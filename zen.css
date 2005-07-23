@@ -67,4 +67,5 @@ UL.pagelist LI.current A { background-color: #FF6600; color: #FFF; cursor: defau
 .commentbody { margin: 5px 0px; line-height: 1.3em; }
 .imgcommentform INPUT { margin-top: 4px; border: 1px solid #eee; background-color: #f8f8f8; }
 .imgcommentform TEXTAREA { margin-top: 4px; font-family: Arial, helvetica, verdana, sans-serif; font-size: 10pt; border: 1px solid #eee;}
+.error { color: #C33; font-weight: bold; }
 
