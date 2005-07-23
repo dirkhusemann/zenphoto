@@ -53,20 +53,27 @@ if (isset($_GET['album'])) {
             // Should always re-cookie to update info in case it's changed...
             $info = array($_POST['name'], $_POST['email'], $website);
             setcookie("zenphoto", implode('|~*~|', $info), time()+5184000, "/");
-
+            $stored = array($_POST['name'], $_POST['email'], $website, $_POST['comment'], isset($_POST['remember']));
           } else {
             setcookie("zenphoto", "", time()-368000, "/");
+            $stored = array("","","",false);
           }
           header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/" . 
             (($mod_rewrite) ? "$g_album/$g_image" : "image.php?album=$g_album&image=$g_image"));
+          exit;
         } else {
-          // Comment added with some error. Display an error message? Different header?
-          printErrorPage("There was an error in your comment.", 
-            "Make sure you've included your name, a valid e-mail address, and a comment. Press back to try again.");
+          $stored = array($_POST['name'], $_POST['email'], $website, $_POST['comment'], false);
+          if (isset($_POST['remember'])) $stored[3] = true;
+          $error = true;
         }
-        exit;
+        
       }
-    }
+    } else if (isset($_COOKIE['zenphoto'])) {
+      // Comment form was not submitted; get the saved info from the cookie.
+      $stored = explode('|~*~|', stripslashes($_COOKIE['zenphoto'])); $stored[] = true; 
+    } else { 
+      $stored = array("","","", false); 
+    } 
     
 	} else {
 		$_zp_current_context = ZP_ALBUM | ZP_INDEX;
