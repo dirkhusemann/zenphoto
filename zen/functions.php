@@ -75,27 +75,4 @@ function is_email($input_email) {
   return false;
 }
 
-
-function printErrorPage($title, $text) {
-  $html = 
-"
-<html><head><title>zenphoto Error: $title</title>
-<style type=\"text/css\">
-  body { font-family: Arial, Helvetica, sans-serif; margin: 0px; font-size: 8pt; }
-  #main { margin: 15%; padding: 10px 20px; background-color: #f6f6f6; border: 1px solid #ddd; }
-  hr { height: 0px; border: 0px; border-top: 1px solid #ccc; }
-</style>
-</head>
-<body>
-  <div id=\"main\">
-  <h1 style=\"color: #C40;\">$title</h1>
-  <p><strong>$text</strong></p>
-  </div>
-</body>
-</html>
-
-";
-  echo $html;
-}
-
 ?>

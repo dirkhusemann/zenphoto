@@ -5,7 +5,7 @@
 
 
 // Load the database functions.
-require_once("functions-db.php");
+require_once("auth_zp.php");
 
 /**********************************************************************/
 // Image Class //

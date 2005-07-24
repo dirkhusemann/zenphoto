@@ -103,51 +103,54 @@ function rem_context($context) {
 	set_context(get_context() & ~$context);
 }
 
-
-function saveTitle($newtitle) {
-  if (get_magic_quotes_gpc()) $newtitle = stripslashes($newtitle);
-  global $_zp_current_image, $_zp_current_album;
-  if (in_context(ZP_IMAGE)) {
-    $_zp_current_image->setTitle($newtitle);
-    return $newtitle;
-  } else if (in_context(ZP_ALBUM)) {
-    $_zp_current_album->setTitle($newtitle);
-    return $newtitle;
-  } else {
-    return false;
+if (zp_loggedin()) {
+  
+  function saveTitle($newtitle) {
+    if (get_magic_quotes_gpc()) $newtitle = stripslashes($newtitle);
+    global $_zp_current_image, $_zp_current_album;
+    if (in_context(ZP_IMAGE)) {
+      $_zp_current_image->setTitle($newtitle);
+      return $newtitle;
+    } else if (in_context(ZP_ALBUM)) {
+      $_zp_current_album->setTitle($newtitle);
+      return $newtitle;
+    } else {
+      return false;
+    }
   }
-}
-
-function saveDesc($newdesc) {
-  if (get_magic_quotes_gpc()) $newdesc = stripslashes($newdesc);
-  global $_zp_current_image, $_zp_current_album;
-  if (in_context(ZP_IMAGE)) {
-    $_zp_current_image->setDesc($newdesc);
-    return $newdesc;
-  } else if (in_context(ZP_ALBUM)) {
-    $_zp_current_album->setDesc($newdesc);
-    return $newdesc;
-  } else {
-    return false;
+  
+  function saveDesc($newdesc) {
+    if (get_magic_quotes_gpc()) $newdesc = stripslashes($newdesc);
+    global $_zp_current_image, $_zp_current_album;
+    if (in_context(ZP_IMAGE)) {
+      $_zp_current_image->setDesc($newdesc);
+      return $newdesc;
+    } else if (in_context(ZP_ALBUM)) {
+      $_zp_current_album->setDesc($newdesc);
+      return $newdesc;
+    } else {
+      return false;
+    }
   }
+  
+  
+  // Load Sajax (AJAX Library) now that we have all objects set.
+  require_once("Sajax.php");
+  sajax_init();
+  $sajax_debug_mode = 0;
+  sajax_export("saveTitle");
+  sajax_export("saveDesc");
+  sajax_handle_client_request();
+  
 }
-
-
-// Load Sajax (AJAX Library) now that we have all objects set.
-require_once("Sajax.php");
-sajax_init();
-$sajax_debug_mode = 0;
-sajax_export("saveTitle");
-sajax_export("saveDesc");
-sajax_handle_client_request();
-
+  
 function zenJavascript() {
-  //if (isset($SAJAX_INCLUDED)) {
+  if (zp_loggedin()) {
     echo "  <script type=\"text/javascript\" src=\"".WEBPATH."/zen/ajax.js\"></script>\n";
     echo "  <script type=\"text/javascript\">\n";
     sajax_show_javascript();
     echo "  </script>";
-  //}
+  }
 }
 
 
@@ -350,7 +353,7 @@ function getAlbumTitle() {
 }
 function printAlbumTitle($editable=false) { 
 	global $_zp_current_album;
-	if ($editable) {
+	if ($editable && zp_loggedin()) {
 		echo "<div id=\"albumTitleEditable\" style=\"display: inline;\">" . getAlbumTitle() . "</div>\n";
     echo "<script>initEditableTitle('albumTitleEditable');</script>";
 	} else {
@@ -366,7 +369,7 @@ function getAlbumDesc() {
 }
 function printAlbumDesc($editable=false) { 
 	global $_zp_current_album;
-	if ($editable) {
+	if ($editable && zp_loggedin()) {
 		echo "<div id=\"albumDescEditable\" style=\"display: block;\">" . getAlbumDesc() . "</div>\n";
     echo "<script>initEditableDesc('albumDescEditable');</script>";
 	} else {
@@ -452,7 +455,7 @@ function getImageTitle() {
 }
 function printImageTitle($editable=false) { 
 	global $_zp_current_image;
-	if ($editable) {
+	if ($editable && zp_loggedin()) {
 		echo "<div id=\"imageTitleEditable\" style=\"display: inline;\">" . getImageTitle() . "</div>\n";
     echo "<script>initEditableTitle('imageTitleEditable');</script>";
 	} else {
@@ -467,7 +470,7 @@ function getImageDesc() {
 }
 function printImageDesc($editable=false) {	
 	global $_zp_current_image;
-	if ($editable) {
+	if ($editable && zp_loggedin()) {
 		echo "<div id=\"imageDescEditable\" style=\"display: block;\">" . getImageDesc() . "</div>\n";
     echo "<script>initEditableDesc('imageDescEditable');</script>";
 	} else {
