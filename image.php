@@ -59,12 +59,13 @@
             <h3>Add a comment:</h3>
             <form name="commentform" id="commentform" action="#comments" method="post">
               <input type="hidden" name="comment" value="1" />
+              <input type="hidden" name="remember" value="1" />
               <?php if (isset($error)) { ?><tr><td><div class="error">There was an error submitting your comment. Name, a valid e-mail address, and a comment are required.</div></td></tr><?php } ?>
               <table border="0">
                 <tr><td><label for="name">Name:</label></td>    <td><input type="text" name="name" size="20" value="<?=$stored[0];?>" />  </td></tr>
                 <tr><td><label for="email">E-Mail (won't be public):</label></td> <td><input type="text" name="email" size="20" value="<?=$stored[1];?>" /> </td></tr>
                 <tr><td><label for="website">Site:</label></td> <td><input type="text" name="website" size="40" value="<?=$stored[2];?>" /></td></tr>
-                <tr><td colspan="2"><label><input type="checkbox" name="remember" <?=($stored[3]) ? "checked=\"1\"" : ""; ?>> Save my information</label></td></tr>
+                <!--<tr><td colspan="2"><label><input type="checkbox" name="remember" <?=($stored[3]) ? "checked=\"1\"" : ""; ?>> Save my information</label></td></tr>-->
               </table>
               <textarea name="comment" rows="6" cols="40"></textarea><br />
               <input type="submit" value="Add Comment" />

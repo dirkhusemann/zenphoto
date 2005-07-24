@@ -24,7 +24,7 @@
       <div class="albumthumb"><a href="<?=getAlbumLinkURL();?>" title="<?=getAlbumTitle();?>">
         <?php printAlbumThumbImage(getAlbumTitle()); ?></a></div>
       <div class="albumtitle"><h3><a href="<?=getAlbumLinkURL();?>" title="<?=getAlbumTitle();?>">
-        <?php printAlbumTitle(); ?></a></h3></div>
+        <?php printAlbumTitle(); ?></a></h3> <?php printAlbumDate(); ?></div>
       <div class="albumdesc"><?php printAlbumDesc(); ?></div>
     </div>
     <hr />
