@@ -4,7 +4,7 @@
 // classes.php - HEADERS STILL NOT SENT!
 
 
-// Load the database functions.
+// Load the authentication functions.
 require_once("auth_zp.php");
 
 /**********************************************************************/
@@ -58,35 +58,29 @@ class Image {
     }
   }
 
-
-  function getTitle() {
-    return $this->meta['title'];
-  }
+  // Title
+  function getTitle() { return $this->meta['title']; }
   function setTitle($title) {
     $this->meta['title'] = $title;
-    // Update the database entry with the new title.
     query("UPDATE ".prefix("images")." SET `title`='" . mysql_escape_string($title) .
           "' WHERE `id`=".$this->imageid);
   }
 	
-	function getAlbum() {
-		return $this->album;
-	}
+  // Album (Object) and Album Name
+	function getAlbum() {	return $this->album; }
 	function getAlbumName() {
 		return $this->album->name;
 	}
 
-
-  function getDesc() {
-    return $this->meta['desc'];
-  }
+  // Description
+  function getDesc() { return $this->meta['desc']; }
   function setDesc($desc) {
     $this->meta['desc'] = $desc;
     query("UPDATE ".prefix("images")." SET `desc`='" . mysql_escape_string($desc) .
           "' WHERE `id`=".$this->imageid);
   }
 
-
+  // Show this image?
   function getShow() { return $this->meta['show']; }
   function setShow($show) {
     if ($show) $show = 1;
@@ -96,6 +90,7 @@ class Image {
           "' WHERE `id`=".$this->imageid);
   }
   
+  // Are comments allowed?
   function getCommentsAllowed() { return $this->meta['commentson']; }
   function setCommentsAllowed($commentson) {
     if ($commentson) $commentson = 1;
@@ -113,8 +108,7 @@ class Image {
     return $this->comments;
   }
   
-  // addComment: assumes all arguments have already been properly escaped (either
-  //   by magic_quotes_gpc or by 
+  // addComment: assumes data is coming straight from GET or POST
   function addComment($name, $email, $website, $comment) {
     $this->getComments();
     $name = trim($name);
@@ -203,7 +197,7 @@ class Image {
   }
 
   // Tag methods?
-
+ 
 }
 
 
@@ -228,8 +222,8 @@ class Album {
       echo SERVERPATH."/albums/$folder<br>";
 			die("Album <strong>{$this->name}</strong> does not exist.");
 		}
-    // Query the database for an Image entry with the given filename/albumname
-    $entry = query_single_row("SELECT * FROM ".prefix("albums").
+    // Query the database for an Album entry with the given foldername
+    $entry = query_single_row("SELECT *, (date + 0) AS date FROM ".prefix("albums").
       " WHERE `folder`='".mysql_escape_string($folder)."' LIMIT 1;");
     if (!$entry) {
       $this->meta['title'] = $folder;
@@ -248,31 +242,44 @@ class Album {
       $this->meta['date']  = $entry['date'];
       $this->meta['place'] = $entry['place'];
       $this->meta['show']  = $entry['show'];
-			$this->meta['thumb'] = $entry['thumb'];
+			$this->meta['thum b'] = $entry['thumb'];
       $this->albumid = $entry['id'];
     }
   }
 	
-  function getTitle() {
-    return $this->meta['title'];
-  }
+  // Title
+  function getTitle() { return $this->meta['title']; }
   function setTitle($title) {
     $this->meta['title'] = $title;
-    // Update the database entry with the new title.
     query("UPDATE ".prefix("albums")." SET `title`='" . mysql_escape_string($title) .
       "' WHERE `id`=".$this->albumid);
   }
 	
-	function getDesc() {
-    return $this->meta['desc'];
-  }
+  // Description
+	function getDesc() { return $this->meta['desc']; }
   function setDesc($desc) {
     $this->meta['desc'] = $desc;
-    // Update the database entry with the new description.
     query("UPDATE ".prefix("albums")." SET `desc`='" . mysql_escape_string($desc) .
       "' WHERE `id`=".$this->albumid);
   }
+  
+  // Date/Time
+  function getDateTime() { return $this->meta['date']; }
+  function setDateTime($myts) {
+    $this->meta['date'] = $myts;
+    query("UPDATE ".prefix("albums")." SET `date`='" . mysql_escape_string($myts) .
+      "' WHERE `id`=".$this->albumid);
+  }
+  
+  // Place
+  function getPlace() { return $this->meta['place']; }
+  function setPlace($place) {
+    $this->meta['title'] = $title;
+    query("UPDATE ".prefix("albums")." SET `place`='" . mysql_escape_string($place) .
+      "' WHERE `id`=".$this->albumid);    
+  }
 
+  // Show this album?
   function getShow() { return $this->meta['show']; }
   function setShow($show) {
     if ($show) $show = 1;
@@ -282,6 +289,7 @@ class Album {
           "' WHERE `id`=".$this->albumid);
   }
 	
+  
 	function getImages($page=0) {
 		if (is_null($this->images)) {
 			$albumdir = SERVERPATH . "/albums/{$this->name}/";
