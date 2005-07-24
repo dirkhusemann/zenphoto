@@ -360,7 +360,27 @@ function printAlbumTitle($editable=false) {
 	} else {
     echo getAlbumTitle();	
 	}
-	
+}
+
+function getAlbumDate() {
+  global $_zp_current_album;
+  return $_zp_current_album->getDateTime();
+}
+
+function printAlbumDate($format="F jS, Y") {
+  $date = getAlbumDate();
+  if ($date) {
+    echo myts_date($format, $date);
+  }
+}
+
+function getAlbumPlace() {
+  global $_zp_current_album;
+  return $_zp_current_album->getPlace();
+}
+
+function printAlbumPlace() {
+  echo getAlbumPlace();
 }
 
 function getAlbumDesc() { 
@@ -403,10 +423,6 @@ function printAlbumLink($text, $title, $class=NULL, $id=NULL) {
 	printLink(getAlbumLinkURL(), $text, $title, $class, $id);
 }
 
-// TODO:
-function getAlbumPlace() { }
-function printAlbumPlace($editable=true) { }
-
 function getAlbumThumb() { 
 	global $_zp_current_album;
 	return $_zp_current_album->getAlbumThumb();
@@ -416,10 +432,6 @@ function printAlbumThumbImage($alt, $class=NULL, $id=NULL) {
 		(($class) ? " class=\"$class\"" : "") . 
 		(($id) ? " id=\"$id\"" : "") . " />";
 }
-
-// TODO:
-function getAlbumDate() { }
-function printAlbumDate($editable=true) { }
 
 function getNumImages() { 
 	global $_zp_current_album;
@@ -478,6 +490,7 @@ function printImageDesc($editable=false) {
     echo getImageDesc();
 	}
 }
+
 
 function hasNextImage() { global $_zp_current_image; return $_zp_current_image->getNextImage(); }
 function hasPrevImage() { global $_zp_current_image; return $_zp_current_image->getPrevImage(); }
@@ -544,9 +557,15 @@ function getFullImageURL() {
 	return $_zp_current_image->getFullImage();
 }
 
-// TODO:
-function getSizedImageURL($size) { }
-function getSizedImageLink($size, $text, $title, $class=NULL, $id=NULL) { }
+function getSizedImageURL($size) { 
+	global $_zp_current_image;
+	return $_zp_current_image->getSizedImage($size);
+}
+
+function printSizedImageLink($size, $text, $title, $class=NULL, $id=NULL) { 
+  printLink(getSizedImageURL($size), $text, $title, $class, $id);
+}
+
 
 
 function getCommentCount() { 
@@ -558,7 +577,6 @@ function getCommentsAllowed() {
   global $_zp_current_image;
   return $_zp_current_image->getCommentsAllowed();
 }
-
 
 // Iterate through comments; use the ZP_COMMENT context.
 function next_comment() {
