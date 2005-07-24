@@ -84,7 +84,8 @@
         <h2>10 Most Recent Comments</h2>
         <ul>
         <?php
-          $comments = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.website, c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
+          $comments = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.website,"
+            . " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
             . " WHERE c.imageid = i.id AND i.albumid = a.id ORDER BY c.id DESC LIMIT 10");
           foreach ($comments as $comment) {
             $author = $comment['name'];
@@ -98,8 +99,6 @@
               . (zp_conf("mod_rewrite") ? "../$album/$image" : "../image.php?album=".urlencode($album)."&image=".urlencode($image))
               . "\">$albumtitle / $title</a>:</div><div class=\"commentbody\">$comment</div></li>";
           }
-        
-        
         ?>
         </ul>
       </div>
