@@ -42,6 +42,15 @@ function get_image($imgfile) {
 	}
 }
 
+function truncate_string($string, $length) {
+  if (strlen($string) > $length) {
+    $pos = strpos($string, " ", $length);
+    return substr($string, 0, $pos) . "...";
+  } else {
+    return $string;
+  }
+}
+
 
 // Simple mySQL timestamp formatting function.
 function myts_date($format,$mytimestamp)

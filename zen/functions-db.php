@@ -45,6 +45,13 @@ function prefix($tablename) {
   return zp_conf('mysql_prefix').$tablename;
 }
 
+function escape($string) {
+  if (get_magic_quotes_gpc()) 
+    return $string;
+  else 
+    return mysql_real_escape_string($string);
+}
+
 
 
 

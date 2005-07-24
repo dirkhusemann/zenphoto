@@ -19,8 +19,8 @@ if (!isset($_GET['a']) || !isset($_GET['i'])) {
 	return false;
 	// TODO: Return a default image (possibly with an error message) instead of just dying.
 }
-$album = $_GET['a'];
-$image = $_GET['i'];
+$album = get_magic_quotes_gpc() ? stripslashes($_GET['a']) : $_GET['a'];
+$image = get_magic_quotes_gpc() ? stripslashes($_GET['i']) : $_GET['i'];
 
 if(isset($_GET['s']) && $_GET['s'] < 3000) { // Disallow abusive size requests.
 	if ($_GET['s'] == "thumb") {

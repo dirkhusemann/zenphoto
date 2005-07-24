@@ -33,9 +33,9 @@ $_zp_current_context = ZP_INDEX;
 // Parse the GET request to see what exactly is requested...
 
 if (isset($_GET['album'])) {
-  $g_album = $_GET['album'];
+  $g_album = get_magic_quotes_gpc() ? stripslashes($_GET['album']) : $_GET['album'];
 	if (isset($_GET['image'])) {
-    $g_image = $_GET['image'];
+    $g_image = get_magic_quotes_gpc() ? stripslashes($_GET['image']) : $_GET['image'];
 		$_zp_current_context = ZP_IMAGE | ZP_ALBUM | ZP_INDEX;
 		// An image page; for image.php.
 		$_zp_current_image = new Image(new Album($_zp_gallery, $g_album), $g_image);
@@ -58,8 +58,9 @@ if (isset($_GET['album'])) {
             setcookie("zenphoto", "", time()-368000, "/");
             $stored = array("","","",false);
           }
+          $g_album = urlencode($g_album); $g_image = urlencode($g_image);
           header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/" . 
-            (($mod_rewrite) ? "$g_album/$g_image" : "image.php?album=$g_album&image=$g_image"));
+            (zp_conf('mod_rewrite') ? "$g_album/$g_image" : "image.php?album=$g_album&image=$g_image"));
           exit;
         } else {
           $stored = array($_POST['name'], $_POST['email'], $website, $_POST['comment'], false);

@@ -19,6 +19,7 @@ if (isset($_COOKIE['zenphoto_auth'])) {
     if ($user == zp_conf("adminuser") && $pass == zp_conf("adminpass")) {
       // Correct auth info. Set the cookie.
       setcookie("zenphoto_auth", sha1($user.$pass), time()+5184000, "/");
+      header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/admin/");
       $_zp_loggedin = true;
     } else {
       $error = true;

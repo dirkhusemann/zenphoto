@@ -113,6 +113,8 @@ class Image {
     return $this->comments;
   }
   
+  // addComment: assumes all arguments have already been properly escaped (either
+  //   by magic_quotes_gpc or by 
   function addComment($name, $email, $website, $comment) {
     $this->getComments();
     $name = trim($name);
@@ -139,10 +141,10 @@ class Image {
     // Update the database entry with the new comment
     query("INSERT INTO " . prefix("comments") . " (imageid, name, email, website, comment, date) VALUES " .
           " ('" . $this->imageid .
-          "', '" . mysql_escape_string($name) . 
-          "', '" . mysql_escape_string($email) . 
-          "', '" . mysql_escape_string($website) . 
-          "', '" . mysql_escape_string($comment) . 
+          "', '" . escape($name) . 
+          "', '" . escape($email) . 
+          "', '" . escape($website) . 
+          "', '" . escape($comment) . 
           "', NOW())");
     return true;
   }
@@ -223,7 +225,8 @@ class Album {
     $this->name = $folder;
 		$this->gallery = $gallery;
     if(!file_exists(SERVERPATH . "/albums/".$folder)) {
-			die("Album <strong>{$this->localpath}</strong> does not exist.");
+      echo SERVERPATH."/albums/$folder<br>";
+			die("Album <strong>{$this->name}</strong> does not exist.");
 		}
     // Query the database for an Image entry with the given filename/albumname
     $entry = query_single_row("SELECT * FROM ".prefix("albums").
@@ -372,6 +375,13 @@ class Album {
     }
   }
   
+  function preLoad() {
+    $images = $this->getImages();
+    foreach ($images as $image) {
+      $img = new Image($this, $image);
+    }
+  }
+  
 }
 
 
@@ -429,6 +439,16 @@ class Gallery {
 		return count($this->albums);
 	}
   
+  function getNumImages() {
+    $result = query_single_row("SELECT count(*) FROM ".prefix('images'));
+    return array_shift($result);
+  }
+  
+  function getNumComments() {
+    $result = query_single_row("SELECT count(*) FROM ".prefix('comments')." WHERE inmoderation = 0");
+    return array_shift($result);
+  }
+  
     
   /* For every album in the gallery, look for its file. Delete from the database
    * if the file does not exist.
@@ -481,6 +501,7 @@ class Gallery {
         foreach ($this->albums as $folder) {
           $album = new Album($this, $folder);
           $album->garbageCollect();
+          $album->preLoad();
         }
       }
     }

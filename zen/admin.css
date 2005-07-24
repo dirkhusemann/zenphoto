@@ -52,21 +52,76 @@ body {
   cursor: default;
 }
 
-#logout {
+#links {
   float: right;
   color: #BAC5DB;
   font-weight: bold;
+  font-size: 9pt;
   margin: 3px 2px 0px 0px;
 }
-#logout A { color: #fff; text-decoration: none; }
-#logout A:hover { color: #fff; }
+#links A { color: #E4ECFB; text-decoration: none; }
+#links A:hover { color: #fff; }
 
 #content {
   padding: 22px;
   background-color: #fff;
 }
 
-h1 { font-size: 18pt; font-weight: normal; margin: 0px; }
+h1 { font-size: 18pt; font-weight: normal; margin: 0px 0px 7px 0px; }
+h2 { font-size: 14pt; font-weight: normal; margin: 0px 0px 5px 0px; }
+h3 { font-size: 12pt; font-weight: normal; margin: 0px 0px 5px 0px; }
+
+/***** Common page styles *****/
+
+A {
+  color: #4D76CF;
+  text-decoration: none;
+}
+
+A:hover {
+  color: #FF8A00;
+}
+
+P {
+  line-height: 1.2em;
+}
+
+HR {
+  height: 0px;
+  border: 0px;
+  border-bottom: 1px solid #f0f0f0;
+  margin: 1em 0px;
+}
+
+.box { 
+  border: 1px solid #f0f0f0; 
+  background-color: #fafafa; 
+}
+
+#footer { clear: both; }
+
+
+/***** Individual page styles *****/
+
+#home-actions {
+  list-style-type: none;
+  margin: 0px 0px 0px 10px;
+  padding: 0px;
+}
+
+#home-actions LI {
+  margin-bottom: 3px;
+  font-size: 11pt;
+}
+
+#overview-stats { width: 45%; float: right; margin-left: 2%; padding: 1%; }
+#overview-suggest { width: 45%; float: right; margin-left: 2%; margin-top: 2%; padding: 1%; }
+
+#overview-comments { width: 46%; float: left; padding: 2%; }
+#overview-comments UL { list-style-type: none; padding: 0px; }
+#overview-comments UL LI { margin-bottom: .5em; }
+#overview-comments .commentmeta { font-size: 8pt;  color: #999; }
+#overview-comments .commentbody { font-size: 9pt; }
 
 
 
