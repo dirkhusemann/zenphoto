@@ -1,0 +1,95 @@
+
+body {
+  font-family: Arial, Helvetica, Verdana, sans-serif;
+  font-size: 10pt;
+  text-align: center;
+  background-color: #8B919F;
+}
+
+/***** Main admin layout styles *****/
+
+#main {
+  text-align: left;
+  margin: 25px auto;
+  padding: 0px;
+  width: 68%;
+  
+}
+
+#nav {
+  list-style-type: none;
+  padding: 0px;
+  margin: 0px;
+  height: 24px;
+  width: 80%;
+}
+
+#nav LI {
+  display: inline;
+}
+
+#nav LI A {
+  display: block;
+  float: left;
+  padding: 3px 5px;
+  margin: 0px 5px 0px 0px;
+  text-decoration: none;
+  font-weight: normal;
+  height: 18px;
+  color: #3A475F;
+  background-color: #BAC5DB;
+}
+
+#nav LI A:hover {
+  color: #000;
+  background-color: #E1E5EF;
+}
+
+#nav LI.current A {
+  color: #000;
+  background-color: #fff;
+  font-weight: bold;
+  cursor: default;
+}
+
+#logout {
+  float: right;
+  color: #BAC5DB;
+  font-weight: bold;
+  margin: 3px 2px 0px 0px;
+}
+#logout A { color: #fff; text-decoration: none; }
+#logout A:hover { color: #fff; }
+
+#content {
+  padding: 22px;
+  background-color: #fff;
+}
+
+h1 { font-size: 18pt; font-weight: normal; margin: 0px; }
+
+
+
+/***** Login Form styles *****/
+
+#loginform {
+  padding: 10px;
+  background-color: #eee;
+  border: 1px solid #ddd;
+  width: 300px;
+  margin: 25px auto;
+  font-size: 11pt;
+}
+
+#loginform input.textfield {
+  margin: 0px;
+  font-size: 12pt;
+  padding: 4px;
+}
+
+#loginform table {
+  margin: 0px auto;
+  border: 0px;
+}
+
+#loginform td { padding: 4px; }
