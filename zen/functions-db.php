@@ -45,11 +45,20 @@ function prefix($tablename) {
   return zp_conf('mysql_prefix').$tablename;
 }
 
+// For things that *are* going into the database, but not from G/P/C.
 function escape($string) {
   if (get_magic_quotes_gpc()) 
     return $string;
   else 
     return mysql_real_escape_string($string);
+}
+
+// For things that *aren't* going into the database, from G/P/C.
+function strip($string) {
+  if (get_magic_quotes_gpc()) 
+    return stripslashes($string);
+  else 
+    return $string;
 }
 
 
