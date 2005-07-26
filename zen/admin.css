@@ -78,6 +78,10 @@ A {
   text-decoration: none;
 }
 
+A IMG {
+  border-width: 1px;
+}
+
 A:hover {
   color: #FF8A00;
 }
@@ -99,6 +103,19 @@ HR {
 }
 
 #footer { clear: both; }
+
+
+/***** Form Styles *****/
+
+input {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+}
+
+textarea {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+}
 
 
 /***** Individual page styles *****/
