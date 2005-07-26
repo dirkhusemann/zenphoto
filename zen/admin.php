@@ -32,7 +32,36 @@
   
   if (isset($_GET['action'])) {
     $action = $_GET['action'];
-    if ($action == "save_edits") {
+    if ($action == "save") {
+      if ($_POST['album'] && $_POST['totalimages']) {
+        $folder = strip($_POST['album']);
+        $album = new Album($gallery, $folder);
+        $album->setTitle(strip($_POST['albumtitle']));
+        $album->setDesc(strip($_POST['albumdesc']));
+        // FIXME: Date entry isn't ready yet...
+        // $album->setDate(strip($_POST["albumdate"]));
+        $album->setPlace(strip($_POST['albumplace']));
+        
+        for ($i = 0; $i < $_POST['totalimages']; $i++) {
+          $filename = strip($_POST["$i-filename"]);
+          $image = new Image($album, $filename);
+          $image->setTitle(strip($_POST["$i-title"]));
+          $image->setDesc(strip($_POST["$i-desc"]));          
+        }
+      } else if ($_POST['totalalbums']) {
+        
+        for ($i = 0; $i < $_POST['totalalbums']; $i++) {
+          $folder = strip($_POST["$i-folder"]);
+          $album = new Album($gallery, $folder);
+          $album->setTitle(strip($_POST["$i-title"]));
+          $album->setDesc(strip($_POST["$i-desc"]));
+          // FIXME: Date entry isn't ready yet...
+          // $album->setDate(strip($_POST["$i-date"]));
+          $album->setPlace(strip($_POST["$i-place"]));
+        }
+      }
+      // header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/admin/?page=edit");
+      
       
     } else if ($action == "upload") {
       
@@ -53,10 +82,131 @@
   
   <div id="content">
   
+<?php /************************************************************************************/ ?>
+  
     <?php if ($page == "edit") { ?>
-      <h1>edit photos</h1>
       
+      <?php if (isset($_GET['album'])) {
+        $folder = strip($_GET['album']);
+        $album = new Album($gallery, $folder);
+        ?>
+        <h1>edit photos</h1>
+        <p><a href="?page=edit" title="Back to the list of albums">&laquo; back to the list</a></p>
+        <form name="albumedit" action="?page=edit&action=save" method="post">
+          <input type="hidden" name="album" value="<?= $album->name; ?>" />
+        
+          <div class="box" style="padding: 15px;">
+            <h2>editing <em><?=$album->getTitle(); ?></em></h2>
+            <table>
+              <tr><td align="right" valign="top">Album Title: </td> <td><input type="text" name="albumtitle" value="<?=$album->getTitle(); ?>" /></td></tr>
+              <tr><td align="right" valign="top">Album Description: </td> <td><textarea name="albumdesc" cols="60" rows="6"><?=$album->getDesc(); ?></textarea></td></tr>
+              <tr><td align="right" valign="top">Date: </td> <td><input type="text" name="albumdate" value="<?=$album->getDateTime(); ?>" /></td></tr>
+              <tr><td align="right" valign="top">Place: </td> <td><input type="text" name="albumplace" value="<?=$album->getPlace(); ?>" /></td></tr>
+            </table>
+          </div>
+
+          <?php $images = $album->getImages();
+          $totalimages = sizeof($images); ?> 
+          <input type="hidden" name="totalimages" value="<?= $totalimages; ?>" />
+          
+          <p><input type="submit" value="save" /></p>
+          <hr />
+          
+          <table id="edittable">
+           
+            <?php
+            $currentimage = 0;
+            foreach ($images as $filename) {
+              $image = new Image($album, $filename);
+            ?>
+            
+            <tr id=""<?= ($currentimage % 2 == 0) ?  "class=\"alt\"" : "" ?>>
+              <td valign="top">
+                <img src="<?=$image->getThumb();?>" alt="<?=$image->filename;?>" />
+              </td>
+  
+              <td>
+                <input type="hidden" name="<?= $currentimage; ?>-filename" value="<?= $image->filename; ?>" />
+                Title: <input type="text" size="57" name="<?= $currentimage; ?>-title" value="<?= $image->getTitle(); ?>" /><br />
+                Description: <br />
+                <textarea name="<?= $currentimage; ?>-desc" cols="60" rows="4"><?= $image->getDesc(); ?></textarea>
+                <br /><br />
+                
+              </td>
+                
+            </tr>
+            
+            <?php 
+              $currentimage++;
+            } 
+            ?>
+            <tr><td> </td> <td><input type="submit" value="save" /></td></tr>
+          </table>
+          
+          
+          <p><a href="?page=edit" title="Back to the list of albums">&laquo; back to the list</a></p>
+        </form>
+        
+<?php /************************************************************************************/ ?>
+        
+      <?php } else if (isset($_GET['massedit'])) { 
+      ?>
+      <h1>edit albums</h1>
+      <p><a href="?page=edit" title="Back to the list of albums">&laquo; back to the list</a></p>
+      <form name="albumedit" action="?page=edit&action=save" method="POST">
+        <p><input type="submit" value="save" /> &nbsp; <input type="reset" value="reset" /></p>
+      <?php
+        $albums = $gallery->getAlbums();
+        ?> <input type="hidden" name="totalalbums" value="<?= sizeof($albums); ?>" /> <?php
+        $currentalbum = 0;
+        foreach ($albums as $folder) { 
+          $album = new Album($gallery, $folder);
+      ?>
+        <input type="hidden" name="<?= $currentalbum; ?>-folder" value="<?= $album->name; ?>" />
+        <table>
+          <tr><td rowspan="4" valign="top"><a href="?page=edit&album=<?= $album->name; ?>" title="Edit this album: <?= $album->name; ?>"><img src="<?= $album->getAlbumThumb(); ?>" /></a></td>
+            <td align="right" valign="top">Album Title: </td> <td><input type="text" name="<?= $currentalbum; ?>-title" value="<?=$album->getTitle(); ?>" /></td></tr>
+          <tr><td align="right" valign="top">Album Description: </td> <td><textarea name="<?= $currentalbum; ?>-desc" cols="60" rows="6"><?=$album->getDesc(); ?></textarea></td></tr>
+          <tr><td align="right" valign="top">Date: </td> <td><input type="text" name="<?= $currentalbum; ?>-date" value="<?=$album->getDateTime(); ?>" /></td></tr>
+          <tr><td align="right" valign="top">Place: </td> <td><input type="text" name="<?= $currentalbum; ?>-place" value="<?=$album->getPlace(); ?>" /></td></tr>
+        </table>
+        <hr />
+        
+      <?php 
+          $currentalbum++;
+        } 
+      ?>
       
+        <p><input type="submit" value="save" /> &nbsp; <input type="reset" value="reset" /></p>
+      
+      </form>
+        
+<?php /************************************************************************************/ ?> 
+        
+      <?php } else { /* Display a list of albums to edit. */ ?>
+        <h1>edit</h1>
+        <h2>Choose an album, or <a href="?page=edit&massedit">mass-edit album data</a>.</h2>
+        
+        <table>
+
+        <?php 
+          $albums = $gallery->getAlbums();
+          foreach ($albums as $folder) { 
+            $album = new Album($gallery, $folder);
+        ?>
+            <tr>
+              <td><a href="?page=edit&album=<?= $album->name; ?>" title="Edit this album: <?= $album->name; ?>"><img height="40" width="40" src="<?= $album->getAlbumThumb(); ?>" /></a></td> 
+              <td><a href="?page=edit&album=<?= $album->name; ?>" title="Edit this album: <?= $album->name; ?>"><?= $album->getTitle(); ?></td>
+            </tr>
+
+          <?php } ?>
+        
+        </table>
+
+<?php /************************************************************************************/ ?>
+
+
+      <?php } ?>
       
     <?php } else if ($page == "upload") { ?>
       <h1>upload photos</h1>
