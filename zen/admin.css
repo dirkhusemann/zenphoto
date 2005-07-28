@@ -141,6 +141,21 @@ textarea {
 #overview-comments .commentbody { font-size: 9pt; }
 
 
+.fileuploadbox {
+  margin-bottom: 5px;
+}
+
+#albumselect {
+  padding: 6px;
+  border: 1px solid #BAC5DB;
+  background-color: #E1E5EF;
+}
+#albumselect input {
+  padding: 4px;
+  font-weight: normal;
+  font-size: 12pt;
+}
+
 
 /***** Login Form styles *****/
 
