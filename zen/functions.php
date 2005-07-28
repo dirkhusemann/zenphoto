@@ -84,4 +84,40 @@ function is_email($input_email) {
   return false;
 }
 
+function is_image($filename) {
+  $ext = strtolower(strrchr($filename, "."));
+  return ($ext == ".jpg" || $ext == ".jpeg" || $ext == ".png" || $ext == ".gif");
+}
+
+function is_zip($filename) {
+  $ext = strtolower(strrchr($filename, "."));
+  return ($ext == ".zip");
+}
+
+
+// Unzip function; ignores ZIP directory structure.
+// Requires zziplib
+
+function unzip($file, $dir) {
+  
+   $zip = zip_open($file);
+   if ($zip) {
+     while ($zip_entry = zip_read($zip)) {
+       // Skip non-images in the zip file.
+       if (!is_image(zip_entry_name($zip_entry))) continue;
+       
+       if (zip_entry_open($zip, $zip_entry, "r")) {
+         $buf = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
+         $path_file = str_replace("/",DIRECTORY_SEPARATOR, $dir . '/' . zip_entry_name($zip_entry));
+         $fp = fopen($path_file, "w");
+         fwrite($fp, $buf);
+         fclose($fp);
+         zip_entry_close($zip_entry);
+       }
+       $count++;
+     }
+     zip_close($zip);
+   }
+} 
+
 ?>
