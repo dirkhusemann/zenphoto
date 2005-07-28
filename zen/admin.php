@@ -32,6 +32,7 @@
   
   if (isset($_GET['action'])) {
     $action = $_GET['action'];
+    echo "$action<br><br>"; ////
     if ($action == "save") {
       if ($_POST['album'] && $_POST['totalimages']) {
         $folder = strip($_POST['album']);
@@ -60,11 +61,47 @@
           $album->setPlace(strip($_POST["$i-place"]));
         }
       }
-      // header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/admin/?page=edit");
+      header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/admin/?page=edit");
       
       
     } else if ($action == "upload") {
       
+      // Make sure the folder exists. If not, create it.
+      if (isset($_FILES['files']) && isset($_POST['folder']) && !empty($_POST['folder'])) {
+        
+        $folder = strip($_POST['folder']);
+        $uploaddir = SERVERPATH . '/albums/' . $folder;
+        if (!is_dir($uploaddir)) {
+          mkdir ($uploaddir, 777);
+        }
+        
+        $error = false;
+        foreach ($_FILES['files']['error'] as $key => $error) {
+          if ($_FILES['files']['name'][$key] == "") continue;
+          if ($error == UPLOAD_ERR_OK) {
+            $tmp_name = $_FILES['files']['tmp_name'][$key];
+            $name = $_FILES['files']['name'][$key];
+            if (is_image($name)) {
+              $uploadfile = $uploaddir . '/' . $name;
+              move_uploaded_file($tmp_name, $uploadfile);
+            } else if (is_zip($name)) {
+              unzip($tmp_name, $uploaddir);
+            }
+          } else {
+            $error = true;
+          }
+        }
+        
+        $album = new Album($gallery, $folder);
+        $title = strip($_POST['albumtitle']);
+        if (!empty($title)) {
+          $album->setTitle($title);
+        }
+        
+        header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/admin/?page=edit&album=$folder");
+        
+      }
+
     }
   }
   
@@ -203,20 +240,162 @@
         
         </table>
 
-<?php /************************************************************************************/ ?>
+
 
 
       <?php } ?>
       
+<?php /************************************************************************************/ 
+      /************************************************************************************/ ?> 
+
     <?php } else if ($page == "upload") { ?>
+      
+      <script type="text/javascript">
+        document.totalinputs = 5;
+        function addUploadBoxes(placeholderid, copyfromid, num) {
+          var placeholder = document.getElementById(placeholderid);
+          var copyfrom = document.getElementById(copyfromid);
+          for (i=0; i<num; i++) {
+            if (document.totalinputs >= 50) return;
+            var newdiv = document.createElement('div');
+            newdiv.innerHTML = copyfrom.innerHTML;
+            newdiv.className = copyfrom.className;
+            placeholder.parentNode.insertBefore(newdiv, placeholder);
+            document.totalinputs++;
+          }
+        }
+        
+        function albumSwitch(sel) {
+          var selected = sel.options[sel.selectedIndex].value;
+          var albumtext = document.getElementById("albumtext");
+          var albumbox = document.getElementById("albumname");
+          if (selected == "") {            
+            albumtext.style.display = "block";
+          } else {
+            albumtext.style.display = "none";
+          }
+          albumbox.value = selected;
+        }
+        
+        function contains(arr, key) {
+          for (i=0; i<arr.length; i++) {
+            if (arr[i] == key) {
+              return true;
+            }
+          }
+          return false;
+        }
+        
+        function updateFolder(nameObj, folderID, checkboxID) {
+          var autogen = document.getElementById(checkboxID).checked;
+          var folder = document.getElementById(folderID);
+          var name = nameObj.value;
+          var fname = "";
+          var fnamesuffix = "";
+          var count = 1;
+          if (autogen && name != "") {
+            fname = name;
+            fname = fname.toLowerCase();
+            fname = fname.replace(/[\!@#$\%\^&*()\~`\'\"]/gi, "");
+            fname = fname.replace(/[^a-zA-Z0-9]/gi, "-");
+            fname = fname.replace(/--*/gi, "-");
+            while (contains(albumArray, fname+fnamesuffix)) {
+              fnamesuffix = "-"+count;
+              count++;
+            }
+          }    
+          folder.value = fname+fnamesuffix;
+        }
+        
+        function toggleAutogen(fieldID, nameID, checkbox) {
+          var field = document.getElementById(fieldID);
+          var name = document.getElementById(nameID);
+          if (checkbox.checked) {
+            field.disabled = true;
+            updateFolder(name, fieldID, checkbox.id);
+          } else {
+            field.disabled = false;
+          }
+        }
+        
+        // Array of album names for javascript functions.
+        var albumArray = new Array ( <?php 
+          $first = true;
+          foreach ($gallery->getAlbums() as $album) {
+            echo ($first ? "" : ", ") . "'" . addslashes($album) . "'";
+            $first = false;
+          }
+        ?> );
+      
+      </script>
+      
       <h1>upload photos</h1>
+      <p>Accepts any supported image (<acronym title="Joint Picture Expert's Group">JPEG</acronym>, 
+      <acronym title="Portable Network Graphics">PNG</acronym>, <acronym title="Graphics Interchange Format">GIF</acronym>) 
+      or a <strong>ZIP</strong> or <strong>.tar.gz</strong> archive of those file types. <em>Note: When uploading archives</em>, 
+      directory structure is ignored, and all images anywhere in the archive will be added to a single album.</p>
+      
+      <p>The maximum size of all data you can upload at once is <?php echo ini_get('upload_max_filesize'); ?></p>
+      
+      <form name="uploadform" enctype="multipart/form-data" action="?action=upload" method="POST">
+        <input type="hidden" name="processed" value="1" />
+      
+        <div id="albumselect">
+          Upload to 
+          <select id="" name="albumselect" onChange="albumSwitch(this)">
+            <option value="" selected="true">a New Album +</option>
+          <?php $albums = $gallery->getAlbums(); foreach($albums as $folder) { $album = new Album($gallery, $folder); ?>
+            <option value="<?=$album->name;?>"><?=$album->getTitle();?></option>
+          <?php } ?>
+          </select>
+          
+          <div id="albumtext" style="margin-top: 5px;"> 
+            called <input id="albumtitle" size="22" type="text" name="albumtitle" value="" onkeyup="updateFolder(this, 'folderdisplay', 'autogen');" /> 
+            in the folder named  <input id="folderdisplay" size="18" type="text" name="folderdisplay" value="" disabled="true" /> 
+            <label><input type="checkbox" name="autogenfolder" id="autogen" checked="true" onClick="toggleAutogen('folderdisplay', 'albumtitle', this);" /> Auto-Generate</label>
+            <input type="hidden" name="folder" value="" />
+          </div>
+          
+        </div>
+        
+        <hr />
+        
+        <!-- This first one is the template that others are copied from -->
+        <div class="fileuploadbox" id="filetemplate">
+          <input type="file" size="40" name="files[]" />
+        </div>
+        <div class="fileuploadbox">
+          <input type="file" size="40" name="files[]" />
+        </div>
+        <div class="fileuploadbox">
+          <input type="file" size="40" name="files[]" />
+        </div>
+        <div class="fileuploadbox">
+          <input type="file" size="40" name="files[]" />
+        </div>
+        <div class="fileuploadbox">
+          <input type="file" size="40" name="files[]" />
+        </div>
+
+        <div id="place" style="display: none;"></div><!-- New boxes get inserted before this -->
+        
+        <p><a href="javascript:addUploadBoxes('place','filetemplate',5)" title="Doesn't reload!">+ Add more upload boxes</a> <small>(won't reload the page, but remember your upload limits!)</small></p>
+        
+        
+        <p><input type="submit" value="Upload!" onclick="this.form.folder.value = this.form.folderdisplay.value;" /></p>
+        
+      </form>
       
       
+      
+<?php /************************************************************************************/ 
+      /************************************************************************************/ ?> 
       
     <?php } else if ($page == "comments") { ?>
       <h1>comments</h1>
       
-      
+<?php /************************************************************************************/ 
+      /************************************************************************************/ ?> 
       
     <?php } else { $page = "home"; ?>
       <h1>zenphoto administration</h1>
