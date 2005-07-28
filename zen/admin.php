@@ -32,7 +32,7 @@
   
   if (isset($_GET['action'])) {
     $action = $_GET['action'];
-    echo "$action<br><br>"; ////
+
     if ($action == "save") {
       if ($_POST['album'] && $_POST['totalimages']) {
         $folder = strip($_POST['album']);
@@ -266,15 +266,17 @@
         }
         
         function albumSwitch(sel) {
-          var selected = sel.options[sel.selectedIndex].value;
+          var selected = sel.options[sel.selectedIndex];
           var albumtext = document.getElementById("albumtext");
-          var albumbox = document.getElementById("albumname");
-          if (selected == "") {            
+          var albumbox = document.getElementById("folderdisplay");
+          var titlebox = document.getElementById("albumtitle");
+          if (selected.value == "") {            
             albumtext.style.display = "block";
           } else {
             albumtext.style.display = "none";
           }
-          albumbox.value = selected;
+          albumbox.value = selected.value;
+          titlebox.value = selected.text;
         }
         
         function contains(arr, key) {
