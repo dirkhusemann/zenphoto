@@ -4,6 +4,7 @@
   <head>
     <title>zenphoto administration</title>
     <link rel="stylesheet" href="admin.css" type="text/css" />
+    <script type="text/javascript" src="admin.js"></script>
   </head>
   
   <body>
@@ -27,13 +28,16 @@
   
   $gallery = new Gallery();
   $gallery->garbageCollect();
-  // Full garbage collection is too slow... only perform when needed.
+  // Full garbage collection is too slow, and unnecessary... only perform when needed.
   // $gallery->garbageCollect(true, true);
   
   if (isset($_GET['action'])) {
     $action = $_GET['action'];
 
+/** SAVE **********************************************************************/
+/*****************************************************************************/
     if ($action == "save") {
+/** SAVE A SINGLE ALBUM *******************************************************/
       if ($_POST['album'] && $_POST['totalimages']) {
         $folder = strip($_POST['album']);
         $album = new Album($gallery, $folder);
@@ -49,6 +53,8 @@
           $image->setTitle(strip($_POST["$i-title"]));
           $image->setDesc(strip($_POST["$i-desc"]));          
         }
+        
+/** SAVE MULTIPLE ALBUMS ******************************************************/
       } else if ($_POST['totalalbums']) {
         
         for ($i = 0; $i < $_POST['totalalbums']; $i++) {
@@ -62,12 +68,21 @@
         }
       }
       header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/admin/?page=edit");
+      exit();
       
-      
+/** UPLOAD IMAGES *************************************************************/
+/*****************************************************************************/
     } else if ($action == "upload") {
       
+      // Check for files.
+      $files_empty = true;
+      if (isset($_FILES['files']))
+        foreach($_FILES['files']['name'] as $name) { if (!empty($name)) $files_empty = false; }
+      
       // Make sure the folder exists. If not, create it.
-      if (isset($_FILES['files']) && isset($_POST['folder']) && !empty($_POST['folder'])) {
+      if (isset($_POST['processed']) 
+          && !empty($_POST['folder']) 
+          && !$files_empty) {
         
         $folder = strip($_POST['folder']);
         $uploaddir = SERVERPATH . '/albums/' . $folder;
@@ -87,8 +102,6 @@
             } else if (is_zip($name)) {
               unzip($tmp_name, $uploaddir);
             }
-          } else {
-            $error = true;
           }
         }
         
@@ -99,13 +112,46 @@
         }
         
         header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/admin/?page=edit&album=$folder");
+        exit();
         
+      } else {
+        // Handle the error and return to the upload page.
+        $page = "upload";
+        $error = true;
+        if ($files_empty) {
+          $errormsg = "You must upload at least one file.";
+        } else if (empty($_POST['albumtitle'])) {
+          $errormsg = "You must enter a title for your new album.";
+        } else if (empty($_POST['folder'])) {
+          $errormsg = "You must enter a folder name for your new album.";
+        } else if (empty($_POST['processed'])) {
+          $errormsg = "You've most likely exceeded the upload limits. Try uploading fewer files at a time, or use a ZIP file.";
+          
+        } else {
+          $errormsg = "There was an error submitting the form. Please try again. If this keeps happening, check your "
+            . "server and PHP configuration (make sure file uploads are enabled, and upload_max_filesize is set high enough). "
+            . "If you think this is a bug, file a bug report. Thanks!";
+        }
       }
 
     }
   }
   
-  if (isset($_GET['page'])) { $page = $_GET['page']; } else { $page = "home"; }
+  // Redirect to a page if it's set 
+  // (NOTE: Form POST data will be resent on refresh. Use header(Location...) instead.
+  if (isset($_GET['page'])) { $page = $_GET['page']; } else if (empty($page)) { $page = "home"; }
+  
+  
+  
+/************************************************************************************/
+/** End Action Handling *************************************************************/
+/************************************************************************************/
+
+
+
+
+
+
 ?>
 <div id="main">
   <div id="links"><a href="../">view gallery</a> &nbsp; <a href="?logout">logout</a></div>
@@ -119,10 +165,18 @@
   
   <div id="content">
   
-<?php /************************************************************************************/ ?>
+  
+  
+  
+  
+<?php /** EDIT ****************************************************************************/
+      /************************************************************************************/ ?> 
   
     <?php if ($page == "edit") { ?>
       
+      
+      
+<?php /** SINGLE ALBUM ********************************************************************/ ?>
       <?php if (isset($_GET['album'])) {
         $folder = strip($_GET['album']);
         $album = new Album($gallery, $folder);
@@ -170,6 +224,9 @@
                 <br /><br />
                 
               </td>
+              <td style="padding-left: 1em;">
+                <a class="delete" href="?page=edit&action=delete&album=<?= $album->name; ?>" title="Delete the album <?=$album->name; ?>">x</a>
+              </td>
                 
             </tr>
             
@@ -184,7 +241,10 @@
           <p><a href="?page=edit" title="Back to the list of albums">&laquo; back to the list</a></p>
         </form>
         
-<?php /************************************************************************************/ ?>
+        
+        
+        
+<?php /*** MULTI-ALBUM ***************************************************************************/ ?>
         
       <?php } else if (isset($_GET['massedit'])) { 
       ?>
@@ -218,13 +278,22 @@
       
       </form>
         
-<?php /************************************************************************************/ ?> 
+      
+      
+      
+<?php /*** EDIT ALBUM SELECTION *********************************************************************/ ?> 
         
       <?php } else { /* Display a list of albums to edit. */ ?>
         <h1>edit</h1>
         <h2>Choose an album, or <a href="?page=edit&massedit">mass-edit album data</a>.</h2>
         
-        <table>
+        <table class="bordered">
+          <tr>
+            <th>Thumb</th>
+            <th>Edit this album</th>
+            <th>Delete</th>
+          
+          </tr>
 
         <?php 
           $albums = $gallery->getAlbums();
@@ -232,8 +301,15 @@
             $album = new Album($gallery, $folder);
         ?>
             <tr>
-              <td><a href="?page=edit&album=<?= $album->name; ?>" title="Edit this album: <?= $album->name; ?>"><img height="40" width="40" src="<?= $album->getAlbumThumb(); ?>" /></a></td> 
-              <td><a href="?page=edit&album=<?= $album->name; ?>" title="Edit this album: <?= $album->name; ?>"><?= $album->getTitle(); ?></td>
+              <td>
+                <a href="?page=edit&album=<?= $album->name; ?>" title="Edit this album: <?= $album->name; ?>"><img height="40" width="40" src="<?= $album->getAlbumThumb(); ?>" /></a>
+              </td> 
+              <td>
+                <a href="?page=edit&album=<?= $album->name; ?>" title="Edit this album: <?= $album->name; ?>"><?= $album->getTitle(); ?></a>
+              </td>
+              <td>
+                <a class="delete" href="?page=edit&action=delete&album=<?= $album->name; ?>" title="Delete the album <?=$album->name; ?>">x</a>
+              </td>
             </tr>
 
           <?php } ?>
@@ -245,81 +321,18 @@
 
       <?php } ?>
       
-<?php /************************************************************************************/ 
+      
+      
+      
+      
+      
+<?php /**** UPLOAD ************************************************************************/ 
       /************************************************************************************/ ?> 
 
     <?php } else if ($page == "upload") { ?>
       
       <script type="text/javascript">
-        document.totalinputs = 5;
-        function addUploadBoxes(placeholderid, copyfromid, num) {
-          var placeholder = document.getElementById(placeholderid);
-          var copyfrom = document.getElementById(copyfromid);
-          for (i=0; i<num; i++) {
-            if (document.totalinputs >= 50) return;
-            var newdiv = document.createElement('div');
-            newdiv.innerHTML = copyfrom.innerHTML;
-            newdiv.className = copyfrom.className;
-            placeholder.parentNode.insertBefore(newdiv, placeholder);
-            document.totalinputs++;
-          }
-        }
-        
-        function albumSwitch(sel) {
-          var selected = sel.options[sel.selectedIndex];
-          var albumtext = document.getElementById("albumtext");
-          var albumbox = document.getElementById("folderdisplay");
-          var titlebox = document.getElementById("albumtitle");
-          if (selected.value == "") {            
-            albumtext.style.display = "block";
-          } else {
-            albumtext.style.display = "none";
-          }
-          albumbox.value = selected.value;
-          titlebox.value = selected.text;
-        }
-        
-        function contains(arr, key) {
-          for (i=0; i<arr.length; i++) {
-            if (arr[i] == key) {
-              return true;
-            }
-          }
-          return false;
-        }
-        
-        function updateFolder(nameObj, folderID, checkboxID) {
-          var autogen = document.getElementById(checkboxID).checked;
-          var folder = document.getElementById(folderID);
-          var name = nameObj.value;
-          var fname = "";
-          var fnamesuffix = "";
-          var count = 1;
-          if (autogen && name != "") {
-            fname = name;
-            fname = fname.toLowerCase();
-            fname = fname.replace(/[\!@#$\%\^&*()\~`\'\"]/gi, "");
-            fname = fname.replace(/[^a-zA-Z0-9]/gi, "-");
-            fname = fname.replace(/--*/gi, "-");
-            while (contains(albumArray, fname+fnamesuffix)) {
-              fnamesuffix = "-"+count;
-              count++;
-            }
-          }    
-          folder.value = fname+fnamesuffix;
-        }
-        
-        function toggleAutogen(fieldID, nameID, checkbox) {
-          var field = document.getElementById(fieldID);
-          var name = document.getElementById(nameID);
-          if (checkbox.checked) {
-            field.disabled = true;
-            updateFolder(name, fieldID, checkbox.id);
-          } else {
-            field.disabled = false;
-          }
-        }
-        
+        window.totalinputs = 5;
         // Array of album names for javascript functions.
         var albumArray = new Array ( <?php 
           $first = true;
@@ -334,14 +347,23 @@
       <h1>upload photos</h1>
       <p>Accepts any supported image (<acronym title="Joint Picture Expert's Group">JPEG</acronym>, 
       <acronym title="Portable Network Graphics">PNG</acronym>, <acronym title="Graphics Interchange Format">GIF</acronym>) 
-      or a <strong>ZIP</strong> or <strong>.tar.gz</strong> archive of those file types. <em>Note: When uploading archives</em>, 
-      directory structure is ignored, and all images anywhere in the archive will be added to a single album.</p>
+      or a <strong>ZIP</strong> archive of those file types. <em>Note: When uploading archives</em>, 
+      directory structure is ignored, and all images anywhere in the archive will be added to the album.</p>
       
-      <p>The maximum size of all data you can upload at once is <?php echo ini_get('upload_max_filesize'); ?></p>
+      <p>The maximum size of all data you can upload at once is <strong><?php echo ini_get('upload_max_filesize'); ?>B</strong>.</p>
+      
+      <?php if ($error) { ?>
+        <div class="errorbox">
+          <h2>Something went wrong...</h2>
+          <?php echo (empty($errormsg) ? "There was an error submitting the form. Please try again." : $errormsg); ?>
+        </div>
+      <?php } ?>
       
       <form name="uploadform" enctype="multipart/form-data" action="?action=upload" method="POST">
         <input type="hidden" name="processed" value="1" />
-      
+        
+
+        
         <div id="albumselect">
           Upload to 
           <select id="" name="albumselect" onChange="albumSwitch(this)">
@@ -353,7 +375,11 @@
           
           <div id="albumtext" style="margin-top: 5px;"> 
             called <input id="albumtitle" size="22" type="text" name="albumtitle" value="" onkeyup="updateFolder(this, 'folderdisplay', 'autogen');" /> 
-            in the folder named  <input id="folderdisplay" size="18" type="text" name="folderdisplay" value="" disabled="true" /> 
+            in the folder named  
+            <div style="position: relative; display: inline;">
+              <div id="foldererror" style="display: none; color: #D66; position: absolute; z-index: 100; top: -2em; left: 0px;">That name is already used.</div>
+              <input id="folderdisplay" size="18" type="text" name="folderdisplay" value="" disabled="true" onkeyup="validateFolder(this);"/> 
+            </div>
             <label><input type="checkbox" name="autogenfolder" id="autogen" checked="true" onClick="toggleAutogen('folderdisplay', 'albumtitle', this);" /> Auto-Generate</label>
             <input type="hidden" name="folder" value="" />
           </div>
@@ -390,13 +416,22 @@
       
       
       
-<?php /************************************************************************************/ 
+      
+      
+      
+<?php /*** COMMENTS ***********************************************************************/ 
       /************************************************************************************/ ?> 
       
     <?php } else if ($page == "comments") { ?>
       <h1>comments</h1>
       
-<?php /************************************************************************************/ 
+      
+      
+      
+      
+      
+      
+<?php /*** HOME ***************************************************************************/ 
       /************************************************************************************/ ?> 
       
     <?php } else { $page = "home"; ?>

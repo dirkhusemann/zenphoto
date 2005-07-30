@@ -6,6 +6,24 @@ body {
   background-color: #8B919F;
 }
 
+/***** Error Message styles *****/
+
+.errorbox {
+  padding: .5em;
+  background-color: #FDD;
+  border: 1px solid #FAA;
+  margin-bottom: .5em;
+  font-size: 12pt;
+}
+
+.errorbox H2 {
+  color: #DD6666;
+  font-size: 14pt;
+  font-weight: bold;
+  margin: 0px;
+}
+
+
 /***** Main admin layout styles *****/
 
 #main {
@@ -97,6 +115,22 @@ HR {
   margin: 1em 0px;
 }
 
+TABLE.bordered {
+  padding: 0px;
+  border-spacing: 1px;
+  background-color: #eee;
+}
+
+TABLE.bordered TH {
+  font-weight: normal;
+}
+
+TABLE.bordered TD {
+  padding: 2px 8px;
+  margin: 0px;
+  background-color: #fff;
+}
+
 .box { 
   border: 1px solid #f0f0f0; 
   background-color: #fafafa; 
@@ -154,6 +188,19 @@ textarea {
   padding: 4px;
   font-weight: normal;
   font-size: 12pt;
+}
+
+
+A.delete {
+  display: block;
+  background-color: #F99;
+  border: 1px solid #D66;
+  color: #D66;
+  width: .8em;
+  height: .8em;
+  padding: 1px;
+  text-align: center;
+  vertical-align: top;
 }
 
 
