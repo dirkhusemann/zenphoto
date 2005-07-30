@@ -12,6 +12,7 @@ RewriteRule ^tests/(.*)$                   - [L]
 RewriteRule	^admin$	                       admin/ [R]
 RewriteRule	^admin/?$	                     zen/admin.php [QSA,L]
 RewriteRule ^admin/admin.css$              zen/admin.css [R,L]
+RewriteRule ^admin/admin.js$               zen/admin.js [R,L]
 
 RewriteRule ^page/([0-9]+)/?$              index.php?page=$1 [QSA,L]
 RewriteRule ^([^/\.]+)/?$                  album.php?album=$1 [QSA,L]
