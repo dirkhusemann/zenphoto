@@ -1,30 +1,6 @@
-<?php require_once("classes.php"); /* Don't put anything before this line! */ ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-  <head>
-    <title>zenphoto administration</title>
-    <link rel="stylesheet" href="admin.css" type="text/css" />
-    <script type="text/javascript" src="admin.js"></script>
-  </head>
-  
-  <body>
+<?php require_once("classes.php"); /* Don't put anything before this line! */ 
 
-<?php if (!zp_loggedin()) {  /* Display the login form and exit. */ ?>
-  
-  <div id="loginform">
-  
-  <form name="login" action="#" method="POST">
-    <input type="hidden" name="login" value="1" />
-    <table>
-      <tr><td>Login</td><td><input class="textfield" name="user" type="text" size="20" /></td></tr>
-      <tr><td>Password</td><td><input class="textfield" name="pass" type="password" size="20" /></td></tr>
-      <tr><td colspan="2"><input class="button" type="submit" value="Log in" /></td></tr>
-    </table>
-  </form>
-  
-  </div>
-
-<?php } else { /* Display the admin pages. Do action handling first. */
+if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
   
   $gallery = new Gallery();
   $gallery->garbageCollect();
@@ -87,8 +63,9 @@
         $folder = strip($_POST['folder']);
         $uploaddir = SERVERPATH . '/albums/' . $folder;
         if (!is_dir($uploaddir)) {
-          mkdir ($uploaddir, 777);
+          mkdir ($uploaddir, 0777);
         }
+        chmod($uploaddir,0777);
         
         $error = false;
         foreach ($_FILES['files']['error'] as $key => $error) {
@@ -99,6 +76,7 @@
             if (is_image($name)) {
               $uploadfile = $uploaddir . '/' . $name;
               move_uploaded_file($tmp_name, $uploadfile);
+              @chmod($uploadfile, 0755);
             } else if (is_zip($name)) {
               unzip($tmp_name, $uploaddir);
             }
@@ -141,18 +119,40 @@
   // (NOTE: Form POST data will be resent on refresh. Use header(Location...) instead.
   if (isset($_GET['page'])) { $page = $_GET['page']; } else if (empty($page)) { $page = "home"; }
   
-  
+} /* NO Admin-only content between this and the next check. */
   
 /************************************************************************************/
 /** End Action Handling *************************************************************/
 /************************************************************************************/
 
-
-
-
-
-
 ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <title>zenphoto administration</title>
+    <link rel="stylesheet" href="admin.css" type="text/css" />
+    <script type="text/javascript" src="admin.js"></script>
+  </head>
+  
+  <body>
+  
+  <?php if (!zp_loggedin()) {  /* Display the login form and exit. */ ?>
+  
+    <div id="loginform">
+    
+    <form name="login" action="#" method="POST">
+      <input type="hidden" name="login" value="1" />
+      <table>
+        <tr><td>Login</td><td><input class="textfield" name="user" type="text" size="20" /></td></tr>
+        <tr><td>Password</td><td><input class="textfield" name="pass" type="password" size="20" /></td></tr>
+        <tr><td colspan="2"><input class="button" type="submit" value="Log in" /></td></tr>
+      </table>
+    </form>
+    
+    </div>
+    
+  <?php } else { /* Admin-only content safe from here on. */ ?>
+
 <div id="main">
   <div id="links"><a href="../">view gallery</a> &nbsp; <a href="?logout">logout</a></div>
   <ul id="nav">
