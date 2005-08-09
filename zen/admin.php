@@ -475,6 +475,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         <ul>
           <li><strong><?= $gallery->getNumImages(); ?></strong> images in <strong><?= $gallery->getNumAlbums(); ?></strong> albums.</li>
           <li><strong><?= $gallery->getNumComments(); ?></strong> total comments.</li>
+          <li>Total size of cached images: <strong><?= size_readable($gallery->sizeOfCache(), "MB"); ?></strong></li>
+          <li>Total size of album images: <strong><?= size_readable($gallery->sizeOfImages(), "MB"); ?></strong></li>
         </ul>
       </div>
       

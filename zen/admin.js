@@ -56,8 +56,8 @@ function updateFolder(nameObj, folderID, checkboxID) {
       fnamesuffix = "-"+count;
       count++;
     }
-  }    
-  folder.value = fname+fnamesuffix;
+    folder.value = fname+fnamesuffix;
+  }
 }
 
 function validateFolder(folderObj) {
@@ -73,9 +73,12 @@ function toggleAutogen(fieldID, nameID, checkbox) {
   var field = document.getElementById(fieldID);
   var name = document.getElementById(nameID);
   if (checkbox.checked) {
+    window.folderbackup = field.value;
     field.disabled = true;
     updateFolder(name, fieldID, checkbox.id);
   } else {
+    if (window.folderbackup && window.folderbackup != "")
+      field.value = window.folderbackup;
     field.disabled = false;
   }
 }

@@ -516,6 +516,31 @@ class Gallery {
     
   }
   
+  
+  function sizeOfCache() {
+    $cachefolder = SERVERPATH . "/cache";
+    if (is_dir($cachefolder)) {
+      return dirsize($cachefolder);
+    } else {
+      return 0;
+    }
+  }
+  
+  function sizeOfImages() {
+    $imagefolder = SERVERPATH . "/albums";
+    if (is_dir($imagefolder)) {
+      return dirsize($imagefolder);
+    } else {
+      return 0;
+    }
+  }
+  
+  // TODO
+  function clearCache() {
+    $cachefolder = SERVERPATH . "/cache";
+    return null;
+  }
+  
 
 }
 

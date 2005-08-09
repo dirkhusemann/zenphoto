@@ -99,7 +99,6 @@ function is_zip($filename) {
 // Requires zziplib
 
 function unzip($file, $dir) {
-  
    $zip = zip_open($file);
    if ($zip) {
      while ($zip_entry = zip_read($zip)) {
@@ -118,6 +117,95 @@ function unzip($file, $dir) {
      }
      zip_close($zip);
    }
-} 
+}
+
+
+/**
+ * Get the size of a directory.
+ * From: http://aidan.dotgeek.org/lib/
+ *
+ * @author      Aidan Lister <aidan@php.net>
+ * @version     1.0.0
+ * @param       string $directory   Path to directory
+ */
+function dirsize($directory)
+{
+    // Init
+    $size = 0;
+ 
+    // Trailing slash
+    if (substr($directory, -1, 1) !== DIRECTORY_SEPARATOR) {
+        $directory .= DIRECTORY_SEPARATOR;
+    }
+
+    $stack = array($directory);
+
+    for ($i = 0, $j = count($stack); $i < $j; ++$i) {
+        // Add to total size
+        if (is_file($stack[$i])) {
+            $size += filesize($stack[$i]);
+            
+        } else if (is_dir($stack[$i])) {
+            // Read directory
+            $dir = dir($stack[$i]);
+            while (false !== ($entry = $dir->read())) {
+                // No pointers
+                if ($entry == '.' || $entry == '..') {
+                    continue;
+                }
+                // Add to stack
+                $add = $stack[$i] . $entry;
+                if (is_dir($stack[$i] . $entry)) {
+                    $add .= DIRECTORY_SEPARATOR;
+                }
+                $stack[] = $add;
+ 
+            }
+            // Clean up
+            $dir->close();
+        }
+        // Recount stack
+        $j = count($stack);
+    }
+    return $size;
+}
+
+
+/**
+ * Return human readable sizes
+ * From: http://aidan.dotgeek.org/lib/
+ *
+ * @param       int    $size        Size
+ * @param       int    $unit        The maximum unit
+ * @param       int    $retstring   The return string format
+ * @author      Aidan Lister <aidan@php.net>
+ * @version     1.1.0
+ */
+function size_readable($size, $unit = null, $retstring = null)
+{
+    // Units
+    $sizes = array('B', 'KB', 'MB', 'GB', 'TB');
+    $ii = count($sizes) - 1;
+ 
+    // Max unit
+    $unit = array_search((string) $unit, $sizes);
+    if ($unit === null || $unit === false) {
+        $unit = $ii;
+    }
+ 
+    // Return string
+    if ($retstring === null) {
+        $retstring = '%01.2f %s';
+    }
+ 
+    // Loop
+    $i = 0;
+    while ($unit != $i && $size >= 1024 && $i < $ii) {
+        $size /= 1024;
+        $i++;
+    }
+ 
+    return sprintf($retstring, $size, $sizes[$i]);
+}
 
 ?>
