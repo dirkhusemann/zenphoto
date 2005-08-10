@@ -82,4 +82,30 @@ function toggleAutogen(fieldID, nameID, checkbox) {
     field.disabled = false;
   }
 }
+
+
+// Checks all the checkboxes in a group (with the specified name);
+function checkAll(form, arr, mark) { 
+  for (i = 0; i <= form.elements.length; i++) { 
+    try { 
+      if(form.elements[i].name == arr) { 
+        form.elements[i].checked = mark; 
+      }
+    } catch(e) {} 
+  }
+}
+
+function triggerAllBox(form, arr, allbox) { 
+  for (i = 0; i <= form.elements.length; i++) { 
+    try { 
+      if(form.elements[i].name == arr) { 
+        if(form.elements[i].checked == false) { 
+          allbox.checked = false; return;
+        }
+      }
+    } catch(e) {}
+  }
+  allbox.checked = true;
+}
+
         

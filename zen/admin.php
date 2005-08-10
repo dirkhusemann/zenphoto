@@ -422,13 +422,56 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 <?php /*** COMMENTS ***********************************************************************/ 
       /************************************************************************************/ ?> 
       
-    <?php } else if ($page == "comments") { ?>
+        <?php } else if ($page == "comments") { 
+      if ($_GET['n']) $pagenum = $_GET['n'];
+      else $pagenum = 1;
+        
+      $comments = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.website,"
+        . " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
+        . " WHERE c.imageid = i.id AND i.albumid = a.id ORDER BY c.id DESC ");
+      
+      ?>
       <h1>comments</h1>
+      <form name="comments">
+      <label><input type="checkbox" name="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" /> Check All</label>
+      <table class="bordered">
+        <tr>
+          <th></th>
+          <th>Image</th>
+          <th>Author/Link</th>
+          <th>E-Mail</th>
+          <th>Comment</th>
+        </tr>
+        
+        <?php
+        foreach ($comments as $comment) {
+          $id = $comment['id'];
+          $author = $comment['name'];
+          $email = $comment['email'];
+          $album = $comment['folder'];
+          $image = $comment['filename'];
+          $albumtitle = $comment['albumtitle'];
+          if ($comment['title'] == "") $title = $image; else $title = $comment['title'];
+          $website = $comment['website'];
+          $comment = truncate_string($comment['comment'], 123);
+          ?>
+          <tr>
+            <td><input type="checkbox" name="ids[]" value="<?= $id ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" /></td>
+            <td><?= $title ?></a></td>
+            <td><?= $website ? "<a href=\"$website\">$author</a>" : $author ?></td>
+            <td><?= $email ?></td>
+            <td><?= $comment ?></td>
+          </tr>
+            
+          
+        <?php } ?>
       
+      </table>
       
+      <a href="">Delete all selected comments</a>
+      </select>
       
-      
-      
+      </form>
       
       
 <?php /*** HOME ***************************************************************************/ 
@@ -475,8 +518,13 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         <ul>
           <li><strong><?= $gallery->getNumImages(); ?></strong> images in <strong><?= $gallery->getNumAlbums(); ?></strong> albums.</li>
           <li><strong><?= $gallery->getNumComments(); ?></strong> total comments.</li>
+          
+          <?php
+          /*
           <li>Total size of cached images: <strong><?= size_readable($gallery->sizeOfCache(), "MB"); ?></strong></li>
           <li>Total size of album images: <strong><?= size_readable($gallery->sizeOfImages(), "MB"); ?></strong></li>
+          */
+          ?>
         </ul>
       </div>
       
