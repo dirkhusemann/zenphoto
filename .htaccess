@@ -16,10 +16,10 @@ RewriteRule ^admin/admin.js$               zen/admin.js [R,L]
 RewriteRule	^images/(.*)$	                 images/$1 [L]
 
 RewriteRule ^page/([0-9]+)/?$              index.php?page=$1 [QSA,L]
-RewriteRule ^([^/\.]+)/?$                  album.php?album=$1 [QSA,L]
-RewriteRule ^([^/\.]+)/page/([0-9]+)/?$    album.php?album=$1&page=$2 [QSA,L]
+RewriteRule ^([^/\.]+)/?$                  index.php?album=$1 [QSA,L]
+RewriteRule ^([^/\.]+)/page/([0-9]+)/?$    index.php?album=$1&page=$2 [QSA,L]
 RewriteRule ^([^/\.]+)/image/(thumb|[0-9]{1,4})/([^/\\]+)$    zen/i.php?a=$1&i=$3&s=$2 [QSA,L]
 RewriteRule ^([^/\.]+)/image/([^/\\]+)$    albums/$1/$2
-RewriteRule ^([^/\.]+)/([^/\\]+)$          image.php?album=$1&image=$2 [QSA,L]
+RewriteRule ^([^/\.]+)/([^/\\]+)$          index.php?album=$1&image=$2 [QSA,L]
 
 </IfModule>
