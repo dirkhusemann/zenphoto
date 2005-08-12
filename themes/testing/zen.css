@@ -1,0 +1,71 @@
+/* These styles are just for the test template. Make some better ones. And yes, I know it's messy ;-) */
+BODY { font-family: Arial, Helvetica, sans-serif; font-size: 8pt; text-align: center; }
+#main { width: 595px; margin: 0px auto; text-align: left; }
+.albumthumb IMG { border: 0px; float: left; margin-right: 10px; }
+.imagethumb IMG, .image IMG { border: 0px; margin: 0px; padding: 0px; }
+.image { margin: 0px; padding: 0px; float: left; }
+HR { clear: both; height: 0px; border: 0px; border-top: 1px solid #ccc; margin-top: 0px; padding: 0px; }
+#gallerytitle H2 { font-size: 11pt; }
+.imgnav { margin-bottom: 4px; font-size: 8pt; font-weight: bold; color: #CCC; }
+#images { margin: 5px 0px 10px; clear: both; }
+#albums { clear: both; margin: 5px 0px 10px; padding; 0px; }
+.pagenav { margin: 5px 0px 5px; font-size: 8pt; font-weight: bold; color: #CCC; clear: both; }
+.pagenav A:link, .pagenav A:visited { color: #333; text-decoration: none; }
+.disabledlink { color: #ddd; cursor: default; }
+#gallerytitle SPAN { font-weight: normal; color: #CCC; text-decoration: none; }
+#gallerytitle A:link, #gallerytitle A:visited { text-decoration: underline; color: #999; }
+.albumtitle H3 { margin: 0px; padding: 0px; }
+
+A:link, A:visited {
+	text-decoration: none;
+	color: #3366CC;
+}
+A:hover, A:active, 
+#gallerytitle A:hover, #gallerytitle A:active, 
+.pagenav A:hover, .pagenav A:active  {
+	text-decoration: underline;
+	color: #FF6600;
+	background-color: #FFFCF4;
+}
+
+UL.pagelist {
+  padding: 0px;
+  margin: 5px 0px 5px;
+  list-style-type: none;
+  height: 2em;
+}
+UL.pagelist LI { display: inline; font-weight: bold; }
+UL.pagelist LI A, UL.pagelist LI span.disabledlink {
+  display: block;
+  float: left;
+  padding: 2px 4px;
+  background-color: #FFF6EC;
+  text-decoration: none;
+  color: #555;
+}
+UL.pagelist LI span.disabledlink { background-color: #fff; color: #ddd; cursor: default; }
+UL.pagelist LI A:hover { background-color: #FFCC99; color: black; }
+UL.pagelist LI.current A { background-color: #FF6600; color: #FFF; cursor: default; }
+
+.commentcount { font-weight: normal; font-size: 11pt; margin-top: 10px; }
+
+#comments {
+  border: 1px solid #f0f0f0;
+  padding: 15px 20px;
+  margin: 15px 0px;
+  width: 350px;
+  display: block;
+}
+.comment {
+  margin: 15px 0px;
+  padding: 10px 10px;
+  border: 1px solid #f0f0f0;
+  background-color: #f8f8f8;
+}
+.commentmeta { color: #999; }
+.commentauthor { font-weight: bold; }
+.commentbody { margin: 5px 0px; line-height: 1.3em; }
+.imgcommentform INPUT { margin-top: 4px; border: 1px solid #eee; background-color: #f8f8f8; }
+.imgcommentform TEXTAREA { margin-top: 4px; font-family: Arial, helvetica, verdana, sans-serif; font-size: 10pt; border: 1px solid #eee;}
+.error { color: #C33; font-weight: bold; }
+
