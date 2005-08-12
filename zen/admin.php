@@ -252,6 +252,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           
           <p><input type="submit" value="save" /></p>
           <hr />
+          <p>Click the images for a larger version</p>
           
           <table id="edittable">
            
@@ -263,7 +264,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
             
             <tr id=""<?= ($currentimage % 2 == 0) ?  "class=\"alt\"" : "" ?>>
               <td valign="top">
-                <img src="<?=$image->getThumb();?>" alt="<?=$image->filename;?>" />
+                <a href="javascript: toggleBigImage('thumb-<?= $currentimage ?>', '<?= $image->getSizedImage(zp_conf('image_size')) ?>');"><img id="thumb-<?= $currentimage ?>" src="<?=$image->getThumb();?>" alt="<?=$image->filename;?>" /></a>
               </td>
   
               <td>
@@ -275,7 +276,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
                 
               </td>
               <td style="padding-left: 1em;">
-                <a class="delete" href="?page=edit&action=delete&album=<?= $album->name; ?>" title="Delete the album <?=$album->name; ?>">x</a>
+              <a href="?page=edit&action=delete&album=<?= $album->name; ?>&image=<?= $filename ?>" title="Delete the image <?= $filename ?>"><img src="../images/delete.gif" style="border: 0px;" alt="x" /></a>
               </td>
                 
             </tr>
@@ -358,7 +359,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
                 <a href="?page=edit&album=<?= $album->name; ?>" title="Edit this album: <?= $album->name; ?>"><?= $album->getTitle(); ?></a>
               </td>
               <td>
-                <a class="delete" href="?page=edit&action=delete&album=<?= $album->name; ?>" title="Delete the album <?=$album->name; ?>">x</a>
+                <a class="delete" href="?page=edit&action=delete&album=<?= $album->name; ?>" title="Delete the album <?=$album->name; ?>"><img src="../images/delete.gif" style="border: 0px;" alt="x" /></a>
               </td>
             </tr>
 

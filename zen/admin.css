@@ -195,19 +195,6 @@ textarea {
 }
 
 
-A.delete {
-  display: block;
-  background-color: #F99;
-  border: 1px solid #D66;
-  color: #D66;
-  width: .8em;
-  height: .8em;
-  padding: 1px;
-  text-align: center;
-  vertical-align: top;
-}
-
-
 /***** Login Form styles *****/
 
 #loginform {
