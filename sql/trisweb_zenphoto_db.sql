@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 2.6.0-pl2
+-- version 2.6.2-pl1
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Generation Time: Jul 13, 2005 at 11:48 PM
--- Server version: 4.1.7
--- PHP Version: 5.0.2
+-- Generation Time: Aug 11, 2005 at 11:43 PM
+-- Server version: 4.1.12
+-- PHP Version: 5.0.4
 -- 
 -- Database: `trisweb_zenphoto`
 -- 
@@ -21,14 +21,13 @@ CREATE TABLE IF NOT EXISTS `albums` (
   `folder` varchar(255) NOT NULL default '',
   `title` varchar(255) NOT NULL default '',
   `desc` text,
-  `date` date default NULL,
+  `date` datetime default NULL,
   `place` varchar(255) default NULL,
   `show` int(1) NOT NULL default '1',
   `thumb` varchar(255) default NULL,
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `folder_2` (`folder`),
   KEY `folder` (`folder`)
-) ENGINE=InnoDB;
+) TYPE=InnoDB AUTO_INCREMENT=17 ;
 
 -- --------------------------------------------------------
 
@@ -47,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
   `inmoderation` int(1) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `imageid` (`imageid`)
-) ENGINE=InnoDB;
+) TYPE=InnoDB AUTO_INCREMENT=35 ;
 
 -- --------------------------------------------------------
 
@@ -66,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `images` (
   PRIMARY KEY  (`id`),
   KEY `filename` (`filename`,`albumid`),
   KEY `albumid` (`albumid`)
-) ENGINE=InnoDB;
+) TYPE=InnoDB AUTO_INCREMENT=1677 ;
 
 -- 
 -- Constraints for dumped tables
