@@ -209,7 +209,7 @@ function initEditableDiv(divID) {
     this.title = this.editMessage;
   }
   
-  div.hilight = function () { this.style.backgroundColor = "#eef"; }
+  div.hilight = function () { this.style.backgroundColor = "#FFFFD3"; }
   div.unhilight = function () { this.style.backgroundColor = ""; }
   
 }
