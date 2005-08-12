@@ -4,8 +4,11 @@
 
 
 $conf = array(); // Leave this alone. ;-)
-// Show debugging <!--comments--> in the code?
+// Show debugging <!--comments--> in the code? (There are none)
 define("DEBUG", true);
+
+// The theme you want to use (folder under /themes)
+$conf['theme'] = 'default';
 
 //// The following three only matter if your template uses them.
 //   The default template does.
