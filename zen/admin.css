@@ -124,7 +124,7 @@ TABLE.bordered {
 
 TABLE.bordered TH {
   font-weight: normal;
-  padding: 2px;
+  padding: 2px 6px;
   background-color: #e2e2e2;
   border-bottom: 2px solid #cfcfcf;
 }

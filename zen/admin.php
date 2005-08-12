@@ -111,12 +111,56 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
             . "If you think this is a bug, file a bug report. Thanks!";
         }
       }
+      
+/** COMMENTS ******************************************************************/
+/*****************************************************************************/
 
+    } else if ($action == 'deletecomments') {
+      if (isset($_POST['ids'])) {
+        $ids = $_POST['ids'];
+        $total = count($ids);
+        if ($total > 0) {
+          $n = 0;
+          $sql = "DELETE FROM ".prefix('comments')." WHERE ";
+          foreach ($ids as $id) {
+            $n++;
+            $sql .= "id='$id' ";
+            if ($n < $total) $sql .= "OR ";
+          }
+          query($sql);
+        }
+        header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/admin/?page=comments&ndeleted=$n");
+        exit();
+      } else {
+        header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/admin/?page=comments&ndeleted=0");
+        exit();
+      }
+      
+      
+    } else if ($action == 'savecomment') {
+      if (!isset($_POST['id'])) {
+        header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/admin/?page=comments");
+        exit();
+      }
+      $id = $_POST['id'];
+      $name = $_POST['name'];
+      $email = $_POST['email'];
+      $website = $_POST['website'];
+      $date = $_POST['date'];
+      $comment = $_POST['comment'];
+      
+      // TODO: Update date as well; no good input yet, so leaving out.
+      $sql = "UPDATE ".prefix('comments')." SET name = '$name', email = '$email', website = '$website', comment = '$comment' WHERE id = $id";
+      query($sql);
+      
+      header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/admin/?page=comments&sedit");
+      exit();
+      
     }
   }
   
   // Redirect to a page if it's set 
-  // (NOTE: Form POST data will be resent on refresh. Use header(Location...) instead.
+  // (NOTE: Form POST data will be resent on refresh. Use header(Location...) instead, unless there's an error message.
   if (isset($_GET['page'])) { $page = $_GET['page']; } else if (empty($page)) { $page = "home"; }
   
 } /* NO Admin-only content between this and the next check. */
@@ -150,8 +194,14 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
     </form>
     
     </div>
+        
+  </body>
+</html>
     
-  <?php } else { /* Admin-only content safe from here on. */ ?>
+<?php 
+    exit(); 
+  
+  } else { /* Admin-only content safe from here on. */ ?>
 
 <div id="main">
   <div id="links"><a href="../">view gallery</a> &nbsp; <a href="?logout">logout</a></div>
@@ -422,28 +472,42 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 <?php /*** COMMENTS ***********************************************************************/ 
       /************************************************************************************/ ?> 
       
-        <?php } else if ($page == "comments") { 
-      if ($_GET['n']) $pagenum = $_GET['n'];
-      else $pagenum = 1;
-        
+    <?php } else if ($page == "comments") { 
+      if ($_GET['n']) $pagenum = $_GET['n']; else $pagenum = 1;
+      if (isset($_GET['fulltext'])) $fulltext = true; else $fulltext = false;
+
       $comments = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.website,"
-        . " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
+        . " c.date, c.comment, c.email FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
         . " WHERE c.imageid = i.id AND i.albumid = a.id ORDER BY c.id DESC ");
       
-      ?>
+    ?>
       <h1>comments</h1>
-      <form name="comments">
+      
+      <?php /* Display a message if needed. Fade out and hide after 3 seconds. */ 
+        if (isset($_GET['ndeleted']) || isset($_GET['sedit'])) { ?>
+        <div class="errorbox" id="message">
+          <?php if (isset($_GET['ndeleted'])) { ?> <h2><?= $_GET['ndeleted'] ?> Comments deleted successfully.</h2> <?php } ?>
+          <?php if (isset($_GET['sedit'])) { ?> <h2>Comment saved successfully.</h2> <?php } ?>
+        </div>
+        <script type="text/javascript">
+          Fat.fade_and_hide_element('message', 30, 1000, 3000, Fat.get_bgcolor('message'), '#FFFFFF')
+        </script>
+      <?php } ?>
+      
+      <form name="comments" action="?page=comments&action=deletecomments" method="post" onsubmit="return confirm('Are you sure you want to delete these comments?');">
       <label><input type="checkbox" name="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" /> Check All</label>
       <table class="bordered">
         <tr>
           <th></th>
           <th>Image</th>
           <th>Author/Link</th>
+          <th>Comment <?php if(!$fulltext) { ?>(<a href="?page=comments&n=<?= $pagenum ?>&fulltext">View full text</a>)
+            <?php } else { ?>(<a href="?page=comments&n=<?= $pagenum ?>">View truncated</a>)<?php } ?></th>
           <th>E-Mail</th>
-          <th>Comment</th>
+          <th></th>
         </tr>
         
-        <?php
+      <?php
         foreach ($comments as $comment) {
           $id = $comment['id'];
           $author = $comment['name'];
@@ -453,26 +517,54 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           $albumtitle = $comment['albumtitle'];
           if ($comment['title'] == "") $title = $image; else $title = $comment['title'];
           $website = $comment['website'];
-          $comment = truncate_string($comment['comment'], 123);
-          ?>
+          $shortcomment = truncate_string($comment['comment'], 123);
+          $fullcomment = $comment['comment'];
+      ?>
+
           <tr>
             <td><input type="checkbox" name="ids[]" value="<?= $id ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" /></td>
-            <td><?= $title ?></a></td>
+            <td style="font-size: 7pt;"><?php echo "<a href=\"" . (zp_conf("mod_rewrite") ? "../$album/$image" : "../image.php?album="
+              .urlencode($album)."&image=".urlencode($image)) . "\">$albumtitle / $title</a>"; ?></td>
             <td><?= $website ? "<a href=\"$website\">$author</a>" : $author ?></td>
-            <td><?= $email ?></td>
-            <td><?= $comment ?></td>
+            <td><?= ($fulltext) ? $fullcomment : $shortcomment ?></td>
+            <td><a href="mailto:<?= $email ?>?body=<?= commentReply($fullcomment, $author, $image, $albumtitle); ?>">Reply</a></td>
+            <td><a href="?page=editcomment&id=<?= $id ?>" title="Edit this comment.">Edit</a></td>
           </tr>
-            
-          
         <?php } ?>
       
       </table>
       
-      <a href="">Delete all selected comments</a>
+      <input type="submit" value="Delete selected comments" />
       </select>
       
       </form>
       
+<?php /*** EDIT COMMENT *******************************************************************/ 
+      /************************************************************************************/ ?> 
+      
+    <?php } else if ($page == "editcomment") { ?>
+      <h1>edit comment</h1>
+      <?php
+      if (isset($_GET['id'])) $id = $_GET['id'];
+      else echo "<h2>No comment specified. <a href=\"?page=comments\">&laquo Back</a></h2>";
+      
+      $commentarr = query_single_row("SELECT name, website, date, comment, email FROM ".prefix('comments')." WHERE id = $id LIMIT 1");
+      extract($commentarr);
+      ?>
+      
+      <form action="?page=comments&action=savecomment" method="post">
+        <input type="hidden" name="id" value="<?= $id ?>" />
+        <table>
+        
+          <tr><td width="100">Author:</td>    <td><input type="text" size="40" name="name" value="<?= $name ?>" /></td></tr>
+          <tr><td>Web Site:</td>              <td><input type="text" size="40" name="website" value="<?= $website ?>" /></td></tr>
+          <tr><td>E-Mail:</td>                <td><input type="text" size="40" name="email" value="<?= $email ?>" /></td></tr>
+          <tr><td>Date/Time:</td>             <td><input type="text" size="18" name="date" value="<?= $date ?>" /></td></tr>
+          <tr><td valign="top">Comment:</td>  <td><textarea rows="8" cols="60" name="comment" /><?= $comment ?></textarea></td></tr>
+          <tr><td></td>                       <td><input type="submit" value="save" /> <input type="button" value="cancel" onclick="window.location = '?page=comments';"/>
+
+        </table>
+      </form>
       
 <?php /*** HOME ***************************************************************************/ 
       /************************************************************************************/ ?> 
