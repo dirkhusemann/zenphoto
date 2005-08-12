@@ -1,7 +1,8 @@
 <?php 
 require_once("zen/template-functions.php");
 $themepath = 'themes';
-$theme = 'default';
+
+$theme = zp_conf('theme');
 
 $_zp_themeroot = WEBPATH . "/$themepath/$theme";
 
