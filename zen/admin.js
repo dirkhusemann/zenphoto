@@ -18,10 +18,14 @@ function albumSwitch(sel) {
   var albumtext = document.getElementById("albumtext");
   var albumbox = document.getElementById("folderdisplay");
   var titlebox = document.getElementById("albumtitle");
-  if (selected.value == "") {            
+  var checkbox = document.getElementById("autogen");
+  if (selected.value == "") {
     albumtext.style.display = "block";
     albumbox.value = "";
     titlebox.value = "";
+    document.getElementById("foldererror").style.display = "none";
+    checkbox.checked = true;
+    toggleAutogen("folderdisplay", "albumtitle", checkbox);
   } else {
     albumtext.style.display = "none";
     albumbox.value = selected.value;

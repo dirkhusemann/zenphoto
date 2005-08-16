@@ -613,6 +613,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           <li><strong><?= $gallery->getNumComments(); ?></strong> total comments.</li>
           
           <?php
+          // These disk operations are too slow...
           /*
           <li>Total size of cached images: <strong><?= size_readable($gallery->sizeOfCache(), "MB"); ?></strong></li>
           <li>Total size of album images: <strong><?= size_readable($gallery->sizeOfImages(), "MB"); ?></strong></li>
