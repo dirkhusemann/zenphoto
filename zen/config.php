@@ -18,6 +18,9 @@ $conf['gallery_title'] = "trisweb.com photos";
 $conf['main_site_name'] = "trisweb.com";
 $conf['main_site_url']  = "http://www.trisweb.com/";
 
+// Tags allowed in comments
+$conf['allowed_tags'] = "<a><i><em><b><strong><blockquote><abbr><acronym><ul><ol><li>";
+
 // The path to zenphoto on the server - e.g. /user/public_html/zenphoto. No trailing slash/
 $conf['serverpath']  = "D:/My Projects/zenphoto";
 

@@ -212,6 +212,7 @@ class Album {
 	var $images = NULL;    // Full images array storage.
 	var $gallery;
   var $index;
+  var $themeoverride;
 
   // Constructor
   function Album($gallery, $folder) {
@@ -407,6 +408,8 @@ class Group {
 class Gallery {
 
 	var $albums = NULL;
+  var $theme;
+  var $themes;
 	
 	function Gallery() {
 		$albumdir = SERVERPATH . "/albums/";
@@ -424,6 +427,7 @@ class Gallery {
     $albums = array_reverse($albums);
 		// Sorting here? Alphabetical by default.
 		$this->albums = $albums;
+
 	}
 	
 	function getAlbums($page=0) {
@@ -446,6 +450,57 @@ class Gallery {
 	function getNumAlbums() {
 		return count($this->albums);
 	}
+  
+  
+  /** Theme methods. */
+  
+  function getThemes() {
+    if (empty($this->themes)) {
+      $themedir = SERVERPATH . "/themes";
+      $themes = array();
+      if ($dp = @opendir($themedir)) {
+        while (false !== ($file = readdir($dp))) {
+          if (substr($file, 0, 1) != "." && is_dir("$themedir/$file")) {
+            $themes[$file] = parseThemeDef($themedir . "/$file/theme.txt");
+          }
+        }
+      }
+      $this->themes = $themes;
+    }
+    return $this->themes;
+  }
+  
+  function getCurrentTheme() {
+    if (empty($this->theme)) {
+      $themefile = SERVERPATH . "/cache/theme.txt";
+      $theme = "";
+      if (is_readable($themefile) && $fp = @fopen($themefile, "r")) {
+        $theme = fgets($fp);
+        $themes = $this->getThemes();
+        if (!isset($themes[$theme])) {
+          $theme = "";
+        }
+        fclose($fp);
+      }
+      if (empty($theme)) {
+        $theme = "default";
+      }
+      $this->theme = $theme;
+    }
+    return $this->theme;
+  }
+  
+  function setCurrentTheme($theme) {
+    $themefile = SERVERPATH . "/cache/theme.txt";
+    $themes = $this->getThemes();
+    if (isset($themes[$theme]) && $fp = @fopen($themefile, "w")) {
+      fwrite($fp, $theme);
+      return true;
+    } else {
+      return false;
+    }
+  }
+  
   
   function getNumImages() {
     $result = query_single_row("SELECT count(*) FROM ".prefix('images'));

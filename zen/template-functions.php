@@ -44,14 +44,15 @@ if (isset($_GET['album'])) {
     //// Comment form handling.
     if (isset($_POST['comment'])) {
       if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
-        if (isset($_POST['website'])) $website = $_POST['website']; else $website = "";
-        $commentadded = $_zp_current_image->addComment($_POST['name'], $_POST['email'], $website, $_POST['comment']);
+        if (isset($_POST['website'])) $website = strip_tags($_POST['website']); else $website = "";
+        $commentadded = $_zp_current_image->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']), $website, 
+          strip_tags($_POST['comment'], zp_conf('allowed_tags')));
         // Then redirect to this image page to prevent re-submission.
         if ($commentadded) {
           // Comment added with no errors, redirect to the image... save cookie if requested.
           if (isset($_POST['remember'])) {
             // Should always re-cookie to update info in case it's changed...
-            $info = array($_POST['name'], $_POST['email'], $website);
+            $info = array(strip($_POST['name']), strip($_POST['email']), strip($website));
             setcookie("zenphoto", implode('|~*~|', $info), time()+5184000, "/");
             $stored = array($_POST['name'], $_POST['email'], $website, $_POST['comment'], isset($_POST['remember']));
           } else {

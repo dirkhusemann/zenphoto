@@ -156,7 +156,16 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
       header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/admin/?page=comments&sedit");
       exit();
       
+      
+/** OPTIONS ******************************************************************/
+/*****************************************************************************/
+
+    } else if ($action == 'settheme') {
+      if (isset($_GET['theme'])) {
+        $gallery->setCurrentTheme($_GET['theme']);
+      }
     }
+    
   }
   
   // Redirect to a page if it's set 
@@ -210,6 +219,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
     <li<?= $page == "comments" ? " class=\"current\"" : "" ?>><a href="?page=comments">comments</a></li>
     <li<?= $page == "upload" ? " class=\"current\"" : "" ?>><a href="?page=upload">upload</a></li>
     <li<?= $page == "edit" ? " class=\"current\"" : "" ?>><a href="?page=edit">edit</a></li>
+    <li<?= $page == "options" ? " class=\"current\"" : "" ?>><a href="?page=options">options</a></li>
   </ul>
   
   
@@ -566,6 +576,55 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 
         </table>
       </form>
+      
+      
+      
+<?php /*** OPTIONS (Theme Switcher) *******************************************************/ 
+      /************************************************************************************/ ?> 
+      
+    <?php } else if ($page == "options") { ?>
+      
+      <h1>options</h1>
+      
+      <h2>theme</h2>
+      <table class="bordered">
+        <?php 
+        $themes = $gallery->getThemes();
+        $current_theme = $gallery->getCurrentTheme();
+        $current_theme_style = "background-color: #e6e6e6;";
+        foreach($themes as $theme => $themeinfo):
+          $style = ($theme == $current_theme) ? " style=\"$current_theme_style\"" : "";
+          $themedir = SERVERPATH . "/themes/$theme";
+          $themeweb = WEBPATH . "/themes/$theme";
+        ?>
+        <tr>
+          <td style="margin: 0px; padding: 0px;">
+            <?php 
+              if (file_exists("$themedir/theme.png")) $themeimage = "$themeweb/theme.png";
+              else if (file_exists("$themedir/theme.gif")) $themeimage = "$themeweb/theme.gif";
+              else if (file_exists("$themedir/theme.jpg")) $themeimage = "$themeweb/theme.jpg";
+              else $themeimage = false;
+              if ($themeimage) { ?>
+                <img height="150" width="150" src="<?= $themeimage ?>" alt="Theme Screenshot" />
+                
+            <? } ?>
+          </td>
+          <td<?=$style?>>
+            <strong><?= $themeinfo['name'] ?></strong><br />
+            <?= $themeinfo['author'] ?><br />
+            Version <?= $themeinfo['version'] ?>, <?= $themeinfo['date'] ?><br />
+            <?= $themeinfo['desc'] ?>
+          </td>
+          <td width="100"<?=$style?>>
+            <?php if (!($theme == $current_theme)) { ?>
+              <a href="?page=options&action=settheme&theme=<?=$theme?>" title="Set this as your theme"><strong>Use this theme</strong></a>
+            <?php } else { echo "Current theme"; } ?>
+          </td>
+        </tr>
+        
+        <?php endforeach; ?>
+      </table>
+      
       
 <?php /*** HOME ***************************************************************************/ 
       /************************************************************************************/ ?> 
