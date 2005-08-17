@@ -289,7 +289,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
               </td>
               <?php /*
               <td style="padding-left: 1em;">
-                <a href="?page=edit&action=delete&album=<?= $album->name; ?>&image=<?= $filename ?>" title="Delete the image <?= $filename ?>"><img src="../images/delete.gif" style="border: 0px;" alt="x" /></a>
+                <a href="?page=edit&action=delete&album=<?= $album->name; ?>&image=<?= $filename ?>" title="Delete the image <?= $filename ?>"><img src="images/delete.gif" style="border: 0px;" alt="x" /></a>
               </td>
               */ ?>
                 
@@ -374,7 +374,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
               </td>
               <?php /*
               <td>
-                <a class="delete" href="?page=edit&action=delete&album=<?= $album->name; ?>" title="Delete the album <?=$album->name; ?>"><img src="../images/delete.gif" style="border: 0px;" alt="x" /></a>
+                <a class="delete" href="?page=edit&action=delete&album=<?= $album->name; ?>" title="Delete the album <?=$album->name; ?>"><img src="images/delete.gif" style="border: 0px;" alt="x" /></a>
               </td>
               */ ?>
             </tr>
