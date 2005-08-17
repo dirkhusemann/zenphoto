@@ -1,0 +1,6 @@
+# Zenphoto theme definition file
+name::Zenphoto Default
+author::Joen Asmussen
+version::1.0
+date::8/16/2005
+desc::The default theme, designed by Joen of <a href="http://www.noscope.com">noscope.com</a>
