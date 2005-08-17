@@ -195,7 +195,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
     
     <form name="login" action="#" method="POST">
       <input type="hidden" name="login" value="1" />
-      <input type="hidden" name="redirect" value="/admin/index.php" />
+      <input type="hidden" name="redirect" value="/admin/" />
       <table>
         <tr><td>Login</td><td><input class="textfield" name="user" type="text" size="20" /></td></tr>
         <tr><td>Password</td><td><input class="textfield" name="pass" type="password" size="20" /></td></tr>
