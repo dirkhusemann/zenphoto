@@ -42,7 +42,7 @@ $conf['mysql_pass'] = "67wp184c";
 $conf['mysql_host'] = "localhost";
 $conf['mysql_database'] = "trisweb_zenphoto";
 // If you're sharing the database with other tables, use a prefix to be safe.
-$conf['mysql_prefix'] = "test_";
+$conf['mysql_prefix'] = "";
 
 // Image Processing Configuration
 

@@ -116,14 +116,14 @@ function triggerAllBox(form, arr, allbox) {
 function toggleBigImage(id, largepath) {
   var imageobj = document.getElementById(id);
   if (!imageobj.sizedlarge) {
-    imageobj.style.position = 'absolute';
-    imageobj.style.zIndex = '2';
     imageobj.src2 = imageobj.src;
     imageobj.src = largepath;
+    imageobj.style.position = 'absolute';
+    imageobj.style.zIndex = '1000';
     imageobj.sizedlarge = true;
   } else {
     imageobj.style.position = 'relative';
-    imageobj.style.zIndex = '1';
+    imageobj.style.zIndex = '0';
     imageobj.src = imageobj.src2;
     imageobj.sizedlarge = false;
   }

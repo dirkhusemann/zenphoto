@@ -275,7 +275,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
             
             <tr id=""<?= ($currentimage % 2 == 0) ?  "class=\"alt\"" : "" ?>>
               <td valign="top">
-                <a href="javascript: toggleBigImage('thumb-<?= $currentimage ?>', '<?= $image->getSizedImage(zp_conf('image_size')) ?>');"><img id="thumb-<?= $currentimage ?>" src="<?=$image->getThumb();?>" alt="<?=$image->filename;?>" /></a>
+                <img id="thumb-<?= $currentimage ?>" src="<?=$image->getThumb();?>" alt="<?=$image->filename;?>" 
+                  onclick="toggleBigImage('thumb-<?= $currentimage ?>', '<?= $image->getSizedImage(zp_conf('image_size')) ?>');" />
               </td>
   
               <td>
@@ -286,9 +287,11 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
                 <br /><br />
                 
               </td>
+              <?php /*
               <td style="padding-left: 1em;">
-              <a href="?page=edit&action=delete&album=<?= $album->name; ?>&image=<?= $filename ?>" title="Delete the image <?= $filename ?>"><img src="../images/delete.gif" style="border: 0px;" alt="x" /></a>
+                <a href="?page=edit&action=delete&album=<?= $album->name; ?>&image=<?= $filename ?>" title="Delete the image <?= $filename ?>"><img src="../images/delete.gif" style="border: 0px;" alt="x" /></a>
               </td>
+              */ ?>
                 
             </tr>
             
@@ -353,7 +356,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           <tr>
             <th>Thumb</th>
             <th>Edit this album</th>
-            <th>Delete</th>
+            <?php /* <th>Delete</th> */ ?>
           
           </tr>
 
@@ -369,9 +372,11 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
               <td>
                 <a href="?page=edit&album=<?= $album->name; ?>" title="Edit this album: <?= $album->name; ?>"><?= $album->getTitle(); ?></a>
               </td>
+              <?php /*
               <td>
                 <a class="delete" href="?page=edit&action=delete&album=<?= $album->name; ?>" title="Delete the album <?=$album->name; ?>"><img src="../images/delete.gif" style="border: 0px;" alt="x" /></a>
               </td>
+              */ ?>
             </tr>
 
           <?php } ?>
