@@ -16,10 +16,11 @@ if (isset($_COOKIE['zenphoto_auth'])) {
   if (isset($_POST['login']) && isset($_POST['user']) && isset($_POST['pass'])) {
     $user = $_POST['user'];
     $pass = $_POST['pass'];
+    $redirect = $_POST['redirect'];
     if ($user == zp_conf("adminuser") && $pass == zp_conf("adminpass")) {
       // Correct auth info. Set the cookie.
       setcookie("zenphoto_auth", sha1($user.$pass), time()+5184000, "/");
-      header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/admin/");
+      header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . WEBPATH . $redirect);
       $_zp_loggedin = true;
     } else {
       $error = true;

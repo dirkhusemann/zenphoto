@@ -31,7 +31,7 @@ $conf['webpath'] = '/zp';
 // If you have Apache mod_rewrite, put true here, and you'll get nice cruft-free URLs.
 $conf['mod_rewrite'] = true;
 
-// Admin interface username.
+// Admin interface username (also used for setup).
 $conf['adminuser'] = "admin";
 // Obviously insecure, don't put anything here you don't want anyone to see...
 $conf['adminpass'] = "1234";
@@ -42,7 +42,7 @@ $conf['mysql_pass'] = "67wp184c";
 $conf['mysql_host'] = "localhost";
 $conf['mysql_database'] = "trisweb_zenphoto";
 // If you're sharing the database with other tables, use a prefix to be safe.
-$conf['mysql_prefix'] = "";
+$conf['mysql_prefix'] = "test_";
 
 // Image Processing Configuration
 

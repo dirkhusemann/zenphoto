@@ -10,14 +10,18 @@ $mysql_connection = null;
 function db_connect() {
   global $mysql_connection;
   $db = zp_conf('mysql_database');
-  $mysql_connection = mysql_connect(zp_conf('mysql_host'), zp_conf('mysql_user'), zp_conf('mysql_pass'))
-     or die("Could not connect to MySQL: " . mysql_error());
+  $mysql_connection = @mysql_connect(zp_conf('mysql_host'), zp_conf('mysql_user'), zp_conf('mysql_pass'));
+  if (!$mysql_connection) {
+    echo "MySQL Error: Could not connect to the database server.<br />";
+    return false;
+  }
 
-  mysql_select_db($db) or die("Could not select database $db. Have you run the install script yet?");
-  // Check for the existence of the correct tables (with $mysql_prefix!)
-  // If there's a problem, set $mysql_connection to null and die with an error message.
+  if (!@mysql_select_db($db)) {
+    echo "MySQL Error: Could not select the database $db<br />";
+    return false;
+  }
+  return true;
 }
-
 db_connect();
 
 function query($sql) {
