@@ -103,7 +103,7 @@ class Image {
 
   function getComments() {
     $comments = query_full_array("SELECT *, (date + 0) AS date FROM " . prefix("comments") . 
-       " WHERE imageid='" . $this->imageid . "'");
+       " WHERE imageid='" . $this->imageid . "' ORDER BY id");
     $this->comments = $comments;
     return $this->comments;
   }
@@ -419,7 +419,7 @@ class Gallery {
 		$dp = opendir($albumdir);
 		$albums = array();
 		while ($file = readdir($dp)) {
-			if (is_dir($albumdir.$file) && $file != "." && $file != "..") {
+			if (is_dir($albumdir.$file) && substr($file, 0, 1) != '.') {
 				$albums[] = $file;
 			}
 		}
