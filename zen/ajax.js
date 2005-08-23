@@ -70,17 +70,12 @@ function initEditableDesc(divID) {
 
   
   div.saveChanges = function(form) {
-    try {
-      var formDiv = form.parentNode;
-      document.callbackdiv = this;
-      this.innerHTML = "Saving...";
-      x_saveDesc(form.content.value, this.saveChangesCB);
-      document.getElementById("zenphototempdiv").style.display = "none";
-      return this.stopEditing();
-    } catch (ex) {
-      alert(ex.title+" "+ex.message);
-      return false;
-    }
+    var formDiv = form.parentNode;
+    document.callbackdiv = this;
+    this.innerHTML = "Saving...";
+    x_saveDesc(form.content.value, this.saveChangesCB);
+    document.getElementById("zenphototempdiv").style.display = "none";
+    return this.stopEditing();
   }
   
   div.getInputField = function () {
