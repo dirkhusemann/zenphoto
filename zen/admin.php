@@ -213,8 +213,11 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
   
   } else { /* Admin-only content safe from here on. */ ?>
 
+
+<a href="./" id="logo"><img src="../zen/images/zen-logo.gif" title="Zen Photo" /></a>
+<div id="links"><a href="../">view gallery</a> &nbsp; <a href="?logout">logout</a></div>
+
 <div id="main">
-  <div id="links"><a href="../">view gallery</a> &nbsp; <a href="?logout">logout</a></div>
   <ul id="nav">
     <li<?= $page == "home" ? " class=\"current\"" : "" ?>><a href="?page=home">overview</a></li>
     <li<?= $page == "comments" ? " class=\"current\"" : "" ?>><a href="?page=comments">comments</a></li>
