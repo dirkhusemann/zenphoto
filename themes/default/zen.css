@@ -4,7 +4,8 @@
 	
 */
 
-/* Basic */
+/* Basics
+------------------------------ */
 html {
 	/* IE */
 	overflow-y: scroll; 
@@ -12,51 +13,25 @@ html {
 	height: 100%;
 	margin-bottom: 0.1em;
 }
+
+/* Main Layout
+------------------------------ */
 body {
 	background: #F5F5F3;
 	margin: 0px;
 	padding: 0px 0px 50px;
 	text-align: center;
-	font: normal 82%/200% "Helvetica Neue", Helvetica, Arial, sans-serif;
-	color: #5A5A4B;
-}
-hr {
-	clear: both;
-	height: 0;
-	border: 0;
-	border-top: 1px solid #E6E6DF;
-	margin: 0 0 12px 0;
-	padding: 0;
-}
-img {
-	border: 0;
 }
 #main {
 	text-align: left;
 	margin: 20px auto;
-	width: 660px;
+	width: 600px;
 	background: #fff;
-	padding: 30px 30px 70px;
+	padding: 20px 30px 70px;
 	border-top: 1px solid #E6E6DF;
 	border-right: 1px solid #E6E6DF;
 	border-bottom: 5px solid #E6E6DF;
 	border-left: 1px solid #E6E6DF;
-}
-h2 {
-	font: 120% "Helvetica Neue", Helvetica, Arial, sans-serif;
-	color: #002E5B;
-	margin-top: 30px;
-}
-h3 {
-	font: 120% "Helvetica Neue", Helvetica, Arial, sans-serif;
-	color: #002E5B;
-	margin-top: 30px;
-}
-blockquote {
-	border-left: 1px dotted #96967E;
-	margin-left: 20px;
-	padding-left: 20px;
-	color: #363630;
 }
 #credit {
 	margin: 0 auto;
@@ -77,28 +52,87 @@ blockquote {
 	text-decoration: none;
 }
 #gallerytitle {
-	border-bottom: 1px dotted #E6E6DF;
-	padding-bottom: 6px;
+	border-bottom: 1px solid #E6E6DF;
+	padding-bottom: 14px;
 	margin-bottom: 12px;
-}
-#imageDescEditable {
-	margin-top: 24px;
+	_margin-top: 40px; /* IE Only */
 }
 
-/* Page Navigation */
+
+/* Text Styles
+------------------------------ */
+body {
+	font: normal 82%/200% "Helvetica Neue", Helvetica, Arial, sans-serif;
+	color: #5A5A4B;
+}
+h2 {
+	font: 120% "Helvetica Neue", Helvetica, Arial, sans-serif;
+	color: #002E5B;
+	margin-top: 25px;
+}
+h2 a:link, h2 a:visited, h2 span {
+	color: #8DB8CF;
+}
+h3 {
+	font: 120% "Helvetica Neue", Helvetica, Arial, sans-serif;
+	color: #002E5B;
+	margin-top: 30px;
+}
+
+
+/* Link Styles
+------------------------------ */
+a:link, a:active { text-decoration: underline; color: #17A; }
+a:visited { text-decoration: underline; color: #035; }
+a:hover, a:focus { text-decoration: underline; color: #6BD; }
+
+
+/* Miscellaneous
+------------------------------ */
+hr {
+	clear: both;
+	height: 0;
+	border: 0;
+	border-top: 1px solid #E6E6DF;
+	margin: 0 0 12px 0;
+	padding: 0;
+}
+img {
+	border: 0;
+}
+blockquote {
+	border-left: 1px dotted #96967E;
+	margin-left: 20px;
+	padding-left: 20px;
+	color: #363630;
+}
+
+
+/* Page Navigation
+------------------------------ */
 ul.pagelist {
 	clear: both;
 	padding: 0;
-	margin: 0;
+	margin: 20px 0 0 0;
 	list-style-type: none;
 }
 ul.pagelist li {
 	display: inline;
 }
-.image { 
-	margin: 0;
-	padding: 0;
-	border: 0;
+ul.pagelist li a {
+	padding: 4px;
+}
+ul.pagelist li.current a {
+	font-weight: bold;
+	text-decoration: none;
+	cursor: default;
+	color: #5A5A4B;
+}
+ul.pagelist li.prev {
+	margin-right: 10px;
+}
+ul.pagelist li.next {
+	margin-left: 10px;
 }
 .disabledlink {
 	color: #ddd;
@@ -109,21 +143,22 @@ ul.pagelist li {
 }
 
 
-/* Album description */
+/* AJAX
+------------------------------ */
 #albumDescEditable {
 	margin-bottom: 12px;
 }
+#imageDescEditable {
+	margin-top: 24px;
+}
 
-/* Link Colours */
-a:link, a:active { text-decoration: underline; color: #17A; }
-a:visited { text-decoration: underline; color: #035; }
-a:hover, a:focus { text-decoration: underline; color: #6BD; }
-
-/* Image Thumbnails */
+/* Image Thumbnails
+------------------------------ */
 .imagethumb a {
 	display: block;
 	padding: 10px;
-	margin: 0 12px 12px 0;
+	margin: 6px;
+	
 	border: 1px solid #92BED3;
 	background: #DDEAF0;
 	line-height: 0px;
@@ -141,7 +176,8 @@ a:hover, a:focus { text-decoration: underline; color: #6BD; }
 }
 
 
-/* Album Thumbnails (Frontpage) */
+/* Album Thumbnails
+------------------------------ */
 .album {
 	padding: 10px;
 	margin-bottom: 12px;
@@ -158,7 +194,7 @@ a:hover, a:focus { text-decoration: underline; color: #6BD; }
 }
 .album h3 a {
 	display: block;
-	width: 400px;
+	width: 340px;
 	padding: 3px 0 6px 0;
 }
 .album p {
@@ -166,7 +202,7 @@ a:hover, a:focus { text-decoration: underline; color: #6BD; }
 }
 .albumdesc {
 	float: right;
-	width: 540px;
+	width: 480px;
 }
 .albumdesc small {
 	margin-top: 8px;
@@ -176,34 +212,47 @@ a:hover, a:focus { text-decoration: underline; color: #6BD; }
 	color: #8DB8CF;
 }
 
-/* Image */
+
+/* Individual Image
+------------------------------ */
+.image { 
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
 #image {
 	text-align: center;
 	line-height: 0;
-/*	padding: 10px;
-	margin-bottom: 12px;
-	border: 1px solid #E7F0F5;
-	background: #FBFCFD;*/
 }
 .imgnav {
 	float: right;
-	width: 100px;
+	width: 140px;
 	text-align: center;
-	margin: 12px auto 12px auto;
-	padding: 10px;
-	border: 1px solid #E7F0F5;
-	background: #FBFCFD;
+	border: 1px solid #D5E6EE;
+	background: #EEF5F9;
+	margin-top: 13px;
+	_margin-top: 8px; /* IE Only */
 }
-.imgnav .imgprevious a {
+.imgnav .imgprevious a, .imgnav .imgnext a {
 	display: block;
 	width: 50%;
 	height: 100%;
 	float: left;
+	padding: 4px 0;
+	font-size: 120%;
+	text-decoration: none;
+	line-height: 200%;
+	color: #237898;
+}
+.imgnav .imgprevious a:hover, .imgnav .imgnext a:hover {
+	background-color: #fff;
+	text-decoration: none;
+	color: #002E5B;
+}
+.imgnav .imgprevious a {
+	float: left;
 }
 .imgnav .imgnext a {
-	display: block;
-	width: 50%;
-	height: 100%;
 	float: right;
 }
 #narrow {
@@ -211,7 +260,9 @@ a:hover, a:focus { text-decoration: underline; color: #6BD; }
 	width: 440px;
 }
 
-/* Comments */
+
+/* Comments
+------------------------------ */
 #comments {
 	clear: both;
 }
@@ -219,7 +270,6 @@ a:hover, a:focus { text-decoration: underline; color: #6BD; }
   color: #C33; 
   font-weight: bold; 
 }
-
 .comment {
 	padding: 10px;
 	border: 1px solid #E7F0F5;
@@ -238,7 +288,9 @@ a:hover, a:focus { text-decoration: underline; color: #6BD; }
 	font-size: 85%;
 }
 
-/* Forms */
+
+/* Forms
+------------------------------ */
 .inputbox {
 	width: 250px;
 	padding: 2px;

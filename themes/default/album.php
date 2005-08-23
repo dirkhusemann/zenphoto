@@ -29,7 +29,7 @@
 	
 </div>
 
-<div id="credit">Powered by <a href="http://www.trisweb.com" title="A simpler web photo album">Zen Photo</a></div>
+<div id="credit"><?php if (zp_loggedin()) { ?><a href="<?=getGalleryIndexURL();?>/admin/">Admin</a> | <?php } ?>Powered by <a href="http://www.trisweb.com" title="A simpler web photo album">Zen Photo</a></div>
 
 </body>
 </html>

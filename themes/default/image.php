@@ -26,7 +26,6 @@
 		<?php /*if (hasNextImage()) echo " | "; */ } if (hasNextImage()) { ?>
 		<div class="imgnext"><a href="<?=getNextImageURL();?>" title="Next Image">next &raquo;</a></div>
 		<?php } ?>
-		<br style="clear: both; " />
 	</div>
 		
 	<div id="gallerytitle">
@@ -64,38 +63,38 @@
 			<div class="imgcommentform">
 				<!-- If comments are on for this image AND album... -->
 				<h3>Add a comment:</h3>
-				<form name="commentform" id="commentform" action="#" method="post">
-					<input type="hidden" name="comment" value="1" />
-          <input type="hidden" name="remember" value="1" />
+				<form id="commentform" action="#" method="post">
+				<div><input type="hidden" name="comment" value="1" />
+          		<input type="hidden" name="remember" value="1" />
           <?php if (isset($error)) { ?><tr><td><div class="error">There was an error submitting your comment. Name, a valid e-mail address, and a comment are required.</div></td></tr><?php } ?>
 
 					<table border="0">
 						<tr>
 							<td><label for="name">Name:</label></td>
-							<td><input type="text" name="name" size="20" value="<?=$stored[0];?>" class="inputbox" />
+							<td><input type="text" id="name" name="name" size="20" value="<?=$stored[0];?>" class="inputbox" />
 							</td>
 						</tr>
 						<tr>
 							<td><label for="email">E-Mail:</label></td>
-							<td><input type="text" name="email" size="20" value="<?=$stored[1];?>" class="inputbox" />
+							<td><input type="text" id="email" name="email" size="20" value="<?=$stored[1];?>" class="inputbox" />
 							</td>
 						</tr>
 						<tr>
 							<td><label for="website">Site:</label></td>
-							<td><input type="text" name="website" size="40" value="<?=$stored[2];?>" class="inputbox" /></td>
+							<td><input type="text" id="website" name="website" size="40" value="<?=$stored[2];?>" class="inputbox" /></td>
 						</tr>
             
 					</table>
 					<textarea name="comment" rows="6" cols="40"></textarea>
 					<br />
-					<input type="submit" value="Add Comment" class="pushbutton" />
+					<input type="submit" value="Add Comment" class="pushbutton" /></div>
 				</form>
 			</div>
 		</div>
 	</div>
 </div>
 
-<div id="credit">Powered by <a href="http://www.trisweb.com" title="A simpler web photo album">Zen Photo</a></div>
+<div id="credit"><?php if (zp_loggedin()) { ?><a href="<?=getGalleryIndexURL();?>/admin/">Admin</a> | <?php } ?>Powered by <a href="http://www.trisweb.com" title="A simpler web photo album">Zen Photo</a></div>
 
 </body>
 </html>

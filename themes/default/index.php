@@ -23,11 +23,11 @@
 			<?php printAlbumThumbImage(getAlbumTitle()); ?>
 			</a>
 			<div class="albumdesc">
-				<small>Date Taken: xx-xx-xxxx</small>
+				<?php /* Not Yet Implemented: <small>Date Taken: xx-xx-xxxx</small> */ ?>
 				<h3><a href="<?=getAlbumLinkURL();?>" title="View album: <?=getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
 				<p><?php printAlbumDesc(); ?></p>
 			</div>
-			<br style="clear: both; " />
+			<p style="clear: both; "></p>
 		</div>
 		<?php endwhile; ?>
 	</div>
@@ -36,7 +36,7 @@
 	<?php // printPageNav("&laquo; prev", "|", "next &raquo;"); ?>
 </div>
 
-<div id="credit">Powered by <a href="http://www.trisweb.com" title="A simpler web photo album">Zen Photo</a></div>
+<div id="credit"><?php if (zp_loggedin()) { ?><a href="<?=getGalleryIndexURL();?>/admin/">Admin</a> | <?php } ?>Powered by <a href="http://www.trisweb.com" title="A simpler web photo album">Zen Photo</a></div>
 
 </body>
 </html>
