@@ -45,8 +45,8 @@ body {
 	clear: both;
 	color: #597580;
 	font-size: 85%;
-	margin-top: 20px;
-	text-align: center;
+	margin: 8px 30px 0px;
+	text-align: right;
 }
 #footer a {
 	color: #597580;
@@ -216,7 +216,7 @@ table.bordered {
 	border-spacing: 1px;
 	margin: .5em 0px;
 	
-  	background: #F7F8F9;
+  background: #F7F8F9;
 	border-top: 1px solid #BAC9CF;
 	border-left: 1px solid #BAC9CF;
 	border-right: 1px solid #BAC9CF;
@@ -237,7 +237,7 @@ table.bordered td {
 	background-color: #fff;
 }
 .box { 
-  	background: #F7F8F9;
+  background: #F7F8F9;
 	border-top: 1px solid #BAC9CF;
 	border-left: 1px solid #BAC9CF;
 	border-right: 1px solid #BAC9CF;
@@ -296,7 +296,7 @@ textarea {
 }
 #albumselect {
 	padding: 10px;
-  	background: #F7F8F9;
+  background: #F7F8F9;
 	border-top: 1px solid #BAC9CF;
 	border-left: 1px solid #BAC9CF;
 	border-right: 1px solid #BAC9CF;

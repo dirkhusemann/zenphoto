@@ -5,12 +5,12 @@
 	<link rel="stylesheet" href="<?= $_zp_themeroot ?>/zen.css" type="text/css" />
 	<script type="text/javascript">
 	  function toggleComments() {
-		var commentDiv = document.getElementById("comments");
-		if (commentDiv.style.display == "block") {
-		  commentDiv.style.display = "none";
-		} else {
-		  commentDiv.style.display = "block";
-		}
+      var commentDiv = document.getElementById("comments");
+      if (commentDiv.style.display == "block") {
+        commentDiv.style.display = "none";
+      } else {
+        commentDiv.style.display = "block";
+      }
 	  }
 	</script>
 	<?php zenJavascript(); ?>
@@ -23,17 +23,17 @@
 	<div class="imgnav">
 		<?php if (hasPrevImage()) { ?>
 		<div class="imgprevious"><a href="<?=getPrevImageURL();?>" title="Previous Image">&laquo; prev</a></div>
-		<?php /*if (hasNextImage()) echo " | "; */ } if (hasNextImage()) { ?>
+		<?php } if (hasNextImage()) { ?>
 		<div class="imgnext"><a href="<?=getNextImageURL();?>" title="Next Image">next &raquo;</a></div>
 		<?php } ?>
 	</div>
 		
 	<div id="gallerytitle">
 		<h2><span><a href="<?=getGalleryIndexURL();?>" title="Gallery Index"><?=getGalleryTitle();?></a>
-		 | <a href="<?=getAlbumLinkURL();?>" title="Gallery Index"><?=getAlbumTitle();?></a>
-		  |</span> <?php printImageTitle(true); ?></h2>
+		  | <a href="<?=getAlbumLinkURL();?>" title="Gallery Index"><?=getAlbumTitle();?></a>
+		  | </span> <?php printImageTitle(true); ?></h2>
 	</div>
-	
+
 	<div id="image">
 		<a href="<?=getFullImageURL();?>" title="<?=getImageTitle();?>"> <?php printDefaultSizedImage(getImageTitle()); ?></a> 
 	</div>
@@ -56,7 +56,7 @@
 					<?=getCommentDate();?>
 					,
 					<?=getCommentTime();?>
-					PST
+          <?php printEditCommentLink('Edit', ' | ', ''); ?>
 				</div>
 			</div>
 			<?php endwhile; ?>
@@ -94,7 +94,6 @@
 	</div>
 </div>
 
-<div id="credit"><?php if (zp_loggedin()) { ?><a href="<?=getGalleryIndexURL();?>/admin/">Admin</a> | <?php } ?>Powered by <a href="http://www.trisweb.com" title="A simpler web photo album">Zen Photo</a></div>
-
+<div id="credit"><?php printAdminLink('Admin', '', ' | '); ?>Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
 </body>
 </html>

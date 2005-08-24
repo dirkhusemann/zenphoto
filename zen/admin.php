@@ -690,7 +690,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         </ul>
       </div>
       
-      
+      <?php /*
       <div class="box" id="overview-suggest">
         <h2 class="boxtitle">Suggestions</h2>
           <h3>Add titles to...</h3>
@@ -698,12 +698,15 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           <h3>Add descriptions to...</h3>
           
       </div>
-      
+      */ ?>
     <?php } ?>
     
-    <div id="footer"></div>
+    
   </div>
+  <div id="footer"><a href="http://www.zenphoto.org/">zenphoto</a> version <?= zp_conf('version'); ?></div>
 </div>
+
+
 
   
 <?php } /* No admin-only content allowed after this bracket! */ ?>

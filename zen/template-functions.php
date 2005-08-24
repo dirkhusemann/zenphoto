@@ -37,7 +37,7 @@ if (isset($_GET['album'])) {
 	if (isset($_GET['image'])) {
     $g_image = get_magic_quotes_gpc() ? stripslashes($_GET['image']) : $_GET['image'];
 		$_zp_current_context = ZP_IMAGE | ZP_ALBUM | ZP_INDEX;
-		// An image page; for image.php.
+		// An image page
 		$_zp_current_image = new Image(new Album($_zp_gallery, $g_album), $g_image);
 		$_zp_current_album = $_zp_current_image->getAlbum();
     
@@ -61,7 +61,7 @@ if (isset($_GET['album'])) {
           }
           $g_album = urlencode($g_album); $g_image = urlencode($g_image);
           header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/" . 
-            (zp_conf('mod_rewrite') ? "$g_album/$g_image" : "image.php?album=$g_album&image=$g_image"));
+            (zp_conf('mod_rewrite') ? "$g_album/$g_image" : "index.php?album=$g_album&image=$g_image"));
           exit;
         } else {
           $stored = array($_POST['name'], $_POST['email'], $website, $_POST['comment'], false);
@@ -72,7 +72,7 @@ if (isset($_GET['album'])) {
       }
     } else if (isset($_COOKIE['zenphoto'])) {
       // Comment form was not submitted; get the saved info from the cookie.
-      $stored = explode('|~*~|', stripslashes($_COOKIE['zenphoto'])); $stored[] = true; 
+      $stored = explode('|~*~|', stripslashes($_COOKIE['zenphoto'])); $stored[] = true;
     } else { 
       $stored = array("","","", false); 
     } 
@@ -173,6 +173,21 @@ function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
 }
 
 
+function printVersion() {
+  echo zp_conf('version');
+}
+
+// Prints a link to administration if the current user is logged-in
+function printAdminLink($text, $before='', $after='', $title=NULL, $class=NULL, $id=NULL) {
+  if (zp_loggedin()) {
+    echo $before;
+    printLink(WEBPATH.'/admin/', $text, $title, $class, $id);
+    echo $after;
+  }
+}
+
+
+
 
 /*** Gallery Index (album list) Context ***/
 /******************************************/
@@ -259,15 +274,15 @@ function getPageURL($page) {
   if ($page <= $total && $page > 0) {
     if (in_context(ZP_ALBUM)) {
       if (zp_conf('mod_rewrite')) {
-        return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/page/" . $page . "/";
+        return WEBPATH . "/" . urlencode($_zp_current_album->name) . (($page > 1) ? "/page/" . $page . "/" : "");
       } else {
-        return WEBPATH . "/album.php?album=" . urlencode($_zp_current_album->name) . "&page=" . $page;
+        return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . (($page > 1) ? "&page=" . $page : "");
       }
     } else if (in_context(ZP_INDEX)) {
       if (zp_conf('mod_rewrite')) {
-        return WEBPATH . "/page/" . $page . "/";
+        return WEBPATH . (($page > 1) ? "/page/" . $page . "/" : "");
       } else {
-        return WEBPATH . "/index.php?page=" . $page;
+        return WEBPATH . "/index.php" . (($page > 1) ? "?page=" . $page : "");
       }
     }
   }
@@ -501,7 +516,7 @@ function getNextImageURL() {
 	if (zp_conf('mod_rewrite')) {
 		return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/" . urlencode($_zp_current_image->getNextImage());
 	} else {
-		return WEBPATH . "/image.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($_zp_current_image->getNextImage());
+		return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($_zp_current_image->getNextImage());
 	}
 }
 function getPrevImageURL() {
@@ -510,7 +525,7 @@ function getPrevImageURL() {
 	if (zp_conf('mod_rewrite')) {
 		return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/" . urlencode($_zp_current_image->getPrevImage());
 	} else {
-		return WEBPATH . "/image.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($_zp_current_image->getPrevImage());
+		return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($_zp_current_image->getPrevImage());
 	}
 }
 
@@ -521,7 +536,7 @@ function getImageLinkURL() {
 	if (zp_conf('mod_rewrite')) {
 		return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/" . urlencode($_zp_current_image->name);
 	} else {
-		return WEBPATH . "/image.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($_zp_current_image->name);
+		return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($_zp_current_image->name);
 	}
 }
 
@@ -533,8 +548,10 @@ function getImageThumb() {
 	global $_zp_current_image;
 	return $_zp_current_image->getThumb();
 }
+
 function printImageThumb($alt, $class=NULL, $id=NULL) { 
 	echo "<img src=\"" . getImageThumb() . "\" alt=\"$alt\"" .
+    ((zp_conf('thumb_crop')) ? " width=\"".zp_conf('thumb_crop_width')."\" height=\"".zp_conf('thumb_crop_height')."\"" : "") .
 		(($class) ? " class=\"$class\"" : "") . 
 		(($id) ? " id=\"$id\"" : "") . " />";
 }
@@ -603,8 +620,11 @@ function next_comment() {
 /******************************************/
 
 function getCommentAuthorName() { global $_zp_current_comment; return $_zp_current_comment['name']; }
+
 function getCommentAuthorEmail() { global $_zp_current_comment; return $_zp_current_comment['email']; }
+
 function getCommentAuthorSite() { global $_zp_current_comment; return $_zp_current_comment['website']; }
+
 function printCommentAuthorLink($title=NULL, $class=NULL, $id=NULL) {
   $site = getCommentAuthorSite();
   $name = getCommentAuthorName();
@@ -615,11 +635,23 @@ function printCommentAuthorLink($title=NULL, $class=NULL, $id=NULL) {
     printLink($site, $name, $title, $class, $id);
   }
 }
+
 function getCommentDate() { global $_zp_current_comment; return myts_date("F jS, Y", $_zp_current_comment['date']); }
+
 function getCommentTime() { global $_zp_current_comment; return myts_date("g:i a", $_zp_current_comment['date']); }
+
 function getCommentBody() { 
   global $_zp_current_comment; 
   return str_replace("\n", "<br />", stripslashes($_zp_current_comment['comment'])); 
+}
+
+function printEditCommentLink($text, $before='', $after='', $title=NULL, $class=NULL, $id=NULL) {
+  global $_zp_current_comment;
+  if (zp_loggedin()) {
+    echo $before;
+    printLink(WEBPATH . '/admin/?page=editcomment&id=' . $_zp_current_comment['id'], $text, $title, $class, $id);
+    echo $after;
+  }
 }
 
 /*** End template functions ***/

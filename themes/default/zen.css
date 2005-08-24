@@ -119,7 +119,7 @@ ul.pagelist {
 ul.pagelist li {
 	display: inline;
 }
-ul.pagelist li a {
+ul.pagelist li a, ul.pagelist span.disabledlink {
 	padding: 4px;
 }
 ul.pagelist li.current a {
