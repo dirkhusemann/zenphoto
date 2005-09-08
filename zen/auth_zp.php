@@ -19,7 +19,7 @@ if (isset($_COOKIE['zenphoto_auth'])) {
     $redirect = $_POST['redirect'];
     if ($user == zp_conf("adminuser") && $pass == zp_conf("adminpass")) {
       // Correct auth info. Set the cookie.
-      setcookie("zenphoto_auth", sha1($user.$pass), time()+5184000, "/");
+      setcookie("zenphoto_auth", sha1($user.$pass), time()+5184000, WEBPATH);
       header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . WEBPATH . $redirect);
       $_zp_loggedin = true;
     } else {
@@ -30,7 +30,7 @@ if (isset($_COOKIE['zenphoto_auth'])) {
 unset($saved_auth, $check_auth, $user, $pass);
 // Handle a logout action.
 if (isset($_POST['logout']) || isset($_GET['logout'])) {
-  setcookie("zenphoto_auth", "", time()-368000, "/");
+  setcookie("zenphoto_auth", "", time()-368000, WEBPATH);
   header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/");
 }
 

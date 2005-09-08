@@ -115,9 +115,13 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 /** COMMENTS ******************************************************************/
 /*****************************************************************************/
 
-    } else if ($action == 'deletecomments') {
-      if (isset($_POST['ids'])) {
-        $ids = $_POST['ids'];
+    } else if ($action == 'deletecomments') {      
+      if (isset($_POST['ids']) || isset($_GET['id'])) {
+        if (isset($_GET['id'])) {
+          $ids = array($_GET['id']);
+        } else { 
+          $ids = $_POST['ids'];
+        }
         $total = count($ids);
         if ($total > 0) {
           $n = 0;
@@ -181,18 +185,19 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
-  <head>
-    <title>zenphoto administration</title>
-    <link rel="stylesheet" href="admin.css" type="text/css" />
-    <script type="text/javascript" src="admin.js"></script>
-  </head>
+<head>
+	<title>zenphoto administration</title>
+	<link rel="stylesheet" href="admin.css" type="text/css" />
+	<script type="text/javascript" src="admin.js"></script>
+</head>
   
-  <body>
+<body>
   
-  <?php if (!zp_loggedin()) {  /* Display the login form and exit. */ ?>
+<?php if (!zp_loggedin()) {  /* Display the login form and exit. */ ?>
   
+	<p><img src="../zen/images/zen-logo.gif" title="Zen Photo" /></p>
+
     <div id="loginform">
-    
     <form name="login" action="#" method="POST">
       <input type="hidden" name="login" value="1" />
       <input type="hidden" name="redirect" value="/admin/" />
@@ -213,9 +218,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
   
   } else { /* Admin-only content safe from here on. */ ?>
 
-
 <a href="./" id="logo"><img src="../zen/images/zen-logo.gif" title="Zen Photo" /></a>
-<div id="links"><a href="../">view gallery</a> &nbsp; <a href="?logout">logout</a></div>
+<div id="links"><a href="../">View Gallery</a> &nbsp; | &nbsp; <a href="?logout">Log Out</a></div>
 
 <div id="main">
   <ul id="nav">
@@ -245,7 +249,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         $folder = strip($_GET['album']);
         $album = new Album($gallery, $folder);
         ?>
-        <h1>edit photos</h1>
+        <h1>Edit Album</h1>
         <p><a href="?page=edit" title="Back to the list of albums">&laquo; back to the list</a></p>
         <form name="albumedit" action="?page=edit&action=save" method="post">
           <input type="hidden" name="album" value="<?= $album->name; ?>" />
@@ -316,7 +320,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         
       <?php } else if (isset($_GET['massedit'])) { 
       ?>
-      <h1>edit albums</h1>
+      <h1>Edit All Albums</h1>
       <p><a href="?page=edit" title="Back to the list of albums">&laquo; back to the list</a></p>
       <form name="albumedit" action="?page=edit&action=save" method="POST">
         <p><input type="submit" value="save" /> &nbsp; <input type="reset" value="reset" /></p>
@@ -352,12 +356,12 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 <?php /*** EDIT ALBUM SELECTION *********************************************************************/ ?> 
         
       <?php } else { /* Display a list of albums to edit. */ ?>
-        <h1>edit</h1>
-        <h2>Choose an album, or <a href="?page=edit&massedit">mass-edit album data</a>.</h2>
+        <h1>Edit Albums</h1>
+        <p>Select an album to edit it's description and data, or <a href="?page=edit&massedit">mass-edit all album data</a>.</p>
         
         <table class="bordered">
           <tr>
-            <th>Thumb</th>
+            <th style="width: 60px; ">Thumb</th>
             <th>Edit this album</th>
             <?php /* <th>Delete</th> */ ?>
           
@@ -414,13 +418,12 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
       
       </script>
       
-      <h1>upload photos</h1>
-      <p>Accepts any supported image (<acronym title="Joint Picture Expert's Group">JPEG</acronym>, 
-      <acronym title="Portable Network Graphics">PNG</acronym>, <acronym title="Graphics Interchange Format">GIF</acronym>) 
-      or a <strong>ZIP</strong> archive of those file types. <em>Note: When uploading archives</em>, 
-      directory structure is ignored, and all images anywhere in the archive will be added to the album.</p>
-      
-      <p>The maximum size of all data you can upload at once is <strong><?php echo ini_get('upload_max_filesize'); ?>B</strong>.</p>
+      <h1>Upload Photos</h1>
+      <p>This web-based upload accepts image formats: <acronym title="Joint Picture Expert's Group">JPEG</acronym>, 
+      <acronym title="Portable Network Graphics">PNG</acronym> and <acronym title="Graphics Interchange Format">GIF</acronym>.
+	  You can also upload a <strong>ZIP</strong> archive containing either of those file types.</p>
+	  <p><em>Note:</em> When uploading archives, <strong>all</strong> images in the archive are added to the album, regardles of directory structure.</p>
+      <p>The maximum size for any one file is <strong><?php echo ini_get('upload_max_filesize'); ?>B</strong>. Don't forget, you can also use <acronym title="File Transfer Protocol">FTP</acronym>!</p>
       
       <?php if ($error) { ?>
         <div class="errorbox">
@@ -435,7 +438,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 
         
         <div id="albumselect">
-          Upload to 
+          Upload to: 
           <select id="" name="albumselect" onChange="albumSwitch(this)">
             <option value="" selected="true">a New Album +</option>
           <?php $albums = $gallery->getAlbums(); foreach($albums as $folder) { $album = new Album($gallery, $folder); ?>
@@ -444,13 +447,13 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           </select>
           
           <div id="albumtext" style="margin-top: 5px;"> 
-            called <input id="albumtitle" size="22" type="text" name="albumtitle" value="" onkeyup="updateFolder(this, 'folderdisplay', 'autogen');" /> 
-            in the folder named  
+            called: <input id="albumtitle" size="22" type="text" name="albumtitle" value="" onkeyup="updateFolder(this, 'folderdisplay', 'autogen');" /> 
+            in the folder named: 
             <div style="position: relative; display: inline;">
               <div id="foldererror" style="display: none; color: #D66; position: absolute; z-index: 100; top: -2em; left: 0px;">That name is already used.</div>
-              <input id="folderdisplay" size="18" type="text" name="folderdisplay" value="" disabled="true" onkeyup="validateFolder(this);"/> 
+              <input id="folderdisplay" size="18" type="text" name="folderdisplay" disabled="true" onkeyup="validateFolder(this);"/> 
             </div>
-            <label><input type="checkbox" name="autogenfolder" id="autogen" checked="true" onClick="toggleAutogen('folderdisplay', 'albumtitle', this);" /> Auto-Generate</label>
+            <label><input type="checkbox" name="autogenfolder" id="autogen" checked="true" onClick="toggleAutogen('folderdisplay', 'albumtitle', this);" /> Auto-generate folder names</label>
             <input type="hidden" name="folder" value="" />
           </div>
           
@@ -480,7 +483,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         <p><a href="javascript:addUploadBoxes('place','filetemplate',5)" title="Doesn't reload!">+ Add more upload boxes</a> <small>(won't reload the page, but remember your upload limits!)</small></p>
         
         
-        <p><input type="submit" value="Upload!" onclick="this.form.folder.value = this.form.folderdisplay.value;" /></p>
+        <p><input type="submit" value="Upload" onclick="this.form.folder.value = this.form.folderdisplay.value;" class="button" /></p>
         
       </form>
       
@@ -493,53 +496,60 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
       /************************************************************************************/ ?> 
       
     <?php } else if ($page == "comments") { 
+      // Set up some view option variables.
       if ($_GET['n']) $pagenum = $_GET['n']; else $pagenum = 1;
       if (isset($_GET['fulltext'])) $fulltext = true; else $fulltext = false;
+      if (isset($_GET['viewall'])) $viewall = true; else $viewall = false;
 
       $comments = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.website,"
         . " c.date, c.comment, c.email FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
-        . " WHERE c.imageid = i.id AND i.albumid = a.id ORDER BY c.id DESC ");
+        . " WHERE c.imageid = i.id AND i.albumid = a.id ORDER BY c.id DESC " . ($viewall ? "" : "LIMIT 20") );
       
     ?>
-      <h1>comments</h1>
+      <h1>Comments</h1>
       
-      <?php /* Display a message if needed. Fade out and hide after 3 seconds. */ 
-        if (isset($_GET['ndeleted']) || isset($_GET['sedit'])) { ?>
+      <?php /* Display a message if needed. Fade out and hide after 2 seconds. */ 
+        if ((isset($_GET['ndeleted']) && $_GET['ndeleted'] > 0) || isset($_GET['sedit'])) { ?>
         <div class="errorbox" id="message">
           <?php if (isset($_GET['ndeleted'])) { ?> <h2><?= $_GET['ndeleted'] ?> Comments deleted successfully.</h2> <?php } ?>
           <?php if (isset($_GET['sedit'])) { ?> <h2>Comment saved successfully.</h2> <?php } ?>
         </div>
         <script type="text/javascript">
-          Fat.fade_and_hide_element('message', 30, 1000, 3000, Fat.get_bgcolor('message'), '#FFFFFF')
+          Fat.fade_and_hide_element('message', 30, 1000, 2000, Fat.get_bgcolor('message'), '#FFFFFF')
         </script>
       <?php } ?>
-      
+	  
+	  <p>You can edit or delete comments on your photos.</p>
+    <?php if($viewall) { ?>
+      <p>Showing <strong>all</strong> comments. <a href="?page=comments<?= ($fulltext ? "&fulltext":""); ?>"><strong>Just show 20.</strong></a></p>
+    <?php } else { ?>
+      <p>Showing the latest <strong>20</strong> comments. <a href="?page=comments&viewall<?= ($fulltext ? "&fulltext":""); ?>"><strong>View All</strong></a></p>
+    <?php } ?>
       <form name="comments" action="?page=comments&action=deletecomments" method="post" onsubmit="return confirm('Are you sure you want to delete these comments?');">
-      <label><input type="checkbox" name="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" /> Check All</label>
       <table class="bordered">
         <tr>
-          <th></th>
+          <th>&nbsp;</th>
           <th>Image</th>
           <th>Author/Link</th>
-          <th>Comment <?php if(!$fulltext) { ?>(<a href="?page=comments&n=<?= $pagenum ?>&fulltext">View full text</a>)
-            <?php } else { ?>(<a href="?page=comments&n=<?= $pagenum ?>">View truncated</a>)<?php } ?></th>
+          <th>Comment <?php if(!$fulltext) { ?>(<a href="?page=comments&fulltext<?= $viewall ? "&viewall":"" ?>">View full text</a>)
+            <?php } else { ?>(<a href="?page=comments<?= $viewall ? "&viewall":"" ?>">View truncated</a>)<?php } ?></th>
           <th>E-Mail</th>
-          <th></th>
+          <th colspan="2">&nbsp;</th>
         </tr>
         
-      <?php
-        foreach ($comments as $comment) {
-          $id = $comment['id'];
-          $author = $comment['name'];
-          $email = $comment['email'];
-          $album = $comment['folder'];
-          $image = $comment['filename'];
-          $albumtitle = $comment['albumtitle'];
-          if ($comment['title'] == "") $title = $image; else $title = $comment['title'];
-          $website = $comment['website'];
-          $shortcomment = truncate_string($comment['comment'], 123);
-          $fullcomment = $comment['comment'];
-      ?>
+  <?php
+    foreach ($comments as $comment) {
+      $id = $comment['id'];
+      $author = $comment['name'];
+      $email = $comment['email'];
+      $album = $comment['folder'];
+      $image = $comment['filename'];
+      $albumtitle = $comment['albumtitle'];
+      if ($comment['title'] == "") $title = $image; else $title = $comment['title'];
+      $website = $comment['website'];
+      $shortcomment = truncate_string($comment['comment'], 123);
+      $fullcomment = $comment['comment'];
+  ?>
 
           <tr>
             <td><input type="checkbox" name="ids[]" value="<?= $id ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" /></td>
@@ -549,12 +559,17 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
             <td><?= ($fulltext) ? $fullcomment : $shortcomment ?></td>
             <td><a href="mailto:<?= $email ?>?body=<?= commentReply($fullcomment, $author, $image, $albumtitle); ?>">Reply</a></td>
             <td><a href="?page=editcomment&id=<?= $id ?>" title="Edit this comment.">Edit</a></td>
+            <td><a href="javascript: if(confirm('Are you sure you want to delete this comment?')) { window.location='?page=comments&action=deletecomments&id=<?= $id ?>'; }" title="Delete this comment." style="color: #f00;">Delete</a></td>
           </tr>
-        <?php } ?>
+  <?php } ?>
+		<tr>
+			<td colspan="7" class="subhead"><label><input type="checkbox" name="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" /> Check All</label></td>
+		</tr>
+
       
       </table>
       
-      <input type="submit" value="Delete selected comments" />
+      <input type="submit" value="Delete Selected Comments" class="button" />
       </select>
       
       </form>
@@ -593,14 +608,15 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
       
     <?php } else if ($page == "options") { ?>
       
-      <h1>options</h1>
+      <h1>General Options</h1>
       
-      <h2>theme</h2>
+      <h2>Themes</h2>
+	  <p>Themes allow you to visually change the entire look and feel of your gallery. All themes are located in your <code>zenphoto/themes</code> folder, and you can download more themes at <a href="http://www.zenphoto.org">ZenPhoto.org</a>.</p>
       <table class="bordered">
         <?php 
         $themes = $gallery->getThemes();
         $current_theme = $gallery->getCurrentTheme();
-        $current_theme_style = "background-color: #e6e6e6;";
+        $current_theme_style = "background-color: #ECF1F2;";
         foreach($themes as $theme => $themeinfo):
           $style = ($theme == $current_theme) ? " style=\"$current_theme_style\"" : "";
           $themedir = SERVERPATH . "/themes/$theme";
@@ -626,8 +642,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           </td>
           <td width="100"<?=$style?>>
             <?php if (!($theme == $current_theme)) { ?>
-              <a href="?page=options&action=settheme&theme=<?=$theme?>" title="Set this as your theme"><strong>Use this theme</strong></a>
-            <?php } else { echo "Current theme"; } ?>
+              <a href="?page=options&action=settheme&theme=<?=$theme?>" title="Set this as your theme">Use this Theme</a>
+            <?php } else { echo "<strong>Current Theme</strong>"; } ?>
           </td>
         </tr>
         
@@ -639,7 +655,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
       /************************************************************************************/ ?> 
       
     <?php } else { $page = "home"; ?>
-      <h1>zenphoto administration</h1>
+      <h1>zenphoto Administration</h1>
       
       <ul id="home-actions">
         <li><a href="?page=upload"> &raquo; <strong>Upload</strong> pictures.</a></li>
@@ -674,23 +690,21 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
       </div>
       
       
-      <div class="box" id="overview-stats">
-        <h2 class="boxtitle">Gallery Stats</h2>
-        <ul>
-          <li><strong><?= $gallery->getNumImages(); ?></strong> images in <strong><?= $gallery->getNumAlbums(); ?></strong> albums.</li>
-          <li><strong><?= $gallery->getNumComments(); ?></strong> total comments.</li>
-          
-          <?php
-          // These disk operations are too slow...
-          /*
-          <li>Total size of cached images: <strong><?= size_readable($gallery->sizeOfCache(), "MB"); ?></strong></li>
-          <li>Total size of album images: <strong><?= size_readable($gallery->sizeOfImages(), "MB"); ?></strong></li>
-          */
-          ?>
-        </ul>
-      </div>
+		<div class="box" id="overview-stats">
+			<h2 class="boxtitle">Gallery Stats</h2>
+			<p>There are <strong><?= $gallery->getNumImages(); ?></strong> images in a total of <strong><?= $gallery->getNumAlbums(); ?></strong> albums.</p>
+			<p><strong><?= $gallery->getNumComments(); ?></strong> comments have been posted.</p>
+			
+			<?php
+			// These disk operations are too slow...
+			/*
+			<li>Total size of cached images: <strong><?= size_readable($gallery->sizeOfCache(), "MB"); ?></strong></li>
+			<li>Total size of album images: <strong><?= size_readable($gallery->sizeOfImages(), "MB"); ?></strong></li>
+			*/
+			?>
+		</div>
       
-      <?php /*
+      
       <div class="box" id="overview-suggest">
         <h2 class="boxtitle">Suggestions</h2>
           <h3>Add titles to...</h3>
@@ -698,18 +712,17 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           <h3>Add descriptions to...</h3>
           
       </div>
-      */ ?>
+	  
+	  <p style="clear: both; "></p>
+      
     <?php } ?>
     
-    
-  </div>
-  <div id="footer"><a href="http://www.zenphoto.org/">zenphoto</a> version <?= zp_conf('version'); ?></div>
 </div>
-
-
+	<div id="footer"><a href="http://www.zenphoto.org" title="A simpler web photo album">zen<strong>photo</strong></a> version <?= zp_conf('version'); ?></div>
+</div>
 
   
 <?php } /* No admin-only content allowed after this bracket! */ ?>
     
-  </body>
+</body>
 </html>
