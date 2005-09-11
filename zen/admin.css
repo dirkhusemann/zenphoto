@@ -346,3 +346,21 @@ label:hover {
 	border: 0px;
 }
 #loginform td { padding: 4px; }
+
+
+/* Thumbnail Preview selectbox effect.
+------------------------------------- */
+
+.thumbselect {
+  height: 80px;
+  padding-left: 90px;
+  background-repeat: no-repeat;
+  background-position: center left;
+}
+
+.thumboption {
+  padding-left: 90px;
+  height: 40px;
+  margin-bottom: 2px;
+  background-position: center left;
+}

@@ -246,7 +246,7 @@ class Album {
       $this->meta['date']  = $entry['date'];
       $this->meta['place'] = $entry['place'];
       $this->meta['show']  = $entry['show'];
-			$this->meta['thum b'] = $entry['thumb'];
+			$this->meta['thumb'] = $entry['thumb'];
       $this->albumid = $entry['id'];
     }
   }

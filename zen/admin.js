@@ -130,6 +130,12 @@ function toggleBigImage(id, largepath) {
 }
 
 
+function updateThumbPreview(selectObj) {
+  var thumb = selectObj.options[selectObj.selectedIndex].style.backgroundImage;
+  selectObj.style.backgroundImage = thumb;
+}
+
+
 
 // @name      The Fade Anything Technique
 // @namespace http://www.axentric.com/aside/fat/

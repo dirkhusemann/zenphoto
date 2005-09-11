@@ -22,6 +22,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         // FIXME: Date entry isn't ready yet...
         // $album->setDate(strip($_POST["albumdate"]));
         $album->setPlace(strip($_POST['albumplace']));
+        $album->setAlbumThumb(strip($_POST['thumb']));
         
         for ($i = 0; $i < $_POST['totalimages']; $i++) {
           $filename = strip($_POST["$i-filename"]);
@@ -265,13 +266,15 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
               <tr><td align="right" valign="top">Place: </td> <td><input type="text" name="albumplace" value="<?=$album->getPlace(); ?>" /></td></tr>
               <tr><td align="right" valign="top">Thumbnail: </td> 
                 <td>
-                  <select name="thumb">
+                  <select id="thumbselect" class="thumbselect" name="thumb" onchange="updateThumbPreview(this)">
                     <?php foreach ($images as $filename) { 
                         $image = new Image($album, $filename);
                         $selected = ($filename == $album->meta['thumb']); ?>
-                        <option value="<?= $filename ?>"><?= $image->meta['title'] ?><?= ($filename != $image->meta['title']) ? " ($filename)" : "" ?></option>
+                        <option class="thumboption" style="background-image: url(<?= $image->getThumb(); ?>); background-repeat: no-repeat;" 
+                          value="<?= $filename ?>" <?php if ($selected) echo ' selected="selected"'; ?>><?= $image->meta['title'] ?><?= ($filename != $image->meta['title']) ? " ($filename)" : "" ?></option>
                     <?php } ?>
                   </select>
+                  <script type="text/javascript">updateThumbPreview(document.getElementById('thumbselect'));</script>
                 </td>
               </tr>
             </table>
