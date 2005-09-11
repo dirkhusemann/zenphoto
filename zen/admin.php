@@ -248,6 +248,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
       <?php if (isset($_GET['album'])) {
         $folder = strip($_GET['album']);
         $album = new Album($gallery, $folder);
+        $images = $album->getImages();
+        $totalimages = sizeof($images);
         ?>
         <h1>Edit Album</h1>
         <p><a href="?page=edit" title="Back to the list of albums">&laquo; back to the list</a></p>
@@ -261,11 +263,21 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
               <tr><td align="right" valign="top">Album Description: </td> <td><textarea name="albumdesc" cols="60" rows="6"><?=$album->getDesc(); ?></textarea></td></tr>
               <tr><td align="right" valign="top">Date: </td> <td><input type="text" name="albumdate" value="<?=$album->getDateTime(); ?>" /></td></tr>
               <tr><td align="right" valign="top">Place: </td> <td><input type="text" name="albumplace" value="<?=$album->getPlace(); ?>" /></td></tr>
+              <tr><td align="right" valign="top">Thumbnail: </td> 
+                <td>
+                  <select name="thumb">
+                    <?php foreach ($images as $filename) { 
+                        $image = new Image($album, $filename);
+                        $selected = ($filename == $album->meta['thumb']); ?>
+                        <option value="<?= $filename ?>"><?= $image->meta['title'] ?><?= ($filename != $image->meta['title']) ? " ($filename)" : "" ?></option>
+                    <?php } ?>
+                  </select>
+                </td>
+              </tr>
             </table>
           </div>
 
-          <?php $images = $album->getImages();
-          $totalimages = sizeof($images); ?> 
+          
           <input type="hidden" name="totalimages" value="<?= $totalimages; ?>" />
           
           <p><input type="submit" value="save" /></p>

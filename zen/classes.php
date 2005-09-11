@@ -346,6 +346,11 @@ class Album {
 		$image = new Image($this, $thumb);
 		return $image->getThumb();
 	}
+  function setAlbumThumb($filename) {
+    $this->meta['thumb'] = $thumb;
+    query("UPDATE ".prefix("albums")." SET `thumb`='" . mysql_escape_string($filename) .
+      "' WHERE `id`=".$this->albumid);
+  }
 	
 	function getNextAlbum() {
     if ($this->index == null)
