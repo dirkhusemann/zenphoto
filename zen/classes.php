@@ -120,7 +120,7 @@ class Image {
     // Let the comment have trailing line breaks and space? Nah...
     // Also (in)validate HTML here, and in $name.
     $comment = trim($comment);
-    if (empty($email) || !is_email($email) || empty($name) || empty($comment)) {
+    if (empty($email) || !is_valid_email($email) || empty($name) || empty($comment)) {
       return false;
     }
     
