@@ -23,7 +23,7 @@
 			<?php printAlbumThumbImage(getAlbumTitle()); ?>
 			</a>
 			<div class="albumdesc">
-				<?php /* Not Yet Implemented: <small>Date Taken: xx-xx-xxxx</small> */ ?>
+				<small>Date Taken: <? printAlbumDate(); ?></small>
 				<h3><a href="<?=getAlbumLinkURL();?>" title="View album: <?=getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
 				<p><?php printAlbumDesc(); ?></p>
 			</div>
