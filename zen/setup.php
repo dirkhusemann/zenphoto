@@ -1,3 +1,4 @@
+<?php require_once("auth_zp.php"); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
@@ -30,7 +31,6 @@
 <?php
 
 if (file_exists("config.php")) {
-  require_once("auth_zp.php");
   if (!zp_loggedin()) {  /* Display the login form and exit. */ ?>
   
     <div id="loginform">
