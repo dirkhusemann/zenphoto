@@ -425,14 +425,14 @@ function getAlbumLinkURL() {
       return WEBPATH . "/" . urlencode($_zp_current_album->name) . 
         "/page/" . $_zp_current_image->getAlbumPage();
     } else {
-      return WEBPATH . "/album.php?album=" . urlencode($_zp_current_album->name) . 
+      return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . 
         "&page=" . $_zp_current_image->getAlbumPage();
     }
   } else {
     if (zp_conf('mod_rewrite')) {
       return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/";
     } else {
-      return WEBPATH . "/album.php?album=" . urlencode($_zp_current_album->name);
+      return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name);
     }
   }
 }
