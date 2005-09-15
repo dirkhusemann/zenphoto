@@ -126,10 +126,10 @@ if (file_exists("config.php")) {
     <li><strong>Step 1: Edit the <code>config.php.example</code> file and rename it to <code>config.php</code></strong> . You can find the file
       in the "zen" directory.</li>
     <li><strong>Step 2: Edit the .htaccess file in the root zenphoto folder</strong> if you have the mod_rewrite apache 
-      module, and want cruft-free URLs. Just change t3he one line indicated to make it work.</li>
+      module, and want cruft-free URLs. Just change the one line indicated to make it work.</li>
     <li><strong>Step 3: Change the permissions on the 'albums' and 'cache' folders to be writable by the server</strong> 
       (<code>chmod 777 cache</code>) (not necessary on Windows servers)
-    <li><strong>Step 4: Come back to this page and click "Go!"</strong>
+    <li><strong>Step 4: Come back to this page (just reload it if you're ready) and click "Go!"</strong>
   </ul>
   
   <? } ?>
