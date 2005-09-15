@@ -1,0 +1,13 @@
+
+zenphoto installation instructions
+--------------------------------------------------------------------------------
+
+1. Get the files in the zenphoto.zip or zenphoto.tar.gz package on to your
+   server somehow (FTP, SSH, wget, tar -xzvf .., etc.)
+   (You may want to do step 2 first)
+   
+2. Go to http://www.yoursite.com/zenphoto/zen/setup.php and follow the
+   simple instructions.
+   
+   
+(No, it's not really a 2 step install. There are 4 more steps in step 2...)
