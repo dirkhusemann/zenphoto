@@ -60,8 +60,8 @@ function updateFolder(nameObj, folderID, checkboxID) {
       fnamesuffix = "-"+count;
       count++;
     }
-    folder.value = fname+fnamesuffix;
   }
+  folder.value = fname+fnamesuffix;
 }
 
 function validateFolder(folderObj) {

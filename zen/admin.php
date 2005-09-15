@@ -262,7 +262,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
             <table>
               <tr><td align="right" valign="top">Album Title: </td> <td><input type="text" name="albumtitle" value="<?=$album->getTitle(); ?>" /></td></tr>
               <tr><td align="right" valign="top">Album Description: </td> <td><textarea name="albumdesc" cols="60" rows="6"><?=$album->getDesc(); ?></textarea></td></tr>
-              <tr><td align="right" valign="top">Date: </td> <td><input type="text" name="albumdate" value="<?=$album->getDateTime(); ?>" /></td></tr>
+              <?php /* Removing date entry for now... */ 
+                /* <tr><td align="right" valign="top">Date: </td> <td><input type="text" name="albumdate" value="<?=$album->getDateTime(); ?>" /></td></tr> */ ?>
               <tr><td align="right" valign="top">Place: </td> <td><input type="text" name="albumplace" value="<?=$album->getPlace(); ?>" /></td></tr>
               <tr><td align="right" valign="top">Thumbnail: </td> 
                 <td>
@@ -351,7 +352,10 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           <tr><td rowspan="4" valign="top"><a href="?page=edit&album=<?= $album->name; ?>" title="Edit this album: <?= $album->name; ?>"><img src="<?= $album->getAlbumThumb(); ?>" /></a></td>
             <td align="right" valign="top">Album Title: </td> <td><input type="text" name="<?= $currentalbum; ?>-title" value="<?=$album->getTitle(); ?>" /></td></tr>
           <tr><td align="right" valign="top">Album Description: </td> <td><textarea name="<?= $currentalbum; ?>-desc" cols="60" rows="6"><?=$album->getDesc(); ?></textarea></td></tr>
-          <tr><td align="right" valign="top">Date: </td> <td><input type="text" name="<?= $currentalbum; ?>-date" value="<?=$album->getDateTime(); ?>" /></td></tr>
+          
+          <?php /* Removing date entry for now... */ 
+                /* <tr><td align="right" valign="top">Date: </td> <td><input type="text" name="<?= $currentalbum; ?>-date" value="<?=$album->getDateTime(); ?>" /></td></tr> */ ?>
+          
           <tr><td align="right" valign="top">Place: </td> <td><input type="text" name="<?= $currentalbum; ?>-place" value="<?=$album->getPlace(); ?>" /></td></tr>
         </table>
         <hr />
@@ -517,7 +521,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
       if (isset($_GET['viewall'])) $viewall = true; else $viewall = false;
 
       $comments = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.website,"
-        . " c.date, c.comment, c.email FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
+        . " (c.date + 0) AS date, c.comment, c.email FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
         . " WHERE c.imageid = i.id AND i.albumid = a.id ORDER BY c.id DESC " . ($viewall ? "" : "LIMIT 20") );
       
     ?>
@@ -546,6 +550,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           <th>&nbsp;</th>
           <th>Image</th>
           <th>Author/Link</th>
+          <th>Date/Time</th>
           <th>Comment <?php if(!$fulltext) { ?>(<a href="?page=comments&fulltext<?= $viewall ? "&viewall":"" ?>">View full text</a>)
             <?php } else { ?>(<a href="?page=comments<?= $viewall ? "&viewall":"" ?>">View truncated</a>)<?php } ?></th>
           <th>E-Mail</th>
@@ -559,6 +564,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
       $email = $comment['email'];
       $album = $comment['folder'];
       $image = $comment['filename'];
+      $date  = myts_date("n/j/Y, g:i a", $comment['date']);
       $albumtitle = $comment['albumtitle'];
       if ($comment['title'] == "") $title = $image; else $title = $comment['title'];
       $website = $comment['website'];
@@ -571,14 +577,15 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
             <td style="font-size: 7pt;"><?php echo "<a href=\"" . (zp_conf("mod_rewrite") ? "../$album/$image" : "../image.php?album="
               .urlencode($album)."&image=".urlencode($image)) . "\">$albumtitle / $title</a>"; ?></td>
             <td><?= $website ? "<a href=\"$website\">$author</a>" : $author ?></td>
+            <td style="font-size: 7pt;"><?= $date ?></td>
             <td><?= ($fulltext) ? $fullcomment : $shortcomment ?></td>
             <td><a href="mailto:<?= $email ?>?body=<?= commentReply($fullcomment, $author, $image, $albumtitle); ?>">Reply</a></td>
             <td><a href="?page=editcomment&id=<?= $id ?>" title="Edit this comment.">Edit</a></td>
-            <td><a href="javascript: if(confirm('Are you sure you want to delete this comment?')) { window.location='?page=comments&action=deletecomments&id=<?= $id ?>'; }" title="Delete this comment." style="color: #f00;">Delete</a></td>
+            <td><a href="javascript: if(confirm('Are you sure you want to delete this comment?')) { window.location='?page=comments&action=deletecomments&id=<?= $id ?>'; }" title="Delete this comment." style="color: #c33;">Delete</a></td>
           </tr>
   <?php } ?>
 		<tr>
-			<td colspan="7" class="subhead"><label><input type="checkbox" name="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" /> Check All</label></td>
+			<td colspan="8" class="subhead"><label><input type="checkbox" name="allbox" onclick="checkAll(this.form, 'ids[]', this.checked);" /> Check All</label></td>
 		</tr>
 
       

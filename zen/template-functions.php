@@ -383,10 +383,12 @@ function getAlbumDate() {
   return $_zp_current_album->getDateTime();
 }
 
-function printAlbumDate($format="F jS, Y") {
+function printAlbumDate($before="Date: ", $nonemessage="", $format="F jS, Y") {
   $date = getAlbumDate();
   if ($date) {
-    echo myts_date($format, $date);
+    echo $before . myts_date($format, $date);
+  } else {
+    echo $nonemessage;
   }
 }
 
