@@ -1,4 +1,5 @@
-<?php require_once("classes.php"); /* Don't put anything before this line! */ 
+<?php  /* Don't put anything before this line! */ 
+require_once("classes.php");
 
 if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
   

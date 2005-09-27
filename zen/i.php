@@ -3,12 +3,6 @@
 
 // i.php - image generation.
 
-// First, fix the server and webpaths for the addition of the /zen from i.php
-define('SERVERPATH', dirname(dirname($_SERVER['SCRIPT_FILENAME'])));
-define('WEBPATH', dirname(dirname($_SERVER['SCRIPT_NAME'])));
-define('SERVERCACHE', SERVERPATH . "/cache");
-define('WEBCACHE', WEBPATH . "/cache");
-
 require_once("functions.php");
 
 // Set the config variables for convenience.
