@@ -178,24 +178,28 @@ class Image {
       return WEBPATH."/zen/i.php?a=" . urlencode($this->album->name) . "&i=" . urlencode($this->filename) . "&s=thumb";
     }
   }
-	
+  
+  function getIndex() {
+    if ($this->index == NULL) {
+      $this->index = array_search($this->filename, $this->album->getImages(0));
+    }
+    return $this->index;
+  }
+
 	// Returns the filename of the next/prev image.
 	function getNextImage() {
-    if ($this->index == null)
-      $this->index = array_search($this->filename, $this->album->getImages(0));
+    $this->getIndex();
 		return $this->album->getImage($this->index+1);
 	}
 	
 	function getPrevImage() {
-		if ($this->index == null)
-      $this->index = array_search($this->filename, $this->album->getImages(0));
+    $this->getIndex();
 		return $this->album->getImage($this->index-1);
 	}
   
   function getAlbumPage() {
+    $this->getIndex();
     $images_per_page = zp_conf('images_per_page');
-    if ($this->index == null)
-      $this->index = array_search($this->filename, $this->album->getImages(0));
     return floor(($this->index / $images_per_page)+1);
   }
 

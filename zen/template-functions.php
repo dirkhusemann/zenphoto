@@ -31,6 +31,7 @@ $_zp_images = NULL;
 $_zp_current_comment = NULL;
 $_zp_comments = NULL;
 $_zp_current_context = ZP_INDEX;
+$_zp_current_context_restore = NULL;
 
 // Parse the GET request to see what exactly is requested...
 
@@ -88,6 +89,7 @@ if (isset($_GET['album'])) {
 	$_zp_current_context = ZP_INDEX;
 }
 
+// Contextual manipulation.
 function get_context() { 
   global $_zp_current_context;
   return $_zp_current_context;
@@ -105,6 +107,15 @@ function add_context($context) {
 function rem_context($context) {
 	global $_zp_current_context;
 	set_context(get_context() & ~$context);
+}
+// Use save and restore rather than add/remove when modifying contexts.
+function save_context() {
+  global $_zp_current_context, $_zp_current_context_restore;
+  $_zp_current_context_restore = $_zp_current_context;
+}
+function restore_context() {
+  global $_zp_current_context, $_zp_current_context_restore;
+  $_zp_current_context = $_zp_current_context_restore;
 }
 
 if (zp_loggedin()) {
@@ -183,7 +194,7 @@ function printVersion() {
 function printAdminLink($text, $before='', $after='', $title=NULL, $class=NULL, $id=NULL) {
   if (zp_loggedin()) {
     echo $before;
-    printLink(WEBPATH.'/admin/', $text, $title, $class, $id);
+    printLink(WEBPATH.'/zen/admin.php', $text, $title, $class, $id);
     echo $after;
   }
 }
@@ -233,17 +244,18 @@ function getNumAlbums() {
 // WHILE next_album(): context switches to Album.
 // Switch back to index when there are no more albums.
 function next_album() {
-	global $_zp_albums, $_zp_gallery, $_zp_current_album, $_zp_page;
+	global $_zp_albums, $_zp_gallery, $_zp_current_album, $_zp_page, $_zp_current_album_restore;
 	if (is_null($_zp_albums)) {
 		$_zp_albums = $_zp_gallery->getAlbums($_zp_page);
     $_zp_current_album_restore = $_zp_current_album;
 		$_zp_current_album = new Album($_zp_gallery, array_shift($_zp_albums));
+    save_context();
 		add_context(ZP_ALBUM);
 		return true;
 	} else if (empty($_zp_albums)) {
 		$_zp_albums = NULL;
 		$_zp_current_album = $_zp_current_album_restore;
-		rem_context(ZP_ALBUM);
+		restore_context();
 		return false;
 	} else {
 		$_zp_current_album = new Album($_zp_gallery, array_shift($_zp_albums));
@@ -461,17 +473,18 @@ function getNumImages() {
 
 
 function next_image() { 
-	global $_zp_images, $_zp_current_image, $_zp_current_album, $_zp_page;
+	global $_zp_images, $_zp_current_image, $_zp_current_album, $_zp_page, $_zp_current_image_restore;
 	if (is_null($_zp_images)) {
 		$_zp_images = $_zp_current_album->getImages($_zp_page);
     $_zp_current_image_restore = $_zp_current_image;
 		$_zp_current_image = new Image($_zp_current_album, array_shift($_zp_images));
-		add_context(ZP_IMAGE);
+		save_context();
+    add_context(ZP_IMAGE);
 		return true;
 	} else if (empty($_zp_images)) {
 		$_zp_images = NULL;
 		$_zp_current_image = $_zp_current_image_restore;
-		rem_context(ZP_IMAGE);
+		restore_context();
 		return false;
 	} else {
 		$_zp_current_image = new Image($_zp_current_album, array_shift($_zp_images));
