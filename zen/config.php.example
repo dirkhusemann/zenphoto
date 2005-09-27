@@ -83,8 +83,13 @@ $conf['images_per_page'] = 15;
 
 $_zp_conf_vars = $conf;
 
-define('SERVERPATH', dirname($_SERVER['SCRIPT_FILENAME']));
-define('WEBPATH', dirname($_SERVER['SCRIPT_NAME']));
+if (basename($_SERVER['SCRIPT_FILENAME']) == "i.php" || basename($_SERVER['SCRIPT_FILENAME']) == "admin.php") {
+  define('SERVERPATH', dirname(dirname($_SERVER['SCRIPT_FILENAME'])));
+  define('WEBPATH', dirname(dirname($_SERVER['SCRIPT_NAME'])));
+} else {
+  define('SERVERPATH', dirname($_SERVER['SCRIPT_FILENAME']));
+  define('WEBPATH', dirname($_SERVER['SCRIPT_NAME']));
+}
 define('SERVERCACHE', SERVERPATH . "/cache");
 define('WEBCACHE', WEBPATH . "/cache");
 
