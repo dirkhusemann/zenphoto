@@ -23,8 +23,10 @@ if (isset($_GET['page'])) {
 // Initialize the global objects and object arrays for this page here:
 $_zp_gallery = new Gallery();
 $_zp_current_album = NULL;
+$_zp_current_album_restore = NULL;
 $_zp_albums = NULL;
 $_zp_current_image = NULL;
+$_zp_current_image_restore = NULL;
 $_zp_images = NULL;
 $_zp_current_comment = NULL;
 $_zp_comments = NULL;
@@ -234,12 +236,13 @@ function next_album() {
 	global $_zp_albums, $_zp_gallery, $_zp_current_album, $_zp_page;
 	if (is_null($_zp_albums)) {
 		$_zp_albums = $_zp_gallery->getAlbums($_zp_page);
+    $_zp_current_album_restore = $_zp_current_album;
 		$_zp_current_album = new Album($_zp_gallery, array_shift($_zp_albums));
 		add_context(ZP_ALBUM);
 		return true;
 	} else if (empty($_zp_albums)) {
 		$_zp_albums = NULL;
-		$_zp_current_album = NULL;
+		$_zp_current_album = $_zp_current_album_restore;
 		rem_context(ZP_ALBUM);
 		return false;
 	} else {
@@ -461,12 +464,13 @@ function next_image() {
 	global $_zp_images, $_zp_current_image, $_zp_current_album, $_zp_page;
 	if (is_null($_zp_images)) {
 		$_zp_images = $_zp_current_album->getImages($_zp_page);
+    $_zp_current_image_restore = $_zp_current_image;
 		$_zp_current_image = new Image($_zp_current_album, array_shift($_zp_images));
 		add_context(ZP_IMAGE);
 		return true;
 	} else if (empty($_zp_images)) {
 		$_zp_images = NULL;
-		$_zp_current_image = NULL;
+		$_zp_current_image = $_zp_current_image_restore;
 		rem_context(ZP_IMAGE);
 		return false;
 	} else {
@@ -529,6 +533,21 @@ function getPrevImageURL() {
 	} else {
 		return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($_zp_current_image->getPrevImage());
 	}
+}
+
+
+function getPrevImageThumb() {
+  if(!in_context(ZP_IMAGE)) return false;
+	global $_zp_current_album, $_zp_current_image;
+  $img = new Image($_zp_current_album, $_zp_current_image->getPrevImage());
+  return $img->getThumb();
+}
+
+function getNextImageThumb() {
+  if(!in_context(ZP_IMAGE)) return false;
+	global $_zp_current_album, $_zp_current_image;
+  $img = new Image($_zp_current_album, $_zp_current_image->getNextImage());
+  return $img->getThumb();
 }
 
 
