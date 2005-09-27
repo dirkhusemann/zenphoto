@@ -3,6 +3,11 @@
 
 // i.php - image generation.
 
+// First, fix the server and webpaths for the addition of the /zen from i.php
+define('SERVERPATH', dirname(dirname($_SERVER['SCRIPT_FILENAME'])));
+define('WEBPATH', dirname(dirname($_SERVER['SCRIPT_NAME'])));
+define('SERVERCACHE', SERVERPATH . "/cache");
+define('WEBCACHE', WEBPATH . "/cache");
 
 require_once("functions.php");
 
@@ -75,8 +80,8 @@ if (!file_exists($newfile)) {
   			$newh = round(($h / $w) * $size);
       }
       
-      // If the requested image is the same size as the original, redirect to it.
-      if ($newh == $h && $neww == $w) {
+      // If the requested image is the same size or smaller than the original, redirect to it.
+      if ($newh >= $h && $neww >= $w) {
         header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/albums/$album/$image");
         return;
       }

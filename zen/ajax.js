@@ -51,7 +51,7 @@ function initEditableTitle(divID) {
   }
   
   div.getInputField = function () {
-    return '<input type="text" name="content" value="'+this.textValue
+    return '<input type="text" name="content" value="'+this.innerHTML
       +'" style="font-size: '+this.style_fontSize
       +'; font-family: '+this.style_fontFamily
       +'; font-weight: '+this.style_fontWeight
@@ -123,10 +123,10 @@ function initEditableDiv(divID) {
   div.style_width = getStyle(div, "width");
   div.style_height = getStyle(div, "height");
   
-  if (div.textContent) {
-    div.textValue = div.textContent;
-  } else {
+  if (div.innerHTML) {
     div.textValue = div.innerHTML;
+  } else {
+    div.textValue = div.textContent;
   }
   
   if (trim(div.textValue) == "") {

@@ -50,6 +50,45 @@
 -->
 
 <div class="entry">
+  <h3>Version 0.9.0</h3>
+  <h4>9/27/2005</h4>
+  <ul>
+    <li>Removed web_path and server_path config variables. They are now automatically deduced (and there was much rejoicing).</li>
+    <li>Added theme functions: <code>getPrevImageThumb()</code> and <code>getNextImageThumb()</code> - return the path
+      to the thumbnail of the previous or next image relative to the current image.</li>
+    <li>Fixed bugs with using next_image() (for iterating through all album images) on an image page. You should now
+      be able to use any loop anywhere without affecting the state.</li>
+    <li>[Bug 005102] Images smaller than the standard image size will not be sized <em>up</em> anymore.</li>
+    <li>[Bug 005125] AJAX-editing no longer strips HTML from titles/descriptions.</li>
+    <li>[Bug 005086] Using zenphoto without mod_rewrite should work fine now.</li>
+  </ul>
+</div>
+
+<div class="entry">
+  <h3>Version 0.8.1, 0.8.2</h3>
+  <h4>9/16/2005</h4>
+  <ul>
+    <li>Fixed bugs in setup script causing instructions not to be shown.</li>
+    <li>(Note: 0.8.2 was a fix for a syntax error 0.8.1 that I hope no one saw)</li>
+  </ul>
+</div>
+
+<div class="entry">
+  <h3>Version 0.8.0 (Developer Release)</h3>
+  <h4>9/15/2005</h4>
+  <ul>
+    <li>Finalized default theme.</li>
+    <li>Admin: Added ability to choose which image to use for the album thumbnail.</li>
+    <li>More bugfixes.</li>
+  </ul>
+  
+  <h4>Relevant links:</h4>
+  <ul>
+    <li><a href="http://www.trisweb.com/archives/2005/09/15/zenphoto-08-beta-developer-release/">trisweb.com - zenphoto 0.8 developer release</a></li>
+  </ul>
+</div>
+
+<div class="entry">
   <h3>Version 0.6.0</h3>
   <h4>6/12/2005</h4>
   <ul>

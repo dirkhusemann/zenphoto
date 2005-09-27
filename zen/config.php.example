@@ -1,22 +1,29 @@
 <?php /* PUT NOTHING BEFORE THIS LINE, not even a line break! */
 $conf = array();
-define("DEBUG", true);
-
+define("DEBUG", false);
 /** Do not edit above this line. **/
 /**********************************/
 
-///////////   zenPHOTO configuration variables.
-// After you're done editing this file, load  
-// http://www.yoursite.com/zenphotodir/zen/setup.php
-// to run the setup (of course, replacing the paths where needed).
+///////////   zenPHOTO Configuration Variables   //////////////////////////////
+//  After you're done editing this file, load  
+//  http://www.yoursite.com/zenphotodir/zen/setup.php
+//  to run the setup (of course, replacing the paths where needed).
 
-//// The following three only matter if your template uses them.
-//   The default template does.
+// NOTE: web_path and server_path are no longer needed! :-)
+
+
+// Database login information (the most important part).
+$conf['mysql_user'] = "user";
+$conf['mysql_pass'] = "pass";
+$conf['mysql_host'] = "localhost"; // Probably won't need to change this.
+$conf['mysql_database'] = "database_name";
+// If you're sharing the database with other tables, use a prefix to be safe.
+$conf['mysql_prefix'] = "";
+
+
+
 // What you want to call your photo gallery.
 $conf['gallery_title'] = "my photos";
-// For a link back to your main site
-$conf['main_site_name'] = "my web site";
-$conf['main_site_url']  = "http://www.google.com/";
 
 // If you're in a different time zone from your server, set the offset in hours:
 $conf['time_offset'] = 0;
@@ -24,31 +31,17 @@ $conf['time_offset'] = 0;
 // Tags allowed in comments
 $conf['allowed_tags'] = "<a><i><em><b><strong><blockquote><abbr><acronym><ul><ol><li>";
 
-// The path to zenphoto on the server - e.g. /home/user/public_html/zenphoto. No trailing slash/
-$conf['serverpath']  = "/home/user/public_html/zenphoto";
-
-// The URL of zenphoto from the domain root. - e.g. 'http://www.yoursite.com/zenphoto'
-// (or '/zenphoto' in that case). No trailing slash/
-$conf['webpath'] = '/zenphoto';
-
 // If you have Apache mod_rewrite, put true here, and you'll get nice cruft-free URLs.
 // MAKE SURE TO EDIT THE .htaccess FILE with your path information.
 $conf['mod_rewrite'] = true;
 
-// Admin interface username (also used for setup).
+// Admin interface username (also required for running setup).
 $conf['adminuser'] = "admin";
 // Obviously insecure, don't put anything here you don't want anyone to see...
 // but make sure you change it to something other than 1234...
-// ("that's incredible, I've got the same combination on my luggage!")
 $conf['adminpass'] = "1234";
 
-// Database login information.
-$conf['mysql_user'] = "user";
-$conf['mysql_pass'] = "pass";
-$conf['mysql_host'] = "localhost"; // Probably won't need to change this.
-$conf['mysql_database'] = "database_name";
-// If you're sharing the database with other tables, use a prefix to be safe.
-$conf['mysql_prefix'] = "";
+
 
 // Image Processing Configuration
 
@@ -61,7 +54,7 @@ $conf['image_quality'] = 85;
 $conf['thumb_quality'] = 75;
 
 // Default image display width (themes will be able to control this 
-//   to an extent in the future).
+// to an extent in the future, but for now you may have to adjust it to fit your theme).
 $conf['image_size'] = 595;
 // If this is set to true, then the longest side of the image will be $image_size.
 // Otherwise, the *width* of the image will be $image_size.
@@ -90,10 +83,9 @@ $conf['images_per_page'] = 15;
 
 $_zp_conf_vars = $conf;
 
-define('SERVERPATH', $_zp_conf_vars['serverpath']);
-define('WEBPATH', $_zp_conf_vars['webpath']);
-define('SERVERCACHE', $_zp_conf_vars['serverpath']."/cache");
-define('WEBCACHE', $_zp_conf_vars['webpath']."/cache");
-define('VERSION', "0.2.2");
+define('SERVERPATH', dirname($_SERVER['SCRIPT_FILENAME']));
+define('WEBPATH', dirname($_SERVER['SCRIPT_NAME']));
+define('SERVERCACHE', SERVERPATH . "/cache");
+define('WEBCACHE', WEBPATH . "/cache");
 
 ?>
