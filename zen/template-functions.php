@@ -549,6 +549,25 @@ function getPrevImageURL() {
 }
 
 
+function printPreloadScript() {
+  global $_zp_current_image, $_zp_current_album;
+  $size = zp_conf('image_size');
+  if (hasNextImage() || hasPrevImage()) {
+    echo "<script type=\"text/javascript\">\n";
+    if (hasNextImage()) {
+      $nextimg = new Image($_zp_current_album, $_zp_current_image->getNextImage());
+      echo "  nextimg = new Image();\n  nextimg.src = \"" . $nextimg->getSizedImage($size) . "\";\n";
+    }
+    if (hasPrevImage()) { 
+      $previmg = new Image($_zp_current_album, $_zp_current_image->getPrevImage());
+      echo "  previmg = new Image();\n  previmg.src = \"" . $previmg->getSizedImage($size) . "\";\n";
+    }
+    
+    echo "</script>\n\n";
+  }
+}
+
+
 function getPrevImageThumb() {
   if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_album, $_zp_current_image;

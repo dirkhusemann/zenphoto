@@ -14,8 +14,11 @@
   }
   </script>
   <?php zenJavascript(); ?>
+  
 </head>
 <body>
+
+
 
 <div id="main">
   <div id="gallerytitle">
@@ -77,4 +80,7 @@
 </div>
 
 </body>
+
+<?php printPreloadScript(); ?>
+
 </html>
