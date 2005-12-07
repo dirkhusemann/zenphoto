@@ -1,0 +1,3 @@
+- If you have no albums, or images, then you start to fill up the db tables with all null
+entries every time you view the site.
+- If a picture's filename is edited, the old entry is not deleted from the images table.
