@@ -8,7 +8,7 @@
 require_once("auth_zp.php");
 
 // Set the version number.
-$_zp_conf_vars['version'] = '0.8 Beta';
+$_zp_conf_vars['version'] = '1.0 Beta';
 
 /**********************************************************************/
 // Image Class //
@@ -234,23 +234,28 @@ class Album {
     $entry = query_single_row("SELECT *, (date + 0) AS date FROM ".prefix("albums").
       " WHERE `folder`='".mysql_escape_string($folder)."' LIMIT 1;");
     if (!$entry) {
+      
       $this->meta['title'] = $folder;
       $this->meta['desc']  = NULL;
       $this->meta['date']  = NULL;
       $this->meta['place'] = NULL;
       $this->meta['show']  = 1;
-			$this->meta['thumb'] = NULL;
+	  $this->meta['thumb'] = NULL;
+	  
+	  // BUG: this causes invalid rows to be inserted into the db table
       query("INSERT INTO ".prefix("albums")." (folder, title) " .
             "VALUES ('".mysql_escape_string($folder).
             "', '".mysql_escape_string($folder)."');");
+            
       $this->albumid = mysql_insert_id();
     } else {
+    	
       $this->meta['title'] = $entry['title'];
       $this->meta['desc']  = $entry['desc'];
       $this->meta['date']  = $entry['date'];
       $this->meta['place'] = $entry['place'];
       $this->meta['show']  = $entry['show'];
-			$this->meta['thumb'] = $entry['thumb'];
+	  $this->meta['thumb'] = $entry['thumb'];
       $this->albumid = $entry['id'];
     }
   }
@@ -311,9 +316,15 @@ class Album {
 					$images[] = $file;
 				}
 			}
+			closedir($dp);
+			
 			// Sorting here? Alphabetical by default.
+			
+			// Todd - 12/06 - add some basic sorting - case insensitive natural sorting
+			natcasesort($images);	
+			
 			// Store the result so we don't have to traverse the dir again.
-			$this->images = $images;
+			$this->images = array_values($images);
 		}
 		// Return the cut of images based on $page. Page 0 means show all.
 		if ($page == 0) { 
