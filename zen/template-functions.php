@@ -33,8 +33,12 @@ $_zp_comments = NULL;
 $_zp_current_context = ZP_INDEX;
 $_zp_current_context_restore = NULL;
 
-// Parse the GET request to see what exactly is requested...
+// Load the Sortable lists now and set up the global sortable array
+require_once("SLLists.php");
+$_zp_sortable_list = new SLLists('zen/scriptaculous');
 
+
+// Parse the GET request to see what exactly is requested...
 if (isset($_GET['album'])) {
   $g_album = get_magic_quotes_gpc() ? stripslashes($_GET['album']) : $_GET['album'];
 	if (isset($_GET['image'])) {
@@ -157,6 +161,7 @@ if (zp_loggedin()) {
   sajax_export("saveDesc");
   sajax_handle_client_request();
   
+  
 }
   
 function zenJavascript() {
@@ -165,6 +170,41 @@ function zenJavascript() {
     echo "  <script type=\"text/javascript\">\n";
     sajax_show_javascript();
     echo "  </script>";
+  }
+}
+
+/**
+ * A utility function that can be used to insert all of the necessary script stuff
+ * in the <head> of the page so that sortable lists are enabled.
+ * 
+ * @author Todd Papaioannou (toddp@acm.org)
+ * @since  1.0.0
+ */
+function zenSortablesHeader()
+{
+  global $_zp_sortable_list;
+  
+  if (zp_loggedin() && isset($_GET['sortable'])) {
+      
+    $_zp_sortable_list->addList('images','imageOrder','div',"overlap:'horizontal',constraint:false");
+    $_zp_sortable_list->debug = false;
+    $_zp_sortable_list->printTopJS();
+  }
+}
+
+/**
+ * Insert the final Sortable.create call in the footer of the page. 
+ * This is required to finalize the sortable lists stuff.
+ * 
+ * @author Todd Papaioannou (toddp@acm.org)
+ * @since  1.0.0
+ */
+function zenSortablesFooter()
+{
+  global $_zp_sortable_list;
+  
+  if (zp_loggedin() && isset($_GET['sortable'])) {
+    $_zp_sortable_list->printBottomJs();
   }
 }
 
@@ -456,10 +496,34 @@ function printAlbumLink($text, $title, $class=NULL, $id=NULL) {
 	printLink(getAlbumLinkURL(), $text, $title, $class, $id);
 }
 
+/**
+ * Print a link that allows the user to sort the current album if they are logged in.
+ * If they are already sorting, the Save button is displayed.
+ * 
+ * @param  text   The text to display in the link
+ * @param  title  The title attribute for the link
+ * @param  class  The class of the link
+ * @param  id     The id of the link
+ * 
+ * @author Todd Papaioannou (toddp@acm.org)
+ * @since  1.0.0
+ */
+function printSortableAlbumLink($text, $title, $class=NULL, $id=NULL) {
+  global $_zp_sortable_list;
+  if (zp_loggedin()) {
+    if (!isset($_GET['sortable'])) {
+      printLink(getAlbumLinkURL()."&sortable", $text, $title, $class, $id);
+    } else {
+      $_zp_sortable_list->printForm(getAlbumLinkURL(), 'POST', 'Save', 'button');
+    }
+  }
+}
+
 function getAlbumThumb() { 
 	global $_zp_current_album;
 	return $_zp_current_album->getAlbumThumb();
 }
+
 function printAlbumThumbImage($alt, $class=NULL, $id=NULL) { 
 	echo "<img src=\"" . getAlbumThumb() . "\" alt=\"$alt\"" .
 		(($class) ? " class=\"$class\"" : "") . 
@@ -607,6 +671,26 @@ function printImageThumb($alt, $class=NULL, $id=NULL) {
     ((zp_conf('thumb_crop')) ? " width=\"".zp_conf('thumb_crop_width')."\" height=\"".zp_conf('thumb_crop_height')."\"" : "") .
 		(($class) ? " class=\"$class\"" : "") . 
 		(($id) ? " id=\"$id\"" : "") . " />";
+}
+
+
+/**
+ * Print the entire <div> for a thumbnail. If we are in sorting mode, then only
+ * the image is inserted, if not, then the hyperlink to the image is also added.
+ * 
+ * @author Todd Papaioannou (toddp@acm.org)
+ * @since  1.0.0
+ */
+function printImageDiv() {
+  
+  if (!isset($_GET['sortable'])) {
+    echo '<a href="'.getImageLinkURL().'" title="'.getImageTitle().'">';
+  }       
+  printImageThumb(getImageTitle());
+          
+  if (!isset($_GET['sortable'])) {
+    echo '</a>';
+  }
 }
 
 // TODO:
