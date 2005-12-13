@@ -1,3 +1,11 @@
+<?php
+if (isset($_POST['sortableListsSubmitted'])) {
+	$orderArray = SLLists::getOrderArray($_POST['imageOrder'],'images');
+	foreach($orderArray as $item) {
+		saveSortOrder($item['element'], $item['order']);
+	}
+}
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
@@ -23,7 +31,7 @@
 
   <div id="images">
     <?php while (next_image()): ?>  
-      <div class="image">
+      <div class="image" id="<?php printImageID(); ?>">
         <div class="imagethumb">
           <?php printImageDiv(); ?>
         </div>

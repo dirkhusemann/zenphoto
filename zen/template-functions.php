@@ -152,6 +152,21 @@ if (zp_loggedin()) {
     }
   }
   
+  /**
+   * Save the new sort order for an image.
+   *
+   * @param imageid   The id of the image, as defined in the id column.
+   * @param sortorder The new sort order for this image.
+   * 
+   * @author Todd Papaioannou (toddp@acm.org)
+   * @since  1.0.0 
+   */
+  function saveSortOrder($imageid, $sortorder) {
+    // TODO: Only issue the update when the order has changed. How do determine this?
+    query("UPDATE ".prefix("images")." SET `sort_order`='" . mysql_escape_string($sortorder) .
+          "' WHERE `id`=".$imageid);
+  }
+  
   
   // Load Sajax (AJAX Library) now that we have all objects set.
   require_once("Sajax.php");
@@ -575,11 +590,60 @@ function printImageTitle($editable=false) {
 	}
 }
 
+/**
+ * Get the unique ID of this image.
+ *
+ * @author Todd Papaioannou (toddp@acm.org)
+ * @since  1.0.0
+ */
+function getImageID() {
+  if (!in_context(ZP_IMAGE)) return false;
+	global $_zp_current_image;
+	return $_zp_current_image->getImageID();
+}
+
+/**
+ * Print the unique ID of this image.
+ *
+ * @author Todd Papaioannou (toddp@acm.org)
+ * @since  1.0.0
+ */
+function printImageID() {
+  if (!in_context(ZP_IMAGE)) return false;
+  global $_zp_current_image;
+  echo "image_".getImageID();
+}
+
+/**
+ * Get the sort order of this image.
+ *
+ * @author Todd Papaioannou (toddp@acm.org)
+ * @since  1.0.0
+ */
+function getImageSortOrder() {
+  if (!in_context(ZP_IMAGE)) return false;
+	global $_zp_current_image;
+	return $_zp_current_image->getSortOrder();
+}
+
+/**
+ * Print the sort order of this image.
+ *
+ * @author Todd Papaioannou (toddp@acm.org)
+ * @since  1.0.0
+ */
+function printImageSortOrder() {
+  if (!in_context(ZP_IMAGE)) return false;
+  global $_zp_current_image;
+  echo getImageSortOrder();
+}
+
 function getImageDesc() { 
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
 	return str_replace("\n", "<br />", $_zp_current_image->getDesc());
 }
+
 function printImageDesc($editable=false) {	
 	global $_zp_current_image;
 	if ($editable && zp_loggedin()) {

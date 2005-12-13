@@ -24,6 +24,7 @@ class Image {
   var $meta;      // Image metadata array.
   var $comments;  // Image comment array.
   var $index;     // The index of the current image in the album array.
+  var $sortorder; // The position that this image should be shown in the album
 
   // Constructor
   function Image($album, $filename) {
@@ -38,15 +39,19 @@ class Image {
 		$this->filename = $filename;
     $this->name = $filename; // Strip the extension?
     $this->comments = null;
+    
     // Query the database for an Image entry with the given filename/albumname
     $entry = query_single_row("SELECT * FROM ".prefix("images").
       " WHERE `filename`='".mysql_escape_string($filename).
       "' AND `albumid`='".mysql_escape_string($this->album->albumid)."' LIMIT 1;");
+    
     if (!$entry) {
       $this->meta['title'] = $filename;
       $this->meta['desc']  = null;
       $this->meta['commentson'] = 1;
       $this->meta['show'] = 1;
+      $this->meta['sortorder'] = null;
+      
       query("INSERT INTO ".prefix("images")." (albumid, filename, title) " .
             "VALUES ('".mysql_escape_string($this->album->albumid).
             "', '".mysql_escape_string($filename).
@@ -57,9 +62,14 @@ class Image {
       $this->meta['desc']  = $entry['desc'];
       $this->meta['commentson'] = $entry['commentson'];
       $this->meta['show'] = $entry['show'];
+      $this->meta['sortorder'] = $entry['sort_order'];
       $this->imageid = $entry['id'];
+      
     }
   }
+  
+  // Image ID - as found in the database
+  function getImageID() { return $this->imageid; }
 
   // Title
   function getTitle() { return $this->meta['title']; }
@@ -80,6 +90,14 @@ class Image {
   function setDesc($desc) {
     $this->meta['desc'] = $desc;
     query("UPDATE ".prefix("images")." SET `desc`='" . mysql_escape_string($desc) .
+          "' WHERE `id`=".$this->imageid);
+  }
+  
+  // Sort order
+  function getSortOrder() { return $this->meta['sortorder']; }
+  function setSortOrder($imageid, $sortorder) {
+    $this->meta['sortorder'] = $sortorder;
+    query("UPDATE ".prefix("images")." SET `sort_order`='" . mysql_escape_string($sortorder) .
           "' WHERE `id`=".$this->imageid);
   }
 
