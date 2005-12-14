@@ -2,25 +2,7 @@
 //           (c) 2005 Jon Tirsen (http://www.tirsen.com)
 //           (c) 2005 Michael Schuerig (http://www.schuerig.de/michael/)
 //
-// Permission is hereby granted, free of charge, to any person obtaining
-// a copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to
-// permit persons to whom the Software is furnished to do so, subject to
-// the following conditions:
-// 
-// The above copyright notice and this permission notice shall be
-// included in all copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
+// See scriptaculous.js for full license.
 
 // experimental, Firefox-only
 Event.simulateMouse = function(element, eventName) {
@@ -78,7 +60,7 @@ Event.simulateKeys = function(element, command) {
   }
 };
 
-Test = {}
+var Test = {}
 Test.Unit = {};
 
 // security exception workaround
@@ -91,7 +73,10 @@ Test.Unit.inspect = function(obj) {
   } else {
     for(property in obj)
       if(typeof obj[property]!="function")
-        info.push(property + ' => "' + obj[property] + '"');
+        info.push(property + ' => ' + 
+          (typeof obj[property] == "string" ?
+            '"' + obj[property] + '"' :
+            obj[property]));
   }
 
   return ("'" + obj + "' #" + typeof obj + 
@@ -144,7 +129,7 @@ Test.Unit.Logger.prototype = {
     this.loglines = $('loglines');
   },
   _toHTML: function(txt) {
-    return txt.escapeHTML().replace(/\n/,"<br/>");
+    return txt.escapeHTML().replace(/\n/g,"<br/>");
   }
 }
 
@@ -154,6 +139,7 @@ Test.Unit.Runner.prototype = {
     this.options = Object.extend({
       testLog: 'testlog'
     }, arguments[1] || {});
+    this.options.resultsURL = this.parseResultsURLQueryParameter();
     if (this.options.testLog) {
       this.options.testLog = $(this.options.testLog) || null;
     }
@@ -180,10 +166,40 @@ Test.Unit.Runner.prototype = {
     this.logger = new Test.Unit.Logger(this.options.testLog);
     setTimeout(this.runTests.bind(this), 1000);
   },
+  parseResultsURLQueryParameter: function() {
+    return window.location.search.parseQuery()["resultsURL"];
+  },
+  // Returns:
+  //  "ERROR" if there was an error,
+  //  "FAILURE" if there was a failure, or
+  //  "SUCCESS" if there was neither
+  getResult: function() {
+    var hasFailure = false;
+    for(var i=0;i<this.tests.length;i++) {
+      if (this.tests[i].errors > 0) {
+        return "ERROR";
+      }
+      if (this.tests[i].failures > 0) {
+        hasFailure = true;
+      }
+    }
+    if (hasFailure) {
+      return "FAILURE";
+    } else {
+      return "SUCCESS";
+    }
+  },
+  postResults: function() {
+    if (this.options.resultsURL) {
+      new Ajax.Request(this.options.resultsURL, 
+        { method: 'get', parameters: 'result=' + this.getResult(), asynchronous: false });
+    }
+  },
   runTests: function() {
     var test = this.tests[this.currentTest];
     if (!test) {
       // finished!
+      this.postResults();
       this.logger.summary(this.summary());
       return;
     }
@@ -281,29 +297,36 @@ Test.Unit.Assertions.prototype = {
   },
   assertNotNull: function(object) {
     var message = arguments[1] || 'assertNotNull';
-    this.assert(object != null);
+    this.assert(object != null, message);
   },
   assertInstanceOf: function(expected, actual) {
-    var message = arguments[1] || 'assertInstanceOf';
-    this.assert(actual instanceof expected);    
+    var message = arguments[2] || 'assertInstanceOf';
+    try { 
+      (actual instanceof expected) ? this.pass() : 
+      this.fail(message + ": object was not an instance of the expected type"); }
+    catch(e) { this.error(e); } 
+  },
+  assertNotInstanceOf: function(expected, actual) {
+    var message = arguments[2] || 'assertNotInstanceOf';
+    try { 
+      !(actual instanceof expected) ? this.pass() : 
+      this.fail(message + ": object was an instance of the not expected type"); }
+    catch(e) { this.error(e); } 
   },
   _isVisible: function(element) {
     element = $(element);
-    if(element == document) return true;
+    if(!element.parentNode) return true;
     this.assertNotNull(element);
-    // if it's not an element (just check parent) may be a text node for example
-    if (element.style && Element.getStyle(element, 'display') == 'none') {
+    if(element.style && Element.getStyle(element, 'display') == 'none')
       return false;
-    } else {
-      return this._isVisible(element.parentNode);
-    }
-    this.assertVisible(element.parentNode);
+    
+    return this._isVisible(element.parentNode);
   },
   assertNotVisible: function(element) {
-    this.assert(!this._isVisible(element), Test.Unit.inspect(element) + " was not hidden and didn't have a hidden parent either");
+    this.assert(!this._isVisible(element), Test.Unit.inspect(element) + " was not hidden and didn't have a hidden parent either. " + ("" || arguments[1]));
   },
   assertVisible: function(element) {
-    this.assert(this._isVisible(element), Test.Unit.inspect(element) + " was not visible");
+    this.assert(this._isVisible(element), Test.Unit.inspect(element) + " was not visible. " + ("" || arguments[1]));
   }
 }
 
