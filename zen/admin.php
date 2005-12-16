@@ -202,6 +202,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
     <div id="loginform">
     <form name="login" action="#" method="POST">
       <input type="hidden" name="login" value="1" />
+      
+      <? // TODO: (todd) I think this is where the admin link bug is ?>
       <input type="hidden" name="redirect" value="/admin/" />
       <table>
         <tr><td>Login</td><td><input class="textfield" name="user" type="text" size="20" /></td></tr>
@@ -254,7 +256,9 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         $totalimages = sizeof($images);
         ?>
         <h1>Edit Album</h1>
-        <p><a href="?page=edit" title="Back to the list of albums">&laquo; back to the list</a></p>
+        <p><a href="?page=edit" title="Back to the list of albums">&laquo; back to the list</a> | 
+        <a href="<?php echo WEBPATH."/zen/albumsort.php?album=$album->name"; ?>">Sort Album</a>
+        </p>
         <form name="albumedit" action="?page=edit&action=save" method="post">
           <input type="hidden" name="album" value="<?= $album->name; ?>" />
         

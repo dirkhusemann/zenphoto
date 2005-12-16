@@ -244,6 +244,8 @@ table.bordered td {
 	border-bottom: 5px solid #BAC9CF;
 }
 
+.imagethumb { margin: 0px; padding: 1px;}
+
 
 /* Forms
 ------------------------------ */

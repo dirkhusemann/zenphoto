@@ -454,6 +454,7 @@ class Gallery {
 	
 	function Gallery() {
 		$albumdir = SERVERPATH . "/albums/";
+		
 		if (!is_dir($albumdir) || !is_readable($albumdir)) {
 			die("Error: The 'albums' directory cannot be found or is not readable.");
 		}
