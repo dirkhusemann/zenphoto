@@ -65,7 +65,13 @@ if (!zp_loggedin()) {
       </div>
   
       <br>
-      <?php zenSortablesSaveButton("?album=". $album->getFolder()); ?>
+      <?php
+        if (isset($_GET['saved'])) {
+          echo "<p>Album order saved.</p>";
+        }
+        
+        zenSortablesSaveButton("?album=". $album->getFolder() . "&saved"); 
+      ?>
       
     </div>
     
