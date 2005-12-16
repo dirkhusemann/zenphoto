@@ -258,9 +258,9 @@ class Album {
       $this->meta['date']  = NULL;
       $this->meta['place'] = NULL;
       $this->meta['show']  = 1;
-	  $this->meta['thumb'] = NULL;
+	    $this->meta['thumb'] = NULL;
 	  
-	  // BUG: this causes invalid rows to be inserted into the db table
+	  // BUG: (todd) this causes invalid rows to be inserted into the db table
       query("INSERT INTO ".prefix("albums")." (folder, title) " .
             "VALUES ('".mysql_escape_string($folder).
             "', '".mysql_escape_string($folder)."');");
@@ -273,10 +273,13 @@ class Album {
       $this->meta['date']  = $entry['date'];
       $this->meta['place'] = $entry['place'];
       $this->meta['show']  = $entry['show'];
-	  $this->meta['thumb'] = $entry['thumb'];
+	    $this->meta['thumb'] = $entry['thumb'];
       $this->albumid = $entry['id'];
     }
   }
+  
+  // Folder on the filesystem
+  function getFolder() { return $this->name; }
 	
   // Title
   function getTitle() { return $this->meta['title']; }

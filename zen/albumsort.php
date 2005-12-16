@@ -27,7 +27,11 @@ if (!zp_loggedin()) {
   $gallery = new Gallery();
   
   // Create our album
-  if (isset($_GET['album'])) {
+  // TODO: We could be a bit more defensive here when parsing the incoming args
+  if (!isset($_GET['album'])) {
+    die("No album provided to sort.");
+  }
+  else if (isset($_GET['album'])) {
     $folder = strip($_GET['album']);
     $album = new Album($gallery, $folder);
     $images = $album->getImages();
@@ -61,7 +65,7 @@ if (!zp_loggedin()) {
       </div>
   
       <br>
-      <?php zenSortablesSaveButton($PHP_SELF); ?>
+      <?php zenSortablesSaveButton("?album=". $album->getFolder()); ?>
       
     </div>
     
