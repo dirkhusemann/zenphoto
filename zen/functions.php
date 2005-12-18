@@ -6,19 +6,12 @@
 
 require_once("config.php");
 
-
-// Resolve Paths:
-
-if (basename($_SERVER['SCRIPT_FILENAME']) == "i.php" 
-  || basename($_SERVER['SCRIPT_FILENAME']) == "albumsort.php"
-  || basename($_SERVER['SCRIPT_FILENAME']) == "setup.php"
-  || basename($_SERVER['SCRIPT_FILENAME']) == "admin.php") {
-  define('SERVERPATH', dirname(dirname($_SERVER['SCRIPT_FILENAME'])));
+if (strstr(basename(dirname($_SERVER['SCRIPT_NAME'])), "zen")) {
   define('WEBPATH', dirname(dirname($_SERVER['SCRIPT_NAME'])));
 } else {
-  define('SERVERPATH', dirname($_SERVER['SCRIPT_FILENAME']));
   define('WEBPATH', dirname($_SERVER['SCRIPT_NAME']));
 }
+define('SERVERPATH', dirname(dirname(__FILE__)));
 define('SERVERCACHE', SERVERPATH . "/cache");
 define('WEBCACHE', WEBPATH . "/cache");
 
@@ -39,7 +32,6 @@ function assert_handler($file, $line, $code) {
 }
 // Set up assertion callback
 assert_options(ASSERT_CALLBACK, 'assert_handler');
-
 
 // Image utility functions
 function is_valid_image($filename) {
