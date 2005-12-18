@@ -70,7 +70,7 @@ function printLoginForm() {
 
 function printLogoAndLinks() {
   
-  echo "\n\n<a href=\"./\" id=\"logo\"><img src=\"../zen/images/zen-logo.gif\" title=\"Zen Photo\" /></a>";
+  echo "\n\n<a href=\"".WEBPATH."/zen/admin.php\" id=\"logo\"><img src=\"../zen/images/zen-logo.gif\" title=\"Zen Photo\" /></a>";
   echo "\n<div id=\"links\">";
   echo "\n  <a href=\"../\">View Gallery</a> &nbsp; | &nbsp; <a href=\"?logout\">Log Out</a>";
   echo "\n</div>";

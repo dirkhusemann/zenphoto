@@ -6,6 +6,24 @@
 
 require_once("config.php");
 
+
+// Resolve Paths:
+
+if (basename($_SERVER['SCRIPT_FILENAME']) == "i.php" 
+  || basename($_SERVER['SCRIPT_FILENAME']) == "albumsort.php"
+  || basename($_SERVER['SCRIPT_FILENAME']) == "setup.php"
+  || basename($_SERVER['SCRIPT_FILENAME']) == "admin.php") {
+  define('SERVERPATH', dirname(dirname($_SERVER['SCRIPT_FILENAME'])));
+  define('WEBPATH', dirname(dirname($_SERVER['SCRIPT_NAME'])));
+} else {
+  define('SERVERPATH', dirname($_SERVER['SCRIPT_FILENAME']));
+  define('WEBPATH', dirname($_SERVER['SCRIPT_NAME']));
+}
+define('SERVERCACHE', SERVERPATH . "/cache");
+define('WEBCACHE', WEBPATH . "/cache");
+
+
+
 // For easy access to config vars.
 function zp_conf($var) {
   global $_zp_conf_vars;

@@ -4,9 +4,12 @@ require_once("classes.php");
 if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
   
   $gallery = new Gallery();
-  $gallery->garbageCollect();
-  // Full garbage collection is too slow, and unnecessary... only perform when needed.
-  // $gallery->garbageCollect(true, true);
+  if (isset($_GET['prune'])) {
+    $gallery->garbageCollect(true, true);
+    header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/zen/admin.php");
+  } else {
+    $gallery->garbageCollect();
+  }
   
   if (isset($_GET['action'])) {
     $action = $_GET['action'];
@@ -45,7 +48,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           $album->setPlace(strip($_POST["$i-place"]));
         }
       }
-      header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/admin/?page=edit");
+      header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/zen/admin.php?page=edit");
       exit();
       
 /** UPLOAD IMAGES *************************************************************/
@@ -91,7 +94,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           $album->setTitle($title);
         }
         
-        header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/admin/?page=edit&album=$folder");
+        header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/zen/admin.php?page=edit&album=$folder");
         exit();
         
       } else {
@@ -135,17 +138,17 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           }
           query($sql);
         }
-        header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/admin/?page=comments&ndeleted=$n");
+        header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/zen/admin.php?page=comments&ndeleted=$n");
         exit();
       } else {
-        header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/admin/?page=comments&ndeleted=0");
+        header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/zen/admin.php?page=comments&ndeleted=0");
         exit();
       }
       
       
     } else if ($action == 'savecomment') {
       if (!isset($_POST['id'])) {
-        header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/admin/?page=comments");
+        header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/zen/admin.php?page=comments");
         exit();
       }
       $id = $_POST['id'];
@@ -159,7 +162,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
       $sql = "UPDATE ".prefix('comments')." SET name = '$name', email = '$email', website = '$website', comment = '$comment' WHERE id = $id";
       query($sql);
       
-      header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/admin/?page=comments&sedit");
+      header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/zen/admin.php?page=comments&sedit");
       exit();
       
       
@@ -203,8 +206,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
     <form name="login" action="#" method="POST">
       <input type="hidden" name="login" value="1" />
       
-      <? // TODO: (todd) I think this is where the admin link bug is ?>
-      <input type="hidden" name="redirect" value="/admin/" />
+      <? /* TODO: (todd) I think this is where the admin link bug is */ ?>
+      <input type="hidden" name="redirect" value="/zen/admin.php" />
       <table>
         <tr><td>Login</td><td><input class="textfield" name="user" type="text" size="20" /></td></tr>
         <tr><td>Password</td><td><input class="textfield" name="pass" type="password" size="20" /></td></tr>
@@ -222,7 +225,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
   
   } else { /* Admin-only content safe from here on. */ ?>
 
-<a href="./" id="logo"><img src="../zen/images/zen-logo.gif" title="Zen Photo" /></a>
+<a href="<?= WEBPATH . "/zen/admin.php" ?>" id="logo"><img src="../zen/images/zen-logo.gif" title="Zen Photo" /></a>
 <div id="links"><a href="../">View Gallery</a> &nbsp; | &nbsp; <a href="?logout">Log Out</a></div>
 
 <div id="main">
@@ -719,15 +722,15 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
       
 		<div class="box" id="overview-stats">
 			<h2 class="boxtitle">Gallery Stats</h2>
-			<p>There are <strong><?= $gallery->getNumImages(); ?></strong> images in a total of <strong><?= $gallery->getNumAlbums(); ?></strong> albums.</p>
+			<p>There are <strong><?= $gallery->getNumImages(); ?></strong> images in a total of <strong><?= $gallery->getNumAlbums(); ?></strong> albums [<strong><a href="?prune">refresh</a></strong>].</p>
 			<p><strong><?= $gallery->getNumComments(); ?></strong> comments have been posted.</p>
 			
 			<?php
 			// These disk operations are too slow...
 			/*
-			<li>Total size of cached images: <strong><?= size_readable($gallery->sizeOfCache(), "MB"); ?></strong></li>
-			<li>Total size of album images: <strong><?= size_readable($gallery->sizeOfImages(), "MB"); ?></strong></li>
-			*/
+      <p>Total size of album images: <strong><?= size_readable($gallery->sizeOfImages(), "MB"); ?></strong></p>
+			<p>Total size of image cache: <strong><?= size_readable($gallery->sizeOfCache(), "MB"); ?></strong></p>
+      */
 			?>
 		</div>
       

@@ -88,6 +88,7 @@ if (file_exists("config.php")) {
       `desc` text,
       `commentson` int(1) NOT NULL default '1',
       `show` int(1) NOT NULL default '1',
+      `sort_order` int(11) default NULL,
       PRIMARY KEY  (`id`),
       KEY `filename` (`filename`,`albumid`),
       KEY `albumid` (`albumid`)

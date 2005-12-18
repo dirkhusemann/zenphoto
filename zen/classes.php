@@ -37,7 +37,7 @@ class Image {
 			die("Image <strong>{$this->localpath}</strong> does not exist.");
 		}
 		$this->filename = $filename;
-    $this->name = $filename; // Strip the extension?
+    $this->name = $filename;
     $this->comments = null;
     
     // Query the database for an Image entry with the given filename/albumname
@@ -46,7 +46,8 @@ class Image {
       "' AND `albumid`='".mysql_escape_string($this->album->albumid)."' LIMIT 1;");
     
     if (!$entry) {
-      $this->meta['title'] = $filename;
+      // Strip the extention from the filename for the initial title.
+      $this->meta['title'] = substr($filename, 0, strrpos($filename, '.'));
       $this->meta['desc']  = null;
       $this->meta['commentson'] = 1;
       $this->meta['show'] = 1;
@@ -110,6 +111,14 @@ class Image {
     query("UPDATE ".prefix("images")." SET `show`='" . $show .
           "' WHERE `id`=".$this->imageid);
   }
+  
+  
+  // Permanently delete this image (be careful!)
+  function deleteImage($clean = true) {
+    if ($clean) { query("DELETE FROM ".prefix('images')." WHERE `id` = " . $this->imageid); }
+    unlink($this->localpath);
+  }
+  
   
   // Are comments allowed?
   function getCommentsAllowed() { return $this->meta['commentson']; }
@@ -244,8 +253,9 @@ class Album {
     // First, instantiate the album object (->$this->$album). If the album doesn't exist yet, it'll be created.
     $this->name = $folder;
 		$this->gallery = $gallery;
-    if(!file_exists(SERVERPATH . "/albums/".$folder)) {
-      echo SERVERPATH."/albums/$folder<br>";
+    $this->localpath = SERVERPATH . "/albums/" . $folder . "/";
+    if(!file_exists($this->localpath)) {
+      echo $this->localpath . "<br />";
 			die("Album <strong>{$this->name}</strong> does not exist.");
 		}
     // Query the database for an Album entry with the given foldername
@@ -326,7 +336,7 @@ class Album {
   
 	function getImages($page=0) {
 		if (is_null($this->images)) {
-			$albumdir = SERVERPATH . "/albums/{$this->name}/";
+			$albumdir = $this->localpath;
 			if (!is_dir($albumdir) || !is_readable($albumdir)) {
 				die("The {$this->name} album cannot be found.\n");
 			}
@@ -406,6 +416,19 @@ class Album {
       $this->index = array_search($this->name, $this->gallery->getAlbums(0));
     return floor(($this->index / $albums_per_page)+1);
   }
+  
+  
+  // Delete the entire album PERMANENTLY. Be careful! This is unrecoverable.
+  function deleteAlbum() {
+    query("DELETE FROM ".prefix('albums')." WHERE `id` = " . $this->imageid);
+    foreach($this->getImages() as $imagefile) {
+      $image = new Image(this, $imagefile);
+      // false here means don't clean up (cascade already took care of it)
+      $image->deleteImage(false);
+    }
+    rmdir($this->localpath);
+  }
+  
   
   /* For every image in the album, look for its file. Delete from the database
    * if the file does not exist.
