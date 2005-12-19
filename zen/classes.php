@@ -71,6 +71,9 @@ class Image {
   
   // Image ID - as found in the database
   function getImageID() { return $this->imageid; }
+  
+  // The filename of this image
+  function getFileName() { return $this->filename; }
 
   // Title
   function getTitle() { return $this->meta['title']; }
@@ -208,8 +211,17 @@ class Image {
   
   function getIndex() {
     if ($this->index == NULL) {
-      $this->index = array_search($this->filename, $this->album->getImages(0));
+      $images = $this->album->getImages(0);
+      $i=0;
+      for ($i=0; $i < count($images); $i++) {
+        $image = $images[$i];
+        if ($this->filename == $image->filename) {
+          $this->index = $i;
+          break;
+        }
+      } 
     }
+
     return $this->index;
   }
 
@@ -240,8 +252,8 @@ class Image {
 
 class Album {
 
-  var $name;      // Folder name of the album.
-  var $albumid;   // From the database; simplifies queries.
+  var $name;             // Folder name of the album.
+  var $albumid;          // From the database; simplifies queries.
   var $meta = array();   // Album metadata array.
 	var $images = NULL;    // Full images array storage.
 	var $gallery;
@@ -269,6 +281,7 @@ class Album {
       $this->meta['place'] = NULL;
       $this->meta['show']  = 1;
 	    $this->meta['thumb'] = NULL;
+      $this->meta['sort_type'] = NULL;
 	  
 	  // BUG: (todd) this causes invalid rows to be inserted into the db table
       query("INSERT INTO ".prefix("albums")." (folder, title) " .
@@ -284,6 +297,7 @@ class Album {
       $this->meta['place'] = $entry['place'];
       $this->meta['show']  = $entry['show'];
 	    $this->meta['thumb'] = $entry['thumb'];
+      $this->meta['sort_type'] = $entry['sort_type'];
       $this->albumid = $entry['id'];
     }
   }
@@ -322,6 +336,14 @@ class Album {
     query("UPDATE ".prefix("albums")." SET `place`='" . mysql_escape_string($place) .
       "' WHERE `id`=".$this->albumid);    
   }
+  
+  // Sort type
+  function getSortType() { return $this->meta['sort_type']; }
+  function setSortType($sorttype) {
+    $this->meta['sort_type'] = $sorttype;
+    query("UPDATE ".prefix("albums")." SET `sort_type`='" . mysql_escape_string($sorttype) .
+      "' WHERE `id`=".$this->albumid);    
+  }
 
   // Show this album?
   function getShow() { return $this->meta['show']; }
@@ -335,27 +357,25 @@ class Album {
 	
   
 	function getImages($page=0) {
+	  
 		if (is_null($this->images)) {
-			$albumdir = $this->localpath;
-			if (!is_dir($albumdir) || !is_readable($albumdir)) {
-				die("The {$this->name} album cannot be found.\n");
-			}
-			$dp = opendir($albumdir);
-			$images = array();
-			while ($file = readdir($dp)) {
-				if (is_file($albumdir.$file) && is_valid_image($file)) {
-					$images[] = $file;
-				}
-			}
-			closedir($dp);
+
+		  // Load the filenames
+		  $files = $this->loadFileNames();
+		  
+		  // The local image array
+		  $images = array();
+		  
+		  // Walk through and turn them into Images
+		  foreach ($files as $file) {
+				$images[] = new Image($this, $file);
+		  }
 			
 			// Sorting here? Alphabetical by default.
-			
-			// Todd - 12/06 - add some basic sorting - case insensitive natural sorting
-			natcasesort($images);	
+			//$images = $this->sortImageArray("filename", $images);
 			
 			// Store the result so we don't have to traverse the dir again.
-			$this->images = array_values($images);
+			$this->images = $images;
 		}
 		// Return the cut of images based on $page. Page 0 means show all.
 		if ($page == 0) { 
@@ -364,6 +384,40 @@ class Album {
 			$images_per_page = zp_conf('images_per_page');
 			return array_slice($this->images, $images_per_page*($page-1), $images_per_page);
 		}
+	}
+  
+  /**
+	 * Sort Image Array will sort an array of Images based on the given key. The
+	 * key should correspond to any of the Image fields that can be sorted.
+	 *
+	 * @param key    The key to sort on.
+	 * @param images The array to be sorted.
+	 * @return A new array of sorted images.
+	 */
+	function sortImageArray($key, $images) {
+	  
+	  $newImageArray = array();
+	  $realkey = NULL;
+	  
+	  foreach ($images as $image) {
+	    if ($key == "title") {
+	      $realkey = $image->meta['title'];
+	    } else if ($key == "sortorder") {
+	      $realkey = $image->getSortOrder();
+	    } else {
+	      $realkey = $image->filename;
+	    }
+	    
+	    echo "real key = $realkey, index = $image\n";
+	    	    
+	    $newImageArray[$realkey] = $image;
+	  }
+	  
+	  // Now sort the array
+	  $newImageArray = natcasesort($newImageArray);
+	  
+	  // Return a new array with just the values
+	  return array_values($newImageArray);
 	}
 	
 	function getNumImages() {
@@ -421,8 +475,7 @@ class Album {
   // Delete the entire album PERMANENTLY. Be careful! This is unrecoverable.
   function deleteAlbum() {
     query("DELETE FROM ".prefix('albums')." WHERE `id` = " . $this->imageid);
-    foreach($this->getImages() as $imagefile) {
-      $image = new Image(this, $imagefile);
+    foreach($this->getImages() as $image) {
       // false here means don't clean up (cascade already took care of it)
       $image->deleteImage(false);
     }
@@ -430,15 +483,21 @@ class Album {
   }
   
   
-  /* For every image in the album, look for its file. Delete from the database
+  /**
+   * For every image in the album, look for its file. Delete from the database
    * if the file does not exist.
    */
   function garbageCollect() {
     if (is_null($this->images)) $this->getImages();
     $result = query("SELECT * FROM ".prefix('images')." WHERE `albumid` = ".$this->albumid);
     $dead = array();
+    
+    // Read in all of the files on disk
+    $files = $this->loadFileNames();
+    
+    // Does the filename from the db row match any in the files on disk?
     while($row = mysql_fetch_assoc($result)) {
-      if (!in_array($row['filename'], $this->images)) {
+      if (!in_array($row['filename'], $files)) {
         $dead[] = $row['id'];
       }
     }
@@ -454,8 +513,40 @@ class Album {
   function preLoad() {
     $images = $this->getImages();
     foreach ($images as $image) {
-      $img = new Image($this, $image);
+      $img = $image;
     }
+  }
+  
+  /**
+   * Load all of the filenames that are found in this Albums directory on disk.
+   *
+   * @return An array of file names.
+   * 
+   * @author Todd Papaioannou (toddp@acm.org)
+   * @since  1.0.0
+   */
+  function loadFileNames() {
+    
+    // This is where we'll look for files
+    $albumdir = SERVERPATH . "/albums/{$this->name}/";
+    
+    // Be defensive
+		if (!is_dir($albumdir) || !is_readable($albumdir)) {
+			die("The {$this->name} album cannot be found.\n");
+		}
+
+		$dir = opendir($albumdir);
+		$files = array();
+		
+		// Walk through the list and add them to the array
+		while ($file = readdir($dir)) {
+  		if (is_file($albumdir.$file) && is_valid_image($file)) {
+  			$files[] = $file;
+  		}
+		}
+		closedir($dir);
+		
+		return $files;
   }
   
 }

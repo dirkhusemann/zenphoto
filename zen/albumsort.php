@@ -56,8 +56,7 @@ if (!zp_loggedin()) {
     <p>Sort the images by dragging them..</p>
     
       <div id="images">
-      <?php foreach ($images as $filename) { 
-        $image = new Image($album, $filename);
+      <?php foreach ($images as $image) { 
         printImageThumb($image);
       }
       ?>

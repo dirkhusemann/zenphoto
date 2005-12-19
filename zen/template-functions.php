@@ -502,7 +502,7 @@ function next_image() {
 	if (is_null($_zp_images)) {
 		$_zp_images = $_zp_current_album->getImages($_zp_page);
     $_zp_current_image_restore = $_zp_current_image;
-		$_zp_current_image = new Image($_zp_current_album, array_shift($_zp_images));
+		$_zp_current_image = array_shift($_zp_images);
 		save_context();
     add_context(ZP_IMAGE);
 		return true;
@@ -512,7 +512,7 @@ function next_image() {
 		restore_context();
 		return false;
 	} else {
-		$_zp_current_image = new Image($_zp_current_album, array_shift($_zp_images));
+		$_zp_current_image = array_shift($_zp_images);
 		return true;
 	}
 }

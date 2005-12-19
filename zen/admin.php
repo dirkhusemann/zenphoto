@@ -30,9 +30,14 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         
         for ($i = 0; $i < $_POST['totalimages']; $i++) {
           $filename = strip($_POST["$i-filename"]);
-          $image = new Image($album, $filename);
-          $image->setTitle(strip($_POST["$i-title"]));
-          $image->setDesc(strip($_POST["$i-desc"]));          
+          
+          // The file might no longer exist
+          if (file_exists($filename)) {
+            $image = new Image($album, $filename);
+            $image->setTitle(strip($_POST["$i-title"]));
+            $image->setDesc(strip($_POST["$i-desc"]));          
+          }
+          // TODO: delete it from the db? This should happen somewhere..
         }
         
 /** SAVE MULTIPLE ALBUMS ******************************************************/
@@ -276,8 +281,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
               <tr><td align="right" valign="top">Thumbnail: </td> 
                 <td>
                   <select id="thumbselect" class="thumbselect" name="thumb" onchange="updateThumbPreview(this)">
-                    <?php foreach ($images as $filename) { 
-                        $image = new Image($album, $filename);
+                    <?php foreach ($images as $image) { 
+                        $filename = $image->getFileName();
                         $selected = ($filename == $album->meta['thumb']); ?>
                         <option class="thumboption" style="background-image: url(<?= $image->getThumb(); ?>); background-repeat: no-repeat;" 
                           value="<?= $filename ?>" <?php if ($selected) echo ' selected="selected"'; ?>><?= $image->meta['title'] ?><?= ($filename != $image->meta['title']) ? " ($filename)" : "" ?></option>
@@ -300,8 +305,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
            
             <?php
             $currentimage = 0;
-            foreach ($images as $filename) {
-              $image = new Image($album, $filename);
+            foreach ($images as $image) {
             ?>
             
             <tr id=""<?= ($currentimage % 2 == 0) ?  "class=\"alt\"" : "" ?>>
