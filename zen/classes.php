@@ -225,15 +225,20 @@ class Image {
     return $this->index;
   }
 
+  // TODO: To keep the Image in array abstraction these next two methods
+	// should really return an Image.
+	
 	// Returns the filename of the next/prev image.
 	function getNextImage() {
     $this->getIndex();
-		return $this->album->getImage($this->index+1);
+    $image = $this->album->getImage($this->index+1);
+		return $image->getFileName();
 	}
 	
 	function getPrevImage() {
     $this->getIndex();
-		return $this->album->getImage($this->index-1);
+		$image = $this->album->getImage($this->index-1);
+		return $image->getFileName();
 	}
   
   function getAlbumPage() {
