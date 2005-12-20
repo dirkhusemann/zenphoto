@@ -232,13 +232,24 @@ class Image {
 	function getNextImage() {
     $this->getIndex();
     $image = $this->album->getImage($this->index+1);
-		return $image->getFileName();
+		
+    if ($image != NULL) {
+  		return $image->getFileName();
+		} else {
+		  return NULL;
+		}
 	}
 	
 	function getPrevImage() {
     $this->getIndex();
 		$image = $this->album->getImage($this->index-1);
-		return $image->getFileName();
+		
+		if ($image != NULL) {
+  		return $image->getFileName();
+		} else {
+		  return NULL;
+		}
+		
 	}
   
   function getAlbumPage() {
@@ -376,8 +387,8 @@ class Album {
 				$images[] = new Image($this, $file);
 		  }
 			
-			// Sorting here? Alphabetical by default.
-			//$images = $this->sortImageArray("filename", $images);
+			// Sort the images array
+			$images = $this->sortImageArray($images, $this->getSortType());
 			
 			// Store the result so we don't have to traverse the dir again.
 			$this->images = $images;
@@ -393,33 +404,40 @@ class Album {
   
   /**
 	 * Sort Image Array will sort an array of Images based on the given key. The
-	 * key should correspond to any of the Image fields that can be sorted.
+	 * key should correspond to any of the Image fields that can be sorted. If the
+	 * given key turns out to be NULL for an image, we default to the filename.
 	 *
 	 * @param key    The key to sort on.
 	 * @param images The array to be sorted.
 	 * @return A new array of sorted images.
+	 * 
+	 * @author Todd Papaioannou (toddp@acm.org)
+	 * @since  1.0.0
 	 */
-	function sortImageArray($key, $images) {
+	function sortImageArray($images, $key = "filename") {
 	  
 	  $newImageArray = array();
 	  $realkey = NULL;
 	  
 	  foreach ($images as $image) {
 	    if ($key == "title") {
-	      $realkey = $image->meta['title'];
+	      $realkey = $image->getTitle();
 	    } else if ($key == "sortorder") {
 	      $realkey = $image->getSortOrder();
 	    } else {
-	      $realkey = $image->filename;
+	      $realkey = $image->getFileName();
 	    }
 	    
-	    echo "real key = $realkey, index = $image\n";
+	    // null won't work in the array, so default to filename
+	    if ($realkey == NULL) {
+	      $realkey = $image->filename;
+	    }
 	    	    
 	    $newImageArray[$realkey] = $image;
 	  }
 	  
-	  // Now sort the array
-	  $newImageArray = natcasesort($newImageArray);
+	  // Now natcase sort the array based on the keys 
+	  uksort($newImageArray, "strnatcasecmp");
 	  
 	  // Return a new array with just the values
 	  return array_values($newImageArray);
