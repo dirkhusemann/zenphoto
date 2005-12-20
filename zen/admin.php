@@ -388,7 +388,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         
       <?php } else { /* Display a list of albums to edit. */ ?>
         <h1>Edit Albums</h1>
-        <p>Select an album to edit it's description and data, or <a href="?page=edit&massedit">mass-edit all album data</a>.</p>
+        <p>Select an album to edit its description and data, or <a href="?page=edit&massedit">mass-edit all album data</a>.</p>
         
         <table class="bordered">
           <tr>
