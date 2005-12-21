@@ -27,6 +27,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         // $album->setDate(strip($_POST["albumdate"]));
         $album->setPlace(strip($_POST['albumplace']));
         $album->setAlbumThumb(strip($_POST['thumb']));
+        $album->setSortType(strip($_POST['sortby']));
         
         for ($i = 0; $i < $_POST['totalimages']; $i++) {
           $filename = strip($_POST["$i-filename"]);
@@ -262,6 +263,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         $album = new Album($gallery, $folder);
         $images = $album->getImages();
         $totalimages = sizeof($images);
+        // TODO: Perhaps we can build this from the meta array of Album? Moreover, they should be a set of constants!
+        $sortby = array('Filename', 'Title', 'Manual' );
         ?>
         <h1>Edit Album</h1>
         <p><a href="?page=edit" title="Back to the list of albums">&laquo; back to the list</a> | 
@@ -289,6 +292,16 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
                     <?php } ?>
                   </select>
                   <script type="text/javascript">updateThumbPreview(document.getElementById('thumbselect'));</script>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top">Sort by: </td>
+                <td>
+                  <select id="sortselect" name="sortby">
+                  <?php foreach ($sortby as $sorttype) { ?>
+                    <option value="<?= $sorttype ?>"<?php if ($sorttype == $album->getSortType()) echo ' selected="selected"'; ?>><?= $sorttype ?></option>
+                  <?php } ?>
+                  </select>
                 </td>
               </tr>
             </table>

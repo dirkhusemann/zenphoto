@@ -470,10 +470,10 @@ function printAlbumLink($text, $title, $class=NULL, $id=NULL) {
  * @since  1.0.0
  */
 function printSortableAlbumLink($text, $title, $class=NULL, $id=NULL) {
-  global $_zp_sortable_list;
+  global $_zp_sortable_list, $_zp_current_album;
   if (zp_loggedin()) {
     if (!isset($_GET['sortable'])) {
-      printLink(getAlbumLinkURL()."&sortable", $text, $title, $class, $id);
+      printLink(WEBPATH . "/zen/albumsort.php?album=" . urlencode($_zp_current_album->getFolder()), $text, $title, $class, $id);
     } else {
       $_zp_sortable_list->printForm(getAlbumLinkURL(), 'POST', 'Save', 'button');
     }

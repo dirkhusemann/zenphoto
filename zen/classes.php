@@ -414,15 +414,15 @@ class Album {
 	 * @author Todd Papaioannou (toddp@acm.org)
 	 * @since  1.0.0
 	 */
-	function sortImageArray($images, $key = "filename") {
+	function sortImageArray($images, $key = "Filename") {
 	  
 	  $newImageArray = array();
 	  $realkey = NULL;
 	  
 	  foreach ($images as $image) {
-	    if ($key == "title") {
+	    if ($key == "Title") {
 	      $realkey = $image->getTitle();
-	    } else if ($key == "sortorder") {
+	    } else if ($key == "Manual") {
 	      $realkey = $image->getSortOrder();
 	    } else {
 	      $realkey = $image->getFileName();
@@ -469,6 +469,7 @@ class Album {
 		$image = new Image($this, $thumb);
 		return $image->getThumb();
 	}
+	
   function setAlbumThumb($filename) {
     $this->meta['thumb'] = $thumb;
     query("UPDATE ".prefix("albums")." SET `thumb`='" . mysql_escape_string($filename) .

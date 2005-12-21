@@ -50,17 +50,16 @@ function zenSortablesFooter()
  * TODO: Make this function generic. I.e. give it params.
  * 
  * @param $link The destination of the POST operation.
+ * @param $label The label for the button.
  *
  * @author Todd Papaioannou (toddp@acm.org)
  * @since  1.0.0
  */
-function zenSortablesSaveButton($link)
+function zenSortablesSaveButton($link, $label="Save")
 {
   global $_zp_sortable_list;
   
-  echo "\n<div>\n";
-  $_zp_sortable_list->printForm($link, 'POST', 'Save', 'button');
-  echo "\n</div>";
+  $_zp_sortable_list->printForm($link, 'POST', $label, 'button');
 }
 
 
