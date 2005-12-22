@@ -1,5 +1,5 @@
 <?php  /* Don't put anything before this line! */ 
-require_once("classes.php");
+require_once("admin-functions.php");
 
 if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
   
@@ -265,11 +265,14 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         $totalimages = sizeof($images);
         // TODO: Perhaps we can build this from the meta array of Album? Moreover, they should be a set of constants!
         $sortby = array('Filename', 'Title', 'Manual' );
-        ?>
+      ?>
         <h1>Edit Album</h1>
-        <p><a href="?page=edit" title="Back to the list of albums">&laquo; back to the list</a> | 
-        <a href="<?php echo WEBPATH."/zen/albumsort.php?album=$album->name"; ?>">Sort Album</a>
+        <p>
+        <?php printAdminLink("edit", "&laquo; back to the list", "Back to the list of albums");?> | 
+        <?php printSortLink($album, "Sort Album", "Sort Album"); ?> |
+        <?php printViewLink($album, "View Album", "View Album"); ?>
         </p>
+    
         <form name="albumedit" action="?page=edit&action=save" method="post">
           <input type="hidden" name="album" value="<?= $album->name; ?>" />
         
@@ -307,11 +310,12 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
             </table>
           </div>
 
-          
           <input type="hidden" name="totalimages" value="<?= $totalimages; ?>" />
           
           <p><input type="submit" value="save" /></p>
           <hr />
+          
+          <div class="box" style="padding: 15px;">
           <p>Click the images for a larger version</p>
           
           <table id="edittable">
@@ -347,12 +351,16 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
               $currentimage++;
             } 
             ?>
-            <tr><td> </td> <td><input type="submit" value="save" /></td></tr>
+            
           </table>
+          </div>
           
+          
+          <p><input type="submit" value="save" /></p>
           
           <p><a href="?page=edit" title="Back to the list of albums">&laquo; back to the list</a></p>
         </form>
+        
         
         
         

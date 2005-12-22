@@ -24,6 +24,14 @@ function printAdminLink($action, $text, $title=NULL, $class=NULL, $id=NULL) {
   printLink("admin.php?page=". $action, $text, $title, $class, $id);
 }
 
+function printSortLink($album, $text, $title=NULL, $class=NULL, $id=NULL) {
+  printLink(WEBPATH . "/zen/albumsort.php?album=". urlencode( ($album->getFolder()) ), $text, $title, $class, $id);
+}
+
+function printViewLink($album, $text, $title=NULL, $class=NULL, $id=NULL) {
+  printLink(WEBPATH . "/index.php?album=". urlencode( ($album->getFolder()) ), $text, $title, $class, $id);
+}
+
 // TODO: make this take an Image as an argument, not the alt and thumb text
 function printImageThumb($image, $class=NULL, $id=NULL) { 
 	echo "\n  <img class=\"imagethumb\" id=\"id_". $image->getImageID() ."\" src=\"" . $image->getThumb() . "\" alt=\"". $image->getTitle() . "\"" .

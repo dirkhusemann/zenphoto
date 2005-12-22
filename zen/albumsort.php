@@ -50,8 +50,8 @@ if (!zp_loggedin()) {
     
     <h1>Sort Album</h1>
     <p><?php printAdminLink("edit", "&laquo; back to the list", "Back to the list of albums");?> | 
-       <?php printAdminLink("edit&album=$album->name", "Edit Album", "Edit Album"); ?> |
-       <?php printLink(WEBPATH . "/index.php?album=". $album->getTitle(), "View Album", "View Album"); ?>
+       <?php printAdminLink("edit&album=". urlencode( ($album->getFolder()) ), "Edit Album", "Edit Album"); ?> |
+       <?php printViewLink($album, "View Album", "View Album"); ?>
     </p>
     
     <p>Sort the images by dragging them..</p>
