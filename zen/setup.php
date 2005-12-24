@@ -63,6 +63,7 @@ if (file_exists("config.php")) {
       `place` varchar(255) default NULL,
       `show` int(1) NOT NULL default '1',
       `thumb` varchar(255) default NULL,
+      `sort_type` varchar(20) default NULL,
       PRIMARY KEY  (`id`),
       KEY `folder` (`folder`)
       );";
