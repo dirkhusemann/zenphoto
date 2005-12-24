@@ -603,37 +603,45 @@ function printImageDesc($editable=false) {
 
 function hasNextImage() { global $_zp_current_image; return $_zp_current_image->getNextImage(); }
 function hasPrevImage() { global $_zp_current_image; return $_zp_current_image->getPrevImage(); }
+
 function getNextImageURL() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_album, $_zp_current_image;
+	
+	$nextimg = $_zp_current_image->getNextImage();
+	
 	if (zp_conf('mod_rewrite')) {
-		return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/" . urlencode($_zp_current_image->getNextImage());
+		return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/" . urlencode($nextimg->getFileName());
 	} else {
-		return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($_zp_current_image->getNextImage());
+		return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($nextimg->getFileName());
 	}
 }
+
 function getPrevImageURL() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_album, $_zp_current_image;
+	
+	$previmg = $_zp_current_image->getPrevImage();
+	
 	if (zp_conf('mod_rewrite')) {
-		return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/" . urlencode($_zp_current_image->getPrevImage());
+		return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/" . urlencode($previmg->getFileName());
 	} else {
-		return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($_zp_current_image->getPrevImage());
+		return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($previmg->getFileName());
 	}
 }
 
 
 function printPreloadScript() {
-  global $_zp_current_image, $_zp_current_album;
+  global $_zp_current_image;
   $size = zp_conf('image_size');
   if (hasNextImage() || hasPrevImage()) {
     echo "<script type=\"text/javascript\">\n";
     if (hasNextImage()) {
-      $nextimg = new Image($_zp_current_album, $_zp_current_image->getNextImage());
+      $nextimg = $_zp_current_image->getNextImage();
       echo "  nextimg = new Image();\n  nextimg.src = \"" . $nextimg->getSizedImage($size) . "\";\n";
     }
     if (hasPrevImage()) { 
-      $previmg = new Image($_zp_current_album, $_zp_current_image->getPrevImage());
+      $previmg = $_zp_current_image->getPrevImage();
       echo "  previmg = new Image();\n  previmg.src = \"" . $previmg->getSizedImage($size) . "\";\n";
     }
     
@@ -644,15 +652,15 @@ function printPreloadScript() {
 
 function getPrevImageThumb() {
   if(!in_context(ZP_IMAGE)) return false;
-	global $_zp_current_album, $_zp_current_image;
-  $img = new Image($_zp_current_album, $_zp_current_image->getPrevImage());
+	global $_zp_current_image;
+  $img = $_zp_current_image->getPrevImage();
   return $img->getThumb();
 }
 
 function getNextImageThumb() {
   if(!in_context(ZP_IMAGE)) return false;
-	global $_zp_current_album, $_zp_current_image;
-  $img = new Image($_zp_current_album, $_zp_current_image->getNextImage());
+	global $_zp_current_image;
+  $img = $_zp_current_image->getNextImage();
   return $img->getThumb();
 }
 

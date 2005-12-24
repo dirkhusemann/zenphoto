@@ -228,28 +228,28 @@ class Image {
   // TODO: To keep the Image in array abstraction these next two methods
 	// should really return an Image.
 	
-	// Returns the filename of the next/prev image.
+	// Returns the next Image.
 	function getNextImage() {
     $this->getIndex();
     $image = $this->album->getImage($this->index+1);
 		
     if ($image != NULL) {
-  		return $image->getFileName();
+  		return $image;
 		} else {
 		  return NULL;
 		}
 	}
 	
+	// Return the previous Image
 	function getPrevImage() {
     $this->getIndex();
 		$image = $this->album->getImage($this->index-1);
 		
 		if ($image != NULL) {
-  		return $image->getFileName();
+  		return $image;
 		} else {
 		  return NULL;
 		}
-		
 	}
   
   function getAlbumPage() {
@@ -372,6 +372,14 @@ class Album {
   }
 	
   
+  /**
+   * Get Images will return all of a slice of the images for this album. They will
+   * also be sorted according to the sort type of this album, or by filename if none
+   * has been set.
+   *
+   * @param  page  Which page of images should be returned.
+   * @return An array of Image objects.
+   */
 	function getImages($page=0) {
 	  
 		if (is_null($this->images)) {
