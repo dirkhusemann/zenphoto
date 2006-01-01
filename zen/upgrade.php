@@ -47,6 +47,7 @@ if (file_exists("config.php")) {
   
     $sql_statements = array();
     $sql_statements[] = "ALTER TABLE `$tbl_albums` ADD COLUMN sort_type varchar(20) AFTER thumb;";
+    $sql_statements[] = "ALTER TABLE `$tbl_albums` ADD COLUMN sort_order int(11) AFTER sort_type;";
     $sql_statements[] = "ALTER TABLE `$tbl_images` ADD COLUMN sort_order int(11) AFTER show;";
     
     if (isset($_GET['upgrade']) && db_connect()) {
