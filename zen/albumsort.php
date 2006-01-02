@@ -3,11 +3,11 @@
 require_once("sortable.php");
 
 // Insert the POST operation handler
-zenSortablesPostHandler("images");
+zenSortablesPostHandler('imageOrder', 'images', 'images');
 // Print the admin header
 printAdminHeader();
 // Print the sortable stuff
-zenSortablesHeader();
+zenSortablesHeader('images','imageOrder','img',"overlap:'horizontal',constraint:false");
 
 ?>
 
@@ -35,7 +35,6 @@ if (!zp_loggedin()) {
     $folder = strip($_GET['album']);
     $album = new Album($gallery, $folder);
     $images = $album->getImages();
-    $totalimages = sizeof($images);
   
     // Layout the page
     printLogoAndLinks();
@@ -43,16 +42,18 @@ if (!zp_loggedin()) {
   
 <div id="main">
   
-  <?php printTabs("edit"); ?>
+  <?php printTabs(); ?>
   
     
   <div id="content">
     
-    <h1>Sort Album</h1>
+    <h1>Sort Album: <?php echo $album->getTitle(); ?></h1>
     <p><?php printAdminLink("edit", "&laquo; back to the list", "Back to the list of albums");?> | 
        <?php printAdminLink("edit&album=". urlencode( ($album->getFolder()) ), "Edit Album", "Edit Album"); ?> |
        <?php printViewLink($album, "View Album", "View Album"); ?>
     </p>
+    
+    <div class="box" style="padding: 15px;">
     
     <p>Sort the images by dragging them..</p>
     
@@ -78,8 +79,10 @@ if (!zp_loggedin()) {
       ?>
       <div>
       <?php
-        zenSortablesSaveButton("?album=". $album->getFolder() . "&saved"); 
+        zenSortablesSaveButton("?page=edit&album=". $album->getFolder() . "&saved"); 
       ?>
+      </div>
+      
       </div>
       
     </div>

@@ -247,6 +247,23 @@ table.bordered td {
 .imagethumb { margin: 0px; padding: 1px;}
 
 
+/* Sortable Album Divs
+------------------------------ */
+
+div.albumList {
+	list-style-type: none;
+	padding: 0px;
+	margin: 0px;
+}
+div.albumList div {
+	cursor: move;
+	margin: 2px 2px;
+	border: 1px solid #BAC9CF;
+}
+
+
+
+
 /* Forms
 ------------------------------ */
 input {

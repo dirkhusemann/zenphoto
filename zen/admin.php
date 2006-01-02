@@ -1,5 +1,5 @@
 <?php  /* Don't put anything before this line! */ 
-require_once("admin-functions.php");
+require_once("sortable.php");
 
 if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
   
@@ -193,68 +193,44 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 /** End Action Handling *************************************************************/
 /************************************************************************************/
 
+if (issetPage('edit')) {
+  zenSortablesPostHandler('albumOrder', 'albumList', 'albums');
+}
+
+// Print our header
+printAdminHeader();
+
+if (issetPage('edit')) {
+  zenSortablesHeader('albumList','albumOrder','div');
+}
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-<head>
-	<title>zenphoto administration</title>
-	<link rel="stylesheet" href="admin.css" type="text/css" />
-	<script type="text/javascript" src="admin.js"></script>
+
 </head>
-  
 <body>
-  
-<?php if (!zp_loggedin()) {  /* Display the login form and exit. */ ?>
-  
-	<p><img src="../zen/images/zen-logo.gif" title="Zen Photo" /></p>
 
-    <div id="loginform">
-    <form name="login" action="#" method="POST">
-      <input type="hidden" name="login" value="1" />
-      
-      <? /* TODO: (todd) I think this is where the admin link bug is */ ?>
-      <input type="hidden" name="redirect" value="/zen/admin.php" />
-      <table>
-        <tr><td>Login</td><td><input class="textfield" name="user" type="text" size="20" /></td></tr>
-        <tr><td>Password</td><td><input class="textfield" name="pass" type="password" size="20" /></td></tr>
-        <tr><td colspan="2"><input class="button" type="submit" value="Log in" /></td></tr>
-      </table>
-    </form>
-    
-    </div>
-        
-  </body>
-</html>
-    
-<?php 
-    exit(); 
+<?php
+// If they are not logged in, display the login form and exit
+if (!zp_loggedin()) {
   
-  } else { /* Admin-only content safe from here on. */ ?>
-
-<a href="<?= WEBPATH . "/zen/admin.php" ?>" id="logo"><img src="../zen/images/zen-logo.gif" title="Zen Photo" /></a>
-<div id="links"><a href="../">View Gallery</a> &nbsp; | &nbsp; <a href="?logout">Log Out</a></div>
-
-<div id="main">
-  <ul id="nav">
-    <li<?= $page == "home" ? " class=\"current\"" : "" ?>><a href="?page=home">overview</a></li>
-    <li<?= $page == "comments" ? " class=\"current\"" : "" ?>><a href="?page=comments">comments</a></li>
-    <li<?= $page == "upload" ? " class=\"current\"" : "" ?>><a href="?page=upload">upload</a></li>
-    <li<?= $page == "edit" ? " class=\"current\"" : "" ?>><a href="?page=edit">edit</a></li>
-    <li<?= $page == "options" ? " class=\"current\"" : "" ?>><a href="?page=options">options</a></li>
-  </ul>
+  printLoginForm();
+  exit(); 
   
+} else { /* Admin-only content safe from here on. */ 
+
+  printLogoAndLinks();
+?>
+
+  <div id="main">
+  
+<?php printTabs(); ?>  
   
   <div id="content">
   
   
-  
-  
-  
 <?php /** EDIT ****************************************************************************/
-      /************************************************************************************/ ?> 
-  
-    <?php if ($page == "edit") { ?>
+      /************************************************************************************/ 
       
+  if ($page == "edit") { ?>
       
       
 <?php /** SINGLE ALBUM ********************************************************************/ ?>
@@ -371,14 +347,21 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
       ?>
       <h1>Edit All Albums</h1>
       <p><a href="?page=edit" title="Back to the list of albums">&laquo; back to the list</a></p>
+      <div class="box" style="padding: 15px;">
+      
       <form name="albumedit" action="?page=edit&action=save" method="POST">
-        <p><input type="submit" value="save" /> &nbsp; <input type="reset" value="reset" /></p>
       <?php
         $albums = $gallery->getAlbums();
-        ?> <input type="hidden" name="totalalbums" value="<?= sizeof($albums); ?>" /> <?php
+        
+        // Two albums will probably require a scroll bar
+        if (sizeof($albums) > 2) {
+          echo "<p><input type=\"submit\" value=\"save\" /> &nbsp; <input type=\"reset\" value=\"reset\" /></p>";
+          echo "<hr />";
+        }
+        ?> 
+        <input type="hidden" name="totalalbums" value="<?= sizeof($albums); ?>" /> <?php
         $currentalbum = 0;
-        foreach ($albums as $folder) { 
-          $album = new Album($gallery, $folder);
+        foreach ($albums as $album) { 
       ?>
         <input type="hidden" name="<?= $currentalbum; ?>-folder" value="<?= $album->name; ?>" />
         <table>
@@ -402,48 +385,62 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
       
       </form>
         
-      
+      </div>
       
       
 <?php /*** EDIT ALBUM SELECTION *********************************************************************/ ?> 
         
       <?php } else { /* Display a list of albums to edit. */ ?>
-        <h1>Edit Albums</h1>
-        <p>Select an album to edit its description and data, or <a href="?page=edit&massedit">mass-edit all album data</a>.</p>
+        <h1>Edit Gallery</h1>
+        <p>Drag the albums into the order you wish them displayed. Select an album to edit its description and data, or <a href="?page=edit&massedit">mass-edit all album data</a>.</p>
         
         <table class="bordered">
           <tr>
-            <th style="width: 60px; ">Thumb</th>
+            <th style="width: 55px; ">Thumb</th>
             <th>Edit this album</th>
             <?php /* <th>Delete</th> */ ?>
           
           </tr>
-
-        <?php 
-          $albums = $gallery->getAlbums();
-          foreach ($albums as $folder) { 
-            $album = new Album($gallery, $folder);
-        ?>
-            <tr>
-              <td>
+          <tr>
+          <td colspan="2" style="padding: 0px 0px;">
+          <div id="albumList" class="albumList">
+            <?php 
+            $albums = $gallery->getAlbums();
+            foreach ($albums as $album) { 
+            ?>
+            <div id="id_<?php echo $album->getAlbumID(); ?>">
+            <table cellspacing="0">
+              <tr>
+                <td align="left">
                 <a href="?page=edit&album=<?= $album->name; ?>" title="Edit this album: <?= $album->name; ?>"><img height="40" width="40" src="<?= $album->getAlbumThumb(); ?>" /></a>
-              </td> 
-              <td>
-                <a href="?page=edit&album=<?= $album->name; ?>" title="Edit this album: <?= $album->name; ?>"><?= $album->getTitle(); ?></a>
-              </td>
-              <?php /*
+                </td>
+                <td> <a href="?page=edit&album=<?= $album->name; ?>" title="Edit this album: <?= $album->name; ?>"><?= $album->getTitle(); ?></a>
+                </td>
+                <?php /*
               <td>
                 <a class="delete" href="?page=edit&action=delete&album=<?= $album->name; ?>" title="Delete the album <?=$album->name; ?>"><img src="images/delete.gif" style="border: 0px;" alt="x" /></a>
               </td>
               */ ?>
-            </tr>
-
-          <?php } ?>
-        
+              </tr>
+            </table>
+            </div>
+            <? } ?>
+          </div>  
+          </td>
+          </tr>
         </table>
-
-
-
+        
+        <?php
+        if (isset($_GET['saved'])) {
+          echo "<p>Gallery order saved.</p>";
+        }
+        ?>
+        
+        <div>
+      <?php
+        zenSortablesSaveButton("?page=edit&saved", "Save Order"); 
+      ?>
+      </div>
 
       <?php } ?>
       
@@ -462,8 +459,9 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         // Array of album names for javascript functions.
         var albumArray = new Array ( <?php 
           $first = true;
-          foreach ($gallery->getAlbums() as $album) {
-            echo ($first ? "" : ", ") . "'" . addslashes($album) . "'";
+          $albums = $gallery->getAlbums();
+          foreach ($albums as $album) {
+            echo ($first ? "" : ", ") . "'" . addslashes($album->getFolder()) . "'";
             $first = false;
           }
         ?> );
@@ -493,8 +491,11 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           Upload to: 
           <select id="" name="albumselect" onChange="albumSwitch(this)">
             <option value="" selected="true">a New Album +</option>
-          <?php $albums = $gallery->getAlbums(); foreach($albums as $folder) { $album = new Album($gallery, $folder); ?>
-            <option value="<?=$album->name;?>"><?=$album->getTitle();?></option>
+          <?php 
+            $albums = $gallery->getAlbums(); 
+            foreach ($albums as $album) { 
+           ?>
+            <option value="<?=$album->getFolder();?>"><?=$album->getTitle();?></option>
           <?php } ?>
           </select>
           
@@ -772,10 +773,11 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
       
     <?php } ?>
     
-</div>
-	<div id="footer"><a href="http://www.zenphoto.org" title="A simpler web photo album">zen<strong>photo</strong></a> version <?= zp_conf('version'); ?></div>
-</div>
+    </div>
+    
+<?php printAdminFooter(); ?>
 
+  <?php zenSortablesFooter(); ?>
   
 <?php } /* No admin-only content allowed after this bracket! */ ?>
     

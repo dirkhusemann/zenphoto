@@ -298,6 +298,7 @@ class Album {
       $this->meta['show']  = 1;
 	    $this->meta['thumb'] = NULL;
       $this->meta['sort_type'] = NULL;
+      $this->meta['sort_order'] = NULL;
 	  
 	  // BUG: (todd) this causes invalid rows to be inserted into the db table
       query("INSERT INTO ".prefix("albums")." (folder, title) " .
@@ -314,12 +315,16 @@ class Album {
       $this->meta['show']  = $entry['show'];
 	    $this->meta['thumb'] = $entry['thumb'];
       $this->meta['sort_type'] = $entry['sort_type'];
+      $this->meta['sort_order'] = $entry['sort_order'];
       $this->albumid = $entry['id'];
     }
   }
   
   // Folder on the filesystem
   function getFolder() { return $this->name; }
+  
+  // The id of this album in the db
+  function getAlbumID() { return $this->albumid; }
 	
   // Title
   function getTitle() { return $this->meta['title']; }
@@ -358,6 +363,14 @@ class Album {
   function setSortType($sorttype) {
     $this->meta['sort_type'] = $sorttype;
     query("UPDATE ".prefix("albums")." SET `sort_type`='" . mysql_escape_string($sorttype) .
+      "' WHERE `id`=".$this->albumid);    
+  }
+  
+  // Sort type
+  function getSortOrder() { return $this->meta['sort_order']; }
+  function setSortOrder($sortorder) {
+    $this->meta['sort_order'] = $sortorder;
+    query("UPDATE ".prefix("albums")." SET `sort_order`='" . mysql_escape_string($sortorder) .
       "' WHERE `id`=".$this->albumid);    
   }
 
@@ -419,7 +432,7 @@ class Album {
 	 * @param images The array to be sorted.
 	 * @return A new array of sorted images.
 	 * 
-	 * @author Todd Papaioannou (toddp@acm.org)
+	 * @author Todd Papaioannou (lucky@luckyspin.org)
 	 * @since  1.0.0
 	 */
 	function sortImageArray($images, $key = "Filename") {
@@ -554,7 +567,7 @@ class Album {
    *
    * @return An array of file names.
    * 
-   * @author Todd Papaioannou (toddp@acm.org)
+   * @author Todd Papaioannou (lucky@luckyspin.org)
    * @since  1.0.0
    */
   function loadFileNames() {
@@ -597,38 +610,113 @@ class Group {
 
 class Gallery {
 
+  var $albumdir = NULL;
 	var $albums = NULL;
   var $theme;
   var $themes;
 	
 	function Gallery() {
-		$albumdir = SERVERPATH . "/albums/";
+	  
+	  // Set our album directory
+		$this->albumdir = SERVERPATH . "/albums/";
 		
+		if (!is_dir($this->albumdir) || !is_readable($this->albumdir)) {
+			die("Error: The 'albums' directory cannot be found or is not readable.");
+		}
+	}
+	
+	// The main albums directory
+	function getAlbumDir() { return $this->albumdir; }
+	
+	function getAlbums($page=0) {
+	  
+	  // Have the albums been loaded yet?
+	  if (is_null($this->albums)) {
+	    
+	    // Load the album folder names
+	    $albumnames = $this->loadAlbumNames();
+	    
+	    // The local albums array
+      $albums	= array();
+      
+      foreach ($albumnames as $album) {
+        $albums[] = new Album($this, $album);
+      }
+	  
+  	  // Sort the albums
+  	  $albums = $this->sortAlbumArray($albums);
+  	  
+  	  // Store the values
+  	  $this->albums = $albums;
+	  
+  	}
+		
+  	if ($page == 0) { 
+  		return $this->albums;
+  	} else {
+  		$albums_per_page = zp_conf('albums_per_page');
+  		return array_slice($this->albums, $albums_per_page*($page-1), $albums_per_page);
+  	}
+	}
+	
+	
+	function sortAlbumArray($albums) {
+	  
+	  $newAlbumArray = array();
+	  $realkey = NULL;
+	  $dummykey = 1000000;
+	  
+	  // Walk through the album array
+	  foreach ($albums as $album) {
+	    
+	    $realkey = $album->getSortOrder();
+	    
+      // null won't work in the array, so we put in a dummy key that is really big. 
+      // The dummy key is then decremented so that newer albums will appear first in the array.
+      if ($realkey == NULL) {
+        $realkey = $dummykey--;
+      }
+  	    
+      $newAlbumArray[$realkey] = $album;
+	  
+	  }
+	  
+	  ksort($newAlbumArray);
+	  
+	  return array_values($newAlbumArray);
+	}
+	
+	/**
+   * Load all of the albums names that are found in the Albums directory on disk.
+   *
+   * @return An array of album names.
+   * 
+   * @author Todd Papaioannou (lucky@luckyspin.org)
+   * @since  1.0.0
+   */
+  function loadAlbumNames() {
+    
+    // This is where we'll look for albums
+    $albumdir = $this->getAlbumDir();
+    
+    // Be defensive
 		if (!is_dir($albumdir) || !is_readable($albumdir)) {
 			die("Error: The 'albums' directory cannot be found or is not readable.");
 		}
-		$dp = opendir($albumdir);
-		$albums = array();
-		while ($file = readdir($dp)) {
-			if (is_dir($albumdir.$file) && substr($file, 0, 1) != '.') {
-				$albums[] = $file;
-			}
-		}
-    // Reverse the order to make recently added albums first.
-    $albums = array_reverse($albums);
-		// Sorting here? Alphabetical by default.
-		$this->albums = $albums;
 
-	}
-	
-	function getAlbums($page=0) {
-		if ($page == 0) { 
-			return $this->albums;
-		} else {
-			$albums_per_page = zp_conf('albums_per_page');
-			return array_slice($this->albums, $albums_per_page*($page-1), $albums_per_page);
+		$dir = opendir($albumdir);
+		$albums = array();
+		
+		// Walk through the list and add them to the array
+		while ($dirname = readdir($dir)) {
+  		if (is_dir($albumdir.$dirname) && substr($dirname, 0, 1) != '.') {
+  			$albums[] = $dirname;
+  		}
 		}
-	}
+		closedir($dir);
+		
+		return $albums;
+  }
 	
 	// Takes care of bounds checking, no need to check input.
 	function getAlbum($index) {
@@ -712,8 +800,12 @@ class Gallery {
   function garbageCollect($cascade=true, $full=false) {
     $result = query("SELECT * FROM ".prefix('albums'));
     $dead = array();
+    
+    // Load the albums from disk
+    $files = $this->loadAlbumNames();
+    
     while($row = mysql_fetch_assoc($result)) {
-      if (!in_array($row['folder'], $this->albums)) {
+      if (!in_array($row['folder'], $files)) {
         $dead[] = $row['id'];
       }
     }
@@ -721,9 +813,9 @@ class Gallery {
     if (count($dead) > 0) {
       $first = true;
       $sql = "DELETE FROM ".prefix('albums')." WHERE ";
-      foreach ($dead as $folder) {
+      foreach ($dead as $album) {
         if (!$first) $sql .= " OR";
-        $sql .= "`id` = $folder";
+        $sql .= "`id` = $album";
         $first = false;
       }
       $n = query($sql);
@@ -731,9 +823,9 @@ class Gallery {
       if (!$full && $n > 0 && $cascade) {
         $first = true;
         $sql = "DELETE FROM ".prefix('images')." WHERE ";
-        foreach ($dead as $folder) {
+        foreach ($dead as $album) {
           if (!$first) $sql .= " OR";
-          $sql .= "`albumid` = $folder";
+          $sql .= "`albumid` = $album";
           $first = false;
         }
       }
@@ -752,8 +844,7 @@ class Gallery {
         query($sql);
         
         // Then go into existing albums recursively to clean them... very invasive.
-        foreach ($this->albums as $folder) {
-          $album = new Album($this, $folder);
+        foreach ($this->albums as $album) {
           $album->garbageCollect();
           $album->preLoad();
         }

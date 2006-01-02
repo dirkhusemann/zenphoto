@@ -8,20 +8,23 @@ $_zp_sortable_list = new SLLists('scriptaculous');
 
 /**
  * A utility function that can be used to insert all of the necessary script stuff
- * in the <head> of the page so that sortable lists are enabled.
+ * in the <head> of the page so that sortable lists are enabled. The container types
+ * support are limited to those supported by scriptaculous: currently div and ul.
  * 
- * TODO: Make this function generic. I.e. give it params.
+ * @param $sortContainerID The id of container that will contain the sortable elements.
+ * @param $orderedList     The array that will contain the ordered elements.
+ * @param $sortableElement The element type that will be sorted.
+ * @param $options         Additional options to be passed to scriptaculous.
  * 
- * @author Todd Papaioannou (toddp@acm.org)
+ * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function zenSortablesHeader()
-{
+function zenSortablesHeader($sortContainerID, $orderedList, $sortableElement, $options="") {
   global $_zp_sortable_list;
   
   if (zp_loggedin()) {
       
-    $_zp_sortable_list->addList('images','imageOrder','img',"overlap:'horizontal',constraint:false");
+    $_zp_sortable_list->addList($sortContainerID, $orderedList, $sortableElement, $options);
     $_zp_sortable_list->debug = false;
     $_zp_sortable_list->printTopJS();
   }
@@ -31,11 +34,10 @@ function zenSortablesHeader()
  * Insert the final Sortable.create call in the footer of the page. 
  * This is required to finalize the sortable lists stuff.
  * 
- * @author Todd Papaioannou (toddp@acm.org)
+ * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function zenSortablesFooter()
-{
+function zenSortablesFooter() {
   global $_zp_sortable_list;
   
   if (zp_loggedin()) {
@@ -47,16 +49,13 @@ function zenSortablesFooter()
  * Insert the Save button that will POST the sortable list to the page
  * indicated by $link.
  *
- * TODO: Make this function generic. I.e. give it params.
- * 
- * @param $link The destination of the POST operation.
+ * @param $link  The destination of the POST operation.
  * @param $label The label for the button.
  *
- * @author Todd Papaioannou (toddp@acm.org)
+ * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function zenSortablesSaveButton($link, $label="Save")
-{
+function zenSortablesSaveButton($link, $label="Save") {
   global $_zp_sortable_list;
   
   $_zp_sortable_list->printForm($link, 'POST', $label, 'button');
@@ -66,16 +65,16 @@ function zenSortablesSaveButton($link, $label="Save")
 /**
  * Insert the chunk that handles the POST operation of the sorted list.
  * 
- * TODO: Make this function generic. I.e. give it more params.
+ * @param $orderedList     The list of ordered elements to be saved.
+ * @param $sortContainerID The parent container for the sortable elements.
+ * @param $dbtable         The database table that will be updated.
  * 
- * @param dbtable The database table that will be updated.
- * 
- * @author Todd Papaioannou (toddp@acm.org)
+ * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function zenSortablesPostHandler($dbtable) {
+function zenSortablesPostHandler($orderedList, $sortContainerID, $dbtable) {
   if (isset($_POST['sortableListsSubmitted'])) {
-  	$orderArray = SLLists::getOrderArray($_POST['imageOrder'], 'images');
+  	$orderArray = SLLists::getOrderArray($_POST[$orderedList], $sortContainerID);
   	foreach($orderArray as $item) {
   		saveSortOrder($dbtable, $item['element'], $item['order']);
   	}
@@ -84,18 +83,18 @@ function zenSortablesPostHandler($dbtable) {
 
 
 /**
- * Save the new sort order for an element.
+ * Save the new sort order for a sortable item.
  *
- * @param dbtable   The dbtable that will be updated.
- * @param imageid   The id of the image, as defined in the id column.
- * @param sortorder The new sort order for this image.
+ * @param dbtable   The dababase table that will be updated.
+ * @param id        The id of the sortable item, as defined in the id column.
+ * @param sortorder The new sort order for this item.
  * 
- * @author Todd Papaioannou (toddp@acm.org)
+ * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0 
  */
 function saveSortOrder($dbtable, $id, $sortorder) {
   
-  // This is a nasty hack really
+  // This is a nasty hack really, but it works.. The hack being we need id_XX in the element id.
   $real_id = substr($id, 0, 3);
   
   // TODO: Only issue the update when the order has changed. How do determine this?

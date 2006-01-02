@@ -249,7 +249,7 @@ function next_album() {
 	if (is_null($_zp_albums)) {
 		$_zp_albums = $_zp_gallery->getAlbums($_zp_page);
     $_zp_current_album_restore = $_zp_current_album;
-		$_zp_current_album = new Album($_zp_gallery, array_shift($_zp_albums));
+		$_zp_current_album = array_shift($_zp_albums);
     save_context();
 		add_context(ZP_ALBUM);
 		return true;
@@ -259,7 +259,7 @@ function next_album() {
 		restore_context();
 		return false;
 	} else {
-		$_zp_current_album = new Album($_zp_gallery, array_shift($_zp_albums));
+		$_zp_current_album = array_shift($_zp_albums);
 		return true;
 	}
 }
@@ -466,14 +466,15 @@ function printAlbumLink($text, $title, $class=NULL, $id=NULL) {
  * @param  class  The class of the link
  * @param  id     The id of the link
  * 
- * @author Todd Papaioannou (toddp@acm.org)
+ * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
 function printSortableAlbumLink($text, $title, $class=NULL, $id=NULL) {
   global $_zp_sortable_list, $_zp_current_album;
   if (zp_loggedin()) {
     if (!isset($_GET['sortable'])) {
-      printLink(WEBPATH . "/zen/albumsort.php?album=" . urlencode($_zp_current_album->getFolder()), $text, $title, $class, $id);
+      printLink(WEBPATH . "/zen/albumsort.php?page=edit&album=" . urlencode($_zp_current_album->getFolder()), 
+        $text, $title, $class, $id);
     } else {
       $_zp_sortable_list->printForm(getAlbumLinkURL(), 'POST', 'Save', 'button');
     }
@@ -539,7 +540,7 @@ function printImageTitle($editable=false) {
 /**
  * Get the unique ID of this image.
  *
- * @author Todd Papaioannou (toddp@acm.org)
+ * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
 function getImageID() {
@@ -551,7 +552,7 @@ function getImageID() {
 /**
  * Print the unique ID of this image.
  *
- * @author Todd Papaioannou (toddp@acm.org)
+ * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
 function printImageID() {
@@ -563,7 +564,7 @@ function printImageID() {
 /**
  * Get the sort order of this image.
  *
- * @author Todd Papaioannou (toddp@acm.org)
+ * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
 function getImageSortOrder() {
@@ -575,7 +576,7 @@ function getImageSortOrder() {
 /**
  * Print the sort order of this image.
  *
- * @author Todd Papaioannou (toddp@acm.org)
+ * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
 function printImageSortOrder() {
@@ -696,7 +697,7 @@ function printImageThumb($alt, $class=NULL, $id=NULL) {
  * Print the entire <div> for a thumbnail. If we are in sorting mode, then only
  * the image is inserted, if not, then the hyperlink to the image is also added.
  * 
- * @author Todd Papaioannou (toddp@acm.org)
+ * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
 function printImageDiv() {
