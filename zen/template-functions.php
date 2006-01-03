@@ -476,7 +476,32 @@ function printSortableAlbumLink($text, $title, $class=NULL, $id=NULL) {
       printLink(WEBPATH . "/zen/albumsort.php?page=edit&album=" . urlencode($_zp_current_album->getFolder()), 
         $text, $title, $class, $id);
     } else {
+      // TODO: this doesn't really work yet
       $_zp_sortable_list->printForm(getAlbumLinkURL(), 'POST', 'Save', 'button');
+    }
+  }
+}
+
+/**
+ * Print a link that allows the user to sort the Gallery if they are logged in.
+ * If they are already sorting, the Save button is displayed.
+ * 
+ * @param  text   The text to display in the link
+ * @param  title  The title attribute for the link
+ * @param  class  The class of the link
+ * @param  id     The id of the link
+ * 
+ * @author Todd Papaioannou (lucky@luckyspin.org)
+ * @since  1.0.0
+ */
+function printSortableGalleryLink($text, $title, $class=NULL, $id=NULL) {
+  global $_zp_sortable_list, $_zp_current_album;
+  if (zp_loggedin()) {
+    if (!isset($_GET['sortable'])) {
+      printLink(WEBPATH . "/zen/admin.php?page=edit", $text, $title, $class, $id);
+    } else {
+      // TODO: this doesn't really work yet
+      $_zp_sortable_list->printForm(WEBPATH . "/zen/admin.php?page=edit", 'POST', 'Save', 'button');
     }
   }
 }

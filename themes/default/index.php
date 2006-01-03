@@ -33,6 +33,10 @@
 	</div>
 	
 	<?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
+	
+	<div id="enableSorting">
+  <? printSortableGalleryLink('Click to sort gallery', 'Manual sorting', NULL, 'credit'); ?>
+  </div>
 
 </div>
 
