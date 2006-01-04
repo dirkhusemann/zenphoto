@@ -5,6 +5,7 @@
 
 
 require_once("config.php");
+//require_once("email.php");
 
 if (strstr(basename(dirname($_SERVER['SCRIPT_NAME'])), "zen")) {
   define('WEBPATH', dirname(dirname($_SERVER['SCRIPT_NAME'])));
@@ -243,6 +244,28 @@ function parseThemeDef($file) {
   } else {
     return false;
   }
+}
+
+/**
+ * Send an mail to the admin user.
+ *
+ * @param $subject  The subject of the email.
+ * @param $message  The message contents of the email.
+ * @param $headers  Optional headers for the email.
+ *
+ * @author Todd Papaioannou (lucky@luckyspin.org)
+ * @since  1.0.0
+ */
+function zp_mail($subject, $message, $headers = '') {
+  
+	if( $headers == '' ) {
+		$headers = "MIME-Version: 1.0\n" .
+			"From: " . zp_conf('gallery_title') . "<zenphoto@" . $_SERVER['SERVER_NAME'] . ">\n" . 
+			"Content-Type: text/plain; charset=charset=us-ascii\n";
+	}
+
+	// Send the mail
+	mail("Admin <" . zp_conf('admin_email') . ">", $subject, $message, $headers);
 }
 
 ?>

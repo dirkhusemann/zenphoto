@@ -173,6 +173,22 @@ class Image {
           "', '" . escape($website) . 
           "', '" . escape($comment) . 
           "', NOW())");
+          
+    // Notify the admin user
+    $message = "A comment has been posted in your album " . $this->getAlbumName() . " about " . $this->getTitle() . "\n" .
+               "\n" .
+               "Author: " . $name . "\n" .
+               "Email: " . $email . "\n" .
+               "Website: " . $website . "\n" .
+               "Comment:\n" . $comment . "\n" .
+               "\n" .
+               "You can view all comments about this image here:\n" .
+               "http://" . $_SERVER['SERVER_NAME'] . getImageLinkURL() . "\n" .
+               "\n" .
+               "You can edit the comment here:\n" .
+               "http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/zen/admin.php?page=comments\n";
+    zp_mail("[" . zp_conf('gallery_title') . "] Comment posted about: " . $this->getTitle(), $message);           
+    
     return true;
   }
 

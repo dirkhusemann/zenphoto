@@ -21,7 +21,6 @@ $conf['mysql_database'] = "database_name";
 $conf['mysql_prefix'] = "";
 
 
-
 // What you want to call your photo gallery.
 $conf['gallery_title'] = "my photos";
 
@@ -40,6 +39,9 @@ $conf['adminuser'] = "admin";
 // Obviously insecure, don't put anything here you don't want anyone to see...
 // but make sure you change it to something other than 1234...
 $conf['adminpass'] = "1234";
+
+// The email for the admin user. Used to send notification emails.
+$conf['admin_email'] = "user@somewhere.com";
 
 
 
@@ -82,5 +84,17 @@ $conf['images_per_page'] = 15;
 /**********************************/
 
 $_zp_conf_vars = $conf;
+
+if (basename($_SERVER['SCRIPT_FILENAME']) == "i.php" ||
+    basename($_SERVER['SCRIPT_FILENAME']) == "admin.php" ||
+    basename($_SERVER['SCRIPT_FILENAME']) == "albumsort.php") {
+  define('SERVERPATH', dirname(dirname($_SERVER['SCRIPT_FILENAME'])));
+  define('WEBPATH', dirname(dirname($_SERVER['SCRIPT_NAME'])));
+} else {
+  define('SERVERPATH', dirname($_SERVER['SCRIPT_FILENAME']));
+  define('WEBPATH', dirname($_SERVER['SCRIPT_NAME']));
+}
+define('SERVERCACHE', SERVERPATH . "/cache");
+define('WEBCACHE', WEBPATH . "/cache");
 
 ?>
