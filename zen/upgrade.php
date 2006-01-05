@@ -46,14 +46,16 @@ if (file_exists("config.php")) {
     $tbl_images = prefix('images');
   
     $sql_statements = array();
-    $sql_statements[] = "ALTER TABLE `$tbl_albums` ADD COLUMN sort_type varchar(20) AFTER thumb;";
-    $sql_statements[] = "ALTER TABLE `$tbl_albums` ADD COLUMN sort_order int(11) AFTER sort_type;";
-    $sql_statements[] = "ALTER TABLE `$tbl_images` ADD COLUMN sort_order int(11) AFTER show;";
+    $sql_statements[] = "ALTER TABLE `$tbl_albums` ADD COLUMN `sort_type` varchar(20);";
+    $sql_statements[] = "ALTER TABLE `$tbl_albums` ADD COLUMN `sort_order` int(11);";
+    $sql_statements[] = "ALTER TABLE `$tbl_images` ADD COLUMN `sort_order` int(11);";
     
     if (isset($_GET['upgrade']) && db_connect()) {
       echo "<h3>Upgrading tables...</h3>";
       foreach($sql_statements as $sql) {
-        query($sql);
+        // Bypass the error-handling in query()... we don't want it to stop.
+        // This is probably bad behavior, so maybe do some checks?
+        @mysql_query($sql);
       }
       echo "<h3>Done!</h3>";
       echo "<p>You can now <a href=\"../\">View your gallery</a>, or <a href=\"../admin/\">administrate.</a></p>";
