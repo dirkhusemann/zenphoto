@@ -39,9 +39,18 @@ if (isset($_GET['album'])) {
 	if (isset($_GET['image'])) {
     $g_image = get_magic_quotes_gpc() ? stripslashes($_GET['image']) : $_GET['image'];
 		$_zp_current_context = ZP_IMAGE | ZP_ALBUM | ZP_INDEX;
-		// An image page
-		$_zp_current_image = new Image(new Album($_zp_gallery, $g_album), $g_image);
-		$_zp_current_album = $_zp_current_image->getAlbum();
+
+		// An image page. Instantiate objects.
+    $_zp_current_album = new Album($_zp_gallery, $g_album);
+		$_zp_current_image = new Image($_zp_current_album, $g_image);
+
+    // TODO: Better error handling than this.
+    if (!$_zp_current_album->exists) {
+      die("The album " . $g_album . " does not exist.");
+    } else if (!$_zp_current_image->exists) {
+      die("The image " . $g_image . " does not exist.");
+    }
+		
     
     //// Comment form handling.
     if (isset($_POST['comment'])) {
@@ -83,6 +92,11 @@ if (isset($_GET['album'])) {
 		$_zp_current_context = ZP_ALBUM | ZP_INDEX;
 		// Album default view; for album.php
 		$_zp_current_album = new Album($_zp_gallery, $g_album);
+
+    // TODO: Better error handling than this.
+    if (!$_zp_current_album->exists) {
+      die("The album " . $g_album . " does not exist.");
+    }
 	}
 } else {
 	$_zp_current_context = ZP_INDEX;

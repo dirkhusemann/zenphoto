@@ -16,6 +16,7 @@ $_zp_conf_vars['version'] = '1.0.0 Beta';
 class Image {
 
   var $filename;  // true filename of the image.
+  var $exists = true;    // Does the image exist?
   var $webpath;   // The full URL path to the original image.
   var $localpath; // The full SERVER path to the original image.
   var $name;      // $filename with the extension stripped off.
@@ -34,7 +35,9 @@ class Image {
 		$this->localpath = SERVERPATH . "/albums/".$album->name."/".$filename;
 		// Check if the file exists.
 		if(!file_exists($this->localpath)) {
-			die("Image <strong>{$this->localpath}</strong> does not exist.");
+			// die("Image <strong>{$this->localpath}</strong> does not exist.");
+      $this->exists = false;
+      return false;
 		}
 		$this->filename = $filename;
     $this->name = $filename;
@@ -65,7 +68,6 @@ class Image {
       $this->meta['show'] = $entry['show'];
       $this->meta['sortorder'] = $entry['sort_order'];
       $this->imageid = $entry['id'];
-      
     }
   }
   
@@ -285,6 +287,7 @@ class Image {
 class Album {
 
   var $name;             // Folder name of the album.
+  var $exists = true;    // Does the folder exist?
   var $albumid;          // From the database; simplifies queries.
   var $meta = array();   // Album metadata array.
 	var $images = NULL;    // Full images array storage.
@@ -299,8 +302,9 @@ class Album {
 		$this->gallery = $gallery;
     $this->localpath = SERVERPATH . "/albums/" . $folder . "/";
     if(!file_exists($this->localpath)) {
-      echo $this->localpath . "<br />";
-			die("Album <strong>{$this->name}</strong> does not exist.");
+			// die("Album <strong>{$this->name}</strong> does not exist.");
+      $this->exists = false;
+      return false;
 		}
     // Query the database for an Album entry with the given foldername
     $entry = query_single_row("SELECT *, (date + 0) AS date FROM ".prefix("albums").

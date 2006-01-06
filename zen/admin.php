@@ -33,8 +33,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           $filename = strip($_POST["$i-filename"]);
           
           // The file might no longer exist
-          if (file_exists($filename)) {
-            $image = new Image($album, $filename);
+          $image = new Image($album, $filename);
+          if ($image->exists) {
             $image->setTitle(strip($_POST["$i-title"]));
             $image->setDesc(strip($_POST["$i-desc"]));          
           }
