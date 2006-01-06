@@ -32,7 +32,7 @@ function issetPage($page) {
 function printAdminFooter() {
   echo "<div id=\"footer\">";
   echo "\n  <a href=\"http://www.zenphoto.org\" title=\"A simpler web photo album\">zen<strong>photo</strong></a>";
-  echo "version ". zp_conf('version');
+  echo " version ". zp_conf('version');
   echo "\n</div>";
 }
 

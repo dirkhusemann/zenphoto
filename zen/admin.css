@@ -217,10 +217,8 @@ table.bordered {
 	margin: .5em 0px;
 	
   background: #F7F8F9;
-	border-top: 1px solid #BAC9CF;
-	border-left: 1px solid #BAC9CF;
-	border-right: 1px solid #BAC9CF;
-	border-bottom: 5px solid #BAC9CF;
+	border: 1px solid #BAC9CF;
+  border-bottom-width: 5px;
 }
 table.bordered th {
 	font-weight: normal;
@@ -238,10 +236,8 @@ table.bordered td {
 }
 .box { 
   background: #F7F8F9;
-	border-top: 1px solid #BAC9CF;
-	border-left: 1px solid #BAC9CF;
-	border-right: 1px solid #BAC9CF;
-	border-bottom: 5px solid #BAC9CF;
+	border: 1px solid #BAC9CF;
+  border-bottom-width: 5px;
 }
 
 .imagethumb { margin: 0px; padding: 1px;}
@@ -258,7 +254,7 @@ div.albumList {
 div.albumList div {
 	cursor: move;
 	margin: 2px 2px;
-	border: 1px solid #BAC9CF;
+	border: 1px solid #F0F3F8;
 }
 
 
