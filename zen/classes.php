@@ -648,6 +648,15 @@ class Gallery {
 	// The main albums directory
 	function getAlbumDir() { return $this->albumdir; }
 	
+	
+	/**
+	 * Get Albums will create our $albums array with a fully populated set of Album
+	 * objects in the correct order.
+	 *
+	 * @param $page An option parameter that can be used to return a slice of the array. 
+	 * 
+	 * @return  An array of Albums.
+	 */
 	function getAlbums($page=0) {
 	  
 	  // Have the albums been loaded yet?
@@ -680,6 +689,16 @@ class Gallery {
 	}
 	
 	
+	/**
+   * Sort the album array based on either a) the manual sort order as specified by the user,
+   * or b) the reverse order of how they are returned from disk. This will thus give us the
+   * album list in with the the ordered albums first, followed by the rest with the newest first.
+   *
+   * @return A sorted array of album names.
+   * 
+   * @author Todd Papaioannou (lucky@luckyspin.org)
+   * @since  1.0.0
+   */
 	function sortAlbumArray($albums) {
 	  
 	  $newAlbumArray = array();
@@ -747,6 +766,9 @@ class Gallery {
 	}
 	
 	function getNumAlbums() {
+	  if ($this->albums == NULL) {
+	    $this->getAlbums();
+	  }
 		return count($this->albums);
 	}
   
