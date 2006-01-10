@@ -120,8 +120,9 @@ class Image {
   
   // Permanently delete this image (be careful!)
   function deleteImage($clean = true) {
-    if ($clean) { query("DELETE FROM ".prefix('images')." WHERE `id` = " . $this->imageid); }
+    //echo $this->localpath;
     unlink($this->localpath);
+    if ($clean) { query("DELETE FROM ".prefix('images')." WHERE `id` = " . $this->imageid); }
   }
   
   
@@ -539,7 +540,8 @@ class Album {
   
   // Delete the entire album PERMANENTLY. Be careful! This is unrecoverable.
   function deleteAlbum() {
-    query("DELETE FROM ".prefix('albums')." WHERE `id` = " . $this->imageid);
+    //echo $this->localpath;
+    query("DELETE FROM ".prefix('albums')." WHERE `id` = " . $this->albumid);
     foreach($this->getImages() as $image) {
       // false here means don't clean up (cascade already took care of it)
       $image->deleteImage(false);

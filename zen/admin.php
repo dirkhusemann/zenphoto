@@ -39,6 +39,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
             $image->setDesc(strip($_POST["$i-desc"]));          
           }
           // TODO: delete it from the db? This should happen somewhere..
+          // (Probably in the Image object upon attempted instantiation of a non-existent image)
         }
         
 /** SAVE MULTIPLE ALBUMS ******************************************************/
@@ -55,6 +56,29 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         }
       }
       header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/zen/admin.php?page=edit");
+      exit();
+
+/** DELETION ******************************************************************/
+/*****************************************************************************/
+    } else if ($action == "deletealbum") {
+      if ($_GET['album']) {
+        $folder = strip($_GET['album']);
+        $album = new Album($gallery, $folder);
+        $album->deleteAlbum();
+      }
+      header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/zen/admin.php?page=edit&ndeleted=1");
+      exit();
+      
+    } else if ($action == "deleteimage") {
+      if ($_GET['album'] && $_GET['image']) {
+        $folder = strip($_GET['album']);
+        $file = strip($_GET['image']);
+        $album = new Album($gallery, $folder);
+        $image = new Image($album, $file);
+        $image->deleteImage();
+      }
+      header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . 
+        "/zen/admin.php?page=edit&album=" . urlencode($folder) . "&ndeleted=1");
       exit();
       
 /** UPLOAD IMAGES *************************************************************/
@@ -76,7 +100,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         if (!is_dir($uploaddir)) {
           mkdir ($uploaddir, 0777);
         }
-        chmod($uploaddir,0777);
+        @chmod($uploaddir,0777);
         
         $error = false;
         foreach ($_FILES['files']['error'] as $key => $error) {
@@ -87,7 +111,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
             if (is_image($name)) {
               $uploadfile = $uploaddir . '/' . $name;
               move_uploaded_file($tmp_name, $uploadfile);
-              @chmod($uploadfile, 0755);
+              @chmod($uploadfile, 0777);
             } else if (is_zip($name)) {
               unzip($tmp_name, $uploaddir);
             }
@@ -248,6 +272,16 @@ if (!zp_loggedin()) {
         <?php printSortLink($album, "Sort Album", "Sort Album"); ?> |
         <?php printViewLink($album, "View Album", "View Album"); ?>
         </p>
+        
+        <?php /* Display a message if needed. Fade out and hide after 2 seconds. */ 
+          if ((isset($_GET['ndeleted']) && $_GET['ndeleted'] > 0)) { ?>
+          <div class="errorbox" id="message">
+            <?php if (isset($_GET['ndeleted'])) { ?> <h2>Image deleted successfully.</h2> <?php } ?>
+          </div>
+          <script type="text/javascript">
+            Fat.fade_and_hide_element('message', 30, 1000, 2000, Fat.get_bgcolor('message'), '#FFFFFF')
+          </script>
+        <?php } ?>
     
         <form name="albumedit" action="?page=edit&action=save" method="post">
           <input type="hidden" name="album" value="<?= $album->name; ?>" />
@@ -315,17 +349,17 @@ if (!zp_loggedin()) {
                 <br /><br />
                 
               </td>
-              <?php /*
+
               <td style="padding-left: 1em;">
-                <a href="?page=edit&action=delete&album=<?= $album->name; ?>&image=<?= $filename ?>" title="Delete the image <?= $filename ?>"><img src="images/delete.gif" style="border: 0px;" alt="x" /></a>
+                <a href="javascript: confirmDeleteImage('?page=edit&action=deleteimage&album=<?= $album->name; ?>&image=<?= $image->filename; ?>');" title="Delete the image <?= $image->filename; ?>"><img src="images/delete.gif" style="border: 0px;" alt="x" /></a>
               </td>
-              */ ?>
+
                 
             </tr>
             
             <?php 
               $currentimage++;
-            } 
+            }
             ?>
             
           </table>
@@ -392,6 +426,17 @@ if (!zp_loggedin()) {
         
       <?php } else { /* Display a list of albums to edit. */ ?>
         <h1>Edit Gallery</h1>
+        
+        <?php /* Display a message if needed. Fade out and hide after 2 seconds. */ 
+          if ((isset($_GET['ndeleted']) && $_GET['ndeleted'] > 0) || isset($_GET['sedit'])) { ?>
+          <div class="errorbox" id="message">
+            <?php if (isset($_GET['ndeleted'])) { ?> <h2>Album deleted successfully.</h2> <?php } ?>
+          </div>
+          <script type="text/javascript">
+            Fat.fade_and_hide_element('message', 30, 1000, 2000, Fat.get_bgcolor('message'), '#FFFFFF')
+          </script>
+        <?php } ?>
+        
         <p>Drag the albums into the order you wish them displayed. Select an album to edit its description and data, or <a href="?page=edit&massedit">mass-edit all album data</a>.</p>
         
         <table class="bordered">
@@ -409,18 +454,18 @@ if (!zp_loggedin()) {
             foreach ($albums as $album) { 
             ?>
             <div id="id_<?php echo $album->getAlbumID(); ?>">
-            <table cellspacing="0">
+            <table cellspacing="0" width="100%">
               <tr>
-                <td align="left">
+                <td align="left" width="20">
                 <a href="?page=edit&album=<?= $album->name; ?>" title="Edit this album: <?= $album->name; ?>"><img height="40" width="40" src="<?= $album->getAlbumThumb(); ?>" /></a>
                 </td>
                 <td> <a href="?page=edit&album=<?= $album->name; ?>" title="Edit this album: <?= $album->name; ?>"><?= $album->getTitle(); ?></a>
                 </td>
-                <?php /*
-              <td>
-                <a class="delete" href="?page=edit&action=delete&album=<?= $album->name; ?>" title="Delete the album <?=$album->name; ?>"><img src="images/delete.gif" style="border: 0px;" alt="x" /></a>
-              </td>
-              */ ?>
+
+                <td width="20" align="right">
+                  <a class="delete" href="javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=<?= $album->name; ?>');" title="Delete the album <?=$album->name; ?>"><img src="images/delete.gif" style="border: 0px;" alt="x" /></a>
+                </td>
+
               </tr>
             </table>
             </div>

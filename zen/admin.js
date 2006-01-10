@@ -1,5 +1,19 @@
 /* Zenphoto administration javascript. */
 
+function confirmDeleteAlbum(url) {
+  if (confirm("Are you sure you want to delete this entire album?")) {
+    if (confirm("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")) {
+      window.location = url;
+    }
+  }
+}
+
+function confirmDeleteImage(url) {
+  if (confirm("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!")) {
+    window.location = url;
+  }
+}
+
 function addUploadBoxes(placeholderid, copyfromid, num) {
   var placeholder = document.getElementById(placeholderid);
   var copyfrom = document.getElementById(copyfromid);
