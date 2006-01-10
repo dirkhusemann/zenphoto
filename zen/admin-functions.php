@@ -33,7 +33,7 @@ function printAdminFooter() {
   echo "<div id=\"footer\">";
   echo "\n  <a href=\"http://www.zenphoto.org\" title=\"A simpler web photo album\">zen<strong>photo</strong></a>";
   echo " version ". zp_conf('version');
-  echo "\n</div>";
+  echo " | <a href=\"changelog.html\" title=\"View Changelog\">Changelog</a>\n</div>";
 }
 
 /**
