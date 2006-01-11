@@ -109,7 +109,7 @@ if (file_exists("config.php")) {
         query($sql);
       }
       echo "<h3>Done!</h3>";
-      echo "<p>You can now <a href=\"../\">View your gallery</a>, or <a href=\"../admin/\">administrate.</a></p>";
+      echo "<p>You can now <a href=\"../\">View your gallery</a>, or <a href=\"admin.php\">administrate.</a></p>";
     
     } else if (db_connect()) {
       echo "<h3>database connected</h3>";
