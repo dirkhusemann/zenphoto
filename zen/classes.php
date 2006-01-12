@@ -8,7 +8,7 @@
 require_once("auth_zp.php");
 
 // Set the version number.
-$_zp_conf_vars['version'] = '1.0.0 Beta';
+$_zp_conf_vars['version'] = '1.0.1 Beta';
 
 /**********************************************************************/
 // Image Class //
@@ -833,6 +833,13 @@ class Gallery {
   function getNumComments() {
     $result = query_single_row("SELECT count(*) FROM ".prefix('comments')." WHERE inmoderation = 0");
     return array_shift($result);
+  }
+  
+  function getAllComments() {
+    $result = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.website,"
+        . " (c.date + 0) AS date, c.comment, c.email FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, "
+        .prefix('albums')." AS a ". " WHERE c.imageid = i.id AND i.albumid = a.id AND c.inmoderation = 0 ORDER BY c.id DESC ");
+    return $result;
   }
   
     

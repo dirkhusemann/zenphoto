@@ -262,6 +262,7 @@ function next_album() {
 	global $_zp_albums, $_zp_gallery, $_zp_current_album, $_zp_page, $_zp_current_album_restore;
 	if (is_null($_zp_albums)) {
 		$_zp_albums = $_zp_gallery->getAlbums($_zp_page);
+		if (empty($_zp_albums)) { return false; }
     $_zp_current_album_restore = $_zp_current_album;
 		$_zp_current_album = array_shift($_zp_albums);
     save_context();
@@ -541,6 +542,7 @@ function next_image() {
 	global $_zp_images, $_zp_current_image, $_zp_current_album, $_zp_page, $_zp_current_image_restore;
 	if (is_null($_zp_images)) {
 		$_zp_images = $_zp_current_album->getImages($_zp_page);
+		if (empty($_zp_images)) { return false; }
     $_zp_current_image_restore = $_zp_current_image;
 		$_zp_current_image = array_shift($_zp_images);
 		save_context();
@@ -831,9 +833,9 @@ function printCommentAuthorLink($title=NULL, $class=NULL, $id=NULL) {
   }
 }
 
-function getCommentDate() { global $_zp_current_comment; return myts_date("F jS, Y", $_zp_current_comment['date']); }
+function getCommentDate($format = "F jS, Y") { global $_zp_current_comment; return myts_date($format, $_zp_current_comment['date']); }
 
-function getCommentTime() { global $_zp_current_comment; return myts_date("g:i a", $_zp_current_comment['date']); }
+function getCommentTime($format = "g:i a") { global $_zp_current_comment; return myts_date($format, $_zp_current_comment['date']); }
 
 function getCommentBody() { 
   global $_zp_current_comment; 

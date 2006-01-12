@@ -5,7 +5,6 @@
 
 
 require_once("config.php");
-//require_once("email.php");
 
 if (strstr(basename(dirname($_SERVER['SCRIPT_NAME'])), "zen")) {
   define('WEBPATH', dirname(dirname($_SERVER['SCRIPT_NAME'])));
