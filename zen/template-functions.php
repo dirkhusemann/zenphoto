@@ -846,7 +846,7 @@ function printEditCommentLink($text, $before='', $after='', $title=NULL, $class=
   global $_zp_current_comment;
   if (zp_loggedin()) {
     echo $before;
-    printLink(WEBPATH . '/admin/?page=editcomment&id=' . $_zp_current_comment['id'], $text, $title, $class, $id);
+    printLink(WEBPATH . '/zen/admin.php?page=editcomment&id=' . $_zp_current_comment['id'], $text, $title, $class, $id);
     echo $after;
   }
 }
