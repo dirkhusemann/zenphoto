@@ -1,8 +1,7 @@
 <?php
 
-
+define('OFFSET_PATH', true);
 // i.php - image generation.
-
 require_once("functions.php");
 
 // Set the config variables for convenience.
@@ -35,10 +34,13 @@ if(isset($_GET['h'])) $height = $_GET['h'];  else $height = false;
 if(isset($_GET['q'])) $quality = $_GET['q']; else $quality = $image_quality;
 
 // Check the cache for the processed image; if it doesn't exist, create it.
-$newfile = SERVERCACHE."/{$album}_{$image}_{$size}.jpg";
-$imgfile = SERVERPATH."/albums/$album/$image";
-$cached = true;
+$newfilename = "/{$album}_{$image}_{$size}.jpg";
+$newfile = SERVERCACHE . $newfilename;
+$imgfile = SERVERPATH  . "/albums/$album/$image";
 
+if (!file_exists($imgfile)) {
+  die("<b>Zenphoto error:</b> Image not found.");
+}
 
 if (!file_exists($newfile)) {
 	if ($im = get_image($imgfile)) {
@@ -89,17 +91,10 @@ if (!file_exists($newfile)) {
 		imagedestroy($newim);
 		imagedestroy($im);
 	}
-	// $cached = false; // Just cache it anyway.
 }
 
-if ($cached) {
-	header("Last-Modified: " . gmdate("D, d M Y H:i:s", mktime (0,0,0,1,1,2000)) . " GMT"); // Date in the past
-	header("Expires: Mon, 26 Jul 2040 05:00:00 GMT"); // Never expire the image (well, until 2040)
-	header("Cache-Control: max-age=10000000, s-maxage=1000000, proxy-revalidate, must-revalidate");
-}
-header('Content-Type: image/jpeg');
-if ($fp = fopen($newfile, 'rb')) {
-	fpassthru($fp);
-}
+$protocol = $_SERVER['HTTPS'] ? 'https' : 'http';
+// Replace 'http://' below with detected protocol.
+header("Location: $protocol://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/cache$newfilename");
 
 ?>

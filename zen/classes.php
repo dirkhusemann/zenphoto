@@ -520,20 +520,20 @@ class Album {
 	
 	function getNextAlbum() {
     if ($this->index == null)
-      $this->index = array_search($this->name, $this->gallery->getAlbums(0));
+      $this->index = array_search($this, $this->gallery->getAlbums(0));
 		return $this->gallery->getAlbum($this->index+1);
 	}
 	
 	function getPrevAlbum() {
     if ($this->index == null)
-      $this->index = array_search($this->name, $this->gallery->getAlbums(0));
+      $this->index = array_search($this, $this->gallery->getAlbums(0));
 		return $this->gallery->getAlbum($this->index-1);
 	}
   
   function getGalleryPage() {
     $albums_per_page = zp_conf('albums_per_page');
     if ($this->index == null)
-      $this->index = array_search($this->name, $this->gallery->getAlbums(0));
+      $this->index = array_search($this, $this->gallery->getAlbums(0));
     return floor(($this->index / $albums_per_page)+1);
   }
   
@@ -541,11 +541,11 @@ class Album {
   // Delete the entire album PERMANENTLY. Be careful! This is unrecoverable.
   function deleteAlbum() {
     //echo $this->localpath;
-    query("DELETE FROM ".prefix('albums')." WHERE `id` = " . $this->albumid);
     foreach($this->getImages() as $image) {
       // false here means don't clean up (cascade already took care of it)
       $image->deleteImage(false);
     }
+    query("DELETE FROM ".prefix('albums')." WHERE `id` = " . $this->albumid);
     rmdir($this->localpath);
   }
   

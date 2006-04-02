@@ -46,9 +46,9 @@ if (isset($_GET['album'])) {
 
     // TODO: Better error handling than this.
     if (!$_zp_current_album->exists) {
-      die("The album " . $g_album . " does not exist.");
+      die("<b>Zenphoto error:</b> album does not exist.");
     } else if (!$_zp_current_image->exists) {
-      die("The image " . $g_image . " does not exist.");
+      die("<b>Zenphoto error:</b> image does not exist.");
     }
 		
     
@@ -95,7 +95,7 @@ if (isset($_GET['album'])) {
 
     // TODO: Better error handling than this.
     if (!$_zp_current_album->exists) {
-      die("The album " . $g_album . " does not exist.");
+      die("<b>Zenphoto error:</b> Album does not exist.");
     }
 	}
 } else {
@@ -239,12 +239,13 @@ function printMainSiteLink($title=NULL, $class=NULL, $id=NULL) {
 
 function getGalleryIndexURL() {
 	global $_zp_current_album;
-  if (in_context(ZP_ALBUM)) {
+  if (in_context(ZP_ALBUM) && $_zp_current_album->getGalleryPage() > 1) {
+    $page = $_zp_current_album->getGalleryPage();
     // Link to the page the current album belongs to.
     if (zp_conf('mod_rewrite')) {
-      return WEBPATH . "/page/" . $_zp_current_album->getGalleryPage();
+      return WEBPATH . "/page/" . $page;
     } else {
-      return WEBPATH . "/index.php?page=" . $_zp_current_album->getGalleryPage();
+      return WEBPATH . "/index.php?page=" . $page;
     }
   } else {
     return WEBPATH;
@@ -450,7 +451,7 @@ function printAlbumDesc($editable=false) {
 
 function getAlbumLinkURL() { 
 	global $_zp_current_album, $_zp_current_image;
-  if (in_context(ZP_IMAGE)) {
+  if (in_context(ZP_IMAGE) && $_zp_current_image->getAlbumPage() > 1) {
     // Link to the page the current image belongs to.
     if (zp_conf('mod_rewrite')) {
       return WEBPATH . "/" . urlencode($_zp_current_album->name) . 

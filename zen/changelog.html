@@ -4,13 +4,13 @@
     <title>zenphoto changelog</title>
     <style type="text/css">
       body { 
-        margin: 20px 20% 10px;
-        padding: 20px;
-        background-color: #f3f3f8; 
-        border: 1px dotted #fff;
+        margin: 0px 20% 0px;
+        background-color: #f4f4f8; 
         font-family: Arial, Helvetica, Verdana, sans-serif;
         font-size: 10pt;
       }
+      #main { background-color: #f0f0f4; padding: 30px 20px; }
+      h1 { font-weight: normal; font-size: 24pt; }
       h1, h2, h3, h4, h5 { padding: 0px; margin: 0px; margin-bottom: .15em; }
       .entry {
         padding: 15px;
@@ -18,19 +18,15 @@
         background-color: #fff;
         margin-bottom: 20px;
       }
-      A:link, A:visited {
-        text-decoration: none;
-        color: #36C;
-      }
-      A:hover, A:active {
-        text-decoration: underline;
-        color: #F60;
-        background-color: #FFFCF4;
-      }
+      A:link, A:visited { text-decoration: none; color: #36C; }
+      A:hover, A:active { text-decoration: underline; color: #F60; background-color: #FFFCF4; }
+      code { color: #090; }
+      cite { color: #09C; font-style: normal; font-size: 8pt;}
     </style>
   </head>
 
 <body>
+<div id="main">
 <h1>zenphoto changelog</h1>
 
 <!-- 
@@ -50,11 +46,27 @@
 -->
 
 <div class="entry">
+  <h3>Version 1.0.2 beta</h3>
+  <h4>4/1/2006</h4>
+  <p>Due to the security enhancements in this release, we <strong>strongly recommend</strong> all users upgrade immediately.</p>
+  <ul>
+    <li>Changed the way images are returned. Should drastically reduce CPU time ZP uses. <cite>[trisweb]</cite></li>
+    <li>Fixed bug with installation paths containing the string 'zen'; refined path resolution more. <cite>[trisweb]</cite></li>
+    <li>Fixed several critical vulnerabilities and security issues. <cite>[trisweb]</cite></li>
+    <li>Minor cosmetic path fix&mdash; <code>/page/1</code> should be gone completely now. <cite>[trisweb]</cite></li>
+  </ul>
+</div>
+
+<div class="entry">
+  <p><em>Has it really been this long? Sorry...</em></p>
+</div>
+
+<div class="entry">
   
   <h3>Version 1.0.1 beta</h3>
   <h4>1/11/06</h4>
   <ul>
-    <li>Fixed an embarrasing bug in template-functions.php where an empty Gallery would cause failures. [luckyspin]</li>
+    <li>Fixed an embarrasing bug in template-functions.php where an empty Gallery would cause failures. <cite>[luckyspin]</cite></li>
   </ul>
 </div>
 
@@ -63,15 +75,15 @@
   <h3>Version 1.0.0 beta</h3>
   <h4>1/10/06</h4>
   <ul>
-  	<li>Added Album sorting. Default is by filename, but you can drag and drop your preferred order manually. [luckyspin]</li>
-  	<li>Added [refresh] link to Gallery stats, you can now manually reset your stats and clean up your DB tables. [trisweb]</li>
-  	<li>Added Gallery sorting. Default is newest first, but you can drag and drop your preferred order. [luckyspin]</li>
-  	<li>Added deletion of images and albums in admin. [trisweb] </li>
-  	<li>Added email notification to the admin user when comments are posted. [luckyspin] </li>
-  	<li>Admin: Created admin functions to clean up admin page(s). [luckyspin]</li>
-  	<li>Admin: Created an upgrade page to migrate db tables to new schema. [luckyspin]</li>
-  	<li>Admin: Spruced up some of the admin pages to their L&F was consistent. [luckyspin]</li>
-    <li>Improved path resolution; please report any bugs you run into! [trisweb]</li>
+  	<li>Added Album sorting. Default is by filename, but you can drag and drop your preferred order manually. <cite>[luckyspin]</cite></li>
+  	<li>Added [refresh] link to Gallery stats, you can now manually reset your stats and clean up your DB tables. <cite>[trisweb]</cite></li>
+  	<li>Added Gallery sorting. Default is newest first, but you can drag and drop your preferred order. <cite>[luckyspin]</cite></li>
+  	<li>Added deletion of images and albums in admin. <cite>[trisweb]</cite> </li>
+  	<li>Added email notification to the admin user when comments are posted. <cite>[luckyspin]</cite> </li>
+  	<li>Admin: Created admin functions to clean up admin page(s). <cite>[luckyspin]</cite></li>
+  	<li>Admin: Created an upgrade page to migrate db tables to new schema. <cite>[luckyspin]</cite></li>
+  	<li>Admin: Spruced up some of the admin pages to their L&F was consistent. <cite>[luckyspin]</cite></li>
+    <li>Improved path resolution; please report any bugs you run into! <cite>[trisweb]</cite></li>
   </ul>
 </div>
 
@@ -311,6 +323,7 @@
   </ul>
 </div>
 
+</div>
 </body>
 
 </html>

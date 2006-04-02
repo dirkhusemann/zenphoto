@@ -6,14 +6,14 @@
 
 require_once("config.php");
 
-if (basename(dirname($_SERVER['SCRIPT_NAME'])) == "zen") {
+if (defined('OFFSET_PATH')) {
   define('WEBPATH', dirname(dirname($_SERVER['SCRIPT_NAME'])));
 } else {
   define('WEBPATH', dirname($_SERVER['SCRIPT_NAME']));
 }
+
 define('SERVERPATH', dirname(dirname(__FILE__)));
 define('SERVERCACHE', SERVERPATH . "/cache");
-define('WEBCACHE', WEBPATH . "/cache");
 
 
 
@@ -60,6 +60,8 @@ function truncate_string($string, $length) {
     return $string;
   }
 }
+
+
 
 
 // Simple mySQL timestamp formatting function.

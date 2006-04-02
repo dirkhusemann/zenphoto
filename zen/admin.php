@@ -1,5 +1,7 @@
 <?php  /* Don't put anything before this line! */ 
+define('OFFSET_PATH', true);
 require_once("sortable.php");
+
 
 if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
   

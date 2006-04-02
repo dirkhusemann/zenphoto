@@ -8,6 +8,7 @@ RewriteEngine On
 RewriteBase /zp
 
 RewriteRule ^zen/(.*)$                     - [L]
+RewriteRule ^cache/(.*)$                     - [L]
 RewriteRule ^tests/(.*)$                   - [L]
 RewriteRule	^admin$	                       admin/ [R]
 RewriteRule	^admin/?$	                     zen/admin.php [R,L]
