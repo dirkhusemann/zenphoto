@@ -6,7 +6,7 @@
 
 require_once("config.php");
 
-if (strstr(basename(dirname($_SERVER['SCRIPT_NAME'])), "zen")) {
+if (basename(dirname($_SERVER['SCRIPT_NAME'])) == "zen") {
   define('WEBPATH', dirname(dirname($_SERVER['SCRIPT_NAME'])));
 } else {
   define('WEBPATH', dirname($_SERVER['SCRIPT_NAME']));
