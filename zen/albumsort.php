@@ -1,5 +1,6 @@
 <?php
 
+define('OFFSET_PATH', true);
 require_once("sortable.php");
 
 // Insert the POST operation handler
@@ -55,7 +56,7 @@ if (!zp_loggedin()) {
     
     <div class="box" style="padding: 15px;">
     
-    <p>Sort the images by dragging them..</p>
+    <p>Sort the images by dragging them...</p>
     
       <div id="images">
       <?php foreach ($images as $image) { 
