@@ -50,10 +50,11 @@
   <h4>4/1/2006</h4>
   <p>Due to the security enhancements in this release, we <strong>strongly recommend</strong> all users upgrade immediately.</p>
   <ul>
-    <li>Changed the way images are returned. Should drastically reduce CPU time ZP uses. <cite>[trisweb]</cite></li>
+    <li>Changed the way images are returned. Should drastically reduce CPU time used (a big issue for Dreamhost users). <cite>[trisweb]</cite></li>
     <li>Fixed bug with installation paths containing the string 'zen'; refined path resolution more. <cite>[trisweb]</cite></li>
     <li>Fixed several critical vulnerabilities and security issues. <cite>[trisweb]</cite></li>
-    <li>Minor cosmetic path fix&mdash; <code>/page/1</code> should be gone completely now. <cite>[trisweb]</cite></li>
+    <li>Minor cosmetic path fix&mdash; <code>/page/1</code> should never be seen now. <cite>[trisweb]</cite></li>
+    <li>Root domain and subdomain installations now work. For mod_rewrite, use <code>RewriteBase /</code> <cite>[trisweb]</cite></li>
   </ul>
 </div>
 

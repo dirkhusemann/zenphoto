@@ -7,11 +7,13 @@
 require_once("config.php");
 
 if (defined('OFFSET_PATH')) {
-  define('WEBPATH', dirname(dirname($_SERVER['SCRIPT_NAME'])));
+  $const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
 } else {
-  define('WEBPATH', dirname($_SERVER['SCRIPT_NAME']));
+  $const_webpath = dirname($_SERVER['SCRIPT_NAME']);
 }
-
+if ($const_webpath == '\\')
+  $const_webpath = '';
+define('WEBPATH', $const_webpath);
 define('SERVERPATH', dirname(dirname(__FILE__)));
 define('SERVERCACHE', SERVERPATH . "/cache");
 

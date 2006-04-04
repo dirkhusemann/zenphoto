@@ -248,7 +248,7 @@ function getGalleryIndexURL() {
       return WEBPATH . "/index.php?page=" . $page;
     }
   } else {
-    return WEBPATH;
+    return WEBPATH . "/";
   }
 }
 
