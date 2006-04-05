@@ -33,8 +33,11 @@ if(isset($_GET['s']) && $_GET['s'] < 3000) { // Disallow abusive size requests.
 if(isset($_GET['h'])) $height = $_GET['h'];  else $height = false;
 if(isset($_GET['q'])) $quality = $_GET['q']; else $quality = $image_quality;
 
+$albumenc = str_replace("++", "_", $album);
+$albumenc = str_replace("/", "++", $albumenc);
+
 // Check the cache for the processed image; if it doesn't exist, create it.
-$newfilename = "/{$album}_{$image}_{$size}.jpg";
+$newfilename = "/{$albumenc}_{$image}_{$size}.jpg";
 $newfile = SERVERCACHE . $newfilename;
 $imgfile = SERVERPATH  . "/albums/$album/$image";
 

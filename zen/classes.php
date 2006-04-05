@@ -292,6 +292,7 @@ class Album {
   var $albumid;          // From the database; simplifies queries.
   var $meta = array();   // Album metadata array.
 	var $images = NULL;    // Full images array storage.
+  var $subalbums = NULL; // Full album array storage.
 	var $gallery;
   var $index;
   var $themeoverride;
@@ -346,6 +347,17 @@ class Album {
   
   // The id of this album in the db
   function getAlbumID() { return $this->albumid; }
+  
+  // The parent Album of this Album. NULL if this is a top-level album.
+  function getParent() {
+    $slashpos = strrpos($this->name, "/");
+    if ($slashpos) {
+      $parent = substr($this->name, 0, $slashpos);
+      return new Album($this->gallery, $parent);
+    } else {
+      return NULL;
+    }    
+  }
 	
   // Title
   function getTitle() { return $this->meta['title']; }
@@ -404,6 +416,30 @@ class Album {
     query("UPDATE ".prefix("albums")." SET `show`='" . $show .
           "' WHERE `id`=".$this->albumid);
   }
+  
+  
+  /**
+   * Returns all the subdirectories in this album as Album objects (sub-albums).
+   * @param page  Which page of subalbums to display.
+   * @return an array of Album objects.
+   */
+  function getSubAlbums($page=0) {
+    if (is_null($this->subalbums)) {
+      $dirs = $this->getFileNames(true);
+      $subalbums = array();
+      
+      foreach ($dirs as $dir) {
+        $dir = $this->name . '/' . $dir;
+        $subalbums[] = new Album($this->gallery, $dir);
+      }
+      
+      // Sort here?
+      
+      $this->subalbums = $subalbums;
+    }
+    
+    return $this->subalbums;
+  }
 	
   
   /**
@@ -419,7 +455,7 @@ class Album {
 		if (is_null($this->images)) {
 
 		  // Load the filenames
-		  $files = $this->loadFileNames();
+		  $files = $this->getFileNames();
 		  
 		  // The local image array
 		  $images = array();
@@ -588,18 +624,19 @@ class Album {
    * Load all of the filenames that are found in this Albums directory on disk.
    *
    * @return An array of file names.
+   * @param  $dirs Whether or not to return directories ONLY with the file array. Default is false.
    * 
    * @author Todd Papaioannou (lucky@luckyspin.org)
    * @since  1.0.0
    */
-  function loadFileNames() {
+  function getFileNames($dirs=false) {
     
     // This is where we'll look for files
     $albumdir = SERVERPATH . "/albums/{$this->name}/";
     
     // Be defensive
 		if (!is_dir($albumdir) || !is_readable($albumdir)) {
-			die("The {$this->name} album cannot be found.\n");
+			die("The album cannot be found.");
 		}
 
 		$dir = opendir($albumdir);
@@ -607,7 +644,8 @@ class Album {
 		
 		// Walk through the list and add them to the array
 		while ($file = readdir($dir)) {
-  		if (is_file($albumdir.$file) && is_valid_image($file)) {
+  		if (($dirs && is_dir($albumdir.$file) && $file != "." && $file != "..") 
+          || (!$dirs && is_file($albumdir.$file) && is_valid_image($file))) {
   			$files[] = $file;
   		}
 		}
