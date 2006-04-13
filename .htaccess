@@ -1,0 +1,23 @@
+# htaccess file for zenphoto
+# NOTE: Change the RewriteBase below to the absolute path to your zenphoto directory.
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# !!! Change this to the web path (eg: http://www.example.com/photos --> /photos) !!!
+RewriteBase /zp
+
+RewriteCond %{REQUEST_FILENAME} -f [NC,OR]
+RewriteCond %{REQUEST_FILENAME} -d [NC]
+RewriteRule ^.*$ - [R,L]
+
+RewriteRule	^admin/?$	                     zen/admin.php [R,L]
+
+RewriteRule ^page/([0-9]+)/?$              index.php?page=$1 [L,QSA]
+RewriteRule ^([^/\.]+)/?$                  index.php?album=$1 [L,QSA]
+RewriteRule ^([^/\.]+)/page/([0-9]+)/?$    index.php?album=$1&page=$2 [L,QSA]
+RewriteRule ^([^/\.]+)/image/(thumb|[0-9]{1,4})/([^/\\]+)$    zen/i.php?a=$1&i=$3&s=$2 [L,QSA]
+RewriteRule ^([^/\.]+)/image/([^/\\]+)$    albums/$1/$2 [L]
+RewriteRule ^([^/\.]+)/([^/\\]+)$          index.php?album=$1&image=$2 [L,QSA]
+
+</IfModule>
