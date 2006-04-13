@@ -89,6 +89,7 @@ if (!file_exists($newfile)) {
     
 		touch($newfile);
 		imagejpeg($newim, $newfile, $image_quality);
+    chmod($newfile, 0644);
 		imagedestroy($newim);
 		imagedestroy($im);
 	}
