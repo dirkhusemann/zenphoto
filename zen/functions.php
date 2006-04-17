@@ -2,6 +2,10 @@
 
 // functions.php - HEADERS NOT SENT YET!
 
+if (!file_exists(dirname(__FILE__) . "/config.php")) {
+  die ("<strong>Zenphoto error:</strong> config.php not found. Perhaps you need to run <a href=\"zen/setup.php\">setup</a>");
+}
+
 require_once("config.php");
 
 if (defined('OFFSET_PATH')) {
