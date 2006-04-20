@@ -17,6 +17,7 @@ if ($const_webpath == '\\' || $const_webpath == '/') $const_webpath = '';
 define('WEBPATH', $const_webpath);
 define('SERVERPATH', dirname(dirname(__FILE__)));
 define('SERVERCACHE', SERVERPATH . "/cache");
+define('PROTOCOL', zp_conf('server_protocol'));
 
 
 
