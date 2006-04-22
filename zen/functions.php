@@ -2,11 +2,11 @@
 
 // functions.php - HEADERS NOT SENT YET!
 
-if (!file_exists(dirname(__FILE__) . "/config.php")) {
-  die ("<strong>Zenphoto error:</strong> config.php not found. Perhaps you need to run <a href=\"zen/setup.php\">setup</a>");
+if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
+  die ("<strong>Zenphoto error:</strong> zp-config.php not found. Perhaps you need to run <a href=\"zen/setup.php\">setup</a> (or migrate your old config.php)");
 }
 
-require_once("config.php");
+require_once("zp-config.php");
 
 if (defined('OFFSET_PATH')) {
   $const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
