@@ -1,4 +1,4 @@
-<?php if (!defined('WEBPATH')) die(); ?>
+<?php $startTime = array_sum(explode(" ",microtime())); if (!defined('WEBPATH')) die(); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
@@ -39,6 +39,13 @@
       
       <a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>">
       <?php printDefaultSizedImage(getImageTitle()); ?></a>
+
+      <div style="font-size: 8pt; text-align: right;"><em>
+        <a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>">Original Size: 
+          <?php echo getFullWidth() . "x" . getFullHeight(); ?>
+        </a></em>
+      </div>
+
       
       <?php printImageDesc(true); ?>
 
@@ -80,8 +87,7 @@
     </div>
 </div>
 
+<?php echo round((array_sum(explode(" ",microtime())) - $startTime),4).' Seconds</strong>'; ?>
+
 </body>
-
-<?php printPreloadScript(); ?>
-
 </html>

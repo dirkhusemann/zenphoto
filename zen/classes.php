@@ -55,6 +55,8 @@ class Image {
       $this->meta['commentson'] = 1;
       $this->meta['show'] = 1;
       $this->meta['sortorder'] = null;
+      $this->meta['width'] = 0;
+      $this->meta['height'] = 0;
       
       query("INSERT INTO ".prefix("images")." (albumid, filename, title) " .
             "VALUES ('".mysql_escape_string($this->album->albumid).
@@ -67,15 +69,40 @@ class Image {
       $this->meta['commentson'] = $entry['commentson'];
       $this->meta['show'] = $entry['show'];
       $this->meta['sortorder'] = $entry['sort_order'];
+      $this->meta['width'] = $entry['width'];
+      $this->meta['height'] = $entry['height'];
+
       $this->imageid = $entry['id'];
     }
   }
-  
+
+
   // Image ID - as found in the database
   function getImageID() { return $this->imageid; }
   
   // The filename of this image
   function getFileName() { return $this->filename; }
+    
+  // Get the original width of the image.
+  function updateDimensions() {
+    if (empty($this->meta['width']) || empty($this->meta['height'])) {
+      $im = get_image($this->localpath);
+      $this->meta['height'] = imagesy($im);
+      $this->meta['width']  = imagesx($im);
+      query("UPDATE " . prefix("images") . " SET width=" . mysql_escape_string($this->meta['width']) .
+        ", height=" . mysql_escape_string($this->meta['height']) . " WHERE id=" . $this->imageid . ";");
+    }
+  }
+  
+  function getWidth() {
+    $this->updateDimensions();
+    return $this->meta['width'];
+  }
+  
+  function getHeight() {
+    $this->updateDimensions();
+    return $this->meta['height'];
+  }
 
   // Title
   function getTitle() { return $this->meta['title']; }
@@ -116,6 +143,7 @@ class Image {
     query("UPDATE ".prefix("images")." SET `show`='" . $show .
           "' WHERE `id`=".$this->imageid);
   }
+
   
   
   // Permanently delete this image (be careful!)
@@ -214,17 +242,22 @@ class Image {
 
   function getSizedImage($size) {
     if (zp_conf('mod_rewrite')) {
-      return WEBPATH."/".urlencode($this->album->name)."/image/".$size."/".urlencode($this->filename);
+      return WEBPATH . "/".urlencode($this->album->name)."/image/".$size."/".urlencode($this->filename);
     } else {
-      return WEBPATH."/zen/i.php?a=" . urlencode($this->album->name) . "&i=" . urlencode($this->filename) . "&s=" . $size;
+      return WEBPATH . "/zen/i.php?a=" . urlencode($this->album->name) . "&i=" . urlencode($this->filename) . "&s=" . $size;
     }
+  }
+  
+  // TODO
+  function getCustomImage($size, $cropw, $croph, $cropx, $cropy) {
+    return false;
   }
 
   function getThumb() {
     if (zp_conf('mod_rewrite')) {
-      return WEBPATH."/" . urlencode($this->album->name) . "/image/thumb/" . urlencode($this->filename);
+      return WEBPATH . "/" . urlencode($this->album->name) . "/image/thumb/" . urlencode($this->filename);
     } else {
-      return WEBPATH."/zen/i.php?a=" . urlencode($this->album->name) . "&i=" . urlencode($this->filename) . "&s=thumb";
+      return WEBPATH . "/zen/i.php?a=" . urlencode($this->album->name) . "&i=" . urlencode($this->filename) . "&s=thumb";
     }
   }
   

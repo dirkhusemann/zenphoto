@@ -44,14 +44,20 @@ if (file_exists("config.php")) {
   
   } else {
     // Logged in. Do the setup.
-    $tbl_albums = prefix('albums');
+    $tbl_albums   = prefix('albums');
     $tbl_comments = prefix('comments');
-    $tbl_images = prefix('images');
+    $tbl_images   = prefix('images');
   
     $sql_statements = array();
+    
+    // v. 1.0.0b
     $sql_statements[] = "ALTER TABLE `$tbl_albums` ADD COLUMN `sort_type` varchar(20);";
     $sql_statements[] = "ALTER TABLE `$tbl_albums` ADD COLUMN `sort_order` int(11);";
     $sql_statements[] = "ALTER TABLE `$tbl_images` ADD COLUMN `sort_order` int(11);";
+    
+    // v. 1.0.3b
+    $sql_statements[] = "ALTER TABLE `$tbl_images` ADD COLUMN `height` INT UNSIGNED;";
+    $sql_statements[] = "ALTER TABLE `$tbl_images` ADD COLUMN `width` INT UNSIGNED;";
     
     if (isset($_GET['upgrade']) && db_connect()) {
       echo "<h3>Upgrading tables...</h3>";

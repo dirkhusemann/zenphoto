@@ -722,18 +722,6 @@ function printImageLink($text, $title, $class=NULL, $id=NULL) {
 	printLink(getImageLinkURL(), $text, $title, $class, $id);
 }
 
-function getImageThumb() { 
-	global $_zp_current_image;
-	return $_zp_current_image->getThumb();
-}
-
-function printImageThumb($alt, $class=NULL, $id=NULL) { 
-	echo "<img src=\"" . getImageThumb() . "\" alt=\"$alt\"" .
-    ((zp_conf('thumb_crop')) ? " width=\"".zp_conf('thumb_crop_width')."\" height=\"".zp_conf('thumb_crop_height')."\"" : "") .
-		(($class) ? " class=\"$class\"" : "") . 
-		(($id) ? " id=\"$id\"" : "") . " />";
-}
-
 
 /**
  * Print the entire <div> for a thumbnail. If we are in sorting mode, then only
@@ -762,8 +750,71 @@ function getDefaultSizedImage() {
 	return $_zp_current_image->getSizedImage(zp_conf('image_size'));
 }
 
+// Returns an array [width, height] of the default-sized image.
+function getSizeDefaultImage() {
+  if(!in_context(ZP_IMAGE)) return false;
+  global $_zp_current_image;
+  $h = $_zp_current_image->getHeight();
+  $w = $_zp_current_image->getWidth();
+  $s = zp_conf('image_size');
+  $ls = !zp_conf('image_use_longest_side');
+  if ($w <= $s || $h <= $s) {
+    return array($w, $h);
+  } else if ($ls || ($w > $h)) {
+    return array($s, round(($h / $w) * $s));
+  } else {
+    return array(round(($w / $h) * $s), $s);
+  }
+}
+
+// Returns an array [width, height] of the original image.
+function getSizeFullImage() {
+  global $_zp_current_image;
+  return array($_zp_current_image->getWidth(), $_zp_current_image->getHeight());
+}
+
+// The width of the default-sized image (in printDefaultSizedImage)
+function getDefaultWidth() {
+  $size = getSizeDefaultImage(); return $size[0];
+}
+// The height of the default-sized image (in printDefaultSizedImage)
+function getDefaultHeight() {
+  $size = getSizeDefaultImage(); return $size[1];
+}
+
+// The width of the original image
+function getFullWidth() {
+  $size = getSizeFullImage(); return $size[0];
+}
+
+// The height of the original image
+function getFullHeight() {
+  $size = getSizeFullImage(); return $size[1];
+}
+
+// Returns true if the image is landscape-oriented (width is greater than height)
+function isLandscape() {
+  if (getFullWidth() >= getFullHeight()) return true;
+  return false;
+}
+
+
 function printDefaultSizedImage($alt, $class=NULL, $id=NULL) { 
 	echo "<img src=\"" . getDefaultSizedImage() . "\" alt=\"$alt\"" .
+    " width=\"" . getDefaultWidth() . "\" height=\"" . getDefaultHeight() . "\"" .
+		(($class) ? " class=\"$class\"" : "") . 
+		(($id) ? " id=\"$id\"" : "") . " />";
+}
+
+
+function getImageThumb() { 
+	global $_zp_current_image;
+	return $_zp_current_image->getThumb();
+}
+
+function printImageThumb($alt, $class=NULL, $id=NULL) { 
+	echo "<img src=\"" . getImageThumb() . "\" alt=\"$alt\"" .
+    ((zp_conf('thumb_crop')) ? " width=\"".zp_conf('thumb_crop_width')."\" height=\"".zp_conf('thumb_crop_height')."\"" : "") .
 		(($class) ? " class=\"$class\"" : "") . 
 		(($id) ? " id=\"$id\"" : "") . " />";
 }
@@ -776,6 +827,11 @@ function getFullImageURL() {
 function getSizedImageURL($size) { 
 	global $_zp_current_image;
 	return $_zp_current_image->getSizedImage($size);
+}
+
+function getCustomImageURL($size, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=null) {
+  global $_zp_current_image;
+	return $_zp_current_image->getCustomImage($size, $cropw, $croph, $cropx, $cropy);
 }
 
 function printSizedImageLink($size, $text, $title, $class=NULL, $id=NULL) { 
