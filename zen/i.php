@@ -1,5 +1,25 @@
 <?php
 
+/*******************************************************************************
+ * i.php: Zenphoto image processor. All image requests go through this file.   *
+ *******************************************************************************
+ * URI Parameters:
+ *   s  - size (logical): Based on config, makes an image of "size s."
+ *   h  - height (explicit): Image is always h pixels high, w is calculated.
+ *   w  - width (explicit): Image is always w pixels wide, h is calculated.
+ *   cw - crop width: crops the image to cw pixels wide.
+ *   ch - crop height: crops the image to ch pixels high.
+ *   cx - crop x position: the x (horizontal) position of the crop area.
+ *   cy - crop y position: the y (vertical) position of the crop area.
+ *   q  - JPEG quality (1-100): sets the quality of the resulting image.
+ *
+ * - cx and cy are measured from the top-left corner of the _scaled_ image.
+ * - One of s, h, or w _must_ be specified; the others are optional.
+ * - If more than one of s, h, or w are specified, s takes priority, then w.
+ * - If none of s, h, or w are specified, the original image is returned.
+ *******************************************************************************
+ */
+
 define('OFFSET_PATH', true);
 // i.php - image generation.
 require_once("functions.php");
@@ -10,8 +30,13 @@ $thumb_size = zp_conf('thumb_size');
 $thumb_crop_width = zp_conf('thumb_crop_width');
 $thumb_crop_height = zp_conf('thumb_crop_height');
 $image_use_longest_side = zp_conf('image_use_longest_side');
+$image_default_size = zp_conf('image_size');
 $quality = zp_conf('image_quality');
 $thumb_quality = zp_conf('thumb_quality');
+$upscale = zp_conf('image_allow_upscale');
+
+// Don't let anything get above this, to save the server from burning up...
+define('MAX_SIZE', 3000);
 
 // Generate an image from the given file ($_GET['f']) at the given size ($_GET['s'])
 if (!isset($_GET['a']) || !isset($_GET['i'])) {
@@ -22,9 +47,12 @@ $album = get_magic_quotes_gpc() ? stripslashes($_GET['a']) : $_GET['a'];
 $image = get_magic_quotes_gpc() ? stripslashes($_GET['i']) : $_GET['i'];
 
 // Disallow abusive size requests.
-if (isset($_GET['s']) && $_GET['s'] < 3000) {
-  // Setting up default variable values.
-  $crop = $cw = $ch = $cx = $cy = false;
+if ((isset($_GET['s']) && $_GET['s'] < MAX_SIZE) 
+  || (isset($_GET['w']) && $_GET['w'] < MAX_SIZE)
+  || (isset($_GET['h']) && $_GET['h'] < MAX_SIZE)) {
+
+  // Set default variable values.
+  $size = $width = $height = $crop = $cw = $ch = $cx = $cy = false;
   
   // If s=thumb, Set up for the default thumbnail settings.
   $size = $_GET['s'];
@@ -41,10 +69,19 @@ if (isset($_GET['s']) && $_GET['s'] < 3000) {
     }
     $size = round($thumb_size);
     $quality = round($thumb_quality);
-    
-  // Otherwise, get crops/height from the command line if they exist.
+
+  // Otherwise, populate the parameters from the URI
 	} else {
-    $size = round($size);
+    if ($size == "default") {
+      $size = $image_default_size;
+    } else if (empty($size) || !is_numeric($size)) {
+      $size = false; // 0 isn't a valid size anyway, so this is OK.
+    } else {
+      $size = round($size);
+    }
+    
+    if (isset($_GET['w']))  { $width   = round($_GET['w']); }
+    if (isset($_GET['h']))  { $height  = round($_GET['h']); }
     if (isset($_GET['cw'])) { $cw      = round($_GET['cw']); $crop = true; }
     if (isset($_GET['ch'])) { $ch      = round($_GET['ch']); $crop = true; }
     if (isset($_GET['cx'])) { $cx      = round($_GET['cx']); }
@@ -52,14 +89,18 @@ if (isset($_GET['s']) && $_GET['s'] < 3000) {
     if (isset($_GET['q']))  { $quality = round($_GET['q']); }
 	}
   
-  $postfix_string = $size . ($height ? "_h$height" : "") . ($cw ? "_cw$cw" : "") . ($ch ? "_ch$ch" : "") 
+  $postfix_string = ($size ? "_$size" : "") . ($width ? "_w$width" : "") 
+    . ($height ? "_h$height" : "") . ($cw ? "_cw$cw" : "") . ($ch ? "_ch$ch" : "") 
     . (is_numeric($cx) ? "_cx$cx" : "") . (is_numeric($cy) ? "_cy$cy" : "");
+    
 } else {
-	die("<b>Zenphoto error:</b> Too few arguments given to the image processor.");
+  // No image parameters specified; return the original image.
+  header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/albums/$album/$image");
+  return;
 }
 
 
-$newfilename = "/{$album}_{$image}_{$postfix_string}.jpg";
+$newfilename = "/{$album}_{$image}{$postfix_string}.jpg";
 $newfile = SERVERCACHE . $newfilename;
 $imgfile = SERVERPATH  . "/albums/$album/$image";
 
@@ -74,29 +115,47 @@ if (!file_exists($newfile)) {
 		$w = imagesx($im);
 		$h = imagesy($im);
     
+    // Give the sizing dimension to $dim
+    if (!empty($size)) {
+      $dim = $size;
+      $width = $height = false;
+    } else if (!empty($width)) {
+      $dim = $width;
+      $size = $height = false;
+    } else if (!empty($height)) {
+      $dim = $height;
+      $size = $width = false;
+    } else {
+      // There's a problem up there somewhere...
+      die("<b>Zenphoto error:</b> Image processing error. Please report to the developers.");
+    }
+    
     // Calculate proportional height and width.
-    $hprop = round(($h / $w) * $size);
-    $wprop = round(($w / $h) * $size);
+    $hprop = round(($h / $w) * $dim);
+    $wprop = round(($w / $h) * $dim);
     
 		if ($thumb) {
-			if ($w < $h) {
-				$neww = $size;
+      // Thumbs always use the shortest side to catch the whole image.
+      // $dim should always be $size here.
+			if ($h > $w) {
+				$neww = $dim;
 				$newh = $hprop;
 			} else {
 				$neww = $wprop;
-				$newh = $size;
+				$newh = $dim;
 			}
     } else {
-      if ($image_use_longest_side && $w < $h) {
-        $newh = $size;
+      if (($size && $image_use_longest_side && $h > $w)
+        || $height) {
+        $newh = $dim;
         $neww = $wprop;
       } else {
-  			$neww = $size;
+  			$neww = $dim;
   			$newh = $hprop;
       }
       
       // If the requested image is the same size or smaller than the original, redirect to it.
-      if ($newh >= $h && $neww >= $w) {
+      if (!$upscale && $newh >= $h && $neww >= $w) {
         header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/albums/$album/$image");
         return;
       }

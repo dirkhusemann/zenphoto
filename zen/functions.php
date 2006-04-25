@@ -24,7 +24,11 @@ define('PROTOCOL', zp_conf('server_protocol'));
 // For easy access to config vars.
 function zp_conf($var) {
   global $_zp_conf_vars;
-  return $_zp_conf_vars[$var];
+  if (array_key_exists($var, $_zp_conf_vars)) {
+    return $_zp_conf_vars[$var];
+  } else {
+    return null;
+  }
 }
 
 // Set up assertions for debugging.

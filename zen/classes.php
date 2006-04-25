@@ -83,7 +83,10 @@ class Image {
   // The filename of this image
   function getFileName() { return $this->filename; }
     
-  // Get the original width of the image.
+  // Get the width and height of the original image--
+  // This is some very lazy evaluation, only updates the database the first time
+  // width or height are requested and not available; otherwise does nothing.
+  // Subsequent requests are already populated in the db, and very fast.
   function updateDimensions() {
     if (empty($this->meta['width']) || empty($this->meta['height'])) {
       $im = get_image($this->localpath);
@@ -249,8 +252,11 @@ class Image {
   }
   
   // TODO
-  function getCustomImage($size, $cropw, $croph, $cropx, $cropy) {
-    return false;
+  function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy) {
+    return WEBPATH . "/zen/i.php?a=" . urlencode($this->album->name) . "&i=" . urlencode($this->filename)
+    . ($size ? "&s=$size" : "" ) . ($width ? "&w=$width" : "") . ($height ? "&h=$height" : "") 
+    . ($cropw ? "&cw=$cropw" : "") . ($croph ? "&ch=$croph" : "")
+    . ($cropx ? "&cx=$cropx" : "") . ($cropy ? "&cy=$cropy" : "") ;
   }
 
   function getThumb() {
@@ -530,20 +536,24 @@ class Album {
 		else
 			return false;
 	}
-	
-	function getAlbumThumb() {
-		$albumdir = SERVERPATH . "/albums/{$this->name}/";
+
+  function getAlbumThumbImage() {
+    $albumdir = SERVERPATH . "/albums/{$this->name}/";
 		$thumb = $this->meta['thumb'];
-		// TODO: Make this use the database entry if it's not null...
 		if ($thumb == NULL || !file_exists($albumdir.$thumb)) {
 			$dp = opendir($albumdir);
 			while ($thumb = readdir($dp)) {
 				if (is_file($albumdir.$thumb) && is_valid_image($thumb)) break;
 			}
 		}
-		$image = new Image($this, $thumb);
+		return new Image($this, $thumb);
+  }
+  
+  function getAlbumThumb() {
+    $image = $this->getAlbumThumbImage();
 		return $image->getThumb();
 	}
+  
 	
   function setAlbumThumb($filename) {
     $this->meta['thumb'] = $thumb;

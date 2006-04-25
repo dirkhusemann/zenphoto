@@ -69,21 +69,27 @@ $conf['thumb_quality'] = 75;
 // Default image display width (themes will be able to control this 
 // to an extent in the future, but for now you may have to adjust it to fit your theme).
 $conf['image_size'] = 595;
+
 // If this is set to true, then the longest side of the image will be $image_size.
 // Otherwise, the *width* of the image will be $image_size.
 $conf['image_use_longest_side'] = true;
+
+// Allow images to be scaled up to the requested size? This could result in loss
+// of quality, so it's off by default.
+$conf['image_allow_upscale'] = false;
 
 // Default thumbnail size and scale:
 // If $thumb_crop is set to true, then the thumbnail will be a centered portion of the image
 // with the given width and height after being resized to $thumb_size (by shortest side).
 // Otherwise, it will be the full image resized to $thumb_size (by shortest side).
 // NOTE: thumb_crop_width and height should always be less than or equal to thumb_size
+$conf['thumb_size']        = 100;
 $conf['thumb_crop']        = true;
 $conf['thumb_crop_width']  = 85;
 $conf['thumb_crop_height'] = 85;
-$conf['thumb_size']        = 100;
 
-// Paging options.
+
+// Paging options:
 // Control of their display is done in the theme, so you might need to change these
 // after switching themes to make it look better.
 $conf['albums_per_page'] = 5;

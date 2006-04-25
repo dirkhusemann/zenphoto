@@ -36,13 +36,13 @@ $_zp_current_context_restore = NULL;
 // Parse the GET request to see what exactly is requested...
 if (isset($_GET['album'])) {
   $g_album = get_magic_quotes_gpc() ? stripslashes($_GET['album']) : $_GET['album'];
-	if (isset($_GET['image'])) {
+  if (isset($_GET['image'])) {
     $g_image = get_magic_quotes_gpc() ? stripslashes($_GET['image']) : $_GET['image'];
-		$_zp_current_context = ZP_IMAGE | ZP_ALBUM | ZP_INDEX;
+    $_zp_current_context = ZP_IMAGE | ZP_ALBUM | ZP_INDEX;
 
-		// An image page. Instantiate objects.
+    // An image page. Instantiate objects.
     $_zp_current_album = new Album($_zp_gallery, $g_album);
-		$_zp_current_image = new Image($_zp_current_album, $g_image);
+    $_zp_current_image = new Image($_zp_current_album, $g_image);
 
     // TODO: Better error handling than this.
     if (!$_zp_current_album->exists) {
@@ -50,7 +50,7 @@ if (isset($_GET['album'])) {
     } else if (!$_zp_current_image->exists) {
       die("<b>Zenphoto error:</b> image does not exist.");
     }
-		
+    
     
     //// Comment form handling.
     if (isset($_POST['comment'])) {
@@ -88,18 +88,18 @@ if (isset($_GET['album'])) {
       $stored = array("","","", false); 
     } 
     
-	} else {
-		$_zp_current_context = ZP_ALBUM | ZP_INDEX;
-		// Album default view; for album.php
-		$_zp_current_album = new Album($_zp_gallery, $g_album);
+  } else {
+    $_zp_current_context = ZP_ALBUM | ZP_INDEX;
+    // Album default view; for album.php
+    $_zp_current_album = new Album($_zp_gallery, $g_album);
 
     // TODO: Better error handling than this.
     if (!$_zp_current_album->exists) {
       die("<b>Zenphoto error:</b> Album does not exist.");
     }
-	}
+  }
 } else {
-	$_zp_current_context = ZP_INDEX;
+  $_zp_current_context = ZP_INDEX;
 }
 
 // Contextual manipulation.
@@ -108,18 +108,18 @@ function get_context() {
   return $_zp_current_context;
 }
 function set_context($context) {
-	global $_zp_current_context;
-	$_zp_current_context = $context;
+  global $_zp_current_context;
+  $_zp_current_context = $context;
 }
 function in_context($context) {
-	return get_context() & $context;
+  return get_context() & $context;
 }
 function add_context($context) {
-	set_context(get_context() | $context);
+  set_context(get_context() | $context);
 }
 function rem_context($context) {
-	global $_zp_current_context;
-	set_context(get_context() & ~$context);
+  global $_zp_current_context;
+  set_context(get_context() & ~$context);
 }
 // Use save and restore rather than add/remove when modifying contexts.
 function save_context() {
@@ -221,24 +221,24 @@ function printAdminLink($text, $before='', $after='', $title=NULL, $class=NULL, 
 /******************************************/
 
 function getGalleryTitle() { 
-	return zp_conf('gallery_title');
+  return zp_conf('gallery_title');
 }
 function printGalleryTitle() { 
-	echo getGalleryTitle(); 
+  echo getGalleryTitle(); 
 }
 
 function getMainSiteName() { 
-	return zp_conf('main_site_name');
+  return zp_conf('main_site_name');
 }
 function getMainSiteURL() { 
-	return zp_conf('main_site_url');
+  return zp_conf('main_site_url');
 }
 function printMainSiteLink($title=NULL, $class=NULL, $id=NULL) { 
-	printLink(getMainSiteURL(), getMainSiteName(), $title, $class, $id);
+  printLink(getMainSiteURL(), getMainSiteName(), $title, $class, $id);
 }
 
 function getGalleryIndexURL() {
-	global $_zp_current_album;
+  global $_zp_current_album;
   if (in_context(ZP_ALBUM) && $_zp_current_album->getGalleryPage() > 1) {
     $page = $_zp_current_album->getGalleryPage();
     // Link to the page the current album belongs to.
@@ -253,31 +253,31 @@ function getGalleryIndexURL() {
 }
 
 function getNumAlbums() { 
-	global $_zp_gallery;
-	return $_zp_gallery->getNumAlbums();
+  global $_zp_gallery;
+  return $_zp_gallery->getNumAlbums();
 }
 
 // WHILE next_album(): context switches to Album.
 // Switch back to index when there are no more albums.
 function next_album() {
-	global $_zp_albums, $_zp_gallery, $_zp_current_album, $_zp_page, $_zp_current_album_restore;
-	if (is_null($_zp_albums)) {
-		$_zp_albums = $_zp_gallery->getAlbums($_zp_page);
-		if (empty($_zp_albums)) { return false; }
+  global $_zp_albums, $_zp_gallery, $_zp_current_album, $_zp_page, $_zp_current_album_restore;
+  if (is_null($_zp_albums)) {
+    $_zp_albums = $_zp_gallery->getAlbums($_zp_page);
+    if (empty($_zp_albums)) { return false; }
     $_zp_current_album_restore = $_zp_current_album;
-		$_zp_current_album = array_shift($_zp_albums);
+    $_zp_current_album = array_shift($_zp_albums);
     save_context();
-		add_context(ZP_ALBUM);
-		return true;
-	} else if (empty($_zp_albums)) {
-		$_zp_albums = NULL;
-		$_zp_current_album = $_zp_current_album_restore;
-		restore_context();
-		return false;
-	} else {
-		$_zp_current_album = array_shift($_zp_albums);
-		return true;
-	}
+    add_context(ZP_ALBUM);
+    return true;
+  } else if (empty($_zp_albums)) {
+    $_zp_albums = NULL;
+    $_zp_current_album = $_zp_current_album_restore;
+    restore_context();
+    return false;
+  } else {
+    $_zp_current_album = array_shift($_zp_albums);
+    return true;
+  }
 }
 
 
@@ -286,16 +286,16 @@ function next_album() {
 // (Common functions shared by Albums and the Gallery Index)
 
 function getCurrentPage() { 
-	global $_zp_page;
-	return $_zp_page;
+  global $_zp_page;
+  return $_zp_page;
 }
 function getTotalPages() { 
-	global $_zp_current_album, $_zp_gallery;
-	if (in_context(ZP_ALBUM)) {
-		return ceil($_zp_current_album->getNumImages() / zp_conf('images_per_page'));
-	} else if (in_context(ZP_INDEX)) {
-		return ceil($_zp_gallery->getNumAlbums() / zp_conf('albums_per_page'));
-	} else {
+  global $_zp_current_album, $_zp_gallery;
+  if (in_context(ZP_ALBUM)) {
+    return ceil($_zp_current_album->getNumImages() / zp_conf('images_per_page'));
+  } else if (in_context(ZP_INDEX)) {
+    return ceil($_zp_gallery->getNumAlbums() / zp_conf('albums_per_page'));
+  } else {
     return null;
   }
 }
@@ -396,18 +396,18 @@ function printPageListWithNav($prevtext, $nexttext, $nextprev=true, $class="page
 /******************************************/
 
 function getAlbumTitle() { 
-	if(!in_context(ZP_ALBUM)) return false;
-	global $_zp_current_album;
-	return $_zp_current_album->getTitle();
+  if(!in_context(ZP_ALBUM)) return false;
+  global $_zp_current_album;
+  return $_zp_current_album->getTitle();
 }
 function printAlbumTitle($editable=false) { 
-	global $_zp_current_album;
-	if ($editable && zp_loggedin()) {
-		echo "<div id=\"albumTitleEditable\" style=\"display: inline;\">" . getAlbumTitle() . "</div>\n";
+  global $_zp_current_album;
+  if ($editable && zp_loggedin()) {
+    echo "<div id=\"albumTitleEditable\" style=\"display: inline;\">" . getAlbumTitle() . "</div>\n";
     echo "<script>initEditableTitle('albumTitleEditable');</script>";
-	} else {
-    echo getAlbumTitle();	
-	}
+  } else {
+    echo getAlbumTitle();  
+  }
 }
 
 function getAlbumDate() {
@@ -434,23 +434,23 @@ function printAlbumPlace() {
 }
 
 function getAlbumDesc() { 
-	if(!in_context(ZP_ALBUM)) return false;
-	global $_zp_current_album;
-	return str_replace("\n", "<br />", $_zp_current_album->getDesc());
+  if(!in_context(ZP_ALBUM)) return false;
+  global $_zp_current_album;
+  return str_replace("\n", "<br />", $_zp_current_album->getDesc());
 }
 function printAlbumDesc($editable=false) { 
-	global $_zp_current_album;
-	if ($editable && zp_loggedin()) {
-		echo "<div id=\"albumDescEditable\" style=\"display: block;\">" . getAlbumDesc() . "</div>\n";
+  global $_zp_current_album;
+  if ($editable && zp_loggedin()) {
+    echo "<div id=\"albumDescEditable\" style=\"display: block;\">" . getAlbumDesc() . "</div>\n";
     echo "<script>initEditableDesc('albumDescEditable');</script>";
-	} else {
-    echo getAlbumDesc();	
-	}
-	
+  } else {
+    echo getAlbumDesc();  
+  }
+  
 }
 
 function getAlbumLinkURL() { 
-	global $_zp_current_album, $_zp_current_image;
+  global $_zp_current_album, $_zp_current_image;
   if (in_context(ZP_IMAGE) && $_zp_current_image->getAlbumPage() > 1) {
     // Link to the page the current image belongs to.
     if (zp_conf('mod_rewrite')) {
@@ -470,7 +470,7 @@ function getAlbumLinkURL() {
 }
 
 function printAlbumLink($text, $title, $class=NULL, $id=NULL) { 
-	printLink(getAlbumLinkURL(), $text, $title, $class, $id);
+  printLink(getAlbumLinkURL(), $text, $title, $class, $id);
 }
 
 /**
@@ -523,41 +523,54 @@ function printSortableGalleryLink($text, $title, $class=NULL, $id=NULL) {
 }
 
 function getAlbumThumb() { 
-	global $_zp_current_album;
-	return $_zp_current_album->getAlbumThumb();
+  global $_zp_current_album;
+  return $_zp_current_album->getAlbumThumb();
 }
 
 function printAlbumThumbImage($alt, $class=NULL, $id=NULL) { 
-	echo "<img src=\"" . getAlbumThumb() . "\" alt=\"$alt\"" .
-		(($class) ? " class=\"$class\"" : "") . 
-		(($id) ? " id=\"$id\"" : "") . " />";
+  echo "<img src=\"" . getAlbumThumb() . "\" alt=\"$alt\"" .
+    (($class) ? " class=\"$class\"" : "") . 
+    (($id) ? " id=\"$id\"" : "") . " />";
 }
 
+function getCustomAlbumThumb($size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=null) {
+  global $_zp_current_album;
+  $thumb = $_zp_current_album->getAlbumThumbImage();
+  return $thumb->getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy);
+}
+
+function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=null, $class=NULL, $id=NULL) {
+  echo "<img src=\"" . getCustomAlbumThumb($size, $width, $height, $cropw, $croph, $cropx, $cropy) . "\" alt=\"$alt\"" .
+    (($class) ? " class=\"$class\"" : "") . 
+    (($id) ? " id=\"$id\"" : "") . " />";
+}
+
+
 function getNumImages() { 
-	global $_zp_current_album;
-	return $_zp_current_album->getNumImages();
+  global $_zp_current_album;
+  return $_zp_current_album->getNumImages();
 }
 
 
 function next_image() { 
-	global $_zp_images, $_zp_current_image, $_zp_current_album, $_zp_page, $_zp_current_image_restore;
-	if (is_null($_zp_images)) {
-		$_zp_images = $_zp_current_album->getImages($_zp_page);
-		if (empty($_zp_images)) { return false; }
+  global $_zp_images, $_zp_current_image, $_zp_current_album, $_zp_page, $_zp_current_image_restore;
+  if (is_null($_zp_images)) {
+    $_zp_images = $_zp_current_album->getImages($_zp_page);
+    if (empty($_zp_images)) { return false; }
     $_zp_current_image_restore = $_zp_current_image;
-		$_zp_current_image = array_shift($_zp_images);
-		save_context();
+    $_zp_current_image = array_shift($_zp_images);
+    save_context();
     add_context(ZP_IMAGE);
-		return true;
-	} else if (empty($_zp_images)) {
-		$_zp_images = NULL;
-		$_zp_current_image = $_zp_current_image_restore;
-		restore_context();
-		return false;
-	} else {
-		$_zp_current_image = array_shift($_zp_images);
-		return true;
-	}
+    return true;
+  } else if (empty($_zp_images)) {
+    $_zp_images = NULL;
+    $_zp_current_image = $_zp_current_image_restore;
+    restore_context();
+    return false;
+  } else {
+    $_zp_current_image = array_shift($_zp_images);
+    return true;
+  }
 }
 
 
@@ -565,18 +578,34 @@ function next_image() {
 /******************************************/
 
 function getImageTitle() { 
-	if(!in_context(ZP_IMAGE)) return false;
-	global $_zp_current_image;
-	return $_zp_current_image->getTitle();
+  if(!in_context(ZP_IMAGE)) return false;
+  global $_zp_current_image;
+  return $_zp_current_image->getTitle();
 }
 function printImageTitle($editable=false) { 
-	global $_zp_current_image;
-	if ($editable && zp_loggedin()) {
-		echo "<div id=\"imageTitleEditable\" style=\"display: inline;\">" . getImageTitle() . "</div>\n";
+  global $_zp_current_image;
+  if ($editable && zp_loggedin()) {
+    echo "<div id=\"imageTitleEditable\" style=\"display: inline;\">" . getImageTitle() . "</div>\n";
     echo "<script>initEditableTitle('imageTitleEditable');</script>";
-	} else {
-    echo getImageTitle();	
-	}
+  } else {
+    echo getImageTitle();  
+  }
+}
+
+function getImageDesc() { 
+  if(!in_context(ZP_IMAGE)) return false;
+  global $_zp_current_image;
+  return str_replace("\n", "<br />", $_zp_current_image->getDesc());
+}
+
+function printImageDesc($editable=false) {  
+  global $_zp_current_image;
+  if ($editable && zp_loggedin()) {
+    echo "<div id=\"imageDescEditable\" style=\"display: block;\">" . getImageDesc() . "</div>\n";
+    echo "<script>initEditableDesc('imageDescEditable');</script>";
+  } else {
+    echo getImageDesc();
+  }
 }
 
 /**
@@ -587,8 +616,8 @@ function printImageTitle($editable=false) {
  */
 function getImageID() {
   if (!in_context(ZP_IMAGE)) return false;
-	global $_zp_current_image;
-	return $_zp_current_image->getImageID();
+  global $_zp_current_image;
+  return $_zp_current_image->getImageID();
 }
 
 /**
@@ -611,8 +640,8 @@ function printImageID() {
  */
 function getImageSortOrder() {
   if (!in_context(ZP_IMAGE)) return false;
-	global $_zp_current_image;
-	return $_zp_current_image->getSortOrder();
+  global $_zp_current_image;
+  return $_zp_current_image->getSortOrder();
 }
 
 /**
@@ -627,50 +656,34 @@ function printImageSortOrder() {
   echo getImageSortOrder();
 }
 
-function getImageDesc() { 
-	if(!in_context(ZP_IMAGE)) return false;
-	global $_zp_current_image;
-	return str_replace("\n", "<br />", $_zp_current_image->getDesc());
-}
-
-function printImageDesc($editable=false) {	
-	global $_zp_current_image;
-	if ($editable && zp_loggedin()) {
-		echo "<div id=\"imageDescEditable\" style=\"display: block;\">" . getImageDesc() . "</div>\n";
-    echo "<script>initEditableDesc('imageDescEditable');</script>";
-	} else {
-    echo getImageDesc();
-	}
-}
-
 
 function hasNextImage() { global $_zp_current_image; return $_zp_current_image->getNextImage(); }
 function hasPrevImage() { global $_zp_current_image; return $_zp_current_image->getPrevImage(); }
 
 function getNextImageURL() {
-	if(!in_context(ZP_IMAGE)) return false;
-	global $_zp_current_album, $_zp_current_image;
-	
-	$nextimg = $_zp_current_image->getNextImage();
-	
-	if (zp_conf('mod_rewrite')) {
-		return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/" . urlencode($nextimg->getFileName());
-	} else {
-		return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($nextimg->getFileName());
-	}
+  if(!in_context(ZP_IMAGE)) return false;
+  global $_zp_current_album, $_zp_current_image;
+  
+  $nextimg = $_zp_current_image->getNextImage();
+  
+  if (zp_conf('mod_rewrite')) {
+    return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/" . urlencode($nextimg->getFileName());
+  } else {
+    return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($nextimg->getFileName());
+  }
 }
 
 function getPrevImageURL() {
-	if(!in_context(ZP_IMAGE)) return false;
-	global $_zp_current_album, $_zp_current_image;
-	
-	$previmg = $_zp_current_image->getPrevImage();
-	
-	if (zp_conf('mod_rewrite')) {
-		return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/" . urlencode($previmg->getFileName());
-	} else {
-		return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($previmg->getFileName());
-	}
+  if(!in_context(ZP_IMAGE)) return false;
+  global $_zp_current_album, $_zp_current_image;
+  
+  $previmg = $_zp_current_image->getPrevImage();
+  
+  if (zp_conf('mod_rewrite')) {
+    return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/" . urlencode($previmg->getFileName());
+  } else {
+    return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($previmg->getFileName());
+  }
 }
 
 
@@ -695,31 +708,31 @@ function printPreloadScript() {
 
 function getPrevImageThumb() {
   if(!in_context(ZP_IMAGE)) return false;
-	global $_zp_current_image;
+  global $_zp_current_image;
   $img = $_zp_current_image->getPrevImage();
   return $img->getThumb();
 }
 
 function getNextImageThumb() {
   if(!in_context(ZP_IMAGE)) return false;
-	global $_zp_current_image;
+  global $_zp_current_image;
   $img = $_zp_current_image->getNextImage();
   return $img->getThumb();
 }
 
 
 function getImageLinkURL() { 
-	if(!in_context(ZP_IMAGE)) return false;
-	global $_zp_current_album, $_zp_current_image;
-	if (zp_conf('mod_rewrite')) {
-		return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/" . urlencode($_zp_current_image->name);
-	} else {
-		return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($_zp_current_image->name);
-	}
+  if(!in_context(ZP_IMAGE)) return false;
+  global $_zp_current_album, $_zp_current_image;
+  if (zp_conf('mod_rewrite')) {
+    return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/" . urlencode($_zp_current_image->name);
+  } else {
+    return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($_zp_current_image->name);
+  }
 }
 
 function printImageLink($text, $title, $class=NULL, $id=NULL) {
-	printLink(getImageLinkURL(), $text, $title, $class, $id);
+  printLink(getImageLinkURL(), $text, $title, $class, $id);
 }
 
 
@@ -746,25 +759,55 @@ function printImageDiv() {
 function getImageEXIFData() { }
 
 function getDefaultSizedImage() { 
-	global $_zp_current_image;
-	return $_zp_current_image->getSizedImage(zp_conf('image_size'));
+  global $_zp_current_image;
+  return $_zp_current_image->getSizedImage(zp_conf('image_size'));
 }
 
-// Returns an array [width, height] of the default-sized image.
-function getSizeDefaultImage() {
+function getSizeCustomImage($size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL) {
   if(!in_context(ZP_IMAGE)) return false;
   global $_zp_current_image;
   $h = $_zp_current_image->getHeight();
   $w = $_zp_current_image->getWidth();
-  $s = zp_conf('image_size');
-  $ls = !zp_conf('image_use_longest_side');
-  if ($w <= $s || $h <= $s) {
-    return array($w, $h);
-  } else if ($ls || ($w > $h)) {
-    return array($s, round(($h / $w) * $s));
-  } else {
-    return array(round(($w / $h) * $s), $s);
+  $ls = zp_conf('image_use_longest_side');
+  $us = zp_conf('image_allow_upscale');
+  
+  if (!empty($size)) {
+    $dim = $size;
+    $width = $height = false;
+  } else if (!empty($width)) {
+    $dim = $width;
+    $size = $height = false;
+  } else if (!empty($height)) {
+    $dim = $height;
+    $size = $width = false;
   }
+  
+  $hprop = round(($h / $w) * $dim);
+  $wprop = round(($w / $h) * $dim);
+  
+  if (($size && $ls && $h > $w)
+    || $height) {
+    // Scale the height
+    $newh = $dim;
+    $neww = $wprop;
+  } else {
+    // Scale the width
+    $neww = $dim;
+    $newh = $hprop;
+  }
+
+  if (!$us && $newh >= $h && $neww >= $w) {
+    return array($w, $h);
+  } else {
+    if ($cropw && $cropw < $neww) $neww = $cropw;
+    if ($croph && $croph < $newh) $newh = $croph;
+    return array($neww, $newh);
+  }
+}
+
+// Returns an array [width, height] of the default-sized image.
+function getSizeDefaultImage() {
+  return getSizeCustomImage(zp_conf('image_size'));
 }
 
 // Returns an array [width, height] of the original image.
@@ -800,38 +843,45 @@ function isLandscape() {
 
 
 function printDefaultSizedImage($alt, $class=NULL, $id=NULL) { 
-	echo "<img src=\"" . getDefaultSizedImage() . "\" alt=\"$alt\"" .
+  echo "<img src=\"" . getDefaultSizedImage() . "\" alt=\"$alt\"" .
     " width=\"" . getDefaultWidth() . "\" height=\"" . getDefaultHeight() . "\"" .
-		(($class) ? " class=\"$class\"" : "") . 
-		(($id) ? " id=\"$id\"" : "") . " />";
+    (($class) ? " class=\"$class\"" : "") . 
+    (($id) ? " id=\"$id\"" : "") . " />";
 }
 
 
 function getImageThumb() { 
-	global $_zp_current_image;
-	return $_zp_current_image->getThumb();
+  global $_zp_current_image;
+  return $_zp_current_image->getThumb();
 }
 
 function printImageThumb($alt, $class=NULL, $id=NULL) { 
-	echo "<img src=\"" . getImageThumb() . "\" alt=\"$alt\"" .
+  echo "<img src=\"" . getImageThumb() . "\" alt=\"$alt\"" .
     ((zp_conf('thumb_crop')) ? " width=\"".zp_conf('thumb_crop_width')."\" height=\"".zp_conf('thumb_crop_height')."\"" : "") .
-		(($class) ? " class=\"$class\"" : "") . 
-		(($id) ? " id=\"$id\"" : "") . " />";
+    (($class) ? " class=\"$class\"" : "") . 
+    (($id) ? " id=\"$id\"" : "") . " />";
 }
 
 function getFullImageURL() {
-	global $_zp_current_image;
-	return $_zp_current_image->getFullImage();
+  global $_zp_current_image;
+  return $_zp_current_image->getFullImage();
 }
 
 function getSizedImageURL($size) { 
-	global $_zp_current_image;
-	return $_zp_current_image->getSizedImage($size);
+  getCustomImageURL($size);
 }
 
-function getCustomImageURL($size, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=null) {
+function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL) {
   global $_zp_current_image;
-	return $_zp_current_image->getCustomImage($size, $cropw, $croph, $cropx, $cropy);
+  return $_zp_current_image->getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy);
+}
+
+function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $class=NULL, $id=NULL) { 
+  $sizearr = getSizeCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy);
+  echo "<img src=\"" . getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy) . "\" alt=\"$alt\"" .
+    " width=\"" . $sizearr[0] . "\" height=\"" . $sizearr[1] . "\"" .
+    (($class) ? " class=\"$class\"" : "") . 
+    (($id) ? " id=\"$id\"" : "") . " />";
 }
 
 function printSizedImageLink($size, $text, $title, $class=NULL, $id=NULL) { 
@@ -853,21 +903,21 @@ function getCommentsAllowed() {
 // Iterate through comments; use the ZP_COMMENT context.
 function next_comment() {
   global $_zp_current_image, $_zp_current_comment, $_zp_comments;
-	if (is_null($_zp_current_comment)) {
-		$_zp_comments = $_zp_current_image->getComments();
+  if (is_null($_zp_current_comment)) {
+    $_zp_comments = $_zp_current_image->getComments();
     if (empty($_zp_comments)) { return false; }
-		$_zp_current_comment = array_shift($_zp_comments);
-		add_context(ZP_COMMENT);
-		return true;
-	} else if (empty($_zp_comments)) {
-		$_zp_comments = NULL;
-		$_zp_current_comment = NULL;
-		rem_context(ZP_COMMENT);
-		return false;
-	} else {
-		$_zp_current_comment = array_shift($_zp_comments);
-		return true;
-	}
+    $_zp_current_comment = array_shift($_zp_comments);
+    add_context(ZP_COMMENT);
+    return true;
+  } else if (empty($_zp_comments)) {
+    $_zp_comments = NULL;
+    $_zp_current_comment = NULL;
+    rem_context(ZP_COMMENT);
+    return false;
+  } else {
+    $_zp_current_comment = array_shift($_zp_comments);
+    return true;
+  }
 }
 
 /*** Comment Context **********************/
