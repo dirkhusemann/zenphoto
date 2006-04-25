@@ -785,7 +785,7 @@ if (!zp_loggedin()) {
             $website = $comment['website'];
             $comment = truncate_string($comment['comment'], 123);
             echo "<li><div class=\"commentmeta\">$author commented on <a href=\""
-              . (zp_conf("mod_rewrite") ? "../$album/$image" : "../image.php?album=".urlencode($album)."&image=".urlencode($image))
+              . (zp_conf("mod_rewrite") ? "../$album/$image" : "../index.php?album=".urlencode($album)."&image=".urlencode($image))
               . "\">$albumtitle / $title</a>:</div><div class=\"commentbody\">$comment</div></li>";
           }
         ?>

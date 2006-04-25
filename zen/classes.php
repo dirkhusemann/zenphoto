@@ -7,8 +7,6 @@
 // Load the authentication functions.
 require_once("auth_zp.php");
 
-// Set the version number.
-$_zp_conf_vars['version'] = '1.0.1 Beta';
 
 /**********************************************************************/
 // Image Class //
