@@ -6,7 +6,7 @@ if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
   die ("<strong>Zenphoto error:</strong> zp-config.php not found. Perhaps you need to run <a href=\"zen/setup.php\">setup</a> (or migrate your old config.php)");
 }
 
-require_once("zp-config.php");
+require_once(dirname(__FILE__) . "/zp-config.php");
 
 // Set the version number.
 $_zp_conf_vars['version'] = '1.0.3 Beta';
