@@ -2,12 +2,17 @@
 zenphoto installation instructions
 --------------------------------------------------------------------------------
 
-1. Get the files in the zenphoto.zip or zenphoto.tar.gz package on to your
-   server somehow (FTP, SSH, wget, tar -xzvf .., etc.)
-   (You may want to do step 2 first)
-   
-2. Go to http://www.yoursite.com/zenphoto/zen/setup.php and follow the
+1. Edit the zp-config.php.example file with your database and other info, and rename
+   it to zp-config.php when you're done (remove the .example).
+
+2. If you want to use mod_rewrite for cruft-free URLs, edit the one line of .htaccess
+
+3. Get the files in the zenphoto.zip or zenphoto.tar.gz package on to your
+   server somehow if you haven't already (FTP, SSH, wget, tar -xzvf .., etc.)
+
+4. Change the permissions on the albums/ and cache/ directories to be writable by the server:
+   chmod 755 albums/ cache/
+   or use your FTP program.
+
+5. Go to http://www.yoursite.com/zenphoto/zen/setup.php and follow the
    simple instructions.
-   
-   
-(No, it's not really a 2 step install. There are 4 more steps in step 2...)

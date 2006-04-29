@@ -1,6 +1,6 @@
-<?php 
+<?php
   define('OFFSET_PATH', true);
-  if (file_exists("config.php")) { require_once("admin-functions.php"); } 
+  if (file_exists("zp-config.php")) { require_once("admin-functions.php"); }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
@@ -33,7 +33,7 @@
   <h1>zenphoto setup</h1>
 <?php
 
-if (file_exists("config.php")) {
+if (file_exists("zp-config.php")) {
   
   // Are we logged in?
   if (!zp_loggedin()) {
@@ -44,14 +44,20 @@ if (file_exists("config.php")) {
   
   } else {
     // Logged in. Do the setup.
-    $tbl_albums = prefix('albums');
+    $tbl_albums   = prefix('albums');
     $tbl_comments = prefix('comments');
-    $tbl_images = prefix('images');
+    $tbl_images   = prefix('images');
   
     $sql_statements = array();
+    
+    // v. 1.0.0b
     $sql_statements[] = "ALTER TABLE `$tbl_albums` ADD COLUMN `sort_type` varchar(20);";
     $sql_statements[] = "ALTER TABLE `$tbl_albums` ADD COLUMN `sort_order` int(11);";
     $sql_statements[] = "ALTER TABLE `$tbl_images` ADD COLUMN `sort_order` int(11);";
+    
+    // v. 1.0.3b
+    $sql_statements[] = "ALTER TABLE `$tbl_images` ADD COLUMN `height` INT UNSIGNED;";
+    $sql_statements[] = "ALTER TABLE `$tbl_images` ADD COLUMN `width` INT UNSIGNED;";
     
     if (isset($_GET['upgrade']) && db_connect()) {
       echo "<h3>Upgrading tables...</h3>";
@@ -78,7 +84,7 @@ if (file_exists("config.php")) {
   // The config file hasn't been created yet. Probably still need to setup.
   ?>
   <ul>
-    <li><strong>You have no config.php</strong>. You probably want to run <a href="setup.php" title="Setup">setup</a> first. </li>
+    <li><strong>You have no zp-config.php</strong>. You probably want to run <a href="setup.php" title="Setup">setup</a> first. </li>
   </ul>
   
 <? } ?>

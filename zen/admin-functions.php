@@ -141,13 +141,7 @@ function printLoginForm() {
   echo "\n  <div id=\"loginform\">";
   echo "\n  <form name=\"login\" action=\"#\" method=\"POST\">";
   echo "\n    <input type=\"hidden\" name=\"login\" value=\"1\" />";
-  
-  // Is rewrite enabled?
-  if (zp_conf('mod_rewrite')) {
-    echo "\n    <input type=\"hidden\" name=\"redirect\" value=\"/admin/\" />";
-  } else {
-    echo "\n    <input type=\"hidden\" name=\"redirect\" value=\"/admin.php\" />";
-  }
+  echo "\n    <input type=\"hidden\" name=\"redirect\" value=\"/zen/admin.php\" />";
   
   echo "\n    <table>";
   echo "\n      <tr><td>Login</td><td><input class=\"textfield\" name=\"user\" type=\"text\" size=\"20\" /></td></tr>";

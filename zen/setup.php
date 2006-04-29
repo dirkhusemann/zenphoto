@@ -1,6 +1,6 @@
 <?php 
   define('OFFSET_PATH', true);
-  if (file_exists("config.php")) { require_once("auth_zp.php"); } 
+  if (file_exists("zp-config.php")) { require_once("auth_zp.php"); } 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
@@ -33,7 +33,7 @@
   <h1>zenphoto setup</h1>
 <?php
 
-if (file_exists("config.php")) {
+if (file_exists("zp-config.php")) {
   if (!zp_loggedin()) {  /* Display the login form and exit. */ ?>
   
     <div id="loginform">
@@ -94,6 +94,8 @@ if (file_exists("config.php")) {
       `commentson` int(1) NOT NULL default '1',
       `show` int(1) NOT NULL default '1',
       `sort_order` int(11) default NULL,
+      `height` int(10) unsigned default NULL,
+      `width` int(10) unsigned default NULL,
       PRIMARY KEY  (`id`),
       KEY `filename` (`filename`,`albumid`),
       KEY `albumid` (`albumid`)
@@ -138,6 +140,6 @@ if (file_exists("config.php")) {
     <li><strong>Step 4: Come back to this page (just reload it if you're ready) and click "Go!"</strong>
   </ul>
   
-  <? } ?>
+  <?php } ?>
 </body>
 </html>

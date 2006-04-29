@@ -3,8 +3,14 @@
 
 // functions.php - HEADERS NOT SENT YET!
 
+if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
+  die ("<strong>Zenphoto error:</strong> zp-config.php not found. Perhaps you need to run <a href=\"zen/setup.php\">setup</a> (or migrate your old config.php)");
+}
 
-require_once("config.php");
+require_once(dirname(__FILE__) . "/zp-config.php");
+
+// Set the version number.
+$_zp_conf_vars['version'] = '1.0.3 Beta';
 
 if (defined('OFFSET_PATH')) {
   $const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
@@ -16,13 +22,19 @@ if ($const_webpath == '\\')
 define('WEBPATH', $const_webpath);
 define('SERVERPATH', dirname(dirname(__FILE__)));
 define('SERVERCACHE', SERVERPATH . "/cache");
+define('PROTOCOL', zp_conf('server_protocol'));
+define('FULLWEBPATH', PROTOCOL."://" . $_SERVER['HTTP_HOST'] . WEBPATH);
 
 
 
 // For easy access to config vars.
 function zp_conf($var) {
   global $_zp_conf_vars;
-  return $_zp_conf_vars[$var];
+  if (array_key_exists($var, $_zp_conf_vars)) {
+    return $_zp_conf_vars[$var];
+  } else {
+    return null;
+  }
 }
 
 // Set up assertions for debugging.

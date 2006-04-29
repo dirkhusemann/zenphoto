@@ -10,6 +10,10 @@ $mysql_connection = null;
 function db_connect() {
   global $mysql_connection;
   $db = zp_conf('mysql_database');
+  if (!function_exists('mysql_connect')) {
+    echo "MySQL Error: The PHP MySQL extentions have not been installed. Please ask your administrator to add them to your PHP installation.<br />";
+    return false;
+  }
   $mysql_connection = @mysql_connect(zp_conf('mysql_host'), zp_conf('mysql_user'), zp_conf('mysql_pass'));
   if (!$mysql_connection) {
     echo "MySQL Error: Could not connect to the database server.<br />";

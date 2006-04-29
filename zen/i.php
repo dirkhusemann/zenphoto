@@ -1,5 +1,25 @@
 <?php
 
+/*******************************************************************************
+ * i.php: Zenphoto image processor. All image requests go through this file.   *
+ *******************************************************************************
+ * URI Parameters:
+ *   s  - size (logical): Based on config, makes an image of "size s."
+ *   h  - height (explicit): Image is always h pixels high, w is calculated.
+ *   w  - width (explicit): Image is always w pixels wide, h is calculated.
+ *   cw - crop width: crops the image to cw pixels wide.
+ *   ch - crop height: crops the image to ch pixels high.
+ *   cx - crop x position: the x (horizontal) position of the crop area.
+ *   cy - crop y position: the y (vertical) position of the crop area.
+ *   q  - JPEG quality (1-100): sets the quality of the resulting image.
+ *
+ * - cx and cy are measured from the top-left corner of the _scaled_ image.
+ * - One of s, h, or w _must_ be specified; the others are optional.
+ * - If more than one of s, h, or w are specified, s takes priority, then w.
+ * - If none of s, h, or w are specified, the original image is returned.
+ *******************************************************************************
+ */
+
 define('OFFSET_PATH', true);
 // i.php - image generation.
 require_once("functions.php");
@@ -10,94 +30,168 @@ $thumb_size = zp_conf('thumb_size');
 $thumb_crop_width = zp_conf('thumb_crop_width');
 $thumb_crop_height = zp_conf('thumb_crop_height');
 $image_use_longest_side = zp_conf('image_use_longest_side');
-$image_quality = zp_conf('image_quality');
+$image_default_size = zp_conf('image_size');
+$quality = zp_conf('image_quality');
+$thumb_quality = zp_conf('thumb_quality');
+$upscale = zp_conf('image_allow_upscale');
+
+// Don't let anything get above this, to save the server from burning up...
+define('MAX_SIZE', 3000);
 
 // Generate an image from the given file ($_GET['f']) at the given size ($_GET['s'])
 if (!isset($_GET['a']) || !isset($_GET['i'])) {
-	return false;
+	die("<b>Zenphoto error:</b> Please specify both an album and an image.");
 	// TODO: Return a default image (possibly with an error message) instead of just dying.
 }
 $album = get_magic_quotes_gpc() ? stripslashes($_GET['a']) : $_GET['a'];
 $image = get_magic_quotes_gpc() ? stripslashes($_GET['i']) : $_GET['i'];
 
-if(isset($_GET['s']) && $_GET['s'] < 3000) { // Disallow abusive size requests.
-	if ($_GET['s'] == "thumb") {
+// Disallow abusive size requests.
+if ((isset($_GET['s']) && $_GET['s'] < MAX_SIZE) 
+  || (isset($_GET['w']) && $_GET['w'] < MAX_SIZE)
+  || (isset($_GET['h']) && $_GET['h'] < MAX_SIZE)) {
+
+  // Set default variable values.
+  $size = $width = $height = $crop = $cw = $ch = $cx = $cy = false;
+  
+  // If s=thumb, Set up for the default thumbnail settings.
+  $size = $_GET['s'];
+	if ($size == "thumb") {
 		$thumb = true;
+    if ($thumb_crop) {
+      if ($thumb_crop_width > $thumb_size)  $thumb_crop_width  = $thumb_size;
+      if ($thumb_crop_height > $thumb_size) $thumb_crop_height = $thumb_size;
+      $cw = $thumb_crop_width;
+      $ch = $thumb_crop_height;
+      $crop = true;
+    } else {
+      $crop = $cw = $ch = false;
+    }
+    $size = round($thumb_size);
+    $quality = round($thumb_quality);
+
+  // Otherwise, populate the parameters from the URI
 	} else {
-		$thumb = false;
+    if ($size == "default") {
+      $size = $image_default_size;
+    } else if (empty($size) || !is_numeric($size)) {
+      $size = false; // 0 isn't a valid size anyway, so this is OK.
+    } else {
+      $size = round($size);
+    }
+    
+    if (isset($_GET['w']))  { $width   = round($_GET['w']); }
+    if (isset($_GET['h']))  { $height  = round($_GET['h']); }
+    if (isset($_GET['cw'])) { $cw      = round($_GET['cw']); $crop = true; }
+    if (isset($_GET['ch'])) { $ch      = round($_GET['ch']); $crop = true; }
+    if (isset($_GET['cx'])) { $cx      = round($_GET['cx']); }
+    if (isset($_GET['cy'])) { $cy      = round($_GET['cy']); }
+    if (isset($_GET['q']))  { $quality = round($_GET['q']); }
 	}
-	$size = $_GET['s'];
+  
+  $postfix_string = ($size ? "_$size" : "") . ($width ? "_w$width" : "") 
+    . ($height ? "_h$height" : "") . ($cw ? "_cw$cw" : "") . ($ch ? "_ch$ch" : "") 
+    . (is_numeric($cx) ? "_cx$cx" : "") . (is_numeric($cy) ? "_cy$cy" : "");
+    
 } else {
-	return false;
+  // No image parameters specified; return the original image.
+  header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/albums/$album/$image");
+  return;
 }
-if(isset($_GET['h'])) $height = $_GET['h'];  else $height = false;
-if(isset($_GET['q'])) $quality = $_GET['q']; else $quality = $image_quality;
 
-$albumenc = str_replace("++", "_", $album);
-$albumenc = str_replace("/", "++", $albumenc);
+$albumenc = str_replace("++", "", $album);
+$albumenc = str_replace("/", "+~+", $albumenc);
 
-// Check the cache for the processed image; if it doesn't exist, create it.
-$newfilename = "/{$albumenc}_{$image}_{$size}.jpg";
+$newfilename = "/{$albumenc}_{$image}{$postfix_string}.jpg";
+
 $newfile = SERVERCACHE . $newfilename;
 $imgfile = SERVERPATH  . "/albums/$album/$image";
 
+// Check for the source image.
 if (!file_exists($imgfile)) {
   die("<b>Zenphoto error:</b> Image not found.");
 }
 
+// If the file hasn't been cached yet, create it.
 if (!file_exists($newfile)) {
 	if ($im = get_image($imgfile)) {
 		$w = imagesx($im);
 		$h = imagesy($im);
+    
+    // Give the sizing dimension to $dim
+    if (!empty($size)) {
+      $dim = $size;
+      $width = $height = false;
+    } else if (!empty($width)) {
+      $dim = $width;
+      $size = $height = false;
+    } else if (!empty($height)) {
+      $dim = $height;
+      $size = $width = false;
+    } else {
+      // There's a problem up there somewhere...
+      die("<b>Zenphoto error:</b> Image processing error. Please report to the developers.");
+    }
+    
+    // Calculate proportional height and width.
+    $hprop = round(($h / $w) * $dim);
+    $wprop = round(($w / $h) * $dim);
+    
 		if ($thumb) {
-			if ($w < $h) {
-				$neww = $thumb_size;
-				$newh = round(($h / $w) * $thumb_size);
+      // Thumbs always use the shortest side to catch the whole image.
+      // $dim should always be $size here.
+			if ($h > $w) {
+				$neww = $dim;
+				$newh = $hprop;
 			} else {
-				$neww = round(($w / $h) * $thumb_size);
-				$newh = $thumb_size;
+				$neww = $wprop;
+				$newh = $dim;
 			}
-			$thumb = imagecreatetruecolor($neww, $newh);
-			imagecopyresampled($thumb, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
-			if ($thumb_crop) {
-				if ($thumb_crop_width > $thumb_size) $thumb_crop_width = $thumb_size;
-				if ($thumb_crop_height > $thumb_size) $thumb_crop_height = $thumb_size;
-				$newim = imagecreatetruecolor($thumb_crop_width, $thumb_crop_height);
-				$x = round(($neww - $thumb_crop_width) / 2);
-				$y = round(($newh - $thumb_crop_height) / 2);
-				imagecopy($newim, $thumb, 0, 0, $x, $y, $thumb_crop_width, $thumb_crop_height);
-			} else {
-				$newim = $thumb;
-			}
-
-		} else {
-		  if ($image_use_longest_side && $h > $w) {
-        $newh = $size;
-        $neww = round(($w / $h) * $size);
+    } else {
+      if (($size && $image_use_longest_side && $h > $w)
+        || $height) {
+        $newh = $dim;
+        $neww = $wprop;
       } else {
-  			$neww = $size;
-  			$newh = round(($h / $w) * $size);
+  			$neww = $dim;
+  			$newh = $hprop;
       }
       
       // If the requested image is the same size or smaller than the original, redirect to it.
-      if ($newh >= $h && $neww >= $w) {
-        header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/albums/$album/$image");
+      if (!$upscale && $newh >= $h && $neww >= $w && !$crop) {
+        header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/albums/$album/$image");
         return;
       }
-      
-			$newim = imagecreatetruecolor($neww, $newh);
-      // imageinterlace($newim, 1);
-			imagecopyresampled($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
-		}
-		
-		imagejpeg($newim, $newfile, $image_quality);
+    }
+    
+    $newim = imagecreatetruecolor($neww, $newh);
+    imagecopyresampled($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
+    
+    // Crop the image if requested.
+    if ($crop) {
+      if ($cw === false || $cw > $neww) $cw = $neww;
+      if ($ch === false || $ch > $newh) $ch = $newh;
+      if ($cx === false) $cx = round(($neww - $cw) / 2);
+      if ($cy === false) $cy = round(($newh - $ch) / 2);
+      if ($cw + $cx > $neww) $cx = $neww - $cw;
+      if ($ch + $cy > $newh) $cy = $newh - $ch;
+      $newim_crop = imagecreatetruecolor($cw, $ch);
+      imagecopy($newim_crop, $newim, 0, 0, $cx, $cy, $cw, $ch);
+      imagedestroy($newim);
+      $newim = $newim_crop;
+    }
+
+    // Create the cached file (with lots of compatibility)...
+		touch($newfile);
+
+		imagejpeg($newim, $newfile, $quality);
+    chmod($newfile,0644);
 		imagedestroy($newim);
 		imagedestroy($im);
 	}
 }
 
-$protocol = $_SERVER['HTTPS'] ? 'https' : 'http';
-// Replace 'http://' below with detected protocol.
-header("Location: $protocol://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/cache$newfilename");
+// ... and redirect the browser to it.
+header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/cache$newfilename");
 
 ?>

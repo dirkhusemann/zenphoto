@@ -1,8 +1,9 @@
+<?php $startTime = array_sum(explode(" ",microtime())); if (!defined('WEBPATH')) die(); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
   <title><?php printGalleryTitle(); ?></title>
-  <link rel="stylesheet" href="<?= $_zp_themeroot ?>/zen.css" type="text/css" />
+  <link rel="stylesheet" href="<?php echo  $_zp_themeroot ?>/zen.css" type="text/css" />
   <script type="text/javascript">
   function toggleComments() {
     var commentDiv = document.getElementById("comments");
@@ -23,8 +24,8 @@
 <div id="main">
   <div id="gallerytitle">
     <h2><span>
-				<a href="<?=getGalleryIndexURL();?>" title="Gallery Index"><?=getGalleryTitle();?></a> | 
-				<a href="<?=getAlbumLinkURL();?>" title="Gallery Index"><?=getAlbumTitle();?></a> |</span>
+				<a href="<?php echo getGalleryIndexURL();?>" title="Gallery Index"><?php echo getGalleryTitle();?></a> | 
+				<a href="<?php echo getAlbumLinkURL();?>" title="Gallery Index"><?php echo getAlbumTitle();?></a> |</span>
 			  <?php printImageTitle(true); ?></h2>
   </div>
   
@@ -32,12 +33,19 @@
   <p> </p>
     <div class="image">
 			<div class="imgnav">
-				<?php if (hasPrevImage()) { ?> <a href="<?=getPrevImageURL();?>" title="Previous Image">&laquo; prev</a>
-				<?php if (hasNextImage()) echo " | "; } if (hasNextImage()) { ?> <a href="<?=getNextImageURL();?>" title="Next Image">next &raquo;</a><?php } ?>
+				<?php if (hasPrevImage()) { ?> <a href="<?php echo getPrevImageURL();?>" title="Previous Image">&laquo; prev</a>
+				<?php if (hasNextImage()) echo " | "; } if (hasNextImage()) { ?> <a href="<?php echo getNextImageURL();?>" title="Next Image">next &raquo;</a><?php } ?>
 			</div>
       
-      <a href="<?=getFullImageURL();?>" title="<?=getImageTitle();?>">
+      <a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>">
       <?php printDefaultSizedImage(getImageTitle()); ?></a>
+
+      <div style="font-size: 8pt; text-align: right;"><em>
+        <a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>">Original Size: 
+          <?php echo getFullWidth() . "x" . getFullHeight(); ?>
+        </a></em>
+      </div>
+
       
       <?php printImageDesc(true); ?>
 
@@ -49,9 +57,9 @@
             <div class="comment">
               <div class="commentmeta">
                 <span class="commentauthor"><?php printCommentAuthorLink(); ?></span>
-                | <span class="commentdate"><?=getCommentDate();?>, <?=getCommentTime();?> PST</span>
+                | <span class="commentdate"><?php echo getCommentDate();?>, <?php echo getCommentTime();?> PST</span>
               </div>
-              <div class="commentbody"><?=getCommentBody();?></div>            
+              <div class="commentbody"><?php echo getCommentBody();?></div>            
             </div>
           <?php endwhile; ?>
           
@@ -63,10 +71,10 @@
               <input type="hidden" name="remember" value="1" />
               <?php if (isset($error)) { ?><tr><td><div class="error">There was an error submitting your comment. Name, a valid e-mail address, and a comment are required.</div></td></tr><?php } ?>
               <table border="0">
-                <tr><td><label for="name">Name:</label></td>    <td><input type="text" name="name" size="20" value="<?=$stored[0];?>" />  </td></tr>
-                <tr><td><label for="email">E-Mail (won't be public):</label></td> <td><input type="text" name="email" size="20" value="<?=$stored[1];?>" /> </td></tr>
-                <tr><td><label for="website">Site:</label></td> <td><input type="text" name="website" size="40" value="<?=$stored[2];?>" /></td></tr>
-                <!--<tr><td colspan="2"><label><input type="checkbox" name="remember" <?=($stored[3]) ? "checked=\"1\"" : ""; ?>> Save my information</label></td></tr>-->
+                <tr><td><label for="name">Name:</label></td>    <td><input type="text" name="name" size="20" value="<?php echo $stored[0];?>" />  </td></tr>
+                <tr><td><label for="email">E-Mail (won't be public):</label></td> <td><input type="text" name="email" size="20" value="<?php echo $stored[1];?>" /> </td></tr>
+                <tr><td><label for="website">Site:</label></td> <td><input type="text" name="website" size="40" value="<?php echo $stored[2];?>" /></td></tr>
+                <!--<tr><td colspan="2"><label><input type="checkbox" name="remember" <?php echo ($stored[3]) ? "checked=\"1\"" : ""; ?>> Save my information</label></td></tr>-->
               </table>
               <textarea name="comment" rows="6" cols="40"></textarea><br />
               <input type="submit" value="Add Comment" />
@@ -79,8 +87,7 @@
     </div>
 </div>
 
+<?php echo round((array_sum(explode(" ",microtime())) - $startTime),4).' Seconds</strong>'; ?>
+
 </body>
-
-<?php printPreloadScript(); ?>
-
 </html>

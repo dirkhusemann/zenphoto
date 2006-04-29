@@ -7,8 +7,6 @@
 // Load the authentication functions.
 require_once("auth_zp.php");
 
-// Set the version number.
-$_zp_conf_vars['version'] = '1.0.1 Beta';
 
 /**********************************************************************/
 // Image Class //
@@ -55,6 +53,8 @@ class Image {
       $this->meta['commentson'] = 1;
       $this->meta['show'] = 1;
       $this->meta['sortorder'] = null;
+      $this->meta['width'] = 0;
+      $this->meta['height'] = 0;
       
       query("INSERT INTO ".prefix("images")." (albumid, filename, title) " .
             "VALUES ('".mysql_escape_string($this->album->albumid).
@@ -67,15 +67,43 @@ class Image {
       $this->meta['commentson'] = $entry['commentson'];
       $this->meta['show'] = $entry['show'];
       $this->meta['sortorder'] = $entry['sort_order'];
+      $this->meta['width'] = $entry['width'];
+      $this->meta['height'] = $entry['height'];
+
       $this->imageid = $entry['id'];
     }
   }
-  
+
+
   // Image ID - as found in the database
   function getImageID() { return $this->imageid; }
   
   // The filename of this image
   function getFileName() { return $this->filename; }
+    
+  // Get the width and height of the original image--
+  // This is some very lazy evaluation, only updates the database the first time
+  // width or height are requested and not available; otherwise does nothing.
+  // Subsequent requests are already populated in the db, and very fast.
+  function updateDimensions() {
+    if (empty($this->meta['width']) || empty($this->meta['height'])) {
+      $size = getimagesize($this->localpath);
+      $this->meta['width']  = $size[0];
+      $this->meta['height'] = $size[1];
+      query("UPDATE " . prefix("images") . " SET width=" . mysql_escape_string($this->meta['width']) .
+        ", height=" . mysql_escape_string($this->meta['height']) . " WHERE id=" . $this->imageid . ";");
+    }
+  }
+  
+  function getWidth() {
+    $this->updateDimensions();
+    return $this->meta['width'];
+  }
+  
+  function getHeight() {
+    $this->updateDimensions();
+    return $this->meta['height'];
+  }
 
   // Title
   function getTitle() { return $this->meta['title']; }
@@ -116,6 +144,7 @@ class Image {
     query("UPDATE ".prefix("images")." SET `show`='" . $show .
           "' WHERE `id`=".$this->imageid);
   }
+
   
   
   // Permanently delete this image (be careful!)
@@ -214,17 +243,25 @@ class Image {
 
   function getSizedImage($size) {
     if (zp_conf('mod_rewrite')) {
-      return WEBPATH."/".urlencode($this->album->name)."/image/".$size."/".urlencode($this->filename);
+      return WEBPATH . "/".urlencode($this->album->name)."/image/".$size."/".urlencode($this->filename);
     } else {
-      return WEBPATH."/zen/i.php?a=" . urlencode($this->album->name) . "&i=" . urlencode($this->filename) . "&s=" . $size;
+      return WEBPATH . "/zen/i.php?a=" . urlencode($this->album->name) . "&i=" . urlencode($this->filename) . "&s=" . $size;
     }
+  }
+  
+  // TODO
+  function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy) {
+    return WEBPATH . "/zen/i.php?a=" . urlencode($this->album->name) . "&i=" . urlencode($this->filename)
+    . ($size ? "&s=$size" : "" ) . ($width ? "&w=$width" : "") . ($height ? "&h=$height" : "") 
+    . ($cropw ? "&cw=$cropw" : "") . ($croph ? "&ch=$croph" : "")
+    . ($cropx ? "&cx=$cropx" : "") . ($cropy ? "&cy=$cropy" : "") ;
   }
 
   function getThumb() {
     if (zp_conf('mod_rewrite')) {
-      return WEBPATH."/" . urlencode($this->album->name) . "/image/thumb/" . urlencode($this->filename);
+      return WEBPATH . "/" . urlencode($this->album->name) . "/image/thumb/" . urlencode($this->filename);
     } else {
-      return WEBPATH."/zen/i.php?a=" . urlencode($this->album->name) . "&i=" . urlencode($this->filename) . "&s=thumb";
+      return WEBPATH . "/zen/i.php?a=" . urlencode($this->album->name) . "&i=" . urlencode($this->filename) . "&s=thumb";
     }
   }
   
@@ -533,20 +570,24 @@ class Album {
 		else
 			return false;
 	}
-	
-	function getAlbumThumb() {
-		$albumdir = SERVERPATH . "/albums/{$this->name}/";
+
+  function getAlbumThumbImage() {
+    $albumdir = SERVERPATH . "/albums/{$this->name}/";
 		$thumb = $this->meta['thumb'];
-		// TODO: Make this use the database entry if it's not null...
 		if ($thumb == NULL || !file_exists($albumdir.$thumb)) {
 			$dp = opendir($albumdir);
 			while ($thumb = readdir($dp)) {
 				if (is_file($albumdir.$thumb) && is_valid_image($thumb)) break;
 			}
 		}
-		$image = new Image($this, $thumb);
+		return new Image($this, $thumb);
+  }
+  
+  function getAlbumThumb() {
+    $image = $this->getAlbumThumbImage();
 		return $image->getThumb();
 	}
+  
 	
   function setAlbumThumb($filename) {
     $this->meta['thumb'] = $thumb;
