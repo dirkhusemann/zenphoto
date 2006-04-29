@@ -654,7 +654,7 @@ if (!zp_loggedin()) {
 
           <tr>
             <td><input type="checkbox" name="ids[]" value="<?php echo $id ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" /></td>
-            <td style="font-size: 7pt;"><?php echo "<a href=\"" . (zp_conf("mod_rewrite") ? "../$album/$image" : "../image.php?album="
+            <td style="font-size: 7pt;"><?php echo "<a href=\"" . (zp_conf("mod_rewrite") ? "../$album/$image" : "../index.php?album="
               .urlencode($album)."&image=".urlencode($image)) . "\">$albumtitle / $title</a>"; ?></td>
             <td><?php echo $website ? "<a href=\"$website\">$author</a>" : $author ?></td>
             <td style="font-size: 7pt;"><?php echo $date ?></td>
