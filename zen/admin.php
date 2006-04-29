@@ -1,4 +1,4 @@
-<?php  /* Don't put anything before this line! */ 
+<?php  /* Don't put anything before this line! */
 define('OFFSET_PATH', true);
 require_once("sortable.php");
 
@@ -8,7 +8,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
   $gallery = new Gallery();
   if (isset($_GET['prune'])) {
     $gallery->garbageCollect(true, true);
-    header("Location: ".PROTOCOL."://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/zen/admin.php");
+    header("Location: " . FULLWEBPATH . "/zen/admin.php");
   } else {
     $gallery->garbageCollect();
   }
@@ -794,9 +794,9 @@ if (!zp_loggedin()) {
       
 		<div class="box" id="overview-stats">
 			<h2 class="boxtitle">Gallery Stats</h2>
-			<p>There are <strong><?= $gallery->getNumImages(); ?></strong> images in a total of <strong><?= $gallery->getNumAlbums(); ?></strong> albums [<strong><a href="?prune">refresh</a></strong>].</p>
-			<p><strong><?= $gallery->getNumComments(); ?></strong> comments have been posted.</p>
-			
+			<p>There are <strong><?php echo $gallery->getNumImages(); ?></strong> images in a total of <strong><?php echo $gallery->getNumAlbums(); ?></strong> albums [<strong><a href="?prune=true">refresh</a></strong>].</p>
+			<p><strong><?php echo $gallery->getNumComments(); ?></strong> comments have been posted.</p>
+
 			<?php
 			// These disk operations are too slow...
 			/*
