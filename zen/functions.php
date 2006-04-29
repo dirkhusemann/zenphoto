@@ -21,6 +21,7 @@ define('WEBPATH', $const_webpath);
 define('SERVERPATH', dirname(dirname(__FILE__)));
 define('SERVERCACHE', SERVERPATH . "/cache");
 define('PROTOCOL', zp_conf('server_protocol'));
+define('FULLWEBPATH', PROTOCOL."://" . $_SERVER['HTTP_HOST'] . WEBPATH);
 
 
 

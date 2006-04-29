@@ -8,7 +8,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
   $gallery = new Gallery();
   if (isset($_GET['prune'])) {
     $gallery->garbageCollect(true, true);
-    header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/zen/admin.php");
+    header("Location: ".PROTOCOL."://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/zen/admin.php");
   } else {
     $gallery->garbageCollect();
   }
@@ -57,7 +57,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           $album->setPlace(strip($_POST["$i-place"]));
         }
       }
-      header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/zen/admin.php?page=edit");
+      header("Location: " . FULLWEBPATH . "/zen/admin.php?page=edit");
       exit();
 
 /** DELETION ******************************************************************/
@@ -68,7 +68,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         $album = new Album($gallery, $folder);
         $album->deleteAlbum();
       }
-      header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/zen/admin.php?page=edit&ndeleted=1");
+      header("Location: " . FULLWEBPATH . "/zen/admin.php?page=edit&ndeleted=1");
       exit();
       
     } else if ($action == "deleteimage") {
@@ -79,8 +79,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         $image = new Image($album, $file);
         $image->deleteImage();
       }
-      header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . 
-        "/zen/admin.php?page=edit&album=" . urlencode($folder) . "&ndeleted=1");
+      header("Location: ". FULLWEBPATH . "/zen/admin.php?page=edit&album=" . urlencode($folder) . "&ndeleted=1");
       exit();
       
 /** UPLOAD IMAGES *************************************************************/
@@ -126,7 +125,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           $album->setTitle($title);
         }
         
-        header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/zen/admin.php?page=edit&album=$folder");
+        header("Location: " . FULLWEBPATH . "/zen/admin.php?page=edit&album=$folder");
         exit();
         
       } else {
@@ -170,31 +169,31 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           }
           query($sql);
         }
-        header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/zen/admin.php?page=comments&ndeleted=$n");
+        header("Location: " . FULLWEBPATH . "/zen/admin.php?page=comments&ndeleted=$n");
         exit();
       } else {
-        header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/zen/admin.php?page=comments&ndeleted=0");
+        header("Location: " . FULLWEBPATH . "/zen/admin.php?page=comments&ndeleted=0");
         exit();
       }
       
       
     } else if ($action == 'savecomment') {
       if (!isset($_POST['id'])) {
-        header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/zen/admin.php?page=comments");
+        header("Location: " . FULLWEBPATH . "/zen/admin.php?page=comments");
         exit();
       }
       $id = $_POST['id'];
-      $name = $_POST['name'];
-      $email = $_POST['email'];
-      $website = $_POST['website'];
-      $date = $_POST['date'];
-      $comment = $_POST['comment'];
+      $name = escape($_POST['name']);
+      $email = escape($_POST['email']);
+      $website = escape($_POST['website']);
+      $date = escape($_POST['date']);
+      $comment = escape($_POST['comment']);
       
       // TODO: Update date as well; no good input yet, so leaving out.
       $sql = "UPDATE ".prefix('comments')." SET name = '$name', email = '$email', website = '$website', comment = '$comment' WHERE id = $id";
       query($sql);
       
-      header("Location: http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/zen/admin.php?page=comments&sedit");
+      header("Location: " . FULLWEBPATH . "/zen/admin.php?page=comments&sedit");
       exit();
       
       

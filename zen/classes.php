@@ -87,9 +87,9 @@ class Image {
   // Subsequent requests are already populated in the db, and very fast.
   function updateDimensions() {
     if (empty($this->meta['width']) || empty($this->meta['height'])) {
-      $im = get_image($this->localpath);
-      $this->meta['height'] = imagesy($im);
-      $this->meta['width']  = imagesx($im);
+      $size = getimagesize($this->localpath);
+      $this->meta['width']  = $size[0];
+      $this->meta['height'] = $size[1];
       query("UPDATE " . prefix("images") . " SET width=" . mysql_escape_string($this->meta['width']) .
         ", height=" . mysql_escape_string($this->meta['height']) . " WHERE id=" . $this->imageid . ";");
     }
