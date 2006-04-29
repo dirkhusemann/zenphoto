@@ -571,16 +571,26 @@ class Album {
 			return false;
 	}
 
+  
   function getAlbumThumbImage() {
     $albumdir = SERVERPATH . "/albums/{$this->name}/";
 		$thumb = $this->meta['thumb'];
-		if ($thumb == NULL || !file_exists($albumdir.$thumb)) {
+		if ($thumb != NULL && file_exists($albumdir.$thumb)) {
+      return new Image($this, $thumb);
+    } else {
 			$dp = opendir($albumdir);
 			while ($thumb = readdir($dp)) {
-				if (is_file($albumdir.$thumb) && is_valid_image($thumb)) break;
+				if (is_file($albumdir.$thumb) && is_valid_image($thumb)) 
+          return new Image($this, $thumb);
 			}
+      $subalbums = $this->getSubAlbums();
+      foreach ($subalbums as $subalbum) {
+        $thumb = $subalbum->getAlbumThumbImage();
+        if ($thumb != NULL && $thumb->exists)
+          return $thumb;
+      }
 		}
-		return new Image($this, $thumb);
+    return NULL;
   }
   
   function getAlbumThumb() {
@@ -685,7 +695,7 @@ class Album {
 		
 		// Walk through the list and add them to the array
 		while ($file = readdir($dir)) {
-  		if (($dirs && is_dir($albumdir.$file) && $file != "." && $file != "..") 
+  		if (($dirs && is_dir($albumdir.$file) && substr($file, 0, 1) != '.')
           || (!$dirs && is_file($albumdir.$file) && is_valid_image($file))) {
   			$files[] = $file;
   		}

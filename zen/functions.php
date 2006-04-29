@@ -75,6 +75,27 @@ function truncate_string($string, $length) {
   }
 }
 
+/** getAlbumArray - returns an array of folder names corresponding to the
+      given album string.
+    @param $albumstring is the path to the album as a string. Ex: album/subalbum/my-album
+    @param $includepaths is a boolean whether or not to include the full path to the album
+      in each item of the array. Ex: when $includepaths==false, the above array would be
+      ['album', 'subalbum', 'my-album'], and with $includepaths==true, 
+      ['album', 'album/subalbum', 'album/subalbum/my-album']
+ 
+ */
+function getAlbumArray($albumstring, $includepaths=false) {
+  if ($includepaths) {
+    $array = array($albumstring);
+    while($slashpos = strrchr($albumstring, '/')) {
+      $albumstring = substr($albumstring, 0, $slashpos);
+      array_unshift($array, $albumstring);
+    }
+    return $array;
+  } else {
+    return explode('/', $albumstring);
+  }
+}
 
 
 

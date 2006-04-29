@@ -99,10 +99,16 @@ if ((isset($_GET['s']) && $_GET['s'] < MAX_SIZE)
   return;
 }
 
-$albumenc = str_replace("++", "", $album);
-$albumenc = str_replace("/", "+~+", $albumenc);
+// Make the directories for the albums in the cache, recursively.
+$albumdirs = getAlbumArray($album, true);
+for($i=0; $i<count($albumdirs); $i++) {
+  $dir = SERVERCACHE . '/' . $albumdirs[$i];
+  if(!is_dir($dir)) {
+    mkdir($dir, 0777);
+  }
+}
 
-$newfilename = "/{$albumenc}_{$image}{$postfix_string}.jpg";
+$newfilename = "/{$album}/{$image}{$postfix_string}.jpg";
 
 $newfile = SERVERCACHE . $newfilename;
 $imgfile = SERVERPATH  . "/albums/$album/$image";
