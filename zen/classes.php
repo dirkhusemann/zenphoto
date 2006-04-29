@@ -926,7 +926,7 @@ class Gallery {
     if ($full) {
       $first = true;
       $result = query("SELECT `id` FROM ".prefix('albums'));
-      if (count($this->albums) > 0) {
+      if ($this->getNumAlbums() > 0) {
         $sql = "DELETE FROM ".prefix('images')." WHERE ";
         while($album = mysql_fetch_assoc($result)) {
           if (!$first) $sql .= " AND";
