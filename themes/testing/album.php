@@ -31,10 +31,9 @@
   
   <?php printPageNav("&laquo; prev", "|", "next &raquo;"); ?>
 
-  
+  <div id="credit"><?php printAdminLink('Admin', '', ' | '); ?>Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a><br />
+  <?php echo round((array_sum(explode(" ",microtime())) - $startTime),4).' Seconds</strong>'; ?></div>
 </div>
-
-<?php echo round((array_sum(explode(" ",microtime())) - $startTime),4).' Seconds</strong>'; ?>
 
 </body>
 </html>
