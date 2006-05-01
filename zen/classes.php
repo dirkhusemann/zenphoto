@@ -129,7 +129,7 @@ class Image {
   
   // Sort order
   function getSortOrder() { return $this->meta['sortorder']; }
-  function setSortOrder($imageid, $sortorder) {
+  function setSortOrder($sortorder) {
     $this->meta['sortorder'] = $sortorder;
     query("UPDATE ".prefix("images")." SET `sort_order`='" . mysql_escape_string($sortorder) .
           "' WHERE `id`=".$this->imageid);
@@ -411,7 +411,7 @@ class Album {
   // Place
   function getPlace() { return $this->meta['place']; }
   function setPlace($place) {
-    $this->meta['title'] = $title;
+    $this->meta['title'] = $place;
     query("UPDATE ".prefix("albums")." SET `place`='" . mysql_escape_string($place) .
       "' WHERE `id`=".$this->albumid);    
   }
@@ -554,7 +554,7 @@ class Album {
   
 	
   function setAlbumThumb($filename) {
-    $this->meta['thumb'] = $thumb;
+    $this->meta['thumb'] = $filename;
     query("UPDATE ".prefix("albums")." SET `thumb`='" . mysql_escape_string($filename) .
       "' WHERE `id`=".$this->albumid);
   }
@@ -802,16 +802,15 @@ class Gallery {
 	
 	// Takes care of bounds checking, no need to check input.
 	function getAlbum($index) {
+    $this->getAlbums();
 		if ($index >= 0 && $index < $this->getNumAlbums())
-			return $albums[$index];
+			return $this->albums[$index];
 		else
 			return false;
 	}
 	
 	function getNumAlbums() {
-	  if ($this->albums == NULL) {
-	    $this->getAlbums();
-	  }
+	  $this->getAlbums();
 		return count($this->albums);
 	}
   
