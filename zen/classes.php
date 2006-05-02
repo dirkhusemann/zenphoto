@@ -1,15 +1,15 @@
 <?php
 
 
-// classes.php - HEADERS STILL NOT SENT!
-
+// classes.php - HEADERS STILL NOT SENT! Do not output text from this file.
 
 // Load the authentication functions.
 require_once("auth_zp.php");
 
 
-/**********************************************************************/
-// Image Class //
+/*******************************************************************************
+ *******************************************************************************
+ * Image Class ****************************************************************/
 
 class Image {
 
@@ -215,7 +215,7 @@ class Image {
                "Comment:\n" . $comment . "\n" .
                "\n" .
                "You can view all comments about this image here:\n" .
-               "http://" . $_SERVER['SERVER_NAME'] . getImageLinkURL() . "\n" .
+               "http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/index.php?album=" . urlencode($this->album->name) . "&image=" . urlencode($this->name) . "\n" .
                "\n" .
                "You can edit the comment here:\n" .
                "http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/zen/admin.php?page=comments\n";
@@ -319,8 +319,9 @@ class Image {
 }
 
 
-/**********************************************************************/
-// Album Class //
+/*******************************************************************************
+ *******************************************************************************
+ * Album Class ****************************************************************/
 
 class Album {
 
@@ -340,7 +341,6 @@ class Album {
 		$this->gallery = $gallery;
     $this->localpath = SERVERPATH . "/albums/" . $folder . "/";
     if(!file_exists($this->localpath)) {
-			// die("Album <strong>{$this->name}</strong> does not exist.");
       $this->exists = false;
       return false;
 		}
@@ -660,17 +660,19 @@ class Album {
 }
 
 
-/**********************************************************************/
-// Group Class //
+/*******************************************************************************
+ *******************************************************************************
+ * Group Class ****************************************************************/
 // To be implemented later.
 
 class Group {
 
 }
 
-/**********************************************************************/
-// Gallery Class //
-
+/*******************************************************************************
+ *******************************************************************************
+ * Gallery Class **************************************************************/
+ 
 class Gallery {
 
   var $albumdir = NULL;

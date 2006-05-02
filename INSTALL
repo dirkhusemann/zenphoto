@@ -1,6 +1,10 @@
 
 zenphoto installation instructions
 --------------------------------------------------------------------------------
+NOTE:
+For more detailed instructions, visit
+http://www.zenphoto.org:8080/confluence/display/DOC/Installation
+--------------------------------------------------------------------------------
 
 1. Edit the zp-config.php.example file with your database and other info, and rename
    it to zp-config.php when you're done (remove the .example).
