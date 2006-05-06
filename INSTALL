@@ -15,7 +15,7 @@ http://www.zenphoto.org:8080/confluence/display/DOC/Installation
    server somehow if you haven't already (FTP, SSH, wget, tar -xzvf .., etc.)
 
 4. Change the permissions on the albums/ and cache/ directories to be writable by the server:
-   chmod 755 albums/ cache/
+   chmod 777 albums/ cache/
    or use your FTP program.
 
 5. Go to http://www.yoursite.com/zenphoto/zen/setup.php and follow the
