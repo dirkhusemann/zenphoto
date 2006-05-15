@@ -136,9 +136,14 @@ function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
  * @since  1.0.0
  */
 function printLoginForm() {
+  global $error;
   
   echo "<p><img src=\"../zen/images/zen-logo.gif\" title=\"Zen Photo\" /></p>";
+  
   echo "\n  <div id=\"loginform\">";
+  if ($error) {
+    echo "<div class=\"errorbox\" id=\"message\"><h2>There was an error logging in.</h2> Check your username and password and try again.</h2></div>";
+  }
   echo "\n  <form name=\"login\" action=\"#\" method=\"POST\">";
   echo "\n    <input type=\"hidden\" name=\"login\" value=\"1\" />";
   echo "\n    <input type=\"hidden\" name=\"redirect\" value=\"/zen/admin.php\" />";

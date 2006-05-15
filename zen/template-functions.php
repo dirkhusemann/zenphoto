@@ -36,8 +36,10 @@ $_zp_current_context_restore = NULL;
 // Parse the GET request to see what exactly is requested...
 if (isset($_GET['album'])) {
   $g_album = get_magic_quotes_gpc() ? stripslashes($_GET['album']) : $_GET['album'];
+  
   if (isset($_GET['image'])) {
     $g_image = get_magic_quotes_gpc() ? stripslashes($_GET['image']) : $_GET['image'];
+
     $_zp_current_context = ZP_IMAGE | ZP_ALBUM | ZP_INDEX;
 
     // An image page. Instantiate objects.

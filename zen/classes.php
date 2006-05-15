@@ -30,6 +30,7 @@ class Image {
     // $album is an Album object; it should already be created.
     $this->album = $album;
 		$this->webpath = WEBPATH . "/albums/".$album->name."/".$filename;
+    $this->encwebpath = WEBPATH . "/albums/".urlencode($album->name)."/".urlencode($filename);
 		$this->localpath = SERVERPATH . "/albums/".$album->name."/".$filename;
 		// Check if the file exists.
 		if(!file_exists($this->localpath)) {
@@ -238,7 +239,7 @@ class Image {
 
   // Returns a path to the original image in the original folder.
   function getFullImage() {
-    return $this->webpath;
+    return $this->encwebpath;
   }
 
   function getSizedImage($size) {

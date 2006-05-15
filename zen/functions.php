@@ -235,7 +235,7 @@ function size_readable($size, $unit = null, $retstring = null)
 
 // Takes a comment and makes the body of an email.
 function commentReply($str, $name, $albumtitle, $imagetitle) {
-  $str = wordwrap($str, 75, '\n');
+  $str = wordwrap(strip_tags($str), 75, '\n');
   $lines = explode('\n', $str);
   $str = implode('%0D%0A', $lines);
   $str = "$name commented on $imagetitle in the album $albumtitle: %0D%0A%0D%0A" . $str;
