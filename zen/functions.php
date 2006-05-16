@@ -271,41 +271,41 @@ function parseThemeDef($file) {
  * @since  1.0.0
  */
 function zp_mail($subject, $message, $headers = '') {
+  $admin_email = zp_conf('admin_email');
+  if (!empty($admin_email)) {
+    // Make sure no one is trying to use our forms to send Spam
+    // Stolen from Hosting Place: 
+  	//   http://support.hostingplace.co.uk/knowledgebase.php?action=displayarticle&cat=0000000039&id=0000000040
+  	$badStrings = array("Content-Type:", "MIME-Version:",	"Content-Transfer-Encoding:",	"bcc:",	"cc:");
+  	foreach($_POST as $k => $v) {
+  	  foreach($badStrings as $v2) {
+  	    if (strpos($v, $v2) !== false) {
+  	      header("HTTP/1.0 403 Forbidden");
+  	      die("Screw you spammer!");
+  	      exit;
+  	    }
+  	  }
+  	}
   
-  // Make sure no one is trying to use our forms to send Spam
-  // Stolen from Hosting Place: 
-	//   http://support.hostingplace.co.uk/knowledgebase.php?action=displayarticle&cat=0000000039&id=0000000040
-	$badStrings = array("Content-Type:", "MIME-Version:",	"Content-Transfer-Encoding:",	"bcc:",	"cc:");
-	foreach($_POST as $k => $v) {
-	  foreach($badStrings as $v2) {
-	    if (strpos($v, $v2) !== false) {
-	      header("HTTP/1.0 403 Forbidden");
-	      die("Screw you spammer!");
-	      exit;
-	    }
-	  }
-	}
-
-	foreach($_GET as $k => $v){
-	  foreach($badStrings as $v2){
-	    if (strpos($v, $v2) !== false){
-	      header("HTTP/1.0 403 Forbidden");
-	      die("Screw you spammer!");
-	      exit;
-	    }
-	  }
-	}
+  	foreach($_GET as $k => $v){
+  	  foreach($badStrings as $v2){
+  	    if (strpos($v, $v2) !== false){
+  	      header("HTTP/1.0 403 Forbidden");
+  	      die("Screw you spammer!");
+  	      exit;
+  	    }
+  	  }
+  	}
   
-	if( $headers == '' ) {
-		$headers = "MIME-Version: 1.0\n" .
-			"From: " . zp_conf('gallery_title') . "<zenphoto@" . $_SERVER['SERVER_NAME'] . ">\n" . 
-			"Content-Type: text/plain; charset=charset=us-ascii\n";
-	}
-	
-	
+  	if( $headers == '' ) {
+  		$headers = "MIME-Version: 1.0\n" .
+  			"From: " . zp_conf('gallery_title') . "<zenphoto@" . $_SERVER['SERVER_NAME'] . ">\n" . 
+  			"Content-Type: text/plain; charset=charset=us-ascii\n";
+  	}
 
-	// Send the mail
-	mail("Admin <" . zp_conf('admin_email') . ">", $subject, $message, $headers);
+  	// Send the mail
+  	mail("Admin <" . zp_conf('admin_email') . ">", $subject, $message, $headers);
+  }
 }
 
 ?>
