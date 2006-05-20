@@ -97,8 +97,9 @@ function myts_date($format,$mytimestamp)
 
 // Text formatting and checking functions
 
-// Determines if the input is an e-mail address. Stolen from WordPress, then fixed.
-function is_valid_email($input_email) {
+// Determines if the input is an e-mail address. Adapted from WordPress.
+// Name changed to avoid conflicts in WP integrations.
+function is_valid_email_zp($input_email) {
   $chars = "/^([a-z0-9+_]|\\-|\\.)+@(([a-z0-9_]|\\-)+\\.)+[a-z]{2,6}\$/i";
   if(strstr($input_email, '@') && strstr($input_email, '.')) {
     if (preg_match($chars, $input_email)) {
