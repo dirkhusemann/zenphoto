@@ -314,7 +314,7 @@ function getPageURL($page) {
       }
     } else if (in_context(ZP_INDEX)) {
       if (zp_conf('mod_rewrite')) {
-        return WEBPATH . (($page > 1) ? "/page/" . $page . "/" : "");
+        return WEBPATH . (($page > 1) ? "/page/" . $page . "/" : "/");
       } else {
         return WEBPATH . "/index.php" . (($page > 1) ? "?page=" . $page : "");
       }
