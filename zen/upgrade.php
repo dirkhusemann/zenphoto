@@ -39,7 +39,7 @@ if (file_exists("zp-config.php")) {
   if (!zp_loggedin()) {
   
   // Display the login form and exit. 
-  printLoginForm();
+  printLoginForm("/zen/upgrade.php");
   exit();
   
   } else {

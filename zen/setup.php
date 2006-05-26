@@ -34,22 +34,12 @@
 <?php
 
 if (file_exists("zp-config.php")) {
-  if (!zp_loggedin()) {  /* Display the login form and exit. */ ?>
+  if (!zp_loggedin()) {  /* Display the login form and exit. */
   
-    <div id="loginform">
-    
-    <form name="login" action="#" method="POST">
-      <input type="hidden" name="login" value="1" />
-      <input type="hidden" name="redirect" value="/zen/setup.php" />
-      <table>
-        <tr><td>Login</td><td><input class="textfield" name="user" type="text" size="20" /></td></tr>
-        <tr><td>Password</td><td><input class="textfield" name="pass" type="password" size="20" /></td></tr>
-        <tr><td colspan="2"><input class="button" type="submit" value="Log in" /></td></tr>
-      </table>
-    </form>
-    </body></html>
-  <?php
-  exit();
+    // Display the login form and exit. 
+    printLoginForm("/zen/setup.php");
+    exit();
+
   } else {
     // Logged in. Do the setup.
     $tbl_albums = prefix('albums');
