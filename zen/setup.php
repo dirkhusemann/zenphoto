@@ -1,6 +1,6 @@
-<?php 
+<?php
   define('OFFSET_PATH', true);
-  if (file_exists("zp-config.php")) { require_once("auth_zp.php"); } 
+  if (file_exists("zp-config.php")) { require_once("admin-functions.php"); } 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
