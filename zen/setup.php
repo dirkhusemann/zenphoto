@@ -112,7 +112,7 @@ if (file_exists("zp-config.php")) {
       echo "<p><a href=\"?create\" title=\"Create the database tables.\" style=\"font-size: 15pt; font-weight: bold;\">Go!</a></p>";
     } else {
       echo "<h3>database not connected</h3>";
-      echo "<p>Check the config.php file to make sure you've got the right username, password, host, and database. If you haven't created
+      echo "<p>Check the zp-config.php file to make sure you've got the right username, password, host, and database. If you haven't created
         the database yet, now would be a good time.";
     }
   }
@@ -121,7 +121,7 @@ if (file_exists("zp-config.php")) {
   ?>
 
   <ul>
-    <li><strong>Step 1: Edit the <code>config.php.example</code> file and rename it to <code>config.php</code></strong> . You can find the file
+    <li><strong>Step 1: Edit the <code>zp-config.php.example</code> file and rename it to <code>zp-config.php</code></strong> . You can find the file
       in the "zen" directory.</li>
     <li><strong>Step 2: Edit the .htaccess file in the root zenphoto folder</strong> if you have the mod_rewrite apache 
       module, and want cruft-free URLs. Just change the one line indicated to make it work.</li>

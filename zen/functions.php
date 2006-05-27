@@ -80,7 +80,7 @@ function truncate_string($string, $length) {
 function myts_date($format,$mytimestamp)
 {
    // If your server is in a different time zone than you, set this.
-   $timezoneadjust = 0; //zp_conf('time_offset');
+   $timezoneadjust = zp_conf('time_offset');
 
    $month  = substr($mytimestamp,4,2);
    $day    = substr($mytimestamp,6,2);
