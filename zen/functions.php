@@ -74,6 +74,16 @@ function truncate_string($string, $length) {
 }
 
 
+/** Takes a user input string (usually from the query string) and cleans out
+ HTML, null-bytes, and slashes (if magic_quotes_gpc is on) to prevent
+ XSS attacks and other malicious user input, and make strings generally clean.
+ */
+function sanitize($user_input) {
+  if (get_magic_quotes_gpc()) $user_input = stripslashes($user_input);
+  $user_input = str_replace(chr(0), " ", $user_input);
+  return $user_input;
+}
+
 
 
 // Simple mySQL timestamp formatting function.
