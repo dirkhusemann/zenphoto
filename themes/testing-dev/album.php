@@ -23,11 +23,11 @@
     $subalbums = $_zp_current_album->getSubAlbums();
     if (count($subalbums) > 0) {
       foreach ($subalbums as $suba) {
-        echo '<b><a href="' . WEBPATH . '/index.php?album=' . $suba->name . '">' . $suba->name . "</a></b><br />";
+        echo '<b><a href="' . WEBPATH . '/index.php?album=' . urlencode($suba->name) . '">' . $suba->name . "</a></b><br />";
       }
     }
     $parent = $_zp_current_album->getParent();
-    if ($parent != NULL) { echo '<br /><strong>Parent album: <a href="' . WEBPATH . '/index.php?album=' . $parent->name . '">' . $parent->name . "</a></strong><br />"; }
+    if ($parent != NULL) { echo '<br /><strong>Parent album: <a href="' . WEBPATH . '/index.php?album=' . urlencode($parent->name) . '">' . $parent->name . "</a></strong><br />"; }
   
   ?>
   

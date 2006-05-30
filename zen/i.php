@@ -215,6 +215,12 @@ if (!file_exists($newfile)) {
 
 // ... and redirect the browser to it.
 
-header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/cache/" . rawurlencode($newfilename));
+$encpath = explode("/", $newfilename);
+for($i=0; $i<count($encpath); $i++) {
+  $encpath[$i] = rawurlencode($encpath[$i]);
+}
+$encpath = implode("/", $encpath);
+
+header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/cache/" . $encpath);
 
 ?>
