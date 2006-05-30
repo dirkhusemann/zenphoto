@@ -17,8 +17,7 @@ if (defined('OFFSET_PATH')) {
 } else {
   $const_webpath = dirname($_SERVER['SCRIPT_NAME']);
 }
-if ($const_webpath == '\\')
-  $const_webpath = '';
+if ($const_webpath == '\\' || $const_webpath == '/') $const_webpath = '';
 define('WEBPATH', $const_webpath);
 define('SERVERPATH', dirname(dirname(__FILE__)));
 define('SERVERCACHE', SERVERPATH . "/cache");
@@ -97,13 +96,23 @@ function getAlbumArray($albumstring, $includepaths=false) {
   }
 }
 
+/** Takes a user input string (usually from the query string) and cleans out
+ HTML, null-bytes, and slashes (if magic_quotes_gpc is on) to prevent
+ XSS attacks and other malicious user input, and make strings generally clean.
+ */
+function sanitize($user_input) {
+  if (get_magic_quotes_gpc()) $user_input = stripslashes($user_input);
+  $user_input = str_replace(chr(0), " ", $user_input);
+  return $user_input;
+}
+
 
 
 // Simple mySQL timestamp formatting function.
 function myts_date($format,$mytimestamp)
 {
    // If your server is in a different time zone than you, set this.
-   $timezoneadjust = 0; //zp_conf('time_offset');
+   $timezoneadjust = zp_conf('time_offset');
 
    $month  = substr($mytimestamp,4,2);
    $day    = substr($mytimestamp,6,2);
@@ -120,8 +129,9 @@ function myts_date($format,$mytimestamp)
 
 // Text formatting and checking functions
 
-// Determines if the input is an e-mail address. Stolen from WordPress, then fixed.
-function is_valid_email($input_email) {
+// Determines if the input is an e-mail address. Adapted from WordPress.
+// Name changed to avoid conflicts in WP integrations.
+function is_valid_email_zp($input_email) {
   $chars = "/^([a-z0-9+_]|\\-|\\.)+@(([a-z0-9_]|\\-)+\\.)+[a-z]{2,6}\$/i";
   if(strstr($input_email, '@') && strstr($input_email, '.')) {
     if (preg_match($chars, $input_email)) {
@@ -258,7 +268,7 @@ function size_readable($size, $unit = null, $retstring = null)
 
 // Takes a comment and makes the body of an email.
 function commentReply($str, $name, $albumtitle, $imagetitle) {
-  $str = wordwrap($str, 75, '\n');
+  $str = wordwrap(strip_tags($str), 75, '\n');
   $lines = explode('\n', $str);
   $str = implode('%0D%0A', $lines);
   $str = "$name commented on $imagetitle in the album $albumtitle: %0D%0A%0D%0A" . $str;
@@ -283,7 +293,8 @@ function parseThemeDef($file) {
 }
 
 /**
- * Send an mail to the admin user.
+ * Send an mail to the admin user. We also attempt to intercept any form injection
+ * attacks by slime ball spammers.
  *
  * @param $subject  The subject of the email.
  * @param $message  The message contents of the email.
@@ -293,39 +304,41 @@ function parseThemeDef($file) {
  * @since  1.0.0
  */
 function zp_mail($subject, $message, $headers = '') {
+  $admin_email = zp_conf('admin_email');
+  if (!empty($admin_email)) {
+    // Make sure no one is trying to use our forms to send Spam
+    // Stolen from Hosting Place: 
+  	//   http://support.hostingplace.co.uk/knowledgebase.php?action=displayarticle&cat=0000000039&id=0000000040
+  	$badStrings = array("Content-Type:", "MIME-Version:",	"Content-Transfer-Encoding:",	"bcc:",	"cc:");
+  	foreach($_POST as $k => $v) {
+  	  foreach($badStrings as $v2) {
+  	    if (strpos($v, $v2) !== false) {
+  	      header("HTTP/1.0 403 Forbidden");
+  	      die("Screw you spammer!");
+  	      exit;
+  	    }
+  	  }
+  	}
   
-  // Make sure no one is trying to use our forms to send Spam
-  // Stolen from Hosting Place: 
-	//   http://support.hostingplace.co.uk/knowledgebase.php?action=displayarticle&cat=0000000039&id=0000000040
-	$badStrings = array("Content-Type:", "MIME-Version:",	"Content-Transfer-Encoding:",	"bcc:",	"cc:");
-	foreach($_POST as $k => $v) {
-	  foreach($badStrings as $v2) {
-	    if (strpos($v, $v2) !== false) {
-	      header("HTTP/1.0 403 Forbidden");
-	      die("Screw you spammer!");
-	      exit;
-	    }
-	  }
-	}
-
-	foreach($_GET as $k => $v){
-	  foreach($badStrings as $v2){
-	    if (strpos($v, $v2) !== false){
-	      header("HTTP/1.0 403 Forbidden");
-	      die("Screw you spammer!");
-	      exit;
-	    }
-	  }
-	}
+  	foreach($_GET as $k => $v){
+  	  foreach($badStrings as $v2){
+  	    if (strpos($v, $v2) !== false){
+  	      header("HTTP/1.0 403 Forbidden");
+  	      die("Screw you spammer!");
+  	      exit;
+  	    }
+  	  }
+  	}
   
-	if( $headers == '' ) {
-		$headers = "MIME-Version: 1.0\n" .
-			"From: " . zp_conf('gallery_title') . "<zenphoto@" . $_SERVER['SERVER_NAME'] . ">\n" . 
-			"Content-Type: text/plain; charset=charset=us-ascii\n";
-	}
+  	if( $headers == '' ) {
+  		$headers = "MIME-Version: 1.0\n" .
+  			"From: " . zp_conf('gallery_title') . "<zenphoto@" . $_SERVER['SERVER_NAME'] . ">\n" . 
+  			"Content-Type: text/plain; charset=charset=us-ascii\n";
+  	}
 
-	// Send the mail
-	mail("Admin <" . zp_conf('admin_email') . ">", $subject, $message, $headers);
+  	// Send the mail
+  	mail("Admin <" . zp_conf('admin_email') . ">", $subject, $message, $headers);
+  }
 }
 
 ?>

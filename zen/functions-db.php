@@ -2,7 +2,6 @@
 
 // functions-db.php - HEADERS NOT SENT YET!
 
-
 require_once("functions.php");
 
 $mysql_connection = null;
@@ -14,6 +13,7 @@ function db_connect() {
     echo "MySQL Error: The PHP MySQL extentions have not been installed. Please ask your administrator to add them to your PHP installation.<br />";
     return false;
   }
+
   $mysql_connection = @mysql_connect(zp_conf('mysql_host'), zp_conf('mysql_user'), zp_conf('mysql_pass'));
   if (!$mysql_connection) {
     echo "MySQL Error: Could not connect to the database server.<br />";
@@ -26,12 +26,14 @@ function db_connect() {
   }
   return true;
 }
+
 db_connect();
 
 function query($sql) {
   global $mysql_connection;
-  if ($mysql_connection = null)
+  if ($mysql_connection == null) {
     db_connect();
+  }
   $result = mysql_query($sql) or die("MySQL Query ( $sql ) Failed. Error: " . mysql_error());
   return $result;
 }

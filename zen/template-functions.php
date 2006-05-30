@@ -1,8 +1,6 @@
 <?php
 
-
 // template-functions.php - Headers may be sent in this file ONLY.
-
 
 require_once("classes.php");
 
@@ -20,7 +18,7 @@ if (isset($_GET['page'])) {
   $_zp_page = 1;
 }
 
-// Initialize the global objects and object arrays for this page here:
+// Initialize the global objects and object arrays:
 $_zp_gallery = new Gallery();
 $_zp_current_album = NULL;
 $_zp_current_album_restore = NULL;
@@ -33,11 +31,30 @@ $_zp_comments = NULL;
 $_zp_current_context = ZP_INDEX;
 $_zp_current_context_restore = NULL;
 
+// Fix special characters in the album and image names if mod_rewrite is on:
+if (zp_conf('mod_rewrite')) {
+  $zppath = substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1);
+  $zpitems = explode("/", $zppath);
+  $req_album = $zpitems[0];
+  if ($zpitems[1] == "page") {
+    $req_image = NULL;
+  } else {
+    $req_image = $zpitems[1];
+  }
+  if (!empty($req_album))
+    $_GET['album'] = urldecode($req_album);
+  if (!empty($req_image))
+    $_GET['image'] = urldecode($req_image);
+}
+
+
 // Parse the GET request to see what exactly is requested...
 if (isset($_GET['album'])) {
-  $g_album = get_magic_quotes_gpc() ? stripslashes($_GET['album']) : $_GET['album'];
+  $g_album = sanitize($_GET['album']);
+
   if (isset($_GET['image'])) {
-    $g_image = get_magic_quotes_gpc() ? stripslashes($_GET['image']) : $_GET['image'];
+    $g_image = sanitize($_GET['image']);
+
     $_zp_current_context = ZP_IMAGE | ZP_ALBUM | ZP_INDEX;
 
     // An image page. Instantiate objects.
@@ -50,7 +67,6 @@ if (isset($_GET['album'])) {
     } else if (!$_zp_current_image->exists) {
       die("<b>Zenphoto error:</b> image does not exist.");
     }
-    
     
     //// Comment form handling.
     if (isset($_POST['comment'])) {
@@ -79,7 +95,6 @@ if (isset($_GET['album'])) {
           if (isset($_POST['remember'])) $stored[3] = true;
           $error = true;
         }
-        
       }
     } else if (isset($_COOKIE['zenphoto'])) {
       // Comment form was not submitted; get the saved info from the cookie.
@@ -87,7 +102,6 @@ if (isset($_GET['album'])) {
     } else { 
       $stored = array("","","", false); 
     } 
-    
   } else {
     $_zp_current_context = ZP_ALBUM | ZP_INDEX;
     // Album default view; for album.php
@@ -312,7 +326,7 @@ function getPageURL($page) {
       }
     } else if (in_context(ZP_INDEX)) {
       if (zp_conf('mod_rewrite')) {
-        return WEBPATH . (($page > 1) ? "/page/" . $page . "/" : "");
+        return WEBPATH . (($page > 1) ? "/page/" . $page . "/" : "/");
       } else {
         return WEBPATH . "/index.php" . (($page > 1) ? "?page=" . $page : "");
       }

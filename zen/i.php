@@ -43,8 +43,22 @@ if (!isset($_GET['a']) || !isset($_GET['i'])) {
 	die("<b>Zenphoto error:</b> Please specify both an album and an image.");
 	// TODO: Return a default image (possibly with an error message) instead of just dying.
 }
-$album = get_magic_quotes_gpc() ? stripslashes($_GET['a']) : $_GET['a'];
-$image = get_magic_quotes_gpc() ? stripslashes($_GET['i']) : $_GET['i'];
+
+// Fix special characters in the album and image names if mod_rewrite is on:
+if (zp_conf('mod_rewrite')) {
+  $zppath = substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1);
+  $zpitems = explode("/", $zppath);
+  $req_album = $zpitems[0];
+  $req_image = $zpitems[count($zpitems)-1];
+  if (!empty($req_album))
+    $_GET['a'] = urldecode($req_album);
+  if (!empty($req_image))
+    $_GET['i'] = urldecode($req_image);
+}
+
+
+$album = sanitize($_GET['a']);
+$image = sanitize($_GET['i']);
 
 // Disallow abusive size requests.
 if ((isset($_GET['s']) && $_GET['s'] < MAX_SIZE) 
@@ -95,7 +109,8 @@ if ((isset($_GET['s']) && $_GET['s'] < MAX_SIZE)
     
 } else {
   // No image parameters specified; return the original image.
-  header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/albums/$album/$image");
+  header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH 
+    . "/albums/" . rawurlencode($album) . "/" . rawurlencode($image));
   return;
 }
 
@@ -165,7 +180,8 @@ if (!file_exists($newfile)) {
       
       // If the requested image is the same size or smaller than the original, redirect to it.
       if (!$upscale && $newh >= $h && $neww >= $w && !$crop) {
-        header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/albums/$album/$image");
+        header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH
+          . "/albums/" . urlencode($album) . "/" . urlencode($image));
         return;
       }
     }
@@ -198,6 +214,7 @@ if (!file_exists($newfile)) {
 }
 
 // ... and redirect the browser to it.
-header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/cache$newfilename");
+
+header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/cache/" . rawurlencode($newfilename));
 
 ?>

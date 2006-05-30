@@ -1,6 +1,6 @@
-<?php 
+<?php
   define('OFFSET_PATH', true);
-  if (file_exists("zp-config.php")) { require_once("auth_zp.php"); } 
+  if (file_exists("zp-config.php")) { require_once("admin-functions.php"); } 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
@@ -34,22 +34,12 @@
 <?php
 
 if (file_exists("zp-config.php")) {
-  if (!zp_loggedin()) {  /* Display the login form and exit. */ ?>
+  if (!zp_loggedin()) {  /* Display the login form and exit. */
   
-    <div id="loginform">
-    
-    <form name="login" action="#" method="POST">
-      <input type="hidden" name="login" value="1" />
-      <input type="hidden" name="redirect" value="/zen/setup.php" />
-      <table>
-        <tr><td>Login</td><td><input class="textfield" name="user" type="text" size="20" /></td></tr>
-        <tr><td>Password</td><td><input class="textfield" name="pass" type="password" size="20" /></td></tr>
-        <tr><td colspan="2"><input class="button" type="submit" value="Log in" /></td></tr>
-      </table>
-    </form>
-    </body></html>
-  <?php
-  exit();
+    // Display the login form and exit. 
+    printLoginForm("/zen/setup.php");
+    exit();
+
   } else {
     // Logged in. Do the setup.
     $tbl_albums = prefix('albums');
@@ -122,7 +112,7 @@ if (file_exists("zp-config.php")) {
       echo "<p><a href=\"?create\" title=\"Create the database tables.\" style=\"font-size: 15pt; font-weight: bold;\">Go!</a></p>";
     } else {
       echo "<h3>database not connected</h3>";
-      echo "<p>Check the config.php file to make sure you've got the right username, password, host, and database. If you haven't created
+      echo "<p>Check the zp-config.php file to make sure you've got the right username, password, host, and database. If you haven't created
         the database yet, now would be a good time.";
     }
   }
@@ -131,7 +121,7 @@ if (file_exists("zp-config.php")) {
   ?>
 
   <ul>
-    <li><strong>Step 1: Edit the <code>config.php.example</code> file and rename it to <code>config.php</code></strong> . You can find the file
+    <li><strong>Step 1: Edit the <code>zp-config.php.example</code> file and rename it to <code>zp-config.php</code></strong> . You can find the file
       in the "zen" directory.</li>
     <li><strong>Step 2: Edit the .htaccess file in the root zenphoto folder</strong> if you have the mod_rewrite apache 
       module, and want cruft-free URLs. Just change the one line indicated to make it work.</li>

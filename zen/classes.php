@@ -1,15 +1,15 @@
 <?php
 
 
-// classes.php - HEADERS STILL NOT SENT!
-
+// classes.php - HEADERS STILL NOT SENT! Do not output text from this file.
 
 // Load the authentication functions.
 require_once("auth_zp.php");
 
 
-/**********************************************************************/
-// Image Class //
+/*******************************************************************************
+ *******************************************************************************
+ * Image Class ****************************************************************/
 
 class Image {
 
@@ -30,6 +30,7 @@ class Image {
     // $album is an Album object; it should already be created.
     $this->album = $album;
 		$this->webpath = WEBPATH . "/albums/".$album->name."/".$filename;
+    $this->encwebpath = WEBPATH . "/albums/".rawurlencode($album->name)."/".rawurlencode($filename);
 		$this->localpath = SERVERPATH . "/albums/".$album->name."/".$filename;
 		// Check if the file exists.
 		if(!file_exists($this->localpath)) {
@@ -129,7 +130,7 @@ class Image {
   
   // Sort order
   function getSortOrder() { return $this->meta['sortorder']; }
-  function setSortOrder($imageid, $sortorder) {
+  function setSortOrder($sortorder) {
     $this->meta['sortorder'] = $sortorder;
     query("UPDATE ".prefix("images")." SET `sort_order`='" . mysql_escape_string($sortorder) .
           "' WHERE `id`=".$this->imageid);
@@ -182,7 +183,7 @@ class Image {
     // Let the comment have trailing line breaks and space? Nah...
     // Also (in)validate HTML here, and in $name.
     $comment = trim($comment);
-    if (empty($email) || !is_valid_email($email) || empty($name) || empty($comment)) {
+    if (empty($email) || !is_valid_email_zp($email) || empty($name) || empty($comment)) {
       return false;
     }
     
@@ -215,7 +216,7 @@ class Image {
                "Comment:\n" . $comment . "\n" .
                "\n" .
                "You can view all comments about this image here:\n" .
-               "http://" . $_SERVER['SERVER_NAME'] . getImageLinkURL() . "\n" .
+               "http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/index.php?album=" . urlencode($this->album->name) . "&image=" . urlencode($this->name) . "\n" .
                "\n" .
                "You can edit the comment here:\n" .
                "http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/zen/admin.php?page=comments\n";
@@ -238,7 +239,7 @@ class Image {
 
   // Returns a path to the original image in the original folder.
   function getFullImage() {
-    return $this->webpath;
+    return $this->encwebpath;
   }
 
   function getSizedImage($size) {
@@ -319,8 +320,9 @@ class Image {
 }
 
 
-/**********************************************************************/
-// Album Class //
+/*******************************************************************************
+ *******************************************************************************
+ * Album Class ****************************************************************/
 
 class Album {
 
@@ -341,7 +343,6 @@ class Album {
 		$this->gallery = $gallery;
     $this->localpath = SERVERPATH . "/albums/" . $folder . "/";
     if(!file_exists($this->localpath)) {
-			// die("Album <strong>{$this->name}</strong> does not exist.");
       $this->exists = false;
       return false;
 		}
@@ -423,7 +424,7 @@ class Album {
   // Place
   function getPlace() { return $this->meta['place']; }
   function setPlace($place) {
-    $this->meta['title'] = $title;
+    $this->meta['title'] = $place;
     query("UPDATE ".prefix("albums")." SET `place`='" . mysql_escape_string($place) .
       "' WHERE `id`=".$this->albumid);    
   }
@@ -600,7 +601,7 @@ class Album {
   
 	
   function setAlbumThumb($filename) {
-    $this->meta['thumb'] = $thumb;
+    $this->meta['thumb'] = $filename;
     query("UPDATE ".prefix("albums")." SET `thumb`='" . mysql_escape_string($filename) .
       "' WHERE `id`=".$this->albumid);
   }
@@ -708,17 +709,19 @@ class Album {
 }
 
 
-/**********************************************************************/
-// Group Class //
+/*******************************************************************************
+ *******************************************************************************
+ * Group Class ****************************************************************/
 // To be implemented later.
 
 class Group {
 
 }
 
-/**********************************************************************/
-// Gallery Class //
-
+/*******************************************************************************
+ *******************************************************************************
+ * Gallery Class **************************************************************/
+ 
 class Gallery {
 
   var $albumdir = NULL;
@@ -850,16 +853,15 @@ class Gallery {
 	
 	// Takes care of bounds checking, no need to check input.
 	function getAlbum($index) {
+    $this->getAlbums();
 		if ($index >= 0 && $index < $this->getNumAlbums())
-			return $albums[$index];
+			return $this->albums[$index];
 		else
 			return false;
 	}
 	
 	function getNumAlbums() {
-	  if ($this->albums == NULL) {
-	    $this->getAlbums();
-	  }
+	  $this->getAlbums();
 		return count($this->albums);
 	}
   

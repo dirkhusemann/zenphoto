@@ -32,12 +32,11 @@
   </div>
   
   <?php printPageNav("&laquo; prev", "|", "next &raquo;"); ?>
-
-  <div id="enableSorting">
-  <?php printSortableGalleryLink('Click to sort gallery', 'Manual sorting', NULL, 'credit'); ?>
-  </div>
+  
+  <div id="credit"><?php printSortableGalleryLink('Sort Gallery', 'Manual sorting', NULL, 'credit'); ?> <?php printAdminLink('Admin', ' | ', ' | '); ?>Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
 
 </div>
+
 
 </body>
 </html>
