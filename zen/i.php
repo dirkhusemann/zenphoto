@@ -43,6 +43,20 @@ if (!isset($_GET['a']) || !isset($_GET['i'])) {
 	die("<b>Zenphoto error:</b> Please specify both an album and an image.");
 	// TODO: Return a default image (possibly with an error message) instead of just dying.
 }
+
+// Fix special characters in the album and image names if mod_rewrite is on:
+if (zp_conf('mod_rewrite')) {
+  $zppath = substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1);
+  $zpitems = explode("/", $zppath);
+  $req_album = $zpitems[0];
+  $req_image = $zpitems[count($zpitems)-1];
+  if (!empty($req_album))
+    $_GET['a'] = urldecode($req_album);
+  if (!empty($req_image))
+    $_GET['i'] = urldecode($req_image);
+}
+
+
 $album = sanitize($_GET['a']);
 $image = sanitize($_GET['i']);
 
