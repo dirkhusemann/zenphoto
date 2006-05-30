@@ -172,7 +172,7 @@ if (!file_exists($newfile)) {
       // If the requested image is the same size or smaller than the original, redirect to it.
       if (!$upscale && $newh >= $h && $neww >= $w && !$crop) {
         header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH
-          . "/albums/" . urlencode($album) . "/" . urlencode($image));
+          . "/albums/" . rawurlencode($album) . "/" . rawurlencode($image));
         return;
       }
     }
