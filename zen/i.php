@@ -15,7 +15,9 @@
  *
  * - cx and cy are measured from the top-left corner of the _scaled_ image.
  * - One of s, h, or w _must_ be specified; the others are optional.
- * - If more than one of s, h, or w are specified, s takes priority, then w.
+ * - If more than one of s, h, or w are specified, s takes priority, then w+h:
+ * - If both w and h are given, the image is resized to shortest side, then
+ *     cropped on the remaining dimension. Image output will always be WxH.
  * - If none of s, h, or w are specified, the original image is returned.
  *******************************************************************************
  */
@@ -137,6 +139,20 @@ if (!file_exists($newfile)) {
     if (!empty($size)) {
       $dim = $size;
       $width = $height = false;
+    } else if (!empty($width) && !empty($height)) {
+      $ratio_in = $h / $w;
+      $ratio_out = $height / $width;
+      $crop = true;
+      if ($ratio_in > $ratio_out) {
+        $thumb = true;
+        $dim = $width;
+        $ch = $height;
+      } else {
+        $dim = $height;
+        $cw = $width;
+        $height = true;
+      }
+      
     } else if (!empty($width)) {
       $dim = $width;
       $size = $height = false;
@@ -153,8 +169,7 @@ if (!file_exists($newfile)) {
     $wprop = round(($w / $h) * $dim);
     
 		if ($thumb) {
-      // Thumbs always use the shortest side to catch the whole image.
-      // $dim should always be $size here.
+      // Use the shortest side.
 			if ($h > $w) {
 				$neww = $dim;
 				$newh = $hprop;
@@ -167,8 +182,8 @@ if (!file_exists($newfile)) {
         $newh = $dim;
         $neww = $wprop;
       } else {
+        $newh = $hprop;
   			$neww = $dim;
-  			$newh = $hprop;
       }
       
       // If the requested image is the same size or smaller than the original, redirect to it.
