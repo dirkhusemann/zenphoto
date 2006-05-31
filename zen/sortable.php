@@ -127,38 +127,38 @@ class SLLists {
 	
 	function printTopJS() {
 		?>
-		<script src="<?=$this->jsPath;?>/prototype.js" type="text/javascript"></script>
-		<script src="<?=$this->jsPath;?>/scriptaculous.js" type="text/javascript"></script>
+		<script src="<?php echo $this->jsPath;?>/prototype.js" type="text/javascript"></script>
+		<script src="<?php echo $this->jsPath;?>/scriptaculous.js" type="text/javascript"></script>
 		<script language="JavaScript" type="text/javascript"><!--
 			function populateHiddenVars() {
-				<?
-				foreach($this->lists as $list) {
+				<?php				
+        foreach($this->lists as $list) {
 					?>
-					document.getElementById('<?=$list['input'];?>').value = Sortable.serialize('<?=$list['list'];?>');
-					<?
+					document.getElementById('<?php echo $list['input'];?>').value = Sortable.serialize('<?php echo $list['list'];?>');
+					<?php
 				}
 				?>
 				return true;
 			}
 			//-->
 		</script>
-		<?
+		<?php
 	}
 	
 	function printBottomJs() {
 		?>
 		 <script type="text/javascript">
 			// <![CDATA[
-			<?
+			<?php
 			foreach($this->lists as $list) {
 				?>
-				Sortable.create('<?=$list['list'];?>',{tag:'<?=$list['tag'];?>'<?=$list['additionalOptions'];?>});
-				<?
+				Sortable.create('<?php echo $list['list'];?>',{tag:'<?php echo $list['tag'];?>'<?php echo $list['additionalOptions'];?>});
+				<?php
 			}
 			?>
 			// ]]>
 		 </script>
-		<?
+		<?php
 	}
 	
 	function printHiddenInputs() {
@@ -167,25 +167,25 @@ class SLLists {
 		foreach($this->lists as $list) {
 			if ($this->debug) echo '<br>'.$list['input'].': ';
 			?>
-			<input type="<?=$inputType;?>" name="<?=$list['input'];?>" id="<?=$list['input'];?>" size="60">
-			<?
+			<input type="<?php echo $inputType;?>" name="<?php echo $list['input'];?>" id="<?php echo $list['input'];?>" size="60">
+			<?php
 		}
 		if ($this->debug) echo '<br>';
 	}
 	
 	function printForm($action, $method = 'POST', $submitText = 'Submit', $submitClass = '',$formName = 'sortableListForm') {
 		?>
-		<form action="<?=$action;?>" method="<?=$method;?>" onSubmit="populateHiddenVars();" name="<?=$formName;?>" id="<?=$formName;?>">
+		<form action="<?php echo $action;?>" method="<?php echo $method;?>" onSubmit="populateHiddenVars();" name="<?php echo $formName;?>" id="<?php echo $formName;?>">
 			<?php $this->printHiddenInputs();?>
 			<input type="hidden" name="sortableListsSubmitted" value="true">
-			<?
+			<?php
 			if ($this->debug) {
-				?><input type="button" value="View Serialized Lists" class="<?=$submitClass;?>" onClick="populateHiddenVars();"><br><?
+				?><input type="button" value="View Serialized Lists" class="<?php echo $submitClass;?>" onClick="populateHiddenVars();"><br><?php
 			}
 			?>
-			<input type="submit" value="<?=$submitText;?>" class="<?=$submitClass;?>">
+			<input type="submit" value="<?php echo $submitText;?>" class="<?php echo $submitClass;?>">
 		</form>
-		<?
+		<?php
 	}
 	
 	function getOrderArray($input,$listname,$itemKeyName = 'element',$orderKeyName = 'order') {
