@@ -5,7 +5,7 @@ if (!isset($SAJAX_INCLUDED)) {
 	 * GLOBALS AND DEFAULTS
 	 *
 	 */ 
-	$GLOBALS['sajax_version'] = '0.12';	
+	$GLOBALS['sajax_version'] = '0.12modified';	
 	$GLOBALS['sajax_debug_mode'] = 0;
 	$GLOBALS['sajax_export_list'] = array();
 	$GLOBALS['sajax_request_type'] = 'GET';
@@ -58,7 +58,7 @@ if (!isset($SAJAX_INCLUDED)) {
 				$value = get_object_vars($value);
 			} 
 			foreach ($value as $k=>$v) {
-				$esc_key = sajax_esc($k);
+				$esc_key = sajax_escapeutf8($k);
 				if (is_numeric($k)) 
 					$s .= "$k: " . sajax_get_js_repr($v) . ", ";
 				else
@@ -69,7 +69,7 @@ if (!isset($SAJAX_INCLUDED)) {
 			return $s . " }";
 		} 
 		else {
-			$esc_val = sajax_esc($value);
+			$esc_val = sajax_escapeutf8($value);
 			$s = "'$esc_val'";
 			return $s;
 		}
@@ -195,24 +195,24 @@ if (!isset($SAJAX_INCLUDED)) {
 			if (sajax_request_type == "GET") {
 			
 				if (uri.indexOf("?") == -1) 
-					uri += "?rs=" + escape(func_name);
+					uri += "?rs=" + encodeURIComponent(func_name);
 				else
-					uri += "&rs=" + escape(func_name);
-				uri += "&rst=" + escape(sajax_target_id);
+					uri += "&rs=" + encodeURIComponent(func_name);
+				uri += "&rst=" + encodeURIComponent(sajax_target_id);
 				uri += "&rsrnd=" + new Date().getTime();
 				
 				for (i = 0; i < args.length-1; i++) 
-					uri += "&rsargs[]=" + escape(args[i]);
+					uri += "&rsargs[]=" + encodeURIComponent(args[i]);
 
 				post_data = null;
 			} 
 			else if (sajax_request_type == "POST") {
-				post_data = "rs=" + escape(func_name);
-				post_data += "&rst=" + escape(sajax_target_id);
+				post_data = "rs=" + encodeURIComponent(func_name);
+				post_data += "&rst=" + encodeURIComponent(sajax_target_id);
 				post_data += "&rsrnd=" + new Date().getTime();
 				
 				for (i = 0; i < args.length-1; i++) 
-					post_data = post_data + "&rsargs[]=" + escape(args[i]);
+					post_data = post_data + "&rsargs[]=" + encodeURIComponent(args[i]);
 			}
 			else {
 				alert("Illegal request type: " + sajax_request_type);
@@ -355,6 +355,65 @@ if (!isset($SAJAX_INCLUDED)) {
 		echo sajax_get_javascript();
 	}
 
+	function sajax_escapeutf8($string)
+	{
+		$string = str_replace ('\\', '\\\\', $string);
+		$string = str_replace ('"', '\\"', $string);
+		$string = str_replace ("'", "\\'", $string);
+		$string = str_replace ("\n", "\\n", $string);
+		$string = str_replace ("\r", "\\r", $string);
+		$string = str_replace ("\t", "\\t", $string);
+		
+		$len = strlen ($string);
+		$pos = 0;
+		$out = '';
+			
+		while ($pos < $len) 
+		{
+			$ascii = ord (substr ($string, $pos, 1));
+			
+			if ($ascii >= 0xF0) 
+			{
+				$byte[1] = ord(substr ($string, $pos, 1)) - 0xF0;
+				$byte[2] = ord(substr ($string, $pos + 1, 1)) - 0x80;
+				$byte[3] = ord(substr ($string, $pos + 2, 1)) - 0x80;
+				$byte[4] = ord(substr ($string, $pos + 3, 1)) - 0x80;
+	
+
+				$char_code = ($byte[1] << 18) + ($byte[2] << 12) + ($byte[3] << 6) + $byte[4];
+				$pos += 4;
+			}
+			elseif (($ascii >= 0xE0) && ($ascii < 0xF0)) 
+			{
+				$byte[1] = ord(substr ($string, $pos, 1)) - 0xE0;
+				$byte[2] = ord(substr ($string, $pos + 1, 1)) - 0x80;
+				$byte[3] = ord(substr ($string, $pos + 2, 1)) - 0x80;
+	
+				$char_code = ($byte[1] << 12) + ($byte[2] << 6) + $byte[3];
+				$pos += 3;
+			}
+			elseif (($ascii >= 0xC0) && ($ascii < 0xE0)) 
+			{
+				$byte[1] = ord(substr ($string, $pos, 1)) - 0xC0;
+				$byte[2] = ord(substr ($string, $pos + 1, 1)) - 0x80;
+	
+				$char_code = ($byte[1] << 6) + $byte[2];
+				$pos += 2;
+			}
+			else 
+			{
+				$char_code = ord(substr ($string, $pos, 1));
+				$pos += 1;
+			}
+	
+			if ($char_code < 0x80)
+				$out .= chr($char_code);
+			else
+				$out .= '\\u'. str_pad(dechex($char_code), 4, '0', STR_PAD_LEFT);
+		}
+	
+		return $out;	
+	}	
 	
 	$SAJAX_INCLUDED = 1;
 }
