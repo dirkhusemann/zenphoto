@@ -288,13 +288,13 @@ if (!zp_loggedin()) {
           <input type="hidden" name="album" value="<?php echo $album->name; ?>" />
         
           <div class="box" style="padding: 15px;">
-            <h2>editing <em><?=$album->getTitle(); ?></em></h2>
+            <h2>editing <em><?php echo $album->getTitle(); ?></em></h2>
             <table>
-              <tr><td align="right" valign="top">Album Title: </td> <td><input type="text" name="albumtitle" value="<?=$album->getTitle(); ?>" /></td></tr>
-              <tr><td align="right" valign="top">Album Description: </td> <td><textarea name="albumdesc" cols="60" rows="6"><?=$album->getDesc(); ?></textarea></td></tr>
+              <tr><td align="right" valign="top">Album Title: </td> <td><input type="text" name="albumtitle" value="<?php echo $album->getTitle(); ?>" /></td></tr>
+              <tr><td align="right" valign="top">Album Description: </td> <td><textarea name="albumdesc" cols="60" rows="6"><?php echo $album->getDesc(); ?></textarea></td></tr>
               <?php /* Removing date entry for now... */ 
-                /* <tr><td align="right" valign="top">Date: </td> <td><input type="text" name="albumdate" value="<?=$album->getDateTime(); ?>" /></td></tr> */ ?>
-              <tr><td align="right" valign="top">Place: </td> <td><input type="text" name="albumplace" value="<?=$album->getPlace(); ?>" /></td></tr>
+                /* <tr><td align="right" valign="top">Date: </td> <td><input type="text" name="albumdate" value="<?php echo $album->getDateTime(); ?>" /></td></tr> */ ?>
+              <tr><td align="right" valign="top">Place: </td> <td><input type="text" name="albumplace" value="<?php echo $album->getPlace(); ?>" /></td></tr>
               <tr><td align="right" valign="top">Thumbnail: </td> 
                 <td>
                   <select id="thumbselect" class="thumbselect" name="thumb" onchange="updateThumbPreview(this)">
@@ -338,7 +338,7 @@ if (!zp_loggedin()) {
             
             <tr id=""<?php echo ($currentimage % 2 == 0) ?  "class=\"alt\"" : "" ?>>
               <td valign="top">
-                <img id="thumb-<?php echo $currentimage ?>" src="<?=$image->getThumb();?>" alt="<?=$image->filename;?>" 
+                <img id="thumb-<?php echo $currentimage ?>" src="<?php echo $image->getThumb();?>" alt="<?php echo $image->filename;?>" 
                   onclick="toggleBigImage('thumb-<?php echo $currentimage ?>', '<?php echo $image->getSizedImage(zp_conf('image_size')) ?>');" />
               </td>
   
@@ -401,13 +401,13 @@ if (!zp_loggedin()) {
         <input type="hidden" name="<?php echo $currentalbum; ?>-folder" value="<?php echo $album->name; ?>" />
         <table>
           <tr><td rowspan="4" valign="top"><a href="?page=edit&album=<?php echo $album->name; ?>" title="Edit this album: <?php echo $album->name; ?>"><img src="<?php echo $album->getAlbumThumb(); ?>" /></a></td>
-            <td align="right" valign="top">Album Title: </td> <td><input type="text" name="<?php echo $currentalbum; ?>-title" value="<?=$album->getTitle(); ?>" /></td></tr>
-          <tr><td align="right" valign="top">Album Description: </td> <td><textarea name="<?php echo $currentalbum; ?>-desc" cols="60" rows="6"><?=$album->getDesc(); ?></textarea></td></tr>
+            <td align="right" valign="top">Album Title: </td> <td><input type="text" name="<?php echo $currentalbum; ?>-title" value="<?php echo $album->getTitle(); ?>" /></td></tr>
+          <tr><td align="right" valign="top">Album Description: </td> <td><textarea name="<?php echo $currentalbum; ?>-desc" cols="60" rows="6"><?php echo $album->getDesc(); ?></textarea></td></tr>
           
           <?php /* Removing date entry for now... */ 
-                /* <tr><td align="right" valign="top">Date: </td> <td><input type="text" name="<?php echo $currentalbum; ?>-date" value="<?=$album->getDateTime(); ?>" /></td></tr> */ ?>
+                /* <tr><td align="right" valign="top">Date: </td> <td><input type="text" name="<?php echo $currentalbum; ?>-date" value="<?php echo $album->getDateTime(); ?>" /></td></tr> */ ?>
           
-          <tr><td align="right" valign="top">Place: </td> <td><input type="text" name="<?php echo $currentalbum; ?>-place" value="<?=$album->getPlace(); ?>" /></td></tr>
+          <tr><td align="right" valign="top">Place: </td> <td><input type="text" name="<?php echo $currentalbum; ?>-place" value="<?php echo $album->getPlace(); ?>" /></td></tr>
         </table>
         <hr />
         
@@ -464,7 +464,7 @@ if (!zp_loggedin()) {
                 </td>
 
                 <td width="20" align="right">
-                  <a class="delete" href="javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=<?php echo $album->name; ?>');" title="Delete the album <?=$album->name; ?>"><img src="images/delete.gif" style="border: 0px;" alt="x" /></a>
+                  <a class="delete" href="javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=<?php echo $album->name; ?>');" title="Delete the album <?php echo $album->name; ?>"><img src="images/delete.gif" style="border: 0px;" alt="x" /></a>
                 </td>
 
               </tr>
@@ -541,7 +541,7 @@ if (!zp_loggedin()) {
             $albums = $gallery->getAlbums(); 
             foreach ($albums as $album) { 
            ?>
-            <option value="<?=$album->getFolder();?>"><?=$album->getTitle();?></option>
+            <option value="<?php echo $album->getFolder();?>"><?php echo $album->getTitle();?></option>
           <?php } ?>
           </select>
           
@@ -736,15 +736,15 @@ if (!zp_loggedin()) {
                 
             <?php } ?>
           </td>
-          <td<?=$style?>>
+          <td<?php echo $style; ?>>
             <strong><?php echo $themeinfo['name'] ?></strong><br />
             <?php echo $themeinfo['author'] ?><br />
             Version <?php echo $themeinfo['version'] ?>, <?php echo $themeinfo['date'] ?><br />
             <?php echo $themeinfo['desc'] ?>
           </td>
-          <td width="100"<?=$style?>>
+          <td width="100"<?php echo $style; ?>>
             <?php if (!($theme == $current_theme)) { ?>
-              <a href="?page=options&action=settheme&theme=<?=$theme?>" title="Set this as your theme">Use this Theme</a>
+              <a href="?page=options&action=settheme&theme=<?php echo $theme; ?>" title="Set this as your theme">Use this Theme</a>
             <?php } else { echo "<strong>Current Theme</strong>"; } ?>
           </td>
         </tr>
