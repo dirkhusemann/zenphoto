@@ -6,6 +6,8 @@ $theme = $_zp_gallery->getCurrentTheme();
 
 $_zp_themeroot = WEBPATH . "/$themepath/$theme";
 
+header ('Content-Type: text/html; charset=' . zp_conf('charset'));
+
 if (in_context(ZP_IMAGE)) {
   include("$themepath/$theme/image.php");
 } else if (in_context(ZP_ALBUM)) {

@@ -58,8 +58,6 @@ $conf['admin_email'] = "user@somewhere.com";
 $conf['server_protocol'] = "http";
 
 // The character encoding to use internally. Leave at UTF-8 if you're unsure.
-// NOTE: Leave this as UTF-8 if you want to use AJAX-editing for titles/descriptions.
-//       Results with Ajax and other character sets are unpredictable...
 $conf['charset'] = 'UTF-8';
 
 
