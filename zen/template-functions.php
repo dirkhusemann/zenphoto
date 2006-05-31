@@ -39,10 +39,12 @@ if (zp_conf('mod_rewrite')) {
   
   $zpitems = explode("/", $zppath);
   $req_album = $zpitems[0];
-  if ($zpitems[1] == "page") {
-    $req_image = NULL;
-  } else {
-    $req_image = $zpitems[1];
+  if (isset($zpitems[1])) {
+    if ($zpitems[1] == "page") {
+      $req_image = NULL;
+    } else {
+      $req_image = $zpitems[1];
+    }
   }
   if (!empty($req_album)) $_GET['album'] = urldecode($req_album);
   if (!empty($req_image)) $_GET['image'] = urldecode($req_image);

@@ -521,7 +521,7 @@ if (!zp_loggedin()) {
 	  <p><em>Note:</em> When uploading archives, <strong>all</strong> images in the archive are added to the album, regardles of directory structure.</p>
       <p>The maximum size for any one file is <strong><?php echo ini_get('upload_max_filesize'); ?>B</strong>. Don't forget, you can also use <acronym title="File Transfer Protocol">FTP</acronym>!</p>
       
-      <?php if ($error) { ?>
+      <?php if (isset($error) && $error) { ?>
         <div class="errorbox">
           <h2>Something went wrong...</h2>
           <?php echo (empty($errormsg) ? "There was an error submitting the form. Please try again." : $errormsg); ?>
@@ -596,7 +596,7 @@ if (!zp_loggedin()) {
       
     <?php } else if ($page == "comments") { 
       // Set up some view option variables.
-      if ($_GET['n']) $pagenum = $_GET['n']; else $pagenum = 1;
+      if (isset($_GET['n'])) $pagenum = max(intval($_GET['n']), 1); else $pagenum = 1;
       if (isset($_GET['fulltext'])) $fulltext = true; else $fulltext = false;
       if (isset($_GET['viewall'])) $viewall = true; else $viewall = false;
 
