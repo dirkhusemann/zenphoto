@@ -31,23 +31,24 @@ $_zp_comments = NULL;
 $_zp_current_context = ZP_INDEX;
 $_zp_current_context_restore = NULL;
 
+
 // Fix special characters in the album and image names if mod_rewrite is on:
+// This is redundand and hacky; we need to either make the rewriting internal,
+// or fix the bugs in mod_rewrite. The former is probably a good idea.
+
 if (zp_conf('mod_rewrite')) {
   $zppath = substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1);
   $qspos = strpos($zppath, '?');
-  if ($qspos !== false) $zppath = substr($zppath, 0, $qspos); 
-  
-  $zpitems = explode("/", $zppath);
-  $req_album = $zpitems[0];
-  if (isset($zpitems[1])) {
-    if ($zpitems[1] == "page") {
-      $req_image = NULL;
-    } else {
+  if ($qspos !== false) $zppath = substr($zppath, 0, $qspos);
+  if (strpos($zppath, '/page/') === false) {
+    $zpitems = explode("/", $zppath);
+    if (isset($zpitems[0]) && $zpitems[0] != 'page')
+      $req_album = $zpitems[0];
+    if (isset($zpitems[1]) && $zpitems[1] != 'page')
       $req_image = $zpitems[1];
-    }
+    if (!empty($req_album)) $_GET['album'] = urldecode($req_album);
+    if (!empty($req_image)) $_GET['image'] = urldecode($req_image);
   }
-  if (!empty($req_album)) $_GET['album'] = urldecode($req_album);
-  if (!empty($req_image)) $_GET['image'] = urldecode($req_image);
 }
 
 
