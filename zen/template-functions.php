@@ -40,7 +40,7 @@ if (zp_conf('mod_rewrite')) {
   $zppath = substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1);
   $qspos = strpos($zppath, '?');
   if ($qspos !== false) $zppath = substr($zppath, 0, $qspos);
-  if (strpos($zppath, '/page/') === false) {
+  if (strpos($zppath, '/page/') === false && strpos($zppath, '.php') === false) {
     $zpitems = explode("/", $zppath);
     if (isset($zpitems[0]) && $zpitems[0] != 'page')
       $req_album = $zpitems[0];
