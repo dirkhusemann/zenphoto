@@ -129,7 +129,7 @@ function initEditableDiv(divID) {
     div.textValue = div.textContent;
   }
   
-  if (trim(div.textValue) == "") {
+  if (trim(div.innerHTML) == '' || trim(div.textValue) == "") {
     div.innerHTML = div.blankMessage;
   }
   
