@@ -77,7 +77,7 @@ if (isset($_GET['album'])) {
       if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
         if (isset($_POST['website'])) $website = strip_tags($_POST['website']); else $website = "";
         $commentadded = $_zp_current_image->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']), $website, 
-          strip_tags($_POST['comment'], zp_conf('allowed_tags')));
+          kses($_POST['comment'], zp_conf('allowed_tags')));
         // Then redirect to this image page to prevent re-submission.
         if ($commentadded) {
           // Comment added with no errors, redirect to the image... save cookie if requested.

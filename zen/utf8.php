@@ -261,12 +261,12 @@ class utf8 {
 				while (intval(ord($str[$pos + $length + $adjust]) & 0xC0) == 0x80) 
 					$adjust--;
 		
-				$buffer .= ($buffer == '' ? '' : "?=\r\n =?UTF-8?B?") . base64_encode(substr($str, $pos, $length + $adjust));
+				$buffer .= ($buffer == '' ? '' : "?=\n =?UTF-8?B?") . base64_encode(substr($str, $pos, $length + $adjust));
 				$pos = $pos + $length + $adjust;
 			} 
 			else 
 			{
-				$buffer .= ($buffer == '' ? '' : "?=\r\n =?UTF-8?B?") . base64_encode(substr($str, $pos));
+				$buffer .= ($buffer == '' ? '' : "?=\n =?UTF-8?B?") . base64_encode(substr($str, $pos));
 				$pos = $max;
 			}	
 		}
@@ -285,11 +285,11 @@ class utf8 {
 		$additional_headers = trim($additional_headers);
 		
 		if ($additional_headers != '')
-			$additional_headers .= "\r\n";
+			$additional_headers .= "\n";
 		
 		$additional_headers .=
-			"Mime-Version: 1.0\r\n" . 
-			"Content-Type: text/plain; charset=UTF-8\r\n" . 
+			"Mime-Version: 1.0\n" . 
+			"Content-Type: text/plain; charset=UTF-8\n" . 
 			"Content-Transfer-Encoding: base64";
 			
 		@mail($to, $subject, $message, $additional_headers, $additional_parameter); 

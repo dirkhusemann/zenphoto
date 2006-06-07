@@ -42,9 +42,14 @@ if (file_exists("zp-config.php")) {
 
   } else {
     // Logged in. Do the setup.
+    
+    // Prefix the table names:
     $tbl_albums = prefix('albums');
     $tbl_comments = prefix('comments');
     $tbl_images = prefix('images');
+    // Prefix the constraint names:
+    $cst_comments = prefix('comments_ibfk1');
+    $cst_images = prefix('images_ibfk1');
   
     $db_schema = array();
     $db_schema[] = "CREATE TABLE IF NOT EXISTS `$tbl_albums` (
@@ -92,10 +97,10 @@ if (file_exists("zp-config.php")) {
       );";
   
     $db_schema[] = "ALTER TABLE `$tbl_comments`
-      ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`imageid`) REFERENCES `$tbl_images` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
+      ADD CONSTRAINT `$cst_comments` FOREIGN KEY (`imageid`) REFERENCES `$tbl_images` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
   
     $db_schema[] = "ALTER TABLE `$tbl_images`
-      ADD CONSTRAINT `images_ibfk_1` FOREIGN KEY (`albumid`) REFERENCES `$tbl_albums` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
+      ADD CONSTRAINT `$cst_images` FOREIGN KEY (`albumid`) REFERENCES `$tbl_albums` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
   
   
     if (isset($_GET['create']) && db_connect()) {
