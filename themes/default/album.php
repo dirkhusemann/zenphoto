@@ -29,7 +29,7 @@
 	<?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
 	
 	<div id="enableSorting">
-  <?php printSortableAlbumLink('Click to sort album', 'Manual sorting', NULL, 'credit'); ?>
+  <?php printSortableAlbumLink('Click to sort album', 'Manual sorting', NULL, 'sort'); ?>
   </div>
 	
 </div>

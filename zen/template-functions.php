@@ -211,8 +211,8 @@ function zenJavascript() {
 /******************************************/
 
 function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
-  echo "<a href=\"" . $url . "\"" . 
-  (($title) ? " title=\"$title\"" : "") .
+  echo "<a href=\"" . htmlspecialchars($url) . "\"" . 
+  (($title) ? " title=\"" . htmlspecialchars($title, ENT_QUOTES) . "\"" : "") .
   (($class) ? " class=\"$class\"" : "") . 
   (($id) ? " id=\"$id\"" : "") . ">" .
   $text . "</a>";
@@ -242,7 +242,7 @@ function getGalleryTitle() {
   return zp_conf('gallery_title');
 }
 function printGalleryTitle() { 
-  echo getGalleryTitle(); 
+	echo htmlspecialchars(getGalleryTitle()); 
 }
 
 function getMainSiteName() { 
@@ -421,10 +421,10 @@ function getAlbumTitle() {
 function printAlbumTitle($editable=false) { 
   global $_zp_current_album;
   if ($editable && zp_loggedin()) {
-    echo "<div id=\"albumTitleEditable\" style=\"display: inline;\">" . getAlbumTitle() . "</div>\n";
-    echo "<script>initEditableTitle('albumTitleEditable');</script>";
+		echo "<div id=\"albumTitleEditable\" style=\"display: inline;\">" . htmlspecialchars(getAlbumTitle()) . "</div>\n";
+    echo "<script type=\"text/javascript\">initEditableTitle('albumTitleEditable');</script>";
   } else {
-    echo getAlbumTitle();  
+    echo htmlspecialchars(getAlbumTitle());	
   }
 }
 
@@ -460,7 +460,7 @@ function printAlbumDesc($editable=false) {
   global $_zp_current_album;
   if ($editable && zp_loggedin()) {
     echo "<div id=\"albumDescEditable\" style=\"display: block;\">" . getAlbumDesc() . "</div>\n";
-    echo "<script>initEditableDesc('albumDescEditable');</script>";
+    echo "<script type=\"text/javascript\">initEditableDesc('albumDescEditable');</script>";
   } else {
     echo getAlbumDesc();  
   }
@@ -546,7 +546,7 @@ function getAlbumThumb() {
 }
 
 function printAlbumThumbImage($alt, $class=NULL, $id=NULL) { 
-  echo "<img src=\"" . getAlbumThumb() . "\" alt=\"$alt\"" .
+	echo "<img src=\"" . htmlspecialchars(getAlbumThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     (($class) ? " class=\"$class\"" : "") . 
     (($id) ? " id=\"$id\"" : "") . " />";
 }
@@ -558,7 +558,7 @@ function getCustomAlbumThumb($size, $width=NULL, $height=NULL, $cropw=NULL, $cro
 }
 
 function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=null, $class=NULL, $id=NULL) {
-  echo "<img src=\"" . getCustomAlbumThumb($size, $width, $height, $cropw, $croph, $cropx, $cropy) . "\" alt=\"$alt\"" .
+  echo "<img src=\"" . htmlspecialchars(getCustomAlbumThumb($size, $width, $height, $cropw, $croph, $cropx, $cropy)) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     (($class) ? " class=\"$class\"" : "") . 
     (($id) ? " id=\"$id\"" : "") . " />";
 }
@@ -603,10 +603,10 @@ function getImageTitle() {
 function printImageTitle($editable=false) { 
   global $_zp_current_image;
   if ($editable && zp_loggedin()) {
-    echo "<div id=\"imageTitleEditable\" style=\"display: inline;\">" . getImageTitle() . "</div>\n";
-    echo "<script>initEditableTitle('imageTitleEditable');</script>";
+		echo "<div id=\"imageTitleEditable\" style=\"display: inline;\">" . htmlspecialchars(getImageTitle()) . "</div>\n";
+    echo "<script type=\"text/javascript\">initEditableTitle('imageTitleEditable');</script>";
   } else {
-    echo getImageTitle();  
+    echo htmlspecialchars(getImageTitle());	
   }
 }
 
@@ -620,7 +620,7 @@ function printImageDesc($editable=false) {
   global $_zp_current_image;
   if ($editable && zp_loggedin()) {
     echo "<div id=\"imageDescEditable\" style=\"display: block;\">" . getImageDesc() . "</div>\n";
-    echo "<script>initEditableDesc('imageDescEditable');</script>";
+    echo "<script type=\"text/javascript\">initEditableDesc('imageDescEditable');</script>";
   } else {
     echo getImageDesc();
   }
@@ -764,7 +764,7 @@ function printImageLink($text, $title, $class=NULL, $id=NULL) {
 function printImageDiv() {
   
   if (!isset($_GET['sortable'])) {
-    echo '<a href="'.getImageLinkURL().'" title="'.getImageTitle().'">';
+    echo '<a href="'.htmlspecialchars(getImageLinkURL()).'" title="'.htmlspecialchars(getImageTitle(), ENT_QUOTES).'">';
   }       
   printImageThumb(getImageTitle());
           
@@ -861,7 +861,7 @@ function isLandscape() {
 
 
 function printDefaultSizedImage($alt, $class=NULL, $id=NULL) { 
-  echo "<img src=\"" . getDefaultSizedImage() . "\" alt=\"$alt\"" .
+	echo "<img src=\"" . htmlspecialchars(getDefaultSizedImage()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     " width=\"" . getDefaultWidth() . "\" height=\"" . getDefaultHeight() . "\"" .
     (($class) ? " class=\"$class\"" : "") . 
     (($id) ? " id=\"$id\"" : "") . " />";
@@ -874,7 +874,7 @@ function getImageThumb() {
 }
 
 function printImageThumb($alt, $class=NULL, $id=NULL) { 
-  echo "<img src=\"" . getImageThumb() . "\" alt=\"$alt\"" .
+  echo "<img src=\"" . htmlspecialchars(getImageThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     ((zp_conf('thumb_crop')) ? " width=\"".zp_conf('thumb_crop_width')."\" height=\"".zp_conf('thumb_crop_height')."\"" : "") .
     (($class) ? " class=\"$class\"" : "") . 
     (($id) ? " id=\"$id\"" : "") . " />";
@@ -896,7 +896,7 @@ function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph
 
 function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $class=NULL, $id=NULL) { 
   $sizearr = getSizeCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy);
-  echo "<img src=\"" . getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy) . "\" alt=\"$alt\"" .
+  echo "<img src=\"" . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy)) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     " width=\"" . $sizearr[0] . "\" height=\"" . $sizearr[1] . "\"" .
     (($class) ? " class=\"$class\"" : "") . 
     (($id) ? " id=\"$id\"" : "") . " />";
@@ -951,7 +951,7 @@ function printCommentAuthorLink($title=NULL, $class=NULL, $id=NULL) {
   $site = getCommentAuthorSite();
   $name = getCommentAuthorName();
   if (empty($site)) {
-    echo $name;
+    echo htmlspecialchars($name);
   } else {
     if (is_null($title)) $title = "Visit $name";
     printLink($site, $name, $title, $class, $id);
