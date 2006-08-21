@@ -39,7 +39,7 @@ class Image {
     $this->encwebpath = WEBPATH . "/albums/".rawurlencode($album->name)."/".rawurlencode($filename);
 		$this->localpath = SERVERPATH . "/albums/".$album->name."/".$filename;
 		// Check if the file exists.
-		if(!file_exists($this->localpath)) {
+		if(!file_exists($this->localpath) || is_dir($this->localpath)) {
 			// die("Image <strong>{$this->localpath}</strong> does not exist.");
       $this->exists = false;
       return false;
@@ -93,7 +93,7 @@ class Image {
   // width or height are requested and not available; otherwise does nothing.
   // Subsequent requests are already populated in the db, and very fast.
   function updateDimensions() {
-    if (empty($this->meta['width']) || empty($this->meta['height'])) {
+    if ($this->exists && (empty($this->meta['width']) || empty($this->meta['height']))) {
       $size = getimagesize($this->localpath);
       $this->meta['width']  = $size[0];
       $this->meta['height'] = $size[1];
