@@ -298,8 +298,8 @@ if (!zp_loggedin()) {
               <tr><td align="right" valign="top">Thumbnail: </td> 
                 <td>
                   <select id="thumbselect" class="thumbselect" name="thumb" onchange="updateThumbPreview(this)">
-                    <?php foreach ($images as $image) { 
-                        $filename = $image->getFileName();
+                    <?php foreach ($images as $filename) { 
+                        $image = new Image($album, $filename);
                         $selected = ($filename == $album->meta['thumb']); ?>
                         <option class="thumboption" style="background-image: url(<?php echo $image->getThumb(); ?>); background-repeat: no-repeat;" 
                           value="<?php echo $filename ?>" <?php if ($selected) echo ' selected="selected"'; ?>><?php echo $image->meta['title'] ?><?php echo ($filename != $image->meta['title']) ? " ($filename)" : "" ?></option>
@@ -333,7 +333,8 @@ if (!zp_loggedin()) {
            
             <?php
             $currentimage = 0;
-            foreach ($images as $image) {
+            foreach ($images as $filename) {
+              $image = new Image($album, $filename);
             ?>
             
             <tr id=""<?php echo ($currentimage % 2 == 0) ?  "class=\"alt\"" : "" ?>>
@@ -396,7 +397,8 @@ if (!zp_loggedin()) {
         ?> 
         <input type="hidden" name="totalalbums" value="<?php echo sizeof($albums); ?>" /> <?php
         $currentalbum = 0;
-        foreach ($albums as $album) { 
+        foreach ($albums as $folder) { 
+          $album = new Album($gallery, $folder);
       ?>
         <input type="hidden" name="<?php echo $currentalbum; ?>-folder" value="<?php echo $album->name; ?>" />
         <table>
@@ -452,7 +454,8 @@ if (!zp_loggedin()) {
           <div id="albumList" class="albumList">
             <?php 
             $albums = $gallery->getAlbums();
-            foreach ($albums as $album) { 
+            foreach ($albums as $folder) { 
+              $album = new Album($gallery, $folder);
             ?>
             <div id="id_<?php echo $album->getAlbumID(); ?>">
             <table cellspacing="0" width="100%">
@@ -506,7 +509,8 @@ if (!zp_loggedin()) {
         var albumArray = new Array ( <?php 
           $first = true;
           $albums = $gallery->getAlbums();
-          foreach ($albums as $album) {
+          foreach ($albums as $folder) {
+            $album = new Album($gallery, $folder);
             echo ($first ? "" : ", ") . "'" . addslashes($album->getFolder()) . "'";
             $first = false;
           }
@@ -539,7 +543,8 @@ if (!zp_loggedin()) {
             <option value="" selected="true">a New Album +</option>
           <?php 
             $albums = $gallery->getAlbums(); 
-            foreach ($albums as $album) { 
+            foreach ($albums as $folder) { 
+              $album = new Album($gallery, $folder);
            ?>
             <option value="<?php echo $album->getFolder();?>"><?php echo $album->getTitle();?></option>
           <?php } ?>

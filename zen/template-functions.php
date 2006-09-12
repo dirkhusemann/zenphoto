@@ -31,7 +31,6 @@ $_zp_comments = NULL;
 $_zp_current_context = ZP_INDEX;
 $_zp_current_context_restore = NULL;
 
-
 // Fix special characters in the album and image names if mod_rewrite is on:
 // This is redundand and hacky; we need to either make the rewriting internal,
 // or fix the bugs in mod_rewrite. The former is probably a good idea.
@@ -49,6 +48,10 @@ if (zp_conf('mod_rewrite')) {
     if (!empty($req_album)) $_GET['album'] = urldecode($req_album);
     if (!empty($req_image)) $_GET['image'] = urldecode($req_image);
   }
+  if (!empty($req_album))
+    $_GET['album'] = urldecode($req_album);
+  if (!empty($req_image))
+    $_GET['image'] = urldecode($req_image);
 }
 
 
@@ -283,7 +286,7 @@ function next_album() {
     $_zp_albums = $_zp_gallery->getAlbums($_zp_page);
     if (empty($_zp_albums)) { return false; }
     $_zp_current_album_restore = $_zp_current_album;
-    $_zp_current_album = array_shift($_zp_albums);
+    $_zp_current_album = new Album($_zp_gallery, array_shift($_zp_albums));
     save_context();
     add_context(ZP_ALBUM);
     return true;
@@ -293,7 +296,7 @@ function next_album() {
     restore_context();
     return false;
   } else {
-    $_zp_current_album = array_shift($_zp_albums);
+    $_zp_current_album = new Album($_zp_gallery, array_shift($_zp_albums));
     return true;
   }
 }
@@ -576,7 +579,7 @@ function next_image() {
     $_zp_images = $_zp_current_album->getImages($_zp_page);
     if (empty($_zp_images)) { return false; }
     $_zp_current_image_restore = $_zp_current_image;
-    $_zp_current_image = array_shift($_zp_images);
+    $_zp_current_image = new Image($_zp_current_album, array_shift($_zp_images));
     save_context();
     add_context(ZP_IMAGE);
     return true;
@@ -586,7 +589,7 @@ function next_image() {
     restore_context();
     return false;
   } else {
-    $_zp_current_image = array_shift($_zp_images);
+    $_zp_current_image = new Image($_zp_current_album, array_shift($_zp_images));
     return true;
   }
 }

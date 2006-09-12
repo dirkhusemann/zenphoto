@@ -60,7 +60,7 @@ if (!zp_loggedin()) {
     
       <div id="images">
       <?php foreach ($images as $image) { 
-        printImageThumb($image);
+        printImageThumb(new Image($album, $image));
       }
       ?>
       

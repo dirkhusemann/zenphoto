@@ -278,7 +278,7 @@ class Image {
       $i=0;
       for ($i=0; $i < count($images); $i++) {
         $image = $images[$i];
-        if ($this->filename == $image->filename) {
+        if ($this->filename == $image) {
           $this->index = $i;
           break;
         }
@@ -463,18 +463,10 @@ class Album {
 		if (is_null($this->images)) {
 
 		  // Load the filenames
-		  $files = $this->loadFileNames();
-		  
-		  // The local image array
-		  $images = array();
-		  
-		  // Walk through and turn them into Images
-		  foreach ($files as $file) {
-				$images[] = new Image($this, $file);
-		  }
+		  $images = $this->loadFileNames();
 			
 			// Sort the images array
-			$images = $this->sortImageArray($images, $this->getSortType());
+		  $images = $this->sortImageArray($images, $this->getSortType());
 			
 			// Store the result so we don't have to traverse the dir again.
 			$this->images = $images;
@@ -488,10 +480,14 @@ class Album {
 		}
 	}
   
+  
   /**
 	 * Sort Image Array will sort an array of Images based on the given key. The
 	 * key should correspond to any of the Image fields that can be sorted. If the
 	 * given key turns out to be NULL for an image, we default to the filename.
+   *
+   * Updated significantly by Tristan so sorting has nearly zero performance impact
+   * and images are still stored in the main array as simple filenames.
 	 *
 	 * @param key    The key to sort on.
 	 * @param images The array to be sorted.
@@ -501,33 +497,41 @@ class Album {
 	 * @since  1.0.0
 	 */
 	function sortImageArray($images, $key = "Filename") {
-	  
-	  $newImageArray = array();
-	  $realkey = NULL;
-	  
-	  foreach ($images as $image) {
-	    if ($key == "Title") {
-	      $realkey = $image->getTitle();
-	    } else if ($key == "Manual") {
-	      $realkey = $image->getSortOrder();
-	    } else {
-	      $realkey = $image->getFileName();
-	    }
-	    
-	    // null won't work in the array, so default to filename
-	    if ($realkey == NULL) {
-	      $realkey = $image->filename;
-	    }
-	    	    
-	    $newImageArray[$realkey] = $image;
-	  }
-	  
-	  // Now natcase sort the array based on the keys 
-	  uksort($newImageArray, "strnatcasecmp");
-	  
-	  // Return a new array with just the values
-	  return array_values($newImageArray);
+    if ($key == "Title") {
+      $realkey = "title";
+    } else if ($key == "Manual") {
+      $realkey = "sort_order";
+    } else {
+      $realkey = "filename";
+    }
+    
+    $result = query("SELECT filename, title, sort_order FROM " . prefix("images") 
+      . " WHERE albumid=" . $this->albumid . " ORDER BY " . $realkey);
+    
+    $i = 0;
+    $images_r = array_flip($images);
+    $images_touched = array();
+    while ($row = mysql_fetch_assoc($result)) {
+      $filename = $row['filename'];
+      if (array_key_exists($filename, $images_r)) {
+        $images_r[$filename] = $i;
+        $images_touched[] = $filename;
+      }
+      $i++;
+    }
+    
+    $images_untouched = array_diff($images, $images_touched);
+    foreach($images_untouched as $im) {
+      $images_r[$im] = $i;
+      $i++;
+    }
+    
+    $images = array_flip($images_r);
+    ksort($images);    
+
+	  return $images;
 	}
+  
 	
 	function getNumImages() {
 		if (is_null($this->images)) $this->getImages();
@@ -537,7 +541,7 @@ class Album {
 	function getImage($index) {
 		if (is_null($this->images)) $this->getImages();
 		if ($index >= 0 && $index < $this->getNumImages())
-			return $this->images[$index];
+			return new Image($this, $this->images[$index]);
 		else
 			return false;
 	}
@@ -581,7 +585,7 @@ class Album {
   function getGalleryPage() {
     $albums_per_page = zp_conf('albums_per_page');
     if ($this->index == null)
-      $this->index = @array_search($this, $this->gallery->getAlbums(0));
+      $this->index = @array_search($this->name, $this->gallery->getAlbums(0));
     return floor(($this->index / $albums_per_page)+1);
   }
   
@@ -713,24 +717,13 @@ class Gallery {
 	  
 	  // Have the albums been loaded yet?
 	  if (is_null($this->albums)) {
-	    
-	    // Load the album folder names
+
 	    $albumnames = $this->loadAlbumNames();
-	    
-	    // The local albums array
-      $albums	= array();
-      
-      foreach ($albumnames as $album) {
-        $albums[] = new Album($this, $album);
-      }
-	  
-  	  // Sort the albums
-  	  $albums = $this->sortAlbumArray($albums);
+  	  $albums = $this->sortAlbumArray($albumnames);
   	  
   	  // Store the values
   	  $this->albums = $albums;
-	  
-  	}
+    }
 		
   	if ($page == 0) { 
   		return $this->albums;
@@ -753,28 +746,33 @@ class Gallery {
    */
 	function sortAlbumArray($albums) {
 	  
-	  $newAlbumArray = array();
-	  $realkey = NULL;
-	  $dummykey = 1000000;
-	  
-	  // Walk through the album array
-	  foreach ($albums as $album) {
-	    
-	    $realkey = $album->getSortOrder();
-	    
-      // null won't work in the array, so we put in a dummy key that is really big. 
-      // The dummy key is then decremented so that newer albums will appear first in the array.
-      if ($realkey == NULL) {
-        $realkey = $dummykey--;
+	  $albums_r = array();
+    
+    $result = query("SELECT folder, sort_order FROM " . prefix("albums") 
+      . " ORDER BY sort_order");
+    
+    $i = 0;
+    $albums_r = array_flip($albums);
+    $albums_touched = array();
+    while ($row = mysql_fetch_assoc($result)) {
+      $folder = $row['folder'];
+      if (array_key_exists($folder, $albums_r)) {
+        $albums_r[$folder] = $i;
+        $albums_touched[] = $folder;
       }
-  	    
-      $newAlbumArray[$realkey] = $album;
+      $i++;
+    }
+    
+    $albums_untouched = array_diff($albums, $albums_touched);
+    foreach($albums_untouched as $alb) {
+      $albums_r[$alb] = $i;
+      $i++;
+    }
+    
+    $albums = array_flip($albums_r);
+    ksort($albums);    
 	  
-	  }
-	  
-	  ksort($newAlbumArray);
-	  
-	  return array_values($newAlbumArray);
+	  return $albums;
 	}
 	
 	/**
@@ -813,7 +811,7 @@ class Gallery {
 	function getAlbum($index) {
     $this->getAlbums();
 		if ($index >= 0 && $index < $this->getNumAlbums())
-			return $this->albums[$index];
+			return new Album($this, $this->albums[$index]);
 		else
 			return false;
 	}
