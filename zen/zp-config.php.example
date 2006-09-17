@@ -124,7 +124,8 @@ $conf['allowed_tags'] = array (
 ////////////////////////////////////////////////////////////////////////////////
 // Path Overrides
 ////////////////////////////////////////////////////////////////////////////////
-// Uncomment the following two lines ONLY IF YOU'RE HAVING PROBLEMS.
+// Uncomment the following two lines ONLY IF YOU'RE HAVING PROBLEMS,
+// like "file not found" or "not readable" errors.
 // These allow you to override Zenphoto's detection of the correct paths
 // on your server, which might work better on some setups.
 ////////////////////////////////////////////////////////////////////////////////
