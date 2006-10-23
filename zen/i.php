@@ -26,6 +26,9 @@ define('OFFSET_PATH', true);
 // i.php - image generation.
 require_once("functions.php");
 
+// Set the memory limit higher just in case.
+ini_set("memory_limit","64M");
+
 // Set the config variables for convenience.
 $thumb_crop = zp_conf('thumb_crop');
 $thumb_size = zp_conf('thumb_size');
