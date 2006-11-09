@@ -152,6 +152,12 @@ function is_zip($filename) {
 }
 
 
+// rawurlencode function that is path-safe (does not encode /)
+function pathurlencode($path) {
+  return implode("/", array_map("rawurlencode", explode("/", $path)));
+}
+
+
 // Unzip function; ignores ZIP directory structure.
 // Requires zziplib
 

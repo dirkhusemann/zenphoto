@@ -118,7 +118,7 @@ if ((isset($_GET['s']) && $_GET['s'] < MAX_SIZE)
 } else {
   // No image parameters specified; return the original image.
   header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH 
-    . "/albums/" . rawurlencode($album) . "/" . rawurlencode($image));
+    . "/albums/" . pathurlencode($album) . "/" . rawurlencode($image));
   return;
 }
 
@@ -201,7 +201,7 @@ if (!file_exists($newfile)) {
       // If the requested image is the same size or smaller than the original, redirect to it.
       if (!$upscale && $newh >= $h && $neww >= $w && !$crop) {
         header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH
-          . "/albums/" . urlencode($album) . "/" . urlencode($image));
+          . "/albums/" . pathurlencode($album) . "/" . rawurlencode($image));
         return;
       }
     }
@@ -234,12 +234,6 @@ if (!file_exists($newfile)) {
 }
 
 // ... and redirect the browser to it.
-$encpath = explode("/", $newfilename);
-for($i=0; $i<count($encpath); $i++) {
-  $encpath[$i] = rawurlencode($encpath[$i]);
-}
-$encpath = implode("/", $encpath);
-
-header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/cache/" . $encpath);
-
+header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/cache" . pathurlencode($newfilename));
+exit();
 ?>

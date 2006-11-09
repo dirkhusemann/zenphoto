@@ -35,9 +35,9 @@ class Image {
   function Image($album, $filename) {
     // $album is an Album object; it should already be created.
     $this->album = $album;
-		$this->webpath = WEBPATH . "/albums/".$album->name."/".$filename;
-    $this->encwebpath = WEBPATH . "/albums/".rawurlencode($album->name)."/".rawurlencode($filename);
-		$this->localpath = SERVERPATH . "/albums/".$album->name."/".$filename;
+		$this->webpath = WEBPATH . "/albums/" . $album->name . "/" . $filename;
+    $this->encwebpath = WEBPATH . "/albums/" . pathurlencode($album->name) . "/" . rawurlencode($filename);
+		$this->localpath = SERVERPATH . "/albums/" . $album->name . "/" . $filename;
 		// Check if the file exists.
 		if(!file_exists($this->localpath) || is_dir($this->localpath)) {
 			// die("Image <strong>{$this->localpath}</strong> does not exist.");
@@ -625,13 +625,13 @@ class Album {
 	
 	function getNextAlbum() {
     if ($this->index == null)
-      $this->index = array_search($this, $this->gallery->getAlbums(0));
+      $this->index = @array_search($this->name, $this->gallery->getAlbums(0));
 		return $this->gallery->getAlbum($this->index+1);
 	}
 	
 	function getPrevAlbum() {
     if ($this->index == null)
-      $this->index = array_search($this, $this->gallery->getAlbums(0));
+      $this->index = @array_search($this->name, $this->gallery->getAlbums(0));
 		return $this->gallery->getAlbum($this->index-1);
 	}
   
