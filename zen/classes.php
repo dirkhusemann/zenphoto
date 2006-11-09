@@ -6,6 +6,12 @@
 // Load the authentication functions.
 require_once("auth_zp.php");
 
+// Load UTF-8 library
+require_once("utf8.php");
+
+// Load Kses library
+require_once("kses.php");
+
 
 /*******************************************************************************
  *******************************************************************************
@@ -33,7 +39,7 @@ class Image {
     $this->encwebpath = WEBPATH . "/albums/".rawurlencode($album->name)."/".rawurlencode($filename);
 		$this->localpath = SERVERPATH . "/albums/".$album->name."/".$filename;
 		// Check if the file exists.
-		if(!file_exists($this->localpath)) {
+		if(!file_exists($this->localpath) || is_dir($this->localpath)) {
 			// die("Image <strong>{$this->localpath}</strong> does not exist.");
       $this->exists = false;
       return false;
@@ -87,7 +93,7 @@ class Image {
   // width or height are requested and not available; otherwise does nothing.
   // Subsequent requests are already populated in the db, and very fast.
   function updateDimensions() {
-    if (empty($this->meta['width']) || empty($this->meta['height'])) {
+    if ($this->exists && (empty($this->meta['width']) || empty($this->meta['height']))) {
       $size = getimagesize($this->localpath);
       $this->meta['width']  = $size[0];
       $this->meta['height'] = $size[1];
@@ -250,7 +256,7 @@ class Image {
     }
   }
   
-  // TODO
+  // Get a custom sized version of this image based on the parameters.
   function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy) {
     return WEBPATH . "/zen/i.php?a=" . urlencode($this->album->name) . "&i=" . urlencode($this->filename)
     . ($size ? "&s=$size" : "" ) . ($width ? "&w=$width" : "") . ($height ? "&h=$height" : "") 
@@ -258,6 +264,7 @@ class Image {
     . ($cropx ? "&cx=$cropx" : "") . ($cropy ? "&cy=$cropy" : "") ;
   }
 
+  // Get a default-sized thumbnail of this image.
   function getThumb() {
     if (zp_conf('mod_rewrite')) {
       return WEBPATH . "/" . urlencode($this->album->name) . "/image/thumb/" . urlencode($this->filename);
@@ -266,13 +273,14 @@ class Image {
     }
   }
   
+  // Get the index of this image in the album, taking sorting into account.
   function getIndex() {
     if ($this->index == NULL) {
       $images = $this->album->getImages(0);
       $i=0;
       for ($i=0; $i < count($images); $i++) {
         $image = $images[$i];
-        if ($this->filename == $image->filename) {
+        if ($this->filename == $image) {
           $this->index = $i;
           break;
         }
@@ -358,6 +366,7 @@ class Album {
       $this->meta['show']  = 1;
 	    $this->meta['thumb'] = NULL;
       $this->meta['sort_type'] = NULL;
+      $this->meta['sort_key'] = 'filename';
       $this->meta['sort_order'] = NULL;
 	  
 	  // BUG: (todd) this causes invalid rows to be inserted into the db table
@@ -366,8 +375,8 @@ class Album {
             "', '".mysql_escape_string($folder)."');");
             
       $this->albumid = mysql_insert_id();
+      
     } else {
-    	
       $this->meta['title'] = $entry['title'];
       $this->meta['desc']  = $entry['desc'];
       $this->meta['date']  = $entry['date'];
@@ -375,6 +384,7 @@ class Album {
       $this->meta['show']  = $entry['show'];
 	    $this->meta['thumb'] = $entry['thumb'];
       $this->meta['sort_type'] = $entry['sort_type'];
+      $this->meta['sort_key'] = ($entry['sort_type'] == "Title") ? 'title' : ($entry['sort_type'] == "Manual") ? 'sort_order' : 'filename';
       $this->meta['sort_order'] = $entry['sort_order'];
       $this->albumid = $entry['id'];
     }
@@ -444,6 +454,7 @@ class Album {
     query("UPDATE ".prefix("albums")." SET `sort_order`='" . mysql_escape_string($sortorder) .
       "' WHERE `id`=".$this->albumid);    
   }
+  function getSortKey() { return $this->meta['sort_key']; }
 
   // Show this album?
   function getShow() { return $this->meta['show']; }
@@ -463,7 +474,7 @@ class Album {
    */
   function getSubAlbums($page=0) {
     if (is_null($this->subalbums)) {
-      $dirs = $this->getFileNames(true);
+      $dirs = $this->loadFileNames(true);
       $subalbums = array();
       
       foreach ($dirs as $dir) {
@@ -492,21 +503,9 @@ class Album {
 	  
 		if (is_null($this->images)) {
 
-		  // Load the filenames
-		  $files = $this->getFileNames();
-		  
-		  // The local image array
-		  $images = array();
-		  
-		  // Walk through and turn them into Images
-		  foreach ($files as $file) {
-				$images[] = new Image($this, $file);
-		  }
-			
-			// Sort the images array
-			$images = $this->sortImageArray($images, $this->getSortType());
-			
-			// Store the result so we don't have to traverse the dir again.
+      // Load, sort, and store the images in this Album.
+		  $images = $this->loadFileNames();
+		  $images = $this->sortImageArray($images);
 			$this->images = $images;
 		}
 		// Return the cut of images based on $page. Page 0 means show all.
@@ -518,10 +517,14 @@ class Album {
 		}
 	}
   
+  
   /**
 	 * Sort Image Array will sort an array of Images based on the given key. The
 	 * key should correspond to any of the Image fields that can be sorted. If the
 	 * given key turns out to be NULL for an image, we default to the filename.
+	 *
+   * Updated significantly by Tristan so sorting has nearly zero performance impact
+   * and images are still stored in the main array as simple filenames.
 	 *
 	 * @param key    The key to sort on.
 	 * @param images The array to be sorted.
@@ -530,46 +533,60 @@ class Album {
 	 * @author Todd Papaioannou (lucky@luckyspin.org)
 	 * @since  1.0.0
 	 */
-	function sortImageArray($images, $key = "Filename") {
+	function sortImageArray($images) {
 	  
-	  $newImageArray = array();
-	  $realkey = NULL;
+    $key = $this->getSortKey();
+    $result = query("SELECT filename, title, sort_order FROM " . prefix("images") 
+      . " WHERE albumid=" . $this->albumid . " ORDER BY " . $key);
 	  
-	  foreach ($images as $image) {
-	    if ($key == "Title") {
-	      $realkey = $image->getTitle();
-	    } else if ($key == "Manual") {
-	      $realkey = $image->getSortOrder();
-	    } else {
-	      $realkey = $image->getFileName();
+    $i = 0;
+    $images_r = array_flip($images);
+    $images_touched = array();
+    while ($row = mysql_fetch_assoc($result)) {
+      $filename = $row['filename'];
+      if (array_key_exists($filename, $images_r)) {
+        $images_r[$filename] = $i;
+        $images_touched[] = $filename;
 	    }
-	    
-	    // null won't work in the array, so default to filename
-	    if ($realkey == NULL) {
-	      $realkey = $image->filename;
+      $i++;
 	    }
 	    	    
-	    $newImageArray[$realkey] = $image;
+    $images_untouched = array_diff($images, $images_touched);
+    foreach($images_untouched as $im) {
+      $images_r[$im] = $i;
+      $i++;
 	  }
 	  
-	  // Now natcase sort the array based on the keys 
-	  uksort($newImageArray, "strnatcasecmp");
+    $images = array_flip($images_r);
+    ksort($images);    
 	  
-	  // Return a new array with just the values
-	  return array_values($newImageArray);
+	  return $images;
 	}
 	
+	
 	function getNumImages() {
-		if (is_null($this->images)) $this->getImages();
+		if (!is_null($this->images)) { 
+      $this->getImages(0);
+    }
 		return count($this->images);
 	}
 	
 	function getImage($index) {
-		if (is_null($this->images)) $this->getImages();
-		if ($index >= 0 && $index < $this->getNumImages())
-			return $this->images[$index];
-		else
+    if ($index >= 0 && $index < $this->getNumImages()) {
+      if (!is_null($this->images)) {
+        // Get the image from the array if we already have it, but...
+        return new Image($this, $this->images[$index]);
+      } else {
+        // if possible, run a single query instead of getting all images.
+        $key = $this->getSortKey();
+        $result = query("SELECT filename FROM " . prefix("images") 
+            . " WHERE albumid=" . $this->albumid . " ORDER BY $key LIMIT $index,1");
+        $filename = mysql_result($result, 0);
+        return new Image($this, $filename);        
+      }
+    }
 			return false;
+
 	}
 
   
@@ -621,7 +638,7 @@ class Album {
   function getGalleryPage() {
     $albums_per_page = zp_conf('albums_per_page');
     if ($this->index == null)
-      $this->index = array_search($this, $this->gallery->getAlbums(0));
+      $this->index = @array_search($this->name, $this->gallery->getAlbums(0));
     return floor(($this->index / $albums_per_page)+1);
   }
   
@@ -681,7 +698,7 @@ class Album {
    * @author Todd Papaioannou (lucky@luckyspin.org)
    * @since  1.0.0
    */
-  function getFileNames($dirs=false) {
+  function loadFileNames($dirs=false) {
     
     // This is where we'll look for files
     $albumdir = SERVERPATH . "/albums/{$this->name}/";
@@ -756,22 +773,11 @@ class Gallery {
 	  // Have the albums been loaded yet?
 	  if (is_null($this->albums)) {
 	    
-	    // Load the album folder names
 	    $albumnames = $this->loadAlbumNames();
+  	  $albums = $this->sortAlbumArray($albumnames);
 	    
-	    // The local albums array
-      $albums	= array();
-      
-      foreach ($albumnames as $album) {
-        $albums[] = new Album($this, $album);
-      }
-	  
-  	  // Sort the albums
-  	  $albums = $this->sortAlbumArray($albums);
-  	  
   	  // Store the values
   	  $this->albums = $albums;
-	  
   	}
 		
   	if ($page == 0) { 
@@ -795,28 +801,33 @@ class Gallery {
    */
 	function sortAlbumArray($albums) {
 	  
-	  $newAlbumArray = array();
-	  $realkey = NULL;
-	  $dummykey = 1000000;
+	  $albums_r = array();
 	  
-	  // Walk through the album array
-	  foreach ($albums as $album) {
+    $result = query("SELECT folder, sort_order FROM " . prefix("albums") 
+      . " ORDER BY sort_order");
 	    
-	    $realkey = $album->getSortOrder();
-	    
-      // null won't work in the array, so we put in a dummy key that is really big. 
-      // The dummy key is then decremented so that newer albums will appear first in the array.
-      if ($realkey == NULL) {
-        $realkey = $dummykey--;
+    $i = 0;
+    $albums_r = array_flip($albums);
+    $albums_touched = array();
+    while ($row = mysql_fetch_assoc($result)) {
+      $folder = $row['folder'];
+      if (array_key_exists($folder, $albums_r)) {
+        $albums_r[$folder] = $i;
+        $albums_touched[] = $folder;
       }
+      $i++;
+    }
   	    
-      $newAlbumArray[$realkey] = $album;
-	  
+    $albums_untouched = array_diff($albums, $albums_touched);
+    foreach($albums_untouched as $alb) {
+      $albums_r[$alb] = $i;
+      $i++;
 	  }
 	  
-	  ksort($newAlbumArray);
+    $albums = array_flip($albums_r);
+    ksort($albums);    
 	  
-	  return array_values($newAlbumArray);
+	  return $albums;
 	}
 	
 	/**
@@ -855,7 +866,7 @@ class Gallery {
 	function getAlbum($index) {
     $this->getAlbums();
 		if ($index >= 0 && $index < $this->getNumAlbums())
-			return $this->albums[$index];
+			return new Album($this, $this->albums[$index]);
 		else
 			return false;
 	}
@@ -986,7 +997,8 @@ class Gallery {
         query($sql);
         
         // Then go into existing albums recursively to clean them... very invasive.
-        foreach ($this->albums as $album) {
+        foreach ($this->albums as $folder) {
+          $album = new Album($this, $folder);
           $album->garbageCollect();
           $album->preLoad();
         }

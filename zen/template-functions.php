@@ -32,14 +32,21 @@ $_zp_current_context = ZP_INDEX;
 $_zp_current_context_restore = NULL;
 
 // Fix special characters in the album and image names if mod_rewrite is on:
+// This is redundand and hacky; we need to either make the rewriting internal,
+// or fix the bugs in mod_rewrite. The former is probably a good idea.
+
 if (zp_conf('mod_rewrite')) {
   $zppath = substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1);
-  $zpitems = explode("/", $zppath);
-  $req_album = $zpitems[0];
-  if ($zpitems[1] == "page") {
-    $req_image = NULL;
-  } else {
-    $req_image = $zpitems[1];
+  $qspos = strpos($zppath, '?');
+  if ($qspos !== false) $zppath = substr($zppath, 0, $qspos);
+  if (strpos($zppath, '/page/') === false && strpos($zppath, '.php') === false) {
+    $zpitems = explode("/", $zppath);
+    if (isset($zpitems[0]) && $zpitems[0] != 'page')
+      $req_album = $zpitems[0];
+    if (isset($zpitems[1]) && $zpitems[1] != 'page')
+      $req_image = $zpitems[1];
+    if (!empty($req_album)) $_GET['album'] = urldecode($req_album);
+    if (!empty($req_image)) $_GET['image'] = urldecode($req_image);
   }
   if (!empty($req_album))
     $_GET['album'] = urldecode($req_album);
@@ -73,7 +80,7 @@ if (isset($_GET['album'])) {
       if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
         if (isset($_POST['website'])) $website = strip_tags($_POST['website']); else $website = "";
         $commentadded = $_zp_current_image->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']), $website, 
-          strip_tags($_POST['comment'], zp_conf('allowed_tags')));
+          kses($_POST['comment'], zp_conf('allowed_tags')));
         // Then redirect to this image page to prevent re-submission.
         if ($commentadded) {
           // Comment added with no errors, redirect to the image... save cookie if requested.
@@ -207,8 +214,8 @@ function zenJavascript() {
 /******************************************/
 
 function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
-  echo "<a href=\"" . $url . "\"" . 
-  (($title) ? " title=\"$title\"" : "") .
+  echo "<a href=\"" . htmlspecialchars($url) . "\"" . 
+  (($title) ? " title=\"" . htmlspecialchars($title, ENT_QUOTES) . "\"" : "") .
   (($class) ? " class=\"$class\"" : "") . 
   (($id) ? " id=\"$id\"" : "") . ">" .
   $text . "</a>";
@@ -238,7 +245,7 @@ function getGalleryTitle() {
   return zp_conf('gallery_title');
 }
 function printGalleryTitle() { 
-  echo getGalleryTitle(); 
+	echo htmlspecialchars(getGalleryTitle()); 
 }
 
 function getMainSiteName() { 
@@ -279,7 +286,7 @@ function next_album() {
     $_zp_albums = $_zp_gallery->getAlbums($_zp_page);
     if (empty($_zp_albums)) { return false; }
     $_zp_current_album_restore = $_zp_current_album;
-    $_zp_current_album = array_shift($_zp_albums);
+    $_zp_current_album = new Album($_zp_gallery, array_shift($_zp_albums));
     save_context();
     add_context(ZP_ALBUM);
     return true;
@@ -289,7 +296,7 @@ function next_album() {
     restore_context();
     return false;
   } else {
-    $_zp_current_album = array_shift($_zp_albums);
+    $_zp_current_album = new Album($_zp_gallery, array_shift($_zp_albums));
     return true;
   }
 }
@@ -417,10 +424,10 @@ function getAlbumTitle() {
 function printAlbumTitle($editable=false) { 
   global $_zp_current_album;
   if ($editable && zp_loggedin()) {
-    echo "<div id=\"albumTitleEditable\" style=\"display: inline;\">" . getAlbumTitle() . "</div>\n";
-    echo "<script>initEditableTitle('albumTitleEditable');</script>";
+		echo "<div id=\"albumTitleEditable\" style=\"display: inline;\">" . htmlspecialchars(getAlbumTitle()) . "</div>\n";
+    echo "<script type=\"text/javascript\">initEditableTitle('albumTitleEditable');</script>";
   } else {
-    echo getAlbumTitle();  
+    echo htmlspecialchars(getAlbumTitle());	
   }
 }
 
@@ -456,7 +463,7 @@ function printAlbumDesc($editable=false) {
   global $_zp_current_album;
   if ($editable && zp_loggedin()) {
     echo "<div id=\"albumDescEditable\" style=\"display: block;\">" . getAlbumDesc() . "</div>\n";
-    echo "<script>initEditableDesc('albumDescEditable');</script>";
+    echo "<script type=\"text/javascript\">initEditableDesc('albumDescEditable');</script>";
   } else {
     echo getAlbumDesc();  
   }
@@ -542,7 +549,7 @@ function getAlbumThumb() {
 }
 
 function printAlbumThumbImage($alt, $class=NULL, $id=NULL) { 
-  echo "<img src=\"" . getAlbumThumb() . "\" alt=\"$alt\"" .
+	echo "<img src=\"" . htmlspecialchars(getAlbumThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     (($class) ? " class=\"$class\"" : "") . 
     (($id) ? " id=\"$id\"" : "") . " />";
 }
@@ -554,7 +561,7 @@ function getCustomAlbumThumb($size, $width=NULL, $height=NULL, $cropw=NULL, $cro
 }
 
 function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=null, $class=NULL, $id=NULL) {
-  echo "<img src=\"" . getCustomAlbumThumb($size, $width, $height, $cropw, $croph, $cropx, $cropy) . "\" alt=\"$alt\"" .
+  echo "<img src=\"" . htmlspecialchars(getCustomAlbumThumb($size, $width, $height, $cropw, $croph, $cropx, $cropy)) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     (($class) ? " class=\"$class\"" : "") . 
     (($id) ? " id=\"$id\"" : "") . " />";
 }
@@ -572,7 +579,7 @@ function next_image() {
     $_zp_images = $_zp_current_album->getImages($_zp_page);
     if (empty($_zp_images)) { return false; }
     $_zp_current_image_restore = $_zp_current_image;
-    $_zp_current_image = array_shift($_zp_images);
+    $_zp_current_image = new Image($_zp_current_album, array_shift($_zp_images));
     save_context();
     add_context(ZP_IMAGE);
     return true;
@@ -582,7 +589,7 @@ function next_image() {
     restore_context();
     return false;
   } else {
-    $_zp_current_image = array_shift($_zp_images);
+    $_zp_current_image = new Image($_zp_current_album, array_shift($_zp_images));
     return true;
   }
 }
@@ -599,10 +606,10 @@ function getImageTitle() {
 function printImageTitle($editable=false) { 
   global $_zp_current_image;
   if ($editable && zp_loggedin()) {
-    echo "<div id=\"imageTitleEditable\" style=\"display: inline;\">" . getImageTitle() . "</div>\n";
-    echo "<script>initEditableTitle('imageTitleEditable');</script>";
+		echo "<div id=\"imageTitleEditable\" style=\"display: inline;\">" . htmlspecialchars(getImageTitle()) . "</div>\n";
+    echo "<script type=\"text/javascript\">initEditableTitle('imageTitleEditable');</script>";
   } else {
-    echo getImageTitle();  
+    echo htmlspecialchars(getImageTitle());	
   }
 }
 
@@ -616,7 +623,7 @@ function printImageDesc($editable=false) {
   global $_zp_current_image;
   if ($editable && zp_loggedin()) {
     echo "<div id=\"imageDescEditable\" style=\"display: block;\">" . getImageDesc() . "</div>\n";
-    echo "<script>initEditableDesc('imageDescEditable');</script>";
+    echo "<script type=\"text/javascript\">initEditableDesc('imageDescEditable');</script>";
   } else {
     echo getImageDesc();
   }
@@ -760,7 +767,7 @@ function printImageLink($text, $title, $class=NULL, $id=NULL) {
 function printImageDiv() {
   
   if (!isset($_GET['sortable'])) {
-    echo '<a href="'.getImageLinkURL().'" title="'.getImageTitle().'">';
+    echo '<a href="'.htmlspecialchars(getImageLinkURL()).'" title="'.htmlspecialchars(getImageTitle(), ENT_QUOTES).'">';
   }       
   printImageThumb(getImageTitle());
           
@@ -857,7 +864,7 @@ function isLandscape() {
 
 
 function printDefaultSizedImage($alt, $class=NULL, $id=NULL) { 
-  echo "<img src=\"" . getDefaultSizedImage() . "\" alt=\"$alt\"" .
+	echo "<img src=\"" . htmlspecialchars(getDefaultSizedImage()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     " width=\"" . getDefaultWidth() . "\" height=\"" . getDefaultHeight() . "\"" .
     (($class) ? " class=\"$class\"" : "") . 
     (($id) ? " id=\"$id\"" : "") . " />";
@@ -870,7 +877,7 @@ function getImageThumb() {
 }
 
 function printImageThumb($alt, $class=NULL, $id=NULL) { 
-  echo "<img src=\"" . getImageThumb() . "\" alt=\"$alt\"" .
+  echo "<img src=\"" . htmlspecialchars(getImageThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     ((zp_conf('thumb_crop')) ? " width=\"".zp_conf('thumb_crop_width')."\" height=\"".zp_conf('thumb_crop_height')."\"" : "") .
     (($class) ? " class=\"$class\"" : "") . 
     (($id) ? " id=\"$id\"" : "") . " />";
@@ -892,7 +899,7 @@ function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph
 
 function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $class=NULL, $id=NULL) { 
   $sizearr = getSizeCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy);
-  echo "<img src=\"" . getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy) . "\" alt=\"$alt\"" .
+  echo "<img src=\"" . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy)) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     " width=\"" . $sizearr[0] . "\" height=\"" . $sizearr[1] . "\"" .
     (($class) ? " class=\"$class\"" : "") . 
     (($id) ? " id=\"$id\"" : "") . " />";
@@ -947,7 +954,7 @@ function printCommentAuthorLink($title=NULL, $class=NULL, $id=NULL) {
   $site = getCommentAuthorSite();
   $name = getCommentAuthorName();
   if (empty($site)) {
-    echo $name;
+    echo htmlspecialchars($name);
   } else {
     if (is_null($title)) $title = "Visit $name";
     printLink($site, $name, $title, $class, $id);

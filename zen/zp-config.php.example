@@ -38,9 +38,6 @@ $conf['gallery_title'] = "my photos";
 // If you're in a different time zone from your server, set the offset in hours:
 $conf['time_offset'] = 0;
 
-// Tags allowed in comments
-$conf['allowed_tags'] = "<a><i><em><b><strong><blockquote><abbr><acronym><ul><ol><li>";
-
 // If you have Apache mod_rewrite, put true here, and you'll get nice cruft-free URLs.
 // MAKE SURE TO EDIT THE .htaccess FILE with your path information.
 $conf['mod_rewrite'] = true;
@@ -56,6 +53,10 @@ $conf['admin_email'] = "user@somewhere.com";
 
 // If you're running a secure server, change this to 'https' (Most people will leave this alone)
 $conf['server_protocol'] = "http";
+
+// The character encoding to use internally. Leave at UTF-8 if you're unsure.
+$conf['charset'] = 'UTF-8';
+
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -98,9 +99,33 @@ $conf['images_per_page'] = 15;
 
 
 ////////////////////////////////////////////////////////////////////////////////
+// Comment cleaning configuration
+////////////////////////////////////////////////////////////////////////////////
+
+// Tags allowed in comments
+$conf['allowed_tags'] = array (
+	'a' 		 => array ('href' => array (), 'title' => array ()), 
+	'abbr' 		 => array ('title' => array ()), 
+	'acronym' 	 => array ('title' => array ()), 
+	'b' 		 => array (), 
+	'blockquote' => array ('cite' => array ()),
+	'code' 		 => array (),
+	'em' 		 => array (), 
+	'i' 		 => array (),
+	'strike' 	 => array (), 
+	'strong' 	 => array (),
+	'ul' 		 => array (),
+	'ol' 		 => array (),
+	'li' 		 => array (),
+);
+
+
+
+////////////////////////////////////////////////////////////////////////////////
 // Path Overrides
 ////////////////////////////////////////////////////////////////////////////////
-// Uncomment the following two lines ONLY IF YOU'RE HAVING PROBLEMS.
+// Uncomment the following two lines ONLY IF YOU'RE HAVING PROBLEMS,
+// like "file not found" or "not readable" errors.
 // These allow you to override Zenphoto's detection of the correct paths
 // on your server, which might work better on some setups.
 ////////////////////////////////////////////////////////////////////////////////

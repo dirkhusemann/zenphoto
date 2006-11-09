@@ -10,7 +10,7 @@ if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
 require_once(dirname(__FILE__) . "/zp-config.php");
 
 // Set the version number.
-$_zp_conf_vars['version'] = '1.0.3 Beta';
+$_zp_conf_vars['version'] = '1.0.3';
 
 if (defined('OFFSET_PATH')) {
   $const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
@@ -283,7 +283,7 @@ function parseThemeDef($file) {
       if (substr(trim($line), 0, 1) != "#") {
         $info = split($line, "::");
         $item = explode("::", $line);
-        $themeinfo[trim($item[0])] = strip_tags(trim($item[1]), zp_conf('allowed_tags'));
+        $themeinfo[trim($item[0])] = kses(trim($item[1]), zp_conf('allowed_tags'));
       }
     }
     return $themeinfo;
@@ -331,13 +331,17 @@ function zp_mail($subject, $message, $headers = '') {
   	}
   
   	if( $headers == '' ) {
-  		$headers = "MIME-Version: 1.0\n" .
-  			"From: " . zp_conf('gallery_title') . "<zenphoto@" . $_SERVER['SERVER_NAME'] . ">\n" . 
-  			"Content-Type: text/plain; charset=charset=us-ascii\n";
+		$headers = "From: " . zp_conf('gallery_title') . "<zenphoto@" . $_SERVER['SERVER_NAME'] . ">";
+	}
+
+	// Convert to UTF-8
+    if (zp_conf('charset') != 'UTF-8') {
+        $subject = utf8::convert($subject, zp_conf('charset'));   
+        $message = utf8::convert($message, zp_conf('charset'));   
   	}
 
   	// Send the mail
-  	mail("Admin <" . zp_conf('admin_email') . ">", $subject, $message, $headers);
+	UTF8::send_mail("Admin <" . zp_conf('admin_email') . ">", $subject, $message, $headers);
   }
 }
 

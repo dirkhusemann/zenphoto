@@ -33,8 +33,8 @@
   <p> </p>
     <div class="image">
 			<div class="imgnav">
-				<?php if (hasPrevImage()) { ?> <a href="<?php echo getPrevImageURL();?>" title="Previous Image">&laquo; prev</a>
-				<?php if (hasNextImage()) echo " | "; } if (hasNextImage()) { ?> <a href="<?php echo getNextImageURL();?>" title="Next Image">next &raquo;</a><?php } ?>
+				<?php if (hasPrevImage()) { ?> <a class="prev" href="<?php echo getPrevImageURL();?>" title="Previous Image">&laquo; prev</a>
+				<?php } if (hasNextImage()) { ?> <a class="next" href="<?php echo getNextImageURL();?>" title="Next Image">next &raquo;</a><?php } ?>
 			</div>
       
       <a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>">

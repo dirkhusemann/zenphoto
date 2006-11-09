@@ -33,7 +33,7 @@ body {
 	border-bottom: 5px solid #E6E6DF;
 	border-left: 1px solid #E6E6DF;
 }
-#credit {
+#credit, #sort {
 	margin: 0 auto;
 	width: 640px;
 	font-size: 85%;
@@ -41,12 +41,12 @@ body {
 	text-align: right;
 	clear: both;
 }
-#credit a {
+#credit a, #sort a {
 	text-decoration: none;
 	color: #96967E;
 	border-bottom: 1px dotted #96967E;
 }
-#credit a:hover {
+#credit a:hover, #sort a:hover {
 	color: #BDBDAE;
 	border-bottom: 1px solid #BDBDAE;
 	text-decoration: none;

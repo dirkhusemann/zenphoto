@@ -6,7 +6,11 @@ BODY { font-family: Arial, Helvetica, sans-serif; font-size: 8pt; text-align: ce
 .image { margin: 0px; padding: 0px; float: left; }
 HR { clear: both; height: 0px; border: 0px; border-top: 1px solid #ccc; margin-top: 0px; padding: 0px; }
 #gallerytitle H2 { font-size: 11pt; }
-.imgnav { margin-bottom: 4px; font-size: 8pt; font-weight: bold; color: #CCC; }
+.imgnav { margin-bottom: 4px; font-size: 15pt; font-weight: normal; color: #CCC; text-align: center;}
+.imgnav a { display: block; height: 1em; width: 46%; padding: 2%; color: #999 !important; background-color: #fbfbfb; }
+.imgnav a.prev { float: left; }
+.imgnav a.next { float: right; }
+.imgnav a:hover, .imagenav a:active { background-color: #eee; color: #F60 !important; text-decoration: none !important; }
 #images { margin: 5px 0px 10px; clear: both; }
 #albums { clear: both; margin: 5px 0px 10px; padding: 0px; }
 .pagenav { margin: 5px 0px 5px; font-size: 8pt; font-weight: bold; color: #CCC; clear: both; }

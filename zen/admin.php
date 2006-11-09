@@ -288,18 +288,18 @@ if (!zp_loggedin()) {
           <input type="hidden" name="album" value="<?= $album->name; ?>" />
         
           <div class="box" style="padding: 15px;">
-            <h2>editing <em><?=$album->getTitle(); ?></em></h2>
+            <h2>editing <em><?php echo $album->getTitle(); ?></em></h2>
             <table>
-              <tr><td align="right" valign="top">Album Title: </td> <td><input type="text" name="albumtitle" value="<?=$album->getTitle(); ?>" /></td></tr>
-              <tr><td align="right" valign="top">Album Description: </td> <td><textarea name="albumdesc" cols="60" rows="6"><?=$album->getDesc(); ?></textarea></td></tr>
+              <tr><td align="right" valign="top">Album Title: </td> <td><input type="text" name="albumtitle" value="<?php echo $album->getTitle(); ?>" /></td></tr>
+              <tr><td align="right" valign="top">Album Description: </td> <td><textarea name="albumdesc" cols="60" rows="6"><?php echo $album->getDesc(); ?></textarea></td></tr>
               <?php /* Removing date entry for now... */ 
-                /* <tr><td align="right" valign="top">Date: </td> <td><input type="text" name="albumdate" value="<?=$album->getDateTime(); ?>" /></td></tr> */ ?>
-              <tr><td align="right" valign="top">Place: </td> <td><input type="text" name="albumplace" value="<?=$album->getPlace(); ?>" /></td></tr>
+                /* <tr><td align="right" valign="top">Date: </td> <td><input type="text" name="albumdate" value="<?php echo $album->getDateTime(); ?>" /></td></tr> */ ?>
+              <tr><td align="right" valign="top">Place: </td> <td><input type="text" name="albumplace" value="<?php echo $album->getPlace(); ?>" /></td></tr>
               <tr><td align="right" valign="top">Thumbnail: </td> 
                 <td>
                   <select id="thumbselect" class="thumbselect" name="thumb" onchange="updateThumbPreview(this)">
-                    <?php foreach ($images as $image) { 
-                        $filename = $image->getFileName();
+                    <?php foreach ($images as $filename) { 
+                        $image = new Image($album, $filename);
                         $selected = ($filename == $album->meta['thumb']); ?>
                         <option class="thumboption" style="background-image: url(<?= $image->getThumb(); ?>); background-repeat: no-repeat;" 
                           value="<?= $filename ?>" <?php if ($selected) echo ' selected="selected"'; ?>><?= $image->meta['title'] ?><?= ($filename != $image->meta['title']) ? " ($filename)" : "" ?></option>
@@ -333,7 +333,8 @@ if (!zp_loggedin()) {
            
             <?php
             $currentimage = 0;
-            foreach ($images as $image) {
+            foreach ($images as $filename) {
+              $image = new Image($album, $filename);
             ?>
             
             <tr id=""<?= ($currentimage % 2 == 0) ?  "class=\"alt\"" : "" ?>>
@@ -396,18 +397,19 @@ if (!zp_loggedin()) {
         ?> 
         <input type="hidden" name="totalalbums" value="<?= sizeof($albums); ?>" /> <?php
         $currentalbum = 0;
-        foreach ($albums as $album) { 
+        foreach ($albums as $folder) { 
+          $album = new Album($gallery, $folder);
       ?>
         <input type="hidden" name="<?= $currentalbum; ?>-folder" value="<?= $album->name; ?>" />
         <table>
-          <tr><td rowspan="4" valign="top"><a href="?page=edit&album=<?= $album->name; ?>" title="Edit this album: <?= $album->name; ?>"><img src="<?= $album->getAlbumThumb(); ?>" /></a></td>
-            <td align="right" valign="top">Album Title: </td> <td><input type="text" name="<?= $currentalbum; ?>-title" value="<?=$album->getTitle(); ?>" /></td></tr>
-          <tr><td align="right" valign="top">Album Description: </td> <td><textarea name="<?= $currentalbum; ?>-desc" cols="60" rows="6"><?=$album->getDesc(); ?></textarea></td></tr>
+          <tr><td rowspan="4" valign="top"><a href="?page=edit&album=<?php echo $album->name; ?>" title="Edit this album: <?php echo $album->name; ?>"><img src="<?php echo $album->getAlbumThumb(); ?>" /></a></td>
+            <td align="right" valign="top">Album Title: </td> <td><input type="text" name="<?php echo $currentalbum; ?>-title" value="<?php echo $album->getTitle(); ?>" /></td></tr>
+          <tr><td align="right" valign="top">Album Description: </td> <td><textarea name="<?php echo $currentalbum; ?>-desc" cols="60" rows="6"><?php echo $album->getDesc(); ?></textarea></td></tr>
           
           <?php /* Removing date entry for now... */ 
-                /* <tr><td align="right" valign="top">Date: </td> <td><input type="text" name="<?= $currentalbum; ?>-date" value="<?=$album->getDateTime(); ?>" /></td></tr> */ ?>
+                /* <tr><td align="right" valign="top">Date: </td> <td><input type="text" name="<?php echo $currentalbum; ?>-date" value="<?php echo $album->getDateTime(); ?>" /></td></tr> */ ?>
           
-          <tr><td align="right" valign="top">Place: </td> <td><input type="text" name="<?= $currentalbum; ?>-place" value="<?=$album->getPlace(); ?>" /></td></tr>
+          <tr><td align="right" valign="top">Place: </td> <td><input type="text" name="<?php echo $currentalbum; ?>-place" value="<?php echo $album->getPlace(); ?>" /></td></tr>
         </table>
         <hr />
         
@@ -452,7 +454,8 @@ if (!zp_loggedin()) {
           <div id="albumList" class="albumList">
             <?php 
             $albums = $gallery->getAlbums();
-            foreach ($albums as $album) { 
+            foreach ($albums as $folder) { 
+              $album = new Album($gallery, $folder);
             ?>
             <div id="id_<?php echo $album->getAlbumID(); ?>">
             <table cellspacing="0" width="100%">
@@ -464,7 +467,7 @@ if (!zp_loggedin()) {
                 </td>
 
                 <td width="20" align="right">
-                  <a class="delete" href="javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=<?= $album->name; ?>');" title="Delete the album <?=$album->name; ?>"><img src="images/delete.gif" style="border: 0px;" alt="x" /></a>
+                  <a class="delete" href="javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=<?php echo $album->name; ?>');" title="Delete the album <?php echo $album->name; ?>"><img src="images/delete.gif" style="border: 0px;" alt="x" /></a>
                 </td>
 
               </tr>
@@ -506,7 +509,8 @@ if (!zp_loggedin()) {
         var albumArray = new Array ( <?php 
           $first = true;
           $albums = $gallery->getAlbums();
-          foreach ($albums as $album) {
+          foreach ($albums as $folder) {
+            $album = new Album($gallery, $folder);
             echo ($first ? "" : ", ") . "'" . addslashes($album->getFolder()) . "'";
             $first = false;
           }
@@ -521,7 +525,7 @@ if (!zp_loggedin()) {
 	  <p><em>Note:</em> When uploading archives, <strong>all</strong> images in the archive are added to the album, regardles of directory structure.</p>
       <p>The maximum size for any one file is <strong><?php echo ini_get('upload_max_filesize'); ?>B</strong>. Don't forget, you can also use <acronym title="File Transfer Protocol">FTP</acronym>!</p>
       
-      <?php if ($error) { ?>
+      <?php if (isset($error) && $error) { ?>
         <div class="errorbox">
           <h2>Something went wrong...</h2>
           <?php echo (empty($errormsg) ? "There was an error submitting the form. Please try again." : $errormsg); ?>
@@ -539,9 +543,10 @@ if (!zp_loggedin()) {
             <option value="" selected="true">a New Album +</option>
           <?php 
             $albums = $gallery->getAlbums(); 
-            foreach ($albums as $album) { 
+            foreach ($albums as $folder) { 
+              $album = new Album($gallery, $folder);
            ?>
-            <option value="<?=$album->getFolder();?>"><?=$album->getTitle();?></option>
+            <option value="<?php echo $album->getFolder();?>"><?php echo $album->getTitle();?></option>
           <?php } ?>
           </select>
           
@@ -596,7 +601,7 @@ if (!zp_loggedin()) {
       
     <?php } else if ($page == "comments") { 
       // Set up some view option variables.
-      if ($_GET['n']) $pagenum = $_GET['n']; else $pagenum = 1;
+      if (isset($_GET['n'])) $pagenum = max(intval($_GET['n']), 1); else $pagenum = 1;
       if (isset($_GET['fulltext'])) $fulltext = true; else $fulltext = false;
       if (isset($_GET['viewall'])) $viewall = true; else $viewall = false;
 
@@ -736,15 +741,15 @@ if (!zp_loggedin()) {
                 
             <? } ?>
           </td>
-          <td<?=$style?>>
+          <td<?php echo $style; ?>>
             <strong><?= $themeinfo['name'] ?></strong><br />
             <?= $themeinfo['author'] ?><br />
             Version <?= $themeinfo['version'] ?>, <?= $themeinfo['date'] ?><br />
             <?= $themeinfo['desc'] ?>
           </td>
-          <td width="100"<?=$style?>>
+          <td width="100"<?php echo $style; ?>>
             <?php if (!($theme == $current_theme)) { ?>
-              <a href="?page=options&action=settheme&theme=<?=$theme?>" title="Set this as your theme">Use this Theme</a>
+              <a href="?page=options&action=settheme&theme=<?php echo $theme; ?>" title="Set this as your theme">Use this Theme</a>
             <?php } else { echo "<strong>Current Theme</strong>"; } ?>
           </td>
         </tr>

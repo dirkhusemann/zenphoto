@@ -15,7 +15,9 @@
  *
  * - cx and cy are measured from the top-left corner of the _scaled_ image.
  * - One of s, h, or w _must_ be specified; the others are optional.
- * - If more than one of s, h, or w are specified, s takes priority, then w.
+ * - If more than one of s, h, or w are specified, s takes priority, then w+h:
+ * - If both w and h are given, the image is resized to shortest side, then
+ *     cropped on the remaining dimension. Image output will always be WxH.
  * - If none of s, h, or w are specified, the original image is returned.
  *******************************************************************************
  */
@@ -23,6 +25,9 @@
 define('OFFSET_PATH', true);
 // i.php - image generation.
 require_once("functions.php");
+
+// Set the memory limit higher just in case.
+ini_set("memory_limit","64M");
 
 // Set the config variables for convenience.
 $thumb_crop = zp_conf('thumb_crop');
@@ -47,13 +52,16 @@ if (!isset($_GET['a']) || !isset($_GET['i'])) {
 // Fix special characters in the album and image names if mod_rewrite is on:
 if (zp_conf('mod_rewrite')) {
   $zppath = substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1);
+  $qspos = strpos($zppath, '?');
+  if ($qspos !== false) $zppath = substr($zppath, 0, $qspos); 
   $zpitems = explode("/", $zppath);
-  $req_album = $zpitems[0];
-  $req_image = $zpitems[count($zpitems)-1];
-  if (!empty($req_album))
-    $_GET['a'] = urldecode($req_album);
-  if (!empty($req_image))
-    $_GET['i'] = urldecode($req_image);
+  if (isset($zpitems[1]) && $zpitems[1] == 'image') {
+    $req_album = $zpitems[0];
+    // This next line assumes the image filename is always last. Take note.
+    $req_image = $zpitems[count($zpitems)-1];
+    if (!empty($req_album)) $_GET['a'] = urldecode($req_album);
+    if (!empty($req_image)) $_GET['i'] = urldecode($req_image);
+  }
 }
 
 
@@ -66,7 +74,7 @@ if ((isset($_GET['s']) && $_GET['s'] < MAX_SIZE)
   || (isset($_GET['h']) && $_GET['h'] < MAX_SIZE)) {
 
   // Set default variable values.
-  $size = $width = $height = $crop = $cw = $ch = $cx = $cy = false;
+  $thumb = $size = $width = $height = $crop = $cw = $ch = $cx = $cy = false;
   
   // If s=thumb, Set up for the default thumbnail settings.
   $size = $_GET['s'];
@@ -143,6 +151,20 @@ if (!file_exists($newfile)) {
     if (!empty($size)) {
       $dim = $size;
       $width = $height = false;
+    } else if (!empty($width) && !empty($height)) {
+      $ratio_in = $h / $w;
+      $ratio_out = $height / $width;
+      $crop = true;
+      if ($ratio_in > $ratio_out) {
+        $thumb = true;
+        $dim = $width;
+        $ch = $height;
+      } else {
+        $dim = $height;
+        $cw = $width;
+        $height = true;
+      }
+      
     } else if (!empty($width)) {
       $dim = $width;
       $size = $height = false;
@@ -159,8 +181,7 @@ if (!file_exists($newfile)) {
     $wprop = round(($w / $h) * $dim);
     
 		if ($thumb) {
-      // Thumbs always use the shortest side to catch the whole image.
-      // $dim should always be $size here.
+      // Use the shortest side.
 			if ($h > $w) {
 				$neww = $dim;
 				$newh = $hprop;
@@ -169,13 +190,12 @@ if (!file_exists($newfile)) {
 				$newh = $dim;
 			}
     } else {
-      if (($size && $image_use_longest_side && $h > $w)
-        || $height) {
+      if (($size && $image_use_longest_side && $h > $w) || $height) {
         $newh = $dim;
         $neww = $wprop;
       } else {
+        $newh = $hprop;
   			$neww = $dim;
-  			$newh = $hprop;
       }
       
       // If the requested image is the same size or smaller than the original, redirect to it.
@@ -214,7 +234,6 @@ if (!file_exists($newfile)) {
 }
 
 // ... and redirect the browser to it.
-
 $encpath = explode("/", $newfilename);
 for($i=0; $i<count($encpath); $i++) {
   $encpath[$i] = rawurlencode($encpath[$i]);
