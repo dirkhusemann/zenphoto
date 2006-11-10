@@ -579,13 +579,13 @@ class Album {
 	
 	function getNextAlbum() {
     if ($this->index == null)
-      $this->index = @array_search($this, $this->gallery->getAlbums(0));
+      $this->index = @array_search($this->name, $this->gallery->getAlbums(0));
 		return $this->gallery->getAlbum($this->index+1);
 	}
 	
 	function getPrevAlbum() {
     if ($this->index == null)
-      $this->index = @array_search($this, $this->gallery->getAlbums(0));
+      $this->index = @array_search($this->name, $this->gallery->getAlbums(0));
 		return $this->gallery->getAlbum($this->index-1);
 	}
   
