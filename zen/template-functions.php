@@ -245,7 +245,7 @@ function getGalleryTitle() {
   return zp_conf('gallery_title');
 }
 function printGalleryTitle() { 
-	echo htmlspecialchars(getGalleryTitle()); 
+  echo htmlspecialchars(getGalleryTitle()); 
 }
 
 function getMainSiteName() { 
@@ -424,10 +424,10 @@ function getAlbumTitle() {
 function printAlbumTitle($editable=false) { 
   global $_zp_current_album;
   if ($editable && zp_loggedin()) {
-		echo "<div id=\"albumTitleEditable\" style=\"display: inline;\">" . htmlspecialchars(getAlbumTitle()) . "</div>\n";
+    echo "<div id=\"albumTitleEditable\" style=\"display: inline;\">" . htmlspecialchars(getAlbumTitle()) . "</div>\n";
     echo "<script type=\"text/javascript\">initEditableTitle('albumTitleEditable');</script>";
   } else {
-    echo htmlspecialchars(getAlbumTitle());	
+    echo htmlspecialchars(getAlbumTitle());  
   }
 }
 
@@ -549,7 +549,7 @@ function getAlbumThumb() {
 }
 
 function printAlbumThumbImage($alt, $class=NULL, $id=NULL) { 
-	echo "<img src=\"" . htmlspecialchars(getAlbumThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
+  echo "<img src=\"" . htmlspecialchars(getAlbumThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     (($class) ? " class=\"$class\"" : "") . 
     (($id) ? " id=\"$id\"" : "") . " />";
 }
@@ -606,10 +606,10 @@ function getImageTitle() {
 function printImageTitle($editable=false) { 
   global $_zp_current_image;
   if ($editable && zp_loggedin()) {
-		echo "<div id=\"imageTitleEditable\" style=\"display: inline;\">" . htmlspecialchars(getImageTitle()) . "</div>\n";
+    echo "<div id=\"imageTitleEditable\" style=\"display: inline;\">" . htmlspecialchars(getImageTitle()) . "</div>\n";
     echo "<script type=\"text/javascript\">initEditableTitle('imageTitleEditable');</script>";
   } else {
-    echo htmlspecialchars(getImageTitle());	
+    echo htmlspecialchars(getImageTitle());  
   }
 }
 
@@ -864,7 +864,7 @@ function isLandscape() {
 
 
 function printDefaultSizedImage($alt, $class=NULL, $id=NULL) { 
-	echo "<img src=\"" . htmlspecialchars(getDefaultSizedImage()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
+  echo "<img src=\"" . htmlspecialchars(getDefaultSizedImage()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     " width=\"" . getDefaultWidth() . "\" height=\"" . getDefaultHeight() . "\"" .
     (($class) ? " class=\"$class\"" : "") . 
     (($id) ? " id=\"$id\"" : "") . " />";

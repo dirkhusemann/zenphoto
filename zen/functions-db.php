@@ -72,6 +72,23 @@ function strip($string) {
 }
 
 
+/**
+ * Constructs a where clause ("WHERE uniqueid1='uniquevalue1' AND uniqueid2='uniquevalue2' ...")
+ * from an array (map) of variables and their values which identifies a unique record
+ * in the database table.
+ */
+function getWhereClause($unique_set) {
+  $i = 0;
+  $where = " WHERE";
+  foreach($unique_set as $var => $value) {
+    if ($i > 0) $where .= " AND";
+    $where .= " `$var` = '$value'";
+    $i++;
+  }
+  return $where;
+}
+
+
 
 
 ?>
