@@ -1,2 +1,24 @@
-- Commit changes
+Zenphoto 1.1.0 TODO
+
+- Settable default values for newly instantiated PO's (esp. Title of images and albums)
 - Merge with non sub-albums if we need to release quick.
+- Merge subalbums to trunk! All the functionality is the same with current themes...
+- Sub-albums: in order...
+  1. Theme functions: make it work within a theme first.
+  2. Admin functionality: allow full editing/sorting/renaming of sub-albums and their images.
+- Admin Date interface; allow date entry for photos/albums
+  - Get default date from EXIF data
+- Photo rotation
+- EXIF data in admin by default, and available within themes. Cache it in the DB? Yes!
+- Compile a list of 'reported' bugs from the forums and try to fix them.
+- Better comment control. 
+  1. Ability to close comments by post or album.
+  2. Simple spam filtering, allow blacklisted words, etc. Moderation queue!
+- RSS Feeds (talk to people who have this done)
+- Test in Safari/Mac
+- Image hit counting?
+- Improve the install script (create .htaccess, folders if needed, etc.)
+- Internationalization!!! Provide translation ability for themes and admin 
+  - Use GNU Gettext
+  - See http://codex.wordpress.org/Translating_WordPress, http://www.gnu.org/software/gettext/gettext.html
+  - PHP implementation? See how wordpress does it.
