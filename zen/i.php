@@ -117,8 +117,7 @@ if ((isset($_GET['s']) && $_GET['s'] < MAX_SIZE)
     
 } else {
   // No image parameters specified; return the original image.
-  header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH 
-    . "/albums/" . pathurlencode($album) . "/" . rawurlencode($image));
+  header("Location: " . FULLWEBPATH . "/albums/" . pathurlencode($album) . "/" . rawurlencode($image));
   return;
 }
 
@@ -200,8 +199,7 @@ if (!file_exists($newfile)) {
       
       // If the requested image is the same size or smaller than the original, redirect to it.
       if (!$upscale && $newh >= $h && $neww >= $w && !$crop) {
-        header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH
-          . "/albums/" . pathurlencode($album) . "/" . rawurlencode($image));
+        header("Location: " . FULLWEBPATH . "/albums/" . pathurlencode($album) . "/" . rawurlencode($image));
         return;
       }
     }
@@ -234,6 +232,6 @@ if (!file_exists($newfile)) {
 }
 
 // ... and redirect the browser to it.
-header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/cache" . pathurlencode($newfilename));
+header("Location: " . FULLWEBPATH . "/cache" . pathurlencode($newfilename));
 exit();
 ?>

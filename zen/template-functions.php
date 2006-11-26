@@ -94,7 +94,7 @@ if (isset($_GET['album'])) {
             $stored = array("","","",false);
           }
           $g_album = urlencode($g_album); $g_image = urlencode($g_image);
-          header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/" . 
+          header("Location: " . FULLWEBPATH . "/" . 
             (zp_conf('mod_rewrite') ? "$g_album/$g_image" : "index.php?album=$g_album&image=$g_image"));
           exit;
         } else {
@@ -159,7 +159,7 @@ if (zp_loggedin()) {
     global $_zp_current_image, $_zp_current_album;
     if (in_context(ZP_IMAGE)) {
       $_zp_current_image->setTitle($newtitle);
-      $_zp_current_album->save();
+      $_zp_current_image->save();
       return $newtitle;
     } else if (in_context(ZP_ALBUM)) {
       $_zp_current_album->setTitle($newtitle);
@@ -179,7 +179,7 @@ if (zp_loggedin()) {
       return $newdesc;
     } else if (in_context(ZP_ALBUM)) {
       $_zp_current_album->setDesc($newdesc);
-      $_zp_current_image->save();
+      $_zp_current_album->save();
       return $newdesc;
     } else {
       return false;

@@ -320,7 +320,7 @@ function zp_mail($subject, $message, $headers = '') {
   	  foreach($badStrings as $v2) {
   	    if (strpos($v, $v2) !== false) {
   	      header("HTTP/1.0 403 Forbidden");
-  	      die("Screw you spammer!");
+  	      die("Forbidden");
   	      exit;
   	    }
   	  }
@@ -330,7 +330,7 @@ function zp_mail($subject, $message, $headers = '') {
   	  foreach($badStrings as $v2){
   	    if (strpos($v, $v2) !== false){
   	      header("HTTP/1.0 403 Forbidden");
-  	      die("Screw you spammer!");
+  	      die("Forbidden");
   	      exit;
   	    }
   	  }
