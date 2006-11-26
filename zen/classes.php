@@ -46,13 +46,10 @@ class PersistentObject {
   
   /**
    * Set a variable in this object. Does not persist to the database until 
-   * save() is called.
+   * save() is called. So, IMPORTANT: Call save() after set() to persist.
    */
   function set($var, $value) {
     $this->updates[$var] = $value;
-    // TEMPORARY
-    // TODO: Remove this and use saves after several set()s
-    $this->save();
   }
   
   /**
@@ -147,12 +144,13 @@ class PersistentObject {
 class Image extends PersistentObject {
 
   var $filename;  // true filename of the image.
-  var $exists = true;    // Does the image exist?
+  var $exists = true; // Does the image exist?
   var $webpath;   // The full URL path to the original image.
   var $localpath; // The full SERVER path to the original image.
   var $name;      // $filename with the extension stripped off.
   var $album;     // An album object for the album containing this image.
   var $comments;  // Image comment array.
+  var $commentcount; // The number of comments on this image.
   var $index;     // The index of the current image in the album array.
   var $sortorder; // The position that this image should be shown in the album
 
@@ -203,14 +201,14 @@ class Image extends PersistentObject {
     $this->updateDimensions();
     return $this->get('height');
   }
+    
+  // Album (Object) and Album Name
+  function getAlbum() {  return $this->album; }
+  function getAlbumName() { return $this->album->name; }
 
   // Title
   function getTitle() { return $this->get('title'); }
   function setTitle($title) { $this->set('title', $title); }
-  
-  // Album (Object) and Album Name
-  function getAlbum() {  return $this->album; }
-  function getAlbumName() { return $this->album->name; }
 
   // Description
   function getDesc() { return $this->get('desc'); }
@@ -221,7 +219,7 @@ class Image extends PersistentObject {
   function setSortOrder($sortorder) { $this->set('sortorder', $sortorder); }
 
   // Show this image?
-  function getShow() { return $this->meta['show']; }
+  function getShow() { return $this->get('show'); }
   function setShow($show) { $this->set('show', $show ? 1 : 0); }
 
   
@@ -234,14 +232,8 @@ class Image extends PersistentObject {
   
   
   // Are comments allowed?
-  function getCommentsAllowed() { return $this->meta['commentson']; }
-  function setCommentsAllowed($commentson) {
-    if ($commentson) $commentson = 1;
-    else             $commentson = 0;
-    $this->meta['commentson'] = $commentson;
-    query("UPDATE ".prefix("images")." SET `commentson`='" . $commentson .
-          "' WHERE `id`=".$this->id);
-  }
+  function getCommentsAllowed() { return $this->get('commentson'); }
+  function setCommentsAllowed($commentson) { $this->set('commentson', $commentson ? 1 : 0); }
 
 
   function getComments() {
@@ -303,15 +295,15 @@ class Image extends PersistentObject {
   }
 
   function getCommentCount() { 
-    if (!isset($this->meta['commentcount'])) {
+    if (is_null($this->commentcount)) {
       if ($this->comments == null) {
         $count = query_single_row("SELECT COUNT(*) FROM " . prefix("comments") . " WHERE imageid = " . $this->id);
-        $this->meta['commentcount'] = array_shift($count);
+        $this->commentcount = array_shift($count);
       } else {
-        $this->meta['commentcount'] = count($this->comments);
+        $this->commentcount = count($this->comments);
       }
     }
-    return $this->meta['commentcount'];
+    return $this->commentcount;
   }
 
   // Returns a path to the original image in the original folder.
@@ -463,7 +455,7 @@ class Album extends PersistentObject {
   
   // Place
   function getPlace() { return $this->get('place'); }
-  function setPlace($place) { $this->set('title', $place); }
+  function setPlace($place) { $this->set('place', $place); }
   
   // Sort type
   function getSortType() { return $this->get('sort_type'); }
@@ -618,13 +610,7 @@ class Album extends PersistentObject {
     $image = $this->getAlbumThumbImage();
     return $image->getThumb();
   }
-  
-  
-  function setAlbumThumb($filename) {
-    $this->set('thumb', $filename);
-    query("UPDATE ".prefix("albums")." SET `thumb`='" . mysql_escape_string($filename) .
-      "' WHERE `id`=".$this->id);
-  }
+  function setAlbumThumb($filename) { $this->set('thumb', $filename); }
   
   function getNextAlbum() {
     if ($this->index == null)

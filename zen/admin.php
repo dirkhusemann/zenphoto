@@ -30,6 +30,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         $album->setPlace(strip($_POST['albumplace']));
         $album->setAlbumThumb(strip($_POST['thumb']));
         $album->setSortType(strip($_POST['sortby']));
+        $album->save();
         
         for ($i = 0; $i < $_POST['totalimages']; $i++) {
           $filename = strip($_POST["$i-filename"]);
@@ -38,7 +39,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           $image = new Image($album, $filename);
           if ($image->exists) {
             $image->setTitle(strip($_POST["$i-title"]));
-            $image->setDesc(strip($_POST["$i-desc"]));          
+            $image->setDesc(strip($_POST["$i-desc"]));    
+            $image->save();
           }
           // TODO: delete it from the db? This should happen somewhere..
           // (Probably in the Image object upon attempted instantiation of a non-existent image)
@@ -55,6 +57,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           // FIXME: Date entry isn't ready yet...
           // $album->setDate(strip($_POST["$i-date"]));
           $album->setPlace(strip($_POST["$i-place"]));
+          $album->save();
         }
       }
       header("Location: " . FULLWEBPATH . "/zen/admin.php?page=edit");
@@ -123,6 +126,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         $title = strip($_POST['albumtitle']);
         if (!empty($title)) {
           $album->setTitle($title);
+          $album->save();
         }
         
         header("Location: " . FULLWEBPATH . "/zen/admin.php?page=edit&album=$folder");
@@ -298,12 +302,11 @@ if (!zp_loggedin()) {
               <tr><td align="right" valign="top">Thumbnail: </td> 
                 <td>
                   <select id="thumbselect" class="thumbselect" name="thumb" onchange="updateThumbPreview(this)">
-                    <?php foreach ($images as $filename) { 
-                        $image = new Image($album, $filename);
-                        $selected = ($filename == $album->meta['thumb']); ?>
-                        <option class="thumboption" style="background-image: url(<?= $image->getThumb(); ?>); background-repeat: no-repeat;" 
-                          value="<?= $filename ?>" <?php if ($selected) echo ' selected="selected"'; ?>><?= $image->meta['title'] ?><?= ($filename != $image->meta['title']) ? " ($filename)" : "" ?></option>
-                    <?php } ?>
+<?php foreach ($images as $filename) { 
+  $image = new Image($album, $filename);
+  $selected = ($filename == $album->get('thumb')); ?>
+                    <option class="thumboption" style="background-image: url(<?= $image->getThumb(); ?>); background-repeat: no-repeat;" value="<?= $filename ?>"<?php if ($selected) echo ' selected="selected"'; ?>><?= $image->get('title') ?><?= ($filename != $image->get('title')) ? " ($filename)" : "" ?></option>
+<?php } ?>
                   </select>
                   <script type="text/javascript">updateThumbPreview(document.getElementById('thumbselect'));</script>
                 </td>

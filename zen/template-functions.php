@@ -159,9 +159,11 @@ if (zp_loggedin()) {
     global $_zp_current_image, $_zp_current_album;
     if (in_context(ZP_IMAGE)) {
       $_zp_current_image->setTitle($newtitle);
+      $_zp_current_album->save();
       return $newtitle;
     } else if (in_context(ZP_ALBUM)) {
       $_zp_current_album->setTitle($newtitle);
+      $_zp_current_album->save();
       return $newtitle;
     } else {
       return false;
@@ -173,9 +175,11 @@ if (zp_loggedin()) {
     global $_zp_current_image, $_zp_current_album;
     if (in_context(ZP_IMAGE)) {
       $_zp_current_image->setDesc($newdesc);
+      $_zp_current_image->save();
       return $newdesc;
     } else if (in_context(ZP_ALBUM)) {
       $_zp_current_album->setDesc($newdesc);
+      $_zp_current_image->save();
       return $newdesc;
     } else {
       return false;
