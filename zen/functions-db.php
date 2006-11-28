@@ -57,7 +57,7 @@ function prefix($tablename) {
 
 // For things that *are* going into the database, but not from G/P/C.
 function escape($string) {
-  if (get_magic_quotes_gpc()) 
+  if (get_magic_quotes_gpc()) {
     return $string;
   else 
     return mysql_real_escape_string($string);
@@ -82,7 +82,7 @@ function getWhereClause($unique_set) {
   $where = " WHERE";
   foreach($unique_set as $var => $value) {
     if ($i > 0) $where .= " AND";
-    $where .= " `$var` = '$value'";
+    $where .= " `$var` = '" . mysql_escape_string($value) . "'";
     $i++;
   }
   return $where;
