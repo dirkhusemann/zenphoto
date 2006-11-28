@@ -143,16 +143,16 @@ class PersistentObject {
 
 class Image extends PersistentObject {
 
-  var $filename;  // true filename of the image.
+  var $filename;      // true filename of the image.
   var $exists = true; // Does the image exist?
-  var $webpath;   // The full URL path to the original image.
-  var $localpath; // The full SERVER path to the original image.
-  var $name;      // $filename with the extension stripped off.
-  var $album;     // An album object for the album containing this image.
-  var $comments;  // Image comment array.
-  var $commentcount; // The number of comments on this image.
-  var $index;     // The index of the current image in the album array.
-  var $sortorder; // The position that this image should be shown in the album
+  var $webpath;       // The full URL path to the original image.
+  var $localpath;     // The full SERVER path to the original image.
+  var $name;          // $filename with the extension stripped off.
+  var $album;         // An album object for the album containing this image.
+  var $comments;      // Image comment array.
+  var $commentcount;  // The number of comments on this image.
+  var $index;         // The index of the current image in the album array.
+  var $sortorder;     // The position that this image should be shown in the album
 
   // Constructor
   function Image($album, $filename) {
@@ -627,7 +627,7 @@ class Album extends PersistentObject {
   function getGalleryPage() {
     $albums_per_page = zp_conf('albums_per_page');
     if ($this->index == null)
-      $this->index = @array_search($this->name, $this->gallery->getAlbums(0));
+      $this->index = array_search($this->name, $this->gallery->getAlbums(0));
     return floor(($this->index / $albums_per_page)+1);
   }
   

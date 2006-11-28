@@ -27,6 +27,7 @@ function db_connect() {
   return true;
 }
 
+// Connect to the database immediately.
 db_connect();
 
 function query($sql) {
@@ -59,16 +60,18 @@ function prefix($tablename) {
 function escape($string) {
   if (get_magic_quotes_gpc()) {
     return $string;
-  else 
+  } else {
     return mysql_real_escape_string($string);
+  }
 }
 
 // For things that *aren't* going into the database, from G/P/C.
 function strip($string) {
-  if (get_magic_quotes_gpc()) 
+  if (get_magic_quotes_gpc()) {
     return stripslashes($string);
-  else 
+  } else {
     return $string;
+  }
 }
 
 

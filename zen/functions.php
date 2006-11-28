@@ -10,7 +10,7 @@ if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
 require_once(dirname(__FILE__) . "/zp-config.php");
 
 // Set the version number.
-$_zp_conf_vars['version'] = '1.0.3';
+$_zp_conf_vars['version'] = '1.0.4';
 
 if (defined('OFFSET_PATH')) {
   $const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
@@ -64,6 +64,7 @@ function get_image($imgfile) {
 		return false;
 	}
 }
+
 
 function truncate_string($string, $length) {
   if (strlen($string) > $length) {

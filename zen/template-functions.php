@@ -55,7 +55,7 @@ if (zp_conf('mod_rewrite')) {
 }
 
 
-// Parse the GET request to see what exactly is requested...
+// Parse the GET request to see what's requested
 if (isset($_GET['album'])) {
   $g_album = sanitize($_GET['album']);
 
@@ -225,18 +225,40 @@ function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
   $text . "</a>";
 }
 
-
 function printVersion() {
   echo zp_conf('version');
 }
 
-// Prints a link to administration if the current user is logged-in
+/** 
+ * Prints a link to administration if the current user is logged-in 
+ */
 function printAdminLink($text, $before='', $after='', $title=NULL, $class=NULL, $id=NULL) {
   if (zp_loggedin()) {
     echo $before;
     printLink(WEBPATH.'/zen/admin.php', $text, $title, $class, $id);
     echo $after;
   }
+}
+
+/**
+ * Returns either the rewrite path or the plain, non-mod_rewrite path
+ * based on the mod_rewrite option in zp-config.php.
+ * @param $rewrite is the path to return if rewrite is enabled. (eg: "/myalbum")
+ * @param $plain is the path if rewrite is disabled (eg: "/?album=myalbum")
+ * The given paths can start /with or without a slash, it will decide automatically.
+ *
+ * For future reference, this function can be used to specially escape items in
+ * the rewrite chain, like the # character.
+ */
+function rewrite_path($rewrite, $plain) {
+  $path = null;
+  if (zp_conf('mod_rewrite')) {
+    $path = $rewrite;
+  } else {
+    $path = $plain;
+  }
+  if (substr($path, 0, 1) == "/") $path = substr($path, 1);
+  return WEBPATH . "/" . $path;
 }
 
 
@@ -266,12 +288,7 @@ function getGalleryIndexURL() {
   global $_zp_current_album;
   if (in_context(ZP_ALBUM) && $_zp_current_album->getGalleryPage() > 1) {
     $page = $_zp_current_album->getGalleryPage();
-    // Link to the page the current album belongs to.
-    if (zp_conf('mod_rewrite')) {
-      return WEBPATH . "/page/" . $page;
-    } else {
-      return WEBPATH . "/index.php?page=" . $page;
-    }
+    return rewrite_path("/page/" . $page, "/index.php?page=" . $page);
   } else {
     return WEBPATH . "/";
   }
@@ -330,17 +347,10 @@ function getPageURL($page) {
   $total = getTotalPages();
   if ($page <= $total && $page > 0) {
     if (in_context(ZP_ALBUM)) {
-      if (zp_conf('mod_rewrite')) {
-        return WEBPATH . "/" . urlencode($_zp_current_album->name) . (($page > 1) ? "/page/" . $page . "/" : "");
-      } else {
-        return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . (($page > 1) ? "&page=" . $page : "");
-      }
+      return rewrite_path( urlencode($_zp_current_album->name) . (($page > 1) ? "/page/" . $page . "/" : ""), 
+        "/index.php?album=" . urlencode($_zp_current_album->name) . (($page > 1) ? "&page=" . $page : "") );
     } else if (in_context(ZP_INDEX)) {
-      if (zp_conf('mod_rewrite')) {
-        return WEBPATH . (($page > 1) ? "/page/" . $page . "/" : "/");
-      } else {
-        return WEBPATH . "/index.php" . (($page > 1) ? "?page=" . $page : "");
-      }
+      return rewrite_path((($page > 1) ? "/page/" . $page . "/" : "/"), "/index.php" . (($page > 1) ? "?page=" . $page : ""));
     }
   }
   return null;
@@ -478,19 +488,11 @@ function getAlbumLinkURL() {
   global $_zp_current_album, $_zp_current_image;
   if (in_context(ZP_IMAGE) && $_zp_current_image->getAlbumPage() > 1) {
     // Link to the page the current image belongs to.
-    if (zp_conf('mod_rewrite')) {
-      return WEBPATH . "/" . urlencode($_zp_current_album->name) . 
-        "/page/" . $_zp_current_image->getAlbumPage();
-    } else {
-      return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . 
-        "&page=" . $_zp_current_image->getAlbumPage();
-    }
+    return rewrite_path("/" . urlencode($_zp_current_album->name) . "/page/" . $_zp_current_image->getAlbumPage(),
+      "/index.php?album=" . urlencode($_zp_current_album->name) . "&page=" . $_zp_current_image->getAlbumPage());
   } else {
-    if (zp_conf('mod_rewrite')) {
-      return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/";
-    } else {
-      return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name);
-    }
+    return rewrite_path("/" . urlencode($_zp_current_album->name) . "/",
+      "/index.php?album=" . urlencode($_zp_current_album->name));
   }
 }
 
@@ -691,11 +693,8 @@ function getNextImageURL() {
   
   $nextimg = $_zp_current_image->getNextImage();
   
-  if (zp_conf('mod_rewrite')) {
-    return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/" . urlencode($nextimg->getFileName());
-  } else {
-    return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($nextimg->getFileName());
-  }
+  return rewrite_path("/" . urlencode($_zp_current_album->name) . "/" . urlencode($nextimg->getFileName()),
+    "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($nextimg->getFileName()));
 }
 
 function getPrevImageURL() {
@@ -704,11 +703,8 @@ function getPrevImageURL() {
   
   $previmg = $_zp_current_image->getPrevImage();
   
-  if (zp_conf('mod_rewrite')) {
-    return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/" . urlencode($previmg->getFileName());
-  } else {
-    return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($previmg->getFileName());
-  }
+  return rewrite_path("/" . urlencode($_zp_current_album->name) . "/" . urlencode($previmg->getFileName()),
+    "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($previmg->getFileName()));
 }
 
 
@@ -749,11 +745,8 @@ function getNextImageThumb() {
 function getImageLinkURL() { 
   if(!in_context(ZP_IMAGE)) return false;
   global $_zp_current_album, $_zp_current_image;
-  if (zp_conf('mod_rewrite')) {
-    return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/" . urlencode($_zp_current_image->name);
-  } else {
-    return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($_zp_current_image->name);
-  }
+  return rewrite_path("/" . urlencode($_zp_current_album->name) . "/" . urlencode($_zp_current_image->name),
+    "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($_zp_current_image->name));
 }
 
 function printImageLink($text, $title, $class=NULL, $id=NULL) {
