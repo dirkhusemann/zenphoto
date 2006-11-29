@@ -4,7 +4,6 @@ Zenphoto 1.1.0 TODO
 - Merge with non sub-albums if we need to release quick.
 - Merge subalbums to trunk! All the functionality is the same with current themes...
 - Sub-albums: in order...
-  1. Theme functions: make it work within a theme first.
   2. Admin functionality: allow full editing/sorting/renaming of sub-albums and their images.
 - Admin Date interface; allow date entry for photos/albums
   - Get default date from EXIF data
