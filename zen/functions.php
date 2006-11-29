@@ -87,7 +87,7 @@ function truncate_string($string, $length) {
 function getAlbumArray($albumstring, $includepaths=false) {
   if ($includepaths) {
     $array = array($albumstring);
-    while($slashpos = strrchr($albumstring, '/')) {
+    while($slashpos = strrpos($albumstring, '/')) {
       $albumstring = substr($albumstring, 0, $slashpos);
       array_unshift($array, $albumstring);
     }

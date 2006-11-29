@@ -57,13 +57,12 @@ if (zp_conf('mod_rewrite')) {
   $zpitems = explode("/", $zppath);
   if (isset($zpitems[1]) && $zpitems[1] == 'image') {
     $req_album = $zpitems[0];
-    // This next line assumes the image filename is always last. Take note.
+    // This next line assumes the image filename is always last. Take note of this for writing rewrite rules.
     $req_image = $zpitems[count($zpitems)-1];
     if (!empty($req_album)) $_GET['a'] = urldecode($req_album);
     if (!empty($req_image)) $_GET['i'] = urldecode($req_image);
   }
 }
-
 
 $album = sanitize($_GET['a']);
 $image = sanitize($_GET['i']);
@@ -123,10 +122,13 @@ if ((isset($_GET['s']) && $_GET['s'] < MAX_SIZE)
 
 // Make the directories for the albums in the cache, recursively.
 $albumdirs = getAlbumArray($album, true);
-for($i=0; $i<count($albumdirs); $i++) {
-  $dir = SERVERCACHE . '/' . $albumdirs[$i];
-  if(!is_dir($dir)) {
+foreach($albumdirs as $dir) {
+  //$dir = array_shift($albumdirs)
+  $dir = SERVERCACHE . '/' . $dir;
+  if (!is_dir($dir)) {
     mkdir($dir, 0777);
+  } else if (!is_writable($dir)) {
+    chmod($dir, 0777);
   }
 }
 
@@ -225,7 +227,7 @@ if (!file_exists($newfile)) {
 		touch($newfile);
 
 		imagejpeg($newim, $newfile, $quality);
-    chmod($newfile,0644);
+    chmod($newfile, 0644);
 		imagedestroy($newim);
 		imagedestroy($im);
 	}

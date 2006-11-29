@@ -36,6 +36,9 @@
   <?php endwhile; ?>
   </div>
   
+  
+  <?php if (getNumImages() > 0): /* Only print if we have images. */ ?>
+  
   <?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
 
   <!-- Images -->
@@ -52,8 +55,9 @@
   <br style="clear: both;" />
   
   <?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
-  
   <hr class="space" />
+  
+  <?php endif; ?>
   
   <p style="text-align: right;"><?php printAdminLink("Admin"); ?></p>
 

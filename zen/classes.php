@@ -176,7 +176,9 @@ class Image extends PersistentObject {
 
     $new = parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id));
     if ($new) {
-      $this->set('title', $this->name);
+      $title = substr($this->name, 0, strrpos($this->name, '.'));
+      if (empty($title)) $title = $this->name;
+      $this->set('title', $title);
       $this->save();
     }
   }
@@ -432,8 +434,12 @@ class Album extends PersistentObject {
     if ($new) {
       // Set default data for a new Album
       $parentalbum = $this->getParent();
-      if (!is_null($parentalbum)) { $this->set('parentid', $parentalbum->getAlbumId()); }
-      $this->set('title', $this->name);
+      $title = $this->name;
+      if (!is_null($parentalbum)) { 
+        $this->set('parentid', $parentalbum->getAlbumId());
+        $title = substr($this->name, strrpos($this->name, '/')+1);
+      }
+      $this->set('title', $title);
       $this->save();
     }
     $this->sort_key = ($this->data['sort_type'] == "Title") ? 'title' : ($this->data['sort_type'] == "Manual") ? 'sort_order' : 'filename';
@@ -608,14 +614,18 @@ class Album extends PersistentObject {
     } else {
       $dp = opendir($albumdir);
       while ($thumb = readdir($dp)) {
-        if (is_file($albumdir.$thumb) && is_valid_image($thumb)) 
+        if (is_file($albumdir.$thumb) && is_valid_image($thumb)) {
           return new Image($this, $thumb);
+        }
       }
+      // Otherwise, look in sub-albums.
       $subalbums = $this->getSubAlbums();
-      foreach ($subalbums as $subalbum) {
+      foreach ($subalbums as $subdir) {
+        $subalbum = new Album($this->gallery, $subdir);
         $thumb = $subalbum->getAlbumThumbImage();
-        if ($thumb != NULL && $thumb->exists)
+        if ($thumb != NULL && $thumb->exists) {
           return $thumb;
+        }
       }
     }
     return NULL;

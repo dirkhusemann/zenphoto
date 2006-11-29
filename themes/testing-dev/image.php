@@ -31,16 +31,22 @@
   </div>
   
   <hr />
+  
   <p> </p>
-    <div class="image">
-			<div class="imgnav">
-				<?php if (hasPrevImage()) { ?> <a href="<?=getPrevImageURL();?>" title="Previous Image">&laquo; prev</a>
-				<?php if (hasNextImage()) echo " | "; } if (hasNextImage()) { ?> <a href="<?=getNextImageURL();?>" title="Next Image">next &raquo;</a><?php } ?>
-			</div>
+  
+  <div class="imgnav">
+    <?php if (hasPrevImage()) { ?> <a class="prev" href="<?=getPrevImageURL();?>" title="Previous Image"><span>&laquo;</span> prev</a> <?php } ?>
+    <?php if (hasNextImage()) { ?> <a class="next" href="<?=getNextImageURL();?>" title="Next Image">next <span>&raquo;</span></a><?php } ?>
+    <br style="clear: both;" />
+  </div>
       
-      <a href="<?=getFullImageURL();?>" title="<?=getImageTitle();?>">
-      <?php printDefaultSizedImage(getImageTitle()); ?></a>
-      <span class="desc"><?php printImageDesc(true); ?></span>
+    <div class="image">
+
+      <div class="imagedisplay">
+        <a href="<?=getFullImageURL();?>" title="<?=getImageTitle();?>">
+        <?php printDefaultSizedImage(getImageTitle()); ?></a>
+        <span class="desc"><?php printImageDesc(true); ?></span>
+      </div>
       
       <div id="comments" style="clear: both; padding-top: 10px;">
           <div class="commentcount"><?php $num = getCommentCount(); echo ($num == 0) ? "No comments" : (($num == 1) ? "<strong>One</strong> comment" : "<strong>$num</strong> comments"); ?> on this image:</div>

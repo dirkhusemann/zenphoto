@@ -7,7 +7,32 @@ BODY { font-family: Arial, Helvetica, sans-serif; font-size: 8pt; text-align: ce
 HR { clear: both; height: 0px; border: 0px; border-top: 1px solid #ccc; margin-top: 0px; padding: 0px; }
 HR.space { margin: 12px 0px; }
 #gallerytitle H2 { font-size: 11pt; }
-.imgnav { margin-bottom: 4px; font-size: 8pt; font-weight: bold; color: #CCC; }
+
+.imgnav { 
+  margin-bottom: 8px;
+  font-size: 17pt; 
+  font-weight: normal; 
+  color: #CCC; 
+  border: 1px solid #ddd;
+}
+.imgnav A {
+  display: block;
+  font-style: italic;
+  padding: 1%;
+  background-color: #f4f4f4;
+  text-decoration: none;
+  color: #ccc !important;
+  width: 48%;
+}
+.imgnav A span {
+  font-style: normal;
+  color: #6699CC;
+}
+.imgnav A.next { float: right; text-align: left; }
+.imgnav A.prev { float: left; text-align: right; }
+.imgnav A:hover, .imgnav A:active { background-color: #def; color: #999 !important; text-decoration: none; }
+
+.imagedisplay { clear: both; }
 #images { margin: 5px 0px 10px; clear: both; }
 #albums { clear: both; margin: 5px 0px 10px; padding; 0px; }
 .pagenav { margin: 5px 0px 5px; font-size: 8pt; font-weight: bold; color: #CCC; clear: both; }
@@ -41,13 +66,13 @@ UL.pagelist LI A, UL.pagelist LI span.disabledlink {
   display: block;
   float: left;
   padding: 2px 4px;
-  background-color: #FFF6EC;
+  background-color: #EEEEEE;
   text-decoration: none;
-  color: #555;
+  color: #999;
 }
 UL.pagelist LI span.disabledlink { background-color: #fff; color: #ddd; cursor: default; }
-UL.pagelist LI A:hover { background-color: #FFCC99; color: black; }
-UL.pagelist LI.current A { background-color: #FF6600; color: #FFF; cursor: default; }
+UL.pagelist LI A:hover { background-color: #f90; color: #fff; }
+UL.pagelist LI.current A { background-color: #3366CC; color: #FFF; cursor: default; }
 
 .commentcount { font-weight: normal; font-size: 11pt; margin-top: 10px; }
 

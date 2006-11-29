@@ -539,9 +539,6 @@ function printAlbumLink($text, $title, $class=NULL, $id=NULL) {
  * @param  title  The title attribute for the link
  * @param  class  The class of the link
  * @param  id     The id of the link
- * 
- * @author Todd Papaioannou (lucky@luckyspin.org)
- * @since  1.0.0
  */
 function printSortableAlbumLink($text, $title, $class=NULL, $id=NULL) {
   global $_zp_sortable_list, $_zp_current_album;
@@ -564,9 +561,6 @@ function printSortableAlbumLink($text, $title, $class=NULL, $id=NULL) {
  * @param  title  The title attribute for the link
  * @param  class  The class of the link
  * @param  id     The id of the link
- * 
- * @author Todd Papaioannou (lucky@luckyspin.org)
- * @since  1.0.0
  */
 function printSortableGalleryLink($text, $title, $class=NULL, $id=NULL) {
   global $_zp_sortable_list, $_zp_current_album;
