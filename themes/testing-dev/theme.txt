@@ -1,6 +1,6 @@
 # Zenphoto theme definition file
-name::Testing Theme (Development)
+name::Sub-Albums Testing Theme
 author::Tristan Harward
-version::0.5
-date::8/16/2005
-desc::A theme for testing the program. It includes nearly every template tag and feature, and doesn't look half bad. A good example if you want to make your own theme.
+version::1.0.4
+date::11/28/2006
+desc::A theme demonstrating the sub-albums feature currently under development. Feel free to use it if you need the organization, but be aware that sub-albums are not yet editable or visible through the administrator's backend, only through the AJAX edit-as-you-go functions.

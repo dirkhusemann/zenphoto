@@ -53,42 +53,43 @@ if (file_exists("zp-config.php")) {
   
     $db_schema = array();
     $db_schema[] = "CREATE TABLE IF NOT EXISTS `$tbl_albums` (
-      `id` int(11) NOT NULL auto_increment,
+      `id` int(11) unsigned NOT NULL auto_increment,
+      `parentid` int(11) unsigned default NULL,
       `folder` varchar(255) NOT NULL default '',
       `title` varchar(255) NOT NULL default '',
       `desc` text,
       `date` datetime default NULL,
       `place` varchar(255) default NULL,
-      `show` int(1) NOT NULL default '1',
+      `show` int(1) unsigned NOT NULL default '1',
       `thumb` varchar(255) default NULL,
       `sort_type` varchar(20) default NULL,
-      `sort_order` int(11) default NULL,
+      `sort_order` int(11) unsigned default NULL,
       PRIMARY KEY  (`id`),
       KEY `folder` (`folder`)
       );";
   
     $db_schema[] = "CREATE TABLE IF NOT EXISTS `$tbl_comments` (
-      `id` int(11) NOT NULL auto_increment,
-      `imageid` int(11) NOT NULL default '0',
+      `id` int(11) unsigned NOT NULL auto_increment,
+      `imageid` int(11) unsigned NOT NULL default '0',
       `name` varchar(255) NOT NULL default '',
       `email` varchar(255) NOT NULL default '',
       `website` varchar(255) default NULL,
       `date` datetime default NULL,
       `comment` text NOT NULL,
-      `inmoderation` int(1) NOT NULL default '0',
+      `inmoderation` int(1) unsigned NOT NULL default '0',
       PRIMARY KEY  (`id`),
       KEY `imageid` (`imageid`)
       );";
   
     $db_schema[] = "CREATE TABLE IF NOT EXISTS `$tbl_images` (
-      `id` int(11) NOT NULL auto_increment,
-      `albumid` int(11) NOT NULL default '0',
+      `id` int(11) unsigned NOT NULL auto_increment,
+      `albumid` int(11) unsigned NOT NULL default '0',
       `filename` varchar(255) NOT NULL default '',
       `title` varchar(255) default NULL,
       `desc` text,
       `commentson` int(1) NOT NULL default '1',
       `show` int(1) NOT NULL default '1',
-      `sort_order` int(11) default NULL,
+      `sort_order` int(11) unsigned default NULL,
       `height` int(10) unsigned default NULL,
       `width` int(10) unsigned default NULL,
       PRIMARY KEY  (`id`),

@@ -55,6 +55,7 @@ function initEditableTitle(divID) {
       +'" style="font-size: '+this.style_fontSize
       +'; font-family: '+this.style_fontFamily
       +'; font-weight: '+this.style_fontWeight
+      +'; font-style: '+this.style_fontStyle
       +';" size="'+(this.innerHTML.length)+'"/>';
   }
   
@@ -94,6 +95,7 @@ function initEditableDesc(divID) {
     return '<textarea name="content" style="font-size: '+this.style_fontSize
       +'; font-family: '+this.style_fontFamily
       +'; font-weight: '+this.style_fontWeight
+      +'; font-style: '+this.style_fontStyle
       +'; width: '+this.style_width+'; height: '+this.style_height
       +'; margin: 0px;" rows="5" cols="50"></textarea><br />';
   }
@@ -120,6 +122,7 @@ function initEditableDiv(divID) {
   div.style_fontFamily = getStyle(div, "font-family");
   div.style_fontSize = getStyle(div, "font-size");
   div.style_fontWeight = getStyle(div, "font-weight");
+  div.style_fontStyle = getStyle(div, "font-style");
   div.style_width = getStyle(div, "width");
   div.style_height = getStyle(div, "height");
   

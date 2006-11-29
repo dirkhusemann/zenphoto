@@ -802,7 +802,7 @@ if (!zp_loggedin()) {
       
 		<div class="box" id="overview-stats">
 			<h2 class="boxtitle">Gallery Stats</h2>
-			<p>There are <strong><?php echo $gallery->getNumImages(); ?></strong> images in a total of <strong><?php echo $gallery->getNumAlbums(); ?></strong> albums [<strong><a href="?prune=true">refresh</a></strong>].</p>
+			<p>There are <strong><?php echo $gallery->getNumImages(); ?></strong> images in a total of <strong><?php echo $gallery->getNumAlbums(true); ?></strong> albums [<strong><a href="?prune=true">refresh</a></strong>].</p>
 			<p><strong><?php echo $gallery->getNumComments(); ?></strong> comments have been posted.</p>
 
 			<?php

@@ -22,10 +22,12 @@
 
 <div id="main">
   <div id="gallerytitle">
-    <h2><span>
-				<a href="<?=getGalleryIndexURL();?>" title="Gallery Index"><?=getGalleryTitle();?></a> | 
-				<a href="<?=getAlbumLinkURL();?>" title="Gallery Index"><?=getAlbumTitle();?></a> |</span>
-			  <?php printImageTitle(true); ?></h2>
+    <h2>
+      <span><a href="<?=getGalleryIndexURL();?>" title="Gallery Index"><?=getGalleryTitle();?></a> | 
+      <?php printParentBreadcrumb(); ?>
+      <a href="<?=getAlbumLinkURL();?>" title="<?=getAlbumTitle();?> Index"><?=getAlbumTitle();?></a> |</span>
+      <?php printImageTitle(true); ?>
+    </h2>
   </div>
   
   <hr />
@@ -38,9 +40,7 @@
       
       <a href="<?=getFullImageURL();?>" title="<?=getImageTitle();?>">
       <?php printDefaultSizedImage(getImageTitle()); ?></a>
-      
-      <?php printImageDesc(true); ?>
-
+      <span class="desc"><?php printImageDesc(true); ?></span>
       
       <div id="comments" style="clear: both; padding-top: 10px;">
           <div class="commentcount"><?php $num = getCommentCount(); echo ($num == 0) ? "No comments" : (($num == 1) ? "<strong>One</strong> comment" : "<strong>$num</strong> comments"); ?> on this image:</div>
@@ -76,11 +76,11 @@
 
       </div>
       
+      <p style="text-align: right;"><?php printAdminLink("Admin"); ?></p>
+      
     </div>
 </div>
 
 </body>
-
-<?php /* printPreloadScript(); */ ?>
 
 </html>

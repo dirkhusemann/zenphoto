@@ -5,6 +5,7 @@ BODY { font-family: Arial, Helvetica, sans-serif; font-size: 8pt; text-align: ce
 .imagethumb IMG, .image IMG { border: 0px; margin: 0px; padding: 0px; }
 .image { margin: 0px; padding: 0px; float: left; }
 HR { clear: both; height: 0px; border: 0px; border-top: 1px solid #ccc; margin-top: 0px; padding: 0px; }
+HR.space { margin: 12px 0px; }
 #gallerytitle H2 { font-size: 11pt; }
 .imgnav { margin-bottom: 4px; font-size: 8pt; font-weight: bold; color: #CCC; }
 #images { margin: 5px 0px 10px; clear: both; }
@@ -14,7 +15,8 @@ HR { clear: both; height: 0px; border: 0px; border-top: 1px solid #ccc; margin-t
 .disabledlink { color: #ddd; cursor: default; }
 #gallerytitle SPAN { font-weight: normal; color: #CCC; text-decoration: none; }
 #gallerytitle A:link, #gallerytitle A:visited { text-decoration: underline; color: #999; }
-.albumtitle H3 { margin: 0px; padding: 0px; }
+.albumtitle H3 { margin: 0px; padding: 0px; font-weight: normal; font-size: 13pt; }
+
 
 A:link, A:visited {
 	text-decoration: none;

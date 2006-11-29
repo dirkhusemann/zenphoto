@@ -23,17 +23,17 @@
         <?php printAlbumThumbImage(getAlbumTitle()); ?></a></div>
       <div class="albumtitle"><h3><a href="<?=getAlbumLinkURL();?>" title="<?=getAlbumTitle();?>">
         <?php printAlbumTitle(); ?></a></h3> <?php printAlbumDate(); ?></div>
-      <div class="albumdesc"><?php printAlbumDesc(); ?></div>
+      <div class="desc"><?php printAlbumDesc(); ?></div>
     </div>
     <hr />
     
   <?php endwhile; ?>
   </div>
   
-  <?php printPageNav("&laquo; prev", "|", "next &raquo;"); ?>
+  <?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
 
   <div id="enableSorting">
-  <? printSortableGalleryLink('Click to sort gallery', 'Manual sorting', NULL, 'credit'); ?>
+  <? printSortableGalleryLink('Click to sort gallery', 'Manual sorting', NULL, 'credit'); ?> | <?php printAdminLink("Admin"); ?>
   </div>
 
 </div>

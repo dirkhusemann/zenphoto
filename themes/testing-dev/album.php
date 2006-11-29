@@ -9,41 +9,53 @@
 
 <div id="main">
   <div id="gallerytitle">
-    <h2><span><a href="<?=getGalleryIndexURL();?>" title="Gallery Index"><?=getGalleryTitle();?></a> | </span> <?php printAlbumTitle(true);?></h2>
+    <h2>
+      <span><a href="<?=getGalleryIndexURL();?>" title="Gallery Index"><?=getGalleryTitle();?></a> | 
+      <?php printParentBreadcrumb(); ?></span> 
+      <?php printAlbumTitle(true);?>
+    </h2>
   </div>
   <hr />
-  <?php printAlbumDesc(true); ?>
+  <div class="desc">
+    <?php printAlbumDesc(true); ?>
+  </div>
+  
   <br />
+  
+  <!-- Sub-Albums -->
+  <div id="albums">
+  <?php while (next_album()): ?>
+    <div class="album">
+      <div class="albumthumb"><a href="<?=getAlbumLinkURL();?>" title="<?=getAlbumTitle();?>">
+        <?php printAlbumThumbImage(getAlbumTitle()); ?></a></div>
+      <div class="albumtitle"><h3><a href="<?=getAlbumLinkURL();?>" title="<?=getAlbumTitle();?>">
+        <?php printAlbumTitle(); ?></a></h3> <?php printAlbumDate(); ?></div>
+      <div class="albumdesc"><?php printAlbumDesc(); ?></div>
+    </div>
+    <hr />
+  <?php endwhile; ?>
+  </div>
+  
+  <?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
 
+  <!-- Images -->
+  <div id="images">
+  <?php while (next_image()): ?>
+    <div class="image">
+      <div class="imagethumb"><a href="<?=getImageLinkURL();?>" title="<?=getImageTitle();?>">
+        <?php printImageThumb(getImageTitle()); ?></a>
+      </div>
+    </div>
+  <?php endwhile; ?>
+  </div>
+  
+  <br style="clear: both;" />
   
   <?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
   
-  <?php
-  //// Subalbum tests.
-    $subalbums = $_zp_current_album->getSubAlbums();
-    if (count($subalbums) > 0) {
-      foreach ($subalbums as $suba) {
-        echo '<b><a href="' . WEBPATH . '/index.php?album=' . urlencode($suba->name) . '">' . $suba->name . "</a></b><br />";
-      }
-    }
-    $parent = $_zp_current_album->getParent();
-    if ($parent != NULL) { echo '<br /><strong>Parent album: <a href="' . WEBPATH . '/index.php?album=' . urlencode($parent->name) . '">' . $parent->name . "</a></strong><br />"; }
+  <hr class="space" />
   
-  ?>
-  
-  
-
-  <div id="images">
-<?php while (next_image()): ?>
-    <div class="image">
-      <div class="imagethumb"><a href="<?=getImageLinkURL();?>" title="<?=getImageTitle();?>">
-        <?php printImageThumb(getImageTitle()); ?></a></div>
-    </div>
-
-<?php endwhile; ?>
-  </div>
-  
-  <?php printPageNav("&laquo; prev", "|", "next &raquo;"); ?>
+  <p style="text-align: right;"><?php printAdminLink("Admin"); ?></p>
 
   
 </div>

@@ -41,7 +41,7 @@ class PersistentObject {
     $this->table = $tablename;
     $this->unique_set = $unique_set;
 
-    $this->load();
+    return $this->load();
   }
   
   /**
@@ -68,7 +68,9 @@ class PersistentObject {
   
   /** 
    * Load the data array from the database, using the where() to get the unique
-   * record. If more than one record is found, throw an error.
+   * record.
+   * @return false if the record already exists, true if a new record was created.
+   *   The return value can be used to insert default data for new objects.
    */
   function load() {
     // Get the database record for this object.
@@ -76,9 +78,11 @@ class PersistentObject {
       getWhereClause($this->unique_set) . " LIMIT 1;");
     if (!$entry) {
       $this->save();
+      return true;
     } else {
       $this->data = $entry;
       $this->id = $entry['id'];
+      return false;
     }
   }
 
@@ -163,7 +167,6 @@ class Image extends PersistentObject {
     $this->localpath = SERVERPATH . "/albums/" . $album->name . "/" . $filename;
     // Check if the file exists.
     if(!file_exists($this->localpath) || is_dir($this->localpath)) {
-      // die("Image <strong>{$this->localpath}</strong> does not exist.");
       $this->exists = false;
       return false;
     }
@@ -171,7 +174,11 @@ class Image extends PersistentObject {
     $this->name = $filename;
     $this->comments = null;
 
-    parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id));
+    $new = parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id));
+    if ($new) {
+      $this->set('title', $this->name);
+      $this->save();
+    }
   }
   
   
@@ -401,10 +408,11 @@ class Image extends PersistentObject {
 
 class Album extends PersistentObject {
 
-  var $name;              // Folder name of the album.
+  var $name;             // Folder name of the album (full path from /albums/)
   var $exists = true;    // Does the folder exist?
   var $images = NULL;    // Full images array storage.
   var $subalbums = NULL; // Full album array storage.
+  var $parent = NULL;    // The parent album name
   var $gallery;
   var $index;
   var $sort_key = 'filename';
@@ -420,7 +428,14 @@ class Album extends PersistentObject {
       $this->exists = false;
       return false;
     }
-    parent::PersistentObject('albums', array('folder' => $this->name));
+    $new = parent::PersistentObject('albums', array('folder' => $this->name));
+    if ($new) {
+      // Set default data for a new Album
+      $parentalbum = $this->getParent();
+      if (!is_null($parentalbum)) { $this->set('parentid', $parentalbum->getAlbumId()); }
+      $this->set('title', $this->name);
+      $this->save();
+    }
     $this->sort_key = ($this->data['sort_type'] == "Title") ? 'title' : ($this->data['sort_type'] == "Manual") ? 'sort_order' : 'filename';
   }
   
@@ -435,10 +450,12 @@ class Album extends PersistentObject {
     $slashpos = strrpos($this->name, "/");
     if ($slashpos) {
       $parent = substr($this->name, 0, $slashpos);
-      return new Album($this->gallery, $parent);
-    } else {
-      return NULL;
-    }    
+      $parentalbum = new Album($this->gallery, $parent);
+      if ($parentalbum->exists) {
+        return $parentalbum;
+      }
+    }
+    return NULL;   
   }
   
   // Title
@@ -483,14 +500,12 @@ class Album extends PersistentObject {
       
       foreach ($dirs as $dir) {
         $dir = $this->name . '/' . $dir;
-        $subalbums[] = new Album($this->gallery, $dir);
+        $subalbums[] = $dir;
       }
       
       // Sort here?
-      
       $this->subalbums = $subalbums;
     }
-    
     return $this->subalbums;
   }
   
@@ -614,13 +629,13 @@ class Album extends PersistentObject {
   
   function getNextAlbum() {
     if ($this->index == null)
-      $this->index = @array_search($this->name, $this->gallery->getAlbums(0));
+      $this->index = array_search($this->name, $this->gallery->getAlbums(0));
     return $this->gallery->getAlbum($this->index+1);
   }
   
   function getPrevAlbum() {
     if ($this->index == null)
-      $this->index = @array_search($this->name, $this->gallery->getAlbums(0));
+      $this->index = array_search($this->name, $this->gallery->getAlbums(0));
     return $this->gallery->getAlbum($this->index-1);
   }
   
@@ -635,8 +650,9 @@ class Album extends PersistentObject {
   // Delete the entire album PERMANENTLY. Be careful! This is unrecoverable.
   function deleteAlbum() {
     //echo $this->localpath;
-    foreach($this->getImages() as $image) {
+    foreach($this->getImages() as $filename) {
       // False here means don't clean up (cascade already took care of it)
+      $image = new Image($this, $filename);
       $image->deleteImage(false);
     }
     query("DELETE FROM " . prefix('albums') . " WHERE `id` = " . $this->id);
@@ -646,9 +662,9 @@ class Album extends PersistentObject {
   
   /**
    * For every image in the album, look for its file. Delete from the database
-   * if the file does not exist.
+   * if the file does not exist. Same for each sub-directory/album.
    */
-  function garbageCollect() {
+  function garbageCollect($deep=false) {
     if (is_null($this->images)) $this->getImages();
     $result = query("SELECT * FROM ".prefix('images')." WHERE `albumid` = ".$this->id);
     $dead = array();
@@ -669,14 +685,54 @@ class Album extends PersistentObject {
       }
       query($sql);
     }
-  }
-  
-  function preLoad() {
-    $images = $this->getImages();
-    foreach ($images as $image) {
-      $img = $image;
+    
+    // Get all sub-albums and make sure they exist.
+    $result = query("SELECT * FROM ".prefix('albums')." WHERE `parentid` = ".$this->id);
+    $dead = array();
+    $subdirs = $this->loadFileNames(true);
+    $subalbums = $this->getSubAlbums();
+    
+    for($i=0; $i < count($subdirs); $i++) {
+      $subdirs[$i] = $this->getFolder() . '/' . $subdirs[$i];
+    }
+    
+    // Does the dirname from the db row match any in the subdirs on disk?
+    while($row = mysql_fetch_assoc($result)) {
+      if (!in_array($row['folder'], $subdirs)) {
+        $dead[] = $row['id'];
+      }
+    }
+    if (count($dead) > 0) {
+      $sql = "DELETE FROM ".prefix('albums')." WHERE `id` = " . array_pop($dead);
+      foreach ($dead as $albumid) {
+        $sql .= " OR `id` = $albumid";
+      }
+      query($sql);
+    }
+      
+    if ($deep) {
+      foreach($subalbums as $dir) {
+        $subalbum = new Album($this->gallery, $dir);
+        $subalbum->garbageCollect($deep);
+      }
     }
   }
+  
+  /**
+   * Simply creates objects of all the images and sub-albums in this album to
+   * load accurate values into the database.
+   */
+  function preLoad() {
+    $images = $this->getImages(0);
+    foreach($images as $filename) {
+      $image = new Image($this, $filename);
+    }
+    $subalbums = $this->getSubAlbums(0);
+    foreach($subalbums as $dir) {
+      $album = new Album($this->gallery, $dir);
+    }
+  }
+
   
   /**
    * Load all of the filenames that are found in this Albums directory on disk.
@@ -812,11 +868,15 @@ class Gallery {
       $albums_r[$alb] = $i;
       $i++;
     }
-    
     $albums = array_flip($albums_r);
-    ksort($albums);    
+    ksort($albums);
     
-    return $albums;
+    $albums_ordered = array();
+    foreach($albums as $album) {
+      $albums_ordered[] = $album;
+    }
+    
+    return $albums_ordered;
   }
   
   /**
@@ -860,9 +920,17 @@ class Gallery {
       return false;
   }
   
-  function getNumAlbums() {
-    $this->getAlbums();
-    return count($this->albums);
+  function getNumAlbums($db=false) {
+    $count = -1;
+    if (!$db) {
+      $this->getAlbums();
+      $count = count($this->albums);
+    } else {
+      $sql = "SELECT count(*) FROM " . prefix('albums');
+      $result = query($sql);
+      $count = mysql_result($result, 0);
+    } 
+    return $count;
   }
   
   
@@ -940,7 +1008,7 @@ class Gallery {
    * $full    - garbage collect every image and album in the *database* - completely cleans the database.
    */
   function garbageCollect($cascade=true, $full=false) {
-    $result = query("SELECT * FROM ".prefix('albums'));
+    $result = query("SELECT * FROM " . prefix('albums') . " WHERE `parentid` IS NULL");
     $dead = array();
     
     // Load the albums from disk
@@ -954,7 +1022,7 @@ class Gallery {
 
     if (count($dead) > 0) {
       $first = true;
-      $sql = "DELETE FROM ".prefix('albums')." WHERE ";
+      $sql = "DELETE FROM " . prefix('albums') . " WHERE ";
       foreach ($dead as $album) {
         if (!$first) $sql .= " OR";
         $sql .= "`id` = $album";
@@ -975,7 +1043,8 @@ class Gallery {
     
     if ($full) {
       $first = true;
-      $result = query("SELECT `id` FROM ".prefix('albums'));
+      // Delete all images that don't belong to an album.
+      $result = query("SELECT `id` FROM " . prefix('albums'));
       if ($this->getNumAlbums() > 0) {
         $sql = "DELETE FROM ".prefix('images')." WHERE ";
         while($album = mysql_fetch_assoc($result)) {
@@ -988,7 +1057,7 @@ class Gallery {
         // Then go into existing albums recursively to clean them... very invasive.
         foreach ($this->albums as $folder) {
           $album = new Album($this, $folder);
-          $album->garbageCollect();
+          $album->garbageCollect(true);
           $album->preLoad();
         }
       }

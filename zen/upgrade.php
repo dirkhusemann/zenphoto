@@ -59,6 +59,9 @@ if (file_exists("zp-config.php")) {
     $sql_statements[] = "ALTER TABLE `$tbl_images` ADD COLUMN `height` INT UNSIGNED;";
     $sql_statements[] = "ALTER TABLE `$tbl_images` ADD COLUMN `width` INT UNSIGNED;";
     
+    // v. 1.0.4b
+    $sql_statements[] = "ALTER TABLE `$tbl_albums` ADD COLUMN `parentid` int(11) unsigned default NULL;"
+    
     if (isset($_GET['upgrade']) && db_connect()) {
       echo "<h3>Upgrading tables...</h3>";
       foreach($sql_statements as $sql) {
@@ -72,7 +75,7 @@ if (file_exists("zp-config.php")) {
     } else if (db_connect()) {
       echo "<h3>database connected</h3>";
       echo "<p>We're all set to upgrade the database tables: <code>$tbl_albums</code> and <code>$tbl_images</code>.</p>";
-      echo "<p><strong>It is probably prudent to take a backup first!</strong></p>";
+      echo "<p><strong>It's probably a good idea to make a backup first.</strong></p>";
       echo "<p><a href=\"?upgrade\" title=\"Upgrade the database tables.\" style=\"font-size: 15pt; font-weight: bold;\">Go!</a></p>";
     } else {
       echo "<h3>database not connected</h3>";
