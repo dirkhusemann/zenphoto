@@ -40,7 +40,7 @@ HR.space { margin: 12px 0px; }
 .disabledlink { color: #ddd; cursor: default; }
 #gallerytitle SPAN { font-weight: normal; color: #CCC; text-decoration: none; }
 #gallerytitle A:link, #gallerytitle A:visited { text-decoration: underline; color: #999; }
-.albumtitle H3 { margin: 0px; padding: 0px; font-weight: normal; font-size: 13pt; }
+.albumtitle H3 { margin: 0px; padding: 0px; font-weight: normal; font-size: 14pt; }
 
 
 A:link, A:visited {
@@ -51,8 +51,8 @@ A:hover, A:active,
 #gallerytitle A:hover, #gallerytitle A:active, 
 .pagenav A:hover, .pagenav A:active  {
 	text-decoration: underline;
-	color: #FF6600;
-	background-color: #FFFCF4;
+	color: #f90;
+	background-color: #FFFAF0;
 }
 
 UL.pagelist {

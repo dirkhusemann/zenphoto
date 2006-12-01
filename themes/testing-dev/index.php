@@ -32,9 +32,9 @@
   
   <?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
 
-  <div id="enableSorting">
-  <? printSortableGalleryLink('Click to sort gallery', 'Manual sorting', NULL, 'credit'); ?> | <?php printAdminLink("Admin"); ?>
-  </div>
+  <p style="text-align: right;">
+  <? printSortableGalleryLink('Sort Gallery', 'Manual sorting', NULL, 'credit'); ?> &nbsp; <?php printAdminLink("Admin"); ?>
+  </p>
 
 </div>
 
