@@ -60,7 +60,7 @@ if (file_exists("zp-config.php")) {
     $sql_statements[] = "ALTER TABLE `$tbl_images` ADD COLUMN `width` INT UNSIGNED;";
     
     // v. 1.0.4b
-    $sql_statements[] = "ALTER TABLE `$tbl_albums` ADD COLUMN `parentid` int(11) unsigned default NULL;"
+    $sql_statements[] = "ALTER TABLE `$tbl_albums` ADD COLUMN `parentid` int(11) unsigned default NULL;";
     
     if (isset($_GET['upgrade']) && db_connect()) {
       echo "<h3>Upgrading tables...</h3>";
