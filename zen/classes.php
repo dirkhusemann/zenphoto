@@ -605,7 +605,11 @@ class Album extends PersistentObject {
     return false;
   }
 
-  
+  /**
+   * Gets the album's set thumbnail image from the database if one exists,
+   * otherwise, finds the first image in the album or sub-album and returns it
+   * as an Image object.
+   */
   function getAlbumThumbImage() {
     $albumdir = SERVERPATH . "/albums/{$this->name}/";
     $thumb = $this->get('thumb');
@@ -631,10 +635,18 @@ class Album extends PersistentObject {
     return NULL;
   }
   
+  /**
+   * Gets the thumbnail URL for the album thumbnail image as returned by $this->getAlbumThumbImage();
+   */
   function getAlbumThumb() {
     $image = $this->getAlbumThumbImage();
-    return $image->getThumb();
+    if (!is_null($image)) {
+      return $image->getThumb();
+    } else {
+      return null;
+    }
   }
+  
   function setAlbumThumb($filename) { $this->set('thumb', $filename); }
   
   function getNextAlbum() {
@@ -740,6 +752,7 @@ class Album extends PersistentObject {
     $subalbums = $this->getSubAlbums(0);
     foreach($subalbums as $dir) {
       $album = new Album($this->gallery, $dir);
+      $album->preLoad();
     }
   }
 
