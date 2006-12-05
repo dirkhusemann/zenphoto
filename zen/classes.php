@@ -542,45 +542,43 @@ class Album extends PersistentObject {
   
   
   /**
-   * Sort Image Array will sort an array of Images based on the given key. The
-   * key should correspond to any of the Image fields that can be sorted. If the
-   * given key turns out to be NULL for an image, we default to the filename.
+   * sortImageArray will sort an array of Images based on the given key. The
+   * key must be one of (filename, title, sort_order) at the moment.
    *
-   * Updated significantly by Tristan so sorting has nearly zero performance impact
-   * and images are still stored in the main array as simple filenames.
-   *
-   * @param key    The key to sort on.
-   * @param images The array to be sorted.
-   * @return A new array of sorted images.
+   * @param images The array of filenames to be sorted.
+   * @return A new array of filenames sorted according to the set key.
    */
   function sortImageArray($images) {
-    
     $key = $this->getSortKey();
-    $result = query("SELECT filename, title, sort_order FROM " . prefix("images") 
+    $result = query("SELECT filename, title, sort_order FROM " . prefix("images")
       . " WHERE albumid=" . $this->id . " ORDER BY " . $key);
-    
+
     $i = 0;
-    $images_r = array_flip($images);
-    $images_touched = array();
+    $images_to_keys = array_flip($images);
+    $images_in_db = array();
     while ($row = mysql_fetch_assoc($result)) {
       $filename = $row['filename'];
-      if (array_key_exists($filename, $images_r)) {
-        $images_r[$filename] = $i;
-        $images_touched[] = $filename;
+      // If the image is on the filesystem, but not yet processed, give it the next key:
+      // TODO: We should mark this album for garbage collection if filenames are discovered.
+      if (array_key_exists($filename, $images_to_keys) && !in_array($filename, $images_in_db)) {
+        $images_to_keys[$filename] = $i;
+        $images_in_db[] = $filename;
       }
       $i++;
     }
-    $images_untouched = array_diff($images, $images_touched);
-    foreach($images_untouched as $im) {
-      $images_r[$im] = $i;
+
+    // Place the images not yet in the database after those with sort columns.
+    $images_not_in_db = array_diff($images, $images_in_db);
+    foreach($images_not_in_db as $filename) {
+      $images_to_keys[$filename] = $i;
       $i++;
     }
-    $images = array_flip($images_r);
-    ksort($images);    
+    $images = array_flip($images_to_keys);
+    ksort($images);
     return $images;
   }
   
-  
+
   function getNumImages() {
     if (is_null($this->images)) { 
       $this->getImages(0);
