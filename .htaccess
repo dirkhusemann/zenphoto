@@ -5,7 +5,7 @@
 RewriteEngine On
 
 # !!! Change this to the web path (eg: http://www.example.com/photos --> /photos) !!!
-RewriteBase /zpsub
+RewriteBase /zp
 
 RewriteCond %{REQUEST_FILENAME} -f [NC,OR]
 RewriteCond %{REQUEST_FILENAME} -d [NC]
