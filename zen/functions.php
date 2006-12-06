@@ -1,5 +1,6 @@
 <?php
 
+
 // functions.php - HEADERS NOT SENT YET!
 
 if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
@@ -9,7 +10,7 @@ if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
 require_once(dirname(__FILE__) . "/zp-config.php");
 
 // Set the version number.
-$_zp_conf_vars['version'] = '1.0.3';
+$_zp_conf_vars['version'] = '1.0.4';
 
 if (defined('OFFSET_PATH')) {
   $const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
@@ -64,6 +65,7 @@ function get_image($imgfile) {
 	}
 }
 
+
 function truncate_string($string, $length) {
   if (strlen($string) > $length) {
     $pos = strpos($string, " ", $length);
@@ -73,6 +75,27 @@ function truncate_string($string, $length) {
   }
 }
 
+/** getAlbumArray - returns an array of folder names corresponding to the
+      given album string.
+    @param $albumstring is the path to the album as a string. Ex: album/subalbum/my-album
+    @param $includepaths is a boolean whether or not to include the full path to the album
+      in each item of the array. Ex: when $includepaths==false, the above array would be
+      ['album', 'subalbum', 'my-album'], and with $includepaths==true, 
+      ['album', 'album/subalbum', 'album/subalbum/my-album']
+ 
+ */
+function getAlbumArray($albumstring, $includepaths=false) {
+  if ($includepaths) {
+    $array = array($albumstring);
+    while($slashpos = strrpos($albumstring, '/')) {
+      $albumstring = substr($albumstring, 0, $slashpos);
+      array_unshift($array, $albumstring);
+    }
+    return $array;
+  } else {
+    return explode('/', $albumstring);
+  }
+}
 
 /** Takes a user input string (usually from the query string) and cleans out
  HTML, null-bytes, and slashes (if magic_quotes_gpc is on) to prevent
@@ -127,6 +150,12 @@ function is_image($filename) {
 function is_zip($filename) {
   $ext = strtolower(strrchr($filename, "."));
   return ($ext == ".zip");
+}
+
+
+// rawurlencode function that is path-safe (does not encode /)
+function pathurlencode($path) {
+  return implode("/", array_map("rawurlencode", explode("/", $path)));
 }
 
 
@@ -292,7 +321,7 @@ function zp_mail($subject, $message, $headers = '') {
   	  foreach($badStrings as $v2) {
   	    if (strpos($v, $v2) !== false) {
   	      header("HTTP/1.0 403 Forbidden");
-  	      die("Screw you spammer!");
+  	      die("Forbidden");
   	      exit;
   	    }
   	  }
@@ -302,7 +331,7 @@ function zp_mail($subject, $message, $headers = '') {
   	  foreach($badStrings as $v2){
   	    if (strpos($v, $v2) !== false){
   	      header("HTTP/1.0 403 Forbidden");
-  	      die("Screw you spammer!");
+  	      die("Forbidden");
   	      exit;
   	    }
   	  }

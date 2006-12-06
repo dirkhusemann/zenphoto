@@ -26,8 +26,8 @@ define('OFFSET_PATH', true);
 // i.php - image generation.
 require_once("functions.php");
 
-// Set the memory limit higher just in case.
-ini_set("memory_limit","64M");
+// Set the memory limit higher just in case -- supress errors if user doesn't have control.
+@ini_set("memory_limit","64M");
 
 // Set the config variables for convenience.
 $thumb_crop = zp_conf('thumb_crop');
@@ -57,13 +57,12 @@ if (zp_conf('mod_rewrite')) {
   $zpitems = explode("/", $zppath);
   if (isset($zpitems[1]) && $zpitems[1] == 'image') {
     $req_album = $zpitems[0];
-    // This next line assumes the image filename is always last. Take note.
+    // This next line assumes the image filename is always last. Take note of this for writing rewrite rules.
     $req_image = $zpitems[count($zpitems)-1];
     if (!empty($req_album)) $_GET['a'] = urldecode($req_album);
     if (!empty($req_image)) $_GET['i'] = urldecode($req_image);
   }
 }
-
 
 $album = sanitize($_GET['a']);
 $image = sanitize($_GET['i']);
@@ -117,14 +116,24 @@ if ((isset($_GET['s']) && $_GET['s'] < MAX_SIZE)
     
 } else {
   // No image parameters specified; return the original image.
-  header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH 
-    . "/albums/" . rawurlencode($album) . "/" . rawurlencode($image));
+  header("Location: " . FULLWEBPATH . "/albums/" . pathurlencode($album) . "/" . rawurlencode($image));
   return;
 }
 
+// Make the directories for the albums in the cache, recursively.
+$albumdirs = getAlbumArray($album, true);
+foreach($albumdirs as $dir) {
+  $dir = SERVERCACHE . '/' . $dir;
+  if (!is_dir($dir)) {
+    mkdir($dir, 0777);
+  } else if (!is_writable($dir)) {
+    chmod($dir, 0777);
+  }
+}
 
-$newfilename = "{$album}_{$image}{$postfix_string}.jpg";
-$newfile = SERVERCACHE . "/" . $newfilename;
+$newfilename = "/{$album}/{$image}{$postfix_string}.jpg";
+
+$newfile = SERVERCACHE . $newfilename;
 $imgfile = SERVERPATH  . "/albums/$album/$image";
 
 // Check for the source image.
@@ -191,8 +200,7 @@ if (!file_exists($newfile)) {
       
       // If the requested image is the same size or smaller than the original, redirect to it.
       if (!$upscale && $newh >= $h && $neww >= $w && !$crop) {
-        header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH
-          . "/albums/" . rawurlencode($album) . "/" . rawurlencode($image));
+        header("Location: " . FULLWEBPATH . "/albums/" . pathurlencode($album) . "/" . rawurlencode($image));
         return;
       }
     }
@@ -216,14 +224,15 @@ if (!file_exists($newfile)) {
 
     // Create the cached file (with lots of compatibility)...
 		touch($newfile);
+
 		imagejpeg($newim, $newfile, $quality);
-    chmod($newfile,0644);
+    chmod($newfile, 0644);
 		imagedestroy($newim);
 		imagedestroy($im);
 	}
 }
 
 // ... and redirect the browser to it.
-header("Location: " . PROTOCOL . "://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/cache/" . rawurlencode($newfilename));
+header("Location: " . FULLWEBPATH . "/cache" . pathurlencode($newfilename));
 exit();
 ?>

@@ -1,0 +1,6 @@
+# Zenphoto theme definition file
+name::Sub-Albums Testing Theme
+author::Tristan Harward
+version::1.0.4
+date::11/28/2006
+desc::A theme demonstrating the sub-albums feature currently under development. Feel free to use it if you need the organization, but be aware that sub-albums are not yet editable or visible through the administrator's backend, only through the AJAX edit-as-you-go functions.

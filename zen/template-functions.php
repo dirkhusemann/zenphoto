@@ -55,7 +55,7 @@ if (zp_conf('mod_rewrite')) {
 }
 
 
-// Parse the GET request to see what exactly is requested...
+// Parse the GET request to see what's requested
 if (isset($_GET['album'])) {
   $g_album = sanitize($_GET['album']);
 
@@ -94,7 +94,7 @@ if (isset($_GET['album'])) {
             $stored = array("","","",false);
           }
           $g_album = urlencode($g_album); $g_image = urlencode($g_image);
-          header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . WEBPATH . "/" . 
+          header("Location: " . FULLWEBPATH . "/" . 
             (zp_conf('mod_rewrite') ? "$g_album/$g_image" : "index.php?album=$g_album&image=$g_image"));
           exit;
         } else {
@@ -159,9 +159,11 @@ if (zp_loggedin()) {
     global $_zp_current_image, $_zp_current_album;
     if (in_context(ZP_IMAGE)) {
       $_zp_current_image->setTitle($newtitle);
+      $_zp_current_image->save();
       return $newtitle;
     } else if (in_context(ZP_ALBUM)) {
       $_zp_current_album->setTitle($newtitle);
+      $_zp_current_album->save();
       return $newtitle;
     } else {
       return false;
@@ -173,9 +175,11 @@ if (zp_loggedin()) {
     global $_zp_current_image, $_zp_current_album;
     if (in_context(ZP_IMAGE)) {
       $_zp_current_image->setDesc($newdesc);
+      $_zp_current_image->save();
       return $newdesc;
     } else if (in_context(ZP_ALBUM)) {
       $_zp_current_album->setDesc($newdesc);
+      $_zp_current_album->save();
       return $newdesc;
     } else {
       return false;
@@ -221,18 +225,40 @@ function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
   $text . "</a>";
 }
 
-
 function printVersion() {
   echo zp_conf('version');
 }
 
-// Prints a link to administration if the current user is logged-in
+/** 
+ * Prints a link to administration if the current user is logged-in 
+ */
 function printAdminLink($text, $before='', $after='', $title=NULL, $class=NULL, $id=NULL) {
   if (zp_loggedin()) {
     echo $before;
     printLink(WEBPATH.'/zen/admin.php', $text, $title, $class, $id);
     echo $after;
   }
+}
+
+/**
+ * Returns either the rewrite path or the plain, non-mod_rewrite path
+ * based on the mod_rewrite option in zp-config.php.
+ * @param $rewrite is the path to return if rewrite is enabled. (eg: "/myalbum")
+ * @param $plain is the path if rewrite is disabled (eg: "/?album=myalbum")
+ * The given paths can start /with or without a slash, it will decide automatically.
+ *
+ * For future reference, this function could be used to specially escape items in
+ * the rewrite chain, like the # character (a bug in mod_rewrite).
+ */
+function rewrite_path($rewrite, $plain) {
+  $path = null;
+  if (zp_conf('mod_rewrite')) {
+    $path = $rewrite;
+  } else {
+    $path = $plain;
+  }
+  if (substr($path, 0, 1) == "/") $path = substr($path, 1);
+  return WEBPATH . "/" . $path;
 }
 
 
@@ -245,7 +271,7 @@ function getGalleryTitle() {
   return zp_conf('gallery_title');
 }
 function printGalleryTitle() { 
-	echo htmlspecialchars(getGalleryTitle()); 
+  echo htmlspecialchars(getGalleryTitle()); 
 }
 
 function getMainSiteName() { 
@@ -262,12 +288,7 @@ function getGalleryIndexURL() {
   global $_zp_current_album;
   if (in_context(ZP_ALBUM) && $_zp_current_album->getGalleryPage() > 1) {
     $page = $_zp_current_album->getGalleryPage();
-    // Link to the page the current album belongs to.
-    if (zp_conf('mod_rewrite')) {
-      return WEBPATH . "/page/" . $page;
-    } else {
-      return WEBPATH . "/index.php?page=" . $page;
-    }
+    return rewrite_path("/page/" . $page, "/index.php?page=" . $page);
   } else {
     return WEBPATH . "/";
   }
@@ -278,12 +299,23 @@ function getNumAlbums() {
   return $_zp_gallery->getNumAlbums();
 }
 
+
+/*** Album AND Gallery Context ************/
+/******************************************/
+// (Common functions shared by Albums and the Gallery Index)
+
 // WHILE next_album(): context switches to Album.
-// Switch back to index when there are no more albums.
+// If we're already in the album context, this is a sub-albums loop, which,
+// quite simply, changes the source of the album list.
+// Switch back to the previous context when there are no more albums.
 function next_album() {
   global $_zp_albums, $_zp_gallery, $_zp_current_album, $_zp_page, $_zp_current_album_restore;
   if (is_null($_zp_albums)) {
-    $_zp_albums = $_zp_gallery->getAlbums($_zp_page);
+    if (in_context(ZP_ALBUM)) {
+      $_zp_albums = $_zp_current_album->getSubAlbums();
+    } else {
+      $_zp_albums = $_zp_gallery->getAlbums($_zp_page);
+    }
     if (empty($_zp_albums)) { return false; }
     $_zp_current_album_restore = $_zp_current_album;
     $_zp_current_album = new Album($_zp_gallery, array_shift($_zp_albums));
@@ -300,11 +332,6 @@ function next_album() {
     return true;
   }
 }
-
-
-/*** Album AND Gallery Context ************/
-/******************************************/
-// (Common functions shared by Albums and the Gallery Index)
 
 function getCurrentPage() { 
   global $_zp_page;
@@ -326,17 +353,10 @@ function getPageURL($page) {
   $total = getTotalPages();
   if ($page <= $total && $page > 0) {
     if (in_context(ZP_ALBUM)) {
-      if (zp_conf('mod_rewrite')) {
-        return WEBPATH . "/" . urlencode($_zp_current_album->name) . (($page > 1) ? "/page/" . $page . "/" : "");
-      } else {
-        return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . (($page > 1) ? "&page=" . $page : "");
-      }
+      return rewrite_path( urlencode($_zp_current_album->name) . (($page > 1) ? "/page/" . $page . "/" : ""), 
+        "/index.php?album=" . urlencode($_zp_current_album->name) . (($page > 1) ? "&page=" . $page : "") );
     } else if (in_context(ZP_INDEX)) {
-      if (zp_conf('mod_rewrite')) {
-        return WEBPATH . (($page > 1) ? "/page/" . $page . "/" : "/");
-      } else {
-        return WEBPATH . "/index.php" . (($page > 1) ? "?page=" . $page : "");
-      }
+      return rewrite_path((($page > 1) ? "/page/" . $page . "/" : "/"), "/index.php" . (($page > 1) ? "?page=" . $page : ""));
     }
   }
   return null;
@@ -424,11 +444,36 @@ function getAlbumTitle() {
 function printAlbumTitle($editable=false) { 
   global $_zp_current_album;
   if ($editable && zp_loggedin()) {
-		echo "<div id=\"albumTitleEditable\" style=\"display: inline;\">" . htmlspecialchars(getAlbumTitle()) . "</div>\n";
+    echo "<div id=\"albumTitleEditable\" style=\"display: inline;\">" . htmlspecialchars(getAlbumTitle()) . "</div>\n";
     echo "<script type=\"text/javascript\">initEditableTitle('albumTitleEditable');</script>";
   } else {
-    echo htmlspecialchars(getAlbumTitle());	
+    echo htmlspecialchars(getAlbumTitle());  
   }
+}
+
+function getParentAlbums() {
+  if(!in_context(ZP_ALBUM)) return false;
+  global $_zp_current_album;
+  $parents = array();
+  $album = $_zp_current_album;
+  while (!is_null($album = $album->getParent())) {
+    array_unshift($parents, $album);
+  }
+  return $parents;
+}
+
+function printParentBreadcrumb($before = "", $between=" | ", $after = " | ") {
+  $parents = getParentAlbums();
+  $n = count($parents);
+  if ($n == 0) return;
+  $i = 0;
+  foreach($parents as $parent) {
+    if ($i > 0) echo $between;
+    $url = rewrite_path("/" . urlencode($parent->name) . "/", "/index.php?album=" . urlencode($parent->name));
+    printLink($url, $parent->getTitle(), $parent->getDesc());
+    $i++;
+  }
+  echo $after;
 }
 
 function getAlbumDate() {
@@ -470,23 +515,15 @@ function printAlbumDesc($editable=false) {
   
 }
 
-function getAlbumLinkURL() { 
+function getAlbumLinkURL() {
   global $_zp_current_album, $_zp_current_image;
   if (in_context(ZP_IMAGE) && $_zp_current_image->getAlbumPage() > 1) {
     // Link to the page the current image belongs to.
-    if (zp_conf('mod_rewrite')) {
-      return WEBPATH . "/" . urlencode($_zp_current_album->name) . 
-        "/page/" . $_zp_current_image->getAlbumPage();
-    } else {
-      return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . 
-        "&page=" . $_zp_current_image->getAlbumPage();
-    }
+    return rewrite_path("/" . urlencode($_zp_current_album->name) . "/page/" . $_zp_current_image->getAlbumPage(),
+      "/index.php?album=" . urlencode($_zp_current_album->name) . "&page=" . $_zp_current_image->getAlbumPage());
   } else {
-    if (zp_conf('mod_rewrite')) {
-      return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/";
-    } else {
-      return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name);
-    }
+    return rewrite_path("/" . urlencode($_zp_current_album->name) . "/",
+      "/index.php?album=" . urlencode($_zp_current_album->name));
   }
 }
 
@@ -502,9 +539,6 @@ function printAlbumLink($text, $title, $class=NULL, $id=NULL) {
  * @param  title  The title attribute for the link
  * @param  class  The class of the link
  * @param  id     The id of the link
- * 
- * @author Todd Papaioannou (lucky@luckyspin.org)
- * @since  1.0.0
  */
 function printSortableAlbumLink($text, $title, $class=NULL, $id=NULL) {
   global $_zp_sortable_list, $_zp_current_album;
@@ -527,9 +561,6 @@ function printSortableAlbumLink($text, $title, $class=NULL, $id=NULL) {
  * @param  title  The title attribute for the link
  * @param  class  The class of the link
  * @param  id     The id of the link
- * 
- * @author Todd Papaioannou (lucky@luckyspin.org)
- * @since  1.0.0
  */
 function printSortableGalleryLink($text, $title, $class=NULL, $id=NULL) {
   global $_zp_sortable_list, $_zp_current_album;
@@ -549,7 +580,7 @@ function getAlbumThumb() {
 }
 
 function printAlbumThumbImage($alt, $class=NULL, $id=NULL) { 
-	echo "<img src=\"" . htmlspecialchars(getAlbumThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
+  echo "<img src=\"" . htmlspecialchars(getAlbumThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     (($class) ? " class=\"$class\"" : "") . 
     (($id) ? " id=\"$id\"" : "") . " />";
 }
@@ -606,10 +637,10 @@ function getImageTitle() {
 function printImageTitle($editable=false) { 
   global $_zp_current_image;
   if ($editable && zp_loggedin()) {
-		echo "<div id=\"imageTitleEditable\" style=\"display: inline;\">" . htmlspecialchars(getImageTitle()) . "</div>\n";
+    echo "<div id=\"imageTitleEditable\" style=\"display: inline;\">" . htmlspecialchars(getImageTitle()) . "</div>\n";
     echo "<script type=\"text/javascript\">initEditableTitle('imageTitleEditable');</script>";
   } else {
-    echo htmlspecialchars(getImageTitle());	
+    echo htmlspecialchars(getImageTitle());  
   }
 }
 
@@ -687,11 +718,8 @@ function getNextImageURL() {
   
   $nextimg = $_zp_current_image->getNextImage();
   
-  if (zp_conf('mod_rewrite')) {
-    return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/" . urlencode($nextimg->getFileName());
-  } else {
-    return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($nextimg->getFileName());
-  }
+  return rewrite_path("/" . urlencode($_zp_current_album->name) . "/" . urlencode($nextimg->getFileName()),
+    "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($nextimg->getFileName()));
 }
 
 function getPrevImageURL() {
@@ -700,11 +728,8 @@ function getPrevImageURL() {
   
   $previmg = $_zp_current_image->getPrevImage();
   
-  if (zp_conf('mod_rewrite')) {
-    return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/" . urlencode($previmg->getFileName());
-  } else {
-    return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($previmg->getFileName());
-  }
+  return rewrite_path("/" . urlencode($_zp_current_album->name) . "/" . urlencode($previmg->getFileName()),
+    "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($previmg->getFileName()));
 }
 
 
@@ -745,11 +770,8 @@ function getNextImageThumb() {
 function getImageLinkURL() { 
   if(!in_context(ZP_IMAGE)) return false;
   global $_zp_current_album, $_zp_current_image;
-  if (zp_conf('mod_rewrite')) {
-    return WEBPATH . "/" . urlencode($_zp_current_album->name) . "/" . urlencode($_zp_current_image->name);
-  } else {
-    return WEBPATH . "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($_zp_current_image->name);
-  }
+  return rewrite_path("/" . urlencode($_zp_current_album->name) . "/" . urlencode($_zp_current_image->name),
+    "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($_zp_current_image->name));
 }
 
 function printImageLink($text, $title, $class=NULL, $id=NULL) {
@@ -864,7 +886,7 @@ function isLandscape() {
 
 
 function printDefaultSizedImage($alt, $class=NULL, $id=NULL) { 
-	echo "<img src=\"" . htmlspecialchars(getDefaultSizedImage()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
+  echo "<img src=\"" . htmlspecialchars(getDefaultSizedImage()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     " width=\"" . getDefaultWidth() . "\" height=\"" . getDefaultHeight() . "\"" .
     (($class) ? " class=\"$class\"" : "") . 
     (($id) ? " id=\"$id\"" : "") . " />";

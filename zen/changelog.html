@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
   <head>
     <title>zenphoto changelog</title>
@@ -46,15 +46,18 @@
 -->
 
 <div class="entry">
-  <h3>Version 1.0.3 beta</h3>
-  <h4>11/10/2006</h4>
+  <h3>Version 1.0.4</h3>
+  <h4>11/25/2006</h4>
   <ul>
     <li>Backend performance improvements! Zenphoto is now up to 10 times faster at rendering album and image pages with extremely large albums, and at least three times as fast for moderately-sized ones.<cite>[trisweb]</cite></li>
     <li>Fixed bug where clicking the album or gallery in the breadcrumb would always go to page 1 <cite>[trisweb]</cite></li>
     <li>Fixed a bug with database constraint naming conflicts with multiple installations <cite>[trisweb]</cite></li>
     <li>Added an ini_set to try to adjust PHP's memory limit (should allow for larger images to be processed). <cite>[trisweb]</cite></li>
     <li>Better and more secure comment input filtering from the kses library. <cite>[Niels Leehneer]</cite></li>
-  </ul> 
+    <li>Database access code abstracted and refactored. All (most) queries are now generalized through a new database class: PersistentObject. <cite>[trisweb]</cite>
+    <li>Bugfixes in saving of "Place" field - formerly overwrote the title (oops) <cite>[trisweb]</cite></li>
+    <li>Sub-albums half implemented! Use the Sub-Albums Test Theme to try it out! Admin control and paging yet to be done. <cite>[trisweb]</cite></li>
+  </ul>
 </div>
 
 
@@ -80,16 +83,16 @@
   <h4>4/1/2006</h4>
   <p>Due to the security enhancements in this release, we <strong>strongly recommend</strong> all users upgrade immediately.</p>
   <ul>
-    <li>Changed the way images are returned: now redirected from cache instead of served through PHP. Should drastically reduce CPU time used (a big issue for Dreamhost users). <cite>[trisweb]</cite></li>
+    <li>Changed the way images are returned. Should drastically reduce CPU time used (a big issue for Dreamhost users). <cite>[trisweb]</cite></li>
     <li>Fixed bug with installation paths containing the string 'zen'; refined path resolution more. <cite>[trisweb]</cite></li>
-    <li>Fixed several critical vulnerabilities and security issues. <cite>[trisweb, luckyspin]</cite></li>
+    <li>Fixed several critical vulnerabilities and security issues. <cite>[trisweb]</cite></li>
     <li>Minor cosmetic path fix&mdash; <code>/page/1</code> should never be seen now. <cite>[trisweb]</cite></li>
     <li>Root domain and subdomain installations now work. For mod_rewrite, use <code>RewriteBase /</code> <cite>[trisweb]</cite></li>
-    <li>Removed all uses of PHP's "short tags" -- resolves incompatibility with some servers. <cite>[trisweb]</cite></li>
-    <li>Fixed bug where <code>imagejpeg</code> has trouble writing new files. <cite>[trisweb]</cite></li>
-    <li>Reorganized config.php, and added ability to manually override paths. Please update your config files. <cite>[trisweb]</cite></li>
-    <li>Fixed several bugs in mod_rewrite URLs. Please update your .htaccess files. <cite>[trisweb]</cite></li>
   </ul>
+</div>
+
+<div class="entry">
+  <p><em>Has it really been this long? Sorry...</em></p>
 </div>
 
 <div class="entry">

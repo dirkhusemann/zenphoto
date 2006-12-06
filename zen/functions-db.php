@@ -27,6 +27,7 @@ function db_connect() {
   return true;
 }
 
+// Connect to the database immediately.
 db_connect();
 
 function query($sql) {
@@ -57,18 +58,37 @@ function prefix($tablename) {
 
 // For things that *are* going into the database, but not from G/P/C.
 function escape($string) {
-  if (get_magic_quotes_gpc()) 
+  if (get_magic_quotes_gpc()) {
     return $string;
-  else 
+  } else {
     return mysql_real_escape_string($string);
+  }
 }
 
 // For things that *aren't* going into the database, from G/P/C.
 function strip($string) {
-  if (get_magic_quotes_gpc()) 
+  if (get_magic_quotes_gpc()) {
     return stripslashes($string);
-  else 
+  } else {
     return $string;
+  }
+}
+
+
+/**
+ * Constructs a where clause ("WHERE uniqueid1='uniquevalue1' AND uniqueid2='uniquevalue2' ...")
+ * from an array (map) of variables and their values which identifies a unique record
+ * in the database table.
+ */
+function getWhereClause($unique_set) {
+  $i = 0;
+  $where = " WHERE";
+  foreach($unique_set as $var => $value) {
+    if ($i > 0) $where .= " AND";
+    $where .= " `$var` = '" . mysql_escape_string($value) . "'";
+    $i++;
+  }
+  return $where;
 }
 
 
