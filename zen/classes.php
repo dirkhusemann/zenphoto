@@ -3,13 +3,9 @@
 
 // classes.php - HEADERS STILL NOT SENT! Do not output text from this file.
 
-// Load the authentication functions.
+// Load the authentication functions, UTF-8 Library, and kses.
 require_once("auth_zp.php");
-
-// Load UTF-8 library
 require_once("utf8.php");
-
-// Load Kses library
 require_once("kses.php");
 
 
@@ -18,15 +14,24 @@ require_once("kses.php");
  * Persistent Object Class *****************************************************
  *
  * Parent ABSTRACT class of all persistent objects. This class should not be
- * instantiated, only used for subclasses. 
+ * instantiated, only used for subclasses. This cannot be enforced, but please follow it!
  *
- * More TODO:
- *  - REMOVE the save() with every set(). Move to saving when action-handling.
- *  - Arbitrary default values when creating a new object (Title, etc.)
- */
+ * Documentation/Instructions:
+ * A child class should run the follwing in its constructor:
+ * $new = parent::PersistentObject('tablename', array('uniquestring'=>$value, 'uniqueid'=>$uniqueid));
+ * where 'tablename' is the name of the database table to use for this object type, and
+ * array('uniquestring'=>$value, ...) defines a unique set of columns (keys) and their current values
+ * which uniquely identifies a single record in that database table for this object.
+ * The return value of the constructor (stored in $new in the above example) will be === TRUE if
+ * a new record was created, and === FALSE if an existing record was updated. This can then be
+ * used to set() default values for new objects and save() them.
+ *
+ *******************************************************************************
+ ******************************************************************************/
 
+// ABSTRACT
 class PersistentObject {
-  
+
   var $data;
   var $updates;
   var $table;
@@ -67,8 +72,7 @@ class PersistentObject {
   }
   
   /** 
-   * Load the data array from the database, using the where() to get the unique
-   * record.
+   * Load the data array from the database, using the unique id set to get the unique record.
    * @return false if the record already exists, true if a new record was created.
    *   The return value can be used to insert default data for new objects.
    */
@@ -114,7 +118,7 @@ class PersistentObject {
       if ($success == false || mysql_affected_rows() != 1) { return false; }
       $this->id = mysql_insert_id();
       $this->updates = array();
-      
+
     } else {
       // Save the existing object (updates only) based on the existing id.
       if (empty($this->updates)) {
@@ -136,6 +140,7 @@ class PersistentObject {
     }
     return true;
   }
+
 }
 
 
@@ -143,7 +148,8 @@ class PersistentObject {
 
 /*******************************************************************************
  *******************************************************************************
- * Image Class ****************************************************************/
+ * Image Class *****************************************************************
+ ******************************************************************************/
 
 class Image extends PersistentObject {
 
@@ -402,11 +408,8 @@ class Image extends PersistentObject {
 
 /*******************************************************************************
  *******************************************************************************
- * Album Class ****************************************************************/
- 
- // TODO: Needs to be converted to PersistentObject subclass in full.
- // Tricky: watch out for sort_key, which is derived from the db, not direct.
- //  -> should probably be an instance var.
+ * Album Class *****************************************************************
+ ******************************************************************************/
 
 class Album extends PersistentObject {
 
@@ -792,19 +795,12 @@ class Album extends PersistentObject {
 }
 
 
-/*******************************************************************************
- *******************************************************************************
- * Group Class ****************************************************************/
-// To be implemented later.
-
-class Group {
-
-}
 
 /*******************************************************************************
  *******************************************************************************
- * Gallery Class **************************************************************/
- 
+ * Gallery Class ***************************************************************
+ ******************************************************************************/
+
 class Gallery {
 
   var $albumdir = NULL;
@@ -904,24 +900,16 @@ class Gallery {
    * Load all of the albums names that are found in the Albums directory on disk.
    *
    * @return An array of album names.
-   * 
-   * @author Todd Papaioannou (lucky@luckyspin.org)
-   * @since  1.0.0
    */
   function loadAlbumNames() {
-    
-    // This is where we'll look for albums
     $albumdir = $this->getAlbumDir();
-    
-    // Be defensive
     if (!is_dir($albumdir) || !is_readable($albumdir)) {
       die("Error: The 'albums' directory cannot be found or is not readable.");
     }
 
     $dir = opendir($albumdir);
     $albums = array();
-    
-    // Walk through the list and add them to the array
+
     while ($dirname = readdir($dir)) {
       if (is_dir($albumdir.$dirname) && substr($dirname, 0, 1) != '.') {
         $albums[] = $dirname;
@@ -931,16 +919,26 @@ class Gallery {
     
     return $albums;
   }
+
   
-  // Takes care of bounds checking, no need to check input.
+  /**
+   * Returns the $index'th album in the array. Index is an integer.
+   * Takes care of bounds checking, no need to check input.
+   */
   function getAlbum($index) {
     $this->getAlbums();
-    if ($index >= 0 && $index < $this->getNumAlbums())
+    if ($index >= 0 && $index < $this->getNumAlbums()) {
       return new Album($this, $this->albums[$index]);
-    else
+    } else {
       return false;
+    }
   }
-  
+
+
+  /**
+   * Returns the total number of TOPLEVEL albums in the gallery (does not include sub-albums)
+   * @param $db whether or not to use the database (includes ALL detected albums) or the directories
+   */
   function getNumAlbums($db=false) {
     $count = -1;
     if (!$db) {
@@ -955,8 +953,10 @@ class Gallery {
   }
   
   
-  /** Theme methods. */
-  
+  /**
+   * Populates the theme array and returns it. The theme array contains information about
+   * all the currently available themes.
+   */
   function getThemes() {
     if (empty($this->themes)) {
       $themedir = SERVERPATH . "/themes";
@@ -972,7 +972,12 @@ class Gallery {
     }
     return $this->themes;
   }
-  
+
+
+  /**
+   * Returns the foldername of the current theme. Uses the theme.txt file first,
+   * and if that doesn't exist or the theme in it doesn't exist, then the default theme is used.
+   */
   function getCurrentTheme() {
     if (empty($this->theme)) {
       $themefile = SERVERPATH . "/cache/theme.txt";
@@ -992,7 +997,12 @@ class Gallery {
     }
     return $this->theme;
   }
-  
+
+
+  /**
+   * Sets the current theme by writing it to the theme.txt file in the cache folder.
+   * TODO: use the database for this instead, with an options or prefs table.
+   */
   function setCurrentTheme($theme) {
     $themefile = SERVERPATH . "/cache/theme.txt";
     $themes = $this->getThemes();
@@ -1004,17 +1014,23 @@ class Gallery {
     }
   }
   
-  
+
+  /**
+   * getNumImages() - efficiently get the number of images from a database SELECT count(*)
+   * Ideally one should call garbageCollect() before to make sure the database is current.
+   */
   function getNumImages() {
     $result = query_single_row("SELECT count(*) FROM ".prefix('images'));
     return array_shift($result);
   }
+
   
   function getNumComments() {
     $result = query_single_row("SELECT count(*) FROM ".prefix('comments')." WHERE inmoderation = 0");
     return array_shift($result);
   }
   
+
   function getAllComments() {
     $result = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.website,"
         . " (c.date + 0) AS date, c.comment, c.email FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, "
@@ -1087,6 +1103,9 @@ class Gallery {
   }
   
   
+  /**
+   * Returns the size in bytes of the cache folder. WARNING: VERY SLOW.
+   */
   function sizeOfCache() {
     $cachefolder = SERVERPATH . "/cache";
     if (is_dir($cachefolder)) {
@@ -1095,7 +1114,11 @@ class Gallery {
       return 0;
     }
   }
-  
+
+
+  /**
+   * Returns the size in bytes of the albums folder. WARNING: VERY SLOW.
+   */
   function sizeOfImages() {
     $imagefolder = SERVERPATH . "/albums";
     if (is_dir($imagefolder)) {
@@ -1105,7 +1128,8 @@ class Gallery {
     }
   }
   
-  // TODO
+
+  /** TODO - Not yet implemented. */
   function clearCache() {
     $cachefolder = SERVERPATH . "/cache";
     return null;
