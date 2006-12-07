@@ -662,21 +662,15 @@ function printImageDesc($editable=false) {
 
 /**
  * Get the unique ID of this image.
- *
- * @author Todd Papaioannou (lucky@luckyspin.org)
- * @since  1.0.0
  */
 function getImageID() {
   if (!in_context(ZP_IMAGE)) return false;
   global $_zp_current_image;
-  return $_zp_current_image->getImageID();
+  return $_zp_current_image->id;
 }
 
 /**
  * Print the unique ID of this image.
- *
- * @author Todd Papaioannou (lucky@luckyspin.org)
- * @since  1.0.0
  */
 function printImageID() {
   if (!in_context(ZP_IMAGE)) return false;
@@ -686,9 +680,6 @@ function printImageID() {
 
 /**
  * Get the sort order of this image.
- *
- * @author Todd Papaioannou (lucky@luckyspin.org)
- * @since  1.0.0
  */
 function getImageSortOrder() {
   if (!in_context(ZP_IMAGE)) return false;
@@ -698,9 +689,6 @@ function getImageSortOrder() {
 
 /**
  * Print the sort order of this image.
- *
- * @author Todd Papaioannou (lucky@luckyspin.org)
- * @since  1.0.0
  */
 function printImageSortOrder() {
   if (!in_context(ZP_IMAGE)) return false;
