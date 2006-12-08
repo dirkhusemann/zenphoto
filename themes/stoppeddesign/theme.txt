@@ -1,0 +1,6 @@
+# Zenphoto theme definition file
+name::stoppeddesign theme
+author::Ben Spicer
+version::0.1
+date::05/01/2006
+desc::A theme originally based upon the design from <a href="http://stopdesign.com/templates/photos/">Douglas Bowman</a>, ported to zp by Sjard Bleecken, and given funky new beats by <a href="http://www.benspicer.com/photos/">Ben Spicer</a>. Enjoy. This theme is licensed under the <a href="http://creativecommons.org/licenses/by-nc-sa/2.5/">Creative Commons Attribution-NonCommercial-ShareAlike 2.5</a> License.

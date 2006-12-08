@@ -1,0 +1,5 @@
+Known bugs:
+- Internet Explorer is a real problem when it comes to displaying CSS styled sites.  The next and prev slides dont display exactly as they should when using Internet Explorer.  
+The hovers (<- prev, next ->, or full view) that you get with CSS 2.0 capable browsers are also hidden from IE.
+
+- FireFox/Camino cant yet handle the CSS 3.0 text-shadow, so you can't see the hover text <- prev, next ->, or full view if you have a black background.  Safari and Konqueror can.  IE6 has no hope, and IE7 requires a PC for me to test it :)
