@@ -177,7 +177,6 @@ function unzip($file, $dir) {
          fclose($fp);
          zip_entry_close($zip_entry);
        }
-       $count++;
      }
      zip_close($zip);
    }

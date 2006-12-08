@@ -35,6 +35,11 @@ $conf['mysql_prefix'] = "";
 // What you want to call your photo gallery.
 $conf['gallery_title'] = "my photos";
 
+// Your web site title and address, if you have one. If not, leave blank.
+// These are used to link back to your main site, but your theme must support it.
+$conf['website_title'] = "";
+$conf['website_url'] = "";
+
 // If you're in a different time zone from your server, set the offset in hours:
 $conf['time_offset'] = 0;
 
