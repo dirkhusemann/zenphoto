@@ -1,0 +1,6 @@
+# Zenphoto theme definition file
+name::Zenphoto Default (Dark)
+author::Joen Asmussen & Levi Buzolic
+version::1.0
+date::9/17/2005
+desc::The default theme, designed by Joen of <a href="http://www.noscope.com">noscope.com</a> which has been modified by Levi from <a href="http://www.loadedreality.com">loadedreality.com</a>.
