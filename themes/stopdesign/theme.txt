@@ -3,4 +3,4 @@ name::Stopdesign Theme
 author::Sjard Bleecken
 version::0.9
 date::10/10/2005
-desc::A theme based on the design from <a href="http://stopdesign.com/templates/photos/">Douglas Bowman</a>.
+desc::A theme based on the design from <a href="http://stopdesign.com/templates/photos/">Douglas Bowman</a>. This theme is licensed under the <a href="http://creativecommons.org/licenses/by-nc-sa/2.5/">Creative Commons Attribution-NonCommercial-ShareAlike 2.5</a> License.
