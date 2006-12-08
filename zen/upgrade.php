@@ -69,6 +69,11 @@ if (file_exists("zp-config.php")) {
         // This is probably bad behavior, so maybe do some checks?
         @mysql_query($sql);
       }
+      echo "<h3>Cleaning up...</h3>";
+      $gallery = new Gallery();
+      $gallery->clearCache();
+      $gallery->garbageCollect(true, true);
+      
       echo "<h3>Done!</h3>";
       echo "<p>You can now <a href=\"../\">View your gallery</a>, or <a href=\"../admin/\">administrate.</a></p>";
     

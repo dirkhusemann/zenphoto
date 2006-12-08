@@ -962,9 +962,11 @@ class Gallery {
       $themedir = SERVERPATH . "/themes";
       $themes = array();
       if ($dp = @opendir($themedir)) {
-        while (false !== ($file = readdir($dp))) {
-          if (substr($file, 0, 1) != "." && is_dir("$themedir/$file")) {
-            $themes[$file] = parseThemeDef($themedir . "/$file/theme.txt");
+        while (false !== ($dir = readdir($dp))) {
+          if (substr($dir, 0, 1) != "." && is_dir("$themedir/$dir")) {
+            if (file_exists($themedir . "/$dir/theme.txt")) {
+              $themes[$dir] = parseThemeDef($themedir . "/$dir/theme.txt");
+            }
           }
         }
       }
@@ -1129,9 +1131,19 @@ class Gallery {
   }
   
 
-  /** TODO - Not yet implemented. */
-  function clearCache() {
+  /** 
+   * Cleans out the cache folder for older installations (deletes root-level JPGs)
+   * TODO: clean out the entire folder on request.
+   */
+  function clearCache($folders=false) {
     $cachefolder = SERVERPATH . "/cache";
+    if (is_dir($cachefolder)) {
+      foreach (glob($cachefolder . "/*.jpg") as $filename) {
+        if (file_exists($filename)) {
+          @unlink($filename);
+        }
+      }
+    }
     return null;
   }
   
