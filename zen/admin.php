@@ -305,7 +305,7 @@ if (!zp_loggedin()) {
 <?php foreach ($images as $filename) { 
   $image = new Image($album, $filename);
   $selected = ($filename == $album->get('thumb')); ?>
-                    <option class="thumboption" style="background-image: url(<?php echo $image->getThumb(); ?>); background-repeat: no-repeat;" value="<?php echo $filename ?>"<?php if ($selected) echo ' selected="selected"'; ?>><?php echo $image->get('title') ?><?php echo ($filename != $image->get('title')) ? " ($filename)" : ""; ?></option>
+                    <option class="thumboption" style="background-image: url(<?php echo $image->getThumb(); ?>); background-repeat: no-repeat;" value="<?php echo $filename; ?>"<?php if ($selected) echo ' selected="selected"'; ?>><?php echo $image->get('title'); ?><?php echo ($filename != $image->get('title')) ? " ($filename)" : ""; ?></option>
 <?php } ?>
                   </select>
                   <script type="text/javascript">updateThumbPreview(document.getElementById('thumbselect'));</script>
