@@ -95,6 +95,6 @@ if (file_exists("zp-config.php")) {
     <li><strong>You have no zp-config.php</strong>. You probably want to run <a href="setup.php" title="Setup">setup</a> first. </li>
   </ul>
   
-<? } ?>
+<?php } ?>
 </body>
 </html>

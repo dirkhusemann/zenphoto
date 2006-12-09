@@ -289,7 +289,7 @@ if (!zp_loggedin()) {
         <?php } ?>
     
         <form name="albumedit" action="?page=edit&action=save" method="post">
-          <input type="hidden" name="album" value="<?= $album->name; ?>" />
+          <input type="hidden" name="album" value="<?php echo $album->name; ?>" />
         
           <div class="box" style="padding: 15px;">
             <h2>editing <em><?php echo $album->getTitle(); ?></em></h2>
@@ -305,7 +305,7 @@ if (!zp_loggedin()) {
 <?php foreach ($images as $filename) { 
   $image = new Image($album, $filename);
   $selected = ($filename == $album->get('thumb')); ?>
-                    <option class="thumboption" style="background-image: url(<?= $image->getThumb(); ?>); background-repeat: no-repeat;" value="<?= $filename ?>"<?php if ($selected) echo ' selected="selected"'; ?>><?= $image->get('title') ?><?= ($filename != $image->get('title')) ? " ($filename)" : "" ?></option>
+                    <option class="thumboption" style="background-image: url(<?php echo $image->getThumb(); ?>); background-repeat: no-repeat;" value="<?php echo $filename ?>"<?php if ($selected) echo ' selected="selected"'; ?>><?php echo $image->get('title') ?><?php echo ($filename != $image->get('title')) ? " ($filename)" : ""; ?></option>
 <?php } ?>
                   </select>
                   <script type="text/javascript">updateThumbPreview(document.getElementById('thumbselect'));</script>
@@ -316,7 +316,7 @@ if (!zp_loggedin()) {
                 <td>
                   <select id="sortselect" name="sortby">
                   <?php foreach ($sortby as $sorttype) { ?>
-                    <option value="<?= $sorttype ?>"<?php if ($sorttype == $album->getSortType()) echo ' selected="selected"'; ?>><?= $sorttype ?></option>
+                    <option value="<?php echo $sorttype; ?>"<?php if ($sorttype == $album->getSortType()) echo ' selected="selected"'; ?>><?php echo $sorttype; ?></option>
                   <?php } ?>
                   </select>
                 </td>
@@ -324,7 +324,7 @@ if (!zp_loggedin()) {
             </table>
           </div>
 
-          <input type="hidden" name="totalimages" value="<?= $totalimages; ?>" />
+          <input type="hidden" name="totalimages" value="<?php echo $totalimages; ?>" />
           
           <p><input type="submit" value="save" /></p>
           <hr />
@@ -340,23 +340,23 @@ if (!zp_loggedin()) {
               $image = new Image($album, $filename);
             ?>
             
-            <tr id=""<?= ($currentimage % 2 == 0) ?  "class=\"alt\"" : "" ?>>
+            <tr id=""<?php echo ($currentimage % 2 == 0) ?  "class=\"alt\"" : ""; ?>>
               <td valign="top">
-                <img id="thumb-<?= $currentimage ?>" src="<?=$image->getThumb();?>" alt="<?=$image->filename;?>" 
-                  onclick="toggleBigImage('thumb-<?= $currentimage ?>', '<?= $image->getSizedImage(zp_conf('image_size')) ?>');" />
+                <img id="thumb-<?php echo $currentimage; ?>" src="<?php echo $image->getThumb();?>" alt="<?php echo $image->filename;?>" 
+                  onclick="toggleBigImage('thumb-<?php echo $currentimage; ?>', '<?php echo $image->getSizedImage(zp_conf('image_size')); ?>');" />
               </td>
   
               <td>
-                <input type="hidden" name="<?= $currentimage; ?>-filename" value="<?= $image->filename; ?>" />
-                Title: <input type="text" size="57" name="<?= $currentimage; ?>-title" value="<?= $image->getTitle(); ?>" /><br />
+                <input type="hidden" name="<?php echo $currentimage; ?>-filename" value="<?php echo $image->filename; ?>" />
+                Title: <input type="text" size="57" name="<?php echo $currentimage; ?>-title" value="<?php echo $image->getTitle(); ?>" /><br />
                 Description: <br />
-                <textarea name="<?= $currentimage; ?>-desc" cols="60" rows="4"><?= $image->getDesc(); ?></textarea>
+                <textarea name="<?php echo $currentimage; ?>-desc" cols="60" rows="4"><?php echo $image->getDesc(); ?></textarea>
                 <br /><br />
                 
               </td>
 
               <td style="padding-left: 1em;">
-                <a href="javascript: confirmDeleteImage('?page=edit&action=deleteimage&album=<?= $album->name; ?>&image=<?= $image->filename; ?>');" title="Delete the image <?= $image->filename; ?>"><img src="images/delete.gif" style="border: 0px;" alt="x" /></a>
+                <a href="javascript: confirmDeleteImage('?page=edit&action=deleteimage&album=<?php echo $album->name; ?>&image=<?php echo $image->filename; ?>');" title="Delete the image <?php echo $image->filename; ?>"><img src="images/delete.gif" style="border: 0px;" alt="x" /></a>
               </td>
 
                 
@@ -398,12 +398,12 @@ if (!zp_loggedin()) {
           echo "<hr />";
         }
         ?> 
-        <input type="hidden" name="totalalbums" value="<?= sizeof($albums); ?>" /> <?php
+        <input type="hidden" name="totalalbums" value="<?php echo sizeof($albums); ?>" /> <?php
         $currentalbum = 0;
         foreach ($albums as $folder) { 
           $album = new Album($gallery, $folder);
       ?>
-        <input type="hidden" name="<?= $currentalbum; ?>-folder" value="<?= $album->name; ?>" />
+        <input type="hidden" name="<?php echo $currentalbum; ?>-folder" value="<?php echo $album->name; ?>" />
         <table>
           <tr><td rowspan="4" valign="top"><a href="?page=edit&album=<?php echo $album->name; ?>" title="Edit this album: <?php echo $album->name; ?>"><img src="<?php echo $album->getAlbumThumb(); ?>" /></a></td>
             <td align="right" valign="top">Album Title: </td> <td><input type="text" name="<?php echo $currentalbum; ?>-title" value="<?php echo $album->getTitle(); ?>" /></td></tr>
@@ -464,9 +464,9 @@ if (!zp_loggedin()) {
             <table cellspacing="0" width="100%">
               <tr>
                 <td align="left" width="20">
-                <a href="?page=edit&album=<?= $album->name; ?>" title="Edit this album: <?= $album->name; ?>"><img height="40" width="40" src="<?= $album->getAlbumThumb(); ?>" /></a>
+                <a href="?page=edit&album=<?php echo $album->name; ?>" title="Edit this album: <?php echo $album->name; ?>"><img height="40" width="40" src="<?php echo $album->getAlbumThumb(); ?>" /></a>
                 </td>
-                <td> <a href="?page=edit&album=<?= $album->name; ?>" title="Edit this album: <?= $album->name; ?>"><?= $album->getTitle(); ?></a>
+                <td> <a href="?page=edit&album=<?php echo $album->name; ?>" title="Edit this album: <?php echo $album->name; ?>"><?php echo $album->getTitle(); ?></a>
                 </td>
 
                 <td width="20" align="right">
@@ -476,7 +476,7 @@ if (!zp_loggedin()) {
               </tr>
             </table>
             </div>
-            <? } ?>
+            <?php } ?>
           </div>  
           </td>
           </tr>
@@ -618,7 +618,7 @@ if (!zp_loggedin()) {
       <?php /* Display a message if needed. Fade out and hide after 2 seconds. */ 
         if ((isset($_GET['ndeleted']) && $_GET['ndeleted'] > 0) || isset($_GET['sedit'])) { ?>
         <div class="errorbox" id="message">
-          <?php if (isset($_GET['ndeleted'])) { ?> <h2><?= $_GET['ndeleted'] ?> Comments deleted successfully.</h2> <?php } ?>
+          <?php if (isset($_GET['ndeleted'])) { ?> <h2><?php echo $_GET['ndeleted']; ?> Comments deleted successfully.</h2> <?php } ?>
           <?php if (isset($_GET['sedit'])) { ?> <h2>Comment saved successfully.</h2> <?php } ?>
         </div>
         <script type="text/javascript">
@@ -628,9 +628,9 @@ if (!zp_loggedin()) {
 	  
 	  <p>You can edit or delete comments on your photos.</p>
     <?php if($viewall) { ?>
-      <p>Showing <strong>all</strong> comments. <a href="?page=comments<?= ($fulltext ? "&fulltext":""); ?>"><strong>Just show 20.</strong></a></p>
+      <p>Showing <strong>all</strong> comments. <a href="?page=comments<?php echo ($fulltext ? "&fulltext":""); ?>"><strong>Just show 20.</strong></a></p>
     <?php } else { ?>
-      <p>Showing the latest <strong>20</strong> comments. <a href="?page=comments&viewall<?= ($fulltext ? "&fulltext":""); ?>"><strong>View All</strong></a></p>
+      <p>Showing the latest <strong>20</strong> comments. <a href="?page=comments&viewall<?php echo ($fulltext ? "&fulltext":""); ?>"><strong>View All</strong></a></p>
     <?php } ?>
       <form name="comments" action="?page=comments&action=deletecomments" method="post" onsubmit="return confirm('Are you sure you want to delete these comments?');">
       <table class="bordered">
@@ -639,8 +639,8 @@ if (!zp_loggedin()) {
           <th>Image</th>
           <th>Author/Link</th>
           <th>Date/Time</th>
-          <th>Comment <?php if(!$fulltext) { ?>(<a href="?page=comments&fulltext<?= $viewall ? "&viewall":"" ?>">View full text</a>)
-            <?php } else { ?>(<a href="?page=comments<?= $viewall ? "&viewall":"" ?>">View truncated</a>)<?php } ?></th>
+          <th>Comment <?php if(!$fulltext) { ?>(<a href="?page=comments&fulltext<?php echo $viewall ? "&viewall":""; ?>">View full text</a>)
+            <?php } else { ?>(<a href="?page=comments<?php echo $viewall ? "&viewall":""; ?>">View truncated</a>)<?php } ?></th>
           <th>E-Mail</th>
           <th colspan="2">&nbsp;</th>
         </tr>
@@ -661,15 +661,15 @@ if (!zp_loggedin()) {
   ?>
 
           <tr>
-            <td><input type="checkbox" name="ids[]" value="<?= $id ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" /></td>
+            <td><input type="checkbox" name="ids[]" value="<?php echo $id; ?>" onclick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" /></td>
             <td style="font-size: 7pt;"><?php echo "<a href=\"" . (zp_conf("mod_rewrite") ? "../$album/$image" : "../index.php?album="
               .urlencode($album)."&image=".urlencode($image)) . "\">$albumtitle / $title</a>"; ?></td>
-            <td><?= $website ? "<a href=\"$website\">$author</a>" : $author ?></td>
-            <td style="font-size: 7pt;"><?= $date ?></td>
-            <td><?= ($fulltext) ? $fullcomment : $shortcomment ?></td>
-            <td><a href="mailto:<?= $email ?>?body=<?= commentReply($fullcomment, $author, $image, $albumtitle); ?>">Reply</a></td>
-            <td><a href="?page=editcomment&id=<?= $id ?>" title="Edit this comment.">Edit</a></td>
-            <td><a href="javascript: if(confirm('Are you sure you want to delete this comment?')) { window.location='?page=comments&action=deletecomments&id=<?= $id ?>'; }" title="Delete this comment." style="color: #c33;">Delete</a></td>
+            <td><?php echo $website ? "<a href=\"$website\">$author</a>" : $author; ?></td>
+            <td style="font-size: 7pt;"><?php echo $date; ?></td>
+            <td><?php echo ($fulltext) ? $fullcomment : $shortcomment; ?></td>
+            <td><a href="mailto:<?php echo $email; ?>?body=<?php echo commentReply($fullcomment, $author, $image, $albumtitle); ?>">Reply</a></td>
+            <td><a href="?page=editcomment&id=<?php echo $id; ?>" title="Edit this comment.">Edit</a></td>
+            <td><a href="javascript: if(confirm('Are you sure you want to delete this comment?')) { window.location='?page=comments&action=deletecomments&id=<?php echo $id; ?>'; }" title="Delete this comment." style="color: #c33;">Delete</a></td>
           </tr>
   <?php } ?>
 		<tr>
@@ -698,14 +698,14 @@ if (!zp_loggedin()) {
       ?>
       
       <form action="?page=comments&action=savecomment" method="post">
-        <input type="hidden" name="id" value="<?= $id ?>" />
+        <input type="hidden" name="id" value="<?php echo $id; ?>" />
         <table>
         
-          <tr><td width="100">Author:</td>    <td><input type="text" size="40" name="name" value="<?= $name ?>" /></td></tr>
-          <tr><td>Web Site:</td>              <td><input type="text" size="40" name="website" value="<?= $website ?>" /></td></tr>
-          <tr><td>E-Mail:</td>                <td><input type="text" size="40" name="email" value="<?= $email ?>" /></td></tr>
-          <tr><td>Date/Time:</td>             <td><input type="text" size="18" name="date" value="<?= $date ?>" /></td></tr>
-          <tr><td valign="top">Comment:</td>  <td><textarea rows="8" cols="60" name="comment" /><?= $comment ?></textarea></td></tr>
+          <tr><td width="100">Author:</td>    <td><input type="text" size="40" name="name" value="<?php echo $name; ?>" /></td></tr>
+          <tr><td>Web Site:</td>              <td><input type="text" size="40" name="website" value="<?php echo $website; ?>" /></td></tr>
+          <tr><td>E-Mail:</td>                <td><input type="text" size="40" name="email" value="<?php echo $email; ?>" /></td></tr>
+          <tr><td>Date/Time:</td>             <td><input type="text" size="18" name="date" value="<?php echo $date; ?>" /></td></tr>
+          <tr><td valign="top">Comment:</td>  <td><textarea rows="8" cols="60" name="comment" /><?php echo $comment; ?></textarea></td></tr>
           <tr><td></td>                       <td><input type="submit" value="save" /> <input type="button" value="cancel" onclick="window.location = '?page=comments';"/>
 
         </table>
@@ -740,15 +740,15 @@ if (!zp_loggedin()) {
               else if (file_exists("$themedir/theme.jpg")) $themeimage = "$themeweb/theme.jpg";
               else $themeimage = false;
               if ($themeimage) { ?>
-                <img height="150" width="150" src="<?= $themeimage ?>" alt="Theme Screenshot" />
+                <img height="150" width="150" src="<?php echo $themeimage; ?>" alt="Theme Screenshot" />
                 
-            <? } ?>
+            <?php } ?>
           </td>
           <td<?php echo $style; ?>>
-            <strong><?= $themeinfo['name'] ?></strong><br />
-            <?= $themeinfo['author'] ?><br />
-            Version <?= $themeinfo['version'] ?>, <?= $themeinfo['date'] ?><br />
-            <?= $themeinfo['desc'] ?>
+            <strong><?php echo $themeinfo['name']; ?></strong><br />
+            <?php echo $themeinfo['author']; ?><br />
+            Version <?php echo $themeinfo['version']; ?>, <?php echo $themeinfo['date']; ?><br />
+            <?php echo $themeinfo['desc']; ?>
           </td>
           <td width="100"<?php echo $style; ?>>
             <?php if (!($theme == $current_theme)) { ?>
@@ -808,8 +808,8 @@ if (!zp_loggedin()) {
 			<?php
 			// These disk operations are too slow...
 			/*
-      <p>Total size of album images: <strong><?= size_readable($gallery->sizeOfImages(), "MB"); ?></strong></p>
-			<p>Total size of image cache: <strong><?= size_readable($gallery->sizeOfCache(), "MB"); ?></strong></p>
+      <p>Total size of album images: <strong><?php echo size_readable($gallery->sizeOfImages(), "MB"); ?></strong></p>
+			<p>Total size of image cache: <strong><?php echo size_readable($gallery->sizeOfCache(), "MB"); ?></strong></p>
       */
 			?>
 		</div>

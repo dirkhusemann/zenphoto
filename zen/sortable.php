@@ -176,7 +176,7 @@ class SLLists {
 	function printForm($action, $method = 'POST', $submitText = 'Submit', $submitClass = '',$formName = 'sortableListForm') {
 		?>
 		<form action="<?php echo $action;?>" method="<?php echo $method;?>" onSubmit="populateHiddenVars();" name="<?php echo $formName;?>" id="<?php echo $formName;?>">
-			<? $this->printHiddenInputs();?>
+			<?php $this->printHiddenInputs();?>
 			<input type="hidden" name="sortableListsSubmitted" value="true">
 			<?php
 			if ($this->debug) {
