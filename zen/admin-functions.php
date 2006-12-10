@@ -114,8 +114,8 @@ function printViewLink($album, $text, $title=NULL, $class=NULL, $id=NULL) {
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0 
  */
-function printImageThumb($image, $class=NULL, $id=NULL) { 
-	echo "\n  <img class=\"imagethumb\" id=\"id_". $image->getImageID() ."\" src=\"" . $image->getThumb() . "\" alt=\"". $image->getTitle() . "\"" .
+function printImageThumb($image, $class=NULL, $id=NULL) {
+	echo "\n  <img class=\"imagethumb\" id=\"id_". $image->id ."\" src=\"" . $image->getThumb() . "\" alt=\"". $image->getTitle() . "\"" .
     ((zp_conf('thumb_crop')) ? " width=\"".zp_conf('thumb_crop_width')."\" height=\"".zp_conf('thumb_crop_height')."\"" : "") .
 		(($class) ? " class=\"$class\"" : "") . 
 		(($id) ? " id=\"$id\"" : "") . " />";

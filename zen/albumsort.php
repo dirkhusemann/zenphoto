@@ -73,6 +73,7 @@ if (!zp_loggedin()) {
 
           if ($album->getSortType() != "Manual") {
             $album->setSortType("Manual");
+            $album->save();
             echo " Album sorting set to Manual.</p>";
           }
           echo "</p>";
