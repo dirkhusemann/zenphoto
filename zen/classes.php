@@ -204,6 +204,7 @@ class Image extends PersistentObject {
       $size = getimagesize($this->localpath);
       $this->set('width', $size[0]);
       $this->set('height', $size[1]);
+      $this->save();
     }
   }
   
