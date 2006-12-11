@@ -82,9 +82,10 @@ if (file_exists("zp-config.php")) {
       echo "<p>We're all set to upgrade the database tables: <code>$tbl_albums</code> and <code>$tbl_images</code>.</p>";
       echo "<p><strong>It's probably a good idea to make a backup first.</strong></p>";
       echo "<p><a href=\"?upgrade\" title=\"Upgrade the database tables.\" style=\"font-size: 15pt; font-weight: bold;\">Go!</a></p>";
+    
     } else {
       echo "<h3>database not connected</h3>";
-      echo "<p>Check the config.php file to make sure you've got the right username, password, host, and database. If you haven't created the database yet, now would be a good time.";
+      echo "<p>Check the zp-config.php file to make sure you've got the right username, password, host, and database. If you haven't created the database yet, now would be a good time.";
     }
   } 
   
