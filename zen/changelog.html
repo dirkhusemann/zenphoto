@@ -32,7 +32,7 @@
 <!-- 
 <div class="entry">
   <h3>Version 0.0.0</h3>
-  <h4>6/12/2005</h4>
+  <h4>12/8/2006</h4>
   <ul>
     <li></li>
   </ul>
@@ -46,22 +46,37 @@
 -->
 
 <div class="entry">
+  <h3>Version 1.0.6</h3>
+  <h4>12/11/2006</h4>
+  <ul>
+    <li>Bug: image sorting within albums fixed (getImageId() not found error). <cite>[trisweb]</cite></li>
+    <li>Bug: image dimensions are now cached in the database again (no functional difference, but much faster). <cite>[trisweb]</cite></li>
+    <li>Changed the default RewriteBase in .htaccess to <code>/zenphoto</code> to correspond with the default folder in the package. <cite>[trisweb]</cite></li>
+  </ul>
+</div>
+
+<div class="entry">
   <h3>Version 1.0.5</h3>
   <h4>12/8/2006</h4>
   <ul>
-    <li>1.0.4 was littered with PHP short tags by accident (an SVN reversion somehow happened), now fixed.<cite>[trisweb]</cite></li>
+    <li>1.0.4 was littered with PHP short tags by accident (an SVN reversion somehow happened), now fixed. <cite>[trisweb]</cite></li>
     <li>No other changes.</li>
+  </ul>
+  
+  <h4>Relevant links:</h4>
+  <ul>
+    <li><a href="http://www.trisweb.com/archives/2006/12/10/zenphoto-105-released/">trisweb.com - Zenphoto 1.0.5 Released</a></li>
   </ul>
 </div>
 
 <div class="entry">
   <h3>Version 1.0.4</h3>
-  <h4>11/25/2006</h4>
+  <h4>12/8/2006</h4>
   <ul>
-    <li>Backend performance improvements! Zenphoto is now up to 10 times faster at rendering album and image pages with extremely large albums, and at least three times as fast for moderately-sized ones.<cite>[trisweb]</cite></li>
+    <li>Backend performance improvements! Zenphoto is now up to 10 times faster at rendering album and image pages with extremely large albums, and at least three times as fast for moderately-sized ones. <cite>[trisweb]</cite></li>
     <li>Fixed bug where clicking the album or gallery in the breadcrumb would always go to page 1 <cite>[trisweb]</cite></li>
     <li>Fixed a bug with database constraint naming conflicts with multiple installations <cite>[trisweb]</cite></li>
-    <li>Added an ini_set to try to adjust PHP's memory limit (may allow for larger images to be processed). <cite>[trisweb]</cite></li>
+    <li>Added an <code>ini_set</code> to try to adjust PHP's memory limit (may allow for larger images to be processed). <cite>[trisweb]</cite></li>
     <li>Better and more secure comment input filtering from the kses library. <cite>[Niels Leehneer]</cite></li>
     <li>Database access code abstracted and refactored. All (most) queries are now generalized through a new database class: PersistentObject. <cite>[trisweb]</cite>
     <li>Bugfixes in saving of "Place" field - formerly overwrote the title (oops) <cite>[trisweb]</cite></li>
@@ -101,12 +116,8 @@
   </ul>
 </div>
 
-<div class="entry">
-  <p><em>Has it really been this long? Sorry...</em></p>
-</div>
 
 <div class="entry">
-  
   <h3>Version 1.0.1 beta</h3>
   <h4>1/11/06</h4>
   <ul>
@@ -114,8 +125,8 @@
   </ul>
 </div>
 
+
 <div class="entry">
-  
   <h3>Version 1.0.0 beta</h3>
   <h4>1/10/06</h4>
   <ul>
@@ -132,7 +143,6 @@
 </div>
 
 <div class="entry">
-
   <h3>Version 0.9.0</h3>
   <h4>9/27/2005</h4>
   <ul>

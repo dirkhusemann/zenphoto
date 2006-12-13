@@ -28,8 +28,10 @@ if (isset($_COOKIE['zenphoto_auth'])) {
     if ($user == zp_conf("adminuser") && $pass == zp_conf("adminpass")) {
       // Correct auth info. Set the cookie.
       setcookie("zenphoto_auth", md5($user.$pass), time()+5184000, $cookiepath);
-      header("Location: " . FULLWEBPATH . $redirect);
       $_zp_loggedin = true;
+      //// FIXME: Breaks IIS
+      if (!empty($redirect)) { header("Location: " . FULLWEBPATH . $redirect); }
+      //// 
     } else {
       // Clear the cookie, just in case
       setcookie("zenphoto_auth", "", time()-368000, $cookiepath);
