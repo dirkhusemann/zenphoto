@@ -35,7 +35,7 @@ function query($sql) {
   if ($mysql_connection == null) {
     db_connect();
   }
-  $result = mysql_query($sql) or die("MySQL Query ( $sql ) Failed. Error: " . mysql_error());
+  $result = mysql_query($sql, $mysql_connection) or die("MySQL Query ( $sql ) Failed. Error: " . mysql_error());
   return $result;
 }
 
