@@ -42,11 +42,16 @@ $upscale = zp_conf('image_allow_upscale');
 
 // Don't let anything get above this, to save the server from burning up...
 define('MAX_SIZE', 3000);
+$debug = isset($_GET['debug']) ? true : false;
 
-// Generate an image from the given file ($_GET['f']) at the given size ($_GET['s'])
+// Check for minimum parameters.
 if (!isset($_GET['a']) || !isset($_GET['i'])) {
-	die("<b>Zenphoto error:</b> Please specify both an album and an image.");
-	// TODO: Return a default image (possibly with an error message) instead of just dying.
+  if ($debug) {
+    die("<b>Zenphoto error:</b> You must specify at least both an album and an image.");
+  } else {
+    header("Location: " . FULLWEBPATH . "/zen/images/err-imagenotfound.gif");
+    return;
+  }
 }
 
 // Fix special characters in the album and image names if mod_rewrite is on:
@@ -138,11 +143,26 @@ $imgfile = SERVERPATH  . "/albums/$album/$image";
 
 // Check for the source image.
 if (!file_exists($imgfile)) {
-  die("<b>Zenphoto error:</b> Image not found.");
+  if ($debug) {
+    die("<b>Zenphoto error:</b> Image not found.");
+  } else {
+    header("Location: " . FULLWEBPATH . "/zen/images/err-imagenotfound.gif");
+    return;
+  }
+}
+
+$process = true;
+// If the file exists, check its modification time and update as needed.
+if (file_exists($newfile)) { 
+  if (filemtime($newfile) < filemtime($imgfile)) {
+    $process = true;
+  } else {
+    $process = false;
+  }
 }
 
 // If the file hasn't been cached yet, create it.
-if (!file_exists($newfile)) {
+if ($process) {
 	if ($im = get_image($imgfile)) {
 		$w = imagesx($im);
 		$h = imagesy($im);
@@ -173,7 +193,12 @@ if (!file_exists($newfile)) {
       $size = $width = false;
     } else {
       // There's a problem up there somewhere...
-      die("<b>Zenphoto error:</b> Image processing error. Please report to the developers.");
+      if ($debug) {
+        die("<b>Zenphoto error:</b> Image processing error. Please report to the developers.");
+      } else {
+        header("Location: " . FULLWEBPATH . "/zen/images/err-imagegeneral.gif");
+        return;
+      }
     }
     
     // Calculate proportional height and width.
