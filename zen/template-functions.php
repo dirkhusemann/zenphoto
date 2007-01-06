@@ -271,7 +271,7 @@ function getGalleryTitle() {
   return zp_conf('gallery_title');
 }
 function printGalleryTitle() { 
-  echo htmlspecialchars(getGalleryTitle()); 
+  echo getGalleryTitle(); 
 }
 
 function getMainSiteName() { 
