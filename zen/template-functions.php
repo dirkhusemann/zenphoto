@@ -692,7 +692,6 @@ function getImageSortOrder() {
  */
 function printImageSortOrder() {
   if (!in_context(ZP_IMAGE)) return false;
-  global $_zp_current_image;
   echo getImageSortOrder();
 }
 
