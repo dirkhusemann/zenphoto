@@ -58,6 +58,10 @@ if (zp_conf('mod_rewrite')) {
 // Parse the GET request to see what's requested
 if (isset($_GET['album'])) {
   $g_album = sanitize($_GET['album']);
+  $g_album = str_replace('..','', $g_album);
+  if (!$_zp_current_album->exists) {
+    die("<b>Zenphoto error:</b> album does not exist.");
+  }
 
   if (isset($_GET['image'])) {
     $g_image = sanitize($_GET['image']);
