@@ -424,11 +424,12 @@ class Album extends PersistentObject {
 
   // Constructor
   function Album($gallery, $folder) {
-    // First, instantiate the album object (->$this->$album). If the album doesn't exist yet, it'll be created.
+    // First, instantiate the album object ($this->album). If the album doesn't exist yet, it'll be created.
     $this->name = $folder;
     $this->gallery = $gallery;
     $this->localpath = SERVERPATH . "/albums/" . $folder . "/";
-    if(!file_exists($this->localpath)) {
+    // Second defense against reverse folder traversal:
+    if(!file_exists($this->localpath) || strpos($this->localpath, '..') !== FALSE) {
       $this->exists = false;
       return false;
     }

@@ -58,10 +58,11 @@ if (zp_conf('mod_rewrite')) {
 // Parse the GET request to see what's requested
 if (isset($_GET['album'])) {
   $g_album = sanitize($_GET['album']);
+  // First defense against reverse folder traversal:
+  /* Note this works on everything, since sanitize() converts encoded characters.
+   * Note also that '/' is now a legal album, and shows every album in /albums as a sub-album. 
+   * This may not be desired in the future, but we could take advantage of it.. */
   $g_album = str_replace('..','', $g_album);
-  if (!$_zp_current_album->exists) {
-    die("<b>Zenphoto error:</b> album does not exist.");
-  }
 
   if (isset($_GET['image'])) {
     $g_image = sanitize($_GET['image']);
