@@ -16,7 +16,13 @@ Zenphoto 1.1.0 TODO:
 - Improve the install script (create .htaccess, folders if needed, etc.)
 - EXIF data in admin by default, and available within themes. Cache it in the DB.
 - i.php - reload images if they've changed on disk. Compare cached image mtime with original.
-  
+
+
+Zenphoto BUGS
+================================================================================
+- Rogue entries in the database - need better folder filtering (remove beginning
+  and trailing slashes, dots, all double-dots, illegal characters, etc.)
+
 
 Zenphoto Unversioned TODO:
 ================================================================================
@@ -28,3 +34,6 @@ Zenphoto Unversioned TODO:
   - Use GNU Gettext
   - See http://codex.wordpress.org/Translating_WordPress, http://www.gnu.org/software/gettext/gettext.html
   - PHP implementation? See how wordpress does it.
+
+  
+

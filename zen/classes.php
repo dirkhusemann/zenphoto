@@ -610,6 +610,7 @@ class Album extends PersistentObject {
    * Gets the album's set thumbnail image from the database if one exists,
    * otherwise, finds the first image in the album or sub-album and returns it
    * as an Image object.
+   * TODO: This should fail more gracefully when there are errors reading folders etc.
    */
   function getAlbumThumbImage() {
     $albumdir = SERVERPATH . "/albums/{$this->name}/";
