@@ -15,7 +15,6 @@ Zenphoto 1.1.0 TODO:
 - RSS Feeds (talk to people who have this done)
 - Improve the install script (create .htaccess, folders if needed, etc.)
 - EXIF data in admin by default, and available within themes. Cache it in the DB.
-- i.php - reload images if they've changed on disk. Compare cached image mtime with original.
 
 
 Zenphoto BUGS
