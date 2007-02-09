@@ -30,7 +30,7 @@ require_once("functions.php");
 @ini_set("memory_limit","64M");
 
 // Send the Permanent Redirect status code. This could improve image caching.
-header("HTTP/1.1 301 Moved Permanently");
+
 
 // Set the config variables for convenience.
 $thumb_crop = zp_conf('thumb_crop');
@@ -261,6 +261,9 @@ if ($process) {
 }
 
 // ... and redirect the browser to it.
-header("Location: " . FULLWEBPATH . "/cache" . pathurlencode($newfilename));
+Header('Cache-Control: max-age=86400, must-revalidate, public');
+header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($newfile)).' GMT');
+header('Content-Type: image/jpeg');
+header('Location: ' . FULLWEBPATH . '/cache' . pathurlencode($newfilename), true, 301);
 exit();
 ?>
