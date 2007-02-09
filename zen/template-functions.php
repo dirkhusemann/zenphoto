@@ -32,7 +32,7 @@ $_zp_current_context = ZP_INDEX;
 $_zp_current_context_restore = NULL;
 
 // Fix special characters in the album and image names if mod_rewrite is on:
-// This is redundand and hacky; we need to either make the rewriting internal,
+// This is redundant and hacky; we need to either make the rewriting internal,
 // or fix the bugs in mod_rewrite. The former is probably a good idea.
 
 if (zp_conf('mod_rewrite')) {
@@ -56,6 +56,7 @@ if (zp_conf('mod_rewrite')) {
 
 
 // Parse the GET request to see what's requested
+// TODO: Refactor into functions for each context (load_album, load_image, etc).
 if (isset($_GET['album'])) {
   $g_album = sanitize($_GET['album']);
   // First defense against reverse folder traversal:
@@ -81,6 +82,7 @@ if (isset($_GET['album'])) {
     }
     
     //// Comment form handling.
+    // TODO: This needs to be a function add_comment(...)
     if (isset($_POST['comment'])) {
       if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
         if (isset($_POST['website'])) $website = strip_tags($_POST['website']); else $website = "";
@@ -128,6 +130,11 @@ if (isset($_GET['album'])) {
   $_zp_current_context = ZP_INDEX;
 }
 
+
+/** Contexts are simply constants that tell us what variables are available to us
+ * at any given time. They should be set and unset with those variables.
+ */
+
 // Contextual manipulation.
 function get_context() { 
   global $_zp_current_context;
@@ -157,6 +164,8 @@ function restore_context() {
   $_zp_current_context = $_zp_current_context_restore;
 }
 
+
+// AJAX callback functions for admins only.
 if (zp_loggedin()) {
   
   function saveTitle($newtitle) {
@@ -198,10 +207,9 @@ if (zp_loggedin()) {
   sajax_export("saveTitle");
   sajax_export("saveDesc");
   sajax_handle_client_request();
-  
-  
 }
-  
+ 
+// Print any Javascript required by zenphoto. Every theme should include this somewhere in its <head>.
 function zenJavascript() {
   if (zp_loggedin()) {
     echo "  <script type=\"text/javascript\" src=\"".WEBPATH."/zen/ajax.js\"></script>\n";
@@ -244,28 +252,6 @@ function printAdminLink($text, $before='', $after='', $title=NULL, $class=NULL, 
     echo $after;
   }
 }
-
-/**
- * Returns either the rewrite path or the plain, non-mod_rewrite path
- * based on the mod_rewrite option in zp-config.php.
- * @param $rewrite is the path to return if rewrite is enabled. (eg: "/myalbum")
- * @param $plain is the path if rewrite is disabled (eg: "/?album=myalbum")
- * The given paths can start /with or without a slash, it will decide automatically.
- *
- * For future reference, this function could be used to specially escape items in
- * the rewrite chain, like the # character (a bug in mod_rewrite).
- */
-function rewrite_path($rewrite, $plain) {
-  $path = null;
-  if (zp_conf('mod_rewrite')) {
-    $path = $rewrite;
-  } else {
-    $path = $plain;
-  }
-  if (substr($path, 0, 1) == "/") $path = substr($path, 1);
-  return WEBPATH . "/" . $path;
-}
-
 
 
 
@@ -801,10 +787,6 @@ function printImageDiv() {
 // TODO:
 function getImageEXIFData() { }
 
-function getDefaultSizedImage() { 
-  global $_zp_current_image;
-  return $_zp_current_image->getSizedImage(zp_conf('image_size'));
-}
 
 function getSizeCustomImage($size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL) {
   if(!in_context(ZP_IMAGE)) return false;
@@ -884,6 +866,11 @@ function isLandscape() {
   return false;
 }
 
+
+function getDefaultSizedImage() { 
+  global $_zp_current_image;
+  return $_zp_current_image->getSizedImage(zp_conf('image_size'));
+}
 
 function printDefaultSizedImage($alt, $class=NULL, $id=NULL) { 
   echo "<img src=\"" . htmlspecialchars(getDefaultSizedImage()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .

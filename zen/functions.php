@@ -75,6 +75,7 @@ function truncate_string($string, $length) {
   }
 }
 
+
 /** getAlbumArray - returns an array of folder names corresponding to the
       given album string.
     @param $albumstring is the path to the album as a string. Ex: album/subalbum/my-album
@@ -97,6 +98,7 @@ function getAlbumArray($albumstring, $includepaths=false) {
   }
 }
 
+
 /** Takes a user input string (usually from the query string) and cleans out
  HTML, null-bytes, and slashes (if magic_quotes_gpc is on) to prevent
  XSS attacks and other malicious user input, and make strings generally clean.
@@ -107,6 +109,29 @@ function sanitize($user_input) {
   return $user_input;
 }
 
+
+/**
+ * Returns either the rewrite path or the plain, non-mod_rewrite path
+ * based on the mod_rewrite option in zp-config.php.
+ * @param $rewrite is the path to return if rewrite is enabled. (eg: "/myalbum")
+ * @param $plain is the path if rewrite is disabled (eg: "/?album=myalbum")
+ * The given paths can start /with or without a slash, it doesn't matter.
+ *
+ * IDEA: this function could be used to specially escape items in
+ * the rewrite chain, like the # character (a bug in mod_rewrite).
+ *
+ * This is here because it's used in both template-functions.php and in the classes.
+ */
+function rewrite_path($rewrite, $plain) {
+  $path = null;
+  if (zp_conf('mod_rewrite')) {
+    $path = $rewrite;
+  } else {
+    $path = $plain;
+  }
+  if (substr($path, 0, 1) == "/") $path = substr($path, 1);
+  return WEBPATH . "/" . $path;
+}
 
 
 // Simple mySQL timestamp formatting function.
