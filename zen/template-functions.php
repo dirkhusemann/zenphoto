@@ -539,11 +539,6 @@ function printAlbumLink($text, $title, $class=NULL, $id=NULL) {
 /**
  * Print a link that allows the user to sort the current album if they are logged in.
  * If they are already sorting, the Save button is displayed.
- * 
- * @param  text   The text to display in the link
- * @param  title  The title attribute for the link
- * @param  class  The class of the link
- * @param  id     The id of the link
  */
 function printSortableAlbumLink($text, $title, $class=NULL, $id=NULL) {
   global $_zp_sortable_list, $_zp_current_album;
@@ -561,11 +556,6 @@ function printSortableAlbumLink($text, $title, $class=NULL, $id=NULL) {
 /**
  * Print a link that allows the user to sort the Gallery if they are logged in.
  * If they are already sorting, the Save button is displayed.
- * 
- * @param  text   The text to display in the link
- * @param  title  The title attribute for the link
- * @param  class  The class of the link
- * @param  id     The id of the link
  */
 function printSortableGalleryLink($text, $title, $class=NULL, $id=NULL) {
   global $_zp_sortable_list, $_zp_current_album;
@@ -600,6 +590,24 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
   echo "<img src=\"" . htmlspecialchars(getCustomAlbumThumb($size, $width, $height, $cropw, $croph, $cropx, $cropy)) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     (($class) ? " class=\"$class\"" : "") . 
     (($id) ? " id=\"$id\"" : "") . " />";
+}
+
+
+/** Get the URL of the next album in the gallery. */
+function getNextAlbumURL() {
+  if(!in_context(ZP_ALBUM)) return false;
+  global $_zp_current_album;
+  $nextalbum = $_zp_current_album->getNextAlbum();
+  return rewrite_path("/" . urlencode($nextalbum->name),
+    "/index.php?album=" . urlencode($nextalbum->name));
+}
+
+function getPrevAlbumURL() {
+  if(!in_context(ZP_ALBUM)) return false;
+  global $_zp_current_album;
+  $prevalbum = $_zp_current_album->getPrevAlbum();
+  return rewrite_path("/" . urlencode($prevalbum->name),
+    "/index.php?album=" . urlencode($prevalbum->name));
 }
 
 

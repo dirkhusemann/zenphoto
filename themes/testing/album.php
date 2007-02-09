@@ -12,6 +12,9 @@
   <div id="gallerytitle">
     <h2><span><a href="<?php echo getGalleryIndexURL();?>" title="Gallery Index"><?php echo getGalleryTitle();?></a> | </span> <?php printAlbumTitle(true);?></h2>
   </div>
+  
+  ( <?php printLink(getPrevAlbumURL(), "&laquo; Prev Album"); ?> | <?php printLink(getNextAlbumURL(), "Next Album &raquo;"); ?> )
+  
   <hr />
   <?php printAlbumDesc(true); ?>
   <br />
