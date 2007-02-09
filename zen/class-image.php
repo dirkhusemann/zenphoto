@@ -82,8 +82,8 @@ class Image extends PersistentObject {
   function setDesc($desc) { $this->set('desc', $desc); }
   
   // Sort order
-  function getSortOrder() { return $this->get('sortorder'); }
-  function setSortOrder($sortorder) { $this->set('sortorder', $sortorder); }
+  function getSortOrder() { return $this->get('sort_order'); }
+  function setSortOrder($sortorder) { $this->set('sort_order', $sortorder); }
 
   // Show this image?
   function getShow() { return $this->get('show'); }
