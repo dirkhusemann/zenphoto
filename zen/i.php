@@ -96,7 +96,7 @@ $imgfile = SERVERPATH  . "/albums/$album/$image";
 // Check for the source image.
 if (!file_exists($imgfile)) {
   if ($debug) {
-    die('<b>Zenphoto error:</b> Image not found. Filename: '.$imgfile);
+    die('<b>Zenphoto error:</b> Image not found.');
   } else {
     header('Location: ' . FULLWEBPATH . '/zen/images/err-imagenotfound.gif');
     return;
