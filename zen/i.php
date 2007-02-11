@@ -194,7 +194,7 @@ if ($process) {
 		touch($newfile);
 
 		imagejpeg($newim, $newfile, $quality);
-    chmod($newfile, 0644);
+    chmod($newfile, 0777);
 		imagedestroy($newim);
 		imagedestroy($im);
 	}
