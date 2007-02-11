@@ -127,7 +127,7 @@ function rewrite_get_album_image($albumvar, $imagevar) {
       ['album', 'album/subalbum', 'album/subalbum/my-album']
  */
 function getAlbumArray($albumstring, $includepaths=false) {
-  if ($includepaths || $createcache) {
+  if ($includepaths) {
     $array = array($albumstring);
     while($slashpos = strrpos($albumstring, '/')) {
       $albumstring = substr($albumstring, 0, $slashpos);
