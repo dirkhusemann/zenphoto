@@ -59,9 +59,9 @@ if (isset($_GET['album'])) {
 
     // TODO: Better error handling than this.
     if (!$_zp_current_album->exists) {
-      die("<b>Zenphoto error:</b> album does not exist.");
+      die('<b>Zenphoto error:</b> album does not exist.');
     } else if (!$_zp_current_image->exists) {
-      die("<b>Zenphoto error:</b> image does not exist: ".$_GET['album'].' / '.$_GET['image']); ////
+      die('<b>Zenphoto error:</b> image does not exist.');
     }
     
     //// Comment form handling.
