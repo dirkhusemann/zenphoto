@@ -76,6 +76,48 @@ function truncate_string($string, $length) {
 }
 
 
+/** fix_rewrite_get - Fix special characters in the album and image names if mod_rewrite is on:
+    This is redundant and hacky; we need to either make the rewriting completely internal,
+    or fix the bugs in mod_rewrite. The former is probably a good idea.
+ */
+function rewrite_get_album_image($albumvar, $imagevar) {
+  if (zp_conf('mod_rewrite')) {
+    $path = urldecode(substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1));
+    if (strlen($path) > 0 && isset($_GET[$albumvar])) {
+      $qspos = strpos($path, '?');
+      if ($qspos !== false) $path = substr($path, 0, $qspos);
+      if (substr($path, -1, 1) == '/') $path = substr($path, 0, strlen($path)-1);
+      
+      $pagepos  = strpos($path, '/page/');
+      $slashpos = strrpos($path, '/');
+      $imagepos = strpos($path, '/image/');
+
+      if ($imagepos !== false) {
+        $ralbum = substr($path, 0, $imagepos);
+        $rimage = substr($path, $slashpos+1);
+      } else if ($pagepos !== false) {
+        $ralbum = substr($path, 0, $pagepos);
+        $rimage = null;
+      } else if ($slashpos !== false) {
+        $ralbum = substr($path, 0, $slashpos);
+        $rimage = substr($path, $slashpos+1);
+        if (is_dir(SERVERPATH . '/albums/' . $ralbum . '/' . $rimage)) {
+          $ralbum = $ralbum . '/' . $rimage;
+          $rimage = null;
+        }
+      } else {
+        $ralbum = $path;
+        $rimage = null;
+      }
+      return array($ralbum, $rimage);
+    }
+  }
+  
+  // No mod_rewrite, or no album, etc. Just send back the query args.
+  return array($_GET[$albumvar], $_GET[$imagevar]);
+}
+
+
 /** getAlbumArray - returns an array of folder names corresponding to the
       given album string.
     @param $albumstring is the path to the album as a string. Ex: album/subalbum/my-album
@@ -83,10 +125,9 @@ function truncate_string($string, $length) {
       in each item of the array. Ex: when $includepaths==false, the above array would be
       ['album', 'subalbum', 'my-album'], and with $includepaths==true, 
       ['album', 'album/subalbum', 'album/subalbum/my-album']
- 
  */
 function getAlbumArray($albumstring, $includepaths=false) {
-  if ($includepaths) {
+  if ($includepaths || $createcache) {
     $array = array($albumstring);
     while($slashpos = strrpos($albumstring, '/')) {
       $albumstring = substr($albumstring, 0, $slashpos);
@@ -97,6 +138,87 @@ function getAlbumArray($albumstring, $includepaths=false) {
     return explode('/', $albumstring);
   }
 }
+
+
+
+
+/** getImageCacheFilename
+ */
+function getImageCacheFilename($album, $image, $args) {
+  // Set default variable values.
+  $postfix = getImageCachePostfix($args);
+  if (ini_get('safe_mode')) {
+    $albumsep = "___";
+  } else {
+    $albumsep = '/';
+  }
+  return '/' . $album . $albumsep . $image . $postfix . '.jpg';
+}
+
+/** getImageCachePostfix
+ */
+function getImageCachePostfix($args) {
+  list($size, $width, $height, $cw, $ch, $cx, $cy) = $args;
+  $postfix_string = ($size ? "_$size" : "") . ($width ? "_w$width" : "") 
+    . ($height ? "_h$height" : "") . ($cw ? "_cw$cw" : "") . ($ch ? "_ch$ch" : "") 
+    . (is_numeric($cx) ? "_cx$cx" : "") . (is_numeric($cy) ? "_cy$cy" : "");
+  return $postfix_string;
+}
+
+/** getImageParameters
+ */
+function getImageParameters($args) {
+  $thumb_crop = zp_conf('thumb_crop');
+  $thumb_size = zp_conf('thumb_size');
+  $thumb_crop_width = zp_conf('thumb_crop_width');
+  $thumb_crop_height = zp_conf('thumb_crop_height');
+  $thumb_quality = zp_conf('thumb_quality');
+  $image_default_size = zp_conf('image_size');
+  $quality = zp_conf('image_quality');
+  // Set up the parameters
+  $thumb = $crop = false;
+  list($size, $width, $height, $cw, $ch, $cx, $cy, $quality) = $args;
+  
+  if ($size == 'thumb') {
+    $thumb = true;
+    if ($thumb_crop) {
+      $cw = min($thumb_crop_width, $thumb_size);
+      $ch = min($thumb_crop_height, $thumb_size);
+    }
+    $size = round($thumb_size);
+    $quality = round($thumb_quality);
+    
+  } else {
+    if ($size == 'default') {
+      $size = $image_default_size;
+    } else if (empty($size) || !is_numeric($size)) {
+      $size = false; // 0 isn't a valid size anyway, so this is OK.
+    } else {
+      $size = round($size);
+    }
+	}
+  
+  // Round each numeric variable, or set it to false if not a number.
+  list($width, $height, $cw, $ch, $cx, $cy, $quality) =
+    array_map('round_if_numeric', array($width, $height, $cw, $ch, $cx, $cy, $quality));
+  if (empty($cw) && empty($ch)) $crop = false; else $crop = true;
+  if (empty($quality)) $quality = zp_conf('image_quality');
+  
+  // Return an array of parameters used in image conversion.
+  return array($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop);
+}
+
+
+// Checks if the input is numeric, rounds if so, otherwise returns false.
+function round_if_numeric($num) {
+  if (is_numeric($num)) {
+    return round($num);
+  } else {
+    return false;
+  }
+}
+
+
 
 
 /** Takes a user input string (usually from the query string) and cleans out
@@ -218,44 +340,27 @@ function unzip($file, $dir) {
  */
 function dirsize($directory)
 {
-    // Init
-    $size = 0;
- 
-    // Trailing slash
-    if (substr($directory, -1, 1) !== DIRECTORY_SEPARATOR) {
-        $directory .= DIRECTORY_SEPARATOR;
+  $size = 0;
+  if (substr($directory, -1, 1) !== DIRECTORY_SEPARATOR) {
+    $directory .= DIRECTORY_SEPARATOR;
+  }
+  $stack = array($directory);
+  for ($i = 0, $j = count($stack); $i < $j; ++$i) {
+    if (is_file($stack[$i])) {
+      $size += filesize($stack[$i]);
+    } else if (is_dir($stack[$i])) {
+      $dir = dir($stack[$i]);
+      while (false !== ($entry = $dir->read())) {
+        if ($entry == '.' || $entry == '..') continue;
+        $add = $stack[$i] . $entry;
+        if (is_dir($stack[$i] . $entry)) $add .= DIRECTORY_SEPARATOR;
+        $stack[] = $add;
+      }
+      $dir->close();
     }
-
-    $stack = array($directory);
-
-    for ($i = 0, $j = count($stack); $i < $j; ++$i) {
-        // Add to total size
-        if (is_file($stack[$i])) {
-            $size += filesize($stack[$i]);
-            
-        } else if (is_dir($stack[$i])) {
-            // Read directory
-            $dir = dir($stack[$i]);
-            while (false !== ($entry = $dir->read())) {
-                // No pointers
-                if ($entry == '.' || $entry == '..') {
-                    continue;
-                }
-                // Add to stack
-                $add = $stack[$i] . $entry;
-                if (is_dir($stack[$i] . $entry)) {
-                    $add .= DIRECTORY_SEPARATOR;
-                }
-                $stack[] = $add;
- 
-            }
-            // Clean up
-            $dir->close();
-        }
-        // Recount stack
-        $j = count($stack);
-    }
-    return $size;
+    $j = count($stack);
+  }
+  return $size;
 }
 
 

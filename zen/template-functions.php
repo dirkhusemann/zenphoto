@@ -31,28 +31,11 @@ $_zp_comments = NULL;
 $_zp_current_context = ZP_INDEX;
 $_zp_current_context_restore = NULL;
 
-// Fix special characters in the album and image names if mod_rewrite is on:
-// This is redundant and hacky; we need to either make the rewriting internal,
-// or fix the bugs in mod_rewrite. The former is probably a good idea.
 
-if (zp_conf('mod_rewrite')) {
-  $zppath = substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1);
-  $qspos = strpos($zppath, '?');
-  if ($qspos !== false) $zppath = substr($zppath, 0, $qspos);
-  if (strpos($zppath, '/page/') === false && strpos($zppath, '.php') === false) {
-    $zpitems = explode("/", $zppath);
-    if (isset($zpitems[0]) && $zpitems[0] != 'page')
-      $req_album = $zpitems[0];
-    if (isset($zpitems[1]) && $zpitems[1] != 'page')
-      $req_image = $zpitems[1];
-    if (!empty($req_album)) $_GET['album'] = urldecode($req_album);
-    if (!empty($req_image)) $_GET['image'] = urldecode($req_image);
-  }
-  if (!empty($req_album))
-    $_GET['album'] = urldecode($req_album);
-  if (!empty($req_image))
-    $_GET['image'] = urldecode($req_image);
-}
+
+list($ralbum, $rimage) = rewrite_get_album_image('album','image');
+if (!empty($ralbum)) $_GET['album'] = $ralbum;
+if (!empty($rimage)) $_GET['image'] = $rimage;
 
 
 // Parse the GET request to see what's requested
@@ -78,7 +61,7 @@ if (isset($_GET['album'])) {
     if (!$_zp_current_album->exists) {
       die("<b>Zenphoto error:</b> album does not exist.");
     } else if (!$_zp_current_image->exists) {
-      die("<b>Zenphoto error:</b> image does not exist.");
+      die("<b>Zenphoto error:</b> image does not exist: ".$_GET['album'].' / '.$_GET['image']); ////
     }
     
     //// Comment form handling.
@@ -100,7 +83,7 @@ if (isset($_GET['album'])) {
             setcookie("zenphoto", "", time()-368000, "/");
             $stored = array("","","",false);
           }
-          $g_album = urlencode($g_album); $g_image = urlencode($g_image);
+          $g_album = pathurlencode($g_album); $g_image = urlencode($g_image);
           header("Location: " . FULLWEBPATH . "/" . 
             (zp_conf('mod_rewrite') ? "$g_album/$g_image" : "index.php?album=$g_album&image=$g_image"));
           exit;
@@ -344,8 +327,8 @@ function getPageURL($page) {
   $total = getTotalPages();
   if ($page <= $total && $page > 0) {
     if (in_context(ZP_ALBUM)) {
-      return rewrite_path( urlencode($_zp_current_album->name) . (($page > 1) ? "/page/" . $page . "/" : ""), 
-        "/index.php?album=" . urlencode($_zp_current_album->name) . (($page > 1) ? "&page=" . $page : "") );
+      return rewrite_path( pathurlencode($_zp_current_album->name) . (($page > 1) ? "/page/" . $page . "/" : ""), 
+        "/index.php?album=" . pathurlencode($_zp_current_album->name) . (($page > 1) ? "&page=" . $page : "") );
     } else if (in_context(ZP_INDEX)) {
       return rewrite_path((($page > 1) ? "/page/" . $page . "/" : "/"), "/index.php" . (($page > 1) ? "?page=" . $page : ""));
     }
@@ -460,7 +443,7 @@ function printParentBreadcrumb($before = "", $between=" | ", $after = " | ") {
   $i = 0;
   foreach($parents as $parent) {
     if ($i > 0) echo $between;
-    $url = rewrite_path("/" . urlencode($parent->name) . "/", "/index.php?album=" . urlencode($parent->name));
+    $url = rewrite_path("/" . pathurlencode($parent->name) . "/", "/index.php?album=" . urlencode($parent->name));
     printLink($url, $parent->getTitle(), $parent->getDesc());
     $i++;
   }
@@ -510,10 +493,10 @@ function getAlbumLinkURL() {
   global $_zp_current_album, $_zp_current_image;
   if (in_context(ZP_IMAGE) && $_zp_current_image->getAlbumPage() > 1) {
     // Link to the page the current image belongs to.
-    return rewrite_path("/" . urlencode($_zp_current_album->name) . "/page/" . $_zp_current_image->getAlbumPage(),
+    return rewrite_path("/" . pathurlencode($_zp_current_album->name) . "/page/" . $_zp_current_image->getAlbumPage(),
       "/index.php?album=" . urlencode($_zp_current_album->name) . "&page=" . $_zp_current_image->getAlbumPage());
   } else {
-    return rewrite_path("/" . urlencode($_zp_current_album->name) . "/",
+    return rewrite_path("/" . pathurlencode($_zp_current_album->name) . "/",
       "/index.php?album=" . urlencode($_zp_current_album->name));
   }
 }
@@ -584,7 +567,7 @@ function getNextAlbumURL() {
   if(!in_context(ZP_ALBUM)) return false;
   global $_zp_current_album;
   $nextalbum = $_zp_current_album->getNextAlbum();
-  return rewrite_path("/" . urlencode($nextalbum->name),
+  return rewrite_path("/" . pathurlencode($nextalbum->name),
     "/index.php?album=" . urlencode($nextalbum->name));
 }
 
@@ -592,7 +575,7 @@ function getPrevAlbumURL() {
   if(!in_context(ZP_ALBUM)) return false;
   global $_zp_current_album;
   $prevalbum = $_zp_current_album->getPrevAlbum();
-  return rewrite_path("/" . urlencode($prevalbum->name),
+  return rewrite_path("/" . pathurlencode($prevalbum->name),
     "/index.php?album=" . urlencode($prevalbum->name));
 }
 
@@ -704,7 +687,7 @@ function getNextImageURL() {
   
   $nextimg = $_zp_current_image->getNextImage();
   
-  return rewrite_path("/" . urlencode($_zp_current_album->name) . "/" . urlencode($nextimg->getFileName()),
+  return rewrite_path("/" . pathurlencode($_zp_current_album->name) . "/" . urlencode($nextimg->getFileName()),
     "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($nextimg->getFileName()));
 }
 
@@ -714,7 +697,7 @@ function getPrevImageURL() {
   
   $previmg = $_zp_current_image->getPrevImage();
   
-  return rewrite_path("/" . urlencode($_zp_current_album->name) . "/" . urlencode($previmg->getFileName()),
+  return rewrite_path("/" . pathurlencode($_zp_current_album->name) . "/" . urlencode($previmg->getFileName()),
     "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($previmg->getFileName()));
 }
 
@@ -756,7 +739,7 @@ function getNextImageThumb() {
 function getImageLinkURL() { 
   if(!in_context(ZP_IMAGE)) return false;
   global $_zp_current_album, $_zp_current_image;
-  return rewrite_path("/" . urlencode($_zp_current_album->name) . "/" . urlencode($_zp_current_image->name),
+  return rewrite_path("/" . pathurlencode($_zp_current_album->name) . "/" . urlencode($_zp_current_image->name),
     "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($_zp_current_image->name));
 }
 

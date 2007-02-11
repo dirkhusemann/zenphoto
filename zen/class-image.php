@@ -173,35 +173,56 @@ class Image extends PersistentObject {
     return $this->commentcount;
   }
 
+  
+  /**** Image Methods ****/
+  
   // Returns a path to the original image in the original folder.
   function getFullImage() {
     return $this->encwebpath;
   }
 
   function getSizedImage($size) {
-    if (zp_conf('mod_rewrite')) {
-      return WEBPATH . "/".urlencode($this->album->name)."/image/".$size."/".urlencode($this->filename);
+    $cachefilename = getImageCacheFilename($this->album->name, $this->filename, 
+      getImageParameters(array($size)));
+    if (file_exists(SERVERCACHE . $cachefilename) 
+      && filemtime(SERVERCACHE . $cachefilename) > filemtime($this->localpath)) {
+      return WEBPATH . '/cache' . pathurlencode($cachefilename);
     } else {
-      return WEBPATH . "/zen/i.php?a=" . urlencode($this->album->name) . "&i=" . urlencode($this->filename) . "&s=" . $size;
+      return rewrite_path(
+        pathurlencode($this->album->name).'/image/'.$size.'/'.urlencode($this->filename),
+        'zen/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($this->filename) . '&s=' . $size);
     }
   }
   
   // Get a custom sized version of this image based on the parameters.
   function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy) {
-    return WEBPATH . "/zen/i.php?a=" . urlencode($this->album->name) . "&i=" . urlencode($this->filename)
-    . ($size ? "&s=$size" : "" ) . ($width ? "&w=$width" : "") . ($height ? "&h=$height" : "") 
-    . ($cropw ? "&cw=$cropw" : "") . ($croph ? "&ch=$croph" : "")
-    . ($cropx ? "&cx=$cropx" : "") . ($cropy ? "&cy=$cropy" : "") ;
+    $cachefilename = getImageCacheFilename($this->album->name, $this->filename, 
+      getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy)));
+    if (file_exists(SERVERCACHE . $cachefilename)
+      && filemtime(SERVERCACHE . $cachefilename) > filemtime($this->localpath)) {
+      return WEBPATH . '/cache' . pathurlencode($cachefilename);
+    } else {
+      return WEBPATH . '/zen/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($this->filename)
+        . ($size ? "&s=$size" : "" ) . ($width ? "&w=$width" : "") . ($height ? "&h=$height" : "") 
+        . ($cropw ? "&cw=$cropw" : "") . ($croph ? "&ch=$croph" : "")
+        . ($cropx ? "&cx=$cropx" : "") . ($cropy ? "&cy=$cropy" : "") ;
+    }
   }
 
   // Get a default-sized thumbnail of this image.
   function getThumb() {
-    if (zp_conf('mod_rewrite')) {
-      return WEBPATH . "/" . urlencode($this->album->name) . "/image/thumb/" . urlencode($this->filename);
+    $cachefilename = getImageCacheFilename($this->album->name, $this->filename, getImageParameters(array('thumb')));
+    if (file_exists(SERVERCACHE . $cachefilename)
+      && filemtime(SERVERCACHE . $cachefilename) > filemtime($this->localpath)) {
+      return WEBPATH . '/cache' . pathurlencode($cachefilename);
     } else {
-      return WEBPATH . "/zen/i.php?a=" . urlencode($this->album->name) . "&i=" . urlencode($this->filename) . "&s=thumb";
+      return rewrite_path(
+        pathurlencode($this->album->name) . '/image/thumb/' . urlencode($this->filename),
+        'zen/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($this->filename) . '&s=thumb');
     }
   }
+  
+  
   
   // Get the index of this image in the album, taking sorting into account.
   function getIndex() {

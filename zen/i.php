@@ -1,7 +1,9 @@
 <?php
 
 /*******************************************************************************
- * i.php: Zenphoto image processor. All image requests go through this file.   *
+ * i.php: Zenphoto image processor
+ * All *uncached* image requests go through this file
+ * (As of 1.0.8 images are requested directly from the cache if they exist)
  *******************************************************************************
  * URI Parameters:
  *   s  - size (logical): Based on config, makes an image of "size s."
@@ -16,31 +18,20 @@
  * - cx and cy are measured from the top-left corner of the _scaled_ image.
  * - One of s, h, or w _must_ be specified; the others are optional.
  * - If more than one of s, h, or w are specified, s takes priority, then w+h:
- * - If both w and h are given, the image is resized to shortest side, then
+ * - If both w and h are given, the image is resized to shortest side, then 
  *     cropped on the remaining dimension. Image output will always be WxH.
  * - If none of s, h, or w are specified, the original image is returned.
  *******************************************************************************
  */
 
 define('OFFSET_PATH', true);
-// i.php - image generation.
-require_once("functions.php");
+require_once('functions.php');
 
 // Set the memory limit higher just in case -- supress errors if user doesn't have control.
-@ini_set("memory_limit","64M");
-
-// Send the Permanent Redirect status code. This could improve image caching.
-
+@ini_set('memory_limit','64M');
 
 // Set the config variables for convenience.
-$thumb_crop = zp_conf('thumb_crop');
-$thumb_size = zp_conf('thumb_size');
-$thumb_crop_width = zp_conf('thumb_crop_width');
-$thumb_crop_height = zp_conf('thumb_crop_height');
 $image_use_longest_side = zp_conf('image_use_longest_side');
-$image_default_size = zp_conf('image_size');
-$quality = zp_conf('image_quality');
-$thumb_quality = zp_conf('thumb_quality');
 $upscale = zp_conf('image_allow_upscale');
 
 // Don't let anything get above this, to save the server from burning up...
@@ -50,78 +41,33 @@ $debug = isset($_GET['debug']) ? true : false;
 // Check for minimum parameters.
 if (!isset($_GET['a']) || !isset($_GET['i'])) {
   if ($debug) {
-    die("<b>Zenphoto error:</b> You must specify at least both an album and an image.");
+    die('<b>Zenphoto error:</b> You must specify at least both an album and an image.');
   } else {
-    header("Location: " . FULLWEBPATH . "/zen/images/err-imagenotfound.gif");
+    header('Location: ' . FULLWEBPATH . '/zen/images/err-imagenotfound.gif');
     return;
   }
 }
 
 // Fix special characters in the album and image names if mod_rewrite is on:
-if (zp_conf('mod_rewrite')) {
-  $zppath = substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1);
-  $qspos = strpos($zppath, '?');
-  if ($qspos !== false) $zppath = substr($zppath, 0, $qspos); 
-  $zpitems = explode("/", $zppath);
-  if (isset($zpitems[1]) && $zpitems[1] == 'image') {
-    $req_album = $zpitems[0];
-    // This next line assumes the image filename is always last. Take note of this for writing rewrite rules.
-    $req_image = $zpitems[count($zpitems)-1];
-    if (!empty($req_album)) $_GET['a'] = urldecode($req_album);
-    if (!empty($req_image)) $_GET['i'] = urldecode($req_image);
-  }
-}
+// URL looks like: "/album1/subalbum/image/picture.jpg"
+list($ralbum, $rimage) = rewrite_get_album_image('a', 'i');
 
-$album = sanitize($_GET['a']);
-$image = sanitize($_GET['i']);
+$album = sanitize(str_replace('..','', $ralbum));
+$image = sanitize(str_replace(array('..','/',"\\"),'', $rimage));
 
 // Disallow abusive size requests.
 if ((isset($_GET['s']) && $_GET['s'] < MAX_SIZE) 
   || (isset($_GET['w']) && $_GET['w'] < MAX_SIZE)
   || (isset($_GET['h']) && $_GET['h'] < MAX_SIZE)) {
 
-  // Set default variable values.
-  $thumb = $size = $width = $height = $crop = $cw = $ch = $cx = $cy = false;
-  
-  // If s=thumb, Set up for the default thumbnail settings.
-  $size = $_GET['s'];
-	if ($size == "thumb") {
-		$thumb = true;
-    if ($thumb_crop) {
-      if ($thumb_crop_width > $thumb_size)  $thumb_crop_width  = $thumb_size;
-      if ($thumb_crop_height > $thumb_size) $thumb_crop_height = $thumb_size;
-      $cw = $thumb_crop_width;
-      $ch = $thumb_crop_height;
-      $crop = true;
-    } else {
-      $crop = $cw = $ch = false;
-    }
-    $size = round($thumb_size);
-    $quality = round($thumb_quality);
+  // Extract the image parameters from the input variables
+  // This validates the input as well.
+  $args = getImageParameters(
+    array(
+      $_GET['s'], $_GET['w'], $_GET['h'], $_GET['cw'], $_GET['ch'], $_GET['cx'], $_GET['cy'], $_GET['q'])
+    );
+  list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
 
-  // Otherwise, populate the parameters from the URI
-	} else {
-    if ($size == "default") {
-      $size = $image_default_size;
-    } else if (empty($size) || !is_numeric($size)) {
-      $size = false; // 0 isn't a valid size anyway, so this is OK.
-    } else {
-      $size = round($size);
-    }
-    
-    if (isset($_GET['w']))  { $width   = round($_GET['w']); }
-    if (isset($_GET['h']))  { $height  = round($_GET['h']); }
-    if (isset($_GET['cw'])) { $cw      = round($_GET['cw']); $crop = true; }
-    if (isset($_GET['ch'])) { $ch      = round($_GET['ch']); $crop = true; }
-    if (isset($_GET['cx'])) { $cx      = round($_GET['cx']); }
-    if (isset($_GET['cy'])) { $cy      = round($_GET['cy']); }
-    if (isset($_GET['q']))  { $quality = round($_GET['q']); }
-	}
-  
-  $postfix_string = ($size ? "_$size" : "") . ($width ? "_w$width" : "") 
-    . ($height ? "_h$height" : "") . ($cw ? "_cw$cw" : "") . ($ch ? "_ch$ch" : "") 
-    . (is_numeric($cx) ? "_cx$cx" : "") . (is_numeric($cy) ? "_cy$cy" : "");
-    
 } else {
   // No image parameters specified; return the original image.
   header("Location: " . FULLWEBPATH . "/albums/" . pathurlencode($album) . "/" . rawurlencode($image));
@@ -129,17 +75,20 @@ if ((isset($_GET['s']) && $_GET['s'] < MAX_SIZE)
 }
 
 // Make the directories for the albums in the cache, recursively.
-$albumdirs = getAlbumArray($album, true);
-foreach($albumdirs as $dir) {
-  $dir = SERVERCACHE . '/' . $dir;
-  if (!is_dir($dir)) {
-    mkdir($dir, 0777);
-  } else if (!is_writable($dir)) {
-    chmod($dir, 0777);
+// Skip this for safe_mode, where we can't write to directories we create!
+if (!ini_get("safe_mode")) {
+  $albumdirs = getAlbumArray($album, true);
+  foreach($albumdirs as $dir) {
+    $dir = SERVERCACHE . '/' . $dir;
+    if (!is_dir($dir)) {
+      mkdir($dir, 0777);
+    } else if (!is_writable($dir)) {
+      chmod($dir, 0777);
+    }
   }
 }
 
-$newfilename = "/{$album}/{$image}{$postfix_string}.jpg";
+$newfilename = getImageCacheFilename($album, $image, $args);
 
 $newfile = SERVERCACHE . $newfilename;
 $imgfile = SERVERPATH  . "/albums/$album/$image";
@@ -147,9 +96,9 @@ $imgfile = SERVERPATH  . "/albums/$album/$image";
 // Check for the source image.
 if (!file_exists($imgfile)) {
   if ($debug) {
-    die("<b>Zenphoto error:</b> Image not found.");
+    die('<b>Zenphoto error:</b> Image not found. Filename: '.$imgfile);
   } else {
-    header("Location: " . FULLWEBPATH . "/zen/images/err-imagenotfound.gif");
+    header('Location: ' . FULLWEBPATH . '/zen/images/err-imagenotfound.gif');
     return;
   }
 }
@@ -197,9 +146,9 @@ if ($process) {
     } else {
       // There's a problem up there somewhere...
       if ($debug) {
-        die("<b>Zenphoto error:</b> Image processing error. Please report to the developers.");
+        die('<b>Zenphoto error:</b> Image processing error. Please report to the developers.');
       } else {
-        header("Location: " . FULLWEBPATH . "/zen/images/err-imagegeneral.gif");
+        header('Location: ' . FULLWEBPATH . '/zen/images/err-imagegeneral.gif');
         return;
       }
     }
@@ -208,31 +157,20 @@ if ($process) {
     $hprop = round(($h / $w) * $dim);
     $wprop = round(($w / $h) * $dim);
     
-		if ($thumb) {
-      // Use the shortest side.
-			if ($h > $w) {
-				$neww = $dim;
-				$newh = $hprop;
-			} else {
-				$neww = $wprop;
-				$newh = $dim;
-			}
+    if ((!$thumb && $size && $image_use_longest_side && $h > $w) || ($thumb && $h <= $w) || $height) {
+      $newh = $dim;
+      $neww = $wprop;
     } else {
-      if (($size && $image_use_longest_side && $h > $w) || $height) {
-        $newh = $dim;
-        $neww = $wprop;
-      } else {
-        $newh = $hprop;
-  			$neww = $dim;
-      }
-      
-      // If the requested image is the same size or smaller than the original, redirect to it.
-      if (!$upscale && $newh >= $h && $neww >= $w && !$crop) {
-        header("Location: " . FULLWEBPATH . "/albums/" . pathurlencode($album) . "/" . rawurlencode($image));
-        return;
-      }
+      $newh = $hprop;
+      $neww = $dim;
     }
     
+    // If the requested image is the same size or larger than the original, redirect to it.
+    if (!$upscale && $newh >= $h && $neww >= $w && !$crop) {
+      header("Location: " . FULLWEBPATH . "/albums/" . pathurlencode($album) . "/" . rawurlencode($image));
+      return;
+    }
+
     $newim = imagecreatetruecolor($neww, $newh);
     imagecopyresampled($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
     
@@ -261,7 +199,7 @@ if ($process) {
 }
 
 // ... and redirect the browser to it.
-Header('Cache-Control: max-age=86400, must-revalidate, public');
+// Header('Cache-Control: must-revalidate'); // ?? Not sure if this helps.
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($newfile)).' GMT');
 header('Content-Type: image/jpeg');
 header('Location: ' . FULLWEBPATH . '/cache' . pathurlencode($newfilename), true, 301);
