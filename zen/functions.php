@@ -148,7 +148,7 @@ function getImageCacheFilename($album, $image, $args) {
   // Set default variable values.
   $postfix = getImageCachePostfix($args);
   if (ini_get('safe_mode')) {
-    $albumsep = "___";
+    $albumsep = "__";
   } else {
     $albumsep = '/';
   }
