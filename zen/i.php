@@ -52,8 +52,8 @@ if (!isset($_GET['a']) || !isset($_GET['i'])) {
 // URL looks like: "/album1/subalbum/image/picture.jpg"
 list($ralbum, $rimage) = rewrite_get_album_image('a', 'i');
 
-$album = sanitize(str_replace('..','', $ralbum));
-$image = sanitize(str_replace(array('..','/',"\\"),'', $rimage));
+$album = str_replace('..','', sanitize($ralbum));
+$image = str_replace(array('..','/',"\\"),'', sanitize($rimage));
 
 // Disallow abusive size requests.
 if ((isset($_GET['s']) && $_GET['s'] < MAX_SIZE) 
@@ -96,7 +96,8 @@ $imgfile = SERVERPATH  . "/albums/$album/$image";
 // Check for the source image.
 if (!file_exists($imgfile)) {
   if ($debug) {
-    die('<b>Zenphoto error:</b> Image not found.');
+    die('<b>Zenphoto error:</b> Image not found! <br />Cache: [' 
+      . sanitize($newfilename, true) . '], Image: ['.sanitize($album.'/'.$image, true)']<br />');
   } else {
     header('Location: ' . FULLWEBPATH . '/zen/images/err-imagenotfound.gif');
     return;
@@ -146,7 +147,8 @@ if ($process) {
     } else {
       // There's a problem up there somewhere...
       if ($debug) {
-        die('<b>Zenphoto error:</b> Image processing error. Please report to the developers.');
+        die('<b>Zenphoto error:</b> Image processing error. Please report to the developers.<br />Cache: [' 
+          . sanitize($newfilename, true) . '], Image: ['.sanitize($album.'/'.$image, true)']<br />');
       } else {
         header('Location: ' . FULLWEBPATH . '/zen/images/err-imagegeneral.gif');
         return;

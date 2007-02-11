@@ -224,11 +224,14 @@ function round_if_numeric($num) {
 /** Takes a user input string (usually from the query string) and cleans out
  HTML, null-bytes, and slashes (if magic_quotes_gpc is on) to prevent
  XSS attacks and other malicious user input, and make strings generally clean.
+ @param $input_string is a string that needs cleaning.
+ @param $deepclean is whether to replace HTML tags, javascript, etc.
  */
-function sanitize($user_input) {
-  if (get_magic_quotes_gpc()) $user_input = stripslashes($user_input);
-  $user_input = str_replace(chr(0), " ", $user_input);
-  return $user_input;
+function sanitize($input_string, $deepclean=false) {
+  if (get_magic_quotes_gpc()) $input_string = stripslashes($input_string);
+  $input_string = str_replace(chr(0), " ", $input_string);
+  if ($deepclean) $input_string = kses($input_string, array());
+  return $input_string;
 }
 
 
