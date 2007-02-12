@@ -29,12 +29,12 @@ class Album extends PersistentObject {
     }
     $new = parent::PersistentObject('albums', array('folder' => $this->name));
     if ($new) {
-      // Set default data for a new Album
+      // Set default data for a new Album (title and parent_id)
       $parentalbum = $this->getParent();
-      $title = $this->name;
-      if (!is_null($parentalbum)) { 
+      $title = str_replace(array('-','_','+','~'), ' ', $this->name);
+      if (!is_null($parentalbum)) {
         $this->set('parentid', $parentalbum->getAlbumId());
-        $title = substr($this->name, strrpos($this->name, '/')+1);
+        $title = substr($title, strrpos($title, '/')+1);
       }
       $this->set('title', $title);
       $this->save();

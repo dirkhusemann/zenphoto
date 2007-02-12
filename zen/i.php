@@ -76,17 +76,20 @@ if ((isset($_GET['s']) && $_GET['s'] < MAX_SIZE)
 
 // Make the directories for the albums in the cache, recursively.
 // Skip this for safe_mode, where we can't write to directories we create!
+$old = umask(0);
 if (!ini_get("safe_mode")) {
   $albumdirs = getAlbumArray($album, true);
   foreach($albumdirs as $dir) {
     $dir = SERVERCACHE . '/' . $dir;
     if (!is_dir($dir)) {
       mkdir($dir, 0777);
+      chmod($dir, 0777);
     } else if (!is_writable($dir)) {
       chmod($dir, 0777);
     }
   }
 }
+umask($old);
 
 $newfilename = getImageCacheFilename($album, $image, $args);
 
