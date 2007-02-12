@@ -34,7 +34,7 @@ require_once('functions-image.php');
 // Set the config variables for convenience.
 $image_use_longest_side = zp_conf('image_use_longest_side');
 $upscale = zp_conf('image_allow_upscale');
-$sharpenthumbs = true;
+$sharpenthumbs = zp_conf('thumb_sharpen');
 
 // Don't let anything get above this, to save the server from burning up...
 define('MAX_SIZE', 3000);
