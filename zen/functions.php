@@ -23,6 +23,7 @@ define('SERVERPATH', dirname(dirname(__FILE__)));
 define('SERVERCACHE', SERVERPATH . "/cache");
 define('PROTOCOL', zp_conf('server_protocol'));
 define('FULLWEBPATH', PROTOCOL."://" . $_SERVER['HTTP_HOST'] . WEBPATH);
+define('SAFE_MODE_ALBUM_SEP', '__');
 
 
 
@@ -148,7 +149,8 @@ function getImageCacheFilename($album, $image, $args) {
   // Set default variable values.
   $postfix = getImageCachePostfix($args);
   if (ini_get('safe_mode')) {
-    $albumsep = "__";
+    $albumsep = SAFE_MODE_ALBUM_SEP;
+    $album = str_replace(array('/',"\\"), $albumsep, $album);
   } else {
     $albumsep = '/';
   }
