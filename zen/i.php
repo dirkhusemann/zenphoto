@@ -26,6 +26,7 @@
 
 define('OFFSET_PATH', true);
 require_once('functions.php');
+require_once('functions-image.php');
 
 // Set the memory limit higher just in case -- supress errors if user doesn't have control.
 @ini_set('memory_limit','64M');
@@ -33,6 +34,7 @@ require_once('functions.php');
 // Set the config variables for convenience.
 $image_use_longest_side = zp_conf('image_use_longest_side');
 $upscale = zp_conf('image_allow_upscale');
+$sharpenthumbs = true;
 
 // Don't let anything get above this, to save the server from burning up...
 define('MAX_SIZE', 3000);
@@ -189,6 +191,10 @@ if ($process) {
       imagecopy($newim_crop, $newim, 0, 0, $cx, $cy, $cw, $ch);
       imagedestroy($newim);
       $newim = $newim_crop;
+    }
+    
+    if ($thumb && $sharpenthumbs) {
+      unsharp_mask($newim, 50, 0.5, 2);
     }
 
     // Create the cached file (with lots of compatibility)...

@@ -93,6 +93,8 @@ $conf['thumb_size']        = 100;
 $conf['thumb_crop']        = true;
 $conf['thumb_crop_width']  = 85;
 $conf['thumb_crop_height'] = 85;
+// Add a small amount of unsharp mask to thumbnails?
+$conf['thumb_sharpen']     = false;
 
 
 // Paging options:
