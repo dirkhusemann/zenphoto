@@ -101,10 +101,11 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         
         $folder = strip($_POST['folder']);
         $uploaddir = SERVERPATH . '/albums/' . $folder;
+        $oldumask = umask(0);
         if (!is_dir($uploaddir)) {
           mkdir ($uploaddir, 0777);
         }
-        @chmod($uploaddir,0777);
+        @chmod($uploaddir, 0777);
         
         $error = false;
         foreach ($_FILES['files']['error'] as $key => $error) {
@@ -121,6 +122,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
             }
           }
         }
+        // Restore the umask
+        umask($oldumask);
         
         $album = new Album($gallery, $folder);
         $title = strip($_POST['albumtitle']);
