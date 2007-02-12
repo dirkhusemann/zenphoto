@@ -1,5 +1,5 @@
 <?php
-
+require_once("kses.php");
 
 // functions.php - HEADERS NOT SENT YET!
 

@@ -5,7 +5,6 @@
 // Load the authentication functions, UTF-8 Library, and kses.
 require_once("auth_zp.php");
 require_once("utf8.php");
-require_once("kses.php");
 
 
 /*******************************************************************************

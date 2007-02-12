@@ -96,8 +96,8 @@ $imgfile = SERVERPATH  . "/albums/$album/$image";
 // Check for the source image.
 if (!file_exists($imgfile)) {
   if ($debug) {
-    die('<b>Zenphoto error:</b> Image not found! <br />Cache: [' 
-      . sanitize($newfilename, true).'], Image: ['.sanitize($album.'/'.$image, true).']<br />');
+    die('<b>Zenphoto error:</b> Image not found! <br />Cache: [<code> /cache' 
+      . sanitize($newfilename, true).' </code>]<br />Image: [ <code>'.sanitize($album.'/'.$image, true).' </code>]<br />');
   } else {
     header('Location: ' . FULLWEBPATH . '/zen/images/err-imagenotfound.gif');
     return;
@@ -147,8 +147,8 @@ if ($process) {
     } else {
       // There's a problem up there somewhere...
       if ($debug) {
-        die('<b>Zenphoto error:</b> Image processing error. Please report to the developers.<br />Cache: [' 
-          . sanitize($newfilename, true).'], Image: ['.sanitize($album.'/'.$image, true).']<br />');
+        die('<b>Zenphoto error:</b> Image processing error. Please report to the developers.<br />Cache: [<code> /cache' 
+          . sanitize($newfilename, true).' </code>]<br />Image: [<code> '.sanitize($album.'/'.$image, true).' </code>]<br />');
       } else {
         header('Location: ' . FULLWEBPATH . '/zen/images/err-imagegeneral.gif');
         return;
