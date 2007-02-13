@@ -88,7 +88,7 @@ function rewrite_get_album_image($albumvar, $imagevar) {
       $qspos = strpos($path, '?');
       if ($qspos !== false) $path = substr($path, 0, $qspos);
       // Only manually extract the path when the request wasn't for a .php file.
-      if (strpos($zppath, '.php') === false) {
+      if (strpos($path, '.php') === false) {
         if (substr($path, -1, 1) == '/') $path = substr($path, 0, strlen($path)-1);
         $pagepos  = strpos($path, '/page/');
         $slashpos = strrpos($path, '/');
