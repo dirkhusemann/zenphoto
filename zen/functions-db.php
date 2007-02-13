@@ -6,6 +6,13 @@ require_once("functions.php");
 
 $mysql_connection = null;
 
+// Fix mysql_real_escape_string for PHP < 4.3.0
+if (!function_exists('mysql_real_escape_string')) {
+  function mysql_real_escape_string($string) {
+    mysql_escape_string($string);
+  }
+}
+
 
 /** Connect to the database server and select the database.
  *  TODO: Handle errors more gracefully.
@@ -96,7 +103,7 @@ function strip($string) {
 
 
 /**
- * Constructs a where clause ("WHERE uniqueid1='uniquevalue1' AND uniqueid2='uniquevalue2' ...")
+ * Constructs a WHERE clause ("WHERE uniqueid1='uniquevalue1' AND uniqueid2='uniquevalue2' ...")
  * from an array (map) of variables and their values which identifies a unique record
  * in the database table.
  */
@@ -105,10 +112,26 @@ function getWhereClause($unique_set) {
   $where = ' WHERE';
   foreach($unique_set as $var => $value) {
     if ($i > 0) $where .= ' AND';
-    $where .= ' `' . $var . '` = \'' . mysql_escape_string($value) . '\'';
+    $where .= ' `' . $var . '` = \'' . mysql_real_escape_string($value) . '\'';
     $i++;
   }
   return $where;
+}
+
+/**
+ * Constructs a SET clause ("SET uniqueid1='uniquevalue1', uniqueid2='uniquevalue2' ...")
+ * from an array (map) of variables and their values which identifies a unique record
+ * in the database table. Used to 'move' records. Note: does not check anything.
+ */
+function getSetClause($new_unique_set) {
+  $i = 0;
+  $set = ' SET';
+  foreach($new_unique_set as $var => $value) {
+    if ($i > 0) $set .= ', ';
+    $set .= ' `' . $var . '`=\'' . mysql_real_escape_string($value) . '\'';
+    $i++;
+  }
+  return $set;
 }
 
 

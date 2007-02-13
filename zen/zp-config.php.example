@@ -93,7 +93,7 @@ $conf['thumb_size']        = 100;
 $conf['thumb_crop']        = true;
 $conf['thumb_crop_width']  = 85;
 $conf['thumb_crop_height'] = 85;
-// Add a small amount of unsharp mask to thumbnails?
+// Add a small amount of unsharp mask to thumbnails? Slows thumbnail generation on slow servers.
 $conf['thumb_sharpen']     = false;
 
 

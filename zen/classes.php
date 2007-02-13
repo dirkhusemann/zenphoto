@@ -64,6 +64,36 @@ class PersistentObject {
   }
   
   /**
+   * Change one or more values of the unique set assigned to this record.
+   * Checks if the record already exists first, if so returns false.
+   * If successful returns true and changes $this->unique_set
+   * A call to move is instant, it does not require a save() following it.
+   */
+  function move($new_unique_set) {
+    // Check if we have a row
+    $result = query('SELECT * FROM ' . prefix($this->table) .
+      getWhereClause($new_unique_set) . ' LIMIT 1;');
+    if (mysql_num_rows($result) == 0) {
+      $result = query('UPDATE ' . prefix($this->table) 
+        . getSetClause($this->new_unique_set) . ' '
+        . getWhereClause($this->unique_set));
+      if (mysql_affected_rows($result) == 1) {
+        $this->unique_set = $new_unique_set;
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  /**
+   * Remove this entry from the database permanently.
+   * TODO
+   */
+  function remove() {
+    return false;
+  }
+  
+  /**
    * Get the value of a variable. If $current is false, return the value
    * as of the last save of this object.
    */
@@ -84,8 +114,8 @@ class PersistentObject {
    */
   function load() {
     // Get the database record for this object.
-    $entry = query_single_row("SELECT * FROM " . prefix($this->table) .
-      getWhereClause($this->unique_set) . " LIMIT 1;");
+    $entry = query_single_row('SELECT * FROM ' . prefix($this->table) .
+      getWhereClause($this->unique_set) . ' LIMIT 1;');
     if (!$entry) {
       $this->save();
       return true;
@@ -104,7 +134,7 @@ class PersistentObject {
     if ($this->id == null) {
       // Create a new object and set the id from the one returned.
       $insert_data = array_merge($this->unique_set, $this->updates);
-      $sql = "INSERT INTO " . prefix($this->table) . " (";
+      $sql = 'INSERT INTO ' . prefix($this->table) . ' (';
       if (empty($insert_data)) { return true; }
       $i = 0;
       foreach(array_keys($insert_data) as $col) {
@@ -112,14 +142,14 @@ class PersistentObject {
         $sql .= "`$col`";
         $i++;
       }
-      $sql .= ") VALUES (";
+      $sql .= ') VALUES (';
       $i = 0;
       foreach(array_values($insert_data) as $value) {
-        if ($i > 0) $sql .= ", ";
+        if ($i > 0) $sql .= ', ';
         $sql .= "'" . mysql_escape_string($value) . "'";
         $i++;
       }
-      $sql .= ");";
+      $sql .= ');';
       $success = query($sql);
       if ($success == false || mysql_affected_rows() != 1) { return false; }
       $this->id = mysql_insert_id();
@@ -130,7 +160,7 @@ class PersistentObject {
       if (empty($this->updates)) {
         return true;
       } else {
-        $sql = "UPDATE " . prefix($this->table) . " SET";
+        $sql = 'UPDATE ' . prefix($this->table) . ' SET';
         $i = 0;
         foreach ($this->updates as $col => $value) {
           if ($i > 0) $sql .= ",";
@@ -138,7 +168,7 @@ class PersistentObject {
           $this->data[$col] = $value;
           $i++;
         }
-        $sql .= " WHERE id=" . $this->id . ";";
+        $sql .= ' WHERE id=' . $this->id . ';';
         $success = query($sql);
         if ($success == false || mysql_affected_rows() != 1) { return false; }
         $this->updates = array();
