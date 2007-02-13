@@ -84,33 +84,35 @@ function truncate_string($string, $length) {
 function rewrite_get_album_image($albumvar, $imagevar) {
   if (zp_conf('mod_rewrite')) {
     $path = urldecode(substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1));
-    // Only manually extract the path when the request wasn't for a .php file.
-    if (strlen($path) > 0 && strpos($zppath, '.php?') === false && isset($_GET[$albumvar])) {
+    if (strlen($path) > 0 && isset($_GET[$albumvar])) {
       $qspos = strpos($path, '?');
       if ($qspos !== false) $path = substr($path, 0, $qspos);
-      if (substr($path, -1, 1) == '/') $path = substr($path, 0, strlen($path)-1);
-      $pagepos  = strpos($path, '/page/');
-      $slashpos = strrpos($path, '/');
-      $imagepos = strpos($path, '/image/');
-
-      if ($imagepos !== false) {
-        $ralbum = substr($path, 0, $imagepos);
-        $rimage = substr($path, $slashpos+1);
-      } else if ($pagepos !== false) {
-        $ralbum = substr($path, 0, $pagepos);
-        $rimage = null;
-      } else if ($slashpos !== false) {
-        $ralbum = substr($path, 0, $slashpos);
-        $rimage = substr($path, $slashpos+1);
-        if (is_dir(SERVERPATH . '/albums/' . $ralbum . '/' . $rimage)) {
-          $ralbum = $ralbum . '/' . $rimage;
+      // Only manually extract the path when the request wasn't for a .php file.
+      if (strpos($zppath, '.php') === false) {
+        if (substr($path, -1, 1) == '/') $path = substr($path, 0, strlen($path)-1);
+        $pagepos  = strpos($path, '/page/');
+        $slashpos = strrpos($path, '/');
+        $imagepos = strpos($path, '/image/');
+  
+        if ($imagepos !== false) {
+          $ralbum = substr($path, 0, $imagepos);
+          $rimage = substr($path, $slashpos+1);
+        } else if ($pagepos !== false) {
+          $ralbum = substr($path, 0, $pagepos);
+          $rimage = null;
+        } else if ($slashpos !== false) {
+          $ralbum = substr($path, 0, $slashpos);
+          $rimage = substr($path, $slashpos+1);
+          if (is_dir(SERVERPATH . '/albums/' . $ralbum . '/' . $rimage)) {
+            $ralbum = $ralbum . '/' . $rimage;
+            $rimage = null;
+          }
+        } else {
+          $ralbum = $path;
           $rimage = null;
         }
-      } else {
-        $ralbum = $path;
-        $rimage = null;
+        return array($ralbum, $rimage);
       }
-      return array($ralbum, $rimage);
     }
   }
   
