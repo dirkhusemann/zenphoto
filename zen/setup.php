@@ -42,8 +42,8 @@ if (file_exists("zp-config.php")) {
 
   } else {
     // Logged in. Do the setup.
-    
-    // Prefix the table names:
+
+    // Prefix the table names. These already have `backticks` around them!
     $tbl_albums = prefix('albums');
     $tbl_comments = prefix('comments');
     $tbl_images = prefix('images');
@@ -52,7 +52,7 @@ if (file_exists("zp-config.php")) {
     $cst_images = prefix('images_ibfk1');
   
     $db_schema = array();
-    $db_schema[] = "CREATE TABLE IF NOT EXISTS `$tbl_albums` (
+    $db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_albums (
       `id` int(11) unsigned NOT NULL auto_increment,
       `parentid` int(11) unsigned default NULL,
       `folder` varchar(255) NOT NULL default '',
@@ -68,7 +68,7 @@ if (file_exists("zp-config.php")) {
       KEY `folder` (`folder`)
       );";
   
-    $db_schema[] = "CREATE TABLE IF NOT EXISTS `$tbl_comments` (
+    $db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_comments (
       `id` int(11) unsigned NOT NULL auto_increment,
       `imageid` int(11) unsigned NOT NULL default '0',
       `name` varchar(255) NOT NULL default '',
@@ -81,7 +81,7 @@ if (file_exists("zp-config.php")) {
       KEY `imageid` (`imageid`)
       );";
   
-    $db_schema[] = "CREATE TABLE IF NOT EXISTS `$tbl_images` (
+    $db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_images (
       `id` int(11) unsigned NOT NULL auto_increment,
       `albumid` int(11) unsigned NOT NULL default '0',
       `filename` varchar(255) NOT NULL default '',
@@ -97,11 +97,11 @@ if (file_exists("zp-config.php")) {
       KEY `albumid` (`albumid`)
       );";
   
-    $db_schema[] = "ALTER TABLE `$tbl_comments`
-      ADD CONSTRAINT `$cst_comments` FOREIGN KEY (`imageid`) REFERENCES `$tbl_images` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
+    $db_schema[] = "ALTER TABLE $tbl_comments
+      ADD CONSTRAINT `$cst_comments` FOREIGN KEY (`imageid`) REFERENCES $tbl_images (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
   
-    $db_schema[] = "ALTER TABLE `$tbl_images`
-      ADD CONSTRAINT `$cst_images` FOREIGN KEY (`albumid`) REFERENCES `$tbl_albums` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
+    $db_schema[] = "ALTER TABLE $tbl_images
+      ADD CONSTRAINT `$cst_images` FOREIGN KEY (`albumid`) REFERENCES $tbl_albums (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
   
   
     if (isset($_GET['create']) && db_connect()) {

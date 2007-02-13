@@ -44,6 +44,7 @@ if (file_exists("zp-config.php")) {
   
   } else {
     // Logged in. Do the setup.
+    // These already have `backticks` around them!
     $tbl_albums   = prefix('albums');
     $tbl_comments = prefix('comments');
     $tbl_images   = prefix('images');
@@ -51,16 +52,16 @@ if (file_exists("zp-config.php")) {
     $sql_statements = array();
     
     // v. 1.0.0b
-    $sql_statements[] = "ALTER TABLE `$tbl_albums` ADD COLUMN `sort_type` varchar(20);";
-    $sql_statements[] = "ALTER TABLE `$tbl_albums` ADD COLUMN `sort_order` int(11);";
-    $sql_statements[] = "ALTER TABLE `$tbl_images` ADD COLUMN `sort_order` int(11);";
+    $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `sort_type` varchar(20);";
+    $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `sort_order` int(11);";
+    $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `sort_order` int(11);";
     
     // v. 1.0.3b
-    $sql_statements[] = "ALTER TABLE `$tbl_images` ADD COLUMN `height` INT UNSIGNED;";
-    $sql_statements[] = "ALTER TABLE `$tbl_images` ADD COLUMN `width` INT UNSIGNED;";
+    $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `height` INT UNSIGNED;";
+    $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `width` INT UNSIGNED;";
     
     // v. 1.0.4b
-    $sql_statements[] = "ALTER TABLE `$tbl_albums` ADD COLUMN `parentid` int(11) unsigned default NULL;";
+    $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `parentid` int(11) unsigned default NULL;";
     
     if (isset($_GET['upgrade']) && db_connect()) {
       echo "<h3>Upgrading tables...</h3>";
