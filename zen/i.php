@@ -194,7 +194,7 @@ if ($process) {
     }
     
     if ($thumb && $sharpenthumbs) {
-      unsharp_mask($newim, 50, 0.5, 3);
+      unsharp_mask($newim, 40, 0.5, 3);
     }
 
     // Create the cached file (with lots of compatibility)...
