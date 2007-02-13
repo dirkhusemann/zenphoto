@@ -84,11 +84,11 @@ function truncate_string($string, $length) {
 function rewrite_get_album_image($albumvar, $imagevar) {
   if (zp_conf('mod_rewrite')) {
     $path = urldecode(substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1));
-    if (strlen($path) > 0 && isset($_GET[$albumvar])) {
+    // Only manually extract the path when the request wasn't for a .php file.
+    if (strlen($path) > 0 && strpos($zppath, '.php?') === false && isset($_GET[$albumvar])) {
       $qspos = strpos($path, '?');
       if ($qspos !== false) $path = substr($path, 0, $qspos);
       if (substr($path, -1, 1) == '/') $path = substr($path, 0, strlen($path)-1);
-      
       $pagepos  = strpos($path, '/page/');
       $slashpos = strrpos($path, '/');
       $imagepos = strpos($path, '/image/');
