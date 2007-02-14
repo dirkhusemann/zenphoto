@@ -98,10 +98,10 @@ if (file_exists("zp-config.php")) {
       );";
   
     $db_schema[] = "ALTER TABLE $tbl_comments
-      ADD CONSTRAINT `$cst_comments` FOREIGN KEY (`imageid`) REFERENCES $tbl_images (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
+      ADD CONSTRAINT $cst_comments FOREIGN KEY (`imageid`) REFERENCES $tbl_images (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
   
     $db_schema[] = "ALTER TABLE $tbl_images
-      ADD CONSTRAINT `$cst_images` FOREIGN KEY (`albumid`) REFERENCES $tbl_albums (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
+      ADD CONSTRAINT $cst_images FOREIGN KEY (`albumid`) REFERENCES $tbl_albums (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
   
   
     if (isset($_GET['create']) && db_connect()) {
