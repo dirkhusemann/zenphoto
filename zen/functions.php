@@ -69,11 +69,11 @@ function get_image($imgfile) {
 
 function truncate_string($string, $length) {
   if (strlen($string) > $length) {
-    $pos = strpos($string, " ", $length);
-    return substr($string, 0, $pos) . "...";
-  } else {
-    return $string;
+    $pos = strpos($string, ' ', $length);
+    if ($pos === FALSE) return substr($string, 0, $length) . '...';
+    return substr($string, 0, $pos) . '...';
   }
+  return $string;
 }
 
 
