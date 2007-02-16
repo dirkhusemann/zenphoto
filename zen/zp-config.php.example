@@ -46,6 +46,11 @@ $conf['time_offset'] = 0;
 // If you have Apache mod_rewrite, put true here, and you'll get nice cruft-free URLs.
 // MAKE SURE TO EDIT THE .htaccess FILE with your path information.
 $conf['mod_rewrite'] = true;
+// If mod_rewrite is true above, zenphoto's image page URL's usually end in .jpg, 
+// set this if you want something else appended to the end (helps search engines).
+// Examples: .html, .php, /view, etc.
+// Note that you shouldn't name albums with this suffix on the end.
+$conf['mod_rewrite_image_suffix'] = '';
 
 // Admin interface username (also required for running setup).
 $conf['adminuser'] = "admin";
@@ -102,6 +107,8 @@ $conf['thumb_sharpen']     = false;
 // after switching themes to make it look better.
 $conf['albums_per_page'] = 5;
 $conf['images_per_page'] = 15;
+
+
 
 
 

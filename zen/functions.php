@@ -85,8 +85,14 @@ function rewrite_get_album_image($albumvar, $imagevar) {
   if (zp_conf('mod_rewrite')) {
     $path = urldecode(substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1));
     if (strlen($path) > 0 && isset($_GET[$albumvar])) {
+      $im_suffix = zp_conf('mod_rewrite_image_suffix');
+      $suf_len = strlen($im_suffix);
       $qspos = strpos($path, '?');
       if ($qspos !== false) $path = substr($path, 0, $qspos);
+      // Strip off the image suffix (could interfere with the rest, needs to go anyway).
+      if ($suf_len > 0 && substr($path, -($suf_len)) == $im_suffix) {
+        $path = substr($path, 0, -($suf_len));
+      }
       // Only manually extract the path when the request wasn't for a .php file.
       if (strpos($path, '.php') === false) {
         if (substr($path, -1, 1) == '/') $path = substr($path, 0, strlen($path)-1);
