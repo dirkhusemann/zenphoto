@@ -244,7 +244,7 @@ class utf8 {
 	 */
 	function encode_mimeheader($str) {
 		$length = 45; $pos = 0; $max = strlen($str);
-
+    $buffer = '';
 		while ($pos < $max)
 		{
 			if ($pos + $length < $max)
