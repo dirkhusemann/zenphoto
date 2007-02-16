@@ -67,9 +67,10 @@ function updateFolder(nameObj, folderID, checkboxID) {
   if (autogen && name != "") {
     fname = name;
     fname = fname.toLowerCase();
-    fname = fname.replace(/[\!@#$\%\^&*()\~`\'\"]/gi, "");
-    fname = fname.replace(/[^a-zA-Z0-9]/gi, "-");
-    fname = fname.replace(/--*/gi, "-");
+    fname = fname.replace(/[\!@#$\%\^&*()\~`\'\"]/g, "");
+    fname = fname.replace(/^\s+|\s+$/g, "");
+    fname = fname.replace(/[^a-zA-Z0-9]/g, "-");
+    fname = fname.replace(/--*/g, "-");
     while (contains(albumArray, fname+fnamesuffix)) {
       fnamesuffix = "-"+count;
       count++;
