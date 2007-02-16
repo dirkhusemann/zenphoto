@@ -1,3 +1,4 @@
+<?php $startTime = array_sum(explode(" ",microtime())); if (!defined('WEBPATH')) die(); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
@@ -82,7 +83,8 @@
 
       </div>
       
-      <p style="text-align: right;"><?php printAdminLink("Admin"); ?></p>
+      <p style="text-align: right;"><?php printAdminLink("Admin"); ?>
+        <?php /* Timer */ echo round((array_sum(explode(" ",microtime())) - $startTime),4).' Seconds</strong>'; ?></p>
       
     </div>
 </div>
