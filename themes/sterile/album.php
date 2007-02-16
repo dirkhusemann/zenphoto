@@ -32,6 +32,6 @@
 
 </div>
 
-<div id="credit"><?php printAdminLink('Admin', '', ' | '); ?>Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a> | 'Sterile' Theme by <a href="http://www.loadedreality.com" traget="_blank">Levi Buzolic</a></div>
+<div id="credit"><?php printAdminLink('Admin', '', ' | '); ?>Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a> | 'Sterile' Theme by <a href="http://www.levibuzolic.com" traget="_blank">Levi Buzolic</a></div>
 </body>
 </html>
