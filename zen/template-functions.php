@@ -43,7 +43,7 @@ if (!empty($rimage)) $_GET['image'] = $rimage;
 if (isset($_GET['album'])) {
   $g_album = sanitize($_GET['album']);
   // Defense against upward folder traversal, empty albums, extra characters, etc.
-  $g_album = preg_replace(array('^\/+','\/+$','/\/\/+/','/\.\.+/'), '', $g_album);
+  $g_album = preg_replace(array('/^\/+/','/\/+$/','/\/\/+/','/\.\.+/'), '', $g_album);
 
   if (isset($_GET['image'])) {
     $g_image = sanitize($_GET['image']);
