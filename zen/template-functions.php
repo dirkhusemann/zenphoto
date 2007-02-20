@@ -42,11 +42,8 @@ if (!empty($rimage)) $_GET['image'] = $rimage;
 // TODO: Refactor into functions for each context (load_album, load_image, etc).
 if (isset($_GET['album'])) {
   $g_album = sanitize($_GET['album']);
-  // First defense against reverse folder traversal:
-  /* Note this works on everything, since sanitize() converts encoded characters.
-   * Note also that '/' is now a legal album, and shows every album in /albums as a sub-album. 
-   * This may not be desired in the future, but we could take advantage of it.. */
-  $g_album = str_replace('..','', $g_album);
+  // Defense against upward folder traversal, empty albums, extra characters, etc.
+  $g_album = preg_replace(array('/\/\/+/','/\.\.+/'), array('',''), $g_album);
 
   if (isset($_GET['image'])) {
     $g_image = sanitize($_GET['image']);
@@ -83,7 +80,8 @@ if (isset($_GET['album'])) {
             setcookie("zenphoto", "", time()-368000, "/");
             $stored = array("","","",false);
           }
-          $g_album = pathurlencode($g_album); $g_image = urlencode($g_image);
+          $g_album = pathurlencode($g_album); 
+          $g_image = urlencode($g_image);
           header("Location: " . FULLWEBPATH . "/" . 
             (zp_conf('mod_rewrite') ? $g_album .'/'.$g_image.im_suffix() : "index.php?album=$g_album&image=$g_image"));
           exit;

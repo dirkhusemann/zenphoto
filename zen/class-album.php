@@ -18,7 +18,7 @@ class Album extends PersistentObject {
 
   // Constructor
   function Album($gallery, $folder) {
-    // First, instantiate the album object ($this->album). If the album doesn't exist yet, it'll be created.
+    $folder = str_replace('//','/', $folder);
     $this->name = $folder;
     $this->gallery = $gallery;
     $this->localpath = SERVERPATH . "/albums/" . $folder . "/";
