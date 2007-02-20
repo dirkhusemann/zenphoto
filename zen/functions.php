@@ -80,11 +80,7 @@ function truncate_string($string, $length) {
 function is_query_request() {
   $path = urldecode(substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1));
   $qpos = strpos($path, '?');
-  if ($qpos !== false && strpos($path, '/?') !== false)
-    return true;
-  if ($qpos !== false)
-    $path = substr($path, 0, $qpos);
-  if (strpos($path, '.php') !== false) return true;
+  if ($qpos !== false) return true;
   return false;
 }
 
