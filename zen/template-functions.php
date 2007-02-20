@@ -33,7 +33,6 @@ $_zp_current_context_restore = NULL;
 
 function im_suffix() { return zp_conf('mod_rewrite_image_suffix'); }
 
-
 list($ralbum, $rimage) = rewrite_get_album_image('album','image');
 if (!empty($ralbum)) $_GET['album'] = $ralbum;
 if (!empty($rimage)) $_GET['image'] = $rimage;
@@ -146,6 +145,23 @@ function save_context() {
 function restore_context() {
   global $_zp_current_context, $_zp_current_context_restore;
   $_zp_current_context = $_zp_current_context_restore;
+}
+
+
+// Check to see if we use mod_rewrite, but got a query-string request for a page.
+// If so, redirect with a 301 to the correct URL.
+if (zp_conf('mod_rewrite') && is_query_request()) {
+  $redirecturl = '';
+  if (in_context(ZP_IMAGE)) {
+    $redirecturl = pathurlencode($_zp_current_album->name) .'/'. $_zp_current_image->name . im_suffix();
+  } else if (in_context(ZP_ALBUM)) {
+    $redirecturl = pathurlencode($_zp_current_album->name) .'/'. ($_zp_page > 1 ? 'page/'.$_zp_page : '');
+  } else if (in_context(ZP_INDEX)) {
+    $redirecturl = ($_zp_page > 1 ? 'page/'.$_zp_page : '');
+  }
+  if (strlen($redirecturl) > 0) {
+    header('Location: ' . FULLWEBPATH . '/' . $redirecturl);
+  }
 }
 
 
