@@ -160,7 +160,9 @@ if (zp_conf('mod_rewrite') && is_query_request()) {
     $redirecturl = ($_zp_page > 1 ? 'page/'.$_zp_page : '');
   }
   if (strlen($redirecturl) > 0) {
+    header("HTTP/1.0 301 Moved Permanently");
     header('Location: ' . FULLWEBPATH . '/' . $redirecturl);
+    exit;
   }
 }
 
