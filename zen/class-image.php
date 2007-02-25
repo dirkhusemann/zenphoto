@@ -49,14 +49,15 @@ class Image extends PersistentObject {
 
     
   // Get the width and height of the original image-- uses lazy evaluation.
-  // TODO: Update them if they change by looking at file modification time.
+  // TODO: Update them if they change by looking at file modification time, which must be stored in the database.
+  // FIXME: Temporarily getting dimensions each time they're requested.
   function updateDimensions() {
-    if ($this->exists && (is_null($this->get('width')) || is_null($this->get('height')))) {
+    //if ($this->exists && (is_null($this->get('width')) || is_null($this->get('height')))) {
       $size = getimagesize($this->localpath);
       $this->set('width', $size[0]);
       $this->set('height', $size[1]);
-      $this->save();
-    }
+      //$this->save();
+    //}
   }
   
   function getWidth() {
