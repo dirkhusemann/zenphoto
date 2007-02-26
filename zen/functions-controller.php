@@ -53,11 +53,12 @@ function is_query_request() {
   return (strpos($_SERVER['REQUEST_URI'], '?') !== false);
 }
 
+
 /**
  * Returns the URL of any main page (image/album/page#/etc.) in any form
  * desired (rewrite or query-string).
  */
-function getURL($with_rewrite=NULL, $album=NULL, $image=NULL, $page=NULL) {
+function zpurl($with_rewrite=NULL, $album=NULL, $image=NULL, $page=NULL) {
   global $_zp_current_album, $_zp_current_image, $_zp_page;
   // Set defaults
   if ($with_rewrite === NULL)  $with_rewrite = zp_conf('mod_rewrite');
@@ -93,9 +94,9 @@ function getURL($with_rewrite=NULL, $album=NULL, $image=NULL, $page=NULL) {
  */
 function fix_path_redirect() {
   if (zp_conf('mod_rewrite')
-      && (is_query_request() || (in_context(ZP_IMAGE) 
-      && substr($_SERVER['REQUEST_URI'], -strlen(im_suffix())) != im_suffix()) )) {
-    $redirecturl = getURL(true);
+      && (is_query_request() 
+          || (in_context(ZP_IMAGE) && substr($_SERVER['REQUEST_URI'], -strlen(im_suffix())) != im_suffix()) )) {
+    $redirecturl = zpurl(true);
     $path = urldecode(substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1));
     $path = preg_replace(array('/\/*$/'), '', $path);
     if (strlen($redirecturl) > 0 && $redirecturl != $path) {
