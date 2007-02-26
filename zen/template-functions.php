@@ -65,10 +65,10 @@ function printGalleryTitle() {
 }
 
 function getMainSiteName() { 
-  return zp_conf('main_site_name');
+  return zp_conf('website_name');
 }
 function getMainSiteURL() { 
-  return zp_conf('main_site_url');
+  return zp_conf('website_url');
 }
 function printMainSiteLink($title=NULL, $class=NULL, $id=NULL) { 
   printLink(getMainSiteURL(), getMainSiteName(), $title, $class, $id);
