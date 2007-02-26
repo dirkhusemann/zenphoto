@@ -17,10 +17,10 @@ class Album extends PersistentObject {
   var $themeoverride;
 
   // Constructor
-  function Album($gallery, $folder) {
+  function Album(&$gallery, $folder) {
     $folder = str_replace('//','/', $folder);
     $this->name = $folder;
-    $this->gallery = $gallery;
+    $this->gallery = &$gallery;
     $this->localpath = SERVERPATH . "/albums/" . $folder . "/";
     // Second defense against reverse folder traversal:
     if(!file_exists($this->localpath) || strpos($this->localpath, '..') !== FALSE) {
@@ -265,7 +265,9 @@ class Album extends PersistentObject {
   }
   
   
-  // Delete the entire album PERMANENTLY. Be careful! This is unrecoverable.
+  /**
+   * Delete the entire album PERMANENTLY. Be careful! This is unrecoverable.
+   */
   function deleteAlbum() {
     foreach($this->getImages() as $filename) {
       // False here means don't clean up (cascade already took care of it)
@@ -285,8 +287,7 @@ class Album extends PersistentObject {
     if (is_null($this->images)) $this->getImages();
     $result = query("SELECT * FROM ".prefix('images')." WHERE `albumid` = ".$this->id);
     $dead = array();
-    
-    // Read in all of the files on disk
+
     $files = $this->loadFileNames();
     
     // Does the filename from the db row match any in the files on disk?
@@ -354,28 +355,18 @@ class Album extends PersistentObject {
   
   /**
    * Load all of the filenames that are found in this Albums directory on disk.
-   *
    * @return An array of file names.
    * @param  $dirs Whether or not to return directories ONLY with the file array. Default is false.
-   * 
-   * @author Todd Papaioannou (lucky@luckyspin.org)
-   * @since  1.0.0
    */
   function loadFileNames($dirs=false) {
-    
-    // This is where we'll look for files
     $albumdir = SERVERPATH . "/albums/{$this->name}/";
-    
-    // Be defensive
     if (!is_dir($albumdir) || !is_readable($albumdir)) {
       die("The album cannot be found.");
     }
-
     $dir = opendir($albumdir);
     $files = array();
-    
-    // Walk through the list and add them to the array
-    while ($file = readdir($dir)) {
+
+    while (false !== ($file = readdir($dir))) {
       if (($dirs && is_dir($albumdir.$file) && substr($file, 0, 1) != '.')
           || (!$dirs && is_file($albumdir.$file) && is_valid_image($file))) {
         $files[] = $file;
@@ -387,6 +378,6 @@ class Album extends PersistentObject {
   }
   
 }
-
-
+  
+  
 ?>

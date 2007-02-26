@@ -76,14 +76,6 @@ function truncate_string($string, $length) {
   return $string;
 }
 
-// Determines if this request used a query string (as opposed to mod_rewrite)
-function is_query_request() {
-  $path = urldecode(substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1));
-  $qpos = strpos($path, '?');
-  if ($qpos !== false) return true;
-  return false;
-}
-
 
 /** fix_rewrite_get - Fix special characters in the album and image names if mod_rewrite is on:
     This is redundant and hacky; we need to either make the rewriting completely internal,

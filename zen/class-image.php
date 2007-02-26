@@ -16,11 +16,12 @@ class Image extends PersistentObject {
   var $commentcount;  // The number of comments on this image.
   var $index;         // The index of the current image in the album array.
   var $sortorder;     // The position that this image should be shown in the album
+  var $filemtime;     // Last modified time of this image
 
   // Constructor
-  function Image($album, $filename) {
+  function Image(&$album, $filename) {
     // $album is an Album object; it should already be created.
-    $this->album = $album;
+    $this->album = &$album;
     $this->webpath = WEBPATH . "/albums/" . $album->name . "/" . $filename;
     $this->encwebpath = WEBPATH . "/albums/" . pathurlencode($album->name) . "/" . rawurlencode($filename);
     $this->localpath = SERVERPATH . "/albums/" . $album->name . "/" . $filename;
@@ -30,6 +31,7 @@ class Image extends PersistentObject {
       return false;
     }
     $this->filename = $filename;
+    $this->filemtime = filemtime($this->localpath);
     $this->name = $filename;
     $this->comments = null;
 
@@ -186,7 +188,7 @@ class Image extends PersistentObject {
     $cachefilename = getImageCacheFilename($this->album->name, $this->filename, 
       getImageParameters(array($size)));
     if (file_exists(SERVERCACHE . $cachefilename) 
-      && filemtime(SERVERCACHE . $cachefilename) > filemtime($this->localpath)) {
+      && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
       return WEBPATH . '/cache' . pathurlencode($cachefilename);
     } else {
       return rewrite_path(
@@ -200,7 +202,7 @@ class Image extends PersistentObject {
     $cachefilename = getImageCacheFilename($this->album->name, $this->filename, 
       getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy)));
     if (file_exists(SERVERCACHE . $cachefilename)
-      && filemtime(SERVERCACHE . $cachefilename) > filemtime($this->localpath)) {
+      && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
       return WEBPATH . '/cache' . pathurlencode($cachefilename);
     } else {
       return WEBPATH . '/zen/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($this->filename)
@@ -214,7 +216,7 @@ class Image extends PersistentObject {
   function getThumb() {
     $cachefilename = getImageCacheFilename($this->album->name, $this->filename, getImageParameters(array('thumb')));
     if (file_exists(SERVERCACHE . $cachefilename)
-      && filemtime(SERVERCACHE . $cachefilename) > filemtime($this->localpath)) {
+      && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
       return WEBPATH . '/cache' . pathurlencode($cachefilename);
     } else {
       return rewrite_path(
