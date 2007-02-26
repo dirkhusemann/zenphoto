@@ -1,6 +1,12 @@
 <?php
 
-// template-functions.php - Headers may be sent in this file ONLY.
+/*** template-functions.php ****************************************************
+ * Functions used to display content in themes.
+ ******************************************************************************/
+
+// The first part of this file is actually a controller, which should be 
+// moved into a separate include or two.
+// EG: controller.php + functions-controller.php
 
 require_once("classes.php");
 
@@ -33,10 +39,23 @@ $_zp_current_context_restore = NULL;
 
 function im_suffix() { return zp_conf('mod_rewrite_image_suffix'); }
 
+
+/******************************************************************************/
+/*** Controller ***************************************************************/
+/******************************************************************************/
+
+/*** Request Handler **********************/
+/******************************************/
+// This is the main top-level action handler for user requests. It parses a
+// request, validates the input, loads the appropriate objects, and sets
+// the context. 
+
+// rewrite_get_album_image() parses the album and image from the requested URL
+// if mod_rewrite is on, and replaces the query variables with corrected ones.
+// This is because of bugs in mod_rewrite that disallow certain characters.
 list($ralbum, $rimage) = rewrite_get_album_image('album','image');
 if (!empty($ralbum)) $_GET['album'] = $ralbum;
 if (!empty($rimage)) $_GET['image'] = $rimage;
-
 
 // Parse the GET request to see what's requested
 // TODO: Refactor into functions for each context (load_album, load_image, etc).
@@ -112,11 +131,14 @@ if (isset($_GET['album'])) {
 }
 
 
-/** Contexts are simply constants that tell us what variables are available to us
+
+/*** Context Manipulation Functions *******/
+/******************************************/
+
+/* Contexts are simply constants that tell us what variables are available to us
  * at any given time. They should be set and unset with those variables.
  */
 
-// Contextual manipulation.
 function get_context() { 
   global $_zp_current_context;
   return $_zp_current_context;
@@ -146,26 +168,10 @@ function restore_context() {
 }
 
 
-// Check to see if we use mod_rewrite, but got a query-string request for a page.
-// If so, redirect with a 301 to the correct URL.
-if (zp_conf('mod_rewrite') && is_query_request()) {
-  $redirecturl = '';
-  if (in_context(ZP_IMAGE)) {
-    $redirecturl = pathurlencode($_zp_current_album->name) .'/'. $_zp_current_image->name . im_suffix();
-  } else if (in_context(ZP_ALBUM)) {
-    $redirecturl = pathurlencode($_zp_current_album->name) .'/'. ($_zp_page > 1 ? 'page/'.$_zp_page : '');
-  } else if (in_context(ZP_INDEX)) {
-    $redirecturl = ($_zp_page > 1 ? 'page/'.$_zp_page : '');
-  }
-  if (strlen($redirecturl) > 0) {
-    header("HTTP/1.0 301 Moved Permanently");
-    header('Location: ' . FULLWEBPATH . '/' . $redirecturl);
-    exit;
-  }
-}
 
+/*** Server-side AJAX Functions ***********/
+/******************************************/
 
-// AJAX callback functions for admins only.
 if (zp_loggedin()) {
   
   function saveTitle($newtitle) {
@@ -209,22 +215,36 @@ if (zp_loggedin()) {
   sajax_handle_client_request();
 }
  
-// Print any Javascript required by zenphoto. Every theme should include this somewhere in its <head>.
-function zenJavascript() {
-  if (zp_loggedin()) {
-    echo "  <script type=\"text/javascript\" src=\"".WEBPATH."/zen/ajax.js\"></script>\n";
-    echo "  <script type=\"text/javascript\">\n";
-    sajax_show_javascript();
-    echo "  </script>";
+
+
+
+/*** Consistent URL redirection ***********/
+/******************************************/
+// Check to see if we use mod_rewrite, but got a query-string request for a page.
+// If so, redirect with a 301 to the correct URL. This must come AFTER the Ajax init above,
+// and is mostly helpful for SEO, but also for users. Consistent URLs are a Good Thing.
+if (zp_conf('mod_rewrite') && is_query_request()) {
+  $redirecturl = '';
+  if (in_context(ZP_IMAGE)) {
+    $redirecturl = pathurlencode($_zp_current_album->name) .'/'. $_zp_current_image->name . im_suffix();
+  } else if (in_context(ZP_ALBUM)) {
+    $redirecturl = pathurlencode($_zp_current_album->name) .'/'. ($_zp_page > 1 ? 'page/'.$_zp_page : '');
+  } else if (in_context(ZP_INDEX)) {
+    $redirecturl = ($_zp_page > 1 ? 'page/'.$_zp_page : '');
+  }
+  if (strlen($redirecturl) > 0) {
+    header("HTTP/1.0 301 Moved Permanently");
+    header('Location: ' . FULLWEBPATH . '/' . $redirecturl);
+    exit;
   }
 }
 
 
 
 
-/******************************************/
-/*********** Template Functions ***********/
-/******************************************/
+/******************************************************************************/
+/*** Template Functions *******************************************************/
+/******************************************************************************/
 
 
 /*** Generic Helper Functions *************/
@@ -250,6 +270,18 @@ function printAdminLink($text, $before='', $after='', $title=NULL, $class=NULL, 
     echo $before;
     printLink(WEBPATH.'/zen/admin.php', $text, $title, $class, $id);
     echo $after;
+  }
+}
+
+/**  
+ * Print any Javascript required by zenphoto. Every theme should include this somewhere in its <head>. 
+ */
+function zenJavascript() {
+  if (zp_loggedin()) {
+    echo "  <script type=\"text/javascript\" src=\"".WEBPATH."/zen/ajax.js\"></script>\n";
+    echo "  <script type=\"text/javascript\">\n";
+    sajax_show_javascript();
+    echo "  </script>";
   }
 }
 
