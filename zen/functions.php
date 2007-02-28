@@ -77,9 +77,14 @@ function truncate_string($string, $length) {
 }
 
 
-/** fix_rewrite_get - Fix special characters in the album and image names if mod_rewrite is on:
+/** rewrite_get_album_image - Fix special characters in the album and image names if mod_rewrite is on:
     This is redundant and hacky; we need to either make the rewriting completely internal,
     or fix the bugs in mod_rewrite. The former is probably a good idea.
+    
+    Old explanation:
+      rewrite_get_album_image() parses the album and image from the requested URL
+      if mod_rewrite is on, and replaces the query variables with corrected ones.
+      This is because of bugs in mod_rewrite that disallow certain characters.
  */
 function rewrite_get_album_image($albumvar, $imagevar) {
   if (zp_conf('mod_rewrite')) {

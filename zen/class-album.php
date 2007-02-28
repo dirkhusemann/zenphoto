@@ -18,7 +18,7 @@ class Album extends PersistentObject {
 
   // Constructor
   function Album(&$gallery, $folder) {
-    $folder = str_replace('//','/', $folder);
+    $folder = preg_replace(array('/^\/+/','/\/+$/','/\/\/+/','/\.\.+/'), '', $folder);
     $this->name = $folder;
     $this->gallery = &$gallery;
     $this->localpath = SERVERPATH . "/albums/" . $folder . "/";

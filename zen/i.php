@@ -203,7 +203,6 @@ if ($process) {
 }
 
 // ... and redirect the browser to it.
-// Header('Cache-Control: must-revalidate'); // ?? Not sure if this helps.
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($newfile)).' GMT');
 header('Content-Type: image/jpeg');
 header('Location: ' . FULLWEBPATH . '/cache' . pathurlencode($newfilename), true, 301);
