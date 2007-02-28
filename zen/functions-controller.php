@@ -154,12 +154,8 @@ function zp_handle_comment() {
 
 function zp_load_page($pagenum=NULL) {
   global $_zp_page;
-  if ($pagenum == NULL) {
-    if (isset($_GET['page'])) { 
-      $_zp_page = $_GET['page']; 
-    } else {
-      $_zp_page = 1;
-    }
+  if (!is_numeric($pagenum)) {
+    $_zp_page = isset($_GET['page']) ? $_GET['page'] : 1;
   } else {
     $_zp_page = round($pagenum);
   }
