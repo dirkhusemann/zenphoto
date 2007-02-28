@@ -12,6 +12,8 @@ RewriteCond %{REQUEST_FILENAME} -f [NC,OR]
 RewriteCond %{REQUEST_FILENAME} -d [NC]
 RewriteRule ^.*$ - [R,L]
 
+
+RewriteRule index\.php$                     index.php [L,QSA]
 RewriteRule	^admin/?$                       zen/admin.php [R,L]
 
 RewriteRule ^page/([0-9]+)/?$               index.php?page=$1 [L,QSA]
