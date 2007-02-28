@@ -250,54 +250,39 @@ class Gallery {
    * $full    - garbage collect every image and album in the *database* - completely cleans the database.
    */
   function garbageCollect($cascade=true, $full=false) {
+    // Check for the existence of top-level albums (subalbums handled recursively).
     $result = query("SELECT * FROM " . prefix('albums') . " WHERE `parentid` IS NULL");
     $dead = array();
-    
     // Load the albums from disk
     $files = $this->loadAlbumNames();
-    
-    while($row = mysql_fetch_assoc($result)) {
-      if (!in_array($row['folder'], $files)) {
-        $dead[] = $row['id'];
-      }
-    }
+    while($row = mysql_fetch_assoc($result))
+      if (!in_array($row['folder'], $files)) $dead[] = $row['id'];
 
     if (count($dead) > 0) {
-      $first = true;
-      $sql = "DELETE FROM " . prefix('albums') . " WHERE ";
-      foreach ($dead as $album) {
-        if (!$first) $sql .= " OR";
-        $sql .= "`id` = $album";
-        $first = false;
+      $first = array_pop($dead);
+      $sql1 = "DELETE FROM " . prefix('albums') . " WHERE `id` = '$first'";
+      $sql2 = "DELETE FROM " . prefix('images') . " WHERE `albumid` = '$first'";
+      foreach ($dead as $albumid) {
+        $sql1 .= " OR `id` = '$albumid'";
+        $sql2 .= " OR `albumid` = '$albumid'";
       }
-      $n = query($sql);
-      
+      $n = query($sql1);
       if (!$full && $n > 0 && $cascade) {
-        $first = true;
-        $sql = "DELETE FROM ".prefix('images')." WHERE ";
-        foreach ($dead as $album) {
-          if (!$first) $sql .= " OR";
-          $sql .= "`albumid` = $album";
-          $first = false;
-        }
+        query($sql2);
       }
     }
     
     if ($full) {
-      $first = true;
-      // Delete all images that don't belong to an album.
-      $result = query("SELECT `id` FROM " . prefix('albums'));
-      if ($this->getNumAlbums() > 0) {
-        $sql = "DELETE FROM ".prefix('images')." WHERE ";
-        while($album = mysql_fetch_assoc($result)) {
-          if (!$first) $sql .= " AND";
-          $sql .= " `albumid` != ".$album['id'];
-          $first = false;
-        }
+      // Delete all image entries that don't belong to an album at all.
+      $albumids = query_full_array("SELECT `id` FROM " . prefix('albums'));
+      if (count($albumids) > 0) {
+        $firstrow = array_pop($albumids);
+        $sql = "DELETE FROM ".prefix('images')." WHERE `albumid` != '" . $firstrow['id'] . "'";
+        foreach($albumids as $row) $sql .= " AND `albumid` != '" . $row['id'] . "'";
         query($sql);
         
         // Then go into existing albums recursively to clean them... very invasive.
-        foreach ($this->albums as $folder) {
+        foreach ($this->getAlbums(0) as $folder) {
           $album = new Album($this, $folder);
           $album->garbageCollect(true);
           $album->preLoad();

@@ -274,7 +274,7 @@ class Album extends PersistentObject {
       $image = new Image($this, $filename);
       $image->deleteImage(false);
     }
-    query("DELETE FROM " . prefix('albums') . " WHERE `id` = " . $this->id);
+    query("DELETE FROM " . prefix('albums') . " WHERE `id` = '" . $this->id . "'");
     rmdir($this->localpath);
   }
   
@@ -285,57 +285,46 @@ class Album extends PersistentObject {
    */
   function garbageCollect($deep=false) {
     if (is_null($this->images)) $this->getImages();
-    $result = query("SELECT * FROM ".prefix('images')." WHERE `albumid` = ".$this->id);
+    $result = query("SELECT * FROM ".prefix('images')." WHERE `albumid` = '" . $this->id . "'");
     $dead = array();
 
     $files = $this->loadFileNames();
     
     // Does the filename from the db row match any in the files on disk?
     while($row = mysql_fetch_assoc($result)) {
-      if (!in_array($row['filename'], $files)) {
-        $dead[] = $row['id'];
-      }
+      if (!in_array($row['filename'], $files)) $dead[] = $row['id'];
     }
     if (count($dead) > 0) {
-      $sql = "DELETE FROM ".prefix('images')." WHERE `id` = " . array_pop($dead);
-      foreach ($dead as $img) {
-        $sql .= " OR `id` = $img";
-      }
+      $sql = "DELETE FROM ".prefix('images')." WHERE `id` = '" . array_pop($dead) . "'";
+      foreach ($dead as $img) $sql .= " OR `id` = '$img'";
       query($sql);
     }
     
     // Get all sub-albums and make sure they exist.
-    $result = query("SELECT * FROM ".prefix('albums')." WHERE `parentid` = ".$this->id);
+    $result = query("SELECT * FROM ".prefix('albums')." WHERE `folder` LIKE '" . $this->name . "/%'");
     $dead = array();
-    $subdirs = $this->loadFileNames(true);
-    $subalbums = $this->getSubAlbums();
-    
-    for($i=0; $i < count($subdirs); $i++) {
-      $subdirs[$i] = $this->getFolder() . '/' . $subdirs[$i];
-    }
-    
-    // Does the dirname from the db row match any in the subdirs on disk?
+    // Does the dirname from the db row exist on disk?
     while($row = mysql_fetch_assoc($result)) {
-      if (!in_array($row['folder'], $subdirs)) {
+      if (!is_dir(SERVERPATH . '/albums/' . $row['folder']) 
+          || substr($row['folder'], -1) == '/' || substr($row['folder'], 0, 1) == '/') {
         $dead[] = $row['id'];
       }
     }
     if (count($dead) > 0) {
-      $sql = "DELETE FROM ".prefix('albums')." WHERE `id` = " . array_pop($dead);
-      foreach ($dead as $albumid) {
-        $sql .= " OR `id` = $albumid";
-      }
+      $sql = "DELETE FROM ".prefix('albums')." WHERE `id` = '" . array_pop($dead) . "'";
+      foreach ($dead as $albumid) $sql .= " OR `id` = '$albumid'";
       query($sql);
     }
-      
+    
     if ($deep) {
-      foreach($subalbums as $dir) {
+      foreach($this->getSubAlbums(0) as $dir) {
         $subalbum = new Album($this->gallery, $dir);
         $subalbum->garbageCollect($deep);
       }
     }
   }
-  
+
+
   /**
    * Simply creates objects of all the images and sub-albums in this album to
    * load accurate values into the database.
