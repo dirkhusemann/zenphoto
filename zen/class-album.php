@@ -301,7 +301,7 @@ class Album extends PersistentObject {
     }
     
     // Get all sub-albums and make sure they exist.
-    $result = query("SELECT * FROM ".prefix('albums')." WHERE `folder` LIKE '" . $this->name . "/%'");
+    $result = query("SELECT * FROM ".prefix('albums')." WHERE `folder` LIKE '" . mysql_real_escape_string($this->name) . "/%'");
     $dead = array();
     // Does the dirname from the db row exist on disk?
     while($row = mysql_fetch_assoc($result)) {
