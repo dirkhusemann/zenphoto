@@ -3,6 +3,24 @@
 // functions-image.php - HEADERS NOT SENT YET!
 
 /**
+ * Show an error image if an image was requested, and 
+ */
+function imageError($errormessage, $errorimg='err-imagegeneral.gif') {
+  global $newfilename, $album, $image;
+  $debug = isset($_GET['debug']);
+  if ($debug) {
+    die('<strong>Zenphoto Image Processing Error:</strong> ' . $errormessage
+      . (empty($newfilename) ? '' : '<br />Cache: [<code> /cache'  . sanitize($newfilename, true) . '</code>]')
+      . (empty($image) || empty($album) ? '' : ' <br />Image: [<code> '.sanitize($album.'/'.$image, true).' </code>]<br />'));
+  } else {
+    header('Location: ' . FULLWEBPATH . '/zen/images/' . $errorimg);
+    exit();
+  }
+}
+
+
+
+/**
 
 WARNING! Due to a known bug in PHP 4.3.2 this script is not working well in this
 version. The sharpened images get too dark. The bug is fixed in version 4.3.3.

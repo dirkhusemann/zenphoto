@@ -38,16 +38,10 @@ $sharpenthumbs = zp_conf('thumb_sharpen');
 
 // Don't let anything get above this, to save the server from burning up...
 define('MAX_SIZE', 3000);
-$debug = isset($_GET['debug']) ? true : false;
 
 // Check for minimum parameters.
 if (!isset($_GET['a']) || !isset($_GET['i'])) {
-  if ($debug) {
-    die('<b>Zenphoto error:</b> You must specify at least both an album and an image.');
-  } else {
-    header('Location: ' . FULLWEBPATH . '/zen/images/err-imagenotfound.gif');
-    return;
-  }
+  imageError("Too few arguments! Image not found.", 'err-imagenotfound.gif');
 }
 
 // Fix special characters in the album and image names if mod_rewrite is on:
@@ -71,9 +65,32 @@ if ((isset($_GET['s']) && $_GET['s'] < MAX_SIZE)
   list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
 
 } else {
-  // No image parameters specified; return the original image.
+  // No image parameters specified or are out of bounds; return the original image.
   header("Location: " . FULLWEBPATH . "/albums/" . pathurlencode($album) . "/" . rawurlencode($image));
   return;
+}
+
+// Construct the filename to save the cached image.
+$newfilename = getImageCacheFilename($album, $image, $args);
+$newfile = SERVERCACHE . $newfilename;
+$imgfile = SERVERPATH  . "/albums/$album/$image";
+
+// Make sure the cache directory is writable, attempt to fix. Issue a warning if not fixable.
+if (!is_writable(SERVERCACHE)) {
+  @chmod(SERVERCACHE, 0777);
+  if (!is_writable(SERVERCACHE)) {
+    imageError("The cache directory is not writable! Attempts to chmod didn't work.", 'err-cachewrite.gif');
+  }
+}
+
+// Check for GD
+if (!function_exists('imagecreatetruecolor')) {
+  imageError("The GD Library is not installed or not available.", 'err-nogd.gif');
+}
+
+// Check for the source image.
+if (!file_exists($imgfile) || !is_readable($imgfile)) {
+  imageError("Image not found or is unreadable.", 'err-imagenotfound.gif');
 }
 
 // Make the directories for the albums in the cache, recursively.
@@ -91,25 +108,10 @@ if (!ini_get("safe_mode")) {
   }
 }
 
-$newfilename = getImageCacheFilename($album, $image, $args);
-
-$newfile = SERVERCACHE . $newfilename;
-$imgfile = SERVERPATH  . "/albums/$album/$image";
-
-// Check for the source image.
-if (!file_exists($imgfile)) {
-  if ($debug) {
-    die('<b>Zenphoto error:</b> Image not found! <br />Cache: [<code> /cache' 
-      . sanitize($newfilename, true).' </code>]<br />Image: [ <code>'.sanitize($album.'/'.$image, true).' </code>]<br />');
-  } else {
-    header('Location: ' . FULLWEBPATH . '/zen/images/err-imagenotfound.gif');
-    return;
-  }
-}
 
 $process = true;
 // If the file exists, check its modification time and update as needed.
-if (file_exists($newfile)) { 
+if (file_exists($newfile)) {
   if (filemtime($newfile) < filemtime($imgfile)) {
     $process = true;
   } else {
@@ -149,13 +151,7 @@ if ($process) {
       $size = $width = false;
     } else {
       // There's a problem up there somewhere...
-      if ($debug) {
-        die('<b>Zenphoto error:</b> Image processing error. Please report to the developers.<br />Cache: [<code> /cache' 
-          . sanitize($newfilename, true).' </code>]<br />Image: [<code> '.sanitize($album.'/'.$image, true).' </code>]<br />');
-      } else {
-        header('Location: ' . FULLWEBPATH . '/zen/images/err-imagegeneral.gif');
-        return;
-      }
+      imageError("Unknown error! Please report to the developers at <a href=\"http://www.zenphoto.org/\">www.zenphoto.org</a>");
     }
     
     // Calculate proportional height and width.
@@ -198,10 +194,9 @@ if ($process) {
     }
 
     // Create the cached file (with lots of compatibility)...
-		touch($newfile);
-
+		@touch($newfile);
 		imagejpeg($newim, $newfile, $quality);
-    chmod($newfile, 0777);
+    @chmod($newfile, 0666);
 		imagedestroy($newim);
 		imagedestroy($im);
 	}
