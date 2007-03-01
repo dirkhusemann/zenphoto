@@ -10,7 +10,8 @@ function imageError($errormessage, $errorimg='err-imagegeneral.gif') {
   $debug = isset($_GET['debug']);
   if ($debug) {
     die('<strong>Zenphoto Image Processing Error:</strong> ' . $errormessage
-      . '<br />Request URI: [ <code>' . sanitize($_SERVER['REQUEST_URI'], true) . '</code> ]'
+      . '<br /><br />Request URI: [ <code>' . sanitize($_SERVER['REQUEST_URI'], true) . '</code> ]'
+      . '<br />PHP_SELF:    [ <code>' . sanitize($_SERVER['PHP_SELF'], true) . '</code> ]'
       . (empty($newfilename) ? '' : '<br />Cache: [<code> /cache'  . sanitize($newfilename, true) . '</code>]')
       . (empty($image) || empty($album) ? '' : ' <br />Image: [<code> '.sanitize($album.'/'.$image, true).' </code>]<br />'));
   } else {

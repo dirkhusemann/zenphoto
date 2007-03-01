@@ -59,7 +59,7 @@ $conf['adminuser'] = "admin";
 $conf['adminpass'] = "1234";
 
 // The email for the admin user. Used to send notification emails.
-$conf['admin_email'] = "user@somewhere.com";
+$conf['admin_email'] = "";
 
 // If you're running a secure server, change this to 'https' (Most people will leave this alone)
 $conf['server_protocol'] = "http";

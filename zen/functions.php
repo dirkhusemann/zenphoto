@@ -89,7 +89,8 @@ function truncate_string($string, $length) {
 function rewrite_get_album_image($albumvar, $imagevar) {
   if (zp_conf('mod_rewrite')) {
     $path = urldecode(substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1));
-    if (strlen($path) > 0 && isset($_GET[$albumvar])) {
+    // Only extract the path when the request doesn't include the running php file (query request).
+    if (strlen($path) > 0 && strpos($_SERVER['REQUEST_URI'], $_SERVER['PHP_SELF']) === false && isset($_GET[$albumvar])) {
       $im_suffix = zp_conf('mod_rewrite_image_suffix');
       $suf_len = strlen($im_suffix);
       $qspos = strpos($path, '?');
@@ -98,32 +99,30 @@ function rewrite_get_album_image($albumvar, $imagevar) {
       if ($suf_len > 0 && substr($path, -($suf_len)) == $im_suffix) {
         $path = substr($path, 0, -($suf_len));
       }
-      // Only manually extract the path when the request wasn't for a .php file.
-      if (strpos($path, '.php') === false) {
-        if (substr($path, -1, 1) == '/') $path = substr($path, 0, strlen($path)-1);
-        $pagepos  = strpos($path, '/page/');
-        $slashpos = strrpos($path, '/');
-        $imagepos = strpos($path, '/image/');
-  
-        if ($imagepos !== false) {
-          $ralbum = substr($path, 0, $imagepos);
-          $rimage = substr($path, $slashpos+1);
-        } else if ($pagepos !== false) {
-          $ralbum = substr($path, 0, $pagepos);
-          $rimage = null;
-        } else if ($slashpos !== false) {
-          $ralbum = substr($path, 0, $slashpos);
-          $rimage = substr($path, $slashpos+1);
-          if (is_dir(SERVERPATH . '/albums/' . $ralbum . '/' . $rimage)) {
-            $ralbum = $ralbum . '/' . $rimage;
-            $rimage = null;
-          }
-        } else {
-          $ralbum = $path;
+      
+      if (substr($path, -1, 1) == '/') $path = substr($path, 0, strlen($path)-1);
+      $pagepos  = strpos($path, '/page/');
+      $slashpos = strrpos($path, '/');
+      $imagepos = strpos($path, '/image/');
+
+      if ($imagepos !== false) {
+        $ralbum = substr($path, 0, $imagepos);
+        $rimage = substr($path, $slashpos+1);
+      } else if ($pagepos !== false) {
+        $ralbum = substr($path, 0, $pagepos);
+        $rimage = null;
+      } else if ($slashpos !== false) {
+        $ralbum = substr($path, 0, $slashpos);
+        $rimage = substr($path, $slashpos+1);
+        if (is_dir(SERVERPATH . '/albums/' . $ralbum . '/' . $rimage)) {
+          $ralbum = $ralbum . '/' . $rimage;
           $rimage = null;
         }
-        return array($ralbum, $rimage);
+      } else {
+        $ralbum = $path;
+        $rimage = null;
       }
+      return array($ralbum, $rimage);
     }
   }
   
