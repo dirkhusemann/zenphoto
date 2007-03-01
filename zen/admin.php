@@ -115,7 +115,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
             if (is_image($name)) {
               $uploadfile = $uploaddir . '/' . $name;
               move_uploaded_file($tmp_name, $uploadfile);
-              @chmod($uploadfile, 0777);
+              @chmod($uploadfile, 0666);
             } else if (is_zip($name)) {
               unzip($tmp_name, $uploaddir);
             }

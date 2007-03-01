@@ -76,11 +76,16 @@ $newfile = SERVERCACHE . $newfilename;
 $imgfile = SERVERPATH  . "/albums/$album/$image";
 
 // Make sure the cache directory is writable, attempt to fix. Issue a warning if not fixable.
+if (!is_dir(SERVERCACHE)) {
+  @mkdir(SERVERCACHE, 0777);
+  @chmod(SERVERCACHE, 0777);
+  if (!is_dir(SERVERCACHE))
+    imageError("The cache directory does not exist. Please create it and set the permissions to 0777.", 'err-cachewrite.gif');
+}
 if (!is_writable(SERVERCACHE)) {
   @chmod(SERVERCACHE, 0777);
-  if (!is_writable(SERVERCACHE)) {
+  if (!is_writable(SERVERCACHE))
     imageError("The cache directory is not writable! Attempts to chmod didn't work.", 'err-cachewrite.gif');
-  }
 }
 
 // Check for GD
