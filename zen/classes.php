@@ -48,6 +48,7 @@ class PersistentObject {
     // Initialize the variables.
     // Load the data into the data array using $this->load()
     $this->data = array();
+    $this->tempdata = array();
     $this->updates = array();
     $this->table = $tablename;
     $this->unique_set = $unique_set;
@@ -58,9 +59,17 @@ class PersistentObject {
   /**
    * Set a variable in this object. Does not persist to the database until 
    * save() is called. So, IMPORTANT: Call save() after set() to persist.
+   * If the requested variable is not in the database, sets it in temp storage,
+   * which won't be persisted to the database.
    */
   function set($var, $value) {
-    $this->updates[$var] = $value;
+    if (empty($var)) return false;
+    if (isset($this->data[$var])) {
+      $this->updates[$var] = $value;
+    } else {
+      $this->tempdata[$var] = $value;
+    }
+    return true;
   }
   
   /**
@@ -102,6 +111,8 @@ class PersistentObject {
       return $this->updates[$var];
     } else if (isset($this->data[$var])) {
       return $this->data[$var];
+    } else if (isset($this->tempdata[$var])) {
+      return $this->tempdata[$var];
     } else {
       return null;
     }
