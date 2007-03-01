@@ -144,7 +144,7 @@ function printLoginForm($redirect="/zen/admin.php") {
   
   echo "\n  <div id=\"loginform\">";
   if ($error) {
-    echo "<div class=\"errorbox\" id=\"message\"><h2>There was an error logging in.</h2> Check your username and password and try again.</h2></div>";
+    echo "<div class=\"errorbox\" id=\"message\"><h2>There was an error logging in.</h2> Check your username and password and try again.</div>";
   }
   echo "\n  <form name=\"login\" action=\"#\" method=\"POST\">";
   echo "\n    <input type=\"hidden\" name=\"login\" value=\"1\" />";

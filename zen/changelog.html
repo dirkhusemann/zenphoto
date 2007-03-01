@@ -22,6 +22,7 @@
       A:hover, A:active { text-decoration: underline; color: #F60; background-color: #FFFCF4; }
       code { color: #090; }
       cite { color: #09C; font-style: normal; font-size: 8pt;}
+      .bug, a.bug { color: #D60 !important; font-family: monospace; }
     </style>
   </head>
 
@@ -44,6 +45,23 @@
     <li><a href=""></a></li>
   </ul>
 -->
+
+<div class="entry">
+  <h3>Version 1.0.8</h3>
+  <h4>1/26/2007</h4>
+  <ul>
+    <li>Faster image loading by using the cached image path directly if the file exists. <cite>[trisweb]</cite></li>
+    <li>Custom suffix for image pages (eg: <code>/alb/img1.jpg</code> &raquo; <code>/alb/img1.jpg.php</code>) Defaults to <code>.php</code>, is backward-compatible with older URLs by 301-redirect, and makes sense. <a class="bug" href="http://www.zenphoto.org/trac/ticket/16">#16</a>  <cite>[trisweb]</cite></li>
+    <li>Now compatible with PHP safe_mode restriction. <cite>[trisweb]</cite></li>
+    <li>Fix for permissions wrongly set in cache folder (could not delete cached images). <cite>[trisweb]</cite></li>
+    <li>Added optional Unsharp Mask for thumbnails, defaults to off. Config param: <code>thumb_sharpen</code>. <cite>[trisweb]</cite></li>
+    <li>Refactored the way requests are handled. Split into 2 include files: <code>controller.php</code> and <code>functions-controller.php</code>. <cite>[trisweb]</cite></li>
+    <li>mod_rewrite rules for sub-albums complete; works to infinite path depth.  <cite>[trisweb]</cite></li>
+    <li>Much improved SEO (Search Engine Optimization) - URLs are always 301-redirected to their single canonical form; <a class="bug" href="http://www.zenphoto.org/trac/ticket/16">#16</a> (custom suffix) fixes image pages not appearing in indexes.  <cite>[trisweb]</cite></li>
+    <li>Major code refactoring and reorganization.  <cite>[trisweb]</cite></li>
+    <li>Warning if you use the <abbr title="That's incredible, I've got the same combination on my luggage!">default password</abbr>. </small><cite>[Chris S.]</cite> </li>
+  </ul>
+</div>
 
 <div class="entry">
   <h3>Version 1.0.7</h3>

@@ -1,4 +1,5 @@
 <?php  /* Don't put anything before this line! */
+session_start();
 define('OFFSET_PATH', true);
 require_once("sortable.php");
 
@@ -239,10 +240,23 @@ if (issetPage('edit')) {
 
 <?php
 // If they are not logged in, display the login form and exit
+if (isset($_GET['ignore'])) {
+  $_SESSION['ignoreDefaultPassword'] = true;
+}
+
 if (!zp_loggedin()) {
   
   printLoginForm();
   exit(); 
+  
+} else if ($_SESSION['ignoreDefaultPassword'] != true 
+    && (zp_conf('adminpass') == '1234' || zp_conf('adminpass') == '')) {
+  /* Using default or blank password; issue warning, but only after successfully logged in. */
+  echo '<p><img src="../zen/images/zen-logo.gif" title="Zen Photo" /></p>'
+    .  '<div id="loginform" style="text-align: justify;"><h1 style="color: #cc0000;">Warning!</h1><p>'
+    .  '<strong>You are currently using the defult password!</strong> This is insecure because many people know this password. '
+    .  'It is highly recommended that you change the password by editing <code>zen/zp-config.php</code>. '
+    .  'If you understand this and want to continue anyway, please <a href="?ignore">click here to continue &raquo;</a>.</p></div>';
   
 } else { /* Admin-only content safe from here on. */ 
 

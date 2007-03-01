@@ -75,6 +75,9 @@ $newfilename = getImageCacheFilename($album, $image, $args);
 $newfile = SERVERCACHE . $newfilename;
 $imgfile = SERVERPATH  . "/albums/$album/$image";
 
+
+/** Check for possible problems ***********
+ ******************************************/
 // Make sure the cache directory is writable, attempt to fix. Issue a warning if not fixable.
 if (!is_dir(SERVERCACHE)) {
   @mkdir(SERVERCACHE, 0777);
@@ -87,16 +90,14 @@ if (!is_writable(SERVERCACHE)) {
   if (!is_writable(SERVERCACHE))
     imageError("The cache directory is not writable! Attempts to chmod didn't work.", 'err-cachewrite.gif');
 }
-
 // Check for GD
-if (!function_exists('imagecreatetruecolor')) {
+if (!function_exists('imagecreatetruecolor'))
   imageError("The GD Library is not installed or not available.", 'err-nogd.gif');
-}
-
 // Check for the source image.
-if (!file_exists($imgfile) || !is_readable($imgfile)) {
+if (!file_exists($imgfile) || !is_readable($imgfile))
   imageError("Image not found or is unreadable.", 'err-imagenotfound.gif');
-}
+
+
 
 // Make the directories for the albums in the cache, recursively.
 // Skip this for safe_mode, where we can't write to directories we create!
