@@ -64,11 +64,7 @@ class PersistentObject {
    */
   function set($var, $value) {
     if (empty($var)) return false;
-    if (isset($this->data[$var])) {
-      $this->updates[$var] = $value;
-    } else {
-      $this->tempdata[$var] = $value;
-    }
+    $this->updates[$var] = $value;
     return true;
   }
   
