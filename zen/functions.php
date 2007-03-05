@@ -125,9 +125,10 @@ function rewrite_get_album_image($albumvar, $imagevar) {
       return array($ralbum, $rimage);
     }
   }
-  
   // No mod_rewrite, or no album, etc. Just send back the query args.
-  return array($_GET[$albumvar], $_GET[$imagevar]);
+  $ralbum = isset($_GET[$albumvar]) ? $_GET[$albumvar] : null;
+  $rimage = isset($_GET[$imagevar]) ? $_GET[$imagevar] : null;
+  return array($ralbum, $rimage);
 }
 
 
@@ -191,7 +192,7 @@ function getImageParameters($args) {
   $quality = zp_conf('image_quality');
   // Set up the parameters
   $thumb = $crop = false;
-  list($size, $width, $height, $cw, $ch, $cx, $cy, $quality) = $args;
+  @list($size, $width, $height, $cw, $ch, $cx, $cy, $quality) = $args;
   
   if ($size == 'thumb') {
     $thumb = true;
