@@ -92,10 +92,10 @@ if (!is_writable(SERVERCACHE)) {
 }
 // Check for GD
 if (!function_exists('imagecreatetruecolor'))
-  imageError("The GD Library is not installed or not available.", 'err-nogd.gif');
+  imageError('The GD Library is not installed or not available.', 'err-nogd.gif');
 // Check for the source image.
 if (!file_exists($imgfile) || !is_readable($imgfile))
-  imageError("Image not found or is unreadable.", 'err-imagenotfound.gif');
+  imageError('Image not found or is unreadable.', 'err-imagenotfound.gif');
 
 
 
@@ -200,11 +200,11 @@ if ($process) {
     }
 
     // Create the cached file (with lots of compatibility)...
-		@touch($newfile);
-		imagejpeg($newim, $newfile, $quality);
-    @chmod($newfile, 0666);
-		imagedestroy($newim);
-		imagedestroy($im);
+        @touch($newfile);
+        imagejpeg($newim, $newfile, $quality);
+        @chmod($newfile, 0666);
+        imagedestroy($newim);
+        imagedestroy($im);
 	}
 }
 
