@@ -434,7 +434,6 @@ function parseThemeDef($file) {
   if (is_readable($file) && $fp = @fopen($file, "r")) {
     while($line = fgets($fp)) {
       if (substr(trim($line), 0, 1) != "#") {
-        $info = split($line, "::");
         $item = explode("::", $line);
         $themeinfo[trim($item[0])] = kses(trim($item[1]), zp_conf('allowed_tags'));
       }
