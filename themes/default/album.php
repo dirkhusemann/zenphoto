@@ -3,7 +3,7 @@
 <html>
 <head>
 	<title><?php printGalleryTitle(); ?> | <?php echo getAlbumTitle();?></title>
-	<link rel="stylesheet" href="<?php echo  $_zp_themeroot ?>/zen.css" type="text/css" />
+	<link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
 	<?php zenJavascript(); ?>
 	
 </head>

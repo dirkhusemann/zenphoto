@@ -173,13 +173,15 @@ ul.pagelist li.next {
 	float: left;
 }
 .albumdesc2 {
-	padding: 5px 20px 5px 20px;
 	line-height: 18px;
 }
 
 
 /* Album Thumbnails
 ------------------------------ */
+#albums {
+        float: left;
+}
 .album {
 	margin: 0 15px 15px 0;
 	float: left;
@@ -210,6 +212,10 @@ ul.pagelist li.next {
 
 /* Individual Image
 ------------------------------ */
+#images {
+        float: left;
+        clear: left;
+}
 .image { 
 	margin: 0;
 	padding: 0;

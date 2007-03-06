@@ -2,11 +2,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-	<title><?php printGalleryTitle(); ?> > <?=getAlbumTitle();?> > <?=getImageTitle();?></title>
-	<link rel="stylesheet" href="<?= $_zp_themeroot ?>/css/master.css" type="text/css" />
-	<script type="text/javascript">var blogrelurl = "<?= $_zp_themeroot ?>/";</script>
-	<script type="text/javascript" src="<?= $_zp_themeroot ?>/js/rememberMe.js"></script>
-	<script type="text/javascript" src="<?= $_zp_themeroot ?>/js/comments.js"></script>
+	<title><?php printGalleryTitle(); ?> > <?php echo getAlbumTitle();?> > <?php echo getImageTitle();?></title>
+	<link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/css/master.css" type="text/css" />
+	<script type="text/javascript">var blogrelurl = "<?php echo $_zp_themeroot ?>/";</script>
+	<script type="text/javascript" src="<?php echo $_zp_themeroot ?>/js/rememberMe.js"></script>
+	<script type="text/javascript" src="<?php echo $_zp_themeroot ?>/js/comments.js"></script>
 	<?php zenJavascript(); ?>
 </head>
 
@@ -38,16 +38,16 @@
 					<?php while (next_comment()):  ?>
 					<dt>
 					<a class="postno"> </a>
-					<em>On <?=getCommentDate();?>, <?php printCommentAuthorLink(); ?> wrote:</em>
+					<em>On <?php echo getCommentDate();?>, <?php printCommentAuthorLink(); ?> wrote:</em>
     				</dt>
 
     				<dd>
-					<p><?=getCommentBody();?><?php printEditCommentLink('Edit', ' (', ')'); ?></p>
+					<p><?php echo getCommentBody();?><?php printEditCommentLink('Edit', ' (', ')'); ?></p>
 					</dd>
     				<?php endwhile; ?>
     			</dl>
 <?php if (isset($error)) { ?><p><div class="error">There was an error submitting your comment. Name, a valid e-mail address, and a comment are required.</div></p><?php } ?>
-    			<p class="mainbutton" id="addcommentbutton"><a href="#addcomment" class="btn"><img src="<?= $_zp_themeroot ?>/img/btn_add_a_comment.gif" alt="" /></a></p>
+    			<p class="mainbutton" id="addcommentbutton"><a href="#addcomment" class="btn"><img src="<?php echo $_zp_themeroot ?>/img/btn_add_a_comment.gif" alt="" /></a></p>
 
     			<div id="addcomment">
 				<h2>Add a comment</h2>
@@ -63,17 +63,17 @@
 
 								<tr valign="top" align="left" id="row-name">
 									<th><label for="name">name:</label></td>
-									<td><input type="text" id="name" name="name" class="text" value="<?=$stored[0];?>" class="inputbox" />
+									<td><input type="text" id="name" name="name" class="text" value="<?php echo $stored[0];?>" class="inputbox" />
 									</td>
 								</tr>
 								<tr valign="top" align="left" id="row-email">
 									<th><label for="email">email:</label></td>
-									<td><input type="text" id="email" name="email" class="text" value="<?=$stored[1];?>" class="inputbox" /> <em>(not displayed)</em>
+									<td><input type="text" id="email" name="email" class="text" value="<?php echo $stored[1];?>" class="inputbox" /> <em>(not displayed)</em>
 									</td>
 								</tr>
 								<tr valign="top" align="left">
 									<th><label for="website">url:</label></td>
-									<td><input type="text" id="website" name="website" class="text" value="<?=$stored[2];?>" class="inputbox" /></td>
+									<td><input type="text" id="website" name="website" class="text" value="<?php echo $stored[2];?>" class="inputbox" /></td>
 								</tr>
 								<tr valign="top" align="left">
 									<th><label for="c-text">comment:</label></th>
@@ -91,15 +91,15 @@
 </div>
 
 <?php if (hasPrevImage()) { ?>
-<div id="prev" class="slides">  <p><a href="<?=getPrevImageURL();?>" title="Previous photo"><img src="<?=getPrevImageThumb(); ?>" /></a></p></div>
+<div id="prev" class="slides">  <p><a href="<?php echo getPrevImageURL();?>" title="Previous photo"><img src="<?php echo getPrevImageThumb(); ?>" /></a></p></div>
 <?php } if (hasNextImage()) { ?>
-<div id="next" class="slides">  <p><a href="<?=getNextImageURL();?>" title="Next photo"><img src="<?=getNextImageThumb(); ?>" /></a></p></div>
+<div id="next" class="slides">  <p><a href="<?php echo getNextImageURL();?>" title="Next photo"><img src="<?php echo getNextImageThumb(); ?>" /></a></p></div>
 <?php } ?>
 
 </div>
 
-<p id="path"><a href="<?=getGalleryIndexURL();?>" title="Gallery Index"><?=getGalleryTitle();?></a> >
-			 <a href="<?=getAlbumLinkURL();?>" title="Gallery Index"><?=getAlbumTitle();?></a> >
+<p id="path"><a href="<?php echo getGalleryIndexURL();?>" title="Gallery Index"><?php echo getGalleryTitle();?></a> >
+			 <a href="<?php echo getAlbumLinkURL();?>" title="Gallery Index"><?php echo getAlbumTitle();?></a> >
 		     <?php printImageTitle(false); ?></p>
 
 <div id="footer">

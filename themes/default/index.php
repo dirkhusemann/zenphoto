@@ -4,7 +4,7 @@
 <head>
 
 	<title><?php printGalleryTitle(); ?></title>
-	<link rel="stylesheet" href="<?php echo  $_zp_themeroot ?>/zen.css" type="text/css" />
+	<link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
 	<?php zenJavascript(); ?>
 
 </head>

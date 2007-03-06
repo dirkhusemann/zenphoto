@@ -1,8 +1,9 @@
+<?php if (!defined('WEBPATH')) die(); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <title><?php if (zp_conf('website_title') != '') { echo zp_conf('website_title') . '&#187; '; } ?>Gallery Archive</title>
-  <link rel="stylesheet" href="<?php echo  $_zp_themeroot ?>/css/master.css" type="text/css" />
+  <link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/css/master.css" type="text/css" />
   <?php zenJavascript(); ?>
   </head>
 
@@ -22,7 +23,7 @@
 			  <a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>" class="img">
           <?php printCustomAlbumThumbImage(getAlbumTitle(), null, 230, null, 210, 60); ?></a>
 			  <h3><a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
-			  <p><em><? $number = getNumImages(); if ($number > 1) $number .= " photos"; else $number .=" photo"; echo$number; ?></em> <?php $text = getAlbumDesc(); if( strlen($text) > 44) $text = preg_replace("/[^ ]*$/", '', substr($text, 0, 22))."..."; echo$text; ?></p>
+			  <p><em><?php $number = getNumImages(); if ($number > 1) $number .= " photos"; else $number .=" photo"; echo$number; ?></em> <?php $text = getAlbumDesc(); if( strlen($text) > 44) $text = preg_replace("/[^ ]*$/", '', substr($text, 0, 22))."..."; echo$text; ?></p>
 			</li>
 
 		  <?php endwhile; ?>

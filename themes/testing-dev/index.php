@@ -2,7 +2,7 @@
 <html>
 <head>
   <title><?php printGalleryTitle(); ?></title>
-  <link rel="stylesheet" href="<?= $_zp_themeroot ?>/zen.css" type="text/css" />
+  <link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
   <?php zenJavascript(); ?>
 </head>
 <body>
@@ -19,9 +19,9 @@
   <?php while (next_album()): ?>
   
     <div class="album">
-      <div class="albumthumb"><a href="<?=getAlbumLinkURL();?>" title="<?=getAlbumTitle();?>">
+      <div class="albumthumb"><a href="<?php echo getAlbumLinkURL();?>" title="<?php echo getAlbumTitle();?>">
         <?php printAlbumThumbImage(getAlbumTitle()); ?></a></div>
-      <div class="albumtitle"><h3><a href="<?=getAlbumLinkURL();?>" title="<?=getAlbumTitle();?>">
+      <div class="albumtitle"><h3><a href="<?php echo getAlbumLinkURL();?>" title="<?php echo getAlbumTitle();?>">
         <?php printAlbumTitle(); ?></a></h3> <?php printAlbumDate(); ?></div>
       <div class="desc"><?php printAlbumDesc(); ?></div>
     </div>
@@ -33,7 +33,7 @@
   <?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
 
   <p style="text-align: right;">
-  <? printSortableGalleryLink('Sort Gallery', 'Manual sorting', NULL, 'credit'); ?> &nbsp; <?php printAdminLink("Admin"); ?>
+  <?php printSortableGalleryLink('Sort Gallery', 'Manual sorting', NULL, 'credit'); ?> &nbsp; <?php printAdminLink("Admin"); ?>
   </p>
 
 </div>

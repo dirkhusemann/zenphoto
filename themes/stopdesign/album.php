@@ -2,8 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-	<title><?php printGalleryTitle(); ?> > <?=getAlbumTitle();?></title>
-	<link rel="stylesheet" href="<?= $_zp_themeroot ?>/css/master.css" type="text/css" />
+	<title><?php printGalleryTitle(); ?> > <?php echo getAlbumTitle();?></title>
+	<link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/css/master.css" type="text/css" />
 	<?php zenJavascript(); ?>
 </head>
 
@@ -18,7 +18,7 @@
 
 	<ul class="slides">
 	<?php while (next_image()): ?>
-	<li><a href="<?=getImageLinkURL();?>" title="<?=getImageTitle();?>"><?php printImageThumb(getImageTitle()); ?></a></li>
+	<li><a href="<?php echo getImageLinkURL();?>" title="<?php echo getImageTitle();?>"><?php printImageThumb(getImageTitle()); ?></a></li>
 	<?php endwhile; ?>
 	</ul>
 
@@ -28,7 +28,7 @@
 
 </div>
 
-<p id="path"><a href="<?=getGalleryIndexURL();?>" title="Gallery Index"><?=getGalleryTitle();?></a> > <?php printAlbumTitle(false);?></p>
+<p id="path"><a href="<?php echo getGalleryIndexURL();?>" title="Gallery Index"><?php echo getGalleryTitle();?></a> > <?php printAlbumTitle(false);?></p>
 
 <div id="footer">
 	<hr />

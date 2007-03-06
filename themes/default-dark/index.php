@@ -3,7 +3,7 @@
 <head>
 
 	<title><?php printGalleryTitle(); ?></title>
-	<link rel="stylesheet" href="<?= $_zp_themeroot ?>/zen.css" type="text/css" />
+	<link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
 	<?php zenJavascript(); ?>
 
 </head>
@@ -19,12 +19,12 @@
 	<div id="albums">
 		<?php while (next_album()): ?>
 		<div class="album">
-			<a href="<?=getAlbumLinkURL();?>" title="View album: <?=getAlbumTitle();?>">
+			<a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>">
 			<?php printAlbumThumbImage(getAlbumTitle()); ?>
 			</a>
 			<div class="albumdesc">
-        <small><? printAlbumDate("Date Taken: "); ?></small>
-				<h3><a href="<?=getAlbumLinkURL();?>" title="View album: <?=getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
+        <small><?php printAlbumDate("Date Taken: "); ?></small>
+				<h3><a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
 				<p><?php printAlbumDesc(); ?></p>
 			</div>
 			<p style="clear: both; "></p>

@@ -1,8 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-	<title><?php printGalleryTitle(); ?> | <?=getAlbumTitle();?> | <?=getImageTitle();?></title>
-	<link rel="stylesheet" href="<?= $_zp_themeroot ?>/zen.css" type="text/css" />
+	<title><?php printGalleryTitle(); ?> | <?php echo getAlbumTitle();?> | <?php echo getImageTitle();?></title>
+	<link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
 	<script type="text/javascript">
 	  function toggleComments() {
       var commentDiv = document.getElementById("comments");
@@ -22,20 +22,20 @@
 
 	<div class="imgnav">
 		<?php if (hasPrevImage()) { ?>
-		<div class="imgprevious"><a href="<?=getPrevImageURL();?>" title="Previous Image">&laquo; prev</a></div>
+		<div class="imgprevious"><a href="<?php echo getPrevImageURL();?>" title="Previous Image">&laquo; prev</a></div>
 		<?php } if (hasNextImage()) { ?>
-		<div class="imgnext"><a href="<?=getNextImageURL();?>" title="Next Image">next &raquo;</a></div>
+		<div class="imgnext"><a href="<?php echo getNextImageURL();?>" title="Next Image">next &raquo;</a></div>
 		<?php } ?>
 	</div>
 		
 	<div id="gallerytitle">
-		<h2><span><a href="<?=getGalleryIndexURL();?>" title="Gallery Index"><?=getGalleryTitle();?></a>
-		  | <a href="<?=getAlbumLinkURL();?>" title="Gallery Index"><?=getAlbumTitle();?></a>
+		<h2><span><a href="<?php echo getGalleryIndexURL();?>" title="Gallery Index"><?php echo getGalleryTitle();?></a>
+		  | <a href="<?php echo getAlbumLinkURL();?>" title="Gallery Index"><?php echo getAlbumTitle();?></a>
 		  | </span> <?php printImageTitle(true); ?></h2>
 	</div>
 
 	<div id="image">
-		<a href="<?=getFullImageURL();?>" title="<?=getImageTitle();?>"> <?php printDefaultSizedImage(getImageTitle()); ?></a> 
+		<a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>"> <?php printDefaultSizedImage(getImageTitle()); ?></a> 
 	</div>
 	
 	<div id="narrow">
@@ -50,12 +50,12 @@
 					<span class="commentauthor"><?php printCommentAuthorLink(); ?></span> says: 
 				</div>
 				<div class="commentbody">
-					<?=getCommentBody();?>
+					<?php echo getCommentBody();?>
 				</div>
 				<div class="commentdate">
-					<?=getCommentDate();?>
+					<?php echo getCommentDate();?>
 					,
-					<?=getCommentTime();?>
+					<?php echo getCommentTime();?>
           <?php printEditCommentLink('Edit', ' | ', ''); ?>
 				</div>
 			</div>
@@ -71,17 +71,17 @@
 					<table border="0">
 						<tr>
 							<td><label for="name">Name:</label></td>
-							<td><input type="text" id="name" name="name" size="20" value="<?=$stored[0];?>" class="inputbox" />
+							<td><input type="text" id="name" name="name" size="20" value="<?php echo $stored[0];?>" class="inputbox" />
 							</td>
 						</tr>
 						<tr>
 							<td><label for="email">E-Mail:</label></td>
-							<td><input type="text" id="email" name="email" size="20" value="<?=$stored[1];?>" class="inputbox" />
+							<td><input type="text" id="email" name="email" size="20" value="<?php echo $stored[1];?>" class="inputbox" />
 							</td>
 						</tr>
 						<tr>
 							<td><label for="website">Site:</label></td>
-							<td><input type="text" id="website" name="website" size="40" value="<?=$stored[2];?>" class="inputbox" /></td>
+							<td><input type="text" id="website" name="website" size="40" value="<?php echo $stored[2];?>" class="inputbox" /></td>
 						</tr>
             
 					</table>

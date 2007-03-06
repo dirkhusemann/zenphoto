@@ -3,7 +3,7 @@
 <html>
 <head>
   <title><?php printGalleryTitle(); ?></title>
-  <link rel="stylesheet" href="<?= $_zp_themeroot ?>/zen.css" type="text/css" />
+  <link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
   <?php zenJavascript(); ?>
 </head>
 <body>
@@ -11,7 +11,7 @@
 <div id="main">
   <div id="gallerytitle">
     <h2>
-      <span><a href="<?=getGalleryIndexURL();?>" title="Gallery Index"><?=getGalleryTitle();?></a> | 
+      <span><a href="<?php echo getGalleryIndexURL();?>" title="Gallery Index"><?php echo getGalleryTitle();?></a> | 
       <?php printParentBreadcrumb(); ?></span> 
       <?php printAlbumTitle(true);?>
     </h2>
@@ -27,9 +27,9 @@
   <div id="albums">
   <?php while (next_album()): ?>
     <div class="album">
-      <div class="albumthumb"><a href="<?=getAlbumLinkURL();?>" title="<?=getAlbumTitle();?>">
+      <div class="albumthumb"><a href="<?php echo getAlbumLinkURL();?>" title="<?php echo getAlbumTitle();?>">
         <?php printAlbumThumbImage(getAlbumTitle()); ?></a></div>
-      <div class="albumtitle"><h3><a href="<?=getAlbumLinkURL();?>" title="<?=getAlbumTitle();?>">
+      <div class="albumtitle"><h3><a href="<?php echo getAlbumLinkURL();?>" title="<?php echo getAlbumTitle();?>">
         <?php printAlbumTitle(); ?></a></h3> <?php printAlbumDate(); ?></div>
       <div class="albumdesc"><?php printAlbumDesc(); ?></div>
     </div>
@@ -46,7 +46,7 @@
   <div id="images">
   <?php while (next_image()): ?>
     <div class="image">
-      <div class="imagethumb"><a href="<?=getImageLinkURL();?>" title="<?=getImageTitle();?>">
+      <div class="imagethumb"><a href="<?php echo getImageLinkURL();?>" title="<?php echo getImageTitle();?>">
         <?php printImageThumb(getImageTitle()); ?></a>
       </div>
     </div>

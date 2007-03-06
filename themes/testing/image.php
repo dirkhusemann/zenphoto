@@ -3,7 +3,7 @@
 <html>
 <head>
   <title><?php printGalleryTitle(); ?></title>
-  <link rel="stylesheet" href="<?php echo  $_zp_themeroot ?>/zen.css" type="text/css" />
+  <link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
   <script type="text/javascript">
   function toggleComments() {
     var commentDiv = document.getElementById("comments");

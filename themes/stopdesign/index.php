@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <title><?php printGalleryTitle(); ?></title>
-  <link rel="stylesheet" href="<?= $_zp_themeroot ?>/css/master.css" type="text/css" />
+  <link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/css/master.css" type="text/css" />
   <?php zenJavascript(); ?>
 </head>
 
@@ -20,17 +20,17 @@
 	  <?php $counter = 0; while (next_album() and $counter < 6): ?>
 
 		<li>
-		  <a href="<?=getAlbumLinkURL();?>" title="View album: <?=getAlbumTitle();?>" class="img">
+		  <a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>" class="img">
         <?php printCustomAlbumThumbImage(getAlbumTitle(), null, 230, null, 210, 60); ?>
       </a>
-		  <h3><a href="<?=getAlbumLinkURL();?>" title="View album: <?=getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
-		  <p><em>(<? $number = getNumImages(); if ($number > 1) $number .= " photos"; else $number .=" photo"; echo$number; ?>)</em> <?php $text = getAlbumDesc(); if( strlen($text) > 50) $text = preg_replace("/[^ ]*$/", '', substr($text, 0, 50))."&#8230;"; echo$text; ?></p>
+		  <h3><a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
+		  <p><em>(<?php $number = getNumImages(); if ($number > 1) $number .= " photos"; else $number .=" photo"; echo$number; ?>)</em> <?php $text = getAlbumDesc(); if( strlen($text) > 50) $text = preg_replace("/[^ ]*$/", '', substr($text, 0, 50))."&#8230;"; echo$text; ?></p>
 		</li>
 
 	  <?php if ($counter == 2) {echo "</ul><ul>";}; $counter++; endwhile; ?>
 	  </ul>
 
-		<p class="mainbutton"><a href="index.php?p=archive" class="btn"><img src="<?= $_zp_themeroot ?>/img/btn_gallery_archive.gif" alt="Gallery Archive" /></a></p>
+		<p class="mainbutton"><a href="index.php?p=archive" class="btn"><img src="<?php echo $_zp_themeroot ?>/img/btn_gallery_archive.gif" alt="Gallery Archive" /></a></p>
 
 	</div>
 
@@ -47,15 +47,15 @@
 			<table cellspacing="0" class="gallerydata">
 			  <tr>
 				<th><a href="index.php?p=archive">Galleries</a></th>
-				<td><? $albumNumber = getNumAlbums(); echo $albumNumber ?></td>
+				<td><?php $albumNumber = getNumAlbums(); echo $albumNumber ?></td>
 			  </tr>
 			  <tr>
 				<th>Photos</th>
-				<td><? $photosArray = query_single_row("SELECT count(*) FROM ".prefix('images')); $photosNumber = array_shift($photosArray); echo $photosNumber ?></td>
+				<td><?php $photosArray = query_single_row("SELECT count(*) FROM ".prefix('images')); $photosNumber = array_shift($photosArray); echo $photosNumber ?></td>
 			  </tr>
 			  <tr>
 				<th>Comments</th>
-				<td><? $commentsArray = query_single_row("SELECT count(*) FROM ".prefix('comments')." WHERE inmoderation = 0"); $commentsNumber = array_shift($commentsArray); echo $commentsNumber ?></td>
+				<td><?php $commentsArray = query_single_row("SELECT count(*) FROM ".prefix('comments')." WHERE inmoderation = 0"); $commentsNumber = array_shift($commentsArray); echo $commentsNumber ?></td>
 			  </tr>
 			</table>
 		</div>

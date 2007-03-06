@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <title>Gallery Archive</title>
-  <link rel="stylesheet" href="<?= $_zp_themeroot ?>/css/master.css" type="text/css" />
+  <link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/css/master.css" type="text/css" />
 
   <?php zenJavascript(); ?>
 
@@ -22,11 +22,11 @@
 		  <?php while (next_album()): ?>
 
 			<li>
-			  <a href="<?=getAlbumLinkURL();?>" title="View album: <?=getAlbumTitle();?>" class="img">
+			  <a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>" class="img">
           <?php printCustomAlbumThumbImage(getAlbumTitle(), null, 230, null, 210, 60); ?>
         </a>
-			  <h3><a href="<?=getAlbumLinkURL();?>" title="View album: <?=getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
-			  <p><em>(<? $number = getNumImages(); if ($number > 1) $number .= " photos"; else $number .=" photo"; echo$number; ?>)</em> <?php $text = getAlbumDesc(); if( strlen($text) > 50) $text = preg_replace("/[^ ]*$/", '', substr($text, 0, 50))."..."; echo$text; ?></p>
+			  <h3><a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
+			  <p><em>(<?php $number = getNumImages(); if ($number > 1) $number .= " photos"; else $number .=" photo"; echo$number; ?>)</em> <?php $text = getAlbumDesc(); if( strlen($text) > 50) $text = preg_replace("/[^ ]*$/", '', substr($text, 0, 50))."..."; echo$text; ?></p>
 			</li>
 
 		  <?php endwhile; ?>
@@ -35,7 +35,7 @@
 
 </div>
 
-<p id="path"><a href="<?=getGalleryIndexURL();?>/" title="Gallery Index"><?=getGalleryTitle();?></a> > Gallery Archive</p>
+<p id="path"><a href="<?php echo getGalleryIndexURL();?>/" title="Gallery Index"><?php echo getGalleryTitle();?></a> > Gallery Archive</p>
 
 <div id="footer">
 	<hr />
