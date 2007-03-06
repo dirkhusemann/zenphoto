@@ -9,7 +9,7 @@ function imageError($errormessage, $errorimg='err-imagegeneral.gif') {
   global $newfilename, $album, $image;
   $debug = isset($_GET['debug']);
   if ($debug) {
-    die('<strong>Zenphoto Image Processing Error:</strong> ' . $errormessage
+    echo('<strong>Zenphoto Image Processing Error:</strong> ' . $errormessage
       . '<br /><br />Request URI: [ <code>' . sanitize($_SERVER['REQUEST_URI'], true) . '</code> ]'
       . '<br />PHP_SELF:    [ <code>' . sanitize($_SERVER['PHP_SELF'], true) . '</code> ]'
       . (empty($newfilename) ? '' : '<br />Cache: [<code> /cache'  . sanitize($newfilename, true) . '</code>]')
@@ -18,6 +18,22 @@ function imageError($errormessage, $errorimg='err-imagegeneral.gif') {
     header('Location: ' . FULLWEBPATH . '/zen/images/' . $errorimg);
     exit();
   }
+}
+
+function imageDebug($args) {
+  list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
+  echo "<strong>DEBUG <code>i.php</code> | Arguments:</strong><br />\n\n"
+    .  "<ul><li>size =    <strong>" . sanitize($size, true)     . "</strong></li>\n"
+    .  "<li>width =   <strong>" . sanitize($width, true)    . "</strong></li>\n"
+    .  "<li>height =  <strong>" . sanitize($height, true)   . "</strong></li>\n"
+    .  "<li>cw =      <strong>" . sanitize($cw, true)       . "</strong></li>\n"
+    .  "<li>ch =      <strong>" . sanitize($ch, true)       . "</strong></li>\n"
+    .  "<li>cx =      <strong>" . sanitize($cx, true)       . "</strong></li>\n"
+    .  "<li>cy =      <strong>" . sanitize($cy, true)       . "</strong></li>\n"
+    .  "<li>quality = <strong>" . sanitize($quality, true)  . "</strong></li>\n"
+    .  "<li>thumb =   <strong>" . sanitize($thumb, true)    . "</strong></li>\n"
+    .  "<li>crop =    <strong>" . sanitize($crop, true)     . "</strong></li></ul>\n";
+    
 }
 
 

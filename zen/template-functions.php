@@ -583,13 +583,16 @@ function printImageDiv() {
 function getImageEXIFData() { }
 
 
-function getSizeCustomImage($size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL) {
+function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL, $cx=NULL, $cy=NULL) {
   if(!in_context(ZP_IMAGE)) return false;
   global $_zp_current_image;
   $h = $_zp_current_image->getHeight();
   $w = $_zp_current_image->getWidth();
   $ls = zp_conf('image_use_longest_side');
   $us = zp_conf('image_allow_upscale');
+  
+  $args = getImageParameters(array($size, $width, $height, $cw, $ch, $cx, $cy, null));
+  @list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
   
   if (!empty($size)) {
     $dim = $size;
@@ -619,8 +622,9 @@ function getSizeCustomImage($size, $width=NULL, $height=NULL, $cropw=NULL, $crop
   if (!$us && $newh >= $h && $neww >= $w) {
     return array($w, $h);
   } else {
-    if ($cropw && $cropw < $neww) $neww = $cropw;
-    if ($croph && $croph < $newh) $newh = $croph;
+    if ($cw && $cw < $neww) $neww = $cw;
+    if ($ch && $ch < $newh) $newh = $ch;
+    if ($size && $ch && $cw) { $neww = $cw; $newh = $ch; }
     return array($neww, $newh);
   }
 }
@@ -703,7 +707,8 @@ function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph
 
 function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $class=NULL, $id=NULL) { 
   $sizearr = getSizeCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy);
-  echo "<img src=\"" . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy)) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
+  echo "<img src=\"" . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy)) 
+    . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     " width=\"" . $sizearr[0] . "\" height=\"" . $sizearr[1] . "\"" .
     (($class) ? " class=\"$class\"" : "") . 
     (($id) ? " id=\"$id\"" : "") . " />";

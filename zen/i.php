@@ -31,6 +31,8 @@ require_once('functions-image.php');
 // Set the memory limit higher just in case -- supress errors if user doesn't have control.
 @ini_set('memory_limit','64M');
 
+$debug = isset($_GET['debug']);
+
 // Set the config variables for convenience.
 $image_use_longest_side = zp_conf('image_use_longest_side');
 $upscale = zp_conf('image_allow_upscale');
@@ -63,6 +65,8 @@ if ((isset($_GET['s']) && $_GET['s'] < MAX_SIZE)
       $_GET['s'], $_GET['w'], $_GET['h'], $_GET['cw'], $_GET['ch'], $_GET['cx'], $_GET['cy'], $_GET['q'])
     );
   list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
+  
+  if ($debug) imageDebug($args);
 
 } else {
   // No image parameters specified or are out of bounds; return the original image.
@@ -130,7 +134,7 @@ if ($process) {
 	if ($im = get_image($imgfile)) {
 		$w = imagesx($im);
 		$h = imagesy($im);
-    
+
     // Give the sizing dimension to $dim
     if (!empty($size)) {
       $dim = $size;
@@ -157,7 +161,7 @@ if ($process) {
       $size = $width = false;
     } else {
       // There's a problem up there somewhere...
-      imageError("Unknown error! Please report to the developers at <a href=\"http://www.zenphoto.org/\">www.zenphoto.org</a>");
+      imageError("Unknown error! Please report to the developers at <a href=\"http://www.zenphoto.org/\">www.zenphoto.org</a>", 'err-imagegeneral.gif');
     }
     
     // Calculate proportional height and width.
@@ -207,10 +211,17 @@ if ($process) {
         imagedestroy($im);
 	}
 }
+if (!$debug) {
+  // ... and redirect the browser to it.
+  header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($newfile)).' GMT');
+  header('Content-Type: image/jpeg');
+  header('Location: ' . FULLWEBPATH . '/cache' . pathurlencode($newfilename), true, 301);
+  exit();
+  
+} else {
+  
+  echo "\n<p>Image: <img src=\"" . FULLWEBPATH . '/cache' . pathurlencode($newfilename) ."\" /></p>";
+  
+}
 
-// ... and redirect the browser to it.
-header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($newfile)).' GMT');
-header('Content-Type: image/jpeg');
-header('Location: ' . FULLWEBPATH . '/cache' . pathurlencode($newfilename), true, 301);
-exit();
 ?>

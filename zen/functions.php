@@ -203,6 +203,18 @@ function getImageParameters($args) {
     $size = round($thumb_size);
     $quality = round($thumb_quality);
     
+  } else if ((is_numeric($size) && is_numeric($cw) && is_numeric($ch))
+      || (is_numeric($width) && is_numeric($height))) {
+    if (is_numeric($width) && is_numeric($height)) {
+      $size = max($width, $height);
+      $cw = $width;
+      $ch = $height;
+      $height = $width = false;
+    }
+    $thumb = true;
+    $cw = min($size, $cw);
+    $ch = min($size, $ch);
+    
   } else {
     if ($size == 'default') {
       $size = $image_default_size;
