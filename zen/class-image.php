@@ -19,8 +19,9 @@ class Image extends PersistentObject {
   var $filemtime;     // Last modified time of this image
 
   // Constructor
-  function Image(&$album, $filename) {
+  function Image(&$album, $filename, $cache=true) {
     // $album is an Album object; it should already be created.
+    $filename = sanitize($filename, true);
     $this->album = &$album;
     $this->webpath = WEBPATH . "/albums/" . $album->name . "/" . $filename;
     $this->encwebpath = WEBPATH . "/albums/" . pathurlencode($album->name) . "/" . rawurlencode($filename);
@@ -35,7 +36,7 @@ class Image extends PersistentObject {
     $this->name = $filename;
     $this->comments = null;
 
-    $new = parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id));
+    $new = parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', $cache);
     if ($new) {
       $title = substr($this->name, 0, strrpos($this->name, '.'));
       if (empty($title)) $title = $this->name;

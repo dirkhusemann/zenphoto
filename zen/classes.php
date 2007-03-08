@@ -35,6 +35,10 @@ require_once("utf8.php");
  *******************************************************************************
  ******************************************************************************/
 
+// The query cache 
+$_zp_object_cache = array();
+
+
 // ABSTRACT
 class PersistentObject {
 
@@ -42,18 +46,60 @@ class PersistentObject {
   var $updates;
   var $table;
   var $unique_set;
+  var $cache_by;
   var $id;
   
-  function PersistentObject($tablename, $unique_set) {
+  function PersistentObject($tablename, $unique_set, $cache_by=NULL, $use_cache=true) {
     // Initialize the variables.
     // Load the data into the data array using $this->load()
     $this->data = array();
     $this->tempdata = array();
     $this->updates = array();
+    $this->loaded = false;
     $this->table = $tablename;
     $this->unique_set = $unique_set;
-
+    $this->cache_by = $cache_by;
+    $this->use_cache = $use_cache;
+    
     return $this->load();
+  }
+  
+  
+  /**
+   * Caches the current set of objects defined by a variable key $cache_by.
+   * Uses a global array to store the results of a single database query,
+   * where subsequent requests for the object look for data.
+   * 
+   */
+  function cache() {
+    global $_zp_object_cache;
+    
+    if (is_null($this->cache_by)) return false;
+    $classname = get_class($this);
+    if (!isset($_zp_object_cache[$classname])) {
+      $_zp_object_cache[$classname] = array();
+    }
+    $cache_set = array_diff_assoc($this->unique_set, array($this->cache_by => $this->unique_set[$this->cache_by]));
+    
+    $cache_location = &$_zp_object_cache[$classname];
+    foreach($cache_set as $key => $value) {
+      if (!isset($cache_location[$value])) {
+        $cache_location[$value] = array();
+      }
+      $cache_location = &$cache_location[$value];
+    }
+    // Exit if this object set is already cached.
+    if (!empty($cache_location)) return $cache_location;
+    
+    $sql = 'SELECT * FROM ' . prefix($this->table) . getWhereClause($cache_set);
+    $result = query($sql);
+    if (mysql_num_rows($result) == 0) return false;
+    
+    while ($row = mysql_fetch_assoc($result)) {
+      $key = $row[$this->cache_by];
+      $cache_location[$key] = $row;
+    }
+    return $cache_location;
   }
   
   /**
@@ -64,7 +110,11 @@ class PersistentObject {
    */
   function set($var, $value) {
     if (empty($var)) return false;
-    $this->updates[$var] = $value;
+    if ($this->loaded && !array_key_exists($var, $this->data)) {
+      $this->tempdata[$var] = $value;
+    } else {
+      $this->updates[$var] = $value;
+    }
     return true;
   }
   
@@ -120,17 +170,36 @@ class PersistentObject {
    *   The return value can be used to insert default data for new objects.
    */
   function load() {
-    // Get the database record for this object.
-    $entry = query_single_row('SELECT * FROM ' . prefix($this->table) .
-      getWhereClause($this->unique_set) . ' LIMIT 1;');
-    if (!$entry) {
-      $this->save();
-      return true;
+    // Set up the SQL query in case we need it...
+    $sql = 'SELECT * FROM ' . prefix($this->table) . getWhereClause($this->unique_set) . ' LIMIT 1;';
+    // But first, try the cache.
+    if ($this->use_cache) {
+      $cache_location = &$this->cache();
+      $entry = &$cache_location[$this->unique_set[$this->cache_by]];
+      if (!empty($entry)) {
+        $this->data = &$entry;
+        $this->id = $this->data['id'];
+        $this->loaded = true;
+        return false;
+      }
     } else {
-      $this->data = $entry;
-      $this->id = $entry['id'];
-      return false;
+      // Otherwise get directly from the database.
+      $entry = query_single_row($sql);
     }
+    $new = false;
+    // If we don't have an entry yet, this is a new record. Create it.
+    if (empty($entry)) {
+      $new = true;
+      $this->save();
+      $entry = query_single_row($sql);
+      // If we still don't have an entry, something went wrong...
+      if (!$entry) return null;
+    }
+    // OK to pass by reference here? Not sure.
+    $this->data = &$entry;
+    $this->id = $entry['id'];
+    $this->loaded = true;
+    return $new;
   }
 
   /** 
@@ -141,8 +210,8 @@ class PersistentObject {
     if ($this->id == null) {
       // Create a new object and set the id from the one returned.
       $insert_data = array_merge($this->unique_set, $this->updates);
-      $sql = 'INSERT INTO ' . prefix($this->table) . ' (';
       if (empty($insert_data)) { return true; }
+      $sql = 'INSERT INTO ' . prefix($this->table) . ' (';
       $i = 0;
       foreach(array_keys($insert_data) as $col) {
         if ($i > 0) $sql .= ", ";

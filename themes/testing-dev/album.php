@@ -61,7 +61,7 @@
   <?php endif; ?>
   
   <p style="text-align: right;"><?php printAdminLink("Admin"); ?> 
-    <?php /* Timer */ echo round((array_sum(explode(" ",microtime())) - $startTime),4).' Seconds</strong>'; ?></p>
+    <?php /* Timer */ echo round((array_sum(explode(" ",microtime())) - $startTime),4)." Seconds, $_zp_query_count queries ran."; ?></p>
 
   
 </div>

@@ -42,15 +42,19 @@ function db_connect() {
 // Connect to the database immediately.
 db_connect();
 
+$_zp_query_count = 0;
+
 /** The main query function. Runs the SQL on the connection and handles errors.
  *  TODO: Handle errors more gracefully.
  */
 function query($sql) {
   global $mysql_connection;
+  global $_zp_query_count;
   if ($mysql_connection == null) {
     db_connect();
   }
   $result = mysql_query($sql, $mysql_connection) or die('MySQL Query ( '.$sql.' ) Failed. Error: ' . mysql_error());
+  $_zp_query_count++;
   return $result;
 }
 
@@ -108,6 +112,7 @@ function strip($string) {
  * in the database table.
  */
 function getWhereClause($unique_set) {
+  if (empty($unique_set)) return ' ';
   $i = 0;
   $where = ' WHERE';
   foreach($unique_set as $var => $value) {

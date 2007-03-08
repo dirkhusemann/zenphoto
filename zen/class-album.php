@@ -17,17 +17,19 @@ class Album extends PersistentObject {
   var $themeoverride;
 
   // Constructor
-  function Album(&$gallery, $folder) {
+  function Album(&$gallery, $folder, $cache=true) {
     $folder = preg_replace(array('/^\/+/','/\/+$/','/\/\/+/','/\.\.+/'), '', $folder);
+    $folder = sanitize($folder, true);
     $this->name = $folder;
     $this->gallery = &$gallery;
     $this->localpath = SERVERPATH . "/albums/" . $folder . "/";
+
     // Second defense against reverse folder traversal:
     if(!file_exists($this->localpath) || strpos($this->localpath, '..') !== FALSE) {
       $this->exists = false;
       return false;
     }
-    $new = parent::PersistentObject('albums', array('folder' => $this->name));
+    $new = parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache);
     if ($new) {
       // Set default data for a new Album (title and parent_id)
       $parentalbum = $this->getParent();

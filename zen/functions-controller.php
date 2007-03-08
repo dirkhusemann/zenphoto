@@ -178,12 +178,12 @@ function zp_load_gallery() {
  * zp_load_album - loads the album given by the folder name $folder into the 
  * global context, and sets the context appropriately.
  * @param $folder the folder name of the album to load. Ex: 'testalbum', 'test/subalbum', etc.
+ * @param $force_cache whether to force the use of the global object cache.
  * @return the loaded album object on success, or (===false) on failure.
  */
-function zp_load_album($folder) {
+function zp_load_album($folder, $force_nocache=false) {
   global $_zp_current_album, $_zp_gallery;
-  $folder = sanitize($folder);
-  $_zp_current_album = new Album($_zp_gallery, $folder);
+  $_zp_current_album = new Album($_zp_gallery, $folder, !$force_nocache);
   if (!$_zp_current_album->exists) return false;
   set_context(ZP_ALBUM | ZP_INDEX);
   return $_zp_current_album;
@@ -198,9 +198,8 @@ function zp_load_album($folder) {
  */
 function zp_load_image($folder, $filename) {
   global $_zp_current_image, $_zp_current_album;
-  $filename = sanitize($filename);
   if ($_zp_current_album == NULL || $_zp_current_album->name != $folder)
-    $album = zp_load_album($folder);
+    $album = zp_load_album($folder, true);
   $_zp_current_image = new Image($album, $filename);
   if (!$_zp_current_image->exists) return false;
   set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX);

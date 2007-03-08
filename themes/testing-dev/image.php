@@ -19,7 +19,7 @@
 </head>
 <body>
 
-
+<?php $_zp_current_image->cache(); ?>
 
 <div id="main">
   <div id="gallerytitle">
@@ -84,7 +84,7 @@
       </div>
       
       <p style="text-align: right;"><?php printAdminLink("Admin"); ?>
-        <?php /* Timer */ echo round((array_sum(explode(" ",microtime())) - $startTime),4).' Seconds</strong>'; ?></p>
+        <?php /* Timer */ echo round((array_sum(explode(" ",microtime())) - $startTime),4)." Seconds, $_zp_query_count queries ran."; ?></p>
       
     </div>
 </div>
