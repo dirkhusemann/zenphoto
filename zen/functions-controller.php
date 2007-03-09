@@ -109,7 +109,9 @@ function fix_path_redirect() {
   if (zp_conf('mod_rewrite')) {
     $redirecturl = zpurl(true);
     $path = urldecode(substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1));
-    if (is_query_request() || (strlen($redirecturl) > 0 && $redirecturl != $path)
+    // Get rid of the trailing slash, it's okay.
+    $path = preg_replace(array('/\/$/'), '', $path);
+    if (is_query_request() || (strlen($redirecturl) > 0 && urldecode($redirecturl) != $path)
         || (in_context(ZP_IMAGE) && substr($_SERVER['REQUEST_URI'], -strlen(im_suffix())) != im_suffix()) ) {
       header("HTTP/1.0 301 Moved Permanently");
       header('Location: ' . FULLWEBPATH . '/' . $redirecturl);
