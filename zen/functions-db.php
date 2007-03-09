@@ -55,6 +55,7 @@ function query($sql) {
   }
   $result = mysql_query($sql, $mysql_connection) or die('MySQL Query ( '.$sql.' ) Failed. Error: ' . mysql_error());
   $_zp_query_count++;
+  //echo "<!-- Query: $sql -->";
   return $result;
 }
 
@@ -138,7 +139,6 @@ function getSetClause($new_unique_set) {
   }
   return $set;
 }
-
 
 
 

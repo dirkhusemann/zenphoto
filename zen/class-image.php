@@ -36,13 +36,15 @@ class Image extends PersistentObject {
     $this->name = $filename;
     $this->comments = null;
 
-    $new = parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', $cache);
-    if ($new) {
-      $title = substr($this->name, 0, strrpos($this->name, '.'));
-      if (empty($title)) $title = $this->name;
-      $this->set('title', $title);
-      $this->save();
-    }
+    parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', $cache);
+  }
+  
+  
+  function setDefaults() {
+    $title = substr($this->name, 0, strrpos($this->name, '.'));
+    if (empty($title)) $title = $this->name;
+    $this->set('title', $title);
+    return true;
   }
   
   

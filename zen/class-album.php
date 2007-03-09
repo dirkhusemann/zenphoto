@@ -29,19 +29,23 @@ class Album extends PersistentObject {
       $this->exists = false;
       return false;
     }
-    $new = parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache);
-    if ($new) {
-      // Set default data for a new Album (title and parent_id)
-      $parentalbum = $this->getParent();
-      $title = str_replace(array('-','_','+','~'), ' ', $this->name);
-      if (!is_null($parentalbum)) {
-        $this->set('parentid', $parentalbum->getAlbumId());
-        $title = substr($title, strrpos($title, '/')+1);
-      }
-      $this->set('title', $title);
-      $this->save();
-    }
+    
+    parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache);
+
     $this->sort_key = ($this->data['sort_type'] == "Title") ? 'title' : ($this->data['sort_type'] == "Manual") ? 'sort_order' : 'filename';
+  }
+  
+  
+  function setDefaults() {
+    // Set default data for a new Album (title and parent_id)
+    $parentalbum = $this->getParent();
+    $title = str_replace(array('-','_','+','~'), ' ', $this->name);
+    if (!is_null($parentalbum)) {
+      $this->set('parentid', $parentalbum->getAlbumId());
+      $title = substr($title, strrpos($title, '/')+1);
+    }
+    $this->set('title', $title);
+    return true;
   }
   
   // Folder on the filesystem

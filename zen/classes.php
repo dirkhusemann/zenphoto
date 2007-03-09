@@ -37,6 +37,7 @@ require_once("utf8.php");
 
 // The query cache 
 $_zp_object_cache = array();
+$_zp_object_update_cache = array();
 
 
 // ABSTRACT
@@ -69,7 +70,8 @@ class PersistentObject {
    * Caches the current set of objects defined by a variable key $cache_by.
    * Uses a global array to store the results of a single database query,
    * where subsequent requests for the object look for data.
-   * 
+   * @return a reference to the array location where this class' cache is stored
+   *   indexed by the field $cache_by.
    */
   function cache() {
     global $_zp_object_cache;
@@ -81,6 +83,7 @@ class PersistentObject {
     }
     $cache_set = array_diff_assoc($this->unique_set, array($this->cache_by => $this->unique_set[$this->cache_by]));
     
+    // This must be done here; the references do not work returned by a function.
     $cache_location = &$_zp_object_cache[$classname];
     foreach($cache_set as $key => $value) {
       if (!isset($cache_location[$value])) {
@@ -102,6 +105,11 @@ class PersistentObject {
     return $cache_location;
   }
   
+  
+  function cachesave() {
+    
+  }
+  
   /**
    * Set a variable in this object. Does not persist to the database until 
    * save() is called. So, IMPORTANT: Call save() after set() to persist.
@@ -116,6 +124,15 @@ class PersistentObject {
       $this->updates[$var] = $value;
     }
     return true;
+  }
+  
+  
+  /**
+   * Sets default values for new objects using the set() method.
+   * Should do nothing in the base class; subclasses should override.
+   */
+  function setDefaults() {
+    return;
   }
   
   /**
@@ -176,12 +193,6 @@ class PersistentObject {
     if ($this->use_cache) {
       $cache_location = &$this->cache();
       $entry = &$cache_location[$this->unique_set[$this->cache_by]];
-      if (!empty($entry)) {
-        $this->data = &$entry;
-        $this->id = $this->data['id'];
-        $this->loaded = true;
-        return false;
-      }
     } else {
       // Otherwise get directly from the database.
       $entry = query_single_row($sql);
@@ -195,8 +206,7 @@ class PersistentObject {
       // If we still don't have an entry, something went wrong...
       if (!$entry) return null;
     }
-    // OK to pass by reference here? Not sure.
-    $this->data = &$entry;
+    $this->data = $entry;
     $this->id = $entry['id'];
     $this->loaded = true;
     return $new;
@@ -208,8 +218,9 @@ class PersistentObject {
    */
   function save() {
     if ($this->id == null) {
+      $this->setDefaults();
       // Create a new object and set the id from the one returned.
-      $insert_data = array_merge($this->unique_set, $this->updates);
+      $insert_data = array_merge($this->unique_set, $this->updates, $this->tempdata);
       if (empty($insert_data)) { return true; }
       $sql = 'INSERT INTO ' . prefix($this->table) . ' (';
       $i = 0;
@@ -230,6 +241,7 @@ class PersistentObject {
       if ($success == false || mysql_affected_rows() != 1) { return false; }
       $this->id = mysql_insert_id();
       $this->updates = array();
+      $this->tempdata = array();
 
     } else {
       // Save the existing object (updates only) based on the existing id.
