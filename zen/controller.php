@@ -21,8 +21,8 @@ $_zp_current_context = ZP_INDEX;
 $_zp_current_context_restore = NULL;
 
 
-/*** Request Handler **********************/
-/******************************************/
+/*** Request Handler **********************
+ ******************************************/
 // This is the main top-level action handler for user requests. It parses a
 // request, validates the input, loads the appropriate objects, and sets
 // the context. All that is done in functions-controller.php.
@@ -35,8 +35,8 @@ zp_handle_comment();
 
 
 
-/*** Server-side AJAX Functions ***********/
-/******************************************/
+/*** Server-side AJAX Functions ***********
+ ******************************************/
 // These handle asynchronous requests from the client for updating the 
 // title and description, but only if the user is logged in.
 
@@ -85,8 +85,8 @@ if (zp_loggedin()) {
 
 
 
-/*** Consistent URL redirection ***********/
-/******************************************/
+/*** Consistent URL redirection ***********
+ ******************************************/
 // Check to see if we use mod_rewrite, but got a query-string request for a page.
 // If so, redirect with a 301 to the correct URL. This must come AFTER the Ajax init above,
 // and is mostly helpful for SEO, but also for users. Consistent URLs are a Good Thing.

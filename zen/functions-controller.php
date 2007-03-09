@@ -64,6 +64,11 @@ function is_query_request() {
 /**
  * Returns the URL of any main page (image/album/page#/etc.) in any form
  * desired (rewrite or query-string).
+ * @param $with_rewrite boolean or null, whether the returned path should be in rewrite form.
+ *   Defaults to null, meaning use the mod_rewrite configuration to decide.
+ * @param $album : the Album object to use in the path. Defaults to the current album (if null).
+ * @param $image : the Image object to use in the path. Defaults to the current image (if null).
+ * @param $page : the page number to use in the path. Defaults to the current page (if null).
  */
 function zpurl($with_rewrite=NULL, $album=NULL, $image=NULL, $page=NULL) {
   global $_zp_current_album, $_zp_current_image, $_zp_page;
@@ -71,12 +76,12 @@ function zpurl($with_rewrite=NULL, $album=NULL, $image=NULL, $page=NULL) {
   if ($with_rewrite === NULL)  $with_rewrite = zp_conf('mod_rewrite');
   if (!$album)  $album = $_zp_current_album;
   if (!$image)  $image = $_zp_current_image;
-  if (!$page)   $page = $_zp_page;
+  if (!$page)   $page  = $_zp_page;
 
   $url = '';
   if ($with_rewrite) {
     if (in_context(ZP_IMAGE)) {
-      $url = pathurlencode($album->name) . '/' . $image->name . im_suffix();
+      $url = pathurlencode($album->name) . '/' . rawurlencode($image->filename . im_suffix());
     } else if (in_context(ZP_ALBUM)) {
       $url = pathurlencode($album->name) . ($page > 1 ? '/page/'.$page : '');
     } else if (in_context(ZP_INDEX)) {
@@ -84,29 +89,28 @@ function zpurl($with_rewrite=NULL, $album=NULL, $image=NULL, $page=NULL) {
     }
   } else {
     if (in_context(ZP_IMAGE)) {
-      $url = 'index.php?album=' . pathurlencode($album->name) . '&image='. $image->name;
+      $url = 'index.php?album=' . pathurlencode($album->name) . '&image='. rawurlencode($image->filename);
     } else if (in_context(ZP_ALBUM)) {
       $url = 'index.php?album=' . pathurlencode($album->name) . ($page > 1 ? '&page='.$page : '');
     } else if (in_context(ZP_INDEX)) {
       $url = 'index.php' . ($page > 1 ? '?page='.$page : '');
     }
   }
+  if ($url == im_suffix() || empty($url)) { $url = ''; }
   return $url;
 }
 
 
 /**
  * Checks to see if the current URL matches the correct one, redirects to the
- * corrected URL if not.
+ * corrected URL if not with a 301 Moved Permanently.
  */
 function fix_path_redirect() {
-  if (zp_conf('mod_rewrite')
-      && (is_query_request() 
-          || (in_context(ZP_IMAGE) && substr($_SERVER['REQUEST_URI'], -strlen(im_suffix())) != im_suffix()) )) {
+  if (zp_conf('mod_rewrite')) {
     $redirecturl = zpurl(true);
     $path = urldecode(substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1));
-    $path = preg_replace(array('/\/*$/'), '', $path);
-    if (strlen($redirecturl) > 0 && $redirecturl != $path) {
+    if (is_query_request() || (strlen($redirecturl) > 0 && $redirecturl != $path)
+        || (in_context(ZP_IMAGE) && substr($_SERVER['REQUEST_URI'], -strlen(im_suffix())) != im_suffix()) ) {
       header("HTTP/1.0 301 Moved Permanently");
       header('Location: ' . FULLWEBPATH . '/' . $redirecturl);
       exit;

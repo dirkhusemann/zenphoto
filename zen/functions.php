@@ -246,19 +246,31 @@ function round_if_numeric($num) {
 }
 
 
-
-
 /** Takes a user input string (usually from the query string) and cleans out
- HTML, null-bytes, and slashes (if magic_quotes_gpc is on) to prevent
- XSS attacks and other malicious user input, and make strings generally clean.
- @param $input_string is a string that needs cleaning.
- @param $deepclean is whether to replace HTML tags, javascript, etc.
+ * HTML, null-bytes, and slashes (if magic_quotes_gpc is on) to prevent
+ * XSS attacks and other malicious user input, and make strings generally clean.
+ * @param $input_string is a string that needs cleaning.
+ * @param $deepclean is whether to replace HTML tags, javascript, etc.
+ * @return string the sanitized string.
  */
 function sanitize($input_string, $deepclean=false) {
   if (get_magic_quotes_gpc()) $input_string = stripslashes($input_string);
   $input_string = str_replace(chr(0), " ", $input_string);
   if ($deepclean) $input_string = kses($input_string, array());
   return $input_string;
+}
+
+/** Takes user input meant to be used within a path to a file or folder and 
+ * removes anything that could be insecure or malicious, or result in duplicate
+ * representations for the same physical file.
+ * @param $filename is the path-bound text to filter.
+ * @return string the sanitized filename ready for use in file functions.
+ */
+function sanitize_path($filename) {
+  $filename = str_replace(chr(0), " ", $filename);
+  $filename = strip_tags($filename);
+  $filename = preg_replace(array('/^\/+/','/\/+$/','/\/\/+/','/\.\.+/'), '', $filename);
+  return $filename;
 }
 
 

@@ -1,5 +1,5 @@
 <?php
-/*******************************************************************************
+/* *****************************************************************************
  *******************************************************************************
  * Album Class *****************************************************************
  ******************************************************************************/
@@ -18,13 +18,13 @@ class Album extends PersistentObject {
 
   // Constructor
   function Album(&$gallery, $folder, $cache=true) {
-    $folder = preg_replace(array('/^\/+/','/\/+$/','/\/\/+/','/\.\.+/'), '', $folder);
-    $folder = sanitize($folder, true);
+    $folder = sanitize_path($folder);
+    
     $this->name = $folder;
     $this->gallery = &$gallery;
     $this->localpath = SERVERPATH . "/albums/" . $folder . "/";
 
-    // Second defense against reverse folder traversal:
+    // Second defense against upward folder traversal:
     if(!file_exists($this->localpath) || strpos($this->localpath, '..') !== FALSE) {
       $this->exists = false;
       return false;

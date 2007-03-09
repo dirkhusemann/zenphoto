@@ -1,5 +1,5 @@
 <?php
-/*******************************************************************************
+/* *****************************************************************************
  *******************************************************************************
  * Image Class *****************************************************************
  ******************************************************************************/
@@ -10,7 +10,6 @@ class Image extends PersistentObject {
   var $exists = true; // Does the image exist?
   var $webpath;       // The full URL path to the original image.
   var $localpath;     // The full SERVER path to the original image.
-  var $name;          // $filename with the extension stripped off.
   var $album;         // An album object for the album containing this image.
   var $comments;      // Image comment array.
   var $commentcount;  // The number of comments on this image.
@@ -20,11 +19,10 @@ class Image extends PersistentObject {
 
   // Constructor
   function Image(&$album, $filename, $cache=true) {
-    // $album is an Album object; it should already be created.
-    $filename = sanitize($filename, true);
+    $filename = sanitize_path($filename);
+    
     $this->album = &$album;
     $this->webpath = WEBPATH . "/albums/" . $album->name . "/" . $filename;
-    $this->encwebpath = WEBPATH . "/albums/" . pathurlencode($album->name) . "/" . rawurlencode($filename);
     $this->localpath = SERVERPATH . "/albums/" . $album->name . "/" . $filename;
     // Check if the file exists.
     if(!file_exists($this->localpath) || is_dir($this->localpath)) {
@@ -33,7 +31,6 @@ class Image extends PersistentObject {
     }
     $this->filename = $filename;
     $this->filemtime = filemtime($this->localpath);
-    $this->name = $filename;
     $this->comments = null;
 
     parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', $cache);
@@ -41,8 +38,8 @@ class Image extends PersistentObject {
   
   
   function setDefaults() {
-    $title = substr($this->name, 0, strrpos($this->name, '.'));
-    if (empty($title)) $title = $this->name;
+    $title = substr($this->filename, 0, strrpos($this->filename, '.'));
+    if (empty($title)) $title = $this->filename;
     $this->set('title', $title);
     return true;
   }
@@ -158,7 +155,7 @@ class Image extends PersistentObject {
                "Comment:\n" . $comment . "\n" .
                "\n" .
                "You can view all comments about this image here:\n" .
-               "http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/index.php?album=" . urlencode($this->album->name) . "&image=" . urlencode($this->name) . "\n" .
+               "http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/index.php?album=" . urlencode($this->album->name) . "&image=" . urlencode($this->filename) . "\n" .
                "\n" .
                "You can edit the comment here:\n" .
                "http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/zen/admin.php?page=comments\n";
@@ -184,7 +181,7 @@ class Image extends PersistentObject {
   
   // Returns a path to the original image in the original folder.
   function getFullImage() {
-    return $this->encwebpath;
+    return WEBPATH . "/albums/" . pathurlencode($this->album->name) . "/" . rawurlencode($this->filename);
   }
 
   function getSizedImage($size) {
