@@ -21,7 +21,5 @@ if (in_context(ZP_IMAGE)) {
   }
 }
 
-echo "<!--  \n\n"; print_r($_zp_object_cache); echo "\n\n  -->";
-
 
 ?>

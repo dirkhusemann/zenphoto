@@ -98,13 +98,13 @@ function getNumAlbums() {
 // If we're already in the album context, this is a sub-albums loop, which,
 // quite simply, changes the source of the album list.
 // Switch back to the previous context when there are no more albums.
-function next_album() {
+function next_album($all=false) {
   global $_zp_albums, $_zp_gallery, $_zp_current_album, $_zp_page, $_zp_current_album_restore;
   if (is_null($_zp_albums)) {
     if (in_context(ZP_ALBUM)) {
       $_zp_albums = $_zp_current_album->getSubAlbums();
     } else {
-      $_zp_albums = $_zp_gallery->getAlbums($_zp_page);
+      $_zp_albums = $_zp_gallery->getAlbums($all ? 0 : $_zp_page);
     }
     if (empty($_zp_albums)) { return false; }
     $_zp_current_album_restore = $_zp_current_album;
@@ -402,10 +402,10 @@ function getNumImages() {
 }
 
 
-function next_image() { 
+function next_image($all=false) { 
   global $_zp_images, $_zp_current_image, $_zp_current_album, $_zp_page, $_zp_current_image_restore;
   if (is_null($_zp_images)) {
-    $_zp_images = $_zp_current_album->getImages($_zp_page);
+    $_zp_images = $_zp_current_album->getImages($all ? 0 : $_zp_page);
     if (empty($_zp_images)) { return false; }
     $_zp_current_image_restore = $_zp_current_image;
     $_zp_current_image = new Image($_zp_current_album, array_shift($_zp_images));
@@ -435,10 +435,10 @@ function getImageTitle() {
 function printImageTitle($editable=false) { 
   global $_zp_current_image;
   if ($editable && zp_loggedin()) {
-    echo "<div id=\"imageTitleEditable\" style=\"display: inline;\">" . htmlspecialchars(getImageTitle()) . "</div>\n";
-    echo "<script type=\"text/javascript\">initEditableTitle('imageTitleEditable');</script>";
+    echo "<div id=\"imageTitle\" style=\"display: inline;\">" . htmlspecialchars(getImageTitle()) . "</div>\n";
+    echo "<script type=\"text/javascript\">initEditableTitle('imageTitle');</script>";
   } else {
-    echo htmlspecialchars(getImageTitle());  
+    echo "<div id=\"imageTitle\" style=\"display: inline;\">" . htmlspecialchars(getImageTitle()) . "</div>\n";  
   }
 }
 
@@ -451,10 +451,10 @@ function getImageDesc() {
 function printImageDesc($editable=false) {  
   global $_zp_current_image;
   if ($editable && zp_loggedin()) {
-    echo "<div id=\"imageDescEditable\" style=\"display: block;\">" . getImageDesc() . "</div>\n";
-    echo "<script type=\"text/javascript\">initEditableDesc('imageDescEditable');</script>";
+    echo "<div id=\"imageDesc\" style=\"display: block;\">" . getImageDesc() . "</div>\n";
+    echo "<script type=\"text/javascript\">initEditableDesc('imageDesc');</script>";
   } else {
-    echo getImageDesc();
+    echo "<div id=\"imageDesc\" style=\"display: block;\">" . getImageDesc() . "</div>\n";
   }
 }
 
