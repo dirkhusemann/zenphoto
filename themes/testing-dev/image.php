@@ -19,8 +19,6 @@
 </head>
 <body>
 
-<?php $_zp_current_image->cache(); ?>
-
 <div id="main">
   <div id="gallerytitle">
     <h2>
