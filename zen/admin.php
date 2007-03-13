@@ -124,6 +124,12 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         }
         
         $album = new Album($gallery, $folder);
+        if (!$album->exists) { 
+          zp_error("The album couldn't be created in the /albums folder. This is usually "
+            . "a permissions problem. Try setting the permissions on the albums and cache folders to be world-writable "
+            . "using a shell: <code>chmod 777 albums/ cache/</code>, or use your FTP program to give everyone write "
+            . "permissions to those folders.");
+        }
         $title = strip($_POST['albumtitle']);
         if (!empty($title)) {
           $album->setTitle($title);
@@ -816,8 +822,9 @@ if (!zp_loggedin()) {
       
 		<div class="box" id="overview-stats">
 			<h2 class="boxtitle">Gallery Stats</h2>
-			<p>There are <strong><?php echo $gallery->getNumImages(); ?></strong> images in a total of <strong><?php echo $gallery->getNumAlbums(true); ?></strong> albums [<strong><a href="?prune=true">refresh</a></strong>].</p>
+			<p>There are <strong><?php echo $gallery->getNumImages(); ?></strong> images in a total of <strong><?php echo $gallery->getNumAlbums(true); ?></strong> albums.</p>
 			<p><strong><?php echo $gallery->getNumComments(); ?></strong> comments have been posted.</p>
+      <p><strong><a href="?prune=true">Refresh the Database</a></strong> - This cleans the database, detects any new albums or images, and refreshes the numbers above. It synchronizes the database with the filesystem.</p>
 
 			<?php
 			// These disk operations are too slow...

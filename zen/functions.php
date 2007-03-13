@@ -10,7 +10,7 @@ if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
 require_once(dirname(__FILE__) . "/zp-config.php");
 
 // Set the version number.
-$_zp_conf_vars['version'] = '1.0.8';
+$_zp_conf_vars['version'] = '1.0.9';
 
 if (defined('OFFSET_PATH')) {
   $const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
@@ -24,6 +24,11 @@ define('SERVERCACHE', SERVERPATH . "/cache");
 define('PROTOCOL', zp_conf('server_protocol'));
 define('FULLWEBPATH', PROTOCOL."://" . $_SERVER['HTTP_HOST'] . WEBPATH);
 define('SAFE_MODE_ALBUM_SEP', '__');
+define('DEBUG', false);
+
+// Set error reporting to the default if it's not.
+error_reporting(E_ALL ^ E_NOTICE);
+$_zp_error = false;
 
 
 
@@ -38,7 +43,7 @@ function zp_conf($var) {
 }
 
 // Set up assertions for debugging.
-assert_options(ASSERT_ACTIVE, 1);
+assert_options(ASSERT_ACTIVE, 0);
 assert_options(ASSERT_WARNING, 0);
 assert_options(ASSERT_QUIET_EVAL, 1);
 function assert_handler($file, $line, $code) {
@@ -273,6 +278,35 @@ function sanitize_path($filename) {
   return $filename;
 }
 
+
+
+function zp_error($message) {
+  global $_zp_error;
+  if (!$_zp_error) {
+    echo '<div style="padding: 15px; border: 1px solid #F99; background-color: #FFF0F0; margin: 20px; font-family: Arial, Helvetica, sans-serif; font-size: 12pt;">'
+      . ' <h2 style="margin: 0px 0px 5px; color: #C30;">Zenphoto Error</h2>' . "\n\n" . $message . '</p>';
+    if (DEBUG) {
+      // Get a backtrace.
+      $bt = debug_backtrace();
+      array_shift($bt); // Get rid of zp_error in the backtrace.
+      $prefix = '  ';
+      echo "\n\n<p><strong>Backtrace:</strong> <br />\n<pre>\n";
+      foreach($bt as $b) {
+        echo $prefix . ' in ' 
+          . (isset($b['class']) ? $b['class'] : '')
+          . (isset($b['type']) ? $b['type'] : '')
+          . $b['function'] 
+          . ' (' . basename($b['file']) 
+          . ' [' . $b['line'] . "])\n";
+        $prefix .= '  ';
+      }
+      echo "</p>\n";
+    }
+    echo "</div>\n";
+    $_zp_error = true;
+    exit;
+  }
+}
 
 /**
  * Returns either the rewrite path or the plain, non-mod_rewrite path

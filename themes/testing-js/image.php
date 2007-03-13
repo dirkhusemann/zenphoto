@@ -4,6 +4,7 @@
 <head>
   <title><?php printGalleryTitle(); ?></title>
   <link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
+  <script type="text/javascript" src="<?php echo $_zp_themeroot ?>/jquery.js"></script>
 	<script type="text/javascript">
 	  function toggleComments() {
       var commentDiv = document.getElementById("comments");
@@ -19,12 +20,15 @@
     var maxloadlevel = 2;
     
     // Fine-tune the dynamic preloading
-    var highpreloadbracket = 10; // 10
-    var lowpreloadbracket = 25;  // 25
+    var highpreloadbracket = 0; // 10
+    var lowpreloadbracket = 0;  // 25
     
-    var currentdisplay = null;
+    var fgdisplay = null;
     var bgdisplay = null;
+    var currentdisplaylevel = -1;
+    
     var images = new Array();
+    topz = 5;
     
     // array(id, lowsrc, src, w, h, title, description);
 <?php while (next_image(true)): ?>
@@ -38,10 +42,14 @@
 
     // Preload thumbnails: (onLoad).
     function preLoadLores() {
-      currentdisplay = document.getElementById('imagemain1');
+      fgdisplay = $('#imagemain1');
+      bgdisplay = $('#imagemain2');
       albumImages[current] = createImage(current, 2);
       albumImages[current].onload = null;
-      albumImages[current].src = currentdisplay.src;
+      albumImages[current].src = images[current][2];
+      var cont = document.getElementById('imagecontainer');
+      cont.style.width  = images[current][3]+'px';
+      cont.style.height = images[current][4]+'px';
       preloadAround(current);
     }
     
@@ -92,26 +100,23 @@
     
     function displayImage(index) {
       var img = getImage(index);
-      var title = images[index][5];
-      var desc = images[index][6];
-      setTitle(title);
-      setDesc(desc);
+      setTitle(images[index][5]);
+      setDesc(images[index][6]);
+      
+      $('#imagecontainer').width(getImageWidth(img)).height(getImageHeight(img));
+      
       if (img.loadlevel == 0) {
-        var loading = document.getElementById('loading')
-        hide('imagemain1');
-        hide('imagemain2');
-        loading.style.display = 'block';
-        loading.style.backgroundColor = '#eee';
-        loading.style.width  = getImageWidth(img)+'px';
-        loading.style.height = getImageHeight(img)+'px';
+        $('#loading').css('opacity', 0).css({ zIndex: topz }).width(getImageWidth(img)).height(getImageHeight(img)).fadeIn('fast');
+        
       } else {
-        hide('loading');
-        hide('imagemain2');
-        show('imagemain1');
-        currentdisplay.width = getImageWidth(img);
-        currentdisplay.height = getImageHeight(img);
-        currentdisplay.src = img.src;
+        $(bgdisplay).css({ zIndex : topz }).attr('src', img.src)
+          .width(getImageWidth(img)).height(getImageHeight(img)).show();
+        $(fgdisplay).hide();
+        var newfgdisplay = bgdisplay;
+        bgdisplay = fgdisplay;
+        fgdisplay = newfgdisplay;
       }
+      topz++;
     }
     
     function getImageWidth(img) { return images[img.imageindex][3]; }
@@ -150,6 +155,7 @@
     }
     
     function switchImage(index) {
+      currentdisplaylevel = -1;
       displayImage(index);
       loadImage(index, 1);
       loadImage(index, 2);
@@ -222,9 +228,11 @@
     <div class="image">
 
       <div class="imagedisplay">
-        <img id="imagemain1" src="<?php echo getDefaultSizedImage() ?>" />
-        <img id="imagemain2" src="" style="display: none;" />
-        <div id="loading" style="display: none;"><img src="<?php echo $_zp_themeroot ?>/loading.gif" /></div>
+      <div id="imagecontainer" style="position: relative; width: <?php echo getDefaultWidth(); ?>px; height:<?php echo getDefaultHeight(); ?>px; ">
+          <img id="imagemain1" style="position: absolute; top: 0px; left: 0px; z-index: 3;" src="<?php echo getDefaultSizedImage() ?>" />
+          <img id="imagemain2" style="position: absolute; top: 0px; left: 0px; z-index: 2;" src="<?php echo getDefaultSizedImage() ?>" />
+          <div id="loading"    style="position: absolute; top: 0px; left: 0px; z-index: 1;" ><img src="<?php echo $_zp_themeroot ?>/loading.gif" /></div>
+        </div>
 
         <span class="desc"><?php printImageDesc(true); ?></span>
       </div>

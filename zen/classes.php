@@ -195,14 +195,14 @@ class PersistentObject {
       $entry = &$cache_location[$this->unique_set[$this->cache_by]];
     } else {
       // Otherwise get directly from the database.
-      $entry = query_single_row($sql);
+      $entry = query_single_row($sql, __LINE__);
     }
     $new = false;
     // If we don't have an entry yet, this is a new record. Create it.
     if (empty($entry)) {
       $new = true;
       $this->save();
-      $entry = query_single_row($sql);
+      $entry = query_single_row($sql, __LINE__);
       // If we still don't have an entry, something went wrong...
       if (!$entry) return null;
     }
@@ -237,7 +237,7 @@ class PersistentObject {
         $i++;
       }
       $sql .= ');';
-      $success = query($sql);
+      $success = query($sql, __LINE__);
       if ($success == false || mysql_affected_rows() != 1) { return false; }
       $this->id = mysql_insert_id();
       $this->updates = array();
@@ -257,7 +257,7 @@ class PersistentObject {
           $i++;
         }
         $sql .= ' WHERE id=' . $this->id . ';';
-        $success = query($sql);
+        $success = query($sql, __LINE__);
         if ($success == false || mysql_affected_rows() != 1) { return false; }
         $this->updates = array();
       }

@@ -21,19 +21,26 @@ function db_connect() {
   global $mysql_connection;
   $db = zp_conf('mysql_database');
   if (!function_exists('mysql_connect')) {
-    echo 'MySQL Error: The PHP MySQL extentions have not been installed. Please ask your administrator to add them to your PHP installation.<br />';
+    zp_error('MySQL Error: The PHP MySQL extentions have not been installed. '
+      .  'Please ask your administrator to add MySQL support to your PHP installation.');
     return false;
   }
 
   $mysql_connection = @mysql_connect(zp_conf('mysql_host'), zp_conf('mysql_user'), zp_conf('mysql_pass'));
   if (!$mysql_connection) {
-    echo 'MySQL Error: Could not connect to the database server. Check your <strong>zp-config.php</strong> file for the correct '
-      .  '<strong>Host, User name, and Password</strong>.<br />';
+    zp_error('MySQL Error: Zenphoto could not connect to the database server. Check '
+      .  'your <strong>zp-config.php</strong> file for the correct <em><strong>host</strong>, '
+      .  '<strong>user name</strong>, and <strong>password</strong></em>. Note that you may need to change the '
+      .  '<em>host</em> from localhost if your web server uses a separate MySQL server, which is '
+      .  'common in large shared hosting environments like Dreamhost and GoDaddy. Also make sure the server '
+      .  'is running, if you control it.');
     return false;
   }
 
   if (!@mysql_select_db($db)) {
-    echo 'MySQL Error: Could not select the database ' . $db . '<br />';
+    zp_error('MySQL Error: The database is connected, but Zenphoto could not select the database "' . $db . '". '
+      .  'Make sure it already exists, create it if you need to. Also make sure the user you\'re trying to '
+      .  'connect with has privelages to use this database.');
     return false;
   }
   return true;
@@ -53,7 +60,12 @@ function query($sql) {
   if ($mysql_connection == null) {
     db_connect();
   }
-  $result = mysql_query($sql, $mysql_connection) or die('MySQL Query ( '.$sql.' ) Failed. Error: ' . mysql_error());
+  $result = mysql_query($sql, $mysql_connection);
+  if (!$result) {
+    $sql = sanitize($sql, true);
+    zp_error("MySQL Query ( <em>$sql</em> ) Failed. Error: " . mysql_error());
+    return false;
+  }
   $_zp_query_count++;
   //echo "<!-- Query: $sql -->";
   return $result;
@@ -64,7 +76,11 @@ function query($sql) {
  */
 function query_single_row($sql) {
   $result = query($sql);
-  return mysql_fetch_assoc($result);
+  if ($result) {
+    return mysql_fetch_assoc($result);
+  } else {
+    return false;
+  }
 }
 
 /** Runs a SQL query and returns an array of associative arrays of every row returned.
@@ -74,10 +90,14 @@ function query_single_row($sql) {
  */
 function query_full_array($sql) {
   $result = query($sql);
-  $allrows = array();
-  while ($row = mysql_fetch_assoc($result))
-    $allrows[] = $row;
-  return $allrows;
+  if ($result) {
+    $allrows = array();
+    while ($row = mysql_fetch_assoc($result))
+      $allrows[] = $row;
+    return $allrows;
+  } else {
+    return false;
+  }
 }
 
 
