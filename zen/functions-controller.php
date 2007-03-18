@@ -106,16 +106,15 @@ function zpurl($with_rewrite=NULL, $album=NULL, $image=NULL, $page=NULL) {
  * corrected URL if not with a 301 Moved Permanently.
  */
 function fix_path_redirect() {
-  if (zp_conf('mod_rewrite')) {
+  if (zp_conf('mod_rewrite') 
+      && in_context(ZP_IMAGE) && substr($_SERVER['REQUEST_URI'], -strlen(im_suffix())) != im_suffix() ) {
     $redirecturl = zpurl(true);
     $path = urldecode(substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1));
     // Get rid of the trailing slash, it's okay.
-    $path = preg_replace(array('/\/$/'), '', $path);
-    if (in_context(ZP_IMAGE) && substr($_SERVER['REQUEST_URI'], -strlen(im_suffix())) != im_suffix() ) {
-      header("HTTP/1.0 301 Moved Permanently");
-      header('Location: ' . FULLWEBPATH . '/' . $redirecturl);
-      exit;
-    }
+    $path = preg_replace(array('/\/*$/'), '', $path);
+    header("HTTP/1.0 301 Moved Permanently");
+    header('Location: ' . FULLWEBPATH . '/' . $redirecturl);
+    exit;
   }
 }
 
