@@ -111,8 +111,7 @@ function fix_path_redirect() {
     $path = urldecode(substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1));
     // Get rid of the trailing slash, it's okay.
     $path = preg_replace(array('/\/$/'), '', $path);
-    if (is_query_request() || (strlen($redirecturl) > 0 && urldecode($redirecturl) != $path)
-        || (in_context(ZP_IMAGE) && substr($_SERVER['REQUEST_URI'], -strlen(im_suffix())) != im_suffix()) ) {
+    if (in_context(ZP_IMAGE) && substr($_SERVER['REQUEST_URI'], -strlen(im_suffix())) != im_suffix() ) {
       header("HTTP/1.0 301 Moved Permanently");
       header('Location: ' . FULLWEBPATH . '/' . $redirecturl);
       exit;
