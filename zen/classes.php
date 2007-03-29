@@ -73,7 +73,7 @@ class PersistentObject {
    * @return a reference to the array location where this class' cache is stored
    *   indexed by the field $cache_by.
    */
-  function cache() {
+  function cache($entry=NULL) {
     global $_zp_object_cache;
     
     if (is_null($this->cache_by)) return false;
@@ -94,21 +94,22 @@ class PersistentObject {
     // Exit if this object set is already cached.
     if (!empty($cache_location)) return $cache_location;
     
-    $sql = 'SELECT * FROM ' . prefix($this->table) . getWhereClause($cache_set);
-    $result = query($sql);
-    if (mysql_num_rows($result) == 0) return false;
-    
-    while ($row = mysql_fetch_assoc($result)) {
-      $key = $row[$this->cache_by];
-      $cache_location[$key] = $row;
+    if (!is_null($entry)) {
+      $key = $entry[$this->cache_by];
+      $cache_location[$key] = $entry;
+    } else {
+      $sql = 'SELECT * FROM ' . prefix($this->table) . getWhereClause($cache_set);
+      $result = query($sql);
+      if (mysql_num_rows($result) == 0) return false;
+      
+      while ($row = mysql_fetch_assoc($result)) {
+        $key = $row[$this->cache_by];
+        $cache_location[$key] = $row;
+      }
     }
     return $cache_location;
   }
-  
-  
-  function cachesave() {
-    
-  }
+
   
   /**
    * Set a variable in this object. Does not persist to the database until 
@@ -184,20 +185,22 @@ class PersistentObject {
   /** 
    * Load the data array from the database, using the unique id set to get the unique record.
    * @return false if the record already exists, true if a new record was created.
-   *   The return value can be used to insert default data for new objects.
    */
   function load() {
+    $new = false;
+    $entry = null;
     // Set up the SQL query in case we need it...
     $sql = 'SELECT * FROM ' . prefix($this->table) . getWhereClause($this->unique_set) . ' LIMIT 1;';
     // But first, try the cache.
     if ($this->use_cache) {
       $cache_location = &$this->cache();
       $entry = &$cache_location[$this->unique_set[$this->cache_by]];
-    } else {
-      // Otherwise get directly from the database.
+    }
+    // Re-check the database if: 1) not using cache, or 2) didn't get a hit.
+    if (empty($entry)) {
       $entry = query_single_row($sql, __LINE__);
     }
-    $new = false;
+    
     // If we don't have an entry yet, this is a new record. Create it.
     if (empty($entry)) {
       $new = true;
@@ -205,6 +208,8 @@ class PersistentObject {
       $entry = query_single_row($sql, __LINE__);
       // If we still don't have an entry, something went wrong...
       if (!$entry) return null;
+      // Then save this new entry into the cache so we get a hit next time.
+      $this->cache($entry);
     }
     $this->data = $entry;
     $this->id = $entry['id'];

@@ -10,6 +10,7 @@ printAdminHeader();
 // Print the sortable stuff
 zenSortablesHeader('images','imageOrder','img',"overlap:'horizontal',constraint:false");
 
+
 ?>
 
 </head>
@@ -36,7 +37,16 @@ if (!zp_loggedin()) {
     $folder = strip($_GET['album']);
     $album = new Album($gallery, $folder);
     $images = $album->getImages();
+    
   
+    if (isset($_GET['saved'])) {
+    
+      if ($album->getSortType() != "Manual") {
+        $album->setSortType("Manual");
+        $album->save();
+      }
+    }
+      
     // Layout the page
     printLogoAndLinks();
 ?>
@@ -65,20 +75,18 @@ if (!zp_loggedin()) {
       ?>
       
       </div>
-  
-      <br>
-      <?php
+        <?php
         if (isset($_GET['saved'])) {
           echo "<p>Album order saved.";
 
-          if ($album->getSortType() != "Manual") {
-            $album->setSortType("Manual");
-            $album->save();
-            echo " Album sorting set to Manual.</p>";
+          if ($album->getSortType() == "Manual") {
+            echo " Album sorting set to Manual.";
           }
           echo "</p>";
         }
-      ?>
+        ?>
+      <br>
+
       <div>
       <?php
         zenSortablesSaveButton("?page=edit&album=". $album->getFolder() . "&saved"); 
