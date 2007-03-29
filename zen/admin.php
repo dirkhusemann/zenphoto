@@ -145,8 +145,6 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         $error = true;
         if ($files_empty) {
           $errormsg = "You must upload at least one file.";
-        } else if (empty($_POST['albumtitle'])) {
-          $errormsg = "You must enter a title for your new album.";
         } else if (empty($_POST['folder'])) {
           $errormsg = "You must enter a folder name for your new album.";
         } else if (empty($_POST['processed'])) {
@@ -538,15 +536,21 @@ if (!zp_loggedin()) {
             $first = false;
           }
         ?> );
+        
+        function validateUpload() {
+          if (document.uploadform) {
+            
+          }
+        }
       
       </script>
       
       <h1>Upload Photos</h1>
       <p>This web-based upload accepts image formats: <acronym title="Joint Picture Expert's Group">JPEG</acronym>, 
       <acronym title="Portable Network Graphics">PNG</acronym> and <acronym title="Graphics Interchange Format">GIF</acronym>.
-	  You can also upload a <strong>ZIP</strong> archive containing either of those file types.</p>
-	  <p><em>Note:</em> When uploading archives, <strong>all</strong> images in the archive are added to the album, regardles of directory structure.</p>
-      <p>The maximum size for any one file is <strong><?php echo ini_get('upload_max_filesize'); ?>B</strong>. Don't forget, you can also use <acronym title="File Transfer Protocol">FTP</acronym>!</p>
+	      You can also upload a <strong>ZIP</strong> archive containing any of those file types.</p>
+	    <!--<p><em>Note:</em> When uploading archives, <strong>all</strong> images in the archive are added to the album, regardles of directory structure.</p>-->
+      <p>The maximum size for any one file is <strong><?php echo ini_get('upload_max_filesize'); ?>B</strong>. Don't forget, you can also use <acronym title="File Transfer Protocol">FTP</acronym> to upload folders of images into the albums directory!</p>
       
       <?php if (isset($error) && $error) { ?>
         <div class="errorbox">
@@ -555,7 +559,7 @@ if (!zp_loggedin()) {
         </div>
       <?php } ?>
       
-      <form name="uploadform" enctype="multipart/form-data" action="?action=upload" method="POST">
+      <form name="uploadform" enctype="multipart/form-data" action="?action=upload" method="POST" onsubmit="return validateFolder(document.uploadform.folder);">
         <input type="hidden" name="processed" value="1" />
         
 
@@ -563,56 +567,64 @@ if (!zp_loggedin()) {
         <div id="albumselect">
           Upload to: 
           <select id="" name="albumselect" onChange="albumSwitch(this)">
-            <option value="" selected="true">a New Album +</option>
+            <option value="" selected="true" style="font-weight: bold;">a New Album...</option>
           <?php 
             $albums = $gallery->getAlbums(); 
-            foreach ($albums as $folder) { 
+            foreach ($albums as $folder):
               $album = new Album($gallery, $folder);
-           ?>
+          ?>
             <option value="<?php echo $album->getFolder();?>"><?php echo $album->getTitle();?></option>
-          <?php } ?>
+          <?php endforeach; ?>
           </select>
           
           <div id="albumtext" style="margin-top: 5px;"> 
-            called: <input id="albumtitle" size="22" type="text" name="albumtitle" value="" onkeyup="updateFolder(this, 'folderdisplay', 'autogen');" /> 
-            in the folder named: 
-            <div style="position: relative; display: inline;">
-              <div id="foldererror" style="display: none; color: #D66; position: absolute; z-index: 100; top: -2em; left: 0px;">That name is already used.</div>
+            called: <input id="albumtitle" size="22" type="text" name="albumtitle" value="" onkeyup="updateFolder(this, 'folderdisplay', 'autogen');" />
+            <div style="position: relative; margin-top: 4px;">
+              with the folder name: 
+              <div id="foldererror" style="display: none; color: #D66; position: absolute; z-index: 100; top: 2.5em; left: 0px;"></div>
               <input id="folderdisplay" size="18" type="text" name="folderdisplay" disabled="true" onkeyup="validateFolder(this);"/> 
+              <label><input type="checkbox" name="autogenfolder" id="autogen" checked="true" onClick="toggleAutogen('folderdisplay', 'albumtitle', this);" /> Auto-generate</label>
+              <br /><br />
             </div>
-            <label><input type="checkbox" name="autogenfolder" id="autogen" checked="true" onClick="toggleAutogen('folderdisplay', 'albumtitle', this);" /> Auto-generate folder names</label>
+            
             <input type="hidden" name="folder" value="" />
           </div>
           
         </div>
         
-        <hr />
+        <div id="uploadboxes" style="display: none;">
         
-        <!-- This first one is the template that others are copied from -->
-        <div class="fileuploadbox" id="filetemplate">
-          <input type="file" size="40" name="files[]" />
+          <hr />
+          
+          <!-- This first one is the template that others are copied from -->
+          <div class="fileuploadbox" id="filetemplate">
+            <input type="file" size="40" name="files[]" />
+          </div>
+          <div class="fileuploadbox">
+            <input type="file" size="40" name="files[]" />
+          </div>
+          <div class="fileuploadbox">
+            <input type="file" size="40" name="files[]" />
+          </div>
+          <div class="fileuploadbox">
+            <input type="file" size="40" name="files[]" />
+          </div>
+          <div class="fileuploadbox">
+            <input type="file" size="40" name="files[]" />
+          </div>
+  
+          <div id="place" style="display: none;"></div><!-- New boxes get inserted before this -->
+          
+          <p><a href="javascript:addUploadBoxes('place','filetemplate',5)" title="Doesn't reload!">+ Add more upload boxes</a> <small>(won't reload the page, but remember your upload limits!)</small></p>
+          
+          
+          <p><input type="submit" value="Upload" onclick="this.form.folder.value = this.form.folderdisplay.value;" class="button" /></p>
+          
         </div>
-        <div class="fileuploadbox">
-          <input type="file" size="40" name="files[]" />
-        </div>
-        <div class="fileuploadbox">
-          <input type="file" size="40" name="files[]" />
-        </div>
-        <div class="fileuploadbox">
-          <input type="file" size="40" name="files[]" />
-        </div>
-        <div class="fileuploadbox">
-          <input type="file" size="40" name="files[]" />
-        </div>
-
-        <div id="place" style="display: none;"></div><!-- New boxes get inserted before this -->
-        
-        <p><a href="javascript:addUploadBoxes('place','filetemplate',5)" title="Doesn't reload!">+ Add more upload boxes</a> <small>(won't reload the page, but remember your upload limits!)</small></p>
-        
-        
-        <p><input type="submit" value="Upload" onclick="this.form.folder.value = this.form.folderdisplay.value;" class="button" /></p>
         
       </form>
+      
+      <script type="text/javascript">validateFolder(document.uploadform.folder);</script>
       
       
       

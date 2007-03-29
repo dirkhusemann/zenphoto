@@ -77,14 +77,27 @@ function updateFolder(nameObj, folderID, checkboxID) {
     }
   }
   folder.value = fname+fnamesuffix;
+  validateFolder(folder);
 }
 
 function validateFolder(folderObj) {
   var errorDiv = document.getElementById("foldererror");
+  var uploadBoxesDiv = document.getElementById("uploadboxes");
   if (albumArray && contains(albumArray, folderObj.value)) {
     errorDiv.style.display = "block";
+    errorDiv.innerHTML = "That name is already used.";
+    uploadBoxesDiv.style.display = "none";
+    return false;
+  } else if (folderObj.value == "") {
+    errorDiv.style.display = "block";
+    errorDiv.innerHTML = "This upload has to have a folder. Type a title or folder name to continue...";
+    uploadBoxesDiv.style.display = "none";
+    return false;
   } else {
     errorDiv.style.display = "none";
+    errorDiv.innerHTML = "";
+    uploadBoxesDiv.style.display = "block";
+    return true;
   }
 }
 
