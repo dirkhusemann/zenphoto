@@ -33,19 +33,26 @@ function albumSwitch(sel) {
   var albumbox = document.getElementById("folderdisplay");
   var titlebox = document.getElementById("albumtitle");
   var checkbox = document.getElementById("autogen");
+  var folder = sel.form.folder;
+  var exists = sel.form.existingfolder;
   if (selected.value == "") {
     albumtext.style.display = "block";
     albumbox.value = "";
+    folder.value   = "";
     titlebox.value = "";
-    document.getElementById("foldererror").style.display = "none";
+    exists.value = 0;
     checkbox.checked = true;
+    document.getElementById("foldererror").style.display = "none";
     toggleAutogen("folderdisplay", "albumtitle", checkbox);
+    validateFolder(folder);
   } else {
     albumtext.style.display = "none";
     albumbox.value = selected.value;
+    folder.value   = selected.value;
     titlebox.value = selected.text;
+    exists.value = 1;
+    validateFolder(folder, true);
   }
-
 }
 
 function contains(arr, key) {
@@ -82,8 +89,9 @@ function updateFolder(nameObj, folderID, checkboxID) {
 
 function validateFolder(folderObj) {
   var errorDiv = document.getElementById("foldererror");
+  var exists = document.uploadform.existingfolder.value;
   var uploadBoxesDiv = document.getElementById("uploadboxes");
-  if (albumArray && contains(albumArray, folderObj.value)) {
+  if (!exists && albumArray && contains(albumArray, folderObj.value)) {
     errorDiv.style.display = "block";
     errorDiv.innerHTML = "That name is already used.";
     uploadBoxesDiv.style.display = "none";
