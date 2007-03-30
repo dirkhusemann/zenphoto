@@ -8,9 +8,9 @@ class Album extends PersistentObject {
 
   var $name;             // Folder name of the album (full path from /albums/)
   var $exists = true;    // Does the folder exist?
-  var $images = NULL;    // Full images array storage.
-  var $subalbums = NULL; // Full album array storage.
-  var $parent = NULL;    // The parent album name
+  var $images = null;    // Full images array storage.
+  var $subalbums = null; // Full album array storage.
+  var $parent = null;    // The parent album name
   var $gallery;
   var $index;
   var $sort_key = 'filename';
@@ -25,13 +25,14 @@ class Album extends PersistentObject {
     $this->localpath = SERVERPATH . "/albums/" . $folder . "/";
 
     // Second defense against upward folder traversal:
-    if(!file_exists($this->localpath) || strpos($this->localpath, '..') !== FALSE) {
+    if(!file_exists($this->localpath) || strpos($this->localpath, '..') !== false) {
       $this->exists = false;
       return false;
     }
     
     parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache);
 
+    $this->parentalbum = $this->getParent();
     $this->sort_key = ($this->data['sort_type'] == "Title") ? 'title' : ($this->data['sort_type'] == "Manual") ? 'sort_order' : 'filename';
   }
   
@@ -39,7 +40,7 @@ class Album extends PersistentObject {
   function setDefaults() {
     // Set default data for a new Album (title and parent_id)
     $parentalbum = $this->getParent();
-    $title = str_replace(array('-','_','+','~'), ' ', $this->name);
+    $title = trim(str_replace(array('-','_','+','~'), ' ', $this->name));
     if (!is_null($parentalbum)) {
       $this->set('parentid', $parentalbum->getAlbumId());
       $title = substr($title, strrpos($title, '/')+1);
@@ -56,13 +57,17 @@ class Album extends PersistentObject {
   
   // The parent Album of this Album. NULL if this is a top-level album.
   function getParent() {
-    $slashpos = strrpos($this->name, "/");
-    if ($slashpos) {
-      $parent = substr($this->name, 0, $slashpos);
-      $parentalbum = new Album($this->gallery, $parent);
-      if ($parentalbum->exists) {
-        return $parentalbum;
+    if (is_null($this->parentalbum)) {
+      $slashpos = strrpos($this->name, "/");
+      if ($slashpos) {
+        $parent = substr($this->name, 0, $slashpos);
+        $parentalbum = new Album($this->gallery, $parent);
+        if ($parentalbum->exists) {
+          return $parentalbum;
+        }
       }
+    } else if ($this->parentalbum->exists) {
+      return $this->parentalbum;
     }
     return NULL;   
   }
