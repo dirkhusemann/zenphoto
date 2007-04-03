@@ -555,7 +555,7 @@ if (!zp_loggedin()) {
       
       <form name="uploadform" enctype="multipart/form-data" action="?action=upload" method="POST" onsubmit="return validateFolder(document.uploadform.folder);">
         <input type="hidden" name="processed" value="1" />
-        <input type="hidden" name="existingfolder" value="0" />
+        <input type="hidden" name="existingfolder" value="false" />
         
 
         

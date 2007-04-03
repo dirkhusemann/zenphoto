@@ -40,19 +40,18 @@ function albumSwitch(sel) {
     albumbox.value = "";
     folder.value   = "";
     titlebox.value = "";
-    exists.value = 0;
+    exists.value = false;
     checkbox.checked = true;
     document.getElementById("foldererror").style.display = "none";
     toggleAutogen("folderdisplay", "albumtitle", checkbox);
-    validateFolder(folder);
   } else {
     albumtext.style.display = "none";
     albumbox.value = selected.value;
     folder.value   = selected.value;
     titlebox.value = selected.text;
-    exists.value = 1;
-    validateFolder(folder, true);
+    exists.value = true;
   }
+  validateFolder(folder);
 }
 
 function contains(arr, key) {
@@ -89,7 +88,7 @@ function updateFolder(nameObj, folderID, checkboxID) {
 
 function validateFolder(folderObj) {
   var errorDiv = document.getElementById("foldererror");
-  var exists = document.uploadform.existingfolder.value;
+  var exists = document.uploadform.existingfolder.value != "false";
   var uploadBoxesDiv = document.getElementById("uploadboxes");
   if (!exists && albumArray && contains(albumArray, folderObj.value)) {
     errorDiv.style.display = "block";
