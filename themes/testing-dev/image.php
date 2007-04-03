@@ -47,6 +47,8 @@
         <span class="desc"><?php printImageDesc(true); ?></span>
       </div>
       
+      <div><?php printImageEXIFData(); ?></div>
+      
       <div id="comments" style="clear: both; padding-top: 10px;">
           <div class="commentcount"><?php $num = getCommentCount(); echo ($num == 0) ? "No comments" : (($num == 1) ? "<strong>One</strong> comment" : "<strong>$num</strong> comments"); ?> on this image:</div>
           
