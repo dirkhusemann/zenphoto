@@ -11,6 +11,7 @@ class Album extends PersistentObject {
   var $images = null;    // Full images array storage.
   var $subalbums = null; // Full album array storage.
   var $parent = null;    // The parent album name
+  var $parentalbum = null; // The parent album's album object (lazy)
   var $gallery;
   var $index;
   var $sort_key = 'filename';
@@ -31,9 +32,16 @@ class Album extends PersistentObject {
     }
     
     parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache);
-
-    $this->parentalbum = $this->getParent();
-    $this->sort_key = ($this->data['sort_type'] == "Title") ? 'title' : ($this->data['sort_type'] == "Manual") ? 'sort_order' : 'filename';
+    
+    // Set the sort key, determined by the sorting type.
+    $sorttype = $this->get('sort_type');
+    if ($sorttype == "Title") {
+      $this->sort_key = 'title';
+    } else if ($sorttype == "Manual") {
+      $this->sort_key = 'sort_order';
+    } else {
+      $this->sort_key = 'filename';
+    }
   }
   
   
@@ -171,8 +179,8 @@ class Album extends PersistentObject {
       if (array_key_exists($filename, $images_to_keys) && !in_array($filename, $images_in_db)) {
         $images_to_keys[$filename] = $i;
         $images_in_db[] = $filename;
+        $i++;
       }
-      $i++;
     }
 
     // Place the images not yet in the database after those with sort columns.
