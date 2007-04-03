@@ -253,10 +253,16 @@ class Gallery {
     // Check for the existence of top-level albums (subalbums handled recursively).
     $result = query("SELECT * FROM " . prefix('albums') . " WHERE `parentid` IS NULL");
     $dead = array();
+    $live = array();
     // Load the albums from disk
     $files = $this->loadAlbumNames();
-    while($row = mysql_fetch_assoc($result))
-      if (!in_array($row['folder'], $files)) $dead[] = $row['id'];
+    while($row = mysql_fetch_assoc($result)) {
+      if (!in_array($row['folder'], $files) || in_array($row['folder'], $live)) {
+        $dead[] = $row['id'];
+      } else {
+        $live[] = $row['folder'];
+      }
+    }
 
     if (count($dead) > 0) {
       $first = array_pop($dead);

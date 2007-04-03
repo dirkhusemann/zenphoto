@@ -306,13 +306,24 @@ class Album extends PersistentObject {
     if (is_null($this->images)) $this->getImages();
     $result = query("SELECT * FROM ".prefix('images')." WHERE `albumid` = '" . $this->id . "'");
     $dead = array();
+    $live = array();
 
     $files = $this->loadFileNames();
-    
+
     // Does the filename from the db row match any in the files on disk?
     while($row = mysql_fetch_assoc($result)) {
-      if (!in_array($row['filename'], $files)) $dead[] = $row['id'];
+      if (!in_array($row['filename'], $files)) {
+        // In the database but not on disk. Kill it.
+        $dead[] = $row['id'];
+      } else if (in_array($row['filename'], $live)) {
+        // Duplicate in the database. Kill it.
+        $dead[] = $row['id'];
+        // Do something else here? Compare titles/descriptions/metadata/update dates to see which is the latest?
+      } else {
+        $live[] = $row['filename'];
+      }
     }
+    
     if (count($dead) > 0) {
       $sql = "DELETE FROM ".prefix('images')." WHERE `id` = '" . array_pop($dead) . "'";
       foreach ($dead as $img) $sql .= " OR `id` = '$img'";
@@ -322,11 +333,14 @@ class Album extends PersistentObject {
     // Get all sub-albums and make sure they exist.
     $result = query("SELECT * FROM ".prefix('albums')." WHERE `folder` LIKE '" . mysql_real_escape_string($this->name) . "/%'");
     $dead = array();
+    $live = array();
     // Does the dirname from the db row exist on disk?
     while($row = mysql_fetch_assoc($result)) {
-      if (!is_dir(SERVERPATH . '/albums/' . $row['folder']) 
+      if (!is_dir(SERVERPATH . '/albums/' . $row['folder']) || in_array($row['folder'], $live)
           || substr($row['folder'], -1) == '/' || substr($row['folder'], 0, 1) == '/') {
         $dead[] = $row['id'];
+      } else {
+        $live[] = $row['folder'];
       }
     }
     if (count($dead) > 0) {
@@ -338,7 +352,9 @@ class Album extends PersistentObject {
     if ($deep) {
       foreach($this->getSubAlbums(0) as $dir) {
         $subalbum = new Album($this->gallery, $dir);
-        $subalbum->garbageCollect($deep);
+        // Could have been deleted if it didn't exist above...
+        if ($subalbum->exists)
+          $subalbum->garbageCollect($deep);
       }
     }
   }
