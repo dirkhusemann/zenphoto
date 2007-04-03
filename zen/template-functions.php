@@ -579,8 +579,25 @@ function printImageDiv() {
   }
 }
 
-// TODO:
-function getImageEXIFData() { }
+
+function getImageEXIFData() {
+  global $_zp_current_image;
+  return $_zp_current_image->getExifData();
+}
+
+function printImageEXIFData() {
+  global $_zp_exifvars;
+  $exif = getImageEXIFData();
+  echo "<ul>\n";
+  foreach ($exif as $field => $value) {
+    $display = $_zp_exifvars[$field][3];
+    if ($display) {
+      $label = $_zp_exifvars[$field][2];
+      echo "<li>$label: $value</li>\n";
+    }
+  }
+  echo "</ul>\n\n";
+}
 
 
 function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL, $cx=NULL, $cy=NULL) {

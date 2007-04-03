@@ -1,5 +1,6 @@
 <?php
-require_once("kses.php");
+require_once('kses.php');
+require_once('exif/exif.php');
 
 // functions.php - HEADERS NOT SENT YET!
 
@@ -30,6 +31,28 @@ define('DEBUG', false);
 error_reporting(E_ALL ^ E_NOTICE);
 $_zp_error = false;
 
+
+// Set up default EXIF variables:
+$_zp_exifvars = array(
+    // Database Field       => array('IFDX',   'ExifKey',           'ZP Display Text',        Display?)
+    'EXIFOrientation'       => array('IFD0',   'Orientation',       'Orientation',            false),
+    'EXIFMake'              => array('IFD0',   'Make',              'Camera Maker',           true),
+    'EXIFModel'             => array('IFD0',   'Model',             'Camera Model',           true),
+    'EXIFExposureTime'      => array('SubIFD', 'ExposureTime',      'Shutter Speed',          true),
+    'EXIFFNumber'           => array('SubIFD', 'FNumber',           'Aperture',               true),
+    'EXIFFocalLength'       => array('SubIFD', 'FocalLength',       'Focal Length',           true),
+    'EXIFFocalLength35mm'   => array('SubIFD', 'FocalLength35mmEquiv', '35mm Equivalent Focal Length', false),
+    'EXIFISOSpeedRatings'   => array('SubIFD', 'ISOSpeedRatings',   'ISO Sensitivity',        true),
+    'EXIFDateTimeOriginal'  => array('SubIFD', 'DateTimeOriginal',  'Time Taken',             true),
+    'EXIFExposureBiasValue' => array('SubIFD', 'ExposureBiasValue', 'Exposure Compensation',  true),
+    'EXIFMeteringMode'      => array('SubIFD', 'MeteringMode',      'Metering Mode',          true),
+    'EXIFFlash'             => array('SubIFD', 'Flash',             'Flash Fired',            true),
+    'EXIFImageWidth'        => array('SubIFD', 'ExifImageWidth',    'Original Width',         false),
+    'EXIFImageHeight'       => array('SubIFD', 'ExifImageHeight',   'Original Height',        false),
+    'EXIFContrast'          => array('SubIFD', 'Contrast',          'Contrast Setting',       false),
+    'EXIFSharpness'         => array('SubIFD', 'Sharpness',         'Sharpness Setting',      false),
+    'EXIFSaturation'        => array('SubIFD', 'Saturation',        'Saturation Setting',     false)
+  );
 
 
 // For easy access to config vars.
@@ -284,7 +307,7 @@ function zp_error($message) {
   global $_zp_error;
   if (!$_zp_error) {
     echo '<div style="padding: 15px; border: 1px solid #F99; background-color: #FFF0F0; margin: 20px; font-family: Arial, Helvetica, sans-serif; font-size: 12pt;">'
-      . ' <h2 style="margin: 0px 0px 5px; color: #C30;">Zenphoto Error</h2>' . "\n\n" . $message . '</p>';
+      . ' <h2 style="margin: 0px 0px 5px; color: #C30;">Zenphoto Error</h2><p>' . "\n\n" . $message . '</p>';
     if (DEBUG) {
       // Get a backtrace.
       $bt = debug_backtrace();
@@ -304,7 +327,7 @@ function zp_error($message) {
     }
     echo "</div>\n";
     $_zp_error = true;
-    exit;
+    exit();
   }
 }
 

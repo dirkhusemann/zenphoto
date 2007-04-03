@@ -106,7 +106,7 @@ function zpurl($with_rewrite=NULL, $album=NULL, $image=NULL, $page=NULL) {
  * corrected URL if not with a 301 Moved Permanently.
  */
 function fix_path_redirect() {
-  if (zp_conf('mod_rewrite') 
+  if (zp_conf('mod_rewrite') && strlen(im_suffix()) > 0
       && in_context(ZP_IMAGE) && substr($_SERVER['REQUEST_URI'], -strlen(im_suffix())) != im_suffix() ) {
     $redirecturl = zpurl(true);
     $path = urldecode(substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1));

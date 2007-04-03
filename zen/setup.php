@@ -92,6 +92,7 @@ if (file_exists("zp-config.php")) {
       `sort_order` int(11) unsigned default NULL,
       `height` int(10) unsigned default NULL,
       `width` int(10) unsigned default NULL,
+      `lastestmtime` int(32) default NULL,
       PRIMARY KEY  (`id`),
       KEY `filename` (`filename`,`albumid`),
       KEY `albumid` (`albumid`)

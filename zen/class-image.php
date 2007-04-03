@@ -48,11 +48,39 @@ class Image extends PersistentObject {
   function getFileName() {
     return $this->filename;
   }
+  
+  
+  function getExifData() {
+    global $_zp_exifvars;
+    $exif = array();
+    if (is_null($this->get('EXIFValid'))) { // Also check the stored filemtime...
+      $exifraw = read_exif_data_raw($this->localpath, false);
+      if ($exifraw['ValidEXIFData']) {
+        foreach($_zp_exifvars as $field => $exifvar) {
+          $exif[$field] = $exifraw[$exifvar[0]][$exifvar[1]];
+          $this->set($field, $exif[$field]);
+        }
+        $this->set('EXIFValid', 1);
+      } else {
+        $this->set('EXIFValid', 0);
+      }
+    } else {
+      // Put together an array of EXIF data to return
+      if ($this->get('EXIFValid') == 1) {
+        foreach($_zp_exifvars as $field => $exifvar) {
+          $exif[$field] = $this->get($field);
+        }
+      } else {
+        return false;
+      }
+    }
+    return $exif;
+  }
 
     
   // Get the width and height of the original image-- uses lazy evaluation.
   // TODO: Update them if they change by looking at file modification time, which must be stored in the database.
-  // FIXME: Temporarily getting dimensions each time they're requested.
+  // FIXME: Temporarily getting dimensions each time they're requested. Should sync with EXIF extraction.
   function updateDimensions() {
     //if ($this->exists && (is_null($this->get('width')) || is_null($this->get('height')))) {
       $size = getimagesize($this->localpath);

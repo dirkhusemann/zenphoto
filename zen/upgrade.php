@@ -63,6 +63,9 @@ if (file_exists("zp-config.php")) {
     // v. 1.0.4b
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `parentid` int(11) unsigned default NULL;";
     
+    // v. 1.0.9
+    $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `lastestmtime` int(32) default NULL;";
+    
     if (isset($_GET['upgrade']) && db_connect()) {
       echo "<h3>Upgrading tables...</h3>";
       foreach($sql_statements as $sql) {

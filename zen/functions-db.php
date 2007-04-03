@@ -63,7 +63,12 @@ function query($sql) {
   $result = mysql_query($sql, $mysql_connection);
   if (!$result) {
     $sql = sanitize($sql, true);
-    zp_error("MySQL Query ( <em>$sql</em> ) Failed. Error: " . mysql_error());
+    $error = "MySQL Query ( <em>$sql</em> ) Failed. Error: " . mysql_error();
+    if (!query("SELECT 1 FROM ".prefix('albums')." LIMIT 0")) {
+      $error .= "<br>It looks like your zenphoto tables haven't been created. You may need to "
+        . " <a href=\"zen/setup.php\">run the setup script</a>.";
+    }
+    zp_error($error);
     return false;
   }
   $_zp_query_count++;
