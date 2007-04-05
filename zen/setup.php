@@ -62,6 +62,7 @@ if (file_exists("zp-config.php")) {
       `place` varchar(255) default NULL,
       `show` int(1) unsigned NOT NULL default '1',
       `thumb` varchar(255) default NULL,
+      `mtime` int(32) default NULL,
       `sort_type` varchar(20) default NULL,
       `sort_order` int(11) unsigned default NULL,
       PRIMARY KEY  (`id`),
@@ -92,10 +93,9 @@ if (file_exists("zp-config.php")) {
       `sort_order` int(11) unsigned default NULL,
       `height` int(10) unsigned default NULL,
       `width` int(10) unsigned default NULL,
-      `lastestmtime` int(32) default NULL,
+      `mtime` int(32) default NULL,
       PRIMARY KEY  (`id`),
-      KEY `filename` (`filename`,`albumid`),
-      KEY `albumid` (`albumid`)
+      KEY `filename` (`filename`,`albumid`)
       );";
   
     $db_schema[] = "ALTER TABLE $tbl_comments
