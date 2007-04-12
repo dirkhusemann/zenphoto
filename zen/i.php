@@ -54,9 +54,9 @@ $album = str_replace('..','', sanitize($ralbum));
 $image = str_replace(array('..','/',"\\"),'', sanitize($rimage));
 
 // Disallow abusive size requests.
-if ((isset($_GET['s']) && $_GET['s'] < MAX_SIZE) 
-  || (isset($_GET['w']) && $_GET['w'] < MAX_SIZE)
-  || (isset($_GET['h']) && $_GET['h'] < MAX_SIZE)) {
+if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE) 
+  || (isset($_GET['w']) && abs($_GET['w']) < MAX_SIZE)
+  || (isset($_GET['h']) && abs($_GET['h']) < MAX_SIZE)) {
 
   // Extract the image parameters from the input variables
   // This validates the input as well.

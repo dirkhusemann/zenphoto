@@ -255,7 +255,7 @@ function getImageParameters($args) {
   
   // Round each numeric variable, or set it to false if not a number.
   list($width, $height, $cw, $ch, $cx, $cy, $quality) =
-    array_map('round_if_numeric', array($width, $height, $cw, $ch, $cx, $cy, $quality));
+    array_map('sanitize_numeric', array($width, $height, $cw, $ch, $cx, $cy, $quality));
   if (empty($cw) && empty($ch)) $crop = false; else $crop = true;
   if (empty($quality)) $quality = zp_conf('image_quality');
   
@@ -265,9 +265,9 @@ function getImageParameters($args) {
 
 
 // Checks if the input is numeric, rounds if so, otherwise returns false.
-function round_if_numeric($num) {
+function sanitize_numeric($num) {
   if (is_numeric($num)) {
-    return round($num);
+    return abs(round($num));
   } else {
     return false;
   }
