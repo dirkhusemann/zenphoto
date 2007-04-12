@@ -80,7 +80,7 @@ if (file_exists("zp-config.php")) {
       $gallery->garbageCollect(true, true);
       
       echo "<h3>Done!</h3>";
-      echo "<p>You can now <a href=\"../\">View your gallery</a>, or <a href=\"../admin/\">administrate.</a></p>";
+      echo "<p>You can now <a href=\"../\">View your gallery</a>, or <a href=\"./\">administrate.</a></p>";
     
     } else if (db_connect()) {
       echo "<h3>database connected</h3>";
