@@ -50,6 +50,7 @@ function zenJavascript() {
     sajax_show_javascript();
     echo "  </script>";
   }
+  echo "  <script type=\"text/javascript\" src=\"".WEBPATH."/zen/scripts-common.js\"></script>\n";
 }
 
 
@@ -585,18 +586,26 @@ function getImageEXIFData() {
   return $_zp_current_image->getExifData();
 }
 
-function printImageEXIFData() {
+/** Deprecated, name changed. */
+function printImageEXIFData() { printImageMetadata(); }
+
+function printImageMetadata($title='Image Info', $toggle=true, $id='imagemetadata', $class=null) {
   global $_zp_exifvars;
   $exif = getImageEXIFData();
-  echo "<ul>\n";
+  $dataid = $id . '_data';
+  echo "<div" . (($class) ? " class=\"$class\"" : "") . (($id) ? " id=\"$id\"" : "") . ">\n";
+  if ($toggle) echo "<a href=\"javascript: toggle('$dataid');\">";
+  echo "<strong>$title</strong>";
+  if ($toggle) echo "</a>\n";
+  echo "  <table id=\"$dataid\"" . ($toggle ? " style=\"display: none;\"" : '') . ">\n";
   foreach ($exif as $field => $value) {
     $display = $_zp_exifvars[$field][3];
     if ($display) {
       $label = $_zp_exifvars[$field][2];
-      echo "<li>$label: $value</li>\n";
+      echo "    <tr><td>$label:</td> <td>$value</td></tr>\n";
     }
   }
-  echo "</ul>\n\n";
+  echo "  </table>\n</div>\n\n";
 }
 
 

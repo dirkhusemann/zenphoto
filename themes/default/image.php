@@ -14,7 +14,7 @@
       }
 	  }
 	</script>
-	<?php zenJavascript(); ?>
+<?php zenJavascript(); ?>
 </head>
 
 <body>
@@ -38,6 +38,8 @@
 	<div id="image">
 		<a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>"> <?php printDefaultSizedImage(getImageTitle()); ?></a> 
 	</div>
+  
+  <?php printImageMetadata(); ?>
 	
 	<div id="narrow">
 	

@@ -50,10 +50,16 @@ class Image extends PersistentObject {
   }
   
   
+  function fileChanged() {
+    $storedmtime = $this->get('filemtime');
+    return (empty($storedmtime) || $this->filemtime > $storedmtime);
+  }
+  
+  
   function getExifData() {
     global $_zp_exifvars;
     $exif = array();
-    if (is_null($this->get('EXIFValid'))) { // Also check the stored filemtime...
+    if (is_null($this->get('EXIFValid')) || $this->fileChanged()) {
       $exifraw = read_exif_data_raw($this->localpath, false);
       if ($exifraw['ValidEXIFData']) {
         foreach($_zp_exifvars as $field => $exifvar) {
@@ -64,6 +70,8 @@ class Image extends PersistentObject {
       } else {
         $this->set('EXIFValid', 0);
       }
+      $this->set('filemtime', $this->filemtime);
+      $this->save();
     } else {
       // Put together an array of EXIF data to return
       if ($this->get('EXIFValid') == 1) {
