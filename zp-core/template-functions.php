@@ -1259,26 +1259,24 @@ function getImageStatistic($number, $option) {
   return $imageArray;
 }
 
-function printLatestImages($number=5) {
-  $images = getImageStatistic($number, "latest");
-  echo "\n<div id=\"latest_images\">\n";
+function printImageStatistic($number, $option) {
+  $images = getImageStatistic($number, $option);
+  echo "\n<div id=\"$option_images\">\n";
   foreach ($images as $image) {
     $imageURL = getURL($image); 
-    echo '<a href="' . $imageURL . '" title="' . $desc . "\">\n";
+    echo '<a href="' . $imageURL . '" title="' . $image->getTitle() . "\">\n";
     echo '<img src="' . $image->getThumb() . "\"></a>\n";
   }
   echo "</div>\n";
 }
 
 function printPopularImages($number=5) {
-  $images = getImageStatistic($number, "popular");
-  echo "\n<div id=\"popular_images\">\n";
-  foreach ($images as $image) {
-    $imageURL = getURL($image); 
-    echo '<a href="' . $imageURL . '" title="' . $desc . "\">\n";
-    echo '<img src="' . $image->getThumb() . "\"></a>\n";
-  }
-  echo "</div>\n";
+printImageStatistic(5, "popular");
+}
+
+
+function printLatestImages($number=5) {
+printImageStatistic(5, "latest");
 }
 
 function getRandomImages() {
