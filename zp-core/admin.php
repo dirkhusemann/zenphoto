@@ -1134,7 +1134,7 @@ if (!zp_loggedin()) {
             <td>Enable mod_rewrite:</td>
             <td><input type="checkbox" name="mod_rewrite" value="1"
             <?php echo checked('1', $gallery->getOption('mod_rewrite')); ?> /></td>
-            <td>If you have Apache <i>mod_rewrite</i>, put a checkmark< here, and you'll get nice cruft-free URLs.</td>
+            <td>If you have Apache <i>mod_rewrite</i>, put a checkmark here, and you'll get nice cruft-free URLs.</td>
         </tr>
         <tr>
             <td>Mod_rewrite Image suffix:</td>
@@ -1153,7 +1153,7 @@ if (!zp_loggedin()) {
             <td>Charset:</td>
             <td><input type="text" size="40" name="charset"
                 value="<?php echo $gallery->getOption('charset');?>" /></td>
-            <td>The character encoding to use internally. Leave at i>UTF-8</i> if you're unsure.</td>
+            <td>The character encoding to use internally. Leave at <i>UTF-8</i> if you're unsure.</td>
         </tr>
     
 <!-- SPAM filter options -->
@@ -1196,7 +1196,7 @@ if (!zp_loggedin()) {
               <?php } ?>
               </select>
             </td>
-             <td>Sort order for the gallelry</td>
+             <td>Sort order for the gallery</td>
        </tr>
         <tr>
             <td></td>
@@ -1319,7 +1319,7 @@ if (!zp_loggedin()) {
         $optionHandler = new ThemeOptions();
       
         $supportedOptions = $optionHandler->getOptionsSupported();
-        if (count($supportedOptions)>0) { 
+        if (count($supportedOptions) > 0) { 
           echo "<table class='bordered'>\n";
              echo "<tr><th colspan='3'><h2>Theme Options for <i>".$gallery->getCurrentTheme()."</i></h2></th></tr>\n";
              
