@@ -63,7 +63,7 @@ function printAdminToolbox($context=null, $id="admin") {
     printAdminLink('Admin', '', "<br />\n"); 
     if ($context == ZP_INDEX) {
       if (!in_context(ZP_SEARCH)) {
-        printSortableGalleryLink('Sort Gallery', 'Manual sorting');
+        printSortableGalleryLink('Sort gallery', 'Manual sorting');
         echo "<br />\n";
         printLink($zf . '/admin.php?page=upload' . urlencode($_zp_current_album->name), "New album", NULL, NULL, NULL); 
         echo "<br />\n";
