@@ -1,20 +1,17 @@
-<?php $startTime = array_sum(explode(" ",microtime())); if (!defined('WEBPATH')) die(); ?>
+<?php if (!defined('WEBPATH')) die(); $startTime = array_sum(explode(" ",microtime())); $firstPageImages = normalizeColumns(1, 6); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
   <title><?php printGalleryTitle(); ?></title>
   <link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
+  <?php printRSSHeaderLink('Album',getAlbumTitle()); ?>
   <?php zenJavascript(); ?>
 </head>
 <body>
 
 <div id="main">
   <div id="gallerytitle">
-    <h2>
-      <span><a href="<?php echo getGalleryIndexURL();?>" title="Gallery Index"><?php echo getGalleryTitle();?></a> | 
-      <?php printParentBreadcrumb(); ?></span> 
-      <?php printAlbumTitle(true);?>
-    </h2>
+    <h2><span><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> | <?php printParentBreadcrumb(); ?></span> <?php printAlbumTitle(true);?></h2>
   </div>
   <hr />
   <div class="desc">
@@ -44,7 +41,9 @@
 
   <!-- Images -->
   <div id="images">
-  <?php while (next_image()): ?>
+	<?php 
+	  while (next_image(false, $firstPageImages)): 
+	?>
     <div class="image">
       <div class="imagethumb"><a href="<?php echo getImageLinkURL();?>" title="<?php echo getImageTitle();?>">
         <?php printImageThumb(getImageTitle()); ?></a>
@@ -60,12 +59,12 @@
   
   <?php endif; ?>
   
-  <p style="text-align: right;"><?php printAdminLink("Admin"); ?> 
+  <p style="text-align: right;"><?php printRSSLink('Album', '', 'Album RSS', ''); ?>
     <?php /* Timer */ echo round((array_sum(explode(" ",microtime())) - $startTime),4)." Seconds, $_zp_query_count queries ran."; ?></p>
 
-  
 </div>
 
+<?php printAdminToolbox(); ?>
 
 </body>
 </html>

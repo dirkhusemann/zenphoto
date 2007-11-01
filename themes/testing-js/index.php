@@ -1,14 +1,16 @@
+<?php if (!defined('WEBPATH')) die(); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
   <title><?php printGalleryTitle(); ?></title>
   <link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
+  <?php printRSSHeaderLink('Gallery','Gallery RSS'); ?>
   <?php zenJavascript(); ?>
 </head>
 <body>
 <div id="main">
   <div id="gallerytitle">
-    <h2><?php echo getGalleryTitle(); ?></h2>
+    <h2><?php echo getGalleryTitle(); ?><?php if (getOption('Allow_search')) {  printSearchForm(); } ?></h2>
   </div>
   
   <hr />
@@ -33,10 +35,11 @@
   <?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
 
   <p style="text-align: right;">
-  <?php printSortableGalleryLink('Sort Gallery', 'Manual sorting', NULL, 'credit'); ?> &nbsp; <?php printAdminLink("Admin"); ?>
+  <?php printRSSLink('Gallery','','RSS', ''); ?>
   </p>
-
 </div>
+
+<?php printAdminToolbox(); ?>
 
 </body>
 </html>

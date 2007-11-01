@@ -4,6 +4,7 @@
 <head>
   <title><?php printGalleryTitle(); ?></title>
   <link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
+  <?php printRSSHeaderLink('Gallery','Gallery RSS'); ?>
   <script type="text/javascript" src="<?php echo $_zp_themeroot ?>/jquery.js"></script>
 	<script type="text/javascript">
 	  function toggleComments() {
@@ -32,7 +33,7 @@
     
     // array(id, lowsrc, src, w, h, title, description);
 <?php while (next_image(true)): ?>
-    images.push(new Array(<?=getImageId(); ?>, "<?=getCustomImageURL(100); ?>","<?=getCustomImageURL(595); ?>", <?php
+    images.push(new Array("<?php echo getImageId(); ?>", "<?php echo getCustomImageURL(100); ?>","<?php echo getCustomImageURL(595); ?>", <?php 
          $size = getSizeCustomImage(595); echo $size[0] . ', ' . $size[1]; ?>, "<?php echo addslashes(getImageTitle()); ?>", "<?php echo addslashes(getImageDesc()); ?>"));
 <?php endwhile; ?>
     
@@ -207,12 +208,9 @@
 
 <div id="main">
   <div id="gallerytitle">
-    <h2>
-      <span><a href="<?php echo getGalleryIndexURL();?>" title="Gallery Index"><?php echo getGalleryTitle();?></a> | 
-      <?php printParentBreadcrumb(); ?>
-      <a href="<?php echo getAlbumLinkURL();?>" title="<?php echo getAlbumTitle();?> Index"><?php echo getAlbumTitle();?></a> |</span>
-      <?php printImageTitle(true); ?>
-    </h2>
+    <h2><span><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?>
+          </a> | <?php printParentBreadcrumb(); ?><a href="<?php echo getAlbumLinkURL();?>" title="Album Thumbnails"><?php echo getAlbumTitle();?></a> | 
+          </span> <?php printImageTitle(true); ?></h2>
   </div>
   
   <hr />
@@ -237,7 +235,7 @@
         <span class="desc"><?php printImageDesc(true); ?></span>
       </div>
       
-      <?php /*
+      <?php if (getOption('Allow_comments')) { ?>
       <div id="comments" style="clear: both; padding-top: 10px;">
           <div class="commentcount"><?php $num = getCommentCount(); echo ($num == 0) ? "No comments" : (($num == 1) ? "<strong>One</strong> comment" : "<strong>$num</strong> comments"); ?> on this image:</div>
           
@@ -257,7 +255,21 @@
             <form name="commentform" id="commentform" action="#comments" method="post">
               <input type="hidden" name="comment" value="1" />
               <input type="hidden" name="remember" value="1" />
-              <?php if (isset($error)) { ?><tr><td><div class="error">There was an error submitting your comment. Name, a valid e-mail address, and a comment are required.</div></td></tr><?php } ?>
+              <?php 
+              if (isset($error)) { 
+                echo "<tr>";
+                  echo "<td>";
+                    echo '<div class="error">';
+                    if ($error == 1) {
+                      echo "There was an error submitting your comment. Name, a valid e-mail address, and a spam-free comment are required.";
+                    } else {
+                      echo "Your comment has been marked for moderation.";
+                    }
+                    echo "</div>";
+                  echo "</td>";
+                echo  "</tr>";
+              } 
+              ?>
               <table border="0">
                 <tr><td><label for="name">Name:</label></td>    <td><input type="text" name="name" size="20" value="<?php echo $stored[0];?>" />  </td></tr>
                 <tr><td><label for="email">E-Mail (won't be public):</label></td> <td><input type="text" name="email" size="20" value="<?php echo $stored[1];?>" /> </td></tr>
@@ -271,13 +283,15 @@
           </div>
 
       </div>
-      */ ?>
+      <?php } ?>
       
-      <p style="text-align: left; color: #ddd;"><?php printAdminLink("Admin"); ?>
+      <p style="text-align: left; color: #ddd;"><?php printRSSLink('Gallery','','RSS', ' | '); ?>
         <?php /* Timer */ echo round((array_sum(explode(" ",microtime())) - $startTime),4)." Seconds, $_zp_query_count queries ran."; ?></p>
       
     </div>
 </div>
+
+<?php printAdminToolbox(); ?>
 
 </body>
 

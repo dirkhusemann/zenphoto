@@ -1,0 +1,173 @@
+<?php /* PUT NOTHING BEFORE THIS LINE, not even a line break! */
+$conf = array();
+define("DEBUG", false);
+
+/** Do not edit above this line. **/
+/**********************************/
+
+///////////   zenPHOTO Configuration Variables   //////////////////////////////
+//  After you're done editing this file, load  
+//  http://www.yoursite.com/zenphotodir/zp-core/setup.php
+//  to run the setup (of course, replacing the paths where needed).
+
+// NOTE: web_path and server_path are no longer needed! If you're having problems
+// with the auto-detected paths, you can override them at the bottom of this file.
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Database Information (the most important part!)
+////////////////////////////////////////////////////////////////////////////////
+
+$conf['mysql_user'] = "user";
+$conf['mysql_pass'] = "pass";
+$conf['mysql_host'] = "localhost"; // Won't need to change this 90% of the time.
+$conf['mysql_database'] = "database_name";
+
+// If you're sharing the database with other tables, use a prefix to be safe.
+$conf['mysql_prefix'] = "";
+
+
+////////////////////////////////////////////////////////////////////////////////
+// General Gallery Configuration
+////////////////////////////////////////////////////////////////////////////////
+
+//location of album folder. Usually these are left null. 
+// change 'album_folder' to rename the album folder inside the zenphotos installation
+// change 'external_album_folder' to locate your album folder outside the zenphoto folders
+$conf['album_folder'] = '/albums/';
+$conf['external_album_folder'] = null;
+
+// What you want to call your photo gallery.
+$conf['gallery_title'] = "gallery";
+
+// Your web site title and address, if you have one. If not, leave blank.
+// These are used to link back to your main site, but your theme must support it.
+$conf['website_title'] = "";
+$conf['website_url'] = "";
+
+// If you're in a different time zone from your server, set the offset in hours:
+$conf['time_offset'] = 0;
+
+// If you're going to be using Google Maps, get an API key and enter it here
+// Get a key here - http://www.google.com/apis/maps/signup.html
+$conf['gmaps_apikey'] = '';
+
+// If you have Apache mod_rewrite, put true here, and you'll get nice cruft-free URLs.
+// MAKE SURE TO EDIT THE .htaccess FILE with your path information.
+$conf['mod_rewrite'] = true;
+
+// If mod_rewrite is true above, zenphoto's image page URL's usually end in .jpg, 
+// set this if you want something else appended to the end (helps search engines).
+// Examples: .html, .php, /view, etc.
+$conf['mod_rewrite_image_suffix'] = '.php';
+
+// Admin interface username (also required for running setup).
+$conf['adminuser'] = "";
+// This isn't that secure, so don't put anything here you don't want anyone to see...
+// (but make sure you change it to something other than 1234...)
+$conf['adminpass'] = "";
+
+// The email for the admin user. Used to send notification emails.
+$conf['admin_email'] = "";
+
+// If you're running a secure server, change this to 'https' (Most people will leave this alone)
+$conf['server_protocol'] = "http";
+
+// The character encoding to use internally. Leave at UTF-8 if you're unsure.
+$conf['charset'] = 'UTF-8';
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Image Processing Configuration
+////////////////////////////////////////////////////////////////////////////////
+
+// JPEG Compression quality for all images and thumbnails (respectively):
+$conf['image_quality'] = 85;
+$conf['thumb_quality'] = 75;
+
+// Default image display width (themes will be able to control this 
+// to an extent in the future, but for now you may have to adjust it to fit your theme).
+$conf['image_size'] = 595;
+
+// If this is set to true, then the longest side of the image will be $image_size.
+// Otherwise, the *width* of the image will be $image_size.
+$conf['image_use_longest_side'] = true;
+
+// Allow images to be scaled up to the requested size? This could result in loss
+// of quality, so it's off by default.
+$conf['image_allow_upscale'] = false;
+
+// Default thumbnail size and scale:
+// If $thumb_crop is set to true, then the thumbnail will be a centered portion of the image
+// with the given width and height after being resized to $thumb_size (by shortest side).
+// Otherwise, it will be the full image resized to $thumb_size (by shortest side).
+// NOTE: thumb_crop_width and height should always be less than or equal to thumb_size
+$conf['thumb_size']        = 100;
+$conf['thumb_crop']        = true;
+$conf['thumb_crop_width']  = 85;
+$conf['thumb_crop_height'] = 85;
+// Add a small amount of unsharp mask to thumbnails? Slows thumbnail generation on slow servers.
+$conf['thumb_sharpen']     = false;
+
+
+// Paging options:
+// Control of their display is done in the theme, so you might need to change these
+// after switching themes to make it look better.
+$conf['albums_per_page'] = 5;
+$conf['images_per_page'] = 15;
+
+
+// Watermarking Options (uses a 24bit png in the zp-core/images directory)
+$conf['perform_watermark'] = true;
+$conf['watermark_image'] = "images/watermark.png";
+// Video Watermarking Options
+$conf['perform_video_watermark'] = false;
+$conf['video_watermark_image'] = "images/videoWatermark.png";
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Comment cleaning configuration
+////////////////////////////////////////////////////////////////////////////////
+
+// Tags and attributes allowed in comments
+// Follow the array form array('tag' => array('attribute' => array()))
+$conf['allowed_tags'] = array (
+	'a'          => array ('href' => array (), 'title' => array ()), 
+	'abbr'       => array ('title' => array ()), 
+	'acronym'    => array ('title' => array ()), 
+	'b'          => array (), 
+	'blockquote' => array ('cite' => array ()),
+	'code'       => array (),
+	'em'         => array (), 
+	'i'          => array (),
+	'strike'     => array (), 
+	'strong'     => array (),
+	'ul'         => array (),
+	'ol'         => array (),
+	'li'         => array (),
+);
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Path Overrides
+////////////////////////////////////////////////////////////////////////////////
+// Uncomment the following two lines ONLY IF YOU'RE HAVING PROBLEMS,
+// like "file not found" or "not readable" errors.
+// These allow you to override Zenphoto's detection of the correct paths
+// on your server, which might work better on some setups.
+////////////////////////////////////////////////////////////////////////////////
+
+// define('WEBPATH', '/zenphoto');
+// define('SERVERPATH', '/full/server/path/to/zenphoto');
+
+
+
+/** Do not edit below this line. **/
+/**********************************/
+
+$_zp_conf_vars = $conf;
+
+?>

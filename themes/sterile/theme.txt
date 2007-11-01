@@ -1,6 +1,0 @@
-# Zenphoto theme definition file
-name::Sterile
-author::Levi Buzolic
-version::1.0
-date::9/17/2005
-desc::A clean white 'sterile' theme by Levi from <a href="http://www.loadedreality.com">loadedreality.com</a>. You should change your thumbnail size to 85 in zp-config.php if you use this theme.

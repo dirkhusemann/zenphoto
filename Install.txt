@@ -18,5 +18,5 @@ http://www.zenphoto.org/trac/wiki/ZenphotoInstall
    chmod 777 albums/ cache/
    or use your FTP program.
 
-5. Go to http://www.yoursite.com/zenphoto/zen/setup.php and follow the
+5. Go to http://www.yoursite.com/zenphoto/zp-core/setup.php and follow the
    simple instructions.

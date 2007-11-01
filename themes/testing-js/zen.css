@@ -40,7 +40,7 @@ HR.space { margin: 12px 0px; }
 
 
 #images { margin: 5px 0px 10px; clear: both; }
-#albums { clear: both; margin: 5px 0px 10px; padding; 0px; }
+#albums { clear: both; margin: 5px 0px 10px; padding: 0px; }
 .pagenav { margin: 5px 0px 5px; font-size: 8pt; font-weight: bold; color: #CCC; clear: both; }
 .pagenav A:link, .pagenav A:visited { color: #333; text-decoration: none; }
 .disabledlink { color: #ddd; cursor: default; }
@@ -101,4 +101,11 @@ UL.pagelist LI.current A { background-color: #3366CC; color: #FFF; cursor: defau
 .imgcommentform INPUT { margin-top: 4px; border: 1px solid #eee; background-color: #f8f8f8; }
 .imgcommentform TEXTAREA { margin-top: 4px; font-family: Arial, helvetica, verdana, sans-serif; font-size: 10pt; border: 1px solid #eee;}
 .error { color: #C33; font-weight: bold; }
+/* Admin Toolbox
+------------------------------ */
+#admin, #admin_data{position:fixed;right:0;top:0;border-left: 1px solid #E6E6DF;border-bottom: 1px solid #E6E6DF;background: #fff;width:120px;}
+#admin_data{top:15px;}
+#admin h3 {font: 100% "Helvetica Neue", Helvetica, Arial, sans-serif;font-weight: bold;color: #000;border-bottom: 1px dashed #E6E6DF;margin:0;padding:0;}
 
+#search{float:right;width:150px;margin-top:-15px;}
+#search #search_input{width:75px;}

@@ -2,7 +2,7 @@
 -----------------------------------------------
 Photo Gallery Templates: Main Style Sheet
 Author:   Douglas Bowman
-Version:  1.0.2 - 24 Aug 2005
+Version:  1.1 - 10 May 2006
 The design and Movable Type templates that 
 build these pages are available for anyone to 
 download and use:
@@ -14,7 +14,6 @@ body {
   margin:0;
   padding:0;
   font:small Verdana,Sans-serif;
-  line-height:1.6em;
   color:#333;
   }
 .title, .index {
@@ -24,11 +23,13 @@ body {
   position:relative;
   margin:1.6em 0 0;
   padding:26px 15px 15px;
+  font-size:85%;
+  line-height:1.6;
   }
 .photosolo #content {
   padding:25px 0 15px;
   }
-.index #content, .archive #content {
+.index #content, .archive #content, .recentcomments #content, .comments-entry #content {
   width:720px;
   margin-left:auto;
   margin-right:auto;
@@ -41,30 +42,20 @@ body {
   text-align:left;
   }
 .comments-entry #content {
-  max-width:50em;
   margin-top:1em;
-  margin-left:133px;
   padding-top:0;
-  }
-.recentcomments #content {
-  width:750px;
-  max-width:50em;
-  margin-left:auto;
-  margin-right:auto;
-  }
-.recentcomments>#content {
-  width:auto;
   }
 
 
 /* =Links
 ----------------------------------------------- */
-a {
+a, a:visited {
   color:#258;
   text-decoration:none;
   border-bottom:1px solid #469;
+  outline:none;
   }
-html>body a {
+html>body a, html>body a:visited {
   border-bottom-style:dotted;
   }
 a:hover, a:active {
@@ -85,7 +76,7 @@ a.btn img, a.i>img {
 ----------------------------------------------- */
 h2 {
   margin:.5em 0 .75em;
-  font:120% "Trebuchet MS",Verdana,Sans-serif;
+  font:145% "Trebuchet MS",Verdana,Sans-serif;
   color:#974;
   }
 h2 .btn {
@@ -93,11 +84,11 @@ h2 .btn {
   font-weight:normal;
   color:#666;
   }
-.index h2, .archive h2, .recentcomments h2 {
+.index h2, .galleries h2, .archive h2, .recentcomments h2 {
   background:url("../img/slide_minis.gif") no-repeat 50% 0;
   margin:0 0 8px;
   padding:24px 0 0;
-  font-size:85%;
+  font-size:100%;
   line-height:1.4em;
   font-family:"Gill Sans","Trebuchet MS",Verdana,Sans-serif;
   font-weight:normal;
@@ -111,6 +102,10 @@ h2 .btn {
   top:-10px;
   margin-bottom:0;
   }
+.gallery .galleries h2 {
+  top:-20px;
+  }  
+
 
 
 /* =Lists
@@ -118,8 +113,6 @@ h2 .btn {
 ul {
   margin:.5em 0 1.5em;
   padding:0;
-  font-size:85%;
-  line-height:1.6em;
   }
 li {
   background:url("../img/bullet_white.gif") no-repeat 5px .55em;
@@ -175,10 +168,6 @@ p {
 .buttons p {
   margin:0;
   }
-.sub {
-  font-size:85%;
-  line-height:1.6em;
-  }
 .note, .error {
   color:#c33;
   }
@@ -215,16 +204,23 @@ input, textarea, select, code {
 .mainbutton {
   margin:0;
   padding:5px 0 10px;
-  font-size:85%;
-  line-height:1.6em;
+  font-size:100%;
   text-align:center;
+  }
+.galleries .mainbutton {
+  margin:0;
   }
 #commentblock .mainbutton {
   padding-top:0;
   }
+em.date {
+  font-style:normal;
+  }
 
 
 /* =Path
+Breadcrumb navigation that gets positioned to
+the top of the page.
 ----------------------------------------------- */
 #path {
   background:#000 url("../img/bg_path.gif");
@@ -253,7 +249,7 @@ h1 {
   margin:0 0 3px;
   padding:0 0 .35em;
   border-bottom:1px solid #ddd;
-  font:180% "Gill Sans","Trebuchet MS",Verdana,Sans-serif;
+  font:200% "Gill Sans","Trebuchet MS",Verdana,Sans-serif;
   line-height:1.2em;
   text-align:center;
   text-transform:uppercase;
@@ -267,43 +263,6 @@ h1 {
 .title h1 a, .title h1 a:visited {
   border-bottom-width:0;
   border-style:none;
-  }
-.auto h1 {
-  margin:10px 0 .5em;
-  padding:0;
-  border-width:0;
-  font-size:150%;
-  line-height:1.2em;
-  color:#333;
-  text-align:left;
-  text-transform:none;
-  letter-spacing:0;
-  }
-.auto #titleimg {
-  background:#bbb;
-  position:relative;
-  top:3px;
-  left:3px;
-  float:left;
-  width:500px;
-  height:380px;
-  margin:0 0 10px 0;
-  padding:0;
-  border-width:0;
-  }
-.auto .v #titleimg {
-  width:380px;
-  height:500px;
-  }
-html>body .auto #titleimg {
-  background:url("../img/bg_shadow.png");
-  }
-.auto #titleimg img {
-  display:block;
-  position:relative;
-  top:-3px;
-  left:-3px;
-  border:10px solid #fff;
   }
 
 h1 a, h1 a:hover, .auto #titleimg a {
@@ -321,13 +280,48 @@ h1 img {
   }
 
 
-/* =Gallery Title
+/* =Auto-generated title images
+----------------------------------------------- */
+.auto h1 {
+  margin:10px 0 .5em;
+  padding:0;
+  border-width:0;
+  font-size:170%;
+  line-height:1.2em;
+  color:#333;
+  text-align:left;
+  text-transform:none;
+  letter-spacing:0;
+  }
+.auto #titleimg {
+  background:#bbb;
+  position:relative;
+  top:3px;
+  left:3px;
+  float:left;
+  margin:0 0 10px 0;
+  padding:0;
+  border-width:0;
+  }
+html>body .auto #titleimg {
+  background:url("../img/bg_shadow.png");
+  }
+.auto #titleimg img {
+  display:block;
+  position:relative;
+  top:-3px;
+  left:-3px;
+  border:10px solid #fff;
+  }
+
+
+/* =Gallery Description
+Text block appearing on Gallery Title page
 ----------------------------------------------- */
 #gallerydesc {
   position:relative;
   margin:-110px 29px 0 405px;
-  font-size:85%;
-  line-height:1.6em;
+  font-size:100%;
   }
 .auto #gallerydesc, .v #gallerydesc {
   float:right;
@@ -347,7 +341,8 @@ h1 img {
   }
 
 
-/* =Gallery Index
+/* =Gallery Listing
+Module showing all galleries in system
 ----------------------------------------------- */
 #secondary {
   float:left;
@@ -362,75 +357,103 @@ h1 img {
   padding:0 4px;
   text-align:left;
   }
-.module p {
-  font-size:85%;
-  line-height:1.6em;
-  }
+
 .galleries {
   background:#eee;
   float:left;
-  width:720px;
+  width:100%;
   margin:0 0 15px;
-  padding:1px 0;
-  text-align:center;
+  position:relative;
+  }
+.gallery .galleries {
+  float:left;
+  position:relative;
+  width: 720px;
+  margin:0 0 15px;
+  padding:0;
+  list-style:none;
+  padding-top:10px;
+  line-height:1.4em;
+  }
+.gallery .galleries .thumb {
+  float:left;
+  margin:0 10px 10px 0;
   }
 .index .galleries {
-  margin-bottom:10px;
-  padding-bottom:1px;
+  margin-bottom:5px;
   }
 .galleries ul {
   float:left;
-  width:100%;
-  margin:0;
-  padding:0;
+  margin-left:0;
+  margin-bottom:0;
   list-style:none;
   text-align:left;
   }
 .galleries li {
-  background:url(../img/bg_thumb.gif) 15px 0 no-repeat;
-  position:relative;
+  background-image:none;
   float:left;
+  position:relative;
   width:220px;
-  margin:0;
-  padding:4px 0 15px 15px;
+  height:6.4em;
+  overflow:hidden;
+  margin-bottom:0;
+  padding:75px 0 1.6em 15px;
   }
-.galleries img {
-  padding-left: 4px;
-  }
-div.useslides ul li {
-  background-position:64px 0;
-  padding-top:130px;
-  text-align:center;
+.archive .galleries li {
+  height:10.5em;
   }
 .galleries h3 {
-  margin:.5em 10px .25em 4px;
-  font:bold 100% Verdana,Sans-serif;
-  line-height:1.2em;
+  margin:0 10px 0 4px;
+  font-size:100%;
   }
-.useslides h3 {
-  margin-right:0;
-  }
-.galleries h3 a, .galleries a.img {
+.galleries h3 a, .galleries a.img, .galleries h3 a:visited {
   border-width:0;
   }
-.galleries li .img {
-  /*position:absolute;
-  top:4px;
-  left:19px;*/
+.galleries .img {
+  position:absolute;
+  top:0;
+  left:15px;
   }
-.useslides li .img {
-  left:65px;
+.galleries .img img {
+  display:block;
   }
-.galleries ul p {
-  margin:.35em 10px 0 4px;
+.galleries p {
+  margin:0 10px 0 4px;
   }
-.useslides ul p {
-  margin-right:0;
+.galleries div {
+  margin:0 4px;
   }
-em.date {
-  font-style:normal;
+.gal {
+  background:url("../img/bg_gal.gif") 11px -4px no-repeat;
+  margin:0;
+  }
+html>body .gal {
+  background-image:url("../img/bg_gal.png");
   }
 
+
+/* =Auto-generated Gallery Index
+Slide-formatted list of all galleries
+----------------------------------------------- */
+.useslides ul {
+  text-align:center;
+  }
+.useslides li {
+  padding-top:128px;
+  }
+.useslides .thumb {
+  position:absolute;
+  top:0;
+  left:62px;
+  }
+.useslides p {
+  margin-right:4px;
+  }
+
+
+/* Feed links
+Links to feeds appearing at bottom of Gallery Archive
+----------------------------------------------- */
 #feeds {
   float:left;
   width:100%;
@@ -439,8 +462,6 @@ em.date {
 #feeds ul {
   margin:15px 0 0;
   padding:9px 0;
-  font-size:85%;
-  line-height:1.6em;
   list-style:none;
   text-align:center;
   }
@@ -465,6 +486,7 @@ em.date {
 
 
 /* =GalleryData
+Table of stats appearing on Gallery Index
 ----------------------------------------------- */
 .gallerydata {
   width:100%;
@@ -474,9 +496,8 @@ em.date {
 .gallerydata th, .gallerydata td {
   padding:5px;
   border-bottom:1px solid #ccc;
-  font-size:85%;
-  line-height:1.6em;
   font-weight:normal;
+  vertical-align:middle;
   }
 .gallerydata td {
   text-align:right;
@@ -484,60 +505,52 @@ em.date {
   }
 
 
-/* =FavList
+/* =RandomList
+Module on Index page displaying tiny thumbnails 
+of most recent favorite photos
 ----------------------------------------------- */
-#favlist {
+#randomlist {
   float:left;
   width:204px;
   margin:0 -3px 0 0;
   padding:0 0 0 6px;
   list-style:none;
   }
-#favlist li {
+#randomlist li {
   background:url("../img/bg_slide_sm.gif") 0 0 no-repeat;
   float:left;
   width:62px;
   margin:0 6px 6px 0;
   padding:0;
   }
-#favlist>li {
+html>body #randomlist li {
   background-image:url("../img/bg_slide_sm.png");
   }
-#favlist li a {
-  display:block;
-  float:left;
-  width:48px;
-  height:36px;
-  padding:12px 8px 14px 6px;
-  border-width:0;
+#randomlist table {
+  width:62px;
+  height:62px;
+  margin:0;
+  border-collapse:collapse;
+  font-size:1px;
+  }
+#randomlist td {
+  padding:0 2px 2px 0;
   text-align:center;
+  vertical-align:middle;
   }
-#favlist li a.v {
-  width:36px;
-  height:48px;
-  padding:6px 14px 8px 12px;
-  }
-#favlist li a img {
-  display:block;
-  width:46px;
-  height:34px;
-  border:1px solid;
-  border-color:#ccc #eee #eee #ccc;
-  }
-#favlist li a.v img {
-  width:34px;
-  height:46px;
+#randomlist li a {
+  border-width:0;
   }
 
 
-/* =Gallery Pages
+/* =Gallery Info
+Title, description, & prefs on Photo Gallery page
 ----------------------------------------------- */
 .galleryinfo {
   clear:left;
   float:left;
   width:22%;
   margin:0;
-  font-size:85%;
   line-height:1.4em;
   }
 .galleryinfo h1 {
@@ -571,174 +584,166 @@ em.date {
   }
 
 
-/* =Photos
+/* =Thumbs
+Reusable style for thumbnail photos as slides
 ----------------------------------------------- */
-.slides {
+.thumb {
+  background:url("../img/bg_slide.gif") 0 0 no-repeat;
+  display:block;
+  float:left;
+  margin:0;
+  padding:0 3px 3px 0;
+  }
+html>body .thumb {
+  background-image:url("../img/bg_slide.png");
+  }
+.thumb span {
+  background-repeat:no-repeat;
+  background-position:50% 104px;
+  display:block;
+  }
+.thumbv span {
+  background-position:9px 50%;
+  }
+.thumb em {
+  background-repeat:no-repeat;
+  background-position:50% 50%;
+  display:block;
+  }
+.thumb a, .thumb a:link, .thumb a:visited {
+  background:none !important;
+  display:block;
+  width:120px;
+  height:120px;
+  border:none;
+  text-indent:-9999px;
+  font-size:1px;
+  line-height:1px;
+  }
+
+
+/* =Slideset
+Normal group of slide-like thumbnails
+----------------------------------------------- */
+.slideset {
   float:right;
+  position:relative;
   width:75%;
   margin:0 0 15px;
   padding:0;
   list-style:none;
-  font-size:85%;
   line-height:1.4em;
   }
-.slides li, .slides p, p.slides, .useslides ul li {
-  background:url("../img/bg_slide.gif") 0 0 no-repeat;
-  }
-.slides li, .slides p, p.slides {
-  display:block;
+.slideset .thumb {
   float:left;
-  width:123px;
   margin:0 10px 10px 0;
-  padding:0;
   }
-.slides>li, .slides>p, dd>p.slides, .useslides>ul li {
-  background-image:url("../img/bg_slide.png");
-  }
-.slides a, .slides a:visited, .slides a:hover, .useslides a.img, .useslides a.img:visited, .useslides a.img:hover {
-  background-repeat:no-repeat;
-  background-position:50% 103px;
-  display:block;
-  width:92px;
-  height:92px;
-  padding:19px 9px 12px 19px !important; 
-  padding:19px 14px 12px 14px;
-  border-width:0;
-  text-align:center;
-  }
-.slides a, .slides a:visited, .slides a:hover {
-  float:left;
-  }
-.slides a.v, .slides a.v:visited, .slides a.v:hover, .useslides a.v, .useslides a.v:visited, .useslides a.v:hover {
-  background-position:10px 50%;
-  width:70px;
-  height:92px;
-  padding:14px 28px 17px 25px;
-  }
-.slides img, .useslides .img img {
-  display:block;
-  border:1px solid;
-  border-color:#aaa #ddd #ddd #aaa;
-  }
+  
 
-
-/* =Individual photo
+/* =Individual Photo
 ----------------------------------------------- */
-#main {
+/* NOTE:
+   See [custom.css] to customize your own 
+   photo dimensions with override values. */
+.main {
+  width:500px;
+  margin:0 auto;
   text-align:center;
   }
-#photo_container {
-  float:right;
-  width:500px;
-  text-align: center;
-  margin:0 0 10px 0;
+#photo {
+  margin:0 0 10px;
   }
-#photo_container img {  
-  border:10px solid #fff;
-  }
-p#photo {
+#photo strong {
   background:#bbb;
-  display:block;
-  float:right;
   position:relative;
+  display:block;
   top:3px;
   left:3px;
-  width:500px;
   margin:0 0 10px 0;
   border-width:0;
   }
-html>body p#photo {
+html>body #photo strong {
   background:url("../img/bg_shadow.png");
   }
-p#photo img {
+#photo img {
   display:block;
   position:relative;
   top:-3px;
   left:-3px;
   border:10px solid #fff;
   }
-.v p#photo {
-  width:380px;
-  margin-left:60px;
-  margin-right:60px;
-  }
 
+
+/* =PrevNext Nav (Individual Photo template)
+Thumbnails used for prev/next photo navigation
+----------------------------------------------- */
+#prevnext {
+  position:absolute;
+  top:25px;
+  left:50%;
+  }
 #prev, #next {
   position:absolute;
-  float:none;
-  top:25px;
-  left:0;
-  width:50%;
+  top:0;
+  width:123px;
   margin:0;
-  text-align:right;
-  font-size:85%;
-  line-height:1.6em;
   font-weight:bold;
   }
+#prev {
+  right:262px;
+  }
 #next {
-  left:auto;
-  right:0;
-  text-align:left;
+  left:265px;
   }
-#prev p {
-  float:right;
-  margin:0 0 0 0;
-  padding:0 12px 0 0;
-  }
-#prev>p {
-  padding-right:262px;
-  }
-#next p {
-  background-position:265px 0;
-  float:left;
-  margin:0 0 0 0;
-  padding:0 0 0 265px;
+#prev a, #next a {
+  width:120px;
   }
 
-.slides p a em {
+
+/* =PrevNextHovers (Individual Photo template)
+The two hoverable regions overlaying the main photo
+----------------------------------------------- */
+/* Note:
+   Width and height for the following
+   strong element is set inline using the style 
+   attribute. Both values are automatically 
+   determined by taking the width/height of the 
+   main photo.
+   Width is ((width of main photo + 20) / 2).
+   Height is (height of main photo + 20). */
+#prevnext a strong {
   position:absolute;
   top:0;
-  left:auto;
-  right:-250px;
-  width:250px;
-  height:380px;
-  text-indent:-10000px;
   }
-.slides>p a em {
-  right:0;
-  }
-#next p a em {
-  left:0;
-  right:auto;
-  }
-.v .slides p a em {
-  width:190px;
-  height:500px;
-  }
-#prev a em {
+#prev a strong {
   background:url("../img/photonav_prev.gif") no-repeat 50% -100px;
+  right:-262px;
   }
-#prev a>em {
+#next a strong {
+  background:url("../img/photonav_next.gif") no-repeat 50% -100px;
+  left:-265px;
+  }
+html>body #prev a strong {
   background-image:url("../img/photonav_prev.png");
   }
-#next a em {
-  background:url("../img/photonav_next.gif") no-repeat 50% -100px;
-  }
-#next a>em {
+html>body #next a strong {
   background-image:url("../img/photonav_next.png");
   }
-#prev a:hover em, #next a:hover em, #prev a:active em, #next a:active em {
+#prev a:hover strong, #next a:hover strong, #prev a:active strong, #next a:active strong {
   background-position:50% 10px;
   cursor:pointer;
   }
 
+
+/* =Description (Individual Photo template)
+Title and description of photo
+----------------------------------------------- */
 #desc {
-  float:right;
+  position:absolute;
+  top:170px;
+  right:0;
   width:50%;
-  margin-left:-250px;
-  padding-top:145px;
-  font-size:85%;
-  line-height:1.6em;
+  text-align:left;
   }
 #desc h1 {
   background:url("../img/divider_r.gif") no-repeat 265px 0;
@@ -752,23 +757,25 @@ p#photo img {
   text-transform:none;
   text-align:left;
   }
-#desc>h1 {
+html>body #desc h1 {
   background-image:url("../img/divider_r.png");
   }
-#desc p, #desc>div {
+#desc p {
   max-width:30em;
-  margin:0;
-  margin-left: 260px;
-  padding:3px;
-  border-width:0;
-  line-height:1.6em;
-  letter-spacing:0;
-  text-transform:none;
-  text-align:left;
+  margin:0 0 .75em 250px;
+  padding:0 15px 0 0;
+  }
+#desc #imageDesc {
+  padding-left:265px;
   }
 #desc p.posted {
   margin-top:1.25em;
   }
+
+
+/* =Meta info (Individual Photo template)
+Photo x of y, date, and keywords
+----------------------------------------------- */
 #meta {
   position:absolute;
   top:170px;
@@ -777,13 +784,8 @@ p#photo img {
   }
 #meta ul {
   margin:0;
-  padding:0 15px 0 15px;
-  font-size:85%;
-  line-height:1.6em;
+  padding:0 265px 0 15px;
   list-style:none;
-  }
-#meta>ul {
-  padding-right:265px;
   }
 #meta li {
   background:none;
@@ -796,12 +798,14 @@ p#photo img {
   padding-top:10px;
   padding-bottom:5px;
   }
-#meta ul>li.count {
+html>body #meta li.count {
   background-image:url("../img/divider_l.png");
   }
 
 
 /* =Count
+Miscellaneous portions of the UI that display
+a total count of photos for each gallery
 ----------------------------------------------- */
 .count {
   font-style:italic;
@@ -828,6 +832,9 @@ input.btn, .header form select {
 
 
 /* =Comments
+General div IDs and headings that surround the 
+comment listing for an entry. These are the divs
+the JavaScript uses to hide/show comments
 ----------------------------------------------- */
 #commentblock {
   display:block;
@@ -841,7 +848,7 @@ input.btn, .header form select {
   }
 #commentblock h2 {
   margin-top:0;
-  font:85% Verdana,Sans-serif;
+  font:100% Verdana,Sans-serif;
   color:#333;
   }
 #commentblock h2 a {
@@ -857,21 +864,25 @@ input.btn, .header form select {
 #showcomments, #hidecomments, #addcommentbutton {
   display:none;
   }
-
 #addcomment h2 {
   margin-top:.5em;
   text-align:left;
-  font:120% "Trebuchet MS",Verdana,Sans-serif;
+  font:140% "Trebuchet MS",Verdana,Sans-serif;
   color:#974;
   }
 
+
+/* =Comment photo
+Region on comment preview/error pages that displays
+the thumbnail image, photo name, date, & keywords
+----------------------------------------------- */
 #comment-photo {
-  background:#bbb;
-  padding:45px 15px 12px;
-  border-bottom:3px solid #aaa;
+  float:left;
+  width:100%;
+  padding:35px 0 12px;
   }
 #comment-photo #desc {
-  float:none;
+  position:static;
   width:auto;
   margin-left:133px;
   padding:22px 0 2px;
@@ -884,23 +895,13 @@ input.btn, .header form select {
   margin:0;
   padding:0;
   }
-#comment-photo ul.slides {
-  float:left;
-  width:133px;
-  margin:0;
-  }
-#comment-photo .slides li {
-  margin-bottom:0;
-  margin-right:0;
-  }
-#comment-photo .slides li a {
-  }
 
 
+/* =CommentList
+List of existing comments for an entry
+----------------------------------------------- */
 dl.commentlist, ul.commentlist {
   margin-bottom:1.5em;
-  font-size:85%;
-  line-height:1.6em;
   }
 #commentblock .commentlist {
   margin-bottom:1em;
@@ -927,6 +928,7 @@ dl.commentlist, ul.commentlist {
   border-bottom-width:0;
   border-style:none;
   }
+
 p.comment-error {
   margin:0 0 1.5em;
   color:#c33;
@@ -935,8 +937,6 @@ p.comment-error {
   margin-top:2em;
   }
 #comment-notes p {
-  font-size:85%;
-  line-height:1.6em;
   color:#554;
   }
 
@@ -956,6 +956,10 @@ a.commentlink:hover {
   text-decoration:none;
   }
 
+
+/* =Recent Comments
+Only used on recent comments listing page
+----------------------------------------------- */
 .recentcomments .commentlist {
   float:left;
   width:100%;
@@ -968,13 +972,9 @@ a.commentlink:hover {
   float:left;
   width:100%;
   min-height:138px;
-  height:138px;
   margin:0 0 15px;
   padding:0 0 15px;
   border-bottom-width:0;
-  }
-.recentcomments .commentlist>li {
-  height:auto;
   }
 .recentcomments li p {
   margin-left:148px;
@@ -986,7 +986,8 @@ a.commentlink:hover {
   padding-left:148px;
   font-style:italic;
   }
-.recentcomments p.slides {
+.recentcomments p.thumb {
+  float:left;
   background-position:15px 0;
   height:123px;
   margin:15px 10px 0 0;
@@ -1003,7 +1004,8 @@ a.commentlink:hover {
   }
 
 
-/* =Comment Table
+/* =Comment Form
+Comment Submission form
 ----------------------------------------------- */
 #comments-form table {
   width:100%;
@@ -1020,7 +1022,6 @@ a.commentlink:hover {
   padding:5px 10px 5px 0;
   border-bottom:1px dotted #bbb;
   font-weight:normal;
-  font-size:85%;
   }
 #comments-form th {
   text-transform:lowercase;
@@ -1081,41 +1082,59 @@ a.commentlink:hover {
   color:#933;
   border-bottom-width:1px;
   }
-
-/* =Page Navigation
+  
+/* Labels
 ----------------------------------------------- */
-.galleryinfo ul.pagelist {
-	padding: 0;
-	margin: 0;
-	list-style-type: none;
-	padding: .5em 0 0 0;
-  	border-top:1px dotted #ccc;
+.backward {background-image:url("../img/txt_backward.gif");}
+.forward {background-image:url("../img/txt_forward.gif");}
+
+/* Admin Toolbox
+----------------------------------------------- */
+#admin, #admin_data{
+	position:fixed;
+	right:0;
+	top:0;
+	border-left: 1px solid #333;
+	border-bottom: 1px solid #333;
+	background: #000;
+	width:120px;
+  padding: 2px 0px 4px 4px;
 }
-.galleryinfo ul.pagelist li {
-	padding: 0;
-	margin: 0;
-	background: none;
-	display: inline;
-	list-style-type: none;
+#admin_data{
+	top: 20px;
 }
-.galleryinfo ul.pagelist li a, ul.pagelist span.disabledlink {
-	margin: 0 4px;
+#admin_data a {
+  color: #4480C7;
 }
-.galleryinfo ul.pagelist li.current a {
-	cursor: default;
-	border: 0;
-	color: #333;
-}
-.galleryinfo ul.pagelist li.prev {
-	margin-right: 0;
-}
-.galleryinfo ul.pagelist li.next {
-	margin-left: 0;
-}
-.galleryinfo .disabledlink {
-	cursor: default;
-}
-.galleryinfo .pagenav {
-	clear: both;
+#admin h3 {
+	font: 100% "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	color: #ccc;
+	border-bottom: 1px solid #333;
+	margin:0;
+	padding:0;
 }
 
+/* Search Form
+----------------------------------------------- */
+#search {
+	position:absolute;
+	top:4px;
+	left:5px;
+	width:200px;
+	z-index:9999;
+}
+#search #search_input {
+	width:90px;
+	font-size:85%;
+  background-color: #999;
+  border: 1px solid #bbb;
+}
+#search #search_input:focus {
+  background-color: #ccc; 
+}
+#search #search_submit {
+	font-size:85%;
+  background-color: #999;
+  border: 1px solid #bbb;
+}

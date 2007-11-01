@@ -4,12 +4,13 @@
 <head>
   <title><?php printGalleryTitle(); ?></title>
   <link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
+  <?php printRSSHeaderLink('Gallery','Gallery RSS'); ?>
   <?php zenJavascript(); ?>
 </head>
 <body>
 <div id="main">
   <div id="gallerytitle">
-    <h2><?php echo getGalleryTitle(); ?></h2>
+    <h2><?php echo getGalleryTitle(); ?><?php if (getOption('Allow_search')) {  printSearchForm(); } ?></h2>
   </div>
   
   <hr />
@@ -33,10 +34,11 @@
   
   <?php printPageNav("&laquo; prev", "|", "next &raquo;"); ?>
   
-  <div id="credit"><?php printSortableGalleryLink('Sort Gallery', 'Manual sorting', NULL, 'credit'); ?> <?php printAdminLink('Admin', ' | ', ' | '); ?>Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
+  <div id="credit"><?php printRSSLink('Gallery','','RSS', ''); ?> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
 
 </div>
 
+<?php printAdminToolbox(); ?>
 
 </body>
 </html>

@@ -1,9 +1,13 @@
-<?php if (!defined('WEBPATH')) die(); ?>
+<?php if (!defined('WEBPATH')) die(); $themeResult = getTheme($zenCSS, $themeColor, 'light'); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
 	<title><?php printGalleryTitle(); ?> | <?php echo getAlbumTitle();?> | <?php echo getImageTitle();?></title>
-	<link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
+	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
+    <link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
+	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/jquery.js" type="text/javascript"></script>
+	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.js" type="text/javascript"></script>
+	<?php printRSSHeaderLink('Gallery','Gallery RSS'); ?>
 	<script type="text/javascript">
 	  function toggleComments() {
       var commentDiv = document.getElementById("comments");
@@ -14,38 +18,43 @@
       }
 	  }
 	</script>
-<?php zenJavascript(); ?>
+    <?php printRSSHeaderLink('Gallery','Gallery RSS'); ?>
+	<?php zenJavascript(); ?>
 </head>
 
 <body>
+<?php printAdminToolbox(); ?>
 
 <div id="main">
 
-	<div class="imgnav">
-		<?php if (hasPrevImage()) { ?>
-		<div class="imgprevious"><a href="<?php echo getPrevImageURL();?>" title="Previous Image">&laquo; prev</a></div>
-		<?php } if (hasNextImage()) { ?>
-		<div class="imgnext"><a href="<?php echo getNextImageURL();?>" title="Next Image">next &raquo;</a></div>
-		<?php } ?>
-	</div>
-		
 	<div id="gallerytitle">
-		<h2><span><a href="<?php echo getGalleryIndexURL();?>" title="Gallery Index"><?php echo getGalleryTitle();?></a>
-		  | <a href="<?php echo getAlbumLinkURL();?>" title="Gallery Index"><?php echo getAlbumTitle();?></a>
-		  | </span> <?php printImageTitle(true); ?></h2>
+		<h2><span><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?>
+          </a> | <?php printParentBreadcrumb("", " | ", " | "); ?><a href="<?php echo getAlbumLinkURL();?>" title="Album Thumbnails"><?php echo getAlbumTitle();?></a> | 
+          </span> <?php printImageTitle(true); ?></h2>
+        <div class="imgnav">
+			<?php if (hasPrevImage()) { ?>
+			<div class="imgprevious"><a href="<?php echo getPrevImageURL();?>" title="Previous Image">&laquo; prev</a></div>
+			<?php } if (hasNextImage()) { ?>
+			<div class="imgnext"><a href="<?php echo getNextImageURL();?>" title="Next Image">next &raquo;</a></div>
+			<?php } ?>
+		</div>
 	</div>
 
 	<div id="image">
 		<a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>"> <?php printDefaultSizedImage(getImageTitle()); ?></a> 
-	</div>
-  
-  <?php printImageMetadata(); ?>
+    </div>
 	
 	<div id="narrow">
-	
+    	<?php 
+      if (getImageEXIFData()) {echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=380&width=300&inlineId=imagemetadata\" title=\"Image Info\" class=\"thickbox\">Image Info</a></div>";
+        printImageMetadata('', false); 
+      } ?>
 		<?php printImageDesc(true); ?>
+      <?php printTags(true, 'Tags: '); ?>
+		<?php printImageMap(); ?>
 		
-		<div id="comments">
+		<?php if (getOption('Allow_comments')) { ?>
+        <div id="comments">
 		<?php $num = getCommentCount(); echo ($num == 0) ? "" : ("<h3>Comments ($num)</h3>"); ?>
 			<?php while (next_comment()):  ?>
 			<div class="comment">
@@ -59,7 +68,7 @@
 					<?php echo getCommentDate();?>
 					,
 					<?php echo getCommentTime();?>
-          <?php printEditCommentLink('Edit', ' | ', ''); ?>
+          			<?php printEditCommentLink('Edit', ' | ', ''); ?>
 				</div>
 			</div>
 			<?php endwhile; ?>
@@ -69,8 +78,21 @@
 				<form id="commentform" action="#" method="post">
 				<div><input type="hidden" name="comment" value="1" />
           		<input type="hidden" name="remember" value="1" />
-          <?php if (isset($error)) { ?><tr><td><div class="error">There was an error submitting your comment. Name, a valid e-mail address, and a comment are required.</div></td></tr><?php } ?>
-
+              <?php 
+              if (isset($error)) { 
+                echo "<tr>";
+                  echo "<td>";
+                    echo '<div class="error">';
+                    if ($error == 1) {
+                      echo "There was an error submitting your comment. Name, a valid e-mail address, and a spam-free comment are required.";
+                    } else {
+                      echo "Your comment has been marked for moderation.";
+                    }
+                    echo "</div>";
+                  echo "</td>";
+                echo  "</tr>";
+              } 
+              ?>
 					<table border="0">
 						<tr>
 							<td><label for="name">Name:</label></td>
@@ -94,9 +116,11 @@
 				</form>
 			</div>
 		</div>
+        <?php } ?>
 	</div>
 </div>
 
-<div id="credit"><?php printAdminLink('Admin', '', ' | '); ?>Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
+<div id="credit"><?php printRSSLink('Gallery','','RSS', ' | '); ?> <a href="<?php echo getGalleryIndexURL();?>?p=archive?p=archive">Archive View</a> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
+
 </body>
 </html>

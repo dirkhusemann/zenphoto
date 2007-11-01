@@ -10,6 +10,6 @@ http://stopdesign.com/templates/photos/
 
 /* Imported Styles
 ----------------------------------------------- \*/
-@import url("photos\.css");
-@import url("labels\.css");
+@import url("photos.css");
+@import url("custom.css");
 /* */

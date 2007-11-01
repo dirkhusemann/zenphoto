@@ -1,47 +1,50 @@
-<?php if (!defined('WEBPATH')) die(); ?>
+<?php if (!defined('WEBPATH')) die(); $themeResult = getTheme($zenCSS, $themeColor, 'light'); ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-
 	<title><?php printGalleryTitle(); ?></title>
-	<link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
+	<link rel="stylesheet" href="<?php echo  $zenCSS ?>" type="text/css" />
+	<?php printRSSHeaderLink('Gallery','Gallery RSS'); ?>
 	<?php zenJavascript(); ?>
-
 </head>
 
 <body>
+<?php printAdminToolbox(); ?>
 
 <div id="main">
 
 	<div id="gallerytitle">
 		<h2><?php echo getGalleryTitle(); ?></h2>
+        <?php if (getOption('Allow_search')) {  printSearchForm(); } ?>
 	</div>
-	
-	<div id="albums">
-		<?php while (next_album()): ?>
-		<div class="album">
-			<a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>">
-			<?php printAlbumThumbImage(getAlbumTitle()); ?>
-			</a>
-			<div class="albumdesc">
-        <small><?php printAlbumDate("Date Taken: "); ?></small>
-				<h3><a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
-				<p><?php printAlbumDesc(); ?></p>
+    
+    <div id="padbox">
+    
+		<div id="albums">
+			<?php while (next_album()): ?>
+			<div class="album">
+        		<div class="thumb">
+					<a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumThumbImage(getAlbumTitle()); ?></a>
+       			 </div>
+        		<div class="albumdesc">
+					<h3><a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
+         			<small><?php printAlbumDate(""); ?></small>
+					<p><?php printAlbumDesc(); ?></p>
+				</div>
+				<p style="clear: both; "></p>
 			</div>
-			<p style="clear: both; "></p>
+			<?php endwhile; ?>
 		</div>
-		<?php endwhile; ?>
+	
+		<?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
+        
+        
 	</div>
-	
-	<?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
-	
-	<div id="enableSorting">
-  <?php printSortableGalleryLink('Click to sort gallery', 'Manual sorting', NULL, 'credit'); ?>
-  </div>
 
 </div>
 
-<div id="credit"><?php printAdminLink('Admin', '', ' | '); ?>Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
+<div id="credit"><?php printRSSLink('Gallery','','RSS', ' | '); ?> <a href="?p=archive">Archive View</a> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
 
 </body>
 </html>
