@@ -1271,12 +1271,12 @@ function printImageStatistic($number, $option) {
 }
 
 function printPopularImages($number=5) {
-printImageStatistic(5, "popular");
+printImageStatistic($number, "popular");
 }
 
 
 function printLatestImages($number=5) {
-printImageStatistic(5, "latest");
+printImageStatistic($number, "latest");
 }
 
 function getRandomImages() {
