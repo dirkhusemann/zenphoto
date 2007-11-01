@@ -506,6 +506,10 @@ if (!zp_loggedin()) {
                 </td>
               </tr>
                <tr><td></td><td valign="top"><a href="cache-images.php?album=<?php echo $album->name; ?>">Pre-Cache Images</a></strong> - Cache newly uploaded images.</td></tr>
+               <?php         
+                 if ($album->getNumImages() > 0) { ?> 
+			       <tr><td></td><td valign="top"><a href="refresh-metadata.php?album=<?php echo $album->name; ?>">Refresh Image Metadata</a> - Forces a refresh of the EXIF and IPTC data for all images in the album.</td></tr>
+			   <?php } ?>
             </table>
               
             <input type="submit" value="save" />
@@ -516,8 +520,8 @@ if (!zp_loggedin()) {
     
         <?php  
         $subalbums = $album->getSubAlbums(); 
-        if (count($subalbums) > 0) { ?> 
-          <?php if ($album->getNumImages() > 0)  { ?>
+        if (count($subalbums) > 0) { 
+	  if ($album->getNumImages() > 0)  { ?>
             <p><a name="subalbumList"></a><a href="#imageList" title="Scroll down to the image list.">Image List &raquo;</a></p>
           <?php } ?> 
           
@@ -1429,6 +1433,7 @@ if (!zp_loggedin()) {
             <p><strong><?php echo $gallery->getNumComments(); ?></strong> comments have been posted.</p>
             <p><strong><a href="?prune=true">Refresh the Database</a></strong> - This cleans the database, removes any orphan entries for comments, images, and albums.</p>
             <p><strong><a href="cache-images.php">Pre-Cache Images</a></strong> - Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above.</p>
+            <p><strong><a href="refresh-metadata.php">Refresh Image Metadata</a></strong> - Forces a refresh of the EXIF and IPTC data for all images.</p>
 
             <?php
               // These disk operations are too slow...

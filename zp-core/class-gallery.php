@@ -303,7 +303,7 @@ class Gallery {
       
       /* Look for image records where the file no longer exists. While at it, check for images with IPTC data to update the DB */
       
-      $deadman = 100;  // protect against too much processing.
+      $deadman = strtotime('+ 10 sec');  // protect against too much processing.
       
       $images = query_full_array('SELECT `id`, `albumid`, `filename`, `desc`, `title`, `date`, `tags`, `mtime` FROM ' . prefix('images') . ';');
       foreach($images as $image) {
@@ -368,7 +368,7 @@ class Gallery {
             $sql = "UPDATE " . prefix('images') . " SET `EXIFValid`=0,`mtime`=" . filemtime($imageName) . $set . " WHERE `id`='" . $image['id'] ."'";         
             query($sql);
           
-            if (($deadman -= 1) <=  0) { return true; }    // avoide excessive processing
+            if (time() > $deadman) { return true; }    // avoide excessive processing
           } 
         } else {
           $sql = 'DELETE FROM ' . prefix('images') . ' WHERE `id`="' . $image['id'] . '";';

@@ -158,7 +158,7 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 
 <!-- Footer -->
 <div class="footlinks">
-  <p><small>Effervescence+Simpleviewer: <?php echo "'" . $themeColor  . "'"; ?></small></p>
+  <?php printThemeInfo(); ?>
   <a href="http://www.zenphoto.org" title="A simpler web photo album">Powered by 
   <font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font face="Arial Black" size="1">photo</font></span></a>
 </div>

@@ -241,7 +241,7 @@ if (getOption('Use_Simpleviewer') && !getOption('mod_rewrite')) {
   echo '</div>'; 
 } ?>
 
-<p><small>Effervescence+Simpleviewer: <?php echo "'" . $themeColor . "'"; ?></small></p>
+<?php printThemeInfo(); ?>
 <a href="http://www.zenphoto.org" title="A simpler web photo album">Powered by 
 <font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font size="1" face="Arial Black">photo</font></span></a>
 

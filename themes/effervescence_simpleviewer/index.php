@@ -101,7 +101,7 @@ Comments: <?php $commentsArray = query_single_row("SELECT count(*) FROM ".prefix
 $commentsNumber = array_shift($commentsArray); echo $commentsNumber ?>
 <?php } ?>
 </p>
-<p>Effervescence+Simpleviewer: <?php echo "'" . $themeColor . "'"; ?></p>
+<?php printThemeInfo(); ?>
 </small>
 <a href="http://www.zenphoto.org" title="A simpler web photo album">Powered by 
 <font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a><br/>

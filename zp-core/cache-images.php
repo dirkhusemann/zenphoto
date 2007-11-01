@@ -25,7 +25,7 @@ function loadAlbum($album) {
 }
 
 if (!zp_loggedin()) {
-  printLoginForm();
+  printLoginForm("/" . ZENFOLDER . "/cache-images.php");
   exit(); 
 } else {
   printAdminHeader();
@@ -53,6 +53,12 @@ if (!zp_loggedin()) {
     }
   }
   echo "\n" . "<br/>Finished: Total of $count images.";
+  
+  $r = $_GET['album'];
+  if (!empty($r)) {
+    $r = "?page=edit&album=$r";
+  }
+  echo "<p><a href=\"admin.php$r\">&laquo; Back</a></p>";
   echo "\n" . '</div>';
   echo "\n" . '</div>';
 

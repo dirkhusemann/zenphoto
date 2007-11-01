@@ -92,4 +92,13 @@ function printNofM($what, $first, $last, $total) {
   }
 }
 
+function printThemeInfo() {
+  global $themeColor;
+  if (getOption('Use_Simpleviewer')) {
+    $simpleviewer = "+Simpleviewer: '$themeColor'";
+  } else {
+    $simpleviewer = ": '$themeColor'";
+  }
+  echo "<p><small>Effervescence$simpleviewer</small></p>";
+}
 ?> 
