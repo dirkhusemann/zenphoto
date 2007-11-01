@@ -31,7 +31,7 @@ define('ZENFOLDER', 'zp-core');
 </style>
 </head>
 <body>
-  <h1>zenphoto setup</h1>
+  <h1>zenphoto upgrade</h1>
 <?php
 
 if (file_exists("zp-config.php")) {
