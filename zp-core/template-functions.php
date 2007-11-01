@@ -52,6 +52,7 @@ function printSubalbumAdmin($text, $before='', $after='') {
 
 /* Admin link toolbox */
 function printAdminToolbox($context=null, $id="admin") {
+  global $_zp_current_album;
   if (zp_loggedin()) {
     $dataid = $id . '_data';
     if (is_null($context)) { $context = get_context(); }
@@ -62,10 +63,16 @@ function printAdminToolbox($context=null, $id="admin") {
       if (!in_context(ZP_SEARCH)) {
         printSortableGalleryLink('Sort Gallery', 'Manual sorting');
         echo "<br />\n";
+        printLink(WEBPATH.'/' . ZENFOLDER . '/admin.php?page=upload' . urlencode($_zp_current_album->name), "New album", NULL, NULL, NULL); 
+        echo "<br />\n";
 	    }
     } else if (!in_context(ZP_IMAGE | ZP_SEARCH)) {
       printSubalbumAdmin('Edit album', '', "<br />\n");
       printSortableAlbumLink('Sort Album', 'Manual sorting');
+      echo "<br />\n";
+      printLink(WEBPATH.'/' . ZENFOLDER . '/admin.php?page=upload&album=' . urlencode($_zp_current_album->name), "Upload to here", NULL, NULL, NULL); 
+      echo "<br />\n";
+      printLink(WEBPATH.'/' . ZENFOLDER . '/admin.php?page=upload&new&album=' . urlencode($_zp_current_album->name), "New album here", NULL, NULL, NULL); 
       echo "<br />\n";
     }
     echo "<a href=\"".ZENFOLDER."/admin.php?logout\">Logout</a>\n";

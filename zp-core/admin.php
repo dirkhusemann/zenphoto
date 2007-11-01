@@ -854,25 +854,32 @@ if (!zp_loggedin()) {
             <option value="" selected="true" style="font-weight: bold;">/</option>
             <?php 
               $bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');
+			  $checked = "checked=\"false\"";
               foreach ($albumlist as $album) {
                 $fullfolder = $folderlist[$album];
                 $singlefolder = $fullfolder;
                 $saprefix = "";
                 $salevel = 0;
+				if ($_GET['album'] == $fullfolder) {
+				  $selected = " SELECTED=\"true\" ";
+				  if (!isset($_GET['new'])) { $checked = ""; }
+				} else {
+				  $selected = "";
+				}
                 // Get rid of the slashes in the subalbum, while also making a subalbum prefix for the menu.
                 while (strstr($singlefolder, '/') !== false) {
                   $singlefolder = substr(strstr($singlefolder, '/'), 1);
                   $saprefix = "&nbsp; &nbsp;&raquo;&nbsp;" . $saprefix;
                   $salevel++;
                 }
-                echo '<option value="' . $folderlist[$album] . '"' . ($salevel > 0 ? 'style="background-color: '.$bglevels[$salevel].'; border-bottom: 1px dotted #ccc;"' : '')
-                  . '">' . $saprefix . $album . " (" . $singlefolder . ')' . "</option>\n";
+                echo '<option value="' . $folderlist[$album] . '"' . ($salevel > 0 ? ' style="background-color: '.$bglevels[$salevel].'; border-bottom: 1px dotted #ccc;"' : '')
+                  . "$selected>" . $saprefix . $album . " (" . $singlefolder . ')' . "</option>\n";
               }
             ?>
           </select>
           
           <div id="newalbumbox" style="margin-top: 5px;">
-            <div><label><input type="checkbox" name="newalbum" checked="false" onClick="albumSwitch(this.form.albumselect)"> Make a new Album</label></div>
+            <div><label><input type="checkbox" name="newalbum" <?php echo $checked; ?> onClick="albumSwitch(this.form.albumselect)"> Make a new Album</label></div>
             <div id="publishtext">and <label><input type="checkbox" name="publishalbum" id="publishalbum" value="1" checked="true" />
               Publish the album so everyone can see it.</label></div>
           </div>
