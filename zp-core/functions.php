@@ -775,20 +775,20 @@ function getImageMetadata($imageName) {
 	  if (!empty($date)) {
 	    $result['date'] = substr($date, 0, 4).'-'.substr($date, 4, 2).'-'.substr($date, 6, 2);
 	  }
-      /* iptc title */
-      $title = getIPTCTag('2#005');   /* Option Name */
-      if (empty($title)) { 
-        $title = getIPTCTag('2#105'); /* Headline */
-      }
-      if (!empty($title)) { 
-        $result['title'] = $title; 
-      }
-  
-      /* iptc description */
-      $caption= getIPTCTag('2#120');
-      if (!empty($caption)) { 
-        $result['desc'] = $caption;
-      }
+    /* iptc title */
+    $title = getIPTCTag('2#005');   /* Option Name */
+    if (empty($title)) { 
+      $title = getIPTCTag('2#105'); /* Headline */
+    }
+    if (!empty($title)) { 
+      $result['title'] = $title; 
+    }
+
+    /* iptc description */
+    $caption= getIPTCTag('2#120');
+    if (!empty($caption)) { 
+      $result['desc'] = $caption;
+    }
 	  
 	  /* iptc location, state, country */
 	  $location = getIPTCTag('2#092');
@@ -811,10 +811,10 @@ function getImageMetadata($imageName) {
 	  /* iptc keywords (tags) */
       $keywords= getIPTCTag('2#025');
       if (!empty($keywords)) { 
-	    $result['tags'] = $keywords;
+        $result['tags'] = $keywords;
       }
-    } 
-  } 
+    }
+  }
   
   return $result;
 }

@@ -58,7 +58,7 @@ class Image extends PersistentObject {
       if (isset($metadata['date'])) {
         $newDate = $metadata['date'];
       } else {
-        $newDate = strftime('%Y:%m:%d %T', filectime($this->localpath));
+        $newDate = strftime('%Y/%m/%d %T', filectime($this->localpath));
       }
       $this->set('date', $newDate);
       if (is_null($this->album->getDateTime())) {
@@ -151,26 +151,28 @@ class Image extends PersistentObject {
   }
   
   //ZenVideo: function getWidth modified to return default width of videos
-      function getWidth() {
-          if(!$this->video){
-            $this->updateDimensions();
-            return $this->get('width');
-          }else
-              return "320";
-      }
+  function getWidth() {
+    if (!$this->video) {
+      $this->updateDimensions();
+      return $this->get('width');
+    } else {
+      return "320";
+    }
+  }
 
-    //ZenVideo: function getHeight modified to return default height of videos
-      function getHeight() {
-        if(!$this->video){
-            $this->updateDimensions();
-            return $this->get('height');
-        }else
-              return "240";
-      }
-    
-    //ZenVideo: Get informations about video type.
-    function getVideo() {return $this->video; }
-    function getVideoThumb() {return $this->videoThumb; }
+  //ZenVideo: function getHeight modified to return default height of videos
+  function getHeight() {
+    if (!$this->video) {
+      $this->updateDimensions();
+      return $this->get('height');
+    } else {
+      return "240";
+    }
+  }
+  
+  //ZenVideo: Get informations about video type.
+  function getVideo() {return $this->video; }
+  function getVideoThumb() {return $this->videoThumb; }
     
   // Album (Object) and Album Name
   function getAlbum() {  return $this->album; }
@@ -202,10 +204,10 @@ class Image extends PersistentObject {
   function getDateTime() { return $this->get('date'); }
   function setDateTime($datetime) { 
     if ($datetime == "") {
-	  $this->set('date', '0000-00-00 00:00:00');
-	} else {
+      $this->set('date', '0000-00-00 00:00:00');
+    } else {
       $this->set('date', date('Y-m-d H:i:s', strtotime($datetime))); 
-	}
+    }
   }
   
   // Sort order
