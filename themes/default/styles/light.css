@@ -51,13 +51,15 @@ body {
 #gallerytitle {
 	border-bottom: 1px solid #E6E6DF;
 	padding-bottom: 14px;
-	margin-bottom: 12px;
-	min-height: 40px;
-  _height: 40px;
+	margin-bottom: 20px;
+	/*min-height: 40px;
+  _height: 40px;*/
 }
 #gallerytitle h2 { 
 	font-weight: normal; 
 	font-size: 12pt; 
+	margin-top: 18px;
+	width:510px;
 }
 
 
@@ -76,9 +78,7 @@ h2 {
 	font: 115% "Helvetica Neue", "Lucida Grande", Helvetica, Arial, sans-serif;
 	font-weight: bold;
 	color: #002E5B;
-	margin-top: 25px;
-	width:510px;
-	float:left;
+
 }
 h2 a:link, h2 a:visited {
 	color: #8DB8CF;
@@ -283,7 +283,7 @@ ul.pagelist li.next {
 	text-align: center;
 	border: 1px solid #D5E6EE;
 	background: #EEF5F9;
-	margin-top: 4px;
+	margin-top: -10px;
 }
 .imgnav .imgprevious a, .imgnav .imgnext a {
 	display: block;
@@ -293,7 +293,7 @@ ul.pagelist li.next {
 	padding: 4px 0;
 	font-size: 120%;
 	text-decoration: none;
-	line-height: 200%;
+	line-height: 180%;
 	color: #237898;
 }
 .imgnav .imgprevious a:hover, .imgnav .imgnext a:hover {
@@ -399,7 +399,6 @@ label:hover {
 ------------------------------ */
 #search {
 	float: right;
-	width: 170px;
 	text-align: center;
 	background: #fff;
 }

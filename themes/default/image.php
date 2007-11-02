@@ -28,21 +28,23 @@
 <div id="main">
 
 	<div id="gallerytitle">
+    <div class="imgnav">
+      <?php if (hasPrevImage()) { ?>
+      <div class="imgprevious"><a href="<?php echo getPrevImageURL();?>" title="Previous Image">&laquo; prev</a></div>
+      <?php } if (hasNextImage()) { ?>
+      <div class="imgnext"><a href="<?php echo getNextImageURL();?>" title="Next Image">next &raquo;</a></div>
+      <?php } ?>
+    </div>
 		<h2><span><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?>
-          </a> | <?php printParentBreadcrumb("", " | ", " | "); ?><a href="<?php echo getAlbumLinkURL();?>" title="Album Thumbnails"><?php echo getAlbumTitle();?></a> | 
-          </span> <?php printImageTitle(true); ?></h2>
-        <div class="imgnav">
-			<?php if (hasPrevImage()) { ?>
-			<div class="imgprevious"><a href="<?php echo getPrevImageURL();?>" title="Previous Image">&laquo; prev</a></div>
-			<?php } if (hasNextImage()) { ?>
-			<div class="imgnext"><a href="<?php echo getNextImageURL();?>" title="Next Image">next &raquo;</a></div>
-			<?php } ?>
-		</div>
+      </a> | <?php printParentBreadcrumb("", " | ", " | "); ?><a href="<?php echo getAlbumLinkURL();?>" title="Album Thumbnails"><?php echo getAlbumTitle();?></a> | 
+      </span> <?php printImageTitle(true); ?>
+    </h2>
+    
 	</div>
 
 	<div id="image">
 		<a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>"> <?php printDefaultSizedImage(getImageTitle()); ?></a> 
-    </div>
+  </div>
 	
 	<div id="narrow">
     	<?php 
