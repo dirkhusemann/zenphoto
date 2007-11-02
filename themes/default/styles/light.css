@@ -189,7 +189,11 @@ ul.pagelist li.next {
 	margin-top: 24px;
 }
 #imageDesc, #exif_link {
-	margin-bottom: 12px;
+	margin-bottom: 4px;
+}
+
+#exif_link {
+  float: right;
 }
 
 /* Tags
@@ -239,12 +243,12 @@ ul.pagelist li.next {
 }
 .album {
 	margin: 0 12px 8px 0;
-    padding: 10px 8px 2px 10px;
+  padding: 10px 8px 2px 10px;
 	float: left;
 	width: 305px;
 	border: 1px solid #E7F0F5;
 	background: #F7F9FD;
-    line-height: 100%;
+  line-height: 100%;
 }
 .album a img {  }
 .album .thumb {
@@ -258,8 +262,8 @@ ul.pagelist li.next {
 .album p {
 	line-height: 12px;
 	font-size: 11px;
-  	padding: 4px 0px 0px;
-  	margin: 0px;
+  padding: 4px 0px 0px;
+  margin: 0px;
 }
 .albumdesc small {
 	color: #8DB8CF;

@@ -47,19 +47,21 @@
   </div>
 	
 	<div id="narrow">
-    	<?php 
+    
+		<?php printImageDesc(true); ?>
+    <hr />
+    <?php 
       if (getImageEXIFData()) {echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=320&width=300&inlineId=imagemetadata\" title=\"Image Info\" class=\"thickbox\">Image Info</a></div>";
         printImageMetadata('', false); 
-      } ?>
-		<?php printImageDesc(true); ?>
-    
+      } 
+    ?>
     <?php printTags(true, 'Tags: '); ?>
     
 		<?php printImageMap(); ?>
 		
 		<?php if (getOption('Allow_comments')) { ?>
         <div id="comments">
-		<?php $num = getCommentCount(); echo ($num == 0) ? "" : ("<h3>Comments ($num)</h3>"); ?>
+		<?php $num = getCommentCount(); echo ($num == 0) ? "" : ("<h3>Comments ($num)</h3><hr />"); ?>
 			<?php while (next_comment()):  ?>
 			<div class="comment">
 				<div class="commentmeta">
