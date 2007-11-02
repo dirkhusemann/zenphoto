@@ -51,7 +51,7 @@
 		<?php printImageDesc(true); ?>
     <hr />
     <?php 
-      if (getImageEXIFData()) {echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=320&width=300&inlineId=imagemetadata\" title=\"Image Info\" class=\"thickbox\">Image Info</a></div>";
+      if (getImageEXIFData()) {echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=345&width=300&inlineId=imagemetadata\" title=\"Image Info\" class=\"thickbox\">Image Info</a></div>";
         printImageMetadata('', false); 
       } 
     ?>
