@@ -72,9 +72,9 @@ function printAdminToolbox($context=null, $id="admin") {
       printSubalbumAdmin('Edit album', '', "<br />\n");
       printSortableAlbumLink('Sort album', 'Manual sorting');
       echo "<br />\n";
-      printLink($zf . '/admin.php?page=upload&album=' . urlencode($_zp_current_album->name), "Upload to here", NULL, NULL, NULL); 
+      printLink($zf . '/admin.php?page=upload&album=' . urlencode($_zp_current_album->name), "Upload Here", NULL, NULL, NULL); 
       echo "<br />\n";
-      printLink($zf . '/admin.php?page=upload&new&album=' . urlencode($_zp_current_album->name), "New album here", NULL, NULL, NULL); 
+      printLink($zf . '/admin.php?page=upload&new&album=' . urlencode($_zp_current_album->name), "New Album Here", NULL, NULL, NULL); 
       echo "<br />\n";
 	  echo "<a href=\"javascript: confirmDeleteAlbum('".$zf."/admin.php?page=edit&action=deletealbum&album=" .
 	        queryEncode($_zp_current_album->name) . "');\" title=\"Delete the album\">Delete album</a><br />\n";
@@ -856,7 +856,7 @@ function printImageMetadata($title='Image Info', $toggle=true, $id='imagemetadat
     $display = $_zp_exifvars[$field][3];
     if ($display) {
       $label = $_zp_exifvars[$field][2];
-      echo "    <tr><td>$label:</td> <td>$value</td></tr>\n";
+      echo "    <tr><td align=\"right\">$label: </td> <td><strong>&nbsp;&nbsp;$value</strong></td></tr>\n";
     }
   }
   echo "  </table>\n</div>\n\n";

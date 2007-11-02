@@ -48,11 +48,13 @@
 	
 	<div id="narrow">
     	<?php 
-      if (getImageEXIFData()) {echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=380&width=300&inlineId=imagemetadata\" title=\"Image Info\" class=\"thickbox\">Image Info</a></div>";
+      if (getImageEXIFData()) {echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=320&width=300&inlineId=imagemetadata\" title=\"Image Info\" class=\"thickbox\">Image Info</a></div>";
         printImageMetadata('', false); 
       } ?>
 		<?php printImageDesc(true); ?>
-      <?php printTags(true, 'Tags: '); ?>
+    
+    <?php printTags(true, 'Tags: '); ?>
+    
 		<?php printImageMap(); ?>
 		
 		<?php if (getOption('Allow_comments')) { ?>
