@@ -54,11 +54,10 @@ class SpamFilter  {
   var $excessiveURLCount = 5;
   
   function SpamFilter() {
-    $gallery = new Gallery();
-    $gallery->setOptionDefault('Words_to_die_on', implode(',', $this->wordsToDieOn));
-    $gallery->setOptionDefault('Patterns_to_die_on', implode(' ', $this->patternsToDieOn));
-    $gallery->setOptionDefault('Excessive_URL_count', $this->excessiveURLCount);
-    $gallery->setOptionDefault('Forgiving', 0);
+    setOptionDefault('Words_to_die_on', implode(',', $this->wordsToDieOn));
+    setOptionDefault('Patterns_to_die_on', implode(' ', $this->patternsToDieOn));
+    setOptionDefault('Excessive_URL_count', $this->excessiveURLCount);
+    setOptionDefault('Forgiving', 0);
 }
   
   function getOptionsSupported() {
@@ -73,15 +72,14 @@ class SpamFilter  {
   }
 
   function filterMessage($author, $email, $website, $body, $imageLink) {
-    $gallery = new gallery();
-    $forgive = $gallery->getOption('Forgiving');
-    $list = $gallery->getOption('Words_to_die_on');
+    $forgive = getOption('Forgiving');
+    $list = getOption('Words_to_die_on');
     $list = strtolower($list);
     $this->wordsToDieOn = explode(',', $list);
-    $list = $gallery->getOption('Patterns_to_die_on');
+    $list = getOption('Patterns_to_die_on');
     $list = strtolower($list);
     $this->patternsToDieOn = explode(' ', $list);
-    $this->excessiveURLCount = $gallery->getOption('Excessive_URL_count');
+    $this->excessiveURLCount = getOption('Excessive_URL_count');
     $die = 2;  // good comment until proven bad
     if ($body) {
       if (($num = substr_count($body, 'http://')) >= $this->excessiveURLCount) { // too many links

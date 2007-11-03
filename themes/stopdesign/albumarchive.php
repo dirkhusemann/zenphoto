@@ -60,7 +60,7 @@
 <div id="feeds">
   <h2>Gallery Feeds</h2>
   <ul>
-    <li><?php echo "<a href='http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php?albumnr=".getIDforAlbum()."&albumname=".getAlbumTitle()."' class=\"i\">"; ?><img src="/zp-core/images/rss.gif" /> Photos</a></li>
+    <li><?php echo "<a href='http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php?albumnr=".getAlbumId()."&albumname=".getAlbumTitle()."' class=\"i\">"; ?><img src="/zp-core/images/rss.gif" /> Photos</a></li>
     <li><?php echo "<a href='http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss-comments.php' class=\"i\">"; ?><img src="/zp-core/images/rss.gif" /> Comments</a></li>
   </ul>
 </div>

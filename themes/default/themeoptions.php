@@ -33,10 +33,9 @@ class ThemeOptions {
                         );
   
   function ThemeOptions() {
-    $gallery = new Gallery();
-    $gallery->setOptionDefault('Allow_comments', true);
-	$gallery->setOptionDefault('Allow_search', true);
-    $gallery->setOptionDefault('Theme_colors', 'light'); 
+    setOptionDefault('Allow_comments', true);
+	setOptionDefault('Allow_search', true);
+    setOptionDefault('Theme_colors', 'light'); 
   }
   
   function getOptionsSupported() {

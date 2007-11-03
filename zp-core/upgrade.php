@@ -106,7 +106,10 @@ if (file_exists("zp-config.php")) {
         @mysql_query($sql);
       }
       echo "<h3>Cleaning up...</h3>";
-      $gallery = new Gallery();
+	  
+	  require('option-defaults.php');
+	  
+      $gallery = new Gallery();	  
       $gallery->clearCache();
       $needsrefresh = $gallery->garbageCollect(true, true);
 	  

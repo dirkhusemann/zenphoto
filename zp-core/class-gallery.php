@@ -26,14 +26,14 @@ class Gallery {
       }
       die($msg);
     }
-    $this->getOption('nil'); // force loading of the $options
+    getOption('nil'); // force loading of the $options
   }
   
   // The main albums directory
   function getAlbumDir() { return $this->albumdir; }
   
   function getGallerySortKey($sorttype=null) {
-    if (is_null($sorttype)) { $sorttype = $this->getOption('gallery_sorttype'); }
+    if (is_null($sorttype)) { $sorttype = getOption('gallery_sorttype'); }
     switch ($sorttype) {
       case "Title":
         return 'title';
@@ -168,7 +168,7 @@ class Gallery {
    */
   function getCurrentTheme() {
     if (empty($this->theme)) {
-      if (is_null($theme=$this->getOption('current_theme'))) {
+      if (is_null($theme=getOption('current_theme'))) {
         $themefile = SERVERCACHE . "/theme.txt";
         $theme = "";
         if (is_readable($themefile) && $fp = @fopen($themefile, "r")) {
@@ -186,7 +186,7 @@ class Gallery {
         }       
       }
       if (empty($theme)) { $theme = "default"; }
-      $this->setOptionDefault('current_theme', $theme, 'Holds the current theme');
+      setOptionDefault('current_theme', $theme);
       $this->theme = $theme;
     }
     return $this->theme;
@@ -198,7 +198,7 @@ class Gallery {
    * TODO: use the database for this instead, with an options or prefs table.
    */
   function setCurrentTheme($theme) {
-    $this->setOption('current_theme', $theme);
+    setOption('current_theme', $theme);
   }
   
 
@@ -440,83 +440,6 @@ class Gallery {
     }
     return null;
   }
-  
-  /**
-   * Get a option stored in the database.
-   * This function reads the options only once, in order to improve performance.
-   * @param string $key the name of the option.
-   */
-  function getOption($key) {
-    global $_zp_conf_vars;
-	if (NULL == $this->options) {
-	  $this->options = array();
-	  $sql = "SELECT name, value FROM ".prefix('options');
-	  $optionlist = query_full_array($sql);
-	  foreach($optionlist as $option) {
-	    extract($option);
-	    $this->options[$name] = $value;
-	    $_zp_conf_vars[$name] = $value;  /* so that zp_conf will get the DB result */
-	  }
-	}  
-	
-	if (array_key_exists($key, $this->options)) {
-	  return $this->options[$key];
-	} else {
-	    return zp_conf($key);
-	}
-  }
-
-  /**
-   * Create new option in database.
-   *
-   * @param string $key name of the option.
-   * @param mixed $value new value of the option.
-   */
-  function setOption($key, $value, $persistent=true) {
-    global $_zp_conf_vars;
-    if ($value == $this->getOption($key)) {
-      return true;  // not changed 
-    }
-    if ($persistent) {   
-      if (isset($this->options[$key])) {
-        // option already exists.    
-        $sql = "UPDATE " . prefix('options') . " SET `value`='" . escape($value) . "' WHERE `name`='" . escape($key) ."'";
-      } else {
-        $sql = "INSERT INTO " . prefix('options') . " (name, value) VALUES ('" . escape($key) . "','" . escape($value) . "')";
-      }
-      $result = query($sql);
-    } else {
-      $result = true; 
-    }
     
-    if ($result) {
-      $this->options[$key] = strip($value);
-      $_zp_conf_vars[$key] = strip($value);  /* so that zp_conf will get the DB result */
-      return true;
-    } else {
-      return false;
-    }
-  }
-  
-  function setBoolOption($key, $value) {
-    if ($value) {
-      $this->setOption($key, '1');
-    } else {
-      $this->setOption($key, '0');
-    }
-  }
-
-  function setOptionDefault($key, $default) {
-    if (!isset($this->options[$key])) {
-      $sql = "INSERT INTO " . prefix('options') . " (`name`, `value`) VALUES ('" . escape($key) . "', '". 
-                              escape($default) . "');";
-      query($sql);
-      $this->options[$key] = $value;
-      $_zp_conf_vars[$key] = $value; /* so that zp_conf will get the DB result */
-    }
-  }
-  
-  function getOptionList() { return $this->options; }
-
 }
 ?>

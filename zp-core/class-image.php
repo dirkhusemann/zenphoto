@@ -264,7 +264,7 @@ class Image extends PersistentObject {
 
     $goodMessage = 2;
     $gallery = new gallery();
-    if (!(false === ($requirePath = getPlugin('spamfilters/'.$gallery->getOption('spam_filter').".php", false)))) {
+    if (!(false === ($requirePath = getPlugin('spamfilters/'.getOption('spam_filter').".php", false)))) {
       require_once($requirePath);
       $spamfilter = new SpamFilter();
       $goodMessage = $spamfilter->filterMessage($name, $email, $website, $comment, $this->getFullImage());
@@ -298,7 +298,7 @@ class Image extends PersistentObject {
         $newcomment['date'] = time();
         $this->comments[] = $newcomment; 
         
-        if ($gallery->getOption('email_new_comments')) {
+        if (getOption('email_new_comments')) {
           $message = "A comment has been posted in your album " . $this->getAlbumName() . " about " . $this->getTitle() . "\n" .
                      "\n" .
                      "Author: " . $name . "\n" .

@@ -139,6 +139,7 @@ if (file_exists("zp-config.php")) {
         query($sql);
       }
 	  
+	  require('option-defaults.php');
 	  
 	  echo "<h3>Done!</h3>";
       echo "<p>You can now <a href=\"../\">View your gallery</a>, or <a href=\"admin.php\">administrate.</a></p>";

@@ -49,9 +49,8 @@ class SpamFilter  {
                         'Forgiving' => array('type' => 1, 'desc' => 'Mark suspected SPAM for moderation rather than as SPAM'));
 
   function SpamFilter() {
-  	$gallery = new Gallery();
-  	$gallery->setOptionDefault('Akismet_key', '');
-    $gallery->setOptionDefault('Forgiving', 0);
+  	setOptionDefault('Akismet_key', '');
+    setOptionDefault('Forgiving', 0);
   }												
  
   function getOptionsSupported() {
@@ -72,10 +71,9 @@ class SpamFilter  {
 		 );
 		 
   											
-    $gallery = new Gallery();
     $zp_galUrl = FULLWEBPATH;  // Sets the webpath for the Akismet server
-    $zp_akismetKey = $gallery->getOption('Akismet_key');
-    $forgive = $gallery->getOption('Forgiving');
+    $zp_akismetKey = getOption('Akismet_key');
+    $forgive = getOption('Forgiving');
     $die = 2;  // good comment until proven bad
     
 	$akismet = new Akismet($zp_galUrl, $zp_akismetKey, $commentData);

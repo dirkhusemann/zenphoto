@@ -9,11 +9,10 @@ class ThemeOptions {
 
   function ThemeOptions() {
     /* put any setup code needed here */
-    $gallery = new Gallery();
-    $gallery->setOptionDefault('Allow_comments', true);
-	$gallery->setOptionDefault('Allow_search', true);
-    $gallery->setOptionDefault('Gallery_description', 'You can insert your Gallery description using on the Admin Options tab.');
-    $gallery->setOptionDefault('Mini_slide_selector', 'Recent images');
+    setOptionDefault('Allow_comments', true);
+	setOptionDefault('Allow_search', true);
+    setOptionDefault('Gallery_description', 'You can insert your Gallery description using on the Admin Options tab.');
+    setOptionDefault('Mini_slide_selector', 'Recent images');
 }
   
   function getOptionsSupported() {

@@ -295,39 +295,40 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         exit();
       }
 
-      $gallery->setOption('adminuser', $_POST['adminuser']);
-      $gallery->setOption('adminpass', $_POST['adminpass']);
-      $gallery->setOption('admin_email', $_POST['admin_email']);
-      $gallery->setOption('gallery_title', $_POST['gallery_title']);
-      $gallery->setOption('website_title', $_POST['website_title']);
-      $gallery->setOption('website_url', $_POST['website_url']);
-      $gallery->setOption('time_offset', $_POST['time_offset']);
-      $gallery->setOption('gmaps_apikey', $_POST['gmaps_apikey']);
-      $gallery->setBoolOption('mod_rewrite', $_POST['mod_rewrite']);
-      $gallery->setOption('mod_rewrite_image_suffix', $_POST['mod_rewrite_image_suffix']);
-      $gallery->setOption('server_protocol', $_POST['server_protocol']);
-      $gallery->setOption('charset', $_POST['charset']);
-      $gallery->setOption('image_quality', $_POST['image_quality']);
-      $gallery->setOption('thumb_quality', $_POST['thumb_quality']);
-      $gallery->setOption('image_size', $_POST['image_size']);
-      $gallery->setBoolOption('image_use_longest_side', $_POST['image_use_longest_side']);
-      $gallery->setBoolOption('image_allow_upscale', $_POST['image_allow_upscale']);
-      $gallery->setOption('thumb_size', $_POST['thumb_size']);
-      $gallery->setBoolOption('thumb_crop', $_POST['thumb_crop']);
-      $gallery->setOption('thumb_crop_width', $_POST['thumb_crop_width']);
-      $gallery->setOption('thumb_crop_height', $_POST['thumb_crop_height']);
-      $gallery->setBoolOption('thumb_sharpen', $_POST['thumb_sharpen']);
-      $gallery->setOption('albums_per_page', $_POST['albums_per_page']);
-      $gallery->setOption('images_per_page', $_POST['images_per_page']);
-      $gallery->setBoolOption('perform_watermark', $_POST['perform_watermark']);
-      $gallery->setOption('watermark_image', $_POST['watermark_image']);
-      $gallery->setOption('perform_video_watermark', $_POST['perform_video_watermark']);
-      $gallery->setOption('video_watermark_image', $_POST['video_watermark_image']);
-      $gallery->setOption('spam_filter', $_POST['spam_filter']);         
-      $gallery->setBoolOption('email_new_comments', $_POST['email_new_comments']);         
-      $gallery->setOption('gallery_sorttype', $_POST['gallery_sorttype']);         
+      setOption('adminuser', $_POST['adminuser']);
+      setOption('adminpass', $_POST['adminpass']);
+      setOption('admin_email', $_POST['admin_email']);
+      setOption('gallery_title', $_POST['gallery_title']);
+      setOption('website_title', $_POST['website_title']);
+      setOption('website_url', $_POST['website_url']);
+      setOption('time_offset', $_POST['time_offset']);
+      setOption('gmaps_apikey', $_POST['gmaps_apikey']);
+      setBoolOption('mod_rewrite', $_POST['mod_rewrite']);
+      setOption('mod_rewrite_image_suffix', $_POST['mod_rewrite_image_suffix']);
+      setOption('server_protocol', $_POST['server_protocol']);
+      setOption('charset', $_POST['charset']);
+      setOption('image_quality', $_POST['image_quality']);
+      setOption('thumb_quality', $_POST['thumb_quality']);
+      setOption('image_size', $_POST['image_size']);
+      setBoolOption('image_use_longest_side', $_POST['image_use_longest_side']);
+      setBoolOption('image_allow_upscale', $_POST['image_allow_upscale']);
+      setOption('thumb_size', $_POST['thumb_size']);
+      setBoolOption('thumb_crop', $_POST['thumb_crop']);
+      setOption('thumb_crop_width', $_POST['thumb_crop_width']);
+      setOption('thumb_crop_height', $_POST['thumb_crop_height']);
+      setBoolOption('thumb_sharpen', $_POST['thumb_sharpen']);
+      setOption('albums_per_page', $_POST['albums_per_page']);
+      setOption('images_per_page', $_POST['images_per_page']);
+      setBoolOption('perform_watermark', $_POST['perform_watermark']);
+      setOption('watermark_image', $_POST['watermark_image']);
+      setBoolOption('perform_video_watermark', $_POST['perform_video_watermark']);
+      setOption('video_watermark_image', $_POST['video_watermark_image']);
+      setOption('spam_filter', $_POST['spam_filter']);         
+      setBoolOption('email_new_comments', $_POST['email_new_comments']);         
+      setOption('gallery_sorttype', $_POST['gallery_sorttype']);         
       /* Save the "custom" options */     
-      $templateOptions = $gallery->GetOptionList();
+      $templateOptions = GetOptionList();
+	  
       foreach($standardOptions as $option) {
         unset($templateOptions[$option]);
       }
@@ -336,10 +337,10 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
       $i = 0;
       while ($i < count($keys)) { 
         if (isset($_POST[$keys[$i]])) { 
-          $gallery->setOption($keys[$i], $_POST[$keys[$i]]);
+          setOption($keys[$i], $_POST[$keys[$i]]);
         } else {
           if (isset($_POST['chkbox-' . $keys[$i]])) {
-            $gallery->setOption($keys[$i], 0);
+            setOption($keys[$i], 0);
           }
         }
         $i++;
@@ -744,7 +745,7 @@ if (!zp_loggedin()) {
         
         <?php
           if (isset($saved)) {
-            $gallery->setOption('gallery_sorttype', 'Manual');
+            setOption('gallery_sorttype', 'Manual');
           }
         ?>
 
@@ -1086,19 +1087,19 @@ if (!zp_loggedin()) {
         <tr>
             <td width="175">Admin username:</td>
             <td width="200"><input type="text" size="40" name="adminuser"
-            value="<?php echo $gallery->getOption('adminuser');?>" /></td>
+            value="<?php echo getOption('adminuser');?>" /></td>
             <td></td>
         </tr>
         <tr>
             <td>Admin password:</td>
             <td><input type="password" size="40" name="adminpass"
-            value="<?php echo $gallery->getOption('adminpass');?>" /></td>
+            value="<?php echo getOption('adminpass');?>" /></td>
             <td></td>
         </tr>
         <tr>
             <td>Admin email:</td>
             <td><input type="text" size="40" name="admin_email"
-                value="<?php echo $gallery->getOption('admin_email');?>" /></td>
+                value="<?php echo getOption('admin_email');?>" /></td>
             <td></td>
         </tr>
         <tr>
@@ -1114,56 +1115,56 @@ if (!zp_loggedin()) {
         <tr>
             <td width="175">Gallery title:</td>
             <td width="200"><input type="text" size="40" name="gallery_title"
-                value="<?php echo $gallery->getOption('gallery_title');?>" /></td>
+                value="<?php echo getOption('gallery_title');?>" /></td>
             <td>What you want to call your photo gallery.</td>
         </tr>
         <tr>
             <td>Website title:</td>
             <td><input type="text" size="40" name="website_title"
-                value="<?php echo $gallery->getOption('website_title');?>" /></td>
+                value="<?php echo getOption('website_title');?>" /></td>
             <td>Your web site title.</td>
         </tr>
         <tr>
             <td>Website url:</td>
             <td><input type="text" size="40" name="website_url"
-                value="<?php echo $gallery->getOption('website_url');?>" /></td>
+                value="<?php echo getOption('website_url');?>" /></td>
             <td>This is used to link back to your main site, but your theme must support it.</td>
         </tr>
         <tr>
             <td>Time offset (hours):</td>
             <td><input type="text" size="40" name="time_offset"
-                value="<?php echo $gallery->getOption('time_offset');?>" /></td>
+                value="<?php echo getOption('time_offset');?>" /></td>
             <td>If you're in a different time zone from your server, set the offset in hours.</td>
         </tr>
         <tr>
             <td>Google Maps API key:</td>
             <td><input type="text" size="40" name="gmaps_apikey"
-                value="<?php echo $gallery->getOption('gmaps_apikey');?>" /></td>
+                value="<?php echo getOption('gmaps_apikey');?>" /></td>
             <td>If you're going to be using Google Maps, <a href="http://www.google.com/apis/maps/signup.html" target="_blank">get an API key</a> and enter it here.</td>
         </tr>
         <tr>
             <td>Enable mod_rewrite:</td>
             <td><input type="checkbox" name="mod_rewrite" value="1"
-            <?php echo checked('1', $gallery->getOption('mod_rewrite')); ?> /></td>
+            <?php echo checked('1', getOption('mod_rewrite')); ?> /></td>
             <td>If you have Apache <i>mod_rewrite</i>, put a checkmark here, and you'll get nice cruft-free URLs.</td>
         </tr>
         <tr>
             <td>Mod_rewrite Image suffix:</td>
             <td><input type="text" size="40" name="mod_rewrite_image_suffix"
-                value="<?php echo $gallery->getOption('mod_rewrite_image_suffix');?>" /></td>
+                value="<?php echo getOption('mod_rewrite_image_suffix');?>" /></td>
             <td>If <i>mod_rewrite</i> is checked above, zenphoto's image page URL's usually end in .jpg. Set this if you want something else appended to the end (helps search engines). Examples: <i>.html, .php, /view</i>, etc.</td>
         </tr>
         <tr>
             <td>Server protocol:</td>
             <td><input type="text" size="40" name="server_protocol"
-                value="<?php echo $gallery->getOption('server_protocol');?>" /></td>
+                value="<?php echo getOption('server_protocol');?>" /></td>
             <td>If you're running a secure server, change this to <i>https</i> (Most people will leave this alone.)</td>
         
         <tr/>
         <tr>
             <td>Charset:</td>
             <td><input type="text" size="40" name="charset"
-                value="<?php echo $gallery->getOption('charset');?>" /></td>
+                value="<?php echo getOption('charset');?>" /></td>
             <td>The character encoding to use internally. Leave at <i>UTF-8</i> if you're unsure.</td>
         </tr>
     
@@ -1173,7 +1174,7 @@ if (!zp_loggedin()) {
             <td>
         <select id="spam_filter" name="spam_filter">          
         <?php
-          $currentValue = $gallery->getOption('spam_filter');
+          $currentValue = getOption('spam_filter');
           $pluginroot = SERVERPATH . "/" . ZENFOLDER . "/plugins/spamfilters";
           generateListFromFiles($currentValue, $pluginroot , '.php');
         ?>
@@ -1183,7 +1184,7 @@ if (!zp_loggedin()) {
         </tr>
         <?php 
         /* procss filter based options here */
-      if (!(false === ($requirePath = getPlugin('spamfilters/'.$gallery->getOption('spam_filter').'.php', false)))) {       
+      if (!(false === ($requirePath = getPlugin('spamfilters/'.getOption('spam_filter').'.php', false)))) {       
         require_once($requirePath);
         $optionHandler = new SpamFilter();
         customOptions($optionHandler, "&nbsp;&nbsp;&nbsp;-&nbsp;");
@@ -1195,7 +1196,7 @@ if (!zp_loggedin()) {
         <tr>
             <td>Enable comment notification:</td>
             <td><input type="checkbox" name="email_new_comments" value="1"
-            <?php echo checked('1', $gallery->getOption('email_new_comments')); ?> /></td>
+            <?php echo checked('1', getOption('email_new_comments')); ?> /></td>
             <td>Email the Admin when new comments are posted</td>
         </tr>
         <tr>
@@ -1203,7 +1204,7 @@ if (!zp_loggedin()) {
             <td>
               <select id="sortselect" name="gallery_sorttype">
               <?php foreach ($sortby as $sorttype) { ?>
-                <option value="<?php echo $sorttype; ?>"<?php if ($sorttype == $gallery->getOption('gallery_sorttype')) echo ' selected="selected"'; ?>><?php echo $sorttype; ?></option>
+                <option value="<?php echo $sorttype; ?>"<?php if ($sorttype == getOption('gallery_sorttype')) echo ' selected="selected"'; ?>><?php echo $sorttype; ?></option>
               <?php } ?>
               </select>
             </td>
@@ -1222,97 +1223,97 @@ if (!zp_loggedin()) {
         <tr>
             <td width="175">Image quality:</td>
             <td width="200"><input type="text" size="40" name="image_quality"
-                value="<?php echo $gallery->getOption('image_quality');?>" /></td>
+                value="<?php echo getOption('image_quality');?>" /></td>
             <td>JPEG Compression quality for all images.</td>
         </tr>
         <tr>
             <td>Thumb quality:</td>
             <td><input type="text" size="40" name="thumb_quality"
-                value="<?php echo $gallery->getOption('thumb_quality');?>" /></td>
+                value="<?php echo getOption('thumb_quality');?>" /></td>
             <td>JPEG Compression quality for all thumbnails.</td>
         </tr>
         <tr>
             <td>Image size:</td>
             <td><input type="text" size="40" name="image_size"
-                value="<?php echo $gallery->getOption('image_size');?>" /></td>
+                value="<?php echo getOption('image_size');?>" /></td>
             <td>Default image display width.</td>
         </tr>
         <tr>
             <td>Images size is longest size:</td>
             <td><input type="checkbox" size="40" name="image_use_longest_side" value="1"
-            <?php echo checked('1', $gallery->getOption('image_use_longest_side')); ?> /></td>
+            <?php echo checked('1', getOption('image_use_longest_side')); ?> /></td>
             <td>If this is set to true, then the longest side of the image will be <i>image size</i>. Otherwise, the <i>width</i> of the image will be <i>image size</i>.</td>
         </tr>
         <tr>
             <td>Allow upscale:</td>
             <td><input type="checkbox" size="40" name="image_allow_upscale" value="1"
-            <?php echo checked('1', $gallery->getOption('image_allow_upscale')); ?> /></td>
+            <?php echo checked('1', getOption('image_allow_upscale')); ?> /></td>
             <td>Allow images to be scaled up to the requested size. This could result in loss of quality, so it's off by default.</td>
         </tr>
         <tr>
             <td>Thumb size:</td>
             <td><input type="text" size="40" name="thumb_size"
-                value="<?php echo $gallery->getOption('thumb_size');?>" /></td>
+                value="<?php echo getOption('thumb_size');?>" /></td>
             <td>Default thumbnail size and scale.</td>
         </tr>
         <tr>
             <td>Crop thumbnails:</td>
             <td><input type="checkbox" size="40" name="thumb_crop" value="1"
-            <?php echo checked('1', $gallery->getOption('thumb_crop')); ?> /></td>
+            <?php echo checked('1', getOption('thumb_crop')); ?> /></td>
             <td>If set to true the thumbnail will be a centered portion of the image with the given width and height after being resized to <i>thumb size</i> (by shortest side). Otherwise, it will be the full image resized to <i>thumb size</i> (by shortest side).</td>
         </tr>
         <tr>
             <td>Crop thumbnail width:</td>
             <td><input type="text" size="40" name="thumb_crop_width"
-                value="<?php echo $gallery->getOption('thumb_crop_width');?>" /></td>
+                value="<?php echo getOption('thumb_crop_width');?>" /></td>
             <td>The <i>thumb crop width</i> should always be less than or equal to <i>thumb size</i></td>
         </tr>
         <tr>
             <td>Crop thumbnail height:</td>
             <td><input type="text" size="40" name="thumb_crop_height"
-                value="<?php echo $gallery->getOption('thumb_crop_height');?>" /></td>
+                value="<?php echo getOption('thumb_crop_height');?>" /></td>
             <td>The <i>thumb crop height</i> should always be less than or equal to <i>thumb size</i></td>
         </tr>
         <tr>
             <td>Sharpen thumbnails:</td>
             <td><input type="checkbox" name="thumb_sharpen" value="1"
-            <?php echo checked('1', $gallery->getOption('thumb_sharpen')); ?> /></td>
+            <?php echo checked('1', getOption('thumb_sharpen')); ?> /></td>
             <td>Add a small amount of unsharp mask to thumbnails. Slows thumbnail generation on slow servers.</td>
         </tr>
         <tr>
             <td>Albums per page:</td>
             <td><input type="text" size="40" name="albums_per_page"
-                value="<?php echo $gallery->getOption('albums_per_page');?>" /></td>
+                value="<?php echo getOption('albums_per_page');?>" /></td>
             <td>Controls the number of albums on a page. You might need to change this after switching themes to make it look better.</td>
         </tr>
         <tr>
             <td>Images per page:</td>
             <td><input type="text" size="40" name="images_per_page"
-                value="<?php echo $gallery->getOption('images_per_page');?>" /></td>
+                value="<?php echo getOption('images_per_page');?>" /></td>
             <td>Controls the number of images on a page. You might need to change this after switching themes to make it look better.</td>
         </tr>
         <tr>
             <td>Watermark image:</td>
             <td><input type="checkbox" name="perform_watermark" value="1"
-            <?php echo checked('1', $gallery->getOption('perform_watermark')); ?> /></td>
+            <?php echo checked('1', getOption('perform_watermark')); ?> /></td>
             <td>Controls watermarking of an image</td>
         </tr>
         <tr>
             <td>Image for image watermark:</td>
             <td><input type="text" size="40" name="watermark_image"
-                value="<?php echo $gallery->getOption('watermark_image');?>" /></td>
+                value="<?php echo getOption('watermark_image');?>" /></td>
             <td>The watermark image (png-24). (Place the image in the <?php echo ZENFOLDER; ?>/images/ directory.)</td>
         </tr>
         <tr>
             <td>Watermark video:</td>
             <td><input type="checkbox" name="perform_video_watermark" value="1"
-            <?php echo checked('1', $gallery->getOption('perform_video_watermark')); ?> /></td>
+            <?php echo checked('1', getOption('perform_video_watermark')); ?> /></td>
             <td>Controls watermarking of a video</td>
         </tr>
         <tr>
             <td>Image for video watermark:</td>
             <td><input type="text" size="40" name="video_watermark_image"
-                value="<?php echo $gallery->getOption('video_watermark_image');?>" /></td>
+                value="<?php echo getOption('video_watermark_image');?>" /></td>
             <td>The watermark image (png-24). (Place the image in the <?php echo ZENFOLDER; ?>/images/ directory.)</td>
         </tr>
         <tr>
@@ -1439,7 +1440,7 @@ if (!zp_loggedin()) {
             <p>There are <strong><?php echo $gallery->getNumImages(); ?></strong> images in a total of <strong><?php echo $gallery->getNumAlbums(true); ?></strong> albums.</p>
             <p><strong><?php echo $gallery->getNumComments(); ?></strong> comments have been posted.</p>
             <p><strong><a href="?prune=true">Refresh the Database</a></strong> - This cleans the database, removes any orphan entries for comments, images, and albums.</p>
-            <p><strong><a href="cache-images.php">Pre-Cache Images</a></strong> - Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above.</p>
+            <p><strong><a href="cache-images.php">Pre-Cache Images</a></strong> - Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallelry you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser.</p>
             <p><strong><a href="refresh-metadata.php">Refresh Image Metadata</a></strong> - Forces a refresh of the EXIF and IPTC data for all images.</p>
 
             <?php

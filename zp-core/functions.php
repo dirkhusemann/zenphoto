@@ -11,10 +11,103 @@ require_once("zp-config.php");
 require_once('kses.php');
 require_once('exif/exif.php');
 require_once('plugins/phooglelite.php');
-require_once('exif/exif.php');
+require_once('functions-db.php');
 
 // Set the version number.
 $_zp_conf_vars['version'] = '1.1.0';
+
+// For easy access to config vars.  Depricated, been replaced with getOption() 
+function zp_conf($var) {
+  global $_zp_conf_vars;
+  if (array_key_exists($var, $_zp_conf_vars)) {
+    return $_zp_conf_vars[$var];
+  } else {
+    return null;
+  }
+}
+
+// the options array
+$_zp_options = NULL;
+  
+/**
+  * Get a option stored in the database.
+  * This function reads the options only once, in order to improve performance.
+  * @param string $key the name of the option.
+  */
+function getOption($key) {
+  global $_zp_conf_vars, $_zp_options;
+  if (NULL == $_zp_options) {
+    $_zp_options = array();
+    $sql = "SELECT `name`, `value` FROM ".prefix('options');
+    $optionlist = query_full_array($sql);
+    foreach($optionlist as $option) {
+      $_zp_options[$option['name']] = $option['value'];
+      $_zp_conf_vars[$option['name']] = $option['value'];  /* so that zp_conf will get the DB result */
+    }
+  }  
+  if (array_key_exists($key, $_zp_options)) {
+    return $_zp_options[$key];
+  } else {
+    return $_zp_conf_vars[$key];
+  }
+}
+
+/**
+  * Create new option in database.
+  *
+  * @param string $key name of the option.
+  * @param mixed $value new value of the option.
+  */
+function setOption($key, $value, $persistent=true) {
+  global $_zp_conf_vars, $_zp_options;
+  if ($value == getOption($key)) {
+    return true;  // not changed 
+  }
+  if ($persistent) {   
+    if (array_key_exists($key, $_zp_options)) {
+      // option already exists.    
+      $sql = "UPDATE " . prefix('options') . " SET `value`='" . escape($value) . "' WHERE `name`='" . escape($key) ."'";
+    } else {
+      $sql = "INSERT INTO " . prefix('options') . " (name, value) VALUES ('" . escape($key) . "','" . escape($value) . "')";
+    }
+    $result = query($sql);
+  } else {
+    $result = true; 
+  }
+  if ($result) {
+    $_zp_options[$key] = strip($value);
+    $_zp_conf_vars[$key] = strip($value);  /* so that zp_conf will get the DB result */
+    return true;
+  } else {
+    return false;
+  }
+}
+  
+function setBoolOption($key, $value) {
+  if ($value) {
+    setOption($key, '1');
+  } else {
+    setOption($key, '0');
+  }
+}
+
+function setOptionDefault($key, $default) {
+  global $_zp_conf_vars, $_zp_options;
+  if (NULL == $_zp_options) { getOption('nil'); } // pre-load from the database
+  if (!array_key_exists($key, $_zp_options)) {
+    $sql = "INSERT INTO " . prefix('options') . " (`name`, `value`) VALUES ('" . escape($key) . "', '". 
+                            escape($default) . "');";
+    query($sql);
+    $_zp_options[$key] = $value;
+    $_zp_conf_vars[$key] = $value; /* so that zp_conf will get the DB result */
+  }
+}
+  
+function getOptionList() { 
+  global $_zp_options;
+  if (NULL == $_zp_options) { getOption('nil'); } // pre-load from the database
+  return $_zp_options; 
+}
 
 if (defined('OFFSET_PATH')) {
   $const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
@@ -24,7 +117,7 @@ if (defined('OFFSET_PATH')) {
 if ($const_webpath == '\\' || $const_webpath == '/') $const_webpath = '';
 define('WEBPATH', $const_webpath);
 define('SERVERPATH', dirname(dirname(__FILE__)));
-define('PROTOCOL', zp_conf('server_protocol'));
+define('PROTOCOL', getOption('server_protocol'));
 define('FULLWEBPATH', PROTOCOL."://" . $_SERVER['HTTP_HOST'] . WEBPATH);
 define('SAFE_MODE_ALBUM_SEP', '__');
 define('DEBUG', false);
@@ -75,16 +168,6 @@ $_zp_exifvars = array(
     'EXIFGPSAltitudeRef'    => array('GPS',    'Altitude Reference','Altitude Reference',     true)
   );
 
-
-// For easy access to config vars.
-function zp_conf($var) {
-  global $_zp_conf_vars;
-  if (array_key_exists($var, $_zp_conf_vars)) {
-    return $_zp_conf_vars[$var];
-  } else {
-    return null;
-  }
-}
 
 // Set up assertions for debugging.
 assert_options(ASSERT_ACTIVE, 0);
@@ -273,13 +356,13 @@ function getImageCachePostfix($args) {
 /** getImageParameters
  */
 function getImageParameters($args) {
-  $thumb_crop = zp_conf('thumb_crop');
-  $thumb_size = zp_conf('thumb_size');
-  $thumb_crop_width = zp_conf('thumb_crop_width');
-  $thumb_crop_height = zp_conf('thumb_crop_height');
-  $thumb_quality = zp_conf('thumb_quality');
-  $image_default_size = zp_conf('image_size');
-  $quality = zp_conf('image_quality');
+  $thumb_crop = ('thumb_crop');
+  $thumb_size = getOption('thumb_size');
+  $thumb_crop_width = getOption('thumb_crop_width');
+  $thumb_crop_height = getOption('thumb_crop_height');
+  $thumb_quality = getOption('thumb_quality');
+  $image_default_size = getOption('image_size');
+  $quality = getOption('image_quality');
   // Set up the parameters
   $thumb = $crop = false;
   @list($size, $width, $height, $cw, $ch, $cx, $cy, $quality) = $args;
@@ -319,7 +402,7 @@ function getImageParameters($args) {
   list($width, $height, $cw, $ch, $cx, $cy, $quality) =
     array_map('sanitize_numeric', array($width, $height, $cw, $ch, $cx, $cy, $quality));
   if (empty($cw) && empty($ch)) $crop = false; else $crop = true;
-  if (empty($quality)) $quality = zp_conf('image_quality');
+  if (empty($quality)) $quality = getOption('image_quality');
   
   // Return an array of parameters used in image conversion.
   return array($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop);

@@ -6,9 +6,8 @@ class ThemeOptions {
 
   function ThemeOptions() {
     /* put any setup code needed here */
-    $gallery = new Gallery();
-    $gallery->setOptionDefault('Allow_comments', true);
-	$gallery->setOptionDefault('Allow_search', true);
+    setOptionDefault('Allow_comments', true);
+	setOptionDefault('Allow_search', true);
   }
   
   function getOptionsSupported() {return $this->iSupport;}

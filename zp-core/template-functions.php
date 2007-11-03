@@ -184,11 +184,6 @@ function getCurrentPage() {
   return $_zp_page;
 }
 
-function getIDforAlbum() { 
-if(!in_context(ZP_ALBUM)) return false;
-global $_zp_current_album;
-return $_zp_current_album->getAlbumID();
-}
 function getNumSubalbums() {
   global $_zp_current_album;
   return count($_zp_current_album->getSubalbums());
@@ -1578,7 +1573,7 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
 			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php\">".$linktext."$icon</a>".$next;
 			break;
 		case "Album":
-			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php?albumnr=".getIDforAlbum()."&albumname=".getAlbumTitle()."\">".$linktext."$icon</a>".$next;
+			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php?albumnr=".getAlbumId()."&albumname=".getAlbumTitle()."\">".$linktext."$icon</a>".$next;
 			break;
 		case "Comments":
 			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss-comments.php\">".$linktext."$icon</a>".$next;
@@ -1592,7 +1587,7 @@ function printRSSHeaderLink($option, $linktext) {
 			echo "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php\" />";
 			break;
 		case "Album":
-			echo "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php?albumnr=".getIDforAlbum()."&albumname=".getAlbumTitle()."\" />";
+			echo "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php?albumnr=".getAlbumId()."&albumname=".getAlbumTitle()."\" />";
 			break;
 		case "Comments":
 			echo "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss-comments.php\" />";
@@ -1636,22 +1631,6 @@ function getSearchDate($format="F Y") {
   return false;
 }
 
-/*** Option handling functions ************************/
-/******************************************************/
-function setOption($key, $value, $persistent=true) {
-  global $_zp_gallery;
-  return $_zp_gallery->setOption($key, $value, $persistent);
-}
-
-function getOption($key) {
-  global $_zp_gallery;
-  return $_zp_gallery->getOption($key);
-}
-
-function setOptionDefault($key, $default, $desc, $bool=false) {
-  global $_zp_gallery;
-  return $_zp_gallery->setOptionDefault($key, $default, $desc, $bool);
-}  
 /*** Open for Comments **********************************
   called with one parameter which specifies the degeree of control desired
   IMAGE will return the image level setting

@@ -43,8 +43,7 @@ class SpamFilter  {
  
   function SpamFilter() {
     global $gallery;
-    $gallery = new Gallery();
-    $gallery->setOptionDefault('Moderate', 0);
+    setOptionDefault('Moderate', 0);
   }
 
   function getOptionsSupported() {
@@ -54,8 +53,7 @@ class SpamFilter  {
   }
 
   function filterMessage($author, $email, $website, $body, $imageLink) {
-    global $gallery;
-    return 2 - $gallery->getOption('Moderate');
+    return 2 - getOption('Moderate');
   }
 }
 

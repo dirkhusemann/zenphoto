@@ -9,13 +9,10 @@ require_once('functions-controller.php');
 
 // Initialize the global objects and object arrays:
 $_zp_gallery = new Gallery();
-if($apiKey = $_zp_gallery->getOption('gmaps_apikey')){ 
+if($apiKey = getOption('gmaps_apikey')){ 
   $_zp_phoogle = new PhoogleMapLite();
   $_zp_phoogle->setAPIkey($apiKey);
 }
-$_zp_gallery->setOptionDefault('spam_filter', 'none');
-$_zp_gallery->setOptionDefault('email_new_comments', 1);
-$_zp_gallery->setOptionDefault('gallery_sorttype', 'Manual');
 
 if (!file_exists(getAlbumFolder() . 'videoDefault.png')) { copy(SERVERPATH . '/' . ZENFOLDER . '/images/videoDefault.png',  getAlbumFolder() . 'videoDefault.png'); }
 if (!file_exists(getAlbumFolder() . 'zen-logo.jpg')) { copy(SERVERPATH . '/' . ZENFOLDER . '/images/zen-logo.jpg',  getAlbumFolder() . 'zen-logo.jpg'); } 

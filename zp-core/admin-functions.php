@@ -210,16 +210,6 @@ function printTabs() {
   echo "\n  </ul>";
 }
 
-function queryEncode($url) {
-	$encode = str_replace('%26', '%%1', urlencode($url));  
-	return str_replace('%23', '%%2', $encode); 
-} 
-
-function queryDecode($url) { 
-	$decode = str_replace('%%1', '%26', $url); 
-	return urldecode(str_replace('%%2', '%23', $decode)); 
-}
-
 function checked($checked, $current) {
 	if ( $checked == $current)
 		echo ' checked="checked"';

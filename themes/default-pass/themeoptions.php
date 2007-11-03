@@ -5,8 +5,7 @@ class ThemeOptions {
 
   function ThemeOptions() {
     /* put any setup code needed here */
-    $gallery = new Gallery();
-    $gallery->setOptionDefault('Allow_comments', true);
+    setOptionDefault('Allow_comments', true);
   }
   
   function getOptionsSupported() {return $this->iSupport;}
