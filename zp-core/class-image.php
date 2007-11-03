@@ -267,7 +267,7 @@ class Image extends PersistentObject {
     if (!(false === ($requirePath = getPlugin('spamfilters/'.$gallery->getOption('spam_filter').".php", false)))) {
       require_once($requirePath);
       $spamfilter = new SpamFilter();
-      $goodMessage = $spamfilter->filterMessage($author, $email, $website, $comment, $this->getFullImage());
+      $goodMessage = $spamfilter->filterMessage($name, $email, $website, $comment, $this->getFullImage());
     }      
       
     if ($goodMessage) {
