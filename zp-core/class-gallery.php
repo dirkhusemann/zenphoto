@@ -358,7 +358,7 @@ class Gallery {
             }    
           
             /* date (for sorting) */
-            $newDate = strftime('%Y:%m:%d %T', filectime($imageName));
+            $newDate = strftime('%Y-%m-%d %T', filectime($imageName));
             if (isset($metadata['date'])) {
               $newDate = $metadata['date'];
             }          

@@ -18,12 +18,7 @@ $_zp_conf_vars['version'] = '1.1.0';
 
 // For easy access to config vars.  Depricated, been replaced with getOption() 
 function zp_conf($var) {
-  global $_zp_conf_vars;
-  if (array_key_exists($var, $_zp_conf_vars)) {
-    return $_zp_conf_vars[$var];
-  } else {
-    return null;
-  }
+  return getOption($var);
 }
 
 // the options array

@@ -179,7 +179,7 @@ $backgroundImagePath="";
                $url = getPageURL(getCurrentPage());
              } 
              if (substr($url, -1, 1) == '/') {$url = substr($url, 0, (strlen($url)-1));}
-             echo $url = $url . (zp_conf("mod_rewrite") ? "?" : "&") . 'noflash'; 
+             echo $url = $url . (getOption("mod_rewrite") ? "?" : "&") . 'noflash'; 
              ?>">
              View gallery without Flash</a>.</p></font></div>
              <?php

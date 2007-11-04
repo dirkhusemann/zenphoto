@@ -200,13 +200,13 @@ if (isAlbumPage()) {
                $url = getPageURL(getCurrentPage());
              } 
              if (substr($url, -1, 1) == '/') {$url = substr($url, 0, (strlen($url)-1));}
-             echo $url = $url . (zp_conf("mod_rewrite") ? "?" : "&") . 'noflash'; 
+             echo $url = $url . (getOption("mod_rewrite") ? "?" : "&") . 'noflash'; 
              ?>">
              View gallery without Flash</a>.</p></font></div>
              <?php
              $flash_url = getAlbumLinkURL();	
              if (substr($flash_url, -1, 1) == '/') {$flash_url= substr($flash_url, 0, -1);}
-             $flash_url = $flash_url . (zp_conf("mod_rewrite") ? "?" : "&") . "format=xml";
+             $flash_url = $flash_url . (getOption("mod_rewrite") ? "?" : "&") . "format=xml";
              ?>
              <script type="text/javascript">
                   var fo = new SWFObject("<?php echo  $_zp_themeroot ?>/simpleviewer.swf", "viewer", "100%", "100%", "7", "<?php echo $backgroundColor ?>");	
