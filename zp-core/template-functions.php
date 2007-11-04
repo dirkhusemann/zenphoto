@@ -1507,7 +1507,7 @@ function getCustomPageURL($page, $q="") {
     $result .= WEBPATH."/page/$page";
 	if (!empty($q)) { $result .= "?$q"; }
   } else {
-    $result .= WEBPATH."index.php?p=$page";
+    $result .= WEBPATH."/index.php?p=$page";
 	if (!empty($q)) { $result .= "&$q"; }
   }
   return $result;
