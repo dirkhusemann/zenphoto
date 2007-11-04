@@ -1435,30 +1435,26 @@ if (!zp_loggedin()) {
       
       
         <div class="box" id="overview-stats">
-            <h2 class="boxtitle">Gallery Stats</h2>
+            <h2 class="boxtitle">Gallery Maintenance</h2>
             <p>Your database is <b><?php echo getOption('mysql_database'); ?></b></p>
-            <p>There are <strong><?php echo $gallery->getNumImages(); ?></strong> images in a total of <strong><?php echo $gallery->getNumAlbums(true); ?></strong> albums.</p>
-            <p><strong><?php echo $gallery->getNumComments(); ?></strong> comments have been posted.</p>
             <p><strong><a href="?prune=true">Refresh the Database</a></strong> - This cleans the database, removes any orphan entries for comments, images, and albums.</p>
-            <p><strong><a href="cache-images.php">Pre-Cache Images</a></strong> - Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallelry you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser.</p>
+            <p><strong><a href="cache-images.php">Pre-Cache Images</a></strong> - Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser.</p>
             <p><strong><a href="refresh-metadata.php">Refresh Image Metadata</a></strong> - Forces a refresh of the EXIF and IPTC data for all images.</p>
-
-            <?php
+        </div>
+      
+      
+      <div class="box" id="overview-suggest">
+        <h2 class="boxtitle">Gallery Stats</h2>
+          <p><strong><?php echo $gallery->getNumImages(); ?></strong> images.</p>
+          <p><strong><?php echo $gallery->getNumAlbums(true); ?></strong> albums.</p>
+          <p><strong><?php echo $gallery->getNumComments(); ?></strong> comments.</p>
+          <?php
               // These disk operations are too slow...
               /*
               <p>Total size of album images: <strong><?php echo size_readable($gallery->sizeOfImages(), "MB"); ?></strong></p>
               <p>Total size of image cache: <strong><?php echo size_readable($gallery->sizeOfCache(), "MB"); ?></strong></p>
               */
-            ?>
-        </div>
-      
-      
-      <div class="box" id="overview-suggest">
-        <h2 class="boxtitle">Suggestions</h2>
-          <h3>Add titles to...</h3>
-          
-          <h3>Add descriptions to...</h3>
-          
+          ?>
       </div>
       
       <p style="clear: both; "></p>
