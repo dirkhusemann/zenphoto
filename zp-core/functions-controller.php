@@ -51,7 +51,7 @@ function restore_context() {
 
 
 function im_suffix() { 
-  return zp_conf('mod_rewrite_image_suffix'); 
+  return getOption('mod_rewrite_image_suffix'); 
 }
 
 
@@ -74,7 +74,7 @@ function is_query_request() {
 function zpurl($with_rewrite=NULL, $album=NULL, $image=NULL, $page=NULL) {
   global $_zp_current_album, $_zp_current_image, $_zp_page;
   // Set defaults
-  if ($with_rewrite === NULL)  $with_rewrite = zp_conf('mod_rewrite');
+  if ($with_rewrite === NULL)  $with_rewrite = getOption('mod_rewrite');
   if (!$album)  $album = $_zp_current_album;
   if (!$image)  $image = $_zp_current_image;
   if (!$page)   $page  = $_zp_page;
@@ -107,7 +107,7 @@ function zpurl($with_rewrite=NULL, $album=NULL, $image=NULL, $page=NULL) {
  * corrected URL if not with a 301 Moved Permanently.
  */
 function fix_path_redirect() {
-  if (zp_conf('mod_rewrite') && strlen(im_suffix()) > 0
+  if (getOption('mod_rewrite') && strlen(im_suffix()) > 0
       && in_context(ZP_IMAGE) && substr($_SERVER['REQUEST_URI'], -strlen(im_suffix())) != im_suffix() ) {
     $redirecturl = zpurl(true);
     header("HTTP/1.0 301 Moved Permanently");
@@ -127,7 +127,7 @@ function zp_handle_comment() {
     if (in_context(ZP_IMAGE) && isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
       if (isset($_POST['website'])) $website = strip_tags($_POST['website']); else $website = "";
       $commentadded = $_zp_current_image->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']), 
-          $website, kses($_POST['comment'], zp_conf('allowed_tags')));
+          $website, kses($_POST['comment'], getOption('allowed_tags')));
       if ($commentadded == 2) {
         unset($error);
         if (isset($_POST['remember'])) {

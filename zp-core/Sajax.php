@@ -71,8 +71,8 @@ if (!isset($SAJAX_INCLUDED)) {
 		else {
 
             // Convert from internal charset to UTF-8
-		    if (zp_conf('charset') != 'UTF-8') {
-		        $value = utf8::convert($value, zp_conf('charset'));   
+		    if (getOption('charset') != 'UTF-8') {
+		        $value = utf8::convert($value, getOption('charset'));   
 		    }
 
 			$esc_val = sajax_escapeutf8($value);
@@ -123,9 +123,9 @@ if (!isset($SAJAX_INCLUDED)) {
 		else {
 		    
 		    // Convert UTF-8 to internal charset
-		    if (zp_conf('charset') != 'UTF-8') {
+		    if (getOption('charset') != 'UTF-8') {
 		        while (list($args_k,) = each($args)) {
-		            $args[$args_k] = utf8::convert($args[$args_k], 'UTF-8', zp_conf('charset'));
+		            $args[$args_k] = utf8::convert($args[$args_k], 'UTF-8', getOption('charset'));
 		        }
 		    }
 

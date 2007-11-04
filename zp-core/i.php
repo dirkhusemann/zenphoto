@@ -34,9 +34,9 @@ require_once('functions-image.php');
 $debug = isset($_GET['debug']);
 
 // Set the config variables for convenience.
-$image_use_longest_side = zp_conf('image_use_longest_side');
-$upscale = zp_conf('image_allow_upscale');
-$sharpenthumbs = zp_conf('thumb_sharpen');
+$image_use_longest_side = getOption('image_use_longest_side');
+$upscale = getOption('image_allow_upscale');
+$sharpenthumbs = getOption('thumb_sharpen');
 
 // Don't let anything get above this, to save the server from burning up...
 define('MAX_SIZE', 3000);
@@ -208,8 +208,8 @@ if ($process) {
     }
 
     // Video Watermarks on video thumb
-	 $perform_video_watermark = zp_conf('perform_video_watermark');
-     $video_watermark_image = zp_conf('video_watermark_image');
+	 $perform_video_watermark = getOption('perform_video_watermark');
+     $video_watermark_image = getOption('video_watermark_image');
      if ($_GET['vwm'] == true && $thumb == true) {  
        $watermark = imagecreatefrompng($video_watermark_image);
        imagealphablending($watermark, false);
@@ -245,8 +245,8 @@ if (!$debug) {
 }
 
 // Image Watermarking
-$perform_watermark = zp_conf('perform_watermark');
-$watermark_image = zp_conf('watermark_image');
+$perform_watermark = getOption('perform_watermark');
+$watermark_image = getOption('watermark_image');
 
 if ($perform_watermark == true && $thumb == false && $_GET['wm'] == true) {
 

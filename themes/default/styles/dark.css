@@ -22,7 +22,7 @@ body {
 #main {
 	text-align: left;
 	margin: 20px auto;
-	width: 695px;
+	width: 685px;
 	background: #222;
 	padding: 20px 30px 70px;
 	border-top: 1px solid #444;
@@ -51,33 +51,32 @@ body {
 #gallerytitle {
 	border-bottom: 1px solid #E6E6DF;
 	padding-bottom: 14px;
-	margin-bottom: 12px;
-	min-height: 40px;
-  _height: 40px;
+	margin-bottom: 20px;
+	/*min-height: 40px;
+  _height: 40px;*/
 }
 #gallerytitle h2 { 
 	font-weight: normal; 
 	font-size: 12pt; 
+	margin-top: 18px;
+	width:510px;
 }
 
 /* Link Styles
 ------------------------------ */
-a:link, a:active, a:visited { text-decoration: none; color: #86a1b6; }
-a:hover, a:focus { text-decoration: none; color: #94c2e5; }
+a:link, a:active, a:visited { text-decoration: underline; color: #86a1b6; }
+a:hover, a:focus { text-decoration: underline; color: #94c2e5; }
 
 /* Text Styles
 ------------------------------ */
 body {
-	font: normal 82%/200% "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font: normal 82%/200% "Helvetica Neue", "Lucida Grande", Helvetica, Arial, sans-serif;
 	color: #888;
 }
 h2 {
-	font: 120% "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font: 115% "Helvetica Neue", "Lucida Grande", Helvetica, Arial, sans-serif;
 	font-weight: bold;
 	color: #AAA;
-	margin-top: 25px;
-	width:510px;
-	float:left;
 }
 h2 a:link, h2 a:visited {
 	color: #86a1b6;
@@ -91,8 +90,8 @@ h2 a:hover {
 	text-decoration: none;
 }
 h3 {
-	font: 120% "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-weight:bold;
+	font: 110% "Helvetica Neue", "Lucida Grande", Helvetica, Arial, sans-serif;
+	font-weight: bold;
 	color: #748da0;
 	margin-top: 30px;
 }
@@ -187,7 +186,11 @@ ul.pagelist li.next {
 	margin-top: 24px;
 }
 #imageDesc, #exif_link {
-	margin-bottom: 12px;
+	margin-bottom: 4px;
+}
+
+#exif_link {
+  float: right;
 }
 
 /* Tags
@@ -211,6 +214,11 @@ ul.pagelist li.next {
 	padding: 9px;
 	margin: 0px 9px 9px 0px;
 	line-height: 0px;
+    border: 1px solid #444;
+	background-color: #333;
+}
+.imagethumb a:visited {
+    background-color: #333;
     border: 1px solid #444;
 }
 .imagethumb a:hover {
@@ -241,8 +249,8 @@ ul.pagelist li.next {
 }
 .album a img {  }
 .album .thumb {
-  float: left; 
-  margin-right: 6px;
+    float: left; 
+    margin-right: 6px;
 }
 .album h3 {
 	padding: 0;
@@ -276,7 +284,7 @@ ul.pagelist li.next {
 	text-align: center;
 	border: 1px solid #444;
 	background: #282828;
-	margin-top: 4px;
+	margin-top: -10px;
 }
 .imgnav .imgprevious a, .imgnav .imgnext a {
 	display: block;
@@ -286,7 +294,7 @@ ul.pagelist li.next {
 	padding: 4px 0;
 	font-size: 120%;
 	text-decoration: none;
-	line-height: 200%;
+	line-height: 180%;
 	color: #666;
 }
 .imgnav .imgprevious a:hover, .imgnav .imgnext a:hover {
@@ -344,7 +352,7 @@ textarea {
 	padding: 4px;
 	width: 100%;
 	color: #888;
-	font: 82%/200% "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font: 100%/200% "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 .checkbox {
 	cursor: pointer;
@@ -359,7 +367,6 @@ label {
 label:hover {
 	color: #999;
 }
-
 #map {margin-left: -77px;}
 
 /* Admin Toolbox
@@ -393,7 +400,6 @@ label:hover {
 ------------------------------ */
 #search {
 	float: right;
-	width: 170px;
 	text-align: center;
 	background: #222;
 }

@@ -69,7 +69,7 @@ class Gallery {
     if ($page == 0) { 
       return $this->albums;
     } else {
-      $albums_per_page = zp_conf('albums_per_page');
+      $albums_per_page = getOption('albums_per_page');
       return array_slice($this->albums, $albums_per_page*($page-1), $albums_per_page);
     }
   }

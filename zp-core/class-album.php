@@ -164,7 +164,7 @@ class Album extends PersistentObject {
     if ($page == 0) { 
       return $this->subalbums;
     } else { 
-      $albums_per_page = zp_conf('albums_per_page');
+      $albums_per_page = getOption('albums_per_page');
       return array_slice($this->subalbums, $albums_per_page*($page-1), $albums_per_page);
     }
   }
@@ -205,7 +205,7 @@ class Album extends PersistentObject {
         } else {
           $fetchPage = $page - 1;
         } 
-        $images_per_page = zp_conf('images_per_page');
+        $images_per_page = getOption('images_per_page');
         $pageStart = $firstPageCount + $images_per_page * $fetchPage;
 
 //echo "\n<br>firstPageCount: $firstPageCount, images_per_page: $images_per_page";                
@@ -387,7 +387,7 @@ class Album extends PersistentObject {
   }
   
   function getGalleryPage() {
-    $albums_per_page = zp_conf('albums_per_page');
+    $albums_per_page = getOption('albums_per_page');
     if ($this->index == null)
       $this->index = array_search($this->name, $this->gallery->getAlbums(0));
     return floor(($this->index / $albums_per_page)+1);

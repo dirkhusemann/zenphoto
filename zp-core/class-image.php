@@ -311,7 +311,7 @@ class Image extends PersistentObject {
                      "\n" .
                      "You can edit the comment here:\n" .
                      "http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/" . ZENFOLDER . "/admin.php?page=comments\n";
-          zp_mail("[" . zp_conf('gallery_title') . "] Comment posted about: " . $this->getTitle(), $message);     
+          zp_mail("[" . getOption('gallery_title') . "] Comment posted about: " . $this->getTitle(), $message);     
         }      
       }
     }
@@ -375,7 +375,7 @@ class Image extends PersistentObject {
       if ($this->videoThumb == NULL) {
         return WEBPATH . "/" . ZENFOLDER . "/i.php?a=.&i=videoDefault.png&s=thumb";
       } else {
-        return WEBPATH . "/" . ZENFOLDER . "/i.php?a=".urlencode($this->album->name)."&i=".urlencode($this->videoThumb)."&s=thumb&vwm=".zp_conf('perform_video_watermark');
+        return WEBPATH . "/" . ZENFOLDER . "/i.php?a=".urlencode($this->album->name)."&i=".urlencode($this->videoThumb)."&s=thumb&vwm=".getOption('perform_video_watermark');
       }
     }
 
@@ -438,7 +438,7 @@ class Image extends PersistentObject {
   
   function getAlbumPage() {
     $this->getIndex();
-    $images_per_page = zp_conf('images_per_page');
+    $images_per_page = getOption('images_per_page');
     return floor(($this->index / $images_per_page)+1);
   }
 

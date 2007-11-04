@@ -32,7 +32,7 @@ function issetPage($page) {
 function printAdminFooter() {
   echo "<div id=\"footer\">";
   echo "\n  <a href=\"http://www.zenphoto.org\" title=\"A simpler web photo album\">zen<strong>photo</strong></a>";
-  echo " version ". zp_conf('version');
+  echo " version ". getOption('version');
   echo " | <a href=\"http://www.zenphoto.org/support/\" title=\"Forum\">Forum</a> | <a href=\"http://www.zenphoto.org/trac/\" title=\"Trac\">Trac</a> | <a href=\"changelog.html\" title=\"View Changelog\">Changelog</a>\n</div>";
 }
 
@@ -45,7 +45,7 @@ function printAdminFooter() {
  */
 function printAdminHeader() {
   
-  header ('Content-Type: text/html; charset=' . zp_conf('charset'));
+  header ('Content-Type: text/html; charset=' . getOption('charset'));
   
   echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
   echo "\n<html>";
@@ -119,7 +119,7 @@ function printViewLink($album, $text, $title=NULL, $class=NULL, $id=NULL) {
 
 function adminPrintImageThumb($image, $class=NULL, $id=NULL) { 
 	echo "\n  <img class=\"imagethumb\" id=\"id_". $image->id ."\" src=\"" . $image->getThumb() . "\" alt=\"". $image->getTitle() . "\"" .
-    ((zp_conf('thumb_crop')) ? " width=\"".zp_conf('thumb_crop_width')."\" height=\"".zp_conf('thumb_crop_height')."\"" : "") .
+    ((getOption('thumb_crop')) ? " width=\"".getOption('thumb_crop_width')."\" height=\"".getOption('thumb_crop_height')."\"" : "") .
 		(($class) ? " class=\"$class\"" : "") . 
 		(($id) ? " id=\"$id\"" : "") . " />";
 }

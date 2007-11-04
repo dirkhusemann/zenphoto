@@ -397,11 +397,11 @@ if (!zp_loggedin()) {
   exit(); 
   
 } else if ($_SESSION['ignoreDefaultPassword'] != true 
-    && (zp_conf('adminpass') == '1234' || zp_conf('adminpass') == '')) {
+    && (getOption('adminpass') == '1234' || getOption('adminpass') == '')) {
   /* Using default or blank password; issue warning, but only after successfully logged in. */
   echo '<p><img src="../" . ZENFOLDER . "/images/zen-logo.gif" title="Zen Photo" /></p>'
     .  '<div id="loginform" style="text-align: justify;"><h1 style="color: #cc0000;">Warning!</h1><p>'
-    .  '<strong>You are currently using '.(zp_conf('adminpass') == '1234' ? 'the default' : 'a blank').' password!</strong> This is insecure because many people know this password. '
+    .  '<strong>You are currently using '.(getOption('adminpass') == '1234' ? 'the default' : 'a blank').' password!</strong> This is insecure because many people know this password. '
     .  'It is highly recommended that you change the password by editing <code>' .  ZENFOLDER . '/zp-config.php</code>. '
     .  'If you understand this and want to continue anyway, please <a href="?ignore">click here to continue &raquo;</a>.</p></div>';
   
@@ -617,7 +617,7 @@ if (!zp_loggedin()) {
             <tr id=""<?php echo ($currentimage % 2 == 0) ?  "class=\"alt\"" : ""; ?>>
               <td valign="top" width="100">
                 <img id="thumb-<?php echo $currentimage; ?>" src="<?php echo $image->getThumb();?>" alt="<?php echo $image->filename;?>" 
-                  onclick="toggleBigImage('thumb-<?php echo $currentimage; ?>', '<?php echo $image->getSizedImage(zp_conf('image_size')); ?>');" />
+                  onclick="toggleBigImage('thumb-<?php echo $currentimage; ?>', '<?php echo $image->getSizedImage(getOption('image_size')); ?>');" />
               </td>
   
               <td width="240">
@@ -1004,7 +1004,7 @@ if (!zp_loggedin()) {
 
           <tr>
             <td><input type="checkbox" name="ids[]" value="<?php echo $id; ?>" onClick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" /></td>
-            <td style="font-size: 7pt;"><?php echo "<a href=\"" . (zp_conf("mod_rewrite") ? "../$album/$image" : "../index.php?album=".urlencode($album). 
+            <td style="font-size: 7pt;"><?php echo "<a href=\"" . (getOption("mod_rewrite") ? "../$album/$image" : "../index.php?album=".urlencode($album). 
                       "&image=".urlencode($image)) . "\">$albumtitle / $title</a>"; ?></td> 
             <td><?php echo $website ? "<a href=\"$website\">$author</a>" : $author; ?></td>
             <td style="font-size: 7pt;"><?php echo $date; ?></td>
@@ -1074,7 +1074,7 @@ if (!zp_loggedin()) {
       <table class="bordered">
         <tr>
           <th>
-            Database: <?php echo zp_conf('mysql_database'); ?>
+            Database: <?php echo getOption('mysql_database'); ?>
           </th>
         </tr>
       </table>
@@ -1426,7 +1426,7 @@ if (!zp_loggedin()) {
             $website = $comment['website'];
             $comment = truncate_string($comment['comment'], 123);
             echo "<li><div class=\"commentmeta\">$author commented on <a href=\""
-              . (zp_conf("mod_rewrite") ? "../$album/$image" : "../index.php?album=".urlencode($album)."&image=".urlencode($image))
+              . (getOption("mod_rewrite") ? "../$album/$image" : "../index.php?album=".urlencode($album)."&image=".urlencode($image))
               . "\">$albumtitle / $title</a>:</div><div class=\"commentbody\">$comment</div></li>";
           }
         ?>
@@ -1436,7 +1436,7 @@ if (!zp_loggedin()) {
       
         <div class="box" id="overview-stats">
             <h2 class="boxtitle">Gallery Stats</h2>
-            <p>Your database is <b><?php echo zp_conf('mysql_database'); ?></b></p>
+            <p>Your database is <b><?php echo getOption('mysql_database'); ?></b></p>
             <p>There are <strong><?php echo $gallery->getNumImages(); ?></strong> images in a total of <strong><?php echo $gallery->getNumAlbums(true); ?></strong> albums.</p>
             <p><strong><?php echo $gallery->getNumComments(); ?></strong> comments have been posted.</p>
             <p><strong><a href="?prune=true">Refresh the Database</a></strong> - This cleans the database, removes any orphan entries for comments, images, and albums.</p>

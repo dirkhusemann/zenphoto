@@ -26,7 +26,7 @@ function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
 }
 
 function printVersion() {
-  echo zp_conf('version');
+  echo getOption('version');
 }
 
 /** 
@@ -93,7 +93,7 @@ function printAdminToolbox($context=null, $id="admin") {
  */
 function zenJavascript() {
   global $_zp_phoogle;
-  if(zp_conf('gmaps_apikey') != ''){$_zp_phoogle->printGoogleJS();}
+  if(getOption('gmaps_apikey') != ''){$_zp_phoogle->printGoogleJS();}
   if (zp_loggedin()) {
     echo "  <script type=\"text/javascript\" src=\"".WEBPATH."/" . ZENFOLDER . "/ajax.js\"></script>\n";
     echo "  <script type=\"text/javascript\">\n";
@@ -108,17 +108,17 @@ function zenJavascript() {
 /******************************************/
 
 function getGalleryTitle() { 
-  return zp_conf('gallery_title');
+  return getOption('gallery_title');
 }
 function printGalleryTitle() { 
   echo getGalleryTitle(); 
 }
 
 function getMainSiteName() { 
-  return zp_conf('website_title');
+  return getOption('website_title');
 }
 function getMainSiteURL() { 
-  return zp_conf('website_url');
+  return getOption('website_url');
 }
 function printMainSiteLink($title=NULL, $class=NULL, $id=NULL) { 
   printLink(getMainSiteURL(), getMainSiteName(), $title, $class, $id);
@@ -193,18 +193,18 @@ function getTotalPages($oneImagePage=false) {
   global $_zp_gallery;
   if (in_context(ZP_ALBUM | ZP_SEARCH)) {
     if (in_context(ZP_SEARCH)) {
-      $pageCount = ceil(getNumAlbums() / zp_conf('albums_per_page'));
+      $pageCount = ceil(getNumAlbums() / getOption('albums_per_page'));
     } else {
-      $pageCount = ceil(getNumSubalbums() / zp_conf('albums_per_page'));
+      $pageCount = ceil(getNumSubalbums() / getOption('albums_per_page'));
     }	
     $imageCount = getNumImages();  
     if ($oneImagePage) {
       $imageCount = min(1, $imageCount);
     }
-    $pageCount = ($pageCount + ceil(($imageCount - zp_conf('images_first_page')) / zp_conf('images_per_page')));
+    $pageCount = ($pageCount + ceil(($imageCount - getOption('images_first_page')) / getOption('images_per_page')));
     return $pageCount;
   } else if (in_context(ZP_INDEX)) {
-    return ceil($_zp_gallery->getNumAlbums() / zp_conf('albums_per_page'));
+    return ceil($_zp_gallery->getNumAlbums() / getOption('albums_per_page'));
   } else {
     return null;
   }
@@ -525,9 +525,9 @@ function isImagePage() {
 function isAlbumPage() {
   global $_zp_page;
   if (in_context(ZP_SEARCH)) {
-    $pageCount = Ceil(getNumAlbums() / zp_conf('albums_per_page'));
+    $pageCount = Ceil(getNumAlbums() / getOption('albums_per_page'));
   } else {
-    $pageCount = Ceil(getNumSubalbums() / zp_conf('albums_per_page'));
+    $pageCount = Ceil(getNumSubalbums() / getOption('albums_per_page'));
   }
   return ($_zp_page <= $pageCount);
 }
@@ -771,7 +771,7 @@ function getPrevImageURL() {
 
 function printPreloadScript() {
   global $_zp_current_image;
-  $size = zp_conf('image_size');
+  $size = getOption('image_size');
   if (hasNextImage() || hasPrevImage()) {
     echo "<script type=\"text/javascript\">\n";
     if (hasNextImage()) {
@@ -859,7 +859,7 @@ function printImageMetadata($title='Image Info', $toggle=true, $id='imagemetadat
 
 function printImageMap($zoomlevel='6'){
   global $_zp_phoogle;
-  if(zp_conf('gmaps_apikey') != ''){
+  if(getOption('gmaps_apikey') != ''){
     $exif = getImageEXIFData();
     if(!empty($exif['EXIFGPSLatitude']) &&
        !empty($exif['EXIFGPSLongitude'])){
@@ -876,7 +876,7 @@ function printImageMap($zoomlevel='6'){
 }
 
 function hasMapData() {
-  if(zp_conf('gmaps_apikey') != ''){
+  if(getOption('gmaps_apikey') != ''){
     $exif = getImageEXIFData();
     if(!empty($exif['EXIFGPSLatitude']) && !empty($exif['EXIFGPSLongitude'])){ 
 	  return true;
@@ -887,7 +887,7 @@ function hasMapData() {
 
 function printAlbumMap($zoomlevel='8'){
   global $_zp_phoogle;
-  if(zp_conf('gmaps_apikey') != ''){
+  if(getOption('gmaps_apikey') != ''){
     $foundLocation = false;
     $_zp_phoogle->setZoomLevel($zoomlevel);
     while (next_image(true)) {
@@ -918,8 +918,8 @@ function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL
   global $_zp_current_image;
   $h = $_zp_current_image->getHeight();
   $w = $_zp_current_image->getWidth();
-  $ls = zp_conf('image_use_longest_side');
-  $us = zp_conf('image_allow_upscale');
+  $ls = getOption('image_use_longest_side');
+  $us = getOption('image_allow_upscale');
   
   $args = getImageParameters(array($size, $width, $height, $cw, $ch, $cx, $cy, null));
   @list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
@@ -961,7 +961,7 @@ function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL
 
 // Returns an array [width, height] of the default-sized image.
 function getSizeDefaultImage() {
-  return getSizeCustomImage(zp_conf('image_size'));
+  return getSizeCustomImage(getOption('image_size'));
 }
 
 // Returns an array [width, height] of the original image.
@@ -997,7 +997,7 @@ function isLandscape() {
 
 function getDefaultSizedImage() { 
   global $_zp_current_image;
-  return $_zp_current_image->getSizedImage(zp_conf('image_size'));
+  return $_zp_current_image->getSizedImage(getOption('image_size'));
 }
 
 //ZenVideo: Show video player with video loaded or display the image.
@@ -1056,7 +1056,7 @@ function getImageThumb() {
 
 function printImageThumb($alt, $class=NULL, $id=NULL) { 
   echo "<img src=\"" . htmlspecialchars(getImageThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
-    ((zp_conf('thumb_crop')) ? " width=\"".zp_conf('thumb_crop_width')."\" height=\"".zp_conf('thumb_crop_height')."\"" : "") .
+    ((getOption('thumb_crop')) ? " width=\"".getOption('thumb_crop_width')."\" height=\"".getOption('thumb_crop_height')."\"" : "") .
     (($class) ? " class=\"$class\"" : "") . 
     (($id) ? " id=\"$id\"" : "") . " />";
 }
@@ -1229,7 +1229,7 @@ function printLatestComments($number) {
 	  
 	  echo '<li><div class="commentmeta"><a href="';
 	  
-    	  if (zp_conf('mod_rewrite') == false) {
+    	  if (getOption('mod_rewrite') == false) {
             echo WEBPATH.'/index.php?album='.urlencode($album).'&image='.urlencode($image).'/"';
           } else {
             echo WEBPATH.'/'.$album.'/'.$image.'" ';
@@ -1503,7 +1503,7 @@ echo "</ul>\n</li>\n</ul>\n";
 }
 
 function getCustomPageURL($page, $q="") {
-  if (zp_conf('mod_rewrite')) {
+  if (getOption('mod_rewrite')) {
     $result .= WEBPATH."/page/$page";
 	if (!empty($q)) { $result .= "?$q"; }
   } else {
@@ -1521,7 +1521,7 @@ function printCustomPageURL($linktext, $page, $q="", $prev, $next, $class) {
 }
 
 function getURL($image) {
-if (zp_conf('mod_rewrite')) {
+if (getOption('mod_rewrite')) {
   return WEBPATH . "/" . pathurlencode($image->getAlbumName()) . "/" . urlencode($image->name);
   } else {
   return WEBPATH . "/index.php?album=" . pathurlencode($image->getAlbumName()) . "&image=" . urlencode($image->name);

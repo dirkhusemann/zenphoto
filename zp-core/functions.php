@@ -16,11 +16,6 @@ require_once('functions-db.php');
 // Set the version number.
 $_zp_conf_vars['version'] = '1.1.0';
 
-// For easy access to config vars.  Depricated, been replaced with getOption() 
-function zp_conf($var) {
-  return getOption($var);
-}
-
 // the options array
 $_zp_options = NULL;
   
@@ -255,11 +250,11 @@ function truncate_string($string, $length) {
       This is because of bugs in mod_rewrite that disallow certain characters.
  */
 function rewrite_get_album_image($albumvar, $imagevar) {
-  if (zp_conf('mod_rewrite')) {
+  if (getOption('mod_rewrite')) {
     $path = urldecode(substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)+1));
     // Only extract the path when the request doesn't include the running php file (query request).
     if (strlen($path) > 0 && strpos($_SERVER['REQUEST_URI'], $_SERVER['PHP_SELF']) === false && isset($_GET[$albumvar])) {
-      $im_suffix = zp_conf('mod_rewrite_image_suffix');
+      $im_suffix = getOption('mod_rewrite_image_suffix');
       $suf_len = strlen($im_suffix);
       $qspos = strpos($path, '?');
       if ($qspos !== false) $path = substr($path, 0, $qspos);
@@ -485,7 +480,7 @@ function zp_error($message) {
  */
 function rewrite_path($rewrite, $plain) {
   $path = null;
-  if (zp_conf('mod_rewrite')) {
+  if (getOption('mod_rewrite')) {
     $path = $rewrite;
   } else {
     $path = $plain;
@@ -499,7 +494,7 @@ function rewrite_path($rewrite, $plain) {
 function myts_date($format,$mytimestamp)
 {
    // If your server is in a different time zone than you, set this.
-   $timezoneadjust = zp_conf('time_offset');
+   $timezoneadjust = getOption('time_offset');
 
    $month  = substr($mytimestamp,4,2);
    $day    = substr($mytimestamp,6,2);
@@ -631,7 +626,7 @@ function parseThemeDef($file) {
     while($line = fgets($fp)) {
       if (substr(trim($line), 0, 1) != "#") {
         $item = explode("::", $line);
-        $themeinfo[trim($item[0])] = kses(trim($item[1]), zp_conf('allowed_tags'));
+        $themeinfo[trim($item[0])] = kses(trim($item[1]), getOption('allowed_tags'));
       }
     }
     return $themeinfo;
@@ -652,7 +647,7 @@ function parseThemeDef($file) {
  * @since  1.0.0
  */
 function zp_mail($subject, $message, $headers = '') {
-  $admin_email = zp_conf('admin_email');
+  $admin_email = getOption('admin_email');
   if (!empty($admin_email)) {
     // Make sure no one is trying to use our forms to send Spam
     // Stolen from Hosting Place: 
@@ -679,17 +674,17 @@ function zp_mail($subject, $message, $headers = '') {
   	}
   
   	if( $headers == '' ) {
-		$headers = "From: " . zp_conf('gallery_title') . "<zenphoto@" . $_SERVER['SERVER_NAME'] . ">";
+		$headers = "From: " . getOption('gallery_title') . "<zenphoto@" . $_SERVER['SERVER_NAME'] . ">";
 	}
 
 	// Convert to UTF-8
-    if (zp_conf('charset') != 'UTF-8') {
-        $subject = utf8::convert($subject, zp_conf('charset'));   
-        $message = utf8::convert($message, zp_conf('charset'));   
+    if (getOption('charset') != 'UTF-8') {
+        $subject = utf8::convert($subject, getOption('charset'));   
+        $message = utf8::convert($message, getOption('charset'));   
   	}
 
   	// Send the mail
-    UTF8::send_mail("Admin <" . zp_conf('admin_email') . ">", $subject, $message, $headers);
+    UTF8::send_mail("Admin <" . getOption('admin_email') . ">", $subject, $message, $headers);
   }
 }
 
@@ -767,10 +762,10 @@ function createAlbumZip($album){
 }
 
 function getAlbumFolder($root=SERVERPATH) {
-  if (is_null($album_folder = zp_conf('album_folder'))) {
+  if (is_null($album_folder = getOption('album_folder'))) {
     $album_folder = ALBUMFOLDER;
   }
-  if (!is_null($external_folder = zp_conf('external_album_folder'))) {
+  if (!is_null($external_folder = getOption('external_album_folder'))) {
     return $external_folder;
   } else {
     return $root . $album_folder;

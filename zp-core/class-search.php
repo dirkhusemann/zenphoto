@@ -98,7 +98,7 @@ function getAlbums($page=0) {
     if ($page == 0) { 
       return $this->albums;
     } else {
-      $albums_per_page = zp_conf('albums_per_page');
+      $albums_per_page = getOption('albums_per_page');
       return array_slice($this->albums, $albums_per_page*($page-1), $albums_per_page);
     }  
   }
@@ -176,7 +176,7 @@ function getImages($page=0, $firstPageCount=0) {
         } else {
           $fetchPage = $page - 1;
         } 
-        $images_per_page = zp_conf('images_per_page');
+        $images_per_page = getOption('images_per_page');
         $pageStart = $firstPageCount + $images_per_page * $fetchPage;
       }  
     $slice = array_slice($this->images, $pageStart , $images_per_page);
