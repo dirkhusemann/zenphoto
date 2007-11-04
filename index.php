@@ -10,7 +10,7 @@ if (!(false === ($requirePath = getPlugin('themeoptions.php', true)))) {
   $optionHandler = new ThemeOptions(); /* prime the theme options */
 }
 
-header ('Content-Type: text/html; charset=' . zp_conf('charset'));
+header ('Content-Type: text/html; charset=' . getOption('charset'));
 if (in_context(ZP_IMAGE)) {
   include("$themepath/$theme/image.php");
 } else if (in_context(ZP_ALBUM)) {
