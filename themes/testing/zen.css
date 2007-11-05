@@ -1,12 +1,14 @@
 /* These styles are just for the test template. Make some better ones. And yes, I know it's messy ;-) */
-BODY { font-family: Arial, Helvetica, sans-serif; font-size: 8pt; text-align: center; }
+body { font-family: Arial, Helvetica, sans-serif; font-size: 8pt; text-align: center; }
 .img {border:none}
 #main { width: 600px; margin: 0px auto; text-align: left; }
-.albumthumb IMG { border: 0px; float: left; margin-right: 10px; }
-.imagethumb IMG, .image IMG { border: 0px; margin: 0px; padding: 0px; }
+#gallerytitle h2 { font-size: 11pt; }
+#gallerytitle span { font-weight: normal; color: #CCC; text-decoration: none; }
+#gallerytitle A:link, #gallerytitle A:visited { text-decoration: underline; color: #999; }
+.albumthumb img { border: 0px; float: left; margin-right: 10px; }
+.imagethumb img, .image img { border: 0px; margin: 0px; padding: 0px; }
 .image { margin: 0px; padding: 0px; float: left; }
-HR { clear: both; height: 0px; border: 0px; border-top: 1px solid #ccc; margin-top: 0px; padding: 0px; }
-#gallerytitle H2 { font-size: 11pt; }
+hr { clear: both; height: 0px; border: 0px; border-top: 1px solid #ccc; margin-top: 0px; padding: 0px; }
 .imgnav { margin-bottom: 4px; font-size: 15pt; font-weight: normal; color: #CCC; text-align: center;}
 .imgnav a { display: block; height: 1em; width: 46%; padding: 2%; color: #999 !important; background-color: #fbfbfb; }
 .imgnav a.prev { float: left; }
@@ -17,15 +19,8 @@ HR { clear: both; height: 0px; border: 0px; border-top: 1px solid #ccc; margin-t
 .pagenav { margin: 5px 0px 5px; font-size: 8pt; font-weight: bold; color: #CCC; clear: both; }
 .pagenav A:link, .pagenav A:visited { color: #333; text-decoration: none; }
 .disabledlink { color: #ddd; cursor: default; }
-
-#gallerytitle SPAN { font-weight: normal; color: #CCC; text-decoration: none; }
-#gallerytitle A:link, #gallerytitle A:visited { text-decoration: underline; color: #999; }
 .albumtitle H3 { margin: 0px; padding: 0px; }
-
-A:link, A:visited {
-	text-decoration: none;
-	color: #3366CC;
-}
+A:link, A:visited {text-decoration: none;color: #3366CC;}
 A:hover, A:active, 
 #gallerytitle A:hover, #gallerytitle A:active, 
 .pagenav A:hover, .pagenav A:active  {text-decoration: underline;color: #FF6600;background-color: #FFFCF4;}
@@ -35,9 +30,9 @@ UL.pagelist LI A, UL.pagelist LI span.disabledlink {display: block;float: left;p
 UL.pagelist LI span.disabledlink { background-color: #fff; color: #ddd; cursor: default; }
 UL.pagelist LI A:hover { background-color: #FFCC99; color: black; }
 UL.pagelist LI.current A { background-color: #FF6600; color: #FFF; cursor: default; }
-.commentcount { font-weight: normal; font-size: 11pt; margin-top: 10px; }
-#comments {border: 1px solid #f0f0f0;padding: 15px 20px;margin: 15px 0px;width: 350px;display: block;}
+#comments {border: 1px solid #f0f0f0;padding: 15px 20px;margin: 15px 0px;width: 360px;display: block;clear: both;padding-top: 10px;}
 .comment {margin: 15px 0px;padding: 10px 10px;border: 1px solid #f0f0f0;background-color: #f8f8f8;}
+.commentcount { font-weight: normal; font-size: 11pt; margin-top: 10px; }
 .commentmeta { color: #999; }
 .commentauthor { font-weight: bold; }
 .commentbody { margin: 5px 0px; line-height: 1.3em; }
@@ -49,4 +44,11 @@ UL.pagelist LI.current A { background-color: #FF6600; color: #FFF; cursor: defau
 #admin h3 {font: 100% "Helvetica Neue", Helvetica, Arial, sans-serif;font-weight: bold;color: #000;border-bottom: 1px dashed #E6E6DF;margin:0;padding:0;}
 #search{float:right;width:150px;margin-top:-15px;}
 #search #search_input{width:75px;}
+#map {margin-top: 25px;}
+#imagemetadata {text-align: right;position: relative;display: none;}
+#imagemetadata table {text-align: left;line-height: 1em;border: 1px solid #ccc;position: absolute;top: 2em;right: 0;background-color: #fafafa;}
+#imagemetadata table td {border-bottom: 1px solid #f0f0f0;background-color: #f8f8f8;padding: 2px 5px;}
+#fullsize_download_link {font-size: 8pt; text-align: right; float:right;}
+#meta_link {font-size: 8pt; text-align: left; float:left;}
+#image_data {margin-bottom:15px;}
 
