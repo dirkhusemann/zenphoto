@@ -64,7 +64,7 @@ $firstPageImages = normalizeColumns('1', '6');
   	<?php printPageNav("&laquo; prev", "|", "next &raquo;"); ?>
 
   	<div id="credit">
-		<?php printRSSLink('Album', '', 'Album RSS', ''); ?> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a><br />
+		<?php printRSSLink('Album', '', 'Album RSS', ''); ?> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a> | <a href="?p=archive">Archive View</a><br />
   		<?php echo round((array_sum(explode(" ",microtime())) - $startTime),4).' Seconds</strong>'; ?>
   	</div>
 </div>

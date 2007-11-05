@@ -51,4 +51,50 @@ UL.pagelist LI.current A { background-color: #FF6600; color: #FFF; cursor: defau
 #fullsize_download_link {font-size: 8pt; text-align: right; float:right;}
 #meta_link {font-size: 8pt; text-align: left; float:left;}
 #image_data {margin-bottom:15px;}
+/* Archive View
+---------------------------- */
+#archive{
+	width: 300px;
+	padding:0;
+	margin: 0 auto;
+	text-align: center;
+}
+ul.archive * {
+	padding:0;
+	margin:0;
+	list-style:none;
+}
+ul.archive #year {
+	margin-top:10px;
+	text-align: center;
+	color: #FF6600;
+	margin-bottom:5px;
+	font-weight:bold;
+	font-size:18px;
+}
+ul.archive #month {
+	font-size: 14px;
+	list-style:none;
+	border-top:2px solid #E6E6DF;
+	padding-top: 5px;
+}
+
+/* Tag Cloud
+---------------------------- */
+#tag_cloud {
+	text-align: center;
+	background: #eee;
+	margin-bottom:15px;
+}
+#tag_cloud p {
+	color: #FF6600;
+	padding:10px 0;
+	margin:20px 0;
+	background: #fff;
+	border-top: 3px solid #E6E6DF;
+	border-bottom: 3px solid #E6E6DF;
+	font-size: 18px;
+	font-weight:bold;
+	text-align: center;
+}
 

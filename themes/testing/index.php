@@ -33,11 +33,11 @@
     	<hr />
     
   		<?php endwhile; ?>
-  </div>
+  	</div>
   
-  <?php printPageNav("&laquo; prev", "|", "next &raquo;"); ?>
+  	<?php printPageNav("&laquo; prev", "|", "next &raquo;"); ?>
   
-  <div id="credit"><?php printRSSLink('Gallery','','RSS', ''); ?> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
+  	<div id="credit"><?php printRSSLink('Gallery','','RSS', ''); ?> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a> | <a href="?p=archive">Archive View</a></div>
 
 </div>
 
