@@ -364,7 +364,25 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
   // (NOTE: Form POST data will be resent on refresh. Use header(Location...) instead, unless there's an error message.
   if (isset($_GET['page'])) { $page = $_GET['page']; } else if (empty($page)) { $page = "home"; }
   
-} /* NO Admin-only content between this and the next check. */
+} else {
+  if (isset($_GET['emailpassword'])) {
+    $user = getOption('adminuser');
+	$pass = getOption('adminpass');
+	if (empty($user)) {
+	  $msg = "\nThe Admin user id has not been set. ";
+	} else {
+	  $msg = "\nYour user id is `$user`. ";
+	}
+	if (empty($pass)) {
+	  $msg .= "\nThe Admin password has not been set. ";
+	} else {
+	  $msg .= "\nYour password is `$pass`. ";
+	}
+	$msg .= "\nThis information was requested from the Admin Logon screen at ".FULLWEBPATH."/".ZENFOLDER."/admin.php.";
+
+	zp_mail('The Zenphoto information you requested',  $msg); 
+  }
+}/* NO Admin-only content between this and the next check. */
   
 /************************************************************************************/
 /** End Action Handling *************************************************************/

@@ -14,7 +14,7 @@ require_once('plugins/phooglelite.php');
 require_once('functions-db.php');
 
 // Set the version number.
-$_zp_conf_vars['version'] = '1.1.0';
+$_zp_conf_vars['version'] = '1.1.1';
 
 // the options array
 $_zp_options = NULL;
