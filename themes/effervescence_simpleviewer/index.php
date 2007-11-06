@@ -79,14 +79,6 @@
 
 <!-- Footer -->
 <div class="footlinks">
-<?php 
-if (!$themeResult) { 
-  /* display missing css file error */
-  echo '<div class="errorbox" id="message">'; 
-  echo  "<h2>" . "Could not find the style sheet '" . getOption('Theme_colors') . ".css'" . "</h2>";  
-  echo '</div>'; 
-} ?>
-
 <small>
 <p>Albums: <?php $albumNumber = getNumAlbums(); echo $albumNumber ?> 
 &middot; 

@@ -227,7 +227,11 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
     } else if ($action == 'deletecomments') {    
     if (isset($_POST['moderated'])) {
       $moderated = $_POST['moderated'];
-      $notreleased = $_POST['notreleased'];
+	  if (isset($_POST['notreleased'])) {
+        $notreleased = $_POST['notreleased'];
+	  } else {
+	    $notreleased = array();
+	  }
       $idlist = '';
       $release = array_diff($moderated, $notreleased);
       foreach($release as $id) {

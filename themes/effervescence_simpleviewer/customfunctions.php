@@ -93,11 +93,17 @@ function printNofM($what, $first, $last, $total) {
 }
 
 function printThemeInfo() {
-  global $themeColor;
-  if (getOption('Use_Simpleviewer')) {
-    $simpleviewer = "+Simpleviewer: '$themeColor'";
+  global $themeColor, $themeResult;
+  if ($themeColor == 'effervescence') {
+    $themeColor = '';
   } else {
-    $simpleviewer = ": '$themeColor'";
+    $themeColor = ": '$themeColor'";
+  }
+  if (!$themeResult) { $themeColor .= " (not found)"; }
+  if (getOption('Use_Simpleviewer')) {
+    $simpleviewer = "+Simpleviewer$themeColor";
+  } else {
+    $simpleviewer = $themeColor;
   }
   echo "<p><small>Effervescence$simpleviewer</small></p>";
 }
