@@ -1,5 +1,5 @@
 <?php
-define('ZENFOLDER', 'zp-core');
+if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 
 // functions.php - HEADERS NOT SENT YET!
 
