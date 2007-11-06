@@ -646,6 +646,7 @@ Normal group of slide-like thumbnails
    See [custom.css] to customize your own 
    photo dimensions with override values. */
 .main {
+  position:relative;
   width:500px;
   margin:0 auto;
   text-align:center;
@@ -1091,20 +1092,20 @@ Comment Submission form
 /* Admin Toolbox
 ----------------------------------------------- */
 #admin, #admin_data{
-	position:fixed;
+	position:absolute;
 	right:0;
 	top:0;
 	border-left: 1px solid #333;
 	border-bottom: 1px solid #333;
 	background: #000;
 	width:120px;
-  padding: 2px 0px 4px 4px;
+    padding: 2px 0px 4px 4px;
 }
 #admin_data{
 	top: 20px;
 }
 #admin_data a {
-  color: #4480C7;
+    color: #4480C7;
 }
 #admin h3 {
 	font: 100% "Helvetica Neue", Helvetica, Arial, sans-serif;
