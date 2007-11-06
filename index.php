@@ -1,5 +1,5 @@
 <?php 
-define('ZENFOLDER', 'zp-core');
+if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 require_once(ZENFOLDER . "/template-functions.php");
 $themepath = 'themes';
 $theme = $_zp_gallery->getCurrentTheme();
