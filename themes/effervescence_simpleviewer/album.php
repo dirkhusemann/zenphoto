@@ -213,7 +213,8 @@ if (isAlbumPage()) {
                   fo.addVariable("preloaderColor", "<?php echo $preloaderColor ?>");
                   fo.addVariable("xmlDataPath", "<?php echo $flash_url ?>");
                   fo.addVariable("width", "100%");
-                  fo.addVariable("height", "100%");		
+                  fo.addVariable("height", "100%");	
+				  fo.addParam("wmode", "opaque");	
                   fo.write("flash");
              </script>
              <?php 
