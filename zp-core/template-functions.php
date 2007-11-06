@@ -1125,6 +1125,14 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 	  }
 }
 
+function printCustomSizedImageMaxHeight($maxheight) {
+  if (getFullWidth() === getFullHeight() OR getDefaultHeight() > $maxheight) {
+    printCustomSizedImage(getImageTitle(), null, null, $maxheight, null, null, null, null, null, null);
+  } else {
+  printDefaultSizedImage(getImageTitle());
+  }
+}
+
 function printSizedImageLink($size, $text, $title, $class=NULL, $id=NULL) { 
   printLink(getSizedImageURL($size), $text, $title, $class, $id);
 }
