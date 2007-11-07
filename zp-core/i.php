@@ -223,6 +223,26 @@ if ($process) {
        imagedestroy($watermark);
      }
 	
+	// Image Watermarking
+	$perform_watermark = getOption('perform_watermark');
+	$watermark_image = getOption('watermark_image');
+
+	if ($perform_watermark == true && $thumb == false) {
+
+	$watermark = imagecreatefrompng($watermark_image);
+	imagealphablending($watermark, false);
+	imagesavealpha($watermark, true);
+	$watermark_width = imagesx($watermark);
+	$watermark_height = imagesy($watermark);
+
+	// Position Overlay in Bottom Right
+	$dest_x = imagesx($newim) - $watermark_width;
+	$dest_y = imagesy($newim) - $watermark_height;
+
+	imagecopy($newim, $watermark, $dest_x, $dest_y, 0, 0, $watermark_width, $watermark_height);
+	imagedestroy($watermark);
+	}
+	
 	// Create the cached file (with lots of compatibility)...
         @touch($newfile);
         imagejpeg($newim, $newfile, $quality);
@@ -242,26 +262,6 @@ if (!$debug) {
   
   echo "\n<p>Image: <img src=\"" . FULLWEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($newfilename) ."\" /></p>";
   
-}
-
-// Image Watermarking
-$perform_watermark = getOption('perform_watermark');
-$watermark_image = getOption('watermark_image');
-
-if ($perform_watermark == true && $thumb == false && $_GET['wm'] == true) {
-
-$watermark = imagecreatefrompng($watermark_image);
-imagealphablending($watermark, false);
-imagesavealpha($watermark, true);
-$watermark_width = imagesx($watermark);
-$watermark_height = imagesy($watermark);
-
-// Position Overlay in Bottom Right
-$dest_x = imagesx($newim) - $watermark_width;
-$dest_y = imagesy($newim) - $watermark_height;
-
-imagecopy($newim, $watermark, $dest_x, $dest_y, 0, 0, $watermark_width, $watermark_height);
-imagedestroy($watermark);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
