@@ -13,7 +13,7 @@ $standardOptions = array('gallery_title','website_title','website_url','time_off
                          'albums_per_page','images_per_page','perform_watermark', 
                          'watermark_image','adminuser','adminpass','current_theme', 'spam_filter',
                          'email_new_comments', 'perform_video_watermark', 'video_watermark_image',
-                         'gallery_sorttype');
+                         'gallery_sorttype', 'gallery_sortdirection');
           
 
 if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
@@ -54,7 +54,9 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           $album->setShow(strip($_POST['Published']));
           $album->setCommentsAllowed(strip($_POST['allowcomments']));
           $album->setSortType(strip($_POST['sortby']));
+          $album->setSortDirection('image', strip($_POST['image_sortdirection']));   
           $album->setSubalbumSortType(strip($_POST['subalbumsortby']));   
+          $album->setSortDirection('album', strip($_POST['album_sortdirection']));   
           $album->save();
         }
 
@@ -330,6 +332,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
       setOption('spam_filter', $_POST['spam_filter']);         
       setBoolOption('email_new_comments', $_POST['email_new_comments']);         
       setOption('gallery_sorttype', $_POST['gallery_sorttype']);         
+      setBoolOption('gallery_sortdirection', $_POST['gallery_sortdirection']);         
       /* Save the "custom" options */     
       $templateOptions = GetOptionList();
 	  
@@ -516,6 +519,8 @@ if (!zp_loggedin()) {
                     <option value="<?php echo $sorttype; ?>"<?php if ($sorttype == $album->getSubalbumSortType()) echo ' selected="selected"'; ?>><?php echo $sorttype; ?></option>
                   <?php } ?>
                   </select>
+				&nbsp;decending <input type="checkbox" name="album_sortdirection" value="1"
+				     <?php if ($album->getSortDirection('image')) {echo "CHECKED";} ?>>  
                 </td>
               </tr>
              <tr>
@@ -526,6 +531,8 @@ if (!zp_loggedin()) {
                     <option value="<?php echo $sorttype; ?>"<?php if ($sorttype == $album->getSortType()) echo ' selected="selected"'; ?>><?php echo $sorttype; ?></option>
                   <?php } ?>
                   </select>
+				&nbsp;decending <input type="checkbox" name="image_sortdirection" value="1" 
+				     <?php if ($album->getSortDirection('image')) {echo "CHECKED";} ?>>  
                 </td>
               </tr>
                <tr><td></td><td valign="top"><a href="cache-images.php?album=<?php echo $album->name; ?>">Pre-Cache Images</a></strong> - Cache newly uploaded images.</td></tr>
@@ -1231,7 +1238,13 @@ if (!zp_loggedin()) {
               </select>
             </td>
              <td>Sort order for the gallery</td>
-       </tr>
+        </tr>
+        <tr>
+            <td>Sort decending:</td>
+            <td><input type="checkbox" name="gallery_sortdirection" value="1"
+            <?php echo checked('1', getOption('gallery_sortdirection')); ?> /></td>
+            <td>Gallery sort direction will be decending if this option is checked</td>
+        </tr>
         <tr>
             <td></td>
             <td><input type="submit" value="save" /></td>

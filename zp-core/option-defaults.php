@@ -45,6 +45,7 @@ function setDefault($option, $default) {
   setDefault('spam_filter', 'none');
   setDefault('email_new_comments', 1);
   setDefault('gallery_sorttype', 'Manual');
+  setDefault('gallery_sortdirection', '0');
   setDefault('current_theme', 'default');
 
 ?>

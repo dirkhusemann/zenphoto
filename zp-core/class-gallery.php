@@ -60,7 +60,9 @@ class Gallery {
     if (is_null($this->albums)) {
       
       $albumnames = $this->loadAlbumNames();
-      $albums = sortAlbumArray($albumnames, $this->getGallerySortKey($sorttype));
+	  $key = $this->getGallerySortKey($sorttype);
+	  if (getOption('gallery_sortdirection')) { $key .= ' DESC'; }
+      $albums = sortAlbumArray($albumnames, $key);
       
       // Store the values
       $this->albums = $albums;

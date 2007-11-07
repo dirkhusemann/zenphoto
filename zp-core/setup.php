@@ -78,6 +78,8 @@ if (file_exists("zp-config.php")) {
       `sort_type` varchar(20) default NULL,
       `subalbum_sort_type` varchar(20) default NULL,
       `sort_order` int(11) unsigned default NULL,
+	  `image_sortdirection` int(1) UNSIGNED default '0',
+	  `album_sortdirection` int(1) UNSIGNED default '0',
 	  `tags` text,
       PRIMARY KEY  (`id`),
       KEY `folder` (`folder`)

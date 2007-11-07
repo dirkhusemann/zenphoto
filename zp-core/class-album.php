@@ -103,6 +103,22 @@ class Album extends PersistentObject {
   function setPlace($place) { $this->set('place', $place); }
   
   // Sort type
+  function getSortDirection($what) {
+    if ($what == 'image') {
+	  return $this->get('image_sortdirection');
+    } else {
+	  return $this->get('album_sortdirection');
+    }
+  }
+  function setSortDirection($what, $val) {
+    if ($val) { $b = 1; } else { $b = 0; }
+    if ($what == 'image') {
+	  $this->set('image_sortdirection', $b);
+    } else {
+	  $this->set('album_sortdirection', $b);
+    }
+  }
+  
   function getSortType() { return $this->get('sort_type'); }
   function setSortType($sorttype) { $this->set('sort_type', $sorttype); }
   
@@ -111,6 +127,7 @@ class Album extends PersistentObject {
   
   function getSortOrder() { return $this->get('sort_order'); }
   function setSortOrder($sortorder) { $this->set('sort_order', $sortorder); }
+  
   function getSortKey($sorttype=null) {
     if (is_null($sorttype)) { $sorttype = $this->getSortType(); }
     switch ($sorttype) {
@@ -157,8 +174,9 @@ class Album extends PersistentObject {
         $dir = $this->name . '/' . $dir;
         $subalbums[] = $dir;
       }
-	  
-      $sortedSubalbums = sortAlbumArray($subalbums, $this->getSubalbumSortKey($sorttype)); 
+	  $key = $this->getSubalbumSortKey($sorttype);
+	  if ($this->getSortDirection('album')) { $key .= ' DESC'; }
+      $sortedSubalbums = sortAlbumArray($subalbums, $key); 
       $this->subalbums = $sortedSubalbums;
     }
     if ($page == 0) { 
@@ -236,6 +254,7 @@ class Album extends PersistentObject {
 	
 	$hidden = array();
     $key = $this->getSortKey($sorttype);
+	if ($this->getSortDirection('image')) { $key .= ' DESC'; }
     $result = query("SELECT filename, title, sort_order, `show` FROM " . prefix("images")
       . " WHERE albumid=" . $this->id . " ORDER BY " . $key);
 
@@ -287,6 +306,7 @@ class Album extends PersistentObject {
       } else {
         // if possible, run a single query instead of getting all images.
         $key = $this->getSortKey();
+	    if ($this->getSortDirection('image')) { $key .= ' DESC'; }
         $result = query("SELECT filename FROM " . prefix("images") 
             . " WHERE albumid=" . $this->id . " ORDER BY $key LIMIT $index,1");
         $filename = mysql_result($result, 0);
