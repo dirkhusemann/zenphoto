@@ -67,23 +67,17 @@
                     <p class="mainbutton" id="addcommentbutton"><a href="#addcomment" class="btn"><img src="<?php echo $_zp_themeroot ?>/img/btn_add_a_comment.gif" alt="" width="116" height="21" /></a></p>
 
                     <!-- BEGIN #addcomment -->
-                    <div id="addcomment" style="display: none;">
+					<?php if ($error) { 
+                      echo '<div id="addcomment" style="display: block;">';
+					} else { 
+                      echo '<div id="addcomment" style="display: none;">';
+					} ?>
                         <h2>Add a comment</h2>
                         <form method="post" action="#" id="comments-form">
                             <input type="hidden" name="comment" value="1" />
                               <input type="hidden" name="remember" value="1" />
-                            <?php 
-                                    if (isset($error)) { 
-                                    echo "<tr>\n<td>\n<div class=\"error\">";
-                                    if ($error == 1) {
-                                            echo "There was an error submitting your comment. Name, a valid e-mail address, and a spam-free comment are required.";
-                                    } else {
-                                            echo "Your comment has been marked for moderation.";
-                                    }
-                                    echo "</div>\n</td>\n</tr>";
-                                    } 
-                              ?>
-                            <table cellspacing="0">
+                              <?php printCommentErrors(); ?>
+                              <table cellspacing="0">
                                 <tr valign="top" align="left" id="row-name">
                                     <th><label for="name">Name:</label></th>
                                     <td><input tabindex="1" id="name" name="name" class="text" value="<?php echo $stored[0];?>" /></td>

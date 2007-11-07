@@ -10,7 +10,7 @@ if (isset($_GET['noflash'])) {
   setcookie("noFlash", "noFlash");
   } elseif (isset($_COOKIE["noFlash"])) {
   $_noFlash = true;
-  }
+}
   
 // Change the configuration here
 
@@ -34,14 +34,14 @@ $backgroundImagePath="";
 // End of config
 
 if ($_GET['format'] != 'xml') { 
-require_once ('customfunctions.php');  
-$themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
-$firstPageImages = normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
-if ($_noFlash) {
-  $backgroundColor = "#0";  /* who cares, we won't use it */
-} else {
-  $backgroundColor = parseCSSDef($zenCSS);  
-}
+  require_once ('customfunctions.php');  
+  $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
+  $firstPageImages = normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
+  if ($_noFlash) {
+    $backgroundColor = "#0";  /* who cares, we won't use it */
+  } else {
+    $backgroundColor = parseCSSDef($zenCSS);  
+  }
   
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -109,11 +109,7 @@ if ($_noFlash) {
 </div>
 
 <!-- Random Image -->
-<?php
-if (isAlbumPage()) {
-	printHeadingImage(getRandomImagesAlbum());
-	}
-?>
+<?php if (isAlbumPage()) {printHeadingImage(getRandomImagesAlbum()); } ?>
 </div>
 
 <!-- Wrap Subalbums -->
@@ -179,8 +175,7 @@ if (isAlbumPage()) {
              echo '<div class="imagethumb">' . "\n";
              echo '<a href="' . getImageLinkURL() .'" title="' . getImageTitle() . '">' . "\n";
              echo printImageThumb(getImageTitle()) . "</a>\n";
-             echo "</div>\n";
-             echo "</div>\n";
+             echo "</div>\n</div>\n";
            } ?>
            </div>
            </div>
@@ -271,19 +266,19 @@ if (getOption('Use_Simpleviewer') && !getOption('mod_rewrite')) {
 </html>
 <?php
 } else {
-header ('Content-Type: application/xml');
+  header ('Content-Type: application/xml');
 
-$path = '';
-$levels = explode('/', getAlbumLinkURL());
-foreach ($levels as $v) {$path = $path . '../';}
-$path=substr($path, 0, -1);
+  $path = '';
+  $levels = explode('/', getAlbumLinkURL());
+  foreach ($levels as $v) {$path = $path . '../';}
+  $path=substr($path, 0, -1);
 
-echo '<?xml version="1.0" encoding="UTF-8"?>
-<simpleviewerGallery title=""  maxImageWidth="'.$maxImageWidth.'" maxImageHeight="'.$maxImageHeight.
-'" textColor="'.$textColor.'" frameColor="'.$frameColor.'" frameWidth="'.$frameWidth.'" stagePadding="'.
-$stagePadding.'" thumbnailColumns="'.$thumbnailColumns.'" thumbnailows="'.$thumbnailRows.'" navPosition="'.
-$navPosition.'" enableRightClickOpen="'.$enableRightClickOpen.'" backgroundImagePath="'.$backgroundImagePath.
-'" imagePath="'.$path.'" thumbPath="'.$path.'">'; ?>
+  echo '<?xml version="1.0" encoding="UTF-8"?>
+  <simpleviewerGallery title=""  maxImageWidth="'.$maxImageWidth.'" maxImageHeight="'.$maxImageHeight.
+    '" textColor="'.$textColor.'" frameColor="'.$frameColor.'" frameWidth="'.$frameWidth.'" stagePadding="'.
+    $stagePadding.'" thumbnailColumns="'.$thumbnailColumns.'" thumbnailows="'.$thumbnailRows.'" navPosition="'.
+    $navPosition.'" enableRightClickOpen="'.$enableRightClickOpen.'" backgroundImagePath="'.$backgroundImagePath.
+    '" imagePath="'.$path.'" thumbPath="'.$path.'">'; ?>
 
 <?php while (next_image(true)): ?><image><filename><?php echo getFullImageURL();?></filename><caption><![CDATA[<a href="<?php echo getImageLinkURL();?>" title="Open in a new window">
 <font face="Times"><u><b><em><?php echo getImageTitle() ?></font></em></b></u></a></u>

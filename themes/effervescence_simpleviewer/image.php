@@ -124,21 +124,7 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
         <form id="commentform" action="#" method="post">
           <div><input type="hidden" name="comment" value="1" />
             <input type="hidden" name="remember" value="1" />
-            <?php 
-            if (isset($error)) { 
-              echo "<tr>";
-                echo "<td>";
-                  echo '<div class="error">';
-                  if ($error == 1) {
-                    echo "There was an error submitting your comment. Name, a valid e-mail address, and a spam-free comment are required.";
-                  } else {
-                    echo "Your comment has been marked for moderation.";
-                  }
-                  echo "</div>";
-                echo "</td>";
-              echo  "</tr>";
-            } 
-            ?>
+            <?php printCommentErrors(); ?>
             <p><input type="text" name="name" id="name" class="textinput" value="<?=$stored[0];?>" size="22" tabindex="1" />
             <label for="name"><small>Name</small></label></p>
             <p><input type="text" name="email" id="email" class="textinput" value="<?=$stored[1];?>" size="22" tabindex="2" />

@@ -71,21 +71,7 @@
 				<form id="commentform" action="#" method="post">
 				<div><input type="hidden" name="comment" value="1" />
           		<input type="hidden" name="remember" value="1" />
-              <?php 
-              if (isset($error)) { 
-                echo "<tr>";
-                  echo "<td>";
-                    echo '<div class="error">';
-                    if ($error == 1) {
-                      echo "There was an error submitting your comment. Name, a valid e-mail address, and a spam-free comment are required.";
-                    } else {
-                      echo "Your comment has been marked for moderation.";
-                    }
-                    echo "</div>";
-                  echo "</td>";
-                echo  "</tr>";
-              } 
-              ?>
+                <?php printCommentErrors(); ?>
 
 					<table border="0">
 						<tr>

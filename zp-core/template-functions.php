@@ -1205,6 +1205,24 @@ function printEditCommentLink($text, $before='', $after='', $title=NULL, $class=
   }
 }
 
+function printCommentErrors($class = 'error') {
+  global $error;
+  if (isset($error)) { 
+    echo "<tr>";
+    echo "<td>";
+    echo "<div class=$class>";
+    if ($error == 1) {
+      echo "There was an error submitting your comment. Name, a valid e-mail address, and a spam-free comment are required.";
+    } else {
+      echo "Your comment has been marked for moderation.";
+    }
+    echo "</div>";
+    echo "</td>";
+    echo "</tr>";
+  } 
+  return $error;
+}
+
 function printAlbumZip(){ 
 	global $_zp_current_album; 
 	echo'<a href="' . rewrite_path("/" . pathurlencode($_zp_current_album->name), 
