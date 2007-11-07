@@ -46,7 +46,8 @@
             <div id="commentblock">
 
                   <h2><?php $showhide = "<a href=\"#comments\" id=\"showcomments\"><img src=\"" . $_zp_themeroot . "/img/btn_show.gif\" width=\"35\" height=\"11\" alt=\"SHOW\" /></a> <a href=\"#content\" id=\"hidecomments\"><img src=\"".$_zp_themeroot."/img/btn_hide.gif\" width=\"35\" height=\"11\" alt=\"HIDE\" /></a>"; $num = getCommentCount(); if ($num == 0) echo "<h2>No comments yet</h2>"; if ($num == 1) echo "<h2>1 comment so far $showhide</h2>"; if ($num > 1) echo "<h2>$num comments so far $showhide</h2>"; ?></h2>
-                  
+                  <?php printCommentErrors(); ?>	  
+                
                 <!-- BEGIN #comments -->
                 <div id="comments">
                     <dl class="commentlist">
@@ -76,7 +77,6 @@
                         <form method="post" action="#" id="comments-form">
                             <input type="hidden" name="comment" value="1" />
                               <input type="hidden" name="remember" value="1" />
-                              <?php printCommentErrors(); ?>
                               <table cellspacing="0">
                                 <tr valign="top" align="left" id="row-name">
                                     <th><label for="name">Name:</label></th>
