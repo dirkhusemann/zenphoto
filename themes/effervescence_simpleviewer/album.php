@@ -220,7 +220,7 @@ if ($_GET['format'] != 'xml') {
 		  ?>
 	        <div id="main3">
 	        <div id="main2">
-	        <br>
+	        <br />
 	        <p align="center">Album is empty</font></p>
 	        </div>
 	        </div>
@@ -254,7 +254,7 @@ if (getOption('Use_Simpleviewer') && !getOption('mod_rewrite')) {
 
 <?php printThemeInfo(); ?>
 <a href="http://www.zenphoto.org" title="A simpler web photo album">Powered by 
-<font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font size="1" face="Arial Black">photo</font></span></a><br/>
+<font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font size="1" face="Arial Black">photo</font></span></a><br />
 <?php printRSSLink('Album', '', 'Album RSS', ''); ?>
 
 </div>
@@ -282,4 +282,4 @@ if (getOption('Use_Simpleviewer') && !getOption('mod_rewrite')) {
 
 <?php while (next_image(true)): ?><image><filename><?php echo getFullImageURL();?></filename><caption><![CDATA[<a href="<?php echo getImageLinkURL();?>" title="Open in a new window">
 <font face="Times"><u><b><em><?php echo getImageTitle() ?></font></em></b></u></a></u>
-<br></font><?php echo getImageDesc() ?>]]></caption></image><?php endwhile; ?></simpleviewerGallery><?php } ?>
+<br /></font><?php echo getImageDesc(); ?>]]></caption></image><?php endwhile; ?></simpleviewerGallery><?php } ?>
