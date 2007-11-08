@@ -27,10 +27,6 @@ $conf['mysql_database'] = "database_name";
 // If you're sharing the database with other tables, use a prefix to be safe.
 $conf['mysql_prefix'] = "";
 
-// Change this to "https" if you use an HTTPS server (a "https://..." url)
-// Otherwise you should leave it at "http"
-$conf['server_protocol'] = "http"; 
-
 ////////////////////////////////////////////////////////////////////////////////
 // zp-config.php required options
 ////////////////////////////////////////////////////////////////////////////////
@@ -40,6 +36,10 @@ $conf['server_protocol'] = "http";
 // change 'external_album_folder' to locate your album folder outside the zenphoto folders
 $conf['album_folder'] = '/albums/';
 $conf['external_album_folder'] = null;
+
+// Change this to "https" if you use an HTTPS server (a "https://..." url)
+// Otherwise you should leave it at "http"
+$conf['server_protocol'] = "http";
 
 ////////////////////////////////////////////////////////////////////////////////
 // The below options are for convenience. They may be changed on the admin options page

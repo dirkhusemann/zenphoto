@@ -327,9 +327,9 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
       setOption('albums_per_page', $_POST['albums_per_page']);
       setOption('images_per_page', $_POST['images_per_page']);
       setBoolOption('perform_watermark', $_POST['perform_watermark']);
-      setOption('watermark_image', $_POST['watermark_image']);
+      setOption('watermark_image', 'images/' . $_POST['watermark_image'] . '.png');
       setBoolOption('perform_video_watermark', $_POST['perform_video_watermark']);
-      setOption('video_watermark_image', $_POST['video_watermark_image']);
+      setOption('video_watermark_image', 'images/' . $_POST['video_watermark_image'] . '.png');
       setOption('spam_filter', $_POST['spam_filter']);         
       setBoolOption('email_new_comments', $_POST['email_new_comments']);         
       setOption('gallery_sorttype', $_POST['gallery_sorttype']);         
@@ -1336,8 +1336,15 @@ if (!zp_loggedin()) {
         </tr>
         <tr>
             <td>Image for image watermark:</td>
-            <td><input type="text" size="40" name="watermark_image"
-                value="<?php echo getOption('watermark_image');?>" /></td>
+            <td>
+			<?php
+			  $v = explode("/", getOption('watermark_image'));	  
+              $v = str_replace('.png', "", $v[count($v)-1]);			  
+			  echo "<select id=\"watermark_image\" name=\"watermark_image\">\n";
+              generateListFromFiles($v, SERVERPATH . "/" . ZENFOLDER . '/images' , '.png');
+              echo "</select>\n";
+	        ?>
+			</td>
             <td>The watermark image (png-24). (Place the image in the <?php echo ZENFOLDER; ?>/images/ directory.)</td>
         </tr>
         <tr>
@@ -1348,8 +1355,15 @@ if (!zp_loggedin()) {
         </tr>
         <tr>
             <td>Image for video watermark:</td>
-            <td><input type="text" size="40" name="video_watermark_image"
-                value="<?php echo getOption('video_watermark_image');?>" /></td>
+			<td>
+			<?php
+			  $v = explode("/", getOption('video_watermark_image'));	
+              $v = str_replace('.png', "", $v[count($v)-1]);			  
+			  echo "<select id=\"videowatermarkimage\" name=\"video_watermark_image\">\n";
+              generateListFromFiles($v, SERVERPATH . "/" . ZENFOLDER . '/images' , '.png');
+              echo "</select>\n";
+	        ?>
+			</td>
             <td>The watermark image (png-24). (Place the image in the <?php echo ZENFOLDER; ?>/images/ directory.)</td>
         </tr>
         <tr>

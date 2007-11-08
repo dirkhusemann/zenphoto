@@ -12,7 +12,6 @@ function setDefault($option, $default) {
 
   global $_zp_conf_vars;
   $conf = $_zp_conf_vars;
-  $gallery = new Gallery();
   
   setDefault('gallery_title', "Gallery");
   setDefault('website_title', "");
