@@ -14,7 +14,7 @@ require_once('plugins/phooglelite.php');
 require_once('functions-db.php');
 
 // Set the version number.
-$_zp_conf_vars['version'] = '1.1.1';
+$_zp_conf_vars['version'] = '1.1.2';
 
 // If the server protocol is not set, set it to the default (obscure zp-config.php change).
 if (!isset($_zp_conf_vars['server_protocol'])) $zp_conf_vars['server_protocol'] = 'http';
