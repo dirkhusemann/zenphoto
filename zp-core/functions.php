@@ -16,6 +16,9 @@ require_once('functions-db.php');
 // Set the version number.
 $_zp_conf_vars['version'] = '1.1.1';
 
+// If the server protocol is not set, set it to the default (obscure zp-config.php change).
+if (!isset($_zp_conf_vars['server_protocol'])) $zp_conf_vars['server_protocol'] = 'http';
+
 // the options array
 $_zp_options = NULL;
   
@@ -28,11 +31,13 @@ function getOption($key) {
   global $_zp_conf_vars, $_zp_options;
   if (NULL == $_zp_options) {
     $_zp_options = array();
-    $sql = "SELECT `name`, `value` FROM ".prefix('options');
-    $optionlist = query_full_array($sql);
-    foreach($optionlist as $option) {
-      $_zp_options[$option['name']] = $option['value'];
-      $_zp_conf_vars[$option['name']] = $option['value'];  /* so that zp_conf will get the DB result */
+    if (!defined('SETUP')) {
+      $sql = "SELECT `name`, `value` FROM ".prefix('options');
+      $optionlist = query_full_array($sql);
+      foreach($optionlist as $option) {
+        $_zp_options[$option['name']] = $option['value'];
+        $_zp_conf_vars[$option['name']] = $option['value'];  /* so that zp_conf will get the DB result */
+      }
     }
   }  
   if (array_key_exists($key, $_zp_options)) {

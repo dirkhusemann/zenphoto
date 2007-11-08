@@ -65,9 +65,9 @@ function query($sql) {
     $sql = sanitize($sql, true);
     $error = "MySQL Query ( <em>$sql</em> ) Failed. Error: " . mysql_error();
     // Changed this to mysql_query - *never* call query functions recursively...
-    if (!mysql_query("SELECT 1 FROM ".prefix('albums')." LIMIT 0", $mysql_connection)) {
+    if (!mysql_query("SELECT 1 FROM " . prefix('albums') . " LIMIT 0", $mysql_connection)) {
       $error .= "<br>It looks like your zenphoto tables haven't been created. You may need to "
-        . " <a href=\"" . ZENFOLDER . "/setup.php\">run the setup script</a>.";
+        . " <a href=\"" . WEBPATH . '/' . ZENFOLDER . "/setup.php\">run the setup script</a>.";
     }
     zp_error($error);
     return false;
