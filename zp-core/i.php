@@ -206,7 +206,7 @@ if ($process) {
     if ($thumb && $sharpenthumbs) {
       unsharp_mask($newim, 40, 0.5, 3);
     }
-
+/*
     // Video Watermarks on video thumb
 	 $perform_video_watermark = getOption('perform_video_watermark');
      $video_watermark_image = getOption('video_watermark_image');
@@ -222,25 +222,34 @@ if ($process) {
        imagecopymerge($newim, $watermark, $dest_x, $dest_y, 0, 0, $watermark_width, $watermark_height,100);
        imagedestroy($watermark);
      }
+*/
 	
 	// Image Watermarking
-	$perform_watermark = getOption('perform_watermark');
-	$watermark_image = getOption('watermark_image');
+	$perform_watermark = false;
+	if ($_GET['vwm']) {
+	  if ($thumb) {
+	   $perform_watermark = true;
+       $watermark_image = getOption('video_watermark_image');
+	  }
+	} else {
+	  if (!$thumb) {
+	    $perform_watermark = getOption('perform_watermark');
+	    $watermark_image = getOption('watermark_image');
+	  }
+	}
 
-	if ($perform_watermark == true && $thumb == false) {
+	if ($perform_watermark) {
+	  $watermark = imagecreatefrompng($watermark_image);
+	  imagealphablending($watermark, false);
+	  imagesavealpha($watermark, true);
+	  $watermark_width = imagesx($watermark);
+	  $watermark_height = imagesy($watermark);
+	  // Position Overlay in Bottom Right
+	  $dest_x = max(0, imagesx($newim) - $watermark_width);
+	  $dest_y = max(0, imagesy($newim) - $watermark_height);
 
-	$watermark = imagecreatefrompng($watermark_image);
-	imagealphablending($watermark, false);
-	imagesavealpha($watermark, true);
-	$watermark_width = imagesx($watermark);
-	$watermark_height = imagesy($watermark);
-
-	// Position Overlay in Bottom Right
-	$dest_x = imagesx($newim) - $watermark_width;
-	$dest_y = imagesy($newim) - $watermark_height;
-
-	imagecopy($newim, $watermark, $dest_x, $dest_y, 0, 0, $watermark_width, $watermark_height);
-	imagedestroy($watermark);
+	  imagecopy($newim, $watermark, $dest_x, $dest_y, 0, 0, $watermark_width, $watermark_height);
+	  imagedestroy($watermark);
 	}
 	
 	// Create the cached file (with lots of compatibility)...

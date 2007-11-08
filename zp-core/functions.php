@@ -198,17 +198,15 @@ function is_videoThumb($album,$filename){
 	
 
 //ZenVideo: Search a thumbnail for the image
-function checkVideoThumb($album,$filename){
+function checkVideoThumb($album,$video){
 	$extTab = array(".flv",".3gp",".mov",".FLV",".3GP",".MOV");
     foreach($extTab as $ext) {
-      $video = str_replace($ext,"",$filename);
+      $video = str_replace($ext,"",$video);
     }
 	$extTab = array(".jpg",".jpeg",".gif",".png");
 
-	foreach($extTab as $ext)
-	{
-  		if(file_exists($album."/".$video.$ext))
-      	{
+	foreach($extTab as $ext) {
+  		if(file_exists($album."/".$video.$ext)) {
           	return $video.$ext;
       	}
 	}

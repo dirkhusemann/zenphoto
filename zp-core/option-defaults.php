@@ -41,7 +41,7 @@ function setDefault($option, $default) {
   setDefault('perform_watermark', 0);
   setDefault('watermark_image', "images/watermark.png");
   setDefault('perform_video_watermark', 0);
-  setDefault('video_watermark_image', "images/videoWatermark.png");
+  setDefault('video_watermark_image', "images/videoDefault.png");
   setDefault('spam_filter', 'none');
   setDefault('email_new_comments', 1);
   setDefault('gallery_sorttype', 'Manual');
