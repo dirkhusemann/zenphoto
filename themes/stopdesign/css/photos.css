@@ -1139,3 +1139,27 @@ Comment Submission form
   background-color: #999;
   border: 1px solid #bbb;
 }
+
+/* Meta Data
+----------------------------------------------- */
+#imagemetadata {
+  text-align: right;
+  position: relative;
+  display: none;
+}
+
+#imagemetadata table {
+  text-align: left;
+  line-height: 1em;
+  border: 1px solid #ccc;
+  position: absolute;
+  top: 2em;
+  right: 0px;
+  background-color: #fafafa;
+}
+
+#imagemetadata table td {
+  border-bottom: 1px solid #f0f0f0;
+  background-color: #f8f8f8;
+  padding: 2px 5px;
+}

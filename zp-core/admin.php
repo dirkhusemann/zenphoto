@@ -168,7 +168,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
           if ($_FILES['files']['name'][$key] == "") continue;
           if ($error == UPLOAD_ERR_OK) {
             $tmp_name = $_FILES['files']['tmp_name'][$key];
-            $name = $_FILES['files']['name'][$key];
+            $name = $_FILES['files']['name'][$key];		
+			$name = str_replace("%", "", $name); // the percents cause bad problems
             if (is_image($name)) {
               $uploadfile = $uploaddir . '/' . $name;
               move_uploaded_file($tmp_name, $uploadfile);
