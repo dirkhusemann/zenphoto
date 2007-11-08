@@ -62,7 +62,7 @@
 	
 </div>
 
-<div id="credit"><?php printRSSLink('Gallery', '', 'Gallery RSS', ' | '); ?> <a href="<?php echo getGalleryIndexURL();?>?p=archive?p=archive">Archive View</a> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
+<div id="credit"><?php printRSSLink('Gallery', '', 'Gallery RSS', ' | '); ?> <a href="<?php echo getGalleryIndexURL();?>?p=archive">Archive View</a> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
 
 </body>
 </html>

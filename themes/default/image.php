@@ -4,6 +4,7 @@
 <head>
 	<title><?php printGalleryTitle(); ?> | <?php echo getAlbumTitle();?> | <?php echo getImageTitle();?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
+    <link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/starrating.css" type="text/css" />
     <link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
 	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/jquery.js" type="text/javascript"></script>
 	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.js" type="text/javascript"></script>
@@ -112,7 +113,7 @@
 	</div>
 </div>
 
-<div id="credit"><?php printRSSLink('Gallery','','RSS', ' | '); ?> <a href="<?php echo getGalleryIndexURL();?>?p=archive?p=archive">Archive View</a> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
+<div id="credit"><?php printRSSLink('Gallery','','RSS', ' | '); ?> <a href="<?php echo getGalleryIndexURL();?>?p=archive">Archive View</a> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
 
 </body>
 </html>
