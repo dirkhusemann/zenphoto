@@ -701,7 +701,8 @@ if(!in_context(ZP_IMAGE)) return false;
 function getImageDesc() { 
   if(!in_context(ZP_IMAGE)) return false;
   global $_zp_current_image;
-  return str_replace("\n", "<br />", $_zp_current_image->getDesc());
+  $desc = str_replace("\r\n", "\n", $_zp_current_image->getDesc());
+  return str_replace("\n", "<br/>", $desc);
 }
 
 function printImageDesc($editable=false) {  
