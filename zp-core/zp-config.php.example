@@ -36,6 +36,8 @@ $conf['mysql_prefix'] = "";
 // change 'external_album_folder' to locate your album folder outside the zenphoto folders
 $conf['album_folder'] = '/albums/';
 $conf['external_album_folder'] = null;
+// this can be changed later on the admin/options page. We need it for virgin installations
+$conf['server_protocol'] = "http";
 
 ////////////////////////////////////////////////////////////////////////////////
 // The below options are for convenience. They may be changed on the admin options page
