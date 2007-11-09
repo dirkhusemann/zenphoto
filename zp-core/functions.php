@@ -895,5 +895,29 @@ function getImageMetadata($imageName) {
   return $result;
 }
 
-if (!function_exists('zip_open')) { include('pclZip.php'); }
+function unzip($file, $dir) { //check if zziplib is installed
+  if(function_exists('zip_open()')) {
+    $zip = zip_open($file);
+    if ($zip) {
+      while ($zip_entry = zip_read($zip)) { // Skip non-images in the zip file.
+        if (!is_image(zip_entry_name($zip_entry))) continue;
+          if (zip_entry_open($zip, $zip_entry, "r")) {
+           $buf = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
+           $path_file = str_replace("/",DIRECTORY_SEPARATOR, $dir . '/' . zip_entry_name($zip_entry));
+           $fp = fopen($path_file, "w");
+           fwrite($fp, $buf);
+           fclose($fp);
+           zip_entry_close($zip_entry);
+         }
+       }
+      zip_close($zip);
+    }
+  } else { // Use Zlib http://www.phpconcept.net/pclzip/index.en.php
+    require_once('pclzip.lib.php');
+    $zip = new PclZip($file);
+    if ($zip->extract(PCLZIP_OPT_PATH, $dir, PCLZIP_OPT_REMOVE_ALL_PATH) == 0) {
+      die("Error : ".$zip->errorInfo(true));
+    }
+  }
+}
 ?>

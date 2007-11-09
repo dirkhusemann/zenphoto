@@ -18,7 +18,7 @@ function setDefault($option, $default) {
   setDefault('website_url', "");
   setDefault('time_offset', 0);
   setDefault('gmaps_apikey', "");
-  setDefault('mod_rewrite', 1);
+  setDefault('mod_rewrite', 0);
   setDefault('mod_rewrite_image_suffix', ".php");
   setDefault('adminuser', "");
   setDefault('adminpass', "");
