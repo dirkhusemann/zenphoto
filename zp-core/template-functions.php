@@ -1487,6 +1487,7 @@ function printAllTagsAs($option,$class="",$sort="abc",$counter=FALSE,$links=TRUE
 
 function getAllDates() {
   $alldates = array();
+  $cleandates = array();
   $result = query_full_array("SELECT `date` FROM ". prefix('images') ." WHERE `show` = 1");
   foreach($result as $row){
 	$alldates[] = $row['date']; 

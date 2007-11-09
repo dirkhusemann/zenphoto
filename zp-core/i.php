@@ -206,23 +206,6 @@ if ($process) {
     if ($thumb && $sharpenthumbs) {
       unsharp_mask($newim, 40, 0.5, 3);
     }
-/*
-    // Video Watermarks on video thumb
-	 $perform_video_watermark = getOption('perform_video_watermark');
-     $video_watermark_image = getOption('video_watermark_image');
-     if ($_GET['vwm'] == true && $thumb == true) {  
-       $watermark = imagecreatefrompng($video_watermark_image);
-       imagealphablending($watermark, false);
-       imagesavealpha($watermark, true);
-       $watermark_width = imagesx($watermark);
-       $watermark_height = imagesy($watermark);
-       // Position Overlay in Bottom Right
-       $dest_x = imagesx($newim) - $watermark_width;
-       $dest_y = imagesy($newim) - $watermark_height;
-       imagecopymerge($newim, $watermark, $dest_x, $dest_y, 0, 0, $watermark_width, $watermark_height,100);
-       imagedestroy($watermark);
-     }
-*/
 	
 	// Image Watermarking
 	$perform_watermark = false;
