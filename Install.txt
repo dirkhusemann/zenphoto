@@ -9,7 +9,8 @@ http://www.zenphoto.org/trac/wiki/ZenphotoInstall
 1. Edit the zp-config.php.example file with your database and other info, and rename
    it to zp-config.php when you're done (remove the .example).
 
-2. If you want to use mod_rewrite for cruft-free URLs, edit the one line of .htaccess
+2. If you want to use mod_rewrite for cruft-free URLs, open .htaccess and make sure the
+   value for RewriteBase is the same directory you will be using.
 
 3. Get the files in the zenphoto.zip or zenphoto.tar.gz package on to your
    server somehow if you haven't already (FTP, SSH, wget, tar -xzvf .., etc.)
