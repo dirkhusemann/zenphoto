@@ -39,15 +39,19 @@ if (!zp_loggedin()) {
   global $_zp_gallery;
   $count = 0;
   
+  $gallery = new Gallery();
+  
   if (isset($_GET['album'])) {
     $folder = strip($_GET['album']);
     echo "\n<h2>Refreshing cache for $folder</h2>";
+	$gallery->clearCache(SERVERCACHE . '/' . $folder); // clean out what was there
     $album = new Album($album, $folder);
     $count = loadAlbum($album);
   } else {
     echo "\n<h2>Refreshing cache for Gallery</h2>";
+	$gallery->clearCache(); // clean out what was there.
     $albums = $_zp_gallery->getAlbums();
-      foreach ($albums as $folder) {
+    foreach ($albums as $folder) {
       $album = new Album($album, $folder);
       $count = $count + loadAlbum($album);
     }

@@ -427,20 +427,30 @@ class Gallery {
   }
   
 
-  /** 
-   * Cleans out the cache folder for older installations (deletes root-level JPGs)
-   * TODO: clean out the entire folder on request.
+/** 
+   * Cleans out the cache folder 
    */
-  function clearCache($folders=false) {
-    $cachefolder = SERVERCACHE;
+  function clearCache($cachefolder=NULL) {
+    if (is_null($cachefolder)) {
+      $cachefolder = SERVERCACHE;
+	}
     if (is_dir($cachefolder)) {
-      foreach (glob($cachefolder . "/*.jpg") as $filename) {
-        if (file_exists($filename)) {
-          @unlink($filename);
-        }
+	  $handle = opendir($cachefolder);
+      while (false !== ($filename = readdir($handle))) {
+	    $fullname = $cachefolder . '/' . $filename;
+	    if (is_dir($fullname)) {
+		  if (($filename != '.') && ($filename != '..')) {
+		    $this->clearCache($fullname);
+			rmdir($fullname);
+		  }
+		} else {
+          if (file_exists($fullname)) {
+            unlink($fullname); 
+		  }
+	    }
+
       }
-    }
-    return null;
+	}
   }
     
 }
