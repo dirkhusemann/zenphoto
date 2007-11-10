@@ -450,6 +450,7 @@ class Gallery {
 	    }
 
       }
+	closedir($handle);
 	}
   }
     

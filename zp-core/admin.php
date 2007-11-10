@@ -302,6 +302,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         exit();
       }
 
+	  $wm = getOption('perform_watermark');
+	  $vwm = getOption('perform_video_watermark');
       setOption('adminuser', $_POST['adminuser']);
       setOption('adminpass', $_POST['adminpass']);
       setOption('admin_email', $_POST['admin_email']);
@@ -353,7 +355,9 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
         }
         $i++;
        }  
-      
+	  if(($wm != getOption('perform_watermark')) || ($vwm != getOption('perform_video_watermark'))) {
+	    $gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the option has changed
+	  }
       header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=options");
       exit();
     
