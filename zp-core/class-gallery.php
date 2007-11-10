@@ -327,36 +327,36 @@ class Gallery {
             }          
             if ($defaultTitle == $image['title']) { /* default title */
               if (isset($metadata['title'])) {
-                $set = ',`title`="' . escape($metadata['title']) . '"'; 
+                $set = ',`title`="' . mysql_real_escape_string($metadata['title']) . '"'; 
               }
             }
           
             /* description */
             if (is_null($row['desc'])) {
               if (isset($metadata['desc'])) {
-                $set .= ', `desc`="' . escape($metadata['desc']) . '"'; 
+                $set .= ', `desc`="' . mysql_real_escape_string($metadata['desc']) . '"'; 
               }
             } 
 			
 			/* tags */
             if (is_null($row['tags'])) {
               if (isset($metadata['tags'])) {
-                $set .= ', `tags`="' . escape($metadata['tags']) . '"'; 
+                $set .= ', `tags`="' . mysql_real_escape_string($metadata['tags']) . '"'; 
               }
             }
 			
 			/* location, city, state, and country */
             if (isset($metadata['location'])) {
-               $set .= ', `location`="' . escape($metadata['location']) . '"'; 
+               $set .= ', `location`="' . mysql_real_escape_string($metadata['location']) . '"'; 
             }    
             if (isset($metadata['city'])) {
-               $set .= ', `city`="' . escape($metadata['city']) . '"'; 
+               $set .= ', `city`="' . mysql_real_escape_string($metadata['city']) . '"'; 
             }    
             if (isset($metadata['state'])) {
-               $set .= ', `state`="' . escape($metadata['state']) . '"'; 
+               $set .= ', `state`="' . mysql_real_escape_string($metadata['state']) . '"'; 
             }    
             if (isset($metadata['country'])) {
-               $set .= ', `state`="' . escape($metadata['country']) . '"'; 
+               $set .= ', `state`="' . mysql_real_escape_string($metadata['country']) . '"'; 
             }    
           
             /* date (for sorting) */
