@@ -94,13 +94,8 @@
   define( 'PCLZIP_CB_POST_ADD', 78004 );
   class PclZip
   {
-    // ----- Filename of the zip file
     var $zipname = '';
-
-    // ----- File descriptor of the zip file
     var $zip_fd = 0;
-
-    // ----- Internal error handling
     var $error_code = 1;
     var $error_string = '';
     var $magic_quotes_status;
@@ -110,8 +105,6 @@
     {
       die('Abort '.basename(__FILE__).' : Missing zlib extensions');
     }
-
-    // ----- Set the attributes
     $this->zipname = $p_zipname;
     $this->zip_fd = 0;
     $this->magic_quotes_status = -1;
@@ -119,34 +112,16 @@
   }
   function create($p_filelist)
   {
-    //--(MAGIC-PclTrace)--//PclTraceFctStart(__FILE__, __LINE__, 'PclZip::create', "filelist='$p_filelist', ...");
     $v_result=1;
-
-    // ----- Reset the error handler
     $this->privErrorReset();
-
-    // ----- Set default values
     $v_options = array();
     $v_options[PCLZIP_OPT_NO_COMPRESSION] = FALSE;
-
-    // ----- Look for variable options arguments
     $v_size = func_num_args();
-    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "$v_size arguments passed to the method");
-
-    // ----- Look for arguments
     if ($v_size > 1) {
-      // ----- Get the arguments
       $v_arg_list = func_get_args();
-
-      // ----- Remove from the options list the first argument
       array_shift($v_arg_list);
       $v_size--;
-
-      // ----- Look for first arg
       if ((is_integer($v_arg_list[0])) && ($v_arg_list[0] > 77000)) {
-        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Variable list of options detected");
-
-        // ----- Parse the options
         $v_result = $this->privParseOptions($v_arg_list, $v_size, $v_options,
                                             array (PCLZIP_OPT_REMOVE_PATH => 'optional',
                                                    PCLZIP_OPT_REMOVE_ALL_PATH => 'optional',
@@ -155,83 +130,51 @@
                                                    PCLZIP_CB_POST_ADD => 'optional',
                                                    PCLZIP_OPT_NO_COMPRESSION => 'optional',
                                                    PCLZIP_OPT_COMMENT => 'optional'
-                                                   //, PCLZIP_OPT_CRYPT => 'optional'
                                              ));
         if ($v_result != 1) {
-          //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
           return 0;
         }
       }
-
-      // ----- Look for 2 args
-      // Here we need to support the first historic synopsis of the
-      // method.
       else {
-        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Static synopsis");
-
-        // ----- Get the first argument
         $v_options[PCLZIP_OPT_ADD_PATH] = $v_arg_list[0];
-
-        // ----- Look for the optional second argument
         if ($v_size == 2) {
           $v_options[PCLZIP_OPT_REMOVE_PATH] = $v_arg_list[1];
         }
         else if ($v_size > 2) {
           PclZip::privErrorLog(PCLZIP_ERR_INVALID_PARAMETER,
 		                       "Invalid number / type of arguments");
-          //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, PclZip::errorCode(), PclZip::errorInfo());
           return 0;
         }
       }
     }
-
-    // ----- Init
     $v_string_list = array();
     $v_att_list = array();
     $v_filedescr_list = array();
     $p_result_list = array();
-    
-    // ----- Look if the $p_filelist is really an array
     if (is_array($p_filelist)) {
-    
-      // ----- Look if the first element is also an array
-      //       This will mean that this is a file description entry
       if (isset($p_filelist[0]) && is_array($p_filelist[0])) {
         $v_att_list = $p_filelist;
       }
-      
-      // ----- The list is a list of string names
       else {
         $v_string_list = $p_filelist;
       }
     }
-
-    // ----- Look if the $p_filelist is a string
     else if (is_string($p_filelist)) {
-      // ----- Create a list from the string
       $v_string_list = explode(PCLZIP_SEPARATOR, $p_filelist);
     }
-
-    // ----- Invalid variable type for $p_filelist
     else {
       PclZip::privErrorLog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid variable type p_filelist");
-      //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
       return 0;
     }
-    
-    // ----- Reformat the string list
     if (sizeof($v_string_list) != 0) {
       foreach ($v_string_list as $v_string) {
         if ($v_string != '') {
           $v_att_list[][PCLZIP_ATT_FILE_NAME] = $v_string;
         }
         else {
-          //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Ignore an empty filename");
         }
       }
     }
-    
-    // ----- For each file in the list check the attributes
     $v_supported_attributes
     = array ( PCLZIP_ATT_FILE_NAME => 'mandatory'
              ,PCLZIP_ATT_FILE_NEW_SHORT_NAME => 'optional'
@@ -246,96 +189,31 @@
                                                $v_options,
                                                $v_supported_attributes);
       if ($v_result != 1) {
-        //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
         return 0;
       }
     }
-
-    // ----- Expand the filelist (expand directories)
     $v_result = $this->privFileDescrExpand($v_filedescr_list, $v_options);
     if ($v_result != 1) {
-      //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
       return 0;
     }
-
-    // ----- Call the create fct
     $v_result = $this->privCreate($v_filedescr_list, $p_result_list, $v_options);
     if ($v_result != 1) {
-      //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
       return 0;
     }
-
-    // ----- Return
-    //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $p_result_list);
     return $p_result_list;
   }
-  // --------------------------------------------------------------------------------
-
-  // --------------------------------------------------------------------------------
-  // Function :
-  //   add($p_filelist, $p_add_dir="", $p_remove_dir="")
-  //   add($p_filelist, $p_option, $p_option_value, ...)
-  // Description :
-  //   This method supports two synopsis. The first one is historical.
-  //   This methods add the list of files in an existing archive.
-  //   If a file with the same name already exists, it is added at the end of the
-  //   archive, the first one is still present.
-  //   If the archive does not exist, it is created.
-  // Parameters :
-  //   $p_filelist : An array containing file or directory names, or
-  //                 a string containing one filename or one directory name, or
-  //                 a string containing a list of filenames and/or directory
-  //                 names separated by spaces.
-  //   $p_add_dir : A path to add before the real path of the archived file,
-  //                in order to have it memorized in the archive.
-  //   $p_remove_dir : A path to remove from the real path of the file to archive,
-  //                   in order to have a shorter path memorized in the archive.
-  //                   When $p_add_dir and $p_remove_dir are set, $p_remove_dir
-  //                   is removed first, before $p_add_dir is added.
-  // Options :
-  //   PCLZIP_OPT_ADD_PATH :
-  //   PCLZIP_OPT_REMOVE_PATH :
-  //   PCLZIP_OPT_REMOVE_ALL_PATH :
-  //   PCLZIP_OPT_COMMENT :
-  //   PCLZIP_OPT_ADD_COMMENT :
-  //   PCLZIP_OPT_PREPEND_COMMENT :
-  //   PCLZIP_CB_PRE_ADD :
-  //   PCLZIP_CB_POST_ADD :
-  // Return Values :
-  //   0 on failure,
-  //   The list of the added files, with a status of the add action.
-  //   (see PclZip::listContent() for list entry format)
-  // --------------------------------------------------------------------------------
   function add($p_filelist)
   {
-    //--(MAGIC-PclTrace)--//PclTraceFctStart(__FILE__, __LINE__, 'PclZip::add', "filelist='$p_filelist', ...");
     $v_result=1;
-
-    // ----- Reset the error handler
     $this->privErrorReset();
-
-    // ----- Set default values
     $v_options = array();
     $v_options[PCLZIP_OPT_NO_COMPRESSION] = FALSE;
-
-    // ----- Look for variable options arguments
     $v_size = func_num_args();
-    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "$v_size arguments passed to the method");
-
-    // ----- Look for arguments
     if ($v_size > 1) {
-      // ----- Get the arguments
       $v_arg_list = func_get_args();
-
-      // ----- Remove form the options list the first argument
       array_shift($v_arg_list);
       $v_size--;
-
-      // ----- Look for first arg
       if ((is_integer($v_arg_list[0])) && ($v_arg_list[0] > 77000)) {
-        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Variable list of options detected");
-
-        // ----- Parse the options
         $v_result = $this->privParseOptions($v_arg_list, $v_size, $v_options,
                                             array (PCLZIP_OPT_REMOVE_PATH => 'optional',
                                                    PCLZIP_OPT_REMOVE_ALL_PATH => 'optional',
@@ -346,80 +224,46 @@
                                                    PCLZIP_OPT_COMMENT => 'optional',
                                                    PCLZIP_OPT_ADD_COMMENT => 'optional',
                                                    PCLZIP_OPT_PREPEND_COMMENT => 'optional'
-                                                   //, PCLZIP_OPT_CRYPT => 'optional'
 												   ));
         if ($v_result != 1) {
-          //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
           return 0;
         }
       }
-
-      // ----- Look for 2 args
-      // Here we need to support the first historic synopsis of the
-      // method.
       else {
-        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Static synopsis");
-
-        // ----- Get the first argument
         $v_options[PCLZIP_OPT_ADD_PATH] = $v_add_path = $v_arg_list[0];
-
-        // ----- Look for the optional second argument
         if ($v_size == 2) {
           $v_options[PCLZIP_OPT_REMOVE_PATH] = $v_arg_list[1];
         }
         else if ($v_size > 2) {
-          // ----- Error log
           PclZip::privErrorLog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid number / type of arguments");
-
-          // ----- Return
-          //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, PclZip::errorCode(), PclZip::errorInfo());
           return 0;
         }
       }
     }
-
-    // ----- Init
     $v_string_list = array();
     $v_att_list = array();
     $v_filedescr_list = array();
     $p_result_list = array();
-    
-    // ----- Look if the $p_filelist is really an array
     if (is_array($p_filelist)) {
-    
-      // ----- Look if the first element is also an array
-      //       This will mean that this is a file description entry
       if (isset($p_filelist[0]) && is_array($p_filelist[0])) {
         $v_att_list = $p_filelist;
       }
-      
-      // ----- The list is a list of string names
       else {
         $v_string_list = $p_filelist;
       }
     }
-
-    // ----- Look if the $p_filelist is a string
     else if (is_string($p_filelist)) {
-      // ----- Create a list from the string
       $v_string_list = explode(PCLZIP_SEPARATOR, $p_filelist);
     }
-
-    // ----- Invalid variable type for $p_filelist
     else {
       PclZip::privErrorLog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid variable type '".gettype($p_filelist)."' for p_filelist");
-      //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
       return 0;
     }
-    
-    // ----- Reformat the string list
     if (sizeof($v_string_list) != 0) {
       foreach ($v_string_list as $v_string) {
         $v_att_list[][PCLZIP_ATT_FILE_NAME] = $v_string;
       }
     }
-    
-    // ----- For each file in the list check the attributes
     $v_supported_attributes
     = array ( PCLZIP_ATT_FILE_NAME => 'mandatory'
              ,PCLZIP_ATT_FILE_NEW_SHORT_NAME => 'optional'
@@ -434,171 +278,50 @@
                                                $v_options,
                                                $v_supported_attributes);
       if ($v_result != 1) {
-        //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
         return 0;
       }
     }
-
-    // ----- Expand the filelist (expand directories)
     $v_result = $this->privFileDescrExpand($v_filedescr_list, $v_options);
     if ($v_result != 1) {
-      //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
       return 0;
     }
-
-    // ----- Call the create fct
     $v_result = $this->privAdd($v_filedescr_list, $p_result_list, $v_options);
     if ($v_result != 1) {
-      //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
       return 0;
     }
-
-    // ----- Return
-    //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $p_result_list);
     return $p_result_list;
   }
-  // --------------------------------------------------------------------------------
-
-  // --------------------------------------------------------------------------------
-  // Function : listContent()
-  // Description :
-  //   This public method, gives the list of the files and directories, with their
-  //   properties.
-  //   The properties of each entries in the list are (used also in other functions) :
-  //     filename : Name of the file. For a create or add action it is the filename
-  //                given by the user. For an extract function it is the filename
-  //                of the extracted file.
-  //     stored_filename : Name of the file / directory stored in the archive.
-  //     size : Size of the stored file.
-  //     compressed_size : Size of the file's data compressed in the archive
-  //                       (without the headers overhead)
-  //     mtime : Last known modification date of the file (UNIX timestamp)
-  //     comment : Comment associated with the file
-  //     folder : true | false
-  //     index : index of the file in the archive
-  //     status : status of the action (depending of the action) :
-  //              Values are :
-  //                ok : OK !
-  //                filtered : the file / dir is not extracted (filtered by user)
-  //                already_a_directory : the file can not be extracted because a
-  //                                      directory with the same name already exists
-  //                write_protected : the file can not be extracted because a file
-  //                                  with the same name already exists and is
-  //                                  write protected
-  //                newer_exist : the file was not extracted because a newer file exists
-  //                path_creation_fail : the file is not extracted because the folder
-  //                                     does not exists and can not be created
-  //                write_error : the file was not extracted because there was a
-  //                              error while writing the file
-  //                read_error : the file was not extracted because there was a error
-  //                             while reading the file
-  //                invalid_header : the file was not extracted because of an archive
-  //                                 format error (bad file header)
-  //   Note that each time a method can continue operating when there
-  //   is an action error on a file, the error is only logged in the file status.
-  // Return Values :
-  //   0 on an unrecoverable failure,
-  //   The list of the files in the archive.
-  // --------------------------------------------------------------------------------
   function listContent()
   {
-    //--(MAGIC-PclTrace)--//PclTraceFctStart(__FILE__, __LINE__, 'PclZip::listContent', "");
     $v_result=1;
-
-    // ----- Reset the error handler
     $this->privErrorReset();
-
-    // ----- Check archive
     if (!$this->privCheckFormat()) {
-      //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
       return(0);
     }
-
-    // ----- Call the extracting fct
     $p_list = array();
     if (($v_result = $this->privList($p_list)) != 1)
     {
       unset($p_list);
-      //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0, PclZip::errorInfo());
       return(0);
     }
-
-    // ----- Return
-    //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $p_list);
     return $p_list;
   }
-  // --------------------------------------------------------------------------------
-
-  // --------------------------------------------------------------------------------
-  // Function :
-  //   extract($p_path="./", $p_remove_path="")
-  //   extract([$p_option, $p_option_value, ...])
-  // Description :
-  //   This method supports two synopsis. The first one is historical.
-  //   This method extract all the files / directories from the archive to the
-  //   folder indicated in $p_path.
-  //   If you want to ignore the 'root' part of path of the memorized files
-  //   you can indicate this in the optional $p_remove_path parameter.
-  //   By default, if a newer file with the same name already exists, the
-  //   file is not extracted.
-  //
-  //   If both PCLZIP_OPT_PATH and PCLZIP_OPT_ADD_PATH aoptions
-  //   are used, the path indicated in PCLZIP_OPT_ADD_PATH is append
-  //   at the end of the path value of PCLZIP_OPT_PATH.
-  // Parameters :
-  //   $p_path : Path where the files and directories are to be extracted
-  //   $p_remove_path : First part ('root' part) of the memorized path
-  //                    (if any similar) to remove while extracting.
-  // Options :
-  //   PCLZIP_OPT_PATH :
-  //   PCLZIP_OPT_ADD_PATH :
-  //   PCLZIP_OPT_REMOVE_PATH :
-  //   PCLZIP_OPT_REMOVE_ALL_PATH :
-  //   PCLZIP_CB_PRE_EXTRACT :
-  //   PCLZIP_CB_POST_EXTRACT :
-  // Return Values :
-  //   0 or a negative value on failure,
-  //   The list of the extracted files, with a status of the action.
-  //   (see PclZip::listContent() for list entry format)
-  // --------------------------------------------------------------------------------
   function extract()
   {
-    //--(MAGIC-PclTrace)--//PclTraceFctStart(__FILE__, __LINE__, "PclZip::extract", "");
     $v_result=1;
-
-    // ----- Reset the error handler
     $this->privErrorReset();
-
-    // ----- Check archive
     if (!$this->privCheckFormat()) {
-      //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
       return(0);
     }
-
-    // ----- Set default values
     $v_options = array();
-//    $v_path = "./";
     $v_path = '';
     $v_remove_path = "";
     $v_remove_all_path = false;
-
-    // ----- Look for variable options arguments
     $v_size = func_num_args();
-    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "$v_size arguments passed to the method");
-
-    // ----- Default values for option
     $v_options[PCLZIP_OPT_EXTRACT_AS_STRING] = FALSE;
-
-    // ----- Look for arguments
     if ($v_size > 0) {
-      // ----- Get the arguments
       $v_arg_list = func_get_args();
-
-      // ----- Look for first arg
       if ((is_integer($v_arg_list[0])) && ($v_arg_list[0] > 77000)) {
-        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Variable list of options");
-
-        // ----- Parse the options
         $v_result = $this->privParseOptions($v_arg_list, $v_size, $v_options,
                                             array (PCLZIP_OPT_PATH => 'optional',
                                                    PCLZIP_OPT_REMOVE_PATH => 'optional',
@@ -618,11 +341,8 @@
                                                    ,PCLZIP_OPT_EXTRACT_DIR_RESTRICTION => 'optional'
 												    ));
         if ($v_result != 1) {
-          //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
           return 0;
         }
-
-        // ----- Set the arguments
         if (isset($v_options[PCLZIP_OPT_PATH])) {
           $v_path = $v_options[PCLZIP_OPT_PATH];
         }
@@ -633,137 +353,50 @@
           $v_remove_all_path = $v_options[PCLZIP_OPT_REMOVE_ALL_PATH];
         }
         if (isset($v_options[PCLZIP_OPT_ADD_PATH])) {
-          // ----- Check for '/' in last path char
           if ((strlen($v_path) > 0) && (substr($v_path, -1) != '/')) {
             $v_path .= '/';
           }
           $v_path .= $v_options[PCLZIP_OPT_ADD_PATH];
         }
       }
-
-      // ----- Look for 2 args
-      // Here we need to support the first historic synopsis of the
-      // method.
       else {
-        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Static synopsis");
-
-        // ----- Get the first argument
         $v_path = $v_arg_list[0];
-
-        // ----- Look for the optional second argument
         if ($v_size == 2) {
           $v_remove_path = $v_arg_list[1];
         }
         else if ($v_size > 2) {
-          // ----- Error log
           PclZip::privErrorLog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid number / type of arguments");
-
-          // ----- Return
-          //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0, PclZip::errorInfo());
           return 0;
         }
       }
     }
-
-    // ----- Trace
-    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "path='$v_path', remove_path='$v_remove_path', remove_all_path='".($v_remove_path?'true':'false')."'");
-
-    // ----- Call the extracting fct
     $p_list = array();
     $v_result = $this->privExtractByRule($p_list, $v_path, $v_remove_path,
 	                                     $v_remove_all_path, $v_options);
     if ($v_result < 1) {
       unset($p_list);
-      //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0, PclZip::errorInfo());
       return(0);
     }
-
-    // ----- Return
-    //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $p_list);
     return $p_list;
   }
-  // --------------------------------------------------------------------------------
-
-
-  // --------------------------------------------------------------------------------
-  // Function :
-  //   extractByIndex($p_index, $p_path="./", $p_remove_path="")
-  //   extractByIndex($p_index, [$p_option, $p_option_value, ...])
-  // Description :
-  //   This method supports two synopsis. The first one is historical.
-  //   This method is doing a partial extract of the archive.
-  //   The extracted files or folders are identified by their index in the
-  //   archive (from 0 to n).
-  //   Note that if the index identify a folder, only the folder entry is
-  //   extracted, not all the files included in the archive.
-  // Parameters :
-  //   $p_index : A single index (integer) or a string of indexes of files to
-  //              extract. The form of the string is "0,4-6,8-12" with only numbers
-  //              and '-' for range or ',' to separate ranges. No spaces or ';'
-  //              are allowed.
-  //   $p_path : Path where the files and directories are to be extracted
-  //   $p_remove_path : First part ('root' part) of the memorized path
-  //                    (if any similar) to remove while extracting.
-  // Options :
-  //   PCLZIP_OPT_PATH :
-  //   PCLZIP_OPT_ADD_PATH :
-  //   PCLZIP_OPT_REMOVE_PATH :
-  //   PCLZIP_OPT_REMOVE_ALL_PATH :
-  //   PCLZIP_OPT_EXTRACT_AS_STRING : The files are extracted as strings and
-  //     not as files.
-  //     The resulting content is in a new field 'content' in the file
-  //     structure.
-  //     This option must be used alone (any other options are ignored).
-  //   PCLZIP_CB_PRE_EXTRACT :
-  //   PCLZIP_CB_POST_EXTRACT :
-  // Return Values :
-  //   0 on failure,
-  //   The list of the extracted files, with a status of the action.
-  //   (see PclZip::listContent() for list entry format)
-  // --------------------------------------------------------------------------------
-  //function extractByIndex($p_index, options...)
   function extractByIndex($p_index)
   {
-    //--(MAGIC-PclTrace)--//PclTraceFctStart(__FILE__, __LINE__, "PclZip::extractByIndex", "index='$p_index', ...");
     $v_result=1;
-
-    // ----- Reset the error handler
     $this->privErrorReset();
-
-    // ----- Check archive
     if (!$this->privCheckFormat()) {
-      //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
       return(0);
     }
-
-    // ----- Set default values
     $v_options = array();
-//    $v_path = "./";
     $v_path = '';
     $v_remove_path = "";
     $v_remove_all_path = false;
-
-    // ----- Look for variable options arguments
     $v_size = func_num_args();
-    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "$v_size arguments passed to the method");
-
-    // ----- Default values for option
     $v_options[PCLZIP_OPT_EXTRACT_AS_STRING] = FALSE;
-
-    // ----- Look for arguments
     if ($v_size > 1) {
-      // ----- Get the arguments
       $v_arg_list = func_get_args();
-
-      // ----- Remove form the options list the first argument
       array_shift($v_arg_list);
       $v_size--;
-
-      // ----- Look for first arg
       if ((is_integer($v_arg_list[0])) && ($v_arg_list[0] > 77000)) {
-        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Variable list of options");
-
-        // ----- Parse the options
         $v_result = $this->privParseOptions($v_arg_list, $v_size, $v_options,
                                             array (PCLZIP_OPT_PATH => 'optional',
                                                    PCLZIP_OPT_REMOVE_PATH => 'optional',
@@ -778,11 +411,8 @@
                                                    ,PCLZIP_OPT_EXTRACT_DIR_RESTRICTION => 'optional'
 												   ));
         if ($v_result != 1) {
-          //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
           return 0;
         }
-
-        // ----- Set the arguments
         if (isset($v_options[PCLZIP_OPT_PATH])) {
           $v_path = $v_options[PCLZIP_OPT_PATH];
         }
@@ -793,7 +423,6 @@
           $v_remove_all_path = $v_options[PCLZIP_OPT_REMOVE_ALL_PATH];
         }
         if (isset($v_options[PCLZIP_OPT_ADD_PATH])) {
-          // ----- Check for '/' in last path char
           if ((strlen($v_path) > 0) && (substr($v_path, -1) != '/')) {
             $v_path .= '/';
           }
@@ -801,372 +430,151 @@
         }
         if (!isset($v_options[PCLZIP_OPT_EXTRACT_AS_STRING])) {
           $v_options[PCLZIP_OPT_EXTRACT_AS_STRING] = FALSE;
-          //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Option PCLZIP_OPT_EXTRACT_AS_STRING not set.");
         }
         else {
-            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Option PCLZIP_OPT_EXTRACT_AS_STRING set.");
         }
       }
-
-      // ----- Look for 2 args
-      // Here we need to support the first historic synopsis of the
-      // method.
       else {
-        //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Static synopsis");
-
-        // ----- Get the first argument
         $v_path = $v_arg_list[0];
-
-        // ----- Look for the optional second argument
         if ($v_size == 2) {
           $v_remove_path = $v_arg_list[1];
         }
         else if ($v_size > 2) {
-          // ----- Error log
           PclZip::privErrorLog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid number / type of arguments");
-
-          // ----- Return
-          //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, PclZip::errorCode(), PclZip::errorInfo());
           return 0;
         }
       }
     }
-
-    // ----- Trace
-    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "index='$p_index', path='$v_path', remove_path='$v_remove_path', remove_all_path='".($v_remove_path?'true':'false')."'");
-
-    // ----- Trick
-    // Here I want to reuse extractByRule(), so I need to parse the $p_index
-    // with privParseOptions()
     $v_arg_trick = array (PCLZIP_OPT_BY_INDEX, $p_index);
     $v_options_trick = array();
     $v_result = $this->privParseOptions($v_arg_trick, sizeof($v_arg_trick), $v_options_trick,
                                         array (PCLZIP_OPT_BY_INDEX => 'optional' ));
     if ($v_result != 1) {
-        //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
         return 0;
     }
     $v_options[PCLZIP_OPT_BY_INDEX] = $v_options_trick[PCLZIP_OPT_BY_INDEX];
-
-    // ----- Call the extracting fct
     if (($v_result = $this->privExtractByRule($p_list, $v_path, $v_remove_path, $v_remove_all_path, $v_options)) < 1) {
-        //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0, PclZip::errorInfo());
         return(0);
     }
-
-    // ----- Return
-    //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $p_list);
     return $p_list;
   }
-  // --------------------------------------------------------------------------------
-
-  // --------------------------------------------------------------------------------
-  // Function :
-  //   delete([$p_option, $p_option_value, ...])
-  // Description :
-  //   This method removes files from the archive.
-  //   If no parameters are given, then all the archive is emptied.
-  // Parameters :
-  //   None or optional arguments.
-  // Options :
-  //   PCLZIP_OPT_BY_INDEX :
-  //   PCLZIP_OPT_BY_NAME :
-  //   PCLZIP_OPT_BY_EREG : 
-  //   PCLZIP_OPT_BY_PREG :
-  // Return Values :
-  //   0 on failure,
-  //   The list of the files which are still present in the archive.
-  //   (see PclZip::listContent() for list entry format)
-  // --------------------------------------------------------------------------------
   function delete()
   {
-    //--(MAGIC-PclTrace)--//PclTraceFctStart(__FILE__, __LINE__, "PclZip::delete", "");
     $v_result=1;
-
-    // ----- Reset the error handler
     $this->privErrorReset();
-
-    // ----- Check archive
     if (!$this->privCheckFormat()) {
-      //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
       return(0);
     }
-
-    // ----- Set default values
     $v_options = array();
-
-    // ----- Look for variable options arguments
     $v_size = func_num_args();
-    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "$v_size arguments passed to the method");
-
-    // ----- Look for arguments
     if ($v_size > 0) {
-      // ----- Get the arguments
       $v_arg_list = func_get_args();
-
-      // ----- Parse the options
       $v_result = $this->privParseOptions($v_arg_list, $v_size, $v_options,
                                         array (PCLZIP_OPT_BY_NAME => 'optional',
                                                PCLZIP_OPT_BY_EREG => 'optional',
                                                PCLZIP_OPT_BY_PREG => 'optional',
                                                PCLZIP_OPT_BY_INDEX => 'optional' ));
       if ($v_result != 1) {
-          //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
           return 0;
       }
     }
-
-    // ----- Magic quotes trick
     $this->privDisableMagicQuotes();
-
-    // ----- Call the delete fct
     $v_list = array();
     if (($v_result = $this->privDeleteByRule($v_list, $v_options)) != 1) {
       $this->privSwapBackMagicQuotes();
       unset($v_list);
-      //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0, PclZip::errorInfo());
       return(0);
     }
-
-    // ----- Magic quotes trick
     $this->privSwapBackMagicQuotes();
-
-    // ----- Return
-    //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_list);
     return $v_list;
   }
-  // --------------------------------------------------------------------------------
-
-  // --------------------------------------------------------------------------------
-  // Function : deleteByIndex()
-  // Description :
-  //   ***** Deprecated *****
-  //   delete(PCLZIP_OPT_BY_INDEX, $p_index) should be prefered.
-  // --------------------------------------------------------------------------------
   function deleteByIndex($p_index)
   {
-    //--(MAGIC-PclTrace)--//PclTraceFctStart(__FILE__, __LINE__, "PclZip::deleteByIndex", "index='$p_index'");
-    
     $p_list = $this->delete(PCLZIP_OPT_BY_INDEX, $p_index);
-
-    // ----- Return
-    //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $p_list);
     return $p_list;
   }
-  // --------------------------------------------------------------------------------
-
-  // --------------------------------------------------------------------------------
-  // Function : properties()
-  // Description :
-  //   This method gives the properties of the archive.
-  //   The properties are :
-  //     nb : Number of files in the archive
-  //     comment : Comment associated with the archive file
-  //     status : not_exist, ok
-  // Parameters :
-  //   None
-  // Return Values :
-  //   0 on failure,
-  //   An array with the archive properties.
-  // --------------------------------------------------------------------------------
   function properties()
   {
-    //--(MAGIC-PclTrace)--//PclTraceFctStart(__FILE__, __LINE__, "PclZip::properties", "");
-
-    // ----- Reset the error handler
     $this->privErrorReset();
-
-    // ----- Magic quotes trick
     $this->privDisableMagicQuotes();
-
-    // ----- Check archive
     if (!$this->privCheckFormat()) {
       $this->privSwapBackMagicQuotes();
-      //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
       return(0);
     }
-
-    // ----- Default properties
     $v_prop = array();
     $v_prop['comment'] = '';
     $v_prop['nb'] = 0;
     $v_prop['status'] = 'not_exist';
-
-    // ----- Look if file exists
     if (@is_file($this->zipname))
     {
-      // ----- Open the zip file
-      //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Open file in binary read mode");
       if (($this->zip_fd = @fopen($this->zipname, 'rb')) == 0)
       {
         $this->privSwapBackMagicQuotes();
-        
-        // ----- Error log
         PclZip::privErrorLog(PCLZIP_ERR_READ_OPEN_FAIL, 'Unable to open archive \''.$this->zipname.'\' in binary read mode');
-
-        // ----- Return
-        //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, PclZip::errorCode(), 0);
         return 0;
       }
-
-      // ----- Read the central directory informations
       $v_central_dir = array();
       if (($v_result = $this->privReadEndCentralDir($v_central_dir)) != 1)
       {
         $this->privSwapBackMagicQuotes();
-        //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
         return 0;
       }
-
-      // ----- Close the zip file
       $this->privCloseFd();
-
-      // ----- Set the user attributes
       $v_prop['comment'] = $v_central_dir['comment'];
       $v_prop['nb'] = $v_central_dir['entries'];
       $v_prop['status'] = 'ok';
     }
-
-    // ----- Magic quotes trick
     $this->privSwapBackMagicQuotes();
-
-    // ----- Return
-    //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_prop);
     return $v_prop;
   }
-  // --------------------------------------------------------------------------------
-
-  // --------------------------------------------------------------------------------
-  // Function : duplicate()
-  // Description :
-  //   This method creates an archive by copying the content of an other one. If
-  //   the archive already exist, it is replaced by the new one without any warning.
-  // Parameters :
-  //   $p_archive : The filename of a valid archive, or
-  //                a valid PclZip object.
-  // Return Values :
-  //   1 on success.
-  //   0 or a negative value on error (error code).
-  // --------------------------------------------------------------------------------
   function duplicate($p_archive)
   {
-    //--(MAGIC-PclTrace)--//PclTraceFctStart(__FILE__, __LINE__, "PclZip::duplicate", "");
     $v_result = 1;
-
-    // ----- Reset the error handler
     $this->privErrorReset();
-
-    // ----- Look if the $p_archive is a PclZip object
     if ((is_object($p_archive)) && (get_class($p_archive) == 'pclzip'))
     {
-      //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "The parameter is valid PclZip object '".$p_archive->zipname."'");
-
-      // ----- Duplicate the archive
       $v_result = $this->privDuplicate($p_archive->zipname);
     }
-
-    // ----- Look if the $p_archive is a string (so a filename)
     else if (is_string($p_archive))
     {
-      //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "The parameter is a filename '$p_archive'");
-
-      // ----- Check that $p_archive is a valid zip file
-      // TBC : Should also check the archive format
       if (!is_file($p_archive)) {
-        // ----- Error log
         PclZip::privErrorLog(PCLZIP_ERR_MISSING_FILE, "No file with filename '".$p_archive."'");
         $v_result = PCLZIP_ERR_MISSING_FILE;
       }
       else {
-        // ----- Duplicate the archive
         $v_result = $this->privDuplicate($p_archive);
       }
     }
-
-    // ----- Invalid variable
     else
     {
-      // ----- Error log
       PclZip::privErrorLog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid variable type p_archive_to_add");
       $v_result = PCLZIP_ERR_INVALID_PARAMETER;
     }
-
-    // ----- Return
-    //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_result);
     return $v_result;
   }
-  // --------------------------------------------------------------------------------
-
-  // --------------------------------------------------------------------------------
-  // Function : merge()
-  // Description :
-  //   This method merge the $p_archive_to_add archive at the end of the current
-  //   one ($this).
-  //   If the archive ($this) does not exist, the merge becomes a duplicate.
-  //   If the $p_archive_to_add archive does not exist, the merge is a success.
-  // Parameters :
-  //   $p_archive_to_add : It can be directly the filename of a valid zip archive,
-  //                       or a PclZip object archive.
-  // Return Values :
-  //   1 on success,
-  //   0 or negative values on error (see below).
-  // --------------------------------------------------------------------------------
   function merge($p_archive_to_add)
   {
-    //--(MAGIC-PclTrace)--//PclTraceFctStart(__FILE__, __LINE__, "PclZip::merge", "");
     $v_result = 1;
-
-    // ----- Reset the error handler
     $this->privErrorReset();
-
-    // ----- Check archive
     if (!$this->privCheckFormat()) {
-      //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, 0);
       return(0);
     }
-
-    // ----- Look if the $p_archive_to_add is a PclZip object
     if ((is_object($p_archive_to_add)) && (get_class($p_archive_to_add) == 'pclzip'))
     {
-      //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "The parameter is valid PclZip object");
-
-      // ----- Merge the archive
       $v_result = $this->privMerge($p_archive_to_add);
     }
-
-    // ----- Look if the $p_archive_to_add is a string (so a filename)
     else if (is_string($p_archive_to_add))
     {
-      //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "The parameter is a filename");
-
-      // ----- Create a temporary archive
       $v_object_archive = new PclZip($p_archive_to_add);
-
-      // ----- Merge the archive
       $v_result = $this->privMerge($v_object_archive);
     }
-
-    // ----- Invalid variable
     else
     {
-      // ----- Error log
       PclZip::privErrorLog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid variable type p_archive_to_add");
       $v_result = PCLZIP_ERR_INVALID_PARAMETER;
     }
-
-    // ----- Return
-    //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_result);
     return $v_result;
   }
-  // --------------------------------------------------------------------------------
-
-
-
-  // --------------------------------------------------------------------------------
-  // Function : errorCode()
-  // Description :
-  // Parameters :
-  // --------------------------------------------------------------------------------
   function errorCode()
   {
     if (PCLZIP_ERROR_EXTERNAL == 1) {
@@ -1176,13 +584,6 @@
       return($this->error_code);
     }
   }
-  // --------------------------------------------------------------------------------
-
-  // --------------------------------------------------------------------------------
-  // Function : errorName()
-  // Description :
-  // Parameters :
-  // --------------------------------------------------------------------------------
   function errorName($p_with_code=false)
   {
     $v_name = array ( PCLZIP_ERR_NO_ERROR => 'PCLZIP_ERR_NO_ERROR',
@@ -1222,13 +623,6 @@
       return($v_value);
     }
   }
-  // --------------------------------------------------------------------------------
-
-  // --------------------------------------------------------------------------------
-  // Function : errorInfo()
-  // Description :
-  // Parameters :
-  // --------------------------------------------------------------------------------
   function errorInfo($p_full=false)
   {
     if (PCLZIP_ERROR_EXTERNAL == 1) {
@@ -1243,166 +637,60 @@
       }
     }
   }
-  // --------------------------------------------------------------------------------
-
-
-// --------------------------------------------------------------------------------
-// ***** UNDER THIS LINE ARE DEFINED PRIVATE INTERNAL FUNCTIONS *****
-// *****                                                        *****
-// *****       THESES FUNCTIONS MUST NOT BE USED DIRECTLY       *****
-// --------------------------------------------------------------------------------
-
-
-
-  // --------------------------------------------------------------------------------
-  // Function : privCheckFormat()
-  // Description :
-  //   This method check that the archive exists and is a valid zip archive.
-  //   Several level of check exists. (futur)
-  // Parameters :
-  //   $p_level : Level of check. Default 0.
-  //              0 : Check the first bytes (magic codes) (default value))
-  //              1 : 0 + Check the central directory (futur)
-  //              2 : 1 + Check each file header (futur)
-  // Return Values :
-  //   true on success,
-  //   false on error, the error code is set.
-  // --------------------------------------------------------------------------------
   function privCheckFormat($p_level=0)
   {
-    //--(MAGIC-PclTrace)--//PclTraceFctStart(__FILE__, __LINE__, "PclZip::privCheckFormat", "");
     $v_result = true;
-
-	// ----- Reset the file system cache
     clearstatcache();
-
-    // ----- Reset the error handler
     $this->privErrorReset();
-
-    // ----- Look if the file exits
     if (!is_file($this->zipname)) {
-      // ----- Error log
       PclZip::privErrorLog(PCLZIP_ERR_MISSING_FILE, "Missing archive file '".$this->zipname."'");
-      //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, false, PclZip::errorInfo());
       return(false);
     }
-
-    // ----- Check that the file is readeable
     if (!is_readable($this->zipname)) {
-      // ----- Error log
       PclZip::privErrorLog(PCLZIP_ERR_READ_OPEN_FAIL, "Unable to read archive '".$this->zipname."'");
-      //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, false, PclZip::errorInfo());
       return(false);
     }
-
-    // ----- Check the magic code
-    // TBC
-
-    // ----- Check the central header
-    // TBC
-
-    // ----- Check each file header
-    // TBC
-
-    // ----- Return
-    //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_result);
     return $v_result;
   }
-  // --------------------------------------------------------------------------------
-
-  // --------------------------------------------------------------------------------
-  // Function : privParseOptions()
-  // Description :
-  //   This internal methods reads the variable list of arguments ($p_options_list,
-  //   $p_size) and generate an array with the options and values ($v_result_list).
-  //   $v_requested_options contains the options that can be present and those that
-  //   must be present.
-  //   $v_requested_options is an array, with the option value as key, and 'optional',
-  //   or 'mandatory' as value.
-  // Parameters :
-  //   See above.
-  // Return Values :
-  //   1 on success.
-  //   0 on failure.
-  // --------------------------------------------------------------------------------
   function privParseOptions(&$p_options_list, $p_size, &$v_result_list, $v_requested_options=false)
   {
-    //--(MAGIC-PclTrace)--//PclTraceFctStart(__FILE__, __LINE__, "PclZip::privParseOptions", "");
     $v_result=1;
-    
-    // ----- Read the options
     $i=0;
     while ($i<$p_size) {
-      //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 4, "Looking for table index $i, option = '".PclZipUtilOptionText($p_options_list[$i])."(".$p_options_list[$i].")'");
-
-      // ----- Check if the option is supported
       if (!isset($v_requested_options[$p_options_list[$i]])) {
-        // ----- Error log
         PclZip::privErrorLog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid optional parameter '".$p_options_list[$i]."' for this method");
-
-        // ----- Return
-        //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, PclZip::errorCode(), PclZip::errorInfo());
         return PclZip::errorCode();
       }
-
-      // ----- Look for next option
       switch ($p_options_list[$i]) {
-        // ----- Look for options that request a path value
         case PCLZIP_OPT_PATH :
         case PCLZIP_OPT_REMOVE_PATH :
         case PCLZIP_OPT_ADD_PATH :
-          // ----- Check the number of parameters
           if (($i+1) >= $p_size) {
-            // ----- Error log
             PclZip::privErrorLog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '".PclZipUtilOptionText($p_options_list[$i])."'");
-
-            // ----- Return
-            //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, PclZip::errorCode(), PclZip::errorInfo());
             return PclZip::errorCode();
           }
-
-          // ----- Get the value
           $v_result_list[$p_options_list[$i]] = PclZipUtilTranslateWinPath($p_options_list[$i+1], FALSE);
-          //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "".PclZipUtilOptionText($p_options_list[$i])." = '".$v_result_list[$p_options_list[$i]]."'");
           $i++;
         break;
 
         case PCLZIP_OPT_EXTRACT_DIR_RESTRICTION :
-          // ----- Check the number of parameters
           if (($i+1) >= $p_size) {
-            // ----- Error log
             PclZip::privErrorLog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '".PclZipUtilOptionText($p_options_list[$i])."'");
-
-            // ----- Return
-            //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, PclZip::errorCode(), PclZip::errorInfo());
             return PclZip::errorCode();
           }
-
-          // ----- Get the value
           if (   is_string($p_options_list[$i+1])
               && ($p_options_list[$i+1] != '')) {
             $v_result_list[$p_options_list[$i]] = PclZipUtilTranslateWinPath($p_options_list[$i+1], FALSE);
-            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "".PclZipUtilOptionText($p_options_list[$i])." = '".$v_result_list[$p_options_list[$i]]."'");
             $i++;
           }
           else {
-            //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "".PclZipUtilOptionText($p_options_list[$i])." set with an empty value is ignored.");
           }
         break;
-
-        // ----- Look for options that request an array of string for value
         case PCLZIP_OPT_BY_NAME :
-          // ----- Check the number of parameters
           if (($i+1) >= $p_size) {
-            // ----- Error log
             PclZip::privErrorLog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '".PclZipUtilOptionText($p_options_list[$i])."'");
-
-            // ----- Return
-            //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, PclZip::errorCode(), PclZip::errorInfo());
             return PclZip::errorCode();
           }
-
-          // ----- Get the value
           if (is_string($p_options_list[$i+1])) {
               $v_result_list[$p_options_list[$i]][0] = $p_options_list[$i+1];
           }
@@ -1410,44 +698,24 @@
               $v_result_list[$p_options_list[$i]] = $p_options_list[$i+1];
           }
           else {
-            // ----- Error log
             PclZip::privErrorLog(PCLZIP_ERR_INVALID_OPTION_VALUE, "Wrong parameter value for option '".PclZipUtilOptionText($p_options_list[$i])."'");
-
-            // ----- Return
-            //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, PclZip::errorCode(), PclZip::errorInfo());
             return PclZip::errorCode();
           }
-          ////--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "".PclZipUtilOptionText($p_options_list[$i])." = '".$v_result_list[$p_options_list[$i]]."'");
           $i++;
         break;
-
-        // ----- Look for options that request an EREG or PREG expression
         case PCLZIP_OPT_BY_EREG :
         case PCLZIP_OPT_BY_PREG :
-        //case PCLZIP_OPT_CRYPT :
-          // ----- Check the number of parameters
           if (($i+1) >= $p_size) {
-            // ----- Error log
             PclZip::privErrorLog(PCLZIP_ERR_MISSING_OPTION_VALUE, "Missing parameter value for option '".PclZipUtilOptionText($p_options_list[$i])."'");
-
-            // ----- Return
-            //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, PclZip::errorCode(), PclZip::errorInfo());
             return PclZip::errorCode();
           }
-
-          // ----- Get the value
           if (is_string($p_options_list[$i+1])) {
               $v_result_list[$p_options_list[$i]] = $p_options_list[$i+1];
           }
           else {
-            // ----- Error log
             PclZip::privErrorLog(PCLZIP_ERR_INVALID_OPTION_VALUE, "Wrong parameter value for option '".PclZipUtilOptionText($p_options_list[$i])."'");
-
-            // ----- Return
-            //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, PclZip::errorCode(), PclZip::errorInfo());
             return PclZip::errorCode();
           }
-          //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "".PclZipUtilOptionText($p_options_list[$i])." = '".$v_result_list[$p_options_list[$i]]."'");
           $i++;
         break;
 
