@@ -28,10 +28,10 @@ $_zp_options = NULL;
   * @param string $key the name of the option.
   */
 function getOption($key) {
-  global $_zp_conf_vars, $_zp_options;
+  global $_zp_conf_vars, $_zp_options, $setup;
   if (NULL == $_zp_options) {
     $_zp_options = array();
-    if (!defined('SETUP')) {
+    if (!isset($setup)) {
       $sql = "SELECT `name`, `value` FROM ".prefix('options');
       $optionlist = query_full_array($sql);
       foreach($optionlist as $option) {

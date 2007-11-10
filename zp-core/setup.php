@@ -1,5 +1,5 @@
 <?php
-  define('SETUP', true);
+  $setup = true;
   if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
   define('OFFSET_PATH', true);
   if (file_exists("zp-config.php")) { require_once("admin-functions.php"); } 

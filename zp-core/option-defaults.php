@@ -9,6 +9,7 @@ function setDefault($option, $default) {
   setOptionDefault($option, $v); 
 }
   require('zp-config.php');
+  unset($setup);  // it is now ok (and necessary) to access the database options table
 
   global $_zp_conf_vars;
   $conf = $_zp_conf_vars;
