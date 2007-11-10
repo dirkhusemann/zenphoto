@@ -38,7 +38,7 @@ if ($_GET['format'] != 'xml') {
   $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
   $firstPageImages = normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
   if ($_noFlash) {
-    $backgroundColor = "#0";  /* who cares, we won't use it */
+    $backgroundColor = "#0";  // who cares, we won't use it
   } else {
     $backgroundColor = parseCSSDef($zenCSS);  
   }
@@ -53,11 +53,12 @@ if ($_GET['format'] != 'xml') {
 <link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 <script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
 <script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/swfobject.js"></script>
-<?php zenJavascript(); 
-  global $_zp_current_album;
-
-  
-?>
+<link rel="stylesheet" href="<?= $_zp_themeroot ?>/slimbox/css/slimbox.css" type="text/css" media="screen" />
+<!-- prep for lightbox, but doesn't work, get a cannot load if the slimbox.js loaded.
+<script type="text/javascript" src="<?= $_zp_themeroot ?>/slimbox/js/mootools.js"></script>
+<script type="text/javascript" src="<?= $_zp_themeroot ?>/slimbox/js/slimbox.js"></script>
+-->
+<?php zenJavascript(); global $_zp_current_album; ?>
 
 </head>
 
@@ -173,7 +174,14 @@ if ($_GET['format'] != 'xml') {
              }
              echo '<div class="image">' . "\n";
              echo '<div class="imagethumb">' . "\n";
+			 
              echo '<a href="' . getImageLinkURL() .'" title="' . getImageTitle() . '">' . "\n";
+			 /* lightbox, if we can get slimbox.js loaded
+                                  echo "<a href=\"" . getCustomImageURL(550, null) . "\" rel=\"lightbox[" . getAlbumTitle() . 
+                                           "]\" title=\"" . getImageTitle() . "\">";
+                                  */
+				  
+			 
              echo printImageThumb(getImageTitle()) . "</a>\n";
              echo "</div>\n</div>\n";
            } ?>
@@ -280,6 +288,6 @@ if (getOption('Use_Simpleviewer') && !getOption('mod_rewrite')) {
     $navPosition.'" enableRightClickOpen="'.$enableRightClickOpen.'" backgroundImagePath="'.$backgroundImagePath.
     '" imagePath="'.$path.'" thumbPath="'.$path.'">'; ?>
 
-<?php while (next_image(true)): ?><image><filename><?php echo getFullImageURL();?></filename><caption><![CDATA[<a href="<?php echo getImageLinkURL();?>" title="Open in a new window">
+<?php while (next_image(true)): ?><image><filename><?php echo getcustomImageURL(600);?></filename><caption><![CDATA[<a href="<?php echo getImageLinkURL();?>" title="Open in a new window">
 <font face="Times"><u><b><em><?php echo getImageTitle() ?></font></em></b></u></a></u>
 <br /></font><?php echo getImageDesc(); ?>]]></caption></image><?php endwhile; ?></simpleviewerGallery><?php } ?>

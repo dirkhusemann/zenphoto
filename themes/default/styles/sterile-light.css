@@ -141,7 +141,7 @@ acronym {
 
 /* Page Navigation
 ------------------------------ */
-pagelist {
+.pagelist {
 	padding: 10px 20px 5px 20px;
 }
 ul.pagelist {
@@ -209,7 +209,7 @@ ul.pagelist li.next {
 	padding: 7px;
 	margin: 5px;
 	line-height: 0px;
-	background: url('images/img-bg.gif') top left no-repeat;
+	background: url('../images/img-bg.gif') top left no-repeat;
 }
 .imagethumb, .thumb {
 	float: left;
