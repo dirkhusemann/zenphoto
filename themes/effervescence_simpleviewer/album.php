@@ -258,9 +258,9 @@ if (getOption('Use_Simpleviewer') && !getOption('mod_rewrite')) {
   echo '<div class="errorbox" id="message">'; 
   echo  "<h2>" . "Simpleviewer requires <em>mod_rewrite</em> to be set. Simpleviewer is disabled." . "</h2>";  
   echo '</div>'; 
-} ?>
-
-<?php printThemeInfo(); ?>
+  } 
+printThemeInfo(); 
+?>
 <a href="http://www.zenphoto.org" title="A simpler web photo album">Powered by 
 <font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font size="1" face="Arial Black">photo</font></span></a><br />
 <?php printRSSLink('Album', '', 'Album RSS', ''); ?>
@@ -286,8 +286,20 @@ if (getOption('Use_Simpleviewer') && !getOption('mod_rewrite')) {
     '" textColor="'.$textColor.'" frameColor="'.$frameColor.'" frameWidth="'.$frameWidth.'" stagePadding="'.
     $stagePadding.'" thumbnailColumns="'.$thumbnailColumns.'" thumbnailows="'.$thumbnailRows.'" navPosition="'.
     $navPosition.'" enableRightClickOpen="'.$enableRightClickOpen.'" backgroundImagePath="'.$backgroundImagePath.
-    '" imagePath="'.$path.'" thumbPath="'.$path.'">'; ?>
-
-<?php while (next_image(true)): ?><image><filename><?php echo getcustomImageURL(600);?></filename><caption><![CDATA[<a href="<?php echo getImageLinkURL();?>" title="Open in a new window">
-<font face="Times"><u><b><em><?php echo getImageTitle() ?></font></em></b></u></a></u>
-<br /></font><?php echo getImageDesc(); ?>]]></caption></image><?php endwhile; ?></simpleviewerGallery><?php } ?>
+    '" imagePath="'.$path.'" thumbPath="'.$path.'">'; 
+  while (next_image(true)){ 
+    if (!getImageVideo()) {  // simpleviewer does not do videos
+?>
+      <image><filename><?php echo getDefaultSizedImage();?></filename>
+        <caption>
+	      <![CDATA[<a href="<?php echo getImageLinkURL();?>" title="Open in a new window">
+          <font face="Times"><u><b><em><?php echo getImageTitle() ?></font></em></b></u></a></u>
+          <br /></font><?php echo getImageDesc(); ?>]]>
+	    </caption>
+      </image>
+<?php
+    }
+  }
+  echo "</simpleviewerGallery>";
+} 
+?>
