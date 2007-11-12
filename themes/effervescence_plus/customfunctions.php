@@ -100,8 +100,9 @@ function printThemeInfo() {
     $themeColor = ": '$themeColor'";
   }
   if (!$themeResult) { $themeColor .= " (not found)"; }
-  if (getOption('Use_Simpleviewer')) {
-    $simpleviewer = "+Simpleviewer$themeColor";
+  $personality = getOption('Theme_personality');
+  if ($personality != 'Image page') {
+    $simpleviewer = "+$personality$themeColor";
   } else {
     $simpleviewer = $themeColor;
   }

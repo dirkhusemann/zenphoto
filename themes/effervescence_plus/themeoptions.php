@@ -31,14 +31,15 @@ class ThemeOptions {
 
   var $iSupport = array('Allow_comments' => array('type' => 1, 'desc' => 'Set to enable comment section.'),
   						'Allow_search' => array('type' => 1, 'desc' => 'Set to enable search form.'),
-                        'Use_Simpleviewer' => array('type' => 1, 'desc' => 'Set to use SimpleViewer Flash to display images'),
+						'Slideshow' => array('type' => 1, 'desc' => 'Set to enable slideshow for the <em>Smooth</em> personality.'),
+                        'Theme_personality' => array('type' => 2, 'desc' => 'Select the theme personality'),
                         'Theme_colors' => array('type' => 2, 'desc' => 'Set the colors of the theme')
                         );
                         
   function ThemeOptions() {
     setOptionDefault('Allow_comments', true);
 	setOptionDefault('Allow_search', true);
-    setOptionDefault('Use_Simpleviewer', true);
+    setOptionDefault('Theme_personality', 'Image page');
     setOptionDefault('Theme_colors', 'effervescence'); 
   }
 
@@ -47,14 +48,22 @@ class ThemeOptions {
   }
   
   function handleOption($option, $currentValue) {
-    if ($option == 'Theme_colors') {
+    switch ($option) {
+    case 'Theme_colors': 
       $gallery = new Gallery();
       $theme = $gallery->getCurrentTheme();
       $themeroot = SERVERPATH . "/themes/$theme/styles";
       echo '<select id="themeselect" name="' . $option . '"' . ">\n";
       generateListFromFiles($currentValue, $themeroot , '.css');
       echo "</select>\n";
-    }
+	  break;
+    
+	case 'Theme_personality':
+      echo '<select id="ef_personality" name="' . $option . '"' . ">\n";
+	  generateListFromArray($currentValue, array('Image page', 'Simpleviewer', 'Slimbox', 'Smooth'));
+      echo "</select>\n";	
+	  break;
+	}
   }
   
 }

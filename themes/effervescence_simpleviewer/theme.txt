@@ -1,6 +1,0 @@
-# Zenphoto theme definition file
-name::Effervescence_Simpleviewer
-author::<a href="http://sblog.angoulvant.net/">Stephane Angoulvant</a> with modifications by <a href="http://stephen.sbillard.org/">Stephen Billard</a>
-version::4.0 
-date::08/28/2007
-desc::Based on Effervescence 1.1 with Simpleviewer added. Select different color schemes, enable or disable the use Simpleviewer from the Admin Options tab.
