@@ -524,7 +524,7 @@ if (!zp_loggedin()) {
                     <option value="<?php echo $sorttype; ?>"<?php if ($sorttype == $album->getSubalbumSortType()) echo ' selected="selected"'; ?>><?php echo $sorttype; ?></option>
                   <?php } ?>
                   </select>
-				&nbsp;decending <input type="checkbox" name="album_sortdirection" value="1"
+				&nbsp;Descending <input type="checkbox" name="album_sortdirection" value="1"
 				     <?php if ($album->getSortDirection('image')) {echo "CHECKED";} ?>>  
                 </td>
               </tr>
@@ -536,7 +536,7 @@ if (!zp_loggedin()) {
                     <option value="<?php echo $sorttype; ?>"<?php if ($sorttype == $album->getSortType()) echo ' selected="selected"'; ?>><?php echo $sorttype; ?></option>
                   <?php } ?>
                   </select>
-				&nbsp;decending <input type="checkbox" name="image_sortdirection" value="1" 
+				&nbsp;Descending <input type="checkbox" name="image_sortdirection" value="1" 
 				     <?php if ($album->getSortDirection('image')) {echo "CHECKED";} ?>>  
                 </td>
               </tr>
