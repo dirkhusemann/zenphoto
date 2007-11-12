@@ -9,7 +9,6 @@
   ####
   
   RewriteRule	^admin/?$                       zp-core/admin.php [R,L]
-  RewriteRule	^search/?$                      index.php?p=search [R,L]
 
   RewriteCond %{REQUEST_FILENAME} -f [NC,OR]
   RewriteCond %{REQUEST_FILENAME} -d [NC]
@@ -20,7 +19,14 @@
   RewriteRule ^page/([A-Za-z0-9\-_]+)/?$      index.php?p=$1 [L,QSA]
   RewriteRule ^(.*)/page/([0-9]+)/?$          index.php?album=$1&page=$2 [L,QSA]
   
-  #### !!! If you install the zen core in a folder other than 'zp-core' you must change the following lines
+  #### Rewrite rule addtion for seach
+  RewriteRule ^page/([A-Za-z0-9\-_]+)/([A-Za-z0-9\-_]+)/?$      index.php?p=$1&words=$2 [L,QSA]
+  RewriteRule ^page/([A-Za-z0-9\-_]+)/([A-Za-z0-9\-_]+)/([0-9]+)/?$      index.php?p=$1&words=$2&page=$3 [L,QSA]
+  
+  #### Rewrite rule addtion for archive-/date-search (needed to be separarted because of the same structur)
+  RewriteRule ^page/([A-Za-z0-9\-_]+)/archive/([A-Za-z0-9\-_]+)/?$      index.php?p=$1&date=$2 [L,QSA]
+  RewriteRule ^page/([A-Za-z0-9\-_]+)/archive/([A-Za-z0-9\-_]+)/([0-9]+)/?$      index.php?p=$1&date=$2&page=$3 [L,QSA]
+  
   RewriteRule ^(.*)/image/(thumb|[0-9]{1,4})/([^/\\]+)$    zp-core/i.php?a=$1&i=$3&s=$2 [L,QSA]
   RewriteRule ^(.*)/image/([^/\\]+)$          zp-core/i.php?a=$1&i=$2 [L,QSA]
   ####
