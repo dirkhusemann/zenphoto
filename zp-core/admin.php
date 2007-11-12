@@ -101,7 +101,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
       $qs_albumsuffix = ""; 
       if ($_GET['album']) {
         $folder = queryDecode(strip($_GET['album']));
-        $qs_albumsuffix = '&album='.$folder;
+        $qs_albumsuffix = '&album='.urlencode($folder);
       }
       header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit' . $qs_albumsuffix . '&saved');  
       exit();

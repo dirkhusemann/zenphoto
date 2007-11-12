@@ -304,18 +304,26 @@ function customOptions($optionHandler, $indent="") {
   }
 }
 
+function generateListFromArray($currentValue, $list) {
+  sort($list);
+  foreach($list as $item) {
+    echo '<option value="' . $item . '"';
+    if ($currentValue == $item) { 
+      echo ' selected="selected"'; 
+    }
+    echo '>' . $item . "</option>\n";
+  }
+}
+
 function generateListFromFiles($currentValue, $root, $suffix) {
   chdir($root);
   $filelist = glob('*'.$suffix);
   sort($filelist);
+  $list = array();
   foreach($filelist as $file) {
-    $file = str_replace($suffix, '', $file); 
-    echo '<option value="' . $file . '"';
-    if ($currentValue == $file) { 
-      echo ' selected="selected"'; 
-    }
-    echo '>' . $file . "</option>\n";
+    $list[] = str_replace($suffix, '', $file); 
   }
+  generateListFromArray($currentValue, $list);
 }
 
 ?>
