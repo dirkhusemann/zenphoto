@@ -78,10 +78,11 @@ class SpamFilter  {
     
 	$akismet = new Akismet($zp_galUrl, $zp_akismetKey, $commentData);
 		
-	if ($akismet->isError()) {
+	if ($akismet->errorsExist()) {
 		// TODO: Add more improved error handling (maybe)
 		// echo "Couldn't connected to Akismet server!";
 		// print_r ($akismet->getErrors());
+		$die = 1; // mark for moderation if we can't check for Spam
 		
 	  } else {
       if ($akismet->isSpam()) {
