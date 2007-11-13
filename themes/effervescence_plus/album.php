@@ -50,7 +50,7 @@ if ($_GET['format'] != 'xml') {
 	<title><?php printGalleryTitle(); ?> | <?php echo getAlbumTitle();?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 <?php 
-  zenJavascript(); 
+  echo "<script type=\"text/javascript\" src=\"$_zp_themeroot/scripts/bluranchors.js\"></script>\n";
   $oneImagePage = false;
   $show = false;
   switch ($personality) {
@@ -73,12 +73,13 @@ if ($_GET['format'] != 'xml') {
 	$show = getOption('Slideshow') || (isset($_GET['slideshow']));
     break;
   }
-  echo "<script type=\"text/javascript\" src=\"$_zp_themeroot/scripts/bluranchors.js\"></script>\n";
+  zenJavascript(); 
   global $_zp_current_album; 
 ?>
 </head>
 
 <body onload="blurAnchors()">
+<?php if ($personality == 'Smoothgallery') { ?>
 <script type="text/javascript">
 	function startGallery() {
 		var myGallery = new gallery($('smoothImages'), {
@@ -87,6 +88,7 @@ if ($_GET['format'] != 'xml') {
 	}
 	window.addEvent('domready',startGallery);
 </script>
+<?php } ?>
 
 	<!-- Wrap Header -->
 	<div id="header">
@@ -243,20 +245,19 @@ if ($_GET['format'] != 'xml') {
 	      } else {  /* flash */
 	       if (isImagePage()) {
 	    ?>
-		<div id="flash">
-        	<p align=center><font color=#663300>For the best viewing experience <a href="http://www.macromedia.com/go/getflashplayer/">Get Macromedia Flash.</a></p> 
-            <p align=center><a href="
+			<div id="flash">
+        	<p align=center>
+			<font color=#663300>For the best viewing experience <a href="http://www.macromedia.com/go/getflashplayer/">Get Macromedia Flash.</a></font>
+			</p> 
+            <p align=center>
              <?php 
              if ($imagePage) {
                $url = getPageURL(getTotalPages(true));
              } else {
                $url = getPageURL(getCurrentPage());
              } 
-             if (substr($url, -1, 1) == '/') {$url = substr($url, 0, (strlen($url)-1));}
-             echo $url = $url . (getOption("mod_rewrite") ? "?" : "&") . 'noflash'; 
-             ?>">
-             View gallery without Flash</a>.</p></font></div>
-             <?php
+			 printLinkWithQuery($url, 'noflash', 'View gallery without Flash.');
+			 echo "</p>";
              $flash_url = getAlbumLinkURL();	
              if (substr($flash_url, -1, 1) == '/') {$flash_url= substr($flash_url, 0, -1);}
              $flash_url = $flash_url . (getOption("mod_rewrite") ? "?" : "&") . "format=xml";
@@ -270,6 +271,7 @@ if ($_GET['format'] != 'xml') {
 				  fo.addParam("wmode", "opaque");	
                   fo.write("flash");
              </script>
+			</div>
              <?php 
 	       }
 	     } /* image loop */
