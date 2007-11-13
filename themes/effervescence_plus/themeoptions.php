@@ -39,6 +39,7 @@ class ThemeOptions {
   function ThemeOptions() {
     setOptionDefault('Allow_comments', true);
 	setOptionDefault('Allow_search', true);
+	setOptionDefault('Slideshow', true);
     setOptionDefault('Theme_personality', 'Image page');
     setOptionDefault('Theme_colors', 'effervescence'); 
   }
@@ -60,7 +61,7 @@ class ThemeOptions {
     
 	case 'Theme_personality':
       echo '<select id="ef_personality" name="' . $option . '"' . ">\n";
-	  generateListFromArray($currentValue, array('Image page', 'Simpleviewer', 'Slimbox', 'Smooth'));
+	  generateListFromArray($currentValue, array('Image page', 'Simpleviewer', 'Slimbox', 'Smoothgallery'));
       echo "</select>\n";	
 	  break;
 	}

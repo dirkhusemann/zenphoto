@@ -52,6 +52,7 @@ if ($_GET['format'] != 'xml') {
 <?php 
   zenJavascript(); 
   $oneImagePage = false;
+  $show = false;
   switch ($personality) {
   case 'Simpleviewer':
 	echo "<script type=\"text/javascript\" src=\"$_zp_themeroot/scripts/swfobject.js\"></script>\n";
@@ -62,13 +63,14 @@ if ($_GET['format'] != 'xml') {
 	echo "<script type=\"text/javascript\" src=\"$_zp_themeroot/scripts/mootools.v1.11.js\"></script>\n";
 	echo "<script type=\"text/javascript\" src=\"$_zp_themeroot/scripts/slimbox.js\"></script>\n";
 	break;
-  case 'Smooth':
+  case 'Smoothgallery':
     echo "<link rel=\"stylesheet\" href=\"$_zp_themeroot/jd.gallery.css\" type=\"text/css\" media=\"screen\" charset=\"utf-8\" />\n";
 	echo "<script src=\"$_zp_themeroot/scripts/mootools.v1.11.js\" type=\"text/javascript\"></script>\n";
 	echo "<script src=\"$_zp_themeroot/scripts/jd.gallery.js\" type=\"text/javascript\"></script>\n";
 	setOption('thumb_crop_width', 100, false);
 	setOption('thumb_crop_height', 75, false);
 	$oneImagePage = true;
+	$show = getOption('Slideshow') || (isset($_GET['slideshow']));
     break;
   }
   echo "<script type=\"text/javascript\" src=\"$_zp_themeroot/scripts/bluranchors.js\"></script>\n";
@@ -80,7 +82,7 @@ if ($_GET['format'] != 'xml') {
 <script type="text/javascript">
 	function startGallery() {
 		var myGallery = new gallery($('smoothImages'), {
-			timed: <?php (getOption('Slideshow')) ? print 'true' : print 'false'; ?>
+			timed: <?php ($show) ? print 'true' : print 'false'; ?>
 		});
 	}
 	window.addEvent('domready',startGallery);
@@ -176,7 +178,7 @@ if ($_GET['format'] != 'xml') {
        		<div id="main">
            		<div id="images">
            			<?php 
-					  if ($personality == 'Smooth') {
+					  if ($personality == 'Smoothgallery') {
 					    if (isImagePage()) {
 					?>
 						<div id="smoothImages">
@@ -189,8 +191,19 @@ if ($_GET['format'] != 'xml') {
 							<?php printImageThumb(getImageTitle(), 'thumbnail'); ?>
 						</div>
                 		<?php endwhile; ?>
-					</div>
-					<?php
+						
+						</div>
+						<?php
+						  if (!$show) {
+                            if ($imagePage) {
+                              $url = getPageURL(getTotalPages(true));
+                            } else {
+                              $url = getPageURL(getCurrentPage());
+                            } 
+							echo '<p align=center>';
+							printLinkWithQuery($url, 'slideshow', 'View Slideshow');
+							echo '</p>';
+					      }
 					    }
 					  } else {
 					    $firstImage = null;

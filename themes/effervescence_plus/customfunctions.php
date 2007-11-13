@@ -108,4 +108,10 @@ function printThemeInfo() {
   }
   echo "<p><small>Effervescence$simpleviewer</small></p>";
 }
+
+function printLinkWithQuery($url, $query, $text) {
+  if (substr($url, -1, 1) == '/') {$url = substr($url, 0, (strlen($url)-1));}
+  $url = $url . (getOption("mod_rewrite") ? "?" : "&");
+  echo "<a href=\"$url$query\">$text</a>"; 
+}
 ?> 
