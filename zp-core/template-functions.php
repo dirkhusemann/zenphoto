@@ -1377,6 +1377,12 @@ function my_truncate_string($string, $length) {
 }
 
 /*** tag functions   ***/
+// --------------------------------------------------------------------------------
+// Function : getTags()
+// Description :
+// Parameters :
+// Return Values :
+// --------------------------------------------------------------------------------
 function getTags() {
   if(in_context(ZP_IMAGE)) {
     global $_zp_current_image;
