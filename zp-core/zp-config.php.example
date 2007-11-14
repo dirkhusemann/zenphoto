@@ -25,7 +25,7 @@ $conf['mysql_host'] = "localhost"; // Won't need to change this 90% of the time.
 $conf['mysql_database'] = "database_name";
 
 // If you're sharing the database with other tables, use a prefix to be safe.
-$conf['mysql_prefix'] = "";
+$conf['mysql_prefix'] = "zp_";
 
 ////////////////////////////////////////////////////////////////////////////////
 // zp-config.php required options
