@@ -50,7 +50,6 @@ if ($_GET['format'] != 'xml') {
 	<title><?php printGalleryTitle(); ?> | <?php echo getAlbumTitle();?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 <?php 
-  echo "<script type=\"text/javascript\" src=\"$_zp_themeroot/scripts/bluranchors.js\"></script>\n";
   $oneImagePage = false;
   $show = false;
   switch ($personality) {
@@ -73,6 +72,7 @@ if ($_GET['format'] != 'xml') {
 	$show = getOption('Slideshow') || (isset($_GET['slideshow']));
     break;
   }
+  echo "<script type=\"text/javascript\" src=\"$_zp_themeroot/scripts/bluranchors.js\"></script>\n";
   zenJavascript(); 
   global $_zp_current_album; 
 ?>
@@ -183,16 +183,23 @@ if ($_GET['format'] != 'xml') {
 					  if ($personality == 'Smoothgallery') {
 					    if (isImagePage()) {
 					?>
+<!-- Smoothimage section -->					
 						<div id="smoothImages">
-            			<?php while (next_image(false, $firstPageImages)): ?>
-						<div class="imageElement">
+            			<?php 
+						while (next_image(false, $firstPageImages)){ 
+						  if (!getImageVideo()) { // Smoothgallery does not do videos
+						?>
+						    <div class="imageElement">
 							<h3><?=getImageTitle();?></h3>
 							<p><?=getImageDesc();?></p>
 							<a href="<?php echo getImageLinkURL();?>" title="<?php echo getImageTitle();?>" class="open"></a>
                     		<?php printCustomSizedImage(getImageTitle(), null, 540, null, null, null, null, null, 'full'); ?>
 							<?php printImageThumb(getImageTitle(), 'thumbnail'); ?>
-						</div>
-                		<?php endwhile; ?>
+						    </div>
+                		<?php 
+						  }
+						} 
+						?>
 						
 						</div>
 						<?php
@@ -210,30 +217,33 @@ if ($_GET['format'] != 'xml') {
 					  } else {
 					    $firstImage = null;
            			    $lastImage = null;
-           			    while (next_image(false, $firstPageImages)){  
-             		      if (is_null($firstImage)) { 
-               			    $lastImage = imageNumber();
-               			    $firstImage = $lastImage; 
-             			  } else {
-               			    $lastImage++;
-             			  } 
+           			    while (next_image(false, $firstPageImages)){
+                          if (!(($personality == 'Slimbox') && getImageVideo())) { // Slimbox does not do video 						
+             		        if (is_null($firstImage)) { 
+               			      $lastImage = imageNumber();
+               			      $firstImage = $lastImage; 
+             			    } else {
+               			      $lastImage++;
+             			    } 
 					?>
-             		    <div class="image">
-             			  <div class="imagethumb">
-						  <?php 
-						  if ($personality == 'Slimbox') {
-             			    echo "<a href=\"".getCustomImageURL(550, null)."\""; 
-						    echo "rel=\"lightbox[".getAlbumTitle()."]\"\n"; 
-						  } else {	
-                            echo '<a href="' . getImageLinkURL() . '"';
-						  } 
-						  echo " title=\"".getImageTitle()."\">\n";
-						  printImageThumb(getImageTitle()); 
-						  ?></a>
-                          </div>
-             		    </div>
+<!-- Image thumbnails or no flash -->
+             		      <div class="image">
+             			    <div class="imagethumb">
+						    <?php 
+						    if ($personality == 'Slimbox') {
+             			      echo "<a href=\"".getCustomImageURL(550, null)."\""; 
+						      echo "rel=\"lightbox[".getAlbumTitle()."]\"\n"; 
+						    } else {	
+                              echo '<a href="' . getImageLinkURL() . '"';
+						    } 
+						    echo " title=\"".getImageTitle()."\">\n";
+						    printImageThumb(getImageTitle()); 
+						    ?></a>
+                            </div>
+             		      </div>
 					<?php 
-					    } 
+					      } 
+						}
 					  }
 					?>
            		</div>
@@ -245,6 +255,7 @@ if ($_GET['format'] != 'xml') {
 	      } else {  /* flash */
 	       if (isImagePage()) {
 	    ?>
+<!-- Simpleviewer section -->
 			<div id="flash">
         	<p align=center>
 			<font color=#663300>For the best viewing experience <a href="http://www.macromedia.com/go/getflashplayer/">Get Macromedia Flash.</a></font>

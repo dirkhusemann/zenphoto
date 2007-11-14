@@ -62,7 +62,7 @@ var gallery = {
 			thumbHeight: 75,
 			thumbWidth: 100,
 			thumbSpacing: 10,
-			thumbIdleOpacity: 0.2,
+			thumbIdleOpacity: 0.6,
 			textShowCarousel: 'Pictures',
 			showCarouselLabel: true,
 			thumbCloseCarousel: true,
