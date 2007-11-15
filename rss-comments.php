@@ -4,11 +4,12 @@ header('Content-Type: application/xml');
 require_once(ZENFOLDER . "/template-functions.php");
 $themepath = 'themes';
 
-if(getOption('mod_rewrite'))
- { $albumpath = "/"; $imagepath = "/"; }
-else
- { $albumpath = "/index.php?album="; $imagepath = "&image="; }
-
+if(getOption('mod_rewrite')) { 
+  $albumpath = "/"; $imagepath = "/"; 
+} else { 
+  $albumpath = "/index.php?album="; $imagepath = "&image="; 
+}
+$items = getOption('feed_items'); // # of Items displayed on the feed
 ?>
 <rss version="2.0">
 <channel>
@@ -24,7 +25,7 @@ else
 <webMaster><?php echo getOption('admin_email'); ?></webMaster>
 <?php
 db_connect();
-$comments = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.website," . " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a " . " WHERE c.imageid = i.id AND i.albumid = a.id ORDER BY c.id DESC LIMIT 10");
+$comments = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.website," . " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a " . " WHERE c.imageid = i.id AND i.albumid = a.id ORDER BY c.id DESC LIMIT ".$items;);
 foreach ($comments as $comment)
 {
 $author = $comment['name'];

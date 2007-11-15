@@ -47,5 +47,6 @@ function setDefault($option, $default) {
   setDefault('gallery_sorttype', 'Manual');
   setDefault('gallery_sortdirection', '0');
   setDefault('current_theme', 'default');
+  setDefault('feed_items', 10);
 
 ?>

@@ -8,9 +8,7 @@ $themepath = 'themes';
 $albumnr = $_GET[albumnr];
 $albumname = $_GET[albumname];
 
-if ($albumname != "")
-	{ $albumname = " - for album: ".$_GET[albumname]; }
-	
+if ($albumname != "") { $albumname = " - for album: ".$_GET[albumname]; }
 if(getOption('mod_rewrite'))
  { $albumpath = "/"; $imagepath = "/"; }
 else
@@ -32,24 +30,26 @@ else
 <?php 
 $iw = $cw = 400; // Image Width
 $ih = $ch = 300; // Image Height
-$items = 10; // # of Items displayed on the feed
+$items = getOption('feed_items'); // # of Items displayed on the feed
 
 db_connect();
 
-if ($albumnr != "")
-	{ $sql = "SELECT * FROM ". prefix("images") ." WHERE albumid = $albumnr AND `show` = 1 ORDER BY id DESC LIMIT ".$items;}
-else
- 	{ $sql = "SELECT * FROM ". prefix("images") ." WHERE `show` = 1 ORDER BY id DESC LIMIT ".$items; }
+if ($albumnr != "") { 
+  $sql = "SELECT * FROM ". prefix("images") ." WHERE albumid = $albumnr AND `show` = 1 ORDER BY id DESC LIMIT ".$items;
+} else { 
+  $sql = "SELECT * FROM ". prefix("images") ." WHERE `show` = 1 ORDER BY id DESC LIMIT ".$items; 
+}
  	
 $result = mysql_query($sql);
 
 while($r = mysql_fetch_array($result)) {
 $id=$r['albumid'];
 
-if ($albumnr != "") 
-	{ $sql="SELECT * FROM ". prefix("albums") ." WHERE `show` = 1 AND id = $albumnr"; }
-else
-	{ $sql="SELECT * FROM ". prefix("albums") ." WHERE `show` = 1 AND id = $id"; }
+if ($albumnr != "") { 
+  $sql="SELECT * FROM ". prefix("albums") ." WHERE `show` = 1 AND id = $albumnr"; 
+} else { 
+  $sql="SELECT * FROM ". prefix("albums") ." WHERE `show` = 1 AND id = $id"; 
+}
 
 $album = mysql_query($sql);
 $a = mysql_fetch_array($album);

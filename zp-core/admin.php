@@ -13,7 +13,7 @@ $standardOptions = array('gallery_title','website_title','website_url','time_off
                          'albums_per_page','images_per_page','perform_watermark', 
                          'watermark_image','adminuser','adminpass','current_theme', 'spam_filter',
                          'email_new_comments', 'perform_video_watermark', 'video_watermark_image',
-                         'gallery_sorttype', 'gallery_sortdirection');
+                         'gallery_sorttype', 'gallery_sortdirection', 'feed_items');
           
 
 if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
@@ -335,7 +335,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
       setOption('spam_filter', $_POST['spam_filter']);         
       setBoolOption('email_new_comments', $_POST['email_new_comments']);         
       setOption('gallery_sorttype', $_POST['gallery_sorttype']);         
-      setBoolOption('gallery_sortdirection', $_POST['gallery_sortdirection']);         
+      setBoolOption('gallery_sortdirection', $_POST['gallery_sortdirection']);   
+	  setOption('feed_items', $_POST['feed_items']);      
       /* Save the "custom" options */     
       $templateOptions = GetOptionList();
 	  
@@ -1232,6 +1233,12 @@ if (!zp_loggedin()) {
             <td><input type="checkbox" name="email_new_comments" value="1"
             <?php echo checked('1', getOption('email_new_comments')); ?> /></td>
             <td>Email the Admin when new comments are posted</td>
+        </tr>
+        <tr>
+            <td>Number of RSS feed items:</td>
+            <td><input type="text" size="40" name="feed_items"
+                value="<?php echo getOption('feed_items');?>" /></td>
+            <td>The number of new images/albums/comments you want to appear in your site's RSS feed.</td>
         </tr>
         <tr>
             <td>Sort gallery by: </td>
