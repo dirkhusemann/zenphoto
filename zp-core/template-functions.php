@@ -1275,6 +1275,10 @@ function getImageStatistic($number, $option) {
       $sortorder = "images.hitcounter"; break;
     case "latest":
       $sortorder = "images.id"; break;
+    case "mostrated":
+      $sortorder = "images.total_votes"; break;
+    case "toprated":
+      $sortorder = "(total_value/total_votes)"; break;
   }
   global $_zp_gallery;
   $imageArray = array();
@@ -1347,6 +1351,70 @@ function printRandomImages($number, $class=null, $option="all") {
     }
     echo "</ul>";
   }
+}
+
+function getImageRating($option, $id) {
+if(!$id) { $id = getImageID(); }
+  switch ($option) {
+     case "totalvalue":
+        $rating = "total_value"; break;
+     case "totalvotes":
+       $rating = "total_votes"; break;   
+  }
+  $result = query_single_row("SELECT ".$rating." FROM ". prefix('images') ." WHERE id = $id");
+  return $result[$rating];
+}
+
+function getImageRatingCurrent($id) {
+  $votes = getImageRating("totalvotes",$id);
+  $value = getImageRating("totalvalue",$id);
+  if($votes != 0)
+    { $rating =  round($value/$votes, 1); 
+  }
+  return $rating;
+} 
+
+function checkIp($id) {
+  $ip = $_SERVER['REMOTE_ADDR'];  
+  $ipcheck = query_full_array("SELECT used_ips FROM ". prefix('images') ." WHERE used_ips LIKE '%".$ip."%' AND id= $id");
+  if($ipcheck == true) 
+    { return true; 
+      } else { 
+        return false; }
+  } 
+
+function printImageRating() { 
+  $id = getImageID();
+  $value = getImageRating("totalvalue", $id);
+  $votes = getImageRating("totalvotes", $id); 
+  if($votes != 0) 
+    { $ratingpx = round(($value/$votes)*25);
+  }
+  $zenpath = WEBPATH."/".ZENFOLDER."/plugins";
+  echo "<div id=\"rating\">\n"; 
+  echo "<h3>Rating:</h3>\n";
+  echo "<ul class=\"star-rating\">\n"; 
+  echo "<li class=\"current-rating\" id=\"current-rating\" style=\"width:".$ratingpx."px\"></li>\n"; 
+  if(!checkIP($id)){  
+    echo "<li><a href=\"javascript:rateImg(1,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"1 star out of 5\"' class=\"one-star\">2</a></li>\n";
+    echo "<li><a href=\"javascript:rateImg(2,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"2 stars out of 5\" class=\"two-stars\">2</a></li>\n"; 
+    echo "<li><a href=\"javascript:rateImg(3,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"3 stars out of 5\" class=\"three-stars\">2</a></li>\n"; 
+    echo "<li><a href=\"javascript:rateImg(4,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"4 stars out of 5\" class=\"four-stars\">2</a></li>\n"; 
+    echo "<li><a href=\"javascript:rateImg(5,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"5 stars out of 5\" class=\"five-stars\">2</a></li>\n";
+  }
+  echo "</ul>\n";
+  echo "<div id =\"vote\">\n";
+  echo "Rating: ".getImageRatingCurrent($id)." (Total votes: ".$votes.")";
+  echo "</div>\n";
+  echo "</div>\n";
+}
+
+function printTopRatedImages($number=5) {
+printImageStatistic($number, "toprated");
+}
+
+function printMostRatedImages($number=5) {
+printImageStatistic($number, "mostrated");
 }
 
 /* Returns an Image-object, randomly selected from current directory or any of it's subdirectories.

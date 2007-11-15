@@ -124,6 +124,9 @@ if (file_exists("zp-config.php")) {
       `mtime` int(32) default NULL,
       `EXIFValid` int(1) unsigned default NULL,
 	  `hitcounter` int(11) unsigned default NULL,
+	  `total_value` int(11) unsigned default '0',
+	  `total_votes` int(11) unsigned default '0',
+	  `used_ips` longtext,
       $exifschema
       PRIMARY KEY  (`id`),
       KEY `filename` (`filename`,`albumid`)
