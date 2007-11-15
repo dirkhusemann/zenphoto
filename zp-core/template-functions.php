@@ -56,7 +56,7 @@ function printAdminToolbox($context=null, $id="admin") {
   if (zp_loggedin()) {
   $zf = WEBPATH."/".ZENFOLDER;
     $dataid = $id . '_data';
-    echo "\n<script type=\"text/javascript\" src=\"".$zf."/admin.js\"></script>\n";
+    echo "\n<script type=\"text/javascript\" src=\"".$zf."/js/admin.js\"></script>\n";
     if (is_null($context)) { $context = get_context(); }
     echo '<div id="' .$id. '">'."\n".'<a href="javascript: toggle('. "'" .$dataid."'".');"><h3>Admin Toolbox</h3></a>'."\n"."\n</div>"; 
     echo '<div id="' .$dataid. '" style="display: none;">'."\n"; 
@@ -95,13 +95,13 @@ function zenJavascript() {
   global $_zp_phoogle;
   if(getOption('gmaps_apikey') != ''){$_zp_phoogle->printGoogleJS();}
   if (zp_loggedin()) {
-    echo "  <script type=\"text/javascript\" src=\"".WEBPATH."/" . ZENFOLDER . "/ajax.js\"></script>\n";
+    echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/ajax.js\"></script>\n";
     echo "  <script type=\"text/javascript\">\n";
     sajax_show_javascript();
-    echo "  </script>";
+    echo "  </script>\n";
   }
-  echo "  <script type=\"text/javascript\" src=\"".WEBPATH."/" . ZENFOLDER . "/scripts-common.js\"></script>\n";
-  echo "  <script type=\"text/javascript\" src=\"".WEBPATH."/" . ZENFOLDER . "/flvplayer.js\"></script>\n";
+  echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/scripts-common.js\"></script>\n";
+  echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/flvplayer.js\"></script>\n";
 }
 
 /*** Gallery Index (album list) Context ***/
