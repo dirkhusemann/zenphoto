@@ -1377,11 +1377,8 @@ function getImageRatingCurrent($id) {
 function checkIp($id) {
   $ip = $_SERVER['REMOTE_ADDR'];  
   $ipcheck = query_full_array("SELECT used_ips FROM ". prefix('images') ." WHERE used_ips LIKE '%".$ip."%' AND id= $id");
-  if($ipcheck == true) 
-    { return true; 
-      } else { 
-        return false; }
-  } 
+  return $ipcheck;
+} 
 
 function printImageRating() { 
   $id = getImageID();
