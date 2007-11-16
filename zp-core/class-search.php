@@ -1,7 +1,18 @@
 <?php
 
 /*******************************************************************/
-/*ZENPHOTO SEARCH ENGINE CLASS *************************************/
+/*ZENPHOTO SEARCH ENGINE CLASS ********************************/
+/*******************************************************************/
+define('SEARCH_TITLE', 1);
+define('SEARCH_DESC', 2);
+define('SEARCH_TAGS', 4);
+define('SEARCH_FOLDER', 8);
+define('SEARCH_FILENAME', 16);
+define('SEARCH_LOCATION', 32);
+define('SEARCH_CITY', 64);
+define('SEARCH_STATE', 128);
+define('SEARCH_COUNTRY', 256);
+
 /*******************************************************************/
 class SearchEngine
 {
@@ -63,22 +74,106 @@ function getNumAlbums() {
   }
   return count($this->albums);
 }
+
+/**
+ * returns the set of fields from the url query/post
+  *@return int set of fields to be searched
+  *@since 1.1.3
+  */
+function getQueryFields() {
+  $fields = 0;
+  if (isset($_REQUEST['searchfields'])) { $fields = strip($_GET['searchfields']); }
+  if (isset($_REQUEST['sf_title'])) { $fields = $fields | SEARCH_TITLE; }
+  if (isset($_REQUEST['sf_desc']))  { $fields = $fields | SEARCH_DESC; }
+  if (isset($_REQUEST['sf_tags']))  { $fields = $fields | SEARCH_TAGS; }
+  if (isset($_REQUEST['sf_filename'])) { $fields = $fields | SEARCH_FILENAME; }
+  if (isset($_REQUEST['sf_location'])) { $fields = $fields | SEARCH_LOCATION; }
+  if (isset($_REQUEST['sf_city'])) { $fields = $fields | SEARCH_CITY; }
+  if (isset($_REQUEST['sf_state'])) { $fields = $fields | SEARCH_STATE; }
+  if (isset($_REQUEST['sf_country'])) { $fields = $fields | SEARCH_COUNTRY; }
+  if ($fields == 0) { $fields = SEARCH_TITLE | SEARCH_DESC | SEARCH_TAGS | SEARCH_FILENAME | SEARCH_LOCATION | SEARCH_CITY | SEARCH_STATE | SEARCH_COUNTRY; }
+  $fields = $fields & getOption('search_fields');
+  return $fields;
+}
+
+/**
+ * returns the sql string for a search
+ *@param string param1 the search target
+ *@param int param2 which fields to perform the search on
+  *@parm string the database table to search
+ *@return string SQL query for the search
+  *@since 1.1.3
+ */
+function getSearchSQL($searchstring, $tbl, $fields) {
+  $sql = 'SELECT `show`,`title`,`desc`,`tags`';
+  if ($tbl=='albums') {
+    if ($fields & SEARCH_FILENAME) { $fields = $fields + SEARCH_FOLDER; } // for searching these are really the same thing, just named differently in the different tables
+	$fields = $fields & (SEARCH_TITLE + SEARCH_DESC + SEARCH_TAGS + SEARCH_FOLDER); // these are all albums have
+	$sql .= ",`folder`";
+  } else {
+    $sql .= ",`albumid`,`filename`,`location`,`city`,`state`,`country`";
+  }
+  $sql .= " FROM ".prefix($tbl)." WHERE ";
+  if(!zp_loggedin()) { $sql .= "`show` = 1 AND"; }
+  
+  $nr = 0;
+  foreach($searchstring as $singlesearchstring){
+    if (SEARCH_TITLE & $fields) {
+      $nr++;
+      if ($nr > 1) { $sql .= " OR "; } // add OR for more searchstrings
+      $sql .= " `title` LIKE '%$singlesearchstring%'"; 
+	}
+    if (SEARCH_DESC & $fields) {
+      $nr++;
+      if ($nr > 1) { $sql .= " OR "; } // add OR for more searchstrings
+      $sql .= " `desc` LIKE '%$singlesearchstring%'"; 
+	}
+    if (SEARCH_TAGS & $fields) {
+      $nr++;
+      if ($nr > 1) { $sql .= " OR "; } // add OR for more searchstrings
+      $sql .= " `tags` LIKE '%$singlesearchstring%'"; 
+	}
+    if (SEARCH_FOLDER & $fields) {
+      $nr++;
+      if ($nr > 1) { $sql .= " OR "; } // add OR for more searchstrings
+      $sql .= " `folder` LIKE '%$singlesearchstring%'"; 
+	}
+    if (SEARCH_FILENAME & $fields) {
+      $nr++;
+      if ($nr > 1) { $sql .= " OR "; } // add OR for more searchstrings
+      $sql .= " `filename` LIKE '%$singlesearchstring%'"; 
+	}
+    if (SEARCH_LOCATION & $fields) {
+      $nr++;
+      if ($nr > 1) { $sql .= " OR "; } // add OR for more searchstrings
+      $sql .= " `location` LIKE '%$singlesearchstring%'"; 
+	}
+    if (SEARCH_CITY & $fields) {
+      $nr++;
+      if ($nr > 1) { $sql .= " OR "; } // add OR for more searchstrings
+      $sql .= " `city` LIKE '%$singlesearchstring%'"; 
+	}
+    if (SEARCH_STATE & $fields) {
+      $nr++;
+      if ($nr > 1) { $sql .= " OR "; } // add OR for more searchstrings
+      $sql .= " `state` LIKE '%$singlesearchstring%'"; 
+	}
+    if (SEARCH_COUNTRY & $fields) {
+      $nr++;
+      if ($nr > 1) { $sql .= " OR "; } // add OR for more searchstrings
+      $sql .= " `country` LIKE '%$singlesearchstring%'"; 
+	}
+  }
+  if ($nr == 0) { return NULL; } // no valid fields
+  return $sql;
+}
 /******************************************************************/   
 function getSearchAlbums() {
   $albums = array();
   $searchstring = $this->getSearchString(); 
   if (empty($searchstring)) { return $albums; } // nothing to find
-  $sql="SELECT `title`, `desc`, `tags`, `folder`, `show` FROM ".prefix('albums')." WHERE ";
-  if(!zp_loggedin()) { $sql = $sql."`show` = 1 AND"; }
-  $nr = 0;
-  foreach($searchstring as $singlesearchstring){
-    $nr++;
-    if ($nr > 1) { $sql = $sql." OR "; } // add OR for more searchstrings
-    $sql = $sql." `title` LIKE '%".$singlesearchstring."%' 
-                  OR `desc` LIKE '%".$singlesearchstring."%'
-                  OR `tags` LIKE '%".$singlesearchstring."%'
-                  OR `folder` LIKE '%".$singlesearchstring."%'"; 
-  }  
+  $sql = $this->getSearchSQL($searchstring, 'albums', $this->getQueryFields());
+  if (empty($sql)) { return $albums; } // no valid fields
   $albumfolder = getAlbumFolder();
   $search_results = query_full_array($sql); 
   foreach ($search_results as $row) {  
@@ -117,23 +212,10 @@ function getSearchImages() {
   $searchstring = $this->getSearchString();
   $searchdate = $this->getSearchDate();
   if (empty($searchstring) && empty($searchdate)) { return $images; } // nothing to find
-  $sql="SELECT `title`, `desc`, `tags`, `albumid`, `filename`, `show`, `date`, `location`, `city`, `state`, `country` FROM ".prefix('images')." WHERE ";
-  if(!zp_loggedin()) { $sql = $sql."`show` = 1 AND"; }
-  $nr = 0;
-  foreach($searchstring as $singlesearchstring){
-    $nr++;
-    if ($nr > 1) { $sql = $sql." OR "; } // add OR for more searchstrings
-    $sql = $sql." `title` LIKE '%".$singlesearchstring."%' 
-                  OR `desc` LIKE '%".$singlesearchstring."%'
-                  OR `tags` LIKE '%".$singlesearchstring."%'
-                  OR `filename` LIKE '%".$singlesearchstring."%'
-                  OR `location` LIKE '%".$singlesearchstring."%'
-                  OR `city` LIKE '%".$singlesearchstring."%'
-                  OR `state` LIKE '%".$singlesearchstring."%'
-                  OR `country` LIKE '%".$singlesearchstring."%'"; 
-  }  
+  $sql = $this->getSearchSQL($searchstring, 'images', $this->getQueryFields());
+  if (empty($sql)) { return $images; } // no valid fields
   if (!empty($searchdate)) { 
-    if ($nr > 1) { $sql = $sql." AND "; } // add OR for more searchstrings
+    if ($nr > 1) { $sql = $sql." AND "; }
 	if ($searchdate == "0000-00") {
 	  $sql .= "`date`=\"0000-00-00 00:00:00\"";
 	} else {
@@ -186,7 +268,5 @@ function getImages($page=0, $firstPageCount=0) {
 
 
 } // search class end
-
-
 
 ?>

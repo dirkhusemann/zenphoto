@@ -13,10 +13,10 @@ $standardOptions = array('gallery_title','website_title','website_url','time_off
                          'albums_per_page','images_per_page','perform_watermark', 
                          'watermark_image','adminuser','adminpass','current_theme', 'spam_filter',
                          'email_new_comments', 'perform_video_watermark', 'video_watermark_image',
-                         'gallery_sorttype', 'gallery_sortdirection', 'feed_items');
+                         'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'search_fields');
           
-
-if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
+global $_zp_null_account;
+if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action handling first. */
   
   $gallery = new Gallery();
   if (isset($_GET['prune'])) {
@@ -304,8 +304,13 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 
 	  $wm = getOption('perform_watermark');
 	  $vwm = getOption('perform_video_watermark');
-      setOption('adminuser', $_POST['adminuser']);
-      setOption('adminpass', $_POST['adminpass']);
+	  if ($_POST['adminpass'] == $_POST['adminpass_2']) {
+        setOption('adminuser', $_POST['adminuser']);
+        setOption('adminpass', $_POST['adminpass']);
+		$notify = '';
+	  } else {
+	    $notify = '&mismatch';
+	  }
       setOption('admin_email', $_POST['admin_email']);
       setOption('gallery_title', $_POST['gallery_title']);
       setOption('website_title', $_POST['website_title']);
@@ -336,7 +341,10 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
       setBoolOption('email_new_comments', $_POST['email_new_comments']);         
       setOption('gallery_sorttype', $_POST['gallery_sorttype']);         
       setBoolOption('gallery_sortdirection', $_POST['gallery_sortdirection']);   
-	  setOption('feed_items', $_POST['feed_items']);      
+	  setOption('feed_items', $_POST['feed_items']);  
+      $search = new SearchEngine();
+	  setOption('search_fields', 32767); // make SearchEngine allow all options so getQueryFields() will gives back what was choosen this time
+      setOption('search_fields', $search->getQueryFields());		  
       /* Save the "custom" options */     
       $templateOptions = GetOptionList();
 	  
@@ -359,7 +367,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	  if(($wm != getOption('perform_watermark')) || ($vwm != getOption('perform_video_watermark'))) {
 	    $gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the option has changed
 	  }
-      header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=options");
+      header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=options$notify");
       exit();
     
 /** THEMES ******************************************************************/
@@ -418,27 +426,16 @@ if (issetPage('edit')) {
 
 <?php
 // If they are not logged in, display the login form and exit
-if (isset($_GET['ignore'])) {
-  $_SESSION['ignoreDefaultPassword'] = true;
-}
 
-if (!zp_loggedin()) {
+if (!zp_loggedin()  && !$_zp_null_account) {
   
   printLoginForm();
   exit(); 
-  
-} else if ($_SESSION['ignoreDefaultPassword'] != true 
-    && (getOption('adminpass') == '1234' || getOption('adminpass') == '')) {
-  /* Using default or blank password; issue warning, but only after successfully logged in. */
-  echo '<p><img src="../" . ZENFOLDER . "/images/zen-logo.gif" title="Zen Photo" /></p>'
-    .  '<div id="loginform" style="text-align: justify;"><h1 style="color: #cc0000;">Warning!</h1><p>'
-    .  '<strong>You are currently using '.(getOption('adminpass') == '1234' ? 'the default' : 'a blank').' password!</strong> This is insecure because many people know this password. '
-    .  'It is highly recommended that you change the password by editing <code>' .  ZENFOLDER . '/zp-config.php</code>. '
-    .  'If you understand this and want to continue anyway, please <a href="?ignore">click here to continue &raquo;</a>.</p></div>';
-  
+    
 } else { /* Admin-only content safe from here on. */ 
-
+  if ($_zp_null_account) { $page = 'options'; } // strongly urge him to set his admin username and password
   printLogoAndLinks();
+ 
 ?>
 
   <div id="main">
@@ -1113,6 +1110,16 @@ if (!zp_loggedin()) {
           </th>
         </tr>
       </table>
+	  <?php
+	  if (isset($_GET['mismatch'])) {
+	  	echo '<div class="errorbox" id="message">'; 
+	    echo  "<h2>Your passwords did not match</h2>";  
+	    echo '</div>'; 
+	    echo '<script type="text/javascript">'; 
+	    echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);"; 
+	    echo "</script>\n"; 
+      }
+	  ?>
       <form action="?page=options&action=saveoptions" method="post">
       <input type="hidden" name="saveoptions" value="yes" />
       <table class="bordered">
@@ -1126,9 +1133,13 @@ if (!zp_loggedin()) {
             <td></td>
         </tr>
         <tr>
-            <td>Admin password:</td>
-            <td><input type="password" size="40" name="adminpass"
-            value="<?php echo getOption('adminpass');?>" /></td>
+            <td>Admin password:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(repeat) </p></td>
+            <td>
+			<input type="password" size="40" name="adminpass"
+            value="<?php echo getOption('adminpass');?>" /><br/>
+			<input type="password" size="40" name="adminpass_2"
+            value="<?php echo getOption('adminpass');?>" />
+			</td>
             <td></td>
         </tr>
         <tr>
@@ -1257,6 +1268,21 @@ if (!zp_loggedin()) {
             <?php echo checked('1', getOption('gallery_sortdirection')); ?> /></td>
             <td>Gallery sort direction will be decending if this option is checked</td>
         </tr>
+		<tr>
+		  <td>Search fields:</td>
+		    <td>
+		    <?php $fields = getOption('search_fields'); ?>
+			<input type="checkbox" name="sf_title" value=1 <?php if ($fields & SEARCH_TITLE) echo ' checked'; ?>> Title<br/>
+            <input type="checkbox" name="sf_desc=" value=1 <?php if ($fields & SEARCH_DESC) echo ' checked'; ?>> Description<br/>
+            <input type="checkbox" name="sf_tags" value=1 <?php if ($fields & SEARCH_TAGS) echo ' checked'; ?>> Tags<br/>
+            <input type="checkbox" name="sf_filename" value=1 <?php if ($fields & SEARCH_FILENAME) echo ' checked'; ?>> File/Folder name<br/>
+            <input type="checkbox" name="sf_location" value=1 <?php if ($fields & SEARCH_LOCATION) echo ' checked'; ?>> Location<br/>
+            <input type="checkbox" name="sf_city" value=1 <?php if ($fields & SEARCH_CITY) echo ' checked'; ?>> City<br/>
+            <input type="checkbox" name="sf_state" value=1 <?php if ($fields & SEARCH_STATE) echo ' checked'; ?>> State<br/>
+            <input type="checkbox" name="sf_country" value=1 <?php if ($fields & SEARCH_COUNTRY) echo ' checked'; ?>> Country<br/>
+	        </td>
+		  <td>The set of fields on which searches may be performed.</td>
+		</tr>
         <tr>
             <td></td>
             <td><input type="submit" value="save" /></td>

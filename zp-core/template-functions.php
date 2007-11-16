@@ -60,7 +60,7 @@ function printSubalbumAdmin($text, $before='', $after='') {
 function printAdminToolbox($context=null, $id="admin") {
   global $_zp_current_album, $_zp_current_image;
   if (zp_loggedin()) {
-  $zf = WEBPATH."/".ZENFOLDER;
+    $zf = WEBPATH."/".ZENFOLDER;
     $dataid = $id . '_data';
     echo "\n<script type=\"text/javascript\" src=\"".$zf."/js/admin.js\"></script>\n";
     if (is_null($context)) { $context = get_context(); }
@@ -220,11 +220,12 @@ function getPageURL_($page, $total) {
   global $_zp_current_album, $_zp_gallery, $_zp_current_search;
   if (in_context(ZP_SEARCH)) {
     $searchwords = $_zp_current_search->words;
+	$searchfields = $_zp_current_search->getQueryFields();
     if (empty($searchwords)) { 
       $searchwords = $_zp_current_search->dates; 
-      $searchpagepath = "index.php?p=search&date=".$searchwords."&page=".$page;
+      $searchpagepath = "index.php?p=search&date=$searchwords&searchfields=$searchfields&page=$page";
     } else { 
-      $searchpagepath = "index.php?p=search&words=".$searchwords."&page=".$page; 
+      $searchpagepath = "index.php?p=search&words=$searchwords&searchfields=$searchfields&page=$page"; 
     }
     return $searchpagepath;
   } else {
@@ -1388,8 +1389,8 @@ function checkIp($id) {
 
 function printImageRating() { 
   $id = getImageID();
-  $value = getImageRating("totalvalue",$id);
-  $votes = getImageRating("totalvotes",$id); 
+  $value = getImageRating("totalvalue", $id);
+  $votes = getImageRating("totalvotes", $id); 
   if($votes != 0) 
     { $ratingpx = round(($value/$votes)*25);
   }
@@ -1398,14 +1399,12 @@ function printImageRating() {
   echo "<h3>Rating:</h3>\n";
   echo "<ul class=\"star-rating\">\n"; 
   echo "<li class=\"current-rating\" id=\"current-rating\" style=\"width:".$ratingpx."px\"></li>\n"; 
-  if(!checkIP($id)) {  
-    echo "<span id='ratingstars'>";
+  if(!checkIP($id)){  
     echo "<li><a href=\"javascript:rateImg(1,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"1 star out of 5\"' class=\"one-star\">2</a></li>\n";
     echo "<li><a href=\"javascript:rateImg(2,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"2 stars out of 5\" class=\"two-stars\">2</a></li>\n"; 
     echo "<li><a href=\"javascript:rateImg(3,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"3 stars out of 5\" class=\"three-stars\">2</a></li>\n"; 
     echo "<li><a href=\"javascript:rateImg(4,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"4 stars out of 5\" class=\"four-stars\">2</a></li>\n"; 
     echo "<li><a href=\"javascript:rateImg(5,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"5 stars out of 5\" class=\"five-stars\">2</a></li>\n";
-    echo "</span>";
   }
   echo "</ul>\n";
   echo "<div id =\"vote\">\n";
@@ -1656,11 +1655,11 @@ function getAllSubAlbumIDs($albumfolder='') {
   return $subIDs; 
 }
 
-function hitcounter($visible=true) {
+function hitcounter() {
   $id = getImageID(); 
   $result = query_single_row("SELECT hitcounter FROM ". prefix('images') ." WHERE id = $id");
   $resultupdate = $result['hitcounter']+1;
-  if($visible == true) { echo $resultupdate; }
+  echo $resultupdate;
   $result2 = query_single_row("UPDATE ". prefix('images') ." SET `hitcounter`= $resultupdate WHERE id = $id");
 }
 
@@ -1707,14 +1706,54 @@ function printRSSHeaderLink($option, $linktext) {
 based on the search engine tutorial from PHPFreaks.com (dissapeared strangely)
 modified for zenphoto by Malte MŸller (acrylian)
 ****************************************************************************/
-function printSearchForm($prevtext=NULL) { 
-  $searchwords= (isset($_POST['words']) ? htmlspecialchars(stripslashes($_REQUEST['words'])) : ''); 
-  echo "\n<div id=\"search\">\n";
-  echo "<form method=\"POST\" action=\"".WEBPATH."/index.php?p=search\" id=\"search_form\">"; 
-  echo $prevtext."<input type=\"text\" name=\"words\" value=\"".$searchwords."\" id=\"search_input\" size=\"10\" />\n"; 
-  echo "<input type=\"submit\" value=\"Search\" class=\"pushbutton\" id=\"search_submit\">\n"; 
-  echo "</form>\n"; 
-  echo "</div>\n";
+function printSearchForm($prevtext=NULL, $enableFieldSelect= false, $id='search') { 
+  $zf = WEBPATH."/".ZENFOLDER;
+  $dataid = $id . '_data';
+  $searchwords = (isset($_POST['words']) ? htmlspecialchars(stripslashes($_REQUEST['words'])) : ''); 
+  echo "\n<div id=\"search\">";
+  echo "\n<form method=\"POST\" action=\"".WEBPATH."/index.php?p=search\" id=\"search_form\">"; 
+  echo "\n$prevtext<input type=\"text\" name=\"words\" value=\"".$searchwords."\" id=\"search_input\" size=\"10\" />"; 
+  echo "\n<input type=\"submit\" value=\"Search\" class=\"pushbutton\" id=\"search_submit\">"; 
+  $fields = getOption('search_fields');
+  $bits = array(SEARCH_TITLE, SEARCH_DESC, SEARCH_TAGS, SEARCH_FILENAME, SEARCH_LOCATION, SEARCH_CITY, SEARCH_STATE, SEARCH_COUNTRY);
+  $c = 0;
+  foreach ($bits as $bit) {
+    if ($bit & $fields) { $c++; }
+    if ($c>1) break;
+  }  
+  if ($enableFieldSelect && ($c>1)) {
+    echo "\n<script type=\"text/javascript\" src=\"".$zf."/js/admin.js\"></script>\n";
+    echo "\n".'<a href="javascript: toggle('. "'" .$dataid."'".');"><h3>Fields</h3></a>'; 
+    echo "\n".'<div id="' .$dataid. '" style="display: none;">'; 
+	if ($fields & SEARCH_TITLE) {
+      echo "\n<input type=\"checkbox\" name=\"sf_title\" value=1 checked> Title<br/>";
+	}
+	if ($fields & SEARCH_DESC) {
+      echo "\n<input type=\"checkbox\" name=\"sf_desc\" value=1 checked> Description<br/>";
+	}
+	if ($fields & SEARCH_TAGS) {
+      echo "\n<input type=\"checkbox\" name=\"sf_tags\" value=1 checked> Tags<br/>";
+	}
+	if ($fields & SEARCH_FILENAME) {
+      echo "\n<input type=\"checkbox\" name=\"sf_filename\" value=1 checked> File/Folder name<br/>";
+	}
+	if ($fields & SEARCH_LOCATION) {
+      echo "\n<input type=\"checkbox\" name=\"sf_location\" value=1 checked> Location<br/>";
+	}
+	if ($fields & SEARCH_CITY) {
+      echo "\n<input type=\"checkbox\" name=\"sf_city\" value=1 checked> City<br/>";
+	}
+	if ($fields & SEARCH_STATE) {
+      echo "\n<input type=\"checkbox\" name=\"sf_state\" value=1 checked> State<br/>";
+	}
+	if ($fields & SEARCH_COUNTRY) {
+      echo "\n<input type=\"checkbox\" name=\"sf_country\" value=1 checked> Country<br/>";
+	}
+      echo "\n</div>";
+  }
+  echo "\n</form>\n"; 
+  echo "\n</div>";
+echo "\n<!-- end of search form -->";
 } 
 
 function getSearchWords($separator=" | ") {

@@ -48,5 +48,6 @@ function setDefault($option, $default) {
   setDefault('gallery_sortdirection', '0');
   setDefault('current_theme', 'default');
   setDefault('feed_items', 10);
+  setDefault('search_fields', 32767);
 
 ?>

@@ -190,7 +190,7 @@ function printLogoAndLinks() {
  * @since  1.0.0
  */
 function printTabs() {
-  
+  global $_zp_null_account;
   // Which page should we highlight? Default is home.
   if (isset($_GET['page'])) {
     $page= $_GET['page'];
@@ -212,6 +212,12 @@ function printTabs() {
   echo "\n    <li". ($page == "themes" ? " class=\"current\""  : "") . 
     "> <a href=\"admin.php?page=themes\">themes</a></li>";
   echo "\n  </ul>";
+  
+  if ($_zp_null_account) {
+    echo "<div class=\"errorbox\">";
+    echo "<h2>You need to <a href=\"admin.php?page=options\">set</a> your admin user and password.</h2>";
+	echo "</div>";
+  }
 }
 
 function checked($checked, $current) {

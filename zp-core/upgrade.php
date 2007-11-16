@@ -37,14 +37,6 @@
 
 if (file_exists("zp-config.php")) {
   
-  // Are we logged in?
-  if (!zp_loggedin()) {
-  
-    // Display the login form and exit. 
-    printLoginForm("/" . ZENFOLDER . "/upgrade.php");
-    exit();
-  
-  } else {
     // Logged in. Do the setup.
     // These already have `backticks` around them!
     $tbl_albums   = prefix('albums');
@@ -124,7 +116,12 @@ if (file_exists("zp-config.php")) {
       $needsrefresh = $gallery->garbageCollect(true, true);
 	  
 	  echo "<h3>Done!</h3>";
-      echo "<p>You can now <a href=\"../\">View your gallery</a>, or <a href=\"admin.php\">administrate.</a></p>";
+	  $credentials = getOption('adminuser') . getOption('adminpass');
+	  if (empty($credentials)) {
+        echo "<p>You need to <a href=\"admin.php?page=options\">set</a> your admin user and password.</p>";
+	  } else {
+        echo "<p>You can now <a href=\"../\">View your gallery</a>, or <a href=\"admin.php\">administrate.</a></p>";
+	  }
       if ($needsrefresh) {
         echo "<p>The database refresh stopped early due to processing time. You may need to run refresh again from the admin pages.</a></p>";
       }
@@ -138,8 +135,7 @@ if (file_exists("zp-config.php")) {
     } else {
       echo "<h3>database not connected</h3>";
       echo "<p>Check the zp-config.php file to make sure you've got the right username, password, host, and database. If you haven't created the database yet, now would be a good time.";
-    }
-  } 
+    } 
   
 } else {
   // The config file hasn't been created yet. Probably still need to setup.

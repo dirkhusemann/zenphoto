@@ -10,7 +10,12 @@ $_zp_loggedin = false;
 $cookiepath = WEBPATH;
 if (WEBPATH == '') { $cookiepath = '/'; }
 
-if (isset($_COOKIE['zenphoto_auth'])) {
+$credentials = getOption('adminuser') . getOption('adminpass');
+$_zp_null_account = false;
+if (empty($credentials)) {
+  $_zp_loggedin = false; 
+  $_zp_null_account = true;  // no account setup yet
+} else if (isset($_COOKIE['zenphoto_auth'])) {
   $saved_auth = $_COOKIE['zenphoto_auth'];
   $check_auth = md5(getOption("adminuser").getOption("adminpass"));
   if ($saved_auth == $check_auth) {
