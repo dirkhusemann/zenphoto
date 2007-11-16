@@ -50,7 +50,13 @@ function printSubalbumAdmin($text, $before='', $after='') {
    }
 }
 
-/* Admin link toolbox */
+/**
+ * prints the clickable drop down toolbox on any theme page with generic admin helpers
+ * @param string $context index, album, image or search
+ * @param string $id the html/css theming id
+ * @return string with all the html for the admin toolbox
+ * @since 1.1
+ */
 function printAdminToolbox($context=null, $id="admin") {
   global $_zp_current_album, $_zp_current_image;
   if (zp_loggedin()) {
