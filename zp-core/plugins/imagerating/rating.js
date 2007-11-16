@@ -82,6 +82,6 @@ function rateImg(rating,imgId,votes,values,path)  {
 		nt = remotos.enviar(path+'/imagerating/update.php?rating='+rating+'&imgId='+imgId);
 		document.getElementById('vote').innerHTML="Rating: "+values+" (Total votes: "+votes+")<br />Thanks for voting!";
 		rating = rating * 25;
-		document.getElementById('currentrating').innerHTML=" ";
+		document.getElementById('ratingstars').innerHTML=" ";
 		document.getElementById('current-rating').style.width = rating+'px';
 }

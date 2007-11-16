@@ -1382,8 +1382,8 @@ function checkIp($id) {
 
 function printImageRating() { 
   $id = getImageID();
-  $value = getImageRating("totalvalue", $id);
-  $votes = getImageRating("totalvotes", $id); 
+  $value = getImageRating("totalvalue",$id);
+  $votes = getImageRating("totalvotes",$id); 
   if($votes != 0) 
     { $ratingpx = round(($value/$votes)*25);
   }
@@ -1392,12 +1392,14 @@ function printImageRating() {
   echo "<h3>Rating:</h3>\n";
   echo "<ul class=\"star-rating\">\n"; 
   echo "<li class=\"current-rating\" id=\"current-rating\" style=\"width:".$ratingpx."px\"></li>\n"; 
-  if(!checkIP($id)){  
+  if(!checkIP($id)) {  
+    echo "<span id='ratingstars'>";
     echo "<li><a href=\"javascript:rateImg(1,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"1 star out of 5\"' class=\"one-star\">2</a></li>\n";
     echo "<li><a href=\"javascript:rateImg(2,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"2 stars out of 5\" class=\"two-stars\">2</a></li>\n"; 
     echo "<li><a href=\"javascript:rateImg(3,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"3 stars out of 5\" class=\"three-stars\">2</a></li>\n"; 
     echo "<li><a href=\"javascript:rateImg(4,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"4 stars out of 5\" class=\"four-stars\">2</a></li>\n"; 
     echo "<li><a href=\"javascript:rateImg(5,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"5 stars out of 5\" class=\"five-stars\">2</a></li>\n";
+    echo "</span>";
   }
   echo "</ul>\n";
   echo "<div id =\"vote\">\n";
@@ -1648,11 +1650,11 @@ function getAllSubAlbumIDs($albumfolder='') {
   return $subIDs; 
 }
 
-function hitcounter() {
+function hitcounter($visible=true) {
   $id = getImageID(); 
   $result = query_single_row("SELECT hitcounter FROM ". prefix('images') ." WHERE id = $id");
   $resultupdate = $result['hitcounter']+1;
-  echo $resultupdate;
+  if($visible == true) { echo $resultupdate; }
   $result2 = query_single_row("UPDATE ". prefix('images') ." SET `hitcounter`= $resultupdate WHERE id = $id");
 }
 
