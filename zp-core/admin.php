@@ -444,6 +444,13 @@ if (!zp_loggedin()  && !$_zp_null_account) {
   
   <div id="content">
   
+  <?php if ($_zp_null_account) {
+    echo "<div class=\"errorbox space\">";
+    echo "<h2>You need to <a href=\"admin.php?page=options\">set</a> your admin user and password.</h2>";
+	echo "</div>";
+  }
+  ?>
+  
   
 <?php /** EDIT ****************************************************************************/
       /************************************************************************************/ 

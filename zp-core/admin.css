@@ -409,6 +409,7 @@ label:hover {
 
 /* Option Tabs
 ------------------------------------- */
+.space {margin-top:40px;}
 .panel {
 	clear: both;
 	display: none;
@@ -421,7 +422,7 @@ label:hover {
 #tabs {
 	position: absolute;
 	top: 125px;
-	left:0;
+	left: 0;
 	height: 28px;
 	list-style: none;
 }
