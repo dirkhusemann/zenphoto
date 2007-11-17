@@ -12,6 +12,7 @@
 <?php printAdminToolbox(); ?>
 
 <div id="main">
+
 	<div id="gallerytitle">
     <?php printSearchForm(); ?>
 		<h2><span><a href="<?php echo getGalleryIndexURL();?>" title="Gallery Index"><?php echo getGalleryTitle();?></a></span> | Search</h2>
