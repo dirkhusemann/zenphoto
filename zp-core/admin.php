@@ -302,6 +302,9 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         exit();
       }
 
+echo "<br/>_REQUEST<br/>";print_r($_REQUEST);
+echo "<br/>_POST<br/>";print_r($_POST);
+
 	  $wm = getOption('perform_watermark');
 	  $vwm = getOption('perform_video_watermark');
 	  if ($_POST['adminpass'] == $_POST['adminpass_2']) {
@@ -367,7 +370,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
 	  if(($wm != getOption('perform_watermark')) || ($vwm != getOption('perform_video_watermark'))) {
 	    $gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the option has changed
 	  }
-      header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=options$notify");
+      header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=options".$notify);
       exit();
     
 /** THEMES ******************************************************************/
@@ -813,9 +816,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 
                 <td align="left"> 
                   <a class="delete" href="javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=<?php echo queryEncode($album->name); ?>');" title="Delete the album <?php echo $album->name; ?>"> 
-                  <img src="images/delete.gif" style="border: 0px;" alt="x" /></a>
-                  <a class="cache" href="cache-images.php?album=<?php echo $album->name; ?>" title="Pre-Cache the album '<?php echo $album->name; ?>'">
-                  <img src="images/cache.gif" style="border: 0px;" alt="cache" /></a>
+                  <img src="images/delete.gif" style="border: 0px;" alt="x" /></a> 
                 </td>
 
               </tr>
@@ -1111,7 +1112,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
       
       <form action="?page=options&action=saveoptions" method="post">
       <input type="hidden" name="saveoptions" value="yes" />
-        
+       
       <div id="container">
 		<div id="mainmenu">
 		  <ul id="tabs">
@@ -1275,7 +1276,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 		    			<td>
 		    				<?php $fields = getOption('search_fields'); ?>
 							<input type="checkbox" name="sf_title" value=1 <?php if ($fields & SEARCH_TITLE) echo ' checked'; ?>> Title<br/>
-            				<input type="checkbox" name="sf_desc=" value=1 <?php if ($fields & SEARCH_DESC) echo ' checked'; ?>> Description<br/>
+            				<input type="checkbox" name="sf_desc" value=1 <?php if ($fields & SEARCH_DESC) echo ' checked'; ?>> Description<br/>
             				<input type="checkbox" name="sf_tags" value=1 <?php if ($fields & SEARCH_TAGS) echo ' checked'; ?>> Tags<br/>
             				<input type="checkbox" name="sf_filename" value=1 <?php if ($fields & SEARCH_FILENAME) echo ' checked'; ?>> File/Folder name<br/>
             				<input type="checkbox" name="sf_location" value=1 <?php if ($fields & SEARCH_LOCATION) echo ' checked'; ?>> Location<br/>

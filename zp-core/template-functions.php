@@ -220,13 +220,9 @@ function getPageURL_($page, $total) {
   global $_zp_current_album, $_zp_gallery, $_zp_current_search;
   if (in_context(ZP_SEARCH)) {
     $searchwords = $_zp_current_search->words;
+	$searchdate = $_zp_current_search->getSearchDate();
 	$searchfields = $_zp_current_search->getQueryFields();
-    if (empty($searchwords)) { 
-      $searchwords = $_zp_current_search->dates; 
-      $searchpagepath = "index.php?p=search&date=$searchwords&searchfields=$searchfields&page=$page";
-    } else { 
-      $searchpagepath = "index.php?p=search&words=$searchwords&searchfields=$searchfields&page=$page"; 
-    }
+	$searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields).(($page > 1) ? "&page=" . $page : "") ;
     return $searchpagepath;
   } else {
     if ($page <= $total && $page > 0) {
@@ -1389,8 +1385,8 @@ function checkIp($id) {
 
 function printImageRating() { 
   $id = getImageID();
-  $value = getImageRating("totalvalue",$id);
-  $votes = getImageRating("totalvotes",$id); 
+  $value = getImageRating("totalvalue", $id);
+  $votes = getImageRating("totalvotes", $id); 
   if($votes != 0) 
     { $ratingpx = round(($value/$votes)*25);
   }
@@ -1399,15 +1395,12 @@ function printImageRating() {
   echo "<h3>Rating:</h3>\n";
   echo "<ul class=\"star-rating\">\n"; 
   echo "<li class=\"current-rating\" id=\"current-rating\" style=\"width:".$ratingpx."px\"></li>\n"; 
-  if(!checkIP($id))
-  	{  
-  echo "<span id='ratingstars'>";
-  echo "<li><a href=\"javascript:rateImg(1,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"1 star out of 5\"' class=\"one-star\">2</a></li>\n";
-  echo "<li><a href=\"javascript:rateImg(2,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"2 stars out of 5\" class=\"two-stars\">2</a></li>\n"; 
-  echo "<li><a href=\"javascript:rateImg(3,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"3 stars out of 5\" class=\"three-stars\">2</a></li>\n"; 
-  echo "<li><a href=\"javascript:rateImg(4,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"4 stars out of 5\" class=\"four-stars\">2</a></li>\n"; 
-  echo "<li><a href=\"javascript:rateImg(5,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"5 stars out of 5\" class=\"five-stars\">2</a></li>\n";
-  echo "</span>";
+  if(!checkIP($id)){  
+    echo "<li><a href=\"javascript:rateImg(1,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"1 star out of 5\"' class=\"one-star\">2</a></li>\n";
+    echo "<li><a href=\"javascript:rateImg(2,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"2 stars out of 5\" class=\"two-stars\">2</a></li>\n"; 
+    echo "<li><a href=\"javascript:rateImg(3,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"3 stars out of 5\" class=\"three-stars\">2</a></li>\n"; 
+    echo "<li><a href=\"javascript:rateImg(4,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"4 stars out of 5\" class=\"four-stars\">2</a></li>\n"; 
+    echo "<li><a href=\"javascript:rateImg(5,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"5 stars out of 5\" class=\"five-stars\">2</a></li>\n";
   }
   echo "</ul>\n";
   echo "<div id =\"vote\">\n";
@@ -1482,7 +1475,7 @@ function printTags($option="",$preText=NULL,$class='taglist',$separator=", ",$ed
     for ($x = 0; $x < $ct; $x++) {
       if ($x === $ct - 1) { $separator = ""; }
       if ($option === "links") {
-        $links1 = "<a href=\"".WEBPATH."/index.php?p=search&words=".$singletag[$x]."\" title=\"".$singletag[$x]."\">"; 
+        $links1 = "<a href=\"".WEBPATH.getSearachURL($singletag[$x], ''. SEARCH_TAGS)."\" title=\"".$singletag[$x]."\">"; 
         $links2 = "</a>"; 
 	  }
       echo "\t<li>".$links1.htmlspecialchars($singletag[$x]).$links2.$separator."</li>\n";
@@ -1556,8 +1549,8 @@ function printAllTagsAs($option,$class="",$sort="abc",$counter=FALSE,$links=TRUE
         echo "\t<li style=\"font-size:".$size."em\">".$key.$counter."</li>\n";  
 	  } else { 
 	    $key = str_replace('"', '', $key);
-        echo "\t<li style=\"display:inline; list-style-type:none\"><a href=\"".WEBPATH.
-	         "/index.php?p=search&sf_tags&words=".$key."\" style=\"font-size:".$size."em;\">".
+        echo "\t<li style=\"display:inline; list-style-type:none\"><a href=\"".
+	         getSearchURL($key, '', SEARCH_TAGS)."\" style=\"font-size:".$size."em;\">".
 		     $key.$counter."</a></li>\n";  
 	  }
 	}
@@ -1606,7 +1599,7 @@ function printAllDates($class="archive", $yearid="year", $monthid="month") {
 	  if($nr != 1) {  echo "</ul>\n</li>\n";}
       echo "<li $yearid>$year\n<ul $monthid>\n";
 	}
-	echo "<li><a href=\"index.php?p=search&date=".substr($key, 0, 7)."\">$month ($val)</a></li>\n";
+	echo "<li><a href=\"".getSearchURl('', substr($key, 0, 7))."\">$month ($val)</a></li>\n";
   }
 echo "</ul>\n</li>\n</ul>\n";
 }
@@ -1709,6 +1702,22 @@ function printRSSHeaderLink($option, $linktext) {
 based on the search engine tutorial from PHPFreaks.com (dissapeared strangely)
 modified for zenphoto by Malte MŸller (acrylian)
 ****************************************************************************/
+/**
+ * creates a search URL
+ *@param string $param1 the search words target
+ *@param string $param2 the dates that limit the search
+ *@param integer $param3 the fields on which to search
+ *@return string the url to be used for the search page
+ *@since 1.1.3
+  */
+function getSearchURL($words, $dates, $fields=0) {
+  $url = WEBPATH."/index.php?p=search";
+  if($fields != 0) { $url .= "&searchfields=$fields"; }
+  if (!empty($words)) { $url .= "&words=$words"; }
+  if (!empty($dates)) { $url .= "&date=$dates"; }
+  return $url;
+}
+
 function printSearchForm($prevtext=NULL, $enableFieldSelect= false, $id='search') { 
   $zf = WEBPATH."/".ZENFOLDER;
   $dataid = $id . '_data';

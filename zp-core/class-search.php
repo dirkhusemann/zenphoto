@@ -6,12 +6,12 @@
 define('SEARCH_TITLE', 1);
 define('SEARCH_DESC', 2);
 define('SEARCH_TAGS', 4);
-define('SEARCH_FOLDER', 8);
-define('SEARCH_FILENAME', 16);
-define('SEARCH_LOCATION', 32);
-define('SEARCH_CITY', 64);
-define('SEARCH_STATE', 128);
-define('SEARCH_COUNTRY', 256);
+define('SEARCH_FILENAME', 8);
+define('SEARCH_LOCATION', 16);
+define('SEARCH_CITY', 32);
+define('SEARCH_STATE', 64);
+define('SEARCH_COUNTRY', 128);
+define('SEARCH_FOLDER', 256);
 
 /*******************************************************************/
 class SearchEngine
@@ -81,17 +81,22 @@ function getNumAlbums() {
   *@since 1.1.3
   */
 function getQueryFields() {
-  $fields = 0;
-  if (isset($_REQUEST['searchfields'])) { $fields = strip($_GET['searchfields']); }
-  if (isset($_REQUEST['sf_title'])) { $fields = $fields | SEARCH_TITLE; }
-  if (isset($_REQUEST['sf_desc']))  { $fields = $fields | SEARCH_DESC; }
-  if (isset($_REQUEST['sf_tags']))  { $fields = $fields | SEARCH_TAGS; }
-  if (isset($_REQUEST['sf_filename'])) { $fields = $fields | SEARCH_FILENAME; }
-  if (isset($_REQUEST['sf_location'])) { $fields = $fields | SEARCH_LOCATION; }
-  if (isset($_REQUEST['sf_city'])) { $fields = $fields | SEARCH_CITY; }
-  if (isset($_REQUEST['sf_state'])) { $fields = $fields | SEARCH_STATE; }
-  if (isset($_REQUEST['sf_country'])) { $fields = $fields | SEARCH_COUNTRY; }
+  if (isset($_REQUEST['searchfields'])) {
+    $fields = 0+strip($_GET['searchfields']); 
+  } else {
+    $fields = 0;
+  }
+  if (isset($_REQUEST['sf_title'])) { $fields |= SEARCH_TITLE; }
+  if (isset($_REQUEST['sf_desc']))  { $fields |= SEARCH_DESC; }
+  if (isset($_REQUEST['sf_tags']))  { $fields |= SEARCH_TAGS; }
+  if (isset($_REQUEST['sf_filename'])) { $fields |= SEARCH_FILENAME; }
+  if (isset($_REQUEST['sf_location'])) { $fields |= SEARCH_LOCATION; }
+  if (isset($_REQUEST['sf_city'])) { $fields |= SEARCH_CITY; }
+  if (isset($_REQUEST['sf_state'])) { $fields |= SEARCH_STATE; }
+  if (isset($_REQUEST['sf_country'])) { $fields |= SEARCH_COUNTRY; }
+  
   if ($fields == 0) { $fields = SEARCH_TITLE | SEARCH_DESC | SEARCH_TAGS | SEARCH_FILENAME | SEARCH_LOCATION | SEARCH_CITY | SEARCH_STATE | SEARCH_COUNTRY; }
+
   $fields = $fields & getOption('search_fields');
   return $fields;
 }
