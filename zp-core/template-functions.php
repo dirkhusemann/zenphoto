@@ -1554,7 +1554,7 @@ function printAllTagsAs($option,$class="",$sort="abc",$counter=FALSE,$links=TRUE
 	  } else { 
 	    $key = str_replace('"', '', $key);
         echo "\t<li style=\"display:inline; list-style-type:none\"><a href=\"".WEBPATH.
-	         "/index.php?p=search&words=".$key."\" style=\"font-size:".$size."em;\">".
+	         "/index.php?p=search&sf_tags&words=".$key."\" style=\"font-size:".$size."em;\">".
 		     $key.$counter."</a></li>\n";  
 	  }
 	}
