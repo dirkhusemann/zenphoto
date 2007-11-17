@@ -1,8 +1,17 @@
 <?php
-  $setup = true;
-  if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
-  define('OFFSET_PATH', true);
-  if (file_exists("zp-config.php")) { require_once("admin-functions.php"); }
+if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
+define('OFFSET_PATH', true);
+$setup = true;
+require_once('functions-db.php');
+if (file_exists("zp-config.php")) {
+  if (db_connect() && !(isset($_GET['upgrade']))) {
+    $result = mysql_query("SELECT `name`, `value` FROM " . prefix('options') . " LIMIT 1", $mysql_connection);
+    if ($result) {
+      unset($setup);
+    }
+    require_once("admin-functions.php"); 
+  } 
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
@@ -34,9 +43,14 @@
 <body>
   <h1>zenphoto upgrade</h1>
 <?php
-
 if (file_exists("zp-config.php")) {
-  
+  $credentials = getOption('adminuser').getOption('adminpass');
+  if (!empty($credentials)) {
+    if (!zp_loggedin()) {  // Display the login form and exit.
+      printLoginForm("/" . ZENFOLDER . "/upgrade.php");
+      exit();
+    }
+  } 
     // Logged in. Do the setup.
     // These already have `backticks` around them!
     $tbl_albums   = prefix('albums');
@@ -111,14 +125,16 @@ if (file_exists("zp-config.php")) {
 	  
 	  require('option-defaults.php');
 	  
+      require_once("admin-functions.php"); 
       $gallery = new Gallery();	  
       $gallery->clearCache();
+	  
       $needsrefresh = $gallery->garbageCollect(true, true);
 	  
 	  echo "<h3>Done!</h3>";
 	  $credentials = getOption('adminuser') . getOption('adminpass');
 	  if (empty($credentials)) {
-        echo "<p>You need to <a href=\"admin.php?page=options\">set</a> your admin user and password.</p>";
+        echo "<p>You need to <a href=\"admin.php?page=options\">set your admin user and password</a>.</p>";
 	  } else {
         echo "<p>You can now <a href=\"../\">View your gallery</a>, or <a href=\"admin.php\">administrate.</a></p>";
 	  }
