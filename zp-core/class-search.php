@@ -104,7 +104,7 @@ function getQueryFields() {
  *@return string SQL query for the search
   *@since 1.1.3
  */
-function getSearchSQL($searchstring, $tbl, $fields) {
+function getSearchSQL($searchstring, $searchdate, $tbl, $fields) {
   $sql = 'SELECT `show`,`title`,`desc`,`tags`';
   if ($tbl=='albums') {
     if ($fields & SEARCH_FILENAME) { $fields = $fields + SEARCH_FOLDER; } // for searching these are really the same thing, just named differently in the different tables
@@ -164,6 +164,19 @@ function getSearchSQL($searchstring, $tbl, $fields) {
       $sql .= " `country` LIKE '%$singlesearchstring%'"; 
 	}
   }
+  if (!empty($searchdate)) { 
+    if ($nr > 1) { $sql = $sql." AND "; }
+	$nr++;
+	if ($searchdate == "0000-00") {
+	  $sql .= "`date`=\"0000-00-00 00:00:00\"";
+	} else {
+  	  $d1 = $searchdate."-01 00:00:00";
+	  $d = strtotime($d1);
+	  $d = strtotime('+ 1 month', $d);
+      $d2 = substr(date('Y-m-d H:m:s', $d), 0, 7) . "-01 00:00:00";
+      $sql .= "`date` >= \"$d1\" AND `date` < \"$d2\""; 
+	}
+  }
   if ($nr == 0) { return NULL; } // no valid fields
   return $sql;
 }
@@ -172,7 +185,7 @@ function getSearchAlbums() {
   $albums = array();
   $searchstring = $this->getSearchString(); 
   if (empty($searchstring)) { return $albums; } // nothing to find
-  $sql = $this->getSearchSQL($searchstring, 'albums', $this->getQueryFields());
+  $sql = $this->getSearchSQL($searchstring, '', 'albums', $this->getQueryFields());
   if (empty($sql)) { return $albums; } // no valid fields
   $albumfolder = getAlbumFolder();
   $search_results = query_full_array($sql); 
@@ -212,20 +225,8 @@ function getSearchImages() {
   $searchstring = $this->getSearchString();
   $searchdate = $this->getSearchDate();
   if (empty($searchstring) && empty($searchdate)) { return $images; } // nothing to find
-  $sql = $this->getSearchSQL($searchstring, 'images', $this->getQueryFields());
+  $sql = $this->getSearchSQL($searchstring, $searchdate, 'images', $this->getQueryFields());
   if (empty($sql)) { return $images; } // no valid fields
-  if (!empty($searchdate)) { 
-    if ($nr > 1) { $sql = $sql." AND "; }
-	if ($searchdate == "0000-00") {
-	  $sql .= "`date`=\"0000-00-00 00:00:00\"";
-	} else {
-  	  $d1 = $searchdate."-01 00:00:00";
-	  $d = strtotime($d1);
-	  $d = strtotime('+ 1 month', $d);
-      $d2 = substr(date('Y-m-d H:m:s', $d), 0, 7) . "-01 00:00:00";
-      $sql .= "`date` >= \"$d1\" AND `date` < \"$d2\""; 
-	}
-  }
   $albumfolder = getAlbumFolder();
   $search_results = query_full_array($sql); 
   foreach ($search_results as $row) { 
