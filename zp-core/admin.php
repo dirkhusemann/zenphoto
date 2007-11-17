@@ -1100,340 +1100,322 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         global $_zp_gallery;
       ?> 
       
-      <h1>General Options</h1>
-           
-      <h2>Options for your Zenphoto Gallery.</h2>
-      <table class="bordered">
-        <tr>
-          <th>
-            Database: <?php echo getOption('mysql_database'); ?>
-          </th>
-        </tr>
-      </table>
-	  <?php
-	  if (isset($_GET['mismatch'])) {
-	  	echo '<div class="errorbox" id="message">'; 
-	    echo  "<h2>Your passwords did not match</h2>";  
-	    echo '</div>'; 
-	    echo '<script type="text/javascript">'; 
-	    echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);"; 
-	    echo "</script>\n"; 
-      }
-	  ?>
       <form action="?page=options&action=saveoptions" method="post">
       <input type="hidden" name="saveoptions" value="yes" />
-      <table class="bordered">
-        <tr> 
-               <th colspan="3"><h2>Admin login information</h2></th>
-          </tr>    
-        <tr>
-            <td width="175">Admin username:</td>
-            <td width="200"><input type="text" size="40" name="adminuser"
-            value="<?php echo getOption('adminuser');?>" /></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Admin password:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(repeat) </p></td>
-            <td>
-			<input type="password" size="40" name="adminpass"
-            value="<?php echo getOption('adminpass');?>" /><br/>
-			<input type="password" size="40" name="adminpass_2"
-            value="<?php echo getOption('adminpass');?>" />
-			</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Admin email:</td>
-            <td><input type="text" size="40" name="admin_email"
-                value="<?php echo getOption('admin_email');?>" /></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><input type="submit" value="save" /></td>
-            <td></td>
-        </tr>
-      </table>
-      <table class="bordered">
-         <tr> 
-               <th colspan="3"><h2>General Gallery Configuration</h2></th>
-          </tr>    
-        <tr>
-            <td width="175">Gallery title:</td>
-            <td width="200"><input type="text" size="40" name="gallery_title"
-                value="<?php echo getOption('gallery_title');?>" /></td>
-            <td>What you want to call your photo gallery.</td>
-        </tr>
-        <tr>
-            <td>Website title:</td>
-            <td><input type="text" size="40" name="website_title"
-                value="<?php echo getOption('website_title');?>" /></td>
-            <td>Your web site title.</td>
-        </tr>
-        <tr>
-            <td>Website url:</td>
-            <td><input type="text" size="40" name="website_url"
-                value="<?php echo getOption('website_url');?>" /></td>
-            <td>This is used to link back to your main site, but your theme must support it.</td>
-        </tr>
-        <tr>
-            <td>Time offset (hours):</td>
-            <td><input type="text" size="40" name="time_offset"
-                value="<?php echo getOption('time_offset');?>" /></td>
-            <td>If you're in a different time zone from your server, set the offset in hours.</td>
-        </tr>
-        <tr>
-            <td>Google Maps API key:</td>
-            <td><input type="text" size="40" name="gmaps_apikey"
-                value="<?php echo getOption('gmaps_apikey');?>" /></td>
-            <td>If you're going to be using Google Maps, <a href="http://www.google.com/apis/maps/signup.html" target="_blank">get an API key</a> and enter it here.</td>
-        </tr>
-        <tr>
-            <td>Enable mod_rewrite:</td>
-            <td><input type="checkbox" name="mod_rewrite" value="1"
-            <?php echo checked('1', getOption('mod_rewrite')); ?> /></td>
-            <td>If you have Apache <i>mod_rewrite</i>, put a checkmark here, and you'll get nice cruft-free URLs.</td>
-        </tr>
-        <tr>
-            <td>Mod_rewrite Image suffix:</td>
-            <td><input type="text" size="40" name="mod_rewrite_image_suffix"
-                value="<?php echo getOption('mod_rewrite_image_suffix');?>" /></td>
-            <td>If <i>mod_rewrite</i> is checked above, zenphoto's image page URL's usually end in .jpg. Set this if you want something else appended to the end (helps search engines). Examples: <i>.html, .php, /view</i>, etc.</td>
-        </tr>
-        <tr>
-            <td>Server protocol:</td>
-            <td><input type="text" size="40" name="server_protocol"
-                value="<?php echo getOption('server_protocol');?>" /></td>
-            <td>If you're running a secure server, change this to <i>https</i> (Most people will leave this alone.)</td>
         
-        <tr/>
-        <tr>
-            <td>Charset:</td>
-            <td><input type="text" size="40" name="charset"
-                value="<?php echo getOption('charset');?>" /></td>
-            <td>The character encoding to use internally. Leave at <i>UTF-8</i> if you're unsure.</td>
-        </tr>
-    
-<!-- SPAM filter options -->
-        <tr>
-          <td>Spam filter:</td>
-            <td>
-        <select id="spam_filter" name="spam_filter">          
-        <?php
-          $currentValue = getOption('spam_filter');
-          $pluginroot = SERVERPATH . "/" . ZENFOLDER . "/plugins/spamfilters";
-          generateListFromFiles($currentValue, $pluginroot , '.php');
-        ?>
-        </select>
-            </td>
-            <td>The SPAM filter plug-in you wish to use to check comments for SPAM</td>
-        </tr>
-        <?php 
-        /* procss filter based options here */
-      if (!(false === ($requirePath = getPlugin('spamfilters/'.getOption('spam_filter').'.php', false)))) {       
-        require_once($requirePath);
-        $optionHandler = new SpamFilter();
-        customOptions($optionHandler, "&nbsp;&nbsp;&nbsp;-&nbsp;");
-      } 
+      <div id="container">
+		<div id="mainmenu">
+		  <ul id="tabs">
+			<li><a href="#tab1">admin information</a></li>
+			<li><a href="#tab2">gallery configuration</a></li>
+			<li><a href="#tab3">image display</a></li>
+			<li><a href="#tab4">theme options</a></li>
+		  </ul>
+		</div>
+			<div class="panel" id="tab1">
+				<?php
+	  			if (isset($_GET['mismatch'])) {
+	  			  echo '<div class="errorbox" id="message">'; 
+	    		  echo  "<h2>Your passwords did not match</h2>";  
+	    		  echo '</div>'; 
+	    		  echo '<script type="text/javascript">'; 
+	    		  echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);"; 
+	    		  echo "</script>\n"; 
+      			}
+	  			?>
+      			<table class="bordered">
+        			<tr> 
+               			<th colspan="3"><h2>Admin login information</h2></th>
+          			</tr>    
+        			<tr>
+            			<td width="175">Admin username:</td>
+            			<td width="200"><input type="text" size="40" name="adminuser" value="<?php echo getOption('adminuser');?>" /></td>
+            			<td></td>
+        			</tr>
+        			<tr>
+            			<td>Admin password:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(repeat) </p></td>
+            			<td>
+							<input type="password" size="40" name="adminpass"
+            				value="<?php echo getOption('adminpass');?>" /><br/>
+							<input type="password" size="40" name="adminpass_2"
+            				value="<?php echo getOption('adminpass');?>" />
+						</td>
+            			<td></td>
+        			</tr>
+        			<tr>
+            			<td>Admin email:</td>
+            			<td><input type="text" size="40" name="admin_email" value="<?php echo getOption('admin_email');?>" /></td>
+            			<td></td>
+        			</tr>
+        			<tr>
+            			<td>Database:</td>
+            			<td><?php echo getOption('mysql_database'); ?></td>
+            			<td></td>
+        			</tr>
+        			<tr>
+            			<td></td>
+            			<td><input type="submit" value="save" /></td>
+            			<td></td>
+        			</tr>
+      			</table>
+			</div>
+			<div class="panel" id="tab2">
+				<table class="bordered">
+         			<tr> 
+               			<th colspan="3"><h2>General Gallery Configuration</h2></th>
+          			</tr>    
+        			<tr>
+            			<td width="175">Gallery title:</td>
+            			<td width="200"><input type="text" size="40" name="gallery_title" value="<?php echo getOption('gallery_title');?>" /></td>
+            			<td>What you want to call your photo gallery.</td>
+        			</tr>
+        			<tr>
+            			<td>Website title:</td>
+            			<td><input type="text" size="40" name="website_title" value="<?php echo getOption('website_title');?>" /></td>
+            			<td>Your web site title.</td>
+        			</tr>
+        			<tr>
+            		<td>Website url:</td>
+            			<td><input type="text" size="40" name="website_url" value="<?php echo getOption('website_url');?>" /></td>
+            			<td>This is used to link back to your main site, but your theme must support it.</td>
+        				</tr>
+        			<tr>
+            			<td>Time offset (hours):</td>
+            			<td><input type="text" size="40" name="time_offset" value="<?php echo getOption('time_offset');?>" /></td>
+            			<td>If you're in a different time zone from your server, set the offset in hours.</td>
+        			</tr>
+        			<tr>
+            			<td>Google Maps API key:</td>
+            			<td><input type="text" size="40" name="gmaps_apikey" value="<?php echo getOption('gmaps_apikey');?>" /></td>
+            			<td>If you're going to be using Google Maps, <a href="http://www.google.com/apis/maps/signup.html" target="_blank">get an API key</a> and enter it here.</td>
+        			</tr>
+        			<tr>
+            			<td>Enable mod_rewrite:</td>
+            			<td><input type="checkbox" name="mod_rewrite" value="1" <?php echo checked('1', getOption('mod_rewrite')); ?> /></td>
+            			<td>If you have Apache <i>mod_rewrite</i>, put a checkmark here, and you'll get nice cruft-free URLs.</td>
+        			</tr>
+       			 	<tr>
+            			<td>Mod_rewrite Image suffix:</td>
+            			<td><input type="text" size="40" name="mod_rewrite_image_suffix" value="<?php echo getOption('mod_rewrite_image_suffix');?>" /></td>
+            			<td>If <i>mod_rewrite</i> is checked above, zenphoto's image page URL's usually end in .jpg. Set this if you want something else appended to the end (helps search engines). Examples: <i>.html, .php, /view</i>, etc.</td>
+        			</tr>
+        			<tr>
+            			<td>Server protocol:</td>
+            			<td><input type="text" size="40" name="server_protocol" value="<?php echo getOption('server_protocol');?>" /></td>
+            			<td>If you're running a secure server, change this to <i>https</i> (Most people will leave this alone.)</td>
+        			<tr/>
+        			<tr>
+            			<td>Charset:</td>
+            			<td><input type="text" size="40" name="charset" value="<?php echo getOption('charset');?>" /></td>
+            			<td>The character encoding to use internally. Leave at <i>UTF-8</i> if you're unsure.</td>
+        			</tr>
+					<!-- SPAM filter options -->
+        			<tr>
+          				<td>Spam filter:</td>
+            			<td>
+                        	<select id="spam_filter" name="spam_filter">          
+        					<?php
+          					  $currentValue = getOption('spam_filter');
+          					  $pluginroot = SERVERPATH . "/" . ZENFOLDER . "/plugins/spamfilters";
+          					  generateListFromFiles($currentValue, $pluginroot , '.php');
+        					?>
+        					</select>
+            			</td>
+            			<td>The SPAM filter plug-in you wish to use to check comments for SPAM</td>
+        			</tr>
+        			<?php 
+        			  /* procss filter based options here */
+      				  if (!(false === ($requirePath = getPlugin('spamfilters/'.getOption('spam_filter').'.php', false)))) {       
+        			    require_once($requirePath);
+        			    $optionHandler = new SpamFilter();
+        				customOptions($optionHandler, "&nbsp;&nbsp;&nbsp;-&nbsp;");
+      				  } 
 
-    ?>   
-<!-- end of SPAM filter options -->
-        
-        <tr>
-            <td>Enable comment notification:</td>
-            <td><input type="checkbox" name="email_new_comments" value="1"
-            <?php echo checked('1', getOption('email_new_comments')); ?> /></td>
-            <td>Email the Admin when new comments are posted</td>
-        </tr>
-        <tr>
-            <td>Number of RSS feed items:</td>
-            <td><input type="text" size="40" name="feed_items"
-                value="<?php echo getOption('feed_items');?>" /></td>
-            <td>The number of new images/albums/comments you want to appear in your site's RSS feed.</td>
-        </tr>
-        <tr>
-            <td>Sort gallery by: </td>
-            <td>
-              <select id="sortselect" name="gallery_sorttype">
-              <?php foreach ($sortby as $sorttype) { ?>
-                <option value="<?php echo $sorttype; ?>"<?php if ($sorttype == getOption('gallery_sorttype')) echo ' selected="selected"'; ?>><?php echo $sorttype; ?></option>
-              <?php } ?>
-              </select>
-            </td>
-             <td>Sort order for the gallery</td>
-        </tr>
-        <tr>
-            <td>Sort decending:</td>
-            <td><input type="checkbox" name="gallery_sortdirection" value="1"
-            <?php echo checked('1', getOption('gallery_sortdirection')); ?> /></td>
-            <td>Gallery sort direction will be decending if this option is checked</td>
-        </tr>
-		<tr>
-		  <td>Search fields:</td>
-		    <td>
-		    <?php $fields = getOption('search_fields'); ?>
-			<input type="checkbox" name="sf_title" value=1 <?php if ($fields & SEARCH_TITLE) echo ' checked'; ?>> Title<br/>
-            <input type="checkbox" name="sf_desc=" value=1 <?php if ($fields & SEARCH_DESC) echo ' checked'; ?>> Description<br/>
-            <input type="checkbox" name="sf_tags" value=1 <?php if ($fields & SEARCH_TAGS) echo ' checked'; ?>> Tags<br/>
-            <input type="checkbox" name="sf_filename" value=1 <?php if ($fields & SEARCH_FILENAME) echo ' checked'; ?>> File/Folder name<br/>
-            <input type="checkbox" name="sf_location" value=1 <?php if ($fields & SEARCH_LOCATION) echo ' checked'; ?>> Location<br/>
-            <input type="checkbox" name="sf_city" value=1 <?php if ($fields & SEARCH_CITY) echo ' checked'; ?>> City<br/>
-            <input type="checkbox" name="sf_state" value=1 <?php if ($fields & SEARCH_STATE) echo ' checked'; ?>> State<br/>
-            <input type="checkbox" name="sf_country" value=1 <?php if ($fields & SEARCH_COUNTRY) echo ' checked'; ?>> Country<br/>
-	        </td>
-		  <td>The set of fields on which searches may be performed.</td>
-		</tr>
-        <tr>
-            <td></td>
-            <td><input type="submit" value="save" /></td>
-            <td></td>
-        </tr>
-    </table>
-    <table class="bordered">
-    <tr> 
-      <th colspan="3"><h2>Image Display</h2></th>
-    </tr>    
-        <tr>
-            <td width="175">Image quality:</td>
-            <td width="200"><input type="text" size="40" name="image_quality"
-                value="<?php echo getOption('image_quality');?>" /></td>
-            <td>JPEG Compression quality for all images.</td>
-        </tr>
-        <tr>
-            <td>Thumb quality:</td>
-            <td><input type="text" size="40" name="thumb_quality"
-                value="<?php echo getOption('thumb_quality');?>" /></td>
-            <td>JPEG Compression quality for all thumbnails.</td>
-        </tr>
-        <tr>
-            <td>Image size:</td>
-            <td><input type="text" size="40" name="image_size"
-                value="<?php echo getOption('image_size');?>" /></td>
-            <td>Default image display width.</td>
-        </tr>
-        <tr>
-            <td>Images size is longest size:</td>
-            <td><input type="checkbox" size="40" name="image_use_longest_side" value="1"
-            <?php echo checked('1', getOption('image_use_longest_side')); ?> /></td>
-            <td>If this is set to true, then the longest side of the image will be <i>image size</i>. Otherwise, the <i>width</i> of the image will be <i>image size</i>.</td>
-        </tr>
-        <tr>
-            <td>Allow upscale:</td>
-            <td><input type="checkbox" size="40" name="image_allow_upscale" value="1"
-            <?php echo checked('1', getOption('image_allow_upscale')); ?> /></td>
-            <td>Allow images to be scaled up to the requested size. This could result in loss of quality, so it's off by default.</td>
-        </tr>
-        <tr>
-            <td>Thumb size:</td>
-            <td><input type="text" size="40" name="thumb_size"
-                value="<?php echo getOption('thumb_size');?>" /></td>
-            <td>Default thumbnail size and scale.</td>
-        </tr>
-        <tr>
-            <td>Crop thumbnails:</td>
-            <td><input type="checkbox" size="40" name="thumb_crop" value="1"
-            <?php echo checked('1', getOption('thumb_crop')); ?> /></td>
-            <td>If set to true the thumbnail will be a centered portion of the image with the given width and height after being resized to <i>thumb size</i> (by shortest side). Otherwise, it will be the full image resized to <i>thumb size</i> (by shortest side).</td>
-        </tr>
-        <tr>
-            <td>Crop thumbnail width:</td>
-            <td><input type="text" size="40" name="thumb_crop_width"
-                value="<?php echo getOption('thumb_crop_width');?>" /></td>
-            <td>The <i>thumb crop width</i> should always be less than or equal to <i>thumb size</i></td>
-        </tr>
-        <tr>
-            <td>Crop thumbnail height:</td>
-            <td><input type="text" size="40" name="thumb_crop_height"
-                value="<?php echo getOption('thumb_crop_height');?>" /></td>
-            <td>The <i>thumb crop height</i> should always be less than or equal to <i>thumb size</i></td>
-        </tr>
-        <tr>
-            <td>Sharpen thumbnails:</td>
-            <td><input type="checkbox" name="thumb_sharpen" value="1"
-            <?php echo checked('1', getOption('thumb_sharpen')); ?> /></td>
-            <td>Add a small amount of unsharp mask to thumbnails. Slows thumbnail generation on slow servers.</td>
-        </tr>
-        <tr>
-            <td>Albums per page:</td>
-            <td><input type="text" size="40" name="albums_per_page"
-                value="<?php echo getOption('albums_per_page');?>" /></td>
-            <td>Controls the number of albums on a page. You might need to change this after switching themes to make it look better.</td>
-        </tr>
-        <tr>
-            <td>Images per page:</td>
-            <td><input type="text" size="40" name="images_per_page"
-                value="<?php echo getOption('images_per_page');?>" /></td>
-            <td>Controls the number of images on a page. You might need to change this after switching themes to make it look better.</td>
-        </tr>
-        <tr>
-            <td>Watermark image:</td>
-            <td><input type="checkbox" name="perform_watermark" value="1"
-            <?php echo checked('1', getOption('perform_watermark')); ?> /></td>
-            <td>Controls watermarking of an image</td>
-        </tr>
-        <tr>
-            <td>Image for image watermark:</td>
-            <td>
-			<?php
-			  $v = explode("/", getOption('watermark_image'));	  
-              $v = str_replace('.png', "", $v[count($v)-1]);			  
-			  echo "<select id=\"watermark_image\" name=\"watermark_image\">\n";
-              generateListFromFiles($v, SERVERPATH . "/" . ZENFOLDER . '/images' , '.png');
-              echo "</select>\n";
-	        ?>
-			</td>
-            <td>The watermark image (png-24). (Place the image in the <?php echo ZENFOLDER; ?>/images/ directory.)</td>
-        </tr>
-        <tr>
-            <td>Watermark video:</td>
-            <td><input type="checkbox" name="perform_video_watermark" value="1"
-            <?php echo checked('1', getOption('perform_video_watermark')); ?> /></td>
-            <td>Controls watermarking of a video</td>
-        </tr>
-        <tr>
-            <td>Image for video watermark:</td>
-			<td>
-			<?php
-			  $v = explode("/", getOption('video_watermark_image'));	
-              $v = str_replace('.png', "", $v[count($v)-1]);			  
-			  echo "<select id=\"videowatermarkimage\" name=\"video_watermark_image\">\n";
-              generateListFromFiles($v, SERVERPATH . "/" . ZENFOLDER . '/images' , '.png');
-              echo "</select>\n";
-	        ?>
-			</td>
-            <td>The watermark image (png-24). (Place the image in the <?php echo ZENFOLDER; ?>/images/ directory.)</td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><input type="submit" value="save" /></td>
-            <td></td>
-        </tr>
-    </table>    
-<?php
+    				?>   
+					<!-- end of SPAM filter options -->
+        			<tr>
+            			<td>Enable comment notification:</td>
+            			<td><input type="checkbox" name="email_new_comments" value="1" <?php echo checked('1', getOption('email_new_comments')); ?> /></td>
+            			<td>Email the Admin when new comments are posted</td>
+        			</tr>
+        			<tr>
+            			<td>Number of RSS feed items:</td>
+            			<td><input type="text" size="40" name="feed_items" value="<?php echo getOption('feed_items');?>" /></td>
+            			<td>The number of new images/albums/comments you want to appear in your site's RSS feed.</td>
+        			</tr>
+        			<tr>
+            			<td>Sort gallery by: </td>
+            			<td>
+              				<select id="sortselect" name="gallery_sorttype">
+              				<?php foreach ($sortby as $sorttype) { ?>
+                				<option value="<?php echo $sorttype; ?>"<?php if ($sorttype == getOption('gallery_sorttype')) echo ' selected="selected"'; ?>><?php echo $sorttype; ?></option>
+              				<?php } ?>
+              				</select>
+            			</td>
+             			<td>Sort order for the gallery</td>
+        			</tr>
+        			<tr>
+            			<td>Sort decending:</td>
+            			<td><input type="checkbox" name="gallery_sortdirection" value="1" <?php echo checked('1', getOption('gallery_sortdirection')); ?> /></td>
+            			<td>Gallery sort direction will be decending if this option is checked</td>
+        			</tr>
+					<tr>
+		  				<td>Search fields:</td>
+		    			<td>
+		    				<?php $fields = getOption('search_fields'); ?>
+							<input type="checkbox" name="sf_title" value=1 <?php if ($fields & SEARCH_TITLE) echo ' checked'; ?>> Title<br/>
+            				<input type="checkbox" name="sf_desc=" value=1 <?php if ($fields & SEARCH_DESC) echo ' checked'; ?>> Description<br/>
+            				<input type="checkbox" name="sf_tags" value=1 <?php if ($fields & SEARCH_TAGS) echo ' checked'; ?>> Tags<br/>
+            				<input type="checkbox" name="sf_filename" value=1 <?php if ($fields & SEARCH_FILENAME) echo ' checked'; ?>> File/Folder name<br/>
+            				<input type="checkbox" name="sf_location" value=1 <?php if ($fields & SEARCH_LOCATION) echo ' checked'; ?>> Location<br/>
+            				<input type="checkbox" name="sf_city" value=1 <?php if ($fields & SEARCH_CITY) echo ' checked'; ?>> City<br/>
+            				<input type="checkbox" name="sf_state" value=1 <?php if ($fields & SEARCH_STATE) echo ' checked'; ?>> State<br/>
+            				<input type="checkbox" name="sf_country" value=1 <?php if ($fields & SEARCH_COUNTRY) echo ' checked'; ?>> Country<br/>
+	        			</td>
+                        <td>The set of fields on which searches may be performed.</td>
+					</tr>
+        			<tr>
+            			<td></td>
+            			<td><input type="submit" value="save" /></td>
+            			<td></td>
+        			</tr>
+    			</table>
+			</div>
 
-      /* handle theme options */
-
-      if (!(false === ($requirePath = getPlugin('themeoptions.php', true)))) {
-        require_once($requirePath);
-        $optionHandler = new ThemeOptions();
+			<div class="panel" id="tab3">
+				<table class="bordered">
+   					<tr> 
+      					<th colspan="3"><h2>Image Display</h2></th>
+    				</tr>    
+        			<tr>
+            			<td width="175">Image quality:</td>
+            			<td width="200"><input type="text" size="40" name="image_quality" value="<?php echo getOption('image_quality');?>" /></td>
+            			<td>JPEG Compression quality for all images.</td>
+        			</tr>
+                    <tr>
+            			<td>Thumb quality:</td>
+            			<td><input type="text" size="40" name="thumb_quality" value="<?php echo getOption('thumb_quality');?>" /></td>
+            			<td>JPEG Compression quality for all thumbnails.</td>
+        			</tr>
+        			<tr>
+            			<td>Image size:</td>
+            			<td><input type="text" size="40" name="image_size" value="<?php echo getOption('image_size');?>" /></td>
+            			<td>Default image display width.</td>
+        			</tr>
+        			<tr>
+            			<td>Images size is longest size:</td>
+            			<td><input type="checkbox" size="40" name="image_use_longest_side" value="1" <?php echo checked('1', getOption('image_use_longest_side')); ?> /></td>
+            			<td>If this is set to true, then the longest side of the image will be <i>image size</i>. Otherwise, the <i>width</i> of the image will be <i>image size</i>.</td>
+        			</tr>
+        			<tr>
+            			<td>Allow upscale:</td>
+            			<td><input type="checkbox" size="40" name="image_allow_upscale" value="1" <?php echo checked('1', getOption('image_allow_upscale')); ?> /></td>
+            			<td>Allow images to be scaled up to the requested size. This could result in loss of quality, so it's off by default.</td>
+                    </tr>
+        			<tr>
+            			<td>Thumb size:</td>
+            			<td><input type="text" size="40" name="thumb_size" value="<?php echo getOption('thumb_size');?>" /></td>
+            			<td>Default thumbnail size and scale.</td>
+        			</tr>
+        			<tr>
+           				<td>Crop thumbnails:</td>
+            			<td><input type="checkbox" size="40" name="thumb_crop" value="1" <?php echo checked('1', getOption('thumb_crop')); ?> /></td>
+            			<td>If set to true the thumbnail will be a centered portion of the image with the given width and height after being resized to <i>thumb size</i> (by shortest side). Otherwise, it will be the full image resized to <i>thumb size</i> (by shortest side).</td>
+        			</tr>
+        			<tr>
+            			<td>Crop thumbnail width:</td>
+            			<td><input type="text" size="40" name="thumb_crop_width" value="<?php echo getOption('thumb_crop_width');?>" /></td>
+            			<td>The <i>thumb crop width</i> should always be less than or equal to <i>thumb size</i></td>
+        			</tr>
+        			<tr>
+            			<td>Crop thumbnail height:</td>
+            			<td><input type="text" size="40" name="thumb_crop_height" value="<?php echo getOption('thumb_crop_height');?>" /></td>
+            			<td>The <i>thumb crop height</i> should always be less than or equal to <i>thumb size</i></td>
+        			</tr>
+        			<tr>
+            			<td>Sharpen thumbnails:</td>
+            			<td><input type="checkbox" name="thumb_sharpen" value="1" <?php echo checked('1', getOption('thumb_sharpen')); ?> /></td>
+            			<td>Add a small amount of unsharp mask to thumbnails. Slows thumbnail generation on slow servers.</td>
+        			</tr>
+        			<tr>
+            			<td>Albums per page:</td>
+            			<td><input type="text" size="40" name="albums_per_page" value="<?php echo getOption('albums_per_page');?>" /></td>
+            			<td>Controls the number of albums on a page. You might need to change this after switching themes to make it look better.</td>
+        			</tr>
+        			<tr>
+            			<td>Images per page:</td>
+            			<td><input type="text" size="40" name="images_per_page" value="<?php echo getOption('images_per_page');?>" /></td>
+            			<td>Controls the number of images on a page. You might need to change this after switching themes to make it look better.</td>
+        			</tr>
+        			<tr>
+            			<td>Watermark image:</td>
+            			<td><input type="checkbox" name="perform_watermark" value="1" <?php echo checked('1', getOption('perform_watermark')); ?> /></td>
+            			<td>Controls watermarking of an image</td>
+        			</tr>
+        			<tr>
+            			<td>Image for image watermark:</td>
+            			<td>
+							<?php
+			  				  $v = explode("/", getOption('watermark_image'));	  
+              				  $v = str_replace('.png', "", $v[count($v)-1]);			  
+			  				  echo "<select id=\"watermark_image\" name=\"watermark_image\">\n";
+              				  generateListFromFiles($v, SERVERPATH . "/" . ZENFOLDER . '/images' , '.png');
+              				  echo "</select>\n";
+	        				?>
+						</td>
+            			<td>The watermark image (png-24). (Place the image in the <?php echo ZENFOLDER; ?>/images/ directory.)</td>
+        			</tr>
+        			<tr>
+            			<td>Watermark video:</td>
+            			<td><input type="checkbox" name="perform_video_watermark" value="1" <?php echo checked('1', getOption('perform_video_watermark')); ?> /></td>
+            			<td>Controls watermarking of a video</td>
+        			</tr>
+        			<tr>
+            			<td>Image for video watermark:</td>
+						<td>
+						<?php
+			  			  $v = explode("/", getOption('video_watermark_image'));	
+              			  $v = str_replace('.png', "", $v[count($v)-1]);			  
+			  			  echo "<select id=\"videowatermarkimage\" name=\"video_watermark_image\">\n";
+              			  generateListFromFiles($v, SERVERPATH . "/" . ZENFOLDER . '/images' , '.png');
+              			  echo "</select>\n";
+	        			?>
+						</td>
+            			<td>The watermark image (png-24). (Place the image in the <?php echo ZENFOLDER; ?>/images/ directory.)</td>
+        			</tr>
+        			<tr>
+            			<td></td>
+            			<td><input type="submit" value="save" /></td>
+            			<td></td>
+        			</tr>
+    			</table>    
+			</div>
+			<div class="panel" id="tab4">
+				<?php
+				  /* handle theme options */
+				  if (!(false === ($requirePath = getPlugin('themeoptions.php', true)))) {
+        		    require_once($requirePath);
+        		    $optionHandler = new ThemeOptions();
       
-        $supportedOptions = $optionHandler->getOptionsSupported();
-        if (count($supportedOptions) > 0) { 
-          echo "<table class='bordered'>\n";
-             echo "<tr><th colspan='3'><h2>Theme Options for <i>".$gallery->getCurrentTheme()."</i></h2></th></tr>\n";
+        		    $supportedOptions = $optionHandler->getOptionsSupported();
+       			    if (count($supportedOptions) > 0) { 
+          		  	  echo "<table class='bordered'>\n";
+             	      echo "<tr><th colspan='3'><h2>Theme Options for <i>".$gallery->getCurrentTheme()."</i></h2></th></tr>\n";
              
-          customOptions($optionHandler);
+          		  	  customOptions($optionHandler);
 
-          echo "\n<tr>\n";
-          echo "<td></td>\n";
-          echo  '<td><input type="submit" value="save" /></td>' . "\n";
-          echo "<td></td>\n";
-          echo "</tr>\n";
-          echo "<table/>\n";
-        }     
-      }     
-?>
-
+          		  	  echo "\n<tr>\n";
+          		  	  echo "<td></td>\n";
+          		  	  echo  '<td><input type="submit" value="save" /></td>' . "\n";
+          		  	  echo "<td></td>\n";
+          		  	  echo "</tr>\n";
+          		  	  echo "<table/>\n";
+        			}     
+      			  }     
+				?>
+			</div>
+		</div>
+      
       
 <?php /*** THEMES (Theme Switcher) *******************************************************/ 
       /************************************************************************************/ ?> 

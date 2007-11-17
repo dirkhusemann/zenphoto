@@ -406,3 +406,41 @@ label:hover {
   margin-bottom: 2px;
   background-position: center left;
 }
+
+/* Option Tabs
+------------------------------------- */
+.panel {
+	clear: both;
+	display: none;
+	padding: 1em;
+}
+.panel.active-tab-body {
+	display: block;
+}
+
+#tabs {
+	position: absolute;
+	top: 125px;
+	left:0;
+	height: 28px;
+	list-style: none;
+}
+
+#tabs li {
+	float: left;
+}
+
+#tabs a {
+	float: left;
+	padding: 5px 8px;
+	margin-left: 6px;
+	text-decoration: none;
+	color: #6b7d84;
+}
+
+#tabs a.active-tab {
+	background-color: #d6dbde;
+	border-top: 3px solid #6b7d84;
+	padding-top: 3px;
+	color: #6b7d84;
+}

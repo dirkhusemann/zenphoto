@@ -52,9 +52,8 @@ function printAdminHeader() {
   echo "\n<head>";
 	echo "\n  <title>zenphoto administration</title>";
 	echo "\n  <link rel=\"stylesheet\" href=\"admin.css\" type=\"text/css\" />";
+	echo "\n  <script type=\"text/javascript\" src=\"js/prototype.js\"></script>";
 	echo "\n  <script type=\"text/javascript\" src=\"js/admin.js\"></script>";
-  // Move to jQuery eventually...
-  //echo "\n  <script type=\"text/javascript\" src=\"js/jquery.js\"></script>";
 }
 
 /**
