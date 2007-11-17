@@ -813,7 +813,9 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 
                 <td align="left"> 
                   <a class="delete" href="javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=<?php echo queryEncode($album->name); ?>');" title="Delete the album <?php echo $album->name; ?>"> 
-                  <img src="images/delete.gif" style="border: 0px;" alt="x" /></a> 
+                  <img src="images/delete.gif" style="border: 0px;" alt="x" /></a>
+                  <a class="cache" href="cache-images.php?album=<?php echo $album->name; ?>" title="Pre-Cache the album '<?php echo $album->name; ?>'">
+                  <img src="images/cache.gif" style="border: 0px;" alt="cache" /></a>
                 </td>
 
               </tr>
