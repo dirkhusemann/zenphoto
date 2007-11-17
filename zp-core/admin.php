@@ -446,7 +446,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
   
   <?php if ($_zp_null_account) {
     echo "<div class=\"errorbox space\">";
-    echo "<h2>You need to <a href=\"admin.php?page=options\">set</a> your admin user and password.</h2>";
+    echo "<h2>You need to set your admin user and password.</h2>";
 	echo "</div>";
   }
   ?>
@@ -1114,9 +1114,11 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 		<div id="mainmenu">
 		  <ul id="tabs">
 			<li><a href="#tab_admin">admin information</a></li>
+			<?php if (!$_zp_null_account) { ?>
 			<li><a href="#tab_gallery">gallery configuration</a></li>
 			<li><a href="#tab_image">image display</a></li>
 			<li><a href="#tab_theme">theme options</a></li>
+			<?php } ?>
 		  </ul>
 		</div>
 			<div class="panel" id="tab_admin">

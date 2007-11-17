@@ -437,6 +437,7 @@ label:hover {
 	margin-left: 6px;
 	text-decoration: none;
 	color: #6b7d84;
+	outline: none;
 }
 
 #tabs a.active-tab {
