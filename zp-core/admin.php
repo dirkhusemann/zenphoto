@@ -1106,13 +1106,13 @@ if (!zp_loggedin()  && !$_zp_null_account) {
       <div id="container">
 		<div id="mainmenu">
 		  <ul id="tabs">
-			<li><a href="#tab1">admin information</a></li>
-			<li><a href="#tab2">gallery configuration</a></li>
-			<li><a href="#tab3">image display</a></li>
-			<li><a href="#tab4">theme options</a></li>
+			<li><a href="#tab_admin">admin information</a></li>
+			<li><a href="#tab_gallery">gallery configuration</a></li>
+			<li><a href="#tab_image">image display</a></li>
+			<li><a href="#tab_theme">theme options</a></li>
 		  </ul>
 		</div>
-			<div class="panel" id="tab1">
+			<div class="panel" id="tab_admin">
 				<?php
 	  			if (isset($_GET['mismatch'])) {
 	  			  echo '<div class="errorbox" id="message">'; 
@@ -1159,7 +1159,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         			</tr>
       			</table>
 			</div>
-			<div class="panel" id="tab2">
+			<div class="panel" id="tab_gallery">
 				<table class="bordered">
          			<tr> 
                			<th colspan="3"><h2>General Gallery Configuration</h2></th>
@@ -1282,7 +1282,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
     			</table>
 			</div>
 
-			<div class="panel" id="tab3">
+			<div class="panel" id="tab_image">
 				<table class="bordered">
    					<tr> 
       					<th colspan="3"><h2>Image Display</h2></th>
@@ -1390,7 +1390,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         			</tr>
     			</table>    
 			</div>
-			<div class="panel" id="tab4">
+			<div class="panel" id="tab_theme">
 				<?php
 				  /* handle theme options */
 				  if (!(false === ($requirePath = getPlugin('themeoptions.php', true)))) {
