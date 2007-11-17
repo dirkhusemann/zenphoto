@@ -301,10 +301,6 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=options");
         exit();
       }
-
-echo "<br/>_REQUEST<br/>";print_r($_REQUEST);
-echo "<br/>_POST<br/>";print_r($_POST);
-
 	  $wm = getOption('perform_watermark');
 	  $vwm = getOption('perform_video_watermark');
 	  if ($_POST['adminpass'] == $_POST['adminpass_2']) {
@@ -816,7 +812,9 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 
                 <td align="left"> 
                   <a class="delete" href="javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=<?php echo queryEncode($album->name); ?>');" title="Delete the album <?php echo $album->name; ?>"> 
-                  <img src="images/delete.gif" style="border: 0px;" alt="x" /></a> 
+                  <img src="images/delete.gif" style="border: 0px;" alt="x" /></a>
+				  <a class="cache" href="cache-images.php?album=<?php echo $album->name; ?>" title="Pre-Cache the album '<?php echo $album->name; ?>'">
+                  <img src="images/cache.gif" style="border: 0px;" alt="cache" /></a>
                 </td>
 
               </tr>
