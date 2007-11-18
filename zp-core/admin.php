@@ -297,54 +297,68 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
 /** OPTIONS ******************************************************************/
 /*****************************************************************************/
     } else if ($action == 'saveoptions') {
-      if (!isset($_POST['saveoptions'])) {
-        header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=options");
-        exit();
-      }
 	  $wm = getOption('perform_watermark');
 	  $vwm = getOption('perform_video_watermark');
-	  if ($_POST['adminpass'] == $_POST['adminpass_2']) {
-        setOption('adminuser', $_POST['adminuser']);
-        setOption('adminpass', $_POST['adminpass']);
-		$notify = '';
-	  } else {
-	    $notify = '&mismatch';
+      $returntab = "";
+	  /*** admin options ***/
+	  if (isset($_POST['saveadminoptions'])) {
+	    if ($_POST['adminpass'] == $_POST['adminpass_2']) {
+          setOption('adminuser', $_POST['adminuser']);
+          setOption('adminpass', $_POST['adminpass']);
+	      $notify = '';
+	    } else {
+	      $notify = '&mismatch';
+	    }
+        setOption('admin_email', $_POST['admin_email']);
+		$returntab = "#tab_admin";
 	  }
-      setOption('admin_email', $_POST['admin_email']);
-      setOption('gallery_title', $_POST['gallery_title']);
-      setOption('website_title', $_POST['website_title']);
-      setOption('website_url', $_POST['website_url']);
-      setOption('time_offset', $_POST['time_offset']);
-      setOption('gmaps_apikey', $_POST['gmaps_apikey']);
-      setBoolOption('mod_rewrite', $_POST['mod_rewrite']);
-      setOption('mod_rewrite_image_suffix', $_POST['mod_rewrite_image_suffix']);
-      setOption('server_protocol', $_POST['server_protocol']);
-      setOption('charset', $_POST['charset']);
-      setOption('image_quality', $_POST['image_quality']);
-      setOption('thumb_quality', $_POST['thumb_quality']);
-      setOption('image_size', $_POST['image_size']);
-      setBoolOption('image_use_longest_side', $_POST['image_use_longest_side']);
-      setBoolOption('image_allow_upscale', $_POST['image_allow_upscale']);
-      setOption('thumb_size', $_POST['thumb_size']);
-      setBoolOption('thumb_crop', $_POST['thumb_crop']);
-      setOption('thumb_crop_width', $_POST['thumb_crop_width']);
-      setOption('thumb_crop_height', $_POST['thumb_crop_height']);
-      setBoolOption('thumb_sharpen', $_POST['thumb_sharpen']);
-      setOption('albums_per_page', $_POST['albums_per_page']);
-      setOption('images_per_page', $_POST['images_per_page']);
-      setBoolOption('perform_watermark', $_POST['perform_watermark']);
-      setOption('watermark_image', 'images/' . $_POST['watermark_image'] . '.png');
-      setBoolOption('perform_video_watermark', $_POST['perform_video_watermark']);
-      setOption('video_watermark_image', 'images/' . $_POST['video_watermark_image'] . '.png');
-      setOption('spam_filter', $_POST['spam_filter']);         
-      setBoolOption('email_new_comments', $_POST['email_new_comments']);         
-      setOption('gallery_sorttype', $_POST['gallery_sorttype']);         
-      setBoolOption('gallery_sortdirection', $_POST['gallery_sortdirection']);   
-	  setOption('feed_items', $_POST['feed_items']);  
-      $search = new SearchEngine();
-	  setOption('search_fields', 32767); // make SearchEngine allow all options so getQueryFields() will gives back what was choosen this time
-      setOption('search_fields', $search->getQueryFields());		  
-      /* Save the "custom" options */     
+	  
+	  /*** Gallery options ***/
+	  if (isset($_POST['savegalleryoptions'])) {
+        setOption('gallery_title', $_POST['gallery_title']);
+        setOption('website_title', $_POST['website_title']);
+        setOption('website_url', $_POST['website_url']);
+        setOption('time_offset', $_POST['time_offset']);
+        setOption('gmaps_apikey', $_POST['gmaps_apikey']);
+        setBoolOption('mod_rewrite', $_POST['mod_rewrite']);
+        setOption('mod_rewrite_image_suffix', $_POST['mod_rewrite_image_suffix']);
+        setOption('server_protocol', $_POST['server_protocol']);
+        setOption('charset', $_POST['charset']);
+        setOption('spam_filter', $_POST['spam_filter']);         
+        setBoolOption('email_new_comments', $_POST['email_new_comments']);         
+        setOption('gallery_sorttype', $_POST['gallery_sorttype']);         
+        setBoolOption('gallery_sortdirection', $_POST['gallery_sortdirection']);   
+	    setOption('feed_items', $_POST['feed_items']);  
+        $search = new SearchEngine();
+	    setOption('search_fields', 32767); // make SearchEngine allow all options so getQueryFields() will gives back what was choosen this time
+        setOption('search_fields', $search->getQueryFields());	
+		$returntab = "#tab_gallery";
+	  }
+	  /*** Image options ***/
+	  if (isset($_POST['saveimageoptions'])) {
+        setOption('image_quality', $_POST['image_quality']);
+        setOption('thumb_quality', $_POST['thumb_quality']);
+        setOption('image_size', $_POST['image_size']);
+        setBoolOption('image_use_longest_side', $_POST['image_use_longest_side']);
+        setBoolOption('image_allow_upscale', $_POST['image_allow_upscale']);
+        setOption('thumb_size', $_POST['thumb_size']);
+        setBoolOption('thumb_crop', $_POST['thumb_crop']);
+        setOption('thumb_crop_width', $_POST['thumb_crop_width']);
+        setOption('thumb_crop_height', $_POST['thumb_crop_height']);
+        setBoolOption('thumb_sharpen', $_POST['thumb_sharpen']);
+        setOption('albums_per_page', $_POST['albums_per_page']);
+        setOption('images_per_page', $_POST['images_per_page']);
+        setBoolOption('perform_watermark', $_POST['perform_watermark']);
+        setOption('watermark_image', 'images/' . $_POST['watermark_image'] . '.png');
+        setBoolOption('perform_video_watermark', $_POST['perform_video_watermark']);
+        setOption('video_watermark_image', 'images/' . $_POST['video_watermark_image'] . '.png');
+		$returntab = "#tab_image";
+      }	  
+	  if (isset($_POST['savethemeoptions'])) {
+	    // all theme options are custom options, handled below
+	    $returntab = "#tab_theme";
+	  } 
+      /*** custom options ***/     
       $templateOptions = GetOptionList();
 	  
       foreach($standardOptions as $option) {
@@ -366,7 +380,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
 	  if(($wm != getOption('perform_watermark')) || ($vwm != getOption('perform_video_watermark'))) {
 	    $gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the option has changed
 	  }
-      header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=options".$notify);
+      header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=options".$notify.$returntab);
       exit();
     
 /** THEMES ******************************************************************/
@@ -1104,13 +1118,8 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 <?php /*** OPTIONS ************************************************************************/ 
        /************************************************************************************/ ?> 
        
-      <?php } else if ($page == "options") { 
-        global $_zp_gallery;
-      ?> 
-      
-      <form action="?page=options&action=saveoptions" method="post">
-      <input type="hidden" name="saveoptions" value="yes" />
-       
+      <?php } else if ($page == "options") { ?> 
+             
       <div id="container">
 		<div id="mainmenu">
 		  <ul id="tabs">
@@ -1123,6 +1132,8 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 		  </ul>
 		</div>
 			<div class="panel" id="tab_admin">
+				<form action="?page=options&action=saveoptions" method="post">
+				<input type="hidden" name="saveadminoptions" value="yes" />
 				<?php
 	  			if (isset($_GET['mismatch'])) {
 	  			  echo '<div class="errorbox" id="message">'; 
@@ -1159,7 +1170,11 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         			</tr>
         			<tr>
             			<td>Database:</td>
-            			<td><?php echo getOption('mysql_database'); ?></td>
+            			<td>
+						  <?php 
+						  $pre = getOption('mysql_prefix');
+						  echo getOption('mysql_database')." prefixed by '$pre'"; 
+						  ?></td>
             			<td></td>
         			</tr>
         			<tr>
@@ -1168,8 +1183,11 @@ if (!zp_loggedin()  && !$_zp_null_account) {
             			<td></td>
         			</tr>
       			</table>
+				</form>
 			</div>
 			<div class="panel" id="tab_gallery">
+				<form action="?page=options&action=saveoptions" method="post">
+				<input type="hidden" name="savegalleryoptions" value="yes" />
 				<table class="bordered">
          			<tr> 
                			<th colspan="3"><h2>General Gallery Configuration</h2></th>
@@ -1290,9 +1308,12 @@ if (!zp_loggedin()  && !$_zp_null_account) {
             			<td></td>
         			</tr>
     			</table>
+				</form>
 			</div>
 
 			<div class="panel" id="tab_image">
+				<form action="?page=options&action=saveoptions" method="post">
+				<input type="hidden" name="saveimageoptions" value="yes" />
 				<table class="bordered">
    					<tr> 
       					<th colspan="3"><h2>Image Display</h2></th>
@@ -1398,9 +1419,12 @@ if (!zp_loggedin()  && !$_zp_null_account) {
             			<td><input type="submit" value="save" /></td>
             			<td></td>
         			</tr>
-    			</table>    
+    			</table>   
+                </form>				
 			</div>
 			<div class="panel" id="tab_theme">
+				<form action="?page=options&action=saveoptions" method="post">
+				<input type="hidden" name="savethemeoptions" value="yes" />
 				<?php
 				  /* handle theme options */
 				  if (!(false === ($requirePath = getPlugin('themeoptions.php', true)))) {
@@ -1423,6 +1447,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         			}     
       			  }     
 				?>
+			</form>
 			</div>
 		</div>
       
