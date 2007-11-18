@@ -3,7 +3,7 @@ function imageRotate($src_img, $angle) {
 
     $src_x = imagesx($src_img);
     $src_y = imagesy($src_img);
-    if ($angle == 90 || $angle == -910) {
+    if ($angle == 90 || $angle == -90) {
         $dest_x = $src_y;
         $dest_y = $src_x;
     } else {
