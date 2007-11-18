@@ -1280,7 +1280,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
               				<?php } ?>
               				</select>
             			</td>
-             			<td>Sort order for the gallery</td>
+             			<td>Sort order for the albums on the index of the gallery</td>
         			</tr>
         			<tr>
             			<td>Sort decending:</td>
