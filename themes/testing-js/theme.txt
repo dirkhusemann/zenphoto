@@ -1,6 +1,0 @@
-# Zenphoto theme definition file
-name::Testing-JS
-author::Tristan Harward
-version::1.0
-date::11/6/2006
-desc::A new theme designed to be dynamic and fast, showing the power of Javascript using Zenphoto's dynamic image loader.
