@@ -1464,21 +1464,26 @@ function getTags() {
 function printTags($option="",$preText=NULL,$class='taglist',$separator=", ",$editable=TRUE) {
   $tags = getTags();
   $singletag = explode(",", $tags);
+  if (empty($tags)) { $preText = ""; }
   if (!empty($preText)) { $preText = "<strong>".$preText."</strong>"; }
   if ($editable && zp_loggedin()) {
     echo "<div id=\"tagContainer\">".$preText."<div id=\"imageTags\" style=\"display: inline;\">" . htmlspecialchars(getTags()) . "</div></div>\n";
     echo "<script type=\"text/javascript\">initEditableTags('imageTags');</script>";
   } else {
-    echo "<ul class=\"".$class."\">\n";
-    echo "<li>".$preText."</li>";
-	$ct = count($singletag);
-    for ($x = 0; $x < $ct; $x++) {
-      if ($x === $ct - 1) { $separator = ""; }
-      if ($option === "links") {
-        $links1 = "<a href=\"".WEBPATH.getSearachURL($singletag[$x], ''. SEARCH_TAGS)."\" title=\"".$singletag[$x]."\">"; 
-        $links2 = "</a>"; 
+    if (!empty($tags)) {
+      echo "<ul class=\"".$class."\">\n";
+      if (!empty($preText)) { 
+	    echo "<li class=\"tags_title\">".$preText."</li>";
 	  }
-      echo "\t<li>".$links1.htmlspecialchars($singletag[$x]).$links2.$separator."</li>\n";
+	  $ct = count($singletag);
+      for ($x = 0; $x < $ct; $x++) {
+        if ($x === $ct - 1) { $separator = ""; }
+        if ($option === "links") {
+          $links1 = "<a href=\"".WEBPATH.getSearachURL($singletag[$x], ''. SEARCH_TAGS)."\" title=\"".$singletag[$x]."\">"; 
+          $links2 = "</a>"; 
+	    }
+        echo "\t<li>".$links1.htmlspecialchars($singletag[$x]).$links2.$separator."</li>\n";
+	  }
     }
     echo "</ul><br clear=all />\n";  
   }
