@@ -328,6 +328,8 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         setBoolOption('email_new_comments', $_POST['email_new_comments']);         
         setOption('gallery_sorttype', $_POST['gallery_sorttype']);         
         setBoolOption('gallery_sortdirection', $_POST['gallery_sortdirection']);   
+        setOption('image_sorttype', $_POST['image_sorttype']);         
+        setBoolOption('image_sortdirection', $_POST['image_sortdirection']);   
 	    setOption('feed_items', $_POST['feed_items']);  
         $search = new SearchEngine();
 	    setOption('search_fields', 32767); // make SearchEngine allow all options so getQueryFields() will gives back what was choosen this time
@@ -1171,10 +1173,9 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         			<tr>
             			<td>Database:</td>
             			<td>
-						  <?php 
-						  $pre = getOption('mysql_prefix');
-						  echo getOption('mysql_database')." prefixed by '$pre'"; 
-						  ?></td>
+						  <strong><?php echo getOption('mysql_database'); ?></strong>: Tables are prefixed by 
+						  <strong><?php echo getOption('mysql_prefix'); ?></strong>
+						  </td>
             			<td></td>
         			</tr>
         			<tr>
@@ -1277,28 +1278,46 @@ if (!zp_loggedin()  && !$_zp_null_account) {
               				<select id="sortselect" name="gallery_sorttype">
               				<?php foreach ($sortby as $sorttype) { ?>
                 				<option value="<?php echo $sorttype; ?>"<?php if ($sorttype == getOption('gallery_sorttype')) echo ' selected="selected"'; ?>><?php echo $sorttype; ?></option>
-              				<?php } ?>
+             				<?php } ?>
               				</select>
+             			    <input type="checkbox" name="gallery_sortdirection" value="1" <?php echo checked('1', getOption('gallery_sortdirection')); ?> /> Descending
             			</td>
              			<td>Sort order for the albums on the index of the gallery</td>
         			</tr>
         			<tr>
-            			<td>Sort decending:</td>
-            			<td><input type="checkbox" name="gallery_sortdirection" value="1" <?php echo checked('1', getOption('gallery_sortdirection')); ?> /></td>
-            			<td>Gallery sort direction will be decending if this option is checked</td>
+            			<td>Sort images by:</td>
+            			<td>
+              				<select id="imagesortselect" name="image_sorttype">
+              				<?php foreach ($sortby as $sorttype) { ?>
+                				<option value="<?php echo $sorttype; ?>"<?php if ($sorttype == getOption('image_sorttype')) echo ' selected="selected"'; ?>><?php echo $sorttype; ?></option>
+             				<?php } ?>
+              				</select>
+						    <input type="checkbox" name="image_sortdirection" value="1" <?php echo checked('1', getOption('image_sortdirection')); ?> /> Descending
+						    </td>
+            			<td>Default sort order for images</td>
         			</tr>
 					<tr>
 		  				<td>Search fields:</td>
 		    			<td>
 		    				<?php $fields = getOption('search_fields'); ?>
-							<input type="checkbox" name="sf_title" value=1 <?php if ($fields & SEARCH_TITLE) echo ' checked'; ?>> Title<br/>
-            				<input type="checkbox" name="sf_desc" value=1 <?php if ($fields & SEARCH_DESC) echo ' checked'; ?>> Description<br/>
-            				<input type="checkbox" name="sf_tags" value=1 <?php if ($fields & SEARCH_TAGS) echo ' checked'; ?>> Tags<br/>
-            				<input type="checkbox" name="sf_filename" value=1 <?php if ($fields & SEARCH_FILENAME) echo ' checked'; ?>> File/Folder name<br/>
-            				<input type="checkbox" name="sf_location" value=1 <?php if ($fields & SEARCH_LOCATION) echo ' checked'; ?>> Location<br/>
-            				<input type="checkbox" name="sf_city" value=1 <?php if ($fields & SEARCH_CITY) echo ' checked'; ?>> City<br/>
-            				<input type="checkbox" name="sf_state" value=1 <?php if ($fields & SEARCH_STATE) echo ' checked'; ?>> State<br/>
-            				<input type="checkbox" name="sf_country" value=1 <?php if ($fields & SEARCH_COUNTRY) echo ' checked'; ?>> Country<br/>
+							<table>
+							<tr>
+							  <td><input type="checkbox" name="sf_title" value=1 <?php if ($fields & SEARCH_TITLE) echo ' checked'; ?>> Title</td>
+            				  <td><input type="checkbox" name="sf_desc" value=1 <?php if ($fields & SEARCH_DESC) echo ' checked'; ?>> Description</td>
+							</tr>
+							<tr>
+            				  <td><input type="checkbox" name="sf_tags" value=1 <?php if ($fields & SEARCH_TAGS) echo ' checked'; ?>> Tags</td>
+            				  <td><input type="checkbox" name="sf_filename" value=1 <?php if ($fields & SEARCH_FILENAME) echo ' checked'; ?>> File/Folder name</td>
+							</tr>
+							<tr>
+            				  <td><input type="checkbox" name="sf_location" value=1 <?php if ($fields & SEARCH_LOCATION) echo ' checked'; ?>> Location</td>
+            				  <td><input type="checkbox" name="sf_city" value=1 <?php if ($fields & SEARCH_CITY) echo ' checked'; ?>> City</td>
+							</tr>
+							<tr>
+            				  <td><input type="checkbox" name="sf_state" value=1 <?php if ($fields & SEARCH_STATE) echo ' checked'; ?>> State</td>
+            				  <td><input type="checkbox" name="sf_country" value=1 <?php if ($fields & SEARCH_COUNTRY) echo ' checked'; ?>> Country</td>
+							</tr>
+							</table>
 	        			</td>
                         <td>The set of fields on which searches may be performed.</td>
 					</tr>
@@ -1540,7 +1559,8 @@ if (!zp_loggedin()  && !$_zp_null_account) {
       
         <div class="box" id="overview-stats">
             <h2 class="boxtitle">Gallery Maintenance</h2>
-            <p>Your database is <b><?php echo getOption('mysql_database'); ?></b></p>
+            <p>Your database is <strong><?php echo getOption('mysql_database'); ?></strong>: Tables are prefixed by <strong>'<?php echo getOption('mysql_prefix'); ?>'</strong></p>
+
             <p><strong><a href="?prune=true">Refresh the Database</a></strong> - This cleans the database, removes any orphan entries for comments, images, and albums.</p>
             <p><strong><a href="cache-images.php">Pre-Cache Images</a></strong> - Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser.</p>
             <p><strong><a href="refresh-metadata.php">Refresh Image Metadata</a></strong> - Forces a refresh of the EXIF and IPTC data for all images.</p>

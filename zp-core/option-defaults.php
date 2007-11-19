@@ -46,6 +46,8 @@ function setDefault($option, $default) {
   setDefault('email_new_comments', 1);
   setDefault('gallery_sorttype', 'Manual');
   setDefault('gallery_sortdirection', '0');
+  setDefault('image_sorttype', 'Manual');
+  setDefault('image_sortdirection', '0');
   setDefault('current_theme', 'default');
   setDefault('feed_items', 10);
   setDefault('search_fields', 32767);

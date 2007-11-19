@@ -33,7 +33,6 @@ class Album extends PersistentObject {
       $this->exists = false;
       return false;
     }
-    
     parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache);
     
   }
@@ -46,8 +45,18 @@ class Album extends PersistentObject {
     if (!is_null($parentalbum)) {
       $this->set('parentid', $parentalbum->getAlbumId());
       $title = substr($title, strrpos($title, '/')+1);
-    }
+	  $this->set('subalbum_sort_type', $parentalbum->getSubalbumSortType());
+      $this->set('album_sortdirection',$parentalbum->getSortDirection('album'));
+      $this->set('sort_type', $parentalbum->getSortType());
+      $this->set('image_sortdirection', $parentalbum->getSortDirection('image'));   
+    } else {
+	  $this->set('subalbum_sort_type', getOption('gallery_sorttype'));
+	  $this->set('album_sortdirection',getOption('gallery_sortdirection'));
+	  $this->set('sort_type', getOption('image_sorttype'));
+	  $this->set('image_sortdirection',getOption('image_sortdirection'));
+	}
     $this->set('title', $title);
+    
     return true;
   }
   

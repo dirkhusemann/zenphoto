@@ -9,8 +9,8 @@ if (file_exists("zp-config.php")) {
     if ($result) {
       unset($setup);
     }
-    require_once("admin-functions.php"); 
   } 
+  require_once("admin-functions.php"); 
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -46,7 +46,7 @@ if (file_exists("zp-config.php")) {
 if (file_exists("zp-config.php")) {
   $credentials = getOption('adminuser').getOption('adminpass');
   if (!empty($credentials)) {
-    if (!zp_loggedin()) {  // Display the login form and exit.
+    if (!zp_loggedin()  && (isset($_GET['upgrade']))) {  // Display the login form and exit.
       printLoginForm("/" . ZENFOLDER . "/upgrade.php");
       exit();
     }
