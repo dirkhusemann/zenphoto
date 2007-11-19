@@ -1,6 +1,6 @@
 /* These styles are just for the test template. Make some better ones. And yes, I know it's messy ;-) */
 body { font-family: Arial, Helvetica, sans-serif; font-size: 8pt; text-align: center; }
-.img {border:none}
+img {border:none}
 #main { width: 600px; margin: 0px auto; text-align: left; }
 #gallerytitle h2 { font-size: 11pt; }
 #gallerytitle span { font-weight: normal; color: #CCC; text-decoration: none; }

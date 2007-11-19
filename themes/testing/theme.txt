@@ -1,6 +1,6 @@
 # Zenphoto theme definition file
-name::Testing Theme
+name::Testing (Example) Theme
 author::Tristan Harward
 version::1.0
 date::11/05/2007
-desc::A theme for testing the program. It includes nearly every template tag and feature, and doesn't look half bad. A good example if you want to make your own theme or integrate ZenPhoto into a blog.
+desc::A theme for testing the program. Works just fine and you might even like it! It includes nearly every template tag and feature, and doesn't look half bad. A good example if you want to make your own theme or integrate ZenPhoto into a blog.
