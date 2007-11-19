@@ -1,0 +1,6 @@
+# Zenphoto theme definition file
+name::Example Theme
+author::Tristan Harward
+version::1.5
+date::11/05/2007
+desc::This theme was designed to show off many of ZenPhoto's features. It includes many template tags and doesn't look half bad. Also a great example if you want to make your own theme or integrate ZenPhoto into a blog.
