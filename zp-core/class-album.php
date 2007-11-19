@@ -128,10 +128,46 @@ class Album extends PersistentObject {
     }
   }
   
-  function getSortType() { return $this->get('sort_type'); }
+  function getSortType() { 
+    $type = $this->get('sort_type');
+	if (empty($type)) {
+	  $parentalbum = $this->getParent();
+	  if (is_null($parentalbum)) {
+	    $type = getOption('gallery_sorttype');
+	    $direction = getOption('gallery_sortdirection');
+	  } else {
+        $direction = $parentalbum->getSortDirection('album');
+        $type = $parentalbum->getSortType();
+	  }
+	  if (!empty($type)) {
+	    $this->set('sort_type', $type);
+		$this->set('image_sortdirection', $direction);
+		$this->save();
+	  }
+	}
+    return $type; 
+  }
   function setSortType($sorttype) { $this->set('sort_type', $sorttype); }
   
-  function getSubalbumSortType() { return $this->get('subalbum_sort_type'); }
+  function getSubalbumSortType() { 
+    $type = $this->get('subalbum_sort_type'); 
+	if (empty($type)) {
+	  $parentalbum = $this->getParent();
+	  if (is_null($parentalbum)) {
+	    $type = getOption('gallery_sorttype');
+	    $direction = getOption('gallery_sortdirection');
+	  } else {
+        $direction = $parentalbum->getSortDirection('album');
+        $type = $parentalbum->getSortType();
+	  }
+	  if (!empty($type)) {
+	    $this->set('subalbum_sort_type', $type);
+		$this->set('album_sortdirection', $direction);
+		$this->save();
+	  }
+	}
+	return $type;
+  }
   function setSubalbumSortType($sorttype) { $this->set('subalbum_sort_type', $sorttype); }
   
   function getSortOrder() { return $this->get('sort_order'); }
