@@ -10,9 +10,9 @@ $albumname = $_GET[albumname];
 
 if ($albumname != "") { $albumname = " - for album: ".$_GET[albumname]; }
 if(getOption('mod_rewrite'))
- { $albumpath = "/"; $imagepath = "/"; }
+ { $albumpath = "/"; $imagepath = "/"; $modrewritesuffix = getOption('mod_rewrite_image_suffix'); }
 else
- { $albumpath = "/index.php?album="; $imagepath = "&image="; }
+ { $albumpath = "/index.php?album="; $imagepath = "&image="; $modrewritesuffix = ""; }
 
 ?>
 <rss version="2.0">
@@ -53,12 +53,13 @@ if ($albumnr != "") {
 
 $album = mysql_query($sql);
 $a = mysql_fetch_array($album);
+
 ?>
 <item>
 	<title><?php echo $r['title'] ?></title>
-	<link><?php echo '<![CDATA[http://'.$_SERVER["HTTP_HOST"].WEBPATH.$albumpath.$a['folder'].$imagepath.$r['filename'] .getOption('mod_rewrite_image_suffix') . ']]>';?></link>
+	<link><?php echo '<![CDATA[http://'.$_SERVER["HTTP_HOST"].WEBPATH.$albumpath.$a['folder'].$imagepath.$r['filename'].$modrewritesuffix. ']]>';?></link>
 	<description><?php echo '<![CDATA[<a title="'.$r['title'].' in '.$a['title'].'" href="http://'.$_SERVER["HTTP_HOST"].WEBPATH.$albumpath.$a['folder'].$imagepath.$r['filename'].getOption('mod_rewrite_image_suffix').'"><img border="0" src="http://'.$_SERVER["HTTP_HOST"].WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$a['folder'].'&i='.$r['filename'].'&w='.$iw.'&h='.$ih.'&cw='.$cw.'&ch='.$ch.'" alt="'. $r['title'] .'"></a>' . $r['desc'] . ']]>';?> <?php if($exif['datetime']) { echo '<![CDATA[Date: ' . $exif['datetime'] . ']]>'; } ?></description>
-	<guid><?php echo '<![CDATA[http://'.$_SERVER["HTTP_HOST"].WEBPATH.$albumpath.$a['folder'].$imagepath.$r['filename'] .getOption('mod_rewrite_image_suffix') . ']]>';?></guid>
+	<guid><?php echo '<![CDATA[http://'.$_SERVER["HTTP_HOST"].WEBPATH.$albumpath.$a['folder'].$imagepath.$r['filename'].$modrewritesuffix. ']]>';?></guid>
 </item>
 <?php } ?>
 </channel>
