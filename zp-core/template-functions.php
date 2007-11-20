@@ -1657,18 +1657,19 @@ function getAlbumId() {
 }
 
 /* Returns the ID of all sub-albums, relative to the current album. If $_zp_current_album is not set, it'll return null. */
-function getAllSubAlbumIDs($albumfolder='') {	
-  global $_zp_current_album;
-  if (empty($albumfolder)) {
-    if (isset($_zp_current_album)) { 
-	  $albumfolder = $_zp_current_album->getFolder();
-	} else {
-	  return null; 
-	}	
+function getRandomImagesAlbum() {		
+  $images = array();
+  $subIDs = getAllSubAlbumIDs($rootAlbum);
+  if($subIDs == null) {return null;}; //no subdirs avaliable
+  foreach ($subIDs as $ID) {		
+    $query = 'SELECT `id` , `albumid` , `filename` , `title` FROM '.prefix('images').' WHERE `albumid` = "'. $ID['id'] .'"'; 		
+    $images = array_merge($images, query_full_array($query)); 	
   }
-  $query = "SELECT `id` FROM " . prefix('albums') . " WHERE `folder` LIKE '" . $albumfolder . "%'"; 
-  $subIDs = query_full_array($query);
-  return $subIDs; 
+  if(count($images) < 1){return null;}; //no images avaliable in _any_ subdirectory
+  $randomImage = $images[array_rand($images)];
+  $folderPath = query_single_row("SELECT `folder` FROM " .prefix('albums'). " WHERE id = '" .$randomImage['albumid']. "'"  ); 	
+  $image = new Image(new Album(new Gallery(), $folderPath['folder']), $randomImage['filename']);	
+  return $image;
 }
 
 function hitcounter() {
