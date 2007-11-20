@@ -56,10 +56,12 @@ $a = mysql_fetch_array($album);
 
 ?>
 <item>
-	<title><?php echo $r['title'] ?></title>
+	<title><?php echo $r['title']; ?></title>
 	<link><?php echo '<![CDATA[http://'.$_SERVER["HTTP_HOST"].WEBPATH.$albumpath.$a['folder'].$imagepath.$r['filename'].$modrewritesuffix. ']]>';?></link>
-	<description><?php echo '<![CDATA[<a title="'.$r['title'].' in '.$a['title'].'" href="http://'.$_SERVER["HTTP_HOST"].WEBPATH.$albumpath.$a['folder'].$imagepath.$r['filename'].getOption('mod_rewrite_image_suffix').'"><img border="0" src="http://'.$_SERVER["HTTP_HOST"].WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$a['folder'].'&i='.$r['filename'].'&w='.$iw.'&h='.$ih.'&cw='.$cw.'&ch='.$ch.'" alt="'. $r['title'] .'"></a>' . $r['desc'] . ']]>';?> <?php if($exif['datetime']) { echo '<![CDATA[Date: ' . $exif['datetime'] . ']]>'; } ?></description>
+	<description><?php echo '<![CDATA[<a title="'.$r['title'].' in '.$a['title'].'" href="http://'.$_SERVER["HTTP_HOST"].WEBPATH.$albumpath.$a['folder'].$imagepath.$r['filename'].$modrewritesuffix.'"><img border="0" src="http://'.$_SERVER["HTTP_HOST"].WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$a['folder'].'&i='.$r['filename'].'&w='.$iw.'&h='.$ih.'&cw='.$cw.'&ch='.$ch.'" alt="'. $r['title'] .'"></a>' . $r['desc'] . ']]>';?> <?php if($exif['datetime']) { echo '<![CDATA[Date: ' . $exif['datetime'] . ']]>'; } ?></description>
+    <category><?php echo $a['title']; ?></category>
 	<guid><?php echo '<![CDATA[http://'.$_SERVER["HTTP_HOST"].WEBPATH.$albumpath.$a['folder'].$imagepath.$r['filename'].$modrewritesuffix. ']]>';?></guid>
+	<pubDate><?php echo $r['date']; ?></pubDate> 
 </item>
 <?php } ?>
 </channel>
