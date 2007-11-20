@@ -1485,7 +1485,7 @@ function printTags($option="",$preText=NULL,$class='taglist',$separator=", ",$ed
         echo "\t<li>".$links1.htmlspecialchars($singletag[$x]).$links2.$separator."</li>\n";
 	  }
     }
-    echo "</ul><br clear=all />\n";  
+    echo "</ul><br clear=\"all\" />\n";  
   }
 }
 
@@ -1668,7 +1668,7 @@ function hitcounter() {
 /******************************************/
 function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=null) {
   if ($printIcon) {
-    $icon = ' <img src="' . FULLWEBPATH . '/' . ZENFOLDER . '/images/rss.gif" />';
+    $icon = ' <img src="' . FULLWEBPATH . '/' . ZENFOLDER . '/images/rss.gif" alt="RSS Feed" />';
 	} else {
     $icon = '';
 	}
@@ -1728,9 +1728,9 @@ function printSearchForm($prevtext=NULL, $enableFieldSelect= false, $id='search'
   $dataid = $id . '_data';
   $searchwords = (isset($_POST['words']) ? htmlspecialchars(stripslashes($_REQUEST['words'])) : ''); 
   echo "\n<div id=\"search\">";
-  echo "\n<form method=\"POST\" action=\"".WEBPATH."/index.php?p=search\" id=\"search_form\">"; 
+  echo "\n<form method=\"post\" action=\"".WEBPATH."/index.php?p=search\" id=\"search_form\">"; 
   echo "\n$prevtext<input type=\"text\" name=\"words\" value=\"".$searchwords."\" id=\"search_input\" size=\"10\" />"; 
-  echo "\n<input type=\"submit\" value=\"Search\" class=\"pushbutton\" id=\"search_submit\">"; 
+  echo "\n<input type=\"submit\" value=\"Search\" class=\"pushbutton\" id=\"search_submit\" />"; 
   $fields = getOption('search_fields');
   $bits = array(SEARCH_TITLE, SEARCH_DESC, SEARCH_TAGS, SEARCH_FILENAME, SEARCH_LOCATION, SEARCH_CITY, SEARCH_STATE, SEARCH_COUNTRY);
   $c = 0;
