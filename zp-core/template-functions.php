@@ -1461,7 +1461,7 @@ function getTags() {
   }
 }
 
-function printTags($option="",$preText=NULL,$class='taglist',$separator=", ",$editable=TRUE) {
+function printTags($option="links",$preText=NULL,$class='taglist',$separator=", ",$editable=TRUE) {
   $tags = getTags();
   $singletag = explode(",", $tags);
   if (empty($tags)) { $preText = ""; }
@@ -1479,7 +1479,7 @@ function printTags($option="",$preText=NULL,$class='taglist',$separator=", ",$ed
       for ($x = 0; $x < $ct; $x++) {
         if ($x === $ct - 1) { $separator = ""; }
         if ($option === "links") {
-          $links1 = "<a href=\"".WEBPATH.getSearachURL($singletag[$x], ''. SEARCH_TAGS)."\" title=\"".$singletag[$x]."\">"; 
+          $links1 = "<a href=\"".WEBPATH.getSearchURL($singletag[$x], ''. SEARCH_TAGS)."\" title=\"".$singletag[$x]."\">"; 
           $links2 = "</a>"; 
 	    }
         echo "\t<li>".$links1.htmlspecialchars($singletag[$x]).$links2.$separator."</li>\n";
@@ -1531,14 +1531,12 @@ function printAllTagsAs($option,$class="",$sort="abc",$counter=FALSE,$links=TRUE
    	  ksort($tagcount); break;
   } 	  
   echo "<ul style=\"display:inline; list-style-type:none\" ".$class.">\n";
-  
   while (list($key, $val) = each($tagcount)) {  
     if(!$counter) { 
 	  $counter = ""; 
 	} else { 
 	  $counter = " (".$val.") "; 
-	}
-          
+	}   
     if ($option == "cloud") {      
       if ($val <= $mincount) { 
         $size = MINFONTSIZE;  // calculate font sizes, formula from wikipedia
@@ -1548,7 +1546,6 @@ function printAllTagsAs($option,$class="",$sort="abc",$counter=FALSE,$links=TRUE
     } else {
 	  $size = MINFONTSIZE;
 	}
-   	
 	if ($val >= $mincount) {
       if(!$links) {
         echo "\t<li style=\"font-size:".$size."em\">".$key.$counter."</li>\n";  

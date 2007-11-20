@@ -51,7 +51,7 @@ $firstPageImages = normalizeColumns('2', '6');
 		</div>
 	
 		<?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
-        <?php printTags(true, 'Tags: ', 'taglist', ''); ?>
+        <?php printTags('links', 'Tags: ', 'taglist', ''); ?>
         
 	</div>
 	
