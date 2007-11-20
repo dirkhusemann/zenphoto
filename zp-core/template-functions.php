@@ -1444,13 +1444,11 @@ function my_truncate_string($string, $length) {
 	}
 }
 
-/*** tag functions   ***/
-// --------------------------------------------------------------------------------
-// Function : getTags()
-// Description :
-// Parameters :
-// Return Values :
-// --------------------------------------------------------------------------------
+/**
+ * grabs tags for either an image or album, depends on the page called from
+ * @return string with all the tags
+ * @since 1.1
+ */
 function getTags() {
   if(in_context(ZP_IMAGE)) {
     global $_zp_current_image;
@@ -1461,6 +1459,17 @@ function getTags() {
   }
 }
 
+/**
+ * prints a list of tags, editable by admin
+ * @param string $option links by default, if anything else the 
+      tags will not link to all other photos with the same tah
+ * @param string $preText text to go before the printed tags
+ * @param string $class css class to apply to the UL list
+ * @param string $separator what charactor shall separate the tags
+ * @param bit $editable true to allow admin to edit the tags
+ * @return string with all the html for the admin toolbox
+ * @since 1.1
+ */
 function printTags($option="links",$preText=NULL,$class='taglist',$separator=", ",$editable=TRUE) {
   $tags = getTags();
   $singletag = explode(",", $tags);
@@ -1489,6 +1498,11 @@ function printTags($option="links",$preText=NULL,$class='taglist',$separator=", 
   }
 }
 
+/**
+ * grabs the entire galleries tags
+ * @return string with all the tags
+ * @since 1.1
+ */
 function getAllTags() {
   $result = query_full_array("SELECT `tags` FROM ". prefix('images') ." WHERE `show` = 1");
   foreach($result as $row){
@@ -1510,15 +1524,19 @@ function getAllTags() {
   return $tagcount;
 }
 
+/**
+ * either prints all of the galleries tgs as a UL list or a cloud
+ * @param string $option "cloud" for tag cloud, "list" for simple list
+ * @param string $class CSS class
+ * @param string $sort "results" for relevance list, "abc" for alphabetical, blank for unsorted
+ * @param bit $counter TRUE if you want the tag count within brackets behind the tag
+ * @param bit $links text to go before the printed tags
+ * @param string $maxfontsize largest font size the cloud should display
+ * @param string $maxtagcout the maximum count for a tag to appear in the output
+ * @param string $mintagcount the minimum count for a tag to appear in the output
+ * @since 1.1
+ */
 function printAllTagsAs($option,$class="",$sort="abc",$counter=FALSE,$links=TRUE,$maxfontsize="2",$maxcount="50",$mincount="10") {
-//$option = "Cloud" for tag cloud, "list" for simple list
-//$class = CSS class
-//$sort = "results" for relevance list, "abc" for alphabetical, blank for unsorted
-//$counter = TRUE if you want the tag count within brackets behind the tag
-//$links = false for no links
-//$maxfontsize = Maximum font size to use in the tag cloud
-//$maxtagcout = Maximum result value to be used
-//$mintagcount = the lowest result value to be used for the cloud
   define('MINFONTSIZE', 0.8);
   $option = strtolower($option);
   if ($class != "") { $class = "class=\"".$class."\""; }
