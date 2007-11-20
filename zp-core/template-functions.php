@@ -40,7 +40,14 @@ function printAdminLink($text, $before='', $after='', $title=NULL, $class=NULL, 
   }
 }
 
-/* Subalbum administration if the current user is logged-in*/
+/**
+ * prints the admin edit link for subalbums
+ * @param string $text text for the link
+ * @param string $before text do display before the link
+ * @param string $after  text do display after the link
+ * @return string with all the html for the admin toolbox
+ * @since 1.1
+ */
 function printSubalbumAdmin($text, $before='', $after='') {
   global $_zp_current_album, $_zp_themeroot;
   if (zp_loggedin()) {
@@ -152,12 +159,17 @@ function getNumAlbums() {
 
 /*** Album AND Gallery Context ************/
 /******************************************/
-// (Common functions shared by Albums and the Gallery Index)
 
-// WHILE next_album(): context switches to Album.
-// If we're already in the album context, this is a sub-albums loop, which,
-// quite simply, changes the source of the album list.
-// Switch back to the previous context when there are no more albums.
+/**
+ * WHILE next_album(): context switches to Album.
+ * If we're already in the album context, this is a sub-albums loop, which,
+ * quite simply, changes the source of the album list.
+ * Switch back to the previous context when there are no more albums.
+ * @param bit $all true to go through all the albums
+ * @param string $sorttype what you want to sort the albums by
+ * @return true if there is albums, false if none
+ * @since 0.6
+ */
 function next_album($all=false, $sorttype=null) {
   global $_zp_albums, $_zp_gallery, $_zp_current_album, $_zp_page, $_zp_current_album_restore, $_zp_current_search;
   if (is_null($_zp_albums)) {
@@ -1679,8 +1691,17 @@ function hitcounter() {
   $result2 = query_single_row("UPDATE ". prefix('images') ." SET `hitcounter`= $resultupdate WHERE id = $id");
 }
 
-/*** RSS Functions **********************/
-/******************************************/
+/**
+ * prints a RSS link
+ *@param string $option type of RSS (Gallery, Album, Comments)
+ *@param string $prev text to before before the link
+ *@param string $linktext title of the link
+ *@param string $next text to appear after the link
+ *@param bit $printIcon print an RSS icon beside it? if true, the icon is zp-core/images/rss.gif
+ *@param string $class css class
+ *@return string link formatted for the HTML HEAD
+ *@since 1.1
+  */
 function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=null) {
   if ($printIcon) {
     $icon = ' <img src="' . FULLWEBPATH . '/' . ZENFOLDER . '/images/rss.gif" alt="RSS Feed" />';
@@ -1703,6 +1724,13 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
 	}
 }
 
+/**
+ * prints the RSS link for use in the HTML HEAD
+ *@param string $option type of RSS (Gallery, Album, Comments)
+ *@param string $linktext title of the link
+ *@return string link formatted for the HTML HEAD
+ *@since 1.1
+  */
 function printRSSHeaderLink($option, $linktext) {
 	switch($option) {
 		case "Gallery":
@@ -1738,7 +1766,15 @@ function getSearchURL($words, $dates, $fields=0) {
   return $url;
 }
 
-function printSearchForm($prevtext=NULL, $enableFieldSelect= false, $id='search') { 
+/**
+ * prints the search form
+ * @param string $prevtext text to go before the search form
+ * @param bit $enableFieldSelect prints a drop down of searchable elements
+ * @param string $id css id for the search form, default is 'search'
+ * @return returns the css file name for the theme
+ * @since 1.1
+ */
+function printSearchForm($prevtext=NULL, $enableFieldSelect=false, $id='search') { 
   $zf = WEBPATH."/".ZENFOLDER;
   $dataid = $id . '_data';
   $searchwords = (isset($_POST['words']) ? htmlspecialchars(stripslashes($_REQUEST['words'])) : ''); 
@@ -1788,6 +1824,12 @@ function printSearchForm($prevtext=NULL, $enableFieldSelect= false, $id='search'
 echo "\n<!-- end of search form -->";
 } 
 
+/**
+ * grabs the search criteria
+ * @param string $separator what to put inbetween the search results, default ' | '
+ * @return returns search results, seperated by $separator
+ * @since 1.1
+ */
 function getSearchWords($separator=" | ") {
   if (in_context(ZP_SEARCH)) {
     global $_zp_current_search;
@@ -1797,6 +1839,12 @@ function getSearchWords($separator=" | ") {
   return false;
 }
 
+/**
+ * grabs the searched date
+ * @param string $format formatting of the date, default 'F Y'
+ * @return returns the date of the search
+ * @since 1.1
+ */
 function getSearchDate($format="F Y") {
   if (in_context(ZP_SEARCH)) {
     global $_zp_current_search;
@@ -1825,11 +1873,14 @@ function OpenedForComments($what=3) {
   return $result;
 }
 
-
-/*** getTheme *****************************
+/**
  * finds the name of the themeColor option selected on the admin options tab
+ * @param string $zenCSS path to the css file
+ * @param string $themeColor name of the css file
+ * @param string $defaultColor name of the default css file
+ * @return returns the css file name for the theme
+ * @since 1.1
  */
-
 function getTheme(&$zenCSS, &$themeColor, $defaultColor) {
   global $_zp_themeroot;
   $themeColor = getOption('Theme_colors');
@@ -1843,11 +1894,14 @@ function getTheme(&$zenCSS, &$themeColor, $defaultColor) {
   }
 }
 
-/*** normalizeColumns **************************
-  * passed # of album columns, # of image columns of the theme
-  * returns # of images that will go on the album/image transition page
-  * Updates (non-persistent) images_per_page and albums_per_page so that the rows are filled
-    */
+/**
+ * passed # of album columns, # of image columns of the theme
+ * Updates (non-persistent) images_per_page and albums_per_page so that the rows are filled
+ * @param int $albumColumns number of album columns on the page
+ * @param int $imageColumns number of image columns on the page
+ * @return returns # of images that will go on the album/image transition page
+ * @since 1.1
+ */
 function normalizeColumns($albumColumns, $imageColumns) {
   $albcount = getOption('albums_per_page');
   if (($albcount % $albumColumns) != 0) {  

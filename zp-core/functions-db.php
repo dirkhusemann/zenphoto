@@ -14,9 +14,12 @@ if (!function_exists('mysql_real_escape_string')) {
 }
 
 
-/** Connect to the database server and select the database.
- *  TODO: Handle errors more gracefully.
- */
+/**
+ * Connect to the database server and select the database.
+ * TODO: Handle errors more gracefully.
+ *@return true if successful connection
+ *@since 0.6
+  */
 function db_connect() {
   global $mysql_connection, $_zp_conf_vars;
   $db = $_zp_conf_vars['mysql_database'];
@@ -51,9 +54,13 @@ db_connect();
 
 $_zp_query_count = 0;
 
-/** The main query function. Runs the SQL on the connection and handles errors.
- *  TODO: Handle errors more gracefully.
- */
+/**
+ * The main query function. Runs the SQL on the connection and handles errors.
+ * TODO: Handle errors more gracefully.
+ *@param string $sql sql code
+ *@return results of the sql statements
+ *@since 0.6
+  */
 function query($sql) {
   global $mysql_connection;
   global $_zp_query_count;
@@ -76,9 +83,13 @@ function query($sql) {
   return $result;
 }
 
-/** Runs a SQL query and returns an associative array of the first row.
- *  Doesn't handle multiple rows, so this should only be used for unique entries.
- */
+/**
+ * Runs a SQL query and returns an associative array of the first row.
+ * Doesn't handle multiple rows, so this should only be used for unique entries.
+ *@param string $sql sql code
+ *@return results of the sql statements
+ *@since 0.6
+  */
 function query_single_row($sql) {
   $result = query($sql);
   if ($result) {
@@ -88,11 +99,15 @@ function query_single_row($sql) {
   }
 }
 
-/** Runs a SQL query and returns an array of associative arrays of every row returned.
- *  TODO: This may not be very efficient. Could use a global resultset instead,
- *        then use a next_db_entry()-like function to get the next row.
- *        But this is probably just fine.
- */
+/**
+ * Runs a SQL query and returns an array of associative arrays of every row returned.
+ * TODO: This may not be very efficient. Could use a global resultset instead,
+ * 			then use a next_db_entry()-like function to get the next row.
+ *		But this is probably just fine.
+ *@param string $sql sql code
+ *@return results of the sql statements
+ *@since 0.6
+  */
 function query_full_array($sql) {
   $result = query($sql);
   if ($result) {
@@ -106,15 +121,24 @@ function query_full_array($sql) {
 }
 
 
-/** Prefix a table name with a user-defined string to avoid conflicts.
- *  This MUST be used in all database queries.
- */
+/**
+ * Prefix a table name with a user-defined string to avoid conflicts.
+ * This MUST be used in all database queries.
+ *@param string $tablename name of the table
+ *@return prefixed table name
+ *@since 0.6
+  */
 function prefix($tablename) {
   global $_zp_conf_vars;
   return '`' . $_zp_conf_vars['mysql_prefix'] . $tablename . '`';
 }
 
-// For things that *are* going into the database, but not from G/P/C.
+/**
+ * For things that *are* going into the database, but not from G/P/C.
+ *@param string $string string to clean
+ *@return cleaned up string
+ *@since 0.6
+  */
 function escape($string) {
   if (get_magic_quotes_gpc()) {
     return $string;
@@ -123,7 +147,12 @@ function escape($string) {
   }
 }
 
-// For things that *aren't* going into the database, from G/P/C.
+/**
+ * For things that *aren't* going into the database, but not from G/P/C.
+ *@param string $string string to clean
+ *@return cleaned up string
+ *@since 0.6
+  */
 function strip($string) {
   if (get_magic_quotes_gpc()) {
     return stripslashes($string);
@@ -132,12 +161,14 @@ function strip($string) {
   }
 }
 
-
 /**
  * Constructs a WHERE clause ("WHERE uniqueid1='uniquevalue1' AND uniqueid2='uniquevalue2' ...")
- * from an array (map) of variables and their values which identifies a unique record
- * in the database table.
- */
+ *  from an array (map) of variables and their values which identifies a unique record
+ *  in the database table.
+ *@param string $unique_set what to add to the WHERE clause
+ *@return contructed WHERE cleause
+ *@since 0.6
+  */
 function getWhereClause($unique_set) {
   if (empty($unique_set)) return ' ';
   $i = 0;
@@ -152,9 +183,12 @@ function getWhereClause($unique_set) {
 
 /**
  * Constructs a SET clause ("SET uniqueid1='uniquevalue1', uniqueid2='uniquevalue2' ...")
- * from an array (map) of variables and their values which identifies a unique record
- * in the database table. Used to 'move' records. Note: does not check anything.
- */
+ *  from an array (map) of variables and their values which identifies a unique record
+ *  in the database table. Used to 'move' records. Note: does not check anything.
+ *@param string $new_unique_set what to add to the SET clause
+ *@return contructed SET cleause
+ *@since 0.6
+  */
 function getSetClause($new_unique_set) {
   $i = 0;
   $set = ' SET';
@@ -166,12 +200,23 @@ function getSetClause($new_unique_set) {
   return $set;
 }
 
-
+/**
+ * encodes a query
+ *@param string $url url to encode
+ *@return encoded url
+ *@since 0.6
+  */
 function queryEncode($url) {
 	$encode = str_replace('%26', '%%1', urlencode($url));  
 	return str_replace('%23', '%%2', $encode); 
 } 
 
+/**
+ * decodes a query
+ *@param string $url url to decode
+ *@return decoded url
+ *@since 0.6
+  */
 function queryDecode($url) { 
 	$decode = str_replace('%%1', '%26', $url); 
 	return urldecode(str_replace('%%2', '%23', $decode)); 
