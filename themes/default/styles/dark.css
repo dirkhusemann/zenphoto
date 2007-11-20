@@ -201,10 +201,17 @@ ul.pagelist li.next {
 }
 
 .taglist li {
-	display: inline;
+	background: url(../images/tag.png) no-repeat left center;
 	list-style-type: none;
-	padding-right: 3px;
-	float: left;
+	padding-left: 18px;
+	float:left;
+	padding-right: 5px;
+}
+
+.taglist .tags_title {
+	background: none;
+	padding-right: 5px;
+	padding-left: 0;
 }
 
 /* Image Thumbnails
