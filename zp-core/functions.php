@@ -219,18 +219,7 @@ function checkVideoThumb($album,$video){
 }
 
 
-function get_image($imgfile) {
-	$ext = strtolower(substr(strrchr($imgfile, "."), 1));
-	if ($ext == "jpg" || $ext == "jpeg") {
-		return imagecreatefromjpeg($imgfile);
-	} else if ($ext == "gif") {
-		return imagecreatefromgif($imgfile);
-	} else if ($ext == "png") {
-		return imagecreatefrompng($imgfile);
-	} else {
-		return false;
-	}
-}
+
 
 
 function truncate_string($string, $length) {

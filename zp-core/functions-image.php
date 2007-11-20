@@ -3,7 +3,11 @@
 // functions-image.php - HEADERS NOT SENT YET!
 
 /**
- * Show an error image if an image was requested, and 
+ * If in debug mode, prints the given error message and continues; otherwise redirects
+ * to the given error message image and exits; designed for a production gallery.
+ * @param $errormessage string the error message to print if $_GET['debug'] is set.
+ * @param $errorimg string the filename of the error image to display for production. Defaults
+ *   to 'err-imagegeneral.gif'. Images should be located in /zen/images .
  */
 function imageError($errormessage, $errorimg='err-imagegeneral.gif') {
   global $newfilename, $album, $image;
@@ -20,6 +24,11 @@ function imageError($errormessage, $errorimg='err-imagegeneral.gif') {
   }
 }
 
+/**
+ * Prints debug information from the arguments to i.php.
+ * @param args an array of the arguments to i.php in the standard order.
+ * @return nothing.
+ */
 function imageDebug($args) {
   list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
   echo "<strong>DEBUG <code>i.php</code> | Arguments:</strong><br />\n\n"
@@ -37,35 +46,67 @@ function imageDebug($args) {
 }
 
 
+/**
+ * Takes an image filename and returns a GD Image using the correct function
+ * for the image's format (imagecreatefrom*). Supports JPEG, GIF, and PNG.                                                     
+ * @param string $imagefile the full path and filename of the image to load.
+ * @return image the loaded GD image object.
+ *
+ */
+function get_image($imgfile) {
+	$ext = strtolower(substr(strrchr($imgfile, "."), 1));
+	if ($ext == "jpg" || $ext == "jpeg") {
+		return imagecreatefromjpeg($imgfile);
+	} else if ($ext == "gif") {
+		return imagecreatefromgif($imgfile);
+	} else if ($ext == "png") {
+		return imagecreatefrompng($imgfile);
+	} else {
+		return false;
+	}
+}
+
+
 
 /**
-
-WARNING! Due to a known bug in PHP 4.3.2 this script is not working well in this
-version. The sharpened images get too dark. The bug is fixed in version 4.3.3.
-
-From version 2 (July 17 2006) the script uses the imageconvolution function in
-PHP version >= 5.1, which improves the performance considerably.
-
-Unsharp masking is a traditional darkroom technique that has proven very
-suitable for digital imaging. The principle of unsharp masking is to create a
-blurred copy of the image and compare it to the underlying original. The
-difference in colour values between the two images is greatest for the pixels
-near sharp edges. When this difference is subtracted from the original image,
-the edges will be accentuated.
-
-The Amount parameter simply says how much of the effect you want. 100 is
-'normal'. Radius is the radius of the blurring circle of the mask. 'Threshold'
-is the least difference in colour values that is allowed between the original
-and the mask. In practice this means that low-contrast areas of the picture are
-left unrendered whereas edges are treated normally. This is good for pictures of
-e.g. skin or blue skies.
-
-Any suggenstions for improvement of the algorithm, expecially regarding the
-speed and the roundoff errors in the Gaussian blur process, are welcome.
-
-Permission to license this code under the GPL was granted by the author on 2/12/2007.
-
-*/
+ * Sharpens an image using an Unsharp Mask filter.
+ *
+ * Original description from the author:
+ *
+ * WARNING ! Due to a known bug in PHP 4.3.2 this script is not working well in this
+ * version. The sharpened images get too dark. The bug is fixed in version 4.3.3.
+ * 
+ * From version 2 (July 17 2006) the script uses the imageconvolution function in
+ * PHP version >= 5.1, which improves the performance considerably.
+ * 
+ * Unsharp masking is a traditional darkroom technique that has proven very
+ * suitable for digital imaging. The principle of unsharp masking is to create a
+ * blurred copy of the image and compare it to the underlying original. The
+ * difference in colour values between the two images is greatest for the pixels
+ * near sharp edges. When this difference is subtracted from the original image,
+ * the edges will be accentuated.
+ * 
+ * The Amount parameter simply says how much of the effect you want. 100 is
+ * 'normal'. Radius is the radius of the blurring circle of the mask. 'Threshold'
+ * is the least difference in colour values that is allowed between the original
+ * and the mask. In practice this means that low-contrast areas of the picture are
+ * left unrendered whereas edges are treated normally. This is good for pictures of
+ * e.g. skin or blue skies.
+ * 
+ * Any suggenstions for improvement of the algorithm, expecially regarding the
+ * speed and the roundoff errors in the Gaussian blur process, are welcome.
+ *   
+ * Permission to license this code under the GPL was granted by the author on 2/12/2007.
+ *
+ * @param image $img the GD format image to sharpen. This is not a URL string, but 
+ *   should be the result of a GD image function.
+ * @param int $amount the strength of the sharpening effect. Nominal values are between 0 and 100.
+ * @param int $radius the pixel radius of the sharpening mask. A smaller radius sharpens smaller 
+ *   details, and a larger radius sharpens larger details.
+ * @param int $threshold the color difference threshold required for sharpening. A low threshold
+ *   sharpens all edges including faint ones, while a higher threshold only sharpens more distinct edges.
+ * @return image the input image with the specified sharpening applied.
+ */
 function unsharp_mask($img, $amount, $radius, $threshold) {
   /*
   Unsharp Mask for PHP - version 2.0
