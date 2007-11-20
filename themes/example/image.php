@@ -62,7 +62,7 @@
         	
             <br clear="all" />
         	<?php printImageDesc(true); ?>
-        	<?php printTags(true, 'Image tags: '); ?>
+        	<?php printTags('links', 'Image tags: '); ?>
 	    	<?php printImageMap(); ?>
       	</div>
       
