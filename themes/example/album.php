@@ -22,7 +22,7 @@ $firstPageImages = normalizeColumns('1', '6');
   	( <?php printLink(getPrevAlbumURL(), "&laquo; Prev Album"); ?> | <?php printLink(getNextAlbumURL(), "Next Album &raquo;"); ?> )
   
   	<hr />
-  	<?php printTags('links', 'Album tags: '); ?>
+  	<?php printTags('links', 'Tags: ', 'taglist', ''); ?>
 	<?php printAlbumDesc(true); ?>
   	<br />
 
