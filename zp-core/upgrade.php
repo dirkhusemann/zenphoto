@@ -2,8 +2,8 @@
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 define('OFFSET_PATH', true);
 $setup = true;
-require_once('functions-db.php');
 if (file_exists("zp-config.php")) {
+  require_once('functions-db.php');
   if (db_connect() && !(isset($_GET['upgrade']))) {
     $result = mysql_query("SELECT `name`, `value` FROM " . prefix('options') . " LIMIT 1", $mysql_connection);
     if ($result) {

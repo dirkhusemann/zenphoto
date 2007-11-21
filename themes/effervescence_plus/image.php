@@ -69,17 +69,13 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 
 			<!-- The Image -->
             <div id="image">
-    			<a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>"><?php printDefaultSizedImage(getImageTitle()); ?></a> 
+    			<div id="image_container"><a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>"><?php printDefaultSizedImage(getImageTitle()); ?></a></div>
     			<?php 
-				  $MAP = printImageMap();
+				  printImageMap();
 				  if (getImageEXIFData()) {
 	  			    echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=400&width=300&inlineId=imagemetadata\" title=\"image details from exif\" class=\"thickbox\">Image Info</a></div>";
 	  				printImageMetadata('', false); 
 				  }
-				  //if (hasMapData()) { css not up to par yet
-	  				//echo "<div id=\"map_link\"><a href=\"#TB_inline?height=500&width=595&inlineId=map\" class=\"thickbox\">View Map</a></div>";
-	  				//printImageMap(); 
-				  //}
 				?>
   			</div>
   			<br clear="all" />

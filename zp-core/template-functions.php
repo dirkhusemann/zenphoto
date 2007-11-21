@@ -873,7 +873,7 @@ function printImageMetadata($title='Image Info', $toggle=true, $id='imagemetadat
   echo "  </table>\n</div>\n\n";
 }
 
-function printImageMap($zoomlevel='6'){
+function printImageMap($zoomlevel='6', $width=null, $height=null){
   global $_zp_phoogle;
   if(getOption('gmaps_apikey') != ''){
     $exif = getImageEXIFData();
@@ -881,6 +881,8 @@ function printImageMap($zoomlevel='6'){
        !empty($exif['EXIFGPSLongitude'])){
            
       $_zp_phoogle->setZoomLevel($zoomlevel);
+	  if (!is_null($width)) { $_zp_phoogle->setWidth($width); }
+	  if (!is_null($height)) { $_zp_phoogle->setHeight($height); }
       $lat = $exif['EXIFGPSLatitude'];
       $long = $exif['EXIFGPSLongitude'];
       if($exif['EXIFGPSLatitudeRef'] == 'S'){  $lat = '-' . $lat; }
@@ -901,11 +903,13 @@ function hasMapData() {
   return false;
 }
 
-function printAlbumMap($zoomlevel='8'){
+function printAlbumMap($zoomlevel='8', $width=null, $height=null){
   global $_zp_phoogle;
   if(getOption('gmaps_apikey') != ''){
     $foundLocation = false;
     $_zp_phoogle->setZoomLevel($zoomlevel);
+	if (!is_null($width)) { $_zp_phoogle->setWidth($width); }
+	if (!is_null($height)) { $_zp_phoogle->setHeight($height); }
     while (next_image(true)) {
       $exif = getImageEXIFData();
       if(!empty($exif['EXIFGPSLatitude']) &&

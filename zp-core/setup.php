@@ -2,8 +2,8 @@
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 define('OFFSET_PATH', true);
 $setup = true;
-require_once('functions-db.php');
 if (file_exists("zp-config.php")) {
+  require_once('functions-db.php');
   if (db_connect() && !(isset($_GET['create']))) {
     $result = mysql_query("SELECT `name`, `value` FROM " . prefix('options') . " LIMIT 1", $mysql_connection);
     if ($result) {
@@ -11,7 +11,7 @@ if (file_exists("zp-config.php")) {
     }
   } 
   require_once("admin-functions.php"); 
-}
+} 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
@@ -176,7 +176,7 @@ if (file_exists("zp-config.php")) {
 
   <ul>
     <li><strong>Step 1: Edit the <code>zp-config.php.example</code> file and rename it to <code>zp-config.php</code></strong> . You can find the file
-      in the "zen" directory.</li>
+      in the "zp-core" directory.</li>
     <li><strong>Step 2: Edit the .htaccess file in the root zenphoto folder</strong> if you have the mod_rewrite apache 
       module, and want cruft-free URLs. Just change the one line indicated to make it work.</li>
     <li><strong>Step 3: Change the permissions on the 'albums' and 'cache' folders to be writable by the server</strong> 

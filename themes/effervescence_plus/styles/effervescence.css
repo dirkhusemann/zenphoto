@@ -588,11 +588,12 @@ ul.pagelist li.next {
 	width: 615px;
 	margin: 0 auto;
 }
-#main2 img {
+#image_container {
 	text-align: center;
-	border: 2px solid #0c8369; /* border for single-image view.*/
+	border: 2px solid #ECEBE1;
 	padding: 7px;
 	background: #fff;
+	margin-bottom: 10px;
 }
 .imgnav {
 	float: right;
