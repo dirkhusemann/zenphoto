@@ -114,7 +114,9 @@ function zenJavascript() {
     echo "  </script>\n";
   }
   echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/scripts-common.js\"></script>\n";
-  echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/flvplayer.js\"></script>\n";
+  if (in_context(ZP_IMAGE)) {
+    echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/flvplayer.js\"></script>\n";
+  }
 }
 
 /*** Gallery Index (album list) Context ***/
@@ -881,8 +883,8 @@ function printImageMap($zoomlevel='6', $width=null, $height=null){
        !empty($exif['EXIFGPSLongitude'])){
            
       $_zp_phoogle->setZoomLevel($zoomlevel);
-	  if (!is_null($width)) { $_zp_phoogle->setWidth($width); }
-	  if (!is_null($height)) { $_zp_phoogle->setHeight($height); }
+	  if (!is_null($width)) { $_zp_phoogle->setWidth($width); } else { $_zp_phoogle->setWidth(getDefaultWidth()); }
+	  if (!is_null($height)) { $_zp_phoogle->setHeight($height); } else { $_zp_phoogle->setHeight(getDefaultHeight()); }
       $lat = $exif['EXIFGPSLatitude'];
       $long = $exif['EXIFGPSLongitude'];
       if($exif['EXIFGPSLatitudeRef'] == 'S'){  $lat = '-' . $lat; }
@@ -908,15 +910,13 @@ function printAlbumMap($zoomlevel='8', $width=null, $height=null){
   if(getOption('gmaps_apikey') != ''){
     $foundLocation = false;
     $_zp_phoogle->setZoomLevel($zoomlevel);
-	if (!is_null($width)) { $_zp_phoogle->setWidth($width); }
-	if (!is_null($height)) { $_zp_phoogle->setHeight($height); }
+	if (!is_null($width)) { $_zp_phoogle->setWidth($width); } else { $_zp_phoogle->setWidth(getDefaultWidth()); }
+	if (!is_null($height)) { $_zp_phoogle->setHeight($height); } else { $_zp_phoogle->setHeight(getDefaultHeight()); }
     while (next_image(true)) {
       $exif = getImageEXIFData();
       if(!empty($exif['EXIFGPSLatitude']) &&
          !empty($exif['EXIFGPSLongitude'])){
         $foundLocation = true;
-        $_zp_phoogle->setHeight(getDefaultHeight());
-        $_zp_phoogle->setWidth(getDefaultWidth());
         $lat = $exif['EXIFGPSLatitude'];
         $long = $exif['EXIFGPSLongitude'];
         if($exif['EXIFGPSLatitudeRef'] == 'S'){  $lat = '-' . $lat; }
@@ -925,7 +925,7 @@ function printAlbumMap($zoomlevel='8', $width=null, $height=null){
           getImageThumb() . '" alt="' . getImageDesc() . '" ' .
           'style=" margin-left: 30%; margin-right: 10%; border: 0px; "/></a>' .
           '<p>' . getImageDesc() . '</p>';
-        $_zp_phoogle->addGeoPoint($lat, $long, $infoHTML);
+        $_zp_phoogle->addGeoPoint($lat, $long, $infoHTML);	
       }
     }
     if($foundLocation){ $_zp_phoogle->showMap(); }

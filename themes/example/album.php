@@ -2,7 +2,7 @@
 if (!defined('WEBPATH')) die(); 
 $startTime = array_sum(explode(" ",microtime())); 
 $themeResult = getTheme($zenCSS, $themeColor, 'light');
-$firstPageImages = normalizeColumns('1', '6');
+$firstPageImages = normalizeColumns(1, 7);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>

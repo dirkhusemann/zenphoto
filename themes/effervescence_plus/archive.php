@@ -1,4 +1,8 @@
-<?php require ('customfunctions.php'); $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');normalizeColumns(3, 5);?>
+<?php require ('customfunctions.php'); 
+define('ALBUMCOLUMNS', 3);
+define('IMAGECOLUMNS', 5);
+$themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
+normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
