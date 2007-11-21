@@ -93,7 +93,7 @@ function printNofM($what, $first, $last, $total) {
 }
 
 function printThemeInfo() {
-  global $themeColor, $themeResult;
+  global $themeColor, $themeResult, $_noFlash;
   if ($themeColor == 'effervescence') {
     $themeColor = '';
   } else {
@@ -102,11 +102,14 @@ function printThemeInfo() {
   if (!$themeResult) { $themeColor .= " (not found)"; }
   $personality = getOption('Theme_personality');
   if ($personality != 'Image page') {
-    $simpleviewer = "+$personality$themeColor";
+    if (($personality == 'Simpleviewer') && (!getOption('mod_rewrite') || $_noFlash)) {
+	  $personality = "<strike>$personality</strike>";
+	}
+    $personality = "+$personality$themeColor";
   } else {
-    $simpleviewer = $themeColor;
+    $personality = $themeColor;
   }
-  echo "<p><small>Effervescence$simpleviewer</small></p>";
+  echo "<p><small>Effervescence$personality</small></p>";
 }
 
 function printLinkWithQuery($url, $query, $text) {
