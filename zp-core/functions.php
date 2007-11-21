@@ -294,6 +294,7 @@ function rewrite_get_album_image($albumvar, $imagevar) {
       in each item of the array. Ex: when $includepaths==false, the above array would be
       ['album', 'subalbum', 'my-album'], and with $includepaths==true, 
       ['album', 'album/subalbum', 'album/subalbum/my-album']
+    @return array an array of album folder name strings for the given album.
  */
 function getAlbumArray($albumstring, $includepaths=false) {
   if ($includepaths) {

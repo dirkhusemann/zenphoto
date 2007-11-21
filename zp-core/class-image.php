@@ -138,44 +138,38 @@ class Image extends PersistentObject {
   }
 
     
-  // Get the width and height of the original image-- uses lazy evaluation.
-  // TODO: Update them if they change by looking at file modification time, which must be stored in the database.
-  // FIXME: Temporarily getting dimensions each time they're requested. Should sync with EXIF extraction.
+  /** 
+   * Update this object's values for width and height. Uses lazy evaluation.
+   * TODO: Update them if they change by looking at file modification time, which must be stored in the database.
+   * FIXME: Temporarily getting dimensions each time they're requested. Should be same as EXIF extraction (see TODO).
+   *
+   */
   function updateDimensions() {
-    //if ($this->exists && (is_null($this->get('width')) || is_null($this->get('height')))) {
+    if ($this->video) {
+      $size = array('320','240');
+    } else {
       $size = getimagesize($this->localpath);
-      $this->set('width', $size[0]);
-      $this->set('height', $size[1]);
-      //$this->save();
-    //}
+    }
+    $this->set('width', $size[0]);
+    $this->set('height', $size[1]);
   }
   
-  //ZenVideo: function getWidth modified to return default width of videos
   function getWidth() {
-    if (!$this->video) {
-      $this->updateDimensions();
-      return $this->get('width');
-    } else {
-      return "320";
-    }
+    $this->updateDimensions();
+    return $this->get('width');
   }
 
-  //ZenVideo: function getHeight modified to return default height of videos
   function getHeight() {
-    if (!$this->video) {
-      $this->updateDimensions();
-      return $this->get('height');
-    } else {
-      return "240";
-    }
+    $this->updateDimensions();
+    return $this->get('height');
   }
   
   //ZenVideo: Get informations about video type.
-  function getVideo() {return $this->video; }
-  function getVideoThumb() {return $this->videoThumb; }
+  function getVideo() { return $this->video; }
+  function getVideoThumb() { return $this->videoThumb; }
     
   // Album (Object) and Album Name
-  function getAlbum() {  return $this->album; }
+  function getAlbum() { return $this->album; }
   function getAlbumName() { return $this->album->name; }
 
   // Title
@@ -186,7 +180,7 @@ class Image extends PersistentObject {
   function getDesc() { return $this->get('desc'); }
   function setDesc($desc) { $this->set('desc', $desc); }
   
-   // Location, city, state, and country
+  // Location, city, state, and country
   function getLocation() { return $this->get('location'); }
   function setLocation($location) { $this->set('location', $location); }
   function getCity() { return $this->get('city'); }
@@ -196,7 +190,7 @@ class Image extends PersistentObject {
   function getCountry() { return $this->get('country'); }
   function setcountry($country) { $this->set('country', $country); }
   
-   // Tags
+  // Tags
   function getTags() { return $this->get('tags'); }
   function setTags($tags) { $this->set('tags', $tags); }
   
@@ -219,12 +213,49 @@ class Image extends PersistentObject {
   function setShow($show) { $this->set('show', $show ? 1 : 0); }
 
   
-  // Permanently delete this image (be careful!)
-  function deleteImage($clean = true) {
-    //echo $this->localpath;
+  /** 
+   * Permanently delete this image (permanent: be careful!) 
+   * @param bool $clean whether to remove the database entry.
+   * @return bool the result of the unlink operation (whether the delete was successful)
+   */
+  function deleteImage($clean=true) {
     $result = unlink($this->localpath); 
     if ($clean && $result) { query("DELETE FROM ".prefix('images')." WHERE `id` = " . $this->id); } 
     return $result; 
+  }
+  
+  /**
+   * Moves an image to a new album and/or filename (rename).
+   * @param Album $newalbum the album to move this file to. Must be a valid Album object.
+   * @param string $newfilename the new file name of the image in the specified album.
+   * @return bool true on success and false on failure.
+   */
+  function moveImage($newalbum, $newfilename=null) {
+    if ($newfilename == null) $newfilename = $this->filename;
+    if ($newalbum->id == $this->album->id && $newfilename == $this->filename) {
+      // Nothing to do - moving the file to the same place.
+      return true;
+    }
+    $newpath = getAlbumFolder() . $newalbum->name . "/" . $newfilename;
+    $result = rename($this->localpath, $newpath);
+    if ($result) {
+      $result = query("UPDATE ".prefix('images')." SET albumid='" . $newalbum->id 
+        . "', filename='" . $newfilename . " WHERE id=" . $this->id . " LIMIT 1");
+    }
+    return $result;
+  }
+  
+  /**
+   * Renames an image to a new filename, keeping it in the same album. Convenience for moveImage($image->album, $newfilename).
+   * @param string $newfilename the new file name of the image file.
+   * @return bool true on success and false on failure.
+   */
+  function renameImage($newfilename) {
+    return $this->moveImage($this->album, $newfilename);
+  }
+  
+  function copyImage($newalbum) {
+    
   }
   
   
@@ -392,7 +423,10 @@ class Image extends PersistentObject {
   
   
   
-  // Get the index of this image in the album, taking sorting into account.
+  /** 
+   * Get the index of this image in the album, taking sorting into account.
+   *
+   */
   function getIndex() {
     if ($this->index == NULL) {
       $images = $this->album->getImages(0);
@@ -405,13 +439,9 @@ class Image extends PersistentObject {
         }
       } 
     }
-
     return $this->index;
   }
 
-  // TODO: To keep the Image in array abstraction these next two methods
-  // should really return an Image.
-  
   // Returns the next Image.
   function getNextImage() {
     $this->getIndex();
@@ -442,7 +472,6 @@ class Image extends PersistentObject {
     return floor(($this->index / $images_per_page)+1);
   }
 
-  // Tag methods?
- 
 }
+
 ?>
