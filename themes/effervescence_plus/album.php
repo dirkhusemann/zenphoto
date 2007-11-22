@@ -347,7 +347,7 @@ printThemeInfo();
   echo '<?xml version="1.0" encoding="UTF-8"?>
   <simpleviewerGallery title=""  maxImageWidth="'.$maxImageWidth.'" maxImageHeight="'.$maxImageHeight.
     '" textColor="'.$textColor.'" frameColor="'.$frameColor.'" frameWidth="'.$frameWidth.'" stagePadding="'.
-    $stagePadding.'" thumbnailColumns="'.$thumbnailColumns.'" thumbnailows="'.$thumbnailRows.'" navPosition="'.
+    $stagePadding.'" thumbnailColumns="'.$thumbnailColumns.'" thumbnailRows="'.$thumbnailRows.'" navPosition="'.
     $navPosition.'" enableRightClickOpen="'.$enableRightClickOpen.'" backgroundImagePath="'.$backgroundImagePath.
     '" imagePath="'.$path.'" thumbPath="'.$path.'">'; 
   while (next_image(true)){ 
