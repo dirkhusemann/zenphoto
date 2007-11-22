@@ -153,7 +153,19 @@ class PhoogleMapLite {
      */
     function setAPIkey($key){ $this->apiKey = $key; }
 
+    /**
+     * @param        $lvl :string
+     * @returns      nothing
+     * @description  Sets the zoom level
+     */
     function setZoomLevel($lvl) { $this->zoomLevel = $lvl; }
+
+/**
+     * @param        $type:string
+     * @returns      nothing
+     * @description  Stores maptype in $defaultType
+     */
+function setMapType($type) { $this->defaultType = $type; }
 
     /**
      * @function     printGoogleJS

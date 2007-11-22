@@ -874,8 +874,16 @@ function printImageMetadata($title='Image Info', $toggle=true, $id='imagemetadat
   }
   echo "  </table>\n</div>\n\n";
 }
-
-function printImageMap($zoomlevel='6', $width=null, $height=null){
+/**
+ * Causes a Google map to be printed based on the gps data in the current image
+ *@param  string $zoomlevel the zoom in for the map
+ *@param string $type of map to produce: allowed values are G_NORMAL_MAP | G_SATELLITE_MAP | G_HYBRID_MAP
+ *@param int $width is the image width of the map. NULL will use the default
+  *@param int $height is the image height of the map. NULL will use the default
+  *@return nothing
+  *@since 1.1.3
+*/
+function printImageMap($zoomlevel='6', $type=NULL, $width=NULL, $height=NULL){
   global $_zp_phoogle;
   if(getOption('gmaps_apikey') != ''){
     $exif = getImageEXIFData();
@@ -885,6 +893,7 @@ function printImageMap($zoomlevel='6', $width=null, $height=null){
       $_zp_phoogle->setZoomLevel($zoomlevel);
 	  if (!is_null($width)) { $_zp_phoogle->setWidth($width); }
 	  if (!is_null($height)) { $_zp_phoogle->setHeight($height); }
+	  if (!is_null($type)) { $_zp_phoogle->setMapType($type); }
       $lat = $exif['EXIFGPSLatitude'];
       $long = $exif['EXIFGPSLongitude'];
       if($exif['EXIFGPSLatitudeRef'] == 'S'){  $lat = '-' . $lat; }
@@ -905,11 +914,21 @@ function hasMapData() {
   return false;
 }
 
-function printAlbumMap($zoomlevel='8', $width=null, $height=null){
+/**
+ * Causes a Google map to be printed based on the gps data in all the images in the album
+ *@param  string $zoomlevel the zoom in for the map
+ *@param string $type of map to produce: allowed values are G_NORMAL_MAP | G_SATELLITE_MAP | G_HYBRID_MAP
+ *@param int $width is the image width of the map. NULL will use the default
+  *@param int $height is the image height of the map. NULL will use the default
+  *@return nothing
+  *@since 1.1.3
+*/
+function printAlbumMap($zoomlevel='8', $type=NULL, $width=NULL, $height=NULL){
   global $_zp_phoogle;
   if(getOption('gmaps_apikey') != ''){
     $foundLocation = false;
     $_zp_phoogle->setZoomLevel($zoomlevel);
+	if (!is_null($type)) { $_zp_phoogle->setMapType($type); }
 	if (!is_null($width)) { $_zp_phoogle->setWidth($width); }
 	if (!is_null($height)) { $_zp_phoogle->setHeight($height); }
     while (next_image(true)) {

@@ -306,7 +306,7 @@ if ($_GET['format'] != 'xml') {
     printPageListWithNav("&laquo; prev", "next &raquo;", $oneImagePage); 
     echo "</div></div>";
   } 
-  printAlbumMap();
+  printAlbumMap(8, 'G_HYBRID_MAP');
   echo "</div></div>";
 ?>
 

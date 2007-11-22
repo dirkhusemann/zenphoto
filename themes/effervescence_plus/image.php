@@ -74,7 +74,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
             <div id="image">
     			<div id="image_container"><a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>"><?php printDefaultSizedImage(getImageTitle()); ?></a></div>
     			<?php 
-				  printImageMap();
+				  printImageMap(6, 'G_HYBRID_MAP');
 				  if (getImageEXIFData()) {
 	  			    echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=400&width=300&inlineId=imagemetadata\" title=\"image details from exif\" class=\"thickbox\">Image Info</a></div>";
 	  				printImageMetadata('', false); 
