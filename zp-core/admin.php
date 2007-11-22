@@ -452,21 +452,15 @@ if (!zp_loggedin()  && !$_zp_null_account) {
   printLogoAndLinks();
  
 ?>
-
   <div id="main">
-  
 <?php printTabs(); ?>  
-  
   <div id="content">
-  
   <?php if ($_zp_null_account) {
     echo "<div class=\"errorbox space\">";
     echo "<h2>You need to set your admin user and password.</h2>";
 	echo "</div>";
   }
   ?>
-  
-  
 <?php /** EDIT ****************************************************************************/
       /************************************************************************************/ 
       
@@ -1118,10 +1112,9 @@ if (!zp_loggedin()  && !$_zp_null_account) {
       </form>
       
 <?php /*** OPTIONS ************************************************************************/ 
-       /************************************************************************************/ ?> 
-       
-      <?php } else if ($page == "options") { ?> 
-             
+       /************************************************************************************/ 
+    } else if ($page == "options") { 
+?> 
       <div id="container">
 		<div id="mainmenu">
 		  <ul id="tabs">
@@ -1185,7 +1178,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         			</tr>
       			</table>
 				</form>
-			</div>
+			</div> <!-- end of tab_admin div -->
 			<div class="panel" id="tab_gallery">
 				<form action="?page=options&action=saveoptions" method="post">
 				<input type="hidden" name="savegalleryoptions" value="yes" />
@@ -1259,7 +1252,6 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         			    $optionHandler = new SpamFilter();
         				customOptions($optionHandler, "&nbsp;&nbsp;&nbsp;-&nbsp;");
       				  } 
-
     				?>   
 					<!-- end of SPAM filter options -->
         			<tr>
@@ -1328,8 +1320,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         			</tr>
     			</table>
 				</form>
-			</div>
-
+			</div>  <!-- end of tab-gallery div -->
 			<div class="panel" id="tab_image">
 				<form action="?page=options&action=saveoptions" method="post">
 				<input type="hidden" name="saveimageoptions" value="yes" />
@@ -1440,7 +1431,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         			</tr>
     			</table>   
                 </form>				
-			</div>
+			</div> <!-- end of tab_image div -->
 			<div class="panel" id="tab_theme">
 				<form action="?page=options&action=saveoptions" method="post">
 				<input type="hidden" name="savethemeoptions" value="yes" />
@@ -1449,28 +1440,23 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 				  if (!(false === ($requirePath = getPlugin('themeoptions.php', true)))) {
         		    require_once($requirePath);
         		    $optionHandler = new ThemeOptions();
-      
         		    $supportedOptions = $optionHandler->getOptionsSupported();
        			    if (count($supportedOptions) > 0) { 
           		  	  echo "<table class='bordered'>\n";
              	      echo "<tr><th colspan='3'><h2>Theme Options for <i>".$gallery->getCurrentTheme()."</i></h2></th></tr>\n";
-             
           		  	  customOptions($optionHandler);
-
           		  	  echo "\n<tr>\n";
           		  	  echo "<td></td>\n";
           		  	  echo  '<td><input type="submit" value="save" /></td>' . "\n";
           		  	  echo "<td></td>\n";
           		  	  echo "</tr>\n";
-          		  	  echo "<table/>\n";
+          		  	  echo "</table>\n";
         			}     
       			  }     
 				?>
 			</form>
-			</div>
-		</div>
-      
-      
+			</div>  <!-- end of tab_themne div -->
+		</div> <!-- container -->
 <?php /*** THEMES (Theme Switcher) *******************************************************/ 
       /************************************************************************************/ ?> 
       
@@ -1580,18 +1566,16 @@ if (!zp_loggedin()  && !$_zp_null_account) {
               */
           ?>
       </div>
-      
       <p style="clear: both; "></p>
-      
     <?php } ?>
-    
-    </div>
-    
-<?php printAdminFooter(); ?>
-
-  <?php zenSortablesFooter(); ?>
-  
-<?php } /* No admin-only content allowed after this bracket! */ ?>
+    </div> <!-- content -->
+<?php 
+  printAdminFooter(); 
+  if (issetPage('edit')) {
+    zenSortablesFooter(); 
+  }
+} /* No admin-only content allowed after this bracket! */ ?>
+</div> <!-- main -->
     
 </body>
 </html>

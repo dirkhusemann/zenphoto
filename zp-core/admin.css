@@ -339,7 +339,7 @@ input.tags {
 }
 #albumselect {
 	padding: 10px;
-  background: #F7F8F9;
+    background: #F7F8F9;
 	border-top: 1px solid #BAC9CF;
 	border-left: 1px solid #BAC9CF;
 	border-right: 1px solid #BAC9CF;
@@ -435,9 +435,19 @@ label:hover {
 	float: left;
 	padding: 5px 8px;
 	margin-left: 6px;
+	margin-right: 6px;
+	margin-bottom: 0px;
 	text-decoration: none;
 	color: #6b7d84;
 	outline: none;
+	background: #E9ECEF;
+	border-top: 1px solid #C7D3D8;
+	border-left: 1px solid #C7D3D8;
+	border-right: 1px solid #C7D3D8;
+}
+
+#tabs a:hover {
+	background-color: #d6dbde;
 }
 
 #tabs a.active-tab {
