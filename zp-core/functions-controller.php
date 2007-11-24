@@ -159,7 +159,7 @@ function zp_handle_comment() {
  *checks for album password posting
  */
 function zp_handle_password() {
-  global $_zp_current_album, $_zp_album_authorized;
+  global $error, $_zp_current_album, $_zp_album_authorized;
   if (in_context(ZP_SEARCH)) {
     $authType = 'zp_search_auth';
 	$check_auth = getOption('search_password');

@@ -1103,6 +1103,7 @@ function printImageThumb($alt, $class=NULL, $id=NULL) {
 }
 
 function getFullImageURL() {
+  
   global $_zp_current_image;
   return $_zp_current_image->getFullImage();
 }
@@ -1971,9 +1972,6 @@ function normalizeColumns($albumColumns, $imageColumns) {
  */
 function checkforPassword() {
   global $_zp_current_album, $_zp_current_search, $_zp_album_authorized;
-  
-echo "<br/>_GET<br/>";print_r($_GET);
-
   if (in_context(ZP_SEARCH)) {
     $hash = getOption('search_password');
     if (!is_null($hash)) {
@@ -2012,7 +2010,7 @@ function printPasswordForm() {
   if ($_zp_password_form_printed) { return; }
   $_zp_password_form_printed = true;
   if ($error) {
-    echo "<div class=\"errorbox\" id=\"message\"><h2>There was an error logging in.</h2> Check your username and password and try again.</div>";
+    echo "<div class=\"errorbox\" id=\"message\"><h2>There was an error logging in.</h2><br/>Check your password and try again.</div>";
   }
   $action = "#";
   if (in_context(ZP_SEARCH)) { 

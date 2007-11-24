@@ -71,6 +71,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
     		</div>
 
 			<!-- The Image -->
+			<?php if (!checkForPassword()) { ?>
             <div id="image">
     			<div id="image_container"><a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>"><?php printDefaultSizedImage(getImageTitle()); ?></a></div>
     			<?php 
@@ -81,6 +82,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 				  }
 				?>
   			</div>
+			<?php } ?>
   			<br clear="all" />
 		</div>  
 
