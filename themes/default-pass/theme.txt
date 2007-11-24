@@ -1,6 +1,0 @@
-# Zenphoto theme definition file
-name::Default (Password Protected)
-author::<a href="http://www.noscope.com" target="_blank">Joen Asmussen</a>
-version::1.0
-date::8/16/2005
-desc::The default theme, which has been password protected. Default is 'zen', but you can change this in album_images.php. Only the light default theme is included.
