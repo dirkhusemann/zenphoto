@@ -104,6 +104,19 @@ class Album extends PersistentObject {
       $this->set('password', md5($pwd)); 
 	}
   }
+  function getPasswordHint() { 
+    $hint = $this->get('password_hint');
+	if (is_null($hint)) {
+	  $parentalbum = $this->getParent();
+	  if (is_null($parentalbum)) {
+	    $hint = getOption('gallery_hint');
+	  } else {
+        $hint = $parentalbum->getPasswordHint();
+	  }
+	}
+    return $hint; 
+  }
+  function setPasswordHint($hint) { $this->set('password_hint', $hint); }
   
   // Title
   function getTitle() { return $this->get('title'); }

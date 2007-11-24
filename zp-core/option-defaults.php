@@ -16,7 +16,9 @@ function setDefault($option, $default) {
   
   setDefault('gallery_title', "Gallery");
   setDefault('gallery_password', NULL);
+  setDefault('gallery_hint', NULL);
   setDefault('search_password', NULL);
+  setDefault('search_hint', NULL);
   setDefault('website_title', "");
   setDefault('website_url', "");
   setDefault('time_offset', 0);

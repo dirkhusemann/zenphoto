@@ -168,7 +168,7 @@ function zp_handle_password() {
 	$check_auth = $_zp_current_album->getPassword();
   } else {
     $authType = 'zp_gallery_auth';
-	$check_auth = getOption('search_password');
+	$check_auth = getOption('gallery_password');
   }
   $_zp_album_authorized = NULL;
   if (is_null($check_auth)) { //no password on record

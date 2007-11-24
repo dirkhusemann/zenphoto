@@ -14,7 +14,7 @@ $standardOptions = array('gallery_title','website_title','website_url','time_off
                          'watermark_image','adminuser','adminpass','current_theme', 'spam_filter',
                          'email_new_comments', 'perform_video_watermark', 'video_watermark_image',
                          'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'search_fields',
-						 'password');
+						 'gallery_password', 'gallery_hint', 'search_password', 'search_hint');
           
 global $_zp_null_account;
 if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action handling first. */
@@ -71,6 +71,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
 	      } else {
 	        $notify = '&mismatch=album';
 	      }
+          $album->setPasswordHint(strip($_POST['albumpass_hint']));   
           $album->save();
         }
 
@@ -372,6 +373,8 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
 	    } else {
 	      $notify = '&mismatch=search';
 	    }
+	    setOption('gallery_hint', $_POST['gallery_hint']);  
+	    setOption('search_hint', $_POST['search_hint']);  
 		$returntab = "#tab_gallery";
 	  }
 	  /*** Image options ***/
@@ -571,6 +574,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
             		value="<?php echo $x; ?>" />
 				</td>
 			  </tr>
+              <tr><td align="right" valign="top">Password hint: </td> <td><input type="text" name="albumpass_hint" class="tags" value="<?php echo $album->getPasswordHint(); ?>" /></td></tr>
               <tr><td align="right" valign="top">Tags: </td> <td><input type="text" name="albumtags" class="tags" value="<?php echo $album->getTags(); ?>" /></td></tr>
               <tr><td align="right" valign="top">Date: </td> <td><input type="text" name="albumdate" value="<?php $d=$album->getDateTime(); if ($d!='0000-00-00 00:00:00') { echo $d; }?>" /></td></tr>
               <tr><td align="right" valign="top">Location: </td> <td><input type="text" name="albumplace" value="<?php echo $album->getPlace(); ?>" /></td></tr>
@@ -1270,6 +1274,11 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 						</td>
             			<td>Master password for the gallery. If this is set, visitors must know this password to view the gallery.</td>
         			</tr>
+       			    <tr>
+            			<td>Gallery password hint:</td>
+            			<td><input type="text" size="40" name="gallery_hint" value="<?php echo getOption('gallery_hint');?>" /></td>
+            			<td>A reminder hint for the password.</td>
+        			</tr>
         			<tr>
             			<td>Search password:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(repeat) </p></td>
             			<td>
@@ -1280,6 +1289,11 @@ if (!zp_loggedin()  && !$_zp_null_account) {
             				value="<?php echo $x; ?>" />
 						</td>
             			<td>Password for the searching. If this is set, visitors must know this password to view search results.</td>
+        			</tr>
+       			    <tr>
+            			<td>Search password hint:</td>
+            			<td><input type="text" size="40" name="search_hint" value="<?php echo getOption('search_hint');?>" /></td>
+            			<td>A reminder hint for the password.</td>
         			</tr>
         			<tr>
             			<td>Website title:</td>

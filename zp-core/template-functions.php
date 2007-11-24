@@ -1984,25 +1984,28 @@ function checkforPassword() {
   if (ZP_loggedin()) { return false; }  // you're the admin, you don't need the passwords.
   if (in_context(ZP_SEARCH)) {
     $hash = getOption('search_password');
+	$hint = getOption('search_hint');
     if (!is_null($hash)) {
 	  if ($_zp_album_authorized != $hash) {
-	    printPasswordForm();
+	    printPasswordForm($hint);
 	    return true;
 	  }
 	}
   } else if (isset($_GET['album'])) {
      $hash = $_zp_current_album->getPassword();
+     $hint = $_zp_current_album->getPasswordHint();
      if (!empty($hash)) {
 	    if ($_zp_album_authorized != $hash) {
-	      printPasswordForm();
+	      printPasswordForm($hint);
 	      return true;
 	    }
 	  }
     } else {
       $hash = getOption('gallery_password');
+	  $hint = getOption('gallery_hint');
      if (!empty($hash)) {
 	    if ($_zp_album_authorized != $hash) {
-	      printPasswordForm();
+	      printPasswordForm($hint);
 	      return true;
 	    }
 	  }
@@ -2015,7 +2018,7 @@ function checkforPassword() {
  * prints the album password form
  *@since 1.1.3
  */
-function printPasswordForm() {
+function printPasswordForm($hint) {
   global $error, $_zp_password_form_printed, $_zp_current_search;
   if ($_zp_password_form_printed) { return; }
   $_zp_password_form_printed = true;
@@ -2038,6 +2041,9 @@ function printPasswordForm() {
   echo "\n    <table>";
   echo "\n      <tr><td>Password</td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
   echo "\n      <tr><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"Submit\" /></td></tr>";
+  if (!empty($hint)) {
+    echo "\n      <tr><td>Hint: " . $hint . "</td></tr>";
+  }
   echo "\n    </table>";
   echo "\n  </form>";
 }
