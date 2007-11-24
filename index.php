@@ -16,7 +16,10 @@ if (in_context(ZP_IMAGE)) {
 } else if (in_context(ZP_ALBUM)) {
   if(isset($_GET['zipfile']) && is_dir(realpath('albums/' . $_GET['album']))){ 
   	createAlbumZip($_GET['album']); 
-  } else { include("$themepath/$theme/album.php"); } 
+  } else { 
+    setOption('search_params', NULL);
+    include("$themepath/$theme/album.php"); 
+  } 
 } else if (in_context(ZP_INDEX)) {
   if (isset($_GET['p'])) {
     $page = str_replace(array('/','\\','.'), '', $_GET['p']);

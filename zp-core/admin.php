@@ -178,13 +178,16 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         }
         @chmod($uploaddir, 0777);
         
+		$reject = array ("'", '"', "%"); // any characters in file names that will give us problems
         $error = false;
         foreach ($_FILES['files']['error'] as $key => $error) {
           if ($_FILES['files']['name'][$key] == "") continue;
           if ($error == UPLOAD_ERR_OK) {
             $tmp_name = $_FILES['files']['tmp_name'][$key];
-            $name = $_FILES['files']['name'][$key];		
-			$name = str_replace("%", "", $name); // the percents cause bad problems
+            $name = $_FILES['files']['name'][$key];	
+			foreach ($reject as $chr) {			
+			  $name = str_replace($chr, "", $name); // get rid of problem characters
+			}
             if (is_image($name)) {
               $uploadfile = $uploaddir . '/' . $name;
               move_uploaded_file($tmp_name, $uploadfile);
