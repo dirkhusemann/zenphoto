@@ -230,13 +230,13 @@ function bool($param) {
 function genAlbumList(&$list, $curAlbum=NULL) {
   global $gallery;
   if (is_null($curAlbum)) {
-    $albums = $gallery->getAlbums();
+    $albums = $gallery->getAlbums(0);
   } else {
-    $albums = $curAlbum->getSubAlbums();
+    $albums = $curAlbum->getSubAlbums(0);
   }
   foreach ($albums as $folder) {
     $album = new Album($gallery, $folder);
-    $list[$album->getTitle()] = $album->getFolder();
+    $list[$album->getFolder()] = $album->getTitle();
     genAlbumList($list, $album);  /* generate for subalbums */
   }
 }

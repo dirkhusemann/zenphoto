@@ -922,11 +922,10 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 
     <?php } else if ($page == "upload") { 
       
-      $folderlist = array();
-      genAlbumList($folderlist);
-      natcasesort($folderlist);
-      $albumlist = array_flip($folderlist);
-      
+      $albumlist = array();
+      genAlbumList($albumlist);
+
+       
     ?>
     
       
@@ -936,8 +935,8 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         var albumArray = new Array ( 
           <?php 
           $separator = '';
-          foreach($folderlist as $folder) {
-            echo $separator . "'" . addslashes($folder) . "'";
+          foreach($albumlist as $key => $value) {
+            echo $separator . "'" . addslashes($key) . "'";
             $separator = ", ";
           } 
           ?> );
@@ -968,8 +967,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
             <?php 
               $bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');
 			  $checked = "checked=\"false\"";
-              foreach ($albumlist as $album) {
-                $fullfolder = $folderlist[$album];
+              foreach ($albumlist as $fullfolder => $albumtitle) {
                 $singlefolder = $fullfolder;
                 $saprefix = "";
                 $salevel = 0;
@@ -985,8 +983,8 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                   $saprefix = "&nbsp; &nbsp;&raquo;&nbsp;" . $saprefix;
                   $salevel++;
                 }
-                echo '<option value="' . $folderlist[$album] . '"' . ($salevel > 0 ? ' style="background-color: '.$bglevels[$salevel].'; border-bottom: 1px dotted #ccc;"' : '')
-                  . "$selected>" . $saprefix . $album . " (" . $singlefolder . ')' . "</option>\n";
+                echo '<option value="' . $fullfolder . '"' . ($salevel > 0 ? ' style="background-color: '.$bglevels[$salevel].'; border-bottom: 1px dotted #ccc;"' : '')
+                  . "$selected>" . $saprefix . $singlefolder . " (" . $albumtitle . ')' . "</option>\n";
               }
             ?>
           </select>
