@@ -520,17 +520,27 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 
 /** Get the URL of the next album in the gallery. */
 function getNextAlbumURL() {
-  if(!in_context(ZP_ALBUM)) return false;
-  global $_zp_current_album;
-  $nextalbum = $_zp_current_album->getNextAlbum();
-  return rewrite_path("/" . pathurlencode($nextalbum->name),
-    "/index.php?album=" . urlencode($nextalbum->name));
+  global $_zp_current_album, $_zp_current_search;
+  if (in_context(ZP_SEARCH)) {
+    $nextalbum = $_zp_current_search->getNextAlbum();
+  } else if (in_context(ZP_ALBUM)) {
+    $nextalbum = $_zp_current_album->getNextAlbum();
+  } else {
+    return false;
+  }
+  return rewrite_path("/" . pathurlencode($nextalbum->name) . empty($from) ? '' : "?$fromsearch",
+    "/index.php?album=" . urlencode($nextalbum->name) . empty($from) ? '' : "&$fromsearch");
 }
 
 function getPrevAlbumURL() {
-  if(!in_context(ZP_ALBUM)) return false;
-  global $_zp_current_album;
-  $prevalbum = $_zp_current_album->getPrevAlbum();
+  global $_zp_current_album, $_zp_current_search;
+  if (in_context(ZP_SEARCH)) {
+    $prevalbum = $_zp_current_search->getPrevAlbum();
+  } else if(in_context(ZP_ALBUM)) {
+    $prevalbum = $_zp_current_album->getPrevAlbum();
+  } else {
+    return false;
+  }
   return rewrite_path("/" . pathurlencode($prevalbum->name),
     "/index.php?album=" . urlencode($prevalbum->name));
 }
@@ -785,16 +795,16 @@ function getNextImageURL() {
   if(!in_context(ZP_IMAGE)) return false;
   global $_zp_current_album, $_zp_current_image;
   $nextimg = $_zp_current_image->getNextImage();
-  return rewrite_path("/" . pathurlencode($_zp_current_album->name) . "/" . urlencode($nextimg->filename) . im_suffix(),
-    "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($nextimg->filename));
+  return rewrite_path("/" . pathurlencode($nextimg->album->name) . "/" . urlencode($nextimg->filename) . im_suffix(),
+    "/index.php?album=" . urlencode($nextimg->album->name) . "&image=" . urlencode($nextimg->filename));
 }
 
 function getPrevImageURL() {
   if(!in_context(ZP_IMAGE)) return false;
   global $_zp_current_album, $_zp_current_image;
   $previmg = $_zp_current_image->getPrevImage();
-  return rewrite_path("/" . pathurlencode($_zp_current_album->name) . "/" . urlencode($previmg->filename) . im_suffix(),
-    "/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($previmg->filename));
+  return rewrite_path("/" . pathurlencode($previmg->album->name) . "/" . urlencode($previmg->filename) . im_suffix(),
+    "/index.php?album=" . urlencode($previmg->album->name) . "&image=" . urlencode($previmg->filename));
 }
 
 

@@ -25,19 +25,39 @@ var $albums;
 function SearchEngine() {
   $this->words = $this->getSearchWords();
   $this->dates = $this->getSearchDate();
+  $this->fields = $this->getQueryFields();
   $this->images = null;  
   $this->albums = null;
   }
 /******************************************************************/
 function getSearchParams() {
   $r = '';
-  $w = $this->getSearchWords();
+  $w = $this->words;
   if (!empty($w)) { $r .= '&words=' . $w; }
-  $d = $this->getSearchDate();
+  $d = $this->dates;
   if (!empty($d)) { $r .= '&date=' . $d; }
-  $f = $this->getQueryFields();
+  $f = $this->fields;
   if (!empty($f)) { $r .= '&searchfields=' . $f; }
   return $r;
+}
+function setSearchParams($paramstr) {
+  $params = explode('&', $paramstr);
+  foreach ($params as $param) {
+    $e = strpos($param, '=');
+	$p = substr($param, 0, $e);
+	$v = substr($param, $e + 1);
+    switch($p) {
+	  case 'words':
+	  $this->words = $v;
+	  break;
+	  case 'date':
+	  $this->dates = $v;
+	  break;
+	  case 'searchfields':
+	  $this->fields = $v;
+	  break;
+    }
+  }
 }
 /******************************************************************/
 function getSearchWords() {
@@ -200,7 +220,7 @@ function getSearchAlbums() {
   $albums = array();
   $searchstring = $this->getSearchString(); 
   if (empty($searchstring)) { return $albums; } // nothing to find
-  $sql = $this->getSearchSQL($searchstring, '', 'albums', $this->getQueryFields());
+  $sql = $this->getSearchSQL($searchstring, '', 'albums', $this->fields);
   if (empty($sql)) { return $albums; } // no valid fields
   $albumfolder = getAlbumFolder();
   $search_results = query_full_array($sql); 
@@ -225,6 +245,24 @@ function getAlbums($page=0) {
       return array_slice($this->albums, $albums_per_page*($page-1), $albums_per_page);
     }  
   }
+  
+  function getNextAlbum() {
+    $albums = $this->getAlbums(0);
+    $inx = array_search($this->name, $albums)+1;
+    if ($inx >= 0 && $inx < count($albums)) {
+      return new Album($parent, $albums[$inx]);
+    } 
+    return null;
+  }
+  
+  function getPrevAlbum() {
+     $albums = $this->getAlbums(0);
+    $inx = array_search($this->name, $albums)-1;
+    if ($inx >= 0 && $inx < count($albums)) {
+      return new Album($paraent, $albums[$inx]);
+    } 
+    return null;
+  }
 
 /******************************************************************/
 function getNumImages() {
@@ -238,9 +276,9 @@ function getSearchImages() {
   global $_zp_current_gallery;
   $images = array();
   $searchstring = $this->getSearchString();
-  $searchdate = $this->getSearchDate();
+  $searchdate = $this->dates;
   if (empty($searchstring) && empty($searchdate)) { return $images; } // nothing to find
-  $sql = $this->getSearchSQL($searchstring, $searchdate, 'images', $this->getQueryFields());
+  $sql = $this->getSearchSQL($searchstring, $searchdate, 'images', $this->fields);
   if (empty($sql)) { return $images; } // no valid fields
   $albumfolder = getAlbumFolder();
   $search_results = query_full_array($sql); 
@@ -281,7 +319,16 @@ function getImages($page=0, $firstPageCount=0) {
     return $slice;
     }
   }
-
+  function getImage($index) {
+    global $_zp_gallery;
+    if ($index >= 0 && $index < $this->getNumImages()) {
+      if (!is_null($this->images)) {
+		$img = $this->images[$index];
+        return new Image(new Album($_zp_gallery, $img['folder']), $img['filename']);
+      }
+    }
+    return false;
+  }
 
 } // search class end
 

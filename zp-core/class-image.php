@@ -420,33 +420,48 @@ class Image extends PersistentObject {
         ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($this->filename) . '&s=thumb');
     }
   }
-  
-  
-  
-  /** 
+
+/** 
    * Get the index of this image in the album, taking sorting into account.
    *
    */
   function getIndex() {
+    global $_zp_current_search;
     if ($this->index == NULL) {
-      $images = $this->album->getImages(0);
-      $i=0;
-      for ($i=0; $i < count($images); $i++) {
-        $image = $images[$i];
-        if ($this->filename == $image) {
-          $this->index = $i;
-          break;
-        }
-      } 
+      if (in_context(ZP_SEARCH)) {
+	    $images =  $_zp_current_search->getImages(0);
+        $i=0;
+        for ($i=0; $i < count($images); $i++) {
+          $image = $images[$i];
+          if ($this->filename == $image['filename']) {
+            $this->index = $i;
+            break;
+          }
+        } 
+	  } else {
+	    $images =  $this->album->getImages(0);
+        $i=0;
+        for ($i=0; $i < count($images); $i++) {
+          $image = $images[$i];
+          if ($this->filename == $image) {
+            $this->index = $i;
+            break;
+          }
+        } 
+	  }
     }
     return $this->index;
   }
 
   // Returns the next Image.
   function getNextImage() {
-    $this->getIndex();
-    $image = $this->album->getImage($this->index+1);
-    
+    global $_zp_current_search;
+    $index = $this->getIndex() + 1;
+	if (in_context(ZP_SEARCH)) {
+      $image = $_zp_current_search->getImage($this->index+1);
+	} else {
+      $image = $this->album->getImage($this->index+1);
+    }
     if ($image != NULL) {
       return $image;
     } else {
@@ -456,8 +471,13 @@ class Image extends PersistentObject {
   
   // Return the previous Image
   function getPrevImage() {
+    global $_zp_current_search;
     $this->getIndex();
-    $image = $this->album->getImage($this->index-1);
+	if (in_context(ZP_SEARCH)) {
+      $image = $_zp_current_search->getImage($this->index-1);
+	} else {
+      $image = $this->album->getImage($this->index-1);
+	}
     
     if ($image != NULL) {
       return $image;

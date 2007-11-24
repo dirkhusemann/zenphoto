@@ -230,6 +230,7 @@ function zp_load_search() {
   if ($_zp_current_search == NULL)
     $_zp_current_search = new SearchEngine();
   set_context(ZP_INDEX | ZP_SEARCH);
+  setOption('search_params', $_zp_current_search->getSearchParams());
   return $_zp_current_search;
 }
 
@@ -256,12 +257,21 @@ function zp_load_album($folder, $force_nocache=false) {
  * @return the loaded album object on success, or (===false) on failure.
  */
 function zp_load_image($folder, $filename) {
-  global $_zp_current_image, $_zp_current_album;
+  global $_zp_current_image, $_zp_current_album, $_zp_current_search;
   if ($_zp_current_album == NULL || $_zp_current_album->name != $folder)
     $album = zp_load_album($folder);
   $_zp_current_image = new Image($album, $filename);
   if (!$_zp_current_image->exists) return false;
-  set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX);
+  $params = getOption('search_params');
+  if (!empty($params)) {
+    if ($_zp_current_search == NULL) {
+      $_zp_current_search = new SearchEngine();
+	}
+    set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX | ZP_SEARCH);
+	$_zp_current_search->setSearchParams($params);
+  } else {
+    set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX);
+  }
   return $_zp_current_image;
 }
 
