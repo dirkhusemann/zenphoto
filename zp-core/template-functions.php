@@ -558,11 +558,20 @@ function getNumImages() {
     return $_zp_current_album->getNumImages();
   }
 }
-
-function next_image($all=false, $firstPageCount=0, $sorttype=null) { 
+/**
+ * returns the next image on a page.
+ * sets $_zp_current_image to the next image in the album.
+ *@param bool $param1 set to true disable pagination
+ *@paaram int $param2 the number of images which can go on the page that transitions between albums and images
+ *@param string $param3 overrides the default sort type
+ *@param bool overrides the password chedk
+ *@return true if there is an image to be shown
+ */
+function next_image($all=false, $firstPageCount=0, $sorttype=null, $overridePassword=false) { 
   global $_zp_images, $_zp_current_image, $_zp_current_album, $_zp_page, $_zp_current_image_restore, 
          $_zp_conf_vars, $_zp_current_search, $_zp_gallery;
-  if (checkforPassword()) { return false; }
+		 
+  if (!$overridePassword) { if (checkforPassword()) { return false; } }
   $imagePageOffset = getTotalPages(true) - 1; /* gives us the count of pages for album thumbs */
   if ($all) { 
     $imagePage = 1;
@@ -1972,6 +1981,7 @@ function normalizeColumns($albumColumns, $imageColumns) {
  */
 function checkforPassword() {
   global $_zp_current_album, $_zp_current_search, $_zp_album_authorized;
+  if (ZP_loggedin()) { return false; }  // you're the admin, you don't need the passwords.
   if (in_context(ZP_SEARCH)) {
     $hash = getOption('search_password');
     if (!is_null($hash)) {

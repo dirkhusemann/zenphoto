@@ -253,7 +253,7 @@ if ($_GET['format'] != 'xml') {
 		</div>
 	    <?php 
 	      } else {  /* flash */
-	       if (isImagePage()) {
+	       if (isImagePage() && !checkforPassword()) {
 	    ?>
 <!-- Simpleviewer section -->
 			<div id="flash">
@@ -350,7 +350,7 @@ printThemeInfo();
     $stagePadding.'" thumbnailColumns="'.$thumbnailColumns.'" thumbnailRows="'.$thumbnailRows.'" navPosition="'.
     $navPosition.'" enableRightClickOpen="'.$enableRightClickOpen.'" backgroundImagePath="'.$backgroundImagePath.
     '" imagePath="'.$path.'" thumbPath="'.$path.'">'; 
-  while (next_image(true)){ 
+  while (next_image(true, 0, NULL, true)){ 
     if (!getImageVideo()) {  // simpleviewer does not do videos
 ?>
       <image><filename><?php echo getDefaultSizedImage();?></filename>
