@@ -20,7 +20,6 @@ if (in_context(ZP_IMAGE)) {
 } else if (in_context(ZP_INDEX)) {
   if (isset($_GET['p'])) {
     $page = str_replace(array('/','\\','.'), '', $_GET['p']);
-	if ($page == "search") { zp_load_search(); }
     include("$themepath/$theme/$page.php");
   } else {
     include("$themepath/$theme/index.php");

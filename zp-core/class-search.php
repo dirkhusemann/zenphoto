@@ -28,7 +28,17 @@ function SearchEngine() {
   $this->images = null;  
   $this->albums = null;
   }
-
+/******************************************************************/
+function getSearchParams() {
+  $r = '';
+  $w = $this->getSearchWords();
+  if (!empty($w)) { $r .= '&words=' . $w; }
+  $d = $this->getSearchDate();
+  if (!empty($d)) { $r .= '&date=' . $d; }
+  $f = $this->getQueryFields();
+  if (!empty($f)) { $r .= '&searchfields=' . $f; }
+  return $r;
+}
 /******************************************************************/
 function getSearchWords() {
   $this->words = $_REQUEST['words'];

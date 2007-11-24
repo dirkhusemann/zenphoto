@@ -2027,11 +2027,7 @@ function printPasswordForm($hint) {
   }
   $action = "#";
   if (in_context(ZP_SEARCH)) { 
-    $action = "?p=search";
-	$s = $_zp_current_search->getSearchWords(); 
-	if (!empty($s)) { $acation .= "&words=$s"; }
-	$d = $_zp_current_search->getSearchDate();
-	if (!empty($d)) { $action .= "&date=$d"; }
+    $action = "?p=search" . $_zp_current_search->getSearchParams(); 
   }
   echo "\n<p>The page you are trying to view is password protected.</p>";
   echo "\n<br/>";

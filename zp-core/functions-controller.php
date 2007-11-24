@@ -275,6 +275,10 @@ function zp_load_request() {
   } else if (!empty($album)) {
     $success = zp_load_album($album);
   }
+  if (isset($_GET['p'])) {
+    $page = str_replace(array('/','\\','.'), '', $_GET['p']);
+	if ($page == "search") { zp_load_search(); }
+  } 
   // Error message for objects not found.
   if ($success === false) {
     // Replace this with a redirect to an error page in the theme if it exists, or a default ZP error page.
