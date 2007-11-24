@@ -13,7 +13,8 @@ $standardOptions = array('gallery_title','website_title','website_url','time_off
                          'albums_per_page','images_per_page','perform_watermark', 
                          'watermark_image','adminuser','adminpass','current_theme', 'spam_filter',
                          'email_new_comments', 'perform_video_watermark', 'video_watermark_image',
-                         'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'search_fields');
+                         'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'search_fields',
+						 'password');
           
 global $_zp_null_account;
 if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action handling first. */
@@ -38,6 +39,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
 /** SAVE **********************************************************************/
 /*****************************************************************************/
     if ($action == "save") {
+	  $notify = '';
 /** SAVE A SINGLE ALBUM *******************************************************/
       if ($_POST['album']) {
       
@@ -57,6 +59,18 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
           $album->setSortDirection('image', strip($_POST['image_sortdirection']));   
           $album->setSubalbumSortType(strip($_POST['subalbumsortby']));   
           $album->setSortDirection('album', strip($_POST['album_sortdirection']));   
+	      if ($_POST['albumpass'] == $_POST['albumpass_2']) {
+		    $pwd = trim($_POST['albumpass']);
+		    if (empty($pwd)) {  
+		      if (empty($_POST['albumpass'])) {
+                $album->setPassword(NULL);  // clear the gallery password
+			  }
+		    } else {
+              $album->setPassword($pwd);
+		    }
+	      } else {
+	        $notify = '&mismatch=album';
+	      }
           $album->save();
         }
 
@@ -103,7 +117,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         $folder = queryDecode(strip($_GET['album']));
         $qs_albumsuffix = '&album='.urlencode($folder);
       }
-      header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit' . $qs_albumsuffix . '&saved');  
+      header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit' . $qs_albumsuffix . $notify . '&saved');  
       exit();
 
 /** DELETION ******************************************************************/
@@ -299,13 +313,13 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
     } else if ($action == 'saveoptions') {
 	  $wm = getOption('perform_watermark');
 	  $vwm = getOption('perform_video_watermark');
+	  $notify = '';
       $returntab = "";
 	  /*** admin options ***/
 	  if (isset($_POST['saveadminoptions'])) {
 	    if ($_POST['adminpass'] == $_POST['adminpass_2']) {
           setOption('adminuser', $_POST['adminuser']);
           setOption('adminpass', $_POST['adminpass']);
-	      $notify = '';
 	    } else {
 	      $notify = '&mismatch';
 	    }
@@ -334,6 +348,30 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         $search = new SearchEngine();
 	    setOption('search_fields', 32767); // make SearchEngine allow all options so getQueryFields() will gives back what was choosen this time
         setOption('search_fields', $search->getQueryFields());	
+	    if ($_POST['gallerypass'] == $_POST['gallerypass_2']) {
+		  $pwd = trim($_POST['gallerypass']);
+		  if (empty($pwd)) {  
+		    if (empty($_POST['gallerypass'])) {
+              setOption('gallery_password', NULL);  // clear the gallery password
+			}
+		  } else {
+            setOption('gallery_password', md5($pwd));
+		  }
+	    } else {
+	      $notify = '&mismatch=gallery';
+	    }
+	    if ($_POST['searchpass'] == $_POST['searchpass_2']) {
+		  $pwd = trim($_POST['searchpass']);
+		  if (empty($pwd)) {  
+		    if (empty($_POST['searchpass'])) {
+              setOption('search_password', NULL);  // clear the gallery password
+			}
+		  } else {
+            setOption('search_password', md5($pwd));
+		  }
+	    } else {
+	      $notify = '&mismatch=search';
+	    }
 		$returntab = "#tab_gallery";
 	  }
 	  /*** Image options ***/
@@ -489,10 +527,20 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         </p>
         
         <?php displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */ ?>
-        <?php if (isset($_GET['saved'])) { ?>
+        <?php 
+		if (isset($_GET['saved'])) { 
+		  if (isset($_GET['mismatch'])) {
+		?>
+          <div class="errorbox" id="message1"> 
+            <h2>Your passwords did not match</h2>
+          </div>
+	    <?php
+		  } else { 
+		?>
           <div class="messagebox" id="message1"> 
             <h2>Save Successful</h2>
           </div>
+		<?php } ?>
           <script type="text/javascript">
             window.setTimeout('Effect.Fade($(\'message1\'))', 2500);
           </script>
@@ -513,6 +561,16 @@ if (!zp_loggedin()  && !$_zp_null_account) {
             <table>
               <tr><td align="right" valign="top">Album Title: </td> <td><input type="text" name="albumtitle" value="<?php echo $album->getTitle(); ?>" /></td></tr>
               <tr><td align="right" valign="top">Album Description: </td> <td><textarea name="albumdesc" cols="60" rows="6"><?php echo $album->getDesc(); ?></textarea></td></tr>
+              <tr>		
+			    <td>Album password</td>
+				<td>
+					<?php $x = $album->getPassword(); if (!empty($x)) { $x = '          '; } ?>
+					<input type="password" size="40" name="albumpass"
+            		value="<?php echo $x; ?>" /><br/>
+					<input type="password" size="40" name="albumpass_2"
+            		value="<?php echo $x; ?>" />
+				</td>
+			  </tr>
               <tr><td align="right" valign="top">Tags: </td> <td><input type="text" name="albumtags" class="tags" value="<?php echo $album->getTags(); ?>" /></td></tr>
               <tr><td align="right" valign="top">Date: </td> <td><input type="text" name="albumdate" value="<?php $d=$album->getDateTime(); if ($d!='0000-00-00 00:00:00') { echo $d; }?>" /></td></tr>
               <tr><td align="right" valign="top">Location: </td> <td><input type="text" name="albumplace" value="<?php echo $album->getPlace(); ?>" /></td></tr>
@@ -1182,6 +1240,16 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 			<div class="panel" id="tab_gallery">
 				<form action="?page=options&action=saveoptions" method="post">
 				<input type="hidden" name="savegalleryoptions" value="yes" />
+				<?php
+	  			if (isset($_GET['mismatch'])) {
+	  			  echo '<div class="errorbox" id="message">'; 
+	    		  echo  "<h2>Your " . $_GET['mismatch'] . " passwords did not match</h2>";  
+	    		  echo '</div>'; 
+	    		  echo '<script type="text/javascript">'; 
+	    		  echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);"; 
+	    		  echo "</script>\n"; 
+      			}
+	  			?>
 				<table class="bordered">
          			<tr> 
                			<th colspan="3"><h2>General Gallery Configuration</h2></th>
@@ -1190,6 +1258,28 @@ if (!zp_loggedin()  && !$_zp_null_account) {
             			<td width="175">Gallery title:</td>
             			<td width="200"><input type="text" size="40" name="gallery_title" value="<?php echo getOption('gallery_title');?>" /></td>
             			<td>What you want to call your photo gallery.</td>
+        			</tr>
+        			<tr>
+            			<td>Gallery password:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(repeat) </p></td>
+            			<td>
+						    <?php $x = getOption('gallery_password'); if (!empty($x)) { $x = '          '; } ?>
+							<input type="password" size="40" name="gallerypass"
+            				value="<?php echo $x; ?>" /><br/>
+							<input type="password" size="40" name="gallerypass_2"
+            				value="<?php echo $x; ?>" />
+						</td>
+            			<td>Master password for the gallery. If this is set, visitors must know this password to view the gallery.</td>
+        			</tr>
+        			<tr>
+            			<td>Search password:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(repeat) </p></td>
+            			<td>
+						    <?php $x = getOption('search_password'); if (!empty($x)) { $x = '          '; } ?>
+							<input type="password" size="40" name="searchpass"
+            				value="<?php echo $x; ?>" /><br/>
+							<input type="password" size="40" name="searchpass_2"
+            				value="<?php echo $x; ?>" />
+						</td>
+            			<td>Password for the searching. If this is set, visitors must know this password to view search results.</td>
         			</tr>
         			<tr>
             			<td>Website title:</td>

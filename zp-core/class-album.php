@@ -49,11 +49,13 @@ class Album extends PersistentObject {
       $this->set('album_sortdirection',$parentalbum->getSortDirection('album'));
       $this->set('sort_type', $parentalbum->getSortType());
       $this->set('image_sortdirection', $parentalbum->getSortDirection('image'));   
+	  $this->set('password', $parentalbum->getPassword());
     } else {
 	  $this->set('subalbum_sort_type', getOption('gallery_sorttype'));
 	  $this->set('album_sortdirection',getOption('gallery_sortdirection'));
 	  $this->set('sort_type', getOption('image_sorttype'));
 	  $this->set('image_sortdirection',getOption('image_sortdirection'));
+	  $this->set('password', getOption('gallery_password'));
 	}
     $this->set('title', $title);
     
@@ -81,6 +83,26 @@ class Album extends PersistentObject {
       return $this->parentalbum;
     }
     return NULL;   
+  }
+  // password
+  function getPassword() { 
+    $pwd = $this->get('password');
+	if (is_null($pwd)) {
+	  $parentalbum = $this->getParent();
+	  if (is_null($parentalbum)) {
+	    $pwd = getOption('gallery_password');
+	  } else {
+        $pwd = $parentalbum->getPassword();
+	  }
+	}
+    return $pwd; 
+  }
+  function setPassword($pwd) { 
+    if (empty($pwd)) {
+	  $this->set('password', NULL);
+	} else {
+      $this->set('password', md5($pwd)); 
+	}
   }
   
   // Title

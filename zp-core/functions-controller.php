@@ -155,6 +155,51 @@ function zp_handle_comment() {
   return $error;
 }
 
+/**
+ *checks for album password posting
+ */
+function zp_handle_password() {
+  global $_zp_current_album, $_zp_album_authorized;
+  if (in_context(ZP_SEARCH)) {
+    $authType = 'zp_search_auth';
+	$check_auth = getOption('search_password');
+  } else if (in_context(ZP_ALBUM)) {
+    $authType = "zp_album_auth_" . $_zp_current_album->name;
+	$check_auth = $_zp_current_album->getPassword();
+  } else {
+    $authType = 'zp_gallery_auth';
+	$check_auth = getOption('search_password');
+  }
+  $_zp_album_authorized = NULL;
+  if (is_null($check_auth)) { //no password on record
+	return;
+  }
+  if (isset($_COOKIE[$authType])) {
+    $saved_auth = $_COOKIE[$authType];
+    if ($saved_auth == $check_auth) {
+      $_zp_album_authorized = $saved_auth;
+    } else {
+      // Clear the cookie
+      setcookie($authType, "", time()-368000, $cookiepath);
+    }
+  } else {
+    // Handle the login form.
+    if (isset($_POST['password']) && isset($_POST['pass'])) {
+      $pass = md5($_POST['pass']);
+      if ($pass == $check_auth) {
+        // Correct auth info. Set the cookie.
+        setcookie($authType, $pass, time()+5184000, $cookiepath);
+        $_zp_album_authorized = $pass;
+      } else {
+       // Clear the cookie, just in case
+        setcookie($authType, "", time()-368000, $cookiepath);
+        $error = true;
+      }
+    }
+  }
+}
+
+
 function zp_load_page($pagenum=NULL) {
   global $_zp_page;
   if (!is_numeric($pagenum)) {

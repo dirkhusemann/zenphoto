@@ -174,6 +174,7 @@ function getNumAlbums() {
  */
 function next_album($all=false, $sorttype=null) {
   global $_zp_albums, $_zp_gallery, $_zp_current_album, $_zp_page, $_zp_current_album_restore, $_zp_current_search;
+  if (checkforPassword()) { return false; }
   if (is_null($_zp_albums)) {
     if (in_context(ZP_SEARCH)) {
 	  $_zp_albums = $_zp_current_search-> getAlbums($all ? 0 : $_zp_page);
@@ -561,6 +562,7 @@ function getNumImages() {
 function next_image($all=false, $firstPageCount=0, $sorttype=null) { 
   global $_zp_images, $_zp_current_image, $_zp_current_album, $_zp_page, $_zp_current_image_restore, 
          $_zp_conf_vars, $_zp_current_search, $_zp_gallery;
+  if (checkforPassword()) { return false; }
   $imagePageOffset = getTotalPages(true) - 1; /* gives us the count of pages for album thumbs */
   if ($all) { 
     $imagePage = 1;
@@ -1617,7 +1619,9 @@ function printAllTagsAs($option,$class="",$sort="abc",$counter=FALSE,$links=TRUE
 function getAllDates() {
   $alldates = array();
   $cleandates = array();
-  $result = query_full_array("SELECT `date` FROM ". prefix('images') ." WHERE `show` = 1");
+  $sql = "SELECT `date` FROM ". prefix('images');
+  if (!zp_loggedin()) { $sql .= " WHERE `show` = 1"; }
+  $result = query_full_array($sql);
   foreach($result as $row){
 	$alldates[] = $row['date']; 
   }
@@ -1955,6 +1959,80 @@ function normalizeColumns($albumColumns, $imageColumns) {
   return false;
 }
 
+/************************************************************************************************
+ album password handling
+ ************************************************************************************************/
+ 
+/**
+ * checks to see if a password is needed
+ * displays a password form if log-on is required
+ *@return bool true if a login form has been displayed
+ *@since 1.1.3 
+ */
+function checkforPassword() {
+  global $_zp_current_album, $_zp_current_search, $_zp_album_authorized;
+  
+echo "<br/>_GET<br/>";print_r($_GET);
+
+  if (in_context(ZP_SEARCH)) {
+    $hash = getOption('search_password');
+    if (!is_null($hash)) {
+	  if ($_zp_album_authorized != $hash) {
+	    printPasswordForm();
+	    return true;
+	  }
+	}
+  } else if (isset($_GET['album'])) {
+     $hash = $_zp_current_album->getPassword();
+     if (!empty($hash)) {
+	    if ($_zp_album_authorized != $hash) {
+	      printPasswordForm();
+	      return true;
+	    }
+	  }
+    } else {
+      $hash = getOption('gallery_password');
+     if (!empty($hash)) {
+	    if ($_zp_album_authorized != $hash) {
+	      printPasswordForm();
+	      return true;
+	    }
+	  }
+	}
+
+  return false;
+}
+
+/**
+ * prints the album password form
+ *@since 1.1.3
+ */
+function printPasswordForm() {
+  global $error, $_zp_password_form_printed, $_zp_current_search;
+  if ($_zp_password_form_printed) { return; }
+  $_zp_password_form_printed = true;
+  if ($error) {
+    echo "<div class=\"errorbox\" id=\"message\"><h2>There was an error logging in.</h2> Check your username and password and try again.</div>";
+  }
+  $action = "#";
+  if (in_context(ZP_SEARCH)) { 
+    $action = "?p=search";
+	$s = $_zp_current_search->getSearchWords(); 
+	if (!empty($s)) { $acation .= "&words=$s"; }
+	$d = $_zp_current_search->getSearchDate();
+	if (!empty($d)) { $action .= "&date=$d"; }
+  }
+  echo "\n<p>The page you are trying to view is password protected.</p>";
+  echo "\n<br/>";
+  echo "\n  <form name=\"password\" action=\"$action\" method=\"POST\">";
+  echo "\n    <input type=\"hidden\" name=\"password\" value=\"1\" />";
+  
+  echo "\n    <table>";
+  echo "\n      <tr><td>Password</td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
+  echo "\n      <tr><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"Submit\" /></td></tr>";
+  echo "\n    </table>";
+  echo "\n  </form>";
+}
 /*** End template functions ***/
 
 ?>

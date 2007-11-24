@@ -40,6 +40,9 @@ $_zp_current_search_restore = NULL;
 // Handle the request for an image or album.
 zp_load_request();
 
+// handle any album passwords that might have been posted
+zp_handle_password();
+
 // Handle any comments that might be posted.
 zp_handle_comment();
 
