@@ -114,7 +114,7 @@ if (!ini_get("safe_mode")) {
   foreach($albumdirs as $dir) {
     $dir = SERVERCACHE . '/' . $dir;
     if (!is_dir($dir)) {
-      mkdir($dir, 0777);
+      @mkdir($dir, 0777);
       chmod($dir, 0777);
     } else if (!is_writable($dir)) {
       chmod($dir, 0777);
