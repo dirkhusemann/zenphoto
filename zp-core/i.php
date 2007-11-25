@@ -125,8 +125,9 @@ if (!ini_get("safe_mode")) {
 
 $process = true;
 // If the file exists, check its modification time and update as needed.
+$fmt = filemtime($imgfile);
 if (file_exists($newfile)) {
-  if (filemtime($newfile) < filemtime($imgfile)) {
+  if ($fmt = filemtime($newfile) < filemtime($imgfile)) {
     $process = true;
   } else {
     $process = false;
@@ -245,7 +246,7 @@ if ($process) {
 }
 if (!$debug) {
   // ... and redirect the browser to it.
-  header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($newfile)).' GMT');
+  header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $fmt).' GMT');
   header('Content-Type: image/jpeg');
   header('Location: ' . FULLWEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($newfilename), true, 301);
   exit();
