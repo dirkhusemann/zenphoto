@@ -159,6 +159,8 @@ function zp_handle_comment() {
  *checks for album password posting
  */
 function zp_handle_password() {
+  $cookiepath = WEBPATH;
+  if (WEBPATH == '') { $cookiepath = '/'; }
   global $error, $_zp_current_album, $_zp_album_authorized;
   if (in_context(ZP_SEARCH)) {
     $authType = 'zp_search_auth';
@@ -230,7 +232,9 @@ function zp_load_search() {
   if ($_zp_current_search == NULL)
     $_zp_current_search = new SearchEngine();
   set_context(ZP_INDEX | ZP_SEARCH);
-  setOption('search_params', $_zp_current_search->getSearchParams());
+  $cookiepath = WEBPATH;
+  if (WEBPATH == '') { $cookiepath = '/'; }
+  setcookie("zenphoto_search_params", $_zp_current_search->getSearchParams(), 0, $cookiepath);
   return $_zp_current_search;
 }
 
@@ -262,15 +266,17 @@ function zp_load_image($folder, $filename) {
     $album = zp_load_album($folder);
   $_zp_current_image = new Image($album, $filename);
   if (!$_zp_current_image->exists) return false;
-  $params = getOption('search_params');
-  if (!empty($params)) {
-    if ($_zp_current_search == NULL) {
-      $_zp_current_search = new SearchEngine();
+
+  set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX);
+  if (isset($_COOKIE['zenphoto_search_params'])) {
+    $params = $_COOKIE['zenphoto_search_params'];
+    if (!empty($params)) {
+      if ($_zp_current_search == NULL) {
+        $_zp_current_search = new SearchEngine();
+	  }
+      set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX | ZP_SEARCH);
+	  $_zp_current_search->setSearchParams($params);
 	}
-    set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX | ZP_SEARCH);
-	$_zp_current_search->setSearchParams($params);
-  } else {
-    set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX);
   }
   return $_zp_current_image;
 }

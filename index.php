@@ -17,7 +17,9 @@ if (in_context(ZP_IMAGE)) {
   if(isset($_GET['zipfile']) && is_dir(realpath('albums/' . $_GET['album']))){ 
   	createAlbumZip($_GET['album']); 
   } else { 
-    setOption('search_params', NULL);
+    $cookiepath = WEBPATH;
+    if (WEBPATH == '') { $cookiepath = '/'; }
+    setcookie("zenphoto_search_params", "", time()-368000, $cookiepath);
     include("$themepath/$theme/album.php"); 
   } 
 } else if (in_context(ZP_INDEX)) {

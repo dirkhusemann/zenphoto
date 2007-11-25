@@ -55,6 +55,5 @@ function setDefault($option, $default) {
   setDefault('current_theme', 'default');
   setDefault('feed_items', 10);
   setDefault('search_fields', 32767);
-  setDefault('search_params', NULL);
 
 ?>
