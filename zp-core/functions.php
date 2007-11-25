@@ -17,7 +17,7 @@ require_once('functions-db.php');
 $_zp_conf_vars['version'] = '1.1.2';
 
 // If the server protocol is not set, set it to the default (obscure zp-config.php change).
-if (!isset($_zp_conf_vars['server_protocol'])) $zp_conf_vars['server_protocol'] = 'http';
+if (!isset($_zp_conf_vars['server_protocol'])) $_zp_conf_vars['server_protocol'] = 'http';
 
 // the options array
 $_zp_options = NULL;

@@ -46,7 +46,7 @@ if (file_exists("zp-config.php")) {
 if (file_exists("zp-config.php")) {
   $credentials = getOption('adminuser').getOption('adminpass');
   if (!empty($credentials)) {
-    if (!zp_loggedin()  && (isset($_GET['upgrade']))) {  // Display the login form and exit.
+    if (!zp_loggedin()  && (!isset($_GET['upgrade']))) {  // Display the login form and exit.
       printLoginForm("/" . ZENFOLDER . "/upgrade.php");
       exit();
     }

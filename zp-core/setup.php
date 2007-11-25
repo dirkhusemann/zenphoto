@@ -3,6 +3,7 @@ if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 define('OFFSET_PATH', true);
 $setup = true;
 if (file_exists("zp-config.php")) {
+  require_once("zp-config.php");
   require_once('functions-db.php');
   if (db_connect() && !(isset($_GET['create']))) {
     $result = mysql_query("SELECT `name`, `value` FROM " . prefix('options') . " LIMIT 1", $mysql_connection);
@@ -46,8 +47,8 @@ if (file_exists("zp-config.php")) {
 if (file_exists("zp-config.php")) {
   $credentials = getOption('adminuser').getOption('adminpass');
   if (!empty($credentials)) {
-    if (!zp_loggedin() && !(isset($_GET['create']))) {  // Display the login form and exit.
-      printLoginForm("/" . ZENFOLDER . "/upgrade.php");
+    if (!zp_loggedin() && (!isset($_GET['create']))) {  // Display the login form and exit.
+      printLoginForm("/" . ZENFOLDER . "/setup.php");
       exit();
     }
   } 
