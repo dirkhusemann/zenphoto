@@ -988,7 +988,7 @@ function get35mmEquivFocalLength(&$result) {
   $xres = $result['SubIFD']['FocalPlaneXResolution'];
   $fl = $result['SubIFD']['FocalLength'];
   
-  if (!empty($units) && !empty($xres) && !empty($fl) && !empty($width)) {
+  if (($width != 0) && !empty($units) && !empty($xres) && !empty($fl) && !empty($width)) {
     $ccdwidth = ($width * $unitfactor) / $xres;
     $equivfl = $fl / $ccdwidth*36+0.5;
     return $equivfl;
