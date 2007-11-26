@@ -4,13 +4,13 @@ require_once(ZENFOLDER . "/template-functions.php");
 $themepath = 'themes';
 $theme = $_zp_gallery->getCurrentTheme();
 $_zp_themeroot = WEBPATH . "/$themepath/$theme";
-
 if (!(false === ($requirePath = getPlugin('themeoptions.php', true)))) {
   require_once($requirePath);
   $optionHandler = new ThemeOptions(); /* prime the theme options */
 }
 
 header ('Content-Type: text/html; charset=' . getOption('charset'));
+
 if (in_context(ZP_IMAGE)) {
   include("$themepath/$theme/image.php");
 } else if (in_context(ZP_ALBUM)) {
@@ -30,6 +30,7 @@ if (in_context(ZP_IMAGE)) {
     include("$themepath/$theme/index.php");
   }
 }
+echo "\n<!-- zenphoto version " . getOption('version') . " Theme: " . $theme . " -->";
 
 
 ?>
