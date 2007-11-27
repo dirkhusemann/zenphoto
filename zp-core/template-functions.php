@@ -1541,7 +1541,7 @@ function printTags($option="links",$preText=NULL,$class='taglist',$separator=", 
       for ($x = 0; $x < $ct; $x++) {
         if ($x === $ct - 1) { $separator = ""; }
         if ($option === "links") {
-          $links1 = "<a href=\"".WEBPATH.getSearchURL($singletag[$x], '', SEARCH_TAGS)."\" title=\"".$singletag[$x]."\">"; 
+          $links1 = "<a href=\"".getSearchURL($singletag[$x], '', SEARCH_TAGS)."\" title=\"".$singletag[$x]."\">"; 
           $links2 = "</a>"; 
 	    }
         echo "\t<li>".$links1.htmlspecialchars($singletag[$x]).$links2.$separator."</li>\n";
