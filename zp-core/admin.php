@@ -323,7 +323,14 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
 	  if (isset($_POST['saveadminoptions'])) {
 	    if ($_POST['adminpass'] == $_POST['adminpass_2']) {
           setOption('adminuser', $_POST['adminuser']);
-          setOption('adminpass', $_POST['adminpass']);
+		  $pwd = trim($_POST['adminpass']);
+		  if (empty($pwd)) {
+            setOption('adminpass', NULL);
+		  } else {
+            setOption('adminpass', md5($_POST['adminuser'] . $pwd));
+
+		  }
+		  setOption('admin_reset_date', '0');
 	    } else {
 	      $notify = '&mismatch';
 	    }
@@ -445,21 +452,12 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
   if (isset($_GET['page'])) { $page = $_GET['page']; } else if (empty($page)) { $page = "home"; }
   
 } else {
-  if (isset($_GET['emailpassword'])) {
-    $user = getOption('adminuser');
-	$pass = getOption('adminpass');
-	if (empty($user)) {
-	  $msg = "\nThe Admin user id has not been set. ";
-	} else {
-	  $msg = "\nYour user id is `$user`. ";
-	}
-	if (empty($pass)) {
-	  $msg .= "\nThe Admin password has not been set. ";
-	} else {
-	  $msg .= "\nYour password is `$pass`. ";
-	}
-	$msg .= "\nThis information was requested from the Admin Logon screen at ".FULLWEBPATH."/".ZENFOLDER."/admin.php.";
-
+  if (isset($_GET['emailreset'])) {
+	setOption('admin_reset_date', time());
+	$ref = md5(getOption('admin_reset_date') . getOption('adminuser') . getOption('adminpass'));
+	$msg .= "\nYou are receiving this e-mail becauseof a password reset request on your Zenphoto gallery." . 
+	        "\nTo reset your Zenphoto Admin password visit: ".FULLWEBPATH."/".ZENFOLDER."/admin.php?id=$ref" .
+            "\nIf you do not wish to reset your password just ignore this message.";
 	zp_mail('The Zenphoto information you requested',  $msg); 
   }
 }/* NO Admin-only content between this and the next check. */
@@ -487,7 +485,6 @@ if (issetPage('edit')) {
 // If they are not logged in, display the login form and exit
 
 if (!zp_loggedin()  && !$_zp_null_account) {
-  
   printLoginForm();
   exit(); 
     
@@ -501,7 +498,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
   <div id="content">
   <?php if ($_zp_null_account) {
     echo "<div class=\"errorbox space\">";
-    echo "<h2>You need to set your admin user and password.</h2>";
+    echo "<h2>You need to set your admin username and password.</h2>";
 	echo "</div>";
   }
   ?>
@@ -1214,10 +1211,11 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         			<tr>
             			<td>Admin password:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(repeat) </p></td>
             			<td>
+						    <?php $x = getOption('adminpass'); if (!empty($x)) { $x = '          '; } ?>
 							<input type="password" size="40" name="adminpass"
-            				value="<?php echo getOption('adminpass');?>" /><br/>
+            				value="<?php echo $x; ?>" /><br/>
 							<input type="password" size="40" name="adminpass_2"
-            				value="<?php echo getOption('adminpass');?>" />
+            				value="<?php echo $x; ?>" />
 						</td>
             			<td></td>
         			</tr>

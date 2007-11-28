@@ -159,7 +159,7 @@ function printLoginForm($redirect=null) {
   echo "\n  </form>";
   $email = getOption('admin_email');
   if (!empty($email)) {
-    echo "\n  <a href=\"?emailpassword\">Email my password</a>";
+    echo "\n  <a href=\"?emailreset\">Email password reset link</a>";
   }
   echo "\n  </div>";
   echo "\n</body>";

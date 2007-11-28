@@ -54,6 +54,14 @@ function setDefault($option, $default) {
   setDefault('image_sortdirection', '0');
   setDefault('current_theme', 'default');
   setDefault('feed_items', 10);
-  setDefault('search_fields', 32767);
+  setDefault('search_fields', 32767);  
+  
+  $md5 = getOption('md5_password');
+  if (empty($md5)) {
+    setOption('adminpass', ""); // force setting the password.
+  }  
+  
+  setOption('md5_password', 1);  
+
 
 ?>

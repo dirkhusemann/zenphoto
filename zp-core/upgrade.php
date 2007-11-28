@@ -134,8 +134,9 @@ if (file_exists("zp-config.php")) {
       $needsrefresh = $gallery->garbageCollect(true, true);
 	  
 	  echo "<h3>Done!</h3>";
-	  $credentials = getOption('adminuser') . getOption('adminpass');
-	  if (empty($credentials)) {
+      $adm = getOption('adminuser');
+      $pas = getOption('adminpass');
+      if (empty($adm) || empty($pas)) {
         echo "<p>You need to <a href=\"admin.php?page=options\">set your admin user and password</a>.</p>";
 	  } else {
         echo "<p>You can now <a href=\"../\">View your gallery</a>, or <a href=\"admin.php\">administrate.</a></p>";

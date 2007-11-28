@@ -10,14 +10,22 @@ $_zp_null_account = false;
 // Fix the cookie's path for root installs.
 $cookiepath = WEBPATH;
 if (WEBPATH == '') { $cookiepath = '/'; }
-
-$credentials = getOption('adminuser') . getOption('adminpass');
-if (empty($credentials)) {
-  $_zp_null_account = true;  // no account setup yet
+$adm = getOption('adminuser');
+$pas = getOption('adminpass');
+if (isset($_GET['id'])) { // paassword reset query
+  $offer = $_GET['id'];
+  $ref = md5(getOption('admin_reset_date') . getOption('adminuser') . getOption('adminpass'));
+  if ($ref === $offer) {
+    setOption('adminpass', '');
+	$pas = '';
+  }
+}
+if (empty($adm) || empty($pas)) {
+  $_zp_null_account = true;  // account requires setup
 } 
-if (isset($_COOKIE['zenphoto_auth'])) {
+$check_auth = md5($adm . $pas);
+if (isset($_COOKIE['zenphoto_auth'])  && !isset($_POST['login'])) {
   $saved_auth = $_COOKIE['zenphoto_auth'];
-  $check_auth = md5(getOption("adminuser").getOption("adminpass"));
   if ($saved_auth == $check_auth) {
     $_zp_loggedin = true;
   } else {
@@ -27,12 +35,17 @@ if (isset($_COOKIE['zenphoto_auth'])) {
 } else {
   // Handle the login form.
   if (isset($_POST['login']) && isset($_POST['user']) && isset($_POST['pass'])) {
-    $user = $_POST['user'];
-    $pass = $_POST['pass'];
+    $post_user = $_POST['user'];
+	if ($_POST['pass'] == $pas) { // old cleartext password
+	  $post_pass = $_POST['pass'];
+      $_zp_null_account = true;  // require saving the credentials again to get password encrypted
+	} else { 
+	  $post_pass = md5($post_user . $_POST['pass']);
+	}
     $redirect = $_POST['redirect'];
-    if ($user == getOption("adminuser") && $pass == getOption("adminpass")) {
+    if (($adm == $post_user) && ($pas == $post_pass)) {
       // Correct auth info. Set the cookie.
-      setcookie("zenphoto_auth", md5($user.$pass), time()+5184000, $cookiepath);
+      setcookie("zenphoto_auth", md5($post_user . $post_pass), time()+5184000, $cookiepath);
       $_zp_loggedin = true;
       //// FIXME: Breaks IIS
       if (!empty($redirect)) { header("Location: " . FULLWEBPATH . $redirect); }
