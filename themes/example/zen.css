@@ -64,3 +64,44 @@ ul.archive #month {	font-size: 14px; list-style:none; border-top:2px solid #E6E6
 .taglist li { background: url(tag.png) no-repeat left center; list-style-type: none; line-height: 18px; padding-left: 18px; float:left; padding-right: 5px;}
 .taglist .tags_title { background: none; padding-right: 5px; padding-left: 0;}
 
+/* searchForm tag selection drop-down */
+#container {
+  width:500px;
+  margin:auto;
+  font-size:11pt;
+  text-align:left;
+}
+#menu {
+  position:absolute;
+  margin-top:0px;
+}
+#menu ul .item {
+  display:none;
+}
+#menu ul:hover .item {
+  display:block;
+  padding:1px;
+  margin:1px;
+}
+#menu ul:hover .item a {
+  color:#000;
+  text-decoration:none;
+}
+#menu ul:hover .item a:hover {
+  color:#999;
+}
+#menu ul {
+  width:20px;
+  float:left;
+  margin:0px;
+  padding:2px;
+  list-style:none;
+}
+#menu li {
+width:150px;
+}
+.clear {
+  clear:both;
+  height:10px;
+}
+

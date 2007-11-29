@@ -88,6 +88,8 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
               $image->setCity(strip($_POST["$i-city"])); 
               $image->setState(strip($_POST["$i-state"])); 
               $image->setCountry(strip($_POST["$i-country"])); 
+              $image->setCredit(strip($_POST["$i-credit"])); 			  
+			  $image->setCopyright(strip($_POST["$i-copyright"])); 			  			  
               $image->setTags(strip($_POST["$i-tags"])); 
               $image->setDateTime(strip($_POST["$i-date"]));  
               $image->setShow(strip($_POST["$i-Visible"]));  
@@ -739,6 +741,8 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                   <tr><td align="right" valign="top">City: </td> <td><input type="text" size="56" style="width: 360px" name="<?php echo $currentimage; ?>-city" value="<?php echo $image->getCity(); ?>" /></td></tr>
                   <tr><td align="right" valign="top">State: </td> <td><input type="text" size="56" style="width: 360px" name="<?php echo $currentimage; ?>-state" value="<?php echo $image->getState(); ?>" /></td></tr>
                   <tr><td align="right" valign="top">Country: </td> <td><input type="text" size="56" style="width: 360px" name="<?php echo $currentimage; ?>-country" value="<?php echo $image->getCountry(); ?>" /></td></tr>
+                  <tr><td align="right" valign="top">Credit: </td> <td><input type="text" size="56" style="width: 360px" name="<?php echo $currentimage; ?>-credit" value="<?php echo $image->getCredit(); ?>" /></td></tr>                 
+                  <tr><td align="right" valign="top">Copyright: </td> <td><input type="text" size="56" style="width: 360px" name="<?php echo $currentimage; ?>-copyright" value="<?php echo $image->getCopyright(); ?>" /></td></tr>
                   <tr><td align="right" valign="top">Tags: </td> <td><input type="text" size="56" style="width: 360px" name="<?php echo $currentimage; ?>-tags" value="<?php echo $image->getTags(); ?>" /></td></tr>
                   <tr><td align="right" valign="top">Date: </td> <td><input type="text" size="56" style="width: 360px" name="<?php echo $currentimage; ?>-date" value="<?php $d=$image->getDateTime(); if ($d!='0000-00-00 00:00:00') { echo $d; } ?>" /></td></tr>
                   <tr><td align="right" valign="top" colspan="2">

@@ -873,7 +873,24 @@ function getImageMetadata($imageName) {
 	  if (!empty($country)) {
 	    $result['country'] = $country;
 	  }
-	  
+ 	/* iptc credit */
+ 	$credit= getIPTCTag('2#080'); /* by-line */
+    if (empty($credit)) { 
+      $credit = getIPTCTag('2#110'); /* credit */
+    }	
+ 	if (empty($credit)) { 
+      $credit = getIPTCTag('2#115'); /* source */
+    }
+	if (!empty($credit)) { 
+      $result['credit'] = $credit;
+    }
+ 	
+ 	/* iptc copyright */
+ 	$copyright= getIPTCTag('2#116');
+    if (!empty($copyright)) { 
+      $result['copyright'] = $copyright;
+    }
+	
 	  /* iptc keywords (tags) */
       $keywords= getIPTCTag('2#025');
       if (!empty($keywords)) { 

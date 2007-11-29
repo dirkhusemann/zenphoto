@@ -669,8 +669,8 @@ list-style: none;
 #comments {
 	clear: both;
 	display: block;
-	margin: 10px 0 30px 0;
-	/*margin: 0 auto; width: 400px; (centers the comment area and forces 400px containment)*/
+	margin: 0 auto; 
+	width: 650px; 
 	text-align: left;
 }
 .error { 
@@ -826,4 +826,45 @@ ul.archive #month {
 	background: #67678B; 
 	font-size: 18px;
 	text-align: center;
+}
+
+/* searchForm tag selection drop-down */
+#container {
+  width:500px;
+  margin:auto;
+  font-size:11pt;
+  text-align:left;
+}
+#menu {
+  position:absolute;
+  margin-top:0px;
+}
+#menu ul .item {
+  display:none;
+}
+#menu ul:hover .item {
+  display:block;
+  padding:1px;
+  margin:1px;
+}
+#menu ul:hover .item a {
+  color:#000;
+  text-decoration:none;
+}
+#menu ul:hover .item a:hover {
+  color:#999;
+}
+#menu ul {
+  width:20px;
+  float:left;
+  margin:0px;
+  padding:2px;
+  list-style:none;
+}
+#menu li {
+width:150px;
+}
+.clear {
+  clear:both;
+  height:10px;
 }

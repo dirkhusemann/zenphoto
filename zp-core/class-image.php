@@ -92,6 +92,12 @@ class Image extends PersistentObject {
       if (isset($metadata['country'])) {
         $this->setCountry($metadata['country']); 
       }    
+      if (isset($metadata['credit'])) {
+        $this->setCredit($metadata['credit']); 
+      }    
+      if (isset($metadata['copyright'])) {
+        $this->setCopyright($metadata['copyright']); 
+      }    	  	  
       $this->set('mtime', filemtime($this->localpath));
       $this->save();
     }
@@ -189,6 +195,13 @@ class Image extends PersistentObject {
   function setState($state) { $this->set('state', $state); }
   function getCountry() { return $this->get('country'); }
   function setcountry($country) { $this->set('country', $country); }
+
+  // Copyright & Credit
+  function getCredit() { return $this->get('credit'); }
+  function setCredit($credit) { $this->set('credit', $credit); }
+ 
+  function getCopyright() { return $this->get('copyright'); }
+  function setCopyright($copyright) { $this->set('copyright', $copyright); }   
   
   // Tags
   function getTags() { return $this->get('tags'); }

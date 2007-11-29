@@ -123,6 +123,8 @@ if (file_exists("zp-config.php")) {
 	  `city` tinytext,
 	  `state` tinytext,
 	  `country` tinytext,
+	  `credit` tinytext,
+	  `copyright` tinytext,	  
 	  `tags` text,
       `commentson` int(1) NOT NULL default '1',
       `show` int(1) NOT NULL default '1',

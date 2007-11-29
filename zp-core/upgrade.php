@@ -96,6 +96,8 @@ if (file_exists("zp-config.php")) {
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `city` tinytext;";
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `state` tinytext;";
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `country` tinytext;";
+    $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `credit` tinytext;";
+    $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `copyright` tinytext;";	
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `date` datetime default NULL;";
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `tags` text;";
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `EXIFValid` int(1) UNSIGNED default NULL;";

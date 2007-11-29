@@ -752,7 +752,40 @@ function printImageDesc($editable=false) {
     echo "<div id=\"imageDesc\" style=\"display: block;\">" . getImageDesc() . "</div>\n";
   }
 }
+// function to print any Image Data
 
+function getImageData($field) {
+ if(!in_context(ZP_IMAGE)) return false;
+ global $_zp_current_image;
+ switch ($field) {
+   	case "location":
+		return $_zp_current_image->getLocation();
+		break;
+	case "city":
+		return $_zp_current_image->getCity();
+		break;
+	case "state":
+		return $_zp_current_image->getState();
+		break;
+    case "country":
+		return $_zp_current_image->getContry();
+		break;
+	case "credit":
+		return $_zp_current_image->getCredit();
+		break;
+	case "copyright":
+ 		return $_zp_current_image->getCopyright();
+ 		break;
+  }
+}
+ 
+function printImageData($field, $label) {
+  global $_zp_current_image;
+  if(getImageData($field)) { // only print it if there's something there 
+  	echo "<p class=\"metadata\"><strong>" . $label . "</strong> " . getImageData($field) . "</p>\n";
+  }
+}
+ 
 /**
  * Get the unique ID of this image.
  */
@@ -1810,61 +1843,73 @@ function getSearchURL($words, $dates, $fields=0) {
 }
 
 /**
- * prints the search form
- * @param string $prevtext text to go before the search form
- * @param bit $enableFieldSelect prints a drop down of searchable elements
- * @param string $id css id for the search form, default is 'search'
- * @return returns the css file name for the theme
- * @since 1.1
+ *prints the search form
+ *@param string $param1 text to go before the search form
+ *@param bit $param2 prints a drop down of searchable elements
+ *        = 0 all fields
+ *        = NULL means no drop-down selection
+ *@param string $param3 css id for the search form, default is 'search'
+ *@param bool $param4 controls emitting the css style
+ *@return returns nothing
+ *@since 1.1.3
  */
-function printSearchForm($prevtext=NULL, $enableFieldSelect=false, $id='search') { 
+function printSearchForm($prevtext=NULL, $fieldSelect=1, $id='search') { 
   $zf = WEBPATH."/".ZENFOLDER;
   $dataid = $id . '_data';
   $searchwords = (isset($_POST['words']) ? htmlspecialchars(stripslashes($_REQUEST['words'])) : ''); 
+  
   echo "\n<div id=\"search\">";
+  echo "\n<div id=\"container\">";
   echo "\n<form method=\"post\" action=\"".WEBPATH."/index.php?p=search\" id=\"search_form\">"; 
   echo "\n$prevtext<input type=\"text\" name=\"words\" value=\"".$searchwords."\" id=\"search_input\" size=\"10\" />"; 
   echo "\n<input type=\"submit\" value=\"Search\" class=\"pushbutton\" id=\"search_submit\" />"; 
-  $fields = getOption('search_fields');
+  
   $bits = array(SEARCH_TITLE, SEARCH_DESC, SEARCH_TAGS, SEARCH_FILENAME, SEARCH_LOCATION, SEARCH_CITY, SEARCH_STATE, SEARCH_COUNTRY);
+  if ($fieldSelect === 0) { $fieldSelect = 32767; }
+  $fields = getOption('search_fields') & $fieldSelect;
   $c = 0;
   foreach ($bits as $bit) {
     if ($bit & $fields) { $c++; }
     if ($c>1) break;
   }  
-  if ($enableFieldSelect && ($c>1)) {
-    echo "\n<script type=\"text/javascript\" src=\"".$zf."/js/admin.js\"></script>\n";
-    echo "\n".'<a href="javascript: toggle('. "'" .$dataid."'".');"><h3>Fields</h3></a>'; 
-    echo "\n".'<div id="' .$dataid. '" style="display: none;">'; 
+  if ($fieldSelect && ($c>1)) {
+    echo "\n<div id=\"menu\">";
+
+    echo "\n<ul id=\"item1\">";
+    echo "\n<li class=\"top\">&raquo;</li>";
 	if ($fields & SEARCH_TITLE) {
-      echo "\n<input type=\"checkbox\" name=\"sf_title\" value=1 checked> Title<br/>";
+      echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_title\" value=1 checked> Title</li>";
 	}
 	if ($fields & SEARCH_DESC) {
-      echo "\n<input type=\"checkbox\" name=\"sf_desc\" value=1 checked> Description<br/>";
+      echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_desc\" value=1 checked> Description</li>";
 	}
 	if ($fields & SEARCH_TAGS) {
-      echo "\n<input type=\"checkbox\" name=\"sf_tags\" value=1 checked> Tags<br/>";
+      echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_tags\" value=1 checked> Tags</li>";
 	}
 	if ($fields & SEARCH_FILENAME) {
-      echo "\n<input type=\"checkbox\" name=\"sf_filename\" value=1 checked> File/Folder name<br/>";
+      echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_filename\" value=1 checked> File/Folder name</li>";
 	}
 	if ($fields & SEARCH_LOCATION) {
-      echo "\n<input type=\"checkbox\" name=\"sf_location\" value=1 checked> Location<br/>";
+      echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_location\" value=1 checked> Location</li>";
 	}
 	if ($fields & SEARCH_CITY) {
-      echo "\n<input type=\"checkbox\" name=\"sf_city\" value=1 checked> City<br/>";
+      echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_city\" value=1 checked> City</li>";
 	}
 	if ($fields & SEARCH_STATE) {
-      echo "\n<input type=\"checkbox\" name=\"sf_state\" value=1 checked> State<br/>";
+      echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_state\" value=1 checked> State</li>";
 	}
 	if ($fields & SEARCH_COUNTRY) {
-      echo "\n<input type=\"checkbox\" name=\"sf_country\" value=1 checked> Country<br/>";
-	}
-      echo "\n</div>";
+      echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_country\" value=1 checked> Country</li>";
+	}    
+	echo "\n</ul>";
+
+    echo "\n<div class=\"clear\"></div>";
+    echo "\n</div>";  //menu
   }
   echo "\n</form>\n"; 
-  echo "\n</div>";
-echo "\n<!-- end of search form -->";
+  echo "\n</div>"; // container
+  echo "\n</div>";  // search
+  echo "\n<!-- end of search form -->\n";
 } 
 
 /**

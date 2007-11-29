@@ -358,6 +358,13 @@ class Gallery {
             if (isset($metadata['country'])) {
                $set .= ', `state`="' . mysql_real_escape_string($metadata['country']) . '"'; 
             }    
+ 			/* credit & copyright */
+ 	        if (isset($metadata['credit'])) {
+               $set .= ', `credit`="' . escape($metadata['credit']) . '"'; 
+            }    
+ 	        if (isset($metadata['copyright'])) {
+              $set .= ', `copyright`="' . escape($metadata['copyright']) . '"'; 
+			}    
           
             /* date (for sorting) */
             $newDate = strftime('%Y-%m-%d %T', filectime($imageName));

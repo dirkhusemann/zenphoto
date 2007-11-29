@@ -56,12 +56,11 @@ function setDefault($option, $default) {
   setDefault('feed_items', 10);
   setDefault('search_fields', 32767);  
   
-  $md5 = getOption('md5_password');
-  if (empty($md5)) {
+  if (!isset($_zp_conf_vars['admin_reset_date'])) {
     setOption('adminpass', ""); // force setting the password.
   }  
   
-  setOption('md5_password', 1);  
+  setOption('admin_reset_date', 1);  
 
 
 ?>

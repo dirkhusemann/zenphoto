@@ -312,14 +312,14 @@ body {
 //	color: #FFFCDB;
 }
 #header {
-background: #d8d6cf; /*the header area above the nav-bar*/
+    background: #d8d6cf; /*the header area above the nav-bar*/
 	text-align: left;
 	border: none;
 	padding: 0;
 	margin: 0;
 }
 #galleryheader {
-background: #0b9577; /*the header area above the nav-bar, single image view*/
+    background: #0b9577; /*the header area above the nav-bar, single image view*/
 	border: none;
 	padding: 0;
 	margin: 0;
@@ -331,7 +331,7 @@ background: #0b9577; /*the header area above the nav-bar, single image view*/
 	margin: 0 auto 0 auto;
 }
 #description {
-color: #98958f; /*text color for descriptions*/
+    color: #98958f; /*text color for descriptions*/
 	text-align: center;
 	padding: 7px 7px;
 	margin: 0px auto 0px auto;
@@ -388,11 +388,16 @@ color: #98958f; /*text color for descriptions*/
 #commentbox textarea:focus {
 	background: #fafaf9; /*Color of textarea when focused*/
 }
+/* Comments 
+------------------------------ */
 #comments {
-	clear: both;
-	display: block;
-	margin: 10px 0 30px 0;
+clear: both;
+display: block;
+margin: 0 auto; 
+width: 650px; 
+text-align: left;
 }
+
 .error {
 	color: #950b42;  /*Error message when a visitor forgets a field.*/
 	font-weight: bold;
@@ -768,4 +773,47 @@ ul.archive #month {
 	background: #eceae7;
 	font-size: 18px;
 	text-align: center;
+}
+
+/* searchForm tag selection drop-down */
+#container {
+  width:500px;
+  margin:auto;
+  font-size:11pt;
+  text-align:left;
+}
+#menu {
+  position:absolute;
+  margin-top:0px;
+  color: #7b7871;
+}
+#menu ul .item {
+  display:none;
+  color: #7b7871;
+}
+#menu ul:hover .item {
+  display:block;
+  padding:1px;
+  margin:1px;
+}
+#menu ul:hover .item a {
+  color:#000;
+  text-decoration:none;
+}
+#menu ul:hover .item a:hover {
+  color:#999;
+}
+#menu ul {
+  width:20px;
+  float:left;
+  margin:0px;
+  padding:2px;
+  list-style:none;
+}
+#menu li {
+width:150px;
+}
+.clear {
+  clear:both;
+  height:10px;
 }
