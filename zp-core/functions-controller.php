@@ -123,11 +123,22 @@ function fix_path_redirect() {
  
 function zp_handle_comment() {
   global $_zp_current_image, $stored, $error;
+  $redirectTo = FULLWEBPATH . '/' . zpurl();
   if (isset($_POST['comment'])) {
     if (in_context(ZP_IMAGE) && isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
       if (isset($_POST['website'])) $website = strip_tags($_POST['website']); else $website = "";
-      $commentadded = $_zp_current_image->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']), 
-          $website, kses($_POST['comment'], getOption('allowed_tags')));
+	     if(isset($_POST['imageid'])){       	
+	      	$activeImage = zp_load_image_from_id(strip_tags($_POST['imageid']));
+	      	if($activeImage !== false){
+	      		$commentadded = $activeImage->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']), 
+	          		$website, kses($_POST['comment'], getOption('allowed_tags')));
+	        	$redirectTo = $activeImage->getImageLink();
+	      	}
+	      } else {
+            $commentadded = $_zp_current_image->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']), 
+            $website, kses($_POST['comment'], getOption('allowed_tags')));
+	        	$redirectTo = $_zp_current_image->getImageLink();
+	      }   
       if ($commentadded == 2) {
         unset($error);
         if (isset($_POST['remember'])) {
@@ -137,8 +148,8 @@ function zp_handle_comment() {
         } else {
           setcookie('zenphoto', '', time()-368000, '/');
         }
-        // Redirect to this image page to prevent re-submission. 
-        header('Location: ' . FULLWEBPATH . '/' . zpurl());
+        //use $redirectTo to send users back to where they came from instead of booting them back to the gallery index. (default behaviour) 
+        header('Location: ' . $redirectTo); 
         exit;
       } else {
         $stored = array($_POST['name'], $_POST['email'], $website, $_POST['comment'], false);
@@ -279,6 +290,28 @@ function zp_load_image($folder, $filename) {
 	}
   }
   return $_zp_current_image;
+}
+
+/**
+ * zp_load_image_from_id - loads and returns the image "id" from the database, without
+ * altering the global context or zp_current_image.
+ * @param $id the database id-field of the image. 
+ * @return the loaded image object on success, or (===false) on failure.
+ */
+function zp_load_image_from_id($id){	
+	$sql = "SELECT `albumid`, `filename` FROM " .prefix('images') ." WHERE `id` = " . $id;
+	$result = query_single_row($sql);
+	$filename = $result['filename'];
+	$albumid = $result['albumid'];
+	
+	$sql = "SELECT `folder` FROM ". prefix('albums') ." WHERE `id` = " . $albumid;
+	$result = query_single_row($sql);	
+	$folder = $result['folder'];
+
+	$album = zp_load_album($folder);
+	$currentImage = new Image($album, $filename);
+	if (!$currentImage->exists) return false;	
+	return $currentImage; 
 }
 
 
