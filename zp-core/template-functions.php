@@ -1849,11 +1849,10 @@ function getSearchURL($words, $dates, $fields=0) {
  *        = 0 all fields
  *        = NULL means no drop-down selection
  *@param string $param3 css id for the search form, default is 'search'
- *@param bool $param4 controls emitting the css style
  *@return returns nothing
  *@since 1.1.3
  */
-function printSearchForm($prevtext=NULL, $fieldSelect=1, $id='search') { 
+function printSearchForm($prevtext=NULL, $fieldSelect=NULL, $id='search') { 
   $zf = WEBPATH."/".ZENFOLDER;
   $dataid = $id . '_data';
   $searchwords = (isset($_POST['words']) ? htmlspecialchars(stripslashes($_REQUEST['words'])) : ''); 
