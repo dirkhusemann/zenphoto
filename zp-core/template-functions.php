@@ -1867,46 +1867,46 @@ function printSearchForm($prevtext=NULL, $fieldSelect=0, $id='search') {
   $bits = array(SEARCH_TITLE, SEARCH_DESC, SEARCH_TAGS, SEARCH_FILENAME, SEARCH_LOCATION, SEARCH_CITY, SEARCH_STATE, SEARCH_COUNTRY);
   if ($fieldSelect === 0) { $fieldSelect = 32767; }
   $fields = getOption('search_fields') & $fieldSelect;
-if (false) {
+if (false) {//disable until it works in firefox
   $c = 0;
   foreach ($bits as $bit) {
     if ($bit & $fields) { $c++; }
     if ($c>1) break;
   }  
-  if ($fieldSelect && ($c>1)) {  //disable until it works in firefox
-    echo "\n<div id=\"menu\">";
+  if ($fieldSelect && ($c>1)) {  
+    echo "\n<div id=\"search_menu\">";
 
-    echo "\n<ul id=\"item1\">";
+    echo "\n<ul id=\"search_item1\">";
     echo "\n<li class=\"top\">&raquo;</li>";
 	if ($fields & SEARCH_TITLE) {
-      echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_title\" value=1 checked> Title</li>";
+      echo "\n<li class=\"search_item\"><input type=\"checkbox\" name=\"sf_title\" value=1 checked> Title</li>";
 	}
 	if ($fields & SEARCH_DESC) {
-      echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_desc\" value=1 checked> Description</li>";
+      echo "\n<li class=\"search_item\"><input type=\"checkbox\" name=\"sf_desc\" value=1 checked> Description</li>";
 	}
 	if ($fields & SEARCH_TAGS) {
-      echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_tags\" value=1 checked> Tags</li>";
+      echo "\n<li class=\"search_item\"><input type=\"checkbox\" name=\"sf_tags\" value=1 checked> Tags</li>";
 	}
 	if ($fields & SEARCH_FILENAME) {
-      echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_filename\" value=1 checked> File/Folder name</li>";
+      echo "\n<li class=\"search_item\"><input type=\"checkbox\" name=\"sf_filename\" value=1 checked> File/Folder name</li>";
 	}
 	if ($fields & SEARCH_LOCATION) {
-      echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_location\" value=1 checked> Location</li>";
+      echo "\n<li class=\"search_item\"><input type=\"checkbox\" name=\"sf_location\" value=1 checked> Location</li>";
 	}
 	if ($fields & SEARCH_CITY) {
-      echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_city\" value=1 checked> City</li>";
+      echo "\n<li class=\"search_item\"><input type=\"checkbox\" name=\"sf_city\" value=1 checked> City</li>";
 	}
 	if ($fields & SEARCH_STATE) {
-      echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_state\" value=1 checked> State</li>";
+      echo "\n<li class=\"search_item\"><input type=\"checkbox\" name=\"sf_state\" value=1 checked> State</li>";
 	}
 	if ($fields & SEARCH_COUNTRY) {
-      echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_country\" value=1 checked> Country</li>";
+      echo "\n<li class=\"search_item\"><input type=\"checkbox\" name=\"sf_country\" value=1 checked> Country</li>";
 	}    
 	echo "\n</ul>";
 
     echo "\n<div class=\"clear\"></div>";
-    echo "\n</div>";  //menu
-}
+    echo "\n</div>";  //search_menu
+}//end disable
   }
   echo "\n</form>\n"; 
   echo "\n</div>"; // container

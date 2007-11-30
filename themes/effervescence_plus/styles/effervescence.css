@@ -732,6 +732,39 @@ ul.pagelist li.next {
   padding: 1px;
   font-size: 80%;
 }
+#search_menu {
+  position:absolute;
+  margin-top:0px;
+}
+#search_menu ul .item {
+  display:none;
+}
+#search_menu ul:hover .item {
+  display:block;
+  padding:1px;
+  margin:1px;
+}
+#search_menu ul:hover .item a {
+  color:#000;
+  text-decoration:none;
+}
+#search_menu ul:hover .item a:hover {
+  color:#999;
+}
+#search_menu ul {
+  width:20px;
+  float:left;
+  margin:0px;
+  padding:2px;
+  list-style:none;
+}
+#search_menu li {
+width:150px;
+}
+.clear {
+  clear:both;
+  height:10px;
+}
 
 /* Archive View
 ---------------------------- */
@@ -773,47 +806,4 @@ ul.archive #month {
 	background: #eceae7;
 	font-size: 18px;
 	text-align: center;
-}
-
-/* searchForm tag selection drop-down */
-#container {
-  width:500px;
-  margin:auto;
-  font-size:11pt;
-  text-align:left;
-}
-#menu {
-  position:absolute;
-  margin-top:0px;
-  color: #7b7871;
-}
-#menu ul .item {
-  display:none;
-  color: #7b7871;
-}
-#menu ul:hover .item {
-  display:block;
-  padding:1px;
-  margin:1px;
-}
-#menu ul:hover .item a {
-  color:#000;
-  text-decoration:none;
-}
-#menu ul:hover .item a:hover {
-  color:#999;
-}
-#menu ul {
-  width:20px;
-  float:left;
-  margin:0px;
-  padding:2px;
-  list-style:none;
-}
-#menu li {
-width:150px;
-}
-.clear {
-  clear:both;
-  height:10px;
 }

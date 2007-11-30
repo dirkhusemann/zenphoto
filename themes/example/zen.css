@@ -44,6 +44,14 @@ UL.pagelist LI.current A { background-color: #FF6600; color: #FFF; cursor: defau
 #admin h3 {font: 100% "Helvetica Neue", Helvetica, Arial, sans-serif;font-weight: bold;color: #000;border-bottom: 1px dashed #E6E6DF;margin:0;padding:0;}
 #search{float:right;width:150px;margin-top:-15px;}
 #search #search_input{width:75px;}
+#search_menu { position:absolute;margin-top:0px;}
+#search_menu ul .item { display:none;}
+#search_menu ul:hover .item { display:block; padding:1px; margin:1px;}
+#search_menu ul:hover .item a { color:#000; text-decoration:none;}
+#search_menu ul:hover .item a:hover { color:#999;}
+#search_menu ul {width:20px; float:left; margin:0px;padding:2px;list-style:none;}
+#search_menu li {width:150px;}
+.clear {clear:both;height:10px;}
 #map {margin-top: 25px;}
 #imagemetadata {text-align: right;position: relative;display: none;}
 #imagemetadata table {text-align: left;line-height: 1em;border: 1px solid #ccc;position: absolute;top: 2em;right: 0;background-color: #fafafa;}
@@ -63,45 +71,4 @@ ul.archive #month {	font-size: 14px; list-style:none; border-top:2px solid #E6E6
 .taglist ul { display: inline; list-style-type: none; }
 .taglist li { background: url(tag.png) no-repeat left center; list-style-type: none; line-height: 18px; padding-left: 18px; float:left; padding-right: 5px;}
 .taglist .tags_title { background: none; padding-right: 5px; padding-left: 0;}
-
-/* searchForm tag selection drop-down */
-#container {
-  width:500px;
-  margin:auto;
-  font-size:11pt;
-  text-align:left;
-}
-#menu {
-  position:absolute;
-  margin-top:0px;
-}
-#menu ul .item {
-  display:none;
-}
-#menu ul:hover .item {
-  display:block;
-  padding:1px;
-  margin:1px;
-}
-#menu ul:hover .item a {
-  color:#000;
-  text-decoration:none;
-}
-#menu ul:hover .item a:hover {
-  color:#999;
-}
-#menu ul {
-  width:20px;
-  float:left;
-  margin:0px;
-  padding:2px;
-  list-style:none;
-}
-#menu li {
-width:150px;
-}
-.clear {
-  clear:both;
-  height:10px;
-}
 
