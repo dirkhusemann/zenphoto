@@ -46,6 +46,7 @@ function db_connect() {
       .  'connect with has privileges to use this database.');
     return false;
   }
+  mysql_query("SET NAMES 'utf8'", $mysql_connection);
   return true;
 }
 

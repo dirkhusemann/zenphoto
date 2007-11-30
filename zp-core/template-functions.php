@@ -1849,10 +1849,11 @@ function getSearchURL($words, $dates, $fields=0) {
  *        = 0 all fields
  *        = NULL means no drop-down selection
  *@param string $param3 css id for the search form, default is 'search'
+ *@param bool $param4 controls emitting the css style
  *@return returns nothing
  *@since 1.1.3
  */
-function printSearchForm($prevtext=NULL, $fieldSelect=NULL, $id='search') { 
+function printSearchForm($prevtext=NULL, $fieldSelect=0, $id='search') { 
   $zf = WEBPATH."/".ZENFOLDER;
   $dataid = $id . '_data';
   $searchwords = (isset($_POST['words']) ? htmlspecialchars(stripslashes($_REQUEST['words'])) : ''); 
@@ -1866,12 +1867,13 @@ function printSearchForm($prevtext=NULL, $fieldSelect=NULL, $id='search') {
   $bits = array(SEARCH_TITLE, SEARCH_DESC, SEARCH_TAGS, SEARCH_FILENAME, SEARCH_LOCATION, SEARCH_CITY, SEARCH_STATE, SEARCH_COUNTRY);
   if ($fieldSelect === 0) { $fieldSelect = 32767; }
   $fields = getOption('search_fields') & $fieldSelect;
+if (false) {
   $c = 0;
   foreach ($bits as $bit) {
     if ($bit & $fields) { $c++; }
     if ($c>1) break;
   }  
-  if ($fieldSelect && ($c>1)) {
+  if ($fieldSelect && ($c>1)) {  //disable until it works in firefox
     echo "\n<div id=\"menu\">";
 
     echo "\n<ul id=\"item1\">";
@@ -1904,6 +1906,7 @@ function printSearchForm($prevtext=NULL, $fieldSelect=NULL, $id='search') {
 
     echo "\n<div class=\"clear\"></div>";
     echo "\n</div>";  //menu
+}
   }
   echo "\n</form>\n"; 
   echo "\n</div>"; // container
