@@ -44,13 +44,13 @@ UL.pagelist LI.current A { background-color: #FF6600; color: #FFF; cursor: defau
 #admin h3 {font: 100% "Helvetica Neue", Helvetica, Arial, sans-serif;font-weight: bold;color: #000;border-bottom: 1px dashed #E6E6DF;margin:0;padding:0;}
 #search{float:right;width:150px;margin-top:-15px;}
 #search #search_input{width:75px;}
-#search_menu { position:absolute;margin-top:0px;}
-#search_menu ul .item { display:none;}
-#search_menu ul:hover .item { display:block; padding:1px; margin:1px;}
-#search_menu ul:hover .item a { color:#000; text-decoration:none;}
-#search_menu ul:hover .item a:hover { color:#999;}
-#search_menu ul {width:20px; float:left; margin:0px;padding:2px;list-style:none;}
-#search_menu li {width:150px;}
+#search ul { position:absolute;margin-top:0px;text-align: left;}
+#search ul .item { display:none;}
+#search ul:hover .item { display:block; padding:1px; margin:1px;}
+#search ul:hover .item a { color:#000; text-decoration:none;}
+#search ul:hover .item a:hover { color:#999;}
+#search ul {width:20px; float:left; margin:0px;padding:2px;list-style:none;}
+#search li {width:150px;}
 .clear {clear:both;height:10px;}
 #map {margin-top: 25px;}
 #imagemetadata {text-align: right;position: relative;display: none;}

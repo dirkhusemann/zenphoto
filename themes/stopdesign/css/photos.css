@@ -1139,36 +1139,37 @@ Comment Submission form
   background-color: #999;
   border: 1px solid #bbb;
 }
-#search_menu {
+#search ul {
   position:absolute;
   margin-top:0px;
   text-decoration:none;
   color:#fff;
+  text-align: left;
 }
-#search_menu ul .item {
+#search ul .item {
   display:none;
 }
-#search_menu ul:hover .item {
+#search ul:hover .item {
   display:block;
   padding:1px;
   margin:0px;
   background: #000;
 }
-#search_menu ul:hover .item a {
+#search ul:hover .item a {
   color:#000;
   text-decoration:none;
 }
-#search_menu ul:hover .item a:hover {
+#search ul:hover .item a:hover {
   color:#999;
 }
-#search_menu ul {
+#search ul {
   width:20px;
   float:left;
   margin:0px;
   padding:2px;
   list-style:none;
 }
-#search_menu li {
+#search li {
 width:150px;
 }
 .clear {
