@@ -1759,11 +1759,17 @@ function getAllSubAlbumIDs($albumfolder='') {
   return $subIDs; 
 }
 
-function hitcounter() {
+/**
+ * counts and prints the hits of an image
+ * @param string $visible true prints the hits
+ * @return string with the hits of the image
+ * @since 1.1
+ */
+function hitcounter($visible=true) {
   $id = getImageID(); 
   $result = query_single_row("SELECT hitcounter FROM ". prefix('images') ." WHERE id = $id");
   $resultupdate = $result['hitcounter']+1;
-  echo $resultupdate;
+  if($visible) { echo $resultupdate; }
   $result2 = query_single_row("UPDATE ". prefix('images') ." SET `hitcounter`= $resultupdate WHERE id = $id");
 }
 
@@ -1823,8 +1829,6 @@ function printRSSHeaderLink($option, $linktext) {
 
 
 /*** Search functions *******************************************************
-based on the search engine tutorial from PHPFreaks.com (dissapeared strangely)
-modified for zenphoto by Malte MŸller (acrylian)
 ****************************************************************************/
 /**
  * creates a search URL
