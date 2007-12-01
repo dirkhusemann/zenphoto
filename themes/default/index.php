@@ -14,7 +14,7 @@
 <div id="main">
 
 	<div id="gallerytitle">
-    <?php if (getOption('Allow_search')) {  printSearchForm('', 0); } ?>
+    <?php if (getOption('Allow_search')) {  printSearchForm(''); } ?>
 		<h2><?php echo getGalleryTitle(); ?></h2>
 	</div>
     
