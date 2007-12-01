@@ -22,7 +22,7 @@
   		<div id="gallerytitle">
     		<div id="logo">
     			<?php
-    			  if (getOption('Allow_search')) {  printSearchForm(); }
+    			  if (getOption('Allow_search')) {  printSearchForm('', 0); }
 				echo '<h1><a href="' . getMainSiteURL() . '" title="Visit ' . getMainSiteName() . '">' . $_SERVER['HTTP_HOST'] . '</a></h1>';
     			?>
     		</div>

@@ -15,7 +15,7 @@
 </head>
 
 <body class="index">
-	<?php echo getGalleryTitle(); ?><?php if (getOption('Allow_search')) {  printSearchForm(); } ?>
+	<?php echo getGalleryTitle(); ?><?php if (getOption('Allow_search')) {  printSearchForm('', 0); } ?>
 
 	<div id="content">
 

@@ -787,8 +787,11 @@ border-bottom: 1px dotted #fff;
 }
 #search ul {
   position:absolute;
-  margin-top:0px;
   text-align: left;
+  width:20px;
+  margin:0px;
+  padding:2px;
+  list-style:none;
 }
 #search ul .item {
   display:none;
@@ -797,20 +800,6 @@ border-bottom: 1px dotted #fff;
   display:block;
   padding:1px;
   margin:0px;
-}
-#search ul:hover .item a {
-  color:#000;
-  text-decoration:none;
-}
-#search ul:hover .item a:hover {
-  color:#999;
-}
-#search ul {
-  width:20px;
-  float:left;
-  margin:0px;
-  padding:2px;
-  list-style:none;
 }
 #search li {
 width:150px;
