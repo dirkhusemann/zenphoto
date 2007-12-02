@@ -7,7 +7,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="stylesheet" type="text/css" media="screen, projection" href="<?php echo $_zp_themeroot ?>/css/master.css" />
   <link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
-  <script type="text/javascript">var blogrelurl = "/zp/";</script>
+  <script type="text/javascript">var blogrelurl = "<?php echo $_zp_themeroot ?>";</script>
   <script type="text/javascript" src="<?php echo $_zp_themeroot ?>/js/rememberMe.js"></script>
   <script type="text/javascript" src="<?php echo $_zp_themeroot ?>/js/comments.js"></script>
   <script type="text/javascript" src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/jquery.js"></script>

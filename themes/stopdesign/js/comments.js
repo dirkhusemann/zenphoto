@@ -5,9 +5,9 @@ URL: http://www.bobbyvandersluis.com/articles/unobtrusiveshowhide.php
 */
 if (document.getElementById) {
   if (getCookie('showcomments') != 1) {
-    document.write('<link rel="stylesheet" type="text/css" href="' + blogrelurl + 'meta/css/comments-hide.css" />');
+    document.write('<link rel="stylesheet" type="text/css" href="' + blogrelurl + '/css/comments-hide.css" />');
   } else {
-    document.write('<link rel="stylesheet" type="text/css" href="' + blogrelurl + 'meta/css/comments-show.css" />');
+    document.write('<link rel="stylesheet" type="text/css" href="' + blogrelurl + '/css/comments-show.css" />');
   }
   window.onload = initCommentState;
 }
