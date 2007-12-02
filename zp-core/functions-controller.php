@@ -82,7 +82,8 @@ function zpurl($with_rewrite=NULL, $album=NULL, $image=NULL, $page=NULL) {
   $url = '';
   if ($with_rewrite) {
     if (in_context(ZP_IMAGE)) {
-      $url = pathurlencode($album->name) . '/' . rawurlencode($image->filename . im_suffix());
+      $encoded_suffix = implode('/', array_map('rawurlencode', explode('/', im_suffix())));
+      $url = pathurlencode($album->name) . '/' . rawurlencode($image->filename) . $encoded_suffix;
     } else if (in_context(ZP_ALBUM)) {
       $url = pathurlencode($album->name) . ($page > 1 ? '/page/'.$page : '');
     } else if (in_context(ZP_INDEX)) {
