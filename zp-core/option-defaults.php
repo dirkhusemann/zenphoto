@@ -28,6 +28,7 @@ function setDefault($option, $default) {
   setDefault('adminuser', "");
   setDefault('adminpass', "");
   setDefault('admin_email', "");
+  setDefault('admin_name', "");
   setDefault('server_protocol', "http");
   setDefault('charset', "UTF-8");
   setDefault('image_quality', 85);

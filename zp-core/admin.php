@@ -6,7 +6,7 @@ require_once("sortable.php");
 $sortby = array('Filename', 'Date', 'Title', 'Manual' ); 
 $standardOptions = array('gallery_title','website_title','website_url','time_offset', 
                          'gmaps_apikey','mod_rewrite','mod_rewrite_image_suffix',  
-                         'admin_email','server_protocol','charset','image_quality', 
+                         'admin_email','admin_name','server_protocol','charset','image_quality', 
                          'thumb_quality','image_size','image_use_longest_side', 
                          'image_allow_upscale','thumb_size','thumb_crop', 
                          'thumb_crop_width','thumb_crop_height','thumb_sharpen', 
@@ -333,6 +333,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
 	      $notify = '&mismatch';
 	    }
         setOption('admin_email', $_POST['admin_email']);
+		setOption('admin_name', $_POST['admin_name']);
 		$returntab = "#tab_admin";
 	  }
 	  
@@ -1129,6 +1130,11 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 							<input type="password" size="40" name="adminpass_2"
             				value="<?php echo $x; ?>" />
 						</td>
+            			<td></td>
+        			</tr>
+                    <tr>
+            			<td>Admin full name:</td>
+            			<td><input type="text" size="40" name="admin_name" value="<?php echo getOption('admin_name');?>" /></td>
             			<td></td>
         			</tr>
         			<tr>
