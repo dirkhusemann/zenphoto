@@ -6,7 +6,6 @@ require_once("functions-db.php");
 if (isset($_zp_loggedin)) unset($_zp_loggedin);
 $_zp_loggedin = false;
 $_zp_null_account = false;
-
 // Fix the cookie's path for root installs.
 $cookiepath = WEBPATH;
 if (WEBPATH == '') { $cookiepath = '/'; }
@@ -24,7 +23,7 @@ if (empty($adm) || empty($pas)) {
   $_zp_null_account = true;  // account requires setup
 } 
 $check_auth = md5($adm . $pas);
-if (isset($_COOKIE['zenphoto_auth'])  && !isset($_POST['login'])) {
+if (isset($_COOKIE['zenphoto_auth']) && !isset($_POST['login'])) {
   $saved_auth = $_COOKIE['zenphoto_auth'];
   if ($saved_auth == $check_auth) {
     $_zp_loggedin = true;

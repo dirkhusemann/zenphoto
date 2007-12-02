@@ -325,5 +325,205 @@ function generateListFromFiles($currentValue, $root, $suffix) {
   }
   generateListFromArray($currentValue, $list);
 }
+/**
+ * emits the html for editing album information
+ * called in edit album and mass edit
+ *@param string param1 the index of the entry in mass edit or '0' if single album
+ *@param object param2 the album object
+*@return nothing
+ *@since 1.1.3
+ */
+function printAlbumEditForm($index, $album) {
+  global $sortby, $images;
+  if ($index == 0) {
+    if (isset($saved)) {
+      $album->setSubalbumSortType('Manual');
+    }
+    $prefix = '';
+  } else {
+    $prefix = "$index-";
+	echo "<p><em><strong>" . $album->name . "</strong></em></p>";
+  }
+       
+  echo "\n<input type=\"hidden\" name=\"" . $prefix . "folder\" value=\"" . $album->name . "\" />";
+  echo "\n<div class=\"box\" style=\"padding: 15px;\">";
+  echo "\n<table>";
+  echo "\n<tr><td align=\"right\" valign=\"top\">Album Title: </td> <td><input type=\"text\" name=\"".$prefix."albumtitle\" value=\"" . 
+       $album->getTitle() . '" /></td></tr>';
+  echo "\n<tr><td align=\"right\" valign=\"top\">Album Description: </td> <td><textarea name=\"".$prefix."albumdesc\" cols=\"60\" rows=\"6\">" .
+       $album->getDesc() . "</textarea></td></tr>";
+  echo "\n<tr>";		
+  echo "\n<td>Album password</td>";
+  echo "\n<td>";
+  $x = $album->getPassword(); 
+
+  if (!empty($x)) { 
+    $x = '          '; 
+  } 
+
+  echo "\n<input type=\"password\" size=\"40\" name=\"".$prefix."albumpass\"";
+  echo "\nvalue=\"" . $x . '" /><br/>';
+  echo "\n<input type=\"password\" size=\"40\" name=\"".$prefix."albumpass_2\"";
+  echo "\nvalue=\"" . $x . '" />';
+  echo "\n</td>";
+  echo "\n</tr>";
+  echo "\n<tr><td align=\"right\" valign=\"top\">Password hint: </td> <td><input type=\"text\" name=\"".$prefix."albumpass_hint\" class=\"tags\" value=\"" . 
+       $album->getPasswordHint() . '" /></td></tr>';
+  echo "\n<tr><td align=\"right\" valign=\"top\">Tags: </td> <td><input type=\"text\" name=\"".$prefix."albumtags\" class=\"tags\" value=\"" . 
+       $album->getTags() . '" /></td></tr>';
+
+  $d = $album->getDateTime();
+  if ($d == "0000-00-00 00:00:00") { 
+    $d = ""; 
+  }
+
+  echo "\n<tr><td align=\"right\" valign=\"top\">Date: </td> <td><input type=\"text\" name=\"".$prefix."albumdate\" value=\"" . $d . '" /></td></tr>';
+  echo "\n<tr><td align=\"right\" valign=\"top\">Location: </td> <td><input type=\"text\" name=\"".$prefix."albumplace\" value=\"" .
+       $album->getPlace() . "\" /></td></tr>";
+  echo "\n<tr><td align=\"right\" valign=\"top\">Thumbnail: </td> ";
+  echo "\n<td>";
+  echo "\n<select id=\"thumbselect\" class=\"thumbselect\" name=\"".$prefix."thumb\" onChange=\"updateThumbPreview(this)\">";
+
+  foreach ($images as $filename) { 
+    $image = new Image($album, $filename);
+    $selected = ($filename == $album->get('thumb')); 
+    echo "\n<option class=\"thumboption\" style=\"background-image: url(" . $image->getThumb() . 
+	     "); background-repeat: no-repeat;\" value=\"<" . $filename . "\"";
+	if ($selected) {
+	  echo " selected=\"selected\""; 
+	}
+	echo ">" . $image->get('title'); 
+    if ($filename != $image->get('title')) {
+	  echo  " ($filename)";
+	}
+	echo "</option>";
+  } 
+
+  echo "\n</select>";
+  echo "\n<script type=\"text/javascript\">updateThumbPreview(document.getElementById('thumbselect'));</script>";
+  echo "\n</td>";
+  echo "\n</tr>";
+  echo "\n<tr><td align=\"right\" valign=\"top\">Allow Comments: </td><td><input type=\"checkbox\" name=\"" .
+       $prefix."allowcomments\" value=\"1\"";
+  if ($album->getCommentsAllowed()) {
+    echo "CHECKED";
+  } 
+
+  echo "\n>";
+  echo "\n</td></tr>";
+  echo "\n<tr><td align=\"right\" valign=\"top\">Published: </td><td><input type=\"checkbox\" name=\"" . 
+        $prefix."Published\" value=\"1\"";
+  if ($album->getShow()) {
+    echo "CHECKED";
+  } 
+  echo ">";
+  echo "\n</td></tr>";
+  echo "\n<tr>";
+  echo "\n<td align=\"right\" valign=\"top\">Sort subalbums by: </td>";
+  echo "\n<td>";
+  echo "\n<select id=\"sortselect\" name=\"".$prefix."subalbumsortby\">";
+
+  foreach ($sortby as $sorttype) { 
+    echo "\n<option value=\"" . $sorttype . "\"";
+	if ($sorttype == $album->getSubalbumSortType()) {
+	  echo ' selected="selected"';
+    }
+	echo ">$sorttype </option>";
+  } 
+
+  echo "\n</select>";
+  echo "&nbsp;Descending <input type=\"checkbox\" name=\"".$prefix."album_sortdirection\" value=\"1\"";
+
+  if ($album->getSortDirection('image')) {
+    echo "CHECKED";
+  } 
+
+  echo ">";  
+  echo "\n</td>";
+  echo "\n</tr>";
+  echo "\n<tr>";
+  echo "\n<td align=\"right\" valign=\"top\">Sort images by: </td>";
+  echo "\n<td>";
+  echo "\n<select id=\"sortselect\" name=\"".$prefix."sortby\">";
+
+  foreach ($sortby as $sorttype) { 
+    echo "\n<option value=\"$sorttype\"";
+	if ($sorttype == $album->getSortType()) {
+	  echo ' selected="selected"'; 
+	}
+	echo ">$sorttype</option>";
+  }
+
+  echo "\n</select>";
+  echo "&nbsp;Descending <input type=\"checkbox\" name=\"".$prefix."image_sortdirection\" value=\"1\""; 
+
+  if ($album->getSortDirection('image')) {
+    echo "CHECKED";
+  } 
+
+  echo ">"; 
+  echo "\n</td>";
+  echo "\n</tr>";
+  echo "\n<tr><td></td><td valign=\"top\"><a href=\"cache-images.php?album=" . 
+       $album->name . "\">Pre-Cache Images</a></strong> - Cache newly uploaded images.</td></tr>";
+
+  if ($album->getNumImages() > 0) { 
+	echo "\n<tr><td></td><td valign=\"top\"><a href=\"refresh-metadata.php?album=" . 
+	     $album->name . "\">Refresh Image Metadata</a> - Forces a refresh of the EXIF and IPTC data for all images in the album.</td></tr>";
+  }
+
+  echo "\n</table>";  
+  echo "\n<input type=\"submit\" value=\"save\" />";
+  echo "\n</div>";
+
+}
+
+
+/**
+ * processes the post from the above 
+ *@param int param1 the index of the entry in mass edit or 0 if single album
+  *@param object param2 the album object
+ *@return string error flag if passwords don't match
+ *@since 1.1.3
+*/
+function processAlbumEdit($index, $album) {
+
+  if ($index == 0) {
+    $prefix = '';
+  } else {
+    $prefix = "$index-";
+  }
+  $notify = '';      
+  $album->setTitle(strip($_POST[$prefix.'albumtitle']));
+  $album->setDesc(strip($_POST[$prefix.'albumdesc']));
+  $album->setTags(strip($_POST[$prefix.'albumtags']));
+  $album->setDateTime(strip($_POST[$prefix."albumdate"]));
+  $album->setPlace(strip($_POST[$prefix.'albumplace']));
+  $album->setAlbumThumb(strip($_POST[$prefix.'thumb']));
+  $album->setShow(strip($_POST[$prefix.'Published']));
+  $album->setCommentsAllowed(strip($_POST[$prefix.'allowcomments']));
+  $album->setSortType(strip($_POST[$prefix.'sortby']));
+  $album->setSortDirection('image', strip($_POST[$prefix.'image_sortdirection']));   
+  $album->setSubalbumSortType(strip($_POST[$prefix.'subalbumsortby']));   
+  $album->setSortDirection('album', strip($_POST[$prefix.'album_sortdirection']));   
+
+  if ($_POST[$prefix.'albumpass'] == $_POST[$prefix.'albumpass_2']) {
+    $pwd = trim($_POST[$prefix.'albumpass']);
+    if (empty($pwd)) {  
+	  if (empty($_POST[$prefix.'albumpass'])) {
+        $album->setPassword(NULL);  // clear the gallery password
+      }
+    } else {
+      $album->setPassword($pwd);
+    }
+  } else {
+    $notify = '&mismatch=album';
+  }
+
+  $album->setPasswordHint(strip($_POST[$prefix.'albumpass_hint']));   
+  $album->save();
+  return $notify;
+
+}
 
 ?>

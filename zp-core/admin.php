@@ -39,14 +39,15 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
 /** SAVE **********************************************************************/
 /*****************************************************************************/
     if ($action == "save") {
-	  $notify = '';
 /** SAVE A SINGLE ALBUM *******************************************************/
       if ($_POST['album']) {
       
         $folder = queryDecode(strip($_POST['album']));  
         $album = new Album($gallery, $folder);
-        
+        $notify = '';
         if (isset($_POST['savealbuminfo'])) {
+		  $notify = processAlbumEdit(0, $album);
+/*		  
           $album->setTitle(strip($_POST['albumtitle']));
           $album->setDesc(strip($_POST['albumdesc']));
           $album->setTags(strip($_POST['albumtags']));
@@ -73,6 +74,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
 	      }
           $album->setPasswordHint(strip($_POST['albumpass_hint']));   
           $album->save();
+*/
         }
 
         if (isset($_POST['totalimages'])) {
@@ -101,21 +103,15 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         
 /** SAVE MULTIPLE ALBUMS ******************************************************/
       } else if ($_POST['totalalbums']) {
-        
-        for ($i = 0; $i < $_POST['totalalbums']; $i++) {
+        for ($i = 1; $i <= $_POST['totalalbums']; $i++) {
           $folder = queryDecode(strip($_POST["$i-folder"]));  
           $album = new Album($gallery, $folder);
-          $album->setTitle(strip($_POST["$i-title"]));
-          $album->setDesc(strip($_POST["$i-desc"]));
-          $album->setTags(strip($_POST["$i-tags"]));
-          // FIXME: Date entry isn't ready yet...
-          // $album->setDate(strip($_POST["$i-date"]));
-          $album->setPlace(strip($_POST["$i-place"]));
-          $album->save();
+		  $rslt = processAlbumEdit($i, $album);
+		  if (!empty($rslt)) { $notify = $rslt; }
         }
       }
       // Redirect to the same album we saved.
-      $qs_albumsuffix = ""; 
+      $qs_albumsuffix = "&massedit"; 
       if ($_GET['album']) {
         $folder = queryDecode(strip($_GET['album']));
         $qs_albumsuffix = '&album='.urlencode($folder);
@@ -551,82 +547,12 @@ if (!zp_loggedin()  && !$_zp_null_account) {
           </script>
         <?php } ?>
     
-    <!-- Album info box --> 
-        <?php
-          if (isset($saved)) {
-            $album->setSubalbumSortType('Manual');
-          }
-        ?>
-
+        <!-- Album info box --> 
+	
         <form name="albumedit1" action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>" method="post">
-          <input type="hidden" name="album" value="<?php echo $album->name; ?>" />
-          <input type="hidden" name="savealbuminfo" value="1" />
-        
-          <div class="box" style="padding: 15px;">
-            <table>
-              <tr><td align="right" valign="top">Album Title: </td> <td><input type="text" name="albumtitle" value="<?php echo $album->getTitle(); ?>" /></td></tr>
-              <tr><td align="right" valign="top">Album Description: </td> <td><textarea name="albumdesc" cols="60" rows="6"><?php echo $album->getDesc(); ?></textarea></td></tr>
-              <tr>		
-			    <td>Album password</td>
-				<td>
-					<?php $x = $album->getPassword(); if (!empty($x)) { $x = '          '; } ?>
-					<input type="password" size="40" name="albumpass"
-            		value="<?php echo $x; ?>" /><br/>
-					<input type="password" size="40" name="albumpass_2"
-            		value="<?php echo $x; ?>" />
-				</td>
-			  </tr>
-              <tr><td align="right" valign="top">Password hint: </td> <td><input type="text" name="albumpass_hint" class="tags" value="<?php echo $album->getPasswordHint(); ?>" /></td></tr>
-              <tr><td align="right" valign="top">Tags: </td> <td><input type="text" name="albumtags" class="tags" value="<?php echo $album->getTags(); ?>" /></td></tr>
-              <tr><td align="right" valign="top">Date: </td> <td><input type="text" name="albumdate" value="<?php $d=$album->getDateTime(); if ($d!='0000-00-00 00:00:00') { echo $d; }?>" /></td></tr>
-              <tr><td align="right" valign="top">Location: </td> <td><input type="text" name="albumplace" value="<?php echo $album->getPlace(); ?>" /></td></tr>
-              <tr><td align="right" valign="top">Thumbnail: </td> 
-                <td>
-                  <select id="thumbselect" class="thumbselect" name="thumb" onChange="updateThumbPreview(this)">
-<?php foreach ($images as $filename) { 
-  $image = new Image($album, $filename);
-  $selected = ($filename == $album->get('thumb')); ?>
-                    <option class="thumboption" style="background-image: url(<?php echo $image->getThumb(); ?>); background-repeat: no-repeat;" value="<?php echo $filename; ?>"<?php if ($selected) echo ' selected="selected"'; ?>><?php echo $image->get('title'); ?><?php echo ($filename != $image->get('title')) ? " ($filename)" : ""; ?></option>
-<?php } ?>
-                  </select>
-                  <script type="text/javascript">updateThumbPreview(document.getElementById('thumbselect'));</script>
-                </td>
-              </tr>
-              <tr><td align="right" valign="top">Allow Comments: </td><td><input type="checkbox" name="allowcomments" value="1" <?php if ($album->getCommentsAllowed()) {echo "CHECKED";} ?>></td></tr>
-              <tr><td align="right" valign="top">Published: </td><td><input type="checkbox" name="Published" value="1" <?php if ($album->getShow()) {echo "CHECKED";} ?>></td></tr>
-             <tr>
-                <td align="right" valign="top">Sort subalbums by: </td>
-                <td>
-                  <select id="sortselect" name="subalbumsortby">
-                  <?php foreach ($sortby as $sorttype) { ?>
-                    <option value="<?php echo $sorttype; ?>"<?php if ($sorttype == $album->getSubalbumSortType()) echo ' selected="selected"'; ?>><?php echo $sorttype; ?></option>
-                  <?php } ?>
-                  </select>
-				&nbsp;Descending <input type="checkbox" name="album_sortdirection" value="1"
-				     <?php if ($album->getSortDirection('image')) {echo "CHECKED";} ?>>  
-                </td>
-              </tr>
-             <tr>
-                <td align="right" valign="top">Sort images by: </td>
-                <td>
-                  <select id="sortselect" name="sortby">
-                  <?php foreach ($sortby as $sorttype) { ?>
-                    <option value="<?php echo $sorttype; ?>"<?php if ($sorttype == $album->getSortType()) echo ' selected="selected"'; ?>><?php echo $sorttype; ?></option>
-                  <?php } ?>
-                  </select>
-				&nbsp;Descending <input type="checkbox" name="image_sortdirection" value="1" 
-				     <?php if ($album->getSortDirection('image')) {echo "CHECKED";} ?>>  
-                </td>
-              </tr>
-               <tr><td></td><td valign="top"><a href="cache-images.php?album=<?php echo $album->name; ?>">Pre-Cache Images</a></strong> - Cache newly uploaded images.</td></tr>
-               <?php         
-                 if ($album->getNumImages() > 0) { ?> 
-			       <tr><td></td><td valign="top"><a href="refresh-metadata.php?album=<?php echo $album->name; ?>">Refresh Image Metadata</a> - Forces a refresh of the EXIF and IPTC data for all images in the album.</td></tr>
-			   <?php } ?>
-            </table>
-              
-            <input type="submit" value="save" />
-          </div>
+        <input type="hidden" name="album" value="<?php echo $album->name; ?>" />
+        <input type="hidden" name="savealbuminfo" value="1" />
+	    <?php printAlbumEditForm(0, $album); ?>
         </form>
           
         <!-- Subalbum list goes here -->
@@ -634,7 +560,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         <?php  
         $subalbums = $album->getSubAlbums(); 
         if (count($subalbums) > 0) { 
-	  if ($album->getNumImages() > 0)  { ?>
+	    if ($album->getNumImages() > 0)  { ?>
             <p><a name="subalbumList"></a><a href="#imageList" title="Scroll down to the image list.">Image List &raquo;</a></p>
           <?php } ?> 
           
@@ -790,6 +716,17 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 <?php /*** MULTI-ALBUM ***************************************************************************/ ?>
         
       <?php } else if (isset($_GET['massedit'])) { 
+		if (isset($_GET['saved'])) { 
+		  if (isset($_GET['mismatch'])) {
+            echo "\n<div class=\"errorbox\" id=\"message1\">"; 
+            echo "\n<h2>Your passwords did not match</h2>";
+            echo "\n</div>";
+		  } else { 
+            echo "\n<div class=\"messagebox\" id=\"message1\">"; 
+            echo "\n<h2>Save Successful</h2>";
+            echo "\n</div>";
+		  }
+		} 
         $albumdir = ""; 
         if (isset($_GET['album'])) {
           $folder = strip($_GET['album']); 
@@ -811,50 +748,22 @@ if (!zp_loggedin()  && !$_zp_null_account) {
       <div class="box" style="padding: 15px;">
       
       <form name="albumedit" action="?page=edit&action=save<?php echo $albumdir ?>" method="POST"> 
-      <?php
-        
-        // Two albums will probably require a scroll bar
-        if (sizeof($albums) > 2) {
-          echo "<p><input type=\"submit\" value=\"save\" /> &nbsp; <input type=\"reset\" value=\"reset\" /></p>";
-          echo "<hr />";
-        }
-        ?> 
-        <input type="hidden" name="totalalbums" value="<?php echo sizeof($albums); ?>" /> <?php
+        <input type="hidden" name="totalalbums" value="<?php echo sizeof($albums); ?>" /> 
+		<?php
         $currentalbum = 0;
         foreach ($albums as $folder) { 
-          $album = new Album($gallery, $folder);
-      ?>
-        <input type="hidden" name="<?php echo $currentalbum; ?>-folder" value="<?php echo $album->name; ?>" />
-        <table>
-          <tr><td rowspan="4" valign="top"><a href="?page=edit&album=<?php echo urlencode($album->name); ?>" title="Edit this album: <?php echo $album->name; ?>"><img src="<?php echo $album->getAlbumThumb(); ?>" /></a></td> 
-            <td align="right" valign="top">Album Title: </td> <td><input type="text" name="<?php echo $currentalbum; ?>-title" value="<?php echo $album->getTitle(); ?>" /></td></tr>
-          <tr><td align="right" valign="top">Album Description: </td> <td><textarea name="<?php echo $currentalbum; ?>-desc" cols="60" rows="6"><?php echo $album->getDesc(); ?></textarea></td></tr>
-          
-          <?php /* Removing date entry for now... */ 
-                /* <tr><td align="right" valign="top">Date: </td> <td><input type="text" name="<?php echo $currentalbum; ?>-date" value="<?php echo $album->getDateTime(); ?>" /></td></tr> */ ?>
-          
-          <tr><td align="right" valign="top">Place: </td> <td><input type="text" name="<?php echo $currentalbum; ?>-place" value="<?php echo $album->getPlace(); ?>" /></td></tr>
-        </table>
-        <hr />
-        
-      <?php 
           $currentalbum++;
+          $album = new Album($gallery, $folder);
+          $images = $album->getImages(); 
+		  echo "\n<!-- " . $album->name . " -->\n";
+		  printAlbumEditForm($currentalbum, $album);
         } 
-      ?>
-      
-        <p><input type="submit" value="save" /> &nbsp; <input type="reset" value="reset" /></p>
-      
+      ?>      
       </form>
-        
       </div>
-      
-      
-<?php /*** EDIT ALBUM SELECTION *********************************************************************/ ?> 
-
-       
+<?php /*** EDIT ALBUM SELECTION *********************************************************************/ ?>      
       <?php } else { /* Display a list of albums to edit. */ ?>
         <h1>Edit Gallery</h1>
-        
         <?php displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */ ?> 
         
         <?php
@@ -862,7 +771,6 @@ if (!zp_loggedin()  && !$_zp_null_account) {
             setOption('gallery_sorttype', 'Manual');
           }
         ?>
-
         <p>Drag the albums into the order you wish them displayed. Select an album to edit its description and data, or <a href="?page=edit&massedit">mass-edit all album data</a>.</p>
 
         <table class="bordered">
