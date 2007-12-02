@@ -1904,8 +1904,8 @@ function printSearchForm($prevtext=NULL, $fieldSelect=NULL, $id='search') {
       echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_country\" value=1 checked> Country</li>";
 	}    
 	echo "\n</ul>";
+    echo "\n<div class=\"clear\"></div>";
   }
-  echo "\n<div class=\"clear\"></div>";
   echo "\n</form>\n"; 
   echo "\n</div>";  // search
   echo "\n<!-- end of search form -->\n";
