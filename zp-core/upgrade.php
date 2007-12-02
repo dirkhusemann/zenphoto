@@ -116,7 +116,6 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `used_ips` longtext;";
   	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `password` varchar(255) default NULL;";
   	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `password_hint` text;";
-	$sql_statements[] = "ALTER TABLE $tbl_options ADD COLUMN `admin_name` tinytext;";	
  
     
     if (isset($_GET['upgrade']) && db_connect()) {
