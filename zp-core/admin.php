@@ -47,34 +47,6 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         $notify = '';
         if (isset($_POST['savealbuminfo'])) {
 		  $notify = processAlbumEdit(0, $album);
-/*		  
-          $album->setTitle(strip($_POST['albumtitle']));
-          $album->setDesc(strip($_POST['albumdesc']));
-          $album->setTags(strip($_POST['albumtags']));
-          $album->setDateTime(strip($_POST["albumdate"]));
-          $album->setPlace(strip($_POST['albumplace']));
-          $album->setAlbumThumb(strip($_POST['thumb']));
-          $album->setShow(strip($_POST['Published']));
-          $album->setCommentsAllowed(strip($_POST['allowcomments']));
-          $album->setSortType(strip($_POST['sortby']));
-          $album->setSortDirection('image', strip($_POST['image_sortdirection']));   
-          $album->setSubalbumSortType(strip($_POST['subalbumsortby']));   
-          $album->setSortDirection('album', strip($_POST['album_sortdirection']));   
-	      if ($_POST['albumpass'] == $_POST['albumpass_2']) {
-		    $pwd = trim($_POST['albumpass']);
-		    if (empty($pwd)) {  
-		      if (empty($_POST['albumpass'])) {
-                $album->setPassword(NULL);  // clear the gallery password
-			  }
-		    } else {
-              $album->setPassword($pwd);
-		    }
-	      } else {
-	        $notify = '&mismatch=album';
-	      }
-          $album->setPasswordHint(strip($_POST['albumpass_hint']));   
-          $album->save();
-*/
         }
 
         if (isset($_POST['totalimages'])) {
@@ -323,7 +295,9 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
           setOption('adminuser', $_POST['adminuser']);
 		  $pwd = trim($_POST['adminpass']);
 		  if (empty($pwd)) {
-            setOption('adminpass', NULL);
+		    if (empty($_POST['adminpass'])) {
+              setOption('adminpass', NULL);
+			}
 		  } else {
             setOption('adminpass', md5($_POST['adminuser'] . $pwd));
 
