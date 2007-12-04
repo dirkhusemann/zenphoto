@@ -37,10 +37,14 @@ class Gallery {
     switch ($sorttype) {
       case "Title":
         return 'title';
+      case "Manual":
+        return 'sort_order';
       case "Filename":
         return 'folder';
       case "Date":
         return 'date';
+	  case "ID":
+	    return 'id';
     }
     return 'sort_order';
   }

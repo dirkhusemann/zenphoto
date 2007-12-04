@@ -3,7 +3,7 @@ session_start();
 define('OFFSET_PATH', true);
 require_once("sortable.php");
 
-$sortby = array('Filename', 'Date', 'Title', 'Manual' ); 
+$sortby = array('Filename', 'Date', 'Title', 'Manual', 'ID' ); 
 $standardOptions = array('gallery_title','website_title','website_url','time_offset', 
                          'gmaps_apikey','mod_rewrite','mod_rewrite_image_suffix',  
                          'admin_email','admin_name','server_protocol','charset','image_quality', 

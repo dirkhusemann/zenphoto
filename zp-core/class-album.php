@@ -217,6 +217,8 @@ class Album extends PersistentObject {
         return 'sort_order';
       case "Date":
         return 'date';
+	  case "ID":
+	    return 'id';
     }
     return 'filename';
   }
@@ -225,10 +227,14 @@ class Album extends PersistentObject {
     switch ($sorttype) {
       case "Title":
         return 'title';
+      case "Manual":
+        return 'sort_order';
       case "Filename":
         return 'folder';
       case "Date":
         return 'date';
+	  case "ID":
+	    return 'id';
     }
     return 'sort_order';
   }

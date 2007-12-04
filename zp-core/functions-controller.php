@@ -332,11 +332,8 @@ function zp_load_request() {
   // Error message for objects not found.
   if ($success === false) {
     // Replace this with a redirect to an error page in the theme if it exists, or a default ZP error page.
-    if (DEBUG) {
-      echo "<strong>Zenphoto Error:</strong> the requested object (album=\"" . $album . "\": image=\"" . $image . "\") was not found. Please go back and try again.";
-	} else {
-      echo "<strong>Zenphoto Error:</strong> the requested object was not found. Please go back and try again.";
-	}
+    echo "\n<strong>Zenphoto Error:</strong> the requested object was not found. Please go back and try again.";
+    echo "\n<!-- The requested object (album=\"" . $album . "\": image=\"" . $image . "\") was not found. -->";
     exit();
   }
 }
