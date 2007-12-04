@@ -88,6 +88,7 @@ if (file_exists("zp-config.php")) {
       `sort_order` int(11) unsigned default NULL,
 	  `image_sortdirection` int(1) UNSIGNED default '0',
 	  `album_sortdirection` int(1) UNSIGNED default '0',
+	  `hitcounter` int(11) unsigned default NULL,
       `password` varchar(255) default NULL,
 	  `password_hint` text,
 	  `tags` text,
