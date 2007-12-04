@@ -1358,35 +1358,28 @@ function printLatestComments($number) {
 	echo '</div>';	
 }
 
-function getImageStatistic($number, $option) {
-  switch ($option) {
-    case "popular":
-      $sortorder = "images.hitcounter"; break;
-    case "latest":
-      $sortorder = "images.id"; break;
-    case "mostrated":
-      $sortorder = "images.total_votes"; break;
-    case "toprated":
-      $sortorder = "(total_value/total_votes)"; break;
+/**
+ * counts and prints the hits of an image
+ * @param string $option "image" for image hit counter (default), "album" for album hit counter
+ * @param string $visible true prints the hits
+ * @return string with the hits of the image
+ * @since 1.1
+ */
+function hitcounter($option="image", $visible=true) {
+  switch($option) {
+		case "image":
+			$id = getImageID(); 
+			$dbtable = prefix('images');
+		break;
+		case "album":
+			$id = getAlbumID(); 
+			$dbtable = prefix('albums');
+		break;
   }
-  global $_zp_gallery;
-  $imageArray = array();
-  $images = query_full_array("SELECT images.albumid, images.filename AS filename, images.title AS title, albums.folder AS folder FROM " . 
-            prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
-      " WHERE images.albumid = albums.id AND images.show = 1" . 
-      " AND albums.folder != ''".
-      " ORDER BY ".$sortorder." DESC LIMIT $number");
-  foreach ($images as $imagerow) {
-    
-    $filename = $imagerow['filename'];
-    $albumfolder = $imagerow['folder'];
-    
-    $desc = $imagerow['title'];
-    // Album is set as a reference, so we can't re-assign to the same variable!
-    $image = new Image(new Album($_zp_gallery, $albumfolder), $filename);
-    $imageArray [] = $image;
-  }
-  return $imageArray;
+  $result = query_single_row("SELECT hitcounter FROM $dbtable WHERE id = $id");
+  $resultupdate = $result['hitcounter']+1;
+  if($visible) { echo $resultupdate; }
+  $result2 = query_single_row("UPDATE $dbtable SET `hitcounter`= $resultupdate WHERE id = $id");
 }
 
 function printImageStatistic($number, $option) {
