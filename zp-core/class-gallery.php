@@ -163,41 +163,24 @@ class Gallery {
   }
 
 
-  /**
+/**
    * Returns the foldername of the current theme. 
-   * Uses the 'current_theme' option first, then the theme.txt file,
-   * and if they don't exist or the theme in it doesn't exist, then the default theme is used.
+   * if no theme is set, returns "default".
    */
   function getCurrentTheme() {
     if (empty($this->theme)) {
-      if (is_null($theme=getOption('current_theme'))) {
-        $themefile = SERVERCACHE . "/theme.txt";
-        $theme = "";
-        if (is_readable($themefile) && $fp = @fopen($themefile, "r")) {
-          $theme = fgets($fp);
-          $themes = $this->getThemes();
-          if (!isset($themes[$theme])) {
-            $theme = "";
-          }
-          fclose($fp);
-        }
-      } else {
-        $themes = $this->getThemes();
-        if (!isset($themes[$theme])) {
-          $theme = "";
-        }       
-      }
-      if (empty($theme)) { $theme = "default"; }
-      setOptionDefault('current_theme', $theme);
+	  $theme = getOption('current_theme');
+      if (empty($theme)) { 
+	    $theme = "default"; 
+	  }
       $this->theme = $theme;
     }
     return $this->theme;
   }
 
 
-  /**
-   * Sets the current theme by writing it to the theme.txt file in the cache folder.
-   * TODO: use the database for this instead, with an options or prefs table.
+/**
+   * Sets the current theme 
    */
   function setCurrentTheme($theme) {
     setOption('current_theme', $theme);
