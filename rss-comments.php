@@ -21,8 +21,8 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 <lastBuildDate><?php echo date("r", time()); ?></lastBuildDate>
 <docs>http://blogs.law.harvard.edu/tech/rss</docs>
 <generator>Acrylian's ZenPhoto Comment RSS Generator based on Tris's Latest Comments function from zenphoto admin.php</generator>
-<managingEditor><?php echo getOption('admin_email'); ?></managingEditor>
-<webMaster><?php echo getOption('admin_email'); ?></webMaster>
+<managingEditor><?php echo getOption('admin_name'); ?></managingEditor>
+<webMaster><?php echo getOption('admin_name'); ?></webMaster>
 <?php
 db_connect();
 $comments = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.website," . " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a " . " WHERE c.imageid = i.id AND i.albumid = a.id ORDER BY c.id DESC LIMIT $items");

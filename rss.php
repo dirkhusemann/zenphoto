@@ -25,8 +25,8 @@ else
 <lastBuildDate><?php echo date("r", time()); ?></lastBuildDate>
 <docs>http://blogs.law.harvard.edu/tech/rss</docs>
 <generator>Acrylian's ZenPhoto Album RSS Generator based on Alenônimo's ZenPhoto RSS Generator which is based on ThinkDreams' Generator</generator>
-<managingEditor><?php echo getOption('admin_email'); ?></managingEditor>
-<webMaster><?php echo getOption('admin_email'); ?></webMaster>
+<managingEditor><?php echo getOption('admin_name'); ?></managingEditor>
+<webMaster><?php echo getOption('admin_name'); ?></webMaster>
 <?php 
 $iw = $cw = 400; // Image Width
 $ih = $ch = 300; // Image Height
