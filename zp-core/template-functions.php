@@ -1388,6 +1388,58 @@ function hitcounter($option="image") {
   return $resultupdate;
 }
 
+/**
+ * grabs album statistic accordingly to $option
+ * @param string $number the number of albums to get
+ * @param string $option "popular" for the most popular albums, "latest" for the latest uploaded
+ * @return string with albums
+ */
+function getAlbumStatistic($number=5, $option) {
+  switch($option) { // of course seeems unnecessary but prevents from false input...
+    case "popular": 
+    	$sortorder = "hitcounter";
+    break;
+    case "latest": 
+    	$sortorder = "id";
+    break; 
+  }
+	$albums = query("SELECT id, title, folder, thumb FROM " . prefix('albums') . " ORDER BY ".$sortorder." DESC LIMIT $number");
+	return $albums;
+}
+
+/**
+ * prints album statistic according to $option
+ * @param string $number the number of albums to get
+ * @param string $option "popular" for the most popular albums, "latest" for the latest uploaded
+ * @return string with albums
+ */
+function printAlbumStatistic($number=5, $option) {
+	$albums = getAlbumStatistic($number, $option);
+  echo "\n<div id=\"$option_albums\">\n";
+  if (getOption('mod_rewrite')) 
+		{ $albumlinkpath = WEBPATH."/"; 
+  } else { 
+    $albumlinkpath = "index.php?album="; 
+  } 
+  while ($album = mysql_fetch_array($albums)) {
+    if ($album['thumb'] === NULL)
+      { $image = query_single_row("SELECT * FROM " . prefix('images') . " WHERE albumid = ".$album['id']." ORDER BY sort_order DESC LIMIT 1");
+    		$albumthumb = $image['filename'];
+    } else {
+    	$albumthumb = $album['thumb'];
+    }
+    echo "<a href=\"".$albumlinkpath.$album['folder']."\" title=\"" . $album['title'] . "\">\n";
+    echo "<img src=\"".$albumlinkpath.$album['folder']."/image/thumb/".$albumthumb."\"></a>\n";
+  }
+  echo "</div>\n";
+}
+
+/**
+ * grabs image statistic according to $option
+ * @param string $number the number of images to get
+ * @param string $option "popular" for the most popular images, "latest" for the latest uploaded
+ * @return string with images
+ */
 function getImageStatistic($number, $option) {
   switch ($option) {
     case "popular":
@@ -1419,6 +1471,12 @@ function getImageStatistic($number, $option) {
   return $imageArray;
 }
 
+/**
+ * prints image statistic according to $option
+ * @param string $number the number of albums to get
+ * @param string $option "popular" for the most popular images, "latest" for the latest uploaded
+ * @return string with images
+ */
 function printImageStatistic($number, $option) {
   $images = getImageStatistic($number, $option);
   echo "\n<div id=\"$option_images\">\n";
