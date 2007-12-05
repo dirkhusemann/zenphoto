@@ -1395,7 +1395,7 @@ function hitcounter($option="image") {
  * @return string with albums
  */
 function getAlbumStatistic($number=5, $option) {
-  switch($option) { // of course seeems unnecessary but prevents from false input...
+  switch($option) { 
     case "popular": 
     	$sortorder = "hitcounter";
     break;
@@ -1413,7 +1413,7 @@ function getAlbumStatistic($number=5, $option) {
  * @param string $option "popular" for the most popular albums, "latest" for the latest uploaded
  * @return string with albums
  */
-function printAlbumStatistic($number=5, $option) {
+function printAlbumStatistic($number, $option) {
 	$albums = getAlbumStatistic($number, $option);
   echo "\n<div id=\"$option_albums\">\n";
   if (getOption('mod_rewrite')) 
@@ -1432,6 +1432,22 @@ function printAlbumStatistic($number=5, $option) {
     echo "<img src=\"".$albumlinkpath.$album['folder']."/image/thumb/".$albumthumb."\"></a>\n";
   }
   echo "</div>\n";
+}
+
+/**
+ * prints the most popular albums
+ * @param string $number the number of albums to get
+ */
+function printPopularAlbums($number=5) {
+  printAlbumStatistic($number,"popular"); 
+}
+
+/**
+ * prints the latest albums
+ * @param string $number the number of albums to get
+ */
+function printLatestAlbums($number=5) {
+  printAlbumStatistic($number,"latest"); 
 }
 
 /**
@@ -1488,11 +1504,18 @@ function printImageStatistic($number, $option) {
   echo "</div>\n";
 }
 
+/**
+ * prints the most popular images
+ * @param string $number the number of images to get
+ */
 function printPopularImages($number=5) {
 printImageStatistic($number, "popular");
 }
 
-
+/**
+ * prints the latest images
+ * @param string $number the number of images to get
+ */
 function printLatestImages($number=5) {
 printImageStatistic($number, "latest");
 }
