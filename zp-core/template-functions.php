@@ -1388,6 +1388,36 @@ function hitcounter($option="image") {
   return $resultupdate;
 }
 
+function getImageStatistic($number, $option) {
+  switch ($option) {
+    case "popular":
+      $sortorder = "images.hitcounter"; break;
+    case "latest":
+      $sortorder = "images.id"; break;
+    case "mostrated":
+      $sortorder = "images.total_votes"; break;
+    case "toprated":
+      $sortorder = "(total_value/total_votes)"; break;
+  }
+  global $_zp_gallery;
+  $imageArray = array();
+  $images = query_full_array("SELECT images.albumid, images.filename AS filename, images.title AS title, albums.folder AS folder FROM " . 
+            prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
+      " WHERE images.albumid = albums.id AND images.show = 1" . 
+      " AND albums.folder != ''".
+      " ORDER BY ".$sortorder." DESC LIMIT $number");
+  foreach ($images as $imagerow) {
+    
+    $filename = $imagerow['filename'];
+    $albumfolder = $imagerow['folder'];
+    
+    $desc = $imagerow['title'];
+    // Album is set as a reference, so we can't re-assign to the same variable!
+    $image = new Image(new Album($_zp_gallery, $albumfolder), $filename);
+    $imageArray [] = $image;
+  }
+  return $imageArray;
+}
 
 function printImageStatistic($number, $option) {
   $images = getImageStatistic($number, $option);
