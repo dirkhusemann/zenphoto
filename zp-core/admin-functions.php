@@ -348,8 +348,15 @@ function printAlbumEditForm($index, $album) {
   echo "\n<input type=\"hidden\" name=\"" . $prefix . "folder\" value=\"" . $album->name . "\" />";
   echo "\n<div class=\"box\" style=\"padding: 15px;\">";
   echo "\n<table>";
-  echo "\n<tr><td align=\"right\" valign=\"top\">Album Title: </td> <td><input type=\"text\" name=\"".$prefix."albumtitle\" value=\"" . 
-       $album->getTitle() . '" /></td></tr>';
+  echo "\n<tr>";
+  echo "<td align=\"right\" valign=\"top\">Album Title: </td> <td><input type=\"text\" name=\"".$prefix."albumtitle\" value=\"" . 
+       $album->getTitle() . '" />';
+  $id = $album->getAlbumId();
+  $result = query_single_row("SELECT `hitcounter` FROM " . prefix('albums') . " WHERE id = $id");
+  $hc = $result['hitcounter'];
+  if (empty($hc)) { $hc = '0'; }
+  echo " Hit counter: ". $hc . " <input type=\"checkbox\" name=\"reset_hitcounter\"> Reset</td>";
+  echo '</tr>';
   echo "\n<tr><td align=\"right\" valign=\"top\">Album Description: </td> <td><textarea name=\"".$prefix."albumdesc\" cols=\"60\" rows=\"6\">" .
        $album->getDesc() . "</textarea></td></tr>";
   echo "\n<tr>";		
@@ -506,6 +513,10 @@ function processAlbumEdit($index, $album) {
   $album->setSortDirection('image', strip($_POST[$prefix.'image_sortdirection']));   
   $album->setSubalbumSortType(strip($_POST[$prefix.'subalbumsortby']));   
   $album->setSortDirection('album', strip($_POST[$prefix.'album_sortdirection']));   
+  if (isset($_POST['reset_hitcounter'])) {
+    $id = $album->getAlbumID();
+    query("UPDATE " . prefix('albums') . " SET `hitcounter`= 0 WHERE `id` = $id");
+  }
 
   if ($_POST[$prefix.'albumpass'] == $_POST[$prefix.'albumpass_2']) {
     $pwd = trim($_POST[$prefix.'albumpass']);

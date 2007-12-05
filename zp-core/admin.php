@@ -36,9 +36,16 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
   if (isset($_GET['action'])) {
     $action = $_GET['action'];
 
+/** Reset hitcounters ************************************************************/
+/******************************************************************************/
+    if ($action == "reset_hitcounters") {
+      query("UPDATE " . prefix('albums') . " SET `hitcounter`= 0");
+      query("UPDATE " . prefix('images') . " SET `hitcounter`= 0");
+	
 /** SAVE **********************************************************************/
-/*****************************************************************************/
-    if ($action == "save") {
+/******************************************************************************/
+    } else if ($action == "save") {
+	    
 /** SAVE A SINGLE ALBUM *******************************************************/
       if ($_POST['album']) {
       
@@ -68,6 +75,10 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
               $image->setDateTime(strip($_POST["$i-date"]));  
               $image->setShow(strip($_POST["$i-Visible"]));  
               $image->setCommentsAllowed(strip($_POST["$i-allowcomments"]));  
+			  if (isset($_POST["$i-reset_hitcounter"])) {
+			    $id = $image->id;
+                query("UPDATE " . prefix('images') . " SET `hitcounter`= 0 WHERE `id` = $id");
+			  }
               $image->save();
             }
           }
@@ -637,6 +648,14 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                 <input type="hidden" name="<?php echo $currentimage; ?>-filename" value="<?php echo $image->filename; ?>" />
                 <table border="0" class="formlayout">
                   <tr><td align="right" valign="top">Title: </td> <td><input type="text" size="56" style="width: 360px" name="<?php echo $currentimage; ?>-title" value="<?php echo $image->getTitle(); ?>" /></td></tr>
+                  <?php
+                    $id = $image->id;
+                    $result = query_single_row("SELECT `hitcounter` FROM " . prefix('images') . " WHERE `id` = $id");
+                    $hc = $result['hitcounter'];
+                    if (empty($hc)) { $hc = '0'; }
+                    echo "<td></td><td>Hit counter: ". $hc . " <input type=\"checkbox\" name=\"reset_hitcounter\"> Reset</td>";
+                  ?>
+				  </tr>
                   <tr><td align="right" valign="top">Description: </td> <td><textarea name="<?php echo $currentimage; ?>-desc" cols="60" rows="4" style="width: 360px"><?php echo $image->getDesc(); ?></textarea></td></tr>
                   <tr><td align="right" valign="top">Location: </td> <td><input type="text" size="56" style="width: 360px" name="<?php echo $currentimage; ?>-location" value="<?php echo $image->getLocation(); ?>" /></td></tr>
                   <tr><td align="right" valign="top">City: </td> <td><input type="text" size="56" style="width: 360px" name="<?php echo $currentimage; ?>-city" value="<?php echo $image->getCity(); ?>" /></td></tr>
@@ -1545,6 +1564,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
             <p><strong><a href="?prune=true">Refresh the Database</a></strong> - This cleans the database, removes any orphan entries for comments, images, and albums.</p>
             <p><strong><a href="cache-images.php">Pre-Cache Images</a></strong> - Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser.</p>
             <p><strong><a href="refresh-metadata.php">Refresh Image Metadata</a></strong> - Forces a refresh of the EXIF and IPTC data for all images.</p>
+            <p><strong><a href="?action=reset_hitcounters">Reset all hitcounters</a></strong> - Sets all album and image hitcounters to zero.</p>
         </div>
       
       

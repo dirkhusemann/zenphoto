@@ -1359,28 +1359,35 @@ function printLatestComments($number) {
 }
 
 /**
- * counts and prints the hits of an image
+ * increments the hitcounter
  * @param string $option "image" for image hit counter (default), "album" for album hit counter
- * @param string $visible true prints the hits
- * @return string with the hits of the image
- * @since 1.1
+ * @return string  hitcount
+ * @since 1.1.3
  */
-function hitcounter($option="image", $visible=true) {
+function hitcounter($option="image") {
   switch($option) {
 		case "image":
 			$id = getImageID(); 
 			$dbtable = prefix('images');
+			$doUpdate = true;
 		break;
 		case "album":
 			$id = getAlbumID(); 
 			$dbtable = prefix('albums');
+			$doUpdate = getCurrentPage() == 1; // only count initial page for a hit on an album
 		break;
   }
-  $result = query_single_row("SELECT hitcounter FROM $dbtable WHERE id = $id");
-  $resultupdate = $result['hitcounter']+1;
-  if($visible) { echo $resultupdate; }
-  $result2 = query_single_row("UPDATE $dbtable SET `hitcounter`= $resultupdate WHERE id = $id");
+  $sql = "SELECT `hitcounter` FROM $dbtable WHERE `id` = $id";
+  if ($doUpdate) { $sql .= " FOR UPDATE"; }
+  $result = query_single_row($sql);
+  $resultupdate = $result['hitcounter'];
+  if ($doUpdate) {
+    $resultupdate++;
+    query("UPDATE $dbtable SET `hitcounter`= $resultupdate WHERE `id` = $id");
+  }
+  return $resultupdate;
 }
+
 
 function printImageStatistic($number, $option) {
   $images = getImageStatistic($number, $option);

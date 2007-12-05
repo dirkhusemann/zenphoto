@@ -316,13 +316,14 @@ if ($_GET['format'] != 'xml') {
 <div class="footlinks">
 
 <?php 
-if (getOption('Use_Simpleviewer') && !getOption('mod_rewrite')) { 
-  /* display missing css file error */
-  echo '<div class="errorbox" id="message">'; 
-  echo  "<h2>" . "Simpleviewer requires <em>mod_rewrite</em> to be set. Simpleviewer is disabled." . "</h2>";  
-  echo '</div>'; 
-  } 
-printThemeInfo(); 
+$h = hitcounter('album');
+if ($h == 1) {
+  $h .= ' hit';
+} else {
+  $h .= ' hits';
+}
+echo "<p>$h on this album</p>";
+printThemeInfo();
 ?>
 <a href="http://www.zenphoto.org" title="A simpler web photo album">Powered by 
 <font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font size="1" face="Arial Black">photo</font></span></a><br />

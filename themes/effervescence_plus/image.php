@@ -141,7 +141,16 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 
 	<!-- Footer -->
 	<div class="footlinks">
-  		<?php printThemeInfo(); ?>
+  		<?php 
+		  $h = hitcounter('image');
+		  if ($h == 1) {
+		    $h .= ' hit';
+		  } else {
+		    $h .= ' hits';
+		  }
+          echo "<p>$h on this image</p>";
+		  printThemeInfo(); 
+		?>
   		<a href="http://www.zenphoto.org" title="A simpler web photo album">Powered by 
   		<font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font face="Arial Black" size="1">photo</font></span></a>
 	</div>

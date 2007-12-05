@@ -435,7 +435,7 @@ function zp_error($message) {
   global $_zp_error;
   if (!$_zp_error) {
     echo '<div style="padding: 15px; border: 1px solid #F99; background-color: #FFF0F0; margin: 20px; font-family: Arial, Helvetica, sans-serif; font-size: 12pt;">'
-      . ' <h2 style="margin: 0px 0px 5px; color: #C30;">Zenphoto Error</h2><p>' . "\n\n" . $message . '</p>';
+      . ' <h2 style="margin: 0px 0px 5px; color: #C30;">Zenphoto Error</h2><div style=" color:#000;">' . "\n\n" . $message . '</div>';
     if (DEBUG) {
       // Get a backtrace.
       $bt = debug_backtrace();
