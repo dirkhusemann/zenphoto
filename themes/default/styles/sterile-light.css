@@ -174,6 +174,9 @@ ul.pagelist li.next {
 .pagenav {
 	clear: both;
 }
+.disabled_nav {
+	visibility: hidden;
+}
 
 
 /* AJAX

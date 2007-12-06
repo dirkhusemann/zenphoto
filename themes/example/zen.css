@@ -18,6 +18,7 @@ hr { clear: both; height: 0px; border: 0px; border-top: 1px solid #ccc; margin-t
 #albums { clear: both; margin: 5px 0px 10px; padding: 0px; }
 .pagenav { margin: 5px 0px 5px; font-size: 8pt; font-weight: bold; color: #CCC; clear: both; }
 .pagenav A:link, .pagenav A:visited { color: #333; text-decoration: none; }
+.disabled_nav {visibility: hidden;}
 .disabledlink { color: #ddd; cursor: default; }
 .albumtitle H3 { margin: 0px; padding: 0px; }
 A:link, A:visited {text-decoration: none;color: #3366CC;}
