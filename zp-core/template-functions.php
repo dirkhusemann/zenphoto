@@ -309,28 +309,31 @@ function printPageList($class="pagelist", $id=NULL) {
 
 
 function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextprev=true, $class="pagelist", $id=NULL) {
-  echo "<div" . (($id) ? " id=\"$id\"" : "") . " class=\"$class\">";
   $total = getTotalPages($oneImagePage);
-  $current = getCurrentPage();
-  echo "\n<ul class=\"$class\">";
-  if ($nextprev) {
-    echo "\n  <li class=\"prev\">"; 
-    printPrevPageLink($prevtext, "Previous Page");
-    echo "</li>";
+  if ($total > 1) { 
+    echo "<div" . (($id) ? " id=\"$id\"" : "") . " class=\"$class\">";
+    $total = getTotalPages($oneImagePage);
+    $current = getCurrentPage();
+    echo "\n<ul class=\"$class\">";
+    if ($nextprev) {
+      echo "\n  <li class=\"prev\">"; 
+      printPrevPageLink($prevtext, "Previous Page");
+      echo "</li>";
+    }
+    for ($i=($j=max(1, min($current-2, $total-6))); $i <= min($total, $j+6); $i++) {
+      echo "\n  <li" . (($i == $current) ? " class=\"current\"" : "") . ">";
+      printLink(getPageURL_($i, $total), $i, "Page $i" . (($i == $current) ? " (Current Page)" : ""));
+      echo "</li>";
+    }
+    if ($i <= $total) {echo "\n <li><a>" . ". . ." . "</a></li>"; }
+    if ($nextprev) {
+      echo "\n  <li class=\"next\">"; 
+      printNextPageLink($nexttext, "Next Page");
+      echo "</li>"; 
+    }
+    echo "\n</ul>";
+    echo "\n</div>\n";
   }
-  for ($i=($j=max(1, min($current-2, $total-6))); $i <= min($total, $j+6); $i++) {
-    echo "\n  <li" . (($i == $current) ? " class=\"current\"" : "") . ">";
-    printLink(getPageURL_($i, $total), $i, "Page $i" . (($i == $current) ? " (Current Page)" : ""));
-    echo "</li>";
-  }
-  if ($i <= $total) {echo "\n <li><a>" . ". . ." . "</a></li>"; }
-  if ($nextprev) {
-    echo "\n  <li class=\"next\">"; 
-    printNextPageLink($nexttext, "Next Page");
-    echo "</li>"; 
-  }
-  echo "\n</ul>";
-  echo "\n</div>\n";
 }
 
 /*** Album Context ************************/
