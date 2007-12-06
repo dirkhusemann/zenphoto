@@ -1523,7 +1523,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
       
     <?php } else { $page = "home"; ?>
       <h1>zenphoto Administration</h1>
-      
+      <?php if ($v = checkForUpdate()) { echo "\n<div style=\"font-size:150%;color:#C30;text-align:right;\"><a href=\"http://www.zenphoto.org\">zenphoto version $v is available.</a></div>\n"; } ?>
       <ul id="home-actions">
         <li><a href="?page=upload"> &raquo; <strong>Upload</strong> pictures.</a></li>
         <li><a href="?page=edit"> &raquo; <strong>Edit</strong> titles, descriptions, and other metadata.</a></li>

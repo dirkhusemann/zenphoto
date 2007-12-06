@@ -534,7 +534,35 @@ function processAlbumEdit($index, $album) {
   $album->setPasswordHint(strip($_POST[$prefix.'albumpass_hint']));   
   $album->save();
   return $notify;
+}
 
+/**
+ * Searches the zenphoto.org home page for the current zenphoto download
+ * locates the version number of the download and compares it to the version
+ * we are running. 
+ * 
+ *@rerturn string If there is a more current version on the WEB, returns its version number otherwise returns FALSE
+ *@since 1.1.3
+ */
+function checkForUpdate() {
+  global $_zp_WEB_Version;
+  if (isset($_zp_WEB_Version)) { return $_zp_WEB_Version; }
+  $page = file_get_contents('http://www.zenphoto.org');
+  $i = strpos($page, '<a href="files/zenphoto-') + 24;
+  $j = strpos($page, '.zip">', $i);
+  if ($j === FALSE) { $j = strpos($page, '.tar.gz">', $i); }
+  $v = substr($page, $i, $j - $i);
+  $wv = explode('.', $v);
+  $c = getOption('version');
+  $cv = explode('.', $c);
+  $wvd = $wv[0] * 1000000000 + $wv[1] * 10000000 + $wv[2] * 100000 + $wv[3];
+  $cvd = $cv[0] * 1000000000 + $cv[1] * 10000000 + $cv[2] * 100000 + $cv[3];
+  if ($wvd > $cvd) {
+    $_zp_WEB_Version = $v;
+  } else {
+    $_zp_WEB_Version = false;
+  }
+  Return $_zp_WEB_Version;
 }
 
 ?>

@@ -65,38 +65,47 @@ function printSubalbumAdmin($text, $before='', $after='') {
  * @since 1.1
  */
 function printAdminToolbox($context=null, $id="admin") {
-  global $_zp_current_album, $_zp_current_image;
+  global $_zp_current_album, $_zp_current_image, $_zp_current_search;
   if (zp_loggedin()) {
     $zf = WEBPATH."/".ZENFOLDER;
     $dataid = $id . '_data';
+	$page = getCurrentPage();
+	$redirect = '';
     echo "\n<script type=\"text/javascript\" src=\"".$zf."/js/admin.js\"></script>\n";
     if (is_null($context)) { $context = get_context(); }
     echo '<div id="' .$id. '">'."\n".'<a href="javascript: toggle('. "'" .$dataid."'".');"><h3>Admin Toolbox</h3></a>'."\n"."\n</div>"; 
     echo '<div id="' .$dataid. '" style="display: none;">'."\n"; 
     printAdminLink('Admin', '', "<br />\n"); 
-    if ($context == ZP_INDEX) {
-      if (!in_context(ZP_SEARCH)) {
-        printSortableGalleryLink('Sort gallery', 'Manual sorting');
-        echo "<br />\n";
-        printLink($zf . '/admin.php?page=upload' . urlencode($_zp_current_album->name), "New album", NULL, NULL, NULL); 
-        echo "<br />\n";
-	    }
-    } else if (!in_context(ZP_IMAGE | ZP_SEARCH)) {
+    if ($context === ZP_INDEX) {
+      printSortableGalleryLink('Sort gallery', 'Manual sorting');
+      echo "<br />\n";
+      printLink($zf . '/admin.php?page=upload' . urlencode($_zp_current_album->name), "New album", NULL, NULL, NULL); 
+      echo "<br />\n";
+	  $redirect = "&page=$page";
+    } else if (!in_context(ZP_IMAGE | ZP_SEARCH)) {  // then it must be an album page
       printSubalbumAdmin('Edit album', '', "<br />\n");
       printSortableAlbumLink('Sort album', 'Manual sorting');
       echo "<br />\n";
-      printLink($zf . '/admin.php?page=upload&album=' . urlencode($_zp_current_album->name), "Upload Here", NULL, NULL, NULL); 
+	  $albumname = urlencode($_zp_current_album->name);
+      printLink($zf . '/admin.php?page=upload&album=' . $albumname, "Upload Here", NULL, NULL, NULL); 
       echo "<br />\n";
-      printLink($zf . '/admin.php?page=upload&new&album=' . urlencode($_zp_current_album->name), "New Album Here", NULL, NULL, NULL); 
+      printLink($zf . '/admin.php?page=upload&new&album=' . $albumname, "New Album Here", NULL, NULL, NULL); 
       echo "<br />\n";
 	  echo "<a href=\"javascript: confirmDeleteAlbum('".$zf."/admin.php?page=edit&action=deletealbum&album=" .
 	        queryEncode($_zp_current_album->name) . "');\" title=\"Delete the album\">Delete album</a><br />\n";
+	  $redirect = "&album=$albumname&page=$page";
     } else if (in_context(ZP_IMAGE)) {
+	  $albumname = urlencode($_zp_current_album->name);
+	  $imagename = queryEncode($_zp_current_image->filename);
       echo "<a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?page=edit&action=deleteimage&album=" .
-	       queryEncode($_zp_current_album->name) . "&image=".queryEncode($_zp_current_image->filename) . "');\" title=\"Delete the image\">Delete image</a>";  
+	       $albumname . "&image=". $imagename . "');\" title=\"Delete the image\">Delete image</a>";  
 	  echo "<br />\n";
-	} 
-    echo "<a href=\"".$zf."/admin.php?logout\">Logout</a>\n";
+	  $redirect = "&album=$albumname&image=$imagename";
+	} else if (in_context(ZP_SEARCH)) {
+	  $redirect = "&p=search" . $_zp_current_search->getSearchParams() . "&page=$page";
+	}
+	
+    echo "<a href=\"".$zf."/admin.php?logout$redirect\">Logout</a>\n";
     echo "</div>\n"; 
   }
 }
