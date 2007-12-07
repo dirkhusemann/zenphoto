@@ -13,6 +13,21 @@ require_once('exif/exif.php');
 require_once('plugins/phooglelite.php');
 require_once('functions-db.php');
 
+if (defined('OFFSET_PATH')) {
+  $const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
+} else {
+  $const_webpath = dirname($_SERVER['SCRIPT_NAME']);
+}
+if ($const_webpath == '\\' || $const_webpath == '/') $const_webpath = '';
+if (!defined('WEBPATH')) { define('WEBPATH', $const_webpath); }
+define('SERVERPATH', dirname(dirname(__FILE__)));
+define('PROTOCOL', getOption('server_protocol'));
+define('FULLWEBPATH', PROTOCOL."://" . $_SERVER['HTTP_HOST'] . WEBPATH);
+define('SAFE_MODE_ALBUM_SEP', '__');
+define('DEBUG', false);
+define('CACHEFOLDER', '/cache/');
+define('SERVERCACHE', SERVERPATH . substr(CACHEFOLDER, 0, -1));
+
 // Set the version number.
 $_zp_conf_vars['version'] = '1.1.2';
 
@@ -103,21 +118,6 @@ function getOptionList() {
   if (NULL == $_zp_options) { getOption('nil'); } // pre-load from the database
   return $_zp_options; 
 }
-
-if (defined('OFFSET_PATH')) {
-  $const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
-} else {
-  $const_webpath = dirname($_SERVER['SCRIPT_NAME']);
-}
-if ($const_webpath == '\\' || $const_webpath == '/') $const_webpath = '';
-define('WEBPATH', $const_webpath);
-define('SERVERPATH', dirname(dirname(__FILE__)));
-define('PROTOCOL', getOption('server_protocol'));
-define('FULLWEBPATH', PROTOCOL."://" . $_SERVER['HTTP_HOST'] . WEBPATH);
-define('SAFE_MODE_ALBUM_SEP', '__');
-define('DEBUG', false);
-define('CACHEFOLDER', '/cache/');
-define('SERVERCACHE', SERVERPATH . substr(CACHEFOLDER, 0, -1));
 /* album folder 
  *  Name of the folder where albums are located.
  *  may be overridden by zp-config: 
