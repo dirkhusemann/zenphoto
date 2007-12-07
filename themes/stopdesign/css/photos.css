@@ -763,7 +763,7 @@ html>body #desc h1 {
   }
 #desc p {
   max-width:30em;
-  margin:0 0 .75em 250px;
+  margin:0 0 .75em -250px;
   padding:0 15px 0 0;
   }
 #desc #imageDesc {
