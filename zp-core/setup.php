@@ -81,6 +81,7 @@ if (file_exists("zp-config.php")) {
       `place` varchar(255) default NULL,
       `show` int(1) unsigned NOT NULL default '1',
       `closecomments` int(1) unsigned NOT NULL default '0',
+      `commentson` int(1) UNSIGNED NOT NULL default '1',   
       `thumb` varchar(255) default NULL,
       `mtime` int(32) default NULL,
       `sort_type` varchar(20) default NULL,
