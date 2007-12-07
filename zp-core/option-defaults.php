@@ -11,7 +11,7 @@ function setDefault($option, $default) {
   require('zp-config.php');
   unset($setup);  // it is now ok (and necessary) to access the database options table
 
-  global $_zp_conf_vars;
+  global $_zp_conf_vars, $_zp_options;
   $conf = $_zp_conf_vars;
   
   setDefault('gallery_title', "Gallery");
@@ -56,8 +56,8 @@ function setDefault($option, $default) {
   setDefault('current_theme', 'default');
   setDefault('feed_items', 10);
   setDefault('search_fields', 32767);  
-  
-  if (!isset($_zp_conf_vars['admin_reset_date'])) {
+
+  if (is_null(getOption('admin_reset_date'))) {
     setOption('adminpass', ""); // force setting the password.
   }  
   
