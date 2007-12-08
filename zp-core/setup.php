@@ -64,7 +64,7 @@ if (file_exists("zp-config.php")) {
 if (file_exists("zp-config.php")) {
   $credentials = getOption('adminuser').getOption('adminpass');
   if (!empty($credentials)) {
-    if (!zp_loggedin() && (!isset($_GET['create']))) {  // Display the login form and exit.
+    if (!zp_loggedin() && (!isset($_GET['create']) && !isset($_GET['update']))) {  // Display the login form and exit.
       printLoginForm("/" . ZENFOLDER . "/setup.php");
       exit();
     }
@@ -241,7 +241,7 @@ if (file_exists("zp-config.php")) {
 	 ******                                                                                                                                        ******	 
 	********************************************************************************/   
   
-    if (isset($_GET['create']) && db_connect()) {
+    if (isset($_GET['create']) || isset($_GET['update']) && db_connect()) {
       echo "<h3>Abut to $task tables...</h3>";
       // Bypass the error-handling in query()... we don't want it to stop.
 	  // Besides, we expect that some tables/fields already exist.
@@ -259,10 +259,8 @@ if (file_exists("zp-config.php")) {
 	  // set defaults on any options that need it
 	  require('option-defaults.php');
 	    
-	  if ($task == 'upgrade') {
+	  if ($task == 'update') {
         echo "<h3>Cleaning up...</h3>";
-	  
-	    require('option-defaults.php');
         require_once("admin-functions.php"); 
         $gallery = new Gallery();	  
         $gallery->clearCache();
@@ -272,7 +270,7 @@ if (file_exists("zp-config.php")) {
         $needsrefresh = false;
 	  }
 	    
-	  echo "<h3>Done!</h3>";
+	  echo "<h3>Done with table $task!</h3>";
       $adm = getOption('adminuser');
       $pas = getOption('adminpass');
 
@@ -288,7 +286,7 @@ if (file_exists("zp-config.php")) {
     } else if (db_connect()) {
       echo "<h3>database connected</h3>";
       echo "<p>We're all set to $task the database tables: <code>$tbl_albums</code>, <code>$tbl_images</code>, <code>$tbl_comments, and <code>$tbl_options";
-      echo "<p><a href=\"?create\" title=\"$task the database tables.\" style=\"font-size: 15pt; font-weight: bold;\">Go!</a></p>";
+      echo "<p><a href=\"?$task\" title=\"$task the database tables.\" style=\"font-size: 15pt; font-weight: bold;\">Go!</a></p>";
     } else {
       echo "<h3>database not connected</h3>";
       echo "<p>Check the zp-config.php file to make sure you've got the right username, password, host, and database. If you haven't created
