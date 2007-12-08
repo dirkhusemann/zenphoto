@@ -5,17 +5,29 @@ $setup = true;
 if (file_exists("zp-config.php")) {
   require_once("zp-config.php");
   require_once('functions-db.php');
-  $task = 'create';
-  if (db_connect() && !(isset($_GET['create']))) {
+  $task = '';
+  if (isset($_GET['create'])) { $task = 'create'; }
+  if (isset($_GET['update'])) { $task = 'update'; }
+  if (db_connect() && empty($task)) {
+    $task = 'update';
     $result = mysql_query("SELECT `name`, `value` FROM " . prefix('options') . " LIMIT 1", $mysql_connection);
     if ($result) {
       unset($setup);
     }
-    $result = mysql_query("SELECT `folder` FROM " . prefix('albums') . " LIMIT 1", $mysql_connection);
-    if ($result) {
-      $task = 'upgrade';
+    $result = mysql_query("SELECT `id` FROM " . prefix('albums') . " LIMIT 1", $mysql_connection);
+    if (empty($result)) {
+      $task = 'create';
+    }
+    $result = mysql_query("SELECT `id` FROM " . prefix('images') . " LIMIT 1", $mysql_connection);
+    if (empty($result)) {
+      $task = 'create';
+    }
+    $result = mysql_query("SELECT `id` FROM " . prefix('comments') . " LIMIT 1", $mysql_connection);
+    if (empty($result)) {
+      $task = 'create';
     }
   } 
+
   require_once("admin-functions.php"); 
 } 
 ?>
