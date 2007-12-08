@@ -548,14 +548,10 @@ function checkForUpdate() {
   global $_zp_WEB_Version;
   if (isset($_zp_WEB_Version)) { return $_zp_WEB_Version; }
   $c = getOption('version');
-  $page = @file_get_contents('http://www.zenphoto.org');
-  if (empty($page)) {
+  $v = @file_get_contents('http://www.zenphoto.org/files/LATESTVERSION');
+  if (empty($v)) {
     $_zp_WEB_Version = false;
   } else {
-    $i = strpos($page, '<a href="files/zenphoto-') + 24;
-    $j = strpos($page, '.zip">', $i);
-    if ($j === FALSE) { $j = strpos($page, '.tar.gz">', $i); }
-    $v = substr($page, $i, $j - $i);
     $wv = explode('.', $v);
     $cv = explode('.', $c);
     $wvd = $wv[0] * 1000000000 + $wv[1] * 10000000 + $wv[2] * 100000 + $wv[3];
