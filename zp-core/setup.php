@@ -1,13 +1,186 @@
 <?php
+global $setup;
+$checked = isset($_GET['checked']);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 define('OFFSET_PATH', true);
 $setup = true;
+if (file_exists("zp-config.php")) {
+  require_once("zp-config.php");
+  global $_zp_conf_vars;
+  if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
+    @mysql_select_db($_zp_conf_vars['mysql_database']);  
+    $result = mysql_query("SELECT `id` FROM " . $_zp_conf_vars['mysql_prefix'].'options' . " LIMIT 1", $connection);
+    if ($result) {
+      unset($setup);
+    }
+  } 
+}
+require_once("admin-functions.php"); 
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<title>zenphoto setup</title>
+<style type="text/css">
+  body {margin: 0px 20% 0px; background-color: #f4f4f8; font-family: Arial, Helvetica, Verdana, sans-serif; font-size: 10pt;}
+  li { margin-bottom: 1em; }
+  #main { background-color: #f0f0f4; padding: 30px 20px; }
+  h1 { font-weight: normal; font-size: 24pt; }
+  h1, h2, h3, h4, h5 { padding: 0px; margin: 0px; margin-bottom: .15em; }
+  #content {padding: 15px;border: 1px solid #dddde2;background-color: #fff;margin-bottom: 20px;}
+  A:link, A:visited { text-decoration: none; color: #36C; }
+  A:hover, A:active { text-decoration: underline; color: #F60; background-color: #FFFCF4; }
+  code { color: #090; }
+  cite { color: #09C; font-style: normal; font-size: 8pt;}
+  .bug, a.bug { color: #D60 !important; font-family: monospace; }
+  .pass {background:url(images/pass.png) top left no-repeat; padding-left: 20px; line-height:20px;}
+  .fail {background:url(images/fail.png) top left no-repeat; padding-left: 20px; line-height:20px;}
+  .warn {background:url(images/warn.png) top left no-repeat; padding-left: 20px; line-height:20px;}
+  .error {line-height:1; border-top:1px solid #FF9595; border-bottom:1px solid #FF9595; background-color:#FFEAEA; padding:10px 8px 10px 8px;margin-left: 20px; }
+  h4 { font-weight: normal; font-size: 10pt; margin-left: 2em; margin-bottom: .15em; margin-top: .35em;}
+</style>
+</head>
+<body>
+<div id="main">
+<h1>zenphoto setup</h1>
+<div id="content">
+<?php
+if (!$checked) {
+
+  /***********************************************************************
+       *                                                                                                                                           *
+       *                                          SYSTEMS CHECK                                                                  *
+       *                                                                                                                                           *
+      ************************************************************************/
+  global $_zp_conf_vars;
+
+  function checkMark($check, $text, $sfx, $msg) {
+    if ($check > 0) {$check = 1; }
+    echo "\n<br/><span class=\"";
+	switch ($check) {
+	  case 0: echo "fail"; break;
+	  case 1: echo "pass"; break;
+	  case -1: echo "warn"; break;
+	}
+    echo "\">$text</span>";
+	if (!$check) { 
+	  if (!empty($sfx)) { echo $sfx; }
+	  if (!empty($msg)) { echo "\n<p class=\"error\">$msg</p>"; }
+	}
+	return $check;
+  }
+  function folderCheck($folder) {
+    $path = dirname(dirname(__FILE__)) . $folder;
+    if (!is_dir($path)) {
+      @mkdir($path, 0777);
+    }
+    @chmod($path, 0777);
+	  if (!is_dir($path)) {
+	    $sfx = " [Does not exist]"; 
+	  } else {
+	    $sfx = " [Not writeable]";
+	  }
+    return checkMark(is_dir($path) && is_writable($path), " <em>$folder</em> folder", $sfx, 
+	       "Change the permissions on the <code>$folder</code> folder to be writable by the server</strong> " .  
+           "(<code>chmod 777 $folder</code>)");
+	}
+
+
+  $good = true;
+  
+  $phpv = phpversion();
+  $n = explode(".", $phpv);
+  $v = $n[0]*10000 + $n[1]*100 + $n[2]; 
+  $php = $v >= 40100;
+  $good = checkMark($php, " PHP version 4.1.0 or greater", " [version is $phpv]", '') && $good; 
+
+  $good = checkMark(extension_loaded('gd'), " PHP GD support", '', '') && $good;
+
+  $sql = extension_loaded('mysql');
+  $good = checkMark($sql, " PHP mySQL support", '', '') && $good;
+
+  if (file_exists("zp-config.php")) {
+    require_once("zp-config.php");
+    $cfg = true;
+  } else {
+    $cfg = false;
+  }
+  $good = checkMark ($cfg, " zp-config.php file", " [does not exist]",
+               "Edit the <code>zp-config.php.example</code> file and rename it to <code>zp-config.php</code> " .
+	           "You can find the file in the \"zp-core\" directory.") && $good;
+
+  if ($sql) {
+    if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
+      $db = $_zp_conf_vars['mysql_database'];
+	  $db = @mysql_select_db($db);
+    }
+  }
+  $good = checkMark($connection, " connect to mySQL", '', '') && $good; 
+  if ($connection) {
+    $a = mysql_get_server_info();
+    $mysqlv = substr($a, 0, strpos($a, "-"));
+    $n = explode(".", $mysqlv);
+    $v = $n[0]*10000 + $n[1]*100 + $n[2]; 
+    $sqlv = $v >= 32300;
+    $good = checkMark($sqlv, " mySQL version 3.2.3 or greater", " [version is $mysqlv]", "") && $good; 
+    $good = checkMark($db, " connect to \"" . $_zp_conf_vars['mysql_database'] . "\"", '', '') && $good;
+    }
+	
+  $ht = @file_get_contents('../.htaccess');
+  $htu = strtoupper($ht);
+  $i = strpos($htu, 'REWRITEENGINE');
+  if ($i === false) {
+    $rw = '';
+  } else {
+    $j = strpos($htu, "\n", $i+13);
+    $rw = trim(substr($htu, $i+13, $j-$i-13));
+  }
+  $mod = '';
+  $msg = " .htaccess file";
+  if (!empty($rw)) { 
+    $msg .= " (<em>RewriteEngine</em> is <strong>$rw</strong>)";
+    $mod = "&mod_rewrite=$rw";
+  }
+  if (empty($ht)) { $check = -1; } else { $ch = 1; }
+  checkMark($ch, $msg, " [is empty or does not exist]", 
+               "Edit the <code>.htaccess</code> file in the root zenphoto folder if you have the mod_rewrite apache ". 
+               "module, and want cruft-free URLs. Just change the one line indicated to make it work."); 
+
+  $base = true;
+  if ($rw == 'ON') {
+    $i = strpos($htu, 'REWRITEBASE', $j);
+    if ($i === false) {
+      $base = false;
+    } else {
+      $j = strpos($htu, "\n", $i+11);
+      $b = trim(substr($ht, $i+11, $j-$i-11));
+	  $d = dirname(dirname($_SERVER['SCRIPT_NAME']));
+      $good = checkMark($base = ($b == $d), " RewriteBase", " [Does not match install folder]", 
+	               "Install folder is <code>$d</code> and RewriteBase is set to <code>$b</code>. ".
+				   "Set <code>RewriteBase</code> in your <code>.htaccess</code> file to <code>$d</code>.") && $good;
+    }
+  }
+  $good = folderCheck('albums') && $good;
+  $good = folderCheck('cache') && $good;
+ 
+  if ($good) {
+    $dbmsg = "";
+  } else {
+    echo "<p>You need to address the problems indicated above.</p>";
+	exit();
+  }
+} else { 
+  $dbmsg = "database connected";
+} // system check
 if (file_exists("zp-config.php")) {
   require_once("zp-config.php");
   require_once('functions-db.php');
   $task = '';
   if (isset($_GET['create'])) { $task = 'create'; }
   if (isset($_GET['update'])) { $task = 'update'; }
+  
+  
   if (db_connect() && empty($task)) {
     $task = 'update';
     $result = mysql_query("SELECT `name`, `value` FROM " . prefix('options') . " LIMIT 1", $mysql_connection);
@@ -26,49 +199,20 @@ if (file_exists("zp-config.php")) {
     if (empty($result)) {
       $task = 'create';
     }
-  } 
-
-  require_once("admin-functions.php"); 
-} 
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-<head>
-<title>zenphoto setup</title>
-<style type="text/css">
-  body { 
-    margin: 20px 20% 10px;
-    padding: 20px;
-    background-color: #f3f3f3; 
-    font-family: Arial, Helvetica, Verdana, sans-serif;
-    font-size: 10pt;
+    $credentials = getOption('adminuser').getOption('adminpass');
+    if (!empty($credentials)) {
+      if (!zp_loggedin() && (!isset($_GET['create']) && !isset($_GET['update']))) {  // Display the login form and exit.
+	    if (isset($_GET['mod_rewrite'])) {
+	      $rw = "&mod_rewrite=" . $_GET['mod_rewrite'];
+	    } else {
+	      $rw = '';
+	    }
+        printLoginForm("/" . ZENFOLDER . "/setup.php?checked$rw");
+        exit();
+      }
+    } 
   }
-  h1, h2, h3, h4, h5 { padding: 0px; margin: 0px; margin-bottom: .15em; }
-
-  A:link, A:visited {
-    text-decoration: none;
-    color: #36C;
-  }
-  A:hover, A:active {
-    text-decoration: underline;
-    color: #F60;
-    background-color: #FFFCF4;
-  }
-  LI { margin-bottom: 1em; }
-
-</style>
-</head>
-<body>
-  <h1>zenphoto setup</h1>
-<?php
-if (file_exists("zp-config.php")) {
-  $credentials = getOption('adminuser').getOption('adminpass');
-  if (!empty($credentials)) {
-    if (!zp_loggedin() && (!isset($_GET['create']) && !isset($_GET['update']))) {  // Display the login form and exit.
-      printLoginForm("/" . ZENFOLDER . "/setup.php");
-      exit();
-    }
-  } 
+  
     // Prefix the table names. These already have `backticks` around them!
     $tbl_albums = prefix('albums');
     $tbl_comments = prefix('comments');
@@ -242,7 +386,7 @@ if (file_exists("zp-config.php")) {
 	********************************************************************************/   
   
     if (isset($_GET['create']) || isset($_GET['update']) && db_connect()) {
-      echo "<h3>Abut to $task tables...</h3>";
+      echo "<h3>About to $task tables...</h3>";
       // Bypass the error-handling in query()... we don't want it to stop.
 	  // Besides, we expect that some tables/fields already exist.
       // This is probably bad behavior, so maybe do some checks?
@@ -284,9 +428,14 @@ if (file_exists("zp-config.php")) {
       }
     
     } else if (db_connect()) {
-      echo "<h3>database connected</h3>";
-      echo "<p>We're all set to $task the database tables: <code>$tbl_albums</code>, <code>$tbl_images</code>, <code>$tbl_comments, and <code>$tbl_options";
-      echo "<p><a href=\"?$task\" title=\"$task the database tables.\" style=\"font-size: 15pt; font-weight: bold;\">Go!</a></p>";
+      echo "<h3>$dbmsg</h3>";
+      echo "<p>We're all set to $task the database tables: <code>$tbl_albums</code>, <code>$tbl_images</code>, <code>$tbl_comments</code>, and <code>$tbl_options</code>";
+	  if (isset($_GET['mod_rewrite'])) {
+	    $rw = "&mod_rewrite=" . $_GET['mod_rewrite'];
+	  } else {
+	    $rw = '';
+	  }
+      echo "<p><a href=\"?checked&$task$rw\" title=\"$task the database tables.\" style=\"font-size: 15pt; font-weight: bold;\">Go!</a></p>";
     } else {
       echo "<h3>database not connected</h3>";
       echo "<p>Check the zp-config.php file to make sure you've got the right username, password, host, and database. If you haven't created
@@ -307,5 +456,7 @@ if (file_exists("zp-config.php")) {
   </ul>
   
   <?php } ?>
+</div>
+</div>
 </body>
 </html>

@@ -23,7 +23,14 @@ function setDefault($option, $default) {
   setDefault('website_url', "");
   setDefault('time_offset', 0);
   setDefault('gmaps_apikey', "");
-  setDefault('mod_rewrite', 0);
+  
+  if ($_GET['mod_rewrite'] == 'ON') {
+    $rw = 1;
+  } else {
+    $rw = 0;
+  }
+  setDefault('mod_rewrite', $rw);
+  
   setDefault('mod_rewrite_image_suffix', ".php");
   setDefault('adminuser', "");
   setDefault('adminpass', "");
