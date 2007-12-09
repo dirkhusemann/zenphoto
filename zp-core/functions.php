@@ -8,6 +8,10 @@ if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
 }
 
 require_once("zp-config.php");
+
+// If the server protocol is not set, set it to the default (obscure zp-config.php change).
+if (!isset($_zp_conf_vars['server_protocol'])) $_zp_conf_vars['server_protocol'] = 'http';
+
 require_once('kses.php');
 require_once('exif/exif.php');
 require_once('plugins/phooglelite.php');
@@ -30,9 +34,6 @@ define('SERVERCACHE', SERVERPATH . substr(CACHEFOLDER, 0, -1));
 
 // Set the version number.
 $_zp_conf_vars['version'] = '1.1.2';
-
-// If the server protocol is not set, set it to the default (obscure zp-config.php change).
-if (!isset($_zp_conf_vars['server_protocol'])) $_zp_conf_vars['server_protocol'] = 'http';
 
 // the options array
 $_zp_options = NULL;
