@@ -302,9 +302,12 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
       $returntab = "";
 	  /*** admin options ***/
 	  if (isset($_POST['saveadminoptions'])) {
-	    if ($_POST['adminpass'] == $_POST['adminpass_2']) {
+		$olduser = getOption('adminuser');
+		$pwd = trim($_POST['adminpass']);
+		if (empty($pwd) && !empty($_POST['adminpass']) && ($olduser != $_POST['adminuser'])) {
+		  $notify = '&mismatch=newuser';
+		} else if ($pwd == $_POST['adminpass_2']) {
           setOption('adminuser', $_POST['adminuser']);
-		  $pwd = trim($_POST['adminpass']);
 		  if (empty($pwd)) {
 		    if (empty($_POST['adminpass'])) {
               setOption('adminpass', NULL);
@@ -315,7 +318,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
 		  }
 		  setOption('admin_reset_date', '0');
 	    } else {
-	      $notify = '&mismatch';
+	      $notify = '&mismatch=password';
 	    }
         setOption('admin_email', $_POST['admin_email']);
 		setOption('admin_name', $_POST['admin_name']);
@@ -1097,8 +1100,13 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 				<input type="hidden" name="saveadminoptions" value="yes" />
 				<?php
 	  			if (isset($_GET['mismatch'])) {
+		          if ($_GET['mismatch'] == 'newuser') {
+			        $msg = 'You must supply a password';
+			      } else {
+			        $msg = 'Your passwords did not match';
+			      }
 	  			  echo '<div class="errorbox" id="message">'; 
-	    		  echo  "<h2>Your passwords did not match</h2>";  
+	    		  echo  "<h2>$msg</h2>";  
 	    		  echo '</div>'; 
 	    		  echo '<script type="text/javascript">'; 
 	    		  echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);"; 
