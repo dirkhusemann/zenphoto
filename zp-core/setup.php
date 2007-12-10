@@ -60,11 +60,11 @@ if (!$checked) {
     echo "\n<br/><span class=\"";
 	switch ($check) {
 	  case 0: echo "fail"; break;
-	  case 1: echo "pass"; break;
 	  case -1: echo "warn"; break;
+	  case 1: echo "pass"; break;
 	}
     echo "\">$text</span>";
-	if (!$check) { 
+	if ($check <= 0) { 
 	  if (!empty($sfx)) { echo $sfx; }
 	  if (!empty($msg)) { echo "\n<p class=\"error\">$msg</p>"; }
 	}
@@ -145,7 +145,8 @@ if (!$checked) {
   if (empty($ht)) { $check = -1; } else { $ch = 1; }
   checkMark($ch, $msg, " [is empty or does not exist]", 
                "Edit the <code>.htaccess</code> file in the root zenphoto folder if you have the mod_rewrite apache ". 
-               "module, and want cruft-free URLs. Just change the one line indicated to make it work."); 
+               "module, and want cruft-free URLs. Just change the one line indicated to make it work. " .
+			   "You can ignore this warning if you do not intend to set the option <code>mod_rewrite</code>."); 
 
   $base = true;
   if ($rw == 'ON') {
