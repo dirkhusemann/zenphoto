@@ -4,8 +4,11 @@ define('OFFSET_PATH', true);
 require_once("sortable.php");
 $adm = getOption('adminuser');
 $pas = getOption('adminpass');
-if (is_null(getOption('admin_reset_date')) || empty($adm) || empty($pas)) { 
+$rsd = getOption('admin_reset_date');
+if (empty($rsd) || empty($adm) || empty($pas)) { 
   $_zp_null_account = true;  // require setting admin user/password
+  } else {
+  $_zp_null_account = false;
 }
 
 $sortby = array('Filename', 'Date', 'Title', 'Manual', 'ID' ); 
@@ -21,7 +24,6 @@ $standardOptions = array('gallery_title','website_title','website_url','time_off
                          'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'search_fields',
 						 'gallery_password', 'gallery_hint', 'search_password', 'search_hint');
           
-global $_zp_null_account;
 if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action handling first. */
   
   $gallery = new Gallery();
@@ -321,7 +323,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
             setOption('adminpass', md5($_POST['adminuser'] . $pwd));
 
 		  }
-		  setOption('admin_reset_date', '0');
+		  setOption('admin_reset_date', '1');
 	    } else {
 	      $notify = '&mismatch=password';
 	    }
@@ -445,11 +447,14 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
   
 } else {
   if (isset($_GET['emailreset'])) {
+	$adm = getOption('adminuser');
+	$pas = getOption('adminpass');
 	setOption('admin_reset_date', time());
-	$ref = md5(getOption('admin_reset_date') . getOption('adminuser') . getOption('adminpass'));
+	$req = getOption('admin_reset_date');
+	$ref = md5($req . $adm . $pas);
 	$msg .= "\nYou are receiving this e-mail becauseof a password reset request on your Zenphoto gallery." . 
-	        "\nTo reset your Zenphoto Admin password visit: ".FULLWEBPATH."/".ZENFOLDER."/admin.php?id=$ref" .
-            "\nIf you do not wish to reset your password just ignore this message.";
+	        "\nTo reset your Zenphoto Admin password visit: ".FULLWEBPATH."/".ZENFOLDER."/admin.php?ticket=$ref" .
+            "\nIf you do not wish to reset your password just ignore this message. This ticket will automatically expire in 3 days.";
 	zp_mail('The Zenphoto information you requested',  $msg); 
   }
 }/* NO Admin-only content between this and the next check. */
@@ -481,7 +486,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
   exit(); 
     
 } else { /* Admin-only content safe from here on. */ 
-  if (is_null(getOption('admin_reset_date'))) { $page = 'options'; } // strongly urge him to set his admin username and password
+  if ($_zp_null_account) { $page = 'options'; } // strongly urge him to set his admin username and password
   printLogoAndLinks();
  
 ?>

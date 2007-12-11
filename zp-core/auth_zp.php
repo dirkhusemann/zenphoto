@@ -10,12 +10,14 @@ $cookiepath = WEBPATH;
 if (WEBPATH == '') { $cookiepath = '/'; }
 $adm = getOption('adminuser');
 $pas = getOption('adminpass');
-if (isset($_GET['id'])) { // paassword reset query
-  $offer = $_GET['id'];
-  $ref = md5(getOption('admin_reset_date') . getOption('adminuser') . getOption('adminpass'));
+if (isset($_GET['ticket'])) { // paassword reset query
+  $offer = $_GET['ticket'];
+  $req = getOption('admin_reset_date');
+  $ref = md5($req . $adm . $pas);
   if ($ref === $offer) {
-    setOption('adminpass', '');
-	$pas = '';
+    if (time() <= ($req + (3 * 24 * 60 * 60))) { // you have one week to use the request
+      setOption('admin_reset_date', NULL);
+	}
   }
 }
 $check_auth = md5($adm . $pas);
@@ -31,7 +33,8 @@ if (isset($_COOKIE['zenphoto_auth']) && !isset($_POST['login'])) {
   // Handle the login form.
   if (isset($_POST['login']) && isset($_POST['user']) && isset($_POST['pass'])) {
     $post_user = $_POST['user'];
-	if (($_POST['pass'] == $pas) && (is_null(getOption('admin_reset_date')))) { // old cleartext password
+    $rsd = getOption('admin_reset_date');
+	if (($_POST['pass'] == $pas) && empty($rsd)) { // old cleartext password
 	  $post_pass = $_POST['pass'];
 	} else { 
 	  $post_pass = md5($post_user . $_POST['pass']);
@@ -40,7 +43,6 @@ if (isset($_COOKIE['zenphoto_auth']) && !isset($_POST['login'])) {
     if (($adm == $post_user) && ($pas == $post_pass)) {
       // Correct auth info. Set the cookie.
       setcookie("zenphoto_auth", md5($post_user . $post_pass), time()+5184000, $cookiepath);
-//      setOption('admin_reset_date', 1);  // clear any pending password reset requests
       $_zp_loggedin = true;
       //// FIXME: Breaks IIS
       if (!empty($redirect)) { header("Location: " . FULLWEBPATH . $redirect); }

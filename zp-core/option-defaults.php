@@ -64,11 +64,4 @@ function setDefault($option, $default) {
   setDefault('feed_items', 10);
   setDefault('search_fields', 32767);  
 
-  if (is_null(getOption('admin_reset_date'))) {
-    setOption('adminpass', ""); // force setting the password.
-  }  
-  
-  setOption('admin_reset_date', 1);  
-
-
 ?>

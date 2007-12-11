@@ -43,7 +43,7 @@
 class SpamFilter  {
 
   var $iSupport = array('Words_to_die_on' => array('type' => 2, 'desc' => 'SPAM blacklist words (separate with commas)'),
-                        'Patterns_to_die_on' => array('type' => 0, 'desc' => 'SPAM blacklist <a href="http://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> (separate with spaces)'),
+                        'Patterns_to_die_on' => array('type' => 2, 'desc' => 'SPAM blacklist <a href="http://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> (separate with spaces)'),
                         'Excessive_URL_count' => array('type' => 0, 'desc' => 'Message is considered SPAM if there are more than this many URLs in it'),
                         'Forgiving' => array('type' => 1, 'desc' => 'Mark suspected SPAM for moderation rather than as SPAM'));
                         
@@ -67,8 +67,10 @@ class SpamFilter  {
      if ($option=='Words_to_die_on') {
        $list = explode(',', $currentValue);
        sort($list);
-       echo '<input type="text" size="40" name="' . $option. '" value="' . implode(',', $list) . '">' . "\n";    
-     }
+	   echo '<textarea name="' . $option . '" cols="42" rows="4">' . implode(',', $list) . "</textarea>\n";
+     } else if ($option=='Patterns_to_die_on') {
+	   echo '<textarea name="' . $option . '" cols="42" rows="2">' . $currentValue . "</textarea>\n";
+	 }
   }
 
   function filterMessage($author, $email, $website, $body, $imageLink) {

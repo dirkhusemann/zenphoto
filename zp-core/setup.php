@@ -72,20 +72,32 @@ if (!$checked) {
 	}
 	return $check;
   }
-  function folderCheck($folder) {
-    $path = dirname(dirname(__FILE__)) . "/" . $folder;
-    if (!is_dir($path)) {
+  function folderCheck($which, $path, $external) {
+    if (!is_dir($path) && !$external) {
       @mkdir($path, 0777);
     }
     @chmod($path, 0777);
-	  if (!is_dir($path)) {
-	    $sfx = " [Does not exist]"; 
-	  } else {
-	    $sfx = " [Not writeable]";
-	  }
-    return checkMark(is_dir($path) && is_writable($path), " <em>$folder</em> folder", $sfx, 
-	       "Change the permissions on the <code>$folder</code> folder to be writable by the server</strong> " .  
-           "(<code>chmod 777 $folder</code>)");
+    $folders = explode('/', $path);
+	$folder = $folders[count($folders)-1];
+	if (empty($folder)) $folder = $folders[count($folders)-2];  // trailing slash
+	if ($external) {
+	  $append = $path;
+	} else {
+	  $append = $folder;
+	}
+	if (!is_dir($path)) {
+	  $sfx = " [<em>$append</em> does not exist]"; 
+	  $msg = " You must create the folder $folder. <code>mkdir($path, 0777)</code>.";	  
+	} else if (!is_writable($path)) {  
+	  $sfx = " [<em>$append</em> is not writeable]";
+	  $msg =  "Change the permissions on the <code>$folder</code> folder to be writable by the server " .  
+              "(<code>chmod 777 " . $append . "</code>)";
+	} else if (($folder != $which) || $external) {
+	  $f = " (<em>$append</em>)";
+	}
+	
+    return checkMark(is_dir($path) && is_writable($path), " <em>$which</em> folder$f", $sfx, $msg);
+	      
 	}
 
 
@@ -108,7 +120,7 @@ if (!$checked) {
   } else {
     $cfg = false;
   }
-  $good = checkMark($cfg, " zp-config.php file", " [does not exist]",
+  $good = checkMark($cfg, " <em>zp-config.php</em> file", " [does not exist]",
                "Edit the <code>zp-config.php.example</code> file and rename it to <code>zp-config.php</code> " .
 	           "<br/><br/>You can find the file in the \"zp-core\" directory.") && $good;
   if ($cfg) {
@@ -133,7 +145,7 @@ if (!$checked) {
     $v = $n[0]*10000 + $n[1]*100 + $n[2]; 
     $sqlv = $v >= 32300;
     $good = checkMark($sqlv, " mySQL version 3.2.3 or greater", " [version is $mysqlv]", "") && $good; 
-    $good = checkMark($db, " connect to \"" . $_zp_conf_vars['mysql_database'] . "\"", '', '') && $good;
+    $good = checkMark($db, " connect to the database <code>" . $_zp_conf_vars['mysql_database'] . "</code>", '', '') && $good;
     }
 	
   $ht = @file_get_contents('../.htaccess');
@@ -146,7 +158,7 @@ if (!$checked) {
     $rw = trim(substr($htu, $i+13, $j-$i-13));
   }
   $mod = '';
-  $msg = " .htaccess file";
+  $msg = " <em>.htaccess</em> file";
   if (!empty($rw)) { 
     $msg .= " (<em>RewriteEngine</em> is <strong>$rw</strong>)";
     $mod = "&mod_rewrite=$rw";
@@ -171,8 +183,13 @@ if (!$checked) {
 				   "Set <code>RewriteBase</code> in your <code>.htaccess</code> file to <code>$d</code>.") && $good;
     }
   }
-  $good = folderCheck('albums') && $good;
-  $good = folderCheck('cache') && $good;
+  if (is_null($_zp_conf_vars['external_album_folder'])) {
+    $good = folderCheck('albums', dirname(dirname(__FILE__)) . $_zp_conf_vars['album_folder'], false) && $good;
+  } else {
+    $good = folderCheck('albums', $_zp_conf_vars['external_album_folder'], true) && $good;
+  }
+
+  $good = folderCheck('cache', dirname(dirname(__FILE__)) . "/cache/", false) && $good;
  
   if ($good) {
     $dbmsg = "";
@@ -192,25 +209,39 @@ if (file_exists("zp-config.php")) {
   
   
   if (db_connect() && empty($task)) {
-    $task = 'update';
-    $result = mysql_query("SELECT `name`, `value` FROM " . prefix('options') . " LIMIT 1", $mysql_connection);
-    if ($result) {
-      unset($setup);
+  
+    $sql = "SHOW TABLES FROM ".$_zp_conf_vars['mysql_database']." LIKE '".$_zp_conf_vars['mysql_prefix']."%';";
+    $result = mysql_query($sql, $mysql_connection);
+
+    if (!$result) {
+      echo "<br/>DB Error, could not list tables\n";
+      echo 'MySQL Error: ' . mysql_error();
+      exit;
     }
-    $result = mysql_query("SELECT `id` FROM " . prefix('albums') . " LIMIT 1", $mysql_connection);
-    if (empty($result)) {
-      $task = 'create';
+	$tables = array();
+    while ($row = mysql_fetch_row($result)) {
+      $tables[] = $row[0];
     }
-    $result = mysql_query("SELECT `id` FROM " . prefix('images') . " LIMIT 1", $mysql_connection);
-    if (empty($result)) {
-      $task = 'create';
-    }
-    $result = mysql_query("SELECT `id` FROM " . prefix('comments') . " LIMIT 1", $mysql_connection);
-    if (empty($result)) {
-      $task = 'create';
-    }
-    $credentials = getOption('adminuser').getOption('adminpass');
-    if (!empty($credentials)) {
+    $tables = array_flip($tables);
+	foreach ($tables as $key => $v) {
+	  $tables[$key] = 'update';
+	}
+
+    $expected_tables = array($_zp_conf_vars['mysql_prefix'].'options',
+	                         $_zp_conf_vars['mysql_prefix'].'albums',
+							 $_zp_conf_vars['mysql_prefix'].'images',
+							 $_zp_conf_vars['mysql_prefix'].'comments');
+	foreach ($expected_tables as $needed) {
+	  if (!isset($tables[$needed])) {
+	    $tables[$needed] = 'create';
+	  }
+	}
+	
+    $adm = getOption('adminuser');
+    $pas = getOption('adminpass');
+    $rsd = getOption('admin_reset_date');
+
+    if (!(empty($rsd) || empty($adm) || empty($pas))) { 
       if (!zp_loggedin() && (!isset($_GET['create']) && !isset($_GET['update']))) {  // Display the login form and exit.
 	    if (isset($_GET['mod_rewrite'])) {
 	      $rw = "&mod_rewrite=" . $_GET['mod_rewrite'];
@@ -425,10 +456,12 @@ if (file_exists("zp-config.php")) {
 	  }
 	    
 	  echo "<h3>Done with table $task!</h3>";
+
       $adm = getOption('adminuser');
       $pas = getOption('adminpass');
-
-      if (empty($adm) || empty($pas)) {
+      $rsd = getOption('admin_reset_date');
+ 
+     if (empty($adm) || empty($pas) || empty($rsd)) {
         echo "<p>You need to <a href=\"admin.php?page=options\">set your admin user and password</a>.</p>";
 	  } else {
         echo "<p>You can now <a href=\"../\">View your gallery</a>, or <a href=\"admin.php\">administrate.</a></p>";
@@ -438,14 +471,46 @@ if (file_exists("zp-config.php")) {
       }
     
     } else if (db_connect()) {
+	  $task = 'update';
       echo "<h3>$dbmsg</h3>";
-      echo "<p>We're all set to $task the database tables: <code>$tbl_albums</code>, <code>$tbl_images</code>, <code>$tbl_comments</code>, and <code>$tbl_options</code>";
+	  echo "<p>We are all set to ";
+	  $db_list = '';
+	  $nc = 0;
+	  foreach ($tables as $key=>$action) {
+	    if ($action == 'create') {
+		  if (!empty($db_list)) { $db_list .= ", "; }
+		  $db_list .= "<code>$key</code>";
+		  $nc++;
+		}
+	  }
+	  if ($nc>0) {
+	    $task = 'create';
+	    echo "create the database table";
+		if ($nc > 1) { echo "s"; }
+		echo ": $db_list ";
+	  }
+	  $db_list = '';
+	  $nu = 0;
+	  foreach ($tables as $key=>$action) {
+	    if ($action == 'update') {
+		  if (!empty($db_list)) { $db_list .= ", "; }
+		  $db_list .= "<code>$key</code>";
+		  $nu++;
+		}
+	  }
+	  if ($nu>0) {
+	    if ($nc > 0) { echo "and "; }
+		echo "update the database table";
+		if ($nu > 1) { echo "s"; }
+		echo ": $db_list";
+	  }
+	  echo "</p>";
 	  if (isset($_GET['mod_rewrite'])) {
 	    $rw = "&mod_rewrite=" . $_GET['mod_rewrite'];
 	  } else {
 	    $rw = '';
 	  }
-      echo "<p><a href=\"?checked&$task$rw\" title=\"$task the database tables.\" style=\"font-size: 15pt; font-weight: bold;\">Go!</a></p>";
+      echo "<p><a href=\"?checked&$task$rw\" title=\"create and or update the database tables.\" style=\"font-size: 15pt; font-weight: bold;\">Go!</a></p>";
     } else {
       echo "<h3>database not connected</h3>";
       echo "<p>Check the zp-config.php file to make sure you've got the right username, password, host, and database. If you haven't created
