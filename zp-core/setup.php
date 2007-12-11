@@ -8,14 +8,15 @@ if (file_exists("zp-config.php")) {
   require_once("zp-config.php");
   global $_zp_conf_vars;
   if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
-    @mysql_select_db($_zp_conf_vars['mysql_database']);  
-    $result = mysql_query("SELECT `id` FROM " . $_zp_conf_vars['mysql_prefix'].'options' . " LIMIT 1", $connection);
-    if ($result) {
-      unset($setup);
+    if (mysql_select_db($_zp_conf_vars['mysql_database'])) { 
+      $result = mysql_query("SELECT `id` FROM " . $_zp_conf_vars['mysql_prefix'].'options' . " LIMIT 1", $connection);
+      if ($result) {
+        unset($setup);
+      }
+    require_once("admin-functions.php"); 
     }
   } 
 }
-require_once("admin-functions.php"); 
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -27,7 +28,8 @@ require_once("admin-functions.php");
   li { margin-bottom: 1em; }
   #main { background-color: #f0f0f4; padding: 30px 20px; }
   h1 { font-weight: normal; font-size: 24pt; }
-  h1, h2, h3, h4, h5 { padding: 0px; margin: 0px; margin-bottom: .15em; }
+  h1, h2, h3, h4, h5 { padding: 0px; margin: 0px; margin-bottom: .15em; color: #69777d; }
+  h3 span {margin-bottom: 5px;}
   #content {padding: 15px;border: 1px solid #dddde2;background-color: #fff;margin-bottom: 20px;}
   A:link, A:visited { text-decoration: none; color: #36C; }
   A:hover, A:active { text-decoration: underline; color: #F60; background-color: #FFFCF4; }
@@ -43,7 +45,7 @@ require_once("admin-functions.php");
 </head>
 <body>
 <div id="main">
-<h1>zenphoto setup</h1>
+<h1><img src="images/zen-logo.gif" title="Zen Photo Setup" /> setup</h1>
 <div id="content">
 <?php
 if (!$checked) {
@@ -71,7 +73,7 @@ if (!$checked) {
 	return $check;
   }
   function folderCheck($folder) {
-    $path = dirname(dirname(__FILE__)) . $folder;
+    $path = dirname(dirname(__FILE__)) . "/" . $folder;
     if (!is_dir($path)) {
       @mkdir($path, 0777);
     }
@@ -106,10 +108,17 @@ if (!$checked) {
   } else {
     $cfg = false;
   }
-  $good = checkMark ($cfg, " zp-config.php file", " [does not exist]",
+  $good = checkMark($cfg, " zp-config.php file", " [does not exist]",
                "Edit the <code>zp-config.php.example</code> file and rename it to <code>zp-config.php</code> " .
-	           "You can find the file in the \"zp-core\" directory.") && $good;
-
+	           "<br/><br/>You can find the file in the \"zp-core\" directory.") && $good;
+  if ($cfg) {
+    $mySQLadmin = ($_zp_conf_vars['mysql_user'] == "user") ||
+                  ($_zp_conf_vars['mysql_pass'] == "pass") ||
+                  ($_zp_conf_vars['mysql_database'] == "database_name");
+    $good = checkMark(!$mySQLadmin, " mySQL setup in zp-config.php", '', 
+                      "You have not set your <strong>mySQL</strong> <code>user</code>, " .
+	                  "<code>password</code>, etc. in your <code>zp-confgi.php</code> file.") && $good;
+  }
   if ($sql) {
     if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
       $db = $_zp_conf_vars['mysql_database'];
@@ -142,11 +151,11 @@ if (!$checked) {
     $msg .= " (<em>RewriteEngine</em> is <strong>$rw</strong>)";
     $mod = "&mod_rewrite=$rw";
   }
-  if (empty($ht)) { $check = -1; } else { $ch = 1; }
+  if (empty($ht)) { $ch = -1; } else { $ch = 1; }
   checkMark($ch, $msg, " [is empty or does not exist]", 
                "Edit the <code>.htaccess</code> file in the root zenphoto folder if you have the mod_rewrite apache ". 
                "module, and want cruft-free URLs. Just change the one line indicated to make it work. " .
-			   "You can ignore this warning if you do not intend to set the option <code>mod_rewrite</code>."); 
+			   "<br/><br/>You can ignore this warning if you do not intend to set the option <code>mod_rewrite</code>."); 
 
   $base = true;
   if ($rw == 'ON') {
@@ -168,7 +177,7 @@ if (!$checked) {
   if ($good) {
     $dbmsg = "";
   } else {
-    echo "<p>You need to address the problems indicated above.</p>";
+    echo "<p>You need to address the problems indicated above then run <code>setup.php</code> again.</p>";
 	exit();
   }
 } else { 
@@ -208,7 +217,7 @@ if (file_exists("zp-config.php")) {
 	    } else {
 	      $rw = '';
 	    }
-        printLoginForm("/" . ZENFOLDER . "/setup.php?checked$rw");
+        printLoginForm("/" . ZENFOLDER . "/setup.php?checked$rw", false);
         exit();
       }
     } 

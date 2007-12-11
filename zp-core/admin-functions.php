@@ -137,11 +137,11 @@ function adminPrintLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function printLoginForm($redirect=null) {
+function printLoginForm($redirect=null, $logo=true) {
   global $error;
   if (is_null($redirect)) { $redirect = "/" . ZENFOLDER . "/admin.php"; }
   
-  echo "<p><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" /></p>";
+  if ($logo) echo "<p><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" /></p>";
   
   echo "\n  <div id=\"loginform\">";
   if ($error) {
@@ -189,7 +189,6 @@ function printLogoAndLinks() {
  * @since  1.0.0
  */
 function printTabs() {
-  global $_zp_null_account;
   // Which page should we highlight? Default is home.
   if (isset($_GET['page'])) {
     $page= $_GET['page'];

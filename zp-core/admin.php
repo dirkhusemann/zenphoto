@@ -2,6 +2,11 @@
 session_start();
 define('OFFSET_PATH', true);
 require_once("sortable.php");
+$adm = getOption('adminuser');
+$pas = getOption('adminpass');
+if (is_null(getOption('admin_reset_date')) || empty($adm) || empty($pas)) { 
+  $_zp_null_account = true;  // require setting admin user/password
+}
 
 $sortby = array('Filename', 'Date', 'Title', 'Manual', 'ID' ); 
 $standardOptions = array('gallery_title','website_title','website_url','time_offset', 
@@ -476,7 +481,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
   exit(); 
     
 } else { /* Admin-only content safe from here on. */ 
-  if ($_zp_null_account) { $page = 'options'; } // strongly urge him to set his admin username and password
+  if (is_null(getOption('admin_reset_date'))) { $page = 'options'; } // strongly urge him to set his admin username and password
   printLogoAndLinks();
  
 ?>

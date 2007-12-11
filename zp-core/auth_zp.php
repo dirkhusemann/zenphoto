@@ -5,7 +5,6 @@ require_once("functions-db.php");
 // If the auth variable gets set somehow before this, get rid of it.
 if (isset($_zp_loggedin)) unset($_zp_loggedin);
 $_zp_loggedin = false;
-$_zp_null_account = false;
 // Fix the cookie's path for root installs.
 $cookiepath = WEBPATH;
 if (WEBPATH == '') { $cookiepath = '/'; }
@@ -19,9 +18,6 @@ if (isset($_GET['id'])) { // paassword reset query
 	$pas = '';
   }
 }
-if (empty($adm) || empty($pas)) {
-  $_zp_null_account = true;  // account requires setup
-} 
 $check_auth = md5($adm . $pas);
 if (isset($_COOKIE['zenphoto_auth']) && !isset($_POST['login'])) {
   $saved_auth = $_COOKIE['zenphoto_auth'];
@@ -35,9 +31,8 @@ if (isset($_COOKIE['zenphoto_auth']) && !isset($_POST['login'])) {
   // Handle the login form.
   if (isset($_POST['login']) && isset($_POST['user']) && isset($_POST['pass'])) {
     $post_user = $_POST['user'];
-	if ($_POST['pass'] == $pas) { // old cleartext password
+	if (($_POST['pass'] == $pas) && (is_null(getOption('admin_reset_date')))) { // old cleartext password
 	  $post_pass = $_POST['pass'];
-      $_zp_null_account = true;  // require saving the credentials again to get password encrypted
 	} else { 
 	  $post_pass = md5($post_user . $_POST['pass']);
 	}
@@ -45,6 +40,7 @@ if (isset($_COOKIE['zenphoto_auth']) && !isset($_POST['login'])) {
     if (($adm == $post_user) && ($pas == $post_pass)) {
       // Correct auth info. Set the cookie.
       setcookie("zenphoto_auth", md5($post_user . $post_pass), time()+5184000, $cookiepath);
+//      setOption('admin_reset_date', 1);  // clear any pending password reset requests
       $_zp_loggedin = true;
       //// FIXME: Breaks IIS
       if (!empty($redirect)) { header("Location: " . FULLWEBPATH . $redirect); }
