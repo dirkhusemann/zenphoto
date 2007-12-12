@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
 	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/jquery.js" type="text/javascript"></script>
 	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.js" type="text/javascript"></script>
-	<?php printRSSHeaderLink('Gallery','Gallery RSS'); ?>
 	<script type="text/javascript">
 	  function toggleComments() {
       var commentDiv = document.getElementById("comments");
