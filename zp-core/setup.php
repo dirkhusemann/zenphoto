@@ -238,12 +238,8 @@ if (file_exists("zp-config.php")) {
     }
 	$tables = array();
     while ($row = mysql_fetch_row($result)) {
-      $tables[] = $row[0];
+      $tables[$row[0]] = 'update';
     }
-    $tables = array_flip($tables);
-	foreach ($tables as $key => $v) {
-	  $tables[$key] = 'update';
-	}
 
     $expected_tables = array($_zp_conf_vars['mysql_prefix'].'options',
 	                         $_zp_conf_vars['mysql_prefix'].'albums',
