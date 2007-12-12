@@ -170,19 +170,37 @@ if (!$checked) {
 			   "<br/><br/>You can ignore this warning if you do not intend to set the option <code>mod_rewrite</code>."); 
 
   $base = true;
+  $f = '';
   if ($rw == 'ON') {
+	$d = dirname(dirname($_SERVER['SCRIPT_NAME']));
     $i = strpos($htu, 'REWRITEBASE', $j);
     if ($i === false) {
       $base = false;
+	  $b = "<em>missing</em>";
+	  $i = $j+1;
     } else {
       $j = strpos($htu, "\n", $i+11);
       $b = trim(substr($ht, $i+11, $j-$i-11));
-	  $d = dirname(dirname($_SERVER['SCRIPT_NAME']));
-      $good = checkMark($base = ($b == $d), " RewriteBase", " [Does not match install folder]", 
-	               "Install folder is <code>$d</code> and RewriteBase is set to <code>$b</code>. ".
-				   "Set <code>RewriteBase</code> in your <code>.htaccess</code> file to <code>$d</code>.") && $good;
+	  $base = ($b == $d);
+	}
+	$f = '';
+	if (!$base && is_writeable('../.htaccess')) { // try and fix it
+	  $ht = substr($ht, 0, $i) . "RewriteBase $d\n" . substr($ht, $j+1);
+	  if ($handle = fopen('../.htaccess', 'w')) {
+        if (fwrite($handle, $ht)) {
+          $base = true;
+		  $f = " (fixed)";
+        }
+      }
+      fclose($handle);	  
     }
+    $good = checkMark($base, " RewriteBase$f", " [Does not match install folder]", 
+	                  "Install folder is <code>$d</code> and RewriteBase is set to <code>$b</code>. ".
+					  "<br/>Setup was not able to write to the file to fix this problem. " .
+					  "<br/>Either make the file writeable or ".
+				      "set <code>RewriteBase</code> in your <code>.htaccess</code> file to <code>$d</code>.") && $good;
   }
+
   if (is_null($_zp_conf_vars['external_album_folder'])) {
     $good = folderCheck('albums', dirname(dirname(__FILE__)) . $_zp_conf_vars['album_folder'], false) && $good;
   } else {
