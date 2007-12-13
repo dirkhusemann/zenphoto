@@ -1,7 +1,5 @@
 <?php
-
-require_once("functions-db.php");
-
+require_once("functions.php");
 // If the auth variable gets set somehow before this, get rid of it.
 if (isset($_zp_loggedin)) unset($_zp_loggedin);
 $_zp_loggedin = false;
