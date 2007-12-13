@@ -40,7 +40,7 @@ define('CACHEFOLDER', '/cache/');
 define('SERVERCACHE', SERVERPATH . substr(CACHEFOLDER, 0, -1));
 
 // Set the version number.
-$_zp_conf_vars['version'] = '1.1.2';
+$_zp_conf_vars['version'] = '1.1.3';
 
 // the options array
 $_zp_options = NULL;
