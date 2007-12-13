@@ -56,9 +56,9 @@ function setDefault($option, $default) {
   setDefault('video_watermark_image', "images/watermark-video.png");
   setDefault('spam_filter', 'none');
   setDefault('email_new_comments', 1);
-  setDefault('gallery_sorttype', 'Manual');
+  setDefault('gallery_sorttype', 'ID');
   setDefault('gallery_sortdirection', '0');
-  setDefault('image_sorttype', 'Manual');
+  setDefault('image_sorttype', 'Filename');
   setDefault('image_sortdirection', '0');
   setDefault('current_theme', 'default');
   setDefault('feed_items', 10);

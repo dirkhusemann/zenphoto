@@ -23,10 +23,10 @@ class Album extends PersistentObject {
     $this->name = $folder;
     $this->gallery = &$gallery;
     if ($folder == '') {
-	  $this->localpath = getAlbumFolder();
-	} else {
-	  $this->localpath = getAlbumFolder() . $folder . "/"; 
-	}
+      $this->localpath = getAlbumFolder();
+    } else {
+      $this->localpath = getAlbumFolder() . $folder . "/"; 
+    }
 
     // Second defense against upward folder traversal:
     if(!file_exists($this->localpath) || strpos($this->localpath, '..') !== false) {
@@ -45,18 +45,18 @@ class Album extends PersistentObject {
     if (!is_null($parentalbum)) {
       $this->set('parentid', $parentalbum->getAlbumId());
       $title = substr($title, strrpos($title, '/')+1);
-	  $this->set('subalbum_sort_type', $parentalbum->getSubalbumSortType());
+      $this->set('subalbum_sort_type', $parentalbum->getSubalbumSortType());
       $this->set('album_sortdirection',$parentalbum->getSortDirection('album'));
       $this->set('sort_type', $parentalbum->getSortType());
       $this->set('image_sortdirection', $parentalbum->getSortDirection('image'));   
-	  $this->set('password', $parentalbum->getPassword());
+      $this->set('password', $parentalbum->getPassword());
     } else {
-	  $this->set('subalbum_sort_type', getOption('gallery_sorttype'));
-	  $this->set('album_sortdirection',getOption('gallery_sortdirection'));
-	  $this->set('sort_type', getOption('image_sorttype'));
-	  $this->set('image_sortdirection',getOption('image_sortdirection'));
-	  $this->set('password', getOption('gallery_password'));
-	}
+      $this->set('subalbum_sort_type', getOption('gallery_sorttype'));
+      $this->set('album_sortdirection',getOption('gallery_sortdirection'));
+      $this->set('sort_type', getOption('image_sorttype'));
+      $this->set('image_sortdirection',getOption('image_sortdirection'));
+      $this->set('password', getOption('gallery_password'));
+    }
     $this->set('title', $title);
     
     return true;
@@ -87,33 +87,33 @@ class Album extends PersistentObject {
   // password
   function getPassword() { 
     $pwd = $this->get('password');
-	if (is_null($pwd)) {
-	  $parentalbum = $this->getParent();
-	  if (is_null($parentalbum)) {
-	    $pwd = getOption('gallery_password');
-	  } else {
+    if (is_null($pwd)) {
+      $parentalbum = $this->getParent();
+      if (is_null($parentalbum)) {
+        $pwd = getOption('gallery_password');
+      } else {
         $pwd = $parentalbum->getPassword();
-	  }
-	}
+      }
+    }
     return $pwd; 
   }
   function setPassword($pwd) { 
     if (empty($pwd)) {
-	  $this->set('password', NULL);
-	} else {
+      $this->set('password', NULL);
+    } else {
       $this->set('password', md5($pwd)); 
-	}
+    }
   }
   function getPasswordHint() { 
     $hint = $this->get('password_hint');
-	if (is_null($hint)) {
-	  $parentalbum = $this->getParent();
-	  if (is_null($parentalbum)) {
-	    $hint = getOption('gallery_hint');
-	  } else {
+    if (is_null($hint)) {
+      $parentalbum = $this->getParent();
+      if (is_null($parentalbum)) {
+        $hint = getOption('gallery_hint');
+      } else {
         $hint = $parentalbum->getPasswordHint();
-	  }
-	}
+      }
+    }
     return $hint; 
   }
   function setPasswordHint($hint) { $this->set('password_hint', $hint); }
@@ -134,12 +134,12 @@ class Album extends PersistentObject {
   function getDateTime() { return $this->get('date'); }
   function setDateTime($datetime) { 
     if ($datetime == "") {
-	  $this->set('date', '0000-00-00 00:00:00');
-	} else {
+      $this->set('date', '0000-00-00 00:00:00');
+    } else {
       $time = @strtotime($datetime);
       if ($time == -1 || $time == false) return;
       $this->set('date', date('Y-m-d H:i:s', $time)); 
-	}
+    }
   }
   
   // Place
@@ -149,59 +149,59 @@ class Album extends PersistentObject {
   // Sort type
   function getSortDirection($what) {
     if ($what == 'image') {
-	  return $this->get('image_sortdirection');
+      return $this->get('image_sortdirection');
     } else {
-	  return $this->get('album_sortdirection');
+      return $this->get('album_sortdirection');
     }
   }
   function setSortDirection($what, $val) {
     if ($val) { $b = 1; } else { $b = 0; }
     if ($what == 'image') {
-	  $this->set('image_sortdirection', $b);
+      $this->set('image_sortdirection', $b);
     } else {
-	  $this->set('album_sortdirection', $b);
+      $this->set('album_sortdirection', $b);
     }
   }
   
   function getSortType() { 
     $type = $this->get('sort_type');
-	if (empty($type)) {
-	  $parentalbum = $this->getParent();
-	  if (is_null($parentalbum)) {
-	    $type = getOption('gallery_sorttype');
-	    $direction = getOption('gallery_sortdirection');
-	  } else {
+    if (empty($type)) {
+      $parentalbum = $this->getParent();
+      if (is_null($parentalbum)) {
+        $type = getOption('gallery_sorttype');
+        $direction = getOption('gallery_sortdirection');
+      } else {
         $direction = $parentalbum->getSortDirection('album');
         $type = $parentalbum->getSortType();
-	  }
-	  if (!empty($type)) {
-	    $this->set('sort_type', $type);
-		$this->set('image_sortdirection', $direction);
-		$this->save();
-	  }
-	}
+      }
+      if (!empty($type)) {
+        $this->set('sort_type', $type);
+        $this->set('image_sortdirection', $direction);
+        $this->save();
+      }
+    }
     return $type; 
   }
   function setSortType($sorttype) { $this->set('sort_type', $sorttype); }
   
   function getSubalbumSortType() { 
     $type = $this->get('subalbum_sort_type'); 
-	if (empty($type)) {
-	  $parentalbum = $this->getParent();
-	  if (is_null($parentalbum)) {
-	    $type = getOption('gallery_sorttype');
-	    $direction = getOption('gallery_sortdirection');
-	  } else {
+    if (empty($type)) {
+      $parentalbum = $this->getParent();
+      if (is_null($parentalbum)) {
+        $type = getOption('gallery_sorttype');
+        $direction = getOption('gallery_sortdirection');
+      } else {
         $direction = $parentalbum->getSortDirection('album');
         $type = $parentalbum->getSortType();
-	  }
-	  if (!empty($type)) {
-	    $this->set('subalbum_sort_type', $type);
-		$this->set('album_sortdirection', $direction);
-		$this->save();
-	  }
-	}
-	return $type;
+      }
+      if (!empty($type)) {
+        $this->set('subalbum_sort_type', $type);
+        $this->set('album_sortdirection', $direction);
+        $this->save();
+      }
+    }
+    return $type;
   }
   function setSubalbumSortType($sorttype) { $this->set('subalbum_sort_type', $sorttype); }
   
@@ -217,8 +217,8 @@ class Album extends PersistentObject {
         return 'sort_order';
       case "Date":
         return 'date';
-	  case "ID":
-	    return 'id';
+      case "ID":
+        return 'id';
     }
     return 'filename';
   }
@@ -233,8 +233,8 @@ class Album extends PersistentObject {
         return 'folder';
       case "Date":
         return 'date';
-	  case "ID":
-	    return 'id';
+      case "ID":
+        return 'id';
     }
     return 'sort_order';
   }
@@ -260,8 +260,8 @@ class Album extends PersistentObject {
         $dir = $this->name . '/' . $dir;
         $subalbums[] = $dir;
       }
-	  $key = $this->getSubalbumSortKey($sorttype);
-	  if ($this->getSortDirection('album')) { $key .= ' DESC'; }
+      $key = $this->getSubalbumSortKey($sorttype);
+      if ($this->getSortDirection('album')) { $key .= ' DESC'; }
       $sortedSubalbums = sortAlbumArray($subalbums, $key); 
       $this->subalbums = $sortedSubalbums;
     }
@@ -282,10 +282,6 @@ class Album extends PersistentObject {
    * @return An array of Image objects.
    */
   function getImages($page=0, $firstPageCount=0, $sorttype=null) {
-
-//echo "\n<br>getImages";        
-//echo "\n<br>Page $page";
-
    if (is_null($this->images)) {
       // Load, sort, and store the images in this Album.
       $images = $this->loadFileNames();
@@ -296,12 +292,10 @@ class Album extends PersistentObject {
     if ($page == 0) { 
       return $this->images;
     } else {
-    // Only return $firstPageCount images if we are on the first page and $firstPageCount > 0
+      // Only return $firstPageCount images if we are on the first page and $firstPageCount > 0
       if (($page==1) && ($firstPageCount>0)) {
         $pageStart = 0;
         $images_per_page = $firstPageCount;
-
-//echo "\n<br>firstPage: $firstPageCount";                
         
       } else {
         if ($firstPageCount>0) { 
@@ -312,16 +306,8 @@ class Album extends PersistentObject {
         $images_per_page = getOption('images_per_page');
         $pageStart = $firstPageCount + $images_per_page * $fetchPage;
 
-//echo "\n<br>firstPageCount: $firstPageCount, images_per_page: $images_per_page";                
-//echo "\n<br>pageStart: $pageStart<br/>\n";                
-
       }  
       $slice = array_slice($this->images, $pageStart , $images_per_page);
-      
-//echo "\n<br/>this->images<br/>\n";
-//print_r($this->images);
-//echo "\n<br/>Slice<br/>\n";
-//print_r($slice);
 
       return $slice;
     }
@@ -337,40 +323,42 @@ class Album extends PersistentObject {
    */
   function sortImageArray($images, $sorttype=null) {
     global $_zp_loggedin;
-	
-	$hidden = array();
+    
+    $hidden = array();
     $key = $this->getSortKey($sorttype);
-	if ($this->getSortDirection('image')) { $key .= ' DESC'; }
+    $direction = '';
+    if ($this->getSortDirection('image')) { $direction = ' DESC'; }
     $result = query("SELECT filename, title, sort_order, `show` FROM " . prefix("images")
-      . " WHERE albumid=" . $this->id . " ORDER BY " . $key);
+      . " WHERE albumid=" . $this->id . " ORDER BY " . $key . $direction);
 
     $i = 0;
     $images_to_keys = array_flip($images);
     $images_in_db = array();
     while ($row = mysql_fetch_assoc($result)) {
       $filename = $row['filename'];
+      $sort_key_value = $row[$key];
       // If the image is on the filesystem, but not yet processed, give it the next key:
       // TODO: We should mark this album for garbage collection if filenames are discovered.
-      if (array_key_exists($filename, $images_to_keys) && !in_array($filename, $images_in_db)) {
+      if (array_key_exists($filename, $images_to_keys) && !in_array($filename, $images_in_db) && $sort_key_value) {
         $images_to_keys[$filename] = $i;
         $images_in_db[] = $filename;
-		if (!$_zp_loggedin && !$row['show']) { $hidden[] = $filename; }
+        if (!$_zp_loggedin && !$row['show']) { $hidden[] = $filename; }
         $i++;
       }
     }
 
     // Place the images not yet in the database before those with sort columns.
-	// This is consistent with the sort oder of a NULL sort_order key in manual sorts
+    // This is consistent with the sort oder of a NULL sort_order key in manual sorts
     $images_not_in_db = array_diff($images, $images_in_db);
     foreach($images_not_in_db as $filename) {
-      $images_to_keys[$filename] = -$i;
+      $images_to_keys[$filename] = $i;
       $i++;
     }
-	
-	foreach($hidden as $filename) {
-	  unset($images_to_keys[$filename]);
-	}
-	
+    
+    foreach($hidden as $filename) {
+      unset($images_to_keys[$filename]);
+    }
+    
     $images = array_flip($images_to_keys);
     ksort($images);
     return $images;
@@ -392,7 +380,7 @@ class Album extends PersistentObject {
       } else {
         // if possible, run a single query instead of getting all images.
         $key = $this->getSortKey();
-	    if ($this->getSortDirection('image')) { $key .= ' DESC'; }
+        if ($this->getSortDirection('image')) { $key .= ' DESC'; }
         $result = query("SELECT filename FROM " . prefix("images") 
             . " WHERE albumid=" . $this->id . " ORDER BY $key LIMIT $index,1");
         $filename = mysql_result($result, 0);
@@ -411,23 +399,23 @@ class Album extends PersistentObject {
   function getAlbumThumbImage() {
     $albumdir = getAlbumFolder() . $this->name ."/";
     $thumb = $this->get('thumb');
-	$i = strpos($thumb, '/');
-	if ($root = ($i === 0)) { 
-		$thumb = substr($thumb, 1); /* strip off the slash */ 
-		$albumdir = getAlbumFolder(); 
-	}
+    $i = strpos($thumb, '/');
+    if ($root = ($i === 0)) { 
+        $thumb = substr($thumb, 1); /* strip off the slash */ 
+        $albumdir = getAlbumFolder(); 
+    }
     if ($thumb != NULL && file_exists($albumdir.$thumb)) {
       if ($i===false) { 
-	  	return new Image($this, $thumb); 
-	} else { 
-		$pieces = explode('/', $thumb); 
-		$i = count($pieces); 
-		$thumb = $pieces[$i-1]; 
-		unset($pieces[$i-1]); 
-		$albumdir = implode('/', $pieces); 
-	  if (!$root) { $albumdir = $this->name . "/" . $albumdir; } else { $albumdir = $albumdir . "/";} 
-	  	return new Image(new Album($this->gallery, $albumdir), $thumb); 
-	} 
+          return new Image($this, $thumb); 
+    } else { 
+        $pieces = explode('/', $thumb); 
+        $i = count($pieces); 
+        $thumb = $pieces[$i-1]; 
+        unset($pieces[$i-1]); 
+        $albumdir = implode('/', $pieces); 
+      if (!$root) { $albumdir = $this->name . "/" . $albumdir; } else { $albumdir = $albumdir . "/";} 
+          return new Image(new Album($this->gallery, $albumdir), $thumb); 
+    } 
     } else {
       $dp = opendir($albumdir);
       while ($thumb = readdir($dp)) {
@@ -444,13 +432,13 @@ class Album extends PersistentObject {
           return $thumb;
         }
       }
-	  //jordi-kun - no images, no subalbums, check for videos
-	$dp = opendir($albumdir);
-	while ($thumb = readdir($dp)) {
-		if (is_file($albumdir.$thumb) && is_valid_video($thumb)) {
-			return new Image($this, $thumb);
-		}
-	}
+      //jordi-kun - no images, no subalbums, check for videos
+    $dp = opendir($albumdir);
+    while ($thumb = readdir($dp)) {
+        if (is_file($albumdir.$thumb) && is_valid_video($thumb)) {
+            return new Image($this, $thumb);
+        }
+    }
     }
     $noImage = new Album($this->gallery, '');
     return new image($noImage, 'zen-logo.jpg');
@@ -505,9 +493,9 @@ class Album extends PersistentObject {
    */
   function deleteAlbum() {
     foreach ($this->getSubAlbums() as $folder) {  
-	  $subalbum = new Album($album, $folder); 
-	  $subalbum->deleteAlbum(); 
-	}
+      $subalbum = new Album($album, $folder); 
+      $subalbum->deleteAlbum(); 
+    }
     foreach($this->getImages() as $filename) {
       // False here means don't clean up (cascade already took care of it)
       $image = new Image($this, $filename);
