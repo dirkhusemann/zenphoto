@@ -7,13 +7,7 @@ if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
   die ("<strong>Zenphoto error:</strong> zp-config.php not found. Perhaps you need to run <a href=\"" . ZENFOLDER . "/setup.php\">setup</a> (or migrate your old config.php)");
 }
 
-// THE FOLLOWING ARE REQUIRED for zp-config.php. Don't change them.
-$conf = array();
-require("zp-config.php");
-if (!defined("DEBUG")) define("DEBUG", false);
-$_zp_conf_vars = $conf;
-unset($conf);
-// END zp-config.php required stuff.
+require_once("zp-config.php");
 
 // If the server protocol is not set, set it to the default (obscure zp-config.php change).
 if (!isset($_zp_conf_vars['server_protocol'])) $_zp_conf_vars['server_protocol'] = 'http';
@@ -30,7 +24,6 @@ if (defined('OFFSET_PATH')) {
 }
 if ($const_webpath == '\\' || $const_webpath == '/') $const_webpath = '';
 if (!defined('WEBPATH')) { define('WEBPATH', $const_webpath); }
-unset($const_webpath);
 define('SERVERPATH', dirname(dirname(__FILE__)));
 define('PROTOCOL', getOption('server_protocol'));
 define('FULLWEBPATH', PROTOCOL."://" . $_SERVER['HTTP_HOST'] . WEBPATH);
@@ -40,7 +33,7 @@ define('CACHEFOLDER', '/cache/');
 define('SERVERCACHE', SERVERPATH . substr(CACHEFOLDER, 0, -1));
 
 // Set the version number.
-$_zp_conf_vars['version'] = '1.1.3';
+$_zp_conf_vars['version'] = '1.1.2';
 
 // the options array
 $_zp_options = NULL;
