@@ -43,8 +43,8 @@ class Gallery {
         return 'folder';
       case "Date":
         return 'date';
-	  case "ID":
-	    return 'id';
+      case "ID":
+        return 'id';
     }
     return 'sort_order';
   }
@@ -64,8 +64,8 @@ class Gallery {
     if (is_null($this->albums)) {
       
       $albumnames = $this->loadAlbumNames();
-	  $key = $this->getGallerySortKey($sorttype);
-	  if (getOption('gallery_sortdirection')) { $key .= ' DESC'; }
+      $key = $this->getGallerySortKey($sorttype);
+      if (getOption('gallery_sortdirection')) { $key .= ' DESC'; }
       $albums = sortAlbumArray($albumnames, $key);
       
       // Store the values
@@ -173,10 +173,10 @@ class Gallery {
    */
   function getCurrentTheme() {
     if (empty($this->theme)) {
-	  $theme = getOption('current_theme');
+      $theme = getOption('current_theme');
       if (empty($theme)) { 
-	    $theme = "default"; 
-	  }
+        $theme = "default"; 
+      }
       $this->theme = $theme;
     }
     return $this->theme;
@@ -279,12 +279,12 @@ class Gallery {
         // Then go into existing albums recursively to clean them... very invasive.
         foreach ($this->getAlbums(0) as $folder) {
           $album = new Album($this, $folder);
-		  if(is_null($album->getDateTime())) {  // see if we can get one from an image
-		    $image = $album->getImage(0);
-			if(!($image === false)) {
-			  $album->setDateTime($image->getDateTime());
-			}
-		  }
+          if(is_null($album->getDateTime())) {  // see if we can get one from an image
+            $image = $album->getImage(0);
+            if(!($image === false)) {
+              $album->setDateTime($image->getDateTime());
+            }
+          }
           $album->garbageCollect(true);
           $album->preLoad();
         }
@@ -324,15 +324,15 @@ class Gallery {
                 $set .= ', `desc`="' . mysql_real_escape_string($metadata['desc']) . '"'; 
               }
             } 
-			
-			/* tags */
+            
+            /* tags */
             if (is_null($row['tags'])) {
               if (isset($metadata['tags'])) {
                 $set .= ', `tags`="' . mysql_real_escape_string($metadata['tags']) . '"'; 
               }
             }
-			
-			/* location, city, state, and country */
+            
+            /* location, city, state, and country */
             if (isset($metadata['location'])) {
                $set .= ', `location`="' . mysql_real_escape_string($metadata['location']) . '"'; 
             }    
@@ -345,13 +345,13 @@ class Gallery {
             if (isset($metadata['country'])) {
                $set .= ', `state`="' . mysql_real_escape_string($metadata['country']) . '"'; 
             }    
- 			/* credit & copyright */
- 	        if (isset($metadata['credit'])) {
+             /* credit & copyright */
+             if (isset($metadata['credit'])) {
                $set .= ', `credit`="' . escape($metadata['credit']) . '"'; 
             }    
- 	        if (isset($metadata['copyright'])) {
+             if (isset($metadata['copyright'])) {
               $set .= ', `copyright`="' . escape($metadata['copyright']) . '"'; 
-			}    
+            }    
           
             /* date (for sorting) */
             $newDate = strftime('%Y-%m-%d %T', filectime($imageName));
@@ -421,31 +421,31 @@ class Gallery {
   }
   
 
-/** 
+  /** 
    * Cleans out the cache folder 
    */
   function clearCache($cachefolder=NULL) {
     if (is_null($cachefolder)) {
       $cachefolder = SERVERCACHE;
-	}
+    }
     if (is_dir($cachefolder)) {
-	  $handle = opendir($cachefolder);
+      $handle = opendir($cachefolder);
       while (false !== ($filename = readdir($handle))) {
-	    $fullname = $cachefolder . '/' . $filename;
-	    if (is_dir($fullname)) {
-		  if (($filename != '.') && ($filename != '..')) {
-		    $this->clearCache($fullname);
-			rmdir($fullname);
-		  }
-		} else {
-          if (file_exists($fullname)) {
+        $fullname = $cachefolder . '/' . $filename;
+        if (is_dir($fullname) && !(substr($filename, 0, 1) == '.')) {
+          if (($filename != '.') && ($filename != '..')) {
+            $this->clearCache($fullname);
+            rmdir($fullname);
+          }
+        } else {
+          if (file_exists($fullname) && !(substr($filename, 0, 1) == '.')) {
             unlink($fullname); 
-		  }
-	    }
+          }
+        }
 
       }
-	closedir($handle);
-	}
+      closedir($handle);
+    }
   }
     
 }
