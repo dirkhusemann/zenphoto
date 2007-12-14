@@ -73,7 +73,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 			<!-- The Image -->
 			<?php if (!checkForPassword()) { ?>
             <div id="image">
-    			<div id="image_container"><a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>"><?php printDefaultSizedImage(getImageTitle()); ?></a></div>
+    			<div id="image_container"><a href="<?php echo getProtectedImageURL();?>" title="<?php echo getImageTitle();?>"><?php printDefaultSizedImage(getImageTitle()); ?></a></div>
     			<?php 
 				  printImageMap(6, 'G_HYBRID_MAP');
 				  if (getImageEXIFData()) {

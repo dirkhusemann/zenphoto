@@ -71,7 +71,7 @@ function is_query_request() {
  * @param $image : the Image object to use in the path. Defaults to the current image (if null).
  * @param $page : the page number to use in the path. Defaults to the current page (if null).
  */
-function zpurl($with_rewrite=NULL, $album=NULL, $image=NULL, $page=NULL) {
+function zpurl($with_rewrite=NULL, $album=NULL, $image=NULL, $page=NULL, $special='') {
   global $_zp_current_album, $_zp_current_image, $_zp_page;
   // Set defaults
   if ($with_rewrite === NULL)  $with_rewrite = getOption('mod_rewrite');
@@ -99,6 +99,13 @@ function zpurl($with_rewrite=NULL, $album=NULL, $image=NULL, $page=NULL) {
     }
   }
   if ($url == im_suffix() || empty($url)) { $url = ''; }
+  if (!empty($url) && !(empty($special))) {
+    if ($page > 1) {
+	  $url .= "&$special";
+	} else {
+	  $url .= "?$special";
+	}
+  }
   return $url;
 }
 
@@ -108,9 +115,17 @@ function zpurl($with_rewrite=NULL, $album=NULL, $image=NULL, $page=NULL) {
  * corrected URL if not with a 301 Moved Permanently.
  */
 function fix_path_redirect() {
-  if (getOption('mod_rewrite') && strlen(im_suffix()) > 0
-      && in_context(ZP_IMAGE) && substr($_SERVER['REQUEST_URI'], -strlen(im_suffix())) != im_suffix() ) {
-    $redirecturl = zpurl(true);
+	$sfx = im_suffix();
+    if (isset($_GET['p'])) {
+      $special = "p=".$_GET['p'];
+	  $sfx .= "?" . $special;
+    } else {
+      $special = '';
+    }
+
+  if (getOption('mod_rewrite') && strlen($sfx) > 0
+      && in_context(ZP_IMAGE) && substr($_SERVER['REQUEST_URI'], -strlen($sfx)) != $sfx ) {
+    $redirecturl = zpurl(true, NULL, NULL, NULL, $special);
     header("HTTP/1.0 301 Moved Permanently");
     header('Location: ' . FULLWEBPATH . '/' . $redirecturl);
     exit;

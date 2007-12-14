@@ -40,13 +40,13 @@
 			<?php } if (hasNextImage()) { ?> <a class="next" href="<?php echo getNextImageURL();?>" title="Next Image">next &raquo;</a><?php } ?>
 		</div>
       
-      	<a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>">
+      	<a href="<?php echo getProtectedImageURL();?>" title="<?php echo getImageTitle();?>">
       	<?php printDefaultSizedImage(getImageTitle()); ?></a>
 
       	<div id="image_data">
       		<div id="fullsize_download_link">
         		<em>
-        		<a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>">Original Size: 
+        		<a href="<?php echo getProtectedImageURL();?>" title="<?php echo getImageTitle();?>">Original Size: 
           		<?php echo getFullWidth() . "x" . getFullHeight(); ?>
         		</a>
                 </em>

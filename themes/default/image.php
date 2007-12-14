@@ -42,7 +42,7 @@
 	</div>
 
 	<div id="image">
-		<a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>"><strong><?php printDefaultSizedImage(getImageTitle()); ?></strong></a> 
+		<a href="<?php echo getProtectedImageURL();?>" title="<?php echo getImageTitle();?>"><strong><?php printDefaultSizedImage(getImageTitle()); ?></strong></a> 
   	</div>
 	
 	<div id="narrow">

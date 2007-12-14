@@ -126,9 +126,9 @@ if (!$checked) {
                "Edit the <code>zp-config.php.example</code> file and rename it to <code>zp-config.php</code> " .
 	           "<br/><br/>You can find the file in the \"zp-core\" directory.") && $good;
   if ($cfg) {
-    $mySQLadmin = ($_zp_conf_vars['mysql_user'] == "user") ||
-                  ($_zp_conf_vars['mysql_pass'] == "pass") ||
-                  ($_zp_conf_vars['mysql_database'] == "database_name");
+    $mySQLadmin = (empty($_zp_conf_vars['mysql_user']) || ($_zp_conf_vars['mysql_user'] == "user")) ||
+                  (empty($_zp_conf_vars['mysql_pass']) || $_zp_conf_vars['mysql_pass'] == "pass") ||
+                  (empty($_zp_conf_vars['mysql_database']) || $_zp_conf_vars['mysql_database'] == "database_name");
     $good = checkMark(!$mySQLadmin, " mySQL setup in zp-config.php", '', 
                       "You have not set your <strong>mySQL</strong> <code>user</code>, " .
 	                  "<code>password</code>, etc. in your <code>zp-confgi.php</code> file.") && $good;
@@ -141,7 +141,7 @@ if (!$checked) {
   }
   $good = checkMark($connection, " connect to mySQL", '', '') && $good; 
   if ($connection) {
-    $mysqlv = mysql_get_server_info();
+    $mysqlv = trim(mysql_get_server_info());
 	$i = strpos($a, "-");
 	if ($i !== false) {
       $mysqlv = substr($a, 0, $i);

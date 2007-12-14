@@ -1170,9 +1170,22 @@ function printImageThumb($alt, $class=NULL, $id=NULL) {
 }
 
 function getFullImageURL() {
-  
   global $_zp_current_image;
   return $_zp_current_image->getFullImage();
+}
+/**
+* returns a password protected/watermarked url to the image
+**/
+function getProtectedImageURL() {
+  if(!in_context(ZP_IMAGE)) return false;
+  global $_zp_current_image;
+  $path = $_zp_current_image->getImageLink();
+  if (getOption('mod_rewrite')) {
+    $path .= "?p=*full-image";
+  } else {
+    $path .= "&p=*full-image";
+  }
+  return $path;
 }
 
 function getSizedImageURL($size) { 
@@ -2141,7 +2154,7 @@ function normalizeColumns($albumColumns, $imageColumns) {
  *@return bool true if a login form has been displayed
  *@since 1.1.3 
  */
-function checkforPassword() {
+function checkforPassword($silent=false) {
   global $_zp_current_album, $_zp_current_search, $_zp_album_authorized;
   if (ZP_loggedin()) { return false; }  // you're the admin, you don't need the passwords.
   if (in_context(ZP_SEARCH)) {
@@ -2149,7 +2162,9 @@ function checkforPassword() {
 	$hint = getOption('search_hint');
     if (!is_null($hash)) {
 	  if ($_zp_album_authorized != $hash) {
-	    printPasswordForm($hint);
+	    if (!$silent) {
+		  printPasswordForm($hint);
+		}
 	    return true;
 	  }
 	}
@@ -2158,7 +2173,9 @@ function checkforPassword() {
      $hint = $_zp_current_album->getPasswordHint();
      if (!empty($hash)) {
 	    if ($_zp_album_authorized != $hash) {
-	      printPasswordForm($hint);
+	      if (!$silent) {
+		    printPasswordForm($hint);
+		  }
 	      return true;
 	    }
 	  }
@@ -2167,7 +2184,9 @@ function checkforPassword() {
 	  $hint = getOption('gallery_hint');
      if (!empty($hash)) {
 	    if ($_zp_album_authorized != $hash) {
-	      printPasswordForm($hint);
+	      if (!$silent) {
+		    printPasswordForm($hint);
+		  }
 	      return true;
 	    }
 	  }
