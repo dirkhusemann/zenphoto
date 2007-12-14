@@ -7,33 +7,38 @@ define("DEBUG", false);
 
 ///////////   zenPHOTO Configuration Variables   //////////////////////////////
 //  After you're done editing this file, load  
-//  http://www.yoursite.com/zenphotodir/zp-core/setup.php
-//  to run the setup (of course, replacing the paths where needed).
-
-// NOTE: web_path and server_path are no longer needed! If you're having problems
-// with the auto-detected paths, you can override them at the bottom of this file.
+//  http://www.yoursite.com/zenphoto-install-folder/zp-core/setup.php
+//  to run the setup (replacing the path to match your site).
 ////////////////////////////////////////////////////////////////////////////////
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Database Information (the most important part!)
 ////////////////////////////////////////////////////////////////////////////////
 
-$conf['mysql_user'] = "user";
-$conf['mysql_pass'] = "pass";
-$conf['mysql_host'] = "localhost"; // Won't need to change this 90% of the time.
-$conf['mysql_database'] = "database_name";
+$conf['mysql_user']     = "DB-USER";       // Database user
+$conf['mysql_pass']     = "DB-PASSWORD";   // Database password
+$conf['mysql_host']     = "localhost";     // Won't need to change this 90% of the time.
+$conf['mysql_database'] = "DB-NAME";       // Database name
 
 // If you're sharing the database with other tables, use a prefix to be safe.
 $conf['mysql_prefix'] = "zp_";
 
 ////////////////////////////////////////////////////////////////////////////////
-// zp-config.php required options
+// zp-config.php optional settings
+////////////////////////////////////////////////////////////////////////////////
+// The following settings are OPTIONAL and are here for custom setups. If you're
+// not sure if you need to change a setting, it's probably OK to leave it alone. 
+// Just be sure to set the database info above.
+// 
+// For other options, click the "Options" tab in the Admin after you run setup.
+//
+////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
 // location of album folder. 
-// change 'album_folder' to rename the album folder inside the zenphotos installation
-// change 'external_album_folder' to locate your album folder outside the zenphoto folders
+// change 'album_folder' to rename the 'albums' folder, within the install directory.
+// change 'external_album_folder' to tell zenphoto where to look if you want the 
+//   album folder somewhere outside zenphoto's installation directory (experimental).
 $conf['album_folder'] = '/albums/';
 $conf['external_album_folder'] = null;
 
@@ -76,8 +81,6 @@ $conf['allowed_tags'] = array (
 
 // define('WEBPATH', '/zenphoto');
 // define('SERVERPATH', '/full/server/path/to/zenphoto');
-
-
 
 /** Do not edit below this line. **/
 /**********************************/
