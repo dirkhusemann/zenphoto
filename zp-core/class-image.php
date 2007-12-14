@@ -58,7 +58,7 @@ class Image extends PersistentObject {
       if (isset($metadata['date'])) {
         $newDate = $metadata['date'];
       } else {
-        $newDate = strftime('%Y/%m/%d %T', filectime($this->localpath));
+        $newDate = strftime('%Y/%m/%d %T', filemtime($this->localpath));
       }
       $this->set('date', $newDate);
       if (is_null($this->album->getDateTime())) {
