@@ -594,7 +594,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                       
                       <td>
                         <a class="delete" href="javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=<?php echo queryEncode($subalbum->name); ?>
-                          ');" title="Delete the album <?php echo $subalbum->name; ?>"><img src="images/delete.gif" style="border: 0px;" alt="x" /></a> 
+                          ');" title="Delete the album <?php echo $subalbum->name; ?>"><img src="images/fail.png" style="border: 0px;" alt="x" /></a> 
                       </td> 
                       
                     </tr> 
@@ -688,7 +688,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 
               <td style="padding-left: 1em;">
                 <a href="javascript: confirmDeleteImage('?page=edit&action=deleteimage&album=<?php echo queryEncode($album->name); ?>&image=<?php echo queryEncode($image->filename); ?>');" title="Delete the image <?php echo $image->filename; ?>">  
-                <img src="images/delete.gif" style="border: 0px;" alt="x" /></a> 
+                <img src="images/fail.png" style="border: 0px;" alt="Delete the image <?php echo $image->filename; ?>" /></a> 
               </td>
 
                 
@@ -803,9 +803,9 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 
                 <td align="left"> 
                   <a class="delete" href="javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=<?php echo queryEncode($album->name); ?>');" title="Delete the album <?php echo $album->name; ?>"> 
-                  <img src="images/delete.gif" style="border: 0px;" alt="x" /></a>
+                  <img src="images/fail.png" style="border: 0px;" alt="Delete the album <?php echo $album->name; ?>" /></a>
 				  <a class="cache" href="cache-images.php?album=<?php echo $album->name; ?>" title="Pre-Cache the album '<?php echo $album->name; ?>'">
-                  <img src="images/cache.gif" style="border: 0px;" alt="cache" /></a>
+                  <img src="images/cache.png" style="border: 0px;" alt="Cache the album <?php echo $album->name; ?>" /></a>
                 </td>
 
               </tr>
