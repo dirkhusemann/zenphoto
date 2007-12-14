@@ -5,11 +5,10 @@ if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 define('OFFSET_PATH', true);
 $setup = true;
 if (file_exists("zp-config.php")) {
-  require_once("zp-config.php");
-  global $_zp_conf_vars;
+  require("zp-config.php");
   if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
-    if (mysql_select_db($_zp_conf_vars['mysql_database'])) { 
-      $result = mysql_query("SELECT `id` FROM " . $_zp_conf_vars['mysql_prefix'].'options' . " LIMIT 1", $connection);
+    if (@mysql_select_db($_zp_conf_vars['mysql_database'])) { 
+      $result = @mysql_query("SELECT `id` FROM " . $_zp_conf_vars['mysql_prefix'].'options' . " LIMIT 1", $connection);
       if ($result) {
         unset($setup);
       }
@@ -117,7 +116,7 @@ if (!$checked) {
   $good = checkMark($sql, " PHP mySQL support", '', '') && $good;
 
   if (file_exists("zp-config.php")) {
-    require_once("zp-config.php");
+    require("zp-config.php");
     $cfg = true;
   } else {
     $cfg = false;
@@ -237,7 +236,7 @@ if (!$checked) {
 } // system check
 
   if (file_exists("zp-config.php")) {
-    require_once("zp-config.php");
+    require("zp-config.php");
     require_once('functions-db.php');
     $task = '';
     if (isset($_GET['create'])) { 

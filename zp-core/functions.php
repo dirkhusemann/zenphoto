@@ -7,7 +7,8 @@ if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
   die ("<strong>Zenphoto error:</strong> zp-config.php not found. Perhaps you need to run <a href=\"" . ZENFOLDER . "/setup.php\">setup</a> (or migrate your old config.php)");
 }
 
-require_once("zp-config.php");
+// Including zp-config.php more than once is OK, and avoids $conf missing.
+require("zp-config.php");
 
 // If the server protocol is not set, set it to the default (obscure zp-config.php change).
 if (!isset($_zp_conf_vars['server_protocol'])) $_zp_conf_vars['server_protocol'] = 'http';
