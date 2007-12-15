@@ -394,7 +394,7 @@ function printAlbumEditForm($index, $album) {
     $image = new Image($album, $filename);
     $selected = ($filename == $album->get('thumb')); 
     echo "\n<option class=\"thumboption\" style=\"background-image: url(" . $image->getThumb() . 
-	     "); background-repeat: no-repeat;\" value=\"<" . $filename . "\"";
+	     "); background-repeat: no-repeat;\" value=\"" . $filename . "\"";
 	if ($selected) {
 	  echo " selected=\"selected\""; 
 	}
@@ -493,7 +493,6 @@ function printAlbumEditForm($index, $album) {
  *@since 1.1.3
 */
 function processAlbumEdit($index, $album) {
-
   if ($index == 0) {
     $prefix = '';
   } else {
