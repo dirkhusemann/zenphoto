@@ -4,6 +4,41 @@ $checked = isset($_GET['checked']);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 define('OFFSET_PATH', true);
 $setup = true;
+
+function updateItem($item, $value) {
+  global $zp_cfg;
+  $i = strpos($zp_cfg, $item);
+  $i = strpos($zp_cfg, '=', $i);
+  $j = strpos($zp_cfg, "\n", $i);
+  $zp_cfg = substr($zp_cfg, 0, $i) . '= "' . $value . '";' . substr($zp_cfg, $j);
+}
+if (isset($_POST['mysql'])) { //try to update the zp-config file
+  $zp_cfg = @file_get_contents('zp-config.php');
+  if (isset($_POST['mysql_user'])) {
+    updateItem('mysql_user', $_POST['mysql_user']);
+  }
+  if (isset($_POST['mysql_pass'])) {
+    updateItem('mysql_pass', $_POST['mysql_pass']);
+  }
+  if (isset($_POST['mysql_host'])) {
+    updateItem('mysql_host', $_POST['mysql_host']);
+  }
+  if (isset($_POST['mysql_database'])) {
+    updateItem('mysql_database', $_POST['mysql_database']);
+  }
+  if (isset($_POST['mysql_prefix'])) {
+    updateItem('mysql_prefix', $_POST['mysql_prefix']);
+  }
+  @chmod('zp-config.php', 0777);
+  if (is_writeable('zp-config.php')) { 
+    if ($handle = fopen('zp-config.php', 'w')) {
+      if (fwrite($handle, $zp_cfg)) {
+        $base = true;
+      }
+    }
+    fclose($handle);
+  }
+}
 if (file_exists("zp-config.php")) {
   require("zp-config.php");
   if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
@@ -125,16 +160,55 @@ if (!$checked) {
                "Edit the <code>zp-config.php.example</code> file and rename it to <code>zp-config.php</code> " .
                "<br/><br/>You can find the file in the \"zp-core\" directory.") && $good;
   if ($cfg) {
-    // If any of these are empty, or they *all* equal the default value, then they are probably not set yet or set wrong.
-    // Note: We allow empty mysql_password, as this is a valid possibility. User/host/database must not be empty.
-    $mysql_info_valid = (empty($_zp_conf_vars['mysql_user']) ||
-                         empty($_zp_conf_vars['mysql_host']) || 
-                         ($_zp_conf_vars['mysql_user'] == 'DB-USER' 
-                          && $_zp_conf_vars['mysql_pass'] == 'DB-PASS' 
-                          && $_zp_conf_vars['mysql_database'] == 'DB-NAME'));
-    $good = checkMark(!$mysql_info_valid, " MySQL setup in zp-config.php", '', 
-                      "You have not set your <strong>MySQL</strong> <code>user</code>, " .
-                      "<code>password</code>, and <code>database name</code> in your <code>zp-config.php</code> file.") && $good;
+    @chmod('zp-config.php', 0777);
+    $mySQLadmin = (empty($_zp_conf_vars['mysql_user']) || ($_zp_conf_vars['mysql_user'] == "user")) ||
+                  (empty($_zp_conf_vars['mysql_pass']) || $_zp_conf_vars['mysql_pass'] == "pass") ||
+                  (empty($_zp_conf_vars['mysql_database']) || $_zp_conf_vars['mysql_database'] == "database_name");
+	if ($mySQLadmin && is_writable('zp-config.php')) {
+	  $good = checkMark(false, " mySQL setup in zp-config.php", '', '') && $good;
+	  // input form for the information
+?>
+      <div class="error">
+	  Fill in the missing information below and <strong>setup</strong> will attempt to update your <code>zp-config.php</code> file.<br/><br/>
+	  <form action="#" method="post">
+	  <input type="hidden" name="mysql" value="yes" />
+	  <table>
+ 	     <tr>
+		   <td>mySQL admin user</td>
+           <td><input type="text" size="40" name="mysql_user" value="<?php echo $_zp_conf_vars['mysql_user']?>" />&nbsp;*</td>
+		 </tr>
+ 	     <tr>
+		   <td>mySQL admin password</td>
+           <td><input type="text" size="40" name="mysql_pass" value="<?php echo $_zp_conf_vars['mysql_pass']?>" />&nbsp;*</td>
+		 </tr>
+ 	     <tr>
+		   <td>mySQL host</td>
+           <td><input type="text" size="40" name="mysql_host" value="<?php echo $_zp_conf_vars['mysql_host']?>" /></td>
+		 </tr>
+ 	     <tr>
+		   <td>mySQL database</td>
+           <td><input type="text" size="40" name="mysql_database" value="<?php echo $_zp_conf_vars['mysql_database']?>" />&nbsp;*</td>
+		 </tr>
+ 	     <tr>
+		   <td>Database table prefix</td>
+           <td><input type="text" size="40" name="mysql_prefix" value="<?php echo $_zp_conf_vars['mysql_prefix']?>" /></td>
+		 </tr>
+		 <tr><td></td><td align="right">* required</td></tr>
+         <tr>
+           <td></td>
+           <td><input type="submit" value="save" /></td>
+           <td></td>
+        </tr>
+	  </table>
+	  </form>
+	  </div>
+<?php
+	} else {
+      $good = checkMark(!$mySQLadmin, " mySQL setup in zp-config.php", '', 
+                        "You have not set your <strong>mySQL</strong> <code>user</code>, " .
+	                    "<code>password</code>, etc. in your <code>zp-confgi.php</code> file ".
+						"and <strong>setup</strong> is not able to write to the file.") && $good;
+	}
   }
   if ($sql) {
     if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])) {
