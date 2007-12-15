@@ -1713,7 +1713,7 @@ function printTags($option="links",$preText=NULL,$class='taglist',$separator=", 
       for ($x = 0; $x < $ct; $x++) {
         if ($x === $ct - 1) { $separator = ""; }
         if ($option === "links") {
-          $links1 = "<a href=\"".getSearchURL($singletag[$x], '', SEARCH_TAGS)."\" title=\"".$singletag[$x]."\">"; 
+          $links1 = "<a href=\"".getSearchURL($singletag[$x], '', SEARCH_TAGS)."\" title=\"".$singletag[$x]."\" rel=\"nofollow\">"; 
           $links2 = "</a>"; 
 	    }
         echo "\t<li>".$links1.htmlspecialchars($singletag[$x]).$links2.$separator."</li>\n";
@@ -1795,7 +1795,7 @@ function printAllTagsAs($option,$class="",$sort="abc",$counter=FALSE,$links=TRUE
 	  } else { 
 	    $key = str_replace('"', '', $key);
         echo "\t<li style=\"display:inline; list-style-type:none\"><a href=\"".
-	         getSearchURL($key, '', SEARCH_TAGS)."\" style=\"font-size:".$size."em;\">".
+	         getSearchURL($key, '', SEARCH_TAGS)."\" style=\"font-size:".$size."em;\" rel=\"nofollow\">".
 		     $key.$counter."</a></li>\n";  
 	  }
 	}
@@ -1846,7 +1846,7 @@ function printAllDates($class="archive", $yearid="year", $monthid="month") {
 	  if($nr != 1) {  echo "</ul>\n</li>\n";}
       echo "<li $yearid>$year\n<ul $monthid>\n";
 	}
-	echo "<li><a href=\"".getSearchURl('', substr($key, 0, 7))."\">$month ($val)</a></li>\n";
+	echo "<li><a href=\"".getSearchURl('', substr($key, 0, 7))."\" rel=\"nofollow\">$month ($val)</a></li>\n";
   }
 echo "</ul>\n</li>\n</ul>\n";
 }
@@ -1920,13 +1920,13 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
 	}
 	switch($option) {
 		case "Gallery":
-			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php\">".$linktext."$icon</a>".$next;
+			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
 		case "Album":
-			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php?albumnr=".getAlbumId()."&albumname=".getAlbumTitle()."\">".$linktext."$icon</a>".$next;
+			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php?albumnr=".getAlbumId()."&albumname=".getAlbumTitle()."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
 		case "Comments":
-			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss-comments.php\">".$linktext."$icon</a>".$next;
+			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss-comments.php\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
 	}
 }
