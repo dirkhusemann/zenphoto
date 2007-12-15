@@ -4,7 +4,9 @@ $checked = isset($_GET['checked']);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 define('OFFSET_PATH', true);
 $setup = true;
-
+if (!file_exists('zp-config.php')) { 
+  copy('zp-config.php.example', 'zp-config.php'); 
+}
 function updateItem($item, $value) {
   global $zp_cfg;
   $i = strpos($zp_cfg, $item);
