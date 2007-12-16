@@ -543,6 +543,9 @@ function processAlbumEdit($index, $album) {
  *@since 1.1.3
  */
 function checkForUpdate() {
+
+return false; //disable the feature.
+
   global $_zp_WEB_Version;
   if (isset($_zp_WEB_Version)) { return $_zp_WEB_Version; }
   $c = getOption('version');
