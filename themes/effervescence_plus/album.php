@@ -25,7 +25,7 @@ if ((($personality = getOption('Theme_personality'))!="Simpleviewer") || !getOpt
   $stagePadding="20";
 
   $thumbnailColumns="3";
-  $thumbnailRows="6";
+  $thumbnailRows="5";
   $navPosition="left";
 
   $enableRightClickOpen="true";

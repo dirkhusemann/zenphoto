@@ -143,16 +143,17 @@ function zp_handle_comment() {
   if (isset($_POST['comment'])) {
     if (in_context(ZP_IMAGE) && isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
       if (isset($_POST['website'])) $website = strip_tags($_POST['website']); else $website = "";
-	     if(isset($_POST['imageid'])){       	
+	     if(isset($_POST['imageid'])){       
+            $allowed_tags = getOption('allowed_tags');         
 	      	$activeImage = zp_load_image_from_id(strip_tags($_POST['imageid']));
 	      	if($activeImage !== false){
 	      		$commentadded = $activeImage->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']), 
-	          		$website, kses($_POST['comment'], getOption('allowed_tags')));
+	          		$website, kses($_POST['comment'], $allowed_tags));
 	        	$redirectTo = $activeImage->getImageLink();
 	      	}
 	      } else {
             $commentadded = $_zp_current_image->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']), 
-            $website, kses($_POST['comment'], getOption('allowed_tags')));
+            $website, kses($_POST['comment'], $allowed_tags));
 	        	$redirectTo = $_zp_current_image->getImageLink();
 	      }   
       if ($commentadded == 2) {
@@ -193,7 +194,7 @@ function zp_handle_password() {
     $authType = 'zp_search_auth';
 	$check_auth = getOption('search_password');
   } else if (in_context(ZP_ALBUM)) {
-    $authType = "zp_album_auth_" . $_zp_current_album->name;
+    $authType = "zp_album_auth_" . urlencode($_zp_current_album->name);
 	$check_auth = $_zp_current_album->getPassword();
   } else {
     $authType = 'zp_gallery_auth';
