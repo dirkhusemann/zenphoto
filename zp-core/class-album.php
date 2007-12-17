@@ -321,29 +321,35 @@ class Album extends PersistentObject {
    * @param images The array of filenames to be sorted.
    * @return A new array of filenames sorted according to the set key.
    */
-  function sortImageArray($images, $sorttype=null) {
+  function sortImageArray($images, $sorttype=NULL, $sortdirection=NULL) {
     global $_zp_loggedin;
     
     $hidden = array();
     $key = $this->getSortKey($sorttype);
     $direction = '';
-    if ($this->getSortDirection('image')) { $direction = ' DESC'; }
-    $result = query("SELECT filename, title, sort_order, `show` FROM " . prefix("images")
-      . " WHERE albumid=" . $this->id . " ORDER BY " . $key . $direction);
+    if (!is_null($sortdirection)) {
+      $direction = $sortdirection;
+    } else {
+      if ($this->getSortDirection('image')) { 
+        $direction = ' DESC'; 
+      }
+    }
+    $result = query("SELECT `filename`, `title`, `sort_order`, `show` FROM " . prefix("images")
+      . " WHERE `albumid`=" . $this->id . " ORDER BY " . $key . $direction);
 
     $i = 0;
     $images_to_keys = array_flip($images);
     $images_in_db = array();
     while ($row = mysql_fetch_assoc($result)) {
       $filename = $row['filename'];
-      $sort_key_value = $row[$key];
       // If the image is on the filesystem, but not yet processed, give it the next key:
       // TODO: We should mark this album for garbage collection if filenames are discovered.
-      if (array_key_exists($filename, $images_to_keys) && !in_array($filename, $images_in_db) && $sort_key_value) {
-        $images_to_keys[$filename] = $i;
-        $images_in_db[] = $filename;
-        if (!$_zp_loggedin && !$row['show']) { $hidden[] = $filename; }
-        $i++;
+      if (array_key_exists($filename, $images_to_keys) && !in_array($filename, $images_in_db)) {
+        if ($_zp_loggedin || $row['show']) {         
+          $images_to_keys[$filename] = $i;  
+          $images_in_db[] = $filename;
+          $i++;
+        }
       }
     }
 
@@ -354,11 +360,6 @@ class Album extends PersistentObject {
       $images_to_keys[$filename] = $i;
       $i++;
     }
-    
-    foreach($hidden as $filename) {
-      unset($images_to_keys[$filename]);
-    }
-    
     $images = array_flip($images_to_keys);
     ksort($images);
     return $images;
@@ -374,18 +375,7 @@ class Album extends PersistentObject {
   
   function getImage($index) {
     if ($index >= 0 && $index < $this->getNumImages()) {
-      if (!is_null($this->images)) {
-        // Get the image from the array if we already have it, but...
-        return new Image($this, $this->images[$index]);
-      } else {
-        // if possible, run a single query instead of getting all images.
-        $key = $this->getSortKey();
-        if ($this->getSortDirection('image')) { $key .= ' DESC'; }
-        $result = query("SELECT filename FROM " . prefix("images") 
-            . " WHERE albumid=" . $this->id . " ORDER BY $key LIMIT $index,1");
-        $filename = mysql_result($result, 0);
-        return new Image($this, $filename);        
-      }
+      return new Image($this, $this->images[$index]);
     }
     return false;
   }
