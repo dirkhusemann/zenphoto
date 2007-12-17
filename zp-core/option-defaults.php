@@ -63,5 +63,18 @@ function setDefault($option, $default) {
   setDefault('current_theme', 'default');
   setDefault('feed_items', 10);
   setDefault('search_fields', 32767);  
+  setOptionDefault('allowed_tags', "a => (href => () title => ()) \n".
+	                               "abbr => (title => ())\n" . 
+	                               "acronym => (title => ())\n" . 
+	                               "b => ()\n" .
+	                               "blockquote => (cite => ())\n" .
+	                               "code => ()\n" .
+	                               "em => ()\n" . 
+	                               "i => () \n" .
+	                               "strike => ()\n" . 
+	                               "strong => ()\n" .
+	                               "ul => ()\n" .
+	                               "ol => ()\n" .
+	                               "li => ()\n");
 
 ?>

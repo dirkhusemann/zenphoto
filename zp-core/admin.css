@@ -230,9 +230,9 @@ table.bordered {
 	padding: 0px;
 	border-spacing: 1px;
 	margin: 1em 0px 0.5em;
-  background: #F1F2F3;
+    background: #F1F2F3;
 	border: 1px solid #BAC9CF;
-  border-bottom-width: 5px;
+    border-bottom-width: 5px;
 }
 table.bordered th {
 	font-weight: normal;
@@ -255,6 +255,20 @@ table.bordered tr.alt td {
 table.formlayout td {
   padding: 2px;
   vertical-align: top;
+}
+table.checkboxes {
+  padding: 0px;
+  margin: 0px;
+  line-height: 10px;
+  border: 0px;
+}
+table.checkboxes tr {
+  padding: 0px;
+  margin: 0px;
+}
+table.checkboxes td {
+  padding: 0px;
+  margin: 0px;
 }
 
 

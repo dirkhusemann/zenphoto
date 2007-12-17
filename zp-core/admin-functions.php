@@ -471,12 +471,14 @@ function printAlbumEditForm($index, $album) {
   echo "\n</td>";
   echo "\n</tr>";
   echo "\n<tr><td></td><td valign=\"top\"><a href=\"cache-images.php?album=" . 
-       $album->name . "\">Pre-Cache Images</a></strong> - Cache newly uploaded images.</td></tr>";
+       $album->name . "\"><img src=\"images/cache.png\" style=\"border: 0px;\" />Pre-Cache Images</a></strong> - Cache newly uploaded images.</td></tr>";
 
   if ($album->getNumImages() > 0) { 
 	echo "\n<tr><td></td><td valign=\"top\"><a href=\"refresh-metadata.php?album=" . 
-	     $album->name . "\">Refresh Image Metadata</a> - Forces a refresh of the EXIF and IPTC data for all images in the album.</td></tr>";
+	     $album->name . "\"><img src=\"images/warn.png\" style=\"border: 0px;\" />Refresh Image Metadata</a> - Forces a refresh of the EXIF and IPTC data for all images in the album.</td></tr>";
   }
+  echo "\n<tr><td></td><td valign=\"top\"><a href=\"?action=reset_hitcounters&albumid=" . 
+       $album->getAlbumID() . "&return=" . $album->name . "\"><img src=\"images/reset.png\" style=\"border: 0px;\" />Reset hitcounters</a></strong> - Resets all hitcounters in the album.</td></tr>";
 
   echo "\n</table>";  
   echo "\n<input type=\"submit\" value=\"save\" />";
@@ -543,15 +545,12 @@ function processAlbumEdit($index, $album) {
  *@since 1.1.3
  */
 function checkForUpdate() {
-
-return false; //disable the feature.
-
   global $_zp_WEB_Version;
   if (isset($_zp_WEB_Version)) { return $_zp_WEB_Version; }
   $c = getOption('version');
   $v = @file_get_contents('http://www.zenphoto.org/files/LATESTVERSION');
   if (empty($v)) {
-    $_zp_WEB_Version = false;
+    $_zp_WEB_Version = 'X';
   } else {
     $wv = explode('.', $v);
     $cv = explode('.', $c);
@@ -560,7 +559,7 @@ return false; //disable the feature.
     if ($wvd > $cvd) {
       $_zp_WEB_Version = $v;
     } else {
-      $_zp_WEB_Version = false;
+      $_zp_WEB_Version = '';
     }
   }
   Return $_zp_WEB_Version;

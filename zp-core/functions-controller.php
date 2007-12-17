@@ -143,19 +143,20 @@ function zp_handle_comment() {
   if (isset($_POST['comment'])) {
     if (in_context(ZP_IMAGE) && isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
       if (isset($_POST['website'])) $website = strip_tags($_POST['website']); else $website = "";
-	     if(isset($_POST['imageid'])){       
-            $allowed_tags = getOption('allowed_tags');         
-	      	$activeImage = zp_load_image_from_id(strip_tags($_POST['imageid']));
-	      	if($activeImage !== false){
-	      		$commentadded = $activeImage->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']), 
-	          		$website, kses($_POST['comment'], $allowed_tags));
-	        	$redirectTo = $activeImage->getImageLink();
-	      	}
-	      } else {
-            $commentadded = $_zp_current_image->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']), 
-            $website, kses($_POST['comment'], $allowed_tags));
-	        	$redirectTo = $_zp_current_image->getImageLink();
-	      }   
+      $allowed_tags = "(".getOption('allowed_tags').")"; 
+      $allowed = parseAllowedTags($allowed_tags);
+      if(isset($_POST['imageid'])){       
+	   	$activeImage = zp_load_image_from_id(strip_tags($_POST['imageid']));
+	   	if($activeImage !== false){
+	      $commentadded = $activeImage->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']), 
+	          		                               $website, kses($_POST['comment'], $allowed));
+	      $redirectTo = $activeImage->getImageLink();
+	      }
+	    } else {
+          $commentadded = $_zp_current_image->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']), 
+                                                         $website, kses($_POST['comment'], $allowed));
+	      $redirectTo = $_zp_current_image->getImageLink();
+	    }   
       if ($commentadded == 2) {
         unset($error);
         if (isset($_POST['remember'])) {

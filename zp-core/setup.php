@@ -161,12 +161,28 @@ if (!$checked) {
   $good = checkMark($cfg, " <em>zp-config.php</em> file", " [does not exist]",
                "Edit the <code>zp-config.php.example</code> file and rename it to <code>zp-config.php</code> " .
                "<br/><br/>You can find the file in the \"zp-core\" directory.") && $good;
+  if ($sql) {
+    if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])) {
+      $db = $_zp_conf_vars['mysql_database'];
+      $db = @mysql_select_db($db);
+    }
+  }
+  if ($connection) {
+    $mysqlv = trim(mysql_get_server_info());
+    $i = strpos($a, "-");
+    if ($i !== false) {
+      $mysqlv = substr($a, 0, $i);
+    }
+    $n = explode(".", $mysqlv);
+    $v = $n[0]*10000 + $n[1]*100 + $n[2]; 
+    $sqlv = $v >= 32300;
+  }
   if ($cfg) {
     @chmod('zp-config.php', 0777);
     $mySQLadmin = (empty($_zp_conf_vars['mysql_user']) || ($_zp_conf_vars['mysql_user'] == "user")) ||
                   (empty($_zp_conf_vars['mysql_pass']) || $_zp_conf_vars['mysql_pass'] == "pass") ||
                   (empty($_zp_conf_vars['mysql_database']) || $_zp_conf_vars['mysql_database'] == "database_name");
-	if ($mySQLadmin && is_writable('zp-config.php')) {
+	if (($mySQLadmin || !$sql || !$connection  || !$db) && is_writable('zp-config.php')) {
 	  $good = checkMark(false, " mySQL setup in zp-config.php", '', '') && $good;
 	  // input form for the information
 ?>
@@ -181,7 +197,7 @@ if (!$checked) {
 		 </tr>
  	     <tr>
 		   <td>mySQL admin password</td>
-           <td><input type="text" size="40" name="mysql_pass" value="<?php echo $_zp_conf_vars['mysql_pass']?>" />&nbsp;*</td>
+           <td><input type="password" size="40" name="mysql_pass" value="<?php echo $_zp_conf_vars['mysql_pass']?>" />&nbsp;*</td>
 		 </tr>
  	     <tr>
 		   <td>mySQL host</td>
@@ -212,28 +228,15 @@ if (!$checked) {
 						"and <strong>setup</strong> is not able to write to the file.") && $good;
 	}
   }
-  if ($sql) {
-    if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])) {
-      $db = $_zp_conf_vars['mysql_database'];
-      $db = @mysql_select_db($db);
-    }
-  }
   $good = checkMark($connection, " connect to MySQL", '', "Could not connect to the <strong>MySQL</strong> server. Check the <code>user</code>, " .
       "<code>password</code>, and <code>database host</code> in your <code>zp-config.php</code> file and try again. ") && $good; 
   if ($connection) {
-    $mysqlv = trim(mysql_get_server_info());
-    $i = strpos($a, "-");
-    if ($i !== false) {
-      $mysqlv = substr($a, 0, $i);
-    }
-    $n = explode(".", $mysqlv);
-    $v = $n[0]*10000 + $n[1]*100 + $n[2]; 
-    $sqlv = $v >= 32300;
     $good = checkMark($sqlv, " MySQL version 3.2.3 or greater", " [version is $mysqlv]", "") && $good; 
     $good = checkMark($db, " connect to the database <code>" . $_zp_conf_vars['mysql_database'] . "</code>", '', 
       "Could not access the <strong>MySQL</strong> database (<code>" . $_zp_conf_vars['mysql_database'] ."</code>). Check the <code>user</code>, " .
-      "<code>password</code>, and <code>database name</code> in your <code>zp-config.php</code> file and try again. " .
-      "Make sure the database has been created, and the user has access to it.") && $good;
+      "<code>password</code>, and <code>database name</code> and try again. " .
+      "Make sure the database has been created, and the <code>user</code> has access to it. " .
+      "Also check the <code>mySQL host</code>.") && $good;
   }
     
   $ht = @file_get_contents('../.htaccess');

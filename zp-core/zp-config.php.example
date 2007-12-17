@@ -35,34 +35,11 @@ $conf['mysql_prefix'] = "zp_";
 // change 'album_folder' to rename the album folder inside the zenphotos installation
 // change 'external_album_folder' to locate your album folder outside the zenphoto folders
 $conf['album_folder'] = '/albums/';
-$conf['external_album_folder'] = null;
+$conf['external_album_folder'] = NULL;
 
 // Change this to "https" if you use an HTTPS server (a "https://..." url)
 // Otherwise you should leave it at "http"
 $conf['server_protocol'] = "http";
-
-////////////////////////////////////////////////////////////////////////////////
-// Comment cleaning configuration
-////////////////////////////////////////////////////////////////////////////////
-
-// Tags and attributes allowed in comments
-// Follow the array form array('tag' => array('attribute' => array()))
-$conf['allowed_tags'] = array (
-	'a'          => array ('href' => array (), 'title' => array ()), 
-	'abbr'       => array ('title' => array ()), 
-	'acronym'    => array ('title' => array ()), 
-	'b'          => array (), 
-	'blockquote' => array ('cite' => array ()),
-	'code'       => array (),
-	'em'         => array (), 
-	'i'          => array (),
-	'strike'     => array (), 
-	'strong'     => array (),
-	'ul'         => array (),
-	'ol'         => array (),
-	'li'         => array (),
-);
-
 
 
 ////////////////////////////////////////////////////////////////////////////////

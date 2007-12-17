@@ -34,11 +34,26 @@ define('CACHEFOLDER', '/cache/');
 define('SERVERCACHE', SERVERPATH . substr(CACHEFOLDER, 0, -1));
 
 // Set the version number.
-$_zp_conf_vars['version'] = '1.1.3';
+$_zp_conf_vars['version'] = '1.1.2';
 
 // the options array
 $_zp_options = NULL;
-  
+
+/* album folder 
+ *  Name of the folder where albums are located.
+ *  may be overridden by zp-config: 
+ *    Set conf['album_folder'] to the folder path that is located within the zenphoto folders.
+ *      or 
+ *    Set conf['external_album_folder'] to an external folder path.
+ *  An external folder path overrides one located within the zenphotos folders.
+*/
+define('ALBUMFOLDER', '/albums/');
+
+// Set error reporting to the default if it's not.
+error_reporting(E_ALL ^ E_NOTICE);
+$_zp_error = false;
+
+ 
 /**
   * Get a option stored in the database.
   * This function reads the options only once, in order to improve performance.
@@ -120,20 +135,32 @@ function getOptionList() {
   if (NULL == $_zp_options) { getOption('nil'); } // pre-load from the database
   return $_zp_options; 
 }
-/* album folder 
- *  Name of the folder where albums are located.
- *  may be overridden by zp-config: 
- *    Set conf['album_folder'] to the folder path that is located within the zenphoto folders.
- *      or 
- *    Set conf['external_album_folder'] to an external folder path.
- *  An external folder path overrides one located within the zenphotos folders.
-*/
-define('ALBUMFOLDER', '/albums/');
 
-// Set error reporting to the default if it's not.
-error_reporting(E_ALL ^ E_NOTICE);
-$_zp_error = false;
-
+/**
+* parses the 'allowed_tags' option for use by 
+*@param string $source by name, contains the string with the tag options
+*@return array the allowed_tags array.
+*@since 1.1.3
+**/
+function parseAllowedTags(&$source) {
+  $source = trim($source);
+  if (substr($source, 0, 1) != "(") { return false; }
+  $source = substr($source, 1); //strip off the open paren
+  $a = array();
+  while ((strlen($source) > 1) && (substr($source, 0, 1) != ")")) {
+    $i = strpos($source, '=>');
+    if ($i === false) { return false; }
+    $tag = trim(substr($source, 0, $i));
+    $source = trim(substr($source, $i+2));
+    if (substr($source, 0, 1) != "(") { return false; }
+      $x = parseAllowedTags($source, $level);
+      if ($x === false) { return false; }
+      $a[$tag] = $x;
+  }
+  if (substr($source, 0, 1) != ')') { return false; }
+  $source = trim(substr($source, 1)); //strip the close paren
+  return $a;
+}
 
 // Set up default EXIF variables:
 // Note: The database setup/upgrade uses this list, so if fields are added or deleted, upgrade.php should be 
@@ -201,9 +228,6 @@ function is_videoThumb($album,$filename){
  return false;
 }
 
-	
-	
-
 //ZenVideo: Search a thumbnail for the image
 function checkVideoThumb($album,$video){
 	$extTab = array(".flv",".3gp",".mov",".FLV",".3GP",".MOV");
@@ -219,10 +243,6 @@ function checkVideoThumb($album,$video){
 	}
 	return NULL;
 }
-
-
-
-
 
 function truncate_string($string, $length) {
   if (strlen($string) > $length) {
@@ -621,7 +641,9 @@ function parseThemeDef($file) {
     while($line = fgets($fp)) {
       if (substr(trim($line), 0, 1) != "#") {
         $item = explode("::", $line);
-        $themeinfo[trim($item[0])] = kses(trim($item[1]), getOption('allowed_tags'));
+        $allowed_tags = "(".getOption('allowed_tags').")";
+        $allowed = parseAllowedTags($allowed_tags);
+        $themeinfo[trim($item[0])] = kses(trim($item[1]), $allowed);
       }
     }
     return $themeinfo;
