@@ -1389,10 +1389,11 @@ function printLatestComments($number) {
 /**
  * increments the hitcounter
  * @param string $option "image" for image hit counter (default), "album" for album hit counter
+ * @param bool $view set to true if you don't want to increment the counter.
  * @return string  hitcount
  * @since 1.1.3
  */
-function hitcounter($option="image") {
+function hitcounter($option="image", $viewonly=false) {
   switch($option) {
 		case "image":
 			$id = getImageID(); 
@@ -1405,6 +1406,7 @@ function hitcounter($option="image") {
 			$doUpdate = getCurrentPage() == 1; // only count initial page for a hit on an album
 		break;
   }
+  if (zp_loggedin() || $viewonly) { $doUpdate = false; }
   $sql = "SELECT `hitcounter` FROM $dbtable WHERE `id` = $id";
   if ($doUpdate) { $sql .= " FOR UPDATE"; }
   $result = query_single_row($sql);
