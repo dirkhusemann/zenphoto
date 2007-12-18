@@ -4,7 +4,8 @@ $checked = isset($_GET['checked']);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 define('OFFSET_PATH', true);
 $setup = true;
-if (!file_exists('zp-config.php')) { 
+
+if (!$checked && !file_exists('zp-config.php')) { 
   copy('zp-config.php.example', 'zp-config.php'); 
 }
 function updateItem($item, $value) {
@@ -87,10 +88,10 @@ if (file_exists("zp-config.php")) {
 if (!$checked) {
 
   /*****************************************************************************
-   *                                                                           *
-   *                             SYSTEMS CHECK                                 *
-   *                                                                           *
-   ****************************************************************************/
+   *                                                                                                                    *
+   *                             SYSTEMS CHECK                                                              *
+   *                                                                                                                    *
+   *******************************************************************************/
   global $_zp_conf_vars;
 
   function checkMark($check, $text, $sfx, $msg) {
@@ -372,7 +373,7 @@ if (!$checked) {
   
     $db_schema = array();
     
-    /***********************************************************************************
+  /***********************************************************************************
      Add new fields in the upgrade section. This section should remain static except for new
      tables. This tactic keeps all changes in one place so that noting gets accidentaly omitted.
     ************************************************************************************/
@@ -465,11 +466,11 @@ if (!$checked) {
       "ADD CONSTRAINT $cst_images FOREIGN KEY (`albumid`) REFERENCES $tbl_albums (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
     }
   
-    /****************************************************************************************
-     ******                                              UPGRADE SECTION               ******
-     ******                                                                            ******     
-     ******                                           Add all new fields below         ******
-     ******                                                                            ******     
+  /****************************************************************************************
+     ******                                              UPGRADE SECTION                                        ******
+     ******                                                                                                                   ******     
+     ******                                           Add all new fields below                                       ******
+     ******                                                                                                                   ******     
     ****************************************************************************************/
     $sql_statements = array();
     
@@ -523,11 +524,11 @@ if (!$checked) {
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `password_hint` text;";
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `hitcounter` int(11) UNSIGNED default NULL;";
  
-    /**************************************************************************************
-     ******                                        END of UPGRADE SECTION            ******
-     ******                                                                          ******     
-     ******                                    Add all new fields above              ******
-     ******                                                                          ******     
+  /**************************************************************************************
+     ******                                        END of UPGRADE SECTION                               ******
+     ******                                                                                                                ******     
+     ******                                    Add all new fields above                                           ******
+     ******                                                                                                                ******     
     ***************************************************************************************/   
 
     if (isset($_GET['create']) || isset($_GET['update']) && db_connect()) {
@@ -620,23 +621,19 @@ if (!$checked) {
       }
       echo "<p><a href=\"?checked&$task$mod\" title=\"create and or update the database tables.\" style=\"font-size: 15pt; font-weight: bold;\">Go!</a></p>";
     } else {
-      echo "<h3>database not connected</h3>";
-      echo "<p>Check the zp-config.php file to make sure you've got the right username, password, host, and database. If you haven't created
+      echo "<div class=\"error\">";
+      echo "<h3>database did not connect</h3>";
+      echo "<p>You should run setup.php to check your configuration. If you haven't created
         the database yet, now would be a good time.";
+      echo "</div>";
     }
 } else {
   // The config file hasn't been created yet. Show the steps.
   ?>
 
-  <ul>
-    <li><strong>Step 1: Edit the <code>zp-config.php.example</code> file and rename it to <code>zp-config.php</code></strong> . You can find the file
-      in the "zp-core" directory.</li>
-    <li><strong>Step 2: Edit the .htaccess file in the root zenphoto folder</strong> if you have the mod_rewrite apache 
-      module, and want cruft-free URLs. Just change the one line indicated to make it work.</li>
-    <li><strong>Step 3: Change the permissions on the 'albums' and 'cache' folders to be writable by the server</strong> 
-      (<code>chmod 777 cache</code>) (not necessary on Windows servers)
-    <li><strong>Step 4: Come back to this page (just reload it if you're ready) and click "Go!"</strong>
-  </ul>
+  <div class="error">
+    The zp-config.php file does not exist. You should run setup.php to check your configuration and create this file.
+  </div>
   
   <?php } ?>
 </div>
