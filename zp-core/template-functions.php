@@ -1528,7 +1528,7 @@ function printImageStatistic($number, $option) {
   echo "\n<div id=\"$option_images\">\n";
   foreach ($images as $image) {
     $imageURL = getURL($image); 
-    echo '<a href="' . $imageURL . '" title="' . $image->getTitle() . "\">\n";
+    echo '<a href="' . $imageURL . '" title="' . htmlspecialchars($image->getTitle(), ENT_QUOTES) . "\">\n";
     echo '<img src="' . $image->getThumb() . "\"></a>\n";
   }
   echo "</div>\n";
@@ -1574,9 +1574,9 @@ function printRandomImages($number, $class=null, $option="all") {
          $randomImage = getRandomImagesAlbum(); break;
       }
       $randomImageURL = getURL($randomImage); 
-      echo '<a href="' . $randomImageURL . '" title="View image: ' . $randomImage->getTitle() . '">' .
+      echo '<a href="' . $randomImageURL . '" title="View image: ' . htmlspecialchars($randomImage->getTitle(), ENT_QUOTES) . '">' .
       '<img src="' . $randomImage->getThumb() . 
-      '" alt="'.$randomImage->getTitle().'"'; 
+      '" alt="'.htmlspecialchars($randomImage->getTitle(), ENT_QUOTES).'"'; 
       echo "/></a></li>\n";
     }
     echo "</ul>";
@@ -1703,7 +1703,7 @@ function printTags($option="links",$preText=NULL,$class='taglist',$separator=", 
   if (empty($tags)) { $preText = ""; }
   if (!empty($preText)) { $preText = "<strong>".$preText."</strong>"; }
   if ($editable && zp_loggedin()) {
-    echo "<div id=\"tagContainer\">".$preText."<div id=\"imageTags\" style=\"display: inline;\">" . htmlspecialchars(getTags()) . "</div></div>\n";
+    echo "<div id=\"tagContainer\">".$preText."<div id=\"imageTags\" style=\"display: inline;\">" . htmlspecialchars(getTags(), ENT_QUOTES) . "</div></div>\n";
     echo "<script type=\"text/javascript\">initEditableTags('imageTags');</script>";
   } else {
     if (!empty($tags)) {
@@ -1718,7 +1718,7 @@ function printTags($option="links",$preText=NULL,$class='taglist',$separator=", 
           $links1 = "<a href=\"".getSearchURL($singletag[$x], '', SEARCH_TAGS)."\" title=\"".$singletag[$x]."\" rel=\"nofollow\">"; 
           $links2 = "</a>"; 
 	    }
-        echo "\t<li>".$links1.htmlspecialchars($singletag[$x]).$links2.$separator."</li>\n";
+        echo "\t<li>".$links1.htmlspecialchars($singletag[$x], ENT_QUOTES).$links2.$separator."</li>\n";
 	  }
     }
     echo "</ul><br clear=\"all\" />\n";  
@@ -1986,7 +1986,7 @@ function getSearchURL($words, $dates, $fields=0) {
 function printSearchForm($prevtext=NULL, $fieldSelect=NULL, $id='search') { 
   $zf = WEBPATH."/".ZENFOLDER;
   $dataid = $id . '_data';
-  $searchwords = (isset($_POST['words']) ? htmlspecialchars(stripslashes($_REQUEST['words'])) : ''); 
+  $searchwords = (isset($_POST['words']) ? htmlspecialchars(stripslashes($_REQUEST['words']), ENT_QUOTES) : ''); 
   
   echo "\n<div id=\"search\">";
   echo "\n<form method=\"post\" action=\"".WEBPATH."/index.php?p=search\" id=\"search_form\">"; 

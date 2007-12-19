@@ -30,14 +30,14 @@ function printHeadingImage($randomImage) {
         $randomAlbum = $randomAlbum->getParent();
       }
     }
-    $randomAlt1 = str_replace('"', "''", $randomAlt1);
     $randomImageURL = getURL($randomImage);
-      print "<a href='".$randomImageURL."' title='Random Picture...'><img src='".
-      $randomImage->getCustomImage(1000, 620, 180, 620, 180, 300, 300).
-      "' width=620 height=180 alt=".'"'.
-      $randomAlt1.":\n".$randomImage->getTitle().
-      '" /></a>';
-      echo '</div>';
+    print "<a href='".$randomImageURL."' title='Random Picture...'><img src='".
+    $randomImage->getCustomImage(1000, 620, 180, 620, 180, 300, 300).
+          "' width=620 height=180 alt=".'"'.
+          htmlspecialchars($randomAlt1, ENT_QUOTES).
+          ":\n".htmlspecialchars($randomImage->getTitle(), ENT_QUOTES).
+          '" /></a>';
+    echo '</div>';
   }
 }
 
