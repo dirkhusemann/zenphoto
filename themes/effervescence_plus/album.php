@@ -101,7 +101,9 @@ if ($_GET['format'] != 'xml') {
 	   				  if (is_null($album = $_zp_current_album->getPrevAlbum())) {
 	    			    echo '<div class="albdisabledlink">&laquo; prev</div>';
 	  				  } else {
-	    				echo '<a href="' . getPrevAlbumURL() .'" title="' . $album->getTitle() . '">&laquo; prev</a>';
+	    				echo '<a href="' . 
+                        rewrite_path("/" . pathurlencode($album->name), "/index.php?album=" . urlencode($album->name)) .
+                        '" title="' . $album->getTitle() . '">&laquo; prev</a>';
 	    			  } 
 	  				?>
 	  			</div>
@@ -110,7 +112,9 @@ if ($_GET['format'] != 'xml') {
 	    			  if (is_null($album = $_zp_current_album->getNextAlbum())) {
 	      			    echo '<div class="albdisabledlink">next &raquo;</div>';
 	    			  } else {
-	      				echo '<a href="' . getNextAlbumURL() . '" title="' . $album->getTitle() . '">next &raquo;</a>';
+	      				echo '<a href="' . 
+                        rewrite_path("/" . pathurlencode($album->name), "/index.php?album=" . urlencode($album->name)) .
+                        '" title="' . $album->getTitle() . '">next &raquo;</a>';
 	    			  } 
 	    			?>
 	  			</div>

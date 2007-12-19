@@ -543,8 +543,8 @@ function getNextAlbumURL() {
   } else {
     return false;
   }
-  return rewrite_path("/" . pathurlencode($nextalbum->name) . empty($from) ? '' : "?$fromsearch",
-    "/index.php?album=" . urlencode($nextalbum->name) . empty($from) ? '' : "&$fromsearch");
+  return rewrite_path("/" . pathurlencode($nextalbum->name),
+    "/index.php?album=" . urlencode($nextalbum->name));
 }
 
 function getPrevAlbumURL() {
