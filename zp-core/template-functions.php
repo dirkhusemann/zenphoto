@@ -506,6 +506,16 @@ function getAlbumThumb() {
 }
 
 function printAlbumThumbImage($alt, $class=NULL, $id=NULL) { 
+  global $_zp_current_album;
+  if (!$_zp_current_album->getShow()) { 
+    $class .= " not_visible"; 
+  } else {
+  $pwd = $_zp_current_album->getPassword();
+    if (zp_loggedin() && !empty($pwd)) {
+      $class .= " password_protected";
+    }
+  }
+  $class = trim($class);
   echo "<img src=\"" . htmlspecialchars(getAlbumThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     (($class) ? " class=\"$class\"" : "") . 
     (($id) ? " id=\"$id\"" : "") . " />";
@@ -518,6 +528,16 @@ function getCustomAlbumThumb($size, $width=NULL, $height=NULL, $cropw=NULL, $cro
 }
 
 function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=null, $class=NULL, $id=NULL) {
+  global $_zp_current_album;
+  if (!$_zp_current_album->getShow()) { 
+    $class .= " not_visible"; 
+  } else {
+  $pwd = $_zp_current_album->getPassword();
+    if (zp_loggedin() && !empty($pwd)) {
+      $class .= " password_protected";
+    }
+  }
+  $class = trim($class);
   /* set the HTML image width and height parameters in case this image was "zen-logo.gif" substituted for no thumbnail then the thumb layout is preserved */
   if ($sizeW = max(is_null($width) ? 0: $sizeW, is_null($cropw) ? 0 : $cropw)) {
     $sizing = ' width="' . $sizeW . '"'; 
@@ -1163,6 +1183,16 @@ function getImageThumb() {
 }
 
 function printImageThumb($alt, $class=NULL, $id=NULL) { 
+  global $_zp_current_album, $_zp_current_image;
+  if (!$_zp_current_image->getShow()) { 
+    $class .= " not_visible"; 
+  } else {
+  $pwd = $_zp_current_album->getPassword();
+    if (zp_loggedin() && !empty($pwd)) {
+      $class .= " password_protected";
+    }
+  }
+  $class = trim($class);
   echo "<img src=\"" . htmlspecialchars(getImageThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     ((getOption('thumb_crop')) ? " width=\"".getOption('thumb_crop_width')."\" height=\"".getOption('thumb_crop_height')."\"" : "") .
     (($class) ? " class=\"$class\"" : "") . 
@@ -1199,6 +1229,16 @@ function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph
 
 //ZenVideo: Print normal video or custom sized images...
 function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $class=NULL, $id=NULL) { 
+  global $_zp_current_album, $_zp_current_image;
+  if (!$_zp_current_album->getShow()) { 
+    $class .= " not_visible"; 
+  } else {
+  $pwd = $_zp_current_image->getPassword();
+    if (zp_loggedin() && !empty($pwd)) {
+      $class .= " password_protected";
+    }
+  }
+  $class = trim($class);
   	//Print videos
 	  if(getImageVideo()) {
 	  $ext = strtolower(strrchr(getFullImageURL(), "."));

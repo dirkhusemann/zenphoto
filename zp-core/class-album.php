@@ -491,6 +491,13 @@ class Album extends PersistentObject {
       $image = new Image($this, $filename);
       $image->deleteImage(false);
     }
+    chdir($this->localpath);
+    $filelist = glob('*');
+    foreach($filelist as $file) {
+      if (($file != '.') && ($file != '..')) {
+        unlink($this->localpath . $file); // clean out any other files in the folder
+      }
+    }
     query("DELETE FROM " . prefix('albums') . " WHERE `id` = '" . $this->id . "'");
     return rmdir($this->localpath); 
   }
