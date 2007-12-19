@@ -427,6 +427,9 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         } else {
           $notify = '&tag_parse_error';
         }
+        setBoolOption('comment_name_required', $_POST['comment_name_required']);
+        setBoolOption('comment_email_required', $_POST['comment_email_required']);
+        setBoolOption('comment_web_required', $_POST['comment_web_required']);
         $returntab = "#tab_comments";
 
       }
@@ -1510,7 +1513,16 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                         }
                     ?>
                     <!-- end of SPAM filter options -->
-                   <tr>
+                    <tr>
+                      <td>Require fields:</td>
+                      <td>
+                      <input type="checkbox" name="comment_name_required" value=1 <?php checked('1', getOption('comment_name_required')); ?>>&nbsp;Name
+                      <input type="checkbox" name="comment_email_required" value=1 <?php checked('1', getOption('comment_email_required')); ?>>&nbsp;Email
+                      <input type="checkbox" name="comment_web_required" value=1 <?php checked('1', getOption('comment_web_required')); ?>>&nbsp;Website
+                      </td>
+                      <td>Checked fields must be valid in a comment posting..</td>
+                    </tr>
+                    <tr>
                         <td></td>
                         <td><input type="submit" value="save" /></td>
                         <td></td>

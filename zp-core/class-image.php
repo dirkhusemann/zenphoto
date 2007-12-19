@@ -298,7 +298,10 @@ class Image extends PersistentObject {
     // Let the comment have trailing line breaks and space? Nah...
     // Also (in)validate HTML here, and in $name.
     $comment = trim($comment);
-    if (empty($email) || !is_valid_email_zp($email) || empty($name) || empty($comment)) {
+    if (getOption('comment_email_required') && (empty($email) || !is_valid_email_zp($email))) { return 0; }
+    if (getOption('comment_name_required') && empty($name)) { return 0; }
+    if (getOption('comment_web_required') && empty($website)) { return 0; }
+    if (empty($comment)) {
       return 0;
     }
     
