@@ -1465,6 +1465,11 @@ function hitcounter($option="image", $viewonly=false) {
  * @return string with albums
  */
 function getAlbumStatistic($number=5, $option) {
+  if (zp_loggedin()) {
+    $albumWhere = "";
+  } else {
+    $albumWhere = "WHERE `show`=1 AND `password`=''";
+  }
   switch($option) { 
     case "popular": 
     	$sortorder = "hitcounter";
@@ -1473,7 +1478,7 @@ function getAlbumStatistic($number=5, $option) {
     	$sortorder = "id";
     break; 
   }
-	$albums = query("SELECT id, title, folder, thumb FROM " . prefix('albums') . " ORDER BY ".$sortorder." DESC LIMIT $number");
+	$albums = query("SELECT id, title, folder, thumb FROM " . prefix('albums') . $albumWhere . " ORDER BY ".$sortorder." DESC LIMIT $number");
 	return $albums;
 }
 
@@ -1527,6 +1532,14 @@ function printLatestAlbums($number=5) {
  * @return string with images
  */
 function getImageStatistic($number, $option) {
+  global $_zp_gallery;
+  if (zp_loggedin()) {
+    $albumWhere = "";
+    $imageWhere = "";
+  } else {
+    $albumWhere = " AND albums.show=1 AND albums.password=''";
+    $imageWhere = " AND images.show=1";
+  }
   switch ($option) {
     case "popular":
       $sortorder = "images.hitcounter"; break;
@@ -1537,13 +1550,13 @@ function getImageStatistic($number, $option) {
     case "toprated":
       $sortorder = "(total_value/total_votes)"; break;
   }
-  global $_zp_gallery;
   $imageArray = array();
-  $images = query_full_array("SELECT images.albumid, images.filename AS filename, images.title AS title, albums.folder AS folder FROM " . 
-            prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
-      " WHERE images.albumid = albums.id AND images.show = 1" . 
-      " AND albums.folder != ''".
-      " ORDER BY ".$sortorder." DESC LIMIT $number");
+  $images = query_full_array("SELECT images.albumid, images.filename AS filename, images.title AS title, " .
+                             "albums.folder AS folder, images.show, albums.show, albums.password FROM " . 
+                              prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
+                              " WHERE images.albumid = albums.id " . $imageWhere . $albumWhere .
+                              " AND albums.folder != ''".
+                              " ORDER BY ".$sortorder." DESC LIMIT $number");
   foreach ($images as $imagerow) {
     
     $filename = $imagerow['filename'];
@@ -1590,15 +1603,69 @@ function printLatestImages($number=5) {
 printImageStatistic($number, "latest");
 }
 
+/* Returns the ID of all sub-albums, relative to the current album. If $_zp_current_album is not set, it'll return null. */
+function getAllSubAlbumIDs($albumfolder='') {	
+  global $_zp_current_album;
+  if (empty($albumfolder)) {
+    if (isset($_zp_current_album)) { 
+	  $albumfolder = $_zp_current_album->getFolder();
+	} else {
+	  return null; 
+	}	
+  }
+  $query = "SELECT `id` FROM " . prefix('albums') . " WHERE `folder` LIKE '" . mysql_real_escape_string($albumfolder) . "%'"; 
+  $subIDs = query_full_array($query);
+  return $subIDs; 
+}
+
 function getRandomImages() {
+  if (zp_loggedin()) {
+    $albumWhere = '';
+    $imageWhere = '';
+  } else {
+    $albumWhere = " AND ".prefix('albums') . ".show=1 AND " . prefix('albums') . ".password=''";
+    $imageWhere = " AND " . prefix('images') . ".show=1";
+  }
   $result = query_single_row('SELECT '.prefix('images').'.filename,'.prefix('images').'.title, '.prefix('albums').
-                             '.folder FROM '.prefix('images').' INNER JOIN '.prefix('albums').
+                             '.folder, ' . prefix('images') . '.show, ' . prefix('albums') . '.show, ' . prefix('albums') . '.password '.
+                             'FROM '.prefix('images'). ' INNER JOIN '.prefix('albums').
 							 ' ON '.prefix('images').'.albumid = '.prefix('albums').'.id WHERE '.prefix('albums').'.folder!=""'.
-							 ' ORDER BY RAND() LIMIT 1');
+							 $albumWhere . $imageWhere . ' ORDER BY RAND() LIMIT 1');
   $imageName = $result['filename'];
   if ($imageName =='') { return NULL; }
   $image = new Image(new Album(new Gallery(), $result['folder']), $imageName );
   return $image;
+}
+
+/* Returns an Image-object, randomly selected from current directory or any of it's subdirectories.
+returns null if $_zp_current_album isn't set, and if no images can be found. You might want it to fall back to a
+placeholder image instead. */
+function getRandomImagesAlbum() {		
+  if (zp_loggedin()) {
+    $imageWhere = '';
+  } else {
+    $imageWhere = " AND `show`=1";
+  }
+  $images = array();
+  $subIDs = getAllSubAlbumIDs($rootAlbum);
+  if(is_null($subIDs)) {return null;}; //no subdirs avaliable
+  foreach ($subIDs as $ID) {		
+    $query = 'SELECT `id` , `albumid` , `filename` , `title` FROM '.prefix('images').' WHERE `albumid` = "'. $ID['id'] .'"' . $imageWhere; 		
+    $images = array_merge($images, query_full_array($query)); 	
+  }
+  $image = NULL;
+  while (is_null($image)) {
+    if(count($images) < 1){return null;}; //no images avaliable in _any_ subdirectory
+    $inx = array_rand($images);
+    $randomImage = $images[$inx];
+    $row = query_single_row("SELECT `folder`, `show`, `password` FROM " .prefix('albums'). " WHERE id = '" .$randomImage['albumid']. "'"); 	
+    if (zp_loggedin() || (($row['show']==1) && empty($row['password']))) {
+      $image = new Image(new Album(new Gallery(), $row['folder']), $randomImage['filename']);
+      return $image;
+    }	
+    unset($images[$inx]);
+  }
+  return null;
 }
 
 function printRandomImages($number, $class=null, $option="all") {
@@ -1682,24 +1749,6 @@ printImageStatistic($number, "toprated");
 
 function printMostRatedImages($number=5) {
 printImageStatistic($number, "mostrated");
-}
-
-/* Returns an Image-object, randomly selected from current directory or any of it's subdirectories.
-returns null if $_zp_current_album isn't set, and if no images can be found. You might want it to fall back to a
-placeholder image instead. */
-function getRandomImagesAlbum() {		
-  $images = array();
-  $subIDs = getAllSubAlbumIDs($rootAlbum);
-  if($subIDs == null) {return null;}; //no subdirs avaliable
-  foreach ($subIDs as $ID) {		
-    $query = 'SELECT `id` , `albumid` , `filename` , `title` FROM '.prefix('images').' WHERE `albumid` = "'. $ID['id'] .'"'; 		
-    $images = array_merge($images, query_full_array($query)); 	
-  }
-  if(count($images) < 1){return null;}; //no images avaliable in _any_ subdirectory
-  $randomImage = $images[array_rand($images)];
-  $folderPath = query_single_row("SELECT `folder` FROM " .prefix('albums'). " WHERE id = '" .$randomImage['albumid']. "'"  ); 	
-  $image = new Image(new Album(new Gallery(), $folderPath['folder']), $randomImage['filename']);	
-  return $image;
 }
 
 function my_truncate_string($string, $length) {
@@ -1923,21 +1972,6 @@ function getAlbumId() {
   global $_zp_current_album;
   if (!isset($_zp_current_album)) { return null; }
     return $_zp_current_album->getAlbumId();
-}
-
-/* Returns the ID of all sub-albums, relative to the current album. If $_zp_current_album is not set, it'll return null. */
-function getAllSubAlbumIDs($albumfolder='') {	
-  global $_zp_current_album;
-  if (empty($albumfolder)) {
-    if (isset($_zp_current_album)) { 
-	  $albumfolder = $_zp_current_album->getFolder();
-	} else {
-	  return null; 
-	}	
-  }
-  $query = "SELECT `id` FROM " . prefix('albums') . " WHERE `folder` LIKE '" . mysql_real_escape_string($albumfolder) . "%'"; 
-  $subIDs = query_full_array($query);
-  return $subIDs; 
 }
 
 /**

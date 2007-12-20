@@ -812,10 +812,15 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 
         <table class="bordered">
           <tr>
-            <th>Edit this album</th>
+            <th style="width: 48%; text-align: left">Edit this album</th>
+            <th style="width: 10%; text-align: center">Published</th>
+            <th style="width: 10%; text-align: center">Delete</th>
+            <th style="width: 10%; text-align: center">Pre-cache</th>
+            <th style="width: 10%; text-align: center">Refresh metadata</th>
+            <th style="width: 10%; text-align: center">Reset hitcounter</th>
           </tr>
           <tr>
-          <td colspan="2" style="padding: 0px 0px;">
+          <td colspan="6" style="padding: 0px 0px;">
           <div id="albumList" class="albumList">
             <?php
             $albums = $gallery->getAlbums();
@@ -823,24 +828,36 @@ if (!zp_loggedin()  && !$_zp_null_account) {
               $album = new Album($gallery, $folder);
            ?>
             <div id="id_<?php echo $album->getAlbumID(); ?>">
-            <table cellspacing="0" width="100%">
+            <table cellspacing="0">
               <tr>
-                <td align="left" width="20">
+                <td style="align: left; width: 3%">
                 <a href="?page=edit&album=<?php echo urlencode($album->name); ?>" title="Edit this album: <?php echo $album->name; ?>"><img height="40" width="40" src="<?php echo $album->getAlbumThumb(); ?>" /></a>
                 </td>
-                <td align="left" width="400"> <a href="?page=edit&album=<?php echo urlencode($album->name); ?>" title="Edit this album: <?php echo $album->name; ?>"><?php echo $album->getTitle(); ?></a>
+                <td  style="align: left; width: 43%"> <a href="?page=edit&album=<?php echo urlencode($album->name); ?>" title="Edit this album: <?php echo $album->name; ?>"><?php echo $album->getTitle(); ?></a>
                 </td>
 
-                <td align="left">
+                <td align="center" style="width: 10%">
+                  <?php if ($album->getShow()) { ?>
+                  <img src="images/pass.png" style="border: 0px;" alt="Published" /></a>
+                  <?php } ?>
+                </td>                 
+                <td align="center" style="width: 10%">
                   <a class="delete" href="javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=<?php echo queryEncode($album->name); ?>');" title="Delete the album <?php echo $album->name; ?>">
                   <img src="images/fail.png" style="border: 0px;" alt="Delete the album <?php echo $album->name; ?>" /></a>
+                </td>                 
+                <td align="center" style="width: 10%">
                   <a class="cache" href="cache-images.php?album=<?php echo $album->name; ?>&return=edit" title="Pre-Cache the album '<?php echo $album->name; ?>'">
                   <img src="images/cache.png" style="border: 0px;" alt="Cache the album <?php echo $album->name; ?>" /></a>
+                </td>                 
+                <td align="center" style="width: 10%">
                   <a class="warn" href="refresh-metadata.php?album=<?php echo $album->name; ?>" title="Refresh metadata for the album '<?php echo $album->name; ?>'">
                   <img src="images/warn.png" style="border: 0px;" alt="Refresh image metadata in the album <?php echo $album->name; ?>" /></a>
+                </td>                 
+                <td align="center" style="width: 10%">
                   <a class="reset" href="?action=reset_hitcounters&albumid=<?php echo $album->getAlbumID(); ?>" title="Reset hitcounters for album '<?php echo $album->name; ?>'">
                   <img src="images/reset.png" style="border: 0px;" alt="Reset hitcounters for the album <?php echo $album->name; ?>" /></a>
-                </td>
+                </td>                 
+
 
               </tr>
             </table>
