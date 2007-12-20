@@ -304,7 +304,7 @@ if (!$checked) {
   }
 
   $good = folderCheck('cache', dirname(dirname(__FILE__)) . "/cache/", false) && $good;
- 
+  mysql_close($connection); 
   if ($good) {
     $dbmsg = "";
   } else {

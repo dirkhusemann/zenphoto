@@ -1520,7 +1520,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                       <input type="checkbox" name="comment_email_required" value=1 <?php checked('1', getOption('comment_email_required')); ?>>&nbsp;Email
                       <input type="checkbox" name="comment_web_required" value=1 <?php checked('1', getOption('comment_web_required')); ?>>&nbsp;Website
                       </td>
-                      <td>Checked fields must be valid in a comment posting..</td>
+                      <td>Checked fields must be valid in a comment posting.</td>
                     </tr>
                     <tr>
                         <td></td>
