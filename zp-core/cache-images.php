@@ -42,7 +42,7 @@ if (!zp_loggedin()) {
   $gallery = new Gallery();
   
   if (isset($_GET['album'])) {
-    $folder = strip($_GET['album']);
+    $folder = querydecode(strip($_GET['album']));
     echo "\n<h2>Refreshing cache for $folder</h2>";
 	$gallery->clearCache(SERVERCACHE . '/' . $folder); // clean out what was there
     $album = new Album($album, $folder);

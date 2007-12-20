@@ -44,9 +44,19 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
   if (isset($_GET['action'])) {
     $action = $_GET['action'];
 
+/** Publish album  **************************************************************/
+/******************************************************************************/
+  if ($action == "publish") {
+    $folder = queryDecode(strip($_GET['album']));
+    $album = new Album($gallery, $folder);
+    $album->setShow($_GET['value']);
+    $album->save();
+    header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit');
+    exit();
+
 /** Reset hitcounters ************************************************************/
 /******************************************************************************/
-    if ($action == "reset_hitcounters") {
+    } else if ($action == "reset_hitcounters") {
       if(isset($_GET['albumid'])) {
         $where = ' WHERE `id`='.$_GET['albumid'];
         $imgwhere = ' WHERE `albumid`='.$_GET['albumid'];
@@ -810,14 +820,14 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         ?>
         <p>Drag the albums into the order you wish them displayed. Select an album to edit its description and data, or <a href="?page=edit&massedit">mass-edit all album data</a>.</p>
 
-        <table class="bordered">
+        <table class="bordered" style="width: 100%">
           <tr>
-            <th style="width: 48%; text-align: left">Edit this album</th>
-            <th style="width: 10%; text-align: center">Published</th>
-            <th style="width: 10%; text-align: center">Delete</th>
-            <th style="width: 10%; text-align: center">Pre-cache</th>
-            <th style="width: 10%; text-align: center">Refresh metadata</th>
-            <th style="width: 10%; text-align: center">Reset hitcounter</th>
+            <th style="text-align: left; width: 50%">Edit this album</th>
+            <th style="text-align: center; width: 10%">Published</th>
+            <th style="text-align: center; width: 10%">Delete</th>
+            <th style="text-align: center; width: 10%">Pre-cache</th>
+            <th style="text-align: center; width: 10%">Refresh metadata</th>
+            <th style="text-align: center; width: 10%">Reset hitcounter</th>
           </tr>
           <tr>
           <td colspan="6" style="padding: 0px 0px;">
@@ -828,32 +838,36 @@ if (!zp_loggedin()  && !$_zp_null_account) {
               $album = new Album($gallery, $folder);
            ?>
             <div id="id_<?php echo $album->getAlbumID(); ?>">
-            <table cellspacing="0">
+            <table cellspacing="0" style="width: 100%">
               <tr>
-                <td style="align: left; width: 3%">
+                <td style="text-align: left;  width: 5%">
                 <a href="?page=edit&album=<?php echo urlencode($album->name); ?>" title="Edit this album: <?php echo $album->name; ?>"><img height="40" width="40" src="<?php echo $album->getAlbumThumb(); ?>" /></a>
                 </td>
-                <td  style="align: left; width: 43%"> <a href="?page=edit&album=<?php echo urlencode($album->name); ?>" title="Edit this album: <?php echo $album->name; ?>"><?php echo $album->getTitle(); ?></a>
+                <td  style="text-align: left;  width: 45%"> <a href="?page=edit&album=<?php echo urlencode($album->name); ?>" title="Edit this album: <?php echo $album->name; ?>"><?php echo $album->getTitle(); ?></a>
                 </td>
 
-                <td align="center" style="width: 10%">
+                <td style="text-align: center; width: 10%">
                   <?php if ($album->getShow()) { ?>
+                  <a class="publish" href="?action=publish&value=0&album=<?php echo queryencode($album->name); ?>" title="Publish the album '<?php echo $album->name; ?>'">
                   <img src="images/pass.png" style="border: 0px;" alt="Published" /></a>
+                  <?php } else { ?>
+                  <a class="publish" href="?action=publish&value=1&album=<?php echo queryencode($album->name); ?>" title="Publish the album '<?php echo $album->name; ?>'">
+                  <img src="images/action.png" style="border: 0px;" alt="Publish the album <?php echo $album->name; ?>" /></a>
                   <?php } ?>
                 </td>                 
-                <td align="center" style="width: 10%">
+                <td style="text-align: center;width: 10%">
                   <a class="delete" href="javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=<?php echo queryEncode($album->name); ?>');" title="Delete the album <?php echo $album->name; ?>">
                   <img src="images/fail.png" style="border: 0px;" alt="Delete the album <?php echo $album->name; ?>" /></a>
                 </td>                 
-                <td align="center" style="width: 10%">
-                  <a class="cache" href="cache-images.php?album=<?php echo $album->name; ?>&return=edit" title="Pre-Cache the album '<?php echo $album->name; ?>'">
+                <td style="text-align: center;width: 10%">
+                  <a class="cache" href="cache-images.php?album=<?php echo queryencode($album->name); ?>&return=edit" title="Pre-Cache the album '<?php echo $album->name; ?>'">
                   <img src="images/cache.png" style="border: 0px;" alt="Cache the album <?php echo $album->name; ?>" /></a>
                 </td>                 
-                <td align="center" style="width: 10%">
-                  <a class="warn" href="refresh-metadata.php?album=<?php echo $album->name; ?>" title="Refresh metadata for the album '<?php echo $album->name; ?>'">
+                <td style="text-align:center;width: 10%">
+                  <a class="warn" href="refresh-metadata.php?album=<?php echo queryencode($album->name); ?>" title="Refresh metadata for the album '<?php echo $album->name; ?>'">
                   <img src="images/warn.png" style="border: 0px;" alt="Refresh image metadata in the album <?php echo $album->name; ?>" /></a>
                 </td>                 
-                <td align="center" style="width: 10%">
+                <td style="text-align:center;width: 10%">
                   <a class="reset" href="?action=reset_hitcounters&albumid=<?php echo $album->getAlbumID(); ?>" title="Reset hitcounters for album '<?php echo $album->name; ?>'">
                   <img src="images/reset.png" style="border: 0px;" alt="Reset hitcounters for the album <?php echo $album->name; ?>" /></a>
                 </td>                 

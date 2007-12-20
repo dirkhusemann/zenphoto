@@ -42,7 +42,7 @@ if (!zp_loggedin()) {
 	$id = '';
 	$r = "";
 	if (isset($_GET['album'])) {
-	  $folder = $_GET['album'];
+	  $folder = querydecode(strip($_GET['album']));
 	  if (!empty($folder)) {
 	    $sql = "SELECT `id` FROM ". prefix('albums') . " WHERE `folder`=\"".mysql_real_escape_string($folder)."\";";
 		$row = query_single_row($sql);
