@@ -37,7 +37,9 @@ function printAdminLink($text, $before='', $after='', $title=NULL, $class=NULL, 
     echo $before;
     printLink(WEBPATH.'/' . ZENFOLDER . '/admin.php', $text, $title, $class, $id);
     echo $after;
+    return true;
   }
+  return false;
 }
 
 /**
@@ -2223,15 +2225,14 @@ function normalizeColumns($albumColumns, $imageColumns) {
 /************************************************************************************************
  album password handling
  ************************************************************************************************/
- 
 /**
  * checks to see if a password is needed
  * displays a password form if log-on is required
  *@return bool true if a login form has been displayed
  *@since 1.1.3 
- */
+ **/
 function checkforPassword($silent=false) {
-  global $_zp_current_album, $_zp_current_search, $_zp_album_authorized;
+  global $_zp_current_album, $_zp_current_search, $_zp_album_authorized, $_zp_gallery;
   if (ZP_loggedin()) { return false; }  // you're the admin, you don't need the passwords.
   if (in_context(ZP_SEARCH)) {
     $hash = getOption('search_password');
@@ -2245,16 +2246,26 @@ function checkforPassword($silent=false) {
 	  }
 	}
   } else if (isset($_GET['album'])) {
-     $hash = $_zp_current_album->getPassword();
-     $hint = $_zp_current_album->getPasswordHint();
-     if (!empty($hash)) {
-	    if ($_zp_album_authorized != $hash) {
-	      if (!$silent) {
-		    printPasswordForm($hint);
-		  }
-	      return true;
-	    }
+    $album = new album($_zp_gallery, $_GET['album']);
+    $hash = $album->getPassword();
+    $hint = $album->getPasswordHint();
+    if (empty($hash)) {
+      $parent = $album->getParent();
+      while (!is_null($parent)) {
+        $pwd = $parent->getPassword();
+        if (!empty($pwd)) { //whoo, sneeky url jump,
+          return true;
+        }
+        $parent = $parent->getParent();
+      }
+    } else {
+      if ($_zp_album_authorized != $hash) {
+	    if (!$silent) {
+	      printPasswordForm($hint);
+		}
+	    return true;
 	  }
+	}
     } else {
       $hash = getOption('gallery_password');
 	  $hint = getOption('gallery_hint');
