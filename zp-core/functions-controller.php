@@ -145,6 +145,7 @@ function zp_handle_comment() {
       if (isset($_POST['website'])) $website = strip_tags($_POST['website']); else $website = "";
       $allowed_tags = "(".getOption('allowed_tags').")"; 
       $allowed = parseAllowedTags($allowed_tags);
+      if ($allowed === false) { $allowed = array(); } // someone has screwed with the 'allowed_tags' option row in the database, but better safe than sorry
       if(isset($_POST['imageid'])){       
 	   	$activeImage = zp_load_image_from_id(strip_tags($_POST['imageid']));
 	   	if($activeImage !== false){
