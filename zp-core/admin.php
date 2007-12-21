@@ -617,8 +617,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
               </td>
             </tr>
             <tr>
-              <th style="text-align: left;"></th>
-              <th style="text-align: left;"></th>
+              <th style="text-align: center;" colspan="2">&nbsp;</th>
               <th style="text-align: center;">Password Protected</th>
               <th style="text-align: center;">Published</th>
               <th style="text-align: center;">Delete</th>
@@ -627,7 +626,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
               <th style="text-align: center;">Reset hitcounter</th>
             </tr>
             <tr>
-            <td style="padding: 0px 0px;">
+            <td style="padding: 0px 0px;" colspan="8">
             <div id="albumList" class="albumList">
               <?php
                 foreach ($subalbums as $folder) {
@@ -683,7 +682,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
             </div>
             </tr>
             <tr>
-              <td colspan="7">
+              <td colspan="8">
                 <?php
                 zenSortablesSaveButton("?page=edit&album=" . urlencode($album->name) . "&saved", "Save Order");
                 ?>
@@ -700,9 +699,11 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 
      <!-- Images List -->
 
-      <?php if (count($album->getSubalbums())) { ?>
+      <?php if (count($album->getSubalbums()) > 10) { ?>
         <p><a name="imageList"></a><a href="#subalbumList" title="Scroll up to the sub-album list">&laquo; Subalbum List</a></p>
-      <?php } ?>
+      <?php } 
+      if (count($album->getImages())) {
+      ?>
 
       <form name="albumedit2" action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>" method="post">
         <input type="hidden" name="album" value="<?php echo $album->name; ?>" />
@@ -787,7 +788,9 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 
       <?php if (count($album->getSubalbums())) { ?>
         <p><a href="#subalbumList" title="Scroll up to the sub-album list">&nbsp; &nbsp; &nbsp;^ Subalbum List</a></p>
-      <?php } ?>
+      <?php 
+        } 
+      } ?>
 
       <!-- page trailer -->
       <p><a href="?page=edit<?php echo $albumdir ?>" title="Back to the list of albums (go up one level)">&laquo; Back</a></p>
@@ -855,8 +858,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 
         <table class="bordered" width="100%">
           <tr>
-            <th>&nbsp;</th>
-            <th style="text-align: left;">Edit this album</th>
+            <th style="text-align: center;" colspan="2">Edit this album</th>
             <th style="text-align: center;">Password Protected</th>
             <th style="text-align: center;">Published</th>
             <th style="text-align: center;">Delete</th>
@@ -865,7 +867,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
             <th style="text-align: center;">Reset hitcounter</th>
           </tr>
           <tr>
-          <td style="padding: 0px 0px;">
+          <td style="padding: 0px 0px;" colspan="8">
           <div id="albumList" class="albumList">
             <?php
             $albums = $gallery->getAlbums();

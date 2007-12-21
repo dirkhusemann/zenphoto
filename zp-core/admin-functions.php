@@ -470,10 +470,10 @@ function printAlbumEditForm($index, $album) {
   echo ">"; 
   echo "\n</td>";
   echo "\n</tr>";
-  echo "\n<tr><td></td><td valign=\"top\"><a href=\"cache-images.php?album=" . 
-       queryencode($album->name) . "\"><img src=\"images/cache.png\" style=\"border: 0px;\" />Pre-Cache Images</a></strong> - Cache newly uploaded images.</td></tr>";
-
   if ($album->getNumImages() > 0) { 
+    echo "\n<tr><td></td><td valign=\"top\"><a href=\"cache-images.php?album=" . 
+         queryencode($album->name) . "\"><img src=\"images/cache.png\" style=\"border: 0px;\" />Pre-Cache Images</a></strong> - Cache newly uploaded images.</td></tr>";
+
 	echo "\n<tr><td></td><td valign=\"top\"><a href=\"refresh-metadata.php?album=" . 
 	     queryencode($album->name) . "\"><img src=\"images/warn.png\" style=\"border: 0px;\" />Refresh Image Metadata</a> - Forces a refresh of the EXIF and IPTC data for all images in the album.</td></tr>";
   }
