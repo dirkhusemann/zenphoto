@@ -49,13 +49,11 @@ class Album extends PersistentObject {
       $this->set('album_sortdirection',$parentalbum->getSortDirection('album'));
       $this->set('sort_type', $parentalbum->getSortType());
       $this->set('image_sortdirection', $parentalbum->getSortDirection('image'));   
-      $this->set('password', $parentalbum->getPassword());
     } else {
       $this->set('subalbum_sort_type', getOption('gallery_sorttype'));
       $this->set('album_sortdirection',getOption('gallery_sortdirection'));
       $this->set('sort_type', getOption('image_sorttype'));
       $this->set('image_sortdirection',getOption('image_sortdirection'));
-      $this->set('password', getOption('gallery_password'));
     }
     $this->set('title', $title);
     
@@ -85,37 +83,15 @@ class Album extends PersistentObject {
     return NULL;   
   }
   // password
-  function getPassword() { 
-    $pwd = $this->get('password');
-    if (is_null($pwd)) {
-      $parentalbum = $this->getParent();
-      if (is_null($parentalbum)) {
-        $pwd = getOption('gallery_password');
-      } else {
-        $pwd = $parentalbum->getPassword();
-      }
-    }
-    return $pwd; 
-  }
+  function getPassword() { return $this->get('password'); }
   function setPassword($pwd) { 
     if (empty($pwd)) {
-      $this->set('password', NULL);
+      $this->set('password', "");
     } else {
       $this->set('password', md5($pwd)); 
     }
   }
-  function getPasswordHint() { 
-    $hint = $this->get('password_hint');
-    if (is_null($hint)) {
-      $parentalbum = $this->getParent();
-      if (is_null($parentalbum)) {
-        $hint = getOption('gallery_hint');
-      } else {
-        $hint = $parentalbum->getPasswordHint();
-      }
-    }
-    return $hint; 
-  }
+  function getPasswordHint() { return $this->get('password_hint'); }
   function setPasswordHint($hint) { $this->set('password_hint', $hint); }
   
   // Title

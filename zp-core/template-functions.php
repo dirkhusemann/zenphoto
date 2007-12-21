@@ -2234,7 +2234,7 @@ function normalizeColumns($albumColumns, $imageColumns) {
 function checkforPassword($silent=false) {
   global $_zp_current_album, $_zp_current_search, $_zp_album_authorized, $_zp_gallery;
   if (ZP_loggedin()) { return false; }  // you're the admin, you don't need the passwords.
-  if (in_context(ZP_SEARCH)) {
+  if (in_context(ZP_SEARCH)) {  // search page
     $hash = getOption('search_password');
 	$hint = getOption('search_hint');
     if (!is_null($hash)) {
@@ -2245,19 +2245,39 @@ function checkforPassword($silent=false) {
 	    return true;
 	  }
 	}
-  } else if (isset($_GET['album'])) {
+  } else if (isset($_GET['album'])) {  // album page
     $album = new album($_zp_gallery, $_GET['album']);
     $hash = $album->getPassword();
     $hint = $album->getPasswordHint();
+
     if (empty($hash)) {
-      $parent = $album->getParent();
-      while (!is_null($parent)) {
-        $pwd = $parent->getPassword();
-        if (!empty($pwd)) { //whoo, sneeky url jump,
+      $album = $album->getParent();
+      while (!is_null($album)) {
+        $hash = $album->getPassword();
+        if (!empty($hash)) { //whoo, sneeky url jump,
+          $hint = $album->getPasswordHint();
+	      if ($_zp_album_authorized == $hash) {
+            return false;
+          } else {
+            if (!$silent) {
+		      printPasswordForm($hint);
+            }
           return true;
+          }
         }
-        $parent = $parent->getParent();
+        $album = $album->getParent();
       }
+      // revert all tlhe way to the gallery
+      $hash = getOption('gallery_password');
+	  $hint = getOption('gallery_hint');
+      if (!empty($hash)) {
+	    if ($_zp_album_authorized != $hash) {
+	      if (!$silent) {
+		    printPasswordForm($hint);
+		  }
+	      return true;
+	    }
+	  }
     } else {
       if ($_zp_album_authorized != $hash) {
 	    if (!$silent) {
@@ -2266,19 +2286,18 @@ function checkforPassword($silent=false) {
 	    return true;
 	  }
 	}
-    } else {
-      $hash = getOption('gallery_password');
-	  $hint = getOption('gallery_hint');
-     if (!empty($hash)) {
-	    if ($_zp_album_authorized != $hash) {
-	      if (!$silent) {
-		    printPasswordForm($hint);
-		  }
-	      return true;
-	    }
+  } else {  // index page
+    $hash = getOption('gallery_password');
+    $hint = getOption('gallery_hint');
+    if (!empty($hash)) {
+	  if ($_zp_album_authorized != $hash) {
+	    if (!$silent) {
+	      printPasswordForm($hint);
+		}
+	    return true;
 	  }
 	}
-
+  }
   return false;
 }
 
