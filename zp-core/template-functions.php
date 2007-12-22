@@ -1387,7 +1387,7 @@ function printAlbumZip(){
 	global $_zp_current_album; 
 	echo'<a href="' . rewrite_path("/" . pathurlencode($_zp_current_album->name), 
 		"/index.php?album=" . urlencode($_zp_current_album->name)) .  
-		'?zipfile" title="Download Zip of the Album">Download a zip file ' . 
+		'&zipfile" title="Download Zip of the Album">Download a zip file ' . 
 		'of this album</a>'; 
 }
 

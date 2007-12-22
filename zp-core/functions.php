@@ -758,7 +758,7 @@ function zp_mail($subject, $message, $headers = '') {
   }
 
 function createAlbumZip($album){
-  $rp = realpath('albums/' . $album) . '/';
+  $rp = realpath(getAlbumFolder() . $album) . '/';
   $p = $album . '/';
   if(is_dir($rp)){
     include_once('plugins/zipfile.php');
