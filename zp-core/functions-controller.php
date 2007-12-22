@@ -189,9 +189,7 @@ function zp_handle_comment() {
 * encodes for cookie
 **/
 function cookiecode($text) {
-  $text = htmlspecialchars($text);
-  $text = str_replace(' ', "_", $text);
-  return $text;
+  return md5($text);
 }
 /**
  *checks for album password posting
