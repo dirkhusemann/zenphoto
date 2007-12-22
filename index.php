@@ -23,7 +23,7 @@ if (isset($_GET['p'])) {
 } else if (in_context(ZP_IMAGE)) {
   include($obj = "$themepath/$theme/image.php");
 } else if (in_context(ZP_ALBUM)) {
-  if(isset($_GET['zipfile']) && is_dir(realpath('albums/' . $_GET['album']))){ 
+  if(isset($_GET['zipfile']) && is_dir(realpath(getAlbumFolder() . $_GET['album']))){ 
   	createAlbumZip($_GET['album']); 
   } else { 
     $cookiepath = WEBPATH;
