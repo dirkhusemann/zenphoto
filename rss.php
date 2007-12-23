@@ -35,33 +35,31 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 db_connect();
 
 if ($albumnr != "") { 
-  $sql = "SELECT * FROM ". prefix("images") ." WHERE albumid = $albumnr AND `show` = 1 ORDER BY id DESC LIMIT ".$items;
+  $result = query_full_array("SELECT images.albumid, images.date AS date, images.filename AS filename, images.title AS title, " .
+                             "albums.folder AS folder, albums.title AS albumtitle, images.show, albums.show, albums.password FROM " . 
+                              prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
+                              " WHERE images.albumid = $albumnr AND images.albumid = albums.id AND images.show=1 AND albums.show=1 AND albums.password=''".
+                              " AND albums.folder != ''".
+                              " ORDER BY images.id DESC LIMIT ".$items);
 } else { 
-  $sql = "SELECT * FROM ". prefix("images") ." WHERE `show` = 1 ORDER BY id DESC LIMIT ".$items; 
+$result = query_full_array("SELECT images.albumid, images.date AS date, images.filename AS filename, images.title AS title, " .
+                             "albums.folder AS folder, albums.title AS albumtitle, albums.id, images.show, albums.show, albums.password FROM " . 
+                              prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
+                              " WHERE images.albumid = albums.id AND images.show=1 AND albums.show=1 AND albums.password=''".
+                              " AND albums.folder != ''".
+                              " ORDER BY images.id DESC LIMIT ".$items);
 }
  	
-$result = mysql_query($sql);
-
-while($r = mysql_fetch_array($result)) {
-$id=$r['albumid'];
-
-if ($albumnr != "") { 
-  $sql="SELECT * FROM ". prefix("albums") ." WHERE `show` = 1 AND id = $albumnr"; 
-} else { 
-  $sql="SELECT * FROM ". prefix("albums") ." WHERE `show` = 1 AND id = $id"; 
-}
-
-$album = mysql_query($sql);
-$a = mysql_fetch_array($album);
+foreach ($result as $images) {
 
 ?>
 <item>
-	<title><?php echo $r['title']; ?></title>
-	<link><?php echo '<![CDATA[http://'.$_SERVER["HTTP_HOST"].WEBPATH.$albumpath.$a['folder'].$imagepath.$r['filename'].$modrewritesuffix. ']]>';?></link>
-	<description><?php echo '<![CDATA[<a title="'.$r['title'].' in '.$a['title'].'" href="http://'.$_SERVER["HTTP_HOST"].WEBPATH.$albumpath.$a['folder'].$imagepath.$r['filename'].$modrewritesuffix.'"><img border="0" src="http://'.$_SERVER["HTTP_HOST"].WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$a['folder'].'&i='.$r['filename'].'&w='.$iw.'&h='.$ih.'&cw='.$cw.'&ch='.$ch.'" alt="'. $r['title'] .'"></a>' . $r['desc'] . ']]>';?> <?php if($exif['datetime']) { echo '<![CDATA[Date: ' . $exif['datetime'] . ']]>'; } ?></description>
-    <category><?php echo $a['title']; ?></category>
-	<guid><?php echo '<![CDATA[http://'.$_SERVER["HTTP_HOST"].WEBPATH.$albumpath.$a['folder'].$imagepath.$r['filename'].$modrewritesuffix. ']]>';?></guid>
-	<pubDate><?php echo $r['date']; ?></pubDate> 
+	<title><?php echo $images['title']; ?></title>
+	<link><?php echo '<![CDATA[http://'.$_SERVER["HTTP_HOST"].WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix. ']]>';?></link>
+	<description><?php echo '<![CDATA[<a title="'.$images['title'].' in '.$images['albumtitle'].'" href="http://'.$_SERVER["HTTP_HOST"].WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix.'"><img border="0" src="http://'.$_SERVER["HTTP_HOST"].WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$images['folder'].'&i='.$images['filename'].'&w='.$iw.'&h='.$ih.'&cw='.$cw.'&ch='.$ch.'" alt="'. $images['title'] .'"></a>' . $images['desc'] . ']]>';?> <?php if($exif['datetime']) { echo '<![CDATA[Date: ' . $exif['datetime'] . ']]>'; } ?></description>
+    <category><?php echo $images['title']; ?></category>
+	<guid><?php echo '<![CDATA[http://'.$_SERVER["HTTP_HOST"].WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix. ']]>';?></guid>
+	<pubDate><?php echo $images['date']; ?></pubDate> 
 </item>
 <?php } ?>
 </channel>

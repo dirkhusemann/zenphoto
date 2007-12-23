@@ -25,7 +25,7 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 <webMaster><?php echo getOption('admin_name'); ?></webMaster>
 <?php
 db_connect();
-$comments = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.website," . " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a " . " WHERE c.imageid = i.id AND i.albumid = a.id ORDER BY c.id DESC LIMIT $items");
+$comments = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.website," . " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a " . " WHERE a.password = '' AND c.imageid = i.id AND i.albumid = a.id ORDER BY c.id DESC LIMIT $items");
 foreach ($comments as $comment)
 {
 $author = $comment['name'];
