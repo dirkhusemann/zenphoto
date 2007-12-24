@@ -29,13 +29,15 @@ class ThemeOptions {
 
   var $iSupport = array('Allow_comments' => array('type' => 1, 'desc' => 'Set to enable comment section.'),
   						'Allow_search' => array('type' => 1, 'desc' => 'Set to enable search form.'),
-                        'Theme_colors' => array('type' => 2, 'desc' => 'Set the colors of the theme')
+                        'Theme_colors' => array('type' => 2, 'desc' => 'Set the colors of the theme'),
+                        'Use_Captcha' => array('type' => 1, 'desc' => 'Require <em>Captcha</em> input in comment posts.')
                         );
   
   function ThemeOptions() {
     setOptionDefault('Allow_comments', true);
 	setOptionDefault('Allow_search', true);
     setOptionDefault('Theme_colors', 'light'); 
+	setOptionDefault('Use_Captcha', true);
   }
   
   function getOptionsSupported() {

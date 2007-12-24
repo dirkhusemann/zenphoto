@@ -150,12 +150,14 @@ function zp_handle_comment() {
 	   	$activeImage = zp_load_image_from_id(strip_tags($_POST['imageid']));
 	   	if($activeImage !== false){
 	      $commentadded = $activeImage->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']), 
-	          		                               $website, kses($_POST['comment'], $allowed));
+	          		                               $website, kses($_POST['comment'], $allowed), 
+                                                   strip_tags($_POST['code']), $_POST['code_h']);
 	      $redirectTo = $activeImage->getImageLink();
 	      }
 	    } else {
           $commentadded = $_zp_current_image->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']), 
-                                                         $website, kses($_POST['comment'], $allowed));
+                                                         $website, kses($_POST['comment'], $allowed),
+                                                         strip_tags($_POST['code']), $_POST['code_h']);
 	      $redirectTo = $_zp_current_image->getImageLink();
 	    }   
       if ($commentadded == 2) {

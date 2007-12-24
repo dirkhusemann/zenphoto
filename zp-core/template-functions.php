@@ -1189,7 +1189,7 @@ function printImageThumb($alt, $class=NULL, $id=NULL) {
   if (!$_zp_current_image->getShow()) { 
     $class .= " not_visible"; 
   } else {
-  $pwd = $_zp_current_album->getPassword();
+    $pwd = $_zp_current_album->getPassword();
     if (zp_loggedin() && !empty($pwd)) {
       $class .= " password_protected";
     }
@@ -1235,7 +1235,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
   if (!$_zp_current_album->getShow()) { 
     $class .= " not_visible"; 
   } else {
-  $pwd = $_zp_current_image->getPassword();
+    $pwd = $_zp_current_album->getPassword();
     if (zp_loggedin() && !empty($pwd)) {
       $class .= " password_protected";
     }
@@ -2330,6 +2330,80 @@ function printPasswordForm($hint) {
   echo "\n    </table>";
   echo "\n  </form>";
 }
+
+/**
+* simple captcha for comments
+* thanks to gregb34 who posted the original code
+* Prints a captcha entry form and posts the input with the comment posts
+* @since 1.1.4
+**/
+function printCaptcha($tableRow=false) {
+  $lettre='abcdefghijklmnpqrstuvwxyz';
+  $chiffre='123456789';
+  $position=rand(0,2);
+
+  $rand1=rand(0,24);
+  $rand2=rand(0,24);
+  $rand3=rand(0,8);
+
+  $lettre1=$lettre[$rand1];
+  $lettre2=$lettre[$rand2];
+  $chiffre1=$chiffre[$rand3];
+
+  $code=md5($lettre1.$lettre2.$chiffre1);
+
+  //header ("Content-type: image/png");
+  $image = imagecreate(65,20);
+
+  $fond = imagecolorallocate($image, 255, 255, 255);
+  ImageFill ($image,65,20, $fond);
+
+  $ligne = imagecolorallocate($image,150,150,150);
+
+  $i = 7;
+  while($i<=15) {
+  ImageLine($image, 0,$i, 65,$i, $ligne);
+  $i = $i+7;
+  }
+
+  $i = 10;
+  while($i<=65) {
+  ImageLine($image,$i,0,$i,20, $ligne);
+  $i = $i+10;
+  }
+
+  $lettre = imagecolorallocate($image,0,0,0);
+  imagestring($image,10,5,0,$lettre1,$lettre);
+  imagestring($image,10,20,0,$lettre2,$lettre);
+  imagestring($image,10,35,0,$chiffre1,$lettre);
+
+  $rectangle = imagecolorallocate($image,48,57,85);
+  ImageRectangle ($image,0,0,64,19,$rectangle);
+
+  $img = "code_" . $code . ".png";
+  
+  imagepng($image, SERVERCACHE . "/" . $img);
+
+  $inputBox =  "<input type=\"text\" id=\"code\" name=\"code\" size=\"6\" class=\"inputbox\" />";
+  $captcha = " Enter&nbsp;" .
+             "<input type=\"hidden\" name=\"code_h\" value=\"" . $code . "\"/>" .
+             "<label for=\"code\"><img src=\"/cache/". $img . "\" alt=\"Code\"/></label>&nbsp;";
+
+$x = 0;
+             
+  if ($tableRow) { 
+    echo "<tr><td>"; 
+  }
+  echo $captcha; 
+  if ($tableRow) { 
+    echo "</td><td>"; 
+  }
+  echo $inputBox; 
+  if ($tableRow) { 
+    echo "</td><tr>"; 
+  }
+}
+
 /*** End template functions ***/
 
 ?>

@@ -102,6 +102,8 @@
                                     <th><label for="website">URL:</label></th>
                                     <td><input tabindex="3" type="text" name="website" id="website" class="text" value="<?php echo $stored[2];?>" /></td>
                                   </tr>
+                                  
+                                  <?php if (getOption('Use_Captcha')) { printCaptcha("", "Enter Captcha", 8, true); } ?></td></tr>
 
                                   <tr valign="top" align="left">
                                     <th><label for="comment">Comment:</label></th>
@@ -111,7 +113,8 @@
                                   <tr valign="top" align="left">
                                     <th class="buttons">&nbsp;</th>
                                     <td class="buttons">
-                                        <!--<input type="submit" name="preview" tabindex="5" value="Preview" id="btn-preview" />--> <input type="submit" name="post" tabindex="6" value="Post" id="btn-post" />
+                                        <!--<input type="submit" name="preview" tabindex="5" value="Preview" id="btn-preview" />--> 
+                                        <input type="submit" name="post" tabindex="6" value="Post" id="btn-post" />
                                         <p>Avoid clicking &ldquo;Post&rdquo; more than once.</p>
                                     </td>
                                   </tr>
