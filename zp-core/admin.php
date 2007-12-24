@@ -46,16 +46,29 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
 
 /** Publish album  **************************************************************/
 /******************************************************************************/
-  if ($action == "publish") {
-    $folder = queryDecode(strip($_GET['album']));
-    $album = new Album($gallery, $folder);
-    $album->setShow($_GET['value']);
-    $album->save();
-    header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit');
-    exit();
-
+    if ($action == "publish") {
+      $folder = queryDecode(strip($_GET['album']));
+      $album = new Album($gallery, $folder);
+      $album->setShow($_GET['value']);
+      $album->save();
+      header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit');
+      exit();
+    
+/** Captcha cleanup **************************************************************/
+/********************************************************************************/
+    } else if ($action == 'Captcha') {
+      chdir(SERVERCACHE . "/");
+      $filelist = glob('code_*.png');
+      $expire = time() - 60*60*24;
+      foreach ($filelist as $file) {
+        $file = SERVERCACHE . "/" . $file;
+        if (filemtime($file) < $expire) {
+          unlink($file);
+        }
+      }
+  
 /** Reset hitcounters ************************************************************/
-/******************************************************************************/
+/********************************************************************************/
     } else if ($action == "reset_hitcounters") {
       if(isset($_GET['albumid'])) {
         $where = ' WHERE `id`='.$_GET['albumid'];
@@ -1735,6 +1748,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
           <p><strong><a href="cache-images.php"><img src="images/cache.png" style="border: 0px;" />Pre-Cache Images</a></strong> - Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser.</p>
           <p><strong><a href="refresh-metadata.php"><img src="images/warn.png" style="border: 0px;" />Refresh Image Metadata</a></strong> - Forces a refresh of the EXIF and IPTC data for all images.</p>
           <p><strong><a href="?action=reset_hitcounters"><img src="images/reset.png" style="border: 0px;" />Reset all hitcounters</a></strong> - Sets all album and image hitcounters to zero.</p>
+          <p><strong><a href="?action=Captcha"><img src="images/fail.png" style="border: 0px;" />Cleanup Captcha images</a></strong> - Deletes old <em>Capcha</em> images.</p>
         </div>
 
 
