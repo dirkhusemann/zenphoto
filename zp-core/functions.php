@@ -1,6 +1,9 @@
 <?php
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 
+// Set the memory limit higher just in case -- supress errors if user doesn't have control.
+@ini_set('memory_limit','128M');
+
 // functions.php - HEADERS NOT SENT YET!
 
 if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {

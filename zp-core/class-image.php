@@ -295,7 +295,7 @@ class Image extends PersistentObject {
     $name = trim($name);
     $email = trim($email);
     $website = trim($website);
-    $code = trim($code);
+    $code = md5(trim($code));
     $code_ok = trim($code_ok);
     // Let the comment have trailing line breaks and space? Nah...
     // Also (in)validate HTML here, and in $name.
@@ -303,7 +303,9 @@ class Image extends PersistentObject {
     if (getOption('comment_email_required') && (empty($email) || !is_valid_email_zp($email))) { return 0; }
     if (getOption('comment_name_required') && empty($name)) { return 0; }
     if (getOption('comment_web_required') && empty($website)) { return 0; }
-    if ($code != $code_h) { return 0; }
+    $file = SERVERCACHE . "/code_" . $code_ok . ".png";
+    if (getOption('Use_Captcha') && !file_exists($file)) { return 0; }
+    if ($code != $code_ok) { return 0; }
     if (empty($comment)) {
       return 0;
     }

@@ -29,7 +29,7 @@ require_once('functions.php');
 require_once('functions-image.php');
 
 // Set the memory limit higher just in case -- supress errors if user doesn't have control.
-@ini_set('memory_limit','64M');
+@ini_set('memory_limit','128M');
 
 $debug = isset($_GET['debug']);
 

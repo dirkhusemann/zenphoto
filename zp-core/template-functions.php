@@ -1374,7 +1374,9 @@ function printCommentErrors($class = 'error') {
   if (isset($error)) { 
     echo "<div class=$class>";
     if ($error == 1) {
-      echo "There was an error submitting your comment. Name, a valid e-mail address, and a spam-free comment are required.";
+      echo "There was an error submitting your comment. Name, a valid e-mail address, ";
+      if (getOption('Use_Captcha')) { echo " <em>Captcha</em> input, "; }
+      echo "and a spam-free comment are required.";
     } else {
       echo "Your comment has been marked for moderation.";
     }
@@ -2337,7 +2339,7 @@ function printPasswordForm($hint) {
 * Prints a captcha entry form and posts the input with the comment posts
 * @since 1.1.4
 **/
-function printCaptcha($tableRow=false) {
+function printCaptcha($preText='', $postText='', $size=4, $tableRow=false) {
   $lettre='abcdefghijklmnpqrstuvwxyz';
   $chiffre='123456789';
   $position=rand(0,2);
@@ -2384,9 +2386,8 @@ function printCaptcha($tableRow=false) {
   
   imagepng($image, SERVERCACHE . "/" . $img);
 
-  $inputBox =  "<input type=\"text\" id=\"code\" name=\"code\" size=\"6\" class=\"inputbox\" />";
-  $captcha = " Enter&nbsp;" .
-             "<input type=\"hidden\" name=\"code_h\" value=\"" . $code . "\"/>" .
+  $inputBox =  "<input type=\"text\" id=\"code\" name=\"code\" size=\"" . $size . "\" class=\"inputbox\" />";
+  $captcha = "<input type=\"hidden\" name=\"code_h\" value=\"" . $code . "\"/>" .
              "<label for=\"code\"><img src=\"/cache/". $img . "\" alt=\"Code\"/></label>&nbsp;";
 
 $x = 0;
@@ -2394,11 +2395,13 @@ $x = 0;
   if ($tableRow) { 
     echo "<tr><td>"; 
   }
+  echo $preText;
   echo $captcha; 
   if ($tableRow) { 
     echo "</td><td>"; 
   }
   echo $inputBox; 
+  echo $postText;
   if ($tableRow) { 
     echo "</td><tr>"; 
   }
