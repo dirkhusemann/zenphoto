@@ -35,10 +35,9 @@ if (!zp_loggedin()) {
     $folder = strip($_GET['album']);
     $album = new Album($gallery, $folder);
     if (isset($_GET['saved'])) {   
-      if ($album->getSortType() != "Manual") {
-        $album->setSortType("Manual");
-        $album->save();
-      }
+      $album->setSortType("Manual");
+      $album->setSortDirection('image', 0);
+      $album->save();
     }
       
     // Layout the page

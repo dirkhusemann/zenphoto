@@ -381,7 +381,11 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         setOption('server_protocol', $_POST['server_protocol']);
         setOption('charset', $_POST['charset']);
         setOption('gallery_sorttype', $_POST['gallery_sorttype']);
-        setBoolOption('gallery_sortdirection', $_POST['gallery_sortdirection']);
+        if ($_POST['gallery_sorttype'] == 'Manual') {
+          setBoolOption('gallery_sortdirection', 0);
+        } else {
+          setBoolOption('gallery_sortdirection', $_POST['gallery_sortdirection']);
+        }
         setOption('image_sorttype', $_POST['image_sorttype']);
         setBoolOption('image_sortdirection', $_POST['image_sortdirection']);
         setOption('feed_items', $_POST['feed_items']);
@@ -613,6 +617,12 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         <!-- Subalbum list goes here -->
 
         <?php
+
+        if (isset($_GET['subalbumsaved'])) {
+          $album->setSubalbumSortType('Manual');
+          $album->setSortDirection('album', 0);
+          $album->save();
+        }
         $subalbums = $album->getSubAlbums();
         if (count($subalbums) > 0) {
         if ($album->getNumImages() > 0)  { ?>
@@ -630,85 +640,39 @@ if (!zp_loggedin()  && !$_zp_null_account) {
               </td>
             </tr>
             <tr>
-              <th style="text-align: center;" colspan="2">&nbsp;</th>
-              <th style="text-align: center;">Password Protected</th>
-              <th style="text-align: center;">Published</th>
-              <th style="text-align: center;">Delete</th>
-              <th style="text-align: center;">Pre-cache</th>
-              <th style="text-align: center;">Refresh metadata</th>
-              <th style="text-align: center;">Reset hitcounter</th>
-            </tr>
-            <tr>
             <td style="padding: 0px 0px;" colspan="8">
             <div id="albumList" class="albumList">
               <?php
                 foreach ($subalbums as $folder) {
                   $subalbum = new Album($album, $folder);
+                  printAlbumEditRow($subalbum);
+                }
               ?>
-                  <div id="id_<?php echo $subalbum->getAlbumID(); ?>">
-                    <tr>
-                      <td style="text-align: left" width="45">
-                        <a href="?page=edit&album=<?php echo urlencode($subalbum->name); ?>" title="Edit this album: <?php echo $subalbum->name; ?>">
-                          <img height="40" width="40" src="<?php echo $subalbum->getAlbumThumb(); ?>" /></a>
-                      </td>
-                      <td style="text-align: left">
-                        <a href="?page=edit&album=<?php echo urlencode($subalbum->name); ?>" title="Edit this album: <?php echo $subalbum->name; ?>">
-                          <?php echo $subalbum->getTitle(); ?></a>
-                      </td>
 
-                <td style="text-align: center;" width="10%">
-                  <?php 
-                  $pwd = $subalbum->getPassword();
-                  if (!empty($pwd)) { ?>
-                  <img src="images/lock.png" style="border: 0px;" alt="Protected" /></a>
-                  <?php } ?>
-                </td>                 
-                <td style="text-align: center;" width="10%">
-                  <?php if ($subalbum->getShow()) { ?>
-                  <a class="publish" href="?action=publish&value=0&album=<?php echo queryencode($subalbum->name); ?>" title="Publish the album '<?php echo $subalbum->name; ?>'">
-                  <img src="images/pass.png" style="border: 0px;" alt="Published" /></a>
-                  <?php } else { ?>
-                  <a class="publish" href="?action=publish&value=1&album=<?php echo queryencode($subalbum->name); ?>" title="Publish the album '<?php echo $subalbum->name; ?>'">
-                  <img src="images/action.png" style="border: 0px;" alt="Publish the album <?php echo $subalbum->name; ?>" /></a>
-                  <?php } ?>
-                </td>                 
-                <td style="text-align: center;" width="10%">
-                  <a class="delete" href="javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=<?php echo queryEncode($subalbum->name); ?>');" title="Delete the album <?php echo $subalbum->name; ?>">
-                  <img src="images/fail.png" style="border: 0px;" alt="Delete the album <?php echo $subalbum->name; ?>" /></a>
-                </td>                 
-                <td style="text-align: center;" width="10%">
-                  <a class="cache" href="cache-images.php?album=<?php echo queryencode($subalbum->name); ?>&return=edit" title="Pre-Cache the album '<?php echo $subalbum->name; ?>'">
-                  <img src="images/cache.png" style="border: 0px;" alt="Cache the album <?php echo $subalbum->name; ?>" /></a>
-                </td>                 
-                <td style="text-align:center;" width="10%">
-                  <a class="warn" href="refresh-metadata.php?album=<?php echo queryencode($subalbum->name); ?>" title="Refresh metadata for the album '<?php echo $subalbum->name; ?>'">
-                  <img src="images/warn.png" style="border: 0px;" alt="Refresh image metadata in the album <?php echo $subalbum->name; ?>" /></a>
-                </td>                 
-                <td style="text-align:center;" width="10%">
-                  <a class="reset" href="?action=reset_hitcounters&albumid=<?php echo $subalbum->getAlbumID(); ?>" title="Reset hitcounters for album '<?php echo $subalbum->name; ?>'">
-                  <img src="images/reset.png" style="border: 0px;" alt="Reset hitcounters for the album <?php echo $subalbum->name; ?>" /></a>
-                </td>                 
-
-               </tr>
-                  </div>
-              <?php } ?>
             </div>
             </tr>
             <tr>
               <td colspan="8">
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="images/lock.png" style="border: 0px;" alt="Protected" />Has Password&nbsp;
+      <img src="images/pass.png" style="border: 0px;" alt="Published" />Published&nbsp;
+      <img src="images/action.png" style="border: 0px;" alt="Unpublished" />Unpublished&nbsp;
+      <img src="images/cache.png" style="border: 0px;" alt="Cache the album" />Cache the album&nbsp;
+      <img src="images/warn.png" style="border: 0px;" alt="Refresh image metadata" />Refresh image metadata&nbsp;
+      <img src="images/reset.png" style="border: 0px;" alt="Reset hitcounters" />Reset hitcounters&nbsp;
+      <img src="images/fail.png" style="border: 0px;" alt="Delete" /></a>Delete&nbsp;
                 <?php
-                zenSortablesSaveButton("?page=edit&album=" . urlencode($album->name) . "&saved", "Save Order");
+                zenSortablesSaveButton("?page=edit&album=" . urlencode($album->name) . "&subalbumsaved", "Save Order");
                 ?>
               </td>
             </tr>
           </table>
 
           <?php
-            if (isset($_GET['saved'])) {
+            if (isset($_GET['subalbumsaved'])) {
               echo "<p>Subalbum order saved.</p>";
             }
-          ?>
-        <?php } ?>
+          } ?>
 
      <!-- Images List -->
 
@@ -865,75 +829,43 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         <?php
           if (isset($saved)) {
             setOption('gallery_sorttype', 'Manual');
+            setOption('gallery_sortdirection', 0);
           }
         ?>
         <p>Drag the albums into the order you wish them displayed. Select an album to edit its description and data, or <a href="?page=edit&massedit">mass-edit all album data</a>.</p>
 
         <table class="bordered" width="100%">
           <tr>
-            <th style="text-align: center;" colspan="2">Edit this album</th>
-            <th style="text-align: center;">Password Protected</th>
-            <th style="text-align: center;">Published</th>
-            <th style="text-align: center;">Delete</th>
-            <th style="text-align: center;">Pre-cache</th>
-            <th style="text-align: center;">Refresh metadata</th>
-            <th style="text-align: center;">Reset hitcounter</th>
+            <th style="text-align: left;" width="345">Edit this album</th>
           </tr>
           <tr>
-          <td style="padding: 0px 0px;" colspan="8">
+          <td style="padding: 0px 0px;" colspan="2">
           <div id="albumList" class="albumList">
             <?php
             $albums = $gallery->getAlbums();
             foreach ($albums as $folder) {
               $album = new Album($gallery, $folder);
-           ?>
-            <div id="id_<?php echo $album->getAlbumID(); ?>">
-              <tr>
-                <td style="text-align: left;" width="45">
-                <a href="?page=edit&album=<?php echo urlencode($album->name); ?>" title="Edit this album: <?php echo $album->name; ?>"><img height="40" width="40" src="<?php echo $album->getAlbumThumb(); ?>" /></a>
-                </td>
-                <td  style="text-align: left;font-size:110%;"> <a href="?page=edit&album=<?php echo urlencode($album->name); ?>" title="Edit this album: <?php echo $album->name; ?>"><?php echo $album->getTitle(); ?></a>
-                </td>
+              printAlbumEditRow($album);
+            } 
+            ?>
 
-                <td style="text-align: center;" width="10%">
-                  <?php 
-                  $pwd = $album->getPassword();
-                  if (!empty($pwd)) { ?>
-                  <img src="images/lock.png" style="border: 0px;" alt="Protected" /></a>
-                  <?php } ?>
-                </td>                 
-                <td style="text-align: center;" width="10%">
-                  <?php if ($album->getShow()) { ?>
-                  <a class="publish" href="?action=publish&value=0&album=<?php echo queryencode($album->name); ?>" title="Publish the album '<?php echo $album->name; ?>'">
-                  <img src="images/pass.png" style="border: 0px;" alt="Published" /></a>
-                  <?php } else { ?>
-                  <a class="publish" href="?action=publish&value=1&album=<?php echo queryencode($album->name); ?>" title="Publish the album '<?php echo $album->name; ?>'">
-                  <img src="images/action.png" style="border: 0px;" alt="Publish the album <?php echo $album->name; ?>" /></a>
-                  <?php } ?>
-                </td>                 
-                <td style="text-align: center;" width="10%">
-                  <a class="delete" href="javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=<?php echo queryEncode($album->name); ?>');" title="Delete the album <?php echo $album->name; ?>">
-                  <img src="images/fail.png" style="border: 0px;" alt="Delete the album <?php echo $album->name; ?>" /></a>
-                </td>                 
-                <td style="text-align: center;" width="10%">
-                  <a class="cache" href="cache-images.php?album=<?php echo queryencode($album->name); ?>&return=edit" title="Pre-Cache the album '<?php echo $album->name; ?>'">
-                  <img src="images/cache.png" style="border: 0px;" alt="Cache the album <?php echo $album->name; ?>" /></a>
-                </td>                 
-                <td style="text-align:center;" width="10%">
-                  <a class="warn" href="refresh-metadata.php?album=<?php echo queryencode($album->name); ?>" title="Refresh metadata for the album '<?php echo $album->name; ?>'">
-                  <img src="images/warn.png" style="border: 0px;" alt="Refresh image metadata in the album <?php echo $album->name; ?>" /></a>
-                </td>                 
-                <td style="text-align:center;" width="10%">
-                  <a class="reset" href="?action=reset_hitcounters&albumid=<?php echo $album->getAlbumID(); ?>" title="Reset hitcounters for album '<?php echo $album->name; ?>'">
-                  <img src="images/reset.png" style="border: 0px;" alt="Reset hitcounters for the album <?php echo $album->name; ?>" /></a>
-                </td>                 
-              </tr>
-            </div>
-            <?php } ?>
           </div>
           </td>
           </tr>
         </table>
+        <div>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="images/lock.png" style="border: 0px;" alt="Protected" />Has Password&nbsp;
+      <img src="images/pass.png" style="border: 0px;" alt="Published" />Published&nbsp;
+      <img src="images/action.png" style="border: 0px;" alt="Unpublished" />Unpublished&nbsp;
+      <img src="images/cache.png" style="border: 0px;" alt="Cache the album" />Cache the album&nbsp;
+      <img src="images/warn.png" style="border: 0px;" alt="Refresh image metadata" />Refresh image metadata&nbsp;
+      <img src="images/reset.png" style="border: 0px;" alt="Reset hitcounters" />Reset hitcounters&nbsp;
+      <img src="images/fail.png" style="border: 0px;" alt="Delete" /></a>Delete&nbsp;
+      <?php
+        zenSortablesSaveButton("?page=edit&saved", "Save Order");
+      ?>
+      </div>
 
         <?php
         if (isset($_GET['saved'])) {
@@ -941,11 +873,6 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         }
         ?>
 
-        <div>
-      <?php
-        zenSortablesSaveButton("?page=edit&saved", "Save Order");
-      ?>
-      </div>
 
       <?php } ?>
 

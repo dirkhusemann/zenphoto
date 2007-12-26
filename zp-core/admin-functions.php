@@ -485,7 +485,58 @@ function printAlbumEditForm($index, $album) {
   echo "\n</div>";
 
 }
+/**
+* puts out a row in the edit album table
+* @param object $album is the album being emitted
+**/
+function printAlbumEditRow($album) {
+  echo "\n<div id=\"id_" . $album->getAlbumID() . '">';
+  echo '<table cellspacing="0" width="100%">';
+  echo "\n<tr>";
+  echo '<td style="text-align: left;" width="45">';
+  echo '<a href="?page=edit&album=' . urlencode($album->name) .'" title="Edit this album: ' . $album->name . 
+       '"><img height="40" width="40" src="' . $album->getAlbumThumb() . '" /></a>';
+  echo "</td>\n";
+  echo '<td  style="text-align: left;font-size:110%;" width="300"> <a href="?page=edit&album=' . urlencode($album->name) . 
+       '" title="Edit this album: ' . $album->name . '">' . $album->getTitle() . '</a>';
+  echo "</td>\n";
 
+  echo "\n<td style=\"text-align: left;\">";
+
+  $pwd = $album->getPassword();
+  if (!empty($pwd)) {
+    echo '<img src="images/lock.png" style="border: 0px;" alt="Protected" /></a>';
+  } else {
+    echo '<img src="images/blank.png" style="border: 0px;" alt="No password" /></a>';
+  }
+  echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp\n";
+  if ($album->getShow()) {
+    echo '<a class="publish" href="?action=publish&value=0&album=' . queryencode($album->name) . 
+         '" title="Publish the album <em>' . $album->name . '</em>">';
+    echo '<img src="images/pass.png" style="border: 0px;" alt="Published" /></a>';
+  } else {
+    echo '<a class="publish" href="?action=publish&value=1&album=' . queryencode($album->name) . 
+         '" title="Publish the album <em>' . $album->name . '</em>">';
+    echo '<img src="images/action.png" style="border: 0px;" alt="Publish the album ' . $album->name . '" /></a>';
+  }
+  echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp\n";
+  echo '<img src="images/cache.png" style="border: 0px;" alt="Cache the album ' . $album->name . '" /></a>';
+  echo '<a class="warn" href="refresh-metadata.php?album=' . queryencode($album->name) . 
+       '" title="Refresh metadata for the album <em>' . $album->name . '</em>">';
+  echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp\n";
+  echo '<img src="images/warn.png" style="border: 0px;" alt="Refresh image metadata in the album ' . $album->name . '>" /></a>';
+  echo '<a class="reset" href="?action=reset_hitcounters&albumid=' . $album->getAlbumID() . '" title="Reset hitcounters for album <em>' . $album->name . '</em>">';
+  echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp\n";
+  echo '<img src="images/reset.png" style="border: 0px;" alt="Reset hitcounters for the album ' . $album->name . '" /></a>';
+  echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp\n";
+  echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=" . queryEncode($album->name) . "');\" title=\"Delete the album " . $album->name . "\">";
+  echo '<img src="images/fail.png" style="border: 0px;" alt="Delete the album ' . $album->name . '" /></a>';
+  echo '<a class="cache" href="cache-images.php?album=' . queryencode($album->name) . 
+       '&return=edit" title="Pre-Cache the album <em>' . $album->name . '</em>">';
+  echo '</tr>';
+  echo '</table>';
+  echo "</div>\n";
+}
 
 /**
  * processes the post from the above 
@@ -510,7 +561,11 @@ function processAlbumEdit($index, $album) {
   $album->setShow(strip($_POST[$prefix.'Published']));
   $album->setCommentsAllowed(strip($_POST[$prefix.'allowcomments']));
   $album->setSortType(strip($_POST[$prefix.'sortby']));
-  $album->setSortDirection('image', strip($_POST[$prefix.'image_sortdirection']));   
+  if ($_POST[$prefix.'sortby'] == 'Manual') {
+    $album->setSortDirection('image', 0);   
+  } else {
+    $album->setSortDirection('image', strip($_POST[$prefix.'image_sortdirection']));   
+  }
   $album->setSubalbumSortType(strip($_POST[$prefix.'subalbumsortby']));   
   $album->setSortDirection('album', strip($_POST[$prefix.'album_sortdirection']));   
   if (isset($_POST['reset_hitcounter'])) {
