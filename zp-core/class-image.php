@@ -304,8 +304,10 @@ class Image extends PersistentObject {
     if (getOption('comment_name_required') && empty($name)) { return 0; }
     if (getOption('comment_web_required') && empty($website)) { return 0; }
     $file = SERVERCACHE . "/code_" . $code_ok . ".png";
-    if (getOption('Use_Captcha') && !file_exists($file)) { return 0; }
-    if ($code != $code_ok) { return 0; }
+    if (getOption('Use_Captcha')) {
+      if (!file_exists($file)) { return 0; }
+      if ($code != $code_ok) { return 0; }
+    }
     if (empty($comment)) {
       return 0;
     }

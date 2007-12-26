@@ -30,6 +30,24 @@ $_zp_current_context_restore = NULL;
 $_zp_current_search = NULL;
 $_zp_current_search_restore = NULL;
 
+/*** Captcha cleanup **********************
+******************************************/
+if (getOption('Use_Captcha')) {
+  $d = getOption('last_captcha_purge');
+  $expire = time() - 86400;
+  if ($d > $expire) {
+    chdir(SERVERCACHE . "/");
+    $filelist = glob('code_*.png');
+    foreach ($filelist as $file) {
+      $file = SERVERCACHE . "/" . $file;
+      if (filemtime($file) < $expire) {
+        unlink($file);
+      }
+    }
+  }
+  setOption('last_captcha_purge', time());
+}
+
 
 /*** Request Handler **********************
  ******************************************/
