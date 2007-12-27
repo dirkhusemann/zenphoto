@@ -61,7 +61,7 @@
 		<?php if (getOption('Allow_comments')) { ?>
         <div id="comments">
 		<?php $num = getCommentCount(); echo ($num == 0) ? "" : ("<h3>Comments ($num)</h3><hr />"); ?>
-			<?php while (next_comment()):  ?>
+			<?php while (next_comment()){  ?>
 			<div class="comment">
 				<div class="commentmeta">
 					<span class="commentauthor"><?php printCommentAuthorLink(); ?></span> says: 
@@ -76,9 +76,11 @@
           			<?php printEditCommentLink('Edit', ' | ', ''); ?>
 				</div>
 			</div>
-			<?php endwhile; ?>
+			<?php }; ?>
+            
+			<?php if (OpenedForComments()) { ?>
 			<div class="imgcommentform">
-				<!-- If comments are on for this image AND album... -->
+              <!-- If comments are on for this image AND album... -->
 				<h3>Add a comment:</h3>
 				<form id="commentform" action="#" method="post">
 				<div><input type="hidden" name="comment" value="1" />
@@ -109,6 +111,7 @@
 				</form>
 			</div>
 		</div>
+        <?php } else { echo 'Comments are closed.'; } ?>
         <?php } ?>
 	</div>
 </div>

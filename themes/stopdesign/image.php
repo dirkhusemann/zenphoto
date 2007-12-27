@@ -75,7 +75,9 @@
                         <?php endwhile; ?>
                     </dl>
                 
+			        <?php if (OpenedForComments()) { ?>
                     <p class="mainbutton" id="addcommentbutton"><a href="#addcomment" class="btn"><img src="<?php echo $_zp_themeroot ?>/img/btn_add_a_comment.gif" alt="" width="116" height="21" /></a></p>
+                    <?php } else { echo '<h2>Comments are closed</h2>'; } ?>
 
                     <!-- BEGIN #addcomment -->
 					<?php if ($error) { 
