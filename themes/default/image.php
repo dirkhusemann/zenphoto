@@ -99,8 +99,9 @@
 							<td><label for="website">Site:</label></td>
 							<td><input type="text" id="website" name="website" size="40" value="<?php echo $stored[2];?>" class="inputbox" /></td>
 						</tr>
-                        <?php if (getOption('Use_Captcha')) { printCaptcha('Enter Captcha:', '', 8, true); } ?></td></tr>
-            
+                        <?php if (getOption('Use_Captcha')) { 
+                          printCaptcha('<tr><td>Enter Captcha:', '</td><td>', '</td></tr>'); 
+                        } ?>
 					</table>
 					<textarea name="comment" rows="6" cols="40"></textarea>
 					<br />

@@ -128,7 +128,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
             			<p><input type="text" name="name" id="name" class="textinput" value="<?=$stored[0];?>" size="22" tabindex="1" /><label for="name"><small>Name</small></label></p>
             			<p><input type="text" name="email" id="email" class="textinput" value="<?=$stored[1];?>" size="22" tabindex="2" /><label for="email"><small>Mail</small></label></p>
                         <p><input type="text" name="website" id="website" class="textinput" value="<?=$stored[2];?>" size="22" tabindex="3" /><label for="website"><small>Website</small></label></p>
-                        <?php if (getOption('Use_Captcha')) { printCaptcha('', '<small>Enter Captcha</small>', 8);} ?>
+                        <?php if (getOption('Use_Captcha')) { printCaptcha('', '', '<small>Enter Captcha</small>', 8);} ?>
             			<p><textarea name="comment" id="comment" rows="5" cols="100%" tabindex="4"></textarea></p>
             			<p><input type="submit" value="Submit" class="pushbutton" /></p>
           			</div>

@@ -1374,7 +1374,10 @@ function printCommentErrors($class = 'error') {
   if (isset($error)) { 
     echo "<div class=$class>";
     if ($error == 1) {
-      echo "There was an error submitting your comment. Name, a valid e-mail address, ";
+      echo "There was an error submitting your comment. ";
+      if (getOption('comment_name_required')) { echo "Name, "; }
+      if (getOption('comment_email_required')) { echo "a valid e-mail address, "; }
+      if (getOption('comment_web_required')) { echo "a Website, "; }
       if (getOption('Use_Captcha')) { echo " <em>Captcha</em> input, "; }
       echo "and a spam-free comment are required.";
     } else {
@@ -2339,20 +2342,19 @@ function printPasswordForm($hint) {
 * Prints a captcha entry form and posts the input with the comment posts
 * @since 1.1.4
 **/
-function printCaptcha($preText='', $postText='', $size=4, $tableRow=false) {
+function printCaptcha($preText='', $midText='', $postText='', $size=4) {
   $lettre='abcdefghijklmnpqrstuvwxyz';
   $chiffre='123456789';
-  $position=rand(0,2);
 
-  $rand1=rand(0,24);
-  $rand2=rand(0,24);
-  $rand3=rand(0,8);
-
-  $lettre1=$lettre[$rand1];
-  $lettre2=$lettre[$rand2];
-  $chiffre1=$chiffre[$rand3];
-
-  $code=md5($lettre1.$lettre2.$chiffre1);
+  $lettre1=$lettre[rand(0,24)];
+  $lettre2=$lettre[rand(0,24)];
+  $chiffre1=$chiffre[rand(0,8)];
+  if (rand(0,1)) {
+    $string = $lettre1.$lettre2.$chiffre1;
+  } else {
+    $string = $lettre1.$chiffre1.$lettre2;
+  }
+  $code=md5($string);
 
   //header ("Content-type: image/png");
   $image = imagecreate(65,20);
@@ -2375,9 +2377,9 @@ function printCaptcha($preText='', $postText='', $size=4, $tableRow=false) {
   }
 
   $lettre = imagecolorallocate($image,0,0,0);
-  imagestring($image,10,5,0,$lettre1,$lettre);
-  imagestring($image,10,20,0,$lettre2,$lettre);
-  imagestring($image,10,35,0,$chiffre1,$lettre);
+  imagestring($image,10,5+rand(0,6),0,substr($string, 0, 1),$lettre);
+  imagestring($image,10,20+rand(0,6),0,substr($string, 1, 1),$lettre);
+  imagestring($image,10,35+rand(0,6),0,substr($string, 2, 1),$lettre);
 
   $rectangle = imagecolorallocate($image,48,57,85);
   ImageRectangle ($image,0,0,64,19,$rectangle);
@@ -2390,21 +2392,11 @@ function printCaptcha($preText='', $postText='', $size=4, $tableRow=false) {
   $captcha = "<input type=\"hidden\" name=\"code_h\" value=\"" . $code . "\"/>" .
              "<label for=\"code\"><img src=\"/cache/". $img . "\" alt=\"Code\"/></label>&nbsp;";
 
-$x = 0;
-             
-  if ($tableRow) { 
-    echo "<tr><td>"; 
-  }
   echo $preText;
   echo $captcha; 
-  if ($tableRow) { 
-    echo "</td><td>"; 
-  }
+  echo $midText; 
   echo $inputBox; 
   echo $postText;
-  if ($tableRow) { 
-    echo "</td><tr>"; 
-  }
 }
 
 /*** End template functions ***/

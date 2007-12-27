@@ -15,7 +15,7 @@ class ThemeOptions {
 	setOptionDefault('Allow_search', true);
     setOptionDefault('Gallery_description', 'You can insert your Gallery description using on the Admin Options tab.');
     setOptionDefault('Mini_slide_selector', 'Recent images');
-	setOptionDefault('Use_Captcha', false);
+	setOptionDefault('Use_Captcha', true);
 }
   
   function getOptionsSupported() {
