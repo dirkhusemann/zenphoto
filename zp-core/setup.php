@@ -5,8 +5,9 @@ if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 define('OFFSET_PATH', true);
 $setup = true;
 
-if (!$checked && !file_exists('zp-config.php')) { 
-  copy('zp-config.php.example', 'zp-config.php'); 
+if (!$checked && !file_exists('zp-config.php')) {
+  @chmod(dirname(__FILE__), 0777);
+  @copy('zp-config.php.example', 'zp-config.php');
 }
 function updateItem($item, $value) {
   global $zp_cfg;
@@ -33,7 +34,7 @@ if (isset($_POST['mysql'])) { //try to update the zp-config file
     updateItem('mysql_prefix', $_POST['mysql_prefix']);
   }
   @chmod('zp-config.php', 0777);
-  if (is_writeable('zp-config.php')) { 
+  if (is_writeable('zp-config.php')) {
     if ($handle = fopen('zp-config.php', 'w')) {
       if (fwrite($handle, $zp_cfg)) {
         $base = true;
@@ -45,17 +46,15 @@ if (isset($_POST['mysql'])) { //try to update the zp-config file
 if (file_exists("zp-config.php")) {
   require("zp-config.php");
   if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
-    if (@mysql_select_db($_zp_conf_vars['mysql_database'])) { 
+    if (@mysql_select_db($_zp_conf_vars['mysql_database'])) {
       $result = @mysql_query("SELECT `id` FROM " . $_zp_conf_vars['mysql_prefix'].'options' . " LIMIT 1", $connection);
       if ($result) {
         unset($setup);
       }
-      require_once("admin-functions.php"); 
+      require_once("admin-functions.php");
     }
-  } 
-}
-
-?>
+  }
+}?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
@@ -87,11 +86,11 @@ if (file_exists("zp-config.php")) {
 <?php
 if (!$checked) {
 
-  /*****************************************************************************
-   *                                                                                                                    *
-   *                             SYSTEMS CHECK                                                              *
-   *                                                                                                                    *
-   *******************************************************************************/
+ /*****************************************************************************
+   *                                                                                                                                                       *
+   *                             SYSTEMS CHECK                                                                                           *
+   *                                                                                                                                                       *
+   ******************************************************************************/
   global $_zp_conf_vars;
 
   function checkMark($check, $text, $sfx, $msg) {
@@ -103,7 +102,7 @@ if (!$checked) {
       case 1: echo "pass"; break;
     }
     echo "\">$text</span>";
-    if ($check <= 0) { 
+    if ($check <= 0) {
       if (!empty($sfx)) { echo $sfx; }
       if (!empty($msg)) { echo "\n<p class=\"error\">$msg</p>"; }
     }
@@ -125,28 +124,26 @@ if (!$checked) {
     if (!is_dir($path)) {
       $e = '';
       if (!$external) $d = " and <strong>setup</strong> could not create it";
-      $sfx = " [<em>$append</em> does not exist$d]"; 
-      $msg = " You must create the folder $folder. <code>mkdir($path, 0777)</code>.";    
-    } else if (!is_writable($path)) {  
+      $sfx = " [<em>$append</em> does not exist$d]";
+      $msg = " You must create the folder $folder. <code>mkdir($path, 0777)</code>.";
+    } else if (!is_writable($path)) {
       $sfx = " [<em>$append</em> is not writeable and <strong>setup</strong> could not make it so]";
-      $msg =  "Change the permissions on the <code>$folder</code> folder to be writable by the server " .  
+      $msg =  "Change the permissions on the <code>$folder</code> folder to be writable by the server " .
               "(<code>chmod 777 " . $append . "</code>)";
     } else if (($folder != $which) || $external) {
       $f = " (<em>$append</em>)";
     }
-    
+
     return checkMark(is_dir($path) && is_writable($path), " <em>$which</em> folder$f", $sfx, $msg);
-          
     }
 
-
   $good = true;
-  
+
   $phpv = phpversion();
   $n = explode(".", $phpv);
-  $v = $n[0]*10000 + $n[1]*100 + $n[2]; 
+  $v = $n[0]*10000 + $n[1]*100 + $n[2];
   $php = $v >= 40100;
-  $good = checkMark($php, " PHP version 4.1.0 or greater", " [version is $phpv]", '') && $good; 
+  $good = checkMark($php, " PHP version 4.1.0 or greater", " [version is $phpv]", '') && $good;
 
   $good = checkMark(extension_loaded('gd'), " PHP GD support", '', '') && $good;
 
@@ -175,7 +172,7 @@ if (!$checked) {
       $mysqlv = substr($a, 0, $i);
     }
     $n = explode(".", $mysqlv);
-    $v = $n[0]*10000 + $n[1]*100 + $n[2]; 
+    $v = $n[0]*10000 + $n[1]*100 + $n[2];
     $sqlv = $v >= 32300;
   }
   if ($cfg) {
@@ -223,24 +220,25 @@ if (!$checked) {
 	  </div>
 <?php
 	} else {
-      $good = checkMark(!$mySQLadmin, " mySQL setup in zp-config.php", '', 
+      $good = checkMark(!$mySQLadmin, " mySQL setup in zp-config.php", '',
                         "You have not set your <strong>mySQL</strong> <code>user</code>, " .
 	                    "<code>password</code>, etc. in your <code>zp-confgi.php</code> file ".
 						"and <strong>setup</strong> is not able to write to the file.") && $good;
 	}
   }
   $good = checkMark($connection, " connect to MySQL", '', "Could not connect to the <strong>MySQL</strong> server. Check the <code>user</code>, " .
-      "<code>password</code>, and <code>database host</code> in your <code>zp-config.php</code> file and try again. ") && $good; 
+      "<code>password</code>, and <code>database host</code> in your <code>zp-config.php</code> file and try again. ") && $good;
   if ($connection) {
-    $good = checkMark($sqlv, " MySQL version 3.2.3 or greater", " [version is $mysqlv]", "") && $good; 
-    $good = checkMark($db, " connect to the database <code>" . $_zp_conf_vars['mysql_database'] . "</code>", '', 
+    $good = checkMark($sqlv, " MySQL version 3.2.3 or greater", " [version is $mysqlv]", "") && $good;
+    $good = checkMark($db, " connect to the database <code>" . $_zp_conf_vars['mysql_database'] . "</code>", '',
       "Could not access the <strong>MySQL</strong> database (<code>" . $_zp_conf_vars['mysql_database'] ."</code>). Check the <code>user</code>, " .
       "<code>password</code>, and <code>database name</code> and try again. " .
       "Make sure the database has been created, and the <code>user</code> has access to it. " .
       "Also check the <code>mySQL host</code>.") && $good;
   }
-    
-  $ht = @file_get_contents('../.htaccess');
+
+  $htfile = '../.htaccess';
+  $ht = @file_get_contents($htfile);
   $htu = strtoupper($ht);
   $i = strpos($htu, 'REWRITEENGINE');
   if ($i === false) {
@@ -251,16 +249,16 @@ if (!$checked) {
   }
   $mod = '';
   $msg = " <em>.htaccess</em> file";
-  if (!empty($rw)) { 
+  if (!empty($rw)) {
     $msg .= " (<em>RewriteEngine</em> is <strong>$rw</strong>)";
     $mod = "&mod_rewrite=$rw";
   }
-  
+
   if (empty($ht)) { $ch = -1; } else { $ch = 1; }
-  checkMark($ch, $msg, " [is empty or does not exist]", 
-               "Edit the <code>.htaccess</code> file in the root zenphoto folder if you have the mod_rewrite apache ". 
+  checkMark($ch, $msg, " [is empty or does not exist]",
+               "Edit the <code>.htaccess</code> file in the root zenphoto folder if you have the mod_rewrite apache ".
                "module, and want cruft-free URLs. Just change the one line indicated to make it work. " .
-               "<br/><br/>You can ignore this warning if you do not intend to set the option <code>mod_rewrite</code>."); 
+               "<br/><br/>You can ignore this warning if you do not intend to set the option <code>mod_rewrite</code>.");
 
   $base = true;
   $f = '';
@@ -278,19 +276,20 @@ if (!$checked) {
     }
     $f = '';
     if (!$base) { // try and fix it
-      @chmod('../.htaccess', 0777);
-      if (is_writeable('../.htaccess')) { 
+      @chmod(dirname($htfile), 0777);
+      @chmod($htfile, 0777);
+      if (is_writeable($htfile)) {
         $ht = substr($ht, 0, $i) . "RewriteBase $d\n" . substr($ht, $j+1);
-        if ($handle = fopen('../.htaccess', 'w')) {
+        if ($handle = fopen($htfile, 'w')) {
           if (fwrite($handle, $ht)) {
             $base = true;
             $f = " (fixed)";
           }
         }
         fclose($handle);
-      }      
+      }
     }
-    $good = checkMark($base, "<em>.htaccess</em> RewriteBase$f", " [Does not match install folder]", 
+    $good = checkMark($base, "<em>.htaccess</em> RewriteBase$f", " [Does not match install folder]",
                       "Install folder is <code>$d</code> and RewriteBase is set to <code>$b</code>. ".
                       "<br/>Setup was not able to write to the file to fix this problem. " .
                       "<br/>Either make the file writeable or ".
@@ -304,14 +303,14 @@ if (!$checked) {
   }
 
   $good = folderCheck('cache', dirname(dirname(__FILE__)) . "/cache/", false) && $good;
-  mysql_close($connection); 
+  if ($connection) { mysql_close($connection); }
   if ($good) {
     $dbmsg = "";
   } else {
     echo "<p>You need to address the problems indicated above then run <code>setup.php</code> again.</p>";
     exit();
   }
-} else { 
+} else {
   $dbmsg = "database connected";
 } // system check
 
@@ -319,19 +318,19 @@ if (!$checked) {
     require("zp-config.php");
     require_once('functions-db.php');
     $task = '';
-    if (isset($_GET['create'])) { 
-      $task = 'create'; 
+    if (isset($_GET['create'])) {
+      $task = 'create';
       $create = array_flip(explode(',', $_GET['create']));
     }
-    if (isset($_GET['update'])) { 
-      $task = 'update'; 
-    }  
-    
+    if (isset($_GET['update'])) {
+      $task = 'update';
+    }
+
     if (db_connect() && empty($task)) {
-    
+
       $sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$_zp_conf_vars['mysql_prefix']."%';";
       $result = mysql_query($sql, $mysql_connection);
-  
+
       $tables = array();
       if (!$result) {
         echo "<div class=\"error\">";
@@ -343,7 +342,7 @@ if (!$checked) {
           $tables[$row[0]] = 'update';
         }
       }
-      $expected_tables = array($_zp_conf_vars['mysql_prefix'].'options', $_zp_conf_vars['mysql_prefix'].'albums', 
+      $expected_tables = array($_zp_conf_vars['mysql_prefix'].'options', $_zp_conf_vars['mysql_prefix'].'albums',
                                $_zp_conf_vars['mysql_prefix'].'images', $_zp_conf_vars['mysql_prefix'].'comments');
       foreach ($expected_tables as $needed) {
         if (!isset($tables[$needed])) {
@@ -353,15 +352,15 @@ if (!$checked) {
       $adm = getOption('adminuser');
       $pas = getOption('adminpass');
       $rsd = getOption('admin_reset_date');
-  
-      if (!(empty($rsd) || empty($adm) || empty($pas))) { 
+
+      if (!(empty($rsd) || empty($adm) || empty($pas))) {
         if (!zp_loggedin() && (!isset($_GET['create']) && !isset($_GET['update']))) {  // Display the login form and exit.
           printLoginForm("/" . ZENFOLDER . "/setup.php?checked$mod", false);
           exit();
         }
-      } 
+      }
     }
-  
+
     // Prefix the table names. These already have `backticks` around them!
     $tbl_albums = prefix('albums');
     $tbl_comments = prefix('comments');
@@ -370,9 +369,9 @@ if (!$checked) {
     // Prefix the constraint names:
     $cst_comments = prefix('comments_ibfk1');
     $cst_images = prefix('images_ibfk1');
-  
+
     $db_schema = array();
-    
+
   /***********************************************************************************
      Add new fields in the upgrade section. This section should remain static except for new
      tables. This tactic keeps all changes in one place so that noting gets accidentaly omitted.
@@ -399,7 +398,7 @@ if (!$checked) {
         `place` varchar(255) default NULL,
         `show` int(1) unsigned NOT NULL default '1',
         `closecomments` int(1) unsigned NOT NULL default '0',
-        `commentson` int(1) UNSIGNED NOT NULL default '1',   
+        `commentson` int(1) UNSIGNED NOT NULL default '1',
         `thumb` varchar(255) default NULL,
         `mtime` int(32) default NULL,
         `sort_type` varchar(20) default NULL,
@@ -415,7 +414,7 @@ if (!$checked) {
         KEY `folder` (`folder`)
         );";
     }
-  
+
     if (isset($create[$_zp_conf_vars['mysql_prefix'].'comments'])) {
       $db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_comments (
         `id` int(11) unsigned NOT NULL auto_increment,
@@ -432,7 +431,7 @@ if (!$checked) {
     $db_schema[] = "ALTER TABLE $tbl_comments ".
       "ADD CONSTRAINT $cst_comments FOREIGN KEY (`imageid`) REFERENCES $tbl_images (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
     }
-    
+
     if (isset($create[$_zp_conf_vars['mysql_prefix'].'images'])) {
       $db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_images (
         `id` int(11) unsigned NOT NULL auto_increment,
@@ -445,7 +444,7 @@ if (!$checked) {
         `state` tinytext,
         `country` tinytext,
         `credit` tinytext,
-        `copyright` tinytext,      
+        `copyright` tinytext,
         `tags` text,
         `commentson` int(1) NOT NULL default '1',
         `show` int(1) NOT NULL default '1',
@@ -465,45 +464,45 @@ if (!$checked) {
     $db_schema[] = "ALTER TABLE $tbl_images ".
       "ADD CONSTRAINT $cst_images FOREIGN KEY (`albumid`) REFERENCES $tbl_albums (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
     }
-  
-  /****************************************************************************************
-     ******                                              UPGRADE SECTION                                        ******
-     ******                                                                                                                   ******     
-     ******                                           Add all new fields below                                       ******
-     ******                                                                                                                   ******     
-    ****************************************************************************************/
+
+ /****************************************************************************************
+     ******                                              UPGRADE SECTION                                                                       ******
+     ******                                                                                                                                                         ******
+     ******                                           Add all new fields below                                                                     ******
+     ******                                                                                                                                                         ******
+    *****************************************************************************************/
     $sql_statements = array();
-    
+
     // v. 1.0.0b
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `sort_type` varchar(20);";
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `sort_order` int(11);";
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `sort_order` int(11);";
-    
+
     // v. 1.0.3b
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `height` INT UNSIGNED;";
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `width` INT UNSIGNED;";
-    
+
     // v. 1.0.4b
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `parentid` int(11) unsigned default NULL;";
-    
+
     // v. 1.0.9
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `mtime` int(32) default NULL;";
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `mtime` int(32) default NULL;";
-    
-    //v. 1.1    
+
+    //v. 1.1
     $sql_statements[] = "ALTER TABLE $tbl_options DROP `bool`, DROP `description`;";
     $sql_statements[] = "ALTER TABLE $tbl_options CHANGE `value` `value` text;";
     $sql_statements[] = "ALTER TABLE $tbl_options DROP INDEX `name`;";
     $sql_statements[] = "ALTER TABLE $tbl_options ADD UNIQUE (`name`);";
-    $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `commentson` int(1) UNSIGNED NOT NULL default '1';";   
-    $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `subalbum_sort_type` varchar(20) default NULL;";   
+    $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `commentson` int(1) UNSIGNED NOT NULL default '1';";
+    $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `subalbum_sort_type` varchar(20) default NULL;";
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `tags` text;";
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `location` tinytext;";
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `city` tinytext;";
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `state` tinytext;";
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `country` tinytext;";
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `credit` tinytext;";
-    $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `copyright` tinytext;";    
+    $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `copyright` tinytext;";
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `date` datetime default NULL;";
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `tags` text;";
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `EXIFValid` int(1) UNSIGNED default NULL;";
@@ -511,11 +510,11 @@ if (!$checked) {
     foreach (array_keys($_zp_exifvars) as $exifvar) {
       $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `$exifvar` varchar(52) default NULL;";
     }
-    
+
     //v1.1.1
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `image_sortdirection` int(1) UNSIGNED default '0';";
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `album_sortdirection` int(1) UNSIGNED default '0';";
-    
+
     //v1.1.3
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `total_value` int(11) UNSIGNED default '0';";
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `total_votes` int(11) UNSIGNED default '0';";
@@ -523,17 +522,20 @@ if (!$checked) {
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `password` varchar(255) default NULL;";
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `password_hint` text;";
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `hitcounter` int(11) UNSIGNED default NULL;";
- 
-  /**************************************************************************************
-     ******                                        END of UPGRADE SECTION                               ******
-     ******                                                                                                                ******     
-     ******                                    Add all new fields above                                           ******
-     ******                                                                                                                ******     
-    ***************************************************************************************/   
+    
+    //v1.2
+    $sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `type` varchar(52) NOT NULL default 'images';";
+    
+
+ /**************************************************************************************
+     ******                                        END of UPGRADE SECTION                                                           ******
+     ******                                                                                                                                                     ******
+     ******                                          Add all new fields above                                                                  ******
+     ******                                                                                                                                                     ******
+    ***************************************************************************************/
 
     if (isset($_GET['create']) || isset($_GET['update']) && db_connect()) {
-    
-      
+
       echo "<h3>About to $task tables...</h3>";
       // Bypass the error-handling in query()... we don't want it to stop.
       // This is probably bad behavior, so maybe do some checks?
@@ -544,27 +546,27 @@ if (!$checked) {
       foreach($sql_statements as $sql) {
         @mysql_query($sql);
       }
-      
+
       // set defaults on any options that need it
       require('option-defaults.php');
-        
+
       if ($task == 'update') {
         echo "<h3>Cleaning up...</h3>";
-        require_once("admin-functions.php"); 
-        $gallery = new Gallery();      
+        require_once("admin-functions.php");
+        $gallery = new Gallery();
         $gallery->clearCache();
-      
+
         $needsrefresh = $gallery->garbageCollect(true, true);
       } else {
         $needsrefresh = false;
       }
-        
+
       echo "<h3>Done with table $task!</h3>";
 
       $adm = getOption('adminuser');
       $pas = getOption('adminpass');
       $rsd = getOption('admin_reset_date');
- 
+
      if (empty($adm) || empty($pas) || empty($rsd)) {
         echo "<p>You need to <a href=\"admin.php?page=options\">set your admin user and password</a>.</p>";
       } else {
@@ -573,7 +575,7 @@ if (!$checked) {
       if ($needsrefresh) {
         echo "<p>The database refresh stopped early due to processing time. You may need to run refresh again from the admin pages.</a></p>";
       }
-    
+
     } else if (db_connect()) {
       echo "<h3>$dbmsg</h3>";
       echo "<p>We are all set to ";
@@ -616,8 +618,8 @@ if (!$checked) {
           $task .= "&update";
         }
       }
-      if (isset($_GET['mod_rewrite'])) { 
-        $mod = '&mod_rewrite='.$_GET['mod_rewrite']; 
+      if (isset($_GET['mod_rewrite'])) {
+        $mod = '&mod_rewrite='.$_GET['mod_rewrite'];
       }
       echo "<p><a href=\"?checked&$task$mod\" title=\"create and or update the database tables.\" style=\"font-size: 15pt; font-weight: bold;\">Go!</a></p>";
     } else {
@@ -634,8 +636,9 @@ if (!$checked) {
   <div class="error">
     The zp-config.php file does not exist. You should run setup.php to check your configuration and create this file.
   </div>
-  
-  <?php } ?>
+
+  <?php 
+} ?>
 </div>
 </div>
 </body>

@@ -1396,12 +1396,12 @@ function printAlbumZip(){
 		'of this album</a>'; 
 }
 
-function printLatestComments($number) {
+function printLatestComments($number, $type='images') {
 	echo '<div id="showlatestcomments">';
 	echo '<ul>';
 	$comments = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.website,"
 	  . " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
-	  . " WHERE c.imageid = i.id AND i.albumid = a.id ORDER BY c.id DESC LIMIT $number");
+	  . " WHERE `type`=$type AND c.imageid = i.id AND i.albumid = a.id ORDER BY c.id DESC LIMIT $number");
 	foreach ($comments as $comment) {
 	  $author = $comment['name'];
 	  $album = $comment['folder'];

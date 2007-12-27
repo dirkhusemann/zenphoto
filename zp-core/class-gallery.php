@@ -204,7 +204,7 @@ class Gallery {
   function getNumComments($moderated=false) {
     $sql = "SELECT count(*) FROM ".prefix('comments');
     if (!$moderated) { 
-      $sql .= " WHERE inmoderation = 0";
+      $sql .= " WHERE `inmoderation`=0";
     }
     $result = query_single_row($sql);
     return array_shift($result);
@@ -214,7 +214,7 @@ class Gallery {
   function getAllComments($moderated=false) {
     $sql = "SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.website,"
         . " (c.date + 0) AS date, c.comment, c.email FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, "
-        .prefix('albums')." AS a ". " WHERE c.imageid = i.id AND i.albumid = a.id";
+        .prefix('albums')." AS a ". " WHERE AND c.imageid = i.id AND i.albumid = a.id";
     if (!$moderated) { 
       $sql .= " AND inmoderation = 0";
     }
@@ -369,7 +369,7 @@ class Gallery {
         } else {
           $sql = 'DELETE FROM ' . prefix('images') . ' WHERE `id`="' . $image['id'] . '";';
           $result = query($sql);   
-          $sql = 'DELETE FROM ' . prefix('comments') . ' WHERE `imageid` ="' . $image['id'] . '";'; 
+          $sql = 'DELETE FROM ' . prefix('comments') . ' WHERE `type`="images" AND `imageid` ="' . $image['id'] . '";'; 
           $result = query($sql);
         }
       }    
@@ -379,14 +379,14 @@ class Gallery {
       $imageids = query_full_array('SELECT `id` FROM ' . prefix('images'));                          /* all the image IDs */
       $idsofimages = array();
       foreach($imageids as $row) { $idsofimages[] = $row['id']; }
-      $commentImages = query_full_array("SELECT DISTINCT `imageid` FROM " . prefix('comments'));     /* imageids of all the comments */
+      $commentImages = query_full_array("SELECT DISTINCT `imageid` FROM " . prefix('comments') . 'WHERE `type`="images"');     /* imageids of all the comments */
       $imageidsofcomments = array();
       foreach($commentImages as $row) { $imageidsofcomments [] = $row['imageid']; } 
       $orphans = array_diff($imageidsofcomments , $idsofimages );                                    /* imageids of comments with no image */      
       
       if (count($orphans) > 0 ) { /* delete dead comments from the DB */
         $firstrow = array_pop($orphans);
-        $sql = "DELETE FROM " . prefix('comments') . "WHERE `imageid`='" . $firstrow . "'";
+        $sql = "DELETE FROM " . prefix('comments') . "WHERE `type`='images' AND `imageid`='" . $firstrow . "'";
         foreach($orphans as $id) $sql .= " OR `imageid`='" . $id . "'";
         query($sql);
       }

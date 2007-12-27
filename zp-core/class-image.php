@@ -279,9 +279,9 @@ class Image extends PersistentObject {
 
   function getComments($moderated=false) {
     $sql = "SELECT *, (date + 0) AS date FROM " . prefix("comments") . 
-       " WHERE imageid='" . $this->id . "'";
+       " WHERE `type`='images' AND `imageid`='" . $this->id . "'";
     if (!$moderated) {
-      $sql .= " AND inmoderation = 0";
+      $sql .= " AND `inmoderation`=0";
     } 
     $sql .= " ORDER BY id";
     $comments = query_full_array($sql);
@@ -332,14 +332,15 @@ class Image extends PersistentObject {
       }
 
       // Update the database entry with the new comment
-      query("INSERT INTO " . prefix("comments") . " (imageid, name, email, website, comment, inmoderation, date) VALUES " .
+      query("INSERT INTO " . prefix("comments") . " (`imageid`, `name`, `email`, `website`, `comment`, `inmoderation`, `date`, `type`) VALUES " .
             " ('" . $this->id .
             "', '" . escape($name) . 
             "', '" . escape($email) . 
             "', '" . escape($website) . 
             "', '" . escape($comment) . 
             "', '" . $moderate . 
-            "', NOW())");
+            "', NOW()" .
+            ", 'images')");
         
       if (!$moderate) {
         //  add to comments array and notify the admin user
@@ -375,7 +376,7 @@ class Image extends PersistentObject {
   function getCommentCount() { 
     if (is_null($this->commentcount)) {
       if ($this->comments == null) {
-        $count = query_single_row("SELECT COUNT(*) FROM " . prefix("comments") . " WHERE inmoderation=0 AND imageid = " . $this->id);
+        $count = query_single_row("SELECT COUNT(*) FROM " . prefix("comments") . " WHERE `type`='images' AND `inmoderation`=0 AND `imageid`=" . $this->id);
         $this->commentcount = array_shift($count);
       } else {
         $this->commentcount = count($this->comments);
