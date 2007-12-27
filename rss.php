@@ -35,21 +35,18 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 db_connect();
 
 if ($albumnr != "") { 
-  $result = query_full_array("SELECT images.albumid, images.date AS date, images.filename AS filename, images.title AS title, " .
+	$albumWhere = "images.albumid = $albumnr AND";
+} else {
+	$albumWhere = "";
+}
+
+$result = query_full_array("SELECT images.albumid, images.date AS date, images.filename AS filename, images.title AS title, " .
                              "albums.folder AS folder, albums.title AS albumtitle, images.show, albums.show, albums.password FROM " . 
                               prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
-                              " WHERE images.albumid = $albumnr AND images.albumid = albums.id AND images.show=1 AND albums.show=1 AND albums.password=''".
+                              " WHERE ".$albumWhere." images.albumid = albums.id AND images.show=1 AND albums.show=1 AND albums.password=''".
                               " AND albums.folder != ''".
                               " ORDER BY images.id DESC LIMIT ".$items);
-} else { 
-$result = query_full_array("SELECT images.albumid, images.date AS date, images.filename AS filename, images.title AS title, " .
-                             "albums.folder AS folder, albums.title AS albumtitle, albums.id, images.show, albums.show, albums.password FROM " . 
-                              prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
-                              " WHERE images.albumid = albums.id AND images.show=1 AND albums.show=1 AND albums.password=''".
-                              " AND albums.folder != ''".
-                              " ORDER BY images.id DESC LIMIT ".$items);
-}
- 	
+
 foreach ($result as $images) {
 
 ?>
