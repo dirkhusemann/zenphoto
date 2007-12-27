@@ -17,22 +17,38 @@ require_once('controller.php');
 /*** Generic Helper Functions *************/
 /******************************************/
 
+/**
+ * general link printing function
+ * @param string $url The link URL
+ * @param string $text The text to go with the link
+ * @param string $title Text for the title tag
+ * @param string $class optional class
+ * @param string $id optional id
+ */
 function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
-  echo "<a href=\"" . htmlspecialchars($url) . "\"" . 
+  echo "<a href=\"" . htmlspecialchars($url) . "\"" .
   (($title) ? " title=\"" . htmlspecialchars($title, ENT_QUOTES) . "\"" : "") .
-  (($class) ? " class=\"$class\"" : "") . 
+  (($class) ? " class=\"$class\"" : "") .
   (($id) ? " id=\"$id\"" : "") . ">" .
   $text . "</a>";
 }
-
+/**
+ * returns the zenphoto version string
+ * @return string the version string
+ */
 function printVersion() {
   echo getOption('version');
 }
 
-/** 
- * Prints a link to administration if the current user is logged-in 
+/**
+ * prints the admin edit link for albums if the current user is logged-in
+ * @$text string $text text for the link
+ * @$before string $before text do display before the link
+ * @$after string $after  text do display after the link
+ * @return bool true if the user is logged in
+ * @since 1.1
  */
-function printAdminLink($text, $before='', $after='', $title=NULL, $class=NULL, $id=NULL) {
+ function printAdminLink($text, $before='', $after='', $title=NULL, $class=NULL, $id=NULL) {
   if (zp_loggedin()) {
     echo $before;
     printLink(WEBPATH.'/' . ZENFOLDER . '/admin.php', $text, $title, $class, $id);
@@ -43,18 +59,17 @@ function printAdminLink($text, $before='', $after='', $title=NULL, $class=NULL, 
 }
 
 /**
- * prints the admin edit link for subalbums
- * @param string $text text for the link
- * @param string $before text do display before the link
- * @param string $after  text do display after the link
- * @return string with all the html for the admin toolbox
+ * prints the admin edit link for subalbums if the current user is logged-in
+ * @$text string $text text for the link
+ * @$before string $before text do display before the link
+ * @$after string $after  text do display after the link
  * @since 1.1
  */
 function printSubalbumAdmin($text, $before='', $after='') {
   global $_zp_current_album, $_zp_themeroot;
   if (zp_loggedin()) {
     echo $before;
-    printLink(WEBPATH.'/' . ZENFOLDER . '/admin.php?page=edit&album=' . urlencode($_zp_current_album->name), $text, NULL, NULL, NULL); 
+    printLink(WEBPATH.'/' . ZENFOLDER . '/admin.php?page=edit&album=' . urlencode($_zp_current_album->name), $text, NULL, NULL, NULL);
     echo $after;
    }
 }
@@ -63,7 +78,6 @@ function printSubalbumAdmin($text, $before='', $after='') {
  * prints the clickable drop down toolbox on any theme page with generic admin helpers
  * @param string $context index, album, image or search
  * @param string $id the html/css theming id
- * @return string with all the html for the admin toolbox
  * @since 1.1
  */
 function printAdminToolbox($context=null, $id="admin") {
@@ -75,13 +89,13 @@ function printAdminToolbox($context=null, $id="admin") {
 	$redirect = '';
     echo "\n<script type=\"text/javascript\" src=\"".$zf."/js/admin.js\"></script>\n";
     if (is_null($context)) { $context = get_context(); }
-    echo '<div id="' .$id. '">'."\n".'<a href="javascript: toggle('. "'" .$dataid."'".');"><h3>Admin Toolbox</h3></a>'."\n"."\n</div>"; 
-    echo '<div id="' .$dataid. '" style="display: none;">'."\n"; 
-    printAdminLink('Admin', '', "<br />\n"); 
+    echo '<div id="' .$id. '">'."\n".'<a href="javascript: toggle('. "'" .$dataid."'".');"><h3>Admin Toolbox</h3></a>'."\n"."\n</div>";
+    echo '<div id="' .$dataid. '" style="display: none;">'."\n";
+    printAdminLink('Admin', '', "<br />\n");
     if ($context === ZP_INDEX) {
       printSortableGalleryLink('Sort gallery', 'Manual sorting');
       echo "<br />\n";
-      printLink($zf . '/admin.php?page=upload' . urlencode($_zp_current_album->name), "New album", NULL, NULL, NULL); 
+      printLink($zf . '/admin.php?page=upload' . urlencode($_zp_current_album->name), "New album", NULL, NULL, NULL);
       echo "<br />\n";
 	  if (isset($_GET['p'])) {
 	    $redirect = "&p=" . $_GET['p'];
@@ -92,9 +106,9 @@ function printAdminToolbox($context=null, $id="admin") {
       printSortableAlbumLink('Sort album', 'Manual sorting');
       echo "<br />\n";
 	  $albumname = urlencode($_zp_current_album->name);
-      printLink($zf . '/admin.php?page=upload&album=' . $albumname, "Upload Here", NULL, NULL, NULL); 
+      printLink($zf . '/admin.php?page=upload&album=' . $albumname, "Upload Here", NULL, NULL, NULL);
       echo "<br />\n";
-      printLink($zf . '/admin.php?page=upload&new&album=' . $albumname, "New Album Here", NULL, NULL, NULL); 
+      printLink($zf . '/admin.php?page=upload&new&album=' . $albumname, "New Album Here", NULL, NULL, NULL);
       echo "<br />\n";
 	  echo "<a href=\"javascript: confirmDeleteAlbum('".$zf."/admin.php?page=edit&action=deletealbum&album=" .
 	        queryEncode($_zp_current_album->name) . "');\" title=\"Delete the album\">Delete album</a><br />\n";
@@ -103,20 +117,20 @@ function printAdminToolbox($context=null, $id="admin") {
 	  $albumname = urlencode($_zp_current_album->name);
 	  $imagename = queryEncode($_zp_current_image->filename);
       echo "<a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?page=edit&action=deleteimage&album=" .
-	       $albumname . "&image=". $imagename . "');\" title=\"Delete the image\">Delete image</a>";  
+	       $albumname . "&image=". $imagename . "');\" title=\"Delete the image\">Delete image</a>";
 	  echo "<br />\n";
 	  $redirect = "&album=$albumname&image=$imagename";
 	} else if (in_context(ZP_SEARCH)) {
 	  $redirect = "&p=search" . $_zp_current_search->getSearchParams() . "&page=$page";
 	}
-	
+
     echo "<a href=\"".$zf."/admin.php?logout$redirect\">Logout</a>\n";
-    echo "</div>\n"; 
+    echo "</div>\n";
   }
 }
 
-/**  
- * Print any Javascript required by zenphoto. Every theme should include this somewhere in its <head>. 
+/**
+ * Print any Javascript required by zenphoto. Every theme should include this somewhere in its <head>.
  */
 function zenJavascript() {
   global $_zp_phoogle;
@@ -136,20 +150,20 @@ function zenJavascript() {
 /*** Gallery Index (album list) Context ***/
 /******************************************/
 
-function getGalleryTitle() { 
+function getGalleryTitle() {
   return getOption('gallery_title');
 }
-function printGalleryTitle() { 
-  echo getGalleryTitle(); 
+function printGalleryTitle() {
+  echo getGalleryTitle();
 }
 
-function getMainSiteName() { 
+function getMainSiteName() {
   return getOption('website_title');
 }
-function getMainSiteURL() { 
+function getMainSiteURL() {
   return getOption('website_url');
 }
-function printMainSiteLink($title=NULL, $class=NULL, $id=NULL) { 
+function printMainSiteLink($title=NULL, $class=NULL, $id=NULL) {
   printLink(getMainSiteURL(), getMainSiteName(), $title, $class, $id);
 }
 
@@ -163,7 +177,7 @@ function getGalleryIndexURL() {
   }
 }
 
-function getNumAlbums() { 
+function getNumAlbums() {
   global $_zp_gallery, $_zp_current_search;
   if (in_context(ZP_SEARCH)) {
     return $_zp_current_search->getNumAlbums();
@@ -214,7 +228,7 @@ function next_album($all=false, $sorttype=null) {
   }
 }
 
-function getCurrentPage() { 
+function getCurrentPage() {
   global $_zp_page;
   return $_zp_page;
 }
@@ -224,15 +238,15 @@ function getNumSubalbums() {
   return count($_zp_current_album->getSubalbums());
 }
 
-function getTotalPages($oneImagePage=false) { 
+function getTotalPages($oneImagePage=false) {
   global $_zp_gallery;
   if (in_context(ZP_ALBUM | ZP_SEARCH)) {
     if (in_context(ZP_SEARCH)) {
       $pageCount = ceil(getNumAlbums() / getOption('albums_per_page'));
     } else {
       $pageCount = ceil(getNumSubalbums() / getOption('albums_per_page'));
-    }	
-    $imageCount = getNumImages();  
+    }
+    $imageCount = getNumImages();
     if ($oneImagePage) {
       $imageCount = min(1, $imageCount);
     }
@@ -256,13 +270,13 @@ function getPageURL_($page, $total) {
   } else {
     if ($page <= $total && $page > 0) {
       if (in_context(ZP_ALBUM)) {
-        return rewrite_path( pathurlencode($_zp_current_album->name) . (($page > 1) ? "/page/" . $page . "/" : ""), 
+        return rewrite_path( pathurlencode($_zp_current_album->name) . (($page > 1) ? "/page/" . $page . "/" : ""),
           "/index.php?album=" . pathurlencode($_zp_current_album->name) . (($page > 1) ? "&page=" . $page : "") );
       } else if (in_context(ZP_INDEX)) {
         return rewrite_path((($page > 1) ? "/page/" . $page . "/" : "/"), "/index.php" . (($page > 1) ? "?page=" . $page : ""));
-      }       
+      }
     }
-    return null; 
+    return null;
   }
 }
 
@@ -274,10 +288,10 @@ function getPageURL($page) {
 function hasNextPage() { return (getCurrentPage() < getTotalPages()); }
 
 function getNextPageURL() {
-  return getPageURL(getCurrentPage() + 1); 
+  return getPageURL(getCurrentPage() + 1);
 }
 
-function printNextPageLink($text, $title=NULL, $class=NULL, $id=NULL) { 
+function printNextPageLink($text, $title=NULL, $class=NULL, $id=NULL) {
   if (hasNextPage()) {
     printLink(getNextPageURL(), $text, $title, $class, $id);
   } else {
@@ -315,14 +329,14 @@ function printPageList($class="pagelist", $id=NULL) {
 
 function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextprev=true, $class="pagelist", $id=NULL) {
   $total = getTotalPages($oneImagePage);
-  if ($total < 2) { 
+  if ($total < 2) {
     $class .= ' disabled_nav';
   }
   echo "<div" . (($id) ? " id=\"$id\"" : "") . " class=\"$class\">";
   $current = getCurrentPage();
   echo "\n<ul class=\"$class\">";
   if ($nextprev) {
-    echo "\n  <li class=\"prev\">"; 
+    echo "\n  <li class=\"prev\">";
     printPrevPageLink($prevtext, "Previous Page");
     echo "</li>";
   }
@@ -333,9 +347,9 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
   }
   if ($i <= $total) {echo "\n <li><a>" . ". . ." . "</a></li>"; }
   if ($nextprev) {
-    echo "\n  <li class=\"next\">"; 
+    echo "\n  <li class=\"next\">";
     printNextPageLink($nexttext, "Next Page");
-    echo "</li>"; 
+    echo "</li>";
   }
   echo "\n</ul>";
   echo "\n</div>\n";
@@ -344,22 +358,22 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 /*** Album Context ************************/
 /******************************************/
 
-function getAlbumTitle() { 
+function getAlbumTitle() {
   if(!in_context(ZP_ALBUM)) return false;
   global $_zp_current_album;
   return $_zp_current_album->getTitle();
 }
-function printAlbumTitle($editable=false) { 
+function printAlbumTitle($editable=false) {
   global $_zp_current_album;
   if ($editable && zp_loggedin()) {
     echo "<div id=\"albumTitleEditable\" style=\"display: inline;\">" . htmlspecialchars(getAlbumTitle()) . "</div>\n";
     echo "<script type=\"text/javascript\">initEditableTitle('albumTitleEditable');</script>";
   } else {
-    echo htmlspecialchars(getAlbumTitle());  
+    echo htmlspecialchars(getAlbumTitle());
   }
 }
 
-// gets the n for n of m albums	
+// gets the n for n of m albums
 function albumNumber() {
   global $_zp_current_album, $_zp_current_image, $_zp_current_search, $_zp_gallery;
   $name = $_zp_current_album->getFolder();
@@ -380,8 +394,8 @@ function albumNumber() {
     }
   }
   return false;
-} 
-  
+}
+
 
 function getParentAlbums() {
   if(!in_context(ZP_ALBUM)) return false;
@@ -411,13 +425,13 @@ function printParentBreadcrumb($before = "", $between=" | ", $after = " | ") {
 function getAlbumDate($format=null) {
   global $_zp_current_album;
   $d = $_zp_current_album->getDateTime();
-  if (empty($d) || ($d == '0000-00-00 00:00:00')) { 
-    return false; 
+  if (empty($d) || ($d == '0000-00-00 00:00:00')) {
+    return false;
   }
   if (is_null($format)) {
     return $d;
   }
-  return date($format, strtotime($d));  
+  return date($format, strtotime($d));
 }
 
 function printAlbumDate($before="Date: ", $nonemessage="", $format="F jS, Y") {
@@ -438,18 +452,18 @@ function printAlbumPlace() {
   echo getAlbumPlace();
 }
 
-function getAlbumDesc() { 
+function getAlbumDesc() {
   if(!in_context(ZP_ALBUM)) return false;
   global $_zp_current_album;
   return str_replace("\n", "<br />", $_zp_current_album->getDesc());
 }
-function printAlbumDesc($editable=false) { 
+function printAlbumDesc($editable=false) {
   global $_zp_current_album;
   if ($editable && zp_loggedin()) {
     echo "<div id=\"albumDescEditable\" style=\"display: block;\">" . getAlbumDesc() . "</div>\n";
     echo "<script type=\"text/javascript\">initEditableDesc('albumDescEditable');</script>";
   } else {
-    echo getAlbumDesc();  
+    echo getAlbumDesc();
   }
 }
 
@@ -465,7 +479,7 @@ function getAlbumLinkURL() {
   }
 }
 
-function printAlbumLink($text, $title, $class=NULL, $id=NULL) { 
+function printAlbumLink($text, $title, $class=NULL, $id=NULL) {
   printLink(getAlbumLinkURL(), $text, $title, $class, $id);
 }
 
@@ -477,7 +491,7 @@ function printSortableAlbumLink($text, $title, $class=NULL, $id=NULL) {
   global $_zp_sortable_list, $_zp_current_album;
   if (zp_loggedin()) {
     if (!isset($_GET['sortable'])) {
-      printLink(WEBPATH . "/" . ZENFOLDER . "/albumsort.php?page=edit&album=" . urlencode($_zp_current_album->getFolder()), 
+      printLink(WEBPATH . "/" . ZENFOLDER . "/albumsort.php?page=edit&album=" . urlencode($_zp_current_album->getFolder()),
         $text, $title, $class, $id);
     } else {
       // TODO: this doesn't really work yet
@@ -502,15 +516,15 @@ function printSortableGalleryLink($text, $title, $class=NULL, $id=NULL) {
   }
 }
 
-function getAlbumThumb() { 
+function getAlbumThumb() {
   global $_zp_current_album;
   return $_zp_current_album->getAlbumThumb();
 }
 
-function printAlbumThumbImage($alt, $class=NULL, $id=NULL) { 
+function printAlbumThumbImage($alt, $class=NULL, $id=NULL) {
   global $_zp_current_album;
-  if (!$_zp_current_album->getShow()) { 
-    $class .= " not_visible"; 
+  if (!$_zp_current_album->getShow()) {
+    $class .= " not_visible";
   } else {
   $pwd = $_zp_current_album->getPassword();
     if (zp_loggedin() && !empty($pwd)) {
@@ -519,7 +533,7 @@ function printAlbumThumbImage($alt, $class=NULL, $id=NULL) {
   }
   $class = trim($class);
   echo "<img src=\"" . htmlspecialchars(getAlbumThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
-    (($class) ? " class=\"$class\"" : "") . 
+    (($class) ? " class=\"$class\"" : "") .
     (($id) ? " id=\"$id\"" : "") . " />";
 }
 
@@ -531,8 +545,8 @@ function getCustomAlbumThumb($size, $width=NULL, $height=NULL, $cropw=NULL, $cro
 
 function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=null, $class=NULL, $id=NULL) {
   global $_zp_current_album;
-  if (!$_zp_current_album->getShow()) { 
-    $class .= " not_visible"; 
+  if (!$_zp_current_album->getShow()) {
+    $class .= " not_visible";
   } else {
   $pwd = $_zp_current_album->getPassword();
     if (zp_loggedin() && !empty($pwd)) {
@@ -542,15 +556,15 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
   $class = trim($class);
   /* set the HTML image width and height parameters in case this image was "zen-logo.gif" substituted for no thumbnail then the thumb layout is preserved */
   if ($sizeW = max(is_null($width) ? 0: $sizeW, is_null($cropw) ? 0 : $cropw)) {
-    $sizing = ' width="' . $sizeW . '"'; 
-  } else { 
-    $sizing = null; 
+    $sizing = ' width="' . $sizeW . '"';
+  } else {
+    $sizing = null;
   }
   if ($sizeH = max(is_null($height) ? 0 : $height, is_null($croph) ? 0 : $croph)) {
     $sizing = $sizing . ' height="' . $sizeH . '"';
   }
   echo "<img src=\"" . htmlspecialchars(getCustomAlbumThumb($size, $width, $height, $cropw, $croph, $cropx, $cropy)). "\"" . $sizing . " alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
-    (($class) ? " class=\"$class\"" : "") . 
+    (($class) ? " class=\"$class\"" : "") .
     (($id) ? " id=\"$id\"" : "") . " />";
 }
 
@@ -597,7 +611,7 @@ function isAlbumPage() {
   return ($_zp_page <= $pageCount);
 }
 
-function getNumImages() { 
+function getNumImages() {
   global $_zp_current_album, $_zp_current_search;
   if (in_context(ZP_SEARCH)) {
     return $_zp_current_search->getNumImages();
@@ -608,19 +622,19 @@ function getNumImages() {
 /**
  * returns the next image on a page.
  * sets $_zp_current_image to the next image in the album.
- *@param bool $param1 set to true disable pagination
- *@paaram int $param2 the number of images which can go on the page that transitions between albums and images
- *@param string $param3 overrides the default sort type
- *@param bool overrides the password chedk
- *@return true if there is an image to be shown
+ *@param bool $all set to true disable pagination
+ *@param int $firstPageCount the number of images which can go on the page that transitions between albums and images
+ *@param string $sorttype overrides the default sort type
+ *@param bool $overridePassword the password chedk
+ *@return bool true if there is an image to be shown
  */
-function next_image($all=false, $firstPageCount=0, $sorttype=null, $overridePassword=false) { 
-  global $_zp_images, $_zp_current_image, $_zp_current_album, $_zp_page, $_zp_current_image_restore, 
+function next_image($all=false, $firstPageCount=0, $sorttype=null, $overridePassword=false) {
+  global $_zp_images, $_zp_current_image, $_zp_current_album, $_zp_page, $_zp_current_image_restore,
          $_zp_conf_vars, $_zp_current_search, $_zp_gallery;
-		 
+
   if (!$overridePassword) { if (checkforPassword()) { return false; } }
   $imagePageOffset = getTotalPages(true) - 1; /* gives us the count of pages for album thumbs */
-  if ($all) { 
+  if ($all) {
     $imagePage = 1;
   } else {
     $_zp_conf_vars['images_first_page'] = $firstPageCount;  /* save this so pagination can see it */
@@ -629,13 +643,13 @@ function next_image($all=false, $firstPageCount=0, $sorttype=null, $overridePass
   if ($firstPageCount > 0) {
     $imagePage = $imagePage + 1;  /* can share with last album page */
   }
-  
+
   if ($imagePage <= 0) {
     return false;  /* we are on an album page */
     }
-	
+
   if (is_null($_zp_images)) {
-    
+
 //echo "\n<br>firstPageCount=$firstPageCount";
 //echo "\n<br>_zp_page=$_zp_page";
 //echo "\n<br>imagePage=$imagePage";
@@ -648,7 +662,7 @@ function next_image($all=false, $firstPageCount=0, $sorttype=null, $overridePass
     if (empty($_zp_images)) { return false; }
     $_zp_current_image_restore = $_zp_current_image;
 	if (in_context(ZP_SEARCH)) {
-	  $img = array_shift($_zp_images); 
+	  $img = array_shift($_zp_images);
       $_zp_current_image = new Image(new Album($_zp_gallery, $img['folder']), $img['filename']);
 	} else {
       $_zp_current_image = new Image($_zp_current_album, array_shift($_zp_images));
@@ -663,7 +677,7 @@ function next_image($all=false, $firstPageCount=0, $sorttype=null, $overridePass
     return false;
   } else {
 	if (in_context(ZP_SEARCH)) {
-	  $img = array_shift($_zp_images); 
+	  $img = array_shift($_zp_images);
       $_zp_current_image = new Image(new Album($_zp_gallery, $img['folder']), $img['filename']);
 	} else {
       $_zp_current_image = new Image($_zp_current_album, array_shift($_zp_images));
@@ -675,23 +689,23 @@ function next_image($all=false, $firstPageCount=0, $sorttype=null, $overridePass
 /*** Image Context ************************/
 /******************************************/
 
-function getImageTitle() { 
+function getImageTitle() {
   if(!in_context(ZP_IMAGE)) return false;
   global $_zp_current_image;
   return $_zp_current_image->getTitle();
 }
 
-function printImageTitle($editable=false) { 
+function printImageTitle($editable=false) {
   global $_zp_current_image;
   if ($editable && zp_loggedin()) {
     echo "<div id=\"imageTitle\" style=\"display: inline;\">" . htmlspecialchars(getImageTitle()) . "</div>\n";
     echo "<script type=\"text/javascript\">initEditableTitle('imageTitle');</script>";
   } else {
-    echo "<div id=\"imageTitle\" style=\"display: inline;\">" . htmlspecialchars(getImageTitle()) . "</div>\n";  
+    echo "<div id=\"imageTitle\" style=\"display: inline;\">" . htmlspecialchars(getImageTitle()) . "</div>\n";
   }
 }
 
-// gets the n for n of m images	
+// gets the n for n of m images
   function imageNumber() {
     global $_zp_current_image, $_zp_current_search;
     $name = $_zp_current_image->getFileName();
@@ -707,8 +721,8 @@ function printImageTitle($editable=false) {
 	  return $_zp_current_image->getIndex()+1;
     }
     return false;
-  } 
-  
+  }
+
 
 // returns the image date in yyyy-mm-dd hh:mm:ss format
 // pass it a date format string for custom formatting
@@ -716,13 +730,13 @@ function printImageTitle($editable=false) {
     if(!in_context(ZP_IMAGE)) return false;
     global $_zp_current_image;
     $d = $_zp_current_image->getDateTime();
-	if (empty($d) || ($d == '0000-00-00 00:00:00') ) { 
-	  return false; 
+	if (empty($d) || ($d == '0000-00-00 00:00:00') ) {
+	  return false;
 	}
     if (is_null($format)) {
       return $d;
     }
-  return date($format, strtotime($d));  
+  return date($format, strtotime($d));
   }
 
 function printImageDate($before="Date: ", $nonemessage="", $format="F jS, Y") {
@@ -773,14 +787,14 @@ if(!in_context(ZP_IMAGE)) return false;
   return $_zp_current_image->getVideoThumb();
 }
 
-function getImageDesc() { 
+function getImageDesc() {
   if(!in_context(ZP_IMAGE)) return false;
   global $_zp_current_image;
   $desc = str_replace("\r\n", "\n", $_zp_current_image->getDesc());
   return str_replace("\n", "<br/>", $desc);
 }
 
-function printImageDesc($editable=false) {  
+function printImageDesc($editable=false) {
   global $_zp_current_image;
   if ($editable && zp_loggedin()) {
     echo "<div id=\"imageDesc\" style=\"display: block;\">" . getImageDesc() . "</div>\n";
@@ -815,14 +829,14 @@ function getImageData($field) {
  		break;
   }
 }
- 
+
 function printImageData($field, $label) {
   global $_zp_current_image;
-  if(getImageData($field)) { // only print it if there's something there 
+  if(getImageData($field)) { // only print it if there's something there
   	echo "<p class=\"metadata\"><strong>" . $label . "</strong> " . getImageData($field) . "</p>\n";
   }
 }
- 
+
 /**
  * Get the unique ID of this image.
  */
@@ -887,11 +901,11 @@ function printPreloadScript() {
       $nextimg = $_zp_current_image->getNextImage();
       echo "  nextimg = new Image();\n  nextimg.src = \"" . $nextimg->getSizedImage($size) . "\";\n";
     }
-    if (hasPrevImage()) { 
+    if (hasPrevImage()) {
       $previmg = $_zp_current_image->getPrevImage();
       echo "  previmg = new Image();\n  previmg.src = \"" . $previmg->getSizedImage($size) . "\";\n";
     }
-    
+
     echo "</script>\n\n";
   }
 }
@@ -910,7 +924,7 @@ function getNextImageThumb() {
   return $img->getThumb();
 }
 
-function getImageLinkURL() { 
+function getImageLinkURL() {
   if(!in_context(ZP_IMAGE)) return false;
   global $_zp_current_image;
   return $_zp_current_image->getImageLink();
@@ -923,17 +937,17 @@ function printImageLink($text, $title, $class=NULL, $id=NULL) {
 /**
  * Print the entire <div> for a thumbnail. If we are in sorting mode, then only
  * the image is inserted, if not, then the hyperlink to the image is also added.
- * 
+ *
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
 function printImageDiv() {
-  
+
   if (!isset($_GET['sortable'])) {
     echo '<a href="'.htmlspecialchars(getImageLinkURL()).'" title="'.htmlspecialchars(getImageTitle(), ENT_QUOTES).'">';
-  }       
+  }
   printImageThumb(getImageTitle());
-          
+
   if (!isset($_GET['sortable'])) {
     echo '</a>';
   }
@@ -980,7 +994,7 @@ function printImageMap($zoomlevel='6', $type=NULL, $width=NULL, $height=NULL){
     $exif = getImageEXIFData();
     if(!empty($exif['EXIFGPSLatitude']) &&
        !empty($exif['EXIFGPSLongitude'])){
-           
+
       $_zp_phoogle->setZoomLevel($zoomlevel);
 	  if (!is_null($width)) { $_zp_phoogle->setWidth($width); }
 	  if (!is_null($height)) { $_zp_phoogle->setHeight($height); }
@@ -998,21 +1012,21 @@ function printImageMap($zoomlevel='6', $type=NULL, $width=NULL, $height=NULL){
 function hasMapData() {
   if(getOption('gmaps_apikey') != ''){
     $exif = getImageEXIFData();
-    if(!empty($exif['EXIFGPSLatitude']) && !empty($exif['EXIFGPSLongitude'])){ 
+    if(!empty($exif['EXIFGPSLatitude']) && !empty($exif['EXIFGPSLongitude'])){
 	  return true;
-    } 
+    }
   }
   return false;
 }
 
 /**
  * Causes a Google map to be printed based on the gps data in all the images in the album
- *@param  string $zoomlevel the zoom in for the map
+ *@param string $zoomlevel the zoom in for the map
  *@param string $type of map to produce: allowed values are G_NORMAL_MAP | G_SATELLITE_MAP | G_HYBRID_MAP
  *@param int $width is the image width of the map. NULL will use the default
-  *@param int $height is the image height of the map. NULL will use the default
-  *@return nothing
-  *@since 1.1.3
+ *@param int $height is the image height of the map. NULL will use the default
+ *@return nothing
+ *@since 1.1.3
 */
 function printAlbumMap($zoomlevel='8', $type=NULL, $width=NULL, $height=NULL){
   global $_zp_phoogle;
@@ -1035,7 +1049,7 @@ function printAlbumMap($zoomlevel='8', $type=NULL, $width=NULL, $height=NULL){
           getImageThumb() . '" alt="' . getImageDesc() . '" ' .
           'style=" margin-left: 30%; margin-right: 10%; border: 0px; "/></a>' .
           '<p>' . getImageDesc() . '</p>';
-        $_zp_phoogle->addGeoPoint($lat, $long, $infoHTML);	
+        $_zp_phoogle->addGeoPoint($lat, $long, $infoHTML);
       }
     }
     if($foundLocation){ $_zp_phoogle->showMap(); }
@@ -1050,10 +1064,10 @@ function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL
   $w = $_zp_current_image->getWidth();
   $ls = getOption('image_use_longest_side');
   $us = getOption('image_allow_upscale');
-  
+
   $args = getImageParameters(array($size, $width, $height, $cw, $ch, $cx, $cy, null));
   @list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
-  
+
   if (!empty($size)) {
     $dim = $size;
     $width = $height = false;
@@ -1064,10 +1078,10 @@ function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL
     $dim = $height;
     $size = $width = false;
   }
-  
+
   $hprop = round(($h / $w) * $dim);
   $wprop = round(($w / $h) * $dim);
-  
+
   if (($size && $ls && $h > $w)
     || $height) {
     // Scale the height
@@ -1125,13 +1139,13 @@ function isLandscape() {
   return false;
 }
 
-function getDefaultSizedImage() { 
+function getDefaultSizedImage() {
   global $_zp_current_image;
   return $_zp_current_image->getSizedImage(getOption('image_size'));
 }
 
 //ZenVideo: Show video player with video loaded or display the image.
-function printDefaultSizedImage($alt, $class=NULL, $id=NULL) { 
+function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
   	  //Print videos
 	  if(getImageVideo()) {
 	  $ext = strtolower(strrchr(getFullImageURL(), "."));
@@ -1148,9 +1162,9 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 	    </script><a>';
 	  }
 	  elseif ($ext == ".3gp") {
-	    echo '</a> 
-		  <object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="352" height="304" codebase="http://www.apple.com/qtactivex/qtplugin.cab"> 
-		    <param name="src" value="' . getFullImageURL() . '"/> 
+	    echo '</a>
+		  <object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="352" height="304" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
+		    <param name="src" value="' . getFullImageURL() . '"/>
 		    <param name="autoplay" value="false" />
 		    <param name="type" value="video/quicktime" />
 		    <param name="controller" value="true" />
@@ -1159,9 +1173,9 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 	        </object><a>';
 		 }
 		 elseif ($ext == ".mov") {
-		   echo '</a> 
-		     <object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="640" height="496" codebase="http://www.apple.com/qtactivex/qtplugin.cab"> 
-			   <param name="src" value="' . getFullImageURL() . '"/> 
+		   echo '</a>
+		     <object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="640" height="496" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
+			   <param name="src" value="' . getFullImageURL() . '"/>
 			   <param name="autoplay" value="false" />
 			   <param name="type" value="video/quicktime" />
 			   <param name="controller" value="true" />
@@ -1174,20 +1188,20 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 	  else {
 		echo "<img src=\"" . htmlspecialchars(getDefaultSizedImage()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     	" width=\"" . getDefaultWidth() . "\" height=\"" . getDefaultHeight() . "\"" .
-    	(($class) ? " class=\"$class\"" : "") . 
+    	(($class) ? " class=\"$class\"" : "") .
     	(($id) ? " id=\"$id\"" : "") . " />";
 	  }
 }
 
-function getImageThumb() { 
+function getImageThumb() {
   global $_zp_current_image;
   return $_zp_current_image->getThumb();
 }
 
-function printImageThumb($alt, $class=NULL, $id=NULL) { 
+function printImageThumb($alt, $class=NULL, $id=NULL) {
   global $_zp_current_album, $_zp_current_image;
-  if (!$_zp_current_image->getShow()) { 
-    $class .= " not_visible"; 
+  if (!$_zp_current_image->getShow()) {
+    $class .= " not_visible";
   } else {
     $pwd = $_zp_current_album->getPassword();
     if (zp_loggedin() && !empty($pwd)) {
@@ -1197,7 +1211,7 @@ function printImageThumb($alt, $class=NULL, $id=NULL) {
   $class = trim($class);
   echo "<img src=\"" . htmlspecialchars(getImageThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     ((getOption('thumb_crop')) ? " width=\"".getOption('thumb_crop_width')."\" height=\"".getOption('thumb_crop_height')."\"" : "") .
-    (($class) ? " class=\"$class\"" : "") . 
+    (($class) ? " class=\"$class\"" : "") .
     (($id) ? " id=\"$id\"" : "") . " />";
 }
 
@@ -1220,7 +1234,7 @@ function getProtectedImageURL() {
   return $path;
 }
 
-function getSizedImageURL($size) { 
+function getSizedImageURL($size) {
   getCustomImageURL($size);
 }
 
@@ -1230,10 +1244,10 @@ function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph
 }
 
 //ZenVideo: Print normal video or custom sized images...
-function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $class=NULL, $id=NULL) { 
+function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $class=NULL, $id=NULL) {
   global $_zp_current_album, $_zp_current_image;
-  if (!$_zp_current_album->getShow()) { 
-    $class .= " not_visible"; 
+  if (!$_zp_current_album->getShow()) {
+    $class .= " not_visible";
   } else {
     $pwd = $_zp_current_album->getPassword();
     if (zp_loggedin() && !empty($pwd)) {
@@ -1257,9 +1271,9 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 	    </script><a>';
 	  }
 	  elseif ($ext == ".3gp") {
-	    echo '</a> 
-		  <object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="352" height="304" codebase="http://www.apple.com/qtactivex/qtplugin.cab"> 
-		    <param name="src" value="' . getFullImageURL() . '"/> 
+	    echo '</a>
+		  <object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="352" height="304" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
+		    <param name="src" value="' . getFullImageURL() . '"/>
 		    <param name="autoplay" value="false" />
 		    <param name="type" value="video/quicktime" />
 		    <param name="controller" value="true" />
@@ -1268,9 +1282,9 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 	        </object><a>';
 		 }
 		 elseif ($ext == ".mov") {
-		   echo '</a> 
-		     <object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="640" height="496" codebase="http://www.apple.com/qtactivex/qtplugin.cab"> 
-			   <param name="src" value="' . getFullImageURL() . '"/> 
+		   echo '</a>
+		     <object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="640" height="496" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
+			   <param name="src" value="' . getFullImageURL() . '"/>
 			   <param name="autoplay" value="false" />
 			   <param name="type" value="video/quicktime" />
 			   <param name="controller" value="true" />
@@ -1284,7 +1298,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 		$sizearr = getSizeCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy);
   		echo "<img src=\"" . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy)) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     	" width=\"" . $sizearr[0] . "\" height=\"" . $sizearr[1] . "\"" .
-    	(($class) ? " class=\"$class\"" : "") . 
+    	(($class) ? " class=\"$class\"" : "") .
     	(($id) ? " id=\"$id\"" : "") . " />";
 	  }
 }
@@ -1297,11 +1311,11 @@ function printCustomSizedImageMaxHeight($maxheight) {
   }
 }
 
-function printSizedImageLink($size, $text, $title, $class=NULL, $id=NULL) { 
+function printSizedImageLink($size, $text, $title, $class=NULL, $id=NULL) {
   printLink(getSizedImageURL($size), $text, $title, $class, $id);
 }
 
-function getCommentCount() { 
+function getCommentCount() {
   global $_zp_current_image;
   return $_zp_current_image->getCommentCount();
 }
@@ -1355,9 +1369,9 @@ function getCommentDate($format = "F jS, Y") { global $_zp_current_comment; retu
 
 function getCommentTime($format = "g:i a") { global $_zp_current_comment; return myts_date($format, $_zp_current_comment['date']); }
 
-function getCommentBody() { 
-  global $_zp_current_comment; 
-  return str_replace("\n", "<br />", stripslashes($_zp_current_comment['comment'])); 
+function getCommentBody() {
+  global $_zp_current_comment;
+  return str_replace("\n", "<br />", stripslashes($_zp_current_comment['comment']));
 }
 
 function printEditCommentLink($text, $before='', $after='', $title=NULL, $class=NULL, $id=NULL) {
@@ -1371,7 +1385,7 @@ function printEditCommentLink($text, $before='', $after='', $title=NULL, $class=
 
 function printCommentErrors($class = 'error') {
   global $error;
-  if (isset($error)) { 
+  if (isset($error)) {
     echo "<div class=$class>";
     if ($error == 1) {
       echo "There was an error submitting your comment. ";
@@ -1384,16 +1398,16 @@ function printCommentErrors($class = 'error') {
       echo "Your comment has been marked for moderation.";
     }
     echo "</div>";
-  } 
+  }
   return $error;
 }
 
-function printAlbumZip(){ 
-	global $_zp_current_album; 
-	echo'<a href="' . rewrite_path("/" . pathurlencode($_zp_current_album->name), 
-		"/index.php?album=" . urlencode($_zp_current_album->name)) .  
-		'&zipfile" title="Download Zip of the Album">Download a zip file ' . 
-		'of this album</a>'; 
+function printAlbumZip(){
+	global $_zp_current_album;
+	echo'<a href="' . rewrite_path("/" . pathurlencode($_zp_current_album->name),
+		"/index.php?album=" . urlencode($_zp_current_album->name)) .
+		'&zipfile" title="Download Zip of the Album">Download a zip file ' .
+		'of this album</a>';
 }
 
 function printLatestComments($number, $type='images') {
@@ -1408,29 +1422,29 @@ function printLatestComments($number, $type='images') {
 	  $image = $comment['filename'];
 	  $albumtitle = $comment['albumtitle'];
 		  if ($comment['title'] == "")  {
-			$title = $image; 
+			$title = $image;
 		  }	else {
 			$title = $comment['title'];
-		  }	
+		  }
 	  $website = $comment['website'];
 	  $comment = my_truncate_string($comment['comment'], 40);
-	  
+
 	  $link = $author.' commented on '.$albumtitle.' / '.$title ;
 	  $short_link = my_truncate_string($link, 40);
-	  
+
 	  echo '<li><div class="commentmeta"><a href="';
-	  
+
     	  if (getOption('mod_rewrite') == false) {
             echo WEBPATH.'/index.php?album='.urlencode($album).'&image='.urlencode($image).'/"';
           } else {
             echo WEBPATH.'/'.$album.'/'.$image.'" ';
           }
-        
+
       echo 'title="'.$link.'">';
-      echo $short_link.'</a>:</div><div class="commentbody">'.$comment.'</div></li>';	    
+      echo $short_link.'</a>:</div><div class="commentbody">'.$comment.'</div></li>';
 	}
 	echo '</ul>';
-	echo '</div>';	
+	echo '</div>';
 }
 
 /**
@@ -1443,12 +1457,12 @@ function printLatestComments($number, $type='images') {
 function hitcounter($option="image", $viewonly=false) {
   switch($option) {
 		case "image":
-			$id = getImageID(); 
+			$id = getImageID();
 			$dbtable = prefix('images');
 			$doUpdate = true;
 		break;
 		case "album":
-			$id = getAlbumID(); 
+			$id = getAlbumID();
 			$dbtable = prefix('albums');
 			$doUpdate = getCurrentPage() == 1; // only count initial page for a hit on an album
 		break;
@@ -1477,13 +1491,13 @@ function getAlbumStatistic($number=5, $option) {
   } else {
     $albumWhere = "WHERE `show`=1 AND `password`=''";
   }
-  switch($option) { 
-    case "popular": 
+  switch($option) {
+    case "popular":
     	$sortorder = "hitcounter";
     break;
-    case "latest": 
+    case "latest":
     	$sortorder = "id";
-    break; 
+    break;
   }
 	$albums = query("SELECT id, title, folder, thumb FROM " . prefix('albums') . $albumWhere . " ORDER BY ".$sortorder." DESC LIMIT $number");
 	return $albums;
@@ -1498,11 +1512,11 @@ function getAlbumStatistic($number=5, $option) {
 function printAlbumStatistic($number, $option) {
 	$albums = getAlbumStatistic($number, $option);
   echo "\n<div id=\"$option_albums\">\n";
-  if (getOption('mod_rewrite')) 
-		{ $albumlinkpath = WEBPATH."/"; 
-  } else { 
-    $albumlinkpath = "index.php?album="; 
-  } 
+  if (getOption('mod_rewrite'))
+		{ $albumlinkpath = WEBPATH."/";
+  } else {
+    $albumlinkpath = "index.php?album=";
+  }
   while ($album = mysql_fetch_array($albums)) {
     if ($album['thumb'] === NULL)
       { $image = query_single_row("SELECT * FROM " . prefix('images') . " WHERE albumid = ".$album['id']." ORDER BY sort_order DESC LIMIT 1");
@@ -1521,7 +1535,7 @@ function printAlbumStatistic($number, $option) {
  * @param string $number the number of albums to get
  */
 function printPopularAlbums($number=5) {
-  printAlbumStatistic($number,"popular"); 
+  printAlbumStatistic($number,"popular");
 }
 
 /**
@@ -1529,7 +1543,7 @@ function printPopularAlbums($number=5) {
  * @param string $number the number of albums to get
  */
 function printLatestAlbums($number=5) {
-  printAlbumStatistic($number,"latest"); 
+  printAlbumStatistic($number,"latest");
 }
 
 /**
@@ -1559,16 +1573,16 @@ function getImageStatistic($number, $option) {
   }
   $imageArray = array();
   $images = query_full_array("SELECT images.albumid, images.filename AS filename, images.title AS title, " .
-                             "albums.folder AS folder, images.show, albums.show, albums.password FROM " . 
+                             "albums.folder AS folder, images.show, albums.show, albums.password FROM " .
                               prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
                               " WHERE images.albumid = albums.id " . $imageWhere . $albumWhere .
                               " AND albums.folder != ''".
                               " ORDER BY ".$sortorder." DESC LIMIT $number");
   foreach ($images as $imagerow) {
-    
+
     $filename = $imagerow['filename'];
     $albumfolder = $imagerow['folder'];
-    
+
     $desc = $imagerow['title'];
     // Album is set as a reference, so we can't re-assign to the same variable!
     $image = new Image(new Album($_zp_gallery, $albumfolder), $filename);
@@ -1587,7 +1601,7 @@ function printImageStatistic($number, $option) {
   $images = getImageStatistic($number, $option);
   echo "\n<div id=\"$option_images\">\n";
   foreach ($images as $image) {
-    $imageURL = getURL($image); 
+    $imageURL = getURL($image);
     echo '<a href="' . $imageURL . '" title="' . htmlspecialchars($image->getTitle(), ENT_QUOTES) . "\">\n";
     echo '<img src="' . $image->getThumb() . "\"></a>\n";
   }
@@ -1611,18 +1625,18 @@ printImageStatistic($number, "latest");
 }
 
 /* Returns the ID of all sub-albums, relative to the current album. If $_zp_current_album is not set, it'll return null. */
-function getAllSubAlbumIDs($albumfolder='') {	
+function getAllSubAlbumIDs($albumfolder='') {
   global $_zp_current_album;
   if (empty($albumfolder)) {
-    if (isset($_zp_current_album)) { 
+    if (isset($_zp_current_album)) {
 	  $albumfolder = $_zp_current_album->getFolder();
 	} else {
-	  return null; 
-	}	
+	  return null;
+	}
   }
-  $query = "SELECT `id` FROM " . prefix('albums') . " WHERE `folder` LIKE '" . mysql_real_escape_string($albumfolder) . "%'"; 
+  $query = "SELECT `id` FROM " . prefix('albums') . " WHERE `folder` LIKE '" . mysql_real_escape_string($albumfolder) . "%'";
   $subIDs = query_full_array($query);
-  return $subIDs; 
+  return $subIDs;
 }
 
 function getRandomImages() {
@@ -1647,7 +1661,7 @@ function getRandomImages() {
 /* Returns an Image-object, randomly selected from current directory or any of it's subdirectories.
 returns null if $_zp_current_album isn't set, and if no images can be found. You might want it to fall back to a
 placeholder image instead. */
-function getRandomImagesAlbum() {		
+function getRandomImagesAlbum() {
   if (zp_loggedin()) {
     $imageWhere = '';
   } else {
@@ -1656,25 +1670,30 @@ function getRandomImagesAlbum() {
   $images = array();
   $subIDs = getAllSubAlbumIDs($rootAlbum);
   if(is_null($subIDs)) {return null;}; //no subdirs avaliable
-  foreach ($subIDs as $ID) {		
-    $query = 'SELECT `id` , `albumid` , `filename` , `title` FROM '.prefix('images').' WHERE `albumid` = "'. $ID['id'] .'"' . $imageWhere; 		
-    $images = array_merge($images, query_full_array($query)); 	
+  foreach ($subIDs as $ID) {
+    $query = 'SELECT `id` , `albumid` , `filename` , `title` FROM '.prefix('images').' WHERE `albumid` = "'. $ID['id'] .'"' . $imageWhere;
+    $images = array_merge($images, query_full_array($query));
   }
   $image = NULL;
   while (is_null($image)) {
     if(count($images) < 1){return null;}; //no images avaliable in _any_ subdirectory
     $inx = array_rand($images);
     $randomImage = $images[$inx];
-    $row = query_single_row("SELECT `folder`, `show`, `password` FROM " .prefix('albums'). " WHERE id = '" .$randomImage['albumid']. "'"); 	
+    $row = query_single_row("SELECT `folder`, `show`, `password` FROM " .prefix('albums'). " WHERE id = '" .$randomImage['albumid']. "'");
     if (zp_loggedin() || (($row['show']==1) && empty($row['password']))) {
       $image = new Image(new Album(new Gallery(), $row['folder']), $randomImage['filename']);
       return $image;
-    }	
+    }
     unset($images[$inx]);
   }
   return null;
 }
-
+/**
+ * puts up random image thumbs from the gallery
+ * @param int $number how many images
+ * @param string $class optional class
+ * @param string $option optional
+ */
 function printRandomImages($number, $class=null, $option="all") {
   if (!is_null($class)) {
 	$class = 'class="' . $class . '";';
@@ -1687,10 +1706,10 @@ function printRandomImages($number, $class=null, $option="all") {
         case "album":
          $randomImage = getRandomImagesAlbum(); break;
       }
-      $randomImageURL = getURL($randomImage); 
+      $randomImageURL = getURL($randomImage);
       echo '<a href="' . $randomImageURL . '" title="View image: ' . htmlspecialchars($randomImage->getTitle(), ENT_QUOTES) . '">' .
-      '<img src="' . $randomImage->getThumb() . 
-      '" alt="'.htmlspecialchars($randomImage->getTitle(), ENT_QUOTES).'"'; 
+      '<img src="' . $randomImage->getThumb() .
+      '" alt="'.htmlspecialchars($randomImage->getTitle(), ENT_QUOTES).'"';
       echo "/></a></li>\n";
     }
     echo "</ul>";
@@ -1703,7 +1722,7 @@ if(!$id) { $id = getImageID(); }
      case "totalvalue":
         $rating = "total_value"; break;
      case "totalvotes":
-       $rating = "total_votes"; break;   
+       $rating = "total_votes"; break;
   }
   $result = query_single_row("SELECT ".$rating." FROM ". prefix('images') ." WHERE id = $id");
   return $result[$rating];
@@ -1713,34 +1732,34 @@ function getImageRatingCurrent($id) {
   $votes = getImageRating("totalvotes",$id);
   $value = getImageRating("totalvalue",$id);
   if($votes != 0)
-    { $rating =  round($value/$votes, 1); 
+    { $rating =  round($value/$votes, 1);
   }
   return $rating;
-} 
+}
 
 function checkIp($id) {
-  $ip = $_SERVER['REMOTE_ADDR'];  
+  $ip = $_SERVER['REMOTE_ADDR'];
   $ipcheck = query_full_array("SELECT used_ips FROM ". prefix('images') ." WHERE used_ips LIKE '%".$ip."%' AND id= $id");
   return $ipcheck;
-} 
+}
 
-function printImageRating() { 
+function printImageRating() {
   $id = getImageID();
   $value = getImageRating("totalvalue", $id);
-  $votes = getImageRating("totalvotes", $id); 
-  if($votes != 0) 
+  $votes = getImageRating("totalvotes", $id);
+  if($votes != 0)
     { $ratingpx = round(($value/$votes)*25);
   }
   $zenpath = WEBPATH."/".ZENFOLDER."/plugins";
-  echo "<div id=\"rating\">\n"; 
+  echo "<div id=\"rating\">\n";
   echo "<h3>Rating:</h3>\n";
-  echo "<ul class=\"star-rating\">\n"; 
-  echo "<li class=\"current-rating\" id=\"current-rating\" style=\"width:".$ratingpx."px\"></li>\n"; 
-  if(!checkIP($id)){  
+  echo "<ul class=\"star-rating\">\n";
+  echo "<li class=\"current-rating\" id=\"current-rating\" style=\"width:".$ratingpx."px\"></li>\n";
+  if(!checkIP($id)){
     echo "<li><a href=\"javascript:rateImg(1,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"1 star out of 5\"' class=\"one-star\">2</a></li>\n";
-    echo "<li><a href=\"javascript:rateImg(2,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"2 stars out of 5\" class=\"two-stars\">2</a></li>\n"; 
-    echo "<li><a href=\"javascript:rateImg(3,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"3 stars out of 5\" class=\"three-stars\">2</a></li>\n"; 
-    echo "<li><a href=\"javascript:rateImg(4,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"4 stars out of 5\" class=\"four-stars\">2</a></li>\n"; 
+    echo "<li><a href=\"javascript:rateImg(2,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"2 stars out of 5\" class=\"two-stars\">2</a></li>\n";
+    echo "<li><a href=\"javascript:rateImg(3,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"3 stars out of 5\" class=\"three-stars\">2</a></li>\n";
+    echo "<li><a href=\"javascript:rateImg(4,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"4 stars out of 5\" class=\"four-stars\">2</a></li>\n";
     echo "<li><a href=\"javascript:rateImg(5,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"5 stars out of 5\" class=\"five-stars\">2</a></li>\n";
   }
   echo "</ul>\n";
@@ -1750,14 +1769,24 @@ function printImageRating() {
   echo "</div>\n";
 }
 
+/**
+ * @param int $number The number if images desired
+ */
 function printTopRatedImages($number=5) {
 printImageStatistic($number, "toprated");
 }
-
+/**
+ * @param int $number The number if images desired
+ */
 function printMostRatedImages($number=5) {
 printImageStatistic($number, "mostrated");
 }
-
+/**
+ * shortens a string to $length
+ * @param string $string the string to be shortened
+ * @param int $length the desired length for the string
+ * @return string the shortened string
+ */
 function my_truncate_string($string, $length) {
 	if (strlen($string) > $length) {
 		$short = substr($string, 0, $length);
@@ -1784,7 +1813,7 @@ function getTags() {
 
 /**
  * prints a list of tags, editable by admin
- * @param string $option links by default, if anything else the 
+ * @param string $option links by default, if anything else the
       tags will not link to all other photos with the same tah
  * @param string $preText text to go before the printed tags
  * @param string $class css class to apply to the UL list
@@ -1804,20 +1833,20 @@ function printTags($option="links",$preText=NULL,$class='taglist',$separator=", 
   } else {
     if (!empty($tags)) {
       echo "<ul class=\"".$class."\">\n";
-      if (!empty($preText)) { 
+      if (!empty($preText)) {
 	    echo "<li class=\"tags_title\">".$preText."</li>";
 	  }
 	  $ct = count($singletag);
       for ($x = 0; $x < $ct; $x++) {
         if ($x === $ct - 1) { $separator = ""; }
         if ($option === "links") {
-          $links1 = "<a href=\"".getSearchURL($singletag[$x], '', SEARCH_TAGS)."\" title=\"".$singletag[$x]."\" rel=\"nofollow\">"; 
-          $links2 = "</a>"; 
+          $links1 = "<a href=\"".getSearchURL($singletag[$x], '', SEARCH_TAGS)."\" title=\"".$singletag[$x]."\" rel=\"nofollow\">";
+          $links2 = "</a>";
 	    }
         echo "\t<li>".$links1.htmlspecialchars($singletag[$x], ENT_QUOTES).$links2.$separator."</li>\n";
 	  }
     }
-    echo "</ul><br clear=\"all\" />\n";  
+    echo "</ul><br clear=\"all\" />\n";
   }
 }
 
@@ -1834,7 +1863,7 @@ function getAllTags() {
   $result = query_full_array("SELECT `tags` FROM ". prefix('albums') ." WHERE `show` = 1");
   foreach($result as $row){
 	$alltags = $alltags.$row['tags'].",";  // add comma after the last entry so that we can explode to array later
-  } 
+  }
   $alltags = explode(",",$alltags);
   $cleantags = array();
   foreach ($alltags as $tag) {
@@ -1870,38 +1899,41 @@ function printAllTagsAs($option,$class="",$sort="abc",$counter=FALSE,$links=TRUE
    	  arsort($tagcount); break;
    	case "abc":
    	  ksort($tagcount); break;
-  } 	  
+  }
   echo "<ul style=\"display:inline; list-style-type:none\" ".$class.">\n";
-  while (list($key, $val) = each($tagcount)) {  
-    if(!$counter) { 
-	  $counter = ""; 
-	} else { 
-	  $counter = " (".$val.") "; 
-	}   
-    if ($option == "cloud") {      
-      if ($val <= $mincount) { 
+  while (list($key, $val) = each($tagcount)) {
+    if(!$counter) {
+	  $counter = "";
+	} else {
+	  $counter = " (".$val.") ";
+	}
+    if ($option == "cloud") {
+      if ($val <= $mincount) {
         $size = MINFONTSIZE;  // calculate font sizes, formula from wikipedia
-      } else { 
-	    $size =min(max(round(($maxfontsize*($val-$mincount))/($maxcount-$mincount), 2), MINFONTSIZE), $maxfontsize); 
-      }    
+      } else {
+	    $size =min(max(round(($maxfontsize*($val-$mincount))/($maxcount-$mincount), 2), MINFONTSIZE), $maxfontsize);
+      }
     } else {
 	  $size = MINFONTSIZE;
 	}
 	if ($val >= $mincount) {
       if(!$links) {
-        echo "\t<li style=\"font-size:".$size."em\">".$key.$counter."</li>\n";  
-	  } else { 
+        echo "\t<li style=\"font-size:".$size."em\">".$key.$counter."</li>\n";
+	  } else {
 	    $key = str_replace('"', '', $key);
         echo "\t<li style=\"display:inline; list-style-type:none\"><a href=\"".
 	         getSearchURL($key, '', SEARCH_TAGS)."\" style=\"font-size:".$size."em;\" rel=\"nofollow\">".
-		     $key.$counter."</a></li>\n";  
+		     $key.$counter."</a></li>\n";
 	  }
 	}
-         
-  } // while end 
+
+  } // while end
   echo "</ul>\n";
 }
-
+/**
+ * retrieves a list of all unique years & months
+ * @return array dates and the count of images in each
+ */
 function getAllDates() {
   $alldates = array();
   $cleandates = array();
@@ -1909,7 +1941,7 @@ function getAllDates() {
   if (!zp_loggedin()) { $sql .= " WHERE `show` = 1"; }
   $result = query_full_array($sql);
   foreach($result as $row){
-	$alldates[] = $row['date']; 
+	$alldates[] = $row['date'];
   }
   foreach ($alldates as $adate) {
     if (!empty($adate)) {
@@ -1920,7 +1952,12 @@ function getAllDates() {
   ksort($datecount);
   return $datecount;
 }
-
+/**
+ * prints a compendum of dates and links to a search page that will show results of the date
+ * @param string $class optional class
+ * @param string $yearid optional class for "year"
+ * @param string $monthis optional class for "month"
+ */
 function printAllDates($class="archive", $yearid="year", $monthid="month") {
   if (!empty($class)){ $class = "class=\"$class\""; }
   if (!empty($yearid)){ $yearid = "id=\"$yearid\""; }
@@ -1928,19 +1965,19 @@ function printAllDates($class="archive", $yearid="year", $monthid="month") {
   $datecount = getAllDates();
   $lastyear = "";
   echo "\n<ul $class>\n";
-  while (list($key, $val) = each($datecount)) {  
+  while (list($key, $val) = each($datecount)) {
     $nr++;
-    if ($key == '0000-00-01') { 
+    if ($key == '0000-00-01') {
 	  $year = "no date";
 	  $month = "";
-    } else {	  
+    } else {
       $dt = date('Y-F', strtotime($key));
 	  $year = substr($dt, 0, 4);
 	  $month = substr($dt, 5);
 	}
-	  
+
 	if ($lastyear != $year) {
-	  $lastyear = $year;	
+	  $lastyear = $year;
 	  if($nr != 1) {  echo "</ul>\n</li>\n";}
       echo "<li $yearid>$year\n<ul $monthid>\n";
 	}
@@ -1949,6 +1986,13 @@ function printAllDates($class="archive", $yearid="year", $monthid="month") {
 echo "</ul>\n</li>\n</ul>\n";
 }
 
+/**
+ * produces the url to a custom page (e.g. one that is not album.php, image.php, or index.php)
+ * @param string $linktext Text for the URL
+ * @param int $page page number to include in URL
+ * @param string $q query string to add to url
+ * @return string the URL
+ */
 function getCustomPageURL($page, $q="") {
   if (getOption('mod_rewrite')) {
     $result .= WEBPATH."/page/$page";
@@ -1960,6 +2004,15 @@ function getCustomPageURL($page, $q="") {
   return $result;
 }
 
+/**
+ * prints the url to a custom page (e.g. one that is not album.php, image.php, or index.php)
+ * @param string $linktext Text for the URL
+ * @param int $page page number to include in URL
+ * @param string $q query string to add to url
+ * @param string $prev text to insert before the URL
+ * @param string $next text to follow the URL
+ * @param string $class optional class
+ */
 function printCustomPageURL($linktext, $page, $q="", $prev, $next, $class) {
   if (!is_null($class)) {
 	$class = 'class="' . $class . '";';
@@ -1967,6 +2020,9 @@ function printCustomPageURL($linktext, $page, $q="", $prev, $next, $class) {
   echo $prev."<a href=\"".getCustomPageURL($page, $q)." $class \">$linktext</a>".$next;
 }
 
+/**
+ * @return string the URL to an image
+ */
 function getURL($image) {
 if (getOption('mod_rewrite')) {
   return WEBPATH . "/" . pathurlencode($image->getAlbumName()) . "/" . urlencode($image->name);
@@ -1974,7 +2030,9 @@ if (getOption('mod_rewrite')) {
   return WEBPATH . "/index.php?album=" . pathurlencode($image->getAlbumName()) . "&image=" . urlencode($image->name);
   }
 }
-
+/**
+ * @return int record number of the album in the database
+ */
 function getAlbumId() {
   global $_zp_current_album;
   if (!isset($_zp_current_album)) { return null; }
@@ -2064,26 +2122,26 @@ function getSearchURL($words, $dates, $fields=0) {
  *@return returns nothing
  *@since 1.1.3
  */
-function printSearchForm($prevtext=NULL, $fieldSelect=NULL, $id='search') { 
+function printSearchForm($prevtext=NULL, $fieldSelect=NULL, $id='search') {
   $zf = WEBPATH."/".ZENFOLDER;
   $dataid = $id . '_data';
-  $searchwords = (isset($_POST['words']) ? htmlspecialchars(stripslashes($_REQUEST['words']), ENT_QUOTES) : ''); 
-  
+  $searchwords = (isset($_POST['words']) ? htmlspecialchars(stripslashes($_REQUEST['words']), ENT_QUOTES) : '');
+
   echo "\n<div id=\"search\">";
-  echo "\n<form method=\"post\" action=\"".WEBPATH."/index.php?p=search\" id=\"search_form\">"; 
-  echo "\n$prevtext<input type=\"text\" name=\"words\" value=\"".$searchwords."\" id=\"search_input\" size=\"10\" />"; 
-  echo "\n<input type=\"submit\" value=\"Search\" class=\"pushbutton\" id=\"search_submit\" />"; 
-  
+  echo "\n<form method=\"post\" action=\"".WEBPATH."/index.php?p=search\" id=\"search_form\">";
+  echo "\n$prevtext<input type=\"text\" name=\"words\" value=\"".$searchwords."\" id=\"search_input\" size=\"10\" />";
+  echo "\n<input type=\"submit\" value=\"Search\" class=\"pushbutton\" id=\"search_submit\" />";
+
   $bits = array(SEARCH_TITLE, SEARCH_DESC, SEARCH_TAGS, SEARCH_FILENAME, SEARCH_LOCATION, SEARCH_CITY, SEARCH_STATE, SEARCH_COUNTRY);
   if ($fieldSelect === 0) { $fieldSelect = 32767; }
   $fields = getOption('search_fields') & $fieldSelect;
-  
+
   $c = 0;
   foreach ($bits as $bit) {
     if ($bit & $fields) { $c++; }
     if ($c>1) break;
-  }  
-  if ($fieldSelect && ($c>1)) {  
+  }
+  if ($fieldSelect && ($c>1)) {
 
     echo "\n<ul>";
     echo "\n<li class=\"top\">&raquo;</li>";
@@ -2110,14 +2168,14 @@ function printSearchForm($prevtext=NULL, $fieldSelect=NULL, $id='search') {
 	}
 	if ($fields & SEARCH_COUNTRY) {
       echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_country\" value=1 checked> Country</li>";
-	}    
+	}
 	echo "\n</ul>";
     echo "\n<div class=\"clear\"></div>";
   }
-  echo "\n</form>\n"; 
+  echo "\n</form>\n";
   echo "\n</div>";  // search
   echo "\n<!-- end of search form -->\n";
-} 
+}
 
 /**
  * grabs the search criteria
@@ -2152,14 +2210,14 @@ function getSearchDate($format="F Y") {
   return false;
 }
 
-/*** Open for Comments **********************************
-  called with one parameter which specifies the degeree of control desired
-  IMAGE will return the image level setting
-  ALBUM will return the album level setting
-  the Default, IMAGE+ALBUM will return the AND of the two levels
- ********************************************************/
 define("IMAGE", 1);
 define("ALBUM", 2);
+/**
+ * checks to see if comment posting is allowed for an image/album
+ * @param int $what the degree of control desired allowed values: ALBUM, IMAGE, and ALBUM+IMAGE
+ * @return bool true if comment posting should be allowed
+ *
+ */
 function OpenedForComments($what=3) {
   global $_zp_current_image;
   $result = true;
@@ -2199,12 +2257,12 @@ function getTheme(&$zenCSS, &$themeColor, $defaultColor) {
  */
 function normalizeColumns($albumColumns, $imageColumns) {
   $albcount = getOption('albums_per_page');
-  if (($albcount % $albumColumns) != 0) {  
-    setOption('albums_per_page', $albcount = ((floor($albcount / $albumColumns) + 1) * $albumColumns), false);  
+  if (($albcount % $albumColumns) != 0) {
+    setOption('albums_per_page', $albcount = ((floor($albcount / $albumColumns) + 1) * $albumColumns), false);
   }
   $imgcount = getOption('images_per_page');
-  if (($imgcount % $imageColumns) != 0) {  
-    setOption('images_per_page', $imgcount = ((floor($imgcount / $imageColumns) + 1) * $imageColumns - $imageReduction), false);  
+  if (($imgcount % $imageColumns) != 0) {
+    setOption('images_per_page', $imgcount = ((floor($imgcount / $imageColumns) + 1) * $imageColumns - $imageReduction), false);
   }
   if (in_context(ZP_ALBUM | ZP_SEARCH)) {
     if (in_context(ZP_SEARCH)) {
@@ -2213,7 +2271,7 @@ function normalizeColumns($albumColumns, $imageColumns) {
       $count = GetNumSubalbums();
 	}
 	if ($count == 0) {
-	  return 0; 
+	  return 0;
 	}
     $rowssused = ceil(($count % $albcount) / $albumColumns);     /* number of album rows unused */
     $leftover = floor(getOption('images_per_page') / $imageColumns) - $rowssused;
@@ -2233,8 +2291,9 @@ function normalizeColumns($albumColumns, $imageColumns) {
 /**
  * checks to see if a password is needed
  * displays a password form if log-on is required
+ *@param bool $silent set to true to inhibit the logon form
  *@return bool true if a login form has been displayed
- *@since 1.1.3 
+ *@since 1.1.3
  **/
 function checkforPassword($silent=false) {
   global $_zp_current_album, $_zp_current_search, $_zp_album_authorized, $_zp_gallery;
@@ -2318,14 +2377,14 @@ function printPasswordForm($hint) {
     echo "<div class=\"errorbox\" id=\"message\"><h2>There was an error logging in.</h2><br/>Check your password and try again.</div>";
   }
   $action = "#";
-  if (in_context(ZP_SEARCH)) { 
-    $action = "?p=search" . $_zp_current_search->getSearchParams(); 
+  if (in_context(ZP_SEARCH)) {
+    $action = "?p=search" . $_zp_current_search->getSearchParams();
   }
   echo "\n<p>The page you are trying to view is password protected.</p>";
   echo "\n<br/>";
   echo "\n  <form name=\"password\" action=\"$action\" method=\"POST\">";
   echo "\n    <input type=\"hidden\" name=\"password\" value=\"1\" />";
-  
+
   echo "\n    <table>";
   echo "\n      <tr><td>Password</td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
   echo "\n      <tr><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"Submit\" /></td></tr>";
@@ -2340,6 +2399,10 @@ function printPasswordForm($hint) {
 * simple captcha for comments
 * thanks to gregb34 who posted the original code
 * Prints a captcha entry form and posts the input with the comment posts
+* @param string $preText lead-in text
+* @param string $midText text that goes between the captcha image and the input field
+* @param string $postText text that closes the captcha
+* @param int $size the text-width of the input field
 * @since 1.1.4
 **/
 function printCaptcha($preText='', $midText='', $postText='', $size=4) {
@@ -2385,7 +2448,7 @@ function printCaptcha($preText='', $midText='', $postText='', $size=4) {
   ImageRectangle ($image,0,0,64,19,$rectangle);
 
   $img = "code_" . $code . ".png";
-  
+
   imagepng($image, SERVERCACHE . "/" . $img);
 
   $inputBox =  "<input type=\"text\" id=\"code\" name=\"code\" size=\"" . $size . "\" class=\"inputbox\" />";
@@ -2393,9 +2456,9 @@ function printCaptcha($preText='', $midText='', $postText='', $size=4) {
              "<label for=\"code\"><img src=\"/cache/". $img . "\" alt=\"Code\"/></label>&nbsp;";
 
   echo $preText;
-  echo $captcha; 
-  echo $midText; 
-  echo $inputBox; 
+  echo $captcha;
+  echo $midText;
+  echo $inputBox;
   echo $postText;
 }
 
