@@ -507,7 +507,7 @@ function printAlbumEditRow($album) {
   if (!empty($pwd)) {
     echo '<img src="images/lock.png" style="border: 0px;" alt="Protected" /></a>';
   } else {
-    echo '<img src="images/lock_open.png" style="border: 0px;" alt="No password" /></a>';
+    echo '<img src="images/blank.png" style="border: 0px;" alt="No password" /></a>';
   }
   echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp\n";
   if ($album->getShow()) {

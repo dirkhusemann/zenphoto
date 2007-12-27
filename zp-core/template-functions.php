@@ -1220,7 +1220,7 @@ function getFullImageURL() {
   return $_zp_current_image->getFullImage();
 }
 /**
-* returns a password protected/watermarked url to the image
+* @return string an url to the password protected/watermarked image
 **/
 function getProtectedImageURL() {
   if(!in_context(ZP_IMAGE)) return false;
@@ -1302,7 +1302,9 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
     	(($id) ? " id=\"$id\"" : "") . " />";
 	  }
 }
-
+/**
+ * @param int $maxheight how bif the picture should be
+ */
 function printCustomSizedImageMaxHeight($maxheight) {
   if (getFullWidth() === getFullHeight() OR getDefaultHeight() > $maxheight) {
     printCustomSizedImage(getImageTitle(), null, null, $maxheight, null, null, null, null, null, null);
@@ -1310,22 +1312,35 @@ function printCustomSizedImageMaxHeight($maxheight) {
   printDefaultSizedImage(getImageTitle());
   }
 }
-
+/**
+ * prints link to an image of specific size
+ * @param int $size how big
+ * @param stromg $text URL text
+ * @param stromg $title URL title
+ * @param stromg $class optional URL class
+ * @param stromg $id optional URL id
+ */
 function printSizedImageLink($size, $text, $title, $class=NULL, $id=NULL) {
   printLink(getSizedImageURL($size), $text, $title, $class, $id);
 }
-
+/**
+ * @return ing count of comments
+ */
 function getCommentCount() {
   global $_zp_current_image;
   return $_zp_current_image->getCommentCount();
 }
-
+/**
+ * @return bool true if coommenting is allowed
+ */
 function getCommentsAllowed() {
   global $_zp_current_image;
   return $_zp_current_image->getCommentsAllowed();
 }
-
-// Iterate through comments; use the ZP_COMMENT context.
+/**
+*Iterate through comments; use the ZP_COMMENT context.
+*@return bool true if there are more comments
+*/
 function next_comment() {
   global $_zp_current_image, $_zp_current_comment, $_zp_comments;
   if (is_null($_zp_current_comment)) {
@@ -1348,12 +1363,25 @@ function next_comment() {
 /*** Comment Context **********************/
 /******************************************/
 
+/**
+ * @return string comment author's name
+ */
 function getCommentAuthorName() { global $_zp_current_comment; return $_zp_current_comment['name']; }
 
+/**
+ * @return string comment author's email
+ */
 function getCommentAuthorEmail() { global $_zp_current_comment; return $_zp_current_comment['email']; }
-
+/**
+ * @return string comment author's website
+ */
 function getCommentAuthorSite() { global $_zp_current_comment; return $_zp_current_comment['website']; }
-
+/**
+ * prints a link to the author
+ * @param string $title URL title tag
+ * @param string $class optional class tag
+ * @param string $id optional id tag
+ */
 function printCommentAuthorLink($title=NULL, $class=NULL, $id=NULL) {
   $site = getCommentAuthorSite();
   $name = getCommentAuthorName();
@@ -1365,15 +1393,33 @@ function printCommentAuthorLink($title=NULL, $class=NULL, $id=NULL) {
   }
 }
 
+/**
+ * retrieves the date of the current comment
+ * @param string $format how to format the result
+ * @return string formatted date
+ */
 function getCommentDate($format = "F jS, Y") { global $_zp_current_comment; return myts_date($format, $_zp_current_comment['date']); }
-
+/**
+ * retrieves the time of the current comment
+ * @param string $format how to format the result
+ * @return string formatted time
+ */
 function getCommentTime($format = "g:i a") { global $_zp_current_comment; return myts_date($format, $_zp_current_comment['date']); }
 
+/**
+ * @return string the body of the current comment
+ */
 function getCommentBody() {
   global $_zp_current_comment;
   return str_replace("\n", "<br />", stripslashes($_zp_current_comment['comment']));
 }
 
+/**
+ * creates a link to the admin comment edit page for the current comment
+ * @param string $text Link text
+ * @param string $before text to go before the link
+ * @param string $after text to go after the link
+ */
 function printEditCommentLink($text, $before='', $after='', $title=NULL, $class=NULL, $id=NULL) {
   global $_zp_current_comment;
   if (zp_loggedin()) {
@@ -1383,6 +1429,10 @@ function printEditCommentLink($text, $before='', $after='', $title=NULL, $class=
   }
 }
 
+/**
+ * tool to put an out error message if a comment possting was not accepted
+ * @param string $class optional division class for the message
+ */
 function printCommentErrors($class = 'error') {
   global $error;
   if (isset($error)) {
@@ -1401,7 +1451,9 @@ function printCommentErrors($class = 'error') {
   }
   return $error;
 }
-
+/**
+ * creates an URL for a download of a zipped copy of the album
+ */
 function printAlbumZip(){
 	global $_zp_current_album;
 	echo'<a href="' . rewrite_path("/" . pathurlencode($_zp_current_album->name),
@@ -1410,6 +1462,10 @@ function printAlbumZip(){
 		'of this album</a>';
 }
 
+/**
+ * @param int $number howmany comments you want.
+ * @param string $type 'images' for image comments, 'albums' for album comments
+ */
 function printLatestComments($number, $type='images') {
 	echo '<div id="showlatestcomments">';
 	echo '<ul>';
@@ -1624,7 +1680,10 @@ function printLatestImages($number=5) {
 printImageStatistic($number, "latest");
 }
 
-/* Returns the ID of all sub-albums, relative to the current album. If $_zp_current_album is not set, it'll return null. */
+/**
+ *@param string @albumfolder folder name if you want a album different from the current album
+ *@return array an array of album ids whose parent is the folder
+ */
 function getAllSubAlbumIDs($albumfolder='') {
   global $_zp_current_album;
   if (empty($albumfolder)) {
@@ -1639,6 +1698,9 @@ function getAllSubAlbumIDs($albumfolder='') {
   return $subIDs;
 }
 
+/**
+ * @return object a randomly selected image from the gallery. (May be NULL if none exists)
+ */
 function getRandomImages() {
   if (zp_loggedin()) {
     $albumWhere = '';
@@ -1658,9 +1720,9 @@ function getRandomImages() {
   return $image;
 }
 
-/* Returns an Image-object, randomly selected from current directory or any of it's subdirectories.
-returns null if $_zp_current_album isn't set, and if no images can be found. You might want it to fall back to a
-placeholder image instead. */
+/**
+ * @return object a randomly selected image from the album or its subalbums. (May be NULL if none exists)
+ */
 function getRandomImagesAlbum() {
   if (zp_loggedin()) {
     $imageWhere = '';

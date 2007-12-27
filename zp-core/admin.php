@@ -1622,7 +1622,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                     <tr>
                         <td>Allowed tags:</td>
                         <td>
-                         <textarea name="allowed_tags" cols="40" rows="10"><?php echo getOption('allowed_tags'); ?></textarea>;
+                         <textarea name="allowed_tags" cols="40" rows="10"><?php echo getOption('allowed_tags'); ?></textarea>
                         </td>
                            <td>
                           Tags and attributes allowed in comments<br/>
