@@ -164,7 +164,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
   if (isset($_GET['action'])) {
     $action = $_GET['action'];
 
-/** Publish album  **************************************************************/
+/** Publish album  *************************************************************/
 /******************************************************************************/
     if ($action == "publish") {
       $folder = queryDecode(strip($_GET['album']));
@@ -174,7 +174,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
       header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit');
       exit();
     
-/** Captcha cleanup **************************************************************/
+/** Captcha cleanup *************************************************************/
 /********************************************************************************/
     } else if ($action == 'Captcha') {
       chdir(SERVERCACHE . "/");
@@ -186,8 +186,16 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
           unlink($file);
         }
       }
-  
-/** Reset hitcounters ************************************************************/
+
+/** un-moderate comment *********************************************************/
+/********************************************************************************/
+    } else if ($action == "moderation") {
+      $sql = 'UPDATE ' . prefix('comments') . ' SET `inmoderation`=0 WHERE `id`=' . $_GET['id'] . ';';
+      query($sql);      
+      header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=comments');
+      exit();
+
+/** Reset hitcounters ***********************************************************/
 /********************************************************************************/
     } else if ($action == "reset_hitcounters") {
       if(isset($_GET['albumid'])) {
@@ -392,27 +400,6 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
 /*****************************************************************************/
 
     } else if ($action == 'deletecomments') {
-      if (isset($_POST['moderated'])) {
-        $moderated = $_POST['moderated'];
-      if (isset($_POST['notreleased'])) {
-          $notreleased = $_POST['notreleased'];
-      } else {
-        $notreleased = array();
-      }
-        $idlist = '';
-        $release = array_diff($moderated, $notreleased);
-        foreach($release as $id) {
-          if (!empty($idlist)) {
-            $idlist .= "OR ";
-          }
-          $idlist .= "id='$id' ";
-        }
-        if (!empty($idlist)) {
-          $sql = 'UPDATE ' . prefix('comments') . ' SET `inmoderation`=0 WHERE ' . $idlist . ';';
-          query($sql);
-        }
-      }
-
 
       if (isset($_POST['ids']) || isset($_GET['id'])) {
         if (isset($_GET['id'])) {
@@ -1161,9 +1148,9 @@ if (!zp_loggedin()  && !$_zp_null_account) {
           <th>Comment <?php if(!$fulltext) { ?>(<a href="?page=comments&fulltext<?php echo $viewall ? "&viewall":""; ?>">View full text</a>)
             <?php } else { ?>(<a href="?page=comments<?php echo $viewall ? "&viewall":""; ?>">View truncated</a>)<?php } ?></th>
           <th>E-Mail</th>
-          <th>Moderation</th>
-          <th colspan="2">&nbsp;</th>
-        </tr>
+          <th>Spam</th>
+          <th>Edit</th>
+          <th>Delete</th>        </tr>
 
   <?php
     foreach ($comments as $comment) {
@@ -1188,17 +1175,20 @@ if (!zp_loggedin()  && !$_zp_null_account) {
             <td><?php echo $website ? "<a href=\"$website\">$author</a>" : $author; ?></td>
             <td style="font-size: 7pt;"><?php echo $date; ?></td>
             <td><?php echo ($fulltext) ? $fullcomment : $shortcomment; ?></td>
-            <td><a href="mailto:<?php echo $email; ?>?body=<?php echo commentReply($fullcomment, $author, $image, $albumtitle); ?>">Reply</a></td>
-            <td>
+            <td align="center"><a href="mailto:<?php echo $email; ?>?body=<?php echo commentReply($fullcomment, $author, $image, $albumtitle); ?>">
+                <img src="images/envelope.png" style="border: 0px;" alt="Reply" /></a></td>
+            <td align="center">
               <?php
                 if ($inmoderation) {
-                  echo '<input type="hidden" name = "moderated[]" value="' . $id . '">';
-                  echo '<input type="checkbox" name="notreleased[]" value="' . $id . '" CHECKED=true >';
+                  echo "<a href=\"?action=moderation&id=" . $id . "\">";
+                  echo '<img src="images/warn.png" style="border: 0px;" alt="remove from moderation" /></a>';
                 }
               ?>
             </td>
-            <td><a href="?page=editcomment&id=<?php echo $id; ?>" title="Edit this comment.">Edit</a></td>
-            <td><a href="javascript: if(confirm('Are you sure you want to delete this comment?')) { window.location='?page=comments&action=deletecomments&id=<?php echo $id; ?>'; }" title="Delete this comment." style="color: #c33;">Delete</a></td>
+            <td align="center"><a href="?page=editcomment&id=<?php echo $id; ?>" title="Edit this comment.">
+               <img src="images/pencil.png" style="border: 0px;" alt="Edit" /></a></td>
+            <td align="center"><a href="javascript: if(confirm('Are you sure you want to delete this comment?')) { window.location='?page=comments&action=deletecomments&id=<?php echo $id; ?>'; }" title="Delete this comment." style="color: #c33;">
+                <img src="images/fail.png" style="border: 0px;" alt="Delete" /></a></td>
           </tr>
   <?php } ?>
         <tr>
@@ -1208,7 +1198,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 
       </table>
 
-      <input type="submit" value="Delete Selected Comments and update moderated status" class="button" />
+      <input type="submit" value="Delete Selected Comments" class="button" />
       </select>
 
       </form>
