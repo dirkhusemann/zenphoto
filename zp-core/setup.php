@@ -136,14 +136,19 @@ if (!$checked) {
 
     return checkMark(is_dir($path) && is_writable($path), " <em>$which</em> folder$f", $sfx, $msg);
     }
+  function versionCheck($required, $found) {
+    $nr = explode(".", $required . '.0.0.0');
+    $vr = $nr[0]*10000 + $nr[1]*100 + $nr[2];
+    $nf = explode(".", $found . '.0.0.0');
+    $vf = $nf[0]*10000 + $nf[1]*100 + $nf[2];
+    return ($vf >= $vr);
+  }
 
   $good = true;
 
+  $required = '4.1.0';
   $phpv = phpversion();
-  $n = explode(".", $phpv);
-  $v = $n[0]*10000 + $n[1]*100 + $n[2];
-  $php = $v >= 40100;
-  $good = checkMark($php, " PHP version 4.1.0 or greater", " [version is $phpv]", '') && $good;
+  $good = checkMark(versionCheck($required, $phpv), " PHP version $phpv", "", "Version $required or greater is required.") && $good;
 
   $good = checkMark(extension_loaded('gd'), " PHP GD support", '', '') && $good;
 
@@ -167,13 +172,12 @@ if (!$checked) {
   }
   if ($connection) {
     $mysqlv = trim(mysql_get_server_info());
-    $i = strpos($a, "-");
+    $i = strpos($mysqlv, "-");
     if ($i !== false) {
-      $mysqlv = substr($a, 0, $i);
+      $mysqlv = substr($mysqlv, 0, $i);
     }
-    $n = explode(".", $mysqlv);
-    $v = $n[0]*10000 + $n[1]*100 + $n[2];
-    $sqlv = $v >= 32300;
+    $required = '3.23';
+    $sqlv = versionCheck($required, $mysqlv);;
   }
   if ($cfg) {
     @chmod('zp-config.php', 0777);
@@ -229,12 +233,44 @@ if (!$checked) {
   $good = checkMark($connection, " connect to MySQL", '', "Could not connect to the <strong>MySQL</strong> server. Check the <code>user</code>, " .
       "<code>password</code>, and <code>database host</code> in your <code>zp-config.php</code> file and try again. ") && $good;
   if ($connection) {
-    $good = checkMark($sqlv, " MySQL version 3.2.3 or greater", " [version is $mysqlv]", "") && $good;
+    $good = checkMark($sqlv, " MySQL version $mysqlv", "", "Version $required or greater is required") && $good;
     $good = checkMark($db, " connect to the database <code>" . $_zp_conf_vars['mysql_database'] . "</code>", '',
       "Could not access the <strong>MySQL</strong> database (<code>" . $_zp_conf_vars['mysql_database'] ."</code>). Check the <code>user</code>, " .
       "<code>password</code>, and <code>database name</code> and try again. " .
       "Make sure the database has been created, and the <code>user</code> has access to it. " .
       "Also check the <code>mySQL host</code>.") && $good;
+      
+      $dbn = "`".$_zp_conf_vars['mysql_database']. "`.*";
+      $sql = "SHOW GRANTS;";
+      $result = mysql_query($sql, $mysql_connection);
+      $access = -1;
+      $report = "";
+      if ($result) {
+        while ($row = mysql_fetch_row($result)) {
+          $report .= "<br/><br/>".$row[0];
+          $r = str_replace(',', '', $row[0]);
+          $i = strpos($r, "ON");
+          $j = strpos($r, "TO", $i);
+          $found = trim(substr($r, $i+2, $j-$i-2));
+          $rights = array_flip(explode(' ', $r));
+          if (($found == $dbn) || ($found == "*.*")) {
+            if (isset($rights['ALL']) || (isset($rights['SELECT']) && isset($rights['INSERT']) && isset($rights['UPDATE']) && isset($rights['DELETE']))) {
+              $access = 1;
+            }
+          }
+        }
+      }
+    checkMark($access, " mySQL access rights", " [insufficient rights]", 
+                       "Your mySQL user must have <code>Select</code>, <code>Insert</code>, ". 
+                       "<code>Update</code>, and <code>Delete</code> rights. <br/><br/><em>Grants found:</em>" . $report);
+      
+    $sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$_zp_conf_vars['mysql_prefix']."%';";
+    $result = mysql_query($sql, $mysql_connection);
+    if (!$result) { $result = -1; }
+    $dbn = $_zp_conf_vars['mysql_database'];
+    checkMark($result, " mySQL <em>show tables</em>", " [Failed]", "mySQL did not return a list of the database tables for <code>$dbn</code>." .
+                       "<br/><strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables.");
+
   }
 
   $htfile = '../.htaccess';
@@ -289,9 +325,8 @@ if (!$checked) {
         fclose($handle);
       }
     }
-    $good = checkMark($base, "<em>.htaccess</em> RewriteBase$f", " [Does not match install folder]",
-                      "Install folder is <code>$d</code> and RewriteBase is set to <code>$b</code>. ".
-                      "<br/>Setup was not able to write to the file to fix this problem. " .
+    $good = checkMark($base, "<em>.htaccess</em> RewriteBase is <code>$b</code> $f", " [Does not match install folder]",
+                      "Setup was not able to write to the file change RewriteBase match the install folder." .
                       "<br/>Either make the file writeable or ".
                       "set <code>RewriteBase</code> in your <code>.htaccess</code> file to <code>$d</code>.") && $good;
   }
@@ -330,14 +365,8 @@ if (!$checked) {
 
       $sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$_zp_conf_vars['mysql_prefix']."%';";
       $result = mysql_query($sql, $mysql_connection);
-
       $tables = array();
-      if (!$result) {
-        echo "<div class=\"error\">";
-        echo "Warning: DB Error, could not list tables\n";
-        echo 'MySQL Error: ' . mysql_error();
-        echo "</div>";
-      } else {
+      if ($result) {
         while ($row = mysql_fetch_row($result)) {
           $tables[$row[0]] = 'update';
         }

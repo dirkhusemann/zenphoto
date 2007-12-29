@@ -39,21 +39,31 @@
  
 class SpamFilter  {
  
-  var $iSupport = array('Moderate' => array('type' => 1, 'desc' => 'Mark all comments for moderation'));
+  var $iSupport = array('Action' => array('type' => 2, 'desc' => 'This action will be taken for all messages.'));
  
   function SpamFilter() {
     global $gallery;
-    setOptionDefault('Moderate', 0);
+    setOptionDefault('Action', 'pass');
   }
 
   function getOptionsSupported() {
     return $this->iSupport;
   }
   function handleOption($option, $currentValue) {
+    if ($option == 'Action') {
+      echo "<select id=\"Action\" name=\"Action\">";
+      generateListFromArray($currentValue, array('pass', 'moderate', 'reject'));
+      echo "</select>";
+    }
   }
 
   function filterMessage($author, $email, $website, $body, $imageLink) {
-    return 2 - getOption('Moderate');
+    $strategy = getOption('Action');
+    switch ($strategy) {
+      case 'reject': return 0;
+      case 'moderate': return 1;
+    }
+    return 2;
   }
 }
 
