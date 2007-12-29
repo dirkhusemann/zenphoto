@@ -244,8 +244,8 @@ if (!$checked) {
       $sql = "SHOW GRANTS;";
       $result = mysql_query($sql, $mysql_connection);
       $access = -1;
-      $report = "";
       if ($result) {
+        $report = "<br/><br/><em>Grants found:</em>";
         while ($row = mysql_fetch_row($result)) {
           $report .= "<br/><br/>".$row[0];
           $r = str_replace(',', '', $row[0]);
@@ -254,15 +254,18 @@ if (!$checked) {
           $found = trim(substr($r, $i+2, $j-$i-2));
           $rights = array_flip(explode(' ', $r));
           if (($found == $dbn) || ($found == "*.*")) {
-            if (isset($rights['ALL']) || (isset($rights['SELECT']) && isset($rights['INSERT']) && isset($rights['UPDATE']) && isset($rights['DELETE']))) {
+            if (isset($rights['ALL']) || (isset($rights['SELECT']) && isset($rights['INSERT']) && 
+                isset($rights['UPDATE']) && isset($rights['DELETE']))) {
               $access = 1;
             }
           }
         }
+      } else {
+        $report = "<br/><br/>The <em>SHOW GRANTS</em> query failed.";
       }
     checkMark($access, " mySQL access rights", " [insufficient rights]", 
                        "Your mySQL user must have <code>Select</code>, <code>Insert</code>, ". 
-                       "<code>Update</code>, and <code>Delete</code> rights. <br/><br/><em>Grants found:</em>" . $report);
+                       "<code>Update</code>, and <code>Delete</code> rights." . $report);
       
     $sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$_zp_conf_vars['mysql_prefix']."%';";
     $result = mysql_query($sql, $mysql_connection);
