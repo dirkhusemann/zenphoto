@@ -174,19 +174,6 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
       header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit');
       exit();
     
-/** Captcha cleanup *************************************************************/
-/********************************************************************************/
-    } else if ($action == 'Captcha') {
-      chdir(SERVERCACHE . "/");
-      $filelist = glob('code_*.png');
-      $expire = time() - 60*60*24;
-      foreach ($filelist as $file) {
-        $file = SERVERCACHE . "/" . $file;
-        if (filemtime($file) < $expire) {
-          unlink($file);
-        }
-      }
-
 /** un-moderate comment *********************************************************/
 /********************************************************************************/
     } else if ($action == "moderation") {
@@ -450,6 +437,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
     } else if ($action == 'saveoptions') {
       $wm = getOption('perform_watermark');
       $vwm = getOption('perform_video_watermark');
+      $captcha = getOption('Use_Captcha');
       $notify = '';
       $returntab = "";
       /*** admin options ***/
@@ -594,6 +582,15 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
       if (($wm != getOption('perform_watermark')) || ($vwm != getOption('perform_video_watermark'))) {
         $gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the option has changed
       }
+      if ($captcha && !getOption('Use_Captcha')) { // No longer using captcha, clean up the images
+        chdir(SERVERCACHE . "/");
+        $filelist = glob('code_*.png');
+        foreach ($filelist as $file) {
+          $file = SERVERCACHE . "/" . $file;
+            unlink($file);
+        }
+      }
+
       header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=options".$notify.$returntab);
       exit();
 
@@ -1801,8 +1798,6 @@ if (!zp_loggedin()  && !$_zp_null_account) {
           <br/>Forces a refresh of the EXIF and IPTC data for all images.
           <p/><button onClick="window.location='admin.php?action=reset_hitcounters"><img src="images/reset.png" style="border: 0px;" /> Reset hitcounters</button>
           <br/>Sets all album and image hitcounters to zero.
-          <p/><button onClick="window.location='admin.php?action=Captcha'"><img src="images/fail.png" style="border: 0px;" /> Cleanup Captcha</button>
-          <br/>Deletes old <em>Capcha</em> images.
         </div>
 
 
