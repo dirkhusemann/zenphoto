@@ -258,7 +258,7 @@ if (!$checked) {
                 isset($rights['UPDATE']) && isset($rights['DELETE']))) {
               $access = 1;
             }
-          $report .= " *";
+            $report .= " *";
           }
         }
       } else {

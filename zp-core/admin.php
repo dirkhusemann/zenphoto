@@ -720,7 +720,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         <input type="hidden" name="savealbuminfo" value="1" />
         <?php printAlbumEditForm(0, $album); ?>
         </form>
-
+        <?php printAlbumButtons($album) ?>
         <!-- Subalbum list goes here -->
 
         <?php
@@ -927,6 +927,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         }
       ?>
       </form>
+      <?php printAlbumButtons($album) ?>
       </div>
 <?php /*** EDIT ALBUM SELECTION *********************************************************************/ ?>
       <?php } else { /* Display a list of albums to edit. */ ?>
@@ -1787,13 +1788,21 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 
         <div class="box" id="overview-stats">
           <h2 class="boxtitle">Gallery Maintenance</h2>
-          <p>Your database is <strong><?php echo getOption('mysql_database'); ?></strong>: Tables are prefixed by <strong>'<?php echo getOption('mysql_prefix'); ?>'</strong></p>
-
-          <p><strong><a href="?prune=true">Refresh the Database</a></strong> - This cleans the database, removes any orphan entries for comments, images, and albums.</p>
-          <p><strong><a href="cache-images.php"><img src="images/cache.png" style="border: 0px;" />Pre-Cache Images</a></strong> - Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser.</p>
-          <p><strong><a href="refresh-metadata.php"><img src="images/warn.png" style="border: 0px;" />Refresh Image Metadata</a></strong> - Forces a refresh of the EXIF and IPTC data for all images.</p>
-          <p><strong><a href="?action=reset_hitcounters"><img src="images/reset.png" style="border: 0px;" />Reset all hitcounters</a></strong> - Sets all album and image hitcounters to zero.</p>
-          <p><strong><a href="?action=Captcha"><img src="images/fail.png" style="border: 0px;" />Cleanup Captcha images</a></strong> - Deletes old <em>Capcha</em> images.</p>
+          <p>Your database is <strong><?php echo getOption('mysql_database'); ?>
+          </strong>: Tables are prefixed by <strong>'<?php echo getOption('mysql_prefix'); ?>'</strong></p>
+          <button onClick="window.location='admin.php?prune=true">Refresh the Database</button>
+          <br/>This cleans the database, removes any orphan entries for comments, images, and albums.
+          <form action="cache-images.php">
+            <button type="submit"><img src="images/cache.png" style="border: 0px;" /> Pre-Cache Images</button>
+            <input type="checkbox" name="clear" checked="true" /> Clear
+            <br/>Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser.
+          </form>
+          <button onClick="window.location='refresh-metadata.php'"><img src="images/warn.png" style="border: 0px;" /> Refresh Metadata</button>
+          <br/>Forces a refresh of the EXIF and IPTC data for all images.
+          <p/><button onClick="window.location='admin.php?action=reset_hitcounters"><img src="images/reset.png" style="border: 0px;" /> Reset hitcounters</button>
+          <br/>Sets all album and image hitcounters to zero.
+          <p/><button onClick="window.location='admin.php?action=Captcha'"><img src="images/fail.png" style="border: 0px;" /> Cleanup Captcha</button>
+          <br/>Deletes old <em>Capcha</em> images.
         </div>
 
 

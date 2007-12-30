@@ -469,24 +469,39 @@ function printAlbumEditForm($index, $album) {
 
   echo ">"; 
   echo "\n</td>";
-  echo "\n</tr>";
-  if ($album->getNumImages() > 0) { 
-    echo "\n<tr><td></td><td valign=\"top\"><a href=\"cache-images.php?album=" . 
-         queryencode($album->name) . "\"><img src=\"images/cache.png\" style=\"border: 0px;\" />Pre-Cache Images</a></strong> - Cache newly uploaded images.</td></tr>";
-
-	echo "\n<tr><td></td><td valign=\"top\"><a href=\"refresh-metadata.php?album=" . 
-	     queryencode($album->name) . "\"><img src=\"images/warn.png\" style=\"border: 0px;\" />Refresh Image Metadata</a> - Forces a refresh of the EXIF and IPTC data for all images in the album.</td></tr>";
-  }
-  echo "\n<tr><td></td><td valign=\"top\"><a href=\"?action=reset_hitcounters&albumid=" . 
-       $album->getAlbumID() . "&return=" . $album->name . "\"><img src=\"images/reset.png\" style=\"border: 0px;\" />Reset hitcounters</a></strong> - Resets all hitcounters in the album.</td></tr>";
 
   echo "\n</table>";  
   echo "\n<input type=\"submit\" value=\"save\" />";
+  echo "\n</tr>";
   echo "\n</div>";
 
 }
 /**
+ * puts out the maintenance buttons for an album
+ * 
+ * @param object $album is the album being emitted
+ */
+function printAlbumButtons($album) {
+  echo "\n<table class=\"buttons\"><tr>";
+  if ($album->getNumImages() > 0) { 
+    echo "\n<td valign=\"top\" width=30% style=\"padding: 0px 30px 0px 30px;\"><form action=\"cache-images.php?album=" . queryencode($album->name) . "\">" .
+         "<button type=\"submit\"><img src=\"images/cache.png\" style=\"border: 0px;\" />".
+         " Pre-Cache Images</Button>";
+    echo "<input type=\"checkbox\" name=\"clear\" checked=\"true\" /> Clear";    
+    echo "<br/>Cache newly uploaded images.</form>\n</td>";
+
+	echo "\n<td valign=\"top\" width = 30% style=\"padding: 0px 30px 0px 30px;\"><button onClick=\"window.location='refresh-metadata.php'?album=" . 
+	     queryencode($album->name) . "'\"><img src=\"images/warn.png\" style=\"border: 0px;\">" .
+	     "Refresh Metadata</button><br/>Forces a refresh of the EXIF and IPTC data for all images in the album.\n</td>";
+  }
+  echo "\n<td valign=\"top\" width = 30% style=\"padding: 0px 30px 0px 30px;\"><button onClick=\"window.location='admin.php?action=Captcha" . 
+       $album->getAlbumID() . "&return=" . $album->name . "'\"><img src=\"images/reset.png\" style=\"border: 0px;\" >" .
+       "Reset hitcounters</button><br/>Resets all hitcounters in the album.\n</td>";
+  echo "\n</tr></table>";	
+}
+/**
 * puts out a row in the edit album table
+* 
 * @param object $album is the album being emitted
 **/
 function printAlbumEditRow($album) {

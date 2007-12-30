@@ -35,7 +35,11 @@ if (!zp_loggedin()) {
   printTabs();
   echo "\n" . '<div id="content">';
 
-
+  if ($_GET['clear'] == 'on') { 
+    $clear = 'Clearing and '; 
+  } else { 
+    $clear = ''; 
+  }
   global $_zp_gallery;
   $count = 0;
   
@@ -43,13 +47,17 @@ if (!zp_loggedin()) {
   
   if (isset($_GET['album'])) {
     $folder = querydecode(strip($_GET['album']));
-    echo "\n<h2>Refreshing cache for $folder</h2>";
-	$gallery->clearCache(SERVERCACHE . '/' . $folder); // clean out what was there
+    echo "\n<h2>".$clear."Refreshing cache for $folder</h2>";
+    if (isset($_GET['clear'])) {
+	  $gallery->clearCache(SERVERCACHE . '/' . $folder); // clean out what was there
+    }
     $album = new Album($album, $folder);
     $count = loadAlbum($album);
   } else {
-    echo "\n<h2>Refreshing cache for Gallery</h2>";
-	$gallery->clearCache(); // clean out what was there.
+    echo "\n<h2>".$clear."Refreshing cache for Gallery</h2>";
+    if (isset($_GET['clear'])) {
+      $gallery->clearCache(); // clean out what was there.
+    }
     $albums = $_zp_gallery->getAlbums();
     foreach ($albums as $folder) {
       $album = new Album($album, $folder);
