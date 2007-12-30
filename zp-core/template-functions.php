@@ -3105,7 +3105,7 @@ function printCaptcha($preText='', $midText='', $postText='', $size=4) {
 
   $inputBox =  "<input type=\"text\" id=\"code\" name=\"code\" size=\"" . $size . "\" class=\"inputbox\" />";
   $captcha = "<input type=\"hidden\" name=\"code_h\" value=\"" . $code . "\"/>" .
-             "<label for=\"code\"><img src=\"/cache/". $img . "\" alt=\"Code\"/></label>&nbsp;";
+             "<label for=\"code\"><img src=\"" . WEBPATH . "/cache/". $img . "\" alt=\"Code\"/></label>&nbsp;";
 
   echo $preText;
   echo $captcha;

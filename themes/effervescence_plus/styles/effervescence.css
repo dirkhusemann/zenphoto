@@ -301,8 +301,8 @@ body {
 #main3 {
 	margin: 0 auto 0 auto;
 	padding: 10px 20px 20px 20px;
-	color: $a5e7d9; /*background around comment area */
-	background: #607848;
+	color: $0; 
+	background: #607848; /*background around comment area */
 }
 #main4 {
 	margin: 0 auto 0 auto;
@@ -359,6 +359,7 @@ body {
 }
 #commentform {
 	margin-top: 10px;
+	color: #fff;
 }
 #commentbox input {
 	font: 12px/22px Arial, Helvetica, Tahoma, Verdana, sans-serif;
