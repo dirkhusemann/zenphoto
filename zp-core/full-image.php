@@ -14,13 +14,33 @@ header("HTTP/1.0 404 Not Found");
 <?php
 exit();
 }
-header('content-type: image/jpeg'); 
-//header('Content-Disposition: attachment; filename="' . $_zp_current_image->name . '"');  // enable this to make the image a download
 
 
 $image_path = $_zp_gallery->getAlbumDir() . $_zp_current_album->name . "/" . $_zp_current_image->name;
 
-$newim = imagecreatefromjpeg($image_path);
+$k = explode('.', $image_path);
+$suffix = $k[count($k)-1];
+switch ($suffix) {
+  case 'png':
+    $newim = imagecreatefrompng($image_path);
+    header('content-type: image/png'); 
+    break;
+  case 'bmp':
+    $newim = imagecreatefromwbmp($image_path);
+    header('content-type: image/wbmp'); 
+    break;
+  case 'jpeg':
+  case 'jpg':
+    $newim = imagecreatefromjpeg($image_path);
+    header('content-type: image/jpeg'); 
+    break;
+  case 'gif':
+    $newim = imagecreatefromgif($image_path);
+    header('content-type: image/gif'); 
+    break;
+}
+//header('Content-Disposition: attachment; filename="' . $_zp_current_image->name . '"');  // enable this to make the image a download
+  
 
 if (getOption('perform_watermark')) {
   $watermark_path = SERVERPATH . "/" . ZENFOLDER . "/" . getOption('watermark_image');
@@ -35,7 +55,21 @@ if (getOption('perform_watermark')) {
   imagecopy($newim, $watermark, $dest_x, $dest_y, 0, 0, $watermark_width, $watermark_height);
   imagedestroy($watermark);
 }
+switch ($suffix) {
+  case 'jpg':
+  case 'jpeg':
+    imagejpeg($newim);
+    break;
+  case 'png':
+    imagepng($newim);
+    break;
+  case 'bmp':
+    imagewbmp($newim);
+    break;
+  case 'gif':
+    imagegif($newim);
+    break;
+  }
 
-imagejpeg($newim);
 ?>
 

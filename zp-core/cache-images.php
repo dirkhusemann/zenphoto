@@ -1,6 +1,9 @@
 <?php
-/* This template is used to generate cache images. Running it will process the entire gallery,
-	supplying an album name (ex: loadAlbums.php?album=newalbum) will only process the album named. */
+/* 
+ * This template is used to generate cache images. Running it will process the entire gallery,
+ * supplying an album name (ex: loadAlbums.php?album=newalbum) will only process the album named. 
+ * Passing clear=on will purge the designated cache before generating cache images
+ */
 define('OFFSET_PATH', true);
 require_once("template-functions.php");
 require_once("admin-functions.php");

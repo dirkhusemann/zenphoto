@@ -81,7 +81,7 @@ function printSubalbumAdmin($text, $before='', $after='') {
  * @param string $id the html/css theming id
  * @since 1.1
  */
-function printAdminToolbox($context=null, $id="admin") {
+function printAdminToolbox($context=null, $id='admin') {
   global $_zp_current_album, $_zp_current_image, $_zp_current_search;
   if (zp_loggedin()) {
     $zf = WEBPATH."/".ZENFOLDER;
@@ -234,7 +234,7 @@ function getNumAlbums() {
  * If we're already in the album context, this is a sub-albums loop, which,
  * quite simply, changes the source of the album list.
  * Switch back to the previous context when there are no more albums.
- * Returns true if there is albums, false if none
+ * Returns true if there are albums, false if none
  *
  * @param bool $all true to go through all the albums
  * @param string $sorttype what you want to sort the albums by
@@ -320,7 +320,7 @@ function getTotalPages($oneImagePage=false) {
 
 /**
  * Returns the URL of a page. Use alway with a variable like getPageURL(1)
- * for the first page for example.
+ * for the first page for example. Use this function when you know the total pages
  *
  * @param int $page
  * @param int $total
@@ -360,14 +360,14 @@ function getPageURL($page) {
 }
 
 /**
-* Returns the URL of a page. Use alway with a variable like getPageURL(1) for the first page for example.
+* Returns true if there is a next page
 *
 * @return bool
 */
 function hasNextPage() { return (getCurrentPage() < getTotalPages()); }
 
 /**
-* Returns the URL of the next page.
+* Returns the URL of the next page. Use within If or while loops for pagination.
 *
 * @return string
 */
@@ -392,7 +392,7 @@ function printNextPageLink($text, $title=NULL, $class=NULL, $id=NULL) {
 }
 
 /**
-* Returns TRUE if there is a previous page. Use within If- or while loops for pagination.
+* Returns TRUE if there is a previous page. Use within If or while loops for pagination.
 *
 * @return bool
 */
@@ -549,7 +549,7 @@ function albumNumber() {
 
 
 /**
-* Returns the parent if you use subalbums. Not fully implemented.
+* Returns the names of the parents of the subalbums.
 *
 * @return object
 */
@@ -610,7 +610,7 @@ function getAlbumDate($format=null) {
 * @param string $nonemessage Insert here the text to be printed if there is no date.
 * @param string $format Format string for the date formatting
 */
-function printAlbumDate($before="Date: ", $nonemessage="", $format="F jS, Y") {
+function printAlbumDate($before='Date: ', $nonemessage='', $format='F jS, Y') {
   $date = getAlbumDate($format);
   if ($date) {
     echo $before . $date;
@@ -904,6 +904,25 @@ function getNumImages() {
   }
 }
 /**
+ * Returns the count of all the images in the album and any subalbums
+ *
+ * @param object $album The album whose image count you want
+ * @return int
+ * @since 1.1.4
+ */
+function getTotalImagesIn($album) {
+  global $_zp_gallery;
+  $sum = $album->getNumImages();
+  $subalbums = $album->getSubalbums(0);
+  while (count($subalbums) > 0) {
+    $albumname = array_pop($subalbums);
+    $album = new Album($_zp_gallery, $albumname);
+    $sum = $sum + getTotalImagesIn($album);
+  }
+  return $sum;
+}
+
+/**
  * Returns the next image on a page.
  * sets $_zp_current_image to the next image in the album.
  * Returns true if there is an image to be shown
@@ -1022,8 +1041,8 @@ function imageNumber() {
 }
 
 /**
-* Returns the image date of the current image in yyyy-mm-dd hh:mm:ss format
-* pass it a date format string for custom formatting
+* Returns the image date of the current image in yyyy-mm-dd hh:mm:ss format. 
+* Pass it a date format string for custom formatting
 *
 * @param string $format formatting string for the data
 * @return string
@@ -1946,14 +1965,14 @@ function printCommentAuthorLink($title=NULL, $class=NULL, $id=NULL) {
  * @param string $format how to format the result
  * @return string
  */
-function getCommentDate($format = "F jS, Y") { global $_zp_current_comment; return myts_date($format, $_zp_current_comment['date']); }
+function getCommentDate($format = 'F jS, Y') { global $_zp_current_comment; return myts_date($format, $_zp_current_comment['date']); }
 /**
  * Retrieves the time of the current comment
  * Returns a formatted time
  * @param string $format how to format the result
  * @return string
  */
-function getCommentTime($format = "g:i a") { global $_zp_current_comment; return myts_date($format, $_zp_current_comment['date']); }
+function getCommentTime($format = 'g:i a') { global $_zp_current_comment; return myts_date($format, $_zp_current_comment['date']); }
 
 /**
 * Returns the body of the current comment
@@ -2065,11 +2084,11 @@ function printLatestComments($number, $type='images') {
  * Increments (optionally) and returns the hitcounter
  *
  * @param string $option "image" for image hit counter (default), "album" for album hit counter
- * @param bool $view set to true if you don't want to increment the counter.
+ * @param bool $viewonly set to true if you don't want to increment the counter.
  * @return string
  * @since 1.1.3
  */
-function hitcounter($option="image", $viewonly=false) {
+function hitcounter($option='image', $viewonly=false) {
   switch($option) {
     case "image":
       $id = getImageID();
@@ -2662,7 +2681,7 @@ function printAllDates($class="archive", $yearid="year", $monthid="month") {
  * @param string $q query string to add to url
  * @return string
  */
-function getCustomPageURL($page, $q="") {
+function getCustomPageURL($page, $q='') {
   if (getOption('mod_rewrite')) {
     $result .= WEBPATH."/page/$page";
     if (!empty($q)) { $result .= "?$q"; }
@@ -2774,9 +2793,9 @@ function printRSSHeaderLink($option, $linktext) {
 /**
  * Returns a search URL
  *
- * @param string $param1 the search words target
- * @param string $param2 the dates that limit the search
- * @param integer $param3 the fields on which to search
+ * @param string $words the search words target
+ * @param string $dates the dates that limit the search
+ * @param integer $fields the fields on which to search
  * @return string
  * @since 1.1.3
  */
@@ -2860,7 +2879,7 @@ function printSearchForm($prevtext=NULL, $fieldSelect=NULL, $id='search') {
  * @return string
  * @since 1.1
  */
-function getSearchWords($separator=" | ") {
+function getSearchWords($separator=' | ') {
   if (in_context(ZP_SEARCH)) {
     global $_zp_current_search;
     $tags = $_zp_current_search->getSearchString();
@@ -2876,7 +2895,7 @@ function getSearchWords($separator=" | ") {
  * @return string
  * @since 1.1
  */
-function getSearchDate($format="F Y") {
+function getSearchDate($format='F Y') {
   if (in_context(ZP_SEARCH)) {
     global $_zp_current_search;
     $date = $_zp_current_search->getSearchDate();
@@ -2929,9 +2948,9 @@ function getTheme(&$zenCSS, &$themeColor, $defaultColor) {
 }
 
 /**
- * Passed # of album columns, # of image columns of the theme
- * Updates (non-persistent) images_per_page and albums_per_page so that the rows are filled
- * Returns # of images that will go on the album/image transition page
+ * Passed # of album columns, # of image columns of the theme.
+ * Updates (non-persistent) images_per_page and albums_per_page so that the rows are filled.
+ * Returns # of images that will go on the album/image transition page.
  *
  * @param int $albumColumns number of album columns on the page
  * @param int $imageColumns number of image columns on the page
