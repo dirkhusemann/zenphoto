@@ -55,7 +55,15 @@
             <!-- BEGIN #commentblock -->
             <div id="commentblock">
 
-                  <h2><?php $showhide = "<a href=\"#comments\" id=\"showcomments\"><img src=\"" . $_zp_themeroot . "/img/btn_show.gif\" width=\"35\" height=\"11\" alt=\"SHOW\" /></a> <a href=\"#content\" id=\"hidecomments\"><img src=\"".$_zp_themeroot."/img/btn_hide.gif\" width=\"35\" height=\"11\" alt=\"HIDE\" /></a>"; $num = getCommentCount(); if ($num == 0) echo "<h2>No comments yet</h2>"; if ($num == 1) echo "<h2>1 comment so far $showhide</h2>"; if ($num > 1) echo "<h2>$num comments so far $showhide</h2>"; ?></h2>
+                  <h2>
+                    <?php $showhide = "<a href=\"#comments\" id=\"showcomments\"><img src=\"" . 
+                                        $_zp_themeroot . "/img/btn_show.gif\" width=\"35\" height=\"11\" alt=\"SHOW\" /></a> <a href=\"#content\" id=\"hidecomments\"><img src=\"" .
+                                        $_zp_themeroot . "/img/btn_hide.gif\" width=\"35\" height=\"11\" alt=\"HIDE\" /></a>"; 
+                     $num = getCommentCount(); if ($num == 0) echo "<h2>No comments yet</h2>"; 
+                     if ($num == 1) echo "<h2>1 comment so far $showhide</h2>"; 
+                     if ($num > 1) echo "<h2>$num comments so far $showhide</h2>"; 
+                     ?>
+                  </h2>
                   <?php printCommentErrors(); ?>	  
                 
                 <!-- BEGIN #comments -->
@@ -80,7 +88,7 @@
                     <?php } else { echo '<h2>Comments are closed</h2>'; } ?>
 
                     <!-- BEGIN #addcomment -->
-					<?php if ($error) { 
+					<?php if ($error || ($num == 0)) { 
                       echo '<div id="addcomment" style="display: block;">';
 					} else { 
                       echo '<div id="addcomment" style="display: none;">';
