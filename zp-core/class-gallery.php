@@ -229,7 +229,7 @@ class Gallery {
    * $cascade - garbage collect every image and album in the gallery as well.
    * $full    - garbage collect every image and album in the *database* - completely cleans the database.
    */
-  function garbageCollect($cascade=true, $full=false) {
+  function garbageCollect($cascade=true, $complete=false) {
     // Check for the existence of top-level albums (subalbums handled recursively).
     $result = query("SELECT * FROM " . prefix('albums') . " WHERE `parentid` IS NULL");
     $dead = array();
@@ -248,9 +248,11 @@ class Gallery {
       $first = array_pop($dead);
       $sql1 = "DELETE FROM " . prefix('albums') . " WHERE `id` = '$first'";
       $sql2 = "DELETE FROM " . prefix('images') . " WHERE `albumid` = '$first'";
+      $sql3 = "DELETE FROM " . prefix('comments') . " WHERE `type`='albums' AND `imageid`= '$first'";
       foreach ($dead as $albumid) {
         $sql1 .= " OR `id` = '$albumid'";
         $sql2 .= " OR `albumid` = '$albumid'";
+        $sql3 .= " OR `image` = '$albumid'";
       }
       $n = query($sql1);
       if (!$full && $n > 0 && $cascade) {
@@ -258,7 +260,7 @@ class Gallery {
       }
     }
     
-    if ($full) {
+    if ($complete) {
     
       /* Delete all image entries that don't belong to an album at all. */
       
@@ -376,14 +378,31 @@ class Gallery {
       
       /* clean the comments table */
       
-      $imageids = query_full_array('SELECT `id` FROM ' . prefix('images'));                          /* all the image IDs */
+      $imageids = query_full_array('SELECT `id` FROM ' . prefix('images'));      /* all the image IDs */
       $idsofimages = array();
       foreach($imageids as $row) { $idsofimages[] = $row['id']; }
-      $commentImages = query_full_array("SELECT DISTINCT `imageid` FROM " . prefix('comments') . 'WHERE `type`="images"');     /* imageids of all the comments */
+      $commentImages = query_full_array("SELECT DISTINCT `imageid` FROM " . 
+          prefix('comments') . 'WHERE `type`="images"');                         /* imageids of all the comments */
       $imageidsofcomments = array();
       foreach($commentImages as $row) { $imageidsofcomments [] = $row['imageid']; } 
-      $orphans = array_diff($imageidsofcomments , $idsofimages );                                    /* imageids of comments with no image */      
+      $orphans = array_diff($imageidsofcomments , $idsofimages );                 /* image ids of comments with no image */      
       
+      if (count($orphans) > 0 ) { /* delete dead comments from the DB */
+        $firstrow = array_pop($orphans);
+        $sql = "DELETE FROM " . prefix('comments') . "WHERE `type`='images' AND `imageid`='" . $firstrow . "'";
+        foreach($orphans as $id) $sql .= " OR `imageid`='" . $id . "'";
+        query($sql);
+      }
+      
+      /* do the same for album comments */
+      $albumids = query_full_array('SELECT `id` FROM ' . prefix('albums'));      /* all the album IDs */
+      $idsofalbums = array();
+      foreach($albumids as $row) { $idsofalbums[] = $row['id']; }
+      $commentAlbums = query_full_array("SELECT DISTINCT `imageid` FROM " . 
+          prefix('comments') . 'WHERE `type`="albums"');                         /* album ids of all the comments */
+      $albumidsofcomments = array();
+      foreach($commentAlbums as $row) { $albumidsofcomments [] = $row['imageid']; } 
+      $orphans = array_diff($albumidsofcomments , $idsofalbums );                 /* album ids of comments with no album */      
       if (count($orphans) > 0 ) { /* delete dead comments from the DB */
         $firstrow = array_pop($orphans);
         $sql = "DELETE FROM " . prefix('comments') . "WHERE `type`='images' AND `imageid`='" . $firstrow . "'";

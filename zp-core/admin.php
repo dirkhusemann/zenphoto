@@ -185,12 +185,16 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
 /** Reset hitcounters ***********************************************************/
 /********************************************************************************/
     } else if ($action == "reset_hitcounters") {
-      if(isset($_GET['albumid'])) {
-        $where = ' WHERE `id`='.$_GET['albumid'];
-        $imgwhere = ' WHERE `albumid`='.$_GET['albumid'];
+      if (isset($_GET['albumid'])) $id = $_GET['albumid'];
+      if (isset($_POST['albumid'])) $id = $_POST['albumid'];
+      if(isset($id)) {
+        $where = ' WHERE `id`='.$id;
+        $imgwhere = ' WHERE `albumid`='.$id;
         $return = '?page=edit';
-        if (isset($_GET['return'])) {
-          $return .= '&album=' . $_GET['return'];
+        if (isset($_GET['return'])) $rt = $_GET['return'];
+        if (isset($_POST['return'])) $rt = $_POST['return'];
+        if (isset($rt)) {
+          $return .= '&album=' . $rt;
         }
       } else {
         $where = '';
@@ -1113,9 +1117,9 @@ if (!zp_loggedin()  && !$_zp_null_account) {
       if (isset($_GET['fulltext'])) $fulltext = true; else $fulltext = false;
       if (isset($_GET['viewall'])) $viewall = true; else $viewall = false;
 
-      $comments = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.website,"
-        . " (c.date + 0) AS date, c.comment, c.email, c.inmoderation FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
-        . " WHERE c.imageid = i.id AND i.albumid = a.id ORDER BY c.id DESC " . ($viewall ? "" : "LIMIT 20") );
+      $comments = query_full_array("SELECT id, name, website, type, imageid,"
+        . " (date + 0) AS date, comment, email, inmoderation FROM ".prefix('comments')
+        . " ORDER BY id DESC " . ($viewall ? "" : "LIMIT 20") );
     ?>
       <h1>Comments</h1>
 
@@ -1140,7 +1144,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
       <table class="bordered">
         <tr>
           <th>&nbsp;</th>
-          <th>Image</th>
+          <th>Album/Image</th>
           <th>Author/Link</th>
           <th>Date/Time</th>
           <th>Comment <?php if(!$fulltext) { ?>(<a href="?page=comments&fulltext<?php echo $viewall ? "&viewall":""; ?>">View full text</a>)
@@ -1155,11 +1159,42 @@ if (!zp_loggedin()  && !$_zp_null_account) {
       $id = $comment['id'];
       $author = $comment['name'];
       $email = $comment['email'];
-      $album = $comment['folder'];
-      $image = $comment['filename'];
+      if ($comment['type']=='images') {
+        $imagedata = query_full_array("SELECT `title`, `filename`, `albumid` FROM ". prefix('images') .
+                     " WHERE `id`=" . $comment['imageid']);
+        if ($imagedata) {
+          $imgdata = $imagedata[0];
+          $image = $imgdata['filename'];
+          if ($imgdata['title'] == "") $title = $image; else $title = $imgdata['title'];
+          $title = '/ ' . $title;
+          $albmdata = query_full_array("SELECT `folder`, `title` FROM ". prefix('albums') .
+                       " WHERE `id`=" . $imgdata['albumid']);
+          if ($albmdata) {
+            $albumdata = $albmdata[0];
+            $album = $albumdata['folder'];
+            $albumtitle = $albumdata['albumtitle'];
+            if (empty($albumtitle)) $albumtitle = $album;
+          } else {
+            $title = 'database error';
+          }
+        } else {
+          $title = 'database error';
+        }
+      } else {
+        $image = '';
+        $title = '';
+        $albmdata = query_full_array("SELECT `title`, `folder` FROM ". prefix('albums') .
+                     " WHERE `id`=" . $comment['imageid']);
+        if ($albmdata) {
+          $albumdata = $albmdata[0];
+          $album = $albumdata['folder'];
+          $albumtitle = $albumdata['albumtitle'];
+          if (empty($albumtitle)) $albumtitle = $album;
+        } else {
+          $title = 'database error';
+        }
+      }
       $date  = myts_date("n/j/Y, g:i a", $comment['date']);
-      $albumtitle = $comment['albumtitle'];
-      if ($comment['title'] == "") $title = $image; else $title = $comment['title'];
       $website = $comment['website'];
       $shortcomment = truncate_string($comment['comment'], 123);
       $fullcomment = $comment['comment'];
@@ -1169,7 +1204,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
           <tr>
             <td><input type="checkbox" name="ids[]" value="<?php echo $id; ?>" onClick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" /></td>
             <td style="font-size: 7pt;"><?php echo "<a href=\"" . (getOption("mod_rewrite") ? "../$album/$image" : "../index.php?album=".urlencode($album).
-                      "&image=".urlencode($image)) . "\">$albumtitle / $title</a>"; ?></td>
+                      "&image=".urlencode($image)) . "\">$albumtitle $title</a>"; ?></td>
             <td><?php echo $website ? "<a href=\"$website\">$author</a>" : $author; ?></td>
             <td style="font-size: 7pt;"><?php echo $date; ?></td>
             <td><?php echo ($fulltext) ? $fullcomment : $shortcomment; ?></td>
@@ -1763,21 +1798,54 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         <h2>10 Most Recent Comments</h2>
         <ul>
         <?php
-          $comments = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.website,"
-            . " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
-            . " WHERE c.imageid = i.id AND i.albumid = a.id ORDER BY c.id DESC LIMIT 10");
-          foreach ($comments as $comment) {
-            $author = $comment['name'];
-            $album = $comment['folder'];
-            $image = $comment['filename'];
-            $albumtitle = $comment['albumtitle'];
-            if ($comment['title'] == "") $title = $image; else $title = $comment['title'];
-            $website = $comment['website'];
-            $comment = truncate_string($comment['comment'], 123);
-            echo "<li><div class=\"commentmeta\">$author commented on <a href=\""
-              . (getOption("mod_rewrite") ? "../$album/$image" : "../index.php?album=".urlencode($album)."&image=".urlencode($image))
-              . "\">$albumtitle / $title</a>:</div><div class=\"commentbody\">$comment</div></li>";
+        $comments = query_full_array("SELECT id, name, website, type, imageid,"
+        . " (date + 0) AS date, comment, email, inmoderation FROM ".prefix('comments')
+        . " ORDER BY id DESC " . ($viewall ? "" : "LIMIT 20") );
+        foreach ($comments as $comment) {
+          $id = $comment['id'];
+          $author = $comment['name'];
+          $email = $comment['email'];
+          if ($comment['type']=='images') {
+            $imagedata = query_full_array("SELECT `title`, `filename`, `albumid` FROM ". prefix('images') .
+                     " WHERE `id`=" . $comment['imageid']);
+            if ($imagedata) {
+              $imgdata = $imagedata[0];
+              $image = $imgdata['filename'];
+              if ($imgdata['title'] == "") $title = $image; else $title = $imgdata['title'];
+              $title = '/ ' . $title;
+              $albmdata = query_full_array("SELECT `folder`, `title` FROM ". prefix('albums') .
+                       " WHERE `id`=" . $imgdata['albumid']);
+              if ($albmdata) {
+                $albumdata = $albmdata[0];
+                $album = $albumdata['folder'];
+                $albumtitle = $albumdata['albumtitle'];
+                if (empty($albumtitle)) $albumtitle = $album;
+              } else {
+                $title = 'database error';
+              }
+            } else {
+              $title = 'database error';
+            }
+          } else {
+            $image = '';
+            $title = '';
+            $albmdata = query_full_array("SELECT `title`, `folder` FROM ". prefix('albums') .
+                     " WHERE `id`=" . $comment['imageid']);
+            if ($albmdata) {
+              $albumdata = $albmdata[0];
+              $album = $albumdata['folder'];
+              $albumtitle = $albumdata['albumtitle'];
+              if (empty($albumtitle)) $albumtitle = $album;
+            } else {
+              $title = 'database error';
+            }
           }
+          $website = $comment['website'];
+          $comment = truncate_string($comment['comment'], 123);
+          echo "<li><div class=\"commentmeta\">$author commented on <a href=\""
+          . (getOption("mod_rewrite") ? "../$album/$image" : "../index.php?album=".urlencode($album)."&image=".urlencode($image))
+          . "\">$albumtitle $title</a>:</div><div class=\"commentbody\">$comment</div></li>";
+        }
         ?>
         </ul>
       </div>
@@ -1787,17 +1855,25 @@ if (!zp_loggedin()  && !$_zp_null_account) {
           <h2 class="boxtitle">Gallery Maintenance</h2>
           <p>Your database is <strong><?php echo getOption('mysql_database'); ?>
           </strong>: Tables are prefixed by <strong>'<?php echo getOption('mysql_prefix'); ?>'</strong></p>
-          <button onClick="window.location='admin.php?prune=true">Refresh the Database</button>
-          <br/>This cleans the database, removes any orphan entries for comments, images, and albums.
-          <form action="cache-images.php">
+          <form name="prune_gallery" action="admin.php?prune=true">
+            <input type="hidden" name="prune" value="true">
+            <button Type="submit">Refresh the Database</button>
+            <br/>This cleans the database, removes any orphan entries for comments, images, and albums.
+          </form>
+          <form name="cache_images" action="cache-images.php">
             <button type="submit"><img src="images/cache.png" style="border: 0px;" /> Pre-Cache Images</button>
             <input type="checkbox" name="clear" checked="true" /> Clear
-            <br/>Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser.
+            Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser.
           </form>
-          <button onClick="window.location='refresh-metadata.php'"><img src="images/warn.png" style="border: 0px;" /> Refresh Metadata</button>
-          <br/>Forces a refresh of the EXIF and IPTC data for all images.
-          <p/><button onClick="window.location='admin.php?action=reset_hitcounters"><img src="images/reset.png" style="border: 0px;" /> Reset hitcounters</button>
-          <br/>Sets all album and image hitcounters to zero.
+          <form name= "refresh_metadata" action="refresh-metadata.php">
+            <button type="submit"><img src="images/warn.png" style="border: 0px;" /> Refresh Metadata</button>
+            <br/>Forces a refresh of the EXIF and IPTC data for all images.
+          </form>
+          <form name="reset_hitcounters" action="admin.php?action=reset_hitcounters=true">
+            <input type="hidden" name="action" value="reset_hitcounters">
+            <p/><button type="submit"><img src="images/reset.png" style="border: 0px;" /> Reset hitcounters</button>
+            <br/>Sets all album and image hitcounters to zero.
+          </form>
         </div>
 
 
@@ -1805,14 +1881,15 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         <h2 class="boxtitle">Gallery Stats</h2>
           <p><strong><?php echo $gallery->getNumImages(); ?></strong> images.</p>
           <p><strong><?php echo $gallery->getNumAlbums(true); ?></strong> albums.</p>
-          <p><strong><?php echo $gallery->getNumComments(); ?></strong> comments.</p>
-          <?php
-            // These disk operations are too slow...
-            /*
-            <p>Total size of album images: <strong><?php echo size_readable($gallery->sizeOfImages(), "MB"); ?></strong></p>
-            <p>Total size of image cache: <strong><?php echo size_readable($gallery->sizeOfCache(), "MB"); ?></strong></p>
-            */
-          ?>
+          <p><strong><?php echo $t = $gallery->getNumComments(true); ?></strong> comments.
+          <?php  
+             $c = $gallery->getNumComments(false);
+             if ($c != $t) { 
+               $m = $t - $c;
+               if ($m > 1) $verb = 'are'; else $verb = 'is';
+               echo " ($m $verb in moderation.)";
+             }
+          ?></p>
       </div>
       <p style="clear: both; "></p>
     <?php } ?>

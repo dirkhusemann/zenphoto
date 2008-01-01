@@ -33,12 +33,11 @@ if (!zp_loggedin()) {
 } else {
   printAdminHeader();
   printLogoAndLinks();
-
   echo "\n" . '<div id="main">';
   printTabs();
   echo "\n" . '<div id="content">';
 
-  if ($_GET['clear'] == 'on') { 
+  if (isset($_GET['clear']) || isset($_POST['clear'])) {
     $clear = 'Clearing and '; 
   } else { 
     $clear = ''; 
@@ -48,9 +47,11 @@ if (!zp_loggedin()) {
   
   $gallery = new Gallery();
   
-  if (isset($_GET['album'])) {
-    $folder = querydecode(strip($_GET['album']));
-    echo "\n<h2>".$clear."Refreshing cache for $folder</h2>";
+  if (isset($_GET['album'])) $alb = $_GET['album'];
+  if (isset($_POST['album'])) $alb = $_POST['album'];
+  if (isset($alb)) {
+    $folder = querydecode(strip($alb));
+    echo "\n<h2>".$clear."Refreshing cache for <em>$folder</em></h2>";
     if (isset($_GET['clear'])) {
 	  $gallery->clearCache(SERVERCACHE . '/' . $folder); // clean out what was there
     }
@@ -58,7 +59,7 @@ if (!zp_loggedin()) {
     $count = loadAlbum($album);
   } else {
     echo "\n<h2>".$clear."Refreshing cache for Gallery</h2>";
-    if (isset($_GET['clear'])) {
+    if (!empty($clear)) {
       $gallery->clearCache(); // clean out what was there.
     }
     $albums = $_zp_gallery->getAlbums();
@@ -69,9 +70,11 @@ if (!zp_loggedin()) {
   }
   echo "\n" . "<br/>Finished: Total of $count images.";
   
-  $r = $_GET['album'];
-  if (!empty($r)) {
-    $r = "?page=edit&album=$r";
+  if (isset($_GET['return'])) $ret = $_GET['return'];
+  if (isset($_POST['return'])) $ret = $_POST['return'];
+  if (!empty($ret)) {
+    $r = "?page=edit";
+    if ($ret != '*') $r .= "&album=$ret";
   }
   echo "<p><a href=\"admin.php$r\">&laquo; Back</a></p>";
   echo "\n" . '</div>';

@@ -1,12 +1,17 @@
 <?php
 
-//*** template-functions.php ***************************************************
-//* Functions used to display content in themes.
-//******************************************************************************
+/**
+* Functions used to display content in themes.
+*/
 
-// Load the classes
+/**
+ * Load the classes
+ */ 
 require_once('classes.php');
-// Invoke the controller to handle requests
+
+/**
+ * Invoke the controller to handle requests
+ */ 
 require_once('controller.php');
 
 
@@ -432,7 +437,7 @@ function printPrevPageLink($text, $title=NULL, $class=NULL, $id=NULL) {
 * @param string $class Insert here the CSS-class name you want to style the link with (default is "pagelist")
 * @param string $id Insert here the CSS-ID name if you want to style the link with this
 */
-function printPageNav($prevtext, $separator, $nexttext, $class="pagenav", $id=NULL) {
+function printPageNav($prevtext, $separator, $nexttext, $class='pagenav', $id=NULL) {
   echo "<div" . (($id) ? " id=\"$id\"" : "") . " class=\"$class\">";
   printPrevPageLink($prevtext, "Previous Page");
   echo " $separator ";
@@ -447,7 +452,7 @@ function printPageNav($prevtext, $separator, $nexttext, $class="pagenav", $id=NU
  * @param string $class the css class to use, "pagelist" by default
  * @param string $id the css id to use
  */
-function printPageList($class="pagelist", $id=NULL) {
+function printPageList($class='pagelist', $id=NULL) {
   printPageListWithNav(null, null, false, false, $class, $id);
 }
 
@@ -462,7 +467,7 @@ function printPageList($class="pagelist", $id=NULL) {
 * @param string $class Insert here the CSS-class name you want to style the link with (default is "pagelist")
 * @param string $id Insert here the CSS-ID name if you want to style the link with this
 */
-function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextprev=true, $class="pagelist", $id=NULL) {
+function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextprev=true, $class='pagelist', $id=NULL) {
   $total = getTotalPages($oneImagePage);
   if ($total < 2) {
     $class .= ' disabled_nav';
@@ -571,7 +576,7 @@ function getParentAlbums() {
 * @param string $between Insert here the text to be printed between the links
 * @param string $after Insert here the text to be printed after the links
 */
-function printParentBreadcrumb($before = "", $between=" | ", $after = " | ") {
+function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
   $parents = getParentAlbums();
   $n = count($parents);
   if ($n == 0) return;
@@ -1067,7 +1072,7 @@ function getImageDate($format=null) {
 * @param string $nonemessage Text to put out if there is no date
 * @param string $format format string for the date
 */
-function printImageDate($before="Date: ", $nonemessage="", $format="F jS, Y") {
+function printImageDate($before='Date: ', $nonemessage='', $format='F jS, Y') {
   $date = getImageDate($format);
   if ($date) {
     echo $before . $date;
@@ -1880,8 +1885,12 @@ function printSizedImageLink($size, $text, $title, $class=NULL, $id=NULL) {
 * @return int
 */
 function getCommentCount() {
-  global $_zp_current_image;
-  return $_zp_current_image->getCommentCount();
+  global $_zp_current_image, $_zp_current_album;
+  if (in_context(ZP_IMAGE)) {
+    return $_zp_current_image->getCommentCount();
+  } else {
+    return $_zp_current_album->getCommentCount();
+  }
 }
 /**
 * Returns true if neither the album nor the image have comments closed
@@ -1889,8 +1898,12 @@ function getCommentCount() {
 * @return bool
 */
 function getCommentsAllowed() {
-  global $_zp_current_image;
-  return $_zp_current_image->getCommentsAllowed();
+  global $_zp_current_image, $_zp_current_album;
+  if (in_context(ZP_IMAGE)) {
+    return $_zp_current_image->getCommentsAllowed();
+  } else {
+    return $_zp_current_album->getCommentsAllowed();
+  }
 }
 /**
  *Iterate through comments; use the ZP_COMMENT context.
@@ -1899,9 +1912,13 @@ function getCommentsAllowed() {
  *@return bool
  *  */
 function next_comment() {
-  global $_zp_current_image, $_zp_current_comment, $_zp_comments;
+  global $_zp_current_image, $_zp_current_album, $_zp_current_comment, $_zp_comments;
   if (is_null($_zp_current_comment)) {
-    $_zp_comments = $_zp_current_image->getComments();
+    if (in_context(ZP_IMAGE)) {
+      $_zp_comments = $_zp_current_image->getComments();  
+    } else {
+      $_zp_comments = $_zp_current_album->getComments();  
+    }
     if (empty($_zp_comments)) { return false; }
     $_zp_current_comment = array_shift($_zp_comments);
     add_context(ZP_COMMENT);
@@ -2267,7 +2284,7 @@ function printLatestImages($number=5) {
 
 /**
 * Returns  an array of album ids whose parent is the folder
-* @param string $albumfolder folder name if you want a album different >from the current album
+* @param string $albumfolder folder name if you want a album different >>from the current album
 * @return array
 */
 function getAllSubAlbumIDs($albumfolder='') {
@@ -2347,7 +2364,7 @@ function getRandomImagesAlbum() {
  * @param string $class optional class
  * @param string $option optional
  */
-function printRandomImages($number, $class=null, $option="all") {
+function printRandomImages($number, $class=null, $option='all') {
   if (!is_null($class)) {
     $class = 'class="' . $class . '";';
     echo "<ul".$class.">";
@@ -2505,7 +2522,7 @@ function getTags() {
  * @param bool $editable true to allow admin to edit the tags
  * @since 1.1
  */
-function printTags($option="links",$preText=NULL,$class='taglist',$separator=", ",$editable=TRUE) {
+function printTags($option='links',$preText=NULL,$class='taglist',$separator=', ',$editable=TRUE) {
   $tags = getTags();
   $singletag = explode(",", $tags);
   if (empty($tags)) { $preText = ""; }
@@ -2568,12 +2585,12 @@ function getAllTags() {
  * @param string $sort "results" for relevance list, "abc" for alphabetical, blank for unsorted
  * @param bool $counter TRUE if you want the tag count within brackets behind the tag
  * @param bool $links text to go before the printed tags
- * @param string $maxfontsize largest font size the cloud should display
- * @param string $maxcount the maximum count for a tag to appear in the output
- * @param string $mincount the minimum count for a tag to appear in the output
+ * @param int $maxfontsize largest font size the cloud should display
+ * @param int $maxcount the maximum count for a tag to appear in the output
+ * @param int $mincount the minimum count for a tag to appear in the output
  * @since 1.1
  */
-function printAllTagsAs($option,$class="",$sort="abc",$counter=FALSE,$links=TRUE,$maxfontsize="2",$maxcount="50",$mincount="10") {
+function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE,$maxfontsize=2,$maxcount=50,$mincount=10) {
   define('MINFONTSIZE', 0.8);
   $option = strtolower($option);
   if ($class != "") { $class = "class=\"".$class."\""; }
@@ -2645,7 +2662,7 @@ function getAllDates() {
  * @param string $yearid optional class for "year"
  * @param string $monthid optional class for "month"
  */
-function printAllDates($class="archive", $yearid="year", $monthid="month") {
+function printAllDates($class="archive", $yearid='year', $monthid='month') {
   if (!empty($class)){ $class = "class=\"$class\""; }
   if (!empty($yearid)){ $yearid = "id=\"$yearid\""; }
   if (!empty($monthid)){ $monthid = "id=\"$monthid\""; }
@@ -2917,10 +2934,10 @@ define("ALBUM", 2);
  * @return bool 
  */
 function OpenedForComments($what=3) {
-  global $_zp_current_image;
+  global $_zp_current_image, $_zp_current_album;
   $result = true;
   if (IMAGE & $what) { $result = $result && $_zp_current_image->getCommentsAllowed(); }
-  if (ALBUM & $what) { $result = $result && $_zp_current_image->album->getCommentsAllowed(); }
+  if (ALBUM & $what) { $result = $result && $_zp_current_album->getCommentsAllowed(); }
   return $result;
 }
 

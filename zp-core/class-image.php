@@ -233,7 +233,10 @@ class Image extends PersistentObject {
    */
   function deleteImage($clean=true) {
     $result = unlink($this->localpath); 
-    if ($clean && $result) { query("DELETE FROM ".prefix('images')." WHERE `id` = " . $this->id); } 
+    if ($clean && $result) { 
+      query("DELETE FROM ".prefix('comments') . "WHERE `type`='images' AND `imageid`=" . $this->id);
+      query("DELETE FROM ".prefix('images') . "WHERE `id` = " . $this->id); 
+    } 
     return $result; 
   }
   
@@ -291,86 +294,7 @@ class Image extends PersistentObject {
   
   // addComment: assumes data is coming straight from GET or POST
   function addComment($name, $email, $website, $comment, $code, $code_ok) {
-    $this->getComments();
-    $name = trim($name);
-    $email = trim($email);
-    $website = trim($website);
-    $code = md5(trim($code));
-    $code_ok = trim($code_ok);
-    // Let the comment have trailing line breaks and space? Nah...
-    // Also (in)validate HTML here, and in $name.
-    $comment = trim($comment);
-    if (getOption('comment_email_required') && (empty($email) || !is_valid_email_zp($email))) { return 0; }
-    if (getOption('comment_name_required') && empty($name)) { return 0; }
-    if (getOption('comment_web_required') && empty($website)) { return 0; }
-    $file = SERVERCACHE . "/code_" . $code_ok . ".png";
-    if (getOption('Use_Captcha')) {
-      if (!file_exists($file)) { return 0; }
-      if ($code != $code_ok) { return 0; }
-    }
-    if (empty($comment)) {
-      return 0;
-    }
-    
-    if (!empty($website) && substr($website, 0, 7) != "http://") {
-      $website = "http://" . $website;
-    }
-
-    $goodMessage = 2;
-    $gallery = new gallery();
-    if (!(false === ($requirePath = getPlugin('spamfilters/'.getOption('spam_filter').".php", false)))) {
-      require_once($requirePath);
-      $spamfilter = new SpamFilter();
-      $goodMessage = $spamfilter->filterMessage($name, $email, $website, $comment, $this->getFullImage());
-    }      
-      
-    if ($goodMessage) {
-      if ($goodMessage == 1) {
-        $moderate = 1;
-      } else {
-        $moderate = 0;
-      }
-
-      // Update the database entry with the new comment
-      query("INSERT INTO " . prefix("comments") . " (`imageid`, `name`, `email`, `website`, `comment`, `inmoderation`, `date`, `type`) VALUES " .
-            " ('" . $this->id .
-            "', '" . escape($name) . 
-            "', '" . escape($email) . 
-            "', '" . escape($website) . 
-            "', '" . escape($comment) . 
-            "', '" . $moderate . 
-            "', NOW()" .
-            ", 'images')");
-        
-      if (!$moderate) {
-        //  add to comments array and notify the admin user
-   
-        $newcomment = array();
-        $newcomment['name'] = $name;
-        $newcomment['email'] = $email;
-        $newcomment['website'] = $website;
-        $newcomment['comment'] = $comment;
-        $newcomment['date'] = time();
-        $this->comments[] = $newcomment; 
-        
-        if (getOption('email_new_comments')) {
-          $message = "A comment has been posted in your album " . $this->getAlbumName() . " about " . $this->getTitle() . "\n" .
-                     "\n" .
-                     "Author: " . $name . "\n" .
-                     "Email: " . $email . "\n" .
-                     "Website: " . $website . "\n" .
-                     "Comment:\n" . $comment . "\n" .
-                     "\n" .
-                     "You can view all comments about this image here:\n" .
-                     "http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/index.php?album=" . urlencode($this->album->name) . "&image=" . urlencode($this->filename) . "\n" .
-                     "\n" .
-                     "You can edit the comment here:\n" .
-                     "http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/" . ZENFOLDER . "/admin.php?page=comments\n";
-          zp_mail("[" . getOption('gallery_title') . "] Comment posted about: " . $this->getTitle(), $message);     
-        }      
-      }
-    }
-    return $goodMessage;
+    return postComment($name, $email, $website, $comment, $code, $code_ok, $this);
   }
 
   function getCommentCount() { 

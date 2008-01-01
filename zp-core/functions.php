@@ -454,8 +454,6 @@ function sanitize_path($filename) {
   return $filename;
 }
 
-
-
 function zp_error($message) {
   global $_zp_error;
   if (!$_zp_error) {
@@ -815,14 +813,8 @@ $_zp_themeroot = WEBPATH . "/themes/$theme";
     $pluginFile = SERVERPATH . '/' . ZENFOLDER . '/plugins/' . $plugin;
   }
   if (file_exists($pluginFile)) {
-
-//echo "\n<br/>Exists: ".$pluginFile."<br/>\n";  
-
     return $pluginFile;
   } else {
-  
-//echo "\n<br/>Doesn't exists: ".$pluginFile."<br/>\n";  
-
     return false;
   }
 }
@@ -954,4 +946,119 @@ function unzip($file, $dir) { //check if zziplib is installed
     }
   }
 }
+
+/**
+ * Generic comment adding routine. Called by album objects or image objects
+ * to add comments.
+ * 
+ * Returns a code for the success of the comment add:
+ *    0: Bad entry
+ *    1: Marked for moderation
+ *    2: Successfully posted
+ *
+ * @param string $name Comment author name
+ * @param string $email Comment author email
+ * @param string $website Comment author website
+ * @param string $comment body of the comment
+ * @param string $code Captcha code entered
+ * @param string $code_ok Captcha md5 expected
+ * @param string $type 'albums' if it is an album or 'images' if it is an image comment
+ * @param object $receiver
+ * @return int
+ */
+function postComment($name, $email, $website, $comment, $code, $code_ok, $receiver) {
+  if (strtolower(get_class($receiver)) == 'image') {
+    $type = 'images';
+  } else {
+    $type = 'albums';
+  }
+  $receiver->getComments();
+  $name = trim($name);
+  $email = trim($email);
+  $website = trim($website);
+  $code = md5(trim($code));
+  $code_ok = trim($code_ok);
+  // Let the comment have trailing line breaks and space? Nah...
+  // Also (in)validate HTML here, and in $name.
+  $comment = trim($comment);
+  if (getOption('comment_email_required') && (empty($email) || !is_valid_email_zp($email))) { return 0; }
+  if (getOption('comment_name_required') && empty($name)) { return 0; }
+  if (getOption('comment_web_required') && empty($website)) { return 0; }
+  $file = SERVERCACHE . "/code_" . $code_ok . ".png";
+  if (getOption('Use_Captcha')) {
+    if (!file_exists($file)) { return 0; }
+    if ($code != $code_ok) { return 0; }
+  }
+  if (empty($comment)) {
+    return 0;
+  }
+
+  if (!empty($website) && substr($website, 0, 7) != "http://") {
+    $website = "http://" . $website;
+  }
+
+  $goodMessage = 2;
+  $gallery = new gallery();
+  if (!(false === ($requirePath = getPlugin('spamfilters/'.getOption('spam_filter').".php", false)))) {
+    require_once($requirePath);
+    $spamfilter = new SpamFilter();
+    $goodMessage = $spamfilter->filterMessage($name, $email, $website, $comment, $type=='images'?$receiver->getFullImage():NULL);
+  }
+
+  if ($goodMessage) {
+    if ($goodMessage == 1) {
+      $moderate = 1;
+    } else {
+      $moderate = 0;
+    }
+
+    // Update the database entry with the new comment
+    query("INSERT INTO " . prefix("comments") . " (`imageid`, `name`, `email`, `website`, `comment`, `inmoderation`, `date`, `type`) VALUES " .
+            " ('" . $receiver->id .
+            "', '" . escape($name) . 
+            "', '" . escape($email) . 
+            "', '" . escape($website) . 
+            "', '" . escape($comment) . 
+            "', '" . $moderate . 
+            "', NOW()" .
+            ", '$type')");
+
+    if (!$moderate) {
+      //  add to comments array and notify the admin user
+       
+      $newcomment = array();
+      $newcomment['name'] = $name;
+      $newcomment['email'] = $email;
+      $newcomment['website'] = $website;
+      $newcomment['comment'] = $comment;
+      $newcomment['date'] = time();
+      $this->comments[] = $newcomment;
+
+      if ($type == 'images') {
+        $on = $receiver->getAlbumName() . " about " . $receiver->getTitle();
+        $url = "album=" . urlencode($receiver->album->name) . "&image=" . urlencode($receiver->filename);
+      } else {
+        $on = $receiver->name;
+        $url = "album=" . urlencode($receiver->name);
+      }
+      if (getOption('email_new_comments')) {
+        $message = "A comment has been posted in your album $on\n" .
+                     "\n" .
+                     "Author: " . $name . "\n" .
+                     "Email: " . $email . "\n" .
+                     "Website: " . $website . "\n" .
+                     "Comment:\n" . $comment . "\n" .
+                     "\n" .
+                     "You can view all comments about this image here:\n" .
+                     "http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/index.php?$url\n" .
+                     "\n" .
+                     "You can edit the comment here:\n" .
+                     "http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/" . ZENFOLDER . "/admin.php?page=comments\n";
+        zp_mail("[" . getOption('gallery_title') . "] Comment posted on $on", $message);
+      }
+    }
+  }
+  return $goodMessage;
+}
+
 ?>

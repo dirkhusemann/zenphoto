@@ -23,7 +23,6 @@ if (!zp_loggedin()) {
   } 
   printAdminHeader();
   printLogoAndLinks();
-
   echo "\n" . '<div id="main">';
   printTabs();
   echo "\n" . '<div id="content">';
@@ -31,9 +30,13 @@ if (!zp_loggedin()) {
 
   if (isset($_GET['refresh']) && db_connect()) {
     echo "<h3>Finished refreshing metadata.</h3>";
-	$r = $_GET['return'];
-	if (!empty($r)) {
-	  $r = "?page=edit&album=$r";
+    if (isset($_GET['return'])) $ret = $_GET['return'];
+    if (isset($_POST['return'])) $ret = $_POST['return'];
+    if (!empty($ret)) {
+	  $r = "?page=edit";
+	  if ($ret != '*') {
+	    $r .= "&album=$ret";
+	  }
 	}
 	echo "<p><a href=\"admin.php$r\">&laquo; Back</a></p>";
   } else if (db_connect()) {
@@ -41,8 +44,10 @@ if (!zp_loggedin()) {
 	$folder = '';
 	$id = '';
 	$r = "";
-	if (isset($_GET['album'])) {
-	  $folder = querydecode(strip($_GET['album']));
+    if (isset($_GET['album'])) $alb = $_GET['album'];
+    if (isset($_POST['album'])) $alb = $_POST['album'];
+	if (isset($alb)) {
+	  $folder = querydecode(strip($alb));
 	  if (!empty($folder)) {
 	    $sql = "SELECT `id` FROM ". prefix('albums') . " WHERE `folder`=\"".mysql_real_escape_string($folder)."\";";
 		$row = query_single_row($sql);
@@ -60,8 +65,10 @@ if (!zp_loggedin()) {
 	} else {
       $sql = "UPDATE " . prefix('images') . " SET `mtime`=0 $id;";
 	  query($sql);
-      echo "<p>We're all set to refresh image metadata$r</p>";
-      echo "<p><a href=\"?refresh=start&return=$folder\" title=\"Refresh image metadata.\" style=\"font-size: 15pt; font-weight: bold;\">Go!</a></p>";
+      if (isset($_GET['return'])) $ret = $_GET['return'];
+      if (isset($_POST['return'])) $ret = $_POST['return'];
+	  echo "<p>We're all set to refresh image metadata$r</p>";
+      echo "<p><a href=\"?refresh=start&return=$ret\" title=\"Refresh image metadata.\" style=\"font-size: 15pt; font-weight: bold;\">Go!</a></p>";
     }
   } else {
     echo "<h3>database not connected</h3>";

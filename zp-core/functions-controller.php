@@ -138,10 +138,10 @@ function fix_path_redirect() {
  ******************************************************************************/
  
 function zp_handle_comment() {
-  global $_zp_current_image, $stored, $error;
+  global $_zp_current_image, $_zp_current_album, $stored, $error;
   $redirectTo = FULLWEBPATH . '/' . zpurl();
   if (isset($_POST['comment'])) {
-    if (in_context(ZP_IMAGE) && isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
+    if (in_context(ZP_ALBUM) && isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
       if (isset($_POST['website'])) $website = strip_tags($_POST['website']); else $website = "";
       $allowed_tags = "(".getOption('allowed_tags').")"; 
       $allowed = parseAllowedTags($allowed_tags);
@@ -155,10 +155,16 @@ function zp_handle_comment() {
 	      $redirectTo = $activeImage->getImageLink();
 	      }
 	    } else {
-          $commentadded = $_zp_current_image->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']), 
+	      if (in_context(ZP_IMAGE)) {
+	        $commentobject = $_zp_current_image;
+	        $redirectTo = $_zp_current_image->getImageLink();
+	      } else {
+	        $commentobject = $_zp_current_album;
+	        $redirectTo = $_zp_current_album->getAlbumLink();
+	      }
+          $commentadded = $commentobject->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']), 
                                                          $website, kses($_POST['comment'], $allowed),
                                                          strip_tags($_POST['code']), $_POST['code_h']);
-	      $redirectTo = $_zp_current_image->getImageLink();
 	    }   
       if ($commentadded == 2) {
         unset($error);
@@ -378,6 +384,5 @@ function zp_load_request() {
     exit();
   }
 }
-
 
 ?>

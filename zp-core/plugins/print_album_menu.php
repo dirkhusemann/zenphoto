@@ -1,51 +1,54 @@
 <?php	
 
-/* printAlbumMenu Custom Function 1.3 for zenphoto 1.1 or newer - Changelog
-
-1.3:
-- only for zenphoto 1.1. or newer
-- nearly completly rewritten
-- Supports 4 subalbum levels with context sensitive fold out display
-	
-1.2.2.3:
-- Automatic detection if mod_rewrite is enabled but it has to be set and save in the admin options. The
-zp-config.php entry is not used.
-- Better looking source code thanks to spacing and linebreaks implemented by aitf311
-
-1.2.2.2:
-- Automatic disabling of the counter for main albums so that they don't show "(0)" anymore if you only use subalbums for images
-now for subalbums, too.
-
-1.2.2.1:
-- Automatic disabling of the counter for main albums so that they don't show "(0)" anymore if you only use subalbums for images
-
-1.2.2: 
-- Change Subalbum CSS-ID "$id2" to CLASS "$class" ((X)HTML Validation issue)
-- Add htmlspecialchars to the printed album titles, so that validation does not fail because of ampersands in names.
-
-1.2.1: 
-- New option for mod_rewrite (needs to be automatic...),
-- bug fixes for the id-Tags, which didn't get used.
-
-
-1.2 What's new: Now works with sbillard's album publishing function.
-
-1.1. What's new:
-- Option for album list or a drop down jump menu if you want to save space 
-- Displays the number of images in the album (like e.g. wordpress does with articles)
-- Option for disabling the counter
-- Parameters for CSS-Ids for styling, separate ones for main album and subalbums
-- Renamed the function name from show_album_menu() to more zp style printAlbumMenu()
-*/
+/** printAlbumMenu Custom Function 1.3 for zenphoto 1.1 or newer 
+ * 
+ * Changelog
+ *
+ * 1.3:
+ * - only for zenphoto 1.1. or newer
+ * - nearly completly rewritten
+ * - Supports 4 subalbum levels with context sensitive fold out display
+ * 	
+ * 1.2.2.3:
+ * - Automatic detection if mod_rewrite is enabled but it has to be set and save in the admin options. The
+ * zp-config.php entry is not used.
+ * - Better looking source code thanks to spacing and linebreaks implemented by aitf311
+ * 
+ * 1.2.2.2:
+ * - Automatic disabling of the counter for main albums so that they don't show "(0)" anymore if you only use subalbums for images
+ * now for subalbums, too.
+ * 
+ * 1.2.2.1:
+ * - Automatic disabling of the counter for main albums so that they don't show "(0)" anymore if you only use subalbums for images
+ * 
+ * 1.2.2: 
+ * - Change Subalbum CSS-ID "$id2" to CLASS "$class" ((X)HTML Validation issue)
+ * - Add htmlspecialchars to the printed album titles, so that validation does not fail because of ampersands in names.
+ * 
+ * 1.2.1: 
+ * - New option for mod_rewrite (needs to be automatic...),
+ * - bug fixes for the id-Tags, which didn't get used.
+ * 
+ * 1.2 What's new: Now works with sbillard's album publishing function.
+ * 
+ * 1.1. What's new:
+ * - Option for album list or a drop down jump menu if you want to save space 
+ * - Displays the number of images in the album (like e.g. wordpress does with articles)
+ * - Option for disabling the counter
+ * - Parameters for CSS-Ids for styling, separate ones for main album and subalbums
+ * - Renamed the function name from show_album_menu() to more zp style printAlbumMenu()
+ */
 
 /**
  * Prints a list of all albums context sensitive up to the 4th subalbum level
+ * Usage: Call the file via require_once(ZENFOLDER.'zp-core/plugins/print_album_menu.php') within your theme pages where you want to use the menu  
  * @param string $option "list" for html list, "jump" for a jump drop down menu
  * @param string $option2 "count" for a image counter in brackets behind the album name, "" = for no image numbers or leave blank if you don't set css styles
  * @param string $css_id insert css id for the main album list, leave blank if you don't use 
  * @param string $css_id_active insert css class for the active link in the main album list
  * @param string $css_class insert css class for the sub album lists
  * @param string $css_class_active insert css class for the active link in the sub album lists
+ * @return html list or drop down jump menu of the albums
  * @since 1.2
  */
 

@@ -61,7 +61,48 @@ $firstPageImages = normalizeColumns(1, 7);
 		<br clear="all" />
     	<?php printAlbumMap(); ?>
   	</div>
-  	<?php printPageNav("&laquo; prev", "|", "next &raquo;"); ?>
+ 
+ <!-- begin comment block -->     
+      	<?php if (getOption('Allow_comments')  && getCurrentPage() == 1) { ?>
+      	<div id="comments">
+        	<div class="commentcount"><?php $num = getCommentCount(); echo ($num == 0) ? "No comments" : (($num == 1) ? "<strong>One</strong> comment" : "<strong>$num</strong> comments"); ?> on this alblum:</div>
+          
+          	<?php while (next_comment()):  ?>
+            <div class="comment">
+            	<div class="commentmeta">
+                	<span class="commentauthor"><?php printCommentAuthorLink(); ?></span>
+                	| <span class="commentdate"><?php echo getCommentDate();?>, <?php echo getCommentTime();?> PST</span>
+             	</div>
+              	<div class="commentbody"><?php echo getCommentBody();?></div>            
+            </div>
+          	<?php endwhile; ?>
+          
+          	<div class="imgcommentform">
+			  <?php if (OpenedForComments(ALBUM)) { ?>
+          		<!-- If comments are on for this album... -->
+            	<h3>Add a comment:</h3>
+            	<form name="commentform" id="commentform" action="#comments" method="post">
+              		<input type="hidden" name="comment" value="1" />
+              		<input type="hidden" name="remember" value="1" />
+                    <?php printCommentErrors(); ?>
+              		<table border="0">
+                		<tr><td><label for="name">Name:</label></td>    <td><input type="text" name="name" size="20" value="<?php echo $stored[0];?>" />  </td></tr>
+                		<tr><td><label for="email">E-Mail (won't be public):</label></td> <td><input type="text" name="email" size="20" value="<?php echo $stored[1];?>" /> </td></tr>
+                		<tr><td><label for="website">Site:</label></td> <td><input type="text" name="website" size="30" value="<?php echo $stored[2];?>" /></td></tr>
+                        <?php if (getOption('Use_Captcha')) { 
+                          printCaptcha('<tr><td>Enter ', ':</td><td>', '</td></tr>'); 
+                        } ?>
+              		</table>
+              		<textarea name="comment" rows="6" cols="40"></textarea><br />
+              		<input type="submit" value="Add Comment" />
+            	</form>
+          	</div>
+        <?php } else { echo 'Comments are closed.'; } ?>
+      	</div>
+      	<?php } ?>
+<!--  end comment block -->
+ 
+   	<?php printPageNav("&laquo; prev", "|", "next &raquo;"); ?>
 
   	<div id="credit">
 		<?php printRSSLink('Album', '', 'Album RSS', ''); ?> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a> | <a href="?p=archive">Archive View</a><br />

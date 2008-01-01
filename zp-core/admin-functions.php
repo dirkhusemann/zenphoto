@@ -482,22 +482,38 @@ function printAlbumEditForm($index, $album) {
  * @param object $album is the album being emitted
  */
 function printAlbumButtons($album) {
-  echo "\n<table class=\"buttons\"><tr>";
-  if ($album->getNumImages() > 0) { 
-    echo "\n<td valign=\"top\" width=30% style=\"padding: 0px 30px 0px 30px;\"><form action=\"cache-images.php?album=" . queryencode($album->name) . "\">" .
-         "<button type=\"submit\"><img src=\"images/cache.png\" style=\"border: 0px;\" />".
-         " Pre-Cache Images</Button>";
-    echo "<input type=\"checkbox\" name=\"clear\" checked=\"true\" /> Clear";    
+  if ($album->getNumImages() > 0) {
+    echo "\n<table class=\"buttons\"><tr>";
+    
+    echo "\n<td valign=\"top\" width=30% style=\"padding: 0px 30px 0px 30px;\">";
+    echo "<form name=\"cache_images\" action=\"cache-images.php\" method=\"post\">";
+    echo "<input type=\"hidden\" name=\"album\" value=" . queryencode($album->name) . ">";
+    echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
+    echo "<button type=\"submit\"><img src=\"images/cache.png\" style=\"border: 0px;\" />";
+    echo " Pre-Cache Images</Button>";
+    echo "<input type=\"checkbox\" name=\"clear\" checked=\"true\" /> Clear";
     echo "<br/>Cache newly uploaded images.</form>\n</td>";
 
-	echo "\n<td valign=\"top\" width = 30% style=\"padding: 0px 30px 0px 30px;\"><button onClick=\"window.location='refresh-metadata.php'?album=" . 
-	     queryencode($album->name) . "'\"><img src=\"images/warn.png\" style=\"border: 0px;\">" .
-	     "Refresh Metadata</button><br/>Forces a refresh of the EXIF and IPTC data for all images in the album.\n</td>";
+    echo "\n<td valign=\"top\" width = 30% style=\"padding: 0px 30px 0px 30px;\">";
+    echo "<form name=\"refresh_metadata\" action=\"refresh-metadata.php\"?album=" . queryencode($album->name) . "\" method=\"post\">";
+    echo "<input type=\"hidden\" name=\"album\" value=" . queryencode($album->name) . ">";
+    echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
+    echo "<button type=\"submit\"><img src=\"images/warn.png\" style=\"border: 0px;\" /> Refresh Metadata</button>";
+    echo "<br/>Forces a refresh of the EXIF and IPTC data for all images in the album.";
+    echo "</form>";
+	echo "\n</td>";
+         
+    echo "\n<td valign=\"top\" width = 30% style=\"padding: 0px 30px 0px 30px;\">";
+    echo "</form>";
+    echo "<form name=\"reset_hitcounters\" action=\"?action=reset_hitcounters\"" . " method=\"post\">";
+    echo "<input type=\"hidden\" name=\"action\" value=\"reset_hitcounters\">";
+    echo "<input type=\"hidden\" name=\"albumid\" value=" . $album->getAlbumID() . ">";
+    echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
+    echo "<button type=\"submit\"><img src=\"images/reset.png\" style=\"border: 0px;\" /> Reset hitcounters</button>";
+    echo "<br/>Resets all hitcounters in the album.";
+    echo "</form>";
+    echo "\n</tr></table>";
   }
-  echo "\n<td valign=\"top\" width = 30% style=\"padding: 0px 30px 0px 30px;\"><button onClick=\"window.location='admin.php?action=Captcha" . 
-       $album->getAlbumID() . "&return=" . $album->name . "'\"><img src=\"images/reset.png\" style=\"border: 0px;\" >" .
-       "Reset hitcounters</button><br/>Resets all hitcounters in the album.\n</td>";
-  echo "\n</tr></table>";	
 }
 /**
 * puts out a row in the edit album table
@@ -524,6 +540,7 @@ function printAlbumEditRow($album) {
   } else {
     echo '<img src="images/blank.png" style="border: 0px;" alt="No password" /></a>';
   }
+  
   echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp\n";
   if ($album->getShow()) {
     echo '<a class="publish" href="?action=publish&value=0&album=' . queryencode($album->name) . 
@@ -534,20 +551,27 @@ function printAlbumEditRow($album) {
          '" title="Publish the album <em>' . $album->name . '</em>">';
     echo '<img src="images/action.png" style="border: 0px;" alt="Publish the album ' . $album->name . '" /></a>';
   }
-  echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp\n";
+  
+  echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp\n";  
+  echo '<a class="cache" href="cache-images.php?album=' . queryencode($album->name) . "&return=*" . 
+       '" title="Pre-cache images in <em>' . $album->name . '</em>">';
   echo '<img src="images/cache.png" style="border: 0px;" alt="Cache the album ' . $album->name . '" /></a>';
-  echo '<a class="warn" href="refresh-metadata.php?album=' . queryencode($album->name) . 
+  
+  echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp\n";  
+  echo '<a class="warn" href="refresh-metadata.php?album=' . queryencode($album->name) . "&return=*" . 
        '" title="Refresh metadata for the album <em>' . $album->name . '</em>">';
-  echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp\n";
   echo '<img src="images/warn.png" style="border: 0px;" alt="Refresh image metadata in the album ' . $album->name . '>" /></a>';
+
+  echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp\n";  
   echo '<a class="reset" href="?action=reset_hitcounters&albumid=' . $album->getAlbumID() . '" title="Reset hitcounters for album <em>' . $album->name . '</em>">';
-  echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp\n";
   echo '<img src="images/reset.png" style="border: 0px;" alt="Reset hitcounters for the album ' . $album->name . '" /></a>';
+  
   echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp\n";
   echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=" . queryEncode($album->name) . "');\" title=\"Delete the album " . $album->name . "\">";
   echo '<img src="images/fail.png" style="border: 0px;" alt="Delete the album ' . $album->name . '" /></a>';
   echo '<a class="cache" href="cache-images.php?album=' . queryencode($album->name) . 
        '&return=edit" title="Pre-Cache the album <em>' . $album->name . '</em>">';
+  
   echo '</tr>';
   echo '</table>';
   echo "</div>\n";

@@ -420,6 +420,18 @@ class Album extends PersistentObject {
   
   function setAlbumThumb($filename) { $this->set('thumb', $filename); }
   
+  function getAlbumLink() {
+    global $_zp_page;
+
+    $rewrite = pathurlencode($this->name) . '/';
+    $plain = '/index.php?album=' . urlencode($this->name). '/';
+    if ($_zp_page) {
+      $rewrite .= "page/$_zp_page";
+      $plain .= "&page=$_zp_page";
+    }
+    return rewrite_path($rewrite, $plain);
+  }
+  
   function getNextAlbum() {
     if (is_null($parent = $this->getParent())) {
      $albums = $this->gallery->getAlbums(0);
@@ -474,7 +486,8 @@ class Album extends PersistentObject {
         unlink($this->localpath . $file); // clean out any other files in the folder
       }
     }
-    query("DELETE FROM " . prefix('albums') . " WHERE `id` = '" . $this->id . "'");
+    query("DELETE FROM " . prefix('comments') . "WHERE `type`='albums' AND `imageid`=" . $this->id);
+    query("DELETE FROM " . prefix('albums') . " WHERE `id` = " . $this->id);
     return rmdir($this->localpath); 
   }
   
@@ -510,8 +523,13 @@ class Album extends PersistentObject {
     
     if (count($dead) > 0) {
       $sql = "DELETE FROM ".prefix('images')." WHERE `id` = '" . array_pop($dead) . "'";
-      foreach ($dead as $img) $sql .= " OR `id` = '$img'";
+      $sql2 = "DELETE FROM ".prefix('comments')." WHERE `type`='albums' AND imageid` = '" . array_pop($dead) . "'";
+      foreach ($dead as $id) {
+        $sql .= " OR `id` = '$id'";
+        $sql2 .= " OR `imageid` = '$id'";
+      }
       query($sql);
+      query($sql2);
     }
     
     // Get all sub-albums and make sure they exist.
@@ -529,8 +547,13 @@ class Album extends PersistentObject {
     }
     if (count($dead) > 0) {
       $sql = "DELETE FROM ".prefix('albums')." WHERE `id` = '" . array_pop($dead) . "'";
-      foreach ($dead as $albumid) $sql .= " OR `id` = '$albumid'";
+      $sql2 = "DELETE FROM ".prefix('comments')." WHERE `type`='albums' AND imageid` = '" . array_pop($dead) . "'";
+      foreach ($dead as $albumid) {
+        $sql .= " OR `id` = '$albumid'";
+        $sql2 .= " OR `imageid` = '$albumid'";
+      }
       query($sql);
+      query($sql2);
     }
     
     if ($deep) {
@@ -585,6 +608,35 @@ class Album extends PersistentObject {
     
     return $files;
   }
+  
+  function getComments($moderated=false) {
+    $sql = "SELECT *, (date + 0) AS date FROM " . prefix("comments") . 
+       " WHERE `type`='albums' AND `imageid`='" . $this->id . "'";
+    if (!$moderated) {
+      $sql .= " AND `inmoderation`=0";
+    } 
+    $sql .= " ORDER BY id";
+    $comments = query_full_array($sql);
+    $this->comments = $comments;
+    return $this->comments;
+  }
+
+  // addComment: assumes data is coming straight from GET or POST
+  function addComment($name, $email, $website, $comment, $code, $code_ok) {
+    return postComment($name, $email, $website, $comment, $code, $code_ok, $this);
+  }
+  function getCommentCount() { 
+    if (is_null($this->commentcount)) {
+      if ($this->comments == null) {
+        $count = query_single_row("SELECT COUNT(*) FROM " . prefix("comments") . " WHERE `type`='albums' AND `inmoderation`=0 AND `imageid`=" . $this->id);
+        $this->commentcount = array_shift($count);
+      } else {
+        $this->commentcount = count($this->comments);
+      }
+    }
+    return $this->commentcount;
+  }
+
   
 }
   
