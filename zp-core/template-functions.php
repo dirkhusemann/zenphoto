@@ -1713,15 +1713,16 @@ function getImageThumb() {
  * @param string $id optional id tag
  */
 function printImageThumb($alt, $class=NULL, $id=NULL) {
-  global $_zp_current_album, $_zp_current_image;
+  global $_zp_current_image;
   if (!$_zp_current_image->getShow()) {
     $class .= " not_visible";
-  } else {
-    $pwd = $_zp_current_album->getPassword();
-    if (zp_loggedin() && !empty($pwd)) {
-      $class .= " password_protected";
-    }
   }
+  $album = $_zp_current_image->getAlbum();
+  $pwd = $album->getPassword();
+  if (zp_loggedin() && !empty($pwd)) {
+    $class .= " password_protected";
+  }
+
   $class = trim($class);
   echo "<img src=\"" . htmlspecialchars(getImageThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
   ((getOption('thumb_crop')) ? " width=\"".getOption('thumb_crop_width')."\" height=\"".getOption('thumb_crop_height')."\"" : "") .
