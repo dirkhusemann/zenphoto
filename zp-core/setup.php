@@ -556,8 +556,11 @@ if (!$checked) {
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `password_hint` text;";
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `hitcounter` int(11) UNSIGNED default NULL;";
     
-    //v1.2
+    //v1.1.4
     $sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `type` varchar(52) NOT NULL default 'images';";
+    $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `total_value` int(11) UNSIGNED default '0';";
+    $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `total_votes` int(11) UNSIGNED default '0';";
+    $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `used_ips` longtext;";
     
 
  /**************************************************************************************
