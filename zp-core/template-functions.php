@@ -150,6 +150,7 @@ function zenJavascript() {
   echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/scripts-common.js\"></script>\n";
   if (in_context(ZP_IMAGE)) {
     echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/flvplayer.js\"></script>\n";
+    
   }
 }
 
@@ -2064,31 +2065,58 @@ function printAlbumZip(){
 function printLatestComments($number, $type='images') {
   echo '<div id="showlatestcomments">';
   echo '<ul>';
-  $comments = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.website,"
-  . " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
-  . " WHERE `type`=$type AND c.imageid = i.id AND i.albumid = a.id ORDER BY c.id DESC LIMIT $number");
+  $sql = "SELECT c.id, c.name, c.website, c.date, c.comment, "; 
+  if ($type=='images') {
+    $sql .= "i.title, i.filename, ";
+  }
+  $sql .= "a.folder, a.title AS albumtitle, ";
+  $sql .= " FROM ".prefix('comments') . " AS c, ";
+  if ($type=='images') {
+    $sql .= prefix('images') . " AS i, ";
+  }
+  $sql .= prefix('albums')." AS a ";
+  $sql .= " WHERE `type`=$type AND "; 
+  if ($type=='images') {
+    $sql .= "c.imageid = i.id AND i.albumid = a.id ";
+  } else {
+    $sql .= "c.imageid = a.id ";
+ 
+  }
+  $sql .= "ORDER BY c.id DESC LIMIT $number";
+  $comments = Query_full_array($sql);
   foreach ($comments as $comment) {
     $author = $comment['name'];
     $album = $comment['folder'];
     $image = $comment['filename'];
     $albumtitle = $comment['albumtitle'];
-    if ($comment['title'] == "")  {
-      $title = $image;
-    }	else {
-      $title = $comment['title'];
+    if ($type=='images') {
+      if ($comment['title'] == "")  {
+        $title = $image;
+      }	else {
+        $title = $comment['title'];
+      }
+      $title .= ' / ';
+    } else {
+      $title = '';
     }
     $website = $comment['website'];
     $comment = my_truncate_string($comment['comment'], 40);
 
-    $link = $author.' commented on '.$albumtitle.' / '.$title ;
+    $link = $author.' commented on '.$albumtitle.$title ;
     $short_link = my_truncate_string($link, 40);
 
     echo '<li><div class="commentmeta"><a href="';
 
     if (getOption('mod_rewrite') == false) {
-      echo WEBPATH.'/index.php?album='.urlencode($album).'&image='.urlencode($image).'/"';
+      echo WEBPATH.'/index.php?album='.urlencode($album);
+      if ($type=='images') {
+        echo '&image='.urlencode($image).'/"';
+      }
     } else {
-      echo WEBPATH.'/'.$album.'/'.$image.'" ';
+      echo WEBPATH.'/'.$album.'/';
+      if ($type=='images') {
+        echo $image.'" ';
+      }
     }
 
     echo 'title="'.$link.'">';
@@ -2135,7 +2163,7 @@ function hitcounter($option='image', $viewonly=false) {
  * Retuns a list of album statistic accordingly to $option
  *
  * @param int $number the number of albums to get
- * @param string $option "popular" for the most popular albums, "latest" for the latest uploaded
+ * @param string $option "popular" for the most popular albums, "latest" for the latest uploaded, "mostrated" for the most voted, "toprated" for the best voted
  * @return string
  */
 function getAlbumStatistic($number=5, $option) {
@@ -2151,6 +2179,10 @@ function getAlbumStatistic($number=5, $option) {
     case "latest":
       $sortorder = "id";
       break;
+    case "mostrated":
+      $sortorder = "total_votes"; break;
+    case "toprated":
+      $sortorder = "(total_value/total_votes)"; break;  
   }
   $albums = query("SELECT id, title, folder, thumb FROM " . prefix('albums') . $albumWhere . " ORDER BY ".$sortorder." DESC LIMIT $number");
   return $albums;
@@ -2199,6 +2231,24 @@ function printPopularAlbums($number=5) {
  */
 function printLatestAlbums($number=5) {
   printAlbumStatistic($number,"latest");
+}
+
+/**
+ * Prints the most rated albums
+ *
+ * @param string $number the number of albums to get
+ */
+function printMostRatedAlbums($number=5) {
+  printAlbumStatistic($number,"mostrated");
+}
+
+/**
+ * Prints the top voted albums
+ *
+ * @param string $number the number of albums to get
+ */
+function printTopRatedAlbums($number=5) {
+  printAlbumStatistic($number,"toprated");
 }
 
 /**
@@ -2391,26 +2441,17 @@ function printRandomImages($number, $class=null, $option='all') {
 * Returns the rating of the designated image
 *
 * @param string $option 'totalvalue' or 'totalvotes'
-*
 * @param int $id Record id for the image
 * @return int
 */
 function getImageRating($option, $id) {
-  if(!$id) { $id = getImageID(); }
-  switch ($option) {
-    case "totalvalue":
-      $rating = "total_value"; break;
-    case "totalvotes":
-      $rating = "total_votes"; break;
-  }
-  $result = query_single_row("SELECT ".$rating." FROM ". prefix('images') ." WHERE id = $id");
-  return $result[$rating];
+  return getRating($option,"image",$id);
 }
 
 /**
 * Returns the average rating of the image
 *
-* @param int $id
+* @param int $id the id of the image
 * @return real
 */
 function getImageRatingCurrent($id) {
@@ -2422,15 +2463,26 @@ function getImageRatingCurrent($id) {
   return $rating;
 }
 
+
 /**
+* For internal use by the function printRating()
 * Returns true if the IP has voted
 *
 * @param int $id the record ID of the image
+* @param string $option 'image' or 'album' depending on the requestor
 * @return bool
 */
-function checkIp($id) {
+function checkIp($id, $option) {
   $ip = $_SERVER['REMOTE_ADDR'];
-  $ipcheck = query_full_array("SELECT used_ips FROM ". prefix('images') ." WHERE used_ips LIKE '%".$ip."%' AND id= $id");
+  switch($option) {
+    case "image":
+      $dbtable = prefix('images');
+      break;
+    case "album":
+      $dbtable = prefix('albums');
+      break;
+  }
+  $ipcheck = query_full_array("SELECT used_ips FROM $dbtable WHERE used_ips LIKE '%".$ip."%' AND id= $id");
   return $ipcheck;
 }
 
@@ -2439,29 +2491,128 @@ function checkIp($id) {
 *
 */
 function printImageRating() {
-  $id = getImageID();
-  $value = getImageRating("totalvalue", $id);
-  $votes = getImageRating("totalvotes", $id);
-  if($votes != 0)
-  { $ratingpx = round(($value/$votes)*25);
+  printRating("image");
+}
+
+
+
+/**
+ * Prints the rating accordingly to option, it's a combined function for image and album rating
+ *
+ * @param string $option "image" for image rating, "album" for album rating.
+ * @see printImageRating() and printAlbumRating()
+ * 
+ */
+function printRating($option) {
+  switch($option) {
+    case "image":
+      $id = getImageID();
+      $value = getImageRating("totalvalue", $id);
+      $votes = getImageRating("totalvotes", $id);
+      break;
+    case "album":
+      $id = getAlbumID();
+      $value = getAlbumRating("totalvalue", $id);
+      $votes = getAlbumRating("totalvotes", $id);
+      break;
+  }
+  if($votes != 0) { 
+    $ratingpx = round(($value/$votes)*25);
   }
   $zenpath = WEBPATH."/".ZENFOLDER."/plugins";
   echo "<div id=\"rating\">\n";
   echo "<h3>Rating:</h3>\n";
   echo "<ul class=\"star-rating\">\n";
   echo "<li class=\"current-rating\" id=\"current-rating\" style=\"width:".$ratingpx."px\"></li>\n";
-  if(!checkIP($id)){
-    echo "<li><a href=\"javascript:rateImg(1,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"1 star out of 5\"' class=\"one-star\">2</a></li>\n";
-    echo "<li><a href=\"javascript:rateImg(2,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"2 stars out of 5\" class=\"two-stars\">2</a></li>\n";
-    echo "<li><a href=\"javascript:rateImg(3,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"3 stars out of 5\" class=\"three-stars\">2</a></li>\n";
-    echo "<li><a href=\"javascript:rateImg(4,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"4 stars out of 5\" class=\"four-stars\">2</a></li>\n";
-    echo "<li><a href=\"javascript:rateImg(5,$id,$votes,$value,'".rawurlencode($zenpath)."')\" title=\"5 stars out of 5\" class=\"five-stars\">2</a></li>\n";
+  if(!checkIP($id,$option)){
+    echo "<li><a href=\"javascript:rate(1,$id,$votes,$value,'".rawurlencode($zenpath)."','$option')\" title=\"1 star out of 5\"' class=\"one-star\">2</a></li>\n";
+    echo "<li><a href=\"javascript:rate(2,$id,$votes,$value,'".rawurlencode($zenpath)."','$option'')\" title=\"2 stars out of 5\" class=\"two-stars\">2</a></li>\n";
+    echo "<li><a href=\"javascript:rate(3,$id,$votes,$value,'".rawurlencode($zenpath)."','$option')\" title=\"3 stars out of 5\" class=\"three-stars\">2</a></li>\n";
+    echo "<li><a href=\"javascript:rate(4,$id,$votes,$value,'".rawurlencode($zenpath)."','$option')\" title=\"4 stars out of 5\" class=\"four-stars\">2</a></li>\n";
+    echo "<li><a href=\"javascript:rate(5,$id,$votes,$value,'".rawurlencode($zenpath)."','$option')\" title=\"5 stars out of 5\" class=\"five-stars\">2</a></li>\n";
   }
   echo "</ul>\n";
   echo "<div id =\"vote\">\n";
-  echo "Rating: ".getImageRatingCurrent($id)." (Total votes: ".$votes.")";
+  switch($option) {
+    case "image":
+      echo "Rating: ".getImageRatingCurrent($id)." (Total votes: ".$votes.")";
+      break; 
+    case "album":
+      echo "Rating: ".getAlbumRatingCurrent($id)." (Total votes: ".$votes.")";
+      break;
+  }
   echo "</div>\n";
-  echo "</div>\n";
+  echo "</div>\n"; 
+}
+
+/**
+ * Get the rating for an image or album, 
+ *
+ * @param string $option 'totalvalue' or 'totalvotes' 
+ * @param string $option2 'image' or 'album'
+ * @param int $id id of the image or album
+ * @see getImageRating() and getAlbumRating()
+ * @return unknown
+ */
+function getRating($option,$option2,$id) {
+  switch ($option) {
+    case "totalvalue":
+      $rating = "total_value"; break;
+    case "totalvotes":
+      $rating = "total_votes"; break;
+  }  
+  switch ($option2) {
+    case "image":
+      if(!$id) { 
+          $id = getImageID(); 
+      }  
+      $dbtable = prefix('images');
+      break; 
+    case "album":
+      if(!$id) { 
+        $id = getAlbumID(); 
+      }  
+      $dbtable = prefix('albums');
+      break;
+  }
+   $result = query_single_row("SELECT ".$rating." FROM $dbtable WHERE id = $id");
+   return $result[$rating]; 
+}
+
+/**
+ * Prints the image rating information for the current image 
+ *
+ */
+function printAlbumRating() {
+  printRating("album");
+}
+
+/**
+* Returns the average rating of the album
+*
+* @param int $id Record id for the album
+* @return real
+*/
+function getAlbumRatingCurrent($id) {
+  $votes = getAlbumRating("totalvotes",$id);
+  $value = getAlbumRating("totalvalue",$id);
+  if($votes != 0)
+  { $rating =  round($value/$votes, 1);
+  }
+  return $rating;
+}
+
+
+/**
+* Returns the rating of the designated album
+*
+* @param string $option 'totalvalue' or 'totalvotes'
+* @param int $id Record id for the album
+* @return int
+*/
+function getAlbumRating($option, $id) {
+  $rating =  getRating($option,"album",$id);
+  return $rating;
 }
 
 /**
@@ -2472,6 +2623,7 @@ function printImageRating() {
 function printTopRatedImages($number=5) {
   printImageStatistic($number, "toprated");
 }
+
 /**
 * Prints the n most rated images
 *
@@ -2480,6 +2632,7 @@ function printTopRatedImages($number=5) {
 function printMostRatedImages($number=5) {
   printImageStatistic($number, "mostrated");
 }
+
 /**
  * Shortens a string to $length
  *
@@ -2609,22 +2762,23 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
     } else {
       $counter = " (".$val.") ";
     }
-    if ($option == "cloud") {
+    if ($option == "cloud") { // calculate font sizes, formula from wikipedia
       if ($val <= $mincount) {
-        $size = MINFONTSIZE;  // calculate font sizes, formula from wikipedia
+        $size = MINFONTSIZE;  
       } else {
-        $size =min(max(round(($maxfontsize*($val-$mincount))/($maxcount-$mincount), 2), MINFONTSIZE), $maxfontsize);
+        $size = min(max(round(($maxfontsize*($val-$mincount))/($maxcount-$mincount), 2), MINFONTSIZE), $maxfontsize);
       }
+      $size = " style=\"font-size:".$size."em;\"";
     } else {
-      $size = MINFONTSIZE;
+      $size = '';
     }
     if ($val >= $mincount) {
       if(!$links) {
-        echo "\t<li style=\"font-size:".$size."em\">".$key.$counter."</li>\n";
+        echo "\t<li$size>".$key.$counter."</li>\n";
       } else {
         $key = str_replace('"', '', $key);
         echo "\t<li style=\"display:inline; list-style-type:none\"><a href=\"".
-        getSearchURL($key, '', SEARCH_TAGS)."\" style=\"font-size:".$size."em;\" rel=\"nofollow\">".
+        getSearchURL($key, '', SEARCH_TAGS)."\"$size rel=\"nofollow\">".
         $key.$counter."</a></li>\n";
       }
     }
