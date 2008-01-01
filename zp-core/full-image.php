@@ -39,7 +39,9 @@ switch ($suffix) {
     header('content-type: image/gif'); 
     break;
 }
-//header('Content-Disposition: attachment; filename="' . $_zp_current_image->name . '"');  // enable this to make the image a download
+if (getOption('full_image_download')) {
+  header('Content-Disposition: attachment; filename="' . $_zp_current_image->name . '"');  // enable this to make the image a download
+}
   
 
 if (getOption('perform_watermark')) {

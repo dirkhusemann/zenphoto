@@ -23,7 +23,7 @@ $standardOptions = array('gallery_title','website_title','website_url','time_off
                          'email_new_comments', 'perform_video_watermark', 'video_watermark_image',
                          'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'search_fields',
                          'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
-                         'allowed_tags');
+                         'allowed_tags', 'full_image_download');
 $charsets = array("ASMO-708" => "Arabic",
                   "big5" => "Chinese Traditional",
                   "CP1026" => "IBM EBCDIC (Turkish Latin-5)",
@@ -538,6 +538,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         setOption('watermark_image', 'images/' . $_POST['watermark_image'] . '.png');
         setBoolOption('perform_video_watermark', $_POST['perform_video_watermark']);
         setOption('video_watermark_image', 'images/' . $_POST['video_watermark_image'] . '.png');
+        setBoolOption('full_image_download', $_POST['full_image_download']);
         $returntab = "#tab_image";
       }
       /*** Comment options ***/
@@ -1611,6 +1612,11 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                            <?php echo checked('1', getOption('perform_video_watermark')); ?> />&nbsp;Enabled
                         </td>
                         <td>The watermark image (png-24). (Place the image in the <?php echo ZENFOLDER; ?>/images/ directory.)</td>
+                    </tr>
+                    <tr>
+                        <td>Full image download:</td>
+                        <td><input type="checkbox" name="full_image_download" value="1" <?php echo checked('1', getOption('full_image_download')); ?> /></td>
+                        <td>Causes a download dialog to be displayed when clicking on a full-image link.</td>
                     </tr>
                     <tr>
                         <td></td>

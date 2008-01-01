@@ -79,5 +79,6 @@ function setDefault($option, $default) {
   setDefault('comment_name_required', 1);
   setDefault('comment_email_required', 1);
   setDefault('comment_web_required', 0);
+  setDefault('full_image_download', 0);
 
 ?>
