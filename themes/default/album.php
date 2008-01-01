@@ -47,7 +47,7 @@
 		</div>
 	
 		<?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
-        <?php printTags('links', 'Tags: ', 'taglist', ''); ?>
+        <?php printTags('links', '<strong>Tags:</strong> ', 'taglist', ''); ?>
         
 	</div>
 	

@@ -2527,7 +2527,6 @@ function printTags($option='links',$preText=NULL,$class='taglist',$separator=', 
   $tags = getTags();
   $singletag = explode(",", $tags);
   if (empty($tags)) { $preText = ""; }
-  if (!empty($preText)) { $preText = "<strong>".$preText."</strong>"; }
   if ($editable && zp_loggedin()) {
     echo "<div id=\"tagContainer\">".$preText."<div id=\"imageTags\" style=\"display: inline;\">" . htmlspecialchars(getTags(), ENT_QUOTES) . "</div></div>\n";
     echo "<script type=\"text/javascript\">initEditableTags('imageTags');</script>";
