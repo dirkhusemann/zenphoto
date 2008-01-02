@@ -57,13 +57,14 @@ if (getOption('perform_watermark')) {
   imagecopy($newim, $watermark, $dest_x, $dest_y, 0, 0, $watermark_width, $watermark_height);
   imagedestroy($watermark);
 }
+$quality = getOption('full_image_quality');
 switch ($suffix) {
   case 'jpg':
   case 'jpeg':
-    imagejpeg($newim);
+    imagejpeg($newim, NULL, $quality);
     break;
   case 'png':
-    imagepng($newim);
+    imagepng($newim, NULL, $quality);
     break;
   case 'bmp':
     imagewbmp($newim);

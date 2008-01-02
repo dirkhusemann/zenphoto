@@ -2822,7 +2822,7 @@ function getAllDates() {
  * @param string $yearid optional class for "year"
  * @param string $monthid optional class for "month"
  */
-function printAllDates($class="archive", $yearid='year', $monthid='month') {
+function printAllDates($class='archive', $yearid='year', $monthid='month') {
   if (!empty($class)){ $class = "class=\"$class\""; }
   if (!empty($yearid)){ $yearid = "id=\"$yearid\""; }
   if (!empty($monthid)){ $monthid = "id=\"$monthid\""; }
@@ -2879,7 +2879,7 @@ function getCustomPageURL($page, $q='') {
  * @param string $next text to follow the URL
  * @param string $class optional class
  */
-function printCustomPageURL($linktext, $page, $q="", $prev, $next, $class) {
+function printCustomPageURL($linktext, $page, $q='', $prev, $next, $class) {
   if (!is_null($class)) {
     $class = 'class="' . $class . '";';
   }
