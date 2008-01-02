@@ -2131,18 +2131,23 @@ function printLatestComments($number, $type='images') {
  *
  * @param string $option "image" for image hit counter (default), "album" for album hit counter
  * @param bool $viewonly set to true if you don't want to increment the counter.
+ * @param int $id Optional record id of the object if not the current image or album
  * @return string
  * @since 1.1.3
  */
-function hitcounter($option='image', $viewonly=false) {
+function hitcounter($option='image', $viewonly=false, $id=NULL) {
   switch($option) {
     case "image":
-      $id = getImageID();
+      if (is_null($id)) {
+        $id = getImageID();
+      }
       $dbtable = prefix('images');
       $doUpdate = true;
       break;
     case "album":
-      $id = getAlbumID();
+      if ($is_null($id)) {
+        $id = getAlbumID();
+      }
       $dbtable = prefix('albums');
       $doUpdate = getCurrentPage() == 1; // only count initial page for a hit on an album
       break;
@@ -2986,6 +2991,10 @@ function getSearchURL($words, $dates, $fields=0) {
 
 /**
  * Prints the search form
+ * 
+ * Search works on a list of tags entered into the search form. Tags are separated by commas and
+ * may contain spaces or any other character other than a comma or a peck mark. To include commas in
+ * tag, enclose it in peck marks (`). To use peck marks in a search submit a feature request.
  *
  * @param string $prevtext text to go before the search form
  * @param bool $fieldSelect prints a drop down of searchable elements
@@ -3173,6 +3182,17 @@ function normalizeColumns($albumColumns, $imageColumns) {
  * Checks to see if a password is needed
  * displays a password form if log-on is required
  * Returns true if a login form has been displayed
+ * 
+ * The password protection is hereditary. 
+ * 
+ * This normally only impacts direct url access to an album or image since if
+ * you are going down the tree you will be stopped at the first place a password is required.
+ * 
+ * If the gallery is password protected then every album & image will require that password.
+ * If an album is password protected then all subalbums and images treed below that album will require 
+ * the password. If there are multiple passwords in the tree and you direct link, the password that is 
+ * required will be that of the nearest parent that has a password. (The gallery is the ur-parrent to all
+ * albums.)
  *
  * @param bool $silent set to true to inhibit the logon form
  * @return bool 

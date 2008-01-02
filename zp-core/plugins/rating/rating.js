@@ -70,16 +70,16 @@ function _gr(reqseccion,divcont) {
 
 //Estas dos son para guardar
 
-var urlBase = "/update.php?";
+var urlBase = "/update.php";
 
-function rateImg(rating,imgId,votes,values,path)  {
+function rate(rating,id,votes,values,path,option)  {
 		votes = votes + 1;
 		values = (values+rating)/votes;
 		values = values*10;
 		values = Math.round(values);
 		values = values/10;	
 		remotos = new datosServidor;
-		nt = remotos.enviar(path+'/imagerating/update.php?rating='+rating+'&imgId='+imgId);
+		nt = remotos.enviar(path+'/rating/update.php?rating='+rating+'&id='+id+'&option='+option);
 		document.getElementById('vote').innerHTML="Rating: "+values+" (Total votes: "+votes+")<br />Thanks for voting!";
 		rating = rating * 25;
 		document.getElementById('ratingstars').innerHTML=" ";
