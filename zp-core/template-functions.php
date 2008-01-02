@@ -2168,7 +2168,9 @@ function hitcounter($option='image', $viewonly=false, $id=NULL) {
  * Retuns a list of album statistic accordingly to $option
  *
  * @param int $number the number of albums to get
- * @param string $option "popular" for the most popular albums, "latest" for the latest uploaded, "mostrated" for the most voted, "toprated" for the best voted
+ * @param string $option "popular" for the most popular albums, 
+ *     "latest" for the latest uploaded, "mostrated" for the most voted, 
+ *     "toprated" for the best voted
  * @return string
  */
 function getAlbumStatistic($number=5, $option) {
@@ -2197,7 +2199,11 @@ function getAlbumStatistic($number=5, $option) {
  * Prints album statistic according to $option
  *
  * @param string $number the number of albums to get
- * @param string $option "popular" for the most popular albums, "latest" for the latest uploaded
+ * @param string $option "popular" for the most popular albums, 
+ *                  "latest" for the latest uploaded, 
+ *                  "latest" for the latest uploaded, 
+ *                  "mostrated" for the most voted, 
+ *                  "toprated" for the best voted
  */
 function printAlbumStatistic($number, $option) {
   $albums = getAlbumStatistic($number, $option);
@@ -2260,7 +2266,11 @@ function printTopRatedAlbums($number=5) {
  * Returns a list of image statistic according to $option
  *
  * @param string $number the number of images to get
- * @param string $option "popular" for the most popular images, "latest" for the latest uploaded
+ * @param string $option "popular" for the most popular images, 
+ *                       "latest" for the latest uploaded, 
+ *                       "latest" for the latest uploaded, 
+ *                       "mostrated" for the most voted, 
+ *                       "toprated" for the best voted
  * @return string
  */
 function getImageStatistic($number, $option) {
@@ -2306,7 +2316,11 @@ function getImageStatistic($number, $option) {
  * Prints image statistic according to $option
  *
  * @param string $number the number of albums to get
- * @param string $option "popular" for the most popular images, "latest" for the latest uploaded
+ * @param string $option "popular" for the most popular images, 
+ *                       "latest" for the latest uploaded, 
+ *                       "latest" for the latest uploaded, 
+ *                       "mostrated" for the most voted, 
+ *                       "toprated" for the best voted
  * @return string
  */
 function printImageStatistic($number, $option) {
@@ -2340,7 +2354,7 @@ function printLatestImages($number=5) {
 
 /**
 * Returns  an array of album ids whose parent is the folder
-* @param string $albumfolder folder name if you want a album different >>from the current album
+ * @param string $albumfolder folder name if you want a album different >>from the current album
 * @return array
 */
 function getAllSubAlbumIDs($albumfolder='') {
@@ -2674,7 +2688,7 @@ function getTags() {
  * Prints a list of tags, editable by admin
  *
  * @param string $option links by default, if anything else the
- tags will not link to all other photos with the same tah
+ *               tags will not link to all other photos with the same tah
  * @param string $preText text to go before the printed tags
  * @param string $class css class to apply to the UL list
  * @param string $separator what charactor shall separate the tags
