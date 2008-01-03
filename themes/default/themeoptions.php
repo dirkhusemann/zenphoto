@@ -28,6 +28,7 @@ require_once(SERVERPATH . "/" . ZENFOLDER . "/admin-functions.php");
 class ThemeOptions {
 
   var $iSupport = array('Allow_comments' => array('type' => 1, 'desc' => 'Set to enable comment section.'),
+  						'Allow_ratings' => array('type' => 1, 'desc' => 'Set to enable album and image ratings.'),
   						'Allow_search' => array('type' => 1, 'desc' => 'Set to enable search form.'),
                         'Theme_colors' => array('type' => 2, 'desc' => 'Set the colors of the theme'),
                         'Use_Captcha' => array('type' => 1, 'desc' => 'Require <em>Captcha</em> input in comment posts.')
@@ -35,6 +36,7 @@ class ThemeOptions {
   
   function ThemeOptions() {
     setOptionDefault('Allow_comments', true);
+	setOptionDefault('Allow_ratings', true);
 	setOptionDefault('Allow_search', true);
     setOptionDefault('Theme_colors', 'light'); 
 	setOptionDefault('Use_Captcha', true);

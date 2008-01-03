@@ -46,7 +46,7 @@
 	<div id="image">
 		<a href="<?php echo getProtectedImageURL();?>" title="<?php echo getImageTitle();?>"><strong><?php printDefaultSizedImage(getImageTitle()); ?></strong></a> 
   	</div>
-	<?php printImageRating(); ?>
+	<?php if (getOption('Allow_ratings')) { printImageRating(); }?>
 	
 	<div id="narrow">
     

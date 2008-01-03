@@ -56,7 +56,7 @@
         <?php printTags('links', '<strong>Tags:</strong> ', 'taglist', ''); ?>
         
 	</div>
-		<?php printAlbumRating(); ?>
+		<?php if (getOption('Allow_ratings')) { printImageRating(); }?>
 </div>
 
 <div id="credit"><?php printRSSLink('Album', '', 'Album RSS', ''); ?> | <a href="<?php echo getGalleryIndexURL();?>?p=archive">Archive View</a> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
