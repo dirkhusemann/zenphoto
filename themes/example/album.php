@@ -9,6 +9,8 @@ $firstPageImages = normalizeColumns(1, 7);
 <head>
 	<title><?php printGalleryTitle(); ?></title>
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
+	<script type="text/javascript" src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/plugins/rating/rating.js"></script>
+  <link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/plugins/rating/rating.css" type="text/css" />
 	<?php printRSSHeaderLink('Album',getAlbumTitle()); ?>
 	<?php zenJavascript(); ?>
 </head>
@@ -58,7 +60,11 @@ $firstPageImages = normalizeColumns(1, 7);
     	</div>
 
 		<?php endwhile; ?>
+		
+	 
+		
 		<br clear="all" />
+			<div class="rating"><?php printAlbumRating(); ?></div>
     	<?php printAlbumMap(); ?>
   	</div>
  

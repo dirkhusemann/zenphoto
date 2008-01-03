@@ -4,6 +4,8 @@
 <head>
   <title><?php printGalleryTitle(); ?></title>
   <link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
+  <script type="text/javascript" src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/plugins/rating/rating.js"></script>
+  <link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/plugins/rating/rating.css" type="text/css" />
   <link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
   <?php printRSSHeaderLink('Gallery','Gallery RSS'); echo "\n"; ?>
   <script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/jquery.js" type="text/javascript"></script>
@@ -51,7 +53,9 @@
         		</a>
                 </em>
         	</div>
-            
+       
+        	 	<div class="rating"><?php printImageRating(); ?></div> 
+          
         	<div id="meta_link">
         		<?php 
       		  	if (getImageEXIFData()) {echo "<a href=\"#TB_inline?height=345&width=300&inlineId=imagemetadata\" title=\"Image Info\" class=\"thickbox\">Image Info</a>";

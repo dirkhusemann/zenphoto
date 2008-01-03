@@ -73,3 +73,4 @@ ul.archive #month {	font-size: 14px; list-style:none; border-top:2px solid #E6E6
 .taglist li { background: url(tag.png) no-repeat left center; list-style-type: none; line-height: 18px; padding-left: 18px; float:left; padding-right: 5px;}
 .taglist .tags_title { background: none; padding-right: 5px; padding-left: 0;}
 
+.rating { margin-top: 15px; margin-bottom: 15px; }

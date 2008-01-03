@@ -4,6 +4,8 @@
 <head>
 	<title><?php printGalleryTitle(); ?> | <?php echo getAlbumTitle();?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
+	<script type="text/javascript" src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/plugins/rating/rating.js"></script>
+  <link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/plugins/rating/rating.css" type="text/css" />
 	<?php printRSSHeaderLink('Album',getAlbumTitle()); ?>
 	<?php zenJavascript(); ?>
 </head>
@@ -44,13 +46,17 @@
 				<div class="imagethumb"><a href="<?php echo getImageLinkURL();?>" title="<?php echo getImageTitle();?>"><?php printImageThumb(getImageTitle()); ?></a></div>
 			</div>
 			<?php endwhile; ?>
+			
+				
 		</div>
+	
+
 	
 		<?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
         <?php printTags('links', '<strong>Tags:</strong> ', 'taglist', ''); ?>
         
 	</div>
-	
+		<?php printAlbumRating(); ?>
 </div>
 
 <div id="credit"><?php printRSSLink('Album', '', 'Album RSS', ''); ?> | <a href="<?php echo getGalleryIndexURL();?>?p=archive">Archive View</a> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>

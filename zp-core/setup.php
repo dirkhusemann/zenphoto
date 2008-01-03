@@ -499,11 +499,11 @@ if (!$checked) {
     }
 
  /****************************************************************************************
-     ******                                              UPGRADE SECTION                                                                       ******
-     ******                                                                                                                                                         ******
-     ******                                           Add all new fields below                                                                     ******
-     ******                                                                                                                                                         ******
-    *****************************************************************************************/
+  ******                             UPGRADE SECTION                                                                       ******
+  ******                                                                                                                                                    ******
+  ******                          Add all new fields below                                                                     ******
+  ******                                                                                                                                                         ******
+  *****************************************************************************************/
     $sql_statements = array();
 
     // v. 1.0.0b
@@ -561,14 +561,19 @@ if (!$checked) {
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `total_value` int(11) UNSIGNED default '0';";
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `total_votes` int(11) UNSIGNED default '0';";
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `used_ips` longtext;";
+    // provide a way to revert the comments table to use `imageid` rather than `ownerid`
+    $sql_statements[] = "ALTER TABLE $tbl_comments CHANGE `ownerid` `imageid` int(11) UNSIGNED NOT NULL default '0';";
+    $sql_statements[] = "ALTER TABLE $tbl_comments DROP INDEX `ownerid`;";
+    $sql_statements[] = "ALTER TABLE $tbl_comments ADD INDEX (`imageid`);";
+        
     
 
  /**************************************************************************************
-     ******                                        END of UPGRADE SECTION                                                           ******
-     ******                                                                                                                                                     ******
-     ******                                          Add all new fields above                                                                  ******
-     ******                                                                                                                                                     ******
-    ***************************************************************************************/
+  ******                            END of UPGRADE SECTION                                                           ******
+  ******                                                                                                                                                     ******
+  ******                           Add all new fields above                                                                  ******
+  ******                                                                                                                                                     ******
+  ***************************************************************************************/
 
     if (isset($_GET['create']) || isset($_GET['update']) && db_connect()) {
 
