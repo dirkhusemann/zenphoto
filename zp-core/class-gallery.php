@@ -209,21 +209,7 @@ class Gallery {
     $result = query_single_row($sql);
     return array_shift($result);
   }
-  
-
-  function getAllComments($moderated=false) {
-    $sql = "SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.website,"
-        . " (c.date + 0) AS date, c.comment, c.email FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, "
-        .prefix('albums')." AS a ". " WHERE AND c.imageid = i.id AND i.albumid = a.id";
-    if (!$moderated) { 
-      $sql .= " AND inmoderation = 0";
-    }
-    $sql .= " ORDER BY c.id DESC ";
-    $result = query_full_array($sql);
-    return $result;
-  }
-  
-    
+      
   /* For every album in the gallery, look for its file. Delete from the database
    * if the file does not exist.
    * $cascade - garbage collect every image and album in the gallery as well.
@@ -252,7 +238,7 @@ class Gallery {
       foreach ($dead as $albumid) {
         $sql1 .= " OR `id` = '$albumid'";
         $sql2 .= " OR `albumid` = '$albumid'";
-        $sql3 .= " OR `image` = '$albumid'";
+        $sql3 .= " OR `imageid` = '$albumid'";
       }
       $n = query($sql1);
       if (!$full && $n > 0 && $cascade) {

@@ -1119,7 +1119,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
       if (isset($_GET['fulltext'])) $fulltext = true; else $fulltext = false;
       if (isset($_GET['viewall'])) $viewall = true; else $viewall = false;
 
-      $comments = query_full_array("SELECT id, name, website, type, imageid,"
+      $comments = query_full_array("SELECT `id`, `name`, `website`, `type`, `imageid`,"
         . " (date + 0) AS date, comment, email, inmoderation FROM ".prefix('comments')
         . " ORDER BY id DESC " . ($viewall ? "" : "LIMIT 20") );
     ?>
@@ -1810,7 +1810,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         <h2>10 Most Recent Comments</h2>
         <ul>
         <?php
-        $comments = query_full_array("SELECT id, name, website, type, imageid,"
+        $comments = query_full_array("SELECT `id`, `name`, `website`, `type`, `imageid`,"
         . " (date + 0) AS date, comment, email, inmoderation FROM ".prefix('comments')
         . " ORDER BY id DESC " . ($viewall ? "" : "LIMIT 20") );
         foreach ($comments as $comment) {

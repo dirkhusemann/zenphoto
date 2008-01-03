@@ -523,7 +523,7 @@ class Album extends PersistentObject {
     
     if (count($dead) > 0) {
       $sql = "DELETE FROM ".prefix('images')." WHERE `id` = '" . array_pop($dead) . "'";
-      $sql2 = "DELETE FROM ".prefix('comments')." WHERE `type`='albums' AND imageid` = '" . array_pop($dead) . "'";
+      $sql2 = "DELETE FROM ".prefix('comments')." WHERE `type`='albums' AND `imageid` = '" . array_pop($dead) . "'";
       foreach ($dead as $id) {
         $sql .= " OR `id` = '$id'";
         $sql2 .= " OR `imageid` = '$id'";
@@ -547,7 +547,7 @@ class Album extends PersistentObject {
     }
     if (count($dead) > 0) {
       $sql = "DELETE FROM ".prefix('albums')." WHERE `id` = '" . array_pop($dead) . "'";
-      $sql2 = "DELETE FROM ".prefix('comments')." WHERE `type`='albums' AND imageid` = '" . array_pop($dead) . "'";
+      $sql2 = "DELETE FROM ".prefix('comments')." WHERE `type`='albums' AND `imageid` = '" . array_pop($dead) . "'";
       foreach ($dead as $albumid) {
         $sql .= " OR `id` = '$albumid'";
         $sql2 .= " OR `imageid` = '$albumid'";

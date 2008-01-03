@@ -19,7 +19,7 @@ exit();
 $image_path = $_zp_gallery->getAlbumDir() . $_zp_current_album->name . "/" . $_zp_current_image->name;
 
 $k = explode('.', $image_path);
-$suffix = $k[count($k)-1];
+$suffix = strtolower($k[count($k)-1]);
 switch ($suffix) {
   case 'png':
     $newim = imagecreatefrompng($image_path);
