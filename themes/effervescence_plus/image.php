@@ -18,8 +18,6 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 
 <body onload="blurAnchors()">
 
-	<?php printAdminToolbox(); ?>
-
 	<!-- Wrap Everything -->
 	<div id="main4">
  		<div id="main2">
@@ -162,6 +160,8 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
   		<a href="http://www.zenphoto.org" title="A simpler web photo album">Powered by 
   		<font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font face="Arial Black" size="1">photo</font></span></a>
 	</div>
+    
+    <?php printAdminToolbox(); ?>
  
 </body>
 </html>

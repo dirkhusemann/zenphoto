@@ -11,7 +11,6 @@
 </head>
 
 <body>
-<?php printAdminToolbox(); ?>
 
 <div id="main">
 
@@ -46,20 +45,21 @@
 				<div class="imagethumb"><a href="<?php echo getImageLinkURL();?>" title="<?php echo getImageTitle();?>"><?php printImageThumb(getImageTitle()); ?></a></div>
 			</div>
 			<?php endwhile; ?>
-			
 				
 		</div>
-	
-
 	
 		<?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
         <?php printTags('links', '<strong>Tags:</strong> ', 'taglist', ''); ?>
         
 	</div>
-		<?php if (getOption('Allow_ratings')) { printImageRating(); }?>
+    
+	<?php if (getOption('Allow_ratings')) { printAlbumRating(); }?>
+    
 </div>
 
 <div id="credit"><?php printRSSLink('Album', '', 'Album RSS', ''); ?> | <a href="<?php echo getGalleryIndexURL();?>?p=archive">Archive View</a> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
+
+<?php printAdminToolbox(); ?>
 
 </body>
 </html>

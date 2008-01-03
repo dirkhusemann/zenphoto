@@ -16,8 +16,6 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 
 <body onload="blurAnchors()">
 
-	<?php printAdminToolbox(); ?>
-
 	<!-- Wrap Header -->
 	<div id="header">
   		<div id="gallerytitle">
@@ -54,6 +52,8 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 		<a href="http://www.zenphoto.org" title="A simpler web photo album">Powered by <font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a><br/>
 		<?php printRSSLink('Gallery','', 'Gallery RSS', ''); ?>
 	</div>
+    
+    <?php printAdminToolbox(); ?>
 
 </body>
 </html>

@@ -24,7 +24,6 @@
 </head>
 
 <body>
-<?php printAdminToolbox(); ?>
 
 <div id="main">
 
@@ -120,6 +119,8 @@
 </div>
 
 <div id="credit"><?php printRSSLink('Gallery','','RSS', ' | '); ?> <a href="<?php echo getGalleryIndexURL();?>?p=archive">Archive View</a> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
+
+<?php printAdminToolbox(); ?>
 
 </body>
 </html>

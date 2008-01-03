@@ -129,7 +129,7 @@
   		</p>
 	</div>
 
-        <?php printAdminToolbox(ZP_INDEX); ?>
+    <?php printAdminToolbox(ZP_INDEX); ?>
 
 </body>
 
