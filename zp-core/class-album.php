@@ -316,6 +316,7 @@ class Album extends PersistentObject {
     $i = 0;
     $images_to_keys = array_flip($images);
     $images_in_db = array();
+    $images_invisible = array();
     while ($row = mysql_fetch_assoc($result)) {
       $filename = $row['filename'];
       // If the image is on the filesystem, but not yet processed, give it the next key:
@@ -323,9 +324,9 @@ class Album extends PersistentObject {
       if (array_key_exists($filename, $images_to_keys) && !in_array($filename, $images_in_db)) {
         if ($_zp_loggedin || $row['show']) {         
           $images_to_keys[$filename] = $i;  
-          $images_in_db[] = $filename;
           $i++;
         }
+        $images_in_db[] = $filename;
       }
     }
 
