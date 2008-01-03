@@ -50,7 +50,7 @@ if (isset($_COOKIE['zenphoto_auth']) && !isset($_POST['login'])) {
     } else {
      // Clear the cookie, just in case
       setcookie("zenphoto_auth", "", time()-368000, $cookiepath);
-      $error = true;
+      $_zp_login_error = true;
     }
   }
 }

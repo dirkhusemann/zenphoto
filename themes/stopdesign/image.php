@@ -88,7 +88,7 @@
                     <?php } else { echo '<h2>Comments are closed</h2>'; } ?>
 
                     <!-- BEGIN #addcomment -->
-					<?php if ($error || ($num == 0)) { 
+					<?php if ($_zp_comment_error || ($num == 0)) { 
                       echo '<div id="addcomment" style="display: block;">';
 					} else { 
                       echo '<div id="addcomment" style="display: none;">';

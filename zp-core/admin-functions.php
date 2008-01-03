@@ -138,13 +138,13 @@ function adminPrintLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
  * @since  1.0.0
  */
 function printLoginForm($redirect=null, $logo=true) {
-  global $error;
+  global $_zp_login_error;
   if (is_null($redirect)) { $redirect = "/" . ZENFOLDER . "/admin.php"; }
   
   if ($logo) echo "<p><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" /></p>";
   
   echo "\n  <div id=\"loginform\">";
-  if ($error) {
+  if ($_zp_login_error) {
     echo "<div class=\"errorbox\" id=\"message\"><h2>There was an error logging in.</h2> Check your username and password and try again.</div>";
   }
   echo "\n  <form name=\"login\" action=\"#\" method=\"POST\">";

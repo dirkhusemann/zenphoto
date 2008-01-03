@@ -2028,10 +2028,10 @@ function printEditCommentLink($text, $before='', $after='', $title=NULL, $class=
  * @param string $class optional division class for the message
  */
 function printCommentErrors($class = 'error') {
-  global $error;
-  if (isset($error)) {
+  global $_zp_comment_error;
+  if (isset($_zp_comment_error)) {
     echo "<div class=$class>";
-    if ($error == 1) {
+    if ($_zp_comment_error == 1) {
       echo "There was an error submitting your comment. ";
       if (getOption('comment_name_required')) { echo "Name, "; }
       if (getOption('comment_email_required')) { echo "a valid e-mail address, "; }
@@ -2043,7 +2043,7 @@ function printCommentErrors($class = 'error') {
     }
     echo "</div>";
   }
-  return $error;
+  return $_zp_comment_error;
 }
 /**
  * Creates an URL for a download of a zipped copy of the current album
@@ -3290,10 +3290,10 @@ function checkforPassword($silent=false) {
  *@since 1.1.3
  */
 function printPasswordForm($hint) {
-  global $error, $_zp_password_form_printed, $_zp_current_search;
+  global $_zp_login_error, $_zp_password_form_printed, $_zp_current_search;
   if ($_zp_password_form_printed) { return; }
   $_zp_password_form_printed = true;
-  if ($error) {
+  if ($_zp_login_error) {
     echo "<div class=\"errorbox\" id=\"message\"><h2>There was an error logging in.</h2><br/>Check your password and try again.</div>";
   }
   $action = "#";

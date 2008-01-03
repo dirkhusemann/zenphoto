@@ -138,7 +138,7 @@ function fix_path_redirect() {
  ******************************************************************************/
  
 function zp_handle_comment() {
-  global $_zp_current_image, $_zp_current_album, $stored, $error;
+  global $_zp_current_image, $_zp_current_album, $stored, $_zp_comment_error;
   $redirectTo = FULLWEBPATH . '/' . zpurl();
   if (isset($_POST['comment'])) {
     if (in_context(ZP_ALBUM) && isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
@@ -167,7 +167,7 @@ function zp_handle_comment() {
                                                          strip_tags($_POST['code']), $_POST['code_h']);
 	    }   
       if ($commentadded == 2) {
-        unset($error);
+        unset($_zp_comment_error);
         if (isset($_POST['remember'])) {
           // Should always re-cookie to update info in case it's changed...
           $info = array(strip($_POST['name']), strip($_POST['email']), strip($website));
@@ -181,7 +181,7 @@ function zp_handle_comment() {
       } else {
         $stored = array($_POST['name'], $_POST['email'], $website, $_POST['comment'], false);
         if (isset($_POST['remember'])) $stored[3] = true;
-        $error = 1 + $commentadded;
+        $_zp_comment_error = 1 + $commentadded;
       }
     }
   } else if (isset($_COOKIE['zenphoto'])) {
@@ -190,7 +190,7 @@ function zp_handle_comment() {
   } else {
     $stored = array('','','', false); 
   }
-  return $error;
+  return $_zp_comment_error;
 }
 
 /**
@@ -205,7 +205,7 @@ function cookiecode($text) {
 function zp_handle_password() {
   $cookiepath = WEBPATH;
   if (WEBPATH == '') { $cookiepath = '/'; }
-  global $error, $_zp_current_album, $_zp_album_authorized;
+  global $_zp_login_error, $_zp_current_album, $_zp_album_authorized;
   if (in_context(ZP_SEARCH)) {  // search page
     $authType = 'zp_search_auth';
 	$check_auth = getOption('search_password');
@@ -254,7 +254,7 @@ function zp_handle_password() {
     } else {
      // Clear the cookie, just in case
       setcookie($authType, "", time()-368000, $cookiepath);
-      $error = true;
+      $_zp_login_error = true;
     }
   }
 
