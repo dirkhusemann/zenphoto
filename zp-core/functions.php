@@ -364,7 +364,7 @@ function getImageCachePostfix($args) {
 /** getImageParameters
  */
 function getImageParameters($args) {
-  $thumb_crop = ('thumb_crop');
+  $thumb_crop = getOption('thumb_crop');
   $thumb_size = getOption('thumb_size');
   $thumb_crop_width = getOption('thumb_crop_width');
   $thumb_crop_height = getOption('thumb_crop_height');
