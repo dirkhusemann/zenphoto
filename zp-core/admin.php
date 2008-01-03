@@ -1737,7 +1737,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
       <h1>General Options</h1>
 
       <h2>Themes (current theme is <em><?php echo $current_theme = $gallery->getCurrentTheme();?></em>)</h2>
-      <p>Themes allow you to visually change the entire look and feel of your gallery. All themes are located in your <code>zenphoto/themes</code> folder, and you can download more themes at the <a href="http://www.zenphoto.org/support/">zenphoto forum</a> and <a href="http://www.zenphoto.org/trac/wiki/ZenphotoThemes">trac themes page</a>.</p>
+      <p>Themes allow you to visually change the entire look and feel of your gallery. All themes are located in your <code>zenphoto/themes</code> folder, and you can download more themes at the <a href="http://www.zenphoto.org/support/">zenphoto forum</a> and <a href="http://www.zenphoto.org/zp/theme/">zenphoto themes page</a>.</p>
       <table class="bordered">
         <?php
         $themes = $gallery->getThemes();
