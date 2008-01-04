@@ -31,8 +31,12 @@
           <p><em><?php printImageDesc(true); ?></em></p>
         </div>
 
-        <div class="main">
-          <p id="photo"><strong><?php printCustomSizedImage(getImageTitle(), null, 480); ?></strong></p>
+        <div class="main" <?php if (!isLandscape()) { echo "style=\"width:342px;\""; } ?>>
+          <p id="photo">
+          <strong>
+            <?php $ls = isLandscape(); printCustomSizedImage(getImageTitle(), null, $ls?480:null, $ls?null:480); ?>
+          </strong>
+          </p>
         </div>
 
         <div id="meta">

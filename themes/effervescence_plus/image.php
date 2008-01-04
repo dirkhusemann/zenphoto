@@ -70,7 +70,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 
 			<!-- The Image -->
 			<?php if (!checkForPassword()) { ?>
-            <div id="image">
+            <div id="image" <?php if (!isLandscape()) { echo "style=\"width:422px;\""; } ?>>
     			<div id="image_container"><a href="<?php echo getProtectedImageURL();?>" title="<?php echo getImageTitle();?>"><?php printDefaultSizedImage(getImageTitle()); ?></a></div>
     			<?php 
 				  printImageMap(6, 'G_HYBRID_MAP');
