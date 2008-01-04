@@ -2031,15 +2031,14 @@ function printCommentErrors($class = 'error') {
   global $_zp_comment_error;
   if (isset($_zp_comment_error)) {
     echo "<div class=$class>";
-    if ($_zp_comment_error == 1) {
-      echo "There was an error submitting your comment. ";
-      if (getOption('comment_name_required')) { echo "Name, "; }
-      if (getOption('comment_email_required')) { echo "a valid e-mail address, "; }
-      if (getOption('comment_web_required')) { echo "a Website, "; }
-      if (getOption('Use_Captcha')) { echo " <em>Captcha</em> input, "; }
-      echo "and a spam-free comment are required.";
-    } else {
-      echo "Your comment has been marked for moderation.";
+    switch ($_zp_comment_error) {
+      case -1: echo "You must supply an e-mail address."; break;
+      case -2: echo "You must entert your name."; break;
+      case -3: echo "You must supply an WEB page URL."; break;
+      case -4: echo "Captcha verification failed."; break;
+      case -5: echo "You must enter something in the comment text."; break;
+      case  1: echo "You comment failed the SPAM filter check."; break;
+      case  2: echo "You comment has been marked for moderation."; break;
     }
     echo "</div>";
   }

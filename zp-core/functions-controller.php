@@ -140,6 +140,7 @@ function fix_path_redirect() {
 function zp_handle_comment() {
   global $_zp_current_image, $_zp_current_album, $stored, $_zp_comment_error;
   $redirectTo = FULLWEBPATH . '/' . zpurl();
+  unset($_zp_comment_error);
   if (isset($_POST['comment'])) {
     if (in_context(ZP_ALBUM) && isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
       if (isset($_POST['website'])) $website = strip_tags($_POST['website']); else $website = "";

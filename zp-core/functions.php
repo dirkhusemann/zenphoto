@@ -981,16 +981,16 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
   // Let the comment have trailing line breaks and space? Nah...
   // Also (in)validate HTML here, and in $name.
   $comment = trim($comment);
-  if (getOption('comment_email_required') && (empty($email) || !is_valid_email_zp($email))) { return 0; }
-  if (getOption('comment_name_required') && empty($name)) { return 0; }
-  if (getOption('comment_web_required') && empty($website)) { return 0; }
+  if (getOption('comment_email_required') && (empty($email) || !is_valid_email_zp($email))) { return -2; }
+  if (getOption('comment_name_required') && empty($name)) { return -3; }
+  if (getOption('comment_web_required') && empty($website)) { return -4; }
   $file = SERVERCACHE . "/code_" . $code_ok . ".png";
   if (getOption('Use_Captcha')) {
-    if (!file_exists($file)) { return 0; }
-    if ($code != $code_ok) { return 0; }
+    if (!file_exists($file)) { return -5; }
+    if ($code != $code_ok) { return -5; }
   }
   if (empty($comment)) {
-    return 0;
+    return -6;
   }
 
   if (!empty($website) && substr($website, 0, 7) != "http://") {
