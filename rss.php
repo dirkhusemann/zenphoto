@@ -34,11 +34,13 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 
 db_connect();
 
-if ($albumnr != "") { 
+
+if (is_numeric($albumnr) && $albumnr != "") { 
 	$albumWhere = "images.albumid = $albumnr AND";
 } else {
 	$albumWhere = "";
 }
+
 
 $result = query_full_array("SELECT images.albumid, images.date AS date, images.filename AS filename, images.title AS title, " .
                              "albums.folder AS folder, albums.title AS albumtitle, images.show, albums.show, albums.password FROM " . 
