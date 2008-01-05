@@ -1812,7 +1812,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         <?php
         $comments = query_full_array("SELECT `id`, `name`, `website`, `type`, `imageid`,"
         . " (date + 0) AS date, comment, email, inmoderation FROM ".prefix('comments')
-        . " ORDER BY id DESC " . ($viewall ? "" : "LIMIT 20") );
+        . " ORDER BY id DESC LIMIT 10" );
         foreach ($comments as $comment) {
           $id = $comment['id'];
           $author = $comment['name'];
