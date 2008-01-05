@@ -134,7 +134,7 @@ if (!isset($SAJAX_INCLUDED)) {
 			echo "+:";
 			echo "var res = " . trim(sajax_get_js_repr($result)) . "; res;";
 		}
-		exit;
+		exit();
 	}
 	
 	function sajax_get_common_js() {

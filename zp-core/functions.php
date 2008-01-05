@@ -676,7 +676,7 @@ function zp_mail($subject, $message, $headers = '') {
   	    if (strpos($v, $v2) !== false) {
   	      header("HTTP/1.0 403 Forbidden");
   	      die("Forbidden");
-  	      exit;
+  	      exit();
   	    }
   	  }
   	}
@@ -686,7 +686,7 @@ function zp_mail($subject, $message, $headers = '') {
   	    if (strpos($v, $v2) !== false){
   	      header("HTTP/1.0 403 Forbidden");
   	      die("Forbidden");
-  	      exit;
+  	      exit();
   	    }
   	  }
   	}
@@ -946,6 +946,15 @@ function unzip($file, $dir) { //check if zziplib is installed
     }
   }
 }
+/**
+ * Checks to see if a URL is valid
+ *
+ * @param string $url
+ * @return bool
+ */
+function isValidURL($url) { 
+  return preg_match('|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $url); 
+}  
 
 /**
  * Generic comment adding routine. Called by album objects or image objects
@@ -983,7 +992,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
   $comment = trim($comment);
   if (getOption('comment_email_required') && (empty($email) || !is_valid_email_zp($email))) { return -2; }
   if (getOption('comment_name_required') && empty($name)) { return -3; }
-  if (getOption('comment_web_required') && empty($website)) { return -4; }
+  if (getOption('comment_web_required') && empty($website) || !isValidURL($website) ) { return -4; }
   $file = SERVERCACHE . "/code_" . $code_ok . ".png";
   if (getOption('Use_Captcha')) {
     if (!file_exists($file)) { return -5; }

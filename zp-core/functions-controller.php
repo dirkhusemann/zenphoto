@@ -128,7 +128,7 @@ function fix_path_redirect() {
     $redirecturl = zpurl(true, NULL, NULL, NULL, $special);
     header("HTTP/1.0 301 Moved Permanently");
     header('Location: ' . FULLWEBPATH . '/' . $redirecturl);
-    exit;
+    exit();
   }
 }
 
@@ -178,7 +178,7 @@ function zp_handle_comment() {
         }
         //use $redirectTo to send users back to where they came from instead of booting them back to the gallery index. (default behaviour) 
         header('Location: ' . $redirectTo); 
-        exit;
+        exit();
       } else {
         $stored = array($_POST['name'], $_POST['email'], $website, $_POST['comment'], false);
         if (isset($_POST['remember'])) $stored[3] = true;
