@@ -294,7 +294,8 @@ class Image extends PersistentObject {
   
   // addComment: assumes data is coming straight from GET or POST
   function addComment($name, $email, $website, $comment, $code, $code_ok) {
-    return postComment($name, $email, $website, $comment, $code, $code_ok, $this);
+    $goodMessage = postComment($name, $email, $website, $comment, $code, $code_ok, $this);
+    return $goodMessage;
   }
 
   function getCommentCount() { 

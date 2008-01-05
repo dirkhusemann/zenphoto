@@ -992,7 +992,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
   $comment = trim($comment);
   if (getOption('comment_email_required') && (empty($email) || !is_valid_email_zp($email))) { return -2; }
   if (getOption('comment_name_required') && empty($name)) { return -3; }
-  if (getOption('comment_web_required') && empty($website) || !isValidURL($website) ) { return -4; }
+  if (getOption('comment_web_required') && (empty($website) || !isValidURL($website))) { return -4; }
   $file = SERVERCACHE . "/code_" . $code_ok . ".png";
   if (getOption('Use_Captcha')) {
     if (!file_exists($file)) { return -5; }
