@@ -1041,7 +1041,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
       $newcomment['website'] = $website;
       $newcomment['comment'] = $comment;
       $newcomment['date'] = time();
-      $this->comments[] = $newcomment;
+      $receiver->comments[] = $newcomment;
 
       if ($type == 'images') {
         $on = $receiver->getAlbumName() . " about " . $receiver->getTitle();
