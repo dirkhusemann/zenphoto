@@ -392,7 +392,7 @@ function getImageParameters($args) {
       $ch = $height;
       $height = $width = false;
     }
-    $thumb = true;
+//    $thumb = true;
     $cw = min($size, $cw);
     $ch = min($size, $ch);
     

@@ -151,7 +151,7 @@ if ($process) {
       $ratio_out = $height / $width;
       $crop = true;
       if ($ratio_in > $ratio_out) {
-        $thumb = true;
+//        $thumb = true;
         $dim = $width;
         $ch = $height;
       } else {
