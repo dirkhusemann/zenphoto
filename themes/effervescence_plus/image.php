@@ -69,9 +69,18 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
     		</div>
 
 			<!-- The Image -->
-			<?php if (!checkForPassword()) { ?>
-            <div id="image" <?php if (!isLandscape()) { echo "style=\"width:422px;\""; } ?>>
-    			<div id="image_container"><a href="<?php echo getProtectedImageURL();?>" title="<?php echo getImageTitle();?>"><?php printDefaultSizedImage(getImageTitle()); ?></a></div>
+			<?php if (!checkForPassword()) { 
+			  $s = getDefaultWidth() + 22;
+			  $wide = "style=\"width:".$s."px;"; 
+			  $s = getDefaultHeight() + 22;
+			  $high = " height:".$s."px;\""; 
+			  ?>
+            <div id="image" <?php echo $wide.$high; ?>>
+    			<div id="image_container">
+    			<a href="<?php echo getProtectedImageURL();?>" title="<?php echo getImageTitle();?>">
+    			<?php printDefaultSizedImage(getImageTitle()); ?>
+    			</a>
+    			</div>
     			<?php 
 				  printImageMap(6, 'G_HYBRID_MAP');
 				  if (getImageEXIFData()) {

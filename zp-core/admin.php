@@ -535,9 +535,9 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         setOption('albums_per_page', $_POST['albums_per_page']);
         setOption('images_per_page', $_POST['images_per_page']);
         setBoolOption('perform_watermark', $_POST['perform_watermark']);
-        setOption('watermark_image', 'images/' . $_POST['watermark_image'] . '.png');
+        setOption('watermark_image', 'watermarks/' . $_POST['watermark_image'] . '.png');
         setBoolOption('perform_video_watermark', $_POST['perform_video_watermark']);
-        setOption('video_watermark_image', 'images/' . $_POST['video_watermark_image'] . '.png');
+        setOption('video_watermark_image', 'watermarks/' . $_POST['video_watermark_image'] . '.png');
         setBoolOption('full_image_download', $_POST['full_image_download']);
         setOption('full_image_quality', $_POST['full_image_quality']);
         $returntab = "#tab_image";
@@ -763,14 +763,15 @@ if (!zp_loggedin()  && !$_zp_null_account) {
             </tr>
             <tr>
               <td colspan="8">
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <p align="right">
       <img src="images/lock.png" style="border: 0px;" alt="Protected" />Has Password&nbsp;
       <img src="images/pass.png" style="border: 0px;" alt="Published" />Published&nbsp;
       <img src="images/action.png" style="border: 0px;" alt="Unpublished" />Unpublished&nbsp;
       <img src="images/cache.png" style="border: 0px;" alt="Cache the album" />Cache the album&nbsp;
       <img src="images/warn.png" style="border: 0px;" alt="Refresh image metadata" />Refresh image metadata&nbsp;
       <img src="images/reset.png" style="border: 0px;" alt="Reset hitcounters" />Reset hitcounters&nbsp;
-      <img src="images/fail.png" style="border: 0px;" alt="Delete" /></a>Delete&nbsp;
+      <img src="images/fail.png" style="border: 0px;" alt="Delete" /></a>Delete
+      </p>
                 <?php
                 zenSortablesSaveButton("?page=edit&album=" . urlencode($album->name) . "&subalbumsaved", "Save Order");
                 ?>
@@ -947,7 +948,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 
         <table class="bordered" width="100%">
           <tr>
-            <th style="text-align: left;" width="345">Edit this album</th>
+            <th style="text-align: left;" >Edit this album</th>
           </tr>
           <tr>
           <td style="padding: 0px 0px;" colspan="2">
@@ -965,14 +966,15 @@ if (!zp_loggedin()  && !$_zp_null_account) {
           </tr>
         </table>
         <div>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <p align="right">
       <img src="images/lock.png" style="border: 0px;" alt="Protected" />Has Password&nbsp;
       <img src="images/pass.png" style="border: 0px;" alt="Published" />Published&nbsp;
       <img src="images/action.png" style="border: 0px;" alt="Unpublished" />Unpublished&nbsp;
       <img src="images/cache.png" style="border: 0px;" alt="Cache the album" />Cache the album&nbsp;
       <img src="images/warn.png" style="border: 0px;" alt="Refresh image metadata" />Refresh image metadata&nbsp;
       <img src="images/reset.png" style="border: 0px;" alt="Reset hitcounters" />Reset hitcounters&nbsp;
-      <img src="images/fail.png" style="border: 0px;" alt="Delete" /></a>Delete&nbsp;
+      <img src="images/fail.png" style="border: 0px;" alt="Delete" /></a>Delete
+      </p>
       <?php
         zenSortablesSaveButton("?page=edit&saved", "Save Order");
       ?>
@@ -1591,13 +1593,13 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                                 $v = explode("/", getOption('watermark_image'));
                                 $v = str_replace('.png', "", $v[count($v)-1]);
                                 echo "<select id=\"watermark_image\" name=\"watermark_image\">\n";
-                                generateListFromFiles($v, SERVERPATH . "/" . ZENFOLDER . '/images' , '.png');
+                                generateListFromFiles($v, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png');
                                 echo "</select>\n";
                             ?>
                           <input type="checkbox" name="perform_watermark" value="1"
                           <?php echo checked('1', getOption('perform_watermark')); ?> />&nbsp;Enabled
                         </td>
-                        <td>The watermark image (png-24). (Place the image in the <?php echo ZENFOLDER; ?>/images/ directory.)</td>
+                        <td>The watermark image (png-24). (Place the image in the <?php echo ZENFOLDER; ?>/watermarks/ directory.)</td>
                     </tr>
                      <tr>
                         <td>Image for video watermark:</td>
@@ -1606,13 +1608,13 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                             $v = explode("/", getOption('video_watermark_image'));
                             $v = str_replace('.png', "", $v[count($v)-1]);
                             echo "<select id=\"videowatermarkimage\" name=\"video_watermark_image\">\n";
-                            generateListFromFiles($v, SERVERPATH . "/" . ZENFOLDER . '/images' , '.png');
+                            generateListFromFiles($v, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png');
                             echo "</select>\n";
                         ?>
                            <input type="checkbox" name="perform_video_watermark" value="1"
                            <?php echo checked('1', getOption('perform_video_watermark')); ?> />&nbsp;Enabled
                         </td>
-                        <td>The watermark image (png-24). (Place the image in the <?php echo ZENFOLDER; ?>/images/ directory.)</td>
+                        <td>The watermark image (png-24). (Place the image in the <?php echo ZENFOLDER; ?>/watermarks/ directory.)</td>
                     </tr>
                     <tr>
                         <td>Full image quality:</td>

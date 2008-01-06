@@ -51,9 +51,9 @@ function setDefault($option, $default) {
   setDefault('albums_per_page', 5);
   setDefault('images_per_page', 15);
   setDefault('perform_watermark', 0);
-  setDefault('watermark_image', "images/watermark.png");
+  setDefault('watermark_image', "watermarks/watermark.png");
   setDefault('perform_video_watermark', 0);
-  setDefault('video_watermark_image', "images/watermark-video.png");
+  setDefault('video_watermark_image', "watermarks/watermark-video.png");
   setDefault('spam_filter', 'none');
   setDefault('email_new_comments', 1);
   setDefault('gallery_sorttype', 'ID');

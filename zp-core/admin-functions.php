@@ -549,16 +549,16 @@ function printAlbumEditRow($album) {
        '" title="Edit this album: ' . $album->name . '">' . $album->getTitle() . '</a>';
   echo "</td>\n";
 
-  echo "\n<td style=\"text-align: left;\">";
+  $wide='40px';
+  echo "\n<td><table width='100%'><tr>\n<td>";
+  echo "\n<td style=\"text-align:center;\" width='$wide';>";
 
   $pwd = $album->getPassword();
   if (!empty($pwd)) {
     echo '<img src="images/lock.png" style="border: 0px;" alt="Protected" /></a>';
-  } else {
-    echo '<img src="images/blank.png" style="border: 0px;" alt="No password" /></a>';
-  }
+   }
   
-  echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp\n";
+  echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
   if ($album->getShow()) {
     echo '<a class="publish" href="?action=publish&value=0&album=' . queryencode($album->name) . 
          '" title="Publish the album <em>' . $album->name . '</em>">';
@@ -569,25 +569,26 @@ function printAlbumEditRow($album) {
     echo '<img src="images/action.png" style="border: 0px;" alt="Publish the album ' . $album->name . '" /></a>';
   }
   
-  echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp\n";  
+  echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
   echo '<a class="cache" href="cache-images.php?album=' . queryencode($album->name) . "&return=*" . 
        '" title="Pre-cache images in <em>' . $album->name . '</em>">';
   echo '<img src="images/cache.png" style="border: 0px;" alt="Cache the album ' . $album->name . '" /></a>';
   
-  echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp\n";  
+  echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
   echo '<a class="warn" href="refresh-metadata.php?album=' . queryencode($album->name) . "&return=*" . 
        '" title="Refresh metadata for the album <em>' . $album->name . '</em>">';
   echo '<img src="images/warn.png" style="border: 0px;" alt="Refresh image metadata in the album ' . $album->name . '>" /></a>';
 
-  echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp\n";  
+  echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
   echo '<a class="reset" href="?action=reset_hitcounters&albumid=' . $album->getAlbumID() . '" title="Reset hitcounters for album <em>' . $album->name . '</em>">';
   echo '<img src="images/reset.png" style="border: 0px;" alt="Reset hitcounters for the album ' . $album->name . '" /></a>';
   
-  echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp\n";
-  echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=" . queryEncode($album->name) . "');\" title=\"Delete the album " . $album->name . "\">";
+  echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
+    echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=" . queryEncode($album->name) . "');\" title=\"Delete the album " . $album->name . "\">";
   echo '<img src="images/fail.png" style="border: 0px;" alt="Delete the album ' . $album->name . '" /></a>';
   echo '<a class="cache" href="cache-images.php?album=' . queryencode($album->name) . 
        '&return=edit" title="Pre-Cache the album <em>' . $album->name . '</em>">';
+  echo "</td>\n</tr></table>\n</td>";
   
   echo '</tr>';
   echo '</table>';

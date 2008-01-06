@@ -31,10 +31,22 @@
           <p><em><?php printImageDesc(true); ?></em></p>
         </div>
 
-        <div class="main" <?php if (!isLandscape()) { echo "style=\"width:342px;\""; } ?>>
+        <?php
+          $ls = isLandscape(); 
+          if (!$ls) {
+	        $s = getDefaultWidth();
+		    $h = getDefaultHeight();
+		    $r = 480/$h;
+		    $s = round($r*$s)+22;
+		    $wide = "style=\"width:".$s."px;\""; 
+          } else {
+            $wide = '';
+          }
+        ?>
+        <div class="main" <?php echo $wide; ?>>
           <p id="photo">
           <strong>
-            <?php $ls = isLandscape(); printCustomSizedImage(getImageTitle(), null, $ls?480:null, $ls?null:480); ?>
+            <?php printCustomSizedImage(getImageTitle(), null, $ls?480:null, $ls?null:480); ?>
           </strong>
           </p>
         </div>
