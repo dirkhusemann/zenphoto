@@ -1734,10 +1734,8 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 
 <?php } else if ($page == "themes") { ?>
 
-      <h1>General Options</h1>
-
-      <h2>Themes (current theme is <em><?php echo $current_theme = $gallery->getCurrentTheme();?></em>)</h2>
-      <p>Themes allow you to visually change the entire look and feel of your gallery. All themes are located in your <code>zenphoto/themes</code> folder, and you can download more themes at the <a href="http://www.zenphoto.org/support/">zenphoto forum</a> and <a href="http://www.zenphoto.org/zp/theme/">zenphoto themes page</a>.</p>
+      <h1>Themes (current theme is <em><?php echo $current_theme = $gallery->getCurrentTheme();?></em>)</h1>
+      <p>Themes allow you to visually change the entire look and feel of your gallery. All themes are located in your <code>zenphoto/themes</code> folder, and you can download more themes at the <a href="http://www.zenphoto.org/support/">zenphoto forum</a> and the <a href="http://www.zenphoto.org/zp/theme/">zenphoto themes page</a>.</p>
       <table class="bordered">
         <?php
         $themes = $gallery->getThemes();
@@ -1869,23 +1867,24 @@ if (!zp_loggedin()  && !$_zp_null_account) {
           </strong>: Tables are prefixed by <strong>'<?php echo getOption('mysql_prefix'); ?>'</strong></p>
           <form name="prune_gallery" action="admin.php?prune=true">
             <input type="hidden" name="prune" value="true">
-            <button Type="submit">Refresh the Database</button>
-            <br/>This cleans the database, removes any orphan entries for comments, images, and albums.
+            <div class="buttons"><button type="submit"><img src="images/refresh.png" alt="" /> Refresh the Database</button></div><br clear="all" />
+            This cleans the database, removes any orphan entries for comments, images, and albums.
           </form>
           <form name="cache_images" action="cache-images.php">
-            <button type="submit"><img src="images/cache.png" style="border: 0px;" /> Pre-Cache Images</button>
+          	<div class="buttons"><button type="submit"><img src="images/cache.png" alt="" /> Pre-Cache Images</button></div><br clear="all" />
             <input type="checkbox" name="clear" checked="true" /> Clear
             Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser.
           </form>
           <form name= "refresh_metadata" action="refresh-metadata.php">
-            <button type="submit"><img src="images/warn.png" style="border: 0px;" /> Refresh Metadata</button>
-            <br/>Forces a refresh of the EXIF and IPTC data for all images.
+            <div class="buttons"><button type="submit"><img src="images/warn.png" alt="" /> Refresh Metadata</button></div><br clear="all" />
+            Forces a refresh of the EXIF and IPTC data for all images.
           </form>
           <form name="reset_hitcounters" action="admin.php?action=reset_hitcounters=true">
             <input type="hidden" name="action" value="reset_hitcounters">
-            <p/><button type="submit"><img src="images/reset.png" style="border: 0px;" /> Reset hitcounters</button>
-            <br/>Sets all album and image hitcounters to zero.
+            <div class="buttons"><button type="submit"><img src="images/reset.png" alt="" /> Reset hitcounters</button></div><br clear="all" />
+            Sets all album and image hitcounters to zero.
           </form>
+          </p>
         </div>
 
 

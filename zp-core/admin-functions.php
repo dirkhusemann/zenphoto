@@ -492,14 +492,14 @@ function printAlbumButtons($album) {
     echo "<button type=\"submit\"><img src=\"images/cache.png\" style=\"border: 0px;\" />";
     echo " Pre-Cache Images</Button>";
     echo "<input type=\"checkbox\" name=\"clear\" checked=\"true\" /> Clear";
-    echo "<br/>Cache newly uploaded images.</form>\n</td>";
+    echo "<br clear='all' />Cache newly uploaded images.</form>\n</td>";
 
     echo "\n<td valign=\"top\" width = 30% style=\"padding: 0px 30px 0px 30px;\">";
     echo "<form name=\"refresh_metadata\" action=\"refresh-metadata.php\"?album=" . queryencode($album->name) . "\" method=\"post\">";
     echo "<input type=\"hidden\" name=\"album\" value=" . queryencode($album->name) . ">";
     echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
     echo "<button type=\"submit\"><img src=\"images/warn.png\" style=\"border: 0px;\" /> Refresh Metadata</button>";
-    echo "<br/>Forces a refresh of the EXIF and IPTC data for all images in the album.";
+    echo "<br clear='all' />Forces a refresh of the EXIF and IPTC data for all images in the album.";
     echo "</form>";
 	echo "\n</td>";
          
@@ -510,7 +510,7 @@ function printAlbumButtons($album) {
     echo "<input type=\"hidden\" name=\"albumid\" value=" . $album->getAlbumID() . ">";
     echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
     echo "<button type=\"submit\"><img src=\"images/reset.png\" style=\"border: 0px;\" /> Reset hitcounters</button>";
-    echo "<br/>Resets all hitcounters in the album.";
+    echo "<br clear='all' />Resets all hitcounters in the album.";
     echo "</form>";
     echo "\n</tr></table>";
   }
