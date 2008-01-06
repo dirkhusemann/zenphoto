@@ -335,7 +335,7 @@ class Image extends PersistentObject {
   }
   
   // Get a custom sized version of this image based on the parameters.
-  function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy) {
+  function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin=false) {
     $cachefilename = getImageCacheFilename($this->album->name, $this->filename, 
       getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy)));
     if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
@@ -344,7 +344,8 @@ class Image extends PersistentObject {
       return WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($this->filename)
         . ($size ? "&s=$size" : "" ) . ($width ? "&w=$width" : "") . ($height ? "&h=$height" : "") 
         . ($cropw ? "&cw=$cropw" : "") . ($croph ? "&ch=$croph" : "")
-        . ($cropx ? "&cx=$cropx" : "") . ($cropy ? "&cy=$cropy" : "") ;
+        . ($cropx ? "&cx=$cropx" : "") . ($cropy ? "&cy=$cropy" : "") 
+        . ($thumbStandin ? "&t=true" : "") ;
     }
   }
 

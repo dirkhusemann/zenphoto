@@ -14,6 +14,7 @@
  *   cx - crop x position: the x (horizontal) position of the crop area.
  *   cy - crop y position: the y (vertical) position of the crop area.
  *   q  - JPEG quality (1-100): sets the quality of the resulting image.
+ *   t  - Set for custom images if used as thumbs (no watermarking.)
  *
  * - cx and cy are measured from the top-left corner of the _scaled_ image.
  * - One of s, h, or w _must_ be specified; the others are optional.
@@ -45,6 +46,7 @@ define('MAX_SIZE', 3000);
 if (!isset($_GET['a']) || !isset($_GET['i'])) {
   imageError("Too few arguments! Image not found.", 'err-imagenotfound.gif');
 }
+if (isset($_GET['t'])) { $thumbStandin = $_GET['t']; } else { $thumbStandin = false; }
 
 // Fix special characters in the album and image names if mod_rewrite is on:
 // URL looks like: "/album1/subalbum/image/picture.jpg"
@@ -216,7 +218,7 @@ if ($process) {
          $watermark_image = getOption('video_watermark_image');
       }
     } else {
-      if (!$thumb) {
+      if (!$thumb && !$thumbStandin) {
         $perform_watermark = getOption('perform_watermark');
         $watermark_image = getOption('watermark_image');
       }

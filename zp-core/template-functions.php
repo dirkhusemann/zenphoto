@@ -790,7 +790,7 @@ function printAlbumThumbImage($alt, $class=NULL, $id=NULL) {
 function getCustomAlbumThumb($size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=null) {
   global $_zp_current_album;
   $thumb = $_zp_current_album->getAlbumThumbImage();
-  return $thumb->getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy);
+  return $thumb->getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, true);
 }
 
 /**
@@ -1778,9 +1778,9 @@ function getSizedImageURL($size) {
 * @param int $cropy crop part y axis
 * @return string
 */
-function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL) {
+function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $thumbStandin=false) {
   global $_zp_current_image;
-  return $_zp_current_image->getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy);
+  return $_zp_current_image->getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin);
 }
 
 /**
@@ -1798,7 +1798,7 @@ function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph
 * @param string $class Optional style class
 * @param string $id Optional style id
 */
-function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $class=NULL, $id=NULL) {
+function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $class=NULL, $id=NULL, $thumbStandin=false) {
   global $_zp_current_album, $_zp_current_image;
   if (!$_zp_current_album->getShow()) {
     $class .= " not_visible";
@@ -1850,7 +1850,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
   //Print images
   else {
     $sizearr = getSizeCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy);
-  		echo "<img src=\"" . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy)) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
+  		echo "<img src=\"" . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin)) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
     	" width=\"" . $sizearr[0] . "\" height=\"" . $sizearr[1] . "\"" .
   		(($class) ? " class=\"$class\"" : "") .
   		(($id) ? " id=\"$id\"" : "") . " />";
