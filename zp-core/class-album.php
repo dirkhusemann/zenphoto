@@ -16,7 +16,14 @@ class Album extends PersistentObject {
   var $index;
   var $themeoverride;
 
-  // Constructor
+  /**
+   * Constructor for albums
+   *
+   * @param object $gallery The parent gallery
+   * @param string $folder folder name of the album
+   * @param bool $cache load from cache if present
+   * @return Album
+   */
   function Album(&$gallery, $folder, $cache=true) {
     $folder = sanitize_path($folder);
     
@@ -38,6 +45,11 @@ class Album extends PersistentObject {
   }
   
   
+  /**
+   * Sets default values for a new album
+   *
+   * @return bool
+   */
   function setDefaults() {
     // Set default data for a new Album (title and parent_id)
     $parentalbum = $this->getParent();

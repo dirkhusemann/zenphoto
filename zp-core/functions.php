@@ -334,10 +334,13 @@ function getAlbumArray($albumstring, $includepaths=false) {
   }
 }
 
-
-
-
-/** getImageCacheFilename
+/**
+ * Returns the name of an image for uses in caching it
+ *
+ * @param string $album album folder
+ * @param string $image image file name
+ * @param array $args cropping arguments
+ * @return string
  */
 function getImageCacheFilename($album, $image, $args) {
   // Set default variable values.
@@ -351,7 +354,11 @@ function getImageCacheFilename($album, $image, $args) {
   return '/' . $album . $albumsep . $image . $postfix . '.jpg';
 }
 
-/** getImageCachePostfix
+/** 
+ * Returns the crop/sizing string to postfix to a cache image
+ * 
+ * @param array $args cropping arguments
+ * @return string
  */
 function getImageCachePostfix($args) {
   list($size, $width, $height, $cw, $ch, $cx, $cy) = $args;
@@ -361,7 +368,12 @@ function getImageCachePostfix($args) {
   return $postfix_string;
 }
 
-/** getImageParameters
+
+/** 
+ * Validates and edits image size/cropping parameters
+ * 
+ * @param array $args cropping arguments
+ * @return array
  */
 function getImageParameters($args) {
   $thumb_crop = getOption('thumb_crop');
@@ -417,7 +429,12 @@ function getImageParameters($args) {
 }
 
 
-// Checks if the input is numeric, rounds if so, otherwise returns false.
+/**
+ * Checks if the input is numeric, rounds if so, otherwise returns false.
+ *
+ * @param mixed $num
+ * @return bool
+ */
 function sanitize_numeric($num) {
   if (is_numeric($num)) {
     return abs(round($num));
@@ -430,8 +447,9 @@ function sanitize_numeric($num) {
 /** Takes a user input string (usually from the query string) and cleans out
  * HTML, null-bytes, and slashes (if magic_quotes_gpc is on) to prevent
  * XSS attacks and other malicious user input, and make strings generally clean.
- * @param $input_string is a string that needs cleaning.
- * @param $deepclean is whether to replace HTML tags, javascript, etc.
+ * 
+ * @param string $input_string is a string that needs cleaning.
+ * @param string $deepclean is whether to replace HTML tags, javascript, etc.
  * @return string the sanitized string.
  */
 function sanitize($input_string, $deepclean=false) {
@@ -444,7 +462,8 @@ function sanitize($input_string, $deepclean=false) {
 /** Takes user input meant to be used within a path to a file or folder and 
  * removes anything that could be insecure or malicious, or result in duplicate
  * representations for the same physical file.
- * @param $filename is the path-bound text to filter.
+ * 
+ * @param string $filename is the path-bound text to filter.
  * @return string the sanitized filename ready for use in file functions.
  */
 function sanitize_path($filename) {
@@ -454,6 +473,12 @@ function sanitize_path($filename) {
   return $filename;
 }
 
+/**
+ * Formats an error message
+ * If DEBUG is set, supplies the calling sequence
+ *
+ * @param string $message
+ */
 function zp_error($message) {
   global $_zp_error;
   if (!$_zp_error) {
@@ -485,14 +510,15 @@ function zp_error($message) {
 /**
  * Returns either the rewrite path or the plain, non-mod_rewrite path
  * based on the mod_rewrite option in zp-config.php.
- * @param $rewrite is the path to return if rewrite is enabled. (eg: "/myalbum")
- * @param $plain is the path if rewrite is disabled (eg: "/?album=myalbum")
  * The given paths can start /with or without a slash, it doesn't matter.
  *
  * IDEA: this function could be used to specially escape items in
  * the rewrite chain, like the # character (a bug in mod_rewrite).
  *
  * This is here because it's used in both template-functions.php and in the classes.
+ * @param string $rewrite is the path to return if rewrite is enabled. (eg: "/myalbum")
+ * @param string $plain is the path if rewrite is disabled (eg: "/?album=myalbum")
+ * @return string
  */
 function rewrite_path($rewrite, $plain) {
   $path = null;
@@ -506,7 +532,14 @@ function rewrite_path($rewrite, $plain) {
 }
 
 
-// Simple mySQL timestamp formatting function.
+
+/**
+ * Simple mySQL timestamp formatting function.
+ *
+ * @param string $format formatting template
+ * @param int $mytimestamp timestamp
+ * @return string
+ */
 function myts_date($format,$mytimestamp)
 {
    // If your server is in a different time zone than you, set this.
@@ -527,8 +560,13 @@ function myts_date($format,$mytimestamp)
 
 // Text formatting and checking functions
 
-// Determines if the input is an e-mail address. Adapted from WordPress.
-// Name changed to avoid conflicts in WP integrations.
+/**
+ * Determines if the input is an e-mail address. Adapted from WordPress.
+ * Name changed to avoid conflicts in WP integrations.
+ *
+ * @param string $input_email email address?
+ * @return bool
+ */
 function is_valid_email_zp($input_email) {
   $chars = "/^([a-z0-9+_]|\\-|\\.)+@(([a-z0-9_]|\\-)+\\.)+[a-z]{2,6}\$/i";
   if(strstr($input_email, '@') && strstr($input_email, '.')) {
@@ -539,18 +577,35 @@ function is_valid_email_zp($input_email) {
   return false;
 }
 
+/**
+ * Checks the suffix of a file for a valid image suffix
+ *
+ * @param string $filename name of the image
+ * @return bool
+ */
 function is_image($filename) {
   $ext = strtolower(strrchr($filename, "."));
   return ($ext == ".jpg" || $ext == ".jpeg" || $ext == ".png" || $ext == ".gif");
 }
 
+/**
+ * Checks for a zip file
+ *
+ * @param string $filename name of the file
+ * @return bool
+ */
 function is_zip($filename) {
   $ext = strtolower(strrchr($filename, "."));
   return ($ext == ".zip");
 }
 
 
-// rawurlencode function that is path-safe (does not encode /)
+/**
+ * rawurlencode function that is path-safe (does not encode /)
+ *
+ * @param string $path URL
+ * @return string
+ */
 function pathurlencode($path) {
   return implode("/", array_map("rawurlencode", explode("/", $path)));
 }
@@ -626,7 +681,15 @@ function size_readable($size, $unit = null, $retstring = null)
 }
 
 
-// Takes a comment and makes the body of an email.
+/**
+ * Takes a comment and makes the body of an email.
+ *
+ * @param string $str comment
+ * @param string $name author
+ * @param string $albumtitle album
+ * @param string $imagetitle image
+ * @return string
+ */
 function commentReply($str, $name, $albumtitle, $imagetitle) {
   $str = wordwrap(strip_tags($str), 75, '\n');
   $lines = explode('\n', $str);
@@ -636,6 +699,12 @@ function commentReply($str, $name, $albumtitle, $imagetitle) {
 }
 
 
+/**
+ * Parses and sanitizes Theme definition text
+ *
+ * @param file $file theme file
+ * @return string
+ */
 function parseThemeDef($file) {
   $themeinfo = array();
   if (is_readable($file) && $fp = @fopen($file, "r")) {
@@ -711,6 +780,8 @@ function zp_mail($subject, $message, $headers = '') {
    * or b) the reverse order of how they are returned from disk. This will thus give us the
    * album list in with the the ordered albums first, followed by the rest with the newest first.
    *
+   * @param  array $albums array of album names
+   * @param  string $sortkey the sorting scheme
    * @return A sorted array of album names.
    * 
    * @author Todd Papaioannou (lucky@luckyspin.org)
@@ -758,6 +829,11 @@ function zp_mail($subject, $message, $headers = '') {
     return $albums_ordered;
   }
 
+/**
+ * Creates a zip file of the album
+ *
+ * @param string $album album folder
+ */
 function createAlbumZip($album){
   $rp = realpath(getAlbumFolder() . $album) . '/';
   $p = $album . '/';
@@ -779,6 +855,12 @@ function createAlbumZip($album){
   }
 }
 
+/**
+ * Returns the fully qualified path to the album folders
+ *
+ * @param string $root the base from whence the path dereives
+ * @return sting
+ */
 function getAlbumFolder($root=SERVERPATH) {
   if (is_null($album_folder = getOption('album_folder'))) {
     $album_folder = ALBUMFOLDER;
@@ -790,17 +872,16 @@ function getAlbumFolder($root=SERVERPATH) {
   }
 }
 
-/*
- *Plug-in handling
-  
- *getPlugin($plugin, $inTheme)
-  
- *$plugin is the name of the plugin file, typically something.php
- *$inTheme tells where to find the plugin.
+/**
+ * Plug-in handling
+ * Returns the fully qualified "require" file name.
+ * 
+ * @param  string $plugin is the name of the plugin file, typically something.php
+ * @param  bool $inTheme tells where to find the plugin.
  *   true means look in the current theme
  *   false means look in the zp-core/plugins folder.
  *
- *  Returns the fully qualified "require" file name.
+ * @return string
  */
 function getPlugin($plugin, $inTheme) {
 $gallery = new Gallery();
@@ -819,6 +900,12 @@ $_zp_themeroot = WEBPATH . "/themes/$theme";
   }
 }
 
+/**
+ * For internal use--fetches a single tag from IPTC data
+ *
+ * @param string $tag
+ * @return string
+ */
 function getIPTCTag($tag) {
   global $iptc;
   $iptcTag = $iptc[$tag];
@@ -832,6 +919,13 @@ function getIPTCTag($tag) {
   return $r;
 }
   
+/**
+ * Parces IPTC data and returns those tags zenphoto is interested in
+ * folds multiple tags into single zp data items based on precidence.
+ *
+ * @param string $imageName
+ * @return array
+ */
 function getImageMetadata($imageName) {
   global $iptc;
   
@@ -921,6 +1015,12 @@ function getImageMetadata($imageName) {
   return $result;
 }
 
+/**
+ * Unzips an image archive
+ *
+ * @param file $file the archive
+ * @param string $dir where the images go
+ */
 function unzip($file, $dir) { //check if zziplib is installed
   if(function_exists('zip_open()')) {
     $zip = zip_open($file);

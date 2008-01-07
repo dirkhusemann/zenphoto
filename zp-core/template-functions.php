@@ -1776,7 +1776,8 @@ function getSizedImageURL($size) {
 * @param int $croph crop height
 * @param int $cropx crop part x axis
 * @param int $cropy crop part y axis
-* @return string
+* @param bool $thumbStandin set true to inhibit watermarking
+* * @return string
 */
 function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $thumbStandin=false) {
   global $_zp_current_image;
@@ -1797,7 +1798,8 @@ function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph
 * @param int $cropy crop y axis
 * @param string $class Optional style class
 * @param string $id Optional style id
-*/
+* @param bool $thumbStandin set true to inhibit watermarking
+* */
 function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $class=NULL, $id=NULL, $thumbStandin=false) {
   global $_zp_current_album, $_zp_current_image;
   if (!$_zp_current_album->getShow()) {
@@ -2144,7 +2146,7 @@ function hitcounter($option='image', $viewonly=false, $id=NULL) {
       $doUpdate = true;
       break;
     case "album":
-      if ($is_null($id)) {
+      if (is_null($id)) {
         $id = getAlbumID();
       }
       $dbtable = prefix('albums');

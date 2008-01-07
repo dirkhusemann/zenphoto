@@ -334,7 +334,21 @@ class Image extends PersistentObject {
     }
   }
   
-  // Get a custom sized version of this image based on the parameters.
+/**
+ *  Get a custom sized version of this image based on the parameters.
+ * 
+ * @param string $alt Alt text for the url
+ * @param int $size size
+ * @param int $width width
+ * @param int $height height 
+ * @param int $cropw crop width
+ * @param int $croph crop height
+ * @param int $cropx crop x axis
+ * @param int $cropy crop y axis
+ * @param string $class Optional style class
+ * @param string $id Optional style id
+ * @param bool $thumbStandin set true to inhibit watermarking
+ */
   function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin=false) {
     $cachefilename = getImageCacheFilename($this->album->name, $this->filename, 
       getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy)));
