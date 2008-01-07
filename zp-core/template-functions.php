@@ -47,6 +47,7 @@ function printVersion() {
 
 /**
  * Prints the admin edit link for albums if the current user is logged-in
+
  * Returns true if the user is logged in
  * @param string $text text for the link
  * @param string $before text do display before the link
@@ -240,6 +241,7 @@ function getNumAlbums() {
  * If we're already in the album context, this is a sub-albums loop, which,
  * quite simply, changes the source of the album list.
  * Switch back to the previous context when there are no more albums.
+
  * Returns true if there are albums, false if none
  *
  * @param bool $all true to go through all the albums
@@ -338,7 +340,11 @@ function getPageURL_($page, $total) {
     $searchwords = $_zp_current_search->words;
     $searchdate = $_zp_current_search->getSearchDate();
     $searchfields = $_zp_current_search->getQueryFields();
-    $searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields).(($page > 1) ? "&page=" . $page : "") ;
+    if (getOption('mod_rewrite')) {
+      $searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields).(($page > 1) ? "/" . $page : "") ;
+    } else {
+      $searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields).(($page > 1) ? "&page=" . $page : "") ;
+    }
     return $searchpagepath;
   } else {
     if ($page <= $total && $page > 0) {
@@ -909,28 +915,48 @@ function getNumImages() {
     return $_zp_current_album->getNumImages();
   }
 }
+
 /**
+
  * Returns the count of all the images in the album and any subalbums
+
  *
+
  * @param object $album The album whose image count you want
+
  * @return int
+
  * @since 1.1.4
+
  */
+
 function getTotalImagesIn($album) {
+
   global $_zp_gallery;
+
   $sum = $album->getNumImages();
+
   $subalbums = $album->getSubalbums(0);
+
   while (count($subalbums) > 0) {
+
     $albumname = array_pop($subalbums);
+
     $album = new Album($_zp_gallery, $albumname);
+
     $sum = $sum + getTotalImagesIn($album);
+
   }
+
   return $sum;
+
 }
+
 
 /**
  * Returns the next image on a page.
  * sets $_zp_current_image to the next image in the album.
+
  * Returns true if there is an image to be shown
  *
  *@param bool $all set to true disable pagination
@@ -1718,8 +1744,11 @@ function printImageThumb($alt, $class=NULL, $id=NULL) {
   if (!$_zp_current_image->getShow()) {
     $class .= " not_visible";
   }
+
   $album = $_zp_current_image->getAlbum();
+
   $pwd = $album->getPassword();
+
   if (zp_loggedin() && !empty($pwd)) {
     $class .= " password_protected";
   }
@@ -1777,6 +1806,7 @@ function getSizedImageURL($size) {
 * @param int $cropx crop part x axis
 * @param int $cropy crop part y axis
 * @param bool $thumbStandin set true to inhibit watermarking
+
 * * @return string
 */
 function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $thumbStandin=false) {
@@ -1799,6 +1829,7 @@ function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph
 * @param string $class Optional style class
 * @param string $id Optional style id
 * @param bool $thumbStandin set true to inhibit watermarking
+
 * */
 function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $class=NULL, $id=NULL, $thumbStandin=false) {
   global $_zp_current_album, $_zp_current_image;
@@ -1890,10 +1921,14 @@ function printSizedImageLink($size, $text, $title, $class=NULL, $id=NULL) {
 */
 function getCommentCount() {
   global $_zp_current_image, $_zp_current_album;
+
   if (in_context(ZP_IMAGE)) {
     return $_zp_current_image->getCommentCount();
+
   } else {
+
     return $_zp_current_album->getCommentCount();
+
   }
 }
 /**
@@ -1903,25 +1938,38 @@ function getCommentCount() {
 */
 function getCommentsAllowed() {
   global $_zp_current_image, $_zp_current_album;
+
   if (in_context(ZP_IMAGE)) {
+
     return $_zp_current_image->getCommentsAllowed();
+
   } else {
+
     return $_zp_current_album->getCommentsAllowed();
+
   }
 }
 /**
  *Iterate through comments; use the ZP_COMMENT context.
  *Return true if there are more comments
+
  * 
+
  *@return bool
+
  *  */
 function next_comment() {
   global $_zp_current_image, $_zp_current_album, $_zp_current_comment, $_zp_comments;
   if (is_null($_zp_current_comment)) {
+
     if (in_context(ZP_IMAGE)) {
+
       $_zp_comments = $_zp_current_image->getComments();  
+
     } else {
+
       $_zp_comments = $_zp_current_album->getComments();  
+
     }
     if (empty($_zp_comments)) { return false; }
     $_zp_current_comment = array_shift($_zp_comments);
@@ -1981,6 +2029,7 @@ function printCommentAuthorLink($title=NULL, $class=NULL, $id=NULL) {
 
 /**
  * Retrieves the date of the current comment
+
  * Returns a formatted date
  *
  * @param string $format how to format the result
@@ -1990,6 +2039,7 @@ function getCommentDate($format = 'F jS, Y') { global $_zp_current_comment; retu
 /**
  * Retrieves the time of the current comment
  * Returns a formatted time
+
  * @param string $format how to format the result
  * @return string
  */
@@ -2033,14 +2083,23 @@ function printCommentErrors($class = 'error') {
   global $_zp_comment_error;
   if (isset($_zp_comment_error)) {
     echo "<div class=$class>";
+
     switch ($_zp_comment_error) {
+
       case -1: echo "You must supply an e-mail address."; break;
+
       case -2: echo "You must entert your name."; break;
+
       case -3: echo "You must supply an WEB page URL."; break;
+
       case -4: echo "Captcha verification failed."; break;
+
       case -5: echo "You must enter something in the comment text."; break;
+
       case  1: echo "You comment failed the SPAM filter check."; break;
+
       case  2: echo "You comment has been marked for moderation."; break;
+
     }
     echo "</div>";
   }
@@ -2067,38 +2126,59 @@ function printLatestComments($number, $type='images') {
   echo '<div id="showlatestcomments">';
   echo '<ul>';
   $sql = "SELECT c.id, c.name, c.website, c.date, c.comment, "; 
+
   if ($type=='images') {
+
     $sql .= "i.title, i.filename, ";
+
   }
+
   $sql .= "a.folder, a.title AS albumtitle, ";
   $sql .= " FROM ".prefix('comments') . " AS c, ";
+
   if ($type=='images') {
+
     $sql .= prefix('images') . " AS i, ";
+
   }
+
   $sql .= prefix('albums')." AS a ";
   $sql .= " WHERE `type`=$type AND "; 
+
   if ($type=='images') {
+
     $sql .= "c.imageid = i.id AND i.albumid = a.id ";
+
   } else {
+
     $sql .= "c.imageid = a.id ";
+
  
+
   }
+
   $sql .= "ORDER BY c.id DESC LIMIT $number";
+
   $comments = Query_full_array($sql);
   foreach ($comments as $comment) {
     $author = $comment['name'];
     $album = $comment['folder'];
     $image = $comment['filename'];
     $albumtitle = $comment['albumtitle'];
+
     if ($type=='images') {
       if ($comment['title'] == "")  {
         $title = $image;
       }	else {
         $title = $comment['title'];
       }
+
       $title .= ' / ';
+
     } else {
+
       $title = '';
+
     }
     $website = $comment['website'];
     $comment = my_truncate_string($comment['comment'], 40);
@@ -2110,13 +2190,19 @@ function printLatestComments($number, $type='images') {
 
     if (getOption('mod_rewrite') == false) {
       echo WEBPATH.'/index.php?album='.urlencode($album);
+
       if ($type=='images') {
+
         echo '&image='.urlencode($image).'/"';
+
       }
     } else {
       echo WEBPATH.'/'.$album.'/';
+
       if ($type=='images') {
+
         echo $image.'" ';
+
       }
     }
 
@@ -2132,6 +2218,7 @@ function printLatestComments($number, $type='images') {
  *
  * @param string $option "image" for image hit counter (default), "album" for album hit counter
  * @param bool $viewonly set to true if you don't want to increment the counter.
+
  * @param int $id Optional record id of the object if not the current image or album
  * @return string
  * @since 1.1.3
@@ -2139,15 +2226,19 @@ function printLatestComments($number, $type='images') {
 function hitcounter($option='image', $viewonly=false, $id=NULL) {
   switch($option) {
     case "image":
+
       if (is_null($id)) {
         $id = getImageID();
+
       }
       $dbtable = prefix('images');
       $doUpdate = true;
       break;
     case "album":
+
       if (is_null($id)) {
         $id = getAlbumID();
+
       }
       $dbtable = prefix('albums');
       $doUpdate = getCurrentPage() == 1; // only count initial page for a hit on an album
@@ -2170,7 +2261,9 @@ function hitcounter($option='image', $viewonly=false, $id=NULL) {
  *
  * @param int $number the number of albums to get
  * @param string $option "popular" for the most popular albums, 
+
  *     "latest" for the latest uploaded, "mostrated" for the most voted, 
+
  *     "toprated" for the best voted
  * @return string
  */
@@ -2201,9 +2294,13 @@ function getAlbumStatistic($number=5, $option) {
  *
  * @param string $number the number of albums to get
  * @param string $option "popular" for the most popular albums, 
+
  *                  "latest" for the latest uploaded, 
+
  *                  "latest" for the latest uploaded, 
+
  *                  "mostrated" for the most voted, 
+
  *                  "toprated" for the best voted
  */
 function printAlbumStatistic($number, $option) {
@@ -2268,9 +2365,13 @@ function printTopRatedAlbums($number=5) {
  *
  * @param string $number the number of images to get
  * @param string $option "popular" for the most popular images, 
+
  *                       "latest" for the latest uploaded, 
+
  *                       "latest" for the latest uploaded, 
+
  *                       "mostrated" for the most voted, 
+
  *                       "toprated" for the best voted
  * @return string
  */
@@ -2318,9 +2419,13 @@ function getImageStatistic($number, $option) {
  *
  * @param string $number the number of albums to get
  * @param string $option "popular" for the most popular images, 
+
  *                       "latest" for the latest uploaded, 
+
  *                       "latest" for the latest uploaded, 
+
  *                       "mostrated" for the most voted, 
+
  *                       "toprated" for the best voted
  * @return string
  */
@@ -2485,10 +2590,12 @@ function getImageRatingCurrent($id) {
 
 
 /**
+
 * For internal use by the function printRating()
 * Returns true if the IP has voted
 *
 * @param int $id the record ID of the image
+
 * @param string $option 'image' or 'album' depending on the requestor
 * @return bool
 */
@@ -2541,7 +2648,6 @@ function printRating($option) {
   }
   $zenpath = WEBPATH."/".ZENFOLDER."/plugins";
   echo "<div id=\"rating\">\n";
-  echo "<h3>Rating:</h3>\n";
   echo "<ul class=\"star-rating\">\n";
   echo "<li class=\"current-rating\" id=\"current-rating\" style=\"width:".$ratingpx."px\"></li>\n";
   if(!checkIP($id,$option)){
@@ -2644,6 +2750,7 @@ function printTopRatedImages($number=5) {
   printImageStatistic($number, "toprated");
 }
 
+
 /**
 * Prints the n most rated images
 *
@@ -2652,6 +2759,7 @@ function printTopRatedImages($number=5) {
 function printMostRatedImages($number=5) {
   printImageStatistic($number, "mostrated");
 }
+
 
 /**
  * Shortens a string to $length
@@ -2761,26 +2869,34 @@ function getAllTags() {
  * @param int $maxfontsize largest font size the cloud should display
  * @param int $maxcount the maximum count for a tag to appear in the output
  * @param int $mincount the minimum count for a tag to appear in the output
+
  * @param int $limit set to limit the number of tags displayed to the top $numtags
  * @since 1.1
  */
 function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE,$maxfontsize=2,$maxcount=50,$mincount=10, $limit=NULL) {
   define('MINFONTSIZE', 0.8);
+
   $option = strtolower($option);
   if ($class != "") { $class = "class=\"".$class."\""; }
   $tagcount = getAllTags();
   if (!is_array($tagcount)) { return false; }
+
   
   if (!is_null($limit)) {
+
     $tagcount = array_slice($tagcount, 0, $limit);
+
   }
+
   switch($sort) {
    	case "results":
    	  arsort($tagcount); break;
    	case "abc":
    	  ksort($tagcount); break;
   }
+
   
+
   echo "<ul style=\"display:inline; list-style-type:none\" ".$class.">\n";
   while (list($key, $val) = each($tagcount)) {
     if(!$counter) {
@@ -2788,14 +2904,18 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
     } else {
       $counter = " (".$val.") ";
     }
+
     if ($option == "cloud") { // calculate font sizes, formula from wikipedia
       if ($val <= $mincount) {
         $size = MINFONTSIZE;  
       } else {
         $size = min(max(round(($maxfontsize*($val-$mincount))/($maxcount-$mincount), 2), MINFONTSIZE), $maxfontsize);
       }
+
       $size = " style=\"font-size:".$size."em;\"";
+
     } else {
+
       $size = '';
     }
     if ($val >= $mincount) {
@@ -2997,18 +3117,28 @@ function printRSSHeaderLink($option, $linktext) {
  * @since 1.1.3
  */
 function getSearchURL($words, $dates, $fields=0) {
-  $url = WEBPATH."/index.php?p=search";
-  if($fields != 0) { $url .= "&searchfields=$fields"; }
-  if (!empty($words)) { $url .= "&words=$words"; }
-  if (!empty($dates)) { $url .= "&date=$dates"; }
-  return $url;
+if ( !empty($words) && empty($dates) && $fields==SEARCH_TAGS && getOption('mod_rewrite') ) {
+  return WEBPATH."/page/search/tags/".$words; 
+} 
+else if (empty($words) && !empty($dates) && getOption('mod_rewrite') ) {
+  return WEBPATH."/page/search/archive/".$dates; 
+} 
+$url = WEBPATH."/index.php?p=search";
+if($fields != 0) { $url .= "&searchfields=$fields"; }
+if (!empty($words)) { $url .= "&words=$words"; }
+if (!empty($dates)) { $url .= "&date=$dates"; }
+return $url;
 }
 
 /**
  * Prints the search form
+
  * 
+
  * Search works on a list of tags entered into the search form. Tags are separated by commas and
+
  * may contain spaces or any other character other than a comma or a peck mark. To include commas in
+
  * tag, enclose it in peck marks (`). To use peck marks in a search submit a feature request.
  *
  * @param string $prevtext text to go before the search form
@@ -3112,6 +3242,7 @@ define("IMAGE", 1);
 define("ALBUM", 2);
 /**
  * Checks to see if comment posting is allowed for an image/album
+
  * Returns true if comment posting should be allowed
  *
  * @param int $what the degree of control desired allowed values: ALBUM, IMAGE, and ALBUM+IMAGE
@@ -3127,6 +3258,7 @@ function OpenedForComments($what=3) {
 
 /**
  * Finds the name of the themeColor option selected on the admin options tab
+
  * Returns  the css file name for the theme
  *
  * @param string $zenCSS path to the css file
@@ -3151,6 +3283,7 @@ function getTheme(&$zenCSS, &$themeColor, $defaultColor) {
 /**
  * Passed # of album columns, # of image columns of the theme.
  * Updates (non-persistent) images_per_page and albums_per_page so that the rows are filled.
+
  * Returns # of images that will go on the album/image transition page.
  *
  * @param int $albumColumns number of album columns on the page
@@ -3196,17 +3329,29 @@ function normalizeColumns($albumColumns, $imageColumns) {
 /**
  * Checks to see if a password is needed
  * displays a password form if log-on is required
+
  * Returns true if a login form has been displayed
+
  * 
+
  * The password protection is hereditary. 
+
  * 
+
  * This normally only impacts direct url access to an album or image since if
+
  * you are going down the tree you will be stopped at the first place a password is required.
+
  * 
+
  * If the gallery is password protected then every album & image will require that password.
+
  * If an album is password protected then all subalbums and images treed below that album will require 
+
  * the password. If there are multiple passwords in the tree and you direct link, the password that is 
+
  * required will be that of the nearest parent that has a password. (The gallery is the ur-parrent to all
+
  * albums.)
  *
  * @param bool $silent set to true to inhibit the logon form
