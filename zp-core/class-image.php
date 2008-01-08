@@ -22,7 +22,14 @@ class Image extends PersistentObject {
   var $video;   //Is the "image" a video ?
   var $videoThumb = NULL; // Thumbnail of the video 
   
-  // Constructor
+
+  /**
+   * Constructor for class-image
+   *
+   * @param object $album the owning album
+   * @param sting $filename the filename of the image
+   * @return Image
+   */
   function Image(&$album, $filename) {
     // $album is an Album object; it should already be created.
     $this->album = &$album;
@@ -103,17 +110,30 @@ class Image extends PersistentObject {
     }
   }
     
+  /**
+   * Returns the image filename
+   *
+   * @return string
+   */
   function getFileName() {
     return $this->filename;
   }
   
-  
+  /**
+   * Returns true if the file has changed since last time we looked
+   *
+   * @return bool
+   */
   function fileChanged() {
     $storedmtime = $this->get('mtime');
     return (empty($storedmtime) || $this->filemtime > $storedmtime);
   }
   
-  
+  /**
+   * Returns an array of EXIF data
+   *
+   * @return array
+   */
   function getExifData() {
     global $_zp_exifvars;
     $exif = array();
@@ -143,7 +163,6 @@ class Image extends PersistentObject {
     return $exif;
   }
 
-    
   /** 
    * Update this object's values for width and height. Uses lazy evaluation.
    * TODO: Update them if they change by looking at file modification time, which must be stored in the database.
@@ -160,55 +179,194 @@ class Image extends PersistentObject {
     $this->set('height', $size[1]);
   }
   
+  /**
+   * Returns the width of the image
+   *
+   * @return int
+   */
   function getWidth() {
     $this->updateDimensions();
     return $this->get('width');
   }
 
+  /**
+   * Returns the height of the image
+   *
+   * @return int
+   */
   function getHeight() {
     $this->updateDimensions();
     return $this->get('height');
   }
   
-  //ZenVideo: Get informations about video type.
+  /**
+   * Returns true if this image is a video
+   *
+   * @return bool
+   */
   function getVideo() { return $this->video; }
+  
+  /**
+   * Returns the thumbnail for this video
+   *
+   * @return object 
+   */
   function getVideoThumb() { return $this->videoThumb; }
     
-  // Album (Object) and Album Name
+  /**
+   * Returns the album that holds this image
+   *
+   * @return object
+   */
   function getAlbum() { return $this->album; }
+  
+  /**
+   * Retuns the folder name of the album that holds this image
+   *
+   * @return string
+   */
   function getAlbumName() { return $this->album->name; }
 
-  // Title
+
+  /**
+   * Returns the title of this image
+   *
+   * @return string
+   */
   function getTitle() { return $this->get('title'); }
+  
+  /**
+   * Stores the title of this image
+   *
+   * @param string $title text for the title
+   */
   function setTitle($title) { $this->set('title', $title); }
 
-  // Description
+
+  /**
+   * Returns the description of the image
+   *
+   * @return string
+   */
   function getDesc() { return $this->get('desc'); }
+  
+  /**
+   * Stores the description of the image
+   *
+   * @param string $desc text for the description
+   */
   function setDesc($desc) { $this->set('desc', $desc); }
   
-  // Location, city, state, and country
+  /**
+   * Returns the location field of the image
+   *
+   * @return string
+   */
   function getLocation() { return $this->get('location'); }
+  
+  /**
+   * Stores the location field of the image
+   *
+   * @param string $location text for the location
+   */
   function setLocation($location) { $this->set('location', $location); }
+  
+  /**
+   * Returns the city field of the image
+   *
+   * @return string
+   */
   function getCity() { return $this->get('city'); }
+  
+  /**
+   * Stores the city field of the image
+   *
+   * @param string $city text for the city
+   */
   function setCity($city) { $this->set('city', $city); }
+  
+  /**
+   * Returns the state field of the image
+   *
+   * @return string
+   */
   function getState() { return $this->get('state'); }
+  
+  /**
+   * Stores the state field of the image
+   *
+   * @param string $state text for the state
+   */
   function setState($state) { $this->set('state', $state); }
+  
+  /**
+   * Returns the oountry field of the image
+   *
+   * @return string
+   */
   function getCountry() { return $this->get('country'); }
+  
+  /**
+   * Stores the country field of the image
+   *
+   * @param string $country text for the country filed
+   */
   function setcountry($country) { $this->set('country', $country); }
 
-  // Copyright & Credit
+  /**
+   * Returns the credit field of the image
+   *
+   * @return string
+   */
   function getCredit() { return $this->get('credit'); }
+  
+  /**
+   * Stores the credit field of the image
+   *
+   * @param string $credit text for the credit field
+   */
   function setCredit($credit) { $this->set('credit', $credit); }
  
+  /**
+   * Returns the copyright field of the image
+   *
+   * @return string
+   */
   function getCopyright() { return $this->get('copyright'); }
+  
+  /**
+   * Stores the text for the copyright field of the image
+   *
+   * @param string $copyright text for the copyright field
+   */
   function setCopyright($copyright) { $this->set('copyright', $copyright); }   
   
-  // Tags
+  /**
+   * Returns the tags of the image
+   *
+   * @return string
+   */
   function getTags() { return $this->get('tags'); }
+  
+  /**
+   * Sets the tags of the image
+   *
+   * @param string $tags the tag string
+   */
   function setTags($tags) { $this->set('tags', $tags); }
   
-  // Date
+  /**
+   * Returns the unformatted date of the image
+   *
+   * @return string
+   */
   function getDateTime() { return $this->get('date'); }
+  
+  /**
+   * Stores the date of the image
+   *
+   * @param string $datetime the date
+   */
   function setDateTime($datetime) { 
     if ($datetime == "") {
       $this->set('date', '0000-00-00 00:00:00');
@@ -216,16 +374,35 @@ class Image extends PersistentObject {
       $this->set('date', date('Y-m-d H:i:s', strtotime($datetime))); 
     }
   }
-  
-  // Sort order
+
+  /**
+   * Returns the sort order value of the image
+   *
+   * @return int
+   */
   function getSortOrder() { return $this->get('sort_order'); }
+  
+  /**
+   * Sets the sort order value of the image
+   *
+   * @param int $sortorder
+   */
   function setSortOrder($sortorder) { $this->set('sort_order', $sortorder); }
 
-  // Show this image?
+  /**
+   * Returns true if the image is set visible
+   *
+   * @return bool
+   */
   function getShow() { return $this->get('show'); }
+  
+  /**
+   * Sets the visibility of the image
+   *
+   * @param bool $show
+   */
   function setShow($show) { $this->set('show', $show ? 1 : 0); }
 
-  
   /** 
    * Permanently delete this image (permanent: be careful!) 
    * @param bool $clean whether to remove the database entry.
@@ -270,16 +447,35 @@ class Image extends PersistentObject {
     return $this->moveImage($this->album, $newfilename);
   }
   
+  /**
+   * Copies the image to a new album
+   *
+   * @param string $newalbum the destination album
+   */
   function copyImage($newalbum) {
     
   }
   
-  
-  // Are comments allowed?
+  /**
+   * Retuns true if comments are allowed on the image
+   *
+   * @return bool
+   */
   function getCommentsAllowed() { return $this->get('commentson'); }
+  
+  /**
+   * Sets the comments allowed flag on the image
+   *
+   * @param bool $commentson true if they are allowed
+   */
   function setCommentsAllowed($commentson) { $this->set('commentson', $commentson ? 1 : 0); }
 
-
+  /**
+   * Returns an array of comments
+   *
+   * @param bool $moderated if false, comments in moderation are ignored
+   * @return array
+   */
   function getComments($moderated=false) {
     $sql = "SELECT *, (date + 0) AS date FROM " . prefix("comments") . 
        " WHERE `type`='images' AND `imageid`='" . $this->id . "'";
@@ -292,12 +488,35 @@ class Image extends PersistentObject {
     return $this->comments;
   }
   
-  // addComment: assumes data is coming straight from GET or POST
+  /**
+   * Adds a comment to the image
+   * assumes data is coming straight from GET or POST
+   *
+   * Returns a code for the success of the comment add:
+   *    0: Bad entry
+   *    1: Marked for moderation
+   *    2: Successfully posted
+   *
+   * @param string $name Comment author name
+   * @param string $email Comment author email
+   * @param string $website Comment author website
+   * @param string $comment body of the comment
+   * @param string $code Captcha code entered
+   * @param string $code_ok Captcha md5 expected
+   * @param string $type 'albums' if it is an album or 'images' if it is an image comment
+   * @param object $receiver
+   * @return int
+   *    */
   function addComment($name, $email, $website, $comment, $code, $code_ok) {
     $goodMessage = postComment($name, $email, $website, $comment, $code, $code_ok, $this);
     return $goodMessage;
   }
 
+  /**
+   * Returns the count of comments for the image. Comments in moderation are not counted
+   *
+   * @return int
+   */
   function getCommentCount() { 
     if (is_null($this->commentcount)) {
       if ($this->comments == null) {
@@ -313,16 +532,31 @@ class Image extends PersistentObject {
   
   /**** Image Methods ****/
   
+  /**
+   * Returns a link to the image
+   *
+   * @return string
+   */
   function getImageLink() {
     return rewrite_path('/' . pathurlencode($this->album->name) . '/' . urlencode($this->filename) . im_suffix(),
       '/index.php?album=' . urlencode($this->album->name) . '&image=' . urlencode($this->filename));
   }
   
-  // Returns a path to the original image in the original folder.
+  /**
+   * Returns a path to the original image in the original folder.
+   *
+   * @return string
+   */
   function getFullImage() {
     return getAlbumFolder(WEBPATH) . pathurlencode($this->album->name) . "/" . rawurlencode($this->filename);
   }
 
+  /**
+   * Returns a path to a sized version of the image
+   *
+   * @param int $size how big an image is wanted
+   * @return string
+   */
   function getSizedImage($size) {
     $cachefilename = getImageCacheFilename($this->album->name, $this->filename, getImageParameters(array($size)));
     if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
@@ -363,8 +597,13 @@ class Image extends PersistentObject {
     }
   }
 
-  // Get a default-sized thumbnail of this image.
-  // ZenVideo: [OLD] Return a thumb or default Thumb, if the file is a video.
+
+  /**
+   * Get a default-sized thumbnail of this image.
+   * ZenVideo: [OLD] Return a thumb or default Thumb, if the file is a video.
+   *
+   * @return string
+   */
   function getThumb() {
     if ($this->video) {      //The file is a video 
       if ($this->videoThumb == NULL) {
@@ -386,9 +625,10 @@ class Image extends PersistentObject {
   }
 
 /** 
-   * Get the index of this image in the album, taking sorting into account.
-   *
-   */
+ * Get the index of this image in the album, taking sorting into account.
+ *
+ * @return int
+ */
   function getIndex() {
     global $_zp_current_search;
     if ($this->index == NULL) {
@@ -417,7 +657,11 @@ class Image extends PersistentObject {
     return $this->index;
   }
 
-  // Returns the next Image.
+  /**
+   * Returns the next Image.
+   *
+   * @return object
+   */
   function getNextImage() {
     global $_zp_current_search;
     $index = $this->getIndex() + 1;
@@ -433,7 +677,11 @@ class Image extends PersistentObject {
     }
   }
   
-  // Return the previous Image
+  /**
+   * Return the previous Image
+   *
+   * @return object
+   */
   function getPrevImage() {
     global $_zp_current_search;
     $this->getIndex();
@@ -450,6 +698,11 @@ class Image extends PersistentObject {
     }
   }
   
+  /**
+   * Returns the page number of this image in the album
+   *
+   * @return int
+   */
   function getAlbumPage() {
     $this->getIndex();
     $images_per_page = getOption('images_per_page');

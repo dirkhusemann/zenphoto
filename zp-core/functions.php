@@ -87,6 +87,7 @@ function getOption($key) {
   *
   * @param string $key name of the option.
   * @param mixed $value new value of the option.
+  * @param bool $persistent set to false if the option is stored in memory only
   */
 function setOption($key, $value, $persistent=true) {
   global $_zp_conf_vars, $_zp_options;
@@ -113,6 +114,12 @@ function setOption($key, $value, $persistent=true) {
   }
 }
   
+/**
+ * Converts a boolean value to 1 or 0 and sets the option with it
+ *
+ * @param string $key the option
+ * @param bool $value the value to be set
+ */
 function setBoolOption($key, $value) {
   if ($value) {
     setOption($key, '1');
@@ -121,6 +128,13 @@ function setBoolOption($key, $value) {
   }
 }
 
+/**
+ * Sets the default value of an option
+ *   If the option has never been set it is set to the value passed
+ *
+ * @param string $key
+ * @param mixed $default
+ */
 function setOptionDefault($key, $default) {
   global $_zp_conf_vars, $_zp_options;
   if (NULL == $_zp_options) { getOption('nil'); } // pre-load from the database
@@ -133,6 +147,11 @@ function setOptionDefault($key, $default) {
   }
 }
   
+/**
+ * Retuns the option array
+ *
+ * @return array
+ */
 function getOptionList() { 
   global $_zp_options;
   if (NULL == $_zp_options) { getOption('nil'); } // pre-load from the database
@@ -140,7 +159,8 @@ function getOptionList() {
 }
 
 /**
-* parses the 'allowed_tags' option for use by 
+* parses the 'allowed_tags' option for use by kses 
+* 
 *@param string $source by name, contains the string with the tag options
 *@return array the allowed_tags array.
 *@since 1.1.3
@@ -200,6 +220,13 @@ $_zp_exifvars = array(
 assert_options(ASSERT_ACTIVE, 0);
 assert_options(ASSERT_WARNING, 0);
 assert_options(ASSERT_QUIET_EVAL, 1);
+/**
+ * Emits an assertion error
+ *
+ * @param string $file the script file
+ * @param string $line the line of the assertion
+ * @param string $code the error message
+ */
 function assert_handler($file, $line, $code) {
 	dmesg("ERROR: Assertion failed in [$file:$line]: $code");
 }
@@ -207,18 +234,36 @@ function assert_handler($file, $line, $code) {
 assert_options(ASSERT_CALLBACK, 'assert_handler');
 
 // Image utility functions
+/**
+ * Returns true if the file is an image
+ *
+ * @param string $filename the name of the target
+ * @return bool
+ */
 function is_valid_image($filename) {
 	$ext = strtolower(substr(strrchr($filename, "."), 1));
 	return in_array($ext, array('jpg','jpeg','gif','png'));
 }
 
 //ZenVideo: Video utility functions
+/**
+ * Returns true fi the file is a video file
+ *
+ * @param string $filename the name of the target
+ * @return bool
+ */
 function is_valid_video($filename) {
 	$ext = strtolower(substr(strrchr($filename, "."), 1));
 	return in_array($ext, array('flv','3gp','mov'));
 }
 
-//ZenVideo: Check if the image is a video thumb
+/**
+ * Check if the image is a video thumb
+ *
+ * @param string $album folder path for the album
+ * @param string $filename name of the target
+ * @return bool
+ */
 function is_videoThumb($album,$filename){
 	
 	$extTab = array(".flv",".3gp",".mov");
@@ -231,7 +276,13 @@ function is_videoThumb($album,$filename){
  return false;
 }
 
-//ZenVideo: Search a thumbnail for the image
+/**
+ * Search for a thumbnail for the image
+ *
+ * @param string $album folder path of the album
+ * @param string $video name of the target
+ * @return string
+ */
 function checkVideoThumb($album,$video){
 	$extTab = array(".flv",".3gp",".mov",".FLV",".3GP",".MOV");
     foreach($extTab as $ext) {
@@ -247,6 +298,13 @@ function checkVideoThumb($album,$video){
 	return NULL;
 }
 
+/**
+ * Returns a truncated string
+ *
+ * @param string $string souirce string
+ * @param int $length how long it should be
+ * @return string
+ */
 function truncate_string($string, $length) {
   if (strlen($string) > $length) {
     $pos = strpos($string, ' ', $length);
@@ -256,15 +314,18 @@ function truncate_string($string, $length) {
   return $string;
 }
 
-
-/** rewrite_get_album_image - Fix special characters in the album and image names if mod_rewrite is on:
-    This is redundant and hacky; we need to either make the rewriting completely internal,
-    or fix the bugs in mod_rewrite. The former is probably a good idea.
-    
-    Old explanation:
-      rewrite_get_album_image() parses the album and image from the requested URL
-      if mod_rewrite is on, and replaces the query variables with corrected ones.
-      This is because of bugs in mod_rewrite that disallow certain characters.
+/** 
+ * rewrite_get_album_image - Fix special characters in the album and image names if mod_rewrite is on:
+ * This is redundant and hacky; we need to either make the rewriting completely internal,
+ * or fix the bugs in mod_rewrite. The former is probably a good idea.
+ * 
+ *  Old explanation:
+ *    rewrite_get_album_image() parses the album and image from the requested URL
+ *    if mod_rewrite is on, and replaces the query variables with corrected ones.
+ *    This is because of bugs in mod_rewrite that disallow certain characters.
+ * 
+ * @param string $albumvar "$_GET" parameter for the album
+ * @param string $imagevar "$_GET" parameter for the image
  */
 function rewrite_get_album_image($albumvar, $imagevar) {
   if (getOption('mod_rewrite')) {
@@ -313,13 +374,13 @@ function rewrite_get_album_image($albumvar, $imagevar) {
 
 
 /** getAlbumArray - returns an array of folder names corresponding to the
-      given album string.
-    @param $albumstring is the path to the album as a string. Ex: album/subalbum/my-album
-    @param $includepaths is a boolean whether or not to include the full path to the album
-      in each item of the array. Ex: when $includepaths==false, the above array would be
-      ['album', 'subalbum', 'my-album'], and with $includepaths==true, 
-      ['album', 'album/subalbum', 'album/subalbum/my-album']
-    @return array an array of album folder name strings for the given album.
+ *     given album string.
+ * @param string $albumstring is the path to the album as a string. Ex: album/subalbum/my-album
+ * @param string $includepaths is a boolean whether or not to include the full path to the album
+ *    in each item of the array. Ex: when $includepaths==false, the above array would be
+ *    ['album', 'subalbum', 'my-album'], and with $includepaths==true, 
+ *    ['album', 'album/subalbum', 'album/subalbum/my-album']
+ *  @return array 
  */
 function getAlbumArray($albumstring, $includepaths=false) {
   if ($includepaths) {
@@ -432,8 +493,8 @@ function getImageParameters($args) {
 /**
  * Checks if the input is numeric, rounds if so, otherwise returns false.
  *
- * @param mixed $num
- * @return bool
+ * @param mixed $num the number to be sanitized
+ * @return int
  */
 function sanitize_numeric($num) {
   if (is_numeric($num)) {
@@ -575,17 +636,6 @@ function is_valid_email_zp($input_email) {
     }
   }
   return false;
-}
-
-/**
- * Checks the suffix of a file for a valid image suffix
- *
- * @param string $filename name of the image
- * @return bool
- */
-function is_image($filename) {
-  $ext = strtolower(strrchr($filename, "."));
-  return ($ext == ".jpg" || $ext == ".jpeg" || $ext == ".png" || $ext == ".gif");
 }
 
 /**
@@ -844,7 +894,9 @@ function createAlbumZip($album){
     if ($dh = opendir($rp)) {
       while (($file = readdir($dh)) !== false) {
         if($file != '.' && $file != '..'){
-          $z->add_file(file_get_contents($rp . $file), $p . $file);
+          if (!is_dir($rp.$file)) {
+            $z->add_file(file_get_contents($rp . $file), $p . $file);
+          }
         }
       }
       closedir($dh);
@@ -903,7 +955,7 @@ $_zp_themeroot = WEBPATH . "/themes/$theme";
 /**
  * For internal use--fetches a single tag from IPTC data
  *
- * @param string $tag
+ * @param string $tag the metadata tag sought
  * @return string
  */
 function getIPTCTag($tag) {
@@ -923,7 +975,7 @@ function getIPTCTag($tag) {
  * Parces IPTC data and returns those tags zenphoto is interested in
  * folds multiple tags into single zp data items based on precidence.
  *
- * @param string $imageName
+ * @param string $imageName the name of the image
  * @return array
  */
 function getImageMetadata($imageName) {
@@ -1026,7 +1078,7 @@ function unzip($file, $dir) { //check if zziplib is installed
     $zip = zip_open($file);
     if ($zip) {
       while ($zip_entry = zip_read($zip)) { // Skip non-images in the zip file.
-        if (!is_image(zip_entry_name($zip_entry))) continue;
+        if (!is_valid_image(zip_entry_name($zip_entry))) continue;
           if (zip_entry_open($zip, $zip_entry, "r")) {
            $buf = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
            $path_file = str_replace("/",DIRECTORY_SEPARATOR, $dir . '/' . zip_entry_name($zip_entry));
@@ -1049,7 +1101,7 @@ function unzip($file, $dir) { //check if zziplib is installed
 /**
  * Checks to see if a URL is valid
  *
- * @param string $url
+ * @param string $url the URL being checked
  * @return bool
  */
 function isValidURL($url) { 

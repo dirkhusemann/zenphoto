@@ -15,7 +15,6 @@ header("HTTP/1.0 404 Not Found");
 exit();
 }
 
-
 $image_path = $_zp_gallery->getAlbumDir() . $_zp_current_album->name . "/" . $_zp_current_image->name;
 
 $k = explode('.', $image_path);
@@ -42,7 +41,6 @@ switch ($suffix) {
 if (getOption('full_image_download')) {
   header('Content-Disposition: attachment; filename="' . $_zp_current_image->name . '"');  // enable this to make the image a download
 }
-  
 
 if (getOption('perform_watermark')) {
   $watermark_path = SERVERPATH . "/" . ZENFOLDER . "/" . getOption('watermark_image');

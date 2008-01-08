@@ -333,7 +333,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
             foreach ($reject as $chr) {
               $name = str_replace($chr, "", $name); // get rid of problem characters
             }
-            if (is_image($name)) {
+            if (is_valid_image($name)) {
               $uploadfile = $uploaddir . '/' . $name;
               move_uploaded_file($tmp_name, $uploadfile);
               @chmod($uploadfile, 0666);

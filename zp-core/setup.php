@@ -324,6 +324,7 @@ if (!$checked) {
           if (fwrite($handle, $ht)) {
             $base = true;
             $f = " (fixed)";
+            $b = $d;
           }
         }
         fclose($handle);
