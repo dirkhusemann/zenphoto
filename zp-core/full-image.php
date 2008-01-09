@@ -1,18 +1,7 @@
 <?php 
 if (checkforPassword(true)) { 
-header("HTTP/1.0 404 Not Found");
-?>
-<HTML>
-<HEAD>
-	<TITLE>404 - Page Not Found</TITLE>
-	<META NAME="ROBOTS" CONTENT="NOINDEX, FOLLOW">
-</HEAD>
-<BODY bgcolor="#ffffff" text="#000000" link="#0000ff" vlink="#0000ff" alink="#0000ff">
-<FONT face="Helvitica,Arial,Sans-serif" size="2">
-<B>The page could not be found on the server (404)</B><BR>
-<BR>
-<?php
-exit();
+  pageError();
+  exit();
 }
 
 $image_path = $_zp_gallery->getAlbumDir() . $_zp_current_album->name . "/" . $_zp_current_image->name;

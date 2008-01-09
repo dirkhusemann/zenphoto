@@ -884,47 +884,126 @@ function zp_mail($subject, $message, $headers = '') {
   }
 
 /**
- * Creates a zip file of the album
+  * Emits a page error. Used for attempts to bypass password protection
+  *
+  */
+  function pageError() {
+    header("HTTP/1.0 403 Forbidden");
+    echo "<html><head>	<title>403 - Forbidden</TITLE>	<META NAME=\"ROBOTS\" CONTENT=\"NOINDEX, FOLLOW\"></head>";
+    echo "<BODY bgcolor=\"#ffffff\" text=\"#000000\" link=\"#0000ff\" vlink=\"#0000ff\" alink=\"#0000ff\">";
+    echo "<FONT face=\"Helvitica,Arial,Sans-serif\" size=\"2\">";
+    echo "<b>The page access is forbidden by the server (403)</b><br/><br/>";
+    echo "</body></html>";
+  }
+  
+/**
+ * Checks to see if zip file creation can access an album
+ * Returns true if access is allowed.
+ * There is no password dialog--you must have already had authorization.
  *
- * @param string $album album folder
+ * @param string $albumname the album
+ * @return bool
  */
-  function createAlbumZip($album){
+  function checkAlbumPassword($albumname) {
+    if (zp_loggedin()) { return true; }
+    $album = new album($_zp_gallery, $albumname);
+    $hash = $album->getPassword();
 
-//    Define ('NEWZIP', true);
-
-    $rp = realpath(getAlbumFolder() . $album) . '/';
-    $p = $album . '/';
-    if(is_dir($rp)){
-      if (NEWZIP) {
-        if(is_dir($rp)){
-          include_once('create-archive.php');
-          $test = new zip_file($album_name . '.zip');
-          $test->set_options(array('inmemory' => 2, 'recurse' => 0, 'storepaths' => 1, 'method' => 0));
-          $pwd = getcwd();
-          chdir($rp);
-          $test->add_files("./*");
-          $test->create_archive();
-          chdir($pwd);
-        }
-      } else {
-        include_once('plugins/zipfile.php');
-        $z = new zipfile();
-        $z->add_dir($p);
-        if ($dh = opendir($rp)) {
-          while (($file = readdir($dh)) !== false) {
-            if($file != '.' && $file != '..'){
-              if (!is_dir($rp.$file)) {
-                $z->add_file(file_get_contents($rp . $file), $p . $file);
-              }
-            }
+    if (empty($hash)) {
+      $album = $album->getParent();
+      while (!is_null($album)) {
+        $hash = $album->getPassword();
+        $authType = "zp_album_auth_" . cookiecode($album->name);
+        $saved_auth = $_COOKIE[$authType];
+        if (!empty($hash)) {
+          if ($saved_auth == $hash) {
+            return true;
           }
-          closedir($dh);
         }
-        header('Content-Type: application/zip');
-        header('Content-Disposition: attachment; filename="' . $album . '.zip"');
-        echo $z->file();
+        $album = $album->getParent();
+      }
+      // revert all tlhe way to the gallery
+      $hash = getOption('gallery_password');
+      $authType = 'zp_gallery_auth';
+      $saved_auth = $_COOKIE[$authType];
+      if (!empty($hash)) {
+        if ($saved_auth != $hash) {
+          return false;
+        }
+      }
+    } else {
+      $authType = "zp_album_auth_" . cookiecode($album->name);
+      $saved_auth = $_COOKIE[$authType];
+      if ($saved_auth != $hash) {
+        return false;
       }
     }
+    return true;
+  }
+
+/**
+  * Adds a subalbum to the zipfile being created
+  *
+  * @param string $dir the directory of the album
+  * @param string $subalbum the subalbum
+  * @param object $zip the zipfile
+  */
+function zipAddSubalbum($dir, $subalbum, $zip) {
+  if (checkAlbumPassword($dir.$subalbum)) {
+    $rp = $dir.$file;
+    $zip->add_dir($rp);
+    $cwd = getcwd();
+    chdir($rp);
+    if ($dh = opendir($rp)) {
+      while (($file = readdir($dh)) !== false) {
+        if($file != '.' && $file != '..'){
+          if (is_dir($rp.$file)) {
+            zipAddSubalbum($rp, $file, $zip);
+          } else {
+            $z->add_file(file_get_contents($rp . $file), $p . $file);
+          }
+        }
+      }
+      closedir($dh);
+    }
+    chdir($cwd);   
+  }
+}
+
+/**
+  * Creates a zip file of the album
+  *
+  * @param string $album album folder
+  */
+  function createAlbumZip($album){
+    if (checkforPassword(true)) {
+      pageError();
+      exit();
+    }
+    $rp = realpath(getAlbumFolder() . $album) . '/';
+    $p = $album . '/';
+    include_once('plugins/zipfile.php');
+    $z = new zipfile();
+    $z->add_dir($p);
+    if ($dh = opendir($rp)) {
+      while (($file = readdir($dh)) !== false) {
+        if($file != '.' && $file != '..'){
+          if (is_dir($rp.$file)) {
+/*
+ * TODO: there are memory problems with this
+ * 
+ *          zipAddSubalbum($rp, $file, $z);
+ */            
+          } else {
+            $z->add_file(file_get_contents($rp . $file), $p . $file);
+          }
+        }
+      }
+      closedir($dh);
+    }
+    header('Content-Type: application/zip');
+    header('Content-Disposition: attachment; filename="' . $album . '.zip"');
+    echo $z->file();
   }
 
 /**
