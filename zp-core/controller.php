@@ -38,10 +38,12 @@ if (getOption('Use_Captcha')) {
   if ($d > $expire) {
     chdir(SERVERCACHE . "/");
     $filelist = glob('code_*.png');
-    foreach ($filelist as $file) {
-      $file = SERVERCACHE . "/" . $file;
-      if (filemtime($file) < $expire) {
-        unlink($file);
+    if ($filelist) {
+      foreach ($filelist as $file) {
+        $file = SERVERCACHE . "/" . $file;
+        if (filemtime($file) < $expire) {
+          unlink($file);
+        }
       }
     }
   }

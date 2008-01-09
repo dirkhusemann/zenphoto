@@ -132,8 +132,8 @@ function setBoolOption($key, $value) {
  * Sets the default value of an option
  *   If the option has never been set it is set to the value passed
  *
- * @param string $key
- * @param mixed $default
+ * @param string $key the option name
+ * @param mixed $default the value to be used as the default
  */
 function setOptionDefault($key, $default) {
   global $_zp_conf_vars, $_zp_options;
@@ -161,7 +161,7 @@ function getOptionList() {
 /**
 * parses the 'allowed_tags' option for use by kses 
 * 
-*@param string $source by name, contains the string with the tag options
+*@param string &$source by name, contains the string with the tag options
 *@return array the allowed_tags array.
 *@since 1.1.3
 **/
@@ -524,8 +524,10 @@ function sanitize($input_string, $deepclean=false) {
  * removes anything that could be insecure or malicious, or result in duplicate
  * representations for the same physical file.
  * 
- * @param string $filename is the path-bound text to filter.
- * @return string the sanitized filename ready for use in file functions.
+ * Returns the sanitized path
+ * 
+ * @param string $filename is the path text to filter.
+ * @return string 
  */
 function sanitize_path($filename) {
   $filename = str_replace(chr(0), " ", $filename);
@@ -829,10 +831,12 @@ function zp_mail($subject, $message, $headers = '') {
    * Sort the album array based on either a) the manual sort order as specified by the user,
    * or b) the reverse order of how they are returned from disk. This will thus give us the
    * album list in with the the ordered albums first, followed by the rest with the newest first.
+   * 
+   * Returns an array with the albums in the desired sort order
    *
    * @param  array $albums array of album names
    * @param  string $sortkey the sorting scheme
-   * @return A sorted array of album names.
+   * @return array
    * 
    * @author Todd Papaioannou (lucky@luckyspin.org)
    * @since  1.0.0
@@ -884,28 +888,44 @@ function zp_mail($subject, $message, $headers = '') {
  *
  * @param string $album album folder
  */
-function createAlbumZip($album){
-  $rp = realpath(getAlbumFolder() . $album) . '/';
-  $p = $album . '/';
-  if(is_dir($rp)){
-    include_once('plugins/zipfile.php');
-    $z = new zipfile();
-    $z->add_dir($p);
-    if ($dh = opendir($rp)) {
-      while (($file = readdir($dh)) !== false) {
-        if($file != '.' && $file != '..'){
-          if (!is_dir($rp.$file)) {
-            $z->add_file(file_get_contents($rp . $file), $p . $file);
-          }
+  function createAlbumZip($album){
+
+//    Define ('NEWZIP', true);
+
+    $rp = realpath(getAlbumFolder() . $album) . '/';
+    $p = $album . '/';
+    if(is_dir($rp)){
+      if (NEWZIP) {
+        if(is_dir($rp)){
+          include_once('create-archive.php');
+          $test = new zip_file($album_name . '.zip');
+          $test->set_options(array('inmemory' => 2, 'recurse' => 0, 'storepaths' => 1, 'method' => 0));
+          $pwd = getcwd();
+          chdir($rp);
+          $test->add_files("./*");
+          $test->create_archive();
+          chdir($pwd);
         }
+      } else {
+        include_once('plugins/zipfile.php');
+        $z = new zipfile();
+        $z->add_dir($p);
+        if ($dh = opendir($rp)) {
+          while (($file = readdir($dh)) !== false) {
+            if($file != '.' && $file != '..'){
+              if (!is_dir($rp.$file)) {
+                $z->add_file(file_get_contents($rp . $file), $p . $file);
+              }
+            }
+          }
+          closedir($dh);
+        }
+        header('Content-Type: application/zip');
+        header('Content-Disposition: attachment; filename="' . $album . '.zip"');
+        echo $z->file();
       }
-      closedir($dh);
     }
-    header('Content-Type: application/zip');
-    header('Content-Disposition: attachment; filename="' . $album . '.zip"'); 
-    echo $z->file();
   }
-}
 
 /**
  * Returns the fully qualified path to the album folders
@@ -1124,7 +1144,7 @@ function isValidURL($url) {
  * @param string $code Captcha code entered
  * @param string $code_ok Captcha md5 expected
  * @param string $type 'albums' if it is an album or 'images' if it is an image comment
- * @param object $receiver
+ * @param object $receiver the object (image or album) to which to post the comment
  * @return int
  */
 function postComment($name, $email, $website, $comment, $code, $code_ok, $receiver) {

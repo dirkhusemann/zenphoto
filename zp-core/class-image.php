@@ -26,7 +26,7 @@ class Image extends PersistentObject {
   /**
    * Constructor for class-image
    *
-   * @param object $album the owning album
+   * @param object &$album the owning album
    * @param sting $filename the filename of the image
    * @return Image
    */
@@ -300,7 +300,7 @@ class Image extends PersistentObject {
   function setState($state) { $this->set('state', $state); }
   
   /**
-   * Returns the oountry field of the image
+   * Returns the country field of the image
    *
    * @return string
    */
@@ -503,8 +503,6 @@ class Image extends PersistentObject {
    * @param string $comment body of the comment
    * @param string $code Captcha code entered
    * @param string $code_ok Captcha md5 expected
-   * @param string $type 'albums' if it is an album or 'images' if it is an image comment
-   * @param object $receiver
    * @return int
    *    */
   function addComment($name, $email, $website, $comment, $code, $code_ok) {
@@ -582,6 +580,7 @@ class Image extends PersistentObject {
  * @param string $class Optional style class
  * @param string $id Optional style id
  * @param bool $thumbStandin set true to inhibit watermarking
+ * @return string
  */
   function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin=false) {
     $cachefilename = getImageCacheFilename($this->album->name, $this->filename, 

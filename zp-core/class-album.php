@@ -286,10 +286,10 @@ class Album extends PersistentObject {
    */
   function setSortType($sorttype) { $this->set('sort_type', $sorttype); }
   
-  /**
+ /**
    * Returns the sort type for subalbums in this album
    * Will return a parent sort type if the sort type for this album is empty
-   *    *
+   *
    * @return string
    */
   function getSubalbumSortType() { 
@@ -548,11 +548,12 @@ class Album extends PersistentObject {
    * Gets the album's set thumbnail image from the database if one exists,
    * otherwise, finds the first image in the album or sub-album and returns it
    * as an Image object.
-   * TODO: This should fail more gracefully when there are errors reading folders etc.
    * 
    * @return Image
    */
   function getAlbumThumbImage() {
+/* TODO: This should fail more gracefully when there are errors reading folders etc. */
+    
     $albumdir = getAlbumFolder() . $this->name ."/";
     $thumb = $this->get('thumb');
     $i = strpos($thumb, '/');
@@ -875,8 +876,6 @@ class Album extends PersistentObject {
    * @param string $comment body of the comment
    * @param string $code Captcha code entered
    * @param string $code_ok Captcha md5 expected
-   * @param string $type 'albums' if it is an album or 'images' if it is an image comment
-   * @param object $receiver
    * @return int
    */
   function addComment($name, $email, $website, $comment, $code, $code_ok) {

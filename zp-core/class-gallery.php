@@ -12,6 +12,11 @@ class Gallery {
   var $theme;
   var $themes;
   
+ /**
+   * Creates an instance of a gallery
+   *
+   * @return Gallery
+   */
   function Gallery() {
     
     // Set our album directory
@@ -28,8 +33,12 @@ class Gallery {
     }
     getOption('nil'); // force loading of the $options
   }
-  
-  // The main albums directory
+
+ /**
+   * Returns the main albums directory
+   *
+   * @return string
+   */
   function getAlbumDir() { return $this->albumdir; }
   
   function getGallerySortKey($sorttype=null) {
@@ -50,13 +59,15 @@ class Gallery {
   }
 
   
-  /**
+ /**
    * Get Albums will create our $albums array with a fully populated set of Album
    * objects in the correct order.
+   * 
+   * Returns an array of albums (a pages worth if $page is not zero)
    *
    * @param $page An option parameter that can be used to return a slice of the array. 
    * 
-   * @return  An array of Albums.
+   * @return  array
    */
   function getAlbums($page=0, $sorttype=null) {
     
@@ -80,11 +91,11 @@ class Gallery {
     }
   }
   
-    /**
-   * Load all of the albums names that are found in the Albums directory on disk.
-   *
-   * @return An array of album names.
-   */
+/**
+  * Load all of the albums names that are found in the Albums directory on disk.
+  *
+  * @return An array of album names.
+  */
   function loadAlbumNames() {
     $albumdir = $this->getAlbumDir();
     if (!is_dir($albumdir) || !is_readable($albumdir)) {
@@ -111,9 +122,12 @@ class Gallery {
   }
 
   
-  /**
+ /**
    * Returns the $index'th album in the array. Index is an integer.
    * Takes care of bounds checking, no need to check input.
+   * 
+   * @param int $index the index of the album sought
+   * @return Album
    */
   function getAlbum($index) {
     $this->getAlbums();
@@ -125,9 +139,10 @@ class Gallery {
   }
 
 
-  /**
+ /**
    * Returns the total number of TOPLEVEL albums in the gallery (does not include sub-albums)
-   * @param $db whether or not to use the database (includes ALL detected albums) or the directories
+   * @param bool $db whether or not to use the database (includes ALL detected albums) or the directories
+   * @return int
    */
   function getNumAlbums($db=false) {
     $count = -1;
@@ -146,6 +161,7 @@ class Gallery {
   /**
    * Populates the theme array and returns it. The theme array contains information about
    * all the currently available themes.
+   * @return array
    */
   function getThemes() {
     if (empty($this->themes)) {
@@ -168,9 +184,10 @@ class Gallery {
 
 
 /**
-   * Returns the foldername of the current theme. 
-   * if no theme is set, returns "default".
-   */
+  * Returns the foldername of the current theme. 
+  * if no theme is set, returns "default".
+  * @return string
+  */
   function getCurrentTheme() {
     if (empty($this->theme)) {
       $theme = getOption('current_theme');
@@ -184,16 +201,18 @@ class Gallery {
 
 
 /**
-   * Sets the current theme 
-   */
+  * Sets the current theme 
+  * @param string the name of the current theme
+  */
   function setCurrentTheme($theme) {
     setOption('current_theme', $theme);
   }
   
 
   /**
-   * getNumImages() - efficiently get the number of images from a database SELECT count(*)
+   * Returns the number of images from a database SELECT count(*)
    * Ideally one should call garbageCollect() before to make sure the database is current.
+   * @return int
    */
   function getNumImages() {
     $result = query_single_row("SELECT count(*) FROM ".prefix('images'));
@@ -201,6 +220,12 @@ class Gallery {
   }
 
   
+ /**
+   * Returns an array of comments
+   *
+   * @param bool $moderated set true if you want to see moderated comments
+   * @return array
+   */
   function getNumComments($moderated=false) {
     $sql = "SELECT count(*) FROM ".prefix('comments');
     if (!$moderated) { 
@@ -210,10 +235,15 @@ class Gallery {
     return array_shift($result);
   }
       
-  /* For every album in the gallery, look for its file. Delete from the database
-   * if the file does not exist.
-   * $cascade - garbage collect every image and album in the gallery as well.
-   * $full    - garbage collect every image and album in the *database* - completely cleans the database.
+ /** For every album in the gallery, look for its file. Delete from the database
+   * if the file does not exist. Do the same for images. Clean up comments that have
+   * been left orphaned.
+   * 
+   * Returns true if the operation was interrupted because it was taking too long
+   * 
+   * @param bool $cascade garbage collect every image and album in the gallery.
+   * @param bool $full garbage collect every image and album in the *database* - completely cleans the database.
+   * @return bool 
    */
   function garbageCollect($cascade=true, $complete=false) {
     // Check for the existence of top-level albums (subalbums handled recursively).
@@ -400,8 +430,9 @@ class Gallery {
   }
   
   
-  /**
+ /**
    * Returns the size in bytes of the cache folder. WARNING: VERY SLOW.
+   * @return int
    */
   function sizeOfCache() {
     $cachefolder = SERVERCACHE;
@@ -413,8 +444,9 @@ class Gallery {
   }
 
 
-  /**
+ /**
    * Returns the size in bytes of the albums folder. WARNING: VERY SLOW.
+   * @return int
    */
   function sizeOfImages() {
     $imagefolder = substr(getAlbumFolder(), 0, -1);
@@ -426,8 +458,10 @@ class Gallery {
   }
   
 
-  /** 
+ /** 
    * Cleans out the cache folder 
+   * 
+   * @param string $cachefolder the sub-folder to clean
    */
   function clearCache($cachefolder=NULL) {
     if (is_null($cachefolder)) {
