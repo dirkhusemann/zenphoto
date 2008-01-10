@@ -15,9 +15,9 @@ function setDefault($option, $default) {
   $conf = $_zp_conf_vars;
   
   setDefault('gallery_title', "Gallery");
-  setDefault('gallery_password', NULL);
+  setDefault('gallery_password', '');
   setDefault('gallery_hint', NULL);
-  setDefault('search_password', NULL);
+  setDefault('search_password', '');
   setDefault('search_hint', NULL);
   setDefault('website_title', "");
   setDefault('website_url', "");

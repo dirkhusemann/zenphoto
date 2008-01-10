@@ -32,7 +32,7 @@ define('SERVERPATH', dirname(dirname(__FILE__)));
 define('PROTOCOL', getOption('server_protocol'));
 define('FULLWEBPATH', PROTOCOL."://" . $_SERVER['HTTP_HOST'] . WEBPATH);
 define('SAFE_MODE_ALBUM_SEP', '__');
-define('DEBUG', false);
+if (!defined('DEBUG')) { define('DEBUG', false); }
 define('CACHEFOLDER', '/cache/');
 define('SERVERCACHE', SERVERPATH . substr(CACHEFOLDER, 0, -1));
 

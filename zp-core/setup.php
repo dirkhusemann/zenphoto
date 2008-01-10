@@ -553,7 +553,7 @@ if (!$checked) {
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `total_value` int(11) UNSIGNED default '0';";
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `total_votes` int(11) UNSIGNED default '0';";
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `used_ips` longtext;";
-    $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `password` varchar(255) default NULL;";
+    $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `password` varchar(255) NOT NULL default '';";
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `password_hint` text;";
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `hitcounter` int(11) UNSIGNED default NULL;";
     
@@ -564,7 +564,7 @@ if (!$checked) {
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `used_ips` longtext;";
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `custom_data` text default NULL";
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `custom_data` text default NULL";
-    
+    $sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `password` `password` varchar(255) NOT NULL DEFAULT ''";    
     // provide a way to revert the comments table to use `imageid` rather than `ownerid`
     $sql_statements[] = "ALTER TABLE $tbl_comments CHANGE `ownerid` `imageid` int(11) UNSIGNED NOT NULL default '0';";
     $sql_statements[] = "ALTER TABLE $tbl_comments DROP INDEX `ownerid`;";
