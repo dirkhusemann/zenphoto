@@ -105,8 +105,9 @@ class Gallery {
   
 /**
   * Load all of the albums names that are found in the Albums directory on disk.
+  * Returns an array containing this list.
   *
-  * @return An array of album names.
+  * @return array
   */
   function loadAlbumNames() {
     $albumdir = $this->getAlbumDir();

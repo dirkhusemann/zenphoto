@@ -52,7 +52,7 @@ function SearchEngine() {
 /**
  * Parses and stores a search string
  *
- * @param string $paramstr
+ * @param string $paramstr the string containing the search words
  */
 function setSearchParams($paramstr) {
   $params = explode('&', $paramstr);
@@ -171,7 +171,7 @@ function getQueryFields() {
   * returns the sql string for a search
   * @param string $searchstring the search target
   * @param string $searchdate the date target
-  * @parm string $tbl the database table to search
+  * @param string $tbl the database table to search
   * @param int $fields which fields to perform the search on
   * @return string
   * @since 1.1.3

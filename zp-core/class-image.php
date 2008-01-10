@@ -385,7 +385,7 @@ class Image extends PersistentObject {
   /**
    * Sets the sort order value of the image
    *
-   * @param int $sortorder
+   * @param int $sortorder the order the images should appear in
    */
   function setSortOrder($sortorder) { $this->set('sort_order', $sortorder); }
 

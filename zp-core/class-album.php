@@ -388,7 +388,7 @@ class Album extends PersistentObject {
   /**
    * Stores the published value for the album
    *
-   * @param bool $show
+   * @param bool $show True if the album is published
    */
   function setShow($show) { $this->set('show', $show ? 1 : 0); }
   
@@ -397,10 +397,12 @@ class Album extends PersistentObject {
    * modified by s.billard to add paging for subalbums thumbs, sorting of subalbums 
    * 
    * @param string $page  Which page of subalbums to display.
+   * @param string $sorttype The sort strategy
+   * @param string $sortdirection The direction of the sort
    * @return array
    */
     
-  function getSubAlbums($page=0, $sorttype=null) {
+  function getSubAlbums($page=0, $sorttype=null, $sortdirection=null) {
     if (is_null($this->subalbums)) {
       $dirs = $this->loadFileNames(true);
       $subalbums = array();
@@ -410,7 +412,11 @@ class Album extends PersistentObject {
         $subalbums[] = $dir;
       }
       $key = $this->getSubalbumSortKey($sorttype);
-      if ($this->getSortDirection('album')) { $key .= ' DESC'; }
+      if (is_null($sortdirection)) {
+        if ($this->getSortDirection('album')) { $key .= ' DESC'; }
+      } else {
+        $key .= ' ' . $sortdirection;
+      }
       $sortedSubalbums = sortAlbumArray($subalbums, $key); 
       $this->subalbums = $sortedSubalbums;
     }
