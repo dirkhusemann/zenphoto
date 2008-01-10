@@ -19,7 +19,7 @@ class Album extends PersistentObject {
   /**
    * Constructor for albums
    *
-   * @param object $gallery The parent gallery
+   * @param object &$gallery The parent gallery
    * @param string $folder folder name of the album
    * @param bool $cache load from cache if present
    * @return Album
@@ -819,9 +819,10 @@ class Album extends PersistentObject {
   
   /**
    * Load all of the filenames that are found in this Albums directory on disk.
+   * Returns an array with all the names.
    * 
    * @param  $dirs Whether or not to return directories ONLY with the file array. Default is false.
-   * @return An array of file names.
+   * @return array
    */
   function loadFileNames($dirs=false) {
     $albumdir = getAlbumFolder() . $this->name . "/";

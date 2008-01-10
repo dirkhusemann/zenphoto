@@ -41,6 +41,12 @@ class Gallery {
    */
   function getAlbumDir() { return $this->albumdir; }
   
+  /**
+   * Returns the DB field corresponding to the sort type desired
+   *
+   * @param string $sorttype the desired sort
+   * @return string
+   */
   function getGallerySortKey($sorttype=null) {
     if (is_null($sorttype)) { $sorttype = getOption('gallery_sorttype'); }
     switch ($sorttype) {
@@ -65,18 +71,24 @@ class Gallery {
    * 
    * Returns an array of albums (a pages worth if $page is not zero)
    *
-   * @param $page An option parameter that can be used to return a slice of the array. 
+   * @param int $page An option parameter that can be used to return a slice of the array. 
+   * @param string $sorttype the kind of sort desired
+   * @param string $direction set to a direction to override the default option
    * 
    * @return  array
    */
-  function getAlbums($page=0, $sorttype=null) {
+  function getAlbums($page=0, $sorttype=null, $direction=null) {
     
     // Have the albums been loaded yet?
     if (is_null($this->albums)) {
       
       $albumnames = $this->loadAlbumNames();
       $key = $this->getGallerySortKey($sorttype);
-      if (getOption('gallery_sortdirection')) { $key .= ' DESC'; }
+      if (is_null($direction)) {
+        if (getOption('gallery_sortdirection')) { $key .= ' DESC'; }
+      } else {
+        $key .= ' '.$direction;
+      }
       $albums = sortAlbumArray($albumnames, $key);
       
       // Store the values
@@ -242,7 +254,7 @@ class Gallery {
    * Returns true if the operation was interrupted because it was taking too long
    * 
    * @param bool $cascade garbage collect every image and album in the gallery.
-   * @param bool $full garbage collect every image and album in the *database* - completely cleans the database.
+   * @param bool $complete garbage collect every image and album in the *database* - completely cleans the database.
    * @return bool 
    */
   function garbageCollect($cascade=true, $complete=false) {

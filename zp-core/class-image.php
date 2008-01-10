@@ -405,8 +405,9 @@ class Image extends PersistentObject {
 
   /** 
    * Permanently delete this image (permanent: be careful!) 
+   * Returns the result of the unlink operation (whether the delete was successful)
    * @param bool $clean whether to remove the database entry.
-   * @return bool the result of the unlink operation (whether the delete was successful)
+   * @return bool 
    */
   function deleteImage($clean=true) {
     $result = unlink($this->localpath); 
@@ -419,9 +420,10 @@ class Image extends PersistentObject {
   
   /**
    * Moves an image to a new album and/or filename (rename).
+   * Returns  true on success and false on failure.
    * @param Album $newalbum the album to move this file to. Must be a valid Album object.
    * @param string $newfilename the new file name of the image in the specified album.
-   * @return bool true on success and false on failure.
+   * @return bool
    */
   function moveImage($newalbum, $newfilename=null) {
     if ($newfilename == null) $newfilename = $this->filename;
@@ -440,8 +442,9 @@ class Image extends PersistentObject {
   
   /**
    * Renames an image to a new filename, keeping it in the same album. Convenience for moveImage($image->album, $newfilename).
+   * Returns  true on success and false on failure.
    * @param string $newfilename the new file name of the image file.
-   * @return bool true on success and false on failure.
+   * @return bool
    */
   function renameImage($newfilename) {
     return $this->moveImage($this->album, $newfilename);
