@@ -562,6 +562,9 @@ if (!$checked) {
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `total_value` int(11) UNSIGNED default '0';";
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `total_votes` int(11) UNSIGNED default '0';";
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `used_ips` longtext;";
+    $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `custom_data` text default NULL";
+    $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `custom_data` text default NULL";
+    
     // provide a way to revert the comments table to use `imageid` rather than `ownerid`
     $sql_statements[] = "ALTER TABLE $tbl_comments CHANGE `ownerid` `imageid` int(11) UNSIGNED NOT NULL default '0';";
     $sql_statements[] = "ALTER TABLE $tbl_comments DROP INDEX `ownerid`;";

@@ -675,6 +675,27 @@ function printAlbumDesc($editable=false) {
 }
 
 /**
+ * Returns the custom_data field of the current album
+ *
+ * @return string
+ */
+function getAlbumCustomData() {
+  global $_zp_current_album;
+  return $_zp_current_album->getCustomData();
+}
+
+/**
+ * Sets the album custom_data field
+ *
+ * @param string $val
+ */
+function setAlbumCustomData($val) {
+  global $_zp_current_album;
+  $_zp_current_album->setCustomData($val); 
+  $_zp_current_album->save(); 
+}
+
+/**
 * Returns the album link url of the current album.
 *
 * @return string
@@ -1233,6 +1254,27 @@ function getImageData($field) {
       break;
   }
 }
+
+/**
+ * Returns the custom_data field of the current image
+ *
+ * @return string
+ */
+function getImageCustomData() { 
+  Global $_zp_current_image;
+  return $_zp_current_image->getCustomData();
+}
+
+/**
+ * Sets the image custom_data field
+ *
+ * @param string $val
+ */
+function setImageCustomData($val) {
+  Global $_zp_current_image;
+  $_zp_current_image->setCustomData($val);
+  $_zp_current_image->save();
+  }
 
 /**
 * A composit for printing image data

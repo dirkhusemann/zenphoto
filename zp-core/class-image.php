@@ -707,7 +707,21 @@ class Image extends PersistentObject {
     $images_per_page = getOption('images_per_page');
     return floor(($this->index / $images_per_page)+1);
   }
-
+  
+  /**
+   * returns the custom data field
+   *
+   * @return string
+   */
+  function getCustomData() { return $this->get('custom_data'); }
+  
+  /**
+   * Sets the custom data field
+   *
+   * @param string $val the value to be put in custom_data
+   */
+  function setCustomData($val) { $this->set('custom_data', $val); }
+  
 }
 
 ?>

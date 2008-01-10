@@ -330,7 +330,6 @@ function generateListFromFiles($currentValue, $root, $suffix) {
  * called in edit album and mass edit
  *@param string param1 the index of the entry in mass edit or '0' if single album
  *@param object param2 the album object
-*@return nothing
  *@since 1.1.3
  */
 function printAlbumEditForm($index, $album) {
@@ -360,7 +359,7 @@ function printAlbumEditForm($index, $album) {
   echo "\n<tr><td align=\"right\" valign=\"top\">Album Description: </td> <td><textarea name=\"".$prefix."albumdesc\" cols=\"60\" rows=\"6\">" .
        $album->getDesc() . "</textarea></td></tr>";
   echo "\n<tr>";		
-  echo "\n<td>Album password</td>";
+  echo "\n<td align=\"right\">Album password: <br/>repeat: </td>";
   echo "\n<td>";
   $x = $album->getPassword(); 
 
@@ -385,46 +384,17 @@ function printAlbumEditForm($index, $album) {
   }
 
   echo "\n<tr><td align=\"right\" valign=\"top\">Date: </td> <td><input type=\"text\" name=\"".$prefix."albumdate\" value=\"" . $d . '" /></td></tr>';
-  echo "\n<tr><td align=\"right\" valign=\"top\">Location: </td> <td><input type=\"text\" name=\"".$prefix."albumplace\" value=\"" .
+  echo "\n<tr><td align=\"right\" valign=\"top\">Location: </td> <td><input type=\"text\" name=\"".$prefix."albumplace\" class=\"tags\" value=\"" .
        $album->getPlace() . "\" /></td></tr>";
-  echo "\n<tr><td align=\"right\" valign=\"top\">Thumbnail: </td> ";
-  echo "\n<td>";
-  echo "\n<select id=\"thumbselect\" class=\"thumbselect\" name=\"".$prefix."thumb\" onChange=\"updateThumbPreview(this)\">";
-
-  foreach ($images as $filename) { 
-    $image = new Image($album, $filename);
-    $selected = ($filename == $album->get('thumb')); 
-    echo "\n<option class=\"thumboption\" style=\"background-image: url(" . $image->getThumb() . 
-	     "); background-repeat: no-repeat;\" value=\"" . $filename . "\"";
-	if ($selected) {
-	  echo " selected=\"selected\""; 
-	}
-	echo ">" . $image->get('title'); 
-    if ($filename != $image->get('title')) {
-	  echo  " ($filename)";
-	}
-	echo "</option>";
-  } 
+  echo "\n<tr><td align=\"right\" valign=\"top\">Custom data: </td> <td><input type=\"text\" name=\"".$prefix."album_custom_data\" class=\"tags\" value=\"" .
+       $album->getCustomData() . "\" /></td></tr>";
+       
 
   echo "\n</select>";
   echo "\n<script type=\"text/javascript\">updateThumbPreview(document.getElementById('thumbselect'));</script>";
   echo "\n</td>";
   echo "\n</tr>";
-  echo "\n<tr><td align=\"right\" valign=\"top\">Allow Comments: </td><td><input type=\"checkbox\" name=\"" .
-       $prefix."allowcomments\" value=\"1\"";
-  if ($album->getCommentsAllowed()) {
-    echo "CHECKED";
-  } 
-
-  echo "\n>";
-  echo "\n</td></tr>";
-  echo "\n<tr><td align=\"right\" valign=\"top\">Published: </td><td><input type=\"checkbox\" name=\"" . 
-        $prefix."Published\" value=\"1\"";
-  if ($album->getShow()) {
-    echo "CHECKED";
-  } 
-  echo ">";
-  echo "\n</td></tr>";
+  
   echo "\n<tr>";
   echo "\n<td align=\"right\" valign=\"top\">Sort subalbums by: </td>";
   echo "\n<td>";
@@ -470,7 +440,38 @@ function printAlbumEditForm($index, $album) {
 
   echo ">"; 
   echo "\n</td>";
-
+  
+  echo "\n<tr><td align=\"right\" valign=\"top\"></td><td><input type=\"checkbox\" name=\"" .
+       $prefix."allowcomments\" value=\"1\"";
+  if ($album->getCommentsAllowed()) {
+    echo "CHECKED";
+  } 
+  echo "> Allow Comments ";
+  echo "<input type=\"checkbox\" name=\"" . 
+        $prefix."Published\" value=\"1\"";
+  if ($album->getShow()) {
+    echo "CHECKED";
+  } 
+  echo "> Published ";
+  echo "</td></tr>";
+  echo "\n<tr><td align=\"right\" valign=\"top\">Thumbnail: </td> ";
+  echo "\n<td>";
+  echo "\n<select id=\"thumbselect\" class=\"thumbselect\" name=\"".$prefix."thumb\" onChange=\"updateThumbPreview(this)\">";
+  foreach ($images as $filename) { 
+    $image = new Image($album, $filename);
+    $selected = ($filename == $album->get('thumb')); 
+    echo "\n<option class=\"thumboption\" style=\"background-image: url(" . $image->getThumb() . 
+	     "); background-repeat: no-repeat;\" value=\"" . $filename . "\"";
+	if ($selected) {
+	  echo " selected=\"selected\""; 
+	}
+	echo ">" . $image->get('title'); 
+    if ($filename != $image->get('title')) {
+	  echo  " ($filename)";
+	}
+	echo "</option>";
+  } 
+  
   echo "\n</table>";  
   echo "\n<input type=\"submit\" value=\"save\" />";
   echo "\n</tr>";
@@ -644,6 +645,7 @@ function processAlbumEdit($index, $album) {
   }
 
   $album->setPasswordHint(strip($_POST[$prefix.'albumpass_hint']));   
+  $album->setCustomData(strip($_POST[$prefix.'album_custom_data']));   
   $album->save();
   return $notify;
 }

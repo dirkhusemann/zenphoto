@@ -243,6 +243,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
                 $id = $image->id;
                 query("UPDATE " . prefix('images') . " SET `hitcounter`= 0 WHERE `id` = $id");
               }
+              $image->setCustomData(strip($_POST["$i-custom_data"]));
               $image->save();
             }
           }
@@ -843,6 +844,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                   <tr><td align="right" valign="top">Copyright: </td> <td><input type="text" size="56" style="width: 360px" name="<?php echo $currentimage; ?>-copyright" value="<?php echo $image->getCopyright(); ?>" /></td></tr>
                   <tr><td align="right" valign="top">Tags: </td> <td><input type="text" size="56" style="width: 360px" name="<?php echo $currentimage; ?>-tags" value="<?php echo $image->getTags(); ?>" /></td></tr>
                   <tr><td align="right" valign="top">Date: </td> <td><input type="text" size="56" style="width: 360px" name="<?php echo $currentimage; ?>-date" value="<?php $d=$image->getDateTime(); if ($d!='0000-00-00 00:00:00') { echo $d; } ?>" /></td></tr>
+                  <tr><td align="right" valign="top">Custom&nbsp;data: </td> <td><input type="text" size="56" style="width: 360px" name="<?php echo $currentimage; ?>-custom_data" value="<?php echo $image->getCustomData(); ?>" /></td></tr>
                   <tr><td align="right" valign="top" colspan="2">
                     <label for="<?php echo $currentimage; ?>-allowcomments"><input type="checkbox" id="<?php echo $currentimage; ?>-allowcomments" name="<?php echo $currentimage; ?>-allowcomments" value="1" <?php if ($image->getCommentsAllowed()) { echo "checked=\"checked\""; } ?> /> Allow Comments</label>
                     &nbsp; &nbsp;
