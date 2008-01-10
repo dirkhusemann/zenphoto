@@ -21,7 +21,11 @@ var $dates;
 var $images;
 var $albums;
 
-// constructor
+/**
+ * Constuctor
+ *
+ * @return SearchEngine
+ */
 function SearchEngine() {
   $this->words = $this->getSearchWords();
   $this->dates = $this->getSearchDate();
@@ -29,8 +33,13 @@ function SearchEngine() {
   $this->images = null;  
   $this->albums = null;
   }
-/******************************************************************/
-function getSearchParams() {
+
+  /**
+   * creates a search query from the search words
+   *
+   * @return string
+   */
+  function getSearchParams() {
   $r = '';
   $w = $this->words;
   if (!empty($w)) { $r .= '&words=' . $w; }
@@ -40,6 +49,11 @@ function getSearchParams() {
   if (!empty($f)) { $r .= '&searchfields=' . $f; }
   return $r;
 }
+/**
+ * Parses and stores a search string
+ *
+ * @param string $paramstr
+ */
 function setSearchParams($paramstr) {
   $params = explode('&', $paramstr);
   foreach ($params as $param) {
@@ -59,17 +73,34 @@ function setSearchParams($paramstr) {
     }
   }
 }
-/******************************************************************/
+
+/**
+ * Captures and returns the query search string
+ *
+ * @return string
+ */
 function getSearchWords() {
   $this->words = $_REQUEST['words'];
   return $this->words;
 }
-/******************************************************************/
+
+/**
+ * Captures and returns the date string of a search
+ *
+ * @return string
+ */
 function getSearchDate() {
   $this->dates = $_REQUEST['date'];
   return $this->dates;
 }
-/******************************************************************/
+
+/**
+ * Parses a search string
+ * Items in peck marks are treated as atomic
+ * Returns an array of search elements
+ *
+ * @return array
+ */
 function getSearchString() {
   $searchstring = $this->words;
   $result = array();
@@ -97,7 +128,12 @@ function getSearchString() {
   }
   return $result;
 }
-/******************************************************************/
+
+/**
+ * Returns the number of albums found in a search
+ *
+ * @return int
+ */
 function getNumAlbums() {
  if (is_null($this->albums)) { 
     $this->getAlbums(0);
@@ -106,10 +142,10 @@ function getNumAlbums() {
 }
 
 /**
- * returns the set of fields from the url query/post
-  *@return int set of fields to be searched
-  *@since 1.1.3
-  */
+ * Returns the set of fields from the url query/post
+ *@return int 
+ *@since 1.1.3
+ */
 function getQueryFields() {
   if (isset($_REQUEST['searchfields'])) {
     $fields = 0+strip($_GET['searchfields']); 
@@ -132,12 +168,13 @@ function getQueryFields() {
 }
 
 /**
- * returns the sql string for a search
- *@param string param1 the search target
- *@param int param2 which fields to perform the search on
-  *@parm string the database table to search
- *@return string SQL query for the search
-  *@since 1.1.3
+  * returns the sql string for a search
+  * @param string $searchstring the search target
+  * @param string $searchdate the date target
+  * @parm string $tbl the database table to search
+  * @param int $fields which fields to perform the search on
+  * @return string
+  * @since 1.1.3
  */
 function getSearchSQL($searchstring, $searchdate, $tbl, $fields) {
   $sql = 'SELECT `show`,`title`,`desc`,`tags`';
@@ -215,7 +252,12 @@ function getSearchSQL($searchstring, $searchdate, $tbl, $fields) {
   if ($nr == 0) { return NULL; } // no valid fields
   return $sql;
 }
-/******************************************************************/   
+
+/**
+ * Returns an array of albums found in the search
+ *
+ * @return array
+ */
 function getSearchAlbums() {
   $albums = array();
   $searchstring = $this->getSearchString(); 
@@ -233,7 +275,14 @@ function getSearchAlbums() {
 return $albums;
 
 }
-/******************************************************************/
+
+/**
+ * Returns an array of album names found in the search. 
+ * If $page is not zero, it returns the current page's albums
+ *
+ * @param int $page the page number we are on
+ * @return array
+ */
 function getAlbums($page=0) {
  if (is_null($this->albums)) {
     $this->albums = $this->getSearchAlbums();
@@ -246,6 +295,11 @@ function getAlbums($page=0) {
     }  
   }
   
+  /**
+   * Returns the album following the current one
+   *
+   * @return object
+   */
   function getNextAlbum() {
     $albums = $this->getAlbums(0);
     $inx = array_search($this->name, $albums)+1;
@@ -255,6 +309,11 @@ function getAlbums($page=0) {
     return null;
   }
   
+  /**
+   * Returns the album preceding the current one
+   *
+   * @return object
+   */
   function getPrevAlbum() {
      $albums = $this->getAlbums(0);
     $inx = array_search($this->name, $albums)-1;
@@ -264,14 +323,24 @@ function getAlbums($page=0) {
     return null;
   }
 
-/******************************************************************/
-function getNumImages() {
+
+  /**
+   * Returns the number of images found in the search
+   *
+   * @return int
+   */
+  function getNumImages() {
   if (is_null($this->images)) { 
     $this->getImages(0);
   }
   return count($this->images);
 }
-/******************************************************************/   
+
+/**
+ * Returns an array of image names found in the search
+ *
+ * @return array
+ */
 function getSearchImages() {
   global $_zp_current_gallery;
   $images = array();
@@ -294,7 +363,15 @@ function getSearchImages() {
   return $images;
 
 }
-/******************************************************************/
+
+/**
+ * Returns an array of images found in the search
+ * It will return a "page's worth" if $page is non zero
+ *
+ * @param int $page the page number desired
+ * @param int $firstPageCount count of images that go on the album/image transition page
+ * @return array
+ */
 function getImages($page=0, $firstPageCount=0) {
   if (is_null($this->images)) {
     $this->images = $this->getSearchImages();
@@ -319,6 +396,12 @@ function getImages($page=0, $firstPageCount=0) {
     return $slice;
     }
   }
+  /**
+   * Returns a specific image
+   *
+   * @param int $index the index of the image desired
+   * @return object
+   */
   function getImage($index) {
     global $_zp_gallery;
     if ($index >= 0 && $index < $this->getNumImages()) {
