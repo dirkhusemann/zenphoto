@@ -3148,7 +3148,6 @@ function printRSSHeaderLink($option, $linktext) {
 //*** Search functions *******************************************************
 //****************************************************************************
 
-
 /**
  * Returns a search URL
  *
@@ -3159,17 +3158,42 @@ function printRSSHeaderLink($option, $linktext) {
  * @since 1.1.3
  */
 function getSearchURL($words, $dates, $fields=0) {
-if ( !empty($words) && empty($dates) && $fields==SEARCH_TAGS && getOption('mod_rewrite') ) {
-  return WEBPATH."/page/search/tags/".$words; 
-} 
-else if (empty($words) && !empty($dates) && getOption('mod_rewrite') ) {
-  return WEBPATH."/page/search/archive/".$dates; 
-} 
-$url = WEBPATH."/index.php?p=search";
-if($fields != 0) { $url .= "&searchfields=$fields"; }
-if (!empty($words)) { $url .= "&words=$words"; }
-if (!empty($dates)) { $url .= "&date=$dates"; }
-return $url;
+  if(getOption('mod_rewrite')) {
+	  $url = WEBPATH."/page/search/";
+  } else {
+	  $url = WEBPATH."/index.php?p=search";
+  } 
+
+	if($fields != 0 && $fields != 4) { 
+    if(getOption('mod_rewrite')) {
+		  $url .= ""; 
+	  } else { 
+		  $url .= "&searchfields=$fields"; 
+	  }
+  } else if ($fields === 4) {
+     if(getOption('mod_rewrite')) {
+		  $url .= "tags/"; 
+	  } else { 
+		  $url .= "&searchfields=$fields"; 
+	  }
+  }
+  
+  if (!empty($words)) {
+    if(getOption('mod_rewrite')) {   
+      $url .= "$words"; 
+    } else {
+      $url .= "&words=$words"; 
+    }
+  }    
+  
+  if (!empty($dates)) {
+    if(getOption('mod_rewrite')) {   
+      $url .= "archive/$dates"; 
+    } else {
+      $url .= "&date=$dates"; 
+    } 
+  }
+  return $url;
 }
 
 /**
