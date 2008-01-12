@@ -608,8 +608,10 @@ function printHomeLink($before='', $after='') {
   $site = getOption('website_url');
   if (!empty($site)) {
     if (substr($site,-1) == "/") { $site = substr($site, 0, -1); }
+    $title = getOption('website_title');
+    if (empty($title)) { $title = 'Home'; }
     if ($site != FULLWEBPATH) {
-      echo $before . "<a href =\"" . $site . "\">" . getOption('website_title') . "</a>" . $after;
+      echo $before . "<a href =\"" . $site . "\">" . $title . "</a>" . $after;
     }
   }
   
