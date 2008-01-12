@@ -2407,17 +2407,14 @@ function printTopRatedAlbums($number=5) {
  *
  * @param string $number the number of images to get
  * @param string $option "popular" for the most popular images, 
-
  *                       "latest" for the latest uploaded, 
-
  *                       "latest" for the latest uploaded, 
-
  *                       "mostrated" for the most voted, 
-
  *                       "toprated" for the best voted
+ * @param string $album title of an specific album 
  * @return string
  */
-function getImageStatistic($number, $option) {
+function getImageStatistic($number, $option, $album) {
   global $_zp_gallery;
   if (zp_loggedin()) {
     $albumWhere = "";
@@ -2425,6 +2422,11 @@ function getImageStatistic($number, $option) {
   } else {
     $albumWhere = " AND albums.show=1 AND albums.password=''";
     $imageWhere = " AND images.show=1";
+  }
+  if(!empty($album)) {
+    $specificalbum = " albums.title = '".$album."' AND ";
+  } else {
+    $specificalbum = "";
   }
   switch ($option) {
     case "popular":
@@ -2434,13 +2436,13 @@ function getImageStatistic($number, $option) {
     case "mostrated":
       $sortorder = "images.total_votes"; break;
     case "toprated":
-      $sortorder = "(total_value/total_votes)"; break;
+      $sortorder = "(images.total_value/images.total_votes)"; break;
   }
   $imageArray = array();
   $images = query_full_array("SELECT images.albumid, images.filename AS filename, images.title AS title, " .
                              "albums.folder AS folder, images.show, albums.show, albums.password FROM " .
   prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
-                              " WHERE images.albumid = albums.id " . $imageWhere . $albumWhere .
+                              " WHERE ".$specificalbum."images.albumid = albums.id " . $imageWhere . $albumWhere .
                               " AND albums.folder != ''".
                               " ORDER BY ".$sortorder." DESC LIMIT $number");
   foreach ($images as $imagerow) {
@@ -2461,18 +2463,15 @@ function getImageStatistic($number, $option) {
  *
  * @param string $number the number of albums to get
  * @param string $option "popular" for the most popular images, 
-
  *                       "latest" for the latest uploaded, 
-
  *                       "latest" for the latest uploaded, 
-
  *                       "mostrated" for the most voted, 
-
  *                       "toprated" for the best voted
+ * @param string $album title of an specific album
  * @return string
  */
-function printImageStatistic($number, $option) {
-  $images = getImageStatistic($number, $option);
+function printImageStatistic($number, $option, $album) {
+  $images = getImageStatistic($number, $option, $album);
   echo "\n<div id=\"$option_images\">\n";
   foreach ($images as $image) {
     $imageURL = getURL($image);
@@ -2486,18 +2485,20 @@ function printImageStatistic($number, $option) {
  * Prints the most popular images
  *
  * @param string $number the number of images to get
+ * @param string $album title of an specific album
  */
-function printPopularImages($number=5) {
-  printImageStatistic($number, "popular");
+function printPopularImages($number=5,$album) {
+  printImageStatistic($number, "popular",$album);
 }
 
 /**
  * Prints the latest images
  *
  * @param string $number the number of images to get
+ * @param string $album title of an specific album
  */
-function printLatestImages($number=5) {
-  printImageStatistic($number, "latest");
+function printLatestImages($number=5, $album) {
+  printImageStatistic($number, "latest", $album);
 }
 
 /**
