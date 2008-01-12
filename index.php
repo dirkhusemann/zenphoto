@@ -18,7 +18,10 @@ if (isset($_GET['p'])) {
   if (substr($page, 0, 1) == "*") {
     include ($obj = ZENFOLDER."/".substr($page, 1) . ".php");
   } else {
-    include($obj = "$themepath/$theme/$page.php");
+    $obj = "$themepath/$theme/$page.php";
+    if (file_exists(SERVERPATH . "/" . $obj)) {
+      include($obj);
+    }
   }
 } else if (in_context(ZP_IMAGE)) {
   include($obj = "$themepath/$theme/image.php");

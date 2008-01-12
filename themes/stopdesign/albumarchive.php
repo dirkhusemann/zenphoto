@@ -22,10 +22,11 @@
 	<h1><?php printGalleryTitle(); ?> Archive</h1>
 
 	<div class="galleries">
-  		<h2>All galleries</h2>
-  			<ul>
-    			<?php $counter = 0; while (next_album(true) and $counter < 999): ?>
-    			<li class="gal">
+ 	<?php if (!checkForPassword()) {?>
+  	  <h2>All galleries</h2>
+  	  <ul>
+      <?php $counter = 0; while (next_album(true) and $counter < 999): ?>
+      <li class="gal">
       <h3><a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
       <a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 210, 59, 210, 59); ?></a>
       <p>
@@ -54,7 +55,7 @@
     </li>
     <?php if ($counter == 2) {echo "</ul><ul>";}; $counter++; endwhile; ?>
   </ul>
-
+  <?php } ?>
 </div>
 
 <div id="feeds">

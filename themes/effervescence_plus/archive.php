@@ -40,11 +40,14 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 	<!-- Wrap Main Body -->
 	<div id="content">
 		<div id="main">
+	      <?php if (!checkForPassword()) {?>
             <!-- Date List -->
 			<div id="archive"><p>Images by Date</p><?php printAllDates(); ?></div>
 			<div id="tag_cloud"><p>Popular Tags</p><?php printAllTagsAs('cloud', 'tags'); ?></div>
+	      <?php } ?>
 		</div>
 	</div>
+	
 
 	<!-- Footer -->
 	<div class="footlinks">

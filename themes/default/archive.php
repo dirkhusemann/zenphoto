@@ -18,13 +18,13 @@
 	</div>
     
     <div id="padbox">
-    
+ 	  <?php if (!checkForPassword()) {?>
 		<div id="archive"><?php printAllDates(); ?></div>
 		<div id="tag_cloud">
         	<p>Popular Tags</p>
 			<?php printAllTagsAs('cloud', 'tags'); ?>
         </div>
-        
+ 	  <?php } ?>
 	</div>
 
 </div>

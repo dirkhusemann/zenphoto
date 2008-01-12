@@ -16,12 +16,14 @@
   
   	<hr />
   	
+ 	<?php if (!checkForPassword()) {?>
   
   	<div id="archive"><?php printAllDates(); ?></div>
 	<div id="tag_cloud">
     	<p>Popular Tags</p>
 		<?php printAllTagsAs('cloud', 'tags'); ?>
 	</div>
+	<?php } ?>
   
 	<div id="credit"><?php printRSSLink('Gallery','','RSS', ''); ?> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
 
