@@ -2434,7 +2434,7 @@ function printTopRatedAlbums($number=5) {
  * @param string $album title of an specific album 
  * @return string
  */
-function getImageStatistic($number, $option, $album) {
+function getImageStatistic($number, $option, $album='') {
   global $_zp_gallery;
   if (zp_loggedin()) {
     $albumWhere = "";
@@ -2490,7 +2490,7 @@ function getImageStatistic($number, $option, $album) {
  * @param string $album title of an specific album
  * @return string
  */
-function printImageStatistic($number, $option, $album) {
+function printImageStatistic($number, $option, $album='') {
   $images = getImageStatistic($number, $option, $album);
   echo "\n<div id=\"$option_images\">\n";
   foreach ($images as $image) {
@@ -2507,7 +2507,7 @@ function printImageStatistic($number, $option, $album) {
  * @param string $number the number of images to get
  * @param string $album title of an specific album
  */
-function printPopularImages($number=5,$album) {
+function printPopularImages($number=5, $album='') {
   printImageStatistic($number, "popular",$album);
 }
 
@@ -2517,7 +2517,7 @@ function printPopularImages($number=5,$album) {
  * @param string $number the number of images to get
  * @param string $album title of an specific album
  */
-function printLatestImages($number=5, $album) {
+function printLatestImages($number=5, $album='') {
   printImageStatistic($number, "latest", $album);
 }
 
