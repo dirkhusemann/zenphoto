@@ -598,6 +598,24 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
 }
 
 /**
+ * Prints a link to the 'main website'
+ * Only prints the link if the url is not empty and does not point back the the gallery page
+ *
+ * @param string $before text to precede the link
+  * @param string $after text to follow the link
+ */
+function printHomeLink($before='', $after='') {
+  $site = getOption('website_url');
+  if (!empty($site)) {
+    if (substr($site,-1) == "/") { $site = substr($site, 0, -1); }
+    if ($site != FULLWEBPATH) {
+      echo $before . "<a href =\"" . $site . "\">" . getOption('website_title') . "</a>" . $after;
+    }
+  }
+  
+}
+
+/**
 * Returns the formatted date field of the album
 *
 * @param string $format

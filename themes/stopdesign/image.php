@@ -176,7 +176,7 @@
 
     </div>
 
-    <p id="path"><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> > <?php printParentBreadcrumb("", " > ", " > "); ?> <a href="<?php echo getAlbumLinkURL();?>" title="Album Thumbnails"><?php echo getAlbumTitle();?></a> > <?php echo getImageTitle(); ?></p>
+    <p id="path"><?php printHomeLink('', ' > '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> > <?php printParentBreadcrumb("", " > ", " > "); ?> <a href="<?php echo getAlbumLinkURL();?>" title="Album Thumbnails"><?php echo getAlbumTitle();?></a> > <?php echo getImageTitle(); ?></p>
 
     <div id="footer">
           <hr />

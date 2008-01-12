@@ -14,7 +14,7 @@
 
 	<div id="gallerytitle">
     <?php printSearchForm(); ?>
-		<h2><span><a href="<?php echo getGalleryIndexURL();?>" title="Gallery Index"><?php echo getGalleryTitle();?></a></span> | Search</h2>
+		<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Gallery Index"><?php echo getGalleryTitle();?></a></span> | Search</h2>
 	</div>
     
     <div id="padbox">

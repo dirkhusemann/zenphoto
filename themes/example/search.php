@@ -15,7 +15,7 @@ $firstPageImages = normalizeColumns(1, 7);
 
 <div id="main">
 	<div id="gallerytitle">
-    	<h2><span><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a></span> | Search<?php printSearchForm(); ?></h2>
+    	<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a></span> | Search<?php printSearchForm(); ?></h2>
   	</div>
   
   	<hr />

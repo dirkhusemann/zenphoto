@@ -1318,4 +1318,16 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
   return $goodMessage;
 }
 
+/**
+ * Write output to the debug log
+ *
+ * @param string $message the debug information
+ * @param bool $reset set to true to reset the log to zero before writing the message
+ */
+function debugLog($message, $reset) {
+  if ($reset) { $mode = 'w'; } else { $mode = 'a'; }
+  $f = fopen(SERVERPATH . ZENFOLDER . 'debug_log.txt', $mode);
+  fwrite($f, $message . "\n");
+  fclose($f); 
+}
 ?>

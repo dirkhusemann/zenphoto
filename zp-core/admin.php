@@ -473,7 +473,14 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
       if (isset($_POST['savegalleryoptions'])) {
         setOption('gallery_title', $_POST['gallery_title']);
         setOption('website_title', $_POST['website_title']);
-        setOption('website_url', $_POST['website_url']);
+        $web = $_POST['website_url'];
+        setOption('website_url', $web);
+/*
+        if (isValidURL($web)) {
+          setOption('website_url', $web);
+        } else {
+          $notify = "&badurl";
+*/
         setOption('time_offset', $_POST['time_offset']);
         setOption('gmaps_apikey', $_POST['gmaps_apikey']);
         setBoolOption('mod_rewrite', $_POST['mod_rewrite']);
@@ -1355,6 +1362,14 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                   if (isset($_GET['mismatch'])) {
                     echo '<div class="errorbox" id="message">';
                     echo  "<h2>Your " . $_GET['mismatch'] . " passwords did not match</h2>";
+                    echo '</div>';
+                    echo '<script type="text/javascript">';
+                    echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
+                    echo "</script>\n";
+                  }
+                  if (isset($_GET['badurl'])) {
+                    echo '<div class="errorbox" id="message">';
+                    echo  "<h2>Your Website URL is not valid</h2>";
                     echo '</div>';
                     echo '<script type="text/javascript">';
                     echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";

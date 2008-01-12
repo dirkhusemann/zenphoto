@@ -129,7 +129,7 @@ if ($_GET['format'] != 'xml') {
 		<!-- Crumb Trail Navigation -->
 		<div id="wrapnav">
   			<div id="navbar">
-    			<span><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> | <?php printParentBreadcrumb(); ?></span> 
+    			<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> | <?php printParentBreadcrumb(); ?></span> 
     			<?php printAlbumTitle(true);?>
   			</div>
 		</div>
