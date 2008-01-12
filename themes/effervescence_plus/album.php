@@ -242,7 +242,8 @@ if ($_GET['format'] != 'xml') {
 						    } 
 						    echo " title=\"".getImageTitle()."\">\n";
 						    printImageThumb(getImageTitle()); 
-						    ?></a>
+						    echo "</a>"
+						    ?>
                             </div>
              		      </div>
 					<?php 

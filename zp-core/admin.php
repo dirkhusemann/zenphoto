@@ -771,7 +771,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
       <img src="images/cache.png" style="border: 0px;" alt="Cache the album" />Cache the album&nbsp;
       <img src="images/warn.png" style="border: 0px;" alt="Refresh image metadata" />Refresh image metadata&nbsp;
       <img src="images/reset.png" style="border: 0px;" alt="Reset hitcounters" />Reset hitcounters&nbsp;
-      <img src="images/fail.png" style="border: 0px;" alt="Delete" /></a>Delete
+      <img src="images/fail.png" style="border: 0px;" alt="Delete" />Delete
       </p>
                 <?php
                 zenSortablesSaveButton("?page=edit&album=" . urlencode($album->name) . "&subalbumsaved", "Save Order");
@@ -834,7 +834,6 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                     if (empty($hc)) { $hc = '0'; }
                     echo "<td></td><td>Hit counter: ". $hc . " <input type=\"checkbox\" name=\"reset_hitcounter\"> Reset</td>";
                   ?>
-                  </tr>
                   <tr><td align="right" valign="top">Description: </td> <td><textarea name="<?php echo $currentimage; ?>-desc" cols="60" rows="4" style="width: 360px"><?php echo $image->getDesc(); ?></textarea></td></tr>
                   <tr><td align="right" valign="top">Location: </td> <td><input type="text" size="56" style="width: 360px" name="<?php echo $currentimage; ?>-location" value="<?php echo $image->getLocation(); ?>" /></td></tr>
                   <tr><td align="right" valign="top">City: </td> <td><input type="text" size="56" style="width: 360px" name="<?php echo $currentimage; ?>-city" value="<?php echo $image->getCity(); ?>" /></td></tr>
@@ -975,7 +974,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
       <img src="images/cache.png" style="border: 0px;" alt="Cache the album" />Cache the album&nbsp;
       <img src="images/warn.png" style="border: 0px;" alt="Refresh image metadata" />Refresh image metadata&nbsp;
       <img src="images/reset.png" style="border: 0px;" alt="Reset hitcounters" />Reset hitcounters&nbsp;
-      <img src="images/fail.png" style="border: 0px;" alt="Delete" /></a>Delete
+      <img src="images/fail.png" style="border: 0px;" alt="Delete" />Delete
       </p>
       <?php
         zenSortablesSaveButton("?page=edit&saved", "Save Order");
@@ -1034,7 +1033,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         <div id="albumselect">
           Upload to:
           <select id="albumselectmenu" name="albumselect" onChange="albumSwitch(this)">
-            <option value="" selected="true" style="font-weight: bold;">/</option>
+            <option value="" selected="1" style="font-weight: bold;">/</option>
             <?php
               $bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');
               $checked = "checked=\"false\"";
@@ -1062,7 +1061,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 
           <div id="newalbumbox" style="margin-top: 5px;">
             <div><label><input type="checkbox" name="newalbum" <?php echo $checked; ?> onClick="albumSwitch(this.form.albumselect)"> Make a new Album</label></div>
-            <div id="publishtext">and <label><input type="checkbox" name="publishalbum" id="publishalbum" value="1" checked="true" />
+            <div id="publishtext">and <label><input type="checkbox" name="publishalbum" id="publishalbum" value="1" checked="1" />
               Publish the album so everyone can see it.</label></div>
           </div>
 
@@ -1072,8 +1071,8 @@ if (!zp_loggedin()  && !$_zp_null_account) {
             <div style="position: relative; margin-top: 4px;">
               with the folder name:
               <div id="foldererror" style="display: none; color: #D66; position: absolute; z-index: 100; top: 2.5em; left: 0px;"></div>
-              <input id="folderdisplay" size="18" type="text" name="folderdisplay" disabled="true" onKeyUp="validateFolder(this);"/>
-              <label><input type="checkbox" name="autogenfolder" id="autogen" checked="true" onClick="toggleAutogen('folderdisplay', 'albumtitle', this);" /> Auto-generate</label>
+              <input id="folderdisplay" size="18" type="text" name="folderdisplay" disabled="1" onKeyUp="validateFolder(this);"/>
+              <label><input type="checkbox" name="autogenfolder" id="autogen" checked="1" onClick="toggleAutogen('folderdisplay', 'albumtitle', this);" /> Auto-generate</label>
               <br /><br />
             </div>
 
@@ -1238,7 +1237,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
       </table>
 
       <input type="submit" value="Delete Selected Comments" class="button" />
-      </select>
+
 
       </form>
 
@@ -1313,7 +1312,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                         <td></td>
                     </tr>
                     <tr>
-                        <td>Admin password:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(repeat) </p></td>
+                        <td>Admin password:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(repeat) </td>
                         <td>
                             <?php $x = getOption('adminpass'); if (!empty($x)) { $x = '          '; } ?>
                             <input type="password" size="40" name="adminpass"
@@ -1372,7 +1371,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                       <td>What you want to call your photo gallery.</td>
                     </tr>
                     <tr>
-                        <td>Gallery password:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(repeat) </p></td>
+                        <td>Gallery password:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(repeat) </td>
                         <td>
                             <?php $x = getOption('gallery_password'); if (!empty($x)) { $x = '          '; } ?>
                             <input type="password" size="40" name="gallerypass"
@@ -1388,7 +1387,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                         <td>A reminder hint for the password.</td>
                     </tr>
                     <tr>
-                        <td>Search password:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(repeat) </p></td>
+                        <td>Search password:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(repeat) </td>
                         <td>
                             <?php $x = getOption('search_password'); if (!empty($x)) { $x = '          '; } ?>
                             <input type="password" size="40" name="searchpass"
@@ -1880,7 +1879,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
 			</script>
           </form>
           <form name="cache_images" action="cache-images.php">
-          	<div class="buttons" id="home_cache"><button type="submit"><img src="images/cache.png" alt="" /> Pre-Cache Images</button></div><input type="checkbox" name="clear" checked="true" /> Clear<br clear="all" /><br clear="all" />
+          	<div class="buttons" id="home_cache"><button type="submit"><img src="images/cache.png" alt="" /> Pre-Cache Images</button></div><input type="checkbox" name="clear" checked="1" /> Clear<br clear="all" /><br clear="all" />
             <div id='home_cache_tooltip' style="display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
   				Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser.<br />
 			</div>
@@ -1907,7 +1906,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
   				var my_tooltip = new Tooltip('home_refresh', 'home_refresh_tooltip')
 			</script>
           </form>
-          </p>
+
         </div>
 
 

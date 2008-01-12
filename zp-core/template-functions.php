@@ -2582,26 +2582,26 @@ function getRandomImagesAlbum() {
  * @param string $class optional class
  * @param string $option optional
  */
-function printRandomImages($number, $class=null, $option='all') {
+function printRandomImages($number=5, $class=null, $option='all') {
   if (!is_null($class)) {
     $class = 'class="' . $class . '";';
     echo "<ul".$class.">";
-    for ($i=1; $i<=$number; $i++) {
-      echo "<li>\n";
-      switch($option) {
-        case "all":
-          $randomImage = getRandomImages(); break;
-        case "album":
-          $randomImage = getRandomImagesAlbum(); break;
-      }
-      $randomImageURL = getURL($randomImage);
-      echo '<a href="' . $randomImageURL . '" title="View image: ' . htmlspecialchars($randomImage->getTitle(), ENT_QUOTES) . '">' .
+  }
+  for ($i=1; $i<=$number; $i++) {
+    echo "<li>\n";
+    switch($option) {
+      case "all":
+        $randomImage = getRandomImages(); break;
+      case "album":
+        $randomImage = getRandomImagesAlbum(); break;
+    }
+    $randomImageURL = getURL($randomImage);
+    echo '<a href="' . $randomImageURL . '" title="View image: ' . htmlspecialchars($randomImage->getTitle(), ENT_QUOTES) . '">' .
       '<img src="' . $randomImage->getThumb() .
       '" alt="'.htmlspecialchars($randomImage->getTitle(), ENT_QUOTES).'"';
-      echo "/></a></li>\n";
-    }
-    echo "</ul>";
+    echo "/></a></li>\n";
   }
+  echo "</ul>";
 }
 
 /**
@@ -3430,7 +3430,11 @@ function checkforPassword($silent=false) {
   if (in_context(ZP_SEARCH)) {  // search page
     $hash = getOption('search_password');
     $hint = getOption('search_hint');
-    if (!is_null($hash)) {
+    if (empty($hash)) {
+      $hash = getOption('gallery_password');
+      $hint = getOption('gallery_hint');
+    }
+    if (!empty($hash)) {
       if ($_zp_album_authorized != $hash) {
         if (!$silent) {
           printPasswordForm($hint);

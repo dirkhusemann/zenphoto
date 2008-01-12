@@ -944,23 +944,25 @@ function zp_mail($subject, $message, $headers = '') {
 /**
   * Adds a subalbum to the zipfile being created
   *
-  * @param string $dir the directory of the album
-  * @param string $subalbum the subalbum
+  * @param string $base the directory of the base album
+  * @param string $offset the from $base to the subalbum
+  * @param string $subalbum the subalbum file name
   * @param object $zip the zipfile
   */
-function zipAddSubalbum($dir, $subalbum, $zip) {
-  if (checkAlbumPassword($dir.$subalbum)) {
-    $rp = $dir.$file;
-    $zip->add_dir($rp);
+function zipAddSubalbum($base, $offset, $subalbum, $zip) {
+  if (checkAlbumPassword($base.$offset.$subalbum)) {
+    $new_offset = $offset.$subalbum.'/';
+    $rp = $base.$new_offset;
+    $zip->add_dir($new_offset);
     $cwd = getcwd();
     chdir($rp);
     if ($dh = opendir($rp)) {
       while (($file = readdir($dh)) !== false) {
         if($file != '.' && $file != '..'){
           if (is_dir($rp.$file)) {
-            zipAddSubalbum($rp, $file, $zip);
+            zipAddSubalbum($base, $new_offset, $file, $zip);
           } else {
-            $z->add_file(file_get_contents($rp . $file), $p . $file);
+            $zip->add_file(file_get_contents($base.$new_offset.$file), $new_offset.$file);
           }
         }
       }
@@ -984,18 +986,13 @@ function zipAddSubalbum($dir, $subalbum, $zip) {
     $p = $album . '/';
     include_once('plugins/zipfile.php');
     $z = new zipfile();
-    $z->add_dir($p);
     if ($dh = opendir($rp)) {
       while (($file = readdir($dh)) !== false) {
         if($file != '.' && $file != '..'){
           if (is_dir($rp.$file)) {
-/*
- * TODO: there are memory problems with this
- * 
- *          zipAddSubalbum($rp, $file, $z);
- */            
+//            zipAddSubalbum($rp, '', $file, $z);
           } else {
-            $z->add_file(file_get_contents($rp . $file), $p . $file);
+            $z->add_file(file_get_contents($rp . $file), $file);
           }
         }
       }
