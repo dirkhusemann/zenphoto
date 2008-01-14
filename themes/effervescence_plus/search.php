@@ -76,7 +76,7 @@ $backgroundImagePath="";
 
 <div id="wrapnav">
   <div id="navbar">
-    <span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Search Page"><?php echo getGalleryTitle();?></a> | Search 
+    <span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Search Page"><?php echo getGalleryTitle();?></a> | <em>Search</em>
   </div>
 </div>
 

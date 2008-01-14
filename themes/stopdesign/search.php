@@ -23,7 +23,7 @@
 	<div id="content">
 
 		<div class="galleryinfo">
-  			<h1>Search Results</h1>
+  			<h1><em>Search</em></h1>
 		</div>
 		<?php
 		$Results = 0;

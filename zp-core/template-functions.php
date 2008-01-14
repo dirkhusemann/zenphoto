@@ -584,15 +584,30 @@ function getParentAlbums() {
 * @param string $after Insert here the text to be printed after the links
 */
 function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
-  $parents = getParentAlbums();
-  $n = count($parents);
-  if ($n == 0) return;
-  $i = 0;
-  foreach($parents as $parent) {
-    if ($i > 0) echo $between;
-    $url = rewrite_path("/" . pathurlencode($parent->name) . "/", "/index.php?album=" . urlencode($parent->name));
-    printLink($url, $parent->getTitle(), $parent->getDesc());
-    $i++;
+  global $_zp_current_search;
+  echo $before;
+  if (in_context(ZP_SEARCH)) {
+    $page = $_zp_current_search->page;
+    $searchwords = $_zp_current_search->words;
+    $searchdate = $_zp_current_search->getSearchDate();
+    $searchfields = $_zp_current_search->getQueryFields();
+    if (getOption('mod_rewrite')) {
+      $searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields).(($page > 1) ? "/" . $page : "") ;
+    } else {
+      $searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields).(($page > 1) ? "&page=" . $page : "") ;
+    }
+    echo "<a href=\"" . $searchpagepath . "\"><em>Search</em></a>";
+  } else {
+    $parents = getParentAlbums();
+    $n = count($parents);
+    if ($n == 0) return;
+    $i = 0;
+    foreach($parents as $parent) {
+      if ($i > 0) echo $between;
+      $url = rewrite_path("/" . pathurlencode($parent->name) . "/", "/index.php?album=" . urlencode($parent->name));
+      printLink($url, $parent->getTitle(), $parent->getDesc());
+      $i++;
+    }
   }
   echo $after;
 }

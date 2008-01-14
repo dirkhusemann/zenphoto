@@ -18,6 +18,8 @@ class SearchEngine
 {
 var $words;
 var $dates;
+var $fields;
+var $page;
 var $images;
 var $albums;
 
@@ -39,7 +41,8 @@ function SearchEngine() {
    *
    * @return string
    */
-  function getSearchParams() {
+function getSearchParams() {
+  global $_zp_page;
   $r = '';
   $w = $this->words;
   if (!empty($w)) { $r .= '&words=' . $w; }
@@ -47,6 +50,10 @@ function SearchEngine() {
   if (!empty($d)) { $r .= '&date=' . $d; }
   $f = $this->fields;
   if (!empty($f)) { $r .= '&searchfields=' . $f; }
+  if ($_zp_page != 1) { 
+    $this->page = $_zp_page;
+    $r .= '&page=' . $_zp_page; 
+  }
   return $r;
 }
 /**
@@ -69,6 +76,9 @@ function setSearchParams($paramstr) {
 	  break;
 	  case 'searchfields':
 	  $this->fields = $v;
+	  break;
+	  case 'page':
+	  $this->page = $v;
 	  break;
     }
   }
