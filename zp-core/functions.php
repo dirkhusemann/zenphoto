@@ -908,7 +908,6 @@ function zp_mail($subject, $message, $headers = '') {
     if (zp_loggedin()) { return true; }
     $album = new album($_zp_gallery, $albumname);
     $hash = $album->getPassword();
-
     if (empty($hash)) {
       $album = $album->getParent();
       while (!is_null($album)) {
@@ -950,18 +949,26 @@ function zp_mail($subject, $message, $headers = '') {
   * @param object $zip the zipfile
   */
 function zipAddSubalbum($base, $offset, $subalbum, $zip) {
-  if (checkAlbumPassword($base.$offset.$subalbum)) {
+  
+//debugLog("zipAddSubalbum base=$base Offset=$offset subalbum=$subalbum");
+
+  if (checkAlbumPassword($offset.$subalbum)) {
     $new_offset = $offset.$subalbum.'/';
     $rp = $base.$new_offset;
-    $zip->add_dir($new_offset);
     $cwd = getcwd();
     chdir($rp);
+    
+//debugLog("dir $rp");
+
     if ($dh = opendir($rp)) {
       while (($file = readdir($dh)) !== false) {
         if($file != '.' && $file != '..'){
           if (is_dir($rp.$file)) {
             zipAddSubalbum($base, $new_offset, $file, $zip);
           } else {
+
+//debugLog("add_file ".$new_offset.$file);
+
             $zip->add_file(file_get_contents($base.$new_offset.$file), $new_offset.$file);
           }
         }
@@ -978,6 +985,9 @@ function zipAddSubalbum($base, $offset, $subalbum, $zip) {
   * @param string $album album folder
   */
   function createAlbumZip($album){
+    
+//debugLog("createAlbumZip album=$album", true);
+
     if (checkforPassword(true)) {
       pageError();
       exit();
@@ -990,8 +1000,14 @@ function zipAddSubalbum($base, $offset, $subalbum, $zip) {
       while (($file = readdir($dh)) !== false) {
         if($file != '.' && $file != '..'){
           if (is_dir($rp.$file)) {
-//            zipAddSubalbum($rp, '', $file, $z);
+            $base_a = explode("/", $album);
+            unset($base_a[count($base_a)-1]);
+            $base = implode('/', $base_a);
+            zipAddSubalbum($rp, $base, $file, $z);
           } else {
+
+//debugLog("add_file ".$file);
+
             $z->add_file(file_get_contents($rp . $file), $file);
           }
         }
@@ -1324,9 +1340,9 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
  * @param string $message the debug information
  * @param bool $reset set to true to reset the log to zero before writing the message
  */
-function debugLog($message, $reset) {
+function debugLog($message, $reset=false) {
   if ($reset) { $mode = 'w'; } else { $mode = 'a'; }
-  $f = fopen(SERVERPATH . ZENFOLDER . 'debug_log.txt', $mode);
+  $f = fopen(SERVERPATH . '/' . ZENFOLDER . '/debug_log.txt', $mode);
   fwrite($f, $message . "\n");
   fclose($f); 
 }
