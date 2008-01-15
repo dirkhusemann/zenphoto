@@ -315,7 +315,6 @@ if (!$checked) {
     }
     $f = '';
     if (!$base) { // try and fix it
-      @chmod(dirname($htfile), 0777);
       @chmod($htfile, 0777);
       if (is_writeable($htfile)) {
         $ht = substr($ht, 0, $i) . "RewriteBase $d\n" . substr($ht, $j+1);
