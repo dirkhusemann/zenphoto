@@ -949,7 +949,8 @@ function zp_mail($subject, $message, $headers = '') {
   */
 function zipAddSubalbum($base, $offset, $subalbum) {
   global $_zp_zip_list;
-  if (checkAlbumPassword($offset.$subalbum)) {
+  $leadin = str_replace(getAlbumFolder(), '', $base);
+  if (checkAlbumPassword($leadin.$offset.$subalbum)) {
     $new_offset = $offset.$subalbum.'/';
     $rp = $base.$new_offset;
     $cwd = getcwd();
@@ -984,35 +985,39 @@ function createAlbumZip($album){
   $p = $album . '/';
   include_once('archive.php');
   $dest = realpath(getAlbumFolder()) . '/' . urlencode($album) . ".zip";
-  unlink($dest);
-  $z = new zip_file($dest);
-  $z->set_options(array('basedir' => $rp, 'inmemory' => 0, 'recurse' => 0, 'storepaths' => 1));
-  if ($dh = opendir($rp)) {
-    $_zp_zip_list[] = '*.*';
+  $persist = getOption('persistent_archive');
+  if (!$persist  || !file_exists($dest)) {
+    if (file_exists($dest)) unlink($dest);
+    $z = new zip_file($dest);
+    $z->set_options(array('basedir' => $rp, 'inmemory' => 0, 'recurse' => 0, 'storepaths' => 1));
+    if ($dh = opendir($rp)) {
+      $_zp_zip_list[] = '*.*';
 
-    while (($file = readdir($dh)) !== false) {
-      if($file != '.' && $file != '..'){
-        if (is_dir($rp.$file)) {
-          $base_a = explode("/", $album);
-          unset($base_a[count($base_a)-1]);
-          $base = implode('/', $base_a);
-          zipAddSubalbum($rp, $base, $file, $z);
+      while (($file = readdir($dh)) !== false) {
+        if($file != '.' && $file != '..'){
+          if (is_dir($rp.$file)) {
+            $base_a = explode("/", $album);
+            unset($base_a[count($base_a)-1]);
+            $base = implode('/', $base_a);
+            zipAddSubalbum($rp, $base, $file, $z);
+          }
         }
       }
+      closedir($dh);
     }
-    closedir($dh);
-  }
-  $z->add_files($_zp_zip_list);
-  $z->create_archive();
-  if (count($z->error) > 0) {
-    debugLog(count($z->error) . " Errors occurred.", true);
-    foreach($z->error as $msg) {
-      debugLog("zip error: ".$msg);
+    $z->add_files($_zp_zip_list);
+    $z->create_archive();
+    if (count($z->error) > 0) {
+      debugLog(count($z->error) . " Errors occurred.", true);
+      foreach($z->error as $msg) {
+        debugLog("zip error: ".$msg);
+      }
     }
   }
   header('Content-Type: application/zip');
   header('Content-Disposition: attachment; filename="' . urlencode($album) . '.zip"');
   echo file_get_contents($dest);
+  if (!$persist) { unlink($dest); }
 }
 
 /**

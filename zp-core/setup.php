@@ -6,7 +6,6 @@ define('OFFSET_PATH', true);
 $setup = true;
 
 if (!$checked && !file_exists('zp-config.php')) {
-  @chmod(dirname(__FILE__), 0777);
   @copy('zp-config.php.example', 'zp-config.php');
 }
 function updateItem($item, $value) {

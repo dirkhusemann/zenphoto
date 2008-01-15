@@ -23,7 +23,7 @@ $standardOptions = array('gallery_title','website_title','website_url','time_off
                          'email_new_comments', 'perform_video_watermark', 'video_watermark_image',
                          'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'search_fields',
                          'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
-                         'allowed_tags', 'full_image_download', 'full_image_quality');
+                         'allowed_tags', 'full_image_download', 'full_image_quality', 'persistent_archive');
 $charsets = array("ASMO-708" => "Arabic",
                   "big5" => "Chinese Traditional",
                   "CP1026" => "IBM EBCDIC (Turkish Latin-5)",
@@ -525,6 +525,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         }
         setOption('gallery_hint', $_POST['gallery_hint']);
         setOption('search_hint', $_POST['search_hint']);
+        setBoolOption('persistent_archive', $_POST['persistent_archive']);
         $returntab = "#tab_gallery";
       }
 
@@ -1504,6 +1505,12 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                         <td>Google Maps API key:</td>
                         <td><input type="text" size="40" name="gmaps_apikey" value="<?php echo getOption('gmaps_apikey');?>" /></td>
                         <td>If you're going to be using Google Maps, <a href="http://www.google.com/apis/maps/signup.html" target="_blank">get an API key</a> and enter it here.</td>
+                    </tr>
+                    <tr>
+                        <td>Enable Persistent Archives:</td>
+                        <td><input type="checkbox" name="persistent_archive" value="1" <?php echo checked('1', getOption('persistent_archive')); ?> /></td>
+                        <td>Put a checkmark here to re-serve Zip Archive files. If not checked they will be regenerated each time. 
+                        <strong>Note: </strong>Setting this option may impact password protected albums!</td>
                     </tr>
                     <tr>
                         <td></td>
