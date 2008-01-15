@@ -340,11 +340,7 @@ function getPageURL_($page, $total) {
     $searchwords = $_zp_current_search->words;
     $searchdate = $_zp_current_search->dates;
     $searchfields = $_zp_current_search->fields;
-    if (getOption('mod_rewrite')) {
-      $searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields).(($page > 1) ? "/" . $page : "") ;
-    } else {
-      $searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields).(($page > 1) ? "&page=" . $page : "") ;
-    }
+    $searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
     return $searchpagepath;
   } else {
     if ($page <= $total && $page > 0) {
@@ -591,11 +587,7 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
     $searchwords = $_zp_current_search->words;
     $searchdate = $_zp_current_search->dates;
     $searchfields = $_zp_current_search->fields;
-    if (getOption('mod_rewrite')) {
-      $searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields).(($page > 1) ? "/" . $page : "") ;
-    } else {
-      $searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields).(($page > 1) ? "&page=" . $page : "") ;
-    }
+    $searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
     echo "<a href=\"" . $searchpagepath . "\"><em>Search</em></a>";
   } else {
     $parents = getParentAlbums();
@@ -2898,7 +2890,7 @@ function printTags($option='links',$preText=NULL,$class='taglist',$separator=', 
       for ($x = 0; $x < $ct; $x++) {
         if ($x === $ct - 1) { $separator = ""; }
         if ($option === "links") {
-          $links1 = "<a href=\"".getSearchURL($singletag[$x], '', SEARCH_TAGS)."\" title=\"".$singletag[$x]."\" rel=\"nofollow\">";
+          $links1 = "<a href=\"".getSearchURL($singletag[$x], '', SEARCH_TAGS, 0, 0)."\" title=\"".$singletag[$x]."\" rel=\"nofollow\">";
           $links2 = "</a>";
         }
         echo "\t<li>".$links1.htmlspecialchars($singletag[$x], ENT_QUOTES).$links2.$separator."</li>\n";
@@ -3001,7 +2993,7 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
       } else {
         $key = str_replace('"', '', $key);
         echo "\t<li style=\"display:inline; list-style-type:none\"><a href=\"".
-        getSearchURL($key, '', SEARCH_TAGS)."\"$size rel=\"nofollow\">".
+        getSearchURL($key, '', SEARCH_TAGS, 0, 0)."\"$size rel=\"nofollow\">".
         $key.$counter."</a></li>\n";
       }
     }
@@ -3062,7 +3054,7 @@ function printAllDates($class='archive', $yearid='year', $monthid='month') {
       if($nr != 1) {  echo "</ul>\n</li>\n";}
       echo "<li $yearid>$year\n<ul $monthid>\n";
     }
-    echo "<li><a href=\"".getSearchURl('', substr($key, 0, 7))."\" rel=\"nofollow\">$month ($val)</a></li>\n";
+    echo "<li><a href=\"".getSearchURl('', substr($key, 0, 7), 0, 0)."\" rel=\"nofollow\">$month ($val)</a></li>\n";
   }
   echo "</ul>\n</li>\n</ul>\n";
 }
@@ -3192,41 +3184,49 @@ function printRSSHeaderLink($option, $linktext) {
  * @return string
  * @since 1.1.3
  */
-function getSearchURL($words, $dates, $fields=0) {
-  if(getOption('mod_rewrite')) {
-	  $url = WEBPATH."/page/search/";
+function getSearchURL($words, $dates, $fields, $page) {
+  if ($mr = getOption('mod_rewrite')) {
+    $url = WEBPATH."/page/search/";
   } else {
-	  $url = WEBPATH."/index.php?p=search";
-  } 
+    $url = WEBPATH."/index.php?p=search";
+  }
 
-	if($fields != 0 && $fields != 4) { 
-    if(getOption('mod_rewrite')) {
-		  $url .= ""; 
-	  } else { 
-		  $url .= "&searchfields=$fields"; 
-	  }
-  } else if ($fields === 4) {
-     if(getOption('mod_rewrite')) {
-		  $url .= "tags/"; 
-	  } else { 
-		  $url .= "&searchfields=$fields"; 
-	  }
+  if ($fields == (SEARCH_TITLE + SEARCH_DESC + SEARCH_TAGS + SEARCH_FILENAME +
+                  SEARCH_LOCATION + SEARCH_CITY + SEARCH_STATE + SEARCH_COUNTRY + SEARCH_FOLDER)) { $fields = 0; }
+
+  if (($fields == SEARCH_TAGS) && $mr ) {
+    $url .= "tags/";
+  }
+
+  if (!empty($words)) {
+    if($mr) {
+      $url .= "$words";
+    } else {
+      $url .= "&words=$words";
+    }
+  }
+
+  if (!empty($dates)) {
+    if($mr) {
+      $url .= "archive/$dates";
+    } else {
+      $url .= "&date=$dates";
+    }
   }
   
-  if (!empty($words)) {
-    if(getOption('mod_rewrite')) {   
-      $url .= "$words"; 
+  if ($page > 1) {
+    if ($mr) {
+      $url .= "/$page";
     } else {
-      $url .= "&words=$words"; 
+      $url .= "&page=$page";
     }
-  }    
-  
-  if (!empty($dates)) {
-    if(getOption('mod_rewrite')) {   
-      $url .= "archive/$dates"; 
+  }
+  if (($fields != 0) && ($fields != SEARCH_TAGS)) {
+    if($mr) {
+      $url .= "?searchfields=$fields";
     } else {
-      $url .= "&date=$dates"; 
-    } 
+      $url .= "&searchfields=$fields";
+    }
   }
   return $url;
 }
