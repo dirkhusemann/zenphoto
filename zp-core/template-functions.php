@@ -589,8 +589,8 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
   if (in_context(ZP_SEARCH)) {
     $page = $_zp_current_search->page;
     $searchwords = $_zp_current_search->words;
-    $searchdate = $_zp_current_search->getSearchDate();
-    $searchfields = $_zp_current_search->getQueryFields();
+    $searchdate = $_zp_current_search->dates;
+    $searchfields = $_zp_current_search->fields;
     if (getOption('mod_rewrite')) {
       $searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields).(($page > 1) ? "/" . $page : "") ;
     } else {
