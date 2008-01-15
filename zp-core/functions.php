@@ -946,30 +946,20 @@ function zp_mail($subject, $message, $headers = '') {
   * @param string $base the directory of the base album
   * @param string $offset the from $base to the subalbum
   * @param string $subalbum the subalbum file name
-  * @param object $zip the zipfile
   */
-function zipAddSubalbum($base, $offset, $subalbum, $zip) {
-  
-//debugLog("zipAddSubalbum base=$base Offset=$offset subalbum=$subalbum");
-
+function zipAddSubalbum($base, $offset, $subalbum) {
+  global $_zp_zip_list;
   if (checkAlbumPassword($offset.$subalbum)) {
     $new_offset = $offset.$subalbum.'/';
     $rp = $base.$new_offset;
     $cwd = getcwd();
     chdir($rp);
-    
-//debugLog("dir $rp");
-
     if ($dh = opendir($rp)) {
+      $_zp_zip_list[] = "./".$new_offset.'*.*';
       while (($file = readdir($dh)) !== false) {
         if($file != '.' && $file != '..'){
           if (is_dir($rp.$file)) {
             zipAddSubalbum($base, $new_offset, $file, $zip);
-          } else {
-
-//debugLog("add_file ".$new_offset.$file);
-
-            $zip->add_file(file_get_contents($base.$new_offset.$file), $new_offset.$file);
           }
         }
       }
@@ -980,44 +970,50 @@ function zipAddSubalbum($base, $offset, $subalbum, $zip) {
 }
 
 /**
-  * Creates a zip file of the album
-  *
-  * @param string $album album folder
-  */
-  function createAlbumZip($album){
-    
-//debugLog("createAlbumZip album=$album", true);
+ * Creates a zip file of the album
+ *
+ * @param string $album album folder
+ */
+function createAlbumZip($album){
+  global $_zp_zip_list;
+  if (checkforPassword(true)) {
+    pageError();
+    exit();
+  }
+  $rp = realpath(getAlbumFolder() . $album) . '/';
+  $p = $album . '/';
+  include_once('archive.php');
+  $dest = realpath(getAlbumFolder()) . '/' . urlencode($album) . ".zip";
+  unlink($dest);
+  $z = new zip_file($dest);
+  $z->set_options(array('basedir' => $rp, 'inmemory' => 0, 'recurse' => 0, 'storepaths' => 1));
+  if ($dh = opendir($rp)) {
+    $_zp_zip_list[] = '*.*';
 
-    if (checkforPassword(true)) {
-      pageError();
-      exit();
-    }
-    $rp = realpath(getAlbumFolder() . $album) . '/';
-    $p = $album . '/';
-    include_once('plugins/zipfile.php');
-    $z = new zipfile();
-    if ($dh = opendir($rp)) {
-      while (($file = readdir($dh)) !== false) {
-        if($file != '.' && $file != '..'){
-          if (is_dir($rp.$file)) {
-            $base_a = explode("/", $album);
-            unset($base_a[count($base_a)-1]);
-            $base = implode('/', $base_a);
-            zipAddSubalbum($rp, $base, $file, $z);
-          } else {
-
-//debugLog("add_file ".$file);
-
-            $z->add_file(file_get_contents($rp . $file), $file);
-          }
+    while (($file = readdir($dh)) !== false) {
+      if($file != '.' && $file != '..'){
+        if (is_dir($rp.$file)) {
+          $base_a = explode("/", $album);
+          unset($base_a[count($base_a)-1]);
+          $base = implode('/', $base_a);
+          zipAddSubalbum($rp, $base, $file, $z);
         }
       }
-      closedir($dh);
     }
-    header('Content-Type: application/zip');
-    header('Content-Disposition: attachment; filename="' . $album . '.zip"');
-    echo $z->file();
+    closedir($dh);
   }
+  $z->add_files($_zp_zip_list);
+  $z->create_archive();
+  if (count($z->error) > 0) {
+    debugLog(count($z->error) . " Errors occurred.", true);
+    foreach($z->error as $msg) {
+      debugLog("zip error: ".$msg);
+    }
+  }
+  header('Content-Type: application/zip');
+  header('Content-Disposition: attachment; filename="' . urlencode($album) . '.zip"');
+  echo file_get_contents($dest);
+}
 
 /**
  * Returns the fully qualified path to the album folders
