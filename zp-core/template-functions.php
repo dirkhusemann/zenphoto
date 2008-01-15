@@ -338,8 +338,8 @@ function getPageURL_($page, $total) {
   global $_zp_current_album, $_zp_gallery, $_zp_current_search;
   if (in_context(ZP_SEARCH)) {
     $searchwords = $_zp_current_search->words;
-    $searchdate = $_zp_current_search->getSearchDate();
-    $searchfields = $_zp_current_search->getQueryFields();
+    $searchdate = $_zp_current_search->dates;
+    $searchfields = $_zp_current_search->fields;
     if (getOption('mod_rewrite')) {
       $searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields).(($page > 1) ? "/" . $page : "") ;
     } else {
@@ -2509,8 +2509,7 @@ function printImageStatistic($number, $option, $album='') {
   $images = getImageStatistic($number, $option, $album);
   echo "\n<div id=\"$option_images\">\n";
   foreach ($images as $image) {
-    $imageURL = getURL($image);
-    echo '<a href="' . $imageURL . '" title="' . htmlspecialchars($image->getTitle(), ENT_QUOTES) . "\">\n";
+    echo '<a href="' . $image->getImageLink() . '" title="' . htmlspecialchars($image->getTitle(), ENT_QUOTES) . "\">\n";
     echo '<img src="' . $image->getThumb() . "\"></a>\n";
   }
   echo "</div>\n";
