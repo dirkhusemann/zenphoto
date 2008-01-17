@@ -289,15 +289,18 @@ var Fat = {
  * version 1.1 2006-05-06
  * http://creativecommons.org/licenses/by-sa/2.5/
  */
-var Fabtabs = Class.create();
+if (typeof Class != "undefined"){
+  var Fabtabs = Class.create();
 
-Fabtabs.prototype = {
+  Fabtabs.prototype = {
 	initialize : function(element) {
 		this.element = $(element);
 		var options = Object.extend({}, arguments[1] || {});
-		this.menu = $A(this.element.getElementsByTagName('a'));
-		this.show(this.getInitialTab());
-		this.menu.each(this.setupTab.bind(this));
+        if(this.element){
+		  this.menu = $A(this.element.getElementsByTagName('a'));
+		  this.show(this.getInitialTab());
+		  this.menu.each(this.setupTab.bind(this));
+        }
 	},
 	setupTab : function(elm) {
 		Event.observe(elm,'click',this.activate.bindAsEventListener(this),false)
@@ -329,6 +332,6 @@ Fabtabs.prototype = {
 			return this.menu.first();
 		}
 	}
+  }
+  Event.observe(window,'load',function(){ new Fabtabs('tabs'); },false);
 }
-
-Event.observe(window,'load',function(){ new Fabtabs('tabs'); },false);
