@@ -3180,7 +3180,8 @@ function printRSSHeaderLink($option, $linktext) {
  *
  * @param string $words the search words target
  * @param string $dates the dates that limit the search
- * @param integer $fields the fields on which to search
+ * @param int $fields the fields on which to search
+ * @param int $page the page number for the URL
  * @return string
  * @since 1.1.3
  */

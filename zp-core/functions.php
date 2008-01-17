@@ -915,8 +915,8 @@ function zp_mail($subject, $message, $headers = '') {
         $authType = "zp_album_auth_" . cookiecode($album->name);
         $saved_auth = $_COOKIE[$authType];
         if (!empty($hash)) {
-          if ($saved_auth == $hash) {
-            return true;
+          if ($saved_auth != $hash) {
+            return false;
           }
         }
         $album = $album->getParent();
@@ -977,7 +977,7 @@ function zipAddSubalbum($base, $offset, $subalbum) {
  */
 function createAlbumZip($album){
   global $_zp_zip_list;
-  if (checkforPassword(true)) {
+  if (!checkAlbumPassword($album)) {
     pageError();
     exit();
   }
