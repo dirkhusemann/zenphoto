@@ -652,9 +652,9 @@ printAdminHeader();
 if (issetPage('edit')) {
   zenSortablesHeader('albumList','albumOrder','div');
 }
+echo "\n</head>";
 ?>
 
-</head>
 <body>
 
 <?php
@@ -1686,7 +1686,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                         </td>
                            <td>
                           Tags and attributes allowed in comments<br/>
-                          Follow the form <em>tag</em> => (<em>attribute</em> => (<em>attribute</em> => (), <em>attribute</em> => ()...)))
+                          Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em> =&gt; (), <em>attribute</em> =&gt; ()...)))
                         </td>
                     </tr>
                      <!-- SPAM filter options -->
@@ -1956,6 +1956,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
   }
 } /* No admin-only content allowed after this bracket! */ ?>
 </div> <!-- main -->
-
 </body>
-</html>
+<?php // to fool the validator
+echo "\n</html>";
+?>

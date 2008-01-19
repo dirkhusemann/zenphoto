@@ -171,7 +171,7 @@ $backgroundImagePath="";
 	       if (isImagePage()) {
 	       ?>
              <div id="flash"><p align=center><font color=#663300>For the best viewing experience <a href="http://www.macromedia.com/go/getflashplayer/">Get Macromedia Flash.</a></p> 
-             <p align=center><a href="
+             <p align="center"><a href="
              <?php 
              if ($imagePage) {
                $url = getPageURL(getTotalPages(true));

@@ -88,7 +88,7 @@
 			  <?php if (OpenedForComments()) { ?>
           		<!-- If comments are on for this image AND album... -->
             	<h3>Add a comment:</h3>
-            	<form name="commentform" id="commentform" action="#comments" method="post">
+            	<form id="commentform" action="#comments" method="post">
               		<input type="hidden" name="comment" value="1" />
               		<input type="hidden" name="remember" value="1" />
                     <?php printCommentErrors(); ?>

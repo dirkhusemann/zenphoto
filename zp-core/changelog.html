@@ -123,7 +123,7 @@
     <li>mod_rewrite rules for sub-albums complete; works to infinite path depth.  <cite>[trisweb]</cite></li>
     <li>Much improved SEO (Search Engine Optimization) - URLs are always 301-redirected to their single canonical form; <a class="bug" href="http://www.zenphoto.org/trac/ticket/16">#16</a> (custom suffix) fixes image pages not appearing in indexes.  <cite>[trisweb]</cite></li>
     <li>Major code refactoring and reorganization.  <cite>[trisweb]</cite></li>
-    <li>Warning if you use the <abbr title="That's incredible, I've got the same combination on my luggage!">default password</abbr>. </small><cite>[Chris S.]</cite> </li>
+    <li>Warning if you use the <abbr title="That's incredible, I've got the same combination on my luggage!">default password</abbr>. <cite>[Chris S.]</cite> </li>
     <li>Better filtering of the album folder/image filename to avoid duplicate database entries. <cite>[trisweb]</cite></li>
     <li>Collected garbage in garbage collection methods. Fixed several bugs. <cite>[trisweb]</cite></li>
     <li>1.0.8.1 - Fixed a bug with the image suffix as '.php' <cite>[trisweb]</cite></li>
@@ -148,7 +148,7 @@
     <li>Bug: image dimensions are now cached in the database again (no functional difference, but much faster). <cite>[trisweb]</cite></li>
     <li>Changed the default RewriteBase in .htaccess to <code>/zenphoto</code> to correspond with the default folder in the package. <cite>[trisweb]</cite></li>
     <li>Now detects changed images and reprocesses them if the cached versions are old. <cite>[trisweb]</cite></li>
-    <li>When an image cannot be found/loaded, an error image is shown instead of no image (passing <code>i.php?...<strong>&debug</strong></code> disables this and shows the error output) <cite>[trisweb]</cite></li>
+    <li>When an image cannot be found/loaded, an error image is shown instead of no image (passing <code>i.php?...<strong>&amp;debug</strong></code> disables this and shows the error output) <cite>[trisweb]</cite></li>
     <li>Other minor bugfixes and code cleanups.</li>
   </ul>
 </div>
@@ -235,7 +235,7 @@
   	<li>Added email notification to the admin user when comments are posted. <cite>[luckyspin]</cite> </li>
   	<li>Admin: Created admin functions to clean up admin page(s). <cite>[luckyspin]</cite></li>
   	<li>Admin: Created an upgrade page to migrate db tables to new schema. <cite>[luckyspin]</cite></li>
-  	<li>Admin: Spruced up some of the admin pages to their L&F was consistent. <cite>[luckyspin]</cite></li>
+  	<li>Admin: Spruced up some of the admin pages to their L&amp;F was consistent. <cite>[luckyspin]</cite></li>
     <li>Improved path resolution; please report any bugs you run into! <cite>[trisweb]</cite></li>
   </ul>
 </div>

@@ -50,6 +50,41 @@ if (getOption('Use_Captcha')) {
   setOption('last_captcha_purge', time());
 }
 
+/*** check validity of mod_rewrite  *******
+if (getOption('mod_rewrite')) {
+  $htfile = '.htaccess';
+  $ht = @file_get_contents($htfile);
+  $htu = strtoupper($ht);
+  $i = strpos($htu, 'REWRITEENGINE');
+  if ($i === false) {
+    $rw = '';
+  } else {
+    $j = strpos($htu, "\n", $i+13);
+    $rw = trim(substr($htu, $i+13, $j-$i-13));
+  }
+  if ($rw != 'ON') {
+    setOption('mod_rewrite', 0);
+    zp_error("The <em>.htaccess</em> Rewrite Engine is not on. <em>mod_rewrite</em> has been reset. Refresh your browser to continue.");
+    exit();
+  } else {
+    $d = dirname(dirname($_SERVER['SCRIPT_NAME']));
+    $i = strpos($htu, 'REWRITEBASE', $j);
+    if ($i === false) {
+      $base = false;
+    } else {
+      $j = strpos($htu, "\n", $i+11);
+      $b = trim(substr($ht, $i+11, $j-$i-11));
+      $base = ($b == $d);
+    }
+    if (!$base) {
+      setOption('mod_rewrite', 0);
+      zp_error("Your rewrite base is not correct. <em>mod_rewrite</em> has been reset. Perhaps you should run " .
+               "<a href=\"".WEBPATH.ZENFOLDER."/setup.php\">Setup</a>. Refresh your browser to continue.");
+      exit();
+    }
+  }
+}
+*** end of check for mod_rewrite ***********/
 
 /*** Request Handler **********************
  ******************************************/

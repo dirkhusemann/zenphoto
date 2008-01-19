@@ -32,6 +32,8 @@ if (!zp_loggedin()) {
   exit(); 
 } else {
   printAdminHeader();
+  echo "\n</head>";
+  echo "\n<body>";
   printLogoAndLinks();
   echo "\n" . '<div id="main">';
   printTabs();
@@ -82,6 +84,7 @@ if (!zp_loggedin()) {
 
   printAdminFooter();
 }
+
+echo "\n</body>";
+echo "\n</head>";
 ?>
-</body>
-</html>

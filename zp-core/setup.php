@@ -175,7 +175,7 @@ if (!$checked) {
     if ($i !== false) {
       $mysqlv = substr($mysqlv, 0, $i);
     }
-    $required = '3.23';
+    $required = '3.23.36';
     $sqlv = versionCheck($required, $mysqlv);;
   }
   if ($cfg) {

@@ -545,6 +545,9 @@ function printAlbumEditRow($album) {
   echo '<td style="text-align: left;" width="45">';
   echo '<a href="?page=edit&album=' . urlencode($album->name) .'" title="Edit this album: ' . $album->name . 
        '"><img height="40" width="40" src="' . $album->getAlbumThumb() . '" /></a>';
+  $c = count($album->getImages());
+  if ($c == 1) $s = ''; else $s = 's';
+  echo '<td style="text-left;" width="80">' . $c . ' Image' . $s . '</td>';
   echo "</td>\n";
   echo '<td  style="text-align: left;font-size:110%;" width="300"> <a href="?page=edit&album=' . urlencode($album->name) . 
        '" title="Edit this album: ' . $album->name . '">' . $album->getTitle() . '</a>';

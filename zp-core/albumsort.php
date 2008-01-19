@@ -10,10 +10,10 @@ printAdminHeader();
 // Print the sortable stuff
 zenSortablesHeader('images','imageOrder','img',"overlap:'horizontal',constraint:false");
 
-
+echo "\n</head>";
 ?>
 
-</head>
+
 <body>
 
 <?php
@@ -99,9 +99,9 @@ if (!zp_loggedin()) {
   <?php zenSortablesFooter(); ?>
   
 </body>
-</html>
 
 <?php
+echo "\n</html>";
   }
 }
 ?>

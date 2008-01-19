@@ -262,10 +262,10 @@ if ($_GET['format'] != 'xml') {
 	    ?>
 <!-- Simpleviewer section -->
 			<div id="flash">
-        	<p align=center>
+        	<p align="center">
 			<font color=#663300>For the best viewing experience <a href="http://www.macromedia.com/go/getflashplayer/">Get Macromedia Flash.</a></font>
 			</p> 
-            <p align=center>
+            <p align="center">
              <?php 
              if ($imagePage) {
                $url = getPageURL(getTotalPages(true));
