@@ -2186,100 +2186,69 @@ function printAlbumZip(){
 }
 
 /**
-* Prints out latest comments for the current image
+* Prints out latest comments for images and albums
 *
 * @param int $number how many comments you want.
-* @param string $type 'images' for image comments, 'albums' for album comments
+* @param string $shorten the number of characters to shorten the comment display
 */
-function printLatestComments($number, $type='images') {
-  echo '<div id="showlatestcomments">';
-  echo '<ul>';
-  $sql = "SELECT c.id, c.name, c.website, c.date, c.comment, "; 
-
-  if ($type=='images') {
-
-    $sql .= "i.title, i.filename, ";
-
-  }
-
-  $sql .= "a.folder, a.title AS albumtitle, ";
-  $sql .= " FROM ".prefix('comments') . " AS c, ";
-
-  if ($type=='images') {
-
-    $sql .= prefix('images') . " AS i, ";
-
-  }
-
-  $sql .= prefix('albums')." AS a ";
-  $sql .= " WHERE `type`=$type AND "; 
-
-  if ($type=='images') {
-
-    $sql .= "c.imageid = i.id AND i.albumid = a.id ";
-
+function printLatestComments($number, $shorten='123') {
+  if (zp_loggedin()) {
+    $passwordcheck1 = "";
+    $passwordcheck2 = "";
   } else {
 
-    $sql .= "c.imageid = a.id ";
-
- 
-
+    $albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
+    foreach ($albumscheck as $albumcheck) {
+      if(!checkAlbumPassword($albumcheck['folder'])) {
+        $albumpasswordcheck1= " AND i.albumid != ".$albumcheck['id'];
+        $albumpasswordcheck2= " AND a.id != ".$albumcheck['id'];
+        $passwordcheck1 = $passwordcheck1.$albumpasswordcheck1;
+        $passwordcheck2 = $passwordcheck2.$albumpasswordcheck2;
+      }
+    }
   }
-
-  $sql .= "ORDER BY c.id DESC LIMIT $number";
-
-  $comments = Query_full_array($sql);
+  if(getOption('mod_rewrite')) {
+    $albumpath = "/"; $imagepath = "/"; $modrewritesuffix = getOption('mod_rewrite_image_suffix');
+  } else {
+    $albumpath = "/index.php?album="; $imagepath = "&image="; $modrewritesuffix = "";
+  }
+  $comments_images = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.type, c.website,"
+  . " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
+  . " WHERE c.imageid = i.id AND i.albumid = a.id AND c.type = 'images'".$passwordcheck1
+  . " ORDER BY c.id DESC LIMIT $number");
+  $comments_albums = query_full_array("SELECT c.id, a.folder, a.title AS albumtitle, c.name, c.type, c.website,"
+  . " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('albums')." AS a "
+  . " WHERE c.imageid = a.id AND c.type = 'albums'".$passwordcheck2
+  . " ORDER BY c.id DESC LIMIT $number");
+  $comments = array_merge($comments_images,$comments_albums);
+  echo "<div id=\"showlatestcomments\">\n";
+  echo "<ul>\n";
+  $count = 0;
   foreach ($comments as $comment) {
+    if($count == $number) {
+      break;
+    }
     $author = $comment['name'];
     $album = $comment['folder'];
-    $image = $comment['filename'];
+    if($comment['type'] === "images") {
+      $imagetag = $imagepath.$comment['filename'].$modrewritesuffix;
+    } else {
+      $imagetag = "";
+    }
+    $date = $comment['date'];
     $albumtitle = $comment['albumtitle'];
-
-    if ($type=='images') {
-      if ($comment['title'] == "")  {
-        $title = $image;
-      }	else {
-        $title = $comment['title'];
-      }
-
-      $title .= ' / ';
-
-    } else {
-
-      $title = '';
-
-    }
+    if ($comment['title'] == "") $title = $image; else $title = $comment['title'];
     $website = $comment['website'];
-    $comment = my_truncate_string($comment['comment'], 40);
-
-    $link = $author.' commented on '.$albumtitle.$title ;
-    $short_link = my_truncate_string($link, 40);
-
-    echo '<li><div class="commentmeta"><a href="';
-
-    if (getOption('mod_rewrite') == false) {
-      echo WEBPATH.'/index.php?album='.urlencode($album);
-
-      if ($type=='images') {
-
-        echo '&image='.urlencode($image).'/"';
-
-      }
-    } else {
-      echo WEBPATH.'/'.$album.'/';
-
-      if ($type=='images') {
-
-        echo $image.'" ';
-
-      }
+    $shortcomment = truncate_string($comment['comment'], $shorten);
+    if(!empty($title)) {
+      $title = ": ".$title;
     }
-
-    echo 'title="'.$link.'">';
-    echo $short_link.'</a>:</div><div class="commentbody">'.$comment.'</div></li>';
+    $count++;
+    echo "<li><a href=\"".WEBPATH.$albumpath.$album.$imagetag."\" class=\"commentmeta\">".$albumtitle.$title." by ".$author."</a><br />\n"; 
+    echo "<span class=\"commentbody\">".$shortcomment."</span></li>";
   }
-  echo '</ul>';
-  echo '</div>';
+  echo "</ul>\n";
+  echo "</div>\n";
 }
 
 /**
@@ -2340,7 +2309,14 @@ function getAlbumStatistic($number=5, $option) {
   if (zp_loggedin()) {
     $albumWhere = "";
   } else {
-    $albumWhere = "WHERE `show`=1 AND `password`=''";
+    $albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
+    foreach($albumscheck as $albumcheck) {
+      if(!checkAlbumPassword($albumcheck['folder'])) {
+        $albumpasswordcheck= " AND id != ".$albumcheck['id'];
+        $passwordcheck = $passwordcheck.$albumpasswordcheck;
+      }
+    }
+    $albumWhere = "WHERE `show`=1".$passwordcheck;
   }
   switch($option) {
     case "popular":
@@ -2447,7 +2423,14 @@ function getImageStatistic($number, $option, $album='') {
     $albumWhere = "";
     $imageWhere = "";
   } else {
-    $albumWhere = " AND albums.show=1 AND albums.password=''";
+    $albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
+    foreach($albumscheck as $albumcheck) {
+      if(!checkAlbumPassword($albumcheck['folder'])) {
+        $albumpasswordcheck= " AND albums.id != ".$albumcheck['id'];
+        $passwordcheck = $passwordcheck.$albumpasswordcheck;
+      }
+    }
+    $albumWhere = " AND albums.show=1".$passwordcheck;
     $imageWhere = " AND images.show=1";
   }
   if(!empty($album)) {
@@ -2468,7 +2451,7 @@ function getImageStatistic($number, $option, $album='') {
   $imageArray = array();
   $images = query_full_array("SELECT images.albumid, images.filename AS filename, images.title AS title, " .
                              "albums.folder AS folder, images.show, albums.show, albums.password FROM " .
-  prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
+                              prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
                               " WHERE ".$specificalbum."images.albumid = albums.id " . $imageWhere . $albumWhere .
                               " AND albums.folder != ''".
                               " ORDER BY ".$sortorder." DESC LIMIT $number");

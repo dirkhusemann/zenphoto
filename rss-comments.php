@@ -4,6 +4,17 @@ header('Content-Type: application/xml');
 require_once(ZENFOLDER . "/template-functions.php");
 $themepath = 'themes';
 
+// check passwords
+$albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
+foreach($albumscheck as $albumcheck) {
+  if(!checkAlbumPassword($albumcheck['folder'])) {
+    $albumpasswordcheck1= " AND i.albumid != ".$albumcheck['id'];
+    $albumpasswordcheck2= " AND a.id != ".$albumcheck['id'];
+    $passwordcheck1 = $passwordcheck1.$albumpasswordcheck1;
+    $passwordcheck2 = $passwordcheck2.$albumpasswordcheck2;
+  }
+}
+
 if(getOption('mod_rewrite')) {
   $albumpath = "/"; $imagepath = "/"; $modrewritesuffix = getOption('mod_rewrite_image_suffix');
 } else {
@@ -11,110 +22,66 @@ if(getOption('mod_rewrite')) {
 }
 $items = getOption('feed_items'); // # of Items displayed on the feed
 ?>
+
 <rss version="2.0">
 <channel>
 <title><?php echo getOption('gallery_title')." - latest comments"; ?></title>
-<link>
-<?php echo "http://".$_SERVER["HTTP_HOST"].WEBPATH; ?>
-</link>
-<description>
-<?php echo getOption('gallery_title'); ?>
-</description>
-<language>
-en-us
-</language>
-<pubDate>
-<?php echo date("r", time()); ?>
-</pubDate>
-<lastBuildDate>
-<?php echo date("r", time()); ?>
-</lastBuildDate>
-<docs>
-http://blogs.law.harvard.edu/tech/rss
-</docs>
-<generator>
-Acrylian's ZenPhoto Comment RSS Generator based on Tris's Latest
-Comments function from zenphoto admin.php
-</generator>
-<managingEditor>
-<?php echo getOption('admin_name'); ?>
-</managingEditor>
-<webMaster>
-<?php echo getOption('admin_name'); ?>
-</webMaster>
+<link><?php echo "http://".$_SERVER["HTTP_HOST"].WEBPATH; ?></link>
+<description><?php echo getOption('gallery_title'); ?></description>
+<language>en-us</language>
+<pubDate><?php echo date("r", time()); ?></pubDate>
+<lastBuildDate><?php echo date("r", time()); ?></lastBuildDate>
+<docs>http://blogs.law.harvard.edu/tech/rss</docs>
+<generator>Acrylian's ZenPhoto Comment RSS Generator based on Tris' LatestComments function from zenphoto admin.php</generator>
+<managingEditor><?php echo getOption('admin_name'); ?></managingEditor>
+<webMaster><?php echo getOption('admin_name'); ?></webMaster>
+
 <?php
 db_connect();
-$comments = query_full_array("SELECT `id`, `name`, `website`, `type`, `imageid`,"
-                           . " date, comment, email, inmoderation FROM ".prefix('comments')
-                           . " ORDER BY id DESC LIMIT $items" );
+$comments_images = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.type, c.website," 
+. " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a " 
+. " WHERE c.imageid = i.id AND i.albumid = a.id AND c.type = 'images'".$passwordcheck1
+. " ORDER BY c.id DESC LIMIT $items");
+
+$comments_albums = query_full_array("SELECT c.id, a.folder, a.title AS albumtitle, c.name, c.type, c.website," 
+. " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('albums')." AS a " 
+. " WHERE c.imageid = a.id AND c.type = 'albums'".$passwordcheck2
+. " ORDER BY c.id DESC LIMIT $items"); 
+
+$comments = array_merge($comments_images,$comments_albums);
+$count = 0;
 foreach ($comments as $comment) {
-  $id = $comment['id'];
-  $author = $comment['name'];
-  $email = $comment['email'];
-  if ($comment['type']=='images') {
-    $imagedata = query_full_array("SELECT `title`, `filename`, `albumid` FROM ". prefix('images') .
-                     " WHERE `id`=" . $comment['imageid']);
-    if ($imagedata) {
-      $imgdata = $imagedata[0];
-      $image = $imgdata['filename'];
-      if ($imgdata['title'] == "") $title = $image; else $title = $imgdata['title'];
-      $title = '/ ' . $title;
-      $imagetag = $imagepath.$image.$modrewritesuffix;
-      $albmdata = query_full_array("SELECT `folder`, `title` FROM ". prefix('albums') .
-                       " WHERE `id`=" . $imgdata['albumid']);
-      if ($albmdata) {
-        $albumdata = $albmdata[0];
-        $album = $albumdata['folder'];
-        $albumtitle = $albumdata['albumtitle'];
-        if (empty($albumtitle)) $albumtitle = $album;
-      } else {
-        $title = 'database error';
-      }
-    } else {
-      $title = 'database error';
-    }
-  } else {
-    $image = '';
-    $imagetag= '';
-    $title = '';
-    $albmdata = query_full_array("SELECT `title`, `folder` FROM ". prefix('albums') .
-                     " WHERE `id`=" . $comment['imageid']);
-    if ($albmdata) {
-      $albumdata = $albmdata[0];
-      $album = $albumdata['folder'];
-      $albumtitle = $albumdata['albumtitle'];
-      if (empty($albumtitle)) $albumtitle = $album;
-    } else {
-      $title = 'database error';
-    }
+  if($count == $items) { 
+    break; 
   }
-$date = $comment['date'];
-  $website = $comment['website'];
-  $shortcomment = truncate_string($comment['comment'], 123);
-  $fullcomment = $comment['comment'];
-  $inmoderation = $comment['inmoderation'];
-  ?>
+	$author = $comment['name'];
+	$album = $comment['folder'];
+	if($comment['type'] === "images") {
+	  $imagetag = $imagepath.$comment['filename'].$modrewritesuffix;
+	} else {
+		$imagetag = "";
+  }
+	$date = $comment['date'];
+	$albumtitle = $comment['albumtitle'];
+	if ($comment['title'] == "") $title = $image; else $title = $comment['title'];
+	$website = $comment['website'];
+	$shortcomment = truncate_string($comment['comment'], 123);
+  if(!empty($title)) {
+    $title = ": ".$title;
+  } 
+  $count++;
+?>
+
 <item>
-<title><?php echo $albumtitle.": ".$title." by ".$author; ?></title>
-<link>
-  <?php echo '<![CDATA[http://'.$_SERVER['HTTP_HOST'].WEBPATH.$albumpath.$album.$imagetag.']]>';?>
-</link>
-<dc:creator>
-<?php echo $author; ?>
-</dc:creator>
-<description>
-<?php echo $shortcomment; ?>
-</description>
-<category>
-<?php echo $albumtitle; ?>
-</category>
-<guid>
-<?php echo '<![CDATA[http://'.$_SERVER['HTTP_HOST'].WEBPATH.$albumpath.$album.$imagetag.']]>';?>
-</guid>
-<pubDate>
-<?php echo $date; ?>
-</pubDate>
+<title><?php echo $albumtitle.$title." by ".$author; ?></title>
+<link><?php echo '<![CDATA[http://'.$_SERVER['HTTP_HOST'].WEBPATH.$albumpath.$album.$imagetag.']]>';?></link>
+<dc:creator><?php echo $author; ?></dc:creator>
+<description><?php echo $shortcomment; ?></description>
+<category><?php echo $albumtitle; ?></category>
+<guid><?php echo '<![CDATA[http://'.$_SERVER['HTTP_HOST'].WEBPATH.$albumpath.$album.$imagetag.']]>';?></guid>
+<pubDate><?php echo $date; ?></pubDate>
 </item>
 <?php } ?>
 </channel>
 </rss>
+
