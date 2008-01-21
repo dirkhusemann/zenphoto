@@ -4,9 +4,18 @@ header('Content-Type: application/xml');
 require_once(ZENFOLDER . "/template-functions.php");
 $themepath = 'themes';
 
-
 $albumnr = $_GET[albumnr];
 $albumname = $_GET[albumname];
+
+// check passwords
+$albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
+foreach($albumscheck as $albumcheck) {
+echo $album['title'];
+	if(!checkAlbumPassword($albumcheck['folder'])) {
+		$albumpasswordcheck= " AND albums.id != ".$albumcheck['id'];
+		$passwordcheck = $passwordcheck.$albumpasswordcheck;
+	} 
+}
 
 if ($albumname != "") { $albumname = " - for album: ".$_GET[albumname]; }
 if(getOption('mod_rewrite'))
@@ -34,7 +43,6 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 
 db_connect();
 
-
 if (is_numeric($albumnr) && $albumnr != "") { 
 	$albumWhere = "images.albumid = $albumnr AND";
 } else {
@@ -45,8 +53,8 @@ if (is_numeric($albumnr) && $albumnr != "") {
 $result = query_full_array("SELECT images.albumid, images.date AS date, images.filename AS filename, images.title AS title, " .
                              "albums.folder AS folder, albums.title AS albumtitle, images.show, albums.show, albums.password FROM " . 
                               prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
-                              " WHERE ".$albumWhere." images.albumid = albums.id AND images.show=1 AND albums.show=1 AND albums.password=''".
-                              " AND albums.folder != ''".
+                              " WHERE ".$albumWhere." images.albumid = albums.id AND images.show=1 AND albums.show=1 ".
+                              " AND albums.folder != ''".$passwordcheck.
                               " ORDER BY images.id DESC LIMIT ".$items);
 
 foreach ($result as $images) {
