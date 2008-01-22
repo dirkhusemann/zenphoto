@@ -2,6 +2,9 @@
 session_start();
 define('OFFSET_PATH', true);
 require_once("sortable.php");
+if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
+  header("Location: setup.php");
+}
 $adm = getOption('adminuser');
 $pas = getOption('adminpass');
 $rsd = getOption('admin_reset_date');

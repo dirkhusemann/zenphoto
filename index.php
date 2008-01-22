@@ -1,6 +1,9 @@
 <?php 
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 require_once(ZENFOLDER . "/template-functions.php");
+if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
+  header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
+}
 $themepath = 'themes';
 $theme = $_zp_gallery->getCurrentTheme();
 $_zp_themeroot = WEBPATH . "/$themepath/$theme";

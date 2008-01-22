@@ -14,6 +14,8 @@ function setDefault($option, $default) {
   global $_zp_conf_vars, $_zp_options;
   $conf = $_zp_conf_vars;
   
+  setOption('zenphoto_release', ZENPHOTO_RELEASE); 
+  
   setDefault('gallery_title', "Gallery");
   setDefault('gallery_password', '');
   setDefault('gallery_hint', NULL);

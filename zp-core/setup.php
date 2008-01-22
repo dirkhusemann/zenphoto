@@ -259,11 +259,17 @@ if (!$checked) {
             }
             $report .= " *";
           }
+          if ($found) {
+            $rights = 'insufficient';
+          } else {
+            $rights = 'unknown';
+          }
         }
       } else {
         $report = "<br/><br/>The <em>SHOW GRANTS</em> query failed.";
+        $rights = 'unknown';
       }
-    checkMark($access, " mySQL access rights", " [insufficient rights]", 
+    checkMark($access, " mySQL access rights", " [$rights]", 
                        "Your mySQL user must have <code>Select</code>, <code>Insert</code>, ". 
                        "<code>Update</code>, and <code>Delete</code> rights." . $report);
       
