@@ -48,7 +48,7 @@ if (!file_exists(SERVERPATH . "/" . $obj)) {
 }
 $a = explode("/", $obj);
 if ($a[count($a)-1] != 'full-image.php') {
-  echo "\n<!-- zenphoto version " . getOption('version') . " Theme: " . $theme . " (" . $a[count($a)-1] . ") -->";
+  echo "\n<!-- zenphoto version " . getOption('version') . " r-" . ZENPHOTO_RELEASE . " Theme: " . $theme . " (" . $a[count($a)-1] . ") -->";
 }
 
 

@@ -37,8 +37,8 @@ else
 <managingEditor><?php echo getOption('admin_name'); ?></managingEditor>
 <webMaster><?php echo getOption('admin_name'); ?></webMaster>
 <?php 
-$iw = $cw = 400; // Image Width
-$ih = $ch = 300; // Image Height
+$iw = $cw = 250; // Image Width
+$ih = $ch = 250; // Image Height
 $items = getOption('feed_items'); // # of Items displayed on the feed
 
 db_connect();
