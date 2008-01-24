@@ -4,8 +4,8 @@ header('Content-Type: application/xml');
 require_once(ZENFOLDER . "/template-functions.php");
 $themepath = 'themes';
 
-$albumnr = $_GET[albumnr];
-$albumname = $_GET[albumname];
+$albumnr = sanitize_numeric($_GET[albumnr]);
+$albumname = sanitize($_GET[albumname], true);
 
 // check passwords
 $albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
@@ -17,7 +17,7 @@ echo $album['title'];
 	} 
 }
 
-if ($albumname != "") { $albumname = " - for album: ".$_GET[albumname]; }
+if ($albumname != "") { $albumname = " - for album: ".$albumname; }
 if(getOption('mod_rewrite'))
  { $albumpath = "/"; $imagepath = "/"; $modrewritesuffix = getOption('mod_rewrite_image_suffix'); }
 else
