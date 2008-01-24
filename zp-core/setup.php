@@ -180,12 +180,17 @@ if (!$checked) {
   }
   if ($cfg) {
     @chmod('zp-config.php', 0777);
-    $mySQLadmin = (empty($_zp_conf_vars['mysql_user']) || ($_zp_conf_vars['mysql_user'] == "")) ||
-                  (empty($_zp_conf_vars['mysql_pass']) || $_zp_conf_vars['mysql_pass'] == "") ||
-                  (empty($_zp_conf_vars['mysql_database']) || $_zp_conf_vars['mysql_database'] == "");
-	if (($mySQLadmin || !$sql || !$connection  || !$db) && is_writable('zp-config.php')) {
-	  $good = checkMark(false, " mySQL setup in zp-config.php", '', '') && $good;
-	  // input form for the information
+    $mySQLadmin = (empty($_zp_conf_vars['mysql_user']) 
+        || empty($_zp_conf_vars['mysql_pass']) 
+        || empty($_zp_conf_vars['mysql_database']) 
+      || ($_zp_conf_vars['mysql_user'] == 'user' 
+        && $_zp_conf_vars['mysql_pass'] == 'pass' 
+        && $_zp_conf_vars['mysql_database'] = 'database_name') 
+      );
+	
+    if (($mySQLadmin || !$sql || !$connection  || !$db) && is_writable('zp-config.php')) {
+      $good = checkMark(false, " mySQL setup in zp-config.php", '', '') && $good;
+      // input form for the information
 ?>
       <div class="error">
 	  Fill in the missing information below and <strong>setup</strong> will attempt to update your <code>zp-config.php</code> file.<br/><br/>
