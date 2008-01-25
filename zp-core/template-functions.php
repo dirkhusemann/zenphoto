@@ -739,11 +739,11 @@ function setAlbumCustomData($val) {
 * @return string
 */
 function getAlbumLinkURL() {
+  global $_zp_current_album, $_zp_current_image;
   $page = 0;
   if (in_context(ZP_IMAGE) && !in_context(ZP_SEARCH)) {
     $page = $_zp_current_image->getAlbumPage();
   }
-  global $_zp_current_album, $_zp_current_image;
   if (in_context(ZP_IMAGE) && $page > 1) {
     // Link to the page the current image belongs to.
     return rewrite_path("/" . pathurlencode($_zp_current_album->name) . "/page/" . $page,

@@ -1,5 +1,5 @@
 <?php
-define('ZENPHOTO_RELEASE', 1071);
+define('ZENPHOTO_RELEASE', 1072);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 
 // Set the memory limit higher just in case -- supress errors if user doesn't have control.
