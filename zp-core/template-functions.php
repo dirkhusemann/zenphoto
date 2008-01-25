@@ -577,11 +577,10 @@ function getParentAlbums() {
  *
  * @param string $before Text to place before the breadcrumb
  * @param string $after Text to place after the breadcrumb
+ * @param string $title Text to be used as the URL title tag
  */
 function printAlbumBreadcrumb($before='', $after='', $title='Album Thumbnails') {
-  if (!in_context(ZP_SEARCH)) {
-    echo "$before<a href=\"" . getAlbumLinkURL(). "\" title=\"$title\">" . getAlbumTitle() . "</a>$after";
-  }
+  echo "$before<a href=\"" . getAlbumLinkURL(). "\" title=\"$title\">" . getAlbumTitle() . "</a>$after";
 }
 
 /**
@@ -740,11 +739,16 @@ function setAlbumCustomData($val) {
 * @return string
 */
 function getAlbumLinkURL() {
+  if (in_context(ZP_SEARCH)) {
+    $page = 1;
+  } else {
+    $page = $_zp_current_image->getAlbumPage();
+  }
   global $_zp_current_album, $_zp_current_image;
-  if (in_context(ZP_IMAGE) && $_zp_current_image->getAlbumPage() > 1) {
+  if (in_context(ZP_IMAGE) && $page > 1) {
     // Link to the page the current image belongs to.
-    return rewrite_path("/" . pathurlencode($_zp_current_album->name) . "/page/" . $_zp_current_image->getAlbumPage(),
-      "/index.php?album=" . urlencode($_zp_current_album->name) . "&page=" . $_zp_current_image->getAlbumPage());
+    return rewrite_path("/" . pathurlencode($_zp_current_album->name) . "/page/" . $page,
+      "/index.php?album=" . urlencode($_zp_current_album->name) . "&page=" . $page);
   } else {
     return rewrite_path("/" . pathurlencode($_zp_current_album->name) . "/",
       "/index.php?album=" . urlencode($_zp_current_album->name));
@@ -3012,7 +3016,7 @@ function getAllDates() {
   }
   foreach ($alldates as $adate) {
     if (!empty($adate)) {
-      $cleandates[] = substr($adate, 0, 7) . "-01";;
+      $cleandates[] = substr($adate, 0, 7) . "-01";
     }
   }
   $datecount = array_count_values($cleandates);
@@ -3190,10 +3194,18 @@ function getSearchURL($words, $dates, $fields, $page) {
   if ($fields == (SEARCH_TITLE + SEARCH_DESC + SEARCH_TAGS + SEARCH_FILENAME +
                   SEARCH_LOCATION + SEARCH_CITY + SEARCH_STATE + SEARCH_COUNTRY + SEARCH_FOLDER)) { $fields = 0; }
 
-  if (($fields == SEARCH_TAGS) && $mr ) {
-    $url .= "tags/";
+  if (($fields != 0)) {
+    if($mr) {
+      if ($fields == SEARCH_TAGS) {
+        $url .= "tags/";
+      } else {
+        $url .= "fields$fields/";
+      }
+    } else {
+      $url .= "&searchfields=$fields";
+    }
   }
-
+  
   if (!empty($words)) {
     if($mr) {
       $url .= "$words";
@@ -3215,13 +3227,6 @@ function getSearchURL($words, $dates, $fields, $page) {
       $url .= "/$page";
     } else {
       $url .= "&page=$page";
-    }
-  }
-  if (($fields != 0) && ($fields != SEARCH_TAGS)) {
-    if($mr) {
-      $url .= "?searchfields=$fields";
-    } else {
-      $url .= "&searchfields=$fields";
     }
   }
   return $url;
@@ -3248,7 +3253,7 @@ function getSearchURL($words, $dates, $fields, $page) {
 function printSearchForm($prevtext=NULL, $fieldSelect=NULL, $id='search') {
   $zf = WEBPATH."/".ZENFOLDER;
   $dataid = $id . '_data';
-  $searchwords = (isset($_POST['words']) ? sanitize($_REQUEST['words']) : '');
+  $searchwords = (isset($_POST['words']) ? sanitize($_REQUEST['words'], true) : '');
 
   echo "\n<div id=\"search\">";
   echo "\n<form method=\"post\" action=\"".WEBPATH."/index.php?p=search\" id=\"search_form\">";
