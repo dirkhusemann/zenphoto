@@ -30,7 +30,7 @@
 <div id="main">
 	<div id="gallerytitle">
     	<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?>
-          </a> | <?php printParentBreadcrumb(); ?><a href="<?php echo getAlbumLinkURL();?>" title="Album Thumbnails"><?php echo getAlbumTitle();?></a> | 
+          </a> | <?php printParentBreadcrumb(); printAlbumBreadcrumb("", " | "); ?>
           </span> <?php printImageTitle(true); ?></h2>
   	</div>
   

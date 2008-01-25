@@ -125,7 +125,7 @@
 		</div>
 	</div>
 
-	<p id="path"><?php printHomeLink('', ' > '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> &gt; Search Results</p>  
+	<p id="path"><?php printHomeLink('', ' > '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> &gt; <em>Search</em></p>  
 
 	<div id="footer">
   		<hr />

@@ -573,6 +573,18 @@ function getParentAlbums() {
 }
 
 /**
+ * prints the breadcrumb item for the current images's album
+ *
+ * @param string $before Text to place before the breadcrumb
+ * @param string $after Text to place after the breadcrumb
+ */
+function printAlbumBreadcrumb($before='', $after='', $title='Album Thumbnails') {
+  if (!in_context(ZP_SEARCH)) {
+    echo "$before<a href=\"" . getAlbumLinkURL(). "\" title=\"$title\">" . getAlbumTitle() . "</a>$after";
+  }
+}
+
+/**
 * Prints the breadcrumb navigation for album, gallery and image view.
 *
 * @param string $before Insert here the text to be printed before the links
