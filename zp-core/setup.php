@@ -604,16 +604,6 @@ if (!$checked) {
       // set defaults on any options that need it
       require('option-defaults.php');
 
-      if ($task == 'update') {
-        echo "<h3>Cleaning up...</h3>";
-        require_once("admin-functions.php");
-        $gallery = new Gallery();
-        $gallery->clearCache();
-
-        $needsrefresh = $gallery->garbageCollect(true, true);
-      } else {
-        $needsrefresh = false;
-      }
 
       echo "<h3>Done with table $task!</h3>";
 
@@ -625,9 +615,6 @@ if (!$checked) {
         echo "<p>You need to <a href=\"admin.php?page=options\">set your admin user and password</a>.</p>";
       } else {
         echo "<p>You can now <a href=\"../\">View your gallery</a>, or <a href=\"admin.php\">administrate.</a></p>";
-      }
-      if ($needsrefresh) {
-        echo "<p>The database refresh stopped early due to processing time. You may need to run refresh again from the admin pages.</a></p>";
       }
 
     } else if (db_connect()) {
