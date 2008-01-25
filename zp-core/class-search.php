@@ -66,7 +66,7 @@ function setSearchParams($paramstr) {
   foreach ($params as $param) {
     $e = strpos($param, '=');
 	$p = substr($param, 0, $e);
-	$v = substr($param, $e + 1);
+	$v = sanitize(substr($param, $e + 1), true);
     switch($p) {
 	  case 'words':
 	  $this->words = $v;
