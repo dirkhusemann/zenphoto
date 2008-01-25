@@ -196,7 +196,7 @@ function getSearchSQL($searchstring, $searchdate, $tbl, $fields) {
     $sql .= ",`albumid`,`filename`,`location`,`city`,`state`,`country`";
   }
   $sql .= " FROM ".prefix($tbl)." WHERE ";
-  if(!zp_loggedin()) { $sql .= "`show` = 1 AND"; }
+  if(!zp_loggedin()) { $sql .= "`show` = 1 AND ("; }
   
   $nr = 0;
   foreach($searchstring as $singlesearchstring){
@@ -259,6 +259,8 @@ function getSearchSQL($searchstring, $searchdate, $tbl, $fields) {
       $sql .= "`date` >= \"$d1\" AND `date` < \"$d2\""; 
 	}
   }
+  if(!zp_loggedin()) { $sql .= ")"; }
+  
   if ($nr == 0) { return NULL; } // no valid fields
   return $sql;
 }

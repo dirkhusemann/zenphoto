@@ -739,9 +739,8 @@ function setAlbumCustomData($val) {
 * @return string
 */
 function getAlbumLinkURL() {
-  if (in_context(ZP_SEARCH)) {
-    $page = 1;
-  } else {
+  $page = 0;
+  if (in_context(ZP_IMAGE) && !in_context(ZP_SEARCH)) {
     $page = $_zp_current_image->getAlbumPage();
   }
   global $_zp_current_album, $_zp_current_image;
@@ -3192,9 +3191,8 @@ function getSearchURL($words, $dates, $fields, $page) {
   }
 
   if ($fields == (SEARCH_TITLE + SEARCH_DESC + SEARCH_TAGS + SEARCH_FILENAME +
-                  SEARCH_LOCATION + SEARCH_CITY + SEARCH_STATE + SEARCH_COUNTRY + SEARCH_FOLDER)) { $fields = 0; }
-
-  if (($fields != 0)) {
+                  SEARCH_LOCATION + SEARCH_CITY + SEARCH_STATE + SEARCH_COUNTRY)) { $fields = 0; }
+  if (($fields != 0) && empty($dates)) {
     if($mr) {
       if ($fields == SEARCH_TAGS) {
         $url .= "tags/";

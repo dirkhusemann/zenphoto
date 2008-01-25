@@ -6,6 +6,7 @@ $themepath = 'themes';
 
 $albumnr = sanitize_numeric($_GET[albumnr]);
 $albumname = sanitize($_GET[albumname], true);
+$host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 
 // check passwords
 $albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
@@ -27,7 +28,7 @@ else
 <rss version="2.0">
 <channel>
 <title><?php echo getOption('gallery_title'); ?><?php echo $albumname; ?></title>
-<link><?php echo "http://".$_SERVER["HTTP_HOST"].WEBPATH; ?></link>
+<link><?php echo "http://".$host.WEBPATH; ?></link>
 <description><?php echo getOption('gallery_title'); ?></description>
 <language>en-us</language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
@@ -37,8 +38,7 @@ else
 <managingEditor><?php echo getOption('admin_name'); ?></managingEditor>
 <webMaster><?php echo getOption('admin_name'); ?></webMaster>
 <?php 
-$iw = $cw = 250; // Image Width
-$ih = $ch = 250; // Image Height
+$s = 240; // uncropped image size
 $items = getOption('feed_items'); // # of Items displayed on the feed
 
 db_connect();
@@ -57,8 +57,6 @@ $result = query_full_array("SELECT images.albumid, images.date AS date, images.f
                               " AND albums.folder != ''".$passwordcheck.
                               " ORDER BY images.id DESC LIMIT ".$items);
 
-$host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
-
 foreach ($result as $images) {
   $images['folder'] = rawurlencode($images['folder']);
   $images['filename'] = rawurlencode($images['filename']);
@@ -67,7 +65,7 @@ foreach ($result as $images) {
 <item>
 	<title><?php echo $images['title']; ?></title>
 	<link><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix. ']]>';?></link>
-	<description><?php echo '<![CDATA[<a title="'.$images['title'].' in '.$images['albumtitle'].'" href="http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix.'"><img border="0" src="http://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$images['folder'].'&i='.$images['filename'].'&w='.$iw.'&h='.$ih.'&cw='.$cw.'&ch='.$ch.'" alt="'. $images['title'] .'"></a>' . $images['desc'] . ']]>';?> <?php if($exif['datetime']) { echo '<![CDATA[Date: ' . $exif['datetime'] . ']]>'; } ?></description>
+	<description><?php echo '<![CDATA[<a title="'.$images['title'].' in '.$images['albumtitle'].'" href="http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix.'"><img border="0" src="http://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$images['folder'].'&i='.$images['filename'].'&s='.$s.'" alt="'. $images['title'] .'"></a>' . $images['desc'] . ']]>';?> <?php if($exif['datetime']) { echo '<![CDATA[Date: ' . $exif['datetime'] . ']]>'; } ?></description>
     <category><?php echo $images['title']; ?></category>
 	<guid><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix. ']]>';?></guid>
 	<pubDate><?php echo $images['date']; ?></pubDate> 

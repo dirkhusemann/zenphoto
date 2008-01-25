@@ -272,9 +272,16 @@ if (!$checked) {
       
     $sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$_zp_conf_vars['mysql_prefix']."%';";
     $result = mysql_query($sql, $mysql_connection);
+    $tablelist = '';
+    if ($result) {
+      while ($row = mysql_fetch_row($result)) {
+        $tableslist .= $row[0] . ", ";
+      }
+    }
+    if (!empty($tableslist)) { $tableslist = " found " . substr($tableslist, 0, -2); }
     if (!$result) { $result = -1; }
     $dbn = $_zp_conf_vars['mysql_database'];
-    checkMark($result, " mySQL <em>show tables</em>", " [Failed]", "mySQL did not return a list of the database tables for <code>$dbn</code>." .
+    checkMark($result, " mySQL <em>show tables</em>$tableslist", " [Failed]", "mySQL did not return a list of the database tables for <code>$dbn</code>." .
                        "<br/><strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables.");
 
   }
