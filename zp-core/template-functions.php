@@ -3236,7 +3236,7 @@ function getSearchURL($words, $dates, $fields, $page) {
 function printSearchForm($prevtext=NULL, $fieldSelect=NULL, $id='search') {
   $zf = WEBPATH."/".ZENFOLDER;
   $dataid = $id . '_data';
-  $searchwords = (isset($_POST['words']) ? htmlspecialchars(stripslashes($_REQUEST['words']), ENT_QUOTES) : '');
+  $searchwords = (isset($_POST['words']) ? sanitize($_REQUEST['words']) : '');
 
   echo "\n<div id=\"search\">";
   echo "\n<form method=\"post\" action=\"".WEBPATH."/index.php?p=search\" id=\"search_form\">";

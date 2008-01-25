@@ -90,7 +90,7 @@ function setSearchParams($paramstr) {
  * @return string
  */
 function getSearchWords() {
-  $this->words = $_REQUEST['words'];
+  $this->words = sanitize($_REQUEST['words']);
   return $this->words;
 }
 
@@ -100,7 +100,7 @@ function getSearchWords() {
  * @return string
  */
 function getSearchDate() {
-  $this->dates = $_REQUEST['date'];
+  $this->dates = sanitize($_REQUEST['date']);
   return $this->dates;
 }
 
