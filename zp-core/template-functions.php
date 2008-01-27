@@ -2497,7 +2497,7 @@ function getImageStatistic($number, $option, $album='') {
  */
 function printImageStatistic($number, $option, $album='') {
   $images = getImageStatistic($number, $option, $album);
-  echo "\n<div id=\"$option_images\">\n";
+  echo "\n<div id=\"$option\">\n";
   foreach ($images as $image) {
     echo '<a href="' . $image->getImageLink() . '" title="' . htmlspecialchars($image->getTitle(), ENT_QUOTES) . "\">\n";
     echo '<img src="' . $image->getThumb() . "\"></a>\n";
