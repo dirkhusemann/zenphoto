@@ -4,6 +4,8 @@ header('Content-Type: application/xml');
 require_once(ZENFOLDER . "/template-functions.php");
 $themepath = 'themes';
 
+$host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
+
 // check passwords
 $albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
 foreach($albumscheck as $albumcheck) {
@@ -26,7 +28,7 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 <rss version="2.0">
 <channel>
 <title><?php echo getOption('gallery_title')." - latest comments"; ?></title>
-<link><?php echo "http://".$_SERVER["HTTP_HOST"].WEBPATH; ?></link>
+<link><?php echo "http://".$host.WEBPATH; ?></link>
 <description><?php echo getOption('gallery_title'); ?></description>
 <language>en-us</language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
@@ -74,11 +76,11 @@ foreach ($comments as $comment) {
 
 <item>
 <title><?php echo $albumtitle.$title." by ".$author; ?></title>
-<link><?php echo '<![CDATA[http://'.$_SERVER['HTTP_HOST'].WEBPATH.$albumpath.$album.$imagetag.']]>';?></link>
+<link><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$album.$imagetag.']]>';?></link>
 <dc:creator><?php echo $author; ?></dc:creator>
 <description><?php echo $shortcomment; ?></description>
 <category><?php echo $albumtitle; ?></category>
-<guid><?php echo '<![CDATA[http://'.$_SERVER['HTTP_HOST'].WEBPATH.$albumpath.$album.$imagetag.']]>';?></guid>
+<guid><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$album.$imagetag.']]>';?></guid>
 <pubDate><?php echo $date; ?></pubDate>
 </item>
 <?php } ?>
