@@ -37,7 +37,7 @@ if (getOption('Use_Captcha')) {
   $expire = time() - 86400;
   if ($d > $expire) {
     chdir(SERVERCACHE . "/");
-    $filelist = glob('code_*.png');
+    $filelist = safe_glob('code_*.png');
     if ($filelist) {
       foreach ($filelist as $file) {
         $file = SERVERCACHE . "/" . $file;

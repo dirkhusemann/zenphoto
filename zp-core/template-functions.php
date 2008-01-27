@@ -3249,6 +3249,7 @@ function getSearchURL($words, $dates, $fields, $page) {
  * @since 1.1.3
  */
 function printSearchForm($prevtext=NULL, $fieldSelect=NULL, $id='search') {
+  if (checkforPassword(silent)) { return; }
   $zf = WEBPATH."/".ZENFOLDER;
   $dataid = $id . '_data';
   $searchwords = (isset($_POST['words']) ? sanitize($_REQUEST['words'], true) : '');
@@ -3460,7 +3461,7 @@ function normalizeColumns($albumColumns, $imageColumns) {
  */
 function checkforPassword($silent=false) {
   global $_zp_current_album, $_zp_current_search, $_zp_album_authorized, $_zp_gallery;
-  if (ZP_loggedin()) { return false; }  // you're the admin, you don't need the passwords.
+  if (zp_loggedin()) { return false; }  // you're the admin, you don't need the passwords.
   if (in_context(ZP_SEARCH)) {  // search page
     $hash = getOption('search_password');
     $hint = getOption('search_hint');
@@ -3477,10 +3478,9 @@ function checkforPassword($silent=false) {
       }
     }
   } else if (isset($_GET['album'])) {  // album page
-    $album = new album($_zp_gallery, $_GET['album']);
+    $album = $_zp_current_album;
     $hash = $album->getPassword();
     $hint = $album->getPasswordHint();
-
     if (empty($hash)) {
       $album = $album->getParent();
       while (!is_null($album)) {

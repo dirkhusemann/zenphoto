@@ -317,7 +317,7 @@ function generateListFromArray($currentValue, $list) {
 
 function generateListFromFiles($currentValue, $root, $suffix) {
   chdir($root);
-  $filelist = glob('*'.$suffix);
+  $filelist = safe_glob('*'.$suffix);
   sort($filelist);
   $list = array();
   foreach($filelist as $file) {

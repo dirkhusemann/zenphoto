@@ -602,7 +602,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
       }
       if ($captcha && !getOption('Use_Captcha')) { // No longer using captcha, clean up the images
         chdir(SERVERCACHE . "/");
-        $filelist = glob('code_*.png');
+        $filelist = safe_glob('code_*.png');
         foreach ($filelist as $file) {
           $file = SERVERCACHE . "/" . $file;
             unlink($file);

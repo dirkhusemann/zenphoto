@@ -27,8 +27,10 @@
     <div id="content" class="v">
 
         <div id="desc">
+	      <?php if (!checkForPassword(true)) { ?>
           <h1><?php printImageTitle(true); ?></h1>
           <p><em><?php printImageDesc(true); ?></em></p>
+          <?php } ?>
         </div>
 
         <?php
@@ -44,13 +46,15 @@
           }
         ?>
         <div class="main" <?php echo $wide; ?>>
+	      <?php if ($show = !checkForPassword()) { ?>
           <p id="photo">
           <strong>
             <?php printCustomSizedImage(getImageTitle(), null, $ls?480:null, $ls?null:480); ?>
           </strong>
           </p>
+          <?php } ?>
         </div>
-
+        <?php if ($show) { ?>
         <div id="meta">
           <ul>
             <li class="count"><?php if (($num = getNumImages()) > 1) { echo imageNumber() . " of " . getNumImages() . " photos"; }?></li>
@@ -160,7 +164,8 @@
 
             </div>
             <!-- END #commentblock -->
-            <?php } ?>
+            <?php } 
+        } ?>
 
         </div>
 

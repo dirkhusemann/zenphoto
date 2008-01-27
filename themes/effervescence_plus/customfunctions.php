@@ -14,9 +14,7 @@ function show_sub_count_index() {
 
 function printHeadingImage($randomImage) {
   $id = getAlbumId();
-/* comment out the following "if" statement if you don't want the zen logo for a random image 
- */
-  if (is_null($randomImage)) { 
+  if (is_null($randomImage) || checkforPassword(silent)) { 
       $randomImage= new Image(new Album(new Gallery(), ''), 'zen-logo.jpg' );
   } 
   if (!is_null($randomImage)) { 

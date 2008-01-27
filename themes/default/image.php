@@ -42,6 +42,8 @@
     
 	</div>
 
+	<!-- The Image -->
+	<?php if (!checkForPassword()) { ?>
 	<div id="image">
 		<a href="<?php echo getProtectedImageURL();?>" title="<?php echo getImageTitle();?>"><strong><?php printDefaultSizedImage(getImageTitle()); ?></strong></a> 
   	</div>
@@ -116,6 +118,7 @@
         <?php } else { echo 'Comments are closed.'; } ?>
         <?php } ?>
 	</div>
+    <?php } ?>
 </div>
 
 <div id="credit"><?php printRSSLink('Gallery','','RSS', ' | '); ?> <a href="<?php echo getGalleryIndexURL();?>?p=archive">Archive View</a> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>

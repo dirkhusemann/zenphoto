@@ -1,4 +1,5 @@
 <?php
+define('HTACCESS_VERSION', '1.1.4');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
 global $setup;
 $checked = isset($_GET['checked']);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
@@ -275,7 +276,7 @@ if (!$checked) {
     $tablelist = '';
     if ($result) {
       while ($row = mysql_fetch_row($result)) {
-        $tableslist .= $row[0] . ", ";
+        $tableslist .= "<code>" . $row[0] . "</code>, ";
       }
     }
     if (!empty($tableslist)) { $tableslist = " found " . substr($tableslist, 0, -2); }
@@ -286,28 +287,44 @@ if (!$checked) {
 
   }
 
+  $msg = " <em>.htaccess</em> file";
   $htfile = '../.htaccess';
   $ht = @file_get_contents($htfile);
   $htu = strtoupper($ht);
-  $i = strpos($htu, 'REWRITEENGINE');
-  if ($i === false) {
-    $rw = '';
-  } else {
-    $j = strpos($htu, "\n", $i+13);
-    $rw = trim(substr($htu, $i+13, $j-$i-13));
+  $vr = "";
+  if (!empty($htu)) {
+    $i = strpos($htu, 'VERSION');
+    if ($i === false) {
+      $ch = true;
+    } else {
+      $j = strpos($htu, "\n", $i+7);
+      $vr = trim(substr($htu, $i+7, $j-$i-7));
+    }
   }
-  $mod = '';
-  $msg = " <em>.htaccess</em> file";
-  if (!empty($rw)) {
-    $msg .= " (<em>RewriteEngine</em> is <strong>$rw</strong>)";
-    $mod = "&mod_rewrite=$rw";
-  }
+  if ($ch = ($vr == HTACCESS_VERSION)) {
+    $err = "is empty or does not exist";
+    $desc = "Edit the <code>.htaccess</code> file in the root zenphoto folder if you have the mod_rewrite apache ".
+            "module, and want cruft-free URLs. Just change the one line indicated to make it work. " .
+            "<br/><br/>You can ignore this warning if you do not intend to set the option <code>mod_rewrite</code>.";
+    $i = strpos($htu, 'REWRITEENGINE');
+    if ($i === false) {
+      $rw = '';
+    } else {
+      $j = strpos($htu, "\n", $i+13);
+      $rw = trim(substr($htu, $i+13, $j-$i-13));
+    }
+    $mod = '';
+    if (!empty($rw)) {
+      $msg .= " (<em>RewriteEngine</em> is <strong>$rw</strong>)";
+      $mod = "&mod_rewrite=$rw";
+    }
 
-  if (empty($ht)) { $ch = -1; } else { $ch = 1; }
-  checkMark($ch, $msg, " [is empty or does not exist]",
-               "Edit the <code>.htaccess</code> file in the root zenphoto folder if you have the mod_rewrite apache ".
-               "module, and want cruft-free URLs. Just change the one line indicated to make it work. " .
-               "<br/><br/>You can ignore this warning if you do not intend to set the option <code>mod_rewrite</code>.");
+    if (empty($ht)) { $ch = -1; } else { $ch = 1; }
+  } else {
+    $err = "wrong version";
+    $desc = "You need to upload the copy of the .htaccess file that was included with the zenphoto distribution.";
+  }
+  checkMark($ch, $msg, " [$err]", $desc);
 
   $base = true;
   $f = '';

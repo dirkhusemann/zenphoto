@@ -36,6 +36,8 @@
   
   	<hr />
   
+	<!-- The Image -->
+	<?php if (!checkForPassword()) { ?>
     <div class="image">
 		<div class="imgnav">
 			<?php if (hasPrevImage()) { ?> <a class="prev" href="<?php echo getPrevImageURL();?>" title="Previous Image">&laquo; prev</a>
@@ -109,6 +111,7 @@
       	<?php } ?>
       
     </div>
+    <?php } ?>
     
     <div id="credit">
 		<?php printRSSLink('Gallery','','RSS', ' | '); ?>Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a> | <a href="?p=archive">Archive View</a><br />

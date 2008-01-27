@@ -69,13 +69,14 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
     		</div>
 
 			<!-- The Image -->
-			<?php if (!checkForPassword()) { 
+			<?php  
 			  $s = getDefaultWidth() + 22;
 			  $wide = "style=\"width:".$s."px;"; 
 			  $s = getDefaultHeight() + 22;
 			  $high = " height:".$s."px;\""; 
 			  ?>
             <div id="image" <?php echo $wide.$high; ?>>
+     			<?php if ($show = !checkForPassword()) { ?>
     			<div id="image_container">
     			<a href="<?php echo getProtectedImageURL();?>" title="<?php echo getImageTitle();?>">
     			<?php printDefaultSizedImage(getImageTitle()); ?>
@@ -87,20 +88,19 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 	  			    echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=400&width=300&inlineId=imagemetadata\" title=\"image details from exif\" class=\"thickbox\">Image Info</a></div>";
 	  				printImageMetadata('', false); 
 				  }
-				?>
+				} ?>
   			</div>
-			<?php } ?>
   			<br clear="all" />
-		</div>  
+ 		</div>  
 
 		<!-- Image Description -->
-  		<div id="description"><?php printImageDesc(true); ?></div>
+  		<?php if ($show) { ?><div id="description"><?php printImageDesc(true); ?></div> <?php } ?>
 
 	</div>
 
-	<!-- Wrap Bottom Content -->
-	<?php if (getOption('Allow_comments')) { ?>
-	<div id="content">
+	  <!-- Wrap Bottom Content -->
+	  <?php if ($show && getOption('Allow_comments')) { ?>
+	  <div id="content">
 
 		<!-- Headings -->
   		<div id="bottomheadings">
@@ -151,8 +151,8 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
             <?php } ?>
 
   		</div>
-	</div>
-	<?php } ?>
+	  </div>
+	  <?php } ?>
 
 	<!-- Footer -->
 	<div class="footlinks">

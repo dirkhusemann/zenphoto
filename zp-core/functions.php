@@ -1,5 +1,6 @@
 <?php
-define('ZENPHOTO_RELEASE', 1072);
+define('ZENPHOTO_RELEASE', 1073);
+define('SAFE_GLOB', false);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 
 // Set the memory limit higher just in case -- supress errors if user doesn't have control.
@@ -1348,4 +1349,41 @@ function debugLog($message, $reset=false) {
   fwrite($f, $message . "\n");
   fclose($f); 
 }
+/**
+ * Provide an alternative to glob if the ISP has disabled it
+ * To enable the alternative, change the SAFE_GLOB define at the front to functions.php
+ * 
+ * @param string $pattern the 'pattern' for matching files
+ * @param bit $flags glob 'flags'
+ */
+function safe_glob($pattern, $flags=0) {
+  if (!SAFE_GLOB) { return glob($pattern, $flags); }
+  $split=explode('/',$pattern);
+  $match=array_pop($split);
+  $path=implode('/',$split);
+  if (empty($path)) { $path = '.'; };
+
+  if (($dir=opendir($path))!==false) {
+    $glob=array();
+    while(($file=readdir($dir))!==false) {
+      if (fnmatch($match,$file)) {
+        if ((is_dir("$path/$file"))||(!($flags&GLOB_ONLYDIR))) {
+          if ($flags&GLOB_MARK) $file.='/';
+          $glob[]=$file;
+        }
+      }
+    }
+    closedir($dir);
+    if (!($flags&GLOB_NOSORT)) sort($glob);
+    return $glob;
+  } else {
+    return false;
+  }
+}
+if (!function_exists('fnmatch')) {
+  function fnmatch($pattern, $string) {
+    return @preg_match('/^' . strtr(addcslashes($pattern, '\\.+^$(){}=!<>|'), array('*' => '.*', '?' => '.?')) . '$/i', $string);
+  }
+}
+
 ?>

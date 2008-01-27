@@ -706,7 +706,7 @@ class Album extends PersistentObject {
       $image->deleteImage(false);
     }
     chdir($this->localpath);
-    $filelist = glob('*');
+    $filelist = safe_glob('*');
     foreach($filelist as $file) {
       if (($file != '.') && ($file != '..')) {
         unlink($this->localpath . $file); // clean out any other files in the folder
