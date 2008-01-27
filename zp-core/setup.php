@@ -150,10 +150,10 @@ if (!$checked) {
   $phpv = phpversion();
   $good = checkMark(versionCheck($required, $phpv), " PHP version $phpv", "", "Version $required or greater is required.") && $good;
 
-  $good = checkMark(extension_loaded('gd'), " PHP GD support", '', '') && $good;
+  $good = checkMark(extension_loaded('gd'), " PHP GD support", '', 'You need to install GD support in your PHP') && $good;
 
   $sql = extension_loaded('mysql');
-  $good = checkMark($sql, " PHP mySQL support", '', '') && $good;
+  $good = checkMark($sql, " PHP mySQL support", '', 'You need to install mySQL support in your PHP') && $good;
 
   if (file_exists("zp-config.php")) {
     require("zp-config.php");
