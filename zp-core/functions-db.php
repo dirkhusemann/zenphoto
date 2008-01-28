@@ -57,18 +57,19 @@ $_zp_query_count = 0;
 /**
  * The main query function. Runs the SQL on the connection and handles errors.
  * TODO: Handle errors more gracefully.
- *@param string $sql sql code
- *@return results of the sql statements
- *@since 0.6
-  */
-function query($sql) {
+ * @param string $sql sql code
+ * @param bool $noerrmsg set to true to supress the error message
+ * @return results of the sql statements
+ * @since 0.6
+ */
+function query($sql, $noerrmsg = false) {
   global $mysql_connection;
   global $_zp_query_count;
   if ($mysql_connection == null) {
     db_connect();
   }
   $result = mysql_query($sql, $mysql_connection);
-  if (!$result) {
+  if (!$result && !$noerrmsg) {
     $sql = sanitize($sql, true);
     $error = "MySQL Query ( <em>$sql</em> ) Failed. Error: " . mysql_error();
     // Changed this to mysql_query - *never* call query functions recursively...
@@ -86,12 +87,13 @@ function query($sql) {
 /**
  * Runs a SQL query and returns an associative array of the first row.
  * Doesn't handle multiple rows, so this should only be used for unique entries.
- *@param string $sql sql code
- *@return results of the sql statements
- *@since 0.6
-  */
-function query_single_row($sql) {
-  $result = query($sql);
+ * @param string $sql sql code
+ * @param bool $noerrmsg set to true to supress the error message
+ * @return results of the sql statements
+ * @since 0.6
+ */
+function query_single_row($sql, $noerrmsg=false) {
+  $result = query($sql, $noerrmsg);
   if ($result) {
     return mysql_fetch_assoc($result);
   } else {
@@ -104,12 +106,13 @@ function query_single_row($sql) {
  * TODO: This may not be very efficient. Could use a global resultset instead,
  * 			then use a next_db_entry()-like function to get the next row.
  *		But this is probably just fine.
- *@param string $sql sql code
- *@return results of the sql statements
- *@since 0.6
-  */
-function query_full_array($sql) {
-  $result = query($sql);
+ * @param string $sql sql code
+ * @param bool $noerrmsg set to true to supress the error message
+ * @return results of the sql statements
+ * @since 0.6
+ */
+function query_full_array($sql, $noerrmsg = false) {
+  $result = query($sql, $noerrmsg);
   if ($result) {
     $allrows = array();
     while ($row = mysql_fetch_assoc($result))

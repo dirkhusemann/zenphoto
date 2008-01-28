@@ -1,5 +1,5 @@
 <?php
-define('ZENPHOTO_RELEASE', 1073);
+define('ZENPHOTO_RELEASE', 1077);
 define('SAFE_GLOB', false);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 
@@ -916,6 +916,7 @@ function zp_mail($subject, $message, $headers = '') {
         $hash = $album->getPassword();
         $authType = "zp_album_auth_" . cookiecode($album->name);
         $saved_auth = $_COOKIE[$authType];
+    
         if (!empty($hash)) {
           if ($saved_auth != $hash) {
             return false;

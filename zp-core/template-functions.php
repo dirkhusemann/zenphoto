@@ -3232,14 +3232,14 @@ function getSearchURL($words, $dates, $fields, $page) {
 
 /**
  * Prints the search form
-
  * 
-
- * Search works on a list of tags entered into the search form. Tags are separated by commas and
-
- * may contain spaces or any other character other than a comma or a peck mark. To include commas in
-
- * tag, enclose it in peck marks (`). To use peck marks in a search submit a feature request.
+ * Search works on a list of tags entered into the search form. 
+ * 
+ * Tags may be part of boolean expressions using $, |, !, and parens. (Comma is retained as a synonom of | for 
+ * backwords compatibility.)
+ * 
+ * Tags may contain spaces or any other character other than a one of the expression characters or a peck mark. 
+ * To include commas in tag, enclose it in peck marks (`). To use peck marks in a search submit a feature request.
  *
  * @param string $prevtext text to go before the search form
  * @param bool $fieldSelect prints a drop down of searchable elements
@@ -3305,17 +3305,16 @@ function printSearchForm($prevtext=NULL, $fieldSelect=NULL, $id='search') {
 }
 
 /**
- * Returns the search results seperated by $separator
+ * Returns the search string
  *
- * @param string $separator what to put inbetween the search results, default ' | '
  * @return string
  * @since 1.1
  */
-function getSearchWords($separator=' | ') {
+function getSearchWords() {
   if (in_context(ZP_SEARCH)) {
     global $_zp_current_search;
     $tags = $_zp_current_search->getSearchString();
-    return implode($separator, $tags);
+    return implode(" ", $tags);
   }
   return false;
 }
@@ -3462,7 +3461,8 @@ function normalizeColumns($albumColumns, $imageColumns) {
 function checkforPassword($silent=false) {
   global $_zp_current_album, $_zp_current_search, $_zp_album_authorized, $_zp_gallery;
   if (zp_loggedin()) { return false; }  // you're the admin, you don't need the passwords.
-  if (in_context(ZP_SEARCH)) {  // search page
+  $context = get_context();
+  if (($context | ZP_INDEX) == (ZP_INDEX + ZP_SEARCH)) {  // search page
     $hash = getOption('search_password');
     $hint = getOption('search_hint');
     if (empty($hash)) {

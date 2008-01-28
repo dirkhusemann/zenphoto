@@ -114,28 +114,38 @@ function getSearchDate() {
 function getSearchString() {
   $searchstring = $this->words;
   $result = array();
-  $unquoted = "";
+  $target = "";
+  $i = 0;
   do {
-    $i = strpos($searchstring, "`");  // use peck marks to quote search elements
-    if (!($i === false)) {
-      $unquoted = trim($unquoted." ".trim(substr($searchstring, 0, $i)));
-	  $searchstring = substr($searchstring, $i+1);
-     $j = strpos($searchstring, "`");
-	  if (!($j === false)) {
-	    $result[] = substr($searchstring, 0, $j);
-        $searchstring = substr($searchstring, $j+1);
-	  }
+    $c = substr($searchstring, $i, 1);
+    switch ($c) {
+      case '`':
+        $j = strpos($searchstring, '`', $i + 1);
+        $target .= substr($searchstring, $i+1, $i-$j);
+        $i = $j;
+        break;
+      case '&':
+      case '|':
+      case '!':
+      case ',':
+      case '(':
+      case ')':
+        if (!empty($target)) { 
+          $r = trim($target);
+          if (!empty($r)) {
+            $result[] = sanitize($r, true); 
+          }
+        }
+        $target = '';
+        $result[] = $c;
+        break;
+      default:
+        $target .= $c;
+        break;
     }
-  } while (!($i === false));
-  $unquoted = trim($unquoted." ".trim($searchstring));
-  $searchstring = explode(",",$unquoted); // separating several search words
+  } while ($i++ < strlen($searchstring));
+  if (!empty($target)) { $result[] = sanitize(trim($target)); } 
 
-  foreach ($searchstring as $item) {
-    $item = trim($item);
-    if (!empty($item)) {
-      $result[] = mysql_real_escape_string($item);
-	}
-  }
   return $result;
 }
 
@@ -197,58 +207,85 @@ function getSearchSQL($searchstring, $searchdate, $tbl, $fields) {
   }
   $sql .= " FROM ".prefix($tbl)." WHERE ";
   if(!zp_loggedin()) { $sql .= "`show` = 1 AND ("; }
-  
-  $nr = 0;
+  $join = "";
+  $nrt = 0;
   foreach($searchstring as $singlesearchstring){
-    if (SEARCH_TITLE & $fields) {
-      $nr++;
-      if ($nr > 1) { $sql .= " OR "; } // add OR for more searchstrings
-      $sql .= " `title` LIKE '%$singlesearchstring%'"; 
-	}
-    if (SEARCH_DESC & $fields) {
-      $nr++;
-      if ($nr > 1) { $sql .= " OR "; } // add OR for more searchstrings
-      $sql .= " `desc` LIKE '%$singlesearchstring%'"; 
-	}
-    if (SEARCH_TAGS & $fields) {
-      $nr++;
-      if ($nr > 1) { $sql .= " OR "; } // add OR for more searchstrings
-      $sql .= " `tags` LIKE '%$singlesearchstring%'"; 
-	}
-    if (SEARCH_FOLDER & $fields) {
-      $nr++;
-      if ($nr > 1) { $sql .= " OR "; } // add OR for more searchstrings
-      $sql .= " `folder` LIKE '%$singlesearchstring%'"; 
-	}
-    if (SEARCH_FILENAME & $fields) {
-      $nr++;
-      if ($nr > 1) { $sql .= " OR "; } // add OR for more searchstrings
-      $sql .= " `filename` LIKE '%$singlesearchstring%'"; 
-	}
-    if (SEARCH_LOCATION & $fields) {
-      $nr++;
-      if ($nr > 1) { $sql .= " OR "; } // add OR for more searchstrings
-      $sql .= " `location` LIKE '%$singlesearchstring%'"; 
-	}
-    if (SEARCH_CITY & $fields) {
-      $nr++;
-      if ($nr > 1) { $sql .= " OR "; } // add OR for more searchstrings
-      $sql .= " `city` LIKE '%$singlesearchstring%'"; 
-	}
-    if (SEARCH_STATE & $fields) {
-      $nr++;
-      if ($nr > 1) { $sql .= " OR "; } // add OR for more searchstrings
-      $sql .= " `state` LIKE '%$singlesearchstring%'"; 
-	}
-    if (SEARCH_COUNTRY & $fields) {
-      $nr++;
-      if ($nr > 1) { $sql .= " OR "; } // add OR for more searchstrings
-      $sql .= " `country` LIKE '%$singlesearchstring%'"; 
-	}
+    switch ($singlesearchstring) {
+      case '&':
+        $join .= " AND ";
+        break;
+      case '!':
+        $join .= " NOT ";
+        break;
+      case ',':
+      case '|':
+        $join .= " OR ";
+        break;
+      case '(':
+      case ')':
+        $join .= $singlesearchstring;
+        break;
+      default:
+        $subsql = "";
+        $nr = 0;
+        if (SEARCH_TITLE & $fields) {
+          $nr++;
+          if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
+          $subsql .= " `title` LIKE '%$singlesearchstring%'";
+        }
+        if (SEARCH_DESC & $fields) {
+          $nr++;
+          if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
+          $subsql .= " `desc` LIKE '%$singlesearchstring%'";
+        }
+        if (SEARCH_TAGS & $fields) {
+          $nr++;
+          if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
+          $subsql .= " `tags` LIKE '%$singlesearchstring%'";
+        }
+        if (SEARCH_FOLDER & $fields) {
+          $nr++;
+          if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
+          $subsql .= " `folder` LIKE '%$singlesearchstring%'";
+        }
+        if (SEARCH_FILENAME & $fields) {
+          $nr++;
+          if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
+          $subsql .= " `filename` LIKE '%$singlesearchstring%'";
+        }
+        if (SEARCH_LOCATION & $fields) {
+          $nr++;
+          if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
+          $subsql .= " `location` LIKE '%$singlesearchstring%'";
+        }
+        if (SEARCH_CITY & $fields) {
+          $nr++;
+          if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
+          $subsql .= " `city` LIKE '%$singlesearchstring%'";
+        }
+        if (SEARCH_STATE & $fields) {
+          $nr++;
+          if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
+          $subsql .= " `state` LIKE '%$singlesearchstring%'";
+        }
+        if (SEARCH_COUNTRY & $fields) {
+          $nr++;
+          if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
+          $subsql .= " `country` LIKE '%$singlesearchstring%'";
+        }
+        if ($nr > 0) {
+          $nrt++;
+          $sql .= $join; 
+          $join = "";
+          $sql .= "($subsql)";
+        }
+    }
   }
-  if (!empty($searchdate)) { 
-    if ($nr > 1) { $sql = $sql." AND "; }
-	$nr++;
+  $sql .= $join;
+  
+  if (!empty($searchdate)) {
+    if ($nrt > 1) { $sql = $sql." AND "; }
+	$nrt++;
 	if ($searchdate == "0000-00") {
 	  $sql .= "`date`=\"0000-00-00 00:00:00\"";
 	} else {
@@ -260,8 +297,7 @@ function getSearchSQL($searchstring, $searchdate, $tbl, $fields) {
 	}
   }
   if(!zp_loggedin()) { $sql .= ")"; }
-  
-  if ($nr == 0) { return NULL; } // no valid fields
+  if ($nrt == 0) { return NULL; } // no valid fields
   return $sql;
 }
 
@@ -277,11 +313,16 @@ function getSearchAlbums() {
   $sql = $this->getSearchSQL($searchstring, '', 'albums', $this->fields);
   if (empty($sql)) { return $albums; } // no valid fields
   $albumfolder = getAlbumFolder();
-  $search_results = query_full_array($sql); 
-  foreach ($search_results as $row) {  
-    if (file_exists($albumfolder . $row['folder'])) {  
-      $albums[] = $row['folder']; 
-    }	
+  $search_results = query_full_array($sql, true);
+  if (is_array($search_results)) {
+    foreach ($search_results as $row) {
+      $albumname = $row['folder'];
+      if (file_exists($albumfolder . $albumname)) {
+        if (checkAlbumPassword($albumname)) {
+          $albums[] = $row['folder'];
+        }
+      }
+    }
   }
 
 return $albums;
@@ -362,15 +403,20 @@ function getSearchImages() {
   $sql = $this->getSearchSQL($searchstring, $searchdate, 'images', $this->fields);
   if (empty($sql)) { return $images; } // no valid fields
   $albumfolder = getAlbumFolder();
-  $search_results = query_full_array($sql); 
-  foreach ($search_results as $row) { 
-    $albumid = $row['albumid'];
-   	$query = "SELECT id, title, folder,`show` FROM ".prefix('albums')." WHERE id = $albumid"; 
-   	$row2 = query_single_row($query); // id is unique
-	if (file_exists($albumfolder . $row2['folder'] . '/' . $row['filename'])) {
-      $images[] = array('filename' => $row['filename'], 'folder' => $row2['folder']);
-	}
-  } 
+  $search_results = query_full_array($sql, true); 
+  if (is_array($search_results)) {
+    foreach ($search_results as $row) {
+      $albumid = $row['albumid'];
+      $query = "SELECT id, title, folder,`show` FROM ".prefix('albums')." WHERE id = $albumid";
+      $row2 = query_single_row($query); // id is unique
+      $albumname = $row2['folder'];
+      if (file_exists($albumfolder . $albumname . '/' . $row['filename'])) {
+        if (checkAlbumPassword($albumname)) {
+          $images[] = array('filename' => $row['filename'], 'folder' => $row2['folder']);
+        }
+      }
+    }
+  }
 
   return $images;
 
