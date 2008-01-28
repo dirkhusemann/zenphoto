@@ -1,0 +1,39 @@
+# Rewrite rules for lighttpd
+
+server.modules   += ( "mod_rewrite", "mod_redirect" )
+
+# path to your zenphoto installation in the webroot
+# don't forget the trailing slash!
+var.zendir = "/zenphoto/"
+
+# change the hostname to match yours
+$HTTP["host"] =~ "my\.photosite\.com" {
+        url.rewrite-once = (
+                "^"+zendir+"admin/?$" => "$0",
+                "^("+zendir+"(albums|cache|themes|zp-core).*)$" => "$1",
+                "^("+zendir+"\?.*)" = > "$1",
+                "^("+zendir+"[a-z]+.php(\?.*)?)$" => "$1",
+
+                "^"+zendir+"page/([0-9]+)/?$" => zendir+"index.php?page=$1",
+                "^"+zendir+"page/([A-Z]a-z0-9\-_]+)/?$" => zendir+"index.php?p=$1",
+                "^"+zendir+"(.*)/page/([0-9]+/)?$" => zendir+"index.php?album=$1&page=$2",
+
+                # Rewrite rule addition for search
+                "^"+zendir+"page/([A-Za-z0-9\-_]+)/([A-Za-z0-9\-_]+)/?$" => zendir+"index.php?p=$1&words=$2",
+                "^"+zendir+"page/([A-Za-z0-9\-_]+)/([A-Za-z0-9\-_]+)/([0-9]+)/?$" => zendir+"index.php?p=$1&words=$2&page=$3",
+
+                # Rewrite rule addition for archive-/date-search (needed to be separated because of the same structure)
+                "^"+zendir+"page/([A-Za-z0-9\-_]+)/archive/([A-Za-z0-9\-_]+)/?$" => zendir+"index.php?p=$1&date=$2",
+                "^"+zendir+"page/([A-Za-z0-9\-_]+)/archive/([A-Za-z0-9\-_]+)/([0-9]+)/?$" => zendir+"index.php?p=$1&date=$2&page=$3",
+
+                "^"+zendir+"(.*)/image/(thumb|[0-9]{1,4})/([^/\\]+)$" => zendir+"zp-core/i.php?a=$1&i=$3&s=$2",
+                "^"+zendir+"(.*)/image/([^/\\]+)$" => zendir+"zp-core/i.php?a=$1&i=$2",
+
+                # Catch-all - everything else gets handled in PHP for compatibility.
+                "^"+zendir+"(.*)/?$" => zendir+"index.php?album=$1"
+        )
+
+        url.redirect = (
+                "^"+zendir+"admin/?$" => "http://%0"+zendir+"zp-core/admin.php",
+        )
+}
