@@ -1,5 +1,5 @@
 <?php
-define('ZENPHOTO_RELEASE', 1077);
+define('ZENPHOTO_RELEASE', 1079);
 define('SAFE_GLOB', false);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 
@@ -1350,6 +1350,7 @@ function debugLog($message, $reset=false) {
   fwrite($f, $message . "\n");
   fclose($f); 
 }
+
 /**
  * Provide an alternative to glob if the ISP has disabled it
  * To enable the alternative, change the SAFE_GLOB define at the front to functions.php
@@ -1382,6 +1383,13 @@ function safe_glob($pattern, $flags=0) {
   }
 }
 if (!function_exists('fnmatch')) {
+  /**
+   * pattern match function in case it is not included in PHP
+   *
+   * @param string $pattern pattern
+   * @param string $string haystack
+   * @return bool
+   */
   function fnmatch($pattern, $string) {
     return @preg_match('/^' . strtr(addcslashes($pattern, '\\.+^$(){}=!<>|'), array('*' => '.*', '?' => '.?')) . '$/i', $string);
   }

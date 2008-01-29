@@ -44,7 +44,7 @@ function SearchEngine() {
 function getSearchParams() {
   global $_zp_page;
   $r = '';
-  $w = $this->words;
+  $w = urlencode($this->words);
   if (!empty($w)) { $r .= '&words=' . $w; }
   $d = $this->dates;
   if (!empty($d)) { $r .= '&date=' . $d; }
@@ -66,7 +66,7 @@ function setSearchParams($paramstr) {
   foreach ($params as $param) {
     $e = strpos($param, '=');
 	$p = substr($param, 0, $e);
-	$v = sanitize(substr($param, $e + 1), true);
+	$v = sanitize(urldecode(substr($param, $e + 1)), true);
     switch($p) {
 	  case 'words':
 	  $this->words = $v;
@@ -90,7 +90,7 @@ function setSearchParams($paramstr) {
  * @return string
  */
 function getSearchWords() {
-  $this->words = sanitize($_REQUEST['words']);
+  $this->words = sanitize(urldecode($_REQUEST['words']));
   return $this->words;
 }
 
@@ -100,7 +100,7 @@ function getSearchWords() {
  * @return string
  */
 function getSearchDate() {
-  $this->dates = sanitize($_REQUEST['date']);
+  $this->dates = sanitize(urldecode($_REQUEST['date']));
   return $this->dates;
 }
 
@@ -119,10 +119,10 @@ function getSearchString() {
   do {
     $c = substr($searchstring, $i, 1);
     switch ($c) {
-      case '`':
-        $j = strpos($searchstring, '`', $i + 1);
-        $target .= substr($searchstring, $i+1, $i-$j);
-        $i = $j;
+      case "\\":
+        $i++;
+        $c = substr($searchstring, $i, 1);
+        $target .= $c;
         break;
       case '&':
       case '|':
@@ -145,7 +145,6 @@ function getSearchString() {
     }
   } while ($i++ < strlen($searchstring));
   if (!empty($target)) { $result[] = sanitize(trim($target)); } 
-
   return $result;
 }
 

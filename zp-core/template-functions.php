@@ -3189,7 +3189,6 @@ function getSearchURL($words, $dates, $fields, $page) {
   } else {
     $url = WEBPATH."/index.php?p=search";
   }
-
   if ($fields == (SEARCH_TITLE + SEARCH_DESC + SEARCH_TAGS + SEARCH_FILENAME +
                   SEARCH_LOCATION + SEARCH_CITY + SEARCH_STATE + SEARCH_COUNTRY)) { $fields = 0; }
   if (($fields != 0) && empty($dates)) {
@@ -3206,9 +3205,9 @@ function getSearchURL($words, $dates, $fields, $page) {
   
   if (!empty($words)) {
     if($mr) {
-      $url .= "$words";
+      $url .= urlencode($words);
     } else {
-      $url .= "&words=$words";
+      $url .= "&words=".urlencode($words);
     }
   }
 
@@ -3235,11 +3234,12 @@ function getSearchURL($words, $dates, $fields, $page) {
  * 
  * Search works on a list of tags entered into the search form. 
  * 
- * Tags may be part of boolean expressions using $, |, !, and parens. (Comma is retained as a synonom of | for 
+ * Tags may be part of boolean expressions using &, |, !, and parens. (Comma is retained as a synonom of | for 
  * backwords compatibility.)
  * 
- * Tags may contain spaces or any other character other than a one of the expression characters or a peck mark. 
- * To include commas in tag, enclose it in peck marks (`). To use peck marks in a search submit a feature request.
+ * Tags may contain spaces or any other character other than a one of the expression characters. 
+ * the \ character is a special exception. It is used to escape the characters above. \& becomes an ampersand in
+ * the target text, \| an |, etc. \\ yields a \.
  *
  * @param string $prevtext text to go before the search form
  * @param bool $fieldSelect prints a drop down of searchable elements
