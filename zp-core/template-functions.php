@@ -3252,11 +3252,17 @@ function printSearchForm($prevtext=NULL, $fieldSelect=NULL, $id='search') {
   if (checkforPassword(silent)) { return; }
   $zf = WEBPATH."/".ZENFOLDER;
   $dataid = $id . '_data';
-  $searchwords = (isset($_POST['words']) ? sanitize($_REQUEST['words'], true) : '');
+  $searchwords = (isset($_POST['words']) ? $_REQUEST['words'] : '');
+  if (strpos($searchwords, '"') === false) {  // do our best
+    $searchwords = '"'.$searchwords.'"';
+  } else {
+    $searchwords = "'".$searchwords."'";
+  }
 
   echo "\n<div id=\"search\">";
-  echo "\n<form method=\"post\" action=\"".WEBPATH."/index.php?p=search\" id=\"search_form\">";
-  echo "\n$prevtext<input type=\"text\" name=\"words\" value=\"".$searchwords."\" id=\"search_input\" size=\"10\" />";
+  if (getOption('mod_rewrite')) { $searchurl = '/page/search/'; } else { $searchurl = "/index.php?p=search"; }
+  echo "\n<form method=\"post\" action=\"".WEBPATH.$searchurl."\" id=\"search_form\">";
+  echo "\n$prevtext<input type=\"text\" name=\"words\" value=".$searchwords." id=\"search_input\" size=\"10\" />";
   echo "\n<input type=\"submit\" value=\"Search\" class=\"pushbutton\" id=\"search_submit\" />";
 
   $bits = array(SEARCH_TITLE, SEARCH_DESC, SEARCH_TAGS, SEARCH_FILENAME, SEARCH_LOCATION, SEARCH_CITY, SEARCH_STATE, SEARCH_COUNTRY);
@@ -3300,6 +3306,16 @@ function printSearchForm($prevtext=NULL, $fieldSelect=NULL, $id='search') {
     echo "\n<div class=\"clear\"></div>";
   }
   echo "\n</form>\n";
+/*
+  echo "\n  <script type=\"text/javascript\" src=\"".$zf."/js/prototype.tooltip.js\"></script>";
+  echo "<div id='search_form_tooltip' style='display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;'>";
+  echo "Enter tokens to search for. The search will be on the \"OR\" of the tokens. Place the tokens in quotes to get exact".
+  	     "phrase matches. Use parenthesis and the boolena operators (\"&amp;\", \"|\", \"!\") to refine your search.<br />";
+  echo "</div>";
+  echo "<script type='text/javascript'>";
+  echo "var my_tooltip = new Tooltip('search_form', 'search_form_tooltip')";
+  echo "</script>";
+*/
   echo "\n</div>";  // search
   echo "\n<!-- end of search form -->\n";
 }
@@ -3311,12 +3327,26 @@ function printSearchForm($prevtext=NULL, $fieldSelect=NULL, $id='search') {
  * @since 1.1
  */
 function getSearchWords() {
+  $opChars = array ('&'=>1, '|'=>1, '!'=>1, ','=>1, ' '=>1);
+  $result = '';
   if (in_context(ZP_SEARCH)) {
     global $_zp_current_search;
     $tags = $_zp_current_search->getSearchString();
-    return implode(" ", $tags);
+    if (is_array($tags)) {
+      foreach ($tags as $element) {
+        $setQuote = false;
+        foreach ($opChars as $char => $value) {
+          if ((strpos($element, $char) !== false) && ($element != $char)) $setQuote = true;
+        }
+        if ($setQuote) {
+        $result .= '"'.$element.'"';
+        } else {
+          $result .= ' '.$element.' ';
+        }
+      }
+    }
   }
-  return false;
+  return $result;
 }
 
 /**

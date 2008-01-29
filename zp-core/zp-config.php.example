@@ -1,6 +1,5 @@
 <?php /* PUT NOTHING BEFORE THIS LINE, not even a line break! */
 $conf = array();
-define("DEBUG", false);
 
 /** Do not edit above this line. **/
 /**********************************/

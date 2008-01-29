@@ -112,39 +112,66 @@ function getSearchDate() {
  * @return array
  */
 function getSearchString() {
-  $searchstring = $this->words;
+  $searchstring = trim($this->words);
+  $opChars = array ('&'=>1, '|'=>1, '!'=>1, ','=>1, ' '=>1);
+  $c1 = ' ';
+  
   $result = array();
   $target = "";
   $i = 0;
   do {
     $c = substr($searchstring, $i, 1);
     switch ($c) {
-      case "\\":
-        $i++;
-        $c = substr($searchstring, $i, 1);
-        $target .= $c;
+      case "'":
+      case '"':
+        $j = strpos($searchstring, $c, $i+1);
+        if ($j !== false) {
+          $target .= substr($searchstring, $i+1, $j-$i-1);
+          $i = $j;
+        } else {
+          $target .= $c;
+        }
+        $c1 = $c;
+        break;
+      case ' ':
+      case ',':
+        if (!empty($target)) {
+          $r = trim($target);
+          if (!empty($r)) {
+            $result[] = sanitize($r, true);
+            $target = '';
+          }
+        }
+        $c2 = substr($searchstring, $i+1, 1);
+        if (!(isset($opChars[$c2]) || isset($opChars[$c1]))) {
+          $result[] = '|';
+          $c1 = $c;
+        }
         break;
       case '&':
       case '|':
       case '!':
-      case ',':
       case '(':
       case ')':
-        if (!empty($target)) { 
+        if (!empty($target)) {
           $r = trim($target);
           if (!empty($r)) {
-            $result[] = sanitize($r, true); 
+            $result[] = sanitize($r, true);
+            $target = '';
           }
         }
+        $c1 = $c;
         $target = '';
         $result[] = $c;
         break;
       default:
+        $c1 = $c;
         $target .= $c;
         break;
     }
   } while ($i++ < strlen($searchstring));
-  if (!empty($target)) { $result[] = sanitize(trim($target)); } 
+  if (!empty($target)) { $result[] = sanitize(trim($target)); }
+
   return $result;
 }
 
@@ -216,7 +243,6 @@ function getSearchSQL($searchstring, $searchdate, $tbl, $fields) {
       case '!':
         $join .= " NOT ";
         break;
-      case ',':
       case '|':
         $join .= " OR ";
         break;

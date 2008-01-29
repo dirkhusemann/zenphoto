@@ -1,5 +1,5 @@
 <?php
-define('ZENPHOTO_RELEASE', 1079);
+define('ZENPHOTO_RELEASE', 1081);
 define('SAFE_GLOB', false);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 
