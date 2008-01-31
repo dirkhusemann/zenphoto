@@ -1,8 +1,7 @@
 <?php
-/*******************************************************************************
- *******************************************************************************
- * Gallery Class ***************************************************************
- ******************************************************************************/
+//*******************************************************************************
+//* Gallery Class ***************************************************************
+//*******************************************************************************
 
 class Gallery {
 
@@ -67,7 +66,7 @@ class Gallery {
   
  /**
    * Get Albums will create our $albums array with a fully populated set of Album
-   * objects in the correct order.
+   * names in the correct order.
    * 
    * Returns an array of albums (a pages worth if $page is not zero)
    *
@@ -136,7 +135,7 @@ class Gallery {
 
   
  /**
-   * Returns the $index'th album in the array. Index is an integer.
+   * Returns the a specific album in the array indicated by index.
    * Takes care of bounds checking, no need to check input.
    * 
    * @param int $index the index of the album sought
@@ -234,7 +233,7 @@ class Gallery {
 
   
  /**
-   * Returns an array of comments
+   * Returns the count of comments
    *
    * @param bool $moderated set true if you want to see moderated comments
    * @return array

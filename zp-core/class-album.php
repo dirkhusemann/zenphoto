@@ -1,8 +1,7 @@
 <?php
-/* *****************************************************************************
- *******************************************************************************
- * Album Class *****************************************************************
- ******************************************************************************/
+//*******************************************************************************
+//* Album Class *****************************************************************
+//*******************************************************************************
 
 class Album extends PersistentObject {
 
@@ -86,7 +85,11 @@ class Album extends PersistentObject {
    */
   function getAlbumID() { return $this->id; }
   
-  // The parent Album of this Album. NULL if this is a top-level album.
+  /**
+   * Returns The parent Album of this Album. NULL if this is a top-level album.
+   *
+   * @return object
+   */
   function getParent() {
     if (is_null($this->parentalbum)) {
       $slashpos = strrpos($this->name, "/");
@@ -206,7 +209,7 @@ class Album extends PersistentObject {
   }
   
 
-  /*
+ /**
    * Returns the place data of an album
    *
    * @return string
@@ -287,8 +290,9 @@ class Album extends PersistentObject {
   function setSortType($sorttype) { $this->set('sort_type', $sorttype); }
   
  /**
-   * Returns the sort type for subalbums in this album
-   * Will return a parent sort type if the sort type for this album is empty
+   * Returns the sort type for subalbums in this album.
+   * 
+   * Will return a parent sort type if the sort type for this album is empty.
    *
    * @return string
    */
@@ -393,8 +397,7 @@ class Album extends PersistentObject {
   function setShow($show) { $this->set('show', $show ? 1 : 0); }
   
   /**
-   * Returns all the subdirectories in this album as Album objects (sub-albums).
-   * modified by s.billard to add paging for subalbums thumbs, sorting of subalbums 
+   * Returns all folder names for all the subdirectories.
    * 
    * @param string $page  Which page of subalbums to display.
    * @param string $sorttype The sort strategy
@@ -429,11 +432,11 @@ class Album extends PersistentObject {
   }
   
   /**
-   * Get Images will return all of a slice of the images for this album. They will
+   * Returns a of a slice of the images for this album. They will
    * also be sorted according to the sort type of this album, or by filename if none
    * has been set.
    *
-   * @param  string $page  Which page of images should be returned.
+   * @param  string $page  Which page of images should be returned. If zero, all images are returned.
    * @param int $firstPageCount count of images that go on the album/image transition page
    * @param  string $sorttype optional sort type
    * @param  string $sortdirection optional sort direction
@@ -538,7 +541,7 @@ class Album extends PersistentObject {
   }
   
   /**
-   * Returns the n of n of m images
+   * Returns an image from the album based on the index passed.
    *
    * @param int $index
    * @return int
@@ -827,7 +830,7 @@ class Album extends PersistentObject {
    * Load all of the filenames that are found in this Albums directory on disk.
    * Returns an array with all the names.
    * 
-   * @param  $dirs Whether or not to return directories ONLY with the file array. Default is false.
+   * @param  $dirs Whether or not to return directories ONLY with the file array.
    * @return array
    */
   function loadFileNames($dirs=false) {

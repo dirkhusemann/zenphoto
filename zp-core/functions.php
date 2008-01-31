@@ -1,5 +1,5 @@
 <?php
-define('ZENPHOTO_RELEASE', 1081);
+define('ZENPHOTO_RELEASE', 1082);
 define('SAFE_GLOB', false);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 
@@ -85,11 +85,12 @@ function getOption($key) {
 }
 
 /**
-  * Create new option in database.
+  * Stores an option value.
   *
   * @param string $key name of the option.
   * @param mixed $value new value of the option.
-  * @param bool $persistent set to false if the option is stored in memory only
+  * @param bool $persistent set to false if the option is stored in memory only 
+  * otherwise it is preserved in the database
   */
 function setOption($key, $value, $persistent=true) {
   global $_zp_conf_vars, $_zp_options;
@@ -131,8 +132,9 @@ function setBoolOption($key, $value) {
 }
 
 /**
- * Sets the default value of an option
- *   If the option has never been set it is set to the value passed
+ * Sets the default value of an option.
+ * 
+ * If the option has never been set it is set to the value passed
  *
  * @param string $key the option name
  * @param mixed $default the value to be used as the default
@@ -830,9 +832,8 @@ function zp_mail($subject, $message, $headers = '') {
 }
 
 /**
-   * Sort the album array based on either a) the manual sort order as specified by the user,
-   * or b) the reverse order of how they are returned from disk. This will thus give us the
-   * album list in with the the ordered albums first, followed by the rest with the newest first.
+   * Sort the album array based on either according to the sort key.
+   * Default is to sort on the `sort_order` field.
    * 
    * Returns an array with the albums in the desired sort order
    *
@@ -899,9 +900,9 @@ function zp_mail($subject, $message, $headers = '') {
   }
   
 /**
- * Checks to see if zip file creation can access an album
+ * Checks to see access is allowed to an album
  * Returns true if access is allowed.
- * There is no password dialog--you must have already had authorization.
+ * There is no password dialog--you must have already had authorization via a cookie.
  *
  * @param string $albumname the album
  * @return bool
@@ -1041,8 +1042,7 @@ function getAlbumFolder($root=SERVERPATH) {
 }
 
 /**
- * Plug-in handling
- * Returns the fully qualified "require" file name.
+ * Returns the fully qualified "require" file name of the plugin file.
  * 
  * @param  string $plugin is the name of the plugin file, typically something.php
  * @param  bool $inTheme tells where to find the plugin.
@@ -1340,6 +1340,9 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 
 /**
  * Write output to the debug log
+ * Use this for debugging when echo statements would come before headers are sent
+ * or would create havoc in the HTML.
+ * Creates (or adds to) a file named debug_log.txt which is located in the zenphoto core folder
  *
  * @param string $message the debug information
  * @param bool $reset set to true to reset the log to zero before writing the message

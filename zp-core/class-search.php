@@ -1,8 +1,8 @@
 <?php
 
-/*******************************************************************/
-/*ZENPHOTO SEARCH ENGINE CLASS ********************************/
-/*******************************************************************/
+//*************************************************************
+//*ZENPHOTO SEARCH ENGINE CLASS *******************************
+//*************************************************************
 define('SEARCH_TITLE', 1);
 define('SEARCH_DESC', 2);
 define('SEARCH_TAGS', 4);
@@ -13,7 +13,6 @@ define('SEARCH_STATE', 64);
 define('SEARCH_COUNTRY', 128);
 define('SEARCH_FOLDER', 256);
 
-/*******************************************************************/
 class SearchEngine
 {
 var $words;
@@ -106,7 +105,8 @@ function getSearchDate() {
 
 /**
  * Parses a search string
- * Items in peck marks are treated as atomic
+ * Items within quotations are treated as atomic
+ * 
  * Returns an array of search elements
  *
  * @return array

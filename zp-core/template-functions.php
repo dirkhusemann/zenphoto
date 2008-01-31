@@ -52,6 +52,9 @@ function printVersion() {
  * @param string $text text for the link
  * @param string $before text do display before the link
  * @param string $after  text do display after the link
+ * @param string $title Text for the HTML title item
+ * @param string $class The HTML class for the link
+ * @param string $id The HTML id for the link
  * @return bool
  * @since 1.1
  */
@@ -183,8 +186,7 @@ function getMainSiteName() {
   return getOption('website_title');
 }
 /**
- * Returns the URL of the main website if zenphoto is part of a website without
- * printing it and if added this in zp-config.php..
+ * Returns the URL of the main website (from the admin options)
  *
  * @return string
  */
@@ -192,8 +194,7 @@ function getMainSiteURL() {
   return getOption('website_url');
 }
 /**
- * Prints the URL of the main website if zenphoto is part of a website
- * and if added this in zp-config.php.
+ * Prints the URL of the main website as provided in the gallery options
  *
  * @param string $title Title text
  * @param string $class optional css class
@@ -219,7 +220,7 @@ function getGalleryIndexURL() {
 }
 
 /**
- * Returns the number of albums without printing it.
+ * Returns the number of albums.
  *
  * @return int
  */
@@ -298,7 +299,7 @@ function getNumSubalbums() {
 }
 
 /**
-* Returns the number of pages if you have several pages  without printing it
+* Returns the number of pages for the current object
 *
 * @param bool $oneImagePage set to true if your theme collapses all image thumbs
 * or their equivalent to one page. This is typical with flash viewer themes
@@ -387,9 +388,9 @@ function getNextPageURL() {
 * Prints the URL of the next page.
 *
 * @param string $text text for the URL
-* @param string $title
-* @param string $class
-* @param string $id
+* @param string $title Text for the HTML title
+* @param string $class Text for the HTML class
+* @param string $id Text for the HTML id
 */
 function printNextPageLink($text, $title=NULL, $class=NULL, $id=NULL) {
   if (hasNextPage()) {
@@ -557,9 +558,9 @@ function albumNumber() {
 
 
 /**
-* Returns the names of the parents of the subalbums.
+* Returns an array of the names of the parents of the current album.
 *
-* @return object
+* @return array
 */
 function getParentAlbums() {
   if(!in_context(ZP_ALBUM)) return false;
@@ -1810,7 +1811,7 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 }
 
 /**
-* Returns the url to the thumbnail current image.
+* Returns the url to the thumbnail of the current image.
 *
 * @return string
 */
@@ -2190,7 +2191,7 @@ function printCommentErrors($class = 'error') {
   return $_zp_comment_error;
 }
 /**
- * Creates an URL for a download of a zipped copy of the current album
+ * Creates an URL for to download of a zipped copy of the current album
  */
 function printAlbumZip(){
   global $_zp_current_album;
@@ -2268,6 +2269,7 @@ function printLatestComments($number, $shorten='123') {
 
 /**
  * Increments (optionally) and returns the hitcounter
+ * Does not increment the hitcounter if the viewer is logged in as the gallery admin
  *
  * @param string $option "image" for image hit counter (default), "album" for album hit counter
  * @param bool $viewonly set to true if you don't want to increment the counter.
@@ -3000,7 +3002,7 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
   echo "</ul>\n";
 }
 /**
- * Retrieves a list of all unique years & months
+ * Retrieves a list of all unique years & months from the images in the gallery
  *
  * @return array
  */
@@ -3094,7 +3096,7 @@ function printCustomPageURL($linktext, $page, $q='', $prev, $next, $class) {
 }
 
 /**
-* Returns  the URL to an image
+* Returns the URL to an image (This is NOT the URL for the image.php page)
 *
 * @return string
 */
@@ -3232,15 +3234,14 @@ function getSearchURL($words, $dates, $fields, $page) {
 /**
  * Prints the search form
  * 
- * Search works on a list of tags entered into the search form. 
+ * Search works on a list of tokens entered into the search form. 
  * 
- * Tags may be part of boolean expressions using &, |, !, and parens. (Comma is retained as a synonom of | for 
- * backwords compatibility.)
+ * Tokens may be part of boolean expressions using &, |, !, and parens. (Comma is retained as a synonom of | for 
+ * backwords compatibility.) If tokens are separated by spaces, the OR function is presumed.
  * 
- * Tags may contain spaces or any other character other than a one of the expression characters. 
- * the \ character is a special exception. It is used to escape the characters above. \& becomes an ampersand in
- * the target text, \| an |, etc. \\ yields a \.
- *
+ * Tokens may be enclosed in quotation marks to create exact pattern matches or to include the boolean operators and 
+ * parens as part of the tag..
+ * 
  * @param string $prevtext text to go before the search form
  * @param bool $fieldSelect prints a drop down of searchable elements
  *        = 0 all fields
@@ -3389,7 +3390,8 @@ function OpenedForComments($what=3) {
 /**
  * Finds the name of the themeColor option selected on the admin options tab
 
- * Returns  the css file name for the theme
+ * Returns a path and name of the theme css file. Returns the value passed for defaultcolor if the 
+ * theme css option file does not exist.
  *
  * @param string $zenCSS path to the css file
  * @param string $themeColor name of the css file
