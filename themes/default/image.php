@@ -106,8 +106,12 @@
 							<td><input type="text" id="website" name="website" size="40" value="<?php echo $stored[2];?>" class="inputbox" /></td>
 						</tr>
                         <?php if (getOption('Use_Captcha')) { 
-                          printCaptcha('<tr><td>Enter Captcha:', '</td><td>', '</td></tr>'); 
-                        } ?>
+                           $captchaCode=generateCaptcha($img); ?>
+                           <tr>
+                           <td><label for="code">Enter Captcha:<img src=<?php echo "\"$img\"";?> alt="Code"/></label></td>
+                           <td><input type="text" id="code" name="code" size="20" class="inputbox" /><input type="hidden" name="code_h" value="<?php echo $captchaCode;?>"/></td>
+                           </tr>
+                        <?php } ?>
 					</table>
 					<textarea name="comment" rows="6" cols="40"></textarea>
 					<br />

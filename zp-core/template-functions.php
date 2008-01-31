@@ -3598,17 +3598,13 @@ function printPasswordForm($hint) {
 }
 
 /**
- * Simple captcha for comments
- * thanks to gregb34 who posted the original code
+ * generates a simple captcha for comments
+ * 
+ * Returns the captcha code string.
  *
- * Prints a captcha entry form and posts the input with the comment posts
- * @param string $preText lead-in text
- * @param string $midText text that goes between the captcha image and the input field
- * @param string $postText text that closes the captcha
- * @param int $size the text-width of the input field
- * @since 1.1.4
- **/
-function printCaptcha($preText='', $midText='', $postText='', $size=4) {
+ * @return string;
+ */
+function generateCaptcha(&$link) {
   $lettre='abcdefghijklmnpqrstuvwxyz';
   $chiffre='123456789';
 
@@ -3651,12 +3647,29 @@ function printCaptcha($preText='', $midText='', $postText='', $size=4) {
   ImageRectangle ($image,0,0,64,19,$rectangle);
 
   $img = "code_" . $code . ".png";
-
   imagepng($image, SERVERCACHE . "/" . $img);
+  $link = WEBPATH . "/cache/". $img;
+  return $code;
+}
 
+/**
+ * Simple captcha for comments.
+ * 
+ * thanks to gregb34 who posted the original code
+ *
+ * Prints a captcha entry form and posts the input with the comment posts
+ * @param string $preText lead-in text
+ * @param string $midText text that goes between the captcha image and the input field
+ * @param string $postText text that closes the captcha
+ * @param int $size the text-width of the input field
+ * @since 1.1.4
+ **/
+function printCaptcha($preText='', $midText='', $postText='', $size=4) {
+  $captchaCode = generateCaptcha($img);
+  
   $inputBox =  "<input type=\"text\" id=\"code\" name=\"code\" size=\"" . $size . "\" class=\"inputbox\" />";
   $captcha = "<input type=\"hidden\" name=\"code_h\" value=\"" . $code . "\"/>" .
-             "<label for=\"code\"><img src=\"" . WEBPATH . "/cache/". $img . "\" alt=\"Code\"/></label>&nbsp;";
+             "<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\"/></label>&nbsp;";
 
   echo $preText;
   echo $captcha;
