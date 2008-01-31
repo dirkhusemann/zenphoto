@@ -12,8 +12,8 @@ Place it in the root folder of your web pages.
 ****delete all lines above and including this one *******
 User-agent: *
 Disallow: /zenphoto/albums
-Disallow: /zenphoto//cache
-Disallow: /zenphoto//themes
-Disallow: /zenphoto//zp-core
+Disallow: /zenphoto/cache
+Disallow: /zenphoto/themes
+Disallow: /zenphoto/zp-core
 Disallow: /zenphoto/rss.php
 Disallow: /zenphoto/rss-comments.php
