@@ -1,4 +1,4 @@
-# htaccess file version 1.1.4
+# htaccess file version 1.1.4.0
 # Update the above and the define in setup.php when you make changes to the rewrite rules!
 # NOTE: Change the RewriteBase below to the absolute path to your zenphoto directory. (Or let setup.php do it for you!)
 

@@ -2866,7 +2866,7 @@ function getTags() {
  * Prints a list of tags, editable by admin
  *
  * @param string $option links by default, if anything else the
- *               tags will not link to all other photos with the same tah
+ *               tags will not link to all other photos with the same tag
  * @param string $preText text to go before the printed tags
  * @param string $class css class to apply to the UL list
  * @param string $separator what charactor shall separate the tags
@@ -3158,15 +3158,16 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
  * @since 1.1
  */
 function printRSSHeaderLink($option, $linktext) {
+  $host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
   switch($option) {
     case "Gallery":
-      echo "<link rel=\"alternate\" type=\"application/rss+xml\" rel=\"nofollow\" title=\"".$linktext."\" href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php\" />\n";
+      echo "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss.php\" />\n";
       break;
     case "Album":
-      echo "<link rel=\"alternate\" type=\"application/rss+xml\" rel=\"nofollow\" title=\"".$linktext."\" href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php?albumnr=".getAlbumId()."&albumname=".getAlbumTitle()."\" />\n";
+      echo "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss.php?albumnr=".getAlbumId()."&albumname=".getAlbumTitle()."\" />\n";
       break;
     case "Comments":
-      echo "<link rel=\"alternate\" type=\"application/rss+xml\" rel=\"nofollow\" title=\"".$linktext."\" href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss-comments.php\" />\n";
+      echo "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss-comments.php\" />\n";
       break;
   }
 }
@@ -3604,7 +3605,7 @@ function printPasswordForm($hint) {
  *
  * @return string;
  */
-function generateCaptcha(&$link) {
+function generateCaptcha(&$image) {
   $lettre='abcdefghijklmnpqrstuvwxyz';
   $chiffre='123456789';
 
@@ -3648,7 +3649,7 @@ function generateCaptcha(&$link) {
 
   $img = "code_" . $code . ".png";
   imagepng($image, SERVERCACHE . "/" . $img);
-  $link = WEBPATH . "/cache/". $img;
+  $image = WEBPATH . "/cache/". $img;
   return $code;
 }
 

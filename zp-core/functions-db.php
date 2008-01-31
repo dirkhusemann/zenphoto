@@ -16,11 +16,11 @@ if (!function_exists('mysql_real_escape_string')) {
 
 /**
  * Connect to the database server and select the database.
- * TODO: Handle errors more gracefully.
  *@return true if successful connection
  *@since 0.6
   */
 function db_connect() {
+ /* TODO: Handle errors more gracefully. */
   global $mysql_connection, $_zp_conf_vars;
   $db = $_zp_conf_vars['mysql_database'];
   if (!function_exists('mysql_connect')) {
@@ -56,13 +56,13 @@ $_zp_query_count = 0;
 
 /**
  * The main query function. Runs the SQL on the connection and handles errors.
- * TODO: Handle errors more gracefully.
  * @param string $sql sql code
  * @param bool $noerrmsg set to true to supress the error message
  * @return results of the sql statements
  * @since 0.6
  */
 function query($sql, $noerrmsg = false) {
+ /* TODO: Handle errors more gracefully. */
   global $mysql_connection;
   global $_zp_query_count;
   if ($mysql_connection == null) {
@@ -103,15 +103,16 @@ function query_single_row($sql, $noerrmsg=false) {
 
 /**
  * Runs a SQL query and returns an array of associative arrays of every row returned.
- * TODO: This may not be very efficient. Could use a global resultset instead,
- * 			then use a next_db_entry()-like function to get the next row.
- *		But this is probably just fine.
  * @param string $sql sql code
  * @param bool $noerrmsg set to true to supress the error message
  * @return results of the sql statements
  * @since 0.6
  */
 function query_full_array($sql, $noerrmsg = false) {
+/* TODO: This may not be very efficient. Could use a global resultset instead,
+ * 			then use a next_db_entry()-like function to get the next row.
+ *		But this is probably just fine.
+ */
   $result = query($sql, $noerrmsg);
   if ($result) {
     $allrows = array();

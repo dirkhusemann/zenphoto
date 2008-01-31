@@ -164,11 +164,13 @@ class Image extends PersistentObject {
 
   /** 
    * Update this object's values for width and height. Uses lazy evaluation.
-   * TODO: Update them if they change by looking at file modification time, which must be stored in the database.
-   * FIXME: Temporarily getting dimensions each time they're requested. Should be same as EXIF extraction (see TODO).
    *
    */
   function updateDimensions() {
+  /* 
+   * FIXME: Temporarily getting dimensions each time they're requested. Should be same as EXIF extraction (see TODO).
+   * TODO: Update them if they change by looking at file modification time, which must be stored in the database.
+   */
     if ($this->video) {
       $size = array('320','240');
     } else {

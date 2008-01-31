@@ -1,5 +1,6 @@
 <?php
-define('ZENPHOTO_RELEASE', 1083);
+define('ZENPHOTO_VERSION', '1.1.4');
+define('ZENPHOTO_RELEASE', 1084);
 define('SAFE_GLOB', false);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 
@@ -39,7 +40,7 @@ define('CACHEFOLDER', '/cache/');
 define('SERVERCACHE', SERVERPATH . substr(CACHEFOLDER, 0, -1));
 
 // Set the version number.
-$_zp_conf_vars['version'] = '1.1.3';
+$_zp_conf_vars['version'] = ZENPHOTO_VERSION;
 
 // the options array
 $_zp_options = NULL;
