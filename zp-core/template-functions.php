@@ -1847,10 +1847,24 @@ function printImageThumb($alt, $class=NULL, $id=NULL) {
 
 /**
 * Returns the url to original image.
+* It will return a protected image is the option "protect_full_image" is set
 *
 * @return string
 */
 function getFullImageURL() {
+  if (getOption('protect_full_image')) {
+    return getProtectedImageURL();
+  } else {
+    return getUnprotectedImageURL();
+  }
+}
+/**
+ * Returns the "raw" url to the image in the albums folder
+ * 
+ * @return string
+ *
+ */
+function getUnprotectedImageURL() {
   global $_zp_current_image;
   return $_zp_current_image->getFullImage();
 }

@@ -78,7 +78,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
             <div id="image" <?php echo $wide.$high; ?>>
      			<?php if ($show = !checkForPassword()) { ?>
     			<div id="image_container">
-    			<a href="<?php echo getProtectedImageURL();?>" title="<?php echo getImageTitle();?>">
+    			<a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>">
     			<?php printDefaultSizedImage(getImageTitle()); ?>
     			</a>
     			</div>

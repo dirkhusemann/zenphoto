@@ -45,7 +45,7 @@
 	<!-- The Image -->
 	<?php if (!checkForPassword()) { ?>
 	<div id="image">
-		<a href="<?php echo getProtectedImageURL();?>" title="<?php echo getImageTitle();?>"><strong><?php printDefaultSizedImage(getImageTitle()); ?></strong></a> 
+		<a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>"><strong><?php printDefaultSizedImage(getImageTitle()); ?></strong></a> 
   	</div>
 	<?php if (getOption('Allow_ratings')) { printImageRating(); }?>
 	

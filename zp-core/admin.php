@@ -26,7 +26,8 @@ $standardOptions = array('gallery_title','website_title','website_url','time_off
                          'email_new_comments', 'perform_video_watermark', 'video_watermark_image',
                          'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'search_fields',
                          'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
-                         'allowed_tags', 'full_image_download', 'full_image_quality', 'persistent_archive');
+                         'allowed_tags', 'full_image_download', 'full_image_quality', 'persistent_archive',
+                         'protect_full_image');
 $charsets = array("ASMO-708" => "Arabic",
                   "big5" => "Chinese Traditional",
                   "CP1026" => "IBM EBCDIC (Turkish Latin-5)",
@@ -552,6 +553,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         setOption('video_watermark_image', 'watermarks/' . $_POST['video_watermark_image'] . '.png');
         setBoolOption('full_image_download', $_POST['full_image_download']);
         setOption('full_image_quality', $_POST['full_image_quality']);
+        setBoolOption('protect_full_image', $_POST['protect_full_image']);
         $returntab = "#tab_image";
       }
       /*** Comment options ***/
@@ -1592,7 +1594,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                         <td>Default thumbnail size and scale.</td>
                     </tr>
                     <tr>
-                           <td>Crop thumbnails:</td>
+                        <td>Crop thumbnails:</td>
                         <td><input type="checkbox" size="40" name="thumb_crop" value="1" <?php echo checked('1', getOption('thumb_crop')); ?> /></td>
                         <td>If set to true the thumbnail will be a centered portion of the image with the given width and height after being resized to <em>thumb size</em> (by shortest side). Otherwise, it will be the full image resized to <em>thumb size</em> (by shortest side).</td>
                     </tr>
@@ -1657,9 +1659,17 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                         <td>Controls compression on full images.</td>
                     </tr>
                     <tr>
+                        <td>Protect full image:</td>
+                        <td><input type="checkbox" name="protect_full_image" value="1" <?php echo checked('1', getOption('protect_full_image')); ?> /></td>
+                        <td>When set, links to the full image will go through intermediate processing that will check for password protection
+                            and apply watermarking. This requires extra server memory and procssing overhead than if the image is
+                            loaded directly.</td>
+                    </tr>
+                    <tr>
                         <td>Full image download:</td>
                         <td><input type="checkbox" name="full_image_download" value="1" <?php echo checked('1', getOption('full_image_download')); ?> /></td>
-                        <td>Causes a download dialog to be displayed when clicking on a full-image link.</td>
+                        <td>Causes a download dialog to be displayed when clicking on a full-image link. (This option is active only
+                        if Protect Full Image is set.)</td>
                     </tr>
                     <tr>
                         <td></td>

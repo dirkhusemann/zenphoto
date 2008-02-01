@@ -44,7 +44,7 @@
 			<?php } if (hasNextImage()) { ?> <a class="next" href="<?php echo getNextImageURL();?>" title="Next Image">next &raquo;</a><?php } ?>
 		</div>
       
-      	<a href="<?php echo getProtectedImageURL();?>" title="<?php echo getImageTitle();?>">
+      	<a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>">
       	<?php printDefaultSizedImage(getImageTitle()); ?></a>
 
       	<div id="image_data">
