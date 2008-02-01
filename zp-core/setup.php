@@ -121,6 +121,7 @@ if (!$checked) {
     } else {
       $append = $folder;
     }
+    $f = '';
     if (!is_dir($path)) {
       $e = '';
       if (!$external) $d = " and <strong>setup</strong> could not create it";
@@ -131,6 +132,7 @@ if (!$checked) {
       $msg =  "Change the permissions on the <code>$folder</code> folder to be writable by the server " .
               "(<code>chmod 777 " . $append . "</code>)";
     } else if (($folder != $which) || $external) {
+      $msg = '';
       $f = " (<em>$append</em>)";
     }
 
@@ -150,6 +152,13 @@ if (!$checked) {
   $phpv = phpversion();
   $good = checkMark(versionCheck($required, $phpv), " PHP version $phpv", "", "Version $required or greater is required.") && $good;
 
+  if (ini_get('safe_mode')) {
+    $safe = -1;
+  } else {
+    $safe = true;
+  }
+  checkMark($safe, "PHP Safe Mode", " [is set]", "Zenphoto functionality is reduced when PHP <code>safe mode</code> restrictions are in effect.");
+  
   $good = checkMark(extension_loaded('gd'), " PHP GD support", '', 'You need to install GD support in your PHP') && $good;
 
   $sql = extension_loaded('mysql');
@@ -241,6 +250,7 @@ if (!$checked) {
       $sql = "SHOW GRANTS;";
       $result = mysql_query($sql, $mysql_connection);
       $access = -1;
+      $rightsfound = 'unknown';
       if ($result) {
         $report = "<br/><br/><em>Grants found:</em>";
         while ($row = mysql_fetch_row($result)) {
@@ -248,8 +258,9 @@ if (!$checked) {
           $r = str_replace(',', '', $row[0]);
           $i = strpos($r, "ON");
           $j = strpos($r, "TO", $i);
-          $found = trim(substr($r, $i+2, $j-$i-2));
+          $found = stripslashes(trim(substr($r, $i+2, $j-$i-2)));
           $rights = array_flip(explode(' ', $r));
+          $rightsfound = 'insufficient';
           if (($found == $dbn) || ($found == "*.*")) {
             if (isset($rights['ALL']) || (isset($rights['SELECT']) && isset($rights['INSERT']) && 
                 isset($rights['UPDATE']) && isset($rights['DELETE']))) {
@@ -257,17 +268,11 @@ if (!$checked) {
             }
             $report .= " *";
           }
-          if ($found) {
-            $rights = 'insufficient';
-          } else {
-            $rights = 'unknown';
-          }
         }
       } else {
         $report = "<br/><br/>The <em>SHOW GRANTS</em> query failed.";
-        $rights = 'unknown';
       }
-    checkMark($access, " mySQL access rights", " [$rights]", 
+    checkMark($access, " mySQL access rights", " [$rightsfound]", 
                        "Your mySQL user must have <code>Select</code>, <code>Insert</code>, ". 
                        "<code>Update</code>, and <code>Delete</code> rights." . $report);
       

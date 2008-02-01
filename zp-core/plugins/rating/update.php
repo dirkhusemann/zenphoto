@@ -1,8 +1,8 @@
 <?php
 require('../../template-functions.php');
-$id = $_GET['id']; 
-$rating = $_GET['rating'];
-$option = $_GET['option'];
+$id = sanitize_numeric($_GET['id']); 
+$rating = sanitize_numeric($_GET['rating']);
+$option = sanitize($_GET['option'];
 
   switch($option) {
     case "image":

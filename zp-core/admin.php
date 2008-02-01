@@ -1035,7 +1035,16 @@ if (!zp_loggedin()  && !$_zp_null_account) {
           <h2>Something went wrong...</h2>
           <?php echo (empty($errormsg) ? "There was an error submitting the form. Please try again." : $errormsg); ?>
         </div>
-      <?php } ?>
+      <?php 
+      }
+      if (ini_get('safe_mode')) { ?>
+        <div class="errorbox">
+          <h2>PHP Safe Mode Restrictions in effect!</h2>
+          <p>Zenphoto is unable to perform uploads when PHP Safe Mode restrictions are in effect</p>
+        </div>
+      <?php 
+      } else {
+      ?>
 
       <form name="uploadform" enctype="multipart/form-data" action="?action=upload" method="POST" onSubmit="return validateFolder(document.uploadform.folder);">
         <input type="hidden" name="processed" value="1" />
@@ -1121,7 +1130,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         </div>
 
       </form>
-
+      <?php } ?>
       <script type="text/javascript">albumSwitch(document.uploadform.albumselect);</script>
 
 <?php /*** COMMENTS ***********************************************************************/

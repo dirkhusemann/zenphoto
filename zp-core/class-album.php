@@ -836,7 +836,13 @@ class Album extends PersistentObject {
   function loadFileNames($dirs=false) {
     $albumdir = getAlbumFolder() . $this->name . "/";
     if (!is_dir($albumdir) || !is_readable($albumdir)) {
-      die("The album cannot be found.");
+      $msg = "Error: The 'albums' directory (" . $this->albumdir . ") ";
+      if (!is_dir($this->albumdir)) { 
+        $msg .= "cannot be found.";
+      } else {
+        $msg .= "is not readable.";
+      }
+      die($msg);
     }
     $dir = opendir($albumdir);
     $files = array();

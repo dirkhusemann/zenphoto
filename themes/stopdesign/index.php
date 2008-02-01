@@ -120,7 +120,7 @@
 			</div>
 		</div>
 	</div>
-	<p id="path"><?php echo getGalleryTitle(); ?></p>  
+	<p id="path"><?php printHomeLink('', ' > '); echo getGalleryTitle(); ?></p>  
 	<div id="footer">
   		<hr />
 		<p>
