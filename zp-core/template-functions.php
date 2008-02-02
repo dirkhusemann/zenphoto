@@ -2229,7 +2229,7 @@ function printLatestComments($number, $shorten='123') {
 
     $albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
     foreach ($albumscheck as $albumcheck) {
-      if(!checkAlbumPassword($albumcheck['folder'])) {
+      if(!checkAlbumPassword($albumcheck['folder'], $hint)) {
         $albumpasswordcheck1= " AND i.albumid != ".$albumcheck['id'];
         $albumpasswordcheck2= " AND a.id != ".$albumcheck['id'];
         $passwordcheck1 = $passwordcheck1.$albumpasswordcheck1;
@@ -2342,7 +2342,7 @@ function getAlbumStatistic($number=5, $option) {
   } else {
     $albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
     foreach($albumscheck as $albumcheck) {
-      if(!checkAlbumPassword($albumcheck['folder'])) {
+      if(!checkAlbumPassword($albumcheck['folder'], $hint)) {
         $albumpasswordcheck= " AND id != ".$albumcheck['id'];
         $passwordcheck = $passwordcheck.$albumpasswordcheck;
       }
@@ -2456,7 +2456,7 @@ function getImageStatistic($number, $option, $album='') {
   } else {
     $albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
     foreach($albumscheck as $albumcheck) {
-      if(!checkAlbumPassword($albumcheck['folder'])) {
+      if(!checkAlbumPassword($albumcheck['folder'], $hint)) {
         $albumpasswordcheck= " AND albums.id != ".$albumcheck['id'];
         $passwordcheck = $passwordcheck.$albumpasswordcheck;
       }
@@ -3476,29 +3476,20 @@ function normalizeColumns($albumColumns, $imageColumns) {
 /**
  * Checks to see if a password is needed
  * displays a password form if log-on is required
-
+ *
  * Returns true if a login form has been displayed
-
  * 
-
  * The password protection is hereditary. 
-
  * 
-
  * This normally only impacts direct url access to an album or image since if
-
  * you are going down the tree you will be stopped at the first place a password is required.
-
  * 
-
  * If the gallery is password protected then every album & image will require that password.
-
+ * 
  * If an album is password protected then all subalbums and images treed below that album will require 
-
+ * 
  * the password. If there are multiple passwords in the tree and you direct link, the password that is 
-
  * required will be that of the nearest parent that has a password. (The gallery is the ur-parrent to all
-
  * albums.)
  *
  * @param bool $silent set to true to inhibit the logon form
@@ -3506,18 +3497,20 @@ function normalizeColumns($albumColumns, $imageColumns) {
  * @since 1.1.3
  */
 function checkforPassword($silent=false) {
-  global $_zp_current_album, $_zp_current_search, $_zp_album_authorized, $_zp_gallery;
+  global $_zp_current_album, $_zp_current_search, $_zp_gallery;
   if (zp_loggedin()) { return false; }  // you're the admin, you don't need the passwords.
   $context = get_context();
   if (($context | ZP_INDEX) == (ZP_INDEX + ZP_SEARCH)) {  // search page
     $hash = getOption('search_password');
     $hint = getOption('search_hint');
+    $authType = 'zp_search_auth';
     if (empty($hash)) {
       $hash = getOption('gallery_password');
       $hint = getOption('gallery_hint');
+      $authType = 'zp_gallery_auth';
     }
     if (!empty($hash)) {
-      if ($_zp_album_authorized != $hash) {
+      if ($_COOKIE[$authType] != $hash) {
         if (!$silent) {
           printPasswordForm($hint);
         }
@@ -3526,49 +3519,19 @@ function checkforPassword($silent=false) {
     }
   } else if (isset($_GET['album'])) {  // album page
     $album = $_zp_current_album;
-    $hash = $album->getPassword();
-    $hint = $album->getPasswordHint();
-    if (empty($hash)) {
-      $album = $album->getParent();
-      while (!is_null($album)) {
-        $hash = $album->getPassword();
-        if (!empty($hash)) { //whoo, sneeky url jump,
-          $hint = $album->getPasswordHint();
-          if ($_zp_album_authorized == $hash) {
-            return false;
-          } else {
-            if (!$silent) {
-              printPasswordForm($hint);
-            }
-            return true;
-          }
-        }
-        $album = $album->getParent();
-      }
-      // revert all tlhe way to the gallery
-      $hash = getOption('gallery_password');
-      $hint = getOption('gallery_hint');
-      if (!empty($hash)) {
-        if ($_zp_album_authorized != $hash) {
-          if (!$silent) {
-            printPasswordForm($hint);
-          }
-          return true;
-        }
-      }
+    if (checkAlbumPassword($album->name, $hint)) {
+      return false;
     } else {
-      if ($_zp_album_authorized != $hash) {
-        if (!$silent) {
-          printPasswordForm($hint);
-        }
-        return true;
+      if (!$silent) {
+        printPasswordForm($hint);
       }
+      return true;
     }
   } else {  // index page
     $hash = getOption('gallery_password');
     $hint = getOption('gallery_hint');
     if (!empty($hash)) {
-      if ($_zp_album_authorized != $hash) {
+      if ($_COOKIE['zp_gallery_auth'] != $hash) {
         if (!$silent) {
           printPasswordForm($hint);
         }

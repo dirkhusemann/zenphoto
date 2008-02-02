@@ -11,7 +11,7 @@ $host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 // check passwords
 $albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
 foreach($albumscheck as $albumcheck) {
-	if(!checkAlbumPassword($albumcheck['folder'])) {
+	if(!checkAlbumPassword($albumcheck['folder'], $hint)) {
 		$albumpasswordcheck= " AND albums.id != ".$albumcheck['id'];
 		$passwordcheck = $passwordcheck.$albumpasswordcheck;
 	} 

@@ -206,7 +206,7 @@ function cookiecode($text) {
 function zp_handle_password() {
   $cookiepath = WEBPATH;
   if (WEBPATH == '') { $cookiepath = '/'; }
-  global $_zp_login_error, $_zp_current_album, $_zp_album_authorized;
+  global $_zp_login_error, $_zp_current_album;
   if (in_context(ZP_SEARCH)) {  // search page
     $authType = 'zp_search_auth';
     $check_auth = getOption('search_password');
@@ -235,17 +235,16 @@ function zp_handle_password() {
     $authType = 'zp_gallery_auth';
 	$check_auth = getOption('gallery_password');
   }
-  $_zp_album_authorized = NULL;
   if (empty($check_auth)) { //no password on record
 	return;
   }
   if (isset($_COOKIE[$authType])) {
     $saved_auth = $_COOKIE[$authType];
     if ($saved_auth == $check_auth) {
-      $_zp_album_authorized = $saved_auth;
       return;
     } else {
       // Clear the cookie
+      unset($_COOKIE[$authType]);
       setcookie($authType, "", time()-368000, $cookiepath);
     }
   } 
@@ -255,9 +254,10 @@ function zp_handle_password() {
     if ($pass == $check_auth) {
       // Correct auth info. Set the cookie.
       setcookie($authType, $pass, time()+5184000, $cookiepath);
-      $_zp_album_authorized = $pass;
+      $_COOKIE[$authType] = $pass;
     } else {
-     // Clear the cookie, just in case
+      // Clear the cookie, just in case
+      unset($_COOKIE[$authType]);
       setcookie($authType, "", time()-368000, $cookiepath);
       $_zp_login_error = true;
     }

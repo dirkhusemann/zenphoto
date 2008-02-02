@@ -1,6 +1,6 @@
 <?php
 define('ZENPHOTO_VERSION', '1.1.4');
-define('ZENPHOTO_RELEASE', 1089);
+define('ZENPHOTO_RELEASE', 1090);
 define('SAFE_GLOB', false);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 
@@ -906,10 +906,15 @@ function zp_mail($subject, $message, $headers = '') {
  * There is no password dialog--you must have already had authorization via a cookie.
  *
  * @param string $albumname the album
+ * @param string &$hint becomes populated with the password hint.
  * @return bool
  */
-  function checkAlbumPassword($albumname) {
+  function checkAlbumPassword($albumname, &$hint) {
+    global $_zp_pre_authorization;
     if (zp_loggedin()) { return true; }
+    if (isset($_zp_pre_authorization[$albumname])) {
+      return true;
+    }
     $album = new album($_zp_gallery, $albumname);
     $hash = $album->getPassword();
     if (empty($hash)) {
@@ -918,9 +923,10 @@ function zp_mail($subject, $message, $headers = '') {
         $hash = $album->getPassword();
         $authType = "zp_album_auth_" . cookiecode($album->name);
         $saved_auth = $_COOKIE[$authType];
-    
+
         if (!empty($hash)) {
           if ($saved_auth != $hash) {
+            $hint = $album->getPasswordHint();
             return false;
           }
         }
@@ -932,6 +938,7 @@ function zp_mail($subject, $message, $headers = '') {
       $saved_auth = $_COOKIE[$authType];
       if (!empty($hash)) {
         if ($saved_auth != $hash) {
+          $hint = getOption('gallery_hint');
           return false;
         }
       }
@@ -939,9 +946,11 @@ function zp_mail($subject, $message, $headers = '') {
       $authType = "zp_album_auth_" . cookiecode($album->name);
       $saved_auth = $_COOKIE[$authType];
       if ($saved_auth != $hash) {
+        $hint = $album->getPasswordHint();
         return false;
       }
     }
+    $_zp_pre_authorization[$albumname] = true;
     return true;
   }
 
@@ -955,7 +964,7 @@ function zp_mail($subject, $message, $headers = '') {
 function zipAddSubalbum($base, $offset, $subalbum) {
   global $_zp_zip_list;
   $leadin = str_replace(getAlbumFolder(), '', $base);
-  if (checkAlbumPassword($leadin.$offset.$subalbum)) {
+  if (checkAlbumPassword($leadin.$offset.$subalbum, $hint)) {
     $new_offset = $offset.$subalbum.'/';
     $rp = $base.$new_offset;
     $cwd = getcwd();
@@ -982,7 +991,7 @@ function zipAddSubalbum($base, $offset, $subalbum) {
  */
 function createAlbumZip($album){
   global $_zp_zip_list;
-  if (!checkAlbumPassword($album)) {
+  if (!checkAlbumPassword($album, $hint)) {
     pageError();
     exit();
   }

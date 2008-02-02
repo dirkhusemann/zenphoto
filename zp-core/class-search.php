@@ -343,7 +343,7 @@ function getSearchAlbums() {
     foreach ($search_results as $row) {
       $albumname = $row['folder'];
       if (file_exists($albumfolder . $albumname)) {
-        if (checkAlbumPassword($albumname)) {
+        if (checkAlbumPassword($albumname, $hint)) {
           $albums[] = $row['folder'];
         }
       }
@@ -436,7 +436,7 @@ function getSearchImages() {
       $row2 = query_single_row($query); // id is unique
       $albumname = $row2['folder'];
       if (file_exists($albumfolder . $albumname . '/' . $row['filename'])) {
-        if (checkAlbumPassword($albumname)) {
+        if (checkAlbumPassword($albumname, $hint)) {
           $images[] = array('filename' => $row['filename'], 'folder' => $row2['folder']);
         }
       }

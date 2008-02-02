@@ -51,6 +51,11 @@ switch ($suffix) {
     imagejpeg($newim, NULL, $quality);
     break;
   case 'png':
+    if ($quality = 100) {
+      $quality = 0;
+    } else {
+      $quality = round((99 - $quality)/10);
+    }
     imagepng($newim, NULL, $quality);
     break;
   case 'bmp':
