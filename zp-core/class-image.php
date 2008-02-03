@@ -30,6 +30,8 @@ class Image extends PersistentObject {
    * @return Image
    */
   function Image(&$album, $filename) {
+
+    
     // $album is an Album object; it should already be created.
     $this->album = &$album;
     if ($album->name == '') {
@@ -58,7 +60,7 @@ class Image extends PersistentObject {
     }  
 
     // This is where the magic happens...
-    $new = parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id));  
+    $new = parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename');  
     if ($new) {
       $metadata = getImageMetadata($this->localpath);
       if (isset($metadata['date'])) {
@@ -107,6 +109,9 @@ class Image extends PersistentObject {
       $this->set('mtime', filemtime($this->localpath));
       $this->save();
     }
+    
+    
+    
   }
     
   /**
