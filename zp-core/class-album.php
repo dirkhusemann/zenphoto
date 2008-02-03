@@ -846,15 +846,35 @@ class Album extends PersistentObject {
     }
     $dir = opendir($albumdir);
     $files = array();
+    $videos = array();
+    
 
     while (false !== ($file = readdir($dir))) {
-      if (($dirs && is_dir($albumdir.$file) && substr($file, 0, 1) != '.')
-          || (!$dirs && is_file($albumdir.$file) && 
-          !is_videoThumb($albumdir,$file) && ( is_valid_image($file) || is_valid_video($file)))) {
+      if ($dirs && is_dir($albumdir.$file) && substr($file, 0, 1) != '.') {
         $files[] = $file;
+      } else if (!$dirs && is_file($albumdir.$file)) {
+        if (is_valid_video($file)) {
+          $files[] = $file;
+          $videos[] = $file;
+        } else if (is_valid_image($file)) {
+          $files[] = $file;
+        }
       }
     }
     closedir($dir);
+    if (count($videos) > 0) {
+      $video_thumbs = array();
+      foreach($videos as $video) {
+        $video_root = substr($video, 0, strrpos($video,"."));
+        foreach($files as $image) {
+          $image_root = substr($image, 0, strrpos($image,"."));
+          if ($image_root == $video_root && $image != $video) {
+            $videoThumbs[] = $image;
+          }
+        }
+      }
+      array_diff($files, $video_thumbs);
+    }
     
     return $files;
   }

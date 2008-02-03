@@ -262,23 +262,26 @@ function is_valid_video($filename) {
 	return in_array($ext, array('flv','3gp','mov'));
 }
 
+
 /**
  * Check if the image is a video thumb
  *
  * @param string $album folder path for the album
  * @param string $filename name of the target
  * @return bool
+ *
+ * Note: this function is inefficient and slows down the image file loop a lot.
+ * Don't use it in a loop!
  */
 function is_videoThumb($album,$filename){
-	
 	$extTab = array(".flv",".3gp",".mov");
-   foreach($extTab as $ext) {
-     $video = $album.substr($filename,0,strrpos($filename,".")).$ext;
-     if(file_exists($video) && !is_valid_video($filename)){
-       return true;
-     }
-   }
- return false;
+  foreach($extTab as $ext) {
+    $video = $album.substr($filename,0,strrpos($filename,".")).$ext;
+    if(file_exists($video) && !is_valid_video($filename)){
+      return true;
+    }
+  }
+  return false;
 }
 
 /**
