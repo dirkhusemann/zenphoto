@@ -1,6 +1,6 @@
 <?php
 define('ZENPHOTO_VERSION', '1.1.4');
-define('ZENPHOTO_RELEASE', 1090);
+define('ZENPHOTO_RELEASE', 1091);
 define('SAFE_GLOB', false);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 
@@ -319,6 +319,20 @@ function truncate_string($string, $length) {
   return $string;
 }
 
+/**
+ * Returns the oldest ancestor of an alubm;
+ *
+ * @param string $album an album object
+ * @return object
+ */
+function getUrAlbum($album) {
+  while (true) {
+    $parent = $album->getParent();
+    if (is_null($parent)) { return $album; }
+    $album = $parent;
+  }
+}
+
 /** 
  * rewrite_get_album_image - Fix special characters in the album and image names if mod_rewrite is on:
  * This is redundant and hacky; we need to either make the rewriting completely internal,
@@ -376,7 +390,6 @@ function rewrite_get_album_image($albumvar, $imagevar) {
   $rimage = isset($_GET[$imagevar]) ? $_GET[$imagevar] : null;
   return array($ralbum, $rimage);
 }
-
 
 /** getAlbumArray - returns an array of folder names corresponding to the
  *     given album string.
@@ -470,7 +483,7 @@ function getImageParameters($args) {
       $ch = $height;
       $height = $width = false;
     }
-//    $thumb = true;
+    $thumb = true;
     $cw = min($size, $cw);
     $ch = min($size, $ch);
     

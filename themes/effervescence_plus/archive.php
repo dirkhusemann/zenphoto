@@ -39,6 +39,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 
 	<!-- Wrap Main Body -->
 	<div id="content">
+	    <small>&nbsp;</small>
 		<div id="main">
 	      <?php if (!checkForPassword()) {?>
             <!-- Date List -->

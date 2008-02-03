@@ -76,7 +76,7 @@
 					      $imageURL = getURL($image); 
 					      echo '<a href="'.$imageURL.'" title="View image: ' . 
 					        $image->getTitle() . '"><img src="' . 
-					    	$image->getCustomImage(null, 44.5, 33.5, null, null, null, null) . 
+					    	$image->getCustomImage(null, 44.5, 33.5, null, null, null, null, true) . 
 						                        '" width="44.5" height="33.5" alt="' . $image->getTitle() . "\"/></a>\n"; 
 					      echo "</td></tr></table></li>\n";
 						}
@@ -87,7 +87,7 @@
 						  $randomImage = getRandomImages();
 						  $randomImageURL = getURL($randomImage); 
 						  echo '<a href="' . $randomImageURL . '" title="View image: ' . $randomImage->getTitle() . '">' .
-     						  '<img src="' . $randomImage->getCustomImage(null, 44.5, 33.5, null, null, null, null) . 
+     						  '<img src="' . $randomImage->getCustomImage(null, 44.5, 33.5, null, null, null, null, true) . 
 							  '" width="44.5" height="33.5" alt="'.$randomImage->getTitle().'"'; 
 							  echo "/></a></td></tr></table></li>\n";
 						}

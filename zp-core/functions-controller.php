@@ -204,6 +204,7 @@ function cookiecode($text) {
  *checks for album password posting
  */
 function zp_handle_password() {
+  if (zp_loggedin()) { return; } // who cares, we don't need any authorization
   $cookiepath = WEBPATH;
   if (WEBPATH == '') { $cookiepath = '/'; }
   global $_zp_login_error, $_zp_current_album;

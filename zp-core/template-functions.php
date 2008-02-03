@@ -205,14 +205,17 @@ function printMainSiteLink($title=NULL, $class=NULL, $id=NULL) {
 }
 
 /**
- * Returns the URL of  index.php of zenphoto without printing it
+ * Returns the URL of the main gallery page containing the current album
  *
  * @return string
  */
 function getGalleryIndexURL() {
   global $_zp_current_album;
-  if (in_context(ZP_ALBUM) && $_zp_current_album->getGalleryPage() > 1) {
-    $page = $_zp_current_album->getGalleryPage();
+  if (in_context(ZP_ALBUM)) {
+    $album = getUrAlbum($_zp_current_album);
+    $page = $album->getGalleryPage();
+  }
+  if ($page > 1) {
     return rewrite_path("/page/" . $page, "/index.php?page=" . $page);
   } else {
     return WEBPATH . "/";

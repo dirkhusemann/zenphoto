@@ -46,7 +46,14 @@ define('MAX_SIZE', 3000);
 if (!isset($_GET['a']) || !isset($_GET['i'])) {
   imageError("Too few arguments! Image not found.", 'err-imagenotfound.gif');
 }
-if (isset($_GET['t'])) { $thumbStandin = $_GET['t']; } else { $thumbStandin = false; }
+$allowWatermark = false;
+if (isset($_GET['t'])) { 
+  $allowWatermark = !$_GET['t']; 
+} else {  
+  if (isset($_GET[s])) {
+    $allowWatermark = $_GET['s'] != 'thumb';
+  }
+}
 
 // Fix special characters in the album and image names if mod_rewrite is on:
 // URL looks like: "/album1/subalbum/image/picture.jpg"
@@ -67,7 +74,7 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
       $_GET['s'], $_GET['w'], $_GET['h'], $_GET['cw'], $_GET['ch'], $_GET['cx'], $_GET['cy'], $_GET['q'])
     );
   list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
-  
+
   if ($debug) echo "Album: [ " . $album . " ], Image: [ " . $image . " ]<br/><br/>";
   if ($debug) imageDebug($args);
 
@@ -138,9 +145,9 @@ if (file_exists($newfile)) {
 
 // If the file hasn't been cached yet, create it.
 if ($process) {
-	if ($im = get_image($imgfile)) {
-		$w = imagesx($im);
-		$h = imagesy($im);
+  if ($im = get_image($imgfile)) {
+    $w = imagesx($im);
+    $h = imagesy($im);
 
     // Give the sizing dimension to $dim
     if (!empty($size)) {
@@ -151,6 +158,7 @@ if ($process) {
       $ratio_out = $height / $width;
       $crop = true;
       if ($ratio_in > $ratio_out) {
+        $thumb = true;
         $dim = $width;
         $ch = $height;
       } else {
@@ -158,7 +166,7 @@ if ($process) {
         $cw = $width;
         $height = true;
       }
-      
+
     } else if (!empty($width)) {
       $dim = $width;
       $size = $height = false;
@@ -169,11 +177,11 @@ if ($process) {
       // There's a problem up there somewhere...
       imageError("Unknown error! Please report to the developers at <a href=\"http://www.zenphoto.org/\">www.zenphoto.org</a>", 'err-imagegeneral.gif');
     }
-    
+
     // Calculate proportional height and width.
     $hprop = round(($h / $w) * $dim);
     $wprop = round(($w / $h) * $dim);
-    
+
     if ((!$thumb && $size && $image_use_longest_side && $h > $w) || ($thumb && $h <= $w) || $height) {
       $newh = $dim;
       $neww = $wprop;
@@ -181,16 +189,15 @@ if ($process) {
       $newh = $hprop;
       $neww = $dim;
     }
-    
+
     // If the requested image is the same size or larger than the original, redirect to it.
     if (!$upscale && $newh >= $h && $neww >= $w && !$crop) {
       header("Location: " . getAlbumFolder(FULLWEBPATH) . pathurlencode($album) . "/" . rawurlencode($image));
       return;
     }
-
     $newim = imagecreatetruecolor($neww, $newh);
     imagecopyresampled($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
-    
+
     // Crop the image if requested.
     if ($crop) {
       if ($cw === false || $cw > $neww) $cw = $neww;
@@ -204,25 +211,25 @@ if ($process) {
       imagedestroy($newim);
       $newim = $newim_crop;
     }
-    
+
     if ($thumb && $sharpenthumbs) {
       unsharp_mask($newim, 40, 0.5, 3);
     }
-    
+
     // Image Watermarking
     $perform_watermark = false;
     if ($_GET['vwm']) {
       if ($thumb) {
-       $perform_watermark = true;
-         $watermark_image = getOption('video_watermark_image');
+        $perform_watermark = true;
+        $watermark_image = getOption('video_watermark_image');
       }
     } else {
-      if (!$thumb && !$thumbStandin) {
+      if ($allowWatermark) {
         $perform_watermark = getOption('perform_watermark');
         $watermark_image = getOption('watermark_image');
       }
     }
-  
+
     if ($perform_watermark) {
       $watermark = imagecreatefrompng($watermark_image);
       imagealphablending($watermark, false);
@@ -232,18 +239,18 @@ if ($process) {
       // Position Overlay in Bottom Right
       $dest_x = max(0, imagesx($newim) - $watermark_width);
       $dest_y = max(0, imagesy($newim) - $watermark_height);
-  
+
       imagecopy($newim, $watermark, $dest_x, $dest_y, 0, 0, $watermark_width, $watermark_height);
       imagedestroy($watermark);
     }
-    
+
     // Create the cached file (with lots of compatibility)...
     @touch($newfile);
     imagejpeg($newim, $newfile, $quality);
     @chmod($newfile, 0666);
     imagedestroy($newim);
     imagedestroy($im);
-	}
+  }
 }
 if (!$debug) {
   // ... and redirect the browser to it.
