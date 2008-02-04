@@ -97,13 +97,13 @@ if ($album=='') {
  ******************************************/
 // Make sure the cache directory is writable, attempt to fix. Issue a warning if not fixable.
 if (!is_dir(SERVERCACHE)) {
-  @mkdir(SERVERCACHE, 0777);
-  @chmod(SERVERCACHE, 0777);
+  @mkdir(SERVERCACHE, CHMOD_VALUE);
+  @chmod(SERVERCACHE, CHMOD_VALUE);
   if (!is_dir(SERVERCACHE))
     imageError("The cache directory does not exist. Please create it and set the permissions to 0777.", 'err-cachewrite.gif');
 }
 if (!is_writable(SERVERCACHE)) {
-  @chmod(SERVERCACHE, 0777);
+  @chmod(SERVERCACHE, CHMOD_VALUE);
   if (!is_writable(SERVERCACHE))
     imageError("The cache directory is not writable! Attempts to chmod didn't work.", 'err-cachewrite.gif');
 }
@@ -123,10 +123,10 @@ if (!ini_get("safe_mode")) {
   foreach($albumdirs as $dir) {
     $dir = SERVERCACHE . '/' . $dir;
     if (!is_dir($dir)) {
-      @mkdir($dir, 0777);
-      chmod($dir, 0777);
+      @mkdir($dir, CHMOD_VALUE);
+      chmod($dir, CHMOD_VALUE);
     } else if (!is_writable($dir)) {
-      chmod($dir, 0777);
+      chmod($dir, CHMOD_VALUE);
     }
   }
 }
@@ -247,7 +247,7 @@ if ($process) {
     // Create the cached file (with lots of compatibility)...
     @touch($newfile);
     imagejpeg($newim, $newfile, $quality);
-    @chmod($newfile, 0666);
+    @chmod($newfile, 0666 & CHMOD_VALUE);
     imagedestroy($newim);
     imagedestroy($im);
   }

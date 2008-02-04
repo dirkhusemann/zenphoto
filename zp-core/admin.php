@@ -324,9 +324,9 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         $folder = strip($_POST['folder']);
         $uploaddir = $gallery->albumdir . $folder;
         if (!is_dir($uploaddir)) {
-          mkdir ($uploaddir, 0777);
+          mkdir ($uploaddir, CHMOD_VALUE);
         }
-        @chmod($uploaddir, 0777);
+        @chmod($uploaddir, CHMOD_VALUE);
 
         $reject = array ("'", '"', "%"); // any characters in file names that will give us problems
         $error = false;
@@ -341,7 +341,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
             if (is_valid_image($name)) {
               $uploadfile = $uploaddir . '/' . $name;
               move_uploaded_file($tmp_name, $uploadfile);
-              @chmod($uploadfile, 0666);
+              @chmod($uploadfile, 0666 & CHMOD_VALUE);
             } else if (is_zip($name)) {
               unzip($tmp_name, $uploaddir);
             }

@@ -1,7 +1,8 @@
 <?php
 define('ZENPHOTO_VERSION', '1.1.4');
-define('ZENPHOTO_RELEASE', 1096);
+define('ZENPHOTO_RELEASE', 1097);
 define('SAFE_GLOB', false);
+define('CHMOD_VALUE', 0777);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 
 // Set the memory limit higher just in case -- supress errors if user doesn't have control.

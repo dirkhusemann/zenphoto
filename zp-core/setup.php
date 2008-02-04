@@ -1,5 +1,6 @@
 <?php
 define('HTACCESS_VERSION', '1.1.4.0');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
+define('CHMOD_VALUE', 0777);
 global $setup;
 $checked = isset($_GET['checked']);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
@@ -33,7 +34,7 @@ if (isset($_POST['mysql'])) { //try to update the zp-config file
   if (isset($_POST['mysql_prefix'])) {
     updateItem('mysql_prefix', $_POST['mysql_prefix']);
   }
-  @chmod('zp-config.php', 0777);
+  @chmod('zp-config.php', CHMOD_VALUE);
   if (is_writeable('zp-config.php')) {
     if ($handle = fopen('zp-config.php', 'w')) {
       if (fwrite($handle, $zp_cfg)) {
@@ -110,9 +111,9 @@ if (!$checked) {
   }
   function folderCheck($which, $path, $external) {
     if (!is_dir($path) && !$external) {
-      @mkdir($path, 0777);
+      @mkdir($path, CHMOD_VALUE);
     }
-    @chmod($path, 0777);
+    @chmod($path, CHMOD_VALUE);
     $folders = explode('/', $path);
     $folder = $folders[count($folders)-1];
     if (empty($folder)) $folder = $folders[count($folders)-2];  // trailing slash
@@ -189,7 +190,7 @@ if (!$checked) {
     $sqlv = versionCheck($required, $mysqlv);;
   }
   if ($cfg) {
-    @chmod('zp-config.php', 0777);
+    @chmod('zp-config.php', CHMOD_VALUE);
     if ((!$sql || !$connection  || !$db) && is_writable('zp-config.php')) {
       $good = checkMark(false, " mySQL setup in zp-config.php", '', '') && $good;
       // input form for the information
@@ -347,7 +348,7 @@ if (!$checked) {
     }
     $f = '';
     if (!$base) { // try and fix it
-      @chmod($htfile, 0777);
+      @chmod($htfile, CHMOD_VALUE);
       if (is_writeable($htfile)) {
         $ht = substr($ht, 0, $i) . "RewriteBase $d\n" . substr($ht, $j+1);
         if ($handle = fopen($htfile, 'w')) {
