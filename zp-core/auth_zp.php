@@ -21,13 +21,12 @@ if (isset($_GET['ticket'])) { // paassword reset query
   }
 }
 $check_auth = md5($adm . $pas);
-if (isset($_COOKIE['zenphoto_auth']) && !isset($_POST['login'])) {
-  $saved_auth = $_COOKIE['zenphoto_auth'];
+if ((($saved_auth = zp_getCookie('zenphoto_auth')) != '') && !isset($_POST['login'])) {
   if ($saved_auth == $check_auth) {
     $_zp_loggedin = true;
   } else {
     // Clear the cookie
-    setcookie("zenphoto_auth", "", time()-368000, $cookiepath);
+    zp_setcookie("zenphoto_auth", "", time()-368000, $cookiepath);
   }
 } else {
   // Handle the login form.
@@ -42,14 +41,14 @@ if (isset($_COOKIE['zenphoto_auth']) && !isset($_POST['login'])) {
     $redirect = $_POST['redirect'];
     if (($adm == $post_user) && ($pas == $post_pass)) {
       // Correct auth info. Set the cookie.
-      setcookie("zenphoto_auth", md5($post_user . $post_pass), time()+5184000, $cookiepath);
+      zp_setcookie("zenphoto_auth", md5($post_user . $post_pass), time()+5184000, $cookiepath);
       $_zp_loggedin = true;
       //// FIXME: Breaks IIS
       if (!empty($redirect)) { header("Location: " . FULLWEBPATH . $redirect); }
       //// 
     } else {
      // Clear the cookie, just in case
-      setcookie("zenphoto_auth", "", time()-368000, $cookiepath);
+      zp_setcookie("zenphoto_auth", "", time()-368000, $cookiepath);
       $_zp_login_error = true;
     }
   }
@@ -57,7 +56,7 @@ if (isset($_COOKIE['zenphoto_auth']) && !isset($_POST['login'])) {
 unset($saved_auth, $check_auth, $user, $pass);
 // Handle a logout action.
 if (isset($_POST['logout']) || isset($_GET['logout'])) {
-  setcookie("zenphoto_auth", "", time()-368000, $cookiepath);
+  zp_setcookie("zenphoto_auth", "", time()-368000, $cookiepath);
   $redirect = "";
   if (isset($_GET['p'])) { 
     $redirect = "index.php?p=" . $_GET['p'];

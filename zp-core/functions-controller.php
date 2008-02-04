@@ -141,6 +141,7 @@ function zp_handle_comment() {
   global $_zp_current_image, $_zp_current_album, $stored, $_zp_comment_error;
   $redirectTo = FULLWEBPATH . '/' . zpurl();
   unset($_zp_comment_error);
+  $cookie = zp_getCookie('zenphoto');
   if (isset($_POST['comment'])) {
     if (in_context(ZP_ALBUM) && isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
       if (isset($_POST['website'])) $website = strip_tags($_POST['website']); else $website = "";
@@ -172,9 +173,9 @@ function zp_handle_comment() {
         if (isset($_POST['remember'])) {
           // Should always re-cookie to update info in case it's changed...
           $info = array(strip($_POST['name']), strip($_POST['email']), strip($website));
-          setcookie('zenphoto', implode('|~*~|', $info), time()+5184000, '/');
+          zp_setcookie('zenphoto', implode('|~*~|', $info), time()+5184000, '/');
         } else {
-          setcookie('zenphoto', '', time()-368000, '/');
+          zp_setcookie('zenphoto', '', time()-368000, '/');
         }
         //use $redirectTo to send users back to where they came from instead of booting them back to the gallery index. (default behaviour) 
         header('Location: ' . $redirectTo); 
@@ -185,9 +186,9 @@ function zp_handle_comment() {
         $_zp_comment_error = 1 + $commentadded;
       }
     }
-  } else if (isset($_COOKIE['zenphoto'])) {
+  } else  if (!empty($cookie)) {
     // Comment form was not submitted; get the saved info from the cookie.
-    $stored = explode('|~*~|', stripslashes($_COOKIE['zenphoto'])); $stored[] = true;
+    $stored = explode('|~*~|', stripslashes($cookie)); $stored[] = true;
   } else {
     $stored = array('','','', false); 
   }
@@ -239,14 +240,12 @@ function zp_handle_password() {
   if (empty($check_auth)) { //no password on record
 	return;
   }
-  if (isset($_COOKIE[$authType])) {
-    $saved_auth = $_COOKIE[$authType];
+  if (($saved_auth = zp_getCookie($authType)) != '') {
     if ($saved_auth == $check_auth) {
       return;
     } else {
       // Clear the cookie
-      unset($_COOKIE[$authType]);
-      setcookie($authType, "", time()-368000, $cookiepath);
+      zp_setcookie($authType, "", time()-368000, $cookiepath);
     }
   } 
   // Handle the login form.
@@ -254,12 +253,10 @@ function zp_handle_password() {
     $pass = md5($_POST['pass']);
     if ($pass == $check_auth) {
       // Correct auth info. Set the cookie.
-      setcookie($authType, $pass, time()+5184000, $cookiepath);
-      $_COOKIE[$authType] = $pass;
+      zp_setcookie($authType, $pass, time()+5184000, $cookiepath);
     } else {
       // Clear the cookie, just in case
-      unset($_COOKIE[$authType]);
-      setcookie($authType, "", time()-368000, $cookiepath);
+      zp_setcookie($authType, "", time()-368000, $cookiepath);
       $_zp_login_error = true;
     }
   }
@@ -299,7 +296,7 @@ function zp_load_search() {
   set_context(ZP_INDEX | ZP_SEARCH);
   $cookiepath = WEBPATH;
   if (WEBPATH == '') { $cookiepath = '/'; }
-  setcookie("zenphoto_search_params", $_zp_current_search->getSearchParams(), 0, $cookiepath);
+  zp_setcookie("zenphoto_search_params", $_zp_current_search->getSearchParams(), 0, $cookiepath);
   return $_zp_current_search;
 }
 
@@ -333,8 +330,7 @@ function zp_load_image($folder, $filename) {
   if (!$_zp_current_image->exists) return false;
 
   set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX);
-  if (isset($_COOKIE['zenphoto_search_params'])) {
-    $params = $_COOKIE['zenphoto_search_params'];
+  if (($params = zp_getCookie('zenphoto_search_params')) != '') {
     if (!empty($params)) {
       if ($_zp_current_search == NULL) {
         $_zp_current_search = new SearchEngine();

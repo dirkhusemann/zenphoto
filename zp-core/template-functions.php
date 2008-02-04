@@ -1036,7 +1036,7 @@ function getTotalImagesIn($album) {
  */
 function next_image($all=false, $firstPageCount=0, $sorttype=null, $overridePassword=false) {
   global $_zp_images, $_zp_current_image, $_zp_current_album, $_zp_page, $_zp_current_image_restore,
-  $_zp_conf_vars, $_zp_current_search, $_zp_gallery;
+         $_zp_conf_vars, $_zp_current_search, $_zp_gallery;
 
   if (!$overridePassword) { if (checkforPassword()) { return false; } }
   $imagePageOffset = getTotalPages(true) - 1; /* gives us the count of pages for album thumbs */
@@ -1768,7 +1768,7 @@ function getDefaultSizedImage() {
 function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
   //Print videos
   if(getImageVideo()) {
-    $ext = strtolower(strrchr(getFullImageURL(), "."));
+    $ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
     if ($ext == ".flv") {
       //Player Embed...
       echo '</a>
@@ -1776,7 +1776,7 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 	    <script type="text/javascript">
 		  var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/flvplayer.swf","player","320","240","7");
 		  so.addParam("allowfullscreen","true");
-		  so.addVariable("file","' . getFullImageURL() . '&amp;title=' . getImageTitle() . '");
+		  so.addVariable("file","' . getUnprotectedImageURL() . '&amp;title=' . getImageTitle() . '");
 		  so.addVariable("displayheight","310");
 		  so.write("player");
 	    </script><a>';
@@ -1784,22 +1784,22 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
     elseif ($ext == ".3gp") {
       echo '</a>
 		  <object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="352" height="304" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
-		    <param name="src" value="' . getFullImageURL() . '"/>
+		    <param name="src" value="' . getUnprotectedImageURL() . '"/>
 		    <param name="autoplay" value="false" />
 		    <param name="type" value="video/quicktime" />
 		    <param name="controller" value="true" />
-		    <embed src="' . getFullImageURL() . '" width="352" height="304" autoplay="false" controller"true" type="video/quicktime"
+		    <embed src="' . getUnprotectedImageURL() . '" width="352" height="304" autoplay="false" controller"true" type="video/quicktime"
 		      pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
 	        </object><a>';
     }
     elseif ($ext == ".mov") {
       echo '</a>
 		     <object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="640" height="496" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
-			   <param name="src" value="' . getFullImageURL() . '"/>
+			   <param name="src" value="' . getUnprotectedImageURL() . '"/>
 			   <param name="autoplay" value="false" />
 			   <param name="type" value="video/quicktime" />
 			   <param name="controller" value="true" />
-			   <embed src="' . getFullImageURL() . '" width="640" height="496" autoplay="false" controller"true" type="video/quicktime"
+			   <embed src="' . getUnprotectedImageURL() . '" width="640" height="496" autoplay="false" controller"true" type="video/quicktime"
 			     pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
 			  </object><a>';
     }
@@ -1855,10 +1855,11 @@ function printImageThumb($alt, $class=NULL, $id=NULL) {
 * @return string
 */
 function getFullImageURL() {
-  if (getOption('protect_full_image')) {
+  $url = getUnprotectedImageURL();
+  if (getOption('protect_full_image') && !is_valid_video($url)) {
     return getProtectedImageURL();
   } else {
-    return getUnprotectedImageURL();
+    return $url;
   }
 }
 /**
@@ -3513,7 +3514,7 @@ function checkforPassword($silent=false) {
       $authType = 'zp_gallery_auth';
     }
     if (!empty($hash)) {
-      if ($_COOKIE[$authType] != $hash) {
+      if (zp_getCookie($authType) != $hash) {
         if (!$silent) {
           printPasswordForm($hint);
         }
@@ -3534,7 +3535,7 @@ function checkforPassword($silent=false) {
     $hash = getOption('gallery_password');
     $hint = getOption('gallery_hint');
     if (!empty($hash)) {
-      if ($_COOKIE['zp_gallery_auth'] != $hash) {
+      if (zp_getCookie('zp_gallery_auth') != $hash) {
         if (!$silent) {
           printPasswordForm($hint);
         }

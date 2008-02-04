@@ -3,13 +3,13 @@ define('ALBUMCOLUMNS', 3);
 define('IMAGECOLUMNS', 5);
 if (!defined('WEBPATH')) die(); 
 $_noFlash = false;
-if ((($personality = getOption('Theme_personality'))!="Simpleviewer") || !getOption('mod_rewrite')) { 
-  $_noFlash = true; 
+if ((($personality = getOption('Theme_personality'))!="Simpleviewer") || !getOption('mod_rewrite')) {
+  $_noFlash = true;
 } else {  // Simpleviewer initialization stuff
   if (isset($_GET['noflash'])) {
     $_noFlash = true;
-    setcookie("noFlash", "noFlash");
-    } elseif (isset($_COOKIE["noFlash"])) {
+    zp_setcookie("noFlash", "noFlash");
+  } elseif (zp_getCookie("noFlash") != '') {
     $_noFlash = true;
   }
   // Change the Simpleviewer configuration here

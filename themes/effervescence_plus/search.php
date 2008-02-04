@@ -7,8 +7,8 @@ if ((getOption('Use_Simpleviewer')==0) || !getOption('mod_rewrite')) { $_noFlash
 
 if (isset($_GET['noflash'])) {
   $_noFlash = true;
-  setcookie("noFlash", "noFlash");
-  } elseif (isset($_COOKIE["noFlash"])) {
+  zp_setcookie("noFlash", "noFlash");
+  } elseif (zp_getCookie("noFlash") != '') {
   $_noFlash = true;
   }
   */

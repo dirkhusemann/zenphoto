@@ -34,7 +34,7 @@ if (isset($_GET['p'])) {
   } else { 
     $cookiepath = WEBPATH;
     if (WEBPATH == '') { $cookiepath = '/'; }
-    setcookie("zenphoto_search_params", "", time()-368000, $cookiepath);
+    zp_setcookie("zenphoto_search_params", "", time()-368000, $cookiepath);
     include($obj = "$themepath/$theme/album.php"); 
   } 
 } else if (in_context(ZP_INDEX)) {

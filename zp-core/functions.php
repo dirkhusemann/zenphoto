@@ -1,6 +1,6 @@
 <?php
 define('ZENPHOTO_VERSION', '1.1.4');
-define('ZENPHOTO_RELEASE', 1091);
+define('ZENPHOTO_RELEASE', 1096);
 define('SAFE_GLOB', false);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 
@@ -67,7 +67,7 @@ $_zp_error = false;
   */
 function getOption($key) {
   global $_zp_conf_vars, $_zp_options, $setup;
-  if (NULL == $_zp_options) {
+  if (is_null($_zp_options)) {
     $_zp_options = array();
     if (!isset($setup)) {
       $sql = "SELECT `name`, `value` FROM ".prefix('options');
@@ -273,8 +273,8 @@ function is_valid_video($filename) {
  * Note: this function is inefficient and slows down the image file loop a lot.
  * Don't use it in a loop!
  */
-function is_videoThumb($album,$filename){
-	$extTab = array(".flv",".3gp",".mov");
+function is_videoThumb($album, $filename){
+  $extTab = array(".flv",".3gp",".mov");
   foreach($extTab as $ext) {
     $video = $album.substr($filename,0,strrpos($filename,".")).$ext;
     if(file_exists($video) && !is_valid_video($filename)){
@@ -938,7 +938,7 @@ function zp_mail($subject, $message, $headers = '') {
       while (!is_null($album)) {
         $hash = $album->getPassword();
         $authType = "zp_album_auth_" . cookiecode($album->name);
-        $saved_auth = $_COOKIE[$authType];
+        $saved_auth = zp_getCookie($authType);
 
         if (!empty($hash)) {
           if ($saved_auth != $hash) {
@@ -951,7 +951,7 @@ function zp_mail($subject, $message, $headers = '') {
       // revert all tlhe way to the gallery
       $hash = getOption('gallery_password');
       $authType = 'zp_gallery_auth';
-      $saved_auth = $_COOKIE[$authType];
+      $saved_auth = zp_getCookie($authType);
       if (!empty($hash)) {
         if ($saved_auth != $hash) {
           $hint = getOption('gallery_hint');
@@ -960,7 +960,7 @@ function zp_mail($subject, $message, $headers = '') {
       }
     } else {
       $authType = "zp_album_auth_" . cookiecode($album->name);
-      $saved_auth = $_COOKIE[$authType];
+      $saved_auth = zp_getCookie($authType);
       if ($saved_auth != $hash) {
         $hint = $album->getPasswordHint();
         return false;
@@ -1381,6 +1381,32 @@ function debugLog($message, $reset=false) {
 }
 
 /**
+ * "print_r" equivalent for the debug log
+ *
+ * @param array $source
+ */
+function debugLogArray($source) {
+  $msg = "Array( ";
+  if (is_array($source)) {
+    if (count($source) > 0) {
+      foreach ($source as $key => $val) {
+        if (strlen($msg) > 72) {
+          debugLog($msg);
+          $msg = '';
+        }
+        $msg .= $key . " => " . $val . ", ";
+      }
+      $msg = substr($msg, 0, strrpos($msg, ',')) . " )";
+    } else {
+      $msg .= ")";
+    }
+    debugLog($msg);
+  } else {
+    debugLog($msg . ")");
+  }
+}
+
+/**
  * Provide an alternative to glob if the ISP has disabled it
  * To enable the alternative, change the SAFE_GLOB define at the front to functions.php
  * 
@@ -1424,4 +1450,35 @@ if (!function_exists('fnmatch')) {
   }
 }
 
+/**
+ * Returns the value of a cookie from either the cookies or from $_SESSION[] 
+ *
+ * @param string $name the name of the cookie
+ */
+function zp_getCookie($name) {
+  
+//debugLog("\$_SESSION");debugLogArray($_SESSION);
+
+  if (isset($_SESSION[$name])) { return $_SESSION[$name]; }
+  if (isset($_COOKIE[$name])) { return $_COOKIE[$name]; }
+  return '';
+}
+/**
+ * Sets a cookie both in the browser cookies and in $_SESSION[] 
+ *
+ * @param string $name
+ * @param string $value
+ * @param timestamp $time
+ * @param string $path
+ */
+function zp_setCookie($name, $value, $time, $path) {
+  setcookie($name, $value, $time, $path);
+  if ($time < 0) {
+    unset($_SESSION[$name]);
+    unset($_COOKIE[$name]);
+  } else {
+    $_SESSION[$name] = $value;
+    $_COOKIE[$name] = $value;
+  }
+}
 ?>
