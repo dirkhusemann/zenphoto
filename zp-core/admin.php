@@ -1,10 +1,10 @@
 <?php  /* Don't put anything before this line! */
-session_start();
 define('OFFSET_PATH', true);
 require_once("sortable.php");
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
   header("Location: setup.php");
 }
+if (!$session_started) session_start();
 $adm = getOption('adminuser');
 $pas = getOption('adminpass');
 $rsd = getOption('admin_reset_date');
@@ -27,7 +27,7 @@ $standardOptions = array('gallery_title','website_title','website_url','time_off
                          'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'search_fields',
                          'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
                          'allowed_tags', 'full_image_download', 'full_image_quality', 'persistent_archive',
-                         'protect_full_image');
+                         'protect_full_image', 'album_session');
 $charsets = array("ASMO-708" => "Arabic",
                   "big5" => "Chinese Traditional",
                   "CP1026" => "IBM EBCDIC (Turkish Latin-5)",
@@ -530,6 +530,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         setOption('gallery_hint', $_POST['gallery_hint']);
         setOption('search_hint', $_POST['search_hint']);
         setBoolOption('persistent_archive', $_POST['persistent_archive']);
+        setBoolOption('album_session', $_POST['album_session']);
         $returntab = "#tab_gallery";
       }
 
@@ -1525,6 +1526,11 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                         <td><input type="checkbox" name="persistent_archive" value="1" <?php echo checked('1', getOption('persistent_archive')); ?> /></td>
                         <td>Put a checkmark here to re-serve Zip Archive files. If not checked they will be regenerated each time. 
                         <strong>Note: </strong>Setting this option may impact password protected albums!</td>
+                    </tr>
+                    <tr>
+                        <td>Enable gallery sessions:</td>
+                        <td><input type="checkbox" name="album_session" value="1" <?php echo checked('1', getOption('album_session')); ?> /></td>
+                        <td>Put a checkmark here if you are having issues with with album password cookies not being retained.</td>
                     </tr>
                     <tr>
                         <td></td>

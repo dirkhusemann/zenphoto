@@ -69,11 +69,14 @@ class Image extends PersistentObject {
         $newDate = strftime('%Y/%m/%d %T', filemtime($this->localpath));
       }
       $this->set('date', $newDate);
-      if (is_null($this->album->getDateTime())) {
-        $this->album->setDateTime($newDate);   //  not necessarily the right one, but will do. Can be changed in Admin
-        $this->album->save();
+      $alb = $this->album;
+      if (!is_null($alb)) {
+        if (is_null($alb->getDateTime())) {
+          $this->album->setDateTime($newDate);   //  not necessarily the right one, but will do. Can be changed in Admin
+          $this->album->save();
+        }
       }
-      
+
       if (isset($metadata['title'])) { 
         $title = $metadata['title']; 
       } else {
@@ -626,9 +629,13 @@ class Image extends PersistentObject {
       && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
       return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($cachefilename);
     } else {
+      $alb = $this->album->name;
+      $queryURL = ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($this->filename) . '&s=thumb';
+      if (empty($alb)) {
+        $alb = '/ ';
+      }
       return rewrite_path(
-        pathurlencode($this->album->name) . '/image/thumb/' . urlencode($this->filename),
-        ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($this->filename) . '&s=thumb');
+        pathurlencode($alb) . '/image/thumb/' . urlencode($this->filename), $queryURL);
     }
   }
 

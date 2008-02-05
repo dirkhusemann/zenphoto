@@ -25,6 +25,7 @@ function setDefault($option, $default) {
   setDefault('website_url', "");
   setDefault('time_offset', 0);
   setDefault('gmaps_apikey', "");
+  setDefault('album_session', 0);  
   
   if ($_GET['mod_rewrite'] == 'ON') {
     $rw = 1;

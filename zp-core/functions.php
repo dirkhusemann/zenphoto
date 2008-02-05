@@ -1,6 +1,6 @@
 <?php
 define('ZENPHOTO_VERSION', '1.1.4');
-define('ZENPHOTO_RELEASE', 1097);
+define('ZENPHOTO_RELEASE', 1099);
 define('SAFE_GLOB', false);
 define('CHMOD_VALUE', 0777);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
@@ -55,6 +55,9 @@ $_zp_options = NULL;
  *  An external folder path overrides one located within the zenphotos folders.
 */
 define('ALBUMFOLDER', '/albums/');
+
+$session_started = getOption('album_session');
+if ($session_started) session_start();
 
 // Set error reporting to the default if it's not.
 error_reporting(E_ALL ^ E_NOTICE);
@@ -1457,9 +1460,6 @@ if (!function_exists('fnmatch')) {
  * @param string $name the name of the cookie
  */
 function zp_getCookie($name) {
-  
-//debugLog("\$_SESSION");debugLogArray($_SESSION);
-
   if (isset($_SESSION[$name])) { return $_SESSION[$name]; }
   if (isset($_COOKIE[$name])) { return $_COOKIE[$name]; }
   return '';

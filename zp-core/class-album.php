@@ -561,27 +561,29 @@ class Album extends PersistentObject {
    * @return Image
    */
   function getAlbumThumbImage() {
-/* TODO: This should fail more gracefully when there are errors reading folders etc. */
-    
+    /* TODO: This should fail more gracefully when there are errors reading folders etc. */
+
     $albumdir = getAlbumFolder() . $this->name ."/";
     $thumb = $this->get('thumb');
+
     $i = strpos($thumb, '/');
-    if ($root = ($i === 0)) { 
-        $thumb = substr($thumb, 1); /* strip off the slash */ 
-        $albumdir = getAlbumFolder(); 
+    if ($root = ($i === 0)) {
+      $thumb = substr($thumb, 1); // strip off the slash
+      $albumdir = getAlbumFolder();
     }
+
     if ($thumb != NULL && file_exists($albumdir.$thumb)) {
-      if ($i===false) { 
-          return new Image($this, $thumb); 
-    } else { 
-        $pieces = explode('/', $thumb); 
-        $i = count($pieces); 
-        $thumb = $pieces[$i-1]; 
-        unset($pieces[$i-1]); 
-        $albumdir = implode('/', $pieces); 
-      if (!$root) { $albumdir = $this->name . "/" . $albumdir; } else { $albumdir = $albumdir . "/";} 
-          return new Image(new Album($this->gallery, $albumdir), $thumb); 
-    } 
+      if ($i===false) {
+        return new Image($this, $thumb);
+      } else {
+        $pieces = explode('/', $thumb);
+        $i = count($pieces);
+        $thumb = $pieces[$i-1];
+        unset($pieces[$i-1]);
+        $albumdir = implode('/', $pieces);
+        if (!$root) { $albumdir = $this->name . "/" . $albumdir; } else { $albumdir = $albumdir . "/";}
+        return new Image(new Album($this->gallery, $albumdir), $thumb);
+      }
     } else {
       $dp = opendir($albumdir);
       while ($thumb = readdir($dp)) {
@@ -599,17 +601,17 @@ class Album extends PersistentObject {
         }
       }
       //jordi-kun - no images, no subalbums, check for videos
-    $dp = opendir($albumdir);
-    while ($thumb = readdir($dp)) {
+      $dp = opendir($albumdir);
+      while ($thumb = readdir($dp)) {
         if (is_file($albumdir.$thumb) && is_valid_video($thumb)) {
-            return new Image($this, $thumb);
+          return new Image($this, $thumb);
         }
-    }
+      }
     }
     $noImage = new Album($this->gallery, '');
     return new image($noImage, 'zen-logo.jpg');
   }
-  
+
   /**
    * Gets the thumbnail URL for the album thumbnail image as returned by $this->getAlbumThumbImage();
    * @return string
