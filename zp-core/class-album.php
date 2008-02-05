@@ -869,11 +869,11 @@ class Album extends PersistentObject {
         foreach($files as $image) {
           $image_root = substr($image, 0, strrpos($image,"."));
           if ($image_root == $video_root && $image != $video) {
-            $videoThumbs[] = $image;
+            $video_thumbs[] = $image;
           }
         }
       }
-      array_diff($files, $video_thumbs);
+      $files = array_diff($files, $video_thumbs);
     }
     
     return $files;
