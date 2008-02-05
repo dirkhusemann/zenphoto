@@ -298,7 +298,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         $file = queryDecode(strip($_GET['image']));
         $album = new Album($gallery, $folder);
         $image = new Image($album, $file);
-        if ($image->deleteImage()) {
+        if ($image->deleteImage(true)) {
           $nd = 1;
         } else {
           $nd = 2;

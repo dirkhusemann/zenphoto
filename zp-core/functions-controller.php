@@ -296,7 +296,8 @@ function zp_load_search() {
   set_context(ZP_INDEX | ZP_SEARCH);
   $cookiepath = WEBPATH;
   if (WEBPATH == '') { $cookiepath = '/'; }
-  zp_setcookie("zenphoto_search_params", $_zp_current_search->getSearchParams(), 0, $cookiepath);
+  $params = $_zp_current_search->getSearchParams();
+  zp_setcookie("zenphoto_image_search_params", $params, 0, $cookiepath);
   return $_zp_current_search;
 }
 
@@ -330,7 +331,7 @@ function zp_load_image($folder, $filename) {
   if (!$_zp_current_image->exists) return false;
 
   set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX);
-  if (($params = zp_getCookie('zenphoto_search_params')) != '') {
+  if (($params = zp_getCookie('zenphoto_image_search_params')) != '') {
     if (!empty($params)) {
       if ($_zp_current_search == NULL) {
         $_zp_current_search = new SearchEngine();

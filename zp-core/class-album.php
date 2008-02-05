@@ -706,9 +706,8 @@ class Album extends PersistentObject {
       $subalbum->deleteAlbum(); 
     }
     foreach($this->getImages() as $filename) {
-      // False here means don't clean up (cascade already took care of it)
       $image = new Image($this, $filename);
-      $image->deleteImage(false);
+      $image->deleteImage(true);
     }
     chdir($this->localpath);
     $filelist = safe_glob('*');

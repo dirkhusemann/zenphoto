@@ -3522,8 +3522,8 @@ function checkforPassword($silent=false) {
       }
     }
   } else if (isset($_GET['album'])) {  // album page
-    $album = $_zp_current_album;
-    if (checkAlbumPassword($album->name, $hint)) {
+    list($album, $image) = rewrite_get_album_image('album','image');
+    if (checkAlbumPassword($album, $hint)) {
       return false;
     } else {
       if (!$silent) {

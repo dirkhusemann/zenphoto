@@ -2,7 +2,7 @@
 require('../../template-functions.php');
 $id = sanitize_numeric($_GET['id']); 
 $rating = sanitize_numeric($_GET['rating']);
-$option = sanitize($_GET['option'];
+$option = $_GET['option'];
 
   switch($option) {
     case "image":
@@ -19,7 +19,7 @@ if ($rating > 5) {
   
 if(!checkIP($id,$option)) { 
   // fetch used_ips and add new ip
-  $ip = $_SERVER['REMOTE_ADDR'];  
+  $ip = sanitize($_SERVER['REMOTE_ADDR']);  
   $numbers = query_full_array("SELECT total_votes, total_value, used_ips FROM ".$dbtable." WHERE id='$id' ")or die(" Error: ".mysql_error());
   $checkIP = unserialize($numbers['used_ips']);
   ((is_array($checkIP)) ? array_push($checkIP,$ip) : $checkIP = array($ip));
