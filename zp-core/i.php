@@ -189,10 +189,9 @@ if ($process) {
       $neww = $dim;
     }
 
-    // If the requested image is the same size or larger than the original, redirect to it.
-    if (!$upscale && $newh >= $h && $neww >= $w && !$crop) {
-      header("Location: " . getAlbumFolder(FULLWEBPATH) . pathurlencode($album) . "/" . rawurlencode($image));
-      return;
+    if (!$upscale && $newh >= $h && $neww >= $w && !$crop) { // image is the same size or smaller than the request
+      $neww = $w;
+      $newh = $h;
     }
     $newim = imagecreatetruecolor($neww, $newh);
     imagecopyresampled($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
