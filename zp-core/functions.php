@@ -1,6 +1,6 @@
 <?php
 define('ZENPHOTO_VERSION', '1.1.4');
-define('ZENPHOTO_RELEASE', 1103);
+define('ZENPHOTO_RELEASE', 1105);
 define('SAFE_GLOB', false);
 define('CHMOD_VALUE', 0777);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
@@ -11,7 +11,7 @@ if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 // functions.php - HEADERS NOT SENT YET!
 
 if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
-  die ("<strong>Zenphoto error:</strong> zp-config.php not found. Perhaps you need to run <a href=\"" . ZENFOLDER . "/setup.php\">setup</a> (or migrate your old config.php)");
+  header("Location: " . ZENFOLDER . "/setup.php");
 }
 
 // Including zp-config.php more than once is OK, and avoids $conf missing.

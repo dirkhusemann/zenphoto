@@ -2559,7 +2559,7 @@ function getAllSubAlbumIDs($albumfolder='') {
       return null;
     }
   }
-  $query = "SELECT `id` FROM " . prefix('albums') . " WHERE `folder` LIKE '" . mysql_real_escape_string($albumfolder) . "%'";
+  $query = "SELECT `id`,`folder` FROM " . prefix('albums') . " WHERE `folder` LIKE '" . mysql_real_escape_string($albumfolder) . "%'";
   $subIDs = query_full_array($query);
   return $subIDs;
 }
@@ -2574,7 +2574,14 @@ function getRandomImages() {
     $albumWhere = '';
     $imageWhere = '';
   } else {
-    $albumWhere = " AND ".prefix('albums') . ".show=1 AND " . prefix('albums') . ".password=''";
+    $albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
+    foreach($albumscheck as $albumcheck) {
+      if(!checkAlbumPassword($albumcheck['folder'], $hint)) {
+        $albumpasswordcheck= " AND ".prefix('albums').".id != ".$albumcheck['id'];
+        $passwordcheck = $passwordcheck.$albumpasswordcheck;
+      }
+    }
+    $albumWhere = " AND ".prefix('albums') . ".show=1".$passwordcheck;
     $imageWhere = " AND " . prefix('images') . ".show=1";
   }
   $result = query_single_row('SELECT '.prefix('images').'.filename,'.prefix('images').'.title, '.prefix('albums').
@@ -2603,16 +2610,18 @@ function getRandomImagesAlbum() {
   $subIDs = getAllSubAlbumIDs($rootAlbum);
   if(is_null($subIDs)) {return null;}; //no subdirs avaliable
   foreach ($subIDs as $ID) {
-    $query = 'SELECT `id` , `albumid` , `filename` , `title` FROM '.prefix('images').' WHERE `albumid` = "'. $ID['id'] .'"' . $imageWhere;
-    $images = array_merge($images, query_full_array($query));
+    if(checkAlbumPassword($ID['folder'], $hint)) {
+      $query = 'SELECT `id` , `albumid` , `filename` , `title` FROM '.prefix('images').' WHERE `albumid` = "'. $ID['id'] .'"' . $imageWhere;
+      $images = array_merge($images, query_full_array($query));
+    }
   }
   $image = NULL;
   while (is_null($image)) {
     if(count($images) < 1){return null;}; //no images avaliable in _any_ subdirectory
     $inx = array_rand($images);
     $randomImage = $images[$inx];
-    $row = query_single_row("SELECT `folder`, `show`, `password` FROM " .prefix('albums'). " WHERE id = '" .$randomImage['albumid']. "'");
-    if (zp_loggedin() || (($row['show']==1) && empty($row['password']))) {
+    $row = query_single_row("SELECT `folder`, `show`, `password` FROM " .prefix('albums'). " WHERE id = '" .$randomImage['albumid']. "'".$imageWhere);
+    if (zp_loggedin() || (($row['show']==1))) {
       $image = new Image(new Album(new Gallery(), $row['folder']), $randomImage['filename']);
       return $image;
     }

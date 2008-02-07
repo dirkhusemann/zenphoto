@@ -2,7 +2,7 @@
 define('OFFSET_PATH', true);
 require_once("sortable.php");
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
-  header("Location: setup.php");
+  header("Location: " . ZENFOLDER . "/setup.php");
 }
 if (!$session_started) session_start();
 $adm = getOption('adminuser');
@@ -444,8 +444,10 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
 /** OPTIONS ******************************************************************/
 /*****************************************************************************/
     } else if ($action == 'saveoptions') {
-      $wm = getOption('perform_watermark');
-      $vwm = getOption('perform_video_watermark');
+      $wm = getOption('watermark_image');
+      $vwm = getOption('video_watermark_image');
+      $wmo = getOption('perform_watermark');
+      $vwmo = getOption('perform_video_watermark');
       $woh = getOption('watermark_h_offset');
       $wow = getOption('watermark_w_offset');
       $captcha = getOption('Use_Captcha');
@@ -598,10 +600,12 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         }
         $i++;
       }
-      if (($wm != getOption('perform_watermark')) || 
-          ($vwm != getOption('perform_video_watermark')) ||
+      if (($wmo != getOption('perform_watermark')) || 
+          ($vwmo != getOption('perform_video_watermark')) ||
           ($woh != getOption('watermark_h_offset')) ||
-          ($wow != getOption('watermark_w_offset'))) {
+          ($wow != getOption('watermark_w_offset'))  ||
+          ($wm != getOption('watermark_image')) || 
+          ($vwm != getOption('video_watermark_image'))) {
         $gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the options haave changed
       }
       if ($captcha && !getOption('Use_Captcha')) { // No longer using captcha, clean up the images
