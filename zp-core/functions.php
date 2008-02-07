@@ -1,6 +1,6 @@
 <?php
 define('ZENPHOTO_VERSION', '1.1.4');
-define('ZENPHOTO_RELEASE', 1101);
+define('ZENPHOTO_RELEASE', 1102);
 define('SAFE_GLOB', false);
 define('CHMOD_VALUE', 0777);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
@@ -1472,7 +1472,7 @@ function zp_getCookie($name) {
  * @param timestamp $time
  * @param string $path
  */
-function zp_setCookie($name, $value, $time, $path) {
+function zp_setCookie($name, $value, $time=0, $path='/') {
   setcookie($name, $value, $time, $path);
   if ($time < 0) {
     unset($_SESSION[$name]);

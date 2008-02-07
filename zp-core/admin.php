@@ -27,7 +27,7 @@ $standardOptions = array('gallery_title','website_title','website_url','time_off
                          'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'search_fields',
                          'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
                          'allowed_tags', 'full_image_download', 'full_image_quality', 'persistent_archive',
-                         'protect_full_image', 'album_session');
+                         'protect_full_image', 'album_session', 'watermark_offset');
 $charsets = array("ASMO-708" => "Arabic",
                   "big5" => "Chinese Traditional",
                   "CP1026" => "IBM EBCDIC (Turkish Latin-5)",
@@ -446,6 +446,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
     } else if ($action == 'saveoptions') {
       $wm = getOption('perform_watermark');
       $vwm = getOption('perform_video_watermark');
+      $wo = getOption('watermark_offset');
       $captcha = getOption('Use_Captcha');
       $notify = '';
       $returntab = "";
@@ -479,12 +480,6 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         setOption('website_title', $_POST['website_title']);
         $web = $_POST['website_url'];
         setOption('website_url', $web);
-/*
-        if (isValidURL($web)) {
-          setOption('website_url', $web);
-        } else {
-          $notify = "&badurl";
-*/
         setOption('time_offset', $_POST['time_offset']);
         setOption('gmaps_apikey', $_POST['gmaps_apikey']);
         setBoolOption('mod_rewrite', $_POST['mod_rewrite']);
@@ -550,6 +545,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         setOption('images_per_page', $_POST['images_per_page']);
         setBoolOption('perform_watermark', $_POST['perform_watermark']);
         setOption('watermark_image', 'watermarks/' . $_POST['watermark_image'] . '.png');
+        setOption('watermark_offset', $_POST['watermark_offset']);
         setBoolOption('perform_video_watermark', $_POST['perform_video_watermark']);
         setOption('video_watermark_image', 'watermarks/' . $_POST['video_watermark_image'] . '.png');
         setBoolOption('full_image_download', $_POST['full_image_download']);
@@ -600,8 +596,10 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         }
         $i++;
       }
-      if (($wm != getOption('perform_watermark')) || ($vwm != getOption('perform_video_watermark'))) {
-        $gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the option has changed
+      if (($wm != getOption('perform_watermark')) || 
+          ($vwm != getOption('perform_video_watermark')) ||
+          ($wo != getOption('watermark_offset'))) {
+        $gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the options haave changed
       }
       if ($captcha && !getOption('Use_Captcha')) { // No longer using captcha, clean up the images
         chdir(SERVERCACHE . "/");
@@ -1630,7 +1628,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                         <td>Controls the number of images on a page. You might need to change this after switching themes to make it look better.</td>
                     </tr>
                     <tr>
-                        <td>Image for image watermark:</td>
+                        <td>Watermark images:</td>
                         <td>
                             <?php
                                 $v = explode("/", getOption('watermark_image'));
@@ -1641,11 +1639,16 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                             ?>
                           <input type="checkbox" name="perform_watermark" value="1"
                           <?php echo checked('1', getOption('perform_watermark')); ?> />&nbsp;Enabled
+                          <br/>offset <input type="text" size="5" name="watermark_offset" value="<?php echo getOption('watermark_offset');?>" />%                          
                         </td>
-                        <td>The watermark image (png-24). (Place the image in the <?php echo ZENFOLDER; ?>/watermarks/ directory.)</td>
+                        <td>
+                        The watermark image (png-24). (Place the image in the <?php echo ZENFOLDER; ?>/watermarks/ directory.)<br/>
+                        The watermark image is placed relative to the upper left corner of the image. It is offset from there (moved toward the lower
+                        right corner) by the <em>offset</em> percentage of the size difference between the image and the watermark.
+                        </td>
                     </tr>
                      <tr>
-                        <td>Image for video watermark:</td>
+                        <td>Watermark videos:</td>
                         <td>
                         <?php
                             $v = explode("/", getOption('video_watermark_image'));

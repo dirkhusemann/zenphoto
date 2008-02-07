@@ -46,7 +46,7 @@ define('MAX_SIZE', 3000);
 if (!isset($_GET['a']) || !isset($_GET['i'])) {
   imageError("Too few arguments! Image not found.", 'err-imagenotfound.gif');
 }
-$allowWatermark = false;
+$allowWatermark = true;
 if (isset($_GET['t'])) { 
   $allowWatermark = !$_GET['t']; 
 } else {  
@@ -54,7 +54,6 @@ if (isset($_GET['t'])) {
     $allowWatermark = $_GET['s'] != 'thumb';
   }
 }
-
 // Fix special characters in the album and image names if mod_rewrite is on:
 // URL looks like: "/album1/subalbum/image/picture.jpg"
 list($ralbum, $rimage) = rewrite_get_album_image('a', 'i');
@@ -227,17 +226,17 @@ if ($process) {
         $watermark_image = getOption('watermark_image');
       }
     }
-
+    
     if ($perform_watermark) {
+      $offset = getOption('watermark_offset') / 100;
       $watermark = imagecreatefrompng($watermark_image);
       imagealphablending($watermark, false);
       imagesavealpha($watermark, true);
       $watermark_width = imagesx($watermark);
       $watermark_height = imagesy($watermark);
       // Position Overlay in Bottom Right
-      $dest_x = max(0, imagesx($newim) - $watermark_width);
-      $dest_y = max(0, imagesy($newim) - $watermark_height);
-
+      $dest_x = max(0, floor((imagesx($newim) - $watermark_width) * $offset));
+      $dest_y = max(0, floor((imagesy($newim) - $watermark_height) * $offset));
       imagecopy($newim, $watermark, $dest_x, $dest_y, 0, 0, $watermark_width, $watermark_height);
       imagedestroy($watermark);
     }

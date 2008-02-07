@@ -54,6 +54,7 @@ function setDefault($option, $default) {
   setDefault('albums_per_page', 5);
   setDefault('images_per_page', 15);
   setDefault('perform_watermark', 0);
+  setDefault('watermark_offset', 95);
   setDefault('watermark_image', "watermarks/watermark.png");
   setDefault('perform_video_watermark', 0);
   setDefault('video_watermark_image', "watermarks/watermark-video.png");

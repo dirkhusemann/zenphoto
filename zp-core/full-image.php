@@ -30,17 +30,17 @@ switch ($suffix) {
 if (getOption('full_image_download')) {
   header('Content-Disposition: attachment; filename="' . $_zp_current_image->name . '"');  // enable this to make the image a download
 }
-
 if (getOption('perform_watermark')) {
   $watermark_path = SERVERPATH . "/" . ZENFOLDER . "/" . getOption('watermark_image');
+  $offset = getOption('watermark_offset') / 100;
   $watermark = imagecreatefrompng($watermark_path);
   imagealphablending($watermark, false);
   imagesavealpha($watermark, true);
   $watermark_width = imagesx($watermark);
   $watermark_height = imagesy($watermark);
   // Position Overlay in Bottom Right
-  $dest_x = max(0, imagesx($newim) - $watermark_width-20);
-  $dest_y = max(0, imagesy($newim) - $watermark_height-20);
+  $dest_x = max(0, floor((imagesx($newim) - $watermark_width) * $offset));
+  $dest_y = max(0, floor((imagesy($newim) - $watermark_height) * $offset));
   imagecopy($newim, $watermark, $dest_x, $dest_y, 0, 0, $watermark_width, $watermark_height);
   imagedestroy($watermark);
 }
