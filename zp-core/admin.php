@@ -446,7 +446,8 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
     } else if ($action == 'saveoptions') {
       $wm = getOption('perform_watermark');
       $vwm = getOption('perform_video_watermark');
-      $wo = getOption('watermark_offset');
+      $woh = getOption('watermark_h_offset');
+      $wow = getOption('watermark_w_offset');
       $captcha = getOption('Use_Captcha');
       $notify = '';
       $returntab = "";
@@ -599,7 +600,8 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
       }
       if (($wm != getOption('perform_watermark')) || 
           ($vwm != getOption('perform_video_watermark')) ||
-          ($wo != getOption('watermark_offset'))) {
+          ($woh != getOption('watermark_h_offset')) ||
+          ($wow != getOption('watermark_w_offset'))) {
         $gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the options haave changed
       }
       if ($captcha && !getOption('Use_Captcha')) { // No longer using captcha, clean up the images
