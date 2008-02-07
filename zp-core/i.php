@@ -228,15 +228,16 @@ if ($process) {
     }
     
     if ($perform_watermark) {
-      $offset = getOption('watermark_offset') / 100;
+      $offset_h = getOption('watermark_h_offset') / 100;
+      $offset_w = getOption('watermark_w_offset') / 100;
       $watermark = imagecreatefrompng($watermark_image);
       imagealphablending($watermark, false);
       imagesavealpha($watermark, true);
       $watermark_width = imagesx($watermark);
       $watermark_height = imagesy($watermark);
       // Position Overlay in Bottom Right
-      $dest_x = max(0, floor((imagesx($newim) - $watermark_width) * $offset));
-      $dest_y = max(0, floor((imagesy($newim) - $watermark_height) * $offset));
+      $dest_x = max(0, floor((imagesx($newim) - $watermark_width) * $offset_w));
+      $dest_y = max(0, floor((imagesy($newim) - $watermark_height) * $offset_h));
       imagecopy($newim, $watermark, $dest_x, $dest_y, 0, 0, $watermark_width, $watermark_height);
       imagedestroy($watermark);
     }

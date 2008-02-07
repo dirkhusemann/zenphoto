@@ -27,7 +27,7 @@ $standardOptions = array('gallery_title','website_title','website_url','time_off
                          'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'search_fields',
                          'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
                          'allowed_tags', 'full_image_download', 'full_image_quality', 'persistent_archive',
-                         'protect_full_image', 'album_session', 'watermark_offset');
+                         'protect_full_image', 'album_session', 'watermark_h_offset', 'watermark_w_offset');
 $charsets = array("ASMO-708" => "Arabic",
                   "big5" => "Chinese Traditional",
                   "CP1026" => "IBM EBCDIC (Turkish Latin-5)",
@@ -545,7 +545,8 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         setOption('images_per_page', $_POST['images_per_page']);
         setBoolOption('perform_watermark', $_POST['perform_watermark']);
         setOption('watermark_image', 'watermarks/' . $_POST['watermark_image'] . '.png');
-        setOption('watermark_offset', $_POST['watermark_offset']);
+        setOption('watermark_h_offset', $_POST['watermark_h_offset']);
+        setOption('watermark_w_offset', $_POST['watermark_w_offset']);
         setBoolOption('perform_video_watermark', $_POST['perform_video_watermark']);
         setOption('video_watermark_image', 'watermarks/' . $_POST['video_watermark_image'] . '.png');
         setBoolOption('full_image_download', $_POST['full_image_download']);
@@ -1639,12 +1640,13 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                             ?>
                           <input type="checkbox" name="perform_watermark" value="1"
                           <?php echo checked('1', getOption('perform_watermark')); ?> />&nbsp;Enabled
-                          <br/>offset <input type="text" size="5" name="watermark_offset" value="<?php echo getOption('watermark_offset');?>" />%                          
+                          <br/>offset h <input type="text" size="5" name="watermark_h_offset" value="<?php echo getOption('watermark_h_offset');?>" />%   
+                                      w <input type="text" size="5" name="watermark_w_offset" value="<?php echo getOption('watermark_w_offset');?>" />%                       
                         </td>
                         <td>
                         The watermark image (png-24). (Place the image in the <?php echo ZENFOLDER; ?>/watermarks/ directory.)<br/>
                         The watermark image is placed relative to the upper left corner of the image. It is offset from there (moved toward the lower
-                        right corner) by the <em>offset</em> percentage of the size difference between the image and the watermark.
+                        right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark.
                         </td>
                     </tr>
                      <tr>
