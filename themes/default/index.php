@@ -14,7 +14,7 @@
 
 	<div id="gallerytitle">
     <?php if (getOption('Allow_search')) {  printSearchForm(''); } ?>
-		<h2><?php echo getGalleryTitle(); ?></h2>
+		<h2><?php printHomeLink('', ' | '); echo getGalleryTitle(); ?></h2>
 	</div>
     
     <div id="padbox">
@@ -34,7 +34,7 @@
 			</div>
 			<?php endwhile; ?>
 		</div>
-	
+		<br clear="all" />
 		<?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
         
         

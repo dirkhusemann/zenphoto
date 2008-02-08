@@ -193,16 +193,6 @@ function getMainSiteName() {
 function getMainSiteURL() {
   return getOption('website_url');
 }
-/**
- * Prints the URL of the main website as provided in the gallery options
- *
- * @param string $title Title text
- * @param string $class optional css class
- * @param string $id optional css id
- */
-function printMainSiteLink($title=NULL, $class=NULL, $id=NULL) {
-  printLink(getMainSiteURL(), getMainSiteName(), $title, $class, $id);
-}
 
 /**
  * Returns the URL of the main gallery page containing the current album
@@ -624,16 +614,21 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
  * Only prints the link if the url is not empty and does not point back the the gallery page
  *
  * @param string $before text to precede the link
-  * @param string $after text to follow the link
- */
-function printHomeLink($before='', $after='') {
+ * @param string $after text to follow the link
+ * @param string $title Title text
+ * @param string $class optional css class
+ * @param string $id optional css id
+ *  */
+function printHomeLink($before='', $after='', $title=NULL, $class=NULL, $id=NULL) {
   $site = getOption('website_url');
   if (!empty($site)) {
     if (substr($site,-1) == "/") { $site = substr($site, 0, -1); }
-    $title = getOption('website_title');
-    if (empty($title)) { $title = 'Home'; }
+    if (empty($name)) { $name = getOption('website_title'); }
+    if (empty($name)) { $name = 'Home'; }
     if ($site != FULLWEBPATH) {
-      echo $before . "<a href =\"" . $site . "\">" . $title . "</a>" . $after;
+      echo $before;
+      printLink($site, $name, $title, $class, $id);
+      echo $after;
     }
   }
   

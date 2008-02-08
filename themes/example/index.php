@@ -10,7 +10,7 @@
 <body>
 <div id="main">
   	<div id="gallerytitle">
-    	<h2><?php echo getGalleryTitle(); ?><?php if (getOption('Allow_search')) {  printSearchForm(); } ?></h2>
+    	<h2><?php printHomeLink('', ' | '); echo getGalleryTitle(); ?><?php if (getOption('Allow_search')) {  printSearchForm(); } ?></h2>
   	</div>
   
   	<hr />
