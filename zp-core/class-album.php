@@ -501,18 +501,19 @@ class Album extends PersistentObject {
       . " WHERE `albumid`=" . $this->id . " ORDER BY " . $key . $direction);
 
     $i = 0;
+    $flippedimages = array_flip($images);
     $images_to_keys = array();
     $images_in_db = array();
     $images_invisible = array();
-    while ($row = mysql_fetch_assoc($result)) {
+    while ($row = mysql_fetch_assoc($result)) { // see what images are in the database so we can check for visible
       $filename = $row['filename'];
-      // If the image is on the filesystem, but not yet processed, give it the next key:
-      // TODO: We should mark this album for garbage collection if filenames are discovered.
-      if ($_zp_loggedin || $row['show']) {
-        $images_to_keys[$filename] = $i;
-        $i++;
-      } 
-      $images_in_db[] = $filename;
+      if (isset($flippedimages[$filename])) { // ignore db entries for images that no longer exist. 
+        if ($_zp_loggedin || $row['show']) {
+          $images_to_keys[$filename] = $i;
+          $i++;
+        }
+        $images_in_db[] = $filename;
+      }  // TODO: else we should maybe clean out the db record?
     }
     // Place the images not yet in the database before those with sort columns.
     // This is consistent with the sort oder of a NULL sort_order key in manual sorts
