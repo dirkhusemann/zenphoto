@@ -236,8 +236,6 @@ function cacheGalleryImage($newfilename, $imgfile, $args, $allow_watermark=false
   $upscale = getOption('image_allow_upscale');
   $sharpenthumbs = getOption('thumb_sharpen');
 
-  // Don't let anything get above this, to save the server from burning up...
-
   $newfile = SERVERCACHE . $newfilename;
   // Check for GD
   if (!function_exists('imagecreatetruecolor'))

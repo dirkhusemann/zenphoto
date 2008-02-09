@@ -46,6 +46,7 @@ if (isset($_GET['t'])) {
     $allowWatermark = $_GET['s'] != 'thumb';
   }
 }
+
 // Fix special characters in the album and image names if mod_rewrite is on:
 // URL looks like: "/album1/subalbum/image/picture.jpg"
 list($ralbum, $rimage) = rewrite_get_album_image('a', 'i');
@@ -114,7 +115,6 @@ if (!ini_get("safe_mode")) {
   }
 }
 
-
 $process = true;
 // If the file exists, check its modification time and update as needed.
 $fmt = filemtime($imgfile);
@@ -125,10 +125,9 @@ if (file_exists($newfile)) {
     $process = false;
   }
 }
-
 // If the file hasn't been cached yet, create it.
 if ($process) {
-  cacheGalleryImage($newfilename, $imgfile, $args, $allow_watermark);
+  cacheGalleryImage($newfilename, $imgfile, $args, $allowWatermark);
 }
 if (!$debug) {
   // ... and redirect the browser to it.
