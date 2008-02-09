@@ -1,0 +1,6 @@
+# Zenphoto theme definition file
+name::Effervescence+ Supergallery
+author::Stephen Billard
+version::1.0 
+date::2/7/2009
+desc::A "Supergallery" Based on 'Effervescence+'. This theme links zenphoto galleries found within its folder.

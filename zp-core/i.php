@@ -34,14 +34,6 @@ require_once('functions-image.php');
 
 $debug = isset($_GET['debug']);
 
-// Set the config variables for convenience.
-$image_use_longest_side = getOption('image_use_longest_side');
-$upscale = getOption('image_allow_upscale');
-$sharpenthumbs = getOption('thumb_sharpen');
-
-// Don't let anything get above this, to save the server from burning up...
-define('MAX_SIZE', 3000);
-
 // Check for minimum parameters.
 if (!isset($_GET['a']) || !isset($_GET['i'])) {
   imageError("Too few arguments! Image not found.", 'err-imagenotfound.gif');
@@ -73,11 +65,12 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
     );
   list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
 
-  if ($debug) echo "Album: [ " . $album . " ], Image: [ " . $image . " ]<br/><br/>";
-  if ($debug) imageDebug($args);
+  if ($debug) debugLog("Album: [ " . $album . " ], Image: [ " . $image . " ]<br/><br/>");
+  if ($debug) DebugLogArray($args);
 
 } else {
   // No image parameters specified or are out of bounds; return the original image.
+  //TODO: this will fail when the album folder is external to zp. Maybe should force the sizes within bounds.
   header("Location: " . getAlbumFolder(FULLWEBPATH) . pathurlencode($album) . "/" . rawurlencode($image));
   return;
 }
@@ -105,14 +98,6 @@ if (!is_writable(SERVERCACHE)) {
   if (!is_writable(SERVERCACHE))
     imageError("The cache directory is not writable! Attempts to chmod didn't work.", 'err-cachewrite.gif');
 }
-// Check for GD
-if (!function_exists('imagecreatetruecolor'))
-  imageError('The GD Library is not installed or not available.', 'err-nogd.gif');
-// Check for the source image.
-if (!file_exists($imgfile) || !is_readable($imgfile))
-  imageError('Image not found or is unreadable.', 'err-imagenotfound.gif');
-
-
 
 // Make the directories for the albums in the cache, recursively.
 // Skip this for safe_mode, where we can't write to directories we create!
@@ -143,112 +128,7 @@ if (file_exists($newfile)) {
 
 // If the file hasn't been cached yet, create it.
 if ($process) {
-  if ($im = get_image($imgfile)) {
-    $w = imagesx($im);
-    $h = imagesy($im);
-
-    // Give the sizing dimension to $dim
-    if (!empty($size)) {
-      $dim = $size;
-      $width = $height = false;
-    } else if (!empty($width) && !empty($height)) {
-      $ratio_in = $h / $w;
-      $ratio_out = $height / $width;
-      $crop = true;
-      if ($ratio_in > $ratio_out) {
-        $thumb = true;
-        $dim = $width;
-        $ch = $height;
-      } else {
-        $dim = $height;
-        $cw = $width;
-        $height = true;
-      }
-
-    } else if (!empty($width)) {
-      $dim = $width;
-      $size = $height = false;
-    } else if (!empty($height)) {
-      $dim = $height;
-      $size = $width = false;
-    } else {
-      // There's a problem up there somewhere...
-      imageError("Unknown error! Please report to the developers at <a href=\"http://www.zenphoto.org/\">www.zenphoto.org</a>", 'err-imagegeneral.gif');
-    }
-
-    // Calculate proportional height and width.
-    $hprop = round(($h / $w) * $dim);
-    $wprop = round(($w / $h) * $dim);
-
-    if ((!$thumb && $size && $image_use_longest_side && $h > $w) || ($thumb && $h <= $w) || $height) {
-      $newh = $dim;
-      $neww = $wprop;
-    } else {
-      $newh = $hprop;
-      $neww = $dim;
-    }
-
-    if (!$upscale && $newh >= $h && $neww >= $w && !$crop) { // image is the same size or smaller than the request
-      $neww = $w;
-      $newh = $h;
-    }
-    $newim = imagecreatetruecolor($neww, $newh);
-    imagecopyresampled($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
-
-    // Crop the image if requested.
-    if ($crop) {
-      if ($cw === false || $cw > $neww) $cw = $neww;
-      if ($ch === false || $ch > $newh) $ch = $newh;
-      if ($cx === false) $cx = round(($neww - $cw) / 2);
-      if ($cy === false) $cy = round(($newh - $ch) / 2);
-      if ($cw + $cx > $neww) $cx = $neww - $cw;
-      if ($ch + $cy > $newh) $cy = $newh - $ch;
-      $newim_crop = imagecreatetruecolor($cw, $ch);
-      imagecopy($newim_crop, $newim, 0, 0, $cx, $cy, $cw, $ch);
-      imagedestroy($newim);
-      $newim = $newim_crop;
-    }
-
-    if ($thumb && $sharpenthumbs) {
-      unsharp_mask($newim, 40, 0.5, 3);
-    }
-
-    // Image Watermarking
-    $perform_watermark = false;
-    if ($_GET['vwm']) {
-      if ($thumb) {
-        $perform_watermark = true;
-        $watermark_image = getOption('video_watermark_image');
-      }
-    } else {
-      if ($allowWatermark) {
-        $perform_watermark = getOption('perform_watermark');
-        $watermark_image = getOption('watermark_image');
-      }
-    }
-    
-    if ($perform_watermark) {
-      $offset_h = getOption('watermark_h_offset') / 100;
-      $offset_w = getOption('watermark_w_offset') / 100;
-      $watermark = imagecreatefrompng($watermark_image);
-      imagealphablending($watermark, false);
-      imagesavealpha($watermark, true);
-      $watermark_width = imagesx($watermark);
-      $watermark_height = imagesy($watermark);
-      // Position Overlay in Bottom Right
-      $dest_x = max(0, floor((imagesx($newim) - $watermark_width) * $offset_w));
-      $dest_y = max(0, floor((imagesy($newim) - $watermark_height) * $offset_h));
-      imagecopy($newim, $watermark, $dest_x, $dest_y, 0, 0, $watermark_width, $watermark_height);
-      imagedestroy($watermark);
-    }
-
-    // Create the cached file (with lots of compatibility)...
-    @touch($newfile);
-    imagejpeg($newim, $newfile, $quality);
-    @chmod($newfile, 0666 & CHMOD_VALUE);
-    imagedestroy($newim);
-    imagedestroy($im);
-  }
+  cacheGalleryImage($newfilename, $imgfile, $args, $allow_watermark);
 }
 if (!$debug) {
   // ... and redirect the browser to it.

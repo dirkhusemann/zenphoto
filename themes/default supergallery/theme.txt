@@ -1,0 +1,6 @@
+# Zenphoto theme definition file
+name::Default Supergallery
+author::Stephen Billard
+version::1.0
+date::02/07/2008
+desc::A "Supergallery" theme based on 'default'. This them links to zenphoto galleries within found in its folder.

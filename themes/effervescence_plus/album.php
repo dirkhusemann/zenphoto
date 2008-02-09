@@ -122,7 +122,7 @@ if ($_GET['format'] != 'xml') {
 
 			<!-- Logo -->
     		<div id="logo">
-      			<?php echo '<h1><a href="' . getMainSiteURL() . '" title="Visit ' . getMainSiteName() . '">' . $_SERVER['HTTP_HOST'] . '</a></h1>'; ?>
+      			<?php echo '<h1><a href="' . getMainSiteURL() . '" title="Visit ' . getMainSiteName() . '">' . sanitize($_SERVER['HTTP_HOST']) . '</a></h1>'; ?>
     		</div>
   		</div>
 
