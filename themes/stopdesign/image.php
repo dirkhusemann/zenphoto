@@ -132,13 +132,7 @@
                                     <th><label for="website">URL:</label></th>
                                     <td><input tabindex="3" type="text" name="website" id="website" class="text" value="<?php echo $stored[2];?>" /></td>
                                   </tr>
-                                  <?php if (getOption('Use_Captcha')) { 
-                                    echo "<tr valign=\"top\" align=\"left\">";
-                                    printCaptcha("<th><label for=\"captcha\">Enter Captcha ", ":</label></th><td>", "</td>", 8); } 
-                                    echo "</tr>\n";                                  
-                                  ?>
-
-
+                                  <?php printCaptcha("<tr valign=\"top\" align=\"left\"><th><label for=\"captcha\">Enter Captcha ", ":</label></th><td>", "</td></tr>\n", 8); ?>
                                   <tr valign="top" align="left">
                                     <th><label for="comment">Comment:</label></th>
                                     <td><textarea tabindex="4" id="comment" name="comment" rows="10" cols="40"></textarea></td>

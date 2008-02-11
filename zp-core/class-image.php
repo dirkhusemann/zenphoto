@@ -421,7 +421,7 @@ class Image extends PersistentObject {
   function deleteImage($clean=true) {
     $result = unlink($this->localpath); 
     if ($clean && $result) { 
-      query("DELETE FROM ".prefix('comments') . "WHERE `type`='images' AND `imageid`=" . $this->id);
+      query("DELETE FROM ".prefix('comments') . "WHERE `type`='images' AND `ownerid`=" . $this->id);
       query("DELETE FROM ".prefix('images') . "WHERE `id` = " . $this->id); 
     } 
     return $result; 
@@ -490,7 +490,7 @@ class Image extends PersistentObject {
    */
   function getComments($moderated=false) {
     $sql = "SELECT *, (date + 0) AS date FROM " . prefix("comments") . 
-       " WHERE `type`='images' AND `imageid`='" . $this->id . "'";
+       " WHERE `type`='images' AND `ownerid`='" . $this->id . "'";
     if (!$moderated) {
       $sql .= " AND `inmoderation`=0";
     } 
@@ -530,7 +530,7 @@ class Image extends PersistentObject {
   function getCommentCount() { 
     if (is_null($this->commentcount)) {
       if ($this->comments == null) {
-        $count = query_single_row("SELECT COUNT(*) FROM " . prefix("comments") . " WHERE `type`='images' AND `inmoderation`=0 AND `imageid`=" . $this->id);
+        $count = query_single_row("SELECT COUNT(*) FROM " . prefix("comments") . " WHERE `type`='images' AND `inmoderation`=0 AND `ownerid`=" . $this->id);
         $this->commentcount = array_shift($count);
       } else {
         $this->commentcount = count($this->comments);

@@ -33,8 +33,7 @@ class ThemeOptions {
   						'Allow_search' => array('type' => 1, 'desc' => 'Set to enable search form.'),
 						'Slideshow' => array('type' => 1, 'desc' => 'Set to enable slideshow for the <em>Smooth</em> personality.'),
                         'Theme_personality' => array('type' => 2, 'desc' => 'Select the theme personality'),
-                        'Theme_colors' => array('type' => 2, 'desc' => 'Set the colors of the theme'),
-                        'Use_Captcha' => array('type' => 1, 'desc' => 'Require <em>Captcha</em> input in comment posts.')
+                        'Theme_colors' => array('type' => 2, 'desc' => 'Set the colors of the theme')
                         );
                         
   function ThemeOptions() {
@@ -43,7 +42,6 @@ class ThemeOptions {
 	setOptionDefault('Slideshow', true);
     setOptionDefault('Theme_personality', 'Image page');
     setOptionDefault('Theme_colors', 'effervescence'); 
-	setOptionDefault('Use_Captcha', true);
   }
 
   function getOptionsSupported() {

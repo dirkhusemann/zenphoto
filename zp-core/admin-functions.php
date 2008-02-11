@@ -1,6 +1,7 @@
 <?php
 
 require_once("classes.php");
+require_once("functions.php");
 
 /**
  * Test to see whether we should be displaying a particular page.
@@ -123,6 +124,7 @@ function adminPrintImageThumb($image, $class=NULL, $id=NULL) {
 		(($class) ? " class=\"$class\"" : "") . 
 		(($id) ? " id=\"$id\"" : "") . " />";
 }
+
 // TODO: This is a copy of the function in template-functions. Refactor at some point
 function adminPrintLink($url, $text, $title=NULL, $class=NULL, $id=NULL) { 
   echo "<a href=\"" . $url . "\"" . 
@@ -139,8 +141,10 @@ function adminPrintLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
  * @since  1.0.0
  */
 function printLoginForm($redirect=null, $logo=true) {
-  global $_zp_login_error;
+  global $_zp_login_error, $_zp_current_admin;
   if (is_null($redirect)) { $redirect = "/" . ZENFOLDER . "/admin.php"; }
+  $requestor = sanitize($_POST['user']);
+  if (empty($requestor)) { $requestor = sanitize($_GET['ref']); }
   
   if ($logo) echo "<p><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" /></p>";
   
@@ -153,14 +157,17 @@ function printLoginForm($redirect=null, $logo=true) {
   echo "\n    <input type=\"hidden\" name=\"redirect\" value=\"$redirect\" />";
   
   echo "\n    <table>";
-  echo "\n      <tr><td>Login</td><td><input class=\"textfield\" name=\"user\" type=\"text\" size=\"20\" /></td></tr>";
+  echo "\n      <tr><td>Login</td><td><input class=\"textfield\" name=\"user\" type=\"text\" size=\"20\" value=\"$requestor\" /></td></tr>";
   echo "\n      <tr><td>Password</td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
   echo "\n      <tr><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"Log in\" /></td></tr>";
   echo "\n    </table>";
   echo "\n  </form>";
-  $email = getOption('admin_email');
+  
+  $admins = getAdministrators();
+  $email = '';
+  $email = getAdminEmail();
   if (!empty($email)) {
-    echo "\n  <a href=\"?emailreset\">Email password reset link</a>";
+    echo "\n  <a href=\"?emailreset&ref=$requestor\">Email password reset request</a>";
   }
   echo "\n  </div>";
   echo "\n</body>";
@@ -190,28 +197,41 @@ function printLogoAndLinks() {
  * @since  1.0.0
  */
 function printTabs() {
+  global $_zp_loggedin;
   // Which page should we highlight? Default is home.
   if (isset($_GET['page'])) {
     $page= $_GET['page'];
   } else {
     $page= "home";
   }
-    
+  if ($_zp_loggedin == OPTIONS_RIGHTS) { $page = "options"; }
+  
   echo "\n  <ul id=\"nav\">";
-  echo "\n    <li". ($page == "home" ? " class=\"current\""     : "") . 
-    "> <a href=\"admin.php?page=home\">overview</a></li>";
-  echo "\n    <li". ($page == "comments" ? " class=\"current\"" : "") . 
-    "> <a href=\"admin.php?page=comments\">comments</a></li>";
-  echo "\n    <li". ($page == "upload" ? " class=\"current\""   : "") . 
-    "> <a href=\"admin.php?page=upload\">upload</a></li>";
-  echo "\n    <li". ($page == "edit" ? " class=\"current\""     : "") . 
-    "> <a href=\"admin.php?page=edit\">edit</a></li>";
-  echo "\n    <li". ($page == "options" ? " class=\"current\""  : "") . 
-    "> <a href=\"admin.php?page=options\">options</a></li>";
-  echo "\n    <li". ($page == "themes" ? " class=\"current\""  : "") . 
-    "> <a href=\"admin.php?page=themes\">themes</a></li>";
+  if (($_zp_loggedin & MAIN_RIGHTS)) {
+    echo "\n    <li". ($page == "home" ? " class=\"current\""     : "") .
+         "> <a href=\"admin.php?page=home\">overview</a></li>";
+  }
+  if (($_zp_loggedin & COMMENT_RIGHTS)) {
+    echo "\n    <li". ($page == "comments" ? " class=\"current\"" : "") .
+         "> <a href=\"admin.php?page=comments\">comments</a></li>";
+  }
+  if (($_zp_loggedin & UPLOAD_RIGHTS)) {
+    echo "\n    <li". ($page == "upload" ? " class=\"current\""   : "") .
+         "> <a href=\"admin.php?page=upload\">upload</a></li>";
+  }
+  if (($_zp_loggedin & EDIT_RIGHTS)) {
+    echo "\n    <li". ($page == "edit" ? " class=\"current\""     : "") .
+         "> <a href=\"admin.php?page=edit\">edit</a></li>";
+  }
+  echo "\n    <li". ($page == "options" ? " class=\"current\""  : "") .
+       "> <a href=\"admin.php?page=options\">options</a></li>";
+  if (($_zp_loggedin & THEMES_RIGHTS)) {
+
+    echo "\n    <li". ($page == "themes" ? " class=\"current\""  : "") .
+         "> <a href=\"admin.php?page=themes\">themes</a></li>";
+  }
   echo "\n  </ul>";
- 
+
 }
 
 function checked($checked, $current) {
@@ -542,7 +562,8 @@ function printAlbumEditRow($album) {
   echo "\n<div id=\"id_" . $album->getAlbumID() . '">';
   echo '<table cellspacing="0" width="100%">';
   echo "\n<tr>";
-  echo '<td style="text-align: left;" width="45">';
+  echo '<td><img src="images/drag_handle.png" style="border: 0px;" alt="Drag the album '."'".$album->name."'".'" /></td>';
+  echo '<td style="text-align: left;" width="80">';
   echo '<a href="?page=edit&album=' . urlencode($album->name) .'" title="Edit this album: ' . $album->name . 
        '"><img height="40" width="40" src="' . $album->getAlbumThumb() . '" /></a>';
   echo "</td>\n";
@@ -595,7 +616,7 @@ function printAlbumEditRow($album) {
   echo '<img src="images/reset.png" style="border: 0px;" alt="Reset hitcounters for the album ' . $album->name . '" /></a>';
   
   echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-    echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=" . queryEncode($album->name) . "');\" title=\"Delete the album " . $album->name . "\">";
+  echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=" . queryEncode($album->name) . "');\" title=\"Delete the album " . $album->name . "\">";
   echo '<img src="images/fail.png" style="border: 0px;" alt="Delete the album ' . $album->name . '" /></a>';
   echo '<a class="cache" href="cache-images.php?album=' . queryencode($album->name) . 
        '&return=edit" title="Pre-Cache the album <em>' . $album->name . '</em>">';

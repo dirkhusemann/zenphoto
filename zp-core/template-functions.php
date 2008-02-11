@@ -91,7 +91,7 @@ function printSubalbumAdmin($text, $before='', $after='') {
  * @since 1.1
  */
 function printAdminToolbox($context=null, $id='admin') {
-  global $_zp_current_album, $_zp_current_image, $_zp_current_search;
+  global $_zp_current_album, $_zp_current_image, $_zp_current_search, $_zp_loggedin;
   if (zp_loggedin()) {
     $zf = WEBPATH."/".ZENFOLDER;
     $dataid = $id . '_data';
@@ -103,32 +103,42 @@ function printAdminToolbox($context=null, $id='admin') {
     echo '<div id="' .$dataid. '" style="display: none;">'."\n";
     printAdminLink('Admin', '', "<br />\n");
     if ($context === ZP_INDEX) {
-      printSortableGalleryLink('Sort gallery', 'Manual sorting');
-      echo "<br />\n";
-      printLink($zf . '/admin.php?page=upload' . urlencode($_zp_current_album->name), "New album", NULL, NULL, NULL);
-      echo "<br />\n";
+      if ($_zp_loggedin & EDIT_RIGHTS) {
+        printSortableGalleryLink('Sort gallery', 'Manual sorting');
+        echo "<br />\n";
+      }
+      if ($_zp_loggedin & UPLOAD_RIGHTS) {
+        printLink($zf . '/admin.php?page=upload' . urlencode($_zp_current_album->name), "New album", NULL, NULL, NULL);
+        echo "<br />\n";
+      }
       if (isset($_GET['p'])) {
         $redirect = "&p=" . $_GET['p'];
       }
       $redirect .= "&page=$page";
     } else if (!in_context(ZP_IMAGE | ZP_SEARCH)) {  // then it must be an album page
-      printSubalbumAdmin('Edit album', '', "<br />\n");
-      printSortableAlbumLink('Sort album', 'Manual sorting');
-      echo "<br />\n";
       $albumname = urlencode($_zp_current_album->name);
-      printLink($zf . '/admin.php?page=upload&album=' . $albumname, "Upload Here", NULL, NULL, NULL);
-      echo "<br />\n";
-      printLink($zf . '/admin.php?page=upload&new&album=' . $albumname, "New Album Here", NULL, NULL, NULL);
-      echo "<br />\n";
-      echo "<a href=\"javascript: confirmDeleteAlbum('".$zf."/admin.php?page=edit&action=deletealbum&album=" .
-      queryEncode($_zp_current_album->name) . "');\" title=\"Delete the album\">Delete album</a><br />\n";
+      if ($_zp_loggedin & EDIT_RIGHTS) {
+        printSubalbumAdmin('Edit album', '', "<br />\n");
+        printSortableAlbumLink('Sort album', 'Manual sorting');
+        echo "<br />\n";
+        echo "<a href=\"javascript: confirmDeleteAlbum('".$zf."/admin.php?page=edit&action=deletealbum&album=" .
+        queryEncode($_zp_current_album->name) . "');\" title=\"Delete the album\">Delete album</a><br />\n";
+      }
+      if ($_zp_loggedin & UPLOAD_RIGHTS) {
+        printLink($zf . '/admin.php?page=upload&album=' . $albumname, "Upload Here", NULL, NULL, NULL);
+        echo "<br />\n";
+        printLink($zf . '/admin.php?page=upload&new&album=' . $albumname, "New Album Here", NULL, NULL, NULL);
+        echo "<br />\n";
+      }
       $redirect = "&album=$albumname&page=$page";
     } else if (in_context(ZP_IMAGE)) {
       $albumname = urlencode($_zp_current_album->name);
       $imagename = queryEncode($_zp_current_image->filename);
-      echo "<a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?page=edit&action=deleteimage&album=" .
-      $albumname . "&image=". $imagename . "');\" title=\"Delete the image\">Delete image</a>";
-      echo "<br />\n";
+      if ($_zp_loggedin & EDIT_RIGHTS) {
+        echo "<a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?page=edit&action=deleteimage&album=" .
+        $albumname . "&image=". $imagename . "');\" title=\"Delete the image\">Delete image</a>";
+        echo "<br />\n";
+      }
       $redirect = "&album=$albumname&image=$imagename";
     } else if (in_context(ZP_SEARCH)) {
       $redirect = "&p=search" . $_zp_current_search->getSearchParams() . "&page=$page";
@@ -2243,11 +2253,11 @@ function printLatestComments($number, $shorten='123') {
   }
   $comments_images = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.type, c.website,"
   . " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
-  . " WHERE c.imageid = i.id AND i.albumid = a.id AND c.type = 'images'".$passwordcheck1
+  . " WHERE c.ownerid = i.id AND i.albumid = a.id AND c.type = 'images'".$passwordcheck1
   . " ORDER BY c.id DESC LIMIT $number");
   $comments_albums = query_full_array("SELECT c.id, a.folder, a.title AS albumtitle, c.name, c.type, c.website,"
   . " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('albums')." AS a "
-  . " WHERE c.imageid = a.id AND c.type = 'albums'".$passwordcheck2
+  . " WHERE c.ownerid = a.id AND c.type = 'albums'".$passwordcheck2
   . " ORDER BY c.id DESC LIMIT $number");
   $comments = array_merge($comments_images,$comments_albums);
   echo "<div id=\"showlatestcomments\">\n";
@@ -3586,11 +3596,15 @@ function printPasswordForm($hint) {
 /**
  * generates a simple captcha for comments
  * 
- * Returns the captcha code string.
+ * Thanks to gregb34 who posted the original code
+ *
+ * Returns the captcha code string and image URL (via the $image parameter).
  *
  * @return string;
  */
 function generateCaptcha(&$image) {
+  require_once('encript_lib.php');
+  
   $lettre='abcdefghijklmnpqrstuvwxyz';
   $chiffre='123456789';
 
@@ -3602,47 +3616,18 @@ function generateCaptcha(&$image) {
   } else {
     $string = $lettre1.$chiffre1.$lettre2;
   }
+  $key = 'zenphoto_captcha_string';
+  $cypher = urlencode(rc4($key, $string));
+  
   $code=md5($string);
+  $image = WEBPATH . '/' . ZENFOLDER . "/c.php?i=$cypher";
 
-  //header ("Content-type: image/png");
-  $image = imagecreate(65,20);
-
-  $fond = imagecolorallocate($image, 255, 255, 255);
-  ImageFill ($image,65,20, $fond);
-
-  $ligne = imagecolorallocate($image,150,150,150);
-
-  $i = 7;
-  while($i<=15) {
-    ImageLine($image, 0,$i, 65,$i, $ligne);
-    $i = $i+7;
-  }
-
-  $i = 10;
-  while($i<=65) {
-    ImageLine($image,$i,0,$i,20, $ligne);
-    $i = $i+10;
-  }
-
-  $lettre = imagecolorallocate($image,0,0,0);
-  imagestring($image,10,5+rand(0,6),0,substr($string, 0, 1),$lettre);
-  imagestring($image,10,20+rand(0,6),0,substr($string, 1, 1),$lettre);
-  imagestring($image,10,35+rand(0,6),0,substr($string, 2, 1),$lettre);
-
-  $rectangle = imagecolorallocate($image,48,57,85);
-  ImageRectangle ($image,0,0,64,19,$rectangle);
-
-  $img = 'code_' . md5($_SERVER['REMOTE_ADDR']) . ".png";
-  imagepng($image, SERVERCACHE . "/" . $img);
-  $image = WEBPATH . "/cache/". $img;
   return $code;
 }
 
 /**
  * Simple captcha for comments.
  * 
- * thanks to gregb34 who posted the original code
- *
  * Prints a captcha entry form and posts the input with the comment posts
  * @param string $preText lead-in text
  * @param string $midText text that goes between the captcha image and the input field
@@ -3651,17 +3636,18 @@ function generateCaptcha(&$image) {
  * @since 1.1.4
  **/
 function printCaptcha($preText='', $midText='', $postText='', $size=4) {
-  $captchaCode = generateCaptcha($img);
-  
-  $inputBox =  "<input type=\"text\" id=\"code\" name=\"code\" size=\"" . $size . "\" class=\"inputbox\" />";
-  $captcha = "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/>" .
+  if (getOption('Use_Captcha')) {
+    $captchaCode = generateCaptcha($img);
+    $inputBox =  "<input type=\"text\" id=\"code\" name=\"code\" size=\"" . $size . "\" class=\"inputbox\" />";
+    $captcha = "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/>" .
              "<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\"/></label>&nbsp;";
 
-  echo $preText;
-  echo $captcha;
-  echo $midText;
-  echo $inputBox;
-  echo $postText;
+    echo $preText;
+    echo $captcha;
+    echo $midText;
+    echo $inputBox;
+    echo $postText;
+  }
 }
 
 /*** End template functions ***/

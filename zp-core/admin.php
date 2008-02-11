@@ -1,18 +1,7 @@
 <?php  /* Don't put anything before this line! */
 define('OFFSET_PATH', true);
 require_once("sortable.php");
-if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
-  header("Location: " . ZENFOLDER . "/setup.php");
-}
 if (!$session_started) session_start();
-$adm = getOption('adminuser');
-$pas = getOption('adminpass');
-$rsd = getOption('admin_reset_date');
-if (empty($rsd) || empty($adm) || empty($pas)) {
-  $_zp_null_account = true;  // require setting admin user/password
-} else {
-  $_zp_null_account = false;
-}
 
 $sortby = array('Filename', 'Date', 'Title', 'Manual', 'ID' );
 $standardOptions = array('gallery_title','website_title','website_url','time_offset',
@@ -27,7 +16,8 @@ $standardOptions = array('gallery_title','website_title','website_url','time_off
                          'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'search_fields',
                          'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
                          'allowed_tags', 'full_image_download', 'full_image_quality', 'persistent_archive',
-                         'protect_full_image', 'album_session', 'watermark_h_offset', 'watermark_w_offset');
+                         'protect_full_image', 'album_session', 'watermark_h_offset', 'watermark_w_offset',
+                         'Use_Captcha');
 $charsets = array("ASMO-708" => "Arabic",
                   "big5" => "Chinese Traditional",
                   "CP1026" => "IBM EBCDIC (Turkish Latin-5)",
@@ -149,7 +139,7 @@ $charsets = array("ASMO-708" => "Arabic",
                   "x-mac-turkish" => "Turkish (Mac)"
                  );
 
-if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action handling first. */
+if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 
   $gallery = new Gallery();
   if (isset($_GET['prune'])) {
@@ -443,6 +433,11 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
 
 /** OPTIONS ******************************************************************/
 /*****************************************************************************/
+      
+    } else if ($action == 'deleteadmin') {
+      $user = urldecode($_GET['adminuser']);
+      $sql = "DELETE FROM ".prefix('administrators')." WHERE `user`='$user'";
+      query($sql);
     } else if ($action == 'saveoptions') {
       $wm = getOption('watermark_image');
       $vwm = getOption('video_watermark_image');
@@ -450,30 +445,37 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
       $vwmo = getOption('perform_video_watermark');
       $woh = getOption('watermark_h_offset');
       $wow = getOption('watermark_w_offset');
-      $captcha = getOption('Use_Captcha');
       $notify = '';
       $returntab = "";
+
       /*** admin options ***/
       if (isset($_POST['saveadminoptions'])) {
-        $olduser = getOption('adminuser');
-        $pwd = trim($_POST['adminpass']);
-        if (empty($pwd) && !empty($_POST['adminpass']) && ($olduser != $_POST['adminuser'])) {
-          $notify = '&mismatch=newuser';
-        } else if ($pwd == $_POST['adminpass_2']) {
-          setOption('adminuser', $_POST['adminuser']);
-          if (empty($pwd)) {
-            if (empty($_POST['adminpass'])) {
-              setOption('adminpass', NULL);
+        for ($i = 0; $i < $_POST['totaladmins']; $i++) {
+          $pass = trim($_POST[$i.'-adminpass']);
+          $user = trim($_POST[$i.'-adminuser']);
+          if (!empty($user)) {
+            if ($pass == trim($_POST[$i.'-adminpass_2'])) {
+              $admin_n = trim($_POST[$i.'-admin_name']);
+              $admin_e = trim($_POST[$i.'-admin_email']);
+              $admin_r = $_POST[$i.'-admin_rights'];
+              $comment_r = $_POST[$i.'-comment_rights'];
+              $upload_r = $_POST[$i.'-upload_rights'];
+              $edit_r = $_POST[$i.'-edit_rights'];
+              $options_r = $_POST[$i.'-options_rights'];
+              $themes_r = $_POST[$i.'-themes_rights'];
+              $rights = MAIN_RIGHTS + $admin_r + $comment_r + $upload_r + $edit_r + $options_r + $themes_r;
+              if (empty($pass)) {
+                $pwd = null;
+              } else {
+                $pwd = md5($_POST[$i.'-adminuser'] . $pass); 
+              }
+              saveAdmin($user, $pwd, $admin_n, $admin_e, $rights);
+            } else {
+              $notify = '&mismatch=password';
             }
-          } else {
-            setOption('adminpass', md5($_POST['adminuser'] . $pwd));
           }
-          setOption('admin_reset_date', '1');
-        } else {
-          $notify = '&mismatch=password';
         }
-        setOption('admin_email', $_POST['admin_email']);
-        setOption('admin_name', $_POST['admin_name']);
+        setOption('admin_reset_date', '1');
         $returntab = "#tab_admin";
       }
 
@@ -573,6 +575,7 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
         setBoolOption('comment_name_required', $_POST['comment_name_required']);
         setBoolOption('comment_email_required', $_POST['comment_email_required']);
         setBoolOption('comment_web_required', $_POST['comment_web_required']);
+        setBoolOption('Use_Captcha', $_POST['Use_Captcha']);
         $returntab = "#tab_comments";
 
       }
@@ -608,14 +611,6 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
           ($vwm != getOption('video_watermark_image'))) {
         $gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the options haave changed
       }
-      if ($captcha && !getOption('Use_Captcha')) { // No longer using captcha, clean up the images
-        chdir(SERVERCACHE . "/");
-        $filelist = safe_glob('code_*.png');
-        foreach ($filelist as $file) {
-          $file = SERVERCACHE . "/" . $file;
-            unlink($file);
-        }
-      }
 
       header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=options".$notify.$returntab);
       exit();
@@ -635,14 +630,18 @@ if (zp_loggedin() || $_zp_null_account) { /* Display the admin pages. Do action 
 
 } else {
   if (isset($_GET['emailreset'])) {
-    $adm = getOption('adminuser');
-    $pas = getOption('adminpass');
+    $requestor = urldecode($_GET['ref']);
+    if (!empty($requestor)) { $requestor = ' from a user who tried to log in as "'.$requestor.'"'; }
+    $admins = getAdministrators();
+    $user = array_shift($admins);
+    $adm = $user['user'];
+    $pas = $user['pass'];
     setOption('admin_reset_date', time());
     $req = getOption('admin_reset_date');
     $ref = md5($req . $adm . $pas);
-    $msg .= "\nYou are receiving this e-mail becauseof a password reset request on your Zenphoto gallery." .
-            "\nTo reset your Zenphoto Admin password visit: ".FULLWEBPATH."/".ZENFOLDER."/admin.php?ticket=$ref" .
-            "\nIf you do not wish to reset your password just ignore this message. This ticket will automatically expire in 3 days.";
+    $msg .= "\nYou are receiving this e-mail because of a password reset request on your Zenphoto gallery$requestor." .
+            "\nTo reset your Zenphoto Admin passwords visit: ".FULLWEBPATH."/".ZENFOLDER."/admin.php?ticket=$ref" .
+            "\nIf you do not wish to reset your passwords just ignore this message. This ticket will automatically expire in 3 days.";
     zp_mail('The Zenphoto information you requested',  $msg);
   }
 }
@@ -671,22 +670,36 @@ echo "\n</head>";
 <?php
 // If they are not logged in, display the login form and exit
 
-if (!zp_loggedin()  && !$_zp_null_account) {
+if (!zp_loggedin()) {
   printLoginForm();
   exit();
 
 } else { /* Admin-only content safe from here on. */
-  if ($_zp_null_account) { $page = 'options'; } // strongly urge him to set his admin username and password
-  printLogoAndLinks();
-
+  printLogoAndLinks();    
 ?>
   <div id="main">
 <?php printTabs(); ?>
   <div id="content">
-  <?php if ($_zp_null_account) {
+  <?php 
+  if ($_zp_null_account = ($_zp_loggedin == OPTIONS_RIGHTS)) {
+    $page = 'options';
     echo "<div class=\"errorbox space\">";
-    echo "<h2>You need to set your admin username and password.</h2>";
+    echo "<h2>Password reset request.<br/>You may now set admin usernames and passwords.</h2>";
     echo "</div>";
+  }
+  switch ($page) {
+    case 'comments':
+      if (!($_zp_loggedin & COMMENT_RIGHTS)) $page = '';
+      break;
+    case 'upload':
+      if (!($_zp_loggedin & UPLOAD_RIGHTS)) $page = '';
+      break;
+    case 'edit':
+      if (!($_zp_loggedin & EDIT_RIGHTS)) $page = '';
+      break;
+    case 'themes':
+      if (!($_zp_loggedin & THEMES_RIGHTS)) $page = '';
+      break;
   }
   ?>
 <?php /** EDIT ****************************************************************************/
@@ -1150,7 +1163,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
       if (isset($_GET['fulltext'])) $fulltext = true; else $fulltext = false;
       if (isset($_GET['viewall'])) $viewall = true; else $viewall = false;
 
-      $comments = query_full_array("SELECT `id`, `name`, `website`, `type`, `imageid`,"
+      $comments = query_full_array("SELECT `id`, `name`, `website`, `type`, `ownerid`,"
         . " (date + 0) AS date, comment, email, inmoderation FROM ".prefix('comments')
         . " ORDER BY id DESC " . ($viewall ? "" : "LIMIT 20") );
     ?>
@@ -1194,7 +1207,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
       $email = $comment['email'];
       if ($comment['type']=='images') {
         $imagedata = query_full_array("SELECT `title`, `filename`, `albumid` FROM ". prefix('images') .
-                     " WHERE `id`=" . $comment['imageid']);
+                     " WHERE `id`=" . $comment['ownerid']);
         if ($imagedata) {
           $imgdata = $imagedata[0];
           $image = $imgdata['filename'];
@@ -1217,7 +1230,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         $image = '';
         $title = '';
         $albmdata = query_full_array("SELECT `title`, `folder` FROM ". prefix('albums') .
-                     " WHERE `id`=" . $comment['imageid']);
+                     " WHERE `id`=" . $comment['ownerid']);
         if ($albmdata) {
           $albumdata = $albmdata[0];
           $album = $albumdata['folder'];
@@ -1304,7 +1317,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         <div id="mainmenu">
           <ul id="tabs">
             <li><a href="#tab_admin">admin information</a></li>
-            <?php if (!$_zp_null_account) { ?>
+            <?php if ((!$_zp_null_account) && ($_zp_loggedin & OPTIONS_RIGHTS)) { ?>
             <li><a href="#tab_gallery">gallery configuration</a></li>
             <li><a href="#tab_image">image display</a></li>
             <li><a href="#tab_comments">comment configuration</a></li>
@@ -1322,52 +1335,100 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                     } else {
                       $msg = 'Your passwords did not match';
                     }
-                      echo '<div class="errorbox" id="message">';
+                    echo '<div class="errorbox" id="message">';
                     echo  "<h2>$msg</h2>";
                     echo '</div>';
                     echo '<script type="text/javascript">';
                     echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
                     echo "</script>\n";
                   }
+                    if ($_zp_loggedin & ADMIN_RIGHTS) {
+                      $admins = getAdministrators();
+                      $admins [''] = array('pass' => '', 'name' => '', 'email' => '', 'rights' => ALL_RIGHTS);
+                    } else {
+                      global $_zp_current_admin;
+                      $admins = array($_zp_current_admin['user'] => $_zp_current_admin);
+                    }
                   ?>
+                  <input type="hidden" name="totaladmins" value="<?php echo count($admins); ?>" />
                   <table class="bordered">
                     <tr>
                            <th colspan="3"><h2>Admin login information</h2></th>
-                      </tr>
-                    <tr>
-                        <td width="175">Admin username:</td>
-                        <td width="200"><input type="text" size="40" name="adminuser" value="<?php echo getOption('adminuser');?>" /></td>
-                        <td></td>
                     </tr>
-                    <tr>
-                        <td>Admin password:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(repeat) </td>
+                    <?php 
+                    $id = 0;
+                    foreach($admins as $key => $user) {
+                    ?>
+                      <tr>
+                        <td width="175"><strong>Username:</strong></td>
+                        <td width="200">
+                          <?php if (empty($key)) {?>
+                          <input type="text" size="40" name="<?php echo $id ?>-adminuser" value="" />
+                          <?php  } else { echo $key; ?>
+                          <input type="hidden" name="<?php echo $id ?>-adminuser" value="<?php echo $key ?>" />
+                          <?php } ?>
+                        </td>
                         <td>
-                            <?php $x = getOption('adminpass'); if (!empty($x)) { $x = '          '; } ?>
-                            <input type="password" size="40" name="adminpass"
+                          <?php if(!empty($key) && count($admins) > 1) { ?>
+                            <a href="javascript: if(confirm('Are you sure you want to delete this user?')) { window.location='?page=options&action=deleteadmin&adminuser=<?php echo urlencode($key); ?>'; }" title="Delete this comment." style="color: #c33;">
+                            <img src="images/fail.png" style="border: 0px;" alt="Delete" /></a>
+                          <?php } ?>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Password:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(repeat) </td>
+                        <td>
+                            <?php $x = $user['pass']; if (!empty($x)) { $x = '          '; } ?>
+                            <input type="password" size="40" name="<?php echo $id ?>-adminpass"
                             value="<?php echo $x; ?>" /><br/>
-                            <input type="password" size="40" name="adminpass_2"
+                            <input type="password" size="40" name="<?php echo $id ?>-adminpass_2"
                             value="<?php echo $x; ?>" />
                         </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Admin full name:</td>
-                        <td><input type="text" size="40" name="admin_name" value="<?php echo getOption('admin_name');?>" /></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Admin email:</td>
-                        <td><input type="text" size="40" name="admin_email" value="<?php echo getOption('admin_email');?>" /></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Database:</td>
                         <td>
-                          <strong><?php echo getOption('mysql_database'); ?></strong>: Tables are prefixed by
-                          <strong><?php echo getOption('mysql_prefix'); ?></strong>
-                          </td>
+                           <?php 
+                           $master = '';
+                           if ($id == 0) {
+                             if ($_zp_loggedin & ADMIN_RIGHTS) {
+                               $master = " (Master)";
+                               $user['rights'] = ALL_RIGHTS;
+                             }
+                           } 
+                           ?>
+                           <table class="checkboxes">
+                             <tr>
+                               <td style="width: 40%; padding-bottom: 3px;"><strong>Rights</strong><?php echo $master.':' ?>
+                                 <input type="hidden" name="<?php echo $id ?>-main_rights" value=<?php echo MAIN_RIGHTS; ?>>
+                               </td>
+                             </tr>
+                             <tr>
+                               <td><input type="checkbox" name="<?php echo $id ?>-admin_rights" value=<?php echo ADMIN_RIGHTS; if ($user['rights'] & ADMIN_RIGHTS) echo ' checked'; ?>>User admin</td>
+                               <td><input type="checkbox" name="<?php echo $id ?>-options_rights" value=<?php echo OPTIONS_RIGHTS; if ($user['rights'] & OPTIONS_RIGHTS) echo ' checked'; ?>>Options</td>
+                               <td><input type="checkbox" name="<?php echo $id ?>-themes_rights" value=<?php echo THEMES_RIGHTS; if ($user['rights'] & THEMES_RIGHTS) echo ' checked'; ?>>Themes</td>
+                             </tr>
+                             <tr>
+                               <td><input type="checkbox" name="<?php echo $id ?>-edit_rights" value=<?php echo EDIT_RIGHTS; if ($user['rights'] & EDIT_RIGHTS) echo ' checked'; ?>>Edit</td>
+                               <td><input type="checkbox" name="<?php echo $id ?>-comment_rights" value=<?php echo COMMENT_RIGHTS; if ($user['rights'] & COMMENT_RIGHTS) echo ' checked'; ?>>Comment</td>
+                               <td><input type="checkbox" name="<?php echo $id ?>-upload_rights" value=<?php echo UPLOAD_RIGHTS; if ($user['rights'] & UPLOAD_RIGHTS) echo ' checked'; ?>>Upload</td>
+                             </tr>
+                           </table>
+
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Full name:</td>
+                        <td><input type="text" size="40" name="<?php echo $id ?>-admin_name" value="<?php echo $user['name'];?>" /></td>
                         <td></td>
-                    </tr>
+                      </tr>
+                      <tr>
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email:</td>
+                        <td><input type="text" size="40" name="<?php echo $id ?>-admin_email" value="<?php echo $user['email'];?>" /></td>
+                        <td></td>
+                      </tr>
+                      <tr></tr>
+                    <?php 
+                      $id++;
+                    }
+                    ?>
                     <tr>
                         <td></td>
                         <td><input type="submit" value="save" /></td>
@@ -1757,6 +1818,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
                       <input type="checkbox" name="comment_name_required" value=1 <?php checked('1', getOption('comment_name_required')); ?>>&nbsp;Name
                       <input type="checkbox" name="comment_email_required" value=1 <?php checked('1', getOption('comment_email_required')); ?>>&nbsp;Email
                       <input type="checkbox" name="comment_web_required" value=1 <?php checked('1', getOption('comment_web_required')); ?>>&nbsp;Website
+                      <input type="checkbox" name="Use_Captcha" value=1 <?php checked('1', getOption('Use_Captcha')); ?>>&nbsp;Captcha
                       </td>
                       <td>Checked fields must be valid in a comment posting.</td>
                     </tr>
@@ -1872,7 +1934,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
         <h2>10 Most Recent Comments</h2>
         <ul>
         <?php
-        $comments = query_full_array("SELECT `id`, `name`, `website`, `type`, `imageid`,"
+        $comments = query_full_array("SELECT `id`, `name`, `website`, `type`, `ownerid`,"
         . " (date + 0) AS date, comment, email, inmoderation FROM ".prefix('comments')
         . " ORDER BY id DESC LIMIT 10" );
         foreach ($comments as $comment) {
@@ -1881,7 +1943,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
           $email = $comment['email'];
           if ($comment['type']=='images') {
             $imagedata = query_full_array("SELECT `title`, `filename`, `albumid` FROM ". prefix('images') .
-                     " WHERE `id`=" . $comment['imageid']);
+                     " WHERE `id`=" . $comment['ownerid']);
             if ($imagedata) {
               $imgdata = $imagedata[0];
               $image = $imgdata['filename'];
@@ -1904,7 +1966,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
             $image = '';
             $title = '';
             $albmdata = query_full_array("SELECT `title`, `folder` FROM ". prefix('albums') .
-                     " WHERE `id`=" . $comment['imageid']);
+                     " WHERE `id`=" . $comment['ownerid']);
             if ($albmdata) {
               $albumdata = $albmdata[0];
               $album = $albumdata['folder'];
@@ -1929,6 +1991,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
           <h2 class="boxtitle">Gallery Maintenance</h2>
           <p>Your database is <strong><?php echo getOption('mysql_database'); ?>
           </strong>: Tables are prefixed by <strong>'<?php echo getOption('mysql_prefix'); ?>'</strong></p>
+          <?php if ($_zp_loggedin & EDIT_RIGHTS) { ?>
           <form name="prune_gallery" action="admin.php?prune=true">
             <input type="hidden" name="prune" value="true">
             <div class="buttons pad_button" id="home_dbrefresh"><button type="submit"><img src="images/refresh.png" alt="" /> Refresh the Database</button></div><br clear="all" /><br clear="all" />
@@ -1967,7 +2030,7 @@ if (!zp_loggedin()  && !$_zp_null_account) {
   				var my_tooltip = new Tooltip('home_refresh', 'home_refresh_tooltip')
 			</script>
           </form>
-
+          <?php } ?>
         </div>
 
 

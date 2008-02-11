@@ -1,6 +1,6 @@
 <?php
 define('ZENPHOTO_VERSION', '1.1.4');
-define('ZENPHOTO_RELEASE', 1107);
+define('ZENPHOTO_RELEASE', 1112);
 define('SAFE_GLOB', false);
 define('CHMOD_VALUE', 0777);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
@@ -11,7 +11,7 @@ if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 // functions.php - HEADERS NOT SENT YET!
 
 if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
-  header("Location: " . ZENFOLDER . "/setup.php");
+  die ("<strong>Zenphoto error:</strong> zp-config.php not found. Perhaps you need to run <a href=\"" . ZENFOLDER . "/setup.php\">setup</a> (or migrate your old config.php)");
 }
 
 // Including zp-config.php more than once is OK, and avoids $conf missing.
@@ -70,18 +70,20 @@ $_zp_error = false;
   * @param string $key the name of the option.
   */
 function getOption($key) {
-  global $_zp_conf_vars, $_zp_options, $setup;
+  global $_zp_conf_vars, $_zp_options;
   if (is_null($_zp_options)) {
     $_zp_options = array();
-    if (!isset($setup)) {
-      $sql = "SELECT `name`, `value` FROM ".prefix('options');
-      $optionlist = query_full_array($sql);
+
+    $sql = "SELECT `name`, `value` FROM ".prefix('options');
+    $optionlist = query_full_array($sql, true);
+    if ($optionlist !== false) {
       foreach($optionlist as $option) {
         $_zp_options[$option['name']] = $option['value'];
         $_zp_conf_vars[$option['name']] = $option['value'];  /* so that zp_conf will get the DB result */
       }
     }
-  }  
+
+  }
   if (array_key_exists($key, $_zp_options)) {
     return $_zp_options[$key];
   } else {
@@ -811,7 +813,8 @@ function parseThemeDef($file) {
  * @since  1.0.0
  */
 function zp_mail($subject, $message, $headers = '') {
-  $admin_email = getOption('admin_email');
+  $admin_email = getAdminEmail();
+  
   if (!empty($admin_email)) {
     // Make sure no one is trying to use our forms to send Spam
     // Stolen from Hosting Place: 
@@ -848,7 +851,7 @@ function zp_mail($subject, $message, $headers = '') {
   	}
 
   	// Send the mail
-    UTF8::send_mail("Admin <" . getOption('admin_email') . ">", $subject, $message, $headers);
+    UTF8::send_mail("Admin <" . $admin_email . ">", $subject, $message, $headers);
   }
 }
 
@@ -1285,15 +1288,14 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
   $website = trim($website);
   $code = md5(trim($code));
   $code_ok = trim($code_ok);
+
   // Let the comment have trailing line breaks and space? Nah...
   // Also (in)validate HTML here, and in $name.
   $comment = trim($comment);
   if (getOption('comment_email_required') && (empty($email) || !is_valid_email_zp($email))) { return -2; }
   if (getOption('comment_name_required') && empty($name)) { return -3; }
   if (getOption('comment_web_required') && (empty($website) || !isValidURL($website))) { return -4; }
-  $file = SERVERCACHE . "/code_" . $code_ok . ".png";
   if (getOption('Use_Captcha')) {
-    if (!file_exists($file)) { return -5; }
     if ($code != $code_ok) { return -5; }
   }
   if (empty($comment)) {
@@ -1320,7 +1322,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
     }
 
     // Update the database entry with the new comment
-    query("INSERT INTO " . prefix("comments") . " (`imageid`, `name`, `email`, `website`, `comment`, `inmoderation`, `date`, `type`) VALUES " .
+    query("INSERT INTO " . prefix("comments") . " (`ownerid`, `name`, `email`, `website`, `comment`, `inmoderation`, `date`, `type`) VALUES " .
             " ('" . $receiver->id .
             "', '" . escape($name) . 
             "', '" . escape($email) . 
@@ -1481,5 +1483,122 @@ function zp_setCookie($name, $value, $time=0, $path='/') {
     $_SESSION[$name] = $value;
     $_COOKIE[$name] = $value;
   }
+}
+
+//admin user handling
+
+define('MAIN_RIGHTS', 1);
+define('UPLOAD_RIGHTS', 2);
+define('COMMENT_RIGHTS', 4);
+define('EDIT_RIGHTS', 8);
+define('THEMES_RIGHTS', 16);
+define('OPTIONS_RIGHTS', 32);
+define('ADMIN_RIGHTS', 16384);
+define('ALL_RIGHTS', 07777777777);
+$_zp_current_admin = null;
+$_zp_admin_users = null;
+
+/**
+ * Saves an admin user's settings
+ *
+ * @param string $user The username of the admin
+ * @param string $pass The password associated with the user name (md5)
+ * @param string $name The display name of the admin
+ * @param string $email The email address of the admin
+ * @param bit $rights The administrating rites for the admin
+ */
+function saveAdmin($user, $pass, $name, $email, $rights) {
+  $sql = "SELECT `name` FROM " . prefix('administrators') . " WHERE `user` = '$user'";
+  $result = query_single_row($sql);
+  if ($result) {
+    if (!is_null($pass)) {
+      $password = "' ,`password`='" . escape($pass);  
+    }
+    $sql = "UPDATE " . prefix('administrators') . "SET `name`='" . escape($name) . $password . 
+           "', `email`='" . escape($email) . "', `rights`='" . escape($rights) . "' WHERE `user`='" . escape($user) ."'";
+  } else {
+    $sql = "INSERT INTO " . prefix('administrators') . " (user, password, name, email, rights) VALUES ('" .
+           escape($user) . "','" . escape($pass) . "','" . escape($name) . "','" . escape($email) . "','" . $rights . "')";
+  }
+  $result = query($sql);
+}
+
+/**
+ * Returns an array of admin users, indexed by the userid
+ * 
+ * The array contains the md5 password, user's name, email, and admin priviledges 
+ *
+ * @return array
+ */
+function getAdministrators() {
+  if (is_null($_zp_admin_users)) {
+    $_zp_admin_users = array();
+    $sql = "SELECT `user`, `password`, `name`, `email`, `rights` FROM ".prefix('administrators')."ORDER BY `rights` DESC, `id`";
+    $admins = query_full_array($sql, true);
+    if ($admins !== false) {
+      foreach($admins as $user) {
+        $_zp_admin_users[$user['user']] = array('user' => $user['user'], 'pass' => $user['password'], 'name' => $user['name'], 'email' => $user['email'], 'rights' => $user['rights']);
+      }
+    }
+  }
+  return $_zp_admin_users;
+}
+
+/**
+ * Retuns the administration rights of a saved authorization code 
+ *
+ * @param string $authCode the md5 code to check
+ * 
+ * @return bit
+ */
+function checkAuthorization($authCode) {
+  global $_zp_current_admin;
+  $admins = getAdministrators();
+  $reset_date = getOption('admin_reset_date');
+  if ((count($admins) == 0) || empty($reset_date)) { 
+    $_zp_current_admin = null;
+    return OPTIONS_RIGHTS; //no admins or reset request
+  }  
+  $i = 0;
+  foreach($admins as $user) {
+    if ($user['pass'] == $authCode) { 
+      $_zp_current_admin = $user;
+      if ($i == 0) { return ALL_RIGHTS; } // the first admin is the master.
+      return $user['rights']; 
+    }
+    $i++;
+  }
+  $_zp_current_admin = null;
+  return 0; // no rights
+}
+
+/**
+ * Checks a logon user/password against the list of admins
+ * 
+ * Returns true if there is a match
+ *
+ * @param string $user
+ * @param string $pass
+ * @return bool
+ */
+function checkLogon($user, $pass) {
+  $admins = getAdministrators();
+  if (isset($admins[$user])) { 
+    $admin = $admins[$user];
+    $md5 = md5($user.$pass);
+    return $admin['pass'] == $md5; 
+  }
+  return false;
+}
+
+/**
+ * Returns the email address of the first Admin user
+ *
+ * @return string
+ */
+function getAdminEmail() {
+  $admins = getAdministrators();
+  $user = array_shift($admins);
+  return $user['email'];
 }
 ?>

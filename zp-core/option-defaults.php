@@ -9,12 +9,16 @@ function setDefault($option, $default) {
   setOptionDefault($option, $v); 
 }
   require('zp-config.php');
-  unset($setup);  // it is now ok (and necessary) to access the database options table
 
   global $_zp_conf_vars, $_zp_options;
   $conf = $_zp_conf_vars;
   
   setOption('zenphoto_release', ZENPHOTO_RELEASE); 
+  
+  $admin = getOption('adminuser');
+  if (!empty($admin)) {
+    saveAdmin($admin, getOption('adminpass'), getOption('admin_name') , getOption('admin_email'), ALL_RIGHTS);
+  }
   
   setDefault('gallery_title', "Gallery");
   setDefault('gallery_password', '');
@@ -32,13 +36,9 @@ function setDefault($option, $default) {
   } else {
     $rw = 0;
   }
-  setDefault('mod_rewrite', $rw);
-  
+  setDefault('mod_rewrite', $rw); 
   setDefault('mod_rewrite_image_suffix', ".php");
-  setDefault('adminuser', "");
-  setDefault('adminpass', "");
-  setDefault('admin_email', "");
-  setDefault('admin_name', "");
+  
   setDefault('server_protocol', "http");
   setDefault('charset', "UTF-8");
   setDefault('image_quality', 85);
@@ -84,6 +84,7 @@ function setDefault($option, $default) {
   setDefault('comment_name_required', 1);
   setDefault('comment_email_required', 1);
   setDefault('comment_web_required', 0);
+  setDefault('Use_Captcha', true);
   setDefault('full_image_download', 0);
   setDefault('full_image_quality', 75);
   setDefault('persistent_archive', 0);

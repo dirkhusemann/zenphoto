@@ -1,11 +1,9 @@
 <?php
 define('HTACCESS_VERSION', '1.1.4.0');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
 define('CHMOD_VALUE', 0777);
-global $setup;
 $checked = isset($_GET['checked']);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 define('OFFSET_PATH', true);
-$setup = true;
 
 if (!$checked && !file_exists('zp-config.php')) {
   @copy('zp-config.php.example', 'zp-config.php');
@@ -49,9 +47,6 @@ if (file_exists("zp-config.php")) {
   if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
     if (@mysql_select_db($_zp_conf_vars['mysql_database'])) {
       $result = @mysql_query("SELECT `id` FROM " . $_zp_conf_vars['mysql_prefix'].'options' . " LIMIT 1", $connection);
-      if ($result) {
-        unset($setup);
-      }
       require_once("admin-functions.php");
     }
   }
@@ -384,7 +379,6 @@ if (!$checked) {
 } else {
   $dbmsg = "database connected";
 } // system check
-
   if (file_exists("zp-config.php")) {
     require("zp-config.php");
     require_once('functions-db.php');
@@ -408,17 +402,15 @@ if (!$checked) {
         }
       }
       $expected_tables = array($_zp_conf_vars['mysql_prefix'].'options', $_zp_conf_vars['mysql_prefix'].'albums',
-                               $_zp_conf_vars['mysql_prefix'].'images', $_zp_conf_vars['mysql_prefix'].'comments');
+                               $_zp_conf_vars['mysql_prefix'].'images', $_zp_conf_vars['mysql_prefix'].'comments',
+                               $_zp_conf_vars['mysql_prefix'].'administrators');
       foreach ($expected_tables as $needed) {
         if (!isset($tables[$needed])) {
           $tables[$needed] = 'create';
         }
       }
-      $adm = getOption('adminuser');
-      $pas = getOption('adminpass');
-      $rsd = getOption('admin_reset_date');
 
-      if (!(empty($rsd) || empty($adm) || empty($pas))) {
+      if (!($tables['administrators'] == 'create')) {
         if (!zp_loggedin() && (!isset($_GET['create']) && !isset($_GET['update']))) {  // Display the login form and exit.
           printLoginForm("/" . ZENFOLDER . "/setup.php?checked$mod", false);
           exit();
@@ -431,6 +423,7 @@ if (!$checked) {
     $tbl_comments = prefix('comments');
     $tbl_images = prefix('images');
     $tbl_options  = prefix('options');
+    $tbl_administrators = prefix('administrators');
     // Prefix the constraint names:
     $cst_comments = prefix('comments_ibfk1');
     $cst_images = prefix('images_ibfk1');
@@ -442,6 +435,21 @@ if (!$checked) {
      tables. This tactic keeps all changes in one place so that noting gets accidentaly omitted.
     ************************************************************************************/
 
+    // v. 1.1.5
+    if (isset($create[$_zp_conf_vars['mysql_prefix'].'administrators'])) {
+      $db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_administrators (
+        `id` int(11) unsigned NOT NULL auto_increment,
+        `user` varchar(64) NOT NULL,
+        `password` text NOT NULL,
+        `name` text,
+        `email` text,
+        `rights` int,
+        PRIMARY KEY  (`id`),
+        UNIQUE (`user`)
+        );";
+    }
+    
+    // v. 1.1
     if (isset($create[$_zp_conf_vars['mysql_prefix'].'options'])) {
       $db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_options (
         `id` int(11) unsigned NOT NULL auto_increment,
@@ -483,7 +491,7 @@ if (!$checked) {
     if (isset($create[$_zp_conf_vars['mysql_prefix'].'comments'])) {
       $db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_comments (
         `id` int(11) unsigned NOT NULL auto_increment,
-        `imageid` int(11) unsigned NOT NULL default '0',
+        `ownerid` int(11) unsigned NOT NULL default '0',
         `name` varchar(255) NOT NULL default '',
         `email` varchar(255) NOT NULL default '',
         `website` varchar(255) default NULL,
@@ -491,10 +499,10 @@ if (!$checked) {
         `comment` text NOT NULL,
         `inmoderation` int(1) unsigned NOT NULL default '0',
         PRIMARY KEY  (`id`),
-        KEY `imageid` (`imageid`)
+        KEY `ownerid` (`ownerid`)
         );";
     $db_schema[] = "ALTER TABLE $tbl_comments ".
-      "ADD CONSTRAINT $cst_comments FOREIGN KEY (`imageid`) REFERENCES $tbl_images (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
+      "ADD CONSTRAINT $cst_comments FOREIGN KEY (`ownerid`) REFERENCES $tbl_images (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
     }
 
     if (isset($create[$_zp_conf_vars['mysql_prefix'].'images'])) {
@@ -595,11 +603,13 @@ if (!$checked) {
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `used_ips` longtext;";
     $sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `custom_data` text default NULL";
     $sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `custom_data` text default NULL";
-    $sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `password` `password` varchar(255) NOT NULL DEFAULT ''";    
-    // provide a way to revert the comments table to use `imageid` rather than `ownerid`
-    $sql_statements[] = "ALTER TABLE $tbl_comments CHANGE `ownerid` `imageid` int(11) UNSIGNED NOT NULL default '0';";
-    $sql_statements[] = "ALTER TABLE $tbl_comments DROP INDEX `ownerid`;";
-    $sql_statements[] = "ALTER TABLE $tbl_comments ADD INDEX (`imageid`);";
+    $sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `password` `password` varchar(255) NOT NULL DEFAULT ''"; 
+       
+    //v1.1.5
+    $sql_statements[] = "ALTER TABLE $tbl_comments CHANGE `imageid` `ownerid` int(11) UNSIGNED NOT NULL default '0';";
+    $sql_statements[] = "ALTER TABLE $tbl_comments DROP INDEX `imageid`;";
+    $sql_statements[] = "ALTER TABLE $tbl_comments ADD INDEX (`ownerid`);";
+    
         
     
 

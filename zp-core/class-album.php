@@ -497,7 +497,7 @@ class Album extends PersistentObject {
         $direction = ' DESC'; 
       }
     }
-    $result = query("SELECT `filename`, `title`, `sort_order`, `show` FROM " . prefix("images")
+    $result = query("SELECT `filename`, `title`, `sort_order`, `show`, `id` FROM " . prefix("images")
       . " WHERE `albumid`=" . $this->id . " ORDER BY " . $key . $direction);
 
     $i = 0;
@@ -513,7 +513,11 @@ class Album extends PersistentObject {
           $i++;
         }
         $images_in_db[] = $filename;
-      }  // TODO: else we should maybe clean out the db record?
+      } else {
+        $id = $row['id'];
+        query("DELETE FROM ".prefix('images')." WHERE `id`=$id"); // delete the record
+        query("DELETE FROM ".prefix('comments')." WHERE `type`='images' AND `ownerid`=$id"); // remove image comments
+      }
     }
     // Place the images not yet in the database before those with sort columns.
     // This is consistent with the sort oder of a NULL sort_order key in manual sorts
@@ -717,7 +721,7 @@ class Album extends PersistentObject {
         unlink($this->localpath . $file); // clean out any other files in the folder
       }
     }
-    query("DELETE FROM " . prefix('comments') . "WHERE `type`='albums' AND `imageid`=" . $this->id);
+    query("DELETE FROM " . prefix('comments') . "WHERE `type`='albums' AND `ownerid`=" . $this->id);
     query("DELETE FROM " . prefix('albums') . " WHERE `id` = " . $this->id);
     return rmdir($this->localpath); 
   }
@@ -767,10 +771,10 @@ class Album extends PersistentObject {
     
     if (count($dead) > 0) {
       $sql = "DELETE FROM ".prefix('images')." WHERE `id` = '" . array_pop($dead) . "'";
-      $sql2 = "DELETE FROM ".prefix('comments')." WHERE `type`='albums' AND `imageid` = '" . array_pop($dead) . "'";
+      $sql2 = "DELETE FROM ".prefix('comments')." WHERE `type`='albums' AND `ownerid` = '" . array_pop($dead) . "'";
       foreach ($dead as $id) {
         $sql .= " OR `id` = '$id'";
-        $sql2 .= " OR `imageid` = '$id'";
+        $sql2 .= " OR `ownerid` = '$id'";
       }
       query($sql);
       query($sql2);
@@ -791,10 +795,10 @@ class Album extends PersistentObject {
     }
     if (count($dead) > 0) {
       $sql = "DELETE FROM ".prefix('albums')." WHERE `id` = '" . array_pop($dead) . "'";
-      $sql2 = "DELETE FROM ".prefix('comments')." WHERE `type`='albums' AND `imageid` = '" . array_pop($dead) . "'";
+      $sql2 = "DELETE FROM ".prefix('comments')." WHERE `type`='albums' AND `ownerid` = '" . array_pop($dead) . "'";
       foreach ($dead as $albumid) {
         $sql .= " OR `id` = '$albumid'";
-        $sql2 .= " OR `imageid` = '$albumid'";
+        $sql2 .= " OR `ownerid` = '$albumid'";
       }
       query($sql);
       query($sql2);
@@ -889,7 +893,7 @@ class Album extends PersistentObject {
    */
   function getComments($moderated=false) {
     $sql = "SELECT *, (date + 0) AS date FROM " . prefix("comments") . 
-       " WHERE `type`='albums' AND `imageid`='" . $this->id . "'";
+       " WHERE `type`='albums' AND `ownerid`='" . $this->id . "'";
     if (!$moderated) {
       $sql .= " AND `inmoderation`=0";
     } 
@@ -929,7 +933,7 @@ class Album extends PersistentObject {
   function getCommentCount() { 
     if (is_null($this->commentcount)) {
       if ($this->comments == null) {
-        $count = query_single_row("SELECT COUNT(*) FROM " . prefix("comments") . " WHERE `type`='albums' AND `inmoderation`=0 AND `imageid`=" . $this->id);
+        $count = query_single_row("SELECT COUNT(*) FROM " . prefix("comments") . " WHERE `type`='albums' AND `inmoderation`=0 AND `ownerid`=" . $this->id);
         $this->commentcount = array_shift($count);
       } else {
         $this->commentcount = count($this->comments);

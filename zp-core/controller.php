@@ -31,26 +31,6 @@ $_zp_current_search = NULL;
 $_zp_current_search_restore = NULL;
 $_zp_pre_authorization = array();
 
-/*** Captcha cleanup **********************
-******************************************/
-if (getOption('Use_Captcha')) {
-  $d = getOption('last_captcha_purge');
-  $expire = time() - 240;   // every 2 hours
-  if ($d > $expire) {
-    chdir(SERVERCACHE . "/");
-    $filelist = safe_glob('code_*.png');
-    if ($filelist) {
-      foreach ($filelist as $file) {
-        $file = SERVERCACHE . "/" . $file;
-        if (filemtime($file) < $expire) {
-          unlink($file);
-        }
-      }
-    }
-  }
-  setOption('last_captcha_purge', time());
-}
-
 /*** Request Handler **********************
  ******************************************/
 // This is the main top-level action handler for user requests. It parses a

@@ -8,11 +8,13 @@ $_zp_loggedin = false;
 // Fix the cookie's path for root installs.
 $cookiepath = WEBPATH;
 if (WEBPATH == '') { $cookiepath = '/'; }
-$adm = getOption('adminuser');
-$pas = getOption('adminpass');
-if (isset($_GET['ticket'])) { // paassword reset query
+if (isset($_GET['ticket'])) { // password reset query
   $offer = $_GET['ticket'];
+  $admins = getAdministrators();
+  $admin = array_shift($admins);
   $req = getOption('admin_reset_date');
+  $adm = $admin['user'];
+  $pas = $admin['pass'];
   $ref = md5($req . $adm . $pas);
   if ($ref === $offer) {
     if (time() <= ($req + (3 * 24 * 60 * 60))) { // you have one week to use the request
@@ -20,11 +22,10 @@ if (isset($_GET['ticket'])) { // paassword reset query
 	}
   }
 }
-$check_auth = md5($adm . $pas);
-if ((($saved_auth = zp_getCookie('zenphoto_auth')) != '') && !isset($_POST['login'])) {
-  if ($saved_auth == $check_auth) {
-    $_zp_loggedin = true;
-  } else {
+
+if (!isset($_POST['login'])) {
+  $_zp_loggedin = checkAuthorization(zp_getCookie('zenphoto_auth'));
+  if (!$_zp_loggedin) {
     // Clear the cookie
     zp_setcookie("zenphoto_auth", "", time()-368000, $cookiepath);
   }
@@ -32,22 +33,14 @@ if ((($saved_auth = zp_getCookie('zenphoto_auth')) != '') && !isset($_POST['logi
   // Handle the login form.
   if (isset($_POST['login']) && isset($_POST['user']) && isset($_POST['pass'])) {
     $post_user = $_POST['user'];
-    $rsd = getOption('admin_reset_date');
-	if (($_POST['pass'] == $pas) && empty($rsd)) { // old cleartext password
-	  $post_pass = $_POST['pass'];
-	} else { 
-	  $post_pass = md5($post_user . $_POST['pass']);
-	}
+	$post_pass = $_POST['pass'];
     $redirect = $_POST['redirect'];
-    if (($adm == $post_user) && ($pas == $post_pass)) {
-      // Correct auth info. Set the cookie.
+	if ($_zp_loggedin = checkLogon($post_user, $post_pass)) {
       zp_setcookie("zenphoto_auth", md5($post_user . $post_pass), time()+5184000, $cookiepath);
-      $_zp_loggedin = true;
       //// FIXME: Breaks IIS
       if (!empty($redirect)) { header("Location: " . FULLWEBPATH . $redirect); }
-      //// 
     } else {
-     // Clear the cookie, just in case
+      // Clear the cookie, just in case
       zp_setcookie("zenphoto_auth", "", time()-368000, $cookiepath);
       $_zp_login_error = true;
     }

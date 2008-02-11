@@ -276,11 +276,11 @@ class Gallery {
       $first = array_pop($dead);
       $sql1 = "DELETE FROM " . prefix('albums') . " WHERE `id` = '$first'";
       $sql2 = "DELETE FROM " . prefix('images') . " WHERE `albumid` = '$first'";
-      $sql3 = "DELETE FROM " . prefix('comments') . " WHERE `type`='albums' AND `imageid`= '$first'";
+      $sql3 = "DELETE FROM " . prefix('comments') . " WHERE `type`='albums' AND `ownerid`= '$first'";
       foreach ($dead as $albumid) {
         $sql1 .= " OR `id` = '$albumid'";
         $sql2 .= " OR `albumid` = '$albumid'";
-        $sql3 .= " OR `imageid` = '$albumid'";
+        $sql3 .= " OR `ownerid` = '$albumid'";
       }
       $n = query($sql1);
       if (!$full && $n > 0 && $cascade) {
@@ -399,7 +399,7 @@ class Gallery {
         } else {
           $sql = 'DELETE FROM ' . prefix('images') . ' WHERE `id`="' . $image['id'] . '";';
           $result = query($sql);   
-          $sql = 'DELETE FROM ' . prefix('comments') . ' WHERE `type`="images" AND `imageid` ="' . $image['id'] . '";'; 
+          $sql = 'DELETE FROM ' . prefix('comments') . ' WHERE `type`="images" AND `ownerid` ="' . $image['id'] . '";'; 
           $result = query($sql);
         }
       }    
@@ -409,16 +409,16 @@ class Gallery {
       $imageids = query_full_array('SELECT `id` FROM ' . prefix('images'));      /* all the image IDs */
       $idsofimages = array();
       foreach($imageids as $row) { $idsofimages[] = $row['id']; }
-      $commentImages = query_full_array("SELECT DISTINCT `imageid` FROM " . 
+      $commentImages = query_full_array("SELECT DISTINCT `ownerid` FROM " . 
           prefix('comments') . 'WHERE `type`="images"');                         /* imageids of all the comments */
       $imageidsofcomments = array();
-      foreach($commentImages as $row) { $imageidsofcomments [] = $row['imageid']; } 
+      foreach($commentImages as $row) { $imageidsofcomments [] = $row['ownerid']; } 
       $orphans = array_diff($imageidsofcomments , $idsofimages );                 /* image ids of comments with no image */      
       
       if (count($orphans) > 0 ) { /* delete dead comments from the DB */
         $firstrow = array_pop($orphans);
-        $sql = "DELETE FROM " . prefix('comments') . "WHERE `type`='images' AND `imageid`='" . $firstrow . "'";
-        foreach($orphans as $id) $sql .= " OR `imageid`='" . $id . "'";
+        $sql = "DELETE FROM " . prefix('comments') . "WHERE `type`='images' AND `ownerid`='" . $firstrow . "'";
+        foreach($orphans as $id) $sql .= " OR `ownerid`='" . $id . "'";
         query($sql);
       }
       
@@ -426,15 +426,15 @@ class Gallery {
       $albumids = query_full_array('SELECT `id` FROM ' . prefix('albums'));      /* all the album IDs */
       $idsofalbums = array();
       foreach($albumids as $row) { $idsofalbums[] = $row['id']; }
-      $commentAlbums = query_full_array("SELECT DISTINCT `imageid` FROM " . 
+      $commentAlbums = query_full_array("SELECT DISTINCT `ownerid` FROM " . 
           prefix('comments') . 'WHERE `type`="albums"');                         /* album ids of all the comments */
       $albumidsofcomments = array();
-      foreach($commentAlbums as $row) { $albumidsofcomments [] = $row['imageid']; } 
+      foreach($commentAlbums as $row) { $albumidsofcomments [] = $row['ownerid']; } 
       $orphans = array_diff($albumidsofcomments , $idsofalbums );                 /* album ids of comments with no album */      
       if (count($orphans) > 0 ) { /* delete dead comments from the DB */
         $firstrow = array_pop($orphans);
-        $sql = "DELETE FROM " . prefix('comments') . "WHERE `type`='images' AND `imageid`='" . $firstrow . "'";
-        foreach($orphans as $id) $sql .= " OR `imageid`='" . $id . "'";
+        $sql = "DELETE FROM " . prefix('comments') . "WHERE `type`='images' AND `ownerid`='" . $firstrow . "'";
+        foreach($orphans as $id) $sql .= " OR `ownerid`='" . $id . "'";
         query($sql);
       }
     }
