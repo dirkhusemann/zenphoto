@@ -1,9 +1,16 @@
 <?php 
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
+if (!file_exists(dirname(__FILE__) . '/' . ZENFOLDER . "/zp-config.php")) {
+  $location = "http://". $_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']) . "/" . ZENFOLDER . "/setup.php";
+  header("Location: $location" );
+}
+
 require_once(ZENFOLDER . "/template-functions.php");
+
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
   header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
 }
+
 $themepath = 'themes';
 $theme = $_zp_gallery->getCurrentTheme();
 $_zp_themeroot = WEBPATH . "/$themepath/$theme";

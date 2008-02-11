@@ -35,7 +35,7 @@ $_zp_pre_authorization = array();
 ******************************************/
 if (getOption('Use_Captcha')) {
   $d = getOption('last_captcha_purge');
-  $expire = time() - 86400;
+  $expire = time() - 240;   // every 2 hours
   if ($d > $expire) {
     chdir(SERVERCACHE . "/");
     $filelist = safe_glob('code_*.png');

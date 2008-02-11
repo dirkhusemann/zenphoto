@@ -3632,7 +3632,7 @@ function generateCaptcha(&$image) {
   $rectangle = imagecolorallocate($image,48,57,85);
   ImageRectangle ($image,0,0,64,19,$rectangle);
 
-  $img = "code_" . $code . ".png";
+  $img = 'code_' . md5($_SERVER['REMOTE_ADDR']) . ".png";
   imagepng($image, SERVERCACHE . "/" . $img);
   $image = WEBPATH . "/cache/". $img;
   return $code;

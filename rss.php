@@ -4,8 +4,8 @@ header('Content-Type: application/xml');
 require_once(ZENFOLDER . "/template-functions.php");
 $themepath = 'themes';
 
-$albumnr = sanitize_numeric($_GET[albumnr]);
-$albumname = sanitize($_GET[albumname], true);
+$albumnr = sanitize_numeric($_GET['albumnr']);
+$albumname = sanitize($_GET['albumname'], true);
 $host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 
 // check passwords

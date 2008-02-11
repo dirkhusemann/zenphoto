@@ -134,7 +134,7 @@
                                   </tr>
                                   <?php if (getOption('Use_Captcha')) { 
                                     echo "<tr valign=\"top\" align=\"left\">";
-                                    printCaptcha("<th><label for=\"capcha\">Enter Captcha ", ":</label></th><td>", "</td>", 8); } 
+                                    printCaptcha("<th><label for=\"captcha\">Enter Captcha ", ":</label></th><td>", "</td>", 8); } 
                                     echo "</tr>\n";                                  
                                   ?>
 
