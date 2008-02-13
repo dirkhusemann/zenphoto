@@ -1007,7 +1007,7 @@ if (!zp_loggedin()) {
             $albumsprime = $gallery->getAlbums();
             $ablums = array();
             foreach ($albumsprime as $album) { // check for rights
-              if (isMyAlbum($album, UPLOAD_RIGHTS)) {
+              if (isMyAlbum($album, EDIT_RIGHTS)) {
                 $albums[] = $album;
               }
             }
