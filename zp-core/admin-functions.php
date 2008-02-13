@@ -1,7 +1,8 @@
 <?php
-
 require_once("classes.php");
 require_once("functions.php");
+
+$_zp_admin_album_list = null;
 
 /**
  * Test to see whether we should be displaying a particular page.
@@ -247,21 +248,29 @@ function bool($param) {
   }
 }
 
-function genAlbumList(&$list, $curAlbum=NULL) {
+function genAlbumUploadList(&$list, $curAlbum=NULL) {
   global $gallery;
+  $ablums = array();
   if (is_null($curAlbum)) {
-    $albums = $gallery->getAlbums(0);
+    $albumsprime = $gallery->getAlbums(0);
+    foreach ($albumsprime as $album) { // check for rights
+      if (isMyAlbum($album, UPLOAD_RIGHTS)) {
+        $albums[] = $album;
+      }
+    }
   } else {
     $albums = $curAlbum->getSubAlbums(0);
   }
-  foreach ($albums as $folder) {
-    $album = new Album($gallery, $folder);
-    $list[$album->getFolder()] = $album->getTitle();
-    genAlbumList($list, $album);  /* generate for subalbums */
+  if (is_array($albums)) {
+    foreach ($albums as $folder) {
+      $album = new Album($gallery, $folder);
+      $list[$album->getFolder()] = $album->getTitle();
+      genAlbumUploadList($list, $album);  /* generate for subalbums */
+    }
   }
 }
 
-function displayDeleted() { 
+function displayDeleted() {
   /* Display a message if needed. Fade out and hide after 2 seconds. */  
   if (isset($_GET['ndeleted'])) {      
     $ntdel = strip($_GET['ndeleted']);      
@@ -324,11 +333,27 @@ function customOptions($optionHandler, $indent="") {
   }
 }
 
+/**
+ * Creates the body of a select list
+ *
+ * @param array $currentValue list of items to be flagged as checked
+ * @param array $list the elements of the select list
+ */
 function generateListFromArray($currentValue, $list) {
+  
+debugLog("generateListFromArray");
+debugLogArray($currentValue);
+debugLogArray($list);
+
   sort($list);
+  $cv = array_flip($currentValue);
+  
+echo "<br/>\$currentValue<br/>";print_r($currentValue);
+echo "<br/>\$cv<br/>";print_r($cv);
+
   foreach($list as $item) {
     echo '<option value="' . $item . '"';
-    if ($currentValue == $item) { 
+    if (isset($cv[$item])) { 
       echo ' selected="selected"'; 
     }
     echo '>' . $item . "</option>\n";
@@ -343,7 +368,7 @@ function generateListFromFiles($currentValue, $root, $suffix) {
   foreach($filelist as $file) {
     $list[] = str_replace($suffix, '', $file); 
   }
-  generateListFromArray($currentValue, $list);
+  generateListFromArray(array($currentValue), $list);
 }
 /**
  * emits the html for editing album information
@@ -708,6 +733,35 @@ function checkForUpdate() {
     }
   }
   Return $_zp_WEB_Version;
+}
+
+/**
+ * Checks to see if the loggedin Admin has rights to the album
+ *
+ * @param string $albumfolder the album to be checked
+ */
+function isMyAlbum($albumfolder, $action) {
+  global $_zp_loggedin, $_zp_admin_album_list, $_zp_current_admin;
+  if ($_zp_loggedin & ADMIN_RIGHTS) { return true; }
+  if ($_zp_loggedin & $action) {
+    if (is_null($_zp_admin_album_list)) {
+      $_zp_admin_album_list = array();
+      $sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
+             prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
+             $_zp_current_admin['id']." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
+      $albums = query_full_array($sql);
+      foreach($albums as $album) {
+        $_zp_admin_album_list[] =$album['folder'];
+      }
+    }
+    if (count($_zp_admin_album_list) == 0) { return true; }
+    foreach ($_zp_admin_album_list as $key => $adminalbum) { // see if it is one of the managed folders or a subfolder there of
+      if (substr($albumfolder, 0, strlen($adminalbum)) == $adminalbum) { return true; }  
+    }
+    return false;
+  } else {
+    return false;
+  }
 }
 
 ?>

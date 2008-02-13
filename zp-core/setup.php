@@ -403,7 +403,7 @@ if (!$checked) {
       }
       $expected_tables = array($_zp_conf_vars['mysql_prefix'].'options', $_zp_conf_vars['mysql_prefix'].'albums',
                                $_zp_conf_vars['mysql_prefix'].'images', $_zp_conf_vars['mysql_prefix'].'comments',
-                               $_zp_conf_vars['mysql_prefix'].'administrators');
+                               $_zp_conf_vars['mysql_prefix'].'administrators', $_zp_conf_vars['mysql_prefix'].'admintoalbum');
       foreach ($expected_tables as $needed) {
         if (!isset($tables[$needed])) {
           $tables[$needed] = 'create';
@@ -424,6 +424,7 @@ if (!$checked) {
     $tbl_images = prefix('images');
     $tbl_options  = prefix('options');
     $tbl_administrators = prefix('administrators');
+    $tbl_admintoalbum = prefix('admintoalbum');
     // Prefix the constraint names:
     $cst_comments = prefix('comments_ibfk1');
     $cst_images = prefix('images_ibfk1');
@@ -448,7 +449,15 @@ if (!$checked) {
         UNIQUE (`user`)
         );";
     }
-    
+    if (isset($create[$_zp_conf_vars['mysql_prefix'].'admintoalbum'])) {
+      $db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_admintoalbum (
+        `id` int(11) unsigned NOT NULL auto_increment,
+        `adminid` int(11) unsigned NOT NULL,
+        `albumid` int(11) unsigned NOT NULL,
+        PRIMARY KEY  (`id`)
+        );";
+    }
+        
     // v. 1.1
     if (isset($create[$_zp_conf_vars['mysql_prefix'].'options'])) {
       $db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_options (
@@ -460,6 +469,7 @@ if (!$checked) {
         );";
     }
 
+    // base implementation
     if (isset($create[$_zp_conf_vars['mysql_prefix'].'albums'])) {
       $db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_albums (
         `id` int(11) unsigned NOT NULL auto_increment,

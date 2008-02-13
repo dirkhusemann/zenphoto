@@ -102,12 +102,13 @@ function printAdminToolbox($context=null, $id='admin') {
     echo '<div id="' .$id. '">'."\n".'<a href="javascript: toggle('. "'" .$dataid."'".');"><h3>Admin Toolbox</h3></a>'."\n"."\n</div>";
     echo '<div id="' .$dataid. '" style="display: none;">'."\n";
     printAdminLink('Admin', '', "<br />\n");
+    $albumname = $_zp_current_album->name;
     if ($context === ZP_INDEX) {
-      if ($_zp_loggedin & EDIT_RIGHTS) {
+      if (isMyAlbum($albumname, EDIT_RIGHTS)) {
         printSortableGalleryLink('Sort gallery', 'Manual sorting');
         echo "<br />\n";
       }
-      if ($_zp_loggedin & UPLOAD_RIGHTS) {
+      if (isMyAlbum($albumname, UPLOAD_RIGHTS)) {
         printLink($zf . '/admin.php?page=upload' . urlencode($_zp_current_album->name), "New album", NULL, NULL, NULL);
         echo "<br />\n";
       }
@@ -116,30 +117,28 @@ function printAdminToolbox($context=null, $id='admin') {
       }
       $redirect .= "&page=$page";
     } else if (!in_context(ZP_IMAGE | ZP_SEARCH)) {  // then it must be an album page
-      $albumname = urlencode($_zp_current_album->name);
-      if ($_zp_loggedin & EDIT_RIGHTS) {
+      if (isMyAlbum($albumname, EDIT_RIGHTS)) {
         printSubalbumAdmin('Edit album', '', "<br />\n");
         printSortableAlbumLink('Sort album', 'Manual sorting');
         echo "<br />\n";
         echo "<a href=\"javascript: confirmDeleteAlbum('".$zf."/admin.php?page=edit&action=deletealbum&album=" .
-        queryEncode($_zp_current_album->name) . "');\" title=\"Delete the album\">Delete album</a><br />\n";
+        queryEncode($albumname) . "');\" title=\"Delete the album\">Delete album</a><br />\n";
       }
-      if ($_zp_loggedin & UPLOAD_RIGHTS) {
-        printLink($zf . '/admin.php?page=upload&album=' . $albumname, "Upload Here", NULL, NULL, NULL);
+      if (isMyAlbum($albumname, UPLOAD_RIGHTS)) {
+        printLink($zf . '/admin.php?page=upload&album=' . urlencode($albumname), "Upload Here", NULL, NULL, NULL);
         echo "<br />\n";
-        printLink($zf . '/admin.php?page=upload&new&album=' . $albumname, "New Album Here", NULL, NULL, NULL);
+        printLink($zf . '/admin.php?page=upload&new&album=' . urlencode($albumname), "New Album Here", NULL, NULL, NULL);
         echo "<br />\n";
       }
-      $redirect = "&album=$albumname&page=$page";
+      $redirect = "&album=".urlencode($albumname)."&page=$page";
     } else if (in_context(ZP_IMAGE)) {
-      $albumname = urlencode($_zp_current_album->name);
       $imagename = queryEncode($_zp_current_image->filename);
-      if ($_zp_loggedin & EDIT_RIGHTS) {
+      if (isMyAlbum($albumname, EDIT_RIGHTS)) {
         echo "<a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?page=edit&action=deleteimage&album=" .
-        $albumname . "&image=". $imagename . "');\" title=\"Delete the image\">Delete image</a>";
+        urlencode($albumname) . "&image=". $imagename . "');\" title=\"Delete the image\">Delete image</a>";
         echo "<br />\n";
       }
-      $redirect = "&album=$albumname&image=$imagename";
+      $redirect = "&album=".urlencode($albumname)."&image=$imagename";
     } else if (in_context(ZP_SEARCH)) {
       $redirect = "&p=search" . $_zp_current_search->getSearchParams() . "&page=$page";
     }
@@ -1003,25 +1002,15 @@ function getNumImages() {
  */
 
 function getTotalImagesIn($album) {
-
   global $_zp_gallery;
-
   $sum = $album->getNumImages();
-
   $subalbums = $album->getSubalbums(0);
-
   while (count($subalbums) > 0) {
-
     $albumname = array_pop($subalbums);
-
     $album = new Album($_zp_gallery, $albumname);
-
     $sum = $sum + getTotalImagesIn($album);
-
   }
-
   return $sum;
-
 }
 
 
@@ -2525,7 +2514,7 @@ function printImageStatistic($number, $option, $album='') {
   echo "\n<div id=\"$option\">\n";
   foreach ($images as $image) {
     echo '<a href="' . $image->getImageLink() . '" title="' . htmlspecialchars($image->getTitle(), ENT_QUOTES) . "\">\n";
-    echo '<img src="' . $image->getThumb() . "\"></a>\n";
+    echo '<img src="' . $image->getThumb() . "\" /></a>\n";
   }
   echo "</div>\n";
 }
@@ -2643,7 +2632,7 @@ function getRandomImagesAlbum() {
  */
 function printRandomImages($number=5, $class=null, $option='all') {
   if (!is_null($class)) {
-    $class = 'class="' . $class . '";';
+    $class = 'class="' . $class . '"';
     echo "<ul".$class.">";
   }
   for ($i=1; $i<=$number; $i++) {
@@ -3640,7 +3629,7 @@ function printCaptcha($preText='', $midText='', $postText='', $size=4) {
     $captchaCode = generateCaptcha($img);
     $inputBox =  "<input type=\"text\" id=\"code\" name=\"code\" size=\"" . $size . "\" class=\"inputbox\" />";
     $captcha = "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/>" .
-             "<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\"/></label>&nbsp;";
+             "<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" /></label>&nbsp;";
 
     echo $preText;
     echo $captcha;

@@ -61,7 +61,7 @@ class ThemeOptions {
     
 	case 'Theme_personality':
       echo '<select id="ef_personality" name="' . $option . '"' . ">\n";
-	  generateListFromArray($currentValue, array('Image page', 'Simpleviewer', 'Slimbox', 'Smoothgallery'));
+	  generateListFromArray(array($currentValue), array('Image page', 'Simpleviewer', 'Slimbox', 'Smoothgallery'));
       echo "</select>\n";	
 	  break;
 	}

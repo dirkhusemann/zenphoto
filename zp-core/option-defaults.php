@@ -17,7 +17,7 @@ function setDefault($option, $default) {
   
   $admin = getOption('adminuser');
   if (!empty($admin)) {
-    saveAdmin($admin, getOption('adminpass'), getOption('admin_name') , getOption('admin_email'), ALL_RIGHTS);
+    saveAdmin($admin, getOption('adminpass'), getOption('admin_name') , getOption('admin_email'), ALL_RIGHTS, array());
   }
   
   setDefault('gallery_title', "Gallery");

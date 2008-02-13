@@ -1,6 +1,6 @@
 <?php
 define('ZENPHOTO_VERSION', '1.1.4');
-define('ZENPHOTO_RELEASE', 1112);
+define('ZENPHOTO_RELEASE', 1113);
 define('SAFE_GLOB', false);
 define('CHMOD_VALUE', 0777);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
@@ -1506,21 +1506,41 @@ $_zp_admin_users = null;
  * @param string $name The display name of the admin
  * @param string $email The email address of the admin
  * @param bit $rights The administrating rites for the admin
+ * @param array $albums an array of albums that the admin can access. (If empty, access is to all albums)
  */
-function saveAdmin($user, $pass, $name, $email, $rights) {
-  $sql = "SELECT `name` FROM " . prefix('administrators') . " WHERE `user` = '$user'";
+function saveAdmin($user, $pass, $name, $email, $rights, $albums) {
+  $sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '$user'";
   $result = query_single_row($sql);
+  $id = $result['id'];
   if ($result) {
     if (!is_null($pass)) {
-      $password = "' ,`password`='" . escape($pass);  
+      $password = "' ,`password`='" . escape($pass);
     }
-    $sql = "UPDATE " . prefix('administrators') . "SET `name`='" . escape($name) . $password . 
-           "', `email`='" . escape($email) . "', `rights`='" . escape($rights) . "' WHERE `user`='" . escape($user) ."'";
+    if (!is_null($rights)) {
+      $rightsset = "', `rights`='" . escape($rights);
+    }
+    $sql = "UPDATE " . prefix('administrators') . "SET `name`='" . escape($name) . $password .
+           "', `email`='" . escape($email) . $rightsset . "' WHERE `id`='" . $id ."'";
+    $result = query($sql);
   } else {
     $sql = "INSERT INTO " . prefix('administrators') . " (user, password, name, email, rights) VALUES ('" .
-           escape($user) . "','" . escape($pass) . "','" . escape($name) . "','" . escape($email) . "','" . $rights . "')";
+    escape($user) . "','" . escape($pass) . "','" . escape($name) . "','" . escape($email) . "','" . $rights . "')";
+    $result = query($sql);
+    $sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '$user'";
+    $result = query_single_row($sql);
+    $id = $result['id'];
   }
+  $sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
   $result = query($sql);
+  $gallery = new Gallery();
+  if (is_array($albums)) {
+    foreach ($albums as $albumname) {
+      $album = new Album($gallery, $albumname);
+      $albumid = $album->getAlbumID();
+      $sql = "INSERT INTO ".prefix('admintoalbum')." (adminid, albumid) VALUES ($id, $albumid)";
+      $result = query($sql);
+    }
+  }
 }
 
 /**
@@ -1533,11 +1553,13 @@ function saveAdmin($user, $pass, $name, $email, $rights) {
 function getAdministrators() {
   if (is_null($_zp_admin_users)) {
     $_zp_admin_users = array();
-    $sql = "SELECT `user`, `password`, `name`, `email`, `rights` FROM ".prefix('administrators')."ORDER BY `rights` DESC, `id`";
+    $sql = "SELECT `user`, `password`, `name`, `email`, `rights`, `id` FROM ".prefix('administrators')."ORDER BY `rights` DESC, `id`";
     $admins = query_full_array($sql, true);
     if ($admins !== false) {
       foreach($admins as $user) {
-        $_zp_admin_users[$user['user']] = array('user' => $user['user'], 'pass' => $user['password'], 'name' => $user['name'], 'email' => $user['email'], 'rights' => $user['rights']);
+        $_zp_admin_users[$user['user']] = array('user' => $user['user'], 'pass' => $user['password'], 
+                         'name' => $user['name'], 'email' => $user['email'], 'rights' => $user['rights'],
+                         'id' => $user['id']);
       }
     }
   }
@@ -1557,7 +1579,7 @@ function checkAuthorization($authCode) {
   $reset_date = getOption('admin_reset_date');
   if ((count($admins) == 0) || empty($reset_date)) { 
     $_zp_current_admin = null;
-    return OPTIONS_RIGHTS; //no admins or reset request
+    return ADMIN_RIGHTS; //no admins or reset request
   }  
   $i = 0;
   foreach($admins as $user) {

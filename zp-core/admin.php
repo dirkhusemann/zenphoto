@@ -11,7 +11,7 @@ $standardOptions = array('gallery_title','website_title','website_url','time_off
                          'image_allow_upscale','thumb_size','thumb_crop',
                          'thumb_crop_width','thumb_crop_height','thumb_sharpen',
                          'albums_per_page','images_per_page','perform_watermark',
-                         'watermark_image','adminuser','adminpass','current_theme', 'spam_filter',
+                         'watermark_image','current_theme', 'spam_filter',
                          'email_new_comments', 'perform_video_watermark', 'video_watermark_image',
                          'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'search_fields',
                          'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
@@ -435,8 +435,10 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 /*****************************************************************************/
       
     } else if ($action == 'deleteadmin') {
-      $user = urldecode($_GET['adminuser']);
-      $sql = "DELETE FROM ".prefix('administrators')." WHERE `user`='$user'";
+      $id = $_GET['adminuser'];
+      $sql = "DELETE FROM ".prefix('administrators')." WHERE `id`=$id";
+      query($sql);
+      $sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
       query($sql);
     } else if ($action == 'saveoptions') {
       $wm = getOption('watermark_image');
@@ -463,13 +465,18 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
               $edit_r = $_POST[$i.'-edit_rights'];
               $options_r = $_POST[$i.'-options_rights'];
               $themes_r = $_POST[$i.'-themes_rights'];
-              $rights = MAIN_RIGHTS + $admin_r + $comment_r + $upload_r + $edit_r + $options_r + $themes_r;
+              if (!isset($_POST['alter_enabled'])) {
+                $rights = MAIN_RIGHTS + $admin_r + $comment_r + $upload_r + $edit_r + $options_r + $themes_r;
+                $albums = $_POST['managed_albums_'.$i];
+              } else {
+                $rights = null;
+              }
               if (empty($pass)) {
                 $pwd = null;
               } else {
-                $pwd = md5($_POST[$i.'-adminuser'] . $pass); 
+                $pwd = md5($_POST[$i.'-adminuser'] . $pass);
               }
-              saveAdmin($user, $pwd, $admin_n, $admin_e, $rights);
+               saveAdmin($user, $pwd, $admin_n, $admin_e, $rights, $albums);
             } else {
               $notify = '&mismatch=password';
             }
@@ -934,19 +941,29 @@ if (!zp_loggedin()) {
         $albumdir = "";
         if (isset($_GET['album'])) {
           $folder = strip($_GET['album']);
-          $album = new Album($gallery, $folder);
-          $albums = $album->getSubAlbums();
-          $pieces = explode('/', $folder);
-          if (($i = count($pieces)) > 1) {
-            unset($pieces[$i-1]);
-            $albumdir = "&album=" . urlencode(implode('/', $pieces));
+          if (isMyAlbum($folder, EDIT_RIGHTS)) {
+            $album = new Album($gallery, $folder);
+            $albums = $album->getSubAlbums();
+            $pieces = explode('/', $folder);
+            if (($i = count($pieces)) > 1) {
+              unset($pieces[$i-1]);
+              $albumdir = "&album=" . urlencode(implode('/', $pieces));
+            } else {
+              $albumdir = "";
+            }
           } else {
-            $albumdir = "";
+            $albums = array();
           }
         } else {
-          $albums = $gallery->getAlbums();
+          $albumsprime = $gallery->getAlbums();
+          $ablums = array();
+          foreach ($albumsprime as $album) { // check for rights
+            if (isMyAlbum($album, EDIT_RIGHTS)) {
+              $albums[] = $album;
+            }
+          }
         }
-      ?>
+        ?>
       <h1>Edit All Albums in <?php if (!isset($_GET['album'])) {echo "Gallery";} else {echo "<em>" . $album->name . "</em>";}?></h1>
       <p><a href="?page=edit<?php echo $albumdir ?>" title="Back to the list of albums (go up a level)">&laquo; Back</a></p>
       <div class="box" style="padding: 15px;">
@@ -987,11 +1004,19 @@ if (!zp_loggedin()) {
           <td style="padding: 0px 0px;" colspan="2">
           <div id="albumList" class="albumList">
             <?php
-            $albums = $gallery->getAlbums();
-            foreach ($albums as $folder) {
-              $album = new Album($gallery, $folder);
-              printAlbumEditRow($album);
-            } 
+            $albumsprime = $gallery->getAlbums();
+            $ablums = array();
+            foreach ($albumsprime as $album) { // check for rights
+              if (isMyAlbum($album, UPLOAD_RIGHTS)) {
+                $albums[] = $album;
+              }
+            }
+            if (is_array($albums)) {
+              foreach ($albums as $folder) {
+                $album = new Album($gallery, $folder);
+                printAlbumEditRow($album);
+              }
+            }
             ?>
 
           </div>
@@ -1028,7 +1053,7 @@ if (!zp_loggedin()) {
 
 <?php } else if ($page == "upload") {
       $albumlist = array();
-      genAlbumList($albumlist);
+      genAlbumUploadList($albumlist);
     ?>
 
       <script type="text/javascript">
@@ -1064,7 +1089,7 @@ if (!zp_loggedin()) {
           <p>Zenphoto is unable to perform uploads when PHP Safe Mode restrictions are in effect</p>
         </div>
       <?php 
-      } else {
+      }
       ?>
 
       <form name="uploadform" enctype="multipart/form-data" action="?action=upload" method="POST" onSubmit="return validateFolder(document.uploadform.folder);">
@@ -1073,18 +1098,26 @@ if (!zp_loggedin()) {
 
         <div id="albumselect">
           Upload to:
+          <?php if (isset($_GET['new'])) { 
+            $checked = "checked=\"1\""; 
+          } else {
+            $checked = '';
+          }
+          ?>
           <select id="albumselectmenu" name="albumselect" onChange="albumSwitch(this)">
-            <option value="" selected="1" style="font-weight: bold;">/</option>
-            <?php
+              <?php 
+              if (isMyAlbum('/', UPLOAD_RIGHTS)) {
+              ?>
+              <option value="" selected="1" style="font-weight: bold;">/</option>
+              <?php
+              }
               $bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');
-              $checked = "checked=\"false\"";
               foreach ($albumlist as $fullfolder => $albumtitle) {
                 $singlefolder = $fullfolder;
                 $saprefix = "";
                 $salevel = 0;
                 if ($_GET['album'] == $fullfolder) {
                   $selected = " SELECTED=\"true\" ";
-                  if (!isset($_GET['new'])) { $checked = ""; }
                 } else {
                   $selected = "";
                 }
@@ -1097,7 +1130,7 @@ if (!zp_loggedin()) {
                 echo '<option value="' . $fullfolder . '"' . ($salevel > 0 ? ' style="background-color: '.$bglevels[$salevel].'; border-bottom: 1px dotted #ccc;"' : '')
                   . "$selected>" . $saprefix . $singlefolder . " (" . $albumtitle . ')' . "</option>\n";
               }
-            ?>
+              ?>
           </select>
 
           <div id="newalbumbox" style="margin-top: 5px;">
@@ -1151,7 +1184,6 @@ if (!zp_loggedin()) {
         </div>
 
       </form>
-      <?php } ?>
       <script type="text/javascript">albumSwitch(document.uploadform.albumselect);</script>
 
 <?php /*** COMMENTS ***********************************************************************/
@@ -1328,8 +1360,19 @@ if (!zp_loggedin()) {
             <div class="panel" id="tab_admin">
                 <form action="?page=options&action=saveoptions" method="post">
                 <input type="hidden" name="saveadminoptions" value="yes" />
+                
                 <?php
-                  if (isset($_GET['mismatch'])) {
+                if ($_zp_loggedin & ADMIN_RIGHTS) {
+                  $alterrights = '';
+                  $admins = getAdministrators();
+                  $admins [''] = array('id' => -1, 'user' => '', 'pass' => '', 'name' => '', 'email' => '', 'rights' => ALL_RIGHTS);
+                } else {
+                  $alterrights = ' DISABLED';
+                  global $_zp_current_admin;
+                  $admins = array($_zp_current_admin['user'] => $_zp_current_admin);
+                  echo "<input type=\"hidden\" name=\"alter_enabled\" value=\"no\" />";
+                }
+                if (isset($_GET['mismatch'])) {
                     if ($_GET['mismatch'] == 'newuser') {
                       $msg = 'You must supply a password';
                     } else {
@@ -1342,13 +1385,6 @@ if (!zp_loggedin()) {
                     echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
                     echo "</script>\n";
                   }
-                    if ($_zp_loggedin & ADMIN_RIGHTS) {
-                      $admins = getAdministrators();
-                      $admins [''] = array('pass' => '', 'name' => '', 'email' => '', 'rights' => ALL_RIGHTS);
-                    } else {
-                      global $_zp_current_admin;
-                      $admins = array($_zp_current_admin['user'] => $_zp_current_admin);
-                    }
                   ?>
                   <input type="hidden" name="totaladmins" value="<?php echo count($admins); ?>" />
                   <table class="bordered">
@@ -1357,6 +1393,7 @@ if (!zp_loggedin()) {
                     </tr>
                     <?php 
                     $id = 0;
+                    $albumlist = $gallery->getAlbums();
                     foreach($admins as $key => $user) {
                     ?>
                       <tr>
@@ -1370,7 +1407,7 @@ if (!zp_loggedin()) {
                         </td>
                         <td>
                           <?php if(!empty($key) && count($admins) > 1) { ?>
-                            <a href="javascript: if(confirm('Are you sure you want to delete this user?')) { window.location='?page=options&action=deleteadmin&adminuser=<?php echo urlencode($key); ?>'; }" title="Delete this comment." style="color: #c33;">
+                            <a href="javascript: if(confirm('Are you sure you want to delete this user?')) { window.location='?page=options&action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }" title="Delete this comment." style="color: #c33;">
                             <img src="images/fail.png" style="border: 0px;" alt="Delete" /></a>
                           <?php } ?>
                         </td>
@@ -1401,30 +1438,46 @@ if (!zp_loggedin()) {
                                </td>
                              </tr>
                              <tr>
-                               <td><input type="checkbox" name="<?php echo $id ?>-admin_rights" value=<?php echo ADMIN_RIGHTS; if ($user['rights'] & ADMIN_RIGHTS) echo ' checked'; ?>>User admin</td>
-                               <td><input type="checkbox" name="<?php echo $id ?>-options_rights" value=<?php echo OPTIONS_RIGHTS; if ($user['rights'] & OPTIONS_RIGHTS) echo ' checked'; ?>>Options</td>
-                               <td><input type="checkbox" name="<?php echo $id ?>-themes_rights" value=<?php echo THEMES_RIGHTS; if ($user['rights'] & THEMES_RIGHTS) echo ' checked'; ?>>Themes</td>
+                               <td><input type="checkbox" name="<?php echo $id ?>-admin_rights" value=<?php echo ADMIN_RIGHTS; if ($user['rights'] & ADMIN_RIGHTS) echo ' checked';echo $alterrights; ?>>User admin</td>
+                               <td><input type="checkbox" name="<?php echo $id ?>-options_rights" value=<?php echo OPTIONS_RIGHTS; if ($user['rights'] & OPTIONS_RIGHTS) echo ' checked';echo$alterrights; ?>>Options</td>
+                               <td><input type="checkbox" name="<?php echo $id ?>-themes_rights" value=<?php echo THEMES_RIGHTS; if ($user['rights'] & THEMES_RIGHTS) echo ' checked';echo$alterrights; ?>>Themes</td>
                              </tr>
                              <tr>
-                               <td><input type="checkbox" name="<?php echo $id ?>-edit_rights" value=<?php echo EDIT_RIGHTS; if ($user['rights'] & EDIT_RIGHTS) echo ' checked'; ?>>Edit</td>
-                               <td><input type="checkbox" name="<?php echo $id ?>-comment_rights" value=<?php echo COMMENT_RIGHTS; if ($user['rights'] & COMMENT_RIGHTS) echo ' checked'; ?>>Comment</td>
-                               <td><input type="checkbox" name="<?php echo $id ?>-upload_rights" value=<?php echo UPLOAD_RIGHTS; if ($user['rights'] & UPLOAD_RIGHTS) echo ' checked'; ?>>Upload</td>
-                             </tr>
+                               <td><input type="checkbox" name="<?php echo $id ?>-edit_rights" value=<?php echo EDIT_RIGHTS; if ($user['rights'] & EDIT_RIGHTS) echo ' checked';echo$alterrights; ?>>Edit</td>
+                               <td><input type="checkbox" name="<?php echo $id ?>-comment_rights" value=<?php echo COMMENT_RIGHTS; if ($user['rights'] & COMMENT_RIGHTS) echo ' checked';echo$alterrights; ?>>Comment</td>
+                               <td><input type="checkbox" name="<?php echo $id ?>-upload_rights" value=<?php echo UPLOAD_RIGHTS; if ($user['rights'] & UPLOAD_RIGHTS) echo ' checked';echo$alterrights; ?>>Upload</td>
+                              </tr>
                            </table>
 
                         </td>
                       </tr>
                       <tr>
-                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Full name:</td>
-                        <td><input type="text" size="40" name="<?php echo $id ?>-admin_name" value="<?php echo $user['name'];?>" /></td>
-                        <td></td>
+                        <td>
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Full name:
+                          <br/><br/>
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email:
+                        </td>
+                        <td>
+                          <input type="text" size="40" name="<?php echo $id ?>-admin_name" value="<?php echo $user['name'];?>" />
+                          <br/><br/>
+                          <input type="text" size="40" name="<?php echo $id ?>-admin_email" value="<?php echo $user['email'];?>" />
+                        </td>
+                        <td>
+                        <?php
+                        echo "<select id=\"managed_albums\" name=\"managed_albums_".$id."[]\" size=\"4\" multiple=1".$alterrights.">\n";
+                        $cv = array();
+                        $sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
+                               prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
+                               $user['id']." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
+                        $currentvalues = query_full_array($sql);
+                        foreach($currentvalues as $albumitem) {
+                           $cv[] = $albumitem['folder'];
+                        }
+                        generateListFromArray($cv, $albumlist);
+                        echo "</select>\n"
+                        ?>
+                        <tr>
                       </tr>
-                      <tr>
-                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email:</td>
-                        <td><input type="text" size="40" name="<?php echo $id ?>-admin_email" value="<?php echo $user['email'];?>" /></td>
-                        <td></td>
-                      </tr>
-                      <tr></tr>
                     <?php 
                       $id++;
                     }
@@ -1991,7 +2044,7 @@ if (!zp_loggedin()) {
           <h2 class="boxtitle">Gallery Maintenance</h2>
           <p>Your database is <strong><?php echo getOption('mysql_database'); ?>
           </strong>: Tables are prefixed by <strong>'<?php echo getOption('mysql_prefix'); ?>'</strong></p>
-          <?php if ($_zp_loggedin & EDIT_RIGHTS) { ?>
+          <?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?>
           <form name="prune_gallery" action="admin.php?prune=true">
             <input type="hidden" name="prune" value="true">
             <div class="buttons pad_button" id="home_dbrefresh"><button type="submit"><img src="images/refresh.png" alt="" /> Refresh the Database</button></div><br clear="all" /><br clear="all" />
