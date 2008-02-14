@@ -39,32 +39,32 @@
  
 class SpamFilter  {
  
-	var $iSupport = array('Action' => array('type' => 2, 'desc' => 'This action will be taken for all messages.'));
+  var $iSupport = array('Action' => array('type' => 2, 'desc' => 'This action will be taken for all messages.'));
  
-	function SpamFilter() {
-		global $gallery;
-		setOptionDefault('Action', 'pass');
-	}
+  function SpamFilter() {
+    global $gallery;
+    setOptionDefault('Action', 'pass');
+  }
 
-	function getOptionsSupported() {
-		return $this->iSupport;
-	}
-	function handleOption($option, $currentValue) {
-		if ($option == 'Action') {
-			echo "<select id=\"Action\" name=\"Action\">";
-			generateListFromArray(array($currentValue), array('pass', 'moderate', 'reject'));
-			echo "</select>";
-		}
-	}
+  function getOptionsSupported() {
+    return $this->iSupport;
+  }
+  function handleOption($option, $currentValue) {
+    if ($option == 'Action') {
+      echo "<select id=\"Action\" name=\"Action\">";
+      generateListFromArray(array($currentValue), array('pass', 'moderate', 'reject'));
+      echo "</select>";
+    }
+  }
 
-	function filterMessage($author, $email, $website, $body, $imageLink) {
-		$strategy = getOption('Action');
-		switch ($strategy) {
-			case 'reject': return 0;
-			case 'moderate': return 1;
-		}
-		return 2;
-	}
+  function filterMessage($author, $email, $website, $body, $imageLink) {
+    $strategy = getOption('Action');
+    switch ($strategy) {
+      case 'reject': return 0;
+      case 'moderate': return 1;
+    }
+    return 2;
+  }
 }
 
 ?>

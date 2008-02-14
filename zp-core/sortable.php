@@ -20,14 +20,14 @@ $_zp_sortable_list = new SLLists('js');
  * @since  1.0.0
  */
 function zenSortablesHeader($sortContainerID, $orderedList, $sortableElement, $options="") {
-	global $_zp_sortable_list;
-	
-	if (zp_loggedin()) {
-			
-		$_zp_sortable_list->addList($sortContainerID, $orderedList, $sortableElement, $options);
-		$_zp_sortable_list->debug = false;
-		$_zp_sortable_list->printTopJS();
-	}
+  global $_zp_sortable_list;
+  
+  if (zp_loggedin()) {
+      
+    $_zp_sortable_list->addList($sortContainerID, $orderedList, $sortableElement, $options);
+    $_zp_sortable_list->debug = false;
+    $_zp_sortable_list->printTopJS();
+  }
 }
 
 /**
@@ -38,11 +38,11 @@ function zenSortablesHeader($sortContainerID, $orderedList, $sortableElement, $o
  * @since  1.0.0
  */
 function zenSortablesFooter() {
-	global $_zp_sortable_list;
-	
-	if (zp_loggedin()) {
-		$_zp_sortable_list->printBottomJs();
-	}
+  global $_zp_sortable_list;
+  
+  if (zp_loggedin()) {
+    $_zp_sortable_list->printBottomJs();
+  }
 }
 
 /**
@@ -56,9 +56,9 @@ function zenSortablesFooter() {
  * @since  1.0.0
  */
 function zenSortablesSaveButton($link, $label="Save") {
-	global $_zp_sortable_list;
-	
-	$_zp_sortable_list->printForm($link, 'POST', $label, 'button');
+  global $_zp_sortable_list;
+  
+  $_zp_sortable_list->printForm($link, 'POST', $label, 'button');
 }
 
 
@@ -73,12 +73,12 @@ function zenSortablesSaveButton($link, $label="Save") {
  * @since  1.0.0
  */
 function zenSortablesPostHandler($orderedList, $sortContainerID, $dbtable) {
-	if (isset($_POST['sortableListsSubmitted'])) {
-		$orderArray = SLLists::getOrderArray($_POST[$orderedList], $sortContainerID);
-		foreach($orderArray as $item) {
-			saveSortOrder($dbtable, $item['element'], $item['order']);
-		}
-	}
+  if (isset($_POST['sortableListsSubmitted'])) {
+  	$orderArray = SLLists::getOrderArray($_POST[$orderedList], $sortContainerID);
+  	foreach($orderArray as $item) {
+  		saveSortOrder($dbtable, $item['element'], $item['order']);
+  	}
+  }
 }
 
 
@@ -93,13 +93,13 @@ function zenSortablesPostHandler($orderedList, $sortContainerID, $dbtable) {
  * @since  1.0.0 
  */
 function saveSortOrder($dbtable, $id, $sortorder) {
-	
-	// This is a nasty hack really, but it works.. The hack being we need id_XX in the element id.
-	$real_id = substr($id, 0, 3);
-	
-	// TODO: Only issue the update when the order has changed. How do determine this?
-	query("UPDATE ".prefix($dbtable)." SET `sort_order`='" . mysql_escape_string($sortorder) .
-				"' WHERE `id`=".$id);
+  
+  // This is a nasty hack really, but it works.. The hack being we need id_XX in the element id.
+  $real_id = substr($id, 0, 3);
+  
+  // TODO: Only issue the update when the order has changed. How do determine this?
+  query("UPDATE ".prefix($dbtable)." SET `sort_order`='" . mysql_escape_string($sortorder) .
+        "' WHERE `id`=".$id);
 }
 
 

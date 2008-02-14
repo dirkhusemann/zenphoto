@@ -98,7 +98,7 @@ function formatNikonData($type,$tag,$intel,$model,$data) {
 		else if($top==0) $data = 0;
 		else $data=$top."/".$bottom;
 		
- 				if($tag=="0085" && $model==1) { //ManualFocusDistance
+       	if($tag=="0085" && $model==1) { //ManualFocusDistance
 			$data=$data." m";
 		} 
 		if($tag=="0086" && $model==1) { //DigitalZoom
@@ -177,7 +177,7 @@ function formatNikonData($type,$tag,$intel,$model,$data) {
 		if($intel==1) $data = intel2Moto($data);
 		
 		if($tag=="0083" && $model==1) { //Lens Type
-				$data = hexdec(substr($data,0,2));
+		    $data = hexdec(substr($data,0,2));
 			if($data == 0) $data = "AF non D";
 			else if($data == 1) $data = "Manual";
 			else if($data == 2) $data = "AF-D or AF-S";
@@ -186,7 +186,7 @@ function formatNikonData($type,$tag,$intel,$model,$data) {
 			else $data = "Unknown: ".$data;
 		}
 		if($tag=="0087" && $model==1) { //Flash type
-				$data = hexdec(substr($data,0,2));
+		    $data = hexdec(substr($data,0,2));
 			if($data == 0) $data = "Did Not Fire";
 			else if($data == 4) $data = "Unknown";
 			else if($data == 7) $data = "External";

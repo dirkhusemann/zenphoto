@@ -13,19 +13,19 @@
 <div id="main">
 
 	<div id="gallerytitle">
-		<?php printSearchForm(); ?>
+    <?php printSearchForm(); ?>
 		<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Gallery Index"><?php echo getGalleryTitle();?></a></span> | <em>Search</em></h2>
 	</div>
-		
-		<div id="padbox">
+    
+    <div id="padbox">
 	
 		<?php 
-			if ($_REQUEST['words'] OR $_REQUEST['date']) {
-			if (($total = getNumImages() + getNumAlbums()) > 0) {	
-		 	if ($_REQUEST['date']) 
-		 		{ $searchwords = getSearchDate(); 
-		 		} else { $searchwords = getSearchWords(); }
-					echo "<p>Total matches for <em>".$searchwords."</em>: $total</p>";
+  		if ($_REQUEST['words'] OR $_REQUEST['date']) {
+		  if (($total = getNumImages() + getNumAlbums()) > 0) {	
+		   if ($_REQUEST['date']) 
+		     { $searchwords = getSearchDate(); 
+		     } else { $searchwords = getSearchWords(); }
+          echo "<p>Total matches for <em>".$searchwords."</em>: $total</p>";
 		?>
 			<div id="albums">
 			<?php while (next_album()): ?>
@@ -42,7 +42,7 @@
 				</div>
 			<?php endwhile; ?>
 			</div>
-		
+    
 			<div id="images">
 				<?php while (next_image(false, $firstPageImages)): ?>
 				<div class="image">
@@ -51,12 +51,12 @@
 				<?php endwhile; ?>
 			</div>
 		<?php
-				} else { 
-					echo "<p>Sorry, no image matches. Try refining your search.</p>"; 
-			}
+	  	  } else { 
+	  	    echo "<p>Sorry, no image matches. Try refining your search.</p>"; 
+		  }
 		}
-			printPageListWithNav("&laquo; prev","next &raquo;");
-			?> 
+    	printPageListWithNav("&laquo; prev","next &raquo;");
+	    ?> 
 
 	</div>
 	

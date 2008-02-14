@@ -4,7 +4,7 @@ Author: Stephane Angoulvant (modified (badly) by ulfben)
 Author URI: http://angoulvant.net/sblog
 */
 #simpleviewer {   /* the background color for simpleviewer. Leave this line near the front for performance reasons */
-		background: #0b9577; /* Normally the same as main2 */
+    background: #0b9577; /* Normally the same as main2 */
 }
 /*
 This CSS was "reverse engineered" (eg: hijacked and gunned down) by Ulf Benjaminsson to use the the Kish-color scheme. (http://www.colourlovers.com/palette/27527/kish__my_father)
@@ -61,11 +61,11 @@ blockquote {
 #imagemetadata {
 	text-align: center;
 	position: relative;
-		color: #fff;
+    color: #fff;
 	display:none;
 }
 #imgmetadata_data a {
-		color: #fff;
+    color: #fff;
 }
 #imagemetadata_data a:hover {
 	text-decoration: none;
@@ -76,7 +76,7 @@ blockquote {
 	line-height: 1em;
 	top: 2em;
 	right: 0px;
-		background-color: #0c8369;
+    background-color: #0c8369;
 }
 #imagemetadata table td {
  	background-color: #0b9577;
@@ -91,7 +91,7 @@ h1 {
 	letter-spacing: -2px;
 }
 #logo h1 a {
-		color: #12a081;
+    color: #12a081;
 	font: bold 30px Monotype Corsiva, Apple Chancery, Zaph Chancery, Comic Sans, cursive, serif;
 }
 h1 a:hover {
@@ -105,7 +105,7 @@ h1 a {
 }
 /* Image Page Title  --- */
 #logo2 h1 a {
-		color: #84e4cf;
+    color: #84e4cf;
 	font: bold 30px Monotype Corsiva, Apple Chancery, Zaph Chancery, Comic Sans, cursive, serif;
 }
 h2 {
@@ -137,12 +137,12 @@ h2 a:hover {
 	font-size: 120%;
 	text-decoration: none;
 	line-height: 200%;
-		color: #7b7871; /*prev / next in subalbums */
+    color: #7b7871; /*prev / next in subalbums */
 }
 .albnav .albprevious a:hover, .albnav .albnext a:hover {
 	text-decoration: none;
 font-weight: bold;
-		color: #22b393; /*prev / next hover in subalbum*/
+    color: #22b393; /*prev / next hover in subalbum*/
 }
 .albnav .albprevious a {
 	float: left;
@@ -158,7 +158,7 @@ font-weight: bold;
 	font-size: 120%;
 	text-decoration: none;
 	line-height: 200%;
-		color: #b1aea7; /*disabled prev/next links i subalbums (upper part of the screen)*/
+    color: #b1aea7; /*disabled prev/next links i subalbums (upper part of the screen)*/
 	cursor: default;
 }
 /* Intro Text  --- */
@@ -185,9 +185,9 @@ h4 {
 	color: #fff;
 }
 h4 a {
-		color: #98958f; /*album titles in thumbview*/
+    color: #98958f; /*album titles in thumbview*/
 	border: none;
-				font-weight: bold;
+        font-weight: bold;
 }
 h4 a:hover {
 	color: #0b9577; /*album titles in thumbview on mouse over*/
@@ -216,12 +216,12 @@ font-weight: bold;
 }
 /* Links  --- */
 a {
-		color: #7b7871; /*the current pagination link */
+    color: #7b7871; /*the current pagination link */
 	text-decoration: none;
-		font-weight: bold;
+    font-weight: bold;
 }
 a:hover {
-		color: #22b393;
+    color: #22b393;
 	text-decoration: none;
 }
 .disabledlink {
@@ -229,10 +229,10 @@ a:hover {
 	cursor: default;
 }
 #navbar a {
-		color: #22b393;
+    color: #22b393;
 }
 #navbar a:hover {
-		color: #0b9577;
+    color: #0b9577;
 }
 #main2 #navbar a { /*Same as navbar a, but in single-image view.*/
 	color: #fff;
@@ -261,12 +261,12 @@ a:hover {
 body {
 	font: 14px/22px Arial, Helvetica, Tahoma, Verdana, sans-serif;
 	color: #fff;
-		background: #d8d6cf; /*body background*/
+    background: #d8d6cf; /*body background*/
 	text-align: left;
 	margin: 0 auto 0 auto;
 }
 #content {
-		background: #e3e2dd; /*color around the main div in index.*/
+    background: #e3e2dd; /*color around the main div in index.*/
 }
 #content p {
 	color: #7b7973;
@@ -279,18 +279,18 @@ body {
 	padding-bottom: 10px;
 }
 #subcontent {
-		background: #e3e2dd; /*around the main div in sub-albums.*/
+    background: #e3e2dd; /*around the main div in sub-albums.*/
 	margin-bottom: 5px;
 }
 #submain {
-		background: #e3e2dd; /*div around thumbs in subalbums.*/
+    background: #e3e2dd; /*div around thumbs in subalbums.*/
 	text-align: left;
 	width: 630px;
 	margin: 0 auto 0 auto;
 	padding-bottom: 10px;
 }
 #main2 {
-		background: #0b9577; /*div in single-image view.*/
+    background: #0b9577; /*div in single-image view.*/
 	text-align: left;
 	padding-bottom: 30px;
 }
@@ -308,14 +308,14 @@ body {
 //	color: #FFFCDB;
 }
 #header {
-		background: #d8d6cf; /*the header area above the nav-bar*/
+    background: #d8d6cf; /*the header area above the nav-bar*/
 	text-align: left;
 	border: none;
 	padding: 0;
 	margin: 0;
 }
 #galleryheader {
-		background: #0b9577; /*the header area above the nav-bar, single image view*/
+    background: #0b9577; /*the header area above the nav-bar, single image view*/
 	border: none;
 	padding: 0;
 	margin: 0;
@@ -327,7 +327,7 @@ body {
 	margin: 0 auto 0 auto;
 }
 #description {
-		color: #98958f; /*text color for descriptions*/
+    color: #98958f; /*text color for descriptions*/
 	text-align: center;
 	padding: 7px 7px;
 	margin: 0px auto 0px auto;
@@ -350,7 +350,7 @@ body {
 #commentbox {
 	width: 650px;
 	margin: 0 auto;
-		color: #98958f; /*textbox labels*/
+    color: #98958f; /*textbox labels*/
 	font-size: 12px;
 }
 #commentform {
@@ -407,7 +407,7 @@ text-align: left;
 }
 .commentinfo {
 	color: #b1aea7;
-		border-bottom: 1px solid #d8d6cf;  /*seperator between comment info and comment text.*/
+    border-bottom: 1px solid #d8d6cf;  /*seperator between comment info and comment text.*/
 	padding: 5px 0 3px 0;
 }
 .commenttext {
@@ -435,11 +435,11 @@ text-align: left;
 border: 6px solid #fff;
 }
 #wrapnav {
-		background: #12a081;  /*nav bar in single-image.*/
+    background: #12a081;  /*nav bar in single-image.*/
 	margin-bottom: 30px;
 }
 #header #wrapnav {
-		background: #eceae7; /*navbar in subdirs.*/
+    background: #eceae7; /*navbar in subdirs.*/
 	margin-bottom: 0px;
 }
 #main2 #navbar {
@@ -451,30 +451,30 @@ border: 6px solid #fff;
 }
 
 #randomhead {
-		padding: 0;
-		margin: 0 auto 14px auto;
-		width: 630px;
-		border: none;
-		line-height: 0px;
-		background: #fff; /*only visible while the image is loading*/
+    padding: 0;
+    margin: 0 auto 14px auto;
+    width: 630px;
+    border: none;
+    line-height: 0px;
+    background: #fff; /*only visible while the image is loading*/
 
 /*If you wan't the borders of my gallery thumbs, for the random image too
-		border-top: 2px solid #fff;
-		border-left: 2px solid #fff;
-		border-right: 2px solid #fff;
-		border-bottom: 2px solid #fff; 
+    border-top: 2px solid #fff;
+    border-left: 2px solid #fff;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff; 
 } 
 
 If you want it to behave like a button
 #randomhead:hover {
-		border-top: 2px solid #fff;
-		border-left: 2px solid #fff;
-		border-right: 2px solid #fff;
-		border-bottom: 2px solid #fff;*/
+    border-top: 2px solid #fff;
+    border-left: 2px solid #fff;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;*/
 }
 
 #randomhead img {
-		border: 8px solid #fff;
+    border: 8px solid #fff;
 }
 ul.pagelist {
 	clear: both;
@@ -503,10 +503,10 @@ ul.pagelist li.next {
 /* AJAX
 ------------------------------ */
 #albumDescEditable:hover {
-		background: #eceae7;
+    background: #eceae7;
 }
 #imageDescEditable:hover {
-		background: #12a081;
+    background: #12a081;
 }
 /* Image Thumbnails
 ------------------------------ */
@@ -514,29 +514,29 @@ ul.pagelist li.next {
 	display: block;
 	padding: 7px;
 	margin: 6px;
-		border-top: 2px solid #d8d6cf;
-		border-left: 2px solid #d8d6cf;
-		border-right: 2px solid #d8d6cf;
-		border-bottom: 2px solid #22b393;
+    border-top: 2px solid #d8d6cf;
+    border-left: 2px solid #d8d6cf;
+    border-right: 2px solid #d8d6cf;
+    border-bottom: 2px solid #22b393;
 	background: #fff;
 	line-height: 0px;
 }
 .imagethumb a:visited {
-		border-top: 2px solid #d8d6cf;
-		border-left: 2px solid #d8d6cf;
-		border-right: 2px solid #d8d6cf;
-		border-bottom: 2px solid #c4c2bb;
+    border-top: 2px solid #d8d6cf;
+    border-left: 2px solid #d8d6cf;
+    border-right: 2px solid #d8d6cf;
+    border-bottom: 2px solid #c4c2bb;
 	background: #fff;
 }
 .imagethumb a:hover {
-		border-top: 2px solid #c4c2bb;
-		border-left: 2px solid #c4c2bb;
-		border-right: 2px solid #c4c2bb;
-		border-bottom: 2px solid #22b393;
+    border-top: 2px solid #c4c2bb;
+    border-left: 2px solid #c4c2bb;
+    border-right: 2px solid #c4c2bb;
+    border-bottom: 2px solid #22b393;
 	background: #fff;
 }
 #albums li:hover h4 a {
-		color: #0b9577;
+    color: #0b9577;
 }
 .imagethumb {
 	float: left;
@@ -635,7 +635,7 @@ ul.pagelist li.next {
 /* Bottom Separator
 ------------------------------ */
 #bottomheadings {
-		background: #d8d6cf; /* background for commentheader (where it says "X Comments")*/
+    background: #d8d6cf; /* background for commentheader (where it says "X Comments")*/
 	height: 40px;
 }
 .bottomfull {
@@ -726,32 +726,32 @@ ul.pagelist li.next {
 	_margin-top: 24px; /* IE Only */
 }
 #search input.pushbutton {
-	padding: 1px;
-	font-size: 80%;
+  padding: 1px;
+  font-size: 80%;
 }
 #search ul {
-	position:absolute;
-	text-align: left;
-	width:20px;
-	margin:0px;
-	padding:2px;
-	list-style:none;
+  position:absolute;
+  text-align: left;
+  width:20px;
+  margin:0px;
+  padding:2px;
+  list-style:none;
 }
 #search ul .item {
-	display:none;
+  display:none;
 }
 #search ul:hover .item {
-	display:block;
-	padding:1px;
-	margin:0px;
+  display:block;
+  padding:1px;
+  margin:0px;
 }
 
 #search li {
 width:150px;
 }
 .clear {
-	clear:both;
-	height:10px;
+  clear:both;
+  height:10px;
 }
 
 /* Archive View

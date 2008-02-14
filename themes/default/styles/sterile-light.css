@@ -57,7 +57,7 @@ body {
 }
 
 #imagemetadata {
-	display: none;
+  display: none;
 }
 
 
@@ -135,8 +135,8 @@ blockquote {
 	color: #363630;
 }
 acronym {
-		cursor: help;
-		border-bottom: 1px solid;
+  	cursor: help;
+  	border-bottom: 1px solid;
 }
 
 /* Page Navigation
@@ -233,7 +233,7 @@ ul.pagelist li.next {
 /* Album Thumbnails
 ------------------------------ */
 #albums {
-				float: left;
+        float: left;
 }
 .album {
 	margin: 0 15px 15px 0;
@@ -328,8 +328,8 @@ ul.pagelist li.next {
 	clear: both;
 }
 .error { 
-	color: #C33; 
-	font-weight: bold; 
+  color: #C33; 
+  font-weight: bold; 
 }
 .comment {
 	padding: 5px;
@@ -420,36 +420,36 @@ label {
 	margin:0px;
 }
 #search input.pushbutton {
-	padding: 1px;
-	font-size: 80%;
+  padding: 1px;
+  font-size: 80%;
 }
 #search ul {
-	position:absolute;
-	text-align: left;
-	width:20px;
-	margin:0px;
-	padding:2px;
-	list-style:none;
-	color: #666;
+  position:absolute;
+  text-align: left;
+  width:20px;
+  margin:0px;
+  padding:2px;
+  list-style:none;
+  color: #666;
 }
 #search ul .top {
-	font-size: 14px;
-	color: #666;
+  font-size: 14px;
+  color: #666;
 }
 #search ul .item {
-	display:none;
+  display:none;
 }
 #search ul:hover .item {
-	display:block;
-	padding:1px;
-	margin:1px;
+  display:block;
+  padding:1px;
+  margin:1px;
 }
 #search li {
 width:150px;
 }
 .clear {
-	clear:both;
-	height:10px;
+  clear:both;
+  height:10px;
 }
 
 /* Archive View

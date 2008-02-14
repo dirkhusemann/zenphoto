@@ -5,7 +5,7 @@ Author URI: http://angoulvant.net/sblog
 Version: 0.9
 */
 #simpleviewer {   /* the background color for simpleviewer. Leave this line near the front for performance reasons */
-		background: #8597A5; /* Normally the same as main2 */
+    background: #8597A5; /* Normally the same as main2 */
 }
 /*
 This CSS was "reverse engineered" (eg: hijacked and gunned down) by Ulf Benjaminsson to use the the Kish-color scheme. (http://www.colourlovers.com/palette/27527/kish__my_father)
@@ -66,13 +66,13 @@ color: #ECEBE1; /*whenever a paragraph is held within blockquote tags.*/
 	color:#FFFFFF;
 }
 #imagemetadata {
-	text-align: center;
-	position: relative;
-	color: #687192;
-	display: none;
+  text-align: center;
+  position: relative;
+  color: #687192;
+  display: none;
 }
 #imgmetadata_data a {
-	color: #687192;
+  color: #687192;
 }
 #imagemetadata_data a:hover {
 text-decoration: none;
@@ -80,16 +80,16 @@ color: #076a54;
 }
 
 #imagemetadata table {
-	text-align: left;
-	line-height: 1em;
-	top: 2em;
-	right: 0px;
-	background-color: #687192;
+  text-align: left;
+  line-height: 1em;
+  top: 2em;
+  right: 0px;
+  background-color: #687192;
 }
 
 #imagemetadata table td {
-	background-color: #ecdfcc;
-	padding: 2px 5px;
+  background-color: #ecdfcc;
+  padding: 2px 5px;
 }
 
 /* Text Styles
@@ -268,13 +268,13 @@ color: #ECEBE1;
 color: #FFFFFF;
 }
 #main2 #navbar a { /*Same as navbar a, but in single-image view.*/
-		color: #ECEBE1;
+    color: #ECEBE1;
 }
 #main2 #navbar a:hover {
 color: #ffffff;
 }
 #description a:hover {
-		color: #FFFFFF;
+    color: #FFFFFF;
 text-decoration: underline;
 }
 #main2 #description a {
@@ -323,8 +323,8 @@ margin: 0 auto 0 auto;
 padding-bottom: 10px;
 }
 #main2 {
-		background: #8597A5; /*div in single-image view.*/
-		text-align: left;
+    background: #8597A5; /*div in single-image view.*/
+    text-align: left;
 	padding-bottom: 30px;
 }
 #main3 {
@@ -333,7 +333,7 @@ padding: 10px 20px 20px 20px;
 background: #687A92; /*background around comment area */
 }
 #main4 {
-		margin: 0 auto 0 auto;
+    margin: 0 auto 0 auto;
 	padding-left: 20px;
 	padding-right: 20px;	
 	background: #687A92; /*page background in single-image view.*/
@@ -384,7 +384,7 @@ padding: 25px 0 0 10px;
 #commentbox {
 	width: 650px;
 	margin: 0 auto;
-		color: #ECEBE1; /*textbox labels*/
+    color: #ECEBE1; /*textbox labels*/
 	font-size: 12px;
 }
 #commentform {
@@ -583,20 +583,20 @@ list-style: none;
 	padding-right: 2em
 }
 .imgwrap ul {
- 	text-align: center;
- 	margin-left: 0;
- 	margin-rignt: 0;
- 	padding: 0;
- 	list-style-type: none;
+   text-align: center;
+   margin-left: 0;
+   margin-rignt: 0;
+   padding: 0;
+   list-style-type: none;
 }
 .imgwrap li {
- 	margin: 0;
- 	padding: 0;
- 	float: left;
- 	text-align: center;
- 	width: 50%
+   margin: 0;
+   padding: 0;
+   float: left;
+   text-align: center;
+   width: 50%
 }
-		
+    
 .image { 
 	margin: 0;
 	padding: 0;
@@ -782,31 +782,31 @@ border-bottom: 1px dotted #fff;
 	_margin-top: 24px; /* IE Only */
 }
 #search input.pushbutton {
-	padding: 1px;
-	font-size: 80%;
+  padding: 1px;
+  font-size: 80%;
 }
 #search ul {
-	position:absolute;
-	text-align: left;
-	width:20px;
-	margin:0px;
-	padding:2px;
-	list-style:none;
+  position:absolute;
+  text-align: left;
+  width:20px;
+  margin:0px;
+  padding:2px;
+  list-style:none;
 }
 #search ul .item {
-	display:none;
+  display:none;
 }
 #search ul:hover .item {
-	display:block;
-	padding:1px;
-	margin:0px;
+  display:block;
+  padding:1px;
+  margin:0px;
 }
 #search li {
 width:150px;
 }
 .clear {
-	clear:both;
-	height:10px;
+  clear:both;
+  height:10px;
 }
 
 /* Archive View

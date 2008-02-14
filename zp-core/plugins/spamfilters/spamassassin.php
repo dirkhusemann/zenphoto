@@ -90,12 +90,12 @@ class SpamFilter {
 
 	function getOptionsSupported() {
 		return array(
-			'Forgiving' => array('type' => '1' , 'desc' => 'Mark suspected SPAM for moderation rather than as SPAM'),
-			'SpamAssassin_host' => array('type' => '0' , 'desc' => 'SpamAssassin server'),
-			'SpamAssassin_ctype' => array('type' => '2' , 'desc' => 'Connection type'),
-			'SpamAssassin_port' => array('type' => '0' , 'desc' => 'TCP port of SpamAssassin'),
-			'SpamAssassin_socket' => array('type' => '0' , 'desc' => 'Socket of SpamAssassin'),
-			'SpamAssassin_user' => array('type' => '0' , 'desc' => 'User to use on SpamAssassin box')
+		  'Forgiving' => array('type' => '1' , 'desc' => 'Mark suspected SPAM for moderation rather than as SPAM'),
+		  'SpamAssassin_host' => array('type' => '0' , 'desc' => 'SpamAssassin server'),
+		  'SpamAssassin_ctype' => array('type' => '2' , 'desc' => 'Connection type'),
+		  'SpamAssassin_port' => array('type' => '0' , 'desc' => 'TCP port of SpamAssassin'),
+		  'SpamAssassin_socket' => array('type' => '0' , 'desc' => 'Socket of SpamAssassin'),
+		  'SpamAssassin_user' => array('type' => '0' , 'desc' => 'User to use on SpamAssassin box')
 		);
 	}
 	
@@ -134,23 +134,23 @@ class SpamFilter {
 		if (ini_get('magic_quotes_gpc') == 1) $comment = stripslashes($comment);
 
 		$message = "From: \"$name\" <$email>\n".
-			 	"To: ".$this->admin_email."\n".
-			 	"Date: ".$this->date."\n".
-			 	"Content-type: text/plain\n".
-			 	"Received: from ".$this->received_1." ".$this->received_2." (uid ".getmyuid().")\n".
-			 	"	by ".$this->server_name." with Zenphoto; ".$this->date."\n".
-			 	"Message-ID: <zenphoto-".md5(time())."@".$this->server_name.">\n".
-			 	"Subject: Zenphoto\n\n".
-			 	wordwrap($comment." - ".$website."\r\n",76);
+			   "To: ".$this->admin_email."\n".
+			   "Date: ".$this->date."\n".
+			   "Content-type: text/plain\n".
+			   "Received: from ".$this->received_1." ".$this->received_2." (uid ".getmyuid().")\n".
+			   "	by ".$this->server_name." with Zenphoto; ".$this->date."\n".
+			   "Message-ID: <zenphoto-".md5(time())."@".$this->server_name.">\n".
+			   "Subject: Zenphoto\n\n".
+			   wordwrap($comment." - ".$website."\r\n",76);
 
 		return $message;
 	}
 
 	function prepareRequest($message) {
 		$request = "CHECK SPAMC/3.1\n".
-			 	"User: ".$this->spamassassin_user."\n".
-			 	"Content-length: ".strlen($message)."\n\r\n".
-			 	$message;
+			   "User: ".$this->spamassassin_user."\n".
+			   "Content-length: ".strlen($message)."\n\r\n".
+			   $message;
 
 		return $request;
 	}

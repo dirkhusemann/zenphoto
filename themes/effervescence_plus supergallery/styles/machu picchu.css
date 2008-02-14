@@ -4,7 +4,7 @@ Author: Stephane Angoulvant (modified (badly) by ulfben)
 Author URI: http://angoulvant.net/sblog
 */
 #simpleviewer {   /* the background color for simpleviewer. Leave this line near the front for performance reasons */
-		background: #8597A5; /* Normally the same as main2 */
+    background: #8597A5; /* Normally the same as main2 */
 }
 /*
 This CSS was uses the the Machu Picchu color scheme. (http://www.colourlovers.com/palette/100694/Machu_Picchu)
@@ -341,7 +341,7 @@ body {
 #commentbox {
 	width: 650px;
 	margin: 0 auto;
-		color: #FFFCDB; /*textbox labels*/
+    color: #FFFCDB; /*textbox labels*/
 	font-size: 12px;
 }
 #commentform {
@@ -713,30 +713,30 @@ text-align: left;
 	_margin-top: 24px; /* IE Only */
 }
 #search input.pushbutton {
-	padding: 1px;
-	font-size: 80%;
+  padding: 1px;
+  font-size: 80%;
 }
 #search ul {
-	position:absolute;
-	text-align: left;
-	width:20px;
-	margin:0px;
-	padding:2px;
-	list-style:none;
+  position:absolute;
+  text-align: left;
+  width:20px;
+  margin:0px;
+  padding:2px;
+  list-style:none;
 }
 #search ul .item {
-	display:none;
+  display:none;
 }
 #search ul:hover .item {
-	display:block;
-	padding:1px;
-	margin:0px;
+  display:block;
+  padding:1px;
+  margin:0px;
 }
 #search li {
 width:150px;
 .clear {
-	clear:both;
-	height:10px;
+  clear:both;
+  height:10px;
 }
 
 /* Archive View

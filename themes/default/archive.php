@@ -13,18 +13,18 @@
 <div id="main">
 
 	<div id="gallerytitle">
-			<?php if (getOption('Allow_search')) {  printSearchForm(); } ?>
+    	<?php if (getOption('Allow_search')) {  printSearchForm(); } ?>
 		<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Gallery Index"><?php echo getGalleryTitle();?></a></span> | Archive View</h2>
 	</div>
-		
-		<div id="padbox">
- 		<?php if (!checkForPassword()) {?>
+    
+    <div id="padbox">
+ 	  <?php if (!checkForPassword()) {?>
 		<div id="archive"><?php printAllDates(); ?></div>
 		<div id="tag_cloud">
-					<p>Popular Tags</p>
+        	<p>Popular Tags</p>
 			<?php printAllTagsAs('cloud', 'tags'); ?>
-				</div>
- 		<?php } ?>
+        </div>
+ 	  <?php } ?>
 	</div>
 
 </div>

@@ -74,11 +74,11 @@ function formatPanasonicData($type,$tag,$intel,$data) {
 		if($intel==1) $data = intel2Moto($data);
 		$data=hexdec($data);
 
-		if($tag=="000f") { //AFMode
-			if($data == 256) $data = "9-area-focusing";
-			else if($data == 16) $data = "1-area-focusing";
-			else $data = "Unknown (".$data.")";
-		} 
+    if($tag=="000f") { //AFMode
+      if($data == 256) $data = "9-area-focusing";
+      else if($data == 16) $data = "1-area-focusing";
+      else $data = "Unknown (".$data.")";
+    } 
 	
 	} else if($type=="URATIONAL" || $type=="SRATIONAL") {
 		$data = bin2hex($data);

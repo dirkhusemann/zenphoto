@@ -10,7 +10,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 	<link rel="stylesheet" href="<?php echo  $zenCSS ?>" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
 	<?php 
-			zenJavascript(); 
+  	  zenJavascript(); 
 	?>
 </head>
 
@@ -18,20 +18,20 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 
 	<!-- Wrap Header -->
 	<div id="header">
-			<div id="gallerytitle">
+  		<div id="gallerytitle">
 
 			<!-- Logo -->
-				<div id="logo">
+  			<div id="logo">
 				<?php echo '<h1><a href="' . getMainSiteURL() . '" title="Visit ' . getMainSiteName() . '">' . sanitize($_SERVER['HTTP_HOST']) . '</a></h1>'; ?>
-				</div>
-			</div>
+    		</div>
+  		</div>
 
 		<!-- Crumb Trail Navigation -->
 		<div id="wrapnav">
-				<div id="navbar">
-					<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a></span>  | Archive View
-				</div>
-				</div>
+  			<div id="navbar">
+    			<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a></span>  | Archive View
+  			</div>
+        </div>
 
 		<!-- Random Image -->
 		<?php printHeadingImage(getRandomImages()); ?>
@@ -39,13 +39,13 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 
 	<!-- Wrap Main Body -->
 	<div id="content">
-			<small>&nbsp;</small>
+	    <small>&nbsp;</small>
 		<div id="main">
-				<?php if (!checkForPassword()) {?>
-						<!-- Date List -->
+	      <?php if (!checkForPassword()) {?>
+            <!-- Date List -->
 			<div id="archive"><p>Images by Date</p><?php printAllDates(); ?></div>
 			<div id="tag_cloud"><p>Popular Tags</p><?php printAllTagsAs('cloud', 'tags'); ?></div>
-				<?php } ?>
+	      <?php } ?>
 		</div>
 	</div>
 	
@@ -56,8 +56,8 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 		<a href="http://www.zenphoto.org" title="A simpler web photo album">Powered by <font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a><br/>
 		<?php printRSSLink('Gallery','', 'Gallery RSS', ''); ?>
 	</div>
-		
-		<?php printAdminToolbox(); ?>
+    
+    <?php printAdminToolbox(); ?>
 
 </body>
 </html>

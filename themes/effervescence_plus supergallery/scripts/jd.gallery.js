@@ -1,23 +1,23 @@
 /*
-		This file is part of JonDesign's SmoothGallery v2.0.
+    This file is part of JonDesign's SmoothGallery v2.0.
 
-		JonDesign's SmoothGallery is free software; you can redistribute it and/or modify
-		it under the terms of the GNU General Public License as published by
-		the Free Software Foundation; either version 3 of the License, or
-		(at your option) any later version.
+    JonDesign's SmoothGallery is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
+    (at your option) any later version.
 
-		JonDesign's SmoothGallery is distributed in the hope that it will be useful,
-		but WITHOUT ANY WARRANTY; without even the implied warranty of
-		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-		GNU General Public License for more details.
+    JonDesign's SmoothGallery is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-		You should have received a copy of the GNU General Public License
-		along with JonDesign's SmoothGallery; if not, write to the Free Software
-		Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    You should have received a copy of the GNU General Public License
+    along with JonDesign's SmoothGallery; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-		Main Developer: Jonathan Schemoul (JonDesign: http://www.jondesign.net/)
-		Contributed code by:
-		- Christian Ehret (bugfix)
+    Main Developer: Jonathan Schemoul (JonDesign: http://www.jondesign.net/)
+    Contributed code by:
+    - Christian Ehret (bugfix)
 	- Nitrix (bugfix)
 	- Valerio from Mad4Milk for his great help with the carousel scrolling and many other things.
 	- Archie Cowan for helping me find a bugfix on carousel inner width problem.
@@ -204,7 +204,7 @@ var gallery = {
 				currentImg.load = function(imageStyle) {
 					if (!imageStyle.loaded)	{
 						new Asset.image(imageStyle.source, {
-																'onload'  : function(img){
+		                            'onload'  : function(img){
 													img.element.setStyle(
 													'backgroundImage',
 													"url('" + img.source + "')")
@@ -651,50 +651,50 @@ gallery.Transitions = new Abstract ({
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 var Preloader = new Class({
-	
-	Implements: [Events, Options],
+  
+  Implements: [Events, Options],
 
-	options: {
-		root        : '',
-		period      : 100
-	},
-	
-	initialize: function(options){
-		this.setOptions(options);
-	},
-	
-	load: function(sources) {
-		this.index = 0;
-		this.images = [];
-		this.sources = this.temps = sources;
-		this.total = this. sources.length;
-		
-		this.fireEvent('onStart', [this.index, this.total]);
-		this.timer = this.progress.periodical(this.options.period, this);
-		
-		this.sources.each(function(source, index){
-			this.images[index] = new Asset.image(this.options.root + source, {
-				'onload'  : function(){ this.index++; if(this.images[index]) this.fireEvent('onLoad', [this.images[index], index, source]); }.bind(this),
-				'onerror' : function(){ this.index++; this.fireEvent('onError', [this.images.splice(index, 1), index, source]); }.bind(this),
-				'onabort' : function(){ this.index++; this.fireEvent('onError', [this.images.splice(index, 1), index, source]); }.bind(this)
-			});
-		}, this);
-	},
-	
-	progress: function() {
-		this.fireEvent('onProgress', [Math.min(this.index, this.total), this.total]);
-		if(this.index >= this.total) this.complete();
-	},
-	
-	complete: function(){
-		$clear(this.timer);
-		this.fireEvent('onComplete', [this.images]);
-	},
-	
-	cancel: function(){
-		$clear(this.timer);
-	}
-	
+  options: {
+    root        : '',
+    period      : 100
+  },
+  
+  initialize: function(options){
+    this.setOptions(options);
+  },
+  
+  load: function(sources) {
+    this.index = 0;
+    this.images = [];
+    this.sources = this.temps = sources;
+    this.total = this. sources.length;
+    
+    this.fireEvent('onStart', [this.index, this.total]);
+    this.timer = this.progress.periodical(this.options.period, this);
+    
+    this.sources.each(function(source, index){
+      this.images[index] = new Asset.image(this.options.root + source, {
+        'onload'  : function(){ this.index++; if(this.images[index]) this.fireEvent('onLoad', [this.images[index], index, source]); }.bind(this),
+        'onerror' : function(){ this.index++; this.fireEvent('onError', [this.images.splice(index, 1), index, source]); }.bind(this),
+        'onabort' : function(){ this.index++; this.fireEvent('onError', [this.images.splice(index, 1), index, source]); }.bind(this)
+      });
+    }, this);
+  },
+  
+  progress: function() {
+    this.fireEvent('onProgress', [Math.min(this.index, this.total), this.total]);
+    if(this.index >= this.total) this.complete();
+  },
+  
+  complete: function(){
+    $clear(this.timer);
+    this.fireEvent('onComplete', [this.images]);
+  },
+  
+  cancel: function(){
+    $clear(this.timer);
+  }
+  
 });
 
 Preloader.implement(new Events, new Options);

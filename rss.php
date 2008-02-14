@@ -18,12 +18,10 @@ foreach($albumscheck as $albumcheck) {
 }
 
 if ($albumname != "") { $albumname = " - for album: ".$albumname; }
-if(getOption('mod_rewrite')) { 
-	$albumpath = "/"; $imagepath = "/"; $modrewritesuffix = getOption('mod_rewrite_image_suffix'); 
-}
-else { 
-	$albumpath = "/index.php?album="; $imagepath = "&image="; $modrewritesuffix = ""; 
-}
+if(getOption('mod_rewrite'))
+ { $albumpath = "/"; $imagepath = "/"; $modrewritesuffix = getOption('mod_rewrite_image_suffix'); }
+else
+ { $albumpath = "/index.php?album="; $imagepath = "&image="; $modrewritesuffix = ""; }
 
 ?>
 <rss version="2.0">
@@ -52,22 +50,22 @@ if (is_numeric($albumnr) && $albumnr != "") {
 
 
 $result = query_full_array("SELECT images.albumid, images.date AS date, images.filename AS filename, images.title AS title, " .
-					"albums.folder AS folder, albums.title AS albumtitle, images.show, albums.show, albums.password FROM " . 
-					prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
-					" WHERE ".$albumWhere." images.albumid = albums.id AND images.show=1 AND albums.show=1 ".
-					" AND albums.folder != ''".$passwordcheck.
-					" ORDER BY images.id DESC LIMIT ".$items);
+                             "albums.folder AS folder, albums.title AS albumtitle, images.show, albums.show, albums.password FROM " . 
+                              prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
+                              " WHERE ".$albumWhere." images.albumid = albums.id AND images.show=1 AND albums.show=1 ".
+                              " AND albums.folder != ''".$passwordcheck.
+                              " ORDER BY images.id DESC LIMIT ".$items);
 
 foreach ($result as $images) {
-	$images['folder'] = rawurlencode($images['folder']);
-	$images['filename'] = rawurlencode($images['filename']);
+  $images['folder'] = rawurlencode($images['folder']);
+  $images['filename'] = rawurlencode($images['filename']);
 
 ?>
 <item>
 	<title><?php echo $images['title']; ?></title>
 	<link><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix. ']]>';?></link>
 	<description><?php echo '<![CDATA[<a title="'.$images['title'].' in '.$images['albumtitle'].'" href="http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix.'"><img border="0" src="http://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$images['folder'].'&i='.$images['filename'].'&s='.$s.'" alt="'. $images['title'] .'"></a>' . $images['desc'] . ']]>';?> <?php if($exif['datetime']) { echo '<![CDATA[Date: ' . $exif['datetime'] . ']]>'; } ?></description>
-		<category><?php echo $images['title']; ?></category>
+    <category><?php echo $images['title']; ?></category>
 	<guid><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix. ']]>';?></guid>
 	<pubDate><?php echo $images['date']; ?></pubDate> 
 </item>
