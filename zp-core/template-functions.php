@@ -91,7 +91,7 @@ function printSubalbumAdmin($text, $before='', $after='') {
  * @since 1.1
  */
 function printAdminToolbox($context=null, $id='admin') {
-  global $_zp_current_album, $_zp_current_image, $_zp_current_search, $_zp_loggedin;
+  global $_zp_current_album, $_zp_current_image, $_zp_current_search;
   if (zp_loggedin()) {
     $zf = WEBPATH."/".ZENFOLDER;
     $dataid = $id . '_data';
@@ -2540,25 +2540,6 @@ function printLatestImages($number=5, $album='') {
 }
 
 /**
-* Returns  an array of album ids whose parent is the folder
- * @param string $albumfolder folder name if you want a album different >>from the current album
-* @return array
-*/
-function getAllSubAlbumIDs($albumfolder='') {
-  global $_zp_current_album;
-  if (empty($albumfolder)) {
-    if (isset($_zp_current_album)) {
-      $albumfolder = $_zp_current_album->getFolder();
-    } else {
-      return null;
-    }
-  }
-  $query = "SELECT `id`,`folder` FROM " . prefix('albums') . " WHERE `folder` LIKE '" . mysql_real_escape_string($albumfolder) . "%'";
-  $subIDs = query_full_array($query);
-  return $subIDs;
-}
-
-/**
 * Returns a randomly selected image from the gallery. (May be NULL if none exists)
 *
 * @return object
@@ -2591,10 +2572,12 @@ function getRandomImages() {
 
 /**
 * Returns  a randomly selected image from the album or its subalbums. (May be NULL if none exists)
+* 
+* @param string $album optional album folder from which to get the image.
 *
 * @return object
 */
-function getRandomImagesAlbum() {
+function getRandomImagesAlbum($rootAlbum=null) {
   if (zp_loggedin()) {
     $imageWhere = '';
   } else {

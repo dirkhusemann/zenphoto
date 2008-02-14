@@ -157,8 +157,14 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 
   if (isset($_GET['action'])) {
     $action = $_GET['action'];
+    
+/** clear the cache ***********************************************************/
+/******************************************************************************/
+    if ($action == "clear_cache") {
+      $gallery->clearCache();
+    }
 
-/** Publish album  *************************************************************/
+/** Publish album  ************************************************************/
 /******************************************************************************/
     if ($action == "publish") {
       $folder = queryDecode(strip($_GET['album']));
@@ -994,7 +1000,12 @@ if (!zp_loggedin()) {
             setOption('gallery_sortdirection', 0);
           }
         ?>
-        <p>Drag the albums into the order you wish them displayed. Select an album to edit its description and data, or <a href="?page=edit&massedit">mass-edit all album data</a>.</p>
+        <p>
+        <?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?>
+        Drag the albums into the order you wish them displayed. 
+        <?php } ?>
+        Select an album to edit its description and data, or <a href="?page=edit&massedit">mass-edit all album data</a>.
+        </p>
 
         <table class="bordered" width="100%">
           <tr>
@@ -1034,7 +1045,9 @@ if (!zp_loggedin()) {
       <img src="images/fail.png" style="border: 0px;" alt="Delete" />Delete
       </p>
       <?php
+      if ($_zp_loggedin & ADMIN_RIGHTS) { 
         zenSortablesSaveButton("?page=edit&saved", "Save Order");
+      }
       ?>
       </div>
 
@@ -1194,11 +1207,9 @@ if (!zp_loggedin()) {
       if (isset($_GET['n'])) $pagenum = max(intval($_GET['n']), 1); else $pagenum = 1;
       if (isset($_GET['fulltext'])) $fulltext = true; else $fulltext = false;
       if (isset($_GET['viewall'])) $viewall = true; else $viewall = false;
-
-      $comments = query_full_array("SELECT `id`, `name`, `website`, `type`, `ownerid`,"
-        . " (date + 0) AS date, comment, email, inmoderation FROM ".prefix('comments')
-        . " ORDER BY id DESC " . ($viewall ? "" : "LIMIT 20") );
-    ?>
+      
+      $comments = fetchComments($viewall ? "" : 20);
+      ?>
       <h1>Comments</h1>
 
       <?php /* Display a message if needed. Fade out and hide after 2 seconds. */
@@ -1975,9 +1986,13 @@ if (!zp_loggedin()) {
       }
       ?>
       <ul id="home-actions">
+        <?php if ($_zp_loggedin & UPLOAD_RIGHTS)  { ?>
         <li><a href="?page=upload"> &raquo; <strong>Upload</strong> pictures.</a></li>
+        <?php } if ($_zp_loggedin & EDIT_RIGHTS)  { ?>
         <li><a href="?page=edit"> &raquo; <strong>Edit</strong> titles, descriptions, and other metadata.</a></li>
+        <?php } if ($_zp_loggedin & COMMENT_RIGHTS)  { ?>
         <li><a href="?page=comments"> &raquo; Edit or delete <strong>comments</strong>.</a></li>
+        <?php } ?>
         <li><a href="../"> &raquo; Browse your <strong>gallery</strong> and edit on the go.</a></li>
       </ul>
 
@@ -1987,9 +2002,7 @@ if (!zp_loggedin()) {
         <h2>10 Most Recent Comments</h2>
         <ul>
         <?php
-        $comments = query_full_array("SELECT `id`, `name`, `website`, `type`, `ownerid`,"
-        . " (date + 0) AS date, comment, email, inmoderation FROM ".prefix('comments')
-        . " ORDER BY id DESC LIMIT 10" );
+        $comments = fetchComments(10);
         foreach ($comments as $comment) {
           $id = $comment['id'];
           $author = $comment['name'];
@@ -2048,16 +2061,26 @@ if (!zp_loggedin()) {
           <form name="prune_gallery" action="admin.php?prune=true">
             <input type="hidden" name="prune" value="true">
             <div class="buttons pad_button" id="home_dbrefresh"><button type="submit"><img src="images/refresh.png" alt="" /> Refresh the Database</button></div><br clear="all" /><br clear="all" />
-			<div id='home_dbrefresh_tooltip' style="display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
+			<div id="home_dbrefresh_tooltip" style="display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
   				Cleans the database and removes any orphan entries for comments, images, and albums.<br />
 			</div>
 			<script type="text/javascript">
   				var my_tooltip = new Tooltip('home_dbrefresh', 'home_dbrefresh_tooltip')
 			</script>
           </form>
+          <form name="clear_cache" action="admin.php?action=clear_cache=true">
+            <input type="hidden" name="action" value="clear_cache">
+            <div class="buttons" id="home_refresh"><button type="submit"><img src="images/burst.png" alt="" /> Purge Cache</button></div><br clear="all" /><br clear="all" />
+            <div id="home_refresh_tooltip" style="display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
+  				Clears the image cache. Images will be re-cached as they are viewed. To clear the cache and renew it, use the <em>Pre-Cache Images</em> button below.
+			</div>
+			<script type="text/javascript">
+  				var my_tooltip = new Tooltip('home_cache_clear', 'home_cache_clear_tooltip')
+			</script>
+          </form>
           <form name="cache_images" action="cache-images.php">
           	<div class="buttons" id="home_cache"><button type="submit"><img src="images/cache.png" alt="" /> Pre-Cache Images</button></div><input type="checkbox" name="clear" checked="1" /> Clear<br clear="all" /><br clear="all" />
-            <div id='home_cache_tooltip' style="display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
+            <div id="home_cache_tooltip" style="display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
   				Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser.<br />
 			</div>
 			<script type="text/javascript">
@@ -2066,7 +2089,7 @@ if (!zp_loggedin()) {
           </form>
           <form name= "refresh_metadata" action="refresh-metadata.php">
             <div class="buttons" id="home_exif"><button type="submit"><img src="images/warn.png" alt="" /> Refresh Metadata</button></div><br clear="all" /><br clear="all" />
-            <div id='home_exif_tooltip' style="display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
+            <div id="home_exif_tooltip" style="display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
   				Forces a refresh of the EXIF and IPTC data for all images.<br />
 			</div>
 			<script type="text/javascript">
@@ -2076,7 +2099,7 @@ if (!zp_loggedin()) {
           <form name="reset_hitcounters" action="admin.php?action=reset_hitcounters=true">
             <input type="hidden" name="action" value="reset_hitcounters">
             <div class="buttons" id="home_refresh"><button type="submit"><img src="images/reset.png" alt="" /> Reset hitcounters</button></div><br clear="all" /><br clear="all" />
-            <div id='home_refresh_tooltip' style="display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
+            <div id="home_refresh_tooltip" style="display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
   				Sets all album and image hitcounters to zero.<br />
 			</div>
 			<script type="text/javascript">

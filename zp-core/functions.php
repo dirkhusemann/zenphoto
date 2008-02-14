@@ -1,6 +1,6 @@
 <?php
 define('ZENPHOTO_VERSION', '1.1.4');
-define('ZENPHOTO_RELEASE', 1114);
+define('ZENPHOTO_RELEASE', 1118);
 define('SAFE_GLOB', false);
 define('CHMOD_VALUE', 0777);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
@@ -1623,4 +1623,46 @@ function getAdminEmail() {
   $user = array_shift($admins);
   return $user['email'];
 }
+
+
+/**
+ * Checks to see if the loggedin Admin has rights to the album
+ *
+ * @param string $albumfolder the album to be checked
+ */
+function isMyAlbum($albumfolder, $action) {
+  global $_zp_loggedin, $_zp_admin_album_list, $_zp_current_admin;
+  if ($_zp_loggedin & ADMIN_RIGHTS) { return true; }
+  if ($_zp_loggedin & $action) {
+    if (is_null($_zp_admin_album_list)) {
+      getManagedAlbumList();
+    }
+    if (count($_zp_admin_album_list) == 0) { return true; }
+    foreach ($_zp_admin_album_list as $key => $adminalbum) { // see if it is one of the managed folders or a subfolder there of
+      if (substr($albumfolder, 0, strlen($adminalbum)) == $adminalbum) { return true; }  
+    }
+    return false;
+  } else {
+    return false;
+  }
+}
+/**
+* Returns  an array of album ids whose parent is the folder
+ * @param string $albumfolder folder name if you want a album different >>from the current album
+* @return array
+*/
+function getAllSubAlbumIDs($albumfolder='') {
+  global $_zp_current_album;
+  if (empty($albumfolder)) {
+    if (isset($_zp_current_album)) {
+      $albumfolder = $_zp_current_album->getFolder();
+    } else {
+      return null;
+    }
+  }
+  $query = "SELECT `id`,`folder` FROM " . prefix('albums') . " WHERE `folder` LIKE '" . mysql_real_escape_string($albumfolder) . "%'";
+  $subIDs = query_full_array($query);
+  return $subIDs;
+}
+
 ?>

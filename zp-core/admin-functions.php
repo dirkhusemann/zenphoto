@@ -205,7 +205,6 @@ function printTabs() {
   } else {
     $page= "home";
   }
-  if ($_zp_loggedin == OPTIONS_RIGHTS) { $page = "options"; }
   
   echo "\n  <ul id=\"nav\">";
   if (($_zp_loggedin & MAIN_RIGHTS)) {
@@ -347,10 +346,6 @@ debugLogArray($list);
 
   sort($list);
   $cv = array_flip($currentValue);
-  
-echo "<br/>\$currentValue<br/>";print_r($currentValue);
-echo "<br/>\$cv<br/>";print_r($cv);
-
   foreach($list as $item) {
     echo '<option value="' . $item . '"';
     if (isset($cv[$item])) { 
@@ -735,33 +730,78 @@ function checkForUpdate() {
   Return $_zp_WEB_Version;
 }
 
-/**
- * Checks to see if the loggedin Admin has rights to the album
- *
- * @param string $albumfolder the album to be checked
- */
-function isMyAlbum($albumfolder, $action) {
-  global $_zp_loggedin, $_zp_admin_album_list, $_zp_current_admin;
-  if ($_zp_loggedin & ADMIN_RIGHTS) { return true; }
-  if ($_zp_loggedin & $action) {
-    if (is_null($_zp_admin_album_list)) {
-      $_zp_admin_album_list = array();
-      $sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
-             prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
-             $_zp_current_admin['id']." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
-      $albums = query_full_array($sql);
-      foreach($albums as $album) {
-        $_zp_admin_album_list[] =$album['folder'];
-      }
-    }
-    if (count($_zp_admin_album_list) == 0) { return true; }
-    foreach ($_zp_admin_album_list as $key => $adminalbum) { // see if it is one of the managed folders or a subfolder there of
-      if (substr($albumfolder, 0, strlen($adminalbum)) == $adminalbum) { return true; }  
-    }
-    return false;
-  } else {
-    return false;
+function getManagedAlbumList() {
+  global $_zp_admin_album_list, $_zp_current_admin;
+  $_zp_admin_album_list = array();
+  $sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
+  prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
+  $_zp_current_admin['id']." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
+  $albums = query_full_array($sql);
+  foreach($albums as $album) {
+    $_zp_admin_album_list[] =$album['folder'];
   }
+  return $_zp_admin_album_list;
 }
 
+function fetchComments($number) {
+  if ($number) { 
+    $limit = " LIMIT $number";
+  }
+
+  global $_zp_loggedin;
+  $comments = array();
+  if ($_zp_loggedin & ADMIN_RIGHTS) {
+    $sql = "SELECT `id`, `name`, `website`, `type`, `ownerid`,"
+    . " (date + 0) AS date, comment, email, inmoderation FROM ".prefix('comments')
+    . " ORDER BY id DESC$limit";
+    $comments = query_full_array($sql);
+  } else  if ($_zp_loggedin & COMMENT_RIGHTS) {
+    $albumlist = getManagedAlbumList();
+    $albumIDs = array();
+    foreach ($albumlist as $albumname) {
+      $subalbums = getAllSubAlbumIDs($albumname);
+      foreach($subalbums as $ID) {
+        $albumIDs[] = $ID['id'];
+      }
+    }
+    $sql = "SELECT  `id`, `name`, `website`, `type`, `ownerid`,"
+    ." (`date` + 0) AS date, comment, email, inmoderation "
+    ." FROM ".prefix('comments')." WHERE ";
+
+    $sql .= " (`type`='albums' AND (";
+    $i = 0;
+    foreach ($albumIDs as $ID) {
+      if ($i>0) { $sql .= " OR "; }
+      $sql .= "(".prefix('comments').".ownerid=$ID)";
+      $i++;
+    }
+    $sql .= ")) ";
+    $sql .= " ORDER BY id DESC$limit";
+    foreach ($albumcomments as $comment) {
+      $comments[$comment['id']] = $comment;
+    }
+    $sql = "SELECT .".prefix('comments').".id as id, ".prefix('comments').".name as name, `website`, `type`, `ownerid`,"
+    ." (".prefix('comments').".date + 0) AS date, comment, email, inmoderation, ".prefix('images').".`albumid` as albumid"
+    ." FROM ".prefix('comments').",".prefix('images')." WHERE ";
+     
+    $sql .= "(`type`='images' AND(";
+    $i = 0;
+    foreach ($albumIDs as $ID) {
+      if ($i>0) { $sql .= " OR "; }
+      $sql .= "(".prefix('comments').".ownerid=".prefix('images').".id AND ".prefix('images')
+      .".albumid=$ID)";
+      $i++;
+    }
+    $sql .= "))";
+    $sql .= " ORDER BY id DESC$limit";
+    $imagecomments = query_full_array($sql);
+    foreach ($imagecomments as $comment) {
+      $comments[$comment['id']] = $comment;
+    }
+    if (!$number) {
+      $comments = array_slice($comments, 0, $number);
+    }
+  }
+ return $comments;
+}
 ?>

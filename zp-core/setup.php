@@ -411,7 +411,8 @@ if (!$checked) {
       }
 
       if (!($tables['administrators'] == 'create')) {
-        if (!zp_loggedin() && (!isset($_GET['create']) && !isset($_GET['update']))) {  // Display the login form and exit.
+        if (!($_zp_loggedin & ADMIN_RIGHTS) && (!isset($_GET['create']) && !isset($_GET['update']))) {  // Display the login form and exit.
+          if ($_zp_loggedin) { echo "<br/><br/>You need <em>USER ADMIN</em> rights to run setup."; }
           printLoginForm("/" . ZENFOLDER . "/setup.php?checked$mod", false);
           exit();
         }
@@ -649,11 +650,9 @@ if (!$checked) {
 
       echo "<h3>Done with table $task!</h3>";
 
-      $adm = getOption('adminuser');
-      $pas = getOption('adminpass');
       $rsd = getOption('admin_reset_date');
 
-     if (empty($adm) || empty($pas) || empty($rsd)) {
+     if (empty($rsd)) {
         echo "<p>You need to <a href=\"admin.php?page=options\">set your admin user and password</a>.</p>";
       } else {
         echo "<p>You can now <a href=\"../\">View your gallery</a>, or <a href=\"admin.php\">administrate.</a></p>";

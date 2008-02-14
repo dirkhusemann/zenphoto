@@ -72,9 +72,9 @@ if (isset($_POST['logout']) || isset($_GET['logout'])) {
   header("Location: " . FULLWEBPATH . "/$redirect");
 }
 
-function zp_loggedin() {
+function zp_loggedin($rights=ALL_RIGHTS) {
   global $_zp_loggedin;
-  return $_zp_loggedin;
+  return $_zp_loggedin & $rights;
 }
 
 
