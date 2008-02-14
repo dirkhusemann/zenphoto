@@ -44,232 +44,232 @@ $_zp_object_update_cache = array();
 // ABSTRACT
 class PersistentObject {
 
-  var $data;
-  var $updates;
-  var $table;
-  var $unique_set;
-  var $cache_by;
-  var $id;
-  
-  function PersistentObject($tablename, $unique_set, $cache_by=NULL, $use_cache=true) {
-    // Initialize the variables.
-    // Load the data into the data array using $this->load()
-    $this->data = array();
-    $this->tempdata = array();
-    $this->updates = array();
-    $this->loaded = false;
-    $this->table = $tablename;
-    $this->unique_set = $unique_set;
-    $this->cache_by = $cache_by;
-    $this->use_cache = $use_cache;
-    
-    return $this->load();
-  }
-  
-  
-  /**
-   * Caches the current set of objects defined by a variable key $cache_by.
-   * Uses a global array to store the results of a single database query,
-   * where subsequent requests for the object look for data.
-   * @return a reference to the array location where this class' cache is stored
-   *   indexed by the field $cache_by.
-   */
-  function cache($entry=NULL) {
-    global $_zp_object_cache;
-    
-    if (is_null($this->cache_by)) return false;
-    $classname = get_class($this);
-    if (!isset($_zp_object_cache[$classname])) {
-      $_zp_object_cache[$classname] = array();
-    }
-    $cache_set = array_diff_assoc($this->unique_set, array($this->cache_by => $this->unique_set[$this->cache_by]));
-    
-    // This must be done here; the references do not work returned by a function.
-    $cache_location = &$_zp_object_cache[$classname];
-    foreach($cache_set as $key => $value) {
-      if (!isset($cache_location[$value])) {
-        $cache_location[$value] = array();
-      }
-      $cache_location = &$cache_location[$value];
-    }
-    // Exit if this object set is already cached.
-    if (!empty($cache_location)) return $cache_location;
-    
-    if (!is_null($entry)) {
-      $key = $entry[$this->cache_by];
-      $cache_location[$key] = $entry;
-    } else {
-      $sql = 'SELECT * FROM ' . prefix($this->table) . getWhereClause($cache_set);
-      $result = query($sql);
-      if (mysql_num_rows($result) == 0) return false;
-      
-      while ($row = mysql_fetch_assoc($result)) {
-        $key = $row[$this->cache_by];
-        $cache_location[$key] = $row;
-      }
-    }
-    return $cache_location;
-  }
+	var $data;
+	var $updates;
+	var $table;
+	var $unique_set;
+	var $cache_by;
+	var $id;
+	
+	function PersistentObject($tablename, $unique_set, $cache_by=NULL, $use_cache=true) {
+		// Initialize the variables.
+		// Load the data into the data array using $this->load()
+		$this->data = array();
+		$this->tempdata = array();
+		$this->updates = array();
+		$this->loaded = false;
+		$this->table = $tablename;
+		$this->unique_set = $unique_set;
+		$this->cache_by = $cache_by;
+		$this->use_cache = $use_cache;
+		
+		return $this->load();
+	}
+	
+	
+	/**
+ 	* Caches the current set of objects defined by a variable key $cache_by.
+ 	* Uses a global array to store the results of a single database query,
+ 	* where subsequent requests for the object look for data.
+ 	* @return a reference to the array location where this class' cache is stored
+ 	*   indexed by the field $cache_by.
+ 	*/
+	function cache($entry=NULL) {
+		global $_zp_object_cache;
+		
+		if (is_null($this->cache_by)) return false;
+		$classname = get_class($this);
+		if (!isset($_zp_object_cache[$classname])) {
+			$_zp_object_cache[$classname] = array();
+		}
+		$cache_set = array_diff_assoc($this->unique_set, array($this->cache_by => $this->unique_set[$this->cache_by]));
+		
+		// This must be done here; the references do not work returned by a function.
+		$cache_location = &$_zp_object_cache[$classname];
+		foreach($cache_set as $key => $value) {
+			if (!isset($cache_location[$value])) {
+				$cache_location[$value] = array();
+			}
+			$cache_location = &$cache_location[$value];
+		}
+		// Exit if this object set is already cached.
+		if (!empty($cache_location)) return $cache_location;
+		
+		if (!is_null($entry)) {
+			$key = $entry[$this->cache_by];
+			$cache_location[$key] = $entry;
+		} else {
+			$sql = 'SELECT * FROM ' . prefix($this->table) . getWhereClause($cache_set);
+			$result = query($sql);
+			if (mysql_num_rows($result) == 0) return false;
+			
+			while ($row = mysql_fetch_assoc($result)) {
+				$key = $row[$this->cache_by];
+				$cache_location[$key] = $row;
+			}
+		}
+		return $cache_location;
+	}
 
-  
-  /**
-   * Set a variable in this object. Does not persist to the database until 
-   * save() is called. So, IMPORTANT: Call save() after set() to persist.
-   * If the requested variable is not in the database, sets it in temp storage,
-   * which won't be persisted to the database.
-   */
-  function set($var, $value) {
-    if (empty($var)) return false;
-    if ($this->loaded && !array_key_exists($var, $this->data)) {
-      $this->tempdata[$var] = $value;
-    } else {
-      $this->updates[$var] = $value;
-    }
-    return true;
-  }
-  
-  
-  /**
-   * Sets default values for new objects using the set() method.
-   * Should do nothing in the base class; subclasses should override.
-   */
-  function setDefaults() {
-    return;
-  }
-  
-  /**
-   * Change one or more values of the unique set assigned to this record.
-   * Checks if the record already exists first, if so returns false.
-   * If successful returns true and changes $this->unique_set
-   * A call to move is instant, it does not require a save() following it.
-   */
-  function move($new_unique_set) {
-    // Check if we have a row
-    $result = query('SELECT * FROM ' . prefix($this->table) .
-      getWhereClause($new_unique_set) . ' LIMIT 1;');
-    if (mysql_num_rows($result) == 0) {
-      $result = query('UPDATE ' . prefix($this->table) 
-        . getSetClause($this->new_unique_set) . ' '
-        . getWhereClause($this->unique_set));
-      if (mysql_affected_rows($result) == 1) {
-        $this->unique_set = $new_unique_set;
-        return true;
-      }
-    }
-    return false;
-  }
-  
-  /**
-   * Remove this entry from the database permanently.
-   * TODO
-   */
-  function remove() {
-    return false;
-  }
-  
-  /**
-   * Get the value of a variable. If $current is false, return the value
-   * as of the last save of this object.
-   */
-  function get($var, $current=true) {
-    if ($current && isset($this->updates[$var])) {
-      return $this->updates[$var];
-    } else if (isset($this->data[$var])) {
-      return $this->data[$var];
-    } else if (isset($this->tempdata[$var])) {
-      return $this->tempdata[$var];
-    } else {
-      return null;
-    }
-  }
-  
-  /** 
-   * Load the data array from the database, using the unique id set to get the unique record.
-   * @return false if the record already exists, true if a new record was created.
-   */
-  function load() {
-    $new = false;
-    $entry = null;
-    // Set up the SQL query in case we need it...
-    $sql = 'SELECT * FROM ' . prefix($this->table) . getWhereClause($this->unique_set) . ' LIMIT 1;';
-    // But first, try the cache.
-    if ($this->use_cache) {
-      $cache_location = &$this->cache();
-      $entry = &$cache_location[$this->unique_set[$this->cache_by]];
-    }
-    // Re-check the database if: 1) not using cache, or 2) didn't get a hit.
-    if (empty($entry)) {
-      $entry = query_single_row($sql, __LINE__);
-    }
-    
-    // If we don't have an entry yet, this is a new record. Create it.
-    if (empty($entry)) {
-      $new = true;
-      $this->save();
-      $entry = query_single_row($sql, __LINE__);
-      // If we still don't have an entry, something went wrong...
-      if (!$entry) return null;
-      // Then save this new entry into the cache so we get a hit next time.
-      $this->cache($entry);
-    }
-    $this->data = $entry;
-    $this->id = $entry['id'];
-    $this->loaded = true;
-    return $new;
-  }
+	
+	/**
+ 	* Set a variable in this object. Does not persist to the database until 
+ 	* save() is called. So, IMPORTANT: Call save() after set() to persist.
+ 	* If the requested variable is not in the database, sets it in temp storage,
+ 	* which won't be persisted to the database.
+ 	*/
+	function set($var, $value) {
+		if (empty($var)) return false;
+		if ($this->loaded && !array_key_exists($var, $this->data)) {
+			$this->tempdata[$var] = $value;
+		} else {
+			$this->updates[$var] = $value;
+		}
+		return true;
+	}
+	
+	
+	/**
+ 	* Sets default values for new objects using the set() method.
+ 	* Should do nothing in the base class; subclasses should override.
+ 	*/
+	function setDefaults() {
+		return;
+	}
+	
+	/**
+ 	* Change one or more values of the unique set assigned to this record.
+ 	* Checks if the record already exists first, if so returns false.
+ 	* If successful returns true and changes $this->unique_set
+ 	* A call to move is instant, it does not require a save() following it.
+ 	*/
+	function move($new_unique_set) {
+		// Check if we have a row
+		$result = query('SELECT * FROM ' . prefix($this->table) .
+			getWhereClause($new_unique_set) . ' LIMIT 1;');
+		if (mysql_num_rows($result) == 0) {
+			$result = query('UPDATE ' . prefix($this->table) 
+				. getSetClause($this->new_unique_set) . ' '
+				. getWhereClause($this->unique_set));
+			if (mysql_affected_rows($result) == 1) {
+				$this->unique_set = $new_unique_set;
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+ 	* Remove this entry from the database permanently.
+ 	* TODO
+ 	*/
+	function remove() {
+		return false;
+	}
+	
+	/**
+ 	* Get the value of a variable. If $current is false, return the value
+ 	* as of the last save of this object.
+ 	*/
+	function get($var, $current=true) {
+		if ($current && isset($this->updates[$var])) {
+			return $this->updates[$var];
+		} else if (isset($this->data[$var])) {
+			return $this->data[$var];
+		} else if (isset($this->tempdata[$var])) {
+			return $this->tempdata[$var];
+		} else {
+			return null;
+		}
+	}
+	
+	/** 
+ 	* Load the data array from the database, using the unique id set to get the unique record.
+ 	* @return false if the record already exists, true if a new record was created.
+ 	*/
+	function load() {
+		$new = false;
+		$entry = null;
+		// Set up the SQL query in case we need it...
+		$sql = 'SELECT * FROM ' . prefix($this->table) . getWhereClause($this->unique_set) . ' LIMIT 1;';
+		// But first, try the cache.
+		if ($this->use_cache) {
+			$cache_location = &$this->cache();
+			$entry = &$cache_location[$this->unique_set[$this->cache_by]];
+		}
+		// Re-check the database if: 1) not using cache, or 2) didn't get a hit.
+		if (empty($entry)) {
+			$entry = query_single_row($sql, __LINE__);
+		}
+		
+		// If we don't have an entry yet, this is a new record. Create it.
+		if (empty($entry)) {
+			$new = true;
+			$this->save();
+			$entry = query_single_row($sql, __LINE__);
+			// If we still don't have an entry, something went wrong...
+			if (!$entry) return null;
+			// Then save this new entry into the cache so we get a hit next time.
+			$this->cache($entry);
+		}
+		$this->data = $entry;
+		$this->id = $entry['id'];
+		$this->loaded = true;
+		return $new;
+	}
 
-  /** 
-   * Save the updates made to this object since the last update. Returns
-   * true if successful, false if not.
-   */
-  function save() {
-    if ($this->id == null) {
-      $this->setDefaults();
-      // Create a new object and set the id from the one returned.
-      $insert_data = array_merge($this->unique_set, $this->updates, $this->tempdata);
-      if (empty($insert_data)) { return true; }
-      $sql = 'INSERT INTO ' . prefix($this->table) . ' (';
-      $i = 0;
-      foreach(array_keys($insert_data) as $col) {
-        if ($i > 0) $sql .= ", ";
-        $sql .= "`$col`";
-        $i++;
-      }
-      $sql .= ') VALUES (';
-      $i = 0;
-      foreach(array_values($insert_data) as $value) {
-        if ($i > 0) $sql .= ', ';
-        $sql .= "'" . mysql_escape_string($value) . "'";
-        $i++;
-      }
-      $sql .= ');';
-      $success = query($sql, __LINE__);
-      if ($success == false || mysql_affected_rows() != 1) { return false; }
-      $this->id = mysql_insert_id();
-      $this->updates = array();
-      $this->tempdata = array();
+	/** 
+ 	* Save the updates made to this object since the last update. Returns
+ 	* true if successful, false if not.
+ 	*/
+	function save() {
+		if ($this->id == null) {
+			$this->setDefaults();
+			// Create a new object and set the id from the one returned.
+			$insert_data = array_merge($this->unique_set, $this->updates, $this->tempdata);
+			if (empty($insert_data)) { return true; }
+			$sql = 'INSERT INTO ' . prefix($this->table) . ' (';
+			$i = 0;
+			foreach(array_keys($insert_data) as $col) {
+				if ($i > 0) $sql .= ", ";
+				$sql .= "`$col`";
+				$i++;
+			}
+			$sql .= ') VALUES (';
+			$i = 0;
+			foreach(array_values($insert_data) as $value) {
+				if ($i > 0) $sql .= ', ';
+				$sql .= "'" . mysql_escape_string($value) . "'";
+				$i++;
+			}
+			$sql .= ');';
+			$success = query($sql, __LINE__);
+			if ($success == false || mysql_affected_rows() != 1) { return false; }
+			$this->id = mysql_insert_id();
+			$this->updates = array();
+			$this->tempdata = array();
 
-    } else {
-      // Save the existing object (updates only) based on the existing id.
-      if (empty($this->updates)) {
-        return true;
-      } else {
-        $sql = 'UPDATE ' . prefix($this->table) . ' SET';
-        $i = 0;
-        foreach ($this->updates as $col => $value) {
-          if ($i > 0) $sql .= ",";
-          $sql .= " `$col` = '". mysql_escape_string($value) . "'";
-          $this->data[$col] = $value;
-          $i++;
-        }
-        $sql .= ' WHERE id=' . $this->id . ';';
-        $success = query($sql, __LINE__);
-        if ($success == false || mysql_affected_rows() != 1) { return false; }
-        $this->updates = array();
-      }
-    }
-    return true;
-  }
+		} else {
+			// Save the existing object (updates only) based on the existing id.
+			if (empty($this->updates)) {
+				return true;
+			} else {
+				$sql = 'UPDATE ' . prefix($this->table) . ' SET';
+				$i = 0;
+				foreach ($this->updates as $col => $value) {
+					if ($i > 0) $sql .= ",";
+					$sql .= " `$col` = '". mysql_escape_string($value) . "'";
+					$this->data[$col] = $value;
+					$i++;
+				}
+				$sql .= ' WHERE id=' . $this->id . ';';
+				$success = query($sql, __LINE__);
+				if ($success == false || mysql_affected_rows() != 1) { return false; }
+				$this->updates = array();
+			}
+		}
+		return true;
+	}
 
 }
 

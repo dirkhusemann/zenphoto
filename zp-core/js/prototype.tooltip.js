@@ -17,45 +17,45 @@
 
 var Tooltip = Class.create();
 Tooltip.prototype = {
-  initialize: function(element, tool_tip) {
-    var options = Object.extend({
-      default_css: false,
-      margin: "0px",
-	  padding: "5px",
-	  backgroundColor: "#d6d6fc",
-	  delta_x: 5,
-	  delta_y: 5,
-      zindex: 1000
-    }, arguments[1] || {});
+	initialize: function(element, tool_tip) {
+		var options = Object.extend({
+			default_css: false,
+			margin: "0px",
+		padding: "5px",
+		backgroundColor: "#d6d6fc",
+		delta_x: 5,
+		delta_y: 5,
+			zindex: 1000
+		}, arguments[1] || {});
 
-    this.element      = $(element);
-    this.tool_tip     = $(tool_tip);
+		this.element      = $(element);
+		this.tool_tip     = $(tool_tip);
 
-    this.options      = options;
+		this.options      = options;
 
-    // hide the tool-tip by default
-    this.tool_tip.hide();
+		// hide the tool-tip by default
+		this.tool_tip.hide();
 
-    this.eventMouseOver = this.showTooltip.bindAsEventListener(this);
-    this.eventMouseOut   = this.hideTooltip.bindAsEventListener(this);
+		this.eventMouseOver = this.showTooltip.bindAsEventListener(this);
+		this.eventMouseOut   = this.hideTooltip.bindAsEventListener(this);
 
-    this.registerEvents();
-  },
+		this.registerEvents();
+	},
 
-  destroy: function() {
-    Event.stopObserving(this.element, "mouseover", this.eventMouseOver);
-    Event.stopObserving(this.element, "mouseout", this.eventMouseOut);
-  },
+	destroy: function() {
+		Event.stopObserving(this.element, "mouseover", this.eventMouseOver);
+		Event.stopObserving(this.element, "mouseout", this.eventMouseOut);
+	},
 
-  registerEvents: function() {
-    Event.observe(this.element, "mouseover", this.eventMouseOver);
-    Event.observe(this.element, "mouseout", this.eventMouseOut);
-  },
+	registerEvents: function() {
+		Event.observe(this.element, "mouseover", this.eventMouseOver);
+		Event.observe(this.element, "mouseout", this.eventMouseOut);
+	},
 
-  showTooltip: function(event){
+	showTooltip: function(event){
 	Event.stop(event);
 	// get Mouse position
-    var mouse_x = Event.pointerX(event);
+		var mouse_x = Event.pointerX(event);
 	var mouse_y = Event.pointerY(event);
 	
 	
@@ -74,7 +74,7 @@ Tooltip.prototype = {
 	
 	if ( (element_height + mouse_y) >= ( this.getWindowHeight() - this.options.delta_y) ){ // too big for Y
 		mouse_y = mouse_y - element_height;
-	    // apply delta to make sure that the mouse is not on the tool-tip
+			// apply delta to make sure that the mouse is not on the tool-tip
 		mouse_y = mouse_y - this.options.delta_y;
 	} else {
 		mouse_y = mouse_y + this.options.delta_y;
@@ -88,49 +88,49 @@ Tooltip.prototype = {
 	//new Effect.Appear(this.tool_tip);
 	new Element.show(this.tool_tip);
 
-  },
-  
-  setStyles: function(x, y){
-    // set the right styles to position the tool tip
+	},
+	
+	setStyles: function(x, y){
+		// set the right styles to position the tool tip
 	Element.setStyle(this.tool_tip, { position:'absolute',
-	 								  top:y + "px",
-	 								  left:x + "px",
-									  zindex:this.options.zindex
+	 									top:y + "px",
+	 									left:x + "px",
+										zindex:this.options.zindex
 	 								});
 	
 	// apply default theme if wanted
 	if (this.options.default_css){
-	  	Element.setStyle(this.tool_tip, { margin:this.options.margin,
-		 								  padding:this.options.padding,
-		                                  backgroundColor:this.options.backgroundColor,
-										  zindex:this.options.zindex
+			Element.setStyle(this.tool_tip, { margin:this.options.margin,
+		 									padding:this.options.padding,
+																			backgroundColor:this.options.backgroundColor,
+											zindex:this.options.zindex
 		 								});	
 	}	
-  },
+	},
 
-  hideTooltip: function(event){
+	hideTooltip: function(event){
 	//new Effect.Fade(this.tool_tip);
 	new Element.hide(this.tool_tip);
-  },
+	},
 
-  getWindowHeight: function(){
-    var innerHeight;
+	getWindowHeight: function(){
+		var innerHeight;
 	if (navigator.appVersion.indexOf('MSIE')>0) {
 		innerHeight = document.body.clientHeight;
-    } else {
+		} else {
 		innerHeight = window.innerHeight;
-    }
-    return innerHeight;	
-  },
+		}
+		return innerHeight;	
+	},
  
-  getWindowWidth: function(){
-    var innerWidth;
+	getWindowWidth: function(){
+		var innerWidth;
 	if (navigator.appVersion.indexOf('MSIE')>0) {
 		innerWidth = document.body.clientWidth;
-    } else {
+		} else {
 		innerWidth = window.innerWidth;
-    }
-    return innerWidth;	
-  }
+		}
+		return innerWidth;	
+	}
 
 }

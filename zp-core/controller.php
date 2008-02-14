@@ -10,8 +10,8 @@ require_once('functions-controller.php');
 // Initialize the global objects and object arrays:
 $_zp_gallery = new Gallery();
 if($apiKey = getOption('gmaps_apikey')){ 
-  $_zp_phoogle = new PhoogleMapLite();
-  $_zp_phoogle->setAPIkey($apiKey);
+	$_zp_phoogle = new PhoogleMapLite();
+	$_zp_phoogle->setAPIkey($apiKey);
 }
 
 if (!file_exists(getAlbumFolder() . 'videoDefault.png')) { copy(SERVERPATH . '/' . ZENFOLDER . '/images/videoDefault.png',  getAlbumFolder() . 'videoDefault.png'); }
@@ -53,63 +53,63 @@ $_zp_comment_error = zp_handle_comment();
 // title and description, but only if the user is logged in.
 
 if (zp_loggedin()) {
-  
-  function saveTitle($newtitle) {
-    if (get_magic_quotes_gpc()) $newtitle = stripslashes($newtitle);
-    global $_zp_current_image, $_zp_current_album;
-    if (in_context(ZP_IMAGE)) {
-      $_zp_current_image->setTitle($newtitle);
-      $_zp_current_image->save();
-      return $newtitle;
-    } else if (in_context(ZP_ALBUM)) {
-      $_zp_current_album->setTitle($newtitle);
-      $_zp_current_album->save();
-      return $newtitle;
-    } else {
-      return false;
-    }
-  }
-  
-  function saveTags($newtags) {
-    if (get_magic_quotes_gpc()) $newtags = stripslashes($newtags);
-    global $_zp_current_image, $_zp_current_album;
-    if (in_context(ZP_IMAGE)) {
-      $_zp_current_image->setTags($newtags);
-      $_zp_current_image->save();
-      return $newtags;
-    } else if (in_context(ZP_ALBUM)) {
-      $_zp_current_album->setTags($newtags);
-      $_zp_current_album->save();
-      return $newtags;
-    } else {
-      return false;
-    }
-  }
-  
-  function saveDesc($newdesc) {
-    if (get_magic_quotes_gpc()) $newdesc = stripslashes($newdesc);
-    global $_zp_current_image, $_zp_current_album;
-    if (in_context(ZP_IMAGE)) {
-      $_zp_current_image->setDesc($newdesc);
-      $_zp_current_image->save();
-      return $newdesc;
-    } else if (in_context(ZP_ALBUM)) {
-      $_zp_current_album->setDesc($newdesc);
-      $_zp_current_album->save();
-      return $newdesc;
-    } else {
-      return false;
-    }
-  }
-  
-  // Load Sajax (AJAX Library) now that we have all objects set.
-  require_once("Sajax.php");
-  sajax_init();
-  $sajax_debug_mode = 0;
-  sajax_export("saveTitle");
-  sajax_export("saveTags");
-  sajax_export("saveDesc");
-  sajax_handle_client_request();
+	
+	function saveTitle($newtitle) {
+		if (get_magic_quotes_gpc()) $newtitle = stripslashes($newtitle);
+		global $_zp_current_image, $_zp_current_album;
+		if (in_context(ZP_IMAGE)) {
+			$_zp_current_image->setTitle($newtitle);
+			$_zp_current_image->save();
+			return $newtitle;
+		} else if (in_context(ZP_ALBUM)) {
+			$_zp_current_album->setTitle($newtitle);
+			$_zp_current_album->save();
+			return $newtitle;
+		} else {
+			return false;
+		}
+	}
+	
+	function saveTags($newtags) {
+		if (get_magic_quotes_gpc()) $newtags = stripslashes($newtags);
+		global $_zp_current_image, $_zp_current_album;
+		if (in_context(ZP_IMAGE)) {
+			$_zp_current_image->setTags($newtags);
+			$_zp_current_image->save();
+			return $newtags;
+		} else if (in_context(ZP_ALBUM)) {
+			$_zp_current_album->setTags($newtags);
+			$_zp_current_album->save();
+			return $newtags;
+		} else {
+			return false;
+		}
+	}
+	
+	function saveDesc($newdesc) {
+		if (get_magic_quotes_gpc()) $newdesc = stripslashes($newdesc);
+		global $_zp_current_image, $_zp_current_album;
+		if (in_context(ZP_IMAGE)) {
+			$_zp_current_image->setDesc($newdesc);
+			$_zp_current_image->save();
+			return $newdesc;
+		} else if (in_context(ZP_ALBUM)) {
+			$_zp_current_album->setDesc($newdesc);
+			$_zp_current_album->save();
+			return $newdesc;
+		} else {
+			return false;
+		}
+	}
+	
+	// Load Sajax (AJAX Library) now that we have all objects set.
+	require_once("Sajax.php");
+	sajax_init();
+	$sajax_debug_mode = 0;
+	sajax_export("saveTitle");
+	sajax_export("saveTags");
+	sajax_export("saveDesc");
+	sajax_handle_client_request();
 }
 
 

@@ -45,37 +45,37 @@
  
 class SpamFilter  {
  
-  var $iSupport = array('Akismet_key' => array('type' => 0, 'desc' => 'Proper operation requires an Akismet key obtained by signing up for a <a href="http://www.wordpress.com">Wordpress.com</a> account.'),
-                        'Forgiving' => array('type' => 1, 'desc' => 'Mark suspected SPAM for moderation rather than as SPAM'));
+	var $iSupport = array('Akismet_key' => array('type' => 0, 'desc' => 'Proper operation requires an Akismet key obtained by signing up for a <a href="http://www.wordpress.com">Wordpress.com</a> account.'),
+												'Forgiving' => array('type' => 1, 'desc' => 'Mark suspected SPAM for moderation rather than as SPAM'));
 
-  function SpamFilter() {
-  	setOptionDefault('Akismet_key', '');
-    setOptionDefault('Forgiving', 0);
-  }												
+	function SpamFilter() {
+		setOptionDefault('Akismet_key', '');
+		setOptionDefault('Forgiving', 0);
+	}												
  
-  function getOptionsSupported() {
-    return $this->iSupport;
-  }
-  
-  function handleOption($option, $currentValue) {
-  }
+	function getOptionsSupported() {
+		return $this->iSupport;
+	}
+	
+	function handleOption($option, $currentValue) {
+	}
 
-  function filterMessage($author, $email, $website, $body, $imageLink) {
-  	 	
-  	$commentData = array(
-			  'author'    => $author,
-			  'email'     => $email,
-			  'website'   => $website,
-			  'body'      => $body,
-			  'permalink' => $imageLink
+	function filterMessage($author, $email, $website, $body, $imageLink) {
+		 	
+		$commentData = array(
+				'author'    => $author,
+				'email'     => $email,
+				'website'   => $website,
+				'body'      => $body,
+				'permalink' => $imageLink
 		 );
 		 
-  											
-    $zp_galUrl = FULLWEBPATH;  // Sets the webpath for the Akismet server
-    $zp_akismetKey = getOption('Akismet_key');
-    $forgive = getOption('Forgiving');
-    $die = 2;  // good comment until proven bad
-    
+												
+		$zp_galUrl = FULLWEBPATH;  // Sets the webpath for the Akismet server
+		$zp_akismetKey = getOption('Akismet_key');
+		$forgive = getOption('Forgiving');
+		$die = 2;  // good comment until proven bad
+		
 	$akismet = new Akismet($zp_galUrl, $zp_akismetKey, $commentData);
 		
 	if ($akismet->errorsExist()) {
@@ -84,21 +84,21 @@ class SpamFilter  {
 		// print_r ($akismet->getErrors());
 		$die = 1; // mark for moderation if we can't check for Spam
 		
-	  } else {
-      if ($akismet->isSpam()) {
+		} else {
+			if ($akismet->isSpam()) {
 		// Message is spam according to Akismet
 		// echo 'Spam detected';
 		// echo "bad message.";
 		
-        $die = $forgive;
-      } else {
+				$die = $forgive;
+			} else {
 		// Message is not spam according to Akismet
 		// echo "spam filter is true. good message.";
 		
-      }
-    }
-    return $die;
-  }
+			}
+		}
+		return $die;
+	}
 
 }  // end of class SpamFilter
 

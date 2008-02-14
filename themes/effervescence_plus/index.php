@@ -6,8 +6,8 @@
 	<link rel="stylesheet" href="<?php echo  $zenCSS ?>" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
 	<?php 
-  	  printRSSHeaderLink('Gallery','Gallery RSS'); 
-  	  zenJavascript(); 
+			printRSSHeaderLink('Gallery','Gallery RSS'); 
+			zenJavascript(); 
 	?>
 </head>
 
@@ -17,14 +17,14 @@
 	<div id="header">
 
 		<!-- Logo -->
-  		<div id="gallerytitle">
-    		<div id="logo">
-    			<?php
-    			  if (getOption('Allow_search')) {  printSearchForm(''); }
+			<div id="gallerytitle">
+				<div id="logo">
+					<?php
+						if (getOption('Allow_search')) {  printSearchForm(''); }
 				echo '<h1><a href="' . getMainSiteURL() . '" title="Visit ' . getMainSiteName() . '">' . sanitize($_SERVER['HTTP_HOST']) . '</a></h1>';
-    			?>
-    		</div>
-  		</div>
+					?>
+				</div>
+			</div>
 	</div>
 
 	<!-- Random Image -->
@@ -36,23 +36,23 @@
 
 		<!-- Album List -->
 		<ul id="albums">
-    		<?php
-      		  $firstAlbum = null;
-      		  $lastAlbum = null;
-      		  while (next_album()){ 
-        		if (is_null($firstAlbum)) { 
-          		  $lastAlbum = albumNumber();
-          		  $firstAlbum = $lastAlbum; 
+				<?php
+						$firstAlbum = null;
+						$lastAlbum = null;
+						while (next_album()){ 
+						if (is_null($firstAlbum)) { 
+								$lastAlbum = albumNumber();
+								$firstAlbum = $lastAlbum; 
 				} else {
-          		  $lastAlbum++;
-        		}
+								$lastAlbum++;
+						}
 			?>
 			<li>
 				<div class="imagethumb">
 					<a href="<?php echo getAlbumLinkURL();?>" title="View the album: <?php echo getAlbumTitle(); printImage_AlbumCount(); ?>">
 						<?php printCustomAlbumThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?>
-   					</a>
-                </div>
+ 						</a>
+								</div>
 				<h4><a href="<?php echo getAlbumLinkURL();?>" title="View the album: <?php echo getAlbumTitle(); printImage_AlbumCount();?>"><?php printAlbumTitle(); ?></a></h4>
 			</li>
 			<?php } ?>
@@ -75,9 +75,9 @@
 				Images: <?php $photosArray = query_single_row("SELECT count(*) FROM ".prefix('images')); 
 				$photosNumber = array_shift($photosArray); echo $photosNumber ?> 
 				<?php if (getOption('Allow_comments')) { ?>
-				  &middot; 
-				  Comments: <?php $commentsArray = query_single_row("SELECT count(*) FROM ".prefix('comments')." WHERE inmoderation = 0"); 
-				  $commentsNumber = array_shift($commentsArray); echo $commentsNumber ?>
+					&middot; 
+					Comments: <?php $commentsArray = query_single_row("SELECT count(*) FROM ".prefix('comments')." WHERE inmoderation = 0"); 
+					$commentsNumber = array_shift($commentsArray); echo $commentsNumber ?>
 				<?php } ?>
 			</p>
 			<?php printThemeInfo(); ?>
@@ -85,8 +85,8 @@
 		<a href="http://www.zenphoto.org" title="A simpler web photo album">Powered by <font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a><br/>
 		<?php printRSSLink('Gallery','', 'Gallery RSS', ''); ?>
 	</div>
-    
-    <?php printAdminToolbox(); ?>
+		
+		<?php printAdminToolbox(); ?>
 
 </body>
 </html>

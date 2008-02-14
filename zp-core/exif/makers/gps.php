@@ -95,9 +95,9 @@ function GPSRational($data, $intel) {
 function formatGPSData($type,$tag,$intel,$data) {
 
 	if($type=="ASCII") {
-            if($tag=="0001" || $tag=="0003"){ // Latitude Reference, Longitude Reference
-                $data = ($data{1} == $data{2} && $data{1} == $data{3}) ? $data{0} : $data;
-            }
+						if($tag=="0001" || $tag=="0003"){ // Latitude Reference, Longitude Reference
+								$data = ($data{1} == $data{2} && $data{1} == $data{3}) ? $data{0} : $data;
+						}
 		
 	} else if($type=="URATIONAL" || $type=="SRATIONAL") {
 		$data = bin2hex($data);
@@ -111,7 +111,7 @@ function formatGPSData($type,$tag,$intel,$data) {
 		
 		if($type=="SRATIONAL" && $top>2147483647) $top = $top - 4294967296;		//this makes the number signed instead of unsigned
 		
-                if($tag=="0002" || $tag=="0004") { //Latitude, Longitude
+								if($tag=="0002" || $tag=="0004") { //Latitude, Longitude
 		
 			if($intel==1){ 
 				$seconds = GPSRational(substr($data,0,16),$intel); 
@@ -134,9 +134,9 @@ function formatGPSData($type,$tag,$intel,$data) {
 			else if($top==0) $data = 0;
 			else $data=$top."/".$bottom;
 
-                        if($tag=="0006"){
-                            $data .= 'm';
-                        }
+												if($tag=="0006"){
+														$data .= 'm';
+												}
 		}
 	} else if($type=="USHORT" || $type=="SSHORT" || $type=="ULONG" || $type=="SLONG" || $type=="FLOAT" || $type=="DOUBLE") {
 		$data = bin2hex($data);
@@ -154,15 +154,15 @@ function formatGPSData($type,$tag,$intel,$data) {
 
 			
 		if($tag=="0000") { // VersionID
-                    $data =  hexdec(substr($data,0,2)) .
-                        ".". hexdec(substr($data,2,2)) .
-                        ".". hexdec(substr($data,4,2)) .
-                        ".". hexdec(substr($data,6,2));
+										$data =  hexdec(substr($data,0,2)) .
+												".". hexdec(substr($data,2,2)) .
+												".". hexdec(substr($data,4,2)) .
+												".". hexdec(substr($data,6,2));
 
-                } else if($tag=="0005"){ // Altitude Reference
-                    if($data == "00000000"){ $data = 'Above Sea Level'; }
-                    else if($data == "01000000"){ $data = 'Below Sea Level'; }
-                } 
+								} else if($tag=="0005"){ // Altitude Reference
+										if($data == "00000000"){ $data = 'Above Sea Level'; }
+										else if($data == "01000000"){ $data = 'Below Sea Level'; }
+								} 
 		
 	} else {
 		$data = bin2hex($data);

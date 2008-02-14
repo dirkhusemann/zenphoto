@@ -8,9 +8,9 @@ $mysql_connection = null;
 
 // Fix mysql_real_escape_string for PHP < 4.3.0
 if (!function_exists('mysql_real_escape_string')) {
-  function mysql_real_escape_string($string) {
-    mysql_escape_string($string);
-  }
+	function mysql_real_escape_string($string) {
+		mysql_escape_string($string);
+	}
 }
 
 
@@ -18,35 +18,35 @@ if (!function_exists('mysql_real_escape_string')) {
  * Connect to the database server and select the database.
  *@return true if successful connection
  *@since 0.6
-  */
+	*/
 function db_connect() {
  /* TODO: Handle errors more gracefully. */
-  global $mysql_connection, $_zp_conf_vars;
-  $db = $_zp_conf_vars['mysql_database'];
-  if (!function_exists('mysql_connect')) {
-    zp_error('MySQL Error: The PHP MySQL extentions have not been installed. '
-      .  'Please ask your administrator to add MySQL support to your PHP installation.');
-    return false;
-  }
+	global $mysql_connection, $_zp_conf_vars;
+	$db = $_zp_conf_vars['mysql_database'];
+	if (!function_exists('mysql_connect')) {
+		zp_error('MySQL Error: The PHP MySQL extentions have not been installed. '
+			.  'Please ask your administrator to add MySQL support to your PHP installation.');
+		return false;
+	}
 
-  $mysql_connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass']);
-  if (!$mysql_connection) {
-    zp_error('MySQL Error: Zenphoto could not connect to the database server. Check '
-      .  'your <strong>zp-config.php</strong> file for the correct <em><strong>host</strong>, '
-      .  '<strong>user name</strong>, and <strong>password</strong></em>. Note that you may need to change the '
-      .  '<em>host</em> from localhost if your web server uses a separate MySQL server, which is '
-      .  'common in large shared hosting environments like Dreamhost and GoDaddy. Also make sure the server '
-      .  'is running, if you control it.');
-    return false;
-  }
+	$mysql_connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass']);
+	if (!$mysql_connection) {
+		zp_error('MySQL Error: Zenphoto could not connect to the database server. Check '
+			.  'your <strong>zp-config.php</strong> file for the correct <em><strong>host</strong>, '
+			.  '<strong>user name</strong>, and <strong>password</strong></em>. Note that you may need to change the '
+			.  '<em>host</em> from localhost if your web server uses a separate MySQL server, which is '
+			.  'common in large shared hosting environments like Dreamhost and GoDaddy. Also make sure the server '
+			.  'is running, if you control it.');
+		return false;
+	}
 
-  if (!@mysql_select_db($db)) {
-    zp_error('MySQL Error: The database is connected, but Zenphoto could not select the database "' . $db . '". '
-      .  'Make sure it already exists, create it if you need to. Also make sure the user you\'re trying to '
-      .  'connect with has privileges to use this database.');
-    return false;
-  }
-  return true;
+	if (!@mysql_select_db($db)) {
+		zp_error('MySQL Error: The database is connected, but Zenphoto could not select the database "' . $db . '". '
+			.  'Make sure it already exists, create it if you need to. Also make sure the user you\'re trying to '
+			.  'connect with has privileges to use this database.');
+		return false;
+	}
+	return true;
 }
 
 // Connect to the database immediately.
@@ -63,25 +63,25 @@ $_zp_query_count = 0;
  */
 function query($sql, $noerrmsg = false) {
  /* TODO: Handle errors more gracefully. */
-  global $mysql_connection;
-  global $_zp_query_count;
-  if ($mysql_connection == null) {
-    db_connect();
-  }
-  $result = mysql_query($sql, $mysql_connection);
-  if (!$result && !$noerrmsg) {
-    $sql = sanitize($sql, true);
-    $error = "MySQL Query ( <em>$sql</em> ) Failed. Error: " . mysql_error();
-    // Changed this to mysql_query - *never* call query functions recursively...
-    if (!mysql_query("SELECT 1 FROM " . prefix('albums') . " LIMIT 0", $mysql_connection)) {
-      $error .= "<br>It looks like your zenphoto tables haven't been created. You may need to "
-        . " <a href=\"" . WEBPATH . '/' . ZENFOLDER . "/setup.php\">run the setup script</a>.";
-    }
-    zp_error($error);
-    return false;
-  }
-  $_zp_query_count++;
-  return $result;
+	global $mysql_connection;
+	global $_zp_query_count;
+	if ($mysql_connection == null) {
+		db_connect();
+	}
+	$result = mysql_query($sql, $mysql_connection);
+	if (!$result && !$noerrmsg) {
+		$sql = sanitize($sql, true);
+		$error = "MySQL Query ( <em>$sql</em> ) Failed. Error: " . mysql_error();
+		// Changed this to mysql_query - *never* call query functions recursively...
+		if (!mysql_query("SELECT 1 FROM " . prefix('albums') . " LIMIT 0", $mysql_connection)) {
+			$error .= "<br>It looks like your zenphoto tables haven't been created. You may need to "
+				. " <a href=\"" . WEBPATH . '/' . ZENFOLDER . "/setup.php\">run the setup script</a>.";
+		}
+		zp_error($error);
+		return false;
+	}
+	$_zp_query_count++;
+	return $result;
 }
 
 /**
@@ -93,12 +93,12 @@ function query($sql, $noerrmsg = false) {
  * @since 0.6
  */
 function query_single_row($sql, $noerrmsg=false) {
-  $result = query($sql, $noerrmsg);
-  if ($result) {
-    return mysql_fetch_assoc($result);
-  } else {
-    return false;
-  }
+	$result = query($sql, $noerrmsg);
+	if ($result) {
+		return mysql_fetch_assoc($result);
+	} else {
+		return false;
+	}
 }
 
 /**
@@ -113,15 +113,15 @@ function query_full_array($sql, $noerrmsg = false) {
  * 			then use a next_db_entry()-like function to get the next row.
  *		But this is probably just fine.
  */
-  $result = query($sql, $noerrmsg);
-  if ($result) {
-    $allrows = array();
-    while ($row = mysql_fetch_assoc($result))
-      $allrows[] = $row;
-    return $allrows;
-  } else {
-    return false;
-  }
+	$result = query($sql, $noerrmsg);
+	if ($result) {
+		$allrows = array();
+		while ($row = mysql_fetch_assoc($result))
+			$allrows[] = $row;
+		return $allrows;
+	} else {
+		return false;
+	}
 }
 
 
@@ -131,10 +131,10 @@ function query_full_array($sql, $noerrmsg = false) {
  *@param string $tablename name of the table
  *@return prefixed table name
  *@since 0.6
-  */
+	*/
 function prefix($tablename) {
-  global $_zp_conf_vars;
-  return '`' . $_zp_conf_vars['mysql_prefix'] . $tablename . '`';
+	global $_zp_conf_vars;
+	return '`' . $_zp_conf_vars['mysql_prefix'] . $tablename . '`';
 }
 
 /**
@@ -142,13 +142,13 @@ function prefix($tablename) {
  *@param string $string string to clean
  *@return cleaned up string
  *@since 0.6
-  */
+	*/
 function escape($string) {
-  if (get_magic_quotes_gpc()) {
-    return $string;
-  } else {
-    return mysql_real_escape_string($string);
-  }
+	if (get_magic_quotes_gpc()) {
+		return $string;
+	} else {
+		return mysql_real_escape_string($string);
+	}
 }
 
 /**
@@ -156,13 +156,13 @@ function escape($string) {
  *@param string $string string to clean
  *@return cleaned up string
  *@since 0.6
-  */
+	*/
 function strip($string) {
-  if (get_magic_quotes_gpc()) {
-    return stripslashes($string);
-  } else {
-    return $string;
-  }
+	if (get_magic_quotes_gpc()) {
+		return stripslashes($string);
+	} else {
+		return $string;
+	}
 }
 
 /**
@@ -172,17 +172,17 @@ function strip($string) {
  *@param string $unique_set what to add to the WHERE clause
  *@return contructed WHERE cleause
  *@since 0.6
-  */
+	*/
 function getWhereClause($unique_set) {
-  if (empty($unique_set)) return ' ';
-  $i = 0;
-  $where = ' WHERE';
-  foreach($unique_set as $var => $value) {
-    if ($i > 0) $where .= ' AND';
-    $where .= ' `' . $var . '` = \'' . mysql_real_escape_string($value) . '\'';
-    $i++;
-  }
-  return $where;
+	if (empty($unique_set)) return ' ';
+	$i = 0;
+	$where = ' WHERE';
+	foreach($unique_set as $var => $value) {
+		if ($i > 0) $where .= ' AND';
+		$where .= ' `' . $var . '` = \'' . mysql_real_escape_string($value) . '\'';
+		$i++;
+	}
+	return $where;
 }
 
 /**
@@ -192,16 +192,16 @@ function getWhereClause($unique_set) {
  *@param string $new_unique_set what to add to the SET clause
  *@return contructed SET cleause
  *@since 0.6
-  */
+	*/
 function getSetClause($new_unique_set) {
-  $i = 0;
-  $set = ' SET';
-  foreach($new_unique_set as $var => $value) {
-    if ($i > 0) $set .= ', ';
-    $set .= ' `' . $var . '`=\'' . mysql_real_escape_string($value) . '\'';
-    $i++;
-  }
-  return $set;
+	$i = 0;
+	$set = ' SET';
+	foreach($new_unique_set as $var => $value) {
+		if ($i > 0) $set .= ', ';
+		$set .= ' `' . $var . '`=\'' . mysql_real_escape_string($value) . '\'';
+		$i++;
+	}
+	return $set;
 }
 
 /**
@@ -209,7 +209,7 @@ function getSetClause($new_unique_set) {
  *@param string $url url to encode
  *@return encoded url
  *@since 0.6
-  */
+	*/
 function queryEncode($url) {
 	$encode = str_replace('%26', '%%1', urlencode($url));  
 	return str_replace('%23', '%%2', $encode); 
@@ -220,7 +220,7 @@ function queryEncode($url) {
  *@param string $url url to decode
  *@return decoded url
  *@since 0.6
-  */
+	*/
 function queryDecode($url) { 
 	$decode = str_replace('%%1', '%26', $url); 
 	return urldecode(str_replace('%%2', '%23', $decode)); 

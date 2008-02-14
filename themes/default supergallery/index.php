@@ -16,16 +16,16 @@
 	<div id="gallerytitle">
 		<h2><?php printHomeLink('', ' | '); echo getGalleryTitle(); ?></h2>
 	</div>
-    
-    <div id="padbox">
-    
+		
+		<div id="padbox">
+		
 		<div id="albums">
 			<?php while (next_gallery()): ?>
 			<div class="album">
-        		<div class="thumb">
+						<div class="thumb">
  				<a href="<?php echo getSubgalleryURL();?>" title="View gallery: <?php echo getSubgalleryTitle();?>"><?php printSubgalleryThumbImage(getSubgalleryTitle()); ?></a>
-       			</div>
-        		<div class="albumdesc">
+ 						</div>
+						<div class="albumdesc">
 					<h3><a href="<?php echo getSubgalleryURL();?>" title="View gallery: <?php echo getSubgalleryTitle();?>"><?php printSubgalleryTitle(); ?></a></h3>
  					<p><?php printSubgalleryDesc(); ?></p>
 				</div>
