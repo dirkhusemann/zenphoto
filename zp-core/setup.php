@@ -155,7 +155,11 @@ if (!$checked) {
   }
   checkMark($safe, "PHP Safe Mode", " [is set]", "Zenphoto functionality is reduced when PHP <code>safe mode</code> restrictions are in effect.");
   
-  $good = checkMark(extension_loaded('gd'), " PHP GD support", '', 'You need to install GD support in your PHP') && $good;
+  /* Check for GD and JPEG support. */
+  $gd = extension_loaded('gd');
+  $jpeg = ($gd) ? (imagetypes() & IMG_JPG) : 0;
+  $good = checkMark($gd, " PHP GD support", '', 'You need to install GD support in your PHP') && $good;
+  $good = checkMark($jpeg, " PHP GD with JPEG support", '', 'You need to install GD with JPEG support in your PHP') && $good;
 
   $sql = extension_loaded('mysql');
   $good = checkMark($sql, " PHP mySQL support", '', 'You need to install mySQL support in your PHP') && $good;
