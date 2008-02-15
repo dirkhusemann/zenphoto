@@ -591,15 +591,22 @@ class Album extends PersistentObject {
       }
     } else {
       $dp = opendir($albumdir);
-      while ($thumb = readdir($dp)) {
-        if (is_file($albumdir.$thumb) && is_valid_image($thumb)) {
+      if (is_null($this->images)) { 
+        $this->getImages(0);
+      }
+      $thumbs = $this->images;
+      while (count($thumbs) > 0) {
+        shuffle($thumbs);
+        $thumb = array_pop($thumbs);
+        if (!is_valid_video($thumb)) {
           return new Image($this, $thumb);
         }
       }
       // Otherwise, look in sub-albums.
       $subalbums = $this->getSubAlbums();
-      foreach ($subalbums as $subdir) {
-        $subalbum = new Album($this->gallery, $subdir);
+      while (count($subalbums) > 0) {
+        shuffle($subablums);
+        $subalbum = new Album($this->gallery, array_pop($subalbums));
         $thumb = $subalbum->getAlbumThumbImage();
         if ($thumb != NULL && $thumb->exists) {
           return $thumb;
