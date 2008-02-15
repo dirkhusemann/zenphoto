@@ -591,7 +591,7 @@ class Album extends PersistentObject {
       }
     } else {
       $dp = opendir($albumdir);
-      if (is_null($this->images)) { 
+      if (is_null($this->images)) {
         $this->getImages(0);
       }
       $thumbs = $this->images;
@@ -604,12 +604,15 @@ class Album extends PersistentObject {
       }
       // Otherwise, look in sub-albums.
       $subalbums = $this->getSubAlbums();
-      while (count($subalbums) > 0) {
-        shuffle($subablums);
-        $subalbum = new Album($this->gallery, array_pop($subalbums));
-        $thumb = $subalbum->getAlbumThumbImage();
-        if ($thumb != NULL && $thumb->exists) {
-          return $thumb;
+      if (!is_null($subalbums)) {
+        while (count($subalbums) > 0) {
+
+          shuffle($subalbums);
+          $subalbum = new Album($this->gallery, array_pop($subalbums));
+          $thumb = $subalbum->getAlbumThumbImage();
+          if ($thumb != NULL && $thumb->exists) {
+            return $thumb;
+          }
         }
       }
       //jordi-kun - no images, no subalbums, check for videos
