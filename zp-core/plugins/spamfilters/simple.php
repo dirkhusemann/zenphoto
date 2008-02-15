@@ -42,87 +42,87 @@
  
 class SpamFilter  {
 
-  var $iSupport = array('Words_to_die_on' => array('type' => 2, 'desc' => 'SPAM blacklist words (separate with commas)'),
-                        'Patterns_to_die_on' => array('type' => 2, 'desc' => 'SPAM blacklist <a href="http://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> (separate with spaces)'),
-                        'Excessive_URL_count' => array('type' => 0, 'desc' => 'Message is considered SPAM if there are more than this many URLs in it'),
-                        'Forgiving' => array('type' => 1, 'desc' => 'Mark suspected SPAM for moderation rather than as SPAM'));
-                        
-  var $wordsToDieOn = array('cialis','ebony','nude','porn','porno','pussy','upskirt','ringtones','phentermine','viagra', 'levitra'); /* the word black list */
-  
-  var $patternsToDieOn = array('\[url=.*\]');
-  
-  var $excessiveURLCount = 5;
-  
-  function SpamFilter() {
-    setOptionDefault('Words_to_die_on', implode(',', $this->wordsToDieOn));
-    setOptionDefault('Patterns_to_die_on', implode(' ', $this->patternsToDieOn));
-    setOptionDefault('Excessive_URL_count', $this->excessiveURLCount);
-    setOptionDefault('Forgiving', 0);
+	var $iSupport = array('Words_to_die_on' => array('type' => 2, 'desc' => 'SPAM blacklist words (separate with commas)'),
+												'Patterns_to_die_on' => array('type' => 2, 'desc' => 'SPAM blacklist <a href="http://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> (separate with spaces)'),
+												'Excessive_URL_count' => array('type' => 0, 'desc' => 'Message is considered SPAM if there are more than this many URLs in it'),
+												'Forgiving' => array('type' => 1, 'desc' => 'Mark suspected SPAM for moderation rather than as SPAM'));
+												
+	var $wordsToDieOn = array('cialis','ebony','nude','porn','porno','pussy','upskirt','ringtones','phentermine','viagra', 'levitra'); /* the word black list */
+	
+	var $patternsToDieOn = array('\[url=.*\]');
+	
+	var $excessiveURLCount = 5;
+	
+	function SpamFilter() {
+		setOptionDefault('Words_to_die_on', implode(',', $this->wordsToDieOn));
+		setOptionDefault('Patterns_to_die_on', implode(' ', $this->patternsToDieOn));
+		setOptionDefault('Excessive_URL_count', $this->excessiveURLCount);
+		setOptionDefault('Forgiving', 0);
 }
-  
-  function getOptionsSupported() {
-    return $this->iSupport;
-  }
-   function handleOption($option, $currentValue) {
-     if ($option=='Words_to_die_on') {
-       $list = explode(',', $currentValue);
-       sort($list);
-	   echo '<textarea name="' . $option . '" cols="42" rows="4">' . implode(',', $list) . "</textarea>\n";
-     } else if ($option=='Patterns_to_die_on') {
-	   echo '<textarea name="' . $option . '" cols="42" rows="2">' . $currentValue . "</textarea>\n";
+	
+	function getOptionsSupported() {
+		return $this->iSupport;
+	}
+ 	function handleOption($option, $currentValue) {
+ 		if ($option=='Words_to_die_on') {
+ 			$list = explode(',', $currentValue);
+ 			sort($list);
+	 	echo '<textarea name="' . $option . '" cols="42" rows="4">' . implode(',', $list) . "</textarea>\n";
+ 		} else if ($option=='Patterns_to_die_on') {
+	 	echo '<textarea name="' . $option . '" cols="42" rows="2">' . $currentValue . "</textarea>\n";
 	 }
-  }
+	}
 
-  function filterMessage($author, $email, $website, $body, $imageLink) {
-    $forgive = getOption('Forgiving');
-    $list = getOption('Words_to_die_on');
-    $list = strtolower($list);
-    $this->wordsToDieOn = explode(',', $list);
-    $list = getOption('Patterns_to_die_on');
-    $list = strtolower($list);
-    $this->patternsToDieOn = explode(' ', $list);
-    $this->excessiveURLCount = getOption('Excessive_URL_count');
-    $die = 2;  // good comment until proven bad
-    if ($body) {
-      if (($num = substr_count($body, 'http://')) >= $this->excessiveURLCount) { // too many links
-        $die = $forgive;
-      } else {
-        if ($pattern = $this->hasSpamPattern($body)) {
-          $die = $forgive;
-        } else {
-          if ($spamWords = $this->hasSpamWords($body)) {
-            $die = $forgive;
-          }
-        }
-      }
-    }
-    return $die;  
-  }
+	function filterMessage($author, $email, $website, $body, $imageLink) {
+		$forgive = getOption('Forgiving');
+		$list = getOption('Words_to_die_on');
+		$list = strtolower($list);
+		$this->wordsToDieOn = explode(',', $list);
+		$list = getOption('Patterns_to_die_on');
+		$list = strtolower($list);
+		$this->patternsToDieOn = explode(' ', $list);
+		$this->excessiveURLCount = getOption('Excessive_URL_count');
+		$die = 2;  // good comment until proven bad
+		if ($body) {
+			if (($num = substr_count($body, 'http://')) >= $this->excessiveURLCount) { // too many links
+				$die = $forgive;
+			} else {
+				if ($pattern = $this->hasSpamPattern($body)) {
+					$die = $forgive;
+				} else {
+					if ($spamWords = $this->hasSpamWords($body)) {
+						$die = $forgive;
+					}
+				}
+			}
+		}
+		return $die;  
+	}
 
-  function hasSpamPattern($text) {
-    $patterns = $this->patternsToDieOn;
-    foreach ($patterns as $pattern) {
-      if (eregi('('.trim($pattern).')', $text, $matches)) {
-        return $matches[1];
-      }
-    }
-    return false;
-  }
-  
-  function hasSpamWords($text) {
-    $words = $this->getWords($text);
-    $blacklist = $this->wordsToDieOn;
-    $intersect = array_intersect($blacklist , $words);
-    return $intersect ;
-  }
-  
-  function getWords($text, $notUnique=false) {
-    if ($notUnique) {
-      return preg_split("/[\W]+/", strtolower(strip_tags($text)));
-    } else {
-      return array_unique(preg_split("/[\W]+/", strtolower(strip_tags($text))));
-    }
-  }
+	function hasSpamPattern($text) {
+		$patterns = $this->patternsToDieOn;
+		foreach ($patterns as $pattern) {
+			if (eregi('('.trim($pattern).')', $text, $matches)) {
+				return $matches[1];
+			}
+		}
+		return false;
+	}
+	
+	function hasSpamWords($text) {
+		$words = $this->getWords($text);
+		$blacklist = $this->wordsToDieOn;
+		$intersect = array_intersect($blacklist , $words);
+		return $intersect ;
+	}
+	
+	function getWords($text, $notUnique=false) {
+		if ($notUnique) {
+			return preg_split("/[\W]+/", strtolower(strip_tags($text)));
+		} else {
+			return array_unique(preg_split("/[\W]+/", strtolower(strip_tags($text))));
+		}
+	}
 
 }
 

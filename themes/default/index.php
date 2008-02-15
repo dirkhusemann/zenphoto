@@ -13,21 +13,21 @@
 <div id="main">
 
 	<div id="gallerytitle">
-    <?php if (getOption('Allow_search')) {  printSearchForm(''); } ?>
+		<?php if (getOption('Allow_search')) {  printSearchForm(''); } ?>
 		<h2><?php printHomeLink('', ' | '); echo getGalleryTitle(); ?></h2>
 	</div>
-    
-    <div id="padbox">
-    
+		
+		<div id="padbox">
+		
 		<div id="albums">
 			<?php while (next_album()): ?>
 			<div class="album">
-        		<div class="thumb">
+						<div class="thumb">
 					<a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumThumbImage(getAlbumTitle()); ?></a>
-       			 </div>
-        		<div class="albumdesc">
+ 						 </div>
+						<div class="albumdesc">
 					<h3><a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
-         			<small><?php printAlbumDate(""); ?></small>
+ 							<small><?php printAlbumDate(""); ?></small>
 					<p><?php printAlbumDesc(); ?></p>
 				</div>
 				<p style="clear: both; "></p>
@@ -36,7 +36,7 @@
 		</div>
 		<br clear="all" />
 		<?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
-        
+				
 	</div>
 
 </div>

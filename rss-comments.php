@@ -9,18 +9,18 @@ $host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 // check passwords
 $albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
 foreach($albumscheck as $albumcheck) {
-  if(!checkAlbumPassword($albumcheck['folder'], $hint)) {
-    $albumpasswordcheck1= " AND i.albumid != ".$albumcheck['id'];
-    $albumpasswordcheck2= " AND a.id != ".$albumcheck['id'];
-    $passwordcheck1 = $passwordcheck1.$albumpasswordcheck1;
-    $passwordcheck2 = $passwordcheck2.$albumpasswordcheck2;
-  }
+	if(!checkAlbumPassword($albumcheck['folder'], $hint)) {
+		$albumpasswordcheck1= " AND i.albumid != ".$albumcheck['id'];
+		$albumpasswordcheck2= " AND a.id != ".$albumcheck['id'];
+		$passwordcheck1 = $passwordcheck1.$albumpasswordcheck1;
+		$passwordcheck2 = $passwordcheck2.$albumpasswordcheck2;
+	}
 }
 
 if(getOption('mod_rewrite')) {
-  $albumpath = "/"; $imagepath = "/"; $modrewritesuffix = getOption('mod_rewrite_image_suffix');
+	$albumpath = "/"; $imagepath = "/"; $modrewritesuffix = getOption('mod_rewrite_image_suffix');
 } else {
-  $albumpath = "/index.php?album="; $imagepath = "&image="; $modrewritesuffix = "";
+	$albumpath = "/index.php?album="; $imagepath = "&image="; $modrewritesuffix = "";
 }
 $items = getOption('feed_items'); // # of Items displayed on the feed
 ?>
@@ -53,25 +53,25 @@ $comments_albums = query_full_array("SELECT c.id, a.folder, a.title AS albumtitl
 $comments = array_merge($comments_images,$comments_albums);
 $count = 0;
 foreach ($comments as $comment) {
-  if($count == $items) { 
-    break; 
-  }
+	if($count == $items) { 
+		break; 
+	}
 	$author = $comment['name'];
 	$album = $comment['folder'];
 	if($comment['type'] === "images") {
-	  $imagetag = $imagepath.$comment['filename'].$modrewritesuffix;
+		$imagetag = $imagepath.$comment['filename'].$modrewritesuffix;
 	} else {
 		$imagetag = "";
-  }
+	}
 	$date = $comment['date'];
 	$albumtitle = $comment['albumtitle'];
 	if ($comment['title'] == "") $title = $image; else $title = $comment['title'];
 	$website = $comment['website'];
 	$shortcomment = truncate_string($comment['comment'], 123);
-  if(!empty($title)) {
-    $title = ": ".$title;
-  } 
-  $count++;
+	if(!empty($title)) {
+		$title = ": ".$title;
+	} 
+	$count++;
 ?>
 
 <item>

@@ -16,14 +16,14 @@ $ligne = imagecolorallocate($image,150,150,150);
 
 $i = 7;
 while($i<=15) {
-  ImageLine($image, 0,$i, 65,$i, $ligne);
-  $i = $i+7;
+	ImageLine($image, 0,$i, 65,$i, $ligne);
+	$i = $i+7;
 }
 
 $i = 10;
 while($i<=65) {
-  ImageLine($image,$i,0,$i,20, $ligne);
-  $i = $i+10;
+	ImageLine($image,$i,0,$i,20, $ligne);
+	$i = $i+10;
 }
 
 $lettre = imagecolorallocate($image,0,0,0);

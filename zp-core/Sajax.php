@@ -70,10 +70,10 @@ if (!isset($SAJAX_INCLUDED)) {
 		} 
 		else {
 
-            // Convert from internal charset to UTF-8
-		    if (getOption('charset') != 'UTF-8') {
-		        $value = utf8::convert($value, getOption('charset'));   
-		    }
+						// Convert from internal charset to UTF-8
+				if (getOption('charset') != 'UTF-8') {
+						$value = utf8::convert($value, getOption('charset'));   
+				}
 
 			$esc_val = sajax_escapeutf8($value);
 			$s = "'$esc_val'";
@@ -121,16 +121,16 @@ if (!isset($SAJAX_INCLUDED)) {
 		if (! in_array($func_name, $sajax_export_list))
 			echo "-:$func_name not callable";
 		else {
-		    
-		    // Convert UTF-8 to internal charset
-		    if (getOption('charset') != 'UTF-8') {
-		        while (list($args_k,) = each($args)) {
-		            $args[$args_k] = utf8::convert($args[$args_k], 'UTF-8', getOption('charset'));
-		        }
-		    }
+				
+				// Convert UTF-8 to internal charset
+				if (getOption('charset') != 'UTF-8') {
+						while (list($args_k,) = each($args)) {
+								$args[$args_k] = utf8::convert($args[$args_k], 'UTF-8', getOption('charset'));
+						}
+				}
 
 			$result = call_user_func_array($func_name, $args);
-		    
+				
 			echo "+:";
 			echo "var res = " . trim(sajax_get_js_repr($result)) . "; res;";
 		}
