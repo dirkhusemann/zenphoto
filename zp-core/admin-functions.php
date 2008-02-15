@@ -743,6 +743,12 @@ function getManagedAlbumList() {
   return $_zp_admin_album_list;
 }
 
+/**
+ * Gets an array of comments for the current admin
+ *
+ * @param int $number how many comments desired
+ * @return array
+ */
 function fetchComments($number) {
   if ($number) { 
     $limit = " LIMIT $number";
@@ -777,6 +783,7 @@ function fetchComments($number) {
     }
     $sql .= ")) ";
     $sql .= " ORDER BY id DESC$limit";
+    $albumcomments = query_full_array($sql);
     foreach ($albumcomments as $comment) {
       $comments[$comment['id']] = $comment;
     }
@@ -798,8 +805,11 @@ function fetchComments($number) {
     foreach ($imagecomments as $comment) {
       $comments[$comment['id']] = $comment;
     }
-    if (!$number) {
-      $comments = array_slice($comments, 0, $number);
+    krsort($comments);
+    if ($number) {
+      if ($number < count($comments)) {
+        $comments = array_slice($comments, 0, $number);
+      }
     }
   }
  return $comments;

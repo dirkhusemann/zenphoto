@@ -595,19 +595,20 @@ class Album extends PersistentObject {
         $this->getImages(0);
       }
       $thumbs = $this->images;
-      while (count($thumbs) > 0) {
+      if (!is_null($thumbs)) {
         shuffle($thumbs);
-        $thumb = array_pop($thumbs);
-        if (!is_valid_video($thumb)) {
-          return new Image($this, $thumb);
+        while (count($thumbs) > 0) {
+          $thumb = array_pop($thumbs);
+          if (!is_valid_video($thumb)) {
+            return new Image($this, $thumb);
+          }
         }
       }
       // Otherwise, look in sub-albums.
       $subalbums = $this->getSubAlbums();
       if (!is_null($subalbums)) {
+        shuffle($subalbums);
         while (count($subalbums) > 0) {
-
-          shuffle($subalbums);
           $subalbum = new Album($this->gallery, array_pop($subalbums));
           $thumb = $subalbum->getAlbumThumbImage();
           if ($thumb != NULL && $thumb->exists) {
