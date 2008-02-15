@@ -3,7 +3,7 @@
 /* SQL Counting Functions */
 function show_subalbum_count() {
   $sql = "SELECT COUNT(id) FROM ". prefix("albums") ." WHERE parentid IS NOT NULL";
-  if (!$_zp_loggedin) {$sql .= " AND `show` = 1"; }  /* exclude the unpublished albums */
+  if (!zp_loggedin()) {$sql .= " AND `show` = 1"; }  /* exclude the unpublished albums */
   $result = query($sql);
   $count = mysql_result($result, 0);
   echo $count;

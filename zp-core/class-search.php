@@ -376,27 +376,31 @@ function getAlbums($page=0) {
   /**
    * Returns the album following the current one
    *
+   * @param string $curalbum the name of the current album
    * @return object
    */
-  function getNextAlbum() {
+  function getNextAlbum($curalbum) {
     $albums = $this->getAlbums(0);
-    $inx = array_search($this->name, $albums)+1;
+    $inx = array_search($curalbum, $albums)+1;
     if ($inx >= 0 && $inx < count($albums)) {
-      return new Album($parent, $albums[$inx]);
+      $gallery = new Gallery();
+      return new Album($gallery, $albums[$inx]);
     } 
     return null;
   }
   
   /**
    * Returns the album preceding the current one
-   *
+   * 
+   * @param string $curalbum the name of the current album
    * @return object
    */
-  function getPrevAlbum() {
+  function getPrevAlbum($curalbum) {
      $albums = $this->getAlbums(0);
-    $inx = array_search($this->name, $albums)-1;
+    $inx = array_search($curalbum, $albums)-1;
     if ($inx >= 0 && $inx < count($albums)) {
-      return new Album($paraent, $albums[$inx]);
+      $gallery = new Gallery();
+      return new Album($gallery, $albums[$inx]);
     } 
     return null;
   }

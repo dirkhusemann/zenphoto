@@ -911,6 +911,28 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
   (($id) ? " id=\"$id\"" : "") . " />";
 }
 
+/**
+ * Returns the next album
+ *
+ * @return object
+ */
+function getNextAlbum() {
+  global $_zp_current_album, $_zp_current_search;
+    if (in_context(ZP_SEARCH)) {
+    $nextalbum = $_zp_current_search->getNextAlbum($_zp_current_album->name);
+
+debugLog("template functions: getNextAlbum(search): ".$nextalbum->name);
+
+  } else if (in_context(ZP_ALBUM)) {
+    $nextalbum = $_zp_current_album->getNextAlbum();
+
+debugLog("template functions: getNextAlbum(album): ".$nextalbum->name);
+
+  } else {
+    return null;
+  }
+  return $nextalbum;
+}
 
 /**
 * Get the URL of the next album in the gallery.
@@ -918,16 +940,29 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 * @return string
 */
 function getNextAlbumURL() {
+  $nextalbum = getNextAlbum();
+  if ($nextalbum) {
+    return rewrite_path("/" . pathurlencode($nextalbum->name),
+                        "/index.php?album=" . urlencode($nextalbum->name));
+  }
+  return false;
+}
+
+/**
+ * Returns the previous album
+ *
+ * @return object
+ */
+function getPrevAlbum() {
   global $_zp_current_album, $_zp_current_search;
   if (in_context(ZP_SEARCH)) {
-    $nextalbum = $_zp_current_search->getNextAlbum();
-  } else if (in_context(ZP_ALBUM)) {
-    $nextalbum = $_zp_current_album->getNextAlbum();
+    $prevalbum = $_zp_current_search->getPrevAlbum($_zp_current_album->name);
+  } else if(in_context(ZP_ALBUM)) {
+    $prevalbum = $_zp_current_album->getPrevAlbum();
   } else {
-    return false;
+    return null;
   }
-  return rewrite_path("/" . pathurlencode($nextalbum->name),
-    "/index.php?album=" . urlencode($nextalbum->name));
+  return $prevalbum;
 }
 
 /**
@@ -936,16 +971,12 @@ function getNextAlbumURL() {
 * @return string
 */
 function getPrevAlbumURL() {
-  global $_zp_current_album, $_zp_current_search;
-  if (in_context(ZP_SEARCH)) {
-    $prevalbum = $_zp_current_search->getPrevAlbum();
-  } else if(in_context(ZP_ALBUM)) {
-    $prevalbum = $_zp_current_album->getPrevAlbum();
-  } else {
-    return false;
+  $prevalbum = getPrevAlbum();
+  if ($prevalbum) {
+    return rewrite_path("/" . pathurlencode($prevalbum->name),
+                        "/index.php?album=" . urlencode($prevalbum->name));
   }
-  return rewrite_path("/" . pathurlencode($prevalbum->name),
-    "/index.php?album=" . urlencode($prevalbum->name));
+  return false;
 }
 
 /**

@@ -98,7 +98,8 @@ if ($_GET['format'] != 'xml') {
     		<div class="albnav">
       			<div class="albprevious">
 					<?php
-	   				  if (is_null($album = $_zp_current_album->getPrevAlbum())) {
+					  $album = getPrevAlbum();
+	   				  if (is_null($album)) {
 	    			    echo '<div class="albdisabledlink">&laquo; prev</div>';
 	  				  } else {
 	    				echo '<a href="' . 
@@ -109,7 +110,8 @@ if ($_GET['format'] != 'xml') {
 	  			</div>
 	  			<div class="albnext">
 	    			<?php
-	    			  if (is_null($album = $_zp_current_album->getNextAlbum())) {
+	    			  $album = getNextAlbum();
+	    			  if (is_null($album)) {
 	      			    echo '<div class="albdisabledlink">next &raquo;</div>';
 	    			  } else {
 	      				echo '<a href="' . 

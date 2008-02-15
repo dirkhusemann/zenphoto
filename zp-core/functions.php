@@ -1,6 +1,6 @@
 <?php
 define('ZENPHOTO_VERSION', '1.1.4');
-define('ZENPHOTO_RELEASE', 1118);
+define('ZENPHOTO_RELEASE', 1119);
 define('SAFE_GLOB', false);
 define('CHMOD_VALUE', 0777);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
@@ -1663,6 +1663,29 @@ function getAllSubAlbumIDs($albumfolder='') {
   $query = "SELECT `id`,`folder` FROM " . prefix('albums') . " WHERE `folder` LIKE '" . mysql_real_escape_string($albumfolder) . "%'";
   $subIDs = query_full_array($query);
   return $subIDs;
+}
+
+/**
+ * recovers search parameters from stored cookei, clears the cookie
+ *
+ */
+function retrieveSearchParms() {
+  global $_zp_current_search;
+  $context = get_context() | ZP_SEARCH;
+  if (is_null($_zp_current_search)) {
+    if (($params = zp_getCookie('zenphoto_image_search_params')) != '') {
+      if (!empty($params)) {
+        set_context($context);
+        $_zp_current_search = new SearchEngine();
+        $_zp_current_search->setSearchParams($params);
+      }
+      if (!($context & ZP_IMAGE)) {
+        zp_setcookie("zenphoto_image_search_params", "", time()-368000, $cookiepath);
+      }
+    }
+  } else {
+    set_context($context);
+  }
 }
 
 ?>
