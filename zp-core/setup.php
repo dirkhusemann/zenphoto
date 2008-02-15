@@ -4,6 +4,7 @@ define('CHMOD_VALUE', 0777);
 $checked = isset($_GET['checked']);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 define('OFFSET_PATH', true);
+$upgrade = false;
 
 if (!$checked && !file_exists('zp-config.php')) {
 	@copy('zp-config.php.example', 'zp-config.php');
@@ -47,6 +48,7 @@ if (file_exists("zp-config.php")) {
 	if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
 		if (@mysql_select_db($_zp_conf_vars['mysql_database'])) {
 			$result = @mysql_query("SELECT `id` FROM " . $_zp_conf_vars['mysql_prefix'].'options' . " LIMIT 1", $connection);
+			if (mysql_num_rows($result) > 0) $upgrade = true;
 			require_once("admin-functions.php");
 		}
 	}
@@ -54,7 +56,7 @@ if (file_exists("zp-config.php")) {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-<title>zenphoto setup</title>
+<title>zenphoto <?php echo $upgrade ? "upgrade" : "setup" ; ?></title>
 <style type="text/css">
 	body {margin: 0px 20% 0px; background-color: #f4f4f8; font-family: Arial, Helvetica, Verdana, sans-serif; font-size: 10pt;}
 	li { margin-bottom: 1em; }
@@ -77,15 +79,29 @@ if (file_exists("zp-config.php")) {
 </head>
 <body>
 <div id="main">
-<h1><img src="images/zen-logo.gif" title="Zen Photo Setup" /> setup</h1>
+<h1><img src="images/zen-logo.gif" title="Zen Photo Setup" align="absbottom" /> <?php echo $upgrade ? "Upgrade" : "Setup" ; ?></h1>
 <div id="content">
+	
 <?php
 if (!$checked) {
+	// Some descriptions about setup/upgrade.
+?>
+
+	<?php if ($upgrade) { ?>
+		Zenphoto has detected that you're upgrading to a new version. <br /><br />
+		
+	<?php } else { ?>
+		Welcome to Zenphoto! This page will set up Zenphoto on your web server.<br /><br />
+	<?php } ?>
+	
+		<strong>Systems Check:</strong><br />
+	
+<?php 
 
  /*****************************************************************************
- 	*                                                                                                                                                       *
- 	*                             SYSTEMS CHECK                                                                                           *
- 	*                                                                                                                                                       *
+ 	*                                                                           *
+ 	*                             SYSTEMS CHECK                                 *
+ 	*                                                                           *
  	******************************************************************************/
 	global $_zp_conf_vars;
 
@@ -162,7 +178,7 @@ if (!$checked) {
 	$good = checkMark($jpeg, " PHP GD with JPEG support", '', 'You need to install GD with JPEG support in your PHP') && $good;
 
 	$sql = extension_loaded('mysql');
-	$good = checkMark($sql, " PHP mySQL support", '', 'You need to install mySQL support in your PHP') && $good;
+	$good = checkMark($sql, " PHP MySQL support", '', 'You need to install MySQL support in your PHP') && $good;
 
 	if (file_exists("zp-config.php")) {
 		require("zp-config.php");
@@ -191,7 +207,7 @@ if (!$checked) {
 	if ($cfg) {
 		@chmod('zp-config.php', CHMOD_VALUE);
 		if ((!$sql || !$connection  || !$db) && is_writable('zp-config.php')) {
-			$good = checkMark(false, " mySQL setup in zp-config.php", '', '') && $good;
+			$good = checkMark(false, " MySQL setup in zp-config.php", '', '') && $good;
 			// input form for the information
 ?>
 			<div class="error">
@@ -200,19 +216,19 @@ if (!$checked) {
 		<input type="hidden" name="mysql" value="yes" />
 		<table>
  	 		<tr>
-		 	<td>mySQL admin user</td>
+		 	<td>MySQL admin user</td>
  					<td><input type="text" size="40" name="mysql_user" value="<?php echo $_zp_conf_vars['mysql_user']?>" />&nbsp;*</td>
 		 </tr>
  	 		<tr>
-		 	<td>mySQL admin password</td>
+		 	<td>MySQL admin password</td>
  					<td><input type="password" size="40" name="mysql_pass" value="<?php echo $_zp_conf_vars['mysql_pass']?>" />&nbsp;*</td>
 		 </tr>
  	 		<tr>
-		 	<td>mySQL host</td>
+		 	<td>MySQL host</td>
  					<td><input type="text" size="40" name="mysql_host" value="<?php echo $_zp_conf_vars['mysql_host']?>" /></td>
 		 </tr>
  	 		<tr>
-		 	<td>mySQL database</td>
+		 	<td>MySQL database</td>
  					<td><input type="text" size="40" name="mysql_database" value="<?php echo $_zp_conf_vars['mysql_database']?>" />&nbsp;*</td>
 		 </tr>
  	 		<tr>
@@ -230,8 +246,8 @@ if (!$checked) {
 		</div>
 <?php
 	} else {
-			$good = checkMark(!$mySQLadmin, " mySQL setup in zp-config.php", '',
-												"You have not set your <strong>mySQL</strong> <code>user</code>, " .
+			$good = checkMark(!$mySQLadmin, " MySQL setup in zp-config.php", '',
+												"You have not set your <strong>MySQL</strong> <code>user</code>, " .
 											"<code>password</code>, etc. in your <code>zp-confgi.php</code> file ".
 						"and <strong>setup</strong> is not able to write to the file.") && $good;
 	}
@@ -244,7 +260,7 @@ if (!$checked) {
 			"Could not access the <strong>MySQL</strong> database (<code>" . $_zp_conf_vars['mysql_database'] ."</code>). Check the <code>user</code>, " .
 			"<code>password</code>, and <code>database name</code> and try again. " .
 			"Make sure the database has been created, and the <code>user</code> has access to it. " .
-			"Also check the <code>mySQL host</code>.") && $good;
+			"Also check the <code>MySQL host</code>.") && $good;
 			
 			$dbn = "`".$_zp_conf_vars['mysql_database']. "`.*";
 			$sql = "SHOW GRANTS;";
@@ -272,8 +288,8 @@ if (!$checked) {
 			} else {
 				$report = "<br/><br/>The <em>SHOW GRANTS</em> query failed.";
 			}
-		checkMark($access, " mySQL access rights", " [$rightsfound]", 
- 											"Your mySQL user must have <code>Select</code>, <code>Insert</code>, ". 
+		checkMark($access, " MySQL access rights", " [$rightsfound]", 
+ 											"Your MySQL user must have <code>Select</code>, <code>Insert</code>, ". 
  											"<code>Update</code>, and <code>Delete</code> rights." . $report);
 			
 		$sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$_zp_conf_vars['mysql_prefix']."%';";
@@ -287,7 +303,7 @@ if (!$checked) {
 		if (!empty($tableslist)) { $tableslist = " found " . substr($tableslist, 0, -2); }
 		if (!$result) { $result = -1; }
 		$dbn = $_zp_conf_vars['mysql_database'];
-		checkMark($result, " mySQL <em>show tables</em>$tableslist", " [Failed]", "mySQL did not return a list of the database tables for <code>$dbn</code>." .
+		checkMark($result, " MySQL <em>show tables</em>$tableslist", " [Failed]", "MySQL did not return a list of the database tables for <code>$dbn</code>." .
  											"<br/><strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables.");
 
 	}
@@ -554,10 +570,10 @@ if (!$checked) {
 		}
 
  /****************************************************************************************
-	******                             UPGRADE SECTION                                                                       ******
-	******                                                                                                                                                    ******
-	******                          Add all new fields below                                                                     ******
-	******                                                                                                                                                         ******
+	******                             UPGRADE SECTION                                ******
+	******                                                                            ******
+	******                          Add all new fields below                          ******
+	******                                                                            ******
 	*****************************************************************************************/
 		$sql_statements = array();
 
