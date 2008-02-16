@@ -2640,7 +2640,7 @@ function getRandomImagesAlbum($rootAlbum=null) {
  */
 function printRandomImages($number=5, $class=null, $option='all') {
 	if (!is_null($class)) {
-		$class = 'class="' . $class . '"';
+		$class = ' class="' . $class . '"';
 		echo "<ul".$class.">";
 	}
 	for ($i=1; $i<=$number; $i++) {
