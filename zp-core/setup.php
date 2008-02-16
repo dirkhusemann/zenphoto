@@ -173,10 +173,47 @@ if (!$checked) {
 	
 	/* Check for GD and JPEG support. */
 	$gd = extension_loaded('gd');
-	$jpeg = ($gd) ? (imagetypes() & IMG_JPG) : 0;
-	$good = checkMark($gd, " PHP GD support", '', 'You need to install GD support in your PHP') && $good;
-	$good = checkMark($jpeg, " PHP GD with JPEG support", '', 'You need to install GD with JPEG support in your PHP') && $good;
-
+	$good = checkMark($gd, " PHP GD support", ' is not installed', 'You need to install GD support in your PHP') && $good;
+	if ($gd) {
+	  $imgtypes = imagetypes();
+	  if (($imgtypes & (IMG_JPG | IMG_GIF | IMG_PNG)) != (IMG_JPG | IMG_GIF | IMG_PNG)) {
+	    $imgmissing = '';
+	    if (!($imgtypes & IMG_JPG)) { 
+	      $imgmissing .= ' JPEG'; 
+	    }
+	    if (!($imgtypes & IMG_GIF)) { 
+	      if (!($imgtypes & IMG_JPG)) {
+	        if (!($imgtypes & IMG_PNG)) {
+	          $imgmissing .= ", ";
+	        } else {
+	          $imgmissing .= " or";
+	        }
+	      }
+	      $imgmissing .= ' GIF'; 
+	    }
+	    if (!($imgtypes & IMG_PNG)) { 
+	      if (!($imgtypes & IMG_JPG) || !($imgtypes & IMG_GIF)) {
+	        if (!($imgtypes & IMG_JPG) && !($imgtypes & IMG_GIF)) {
+	          $imgmissing .= ", or";
+	        } else {
+	          $imgmissing .= " or";
+	        }
+	      }
+	      $imgmissing .= ' PNG'; 
+	    }
+	    if ($imgtypes & (IMG_JPG | IMG_GIF | IMG_PNG)) { 
+	      $err = -1; 
+	      $mandate = "should";
+	    } else { 
+	      $err = 0;
+	      $good = false; 
+	      $mandate = "need to";
+	    }
+	    checkMark($err, " PHP GD image support", '', "Your PHP GD does not support$imgmissing. ".
+	                    "<br/>The unsupported image types will not be viewable in your albums.".
+	                    "<br/>To correct this you $mandate install GD with appropriate image support in your PHP");
+	  }
+	}
 	$sql = extension_loaded('mysql');
 	$good = checkMark($sql, " PHP MySQL support", '', 'You need to install MySQL support in your PHP') && $good;
 
