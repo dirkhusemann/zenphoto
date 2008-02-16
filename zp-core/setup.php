@@ -255,40 +255,22 @@ on your web server.<br />
 	$good = checkMark($gd, " PHP GD support", ' is not installed', 'You need to install GD support in your PHP') && $good;
 	if ($gd) {
 		$imgtypes = imagetypes();
-		if (($imgtypes & (IMG_JPG | IMG_GIF | IMG_PNG)) != (IMG_JPG | IMG_GIF | IMG_PNG)) {
-			$imgmissing = '';
-			if (!($imgtypes & IMG_JPG)) {
-				$imgmissing .= ' JPEG';
-			}
-			if (!($imgtypes & IMG_GIF)) {
-				if (!($imgtypes & IMG_JPG)) {
-					if (!($imgtypes & IMG_PNG)) {
-						$imgmissing .= ", ";
-					} else {
-						$imgmissing .= " or";
-					}
-				}
-				$imgmissing .= ' GIF';
-			}
-			if (!($imgtypes & IMG_PNG)) {
-				if (!($imgtypes & IMG_JPG) || !($imgtypes & IMG_GIF)) {
-					if (!($imgtypes & IMG_JPG) && !($imgtypes & IMG_GIF)) {
-						$imgmissing .= ", or";
-					} else {
-						$imgmissing .= " or";
-					}
-				}
-				$imgmissing .= ' PNG';
-			}
-			if ($imgtypes & (IMG_JPG | IMG_GIF | IMG_PNG)) {
+		if (!($imgtypes & IMG_JPG)) { $missing[] = 'JPEG'; }
+		if (!($imgtypes & IMG_GIF)) { $missing[] = 'GIF'; }
+		if (!($imgtypes & IMG_PNG)) { $missing[] = 'PNG'; }
+		if (count($missing) > 0) {
+			if (count($missing) < 3) {
+				$imgmissing = $missing[0];
+				if (count($missing) == 2) { $imgmissing .= ' or '.$missing[1]; }
 				$err = -1;
 				$mandate = "should";
 			} else {
+				$imgmissing = $missing[0].', '.$missing[1].', or '.$missing[2];
 				$err = 0;
 				$good = false;
 				$mandate = "need to";
 			}
-			checkMark($err, " PHP GD image support", '', "Your PHP GD does not support$imgmissing. ".
+			checkMark($err, " PHP GD image support", '', "Your PHP GD does not support $imgmissing. ".
 	                    "<br/>The unsupported image types will not be viewable in your albums.".
 	                    "<br/>To correct this you $mandate install GD with appropriate image support in your PHP");
 		}
