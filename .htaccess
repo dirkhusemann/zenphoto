@@ -11,8 +11,8 @@
   
   RewriteRule	^admin/?$                       zp-core/admin.php [R,L]
 
-  RewriteCond %{REQUEST_FILENAME} -f [NC,OR]
-  RewriteCond %{REQUEST_FILENAME} -d [NC]
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^.*$ - [R,L]
   
   RewriteRule index\.php$                     index.php [L,QSA]
