@@ -12,7 +12,7 @@
 /* Contexts are simply constants that tell us what variables are available to us
  * at any given time. They should be set and unset with those variables.
  */
- 
+
 // Contexts (Bitwise and combinable)
 define("ZP_INDEX",   1);
 define("ZP_ALBUM",   2);
@@ -21,7 +21,7 @@ define("ZP_COMMENT", 8);
 define("ZP_GROUP",  16);
 define("ZP_SEARCH", 32);
 
-function get_context() { 
+function get_context() {
 	global $_zp_current_context;
 	return $_zp_current_context;
 }
@@ -50,8 +50,8 @@ function restore_context() {
 }
 
 
-function im_suffix() { 
-	return getOption('mod_rewrite_image_suffix'); 
+function im_suffix() {
+	return getOption('mod_rewrite_image_suffix');
 }
 
 
@@ -101,10 +101,10 @@ function zpurl($with_rewrite=NULL, $album=NULL, $image=NULL, $page=NULL, $specia
 	if ($url == im_suffix() || empty($url)) { $url = ''; }
 	if (!empty($url) && !(empty($special))) {
 		if ($page > 1) {
-		$url .= "&$special";
-	} else {
-		$url .= "?$special";
-	}
+			$url .= "&$special";
+		} else {
+			$url .= "?$special";
+		}
 	}
 	return $url;
 }
@@ -116,15 +116,15 @@ function zpurl($with_rewrite=NULL, $album=NULL, $image=NULL, $page=NULL, $specia
  */
 function fix_path_redirect() {
 	$sfx = im_suffix();
-		if (isset($_GET['p'])) {
-			$special = "p=".$_GET['p'];
+	if (isset($_GET['p'])) {
+		$special = "p=".$_GET['p'];
 		$sfx .= "?" . $special;
-		} else {
-			$special = '';
-		}
+	} else {
+		$special = '';
+	}
 
 	if (getOption('mod_rewrite') && strlen($sfx) > 0
-			&& in_context(ZP_IMAGE) && substr($_SERVER['REQUEST_URI'], -strlen($sfx)) != $sfx ) {
+	&& in_context(ZP_IMAGE) && substr($_SERVER['REQUEST_URI'], -strlen($sfx)) != $sfx ) {
 		$redirecturl = zpurl(true, NULL, NULL, NULL, $special);
 		header("HTTP/1.0 301 Moved Permanently");
 		header('Location: ' . FULLWEBPATH . '/' . $redirecturl);
@@ -136,7 +136,7 @@ function fix_path_redirect() {
 /******************************************************************************
  ***** Action Handling and context data loading functions *********************
  ******************************************************************************/
- 
+
 function zp_handle_comment() {
 	global $_zp_current_image, $_zp_current_album, $stored, $_zp_comment_error;
 	$redirectTo = FULLWEBPATH . '/' . zpurl();
@@ -145,16 +145,16 @@ function zp_handle_comment() {
 	if (isset($_POST['comment'])) {
 		if (in_context(ZP_ALBUM) && isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
 			if (isset($_POST['website'])) $website = strip_tags($_POST['website']); else $website = "";
-			$allowed_tags = "(".getOption('allowed_tags').")"; 
+			$allowed_tags = "(".getOption('allowed_tags').")";
 			$allowed = parseAllowedTags($allowed_tags);
 			if ($allowed === false) { $allowed = array(); } // someone has screwed with the 'allowed_tags' option row in the database, but better safe than sorry
-			if(isset($_POST['imageid'])){       
+			if(isset($_POST['imageid'])){
 	 		$activeImage = zp_load_image_from_id(strip_tags($_POST['imageid']));
 	 		if($activeImage !== false){
-				$commentadded = $activeImage->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']), 
-								 															$website, kses($_POST['comment'], $allowed), 
- 																									strip_tags($_POST['code']), $_POST['code_h']);
-				$redirectTo = $activeImage->getImageLink();
+	 			$commentadded = $activeImage->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']),
+	 			$website, kses($_POST['comment'], $allowed),
+	 			strip_tags($_POST['code']), $_POST['code_h']);
+	 			$redirectTo = $activeImage->getImageLink();
 				}
 			} else {
 				if (in_context(ZP_IMAGE)) {
@@ -164,10 +164,10 @@ function zp_handle_comment() {
 					$commentobject = $_zp_current_album;
 					$redirectTo = $_zp_current_album->getAlbumLink();
 				}
-					$commentadded = $commentobject->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']), 
- 																												$website, kses($_POST['comment'], $allowed),
- 																												strip_tags($_POST['code']), $_POST['code_h']);
-			}   
+				$commentadded = $commentobject->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']),
+				$website, kses($_POST['comment'], $allowed),
+				strip_tags($_POST['code']), $_POST['code_h']);
+			}
 			if ($commentadded == 2) {
 				unset($_zp_comment_error);
 				if (isset($_POST['remember'])) {
@@ -177,8 +177,8 @@ function zp_handle_comment() {
 				} else {
 					zp_setcookie('zenphoto', '', time()-368000, '/');
 				}
-				//use $redirectTo to send users back to where they came from instead of booting them back to the gallery index. (default behaviour) 
-				header('Location: ' . $redirectTo); 
+				//use $redirectTo to send users back to where they came from instead of booting them back to the gallery index. (default behaviour)
+				header('Location: ' . $redirectTo);
 				exit();
 			} else {
 				$stored = array($_POST['name'], $_POST['email'], $website, $_POST['comment'], false);
@@ -190,14 +190,14 @@ function zp_handle_comment() {
 		// Comment form was not submitted; get the saved info from the cookie.
 		$stored = explode('|~*~|', stripslashes($cookie)); $stored[] = true;
 	} else {
-		$stored = array('','','', false); 
+		$stored = array('','','', false);
 	}
 	return $_zp_comment_error;
 }
 
 /**
-* encodes for cookie
-**/
+ * encodes for cookie
+ **/
 function cookiecode($text) {
 	return md5($text);
 }
@@ -218,7 +218,7 @@ function zp_handle_password() {
 		}
 	} else if (in_context(ZP_ALBUM)) { // album page
 		$authType = "zp_album_auth_" . cookiecode($_zp_current_album->name);
-	$check_auth = $_zp_current_album->getPassword();
+		$check_auth = $_zp_current_album->getPassword();
 		if (empty($check_auth)) {
 			$parent = $_zp_current_album->getParent();
 			while (!is_null($parent)) {
@@ -230,15 +230,15 @@ function zp_handle_password() {
 			if (empty($check_auth)) {
 				// revert all tlhe way to the gallery
 				$authType = 'zp_gallery_auth';
-			$check_auth = getOption('gallery_password');
+				$check_auth = getOption('gallery_password');
 			}
 		}
 	} else {  // index page
 		$authType = 'zp_gallery_auth';
-	$check_auth = getOption('gallery_password');
+		$check_auth = getOption('gallery_password');
 	}
 	if (empty($check_auth)) { //no password on record
-	return;
+		return;
 	}
 	if (($saved_auth = zp_getCookie($authType)) != '') {
 		if ($saved_auth == $check_auth) {
@@ -247,7 +247,7 @@ function zp_handle_password() {
 			// Clear the cookie
 			zp_setcookie($authType, "", time()-368000, $cookiepath);
 		}
-	} 
+	}
 	// Handle the login form.
 	if (isset($_POST['password']) && isset($_POST['pass'])) {
 		$pass = md5($_POST['pass']);
@@ -281,18 +281,18 @@ function zp_load_page($pagenum=NULL) {
 function zp_load_gallery() {
 	global $_zp_gallery;
 	if ($_zp_gallery == NULL)
-		$_zp_gallery = new Gallery();
+	$_zp_gallery = new Gallery();
 	set_context(ZP_INDEX);
 	return $_zp_gallery;
 }
 
 /**
- * Loads the search object if it hasn't already been loaded. 
+ * Loads the search object if it hasn't already been loaded.
  */
 function zp_load_search() {
 	global $_zp_current_search;
 	if ($_zp_current_search == NULL)
-		$_zp_current_search = new SearchEngine();
+	$_zp_current_search = new SearchEngine();
 	set_context(ZP_INDEX | ZP_SEARCH);
 	$cookiepath = WEBPATH;
 	if (WEBPATH == '') { $cookiepath = '/'; }
@@ -302,7 +302,7 @@ function zp_load_search() {
 }
 
 /**
- * zp_load_album - loads the album given by the folder name $folder into the 
+ * zp_load_album - loads the album given by the folder name $folder into the
  * global context, and sets the context appropriately.
  * @param $folder the folder name of the album to load. Ex: 'testalbum', 'test/subalbum', etc.
  * @param $force_cache whether to force the use of the global object cache.
@@ -313,7 +313,7 @@ function zp_load_album($folder, $force_nocache=false) {
 	$_zp_current_album = new Album($_zp_gallery, $folder, !$force_nocache);
 	if (!$_zp_current_album->exists) return false;
 	set_context(ZP_ALBUM | ZP_INDEX);
-//  retrieveSearchParms();
+	retrieveSearchParms(0);
 	return $_zp_current_album;
 }
 
@@ -327,34 +327,34 @@ function zp_load_album($folder, $force_nocache=false) {
 function zp_load_image($folder, $filename) {
 	global $_zp_current_image, $_zp_current_album, $_zp_current_search;
 	if ($_zp_current_album == NULL || $_zp_current_album->name != $folder)
-		$album = zp_load_album($folder);
+	$album = zp_load_album($folder);
 	$_zp_current_image = new Image($album, $filename);
 	if (!$_zp_current_image->exists) return false;
 	set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX);
-	retrieveSearchParms();
+	retrieveSearchParms(ZP_SEARCH);
 	return $_zp_current_image;
 }
 
 /**
  * zp_load_image_from_id - loads and returns the image "id" from the database, without
  * altering the global context or zp_current_image.
- * @param $id the database id-field of the image. 
+ * @param $id the database id-field of the image.
  * @return the loaded image object on success, or (===false) on failure.
  */
-function zp_load_image_from_id($id){	
+function zp_load_image_from_id($id){
 	$sql = "SELECT `albumid`, `filename` FROM " .prefix('images') ." WHERE `id` = " . $id;
 	$result = query_single_row($sql);
 	$filename = $result['filename'];
 	$albumid = $result['albumid'];
-	
+
 	$sql = "SELECT `folder` FROM ". prefix('albums') ." WHERE `id` = " . $albumid;
-	$result = query_single_row($sql);	
+	$result = query_single_row($sql);
 	$folder = $result['folder'];
 
 	$album = zp_load_album($folder);
 	$currentImage = new Image($album, $filename);
-	if (!$currentImage->exists) return false;	
-	return $currentImage; 
+	if (!$currentImage->exists) return false;
+	return $currentImage;
 }
 
 
@@ -369,8 +369,8 @@ function zp_load_request() {
 	}
 	if (isset($_GET['p'])) {
 		$page = str_replace(array('/','\\','.'), '', $_GET['p']);
-	if ($page == "search") { zp_load_search(); }
-	} 
+		if ($page == "search") { zp_load_search(); }
+	}
 	// Error message for objects not found.
 	if ($success === false) {
 		// Replace this with a redirect to an error page in the theme if it exists, or a default ZP error page.

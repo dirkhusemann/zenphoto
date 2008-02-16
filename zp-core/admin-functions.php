@@ -339,11 +339,6 @@ function customOptions($optionHandler, $indent="") {
  * @param array $list the elements of the select list
  */
 function generateListFromArray($currentValue, $list) {
-	
-debugLog("generateListFromArray");
-debugLogArray($currentValue);
-debugLogArray($list);
-
 	sort($list);
 	$cv = array_flip($currentValue);
 	foreach($list as $item) {

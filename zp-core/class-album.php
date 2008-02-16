@@ -5,7 +5,7 @@
 
 class Album extends PersistentObject {
 
-	var $name;             // Folder name of the album (full path from the albums folder) 
+	var $name;             // Folder name of the album (full path from the albums folder)
 	var $exists = true;    // Does the folder exist?
 	var $images = null;    // Full images array storage.
 	var $subalbums = null; // Full album array storage.
@@ -16,22 +16,22 @@ class Album extends PersistentObject {
 	var $themeoverride;
 
 	/**
- 	* Constructor for albums
- 	*
- 	* @param object &$gallery The parent gallery
- 	* @param string $folder folder name of the album
- 	* @param bool $cache load from cache if present
- 	* @return Album
- 	*/
+	 * Constructor for albums
+	 *
+	 * @param object &$gallery The parent gallery
+	 * @param string $folder folder name of the album
+	 * @param bool $cache load from cache if present
+	 * @return Album
+	 */
 	function Album(&$gallery, $folder, $cache=true) {
 		$folder = sanitize_path($folder);
-		
+
 		$this->name = $folder;
 		$this->gallery = &$gallery;
 		if ($folder == '') {
 			$this->localpath = getAlbumFolder();
 		} else {
-			$this->localpath = getAlbumFolder() . $folder . "/"; 
+			$this->localpath = getAlbumFolder() . $folder . "/";
 		}
 
 		// Second defense against upward folder traversal:
@@ -40,15 +40,15 @@ class Album extends PersistentObject {
 			return false;
 		}
 		parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache);
-		
+
 	}
-	
-	
+
+
 	/**
- 	* Sets default values for a new album
- 	*
- 	* @return bool
- 	*/
+	 * Sets default values for a new album
+	 *
+	 * @return bool
+	 */
 	function setDefaults() {
 		// Set default data for a new Album (title and parent_id)
 		$parentalbum = $this->getParent();
@@ -59,7 +59,7 @@ class Album extends PersistentObject {
 			$this->set('subalbum_sort_type', $parentalbum->getSubalbumSortType());
 			$this->set('album_sortdirection',$parentalbum->getSortDirection('album'));
 			$this->set('sort_type', $parentalbum->getSortType());
-			$this->set('image_sortdirection', $parentalbum->getSortDirection('image'));   
+			$this->set('image_sortdirection', $parentalbum->getSortDirection('image'));
 		} else {
 			$this->set('subalbum_sort_type', getOption('gallery_sorttype'));
 			$this->set('album_sortdirection',getOption('gallery_sortdirection'));
@@ -67,29 +67,29 @@ class Album extends PersistentObject {
 			$this->set('image_sortdirection',getOption('image_sortdirection'));
 		}
 		$this->set('title', $title);
-		
+
 		return true;
 	}
- 	
+
 	/**
- 	* Returns the folder on the filesystem
- 	*
- 	* @return string
- 	*/
+	 * Returns the folder on the filesystem
+	 *
+	 * @return string
+	 */
 	function getFolder() { return $this->name; }
-	
+
 	/**
- 	* Returns the id of this album in the db
- 	*
- 	* @return int
- 	*/
+	 * Returns the id of this album in the db
+	 *
+	 * @return int
+	 */
 	function getAlbumID() { return $this->id; }
-	
+
 	/**
- 	* Returns The parent Album of this Album. NULL if this is a top-level album.
- 	*
- 	* @return object
- 	*/
+	 * Returns The parent Album of this Album. NULL if this is a top-level album.
+	 *
+	 * @return object
+	 */
 	function getParent() {
 		if (is_null($this->parentalbum)) {
 			$slashpos = strrpos($this->name, "/");
@@ -103,135 +103,135 @@ class Album extends PersistentObject {
 		} else if ($this->parentalbum->exists) {
 			return $this->parentalbum;
 		}
-		return NULL;   
+		return NULL;
 	}
 
 	/**
- 	* Returns the album password
- 	*
- 	* @return string
- 	*/
+	 * Returns the album password
+	 *
+	 * @return string
+	 */
 	function getPassword() { return $this->get('password'); }
-	
+
 	/**
- 	* Sets the album password (md5 encrypted)
- 	*
- 	* @param string $pwd the cleartext password
- 	*/
-	function setPassword($pwd) { 
+	 * Sets the album password (md5 encrypted)
+	 *
+	 * @param string $pwd the cleartext password
+	 */
+	function setPassword($pwd) {
 		if (empty($pwd)) {
 			$this->set('password', "");
 		} else {
-			$this->set('password', md5($pwd)); 
+			$this->set('password', md5($pwd));
 		}
 	}
-	
+
 	/**
- 	* Returns the password hint for the album
- 	*
- 	* @return string
- 	*/
+	 * Returns the password hint for the album
+	 *
+	 * @return string
+	 */
 	function getPasswordHint() { return $this->get('password_hint'); }
-	
+
 	/**
- 	* Sets the album password hint
- 	*
- 	* @param string $hint the hint text
- 	*/
+	 * Sets the album password hint
+	 *
+	 * @param string $hint the hint text
+	 */
 	function setPasswordHint($hint) { $this->set('password_hint', $hint); }
-	
+
 
 	/**
- 	* Returns the album title
- 	*
- 	* @return string
- 	*/
+	 * Returns the album title
+	 *
+	 * @return string
+	 */
 	function getTitle() { return $this->get('title'); }
-	
+
 	/**
- 	* Stores the album title
- 	*
- 	* @param string $title the title
- 	*/
+	 * Stores the album title
+	 *
+	 * @param string $title the title
+	 */
 	function setTitle($title) { $this->set('title', $title); }
-	
+
 
 	/**
- 	* Returns the album description
- 	*
- 	* @return string
- 	*/
+	 * Returns the album description
+	 *
+	 * @return string
+	 */
 	function getDesc() { return $this->get('desc'); }
-	
+
 	/**
- 	* Stores the album description
- 	*
- 	* @param string $desc description text
- 	*/
+	 * Stores the album description
+	 *
+	 * @param string $desc description text
+	 */
 	function setDesc($desc) { $this->set('desc', $desc); }
-	
+
 
 	/**
- 	* Returns the tag data of an album
- 	*
- 	* @return string
- 	*/
+	 * Returns the tag data of an album
+	 *
+	 * @return string
+	 */
 	function getTags() { return $this->get('tags'); }
-	
-	/**
- 	* Stores tag information of an album
- 	*
- 	* @param string $tags the tag string
- 	*/
-	function setTags($tags) { $this->set('tags', $tags); }
-	
 
 	/**
- 	* Returns the unformatted date of the album
- 	*
- 	* @return int
- 	*/
-	function getDateTime() { return $this->get('date'); }
-	
+	 * Stores tag information of an album
+	 *
+	 * @param string $tags the tag string
+	 */
+	function setTags($tags) { $this->set('tags', $tags); }
+
+
 	/**
- 	* Stores the album date
- 	*
- 	* @param string $datetime formatted date
- 	*/
-	function setDateTime($datetime) { 
+	 * Returns the unformatted date of the album
+	 *
+	 * @return int
+	 */
+	function getDateTime() { return $this->get('date'); }
+
+	/**
+	 * Stores the album date
+	 *
+	 * @param string $datetime formatted date
+	 */
+	function setDateTime($datetime) {
 		if ($datetime == "") {
 			$this->set('date', '0000-00-00 00:00:00');
 		} else {
 			$time = @strtotime($datetime);
 			if ($time == -1 || $time == false) return;
-			$this->set('date', date('Y-m-d H:i:s', $time)); 
+			$this->set('date', date('Y-m-d H:i:s', $time));
 		}
 	}
-	
 
- /**
- 	* Returns the place data of an album
- 	*
- 	* @return string
- 	*/
+
+	/**
+	 * Returns the place data of an album
+	 *
+	 * @return string
+	 */
 	function getPlace() { return $this->get('place'); }
-	
-	/**
- 	* Stores the album place
- 	*
- 	* @param string $place text for the place field
- 	*/
-	function setPlace($place) { $this->set('place', $place); }
-	
 
 	/**
- 	* Returns either the subalbum sort direction or the image sort direction of the album
- 	*
- 	* @param string $what 'image_sortdirection' if you want the image direction, 
- 	*        'album_sortdirection' if you want it for the album
- 	* 
- 	* @return string
- 	*/
+	 * Stores the album place
+	 *
+	 * @param string $place text for the place field
+	 */
+	function setPlace($place) { $this->set('place', $place); }
+
+
+	/**
+	 * Returns either the subalbum sort direction or the image sort direction of the album
+	 *
+	 * @param string $what 'image_sortdirection' if you want the image direction,
+	 *        'album_sortdirection' if you want it for the album
+	 *
+	 * @return string
+	 */
 	function getSortDirection($what) {
 		if ($what == 'image') {
 			return $this->get('image_sortdirection');
@@ -239,14 +239,14 @@ class Album extends PersistentObject {
 			return $this->get('album_sortdirection');
 		}
 	}
-	
+
 	/**
- 	* sets sort directions for the album
- 	*
- 	* @param string $what 'image_sortdirection' if you want the image direction, 
- 	*        'album_sortdirection' if you want it for the album
- 	* @param string $val the direction
- 	*/
+	 * sets sort directions for the album
+	 *
+	 * @param string $what 'image_sortdirection' if you want the image direction,
+	 *        'album_sortdirection' if you want it for the album
+	 * @param string $val the direction
+	 */
 	function setSortDirection($what, $val) {
 		if ($val) { $b = 1; } else { $b = 0; }
 		if ($what == 'image') {
@@ -255,14 +255,14 @@ class Album extends PersistentObject {
 			$this->set('album_sortdirection', $b);
 		}
 	}
-	
+
 	/**
- 	* Returns the sort type of the album
- 	* Will return a parent sort type if the sort type for this album is empty
- 	*
- 	* @return string
- 	*/
-	function getSortType() { 
+	 * Returns the sort type of the album
+	 * Will return a parent sort type if the sort type for this album is empty
+	 *
+	 * @return string
+	 */
+	function getSortType() {
 		$type = $this->get('sort_type');
 		if (empty($type)) {
 			$parentalbum = $this->getParent();
@@ -279,25 +279,25 @@ class Album extends PersistentObject {
 				$this->save();
 			}
 		}
-		return $type; 
+		return $type;
 	}
-	
+
 	/**
- 	* Stores the sort type for the album
- 	*
- 	* @param string $sorttype the album sort type
- 	*/
+	 * Stores the sort type for the album
+	 *
+	 * @param string $sorttype the album sort type
+	 */
 	function setSortType($sorttype) { $this->set('sort_type', $sorttype); }
-	
- /**
- 	* Returns the sort type for subalbums in this album.
- 	* 
- 	* Will return a parent sort type if the sort type for this album is empty.
- 	*
- 	* @return string
- 	*/
-	function getSubalbumSortType() { 
-		$type = $this->get('subalbum_sort_type'); 
+
+	/**
+	 * Returns the sort type for subalbums in this album.
+	 *
+	 * Will return a parent sort type if the sort type for this album is empty.
+	 *
+	 * @return string
+	 */
+	function getSubalbumSortType() {
+		$type = $this->get('subalbum_sort_type');
 		if (empty($type)) {
 			$parentalbum = $this->getParent();
 			if (is_null($parentalbum)) {
@@ -315,34 +315,34 @@ class Album extends PersistentObject {
 		}
 		return $type;
 	}
-	
+
 	/**
- 	* Stores the subalbum sort type for this abum
- 	*
- 	* @param string $sorttype the subalbum sort type
- 	*/
+	 * Stores the subalbum sort type for this abum
+	 *
+	 * @param string $sorttype the subalbum sort type
+	 */
 	function setSubalbumSortType($sorttype) { $this->set('subalbum_sort_type', $sorttype); }
-	
+
 	/**
- 	* Returns the image sort order for this album
- 	*
- 	* @return string
- 	*/
+	 * Returns the image sort order for this album
+	 *
+	 * @return string
+	 */
 	function getSortOrder() { return $this->get('sort_order'); }
-	
+
 	/**
- 	* Stores the image sort order for this album
- 	*
- 	* @param string $sortorder image sort order
- 	*/
+	 * Stores the image sort order for this album
+	 *
+	 * @param string $sortorder image sort order
+	 */
 	function setSortOrder($sortorder) { $this->set('sort_order', $sortorder); }
-	
+
 	/**
- 	* Returns the DB key associated with the sort type
- 	*
- 	* @param string $sorttype the sort type
- 	* @return string
- 	*/
+	 * Returns the DB key associated with the sort type
+	 *
+	 * @param string $sorttype the sort type
+	 * @return string
+	 */
 	function getSortKey($sorttype=null) {
 		if (is_null($sorttype)) { $sorttype = $this->getSortType(); }
 		switch ($sorttype) {
@@ -357,13 +357,13 @@ class Album extends PersistentObject {
 		}
 		return 'filename';
 	}
-	
+
 	/**
- 	* Returns the DB key associated with the subalbum sort type
- 	*
- 	* @param string $sorttype subalbum sort type
- 	* @return string
- 	*/
+	 * Returns the DB key associated with the subalbum sort type
+	 *
+	 * @param string $sorttype subalbum sort type
+	 * @return string
+	 */
 	function getSubalbumSortKey($sorttype=null) {
 		if (is_null($sorttype)) { $sorttype = $this->getSubalbumSortType(); }
 		switch ($sorttype) {
@@ -383,33 +383,33 @@ class Album extends PersistentObject {
 
 
 	/**
- 	* Returns true if the album is published
- 	*
- 	* @return bool
- 	*/
+	 * Returns true if the album is published
+	 *
+	 * @return bool
+	 */
 	function getShow() { return $this->get('show'); }
-	
+
 	/**
- 	* Stores the published value for the album
- 	*
- 	* @param bool $show True if the album is published
- 	*/
+	 * Stores the published value for the album
+	 *
+	 * @param bool $show True if the album is published
+	 */
 	function setShow($show) { $this->set('show', $show ? 1 : 0); }
-	
+
 	/**
- 	* Returns all folder names for all the subdirectories.
- 	* 
- 	* @param string $page  Which page of subalbums to display.
- 	* @param string $sorttype The sort strategy
- 	* @param string $sortdirection The direction of the sort
- 	* @return array
- 	*/
-		
+	 * Returns all folder names for all the subdirectories.
+	 *
+	 * @param string $page  Which page of subalbums to display.
+	 * @param string $sorttype The sort strategy
+	 * @param string $sortdirection The direction of the sort
+	 * @return array
+	 */
+
 	function getSubAlbums($page=0, $sorttype=null, $sortdirection=null) {
 		if (is_null($this->subalbums)) {
 			$dirs = $this->loadFileNames(true);
 			$subalbums = array();
-			
+				
 			foreach ($dirs as $dir) {
 				$dir = $this->name . '/' . $dir;
 				$subalbums[] = $dir;
@@ -420,85 +420,85 @@ class Album extends PersistentObject {
 			} else {
 				$key .= ' ' . $sortdirection;
 			}
-			$sortedSubalbums = sortAlbumArray($subalbums, $key); 
+			$sortedSubalbums = sortAlbumArray($subalbums, $key);
 			$this->subalbums = $sortedSubalbums;
 		}
-		if ($page == 0) { 
+		if ($page == 0) {
 			return $this->subalbums;
-		} else { 
+		} else {
 			$albums_per_page = getOption('albums_per_page');
 			return array_slice($this->subalbums, $albums_per_page*($page-1), $albums_per_page);
 		}
 	}
-	
+
 	/**
- 	* Returns a of a slice of the images for this album. They will
- 	* also be sorted according to the sort type of this album, or by filename if none
- 	* has been set.
- 	*
- 	* @param  string $page  Which page of images should be returned. If zero, all images are returned.
- 	* @param int $firstPageCount count of images that go on the album/image transition page
- 	* @param  string $sorttype optional sort type
- 	* @param  string $sortdirection optional sort direction
- 	* @return array
- 	*/
+	 * Returns a of a slice of the images for this album. They will
+	 * also be sorted according to the sort type of this album, or by filename if none
+	 * has been set.
+	 *
+	 * @param  string $page  Which page of images should be returned. If zero, all images are returned.
+	 * @param int $firstPageCount count of images that go on the album/image transition page
+	 * @param  string $sorttype optional sort type
+	 * @param  string $sortdirection optional sort direction
+	 * @return array
+	 */
 	function getImages($page=0, $firstPageCount=0, $sorttype=null, $sortdirection=null) {
- 	if (is_null($this->images)) {
+		if (is_null($this->images)) {
 			// Load, sort, and store the images in this Album.
 			$images = $this->loadFileNames();
 			$images = $this->sortImageArray($images, $sorttype, $sortdirection);
 			$this->images = $images;
 		}
 		// Return the cut of images based on $page. Page 0 means show all.
-		if ($page == 0) { 
+		if ($page == 0) {
 			return $this->images;
 		} else {
 			// Only return $firstPageCount images if we are on the first page and $firstPageCount > 0
 			if (($page==1) && ($firstPageCount>0)) {
 				$pageStart = 0;
 				$images_per_page = $firstPageCount;
-				
+
 			} else {
-				if ($firstPageCount>0) { 
-					$fetchPage = $page - 2; 
+				if ($firstPageCount>0) {
+					$fetchPage = $page - 2;
 				} else {
 					$fetchPage = $page - 1;
-				} 
+				}
 				$images_per_page = getOption('images_per_page');
 				$pageStart = $firstPageCount + $images_per_page * $fetchPage;
 
-			}  
+			}
 			$slice = array_slice($this->images, $pageStart , $images_per_page);
 
 			return $slice;
 		}
 	}
-	
-	
+
+
 	/**
- 	* sortImageArray will sort an array of Images based on the given key. The
- 	* key must be one of (filename, title, sort_order) at the moment.
- 	*
- 	* @param array $images The array of filenames to be sorted.
- 	* @param  string $sorttype optional sort type
- 	* @param  string $sortdirection optional sort direction
- 	* @return array
- 	*/
+	 * sortImageArray will sort an array of Images based on the given key. The
+	 * key must be one of (filename, title, sort_order) at the moment.
+	 *
+	 * @param array $images The array of filenames to be sorted.
+	 * @param  string $sorttype optional sort type
+	 * @param  string $sortdirection optional sort direction
+	 * @return array
+	 */
 	function sortImageArray($images, $sorttype=NULL, $sortdirection=NULL) {
 		global $_zp_loggedin;
-		
+
 		$hidden = array();
 		$key = $this->getSortKey($sorttype);
 		$direction = '';
 		if (!is_null($sortdirection)) {
 			$direction = $sortdirection;
 		} else {
-			if ($this->getSortDirection('image')) { 
-				$direction = ' DESC'; 
+			if ($this->getSortDirection('image')) {
+				$direction = ' DESC';
 			}
 		}
 		$result = query("SELECT `filename`, `title`, `sort_order`, `show`, `id` FROM " . prefix("images")
-			. " WHERE `albumid`=" . $this->id . " ORDER BY " . $key . $direction);
+		. " WHERE `albumid`=" . $this->id . " ORDER BY " . $key . $direction);
 
 		$i = 0;
 		$flippedimages = array_flip($images);
@@ -507,7 +507,7 @@ class Album extends PersistentObject {
 		$images_invisible = array();
 		while ($row = mysql_fetch_assoc($result)) { // see what images are in the database so we can check for visible
 			$filename = $row['filename'];
-			if (isset($flippedimages[$filename])) { // ignore db entries for images that no longer exist. 
+			if (isset($flippedimages[$filename])) { // ignore db entries for images that no longer exist.
 				if ($_zp_loggedin || $row['show']) {
 					$images_to_keys[$filename] = $i;
 					$i++;
@@ -531,26 +531,26 @@ class Album extends PersistentObject {
 		ksort($images);
 		return $images;
 	}
-	
+
 
 	/**
- 	* Returns the number of images in this album (not counting its subalbums)
- 	*
- 	* @return int
- 	*/
+	 * Returns the number of images in this album (not counting its subalbums)
+	 *
+	 * @return int
+	 */
 	function getNumImages() {
-		if (is_null($this->images)) { 
+		if (is_null($this->images)) {
 			$this->getImages(0);
 		}
 		return count($this->images);
 	}
-	
+
 	/**
- 	* Returns an image from the album based on the index passed.
- 	*
- 	* @param int $index
- 	* @return int
- 	*/
+	 * Returns an image from the album based on the index passed.
+	 *
+	 * @param int $index
+	 * @return int
+	 */
 	function getImage($index) {
 		if ($index >= 0 && $index < $this->getNumImages()) {
 			return new Image($this, $this->images[$index]);
@@ -559,12 +559,12 @@ class Album extends PersistentObject {
 	}
 
 	/**
- 	* Gets the album's set thumbnail image from the database if one exists,
- 	* otherwise, finds the first image in the album or sub-album and returns it
- 	* as an Image object.
- 	* 
- 	* @return Image
- 	*/
+	 * Gets the album's set thumbnail image from the database if one exists,
+	 * otherwise, finds the first image in the album or sub-album and returns it
+	 * as an Image object.
+	 *
+	 * @return Image
+	 */
 	function getAlbumThumbImage() {
 		/* TODO: This should fail more gracefully when there are errors reading folders etc. */
 
@@ -599,7 +599,7 @@ class Album extends PersistentObject {
 				shuffle($thumbs);
 				while (count($thumbs) > 0) {
 					$thumb = array_pop($thumbs);
-					if (!is_valid_video($thumb)) {
+					if (is_valid_image($thumb)) {
 						return new Image($this, $thumb);
 					}
 				}
@@ -629,26 +629,26 @@ class Album extends PersistentObject {
 	}
 
 	/**
- 	* Gets the thumbnail URL for the album thumbnail image as returned by $this->getAlbumThumbImage();
- 	* @return string
- 	*/
+	 * Gets the thumbnail URL for the album thumbnail image as returned by $this->getAlbumThumbImage();
+	 * @return string
+	 */
 	function getAlbumThumb() {
 		$image = $this->getAlbumThumbImage();
 		return $image->getThumb();
 	}
-	
+
 	/**
- 	* Stores the thumbnail path for an album thumg
- 	*
- 	* @param string $filename thumbnail path
- 	*/
+	 * Stores the thumbnail path for an album thumg
+	 *
+	 * @param string $filename thumbnail path
+	 */
 	function setAlbumThumb($filename) { $this->set('thumb', $filename); }
-	
+
 	/**
- 	* Returns an URL to the album, including the current page number
- 	*
- 	* @return string
- 	*/
+	 * Returns an URL to the album, including the current page number
+	 *
+	 * @return string
+	 */
 	function getAlbumLink() {
 		global $_zp_page;
 
@@ -660,66 +660,66 @@ class Album extends PersistentObject {
 		}
 		return rewrite_path($rewrite, $plain);
 	}
-	
+
 	/**
- 	* Returns the album following the current album
- 	*
- 	* @return object
- 	*/
+	 * Returns the album following the current album
+	 *
+	 * @return object
+	 */
 	function getNextAlbum() {
 		if (is_null($parent = $this->getParent())) {
- 		$albums = $this->gallery->getAlbums(0);
-		} else { 
- 		$albums = $parent->getSubAlbums(0);
+			$albums = $this->gallery->getAlbums(0);
+		} else {
+			$albums = $parent->getSubAlbums(0);
 		}
 		$inx = array_search($this->name, $albums)+1;
 		if ($inx >= 0 && $inx < count($albums)) {
 			return new Album($parent, $albums[$inx]);
-		} 
+		}
 		return null;
 	}
-	
+
 	/**
- 	* Returns the album prior to the current album
- 	*
- 	* @return object
- 	*/
+	 * Returns the album prior to the current album
+	 *
+	 * @return object
+	 */
 	function getPrevAlbum() {
 		if (is_null($parent = $this->getParent())) {
- 		$albums = $this->gallery->getAlbums(0);
-		} else { 
- 		$albums = $parent->getSubAlbums(0);
+			$albums = $this->gallery->getAlbums(0);
+		} else {
+			$albums = $parent->getSubAlbums(0);
 		}
 		$inx = array_search($this->name, $albums)-1;
 		if ($inx >= 0 && $inx < count($albums)) {
 			return new Album($paraent, $albums[$inx]);
-		} 
+		}
 		return null;
 	}
-	
+
 	/**
- 	* Returns the page number in the gallery of this album
- 	*
- 	* @return int
- 	*/
+	 * Returns the page number in the gallery of this album
+	 *
+	 * @return int
+	 */
 	function getGalleryPage() {
 		$albums_per_page = getOption('albums_per_page');
 		if ($this->index == null)
-			$this->index = array_search($this->name, $this->gallery->getAlbums(0));
+		$this->index = array_search($this->name, $this->gallery->getAlbums(0));
 		return floor(($this->index / $albums_per_page)+1);
 	}
-	
-	
+
+
 	/**
- 	* Delete the entire album PERMANENTLY. Be careful! This is unrecoverable.
- 	* Returns true if successful
- 	* 
- 	* @return bool
- 	*/
+	 * Delete the entire album PERMANENTLY. Be careful! This is unrecoverable.
+	 * Returns true if successful
+	 *
+	 * @return bool
+	 */
 	function deleteAlbum() {
-		foreach ($this->getSubAlbums() as $folder) {  
-			$subalbum = new Album($album, $folder); 
-			$subalbum->deleteAlbum(); 
+		foreach ($this->getSubAlbums() as $folder) {
+			$subalbum = new Album($album, $folder);
+			$subalbum->deleteAlbum();
 		}
 		foreach($this->getImages() as $filename) {
 			$image = new Image($this, $filename);
@@ -734,30 +734,30 @@ class Album extends PersistentObject {
 		}
 		query("DELETE FROM " . prefix('comments') . "WHERE `type`='albums' AND `ownerid`=" . $this->id);
 		query("DELETE FROM " . prefix('albums') . " WHERE `id` = " . $this->id);
-		return rmdir($this->localpath); 
+		return rmdir($this->localpath);
 	}
-	
+
 
 	/**
- 	* Returns true of comments are allowed
- 	*
- 	* @return bool
- 	*/
+	 * Returns true of comments are allowed
+	 *
+	 * @return bool
+	 */
 	function getCommentsAllowed() { return $this->get('commentson'); }
-	
+
 	/**
- 	* Stores the value for comments allwed
- 	*
- 	* @param bool $commentson true if comments are enabled
- 	*/
+	 * Stores the value for comments allwed
+	 *
+	 * @param bool $commentson true if comments are enabled
+	 */
 	function setCommentsAllowed($commentson) { $this->set('commentson', $commentson ? 1 : 0); }
-	
+
 	/**
- 	* For every image in the album, look for its file. Delete from the database
- 	* if the file does not exist. Same for each sub-directory/album.
- 	* 
- 	* @param bool $deep set to true for a thorough cleansing
- 	*/
+	 * For every image in the album, look for its file. Delete from the database
+	 * if the file does not exist. Same for each sub-directory/album.
+	 *
+	 * @param bool $deep set to true for a thorough cleansing
+	 */
 	function garbageCollect($deep=false) {
 		if (is_null($this->images)) $this->getImages();
 		$result = query("SELECT * FROM ".prefix('images')." WHERE `albumid` = '" . $this->id . "'");
@@ -779,7 +779,7 @@ class Album extends PersistentObject {
 				$live[] = $row['filename'];
 			}
 		}
-		
+
 		if (count($dead) > 0) {
 			$sql = "DELETE FROM ".prefix('images')." WHERE `id` = '" . array_pop($dead) . "'";
 			$sql2 = "DELETE FROM ".prefix('comments')." WHERE `type`='albums' AND `ownerid` = '" . array_pop($dead) . "'";
@@ -790,7 +790,7 @@ class Album extends PersistentObject {
 			query($sql);
 			query($sql2);
 		}
-		
+
 		// Get all sub-albums and make sure they exist.
 		$result = query("SELECT * FROM ".prefix('albums')." WHERE `folder` LIKE '" . mysql_real_escape_string($this->name) . "/%'");
 		$dead = array();
@@ -798,7 +798,7 @@ class Album extends PersistentObject {
 		// Does the dirname from the db row exist on disk?
 		while($row = mysql_fetch_assoc($result)) {
 			if (!is_dir(getAlbumFolder() . $row['folder']) || in_array($row['folder'], $live)
-					|| substr($row['folder'], -1) == '/' || substr($row['folder'], 0, 1) == '/') {
+			|| substr($row['folder'], -1) == '/' || substr($row['folder'], 0, 1) == '/') {
 				$dead[] = $row['id'];
 			} else {
 				$live[] = $row['folder'];
@@ -814,22 +814,22 @@ class Album extends PersistentObject {
 			query($sql);
 			query($sql2);
 		}
-		
+
 		if ($deep) {
 			foreach($this->getSubAlbums(0) as $dir) {
 				$subalbum = new Album($this->gallery, $dir);
 				// Could have been deleted if it didn't exist above...
 				if ($subalbum->exists)
-					$subalbum->garbageCollect($deep);
+				$subalbum->garbageCollect($deep);
 			}
 		}
 	}
 
 
 	/**
- 	* Simply creates objects of all the images and sub-albums in this album to
- 	* load accurate values into the database.
- 	*/
+	 * Simply creates objects of all the images and sub-albums in this album to
+	 * load accurate values into the database.
+	 */
 	function preLoad() {
 		$images = $this->getImages(0);
 		foreach($images as $filename) {
@@ -842,19 +842,19 @@ class Album extends PersistentObject {
 		}
 	}
 
-	
+
 	/**
- 	* Load all of the filenames that are found in this Albums directory on disk.
- 	* Returns an array with all the names.
- 	* 
- 	* @param  $dirs Whether or not to return directories ONLY with the file array.
- 	* @return array
- 	*/
+	 * Load all of the filenames that are found in this Albums directory on disk.
+	 * Returns an array with all the names.
+	 *
+	 * @param  $dirs Whether or not to return directories ONLY with the file array.
+	 * @return array
+	 */
 	function loadFileNames($dirs=false) {
 		$albumdir = getAlbumFolder() . $this->name . "/";
 		if (!is_dir($albumdir) || !is_readable($albumdir)) {
 			$msg = "Error: The 'albums' directory (" . $this->albumdir . ") ";
-			if (!is_dir($this->albumdir)) { 
+			if (!is_dir($this->albumdir)) {
 				$msg .= "cannot be found.";
 			} else {
 				$msg .= "is not readable.";
@@ -864,7 +864,7 @@ class Album extends PersistentObject {
 		$dir = opendir($albumdir);
 		$files = array();
 		$videos = array();
-		
+
 
 		while (false !== ($file = readdir($dir))) {
 			if ($dirs && is_dir($albumdir.$file) && substr($file, 0, 1) != '.') {
@@ -892,22 +892,22 @@ class Album extends PersistentObject {
 			}
 			$files = array_diff($files, $video_thumbs);
 		}
-		
+
 		return $files;
 	}
-	
+
 	/**
- 	* Returns an array of comments for this album
- 	*
- 	* @param bool $moderated if false, ignores comments marked for moderation
- 	* @return array
- 	*/
+	 * Returns an array of comments for this album
+	 *
+	 * @param bool $moderated if false, ignores comments marked for moderation
+	 * @return array
+	 */
 	function getComments($moderated=false) {
-		$sql = "SELECT *, (date + 0) AS date FROM " . prefix("comments") . 
+		$sql = "SELECT *, (date + 0) AS date FROM " . prefix("comments") .
  			" WHERE `type`='albums' AND `ownerid`='" . $this->id . "'";
 		if (!$moderated) {
 			$sql .= " AND `inmoderation`=0";
-		} 
+		}
 		$sql .= " ORDER BY id";
 		$comments = query_full_array($sql);
 		$this->comments = $comments;
@@ -915,33 +915,33 @@ class Album extends PersistentObject {
 	}
 
 	/**
- 	* Adds comments to the album
- 	* assumes data is coming straight from GET or POST
- 	*
- 	* Returns a code for the success of the comment add:
- 	*    0: Bad entry
- 	*    1: Marked for moderation
- 	*    2: Successfully posted
- 	*
- 	* @param string $name Comment author name
- 	* @param string $email Comment author email
- 	* @param string $website Comment author website
- 	* @param string $comment body of the comment
- 	* @param string $code Captcha code entered
- 	* @param string $code_ok Captcha md5 expected
- 	* @return int
- 	*/
+	 * Adds comments to the album
+	 * assumes data is coming straight from GET or POST
+	 *
+	 * Returns a code for the success of the comment add:
+	 *    0: Bad entry
+	 *    1: Marked for moderation
+	 *    2: Successfully posted
+	 *
+	 * @param string $name Comment author name
+	 * @param string $email Comment author email
+	 * @param string $website Comment author website
+	 * @param string $comment body of the comment
+	 * @param string $code Captcha code entered
+	 * @param string $code_ok Captcha md5 expected
+	 * @return int
+	 */
 	function addComment($name, $email, $website, $comment, $code, $code_ok) {
 		$goodMessage = postComment($name, $email, $website, $comment, $code, $code_ok, $this);
 		return $goodMessage;
 	}
-	
+
 	/**
- 	* Returns the count of comments in the album. Ignores comments in moderation
- 	*
- 	* @return int
- 	*/
-	function getCommentCount() { 
+	 * Returns the count of comments in the album. Ignores comments in moderation
+	 *
+	 * @return int
+	 */
+	function getCommentCount() {
 		if (is_null($this->commentcount)) {
 			if ($this->comments == null) {
 				$count = query_single_row("SELECT COUNT(*) FROM " . prefix("comments") . " WHERE `type`='albums' AND `inmoderation`=0 AND `ownerid`=" . $this->id);
@@ -952,21 +952,21 @@ class Album extends PersistentObject {
 		}
 		return $this->commentcount;
 	}
-	
+
 	/**
- 	* returns the custom data field
- 	*
- 	* @return string
- 	*/
+	 * returns the custom data field
+	 *
+	 * @return string
+	 */
 	function getCustomData() { return $this->get('custom_data'); }
-	
+
 	/**
- 	* Sets the custom data field
- 	*
- 	* @param string $val the value to be put in custom_data
- 	*/
+	 * Sets the custom data field
+	 *
+	 * @param string $val the value to be put in custom_data
+	 */
 	function setCustomData($val) { $this->set('custom_data', $val); }
-	
+
 }
 
 ?>
