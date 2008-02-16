@@ -226,7 +226,7 @@ function getGalleryIndexURL() {
  *
  * @return int
  */
-function getNumAlbums($addcontext) {
+function getNumAlbums() {
 	global $_zp_gallery, $_zp_current_search;
 	if (in_context(ZP_SEARCH)) {
 		return $_zp_current_search->getNumAlbums();
