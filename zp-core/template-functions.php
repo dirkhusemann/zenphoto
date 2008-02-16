@@ -2539,7 +2539,7 @@ function printImageStatistic($number, $option, $album='') {
 	echo "\n<div id=\"$option\">\n";
 	foreach ($images as $image) {
 		echo '<a href="' . $image->getImageLink() . '" title="' . htmlspecialchars($image->getTitle(), ENT_QUOTES) . "\">\n";
-		echo '<img src="' . $image->getThumb() . "\" /></a>\n";
+		echo '<img src="' . $image->getThumb() . "\"  alt=\"" . htmlspecialchars($image->getTitle(),ENT_QUOTES) . "\" /></a>\n";
 	}
 	echo "</div>\n";
 }
@@ -2749,7 +2749,7 @@ function printRating($option) {
 	echo "<ul class=\"star-rating\">\n";
 	echo "<li class=\"current-rating\" id=\"current-rating\" style=\"width:".$ratingpx."px\"></li>\n";
 	if(!checkIP($id,$option)){
-		echo "<li><a href=\"javascript:rate(1,$id,$votes,$value,'".rawurlencode($zenpath)."','$option')\" title=\"1 star out of 5\"' class=\"one-star\">2</a></li>\n";
+		echo "<li><a href=\"javascript:rate(1,$id,$votes,$value,'".rawurlencode($zenpath)."','$option')\" title=\"1 star out of 5\" class=\"one-star\">2</a></li>\n";
 		echo "<li><a href=\"javascript:rate(2,$id,$votes,$value,'".rawurlencode($zenpath)."','$option'')\" title=\"2 stars out of 5\" class=\"two-stars\">2</a></li>\n";
 		echo "<li><a href=\"javascript:rate(3,$id,$votes,$value,'".rawurlencode($zenpath)."','$option')\" title=\"3 stars out of 5\" class=\"three-stars\">2</a></li>\n";
 		echo "<li><a href=\"javascript:rate(4,$id,$votes,$value,'".rawurlencode($zenpath)."','$option')\" title=\"4 stars out of 5\" class=\"four-stars\">2</a></li>\n";
