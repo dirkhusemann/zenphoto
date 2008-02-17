@@ -16,17 +16,23 @@
 	<!-- Wrap Header -->
 	<div id="header">
 
-		<!-- Logo -->
-			<div id="gallerytitle">
-				<div id="logo">
-					<?php
-						if (getOption('Allow_search')) {  printSearchForm(''); }
-				echo '<h1><a>' . printLogo() . '</a></h1>';
+	<!-- Logo -->
+		<div id="gallerytitle">
+			<div id="logo">
+			<?php
+			if (getOption('Allow_search')) {  printSearchForm(''); }
+			echo printLogo();
 			?>
-				</div>
 			</div>
-	</div>
+		</div>
 
+	<!-- Crumb Trail Navigation -->
+		<div id="wrapnav">
+			<div id="navbar">
+				<span><?php printHomeLink('', ''); ?>
+			</div>
+		</div>
+	</div>
 	<!-- Random Image -->
 	<?php printHeadingImage(getRandomImages()); ?>
 
@@ -36,23 +42,23 @@
 
 		<!-- Album List -->
 		<ul id="albums">
-				<?php
-						$firstAlbum = null;
-						$lastAlbum = null;
-						while (next_album()){ 
-						if (is_null($firstAlbum)) { 
-								$lastAlbum = albumNumber();
-								$firstAlbum = $lastAlbum; 
+			<?php
+			$firstAlbum = null;
+			$lastAlbum = null;
+			while (next_album()){ 
+				if (is_null($firstAlbum)) { 
+					$lastAlbum = albumNumber();
+					$firstAlbum = $lastAlbum; 
 				} else {
-								$lastAlbum++;
-						}
+					$lastAlbum++;
+				}
 			?>
 			<li>
 				<div class="imagethumb">
-					<a href="<?php echo getAlbumLinkURL();?>" title="View the album: <?php echo getAlbumTitle(); printImage_AlbumCount(); ?>">
+				<a href="<?php echo getAlbumLinkURL();?>" title="View the album: <?php echo getAlbumTitle(); printImage_AlbumCount(); ?>">
 						<?php printCustomAlbumThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?>
- 						</a>
-								</div>
+ 				</a>
+				</div>
 				<h4><a href="<?php echo getAlbumLinkURL();?>" title="View the album: <?php echo getAlbumTitle(); printImage_AlbumCount();?>"><?php printAlbumTitle(); ?></a></h4>
 			</li>
 			<?php } ?>

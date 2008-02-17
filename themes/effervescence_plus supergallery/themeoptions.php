@@ -1,10 +1,10 @@
 <?php
 
-/* Plug-in for theme option handling 
+/* Plug-in for theme option handling
  * The Options page of admin.php tests for the presence of this file in a theme folder
  * If it is present admin.php links to it with a require_once call.
  * If it is not present, no theme options are displayed.
- * 
+ *
  * Interface functions:
  *     getOptionsSupported()
  *        returns an array of the option names the theme supports
@@ -13,7 +13,7 @@
  *          'type' => 1 says for admin to use a standard checkbox for the option
  *          'type' => 2 will cause admin to call handleOption to generate the HTML for the option
  *          'desc' => text to be displayed for the option description.
- *             
+ *
  *     handleOption($option, $currentValue)
  *       $option is the name of the option being processed
  *       $currentValue is the "before" value of the option
@@ -24,48 +24,49 @@
  *       the version below provides a dropdown list of all the CSS files in the theme folder. It is used by themes
  *       which support selectable CSS files for different color schemes.
  */
- 
+
 require_once(SERVERPATH . "/" . ZENFOLDER . "/admin-functions.php");
 
 class ThemeOptions {
 
-	var $iSupport = array('Allow_comments' => array('type' => 1, 'desc' => 'Set to enable comment section.'),
+	var $iSupport = array(	'Theme_logo' => array('type' => 0, 'desc' => 'The text for the them logo'),
 							'Allow_search' => array('type' => 1, 'desc' => 'Set to enable search form.'),
-						'Slideshow' => array('type' => 1, 'desc' => 'Set to enable slideshow for the <em>Smooth</em> personality.'),
-												'Theme_personality' => array('type' => 2, 'desc' => 'Select the theme personality'),
-												'Theme_colors' => array('type' => 2, 'desc' => 'Set the colors of the theme')
-												);
-												
+							'Slideshow' => array('type' => 1, 'desc' => 'Set to enable slideshow for the <em>Smooth</em> personality.'),
+							'Theme_personality' => array('type' => 2, 'desc' => 'Select the theme personality'),
+							'Theme_colors' => array('type' => 2, 'desc' => 'Set the colors of the theme')
+	);
+
 	function ThemeOptions() {
+		setOptionDefault('Theme_logo', '');
 		setOptionDefault('Allow_comments', true);
-	setOptionDefault('Allow_search', true);
-	setOptionDefault('Slideshow', true);
+		setOptionDefault('Allow_search', true);
+		setOptionDefault('Slideshow', true);
 		setOptionDefault('Theme_personality', 'Image page');
-		setOptionDefault('Theme_colors', 'effervescence'); 
+		setOptionDefault('Theme_colors', 'effervescence');
 	}
 
 	function getOptionsSupported() {
 		return $this->iSupport;
 	}
-	
+
 	function handleOption($option, $currentValue) {
 		switch ($option) {
-		case 'Theme_colors': 
-			$gallery = new Gallery();
-			$theme = $gallery->getCurrentTheme();
-			$themeroot = SERVERPATH . "/themes/$theme/styles";
-			echo '<select id="themeselect" name="' . $option . '"' . ">\n";
-			generateListFromFiles($currentValue, $themeroot , '.css');
-			echo "</select>\n";
-		break;
-		
-	case 'Theme_personality':
-			echo '<select id="ef_personality" name="' . $option . '"' . ">\n";
-		generateListFromArray(array($currentValue), array('Image page', 'Simpleviewer', 'Slimbox', 'Smoothgallery'));
-			echo "</select>\n";	
-		break;
+			case 'Theme_colors':
+				$gallery = new Gallery();
+				$theme = $gallery->getCurrentTheme();
+				$themeroot = SERVERPATH . "/themes/$theme/styles";
+				echo '<select id="themeselect" name="' . $option . '"' . ">\n";
+				generateListFromFiles($currentValue, $themeroot , '.css');
+				echo "</select>\n";
+				break;
+
+			case 'Theme_personality':
+				echo '<select id="ef_personality" name="' . $option . '"' . ">\n";
+				generateListFromArray(array($currentValue), array('Image page', 'Simpleviewer', 'Slimbox', 'Smoothgallery'));
+				echo "</select>\n";
+				break;
+		}
 	}
-	}
-	
+
 }
 ?>

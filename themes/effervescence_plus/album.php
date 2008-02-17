@@ -124,16 +124,16 @@ if ($_GET['format'] != 'xml') {
 
 			<!-- Logo -->
 				<div id="logo">
-				<?php echo '<h1><a>' .  printLogo() . '</a></h1>'; ?>
+				<?php printLogo(); ?>
 				</div>
 			</div>
 
 		<!-- Crumb Trail Navigation -->
 		<div id="wrapnav">
-				<div id="navbar">
-					<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> | <?php printParentBreadcrumb(); ?></span> 
-					<?php printAlbumTitle(true);?>
-				</div>
+			<div id="navbar">
+				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> | <?php printParentBreadcrumb(); ?></span> 
+				<?php printAlbumTitle(true);?>
+			</div>
 		</div>
 
 		<!-- Random Image -->

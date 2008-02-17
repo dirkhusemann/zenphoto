@@ -77,11 +77,11 @@ function printThemeInfo() {
 }
 
 function printLogo() {
-	if ($name = getOption('gallery_title')) {
-		return $name;
-	} else {
-		return sanitize($_SERVER['HTTP_HOST']);
+	$name = getOption('Theme_logo');
+	if (empty($name)) {
+		$name = sanitize($_SERVER['HTTP_HOST']);
 	}
+	echo "<h1><a>$name</a></h1>";
 }
 
 ?> 

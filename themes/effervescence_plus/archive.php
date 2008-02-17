@@ -18,20 +18,20 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 
 	<!-- Wrap Header -->
 	<div id="header">
-			<div id="gallerytitle">
+		<div id="gallerytitle">
 
-			<!-- Logo -->
-				<div id="logo">
-				<?php echo '<h1><a>' . printLogo() . '</a></h1>'; ?>
-				</div>
+		<!-- Logo -->
+			<div id="logo">
+			<?php printLogo(); ?>
 			</div>
+		</div>
 
 		<!-- Crumb Trail Navigation -->
 		<div id="wrapnav">
-				<div id="navbar">
-					<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a></span>  | Archive View
-				</div>
-				</div>
+			<div id="navbar">
+				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a></span>  | Archive View
+			</div>
+		</div>
 
 		<!-- Random Image -->
 		<?php printHeadingImage(getRandomImages()); ?>
@@ -39,13 +39,13 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 
 	<!-- Wrap Main Body -->
 	<div id="content">
-			<small>&nbsp;</small>
+		<small>&nbsp;</small>
 		<div id="main">
-				<?php if (!checkForPassword()) {?>
-						<!-- Date List -->
+		<?php if (!checkForPassword()) {?>
+			<!-- Date List -->
 			<div id="archive"><p>Images by Date</p><?php printAllDates(); ?></div>
 			<div id="tag_cloud"><p>Popular Tags</p><?php printAllTagsAs('cloud', 'tags'); ?></div>
-				<?php } ?>
+		<?php } ?>
 		</div>
 	</div>
 	
@@ -57,7 +57,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 		<?php printRSSLink('Gallery','', 'Gallery RSS', ''); ?>
 	</div>
 		
-		<?php printAdminToolbox(); ?>
+	<?php printAdminToolbox(); ?>
 
 </body>
 </html>

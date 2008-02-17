@@ -64,13 +64,13 @@ $backgroundImagePath="";
 	<div id="gallerytitle">
  
 <!-- Logo -->
-		<div id="logo">
-			<?php
-			if (getOption('Allow_search')) {  printSearchForm(); }
-		echo '<h1><a>' . printLogo() . '</a></h1>';
-			?>
-		</div>
+	<div id="logo">
+	<?php
+	if (getOption('Allow_search')) {  printSearchForm(); }
+		echo printLogo();
+	?>
 	</div>
+</div>
 
 <!-- Crumb Trail Navigation -->
 
@@ -107,16 +107,16 @@ $backgroundImagePath="";
  					
 	<!-- Album List -->
 	<ul id="albums"> 
-			<?php
-					$firstAlbum = null;
-					$lastAlbum = null;
-			while (next_album()){ 
-						if (is_null($firstAlbum)) { 
-							$lastAlbum = albumNumber();
-							$firstAlbum = $lastAlbum; 
-						} else {
-							$lastAlbum++;
-						}
+		<?php
+		$firstAlbum = null;
+		$lastAlbum = null;
+		while (next_album()){ 
+			if (is_null($firstAlbum)) { 
+				$lastAlbum = albumNumber();
+				$firstAlbum = $lastAlbum; 
+			} else {
+				$lastAlbum++;
+			}
 			?>
 			<li><div class="imagethumb"><a href="<?php echo getAlbumLinkURL();?>" title="View the album: 
 				<?php echo getAlbumTitle();
@@ -126,7 +126,7 @@ $backgroundImagePath="";
 				<h4><a href="<?php echo getAlbumLinkURL();?>" title="View the album: <?php echo getAlbumTitle();
 				printImage_AlbumCount();
 			?>">
-				<?php printAlbumTitle(); ?></a></h4></li>
+			<?php printAlbumTitle(); ?></a></h4></li>
 		<?php 
 			} 
 		?>
@@ -136,18 +136,18 @@ $backgroundImagePath="";
 </div>
 
 <!-- Wrap Main Body -->
+ 	<?php 
+ 	if (getNumImages() > 0){  /* Only print if we have images. */
+ 		if ($_noFlash) {
+	 ?>
+ 			<div id="content">
+ 			<div id="main">
+ 			<div id="images">
  			<?php 
- 			if (getNumImages() > 0){  /* Only print if we have images. */
- 				if ($_noFlash) {
-	 		?>
- 					<div id="content">
- 					<div id="main">
- 					<div id="images">
- 					<?php 
  					
-						$firstImage = null;
-						$lastImage = null;
-						while (next_image(false, $firstPageImages)){  
+			$firstImage = null;
+			$lastImage = null;
+			while (next_image(false, $firstPageImages)){  
 							if (is_null($firstImage)) { 
 								$lastImage = imageNumber();
 								$firstImage = $lastImage; 
@@ -170,39 +170,39 @@ $backgroundImagePath="";
 	 		} else {  /* flash */
 	 			if (isImagePage()) {
 	 			?>
- 						<div id="flash"><p align=center><font color=#663300>For the best viewing experience <a href="http://www.macromedia.com/go/getflashplayer/">Get Macromedia Flash.</a></p> 
- 						<p align="center"><a href="
- 						<?php 
- 						if ($imagePage) {
- 							$url = getPageURL(getTotalPages(true));
- 						} else {
- 							$url = getPageURL(getCurrentPage());
- 						} 
- 						if (substr($url, -1, 1) == '/') {$url = substr($url, 0, (strlen($url)-1));}
- 						echo $url = $url . (getOption("mod_rewrite") ? "?" : "&") . 'noflash'; 
- 						?>">
- 						View gallery without Flash</a>.</p></font></div>
- 						<?php
- 						$flash_url = "index.php?p=search&words=" . getSearchWords() . "&format=xml";	
- 						?>
- 						<script type="text/javascript">
+ 					<div id="flash"><p align=center><font color=#663300>For the best viewing experience <a href="http://www.macromedia.com/go/getflashplayer/">Get Macromedia Flash.</a></p> 
+ 					<p align="center"><a href="
+ 					<?php 
+ 					if ($imagePage) {
+ 						$url = getPageURL(getTotalPages(true));
+ 					} else {
+ 						$url = getPageURL(getCurrentPage());
+ 					} 
+ 					if (substr($url, -1, 1) == '/') {$url = substr($url, 0, (strlen($url)-1));}
+ 					echo $url = $url . (getOption("mod_rewrite") ? "?" : "&") . 'noflash'; 
+ 					?>">
+ 					View gallery without Flash</a>.</p></font></div>
+ 					<?php
+ 					$flash_url = "index.php?p=search&words=" . getSearchWords() . "&format=xml";	
+ 					?>
+ 					<script type="text/javascript">
 									var fo = new SWFObject("<?php echo  $_zp_themeroot ?>/simpleviewer.swf", "viewer", "100%", "100%", "7", "<?php echo $backgroundColor ?>");	
 									fo.addVariable("preloaderColor", "<?php echo $preloaderColor ?>");
 									fo.addVariable("xmlDataPath", "<?php echo $flash_url ?>");
 									fo.addVariable("width", "100%");
 									fo.addVariable("height", "100%");		
 									fo.write("flash");
- 						</script>
- 						<?php 
+ 					</script>
+ 					<?php 
 	 			}
 	 		} /* image loop */
 	 	} else { /* no images to display */
 			if (getNumAlbums() == 0){
 			?>
-					<div id="main3">
-					<div id="main2">
-					<br>
-					<p align="center">
+				<div id="main3">
+				<div id="main2">
+				<br>
+				<p align="center">
 			<?php 
 				if (empty($searchwords)) {
 					echo "Enter your search criteria.";
@@ -211,9 +211,9 @@ $backgroundImagePath="";
 				}
 			?>
 			</font></p>
-					</div>
-					</div>
-				<?php 
+			</div>
+			</div>
+		<?php 
 	 		} 
 	 	} ?>
 

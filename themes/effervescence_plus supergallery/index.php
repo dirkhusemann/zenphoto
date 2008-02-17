@@ -9,8 +9,8 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');normalizeColumns(
 	<link rel="stylesheet" href="<?php echo  $zenCSS ?>" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
 	<?php 
-			printRSSHeaderLink('Gallery','Gallery RSS'); 
-			zenJavascript(); 
+	printRSSHeaderLink('Gallery','Gallery RSS'); 
+	zenJavascript(); 
 	?>
 </head>
 
@@ -20,13 +20,18 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');normalizeColumns(
 	<div id="header">
 
 		<!-- Logo -->
-			<div id="gallerytitle">
-				<div id="logo">
-					<?php
-				echo '<h1><a>' . printLogo() . '</a></h1>';
-					?>
-				</div>
+		<div id="gallerytitle">
+			<div id="logo">
+			<?php printLogo();
+			?>
 			</div>
+		</div>
+	<!-- Crumb Trail Navigation -->
+		<div id="wrapnav">
+			<div id="navbar">
+				<span><?php printHomeLink('', ''); ?>
+			</div>
+		</div>
 	</div>
 
 	<!-- Random Image -->
@@ -44,10 +49,10 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');normalizeColumns(
 					<a href="<?php echo getSubgalleryURL();?>" title="View the gallery: <?php echo getSubgalleryTitle(); ?>">
 						<?php printCustomGalleryThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?>
  						</a>
-								</div>
+				</div>
 				<h4><a href="<?php echo getSubgalleryURL();?>" title="View the gallery: 
-				 						<?php echo getSubgalleryTitle(); ?>">
-				 						<?php printSubgalleryTitle(); ?></a></h4>
+				 			<?php echo getSubgalleryTitle(); ?>">
+				 			<?php printSubgalleryTitle(); ?></a></h4>
 			</li>
 			<?php } ?>
 		</ul>

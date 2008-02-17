@@ -23,91 +23,90 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
  		<div id="main2">
 	
 			<!-- Wrap Header -->
-				<div id="galleryheader">
-						<div id="gallerytitle">
-
-					<!-- Image Navigation -->
-							<div class="imgnav">
-									<div class="imgprevious">
-										<?php 
-											global $_zp_current_image;
-											if (hasPrevImage()) { 
-													$image = $_zp_current_image->getPrevImage();
-												echo '<a href="' . getPrevImageURL() . '" title="' . $image->getTitle() . '">&laquo; prev</a>';
-												} else {
-												echo '<div class="imgdisabledlink">&laquo; prev</div>'; 
+			<div id="galleryheader">
+				<div id="gallerytitle">
+			<!-- Image Navigation -->
+					<div class="imgnav">
+						<div class="imgprevious">
+						<?php 
+						global $_zp_current_image;
+						if (hasPrevImage()) { 
+							$image = $_zp_current_image->getPrevImage();
+							echo '<a href="' . getPrevImageURL() . '" title="' . $image->getTitle() . '">&laquo; prev</a>';
+						} else {
+							echo '<div class="imgdisabledlink">&laquo; prev</div>'; 
 											}
-							?>
-									</div>
-							<div class="imgnext">
-										<?php
-											if (hasNextImage()) { 
-												$image = $_zp_current_image->getNextImage();
-												echo '<a href="' . getNextImageURL() . '" title="' . $image->getTitle() . '">next &raquo;</a>';
-								} else {
-												echo '<div class="imgdisabledlink">next &raquo;</div>';
-											}
-										?>
-									</div>
-							</div>
-
-					<!-- Logo -->
-							<div id="logo2">
-						<?php echo '<h1><a>' . printLogo() . '</a></h1>'; ?>
-							</div>
-						</div>
-
-					<!-- Crumb Trail Navigation -->
-						<div id="wrapnav">
-							<div id="navbar">
-						<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> | 
-						<?php printParentBreadcrumb(); printAlbumBreadcrumb("", " | "); ?> 
-									</span> 
-						<?php printImageTitle(true); ?>
-								</div>
-						</div>
-				</div>
-
-			<!-- The Image -->
-			<?php  
-				$s = getDefaultWidth() + 22;
-				$wide = "style=\"width:".$s."px;"; 
-				$s = getDefaultHeight() + 22;
-				$high = " height:".$s."px;\""; 
-				?>
-						<div id="image" <?php echo $wide.$high; ?>>
- 					<?php if ($show = !checkForPassword()) { ?>
-					<div id="image_container">
-					<a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>">
-					<?php printDefaultSizedImage(getImageTitle()); ?>
-					</a>
+						?>
 					</div>
-					<?php 
-					printImageMap(6, 'G_HYBRID_MAP');
-					if (getImageEXIFData()) {
-							echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=400&width=300&inlineId=imagemetadata\" title=\"image details from exif\" class=\"thickbox\">Image Info</a></div>";
-						printImageMetadata('', false); 
+					<div class="imgnext">
+					<?php
+					if (hasNextImage()) { 
+						$image = $_zp_current_image->getNextImage();
+						echo '<a href="' . getNextImageURL() . '" title="' . $image->getTitle() . '">next &raquo;</a>';
+					} else {
+						echo '<div class="imgdisabledlink">next &raquo;</div>';
 					}
-				} ?>
+					?>
 				</div>
-				<br clear="all" />
- 		</div>  
+			</div>
 
-		<!-- Image Description -->
-			<?php if ($show) { ?><div id="description"><?php printImageDesc(true); ?></div> <?php } ?>
+	<!-- Logo -->
+			<div id="logo2">
+			<?php printLogo(); ?>
+			</div>
+		</div>
 
+	<!-- Crumb Trail Navigation -->
+		<div id="wrapnav">
+			<div id="navbar">
+				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> | 
+				<?php printParentBreadcrumb(); printAlbumBreadcrumb("", " | "); ?> 
+				</span> 
+				<?php printImageTitle(true); ?>
+			</div>
+		</div>
 	</div>
 
-		<!-- Wrap Bottom Content -->
-		<?php if ($show && getOption('Allow_comments')) { ?>
-		<div id="content">
+	<!-- The Image -->
+	<?php  
+		$s = getDefaultWidth() + 22;
+		$wide = "style=\"width:".$s."px;"; 
+		$s = getDefaultHeight() + 22;
+		$high = " height:".$s."px;\""; 
+	?>
+		<div id="image" <?php echo $wide.$high; ?>>
+			<?php if ($show = !checkForPassword()) { ?>
+			<div id="image_container">
+				<a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>">
+					<?php printDefaultSizedImage(getImageTitle()); ?>
+				</a>
+			</div>
+		<?php 
+		printImageMap(6, 'G_HYBRID_MAP');
+		if (getImageEXIFData()) {
+			echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=400&width=300&inlineId=imagemetadata\" title=\"image details from exif\" class=\"thickbox\">Image Info</a></div>";
+			printImageMetadata('', false); 
+		}
+	} ?>
+	</div>
+		<br clear="all" />
+ 	</div>  
 
-		<!-- Headings -->
-			<div id="bottomheadings">
-				<div class="bottomfull">
+	<!-- Image Description -->
+	<?php if ($show) { ?><div id="description"><?php printImageDesc(true); ?></div> <?php } ?>
+
+</div>
+
+	<!-- Wrap Bottom Content -->
+	<?php if ($show && getOption('Allow_comments')) { ?>
+	<div id="content">
+
+	<!-- Headings -->
+		<div id="bottomheadings">
+			<div class="bottomfull">
 				<?php $num = getCommentCount(); echo ($num == 1) ? ("<h3>1 Comment</h3>") : ("<h3>$num Comments</h3>"); ?>
-				</div>
-				</div>
+		</div>
+					</div>
 
 		<!-- Wrap Comments -->
 			<div id="main3">
@@ -145,7 +144,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 					<div id="commentbox">
 						<h3>Closed for comments</h3>
 					</div>
-						<?php } ?>
+				<?php } ?>
 
 			</div>
 		</div>
@@ -153,21 +152,21 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 
 	<!-- Footer -->
 	<div class="footlinks">
-			<?php 
-			$h = hitcounter('image');
-			if ($h == 1) {
-				$h .= ' hit';
-			} else {
-				$h .= ' hits';
-			}
-					echo "<p>$h on this image</p>";
-			printThemeInfo(); 
+		<?php 
+		$h = hitcounter('image');
+		if ($h == 1) {
+			$h .= ' hit';
+		} else {
+			$h .= ' hits';
+		}
+		echo "<p>$h on this image</p>";
+		printThemeInfo(); 
 		?>
-			<a href="http://www.zenphoto.org" title="A simpler web photo album">Powered by 
-			<font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font face="Arial Black" size="1">photo</font></span></a>
+		<a href="http://www.zenphoto.org" title="A simpler web photo album">Powered by 
+		<font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font face="Arial Black" size="1">photo</font></span></a>
 	</div>
 		
-		<?php printAdminToolbox(); ?>
+	<?php printAdminToolbox(); ?>
  
 </body>
 </html>
