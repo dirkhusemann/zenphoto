@@ -1416,15 +1416,15 @@ if (!zp_loggedin()) {
 											} 
  										?>
 											<tr>
-												<td width="175"><strong>Username:</strong></td>
-												<td width="200">
+												<td style="border-top: 4px solid #D1DBDF;" width="175"><strong>Username:</strong></td>
+												<td style="border-top: 4px solid #D1DBDF;" width="200">
 													<?php if (empty($userid)) {?>
 													<input type="text" size="40" name="<?php echo $id ?>-adminuser" value="" />
 													<?php  } else { echo $userid.$master; ?>
 													<input type="hidden" name="<?php echo $id ?>-adminuser" value="<?php echo $userid ?>" />
 													<?php } ?>
 												</td>
-												<td>
+												<td style="border-top: 4px solid #D1DBDF;">
 													<?php if(!empty($userid) && count($admins) > 1) { ?>
 														<a href="javascript: if(confirm('Are you sure you want to delete this user?')) { window.location='?page=options&action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }" title="Delete this comment." style="color: #c33;">
 														<img src="images/fail.png" style="border: 0px;" alt="Delete" /></a>
