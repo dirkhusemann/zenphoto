@@ -918,7 +918,7 @@ function sortAlbumArray($albums, $sortkey='sort_order') {
  */
 function pageError() {
 	header("HTTP/1.0 403 Forbidden");
-	echo "<html><head>	<title>403 - Forbidden</TITLE>	<META NAME=\"ROBOTS\" CONTENT=\"NOINDEX, FOLLOW\"></head>";
+	echo "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head>	<title>403 - Forbidden</TITLE>	<META NAME=\"ROBOTS\" CONTENT=\"NOINDEX, FOLLOW\"></head>";
 	echo "<BODY bgcolor=\"#ffffff\" text=\"#000000\" link=\"#0000ff\" vlink=\"#0000ff\" alink=\"#0000ff\">";
 	echo "<FONT face=\"Helvitica,Arial,Sans-serif\" size=\"2\">";
 	echo "<b>The page access is forbidden by the server (403)</b><br/><br/>";
