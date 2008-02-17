@@ -67,7 +67,7 @@ $backgroundImagePath="";
 		<div id="logo">
 			<?php
 			if (getOption('Allow_search')) {  printSearchForm(); }
-		echo '<h1><a href="' . getMainSiteURL() . '" title="Visit ' . getMainSiteName() . '">' . sanitize($_SERVER['HTTP_HOST']) . '</a></h1>';
+		echo '<h1><a>' . printLogo() . '</a></h1>';
 			?>
 		</div>
 	</div>
@@ -76,7 +76,7 @@ $backgroundImagePath="";
 
 <div id="wrapnav">
 	<div id="navbar">
-		<span><a href="<?php echo getGalleryIndexURL();?>" title="Search Page"><?php echo getGalleryTitle();?></a> | <em>Search</em>
+		<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Search Page"><?php echo getGalleryTitle();?></a> | <em>Search</em>
 	</div>
 </div>
 
