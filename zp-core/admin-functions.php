@@ -164,10 +164,7 @@ function printLoginForm($redirect=null, $logo=true) {
 	echo "\n    </table>";
 	echo "\n  </form>";
 	
-	$admins = getAdministrators();
-	$email = '';
-	$email = getAdminEmail();
-	if (!empty($email)) {
+	if (count(getAdminEmail()) > 0) {
 		echo "\n  <a href=\"?emailreset&ref=$requestor\">Email password reset request</a>";
 	}
 	echo "\n  </div>";

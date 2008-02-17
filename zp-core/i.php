@@ -49,7 +49,7 @@ if (isset($_GET['t'])) {
 
 // Fix special characters in the album and image names if mod_rewrite is on:
 // URL looks like: "/album1/subalbum/image/picture.jpg"
-list($ralbum, $rimage) = rewrite_get_album_image('a', 'i');
+list($ralbum, $rimage, $search_link) = rewrite_get_album_image('a', 'i');
 $album = str_replace('..','', sanitize($ralbum));
 $image = str_replace(array('/',"\\"),'', sanitize($rimage));
 
@@ -67,7 +67,7 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
 	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
 
 	if ($debug) debugLog("Album: [ " . $album . " ], Image: [ " . $image . " ]<br/><br/>");
-	if ($debug) DebugLogArray($args);
+	if ($debug) DebugLogArray("args", $args);
 
 } else {
 	// No image parameters specified or are out of bounds; return the original image.

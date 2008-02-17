@@ -1,6 +1,6 @@
 <?php
 define('ZENPHOTO_VERSION', '1.1.4');
-define('ZENPHOTO_RELEASE', 1128);
+define('ZENPHOTO_RELEASE', 1134);
 define('SAFE_GLOB', false);
 define('CHMOD_VALUE', 0777);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
@@ -802,20 +802,20 @@ function parseThemeDef($file) {
 }
 
 /**
- * Send an mail to the admin user. We also attempt to intercept any form injection
+ * Send an mail to the admin user(s). We also attempt to intercept any form injection
  * attacks by slime ball spammers.
  *
- * @param $subject  The subject of the email.
- * @param $message  The message contents of the email.
- * @param $headers  Optional headers for the email.
+ * @param string $subject  The subject of the email.
+ * @param string $message  The message contents of the email.
+ * @param string $headers  Optional headers for the email.
+ * @param array $admin_emails a list of email addresses
  *
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function zp_mail($subject, $message, $headers = '') {
-	$admin_email = getAdminEmail();
-
-	if (!empty($admin_email)) {
+function zp_mail($subject, $message, $headers = '', $admin_emails=null) {
+	if (is_null($admin_emails)) { $admin_emails = getAdminEmail(); }
+	if (count($admin_emails) > 0) {
 		// Make sure no one is trying to use our forms to send Spam
 		// Stolen from Hosting Place:
 		//   http://support.hostingplace.co.uk/knowledgebase.php?action=displayarticle&cat=0000000039&id=0000000040
@@ -851,7 +851,9 @@ function zp_mail($subject, $message, $headers = '') {
 		}
 
 		// Send the mail
-		UTF8::send_mail("Admin <" . $admin_email . ">", $subject, $message, $headers);
+		foreach ($admin_emails as $email) {
+			UTF8::send_mail("Admin <" . $email . ">", $subject, $message, $headers);
+		}
 	}
 }
 
@@ -875,7 +877,7 @@ function sortAlbumArray($albums, $sortkey='sort_order') {
 	$hidden = array();
 	$result = query("SELECT folder, sort_order, `show` FROM " . prefix("albums")
 	. " ORDER BY " . $sortkey);
-		
+
 	$i = 0;
 	$albums_r = array_flip($albums);
 	$albums_touched = array();
@@ -1340,9 +1342,12 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			if ($type == 'images') {
 				$on = $receiver->getAlbumName() . " about " . $receiver->getTitle();
 				$url = "album=" . urlencode($receiver->album->name) . "&image=" . urlencode($receiver->filename);
+				$album = $receiver->getAlbum();
+				$ur_album = getUrAlbum($album);
 			} else {
 				$on = $receiver->name;
 				$url = "album=" . urlencode($receiver->name);
+				$ur_album = getUrAlbum($receiver);
 			}
 			if (getOption('email_new_comments')) {
 				$message = "A comment has been posted in your album $on\n" .
@@ -1357,7 +1362,24 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
  										"\n" .
  										"You can edit the comment here:\n" .
  										"http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/" . ZENFOLDER . "/admin.php?page=comments\n";
-				zp_mail("[" . getOption('gallery_title') . "] Comment posted on $on", $message);
+				$emails = array();
+				$admin_users = getAdministrators();
+				foreach ($admin_users as $admin) {  // mail anyone else with full rights
+					if (($admin['rights'] & ADMIN_RIGHTS) && ($admin['rights'] & COMMENT_RIGHTS) && !empty($admin['email'])) {
+						$emails[] = $admin['email'];
+						unset($admin_users[$admin['id']]);
+					}
+				}
+				$id = $ur_album->getAlbumID();
+				$sql = "SELECT `adminid` FROM ".prefix('admintoalbum')." WHERE `albumid`=$id";
+				$result = query_full_array($sql);
+				foreach ($result as $anadmin) {
+					$admin = $admin_users[$anadmin['adminid']];
+					if (!empty($admin['email'])) {
+						$emails[] = $admin['email'];
+					}
+				}
+				zp_mail("[" . getOption('gallery_title') . "] Comment posted on $on", $message, "", $emails);
 			}
 		}
 	}
@@ -1385,8 +1407,8 @@ function debugLog($message, $reset=false) {
  *
  * @param array $source
  */
-function debugLogArray($source) {
-	$msg = "Array( ";
+function debugLogArray($name, $source) {
+	$msg = "Array $name( ";
 	if (is_array($source)) {
 		if (count($source) > 0) {
 			foreach ($source as $key => $val) {
@@ -1545,13 +1567,14 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums) {
  * @return array
  */
 function getAdministrators() {
+	global $_zp_admin_users;
 	if (is_null($_zp_admin_users)) {
 		$_zp_admin_users = array();
 		$sql = "SELECT `user`, `password`, `name`, `email`, `rights`, `id` FROM ".prefix('administrators')."ORDER BY `rights` DESC, `id`";
 		$admins = query_full_array($sql, true);
 		if ($admins !== false) {
 			foreach($admins as $user) {
-				$_zp_admin_users[$user['user']] = array('user' => $user['user'], 'pass' => $user['password'],
+				$_zp_admin_users[$user['id']] = array('user' => $user['user'], 'pass' => $user['password'],
  												'name' => $user['name'], 'email' => $user['email'], 'rights' => $user['rights'],
  												'id' => $user['id']);
 			}
@@ -1579,7 +1602,7 @@ function checkAuthorization($authCode) {
 	foreach($admins as $user) {
 		if ($user['pass'] == $authCode) {
 			$_zp_current_admin = $user;
-			if ($i == 0) { return ALL_RIGHTS; } // the first admin is the master.
+			if ($i == 0) { return $user['rights'] | ADMIN_RIGHTS; } // the first admin is the master.
 			return $user['rights'];
 		}
 		$i++;
@@ -1599,25 +1622,49 @@ function checkAuthorization($authCode) {
  */
 function checkLogon($user, $pass) {
 	$admins = getAdministrators();
-	if (isset($admins[$user])) {
-		$admin = $admins[$user];
-		$md5 = md5($user.$pass);
-		return $admin['pass'] == $md5;
+	foreach ($admins as $admin) {
+		if ($admin['user'] == $user) {
+			$md5 = md5($user.$pass);
+			return $admin['pass'] == $md5;
+		}
 	}
 	return false;
 }
 
 /**
- * Returns the email address of the first Admin user
+ * Returns the email addresses of the Admin with ADMIN_USERS rights
  *
- * @return string
+ * @param bit $rights what kind of admins to retrieve
+ * @return array
  */
-function getAdminEmail() {
+function getAdminEmail($rights=ADMIN_RIGHTS) {
+	$emails = array();
 	$admins = getAdministrators();
 	$user = array_shift($admins);
-	return $user['email'];
+	if (!empty($user['email'])) {
+		$emails[] = $user['email'];
+	}
+	foreach ($admins as $user) {
+		if (($user['rights'] & $rights)  && !empty($user['email'])) {
+			$emails[] = $user['email'];
+		}
+	}
+	return $emails;
 }
 
+/**
+ * Returns an array of the names of the admins
+ *
+ * @return array
+ */
+function getAdminNames() {
+	$admins = getAdministrators();
+	$names = array();
+	foreach ($admins as $admin) {
+		$names = $admin['name'];
+	}
+	return $names;
+}
 
 /**
  * Checks to see if the loggedin Admin has rights to the album
@@ -1629,7 +1676,7 @@ function isMyAlbum($albumfolder, $action) {
 	if ($_zp_loggedin & ADMIN_RIGHTS) { return true; }
 	if ($_zp_loggedin & $action) {
 		if (is_null($_zp_admin_album_list)) {
-			getManagedAlbumList();
+			return false;
 		}
 		if (count($_zp_admin_album_list) == 0) { return true; }
 		foreach ($_zp_admin_album_list as $key => $adminalbum) { // see if it is one of the managed folders or a subfolder there of

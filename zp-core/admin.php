@@ -6,7 +6,7 @@ if (!$session_started) session_start();
 $sortby = array('Filename', 'Date', 'Title', 'Manual', 'ID' );
 $standardOptions = array('gallery_title','website_title','website_url','time_offset',
  												'gmaps_apikey','mod_rewrite','mod_rewrite_image_suffix',
- 												'admin_email','admin_name','server_protocol','charset','image_quality',
+ 												'server_protocol','charset','image_quality',
  												'thumb_quality','image_size','image_use_longest_side',
  												'image_allow_upscale','thumb_size','thumb_crop',
  												'thumb_crop_width','thumb_crop_height','thumb_sharpen',
@@ -1405,19 +1405,27 @@ if (!zp_loggedin()) {
 										<?php 
 										$id = 0;
 										$albumlist = $gallery->getAlbums();
-										foreach($admins as $key => $user) {
-										?>
+										foreach($admins as $user) {
+											$userid = $user['user'];
+											$master = '';
+											if ($id == 0) {
+												if ($_zp_loggedin & ADMIN_RIGHTS) {
+													$master = " (<em>Master</em>)";
+													$user['rights'] = $user['rights'] | ADMIN_RIGHTS;
+												}
+											} 
+ 										?>
 											<tr>
 												<td width="175"><strong>Username:</strong></td>
 												<td width="200">
-													<?php if (empty($key)) {?>
+													<?php if (empty($userid)) {?>
 													<input type="text" size="40" name="<?php echo $id ?>-adminuser" value="" />
-													<?php  } else { echo $key; ?>
-													<input type="hidden" name="<?php echo $id ?>-adminuser" value="<?php echo $key ?>" />
+													<?php  } else { echo $userid.$master; ?>
+													<input type="hidden" name="<?php echo $id ?>-adminuser" value="<?php echo $userid ?>" />
 													<?php } ?>
 												</td>
 												<td>
-													<?php if(!empty($key) && count($admins) > 1) { ?>
+													<?php if(!empty($userid) && count($admins) > 1) { ?>
 														<a href="javascript: if(confirm('Are you sure you want to delete this user?')) { window.location='?page=options&action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }" title="Delete this comment." style="color: #c33;">
 														<img src="images/fail.png" style="border: 0px;" alt="Delete" /></a>
 													<?php } ?>
@@ -1433,18 +1441,9 @@ if (!zp_loggedin()) {
 														value="<?php echo $x; ?>" />
 												</td>
 												<td>
- 													<?php 
- 													$master = '';
- 													if ($id == 0) {
- 														if ($_zp_loggedin & ADMIN_RIGHTS) {
- 															$master = " (Master)";
- 															$user['rights'] = ALL_RIGHTS;
- 														}
- 													} 
- 													?>
  													<table class="checkboxes">
  														<tr>
- 															<td style="width: 40%; padding-bottom: 3px;"><strong>Rights</strong><?php echo $master.':' ?>
+ 															<td style="width: 40%; padding-bottom: 3px;"><strong>Rights</strong>:
  																<input type="hidden" name="<?php echo $id ?>-main_rights" value=<?php echo MAIN_RIGHTS; ?>>
  															</td>
  														</tr>

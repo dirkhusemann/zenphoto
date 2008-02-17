@@ -84,7 +84,10 @@ class SpamFilter {
 	
 		/* Internal variables I need to fetch to use them in the class */	
 		$this->server_name = php_uname('n');
-		$this->admin_email = getOption('admin_email');
+		$admin_emails = getAdminEmail();
+		if ($count($admin_emails) > 0) {
+			$this->admin_email = $admin_emails[0];  //TODO: maybe we should send to all of them?
+		}
 
 	}
 
