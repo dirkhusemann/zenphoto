@@ -21,8 +21,8 @@
 				<div id="logo">
 					<?php
 						if (getOption('Allow_search')) {  printSearchForm(''); }
-				echo '<h1><a href="' . getMainSiteURL() . '" title="Visit ' . getMainSiteName() . '">' . sanitize($_SERVER['HTTP_HOST']) . '</a></h1>';
-					?>
+				echo '<h1><a href="' . getMainSiteURL() . '" title="Visit ' . getMainSiteName() . '">' . printHome() . '</a></h1>';
+			?>
 				</div>
 			</div>
 	</div>

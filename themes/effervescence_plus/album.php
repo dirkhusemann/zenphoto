@@ -103,8 +103,8 @@ if ($_GET['format'] != 'xml') {
 								echo '<div class="albdisabledlink">&laquo; prev</div>';
 							} else {
 							echo '<a href="' . 
-												rewrite_path("/" . pathurlencode($album->name), "/index.php?album=" . urlencode($album->name)) .
-												'" title="' . $album->getTitle() . '">&laquo; prev</a>';
+									rewrite_path("/" . pathurlencode($album->name), "/index.php?album=" . urlencode($album->name)) .
+									'" title="' . $album->getTitle() . '">&laquo; prev</a>';
 							} 
 						?>
 					</div>
@@ -115,8 +115,8 @@ if ($_GET['format'] != 'xml') {
 									echo '<div class="albdisabledlink">next &raquo;</div>';
 							} else {
 								echo '<a href="' . 
-												rewrite_path("/" . pathurlencode($album->name), "/index.php?album=" . urlencode($album->name)) .
-												'" title="' . $album->getTitle() . '">next &raquo;</a>';
+										rewrite_path("/" . pathurlencode($album->name), "/index.php?album=" . urlencode($album->name)) .
+										'" title="' . $album->getTitle() . '">next &raquo;</a>';
 							} 
 						?>
 					</div>
@@ -124,14 +124,14 @@ if ($_GET['format'] != 'xml') {
 
 			<!-- Logo -->
 				<div id="logo">
-						<?php echo '<h1><a href="' . getMainSiteURL() . '" title="Visit ' . getMainSiteName() . '">' . sanitize($_SERVER['HTTP_HOST']) . '</a></h1>'; ?>
+				<?php echo '<h1><a href="' . getMainSiteURL() . '" title="Visit ' . getMainSiteName() . '">' .  printHome() . '</a></h1>'; ?>
 				</div>
 			</div>
 
 		<!-- Crumb Trail Navigation -->
 		<div id="wrapnav">
 				<div id="navbar">
-					<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> | <?php printParentBreadcrumb(); ?></span> 
+					<span><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> | <?php printParentBreadcrumb(); ?></span> 
 					<?php printAlbumTitle(true);?>
 				</div>
 		</div>
@@ -153,20 +153,20 @@ if ($_GET['format'] != 'xml') {
 			<ul id="albums"> 
 					<?php
 					$firstAlbum = null;
-								$lastAlbum = null;
+					$lastAlbum = null;
 					while (next_album()){ 
-									if (is_null($firstAlbum)) { 
-										$lastAlbum = albumNumber();
-										$firstAlbum = $lastAlbum; 
-								} else {
-										$lastAlbum++;
-								}
+						if (is_null($firstAlbum)) { 
+							$lastAlbum = albumNumber();
+							$firstAlbum = $lastAlbum; 
+						} else {
+							$lastAlbum++;
+						}
 					?>
 				<li>
-									<div class="imagethumb">
-											<a href="<?php echo getAlbumLinkURL();?>" title="View the album: <?php echo getAlbumTitle(); printImage_AlbumCount(); ?>">
-						<?php printCustomAlbumThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?></a>
-										</div>
+					<div class="imagethumb">
+					<a href="<?php echo getAlbumLinkURL();?>" title="View the album: <?php echo getAlbumTitle(); printImage_AlbumCount(); ?>">
+					<?php printCustomAlbumThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?></a>
+					</div>
 					<h4><a href="<?php echo getAlbumLinkURL();?>" title="View the album: <?php echo getAlbumTitle(); printImage_AlbumCount(); ?>">
 					<?php printAlbumTitle(); ?></a></h4></li>
 				<?php 
@@ -184,25 +184,25 @@ if ($_GET['format'] != 'xml') {
 			?>
 		<div id="content">
  					<div id="main">
- 							<div id="images">
- 								<?php 
+ 						<div id="images">
+ 						<?php 
 						if ($personality == 'Smoothgallery') {
 							if (isImagePage()) {
-					?>
+								?>
 <!-- Smoothimage section -->					
 						<div id="smoothImages">
-									<?php 
+						<?php 
 						while (next_image(false, $firstPageImages)){ 
 							if (!getImageVideo()) { // Smoothgallery does not do videos
 						?>
-								<div class="imageElement">
+							<div class="imageElement">
 							<h3><?=getImageTitle();?></h3>
 							<p><?=getImageDesc();?></p>
 							<a href="<?php echo getImageLinkURL();?>" title="<?php echo getImageTitle();?>" class="open"></a>
 												<?php printCustomSizedImage(getImageTitle(), null, 540, null, null, null, null, null, 'full'); ?>
 							<?php printImageThumb(getImageTitle(), 'thumbnail'); ?>
-								</div>
-										<?php 
+							</div>
+							<?php 
 							}
 						} 
 						?>
@@ -210,50 +210,50 @@ if ($_GET['format'] != 'xml') {
 						</div>
 						<?php
 							if (!$show) {
-														if ($imagePage) {
-															$url = getPageURL(getTotalPages(true));
-														} else {
-															$url = getPageURL(getCurrentPage());
-														} 
-							echo '<p align=center>';
-							printLinkWithQuery($url, 'slideshow', 'View Slideshow');
-							echo '</p>';
+								if ($imagePage) {
+									$url = getPageURL(getTotalPages(true));
+								} else {
+									$url = getPageURL(getCurrentPage());
+								} 
+								echo '<p align=center>';
+								printLinkWithQuery($url, 'slideshow', 'View Slideshow');
+								echo '</p>';
 								}
 							}
 						} else {
 							$firstImage = null;
- 										$lastImage = null;
- 										while (next_image(false, $firstPageImages)){
-													if (!(($personality == 'Slimbox') && getImageVideo())) { // Slimbox does not do video 						
- 												if (is_null($firstImage)) { 
- 													$lastImage = imageNumber();
- 													$firstImage = $lastImage; 
- 											} else {
- 													$lastImage++;
- 											} 
-					?>
+ 								$lastImage = null;
+ 								while (next_image(false, $firstPageImages)){
+									if (!(($personality == 'Slimbox') && getImageVideo())) { // Slimbox does not do video 						
+ 										if (is_null($firstImage)) { 
+ 											$lastImage = imageNumber();
+ 											$firstImage = $lastImage; 
+ 										} else {
+ 											$lastImage++;
+ 										} 
+ 						?>
 <!-- Image thumbnails or no flash -->
- 											<div class="image">
- 											<div class="imagethumb">
-								<?php 
-								if ($personality == 'Slimbox') {
- 												echo "<a href=\"".getCustomImageURL(550, null)."\""; 
-									echo "rel=\"lightbox[".getAlbumTitle()."]\"\n"; 
-								} else {	
-															echo '<a href="' . getImageLinkURL() . '"';
-								} 
-								echo " title=\"".getImageTitle()."\">\n";
-								printImageThumb(getImageTitle()); 
-								echo "</a>"
-								?>
-														</div>
- 											</div>
-					<?php 
-								} 
-						}
+ 									<div class="image">
+ 									<div class="imagethumb">
+ 									<?php 
+ 									if ($personality == 'Slimbox') {
+ 										echo "<a href=\"".getCustomImageURL(550, null)."\""; 
+ 										echo "rel=\"lightbox[".getAlbumTitle()."]\"\n"; 
+ 									} else {	
+ 										echo '<a href="' . getImageLinkURL() . '"';
+ 									} 
+ 									echo " title=\"".getImageTitle()."\">\n";
+ 									printImageThumb(getImageTitle()); 
+ 									echo "</a>"
+									?>
+									</div>
+ 									</div>
+ 									<?php 
+									} 
+								}
 						}
 					?>
- 							</div>
+ 					</div>
  					</div>
 	 			<div class="clearage"></div>
  					<?php printNofM('Photo', $firstImage, $lastImage, getNumImages()); ?>

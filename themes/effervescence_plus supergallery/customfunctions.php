@@ -75,4 +75,14 @@ function printThemeInfo() {
 	}
 	echo "<p><small>Effervescence$personality</small></p>";
 }
+
+function printHome() {
+	$link = getOption('website_url');
+	if ($link) {
+		return getOption('website_title');
+	} else {
+		return sanitize($_SERVER['HTTP_HOST']);
+	}
+}
+
 ?> 

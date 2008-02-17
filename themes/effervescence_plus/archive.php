@@ -22,14 +22,14 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 
 			<!-- Logo -->
 				<div id="logo">
-				<?php echo '<h1><a href="' . getMainSiteURL() . '" title="Visit ' . getMainSiteName() . '">' . sanitize($_SERVER['HTTP_HOST']) . '</a></h1>'; ?>
+				<?php echo '<h1><a href="' . getMainSiteURL() . '" title="Visit ' . getMainSiteName() . '">' . printHome() . '</a></h1>'; ?>
 				</div>
 			</div>
 
 		<!-- Crumb Trail Navigation -->
 		<div id="wrapnav">
 				<div id="navbar">
-					<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a></span>  | Archive View
+					<span><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a></span>  | Archive View
 				</div>
 				</div>
 

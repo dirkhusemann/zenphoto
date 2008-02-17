@@ -115,4 +115,14 @@ function printLinkWithQuery($url, $query, $text) {
 	$url = $url . (getOption("mod_rewrite") ? "?" : "&");
 	echo "<a href=\"$url$query\">$text</a>"; 
 }
+
+function printHome() {
+	$link = getOption('website_url');
+	if ($link) {
+		return getOption('website_title');
+	} else {
+		return sanitize($_SERVER['HTTP_HOST']);
+	}
+}
+
 ?> 

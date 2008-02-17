@@ -23,7 +23,7 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');normalizeColumns(
 			<div id="gallerytitle">
 				<div id="logo">
 					<?php
-									echo '<h1><a href="' . getMainSiteURL() . '" title="Visit ' . getMainSiteName() . '">' . sanitize($_SERVER['HTTP_HOST']) . '</a></h1>';
+				echo '<h1><a href="' . getMainSiteURL() . '" title="Visit ' . getMainSiteName() . '">' . printHome() . '</a></h1>';
 					?>
 				</div>
 			</div>
