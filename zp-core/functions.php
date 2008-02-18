@@ -218,12 +218,12 @@ $_zp_exifvars = array(
 		'EXIFContrast'          => array('SubIFD', 'Contrast',          'Contrast Setting',       false),
 		'EXIFSharpness'         => array('SubIFD', 'Sharpness',         'Sharpness Setting',      false),
 		'EXIFSaturation'        => array('SubIFD', 'Saturation',        'Saturation Setting',     false),
-		'EXIFGPSLatitude'       => array('GPS',    'Latitude',          'Latitude',               true),
-		'EXIFGPSLatitudeRef'    => array('GPS',    'Latitude Reference','Latitude Reference',     true),
-		'EXIFGPSLongitude'      => array('GPS',    'Longitude',         'Longitude',              true),
-		'EXIFGPSLongitudeRef'   => array('GPS',    'Longitude Reference','Longitude Reference',   true),
-		'EXIFGPSAltitude'       => array('GPS',    'Altitude',          'Altitude',               true),
-		'EXIFGPSAltitudeRef'    => array('GPS',    'Altitude Reference','Altitude Reference',     true)
+		'EXIFGPSLatitude'       => array('GPS',    'Latitude',          'Latitude',               false),
+		'EXIFGPSLatitudeRef'    => array('GPS',    'Latitude Reference','Latitude Reference',     false),
+		'EXIFGPSLongitude'      => array('GPS',    'Longitude',         'Longitude',              false),
+		'EXIFGPSLongitudeRef'   => array('GPS',    'Longitude Reference','Longitude Reference',   false),
+		'EXIFGPSAltitude'       => array('GPS',    'Altitude',          'Altitude',               false),
+		'EXIFGPSAltitudeRef'    => array('GPS',    'Altitude Reference','Altitude Reference',     false)
 );
 
 
