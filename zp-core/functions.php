@@ -1,6 +1,6 @@
 <?php
 define('ZENPHOTO_VERSION', '1.1.4');
-define('ZENPHOTO_RELEASE', 1134);
+define('ZENPHOTO_RELEASE', 1141);
 define('SAFE_GLOB', false);
 define('CHMOD_VALUE', 0777);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
@@ -1425,6 +1425,30 @@ function debugLogArray($name, $source) {
 		debugLog($msg);
 	} else {
 		debugLog($msg . ")");
+	}
+}
+
+/**
+ * Logs the calling stack
+ *
+ * @ param string $message Message to prefix the backtrace
+ */
+function debugLogBacktrace($message) {
+	debugLog("Backtrace: $message");
+	// Get a backtrace.
+	$bt = debug_backtrace();
+	array_shift($bt); // Get rid of debugLogBacktrace in the backtrace.
+	array_shift($bt); // Get rid of caller in the backtrace.
+	$prefix = '  ';
+	foreach($bt as $b) {
+		$msg = $prefix . ' from '
+		. (isset($b['class']) ? $b['class'] : '')
+		. (isset($b['type']) ? $b['type'] : '')
+		. $b['function']
+		. ' (' . basename($b['file'])
+		. ' [' . $b['line'] . "])";
+		debugLog($msg);
+		$prefix .= '  ';
 	}
 }
 
