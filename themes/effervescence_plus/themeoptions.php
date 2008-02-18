@@ -31,6 +31,7 @@ class ThemeOptions {
 
 	var $iSupport = array(	'Theme_logo' => array('type' => 0, 'desc' => 'The text for the them logo'),
 							'Allow_comments' => array('type' => 1, 'desc' => 'Set to enable comment section.'),
+							'Watermark_head_image' => array('type' => 1, 'desc' => 'Set to place a watermark on the heading image. (Image watermarking must be set.)'),
 							'Allow_search' => array('type' => 1, 'desc' => 'Set to enable search form.'),
 							'Slideshow' => array('type' => 1, 'desc' => 'Set to enable slideshow for the <em>Smooth</em> personality.'),
 							'Theme_personality' => array('type' => 2, 'desc' => 'Select the theme personality'),
@@ -42,6 +43,7 @@ class ThemeOptions {
 		setOptionDefault('Allow_comments', true);
 		setOptionDefault('Allow_search', true);
 		setOptionDefault('Slideshow', true);
+		setOptionDefault('Watermark_head_image', true);
 		setOptionDefault('Theme_personality', 'Image page');
 		setOptionDefault('Theme_colors', 'effervescence');
 	}

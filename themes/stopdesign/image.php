@@ -34,16 +34,16 @@
 				</div>
 
 				<?php
-					$ls = isLandscape(); 
-					if (!$ls) {
+				$ls = isLandscape(); 
+				if (!$ls) {
 					$s = getDefaultWidth();
-				$h = getDefaultHeight();
-				$r = 480/$h;
-				$s = round($r*$s)+22;
-				$wide = "style=\"width:".$s."px;\""; 
-					} else {
-						$wide = '';
-					}
+					$h = getDefaultHeight();
+					$r = 480/$h;
+					$s = round($r*$s)+22;
+					$wide = "style=\"width:".$s."px;\""; 
+				} else {
+					$wide = '';
+				}
 				?>
 				<div class="main" <?php echo $wide; ?>>
 				<?php if ($show = !checkForPassword()) { ?>
