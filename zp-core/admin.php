@@ -1428,7 +1428,7 @@ if (!zp_loggedin()) {
 													<?php if(!empty($userid) && count($admins) > 1) { ?>
 														<a href="javascript: if(confirm('Are you sure you want to delete this user?')) { window.location='?page=options&action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }" title="Delete this comment." style="color: #c33;">
 														<img src="images/fail.png" style="border: 0px;" alt="Delete" /></a>
-													<?php } ?>
+													<?php } ?>&nbsp;
 												</td>
 											</tr>
 											<tr>
