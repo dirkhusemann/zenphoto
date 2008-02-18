@@ -734,7 +734,12 @@ if (!zp_loggedin()) {
 					unset($pieces[$i-1]);
 					$albumdir = "&album=" . urlencode(implode('/', $pieces));
 				}
-			?>
+				if (isset($_GET['subalbumsaved'])) {
+					$album->setSubalbumSortType('Manual');
+					$album->setSortDirection('album', 0);
+					$album->save();
+				}
+				?>
 				<h1>Edit Album: <em><?php echo $album->name; ?></em></h1>
 				<p>
 				<?php printAdminLinks("edit" . $albumdir, "&laquo; Back", "Back to the list of albums (go up one level)");?> |
@@ -774,11 +779,6 @@ if (!zp_loggedin()) {
 
 				<?php
 
-				if (isset($_GET['subalbumsaved'])) {
-					$album->setSubalbumSortType('Manual');
-					$album->setSortDirection('album', 0);
-					$album->save();
-				}
 				$subalbums = $album->getSubAlbums();
 				if (count($subalbums) > 0) {
 				if ($album->getNumImages() > 0)  { ?>
