@@ -313,7 +313,6 @@ function zp_load_album($folder, $force_nocache=false) {
 	$_zp_current_album = new Album($_zp_gallery, $folder, !$force_nocache);
 	if (!$_zp_current_album->exists) return false;
 	set_context(ZP_ALBUM | ZP_INDEX);
-	retrieveSearchParms(0);
 	return $_zp_current_album;
 }
 
@@ -331,7 +330,6 @@ function zp_load_image($folder, $filename) {
 	$_zp_current_image = new Image($album, $filename);
 	if (!$_zp_current_image->exists) return false;
 	set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX);
-	retrieveSearchParms(ZP_SEARCH);
 	return $_zp_current_image;
 }
 

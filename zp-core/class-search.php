@@ -372,6 +372,17 @@ class SearchEngine
 			return array_slice($this->albums, $albums_per_page*($page-1), $albums_per_page);
 		}
 	}
+	
+	/**
+	 * Returns the index of the album within the search albums
+	 *
+	 * @param string $curalbum The album sought
+	 * @return int
+	 */
+	function getAlbumIndex($curalbum) {
+		$albums = $this->getAlbums(0);
+		return array_search($curalbum, $albums);
+	}
 
 	/**
 	 * Returns the album following the current one
@@ -482,6 +493,25 @@ class SearchEngine
 			$slice = array_slice($this->images, $pageStart , $images_per_page);
 			return $slice;
 		}
+	}
+	
+	/**
+	 * Returns the index of this image in the search images
+	 *
+	 * @param string $album The folder name of the image
+	 * @param string $filename the filename of the image
+	 * @return int
+	 */
+	function getImageIndex($album, $filename) {
+		$images = $this->getImages();
+		$c = 0;
+		foreach($images as $image) {
+			if (($album == $image['folder']) && ($filename == $image['filename'])) {
+				return $c;
+			}
+			$c++;
+		}
+		return false;
 	}
 	/**
 	 * Returns a specific image

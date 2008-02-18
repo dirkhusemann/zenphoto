@@ -26,6 +26,7 @@ $obj = '';
 if (isset($_GET['p'])) {
 	$page = str_replace(array('/','\\','.'), '', $_GET['p']);
 	if (substr($page, 0, 1) == "*") {
+		handleSearchParms();
 		include ($obj = ZENFOLDER."/".substr($page, 1) . ".php");
 	} else {
 		$obj = "$themepath/$theme/$page.php";
@@ -34,16 +35,17 @@ if (isset($_GET['p'])) {
 		}
 	}
 } else if (in_context(ZP_IMAGE)) {
+	handleSearchParms($_zp_current_album->name, $_zp_current_image->filename);
 	include($obj = "$themepath/$theme/image.php");
 } else if (in_context(ZP_ALBUM)) {
 	if(isset($_GET['zipfile']) && is_dir(realpath(getAlbumFolder() . $_GET['album']))){ 
 		createAlbumZip($_GET['album']); 
 	} else { 
-		$cookiepath = WEBPATH;
-		if (WEBPATH == '') { $cookiepath = '/'; }
+		handleSearchParms($_zp_current_album->name);
 		include($obj = "$themepath/$theme/album.php"); 
 	} 
 } else if (in_context(ZP_INDEX)) {
+	handleSearchParms();
 	include($obj = "$themepath/$theme/index.php");
 }
 if (!file_exists(SERVERPATH . "/" . $obj)) {

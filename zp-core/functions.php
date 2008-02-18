@@ -1,6 +1,6 @@
 <?php
 define('ZENPHOTO_VERSION', '1.1.4');
-define('ZENPHOTO_RELEASE', 1142);
+define('ZENPHOTO_RELEASE', 1146);
 define('SAFE_GLOB', false);
 define('CHMOD_VALUE', 0777);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
@@ -1733,29 +1733,34 @@ function getAllSubAlbumIDs($albumfolder='') {
 /**
  * recovers search parameters from stored cookei, clears the cookie
  *
- * @param bit $addcontext The context to be added to the current context
+ * @param string $album Name of the album
+ * @param string $image Name of the image
  */
-function retrieveSearchParms($addcontext) {
+function handleSearchParms($album='', $image='') {
 	global $_zp_current_search;
 	$cookiepath = WEBPATH;
-	if (WEBPATH == '') { $cookiepath = '/'; }
-	$context = get_context() | $addcontext;
+	if (WEBPATH == '') { $cookiepath = '/'; }	
+	if (empty($album)) { // clear the cookie
+		zp_setcookie("zenphoto_image_search_params", "", time()-368000, $cookiepath);
+		return;
+	}
 	if (is_null($_zp_current_search)) {
 		$params = zp_getCookie('zenphoto_image_search_params');
 		if (!empty($params)) {
-			set_context($context);
 			$_zp_current_search = new SearchEngine();
 			$_zp_current_search->setSearchParams($params);
-			if (!($context & ZP_IMAGE)) {
-				zp_setcookie("zenphoto_image_search_params", "", time()-368000, $cookiepath);
+			// check to see if we are still "in the search context"
+			if (!empty($image)) {
+				if ($_zp_current_search->getImageIndex($album, $image) === false) {
+					$_zp_current_search = null;
+				}
+			} else {
+				if ($_zp_current_search->getAlbumIndex($album) === false) {
+					$_zp_current_search = null;
+				}
 			}
 		}
-	} else {
-		set_context($context);
-		$params = $_zp_current_search->getSearchParams();
-		zp_setcookie("zenphoto_image_search_params", $params, 0, $cookiepath);
 	}
-
 }
 
 ?>
