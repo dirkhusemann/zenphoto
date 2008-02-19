@@ -419,7 +419,7 @@ class Image extends PersistentObject {
 	 * @return bool
 	 */
 	function deleteImage($clean=true) {
-		$result = unlink($this->localpath);
+		$result = @unlink($this->localpath);
 		if ($clean && $result) {
 			query("DELETE FROM ".prefix('comments') . "WHERE `type`='images' AND `ownerid`=" . $this->id);
 			query("DELETE FROM ".prefix('images') . "WHERE `id` = " . $this->id);
@@ -441,7 +441,7 @@ class Image extends PersistentObject {
 			return true;
 		}
 		$newpath = getAlbumFolder() . $newalbum->name . "/" . $newfilename;
-		$result = rename($this->localpath, $newpath);
+		$result = @rename($this->localpath, $newpath);
 		if ($result) {
 			$result = $this->move(array('filename'=>$newfilename, 'albumid'=>$newalbum->id));
 		}
@@ -459,12 +459,21 @@ class Image extends PersistentObject {
 	}
 
 	/**
-	 * Copies the image to a new album
+	 * Copies the image to a new album, along with all metadata.
 	 *
 	 * @param string $newalbum the destination album
 	 */
 	function copyImage($newalbum) {
-
+		if ($newalbum->id == $this->album->id) {
+			// Nothing to do - moving the file to the same place.
+			return true;
+		}
+		$newpath = getAlbumFolder() . $newalbum->name . "/" . $this->filename;
+		$result = @copy($this->localpath, $newpath);
+		if ($result) {
+			$result = $this->move(array('filename'=>$this->filename, 'albumid'=>$newalbum->id));
+		}
+		return $result;
 	}
 
 	/**

@@ -149,10 +149,46 @@ class PersistentObject {
 			getWhereClause($new_unique_set) . ' LIMIT 1;');
 		if (mysql_num_rows($result) == 0) {
 			$result = query('UPDATE ' . prefix($this->table) 
-				. getSetClause($this->new_unique_set) . ' '
+				. getSetClause($new_unique_set) . ' '
 				. getWhereClause($this->unique_set));
 			if (mysql_affected_rows($result) == 1) {
 				$this->unique_set = $new_unique_set;
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Copy this record to another unique set. Checks if the record exists there
+	 * first, if so returns false. If successful returns true. No changes are made
+	 * to this object and no other objects are created, just the database entry.
+	 * A call to copy is instant, it does not require a save() following it.
+	 */
+	function copy($new_unique_set) {
+		// Check if we have a row
+		$result = query('SELECT * FROM ' . prefix($this->table) .
+			getWhereClause($new_unique_set) . ' LIMIT 1;');
+		if (mysql_num_rows($result) == 0) {
+			$insert_data = array_merge($new_unique_set, $this->updates, $this->tempdata);
+			if (empty($insert_data)) { return true; }
+			$sql = 'INSERT INTO ' . prefix($this->table) . ' (';
+			$i = 0;
+			foreach(array_keys($insert_data) as $col) {
+				if ($i > 0) $sql .= ", ";
+				$sql .= "`$col`";
+				$i++;
+			}
+			$sql .= ') VALUES (';
+			$i = 0;
+			foreach(array_values($insert_data) as $value) {
+				if ($i > 0) $sql .= ', ';
+				$sql .= "'" . mysql_escape_string($value) . "'";
+				$i++;
+			}
+			$sql .= ');';
+			$success = query($sql, __LINE__);
+			if ($success == true && mysql_affected_rows() == 1) {
 				return true;
 			}
 		}
