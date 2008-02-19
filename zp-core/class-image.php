@@ -443,8 +443,7 @@ class Image extends PersistentObject {
 		$newpath = getAlbumFolder() . $newalbum->name . "/" . $newfilename;
 		$result = rename($this->localpath, $newpath);
 		if ($result) {
-			$result = query("UPDATE ".prefix('images')." SET albumid='" . $newalbum->id
-			. "', filename='" . $newfilename . " WHERE id=" . $this->id . " LIMIT 1");
+			$result = $this->move(array('filename'=>$newfilename, 'albumid'=>$newalbum->id));
 		}
 		return $result;
 	}
