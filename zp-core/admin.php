@@ -17,7 +17,7 @@ $standardOptions = array('gallery_title','website_title','website_url','time_off
  												'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
  												'allowed_tags', 'full_image_download', 'full_image_quality', 'persistent_archive',
  												'protect_full_image', 'album_session', 'watermark_h_offset', 'watermark_w_offset',
- 												'Use_Captcha');
+ 												'Use_Captcha', 'locale');
 $charsets = array("ASMO-708" => "Arabic",
 									"big5" => "Chinese Traditional",
 									"CP1026" => "IBM EBCDIC (Turkish Latin-5)",
@@ -544,6 +544,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				setOption('search_hint', $_POST['search_hint']);
 				setBoolOption('persistent_archive', $_POST['persistent_archive']);
 				setBoolOption('album_session', $_POST['album_session']);
+				setOption('locale', $_POST['locale']);
 				$returntab = "#tab_gallery";
 			}
 
@@ -1594,6 +1595,26 @@ if (!zp_loggedin()) {
 												<td>Mod_rewrite Image suffix:</td>
 												<td><input type="text" size="40" name="mod_rewrite_image_suffix" value="<?php echo getOption('mod_rewrite_image_suffix');?>" /></td>
 												<td>If <em>mod_rewrite</em> is checked above, zenphoto will appended this to the end (helps search engines). Examples: <em>.html, .php, /view</em>, etc.</td>
+										</tr>
+										<tr>
+												<td>Locale:</td>
+												<td>
+ 													<select id="locale" name="locale" DISABLED>
+ 													<?php 
+ 													$dir = opendir(SERVERPATH . "/" . ZENFOLDER ."/locale/");
+ 													$locales = array('');
+
+ 													while ($dirname = readdir($dir)) {
+ 														if (is_dir(SERVERPATH . "/" . ZENFOLDER ."/locale/".$dirname) && (substr($dirname, 0, 1) != '.')) {
+ 															$locales[] = $dirname;
+ 														}
+ 													}
+ 													closedir($dir);
+ 													generateListFromArray(array(getOption('locale')), $locales);
+ 													?>
+ 													</select>
+												</td>
+												<td>The internationalization & localization locale.</td>
 										</tr>
 										<tr>
 												<td>Charset:</td>

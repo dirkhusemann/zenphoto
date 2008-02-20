@@ -341,7 +341,12 @@ function getTotalPages($oneImagePage=false) {
  */
 function getPageURL_($page, $total) {
 	global $_zp_current_album, $_zp_gallery, $_zp_current_search;
-	if (in_context(ZP_SEARCH)) {
+	if (!is_null($_zp_current_album)) {
+		$dynamic = $_zp_current_album->isDynamic();
+	} else {
+		$dynamic = false;
+	}
+	if (in_context(ZP_SEARCH) && !$dynamic) {
 		$searchwords = $_zp_current_search->words;
 		$searchdate = $_zp_current_search->dates;
 		$searchfields = $_zp_current_search->fields;

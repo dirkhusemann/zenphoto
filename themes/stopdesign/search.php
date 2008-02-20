@@ -37,8 +37,7 @@
 		</div>
 		<?php
 		$Results = 0;
- 			if ($_REQUEST['words']) {
-		?>
+ 		?>
 	<?php
 			$first = true;
 			while (next_album()) { 
@@ -57,19 +56,19 @@
 					$results + $number;
 					if ($number > 0) { 
 					if (!($number == 1)) {  $number .= " albums";} else {$number .=" album";}
-					$counters = $number;
+						$counters = $number;
 					} else {
 					$counters = '';
 					}
 					$number = getNumImages();
-									if ($number > 0) {	
-										if (!empty($counters)) { $counters .= ",&nbsp;"; }					
+					if ($number > 0) {	
+						if (!empty($counters)) { $counters .= ",&nbsp;"; }					
 					if ($number != 1) $number .= " photos"; else $number .=" photo"; 
 					$counters .= $number;
 					}
-							if (!empty($counters)) {
-								echo "<p><em>($counters)</em><br/>";
-							}
+					if (!empty($counters)) {
+						echo "<p><em>($counters)</em><br/>";
+					}
 					$text = getAlbumDesc(); 
 						if(strlen($text) > 50) {
 						$text = preg_replace("/[^ ]*$/", '', substr($text, 0, 50))."..."; 
@@ -104,15 +103,13 @@
 			}
 			?>
 		</ul>
-	<?php
-		}
-	?>
 
 		<div class="galleryinfo">
 				<p>Feed for this album: <?php printRSSLink('Album','','','',true,'i'); ?></p>
 			<?php 
-						if ($_REQUEST['words']) {
-						if ($results != "0") {
+			$params = $_zp_current_search->getSearchParams();
+			if (!empty($params)) {
+				if ($results != "0") {
 				echo '<em class="count">';
 				echo "Photos $firstImage-$lastImage of " . getNumImages();  
 				echo "</em>";
@@ -124,12 +121,12 @@
 			?>
 					<a href="<?php echo getNextPageURL(); ?>" accesskey="x">next page &raquo;</a>
 			<?php
-					} 
-					echo '</p>';
-					echo "<em class=\"count\">Total matches for <em>".getSearchWords()."</em>: ".$results."</em>";
-				} else {
-							echo "<p>Sorry, no matches. Try refining your search.</p>"; 
-				}
+						} 
+						echo '</p>';
+						echo "<em class=\"count\">Total matches for <em>".getSearchWords()."</em>: ".$results."</em>";
+					} else {
+						echo "<p>Sorry, no matches. Try refining your search.</p>"; 
+					}
 				}
 			?>
 		</div>

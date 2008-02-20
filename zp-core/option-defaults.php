@@ -89,5 +89,6 @@ function setDefault($option, $default) {
 	setDefault('full_image_quality', 75);
 	setDefault('persistent_archive', 0);
 	setDefault('protect_full_image', 1);
+	setDefault('locale', '');
 	
 ?>

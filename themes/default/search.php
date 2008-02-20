@@ -39,18 +39,18 @@
 		
 		<div id="padbox">
 		<?php 
-		if (($_REQUEST['words'] OR $_REQUEST['date'])) {
-			if (!in_context(ZP_ALBUM)) {
-				if (($total = getNumImages() + getNumAlbums()) > 0) {
-					if ($_REQUEST['date']){
-						$searchwords = getSearchDate();
-		 		} else { $searchwords = getSearchWords(); }
-					echo "<p>Total matches for <em>".$searchwords."</em>: $total</p>";
-				}
+		if (!in_context(ZP_ALBUM)) {
+			if (($total = getNumImages() + getNumAlbums()) > 0) {
+				if ($_REQUEST['date']){
+					$searchwords = getSearchDate();
+	 		} else { $searchwords = getSearchWords(); }
+				echo "<p>Total matches for <em>".$searchwords."</em>: $total</p>";
 			}
+		}
+		$c = 0;
 		?>
 <div id="albums">
-			<?php while (next_album()): ?>
+			<?php while (next_album()): $c++;?>
 				<div class="album">
 					<div class="thumb">
 						<a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumThumbImage(getAlbumTitle()); ?></a>
@@ -66,19 +66,19 @@
 			</div>
 		
 			<div id="images">
-				<?php while (next_image(false, $firstPageImages)): ?>
+				<?php while (next_image(false, $firstPageImages)): $c++;?>
 				<div class="image">
 					<div class="imagethumb"><a href="<?php echo getImageLinkURL();?>" title="<?php echo getImageTitle();?>"><?php printImageThumb(getImageTitle()); ?></a></div>
 				</div>
 				<?php endwhile; ?>
 			</div>
 		<?php
-				} else { 
-					if (in_context(ZP_ALBUM)) {
-						echo "<p> The album is empty.</p>";
-					} else {
-						echo "<p>Sorry, no image matches. Try refining your search.</p>"; 
-					}
+			if ($c == 0) { 
+				if (in_context(ZP_ALBUM)) {
+					echo "<p> The album is empty.</p>";
+				} else {
+					echo "<p>Sorry, no image matches. Try refining your search.</p>"; 
+				}
 			}
 
 			printPageListWithNav("&laquo; prev","next &raquo;");

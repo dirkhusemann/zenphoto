@@ -42,19 +42,18 @@ $firstPageImages = normalizeColumns(1, 7);
 		<hr />
 
 		<?php
-		if ($_REQUEST['words'] OR $_REQUEST['date']) {
-			if (!in_context(ZP_ALBUM)) {
-				if (($total = getNumImages() + getNumAlbums()) > 0) {
-					if ($_REQUEST['date'])
-		 		{ $searchwords = getSearchDate();
-		 		} else { $searchwords = getSearchWords(); }
-					echo "<p>Total matches for <em>".$searchwords."</em>: $total</p>";
-				}
+		if (!in_context(ZP_ALBUM)) {
+			if (($total = getNumImages() + getNumAlbums()) > 0) {
+				if ($_REQUEST['date'])
+	 		{ $searchwords = getSearchDate();
+	 		} else { $searchwords = getSearchWords(); }
+				echo "<p>Total matches for <em>".$searchwords."</em>: $total</p>";
 			}
-
+		}
+		$c = 0;
 		?>
 <div id="albums">
-			<?php while (next_album()): ?>
+			<?php while (next_album()): $c++;?>
 			<div class="album">
 					<div class="albumthumb"><a href="<?php echo getAlbumLinkURL();?>" title="<?php echo getAlbumTitle();?>">
 						<?php printAlbumThumbImage(getAlbumTitle()); ?></a>
@@ -70,7 +69,7 @@ $firstPageImages = normalizeColumns(1, 7);
 		</div>
 		
 		<div id="images">
-		<?php while (next_image(false, $firstPageImages)): ?>
+		<?php while (next_image(false, $firstPageImages)): $c++;?>
 			<div class="image">
 					<div class="imagethumb">
 							<a href="<?php echo getImageLinkURL();?>" title="<?php echo getImageTitle();?>">
@@ -82,9 +81,9 @@ $firstPageImages = normalizeColumns(1, 7);
 
 	<br clear="all" />
 	<?php
-				} else { 
-					if (in_context(ZP_ALBUM)) {
-						echo "<p> The album is empty.</p>";
+			if ($c == 0) { 
+				if (in_context(ZP_ALBUM)) {
+					echo "<p> The album is empty.</p>";
 					} else {
 						echo "<p>Sorry, no image matches. Try refining your search.</p>"; 
 					}
