@@ -39,8 +39,8 @@
 		
 		<div id="padbox">
 		<?php 
-		if (!in_context(ZP_ALBUM)) {
-			if ($_REQUEST['words'] OR $_REQUEST['date']) {
+		if (($_REQUEST['words'] OR $_REQUEST['date'])) {
+			if (!in_context(ZP_ALBUM)) {
 				if (($total = getNumImages() + getNumAlbums()) > 0) {
 					if ($_REQUEST['date']){
 						$searchwords = getSearchDate();
@@ -48,7 +48,6 @@
 					echo "<p>Total matches for <em>".$searchwords."</em>: $total</p>";
 				}
 			}
-		}
 		?>
 <div id="albums">
 			<?php while (next_album()): ?>
@@ -75,9 +74,13 @@
 			</div>
 		<?php
 				} else { 
-					echo "<p>Sorry, no image matches. Try refining your search.</p>"; 
+					if (in_context(ZP_ALBUM)) {
+						echo "<p> The album is empty.</p>";
+					} else {
+						echo "<p>Sorry, no image matches. Try refining your search.</p>"; 
+					}
 			}
-		}
+
 			printPageListWithNav("&laquo; prev","next &raquo;");
 			?> 
 

@@ -42,8 +42,8 @@ $firstPageImages = normalizeColumns(1, 7);
 		<hr />
 
 		<?php
-		if (!in_context(ZP_ALBUM)) {
-			if ($_REQUEST['words'] OR $_REQUEST['date']) {
+		if ($_REQUEST['words'] OR $_REQUEST['date']) {
+			if (!in_context(ZP_ALBUM)) {
 				if (($total = getNumImages() + getNumAlbums()) > 0) {
 					if ($_REQUEST['date'])
 		 		{ $searchwords = getSearchDate();
@@ -51,7 +51,7 @@ $firstPageImages = normalizeColumns(1, 7);
 					echo "<p>Total matches for <em>".$searchwords."</em>: $total</p>";
 				}
 			}
-		}
+
 		?>
 <div id="albums">
 			<?php while (next_album()): ?>
@@ -82,10 +82,14 @@ $firstPageImages = normalizeColumns(1, 7);
 
 	<br clear="all" />
 	<?php
-			} else { 
-				echo "<p>Sorry, no image matches. Try refining your search.</p>"; 
+				} else { 
+					if (in_context(ZP_ALBUM)) {
+						echo "<p> The album is empty.</p>";
+					} else {
+						echo "<p>Sorry, no image matches. Try refining your search.</p>"; 
+					}
 			}
-		}
+	
 			echo '<br clear="all" />';
 			printPageListWithNav("&laquo; prev","next &raquo;");
 	?> 

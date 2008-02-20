@@ -22,8 +22,8 @@ if (!(false === ($requirePath = getPlugin('themeoptions.php', true)))) {
 header ('Content-Type: text/html; charset=' . getOption('charset'));
 $obj = '';
 if (isset($_GET['p'])) {
+	// arbitrary PHP page, either in the theme on in the zenphoto core
 	$page = str_replace(array('/','\\','.'), '', $_GET['p']);
-	handleSearchParms();
 	if (substr($page, 0, 1) == "*") {
 		include ($obj = ZENFOLDER."/".substr($page, 1) . ".php");
 	} else {
@@ -33,9 +33,11 @@ if (isset($_GET['p'])) {
 		}
 	}
 } else if (in_context(ZP_IMAGE)) {
+	// image page
 	handleSearchParms($_zp_current_album->name, $_zp_current_image->filename);
 	include($obj = "$themepath/$theme/image.php");
 } else if (in_context(ZP_ALBUM)) {
+	// album page
 	if(isset($_GET['zipfile']) && is_dir(realpath(getAlbumFolder() . $_GET['album']))){ 
 		createAlbumZip($_GET['album']); 
 	} else { 
@@ -56,6 +58,7 @@ if (isset($_GET['p'])) {
 		}
 	} 
 } else if (in_context(ZP_INDEX)) {
+	// index page
 	handleSearchParms();
 	include($obj = "$themepath/$theme/index.php");
 }

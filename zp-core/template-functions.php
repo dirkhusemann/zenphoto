@@ -566,11 +566,13 @@ function albumNumber() {
  *
  * @return array
  */
-function getParentAlbums() {
+function getParentAlbums($album=null) {
 	if(!in_context(ZP_ALBUM)) return false;
 	global $_zp_current_album;
 	$parents = array();
-	$album = $_zp_current_album;
+	if (is_null($album)) {
+		$album = $_zp_current_album;
+	}
 	while (!is_null($album = $album->getParent())) {
 		array_unshift($parents, $album);
 	}
@@ -585,20 +587,11 @@ function getParentAlbums() {
  * @param string $title Text to be used as the URL title tag
  */
 function printAlbumBreadcrumb($before='', $after='', $title='Album Thumbnails') {
-	echo "$before<a href=\"" . getAlbumLinkURL(). "\" title=\"$title\">" . getAlbumTitle() . "</a>$after";
-}
-
-/**
- * Prints the breadcrumb navigation for album, gallery and image view.
- *
- * @param string $before Insert here the text to be printed before the links
- * @param string $between Insert here the text to be printed between the links
- * @param string $after Insert here the text to be printed after the links
- */
-function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
 	global $_zp_current_search, $_zp_current_gallery;
 	echo $before;
-	if (!is_null($_zp_current_search)) {
+	if (is_null($_zp_current_search)) {
+		echo "<a href=\"" . getAlbumLinkURL(). "\" title=\"$title\">" . getAlbumTitle() . "</a>";
+	} else {
 		$page = $_zp_current_search->page;
 		$searchwords = $_zp_current_search->words;
 		$searchdate = $_zp_current_search->dates;
@@ -613,17 +606,39 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
 			echo "<a href=\"" . $album->getAlbumLink() . "\">";
 			echo $album->getTitle();
 		}
-	} else {
+	}
+	echo $after;
+}
+
+/**
+ * Prints the breadcrumb navigation for album, gallery and image view.
+ *
+ * @param string $before Insert here the text to be printed before the links
+ * @param string $between Insert here the text to be printed between the links
+ * @param string $after Insert here the text to be printed after the links
+ */
+function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
+	global $_zp_current_search, $_zp_current_gallery;
+	echo $before;
+	if (is_null($_zp_current_search)) {
 		$parents = getParentAlbums();
-		$n = count($parents);
-		if ($n == 0) return;
-		$i = 0;
-		foreach($parents as $parent) {
-			if ($i > 0) echo $between;
-			$url = rewrite_path("/" . pathurlencode($parent->name) . "/", "/index.php?album=" . urlencode($parent->name));
-			printLink($url, $parent->getTitle(), $parent->getDesc());
-			$i++;
+	} else {
+		$dynamic_album = $_zp_current_search->albumname;
+		if (empty($dynamic_album)) {
+			$parents = array();
+		} else {
+			$album = new Album($_zp_current_gallery, $dynamic_album);
+			$parents = getParentAlbums($album);
 		}
+	}
+	$n = count($parents);
+	if ($n == 0) return;
+	$i = 0;
+	foreach($parents as $parent) {
+		if ($i > 0) echo $between;
+		$url = rewrite_path("/" . pathurlencode($parent->name) . "/", "/index.php?album=" . urlencode($parent->name));
+		printLink($url, $parent->getTitle(), $parent->getDesc());
+		$i++;
 	}
 	echo $after;
 }

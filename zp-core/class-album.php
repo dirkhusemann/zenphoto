@@ -32,7 +32,7 @@ class Album extends PersistentObject {
 		} else {
 			$this->localpath = getAlbumFolder() . $folder . "/";
 		}
-		if (strtolower(substr(strrchr($folder, "."), 1)) == 'alb') {
+		if (hasDyanmicAlbumSuffix($folder)) {
 			$this->localpath = substr($this->localpath, 0, -1);
 		}
 		
@@ -42,23 +42,31 @@ class Album extends PersistentObject {
 			return false;
 		}
 		$new = parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache);
-		if ($new && (strtolower(substr(strrchr($folder, "."), 1)) == 'alb')) {
+		if ($new && hasDyanmicAlbumSuffix($folder)) {
 			$tags = $this->getSearchTags();
 			$data = file_get_contents($this->localpath);
-			$data1 = trim(substr($data, 0, strpos($data, "\n")));
-			$data2 = trim(substr($data, strlen($data1)));
-			if (strpos($data1, 'TAGS:') !== false) {
-				$tags = substr($data1, 5);
-				$this->set('search_params', $tags);
-			}
-			
-			if (strpos($data2, 'THUMB:') !== false) {
+			while (!empty($data)) {
+				$data1 = trim(substr($data, 0, $i = strpos($data, "\n")));
+				if ($i === false) {
+					$data1 = $data; 
+					$data = '';
+				} else {
+					$data = substr($data, $i + 1);
+				}
+				if (strpos($data1, 'TAGS:') !== false) {
+					$tags = substr($data1, 5);
+					$this->set('search_params', $tags);
+				}
+					
+				if (strpos($data1, 'THUMB:') !== false) {
 
-				$thumb = trim(substr($data2, 6));
-				$this->set('thumb', $thumb);
+					$thumb = trim(substr($data1, 6));
+					$this->set('thumb', $thumb);
+				}
 			}
 			$this->set('dynamic', 1);
-			$this->set('title', substr($folder, 0, -4));
+			$title = $this->get('title');
+			$this->set('title', substr($title, 0, -4));
 			$this->save();
 		}
 	}
@@ -895,7 +903,7 @@ class Album extends PersistentObject {
 
 		while (false !== ($file = readdir($dir))) {
 			if ($dirs && (is_dir($albumdir.$file) && (substr($file, 0, 1) != '.') ||
-										(strtolower(substr(strrchr($file, "."), 1))  == 'alb'))) {
+										hasDyanmicAlbumSuffix($file))) {
 				$files[] = $file;
 			} else if (!$dirs && is_file($albumdir.$file)) {
 				if (is_valid_video($file)) {

@@ -1,6 +1,6 @@
 <?php
 define('ZENPHOTO_VERSION', '1.1.4');
-define('ZENPHOTO_RELEASE', 1150);
+define('ZENPHOTO_RELEASE', 1151);
 define('SAFE_GLOB', false);
 define('CHMOD_VALUE', 0777);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
@@ -373,7 +373,6 @@ function rewrite_get_album_image($albumvar, $imagevar) {
 			$pagepos  = strpos($path, '/page/');
 			$slashpos = strrpos($path, '/');
 			$imagepos = strpos($path, '/image/');
-
 			if ($imagepos !== false) {
 				$ralbum = substr($path, 0, $imagepos);
 				$rimage = substr($path, $slashpos+1);
@@ -383,7 +382,7 @@ function rewrite_get_album_image($albumvar, $imagevar) {
 			} else if ($slashpos !== false) {
 				$ralbum = substr($path, 0, $slashpos);
 				$rimage = substr($path, $slashpos+1);
-				if (is_dir(getAlbumFolder() . $ralbum . '/' . $rimage)) {
+				if ((is_dir(getAlbumFolder() . $ralbum . '/' . $rimage)) || hasDyanmicAlbumSuffix($rimage)) {
 					$ralbum = $ralbum . '/' . $rimage;
 					$rimage = null;
 				}
@@ -1760,6 +1759,16 @@ function handleSearchParms($album='', $image='') {
 			}
 		}
 	}
+}
+
+/**
+ * Returns true if the file has the dynamic album suffix
+ *
+ * @param string $path
+ * @return bool
+ */
+function hasDyanmicAlbumSuffix($path) {
+	return strtolower(substr(strrchr($path, "."), 1)) == 'alb';
 }
 
 ?>

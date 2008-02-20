@@ -242,7 +242,7 @@ function genAlbumUploadList(&$list, $curAlbum=NULL) {
 	if (is_null($curAlbum)) {
 		$albumsprime = $gallery->getAlbums(0);
 		foreach ($albumsprime as $album) { // check for rights
-			if (isMyAlbum($album, UPLOAD_RIGHTS)) {
+			if (isMyAlbum($album, UPLOAD_RIGHTS) && !hasDyanmicAlbumSuffix($album)) {
 				$albums[] = $album;
 			}
 		}
@@ -252,8 +252,10 @@ function genAlbumUploadList(&$list, $curAlbum=NULL) {
 	if (is_array($albums)) {
 		foreach ($albums as $folder) {
 			$album = new Album($gallery, $folder);
-			$list[$album->getFolder()] = $album->getTitle();
-			genAlbumUploadList($list, $album);  /* generate for subalbums */
+			if (!$album->isDynamic()) {
+				$list[$album->getFolder()] = $album->getTitle();
+				genAlbumUploadList($list, $album);  /* generate for subalbums */
+			}
 		}
 	}
 }
