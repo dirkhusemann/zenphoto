@@ -159,10 +159,8 @@ function zp_handle_comment() {
 			} else {
 				if (in_context(ZP_IMAGE)) {
 					$commentobject = $_zp_current_image;
-					$redirectTo = $_zp_current_image->getImageLink();
 				} else {
 					$commentobject = $_zp_current_album;
-					$redirectTo = $_zp_current_album->getAlbumLink();
 				}
 				$commentadded = $commentobject->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']),
 													$website, kses($_POST['comment'], $allowed),
