@@ -2585,9 +2585,9 @@ function getRandomImages() {
 		$imageWhere = " AND " . prefix('images') . ".show=1";
 	}
 	$result = query_single_row('SELECT '.prefix('images').'.filename,'.prefix('images').'.title, '.prefix('albums').
- 														'.folder, ' . prefix('images') . '.show, ' . prefix('albums') . '.show, ' . prefix('albums') . '.password '.
- 														'FROM '.prefix('images'). ' INNER JOIN '.prefix('albums').
-							 ' ON '.prefix('images').'.albumid = '.prefix('albums').'.id WHERE '.prefix('albums').'.folder!=""'.
+ 		'.folder, ' . prefix('images') . '.show, ' . prefix('albums') . '.show, ' . prefix('albums') . '.password '.
+ 		'FROM '.prefix('images'). ' INNER JOIN '.prefix('albums').
+		' ON '.prefix('images').'.albumid = '.prefix('albums').'.id WHERE '.prefix('albums').'.folder!=""'.
 	$albumWhere . $imageWhere . ' ORDER BY RAND() LIMIT 1');
 	$imageName = $result['filename'];
 	if ($imageName =='') { return NULL; }
