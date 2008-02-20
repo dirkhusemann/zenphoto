@@ -6,11 +6,11 @@ $_zp_admin_album_list = null;
 
 /**
  * Test to see whether we should be displaying a particular page.
- * 
+ *
  * @param $page  The page we for which we are testing.
- * 
+ *
  * @return True if this is the page, false otherwise.
- * 
+ *
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
@@ -39,16 +39,16 @@ function printAdminFooter() {
 }
 
 /**
- * Print the header for all admin pages. Starts at <DOCTYPE> but does not include the </head> tag, 
+ * Print the header for all admin pages. Starts at <DOCTYPE> but does not include the </head> tag,
  * in case there is a need to add something further.
  *
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
 function printAdminHeader() {
-	
+
 	header ('Content-Type: text/html; charset=' . getOption('charset'));
-	
+
 	echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
 	echo "\n<html xmlns=\"http://www.w3.org/1999/xhtml\">";
 	echo "\n<head>";
@@ -67,13 +67,13 @@ function printAdminHeader() {
  * @param $title  Optional title attribute for the hyperlink. Default is NULL.
  * @param $class  Optional class attribute for the hyperlink.  Default is NULL.
  * @param $id     Optional id attribute for the hyperlink.  Default is NULL.
- * 
+ *
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
 function printAdminLinks($action, $text, $title=NULL, $class=NULL, $id=NULL) {
-	
-	adminPrintLink("admin.php?page=". $action, $text, $title, $class, $id); 
+
+	adminPrintLink("admin.php?page=". $action, $text, $title, $class, $id);
 }
 
 /**
@@ -84,12 +84,12 @@ function printAdminLinks($action, $text, $title=NULL, $class=NULL, $id=NULL) {
  * @param $title Optional title attribute for the hyperlink. Default is NULL.
  * @param $class Optional class attribute for the hyperlink.  Default is NULL.
  * @param $id    Optional id attribute for the hyperlink.  Default is NULL.
- * 
+ *
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
 function printSortLink($album, $text, $title=NULL, $class=NULL, $id=NULL) {
-	adminPrintLink(WEBPATH . "/" . ZENFOLDER . "/albumsort.php?page=edit&album=". urlencode( ($album->getFolder()) ), $text, $title, $class, $id); 
+	adminPrintLink(WEBPATH . "/" . ZENFOLDER . "/albumsort.php?page=edit&album=". urlencode( ($album->getFolder()) ), $text, $title, $class, $id);
 }
 
 /**
@@ -100,12 +100,12 @@ function printSortLink($album, $text, $title=NULL, $class=NULL, $id=NULL) {
  * @param $title Optional title attribute for the hyperlink. Default is NULL.
  * @param $class Optional class attribute for the hyperlink.  Default is NULL.
  * @param $id    Optional id attribute for the hyperlink.  Default is NULL.
- * 
+ *
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
 function printViewLink($album, $text, $title=NULL, $class=NULL, $id=NULL) {
-	adminPrintLink(WEBPATH . "/index.php?album=". urlencode( ($album->getFolder()) ), $text, $title, $class, $id); 
+	adminPrintLink(WEBPATH . "/index.php?album=". urlencode( ($album->getFolder()) ), $text, $title, $class, $id);
 }
 
 /**
@@ -114,23 +114,23 @@ function printViewLink($album, $text, $title=NULL, $class=NULL, $id=NULL) {
  * @param $image The Image object whose thumbnail we want to display.
  * @param $class Optional class attribute for the hyperlink.  Default is NULL.
  * @param $id    Optional id attribute for the hyperlink.  Default is NULL.
- * 
+ *
  * @author Todd Papaioannou (lucky@luckyspin.org)
- * @since  1.0.0 
+ * @since  1.0.0
  */
 
-function adminPrintImageThumb($image, $class=NULL, $id=NULL) { 
+function adminPrintImageThumb($image, $class=NULL, $id=NULL) {
 	echo "\n  <img class=\"imagethumb\" id=\"id_". $image->id ."\" src=\"" . $image->getThumb() . "\" alt=\"". $image->getTitle() . "\"" .
-		((getOption('thumb_crop')) ? " width=\"".getOption('thumb_crop_width')."\" height=\"".getOption('thumb_crop_height')."\"" : "") .
-		(($class) ? " class=\"$class\"" : "") . 
-		(($id) ? " id=\"$id\"" : "") . " />";
+	((getOption('thumb_crop')) ? " width=\"".getOption('thumb_crop_width')."\" height=\"".getOption('thumb_crop_height')."\"" : "") .
+	(($class) ? " class=\"$class\"" : "") .
+	(($id) ? " id=\"$id\"" : "") . " />";
 }
 
 // TODO: This is a copy of the function in template-functions. Refactor at some point
-function adminPrintLink($url, $text, $title=NULL, $class=NULL, $id=NULL) { 
-	echo "<a href=\"" . $url . "\"" . 
+function adminPrintLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
+	echo "<a href=\"" . $url . "\"" .
 	(($title) ? " title=\"$title\"" : "") .
-	(($class) ? " class=\"$class\"" : "") . 
+	(($class) ? " class=\"$class\"" : "") .
 	(($id) ? " id=\"$id\"" : "") . ">" .
 	$text . "</a>";
 }
@@ -146,9 +146,9 @@ function printLoginForm($redirect=null, $logo=true) {
 	if (is_null($redirect)) { $redirect = "/" . ZENFOLDER . "/admin.php"; }
 	$requestor = sanitize($_POST['user']);
 	if (empty($requestor)) { $requestor = sanitize($_GET['ref']); }
-	
+
 	if ($logo) echo "<p><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" /></p>";
-	
+
 	echo "\n  <div id=\"loginform\">";
 	if ($_zp_login_error) {
 		echo "<div class=\"errorbox\" id=\"message\"><h2>There was an error logging in.</h2> Check your username and password and try again.</div>";
@@ -156,14 +156,14 @@ function printLoginForm($redirect=null, $logo=true) {
 	echo "\n  <form name=\"login\" action=\"#\" method=\"POST\">";
 	echo "\n    <input type=\"hidden\" name=\"login\" value=\"1\" />";
 	echo "\n    <input type=\"hidden\" name=\"redirect\" value=\"$redirect\" />";
-	
+
 	echo "\n    <table>";
 	echo "\n      <tr><td>Login</td><td><input class=\"textfield\" name=\"user\" type=\"text\" size=\"20\" value=\"$requestor\" /></td></tr>";
 	echo "\n      <tr><td>Password</td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
 	echo "\n      <tr><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"Log in\" /></td></tr>";
 	echo "\n    </table>";
 	echo "\n  </form>";
-	
+
 	if (count(getAdminEmail()) > 0) {
 		echo "\n  <a href=\"?emailreset&ref=$requestor\">Email password reset request</a>";
 	}
@@ -180,7 +180,7 @@ function printLoginForm($redirect=null, $logo=true) {
  * @since  1.0.0
  */
 function printLogoAndLinks() {
-	
+
 	echo "\n\n<a href=\"".WEBPATH."/" . ZENFOLDER . "/admin.php\" id=\"logo\"><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" /></a>";
 	echo "\n<div id=\"links\">";
 	echo "\n  <a href=\"../\">View Gallery</a> &nbsp; | &nbsp; <a href=\"?logout\">Log Out</a>";
@@ -202,7 +202,7 @@ function printTabs() {
 	} else {
 		$page= "home";
 	}
-	
+
 	echo "\n  <ul id=\"nav\">";
 	if (($_zp_loggedin & MAIN_RIGHTS)) {
 		echo "\n    <li". ($page == "home" ? " class=\"current\""     : "") .
@@ -233,7 +233,7 @@ function printTabs() {
 
 function checked($checked, $current) {
 	if ( $checked == $current)
-		echo ' checked="checked"';
+	echo ' checked="checked"';
 }
 
 function genAlbumUploadList(&$list, $curAlbum=NULL) {
@@ -259,35 +259,35 @@ function genAlbumUploadList(&$list, $curAlbum=NULL) {
 }
 
 function displayDeleted() {
-	/* Display a message if needed. Fade out and hide after 2 seconds. */  
-	if (isset($_GET['ndeleted'])) {      
-		$ntdel = strip($_GET['ndeleted']);      
-		if ($ntdel <= 2) { 
-		$msg = "Image "; 
-	} else { 
-		$msg = "Album "; 
-		$ntdel = $ntdel - 2; 
-	}
-	if ($ntdel == 2) { 
-		$msg = $msg . "failed to delete."; 
-		$class = 'errorbox'; 
-	} else { 
-		$msg = $msg . "deleted successfully."; 
-		$class = 'messagebox'; 
-	}
-	echo '<div class="' . $class . '" id="message">'; 
-	echo  "<h2>" . $msg . "</h2>";  
-	echo '</div>'; 
-	echo '<script type="text/javascript">'; 
-	echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);"; 
-	echo '</script>'; 
+	/* Display a message if needed. Fade out and hide after 2 seconds. */
+	if (isset($_GET['ndeleted'])) {
+		$ntdel = strip($_GET['ndeleted']);
+		if ($ntdel <= 2) {
+			$msg = "Image ";
+		} else {
+			$msg = "Album ";
+			$ntdel = $ntdel - 2;
+		}
+		if ($ntdel == 2) {
+			$msg = $msg . "failed to delete.";
+			$class = 'errorbox';
+		} else {
+			$msg = $msg . "deleted successfully.";
+			$class = 'messagebox';
+		}
+		echo '<div class="' . $class . '" id="message">';
+		echo  "<h2>" . $msg . "</h2>";
+		echo '</div>';
+		echo '<script type="text/javascript">';
+		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
+		echo '</script>';
 	}
 }
 
 function customOptions($optionHandler, $indent="") {
 	$supportedOptions = $optionHandler->getOptionsSupported();
 	if (count($supportedOptions) > 0) {
-		$keys = array_keys($supportedOptions); 
+		$keys = array_keys($supportedOptions);
 		natcasesort($keys);
 		foreach($keys as $key) {
 			$row = $supportedOptions[$key];
@@ -297,23 +297,23 @@ function customOptions($optionHandler, $indent="") {
 			$db = query_single_row($sql);
 			$v = $db['value'];
 
-			echo "\n<tr>\n"; 
+			echo "\n<tr>\n";
 			echo '<td width="175">' . $indent . str_replace('_', ' ', $key) . ":</td>\n";
-			
+				
 			switch ($type) {
-			case 0:  // text box
-				echo '<td width="200"><input type="text" size="40" name="' . $key . '" value="' . $v . '"></td>' . "\n";
-				break;
-			case 1:  // check box
-				echo '<input type="hidden" name="chkbox-' . $key . '" value=0 />' . "\n";
-				echo '<td width="200"><input type="checkbox" name="' . $key . '" value="1"';
-				echo checked('1', $v); 
-				echo " /></td>\n";
-				break;
-			case 2:  // custom handling	  
-				echo '<td width="200">' . "\n";          
-				$optionHandler->handleOption($key, $v);           
-				echo "</td>\n";
+				case 0:  // text box
+					echo '<td width="200"><input type="text" size="40" name="' . $key . '" value="' . $v . '"></td>' . "\n";
+					break;
+				case 1:  // check box
+					echo '<input type="hidden" name="chkbox-' . $key . '" value=0 />' . "\n";
+					echo '<td width="200"><input type="checkbox" name="' . $key . '" value="1"';
+					echo checked('1', $v);
+					echo " /></td>\n";
+					break;
+				case 2:  // custom handling
+					echo '<td width="200">' . "\n";
+					$optionHandler->handleOption($key, $v);
+					echo "</td>\n";
 			}
 			echo '<td>' . $desc . "</td>\n";
 			echo "</tr>\n";
@@ -332,8 +332,8 @@ function generateListFromArray($currentValue, $list) {
 	$cv = array_flip($currentValue);
 	foreach($list as $item) {
 		echo '<option value="' . $item . '"';
-		if (isset($cv[$item])) { 
-			echo ' selected="selected"'; 
+		if (isset($cv[$item])) {
+			echo ' selected="selected"';
 		}
 		echo '>' . $item . "</option>\n";
 	}
@@ -345,7 +345,7 @@ function generateListFromFiles($currentValue, $root, $suffix) {
 	sort($filelist);
 	$list = array();
 	foreach($filelist as $file) {
-		$list[] = str_replace($suffix, '', $file); 
+		$list[] = str_replace($suffix, '', $file);
 	}
 	generateListFromArray(array($currentValue), $list);
 }
@@ -365,15 +365,15 @@ function printAlbumEditForm($index, $album) {
 		$prefix = '';
 	} else {
 		$prefix = "$index-";
-	echo "<p><em><strong>" . $album->name . "</strong></em></p>";
+		echo "<p><em><strong>" . $album->name . "</strong></em></p>";
 	}
- 			
+
 	echo "\n<input type=\"hidden\" name=\"" . $prefix . "folder\" value=\"" . $album->name . "\" />";
 	echo "\n<div class=\"box\" style=\"padding: 15px;\">";
 	echo "\n<table>";
 	echo "\n<tr>";
-	echo "<td align=\"right\" valign=\"top\">Album Title: </td> <td><input type=\"text\" name=\"".$prefix."albumtitle\" value=\"" . 
- 			$album->getTitle() . '" />';
+	echo "<td align=\"right\" valign=\"top\">Album Title: </td> <td><input type=\"text\" name=\"".$prefix."albumtitle\" value=\"" .
+	$album->getTitle() . '" />';
 	$id = $album->getAlbumId();
 	$result = query_single_row("SELECT `hitcounter` FROM " . prefix('albums') . " WHERE id = $id");
 	$hc = $result['hitcounter'];
@@ -381,15 +381,15 @@ function printAlbumEditForm($index, $album) {
 	echo " Hit counter: ". $hc . " <input type=\"checkbox\" name=\"reset_hitcounter\"> Reset</td>";
 	echo '</tr>';
 	echo "\n<tr><td align=\"right\" valign=\"top\">Album Description: </td> <td><textarea name=\"".$prefix."albumdesc\" cols=\"60\" rows=\"6\">" .
- 			$album->getDesc() . "</textarea></td></tr>";
-	echo "\n<tr>";		
+	$album->getDesc() . "</textarea></td></tr>";
+	echo "\n<tr>";
 	echo "\n<td align=\"right\">Album password: <br/>repeat: </td>";
 	echo "\n<td>";
-	$x = $album->getPassword(); 
+	$x = $album->getPassword();
 
-	if (!empty($x)) { 
-		$x = '          '; 
-	} 
+	if (!empty($x)) {
+		$x = '          ';
+	}
 
 	echo "\n<input type=\"password\" size=\"40\" name=\"".$prefix."albumpass\"";
 	echo "\nvalue=\"" . $x . '" /><br/>';
@@ -397,49 +397,59 @@ function printAlbumEditForm($index, $album) {
 	echo "\nvalue=\"" . $x . '" />';
 	echo "\n</td>";
 	echo "\n</tr>";
-	echo "\n<tr><td align=\"right\" valign=\"top\">Password hint: </td> <td><input type=\"text\" name=\"".$prefix."albumpass_hint\" class=\"tags\" value=\"" . 
- 			$album->getPasswordHint() . '" /></td></tr>';
-	echo "\n<tr><td align=\"right\" valign=\"top\">Tags: </td> <td><input type=\"text\" name=\"".$prefix."albumtags\" class=\"tags\" value=\"" . 
- 			$album->getTags() . '" /></td></tr>';
+	echo "\n<tr><td align=\"right\" valign=\"top\">Password hint: </td> <td><input type=\"text\" name=\"".$prefix."albumpass_hint\" class=\"tags\" value=\"" .
+	$album->getPasswordHint() . '" /></td></tr>';
+	echo "\n<tr><td align=\"right\" valign=\"top\">Tags: </td> <td><input type=\"text\" name=\"".$prefix."albumtags\" class=\"tags\" value=\"" .
+	$album->getTags() . '" /></td></tr>';
 
 	$d = $album->getDateTime();
-	if ($d == "0000-00-00 00:00:00") { 
-		$d = ""; 
+	if ($d == "0000-00-00 00:00:00") {
+		$d = "";
 	}
 
 	echo "\n<tr><td align=\"right\" valign=\"top\">Date: </td> <td><input type=\"text\" name=\"".$prefix."albumdate\" value=\"" . $d . '" /></td></tr>';
 	echo "\n<tr><td align=\"right\" valign=\"top\">Location: </td> <td><input type=\"text\" name=\"".$prefix."albumplace\" class=\"tags\" value=\"" .
- 			$album->getPlace() . "\" /></td></tr>";
+	$album->getPlace() . "\" /></td></tr>";
 	echo "\n<tr><td align=\"right\" valign=\"top\">Custom data: </td> <td><input type=\"text\" name=\"".$prefix."album_custom_data\" class=\"tags\" value=\"" .
- 			$album->getCustomData() . "\" /></td></tr>";
- 			
-
-	echo "\n</select>";
+	$album->getCustomData() . "\" /></td></tr>";
+	if ($album->isDynamic()) {
+		echo "\n</tr>";
+		echo "\n<tr>";
+		echo "\n<td align=\"right\" valign=\"top\">";
+			echo "Dynamic album tags:";
+		echo "\n</td>";
+		echo "\n<td>";
+			echo "\n<input type=\"text\" name=\"".$prefix."search_words\" class=\"tags\" value=\"" .
+													$album->getSearchTags() . '" />';
+		echo "\n</td>";		
+		echo "\n</tr>";
+	}
+	
 	echo "\n<script type=\"text/javascript\">updateThumbPreview(document.getElementById('thumbselect'));</script>";
 	echo "\n</td>";
 	echo "\n</tr>";
-	
+
 	echo "\n<tr>";
 	echo "\n<td align=\"right\" valign=\"top\">Sort subalbums by: </td>";
 	echo "\n<td>";
 	echo "\n<select id=\"sortselect\" name=\"".$prefix."subalbumsortby\">";
 
-	foreach ($sortby as $sorttype) { 
+	foreach ($sortby as $sorttype) {
 		echo "\n<option value=\"" . $sorttype . "\"";
-	if ($sorttype == $album->getSubalbumSortType()) {
-		echo ' selected="selected"';
+		if ($sorttype == $album->getSubalbumSortType()) {
+			echo ' selected="selected"';
 		}
-	echo ">$sorttype </option>";
-	} 
+		echo ">$sorttype </option>";
+	}
 
 	echo "\n</select>";
 	echo "&nbsp;Descending <input type=\"checkbox\" name=\"".$prefix."album_sortdirection\" value=\"1\"";
 
 	if ($album->getSortDirection('image')) {
 		echo "CHECKED";
-	} 
+	}
 
-	echo ">";  
+	echo ">";
 	echo "\n</td>";
 	echo "\n</tr>";
 	echo "\n<tr>";
@@ -447,55 +457,61 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<td>";
 	echo "\n<select id=\"sortselect\" name=\"".$prefix."sortby\">";
 
-	foreach ($sortby as $sorttype) { 
+	foreach ($sortby as $sorttype) {
 		echo "\n<option value=\"$sorttype\"";
-	if ($sorttype == $album->getSortType()) {
-		echo ' selected="selected"'; 
-	}
-	echo ">$sorttype</option>";
+		if ($sorttype == $album->getSortType()) {
+			echo ' selected="selected"';
+		}
+		echo ">$sorttype</option>";
 	}
 
 	echo "\n</select>";
-	echo "&nbsp;Descending <input type=\"checkbox\" name=\"".$prefix."image_sortdirection\" value=\"1\""; 
+	echo "&nbsp;Descending <input type=\"checkbox\" name=\"".$prefix."image_sortdirection\" value=\"1\"";
 
 	if ($album->getSortDirection('image')) {
 		echo "CHECKED";
-	} 
+	}
 
-	echo ">"; 
+	echo ">";
 	echo "\n</td>";
-	
+
 	echo "\n<tr><td align=\"right\" valign=\"top\"></td><td><input type=\"checkbox\" name=\"" .
- 			$prefix."allowcomments\" value=\"1\"";
+	$prefix."allowcomments\" value=\"1\"";
 	if ($album->getCommentsAllowed()) {
 		echo "CHECKED";
-	} 
+	}
 	echo "> Allow Comments ";
-	echo "<input type=\"checkbox\" name=\"" . 
-				$prefix."Published\" value=\"1\"";
+	echo "<input type=\"checkbox\" name=\"" .
+	$prefix."Published\" value=\"1\"";
 	if ($album->getShow()) {
 		echo "CHECKED";
-	} 
+	}
 	echo "> Published ";
 	echo "</td></tr>";
 	echo "\n<tr><td align=\"right\" valign=\"top\">Thumbnail: </td> ";
 	echo "\n<td>";
-	echo "\n<select id=\"thumbselect\" class=\"thumbselect\" name=\"".$prefix."thumb\" onChange=\"updateThumbPreview(this)\">";
-	foreach ($images as $filename) { 
-		$image = new Image($album, $filename);
-		$selected = ($filename == $album->get('thumb')); 
-		echo "\n<option class=\"thumboption\" style=\"background-image: url(" . $image->getThumb() . 
-	 		"); background-repeat: no-repeat;\" value=\"" . $filename . "\"";
-	if ($selected) {
-		echo " selected=\"selected\""; 
+	if ($album->isDynamic()) {
+		echo "\n<input type=\"text\" name=\"".$prefix."thumb\" class=\"tags\" value=\"" .
+													$album->get('thumb'). '" />';
+	} else {
+		echo "\n<select id=\"thumbselect\" class=\"thumbselect\" name=\"".$prefix."thumb\" onChange=\"updateThumbPreview(this)\">";
+		foreach ($images as $filename) {
+			$image = new Image($album, $filename);
+			$selected = ($filename == $album->get('thumb'));
+			echo "\n<option class=\"thumboption\" style=\"background-image: url(" . $image->getThumb() .
+						"); background-repeat: no-repeat;\" value=\"" . $filename . "\"";
+			if ($selected) {
+				echo " selected=\"selected\"";
+			}
+			echo ">" . $image->get('title');
+			if ($filename != $image->get('title')) {
+				echo  " ($filename)";
+			}
+			echo "</option>";
+	  }	
+	echo "\n</td>";	
 	}
-	echo ">" . $image->get('title'); 
-		if ($filename != $image->get('title')) {
-		echo  " ($filename)";
-	}
-	echo "</option>";
-	} 
-	
+
 	echo "\n</table>";  
 	echo "\n<input type=\"submit\" value=\"save\" />";
 	echo "\n</tr>";
@@ -504,13 +520,13 @@ function printAlbumEditForm($index, $album) {
 }
 /**
  * puts out the maintenance buttons for an album
- * 
+ *
  * @param object $album is the album being emitted
  */
 function printAlbumButtons($album) {
 	if ($album->getNumImages() > 0) {
 		echo "\n<table class=\"buttons\"><tr>";
-		
+
 		echo "\n<td valign=\"top\" width=30% style=\"padding: 0px 30px 0px 30px;\">";
 		echo "<form name=\"cache_images\" action=\"cache-images.php\" method=\"post\">";
 		echo "<input type=\"hidden\" name=\"album\" value=" . queryencode($album->name) . ">";
@@ -519,12 +535,12 @@ function printAlbumButtons($album) {
 		echo " Pre-Cache Images</Button>";
 		echo "<input type=\"checkbox\" name=\"clear\" checked=\"true\" /> Clear";
 		echo "</form>\n</td>";
-	echo "<div id='edit_cache_tooltip' style='display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;'>";
+		echo "<div id='edit_cache_tooltip' style='display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;'>";
 		echo "Cache newly uploaded images.<br />";
-	echo "</div>";
-	echo "<script type='text/javascript'>";
+		echo "</div>";
+		echo "<script type='text/javascript'>";
 		echo "var my_tooltip = new Tooltip('edit_cache', 'edit_cache_tooltip')";
-	echo "</script>";
+		echo "</script>";
 
 		echo "\n<td valign=\"top\" width = 30% style=\"padding: 0px 30px 0px 30px;\">";
 		echo "<form name=\"refresh_metadata\" action=\"refresh-metadata.php\"?album=" . queryencode($album->name) . "\" method=\"post\">";
@@ -532,14 +548,14 @@ function printAlbumButtons($album) {
 		echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
 		echo "<button type=\"submit\" id='edit_refresh'><img src=\"images/warn.png\" style=\"border: 0px;\" /> Refresh Metadata</button>";
 		echo "</form>";
-	echo "\n</td>";
-	echo "<div id='edit_refresh_tooltip' style='display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;'>";
+		echo "\n</td>";
+		echo "<div id='edit_refresh_tooltip' style='display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;'>";
 		echo "Forces a refresh of the EXIF and IPTC data for all images in the album.<br />";
-	echo "</div>";
-	echo "<script type='text/javascript'>";
+		echo "</div>";
+		echo "<script type='text/javascript'>";
 		echo "var my_tooltip = new Tooltip('edit_refresh', 'edit_refresh_tooltip')";
-	echo "</script>";
- 				
+		echo "</script>";
+			
 		echo "\n<td valign=\"top\" width = 30% style=\"padding: 0px 30px 0px 30px;\">";
 		echo "</form>";
 		echo "<form name=\"reset_hitcounters\" action=\"?action=reset_hitcounters\"" . " method=\"post\">";
@@ -549,42 +565,45 @@ function printAlbumButtons($album) {
 		echo "<button type=\"submit\" id='edit_hitcounter'><img src=\"images/reset.png\" style=\"border: 0px;\" /> Reset hitcounters</button>";
 		echo "</form>";
 		echo "\n</tr></table>";
-	echo "<div id='edit_hitcounter_tooltip' style='display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;'>";
+		echo "<div id='edit_hitcounter_tooltip' style='display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;'>";
 		echo "Resets all hitcounters in the album.<br />";
-	echo "</div>";
-	echo "<script type='text/javascript'>";
+		echo "</div>";
+		echo "<script type='text/javascript'>";
 		echo "var my_tooltip = new Tooltip('edit_hitcounter', 'edit_hitcounter_tooltip')";
-	echo "</script>";
+		echo "</script>";
 	}
 }
 /**
-* puts out a row in the edit album table
-* 
-* @param object $album is the album being emitted
-**/
+ * puts out a row in the edit album table
+ *
+ * @param object $album is the album being emitted
+ **/
 function printAlbumEditRow($album) {
 	echo "\n<div id=\"id_" . $album->getAlbumID() . '">';
 	echo '<table cellspacing="0" width="100%">';
 	echo "\n<tr>";
 	echo '<td><img src="images/drag_handle.png" style="border: 0px;" alt="Drag the album '."'".$album->name."'".'" /></td>';
 	echo '<td style="text-align: left;" width="80">';
-	echo '<a href="?page=edit&album=' . urlencode($album->name) .'" title="Edit this album: ' . $album->name . 
+	echo '<a href="?page=edit&album=' . urlencode($album->name) .'" title="Edit this album: ' . $album->name .
  			'"><img height="40" width="40" src="' . $album->getAlbumThumb() . '" /></a>';
 	echo "</td>\n";
-	echo '<td  style="text-align: left;font-size:110%;" width="300"> <a href="?page=edit&album=' . urlencode($album->name) . 
+	echo '<td  style="text-align: left;font-size:110%;" width="300"> <a href="?page=edit&album=' . urlencode($album->name) .
  			'" title="Edit this album: ' . $album->name . '">' . $album->getTitle() . '</a>';
 	echo "</td>\n";
 
-	$ci = count($album->getImages());
-	if ($ci > 0) $si = "$ci image" . $si; else $si = "no image";
-	if ($ci != 1) $si .= "s"; else $si .= "&nbsp;";
-	$ca = count($album->getSubalbums());
-	if ($ca > 0) $sa = $ca . " album" . $sa;  else $ca = "&nbsp;";
-	if ($ca > 1) $sa .= "s";
-	
+	if ($album->isDynamic()) {
+		$si = "Dynamic";
+	} else {
+		$ci = count($album->getImages());
+		if ($ci > 0) $si = "$ci image" . $si; else $si = "no image";
+		if ($ci != 1) $si .= "s"; else $si .= "&nbsp;";
+		$ca = count($album->getSubalbums());
+		if ($ca > 0) $sa = $ca . " album" . $sa;  else $ca = "&nbsp;";
+		if ($ca > 1) $sa .= "s";
+	}
 	echo "<td style=\"text-align: right;\" width=\"80\">" . $sa . "</td>";
 	echo "<td style=\"text-align: right;\" width=\"80\">" . $si . "</td>";
-	
+
 	$wide='40px';
 	echo "\n<td><table width='100%'><tr>\n<td>";
 	echo "\n<td style=\"text-align:center;\" width='$wide';>";
@@ -592,59 +611,59 @@ function printAlbumEditRow($album) {
 	$pwd = $album->getPassword();
 	if (!empty($pwd)) {
 		echo '<img src="images/lock.png" style="border: 0px;" alt="Protected" /></a>';
- 	}
-	
+	}
+
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	if ($album->getShow()) {
-		echo '<a class="publish" href="?action=publish&value=0&album=' . queryencode($album->name) . 
+		echo '<a class="publish" href="?action=publish&value=0&album=' . queryencode($album->name) .
  				'" title="Publish the album <em>' . $album->name . '</em>">';
 		echo '<img src="images/pass.png" style="border: 0px;" alt="Published" /></a>';
 	} else {
-		echo '<a class="publish" href="?action=publish&value=1&album=' . queryencode($album->name) . 
+		echo '<a class="publish" href="?action=publish&value=1&album=' . queryencode($album->name) .
  				'" title="Publish the album <em>' . $album->name . '</em>">';
 		echo '<img src="images/action.png" style="border: 0px;" alt="Publish the album ' . $album->name . '" /></a>';
 	}
-	
+
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-	echo '<a class="cache" href="cache-images.php?album=' . queryencode($album->name) . "&return=*" . 
+	echo '<a class="cache" href="cache-images.php?album=' . queryencode($album->name) . "&return=*" .
  			'" title="Pre-cache images in <em>' . $album->name . '</em>">';
 	echo '<img src="images/cache.png" style="border: 0px;" alt="Cache the album ' . $album->name . '" /></a>';
-	
+
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-	echo '<a class="warn" href="refresh-metadata.php?album=' . queryencode($album->name) . "&return=*" . 
+	echo '<a class="warn" href="refresh-metadata.php?album=' . queryencode($album->name) . "&return=*" .
  			'" title="Refresh metadata for the album <em>' . $album->name . '</em>">';
 	echo '<img src="images/warn.png" style="border: 0px;" alt="Refresh image metadata in the album ' . $album->name . '>" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	echo '<a class="reset" href="?action=reset_hitcounters&albumid=' . $album->getAlbumID() . '" title="Reset hitcounters for album <em>' . $album->name . '</em>">';
 	echo '<img src="images/reset.png" style="border: 0px;" alt="Reset hitcounters for the album ' . $album->name . '" /></a>';
-	
+
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=" . queryEncode($album->name) . "');\" title=\"Delete the album " . $album->name . "\">";
 	echo '<img src="images/fail.png" style="border: 0px;" alt="Delete the album ' . $album->name . '" /></a>';
-	echo '<a class="cache" href="cache-images.php?album=' . queryencode($album->name) . 
+	echo '<a class="cache" href="cache-images.php?album=' . queryencode($album->name) .
  			'&return=edit" title="Pre-Cache the album <em>' . $album->name . '</em>">';
 	echo "</td>\n</tr></table>\n</td>";
-	
+
 	echo '</tr>';
 	echo '</table>';
 	echo "</div>\n";
 }
 
 /**
- * processes the post from the above 
+ * processes the post from the above
  *@param int param1 the index of the entry in mass edit or 0 if single album
-	*@param object param2 the album object
+ *@param object param2 the album object
  *@return string error flag if passwords don't match
  *@since 1.1.3
-*/
+ */
 function processAlbumEdit($index, $album) {
 	if ($index == 0) {
 		$prefix = '';
 	} else {
 		$prefix = "$index-";
 	}
-	$notify = '';      
+	$notify = '';
 	$album->setTitle(strip($_POST[$prefix.'albumtitle']));
 	$album->setDesc(strip($_POST[$prefix.'albumdesc']));
 	$album->setTags(strip($_POST[$prefix.'albumtags']));
@@ -655,12 +674,12 @@ function processAlbumEdit($index, $album) {
 	$album->setCommentsAllowed(strip($_POST[$prefix.'allowcomments']));
 	$album->setSortType(strip($_POST[$prefix.'sortby']));
 	if ($_POST[$prefix.'sortby'] == 'Manual') {
-		$album->setSortDirection('image', 0);   
+		$album->setSortDirection('image', 0);
 	} else {
-		$album->setSortDirection('image', strip($_POST[$prefix.'image_sortdirection']));   
+		$album->setSortDirection('image', strip($_POST[$prefix.'image_sortdirection']));
 	}
-	$album->setSubalbumSortType(strip($_POST[$prefix.'subalbumsortby']));   
-	$album->setSortDirection('album', strip($_POST[$prefix.'album_sortdirection']));   
+	$album->setSubalbumSortType(strip($_POST[$prefix.'subalbumsortby']));
+	$album->setSortDirection('album', strip($_POST[$prefix.'album_sortdirection']));
 	if (isset($_POST['reset_hitcounter'])) {
 		$id = $album->getAlbumID();
 		query("UPDATE " . prefix('albums') . " SET `hitcounter`= 0 WHERE `id` = $id");
@@ -668,8 +687,8 @@ function processAlbumEdit($index, $album) {
 
 	if ($_POST[$prefix.'albumpass'] == $_POST[$prefix.'albumpass_2']) {
 		$pwd = trim($_POST[$prefix.'albumpass']);
-		if (empty($pwd)) {  
-		if (empty($_POST[$prefix.'albumpass'])) {
+		if (empty($pwd)) {
+			if (empty($_POST[$prefix.'albumpass'])) {
 				$album->setPassword(NULL);  // clear the gallery password
 			}
 		} else {
@@ -678,9 +697,9 @@ function processAlbumEdit($index, $album) {
 	} else {
 		$notify = '&mismatch=album';
 	}
-
-	$album->setPasswordHint(strip($_POST[$prefix.'albumpass_hint']));   
-	$album->setCustomData(strip($_POST[$prefix.'album_custom_data']));   
+	$album->setPasswordHint(strip($_POST[$prefix.'albumpass_hint']));
+	$album->setCustomData(strip($_POST[$prefix.'album_custom_data']));
+	$album->setSearchTags(strip($_POST[$prefix.'search_words']));
 	$album->save();
 	return $notify;
 }
@@ -688,8 +707,8 @@ function processAlbumEdit($index, $album) {
 /**
  * Searches the zenphoto.org home page for the current zenphoto download
  * locates the version number of the download and compares it to the version
- * we are running. 
- * 
+ * we are running.
+ *
  *@rerturn string If there is a more current version on the WEB, returns its version number otherwise returns FALSE
  *@since 1.1.3
  */
@@ -734,7 +753,7 @@ function getManagedAlbumList() {
  * @return array
  */
 function fetchComments($number) {
-	if ($number) { 
+	if ($number) {
 		$limit = " LIMIT $number";
 	}
 
@@ -774,7 +793,7 @@ function fetchComments($number) {
 		$sql = "SELECT .".prefix('comments').".id as id, ".prefix('comments').".name as name, `website`, `type`, `ownerid`,"
 		." (".prefix('comments').".date + 0) AS date, comment, email, inmoderation, ".prefix('images').".`albumid` as albumid"
 		." FROM ".prefix('comments').",".prefix('images')." WHERE ";
- 		
+			
 		$sql .= "(`type`='images' AND(";
 		$i = 0;
 		foreach ($albumIDs as $ID) {
@@ -796,6 +815,6 @@ function fetchComments($number) {
 			}
 		}
 	}
- return $comments;
+	return $comments;
 }
 ?>

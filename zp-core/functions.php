@@ -1,6 +1,6 @@
 <?php
 define('ZENPHOTO_VERSION', '1.1.4');
-define('ZENPHOTO_RELEASE', 1146);
+define('ZENPHOTO_RELEASE', 1150);
 define('SAFE_GLOB', false);
 define('CHMOD_VALUE', 0777);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
@@ -873,10 +873,9 @@ function zp_mail($subject, $message, $headers = '', $admin_emails=null) {
 function sortAlbumArray($albums, $sortkey='sort_order') {
 	global $_zp_loggedin;
 
-	$albums_r = array();
 	$hidden = array();
-	$result = query("SELECT folder, sort_order, `show` FROM " . prefix("albums")
-	. " ORDER BY " . $sortkey);
+	$result = query("SELECT folder, sort_order, `show`, `dynamic`, `search_params` FROM " . 
+							prefix("albums") . " ORDER BY " . $sortkey);
 
 	$i = 0;
 	$albums_r = array_flip($albums);

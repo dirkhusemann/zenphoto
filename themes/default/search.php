@@ -2,7 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title><?php printGalleryTitle(); ?></title>
+	<title>
+	<?php 
+		printGalleryTitle(); 
+		echo " | "; 
+		if (in_context(ZP_ALBUM)) {
+			echo getAlbumTitle();
+		} else {
+			Echo "<em>Search</em>";
+		}
+		?>
+	</title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 	<?php printRSSHeaderLink('Gallery','Gallery RSS'); ?>
 	<?php zenJavascript(); ?>
@@ -14,20 +24,33 @@
 
 	<div id="gallerytitle">
 		<?php printSearchForm(); ?>
-		<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Gallery Index"><?php echo getGalleryTitle();?></a></span> | <em>Search</em></h2>
+		<h2><span><?php printHomeLink('', ' | '); ?><a href="
+		<?php echo getGalleryIndexURL();?>" title="Gallery Index">
+		<?php echo getGalleryTitle();?></a></span> | 
+		<?php
+		if (in_context(ZP_ALBUM)) {
+			echo getAlbumTitle();
+		} else {
+		  echo "<em>Search</em>";
+		}
+		?>
+		</h2>
 	</div>
 		
 		<div id="padbox">
-	
 		<?php 
+		if (!in_context(ZP_ALBUM)) {
 			if ($_REQUEST['words'] OR $_REQUEST['date']) {
-			if (($total = getNumImages() + getNumAlbums()) > 0) {	
-		 	if ($_REQUEST['date']) 
-		 		{ $searchwords = getSearchDate(); 
+				if (($total = getNumImages() + getNumAlbums()) > 0) {
+					if ($_REQUEST['date']){
+						$searchwords = getSearchDate();
 		 		} else { $searchwords = getSearchWords(); }
 					echo "<p>Total matches for <em>".$searchwords."</em>: $total</p>";
+				}
+			}
+		}
 		?>
-			<div id="albums">
+<div id="albums">
 			<?php while (next_album()): ?>
 				<div class="album">
 					<div class="thumb">

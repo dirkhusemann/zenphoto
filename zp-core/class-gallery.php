@@ -124,12 +124,12 @@ class Gallery {
 		$albums = array();
 
 		while ($dirname = readdir($dir)) {
-			if (is_dir($albumdir.$dirname) && substr($dirname, 0, 1) != '.') {
+			if ((is_dir($albumdir.$dirname) && (substr($dirname, 0, 1) != '.')) || 
+									(strtolower(substr(strrchr($dirname, "."), 1)) == 'alb')) {
 				$albums[] = $dirname;
 			}
 		}
 		closedir($dir);
-		
 		return $albums;
 	}
 

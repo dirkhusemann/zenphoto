@@ -28,7 +28,6 @@ $_zp_comments = NULL;
 $_zp_current_context = ZP_INDEX;
 $_zp_current_context_restore = NULL;
 $_zp_current_search = NULL;
-$_zp_current_search_restore = NULL;
 $_zp_pre_authorization = array();
 
 /*** Request Handler **********************

@@ -116,15 +116,17 @@ function printAdminToolbox($context=null, $id='admin') {
 				$redirect = "&p=" . $_GET['p'];
 			}
 			$redirect .= "&page=$page";
-		} else if (!in_context(ZP_IMAGE | ZP_SEARCH)) {  // then it must be an album page
+		} else if (!in_context(ZP_IMAGE | ZP_SEARCH)  || (get_context() & (ZP_SEARCH | ZP_ALBUM)) == (ZP_SEARCH | ZP_ALBUM)) {  // then it must be an album page
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				printSubalbumAdmin('Edit album', '', "<br />\n");
-				printSortableAlbumLink('Sort album', 'Manual sorting');
-				echo "<br />\n";
+				if (!in_context(ZP_SEARCH)) {
+					printSortableAlbumLink('Sort album', 'Manual sorting');
+					echo "<br />\n";
+				}
 				echo "<a href=\"javascript: confirmDeleteAlbum('".$zf."/admin.php?page=edit&action=deletealbum&album=" .
 				queryEncode($albumname) . "');\" title=\"Delete the album\">Delete album</a><br />\n";
 			}
-			if (isMyAlbum($albumname, UPLOAD_RIGHTS)) {
+			if (isMyAlbum($albumname, UPLOAD_RIGHTS) && !in_context(ZP_SEARCH)) {
 				printLink($zf . '/admin.php?page=upload&album=' . urlencode($albumname), "Upload Here", NULL, NULL, NULL);
 				echo "<br />\n";
 				printLink($zf . '/admin.php?page=upload&new&album=' . urlencode($albumname), "New Album Here", NULL, NULL, NULL);
@@ -594,15 +596,23 @@ function printAlbumBreadcrumb($before='', $after='', $title='Album Thumbnails') 
  * @param string $after Insert here the text to be printed after the links
  */
 function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
-	global $_zp_current_search;
+	global $_zp_current_search, $_zp_current_gallery;
 	echo $before;
 	if (!is_null($_zp_current_search)) {
 		$page = $_zp_current_search->page;
 		$searchwords = $_zp_current_search->words;
 		$searchdate = $_zp_current_search->dates;
 		$searchfields = $_zp_current_search->fields;
+		$dynamic_album = $_zp_current_search->albumname;
 		$searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
-		echo "<a href=\"" . $searchpagepath . "\"><em>Search</em></a>";
+		if (empty($dynamic_album)) {
+			echo "<a href=\"" . $searchpagepath . "\">";
+			echo "<em>Search</em></a>";
+		} else {
+			$album = new Album($_zp_current_gallery, $dynamic_album);
+			echo "<a href=\"" . $album->getAlbumLink() . "\">";
+			echo $album->getTitle();
+		}
 	} else {
 		$parents = getParentAlbums();
 		$n = count($parents);
@@ -2585,9 +2595,9 @@ function getRandomImages() {
 		$imageWhere = " AND " . prefix('images') . ".show=1";
 	}
 	$result = query_single_row('SELECT '.prefix('images').'.filename,'.prefix('images').'.title, '.prefix('albums').
- 		'.folder, ' . prefix('images') . '.show, ' . prefix('albums') . '.show, ' . prefix('albums') . '.password '.
- 		'FROM '.prefix('images'). ' INNER JOIN '.prefix('albums').
-		' ON '.prefix('images').'.albumid = '.prefix('albums').'.id WHERE '.prefix('albums').'.folder!=""'.
+ 														'.folder, ' . prefix('images') . '.show, ' . prefix('albums') . '.show, ' . prefix('albums') . '.password '.
+ 														'FROM '.prefix('images'). ' INNER JOIN '.prefix('albums').
+							 ' ON '.prefix('images').'.albumid = '.prefix('albums').'.id WHERE '.prefix('albums').'.folder!=""'.
 	$albumWhere . $imageWhere . ' ORDER BY RAND() LIMIT 1');
 	$imageName = $result['filename'];
 	if ($imageName =='') { return NULL; }

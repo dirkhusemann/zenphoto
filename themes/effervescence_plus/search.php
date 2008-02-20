@@ -49,7 +49,17 @@ $backgroundImagePath="";
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title><?php printGalleryTitle(); ?> | Search</title>
+	<title>
+	<?php 
+		printGalleryTitle(); 
+		echo " | "; 
+		if (in_context(ZP_ALBUM)) {
+			echo getAlbumTitle();
+		} else {
+			Echo "<em>Search</em>";
+		}
+		?>
+	</title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/swfobject.js"></script>
@@ -76,7 +86,16 @@ $backgroundImagePath="";
 
 <div id="wrapnav">
 	<div id="navbar">
-		<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Search Page"><?php echo getGalleryTitle();?></a> | <em>Search</em>
+		<span><?php printHomeLink('', ' | '); ?>
+		<a href="<?php echo getGalleryIndexURL();?>" title="Albums Index">
+		<?php echo getGalleryTitle();	?></a></span> | 
+		<?php
+		if (in_context(ZP_ALBUM)) {
+			echo getAlbumTitle();
+		} else {
+		  echo "<em>Search</em>";
+		}
+		?>
 	</div>
 </div>
 
@@ -88,21 +107,24 @@ $backgroundImagePath="";
 
 <!-- Album Description -->
 <div id="description">
-<?php 
-	$total = getNumAlbums() + getNumImages(); 
-	$searchwords = getSearchWords();
-	$searchdate = getSearchDate();
-	if (!empty($searchdate)) {
-		if (!empty($seachwords)) {
-		$searchwords .= ": ";
-	}
-	$searchwords .= $searchdate;
-	}
-	if ($total > 0 ) { 
-		echo "$total Hit"; 
-		if ($total > 1) { echo "s"; } 
-	echo " for <em>$searchwords</em>"; } 
-?>
+		<?php
+		if (!in_context(ZP_ALBUM)) {
+			$total = getNumAlbums() + getNumImages();
+			$searchwords = getSearchWords();
+			$searchdate = getSearchDate();
+			if (!empty($searchdate)) {
+				if (!empty($seachwords)) {
+					$searchwords .= ": ";
+				}
+				$searchwords .= $searchdate;
+			}
+			if ($total > 0 ) {
+				echo "$total Hit";
+				if ($total > 1) { echo "s"; }
+				echo " for <em>$searchwords</em>";
+			}
+		}
+		?>
 </div>
  					
 	<!-- Album List -->

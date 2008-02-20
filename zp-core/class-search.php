@@ -21,6 +21,7 @@ class SearchEngine
 	var $page;
 	var $images;
 	var $albums;
+	var $albumname;
 
 	/**
 	 * Constuctor
@@ -49,6 +50,8 @@ class SearchEngine
 		if (!empty($d)) { $r .= '&date=' . $d; }
 		$f = $this->fields;
 		if (!empty($f)) { $r .= '&searchfields=' . $f; }
+		$a = $this->albumname;
+		if ($a) { $r .= '&albumname=' . $a; }
 		if ($_zp_page != 1) {
 			$this->page = $_zp_page;
 			$r .= '&page=' . $_zp_page;
@@ -78,6 +81,9 @@ class SearchEngine
 					break;
 				case 'page':
 					$this->page = $v;
+					break;
+				case 'albumname':
+					$this->albumname = $v;
 					break;
 			}
 		}

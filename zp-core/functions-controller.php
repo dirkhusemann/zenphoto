@@ -152,8 +152,8 @@ function zp_handle_comment() {
 	 		$activeImage = zp_load_image_from_id(strip_tags($_POST['imageid']));
 	 		if($activeImage !== false){
 	 			$commentadded = $activeImage->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']),
-	 			$website, kses($_POST['comment'], $allowed),
-	 			strip_tags($_POST['code']), $_POST['code_h']);
+	 											$website, kses($_POST['comment'], $allowed),
+	 											strip_tags($_POST['code']), $_POST['code_h']);
 	 			$redirectTo = $activeImage->getImageLink();
 				}
 			} else {
@@ -165,8 +165,8 @@ function zp_handle_comment() {
 					$redirectTo = $_zp_current_album->getAlbumLink();
 				}
 				$commentadded = $commentobject->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']),
-				$website, kses($_POST['comment'], $allowed),
-				strip_tags($_POST['code']), $_POST['code_h']);
+													$website, kses($_POST['comment'], $allowed),
+													strip_tags($_POST['code']), $_POST['code_h']);
 			}
 			if ($commentadded == 2) {
 				unset($_zp_comment_error);
@@ -292,7 +292,7 @@ function zp_load_gallery() {
 function zp_load_search() {
 	global $_zp_current_search;
 	if ($_zp_current_search == NULL)
-	$_zp_current_search = new SearchEngine();
+		$_zp_current_search = new SearchEngine();
 	set_context(ZP_INDEX | ZP_SEARCH);
 	$cookiepath = WEBPATH;
 	if (WEBPATH == '') { $cookiepath = '/'; }

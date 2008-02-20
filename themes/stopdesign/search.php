@@ -11,7 +11,17 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<title><?php printGalleryTitle(); ?> | Search</title>
+	<title>
+	<?php 
+		printGalleryTitle(); 
+		echo " | "; 
+		if (in_context(ZP_ALBUM)) {
+			echo getAlbumTitle();
+		} else {
+			Echo "<em>Search</em>";
+		}
+		?>
+	</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" type="text/css" media="screen, projection" href="<?php echo $_zp_themeroot ?>/css/master.css" />
 	<?php printRSSHeaderLink('Gallery','Gallery RSS'); zenJavascript(); global $_zp_gallery; ?>
@@ -125,7 +135,14 @@
 		</div>
 	</div>
 
-	<p id="path"><?php printHomeLink('', ' > '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> &gt; <em>Search</em></p>  
+	<p id="path"><?php printHomeLink('', ' > '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> &gt; 
+	<?php
+		if (in_context(ZP_ALBUM)) {
+			echo getAlbumTitle();
+		} else {
+			Echo "<em>Search</em>";
+		}
+	?>
 
 	<div id="footer">
 			<hr />

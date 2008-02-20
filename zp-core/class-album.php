@@ -25,7 +25,6 @@ class Album extends PersistentObject {
 	 */
 	function Album(&$gallery, $folder, $cache=true) {
 		$folder = sanitize_path($folder);
-
 		$this->name = $folder;
 		$this->gallery = &$gallery;
 		if ($folder == '') {
@@ -33,23 +32,43 @@ class Album extends PersistentObject {
 		} else {
 			$this->localpath = getAlbumFolder() . $folder . "/";
 		}
-
+		if (strtolower(substr(strrchr($folder, "."), 1)) == 'alb') {
+			$this->localpath = substr($this->localpath, 0, -1);
+		}
+		
 		// Second defense against upward folder traversal:
 		if(!file_exists($this->localpath) || strpos($this->localpath, '..') !== false) {
 			$this->exists = false;
 			return false;
 		}
-		parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache);
+		$new = parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache);
+		if ($new && (strtolower(substr(strrchr($folder, "."), 1)) == 'alb')) {
+			$tags = $this->getSearchTags();
+			$data = file_get_contents($this->localpath);
+			$data1 = trim(substr($data, 0, strpos($data, "\n")));
+			$data2 = trim(substr($data, strlen($data1)));
+			if (strpos($data1, 'TAGS:') !== false) {
+				$tags = substr($data1, 5);
+				$this->set('search_params', $tags);
+			}
+			
+			if (strpos($data2, 'THUMB:') !== false) {
 
+				$thumb = trim(substr($data2, 6));
+				$this->set('thumb', $thumb);
+			}
+			$this->set('dynamic', 1);
+			$this->set('title', substr($folder, 0, -4));
+			$this->save();
+		}
 	}
-
 
 	/**
 	 * Sets default values for a new album
 	 *
 	 * @return bool
 	 */
-	function setDefaults() {
+	function setDefaults() {	
 		// Set default data for a new Album (title and parent_id)
 		$parentalbum = $this->getParent();
 		$title = trim(str_replace(array('-','_','+','~'), ' ', $this->name));
@@ -67,7 +86,7 @@ class Album extends PersistentObject {
 			$this->set('image_sortdirection',getOption('image_sortdirection'));
 		}
 		$this->set('title', $title);
-
+		
 		return true;
 	}
 
@@ -570,7 +589,6 @@ class Album extends PersistentObject {
 
 		$albumdir = getAlbumFolder() . $this->name ."/";
 		$thumb = $this->get('thumb');
-
 		$i = strpos($thumb, '/');
 		if ($root = ($i === 0)) {
 			$thumb = substr($thumb, 1); // strip off the slash
@@ -589,7 +607,7 @@ class Album extends PersistentObject {
 				if (!$root) { $albumdir = $this->name . "/" . $albumdir; } else { $albumdir = $albumdir . "/";}
 				return new Image(new Album($this->gallery, $albumdir), $thumb);
 			}
-		} else {
+		} else if (!$this->isDynamic()) {
 			$dp = opendir($albumdir);
 			if (is_null($this->images)) {
 				$this->getImages(0);
@@ -717,24 +735,30 @@ class Album extends PersistentObject {
 	 * @return bool
 	 */
 	function deleteAlbum() {
-		foreach ($this->getSubAlbums() as $folder) {
-			$subalbum = new Album($album, $folder);
-			$subalbum->deleteAlbum();
-		}
-		foreach($this->getImages() as $filename) {
-			$image = new Image($this, $filename);
-			$image->deleteImage(true);
-		}
-		chdir($this->localpath);
-		$filelist = safe_glob('*');
-		foreach($filelist as $file) {
-			if (($file != '.') && ($file != '..')) {
-				unlink($this->localpath . $file); // clean out any other files in the folder
+		if (!$this->isDynamic()) {
+			foreach ($this->getSubAlbums() as $folder) {
+				$subalbum = new Album($album, $folder);
+				$subalbum->deleteAlbum();
+			}
+			foreach($this->getImages() as $filename) {
+				$image = new Image($this, $filename);
+				$image->deleteImage(true);
+			}
+			chdir($this->localpath);
+			$filelist = safe_glob('*');
+			foreach($filelist as $file) {
+				if (($file != '.') && ($file != '..')) {
+					unlink($this->localpath . $file); // clean out any other files in the folder
+				}
 			}
 		}
 		query("DELETE FROM " . prefix('comments') . "WHERE `type`='albums' AND `ownerid`=" . $this->id);
 		query("DELETE FROM " . prefix('albums') . " WHERE `id` = " . $this->id);
-		return rmdir($this->localpath);
+		if ($this->isDynamic()) {
+			return unlink($this->localpath);
+		} else {
+			return rmdir($this->localpath);
+		}
 	}
 
 
@@ -851,6 +875,9 @@ class Album extends PersistentObject {
 	 * @return array
 	 */
 	function loadFileNames($dirs=false) {
+		if ($this->isDynamic()) {  // there are no 'real' files
+			return array();
+		}
 		$albumdir = getAlbumFolder() . $this->name . "/";
 		if (!is_dir($albumdir) || !is_readable($albumdir)) {
 			$msg = "Error: The 'albums' directory (" . $this->albumdir . ") ";
@@ -867,7 +894,8 @@ class Album extends PersistentObject {
 
 
 		while (false !== ($file = readdir($dir))) {
-			if ($dirs && is_dir($albumdir.$file) && substr($file, 0, 1) != '.') {
+			if ($dirs && (is_dir($albumdir.$file) && (substr($file, 0, 1) != '.') ||
+										(strtolower(substr(strrchr($file, "."), 1))  == 'alb'))) {
 				$files[] = $file;
 			} else if (!$dirs && is_file($albumdir.$file)) {
 				if (is_valid_video($file)) {
@@ -966,6 +994,33 @@ class Album extends PersistentObject {
 	 * @param string $val the value to be put in custom_data
 	 */
 	function setCustomData($val) { $this->set('custom_data', $val); }
+
+	/**
+	 * Returns true if the album is "dynamic"
+	 *
+	 * @return bool
+	 */
+	function isDynamic() {
+		return $this->get('dynamic');
+	}
+	
+	/**
+	 * Returns the search parameters for a dynamic album
+	 *
+	 * @return string
+	 */
+	function getSearchTags() {
+		return $this->get('search_params');
+	}
+	
+	/**
+	 * Sets the search parameters of a dynamic album
+	 *
+	 * @param string $params The search string to produce the dynamic album
+	 */
+	function setSearchTags($params) {
+		$this->set('search_params', $params);
+	}
 
 }
 

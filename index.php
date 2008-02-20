@@ -21,12 +21,10 @@ if (!(false === ($requirePath = getPlugin('themeoptions.php', true)))) {
 
 header ('Content-Type: text/html; charset=' . getOption('charset'));
 $obj = '';
-
-
 if (isset($_GET['p'])) {
 	$page = str_replace(array('/','\\','.'), '', $_GET['p']);
+	handleSearchParms();
 	if (substr($page, 0, 1) == "*") {
-		handleSearchParms();
 		include ($obj = ZENFOLDER."/".substr($page, 1) . ".php");
 	} else {
 		$obj = "$themepath/$theme/$page.php";
@@ -41,8 +39,21 @@ if (isset($_GET['p'])) {
 	if(isset($_GET['zipfile']) && is_dir(realpath(getAlbumFolder() . $_GET['album']))){ 
 		createAlbumZip($_GET['album']); 
 	} else { 
-		handleSearchParms($_zp_current_album->name);
-		include($obj = "$themepath/$theme/album.php"); 
+		if ($_zp_current_album->isDynamic()) {
+			$_zp_current_search = new SearchEngine();		
+			$params = 'words='.$_zp_current_album->getSearchTags();
+			$params .= '&searchfields='.SEARCH_TAGS;
+			$params .= '&albumname='.$_zp_current_album->name;		
+			$_zp_current_search->setSearchParams($params);
+			set_context(ZP_INDEX | ZP_ALBUM | ZP_SEARCH);
+			$cookiepath = WEBPATH;
+			if (WEBPATH == '') { $cookiepath = '/'; }
+			zp_setcookie("zenphoto_image_search_params", $params, 0, $cookiepath);
+			include($obj = "$themepath/$theme/search.php");
+		} else {
+			handleSearchParms($_zp_current_album->name);
+			include($obj = "$themepath/$theme/album.php"); 
+		}
 	} 
 } else if (in_context(ZP_INDEX)) {
 	handleSearchParms();
@@ -58,6 +69,4 @@ $a = explode("/", $obj);
 if ($a[count($a)-1] != 'full-image.php') {
 	echo "\n<!-- zenphoto version " . getOption('version') . " r-" . ZENPHOTO_RELEASE . " Theme: " . $theme . " (" . $a[count($a)-1] . ") -->";
 }
-
-
 ?>

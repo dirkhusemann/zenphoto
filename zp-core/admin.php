@@ -775,6 +775,8 @@ if (!zp_loggedin()) {
 				<?php printAlbumEditForm(0, $album); ?>
 				</form>
 				<?php printAlbumButtons($album) ?>
+				
+			  <?php if (!$album->isDynamic())  {?>
 				<!-- Subalbum list goes here -->
 
 				<?php
@@ -809,15 +811,15 @@ if (!zp_loggedin()) {
 						</tr>
 						<tr>
 							<td colspan="8">
-			<p align="right">
-			<img src="images/lock.png" style="border: 0px;" alt="Protected" />Has Password&nbsp;
-			<img src="images/pass.png" style="border: 0px;" alt="Published" />Published&nbsp;
-			<img src="images/action.png" style="border: 0px;" alt="Unpublished" />Unpublished&nbsp;
-			<img src="images/cache.png" style="border: 0px;" alt="Cache the album" />Cache the album&nbsp;
-			<img src="images/warn.png" style="border: 0px;" alt="Refresh image metadata" />Refresh image metadata&nbsp;
-			<img src="images/reset.png" style="border: 0px;" alt="Reset hitcounters" />Reset hitcounters&nbsp;
-			<img src="images/fail.png" style="border: 0px;" alt="Delete" />Delete
-			</p>
+							<p align="right">
+							<img src="images/lock.png" style="border: 0px;" alt="Protected" />Has Password&nbsp;
+							<img src="images/pass.png" style="border: 0px;" alt="Published" />Published&nbsp;
+							<img src="images/action.png" style="border: 0px;" alt="Unpublished" />Unpublished&nbsp;
+							<img src="images/cache.png" style="border: 0px;" alt="Cache the album" />Cache the album&nbsp;
+							<img src="images/warn.png" style="border: 0px;" alt="Refresh image metadata" />Refresh image metadata&nbsp;
+							<img src="images/reset.png" style="border: 0px;" alt="Reset hitcounters" />Reset hitcounters&nbsp;
+							<img src="images/fail.png" style="border: 0px;" alt="Delete" />Delete
+							</p>
 								<?php
 								zenSortablesSaveButton("?page=edit&album=" . urlencode($album->name) . "&subalbumsaved", "Save Order");
 								?>
@@ -923,8 +925,9 @@ if (!zp_loggedin()) {
 			<?php if (count($album->getSubalbums())) { ?>
 				<p><a href="#subalbumList" title="Scroll up to the sub-album list">&nbsp; &nbsp; &nbsp;^ Subalbum List</a></p>
 			<?php 
+					} 
 				} 
-			} ?>
+			}?>
 
 			<!-- page trailer -->
 			<p><a href="?page=edit<?php echo $albumdir ?>" title="Back to the list of albums (go up one level)">&laquo; Back</a></p>
