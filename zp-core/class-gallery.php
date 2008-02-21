@@ -289,6 +289,32 @@ class Gallery {
 		}
 		
 		if ($complete) {
+			
+			/* refresh 'metadata' of dynamic albums */
+			$albumfolder = getAlbumFolder();
+			$albumids = query_full_array("SELECT `id`, `mtime`, `folder` FROM " . prefix('albums') . " WHERE `dynamic`='1'");
+			foreach ($albumids as $album) {
+				if (($mtime=filemtime($albumfolder.$album['folder'])) > $album['mtime']) {  // refresh
+					$data = file_get_contents($albumfolder.$album['folder']);
+					while (!empty($data)) {
+						$data1 = trim(substr($data, 0, $i = strpos($data, "\n")));
+						if ($i === false) {
+							$data1 = $data;
+							$data = '';
+						} else {
+							$data = substr($data, $i + 1);
+						}
+						if (strpos($data1, 'TAGS:') !== false) {
+							$tags = substr($data1, 5);
+						}
+						if (strpos($data1, 'THUMB:') !== false) {
+							$thumb = trim(substr($data1, 6));
+						}
+					}
+				$sql = "UPDATE ".prefix('albums')."SET `search_params`=\"$tags\", `thumb`=\"$thumb\", `mtime`=\"$mtime\" WHERE `id`=\"".$album['id']."\"";		
+				query($sql);	
+				}
+			}
 		
 			/* Delete all image entries that don't belong to an album at all. */
 			

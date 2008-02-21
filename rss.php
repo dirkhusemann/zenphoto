@@ -34,8 +34,13 @@ else
 <lastBuildDate><?php echo date("r", time()); ?></lastBuildDate>
 <docs>http://blogs.law.harvard.edu/tech/rss</docs>
 <generator>Acrylian's ZenPhoto Album RSS Generator based on Alenônimo's ZenPhoto RSS Generator which is based on ThinkDreams' Generator</generator>
-<managingEditor><?php echo array_shift(getAdminNames()); ?></managingEditor>
-<webMaster><?php echo array_shift(getAdminNames()); ?></webMaster>
+<?php
+	$admin = array_shift(getAdministrators());
+	$adminname = $admin['name'];
+?>
+
+<managingEditor><?php echo $adminname; ?></managingEditor>
+<webMaster><?php echo $adminname; ?></webMaster>
 <?php 
 $s = 240; // uncropped image size
 $items = getOption('feed_items'); // # of Items displayed on the feed

@@ -35,38 +35,42 @@ class Album extends PersistentObject {
 		if (hasDyanmicAlbumSuffix($folder)) {
 			$this->localpath = substr($this->localpath, 0, -1);
 		}
-		
+
 		// Second defense against upward folder traversal:
 		if(!file_exists($this->localpath) || strpos($this->localpath, '..') !== false) {
 			$this->exists = false;
 			return false;
 		}
 		$new = parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache);
-		if ($new && hasDyanmicAlbumSuffix($folder)) {
-			$tags = $this->getSearchTags();
-			$data = file_get_contents($this->localpath);
-			while (!empty($data)) {
-				$data1 = trim(substr($data, 0, $i = strpos($data, "\n")));
-				if ($i === false) {
-					$data1 = $data; 
-					$data = '';
-				} else {
-					$data = substr($data, $i + 1);
-				}
-				if (strpos($data1, 'TAGS:') !== false) {
-					$tags = substr($data1, 5);
-					$this->set('search_params', $tags);
-				}
-					
-				if (strpos($data1, 'THUMB:') !== false) {
+		if (hasDyanmicAlbumSuffix($folder)) {
+			if ($new || (filemtime($this->localpath) > $this->get('mtime'))) {
+				$data = file_get_contents($this->localpath);
+				while (!empty($data)) {
+					$data1 = trim(substr($data, 0, $i = strpos($data, "\n")));
+					if ($i === false) {
+						$data1 = $data;
+						$data = '';
+					} else {
+						$data = substr($data, $i + 1);
+					}
+					if (strpos($data1, 'TAGS:') !== false) {
+						$tags = substr($data1, 5);
+						$this->set('search_params', $tags);
+					}
+						
+					if (strpos($data1, 'THUMB:') !== false) {
 
-					$thumb = trim(substr($data1, 6));
-					$this->set('thumb', $thumb);
+						$thumb = trim(substr($data1, 6));
+						$this->set('thumb', $thumb);
+					}
 				}
 			}
 			$this->set('dynamic', 1);
-			$title = $this->get('title');
-			$this->set('title', substr($title, 0, -4));
+			$this->set('mtime', filemtime($this->localpath));
+			if ($new) {
+				$title = $this->get('title');
+				$this->set('title', substr($title, 0, -4));
+			}
 			$this->save();
 		}
 	}
@@ -76,7 +80,7 @@ class Album extends PersistentObject {
 	 *
 	 * @return bool
 	 */
-	function setDefaults() {	
+	function setDefaults() {
 		// Set default data for a new Album (title and parent_id)
 		$parentalbum = $this->getParent();
 		$title = trim(str_replace(array('-','_','+','~'), ' ', $this->name));
@@ -94,7 +98,7 @@ class Album extends PersistentObject {
 			$this->set('image_sortdirection',getOption('image_sortdirection'));
 		}
 		$this->set('title', $title);
-		
+
 		return true;
 	}
 
@@ -436,7 +440,7 @@ class Album extends PersistentObject {
 		if (is_null($this->subalbums)) {
 			$dirs = $this->loadFileNames(true);
 			$subalbums = array();
-				
+
 			foreach ($dirs as $dir) {
 				$dir = $this->name . '/' . $dir;
 				$subalbums[] = $dir;
@@ -903,7 +907,7 @@ class Album extends PersistentObject {
 
 		while (false !== ($file = readdir($dir))) {
 			if ($dirs && (is_dir($albumdir.$file) && (substr($file, 0, 1) != '.') ||
-										hasDyanmicAlbumSuffix($file))) {
+			hasDyanmicAlbumSuffix($file))) {
 				$files[] = $file;
 			} else if (!$dirs && is_file($albumdir.$file)) {
 				if (is_valid_video($file)) {
@@ -1011,7 +1015,7 @@ class Album extends PersistentObject {
 	function isDynamic() {
 		return $this->get('dynamic');
 	}
-	
+
 	/**
 	 * Returns the search parameters for a dynamic album
 	 *
@@ -1020,7 +1024,7 @@ class Album extends PersistentObject {
 	function getSearchTags() {
 		return $this->get('search_params');
 	}
-	
+
 	/**
 	 * Sets the search parameters of a dynamic album
 	 *

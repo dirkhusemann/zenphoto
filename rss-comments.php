@@ -35,8 +35,12 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 <lastBuildDate><?php echo date("r", time()); ?></lastBuildDate>
 <docs>http://blogs.law.harvard.edu/tech/rss</docs>
 <generator>Acrylian's ZenPhoto Comment RSS Generator based on Tris' LatestComments function from zenphoto admin.php</generator>
-<managingEditor><?php echo array_shift(getAdminNames()); ?></managingEditor>
-<webMaster><?php echo array_shift(getAdminNames()); ?></webMaster>
+<?php
+	$admin = array_shift(getAdministrators());
+	$adminname = $admin['name'];
+?>
+<managingEditor><?php echo $adminname; ?></managingEditor>
+<webMaster><?php echo $adminname; ?></webMaster>
 
 <?php
 db_connect();

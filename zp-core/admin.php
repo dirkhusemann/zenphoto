@@ -431,7 +431,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			$comment = escape($_POST['comment']);
 
 			// TODO: Update date as well; no good input yet, so leaving out.
-			$sql = "UPDATE ".prefix('comments')." SET name = '$name', email = '$email', website = '$website', comment = '$comment' WHERE id = $id";
+			$sql = "UPDATE ".prefix('comments')." SET `name` = '$name', `email` = '$email', `website` = '$website', `comment` = '$comment' WHERE id = $id";
 			query($sql);
 
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=comments&sedit");

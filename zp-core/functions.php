@@ -1,6 +1,6 @@
 <?php
 define('ZENPHOTO_VERSION', '1.1.4');
-define('ZENPHOTO_RELEASE', 1154);
+define('ZENPHOTO_RELEASE', 1155);
 define('SAFE_GLOB', false);
 define('CHMOD_VALUE', 0777);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
@@ -1672,20 +1672,6 @@ function getAdminEmail($rights=ADMIN_RIGHTS) {
 		}
 	}
 	return $emails;
-}
-
-/**
- * Returns an array of the names of the admins
- *
- * @return array
- */
-function getAdminNames() {
-	$admins = getAdministrators();
-	$names = array();
-	foreach ($admins as $admin) {
-		$names = $admin['name'];
-	}
-	return $names;
 }
 
 /**
