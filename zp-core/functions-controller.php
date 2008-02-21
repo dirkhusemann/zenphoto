@@ -154,7 +154,7 @@ function zp_handle_comment() {
 	 			$commentadded = $activeImage->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']),
 	 											$website, kses($_POST['comment'], $allowed),
 	 											strip_tags($_POST['code']), $_POST['code_h']);
-	 			$redirectTo = $activeImage->getImageLink();
+	 			$redirectTo = FULLWEBPATH . '/' . zpurl(NULL, $activeImage->getAlbum(), $activeImage);
 				}
 			} else {
 				if (in_context(ZP_IMAGE)) {
