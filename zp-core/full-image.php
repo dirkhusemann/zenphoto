@@ -4,7 +4,7 @@ if (checkforPassword(true)) {
 	exit();
 }
 $image_path = $_zp_gallery->getAlbumDir() . $_zp_current_album->name . "/" . $_zp_current_image->name;
-$suffix = strtolower(substr(strrchr($filename, "."), 1));
+$suffix = strtolower(substr(strrchr($image_path, "."), 1));
 if (!getOption('perform_watermark')) { // no processing needed
 	if (is_null(getOption('external_album_folder')) && !getOption('full_image_download')) { // local album system, return the image directly
 		header("Location: " . getAlbumFolder(FULLWEBPATH) . pathurlencode($_zp_current_album->name) . "/" . rawurlencode($_zp_current_image->name));
@@ -23,25 +23,20 @@ if (!getOption('perform_watermark')) { // no processing needed
 		exit();
 	}
 }
-
-
+header("content-type: image/$suffix");
 switch ($suffix) {
 	case 'png':
 		$newim = imagecreatefrompng($image_path);
-		header('content-type: image/png');
 		break;
 	case 'bmp':
 		$newim = imagecreatefromwbmp($image_path);
-		header('content-type: image/wbmp');
 		break;
 	case 'jpeg':
 	case 'jpg':
 		$newim = imagecreatefromjpeg($image_path);
-		header('content-type: image/jpeg');
 		break;
 	case 'gif':
 		$newim = imagecreatefromgif($image_path);
-		header('content-type: image/gif');
 		break;
 }
 if (getOption('full_image_download')) {
