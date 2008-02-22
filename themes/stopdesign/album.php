@@ -26,8 +26,8 @@
 		<div id="content">
 
 				<div class="galleryinfo">
-							<h1><?php printAlbumTitle(true);?></h1>
-							<p class="desc"><?php printAlbumDesc(true); ?></p>
+					<h1><?php printAlbumTitle(true);?></h1>
+					<p class="desc"><?php printAlbumDesc(true); ?></p>
 				</div>
 
 		<?php
@@ -42,31 +42,31 @@
 				<li class="gal">
 					<a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 230, null, 210, 60); ?></a>
 					<h3><a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
-							<p>
-								<?php 
-									$number = getNumsubalbums(); 
-									if ($number > 0) { 
-										if (!($number == 1)) {  $number .= " albums";} else {$number .=" album";}
-										$counters = $number;
-									} else {
-										$counters = '';
-									}
-									$number = getNumImages();
-									if ($number > 0) {    
-										if (!empty($counters)) { $counters .= ",&nbsp;"; }                    
-										if ($number != 1) $number .= " photos"; else $number .=" photo"; 
-										$counters .= $number;
-									}
-									if (!empty($counters)) {
-										echo "<p><em>($counters)</em><br/>";
-									}
-									$text = getAlbumDesc(); 
-										if(strlen($text) > 50) {
-											$text = preg_replace("/[^ ]*$/", '', substr($text, 0, 50))."..."; 
-										}
-									echo $text; 
-								?>
-							</p>
+					<p>
+					<?php 
+						$number = getNumsubalbums(); 
+						if ($number > 0) { 
+							if (!($number == 1)) {  $number .= " albums"; } else { $number .=" album"; }
+							$counters = $number;
+						} else {
+							$counters = '';
+						}
+						$number = getNumImages();
+						if ($number > 0) {    
+							if (!empty($counters)) { $counters .= ",&nbsp;"; }                    
+							if ($number != 1) $number .= " photos"; else $number .=" photo"; 
+							$counters .= $number;
+						}
+						if (!empty($counters)) {
+							echo "<p><em>($counters)</em><br/>";
+						}
+						$text = getAlbumDesc(); 
+						if(strlen($text) > 50) {
+							$text = preg_replace("/[^ ]*$/", '', substr($text, 0, 50))."..."; 
+						}
+						echo $text; 
+					?>
+					</p>
 				</li>
 		<?php 
 			} 
@@ -89,38 +89,38 @@
 			}
 			if (!is_null($firstImage)  && hasNextPage()) { 
 			?>
-				<li class="thumb"><span class="forward"><em style="background-image:url('<?php echo $_zp_themeroot ?>/img/moreslide_next.gif');"><a href="<?php echo getNextPageURL(); ?>" style="background:#fff;">Next page</a></em></span></li>
-			<?php
-				}
+			<li class="thumb"><span class="forward"><em style="background-image:url('<?php echo $_zp_themeroot ?>/img/moreslide_next.gif');"><a href="<?php echo getNextPageURL(); ?>" style="background:#fff;">Next page</a></em></span></li>
+		<?php
+			}
 		?>
 		</ul>
 
-				<div class="galleryinfo">
-					<br />
-					<p><?php printRSSLink('Album', '', 'Album RSS Feed ', '', true, 'i'); ?></p>
-					<br />
-					<p>
-						<?php 
-						if (!is_null($firstImage)) { 
-							echo '<em class="count">';
-							echo "Photos $firstImage-$lastImage of " . getNumImages(); } 
-							echo "</em>";
-						?>
-						<?php if (hasPrevPage()) { ?>
-							<a href="<?php echo getPrevPageURL(); ?>" accesskey="x">&laquo; Prev page</a>
-						<?php } ?>
-						<?php if (hasNextPage()) { if (hasPrevPage()) { echo '&nbsp;'; } ?>
-							<a href="<?php echo getNextPageURL(); ?>" accesskey="x">next page &raquo;</a>
-						<?php } ?>
-					</p>
-				</div>
+			<div class="galleryinfo">
+				<br />
+				<p><?php printRSSLink('Album', '', 'Album RSS Feed ', '', true, 'i'); ?></p>
+				<br />
+				<p>
+				<?php 
+					if (!is_null($firstImage)) { 
+						echo '<em class="count">';
+						echo "Photos $firstImage-$lastImage of " . getNumImages(); } 
+						echo "</em>";
+				?>
+				<?php if (hasPrevPage()) { ?>
+						<a href="<?php echo getPrevPageURL(); ?>" accesskey="x">&laquo; Prev page</a>
+				<?php } ?>
+				<?php if (hasNextPage()) { if (hasPrevPage()) { echo '&nbsp;'; } ?>
+						<a href="<?php echo getNextPageURL(); ?>" accesskey="x">next page &raquo;</a>
+				<?php } ?>
+				</p>
+			</div>
 		</div>
 
 		<p id="path"><?php printHomeLink('', ' > '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> &gt; <?php printParentBreadcrumb("", " > ", " > "); ?> <?php printAlbumTitle(false);?></p>  
 
 		<div id="footer">
-					<hr />
-					<p>Powered by <a href="http://www.zenphoto.org">ZenPhoto</a>.</p>
+			<hr />
+			<p>Powered by <a href="http://www.zenphoto.org">ZenPhoto</a>.</p>
 		</div>
 		<?php printAdminToolbox(); ?>
 </body>

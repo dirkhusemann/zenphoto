@@ -7,7 +7,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" type="text/css" media="screen, projection" href="<?php echo $_zp_themeroot ?>/css/master.css" />
 	<?php 
-		printRSSHeaderLink('Gallery','Gallery RSS');
+	printRSSHeaderLink('Gallery','Gallery RSS');
 	zenJavascript(); 
 	setOption('thumb_crop_width', 85, false);
 	setOption('thumb_crop_height', 85, false);
@@ -23,38 +23,38 @@
 
 	<div class="galleries">
  	<?php if (!checkForPassword()) {?>
-			<h2>All galleries</h2>
-			<ul>
+		<h2>All galleries</h2>
+		<ul>
 			<?php $counter = 0; while (next_album(true) and $counter < 999): ?>
 			<li class="gal">
 			<h3><a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
 			<a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 210, 59, 210, 59); ?></a>
 			<p>
 		<?php
-		$number = getNumsubalbums(); 
-		if ($number > 0) { 
-			if (!($number == 1)) {  $number .= " albums";} else {$number .=" album";}
+			$number = getNumsubalbums(); 
+			if ($number > 0) { 
+				if (!($number == 1)) {  $number .= " albums";} else {$number .=" album";}
 				$counters = $number;
-		} else {
-			$counters = '';
-		}
-		$number = getNumImages();
-				if ($number > 0) {	
-					if (!empty($counters)) { $counters .= ",&nbsp;"; }					
-			if ($number != 1) $number .= " photos"; else $number .=" photo"; 
+			} else {
+				$counters = '';
+			}
+			$number = getNumImages();
+			if ($number > 0) {	
+				if (!empty($counters)) { $counters .= ",&nbsp;"; }					
+				if ($number != 1) $number .= " photos"; else $number .=" photo"; 
 				$counters .= $number;
 			}
-		if (!empty($counters)) {
-			echo "<p><em>($counters)</em>";
-		}
-		$text = getAlbumDesc(); 
-		if(strlen($text) > 100) { $text = preg_replace("/[^ ]*$/", '', substr($text, 0, 100)) . "..."; } 
-		echo$text; 
-		?></p>
+			if (!empty($counters)) {
+				echo "<p><em>($counters)</em>";
+			}
+			$text = getAlbumDesc(); 
+			if(strlen($text) > 100) { $text = preg_replace("/[^ ]*$/", '', substr($text, 0, 100)) . "..."; } 
+			echo $text; 
+			?></p>
 			<div class="date"><?php printAlbumDate(); ?></div>
-		</li>
-		<?php if ($counter == 2) {echo "</ul><ul>";}; $counter++; endwhile; ?>
-	</ul>
+			</li>
+			<?php if ($counter == 2) {echo "</ul><ul>";}; $counter++; endwhile; ?>
+		</ul>
 	<?php } ?>
 </div>
 
