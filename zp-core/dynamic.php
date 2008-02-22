@@ -5,24 +5,28 @@ define('OFFSET_PATH', true);
 require_once("template-functions.php");
 require_once("admin-functions.php");
 
+
 if (!zp_loggedin()) {
 	printLoginForm("/" . ZENFOLDER . "/refresh-metadata.php");
 	exit();
 } else {
+	$search = new SearchEngine();
 	if (isset($_POST['savealbum'])) {
 		$albumname = $_POST['album'];
 		$album = $_POST['albumselect'];
-		$folder = getAlbumFolder().$album;
-		$tags = $_POST['tags'];
+		$words = $_POST['words'];
 		$thumb = $_POST['thumb'];
+		setOption('search_fields', 32767, false); // parse the search fields post
+		$fields = $search->getQueryFields();
+		$redirect = $album.'/'.$albumname.".alb";
 
 		if (!empty($albumname)) {
-			$f = fopen($folder.$albumname.'.alb', 'w');
+			$f = fopen(getAlbumFolder().$redirect, 'w');
 			if ($f !== false) {
-				fwrite($f,"TAGS:$tags\nTHUMB:$thumb\n");
+				fwrite($f,"WORDS=$words\nTHUMB=$thumb\nFIELDS=$fields\n");
 				fclose($f);
 				// redirct to edit of this album
-				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit&album=" . urlencode($albumname . '.alb'));
+				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit&album=" . urlencode($redirect));
 				exit();
 			}
 		}
@@ -45,10 +49,9 @@ if (!zp_loggedin()) {
 	$albumlist = array();
 	genAlbumUploadList($albumlist);
 	$params = trim(zp_getCookie('zenphoto_image_search_params'));
-	$search = new SearchEngine();
 	$search->setSearchParams($params);
-	$search->fields = SEARCH_TAGS;
-	$tags = trim($search->words);
+	$fields = $search->fields;
+	$words = trim($search->words);
 	$images = $search->getImages(0);
 	$imagelist = array();
 	foreach ($images as $image) {
@@ -56,25 +59,18 @@ if (!zp_loggedin()) {
 		$filename = $image['filename'];
 		$imagelist[] = '/'.$folder.'/'.$filename;
 	}
-
-	$trialname = strtolower(sanitize(trim($tags)));
-	$trialname = str_replace('!', '_', $tags);
-	$albumname = '';
-	for ($i=0; $i<strlen($tags); $i++) {
-		$c2 = $c;
-		$c = substr($trialname, $i, 1);
-		if (($c == '_') || (($c >= 'a') && ($c <= 'z')) || (($c >= '0') && ($c <= '9'))) {
-			$albumname .= $c;
-		} else {
-			$c = '-';
-			if (!empty($albumname) && ($c2 != '-')) {
-				$albumname .= '-';
-			}
-		}
+	$albumname = sanitize(trim($words));
+	$albumname = str_replace('!', ' NOT ', $albumname);
+	$albumname = str_replace('&', ' AND ', $albumname);
+	$albumname = str_replace('|', ' OR ', $albumname);
+	$albumname = preg_replace('`[^a-zA-Z0-9_ ]`i','',$albumname);
+	while ($old != $albumname) {
+		$old = $albumname;
+		$albumname = str_replace('  ', ' ', $albumname);
 	}
 	?>
-<form action="?savealbum" method="post"><input
-	type="hidden" name="savealbum" value="yes" />
+<form action="?savealbum" method="post">
+<input type="hidden" name="savealbum" value="yes" />
 <table>
 	<tr>
 		<td>Album name:</td>
@@ -107,7 +103,6 @@ if (!zp_loggedin()) {
 ?>
 		</select></td>
 	</tr>
-
 	<tr>
 		<td>Thumbnail:</td>
 		<td><select id="thumb" name="thumb">
@@ -120,9 +115,31 @@ if (!zp_loggedin()) {
 	</tr>
 	<tr>
 		<td>Search criteria:</td>
-		<td><input type="text" size="60" name="tags"
-			value="<?php echo $tags ?>" /></td>
+		<td><input type="text" size="60" name="words"
+			value="<?php echo $words ?>" /></td>
 	</tr>
+	<tr>
+		<td>Search fields:</td>
+		<td>
+			<table class="checkboxes">
+			<tr>
+				<td><input type="checkbox" name="sf_title" value=1 <?php if ($fields & SEARCH_TITLE) echo ' checked'; ?>> Title</td>
+				<td><input type="checkbox" name="sf_desc" value=1 <?php if ($fields & SEARCH_DESC) echo ' checked'; ?>> Description</td>
+				<td><input type="checkbox" name="sf_tags" value=1 <?php if ($fields & SEARCH_TAGS) echo ' checked'; ?>> Tags</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="sf_filename" value=1 <?php if ($fields & SEARCH_FILENAME) echo ' checked'; ?>> File/Folder name</td>
+				<td><input type="checkbox" name="sf_location" value=1 <?php if ($fields & SEARCH_LOCATION) echo ' checked'; ?>> Location</td>
+				<td><input type="checkbox" name="sf_city" value=1 <?php if ($fields & SEARCH_CITY) echo ' checked'; ?>> City</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" name="sf_state" value=1 <?php if ($fields & SEARCH_STATE) echo ' checked'; ?>> State</td>
+				<td><input type="checkbox" name="sf_country" value=1 <?php if ($fields & SEARCH_COUNTRY) echo ' checked'; ?>> Country</td>
+			</tr>
+			</table>
+		</td>
+	</tr>
+
 </table>
 <input type="submit" value="Create the album" class="button" /></form>
 

@@ -412,25 +412,20 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<tr><td align=\"right\" valign=\"top\">Date: </td> <td><input type=\"text\" name=\"".$prefix."albumdate\" value=\"" . $d . '" /></td></tr>';
 	echo "\n<tr><td align=\"right\" valign=\"top\">Location: </td> <td><input type=\"text\" name=\"".$prefix."albumplace\" class=\"tags\" value=\"" .
 	$album->getPlace() . "\" /></td></tr>";
-	echo "\n<tr><td align=\"right\" valign=\"top\">Custom data: </td> <td><input type=\"text\" name=\"".$prefix."album_custom_data\" class=\"tags\" value=\"" .
+	echo "\n<tr><td align=\"right\" valign=\"top\">Custom data: </td> <td><input type=\"text\" name=\"".
+	$prefix."album_custom_data\" class=\"tags\" value=\"" .
 	$album->getCustomData() . "\" /></td></tr>";
 	if ($album->isDynamic()) {
-		echo "\n</tr>";
 		echo "\n<tr>";
-		echo "\n<td align=\"right\" valign=\"top\">";
-			echo "Dynamic album tags:";
-		echo "\n</td>";
+		echo "\n<td align=\"right\" valign=\"top\">Dynamic album search:</td>";
 		echo "\n<td>";
-			echo "\n<input type=\"text\" name=\"".$prefix."search_words\" class=\"tags\" value=\"" .
-													$album->getSearchTags() . '" />';
-		echo "\n</td>";		
+			echo "\n<table class=\"noinput\" >";
+			echo "\n<tr><td>" .	$album->getSearchParams() . "</td></tr>";
+			echo "\n</table>";
+			echo "\n</td>";		
 		echo "\n</tr>";
 	}
 	
-	echo "\n<script type=\"text/javascript\">updateThumbPreview(document.getElementById('thumbselect'));</script>";
-	echo "\n</td>";
-	echo "\n</tr>";
-
 	echo "\n<tr>";
 	echo "\n<td align=\"right\" valign=\"top\">Sort subalbums by: </td>";
 	echo "\n<td>";
@@ -476,8 +471,10 @@ function printAlbumEditForm($index, $album) {
 
 	echo ">";
 	echo "\n</td>";
+	echo "\n</tr>";
 
-	echo "\n<tr><td align=\"right\" valign=\"top\"></td><td><input type=\"checkbox\" name=\"" .
+	echo "\n<tr>";
+	echo "\n<td align=\"right\" valign=\"top\"></td><td><input type=\"checkbox\" name=\"" .
 	$prefix."allowcomments\" value=\"1\"";
 	if ($album->getCommentsAllowed()) {
 		echo "CHECKED";
@@ -489,15 +486,14 @@ function printAlbumEditForm($index, $album) {
 		echo "CHECKED";
 	}
 	echo "> Published ";
-	echo "</td></tr>";
-	echo "\n<tr><td align=\"right\" valign=\"top\">Thumbnail: </td> ";
+	echo "</td>\n</tr>";
+	echo "\n<tr>";
+	echo "\n<td align=\"right\" valign=\"top\">Thumbnail: </td> ";
 	echo "\n<td>";
 	if ($album->isDynamic()) {
-		$params = zp_getCookie('zenphoto_image_search_params');
-		$search = new SearchEngine();
+		$params = $album->getSearchParams();
+		$search = new SearchEngine();		
 		$search->setSearchParams($params);
-		$search->fields = SEARCH_TAGS;
-		$tags = $search->words;
 		$images = $search->getImages(0);
 		$imagelist = array();
 		foreach ($images as $image) {
@@ -516,6 +512,7 @@ function printAlbumEditForm($index, $album) {
 		}
 	  echo "\n</select>";
 	} else {
+		echo "\n<script type=\"text/javascript\">updateThumbPreview(document.getElementById('thumbselect'));</script>";
 		echo "\n<select id=\"thumbselect\" class=\"thumbselect\" name=\"".$prefix."thumb\" onChange=\"updateThumbPreview(this)\">";
 		foreach ($images as $filename) {
 			$image = new Image($album, $filename);
@@ -532,12 +529,12 @@ function printAlbumEditForm($index, $album) {
 			echo "</option>";
 	  }	
 	  echo "\n</select>";
-	echo "\n</td>";	
 	}
-
+	echo "\n</td>";	
+	echo "\n</tr>";
 	echo "\n</table>";  
 	echo "\n<input type=\"submit\" value=\"save\" />";
-	echo "\n</tr>";
+
 	echo "\n</div>";
 
 }
@@ -722,7 +719,6 @@ function processAlbumEdit($index, $album) {
 	}
 	$album->setPasswordHint(strip($_POST[$prefix.'albumpass_hint']));
 	$album->setCustomData(strip($_POST[$prefix.'album_custom_data']));
-	$album->setSearchTags(strip($_POST[$prefix.'search_words']));
 	$album->save();
 	return $notify;
 }

@@ -43,8 +43,7 @@ if (isset($_GET['p'])) {
 	} else { 
 		if ($_zp_current_album->isDynamic()) {
 			$_zp_current_search = new SearchEngine();		
-			$params = 'words='.$_zp_current_album->getSearchTags();
-			$params .= '&searchfields='.SEARCH_TAGS;
+			$params = $_zp_current_album->getSearchParams();
 			$params .= '&albumname='.$_zp_current_album->name;		
 			$_zp_current_search->setSearchParams($params);
 			set_context(ZP_INDEX | ZP_ALBUM | ZP_SEARCH);

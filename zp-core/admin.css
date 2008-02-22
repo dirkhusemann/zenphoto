@@ -225,6 +225,18 @@ hr {
 	border-bottom: 1px solid #BAC9CF;
 	margin: 1em 0px;
 }
+table.noinput {
+	width: 100%;
+	padding: 0px;
+	border-spacing: 1px;
+	background: #F1F2F3;
+	border: 1px solid #BAC9CF;
+}
+table.noinput td {
+	font-weight: normal;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 110%
+}
 table.bordered {
 	width: 100%;
 	padding: 0px;

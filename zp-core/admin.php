@@ -514,7 +514,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				setBoolOption('image_sortdirection', $_POST['image_sortdirection']);
 				setOption('feed_items', $_POST['feed_items']);
 				$search = new SearchEngine();
-				setOption('search_fields', 32767); // make SearchEngine allow all options so getQueryFields() will gives back what was choosen this time
+				setOption('search_fields', 32767, false); // make SearchEngine allow all options so getQueryFields() will gives back what was choosen this time
 				setOption('search_fields', $search->getQueryFields());
 				if ($_POST['gallerypass'] == $_POST['gallerypass_2']) {
 					$pwd = trim($_POST['gallerypass']);
@@ -1647,7 +1647,7 @@ if (!zp_loggedin()) {
  												<td>Sort order for the albums on the index of the gallery</td>
 										</tr>
 										<tr>
-													<td>Search fields:</td>
+												<td>Search fields:</td>
 												<td>
 														<?php $fields = getOption('search_fields'); ?>
 														<table class="checkboxes">

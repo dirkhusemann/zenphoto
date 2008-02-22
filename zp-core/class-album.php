@@ -53,15 +53,23 @@ class Album extends PersistentObject {
 					} else {
 						$data = substr($data, $i + 1);
 					}
-					if (strpos($data1, 'TAGS:') !== false) {
-						$tags = substr($data1, 5);
-						$this->set('search_params', $tags);
+					if (strpos($data1, 'WORDS=') !== false) {
+						$words = "words=".substr($data1, 6);
 					}
-						
-					if (strpos($data1, 'THUMB:') !== false) {
+					if (strpos($data1, 'THUMB=') !== false) {
 
 						$thumb = trim(substr($data1, 6));
 						$this->set('thumb', $thumb);
+					}
+					if (strpos($data1, 'FIELDS=') !== false) {
+
+						$fields = "&searchfields=".trim(substr($data1, 7));
+					}
+					if (!empty($words)) {
+						if (empty($fields)) { 
+							$fields = '&searchfields=4';
+						}
+						$this->set('search_params', $words.$fields);
 					}
 				}
 			}
@@ -70,6 +78,7 @@ class Album extends PersistentObject {
 			if ($new) {
 				$title = $this->get('title');
 				$this->set('title', substr($title, 0, -4));
+				$this->setDateTime(strftime('%Y/%m/%d %T', filemtime($this->localpath)));
 			}
 			$this->save();
 		}
@@ -1021,7 +1030,7 @@ class Album extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getSearchTags() {
+	function getSearchParams() {
 		return $this->get('search_params');
 	}
 
