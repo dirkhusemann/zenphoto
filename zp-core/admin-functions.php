@@ -503,7 +503,7 @@ function printAlbumEditForm($index, $album) {
 		foreach ($images as $image) {
 			$folder = $image['folder'];
 			$filename = $image['filename'];
-			$imagelist[] = $folder.'/'.$filename;
+			$imagelist[] = '/'.$folder.'/'.$filename;
 		}
 		echo "\n<select id=\"thumbselect\" class=\"thumbselect\" name=\"".$prefix."thumb\" onChange=\"updateThumbPreview(this)\">";
 		foreach ($imagelist as $image) {
