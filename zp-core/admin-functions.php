@@ -493,8 +493,28 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<tr><td align=\"right\" valign=\"top\">Thumbnail: </td> ";
 	echo "\n<td>";
 	if ($album->isDynamic()) {
-		echo "\n<input type=\"text\" name=\"".$prefix."thumb\" class=\"tags\" value=\"" .
-													$album->get('thumb'). '" />';
+		$params = zp_getCookie('zenphoto_image_search_params');
+		$search = new SearchEngine();
+		$search->setSearchParams($params);
+		$search->fields = SEARCH_TAGS;
+		$tags = $search->words;
+		$images = $search->getImages(0);
+		$imagelist = array();
+		foreach ($images as $image) {
+			$folder = $image['folder'];
+			$filename = $image['filename'];
+			$imagelist[] = $folder.'/'.$filename;
+		}
+		echo "\n<select id=\"thumbselect\" class=\"thumbselect\" name=\"".$prefix."thumb\" onChange=\"updateThumbPreview(this)\">";
+		foreach ($imagelist as $image) {
+			$selected = ($image == $album->get('thumb'));
+			echo "\n<option value=\"".$image."\"";
+			if ($selected) {
+				echo " selected=\"selected\"";
+			}
+			echo " >".$image."</option>";
+		}
+	  echo "\n</select>";
 	} else {
 		echo "\n<select id=\"thumbselect\" class=\"thumbselect\" name=\"".$prefix."thumb\" onChange=\"updateThumbPreview(this)\">";
 		foreach ($images as $filename) {
@@ -511,6 +531,7 @@ function printAlbumEditForm($index, $album) {
 			}
 			echo "</option>";
 	  }	
+	  echo "\n</select>";
 	echo "\n</td>";	
 	}
 

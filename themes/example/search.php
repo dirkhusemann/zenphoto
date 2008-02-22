@@ -13,7 +13,7 @@ $firstPageImages = normalizeColumns(1, 7);
 		if (in_context(ZP_ALBUM)) {
 			echo getAlbumTitle();
 		} else {
-			Echo "<em>Search</em>";
+			Echo "Search";
 		}
 		?>
 	</title>

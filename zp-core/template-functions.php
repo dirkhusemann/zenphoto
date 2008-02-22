@@ -91,7 +91,7 @@ function printSubalbumAdmin($text, $before='', $after='') {
  * @since 1.1
  */
 function printAdminToolbox($context=null, $id='admin') {
-	global $_zp_current_album, $_zp_current_image, $_zp_current_search;
+	global $_zp_current_album, $_zp_current_image, $_zp_current_search, $_zp_loggedin;
 	if (zp_loggedin()) {
 		$zf = WEBPATH."/".ZENFOLDER;
 		$dataid = $id . '_data';
@@ -141,7 +141,10 @@ function printAdminToolbox($context=null, $id='admin') {
 				echo "<br />\n";
 			}
 			$redirect = "&album=".urlencode($albumname)."&image=$imagename";
-		} else if (in_context(ZP_SEARCH)) {
+		} else if (in_context(ZP_SEARCH)&& !empty($_zp_current_search->words)) {
+			if ($_zp_loggedin & UPLOAD_RIGHTS) {
+				echo "<a href=\"".$zf."/dynamic.php\" title=\"Create an album from the search\">Create Album</a><br/>";
+			}
 			$redirect = "&p=search" . $_zp_current_search->getSearchParams() . "&page=$page";
 		}
 

@@ -3,12 +3,6 @@ if (checkforPassword(true)) {
 	pageError();
 	exit();
 }
-
-debugLog("full image", true);
-debugLog("external=".is_null(getOption('external_album_folder')));
-debugLog("download=".getOption('full_image_download'));
-debugLog("watermark=".getOption('perform_watermark'));
-
 $image_path = $_zp_gallery->getAlbumDir() . $_zp_current_album->name . "/" . $_zp_current_image->name;
 $suffix = strtolower(substr(strrchr($filename, "."), 1));
 if (!getOption('perform_watermark')) { // no processing needed

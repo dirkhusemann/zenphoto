@@ -18,7 +18,7 @@
 		if (in_context(ZP_ALBUM)) {
 			echo getAlbumTitle();
 		} else {
-			Echo "<em>Search</em>";
+			Echo "Search";
 		}
 		?>
 	</title>

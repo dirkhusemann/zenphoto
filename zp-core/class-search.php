@@ -68,7 +68,7 @@ class SearchEngine
 		foreach ($params as $param) {
 			$e = strpos($param, '=');
 			$p = substr($param, 0, $e);
-			$v = sanitize(urldecode(substr($param, $e + 1)), true);
+			$v = urldecode(substr($param, $e + 1));
 			switch($p) {
 				case 'words':
 					$this->words = $v;
@@ -144,7 +144,7 @@ class SearchEngine
 					if (!empty($target)) {
 						$r = trim($target);
 						if (!empty($r)) {
-							$result[] = sanitize($r, true);
+							$result[] = $r;
 							$target = '';
 						}
 					}
@@ -162,7 +162,7 @@ class SearchEngine
 					if (!empty($target)) {
 						$r = trim($target);
 						if (!empty($r)) {
-							$result[] = sanitize($r, true);
+							$result[] = $r;
 							$target = '';
 						}
 					}
@@ -176,7 +176,7 @@ class SearchEngine
 					break;
 			}
 		} while ($i++ < strlen($searchstring));
-		if (!empty($target)) { $result[] = sanitize(trim($target)); }
+		if (!empty($target)) { $result[] = trim($target); }
 
 		return $result;
 	}
@@ -259,6 +259,7 @@ class SearchEngine
 				default:
 					$subsql = "";
 					$nr = 0;
+					$singlesearchstring = sanitize($singlesearchstring, true);
 					if (SEARCH_TITLE & $fields) {
 						$nr++;
 						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
@@ -458,7 +459,7 @@ class SearchEngine
 				$albumname = $row2['folder'];
 				if (file_exists($albumfolder . $albumname . '/' . $row['filename'])) {
 					if (checkAlbumPassword($albumname, $hint)) {
-						$images[] = array('filename' => $row['filename'], 'folder' => $row2['folder']);
+						$images[] = array('filename' => $row['filename'], 'folder' => $albumname);
 					}
 				}
 			}
