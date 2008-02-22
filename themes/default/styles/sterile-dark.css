@@ -23,6 +23,7 @@ body {
 	-moz-border-radius: 10px;
 	border: 1px solid #2a2a2a;
 }
+* html #main{width: 720px;}
 #credit {
 	margin: 0 auto 40px auto;
 	width: 680px;
