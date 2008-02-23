@@ -16,6 +16,8 @@
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 	<?php printRSSHeaderLink('Gallery','Gallery RSS'); ?>
 	<?php zenJavascript(); ?>
+  <script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/prototype.js" type="text/javascript"></script>
+  <?php zen_search_script(); ?>
 </head>
 
 <body>

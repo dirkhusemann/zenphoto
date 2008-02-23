@@ -945,7 +945,7 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 	}
 	if (checkAlbumPassword($_zp_current_album->name, $hint)){
 		echo "<img src=\"" . htmlspecialchars(getCustomAlbumThumb($size, $width, $height, $cropw, $croph, $cropx, $cropy)). "\"" . $sizing . " alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
-					(($class) ? " class=\"$class\"" : "") .	(($id) ? " id=\"$id\"" : "") . " />";
+		(($class) ? " class=\"$class\"" : "") .	(($id) ? " id=\"$id\"" : "") . " />";
 	} else {
 		echo "<img src=\"".ZENFOLDER."/images/err-passwordprotected.gif\"".$sizing." />";
 	}
@@ -3301,6 +3301,29 @@ function getSearchURL($words, $dates, $fields, $page) {
 	return $url;
 }
 
+function zen_search_script() {
+	echo "\n<script src=\"" . FULLWEBPATH . "/" . ZENFOLDER . "/js/scriptaculous/scriptaculous.js\" type=\"text/javascript\"></script>";
+	echo "\n	<style type=\"text/css\">";
+	echo "\n		<div.searchoption{padding:8px; border:solid 1px #CCCCCC; width:100px;margin-left:2px; margin-bottom:10px; text-align: left;}";
+	echo "\n	</style>";
+	echo "\n<script language=\"javascript\">";
+	echo "\nfunction showMenu(){";
+	echo "\n	statusMenu = document.getElementById('hiddenStatusMenu');";
+	echo "\n	if(statusMenu.value==0){";
+	echo "\n		statusMenu.value=1;";
+	echo "\n		Effect.toggle('searchmenu','appear'); return false;";
+	echo "\n	}";
+	echo "\n}";
+	echo "\nfunction hideMenu(){";
+	echo "\n	statusMenu = document.getElementById('hiddenStatusMenu');";
+	echo  "\n	if(statusMenu.value==1){";
+	echo "\n		statusMenu.value=0;";
+	echo "\n		Effect.toggle('searchmenu','appear'); return false;";
+	echo "\n	}";
+	echo "\n}";
+	echo "\n</script>";
+}
+
 /**
  * Prints the search form
  *
@@ -3313,13 +3336,10 @@ function getSearchURL($words, $dates, $fields, $page) {
  * parens as part of the tag..
  *
  * @param string $prevtext text to go before the search form
- * @param bool $fieldSelect prints a drop down of searchable elements
- *        = 0 all fields
- *        = NULL means no drop-down selection
  * @param string $id css id for the search form, default is 'search'
  * @since 1.1.3
  */
-function printSearchForm($prevtext=NULL, $fieldSelect=NULL, $id='search') {
+function printSearchForm($prevtext=NULL, $id='search') {
 	if (checkforPassword(silent)) { return; }
 	$zf = WEBPATH."/".ZENFOLDER;
 	$dataid = $id . '_data';
@@ -3333,49 +3353,45 @@ function printSearchForm($prevtext=NULL, $fieldSelect=NULL, $id='search') {
 	echo "\n<div id=\"search\">";
 	if (getOption('mod_rewrite')) { $searchurl = '/page/search/'; } else { $searchurl = "/index.php?p=search"; }
 	echo "\n<form method=\"post\" action=\"".WEBPATH.$searchurl."\" id=\"search_form\">";
-	echo "\n$prevtext<input type=\"text\" name=\"words\" value=".$searchwords." id=\"search_input\" size=\"10\" />";
+	echo "\n$prevtext<input type=\"text\" name=\"words\" value=".$searchwords." id=\"search_input\" size=\"10\" onclick=\"javascript:showMenu()\" />";
 	echo "\n<input type=\"submit\" value=\"Search\" class=\"pushbutton\" id=\"search_submit\" />";
 
-	$bits = array(SEARCH_TITLE, SEARCH_DESC, SEARCH_TAGS, SEARCH_FILENAME, SEARCH_LOCATION, SEARCH_CITY, SEARCH_STATE, SEARCH_COUNTRY);
 	if ($fieldSelect === 0) { $fieldSelect = 32767; }
-	$fields = getOption('search_fields') & $fieldSelect;
+	$fields = getOption('search_fields');
 
-	$c = 0;
-	foreach ($bits as $bit) {
-		if ($bit & $fields) { $c++; }
-		if ($c>1) break;
-	}
-	if ($fieldSelect && ($c>1)) {
+	if (cbone($fields, 8) > 1) { //then there is some choice possible
 
-		echo "\n<ul>";
-		echo "\n<li class=\"top\">&raquo;</li>";
+		echo "\n<input id=\"hiddenStatusMenu\" type=\"hidden\" value=\"0\" />";
+		echo "\n<div class=\"searchoption\" id=\"searchmenu\" style=\"display:none; text-align:left\">";
+		echo "Choose search fields.<br />";
+
 		if ($fields & SEARCH_TITLE) {
-			echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_title\" value=1 checked> Title</li>";
+			echo "\n<input type=\"checkbox\" name=\"sf_title\" value=1 checked><label>Title</label><br />";
 		}
 		if ($fields & SEARCH_DESC) {
-			echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_desc\" value=1 checked> Description</li>";
+			echo "\n<input type=\"checkbox\" name=\"sf_desc\" value=1 checked><label>Description</label><br />";
 		}
 		if ($fields & SEARCH_TAGS) {
-			echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_tags\" value=1 checked> Tags</li>";
+			echo "\n<input type=\"checkbox\" name=\"sf_tags\" value=1 checked><label>Tags</label><br />";
 		}
 		if ($fields & SEARCH_FILENAME) {
-			echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_filename\" value=1 checked> File/Folder name</li>";
+			echo "\n<input type=\"checkbox\" name=\"sf_filename\" value=1 checked><label>File name</label><br />";
 		}
 		if ($fields & SEARCH_LOCATION) {
-			echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_location\" value=1 checked> Location</li>";
+			echo "\n<input type=\"checkbox\" name=\"sf_location\" value=1 checked><label>Location</label><br />";
 		}
 		if ($fields & SEARCH_CITY) {
-			echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_city\" value=1 checked> City</li>";
+			echo "\n<input type=\"checkbox\" name=\"sf_city\" value=1 checked><label>City</label><br />";
 		}
 		if ($fields & SEARCH_STATE) {
-			echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_state\" value=1 checked> State</li>";
+			echo "\n<input type=\"checkbox\" name=\"sf_state\" value=1 checked><label>State</label><br />";
 		}
 		if ($fields & SEARCH_COUNTRY) {
-			echo "\n<li class=\"item\"><input type=\"checkbox\" name=\"sf_country\" value=1 checked> Country</li>";
+			echo "\n<input type=\"checkbox\" name=\"sf_country\" value=1 checked><label>Country</label><br />";
 		}
-		echo "\n</ul>";
-		echo "\n<div class=\"clear\"></div>";
+		echo "\n</a> <a href=\"#\" onclick=\"javscript:hideMenu()\">Close</a></div>";
 	}
+
 	echo "\n</form>\n";
 	/*
 	 echo "\n  <script type=\"text/javascript\" src=\"".$zf."/js/prototype.tooltip.js\"></script>";
