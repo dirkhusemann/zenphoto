@@ -25,10 +25,14 @@ $firstPageImages = normalizeColumns(1, 7);
 
 <div id="main">
 	<div id="gallerytitle">
-		<?php printSearchForm(); ?>
+		<?php 
+		if (!in_context(ZP_ALBUM)) {
+			printSearchForm(); 
+		}
+		?>
 		<h2><span><?php printHomeLink('', ' | '); ?><a href="
 		<?php echo getGalleryIndexURL();?>" title="Gallery Index">
-		<?php echo getGalleryTitle();?></a></span> | 
+		<?php echo getGalleryTitle();?></a> | 
 		<?php
 		if (in_context(ZP_ALBUM)) {
 			echo getAlbumTitle();
@@ -36,7 +40,7 @@ $firstPageImages = normalizeColumns(1, 7);
 		  echo "<em>Search</em>";
 		}
 		?>
-		</h2>
+		</span></h2>
 		</div>
 	
 		<hr />

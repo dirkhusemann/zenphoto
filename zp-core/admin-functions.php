@@ -659,8 +659,6 @@ function printAlbumEditRow($album) {
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=" . queryEncode($album->name) . "');\" title=\"Delete the album " . $album->name . "\">";
 	echo '<img src="images/fail.png" style="border: 0px;" alt="Delete the album ' . $album->name . '" /></a>';
-	echo '<a class="cache" href="cache-images.php?album=' . queryencode($album->name) .
- 			'&return=edit" title="Pre-Cache the album <em>' . $album->name . '</em>">';
 	echo "</td>\n</tr></table>\n</td>";
 
 	echo '</tr>';

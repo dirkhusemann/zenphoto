@@ -8,7 +8,6 @@
 	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/plugins/rating/rating.css" type="text/css" />
 	<?php printRSSHeaderLink('Album',getAlbumTitle()); ?>
 	<?php zenJavascript(); ?>
-  <?php zen_search_script(); ?>
 </head>
 
 <body>

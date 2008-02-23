@@ -76,7 +76,7 @@ $backgroundImagePath="";
 <!-- Logo -->
 	<div id="logo">
 	<?php
-	if (getOption('Allow_search')) {  printSearchForm(); }
+	if (getOption('Allow_search') & (!in_context(ZP_ALBUM))) {  printSearchForm(); }
 		echo printLogo();
 	?>
 	</div>

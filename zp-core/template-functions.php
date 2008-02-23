@@ -3302,6 +3302,9 @@ function getSearchURL($words, $dates, $fields, $page) {
 }
 
 function zen_search_script() {
+	
+return; // disable for now
+
 	echo "\n<script src=\"" . FULLWEBPATH . "/" . ZENFOLDER . "/js/scriptaculous/scriptaculous.js\" type=\"text/javascript\"></script>";
 	echo "\n	<style type=\"text/css\">";
 	echo "\n		<div.searchoption{padding:8px; border:solid 1px #CCCCCC; width:100px;margin-left:2px; margin-bottom:10px; text-align: left;}";
@@ -3341,6 +3344,9 @@ function zen_search_script() {
  */
 function printSearchForm($prevtext=NULL, $id='search') {
 	if (checkforPassword(silent)) { return; }
+	
+	zen_search_script();
+	
 	$zf = WEBPATH."/".ZENFOLDER;
 	$dataid = $id . '_data';
 	$searchwords = (isset($_POST['words']) ? $_REQUEST['words'] : '');
@@ -3350,16 +3356,24 @@ function printSearchForm($prevtext=NULL, $id='search') {
 		$searchwords = "'".$searchwords."'";
 	}
 
+	if ($fieldSelect === 0) { $fieldSelect = 32767; }
+	$fields = getOption('search_fields');
+	$multiple = cbone($fields, 8) > 1;
+	
+$multiple = false; // disable until tested.
+	
 	echo "\n<div id=\"search\">";
 	if (getOption('mod_rewrite')) { $searchurl = '/page/search/'; } else { $searchurl = "/index.php?p=search"; }
 	echo "\n<form method=\"post\" action=\"".WEBPATH.$searchurl."\" id=\"search_form\">";
-	echo "\n$prevtext<input type=\"text\" name=\"words\" value=".$searchwords." id=\"search_input\" size=\"10\" onclick=\"javascript:showMenu()\" />";
+	echo "\n$prevtext<input type=\"text\" name=\"words\" value=".$searchwords." id=\"search_input\" size=\"10\" />";
+	
+	if ($multiple) {
+		echo "\n<a class=\"showmenu\" onclick=\"javascript: javascript:showMenu();\" title=\"Show fields \">";
+		echo '<img src="'.$zf.'/images/warn.png" style="border: 0px;" alt="Show fields" /></a>';
+	}
 	echo "\n<input type=\"submit\" value=\"Search\" class=\"pushbutton\" id=\"search_submit\" />";
 
-	if ($fieldSelect === 0) { $fieldSelect = 32767; }
-	$fields = getOption('search_fields');
-
-	if (cbone($fields, 8) > 1) { //then there is some choice possible
+	if ($multiple) { //then there is some choice possible
 
 		echo "\n<input id=\"hiddenStatusMenu\" type=\"hidden\" value=\"0\" />";
 		echo "\n<div class=\"searchoption\" id=\"searchmenu\" style=\"display:none; text-align:left\">";
@@ -3393,16 +3407,6 @@ function printSearchForm($prevtext=NULL, $id='search') {
 	}
 
 	echo "\n</form>\n";
-	/*
-	 echo "\n  <script type=\"text/javascript\" src=\"".$zf."/js/prototype.tooltip.js\"></script>";
-	 echo "<div id='search_form_tooltip' style='display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;'>";
-	 echo "Enter tokens to search for. The search will be on the \"OR\" of the tokens. Place the tokens in quotes to get exact".
-	 "phrase matches. Use parenthesis and the boolena operators (\"&amp;\", \"|\", \"!\") to refine your search.<br />";
-	 echo "</div>";
-	 echo "<script type='text/javascript'>";
-	 echo "var my_tooltip = new Tooltip('search_form', 'search_form_tooltip')";
-	 echo "</script>";
-	 */
 	echo "\n</div>";  // search
 	echo "\n<!-- end of search form -->\n";
 }

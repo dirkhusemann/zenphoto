@@ -17,7 +17,6 @@
 	<?php printRSSHeaderLink('Gallery','Gallery RSS'); ?>
 	<?php zenJavascript(); ?>
   <script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/prototype.js" type="text/javascript"></script>
-  <?php zen_search_script(); ?>
 </head>
 
 <body>
@@ -25,7 +24,11 @@
 <div id="main">
 
 	<div id="gallerytitle">
-		<?php printSearchForm(); ?>
+		<?php 
+		if (!in_context(ZP_ALBUM)) {
+			printSearchForm(); 
+		}
+		?>
 		<h2><span><?php printHomeLink('', ' | '); ?><a href="
 		<?php echo getGalleryIndexURL();?>" title="Gallery Index">
 		<?php echo getGalleryTitle();?></a></span> | 
