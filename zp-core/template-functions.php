@@ -3302,9 +3302,6 @@ function getSearchURL($words, $dates, $fields, $page) {
 }
 
 function zen_search_script() {
-	
-return; // disable for now
-
 	echo "\n<script src=\"" . FULLWEBPATH . "/" . ZENFOLDER . "/js/scriptaculous/scriptaculous.js\" type=\"text/javascript\"></script>";
 	echo "\n	<style type=\"text/css\">";
 	echo "\n		<div.searchoption{padding:8px; border:solid 1px #CCCCCC; width:100px;margin-left:2px; margin-bottom:10px; text-align: left;}";
@@ -3358,10 +3355,7 @@ function printSearchForm($prevtext=NULL, $id='search') {
 	if ($fieldSelect === 0) { $fieldSelect = 32767; }
 	$fields = getOption('search_fields');
 	if ($multiple = cbone($fields, 8) > 1) {
-	
-$multiple = false; // disable until tested.
-
-//		zen_search_script();
+$multiple = false; //disable until it works!		zen_search_script();
 	}
 	
 	echo "\n<div id=\"search\">";

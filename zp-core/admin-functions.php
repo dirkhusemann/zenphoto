@@ -614,10 +614,16 @@ function printAlbumEditRow($album) {
 	} else {
 		$ci = count($album->getImages());
 		if ($ci > 0) $si = "$ci image" . $si; else $si = "no image";
-		if ($ci != 1) $si .= "s"; else $si .= "&nbsp;";
+		if ($ci != 1) {	$si .= "s"; } else  {	$si .= "&nbsp;"; }
+		if ($ci > 0) {
+			$si = '<a href="?page=edit&album=' . urlencode($album->name) .'#imageList" title="Subalbum List">'.$si.'</a>';
+		}
 		$ca = count($album->getSubalbums());
 		if ($ca > 0) $sa = $ca . " album" . $sa;  else $ca = "&nbsp;";
 		if ($ca > 1) $sa .= "s";
+		if ($ca > 0) {
+			$sa = '<a href="?page=edit&album=' . urlencode($album->name) .'#subalbumList" title="Subalbum List">'.$sa.'</a>';
+		}
 	}
 	echo "<td style=\"text-align: right;\" width=\"80\">" . $sa . "</td>";
 	echo "<td style=\"text-align: right;\" width=\"80\">" . $si . "</td>";
