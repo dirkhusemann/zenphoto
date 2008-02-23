@@ -779,13 +779,13 @@ if (!zp_loggedin()) {
 				
 			  <?php if (!$album->isDynamic())  {?>
 				<!-- Subalbum list goes here -->
-
+				<a name="subalbumList">
 				<?php
 
 				$subalbums = $album->getSubAlbums();
 				if (count($subalbums) > 0) {
 				if ($album->getNumImages() > 0)  { ?>
-						<p><a name="subalbumList"></a><a href="#imageList" title="Scroll down to the image list.">Image List &raquo;</a></p>
+						<p></a><a href="#imageList" title="Scroll down to the image list.">Image List &raquo;</a></p>
 					<?php } ?>
 
 					<table class="bordered" width="100%">
@@ -835,9 +835,9 @@ if (!zp_loggedin()) {
 					} ?>
 
  		<!-- Images List -->
-
+			<a name="imageList"></a>
 			<?php if (count($album->getSubalbums()) > 10) { ?>
-				<p><a name="imageList"></a><a href="#subalbumList" title="Scroll up to the sub-album list">&laquo; Subalbum List</a></p>
+				<p><a href="#subalbumList" title="Scroll up to the sub-album list">&laquo; Subalbum List</a></p>
 			<?php } 
 			if (count($album->getImages())) {
 			?>
