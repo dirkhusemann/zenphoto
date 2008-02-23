@@ -360,6 +360,7 @@ function generateListFromFiles($currentValue, $root, $suffix) {
  */
 function printAlbumEditForm($index, $album) {
 	global $sortby, $images;
+	$sort = $sortby;
 	if ($index == 0) {
 		if (isset($saved)) {
 			$album->setSubalbumSortType('Manual');
@@ -424,13 +425,15 @@ function printAlbumEditForm($index, $album) {
 			echo "\n</table>";
 			echo "\n</td>";		
 		echo "\n</tr>";
+	} else {
+		$sort[] = 'Manual';
 	}
 	echo "\n<tr>";
 	echo "\n<td align=\"right\" valign=\"top\">Sort subalbums by: </td>";
 	echo "\n<td>";
 	echo "\n<select id=\"sortselect\" name=\"".$prefix."subalbumsortby\">";
 
-	foreach ($sortby as $sorttype) {
+	foreach ($sort as $sorttype) {
 		echo "\n<option value=\"" . $sorttype . "\"";
 		if ($sorttype == $album->getSubalbumSortType()) {
 			echo ' selected="selected"';

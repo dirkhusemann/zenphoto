@@ -3,7 +3,7 @@ define('OFFSET_PATH', true);
 require_once("sortable.php");
 if (!$session_started) session_start();
 
-$sortby = array('Filename', 'Date', 'Title', 'Manual', 'ID' );
+$sortby = array('Filename', 'Date', 'Title', 'ID' );
 $standardOptions = array('gallery_title','website_title','website_url','time_offset',
  												'gmaps_apikey','mod_rewrite','mod_rewrite_image_suffix',
  												'server_protocol','charset','image_quality',
@@ -1638,7 +1638,11 @@ if (!zp_loggedin()) {
 												<td>Sort gallery by: </td>
 												<td>
 															<select id="sortselect" name="gallery_sorttype">
-															<?php foreach ($sortby as $sorttype) { ?>
+															<?php 
+															$sort = $sortby;
+															$sort[] = 'Manual'; // allow manual sorttype
+															foreach ($sort as $sorttype) { 
+															?>
 																<option value="<?php echo $sorttype; ?>"<?php if ($sorttype == getOption('gallery_sorttype')) echo ' selected="selected"'; ?>><?php echo $sorttype; ?></option>
  														<?php } ?>
 															</select>
