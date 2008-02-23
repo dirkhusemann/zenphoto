@@ -424,8 +424,7 @@ function printAlbumEditForm($index, $album) {
 			echo "\n</table>";
 			echo "\n</td>";		
 		echo "\n</tr>";
-	}
-	
+	} else {
 	echo "\n<tr>";
 	echo "\n<td align=\"right\" valign=\"top\">Sort subalbums by: </td>";
 	echo "\n<td>";
@@ -438,17 +437,16 @@ function printAlbumEditForm($index, $album) {
 		}
 		echo ">$sorttype </option>";
 	}
-
 	echo "\n</select>";
 	echo "&nbsp;Descending <input type=\"checkbox\" name=\"".$prefix."album_sortdirection\" value=\"1\"";
 
 	if ($album->getSortDirection('image')) {
 		echo "CHECKED";
 	}
-
 	echo ">";
 	echo "\n</td>";
 	echo "\n</tr>";
+
 	echo "\n<tr>";
 	echo "\n<td align=\"right\" valign=\"top\">Sort images by: </td>";
 	echo "\n<td>";
@@ -472,7 +470,7 @@ function printAlbumEditForm($index, $album) {
 	echo ">";
 	echo "\n</td>";
 	echo "\n</tr>";
-
+	}
 	echo "\n<tr>";
 	echo "\n<td align=\"right\" valign=\"top\"></td><td><input type=\"checkbox\" name=\"" .
 	$prefix."allowcomments\" value=\"1\"";
