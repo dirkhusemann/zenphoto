@@ -360,7 +360,6 @@ function generateListFromFiles($currentValue, $root, $suffix) {
  */
 function printAlbumEditForm($index, $album) {
 	global $sortby, $images;
-	$sort = $sortby;
 	if ($index == 0) {
 		if (isset($saved)) {
 			$album->setSubalbumSortType('Manual');
@@ -414,6 +413,7 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<tr><td align=\"right\" valign=\"top\">Location: </td> <td><input type=\"text\" name=\"".$prefix."albumplace\" class=\"tags\" value=\"" .
 	$album->getPlace() . "\" /></td></tr>";
 	echo "\n<tr><td align=\"right\" valign=\"top\">Custom data: </td> <td><input type=\"text\" name=\"".
+	$sort = $sortby;
 	$prefix."album_custom_data\" class=\"tags\" value=\"" .
 	$album->getCustomData() . "\" /></td></tr>";
 	if ($album->isDynamic()) {
@@ -432,14 +432,7 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<td align=\"right\" valign=\"top\">Sort subalbums by: </td>";
 	echo "\n<td>";
 	echo "\n<select id=\"sortselect\" name=\"".$prefix."subalbumsortby\">";
-
-	foreach ($sort as $sorttype) {
-		echo "\n<option value=\"" . $sorttype . "\"";
-		if ($sorttype == $album->getSubalbumSortType()) {
-			echo ' selected="selected"';
-		}
-		echo ">$sorttype </option>";
-	}
+	generateListFromArray(array($album->getSubalbumSortType()), $sort);
 	echo "\n</select>";
 	echo "&nbsp;Descending <input type=\"checkbox\" name=\"".$prefix."album_sortdirection\" value=\"1\"";
 
@@ -454,15 +447,7 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<td align=\"right\" valign=\"top\">Sort images by: </td>";
 	echo "\n<td>";
 	echo "\n<select id=\"sortselect\" name=\"".$prefix."sortby\">";
-
-	foreach ($sortby as $sorttype) {
-		echo "\n<option value=\"$sorttype\"";
-		if ($sorttype == $album->getSortType()) {
-			echo ' selected="selected"';
-		}
-		echo ">$sorttype</option>";
-	}
-
+	generateListFromArray(array($album->getSortType()), $sort); 
 	echo "\n</select>";
 	echo "&nbsp;Descending <input type=\"checkbox\" name=\"".$prefix."image_sortdirection\" value=\"1\"";
 

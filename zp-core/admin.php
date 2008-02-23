@@ -1641,10 +1641,8 @@ if (!zp_loggedin()) {
 															<?php 
 															$sort = $sortby;
 															$sort[] = 'Manual'; // allow manual sorttype
-															foreach ($sort as $sorttype) { 
+															generateListFromArray(array(getOption('gallery_sorttype')), $sort);
 															?>
-																<option value="<?php echo $sorttype; ?>"<?php if ($sorttype == getOption('gallery_sorttype')) echo ' selected="selected"'; ?>><?php echo $sorttype; ?></option>
- 														<?php } ?>
 															</select>
  														<input type="checkbox" name="gallery_sortdirection" value="1" <?php echo checked('1', getOption('gallery_sortdirection')); ?> /> Descending
 												</td>
@@ -1718,9 +1716,7 @@ if (!zp_loggedin()) {
 												<td>Sort images by:</td>
 												<td>
  													<select id="imagesortselect" name="image_sorttype">
- 													<?php foreach ($sortby as $sorttype) { ?>
-															<option value="<?php echo $sorttype; ?>"<?php if ($sorttype == getOption('image_sorttype')) echo ' selected="selected"'; ?>><?php echo $sorttype; ?></option>
- 													<?php } ?>
+ 													<?php generateListFromArray($sortbygetOption('image_sorttype'), $sortby); ?>
  													</select>
  													<input type="checkbox" name="image_sortdirection" value="1" <?php echo checked('1', getOption('image_sortdirection')); ?> /> Descending
  													</td>
