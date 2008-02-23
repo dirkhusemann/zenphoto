@@ -28,12 +28,20 @@
 </head>
 
 <body class="gallery">
-	<?php echo getGalleryTitle(); ?><?php printSearchForm(); ?>
+	<?php echo getGalleryTitle(); ?>
+	<?php if (getOption('Allow_search')) {  printSearchForm(); } ?>
 
 	<div id="content">
 
 		<div class="galleryinfo">
-				<h1><em>Search</em></h1>
+		<?php
+		if (in_context(ZP_ALBUM)) {
+			echo "<h1>".printAlbumTitle(true)."</h1>";
+			echo "<p class=\"desc\">".printAlbumDesc(true)."</p>";
+		} else {
+		  echo "<h1><em>Search</em></h1>";
+		}
+		?>
 		</div>
 		<?php
 		$Results = 0;
@@ -132,9 +140,12 @@
 	</div>
 	</div>
 
-	<p id="path"><?php printHomeLink('', ' > '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> &gt; 
+	<p id="path"><?php printHomeLink('', ' > '); ?>
+	<a href="<?php echo getGalleryIndexURL();?>" title="Albums Index">
+	<?php echo getGalleryTitle();?></a> &gt; 
 	<?php
 	if (in_context(ZP_ALBUM)) {
+		printParentBreadcrumb("", " > ", " > ");
 		echo getAlbumTitle();
 	} else {
 		echo "<em>Search</em>";

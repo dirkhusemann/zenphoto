@@ -3345,7 +3345,6 @@ return; // disable for now
 function printSearchForm($prevtext=NULL, $id='search') {
 	if (checkforPassword(silent)) { return; }
 	
-	zen_search_script();
 	
 	$zf = WEBPATH."/".ZENFOLDER;
 	$dataid = $id . '_data';
@@ -3358,23 +3357,24 @@ function printSearchForm($prevtext=NULL, $id='search') {
 
 	if ($fieldSelect === 0) { $fieldSelect = 32767; }
 	$fields = getOption('search_fields');
-	$multiple = cbone($fields, 8) > 1;
+	if ($multiple = cbone($fields, 8) > 1) {
 	
 $multiple = false; // disable until tested.
+
+//		zen_search_script();
+	}
 	
 	echo "\n<div id=\"search\">";
 	if (getOption('mod_rewrite')) { $searchurl = '/page/search/'; } else { $searchurl = "/index.php?p=search"; }
 	echo "\n<form method=\"post\" action=\"".WEBPATH.$searchurl."\" id=\"search_form\">";
 	echo "\n$prevtext<input type=\"text\" name=\"words\" value=".$searchwords." id=\"search_input\" size=\"10\" />";
 	
-	if ($multiple) {
-		echo "\n<a class=\"showmenu\" onclick=\"javascript: javascript:showMenu();\" title=\"Show fields \">";
-		echo '<img src="'.$zf.'/images/warn.png" style="border: 0px;" alt="Show fields" /></a>';
-	}
 	echo "\n<input type=\"submit\" value=\"Search\" class=\"pushbutton\" id=\"search_submit\" />";
 
 	if ($multiple) { //then there is some choice possible
-
+		echo "\n<a class=\"showmenu\" onclick=\"javascript: javascript:showMenu();\" title=\"Show fields \">";
+		echo '<img src="'.$zf.'/images/warn.png" style="border: 0px;" alt="Show fields" /></a>';
+		
 		echo "\n<input id=\"hiddenStatusMenu\" type=\"hidden\" value=\"0\" />";
 		echo "\n<div class=\"searchoption\" id=\"searchmenu\" style=\"display:none; text-align:left\">";
 		echo "Choose search fields.<br />";

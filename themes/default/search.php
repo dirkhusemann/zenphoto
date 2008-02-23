@@ -34,6 +34,7 @@
 		<?php echo getGalleryTitle();?></a></span> | 
 		<?php
 		if (in_context(ZP_ALBUM)) {
+			printParentBreadcrumb();
 			echo getAlbumTitle();
 		} else {
 		  echo "<em>Search</em>";

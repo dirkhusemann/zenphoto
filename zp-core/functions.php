@@ -343,6 +343,47 @@ function getUrAlbum($album) {
 }
 
 /**
+ * Returns the DB sort key for an album sort type
+ *
+ * @param string $sorttype The sort type option
+ * @return string
+ */
+function albumSortKey($sorttype) {
+	switch ($sorttype) {
+		case "Title":
+			return 'title';
+		case "Manual":
+			return 'sort_order';
+		case "Date":
+			return 'date';
+		case "ID":
+			return 'id';
+	}
+	return 'filename';
+}
+/**
+ * Returns the DB key associated with the subalbum sort type
+ *
+ * @param string $sorttype subalbum sort type
+ * @return string
+ */
+function subalbumSortKey($sorttype) {
+	switch ($sorttype) {
+		case "Title":
+			return 'title';
+		case "Manual":
+			return 'sort_order';
+		case "Filename":
+			return 'folder';
+		case "Date":
+			return 'date';
+		case "ID":
+			return 'id';
+	}
+	return 'sort_order';
+}
+
+/**
  * rewrite_get_album_image - Fix special characters in the album and image names if mod_rewrite is on:
  * This is redundant and hacky; we need to either make the rewriting completely internal,
  * or fix the bugs in mod_rewrite. The former is probably a good idea.

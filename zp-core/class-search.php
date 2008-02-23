@@ -229,6 +229,7 @@ class SearchEngine
 	 * @since 1.1.3
 	 */
 	function getSearchSQL($searchstring, $searchdate, $tbl, $fields) {
+		global $_zp_current_album;
 		$sql = 'SELECT `show`,`title`,`desc`,`tags`';
 		if ($tbl=='albums') {
 			if ($fields & SEARCH_FILENAME) { $fields = $fields + SEARCH_FOLDER; } // for searching these are really the same thing, just named differently in the different tables
@@ -330,6 +331,25 @@ class SearchEngine
 		}
 		if(!zp_loggedin()) { $sql .= ")"; }
 		if ($nrt == 0) { return NULL; } // no valid fields
+		
+		if ($tbl = 'albums') {
+			if (!is_null($_zp_current_album)) {
+				$key = $_zp_current_album->getSubalbumSortKey();
+				if ($_zp_current_album->getSortDirection('album')) { $key .= " DESC"; }
+			} else {
+				$key = subalbumSortKey(getOption('gallery_sorttype'));
+				if (getOption('gallery_sortdirection')) { $key .= " DESC"; }
+			}
+		} else {
+			if (!is_null($_zp_current_album)) {
+				$key = $_zp_current_album->getSortKey();
+				if ($_zp_current_album->getSortDirection('image')) { $key .= " DESC"; }
+			} else {
+				$key = albumSortKey(getOption('image_sorttype'));
+				if (getOption('image_sortdirection')) { $key .= " DESC"; }
+			}
+		}
+		$sql .= " ORDER BY ".$key;
 		return $sql;
 	}
 

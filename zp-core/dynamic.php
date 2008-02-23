@@ -31,7 +31,7 @@ if (!zp_loggedin()) {
 			}
 		}
 	}
-
+	$_GET['page'] = 'upload'; // pretend to be the edit page.
 	printAdminHeader();
 	echo "\n</head>";
 	echo "\n<body>";

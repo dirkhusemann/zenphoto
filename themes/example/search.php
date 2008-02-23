@@ -35,6 +35,7 @@ $firstPageImages = normalizeColumns(1, 7);
 		<?php echo getGalleryTitle();?></a> | 
 		<?php
 		if (in_context(ZP_ALBUM)) {
+			printParentBreadcrumb();
 			echo getAlbumTitle();
 		} else {
 		  echo "<em>Search</em>";

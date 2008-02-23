@@ -385,17 +385,7 @@ class Album extends PersistentObject {
 	 */
 	function getSortKey($sorttype=null) {
 		if (is_null($sorttype)) { $sorttype = $this->getSortType(); }
-		switch ($sorttype) {
-			case "Title":
-				return 'title';
-			case "Manual":
-				return 'sort_order';
-			case "Date":
-				return 'date';
-			case "ID":
-				return 'id';
-		}
-		return 'filename';
+		return albumSortKey($sorttype);
 	}
 
 	/**
@@ -406,19 +396,7 @@ class Album extends PersistentObject {
 	 */
 	function getSubalbumSortKey($sorttype=null) {
 		if (is_null($sorttype)) { $sorttype = $this->getSubalbumSortType(); }
-		switch ($sorttype) {
-			case "Title":
-				return 'title';
-			case "Manual":
-				return 'sort_order';
-			case "Filename":
-				return 'folder';
-			case "Date":
-				return 'date';
-			case "ID":
-				return 'id';
-		}
-		return 'sort_order';
+		return subalbumSortKey($sorttype);
 	}
 
 
