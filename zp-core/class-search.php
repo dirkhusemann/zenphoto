@@ -95,7 +95,7 @@ class SearchEngine
 	 * @return string
 	 */
 	function getSearchWords() {
-		$this->words = sanitize(urldecode($_REQUEST['words']));
+		$this->words = sanitize(urldecode($_REQUEST['words']), true);
 		return $this->words;
 	}
 
@@ -105,7 +105,7 @@ class SearchEngine
 	 * @return string
 	 */
 	function getSearchDate() {
-		$this->dates = sanitize(urldecode($_REQUEST['date']));
+		$this->dates = sanitize(urldecode($_REQUEST['date']), true);
 		return $this->dates;
 	}
 
