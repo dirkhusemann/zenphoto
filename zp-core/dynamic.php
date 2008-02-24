@@ -66,7 +66,7 @@ if (!zp_loggedin()) {
 	$albumname = seofriendlyURL($albumname);
 	while ($old != $albumname) {
 		$old = $albumname;
-		$albumname = str_replace('  ', ' ', $albumname);
+		$albumname = str_replace('--', '-', $albumname);
 	}
 	?>
 <form action="?savealbum" method="post"><input type="hidden"
