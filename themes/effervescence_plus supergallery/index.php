@@ -29,7 +29,7 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');normalizeColumns(
 	<!-- Crumb Trail Navigation -->
 		<div id="wrapnav">
 			<div id="navbar">
-				<span><?php printHomeLink('', ''); ?>
+				<span><?php printHomeLink('', ' | '); printGalleryTitle(); ?>
 			</div>
 		</div>
 	</div>

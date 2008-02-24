@@ -1838,7 +1838,7 @@ All</strong></a></p>
 	<tr>
 		<td>Sort images by:</td>
 		<td><select id="imagesortselect" name="image_sorttype">
-		<?php generateListFromArray($sortbygetOption('image_sorttype'), $sortby); ?>
+		<?php generateListFromArray(getOption('image_sorttype'), $sortby); ?>
 		</select> <input type="checkbox" name="image_sortdirection" value="1"
 		<?php echo checked('1', getOption('image_sortdirection')); ?> />
 		Descending</td>
