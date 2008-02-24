@@ -204,9 +204,9 @@ $backgroundImagePath="";
  					if (substr($url, -1, 1) == '/') {$url = substr($url, 0, (strlen($url)-1));}
  					echo $url = $url . (getOption("mod_rewrite") ? "?" : "&") . 'noflash'; 
  					?>">
- 					View gallery without Flash</a>.</p></font></div>
+ 					View gallery without Flash</a>.</p></div>
  					<?php
- 					$flash_url = "index.php?p=search&words=" . getSearchWords() . "&format=xml";	
+ 					$flash_url = "index.php?p=search" . getSearchParams() . "&format=xml";	
  					?>
  					<script type="text/javascript">
 									var fo = new SWFObject("<?php echo  $_zp_themeroot ?>/simpleviewer.swf", "viewer", "100%", "100%", "7", "<?php echo $backgroundColor ?>");	

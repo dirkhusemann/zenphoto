@@ -2630,7 +2630,7 @@ function getRandomImages() {
 														'.folder, ' . prefix('images') . '.show, ' . prefix('albums') . '.show, ' . prefix('albums') . '.password '.
 														'FROM '.prefix('images'). ' INNER JOIN '.prefix('albums').
 														' ON '.prefix('images').'.albumid = '.prefix('albums').'.id WHERE '.prefix('albums').'.folder!=""'.
-														$albumWhere . $imageWhere . ' ORDER BY RAND() LIMIT 1');
+		$albumWhere . $imageWhere . ' ORDER BY RAND() LIMIT 1');
 		$imageName = $result['filename'];
 		if (is_valid_image($imageName)) {
 			$image = new Image(new Album(new Gallery(), $result['folder']), $imageName );
@@ -2659,8 +2659,8 @@ function getRandomImagesAlbum($rootAlbum=null) {
 	if(is_null($subIDs)) {return null;}; //no subdirs avaliable
 	foreach ($subIDs as $ID) {
 		if(checkAlbumPassword($ID['folder'], $hint)) {
-			$query = 'SELECT `id` , `albumid` , `filename` , `title` FROM '.prefix('images').' WHERE `albumid` = "'. 
-								$ID['id'] .'"' . $imageWhere;
+			$query = 'SELECT `id` , `albumid` , `filename` , `title` FROM '.prefix('images').' WHERE `albumid` = "'.
+			$ID['id'] .'"' . $imageWhere;
 			$images = array_merge($images, query_full_array($query));
 		}
 	}
@@ -3346,8 +3346,8 @@ function zen_search_script() {
  */
 function printSearchForm($prevtext=NULL, $id='search') {
 	if (checkforPassword(silent)) { return; }
-	
-	
+
+
 	$zf = WEBPATH."/".ZENFOLDER;
 	$dataid = $id . '_data';
 	$searchwords = (isset($_POST['words']) ? $_REQUEST['words'] : '');
@@ -3360,20 +3360,20 @@ function printSearchForm($prevtext=NULL, $id='search') {
 	if ($fieldSelect === 0) { $fieldSelect = 32767; }
 	$fields = getOption('search_fields');
 	if ($multiple = cbone($fields, 8) > 1) {
-$multiple = false; //disable until it works!		zen_search_script();
+		$multiple = false; //disable until it works!		zen_search_script();
 	}
-	
+
 	echo "\n<div id=\"search\">";
 	if (getOption('mod_rewrite')) { $searchurl = '/page/search/'; } else { $searchurl = "/index.php?p=search"; }
 	echo "\n<form method=\"post\" action=\"".WEBPATH.$searchurl."\" id=\"search_form\">";
 	echo "\n$prevtext<input type=\"text\" name=\"words\" value=".$searchwords." id=\"search_input\" size=\"10\" />";
-	
+
 	echo "\n<input type=\"submit\" value=\"Search\" class=\"pushbutton\" id=\"search_submit\" />";
 
 	if ($multiple) { //then there is some choice possible
 		echo "\n<a class=\"showmenu\" onclick=\"javascript: javascript:showMenu();\" title=\"Show fields \">";
 		echo '<img src="'.$zf.'/images/warn.png" style="border: 0px;" alt="Show fields" /></a>';
-		
+
 		echo "\n<input id=\"hiddenStatusMenu\" type=\"hidden\" value=\"0\" />";
 		echo "\n<div class=\"searchoption\" id=\"searchmenu\" style=\"display:none; text-align:left\">";
 		echo "Choose search fields.<br />";
@@ -3411,32 +3411,44 @@ $multiple = false; //disable until it works!		zen_search_script();
 }
 
 /**
- * Returns the search string
+ * Returns the a sanitized version of the search string
  *
  * @return string
  * @since 1.1
  */
 function getSearchWords() {
+	global $_zp_current_search;
+	if (!in_context(ZP_SEARCH)) { return ''; }
 	$opChars = array ('&'=>1, '|'=>1, '!'=>1, ','=>1, ' '=>1);
-	$result = '';
-	if (in_context(ZP_SEARCH)) {
-		global $_zp_current_search;
-		$tags = $_zp_current_search->getSearchString();
-		if (is_array($tags)) {
-			foreach ($tags as $element) {
-				$setQuote = false;
-				foreach ($opChars as $char => $value) {
-					if ((strpos($element, $char) !== false) && ($element != $char)) $setQuote = true;
-				}
-				if ($setQuote) {
-					$result .= '"'.$element.'"';
-				} else {
-					$result .= ' '.$element.' ';
-				}
+	$searchstring = $_zp_current_search->getSearchString();
+	$sanitizedwords = '';
+	if (is_array($searchstring)) {
+		foreach($searchstring as $singlesearchstring){
+			switch ($singlesearchstring) {
+				case '&':
+					$sanitizedwords .= " &amp; ";
+					break;
+				case '!':
+				case '|':
+				case '(':
+				case ')':
+					$sanitizedwords .= " $singlesearchstring ";
+					break;
+				default:
+					$setQuote = false;
+					foreach ($opChars as $char => $value) {
+						if ((strpos($singlesearchstring, $char) !== false)) $setQuote = true;
+					}
+					if ($setQuote) {
+						$singlesearchstring = '"'.$singlesearchstring.'"';
+					} else {
+						$singlesearchstring = ' '.$singlesearchstring.' ';
+					}
+					$sanitizedwords .= sanitize($singlesearchstring, true);
 			}
 		}
 	}
-	return $result;
+	return $sanitizedwords;
 }
 
 /**

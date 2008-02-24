@@ -29,9 +29,9 @@ class SearchEngine
 	 * @return SearchEngine
 	 */
 	function SearchEngine() {
-		$this->words = $this->getSearchWords();
-		$this->dates = $this->getSearchDate();
-		$this->fields = $this->getQueryFields();
+		$this->words = $_REQUEST['words'];
+		$this->dates = sanitize(urldecode($_REQUEST['date']), true);
+		$this->fields = $this->parseQueryFields();
 		$this->images = null;
 		$this->albums = null;
 	}
@@ -90,23 +90,30 @@ class SearchEngine
 	}
 
 	/**
-	 * Captures and returns the query search string
+	 * Returns the search words variable
 	 *
 	 * @return string
 	 */
 	function getSearchWords() {
-		$this->words = sanitize(urldecode($_REQUEST['words']), true);
 		return $this->words;
 	}
 
 	/**
-	 * Captures and returns the date string of a search
+	 * Returns the search dates variable
 	 *
 	 * @return string
 	 */
 	function getSearchDate() {
-		$this->dates = sanitize(urldecode($_REQUEST['date']), true);
 		return $this->dates;
+	}
+
+	/**
+	 * Returns the search fields variable
+	 *
+	 * @return bit
+	 */
+	function getSearchFields() {
+		return $this->fields;
 	}
 
 	/**
@@ -121,7 +128,6 @@ class SearchEngine
 		$searchstring = trim($this->words);
 		$opChars = array ('&'=>1, '|'=>1, '!'=>1, ','=>1, ' '=>1);
 		$c1 = ' ';
-
 		$result = array();
 		$target = "";
 		$i = 0;
@@ -195,10 +201,10 @@ class SearchEngine
 
 	/**
 	 * Returns the set of fields from the url query/post
-	 *@return int
-	 *@since 1.1.3
+	 * @return int
+	 * @since 1.1.3
 	 */
-	function getQueryFields() {
+	function parseQueryFields() {
 		if (isset($_REQUEST['searchfields'])) {
 			$fields = 0+strip($_GET['searchfields']);
 		} else {
@@ -331,7 +337,7 @@ class SearchEngine
 		}
 		if(!zp_loggedin()) { $sql .= ")"; }
 		if ($nrt == 0) { return NULL; } // no valid fields
-		
+
 		if ($tbl = 'albums') {
 			if (!is_null($_zp_current_album)) {
 				$key = $_zp_current_album->getSubalbumSortKey();
@@ -399,7 +405,7 @@ class SearchEngine
 			return array_slice($this->albums, $albums_per_page*($page-1), $albums_per_page);
 		}
 	}
-	
+
 	/**
 	 * Returns the index of the album within the search albums
 	 *
@@ -521,7 +527,7 @@ class SearchEngine
 			return $slice;
 		}
 	}
-	
+
 	/**
 	 * Returns the index of this image in the search images
 	 *

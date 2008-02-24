@@ -17,7 +17,7 @@ if (!zp_loggedin()) {
 		$words = $_POST['words'];
 		$thumb = $_POST['thumb'];
 		setOption('search_fields', 32767, false); // parse the search fields post
-		$fields = $search->getQueryFields();
+		$fields = $search->fields;
 		$redirect = $album.'/'.$albumname.".alb";
 
 		if (!empty($albumname)) {
