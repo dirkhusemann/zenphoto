@@ -20,15 +20,15 @@ function getGalleries() {
 				}
 			}
 		}
-	}  
+	}
 }
 
 function setGalleyContext($gallery) {
 	global $_zp_conf_vars, $db_connection, $save_conf;
 	$save_conf = $_zp_conf_vars;
 	require(SERVERPATH . '/' . $gallery .'/' . ZENFOLDER . '/zp-config.php');
-	if (!is_null($super_connection)) { 
-		mysql_close($db_connection); 
+	if (!is_null($super_connection)) {
+		mysql_close($db_connection);
 		$db_connection = null;
 	}
 	$db_connection = db_connect();
@@ -36,7 +36,7 @@ function setGalleyContext($gallery) {
 
 function restoreContext() {
 	global $_zp_conf_vars, $db_connection, $save_conf;
-	$_zp_conf_vars = $save_conf;  
+	$_zp_conf_vars = $save_conf;
 }
 
 function next_gallery() {
@@ -103,26 +103,33 @@ function getGalleryImage() {
 		$albumWhere = " AND ".prefix('albums') . ".show=1".$passwordcheck;
 		$imageWhere = " AND " . prefix('images') . ".show=1";
 	}
-	$result = query_single_row('SELECT '.prefix('images').'.filename,'.prefix('images').'.title, '.prefix('images').'.desc, '.prefix('albums').
+	$c = 0;
+	while ($c < 10) {
+		$result = query_single_row('SELECT '.prefix('images').'.filename,'.prefix('images').'.title, '.prefix('images').'.desc, '.prefix('albums').
  														'.folder, '.prefix('images').'.show, '.prefix('albums').'.show, '.prefix('albums').'.password '.
  														'FROM '.prefix('images'). ' INNER JOIN '.prefix('albums').
 							 ' ON '.prefix('images').'.albumid = '.prefix('albums').'.id WHERE '.prefix('albums').'.folder!=""'.
-	$albumWhere . $imageWhere . ' ORDER BY RAND() LIMIT 1');
-	$imageName = $result['filename'];
-	$image['folder'] = getAlbumFolder() . $result['folder']. '/' . $imageName;
-	$image['title'] = $result['title'];
-	$image['desc'] = $result['desc'];
-	$image['gallery'] = $_current_subgallery;
-	restoreContext();
-	$_current_gallery_image = $image;
-	if ($imageName =='') { return NULL; }
+		$albumWhere . $imageWhere . ' ORDER BY RAND() LIMIT 1');
+		$imageName = $result['filename'];
+		if (is_valid_image($imageName)) {
+			$image['folder'] = getAlbumFolder() . $result['folder']. '/' . $imageName;
+			$image['title'] = $result['title'];
+			$image['desc'] = $result['desc'];
+			$image['gallery'] = $_current_subgallery;
+			restoreContext();
+			$_current_gallery_image = $image;
+			if ($imageName =='') { return NULL; }
+			return $image;
+		}
+	}
+	$image['folder'] = getAlbumFolder() . '/zen-logo.jpg';
 	return $image;
 }
 
 function getCustomGalleryThumb($size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=null) {
 	global $_current_subgallery;
-	$cachefilename = substr(getImageCacheFilename('', $_current_subgallery, 
- 																getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy))), 1);
+	$cachefilename = substr(getImageCacheFilename('', $_current_subgallery,
+	getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy))), 1);
 	if (!file_exists(SERVERCACHE . $cachefilename)) {
 		$img = getGalleryImage();
 		cacheGalleryImage($cachefilename, $img['folder'], getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy)));

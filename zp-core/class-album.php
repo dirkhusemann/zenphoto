@@ -57,7 +57,6 @@ class Album extends PersistentObject {
 						$words = "words=".substr($data1, 6);
 					}
 					if (strpos($data1, 'THUMB=') !== false) {
-
 						$thumb = trim(substr($data1, 6));
 						$this->set('thumb', $thumb);
 					}
@@ -65,12 +64,12 @@ class Album extends PersistentObject {
 
 						$fields = "&searchfields=".trim(substr($data1, 7));
 					}
-					if (!empty($words)) {
-						if (empty($fields)) { 
-							$fields = '&searchfields=4';
-						}
-						$this->set('search_params', $words.$fields);
+				}
+				if (!empty($words)) {
+					if (empty($fields)) {
+						$fields = '&searchfields=4';
 					}
+					$this->set('search_params', $words.$fields);
 				}
 			}
 			$this->set('dynamic', 1);

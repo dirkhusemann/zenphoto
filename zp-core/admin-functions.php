@@ -301,7 +301,7 @@ function customOptions($optionHandler, $indent="") {
 
 			echo "\n<tr>\n";
 			echo '<td width="175">' . $indent . str_replace('_', ' ', $key) . ":</td>\n";
-				
+
 			switch ($type) {
 				case 0:  // text box
 					echo '<td width="200"><input type="text" size="40" name="' . $key . '" value="' . $v . '"></td>' . "\n";
@@ -413,17 +413,17 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<tr><td align=\"right\" valign=\"top\">Location: </td> <td><input type=\"text\" name=\"".$prefix."albumplace\" class=\"tags\" value=\"" .
 	$album->getPlace() . "\" /></td></tr>";
 	echo "\n<tr><td align=\"right\" valign=\"top\">Custom data: </td> <td><input type=\"text\" name=\"".
-	$sort = $sortby;
 	$prefix."album_custom_data\" class=\"tags\" value=\"" .
 	$album->getCustomData() . "\" /></td></tr>";
+	$sort = $sortby;
 	if ($album->isDynamic()) {
 		echo "\n<tr>";
 		echo "\n<td align=\"right\" valign=\"top\">Dynamic album search:</td>";
 		echo "\n<td>";
-			echo "\n<table class=\"noinput\" >";
-			echo "\n<tr><td>" .	$album->getSearchParams() . "</td></tr>";
-			echo "\n</table>";
-			echo "\n</td>";		
+		echo "\n<table class=\"noinput\" >";
+		echo "\n<tr><td>" .	$album->getSearchParams() . "</td></tr>";
+		echo "\n</table>";
+		echo "\n</td>";
 		echo "\n</tr>";
 	} else {
 		$sort[] = 'Manual';
@@ -447,7 +447,7 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<td align=\"right\" valign=\"top\">Sort images by: </td>";
 	echo "\n<td>";
 	echo "\n<select id=\"sortselect\" name=\"".$prefix."sortby\">";
-	generateListFromArray(array($album->getSortType()), $sort); 
+	generateListFromArray(array($album->getSortType()), $sort);
 	echo "\n</select>";
 	echo "&nbsp;Descending <input type=\"checkbox\" name=\"".$prefix."image_sortdirection\" value=\"1\"";
 
@@ -478,7 +478,7 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<td>";
 	if ($album->isDynamic()) {
 		$params = $album->getSearchParams();
-		$search = new SearchEngine();		
+		$search = new SearchEngine();
 		$search->setSearchParams($params);
 		$images = $search->getImages(0);
 		$imagelist = array();
@@ -496,7 +496,7 @@ function printAlbumEditForm($index, $album) {
 			}
 			echo " >".$image."</option>";
 		}
-	  echo "\n</select>";
+		echo "\n</select>";
 	} else {
 		echo "\n<script type=\"text/javascript\">updateThumbPreview(document.getElementById('thumbselect'));</script>";
 		echo "\n<select id=\"thumbselect\" class=\"thumbselect\" name=\"".$prefix."thumb\" onChange=\"updateThumbPreview(this)\">";
@@ -513,12 +513,12 @@ function printAlbumEditForm($index, $album) {
 				echo  " ($filename)";
 			}
 			echo "</option>";
-	  }	
-	  echo "\n</select>";
+		}
+		echo "\n</select>";
 	}
-	echo "\n</td>";	
+	echo "\n</td>";
 	echo "\n</tr>";
-	echo "\n</table>";  
+	echo "\n</table>";
 	echo "\n<input type=\"submit\" value=\"save\" />";
 
 	echo "\n</div>";
@@ -637,12 +637,12 @@ function printAlbumEditRow($album) {
 	}
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-	echo '<a class="cache" href="cache-images.php?album=' . queryencode($album->name) . "&return=*" .
+	echo '<a class="cache" href="cache-images.php?page=edit&album=' . queryencode($album->name) . "&return=*" .
  			'" title="Pre-cache images in <em>' . $album->name . '</em>">';
 	echo '<img src="images/cache.png" style="border: 0px;" alt="Cache the album ' . $album->name . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-	echo '<a class="warn" href="refresh-metadata.php?album=' . queryencode($album->name) . "&return=*" .
+	echo '<a class="warn" href="refresh-metadata.php?page=edit&album=' . queryencode($album->name) . "&return=*" .
  			'" title="Refresh metadata for the album <em>' . $album->name . '</em>">';
 	echo '<img src="images/warn.png" style="border: 0px;" alt="Refresh image metadata in the album ' . $album->name . '>" /></a>';
 
@@ -825,5 +825,46 @@ function fetchComments($number) {
 		}
 	}
 	return $comments;
+}
+
+function seofriendlyURL($name) {
+	$name = strtolower($name);
+	// strip/convert a few specific characters
+	$specialchars = array(
+	"ä"=>"ae",
+	"ü"=>"ue",
+	"ö"=>"oe",
+	"Ä"=>"ae",
+	"Ü"=>"ue",
+	"Ö"=>"oe",
+	"ß"=>"ss",
+	"Á"=>"a",
+	"Û"=>"u",
+	"Ø"=>"o",
+	"Å"=>"a",
+	"Í"=>"i",
+	"Ï"=>"i",
+	"Ì"=>"i",
+	"Ó"=>"o",
+	"Œ"=>"ae",
+	"Æ"=>"ae",
+	"Ù"=>"u",
+	"Ç"=>"c",
+	"œ"=>"ae",
+	"ø"=>"oe",
+	"å"=>"a",
+	"/"=>"-",
+	", "=>"-",
+	","=>"-",
+	"'"=>"",
+	";"=>"-",
+	"?"=>"",
+	"!"=>"",
+	" "=>"-");
+	$name = strtr($name,$specialchars);
+
+	// strip all remaining special characters
+	$string = preg_replace("/[^a-zA-Z0-9_.-]/","",$string);
+	return $name;
 }
 ?>

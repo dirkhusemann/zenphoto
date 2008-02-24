@@ -63,14 +63,14 @@ if (!zp_loggedin()) {
 	$albumname = str_replace('!', ' NOT ', $albumname);
 	$albumname = str_replace('&', ' AND ', $albumname);
 	$albumname = str_replace('|', ' OR ', $albumname);
-	$albumname = preg_replace('`[^a-zA-Z0-9_ ]`i','',$albumname);
+	$albumname = seofriendlyURL($albumname);
 	while ($old != $albumname) {
 		$old = $albumname;
 		$albumname = str_replace('  ', ' ', $albumname);
 	}
 	?>
-<form action="?savealbum" method="post">
-<input type="hidden" name="savealbum" value="yes" />
+<form action="?savealbum" method="post"><input type="hidden"
+	name="savealbum" value="yes" />
 <table>
 	<tr>
 		<td>Album name:</td>
@@ -85,21 +85,21 @@ if (!zp_loggedin()) {
 			?>
 			<option value="" selected="1" style="font-weight: bold;">/</option>
 			<?php
-		}
-		$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');
-		foreach ($albumlist as $fullfolder => $albumtitle) {
-			$singlefolder = $fullfolder;
-			$saprefix = "";
-			$salevel = 0;
-			// Get rid of the slashes in the subalbum, while also making a subalbum prefix for the menu.
-			while (strstr($singlefolder, '/') !== false) {
-				$singlefolder = substr(strstr($singlefolder, '/'), 1);
-				$saprefix = "&nbsp; &nbsp;&raquo;&nbsp;" . $saprefix;
-				$salevel++;
-			}
-			echo '<option value="' . $fullfolder . '"' . ($salevel > 0 ? ' style="background-color: '.$bglevels[$salevel].'; border-bottom: 1px dotted #ccc;"' : '')
-					. "$selected>" . $saprefix . $singlefolder . " (" . $albumtitle . ')' . "</option>\n";
-		}
+}
+$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');
+foreach ($albumlist as $fullfolder => $albumtitle) {
+	$singlefolder = $fullfolder;
+	$saprefix = "";
+	$salevel = 0;
+	// Get rid of the slashes in the subalbum, while also making a subalbum prefix for the menu.
+	while (strstr($singlefolder, '/') !== false) {
+		$singlefolder = substr(strstr($singlefolder, '/'), 1);
+		$saprefix = "&nbsp; &nbsp;&raquo;&nbsp;" . $saprefix;
+		$salevel++;
+	}
+	echo '<option value="' . $fullfolder . '"' . ($salevel > 0 ? ' style="background-color: '.$bglevels[$salevel].'; border-bottom: 1px dotted #ccc;"' : '')
+	. "$selected>" . $saprefix . $singlefolder . " (" . $albumtitle . ')' . "</option>\n";
+}
 ?>
 		</select></td>
 	</tr>
@@ -121,34 +121,43 @@ if (!zp_loggedin()) {
 	<tr>
 		<td>Search fields:</td>
 		<td>
-			<table class="checkboxes">
+		<table class="checkboxes">
 			<tr>
-				<td><input type="checkbox" name="sf_title" value=1 <?php if ($fields & SEARCH_TITLE) echo ' checked'; ?>> Title</td>
-				<td><input type="checkbox" name="sf_desc" value=1 <?php if ($fields & SEARCH_DESC) echo ' checked'; ?>> Description</td>
-				<td><input type="checkbox" name="sf_tags" value=1 <?php if ($fields & SEARCH_TAGS) echo ' checked'; ?>> Tags</td>
+				<td><input type="checkbox" name="sf_title" value=1
+				<?php if ($fields & SEARCH_TITLE) echo ' checked'; ?>> Title</td>
+				<td><input type="checkbox" name="sf_desc" value=1
+				<?php if ($fields & SEARCH_DESC) echo ' checked'; ?>> Description</td>
+				<td><input type="checkbox" name="sf_tags" value=1
+				<?php if ($fields & SEARCH_TAGS) echo ' checked'; ?>> Tags</td>
 			</tr>
 			<tr>
-				<td><input type="checkbox" name="sf_filename" value=1 <?php if ($fields & SEARCH_FILENAME) echo ' checked'; ?>> File/Folder name</td>
-				<td><input type="checkbox" name="sf_location" value=1 <?php if ($fields & SEARCH_LOCATION) echo ' checked'; ?>> Location</td>
-				<td><input type="checkbox" name="sf_city" value=1 <?php if ($fields & SEARCH_CITY) echo ' checked'; ?>> City</td>
+				<td><input type="checkbox" name="sf_filename" value=1
+				<?php if ($fields & SEARCH_FILENAME) echo ' checked'; ?>>
+				File/Folder name</td>
+				<td><input type="checkbox" name="sf_location" value=1
+				<?php if ($fields & SEARCH_LOCATION) echo ' checked'; ?>> Location</td>
+				<td><input type="checkbox" name="sf_city" value=1
+				<?php if ($fields & SEARCH_CITY) echo ' checked'; ?>> City</td>
 			</tr>
 			<tr>
-				<td><input type="checkbox" name="sf_state" value=1 <?php if ($fields & SEARCH_STATE) echo ' checked'; ?>> State</td>
-				<td><input type="checkbox" name="sf_country" value=1 <?php if ($fields & SEARCH_COUNTRY) echo ' checked'; ?>> Country</td>
+				<td><input type="checkbox" name="sf_state" value=1
+				<?php if ($fields & SEARCH_STATE) echo ' checked'; ?>> State</td>
+				<td><input type="checkbox" name="sf_country" value=1
+				<?php if ($fields & SEARCH_COUNTRY) echo ' checked'; ?>> Country</td>
 			</tr>
-			</table>
+		</table>
 		</td>
 	</tr>
 
 </table>
 <input type="submit" value="Create the album" class="button" /></form>
 
-		<?php
+				<?php
 
-		echo "\n" . '</div>';
-		echo "\n" . '</div>';
+				echo "\n" . '</div>';
+				echo "\n" . '</div>';
 
-		printAdminFooter();
+				printAdminFooter();
 }
 echo "\n</body>";
 echo "\n</html>";

@@ -80,8 +80,8 @@ function rate(rating,id,votes,values,path,option)  {
 		values = values/10;	
 		remotos = new datosServidor;
 		nt = remotos.enviar(path+'/rating/update.php?rating='+rating+'&id='+id+'&option='+option);
-		document.getElementById('vote').innerHTML="Rating: "+values+" (Total votes: "+votes+")<br />Thanks for voting!";
 		rating = rating * 25;
-		document.getElementById('ratingstars').innerHTML=" ";
 		document.getElementById('current-rating').style.width = rating+'px';
+		document.getElementById('vote').innerHTML="Rating: "+values+" (Total votes: "+votes+")<br />Thanks for voting!";
+		
 }
