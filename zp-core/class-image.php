@@ -144,7 +144,7 @@ class Image extends PersistentObject {
 	function getExifData() {
 		global $_zp_exifvars;
 		$exif = array();
-		if (is_null($v = $this->get('EXIFValid')) || ($v = 1) || $this->fileChanged()) {
+		if (is_null($v = $this->get('EXIFValid')) || ($v != 1) || $this->fileChanged()) {
 			$exifraw = read_exif_data_raw($this->localpath, false);
 			if ($exifraw['ValidEXIFData']) {
 				foreach($_zp_exifvars as $field => $exifvar) {
