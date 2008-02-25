@@ -62,7 +62,11 @@ $result = query_full_array("SELECT images.albumid, images.date AS date, images.f
 															" ORDER BY images.id DESC LIMIT ".$items);
 
 foreach ($result as $images) {
-	$images['folder'] = rawurlencode($images['folder']);
+	$imagpathnames = explode('/', $images['folder']);
+	foreach ($imagpathnames as $key=>$name) {
+		$imagpathnames[$key] = rawurlencode($name);
+	}
+	$images['folder'] = implode('/', $imagpathnames);
 	$images['filename'] = rawurlencode($images['filename']);
 
 ?>

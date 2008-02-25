@@ -3440,11 +3440,10 @@ function getSearchWords() {
 						if ((strpos($singlesearchstring, $char) !== false)) $setQuote = true;
 					}
 					if ($setQuote) {
-						$singlesearchstring = '"'.$singlesearchstring.'"';
+						$sanitizedwords .= '&quot;'.sanitize($singlesearchstring, true).'&quot;';
 					} else {
-						$singlesearchstring = ' '.$singlesearchstring.' ';
+						$sanitizedwords .= ' '.sanitize($singlesearchstring, true).' ';
 					}
-					$sanitizedwords .= sanitize($singlesearchstring, true);
 			}
 		}
 	}
