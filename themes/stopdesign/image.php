@@ -107,7 +107,7 @@
 						<?php } else { echo '<h2>Comments are closed</h2>'; } ?>
 
 						<!-- BEGIN #addcomment -->
-						<?php if ($_zp_comment_error || ($num == 0)) { 
+						<?php if ($_zp_comment_error) { 
 							echo '<div id="addcomment" style="display: block;">';
 						} else { 
 							echo '<div id="addcomment" style="display: none;">';
