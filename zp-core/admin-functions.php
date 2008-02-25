@@ -1,6 +1,7 @@
 <?php
 require_once("classes.php");
 require_once("functions.php");
+require_once("seofriendlyURL.php"); // keep the function separate for easy modification by site admins
 
 $_zp_admin_album_list = null;
 
@@ -837,44 +838,4 @@ function fetchComments($number) {
 	return $comments;
 }
 
-function seofriendlyURL($name) {
-	$name = strtolower($name);
-	// strip/convert a few specific characters
-	$specialchars = array(
-	"ä"=>"ae",
-	"ü"=>"ue",
-	"ö"=>"oe",
-	"Ä"=>"ae",
-	"Ü"=>"ue",
-	"Ö"=>"oe",
-	"ß"=>"ss",
-	"Á"=>"a",
-	"Û"=>"u",
-	"Ø"=>"o",
-	"Å"=>"a",
-	"Í"=>"i",
-	"Ï"=>"i",
-	"Ì"=>"i",
-	"Ó"=>"o",
-	"Œ"=>"ae",
-	"Æ"=>"ae",
-	"Ù"=>"u",
-	"Ç"=>"c",
-	"œ"=>"ae",
-	"ø"=>"oe",
-	"å"=>"a",
-	"/"=>"-",
-	", "=>"-",
-	","=>"-",
-	"'"=>"",
-	";"=>"-",
-	"?"=>"",
-	"!"=>"",
-	" "=>"-");
-	$name = strtr($name,$specialchars);
-
-	// strip all remaining special characters
-	$string = preg_replace("/[^a-zA-Z0-9_.-]/","",$string);
-	return $name;
-}
 ?>
