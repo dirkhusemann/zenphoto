@@ -2258,9 +2258,9 @@ function printCommentErrors($class = 'error') {
 
 			case -5: echo "You must enter something in the comment text."; break;
 
-			case  1: echo "You comment failed the SPAM filter check."; break;
+			case  1: echo "Your comment failed the SPAM filter check."; break;
 
-			case  2: echo "You comment has been marked for moderation."; break;
+			case  2: echo "Your comment has been marked for moderation."; break;
 
 		}
 		echo "</div>";
