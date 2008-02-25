@@ -1,5 +1,5 @@
 <?php
-
+require_once("utf8.php");
 require_once("functions-db.php");
 
 // If the auth variable gets set somehow before this, get rid of it.
@@ -42,7 +42,25 @@ if (!isset($_POST['login'])) {
 		} else {
 			// Clear the cookie, just in case
 			zp_setcookie("zenphoto_auth", "", time()-368000, $cookiepath);
-			$_zp_login_error = true;
+			// was it a request for a reset?
+			$code = md5(trim($_POST['pass']));
+			if ($code == $_POST['code_h']) {
+				if (!empty($post_user)) { $requestor = ' from a user who tried to log in as "'.$post_user.'"'; }
+				$admins = getAdministrators();
+				$user = array_shift($admins);
+				$adm = $user['user'];
+				$pas = $user['pass'];
+				setOption('admin_reset_date', time());
+				$req = getOption('admin_reset_date');
+				$ref = md5($req . $adm . $pas);
+				$msg .= "\nYou are receiving this e-mail because of a password reset request on your Zenphoto gallery$requestor." .
+						"\nTo reset your Zenphoto Admin passwords visit: ".FULLWEBPATH."/".ZENFOLDER."/admin.php?ticket=$ref" .
+						"\nIf you do not wish to reset your passwords just ignore this message. This ticket will automatically expire in 3 days.";
+				zp_mail('The Zenphoto information you requested',  $msg);
+				$_zp_login_error = 2;
+			} else {
+				$_zp_login_error = 1;
+			}
 		}
 	}
 }

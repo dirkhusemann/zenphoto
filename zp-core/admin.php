@@ -138,556 +138,541 @@ $charsets = array("ASMO-708" => "Arabic",
 									"x-mac-korean" => "Korean (Mac)",
 									"x-mac-turkish" => "Turkish (Mac)"
 									);
+?>
+<?php
+if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 
-									if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
+	$gallery = new Gallery();
+	if (isset($_GET['prune'])) {
+		if ($_GET['prune'] != 'done') {
+			if ($gallery->garbageCollect(true, true)) {
+				$param = '?prune=continue';
+			} else {
+				$param = '?prune=done';
+			}
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php" . $param);
+		}
+	} else {
+		$gallery->garbageCollect();
+	}
 
-										$gallery = new Gallery();
-										if (isset($_GET['prune'])) {
-											if ($_GET['prune'] != 'done') {
-												if ($gallery->garbageCollect(true, true)) {
-													$param = '?prune=continue';
-												} else {
-													$param = '?prune=done';
-												}
-												header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php" . $param);
-											}
-										} else {
-											$gallery->garbageCollect();
-										}
+	if (isset($_GET['action'])) {
+		$action = $_GET['action'];
 
-										if (isset($_GET['action'])) {
-											$action = $_GET['action'];
+		/** clear the cache ***********************************************************/
+		/******************************************************************************/
+		if ($action == "clear_cache") {
+			$gallery->clearCache();
+		}
 
-											/** clear the cache ***********************************************************/
-											/******************************************************************************/
-											if ($action == "clear_cache") {
-												$gallery->clearCache();
-											}
+		/** Publish album  ************************************************************/
+		/******************************************************************************/
+		if ($action == "publish") {
+			$folder = queryDecode(strip($_GET['album']));
+			$album = new Album($gallery, $folder);
+			$album->setShow($_GET['value']);
+			$album->save();
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit');
+			exit();
 
-											/** Publish album  ************************************************************/
-											/******************************************************************************/
-											if ($action == "publish") {
-												$folder = queryDecode(strip($_GET['album']));
-												$album = new Album($gallery, $folder);
-												$album->setShow($_GET['value']);
-												$album->save();
-												header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit');
-												exit();
+			/** un-moderate comment *********************************************************/
+			/********************************************************************************/
+		} else if ($action == "moderation") {
+			$sql = 'UPDATE ' . prefix('comments') . ' SET `inmoderation`=0 WHERE `id`=' . $_GET['id'] . ';';
+			query($sql);
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=comments');
+			exit();
 
-												/** un-moderate comment *********************************************************/
-												/********************************************************************************/
-											} else if ($action == "moderation") {
-												$sql = 'UPDATE ' . prefix('comments') . ' SET `inmoderation`=0 WHERE `id`=' . $_GET['id'] . ';';
-												query($sql);
-												header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=comments');
-												exit();
+			/** Reset hitcounters ***********************************************************/
+			/********************************************************************************/
+		} else if ($action == "reset_hitcounters") {
+			if (isset($_GET['albumid'])) $id = $_GET['albumid'];
+			if (isset($_POST['albumid'])) $id = $_POST['albumid'];
+			if(isset($id)) {
+				$where = ' WHERE `id`='.$id;
+				$imgwhere = ' WHERE `albumid`='.$id;
+				$return = '?page=edit';
+				if (isset($_GET['return'])) $rt = $_GET['return'];
+				if (isset($_POST['return'])) $rt = $_POST['return'];
+				if (isset($rt)) {
+					$return .= '&album=' . $rt;
+				}
+			} else {
+				$where = '';
+				$imgwhere = '';
+				$return = '';
+			}
+			query("UPDATE " . prefix('albums') . " SET `hitcounter`= 0" . $where);
+			query("UPDATE " . prefix('images') . " SET `hitcounter`= 0" . $imgwhere);
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php' . $return);
+			exit();
 
-												/** Reset hitcounters ***********************************************************/
-												/********************************************************************************/
-											} else if ($action == "reset_hitcounters") {
-												if (isset($_GET['albumid'])) $id = $_GET['albumid'];
-												if (isset($_POST['albumid'])) $id = $_POST['albumid'];
-												if(isset($id)) {
-													$where = ' WHERE `id`='.$id;
-													$imgwhere = ' WHERE `albumid`='.$id;
-													$return = '?page=edit';
-													if (isset($_GET['return'])) $rt = $_GET['return'];
-													if (isset($_POST['return'])) $rt = $_POST['return'];
-													if (isset($rt)) {
-														$return .= '&album=' . $rt;
-													}
-												} else {
-													$where = '';
-													$imgwhere = '';
-													$return = '';
-												}
-												query("UPDATE " . prefix('albums') . " SET `hitcounter`= 0" . $where);
-												query("UPDATE " . prefix('images') . " SET `hitcounter`= 0" . $imgwhere);
-												header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php' . $return);
-												exit();
+			/** SAVE **********************************************************************/
+			/******************************************************************************/
+		} else if ($action == "save") {
 
-												/** SAVE **********************************************************************/
-												/******************************************************************************/
-											} else if ($action == "save") {
+			/** SAVE A SINGLE ALBUM *******************************************************/
+			if ($_POST['album']) {
 
-												/** SAVE A SINGLE ALBUM *******************************************************/
-												if ($_POST['album']) {
+				$folder = queryDecode(strip($_POST['album']));
+				$album = new Album($gallery, $folder);
+				$notify = '';
+				if (isset($_POST['savealbuminfo'])) {
+					$notify = processAlbumEdit(0, $album);
+				}
 
-													$folder = queryDecode(strip($_POST['album']));
-													$album = new Album($gallery, $folder);
-													$notify = '';
-													if (isset($_POST['savealbuminfo'])) {
-														$notify = processAlbumEdit(0, $album);
-													}
+				if (isset($_POST['totalimages'])) {
+					for ($i = 0; $i < $_POST['totalimages']; $i++) {
+						$filename = strip($_POST["$i-filename"]);
 
-													if (isset($_POST['totalimages'])) {
-														for ($i = 0; $i < $_POST['totalimages']; $i++) {
-															$filename = strip($_POST["$i-filename"]);
+						// The file might no longer exist
+						$image = new Image($album, $filename);
+						if ($image->exists) {
+							$image->setTitle(strip($_POST["$i-title"]));
+							$image->setDesc(strip($_POST["$i-desc"]));
+							$image->setLocation(strip($_POST["$i-location"]));
+							$image->setCity(strip($_POST["$i-city"]));
+							$image->setState(strip($_POST["$i-state"]));
+							$image->setCountry(strip($_POST["$i-country"]));
+							$image->setCredit(strip($_POST["$i-credit"]));
+							$image->setCopyright(strip($_POST["$i-copyright"]));
+							$image->setTags(strip($_POST["$i-tags"]));
+							$image->setDateTime(strip($_POST["$i-date"]));
+							$image->setShow(strip($_POST["$i-Visible"]));
+							$image->setCommentsAllowed(strip($_POST["$i-allowcomments"]));
+							if (isset($_POST["$i-reset_hitcounter"])) {
+								$id = $image->id;
+								query("UPDATE " . prefix('images') . " SET `hitcounter`= 0 WHERE `id` = $id");
+							}
+							$image->setCustomData(strip($_POST["$i-custom_data"]));
+							$image->save();
+						}
+					}
+				}
 
-															// The file might no longer exist
-															$image = new Image($album, $filename);
-															if ($image->exists) {
-																$image->setTitle(strip($_POST["$i-title"]));
-																$image->setDesc(strip($_POST["$i-desc"]));
-																$image->setLocation(strip($_POST["$i-location"]));
-																$image->setCity(strip($_POST["$i-city"]));
-																$image->setState(strip($_POST["$i-state"]));
-																$image->setCountry(strip($_POST["$i-country"]));
-																$image->setCredit(strip($_POST["$i-credit"]));
-																$image->setCopyright(strip($_POST["$i-copyright"]));
-																$image->setTags(strip($_POST["$i-tags"]));
-																$image->setDateTime(strip($_POST["$i-date"]));
-																$image->setShow(strip($_POST["$i-Visible"]));
-																$image->setCommentsAllowed(strip($_POST["$i-allowcomments"]));
-																if (isset($_POST["$i-reset_hitcounter"])) {
-																	$id = $image->id;
-																	query("UPDATE " . prefix('images') . " SET `hitcounter`= 0 WHERE `id` = $id");
-																}
-																$image->setCustomData(strip($_POST["$i-custom_data"]));
-																$image->save();
-															}
-														}
-													}
+				/** SAVE MULTIPLE ALBUMS ******************************************************/
+			} else if ($_POST['totalalbums']) {
+				for ($i = 1; $i <= $_POST['totalalbums']; $i++) {
+					$folder = queryDecode(strip($_POST["$i-folder"]));
+					$album = new Album($gallery, $folder);
+					$rslt = processAlbumEdit($i, $album);
+					if (!empty($rslt)) { $notify = $rslt; }
+				}
+			}
+			// Redirect to the same album we saved.
+			$qs_albumsuffix = "&massedit";
+			if ($_GET['album']) {
+				$folder = queryDecode(strip($_GET['album']));
+				$qs_albumsuffix = '&album='.urlencode($folder);
+			}
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit' . $qs_albumsuffix . $notify . '&saved');
+			exit();
 
-													/** SAVE MULTIPLE ALBUMS ******************************************************/
-												} else if ($_POST['totalalbums']) {
-													for ($i = 1; $i <= $_POST['totalalbums']; $i++) {
-														$folder = queryDecode(strip($_POST["$i-folder"]));
-														$album = new Album($gallery, $folder);
-														$rslt = processAlbumEdit($i, $album);
-														if (!empty($rslt)) { $notify = $rslt; }
-													}
-												}
-												// Redirect to the same album we saved.
-												$qs_albumsuffix = "&massedit";
-												if ($_GET['album']) {
-													$folder = queryDecode(strip($_GET['album']));
-													$qs_albumsuffix = '&album='.urlencode($folder);
-												}
-												header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit' . $qs_albumsuffix . $notify . '&saved');
-												exit();
+			/** DELETION ******************************************************************/
+			/*****************************************************************************/
+		} else if ($action == "deletealbum") {
+			$albumdir = "";
+			if ($_GET['album']) {
+				$folder = queryDecode(strip($_GET['album']));
+				$album = new Album($gallery, $folder);
+				if ($album->deleteAlbum()) {
+					$nd = 3;
+				} else {
+					$nd = 4;
+				}
+				$pieces = explode('/', $folder);
+				if (($i = count($pieces)) > 1) {
+					unset($pieces[$i-1]);
+					$albumdir = "&album=" . urlencode(implode('/', $pieces));
+				}
+			}
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit" . $albumdir . "&ndeleted=" . $nd);
+			exit();
 
-												/** DELETION ******************************************************************/
-												/*****************************************************************************/
-											} else if ($action == "deletealbum") {
-												$albumdir = "";
-												if ($_GET['album']) {
-													$folder = queryDecode(strip($_GET['album']));
-													$album = new Album($gallery, $folder);
-													if ($album->deleteAlbum()) {
-														$nd = 3;
-													} else {
-														$nd = 4;
-													}
-													$pieces = explode('/', $folder);
-													if (($i = count($pieces)) > 1) {
-														unset($pieces[$i-1]);
-														$albumdir = "&album=" . urlencode(implode('/', $pieces));
-													}
-												}
-												header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit" . $albumdir . "&ndeleted=" . $nd);
-												exit();
+		} else if ($action == "deleteimage") {
+			if ($_GET['album'] && $_GET['image']) {
+				$folder = queryDecode(strip($_GET['album']));
+				$file = queryDecode(strip($_GET['image']));
+				$album = new Album($gallery, $folder);
+				$image = new Image($album, $file);
+				if ($image->deleteImage(true)) {
+					$nd = 1;
+				} else {
+					$nd = 2;
+				}
+			}
+			header("Location: ". FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit&album=" . urlencode($folder) . "&ndeleted=" . $nd);
+			exit();
 
-											} else if ($action == "deleteimage") {
-												if ($_GET['album'] && $_GET['image']) {
-													$folder = queryDecode(strip($_GET['album']));
-													$file = queryDecode(strip($_GET['image']));
-													$album = new Album($gallery, $folder);
-													$image = new Image($album, $file);
-													if ($image->deleteImage(true)) {
-														$nd = 1;
-													} else {
-														$nd = 2;
-													}
-												}
-												header("Location: ". FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit&album=" . urlencode($folder) . "&ndeleted=" . $nd);
-												exit();
+			/** UPLOAD IMAGES *************************************************************/
+			/*****************************************************************************/
+		} else if ($action == "upload") {
 
-												/** UPLOAD IMAGES *************************************************************/
-												/*****************************************************************************/
-											} else if ($action == "upload") {
+			// Check for files.
+			$files_empty = true;
+			if (isset($_FILES['files']))
+			foreach($_FILES['files']['name'] as $name) { if (!empty($name)) $files_empty = false; }
 
-												// Check for files.
-												$files_empty = true;
-												if (isset($_FILES['files']))
-												foreach($_FILES['files']['name'] as $name) { if (!empty($name)) $files_empty = false; }
+			// Make sure the folder exists. If not, create it.
+			if (isset($_POST['processed'])
+			&& !empty($_POST['folder'])
+			&& !$files_empty) {
 
-												// Make sure the folder exists. If not, create it.
-												if (isset($_POST['processed'])
-												&& !empty($_POST['folder'])
-												&& !$files_empty) {
+				$folder = strip($_POST['folder']);
+				$uploaddir = $gallery->albumdir . $folder;
+				if (!is_dir($uploaddir)) {
+					mkdir ($uploaddir, CHMOD_VALUE);
+				}
+				@chmod($uploaddir, CHMOD_VALUE);
 
-													$folder = strip($_POST['folder']);
-													$uploaddir = $gallery->albumdir . $folder;
-													if (!is_dir($uploaddir)) {
-														mkdir ($uploaddir, CHMOD_VALUE);
-													}
-													@chmod($uploaddir, CHMOD_VALUE);
-
-													$error = false;
-													foreach ($_FILES['files']['error'] as $key => $error) {
-														if ($_FILES['files']['name'][$key] == "") continue;
-														if ($error == UPLOAD_ERR_OK) {
-															$tmp_name = $_FILES['files']['tmp_name'][$key];
-															$name = $_FILES['files']['name'][$key];
-															$name = seofriendlyURL($name);
-															if (is_valid_image($name)) {
-																$uploadfile = $uploaddir . '/' . $name;
-																move_uploaded_file($tmp_name, $uploadfile);
-																@chmod($uploadfile, 0666 & CHMOD_VALUE);
-															} else if (is_zip($name)) {
-																unzip($tmp_name, $uploaddir);
-															}
-														}
-													}
-
-
-													$album = new Album($gallery, $folder);
-													if ($album->exists) {
-														if (!isset($_POST['publishalbum'])) {
-															$album->setShow(false);
-														}
-														$title = strip($_POST['albumtitle']);
-														if (!(false === ($pos = strpos($title, ' (')))) {
-															$title = substr($title, 0, $pos);
-														}
-														if (!empty($title)  && isset($_POST['newalbum'])) {
-															$album->setTitle($title);
-														}
-														$album->save();
-													} else {
-														$AlbumDirName = str_replace(SERVERPATH, '', $gallery->albumdir);
-														zp_error("The album couldn't be created in the 'albums' folder. This is usually "
-														. "a permissions problem. Try setting the permissions on the albums and cache folders to be world-writable "
-														. "using a shell: <code>chmod 777 " . $AlbumDirName . CACHEFOLDER ."</code>, or use your FTP program to give everyone write "
-														. "permissions to those folders.");
-													}
+				$error = false;
+				foreach ($_FILES['files']['error'] as $key => $error) {
+					if ($_FILES['files']['name'][$key] == "") continue;
+					if ($error == UPLOAD_ERR_OK) {
+						$tmp_name = $_FILES['files']['tmp_name'][$key];
+						$name = $_FILES['files']['name'][$key];
+						$name = seofriendlyURL($name);
+						if (is_valid_image($name)) {
+							$uploadfile = $uploaddir . '/' . $name;
+							move_uploaded_file($tmp_name, $uploadfile);
+							@chmod($uploadfile, 0666 & CHMOD_VALUE);
+						} else if (is_zip($name)) {
+							unzip($tmp_name, $uploaddir);
+						}
+					}
+				}
 
 
-													header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit&album=" . urlencode($folder));
-													exit();
-
-												} else {
-													// Handle the error and return to the upload page.
-													$page = "upload";
-													$error = true;
-													if ($files_empty) {
-														$errormsg = "You must upload at least one file.";
-													} else if (empty($_POST['folder'])) {
-														$errormsg = "You must enter a folder name for your new album.";
-													} else if (empty($_POST['processed'])) {
-														$errormsg = "You've most likely exceeded the upload limits. Try uploading fewer files at a time, or use a ZIP file.";
-
-													} else {
-														$errormsg = "There was an error submitting the form. Please try again. If this keeps happening, check your "
-														. "server and PHP configuration (make sure file uploads are enabled, and upload_max_filesize is set high enough). "
-														. "If you think this is a bug, file a bug report. Thanks!";
-													}
-												}
-
-												/** COMMENTS ******************************************************************/
-												/*****************************************************************************/
-
-											} else if ($action == 'deletecomments') {
-
-												if (isset($_POST['ids']) || isset($_GET['id'])) {
-													if (isset($_GET['id'])) {
-														$ids = array($_GET['id']);
-													} else {
-														$ids = $_POST['ids'];
-													}
-													$total = count($ids);
-													if ($total > 0) {
-														$n = 0;
-														$sql = "DELETE FROM ".prefix('comments')." WHERE ";
-														foreach ($ids as $id) {
-															$n++;
-															$sql .= "id='$id' ";
-															if ($n < $total) $sql .= "OR ";
-														}
-														query($sql);
-													}
-													header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=comments&ndeleted=$n");
-													exit();
-												} else {
-													header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=comments&ndeleted=0");
-													exit();
-												}
+				$album = new Album($gallery, $folder);
+				if ($album->exists) {
+					if (!isset($_POST['publishalbum'])) {
+						$album->setShow(false);
+					}
+					$title = strip($_POST['albumtitle']);
+					if (!(false === ($pos = strpos($title, ' (')))) {
+						$title = substr($title, 0, $pos);
+					}
+					if (!empty($title)  && isset($_POST['newalbum'])) {
+						$album->setTitle($title);
+					}
+					$album->save();
+				} else {
+					$AlbumDirName = str_replace(SERVERPATH, '', $gallery->albumdir);
+					zp_error("The album couldn't be created in the 'albums' folder. This is usually "
+					. "a permissions problem. Try setting the permissions on the albums and cache folders to be world-writable "
+					. "using a shell: <code>chmod 777 " . $AlbumDirName . CACHEFOLDER ."</code>, or use your FTP program to give everyone write "
+					. "permissions to those folders.");
+				}
 
 
-											} else if ($action == 'savecomment') {
-												if (!isset($_POST['id'])) {
-													header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=comments");
-													exit();
-												}
-												$id = $_POST['id'];
-												$name = escape($_POST['name']);
-												$email = escape($_POST['email']);
-												$website = escape($_POST['website']);
-												$date = escape($_POST['date']);
-												$comment = escape($_POST['comment']);
+				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit&album=" . urlencode($folder));
+				exit();
 
-												// TODO: Update date as well; no good input yet, so leaving out.
-												$sql = "UPDATE ".prefix('comments')." SET `name` = '$name', `email` = '$email', `website` = '$website', `comment` = '$comment' WHERE id = $id";
-												query($sql);
+			} else {
+				// Handle the error and return to the upload page.
+				$page = "upload";
+				$error = true;
+				if ($files_empty) {
+					$errormsg = "You must upload at least one file.";
+				} else if (empty($_POST['folder'])) {
+					$errormsg = "You must enter a folder name for your new album.";
+				} else if (empty($_POST['processed'])) {
+					$errormsg = "You've most likely exceeded the upload limits. Try uploading fewer files at a time, or use a ZIP file.";
 
-												header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=comments&sedit");
-												exit();
+				} else {
+					$errormsg = "There was an error submitting the form. Please try again. If this keeps happening, check your "
+					. "server and PHP configuration (make sure file uploads are enabled, and upload_max_filesize is set high enough). "
+					. "If you think this is a bug, file a bug report. Thanks!";
+				}
+			}
 
-												/** OPTIONS ******************************************************************/
-												/*****************************************************************************/
-													
-											} else if ($action == 'deleteadmin') {
-												$id = $_GET['adminuser'];
-												$sql = "DELETE FROM ".prefix('administrators')." WHERE `id`=$id";
-												query($sql);
-												$sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
-												query($sql);
-											} else if ($action == 'saveoptions') {
-												$wm = getOption('watermark_image');
-												$vwm = getOption('video_watermark_image');
-												$wmo = getOption('perform_watermark');
-												$vwmo = getOption('perform_video_watermark');
-												$woh = getOption('watermark_h_offset');
-												$wow = getOption('watermark_w_offset');
-												$notify = '';
-												$returntab = "";
+			/** COMMENTS ******************************************************************/
+			/*****************************************************************************/
 
-												/*** admin options ***/
-												if (isset($_POST['saveadminoptions'])) {
-													for ($i = 0; $i < $_POST['totaladmins']; $i++) {
-														$pass = trim($_POST[$i.'-adminpass']);
-														$user = trim($_POST[$i.'-adminuser']);
-														if (!empty($user)) {
-															if ($pass == trim($_POST[$i.'-adminpass_2'])) {
-																$admin_n = trim($_POST[$i.'-admin_name']);
-																$admin_e = trim($_POST[$i.'-admin_email']);
-																$admin_r = $_POST[$i.'-admin_rights'];
-																$comment_r = $_POST[$i.'-comment_rights'];
-																$upload_r = $_POST[$i.'-upload_rights'];
-																$edit_r = $_POST[$i.'-edit_rights'];
-																$options_r = $_POST[$i.'-options_rights'];
-																$themes_r = $_POST[$i.'-themes_rights'];
-																if (!isset($_POST['alter_enabled'])) {
-																	$rights = MAIN_RIGHTS + $admin_r + $comment_r + $upload_r + $edit_r + $options_r + $themes_r;
-																	$albums = $_POST['managed_albums_'.$i];
-																} else {
-																	$rights = null;
-																}
-																if (empty($pass)) {
-																	$pwd = null;
-																} else {
-																	$pwd = md5($_POST[$i.'-adminuser'] . $pass);
-																}
-																saveAdmin($user, $pwd, $admin_n, $admin_e, $rights, $albums);
-															} else {
-																$notify = '&mismatch=password';
-															}
-														}
-													}
-													setOption('admin_reset_date', '1');
-													$returntab = "#tab_admin";
-												}
+		} else if ($action == 'deletecomments') {
 
-												/*** Gallery options ***/
-												if (isset($_POST['savegalleryoptions'])) {
-													setOption('gallery_title', $_POST['gallery_title']);
-													setOption('website_title', $_POST['website_title']);
-													$web = $_POST['website_url'];
-													setOption('website_url', $web);
-													setOption('time_offset', $_POST['time_offset']);
-													setOption('gmaps_apikey', $_POST['gmaps_apikey']);
-													setBoolOption('mod_rewrite', $_POST['mod_rewrite']);
-													setOption('mod_rewrite_image_suffix', $_POST['mod_rewrite_image_suffix']);
-													setOption('server_protocol', $_POST['server_protocol']);
-													setOption('charset', $_POST['charset']);
-													setOption('gallery_sorttype', $_POST['gallery_sorttype']);
-													if ($_POST['gallery_sorttype'] == 'Manual') {
-														setBoolOption('gallery_sortdirection', 0);
-													} else {
-														setBoolOption('gallery_sortdirection', $_POST['gallery_sortdirection']);
-													}
-													setOption('image_sorttype', $_POST['image_sorttype']);
-													setBoolOption('image_sortdirection', $_POST['image_sortdirection']);
-													setOption('feed_items', $_POST['feed_items']);
-													$search = new SearchEngine();
-													setOption('search_fields', 32767, false); // make SearchEngine allow all options so parseQueryFields() will gives back what was choosen this time
-													setOption('search_fields', $search->parseQueryFields());
-													if ($_POST['gallerypass'] == $_POST['gallerypass_2']) {
-														$pwd = trim($_POST['gallerypass']);
-														if (empty($pwd)) {
-															if (empty($_POST['gallerypass'])) {
-																setOption('gallery_password', NULL);  // clear the gallery password
-															}
-														} else {
-															setOption('gallery_password', md5($pwd));
-														}
-													} else {
-														$notify = '&mismatch=gallery';
-													}
-													if ($_POST['searchpass'] == $_POST['searchpass_2']) {
-														$pwd = trim($_POST['searchpass']);
-														if (empty($pwd)) {
-															if (empty($_POST['searchpass'])) {
-																setOption('search_password', NULL);  // clear the gallery password
-															}
-														} else {
-															setOption('search_password', md5($pwd));
-														}
-													} else {
-														$notify = '&mismatch=search';
-													}
-													setOption('gallery_hint', $_POST['gallery_hint']);
-													setOption('search_hint', $_POST['search_hint']);
-													setBoolOption('persistent_archive', $_POST['persistent_archive']);
-													setBoolOption('album_session', $_POST['album_session']);
-													setOption('locale', $_POST['locale']);
-													$returntab = "#tab_gallery";
-												}
+			if (isset($_POST['ids']) || isset($_GET['id'])) {
+				if (isset($_GET['id'])) {
+					$ids = array($_GET['id']);
+				} else {
+					$ids = $_POST['ids'];
+				}
+				$total = count($ids);
+				if ($total > 0) {
+					$n = 0;
+					$sql = "DELETE FROM ".prefix('comments')." WHERE ";
+					foreach ($ids as $id) {
+						$n++;
+						$sql .= "id='$id' ";
+						if ($n < $total) $sql .= "OR ";
+					}
+					query($sql);
+				}
+				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=comments&ndeleted=$n");
+				exit();
+			} else {
+				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=comments&ndeleted=0");
+				exit();
+			}
 
-												/*** Image options ***/
-												if (isset($_POST['saveimageoptions'])) {
-													setOption('image_quality', $_POST['image_quality']);
-													setOption('thumb_quality', $_POST['thumb_quality']);
-													setOption('image_size', $_POST['image_size']);
-													setBoolOption('image_use_longest_side', $_POST['image_use_longest_side']);
-													setBoolOption('image_allow_upscale', $_POST['image_allow_upscale']);
-													setOption('thumb_size', $_POST['thumb_size']);
-													setBoolOption('thumb_crop', $_POST['thumb_crop']);
-													setOption('thumb_crop_width', $_POST['thumb_crop_width']);
-													setOption('thumb_crop_height', $_POST['thumb_crop_height']);
-													setBoolOption('thumb_sharpen', $_POST['thumb_sharpen']);
-													setOption('albums_per_page', $_POST['albums_per_page']);
-													setOption('images_per_page', $_POST['images_per_page']);
-													setBoolOption('perform_watermark', $_POST['perform_watermark']);
-													setOption('watermark_image', 'watermarks/' . $_POST['watermark_image'] . '.png');
-													setOption('watermark_h_offset', $_POST['watermark_h_offset']);
-													setOption('watermark_w_offset', $_POST['watermark_w_offset']);
-													setBoolOption('perform_video_watermark', $_POST['perform_video_watermark']);
-													setOption('video_watermark_image', 'watermarks/' . $_POST['video_watermark_image'] . '.png');
-													setBoolOption('full_image_download', $_POST['full_image_download']);
-													setOption('full_image_quality', $_POST['full_image_quality']);
-													setBoolOption('protect_full_image', $_POST['protect_full_image']);
-													$returntab = "#tab_image";
-												}
-												/*** Comment options ***/
-												if (isset($_POST['savecommentoptions'])) {
-													setOption('spam_filter', $_POST['spam_filter']);
-													setBoolOption('email_new_comments', $_POST['email_new_comments']);
-													$tags = $_POST['allowed_tags'];
-													$test = "(".$tags.")";
-													$a = parseAllowedTags($test);
-													if ($a !== false) {
-														setOption('allowed_tags', $tags);
-														$notify = '';
-													} else {
-														$notify = '&tag_parse_error';
-													}
-													setBoolOption('comment_name_required', $_POST['comment_name_required']);
-													setBoolOption('comment_email_required', $_POST['comment_email_required']);
-													setBoolOption('comment_web_required', $_POST['comment_web_required']);
-													setBoolOption('Use_Captcha', $_POST['Use_Captcha']);
-													$returntab = "#tab_comments";
 
-												}
-												/*** Theme options ***/
-												if (isset($_POST['savethemeoptions'])) {
-													// all theme options are custom options, handled below
-													$returntab = "#tab_theme";
-												}
-												/*** custom options ***/
-												$templateOptions = GetOptionList();
+		} else if ($action == 'savecomment') {
+			if (!isset($_POST['id'])) {
+				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=comments");
+				exit();
+			}
+			$id = $_POST['id'];
+			$name = escape($_POST['name']);
+			$email = escape($_POST['email']);
+			$website = escape($_POST['website']);
+			$date = escape($_POST['date']);
+			$comment = escape($_POST['comment']);
 
-												foreach($standardOptions as $option) {
-													unset($templateOptions[$option]);
-												}
-												unset($templateOptions['saveoptions']);
-												$keys = array_keys($templateOptions);
-												$i = 0;
-												while ($i < count($keys)) {
-													if (isset($_POST[$keys[$i]])) {
-														setOption($keys[$i], $_POST[$keys[$i]]);
-													} else {
-														if (isset($_POST['chkbox-' . $keys[$i]])) {
-															setOption($keys[$i], 0);
-														}
-													}
-													$i++;
-												}
-												if (($wmo != getOption('perform_watermark')) ||
-												($vwmo != getOption('perform_video_watermark')) ||
-												($woh != getOption('watermark_h_offset')) ||
-												($wow != getOption('watermark_w_offset'))  ||
-												($wm != getOption('watermark_image')) ||
-												($vwm != getOption('video_watermark_image'))) {
-													$gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the options haave changed
-												}
+			// TODO: Update date as well; no good input yet, so leaving out.
+			$sql = "UPDATE ".prefix('comments')." SET `name` = '$name', `email` = '$email', `website` = '$website', `comment` = '$comment' WHERE id = $id";
+			query($sql);
 
-												header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=options".$notify.$returntab);
-												exit();
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=comments&sedit");
+			exit();
 
-												/** THEMES ******************************************************************/
-												/*****************************************************************************/
-											} else if ($action == 'settheme') {
-												if (isset($_GET['theme'])) {
-													$gallery->setCurrentTheme($_GET['theme']);
-												}
-											}
-										}
+			/** OPTIONS ******************************************************************/
+			/*****************************************************************************/
+				
+		} else if ($action == 'deleteadmin') {
+			$id = $_GET['adminuser'];
+			$sql = "DELETE FROM ".prefix('administrators')." WHERE `id`=$id";
+			query($sql);
+			$sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
+			query($sql);
+		} else if ($action == 'saveoptions') {
+			$wm = getOption('watermark_image');
+			$vwm = getOption('video_watermark_image');
+			$wmo = getOption('perform_watermark');
+			$vwmo = getOption('perform_video_watermark');
+			$woh = getOption('watermark_h_offset');
+			$wow = getOption('watermark_w_offset');
+			$notify = '';
+			$returntab = "";
 
-										// Redirect to a page if it's set
-										// (NOTE: Form POST data will be resent on refresh. Use header(Location...) instead, unless there's an error message.
-										if (isset($_GET['page'])) { $page = $_GET['page']; } else if (empty($page)) { $page = "home"; }
+			/*** admin options ***/
+			if (isset($_POST['saveadminoptions'])) {
+				for ($i = 0; $i < $_POST['totaladmins']; $i++) {
+					$pass = trim($_POST[$i.'-adminpass']);
+					$user = trim($_POST[$i.'-adminuser']);
+					if (!empty($user)) {
+						if ($pass == trim($_POST[$i.'-adminpass_2'])) {
+							$admin_n = trim($_POST[$i.'-admin_name']);
+							$admin_e = trim($_POST[$i.'-admin_email']);
+							$admin_r = $_POST[$i.'-admin_rights'];
+							$comment_r = $_POST[$i.'-comment_rights'];
+							$upload_r = $_POST[$i.'-upload_rights'];
+							$edit_r = $_POST[$i.'-edit_rights'];
+							$options_r = $_POST[$i.'-options_rights'];
+							$themes_r = $_POST[$i.'-themes_rights'];
+							if (!isset($_POST['alter_enabled'])) {
+								$rights = MAIN_RIGHTS + $admin_r + $comment_r + $upload_r + $edit_r + $options_r + $themes_r;
+								$albums = $_POST['managed_albums_'.$i];
+							} else {
+								$rights = null;
+							}
+							if (empty($pass)) {
+								$pwd = null;
+							} else {
+								$pwd = md5($_POST[$i.'-adminuser'] . $pass);
+							}
+							saveAdmin($user, $pwd, $admin_n, $admin_e, $rights, $albums);
+						} else {
+							$notify = '&mismatch=password';
+						}
+					}
+				}
+				setOption('admin_reset_date', '1');
+				$returntab = "#tab_admin";
+			}
 
-									} else {
-										if (isset($_GET['emailreset'])) {
-											$requestor = urldecode($_GET['ref']);
-											if (!empty($requestor)) { $requestor = ' from a user who tried to log in as "'.$requestor.'"'; }
-											$admins = getAdministrators();
-											$user = array_shift($admins);
-											$adm = $user['user'];
-											$pas = $user['pass'];
-											setOption('admin_reset_date', time());
-											$req = getOption('admin_reset_date');
-											$ref = md5($req . $adm . $pas);
-											$msg .= "\nYou are receiving this e-mail because of a password reset request on your Zenphoto gallery$requestor." .
-						"\nTo reset your Zenphoto Admin passwords visit: ".FULLWEBPATH."/".ZENFOLDER."/admin.php?ticket=$ref" .
-						"\nIf you do not wish to reset your passwords just ignore this message. This ticket will automatically expire in 3 days.";
-											zp_mail('The Zenphoto information you requested',  $msg);
-										}
-									}
+			/*** Gallery options ***/
+			if (isset($_POST['savegalleryoptions'])) {
+				setOption('gallery_title', $_POST['gallery_title']);
+				setOption('website_title', $_POST['website_title']);
+				$web = $_POST['website_url'];
+				setOption('website_url', $web);
+				setOption('time_offset', $_POST['time_offset']);
+				setOption('gmaps_apikey', $_POST['gmaps_apikey']);
+				setBoolOption('mod_rewrite', $_POST['mod_rewrite']);
+				setOption('mod_rewrite_image_suffix', $_POST['mod_rewrite_image_suffix']);
+				setOption('server_protocol', $_POST['server_protocol']);
+				setOption('charset', $_POST['charset']);
+				setOption('gallery_sorttype', $_POST['gallery_sorttype']);
+				if ($_POST['gallery_sorttype'] == 'Manual') {
+					setBoolOption('gallery_sortdirection', 0);
+				} else {
+					setBoolOption('gallery_sortdirection', $_POST['gallery_sortdirection']);
+				}
+				setOption('image_sorttype', $_POST['image_sorttype']);
+				setBoolOption('image_sortdirection', $_POST['image_sortdirection']);
+				setOption('feed_items', $_POST['feed_items']);
+				$search = new SearchEngine();
+				setOption('search_fields', 32767, false); // make SearchEngine allow all options so parseQueryFields() will gives back what was choosen this time
+				setOption('search_fields', $search->parseQueryFields());
+				if ($_POST['gallerypass'] == $_POST['gallerypass_2']) {
+					$pwd = trim($_POST['gallerypass']);
+					if (empty($pwd)) {
+						if (empty($_POST['gallerypass'])) {
+							setOption('gallery_password', NULL);  // clear the gallery password
+						}
+					} else {
+						setOption('gallery_password', md5($pwd));
+					}
+				} else {
+					$notify = '&mismatch=gallery';
+				}
+				if ($_POST['searchpass'] == $_POST['searchpass_2']) {
+					$pwd = trim($_POST['searchpass']);
+					if (empty($pwd)) {
+						if (empty($_POST['searchpass'])) {
+							setOption('search_password', NULL);  // clear the gallery password
+						}
+					} else {
+						setOption('search_password', md5($pwd));
+					}
+				} else {
+					$notify = '&mismatch=search';
+				}
+				setOption('gallery_hint', $_POST['gallery_hint']);
+				setOption('search_hint', $_POST['search_hint']);
+				setBoolOption('persistent_archive', $_POST['persistent_archive']);
+				setBoolOption('album_session', $_POST['album_session']);
+				setOption('locale', $_POST['locale']);
+				$returntab = "#tab_gallery";
+			}
 
-									/* NO Admin-only content between this and the next check. */
+			/*** Image options ***/
+			if (isset($_POST['saveimageoptions'])) {
+				setOption('image_quality', $_POST['image_quality']);
+				setOption('thumb_quality', $_POST['thumb_quality']);
+				setOption('image_size', $_POST['image_size']);
+				setBoolOption('image_use_longest_side', $_POST['image_use_longest_side']);
+				setBoolOption('image_allow_upscale', $_POST['image_allow_upscale']);
+				setOption('thumb_size', $_POST['thumb_size']);
+				setBoolOption('thumb_crop', $_POST['thumb_crop']);
+				setOption('thumb_crop_width', $_POST['thumb_crop_width']);
+				setOption('thumb_crop_height', $_POST['thumb_crop_height']);
+				setBoolOption('thumb_sharpen', $_POST['thumb_sharpen']);
+				setOption('albums_per_page', $_POST['albums_per_page']);
+				setOption('images_per_page', $_POST['images_per_page']);
+				setBoolOption('perform_watermark', $_POST['perform_watermark']);
+				setOption('watermark_image', 'watermarks/' . $_POST['watermark_image'] . '.png');
+				setOption('watermark_h_offset', $_POST['watermark_h_offset']);
+				setOption('watermark_w_offset', $_POST['watermark_w_offset']);
+				setBoolOption('perform_video_watermark', $_POST['perform_video_watermark']);
+				setOption('video_watermark_image', 'watermarks/' . $_POST['video_watermark_image'] . '.png');
+				setBoolOption('full_image_download', $_POST['full_image_download']);
+				setOption('full_image_quality', $_POST['full_image_quality']);
+				setBoolOption('protect_full_image', $_POST['protect_full_image']);
+				$returntab = "#tab_image";
+			}
+			/*** Comment options ***/
+			if (isset($_POST['savecommentoptions'])) {
+				setOption('spam_filter', $_POST['spam_filter']);
+				setBoolOption('email_new_comments', $_POST['email_new_comments']);
+				$tags = $_POST['allowed_tags'];
+				$test = "(".$tags.")";
+				$a = parseAllowedTags($test);
+				if ($a !== false) {
+					setOption('allowed_tags', $tags);
+					$notify = '';
+				} else {
+					$notify = '&tag_parse_error';
+				}
+				setBoolOption('comment_name_required', $_POST['comment_name_required']);
+				setBoolOption('comment_email_required', $_POST['comment_email_required']);
+				setBoolOption('comment_web_required', $_POST['comment_web_required']);
+				setBoolOption('Use_Captcha', $_POST['Use_Captcha']);
+				$returntab = "#tab_comments";
 
-									/************************************************************************************/
-									/** End Action Handling *************************************************************/
-									/************************************************************************************/
+			}
+			/*** Theme options ***/
+			if (isset($_POST['savethemeoptions'])) {
+				// all theme options are custom options, handled below
+				$returntab = "#tab_theme";
+			}
+			/*** custom options ***/
+			$templateOptions = GetOptionList();
 
-									if (issetPage('edit')) {
-										zenSortablesPostHandler('albumOrder', 'albumList', 'albums');
-									}
+			foreach($standardOptions as $option) {
+				unset($templateOptions[$option]);
+			}
+			unset($templateOptions['saveoptions']);
+			$keys = array_keys($templateOptions);
+			$i = 0;
+			while ($i < count($keys)) {
+				if (isset($_POST[$keys[$i]])) {
+					setOption($keys[$i], $_POST[$keys[$i]]);
+				} else {
+					if (isset($_POST['chkbox-' . $keys[$i]])) {
+						setOption($keys[$i], 0);
+					}
+				}
+				$i++;
+			}
+			if (($wmo != getOption('perform_watermark')) ||
+			($vwmo != getOption('perform_video_watermark')) ||
+			($woh != getOption('watermark_h_offset')) ||
+			($wow != getOption('watermark_w_offset'))  ||
+			($wm != getOption('watermark_image')) ||
+			($vwm != getOption('video_watermark_image'))) {
+				$gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the options haave changed
+			}
 
-									// Print our header
-									printAdminHeader();
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=options".$notify.$returntab);
+			exit();
 
-									if (issetPage('edit')) {
-										zenSortablesHeader('albumList','albumOrder','div');
-									}
-									echo "\n</head>";
-									?>
+			/** THEMES ******************************************************************/
+			/*****************************************************************************/
+		} else if ($action == 'settheme') {
+			if (isset($_GET['theme'])) {
+				$gallery->setCurrentTheme($_GET['theme']);
+			}
+		}
+	}
+
+	// Redirect to a page if it's set
+	// (NOTE: Form POST data will be resent on refresh. Use header(Location...) instead, unless there's an error message.
+	if (isset($_GET['page'])) { $page = $_GET['page']; } else if (empty($page)) { $page = "home"; }
+
+}
+
+/* NO Admin-only content between this and the next check. */
+
+/************************************************************************************/
+/** End Action Handling *************************************************************/
+/************************************************************************************/
+
+if (issetPage('edit')) {
+	zenSortablesPostHandler('albumOrder', 'albumList', 'albums');
+}
+
+// Print our header
+printAdminHeader();
+
+if (issetPage('edit')) {
+	zenSortablesHeader('albumList','albumOrder','div');
+}
+echo "\n</head>";
+?>
 
 <body>
 
-									<?php
-									// If they are not logged in, display the login form and exit
+<?php
+// If they are not logged in, display the login form and exit
 
-									if (!zp_loggedin()) {
-										printLoginForm();
-										exit();
+if (!zp_loggedin()) {
+	printLoginForm();
+	exit();
 
-									} else { /* Admin-only content safe from here on. */
-										printLogoAndLinks();
-										?>
+} else { /* Admin-only content safe from here on. */
+	printLogoAndLinks();
+	?>
 <div id="main"><?php printTabs(); ?>
 <div id="content"><?php 
 if ($_zp_null_account = ($_zp_loggedin == OPTIONS_RIGHTS)) {
@@ -815,7 +800,7 @@ List &raquo;</a>
 	</tr>
 </table>
 
-			<?php
+<?php
 			if (isset($_GET['subalbumsaved'])) {
 				echo "<p>Subalbum order saved.</p>";
 			}
@@ -1031,7 +1016,7 @@ if (count($album->getImages())) {
 <form name="albumedit"
 	action="?page=edit&action=save<?php echo $albumdir ?>" method="POST"><input
 	type="hidden" name="totalalbums" value="<?php echo sizeof($albums); ?>" />
-	<?php
+<?php
 	$currentalbum = 0;
 	foreach ($albums as $folder) {
 		$currentalbum++;
@@ -1041,13 +1026,13 @@ if (count($album->getImages())) {
 		printAlbumEditForm($currentalbum, $album);
 	}
 	?></form>
-	<?php printAlbumButtons($album) ?></div>
-	<?php /*** EDIT ALBUM SELECTION *********************************************************************/ ?>
-	<?php } else { /* Display a list of albums to edit. */ ?>
+<?php printAlbumButtons($album) ?></div>
+<?php /*** EDIT ALBUM SELECTION *********************************************************************/ ?>
+<?php } else { /* Display a list of albums to edit. */ ?>
 <h1>Edit Gallery</h1>
-	<?php displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */ ?>
+<?php displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */ ?>
 
-	<?php
+<?php
 	if (isset($saved)) {
 		setOption('gallery_sorttype', 'Manual');
 		setOption('gallery_sortdirection', 0);
@@ -1093,20 +1078,20 @@ the album&nbsp; <img src="images/warn.png" style="border: 0px;"
 	src="images/reset.png" style="border: 0px;" alt="Reset hitcounters" />Reset
 hitcounters&nbsp; <img src="images/fail.png" style="border: 0px;"
 	alt="Delete" />Delete</p>
-		<?php
+<?php
 		if ($_zp_loggedin & ADMIN_RIGHTS) {
 			zenSortablesSaveButton("?page=edit&saved", "Save Order");
 		}
 		?></div>
 
-		<?php
+<?php
 		if (isset($_GET['saved'])) {
 			echo "<p>Gallery order saved.</p>";
 		}
 		?> <?php } ?> <?php /**** UPLOAD ************************************************************************/
 		/************************************************************************************/ ?>
 
-		<?php } else if ($page == "upload") {
+<?php } else if ($page == "upload") {
 			$albumlist = array();
 			genAlbumUploadList($albumlist);
 			?> <script type="text/javascript">
@@ -1133,12 +1118,12 @@ a <strong>ZIP</strong> archive containing any of those file types.</p>
 Don't forget, you can also use <acronym title="File Transfer Protocol">FTP</acronym>
 to upload folders of images into the albums directory!</p>
 
-					<?php if (isset($error) && $error) { ?>
+<?php if (isset($error) && $error) { ?>
 <div class="errorbox">
 <h2>Something went wrong...</h2>
-					<?php echo (empty($errormsg) ? "There was an error submitting the form. Please try again." : $errormsg); ?>
+<?php echo (empty($errormsg) ? "There was an error submitting the form. Please try again." : $errormsg); ?>
 </div>
-					<?php
+<?php
 }
 if (ini_get('safe_mode')) { ?>
 <div class="errorbox">
@@ -1263,7 +1248,7 @@ reload the page, but remember your upload limits!)</small></p>
 	?>
 <h1>Comments</h1>
 
-	<?php /* Display a message if needed. Fade out and hide after 2 seconds. */
+<?php /* Display a message if needed. Fade out and hide after 2 seconds. */
 	if ((isset($_GET['ndeleted']) && $_GET['ndeleted'] > 0) || isset($_GET['sedit'])) { ?>
 <div class="messagebox" id="message"><?php if (isset($_GET['ndeleted'])) { ?>
 <h2><?php echo $_GET['ndeleted']; ?> Comments deleted successfully.</h2>
@@ -1391,12 +1376,12 @@ All</strong></a></p>
 
 </form>
 
-	<?php /*** EDIT COMMENT *******************************************************************/
+<?php /*** EDIT COMMENT *******************************************************************/
 	/************************************************************************************/ ?>
 
-	<?php } else if ($page == "editcomment") { ?>
+<?php } else if ($page == "editcomment") { ?>
 <h1>edit comment</h1>
-	<?php
+<?php
 	if (isset($_GET['id'])) $id = $_GET['id'];
 	else echo "<h2>No comment specified. <a href=\"?page=comments\">&laquo Back</a></h2>";
 
@@ -1440,7 +1425,7 @@ All</strong></a></p>
 </table>
 </form>
 
-	<?php /*** OPTIONS ************************************************************************/
+<?php /*** OPTIONS ************************************************************************/
 	/**************************************************************************************/
 } else if ($page == "options") {
 	?>
@@ -1705,7 +1690,7 @@ All</strong></a></p>
 	<tr>
 		<td>Locale:</td>
 		<td><select id="locale" name="locale" DISABLED>
-		<?php
+			<?php
 		$dir = opendir(SERVERPATH . "/" . ZENFOLDER ."/locale/");
 		$locales = array('');
 
@@ -1723,7 +1708,7 @@ All</strong></a></p>
 	<tr>
 		<td>Charset:</td>
 		<td><select id="charset" name="charset">
-		<?php foreach ($charsets as $key => $charset) {
+			<?php foreach ($charsets as $key => $charset) {
 			$key = strtoupper($key);
 			?>
 			<option value="<?php echo $key; ?>"
@@ -1743,7 +1728,7 @@ All</strong></a></p>
 	<tr>
 		<td>Sort gallery by:</td>
 		<td><select id="sortselect" name="gallery_sorttype">
-		<?php
+			<?php
 		$sort = $sortby;
 		$sort[] = 'Manual'; // allow manual sorttype
 		generateListFromArray(array(getOption('gallery_sorttype')), $sort);
@@ -1838,7 +1823,7 @@ All</strong></a></p>
 	<tr>
 		<td>Sort images by:</td>
 		<td><select id="imagesortselect" name="image_sorttype">
-		<?php generateListFromArray(array(getOption('image_sorttype')), $sortby); ?>
+			<?php generateListFromArray(array(getOption('image_sorttype')), $sortby); ?>
 		</select> <input type="checkbox" name="image_sortdirection" value="1"
 		<?php echo checked('1', getOption('image_sortdirection')); ?> />
 		Descending</td>
@@ -2033,7 +2018,7 @@ All</strong></a></p>
 	<tr>
 		<td>Spam filter:</td>
 		<td><select id="spam_filter" name="spam_filter">
-		<?php
+			<?php
 		$currentValue = getOption('spam_filter');
 		$pluginroot = SERVERPATH . "/" . ZENFOLDER . "/plugins/spamfilters";
 		generateListFromFiles($currentValue, $pluginroot , '.php');
@@ -2106,7 +2091,7 @@ folder, and you can download more themes at the <a
 	href="http://www.zenphoto.org/support/">zenphoto forum</a> and the <a
 	href="http://www.zenphoto.org/zp/theme/">zenphoto themes page</a>.</p>
 <table class="bordered">
-<?php
+	<?php
 $themes = $gallery->getThemes();
 $current_theme_style = "background-color: #ECF1F2;";
 foreach($themes as $theme => $themeinfo):
@@ -2137,12 +2122,12 @@ $themeweb = WEBPATH . "/themes/$theme";
 </table>
 
 
-	<?php /*** HOME ***************************************************************************/
+<?php /*** HOME ***************************************************************************/
 	/************************************************************************************/ ?>
 
-	<?php } else { $page = "home"; ?>
+<?php } else { $page = "home"; ?>
 <h1>zenphoto Administration</h1>
-	<?php
+<?php
 	if (isset($_GET['check_for_update'])) {
 		$v = checkForUpdate();
 		if (!empty($v)) {
@@ -2159,7 +2144,7 @@ $themeweb = WEBPATH . "/themes/$theme";
 	}
 	?>
 <ul id="home-actions">
-<?php if ($_zp_loggedin & UPLOAD_RIGHTS)  { ?>
+	<?php if ($_zp_loggedin & UPLOAD_RIGHTS)  { ?>
 	<li><a href="?page=upload"> &raquo; <strong>Upload</strong> pictures.</a></li>
 	<?php } if ($_zp_loggedin & EDIT_RIGHTS)  { ?>
 	<li><a href="?page=edit"> &raquo; <strong>Edit</strong> titles,
@@ -2176,7 +2161,7 @@ $themeweb = WEBPATH . "/themes/$theme";
 <div class="box" id="overview-comments">
 <h2>10 Most Recent Comments</h2>
 <ul>
-<?php
+	<?php
 $comments = fetchComments(10);
 foreach ($comments as $comment) {
 	$id = $comment['id'];

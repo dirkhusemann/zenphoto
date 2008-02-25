@@ -1815,4 +1815,36 @@ function cbone($bits, $limit) {
 	}
 	return $c;
 }
+
+/**
+ * generates a simple captcha for comments
+ *
+ * Thanks to gregb34 who posted the original code
+ *
+ * Returns the captcha code string and image URL (via the $image parameter).
+ *
+ * @return string;
+ */
+function generateCaptcha(&$image) {
+	require_once('encript_lib.php');
+
+	$lettre='abcdefghijklmnpqrstuvwxyz';
+	$chiffre='123456789';
+
+	$lettre1=$lettre[rand(0,24)];
+	$lettre2=$lettre[rand(0,24)];
+	$chiffre1=$chiffre[rand(0,8)];
+	if (rand(0,1)) {
+		$string = $lettre1.$lettre2.$chiffre1;
+	} else {
+		$string = $lettre1.$chiffre1.$lettre2;
+	}
+	$key = 'zenphoto_captcha_string';
+	$cypher = urlencode(rc4($key, $string));
+
+	$code=md5($string);
+	$image = WEBPATH . '/' . ZENFOLDER . "/c.php?i=$cypher";
+
+	return $code;
+}
 ?>

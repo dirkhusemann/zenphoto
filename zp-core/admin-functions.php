@@ -150,23 +150,33 @@ function printLoginForm($redirect=null, $logo=true) {
 	if ($logo) echo "<p><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" /></p>";
 
 	echo "\n  <div id=\"loginform\">";
-	if ($_zp_login_error) {
+	if ($_zp_login_error==1) {
 		echo "<div class=\"errorbox\" id=\"message\"><h2>There was an error logging in.</h2> Check your username and password and try again.</div>";
+	} else {
+		echo "<div class=\"messagebox\" id=\"message\"><h2>A reset request has been sent.</h2></div>";
+		
 	}
 	echo "\n  <form name=\"login\" action=\"#\" method=\"POST\">";
 	echo "\n    <input type=\"hidden\" name=\"login\" value=\"1\" />";
 	echo "\n    <input type=\"hidden\" name=\"redirect\" value=\"$redirect\" />";
-
+	
 	echo "\n    <table>";
 	echo "\n      <tr><td>Login</td><td><input class=\"textfield\" name=\"user\" type=\"text\" size=\"20\" value=\"$requestor\" /></td></tr>";
 	echo "\n      <tr><td>Password</td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
+
+	if (count(getAdminEmail()) > 0) {
+		$captchaCode = generateCaptcha($img);
+		echo "\n      <tr><td></td><td>";
+		echo "\n      Enter ";
+		echo "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/>" .
+ 								"<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"absbottom\"/></label> ";
+		echo " to request a reset.";
+//		echo "      <input type=\"text\" id=\"code\" name=\"code\" size=\"4\" class=\"inputbox\" />";
+		echo "      </td></tr>";
+	}
 	echo "\n      <tr><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"Log in\" /></td></tr>";
 	echo "\n    </table>";
 	echo "\n  </form>";
-
-	if (count(getAdminEmail()) > 0) {
-		echo "\n  <a href=\"?emailreset&ref=$requestor\">Email password reset request</a>";
-	}
 	echo "\n  </div>";
 	echo "\n</body>";
 	echo "\n</html>";
