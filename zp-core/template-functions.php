@@ -2663,23 +2663,48 @@ function getRandomImages() {
  * @return object
  */
 function getRandomImagesAlbum($rootAlbum=null) {
-	if (zp_loggedin()) {
-		$imageWhere = '';
+	global $_zp_current_album, $_zp_gallery, $_zp_current_search;
+	
+debugLog("getRandomImagesAlbum($rootAlbum)");	
+	
+	if (empty($rootAlbum)) {
+		$album = $_zp_current_album;
 	} else {
-		$imageWhere = " AND `show`=1";
+		$album = new Album($_zp_gallery, $rootAlbum);
 	}
-	$images = array();
-	$albumnames = array();
-	$subIDs = getAllSubAlbumIDs($rootAlbum);
-	if(is_null($subIDs)) {return null;}; //no subdirs avaliable
-	foreach ($subIDs as $ID) {
-		if($ID['show'] && checkAlbumPassword($ID['folder'], $hint)) {
-			$albumnames[$ID['id']] = $ID['folder'];
-			$query = 'SELECT `id` , `albumid` , `filename` , `title` FROM '.prefix('images').' WHERE `albumid` = "'.
-								$ID['id'] .'"' . $imageWhere;
-			$images = array_merge($images, query_full_array($query));
+	if ($album->isDynamic()) {
+		$images = $_zp_current_search->getImages(0);
+		$image = NULL;
+		shuffle($images);
+		while (count($images) > 0) {
+			$randomImage = array_pop($images);
+			if (is_valid_image($randomImage['filename'])) {
+				$image = new Image(new Album(new Gallery(), $randomImage['folder']), $randomImage['filename']);
+				return $image;
+			}
 		}
-	}
+
+		debugLogArray("dynamic images", $images);
+		
+	} else {
+		if (zp_loggedin()) {
+			$imageWhere = '';
+		} else {
+			$imageWhere = " AND `show`=1";
+		}
+		$images = array();
+		$albumnames = array();
+		$subIDs = getAllSubAlbumIDs($rootAlbum);
+		if(is_null($subIDs)) {return null;}; //no subdirs avaliable
+		foreach ($subIDs as $ID) {
+			if($ID['show'] && checkAlbumPassword($ID['folder'], $hint)) {
+				$albumnames[$ID['id']] = $ID['folder'];
+				$query = 'SELECT `id` , `albumid` , `filename` , `title` FROM '.prefix('images').' WHERE `albumid` = "'.
+				$ID['id'] .'"' . $imageWhere;
+				$images = array_merge($images, query_full_array($query));
+			}
+		}
+
 	$image = NULL;
 	shuffle($images);
 	while (count($images) > 0) {
@@ -2688,6 +2713,7 @@ function getRandomImagesAlbum($rootAlbum=null) {
 			$image = new Image(new Album(new Gallery(), $albumnames[$randomImage['albumid']]), $randomImage['filename']);
 			return $image;
 		}
+	}
 	}
 	return null;
 }

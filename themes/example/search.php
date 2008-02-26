@@ -9,12 +9,7 @@ $firstPageImages = normalizeColumns(1, 7);
 	<title>
 	<?php 
 		printGalleryTitle(); 
-		echo " | "; 
-		if (in_context(ZP_ALBUM)) {
-			echo getAlbumTitle();
-		} else {
-			Echo "Search";
-		}
+		echo " | Search";
 		?>
 	</title>
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
@@ -34,12 +29,7 @@ $firstPageImages = normalizeColumns(1, 7);
 		<?php echo getGalleryIndexURL();?>" title="Gallery Index">
 		<?php echo getGalleryTitle();?></a> | 
 		<?php
-		if (in_context(ZP_ALBUM)) {
-			printParentBreadcrumb();
-			echo getAlbumTitle();
-		} else {
 		  echo "<em>Search</em>";
-		}
 		?>
 		</span></h2>
 		</div>
@@ -87,11 +77,7 @@ $firstPageImages = normalizeColumns(1, 7);
 	<br clear="all" />
 	<?php
 			if ($c == 0) { 
-				if (in_context(ZP_ALBUM)) {
-					echo "<p> The album is empty.</p>";
-					} else {
-						echo "<p>Sorry, no image matches. Try refining your search.</p>"; 
-					}
+				echo "<p>Sorry, no image matches. Try refining your search.</p>"; 
 			}
 	
 			echo '<br clear="all" />';

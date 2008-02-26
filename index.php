@@ -47,7 +47,7 @@ if (isset($_GET['p'])) {
 			$cookiepath = WEBPATH;
 			if (WEBPATH == '') { $cookiepath = '/'; }
 			zp_setcookie("zenphoto_image_search_params", $params, 0, $cookiepath);
-			include($obj = "$themepath/$theme/search.php");
+			include($obj = "$themepath/$theme/album.php");
 		} else {
 			handleSearchParms($_zp_current_album->name);
 			include($obj = "$themepath/$theme/album.php"); 

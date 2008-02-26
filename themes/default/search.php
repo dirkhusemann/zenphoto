@@ -5,12 +5,7 @@
 	<title>
 	<?php 
 		printGalleryTitle(); 
-		echo " | "; 
-		if (in_context(ZP_ALBUM)) {
-			echo getAlbumTitle();
-		} else {
-			Echo "Search";
-		}
+		echo " | Search";
 		?>
 	</title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
@@ -33,12 +28,7 @@
 		<?php echo getGalleryIndexURL();?>" title="Gallery Index">
 		<?php echo getGalleryTitle();?></a></span> | 
 		<?php
-		if (in_context(ZP_ALBUM)) {
-			printParentBreadcrumb();
-			echo getAlbumTitle();
-		} else {
 		  echo "<em>Search</em>";
-		}
 		?>
 		</h2>
 	</div>
@@ -80,11 +70,7 @@
 			</div>
 		<?php
 			if ($c == 0) { 
-				if (in_context(ZP_ALBUM)) {
-					echo "<p> The album is empty.</p>";
-				} else {
-					echo "<p>Sorry, no image matches. Try refining your search.</p>"; 
-				}
+				echo "<p>Sorry, no image matches. Try refining your search.</p>"; 
 			}
 
 			printPageListWithNav("&laquo; prev","next &raquo;");

@@ -14,12 +14,7 @@
 	<title>
 	<?php 
 		printGalleryTitle(); 
-		echo " | "; 
-		if (in_context(ZP_ALBUM)) {
-			echo getAlbumTitle();
-		} else {
-			Echo "Search";
-		}
+		echo " | Search";
 		?>
 	</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -35,12 +30,7 @@
 
 		<div class="galleryinfo">
 		<?php
-		if (in_context(ZP_ALBUM)) {
-			echo "<h1>".printAlbumTitle(true)."</h1>";
-			echo "<p class=\"desc\">".printAlbumDesc(true)."</p>";
-		} else {
 		  echo "<h1><em>Search</em></h1>";
-		}
 		?>
 		</div>
 		<?php
@@ -148,12 +138,7 @@
 	<a href="<?php echo getGalleryIndexURL();?>" title="Albums Index">
 	<?php echo getGalleryTitle();?></a> &gt; 
 	<?php
-	if (in_context(ZP_ALBUM)) {
-		printParentBreadcrumb("", " > ", " > ");
-		echo getAlbumTitle();
-	} else {
-		echo "<em>Search</em>";
-	}
+	echo "<em>Search</em>";
 	?>
 
 	<div id="footer">

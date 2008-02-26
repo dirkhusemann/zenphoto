@@ -52,12 +52,7 @@ $backgroundImagePath="";
 	<title>
 	<?php 
 		printGalleryTitle(); 
-		echo " | "; 
-		if (in_context(ZP_ALBUM)) {
-			echo getAlbumTitle();
-		} else {
-			Echo "Search";
-		}
+		echo " | Search";
 		?>
 	</title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
@@ -90,12 +85,7 @@ $backgroundImagePath="";
 		<a href="<?php echo getGalleryIndexURL();?>" title="Albums Index">
 		<?php echo getGalleryTitle();	?></a></span> | 
 		<?php
-		if (in_context(ZP_ALBUM)) {
-			printParentBreadcrumb();
-			echo getAlbumTitle();
-		} else {
 		  echo "<em>Search</em>";
-		}
 		?>
 	</div>
 </div>
