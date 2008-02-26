@@ -102,7 +102,9 @@
 			} else {
 				$lastImage++;
 			}	
-			echo '<li class="thumb"><span><em style="background-image:url(' . getImageThumb() . '); "><a href="' . getImageLinkURL() . '" title="' . getImageTitle() . '" style="background:#fff;">"'.getImageTitle().'"</a></em></span></li>';
+			echo "\n<li class=\"thumb\"><span><em style=\"background-image:url(" . getImageThumb() . '); "><a href="' . 
+			getImageLinkURL() . '" title="' . getImageTitle() . '" style="background:#fff;">"'.
+			getImageTitle().'"</a></em></span></li>';
 		}
 		if (!is_null($firstImage)  && hasNextPage()) { 
 		?>
@@ -125,13 +127,15 @@
 				<?php if (hasPrevPage()) { ?>
 				<a href="<?php echo getPrevPageURL(); ?>" accesskey="x">&laquo; Prev page</a>
 				<?php } 
-				if (hasNextPage()) { if (hasPrevPage()) { echo '&nbsp;'; } 
+					if (hasNextPage()) { if (hasPrevPage()) { echo '&nbsp;'; } 
 			?>
 				<a href="<?php echo getNextPageURL(); ?>" accesskey="x">next page &raquo;</a>
 			<?php
-				} 
-					echo '</p>';
-					echo "<em class=\"count\">Total matches for <em>".getSearchWords()."</em>: ".$results."</em>";
+					}
+					if (!in_context(ZP_ALBUM)) {
+						echo '</p>';
+						echo "<em class=\"count\">Total matches for <em>".getSearchWords()."</em>: ".$results."</em>";
+					}
 				} else {
 					echo "<p>Sorry, no matches. Try refining your search.</p>"; 
 				}

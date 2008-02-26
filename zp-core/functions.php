@@ -1799,6 +1799,22 @@ function hasDyanmicAlbumSuffix($path) {
 }
 
 /**
+ * Creates and returns a searchengine for a dynamic album
+ *
+ * @param object $album the dynamic album
+ * @param string &$params the search params are returned here
+ * @return object
+ */
+function setupDynamicAlbum($album, &$params) {
+	if (!$album->isDynamic()) return null;
+	$search = new SearchEngine();
+	$params = $album->getSearchParams();
+	$params .= '&albumname='.$album->name;
+	$search->setSearchParams($params);
+	return $search;
+}
+
+/**
  * Count Binary Ones
  * 
  * Returns the number of bits set in $bits

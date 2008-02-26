@@ -1,7 +1,6 @@
 <?php
 function seofriendlyURL($string) {
-	$string = strtolower($string);
-		// strip/convert a few specific characters
+	// strip/convert a few specific characters
 	$specialchars = array(
 	"À"=>"A",
 	"Á"=>"A",

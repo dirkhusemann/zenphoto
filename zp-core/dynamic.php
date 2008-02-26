@@ -51,7 +51,7 @@ if (!zp_loggedin()) {
 	$params = trim(zp_getCookie('zenphoto_image_search_params'));
 	$search->setSearchParams($params);
 	$fields = $search->fields;
-	$words = trim($search->words);
+	$words = urldecode(trim($search->words));
 	$images = $search->getImages(0);
 	$imagelist = array();
 	foreach ($images as $image) {

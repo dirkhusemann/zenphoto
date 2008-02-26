@@ -1691,17 +1691,18 @@ All</strong></a></p>
 		<td>Locale:</td>
 		<td><select id="locale" name="locale" DISABLED>
 			<?php
-		$dir = opendir(SERVERPATH . "/" . ZENFOLDER ."/locale/");
-		$locales = array('');
-
-		while ($dirname = readdir($dir)) {
-			if (is_dir(SERVERPATH . "/" . ZENFOLDER ."/locale/".$dirname) && (substr($dirname, 0, 1) != '.')) {
-				$locales[] = $dirname;
+			$dir = @opendir(SERVERPATH . "/" . ZENFOLDER ."/locale/");
+			$locales = array('');
+			if ($dir !== false) {
+				while ($dirname = readdir($dir)) {
+					if (is_dir(SERVERPATH . "/" . ZENFOLDER ."/locale/".$dirname) && (substr($dirname, 0, 1) != '.')) {
+						$locales[] = $dirname;
+					}
+				}
+				closedir($dir);
 			}
-		}
-		closedir($dir);
-		generateListFromArray(array(getOption('locale')), $locales);
-		?>
+			generateListFromArray(array(getOption('locale')), $locales);
+			?>
 		</select></td>
 		<td>The internationalization & localization locale.</td>
 	</tr>

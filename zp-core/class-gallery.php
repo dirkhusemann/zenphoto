@@ -305,7 +305,7 @@ class Gallery {
 							$data = substr($data, $i + 1);
 						}
 						if (strpos($data1, 'WORDS=') !== false) {
-							$words = "words=".substr($data1, 6);
+							$words = "words=".urlencode(substr($data1, 6));
 						}
 						if (strpos($data1, 'THUMB=') !== false) {
 							$thumb = trim(substr($data1, 6));

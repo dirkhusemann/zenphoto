@@ -432,7 +432,7 @@ function printAlbumEditForm($index, $album) {
 		echo "\n<td align=\"right\" valign=\"top\">Dynamic album search:</td>";
 		echo "\n<td>";
 		echo "\n<table class=\"noinput\" >";
-		echo "\n<tr><td>" .	$album->getSearchParams() . "</td></tr>";
+		echo "\n<tr><td>" .	urldecode($album->getSearchParams()) . "</td></tr>";
 		echo "\n</table>";
 		echo "\n</td>";
 		echo "\n</tr>";

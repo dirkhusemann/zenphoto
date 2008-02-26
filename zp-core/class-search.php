@@ -183,7 +183,6 @@ class SearchEngine
 			}
 		} while ($i++ < strlen($searchstring));
 		if (!empty($target)) { $result[] = trim($target); }
-
 		return $result;
 	}
 

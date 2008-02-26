@@ -42,10 +42,7 @@ if (isset($_GET['p'])) {
 		createAlbumZip($_GET['album']); 
 	} else { 
 		if ($_zp_current_album->isDynamic()) {
-			$_zp_current_search = new SearchEngine();		
-			$params = $_zp_current_album->getSearchParams();
-			$params .= '&albumname='.$_zp_current_album->name;		
-			$_zp_current_search->setSearchParams($params);
+			$_zp_current_search = setupDynamicAlbum($_zp_current_album, $params);		
 			set_context(ZP_INDEX | ZP_ALBUM | ZP_SEARCH);
 			$cookiepath = WEBPATH;
 			if (WEBPATH == '') { $cookiepath = '/'; }

@@ -233,7 +233,7 @@ function getGalleryIndexURL() {
  */
 function getNumAlbums() {
 	global $_zp_gallery, $_zp_current_search;
-	if (in_context(ZP_SEARCH)) {
+	if (!is_null($_zp_current_search)) {
 		return $_zp_current_search->getNumAlbums();
 	} else {
 		return $_zp_gallery->getNumAlbums();
@@ -301,8 +301,12 @@ function getCurrentPage() {
  * @return int
  */
 function getNumSubalbums() {
-	global $_zp_current_album;
-	return count($_zp_current_album->getSubalbums());
+	global $_zp_current_album, $_zp_current_search;
+	if (!is_null($_zp_current_search)) {
+		return count($_zp_current_search->getNumAlbums());
+	} else {
+		return count($_zp_current_album->getSubalbums());
+	}
 }
 
 /**
@@ -549,7 +553,7 @@ function printAlbumTitle($editable=false) {
 function albumNumber() {
 	global $_zp_current_album, $_zp_current_image, $_zp_current_search, $_zp_gallery;
 	$name = $_zp_current_album->getFolder();
-	if (in_context(ZP_SEARCH)) {
+	if (!is_null($_zp_current_search)) {
 		$albums = $_zp_current_search->getAlbums();
 	} else if (in_context(ZP_ALBUM)) {
 		$parent = $_zp_current_album->getParent();
@@ -1029,8 +1033,8 @@ function isImagePage() {
  * @return bool
  */
 function isAlbumPage() {
-	global $_zp_page;
-	if (in_context(ZP_SEARCH)) {
+	global $_zp_current_search;
+	if (!is_null($_zp_current_search)) {
 		$pageCount = Ceil(getNumAlbums() / getOption('albums_per_page'));
 	} else {
 		$pageCount = Ceil(getNumSubalbums() / getOption('albums_per_page'));
@@ -1045,10 +1049,20 @@ function isAlbumPage() {
  */
 function getNumImages() {
 	global $_zp_current_album, $_zp_current_search;
-	if (in_context(ZP_SEARCH)) {
-		return $_zp_current_search->getNumImages();
+	if (!is_null($_zp_current_search)) {  // search or dynamic album
+		if (is_null($_zp_current_album)) {
+			$dynamic = false;
+		} else {
+			$dynamic = $_zp_current_album->isDynamic();
+		}
+		if ($dynamic) { 
+			$search = setupDynamicAlbum($_zp_current_album, $params);
+			return $search->getNumImages();
+		} else {
+			return $_zp_current_search->getNumImages();
+		}
 	} else {
-		return $_zp_current_album->getNumImages();
+		return $_zp_current_album->getNumImages();	
 	}
 }
 
@@ -1183,7 +1197,7 @@ function printImageTitle($editable=false) {
 function imageNumber() {
 	global $_zp_current_image, $_zp_current_search;
 	$name = $_zp_current_image->getFileName();
-	if (in_context(ZP_SEARCH)) {
+	if (!is_null($_zp_current_search)) {
 		$images = $_zp_current_search->getImages();
 		$ct = count($images);
 		for ($c = 0; $c < $ct; $c++) {
