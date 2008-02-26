@@ -26,11 +26,11 @@
 
 		<div id="content" class="v">
 
-			<div id="desc">
-			<?php if (!checkForPassword(true)) { ?>
-				<h1><?php printImageTitle(true); ?></h1>
-				<p><em><?php printImageDesc(true); ?></em></p>
-			<?php } ?>
+			<div id="desc" style="z-index: 100">
+				<?php if (!checkForPassword(true)) { ?>
+					<h1><?php printImageTitle(true); ?></h1>
+					<?php printImageDesc(true); ?>
+				<?php } ?>
 			</div>
 
 			<?php
