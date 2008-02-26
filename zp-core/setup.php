@@ -420,20 +420,26 @@ on your web server.<br />
 	$ht = @file_get_contents($htfile);
 	$htu = strtoupper($ht);
 	$vr = "";
-	if (!empty($htu)) {
-		$i = strpos($htu, 'VERSION');
-		if ($i === false) {
-			$ch = true;
-		} else {
-			$j = strpos($htu, "\n", $i+7);
-			$vr = trim(substr($htu, $i+7, $j-$i-7));
-		}
-	}
-	if ($ch = ($vr == HTACCESS_VERSION)) {
+	$ch = 1;
+	if (empty($htu)) {
+		$ch = -1;
 		$err = "is empty or does not exist";
 		$desc = "Edit the <code>.htaccess</code> file in the root zenphoto folder if you have the mod_rewrite apache ".
 						"module, and want cruft-free URLs. Just change the one line indicated to make it work. " .
 						"<br/><br/>You can ignore this warning if you do not intend to set the option <code>mod_rewrite</code>.";
+	} else {
+		$i = strpos($htu, 'VERSION');
+		if ($i !== false) {
+			$j = strpos($htu, "\n", $i+7);
+			$vr = trim(substr($htu, $i+7, $j-$i-7));
+		}
+		$ch = $vr == HTACCESS_VERSION;
+		if (!$ch) {
+			$err = "wrong version";
+			$desc = "You need to upload the copy of the .htaccess file that was included with the zenphoto distribution.";
+		}
+	}
+	if ($ch) {
 		$i = strpos($htu, 'REWRITEENGINE');
 		if ($i === false) {
 			$rw = '';
@@ -446,11 +452,6 @@ on your web server.<br />
 			$msg .= " (<em>RewriteEngine</em> is <strong>$rw</strong>)";
 			$mod = "&mod_rewrite=$rw";
 		}
-
-		if (empty($ht)) { $ch = -1; } else { $ch = 1; }
-	} else {
-		$err = "wrong version";
-		$desc = "You need to upload the copy of the .htaccess file that was included with the zenphoto distribution.";
 	}
 	checkMark($ch, $msg, " [$err]", $desc);
 
