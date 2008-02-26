@@ -592,7 +592,6 @@ class Album extends PersistentObject {
 			$thumb = substr($thumb, 1); // strip off the slash
 			$albumdir = getAlbumFolder();
 		}
-
 		if ($thumb != NULL && file_exists($albumdir.$thumb)) {
 			if ($i===false) {
 				return new Image($this, $thumb);

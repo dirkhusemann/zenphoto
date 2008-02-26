@@ -155,12 +155,12 @@ function printLoginForm($redirect=null, $logo=true) {
 		echo "<div class=\"errorbox\" id=\"message\"><h2>There was an error logging in.</h2> Check your username and password and try again.</div>";
 	} else {
 		echo "<div class=\"messagebox\" id=\"message\"><h2>A reset request has been sent.</h2></div>";
-		
+
 	}
 	echo "\n  <form name=\"login\" action=\"#\" method=\"POST\">";
 	echo "\n    <input type=\"hidden\" name=\"login\" value=\"1\" />";
 	echo "\n    <input type=\"hidden\" name=\"redirect\" value=\"$redirect\" />";
-	
+
 	echo "\n    <table>";
 	echo "\n      <tr><td>Login</td><td><input class=\"textfield\" name=\"user\" type=\"text\" size=\"20\" value=\"$requestor\" /></td></tr>";
 	echo "\n      <tr><td>Password</td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
@@ -172,7 +172,7 @@ function printLoginForm($redirect=null, $logo=true) {
 		echo "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/>" .
  								"<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"absbottom\"/></label> ";
 		echo " to request a reset.";
-//		echo "      <input type=\"text\" id=\"code\" name=\"code\" size=\"4\" class=\"inputbox\" />";
+		//		echo "      <input type=\"text\" id=\"code\" name=\"code\" size=\"4\" class=\"inputbox\" />";
 		echo "      </td></tr>";
 	}
 	echo "\n      <tr><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"Log in\" /></td></tr>";
@@ -487,46 +487,84 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<tr>";
 	echo "\n<td align=\"right\" valign=\"top\">Thumbnail: </td> ";
 	echo "\n<td>";
+	echo "\n<script type=\"text/javascript\">updateThumbPreview(document.getElementById('thumbselect'));</script>";
+	echo "\n<select id=\"thumbselect\" class=\"thumbselect\" name=\"".$prefix."thumb\" onChange=\"updateThumbPreview(this)\">";
 	if ($album->isDynamic()) {
 		$params = $album->getSearchParams();
 		$search = new SearchEngine();
 		$search->setSearchParams($params);
 		$images = $search->getImages(0);
+		$thumb = $album->get('thumb');
 		$imagelist = array();
-		foreach ($images as $image) {
-			$folder = $image['folder'];
-			$filename = $image['filename'];
-			$imagelist[] = '/'.$folder.'/'.$filename;
-		}
-		echo "\n<select id=\"thumbselect\" class=\"thumbselect\" name=\"".$prefix."thumb\" onChange=\"updateThumbPreview(this)\">";
-		foreach ($imagelist as $image) {
-			$selected = ($image == $album->get('thumb'));
-			echo "\n<option value=\"".$image."\"";
-			if ($selected) {
-				echo " selected=\"selected\"";
-			}
-			echo " >".$image."</option>";
-		}
-		echo "\n</select>";
-	} else {
-		echo "\n<script type=\"text/javascript\">updateThumbPreview(document.getElementById('thumbselect'));</script>";
-		echo "\n<select id=\"thumbselect\" class=\"thumbselect\" name=\"".$prefix."thumb\" onChange=\"updateThumbPreview(this)\">";
-		foreach ($images as $filename) {
-			$image = new Image($album, $filename);
-			$selected = ($filename == $album->get('thumb'));
+		foreach ($images as $imagerow) {
+			$folder = $imagerow['folder'];
+			$filename = $imagerow['filename'];
+			$imagepath = '/'.$folder.'/'.$filename;
+			$albumx = new Album($gallery, $folder);
+			$image = new Image($albumx, $filename);
+			$selected = ($imagepath == $thumb);
 			echo "\n<option class=\"thumboption\" style=\"background-image: url(" . $image->getThumb() .
-						"); background-repeat: no-repeat;\" value=\"" . $filename . "\"";
+						"); background-repeat: no-repeat;\" value=\"".$imagepath."\"";
 			if ($selected) {
 				echo " selected=\"selected\"";
 			}
 			echo ">" . $image->get('title');
-			if ($filename != $image->get('title')) {
-				echo  " ($filename)";
-			}
+			echo  " ($imagepath)";
 			echo "</option>";
 		}
-		echo "\n</select>";
+	} else {
+		if (count($images) == 0) {
+			$images = array();
+			$albumnames = array();
+			$thumb = $album->get('thumb');
+			$strip = strlen($album->name) + 1;
+			$subIDs = getAllSubAlbumIDs($album->name);
+			if(!is_null($subIDs)) {
+				foreach ($subIDs as $ID) {
+					$albumnames[$ID['id']] = $ID['folder'];
+					$query = 'SELECT `id` , `albumid` , `filename` , `title` FROM '.prefix('images').' WHERE `albumid` = "'.
+					$ID['id'] .'"';
+					$images = array_merge($images, query_full_array($query));
+				}
+				foreach ($images as $imagerow) {
+					$filename = $imagerow['filename'];
+					$folder = $albumnames[$imagerow['albumid']];
+					$imagepath = substr($folder, $strip).'/'.$filename;
+					$albumx = new Album($gallery, $folder);
+					$image = new Image($albumx, $filename);
+					if (is_valid_image($filename)) {
+						$selected = ($imagepath == $thumb);
+						echo "\n<option class=\"thumboption\" style=\"background-image: url(" . $image->getThumb() .
+									"); background-repeat: no-repeat;\" value=\"".$imagepath."\"";
+						if ($selected) {
+							echo " selected=\"selected\"";
+						}
+						echo ">" . $image->get('title');
+						echo  " ($imagepath)";
+						echo "</option>";
+					}
+				}
+			}
+		} else {
+			foreach ($images as $filename) {
+				$image = new Image($album, $filename);
+				$selected = ($filename == $album->get('thumb'));
+				if (is_valid_image($filename)) {
+					echo "\n<option class=\"thumboption\" style=\"background-image: url(" . $image->getThumb() .
+						"); background-repeat: no-repeat;\" value=\"" . $filename . "\"";
+					if ($selected) {
+						echo " selected=\"selected\"";
+					}
+					echo ">" . $image->get('title');
+					if ($filename != $image->get('title')) {
+						echo  " ($filename)";
+					}
+					echo "</option>";
+				}
+			}
+		}
 	}
+	echo "\n</select>";
 	echo "\n</td>";
 	echo "\n</tr>";
 	echo "\n</table>";
