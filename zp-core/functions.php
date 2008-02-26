@@ -409,7 +409,7 @@ function rewrite_get_album_image($albumvar, $imagevar) {
 			if ($suf_len > 0 && substr($path, -($suf_len)) == $im_suffix) {
 				$path = substr($path, 0, -($suf_len));
 			}
-				
+
 			if (substr($path, -1, 1) == '/') $path = substr($path, 0, strlen($path)-1);
 			$pagepos  = strpos($path, '/page/');
 			$slashpos = strrpos($path, '/');
@@ -914,8 +914,8 @@ function sortAlbumArray($albums, $sortkey='sort_order') {
 	global $_zp_loggedin;
 
 	$hidden = array();
-	$result = query("SELECT folder, sort_order, `show`, `dynamic`, `search_params` FROM " . 
-							prefix("albums") . " ORDER BY " . $sortkey);
+	$result = query("SELECT folder, sort_order, `show`, `dynamic`, `search_params` FROM " .
+	prefix("albums") . " ORDER BY " . $sortkey);
 
 	$i = 0;
 	$albums_r = array_flip($albums);
@@ -1367,7 +1367,9 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 						"', NOW()" .
 						", '$type')");
 
-		if (!$moderate) {
+		if ($moderate) {
+			$action = "placed in moderation";
+		} else {
 			//  add to comments array and notify the admin user
 
 			$newcomment = array();
@@ -1377,19 +1379,21 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			$newcomment['comment'] = $comment;
 			$newcomment['date'] = time();
 			$receiver->comments[] = $newcomment;
+			$action = "posted";
+		}
 
-			if ($type == 'images') {
-				$on = $receiver->getAlbumName() . " about " . $receiver->getTitle();
-				$url = "album=" . urlencode($receiver->album->name) . "&image=" . urlencode($receiver->filename);
-				$album = $receiver->getAlbum();
-				$ur_album = getUrAlbum($album);
-			} else {
-				$on = $receiver->name;
-				$url = "album=" . urlencode($receiver->name);
-				$ur_album = getUrAlbum($receiver);
-			}
-			if (getOption('email_new_comments')) {
-				$message = "A comment has been posted in your album $on\n" .
+		if ($type == 'images') {
+			$on = $receiver->getAlbumName() . " about " . $receiver->getTitle();
+			$url = "album=" . urlencode($receiver->album->name) . "&image=" . urlencode($receiver->filename);
+			$album = $receiver->getAlbum();
+			$ur_album = getUrAlbum($album);
+		} else {
+			$on = $receiver->name;
+			$url = "album=" . urlencode($receiver->name);
+			$ur_album = getUrAlbum($receiver);
+		}
+		if (getOption('email_new_comments')) {
+			$message = "A comment has been $action in your album $on\n" .
  										"\n" .
  										"Author: " . $name . "\n" .
  										"Email: " . $email . "\n" .
@@ -1401,26 +1405,26 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
  										"\n" .
  										"You can edit the comment here:\n" .
  										"http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/" . ZENFOLDER . "/admin.php?page=comments\n";
-				$emails = array();
-				$admin_users = getAdministrators();
-				foreach ($admin_users as $admin) {  // mail anyone else with full rights
-					if (($admin['rights'] & ADMIN_RIGHTS) && ($admin['rights'] & COMMENT_RIGHTS) && !empty($admin['email'])) {
-						$emails[] = $admin['email'];
-						unset($admin_users[$admin['id']]);
-					}
+			$emails = array();
+			$admin_users = getAdministrators();
+			foreach ($admin_users as $admin) {  // mail anyone else with full rights
+				if (($admin['rights'] & ADMIN_RIGHTS) && ($admin['rights'] & COMMENT_RIGHTS) && !empty($admin['email'])) {
+					$emails[] = $admin['email'];
+					unset($admin_users[$admin['id']]);
 				}
-				$id = $ur_album->getAlbumID();
-				$sql = "SELECT `adminid` FROM ".prefix('admintoalbum')." WHERE `albumid`=$id";
-				$result = query_full_array($sql);
-				foreach ($result as $anadmin) {
-					$admin = $admin_users[$anadmin['adminid']];
-					if (!empty($admin['email'])) {
-						$emails[] = $admin['email'];
-					}
-				}
-				zp_mail("[" . getOption('gallery_title') . "] Comment posted on $on", $message, "", $emails);
 			}
+			$id = $ur_album->getAlbumID();
+			$sql = "SELECT `adminid` FROM ".prefix('admintoalbum')." WHERE `albumid`=$id";
+			$result = query_full_array($sql);
+			foreach ($result as $anadmin) {
+				$admin = $admin_users[$anadmin['adminid']];
+				if (!empty($admin['email'])) {
+					$emails[] = $admin['email'];
+				}
+			}
+			zp_mail("[" . getOption('gallery_title') . "] Comment posted on $on", $message, "", $emails);
 		}
+
 	}
 	return $goodMessage;
 }
@@ -1764,7 +1768,7 @@ function getAllSubAlbumIDs($albumfolder='') {
 function handleSearchParms($album='', $image='') {
 	global $_zp_current_search;
 	$cookiepath = WEBPATH;
-	if (WEBPATH == '') { $cookiepath = '/'; }	
+	if (WEBPATH == '') { $cookiepath = '/'; }
 	if (empty($album)) { // clear the cookie
 		zp_setcookie("zenphoto_image_search_params", "", time()-368000, $cookiepath);
 		return;
@@ -1816,7 +1820,7 @@ function setupDynamicAlbum($album, &$params) {
 
 /**
  * Count Binary Ones
- * 
+ *
  * Returns the number of bits set in $bits
  *
  * @param bit $bits the bit mask to count
