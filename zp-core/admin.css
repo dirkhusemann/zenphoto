@@ -301,9 +301,11 @@ div.albumList {
 	margin: 0px;
 }
 div.albumList div {
-	cursor: move;
 	margin: 2px 2px;
 	border: 1px solid #F0F3F8;
+}
+td.handle {
+	cursor: move;
 }
 
 

@@ -599,7 +599,7 @@ function printAlbumEditRow($album) {
 	echo "\n<div id=\"id_" . $album->getAlbumID() . '">';
 	echo '<table cellspacing="0" width="100%">';
 	echo "\n<tr>";
-	echo '<td><img src="images/drag_handle.png" style="border: 0px;" alt="Drag the album '."'".$album->name."'".'" /></td>';
+	echo '<td class="handle"><img src="images/drag_handle.png" style="border: 0px;" alt="Drag the album '."'".$album->name."'".'" /></td>';
 	echo '<td style="text-align: left;" width="80">';
 	echo '<a href="?page=edit&album=' . urlencode($album->name) .'" title="Edit this album: ' . $album->name .
  			'"><img height="40" width="40" src="' . $album->getAlbumThumb() . '" /></a>';
@@ -639,26 +639,26 @@ function printAlbumEditRow($album) {
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	if ($album->getShow()) {
 		echo '<a class="publish" href="?action=publish&value=0&album=' . queryencode($album->name) .
- 				'" title="Publish the album <em>' . $album->name . '</em>">';
+ 				'" title="Publish the album ' . $album->name . '">';
 		echo '<img src="images/pass.png" style="border: 0px;" alt="Published" /></a>';
 	} else {
 		echo '<a class="publish" href="?action=publish&value=1&album=' . queryencode($album->name) .
- 				'" title="Publish the album <em>' . $album->name . '</em>">';
+ 				'" title="Publish the album ' . $album->name . '">';
 		echo '<img src="images/action.png" style="border: 0px;" alt="Publish the album ' . $album->name . '" /></a>';
 	}
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	echo '<a class="cache" href="cache-images.php?page=edit&album=' . queryencode($album->name) . "&return=*" .
- 			'" title="Pre-cache images in <em>' . $album->name . '</em>">';
+ 			'" title="Pre-cache images in ' . $album->name . '">';
 	echo '<img src="images/cache.png" style="border: 0px;" alt="Cache the album ' . $album->name . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	echo '<a class="warn" href="refresh-metadata.php?page=edit&album=' . queryencode($album->name) . "&return=*" .
- 			'" title="Refresh metadata for the album <em>' . $album->name . '</em>">';
+ 			'" title="Refresh metadata for the album ' . $album->name . '">';
 	echo '<img src="images/warn.png" style="border: 0px;" alt="Refresh image metadata in the album ' . $album->name . '>" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-	echo '<a class="reset" href="?action=reset_hitcounters&albumid=' . $album->getAlbumID() . '" title="Reset hitcounters for album <em>' . $album->name . '</em>">';
+	echo '<a class="reset" href="?action=reset_hitcounters&albumid=' . $album->getAlbumID() . '" title="Reset hitcounters for album ' . $album->name . '">';
 	echo '<img src="images/reset.png" style="border: 0px;" alt="Reset hitcounters for the album ' . $album->name . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";

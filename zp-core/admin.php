@@ -656,7 +656,7 @@ if (issetPage('edit')) {
 printAdminHeader();
 
 if (issetPage('edit')) {
-	zenSortablesHeader('albumList','albumOrder','div');
+	zenSortablesHeader('albumList','albumOrder','div', "handle:'handle'");
 }
 echo "\n</head>";
 ?>
