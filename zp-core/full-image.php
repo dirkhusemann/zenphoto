@@ -1,10 +1,27 @@
 <?php
+/* Prevent hotlinking to the full image from other servers. */
+$server = $_SERVER['SERVER_NAME'];
+$test = strpos($_SERVER['HTTP_REFERER'], $server);
+if ( $test == FALSE ) { /* It seems they are directly requesting the full image. */
+	$image = 'index.php?album='.$_zp_current_album->name . '&image=' . $_zp_current_image->name;
+	header("Location: {$image}");
+	exit();
+}
+
 if (checkforPassword(true)) {
 	pageError();
 	exit();
 }
 $image_path = $_zp_gallery->getAlbumDir() . $_zp_current_album->name . "/" . $_zp_current_image->name;
 $suffix = strtolower(substr(strrchr($image_path, "."), 1));
+switch ($suffix) {
+	case 'bmp':
+		$suffix = 'wbmp'; 
+		break;
+	case 'jpg':
+		$suffix = 'jpeg'; 
+		break;
+}
 if (!getOption('perform_watermark')) { // no processing needed
 	if (is_null(getOption('external_album_folder')) && !getOption('full_image_download')) { // local album system, return the image directly
 		header("Location: " . getAlbumFolder(FULLWEBPATH) . pathurlencode($_zp_current_album->name) . "/" . rawurlencode($_zp_current_image->name));
@@ -28,11 +45,10 @@ switch ($suffix) {
 	case 'png':
 		$newim = imagecreatefrompng($image_path);
 		break;
-	case 'bmp':
+	case 'wbmp':
 		$newim = imagecreatefromwbmp($image_path);
 		break;
 	case 'jpeg':
-	case 'jpg':
 		$newim = imagecreatefromjpeg($image_path);
 		break;
 	case 'gif':
@@ -59,7 +75,6 @@ if (getOption('perform_watermark')) {
 }
 $quality = getOption('full_image_quality');
 switch ($suffix) {
-	case 'jpg':
 	case 'jpeg':
 		imagejpeg($newim, NULL, $quality);
 		break;
