@@ -513,8 +513,8 @@ function printAlbumEditForm($index, $album) {
 			echo "</option>";
 		}
 	} else {
-		if (count($album->getSubalbums() > 0)) {
-			$images = array();
+		if (count($album->getSubalbums()) > 0) {
+			$imagearray = array();
 			$albumnames = array();
 			$thumb = $album->get('thumb');
 			$strip = strlen($album->name) + 1;
@@ -523,13 +523,14 @@ function printAlbumEditForm($index, $album) {
 				foreach ($subIDs as $ID) {
 					$albumnames[$ID['id']] = $ID['folder'];
 					$query = 'SELECT `id` , `albumid` , `filename` , `title` FROM '.prefix('images').' WHERE `albumid` = "'.
-					$ID['id'] .'"';
-					$images = array_merge($images, query_full_array($query));
+										$ID['id'] .'"';
+					$imagearray = array_merge($imagearray, query_full_array($query));
 				}
-				foreach ($images as $imagerow) {
+				foreach ($imagearray as $imagerow) {
 					$filename = $imagerow['filename'];
 					$folder = $albumnames[$imagerow['albumid']];
 					$imagepath = substr($folder, $strip).'/'.$filename;
+					if (substr($imagepath, 0, 1) == '/') { $imagepath = substr($imagepath, 1); }
 					$albumx = new Album($gallery, $folder);
 					$image = new Image($albumx, $filename);
 					if (is_valid_image($filename)) {
