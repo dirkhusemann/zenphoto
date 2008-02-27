@@ -155,7 +155,6 @@ function printLoginForm($redirect=null, $logo=true) {
 		echo "<div class=\"errorbox\" id=\"message\"><h2>There was an error logging in.</h2> Check your username and password and try again.</div>";
 	} else if ($_zp_login_error == 2){
 		echo "<div class=\"messagebox\" id=\"message\"><h2>A reset request has been sent.</h2></div>";
-
 	}
 	echo "\n  <form name=\"login\" action=\"#\" method=\"POST\">";
 	echo "\n    <input type=\"hidden\" name=\"login\" value=\"1\" />";
@@ -191,10 +190,10 @@ function printLoginForm($redirect=null, $logo=true) {
  * @since  1.0.0
  */
 function printLogoAndLinks() {
-
+	global $_zp_current_admin;
 	echo "\n\n<a href=\"".WEBPATH."/" . ZENFOLDER . "/admin.php\" id=\"logo\"><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" /></a>";
 	echo "\n<div id=\"links\">";
-	echo "\n  <a href=\"../\">View Gallery</a> &nbsp; | &nbsp; <a href=\"?logout\">Log Out</a>";
+	echo "\n  Logged in as ".$_zp_current_admin['user']." &nbsp; | &nbsp <a href=\"?logout\">Log Out</a> &nbsp; | &nbsp; <a href=\"../\">View Gallery</a>";
 	echo "\n</div>";
 }
 
@@ -253,7 +252,7 @@ function genAlbumUploadList(&$list, $curAlbum=NULL) {
 	if (is_null($curAlbum)) {
 		$albumsprime = $gallery->getAlbums(0);
 		foreach ($albumsprime as $album) { // check for rights
-			if (isMyAlbum($album, UPLOAD_RIGHTS) && !hasDyanmicAlbumSuffix($album)) {
+			if (isMyAlbum($album, UPLOAD_RIGHTS)) {
 				$albums[] = $album;
 			}
 		}
@@ -790,19 +789,6 @@ function checkForUpdate() {
 		}
 	}
 	Return $_zp_WEB_Version;
-}
-
-function getManagedAlbumList() {
-	global $_zp_admin_album_list, $_zp_current_admin;
-	$_zp_admin_album_list = array();
-	$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
-	prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
-	$_zp_current_admin['id']." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
-	$albums = query_full_array($sql);
-	foreach($albums as $album) {
-		$_zp_admin_album_list[] =$album['folder'];
-	}
-	return $_zp_admin_album_list;
 }
 
 /**

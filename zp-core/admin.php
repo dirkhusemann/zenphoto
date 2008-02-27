@@ -1088,8 +1088,11 @@ hitcounters&nbsp; <img src="images/fail.png" style="border: 0px;"
 		if (isset($_GET['saved'])) {
 			echo "<p>Gallery order saved.</p>";
 		}
-		?> <?php } ?> <?php /**** UPLOAD ************************************************************************/
-		/************************************************************************************/ ?>
+?> <?php } ?> 
+<?php 
+/**** UPLOAD ************************************************************************/
+/************************************************************************************/ 
+?>
 
 <?php } else if ($page == "upload") {
 			$albumlist = array();
@@ -1486,16 +1489,17 @@ All</strong></a></p>
 				$master = " (<em>Master</em>)";
 				$user['rights'] = $user['rights'] | ADMIN_RIGHTS;
 			}
-		}
+		}		
+		$background = ($user['id'] == $_zp_current_admin['id']) ? " background-color: #ECF1F2;" : "";
 		?>
 	<tr>
-		<td style="border-top: 4px solid #D1DBDF;" width="175"><strong>Username:</strong></td>
-		<td style="border-top: 4px solid #D1DBDF;" width="200"><?php if (empty($userid)) {?>
+		<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" width="175"><strong>Username:</strong></td>
+		<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" width="200"><?php if (empty($userid)) {?>
 		<input type="text" size="40" name="<?php echo $id ?>-adminuser"
-			value="" /> <?php  } else { echo $userid.$master; ?> <input
-			type="hidden" name="<?php echo $id ?>-adminuser"
+			value="" /> <?php  } else { echo $userid.$master; ?> 
+			<input type="hidden" name="<?php echo $id ?>-adminuser"
 			value="<?php echo $userid ?>" /> <?php } ?></td>
-		<td style="border-top: 4px solid #D1DBDF;"><?php if(!empty($userid) && count($admins) > 1) { ?>
+		<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>"><?php if(!empty($userid) && count($admins) > 1) { ?>
 		<a
 			href="javascript: if(confirm('Are you sure you want to delete this user?')) { window.location='?page=options&action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }"
 			title="Delete this comment." style="color: #c33;"> <img
@@ -1503,35 +1507,35 @@ All</strong></a></p>
 		</td>
 	</tr>
 	<tr>
-		<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Password:<br />
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Password:<br />
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(repeat)</td>
-		<td><?php $x = $user['pass']; if (!empty($x)) { $x = '          '; } ?>
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><?php $x = $user['pass']; if (!empty($x)) { $x = '          '; } ?>
 		<input type="password" size="40" name="<?php echo $id ?>-adminpass"
 			value="<?php echo $x; ?>" /><br />
 		<input type="password" size="40" name="<?php echo $id ?>-adminpass_2"
 			value="<?php echo $x; ?>" /></td>
-		<td>
-		<table class="checkboxes">
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+		<table class="checkboxes" >
 			<tr>
-				<td style="width: 40%; padding-bottom: 3px;"><strong>Rights</strong>:
+				<td style="width: 40%; padding-bottom: 3px;<?php echo $background; ?>"><strong>Rights</strong>:
 				<input type="hidden" name="<?php echo $id ?>-main_rights"
 					value=<?php echo MAIN_RIGHTS; ?>></td>
 			</tr>
 			<tr>
-				<td><input type="checkbox" name="<?php echo $id ?>-admin_rights"
+				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-admin_rights"
 					value=<?php echo ADMIN_RIGHTS; if ($user['rights'] & ADMIN_RIGHTS) echo ' checked';echo $alterrights; ?>>User
 				admin</td>
-				<td><input type="checkbox" name="<?php echo $id ?>-options_rights"
+				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-options_rights"
 					value=<?php echo OPTIONS_RIGHTS; if ($user['rights'] & OPTIONS_RIGHTS) echo ' checked';echo$alterrights; ?>>Options</td>
-				<td><input type="checkbox" name="<?php echo $id ?>-themes_rights"
+				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-themes_rights"
 					value=<?php echo THEMES_RIGHTS; if ($user['rights'] & THEMES_RIGHTS) echo ' checked';echo$alterrights; ?>>Themes</td>
 			</tr>
 			<tr>
-				<td><input type="checkbox" name="<?php echo $id ?>-edit_rights"
+				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-edit_rights"
 					value=<?php echo EDIT_RIGHTS; if ($user['rights'] & EDIT_RIGHTS) echo ' checked';echo$alterrights; ?>>Edit</td>
-				<td><input type="checkbox" name="<?php echo $id ?>-comment_rights"
+				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-comment_rights"
 					value=<?php echo COMMENT_RIGHTS; if ($user['rights'] & COMMENT_RIGHTS) echo ' checked';echo$alterrights; ?>>Comment</td>
-				<td><input type="checkbox" name="<?php echo $id ?>-upload_rights"
+				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-upload_rights"
 					value=<?php echo UPLOAD_RIGHTS; if ($user['rights'] & UPLOAD_RIGHTS) echo ' checked';echo$alterrights; ?>>Upload</td>
 			</tr>
 		</table>
@@ -1539,15 +1543,15 @@ All</strong></a></p>
 		</td>
 	</tr>
 	<tr>
-		<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Full name: <br />
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Full name: <br />
 		<br />
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email:</td>
-		<td><input type="text" size="40" name="<?php echo $id ?>-admin_name"
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="text" size="40" name="<?php echo $id ?>-admin_name"
 			value="<?php echo $user['name'];?>" /> <br />
 		<br />
 		<input type="text" size="40" name="<?php echo $id ?>-admin_email"
 			value="<?php echo $user['email'];?>" /></td>
-		<td><?php
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><?php
 		echo "<select id=\"managed_albums\" name=\"managed_albums_".$id."[]\" size=\"4\" multiple=1".$alterrights.">\n";
 		$cv = array();
 		$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
@@ -2080,8 +2084,11 @@ All</strong></a></p>
 	?></form>
 </div>
 <!-- end of tab_themne div --></div>
-<!-- container --> <?php /*** THEMES (Theme Switcher) *******************************************************/
-/************************************************************************************/ ?>
+<!-- container --> 
+<?php 
+/*** THEMES (Theme Switcher) *******************************************************/
+/************************************************************************************/ 
+?>
 
 <?php } else if ($page == "themes") { ?>
 

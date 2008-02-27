@@ -1720,6 +1720,24 @@ function getAdminEmail($rights=ADMIN_RIGHTS) {
 }
 
 /**
+ * Populates and returns the $_zp_admin_album_list array
+ *
+ * @return array
+ */
+function getManagedAlbumList() {
+	global $_zp_admin_album_list, $_zp_current_admin;
+	$_zp_admin_album_list = array();
+	$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
+	prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
+	$_zp_current_admin['id']." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
+	$albums = query_full_array($sql);
+	foreach($albums as $album) {
+		$_zp_admin_album_list[] =$album['folder'];
+	}
+	return $_zp_admin_album_list;
+}
+
+/**
  * Checks to see if the loggedin Admin has rights to the album
  *
  * @param string $albumfolder the album to be checked
@@ -1729,7 +1747,7 @@ function isMyAlbum($albumfolder, $action) {
 	if ($_zp_loggedin & ADMIN_RIGHTS) { return true; }
 	if ($_zp_loggedin & $action) {
 		if (is_null($_zp_admin_album_list)) {
-			return false;
+			getManagedAlbumList();
 		}
 		if (count($_zp_admin_album_list) == 0) { return true; }
 		foreach ($_zp_admin_album_list as $key => $adminalbum) { // see if it is one of the managed folders or a subfolder there of

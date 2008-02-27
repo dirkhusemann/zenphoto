@@ -2664,9 +2664,6 @@ function getRandomImages() {
  */
 function getRandomImagesAlbum($rootAlbum=null) {
 	global $_zp_current_album, $_zp_gallery, $_zp_current_search;
-	
-debugLog("getRandomImagesAlbum($rootAlbum)");	
-	
 	if (empty($rootAlbum)) {
 		$album = $_zp_current_album;
 	} else {
@@ -2683,9 +2680,6 @@ debugLog("getRandomImagesAlbum($rootAlbum)");
 				return $image;
 			}
 		}
-
-		debugLogArray("dynamic images", $images);
-		
 	} else {
 		if (zp_loggedin()) {
 			$imageWhere = '';
