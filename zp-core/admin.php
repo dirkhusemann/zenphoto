@@ -675,7 +675,7 @@ if (!zp_loggedin()) {
 	?>
 <div id="main"><?php printTabs(); ?>
 <div id="content"><?php 
-if ($_zp_null_account = ($_zp_loggedin == OPTIONS_RIGHTS)) {
+if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 	$page = 'options';
 	echo "<div class=\"errorbox space\">";
 	echo "<h2>Password reset request.<br/>You may now set admin usernames and passwords.</h2>";
