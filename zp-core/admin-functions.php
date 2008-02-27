@@ -151,9 +151,9 @@ function printLoginForm($redirect=null, $logo=true) {
 	if ($logo) echo "<p><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" /></p>";
 
 	echo "\n  <div id=\"loginform\">";
-	if ($_zp_login_error==1) {
+	if ($_zp_login_error == 1) {
 		echo "<div class=\"errorbox\" id=\"message\"><h2>There was an error logging in.</h2> Check your username and password and try again.</div>";
-	} else {
+	} else if ($_zp_login_error == 2){
 		echo "<div class=\"messagebox\" id=\"message\"><h2>A reset request has been sent.</h2></div>";
 
 	}
