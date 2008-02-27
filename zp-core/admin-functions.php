@@ -513,7 +513,7 @@ function printAlbumEditForm($index, $album) {
 			echo "</option>";
 		}
 	} else {
-		if (count($images) == 0) {
+		if (count($album->getSubalbums() > 0)) {
 			$images = array();
 			$albumnames = array();
 			$thumb = $album->get('thumb');
