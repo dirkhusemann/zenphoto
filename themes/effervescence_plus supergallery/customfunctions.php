@@ -23,11 +23,17 @@ function printGalleryHeadingImage() {
 }
 
 /* Custom caption functions */
-function getCustomAlbumDesc() { 
-	global $_current_gallery_image;
-	$desc = $_current_gallery_image['gallery'] . '\n' . $_current_gallery_image['desc'];
+function getCustomGalleryDesc() {
+	global $_current_subgallery;
+	$desc = getSubgalleryDesc();
+	if (strlen($desc) == 0) {
+		$desc = getSubgalleryTitle();
+	} else {
+		$desc = getSubgalleryTitle()."\n".$desc;
+	}
 	return $desc;
 }
+
 function parseCSSDef($file) {
 	$file = str_replace(WEBPATH, '', $file);
 	$file = SERVERPATH . $file;

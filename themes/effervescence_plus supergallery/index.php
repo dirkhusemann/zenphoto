@@ -47,7 +47,7 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');normalizeColumns(
 			<li>
 				<div class="imagethumb">
 					<a href="<?php echo getSubgalleryURL();?>" title="View the gallery: <?php echo getSubgalleryTitle(); ?>">
-						<?php printCustomGalleryThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?>
+						<?php printCustomGalleryThumbImage(getCustomGalleryDesc(), null, 180, null, 180, 80); ?>
  						</a>
 				</div>
 				<h4><a href="<?php echo getSubgalleryURL();?>" title="View the gallery: 
