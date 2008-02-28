@@ -1379,8 +1379,10 @@ All</strong></a></p>
 
 </form>
 
-<?php /*** EDIT COMMENT *******************************************************************/
-	/************************************************************************************/ ?>
+<?php 
+/*** EDIT COMMENT *******************************************************************/
+/************************************************************************************/ 
+?>
 
 <?php } else if ($page == "editcomment") { ?>
 <h1>edit comment</h1>
@@ -1428,10 +1430,11 @@ All</strong></a></p>
 </table>
 </form>
 
-<?php /*** OPTIONS ************************************************************************/
-	/**************************************************************************************/
+<?php 
+/*** OPTIONS ************************************************************************/
+/**************************************************************************************/
 } else if ($page == "options") {
-	?>
+?>
 <div id="container">
 <div id="mainmenu">
 <ul id="tabs">
@@ -1490,7 +1493,9 @@ All</strong></a></p>
 				$user['rights'] = $user['rights'] | ADMIN_RIGHTS;
 			}
 		}		
-		$background = ($user['id'] == $_zp_current_admin['id']) ? " background-color: #ECF1F2;" : "";
+		if (count($admins) > 1) {
+			$background = ($user['id'] == $_zp_current_admin['id']) ? " background-color: #ECF1F2;" : "";
+		}
 		?>
 	<tr>
 		<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" width="175"><strong>Username:</strong></td>
@@ -1563,7 +1568,7 @@ All</strong></a></p>
 		}
 		generateListFromArray($cv, $albumlist);
 		echo "</select>\n"
-												?>
+		?>
 	
 	
 	<tr>

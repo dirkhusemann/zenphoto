@@ -193,7 +193,10 @@ function printLogoAndLinks() {
 	global $_zp_current_admin;
 	echo "\n\n<a href=\"".WEBPATH."/" . ZENFOLDER . "/admin.php\" id=\"logo\"><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" /></a>";
 	echo "\n<div id=\"links\">";
-	echo "\n  Logged in as ".$_zp_current_admin['user']." &nbsp; | &nbsp <a href=\"?logout\">Log Out</a> &nbsp; | &nbsp; <a href=\"../\">View Gallery</a>";
+	if (!is_null($_zp_current_admin)) {
+		echo "\n  Logged in as ".$_zp_current_admin['user']." &nbsp; | &nbsp <a href=\"?logout\">Log Out</a> &nbsp; | &nbsp; ";
+	}
+	echo "<a href=\"../\">View Gallery</a>";
 	echo "\n</div>";
 }
 
