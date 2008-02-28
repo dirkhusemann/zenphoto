@@ -695,11 +695,12 @@ switch ($page) {
 		if (!($_zp_loggedin & THEMES_RIGHTS)) $page = '';
 		break;
 }
-?> <?php /** EDIT ****************************************************************************/
+/** EDIT ****************************************************************************/
 /************************************************************************************/
 
-if ($page == "edit") { ?> <?php /** SINGLE ALBUM ********************************************************************/ ?>
-<?php if (isset($_GET['album']) && !isset($_GET['massedit'])) {
+if ($page == "edit") {  
+/** SINGLE ALBUM ********************************************************************/
+if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	$folder = strip($_GET['album']);
 	$album = new Album($gallery, $folder);
 	$images = $album->getImages();
@@ -968,9 +969,9 @@ if (count($album->getImages())) {
 	title="Back to the list of albums (go up one level)">&laquo; Back</a></p>
 
 
-<?php /*** MULTI-ALBUM ***************************************************************************/ ?>
-
-<?php } else if (isset($_GET['massedit'])) {
+<?php 
+/*** MULTI-ALBUM ***************************************************************************/ 
+} else if (isset($_GET['massedit'])) {
 	if (isset($_GET['saved'])) {
 		if (isset($_GET['mismatch'])) {
 			echo "\n<div class=\"errorbox\" id=\"message1\">";
@@ -1026,9 +1027,11 @@ if (count($album->getImages())) {
 		printAlbumEditForm($currentalbum, $album);
 	}
 	?></form>
-<?php printAlbumButtons($album) ?></div>
-<?php /*** EDIT ALBUM SELECTION *********************************************************************/ ?>
-<?php } else { /* Display a list of albums to edit. */ ?>
+<?php printAlbumButtons($album) ?>
+</div>
+<?php 
+/*** EDIT ALBUM SELECTION *********************************************************************/ 
+} else { /* Display a list of albums to edit. */ ?>
 <h1>Edit Gallery</h1>
 <?php displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */ ?>
 
@@ -1088,13 +1091,10 @@ hitcounters&nbsp; <img src="images/fail.png" style="border: 0px;"
 		if (isset($_GET['saved'])) {
 			echo "<p>Gallery order saved.</p>";
 		}
-?> <?php } ?> 
-<?php 
+}  
 /**** UPLOAD ************************************************************************/
 /************************************************************************************/ 
-?>
-
-<?php } else if ($page == "upload") {
+} else if ($page == "upload") {
 			$albumlist = array();
 			genAlbumUploadList($albumlist);
 			?> <script type="text/javascript">
@@ -1238,10 +1238,10 @@ reload the page, but remember your upload limits!)</small></p>
 </form>
 <script type="text/javascript">albumSwitch(document.uploadform.albumselect);</script>
 
-<?php /*** COMMENTS ***********************************************************************/
-/************************************************************************************/ ?>
-
-<?php } else if ($page == "comments") {
+<?php 
+/*** COMMENTS ***********************************************************************/
+/************************************************************************************/ 
+} else if ($page == "comments") {
 	// Set up some view option variables.
 	if (isset($_GET['n'])) $pagenum = max(intval($_GET['n']), 1); else $pagenum = 1;
 	if (isset($_GET['fulltext'])) $fulltext = true; else $fulltext = false;
@@ -1382,9 +1382,7 @@ All</strong></a></p>
 <?php 
 /*** EDIT COMMENT *******************************************************************/
 /************************************************************************************/ 
-?>
-
-<?php } else if ($page == "editcomment") { ?>
+} else if ($page == "editcomment") { ?>
 <h1>edit comment</h1>
 <?php
 	if (isset($_GET['id'])) $id = $_GET['id'];
@@ -2093,9 +2091,7 @@ All</strong></a></p>
 <?php 
 /*** THEMES (Theme Switcher) *******************************************************/
 /************************************************************************************/ 
-?>
-
-<?php } else if ($page == "themes") { ?>
+} else if ($page == "themes") { ?>
 
 <h1>Themes (current theme is <em><?php echo $current_theme = $gallery->getCurrentTheme();?></em>)</h1>
 <p>Themes allow you to visually change the entire look and feel of your
@@ -2135,10 +2131,10 @@ $themeweb = WEBPATH . "/themes/$theme";
 </table>
 
 
-<?php /*** HOME ***************************************************************************/
-	/************************************************************************************/ ?>
-
-<?php } else { $page = "home"; ?>
+<?php 
+/*** HOME ***************************************************************************/
+/************************************************************************************/ 
+} else { $page = "home"; ?>
 <h1>zenphoto Administration</h1>
 <?php
 	if (isset($_GET['check_for_update'])) {
