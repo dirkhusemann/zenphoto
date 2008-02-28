@@ -35,7 +35,7 @@ function issetPage($page) {
 function printAdminFooter() {
 	echo "<div id=\"footer\">";
 	echo "\n  <a href=\"http://www.zenphoto.org\" title=\"A simpler web photo album\">zen<strong>photo</strong></a>";
-	echo " version ". getOption('version');
+	echo " version ". ZENPHOTO_VERSION.' ['.ZENPHOTO_RELEASE.']';
 	echo " | <a href=\"http://www.zenphoto.org/support/\" title=\"Forum\">Forum</a> | <a href=\"http://www.zenphoto.org/trac/\" title=\"Trac\">Trac</a> | <a href=\"changelog.html\" title=\"View Changelog\">Changelog</a>\n</div>";
 }
 
@@ -776,7 +776,7 @@ function processAlbumEdit($index, $album) {
 function checkForUpdate() {
 	global $_zp_WEB_Version;
 	if (isset($_zp_WEB_Version)) { return $_zp_WEB_Version; }
-	$c = getOption('version');
+	$c = ZENPHOTO_VERSION;
 	$v = @file_get_contents('http://www.zenphoto.org/files/LATESTVERSION');
 	if (empty($v)) {
 		$_zp_WEB_Version = 'X';

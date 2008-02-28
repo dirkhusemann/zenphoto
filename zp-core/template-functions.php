@@ -38,11 +38,10 @@ function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
 	$text . "</a>";
 }
 /**
- * Returns the zenphoto version string
- * @return string the version string
+ * Prints the zenphoto version string
  */
 function printVersion() {
-	echo getOption('version');
+	echo ZENPHOTO_VERSION. ' ['.ZENPHOTO_RELEASE. ']';
 }
 
 /**
