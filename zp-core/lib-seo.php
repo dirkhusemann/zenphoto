@@ -1,5 +1,5 @@
 <?php
-function seofriendlyURL($string) {
+function seoFriendlyURL($string) {
 	// strip/convert a few specific characters
 	$specialchars = array(
 	"À"=>"A",

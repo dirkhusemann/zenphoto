@@ -63,7 +63,7 @@ if (!zp_loggedin()) {
 	$albumname = str_replace('!', ' NOT ', $albumname);
 	$albumname = str_replace('&', ' AND ', $albumname);
 	$albumname = str_replace('|', ' OR ', $albumname);
-	$albumname = seofriendlyURL($albumname);
+	$albumname = seoFriendlyURL($albumname);
 	while ($old != $albumname) {
 		$old = $albumname;
 		$albumname = str_replace('--', '-', $albumname);

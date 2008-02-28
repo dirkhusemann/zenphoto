@@ -1,7 +1,7 @@
 <?php
 require_once("classes.php");
 require_once("functions.php");
-require_once("seofriendlyURL.php"); // keep the function separate for easy modification by site admins
+require_once("lib-seo.php"); // keep the function separate for easy modification by site admins
 
 $_zp_admin_album_list = null;
 

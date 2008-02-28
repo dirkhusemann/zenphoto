@@ -1,6 +1,6 @@
 <?php
 require_once('functions.php');
-require_once('encript_lib.php');
+require_once('lib-encryption.php');
 header ("Content-type: image/png");
 $cypher = $_GET['i'];
 

@@ -331,7 +331,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 					if ($error == UPLOAD_ERR_OK) {
 						$tmp_name = $_FILES['files']['tmp_name'][$key];
 						$name = $_FILES['files']['name'][$key];
-						$name = seofriendlyURL($name);
+						$name = seoFriendlyURL($name);
 						if (is_valid_image($name)) {
 							$uploadfile = $uploaddir . '/' . $name;
 							move_uploaded_file($tmp_name, $uploadfile);
@@ -1507,7 +1507,7 @@ All</strong></a></p>
 		<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>"><?php if(!empty($userid) && count($admins) > 1) { ?>
 		<a
 			href="javascript: if(confirm('Are you sure you want to delete this user?')) { window.location='?page=options&action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }"
-			title="Delete this comment." style="color: #c33;"> <img
+			title="Delete this user." style="color: #c33;"> <img
 			src="images/fail.png" style="border: 0px;" alt="Delete" /></a> <?php } ?>&nbsp;
 		</td>
 	</tr>

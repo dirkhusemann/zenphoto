@@ -102,7 +102,7 @@ if (zp_loggedin()) {
 	}
 	
 	// Load Sajax (AJAX Library) now that we have all objects set.
-	require_once("Sajax.php");
+	require_once("lib-sajax.php");
 	sajax_init();
 	$sajax_debug_mode = 0;
 	sajax_export("saveTitle");

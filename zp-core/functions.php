@@ -20,7 +20,7 @@ require("zp-config.php");
 // If the server protocol is not set, set it to the default (obscure zp-config.php change).
 if (!isset($_zp_conf_vars['server_protocol'])) $_zp_conf_vars['server_protocol'] = 'http';
 
-require_once('kses.php');
+require_once('lib-kses.php');
 require_once('exif/exif.php');
 require_once('plugins/phooglelite.php');
 require_once('functions-db.php');
@@ -1275,7 +1275,7 @@ function unzip($file, $dir) { //check if zziplib is installed
 			zip_close($zip);
 		}
 	} else { // Use Zlib http://www.phpconcept.net/pclzip/index.en.php
-		require_once('pclzip.lib.php');
+		require_once('lib-pclzip.php');
 		$zip = new PclZip($file);
 		if ($zip->extract(PCLZIP_OPT_PATH, $dir, PCLZIP_OPT_REMOVE_ALL_PATH) == 0) {
 			die("Error : ".$zip->errorInfo(true));
@@ -1865,7 +1865,7 @@ function cbone($bits, $limit) {
  * @return string;
  */
 function generateCaptcha(&$image) {
-	require_once('encript_lib.php');
+	require_once('lib-encryption.php');
 
 	$lettre='abcdefghijklmnpqrstuvwxyz';
 	$chiffre='123456789';

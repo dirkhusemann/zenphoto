@@ -1,5 +1,5 @@
 <?php
-require_once("utf8.php");
+require_once("lib-utf8.php");
 require_once("functions-db.php");
 
 // If the auth variable gets set somehow before this, get rid of it.
