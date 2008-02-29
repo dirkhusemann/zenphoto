@@ -1491,7 +1491,7 @@ All</strong></a></p>
 				$user['rights'] = $user['rights'] | ADMIN_RIGHTS;
 			}
 		}		
-		if (count($admins) > 1) {
+		if (count($admins) > 2) {
 			$background = ($user['id'] == $_zp_current_admin['id']) ? " background-color: #ECF1F2;" : "";
 		}
 		?>
