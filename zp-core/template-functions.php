@@ -2634,14 +2634,13 @@ function getRandomImages() {
 				$passwordcheck = $passwordcheck.$albumpasswordcheck;
 			}
 		}
-		$albumWhere = " AND ".prefix('albums') . ".show=1".$passwordcheck;
-		$imageWhere = " AND " . prefix('images') . ".show=1";
+		$albumWhere = " AND ".prefix('albums') . ".`show`=1".$passwordcheck;
+		$imageWhere = " AND " . prefix('images') . ".`show`=1";
 	}
 	$c = 0;
 	while ($c < 10) {
 		$result = query_single_row('SELECT '.prefix('images').'.filename,'.prefix('images').'.title, '.prefix('albums').
-														'.folder, ' . prefix('images') . '.show, ' . prefix('albums') . '.show, ' . prefix('albums') . '.password '.
-														'FROM '.prefix('images'). ' INNER JOIN '.prefix('albums').
+														'.folder FROM '.prefix('images'). ' INNER JOIN '.prefix('albums').
 														' ON '.prefix('images').'.albumid = '.prefix('albums').'.id WHERE '.prefix('albums').'.folder!=""'.
 		$albumWhere . $imageWhere . ' ORDER BY RAND() LIMIT 1');
 		$imageName = $result['filename'];
@@ -2657,7 +2656,7 @@ function getRandomImages() {
 /**
  * Returns  a randomly selected image from the album or its subalbums. (May be NULL if none exists)
  *
- * @param string $album optional album folder from which to get the image.
+ * @param string $rootAlbum optional album folder from which to get the image.
  *
  * @return object
  */
@@ -2715,9 +2714,10 @@ function getRandomImagesAlbum($rootAlbum=null) {
  *
  * @param int $number how many images
  * @param string $class optional class
- * @param string $option optional
+ * @param string $option what you want selected: all for all images, album for selected ones from an album
+ * @param string $rootAlbum optional album from which to get the images
  */
-function printRandomImages($number=5, $class=null, $option='all') {
+function printRandomImages($number=5, $class=null, $option='all', $rootAlbum='') {
 	if (!is_null($class)) {
 		$class = ' class="' . $class . '"';
 		echo "<ul".$class.">";
@@ -2728,7 +2728,7 @@ function printRandomImages($number=5, $class=null, $option='all') {
 			case "all":
 				$randomImage = getRandomImages(); break;
 			case "album":
-				$randomImage = getRandomImagesAlbum(); break;
+				$randomImage = getRandomImagesAlbum($rootAlbum); break;
 		}
 		$randomImageURL = getURL($randomImage);
 		echo '<a href="' . $randomImageURL . '" title="View image: ' . htmlspecialchars($randomImage->getTitle(), ENT_QUOTES) . '">' .
