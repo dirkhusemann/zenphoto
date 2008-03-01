@@ -16,9 +16,19 @@ function setDefault($option, $default) {
 	setOption('zenphoto_release', ZENPHOTO_RELEASE); 
 	
 	$admin = getOption('adminuser');
-	if (!empty($admin)) {
-		saveAdmin($admin, getOption('adminpass'), getOption('admin_name') , getOption('admin_email'), ALL_RIGHTS, array());
-	}
+	if (!empty($admin)) {   // transfer the old credentials and then remove them
+		if (count(getAdministrators()) == 0) {  // don't revert anything!
+			saveAdmin($admin, getOption('adminpass'), getOption('admin_name') , getOption('admin_email'), ALL_RIGHTS, array());
+		}
+		$sql = 'DELETE FROM '.prefix('options').' WHERE `name`="adminuser"';
+		query($sql);
+		$sql = 'DELETE FROM '.prefix('options').' WHERE `name`="adminpass"';
+		query($sql);
+		$sql = 'DELETE FROM '.prefix('options').' WHERE `name`="admin_name"';
+		query($sql);
+		$sql = 'DELETE FROM '.prefix('options').' WHERE `name`="admin_email"';
+		query($sql);
+  }
 	
 	setDefault('gallery_title', "Gallery");
 	setDefault('gallery_password', '');
