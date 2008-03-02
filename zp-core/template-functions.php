@@ -2798,8 +2798,6 @@ function printImageRating() {
 	printRating("image");
 }
 
-
-
 /**
  * Prints the rating accordingly to option, it's a combined function for image and album rating
  *
@@ -2998,7 +2996,7 @@ function printTags($option='links',$preText=NULL,$class='taglist',$separator=', 
 			for ($x = 0; $x < $ct; $x++) {
 				if ($x === $ct - 1) { $separator = ""; }
 				if ($option === "links") {
-					$links1 = "<a href=\"".getSearchURL($singletag[$x], '', SEARCH_TAGS, 0, 0)."\" title=\"".$singletag[$x]."\" rel=\"nofollow\">";
+					$links1 = "<a href=\"".getSearchURL(quoteSearchTag($singletag[$x]), '', SEARCH_TAGS, 0, 0)."\" title=\"".$singletag[$x]."\" rel=\"nofollow\">";
 					$links2 = "</a>";
 				}
 				echo "\t<li>".$links1.htmlspecialchars($singletag[$x], ENT_QUOTES).$links2.$separator."</li>\n";
@@ -3058,11 +3056,8 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 	$tagcount = getAllTags();
 	if (!is_array($tagcount)) { return false; }
 
-
 	if (!is_null($limit)) {
-
 		$tagcount = array_slice($tagcount, 0, $limit);
-
 	}
 
 	switch($sort) {
@@ -3071,8 +3066,6 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 		case "abc":
 			ksort($tagcount); break;
 	}
-
-
 
 	echo "<ul style=\"display:inline; list-style-type:none\" ".$class.">\n";
 	while (list($key, $val) = each($tagcount)) {
@@ -3101,7 +3094,7 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 			} else {
 				$key = str_replace('"', '', $key);
 				echo "\t<li style=\"display:inline; list-style-type:none\"><a href=\"".
-				getSearchURL($key, '', SEARCH_TAGS, 0, 0)."\"$size rel=\"nofollow\">".
+				getSearchURL(quoteSearchTag($key), '', SEARCH_TAGS, 0, 0)."\"$size rel=\"nofollow\">".
 				$key.$counter."</a></li>\n";
 			}
 		}
@@ -3340,6 +3333,18 @@ function getSearchURL($words, $dates, $fields, $page) {
 	return $url;
 }
 
+function quoteSearchTag($tag) {
+	if (urlencode($tag) != $tag) {
+		return '`'.$tag.'`';
+	} else {
+		return $tag;
+	}
+}
+
+/**
+ * Emits the javascript for the search form
+ *
+ */
 function zen_search_script() {
 	echo "\n<script src=\"" . FULLWEBPATH . "/" . ZENFOLDER . "/js/scriptaculous/scriptaculous.js\" type=\"text/javascript\"></script>";
 	echo "\n	<style type=\"text/css\">";

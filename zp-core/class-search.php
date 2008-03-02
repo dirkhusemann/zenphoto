@@ -136,6 +136,7 @@ class SearchEngine
 			switch ($c) {
 				case "'":
 				case '"':
+				case '`':
 					$j = strpos($searchstring, $c, $i+1);
 					if ($j !== false) {
 						$target .= substr($searchstring, $i+1, $j-$i-1);
