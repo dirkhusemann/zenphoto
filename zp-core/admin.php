@@ -140,6 +140,18 @@ $charsets = array("ASMO-708" => "Arabic",
 ?>
 <?php
 if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
+	
+	//check for security incursions
+	if (isset($_GET['album'])) {
+		if (!($_zp_loggedin & ADMIN_RIGHTS)) {
+			if (!isMyAlbum(queryDecode(strip($_GET['album'])))) {
+				unset($_GET['album']);
+				unset($_GET['page']);
+				$page = 'home';
+			}
+		}
+	}
+	
 
 	$gallery = new Gallery();
 	if (isset($_GET['prune'])) {
