@@ -3334,6 +3334,7 @@ function getSearchURL($words, $dates, $fields, $page) {
 }
 
 function quoteSearchTag($tag) {
+	$tag = trim($tag);
 	if (urlencode($tag) != $tag) {
 		return '`'.$tag.'`';
 	} else {
