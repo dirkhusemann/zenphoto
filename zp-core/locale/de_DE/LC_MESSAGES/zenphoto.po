@@ -1,0 +1,1208 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: zenphoto\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-03-03 20:33+0100\n"
+"PO-Revision-Date: 2008-03-03 20:33+0100\n"
+"Last-Translator: acrylian <wartgart@gmx.net>\n"
+"Language-Team: acrylian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: /Applications/MAMP/htdocs/zp/\n"
+"X-Poedit-SearchPath-0: zp-core\n"
+
+#: zp-core/admin.php:360
+msgid "The album couldn't be created in the 'albums' folder. This is usually a permissions problem. Try setting the permissions on the albums and cache folders to be world-writable using a shell:"
+msgstr "Das Album konnte nicht im Ordner 'albums' erstellt werden. Dies ist gewöhnlich ein Problem der Zugriffsrechte. Versuch die Zugriffsrechte der Ordner 'albums\" und 'cache\" auf beschreibbar zu setzen."
+
+#: zp-core/admin.php:361
+msgid "or use your FTP program to give everyone write permissions to those folders."
+msgstr "oder benutze dein FTP-Programm, um allgemeine Zugriffe auf diese Ordner zu erlauben."
+
+#: zp-core/admin.php:373
+msgid "You must upload at least one file."
+msgstr "Du musst wenigstens eine Datei hochladen."
+
+#: zp-core/admin.php:375
+msgid "You must enter a folder name for your new album."
+msgstr "Du musst einen Ordnernamen für das neue Album eingeben."
+
+#: zp-core/admin.php:377
+msgid "You've most likely exceeded the upload limits. Try uploading fewer files at a time, or use a ZIP file."
+msgstr "Du hast wahrscheinlich die Uploadgrenze deines Servers überschritten. Versuche weniger Dateien auf einmal hochzuladen oder verwende ein ZIP-Archiv."
+
+#: zp-core/admin.php:380
+msgid "There was an error submitting the form. Please try again. If this keeps happening, check your server and PHP configuration (make sure file uploads are enabled, and upload_max_filesize is set high enough)"
+msgstr "Es ist ein Fehler beim Übermitteln des Formulars aufgetreten. Wenn dies weiterhin passiert, überprüfe deinen Server und deine PHP-Konfiguration (stelle sicher, dass Dateihochladen aktiviert ist und die \"upload_max_filesize\" hoch genug eingestellt ist)."
+
+#: zp-core/admin.php:381
+msgid "If you think this is a bug, file a bug report. Thanks!"
+msgstr "Wenn du dies für einen Fehler hälst, übermittel uns bitte einen Fehlerbericht. Danke!"
+
+#: zp-core/admin.php:677
+msgid "Password reset request.<br/>You may now set admin usernames and passwords."
+msgstr "Passwort zurückgesetzt.<br/>Du kannst nun Benutzernamen und Passworte festlegen."
+
+#: zp-core/admin.php:719
+msgid "edit"
+msgstr "Bearbeiten"
+
+#: zp-core/admin.php:719
+#: zp-core/admin.php:962
+#: zp-core/admin.php:1009
+#: zp-core/admin.php:1374
+msgid "Back"
+msgstr "Zurück"
+
+#: zp-core/admin.php:719
+#: zp-core/admin.php:962
+msgid "Back to the list of albums (go up one level)"
+msgstr "Zurück zur Albumübersicht (eine Ebene zurück)"
+
+#: zp-core/admin.php:720
+msgid "Sort Album"
+msgstr "Album sortieren"
+
+#: zp-core/admin.php:720
+#: zp-core/albumsort.php:57
+msgid "View Album"
+msgstr "Album ansehen"
+
+#: zp-core/admin.php:729
+#: zp-core/admin.php:973
+#: zp-core/admin.php:1450
+msgid "Your passwords did not match"
+msgstr "Ihr Passwort stimmt nicht überein."
+
+#: zp-core/admin.php:735
+#: zp-core/admin.php:977
+msgid "Save Successful"
+msgstr "Erfolgreich gesichert"
+
+#: zp-core/admin.php:755
+msgid "Scroll down to the image list."
+msgstr "Zur Bilderliste runterscrollen."
+
+#: zp-core/admin.php:756
+msgid "Image List"
+msgstr "Bilderliste"
+
+#: zp-core/admin.php:764
+msgid "Albums"
+msgstr "Alben"
+
+#: zp-core/admin.php:768
+msgid "Drag the albums into the order you wish them displayed. Select an album to edit its description and data, or"
+msgstr "Verschiebe die Alben in die gewünschte Reihenfolge. Wähle ein Album zum Bearbeiten seiner Beschreibung und Daten oder"
+
+#: zp-core/admin.php:769
+#: zp-core/admin.php:1042
+msgid "mass-edit all album data"
+msgstr "bearbeite alle Albendaten zusammen"
+
+#: zp-core/admin.php:784
+#: zp-core/admin.php:1070
+msgid "Has Password"
+msgstr "hat Passwort"
+
+#: zp-core/admin.php:785
+#: zp-core/admin.php:1071
+msgid "Published"
+msgstr "Veröffentlicht"
+
+#: zp-core/admin.php:786
+#: zp-core/admin.php:1072
+msgid "Unpublished"
+msgstr "Unveröffentlicht"
+
+#: zp-core/admin.php:787
+msgid "Cache\tthe album"
+msgstr "Bilder des Albums zwischenspeichern."
+
+#: zp-core/admin.php:788
+#: zp-core/admin.php:1074
+msgid "Refresh image metadata"
+msgstr "Bildmetadaten aktualisieren"
+
+#: zp-core/admin.php:789
+msgid "Reset\thitcounters"
+msgstr "Besucherzähler zurücksetzen."
+
+#: zp-core/admin.php:792
+#: zp-core/admin.php:1079
+msgid "Save Order"
+msgstr "Sortierung sichern"
+
+#: zp-core/admin.php:799
+msgid "Subalbum order saved"
+msgstr "Unteralbumreihenfolge gesichert"
+
+#: zp-core/admin.php:802
+#: zp-core/admin.php:955
+msgid "Scroll up to the sub-album list"
+msgstr "Zur Unteralbumliste scrollen."
+
+#: zp-core/admin.php:803
+#: zp-core/admin.php:956
+msgid "Subalbum List"
+msgstr "Unteralbumliste"
+
+#: zp-core/admin.php:817
+msgid "Images"
+msgstr "Bilder"
+
+#: zp-core/admin.php:822
+msgid "Click the images for a larger version"
+msgstr "Für eine grössere Ansicht auf das Bild klicken"
+
+#: zp-core/admin.php:855
+msgid "Hit counter:"
+msgstr "Besucherzähler:"
+
+#: zp-core/admin.php:855
+msgid "reset_hitcounter"
+msgstr "Besucherzähler zurücksetzen"
+
+#: zp-core/admin.php:855
+msgid "Reset"
+msgstr "Zurücksetzen"
+
+#: zp-core/admin.php:858
+msgid "Description:"
+msgstr "Beschreibung:"
+
+#: zp-core/admin.php:863
+msgid "Location:"
+msgstr "Ort:"
+
+#: zp-core/admin.php:869
+msgid "City:"
+msgstr "Stadt:"
+
+#: zp-core/admin.php:875
+msgid "State:"
+msgstr "Land:"
+
+#: zp-core/admin.php:881
+msgid "Country:"
+msgstr "Staat:"
+
+#: zp-core/admin.php:887
+msgid "Credit:"
+msgstr "Credit:"
+
+#: zp-core/admin.php:893
+msgid "Copyright:"
+msgstr "Copyright:"
+
+#: zp-core/admin.php:899
+msgid "Tags:"
+msgstr "Schlagworte:"
+
+#: zp-core/admin.php:905
+msgid "Date:"
+msgstr "Datum:"
+
+#: zp-core/admin.php:911
+msgid "Custom data:"
+msgstr "Sonderfeld:"
+
+#: zp-core/admin.php:922
+msgid "Allow Comments"
+msgstr "Kommentare erlauben"
+
+#: zp-core/admin.php:927
+msgid "Visible"
+msgstr "Sichtbar"
+
+#: zp-core/admin.php:934
+#: zp-core/admin.php:936
+msgid "Delete the image"
+msgstr "Bild löschen"
+
+#: zp-core/admin.php:946
+#: zp-core/admin.php:1410
+#: zp-core/admin.php:1566
+#: zp-core/admin.php:1780
+#: zp-core/admin.php:1942
+#: zp-core/admin.php:2015
+msgid "save"
+msgstr "Sichern"
+
+#: zp-core/admin.php:1007
+msgid "Edit All Albums in"
+msgstr "Alle Alben bearbeiten in"
+
+#: zp-core/admin.php:1007
+msgid "Gallery"
+msgstr "Galerie"
+
+#: zp-core/admin.php:1009
+msgid "Back to the list of albums (go up a level)"
+msgstr "Zurück zur Albumliste (eine Ebene zurück)"
+
+#: zp-core/admin.php:1033
+msgid "Edit Gallery"
+msgstr "Galerie bearbeiten"
+
+#: zp-core/admin.php:1042
+msgid "Drag the albums into the order you wish them displayed."
+msgstr "Verschiebe die Alben in die gewünschte Reihenfolge."
+
+#: zp-core/admin.php:1042
+msgid "Select an album to edit its description and data, or"
+msgstr "Wähle ein Album zum Bearbeiten seiner Beschreibung und Daten aus oder"
+
+#: zp-core/admin.php:1046
+msgid "Edit this album"
+msgstr "Dieses Album bearbeiten"
+
+#: zp-core/admin.php:1070
+msgid "Protected"
+msgstr "Geschützt"
+
+#: zp-core/admin.php:1073
+msgid "Cache the album"
+msgstr "Album zwischenspeichern"
+
+#: zp-core/admin.php:1075
+#: zp-core/admin.php:2240
+msgid "Reset hitcounters"
+msgstr "Besucherzähler zurücksetzen"
+
+#: zp-core/admin.php:1076
+#: zp-core/admin.php:1278
+msgid "Delete"
+msgstr "Löschen"
+
+#: zp-core/admin.php:1085
+msgid "Gallery order saved."
+msgstr "Galeriesortierung gesichert"
+
+#: zp-core/admin.php:1106
+msgid "Upload Photos"
+msgstr "Bilder hochladen"
+
+#: zp-core/admin.php:1107
+msgid "This web-based upload accepts image formats:"
+msgstr "Das webbasierten Hochladen akzeptiert folgende Bildformate:"
+
+#: zp-core/admin.php:1110
+msgid "You can also upload a <strong>ZIP</strong> archive containing any of those file types."
+msgstr "Sie können auch ein <strong>ZIP</strong>-Archiv mit jedem dieser Bildformate hochladen"
+
+#: zp-core/admin.php:1112
+msgid "The maximum size for any one file is"
+msgstr "Die maximale Grösse für Dateien ist "
+
+#: zp-core/admin.php:1113
+msgid "Don't forget, you can also use"
+msgstr "Alternativ kann auch  "
+
+#: zp-core/admin.php:1114
+msgid "to upload folders of images into the albums directory!"
+msgstr "verwenden können, um Ordner und Bilder in den 'albums'-Ordner hochzuladen!"
+
+#: zp-core/admin.php:1118
+msgid "Something went wrong..."
+msgstr "Irgendwas ist schief gegangen..."
+
+#: zp-core/admin.php:1119
+msgid "There was an error submitting the form. Please try again."
+msgstr "Es ist ein Fehler beim Übermitteln des Formulars aufgetreten. Bitte versuchen Sie es erneut."
+
+#: zp-core/admin.php:1125
+msgid "PHP Safe Mode Restrictions in effect!"
+msgstr "PHP Safe Mode-Einschränkungen sind aktiv."
+
+#: zp-core/admin.php:1126
+msgid "Zenphoto is unable to perform uploads when PHP Safe Mode restrictions are in effect"
+msgstr "Zenphoto kann keine Bilder hochladen solange PHP Safe Mode-Einschränkungen aktiv sind."
+
+#: zp-core/admin.php:1138
+msgid "Upload to:"
+msgstr "Hochladen nach: "
+
+#: zp-core/admin.php:1176
+msgid "Make a new Album"
+msgstr "Neues Album erstellen"
+
+#: zp-core/admin.php:1177
+msgid "and"
+msgstr "und"
+
+#: zp-core/admin.php:1178
+msgid "Publish the album so everyone can see it."
+msgstr "Das Album für jeden sichtbar veröffentlichen."
+
+#: zp-core/admin.php:1181
+msgid "called:"
+msgstr "genannt:"
+
+#: zp-core/admin.php:1185
+msgid "with the folder name:"
+msgstr "mit dem Ordnername:"
+
+#: zp-core/admin.php:1192
+msgid "Auto-generate"
+msgstr "Automatisch erstellen"
+
+#: zp-core/admin.php:1217
+msgid "Add more upload boxes"
+msgstr "Mehr Felder zum Hochladen hinzufügen"
+
+#: zp-core/admin.php:1218
+msgid "(won't reload the page, but remember your upload limits!)"
+msgstr "(lädt die Seite nicht neu, aber erinnert Ihre Grenze beim Hochladen!)"
+
+#: zp-core/admin.php:1221
+#: zp-core/admin.php:1528
+msgid "Upload"
+msgstr "Hochladen"
+
+#: zp-core/admin.php:1242
+msgid "Comments"
+msgstr "Kommentare"
+
+#: zp-core/admin.php:1247
+msgid "Comments deleted successfully."
+msgstr "Kommentare erfolgreich gelöscht"
+
+#: zp-core/admin.php:1249
+msgid "Comment saved successfully."
+msgstr "Kommentar erfolgreich gelöscht."
+
+#: zp-core/admin.php:1255
+msgid "You can edit or delete comments on your photos."
+msgstr "Sie können Kommentare zu Ihren Bildern bearbeiten oder löschen."
+
+#: zp-core/admin.php:1257
+msgid "Showing <strong>all</strong> comments."
+msgstr "Zeige <strong>alle</strong> Kommentare."
+
+#: zp-core/admin.php:1258
+msgid "Just show 20."
+msgstr "Nur 20 zeigen."
+
+#: zp-core/admin.php:1260
+msgid "Showing the latest <strong>20</strong> comments."
+msgstr "Zeigen die neuesten <strong>20</strong> Kommentare."
+
+#: zp-core/admin.php:1261
+msgid "View All"
+msgstr "Alle anzeigen."
+
+#: zp-core/admin.php:1265
+msgid "Are you sure you want to delete these comments?"
+msgstr "Sind Sie sicher, dass Sie diese Kommentare löschen wollen?"
+
+#: zp-core/admin.php:1269
+msgid "Album/Image"
+msgstr "Album/Bild"
+
+#: zp-core/admin.php:1270
+msgid "Author/Link"
+msgstr "Autor/Link"
+
+#: zp-core/admin.php:1271
+msgid "Date/Time"
+msgstr "Datum/Zeit"
+
+#: zp-core/admin.php:1272
+#: zp-core/admin.php:1526
+msgid "Comment"
+msgstr "Kommentar"
+
+#: zp-core/admin.php:1273
+msgid "View full text"
+msgstr "Kompletten Text anzeigen"
+
+#: zp-core/admin.php:1274
+msgid "View truncated"
+msgstr "Gekürzt anzeigen"
+
+#: zp-core/admin.php:1275
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: zp-core/admin.php:1276
+msgid "Spam"
+msgstr "Spam"
+
+#: zp-core/admin.php:1277
+#: zp-core/admin.php:1524
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: zp-core/admin.php:1301
+#: zp-core/admin.php:1304
+#: zp-core/admin.php:1317
+msgid "database error"
+msgstr "Datenbankfehler"
+
+#: zp-core/admin.php:1341
+msgid "remove from moderation"
+msgstr "aus der Moderation nehmen"
+
+#: zp-core/admin.php:1356
+msgid "Check All"
+msgstr "Alle auswählen"
+
+#: zp-core/admin.php:1362
+msgid "Delete Selected Comments"
+msgstr "Ausgewählte Kommentare löschen"
+
+#: zp-core/admin.php:1371
+msgid "edit comment"
+msgstr "Kommentar bearbeiten"
+
+#: zp-core/admin.php:1374
+msgid "No comment specified."
+msgstr "Kein Kommentar ausgewählt."
+
+#: zp-core/admin.php:1385
+msgid "Author:"
+msgstr "Autor:"
+
+#: zp-core/admin.php:1390
+msgid "Web Site:"
+msgstr "Website:"
+
+#: zp-core/admin.php:1395
+msgid "E-Mail:"
+msgstr "E-Mail:"
+
+#: zp-core/admin.php:1400
+msgid "Date/Time:"
+msgstr "Datum/Zeit:"
+
+#: zp-core/admin.php:1405
+msgid "Comment:"
+msgstr "Kommentar:"
+
+#: zp-core/admin.php:1424
+msgid "admin information"
+msgstr "Verwaltungsinformation"
+
+#: zp-core/admin.php:1426
+msgid "gallery configuration"
+msgstr "Galerie-Einstellungen"
+
+#: zp-core/admin.php:1427
+msgid "image display"
+msgstr "Bildanzeige"
+
+#: zp-core/admin.php:1428
+msgid "comment configuration"
+msgstr "Kommentareinstellungen"
+
+#: zp-core/admin.php:1429
+msgid "theme options"
+msgstr "Designeinstellungen"
+
+#: zp-core/admin.php:1448
+msgid "You must supply a password"
+msgstr "Es muss ein Passwort eingegeben werden"
+
+#: zp-core/admin.php:1464
+msgid "Admin login information"
+msgstr "Benutzerdaten"
+
+#: zp-core/admin.php:1475
+msgid "Master"
+msgstr "Haupt"
+
+#: zp-core/admin.php:1484
+msgid "Username:"
+msgstr "Benutzername:"
+
+#: zp-core/admin.php:1498
+msgid "Password:"
+msgstr "Passwort:"
+
+#: zp-core/admin.php:1499
+#: zp-core/admin.php:1607
+#: zp-core/admin.php:1624
+msgid "(repeat)"
+msgstr "(wiederholen)"
+
+#: zp-core/admin.php:1508
+msgid "Rights"
+msgstr "Rechte"
+
+#: zp-core/admin.php:1514
+msgid "User\tadmin"
+msgstr "Benutzer"
+
+#: zp-core/admin.php:1517
+msgid "Options"
+msgstr "Einstellungen"
+
+#: zp-core/admin.php:1520
+msgid "Themes"
+msgstr "Designs"
+
+#: zp-core/admin.php:1535
+msgid "Full name:"
+msgstr "Name:"
+
+#: zp-core/admin.php:1537
+msgid "email:"
+msgstr "E-Mail:"
+
+#: zp-core/admin.php:1578
+#: zp-core/admin.php:1792
+msgid "Your "
+msgstr "Die"
+
+#: zp-core/admin.php:1578
+#: zp-core/admin.php:1792
+msgid " passwords did not match"
+msgstr " Passworte stimmen nicht überein"
+
+#: zp-core/admin.php:1586
+msgid "Your Website URL is not valid"
+msgstr "Die Webadresse ist nicht gültig."
+
+#: zp-core/admin.php:1596
+msgid "General Gallery Configuration"
+msgstr "Allgemeine Galerie-Einstellungen"
+
+#: zp-core/admin.php:1600
+msgid "Gallery title:"
+msgstr "Galeriename:"
+
+#: zp-core/admin.php:1603
+msgid "What you want to call your photo gallery."
+msgstr "Der gewünschte Name Ihrer Galerie."
+
+#: zp-core/admin.php:1606
+msgid "Gallery password:"
+msgstr "Galeriepasswort:"
+
+#: zp-core/admin.php:1614
+msgid "Master password for the gallery. If this is set, visitors must\tknow this password to view the gallery."
+msgstr "Hauptpasswort für die Galerie. Wenn es vergeben ist, müssen Besucher das Passwort kennen, um die Galerie ansehen zu können."
+
+#: zp-core/admin.php:1617
+msgid "Gallery password hint:"
+msgstr "Galeriepasswort-Hinweis:"
+
+#: zp-core/admin.php:1620
+#: zp-core/admin.php:1637
+msgid "A reminder hint for the password."
+msgstr "Eine Erinnungsstütze für das Passwort."
+
+#: zp-core/admin.php:1623
+msgid "Search password:"
+msgstr "Suchpasswort:"
+
+#: zp-core/admin.php:1631
+msgid "Password for the searching. If this is set, visitors must know this password to view search results."
+msgstr "Passwort für die Suche. Wenn es gesetzt ist, müssen Besucher das Passwort kennen, um die Suche verwenden zu können."
+
+#: zp-core/admin.php:1634
+msgid "Search password hint:"
+msgstr "Suchpasswort-Hinweis:"
+
+#: zp-core/admin.php:1640
+msgid "Website title:"
+msgstr "Website-Name:"
+
+#: zp-core/admin.php:1643
+msgid "Your web site title."
+msgstr "Der Name deiner Website."
+
+#: zp-core/admin.php:1646
+msgid "Website url:"
+msgstr "Website-Adresse:"
+
+#: zp-core/admin.php:1649
+msgid "This is used to link back to your main site, but your theme must\tsupport it."
+msgstr "Dies wird verwendet, um zu deiner Hauptseite zurückzuverweisen, aber dein Design muss dies unterstützen."
+
+#: zp-core/admin.php:1652
+msgid "Server protocol:"
+msgstr "Serverprotokoll:"
+
+#: zp-core/admin.php:1655
+msgid "If you're running a secure server, change this to"
+msgstr "Wenn du einen sicheren Server verwendest, ändere dies in "
+
+#: zp-core/admin.php:1656
+msgid "(Most people will leave this alone.)"
+msgstr "(muss meist nicht geändert werden)"
+
+#: zp-core/admin.php:1659
+msgid "Time offset (hours):"
+msgstr "Zeitverschiebung (Stunden):"
+
+#: zp-core/admin.php:1662
+msgid "If you're in a different time zone from your server, set the\toffset in hours."
+msgstr "Falls du in einer anderen Zeitzone als dein Server bist, kannst du die Zeitverschiebung in Stunden angeben."
+
+#: zp-core/admin.php:1665
+msgid "Enable mod_rewrite:"
+msgstr "Mod_rewrite aktivieren:"
+
+#: zp-core/admin.php:1668
+msgid "If you have Apache <em>mod_rewrite</em>, put a checkmark here, and\tyou'll get nice cruft-free URLs."
+msgstr "Wenn dein Server über Apache-<em>mod_rewrite</em>-Funktionalität verfügt, aktiviere diese und Zenphoto erzeugt suchmaschinenfreundliche URLs."
+
+#: zp-core/admin.php:1671
+msgid "Mod_rewrite Image suffix:"
+msgstr "Mod_rewrite Bildsuffix:"
+
+#: zp-core/admin.php:1674
+msgid "If <em>mod_rewrite</em> is checked above, zenphoto will appended\tthis to the end (helps search engines). Examples: <em>.html, .php,\t/view</em>, etc."
+msgstr "Wenn <em>mod_rewrite</em> oben aktiviert ist, wird zenphoto dieses Suffix an die Dateien anhängen zenphoto (vorteilhaft für Suchmaschinen). Beispiele: <em>.html, .php, view</em> etc."
+
+#: zp-core/admin.php:1677
+msgid "Locale:"
+msgstr "Sprache:"
+
+#: zp-core/admin.php:1693
+msgid "The internationalization & localization locale."
+msgstr "Die Einstellung für Internationalisierung und Lokalisierung."
+
+#: zp-core/admin.php:1696
+msgid "Charset:"
+msgstr "Zeichensatz:"
+
+#: zp-core/admin.php:1705
+msgid "The character encoding to use internally. Leave at <em>Unicode\t(UTF-8)</em> if you're unsure."
+msgstr "Die Zeichensatzkodierung, die intern benutzt werden soll. Verwende <em>Unicode (UTF-8)</em>, wenn du unsicher bist."
+
+#: zp-core/admin.php:1708
+msgid "Number of RSS feed items:"
+msgstr "Anzahl der RSS-Einträge:"
+
+#: zp-core/admin.php:1711
+msgid "The number of new images/albums/comments you want to appear in your site's RSS feed."
+msgstr "Die Anzahl an neuen Bildern/Alben/Kommentare, die im RSS-Newsfeed erscheinen soll."
+
+#: zp-core/admin.php:1714
+msgid "Sort gallery by:"
+msgstr "Galeriesortierung: "
+
+#: zp-core/admin.php:1724
+#: zp-core/admin.php:1811
+msgid "Descending"
+msgstr "Absteigend"
+
+#: zp-core/admin.php:1725
+msgid "Sort order for the albums on the index of the gallery"
+msgstr "Sortierung für die Alben auf der Galerie-Indexseite"
+
+#: zp-core/admin.php:1728
+msgid "Search fields:"
+msgstr "Suchfelder:"
+
+#: zp-core/admin.php:1733
+msgid "Title"
+msgstr "Titel:"
+
+#: zp-core/admin.php:1735
+msgid "Description"
+msgstr "Beschreibung"
+
+#: zp-core/admin.php:1737
+msgid "Tags"
+msgstr "Schlagworte"
+
+#: zp-core/admin.php:1742
+msgid "File/Folder name"
+msgstr "Datei/Ordnername"
+
+#: zp-core/admin.php:1744
+msgid "Location"
+msgstr "Ort"
+
+#: zp-core/admin.php:1746
+msgid "City"
+msgstr "Stadt"
+
+#: zp-core/admin.php:1750
+msgid "State"
+msgstr "Land"
+
+#: zp-core/admin.php:1752
+msgid "Country"
+msgstr "Staat"
+
+#: zp-core/admin.php:1756
+msgid "The set of fields on which searches may be performed."
+msgstr "Die Suchfelder, in denen gesucht werden soll."
+
+#: zp-core/admin.php:1759
+msgid "Google Maps API key:"
+msgstr "Google Maps API Schlüssel:"
+
+#: zp-core/admin.php:1762
+msgid "If you're going to be using Google Maps,"
+msgstr "Wenn du Google Maps verwenden willst, "
+
+#: zp-core/admin.php:1763
+msgid "get an API key</a> and enter it here."
+msgstr "trage deinen API-Schlüssel hier ein."
+
+#: zp-core/admin.php:1766
+msgid "Enable Persistent Archives:"
+msgstr "Dauerhafte Archive aktivieren:"
+
+#: zp-core/admin.php:1769
+msgid "Put a checkmark here to re-serve Zip Archive files. If not checked\tthey will be regenerated each time."
+msgstr "Wenn dies deaktiviert ist, werden ZIP-Archive jedesmal erneut erstellt."
+
+#: zp-core/admin.php:1770
+msgid "<strong>Note: </strong>Setting\tthis option may impact password protected albums!"
+msgstr "<strong>Anmerkung: </strong>Diese Einstellung kann Auswirkungen auf passwort-geschützte Alben haben!"
+
+#: zp-core/admin.php:1773
+msgid "Enable gallery sessions:"
+msgstr "Galeriesessions aktivieren."
+
+#: zp-core/admin.php:1776
+msgid "Put a checkmark here if you are having issues with with album\tpassword cookies not being retained."
+msgstr "Aktivieren, falls Probleme mit den Albumpassortcookies auftreten."
+
+#: zp-core/admin.php:1802
+msgid "Image Display"
+msgstr "Bildeinstellungen"
+
+#: zp-core/admin.php:1806
+msgid "Sort images by:"
+msgstr "Bildersortierung: "
+
+#: zp-core/admin.php:1812
+msgid "Default sort order for images"
+msgstr "Standardbildsortierung"
+
+#: zp-core/admin.php:1815
+msgid "Image quality:"
+msgstr "Bildqualität:"
+
+#: zp-core/admin.php:1818
+msgid "JPEG Compression quality for all images."
+msgstr "JPEG-Komprimierungsstufe für alle Bilder."
+
+#: zp-core/admin.php:1821
+msgid "Thumb quality:"
+msgstr "Thumbnailqualität:"
+
+#: zp-core/admin.php:1824
+msgid "JPEG Compression quality for all thumbnails."
+msgstr "JPEG-Komprimierungsqualität für alle Thumbnails."
+
+#: zp-core/admin.php:1827
+msgid "Image size:"
+msgstr "Bildgröße:"
+
+#: zp-core/admin.php:1830
+msgid "Default image display width."
+msgstr "Standardbildbreite:"
+
+#: zp-core/admin.php:1833
+msgid "Images size is longest size:"
+msgstr "Bildgröße gemäß längster Seite:"
+
+#: zp-core/admin.php:1837
+msgid "If this is set to true, then the longest side of the image will be\t<em>image size</em>."
+msgstr "Wenn dies aktiviert ist, wird die längste Seite eine Bildes als <em>Bildgröße</em> verwendet."
+
+#: zp-core/admin.php:1838
+msgid "Otherwise, the <em>width</em> of the image will\tbe <em>image size</em>."
+msgstr "Andernfalls wird die <em>Breite</em> des Bildes als <em>Bildgröße</em> verwendet."
+
+#: zp-core/admin.php:1841
+msgid "Allow upscale:"
+msgstr "Hochrechnen erlauben:"
+
+#: zp-core/admin.php:1845
+msgid "Allow images to be scaled up to the requested size. This could\tresult in loss of quality, so it's off by default."
+msgstr "Erlaubt, dass kleinere Bilder auf die eingestellte Größe hochgerechnet werden. Dies kann zu einem Qualitätsverlust führen und ist daher standardmäßig deaktiviert."
+
+#: zp-core/admin.php:1848
+msgid "Thumb size:"
+msgstr "Thumbnailgrösse:"
+
+#: zp-core/admin.php:1851
+msgid "Default thumbnail size and scale."
+msgstr "Standardgrösse der Thumbnails."
+
+#: zp-core/admin.php:1854
+msgid "Crop thumbnails:"
+msgstr "Thumbnails beschneiden:"
+
+#: zp-core/admin.php:1857
+msgid "If set to true the thumbnail will be a centered portion of the\timage with the given width and height after being resized to <em>thumb\tsize</em> (by shortest side)."
+msgstr "Wenn aktivert, werden die Thumbnails aus dem Mittelteil des Bildes mit der eingestellten Breite und Höhe erstellt, nachdem das Bild auf die <em>Thumbnailgrösse</em> umgerechnet wurde (gemäß der kürzesten Seite)."
+
+#: zp-core/admin.php:1858
+msgid "Otherwise, it will be the full image resized to <em>thumb size</em> (by shortest side)."
+msgstr "Anderfalls wird das komplette Bild auf <em>Thumbnailgrösse</em> umgerechnet (gemäss der kürzesten Seite)."
+
+#: zp-core/admin.php:1861
+msgid "Crop thumbnail width:"
+msgstr "Thumbnailbeschnittbreite:"
+
+#: zp-core/admin.php:1864
+msgid "The <em>thumb crop width</em> should always be less than or equal\tto <em>thumb size</em>"
+msgstr "Die <em>Thumbnailbeschnittgrösse</em> sollte der <em>Thumbnailgrösse</em> entsprechen oder kleiner sein."
+
+#: zp-core/admin.php:1867
+msgid "Crop thumbnail height:"
+msgstr "Thumbnailbeschnitthöhe:"
+
+#: zp-core/admin.php:1870
+msgid "The <em>thumb crop height</em> should always be less than or equal to <em>thumb size</em>"
+msgstr "Die <em>Thumbnailbeschnittehöhe</em> sollte immer der <em>Thumbnailgrösse</em> entsprechen oder kleiner sein."
+
+#: zp-core/admin.php:1873
+msgid "Sharpen thumbnails:"
+msgstr "Thumbnails scharfzeichnen:"
+
+#: zp-core/admin.php:1876
+msgid "Add a small amount of unsharp mask to thumbnails. Slows thumbnail\tgeneration on slow servers."
+msgstr "Zeichnet Thumbnails leicht scharf. Die verlangsamt Thumbnailerstellung auf langsameren Servern."
+
+#: zp-core/admin.php:1879
+msgid "Albums per page:"
+msgstr "Alben pro Seite:"
+
+#: zp-core/admin.php:1882
+msgid "Controls the number of albums on a page. You might need to change\tthis after switching themes to make it look better."
+msgstr "Legt die Anzahl an Alben pro Seite fest. Möglicherweise muss der Wert angepasst werden, wenn du dein Design gewechselt hast."
+
+#: zp-core/admin.php:1885
+msgid "Images per page:"
+msgstr "Bilder pro Seite:"
+
+#: zp-core/admin.php:1888
+msgid "Controls the number of images on a page. You might need to change\tthis after switching themes to make it look better."
+msgstr "Legt die Anzahl der Bilder pro Seite fest. Möglicherweise muss der Wert angepasst werden, wenn du dein Design wechselst."
+
+#: zp-core/admin.php:1891
+msgid "Watermark images:"
+msgstr "Bilder mit Wasserzeichen versehen:"
+
+#: zp-core/admin.php:1899
+#: zp-core/admin.php:1918
+msgid "Enabled"
+msgstr "Aktiviert"
+
+#: zp-core/admin.php:1901
+msgid "offset h"
+msgstr "Position h"
+
+#: zp-core/admin.php:1902
+msgid "% w"
+msgstr "% w"
+
+#: zp-core/admin.php:1904
+msgid "%"
+msgstr "%"
+
+#: zp-core/admin.php:1905
+#: zp-core/admin.php:1920
+msgid "The watermark image (png-24). (Place the image in the"
+msgstr "Das Wasserzeichenbild (png-24). (Kopiere das Bild in den"
+
+#: zp-core/admin.php:1906
+msgid "directory."
+msgstr "-Ordner"
+
+#: zp-core/admin.php:1907
+msgid "The watermark image is placed relative to the upper left corner of the\timage. It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark."
+msgstr "Das Wasserzeichen wird relativ zur oberen linken Ecke des Bildes platziert. Es wird von dort aus durch die <em>Positions</em>-Prozentangaben durch den Höhe- und Breiteunterschied zwischen Bild und Wasserzeichen positioniert."
+
+#: zp-core/admin.php:1910
+msgid "Watermark videos:"
+msgstr "Wasserzeichen für Videos:"
+
+#: zp-core/admin.php:1920
+msgid "directory"
+msgstr "Ordner"
+
+#: zp-core/admin.php:1923
+msgid "Full image quality:"
+msgstr "Originalbildqualität:"
+
+#: zp-core/admin.php:1926
+msgid "Controls compression on full images."
+msgstr "Legt die Komprimierung des (hochgeladenen) Originalbildes fest."
+
+#: zp-core/admin.php:1929
+msgid "Protect full image:"
+msgstr "Originalbild schützen:"
+
+#: zp-core/admin.php:1932
+msgid "When set, links to the full image will go through intermediate processing that will check for password protection and apply watermarking. This requires extra server memory and procssing overhead than if the image is loaded directly."
+msgstr "Wenn vergeben, werden Links zum Originalbild auf Passwortschutz geprüft und ein Wasserzeichen hinzugefügt. Dies führt zu mehr Speicherbedarf und - Belastung des Servers als wenn das Originalbild direkt geladen würde."
+
+#: zp-core/admin.php:1935
+msgid "Full image download:"
+msgstr "Originalbild runterladen:"
+
+#: zp-core/admin.php:1938
+msgid "Causes a download dialog to be displayed when clicking on a\tfull-image link. (This option is active only if Protect Full Image is\tset.)"
+msgstr "Zeigt einen Downloaddialog, wenn auf den Originalbildlink geklickt  wird. (Dies Einstellung ist nur möglich, wenn der Originalbildschutz aktiviert ist.)"
+
+#: zp-core/admin.php:1954
+msgid "Your Allowed tags change did not parse successfully."
+msgstr "Die Änderung der erlaubten Schlagwort konnte nicht ausgeführt werden."
+
+#: zp-core/admin.php:1964
+msgid "Comments options"
+msgstr "Kommentarseinstellungen"
+
+#: zp-core/admin.php:1968
+msgid "Enable comment notification:"
+msgstr "Kommentarbenachrichtigung aktivieren:"
+
+#: zp-core/admin.php:1971
+msgid "Email the Admin when new comments are posted"
+msgstr "Verschicke eine E-Mail, wenn neue Kommentare vorhanden sind."
+
+#: zp-core/admin.php:1974
+msgid "Allowed tags:"
+msgstr "Erlaubte Schlagworte:"
+
+#: zp-core/admin.php:1977
+msgid "Tags and attributes allowed in comments"
+msgstr "Die Schlagworte und Steuerbefehle, die in Kommentaren erlaubt sind."
+
+#: zp-core/admin.php:1978
+msgid "Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"
+msgstr "Folge dem Schema <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"
+
+#: zp-core/admin.php:1982
+msgid "Spam filter:"
+msgstr "Spamfilter:"
+
+#: zp-core/admin.php:1990
+msgid "The SPAM filter plug-in you wish to use to check comments for SPAM"
+msgstr "Das Spamfilter-Plugin, das zum Überprüfen der Kommentare verwendet werden soll."
+
+#: zp-core/admin.php:2002
+msgid "Require fields:"
+msgstr "Notwendige Felder:"
+
+#: zp-core/admin.php:2004
+msgid "Name"
+msgstr "Name"
+
+#: zp-core/admin.php:2006
+msgid "Email"
+msgstr "E-Mail"
+
+#: zp-core/admin.php:2008
+msgid "Website"
+msgstr "Website"
+
+#: zp-core/admin.php:2010
+msgid "Captcha"
+msgstr "Captcha"
+
+#: zp-core/admin.php:2011
+msgid "Checked fields must be valid in a comment posting."
+msgstr "Aktivierte Felder müssen in einem Kommentar gültig sein."
+
+#: zp-core/admin.php:2032
+msgid "Theme Options for"
+msgstr "Designeinstellungen für"
+
+#: zp-core/admin.php:2051
+msgid "Themes (current theme is"
+msgstr "Designs (zur Zeit aktives Design ist"
+
+#: zp-core/admin.php:2052
+msgid "Themes allow you to visually change the entire look and feel of your gallery. All themes are located in your"
+msgstr "Designs erlauben dir, das Aussehen deiner Galerie zu verändern. Alle designs befinden sich im Ordner "
+
+#: zp-core/admin.php:2052
+msgid "folder, and you can download more themes at the"
+msgstr " und weitere können auf "
+
+#: zp-core/admin.php:2053
+msgid "zenphoto forum"
+msgstr "zenphoto-Forum"
+
+#: zp-core/admin.php:2053
+msgid "and the"
+msgstr "und im "
+
+#: zp-core/admin.php:2054
+msgid "zenphoto themes page"
+msgstr "Themes-Seite auf zenphoto.org heruntergeladen werden"
+
+#: zp-core/admin.php:2079
+msgid "Use this Theme"
+msgstr "Dieses Design verwenden"
+
+#: zp-core/admin.php:2079
+msgid "Current Theme"
+msgstr "Aktives Design"
+
+#: zp-core/admin.php:2093
+msgid "zenphoto Administration"
+msgstr "Zenphoto-Verwaltung"
+
+#: zp-core/admin.php:2099
+msgid "Could not connect to"
+msgstr "Verbindung nicht möglich mit"
+
+#: zp-core/admin.php:2101
+msgid "zenphoto version"
+msgstr "Zenphoto-Version"
+
+#: zp-core/admin.php:2101
+msgid "is available."
+msgstr "ist verfügbar."
+
+#: zp-core/admin.php:2104
+msgid "You are running the latest zenphoto version."
+msgstr "Du verwendest bereits die neueste Zenphoto-Version."
+
+#: zp-core/admin.php:2107
+msgid "Check for zenphoto update."
+msgstr "Nach Zenphoto-Updates suchen."
+
+#: zp-core/admin.php:2112
+msgid "<strong>Upload</strong> pictures."
+msgstr "Bilder <strong>hochladen</strong>."
+
+#: zp-core/admin.php:2114
+msgid "<strong>Edit</strong> titles, descriptions, and other metadata."
+msgstr "Titel, Beschreibungen und andere Metadaten <strong>bearbeiten</strong>."
+
+#: zp-core/admin.php:2116
+msgid "Edit or delete <strong>comments</strong>."
+msgstr "<strong>Kommentare</strong> löschen oder bearbeiten."
+
+#: zp-core/admin.php:2118
+msgid "Browse your <strong>gallery</strong> and edit on the go."
+msgstr "Die <strong>Galerie</strong> ansehen und währenddessen bearbeiten. "
+
+#: zp-core/admin.php:2124
+msgid "10 Most Recent Comments"
+msgstr "Die 10 neuesten Kommentare"
+
+#: zp-core/admin.php:2179
+msgid "Gallery Maintenance"
+msgstr "Galeriepflege"
+
+#: zp-core/admin.php:2180
+msgid "Your database is"
+msgstr "Deine Datenbank heisst"
+
+#: zp-core/admin.php:2181
+msgid "Tables are prefixed by"
+msgstr "Die Tabellen haben das Prefix "
+
+#: zp-core/admin.php:2186
+msgid "Refresh the Database"
+msgstr "Datenbank aktualisieren"
+
+#: zp-core/admin.php:2192
+msgid "Cleans the database and removes any orphan entries for comments, images, and albums."
+msgstr "Reinigt die Datenbank und entfernt verwaister Einträge von Kommentaren, Bildern und Alben."
+
+#: zp-core/admin.php:2200
+msgid "Purge Cache"
+msgstr "Zwischenspeicher löschen"
+
+#: zp-core/admin.php:2206
+msgid "Clears the image cache. Images will be re-cached as they are viewed. To clear the cache and renew it, use the <em>Pre-Cache Images</em> button below."
+msgstr "Leert den Bildzwischenspeicher. Die Bilder werden erneut zwischengespeichert, wenn sie angesehen werden. Um den Zwischenspeicher zu leeren und gleichzeitig zu erneuern, verwende den Knopf <em>Bilder zwischenspeichern</em> unten."
+
+#: zp-core/admin.php:2212
+msgid "Pre-Cache Images"
+msgstr "Bilder zwischenspeichern"
+
+#: zp-core/admin.php:2214
+msgid "Clear"
+msgstr "Löschen"
+
+#: zp-core/admin.php:2218
+msgid "Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser."
+msgstr "Findet neue Bilder, die noch nicht zwischengespeichert sind und erstellt eine Zwischenspeicherdatein von ihnen. Es führt auch die beiden oberen Funktionen aus. Wenn du eine grosse Menge Bilder in deiner Galerie hast, solltest du besser die Funktion <em>Bilder zwischenspeichern</em>, über den jedes einzelne Album verfügt, verwenden, um eine Überlastung deines Browsers zu vermeiden."
+
+#: zp-core/admin.php:2225
+msgid "Refresh Metadata"
+msgstr "Metadaten aktualisieren."
+
+#: zp-core/admin.php:2231
+msgid "Forces a refresh of the EXIF and IPTC data for all images."
+msgstr "Führt eine Aktualisierung der EXIF- und IPTC-Daten aller Bilder aus."
+
+#: zp-core/admin.php:2246
+msgid "Sets all album and image hitcounters to zero."
+msgstr "Setzt alle Album- und Bildbesucherzähler auf Null."
+
+#: zp-core/admin.php:2255
+msgid "Gallery Stats"
+msgstr "Galeriestatistik"
+
+#: zp-core/admin.php:2256
+msgid "images."
+msgstr "Bilder."
+
+#: zp-core/admin.php:2257
+msgid "albums."
+msgstr "Alben."
+
+#: zp-core/admin.php:2259
+msgid "comments."
+msgstr "Kommentare."
+
+#: zp-core/admin.php:2263
+msgid "are"
+msgstr "sind"
+
+#: zp-core/admin.php:2263
+msgid "is"
+msgstr "ist"
+
+#: zp-core/admin.php:2264
+msgid "in moderation."
+msgstr "in Moderation."
+
+#: zp-core/albumsort.php:55
+msgid "&laquo; back to the list"
+msgstr "&laquo; Zurück zur Liste"
+
+#: zp-core/albumsort.php:55
+msgid "Back to the list of albums"
+msgstr "Zurück zur Albumliste"
+
+#: zp-core/albumsort.php:62
+msgid "Sort the images by dragging them..."
+msgstr "Bilder durch Verschieben sortieren."
+
+#: zp-core/albumsort.php:75
+msgid "Album order saved."
+msgstr "Albumsortierung gesichert."
+
+#: zp-core/albumsort.php:78
+msgid " Album sorting set to Manual."
+msgstr "Albumsortierung auf manuell gestellt."
+
+#, fuzzy
+#~ msgid "mass-edit all album data."
+#~ msgstr "bearbeite alle Albendaten zusammen"
+#~ msgid "Admin Toolbox"
+#~ msgstr "Verwaltung"
+#~ msgid "Sort gallery"
+#~ msgstr "Galerie sortieren"
+#~ msgid "New album"
+#~ msgstr "Neues Album"
+#~ msgid "Logout"
+#~ msgstr "Abmelden"
+#~ msgid "Search"
+#~ msgstr "Suche"
+

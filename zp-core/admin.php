@@ -2,7 +2,6 @@
 define('OFFSET_PATH', true);
 require_once("sortable.php");
 if (!$session_started) session_start();
-
 $sortby = array('Filename', 'Date', 'Title', 'ID' );
 $standardOptions = array('gallery_title','website_title','website_url','time_offset',
  												'gmaps_apikey','mod_rewrite','mod_rewrite_image_suffix',
@@ -358,10 +357,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 					$album->save();
 				} else {
 					$AlbumDirName = str_replace(SERVERPATH, '', $gallery->albumdir);
-					zp_error("The album couldn't be created in the 'albums' folder. This is usually "
-					. "a permissions problem. Try setting the permissions on the albums and cache folders to be world-writable "
-					. "using a shell: <code>chmod 777 " . $AlbumDirName . CACHEFOLDER ."</code>, or use your FTP program to give everyone write "
-					. "permissions to those folders.");
+					zp_error(gettext("The album couldn't be created in the 'albums' folder. This is usually a permissions problem. Try setting the permissions on the albums and cache folders to be world-writable using a shell:")." <code>chmod 777 " . $AlbumDirName . CACHEFOLDER ."</code>, "
+					. gettext("or use your FTP program to give everyone write permissions to those folders."));
 				}
 
 
@@ -373,16 +370,15 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				$page = "upload";
 				$error = true;
 				if ($files_empty) {
-					$errormsg = "You must upload at least one file.";
+					$errormsg = gettext("You must upload at least one file.");
 				} else if (empty($_POST['folder'])) {
-					$errormsg = "You must enter a folder name for your new album.";
+					$errormsg = gettext("You must enter a folder name for your new album.");
 				} else if (empty($_POST['processed'])) {
-					$errormsg = "You've most likely exceeded the upload limits. Try uploading fewer files at a time, or use a ZIP file.";
+					$errormsg = gettext("You've most likely exceeded the upload limits. Try uploading fewer files at a time, or use a ZIP file.");
 
 				} else {
-					$errormsg = "There was an error submitting the form. Please try again. If this keeps happening, check your "
-					. "server and PHP configuration (make sure file uploads are enabled, and upload_max_filesize is set high enough). "
-					. "If you think this is a bug, file a bug report. Thanks!";
+					$errormsg = gettext("There was an error submitting the form. Please try again. If this keeps happening, check your server and PHP configuration (make sure file uploads are enabled, and upload_max_filesize is set high enough)")
+					. gettext("If you think this is a bug, file a bug report. Thanks!");
 				}
 			}
 
@@ -678,7 +674,7 @@ if (!zp_loggedin()) {
 if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 	$page = 'options';
 	echo "<div class=\"errorbox space\">";
-	echo "<h2>Password reset request.<br/>You may now set admin usernames and passwords.</h2>";
+	echo "<h2>".gettext("Password reset request.<br/>You may now set admin usernames and passwords.")."</h2>";
 	echo "</div>";
 }
 switch ($page) {
@@ -699,6 +695,7 @@ switch ($page) {
 /************************************************************************************/
 
 if ($page == "edit") {  
+
 /** SINGLE ALBUM ********************************************************************/
 if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	$folder = strip($_GET['album']);
@@ -719,8 +716,8 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	}
 	?>
 <h1>Edit Album: <em><?php echo $album->name; ?></em></h1>
-<p><?php printAdminLinks("edit" . $albumdir, "&laquo; Back", "Back to the list of albums (go up one level)");?>
-| <?php printSortLink($album, "Sort Album", "Sort Album"); ?> | <?php printViewLink($album, "View Album", "View Album"); ?>
+<p><?php printAdminLinks(gettext("edit") . $albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
+| <?php printSortLink($album, gettext("Sort Album"), gettext("Sort Album")); ?> | <?php printViewLink($album, gettext("View Album"), gettext("View Album")); ?>
 </p>
 
 	<?php displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */ ?>
@@ -729,13 +726,13 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		if (isset($_GET['mismatch'])) {
 			?>
 <div class="errorbox" id="message1">
-<h2>Your passwords did not match</h2>
+<h2><?php echo gettext("Your passwords did not match"); ?></h2>
 </div>
 			<?php
 } else {
 	?>
 <div class="messagebox" id="message1">
-<h2>Save Successful</h2>
+<h2><?php echo gettext("Save Successful"); ?></h2>
 </div>
 	<?php } ?> <script type="text/javascript">
 						window.setTimeout('Effect.Fade($(\'message1\'))', 2500);
@@ -755,23 +752,21 @@ if (count($subalbums) > 0) {
 	if ($album->getNumImages() > 0)  { ?>
 <p>
 
-</a><a href="#imageList" title="Scroll down to the image list.">Image
-List &raquo;</a>
-</p>
+</a><a href="#imageList" title="<?php echo gettext('Scroll down to the image list.'); ?>">
+<?php echo gettext("Image List"); ?> &raquo;</a>
+
 	<?php } ?>
 
 <table class="bordered" width="100%">
 	<input type="hidden" name="subalbumsortby" value="Manual" />
 	<tr>
 		<th colspan="8">
-		<h1>Albums</h1>
+		<h1><?php echo gettext("Albums"); ?></h1>
 		</th>
 	</tr>
 	<tr>
-		<td colspan="8">Drag the albums into the order you wish them
-		displayed. Select an album to edit its description and data, or <a
-			href="?page=edit&album=<?php echo urlencode($album->name)?>&massedit">mass-edit
-		all album data</a>.</td>
+		<td colspan="8"><?php echo gettext("Drag the albums into the order you wish them displayed. Select an album to edit its description and data, or"); ?>
+		 <a	href="?page=edit&album=<?php echo urlencode($album->name)?>&massedit"><?php echo gettext("mass-edit all album data"); ?></a>.</td>
 	</tr>
 	<tr>
 		<td style="padding: 0px 0px;" colspan="8">
@@ -786,28 +781,26 @@ List &raquo;</a>
 	<tr>
 		<td colspan="8">
 		<p align="right"><img src="images/lock.png" style="border: 0px;"
-			alt="Protected" />Has Password&nbsp; <img src="images/pass.png"
-			style="border: 0px;" alt="Published" />Published&nbsp; <img
-			src="images/action.png" style="border: 0px;" alt="Unpublished" />Unpublished&nbsp;
-		<img src="images/cache.png" style="border: 0px;" alt="Cache the album" />Cache
-		the album&nbsp; <img src="images/warn.png" style="border: 0px;"
-			alt="Refresh image metadata" />Refresh image metadata&nbsp; <img
-			src="images/reset.png" style="border: 0px;" alt="Reset hitcounters" />Reset
-		hitcounters&nbsp; <img src="images/fail.png" style="border: 0px;"
+			alt="Protected" /><?php echo gettext("Has Password"); ?>&nbsp; <img src="images/pass.png"
+			style="border: 0px;" alt="Published" /><?php echo gettext("Published"); ?>&nbsp; <img
+			src="images/action.png" style="border: 0px;" alt="Unpublished" /><?php echo gettext("Unpublished"); ?>&nbsp;
+		<img src="images/cache.png" style="border: 0px;" alt="Cache the album" /><?php echo gettext("Cache	the album"); ?>&nbsp; <img src="images/warn.png" style="border: 0px;"
+			alt="Refresh image metadata" /><?php echo gettext("Refresh image metadata"); ?>&nbsp; <img
+			src="images/reset.png" style="border: 0px;" alt="Reset hitcounters" /><?php echo gettext("Reset	hitcounters"); ?>&nbsp; <img src="images/fail.png" style="border: 0px;"
 			alt="Delete" />Delete</p>
 			<?php
-			zenSortablesSaveButton("?page=edit&album=" . urlencode($album->name) . "&subalbumsaved", "Save Order");
+			zenSortablesSaveButton("?page=edit&album=" . urlencode($album->name) . "&subalbumsaved", gettext("Save Order"));
 			?></td>
 	</tr>
 </table>
 
 <?php
 			if (isset($_GET['subalbumsaved'])) {
-				echo "<p>Subalbum order saved.</p>";
+				echo "<p>".gettext("Subalbum order saved")."</p>";
 			}
 } ?> <!-- Images List --> <a name="imageList"></a> <?php if (count($album->getSubalbums()) > 10) { ?>
-<p><a href="#subalbumList" title="Scroll up to the sub-album list">&laquo;
-Subalbum List</a></p>
+<p><a href="#subalbumList" title="<?php gettext('Scroll up to the sub-album list'); ?>">&laquo;
+<?php echo gettext("Subalbum List"); ?></a></p>
 <?php }
 if (count($album->getImages())) {
 	?>
@@ -821,12 +814,12 @@ if (count($album->getImages())) {
 <table class="bordered">
 	<tr>
 		<th colspan="3">
-		<h1>Images</h1>
+		<h1><?php echo gettext("Images"); ?></h1>
 		</th>
 	</tr>
 	<tr>
 		<td><input type="submit" value="save" /></td>
-		<td colspan="2">Click the images for a larger version</td>
+		<td colspan="2"><?php echo gettext("Click the images for a larger version"); ?></td>
 	</tr>
 
 	<?php
@@ -859,63 +852,63 @@ if (count($album->getImages())) {
 			$result = query_single_row("SELECT `hitcounter` FROM " . prefix('images') . " WHERE `id` = $id");
 			$hc = $result['hitcounter'];
 			if (empty($hc)) { $hc = '0'; }
-			echo "<td></td><td>Hit counter: ". $hc . " <input type=\"checkbox\" name=\"reset_hitcounter\"> Reset</td>";
+			echo "<td></td><td>". gettext("Hit counter:"). $hc . " <input type=\"checkbox\" name=\"".gettext("reset_hitcounter")."\"> ".gettext("Reset")."</td>";
 			?>
 			<tr>
-				<td align="right" valign="top">Description:</td>
+				<td align="right" valign="top"><?php echo gettext("Description:"); ?></td>
 				<td><textarea name="<?php echo $currentimage; ?>-desc" cols="60"
 					rows="4" style="width: 360px"><?php echo $image->getDesc(); ?></textarea></td>
 			</tr>
 			<tr>
-				<td align="right" valign="top">Location:</td>
+				<td align="right" valign="top"><?php echo gettext("Location:"); ?></td>
 				<td><input type="text" size="56" style="width: 360px"
 					name="<?php echo $currentimage; ?>-location"
 					value="<?php echo $image->getLocation(); ?>" /></td>
 			</tr>
 			<tr>
-				<td align="right" valign="top">City:</td>
+				<td align="right" valign="top"><?php echo gettext("City:"); ?></td>
 				<td><input type="text" size="56" style="width: 360px"
 					name="<?php echo $currentimage; ?>-city"
 					value="<?php echo $image->getCity(); ?>" /></td>
 			</tr>
 			<tr>
-				<td align="right" valign="top">State:</td>
+				<td align="right" valign="top"><?php echo gettext("State:"); ?></td>
 				<td><input type="text" size="56" style="width: 360px"
 					name="<?php echo $currentimage; ?>-state"
 					value="<?php echo $image->getState(); ?>" /></td>
 			</tr>
 			<tr>
-				<td align="right" valign="top">Country:</td>
+				<td align="right" valign="top"><?php echo gettext("Country:"); ?></td>
 				<td><input type="text" size="56" style="width: 360px"
 					name="<?php echo $currentimage; ?>-country"
 					value="<?php echo $image->getCountry(); ?>" /></td>
 			</tr>
 			<tr>
-				<td align="right" valign="top">Credit:</td>
+				<td align="right" valign="top"><?php echo gettext("Credit:"); ?></td>
 				<td><input type="text" size="56" style="width: 360px"
 					name="<?php echo $currentimage; ?>-credit"
 					value="<?php echo $image->getCredit(); ?>" /></td>
 			</tr>
 			<tr>
-				<td align="right" valign="top">Copyright:</td>
+				<td align="right" valign="top"><?php echo gettext("Copyright:"); ?></td>
 				<td><input type="text" size="56" style="width: 360px"
 					name="<?php echo $currentimage; ?>-copyright"
 					value="<?php echo $image->getCopyright(); ?>" /></td>
 			</tr>
 			<tr>
-				<td align="right" valign="top">Tags:</td>
+				<td align="right" valign="top"><?php echo gettext("Tags:"); ?></td>
 				<td><input type="text" size="56" style="width: 360px"
 					name="<?php echo $currentimage; ?>-tags"
 					value="<?php echo $image->getTags(); ?>" /></td>
 			</tr>
 			<tr>
-				<td align="right" valign="top">Date:</td>
+				<td align="right" valign="top"><?php echo gettext("Date:"); ?></td>
 				<td><input type="text" size="56" style="width: 360px"
 					name="<?php echo $currentimage; ?>-date"
 					value="<?php $d=$image->getDateTime(); if ($d!='0000-00-00 00:00:00') { echo $d; } ?>" /></td>
 			</tr>
 			<tr>
-				<td align="right" valign="top">Custom&nbsp;data:</td>
+				<td align="right" valign="top"><?php echo gettext("Custom data:"); ?></td>
 				<td><input type="text" size="56" style="width: 360px"
 					name="<?php echo $currentimage; ?>-custom_data"
 					value="<?php echo $image->getCustomData(); ?>" /></td>
@@ -926,21 +919,21 @@ if (count($album->getImages())) {
 					type="checkbox" id="<?php echo $currentimage; ?>-allowcomments"
 					name="<?php echo $currentimage; ?>-allowcomments" value="1"
 					<?php if ($image->getCommentsAllowed()) { echo "checked=\"checked\""; } ?> />
-				Allow Comments</label> &nbsp; &nbsp; <label
+				<?php echo gettext("Allow Comments"); ?></label> &nbsp; &nbsp; <label
 					for="<?php echo $currentimage; ?>-Visible"><input type="checkbox"
 					id="<?php echo $currentimage; ?>-Visible"
 					name="<?php echo $currentimage; ?>-Visible" value="1"
 					<?php if ($image->getShow()) { echo "checked=\"checked\""; } ?> />
-				Visible</label></td>
+				<?php echo gettext("Visible"); ?></label></td>
 			</tr>
 		</table>
 		</td>
 
 		<td style="padding-left: 1em;"><a
 			href="javascript: confirmDeleteImage('?page=edit&action=deleteimage&album=<?php echo queryEncode($album->name); ?>&image=<?php echo queryEncode($image->filename); ?>');"
-			title="Delete the image <?php echo $image->filename; ?>"> <img
+			title="<?php gettext('Delete the image'); ?> <?php echo $image->filename; ?>"> <img
 			src="images/fail.png" style="border: 0px;"
-			alt="Delete the image <?php echo $image->filename; ?>" /></a></td>
+			alt="<?php gettext('Delete the image'); ?> <?php echo $image->filename; ?>" /></a></td>
 
 
 	</tr>
@@ -950,7 +943,7 @@ if (count($album->getImages())) {
 }
 ?>
 	<tr>
-		<td colspan="3"><input type="submit" value="save" /></td>
+		<td colspan="3"><input type="submit" value="<?php echo gettext('save'); ?>" /></td>
 	</tr>
 
 </table>
@@ -959,27 +952,29 @@ if (count($album->getImages())) {
 </form>
 
 <?php if (count($album->getSubalbums())) { ?>
-<p><a href="#subalbumList" title="Scroll up to the sub-album list">&nbsp;
-&nbsp; &nbsp;^ Subalbum List</a></p>
+<p><a href="#subalbumList" title="<?php gettext('Scroll up to the sub-album list'); ?>">&nbsp;
+&nbsp; &nbsp;^ <?php echo gettext("Subalbum List"); ?></a></p>
 <?php
 }
 }
 }?> <!-- page trailer -->
 <p><a href="?page=edit<?php echo $albumdir ?>"
-	title="Back to the list of albums (go up one level)">&laquo; Back</a></p>
+	title="<?php echo gettext('Back to the list of albums (go up one level)'); ?>">&laquo; <?php echo gettext("Back"); ?></a></p>
 
 
 <?php 
+
 /*** MULTI-ALBUM ***************************************************************************/ 
+
 } else if (isset($_GET['massedit'])) {
 	if (isset($_GET['saved'])) {
 		if (isset($_GET['mismatch'])) {
 			echo "\n<div class=\"errorbox\" id=\"message1\">";
-			echo "\n<h2>Your passwords did not match</h2>";
+			echo "\n<h2>".gettext("Your passwords did not match")."</h2>";
 			echo "\n</div>";
 		} else {
 			echo "\n<div class=\"messagebox\" id=\"message1\">";
-			echo "\n<h2>Save Successful</h2>";
+			echo "\n<h2>".gettext("Save Successful")."</h2>";
 			echo "\n</div>";
 		}
 	}
@@ -1009,9 +1004,9 @@ if (count($album->getImages())) {
 		}
 	}
 	?>
-<h1>Edit All Albums in <?php if (!isset($_GET['album'])) {echo "Gallery";} else {echo "<em>" . $album->name . "</em>";}?></h1>
+<h1><?php echo gettext("Edit All Albums in"); ?>" <?php if (!isset($_GET['album'])) { echo gettext("Gallery");} else {echo "<em>" . $album->name . "</em>";}?></h1>
 <p><a href="?page=edit<?php echo $albumdir ?>"
-	title="Back to the list of albums (go up a level)">&laquo; Back</a></p>
+	title="<?php gettext('Back to the list of albums (go up a level)'); ?>">&laquo; <?php echo gettext("Back"); ?></a></p>
 <div class="box" style="padding: 15px;">
 
 <form name="albumedit"
@@ -1028,11 +1023,14 @@ if (count($album->getImages())) {
 	}
 	?></form>
 <?php printAlbumButtons($album) ?>
+
 </div>
 <?php 
+
 /*** EDIT ALBUM SELECTION *********************************************************************/ 
+
 } else { /* Display a list of albums to edit. */ ?>
-<h1>Edit Gallery</h1>
+<h1><?php echo gettext("Edit Gallery"); ?></h1>
 <?php displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */ ?>
 
 <?php
@@ -1041,14 +1039,11 @@ if (count($album->getImages())) {
 		setOption('gallery_sortdirection', 0);
 	}
 	?>
-<p><?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?> Drag the albums into the
-order you wish them displayed. <?php } ?> Select an album to edit its
-description and data, or <a href="?page=edit&massedit">mass-edit all
-album data</a>.</p>
+<p><?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?><?php echo gettext('Drag the albums into the order you wish them displayed.') ?><?php } ?> <?php echo gettext('Select an album to edit its description and data, or'); ?><a href="?page=edit&massedit"> <?php echo gettext('mass-edit all album data'); ?></a>.</p>
 
 <table class="bordered" width="100%">
 	<tr>
-		<th style="text-align: left;">Edit this album</th>
+		<th style="text-align: left;"><?php echo gettext("Edit this album"); ?></th>
 	</tr>
 	<tr>
 		<td style="padding: 0px 0px;" colspan="2">
@@ -1072,24 +1067,22 @@ album data</a>.</p>
 </table>
 <div>
 <p align="right"><img src="images/lock.png" style="border: 0px;"
-	alt="Protected" />Has Password&nbsp; <img src="images/pass.png"
-	style="border: 0px;" alt="Published" />Published&nbsp; <img
-	src="images/action.png" style="border: 0px;" alt="Unpublished" />Unpublished&nbsp;
-<img src="images/cache.png" style="border: 0px;" alt="Cache the album" />Cache
-the album&nbsp; <img src="images/warn.png" style="border: 0px;"
-	alt="Refresh image metadata" />Refresh image metadata&nbsp; <img
-	src="images/reset.png" style="border: 0px;" alt="Reset hitcounters" />Reset
-hitcounters&nbsp; <img src="images/fail.png" style="border: 0px;"
-	alt="Delete" />Delete</p>
+	alt="<?php gettext('Protected'); ?>" /><?php echo gettext("Has Password"); ?>&nbsp; <img src="images/pass.png"
+	style="border: 0px;" alt="<?php gettext('Published'); ?>" /><?php echo gettext("Published"); ?>&nbsp; <img
+	src="images/action.png" style="border: 0px;" alt="<?php gettext('Unpublished'); ?>" /><?php echo gettext("Unpublished"); ?>&nbsp;
+<img src="images/cache.png" style="border: 0px;" alt="<?php gettext('Cache the album'); ?>" /><?php echo gettext("Cache the album"); ?>&nbsp; <img src="images/warn.png" style="border: 0px;"
+	alt="<?php gettext('Refresh image metadata'); ?>" /><?php echo gettext("Refresh image metadata"); ?>&nbsp; <img
+	src="images/reset.png" style="border: 0px;" alt="<?php gettext('Reset hitcounters'); ?>" /><?php echo gettext("Reset hitcounters"); ?>&nbsp; <img src="images/fail.png" style="border: 0px;"
+	alt="Delete" /><?php echo gettext("Delete"); ?></p>
 <?php
 		if ($_zp_loggedin & ADMIN_RIGHTS) {
-			zenSortablesSaveButton("?page=edit&saved", "Save Order");
+			zenSortablesSaveButton("?page=edit&saved", gettext("Save Order"));
 		}
 		?></div>
 
 <?php
 		if (isset($_GET['saved'])) {
-			echo "<p>Gallery order saved.</p>";
+			echo "<p>".gettext("Gallery order saved.")."</p>";
 		}
 }  
 /**** UPLOAD ************************************************************************/
@@ -1110,29 +1103,27 @@ hitcounters&nbsp; <img src="images/fail.png" style="border: 0px;"
 					?> );
 			</script>
 
-<h1>Upload Photos</h1>
-<p>This web-based upload accepts image formats: <acronym
+<h1><?php echo gettext("Upload Photos"); ?></h1>
+<p><?php echo gettext("This web-based upload accepts image formats:"); ?> <acronym
 	title="Joint Picture Expert's Group">JPEG</acronym>, <acronym
 	title="Portable Network Graphics">PNG</acronym> and <acronym
-	title="Graphics Interchange Format">GIF</acronym>. You can also upload
-a <strong>ZIP</strong> archive containing any of those file types.</p>
+	title="Graphics Interchange Format">GIF</acronym>. <?php echo gettext("You can also upload a <strong>ZIP</strong> archive containing any of those file types."); ?></p>
 <!--<p><em>Note:</em> When uploading archives, <strong>all</strong> images in the archive are added to the album, regardles of directory structure.</p>-->
-<p>The maximum size for any one file is <strong><?php echo ini_get('upload_max_filesize'); ?>B</strong>.
-Don't forget, you can also use <acronym title="File Transfer Protocol">FTP</acronym>
-to upload folders of images into the albums directory!</p>
+<p><?php echo gettext("The maximum size for any one file is"); ?> <strong><?php echo ini_get('upload_max_filesize'); ?>B</strong>.
+<?php echo gettext("Don't forget, you can also use"); ?> <acronym title="File Transfer Protocol">FTP</acronym>
+<?php echo gettext("to upload folders of images into the albums directory!"); ?></p>
 
 <?php if (isset($error) && $error) { ?>
 <div class="errorbox">
-<h2>Something went wrong...</h2>
-<?php echo (empty($errormsg) ? "There was an error submitting the form. Please try again." : $errormsg); ?>
+<h2><?php echo gettext("Something went wrong..."); ?></h2>
+<?php echo (empty($errormsg) ? gettext("There was an error submitting the form. Please try again.") : $errormsg); ?>
 </div>
 <?php
 }
 if (ini_get('safe_mode')) { ?>
 <div class="errorbox">
-<h2>PHP Safe Mode Restrictions in effect!</h2>
-<p>Zenphoto is unable to perform uploads when PHP Safe Mode restrictions
-are in effect</p>
+<h2><?php echo gettext("PHP Safe Mode Restrictions in effect!"); ?></h2>
+<p><?php echo gettext("Zenphoto is unable to perform uploads when PHP Safe Mode restrictions are in effect"); ?></p>
 </div>
 <?php
 }
@@ -1144,7 +1135,7 @@ are in effect</p>
 	type="hidden" name="processed" value="1" /> <input type="hidden"
 	name="existingfolder" value="false" />
 
-<div id="albumselect">Upload to: <?php if (isset($_GET['new'])) { 
+<div id="albumselect"><?php echo gettext("Upload to:"); ?> <?php if (isset($_GET['new'])) { 
 	$checked = "checked=\"1\"";
 } else {
 	$checked = '';
@@ -1182,24 +1173,23 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 <div id="newalbumbox" style="margin-top: 5px;">
 <div><label><input type="checkbox" name="newalbum"
 <?php echo $checked; ?> onClick="albumSwitch(this.form.albumselect)">
-Make a new Album</label></div>
-<div id="publishtext">and <label><input type="checkbox"
-	name="publishalbum" id="publishalbum" value="1" checked="1" /> Publish
-the album so everyone can see it.</label></div>
+<?php echo gettext("Make a new Album"); ?></label></div>
+<div id="publishtext"><?php echo gettext("and"); ?><label><input type="checkbox"
+	name="publishalbum" id="publishalbum" value="1" checked="1" /> <?php echo gettext("Publish the album so everyone can see it."); ?></label></div>
 </div>
 
-<div id="albumtext" style="margin-top: 5px;">called: <input
+<div id="albumtext" style="margin-top: 5px;"><?php echo gettext("called:"); ?> <input
 	id="albumtitle" size="42" type="text" name="albumtitle" value=""
 	onKeyUp="updateFolder(this, 'folderdisplay', 'autogen');" />
 
-<div style="position: relative; margin-top: 4px;">with the folder name:
+<div style="position: relative; margin-top: 4px;"><?php echo gettext("with the folder name:"); ?>
 <div id="foldererror"
 	style="display: none; color: #D66; position: absolute; z-index: 100; top: 2.5em; left: 0px;"></div>
 <input id="folderdisplay" size="18" type="text" name="folderdisplay"
 	disabled="1" onKeyUp="validateFolder(this);" /> <label><input
 	type="checkbox" name="autogenfolder" id="autogen" checked="1"
 	onClick="toggleAutogen('folderdisplay', 'albumtitle', this);" />
-Auto-generate</label> <br />
+<?php echo gettext("Auto-generate"); ?></label> <br />
 <br />
 </div>
 
@@ -1224,12 +1214,11 @@ Auto-generate</label> <br />
 <div id="place" style="display: none;"></div>
 <!-- New boxes get inserted before this -->
 
-<p><a href="javascript:addUploadBoxes('place','filetemplate',5)"
-	title="Doesn't reload!">+ Add more upload boxes</a> <small>(won't
-reload the page, but remember your upload limits!)</small></p>
+<p><a href="javascript:addUploadBoxes('place','filetemplate',5)"	title="Doesn't reload!">+ <?php echo gettext("Add more upload boxes"); ?></a> <small>
+<?php echo gettext("(won't reload the page, but remember your upload limits!)"); ?></small></p>
 
 
-<p><input type="submit" value="Upload"
+<p><input type="submit" value="<?php echo gettext('Upload'); ?>"
 	onClick="this.form.folder.value = this.form.folderdisplay.value;"
 	class="button" /></p>
 
@@ -1239,6 +1228,7 @@ reload the page, but remember your upload limits!)</small></p>
 <script type="text/javascript">albumSwitch(document.uploadform.albumselect);</script>
 
 <?php 
+
 /*** COMMENTS ***********************************************************************/
 /************************************************************************************/ 
 } else if ($page == "comments") {
@@ -1249,48 +1239,43 @@ reload the page, but remember your upload limits!)</small></p>
 
 	$comments = fetchComments($viewall ? "" : 20);
 	?>
-<h1>Comments</h1>
+<h1><?php echo gettext("Comments"); ?></h1>
 
 <?php /* Display a message if needed. Fade out and hide after 2 seconds. */
 	if ((isset($_GET['ndeleted']) && $_GET['ndeleted'] > 0) || isset($_GET['sedit'])) { ?>
 <div class="messagebox" id="message"><?php if (isset($_GET['ndeleted'])) { ?>
-<h2><?php echo $_GET['ndeleted']; ?> Comments deleted successfully.</h2>
+<h2><?php echo $_GET['ndeleted']; ?> <?php echo gettext("Comments deleted successfully."); ?></h2>
 <?php } ?> <?php if (isset($_GET['sedit'])) { ?>
-<h2>Comment saved successfully.</h2>
+<h2><?php echo gettext("Comment saved successfully."); ?></h2>
 <?php } ?></div>
 <script type="text/javascript">
 					Fat.fade_and_hide_element('message', 30, 1000, 2000, Fat.get_bgcolor('message'), '#FFFFFF')
 				</script> <?php } ?>
 
-<p>You can edit or delete comments on your photos.</p>
+<p><?php echo gettext("You can edit or delete comments on your photos."); ?></p>
 <?php if($viewall) { ?>
-<p>Showing <strong>all</strong> comments. <a
-	href="?page=comments<?php echo ($fulltext ? "&fulltext":""); ?>"><strong>Just
-show 20.</strong></a></p>
+<p><?php echo gettext("Showing <strong>all</strong> comments."); ?> <a
+	href="?page=comments<?php echo ($fulltext ? "&fulltext":""); ?>"><strong><?php echo gettext("Just show 20."); ?></strong></a></p>
 <?php } else { ?>
-<p>Showing the latest <strong>20</strong> comments. <a
-	href="?page=comments&viewall<?php echo ($fulltext ? "&fulltext":""); ?>"><strong>View
-All</strong></a></p>
+<p><?php echo gettext("Showing the latest <strong>20</strong> comments."); ?> <a
+	href="?page=comments&viewall<?php echo ($fulltext ? "&fulltext":""); ?>"><strong><?php echo gettext("View All"); ?></strong></a></p>
 <?php } ?>
 <form name="comments" action="?page=comments&action=deletecomments"
 	method="post"
-	onSubmit="return confirm('Are you sure you want to delete these comments?');">
+	onSubmit="return confirm('<?php echo gettext("Are you sure you want to delete these comments?"); ?>');">
 <table class="bordered">
 	<tr>
 		<th>&nbsp;</th>
-		<th>Album/Image</th>
-		<th>Author/Link</th>
-		<th>Date/Time</th>
-		<th>Comment <?php if(!$fulltext) { ?>(<a
-			href="?page=comments&fulltext<?php echo $viewall ? "&viewall":""; ?>">View
-		full text</a>) <?php } else { ?>(<a
-			href="?page=comments<?php echo $viewall ? "&viewall":""; ?>">View
-		truncated</a>)<?php } ?></th>
-		<th>E-Mail</th>
-		<th>Spam</th>
-		<th>Edit</th>
-		<th>Delete</th>
-	</tr>
+		<th><?php echo gettext("Album/Image"); ?></th>
+		<th><?php echo gettext("Author/Link"); ?></th>
+		<th><?php echo gettext("Date/Time"); ?></th>
+		<th><?php echo gettext("Comment"); ?>" <?php if(!$fulltext) { ?>(<a
+			href="?page=comments&fulltext<?php echo $viewall ? "&viewall":""; ?>"><?php echo gettext("View full text"); ?></a>) <?php } else { ?>(<a
+			href="?page=comments<?php echo $viewall ? "&viewall":""; ?>"><?php echo gettext("View truncated"); ?></a>)<?php } ?></th>
+		<th><?php echo gettext("E-Mail"); ?>/th>
+		<th><?php echo gettext("Spam"); ?></th>
+		<th><?php echo gettext("Edit"); ?></th>
+		<th><?php echo gettext("Delete"); ?>"
 
 	<?php
 	foreach ($comments as $comment) {
@@ -1313,10 +1298,10 @@ All</strong></a></p>
 					$albumtitle = $albumdata['albumtitle'];
 					if (empty($albumtitle)) $albumtitle = $album;
 				} else {
-					$title = 'database error';
+					$title = gettext('database error');
 				}
 			} else {
-				$title = 'database error';
+				$title = gettext('database error');
 			}
 		} else {
 			$image = '';
@@ -1329,7 +1314,7 @@ All</strong></a></p>
 				$albumtitle = $albumdata['albumtitle'];
 				if (empty($albumtitle)) $albumtitle = $album;
 			} else {
-				$title = 'database error';
+				$title = gettext('database error');
 			}
 		}
 		$date  = myts_date("n/j/Y, g:i a", $comment['date']);
@@ -1353,7 +1338,7 @@ All</strong></a></p>
 		<td align="center"><?php
 		if ($inmoderation) {
 			echo "<a href=\"?action=moderation&id=" . $id . "\">";
-			echo '<img src="images/warn.png" style="border: 0px;" alt="remove from moderation" /></a>';
+			echo '<img src="images/warn.png" style="border: 0px;" alt='. gettext("remove from moderation").' /></a>';
 		}
 		?></td>
 		<td align="center"><a href="?page=editcomment&id=<?php echo $id; ?>"
@@ -1368,13 +1353,13 @@ All</strong></a></p>
 	<tr>
 		<td colspan="9" class="subhead"><label><input type="checkbox"
 			name="allbox" onClick="checkAll(this.form, 'ids[]', this.checked);" />
-		Check All</label></td>
+		<?php echo gettext("Check All"); ?></label></td>
 	</tr>
 
 
 </table>
 
-<input type="submit" value="Delete Selected Comments" class="button" />
+<input type="submit" value="<?php echo gettext('Delete Selected Comments'); ?>" class="button" />
 
 
 </form>
@@ -1383,10 +1368,10 @@ All</strong></a></p>
 /*** EDIT COMMENT *******************************************************************/
 /************************************************************************************/ 
 } else if ($page == "editcomment") { ?>
-<h1>edit comment</h1>
+<h1><?php echo gettext("edit comment"); ?></h1>
 <?php
 	if (isset($_GET['id'])) $id = $_GET['id'];
-	else echo "<h2>No comment specified. <a href=\"?page=comments\">&laquo Back</a></h2>";
+	else echo "<h2>". gettext("No comment specified.")." <a href=\"?page=comments\">&laquo ".gettext("Back")."</a></h2>";
 
 	$commentarr = query_single_row("SELECT name, website, date, comment, email FROM ".prefix('comments')." WHERE id = $id LIMIT 1");
 	extract($commentarr);
@@ -1397,32 +1382,32 @@ All</strong></a></p>
 <table>
 
 	<tr>
-		<td width="100">Author:</td>
+		<td width="100"><?php echo gettext("Author:"); ?></td>
 		<td><input type="text" size="40" name="name"
 			value="<?php echo $name; ?>" /></td>
 	</tr>
 	<tr>
-		<td>Web Site:</td>
+		<td><?php echo gettext("Web Site:"); ?></td>
 		<td><input type="text" size="40" name="website"
 			value="<?php echo $website; ?>" /></td>
 	</tr>
 	<tr>
-		<td>E-Mail:</td>
+		<td><?php echo gettext("E-Mail:"); ?></td>
 		<td><input type="text" size="40" name="email"
 			value="<?php echo $email; ?>" /></td>
 	</tr>
 	<tr>
-		<td>Date/Time:</td>
+		<td><?php echo gettext("Date/Time:"); ?></td>
 		<td><input type="text" size="18" name="date"
 			value="<?php echo $date; ?>" /></td>
 	</tr>
 	<tr>
-		<td valign="top">Comment:</td>
+		<td valign="top"><?php echo gettext("Comment:"); ?></td>
 		<td><textarea rows="8" cols="60" name="comment" /><?php echo $comment; ?></textarea></td>
 	</tr>
 	<tr>
 		<td></td>
-		<td><input type="submit" value="save" /> <input type="button"
+		<td><input type="submit" value="<?php echo gettext('save'); ?>" /> <input type="button"
 			value="cancel" onClick="window.location = '?page=comments';" />
 
 </table>
@@ -1436,12 +1421,12 @@ All</strong></a></p>
 <div id="container">
 <div id="mainmenu">
 <ul id="tabs">
-	<li><a href="#tab_admin">admin information</a></li>
+	<li><a href="#tab_admin"><?php echo gettext("admin information"); ?></a></li>
 	<?php if ((!$_zp_null_account) && ($_zp_loggedin & OPTIONS_RIGHTS)) { ?>
-	<li><a href="#tab_gallery">gallery configuration</a></li>
-	<li><a href="#tab_image">image display</a></li>
-	<li><a href="#tab_comments">comment configuration</a></li>
-	<li><a href="#tab_theme">theme options</a></li>
+	<li><a href="#tab_gallery"><?php echo gettext("gallery configuration"); ?></a></li>
+	<li><a href="#tab_image"><?php echo gettext("image display"); ?></a></li>
+	<li><a href="#tab_comments"><?php echo gettext("comment configuration"); ?></a></li>
+	<li><a href="#tab_theme"><?php echo gettext("theme options"); ?></a></li>
 	<?php } ?>
 </ul>
 </div>
@@ -1460,9 +1445,9 @@ All</strong></a></p>
 	}
 	if (isset($_GET['mismatch'])) {
 		if ($_GET['mismatch'] == 'newuser') {
-			$msg = 'You must supply a password';
+			$msg = gettext('You must supply a password');
 		} else {
-			$msg = 'Your passwords did not match';
+			$msg = gettext('Your passwords did not match');
 		}
 		echo '<div class="errorbox" id="message">';
 		echo  "<h2>$msg</h2>";
@@ -1476,7 +1461,7 @@ All</strong></a></p>
 <table class="bordered">
 	<tr>
 		<th colspan="3">
-		<h2>Admin login information</h2>
+		<h2><?php echo gettext("Admin login information"); ?></h2>
 		</th>
 	</tr>
 	<?php
@@ -1487,7 +1472,7 @@ All</strong></a></p>
 		$master = '';
 		if ($id == 0) {
 			if ($_zp_loggedin & ADMIN_RIGHTS) {
-				$master = " (<em>Master</em>)";
+				$master = " (<em>".gettext("Master")."</em>)";
 				$user['rights'] = $user['rights'] | ADMIN_RIGHTS;
 			}
 		}		
@@ -1496,7 +1481,7 @@ All</strong></a></p>
 		}
 		?>
 	<tr>
-		<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" width="175"><strong>Username:</strong></td>
+		<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" width="175"><strong><?php echo gettext("Username:"); ?></strong></td>
 		<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" width="200"><?php if (empty($userid)) {?>
 		<input type="text" size="40" name="<?php echo $id ?>-adminuser"
 			value="" /> <?php  } else { echo $userid.$master; ?> 
@@ -1510,8 +1495,8 @@ All</strong></a></p>
 		</td>
 	</tr>
 	<tr>
-		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Password:<br />
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(repeat)</td>
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Password:"); ?><br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?></td>
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><?php $x = $user['pass']; if (!empty($x)) { $x = '          '; } ?>
 		<input type="password" size="40" name="<?php echo $id ?>-adminpass"
 			value="<?php echo $x; ?>" /><br />
@@ -1520,35 +1505,36 @@ All</strong></a></p>
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 		<table class="checkboxes" >
 			<tr>
-				<td style="width: 40%; padding-bottom: 3px;<?php echo $background; ?>"><strong>Rights</strong>:
+				<td style="width: 40%; padding-bottom: 3px;<?php echo $background; ?>"><strong><?php echo gettext("Rights"); ?></strong>:
 				<input type="hidden" name="<?php echo $id ?>-main_rights"
 					value=<?php echo MAIN_RIGHTS; ?>></td>
 			</tr>
 			<tr>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-admin_rights"
-					value=<?php echo ADMIN_RIGHTS; if ($user['rights'] & ADMIN_RIGHTS) echo ' checked';echo $alterrights; ?>>User
-				admin</td>
+					value=<?php echo ADMIN_RIGHTS; if ($user['rights'] & ADMIN_RIGHTS) echo ' checked';echo $alterrights; ?>><?php echo gettext("User	admin"); ?>
+				</td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-options_rights"
-					value=<?php echo OPTIONS_RIGHTS; if ($user['rights'] & OPTIONS_RIGHTS) echo ' checked';echo$alterrights; ?>>Options</td>
+					value=<?php echo OPTIONS_RIGHTS; if ($user['rights'] & OPTIONS_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Options"); ?>
+				</td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-themes_rights"
-					value=<?php echo THEMES_RIGHTS; if ($user['rights'] & THEMES_RIGHTS) echo ' checked';echo$alterrights; ?>>Themes</td>
+					value=<?php echo THEMES_RIGHTS; if ($user['rights'] & THEMES_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Themes"); ?></td>
 			</tr>
 			<tr>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-edit_rights"
-					value=<?php echo EDIT_RIGHTS; if ($user['rights'] & EDIT_RIGHTS) echo ' checked';echo$alterrights; ?>>Edit</td>
+					value=<?php echo EDIT_RIGHTS; if ($user['rights'] & EDIT_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Edit"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-comment_rights"
-					value=<?php echo COMMENT_RIGHTS; if ($user['rights'] & COMMENT_RIGHTS) echo ' checked';echo$alterrights; ?>>Comment</td>
+					value=<?php echo COMMENT_RIGHTS; if ($user['rights'] & COMMENT_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Comment"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-upload_rights"
-					value=<?php echo UPLOAD_RIGHTS; if ($user['rights'] & UPLOAD_RIGHTS) echo ' checked';echo$alterrights; ?>>Upload</td>
+					value=<?php echo UPLOAD_RIGHTS; if ($user['rights'] & UPLOAD_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Upload"); ?></td>
 			</tr>
 		</table>
 
 		</td>
 	</tr>
 	<tr>
-		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Full name: <br />
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Full name:"); ?> <br />
 		<br />
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email:</td>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("email:"); ?></td>
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="text" size="40" name="<?php echo $id ?>-admin_name"
 			value="<?php echo $user['name'];?>" /> <br />
 		<br />
@@ -1577,7 +1563,7 @@ All</strong></a></p>
 ?>
 	<tr>
 		<td></td>
-		<td><input type="submit" value="save" /></td>
+		<td><input type="submit" value="<?php echo gettext('save'); ?>" /></td>
 		<td></td>
 	</tr>
 </table>
@@ -1589,7 +1575,7 @@ All</strong></a></p>
 	type="hidden" name="savegalleryoptions" value="yes" /> <?php
 	if (isset($_GET['mismatch'])) {
 		echo '<div class="errorbox" id="message">';
-		echo  "<h2>Your " . $_GET['mismatch'] . " passwords did not match</h2>";
+		echo  "<h2>". gettext("Your "). $_GET['mismatch'] . gettext(" passwords did not match")."</h2>";
 		echo '</div>';
 		echo '<script type="text/javascript">';
 		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
@@ -1597,7 +1583,7 @@ All</strong></a></p>
 	}
 	if (isset($_GET['badurl'])) {
 		echo '<div class="errorbox" id="message">';
-		echo  "<h2>Your Website URL is not valid</h2>";
+		echo  "<h2>".gettext("Your Website URL is not valid")."</h2>";
 		echo '</div>';
 		echo '<script type="text/javascript">';
 		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
@@ -1607,96 +1593,89 @@ All</strong></a></p>
 <table class="bordered">
 	<tr>
 		<th colspan="3">
-		<h2>General Gallery Configuration</h2>
+		<h2><?php echo gettext("General Gallery Configuration"); ?></h2>
 		</th>
 	</tr>
 	<tr>
-		<td width="175">Gallery title:</td>
+		<td width="175"><?php echo gettext("Gallery title:"); ?></td>
 		<td width="200"><input type="text" size="40" name="gallery_title"
 			value="<?php echo getOption('gallery_title');?>" /></td>
-		<td>What you want to call your photo gallery.</td>
+		<td><?php echo gettext("What you want to call your photo gallery."); ?></td>
 	</tr>
 	<tr>
-		<td>Gallery password:<br />
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(repeat)
+		<td><?php echo gettext("Gallery password:"); ?><br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php gettext("(repeat)"); ?>
 		</td>
 		<td><?php $x = getOption('gallery_password'); if (!empty($x)) { $x = '          '; } ?>
 		<input type="password" size="40" name="gallerypass"
 			value="<?php echo $x; ?>" /><br />
 		<input type="password" size="40" name="gallerypass_2"
 			value="<?php echo $x; ?>" /></td>
-		<td>Master password for the gallery. If this is set, visitors must
-		know this password to view the gallery.</td>
+		<td><?php echo gettext("Master password for the gallery. If this is set, visitors must	know this password to view the gallery."); ?></td>
 	</tr>
 	<tr>
-		<td>Gallery password hint:</td>
+		<td><?php echo gettext("Gallery password hint:"); ?></td>
 		<td><input type="text" size="40" name="gallery_hint"
 			value="<?php echo getOption('gallery_hint');?>" /></td>
-		<td>A reminder hint for the password.</td>
+		<td><?php echo gettext("A reminder hint for the password."); ?></td>
 	</tr>
 	<tr>
-		<td>Search password:<br />
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(repeat)
+		<td><?php echo gettext("Search password:"); ?><br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?>
 		</td>
 		<td><?php $x = getOption('search_password'); if (!empty($x)) { $x = '          '; } ?>
 		<input type="password" size="40" name="searchpass"
 			value="<?php echo $x; ?>" /><br />
 		<input type="password" size="40" name="searchpass_2"
 			value="<?php echo $x; ?>" /></td>
-		<td>Password for the searching. If this is set, visitors must know
-		this password to view search results.</td>
+		<td><?php echo gettext("Password for the searching. If this is set, visitors must know this password to view search results."); ?></td>
 	</tr>
 	<tr>
-		<td>Search password hint:</td>
+		<td><?php echo gettext("Search password hint:"); ?></td>
 		<td><input type="text" size="40" name="search_hint"
 			value="<?php echo getOption('search_hint');?>" /></td>
-		<td>A reminder hint for the password.</td>
+		<td><?php echo gettext("A reminder hint for the password."); ?></td>
 	</tr>
 	<tr>
-		<td>Website title:</td>
+		<td><?php echo gettext("Website title:"); ?></td>
 		<td><input type="text" size="40" name="website_title"
 			value="<?php echo getOption('website_title');?>" /></td>
-		<td>Your web site title.</td>
+		<td><?php echo gettext("Your web site title."); ?></td>
 	</tr>
 	<tr>
-		<td>Website url:</td>
+		<td><?php echo gettext("Website url:"); ?></td>
 		<td><input type="text" size="40" name="website_url"
 			value="<?php echo getOption('website_url');?>" /></td>
-		<td>This is used to link back to your main site, but your theme must
-		support it.</td>
+		<td><?php echo gettext("This is used to link back to your main site, but your theme must	support it."); ?></td>
 	</tr>
 	<tr>
-		<td>Server protocol:</td>
+		<td><?php echo gettext("Server protocol:"); ?></td>
 		<td><input type="text" size="40" name="server_protocol"
 			value="<?php echo getOption('server_protocol');?>" /></td>
-		<td>If you're running a secure server, change this to <em>https</em>
-		(Most people will leave this alone.)</td>
+		<td><?php echo gettext("If you're running a secure server, change this to"); ?> <em>https</em>
+		<?php echo gettext("(Most people will leave this alone.)"); ?></td>
 	</tr>
 	<tr>
-		<td>Time offset (hours):</td>
+		<td><?php echo gettext("Time offset (hours):"); ?></td>
 		<td><input type="text" size="40" name="time_offset"
 			value="<?php echo getOption('time_offset');?>" /></td>
-		<td>If you're in a different time zone from your server, set the
-		offset in hours.</td>
+		<td><?php echo gettext("If you're in a different time zone from your server, set the	offset in hours."); ?></td>
 	</tr>
 	<tr>
-		<td>Enable mod_rewrite:</td>
+		<td><?php echo gettext("Enable mod_rewrite:"); ?></td>
 		<td><input type="checkbox" name="mod_rewrite" value="1"
 		<?php echo checked('1', getOption('mod_rewrite')); ?> /></td>
-		<td>If you have Apache <em>mod_rewrite</em>, put a checkmark here, and
-		you'll get nice cruft-free URLs.</td>
+		<td><?php echo gettext("If you have Apache <em>mod_rewrite</em>, put a checkmark here, and	you'll get nice cruft-free URLs."); ?></td>
 	</tr>
 	<tr>
-		<td>Mod_rewrite Image suffix:</td>
+		<td><?php echo gettext("Mod_rewrite Image suffix:"); ?></td>
 		<td><input type="text" size="40" name="mod_rewrite_image_suffix"
 			value="<?php echo getOption('mod_rewrite_image_suffix');?>" /></td>
-		<td>If <em>mod_rewrite</em> is checked above, zenphoto will appended
-		this to the end (helps search engines). Examples: <em>.html, .php,
-		/view</em>, etc.</td>
+		<td><?php echo gettext("If <em>mod_rewrite</em> is checked above, zenphoto will appended	this to the end (helps search engines). Examples: <em>.html, .php,	/view</em>, etc."); ?></td>
 	</tr>
 	<tr>
-		<td>Locale:</td>
-		<td><select id="locale" name="locale" DISABLED>
+		<td><?php echo gettext("Locale:"); ?></td>
+		<td><select id="locale" name="locale">
 			<?php
 			$dir = @opendir(SERVERPATH . "/" . ZENFOLDER ."/locale/");
 			$locales = array('');
@@ -1711,10 +1690,10 @@ All</strong></a></p>
 			generateListFromArray(array(getOption('locale')), $locales);
 			?>
 		</select></td>
-		<td>The internationalization & localization locale.</td>
+		<td><?php echo gettext("The internationalization & localization locale."); ?></td>
 	</tr>
 	<tr>
-		<td>Charset:</td>
+		<td><?php echo gettext("Charset:"); ?></td>
 		<td><select id="charset" name="charset">
 			<?php foreach ($charsets as $key => $charset) {
 			$key = strtoupper($key);
@@ -1723,18 +1702,16 @@ All</strong></a></p>
 			<?php if ($key == getOption('charset')) echo ' selected="selected"'; ?>><?php echo $charset; ?></option>
 			<?php } ?>
 		</select></td>
-		<td>The character encoding to use internally. Leave at <em>Unicode
-		(UTF-8)</em> if you're unsure.</td>
+		<td><?php echo gettext("The character encoding to use internally. Leave at <em>Unicode	(UTF-8)</em> if you're unsure."); ?></td>
 	</tr>
 	<tr>
-		<td>Number of RSS feed items:</td>
+		<td><?php echo gettext("Number of RSS feed items:"); ?></td>
 		<td><input type="text" size="40" name="feed_items"
 			value="<?php echo getOption('feed_items');?>" /></td>
-		<td>The number of new images/albums/comments you want to appear in
-		your site's RSS feed.</td>
+		<td><?php echo gettext("The number of new images/albums/comments you want to appear in your site's RSS feed."); ?></td>
 	</tr>
 	<tr>
-		<td>Sort gallery by:</td>
+		<td><?php echo gettext("Sort gallery by:"); ?></td>
 		<td><select id="sortselect" name="gallery_sorttype">
 			<?php
 		$sort = $sortby;
@@ -1744,66 +1721,63 @@ All</strong></a></p>
 		</select> <input type="checkbox" name="gallery_sortdirection"
 			value="1"
 			<?php echo checked('1', getOption('gallery_sortdirection')); ?> />
-		Descending</td>
-		<td>Sort order for the albums on the index of the gallery</td>
+		<?php echo gettext("Descending"); ?></td>
+		<td><?php echo gettext("Sort order for the albums on the index of the gallery"); ?></td>
 	</tr>
 	<tr>
-		<td>Search fields:</td>
+		<td><?php echo gettext("Search fields:"); ?></td>
 		<td><?php $fields = getOption('search_fields'); ?>
 		<table class="checkboxes">
 			<tr>
 				<td><input type="checkbox" name="sf_title" value=1
-				<?php if ($fields & SEARCH_TITLE) echo ' checked'; ?>> Title</td>
+				<?php if ($fields & SEARCH_TITLE) echo ' checked'; ?>> <?php echo gettext("Title"); ?></td>
 				<td><input type="checkbox" name="sf_desc" value=1
-				<?php if ($fields & SEARCH_DESC) echo ' checked'; ?>> Description</td>
+				<?php if ($fields & SEARCH_DESC) echo ' checked'; ?>> <?php echo gettext("Description"); ?></td>
 				<td><input type="checkbox" name="sf_tags" value=1
-				<?php if ($fields & SEARCH_TAGS) echo ' checked'; ?>> Tags</td>
+				<?php if ($fields & SEARCH_TAGS) echo ' checked'; ?>> <?php echo gettext("Tags"); ?></td>
 			</tr>
 			<tr>
 				<td><input type="checkbox" name="sf_filename" value=1
 				<?php if ($fields & SEARCH_FILENAME) echo ' checked'; ?>>
-				File/Folder name</td>
+				<?php echo gettext("File/Folder name"); ?></td>
 				<td><input type="checkbox" name="sf_location" value=1
-				<?php if ($fields & SEARCH_LOCATION) echo ' checked'; ?>> Location</td>
+				<?php if ($fields & SEARCH_LOCATION) echo ' checked'; ?>> <?php echo gettext("Location"); ?></td>
 				<td><input type="checkbox" name="sf_city" value=1
-				<?php if ($fields & SEARCH_CITY) echo ' checked'; ?>> City</td>
+				<?php if ($fields & SEARCH_CITY) echo ' checked'; ?>> <?php echo gettext("City"); ?></td>
 			</tr>
 			<tr>
 				<td><input type="checkbox" name="sf_state" value=1
-				<?php if ($fields & SEARCH_STATE) echo ' checked'; ?>> State</td>
+				<?php if ($fields & SEARCH_STATE) echo ' checked'; ?>> <?php echo gettext("State"); ?></td>
 				<td><input type="checkbox" name="sf_country" value=1
-				<?php if ($fields & SEARCH_COUNTRY) echo ' checked'; ?>> Country</td>
+				<?php if ($fields & SEARCH_COUNTRY) echo ' checked'; ?>> <?php echo gettext("Country"); ?></td>
 			</tr>
 		</table>
 		</td>
-		<td>The set of fields on which searches may be performed.</td>
+		<td><?php echo gettext("The set of fields on which searches may be performed."); ?></td>
 	</tr>
 	<tr>
-		<td>Google Maps API key:</td>
+		<td><?php echo gettext("Google Maps API key:"); ?></td>
 		<td><input type="text" size="40" name="gmaps_apikey"
 			value="<?php echo getOption('gmaps_apikey');?>" /></td>
-		<td>If you're going to be using Google Maps, <a
-			href="http://www.google.com/apis/maps/signup.html" target="_blank">get
-		an API key</a> and enter it here.</td>
+		<td><?php echo gettext("If you're going to be using Google Maps,"); ?> <a	href="http://www.google.com/apis/maps/signup.html" target="_blank">
+				<?php echo gettext("get an API key</a> and enter it here."); ?></td>
 	</tr>
 	<tr>
-		<td>Enable Persistent Archives:</td>
+		<td><?php echo gettext("Enable Persistent Archives:"); ?></td>
 		<td><input type="checkbox" name="persistent_archive" value="1"
 		<?php echo checked('1', getOption('persistent_archive')); ?> /></td>
-		<td>Put a checkmark here to re-serve Zip Archive files. If not checked
-		they will be regenerated each time. <strong>Note: </strong>Setting
-		this option may impact password protected albums!</td>
+		<td><?php echo gettext("Put a checkmark here to re-serve Zip Archive files. If not checked	they will be regenerated each time."); ?> 
+		<?php echo gettext("<strong>Note: </strong>Setting	this option may impact password protected albums!"); ?></td>
 	</tr>
 	<tr>
-		<td>Enable gallery sessions:</td>
+		<td><?php echo gettext("Enable gallery sessions:"); ?></td>
 		<td><input type="checkbox" name="album_session" value="1"
 		<?php echo checked('1', getOption('album_session')); ?> /></td>
-		<td>Put a checkmark here if you are having issues with with album
-		password cookies not being retained.</td>
+		<td><?php echo gettext("Put a checkmark here if you are having issues with with album	password cookies not being retained."); ?></td>
 	</tr>
 	<tr>
 		<td></td>
-		<td><input type="submit" value="save" /></td>
+		<td><input type="submit" value="<?php echo gettext('save'); ?>" /></td>
 		<td></td>
 	</tr>
 </table>
@@ -1815,7 +1789,7 @@ All</strong></a></p>
 	type="hidden" name="saveimageoptions" value="yes" /> <?php
 	if (isset($_GET['mismatch'])) {
 		echo '<div class="errorbox" id="message">';
-		echo  "<h2>Your " . $_GET['mismatch'] . " passwords did not match</h2>";
+		echo  "<h2>".gettext("Your ") . $_GET['mismatch'] . gettext(" passwords did not match")."</h2>";
 		echo '</div>';
 		echo '<script type="text/javascript">';
 		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
@@ -1825,105 +1799,96 @@ All</strong></a></p>
 <table class="bordered">
 	<tr>
 		<th colspan="3">
-		<h2>Image Display</h2>
+		<h2><?php echo gettext("Image Display"); ?></h2>
 		</th>
 	</tr>
 	<tr>
-		<td>Sort images by:</td>
+		<td><?php echo gettext("Sort images by:"); ?></td>
 		<td><select id="imagesortselect" name="image_sorttype">
 			<?php generateListFromArray(array(getOption('image_sorttype')), $sortby); ?>
 		</select> <input type="checkbox" name="image_sortdirection" value="1"
 		<?php echo checked('1', getOption('image_sortdirection')); ?> />
-		Descending</td>
-		<td>Default sort order for images</td>
+		<?php echo gettext("Descending"); ?></td>
+		<td><?php echo gettext("Default sort order for images"); ?></td>
 	</tr>
 	<tr>
-		<td width="175">Image quality:</td>
+		<td width="175"><?php echo gettext("Image quality:"); ?></td>
 		<td width="200"><input type="text" size="40" name="image_quality"
 			value="<?php echo getOption('image_quality');?>" /></td>
-		<td>JPEG Compression quality for all images.</td>
+		<td><?php echo gettext("JPEG Compression quality for all images."); ?></td>
 	</tr>
 	<tr>
-		<td>Thumb quality:</td>
+		<td><?php echo gettext("Thumb quality:"); ?></td>
 		<td><input type="text" size="40" name="thumb_quality"
 			value="<?php echo getOption('thumb_quality');?>" /></td>
-		<td>JPEG Compression quality for all thumbnails.</td>
+		<td><?php echo gettext("JPEG Compression quality for all thumbnails."); ?></td>
 	</tr>
 	<tr>
-		<td>Image size:</td>
+		<td><?php echo gettext("Image size:"); ?></td>
 		<td><input type="text" size="40" name="image_size"
 			value="<?php echo getOption('image_size');?>" /></td>
-		<td>Default image display width.</td>
+		<td><?php echo gettext("Default image display width."); ?></td>
 	</tr>
 	<tr>
-		<td>Images size is longest size:</td>
+		<td><?php echo gettext("Images size is longest size:"); ?></td>
 		<td><input type="checkbox" size="40" name="image_use_longest_side"
 			value="1"
 			<?php echo checked('1', getOption('image_use_longest_side')); ?> /></td>
-		<td>If this is set to true, then the longest side of the image will be
-		<em>image size</em>. Otherwise, the <em>width</em> of the image will
-		be <em>image size</em>.</td>
+		<td><?php echo gettext("If this is set to true, then the longest side of the image will be	<em>image size</em>.");  
+		echo gettext("Otherwise, the <em>width</em> of the image will	be <em>image size</em>."); ?></td>
 	</tr>
 	<tr>
-		<td>Allow upscale:</td>
+		<td><?php echo gettext("Allow upscale:"); ?></td>
 		<td><input type="checkbox" size="40" name="image_allow_upscale"
 			value="1"
 			<?php echo checked('1', getOption('image_allow_upscale')); ?> /></td>
-		<td>Allow images to be scaled up to the requested size. This could
-		result in loss of quality, so it's off by default.</td>
+		<td><?php echo gettext("Allow images to be scaled up to the requested size. This could	result in loss of quality, so it's off by default."); ?></td>
 	</tr>
 	<tr>
-		<td>Thumb size:</td>
+		<td><?php echo gettext("Thumb size:"); ?></td>
 		<td><input type="text" size="40" name="thumb_size"
 			value="<?php echo getOption('thumb_size');?>" /></td>
-		<td>Default thumbnail size and scale.</td>
+		<td><?php echo gettext("Default thumbnail size and scale."); ?></td>
 	</tr>
 	<tr>
-		<td>Crop thumbnails:</td>
+		<td><?php echo gettext("Crop thumbnails:"); ?></td>
 		<td><input type="checkbox" size="40" name="thumb_crop" value="1"
 		<?php echo checked('1', getOption('thumb_crop')); ?> /></td>
-		<td>If set to true the thumbnail will be a centered portion of the
-		image with the given width and height after being resized to <em>thumb
-		size</em> (by shortest side). Otherwise, it will be the full image
-		resized to <em>thumb size</em> (by shortest side).</td>
+		<td><?php echo gettext("If set to true the thumbnail will be a centered portion of the	image with the given width and height after being resized to <em>thumb	size</em> (by shortest side)."); 
+		echo gettext("Otherwise, it will be the full image resized to <em>thumb size</em> (by shortest side)."); ?></td>
 	</tr>
 	<tr>
-		<td>Crop thumbnail width:</td>
+		<td><?php echo gettext("Crop thumbnail width:"); ?></td>
 		<td><input type="text" size="40" name="thumb_crop_width"
 			value="<?php echo getOption('thumb_crop_width');?>" /></td>
-		<td>The <em>thumb crop width</em> should always be less than or equal
-		to <em>thumb size</em></td>
+		<td><?php echo gettext("The <em>thumb crop width</em> should always be less than or equal	to <em>thumb size</em>"); ?></td>
 	</tr>
 	<tr>
-		<td>Crop thumbnail height:</td>
+		<td><?php echo gettext("Crop thumbnail height:"); ?></td>
 		<td><input type="text" size="40" name="thumb_crop_height"
 			value="<?php echo getOption('thumb_crop_height');?>" /></td>
-		<td>The <em>thumb crop height</em> should always be less than or equal
-		to <em>thumb size</em></td>
+		<td><?php echo gettext("The <em>thumb crop height</em> should always be less than or equal to <em>thumb size</em>"); ?></td>
 	</tr>
 	<tr>
-		<td>Sharpen thumbnails:</td>
+		<td><?php echo gettext("Sharpen thumbnails:"); ?></td>
 		<td><input type="checkbox" name="thumb_sharpen" value="1"
 		<?php echo checked('1', getOption('thumb_sharpen')); ?> /></td>
-		<td>Add a small amount of unsharp mask to thumbnails. Slows thumbnail
-		generation on slow servers.</td>
+		<td><?php echo gettext("Add a small amount of unsharp mask to thumbnails. Slows thumbnail	generation on slow servers."); ?></td>
 	</tr>
 	<tr>
-		<td>Albums per page:</td>
+		<td><?php echo gettext("Albums per page:"); ?></td>
 		<td><input type="text" size="40" name="albums_per_page"
 			value="<?php echo getOption('albums_per_page');?>" /></td>
-		<td>Controls the number of albums on a page. You might need to change
-		this after switching themes to make it look better.</td>
+		<td><?php echo gettext("Controls the number of albums on a page. You might need to change	this after switching themes to make it look better."); ?></td>
 	</tr>
 	<tr>
-		<td>Images per page:</td>
+		<td><?php echo gettext("Images per page:"); ?></td>
 		<td><input type="text" size="40" name="images_per_page"
 			value="<?php echo getOption('images_per_page');?>" /></td>
-		<td>Controls the number of images on a page. You might need to change
-		this after switching themes to make it look better.</td>
+		<td><?php echo gettext("Controls the number of images on a page. You might need to change	this after switching themes to make it look better."); ?></td>
 	</tr>
 	<tr>
-		<td>Watermark images:</td>
+		<td><?php echo gettext("Watermark images:"); ?></td>
 		<td><?php
 		$v = explode("/", getOption('watermark_image'));
 		$v = str_replace('.png', "", $v[count($v)-1]);
@@ -1931,21 +1896,18 @@ All</strong></a></p>
 		generateListFromFiles($v, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png');
 		echo "</select>\n";
 		?> <input type="checkbox" name="perform_watermark" value="1"
-		<?php echo checked('1', getOption('perform_watermark')); ?> />&nbsp;Enabled
+		<?php echo checked('1', getOption('perform_watermark')); ?> />&nbsp;<?php echo gettext("Enabled"); ?>
 		<br />
-		offset h <input type="text" size="5" name="watermark_h_offset"
-			value="<?php echo getOption('watermark_h_offset');?>" />% w <input
+		<?php echo gettext("offset h"); ?> <input type="text" size="5" name="watermark_h_offset"
+			value="<?php echo getOption('watermark_h_offset');?>" /><?php echo gettext("% w"); ?> <input
 			type="text" size="5" name="watermark_w_offset"
-			value="<?php echo getOption('watermark_w_offset');?>" />%</td>
-		<td>The watermark image (png-24). (Place the image in the <?php echo ZENFOLDER; ?>/watermarks/
-		directory.)<br />
-		The watermark image is placed relative to the upper left corner of the
-		image. It is offset from there (moved toward the lower right corner)
-		by the <em>offset</em> percentages of the height and width difference
-		between the image and the watermark.</td>
+			value="<?php echo getOption('watermark_w_offset');?>" /><?php echo gettext("%"); ?></td>
+		<td><?php echo gettext("The watermark image (png-24). (Place the image in the"); ?>" <?php echo ZENFOLDER; ?>/watermarks/
+		<?php echo gettext("directory."); ?>")<br />
+		<?php echo gettext("The watermark image is placed relative to the upper left corner of the	image. It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark."); ?></td>
 	</tr>
 	<tr>
-		<td>Watermark videos:</td>
+		<td><?php echo gettext("Watermark videos:"); ?></td>
 		<td><?php
 		$v = explode("/", getOption('video_watermark_image'));
 		$v = str_replace('.png', "", $v[count($v)-1]);
@@ -1953,37 +1915,31 @@ All</strong></a></p>
 		generateListFromFiles($v, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png');
 		echo "</select>\n";
 		?> <input type="checkbox" name="perform_video_watermark" value="1"
-		<?php echo checked('1', getOption('perform_video_watermark')); ?> />&nbsp;Enabled
+		<?php echo checked('1', getOption('perform_video_watermark')); ?> />&nbsp;<?php echo gettext("Enabled"); ?>
 		</td>
-		<td>The watermark image (png-24). (Place the image in the <?php echo ZENFOLDER; ?>/watermarks/
-		directory.)</td>
+		<td><?php echo gettext("The watermark image (png-24). (Place the image in the"); ?> <?php echo ZENFOLDER; ?>/watermarks/ <?php echo gettext("directory"); ?>.)</td>
 	</tr>
 	<tr>
-		<td>Full image quality:</td>
+		<td><?php echo gettext("Full image quality:"); ?></td>
 		<td><input type="text" size="40" name="full_image_quality"
 			value="<?php echo getOption('full_image_quality');?>" /></td>
-		<td>Controls compression on full images.</td>
+		<td><?php echo gettext("Controls compression on full images."); ?></td>
 	</tr>
 	<tr>
-		<td>Protect full image:</td>
+		<td><?php echo gettext("Protect full image:"); ?></td>
 		<td><input type="checkbox" name="protect_full_image" value="1"
 		<?php echo checked('1', getOption('protect_full_image')); ?> /></td>
-		<td>When set, links to the full image will go through intermediate
-		processing that will check for password protection and apply
-		watermarking. This requires extra server memory and procssing overhead
-		than if the image is loaded directly.</td>
+		<td><?php echo gettext("When set, links to the full image will go through intermediate processing that will check for password protection and apply watermarking. This requires extra server memory and procssing overhead than if the image is loaded directly."); ?></td>
 	</tr>
 	<tr>
-		<td>Full image download:</td>
+		<td><?php echo gettext("Full image download:"); ?></td>
 		<td><input type="checkbox" name="full_image_download" value="1"
 		<?php echo checked('1', getOption('full_image_download')); ?> /></td>
-		<td>Causes a download dialog to be displayed when clicking on a
-		full-image link. (This option is active only if Protect Full Image is
-		set.)</td>
+		<td><?php echo gettext("Causes a download dialog to be displayed when clicking on a	full-image link. (This option is active only if Protect Full Image is	set.)"); ?></td>
 	</tr>
 	<tr>
 		<td></td>
-		<td><input type="submit" value="save" /></td>
+		<td><input type="submit" value="<?php echo gettext('save'); ?>" /></td>
 		<td></td>
 	</tr>
 </table>
@@ -1995,7 +1951,7 @@ All</strong></a></p>
 	type="hidden" name="savecommentoptions" value="yes" /> <?php
 	if (isset($_GET['tag_parse_error'])) {
 		echo '<div class="errorbox" id="message">';
-		echo  "<h2>Your Allowed tags change did not parse successfully.</h2>";
+		echo  "<h2>".gettext("Your Allowed tags change did not parse successfully.")."</h2>";
 		echo '</div>';
 		echo '<script type="text/javascript">';
 		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
@@ -2005,26 +1961,25 @@ All</strong></a></p>
 <table class="bordered">
 	<tr>
 		<th colspan="3">
-		<h2>Comments options</h2>
+		<h2><?php echo gettext("Comments options"); ?></h2>
 		</th>
 	</tr>
 	<tr>
-		<td>Enable comment notification:</td>
+		<td><?php echo gettext("Enable comment notification:"); ?></td>
 		<td><input type="checkbox" name="email_new_comments" value="1"
 		<?php echo checked('1', getOption('email_new_comments')); ?> /></td>
-		<td>Email the Admin when new comments are posted</td>
+		<td><?php echo gettext("Email the Admin when new comments are posted"); ?></td>
 	</tr>
 	<tr>
-		<td>Allowed tags:</td>
+		<td><?php echo gettext("Allowed tags:"); ?></td>
 		<td><textarea name="allowed_tags" cols="40" rows="10"><?php echo getOption('allowed_tags'); ?></textarea>
 		</td>
-		<td>Tags and attributes allowed in comments<br />
-		Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>
-		=&gt; (), <em>attribute</em> =&gt; ()...)))</td>
+		<td><?php echo gettext("Tags and attributes allowed in comments"); ?><br />
+		<?php echo gettext("Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"); ?></td>
 	</tr>
 	<!-- SPAM filter options -->
 	<tr>
-		<td>Spam filter:</td>
+		<td><?php echo gettext("Spam filter:"); ?></td>
 		<td><select id="spam_filter" name="spam_filter">
 			<?php
 		$currentValue = getOption('spam_filter');
@@ -2032,7 +1987,7 @@ All</strong></a></p>
 		generateListFromFiles($currentValue, $pluginroot , '.php');
 		?>
 		</select></td>
-		<td>The SPAM filter plug-in you wish to use to check comments for SPAM</td>
+		<td><?php echo gettext("The SPAM filter plug-in you wish to use to check comments for SPAM"); ?></td>
 	</tr>
 	<?php
 	/* procss filter based options here */
@@ -2044,20 +1999,20 @@ All</strong></a></p>
 	?>
 	<!-- end of SPAM filter options -->
 	<tr>
-		<td>Require fields:</td>
+		<td><?php echo gettext("Require fields:"); ?></td>
 		<td><input type="checkbox" name="comment_name_required" value=1
-		<?php checked('1', getOption('comment_name_required')); ?>>&nbsp;Name
+		<?php checked('1', getOption('comment_name_required')); ?>>&nbsp;<?php echo gettext("Name"); ?>
 		<input type="checkbox" name="comment_email_required" value=1
-		<?php checked('1', getOption('comment_email_required')); ?>>&nbsp;Email
+		<?php checked('1', getOption('comment_email_required')); ?>>&nbsp;<?php echo gettext("Email"); ?>
 		<input type="checkbox" name="comment_web_required" value=1
-		<?php checked('1', getOption('comment_web_required')); ?>>&nbsp;Website
+		<?php checked('1', getOption('comment_web_required')); ?>>&nbsp;<?php echo gettext("Website"); ?>
 		<input type="checkbox" name="Use_Captcha" value=1
-		<?php checked('1', getOption('Use_Captcha')); ?>>&nbsp;Captcha</td>
-		<td>Checked fields must be valid in a comment posting.</td>
+		<?php checked('1', getOption('Use_Captcha')); ?>>&nbsp;<?php echo gettext("Captcha"); ?></td>
+		<td><?php echo gettext("Checked fields must be valid in a comment posting."); ?></td>
 	</tr>
 	<tr>
 		<td></td>
-		<td><input type="submit" value="save" /></td>
+		<td><input type="submit" value="<?php echo gettext('save'); ?>" /></td>
 		<td></td>
 	</tr>
 </table>
@@ -2074,11 +2029,11 @@ All</strong></a></p>
 		$supportedOptions = $optionHandler->getOptionsSupported();
 		if (count($supportedOptions) > 0) {
 			echo "<table class='bordered'>\n";
-			echo "<tr><th colspan='3'><h2>Theme Options for <em>".$gallery->getCurrentTheme()."</em></h2></th></tr>\n";
+			echo "<tr><th colspan='3'><h2>".gettext("Theme Options for")." <em>".$gallery->getCurrentTheme()."</em></h2></th></tr>\n";
 			customOptions($optionHandler);
 			echo "\n<tr>\n";
 			echo "<td></td>\n";
-			echo  '<td><input type="submit" value="save" /></td>' . "\n";
+			echo  '<td><input type="submit" value='. echogettext('save').' /></td>' . "\n";
 			echo "<td></td>\n";
 			echo "</tr>\n";
 			echo "</table>\n";
@@ -2093,12 +2048,10 @@ All</strong></a></p>
 /************************************************************************************/ 
 } else if ($page == "themes") { ?>
 
-<h1>Themes (current theme is <em><?php echo $current_theme = $gallery->getCurrentTheme();?></em>)</h1>
-<p>Themes allow you to visually change the entire look and feel of your
-gallery. All themes are located in your <code>zenphoto/themes</code>
-folder, and you can download more themes at the <a
-	href="http://www.zenphoto.org/support/">zenphoto forum</a> and the <a
-	href="http://www.zenphoto.org/zp/theme/">zenphoto themes page</a>.</p>
+<h1><?php echo gettext("Themes (current theme is"); ?> <em><?php echo $current_theme = $gallery->getCurrentTheme();?></em>)</h1>
+<p><?php echo gettext("Themes allow you to visually change the entire look and feel of your gallery. All themes are located in your"); ?> <code>zenphoto/themes</code> <?php echo gettext("folder, and you can download more themes at the"); ?> <a
+	href="http://www.zenphoto.org/support/"><?php echo gettext("zenphoto forum"); ?></a> <?php echo gettext("and the"); ?> <a
+	href="http://www.zenphoto.org/zp/theme/"><?php echo gettext("zenphoto themes page"); ?></a>.</p>
 <table class="bordered">
 	<?php
 $themes = $gallery->getThemes();
@@ -2123,7 +2076,7 @@ $themeweb = WEBPATH . "/themes/$theme";
 		<?php echo $themeinfo['desc']; ?></td>
 		<td width="100" <?php echo $style; ?>><?php if (!($theme == $current_theme)) { ?>
 		<a href="?page=themes&action=settheme&theme=<?php echo $theme; ?>"
-			title="Set this as your theme">Use this Theme</a> <?php } else { echo "<strong>Current Theme</strong>"; } ?>
+			title="Set this as your theme"><?php echo gettext("Use this Theme"); ?></a> <?php } else { echo "<strong>".gettext("Current Theme")."</strong>"; } ?>
 		</td>
 	</tr>
 
@@ -2132,43 +2085,43 @@ $themeweb = WEBPATH . "/themes/$theme";
 
 
 <?php 
+
 /*** HOME ***************************************************************************/
 /************************************************************************************/ 
+
 } else { $page = "home"; ?>
-<h1>zenphoto Administration</h1>
+<h1><?php echo gettext("zenphoto Administration"); ?></h1>
 <?php
 	if (isset($_GET['check_for_update'])) {
 		$v = checkForUpdate();
 		if (!empty($v)) {
 			if ($v == 'X') {
-				echo "\n<div style=\"font-size:150%;color:#ff0000;text-align:right;\">Could not connect to <a href=\"http://www.zenphoto.org\">zenphoto.org</a>.</div>\n";
+				echo "\n<div style=\"font-size:150%;color:#ff0000;text-align:right;\">".gettext("Could not connect to")." <a href=\"http://www.zenphoto.org\">zenphoto.org</a>.</div>\n";
 			} else {
-				echo "\n<div style=\"font-size:150%;text-align:right;\"><a href=\"http://www.zenphoto.org\">zenphoto version $v is available.</a></div>\n";
+				echo "\n<div style=\"font-size:150%;text-align:right;\"><a href=\"http://www.zenphoto.org\">". gettext("zenphoto version"). $v .gettext("is available.")."</a></div>\n";
 			}
 		} else {
-			echo "\n<div style=\"font-size:150%;color:#33cc33;text-align:right;\">You are running the latest zenphoto version.</div>\n";
+			echo "\n<div style=\"font-size:150%;color:#33cc33;text-align:right;\">".gettext("You are running the latest zenphoto version.")."</div>\n";
 		}
 	} else {
-		echo "\n<div style=\"text-align:right;color:#0000ff;\"><a href=\"?check_for_update\">Check for zenphoto update.</a></div>\n";
+		echo "\n<div style=\"text-align:right;color:#0000ff;\"><a href=\"?check_for_update\">".gettext("Check for zenphoto update.")."</a></div>\n";
 	}
 	?>
 <ul id="home-actions">
 	<?php if ($_zp_loggedin & UPLOAD_RIGHTS)  { ?>
-	<li><a href="?page=upload"> &raquo; <strong>Upload</strong> pictures.</a></li>
+	<li><a href="?page=upload"> &raquo; <?php echo gettext("<strong>Upload</strong> pictures."); ?></a></li>
 	<?php } if ($_zp_loggedin & EDIT_RIGHTS)  { ?>
-	<li><a href="?page=edit"> &raquo; <strong>Edit</strong> titles,
-	descriptions, and other metadata.</a></li>
+	<li><a href="?page=edit"> &raquo; <?php echo gettext("<strong>Edit</strong> titles, descriptions, and other metadata."); ?></a></li>
 	<?php } if ($_zp_loggedin & COMMENT_RIGHTS)  { ?>
-	<li><a href="?page=comments"> &raquo; Edit or delete <strong>comments</strong>.</a></li>
+	<li><a href="?page=comments"> &raquo; <?php echo gettext("Edit or delete <strong>comments</strong>."); ?></a></li>
 	<?php } ?>
-	<li><a href="../"> &raquo; Browse your <strong>gallery</strong> and
-	edit on the go.</a></li>
+	<li><a href="../"> &raquo; <?php echo gettext("Browse your <strong>gallery</strong> and edit on the go."); ?></a></li>
 </ul>
 
 <hr />
 
 <div class="box" id="overview-comments">
-<h2>10 Most Recent Comments</h2>
+<h2><?php echo gettext("10 Most Recent Comments"); ?></h2>
 <ul>
 	<?php
 $comments = fetchComments(10);
@@ -2223,22 +2176,20 @@ foreach ($comments as $comment) {
 
 
 <div class="box" id="overview-stats">
-<h2 class="boxtitle">Gallery Maintenance</h2>
-<p>Your database is <strong><?php echo getOption('mysql_database'); ?> </strong>:
-Tables are prefixed by <strong>'<?php echo getOption('mysql_prefix'); ?>'</strong></p>
+<h2 class="boxtitle"><?php echo gettext("Gallery Maintenance"); ?></h2>
+<p><?php echo gettext("Your database is"); ?>: '<strong><?php echo getOption('mysql_database'); ?>'</strong><br /> 
+<?php echo gettext("Tables are prefixed by"); ?> <strong>'<?php echo getOption('mysql_prefix'); ?>'</strong></p>
 <?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?>
 <form name="prune_gallery" action="admin.php?prune=true"><input
 	type="hidden" name="prune" value="true">
 <div class="buttons pad_button" id="home_dbrefresh">
-<button type="submit"><img src="images/refresh.png" alt="" /> Refresh
-the Database</button>
+<button type="submit"><img src="images/refresh.png" alt="" /> <?php echo gettext("Refresh the Database"); ?></button>
 </div>
 <br clear="all" />
 <br clear="all" />
 <div id="home_dbrefresh_tooltip"
 	style="display: none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
-Cleans the database and removes any orphan entries for comments, images,
-and albums.<br />
+<?php echo gettext("Cleans the database and removes any orphan entries for comments, images, and albums."); ?><br />
 </div>
 <script type="text/javascript">
 					var my_tooltip = new Tooltip('home_dbrefresh', 'home_dbrefresh_tooltip')
@@ -2246,45 +2197,38 @@ and albums.<br />
 <form name="clear_cache" action="admin.php?action=clear_cache=true"><input
 	type="hidden" name="action" value="clear_cache">
 <div class="buttons" id="home_refresh">
-<button type="submit"><img src="images/burst.png" alt="" /> Purge Cache</button>
+<button type="submit"><img src="images/burst.png" alt="" /> <?php echo gettext("Purge Cache"); ?></button>
 </div>
 <br clear="all" />
 <br clear="all" />
 <div id="home_refresh_tooltip"
 	style="display: none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
-Clears the image cache. Images will be re-cached as they are viewed. To
-clear the cache and renew it, use the <em>Pre-Cache Images</em> button
-below.</div>
+<?php echo gettext("Clears the image cache. Images will be re-cached as they are viewed. To clear the cache and renew it, use the <em>Pre-Cache Images</em> button below."); ?></div>
 <script type="text/javascript">
 					var my_tooltip = new Tooltip('home_cache_clear', 'home_cache_clear_tooltip')
 			</script></form>
 <form name="cache_images" action="cache-images.php">
 <div class="buttons" id="home_cache">
-<button type="submit"><img src="images/cache.png" alt="" /> Pre-Cache
-Images</button>
+<button type="submit"><img src="images/cache.png" alt="" /> <?php echo gettext("Pre-Cache Images"); ?></button>
 </div>
-<input type="checkbox" name="clear" checked="1" /> Clear<br clear="all" />
+<input type="checkbox" name="clear" checked="1" /> <?php echo gettext("Clear"); ?><br clear="all" />
 <br clear="all" />
 <div id="home_cache_tooltip"
 	style="display: none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
-Finds newly uploaded images that have not been cached and creates the
-cached version. It also refreshes the numbers above. If you have a large
-number of images in your gallery you might consider using the <em>pre-cache
-image</em> link for each album to avoid swamping your browser.<br />
+<?php echo gettext("Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser."); ?><br />
 </div>
 <script type="text/javascript">
 					var my_tooltip = new Tooltip('home_cache', 'home_cache_tooltip')
 			</script></form>
 <form name="refresh_metadata" action="refresh-metadata.php">
 <div class="buttons" id="home_exif">
-<button type="submit"><img src="images/warn.png" alt="" /> Refresh
-Metadata</button>
+<button type="submit"><img src="images/warn.png" alt="" /> <?php echo gettext("Refresh Metadata"); ?></button>
 </div>
 <br clear="all" />
 <br clear="all" />
 <div id="home_exif_tooltip"
 	style="display: none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
-Forces a refresh of the EXIF and IPTC data for all images.<br />
+<?php echo gettext("Forces a refresh of the EXIF and IPTC data for all images."); ?><br />
 </div>
 <script type="text/javascript">
 					var my_tooltip = new Tooltip('home_exif', 'home_exif_tooltip')
@@ -2293,14 +2237,13 @@ Forces a refresh of the EXIF and IPTC data for all images.<br />
 	action="admin.php?action=reset_hitcounters=true"><input type="hidden"
 	name="action" value="reset_hitcounters">
 <div class="buttons" id="home_refresh">
-<button type="submit"><img src="images/reset.png" alt="" /> Reset
-hitcounters</button>
+<button type="submit"><img src="images/reset.png" alt="" /> <?php echo gettext("Reset hitcounters"); ?></button>
 </div>
 <br clear="all" />
 <br clear="all" />
 <div id="home_refresh_tooltip"
 	style="display: none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
-Sets all album and image hitcounters to zero.<br />
+<?php echo gettext("Sets all album and image hitcounters to zero."); ?><br />
 </div>
 <script type="text/javascript">
 					var my_tooltip = new Tooltip('home_refresh', 'home_refresh_tooltip')
@@ -2309,16 +2252,16 @@ Sets all album and image hitcounters to zero.<br />
 
 
 <div class="box" id="overview-suggest">
-<h2 class="boxtitle">Gallery Stats</h2>
-<p><strong><?php echo $gallery->getNumImages(); ?></strong> images.</p>
-<p><strong><?php echo $gallery->getNumAlbums(true); ?></strong> albums.</p>
+<h2 class="boxtitle"><?php echo gettext("Gallery Stats"); ?></h2>
+<p><strong><?php echo $gallery->getNumImages(); ?></strong> <?php echo gettext("images."); ?></p>
+<p><strong><?php echo $gallery->getNumAlbums(true); ?></strong> <?php echo gettext("albums."); ?></p>
 <p><strong><?php echo $t = $gallery->getNumComments(true); ?></strong>
-comments. <?php  
+<?php echo gettext("comments."); ?> <?php  
 $c = $gallery->getNumComments(false);
 if ($c != $t) {
 	$m = $t - $c;
-	if ($m > 1) $verb = 'are'; else $verb = 'is';
-	echo " ($m $verb in moderation.)";
+	if ($m > 1) $verb = gettext('are'); else $verb = gettext('is');
+	echo " ($m $verb ". gettext("in moderation.").")";
 }
 ?></p>
 </div>
