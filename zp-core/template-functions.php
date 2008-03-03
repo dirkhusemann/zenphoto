@@ -2473,15 +2473,11 @@ function printAlbumStatistic($number, $option) {
 	} else {
 		$albumlinkpath = "index.php?album=";
 	}
+	$gallery = new Gallery();
 	while ($album = mysql_fetch_array($albums)) {
-		if ($album['thumb'] === NULL)
-		{ $image = query_single_row("SELECT * FROM " . prefix('images') . " WHERE albumid = ".$album['id']." ORDER BY sort_order DESC LIMIT 1");
-		$albumthumb = $image['filename'];
-		} else {
-			$albumthumb = $album['thumb'];
-		}
+		$tempalbum = new Album($gallery, $album['folder']);
 		echo "<a href=\"".$albumlinkpath.$album['folder']."\" title=\"" . $album['title'] . "\">\n";
-		echo "<img src=\"".$albumlinkpath.$album['folder']."/image/thumb/".$albumthumb."\"></a>\n";
+		echo "<img src=\"".htmlspecialchars($tempalbum->getAlbumThumb())."\"></a>\n";
 	}
 	echo "</div>\n";
 }
