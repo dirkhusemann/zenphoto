@@ -84,11 +84,16 @@ function printThemeInfo() {
 }
 
 function printLogo() {
-	$name = getOption('Theme_logo');
-	if (empty($name)) {
-		$name = sanitize($_SERVER['HTTP_HOST']);
+	global $_zp_themeroot;
+	if ($img = getOption('Graphic_logo')) {
+		echo '<img src="'.$_zp_themeroot.'/images/'.$img.'.png" />';
+	} else {
+		$name = getOption('Theme_logo');
+		if (empty($name)) {
+			$name = sanitize($_SERVER['HTTP_HOST']);
+		}
+		echo "<h1><a>$name</a></h1>";
 	}
-	echo "<h1><a>$name</a></h1>";
 }
 
 ?> 

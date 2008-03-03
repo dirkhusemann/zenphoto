@@ -8,6 +8,7 @@ function show_subalbum_count() {
 	$count = mysql_result($result, 0);
 	echo $count;
 }
+
 function show_sub_count_index() {
 	echo getNumSubalbums();
 }
@@ -32,12 +33,13 @@ function printHeadingImage($randomImage) {
 		echo "<a href='".$randomImageURL."' title='Random Picture...'><img src='".
 		$randomImage->getCustomImage(NULL, 620, 180, 620, 180, NULL, NULL, !getOption('Watermark_head_image')).
 					"' width=620 height=180 alt=".'"'.
-					htmlspecialchars($randomAlt1, ENT_QUOTES).
+		htmlspecialchars($randomAlt1, ENT_QUOTES).
 					":\n".htmlspecialchars($randomImage->getTitle(), ENT_QUOTES).
 					'" /></a>';
 		echo '</div>';
 	}
 }
+
 
 /* Custom caption functions */
 function getCustomAlbumDesc() {
@@ -117,11 +119,16 @@ function printLinkWithQuery($url, $query, $text) {
 }
 
 function printLogo() {
-	$name = getOption('Theme_logo');
-	if (empty($name)) {
-		$name = sanitize($_SERVER['HTTP_HOST']);
+	global $_zp_themeroot;
+	if ($img = getOption('Graphic_logo')) {
+		echo '<img src="'.$_zp_themeroot.'/images/'.$img.'.png" />';
+	} else {
+		$name = getOption('Theme_logo');
+		if (empty($name)) {
+			$name = sanitize($_SERVER['HTTP_HOST']);
+		}
+		echo "<h1><a>$name</a></h1>";
 	}
-	echo "<h1><a>$name</a></h1>";
 }
 
 ?>

@@ -34,6 +34,7 @@ class ThemeOptions {
 							'Watermark_head_image' => array('type' => 1, 'desc' => 'Set to place a watermark on the heading image. (Image watermarking must be set.)'),
 							'Allow_search' => array('type' => 1, 'desc' => 'Set to enable search form.'),
 							'Slideshow' => array('type' => 1, 'desc' => 'Set to enable slideshow for the <em>Smooth</em> personality.'),
+							'Graphic_logo' => array('type' => 2, 'desc' => 'Select a logo (PNG files in the images folder) or leave empty for text logo.'),
 							'Theme_personality' => array('type' => 2, 'desc' => 'Select the theme personality'),
 							'Theme_colors' => array('type' => 2, 'desc' => 'Set the colors of the theme')
 	);
@@ -43,6 +44,7 @@ class ThemeOptions {
 		setOptionDefault('Allow_comments', true);
 		setOptionDefault('Allow_search', true);
 		setOptionDefault('Slideshow', true);
+		setOptionDefault('Graphic_logo', 'logo');
 		setOptionDefault('Watermark_head_image', true);
 		setOptionDefault('Theme_personality', 'Image page');
 		setOptionDefault('Theme_colors', 'effervescence');
@@ -66,6 +68,16 @@ class ThemeOptions {
 			case 'Theme_personality':
 				echo '<select id="ef_personality" name="' . $option . '"' . ">\n";
 				generateListFromArray(array($currentValue), array('Image page', 'Simpleviewer', 'Slimbox', 'Smoothgallery'));
+				echo "</select>\n";
+				break;
+				
+			case 'Graphic_logo':
+				$gallery = new Gallery();
+				$theme = $gallery->getCurrentTheme();
+				$themeroot = SERVERPATH . "/themes/$theme/images";
+				echo '<select id="themeselect" name="' . $option . '"' . ">\n";
+				echo '<option></option>';
+				generateListFromFiles($currentValue, $themeroot , '.png');
 				echo "</select>\n";
 				break;
 		}
