@@ -236,7 +236,6 @@ class Image extends PersistentObject {
 	 */
 	function getAlbumName() { return $this->album->name; }
 
-
 	/**
 	 * Returns the title of this image
 	 *
@@ -719,17 +718,6 @@ class Image extends PersistentObject {
 		} else {
 			return NULL;
 		}
-	}
-
-	/**
-	 * Returns the page number of this image in the album
-	 *
-	 * @return int
-	 */
-	function getAlbumPage() {
-		$this->getIndex();
-		$images_per_page = getOption('images_per_page');
-		return floor(($this->index / $images_per_page)+1);
 	}
 
 	/**

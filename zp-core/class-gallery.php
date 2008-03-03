@@ -477,7 +477,6 @@ class Gallery {
 		return false;
 	}
 
-
 	/**
 	 * Returns the size in bytes of the cache folder. WARNING: VERY SLOW.
 	 * @return int

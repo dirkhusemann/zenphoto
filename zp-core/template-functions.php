@@ -614,7 +614,7 @@ function printAlbumBreadcrumb($before='', $after='', $title='Album Thumbnails') 
 			echo "<em>Search</em></a>";
 		} else {
 			$album = new Album($_zp_current_gallery, $dynamic_album);
-			echo "<a href=\"" . $album->getAlbumLink() . "\">";
+			echo "<a href=\"" . getAlbumLinkURL($album) . "\">";
 			echo $album->getTitle();
 		}
 	}
@@ -782,19 +782,29 @@ function setAlbumCustomData($val) {
  *
  * @return string
  */
-function getAlbumLinkURL() {
-	global $_zp_current_album, $_zp_current_image;
+function getAlbumLinkURL($album=NULL) {
+	global $_zp_current_album, $_zp_current_image, $_zp_current_search, $firstPageImages;
+	if (is_null($album)) $album = $_zp_current_album;
 	$page = 0;
 	if (in_context(ZP_IMAGE) && !in_context(ZP_SEARCH)) {
-		$page = $_zp_current_image->getAlbumPage();
+		if (is_null($_zp_current_search)) {
+			$imageindex = $_zp_current_image->getIndex();
+			$numalbums = count($album->getSubalbums());
+		} else {
+			$imageindex = $_zp_current_search->getImageIndex($_zp_current_album->name, $_zp_current_image->filename);
+			$numalbums = count($_zp_current_search->getAlbums(0));
+		}
+		$imagepage = floor(($imageindex - $firstPageImages) / getOption('images_per_page')) + 1;
+		$albumpages = ceil($numalbums / getOption('albums_per_page'));
+		$page = $albumpages + $imagepage;
 	}
 	if (in_context(ZP_IMAGE) && $page > 1) {
 		// Link to the page the current image belongs to.
-		return rewrite_path("/" . pathurlencode($_zp_current_album->name) . "/page/" . $page,
-			"/index.php?album=" . urlencode($_zp_current_album->name) . "&page=" . $page);
+		return rewrite_path("/" . pathurlencode($album->name) . "/page/" . $page,
+			"/index.php?album=" . urlencode($album->name) . "&page=" . $page);
 	} else {
-		return rewrite_path("/" . pathurlencode($_zp_current_album->name) . "/",
-			"/index.php?album=" . urlencode($_zp_current_album->name));
+		return rewrite_path("/" . pathurlencode($album->name) . "/",
+			"/index.php?album=" . urlencode($album->name));
 	}
 }
 
