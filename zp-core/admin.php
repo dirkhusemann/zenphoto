@@ -144,7 +144,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	//check for security incursions
 	if (isset($_GET['album'])) {
 		if (!($_zp_loggedin & ADMIN_RIGHTS)) {
-			if (!isMyAlbum(queryDecode(strip($_GET['album'])))) {
+			if (!isMyAlbum(queryDecode(strip($_GET['album'])), $_zp_loggedin)) {
 				unset($_GET['album']);
 				unset($_GET['page']);
 				$page = 'home';
