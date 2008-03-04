@@ -40,7 +40,7 @@ if (!zp_loggedin()) {
 	echo "\n" . '<div id="content">';
 
 	if (isset($_GET['clear']) || isset($_POST['clear'])) {
-		$clear = 'Clearing and '; 
+		$clear = gettext('Clearing and').' '; 
 	} else { 
 		$clear = ''; 
 	}
@@ -53,14 +53,14 @@ if (!zp_loggedin()) {
 	if (isset($_POST['album'])) $alb = $_POST['album'];
 	if (isset($alb)) {
 		$folder = querydecode(strip($alb));
-		echo "\n<h2>".$clear."Refreshing cache for <em>$folder</em></h2>";
+		echo "\n<h2>".$clear.gettext("Refreshing cache for")." <em>$folder</em></h2>";
 		if (isset($_GET['clear'])) {
 		$gallery->clearCache(SERVERCACHE . '/' . $folder); // clean out what was there
 		}
 		$album = new Album($album, $folder);
 		$count = loadAlbum($album);
 	} else {
-		echo "\n<h2>".$clear."Refreshing cache for Gallery</h2>";
+		echo "\n<h2>".$clear.gettext("Refreshing cache for Gallery")."</h2>";
 		if (!empty($clear)) {
 			$gallery->clearCache(); // clean out what was there.
 		}
@@ -70,7 +70,7 @@ if (!zp_loggedin()) {
 			$count = $count + loadAlbum($album);
 		}
 	}
-	echo "\n" . "<br/>Finished: Total of $count images.";
+	echo "\n" . "<br/>".gettext("Finished: Total of $count images.");
 	
 	if (isset($_GET['return'])) $ret = $_GET['return'];
 	if (isset($_POST['return'])) $ret = $_POST['return'];
@@ -78,7 +78,7 @@ if (!zp_loggedin()) {
 		$r = "?page=edit";
 		if ($ret != '*') $r .= "&album=$ret";
 	}
-	echo "<p><a href=\"admin.php$r\">&laquo; Back</a></p>";
+	echo "<p><a href=\"admin.php$r\">&laquo; ".gettext("Back")."</a></p>";
 	echo "\n" . '</div>';
 	echo "\n" . '</div>';
 

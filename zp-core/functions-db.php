@@ -24,26 +24,23 @@ function db_connect() {
 	global $mysql_connection, $_zp_conf_vars;
 	$db = $_zp_conf_vars['mysql_database'];
 	if (!function_exists('mysql_connect')) {
-		zp_error('MySQL Error: The PHP MySQL extentions have not been installed. '
-			.  'Please ask your administrator to add MySQL support to your PHP installation.');
+		zp_error(gettext('MySQL Error: The PHP MySQL extentions have not been installed. Please ask your administrator to add MySQL support to your PHP installation.'));
 		return false;
 	}
 
 	$mysql_connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass']);
 	if (!$mysql_connection) {
-		zp_error('MySQL Error: Zenphoto could not connect to the database server. Check '
-			.  'your <strong>zp-config.php</strong> file for the correct <em><strong>host</strong>, '
-			.  '<strong>user name</strong>, and <strong>password</strong></em>. Note that you may need to change the '
-			.  '<em>host</em> from localhost if your web server uses a separate MySQL server, which is '
-			.  'common in large shared hosting environments like Dreamhost and GoDaddy. Also make sure the server '
-			.  'is running, if you control it.');
+		zp_error(gettext('MySQL Error: Zenphoto could not connect to the database server.')
+		.gettext('Check your <strong>zp-config.php</strong> file for the correct <em><strong>host</strong>, <strong>user name</strong>, and <strong>password</strong></em>.') 
+		. gettext('Note that you may need to change the <em>host</em> from localhost if your web server uses a separate MySQL server, which is common in large shared hosting environments like Dreamhost and GoDaddy.') 
+		. gettext('Also make sure the server is running, if you control it.'));
 		return false;
 	}
 
 	if (!@mysql_select_db($db)) {
-		zp_error('MySQL Error: The database is connected, but Zenphoto could not select the database "' . $db . '". '
-			.  'Make sure it already exists, create it if you need to. Also make sure the user you\'re trying to '
-			.  'connect with has privileges to use this database.');
+		zp_error(gettext('MySQL Error: The database is connected, but Zenphoto could not select the database "' . $db . '". ')
+			. gettext('Make sure it already exists, create it if you need to.') 
+			. gettext('Also make sure the user you\'re trying to connect with has privileges to use this database.'));
 		return false;
 	}
 	return true;
@@ -71,11 +68,11 @@ function query($sql, $noerrmsg = false) {
 	$result = mysql_query($sql, $mysql_connection);
 	if (!$result && !$noerrmsg) {
 		$sql = sanitize($sql, true);
-		$error = "MySQL Query ( <em>$sql</em> ) Failed. Error: " . mysql_error();
+		$error = gettext("MySQL Query")." ( <em>$sql</em> ) ".gettext("Failed. Error:").mysql_error();
 		// Changed this to mysql_query - *never* call query functions recursively...
 		if (!mysql_query("SELECT 1 FROM " . prefix('albums') . " LIMIT 0", $mysql_connection)) {
-			$error .= "<br>It looks like your zenphoto tables haven't been created. You may need to "
-				. " <a href=\"" . WEBPATH . '/' . ZENFOLDER . "/setup.php\">run the setup script</a>.";
+			$error .= "<br>".gettext("It looks like your zenphoto tables haven't been created.") 
+				.gettext("You may need to") . " <a href=\"" . WEBPATH . '/' . ZENFOLDER . "/setup.php\">".gettext("run the setup script")."</a>.";
 		}
 		zp_error($error);
 		return false;

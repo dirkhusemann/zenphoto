@@ -53,10 +53,15 @@ if (file_exists("zp-config.php")) {
 		}
 	}
 }?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
+
 <title>zenphoto <?php echo $upgrade ? "upgrade" : "setup" ; ?></title>
+
 <style type="text/css">
 body {
 	margin: 0px 20% 0px;
@@ -158,24 +163,30 @@ h4 {
 	margin-top: .35em;
 }
 </style>
+
 </head>
+
 <body>
+
 <div id="main">
+
 <h1><img src="images/zen-logo.gif" title="Zen Photo Setup"
 	align="absbottom" /> <?php echo $upgrade ? "Upgrade" : "Setup" ; ?></h1>
-<div id="content"><?php
+
+<div id="content">
+<?php
 if (!$checked) {
 	// Some descriptions about setup/upgrade.
-	?> <?php if ($upgrade) { ?> Zenphoto has detected that you're upgrading
-to a new version. <br />
-<br />
-
-	<?php } else { ?> Welcome to Zenphoto! This page will set up Zenphoto
-on your web server.<br />
-<br />
-	<?php } ?> <strong>Systems Check:</strong><br />
-
-	<?php
+  if ($upgrade) { 
+    echo gettext("Zenphoto has detected that you're upgrading to a new version.");
+		echo '<br /><br />';
+	} else { 
+		echo gettext("Welcome to Zenphoto! This page will set up Zenphoto on your web server."); 
+	}
+	echo '<br /><br />';
+	echo '<strong>';
+	echo gettext("Systems Check:"); 
+	echo '</strong><br />';
 
 	/*****************************************************************************
 	 *                                                                           *
@@ -215,12 +226,12 @@ on your web server.<br />
 		$f = '';
 		if (!is_dir($path)) {
 			$e = '';
-			if (!$external) $d = " and <strong>setup</strong> could not create it";
-			$sfx = " [<em>$append</em> does not exist$d]";
-			$msg = " You must create the folder $folder. <code>mkdir($path, 0777)</code>.";
+			if (!$external) $d = " ".gettext("and ")."<strong>setup</strong> ".gettext("could not create it");
+			$sfx = " [<em>$append</em> ".gettext("does not exist")."$d]";
+			$msg = " ".gettext("You must create the folder")." $folder. <code>mkdir($path, 0777)</code>.";
 		} else if (!is_writable($path)) {
-			$sfx = " [<em>$append</em> is not writeable and <strong>setup</strong> could not make it so]";
-			$msg =  "Change the permissions on the <code>$folder</code> folder to be writable by the server " .
+			$sfx = " [<em>$append</em> ".gettext("is not writeable and ")."<strong>setup</strong> ".gettext("could not make it so]");
+			$msg =  gettext("Change the permissions on the")." <code>$folder</code> ".gettext("folder to be writable by the server ") .
 							"(<code>chmod 777 " . $append . "</code>)";
 		} else if (($folder != $which) || $external) {
 			$msg = '';
@@ -241,18 +252,18 @@ on your web server.<br />
 
 	$required = '4.1.0';
 	$phpv = phpversion();
-	$good = checkMark(versionCheck($required, $phpv), " PHP version $phpv", "", "Version $required or greater is required.") && $good;
+	$good = checkMark(versionCheck($required, $phpv), " ".gettext("PHP version")." $phpv", "", gettext("Version $required or greater is required.")) && $good;
 
 	if (ini_get('safe_mode')) {
 		$safe = -1;
 	} else {
 		$safe = true;
 	}
-	checkMark($safe, "PHP Safe Mode", " [is set]", "Zenphoto functionality is reduced when PHP <code>safe mode</code> restrictions are in effect.");
+	checkMark($safe, gettext("PHP Safe Mode"), gettext(" [is set]"), gettext("Zenphoto functionality is reduced when PHP <code>safe mode</code> restrictions are in effect."));
 
 	/* Check for GD and JPEG support. */
 	$gd = extension_loaded('gd');
-	$good = checkMark($gd, " PHP GD support", ' is not installed', 'You need to install GD support in your PHP') && $good;
+	$good = checkMark($gd, gettext(" PHP GD support"), gettext(' is not installed'), gettext('You need to install GD support in your PHP')) && $good;
 	if ($gd) {
 		$imgtypes = imagetypes();
 		if (!($imgtypes & IMG_JPG)) { $missing[] = 'JPEG'; }
@@ -263,30 +274,29 @@ on your web server.<br />
 				$imgmissing = $missing[0];
 				if (count($missing) == 2) { $imgmissing .= ' or '.$missing[1]; }
 				$err = -1;
-				$mandate = "should";
+				$mandate = gettext("should");
 			} else {
 				$imgmissing = $missing[0].', '.$missing[1].', or '.$missing[2];
 				$err = 0;
 				$good = false;
-				$mandate = "need to";
+				$mandate = gettext("need to");
 			}
-			checkMark($err, " PHP GD image support", '', "Your PHP GD does not support $imgmissing. ".
-	                    "<br/>The unsupported image types will not be viewable in your albums.".
-	                    "<br/>To correct this you $mandate install GD with appropriate image support in your PHP");
+			checkMark($err, gettext(" PHP GD image support"), '', gettext("Your PHP GD does not support")." $imgmissing. ".
+	                    "<br/>".gettext("The unsupported image types will not be viewable in your albums.").
+	                    "<br/>".gettext("To correct this you ").$mandate.gettext(" install GD with appropriate image support in your PHP"));
 		}
 	}
 	$sql = extension_loaded('mysql');
-	$good = checkMark($sql, " PHP MySQL support", '', 'You need to install MySQL support in your PHP') && $good;
-
+	$good = checkMark($sql, gettext(" PHP MySQL support"), '', gettext('You need to install MySQL support in your PHP')) && $good;
 	if (file_exists("zp-config.php")) {
 		require("zp-config.php");
 		$cfg = true;
 	} else {
 		$cfg = false;
 	}
-	$good = checkMark($cfg, " <em>zp-config.php</em> file", " [does not exist]",
- 							"Edit the <code>zp-config.php.example</code> file and rename it to <code>zp-config.php</code> " .
- 							"<br/><br/>You can find the file in the \"zp-core\" directory.") && $good;
+	$good = checkMark($cfg, " <em>zp-config.php</em> ".gettext("file"), gettext(" [does not exist]"),
+ 							gettext("Edit the <code>zp-config.php.example</code> file and rename it to <code>zp-config.php</code> ") .
+ 							"<br/><br/>".gettext("You can find the file in the \"zp-core\" directory.")) && $good;
 	if ($sql) {
 		if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])) {
 			$db = $_zp_conf_vars['mysql_database'];
@@ -305,69 +315,66 @@ on your web server.<br />
 	if ($cfg) {
 		@chmod('zp-config.php', CHMOD_VALUE);
 		if ((!$sql || !$connection  || !$db) && is_writable('zp-config.php')) {
-			$good = checkMark(false, " MySQL setup in zp-config.php", '', '') && $good;
+			$good = checkMark(false, gettext(" MySQL setup in").' zp-config.php', '', '') && $good;
 			// input form for the information
 			?>
-			<div class="error">Fill in the missing information below and <strong>setup</strong>
-				will attempt to update your <code>zp-config.php</code> file.<br />
-			<br />
-			<form action="#" method="post">
-			<input type="hidden" name="mysql" value="yes" />
-			<table>
-				<tr>
-				<td>MySQL admin user</td>
-				<td><input type="text" size="40" name="mysql_user"
-					value="<?php echo $_zp_conf_vars['mysql_user']?>" />&nbsp;*</td>
-			</tr>
-			<tr>
-				<td>MySQL admin password</td>
-				<td><input type="password" size="40" name="mysql_pass"
+
+<div class="error">
+<?php echo gettext("Fill in the missing information below and <strong>setup</strong> will attempt to update your <code>zp-config.php</code> file."); ?><br />
+<br />
+<form action="#" method="post"><input type="hidden" name="mysql"	value="yes" />
+<table>
+	<tr>
+		<td>MySQL admin user</td>
+		<td><input type="text" size="40" name="mysql_user"
+			value="<?php echo $_zp_conf_vars['mysql_user']?>" />&nbsp;*</td>
+	</tr>
+	<tr>
+		<td>MySQL admin password</td>
+		<td><input type="password" size="40" name="mysql_pass"
 			value="<?php echo $_zp_conf_vars['mysql_pass']?>" />&nbsp;*</td>
-			</tr>
-			<tr>
-				<td>MySQL host</td>
-				<td><input type="text" size="40" name="mysql_host"
-					value="<?php echo $_zp_conf_vars['mysql_host']?>" /></td>
-			</tr>
-			<tr>
-				<td>MySQL database</td>
-				<td><input type="text" size="40" name="mysql_database"
-					value="<?php echo $_zp_conf_vars['mysql_database']?>" />&nbsp;*</td>
-			</tr>
-			<tr>
-				<td>Database table prefix</td>
-				<td><input type="text" size="40" name="mysql_prefix"
-					value="<?php echo $_zp_conf_vars['mysql_prefix']?>" /></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td align="right">* required</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td><input type="submit" value="save" /></td>
-				<td></td>
-			</tr>
-		</table>
-		</form>
-		</div>
-			 <?php
+	</tr>
+	<tr>
+		<td>MySQL host</td>
+		<td><input type="text" size="40" name="mysql_host"
+			value="<?php echo $_zp_conf_vars['mysql_host']?>" /></td>
+	</tr>
+	<tr>
+		<td>MySQL database</td>
+		<td><input type="text" size="40" name="mysql_database"
+			value="<?php echo $_zp_conf_vars['mysql_database']?>" />&nbsp;*</td>
+	</tr>
+	<tr>
+		<td>Database table prefix</td>
+		<td><input type="text" size="40" name="mysql_prefix"
+			value="<?php echo $_zp_conf_vars['mysql_prefix']?>" /></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td align="right">* required</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><input type="submit" value="save" /></td>
+		<td></td>
+	</tr>
+</table>
+</form>
+</div>
+
+<?php
 		} else {
-			$good = checkMark(!$mySQLadmin, " MySQL setup in <em>zp-config.php</em>", '',
-											"You have not set your <strong>MySQL</strong> <code>user</code>, " .
-											"<code>password</code>, etc. in your <code>zp-confgi.php</code> file ".
-											"and <strong>setup</strong> is not able to write to the file.") && $good;
+			$good = checkMark(!$mySQLadmin, gettext(" MySQL setup in <em>zp-config.php</em>"), '',
+											gettext("You have not set your <strong>MySQL</strong> <code>user</code>, <code>password</code>, etc. in your <code>zp-confgi.php</code> file and <strong>setup</strong> is not able to write to the file.")) && $good;
 		}
 	}
-	$good = checkMark($connection, " connect to MySQL", '', "Could not connect to the <strong>MySQL</strong> server. Check the <code>user</code>, " .
-			"<code>password</code>, and <code>database host</code> in your <code>zp-config.php</code> file and try again. ") && $good;
+	$good = checkMark($connection, gettext(" connect to MySQL"), '', gettext("Could not connect to the <strong>MySQL</strong> server. Check the <code>user</code>, <code>password</code>, and <code>database host</code> in your <code>zp-config.php</code> file and try again. ")) && $good;
 	if ($connection) {
-		$good = checkMark($sqlv, " MySQL version $mysqlv", "", "Version $required or greater is required") && $good;
-		$good = checkMark($db, " connect to the database <code>" . $_zp_conf_vars['mysql_database'] . "</code>", '',
-			"Could not access the <strong>MySQL</strong> database (<code>" . $_zp_conf_vars['mysql_database'] ."</code>). Check the <code>user</code>, " .
-			"<code>password</code>, and <code>database name</code> and try again. " .
-			"Make sure the database has been created, and the <code>user</code> has access to it. " .
-			"Also check the <code>MySQL host</code>.") && $good;
+		$good = checkMark($sqlv, gettext(" MySQL version $mysqlv"), "", gettext("Version $required or greater is required")) && $good;
+		$good = checkMark($db, gettext(" connect to the database <code>") . $_zp_conf_vars['mysql_database'] . "</code>", '',
+			gettext("Could not access the <strong>MySQL</strong> database")." (<code>" . $_zp_conf_vars['mysql_database'] ."</code>). ".gettext("Check the <code>user</code>, <code>password</code>, and <code>database name</code> and try again. ") .
+			gettext("Make sure the database has been created, and the <code>user</code> has access to it. ") .
+			gettext("Also check the <code>MySQL host</code>.")) && $good;
 
 		$dbn = "`".$_zp_conf_vars['mysql_database']. "`.*";
 		$sql = "SHOW GRANTS;";
@@ -375,7 +382,7 @@ on your web server.<br />
 		$access = -1;
 		$rightsfound = 'unknown';
 		if ($result) {
-			$report = "<br/><br/><em>Grants found:</em>";
+			$report = "<br/><br/><em>".gettext("Grants found:")."</em>";
 			while ($row = mysql_fetch_row($result)) {
 				$report .= "<br/><br/>".$row[0];
 				$r = str_replace(',', '', $row[0]);
@@ -393,11 +400,10 @@ on your web server.<br />
 				}
 			}
 		} else {
-			$report = "<br/><br/>The <em>SHOW GRANTS</em> query failed.";
+			$report = "<br/><br/>".gettext("The <em>SHOW GRANTS</em> query failed.");
 		}
-		checkMark($access, " MySQL access rights", " [$rightsfound]",
- 											"Your MySQL user must have <code>Select</code>, <code>Insert</code>, ". 
- 											"<code>Update</code>, and <code>Delete</code> rights." . $report);
+		checkMark($access, gettext(" MySQL access rights"), " [$rightsfound]",
+ 											gettext("Your MySQL user must have <code>Select</code>, <code>Insert</code>, <code>Update</code>, and <code>Delete</code> rights.") . $report);
 
 		$sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$_zp_conf_vars['mysql_prefix']."%';";
 		$result = mysql_query($sql, $mysql_connection);
@@ -410,50 +416,55 @@ on your web server.<br />
 		if (!empty($tableslist)) { $tableslist = " found " . substr($tableslist, 0, -2); }
 		if (!$result) { $result = -1; }
 		$dbn = $_zp_conf_vars['mysql_database'];
-		checkMark($result, " MySQL <em>show tables</em>$tableslist", " [Failed]", "MySQL did not return a list of the database tables for <code>$dbn</code>." .
- 											"<br/><strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables.");
+		checkMark($result, gettext(" MySQL <em>show tables</em>")."$tableslist", gettext(" [Failed]"), gettext("MySQL did not return a list of the database tables for <code>$dbn</code>.") .
+ 											"<br/>".gettext("<strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables."));
 
 	}
 
-	$msg = " <em>.htaccess</em> file";
-	$htfile = '../.htaccess';
-	$ht = @file_get_contents($htfile);
-	$htu = strtoupper($ht);
-	$vr = "";
-	$ch = 1;
-	if (empty($htu)) {
-		$ch = -1;
-		$err = "is empty or does not exist";
-		$desc = "Edit the <code>.htaccess</code> file in the root zenphoto folder if you have the mod_rewrite apache ".
-						"module, and want cruft-free URLs. Just change the one line indicated to make it work. " .
-						"<br/><br/>You can ignore this warning if you do not intend to set the option <code>mod_rewrite</code>.";
-	} else {
-		$i = strpos($htu, 'VERSION');
-		if ($i !== false) {
-			$j = strpos($htu, "\n", $i+7);
-			$vr = trim(substr($htu, $i+7, $j-$i-7));
-		}
-		$ch = $vr == HTACCESS_VERSION;
-		if (!$ch) {
-			$err = "wrong version";
-			$desc = "You need to upload the copy of the .htaccess file that was included with the zenphoto distribution.";
-		}
-	}
-	if ($ch) {
-		$i = strpos($htu, 'REWRITEENGINE');
-		if ($i === false) {
-			$rw = '';
+	$msg = " <em>.htaccess</em> ".gettext("file");
+	if (!stristr($_SERVER['SERVER_SOFTWARE'], "apache")) {
+		checkMark(-1, gettext("Server seems not to be Apache, skipping <code>.htaccess</code> test"), "", "");
+	}	else {
+		$htfile = '../.htaccess';
+		$ht = @file_get_contents($htfile);
+		$htu = strtoupper($ht);
+		$vr = "";
+		$ch = 1;
+		if (empty($htu)) {
+			$ch = -1;
+			$err = gettext("is empty or does not exist");
+			$desc = gettext("Edit the <code>.htaccess</code> file in the root zenphoto folder if you have the mod_rewrite apache module, and want cruft-free URLs.")
+			.gettext("Just change the one line indicated to make it work. ") .
+						"<br/><br/>".gettext("You can ignore this warning if you do not intend to set the option <code>mod_rewrite</code>.");
 		} else {
-			$j = strpos($htu, "\n", $i+13);
-			$rw = trim(substr($htu, $i+13, $j-$i-13));
+			$i = strpos($htu, 'VERSION');
+			if ($i !== false) {
+				$j = strpos($htu, "\n", $i+7);
+				$vr = trim(substr($htu, $i+7, $j-$i-7));
+			}
+			$ch = $vr == HTACCESS_VERSION;
+			if (!$ch) {
+				$err = gettext("wrong version");
+				$desc = gettext("You need to upload the copy of the .htaccess file that was included with the zenphoto distribution.");
+			}
 		}
-		$mod = '';
-		if (!empty($rw)) {
-			$msg .= " (<em>RewriteEngine</em> is <strong>$rw</strong>)";
-			$mod = "&mod_rewrite=$rw";
+
+		if ($ch) {
+			$i = strpos($htu, 'REWRITEENGINE');
+			if ($i === false) {
+				$rw = '';
+			} else {
+				$j = strpos($htu, "\n", $i+13);
+				$rw = trim(substr($htu, $i+13, $j-$i-13));
+			}
+			$mod = '';
+			if (!empty($rw)) {
+				$msg .= gettext(" (<em>RewriteEngine</em> is ")."<strong>$rw</strong>)";
+				$mod = "&mod_rewrite=$rw";
+			}
 		}
+		checkMark($ch, $msg, " [$err]", $desc);
 	}
-	checkMark($ch, $msg, " [$err]", $desc);
 
 	$base = true;
 	$f = '';
@@ -462,7 +473,7 @@ on your web server.<br />
 		$i = strpos($htu, 'REWRITEBASE', $j);
 		if ($i === false) {
 			$base = false;
-			$b = "<em>missing</em>";
+			$b = "<em>".gettext("missing")."</em>";
 			$i = $j+1;
 		} else {
 			$j = strpos($htu, "\n", $i+11);
@@ -484,10 +495,9 @@ on your web server.<br />
 				fclose($handle);
 			}
 		}
-		$good = checkMark($base, "<em>.htaccess</em> RewriteBase is <code>$b</code> $f", " [Does not match install folder]",
-											"Setup was not able to write to the file change RewriteBase match the install folder." .
-											"<br/>Either make the file writeable or ".
-											"set <code>RewriteBase</code> in your <code>.htaccess</code> file to <code>$d</code>.") && $good;
+		$good = checkMark($base, gettext("<em>.htaccess</em> RewriteBase is")." <code>$b</code> $f", gettext(" [Does not match install folder]"),
+											gettext("Setup was not able to write to the file change RewriteBase match the install folder.") .
+											"<br/>".gettext("Either make the file writeable or set <code>RewriteBase</code> in your <code>.htaccess</code> file to")." <code>$d</code>.") && $good;
 	}
 
 	if (is_null($_zp_conf_vars['external_album_folder'])) {
@@ -501,11 +511,11 @@ on your web server.<br />
 	if ($good) {
 		$dbmsg = "";
 	} else {
-		echo "<p>You need to address the problems indicated above then run <code>setup.php</code> again.</p>";
+		echo "<p>".gettext("You need to address the problems indicated above then run <code>setup.php</code> again.")."</p>";
 		exit();
 	}
 } else {
-	$dbmsg = "database connected";
+	$dbmsg = gettext("database connected");
 } // system check
 if (file_exists("zp-config.php")) {
 	require("zp-config.php");
@@ -540,7 +550,7 @@ if (file_exists("zp-config.php")) {
 
 		if (!($tables['administrators'] == 'create')) {
 			if (!($_zp_loggedin & ADMIN_RIGHTS) && (!isset($_GET['create']) && !isset($_GET['update']))) {  // Display the login form and exit.
-				if ($_zp_loggedin) { echo "<br/><br/>You need <em>USER ADMIN</em> rights to run setup."; }
+				if ($_zp_loggedin) { echo "<br/><br/>".gettext("You need <em>USER ADMIN</em> rights to run setup."); }
 				printLoginForm("/" . ZENFOLDER . "/setup.php?checked$mod", false);
 				exit();
 			}
@@ -748,12 +758,10 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_comments CHANGE `imageid` `ownerid` int(11) UNSIGNED NOT NULL default '0';";
 	$sql_statements[] = "ALTER TABLE $tbl_comments DROP INDEX `imageid`;";
 	$sql_statements[] = "ALTER TABLE $tbl_comments ADD INDEX (`ownerid`);";
+
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `dynamic` int(1) UNSIGNED default '0'";
+
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `search_params` text default NULL";
-	
-
-
-
 
 	/**************************************************************************************
 	 ******                            END of UPGRADE SECTION                                                           ******
@@ -778,20 +786,18 @@ if (file_exists("zp-config.php")) {
 		// set defaults on any options that need it
 		require('option-defaults.php');
 
-
-		echo "<h3>Done with table $task!</h3>";
+		echo "<h3>".gettext("Done with table $task!")."</h3>";
 
 		$rsd = getOption('admin_reset_date');
-
 		if (empty($rsd)) {
-			echo "<p>You need to <a href=\"admin.php?page=options\">set your admin user and password</a>.</p>";
+			echo "<p>".gettext("You need to ")."<a href=\"admin.php?page=options\">".gettext("set your admin user and password")."</a>.</p>";
 		} else {
-			echo "<p>You can now <a href=\"../\">View your gallery</a>, or <a href=\"admin.php\">administrate.</a></p>";
+			echo "<p>".gettext("You can now")." <a href=\"../\">".gettext("View your gallery")."</a>".gettext(", or")." <a href=\"admin.php\">".gettext("administrate.")."</a></p>";
 		}
 
 	} else if (db_connect()) {
 		echo "<h3>$dbmsg</h3>";
-		echo "<p>We are all set to ";
+		echo "<p>".gettext("We are all set to")." ";
 		$db_list = '';
 		foreach ($expected_tables as $table) {
 			if ($tables[$table] == 'create') {
@@ -801,8 +807,8 @@ if (file_exists("zp-config.php")) {
 			}
 		}
 		if (($nc = count($create)) > 0) {
-			echo "create the database table";
-			if ($nc > 1) { echo "s"; }
+			echo gettext("create the database table");
+			if ($nc > 1) { echo gettext("s"); }
 			echo ": $db_list ";
 		}
 		$db_list = '';
@@ -815,7 +821,7 @@ if (file_exists("zp-config.php")) {
 		}
 		if (($nu = count($update)) > 0) {
 			if ($nc > 0) { echo "and "; }
-			echo "update the database table";
+			echo gettext("update the database table");
 			if ($nu > 1) { echo "s"; }
 			echo ": $db_list";
 		}
@@ -834,24 +840,22 @@ if (file_exists("zp-config.php")) {
 		if (isset($_GET['mod_rewrite'])) {
 			$mod = '&mod_rewrite='.$_GET['mod_rewrite'];
 		}
-		echo "<p><a href=\"?checked&$task$mod\" title=\"create and or update the database tables.\" style=\"font-size: 15pt; font-weight: bold;\">Go!</a></p>";
+		echo "<p><a href=\"?checked&$task$mod\" title=\"".gettext("create and or update the database tables.")."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Go!")."</a></p>";
 	} else {
 		echo "<div class=\"error\">";
-		echo "<h3>database did not connect</h3>";
-		echo "<p>You should run setup.php to check your configuration. If you haven't created
-				the database yet, now would be a good time.";
+		echo "<h3>".gettext("database did not connect")."</h3>";
+		echo "<p>".gettext("You should run setup.php to check your configuration. If you haven't created the database yet, now would be a good time.");
 		echo "</div>";
 	}
 } else {
 	// The config file hasn't been created yet. Show the steps.
 	?>
 
-	<div class="error">The zp-config.php file does not exist. You should run
-	setup.php to check your configuration and create this file.</div>
+<div class="error"><?php echo gettext("The zp-config.php file does not exist. You should run setup.php to check your configuration and create this file."); ?></div>
 
-	<?php
-} ?>
-</div>
+<?php
+} ?></div>
 </div>
 </body>
 </html>
+

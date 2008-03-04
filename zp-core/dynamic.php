@@ -39,10 +39,10 @@ if (!zp_loggedin()) {
 	echo "\n" . '<div id="main">';
 	printTabs();
 	echo "\n" . '<div id="content">';
-	echo "<h1>zenphoto Create Dynamic Album</h1>\n";
+	echo "<h1>".gettext("zenphoto Create Dynamic Album")."</h1>\n";
 	if (isset($_POST['savealbum'])) { // we fell through, some kind of error
 		echo "<div class=\"errorbox space\">";
-		echo "<h2>Failed to save the album file</h2>";
+		echo "<h2>".gettext("Failed to save the album file")."</h2>";
 		echo "</div>\n";
 	}
 	$gallery = new Gallery();
@@ -73,12 +73,12 @@ if (!zp_loggedin()) {
 	name="savealbum" value="yes" />
 <table>
 	<tr>
-		<td>Album name:</td>
+		<td><?php echo gettext("Album name:"); ?></td>
 		<td><input type="text" size="40" name="album"
 			value="<?php echo $albumname ?>" /></td>
 	</tr>
 	<tr>
-		<td>Create in:</td>
+		<td><?php echo gettext("Create in:"); ?></td>
 		<td><select id="albumselectmenu" name="albumselect">
 		<?php
 		if (isMyAlbum('/', UPLOAD_RIGHTS)) {
@@ -104,7 +104,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		</select></td>
 	</tr>
 	<tr>
-		<td>Thumbnail:</td>
+		<td><?php echo gettext("Thumbnail:"); ?></td>
 		<td><select id="thumb" name="thumb">
 		<?php
 		foreach ($imagelist as $image) {
@@ -114,43 +114,43 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		</select></td>
 	</tr>
 	<tr>
-		<td>Search criteria:</td>
+		<td><?php echo gettext("Search criteria:"); ?></td>
 		<td><input type="text" size="60" name="words"
 			value="<?php echo $words ?>" /></td>
 	</tr>
 	<tr>
-		<td>Search fields:</td>
+		<td><?php echo gettext("Search fields:"); ?></td>
 		<td>
 		<table class="checkboxes">
 			<tr>
 				<td><input type="checkbox" name="sf_title" value=1
-				<?php if ($fields & SEARCH_TITLE) echo ' checked'; ?>> Title</td>
+				<?php if ($fields & SEARCH_TITLE) echo ' checked'; ?>> <?php echo gettext("Title"); ?></td>
 				<td><input type="checkbox" name="sf_desc" value=1
-				<?php if ($fields & SEARCH_DESC) echo ' checked'; ?>> Description</td>
+				<?php if ($fields & SEARCH_DESC) echo ' checked'; ?>> <?php echo gettext("Description"); ?></td>
 				<td><input type="checkbox" name="sf_tags" value=1
-				<?php if ($fields & SEARCH_TAGS) echo ' checked'; ?>> Tags</td>
+				<?php if ($fields & SEARCH_TAGS) echo ' checked'; ?>> <?php echo gettext("Tags"); ?></td>
 			</tr>
 			<tr>
 				<td><input type="checkbox" name="sf_filename" value=1
 				<?php if ($fields & SEARCH_FILENAME) echo ' checked'; ?>>
 				File/Folder name</td>
 				<td><input type="checkbox" name="sf_location" value=1
-				<?php if ($fields & SEARCH_LOCATION) echo ' checked'; ?>> Location</td>
+				<?php if ($fields & SEARCH_LOCATION) echo ' checked'; ?>> <?php echo gettext("Location"); ?></td>
 				<td><input type="checkbox" name="sf_city" value=1
-				<?php if ($fields & SEARCH_CITY) echo ' checked'; ?>> City</td>
+				<?php if ($fields & SEARCH_CITY) echo ' checked'; ?>> <?php echo gettext("City"); ?></td>
 			</tr>
 			<tr>
 				<td><input type="checkbox" name="sf_state" value=1
-				<?php if ($fields & SEARCH_STATE) echo ' checked'; ?>> State</td>
+				<?php if ($fields & SEARCH_STATE) echo ' checked'; ?>> <?php echo gettext("State"); ?></td>
 				<td><input type="checkbox" name="sf_country" value=1
-				<?php if ($fields & SEARCH_COUNTRY) echo ' checked'; ?>> Country</td>
+				<?php if ($fields & SEARCH_COUNTRY) echo ' checked'; ?>> <?php echo gettext("Country"); ?></td>
 			</tr>
 		</table>
 		</td>
 	</tr>
 
 </table>
-<input type="submit" value="Create the album" class="button" /></form>
+<input type="submit" value="<?php echo gettext('Create the album');?>" class="button" /></form>
 
 				<?php
 

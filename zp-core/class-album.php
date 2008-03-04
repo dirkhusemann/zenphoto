@@ -877,11 +877,11 @@ class Album extends PersistentObject {
 		}
 		$albumdir = getAlbumFolder() . $this->name . "/";
 		if (!is_dir($albumdir) || !is_readable($albumdir)) {
-			$msg = "Error: The 'albums' directory (" . $this->albumdir . ") ";
+			$msg = gettext("Error: The 'albums' directory")." (" . $this->albumdir . ") ";
 			if (!is_dir($this->albumdir)) {
-				$msg .= "cannot be found.";
+				$msg .= gettext("cannot be found.");
 			} else {
-				$msg .= "is not readable.";
+				$msg .= gettext("is not readable.");
 			}
 			die($msg);
 		}

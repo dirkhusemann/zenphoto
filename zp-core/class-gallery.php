@@ -22,11 +22,11 @@ class Gallery {
 		$this->albumdir = getAlbumFolder();
 
 		if (!is_dir($this->albumdir) || !is_readable($this->albumdir)) {
-			$msg = "Error: The 'albums' directory (" . $this->albumdir . ") ";
+			$msg = gettext("Error: The 'albums' directory")." (" . $this->albumdir . ") ";
 			if (!is_dir($this->albumdir)) {
-				$msg .= "cannot be found.";
+				$msg .= gettext("cannot be found.");
 			} else {
-				$msg .= "is not readable.";
+				$msg .= gettext("is not readable.");
 			}
 			die($msg);
 		}
@@ -111,11 +111,11 @@ class Gallery {
 	function loadAlbumNames() {
 		$albumdir = $this->getAlbumDir();
 		if (!is_dir($albumdir) || !is_readable($albumdir)) {
-			$msg = "Error: The 'albums' directory (" . $this->albumdir . ") ";
+			$msg = gettext("Error: The 'albums' directory")." (" . $this->albumdir . ") ";
 			if (!is_dir($albumdir)) {
-				$msg .= "cannot be found.";
+				$msg .= gettext("cannot be found.");
 			} else {
-				$msg .= "is not readable.";
+				$msg .= gettext("is not readable.");
 			}
 			die($msg);
 		}

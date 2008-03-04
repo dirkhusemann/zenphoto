@@ -16,11 +16,11 @@ function imageError($errormessage, $errorimg='err-imagegeneral.gif') {
 	global $newfilename, $album, $image;
 	$debug = isset($_GET['debug']);
 	if ($debug) {
-		echo('<strong>Zenphoto Image Processing Error:</strong> ' . $errormessage
-		. '<br /><br />Request URI: [ <code>' . sanitize($_SERVER['REQUEST_URI'], true) . '</code> ]'
+		echo('<strong>'.gettext('Zenphoto Image Processing Error:').'</strong> ' . $errormessage
+		. '<br /><br />'.gettext('Request URI:').' [ <code>' . sanitize($_SERVER['REQUEST_URI'], true) . '</code> ]'
 		. '<br />PHP_SELF:    [ <code>' . sanitize($_SERVER['PHP_SELF'], true) . '</code> ]'
-		. (empty($newfilename) ? '' : '<br />Cache: [<code> ' . substr(CACHEFOLDER, 0, -1) . sanitize($newfilename, true) . '</code>]')
-		. (empty($image) || empty($album) ? '' : ' <br />Image: [<code> '.sanitize($album.'/'.$image, true).' </code>]<br />'));
+		. (empty($newfilename) ? '' : '<br />'.gettext('Cache:').' [<code> ' . substr(CACHEFOLDER, 0, -1) . sanitize($newfilename, true) . '</code>]')
+		. (empty($image) || empty($album) ? '' : ' <br />'.gettext('Image:').' [<code> '.sanitize($album.'/'.$image, true).' </code>]<br />'));
 	} else {
 		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/images/' . $errorimg);
 		exit();
@@ -34,17 +34,17 @@ function imageError($errormessage, $errorimg='err-imagegeneral.gif') {
  */
 function imageDebug($args) {
 	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
-	echo "<strong>DEBUG <code>i.php</code> | Arguments:</strong><br />\n\n"
-	.  "<ul><li>size =    <strong>" . sanitize($size, true)     . "</strong></li>\n"
-	.  "<li>width =   <strong>" . sanitize($width, true)    . "</strong></li>\n"
-	.  "<li>height =  <strong>" . sanitize($height, true)   . "</strong></li>\n"
-	.  "<li>cw =      <strong>" . sanitize($cw, true)       . "</strong></li>\n"
-	.  "<li>ch =      <strong>" . sanitize($ch, true)       . "</strong></li>\n"
-	.  "<li>cx =      <strong>" . sanitize($cx, true)       . "</strong></li>\n"
-	.  "<li>cy =      <strong>" . sanitize($cy, true)       . "</strong></li>\n"
-	.  "<li>quality = <strong>" . sanitize($quality, true)  . "</strong></li>\n"
-	.  "<li>thumb =   <strong>" . sanitize($thumb, true)    . "</strong></li>\n"
-	.  "<li>crop =    <strong>" . sanitize($crop, true)     . "</strong></li></ul>\n";
+	echo "<strong>".gettext("DEBUG")." <code>i.php</code> | ".gettext("Arguments:")."</strong><br />\n\n"
+	.  "<ul><li>".gettext("size =")."    <strong>" . sanitize($size, true)     . "</strong></li>\n"
+	.  "<li>".gettext("width =")."   <strong>" . sanitize($width, true)    . "</strong></li>\n"
+	.  "<li>".gettext("height =")."  <strong>" . sanitize($height, true)   . "</strong></li>\n"
+	.  "<li>".gettext("cw =")."      <strong>" . sanitize($cw, true)       . "</strong></li>\n"
+	.  "<li>".gettext("ch =")."      <strong>" . sanitize($ch, true)       . "</strong></li>\n"
+	.  "<li>".gettext("cx =")."      <strong>" . sanitize($cx, true)       . "</strong></li>\n"
+	.  "<li>".gettext("cy =")."      <strong>" . sanitize($cy, true)       . "</strong></li>\n"
+	.  "<li>".gettext("quality =")." <strong>" . sanitize($quality, true)  . "</strong></li>\n"
+	.  "<li>".gettext("thumb =")."   <strong>" . sanitize($thumb, true)    . "</strong></li>\n"
+	.  "<li>".gettext("crop =")."    <strong>" . sanitize($crop, true)     . "</strong></li></ul>\n";
 
 }
 
@@ -110,7 +110,7 @@ function get_image($imgfile) {
 function unsharp_mask($img, $amount, $radius, $threshold) {
 	/*
 	 Unsharp Mask for PHP - version 2.0
-	 Unsharp mask algorithm by Torstein Hønsi 2003-06.
+	 Unsharp mask algorithm by Torstein Hï¿½nsi 2003-06.
 	 Please leave this notice.
 	 */
 
@@ -240,10 +240,10 @@ function cacheGalleryImage($newfilename, $imgfile, $args, $allow_watermark=false
 	$newfile = SERVERCACHE . $newfilename;
 	// Check for GD
 	if (!function_exists('imagecreatetruecolor'))
-	imageError('The GD Library is not installed or not available.', 'err-nogd.gif');
+	imageError(gettext('The GD Library is not installed or not available.'), 'err-nogd.gif');
 	// Check for the source image.
 	if (!file_exists($imgfile) || !is_readable($imgfile)) {
-		imageError('Image not found or is unreadable.', 'err-imagenotfound.gif');
+		imageError(gettext('Image not found or is unreadable.'), 'err-imagenotfound.gif');
 	}
 
 	if ($im = get_image($imgfile)) {
@@ -276,7 +276,7 @@ function cacheGalleryImage($newfilename, $imgfile, $args, $allow_watermark=false
 			$size = $width = false;
 		} else {
 			// There's a problem up there somewhere...
-			imageError("Unknown error! Please report to the developers at <a href=\"http://www.zenphoto.org/\">www.zenphoto.org</a>", 'err-imagegeneral.gif');
+			imageError(gettext("Unknown error! Please report to the developers at")." <a href=\"http://www.zenphoto.org/\">www.zenphoto.org</a>", 'err-imagegeneral.gif');
 		}
 
 		// Calculate proportional height and width.

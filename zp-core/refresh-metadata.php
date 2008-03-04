@@ -28,7 +28,7 @@ if (!zp_loggedin()) {
 	echo "\n" . '<div id="main">';
 	printTabs();
 	echo "\n" . '<div id="content">';
-	echo "<h1>zenphoto Metadata refresh</h1>";
+	echo "<h1>".gettext("zenphoto Metadata refresh")."</h1>";
 
 	if (isset($_GET['refresh']) && db_connect()) {
 		echo "<h3>Finished refreshing metadata.</h3>";
@@ -42,7 +42,7 @@ if (!zp_loggedin()) {
 		}
 		echo "<p><a href=\"admin.php$r\">&laquo; Back</a></p>";
 	} else if (db_connect()) {
-		echo "<h3>database connected</h3>";
+		echo "<h3>".gettext("database connected")."</h3>";
 		$folder = '';
 		$id = '';
 		$r = "";
@@ -62,22 +62,26 @@ if (!zp_loggedin()) {
 			$id = "WHERE `albumid`=$id";
 			$r = " for <em>$folder</em>";
 		} else {		
+
 			$sql = "UPDATE " . prefix('albums') . " SET `mtime`=0 WHERE `dynamic`='1';";
+
 			query($sql);
+
 		}
 		if (!empty($folder) && empty($id)) {
-			echo "<p><em>$folder</em> not found</p>";
+			echo "<p><em>$folder</em> ".gettext("not found")."</p>";
 		} else {
 			$sql = "UPDATE " . prefix('images') . " SET `mtime`=0 $id;";
 			query($sql);
+
 			if (isset($_GET['return'])) $ret = $_GET['return'];
 			if (isset($_POST['return'])) $ret = $_POST['return'];
-			echo "<p>We're all set to refresh the metadata$r</p>";
-			echo "<p><a href=\"?refresh=start&return=$ret\" title=\"Refresh image metadata.\" style=\"font-size: 15pt; font-weight: bold;\">Go!</a></p>";
+			echo "<p>".gettext("We're all set to refresh the")." metadata$r</p>";
+			echo "<p><a href=\"?refresh=start&return=$ret\" title=\"".gettext("Refresh image metadata.")."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Go!")."</a></p>";
 		}
 	} else {
-		echo "<h3>database not connected</h3>";
-		echo "<p>Check the zp-config.php file to make sure you've got the right username, password, host, and database. If you haven't created the database yet, now would be a good time.";
+		echo "<h3>".gettext("database not connected")."</h3>";
+		echo "<p>".gettext("Check the zp-config.php file to make sure you've got the right username, password, host, and database. If you haven't created the database yet, now would be a good time.");
 	}
 
 	echo "\n" . '</div>';
@@ -88,4 +92,6 @@ if (!zp_loggedin()) {
 echo "\n</body>";
 echo "\n</html>";
 ?>
+
+
 

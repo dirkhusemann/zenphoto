@@ -11,7 +11,7 @@ if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 // functions.php - HEADERS NOT SENT YET!
 
 if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
-	die ("<strong>Zenphoto error:</strong> zp-config.php not found. Perhaps you need to run <a href=\"" . ZENFOLDER . "/setup.php\">setup</a> (or migrate your old config.php)");
+	die ("<strong>".gettext("Zenphoto error:</strong> zp-config.php not found. Perhaps you need to run")." <a href=\"" . ZENFOLDER . "/setup.php\">setup</a> ".gettext("(or migrate your old config.php)"));
 }
 
 // Including zp-config.php more than once is OK, and avoids $conf missing.
@@ -201,31 +201,31 @@ function parseAllowedTags(&$source) {
 //   run or the new data won't be stored (but existing fields will still work; nothing breaks).
 $_zp_exifvars = array(
 // Database Field       => array('IFDX',   'ExifKey',           'ZP Display Text',        Display?)
-		'EXIFOrientation'       => array('IFD0',   'Orientation',       'Orientation',            false),
-		'EXIFMake'              => array('IFD0',   'Make',              'Camera Maker',           true),
-		'EXIFModel'             => array('IFD0',   'Model',             'Camera Model',           true),
-		'EXIFExposureTime'      => array('SubIFD', 'ExposureTime',      'Shutter Speed',          true),
-		'EXIFFNumber'           => array('SubIFD', 'FNumber',           'Aperture',               true),
-		'EXIFFocalLength'       => array('SubIFD', 'FocalLength',       'Focal Length',           true),
-		'EXIFFocalLength35mm'   => array('SubIFD', 'FocalLength35mmEquiv', '35mm Equivalent Focal Length', false),
-		'EXIFISOSpeedRatings'   => array('SubIFD', 'ISOSpeedRatings',   'ISO Sensitivity',        true),
-		'EXIFDateTimeOriginal'  => array('SubIFD', 'DateTimeOriginal',  'Time Taken',             true),
-		'EXIFExposureBiasValue' => array('SubIFD', 'ExposureBiasValue', 'Exposure Compensation',  true),
-		'EXIFMeteringMode'      => array('SubIFD', 'MeteringMode',      'Metering Mode',          true),
-		'EXIFFlash'             => array('SubIFD', 'Flash',             'Flash Fired',            true),
-		'EXIFImageWidth'        => array('SubIFD', 'ExifImageWidth',    'Original Width',         false),
-		'EXIFImageHeight'       => array('SubIFD', 'ExifImageHeight',   'Original Height',        false),
-		'EXIFContrast'          => array('SubIFD', 'Contrast',          'Contrast Setting',       false),
-		'EXIFSharpness'         => array('SubIFD', 'Sharpness',         'Sharpness Setting',      false),
-		'EXIFSaturation'        => array('SubIFD', 'Saturation',        'Saturation Setting',     false),
-		'EXIFGPSLatitude'       => array('GPS',    'Latitude',          'Latitude',               false),
-		'EXIFGPSLatitudeRef'    => array('GPS',    'Latitude Reference','Latitude Reference',     false),
-		'EXIFGPSLongitude'      => array('GPS',    'Longitude',         'Longitude',              false),
-		'EXIFGPSLongitudeRef'   => array('GPS',    'Longitude Reference','Longitude Reference',   false),
-		'EXIFGPSAltitude'       => array('GPS',    'Altitude',          'Altitude',               false),
-		'EXIFGPSAltitudeRef'    => array('GPS',    'Altitude Reference','Altitude Reference',     false)
+		'EXIFOrientation'       => array('IFD0',   'Orientation',       gettext('Orientation'),            false),
+		'EXIFMake'              => array('IFD0',   'Make',              gettext('Camera Maker'),           true),
+		'EXIFModel'             => array('IFD0',   'Model',             gettext('Camera Model'),           true),
+		'EXIFExposureTime'      => array('SubIFD', 'ExposureTime',      gettext('Shutter Speed'),          true),
+		'EXIFFNumber'           => array('SubIFD', 'FNumber',           gettext('Aperture'),               true),
+		'EXIFFocalLength'       => array('SubIFD', 'FocalLength',       gettext('Focal Length'),           true),
+		'EXIFFocalLength35mm'   => array('SubIFD', 'FocalLength35mmEquiv', gettext('35mm Equivalent Focal Length'), false),
+		'EXIFISOSpeedRatings'   => array('SubIFD', 'ISOSpeedRatings',   gettext('ISO Sensitivity'),        true),
+		'EXIFDateTimeOriginal'  => array('SubIFD', 'DateTimeOriginal',  gettext('Time Taken'),             true),
+		'EXIFExposureBiasValue' => array('SubIFD', 'ExposureBiasValue', gettext('Exposure Compensation'),  true),
+		'EXIFMeteringMode'      => array('SubIFD', 'MeteringMode',      gettext('Metering Mode'),          true),
+		'EXIFFlash'             => array('SubIFD', 'Flash',             gettext('Flash Fired'),            true),
+		'EXIFImageWidth'        => array('SubIFD', 'ExifImageWidth',    gettext('Original Width'),         false),
+		'EXIFImageHeight'       => array('SubIFD', 'ExifImageHeight',   gettext('Original Height'),        false),
+		'EXIFContrast'          => array('SubIFD', 'Contrast',          gettext('Contrast Setting'),       false),
+		'EXIFSharpness'         => array('SubIFD', 'Sharpness',         gettext('Sharpness Setting'),      false),
+		'EXIFSaturation'        => array('SubIFD', 'Saturation',        gettext('Saturation Setting'),     false),
+		'EXIFGPSLatitude'       => array('GPS',    'Latitude',          gettext('Latitude'),               false),
+		'EXIFGPSLatitudeRef'    => array('GPS',    'Latitude Reference',gettext('Latitude Reference'),     false),
+		'EXIFGPSLongitude'      => array('GPS',    'Longitude',         gettext('Longitude'),              false),
+		'EXIFGPSLongitudeRef'   => array('GPS',    'Longitude Reference',gettext('Longitude Reference'),   false),
+		'EXIFGPSAltitude'       => array('GPS',    'Altitude',          gettext('Altitude'),               false),
+		'EXIFGPSAltitudeRef'    => array('GPS',    'Altitude Reference',gettext('Altitude Reference'),     false)
 );
-
+	
 
 // Set up assertions for debugging.
 assert_options(ASSERT_ACTIVE, 0);
@@ -239,7 +239,7 @@ assert_options(ASSERT_QUIET_EVAL, 1);
  * @param string $code the error message
  */
 function assert_handler($file, $line, $code) {
-	dmesg("ERROR: Assertion failed in [$file:$line]: $code");
+	dmesg(gettext("ERROR: Assertion failed in")." [$file:$line]: $code");
 }
 // Set up assertion callback
 assert_options(ASSERT_CALLBACK, 'assert_handler');
@@ -1393,7 +1393,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			$ur_album = getUrAlbum($receiver);
 		}
 		if (getOption('email_new_comments')) {
-			$message = "A comment has been $action in your album $on\n" .
+			$message = gettext("A comment has been $action in your album");" $on\n" .
  										"\n" .
  										"Author: " . $name . "\n" .
  										"Email: " . $email . "\n" .

@@ -152,25 +152,25 @@ function printLoginForm($redirect=null, $logo=true) {
 
 	echo "\n  <div id=\"loginform\">";
 	if ($_zp_login_error == 1) {
-		echo "<div class=\"errorbox\" id=\"message\"><h2>There was an error logging in.</h2> Check your username and password and try again.</div>";
+		echo "<div class=\"errorbox\" id=\"message\"><h2>".gettext("There was an error logging in.</h2> Check your username and password and try again.")."</div>";
 	} else if ($_zp_login_error == 2){
-		echo "<div class=\"messagebox\" id=\"message\"><h2>A reset request has been sent.</h2></div>";
+		echo "<div class=\"messagebox\" id=\"message\"><h2>".gettext("A reset request has been sent.")."</h2></div>";
 	}
 	echo "\n  <form name=\"login\" action=\"#\" method=\"POST\">";
 	echo "\n    <input type=\"hidden\" name=\"login\" value=\"1\" />";
 	echo "\n    <input type=\"hidden\" name=\"redirect\" value=\"$redirect\" />";
 
 	echo "\n    <table>";
-	echo "\n      <tr><td>Login</td><td><input class=\"textfield\" name=\"user\" type=\"text\" size=\"20\" value=\"$requestor\" /></td></tr>";
-	echo "\n      <tr><td>Password</td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
+	echo "\n      <tr><td>".gettext("Login")."</td><td><input class=\"textfield\" name=\"user\" type=\"text\" size=\"20\" value=\"$requestor\" /></td></tr>";
+	echo "\n      <tr><td>".gettext("Password")."</td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
 
 	if (count(getAdminEmail()) > 0) {
 		$captchaCode = generateCaptcha($img);
 		echo "\n      <tr><td></td><td>";
-		echo "\n      Enter ";
+		echo "\n      ".gettext("Enter ");
 		echo "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/>" .
  								"<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"absbottom\"/></label> ";
-		echo " to request a reset.";
+		echo gettext(" to request a reset.");
 		//		echo "      <input type=\"text\" id=\"code\" name=\"code\" size=\"4\" class=\"inputbox\" />";
 		echo "      </td></tr>";
 	}
@@ -194,9 +194,9 @@ function printLogoAndLinks() {
 	echo "\n\n<a href=\"".WEBPATH."/" . ZENFOLDER . "/admin.php\" id=\"logo\"><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" /></a>";
 	echo "\n<div id=\"links\">";
 	if (!is_null($_zp_current_admin)) {
-		echo "\n  Logged in as ".$_zp_current_admin['user']." &nbsp; | &nbsp <a href=\"?logout\">Log Out</a> &nbsp; | &nbsp; ";
+		echo "\n  ".gettext("Logged in as")." ".$_zp_current_admin['user']." &nbsp; | &nbsp <a href=\"?logout\">".gettext("Log Out")."</a> &nbsp; | &nbsp; ";
 	}
-	echo "<a href=\"../\">View Gallery</a>";
+	echo "<a href=\"../\">".gettext("View Gallery")."</a>";
 	echo "\n</div>";
 }
 
@@ -219,26 +219,26 @@ function printTabs() {
 	echo "\n  <ul id=\"nav\">";
 	if (($_zp_loggedin & MAIN_RIGHTS)) {
 		echo "\n    <li". ($page == "home" ? " class=\"current\""     : "") .
- 				"> <a href=\"admin.php?page=home\">overview</a></li>";
+ 				"> <a href=\"admin.php?page=home\">".gettext("overview")."</a></li>";
 	}
 	if (($_zp_loggedin & COMMENT_RIGHTS)) {
 		echo "\n    <li". ($page == "comments" ? " class=\"current\"" : "") .
- 				"> <a href=\"admin.php?page=comments\">comments</a></li>";
+ 				"> <a href=\"admin.php?page=comments\">".gettext("comments")."</a></li>";
 	}
 	if (($_zp_loggedin & UPLOAD_RIGHTS)) {
 		echo "\n    <li". ($page == "upload" ? " class=\"current\""   : "") .
- 				"> <a href=\"admin.php?page=upload\">upload</a></li>";
+ 				"> <a href=\"admin.php?page=upload\">".gettext("upload")."</a></li>";
 	}
 	if (($_zp_loggedin & EDIT_RIGHTS)) {
 		echo "\n    <li". ($page == "edit" ? " class=\"current\""     : "") .
- 				"> <a href=\"admin.php?page=edit\">edit</a></li>";
+ 				"> <a href=\"admin.php?page=edit\">".gettext("edit")."</a></li>";
 	}
 	echo "\n    <li". ($page == "options" ? " class=\"current\""  : "") .
- 			"> <a href=\"admin.php?page=options\">options</a></li>";
+ 			"> <a href=\"admin.php?page=options\">".gettext("options")."</a></li>";
 	if (($_zp_loggedin & THEMES_RIGHTS)) {
 
 		echo "\n    <li". ($page == "themes" ? " class=\"current\""  : "") .
- 				"> <a href=\"admin.php?page=themes\">themes</a></li>";
+ 				"> <a href=\"admin.php?page=themes\">".gettext("themes")."</a></li>";
 	}
 	echo "\n  </ul>";
 
@@ -278,16 +278,16 @@ function displayDeleted() {
 	if (isset($_GET['ndeleted'])) {
 		$ntdel = strip($_GET['ndeleted']);
 		if ($ntdel <= 2) {
-			$msg = "Image ";
+			$msg = gettext("Image ");
 		} else {
-			$msg = "Album ";
+			$msg = gettext("Album ");
 			$ntdel = $ntdel - 2;
 		}
 		if ($ntdel == 2) {
-			$msg = $msg . "failed to delete.";
+			$msg = $msg . gettext("failed to delete.");
 			$class = 'errorbox';
 		} else {
-			$msg = $msg . "deleted successfully.";
+			$msg = $msg . gettext("deleted successfully.");
 			$class = 'messagebox';
 		}
 		echo '<div class="' . $class . '" id="message">';
@@ -393,12 +393,12 @@ function printAlbumEditForm($index, $album) {
 	$result = query_single_row("SELECT `hitcounter` FROM " . prefix('albums') . " WHERE id = $id");
 	$hc = $result['hitcounter'];
 	if (empty($hc)) { $hc = '0'; }
-	echo " Hit counter: ". $hc . " <input type=\"checkbox\" name=\"reset_hitcounter\"> Reset</td>";
+	echo" ".gettext("Hit counter: "). $hc . " <input type=\"checkbox\" name=\"".gettext("reset_hitcounter")."\"> Reset</td>";
 	echo '</tr>';
-	echo "\n<tr><td align=\"right\" valign=\"top\">Album Description: </td> <td><textarea name=\"".$prefix."albumdesc\" cols=\"60\" rows=\"6\">" .
+	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Album Description:")." </td> <td><textarea name=\"".$prefix."albumdesc\" cols=\"60\" rows=\"6\">" .
 	$album->getDesc() . "</textarea></td></tr>";
 	echo "\n<tr>";
-	echo "\n<td align=\"right\">Album password: <br/>repeat: </td>";
+	echo "\n<td align=\"right\">".gettext("Album password:")." <br/>repeat: </td>";
 	echo "\n<td>";
 	$x = $album->getPassword();
 
@@ -412,9 +412,9 @@ function printAlbumEditForm($index, $album) {
 	echo "\nvalue=\"" . $x . '" />';
 	echo "\n</td>";
 	echo "\n</tr>";
-	echo "\n<tr><td align=\"right\" valign=\"top\">Password hint: </td> <td><input type=\"text\" name=\"".$prefix."albumpass_hint\" class=\"tags\" value=\"" .
+	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Password hint:")." </td> <td><input type=\"text\" name=\"".$prefix."albumpass_hint\" class=\"tags\" value=\"" .
 	$album->getPasswordHint() . '" /></td></tr>';
-	echo "\n<tr><td align=\"right\" valign=\"top\">Tags: </td> <td><input type=\"text\" name=\"".$prefix."albumtags\" class=\"tags\" value=\"" .
+	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Tags:")." </td> <td><input type=\"text\" name=\"".$prefix."albumtags\" class=\"tags\" value=\"" .
 	$album->getTags() . '" /></td></tr>';
 
 	$d = $album->getDateTime();
@@ -422,16 +422,16 @@ function printAlbumEditForm($index, $album) {
 		$d = "";
 	}
 
-	echo "\n<tr><td align=\"right\" valign=\"top\">Date: </td> <td><input type=\"text\" name=\"".$prefix."albumdate\" value=\"" . $d . '" /></td></tr>';
-	echo "\n<tr><td align=\"right\" valign=\"top\">Location: </td> <td><input type=\"text\" name=\"".$prefix."albumplace\" class=\"tags\" value=\"" .
+	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Date:")." </td> <td><input type=\"text\" name=\"".$prefix."albumdate\" value=\"" . $d . '" /></td></tr>';
+	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Location:")." </td> <td><input type=\"text\" name=\"".$prefix."albumplace\" class=\"tags\" value=\"" .
 	$album->getPlace() . "\" /></td></tr>";
-	echo "\n<tr><td align=\"right\" valign=\"top\">Custom data: </td> <td><input type=\"text\" name=\"".
+	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Custom data:")." </td> <td><input type=\"text\" name=\"".
 	$prefix."album_custom_data\" class=\"tags\" value=\"" .
 	$album->getCustomData() . "\" /></td></tr>";
 	$sort = $sortby;
 	if ($album->isDynamic()) {
 		echo "\n<tr>";
-		echo "\n<td align=\"right\" valign=\"top\">Dynamic album search:</td>";
+		echo "\n<td align=\"right\" valign=\"top\">".gettext("Dynamic album search:")."</td>";
 		echo "\n<td>";
 		echo "\n<table class=\"noinput\" >";
 		echo "\n<tr><td>" .	urldecode($album->getSearchParams()) . "</td></tr>";
@@ -442,12 +442,12 @@ function printAlbumEditForm($index, $album) {
 		$sort[] = 'Manual';
 	}
 	echo "\n<tr>";
-	echo "\n<td align=\"right\" valign=\"top\">Sort subalbums by: </td>";
+	echo "\n<td align=\"right\" valign=\"top\">".gettext("Sort subalbums by:")." </td>";
 	echo "\n<td>";
 	echo "\n<select id=\"sortselect\" name=\"".$prefix."subalbumsortby\">";
 	generateListFromArray(array($album->getSubalbumSortType()), $sort);
 	echo "\n</select>";
-	echo "&nbsp;Descending <input type=\"checkbox\" name=\"".$prefix."album_sortdirection\" value=\"1\"";
+	echo "&nbsp;".gettext("Descending")." <input type=\"checkbox\" name=\"".$prefix."album_sortdirection\" value=\"1\"";
 
 	if ($album->getSortDirection('album')) {
 		echo "CHECKED";
@@ -457,12 +457,12 @@ function printAlbumEditForm($index, $album) {
 	echo "\n</tr>";
 
 	echo "\n<tr>";
-	echo "\n<td align=\"right\" valign=\"top\">Sort images by: </td>";
+	echo "\n<td align=\"right\" valign=\"top\">".gettext("Sort images by:")." </td>";
 	echo "\n<td>";
 	echo "\n<select id=\"sortselect\" name=\"".$prefix."sortby\">";
 	generateListFromArray(array($album->getSortType()), $sort);
 	echo "\n</select>";
-	echo "&nbsp;Descending <input type=\"checkbox\" name=\"".$prefix."image_sortdirection\" value=\"1\"";
+	echo "&nbsp;".gettext("Descending")." <input type=\"checkbox\" name=\"".$prefix."image_sortdirection\" value=\"1\"";
 
 	if ($album->getSortDirection('image')) {
 		echo "CHECKED";
@@ -478,16 +478,16 @@ function printAlbumEditForm($index, $album) {
 	if ($album->getCommentsAllowed()) {
 		echo "CHECKED";
 	}
-	echo "> Allow Comments ";
+	echo "> ".gettext("Allow Comments")." ";
 	echo "<input type=\"checkbox\" name=\"" .
 	$prefix."Published\" value=\"1\"";
 	if ($album->getShow()) {
 		echo "CHECKED";
 	}
-	echo "> Published ";
+	echo "> ".gettext("Published")." ";
 	echo "</td>\n</tr>";
 	echo "\n<tr>";
-	echo "\n<td align=\"right\" valign=\"top\">Thumbnail: </td> ";
+	echo "\n<td align=\"right\" valign=\"top\">".gettext("Thumbnail:")." </td> ";
 	echo "\n<td>";
 	echo "\n<script type=\"text/javascript\">updateThumbPreview(document.getElementById('thumbselect'));</script>";
 	echo "\n<select id=\"thumbselect\" class=\"thumbselect\" name=\"".$prefix."thumb\" onChange=\"updateThumbPreview(this)\">";
@@ -571,7 +571,7 @@ function printAlbumEditForm($index, $album) {
 	echo "\n</td>";
 	echo "\n</tr>";
 	echo "\n</table>";
-	echo "\n<input type=\"submit\" value=\"save\" />";
+	echo "\n<input type=\"submit\" value=\"".gettext("save")."\" />";
 
 	echo "\n</div>";
 
@@ -590,11 +590,11 @@ function printAlbumButtons($album) {
 		echo "<input type=\"hidden\" name=\"album\" value=" . queryencode($album->name) . ">";
 		echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
 		echo "<button type=\"submit\" id='edit_cache'><img src=\"images/cache.png\" style=\"border: 0px;\" />";
-		echo " Pre-Cache Images</Button>";
-		echo "<input type=\"checkbox\" name=\"clear\" checked=\"true\" /> Clear";
+		echo " ".gettext("Pre-Cache Images")."</Button>";
+		echo "<input type=\"checkbox\" name=\"clear\" checked=\"true\" /> ".gettext("Clear");
 		echo "</form>\n</td>";
 		echo "<div id='edit_cache_tooltip' style='display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;'>";
-		echo "Cache newly uploaded images.<br />";
+		echo gettext("Cache newly uploaded images.")."<br />";
 		echo "</div>";
 		echo "<script type='text/javascript'>";
 		echo "var my_tooltip = new Tooltip('edit_cache', 'edit_cache_tooltip')";
@@ -604,11 +604,11 @@ function printAlbumButtons($album) {
 		echo "<form name=\"refresh_metadata\" action=\"refresh-metadata.php\"?album=" . queryencode($album->name) . "\" method=\"post\">";
 		echo "<input type=\"hidden\" name=\"album\" value=" . queryencode($album->name) . ">";
 		echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
-		echo "<button type=\"submit\" id='edit_refresh'><img src=\"images/warn.png\" style=\"border: 0px;\" /> Refresh Metadata</button>";
+		echo "<button type=\"submit\" id='edit_refresh'><img src=\"images/warn.png\" style=\"border: 0px;\" /> ".gettext("Refresh Metadata")."</button>";
 		echo "</form>";
 		echo "\n</td>";
 		echo "<div id='edit_refresh_tooltip' style='display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;'>";
-		echo "Forces a refresh of the EXIF and IPTC data for all images in the album.<br />";
+		echo gettext("Forces a refresh of the EXIF and IPTC data for all images in the album.")."<br />";
 		echo "</div>";
 		echo "<script type='text/javascript'>";
 		echo "var my_tooltip = new Tooltip('edit_refresh', 'edit_refresh_tooltip')";
@@ -620,11 +620,11 @@ function printAlbumButtons($album) {
 		echo "<input type=\"hidden\" name=\"action\" value=\"reset_hitcounters\">";
 		echo "<input type=\"hidden\" name=\"albumid\" value=" . $album->getAlbumID() . ">";
 		echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
-		echo "<button type=\"submit\" id='edit_hitcounter'><img src=\"images/reset.png\" style=\"border: 0px;\" /> Reset hitcounters</button>";
+		echo "<button type=\"submit\" id='edit_hitcounter'><img src=\"images/reset.png\" style=\"border: 0px;\" /> ".gettext("Reset hitcounters")."</button>";
 		echo "</form>";
 		echo "\n</tr></table>";
 		echo "<div id='edit_hitcounter_tooltip' style='display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;'>";
-		echo "Resets all hitcounters in the album.<br />";
+		echo gettext("Resets all hitcounters in the album.")."<br />";
 		echo "</div>";
 		echo "<script type='text/javascript'>";
 		echo "var my_tooltip = new Tooltip('edit_hitcounter', 'edit_hitcounter_tooltip')";
@@ -642,11 +642,11 @@ function printAlbumEditRow($album) {
 	echo "\n<tr>";
 	echo '<td class="handle"><img src="images/drag_handle.png" style="border: 0px;" alt="Drag the album '."'".$album->name."'".'" /></td>';
 	echo '<td style="text-align: left;" width="80">';
-	echo '<a href="?page=edit&album=' . urlencode($album->name) .'" title="Edit this album: ' . $album->name .
+	echo '<a href="?page=edit&album=' . urlencode($album->name) .'" title="'.gettext('Edit this album:').' ' . $album->name .
  			'"><img height="40" width="40" src="' . $album->getAlbumThumb() . '" /></a>';
 	echo "</td>\n";
 	echo '<td  style="text-align: left;font-size:110%;" width="300"> <a href="?page=edit&album=' . urlencode($album->name) .
- 			'" title="Edit this album: ' . $album->name . '">' . $album->getTitle() . '</a>';
+ 			'" title="'.gettext('Edit this album:').' ' . $album->name . '">' . $album->getTitle() . '</a>';
 	echo "</td>\n";
 
 	if ($album->isDynamic()) {
@@ -656,13 +656,13 @@ function printAlbumEditRow($album) {
 		if ($ci > 0) $si = "$ci image" . $si; else $si = "no image";
 		if ($ci != 1) {	$si .= "s"; } else  {	$si .= "&nbsp;"; }
 		if ($ci > 0) {
-			$si = '<a href="?page=edit&album=' . urlencode($album->name) .'#imageList" title="Subalbum List">'.$si.'</a>';
+			$si = '<a href="?page=edit&album=' . urlencode($album->name) .'#imageList" title="'.gettext('Subalbum List').'">'.$si.'</a>';
 		}
 		$ca = count($album->getSubalbums());
 		if ($ca > 0) $sa = $ca . " album" . $sa;  else $ca = "&nbsp;";
 		if ($ca > 1) $sa .= "s";
 		if ($ca > 0) {
-			$sa = '<a href="?page=edit&album=' . urlencode($album->name) .'#subalbumList" title="Subalbum List">'.$sa.'</a>';
+			$sa = '<a href="?page=edit&album=' . urlencode($album->name) .'#subalbumList" title="'.gettext('Subalbum List').'">'.$sa.'</a>';
 		}
 	}
 	echo "<td style=\"text-align: right;\" width=\"80\">" . $sa . "</td>";
@@ -674,37 +674,37 @@ function printAlbumEditRow($album) {
 
 	$pwd = $album->getPassword();
 	if (!empty($pwd)) {
-		echo '<img src="images/lock.png" style="border: 0px;" alt="Protected" /></a>';
+		echo '<img src="images/lock.png" style="border: 0px;" alt="'.gettext('Protected').'" /></a>';
 	}
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	if ($album->getShow()) {
 		echo '<a class="publish" href="?action=publish&value=0&album=' . queryencode($album->name) .
- 				'" title="Publish the album ' . $album->name . '">';
-		echo '<img src="images/pass.png" style="border: 0px;" alt="Published" /></a>';
+ 				'" title="'.gettext('Publish the album').' ' . $album->name . '">';
+		echo '<img src="images/pass.png" style="border: 0px;" alt="'.gettext('Published').'" /></a>';
 	} else {
 		echo '<a class="publish" href="?action=publish&value=1&album=' . queryencode($album->name) .
- 				'" title="Publish the album ' . $album->name . '">';
+ 				'" title="'.gettext('Publish the album').' ' . $album->name . '">';
 		echo '<img src="images/action.png" style="border: 0px;" alt="Publish the album ' . $album->name . '" /></a>';
 	}
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	echo '<a class="cache" href="cache-images.php?page=edit&album=' . queryencode($album->name) . "&return=*" .
- 			'" title="Pre-cache images in ' . $album->name . '">';
-	echo '<img src="images/cache.png" style="border: 0px;" alt="Cache the album ' . $album->name . '" /></a>';
+ 			'" title="'.gettext('Pre-cache images in').' ' . $album->name . '">';
+	echo '<img src="images/cache.png" style="border: 0px;" alt="'.gettext('Cache the album').' ' . $album->name . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	echo '<a class="warn" href="refresh-metadata.php?page=edit&album=' . queryencode($album->name) . "&return=*" .
- 			'" title="Refresh metadata for the album ' . $album->name . '">';
-	echo '<img src="images/warn.png" style="border: 0px;" alt="Refresh image metadata in the album ' . $album->name . '>" /></a>';
+ 			'" title="'.gettext('Refresh metadata for the album').' ' . $album->name . '">';
+	echo '<img src="images/warn.png" style="border: 0px;" alt="'.gettext('Refresh image metadata in the album').' ' . $album->name . '>" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-	echo '<a class="reset" href="?action=reset_hitcounters&albumid=' . $album->getAlbumID() . '" title="Reset hitcounters for album ' . $album->name . '">';
-	echo '<img src="images/reset.png" style="border: 0px;" alt="Reset hitcounters for the album ' . $album->name . '" /></a>';
+	echo '<a class="reset" href="?action=reset_hitcounters&albumid=' . $album->getAlbumID() . '" title="'.gettext('Reset hitcounters for album').' ' . $album->name . '">';
+	echo '<img src="images/reset.png" style="border: 0px;" alt="'.gettext('Reset hitcounters for the album').' ' . $album->name . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-	echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=" . queryEncode($album->name) . "');\" title=\"Delete the album " . $album->name . "\">";
-	echo '<img src="images/fail.png" style="border: 0px;" alt="Delete the album ' . $album->name . '" /></a>';
+	echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=" . queryEncode($album->name) . "');\" title=\"".gettext("Delete the album")." " . $album->name . "\">";
+	echo '<img src="images/fail.png" style="border: 0px;" alt="'.gettext('Delete the album').' ' . $album->name . '" /></a>';
 	echo "</td>\n</tr></table>\n</td>";
 
 	echo '</tr>';

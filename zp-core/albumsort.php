@@ -30,7 +30,7 @@ if (!zp_loggedin()) {
 	// Create our album
 	// TODO: We could be a bit more defensive here when parsing the incoming args
 	if (!isset($_GET['album'])) {
-		die("No album provided to sort.");
+		die(gettext("No album provided to sort."));
 	} else {
 		$folder = strip($_GET['album']);
 		$album = new Album($gallery, $folder);
@@ -52,14 +52,14 @@ if (!zp_loggedin()) {
 	<div id="content">
 		
 		<h1>Sort Album: <?php echo $album->getTitle(); ?></h1>
-		<p><?php printAdminLinks("edit", "&laquo; back to the list", "Back to the list of albums");?> |  
- 			<?php printAdminLinks("edit&album=". urlencode( ($album->getFolder()) ), "Edit Album", "Edit Album"); ?> | 
- 			<?php printViewLink($album, "View Album", "View Album"); ?>
+		<p><?php printAdminLinks(gettext_("edit"), "&laquo; ".gettext("back to the list"), gettext("Back to the list of albums"));?> |  
+ 			<?php printAdminLinks("edit&album=". urlencode( ($album->getFolder()) ), gettext("Edit Album"), gettext("Edit Album")); ?> | 
+ 			<?php printViewLink($album, gettext("View Album"), gettext("View Album")); ?>
 		</p>
 		
 		<div class="box" style="padding: 15px;">
 		
-		<p>Sort the images by dragging them...</p>
+		<p><?php echo gettext("Sort the images by dragging them..."); ?></p>
 		
 			<div id="images">
 			<?php
@@ -72,10 +72,10 @@ if (!zp_loggedin()) {
 			</div>
 				<?php
 				if (isset($_GET['saved'])) {
-					echo "<p>Album order saved.";
+					echo "<p>".gettext("Album order saved.");
 
 					if ($album->getSortType() == "Manual") {
-						echo " Album sorting set to Manual.";
+						echo gettext(" Album sorting set to Manual.");
 					}
 					echo "</p>";
 				}
