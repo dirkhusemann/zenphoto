@@ -95,10 +95,24 @@ function setDefault($option, $default) {
 	setDefault('comment_email_required', 1);
 	setDefault('comment_web_required', 0);
 	setDefault('Use_Captcha', true);
-	setDefault('full_image_download', 0);
 	setDefault('full_image_quality', 75);
 	setDefault('persistent_archive', 0);
-	setDefault('protect_full_image', 1);
+	
+	if (getOption('protect_full_image') === '0') {
+		$protection = 'Unprotected';
+	} else if (getOption('protect_full_image') === '1') {
+		if (getOption('full_image_download')) {
+			$protection = 'Download';
+		} else {
+			$protection = 'Protected view';
+		}
+	}
+	if ($protection) {
+		setOption('protect_full_image', $protection);
+	} else {
+		setDefault('protect_full_image', 'Protected view');
+	}
+	
 	setDefault('locale', '');
 	
 ?>

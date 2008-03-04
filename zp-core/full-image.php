@@ -23,14 +23,14 @@ switch ($suffix) {
 		break;
 }
 if (!getOption('perform_watermark')) { // no processing needed
-	if (is_null(getOption('external_album_folder')) && !getOption('full_image_download')) { // local album system, return the image directly
+	if (is_null(getOption('external_album_folder')) && !getOption('protect_full_image') == 'Download') { // local album system, return the image directly
 		header("Location: " . getAlbumFolder(FULLWEBPATH) . pathurlencode($_zp_current_album->name) . "/" . rawurlencode($_zp_current_image->name));
 		exit();
 	} else {  // the web server does not have access to the image, have to supply it
 		$fp = fopen($image_path, 'rb');
 		// send the right headers
 		header("Content-Type: image/$suffix");
-		if (getOption('full_image_download')) {
+		if (getOption('protect_full_image') == 'Download') {
 			header('Content-Disposition: attachment; filename="' . $_zp_current_image->name . '"');  // enable this to make the image a download
 		}
 		header("Content-Length: " . filesize($image_path));
@@ -55,7 +55,7 @@ switch ($suffix) {
 		$newim = imagecreatefromgif($image_path);
 		break;
 }
-if (getOption('full_image_download')) {
+if (getOption('protect_full_image') == 'Download') {
 	header('Content-Disposition: attachment; filename="' . $_zp_current_image->name . '"');  // enable this to make the image a download
 }
 if (getOption('perform_watermark')) {

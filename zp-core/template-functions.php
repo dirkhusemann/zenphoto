@@ -1944,8 +1944,10 @@ function printImageThumb($alt, $class=NULL, $id=NULL) {
  * @return string
  */
 function getFullImageURL() {
+	$outcome = getOption('protect_full_image');
+	if ($outcome == 'No access') return null;
 	$url = getUnprotectedImageURL();
-	if (getOption('protect_full_image') && !is_valid_video($url)) {
+	if (($outcome != 'Unprotected') && !is_valid_video($url)) {
 		return getProtectedImageURL();
 	} else {
 		return $url;

@@ -14,7 +14,7 @@ $standardOptions = array('gallery_title','website_title','website_url','time_off
  												'email_new_comments', 'perform_video_watermark', 'video_watermark_image',
  												'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'search_fields',
  												'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
- 												'allowed_tags', 'full_image_download', 'full_image_quality', 'persistent_archive',
+ 												'allowed_tags', 'full_image_quality', 'persistent_archive',
  												'protect_full_image', 'album_session', 'watermark_h_offset', 'watermark_w_offset',
  												'Use_Captcha', 'locale');
 $charsets = array("ASMO-708" => "Arabic",
@@ -574,9 +574,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				setOption('watermark_w_offset', $_POST['watermark_w_offset']);
 				setBoolOption('perform_video_watermark', $_POST['perform_video_watermark']);
 				setOption('video_watermark_image', 'watermarks/' . $_POST['video_watermark_image'] . '.png');
-				setBoolOption('full_image_download', $_POST['full_image_download']);
 				setOption('full_image_quality', $_POST['full_image_quality']);
-				setBoolOption('protect_full_image', $_POST['protect_full_image']);
+				setOption('protect_full_image', $_POST['protect_full_image']);
 				$returntab = "#tab_image";
 			}
 			/*** Comment options ***/
@@ -1938,16 +1937,15 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		<td><?php echo gettext("Controls compression on full images."); ?></td>
 	</tr>
 	<tr>
-		<td><?php echo gettext("Protect full image:"); ?></td>
-		<td><input type="checkbox" name="protect_full_image" value="1"
-		<?php echo checked('1', getOption('protect_full_image')); ?> /></td>
-		<td><?php echo gettext("When set, links to the full image will go through intermediate processing that will check for password protection and apply watermarking. This requires extra server memory and procssing overhead than if the image is loaded directly."); ?></td>
-	</tr>
-	<tr>
-		<td><?php echo gettext("Full image download:"); ?></td>
-		<td><input type="checkbox" name="full_image_download" value="1"
-		<?php echo checked('1', getOption('full_image_download')); ?> /></td>
-		<td><?php echo gettext("Causes a download dialog to be displayed when clicking on a	full-image link. (This option is active only if Protect Full Image is	set.)"); ?></td>
+		<td><?php echo gettext("Full image protectin:"); ?></td>
+		<td>
+		<?php 
+		echo "<select id=\"protect_full_image\" name=\"protect_full_image\">\n";
+		generateListFromArray(array(getOption('protect_full_image')), array('Unprotected', 'Protected view', 'Download', 'No access'));
+		echo "</select>\n";
+		?>
+		</td>
+		<td><?php echo gettext("Select the level of protection for full sized images."); ?></td>
 	</tr>
 	<tr>
 		<td></td>
@@ -2045,7 +2043,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 			customOptions($optionHandler);
 			echo "\n<tr>\n";
 			echo "<td></td>\n";
-			echo  '<td><input type="submit" value='. echogettext('save').' /></td>' . "\n";
+			echo  '<td><input type="submit" value='. gettext('save').' /></td>' . "\n";
 			echo "<td></td>\n";
 			echo "</tr>\n";
 			echo "</table>\n";
