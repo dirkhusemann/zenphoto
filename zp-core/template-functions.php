@@ -2485,8 +2485,8 @@ function printAlbumStatistic($number, $option) {
 	$gallery = new Gallery();
 	while ($album = mysql_fetch_array($albums)) {
 		$tempalbum = new Album($gallery, $album['folder']);
-		echo "<a href=\"".$albumlinkpath.$album['folder']."\" title=\"" . $album['title'] . "\">\n";
-		echo "<img src=\"".htmlspecialchars($tempalbum->getAlbumThumb())."\"></a>\n";
+		echo "<a href=\"".pathurlencode($tempalbum->name)."\" title=\"" . $tempalbum->getTitle() . "\">\n";
+		echo "<img src=\"".$tempalbum->getAlbumThumb()."\"></a>\n";
 	}
 	echo "</div>\n";
 }
