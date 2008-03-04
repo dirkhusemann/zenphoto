@@ -449,7 +449,7 @@ function printAlbumEditForm($index, $album) {
 	echo "\n</select>";
 	echo "&nbsp;Descending <input type=\"checkbox\" name=\"".$prefix."album_sortdirection\" value=\"1\"";
 
-	if ($album->getSortDirection('image')) {
+	if ($album->getSortDirection('album')) {
 		echo "CHECKED";
 	}
 	echo ">";
