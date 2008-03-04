@@ -156,13 +156,20 @@ function printAdminToolbox($context=null, $id='admin') {
  * Print any Javascript required by zenphoto. Every theme should include this somewhere in its <head>.
  */
 function zenJavascript() {
-	global $_zp_phoogle;
+	global $_zp_phoogle, $_zp_current_album;
 	if(getOption('gmaps_apikey') != ''){$_zp_phoogle->printGoogleJS();}
-	if (zp_loggedin()) {
-		echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/ajax.js\"></script>\n";
-		echo "  <script type=\"text/javascript\">\n";
-		sajax_show_javascript();
-		echo "  </script>\n";
+	if (($rights = zp_loggedin()) & EDIT_RIGHTS) {
+		if (in_context(ZP_ALBUM)) {
+			$grant = isMyAlbum($_zp_current_album->name, EDIT_RIGHTS);
+		} else {
+			$grant = $rights & ADMIN_RIGHTS;
+		}
+		if ($grant) {
+			echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/ajax.js\"></script>\n";
+			echo "  <script type=\"text/javascript\">\n";
+			sajax_show_javascript();
+			echo "  </script>\n";
+		}
 	}
 	echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/scripts-common.js\"></script>\n";
 	if (in_context(ZP_IMAGE)) {
