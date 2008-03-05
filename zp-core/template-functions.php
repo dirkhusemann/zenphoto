@@ -2027,10 +2027,11 @@ function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph
  * */
 function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $class=NULL, $id=NULL, $thumbStandin=false) {
 	global $_zp_current_album, $_zp_current_image;
-	if (!$_zp_current_album->getShow()) {
+	$album = $_zp_current_image->getAlbum();
+	if (!$album->getShow()) {
 		$class .= " not_visible";
 	} else {
-		$pwd = $_zp_current_album->getPassword();
+		$pwd = $album->getPassword();
 		if (zp_loggedin() && !empty($pwd)) {
 			$class .= " password_protected";
 		}
