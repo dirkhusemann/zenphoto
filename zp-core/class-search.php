@@ -21,7 +21,7 @@ class SearchEngine
 	var $page;
 	var $images;
 	var $albums;
-	var $albumname;
+	var $dynalbumname;
 
 	/**
 	 * Constuctor
@@ -50,7 +50,7 @@ class SearchEngine
 		if (!empty($d)) { $r .= '&date=' . $d; }
 		$f = $this->fields;
 		if (!empty($f)) { $r .= '&searchfields=' . $f; }
-		$a = $this->albumname;
+		$a = $this->dynalbumname;
 		if ($a) { $r .= '&albumname=' . $a; }
 		if ($_zp_page != 1) {
 			$this->page = $_zp_page;
@@ -83,7 +83,7 @@ class SearchEngine
 					$this->page = $v;
 					break;
 				case 'albumname':
-					$this->albumname = $v;
+					$this->dynalbumname = $v;
 					break;
 			}
 		}
@@ -375,9 +375,11 @@ class SearchEngine
 		if (is_array($search_results)) {
 			foreach ($search_results as $row) {
 				$albumname = $row['folder'];
-				if (file_exists($albumfolder . $albumname)) {
-					if (checkAlbumPassword($albumname, $hint)) {
-						$albums[] = $row['folder'];
+				if ($albumname != $this->dynalbumname) {
+					if (file_exists($albumfolder . $albumname)) {
+						if (checkAlbumPassword($albumname, $hint)) {
+							$albums[] = $row['folder'];
+						}
 					}
 				}
 			}
