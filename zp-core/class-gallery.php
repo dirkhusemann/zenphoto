@@ -259,13 +259,13 @@ class Gallery {
 	 */
 	function garbageCollect($cascade=true, $complete=false) {
 		// Check for the existence of top-level albums (subalbums handled recursively).
-		$result = query("SELECT * FROM " . prefix('albums') . " WHERE `parentid` IS NULL");
+		$result = query("SELECT * FROM " . prefix('albums'));
 		$dead = array();
 		$live = array();
 		// Load the albums from disk
-		$files = $this->loadAlbumNames();
+		$albumfolder = getAlbumFolder();
 		while($row = mysql_fetch_assoc($result)) {
-			if (!in_array($row['folder'], $files) || in_array($row['folder'], $live)) {
+			if (!file_exists($albumfolder.$row['folder']) || in_array($row['folder'], $live)) {
 				$dead[] = $row['id'];
 			} else {
 				$live[] = $row['folder'];
