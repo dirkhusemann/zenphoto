@@ -2,12 +2,6 @@
 
 class ThemeOptions {
 
-	var $iSupport = array('Allow_comments' => array('type' => 1, 'desc' => 'Set to enable comment section.'),
-				'Allow_search' => array('type' => 1, 'desc' => 'Set to enable search form.'),
-				'Gallery_description' => array('type' => 2, 'desc' => 'Place a brief descripton  your gallery here.'),
-				'Mini_slide_selector' => array('type' => 2, 'desc' => 'Select what you want for the six special slides.')
-				);
-
 	function ThemeOptions() {
 		/* put any setup code needed here */
 		setOptionDefault('Allow_comments', true);
@@ -17,7 +11,11 @@ class ThemeOptions {
 	}
 	
 	function getOptionsSupported() {
-		return $this->iSupport;
+		return array(	gettext('Allow comments') => array('key' => 'Allow_comments', 'type' => 1, 'desc' => gettext('Set to enable comment section.')),
+									gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Set to enable search form.')),
+									gettext('Gallery description') => array('key' => 'Gallery_description', 'type' => 2, 'desc' => gettext('Place a brief descripton  your gallery here.')),
+									gettext('Mini slide selector') => array('key' => 'Mini_slide_selector', 'type' => 2, 'desc' => gettext('Select what you want for the six special slides.'))
+									);
 	}
 	function handleOption($option, $currentValue) {
 		$selector = array(gettext('Recent images') => 'Recent images', gettext('Random images') => 'Random images');

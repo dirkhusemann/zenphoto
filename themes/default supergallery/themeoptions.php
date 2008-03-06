@@ -41,7 +41,11 @@ class ThemeOptions {
 	}
 	
 	function getOptionsSupported() {
-		return $this->iSupport;
+		return array(	gettext('Allow comments') => array('key' => 'Allow_comments', 'type' => 1, 'desc' => gettext('Set to enable comment section.')),
+									gettext('Allow ratings') => array('key' => 'Allow_ratings', 'type' => 1, 'desc' => gettext('Set to enable album and image ratings.')),
+									gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Set to enable search form.')),
+									gettext('Theme colors') => array('key' => 'Theme_colors', 'type' => 2, 'desc' => gettext('Set the colors of the theme'))
+								);
 	}
 
 	function handleOption($option, $currentValue) {

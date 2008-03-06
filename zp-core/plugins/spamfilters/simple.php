@@ -42,11 +42,6 @@
  
 class SpamFilter  {
 
-	var $iSupport = array('Words_to_die_on' => array('type' => 2, 'desc' => 'SPAM blacklist words (separate with commas)'),
-												'Patterns_to_die_on' => array('type' => 2, 'desc' => 'SPAM blacklist <a href="http://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> (separate with spaces)'),
-												'Excessive_URL_count' => array('type' => 0, 'desc' => 'Message is considered SPAM if there are more than this many URLs in it'),
-												'Forgiving' => array('type' => 1, 'desc' => 'Mark suspected SPAM for moderation rather than as SPAM'));
-												
 	var $wordsToDieOn = array('cialis','ebony','nude','porn','porno','pussy','upskirt','ringtones','phentermine','viagra', 'levitra'); /* the word black list */
 	
 	var $patternsToDieOn = array('\[url=.*\]');
@@ -61,7 +56,10 @@ class SpamFilter  {
 }
 	
 	function getOptionsSupported() {
-		return $this->iSupport;
+		return array(	gettext('Words to die on') => array('key' => 'Words_to_die_on', 'type' => 2, 'desc' => gettext('SPAM blacklist words (separate with commas)')),
+									gettext('Patterns to die on') => array('key' => 'Patterns_to_die_on', 'type' => 2, 'desc' => gettext('SPAM blacklist').' <a href="http://en.wikipedia.org/wiki/Regular_expression">'.gettext('regular expressions').'</a> '.gettext('(separate with spaces)')),
+									gettext('Excessive URL count') => array('key' => 'Excessive_URL_count', 'type' => 0, 'desc' => gettext('Message is considered SPAM if there are more than this many URLs in it')),
+									gettext('Forgiving') => array('key' => 'Forgiving', 'type' => 1, 'desc' => gettext('Mark suspected SPAM for moderation rather than as SPAM')));
 	}
  	function handleOption($option, $currentValue) {
  		if ($option=='Words_to_die_on') {

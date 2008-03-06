@@ -39,15 +39,13 @@
  
 class SpamFilter  {
  
-	var $iSupport = array('Action' => array('type' => 2, 'desc' => 'This action will be taken for all messages.'));
- 
 	function SpamFilter() {
 		global $gallery;
 		setOptionDefault('Action', 'pass');
 	}
 
 	function getOptionsSupported() {
-		return $this->iSupport;
+		return array(gettext('Action') => array('key' => 'Action', 'type' => 2, 'desc' => gettext('This action will be taken for all messages.')));
 	}
 	function handleOption($option, $currentValue) {
 		if ($option == 'Action') {

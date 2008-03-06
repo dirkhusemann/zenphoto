@@ -45,16 +45,15 @@
  
 class SpamFilter  {
  
-	var $iSupport = array('Akismet_key' => array('type' => 0, 'desc' => 'Proper operation requires an Akismet key obtained by signing up for a <a href="http://www.wordpress.com">Wordpress.com</a> account.'),
-												'Forgiving' => array('type' => 1, 'desc' => 'Mark suspected SPAM for moderation rather than as SPAM'));
-
 	function SpamFilter() {
 		setOptionDefault('Akismet_key', '');
 		setOptionDefault('Forgiving', 0);
 	}												
  
 	function getOptionsSupported() {
-		return $this->iSupport;
+		return array(	gettext('Akismet key') => array('key' => 'Akismet_key', 'type' => 0, 'desc' => gettext('Proper operation requires an Akismet key obtained by signing up for a <a href="http://www.wordpress.com">Wordpress.com</a> account.')),
+									gettext('Forgiving') => array('key' => 'Forgiving', 'type' => 1, 'desc' => gettext('Mark suspected SPAM for moderation rather than as SPAM')));
+
 	}
 	
 	function handleOption($option, $currentValue) {

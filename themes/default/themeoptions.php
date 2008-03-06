@@ -26,12 +26,6 @@
 require_once(SERVERPATH . "/" . ZENFOLDER . "/admin-functions.php");
 
 class ThemeOptions {
-
-	var $iSupport = array('Allow_comments' => array('type' => 1, 'desc' => 'Set to enable comment section.'),
-							'Allow_ratings' => array('type' => 1, 'desc' => 'Set to enable album and image ratings.'),
-							'Allow_search' => array('type' => 1, 'desc' => 'Set to enable search form.'),
-												'Theme_colors' => array('type' => 2, 'desc' => 'Set the colors of the theme')
-												);
 	
 	function ThemeOptions() {
 		setOptionDefault('Allow_comments', true);
@@ -41,7 +35,11 @@ class ThemeOptions {
 	}
 	
 	function getOptionsSupported() {
-		return $this->iSupport;
+		return array(	gettext('Allow_comments') => array('key' => 'Allow_comments', 'type' => 1, 'desc' => gettext('Set to enable comment section.')),
+									gettext('Allow_ratings') => array('key' => 'Allow_ratings', 'type' => 1, 'desc' => gettext('Set to enable album and image ratings.')),
+									gettext('Allow_search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Set to enable search form.')),
+									gettext('Theme_colors') => array('key' => 'Theme_colors', 'type' => 2, 'desc' => gettext('Set the colors of the theme'))
+								);
 	}
 
 	function handleOption($option, $currentValue) {

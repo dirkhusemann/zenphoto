@@ -93,12 +93,12 @@ class SpamFilter {
 
 	function getOptionsSupported() {
 		return array(
-			'Forgiving' => array('type' => '1' , 'desc' => 'Mark suspected SPAM for moderation rather than as SPAM'),
-			'SpamAssassin_host' => array('type' => '0' , 'desc' => 'SpamAssassin server'),
-			'SpamAssassin_ctype' => array('type' => '2' , 'desc' => 'Connection type'),
-			'SpamAssassin_port' => array('type' => '0' , 'desc' => 'TCP port of SpamAssassin'),
-			'SpamAssassin_socket' => array('type' => '0' , 'desc' => 'Socket of SpamAssassin'),
-			'SpamAssassin_user' => array('type' => '0' , 'desc' => 'User to use on SpamAssassin box')
+			gettext('Forgiving') => array('key' => 'Forgiving', 'type' => '1' , 'desc' => gettext('Mark suspected SPAM for moderation rather than as SPAM')),
+			gettext('SpamAssassin host') => array('key' => 'SpamAssassin_host', 'type' => '0' , 'desc' => gettext('SpamAssassin server')),
+			gettext('SpamAssassin ctype') => array('key' => 'SpamAssassin_ctype', 'type' => '2' , 'desc' => gettext('Connection type')),
+			gettext('SpamAssassin port') => array('key' => 'SpamAssassin_port', 'type' => '0' , 'desc' => gettext('TCP port of SpamAssassin')),
+			gettext('SpamAssassin socket') => array('key' => 'SpamAssassin_socket', 'type' => '0' , 'desc' => gettext('Socket of SpamAssassin')),
+			gettext('SpamAssassin user') => array('key' => 'SpamAssassin_user', 'type' => '0' , 'desc' => gettext('User to use on SpamAssassin box'))
 		);
 	}
 	

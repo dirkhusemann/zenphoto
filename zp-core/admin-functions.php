@@ -302,18 +302,19 @@ function displayDeleted() {
 function customOptions($optionHandler, $indent="") {
 	$supportedOptions = $optionHandler->getOptionsSupported();
 	if (count($supportedOptions) > 0) {
-		$keys = array_keys($supportedOptions);
-		natcasesort($keys);
-		foreach($keys as $key) {
-			$row = $supportedOptions[$key];
+		$options = array_keys($supportedOptions);
+		natcasesort($options);
+		foreach($options as $option) {
+			$row = $supportedOptions[$option];
 			$type = $row['type'];
-			$desc = gettext($row['desc']);
+			$desc = $row['desc'];
+			$key = $row['key'];
 			$sql = "SELECT `value` FROM " . prefix('options') . " Where `name`='" . escape($key) . "';";
 			$db = query_single_row($sql);
 			$v = $db['value'];
 
 			echo "\n<tr>\n";
-			echo '<td width="175">' . $indent . gettext(str_replace('_', ' ', $key)) . ":</td>\n";
+			echo '<td width="175">' . $indent . $option . ":</td>\n";
 
 			switch ($type) {
 				case 0:  // text box

@@ -29,19 +29,8 @@ require_once(SERVERPATH . "/" . ZENFOLDER . "/admin-functions.php");
 
 class ThemeOptions {
 
-	var $iSupport = array(	'Theme_logo' => array('type' => 0, 'desc' => 'The text for the them logo'),
-							'Allow_search' => array('type' => 1, 'desc' => 'Set to enable search form.'),
-							'Slideshow' => array('type' => 1, 'desc' => 'Set to enable slideshow for the <em>Smooth</em> personality.'),
-							'Graphic_logo' => array('type' => 2, 'desc' => 'Select a logo (PNG files in the images folder) or leave empty for text logo.'),
-							'Watermark_head_image' => array('type' => 1, 'desc' => 'Set to place a watermark on the heading image. (Image watermarking must be set.)'),
-							'Theme_personality' => array('type' => 2, 'desc' => 'Select the theme personality'),
-							'Theme_colors' => array('type' => 2, 'desc' => 'Set the colors of the theme')
-	);
-
 	function ThemeOptions() {
 		setOptionDefault('Theme_logo', '');
-		setOptionDefault('Allow_search', true);
-		setOptionDefault('Slideshow', true);
 		setOptionDefault('Graphic_logo', 'logo');
 		setOptionDefault('Watermark_head_image', true);
 		setOptionDefault('Theme_personality', 'Image page');
@@ -49,7 +38,12 @@ class ThemeOptions {
 	}
 
 	function getOptionsSupported() {
-		return $this->iSupport;
+		return array(	gettext('Theme logo') => array('key' => 'Theme_logo', 'type' => 0, 'desc' => gettext('The text for the them logo')),
+									gettext('Watermark head_image') => array('key' => 'Watermark_head_image', 'type' => 1, 'desc' => gettext('Set to place a watermark on the heading image. (Image watermarking must be set.)')),
+									gettext('Graphic logo') => array('key' => 'Graphic_logo', 'type' => 2, 'desc' => gettext('Select a logo (PNG files in the images folder) or leave empty for text logo.')),
+									gettext('Theme personality') => array('key' => 'Theme_personality', 'type' => 2, 'desc' => gettext('Select the theme personality')),
+									gettext('Theme colors') => array('key' => 'Theme_colors', 'type' => 2, 'desc' => gettext('Set the colors of the theme'))
+								);
 	}
 
 	function handleOption($option, $currentValue) {
