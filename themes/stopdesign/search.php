@@ -122,10 +122,8 @@
 				<a href="<?php echo getNextPageURL(); ?>" accesskey="x">next page &raquo;</a>
 			<?php
 					}
-					if (!in_context(ZP_ALBUM)) {
-						echo '</p>';
-						echo "<em class=\"count\">Total matches for <em>".getSearchWords()."</em>: ".$results."</em>";
-					}
+					echo '</p>';
+					echo "<em class=\"count\">Total matches for <em>".getSearchWords()."</em>: ".$results."</em>";
 				} else {
 					echo "<p>Sorry, no matches. Try refining your search.</p>"; 
 				}

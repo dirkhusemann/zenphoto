@@ -12,6 +12,7 @@ class Album extends PersistentObject {
 	var $parent = null;    // The parent album name
 	var $parentalbum = null; // The parent album's album object (lazy)
 	var $gallery;
+	var $searchengine;           // cache the search engine for dynamic albums
 	var $index;
 	var $themeoverride;
 
@@ -1019,6 +1020,20 @@ class Album extends PersistentObject {
 		$this->set('search_params', $params);
 	}
 
+	/**
+	 * Returns the search engine for a dynamic album
+	 *
+	 * @return object
+	 */
+	function getSearchEngine() {
+		if (!$this->isDynamic()) return null;
+		if (!is_null($this->$searchengine)) return $this->$searchengine;
+		$this->$searchengine = new SearchEngine();
+		$params = $this->getSearchParams();
+		$params .= '&albumname='.$this->name;
+		$this->$searchengine->setSearchParams($params);
+		return $this->$searchengine;		
+	}
 }
 
 ?>

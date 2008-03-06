@@ -42,11 +42,8 @@ if (isset($_GET['p'])) {
 		createAlbumZip($_GET['album']); 
 	} else { 
 		if ($_zp_current_album->isDynamic()) {
-			$_zp_current_search = setupDynamicAlbum($_zp_current_album, $params);		
+			$_zp_current_search = $_zp_current_album->getSearchEngine();		
 			set_context(ZP_INDEX | ZP_ALBUM | ZP_SEARCH);
-			$cookiepath = WEBPATH;
-			if (WEBPATH == '') { $cookiepath = '/'; }
-			zp_setcookie("zenphoto_image_search_params", $params, 0, $cookiepath);
 			include($obj = "$themepath/$theme/album.php");
 		} else {
 			handleSearchParms($_zp_current_album->name);

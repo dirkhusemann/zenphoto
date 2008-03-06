@@ -1072,7 +1072,7 @@ function getNumImages() {
 			$dynamic = $_zp_current_album->isDynamic();
 		}
 		if ($dynamic) { 
-			$search = setupDynamicAlbum($_zp_current_album, $params);
+			$search = $_zp_current_album->getSearchEngine();
 			return $search->getNumImages();
 		} else {
 			return $_zp_current_search->getNumImages();

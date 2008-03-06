@@ -337,22 +337,21 @@ class SearchEngine
 		}
 		if(!zp_loggedin()) { $sql .= ")"; }
 		if ($nrt == 0) { return NULL; } // no valid fields
-
-		if ($tbl = 'albums') {
-			if (!is_null($_zp_current_album)) {
-				$key = $_zp_current_album->getSubalbumSortKey();
-				if ($_zp_current_album->getSortDirection('album')) { $key .= " DESC"; }
-			} else {
+		if ($tbl == 'albums') {
+			if (empty($this->dynalbumname)) {
 				$key = subalbumSortKey(getOption('gallery_sorttype'));
 				if (getOption('gallery_sortdirection')) { $key .= " DESC"; }
+			} else {
+				$key = $_zp_current_album->getSubalbumSortKey();
+				if ($_zp_current_album->getSortDirection('album')) { $key .= " DESC"; }
 			}
 		} else {
-			if (!is_null($_zp_current_album)) {
-				$key = $_zp_current_album->getSortKey();
-				if ($_zp_current_album->getSortDirection('image')) { $key .= " DESC"; }
-			} else {
+			if (empty($this->dynalbumname)) {
 				$key = albumSortKey(getOption('image_sorttype'));
 				if (getOption('image_sortdirection')) { $key .= " DESC"; }
+			} else {
+				$key = $_zp_current_album->getSortKey();
+				if ($_zp_current_album->getSortDirection('image')) { $key .= " DESC"; }
 			}
 		}
 		$sql .= " ORDER BY ".$key;

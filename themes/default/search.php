@@ -20,9 +20,7 @@
 
 	<div id="gallerytitle">
 		<?php 
-		if (!in_context(ZP_ALBUM)) {
 			printSearchForm(); 
-		}
 		?>
 		<h2><span><?php printHomeLink('', ' | '); ?><a href="
 		<?php echo getGalleryIndexURL();?>" title="Gallery Index">
@@ -35,13 +33,11 @@
 		
 		<div id="padbox">
 		<?php 
-		if (!in_context(ZP_ALBUM)) {
-			if (($total = getNumImages() + getNumAlbums()) > 0) {
-				if ($_REQUEST['date']){
-					$searchwords = getSearchDate();
-	 		} else { $searchwords = getSearchWords(); }
-				echo "<p>Total matches for <em>".$searchwords."</em>: $total</p>";
-			}
+		if (($total = getNumImages() + getNumAlbums()) > 0) {
+			if ($_REQUEST['date']){
+				$searchwords = getSearchDate();
+ 		} else { $searchwords = getSearchWords(); }
+			echo "<p>Total matches for <em>".$searchwords."</em>: $total</p>";
 		}
 		$c = 0;
 		?>

@@ -71,7 +71,7 @@ $backgroundImagePath="";
 <!-- Logo -->
 	<div id="logo">
 	<?php
-	if (getOption('Allow_search') & (!in_context(ZP_ALBUM))) {  printSearchForm(); }
+	if (getOption('Allow_search')) {  printSearchForm(); }
 		echo printLogo();
 	?>
 	</div>
@@ -99,7 +99,6 @@ $backgroundImagePath="";
 <!-- Album Description -->
 <div id="description">
 		<?php
-		if (!in_context(ZP_ALBUM)) {
 			$total = getNumAlbums() + getNumImages();
 			$searchwords = getSearchWords();
 			$searchdate = getSearchDate();
@@ -114,7 +113,6 @@ $backgroundImagePath="";
 				if ($total > 1) { echo "s"; }
 				echo " for <em>$searchwords</em>";
 			}
-		}
 		?>
 </div>
  					
