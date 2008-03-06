@@ -1098,20 +1098,22 @@ function createAlbumZip($album){
  * @param string $root the base from whence the path dereives
  * @return sting
  */
+$_zp_xternal_album_folder = null;
 $_zp_album_folder = null;
 function getAlbumFolder($root=SERVERPATH) {
-	global $_zp_album_folder;
-	if ($_zp_album_folder != null) return $_zp_album_folder;
-	if (is_null($album_folder = getOption('album_folder'))) {
-		$album_folder = ALBUMFOLDER;
-	}
-	if (!is_null($external_folder = getOption('external_album_folder'))) {
-		if (substr($external_folder, -1) != '/') $external_folder += '/';
-		$_zp_album_folder = $external_folder;
+	global $_zp_xternal_album_folder, $_zp_album_folder;
+	if (!is_null($_zp_album_folder)) return $root . $_zp_album_folder;
+	if ($_zp_xternal_album_folder != null) return $_zp_xternal_album_folder;
+
+	if (!is_null($_zp_xternal_album_folder = getOption('external_album_folder'))) {
+		if (substr($_zp_xternal_album_folder, -1) != '/') $_zp_xternal_album_folder += '/';
+		return $_zp_xternal_album_folder;
 	} else {
-		$_zp_album_folder = $root . $album_folder;
+		if (is_null($_zp_album_folder = getOption('album_folder'))) {
+			$_zp_album_folder = ALBUMFOLDER;
+		}
+		return $root . $_zp_album_folder;
 	}
-	return $_zp_album_folder;
 }
 
 /**

@@ -308,7 +308,12 @@ function customOptions($optionHandler, $indent="") {
 			$row = $supportedOptions[$option];
 			$type = $row['type'];
 			$desc = $row['desc'];
-			$key = $row['key'];
+			if (isset($row['key'])) {
+				$key = $row['key'];
+			} else { // backward compatibility
+				$key = $option;  
+				$option = str_replace('_', ' ', $option);
+			}
 			$sql = "SELECT `value` FROM " . prefix('options') . " Where `name`='" . escape($key) . "';";
 			$db = query_single_row($sql);
 			$v = $db['value'];
