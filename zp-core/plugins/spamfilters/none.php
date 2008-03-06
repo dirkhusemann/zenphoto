@@ -52,7 +52,7 @@ class SpamFilter  {
 	function handleOption($option, $currentValue) {
 		if ($option == 'Action') {
 			echo "<select id=\"Action\" name=\"Action\">";
-			generateListFromArray(array($currentValue), array('pass', 'moderate', 'reject'));
+			generateListFromArray(array($currentValue), array(gettext('pass') => 'pass', gettext('moderate') => 'moderate', gettext('reject') => 'reject'));
 			echo "</select>";
 		}
 	}

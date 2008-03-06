@@ -104,7 +104,7 @@ class SpamFilter {
 	
 	function handleOption($option, $currentValue) {
 		if ($option == 'SpamAssassin_ctype') {
-			echo '<select id="connectiontype" name="' . $option . '"' . ">\n";
+			echo '<select id="connectiontype" name="' . $option . '"' . " DISABLED>\n";
 			echo '<option value="tcp"';
 			if ($currentValue == 'tcp') { 
 				echo ' selected="selected"'; 

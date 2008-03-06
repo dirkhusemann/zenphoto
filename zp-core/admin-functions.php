@@ -307,13 +307,13 @@ function customOptions($optionHandler, $indent="") {
 		foreach($keys as $key) {
 			$row = $supportedOptions[$key];
 			$type = $row['type'];
-			$desc = $row['desc'];
+			$desc = gettext($row['desc']);
 			$sql = "SELECT `value` FROM " . prefix('options') . " Where `name`='" . escape($key) . "';";
 			$db = query_single_row($sql);
 			$v = $db['value'];
 
 			echo "\n<tr>\n";
-			echo '<td width="175">' . $indent . str_replace('_', ' ', $key) . ":</td>\n";
+			echo '<td width="175">' . $indent . gettext(str_replace('_', ' ', $key)) . ":</td>\n";
 
 			switch ($type) {
 				case 0:  // text box
@@ -343,14 +343,20 @@ function customOptions($optionHandler, $indent="") {
  * @param array $list the elements of the select list
  */
 function generateListFromArray($currentValue, $list) {
-	sort($list);
+	$localize = !is_numeric(array_shift(array_keys($list)));
+	if ($localize) {
+		ksort($list);
+	} else {
+		sort($list);
+	}
 	$cv = array_flip($currentValue);
-	foreach($list as $item) {
+	foreach($list as $key=>$item) {
 		echo '<option value="' . $item . '"';
 		if (isset($cv[$item])) {
 			echo ' selected="selected"';
 		}
-		echo '>' . $item . "</option>\n";
+		if ($localize) $display = $key; else $display = $item;
+		echo '>' . $display . "</option>\n";
 	}
 }
 
@@ -439,7 +445,7 @@ function printAlbumEditForm($index, $album) {
 		echo "\n</td>";
 		echo "\n</tr>";
 	} else {
-		$sort[] = 'Manual';
+		$sort[gettext('Manual')] = 'Manual';
 	}
 	echo "\n<tr>";
 	echo "\n<td align=\"right\" valign=\"top\">".gettext("Sort subalbums by:")." </td>";
@@ -703,7 +709,7 @@ function printAlbumEditRow($album) {
 	echo '<img src="images/reset.png" style="border: 0px;" alt="'.gettext('Reset hitcounters for the album').' ' . $album->name . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-	echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=" . queryEncode($album->name) . "');\" title=\"".gettext("Delete the album")." " . $album->name . "\">";
+	echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=" . queryEncode($album->name) . "','".gettext("Are you sure you want to delete this entire album?")."','".gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")."');\" title=\"".gettext("Delete the album")." " . $album->name . "\">";
 	echo '<img src="images/fail.png" style="border: 0px;" alt="'.gettext('Delete the album').' ' . $album->name . '" /></a>';
 	echo "</td>\n</tr></table>\n</td>";
 

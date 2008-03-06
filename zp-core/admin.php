@@ -2,7 +2,7 @@
 define('OFFSET_PATH', true);
 require_once("sortable.php");
 if (!$session_started) session_start();
-$sortby = array('Filename', 'Date', 'Title', 'ID' );
+$sortby = array(gettext('Filename') => 'Filename', gettext('Date') => 'Date', gettext('Title') => 'Title', gettext('ID') => 'ID' );
 $standardOptions = array('gallery_title','website_title','website_url','time_offset',
  												'gmaps_apikey','mod_rewrite','mod_rewrite_image_suffix',
  												'server_protocol','charset','image_quality',
@@ -941,7 +941,7 @@ if (count($album->getImages())) {
 		</td>
 
 		<td style="padding-left: 1em;"><a
-			href="javascript: confirmDeleteImage('?page=edit&action=deleteimage&album=<?php echo queryEncode($album->name); ?>&image=<?php echo queryEncode($image->filename); ?>');"
+			href="javascript: confirmDeleteImage('?page=edit&action=deleteimage&album=<?php echo queryEncode($album->name); ?>&image=<?php echo queryEncode($image->filename); ?>','<?php echo gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"); ?>');"
 			title="<?php gettext('Delete the image'); ?> <?php echo $image->filename; ?>"> <img
 			src="images/fail.png" style="border: 0px;"
 			alt="<?php gettext('Delete the image'); ?> <?php echo $image->filename; ?>" /></a></td>
@@ -1142,7 +1142,7 @@ if (ini_get('safe_mode')) { ?>
 
 <form name="uploadform" enctype="multipart/form-data"
 	action="?action=upload" method="POST"
-	onSubmit="return validateFolder(document.uploadform.folder);"><input
+	onSubmit="return validateFolder(document.uploadform.folder,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');"><input
 	type="hidden" name="processed" value="1" /> <input type="hidden"
 	name="existingfolder" value="false" />
 
@@ -1197,7 +1197,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 <div id="foldererror"
 	style="display: none; color: #D66; position: absolute; z-index: 100; top: 2.5em; left: 0px;"></div>
 <input id="folderdisplay" size="18" type="text" name="folderdisplay"
-	disabled="1" onKeyUp="validateFolder(this);" /> <label><input
+	disabled="1" onKeyUp="validateFolder(this,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');" /> <label><input
 	type="checkbox" name="autogenfolder" id="autogen" checked="1"
 	onClick="toggleAutogen('folderdisplay', 'albumtitle', this);" />
 <?php echo gettext("Auto-generate"); ?></label> <br />
@@ -1726,7 +1726,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		<td><select id="sortselect" name="gallery_sorttype">
 			<?php
 		$sort = $sortby;
-		$sort[] = 'Manual'; // allow manual sorttype
+		$sort[gettext('Manual')] = 'Manual'; // allow manual sorttype
 		generateListFromArray(array(getOption('gallery_sorttype')), $sort);
 		?>
 		</select> <input type="checkbox" name="gallery_sortdirection"
@@ -1941,7 +1941,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		<td>
 		<?php 
 		echo "<select id=\"protect_full_image\" name=\"protect_full_image\">\n";
-		generateListFromArray(array(getOption('protect_full_image')), array('Unprotected', 'Protected view', 'Download', 'No access'));
+		generateListFromArray(array(getOption('protect_full_image')), array(gettext('Unprotected') => 'Unprotected', gettext('Protected view') => 'Protected view', gettext('Download') => 'Download', gettext('No access') => 'No access'));
 		echo "</select>\n";
 		?>
 		</td>

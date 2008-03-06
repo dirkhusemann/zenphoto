@@ -98,17 +98,17 @@ function printAdminToolbox($context=null, $id='admin') {
 		$redirect = '';
 		echo "\n<script type=\"text/javascript\" src=\"".$zf."/js/admin.js\"></script>\n";
 		if (is_null($context)) { $context = get_context(); }
-		echo '<div id="' .$id. '">'."\n".'<a href="javascript: toggle('. "'" .$dataid."'".');"><h3>Admin Toolbox</h3></a>'."\n"."\n</div>";
+		echo '<div id="' .$id. '">'."\n".'<a href="javascript: toggle('. "'" .$dataid."'".');"><h3>'.gettext('Admin Toolbox').'</h3></a>'."\n"."\n</div>";
 		echo '<div id="' .$dataid. '" style="display: none;">'."\n";
 		printAdminLink('Admin', '', "<br />\n");
 		$albumname = $_zp_current_album->name;
 		if ($context === ZP_INDEX) {
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
-				printSortableGalleryLink('Sort gallery', 'Manual sorting');
+				printSortableGalleryLink(gettext('Sort gallery'), gettext('Manual sorting'));
 				echo "<br />\n";
 			}
 			if (isMyAlbum($albumname, UPLOAD_RIGHTS)) {
-				printLink($zf . '/admin.php?page=upload' . urlencode($_zp_current_album->name), "New album", NULL, NULL, NULL);
+				printLink($zf . '/admin.php?page=upload' . urlencode($_zp_current_album->name), gettext("New album"), NULL, NULL, NULL);
 				echo "<br />\n";
 			}
 			if (isset($_GET['p'])) {
@@ -117,18 +117,18 @@ function printAdminToolbox($context=null, $id='admin') {
 			$redirect .= "&page=$page";
 		} else if (!in_context(ZP_IMAGE | ZP_SEARCH)  || (get_context() & (ZP_SEARCH | ZP_ALBUM)) == (ZP_SEARCH | ZP_ALBUM)) {  // then it must be an album page
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
-				printSubalbumAdmin('Edit album', '', "<br />\n");
+				printSubalbumAdmin(gettext('Edit album'), '', "<br />\n");
 				if (!in_context(ZP_SEARCH)) {
-					printSortableAlbumLink('Sort album', 'Manual sorting');
+					printSortableAlbumLink(gettext('Sort album'), gettext('Manual sorting'));
 					echo "<br />\n";
 				}
 				echo "<a href=\"javascript: confirmDeleteAlbum('".$zf."/admin.php?page=edit&action=deletealbum&album=" .
-				queryEncode($albumname) . "');\" title=\"Delete the album\">Delete album</a><br />\n";
+				queryEncode($albumname) . "');\" title=\"".gettext("Delete the album")."\">".gettext("Delete album")."</a><br />\n";
 			}
 			if (isMyAlbum($albumname, UPLOAD_RIGHTS) && !in_context(ZP_SEARCH)) {
-				printLink($zf . '/admin.php?page=upload&album=' . urlencode($albumname), "Upload Here", NULL, NULL, NULL);
+				printLink($zf . '/admin.php?page=upload&album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL);
 				echo "<br />\n";
-				printLink($zf . '/admin.php?page=upload&new&album=' . urlencode($albumname), "New Album Here", NULL, NULL, NULL);
+				printLink($zf . '/admin.php?page=upload&new&album=' . urlencode($albumname), gettext("New Album Here"), NULL, NULL, NULL);
 				echo "<br />\n";
 			}
 			$redirect = "&album=".urlencode($albumname)."&page=$page";
@@ -136,18 +136,18 @@ function printAdminToolbox($context=null, $id='admin') {
 			$imagename = queryEncode($_zp_current_image->filename);
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				echo "<a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?page=edit&action=deleteimage&album=" .
-				urlencode($albumname) . "&image=". $imagename . "');\" title=\"Delete the image\">Delete image</a>";
+				urlencode($albumname) . "&image=". $imagename . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
 				echo "<br />\n";
 			}
 			$redirect = "&album=".urlencode($albumname)."&image=$imagename";
 		} else if (in_context(ZP_SEARCH)&& !empty($_zp_current_search->words)) {
 			if ($_zp_loggedin & UPLOAD_RIGHTS) {
-				echo "<a href=\"".$zf."/dynamic.php\" title=\"Create an album from the search\">Create Album</a><br/>";
+				echo "<a href=\"".$zf."/dynamic.php\" title=\"".gettext("Create an album from the search")."\">".gettext("Create Album")."</a><br/>";
 			}
 			$redirect = "&p=search" . $_zp_current_search->getSearchParams() . "&page=$page";
 		}
 
-		echo "<a href=\"".$zf."/admin.php?logout$redirect\">Logout</a>\n";
+		echo "<a href=\"".$zf."/admin.php?logout$redirect\">".gettext("Logout")."</a>\n";
 		echo "</div>\n";
 	}
 }
@@ -465,9 +465,9 @@ function printPrevPageLink($text, $title=NULL, $class=NULL, $id=NULL) {
  */
 function printPageNav($prevtext, $separator, $nexttext, $class='pagenav', $id=NULL) {
 	echo "<div" . (($id) ? " id=\"$id\"" : "") . " class=\"$class\">";
-	printPrevPageLink($prevtext, "Previous Page");
+	printPrevPageLink($prevtext, gettext("Previous Page"));
 	echo " $separator ";
-	printNextPageLink($nexttext, "Next Page");
+	printNextPageLink($nexttext, gettext("Next Page"));
 	echo "</div>\n";
 }
 
@@ -503,18 +503,18 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 	echo "\n<ul class=\"$class\">";
 	if ($nextprev) {
 		echo "\n  <li class=\"prev\">";
-		printPrevPageLink($prevtext, "Previous Page");
+		printPrevPageLink($prevtext, gettext("Previous Page"));
 		echo "</li>";
 	}
 	for ($i=($j=max(1, min($current-2, $total-6))); $i <= min($total, $j+6); $i++) {
 		echo "\n  <li" . (($i == $current) ? " class=\"current\"" : "") . ">";
-		printLink(getPageURL_($i, $total), $i, "Page $i" . (($i == $current) ? " (Current Page)" : ""));
+		printLink(getPageURL_($i, $total), $i, "Page $i" . (($i == $current) ? gettext(" (Current Page)") : ""));
 		echo "</li>";
 	}
 	if ($i <= $total) {echo "\n <li><a>" . ". . ." . "</a></li>"; }
 	if ($nextprev) {
 		echo "\n  <li class=\"next\">";
-		printNextPageLink($nexttext, "Next Page");
+		printNextPageLink($nexttext, gettext("Next Page"));
 		echo "</li>";
 	}
 	echo "\n</ul>";
@@ -618,7 +618,7 @@ function printAlbumBreadcrumb($before='', $after='', $title='Album Thumbnails') 
 		$searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
 		if (empty($dynamic_album)) {
 			echo "<a href=\"" . $searchpagepath . "\">";
-			echo "<em>Search</em></a>";
+			echo "<em>".gettext("Search")."</em></a>";
 		} else {
 			$album = new Album($_zp_current_gallery, $dynamic_album);
 			echo "<a href=\"" . getAlbumLinkURL($album) . "\">";
@@ -844,7 +844,7 @@ function printSortableAlbumLink($text, $title, $class=NULL, $id=NULL) {
 			$text, $title, $class, $id);
 		} else {
 			// TODO: this doesn't really work yet
-			$_zp_sortable_list->printForm(getAlbumLinkURL(), 'POST', 'Save', 'button');
+			$_zp_sortable_list->printForm(getAlbumLinkURL(), 'POST', gettext('Save'), 'button');
 		}
 	}
 }
@@ -865,7 +865,7 @@ function printSortableGalleryLink($text, $title, $class=NULL, $id=NULL) {
 			printLink(WEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit", $text, $title, $class, $id);
 		} else {
 			// TODO: this doesn't really work yet
-			$_zp_sortable_list->printForm(WEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit", 'POST', 'Save', 'button');
+			$_zp_sortable_list->printForm(WEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit", 'POST', gettext('Save'), 'button');
 		}
 	}
 }
@@ -1861,7 +1861,7 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 		if ($ext == ".flv") {
 			//Player Embed...
 			echo '</a>
-			<p id="player"><a href="http://www.macromedia.com/go/getflashplayer">Get Flash</a> to see this player.</p>
+			<p id="player"><a href="http://www.macromedia.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
 			<script type="text/javascript">
 			var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/flvplayer.swf","player","320","240","7");
 			so.addParam("allowfullscreen","true");
@@ -2043,7 +2043,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 		if ($ext == ".flv") {
 			//Player Embed...
 			echo '</a>
-			<p id="player"><a href="http://www.macromedia.com/go/getflashplayer">Get Flash</a> to see this player.</p>
+			<p id="player"><a href="http://www.macromedia.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
 			<script type="text/javascript">
 			var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/flvplayer.swf","player","320","240","7");
 			so.addParam("allowfullscreen","true");
@@ -2281,19 +2281,19 @@ function printCommentErrors($class = 'error') {
 
 		switch ($_zp_comment_error) {
 
-			case -1: echo "You must supply an e-mail address."; break;
+			case -1: echo gettext("You must supply an e-mail address."); break;
 
-			case -2: echo "You must entert your name."; break;
+			case -2: echo gettext("You must entert your name."); break;
 
-			case -3: echo "You must supply an WEB page URL."; break;
+			case -3: echo gettext("You must supply an WEB page URL."); break;
 
-			case -4: echo "Captcha verification failed."; break;
+			case -4: echo gettext("Captcha verification failed."); break;
 
-			case -5: echo "You must enter something in the comment text."; break;
+			case -5: echo gettext("You must enter something in the comment text."); break;
 
-			case  1: echo "Your comment failed the SPAM filter check."; break;
+			case  1: echo gettext("Your comment failed the SPAM filter check."); break;
 
-			case  2: echo "Your comment has been marked for moderation."; break;
+			case  2: echo gettext("Your comment has been marked for moderation."); break;
 
 		}
 		echo "</div>";
@@ -2307,8 +2307,7 @@ function printAlbumZip(){
 	global $_zp_current_album;
 	echo'<a href="' . rewrite_path("/" . pathurlencode($_zp_current_album->name),
 		"/index.php?album=" . urlencode($_zp_current_album->name)) .
-		'&zipfile" title="Download Zip of the Album">Download a zip file ' .
-		'of this album</a>';
+		'&zipfile" title="'.gettext('Download Zip of the Album').'">'.gettext('Download a zip file of this album').'</a>';
 }
 
 /**
@@ -2747,7 +2746,7 @@ function printRandomImages($number=5, $class=null, $option='all', $rootAlbum='')
 				$randomImage = getRandomImagesAlbum($rootAlbum); break;
 		}
 		$randomImageURL = getURL($randomImage);
-		echo '<a href="' . $randomImageURL . '" title="View image: ' . htmlspecialchars($randomImage->getTitle(), ENT_QUOTES) . '">' .
+		echo '<a href="' . $randomImageURL . '" title="'.gettext('View image:').' ' . htmlspecialchars($randomImage->getTitle(), ENT_QUOTES) . '">' .
 			'<img src="' . $randomImage->getThumb() .
 			'" alt="'.htmlspecialchars($randomImage->getTitle(), ENT_QUOTES).'"';
 		echo "/></a></li>\n";
@@ -2841,21 +2840,24 @@ function printRating($option) {
 	echo "<div id=\"rating\">\n";
 	echo "<ul class=\"star-rating\">\n";
 	echo "<li class=\"current-rating\" id=\"current-rating\" style=\"width:".$ratingpx."px\"></li>\n";
+	$message1 = gettext("Rating: ");
+	$message2 = gettext(" (Total votes: ");
+	$message3 = gettext(")<br />Thanks for voting!");
 	if(!checkIP($id,$option)){
-		echo "<li><a href=\"javascript:rate(1,$id,$votes,$value,'".rawurlencode($zenpath)."','$option')\" title=\"1 star out of 5\" class=\"one-star\">2</a></li>\n";
-		echo "<li><a href=\"javascript:rate(2,$id,$votes,$value,'".rawurlencode($zenpath)."','$option')\" title=\"2 stars out of 5\" class=\"two-stars\">2</a></li>\n";
-		echo "<li><a href=\"javascript:rate(3,$id,$votes,$value,'".rawurlencode($zenpath)."','$option')\" title=\"3 stars out of 5\" class=\"three-stars\">2</a></li>\n";
-		echo "<li><a href=\"javascript:rate(4,$id,$votes,$value,'".rawurlencode($zenpath)."','$option')\" title=\"4 stars out of 5\" class=\"four-stars\">2</a></li>\n";
-		echo "<li><a href=\"javascript:rate(5,$id,$votes,$value,'".rawurlencode($zenpath)."','$option')\" title=\"5 stars out of 5\" class=\"five-stars\">2</a></li>\n";
+		echo "<li><a href=\"javascript:rate(1,$id,$votes,$value,'".rawurlencode($zenpath)."','$option','$message1','$message2','$message3')\" title=\"".gettext("1 star out of 5")."\" class=\"one-star\">2</a></li>\n";
+		echo "<li><a href=\"javascript:rate(2,$id,$votes,$value,'".rawurlencode($zenpath)."','$option','$message1','$message2','$message3')\" title=\"".gettext("2 stars out of 5")."\" class=\"two-stars\">2</a></li>\n";
+		echo "<li><a href=\"javascript:rate(3,$id,$votes,$value,'".rawurlencode($zenpath)."','$option','$message1','$message2','$message3')\" title=\"".gettext("3 stars out of 5")."\" class=\"three-stars\">2</a></li>\n";
+		echo "<li><a href=\"javascript:rate(4,$id,$votes,$value,'".rawurlencode($zenpath)."','$option','$message1','$message2','$message3')\" title=\"".gettext("4 stars out of 5")."\" class=\"four-stars\">2</a></li>\n";
+		echo "<li><a href=\"javascript:rate(5,$id,$votes,$value,'".rawurlencode($zenpath)."','$option','$message1','$message2','$message3')\" title=\"".gettext("5 stars out of 5")."\" class=\"five-stars\">2</a></li>\n";
 	}
 	echo "</ul>\n";
 	echo "<div id =\"vote\">\n";
 	switch($option) {
 		case "image":
-			echo "Rating: ".getImageRatingCurrent($id)." (Total votes: ".$votes.")";
+			echo $message1.getImageRatingCurrent($id).$message2.$votes.gettext(")");
 			break;
 		case "album":
-			echo "Rating: ".getAlbumRatingCurrent($id)." (Total votes: ".$votes.")";
+			echo $message1.getAlbumRatingCurrent($id).$message2.$votes.gettext(")");
 			break;
 	}
 	echo "</div>\n";
@@ -3424,41 +3426,41 @@ function printSearchForm($prevtext=NULL, $id='search') {
 	echo "\n<form method=\"post\" action=\"".WEBPATH.$searchurl."\" id=\"search_form\">";
 	echo "\n$prevtext<input type=\"text\" name=\"words\" value=".$searchwords." id=\"search_input\" size=\"10\" />";
 
-	echo "\n<input type=\"submit\" value=\"Search\" class=\"pushbutton\" id=\"search_submit\" />";
+	echo "\n<input type=\"submit\" value=\"".gettext("Search")."\" class=\"pushbutton\" id=\"search_submit\" />";
 
 	if ($multiple) { //then there is some choice possible
-		echo "\n<a class=\"showmenu\" onclick=\"javascript: javascript:showMenu();\" title=\"Show fields \">";
-		echo '<img src="'.$zf.'/images/warn.png" style="border: 0px;" alt="Show fields" /></a>';
+		echo "\n<a class=\"showmenu\" onclick=\"javascript: javascript:showMenu();\" title=\"".gettext("Show fields")." \">";
+		echo '<img src="'.$zf.'/images/warn.png" style="border: 0px;" alt="'.gettext("Show fields").'" /></a>';
 
 		echo "\n<input id=\"hiddenStatusMenu\" type=\"hidden\" value=\"0\" />";
 		echo "\n<div class=\"searchoption\" id=\"searchmenu\" style=\"display:none; text-align:left\">";
 		echo "Choose search fields.<br />";
 
 		if ($fields & SEARCH_TITLE) {
-			echo "\n<input type=\"checkbox\" name=\"sf_title\" value=1 checked><label>Title</label><br />";
+			echo "\n<input type=\"checkbox\" name=\"sf_title\" value=1 checked><label>".gettext("Title")."</label><br />";
 		}
 		if ($fields & SEARCH_DESC) {
-			echo "\n<input type=\"checkbox\" name=\"sf_desc\" value=1 checked><label>Description</label><br />";
+			echo "\n<input type=\"checkbox\" name=\"sf_desc\" value=1 checked><label>".gettext("Description")."</label><br />";
 		}
 		if ($fields & SEARCH_TAGS) {
-			echo "\n<input type=\"checkbox\" name=\"sf_tags\" value=1 checked><label>Tags</label><br />";
+			echo "\n<input type=\"checkbox\" name=\"sf_tags\" value=1 checked><label>".gettext("Tags")."</label><br />";
 		}
 		if ($fields & SEARCH_FILENAME) {
-			echo "\n<input type=\"checkbox\" name=\"sf_filename\" value=1 checked><label>File name</label><br />";
+			echo "\n<input type=\"checkbox\" name=\"sf_filename\" value=1 checked><label>".gettext("File name")."</label><br />";
 		}
 		if ($fields & SEARCH_LOCATION) {
-			echo "\n<input type=\"checkbox\" name=\"sf_location\" value=1 checked><label>Location</label><br />";
+			echo "\n<input type=\"checkbox\" name=\"sf_location\" value=1 checked><label>".gettext("Location")."</label><br />";
 		}
 		if ($fields & SEARCH_CITY) {
-			echo "\n<input type=\"checkbox\" name=\"sf_city\" value=1 checked><label>City</label><br />";
+			echo "\n<input type=\"checkbox\" name=\"sf_city\" value=1 checked><label>".gettext("City")."</label><br />";
 		}
 		if ($fields & SEARCH_STATE) {
-			echo "\n<input type=\"checkbox\" name=\"sf_state\" value=1 checked><label>State</label><br />";
+			echo "\n<input type=\"checkbox\" name=\"sf_state\" value=1 checked><label>".gettext("State")."</label><br />";
 		}
 		if ($fields & SEARCH_COUNTRY) {
-			echo "\n<input type=\"checkbox\" name=\"sf_country\" value=1 checked><label>Country</label><br />";
+			echo "\n<input type=\"checkbox\" name=\"sf_country\" value=1 checked><label>".gettext("Country")."</label><br />";
 		}
-		echo "\n</a> <a href=\"#\" onclick=\"javscript:hideMenu()\">Close</a></div>";
+		echo "\n</a> <a href=\"#\" onclick=\"javscript:hideMenu()\">".gettext("Close")."</a></div>";
 	}
 
 	echo "\n</form>\n";
@@ -3518,7 +3520,7 @@ function getSearchDate($format='F Y') {
 		global $_zp_current_search;
 		$date = $_zp_current_search->getSearchDate();
 		if (empty($date)) { return ""; }
-		if ($date == '0000-00') { return "no date"; };
+		if ($date == '0000-00') { return gettext("no date"); };
 		$dt = strtotime($date."-01");
 		return date($format, $dt);
 	}
@@ -3695,22 +3697,22 @@ function printPasswordForm($hint) {
 	if ($_zp_password_form_printed) { return; }
 	$_zp_password_form_printed = true;
 	if ($_zp_login_error) {
-		echo "<div class=\"errorbox\" id=\"message\"><h2>There was an error logging in.</h2><br/>Check your password and try again.</div>";
+		echo "<div class=\"errorbox\" id=\"message\"><h2>".gettext("There was an error logging in.")."</h2><br/>".gettext("Check your password and try again.")."</div>";
 	}
 	$action = "#";
 	if (in_context(ZP_SEARCH)) {
 		$action = "?p=search" . $_zp_current_search->getSearchParams();
 	}
-	echo "\n<p>The page you are trying to view is password protected.</p>";
+	echo "\n<p>".gettext("The page you are trying to view is password protected.")."</p>";
 	echo "\n<br/>";
 	echo "\n  <form name=\"password\" action=\"$action\" method=\"POST\">";
 	echo "\n    <input type=\"hidden\" name=\"password\" value=\"1\" />";
 
 	echo "\n    <table>";
-	echo "\n      <tr><td>Password</td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
-	echo "\n      <tr><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"Submit\" /></td></tr>";
+	echo "\n      <tr><td>".gettext("Password")."</td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
+	echo "\n      <tr><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"".gettext("Submit")."\" /></td></tr>";
 	if (!empty($hint)) {
-		echo "\n      <tr><td>Hint: " . $hint . "</td></tr>";
+		echo "\n      <tr><td>".gettext("Hint:")." " . $hint . "</td></tr>";
 	}
 	echo "\n    </table>";
 	echo "\n  </form>";
