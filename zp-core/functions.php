@@ -1098,15 +1098,20 @@ function createAlbumZip($album){
  * @param string $root the base from whence the path dereives
  * @return sting
  */
+$_zp_album_folder = null;
 function getAlbumFolder($root=SERVERPATH) {
+	global $_zp_album_folder;
+	if ($_zp_album_folder != null) return $_zp_album_folder;
 	if (is_null($album_folder = getOption('album_folder'))) {
 		$album_folder = ALBUMFOLDER;
 	}
 	if (!is_null($external_folder = getOption('external_album_folder'))) {
-		return $external_folder;
+		if (substr($external_folder, -1) != '/') $external_folder += '/';
+		$_zp_album_folder = $external_folder;
 	} else {
-		return $root . $album_folder;
+		$_zp_album_folder = $root . $album_folder;
 	}
+	return $_zp_album_folder;
 }
 
 /**

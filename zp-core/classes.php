@@ -318,8 +318,8 @@ if(function_exists("gettext")) {
 	$locale = getOption("locale");
 	putenv("LANG=$locale");
 	// gettext setup
-	setlocale(LC_TIME, $locale);
-	setlocale(LC_MESSAGES, $locale);
+	@setlocale(LC_TIME, $locale);
+	@setlocale(LC_MESSAGES, $locale);
 	// Set the text domain as 'messages'
 	$domain = 'zenphoto';
 	bindtextdomain($domain, "locale/");
