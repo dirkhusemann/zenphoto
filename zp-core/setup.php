@@ -48,7 +48,9 @@ if (file_exists("zp-config.php")) {
 	if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
 		if (@mysql_select_db($_zp_conf_vars['mysql_database'])) {
 			$result = @mysql_query("SELECT `id` FROM " . $_zp_conf_vars['mysql_prefix'].'options' . " LIMIT 1", $connection);
-			if (mysql_num_rows($result) > 0) $upgrade = true;
+			if ($result) {
+				if (mysql_num_rows($result) > 0) $upgrade = true;
+			}
 			require_once("admin-functions.php");
 		}
 	}
@@ -161,6 +163,23 @@ h4 {
 	margin-left: 2em;
 	margin-bottom: .15em;
 	margin-top: .35em;
+}
+#footer {
+	clear: both;
+	color: #597580;
+	font-size: 85%;
+	margin: 8px 30px 0px;
+	text-align: right;
+}
+#footer a {
+	color: #597580;
+	text-decoration: none;
+	border-bottom: 1px dotted #597580;
+}
+#footer a:hover {
+	color: #4B636B;
+	text-decoration: none;
+	border-bottom: 1px solid #4B636B;
 }
 </style>
 
@@ -854,7 +873,10 @@ if (file_exists("zp-config.php")) {
 <div class="error"><?php echo gettext("The zp-config.php file does not exist. You should run setup.php to check your configuration and create this file."); ?></div>
 
 <?php
-} ?></div>
+}
+ 
+?></div>
+<?php printAdminFooter(); ?>
 </div>
 </body>
 </html>
