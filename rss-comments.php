@@ -6,6 +6,19 @@ $themepath = 'themes';
 
 $host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 
+function fixRSSDate($bad_date) {
+	$rval = FALSE;
+	$parts = explode(" ", $bad_date);
+	$date = $parts[0];
+	$time = $parts[1];
+	$date_parts = explode("-", $date);
+	$year = $date_parts[0];
+	$month = $date_parts[2];
+	$day = $date_parts[1];
+	$rval = date("r",strtotime("$day/$month/$year $time"));
+	return $rval;
+}
+
 // check passwords
 $albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
 foreach($albumscheck as $albumcheck) {
@@ -25,22 +38,24 @@ if(getOption('mod_rewrite')) {
 $items = getOption('feed_items'); // # of Items displayed on the feed
 ?>
 
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
 <title><?php echo getOption('gallery_title')." - latest comments"; ?></title>
 <link><?php echo "http://".$host.WEBPATH; ?></link>
+<atom:link href="http://<?php echo $host.WEBPATH; ?>/rss.php" rel="self" type="application/rss+xml" />
 <description><?php echo getOption('gallery_title'); ?></description>
 <language>en-us</language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
 <lastBuildDate><?php echo date("r", time()); ?></lastBuildDate>
 <docs>http://blogs.law.harvard.edu/tech/rss</docs>
-<generator>Acrylian's ZenPhoto Comment RSS Generator based on Tris' LatestComments function from zenphoto admin.php</generator>
+<generator>ZenPhoto Comment RSS Generator</generator>
 <?php
 	$admin = array_shift(getAdministrators());
 	$adminname = $admin['name'];
+	$adminemail = $admin['email'];
 ?>
-<managingEditor><?php echo $adminname; ?></managingEditor>
-<webMaster><?php echo $adminname; ?></webMaster>
+<managingEditor><?php echo "$adminemail ($adminname)"; ?></managingEditor>
+<webMaster><?php echo "$adminemail ($adminname)"; ?></webMaster>
 
 <?php
 db_connect();
@@ -85,7 +100,7 @@ foreach ($comments as $comment) {
 <description><?php echo $shortcomment; ?></description>
 <category><?php echo $albumtitle; ?></category>
 <guid><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$album.$imagetag.']]>';?></guid>
-<pubDate><?php echo $date; ?></pubDate>
+<pubDate><?php echo fixRSSDate($images['date']); ?></pubDate>
 </item>
 <?php } ?>
 </channel>
