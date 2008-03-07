@@ -50,9 +50,10 @@ if(getOption('mod_rewrite')) {
 <?php
 	$admin = array_shift(getAdministrators());
 	$adminname = $admin['name'];
+	$adminemail = $admin['email'];
 ?>
-<managingEditor><?php echo "$admin[email] ($adminname)"; ?></managingEditor>
-<webMaster><?php echo "$admin[email] ($adminname)"; ?></webMaster>
+<managingEditor><?php echo "$adminemail ($adminname)"; ?></managingEditor>
+<webMaster><?php echo "$adminemail ($adminname)"; ?></webMaster>
 <?php 
 $s = 240; // uncropped image size
 $items = getOption('feed_items'); // # of Items displayed on the feed
