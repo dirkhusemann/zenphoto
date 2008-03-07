@@ -777,9 +777,7 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_comments CHANGE `imageid` `ownerid` int(11) UNSIGNED NOT NULL default '0';";
 	$sql_statements[] = "ALTER TABLE $tbl_comments DROP INDEX `imageid`;";
 	$sql_statements[] = "ALTER TABLE $tbl_comments ADD INDEX (`ownerid`);";
-
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `dynamic` int(1) UNSIGNED default '0'";
-
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `search_params` text default NULL";
 
 	/**************************************************************************************

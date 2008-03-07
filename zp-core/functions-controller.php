@@ -18,8 +18,8 @@ define("ZP_INDEX",   1);
 define("ZP_ALBUM",   2);
 define("ZP_IMAGE",   4);
 define("ZP_COMMENT", 8);
-define("ZP_GROUP",  16);
-define("ZP_SEARCH", 32);
+define("ZP_SEARCH", 16);
+define("ZP_SEARCH_LINKED", 32);
 
 function get_context() {
 	global $_zp_current_context;
@@ -307,9 +307,14 @@ function zp_load_search() {
  * @return the loaded album object on success, or (===false) on failure.
  */
 function zp_load_album($folder, $force_nocache=false) {
-	global $_zp_current_album, $_zp_gallery;
+	global $_zp_current_album, $_zp_gallery, $_zp_dynamic_album;
 	$_zp_current_album = new Album($_zp_gallery, $folder, !$force_nocache);
 	if (!$_zp_current_album->exists) return false;
+	if ($_zp_current_album->isDynamic()) {
+		$_zp_dynamic_album = $_zp_current_album;
+	} else {
+		$_zp_dynamic_album = null;
+	}
 	set_context(ZP_ALBUM | ZP_INDEX);
 	return $_zp_current_album;
 }

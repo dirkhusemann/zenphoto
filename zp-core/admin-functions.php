@@ -513,7 +513,23 @@ function printAlbumEditForm($index, $album) {
 		foreach ($images as $imagerow) {
 			$folder = $imagerow['folder'];
 			$filename = $imagerow['filename'];
-			$imagepath = '/'.$folder.'/'.$filename;
+			$imagelist[] = '/'.$folder.'/'.$filename;
+		}
+	$subalbums = $search->getAlbums(0);
+	foreach ($subalbums as $folder) {
+		$newalbum = new Album($gallery, $folder);
+		if (!$newalbum->isDynamic()) {
+			$images = $newalbum->getImages(0);
+			foreach ($images as $filename) {
+				$imagelist[] = '/'.$folder.'/'.$filename;
+			}
+		}
+	}
+		foreach ($imagelist as $imagepath) {
+			$list = explode('/', $imagepath);
+			$filename = $list[count($list)-1];
+			unset($list[count($list)-1]);
+			$folder = implode('/', $list);
 			$albumx = new Album($gallery, $folder);
 			$image = new Image($albumx, $filename);
 			$selected = ($imagepath == $thumb);

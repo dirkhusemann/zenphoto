@@ -59,6 +59,16 @@ if (!zp_loggedin()) {
 		$filename = $image['filename'];
 		$imagelist[] = '/'.$folder.'/'.$filename;
 	}
+	$subalbums = $search->getAlbums(0);
+	foreach ($subalbums as $folder) {
+		$newalbum = new Album($gallery, $folder);
+		if (!$newalbum->isDynamic()) {
+			$images = $newalbum->getImages(0);
+			foreach ($images as $filename) {
+			$imagelist[] = '/'.$folder.'/'.$filename;
+			}
+		}
+	}
 	$albumname = sanitize(trim($words));
 	$albumname = str_replace('!', ' NOT ', $albumname);
 	$albumname = str_replace('&', ' AND ', $albumname);

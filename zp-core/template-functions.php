@@ -115,17 +115,17 @@ function printAdminToolbox($context=null, $id='admin') {
 				$redirect = "&p=" . $_GET['p'];
 			}
 			$redirect .= "&page=$page";
-		} else if (!in_context(ZP_IMAGE | ZP_SEARCH)  || (get_context() & (ZP_SEARCH | ZP_ALBUM)) == (ZP_SEARCH | ZP_ALBUM)) {  // then it must be an album page
+		} else if (!in_context(ZP_IMAGE)  && (!is_null($_zp_current_album))) {  // then it must be an album page
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				printSubalbumAdmin(gettext('Edit album'), '', "<br />\n");
-				if (!in_context(ZP_SEARCH)) {
+				if (!$_zp_current_album->isDynamic()) {
 					printSortableAlbumLink(gettext('Sort album'), gettext('Manual sorting'));
 					echo "<br />\n";
 				}
 				echo "<a href=\"javascript: confirmDeleteAlbum('".$zf."/admin.php?page=edit&action=deletealbum&album=" .
 				queryEncode($albumname) . "');\" title=\"".gettext("Delete the album")."\">".gettext("Delete album")."</a><br />\n";
 			}
-			if (isMyAlbum($albumname, UPLOAD_RIGHTS) && !in_context(ZP_SEARCH)) {
+			if (isMyAlbum($albumname, UPLOAD_RIGHTS) && !$_zp_current_album->isDynamic()) {
 				printLink($zf . '/admin.php?page=upload&album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL);
 				echo "<br />\n";
 				printLink($zf . '/admin.php?page=upload&new&album=' . urlencode($albumname), gettext("New Album Here"), NULL, NULL, NULL);
@@ -239,7 +239,7 @@ function getGalleryIndexURL() {
  */
 function getNumAlbums() {
 	global $_zp_gallery, $_zp_current_search;
-	if (!is_null($_zp_current_search)) {
+	if (in_context(ZP_SEARCH)) {
 		return $_zp_current_search->getNumAlbums();
 	} else {
 		return $_zp_gallery->getNumAlbums();
@@ -268,9 +268,14 @@ function next_album($all=false, $sorttype=null) {
 	if (checkforPassword()) { return false; }
 	if (is_null($_zp_albums)) {
 		if (in_context(ZP_SEARCH)) {
-			$_zp_albums = $_zp_current_search-> getAlbums($all ? 0 : $_zp_page);
+			$_zp_albums = $_zp_current_search->getAlbums($all ? 0 : $_zp_page);
 		} else if (in_context(ZP_ALBUM)) {
-			$_zp_albums = $_zp_current_album->getSubAlbums($all ? 0 : $_zp_page, $sorttype);
+			if ($_zp_current_album->isDynamic()) {
+				$search = $_zp_current_album->getSearchEngine();
+				$_zp_albums = $search->getAlbums($all ? 0 : $_zp_page);
+			} else {
+				$_zp_albums = $_zp_current_album->getSubAlbums($all ? 0 : $_zp_page, $sorttype);
+			}
 		} else {
 			$_zp_albums = $_zp_gallery->getAlbums($all ? 0 : $_zp_page, $sorttype);
 		}
@@ -308,10 +313,15 @@ function getCurrentPage() {
  */
 function getNumSubalbums() {
 	global $_zp_current_album, $_zp_current_search;
-	if (!is_null($_zp_current_search)) {
-		return count($_zp_current_search->getNumAlbums());
+	if (in_context(ZP_SEARCH)) {
+		return $_zp_current_search->getNumAlbums();
 	} else {
-		return count($_zp_current_album->getSubalbums());
+		if ($_zp_current_album->isDynamic()) {
+			$search = $_zp_current_album->getSearchEngine();
+			return $search->getNumAlbums();
+		} else {
+			return count($_zp_current_album->getSubalbums());
+		}
 	}
 }
 
@@ -324,7 +334,7 @@ function getNumSubalbums() {
  * @return int
  */
 function getTotalPages($oneImagePage=false) {
-	global $_zp_gallery;
+	global $_zp_gallery, $_zp_current_album;
 	if (in_context(ZP_ALBUM | ZP_SEARCH)) {
 		if (in_context(ZP_SEARCH)) {
 			$pageCount = ceil(getNumAlbums() / getOption('albums_per_page'));
@@ -354,12 +364,7 @@ function getTotalPages($oneImagePage=false) {
  */
 function getPageURL_($page, $total) {
 	global $_zp_current_album, $_zp_gallery, $_zp_current_search;
-	if (!is_null($_zp_current_album)) {
-		$dynamic = $_zp_current_album->isDynamic();
-	} else {
-		$dynamic = false;
-	}
-	if (in_context(ZP_SEARCH) && !$dynamic) {
+	if (in_context(ZP_SEARCH)) {
 		$searchwords = $_zp_current_search->words;
 		$searchdate = $_zp_current_search->dates;
 		$searchfields = $_zp_current_search->fields;
@@ -557,16 +562,21 @@ function printAlbumTitle($editable=false) {
  * @return int
  */
 function albumNumber() {
-	global $_zp_current_album, $_zp_current_image, $_zp_current_search, $_zp_gallery;
+	global $_zp_current_album, $_zp_current_image, $_zp_current_search, $_zp_gallery, $_zp_dynamic_album;
 	$name = $_zp_current_album->getFolder();
-	if (!is_null($_zp_current_search)) {
+	if (in_context(ZP_SEARCH)) {
 		$albums = $_zp_current_search->getAlbums();
 	} else if (in_context(ZP_ALBUM)) {
-		$parent = $_zp_current_album->getParent();
-		if (is_null($parent)) {
-			$albums = $_zp_gallery->getAlbums();
+		if (is_null($_zp_dynamic_album)) {
+			$parent = $_zp_current_album->getParent();
+			if (is_null($parent)) {
+				$albums = $_zp_gallery->getAlbums();
+			} else {
+				$albums = $parent->getSubalbums();
+			}
 		} else {
-			$albums = $parent->getSubalbums();
+			$search = $_zp_dynamic_album->getSearchEngine();
+			$albums = $search->getAlbums();			
 		}
 	}
 	$ct = count($albums);
@@ -605,17 +615,15 @@ function getParentAlbums($album=null) {
  * @param string $title Text to be used as the URL title tag
  */
 function printAlbumBreadcrumb($before='', $after='', $title='Album Thumbnails') {
-	global $_zp_current_search, $_zp_current_gallery;
+	global $_zp_current_search, $_zp_current_gallery;	
 	echo $before;
-	if (is_null($_zp_current_search)) {
-		echo "<a href=\"" . getAlbumLinkURL(). "\" title=\"$title\">" . getAlbumTitle() . "</a>";
-	} else {
+	if (in_context(ZP_SEARCH_LINKED)) {
 		$page = $_zp_current_search->page;
 		$searchwords = $_zp_current_search->words;
 		$searchdate = $_zp_current_search->dates;
 		$searchfields = $_zp_current_search->fields;
-		$dynamic_album = $_zp_current_search->albumname;
 		$searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
+		$dynamic_album = $_zp_current_search->dynalbumname;
 		if (empty($dynamic_album)) {
 			echo "<a href=\"" . $searchpagepath . "\">";
 			echo "<em>".gettext("Search")."</em></a>";
@@ -624,6 +632,8 @@ function printAlbumBreadcrumb($before='', $after='', $title='Album Thumbnails') 
 			echo "<a href=\"" . getAlbumLinkURL($album) . "\">";
 			echo $album->getTitle();
 		}
+	} else {
+		echo "<a href=\"" . getAlbumLinkURL(). "\" title=\"$title\">" . getAlbumTitle() . "</a>";
 	}
 	echo $after;
 }
@@ -636,18 +646,11 @@ function printAlbumBreadcrumb($before='', $after='', $title='Album Thumbnails') 
  * @param string $after Insert here the text to be printed after the links
  */
 function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
-	global $_zp_current_search, $_zp_current_gallery;
 	echo $before;
-	if (is_null($_zp_current_search)) {
-		$parents = getParentAlbums();
+	if (in_context(ZP_SEARCH)) {
+		$parents = array();
 	} else {
-		$dynamic_album = $_zp_current_search->albumname;
-		if (empty($dynamic_album)) {
-			$parents = array();
-		} else {
-			$album = new Album($_zp_current_gallery, $dynamic_album);
-			$parents = getParentAlbums($album);
-		}
+		$parents = getParentAlbums();
 	}
 	$n = count($parents);
 	if ($n == 0) return;
@@ -794,12 +797,13 @@ function getAlbumLinkURL($album=NULL) {
 	if (is_null($album)) $album = $_zp_current_album;
 	$page = 0;
 	if (in_context(ZP_IMAGE) && !in_context(ZP_SEARCH)) {
-		if (is_null($_zp_current_search)) {
+		if ($_zp_current_album->isDynamic()) {
+			$search = $_zp_current_album->getSearchEngine();
+			$imageindex = $search->getImageIndex($_zp_current_album->name, $_zp_current_image->filename);
+			$numalbums = count($search->getAlbums(0));
+		} else {
 			$imageindex = $_zp_current_image->getIndex();
 			$numalbums = count($album->getSubalbums());
-		} else {
-			$imageindex = $_zp_current_search->getImageIndex($_zp_current_album->name, $_zp_current_image->filename);
-			$numalbums = count($_zp_current_search->getAlbums(0));
 		}
 		$imagepage = floor(($imageindex - $firstPageImages) / getOption('images_per_page')) + 1;
 		$albumpages = ceil($numalbums / getOption('albums_per_page'));
@@ -978,10 +982,15 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
  */
 function getNextAlbum() {
 	global $_zp_current_album, $_zp_current_search;
-	if (!is_null($_zp_current_search)) {
+	if (in_context(ZP_SEARCH)) {
 		$nextalbum = $_zp_current_search->getNextAlbum($_zp_current_album->name);
 	} else if (in_context(ZP_ALBUM)) {
-		$nextalbum = $_zp_current_album->getNextAlbum();
+		if ($_zp_current_album->isDynamic()) {
+			$search = $_zp_current_album->getSearchEngine();
+			$nextalbum = $search->getNextAlbum($_zp_current_album->name);
+		} else {
+			$nextalbum = $_zp_current_album->getNextAlbum();
+		}
 	} else {
 		return null;
 	}
@@ -1009,10 +1018,15 @@ function getNextAlbumURL() {
  */
 function getPrevAlbum() {
 	global $_zp_current_album, $_zp_current_search;
-	if (!is_null($_zp_current_search)) {
+	if (in_context(ZP_SEARCH)) {
 		$prevalbum = $_zp_current_search->getPrevAlbum($_zp_current_album->name);
 	} else if(in_context(ZP_ALBUM)) {
-		$prevalbum = $_zp_current_album->getPrevAlbum();
+		if ($_zp_current_album->isDynamic()) {
+			$search = $_zp_current_album->getSearchEngine();
+			$prevalbum = $search->getPrevAlbum($_zp_current_album->name);
+		} else {
+			$prevalbum = $_zp_current_album->getPrevAlbum();
+		}
 	} else {
 		return null;
 	}
@@ -1049,8 +1063,7 @@ function isImagePage() {
  * @return bool
  */
 function isAlbumPage() {
-	global $_zp_current_search;
-	if (!is_null($_zp_current_search)) {
+	if (in_context(ZP_SEARCH)) {
 		$pageCount = Ceil(getNumAlbums() / getOption('albums_per_page'));
 	} else {
 		$pageCount = Ceil(getNumSubalbums() / getOption('albums_per_page'));
@@ -1065,20 +1078,15 @@ function isAlbumPage() {
  */
 function getNumImages() {
 	global $_zp_current_album, $_zp_current_search;
-	if (!is_null($_zp_current_search)) {  // search or dynamic album
-		if (is_null($_zp_current_album)) {
-			$dynamic = false;
-		} else {
-			$dynamic = $_zp_current_album->isDynamic();
-		}
-		if ($dynamic) { 
+	if (in_context(ZP_SEARCH)) {  
+		return $_zp_current_search->getNumImages();
+	} else {
+		if ($_zp_current_album->isDynamic()) {
 			$search = $_zp_current_album->getSearchEngine();
 			return $search->getNumImages();
 		} else {
-			return $_zp_current_search->getNumImages();
+			return $_zp_current_album->getNumImages();	
 		}
-	} else {
-		return $_zp_current_album->getNumImages();	
 	}
 }
 
@@ -1145,17 +1153,24 @@ function next_image($all=false, $firstPageCount=0, $sorttype=null, $overridePass
 
 	if (is_null($_zp_images)) {
 		if (in_context(ZP_SEARCH)) {
+			$searchtype = true;
 			$_zp_images = $_zp_current_search->getImages($all ? 0 : ($imagePage), $firstPageCount);
 		} else {
-			$_zp_images = $_zp_current_album->getImages($all ? 0 : ($imagePage), $firstPageCount, $sorttype);
+			if ($_zp_current_album->isDynamic()) {
+				$searchtype = true;
+				$search = $_zp_current_album->getSearchEngine();
+				$_zp_images = $search->getImages($all ? 0 : ($imagePage), $firstPageCount);
+			} else {
+				$_zp_images = $_zp_current_album->getImages($all ? 0 : ($imagePage), $firstPageCount, $sorttype);
+			}
 		}
 		if (empty($_zp_images)) { return false; }
 		$_zp_current_image_restore = $_zp_current_image;
-		if (in_context(ZP_SEARCH)) {
-			$img = array_shift($_zp_images);
+		$img = array_shift($_zp_images);
+		if (is_array($img)) {
 			$_zp_current_image = new Image(new Album($_zp_gallery, $img['folder']), $img['filename']);
 		} else {
-			$_zp_current_image = new Image($_zp_current_album, array_shift($_zp_images));
+			$_zp_current_image = new Image($_zp_current_album, $img);
 		}
 		save_context();
 		add_context(ZP_IMAGE);
@@ -1166,11 +1181,11 @@ function next_image($all=false, $firstPageCount=0, $sorttype=null, $overridePass
 		restore_context();
 		return false;
 	} else {
-		if (in_context(ZP_SEARCH)) {
-			$img = array_shift($_zp_images);
+		$img = array_shift($_zp_images);
+		if (is_array($img)) {
 			$_zp_current_image = new Image(new Album($_zp_gallery, $img['folder']), $img['filename']);
 		} else {
-			$_zp_current_image = new Image($_zp_current_album, array_shift($_zp_images));
+			$_zp_current_image = new Image($_zp_current_album, $img);
 		}
 		return true;
 	}
@@ -1211,9 +1226,9 @@ function printImageTitle($editable=false) {
  * @return int
  */
 function imageNumber() {
-	global $_zp_current_image, $_zp_current_search;
+	global $_zp_current_image, $_zp_current_search, $_zp_current_album;
 	$name = $_zp_current_image->getFileName();
-	if (!is_null($_zp_current_search)) {
+	if (in_context(ZP_SEARCH)) {
 		$images = $_zp_current_search->getImages();
 		$ct = count($images);
 		for ($c = 0; $c < $ct; $c++) {
@@ -1221,9 +1236,19 @@ function imageNumber() {
 				return $c+1;
 			}
 		}
-
 	} else {
-		return $_zp_current_image->getIndex()+1;
+		if ($_zp_current_album->isDynamic()) {
+			$search = $_zp_current_album->getSearchEngine();
+			$images = $search->getImages();
+			$ct = count($images);
+			for ($c = 0; $c < $ct; $c++) {
+			if ($name == $images[$c] ['filename']) {
+				return $c+1;
+			}
+		}
+		} else {
+			return $_zp_current_image->getIndex()+1;
+		}
 	}
 	return false;
 }
@@ -2683,7 +2708,8 @@ function getRandomImagesAlbum($rootAlbum=null) {
 		$album = new Album($_zp_gallery, $rootAlbum);
 	}
 	if ($album->isDynamic()) {
-		$images = $_zp_current_search->getImages(0);
+		$search = $_zp_current_album->getSearchEngine();
+		$images = $search->getImages(0);
 		$image = NULL;
 		shuffle($images);
 		while (count($images) > 0) {
@@ -3583,6 +3609,7 @@ function getTheme(&$zenCSS, &$themeColor, $defaultColor) {
  * @since 1.1
  */
 function normalizeColumns($albumColumns, $imageColumns) {
+	global $_zp_current_album;
 	$albcount = getOption('albums_per_page');
 	if (($albcount % $albumColumns) != 0) {
 		setOption('albums_per_page', $albcount = ((floor($albcount / $albumColumns) + 1) * $albumColumns), false);
@@ -3643,8 +3670,7 @@ function normalizeColumns($albumColumns, $imageColumns) {
 function checkforPassword($silent=false) {
 	global $_zp_current_album, $_zp_current_search, $_zp_gallery;
 	if (zp_loggedin()) { return false; }  // you're the admin, you don't need the passwords.
-	$context = get_context();
-	if (($context | ZP_INDEX) == (ZP_INDEX + ZP_SEARCH)) {  // search page
+	if (in_context(ZP_SEARCH)) {  // search page
 		$hash = getOption('search_password');
 		$hint = getOption('search_hint');
 		$authType = 'zp_search_auth';
