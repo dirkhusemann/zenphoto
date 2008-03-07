@@ -3019,8 +3019,9 @@ function printTags($option='links',$preText=NULL,$class='taglist',$separator=', 
 				}
 				echo "\t<li>".$links1.htmlspecialchars($singletag[$x], ENT_QUOTES).$links2.$separator."</li>\n";
 			}
+			echo "</ul>";
 		}
-		echo "</ul><br clear=\"all\" />\n";
+		echo "<br clear=\"all\" />\n";
 	}
 }
 

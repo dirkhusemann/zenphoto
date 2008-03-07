@@ -42,8 +42,11 @@ if (isset($_GET['p'])) {
 		createAlbumZip($_GET['album']); 
 	} else { 
 		if ($_zp_current_album->isDynamic()) {
-			$_zp_current_search = $_zp_current_album->getSearchEngine();		
-			set_context(ZP_INDEX | ZP_ALBUM | ZP_SEARCH);
+			$search = $_zp_current_album->getSearchEngine();		
+			$cookiepath = WEBPATH;
+			if (WEBPATH == '') { $cookiepath = '/'; }
+			zp_setcookie("zenphoto_image_search_params", $search->getSearchParams(), 0, $cookiepath);
+			set_context(ZP_INDEX | ZP_ALBUM);
 			include($obj = "$themepath/$theme/album.php");
 		} else {
 			handleSearchParms($_zp_current_album->name);

@@ -57,7 +57,7 @@ class SpamFilter  {
 	
 	function getOptionsSupported() {
 		return array(	gettext('Words to die on') => array('key' => 'Words_to_die_on', 'type' => 2, 'desc' => gettext('SPAM blacklist words (separate with commas)')),
-									gettext('Patterns to die on') => array('key' => 'Patterns_to_die_on', 'type' => 2, 'desc' => gettext('SPAM blacklist').' <a href="http://en.wikipedia.org/wiki/Regular_expression">'.gettext('regular expressions').'</a> '.gettext('(separate with spaces)')),
+									gettext('Patterns to die on') => array('key' => 'Patterns_to_die_on', 'type' => 2, 'desc' => gettext('SPAM blacklist <a href="http://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> (separate with spaces)')),
 									gettext('Excessive URL count') => array('key' => 'Excessive_URL_count', 'type' => 0, 'desc' => gettext('Message is considered SPAM if there are more than this many URLs in it')),
 									gettext('Forgiving') => array('key' => 'Forgiving', 'type' => 1, 'desc' => gettext('Mark suspected SPAM for moderation rather than as SPAM')));
 	}
