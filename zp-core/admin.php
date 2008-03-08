@@ -10,7 +10,7 @@ $standardOptions = array('gallery_title','website_title','website_url','time_off
  												'image_allow_upscale','thumb_size','thumb_crop',
  												'thumb_crop_width','thumb_crop_height','thumb_sharpen',
  												'albums_per_page','images_per_page','perform_watermark',
- 												'watermark_image','current_theme', 'spam_filter',
+ 												'watermark_image','watermark_scale', 'current_theme', 'spam_filter',
  												'email_new_comments', 'perform_video_watermark', 'video_watermark_image',
  												'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'search_fields',
  												'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
@@ -459,6 +459,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			$vwmo = getOption('perform_video_watermark');
 			$woh = getOption('watermark_h_offset');
 			$wow = getOption('watermark_w_offset');
+			$ws = getOption('watermark_scale');
 			$notify = '';
 			$returntab = "";
 
@@ -570,6 +571,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				setOption('images_per_page', $_POST['images_per_page']);
 				setBoolOption('perform_watermark', $_POST['perform_watermark']);
 				setOption('watermark_image', 'watermarks/' . $_POST['watermark_image'] . '.png');
+				setOption('watermark_scale', $_POST['watermark_scale']);
 				setOption('watermark_h_offset', $_POST['watermark_h_offset']);
 				setOption('watermark_w_offset', $_POST['watermark_w_offset']);
 				setBoolOption('perform_video_watermark', $_POST['perform_video_watermark']);
@@ -627,6 +629,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			($woh != getOption('watermark_h_offset')) ||
 			($wow != getOption('watermark_w_offset'))  ||
 			($wm != getOption('watermark_image')) ||
+			($ws != getOption('watermark_scale')) ||
 			($vwm != getOption('video_watermark_image'))) {
 				$gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the options haave changed
 			}
@@ -1906,16 +1909,23 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		echo "<select id=\"watermark_image\" name=\"watermark_image\">\n";
 		generateListFromFiles($v, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png');
 		echo "</select>\n";
-		?> <input type="checkbox" name="perform_watermark" value="1"
+		?> 
+		<input type="checkbox" name="perform_watermark" value="1"
 		<?php echo checked('1', getOption('perform_watermark')); ?> />&nbsp;<?php echo gettext("Enabled"); ?>
 		<br />
-		<?php echo gettext("offset h"); ?> <input type="text" size="5" name="watermark_h_offset"
-			value="<?php echo getOption('watermark_h_offset');?>" /><?php echo gettext("% w"); ?> <input
-			type="text" size="5" name="watermark_w_offset"
-			value="<?php echo getOption('watermark_w_offset');?>" /><?php echo gettext("%"); ?></td>
+		<?php echo gettext('cover '); ?>
+		<input type="text" size="2" name="watermark_scale"
+				value="<?php echo getOption('watermark_scale');?>" /><?php echo gettext('% of image') ?>
+		<br />
+		<?php echo gettext("offset h"); ?> 
+		<input type="text" size="2" name="watermark_h_offset"
+				value="<?php echo getOption('watermark_h_offset');?>" /><?php echo gettext("% w, "); ?> 
+		<input type="text" size="2" name="watermark_w_offset"
+			value="<?php echo getOption('watermark_w_offset');?>" /><?php echo gettext("%"); ?>
+		</td>
 		<td><?php echo gettext("The watermark image (png-24). (Place the image in the"); ?>" <?php echo ZENFOLDER; ?>/watermarks/
 		<?php echo gettext("directory."); ?>")<br />
-		<?php echo gettext("The watermark image is placed relative to the upper left corner of the	image. It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark."); ?></td>
+		<?php echo gettext("The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the	image. It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Watermark videos:"); ?></td>

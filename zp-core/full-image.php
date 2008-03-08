@@ -12,6 +12,7 @@ if (checkforPassword(true)) {
 	pageError();
 	exit();
 }
+require_once('functions-image.php');
 $image_path = $_zp_gallery->getAlbumDir() . $_zp_current_album->name . "/" . $_zp_current_image->name;
 $suffix = strtolower(substr(strrchr($image_path, "."), 1));
 switch ($suffix) {
@@ -63,16 +64,23 @@ if (getOption('perform_watermark')) {
 	$offset_h = getOption('watermark_h_offset') / 100;
 	$offset_w = getOption('watermark_w_offset') / 100;
 	$watermark = imagecreatefrompng($watermark_path);
-	imagealphablending($watermark, false);
-	imagesavealpha($watermark, true);
-	$watermark_width = imagesx($watermark);
-	$watermark_height = imagesy($watermark);
-	// Position Overlay in Bottom Right
-	$dest_x = max(0, floor((imagesx($newim) - $watermark_width) * $offset_w));
-	$dest_y = max(0, floor((imagesy($newim) - $watermark_height) * $offset_h));
-	imagecopy($newim, $watermark, $dest_x, $dest_y, 0, 0, $watermark_width, $watermark_height);
-	imagedestroy($watermark);
-}
+			$watermark_width = imagesx($watermark);
+			$watermark_height = imagesy($watermark);
+			$imw = imagesx($newim);
+			$imh = imagesy($newim);
+			$percent = getOption('watermark_scale')/100;
+			$r = sqrt(($imw * $imh * $percent) / ($watermark_width * $watermark_height));
+			$nw = round($watermark_width * $r);
+			$nh = round($watermark_height * $r);
+			if (($nw != $watermark_width) || ($nh != $watermark_height)) {
+				$watermark = imageResizeAlpha(&$watermark, $nw, $nh);
+			}
+			// Position Overlay in Bottom Right
+			$dest_x = max(0, floor(($imw - $nw) * $offset_w));
+			$dest_y = max(0, floor(($imh - $nh) * $offset_h));
+			imagecopy($newim, $watermark, $dest_x, $dest_y, 0, 0, $nw, $nh);
+			imagedestroy($watermark);
+	}
 $quality = getOption('full_image_quality');
 switch ($suffix) {
 	case 'jpeg':

@@ -222,6 +222,35 @@ function unsharp_mask($img, $amount, $radius, $threshold) {
 }
 
 /**
+/**
+ * Resize a PNG file with transparency to given dimensions
+ * and still retain the alpha channel information
+ * Author:  Alex Le - http://www.alexle.net
+ *
+ *
+ * @param image $src
+ * @param int $w
+ * @param int $h
+ * @return image
+ */
+function imageResizeAlpha(&$src, $w, $h) {
+	/* create a new image with the new width and height */
+	$temp = imagecreatetruecolor($w, $h);
+
+	/* making the new image transparent */
+	$background = imagecolorallocate($temp, 0, 0, 0);
+	ImageColorTransparent($temp, $background); // make the new temp image all transparent
+	imagealphablending($temp, false); // turn off the alpha blending to keep the alpha channel
+
+	/* Resize the PNG file */
+	/* use imagecopyresized to gain some performance but loose some quality */
+	imagecopyresized($temp, $src, 0, 0, 0, 0, $w, $h, imagesx($src), imagesy($src));
+	/* use imagecopyresampled if you concern more about the quality */
+	//imagecopyresampled($temp, $src, 0, 0, 0, 0, $w, $h, imagesx($src), imagesy($src));
+	return $temp;
+}
+
+/**
  * Creates the cache folder version of the image, including watermarking
  *
  * @param string $newfilename the name of the file when it is in the cache
@@ -349,14 +378,21 @@ function cacheGalleryImage($newfilename, $imgfile, $args, $allow_watermark=false
 			$offset_h = getOption('watermark_h_offset') / 100;
 			$offset_w = getOption('watermark_w_offset') / 100;
 			$watermark = imagecreatefrompng($watermark_image);
-			imagealphablending($watermark, false);
-			imagesavealpha($watermark, true);
 			$watermark_width = imagesx($watermark);
 			$watermark_height = imagesy($watermark);
+			$imw = imagesx($newim);
+			$imh = imagesy($newim);
+			$percent = getOption('watermark_scale')/100;
+			$r = sqrt(($imw * $imh * $percent) / ($watermark_width * $watermark_height));
+			$nw = round($watermark_width * $r);
+			$nh = round($watermark_height * $r);
+			if (($nw != $watermark_width) || ($nh != $watermark_height)) {
+				$watermark = imageResizeAlpha(&$watermark, $nw, $nh);
+			}
 			// Position Overlay in Bottom Right
-			$dest_x = max(0, floor((imagesx($newim) - $watermark_width) * $offset_w));
-			$dest_y = max(0, floor((imagesy($newim) - $watermark_height) * $offset_h));
-			imagecopy($newim, $watermark, $dest_x, $dest_y, 0, 0, $watermark_width, $watermark_height);
+			$dest_x = max(0, floor(($imw - $nw) * $offset_w));
+			$dest_y = max(0, floor(($imh - $nh) * $offset_h));
+			imagecopy($newim, $watermark, $dest_x, $dest_y, 0, 0, $nw, $nh);
 			imagedestroy($watermark);
 		}
 

@@ -67,6 +67,7 @@ function setDefault($option, $default) {
 	setDefault('watermark_h_offset', 90);
 	setDefault('watermark_w_offset', 90);
 	setDefault('watermark_image', "watermarks/watermark.png");
+	setDefault('watermark_scale', 5);
 	setDefault('perform_video_watermark', 0);
 	setDefault('video_watermark_image', "watermarks/watermark-video.png");
 	setDefault('spam_filter', 'none');
