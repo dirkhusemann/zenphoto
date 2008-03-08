@@ -15,11 +15,46 @@ function getGalleries() {
 			while(($file = readdir($dh)) !== false){
 				if (is_dir($dir.'/'.$file) & !(isset($reject[$file]))) {
 					if (file_exists($dir.'/'.$file.'/zp-core/')) {
-						$_super_gallery_list[]=$file;
+						$_super_gallery_list[filemtime($dir.'/'.$file)]=$file;
 					}
 				}
 			}
 		}
+	}
+	$direction = getOption('gallery_sortdirection') == 1;
+	switch (getOption('gallery_sorttype')) {
+		case 'Filename':
+			if (getOption('gallery_sortdirection')) {
+				rsort($_super_gallery_list);
+			} else {
+				sort($_super_gallery_list);
+			}
+			break;
+		case 'Title':
+			$newlist = array();
+			foreach ($_super_gallery_list as $subgallery) {
+				setGalleyContext($subgallery);
+				$sql = "SELECT `value` FROM ".prefix('options')." WHERE `name`='gallery_title'";
+				$result = query_single_row($sql);
+				$title = $result['value'];
+				restoreContext();
+				$newlist[$title] = $subgallery;
+			}
+			$_super_gallery_list = array();
+			if ($direction) {
+				krsort($newlist);
+			} else {
+				ksort($newlist);
+			}
+			$_super_gallery_list = $newlist;
+			break;
+		case 'Date':
+			if ($direction) {
+				ksort($_super_gallery_list);
+			} else {
+				krsort($_super_gallery_list);
+			}
+			break;
 	}
 }
 
