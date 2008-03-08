@@ -515,16 +515,16 @@ function printAlbumEditForm($index, $album) {
 			$filename = $imagerow['filename'];
 			$imagelist[] = '/'.$folder.'/'.$filename;
 		}
-	$subalbums = $search->getAlbums(0);
-	foreach ($subalbums as $folder) {
-		$newalbum = new Album($gallery, $folder);
-		if (!$newalbum->isDynamic()) {
-			$images = $newalbum->getImages(0);
-			foreach ($images as $filename) {
-				$imagelist[] = '/'.$folder.'/'.$filename;
+		$subalbums = $search->getAlbums(0);
+		foreach ($subalbums as $folder) {
+			$newalbum = new Album($gallery, $folder);
+			if (!$newalbum->isDynamic()) {
+				$images = $newalbum->getImages(0);
+				foreach ($images as $filename) {
+					$imagelist[] = '/'.$folder.'/'.$filename;
+				}
 			}
 		}
-	}
 		foreach ($imagelist as $imagepath) {
 			$list = explode('/', $imagepath);
 			$filename = $list[count($list)-1];

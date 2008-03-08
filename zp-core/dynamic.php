@@ -117,8 +117,19 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		<td><?php echo gettext("Thumbnail:"); ?></td>
 		<td><select id="thumb" name="thumb">
 		<?php
-		foreach ($imagelist as $image) {
-			echo "\n<option value=\"".$image."\" >".$image."</option>";
+		foreach ($imagelist as $imagepath) {
+			$pieces = explode('/', $imagepath);
+			$filename = array_pop($pieces);;
+			$folder = implode('/', $pieces);
+			$albumx = new Album($gallery, $folder);
+			$image = new Image($albumx, $filename);
+			if (is_valid_image($filename)) {
+				echo "\n<option class=\"thumboption\" style=\"background-image: url(" . $image->getThumb() .
+									"); background-repeat: no-repeat;\" value=\"".$imagepath."\"";
+				echo ">" . $image->get('title');
+				echo  " ($imagepath)";
+				echo "</option>";
+			}
 		}
 		?>
 		</select></td>
