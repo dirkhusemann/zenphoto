@@ -14,7 +14,7 @@
 	<title>
 	<?php 
 		printGalleryTitle(); 
-		echo " | Search";
+		echo " | " .gettext('Search');
 		?>
 	</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -30,7 +30,7 @@
 
 		<div class="galleryinfo">
 		<?php
-		  echo "<h1><em>Search</em></h1>";
+		  echo "<h1><em>". gettext('Search'). "</em></h1>";
 		?>
 		</div>
 		<?php
@@ -46,14 +46,14 @@
 				}
 			?>
 				<li class="gal">
-					<a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 230, null, 210, 60); ?></a>
-					<h3><a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
+					<a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View album: '); echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 230, null, 210, 60); ?></a>
+					<h3><a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View album: '); echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
 					<p>
 						<?php 
 						$number = getNumAlbums(); 
 						$results + $number;
 						if ($number > 0) { 
-						if (!($number == 1)) {  $number .= " albums";} else {$number .=" album";}
+						if (!($number == 1)) {  $number .= gettext(' albums');} else {$number .= gettext(' album');}
 							$counters = $number;
 						} else {
 							$counters = '';
@@ -61,7 +61,7 @@
 						$number = getNumImages();
 						if ($number > 0) {	
 							if (!empty($counters)) { $counters .= ",&nbsp;"; }					
-							if ($number != 1) $number .= " photos"; else $number .=" photo"; 
+							if ($number != 1) $number .= gettext(' photos'); else $number .= gettext(' photo'); 
 							$counters .= $number;
 						}
 						if (!empty($counters)) {
@@ -98,7 +98,7 @@
 		}
 		if (!is_null($firstImage)  && hasNextPage()) { 
 		?>
-		<li class="thumb"><span class="forward"><em style="background-image:url('<?php echo $_zp_themeroot ?>/img/moreslide_next.gif');"><a href="<?php echo getNextPageURL(); ?>" style="background:#fff;">Next page</a></em></span></li>
+		<li class="thumb"><span class="forward"><em style="background-image:url('<?php echo $_zp_themeroot ?>/img/moreslide_next.gif');"><a href="<?php echo getNextPageURL(); ?>" style="background:#fff;"><?php echo gettext('Next page'); ?></a></em></span></li>
 		<?php
 		}
 		?>
@@ -111,21 +111,21 @@
 			if (!empty($params)) {
 				if ($results != "0") {
 					echo '<em class="count">';
-					echo "Photos $firstImage-$lastImage of " . getNumImages();  
+					echo gettext('Photos') . $firstImage-$lastImage . gettext('of') . getNumImages();  
 					echo "</em>";
 		?>
 				<?php if (hasPrevPage()) { ?>
-				<a href="<?php echo getPrevPageURL(); ?>" accesskey="x">&laquo; Prev page</a>
+				<a href="<?php echo getPrevPageURL(); ?>" accesskey="x">&laquo; <?php echo gettext('prev page'); ?></a>
 				<?php } 
 					if (hasNextPage()) { if (hasPrevPage()) { echo '&nbsp;'; } 
 			?>
-				<a href="<?php echo getNextPageURL(); ?>" accesskey="x">next page &raquo;</a>
+				<a href="<?php echo getNextPageURL(); ?>" accesskey="x"><?php echo gettext('next page'); ?> &raquo;</a>
 			<?php
 					}
 					echo '</p>';
-					echo "<em class=\"count\">Total matches for <em>".getSearchWords()."</em>: ".$results."</em>";
+					echo "<em class=\"count\">"  .gettext('Total matches for').  "<em>".getSearchWords()."</em>: ".$results."</em>";
 				} else {
-					echo "<p>Sorry, no matches. Try refining your search.</p>"; 
+					echo "<p>".gettext('Sorry, no matches. Try refining your search.')."</p>"; 
 				}
 			}
 			?>
@@ -133,15 +133,15 @@
 	</div>
 
 	<p id="path"><?php printHomeLink('', ' > '); ?>
-	<a href="<?php echo getGalleryIndexURL();?>" title="Albums Index">
+	<a href="<?php echo getGalleryIndexURL();?>" title="<?php echo gettext('Albums Index'); ?>">
 	<?php echo getGalleryTitle();?></a> &gt; 
 	<?php
-	echo "<em>Search</em>";
+	echo "<em>".gettext('Search')."</em>";
 	?>
 
 	<div id="footer">
 		<hr />
-		<p>Powered by <a href="http://www.zenphoto.org">ZenPhoto</a>.</p>
+		<p><?php echo gettext('Powered by '); ?><a href="http://www.zenphoto.org">ZenPhoto</a>.</p>
 	</div>
 	<?php printAdminToolbox(); ?>
 </body>

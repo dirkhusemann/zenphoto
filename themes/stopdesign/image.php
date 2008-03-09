@@ -62,10 +62,10 @@
 					<li class="tags"><?php echo getAlbumPlace(); ?></li>
 					<li class="exif">
 				<?php 
-					if (getImageEXIFData()) {echo "<a href=\"#TB_inline?height=345&width=300&inlineId=imagemetadata\" title=\"Image Info\" class=\"thickbox\">Image Info</a>";
+					if (getImageEXIFData()) {echo "<a href=\"#TB_inline?height=345&width=300&inlineId=imagemetadata\" title=\"".gettext("image details")."\" class=\"thickbox\">".gettext('Image Info')."</a>";
 						printImageMetadata('', false); 
 					} 
-				?> / <a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>">Full Size</a>
+				?> / <a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>"><?php echo gettext('Full Size'); ?></a>
  					</li>
 				</ul>
 			</div>
@@ -77,11 +77,11 @@
 
 					<h2>
 					<?php $showhide = "<a href=\"#comments\" id=\"showcomments\"><img src=\"" . 
-						$_zp_themeroot . "/img/btn_show.gif\" width=\"35\" height=\"11\" alt=\"SHOW\" /></a> <a href=\"#content\" id=\"hidecomments\"><img src=\"" .
-						$_zp_themeroot . "/img/btn_hide.gif\" width=\"35\" height=\"11\" alt=\"HIDE\" /></a>"; 
+						$_zp_themeroot . "/img/btn_show.gif\" width=\"35\" height=\"11\" alt=\"".gettext("SHOW")."\" /></a> <a href=\"#content\" id=\"hidecomments\"><img src=\"" .
+						$_zp_themeroot . "/img/btn_hide.gif\" width=\"35\" height=\"11\" alt=\"".gettext("HIDE")."\" /></a>"; 
  						$num = getCommentCount(); if ($num == 0) echo "<h2>No comments yet</h2>"; 
- 						if ($num == 1) echo "<h2>1 comment so far $showhide</h2>"; 
- 						if ($num > 1) echo "<h2>$num comments so far $showhide</h2>"; 
+ 						if ($num == 1) echo "<h2>" .gettext('1 comment so far '). "$showhide</h2>"; 
+ 						if ($num > 1) echo "<h2>$num " .gettext('comments so far '). "$showhide</h2>"; 
  					?>
 					</h2>
 					<?php printCommentErrors(); ?>	  
@@ -95,10 +95,10 @@
 								$autonumber++;
 						?>
 							<dt id="comment<?php echo $autonmuber; ?>">
-								<a href="#comment<?php echo $autonumber; ?>" class="postno" title="Link to Comment <?php echo $autonumber; ?>"><?php echo $autonumber; ?>.</a>
-								<em>On <?php echo getCommentDate();?>, <?php printCommentAuthorLink(); ?> wrote:</em>
+								<a href="#comment<?php echo $autonumber; ?>" class="postno" title="<?php echo gettext('Link to Comment '); echo $autonumber; ?>"><?php echo $autonumber; ?>.</a>
+								<em>On <?php echo getCommentDate();?>, <?php printCommentAuthorLink(); echo gettext(' wrote:'); ?></em>
 							</dt>
-							<dd><p><?php echo getCommentBody();?><?php printEditCommentLink('Edit', ' | ', ''); ?></p></dd>
+							<dd><p><?php echo getCommentBody();?><?php printEditCommentLink(gettext('Edit'), ' | ', ''); ?></p></dd>
 							<?php endwhile; ?>
 						</dl>
 								
@@ -118,20 +118,20 @@
 							<input type="hidden" name="remember" value="1" />
 							<table cellspacing="0">
 								<tr valign="top" align="left" id="row-name">
-									<th><label for="name">Name:</label></th>
+									<th><label for="name"><?php echo gettext('Name'); ?>:</label></th>
 									<td><input tabindex="1" id="name" name="name" class="text" value="<?php echo $stored[0];?>" /></td>
 								</tr>
 								<tr valign="top" align="left" id="row-email">
-									<th><label for="email">Email:</label></th>
+									<th><label for="email"><?php echo gettext('Email'); ?>:</label></th>
 									<td><input tabindex="2" id="email" name="email" class="text" value="<?php echo $stored[1];?>" /> <em>(not displayed)</em></td>
 								</tr>
 								<tr valign="top" align="left">
-									<th><label for="website">URL:</label></th>
+									<th><label for="website"><?php echo gettext('URL'); ?>:</label></th>
 									<td><input tabindex="3" type="text" name="website" id="website" class="text" value="<?php echo $stored[2];?>" /></td>
 								</tr>
-								<?php printCaptcha("<tr valign=\"top\" align=\"left\"><th><label for=\"captcha\">Enter Captcha ", ":</label></th><td>", "</td></tr>\n", 8); ?>
+								<?php printCaptcha("<tr valign=\"top\" align=\"left\"><th><label for=\"captcha\">" .gettext('Enter Captcha'), ":</label></th><td>", "</td></tr>\n", 8); ?>
 								<tr valign="top" align="left">
-									<th><label for="comment">Comment:</label></th>
+									<th><label for="comment"><?php echo gettext('Comment'); ?>:</label></th>
 									<td><textarea tabindex="4" id="comment" name="comment" rows="10" cols="40"></textarea></td>
 								</tr>
 								<tr valign="top" align="left">
@@ -139,7 +139,7 @@
 									<td class="buttons">
 										<!--<input type="submit" name="preview" tabindex="5" value="Preview" id="btn-preview" />--> 
 										<input type="submit" name="post" tabindex="6" value="Post" id="btn-post" />
-										<p>Avoid clicking &ldquo;Post&rdquo; more than once.</p>
+										<p><?php echo gettext('Avoid clicking &ldquo;Post&rdquo; more than once.'); ?></p>
 									</td>
 								</tr>
 							</table>
@@ -161,10 +161,10 @@
 				<div id="prevnext">
 					<?php if (hasPrevImage()) { ?>
 					<div id="prev"><span class="thumb"><span>
-						<em style="background-image:url('<?php echo getPrevImageThumb(); ?>')"><a href="<?php echo getPrevImageURL();?>" accesskey="z" style="background:#fff;"><strong style="width:190px; height:300px;">Previous: </strong>Crescent</a></em></span></span></div>
+						<em style="background-image:url('<?php echo getPrevImageThumb(); ?>')"><a href="<?php echo getPrevImageURL();?>" accesskey="z" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Previous'); ?>: </strong>Crescent</a></em></span></span></div>
 						<?php } if (hasNextImage()) { ?>
 						<div id="next"><span class="thumb"><span>
-							<em style="background-image:url('<?php echo getNextImageThumb(); ?>')"><a href="<?php echo getNextImageURL();?>" accesskey="x" style="background:#fff;"><strong style="width:190px; height:300px;">Next: </strong>Sagamor</a></em></span></span></div>
+							<em style="background-image:url('<?php echo getNextImageThumb(); ?>')"><a href="<?php echo getNextImageURL();?>" accesskey="x" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Next'); ?>: </strong>Sagamor</a></em></span></span></div>
 						<?php } ?>
 				</div>
 
@@ -175,8 +175,8 @@
 		<div id="footer">
 			<hr />
 			<p>
-				<a href="http://stopdesign.com/templates/photos/">Photo Templates</a> from Stopdesign.
-				Powered by <a href="http://www.zenphoto.org">ZenPhoto</a>.
+				<a href="http://stopdesign.com/templates/photos/"><?php echo gettext('Photo Templates</a> from'); ?> Stopdesign.
+				<?php echo gettext('Powered by '); ?><a href="http://www.zenphoto.org">ZenPhoto</a>.
 			</p>
 		</div>
 		<?php printAdminToolbox(); ?>

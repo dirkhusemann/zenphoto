@@ -3,7 +3,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<title><?php printGalleryTitle(); ?> Archive</title>
+	<title><?php printGalleryTitle(); echo gettext('Archive'); ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" type="text/css" media="screen, projection" href="<?php echo $_zp_themeroot ?>/css/master.css" />
 	<?php 
@@ -19,7 +19,7 @@
 
 <div id="content">
 
-	<h1><?php printGalleryTitle(); ?> Archive</h1>
+	<h1><?php printGalleryTitle(); echo gettext(' | Archive'); ?></h1>
 
 	<div class="galleries">
  	<?php if (!checkForPassword()) {?>
@@ -27,13 +27,13 @@
 		<ul>
 			<?php $counter = 0; while (next_album(true) and $counter < 999): ?>
 			<li class="gal">
-			<h3><a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
-			<a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 210, 59, 210, 59); ?></a>
+			<h3><a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View album: '); echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
+			<a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View album: '); echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 210, 59, 210, 59); ?></a>
 			<p>
 		<?php
 			$number = getNumsubalbums(); 
 			if ($number > 0) { 
-				if (!($number == 1)) {  $number .= " albums";} else {$number .=" album";}
+				if (!($number == 1)) {  $number .= gettext(' albums');} else {$number .=gettext(' album');}
 				$counters = $number;
 			} else {
 				$counters = '';
@@ -41,7 +41,7 @@
 			$number = getNumImages();
 			if ($number > 0) {	
 				if (!empty($counters)) { $counters .= ",&nbsp;"; }					
-				if ($number != 1) $number .= " photos"; else $number .=" photo"; 
+				if ($number != 1) $number .= gettext(' photos'); else $number .= gettext(' photo'); 
 				$counters .= $number;
 			}
 			if (!empty($counters)) {
@@ -59,22 +59,22 @@
 </div>
 
 <div id="feeds">
-	<h2>Gallery Feeds</h2>
+	<h2><?php echo gettext('Gallery Feeds'); ?></h2>
 	<ul>
-		<li><?php echo "<a href='http://".sanitize($_SERVER['HTTP_HOST']).WEBPATH."/rss.php?albumnr=".getAlbumId()."&albumname=".getAlbumTitle()."' class=\"i\">"; ?><img src="<?php echo WEBPATH; ?>/zp-core/images/rss.gif" /> Photos</a></li>
-		<li><?php echo "<a href='http://".sanitize($_SERVER['HTTP_HOST']).WEBPATH."/rss-comments.php' class=\"i\">"; ?><img src="<?php echo WEBPATH; ?>/zp-core/images/rss.gif" /> Comments</a></li>
+		<li><?php echo "<a href='http://".sanitize($_SERVER['HTTP_HOST']).WEBPATH."/rss.php?albumnr=".getAlbumId()."&albumname=".getAlbumTitle()."' class=\"i\">"; ?><img src="<?php echo WEBPATH; ?>/zp-core/images/rss.gif" /> <?php echo gettext('Photos'); ?></a></li>
+		<li><?php echo "<a href='http://".sanitize($_SERVER['HTTP_HOST']).WEBPATH."/rss-comments.php' class=\"i\">"; ?><img src="<?php echo WEBPATH; ?>/zp-core/images/rss.gif" /> <?php echo gettext('Comments'); ?></a></li>
 	</ul>
 </div>
 
 </div>
 
-<p id="path"><?php printHomeLink('', ' > '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> &gt; Gallery Archive</p>  
+<p id="path"><?php printHomeLink('', ' > '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> &gt; <?php echo gettext('Gallery Archive'); ?></p>  
 
 <div id="footer">
 	<hr />
 	<p>
-		<a href="http://stopdesign.com/templates/photos/">Photo Templates</a> from Stopdesign.
-		Powered by <a href="http://www.zenphoto.org">ZenPhoto</a>.
+		<a href="http://stopdesign.com/templates/photos/"><?php echo gettext('Photo Templates</a> from '); ?>Stopdesign.
+		<?php echo gettext('Powered by '); ?><a href="http://www.zenphoto.org">ZenPhoto</a>.
 	</p>
 </div>
 

@@ -40,13 +40,13 @@
 					}
 				?>
 				<li class="gal">
-					<a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 230, null, 210, 60); ?></a>
-					<h3><a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
+					<a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View album: '); echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 230, null, 210, 60); ?></a>
+					<h3><a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View album: '); echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
 					<p>
 					<?php 
 						$number = getNumsubalbums(); 
 						if ($number > 0) { 
-							if (!($number == 1)) {  $number .= " albums"; } else { $number .=" album"; }
+							if (!($number == 1)) {  $number .= gettext(' albums'); } else { $number .= gettext(' album'); }
 							$counters = $number;
 						} else {
 							$counters = '';
@@ -54,7 +54,7 @@
 						$number = getNumImages();
 						if ($number > 0) {    
 							if (!empty($counters)) { $counters .= ",&nbsp;"; }                    
-							if ($number != 1) $number .= " photos"; else $number .=" photo"; 
+							if ($number != 1) $number .= gettext(' photos'); else $number .= gettext(' photo'); 
 							$counters .= $number;
 						}
 						if (!empty($counters)) {
@@ -89,7 +89,7 @@
 			}
 			if (!is_null($firstImage)  && hasNextPage()) { 
 			?>
-			<li class="thumb"><span class="forward"><em style="background-image:url('<?php echo $_zp_themeroot ?>/img/moreslide_next.gif');"><a href="<?php echo getNextPageURL(); ?>" style="background:#fff;">Next page</a></em></span></li>
+			<li class="thumb"><span class="forward"><em style="background-image:url('<?php echo $_zp_themeroot ?>/img/moreslide_next.gif');"><a href="<?php echo getNextPageURL(); ?>" style="background:#fff;"><?php echo gettext('Next page'); ?></a></em></span></li>
 		<?php
 			}
 		?>
@@ -97,30 +97,30 @@
 
 			<div class="galleryinfo">
 				<br />
-				<p><?php printRSSLink('Album', '', 'Album RSS Feed ', '', true, 'i'); ?></p>
+				<p><?php printRSSLink('Album', '', gettext('Album RSS feed '), '', true, 'i'); ?></p>
 				<br />
 				<p>
 				<?php 
 					if (!is_null($firstImage)) { 
 						echo '<em class="count">';
-						echo "Photos $firstImage-$lastImage of " . getNumImages(); } 
+						echo gettext('Photos '). "$firstImage-$lastImage ". gettext('of ') . getNumImages(); } 
 						echo "</em>";
 				?>
 				<?php if (hasPrevPage()) { ?>
-						<a href="<?php echo getPrevPageURL(); ?>" accesskey="x">&laquo; Prev page</a>
+						<a href="<?php echo getPrevPageURL(); ?>" accesskey="x">&laquo; <?php echo gettext('prev page'); ?></a>
 				<?php } ?>
 				<?php if (hasNextPage()) { if (hasPrevPage()) { echo '&nbsp;'; } ?>
-						<a href="<?php echo getNextPageURL(); ?>" accesskey="x">next page &raquo;</a>
+						<a href="<?php echo getNextPageURL(); ?>" accesskey="x"><?php echo gettext('next page'); ?> &raquo;</a>
 				<?php } ?>
 				</p>
 			</div>
 		</div>
 
-		<p id="path"><?php printHomeLink('', ' > '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> &gt; <?php printParentBreadcrumb("", " > ", " > "); ?> <?php printAlbumTitle(false);?></p>  
+		<p id="path"><?php printHomeLink('', ' > '); ?><a href="<?php echo getGalleryIndexURL();?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> &gt; <?php printParentBreadcrumb("", " > ", " > "); ?> <?php printAlbumTitle(false);?></p>  
 
 		<div id="footer">
 			<hr />
-			<p>Powered by <a href="http://www.zenphoto.org">ZenPhoto</a>.</p>
+			<p><?php echo gettext('Powered by '); ?><a href="http://www.zenphoto.org">ZenPhoto</a>.</p>
 		</div>
 		<?php printAdminToolbox(); ?>
 </body>

@@ -21,17 +21,17 @@
 
 		<h1><?php echo getGalleryTitle(); ?></h1>
 		<div class="galleries">
-				<h2>Recently Updated Galleries</h2>
+				<h2><?php echo gettext('Recently Updated Galleries'); ?></h2>
 				<ul>
 					<?php $counter = 0; while (next_album() and $counter < 6): ?>
 						<li class="gal">
-							<h3><a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
-							<a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 210, 59, 210, 59); ?></a>
+							<h3><a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext("View album: "); echo getAlbumTitle(); ?>"><?php printAlbumTitle(); ?></a></h3>
+							<a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext("View album: "); echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 210, 59, 210, 59); ?></a>
 							<p>
 					<?php 
 						$number = getNumsubalbums(); 
 						if ($number > 0) { 
-							if (!($number == 1)) {  $number .= " albums";} else {$number .=" album";}
+							if (!($number == 1)) {  $number .= gettext(" albums");} else {$number .= gettext(" album");}
 								$counters = $number;
 							} else {
 								$counters = '';
@@ -39,7 +39,7 @@
 							$number = getNumImages();
 							if ($number > 0) {	
 								if (!empty($counters)) { $counters .= ",&nbsp;"; }					
-							if ($number != 1) $number .= " photos"; else $number .=" photo"; 
+							if ($number != 1) $number .= gettext(" photos"); else $number .= gettext(" photo"); 
 							$counters .= $number;
 						}
 						if (!empty($counters)) {
@@ -55,7 +55,7 @@
 					</li>
 				<?php if ($counter == 2) {echo "</ul><ul>";}; $counter++; endwhile; ?>
 				</ul>
-				<p class="mainbutton"><a href="<?php echo getCustomPageURL('albumarchive'); ?>" class="btn"><img src="<?php echo $_zp_themeroot ?>/img/btn_gallery_archive.gif" width="118" height="21" alt="Gallery Archive" /></a></p>
+				<p class="mainbutton"><a href="<?php echo getCustomPageURL('albumarchive'); ?>" class="btn"><img src="<?php echo $_zp_themeroot ?>/img/btn_gallery_archive.gif" width="118" height="21" alt="<?php echo gettext(' Gallery Archive'); ?>" /></a></p>
 		</div>
 
 		<div id="secondary">
@@ -74,7 +74,7 @@
 							foreach ($images as $image) {
 								echo "<li><table><tr><td>\n";
 								$imageURL = getURL($image); 
-								echo '<a href="'.$imageURL.'" title="View image: ' . 
+								echo '<a href="'.$imageURL.'" title="'.gettext("View image: ").
 								$image->getTitle() . '"><img src="' . 
 								$image->getCustomImage(null, 44.5, 33.5, null, null, null, null, true) . 
 																		'" width="44.5" height="33.5" alt="' . $image->getTitle() . "\"/></a>\n"; 
@@ -86,7 +86,7 @@
 							echo "<li><table><tr><td>\n";
 							$randomImage = getRandomImages();
 							$randomImageURL = getURL($randomImage); 
-							echo '<a href="' . $randomImageURL . '" title="View image: ' . $randomImage->getTitle() . '">' .
+							echo '<a href="' . $randomImageURL . '" title="'.gettext("View image: ") . $randomImage->getTitle() . '">' .
  								'<img src="' . $randomImage->getCustomImage(null, 44.5, 33.5, null, null, null, null, true) . 
 								'" width="44.5" height="33.5" alt="'.$randomImage->getTitle().'"'; 
 							echo "/></a></td></tr></table></li>\n";
@@ -100,18 +100,18 @@
 				<h2>Gallery data</h2>
 				<table cellspacing="0" class="gallerydata">
 						<tr>
-							<th><a href="<?php getCustomPageURL('albumarchive'); ?>">Galleries</a></th>
+							<th><a href="<?php getCustomPageURL('albumarchive'); ?>"><?php echo gettext('Galleries'); ?></a></th>
 							<td><?php $albumNumber = getNumAlbums(); echo $albumNumber ?></td>
 							<td></td>
 						</tr>
 						<tr>
-							<th>Photos</th>
+							<th><?php echo gettext('Photos'); ?></th>
 							<td><?php $photosArray = query_single_row("SELECT count(*) FROM ".prefix('images')); $photosNumber = array_shift($photosArray); echo $photosNumber ?></td>
 							<td><?php printRSSLink('Gallery','','','',true,'i'); ?></td>
 						</tr>
  					<?php if (getOption('Allow_comments')) { ?>
  						<tr>
-							<th>Comments</th>
+							<th><?php echo gettext('Comments'); ?></th>
 							<td><?php $commentsArray = query_single_row("SELECT count(*) FROM ".prefix('comments')." WHERE inmoderation = 0"); $commentsNumber = array_shift($commentsArray); echo $commentsNumber ?></td>
 							<td><?php printRSSLink('Comments','','','',true,'i'); ?></td>
 							</tr>
@@ -124,8 +124,8 @@
 	<div id="footer">
 		<hr />
 		<p>
-			<a href="http://stopdesign.com/templates/photos/">Photo Templates</a> from Stopdesign.
-			Powered by <a href="http://www.zenphoto.org">ZenPhoto</a>.
+			<a href="http://stopdesign.com/templates/photos/"><?php echo gettext('Photo Templates</a> from'); ?> Stopdesign.
+			<?php echo gettext('Powered by'); ?><a href="http://www.zenphoto.org">ZenPhoto</a>.
 		</p>
 	</div>
 
