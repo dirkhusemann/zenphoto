@@ -100,11 +100,11 @@ if ($_GET['format'] != 'xml') {
 					<?php
 						$album = getPrevAlbum();
 	 						if (is_null($album)) {
-								echo '<div class="albdisabledlink">&laquo; prev</div>';
+								echo '<div class="albdisabledlink">&laquo;  '.gettext('prev').'</div>';
 							} else {
 							echo '<a href="' . 
 									rewrite_path("/" . pathurlencode($album->name), "/index.php?album=" . urlencode($album->name)) .
-									'" title="' . $album->getTitle() . '">&laquo; prev</a>';
+									'" title="' . $album->getTitle() . '">&laquo; '.gettext('prev').'</a>';
 							} 
 						?>
 					</div>
@@ -112,11 +112,11 @@ if ($_GET['format'] != 'xml') {
 						<?php
 							$album = getNextAlbum();
 							if (is_null($album)) {
-									echo '<div class="albdisabledlink">next &raquo;</div>';
+									echo '<div class="albdisabledlink">'.gettext('next').' &raquo;</div>';
 							} else {
 								echo '<a href="' . 
 										rewrite_path("/" . pathurlencode($album->name), "/index.php?album=" . urlencode($album->name)) .
-										'" title="' . $album->getTitle() . '">next &raquo;</a>';
+										'" title="' . $album->getTitle() . '">'.gettext('next').' &raquo;</a>';
 							} 
 						?>
 					</div>
@@ -131,7 +131,7 @@ if ($_GET['format'] != 'xml') {
 		<!-- Crumb Trail Navigation -->
 		<div id="wrapnav">
 			<div id="navbar">
-				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> | <?php printParentBreadcrumb(); ?></span> 
+				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> | <?php printParentBreadcrumb(); ?></span> 
 				<?php printAlbumTitle(true);?>
 			</div>
 		</div>
@@ -164,17 +164,17 @@ if ($_GET['format'] != 'xml') {
 					?>
 				<li>
 					<div class="imagethumb">
-					<a href="<?php echo getAlbumLinkURL();?>" title="View the album: <?php echo getAlbumTitle(); printImage_AlbumCount(); ?>">
+					<a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View the Album:'); echo getAlbumTitle(); printImage_AlbumCount(); ?>">
 					<?php printCustomAlbumThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?></a>
 					</div>
-					<h4><a href="<?php echo getAlbumLinkURL();?>" title="View the album: <?php echo getAlbumTitle(); printImage_AlbumCount(); ?>">
+					<h4><a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View the Album:'); echo getAlbumTitle(); printImage_AlbumCount(); ?>">
 					<?php printAlbumTitle(); ?></a></h4></li>
 				<?php 
 						} 
 				?>
 			</ul> 
 			<div class="clearage"></div>
-			<?php printNofM('Album', $firstAlbum, $lastAlbum, getNumSubAlbums()); ?>
+			<?php printNofM(gettext("Album"), $firstAlbum, $lastAlbum, getNumSubAlbums()); ?>
 		</div>
 
 		<!-- Wrap Main Body -->
@@ -196,11 +196,11 @@ if ($_GET['format'] != 'xml') {
 							if (!getImageVideo()) { // Smoothgallery does not do videos
 						?>
 							<div class="imageElement">
-							<h3><?=getImageTitle();?></h3>
-							<p><?=getImageDesc();?></p>
-							<a href="<?php echo getImageLinkURL();?>" title="<?php echo getImageTitle();?>" class="open"></a>
-												<?php printCustomSizedImage(getImageTitle(), null, 540, null, null, null, null, null, 'full'); ?>
-							<?php printImageThumb(getImageTitle(), 'thumbnail'); ?>
+								<h3><?=getImageTitle();?></h3>
+								<p><?=getImageDesc();?></p>
+								<a href="<?php echo getImageLinkURL();?>" title="<?php echo getImageTitle();?>" class="open"></a>
+								<?php printCustomSizedImage(getImageTitle(), null, 540, null, null, null, null, null, 'full'); ?>
+								<?php printImageThumb(getImageTitle(), 'thumbnail'); ?>
 							</div>
 							<?php 
 							}
@@ -216,7 +216,7 @@ if ($_GET['format'] != 'xml') {
 									$url = getPageURL(getCurrentPage());
 								} 
 								echo '<p align=center>';
-								printLinkWithQuery($url, 'slideshow', 'View Slideshow');
+								printLinkWithQuery($url, 'slideshow', gettext('View Slideshow'));
 								echo '</p>';
 								}
 							}
@@ -256,7 +256,7 @@ if ($_GET['format'] != 'xml') {
  					</div>
  					</div>
 	 			<div class="clearage"></div>
- 					<?php printNofM('Photo', $firstImage, $lastImage, getNumImages()); ?>
+ 					<?php printNofM(gettext('Photo'), $firstImage, $lastImage, getNumImages()); ?>
 		</div>
 			<?php 
 				} else {  /* flash */
@@ -265,7 +265,7 @@ if ($_GET['format'] != 'xml') {
 <!-- Simpleviewer section -->
 			<div id="flash">
 					<p align="center">
-			<font color=#663300>For the best viewing experience <a href="http://www.macromedia.com/go/getflashplayer/">Get Macromedia Flash.</a></font>
+			<font color=#663300><?php echo gettext('For the best viewing experience '); ?><a href="http://www.macromedia.com/go/getflashplayer/"><?php echo gettext('Get Adobe Flash.'); ?></a></font>
 			</p> 
 						<p align="center">
  						<?php 
@@ -274,7 +274,7 @@ if ($_GET['format'] != 'xml') {
  						} else {
  							$url = getPageURL(getCurrentPage());
  						} 
-			 printLinkWithQuery($url, 'noflash', 'View gallery without Flash.');
+			 printLinkWithQuery($url, 'noflash', gettext('View Gallery Without Flash'));
 			 echo "</p>";
  						$flash_url = getAlbumLinkURL();	
  						if (substr($flash_url, -1, 1) == '/') {$flash_url= substr($flash_url, 0, -1);}
@@ -299,7 +299,7 @@ if ($_GET['format'] != 'xml') {
 					<div id="main3">
 					<div id="main2">
 					<br />
-					<p align="center">Album is empty</font></p>
+					<p align="center"><?php echo gettext('Album is empty'); ?></font></p>
 					</div>
 					</div>
 				<?php 
@@ -310,7 +310,7 @@ if ($_GET['format'] != 'xml') {
 <?php
 	echo '<div id="submain"><div id="pagenumbers">';
 	if ((getNumSubalbums() != 0) || !$oneImagePage){
-		printPageListWithNav("&laquo; prev", "next &raquo;", $oneImagePage); 
+		printPageListWithNav("&laquo; " .gettext('prev'), gettext('next')." &raquo;", $oneImagePage); 
 		echo "</div></div>";
 	} 
 	printAlbumMap(8, 'G_HYBRID_MAP');
@@ -325,14 +325,14 @@ if ($_GET['format'] != 'xml') {
 <?php 
 $h = hitcounter('album');
 if ($h == 1) {
-	$h .= ' hit';
+	$h .= gettext('hit');
 } else {
-	$h .= ' hits';
+	$h .= gettext('hits');
 }
-echo "<p>$h on this album</p>";
+echo "<p>$h ".gettext('on this album')."</p>";
 printThemeInfo();
 ?>
-<a href="http://www.zenphoto.org" title="A simpler web photo album">Powered by 
+<a href="http://www.zenphoto.org" title="A simpler web photo album"><?php echo gettext('Powered by '); ?>
 <font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font size="1" face="Arial Black">photo</font></span></a><br />
 <?php printRSSLink('Album', '', 'Album RSS', ''); ?>
 
@@ -363,7 +363,7 @@ printThemeInfo();
 ?>
 			<image><filename><?php echo getDefaultSizedImage();?></filename>
 				<caption>
-				<![CDATA[<a href="<?php echo getImageLinkURL();?>" title="Open in a new window">
+				<![CDATA[<a href="<?php echo getImageLinkURL();?>" title="<?php echo gettext('Open In New Window'); ?>">
 					<font face="Times"><u><b><em><?php echo getImageTitle() ?></font></em></b></u></a></u>
 					<br /></font><?php echo getImageDesc(); ?>]]>
 			</caption>

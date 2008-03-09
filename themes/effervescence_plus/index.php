@@ -19,17 +19,14 @@
 	<!-- Logo -->
 		<div id="gallerytitle">
 			<div id="logo">
-			<?php
-			if (getOption('Allow_search')) {  printSearchForm(''); }
-			echo printLogo();
-			?>
+				<?php if (getOption('Allow_search')) {  printSearchForm(''); }	echo printLogo(); ?>
 			</div>
 		</div>
 
 	<!-- Crumb Trail Navigation -->
 		<div id="wrapnav">
 			<div id="navbar">
-				<span><?php printHomeLink('', ' | '); printGalleryTitle();?>
+				<span><?php printHomeLink('', ' | '); printGalleryTitle();?></span>
 			</div>
 		</div>
 	</div>
@@ -55,20 +52,20 @@
 			?>
 			<li>
 				<div class="imagethumb">
-				<a href="<?php echo getAlbumLinkURL();?>" title="View the album: <?php echo getAlbumTitle(); printImage_AlbumCount(); ?>">
+				<a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View the album: '); echo getAlbumTitle(); printImage_AlbumCount(); ?>">
 						<?php printCustomAlbumThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?>
  				</a>
 				</div>
-				<h4><a href="<?php echo getAlbumLinkURL();?>" title="View the album: <?php echo getAlbumTitle(); printImage_AlbumCount();?>"><?php printAlbumTitle(); ?></a></h4>
+				<h4><a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View the album: '); echo getAlbumTitle(); printImage_AlbumCount();?>"><?php printAlbumTitle(); ?></a></h4>
 			</li>
 			<?php } ?>
 		</ul>
 		<div class="clearage"></div>
-		<?php printNofM('Album', $firstAlbum, $lastAlbum, getNumAlbums()); ?>
+		<?php printNofM(gettext('Album'), $firstAlbum, $lastAlbum, getNumAlbums()); ?>
 	
 		<!-- Page Numbers -->
 		<div id="pagenumbers">
-			<?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
+			<?php printPageListWithNav("&laquo; ".gettext('prev'), gettext('next')." &raquo;"); ?>
 		</div>
 	
 	</div>
@@ -88,7 +85,7 @@
 			</p>
 			<?php printThemeInfo(); ?>
 		</small>
-		<a href="http://www.zenphoto.org" title="A simpler web photo album">Powered by <font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a><br/>
+		<a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album');?>"><?php echo gettext('Powered by ');?><font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a><br/>
 		<?php printRSSLink('Gallery','', 'Gallery RSS', ''); ?>
 	</div>
 		

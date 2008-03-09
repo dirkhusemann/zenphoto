@@ -52,7 +52,7 @@ $backgroundImagePath="";
 	<title>
 	<?php 
 		printGalleryTitle(); 
-		echo " | Search";
+		echo " | ".gettext('Search');
 		?>
 	</title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
@@ -85,7 +85,7 @@ $backgroundImagePath="";
 		<a href="<?php echo getGalleryIndexURL();?>" title="Albums Index">
 		<?php echo getGalleryTitle();	?></a></span> | 
 		<?php
-		  echo "<em>Search</em>";
+		  echo "<em>".gettext('Search')."</em>";
 		?>
 	</div>
 </div>
@@ -109,9 +109,9 @@ $backgroundImagePath="";
 				$searchwords .= $searchdate;
 			}
 			if ($total > 0 ) {
-				echo "$total Hit";
+				echo "$total " .gettext('Hit');
 				if ($total > 1) { echo "s"; }
-				echo " for <em>$searchwords</em>";
+				echo gettext('for'). "<em>$searchwords</em>";
 			}
 		?>
 </div>
@@ -134,7 +134,7 @@ $backgroundImagePath="";
 				printImage_AlbumCount();
 			?>">
 				<?php printCustomAlbumThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?></a></div>
-				<h4><a href="<?php echo getAlbumLinkURL();?>" title="View the album: <?php echo getAlbumTitle();
+				<h4><a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View the Album: '); echo getAlbumTitle();
 				printImage_AlbumCount();
 			?>">
 			<?php printAlbumTitle(); ?></a></h4></li>
@@ -181,7 +181,7 @@ $backgroundImagePath="";
 	 		} else {  /* flash */
 	 			if (isImagePage()) {
 	 			?>
- 					<div id="flash"><p align=center><font color=#663300>For the best viewing experience <a href="http://www.macromedia.com/go/getflashplayer/">Get Macromedia Flash.</a></p> 
+ 					<div id="flash"><p align=center><font color=#663300><?php echo gettext('For the best viewing experience '); ?><a href="http://www.macromedia.com/go/getflashplayer/"><?php echo gettext('get Adobe Flash.'); ?></a></p> 
  					<p align="center"><a href="
  					<?php 
  					if ($imagePage) {
@@ -216,9 +216,9 @@ $backgroundImagePath="";
 				<p align="center">
 			<?php 
 				if (empty($searchwords)) {
-					echo "Enter your search criteria.";
+					echo gettext('Enter your search criteria.');
 				} else {
-					echo "Sorry, no matches for <em>$searchwords</em>. Try refining your search.";
+					echo gettext('Sorry, no matches for <em>') .$searchwords. gettext('</em>. Try refining your search.');
 				}
 			?>
 			</font></p>
@@ -248,12 +248,12 @@ $backgroundImagePath="";
 if (getOption('Use_Simpleviewer') && !getOption('mod_rewrite')) { 
 	/* display missing css file error */
 	echo '<div class="errorbox" id="message">'; 
-	echo  "<h2>" . "Simpleviewer requires <em>mod_rewrite</em> to be set. Simpleviewer is disabled." . "</h2>";  
+	echo  "<h2>" . gettext('Simpleviewer requires <em>mod_rewrite</em> to be set. Simpleviewer is disabled.') . "</h2>";  
 	echo '</div>'; 
 } ?>
 
 <?php printThemeInfo(); ?>
-<a href="http://www.zenphoto.org" title="A simpler web photo album">Powered by 
+<a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>"><?php echo gettext('Powered by '); ?>
 <font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font size="1" face="Arial Black">photo</font></span></a>
 
 </div>
@@ -276,6 +276,6 @@ $stagePadding.'" thumbnailColumns="'.$thumbnailColumns.'" thumbnailows="'.$thumb
 $navPosition.'" enableRightClickOpen="'.$enableRightClickOpen.'" backgroundImagePath="'.$backgroundImagePath.
 '" imagePath="'.$path.'" thumbPath="'.$path.'">'; ?>
 
-<?php while (next_image(true)): ?><image><filename><?php echo getFullImageURL();?></filename><caption><![CDATA[<a href="<?php echo getImageLinkURL();?>" title="Open in a new window">
+<?php while (next_image(true)): ?><image><filename><?php echo getFullImageURL();?></filename><caption><![CDATA[<a href="<?php echo getImageLinkURL();?>" title="<?php echo gettext('Open in a new window'); ?>">
 <font face="Times"><u><b><em><?php echo getImageTitle() ?></font></em></b></u></a></u>
 <br></font><?php echo getImageDesc() ?>]]></caption></image><?php endwhile; ?></simpleviewerGallery><?php } ?>

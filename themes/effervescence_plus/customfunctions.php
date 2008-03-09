@@ -30,7 +30,7 @@ function printHeadingImage($randomImage) {
 			}
 		}
 		$randomImageURL = getURL($randomImage);
-		echo "<a href='".$randomImageURL."' title='Random Picture...'><img src='".
+		echo "<a href='".$randomImageURL."' title='".gettext('Random picture...')."'><img src='".
 		$randomImage->getCustomImage(NULL, 620, 180, 620, 180, NULL, NULL, !getOption('Watermark_head_image')).
 					"' width=620 height=180 alt=".'"'.
 		htmlspecialchars($randomAlt1, ENT_QUOTES).
@@ -56,11 +56,11 @@ function getCustomAlbumDesc() {
 function printImage_AlbumCount() {
 	$c = getNumSubalbums();
 	if ($c > 0) {
-		echo "\n".$c." Albums(s)";
+		echo "\n".$c. gettext('albums(s)');
 	}
 	$c = getNumImages();
 	if ($c > 0) {
-		echo "\n".$c." image(s)";
+		echo "\n".$c. gettext('images(s)');
 	}
 }
 function parseCSSDef($file) {
@@ -88,7 +88,7 @@ function printNofM($what, $first, $last, $total) {
 		} else {
 			echo "s $first-$last";
 		}
-		echo " of $total</p>";
+		echo gettext('of') . " $total</p>";
 	}
 }
 

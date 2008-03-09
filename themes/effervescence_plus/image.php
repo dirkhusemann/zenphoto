@@ -32,19 +32,19 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 						global $_zp_current_image;
 						if (hasPrevImage()) { 
 							$image = $_zp_current_image->getPrevImage();
-							echo '<a href="' . getPrevImageURL() . '" title="' . $image->getTitle() . '">&laquo; prev</a>';
+							echo '<a href="' . getPrevImageURL() . '" title="' . $image->getTitle() . '">&laquo; '.gettext('prev').'</a>';
 						} else {
-							echo '<div class="imgdisabledlink">&laquo; prev</div>'; 
-											}
+							echo '<div class="imgdisabledlink">&laquo; '.gettext('prev').'</div>'; 
+						}
 						?>
 					</div>
 					<div class="imgnext">
 					<?php
 					if (hasNextImage()) { 
 						$image = $_zp_current_image->getNextImage();
-						echo '<a href="' . getNextImageURL() . '" title="' . $image->getTitle() . '">next &raquo;</a>';
+						echo '<a href="' . getNextImageURL() . '" title="' . $image->getTitle() . '">'.gettext('next').' &raquo;</a>';
 					} else {
-						echo '<div class="imgdisabledlink">next &raquo;</div>';
+						echo '<div class="imgdisabledlink">'.gettext('next').' &raquo;</div>';
 					}
 					?>
 				</div>
@@ -59,7 +59,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 	<!-- Crumb Trail Navigation -->
 		<div id="wrapnav">
 			<div id="navbar">
-				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> | 
+				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> | 
 				<?php printParentBreadcrumb(); printAlbumBreadcrumb("", " | "); ?> 
 				</span> 
 				<?php printImageTitle(true); ?>
@@ -84,7 +84,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 		<?php 
 		printImageMap(6, 'G_HYBRID_MAP');
 		if (getImageEXIFData()) {
-			echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=400&width=300&inlineId=imagemetadata\" title=\"image details from exif\" class=\"thickbox\">Image Info</a></div>";
+			echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=400&width=300&inlineId=imagemetadata\" title=\"".gettext("image details from exif")."\" class=\"thickbox\">".gettext('Image Info')."</a></div>";
 			printImageMetadata('', false); 
 		}
 	} ?>
@@ -104,7 +104,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 	<!-- Headings -->
 		<div id="bottomheadings">
 			<div class="bottomfull">
-				<?php $num = getCommentCount(); echo ($num == 1) ? ("<h3>1 Comment</h3>") : ("<h3>$num Comments</h3>"); ?>
+				<?php $num = getCommentCount(); echo ($num == 1) ? ("<h3>1 ".gettext("Comment")."</h3>") : ("<h3>$num ".gettext("Comments")."</h3>"); ?>
 		</div>
 					</div>
 
@@ -125,24 +125,24 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 			<!-- Comment Box -->
 			<?php if (OpenedForComments()) { ?>
 					<div id="commentbox">
-						<h2>Leave a Reply</h2>
+						<h2><?php echo gettext('Leave a Reply');?></h2>
 						<form id="commentform" action="#" method="post">
 								<div>
 										<input type="hidden" name="comment" value="1" />
 									<input type="hidden" name="remember" value="1" />
 									<?php printCommentErrors(); ?>
-									<input type="text" name="name" id="name" class="textinput" value="<?=$stored[0];?>" size="22" tabindex="1" /><label for="name"><small> Name</small></label>
-									<br/><input type="text" name="email" id="email" class="textinput" value="<?=$stored[1];?>" size="22" tabindex="2" /><label for="email"><small> Mail</small></label>
-												<br/><input type="text" name="website" id="website" class="textinput" value="<?=$stored[2];?>" size="22" tabindex="3" /><label for="website"><small> Website</small></label>
-												<?php printCaptcha('<br/>', '', ' <small>Enter Captcha</small>', 8); ?>
+									<input type="text" name="name" id="name" class="textinput" value="<?=$stored[0];?>" size="22" tabindex="1" /><label for="name"><small> <?php echo gettext('Name');?></small></label>
+									<br/><input type="text" name="email" id="email" class="textinput" value="<?=$stored[1];?>" size="22" tabindex="2" /><label for="email"><small> <?php echo gettext('Email');?></small></label>
+												<br/><input type="text" name="website" id="website" class="textinput" value="<?=$stored[2];?>" size="22" tabindex="3" /><label for="website"><small> <?php echo gettext('Website');?></small></label>
+												<?php printCaptcha('<br/>', '', ' <small>'.gettext("Enter Captcha").'</small>', 8); ?>
 									<textarea name="comment" id="comment" rows="5" cols="100%" tabindex="4"></textarea>
-									<input type="submit" value="Submit" class="pushbutton" />
+									<input type="submit" value="<?php echo gettext('Submit');?>" class="pushbutton" />
 								</div>
 						</form>
 					</div>
 				<?php } else {?>
 					<div id="commentbox">
-						<h3>Closed for comments</h3>
+						<h3><?php echo gettext('Closed for comments.');?></h3>
 					</div>
 				<?php } ?>
 
@@ -155,14 +155,14 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 		<?php 
 		$h = hitcounter('image');
 		if ($h == 1) {
-			$h .= ' hit';
+			$h .= gettext(' hit');
 		} else {
-			$h .= ' hits';
+			$h .= gettext(' hits');
 		}
-		echo "<p>$h on this image</p>";
+		echo "<p>$h ".gettext('on this image')."</p>";
 		printThemeInfo(); 
 		?>
-		<a href="http://www.zenphoto.org" title="A simpler web photo album">Powered by 
+		<a href="http://www.zenphoto.org" title="A simpler web photo album"><?php echo gettext('Powered by ');?>
 		<font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font face="Arial Black" size="1">photo</font></span></a>
 	</div>
 		
