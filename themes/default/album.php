@@ -15,7 +15,7 @@
 <div id="main">
 
 	<div id="gallerytitle">
-		<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> | <?php printParentBreadcrumb(); ?></span> <?php printAlbumTitle(true);?></h2>
+		<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> | <?php printParentBreadcrumb(); ?></span> <?php printAlbumTitle(true);?></h2>
 	</div>
 		
 		<div id="padbox">
@@ -27,10 +27,10 @@
 			<div class="album">
 				
 						<div class="thumb">
-					<a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumThumbImage(getAlbumTitle()); ?></a>
+					<a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View album:'); ?> <?php echo getAlbumTitle();?>"><?php printAlbumThumbImage(getAlbumTitle()); ?></a>
 						</div>
 				<div class="albumdesc">
-					<h3><a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
+					<h3><a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View album:'); ?> <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
 								<small><?php printAlbumDate(""); ?></small>
 					<p><?php printAlbumDesc(); ?></p>
 				</div>
@@ -48,8 +48,8 @@
 				
 		</div>
 	
-		<?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
-				<?php printTags('links', '<strong>Tags:</strong> ', 'taglist', ''); ?>
+		<?php printPageListWithNav("&laquo; ".gettext("prev"), gettext("next")." &raquo;"); ?>
+				<?php printTags('links', gettext('<strong>Tags:</strong> '), 'taglist', ''); ?>
 				
 	</div>
 		
@@ -57,7 +57,7 @@
 		
 </div>
 
-<div id="credit"><?php printRSSLink('Album', '', 'Album RSS', ''); ?> | <a href="<?php echo getGalleryIndexURL();?>?p=archive">Archive View</a> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
+<div id="credit"><?php printRSSLink('Album', '', gettext('Album RSS'), ''); ?> | <a href="<?php echo getGalleryIndexURL();?>?p=archive"><?php echo gettext("Archive View"); ?></a> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a></div>
 
 <?php printAdminToolbox(); ?>
 

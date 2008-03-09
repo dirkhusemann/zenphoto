@@ -9,11 +9,11 @@ $firstPageImages = normalizeColumns(1, 7);
 	<title>
 	<?php 
 		printGalleryTitle(); 
-		echo " | Search";
+		echo " | ".gettext("Search");
 		?>
 	</title>
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
-	<?php printRSSHeaderLink('Gallery','Gallery RSS'); ?>
+	<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
 	<?php zenJavascript(); ?>
 </head>
 <body>
@@ -27,7 +27,7 @@ $firstPageImages = normalizeColumns(1, 7);
 		<?php echo getGalleryIndexURL();?>" title="Gallery Index">
 		<?php echo getGalleryTitle();?></a> | 
 		<?php
-		  echo "<em>Search</em>";
+		  echo "<em>".gettext("Search")."</em>";
 		?>
 		</span></h2>
 		</div>
@@ -39,7 +39,7 @@ $firstPageImages = normalizeColumns(1, 7);
 				if ($_REQUEST['date'])
 	 		{ $searchwords = getSearchDate();
 	 		} else { $searchwords = getSearchWords(); }
-				echo "<p>Total matches for <em>".$searchwords."</em>: $total</p>";
+				echo "<p>".gettext("Total matches for")." <em>".$searchwords."</em>: $total</p>";
 			}
 		$c = 0;
 		?>
@@ -73,17 +73,17 @@ $firstPageImages = normalizeColumns(1, 7);
 	<br clear="all" />
 	<?php
 			if ($c == 0) { 
-				echo "<p>Sorry, no image matches. Try refining your search.</p>"; 
+				echo "<p>".gettext("Sorry, no image matches. Try refining your search.")."</p>"; 
 			}
 	
 			echo '<br clear="all" />';
-			printPageListWithNav("&laquo; prev","next &raquo;");
+			printPageListWithNav("&laquo; ".gettext("prev"),gettext("next")." &raquo;");
 	?> 
 	
 
 		<div id="credit">
-			<?php printRSSLink('Gallery', '', 'Gallery RSS', ''); ?> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a> | <a href="?p=archive">Archive View</a><br />
-		<?php echo round((array_sum(explode(" ",microtime())) - $startTime),4).' Seconds</strong>'; ?>
+			<?php printRSSLink('Gallery', '', gettext('Gallery RSS'), ''); ?> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a> | <a href="?p=archive"><?php echo gettext("Archive View"); ?></a><br />
+		<?php echo round((array_sum(explode(" ",microtime())) - $startTime),4).' '.gettext('Seconds').'</strong>'; ?>
 	</div>
 </div>
 

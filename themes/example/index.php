@@ -4,7 +4,7 @@
 <head>
 	<title><?php printGalleryTitle(); ?></title>
 		<link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
-		<?php printRSSHeaderLink('Gallery','Gallery RSS'); ?>
+		<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
 		<?php zenJavascript(); ?>
 </head>
 <body>
@@ -14,7 +14,7 @@
 		</div>
 	
 		<hr />
-		<?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
+		<?php printPageListWithNav("&laquo; ".gettext("prev"), gettext("next")." &raquo;"); ?>
 	
 		<div id="albums">
 			<?php while (next_album()): ?>
@@ -35,9 +35,9 @@
 			<?php endwhile; ?>
 		</div>
 	
-		<?php printPageNav("&laquo; prev", "|", "next &raquo;"); ?>
+		<?php printPageNav("&laquo; ".gettext("prev"), "|", gettext("next")." &raquo;"); ?>
 	
-		<div id="credit"><?php printRSSLink('Gallery','','RSS', ''); ?> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a> | <a href="?p=archive">Archive View</a></div>
+		<div id="credit"><?php printRSSLink('Gallery','','RSS', ''); ?> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a> | <a href="?p=archive"><?php echo gettext("Archive View"); ?></a></div>
 
 </div>
 

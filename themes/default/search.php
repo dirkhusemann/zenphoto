@@ -5,11 +5,11 @@
 	<title>
 	<?php 
 		printGalleryTitle(); 
-		echo " | Search";
+		echo " | ".gettext("Search");
 		?>
 	</title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
-	<?php printRSSHeaderLink('Gallery','Gallery RSS'); ?>
+	<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
 	<?php zenJavascript(); ?>
   <script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/prototype.js" type="text/javascript"></script>
 </head>
@@ -23,10 +23,10 @@
 			printSearchForm(); 
 		?>
 		<h2><span><?php printHomeLink('', ' | '); ?><a href="
-		<?php echo getGalleryIndexURL();?>" title="Gallery Index">
+		<?php echo getGalleryIndexURL();?>" title="<?php echo ('Gallery Index'); ?>">
 		<?php echo getGalleryTitle();?></a></span> | 
 		<?php
-		  echo "<em>Search</em>";
+		  echo "<em>".gettext("Search")."</em>";
 		?>
 		</h2>
 	</div>
@@ -37,7 +37,7 @@
 			if ($_REQUEST['date']){
 				$searchwords = getSearchDate();
  		} else { $searchwords = getSearchWords(); }
-			echo "<p>Total matches for <em>".$searchwords."</em>: $total</p>";
+			echo "<p>".gettext("Total matches for")." <em>".$searchwords."</em>: $total</p>";
 		}
 		$c = 0;
 		?>
@@ -45,12 +45,12 @@
 			<?php while (next_album()): $c++;?>
 				<div class="album">
 					<div class="thumb">
-						<a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumThumbImage(getAlbumTitle()); ?></a>
+						<a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View album:');?> <?php echo getAlbumTitle();?>"><?php printAlbumThumbImage(getAlbumTitle()); ?></a>
 					</div>
 					<div class="albumdesc">
-						<h3><a href="<?php echo getAlbumLinkURL();?>" title="View album: <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
+						<h3><a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View album:');?> <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
 						<p><?php printAlbumDesc(); ?></p>
-						<small><?php printAlbumDate("Date: "); ?></small>
+						<small><?php printAlbumDate(gettext("Date: ")); ?></small>
 					</div>
 					<p style="clear: both; "></p>
 				</div>
@@ -66,17 +66,17 @@
 			</div>
 		<?php
 			if ($c == 0) { 
-				echo "<p>Sorry, no image matches. Try refining your search.</p>"; 
+				echo "<p>".gettext("Sorry, no image matches. Try refining your search.")."</p>"; 
 			}
 
-			printPageListWithNav("&laquo; prev","next &raquo;");
+			printPageListWithNav("&laquo; ".gettext("prev"),gettext("next")." &raquo;");
 			?> 
 
 	</div>
 	
 </div>
 
-<div id="credit"><?php printRSSLink('Gallery', '', 'Gallery RSS', ' | '); ?> <a href="<?php echo getGalleryIndexURL();?>?p=archive">Archive View</a> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
+<div id="credit"><?php printRSSLink('Gallery', '', gettext('Gallery RSS'), ' | '); ?> <a href="<?php echo getGalleryIndexURL();?>?p=archive"><?php echo gettext("Archive View"); ?></a> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a></div>
 
 <?php printAdminToolbox(); ?>
 

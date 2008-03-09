@@ -21,15 +21,15 @@ $firstPageImages = normalizeColumns(1, 7);
 			<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> | <?php printParentBreadcrumb(); ?></span> <?php printAlbumTitle(true);?></h2>
 		</div>
 	
-		( <?php printLink(getPrevAlbumURL(), "&laquo; Prev Album"); ?> | <?php printLink(getNextAlbumURL(), "Next Album &raquo;"); ?> )
+		( <?php printLink(getPrevAlbumURL(), "&laquo; ".gettext("Prev Album")); ?> | <?php printLink(getNextAlbumURL(), gettext("Next Album")." &raquo;"); ?> )
 	
 		<hr />
-		<?php printTags('links', '<strong>Tags:</strong> ', 'taglist', ''); ?>
+		<?php printTags('links', gettext('<strong>Tags:</strong> '), 'taglist', ''); ?>
 	<?php printAlbumDesc(true); ?>
 		<br />
 
 	
-	<?php printPageListWithNav("&laquo; prev", "next &raquo;"); ?>
+	<?php printPageListWithNav("&laquo; ".gettext("prev"), gettext("next")." &raquo;"); ?>
 
 	<!-- Sub-Albums -->
 		<div id="albums">
@@ -71,7 +71,7 @@ $firstPageImages = normalizeColumns(1, 7);
  <!-- begin comment block -->     
 				<?php if (getOption('Allow_comments')  && getCurrentPage() == 1) { ?>
 				<div id="comments">
-					<div class="commentcount"><?php $num = getCommentCount(); echo ($num == 0) ? "No comments" : (($num == 1) ? "<strong>One</strong> comment" : "<strong>$num</strong> comments"); ?> on this alblum:</div>
+					<div class="commentcount"><?php $num = getCommentCount(); echo ($num == 0) ? gettext("No comments") : (($num == 1) ? gettext("<strong>One</strong> comment") : "<strong>$num</strong> ".gettext("comments on this album:")); ?> </div>
 					
 						<?php while (next_comment()):  ?>
 						<div class="comment">
@@ -86,31 +86,31 @@ $firstPageImages = normalizeColumns(1, 7);
 						<div class="imgcommentform">
 				<?php if (OpenedForComments(ALBUM)) { ?>
 							<!-- If comments are on for this album... -->
-							<h3>Add a comment:</h3>
+							<h3><?php echo gettext("Add a comment:"); ?></h3>
 							<form id="commentform" action="#comments" method="post">
 									<input type="hidden" name="comment" value="1" />
 									<input type="hidden" name="remember" value="1" />
 										<?php printCommentErrors(); ?>
 									<table border="0">
-										<tr><td><label for="name">Name:</label></td>    <td><input type="text" name="name" size="20" value="<?php echo $stored[0];?>" />  </td></tr>
-										<tr><td><label for="email">E-Mail (won't be public):</label></td> <td><input type="text" name="email" size="20" value="<?php echo $stored[1];?>" /> </td></tr>
-										<tr><td><label for="website">Site:</label></td> <td><input type="text" name="website" size="30" value="<?php echo $stored[2];?>" /></td></tr>
-												<?php printCaptcha('<tr><td>Enter ', ':</td><td>', '</td></tr>'); ?>
+										<tr><td><label for="name"><?php echo gettext("Name:"); ?></label></td>    <td><input type="text" name="name" size="20" value="<?php echo $stored[0];?>" />  </td></tr>
+										<tr><td><label for="email"><?php echo gettext("E-Mail (won't be public):"); ?></label></td> <td><input type="text" name="email" size="20" value="<?php echo $stored[1];?>" /> </td></tr>
+										<tr><td><label for="website"><?php echo gettext("Site:"); ?></label></td> <td><input type="text" name="website" size="30" value="<?php echo $stored[2];?>" /></td></tr>
+												<?php printCaptcha('<tr><td>'.gettext('Enter').' ', ':</td><td>', '</td></tr>'); ?>
 									</table>
 									<textarea name="comment" rows="6" cols="40"></textarea><br />
-									<input type="submit" value="Add Comment" />
+									<input type="submit" value="<?php echo gettext('Add Comment'); ?>" />
 							</form>
 						</div>
-				<?php } else { echo 'Comments are closed.'; } ?>
+				<?php } else { echo gettext('Comments are closed.'); } ?>
 				</div>
 				<?php } ?>
 <!--  end comment block -->
  
- 		<?php printPageNav("&laquo; prev", "|", "next &raquo;"); ?>
+ 		<?php printPageNav("&laquo; ".gettext("prev"), "|", gettext("next")." &raquo;"); ?>
 
 		<div id="credit">
-		<?php printRSSLink('Album', '', 'Album RSS', ''); ?> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a> | <a href="?p=archive">Archive View</a><br />
-			<?php echo round((array_sum(explode(" ",microtime())) - $startTime),4).' Seconds</strong>'; ?>
+		<?php printRSSLink('Album', '', gettext('Album RSS'), ''); ?> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a> | <a href="?p=archive"><?php echo gettext("Archive View"); ?></a><br />
+			<?php echo round((array_sum(explode(" ",microtime())) - $startTime),4).' '.gettext('Seconds').'</strong>'; ?>
 		</div>
 </div>
 

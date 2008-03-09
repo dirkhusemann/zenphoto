@@ -4,13 +4,13 @@
 <head>
 	<title><?php printGalleryTitle(); ?> | Archive View</title>
 		<link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
-		<?php printRSSHeaderLink('Gallery','Gallery RSS'); ?>
+		<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
 		<?php zenJavascript(); ?>
 </head>
 <body>
 <div id="main">
 		<div id="gallerytitle">
-			<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Gallery Index"><?php echo getGalleryTitle();?></a></span> | Archive View
+			<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Gallery Index"><?php echo getGalleryTitle();?></a></span> | <?php echo gettext("Archive View"); ?>
 		<?php if (getOption('Allow_search')) {  printSearchForm(); } ?></h2>
 		</div>
 	
@@ -25,7 +25,7 @@
 	</div>
 	<?php } ?>
 	
-	<div id="credit"><?php printRSSLink('Gallery','','RSS', ''); ?> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
+	<div id="credit"><?php printRSSLink('Gallery','','RSS', ''); ?> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a></div>
 
 </div>
 

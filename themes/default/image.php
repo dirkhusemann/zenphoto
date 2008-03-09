@@ -19,7 +19,7 @@
 			}
 		}
 	</script>
-		<?php printRSSHeaderLink('Gallery','Gallery RSS'); ?>
+		<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
 	<?php zenJavascript(); ?>
 </head>
 
@@ -30,12 +30,12 @@
 	<div id="gallerytitle">
 		<div class="imgnav">
 			<?php if (hasPrevImage()) { ?>
-			<div class="imgprevious"><a href="<?php echo getPrevImageURL();?>" title="Previous Image">&laquo; prev</a></div>
+			<div class="imgprevious"><a href="<?php echo getPrevImageURL();?>" title="<?php echo gettext("Previous Image"); ?>">&laquo; <?php echo gettext("prev"); ?></a></div>
 			<?php } if (hasNextImage()) { ?>
-			<div class="imgnext"><a href="<?php echo getNextImageURL();?>" title="Next Image">next &raquo;</a></div>
+			<div class="imgnext"><a href="<?php echo getNextImageURL();?>" title="<?php echo gettext("Next Image"); ?>"><?php echo gettext("next"); ?> &raquo;</a></div>
 			<?php } ?>
 		</div>
-		<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?>
+		<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="<?php gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?>
 			</a> | <?php printParentBreadcrumb("", " | ", " | "); printAlbumBreadcrumb("", " | "); ?> 
 			</span> <?php printImageTitle(true); ?>
 		</h2>
@@ -54,17 +54,17 @@
 		<?php printImageDesc(true); ?>
 		<hr />
 		<?php 
-			if (getImageEXIFData()) {echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=345&width=300&inlineId=imagemetadata\" title=\"Image Info\" class=\"thickbox\">Image Info</a></div>";
+			if (getImageEXIFData()) {echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=345&width=300&inlineId=imagemetadata\" title=\"".gettext("Image Info")."\" class=\"thickbox\">".gettext("Image Info")."</a></div>";
 				printImageMetadata('', false); 
 			} 
 		?>
-		<?php printTags('links', '<strong>Tags:</strong> ', 'taglist', ''); ?>
+		<?php printTags('links', gettext('<strong>Tags:</strong> '), 'taglist', ''); ?>
 		
 		<?php printImageMap(); ?>
 		
 		<?php if (getOption('Allow_comments')) { ?>
 				<div id="comments">
-		<?php $num = getCommentCount(); echo ($num == 0) ? "" : ("<h3>Comments ($num)</h3><hr />"); ?>
+		<?php $num = getCommentCount(); echo ($num == 0) ? "" : ("<h3>".gettext("Comments")." ($num)</h3><hr />"); ?>
 			<?php while (next_comment()){  ?>
 			<div class="comment">
 				<div class="commentmeta">
@@ -77,7 +77,7 @@
 					<?php echo getCommentDate();?>
 					,
 					<?php echo getCommentTime();?>
-								<?php printEditCommentLink('Edit', ' | ', ''); ?>
+								<?php printEditCommentLink(gettext('Edit'), ' | ', ''); ?>
 				</div>
 			</div>
 			<?php }; ?>
@@ -85,47 +85,47 @@
 			<?php if (OpenedForComments()) { ?>
 			<div class="imgcommentform">
 							<!-- If comments are on for this image AND album... -->
-				<h3>Add a comment:</h3>
+				<h3><?php echo gettext("Add a comment:"); ?></h3>
 				<form id="commentform" action="#" method="post">
 				<div><input type="hidden" name="comment" value="1" />
 							<input type="hidden" name="remember" value="1" />
 								<?php printCommentErrors(); ?>
 					<table border="0">
 						<tr>
-							<td><label for="name">Name:</label></td>
+							<td><label for="name"><?php echo gettext("Name:"); ?></label></td>
 							<td><input type="text" id="name" name="name" size="20" value="<?php echo $stored[0];?>" class="inputbox" />
 							</td>
 						</tr>
 						<tr>
-							<td><label for="email">E-Mail:</label></td>
+							<td><label for="email"><?php echo gettext("E-Mail:"); ?></label></td>
 							<td><input type="text" id="email" name="email" size="20" value="<?php echo $stored[1];?>" class="inputbox" />
 							</td>
 						</tr>
 						<tr>
-							<td><label for="website">Site:</label></td>
+							<td><label for="website"><?php echo gettext("Site:"); ?></label></td>
 							<td><input type="text" id="website" name="website" size="40" value="<?php echo $stored[2];?>" class="inputbox" /></td>
 						</tr>
 												<?php if (getOption('Use_Captcha')) { 
  													$captchaCode=generateCaptcha($img); ?>
  													<tr>
- 													<td><label for="code">Enter Captcha:<img src=<?php echo "\"$img\"";?> alt="Code" align="absbottom"/></label></td>
+ 													<td><label for="code"><?php echo gettext("Enter Captcha:"); ?><img src=<?php echo "\"$img\"";?> alt="Code" align="absbottom"/></label></td>
  													<td><input type="text" id="code" name="code" size="20" class="inputbox" /><input type="hidden" name="code_h" value="<?php echo $captchaCode;?>"/></td>
  													</tr>
 												<?php } ?>
 					</table>
 					<textarea name="comment" rows="6" cols="40"></textarea>
 					<br />
-					<input type="submit" value="Add Comment" class="pushbutton" /></div>
+					<input type="submit" value="<?php echo gettext('Add Comment'); ?>" class="pushbutton" /></div>
 				</form>
 			</div>
 		</div>
-				<?php } else { echo 'Comments are closed.'; } ?>
+				<?php } else { echo gettext('Comments are closed.'); } ?>
 				<?php } ?>
 	</div>
 		<?php } ?>
 </div>
 
-<div id="credit"><?php printRSSLink('Gallery','','RSS', ' | '); ?> <a href="<?php echo getGalleryIndexURL();?>?p=archive">Archive View</a> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
+<div id="credit"><?php printRSSLink('Gallery','','RSS', ' | '); ?> <a href="<?php echo getGalleryIndexURL();?>?p=archive"><?php echo gettext("Archive View"); ?></a> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a></div>
 
 <?php printAdminToolbox(); ?>
 
