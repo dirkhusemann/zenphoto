@@ -5,7 +5,7 @@
 <head>
 	<title><?php printGalleryTitle(); ?></title>
 	<link rel="stylesheet" href="<?php echo  $zenCSS ?>" type="text/css" />
-	<?php printRSSHeaderLink('Gallery','Gallery RSS'); ?>
+	<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
 	<?php zenJavascript(); ?>
 </head>
 
@@ -38,7 +38,7 @@
 
 </div>
 
-<div id="credit"><?php printRSSLink('Gallery','','RSS', ' | '); ?> <a href="?p=archive">Archive View</a> | Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album">zenphoto</a></div>
+<div id="credit"><?php printRSSLink('Gallery','','RSS', ' | '); ?> <a href="?p=archive"><?php echo gettext("Archive View"); ?></a> | <?ph echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a></div>
 
 <?php printAdminToolbox(); ?>
 

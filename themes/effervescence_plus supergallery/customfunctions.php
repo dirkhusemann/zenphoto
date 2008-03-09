@@ -5,7 +5,7 @@ function printGalleryHeadingImage() {
 	$img = getRandomGalleryImage();
 	if (!isset($img['folder'])) {
 		$img['folder'] = SERVERPATH . "/" . ZENFOLDER . '/images/zen-logo.jpg';
-		$img['title'] = 'No image available';
+		$img['title'] = gettext('No image available');
 		$img['desc'] = '';
 		$img['gallery'] = '';
 	}
@@ -14,7 +14,7 @@ function printGalleryHeadingImage() {
 						!getOption('Watermark_head_image'))), true, true);
 	$randomImageURL = WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($cachefilename);
 	echo '<div id="randomhead">';
-	echo "<a href='".getSubgalleryURL()."' title='Random Picture...'><img src='".
+	echo "<a href='".getSubgalleryURL()."' title='".gettext('Random Picture...')."'><img src='".
  			$randomImageURL."' width=620 height=180  alt=".'"'.
  			htmlspecialchars($img['gallery'], ENT_QUOTES).
  			":\n".htmlspecialchars($img['title'], ENT_QUOTES).
@@ -70,7 +70,7 @@ function printThemeInfo() {
 	} else {
 		$themeColor = ": '$themeColor'";
 	}
-	if (!$themeResult) { $themeColor .= " (not found)"; }
+	if (!$themeResult) { $themeColor .= gettext(" (not found)"); }
 	$personality = getOption('Theme_personality');
 	if ($personality != 'Image page') {
 		if (($personality == 'Simpleviewer') && (!getOption('mod_rewrite') || $_noFlash)) {

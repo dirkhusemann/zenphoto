@@ -9,7 +9,7 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');normalizeColumns(
 	<link rel="stylesheet" href="<?php echo  $zenCSS ?>" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
 	<?php 
-	printRSSHeaderLink('Gallery','Gallery RSS'); 
+	printRSSHeaderLink('Gallery',gettext('Gallery RSS')); 
 	zenJavascript(); 
 	?>
 </head>
@@ -50,7 +50,7 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');normalizeColumns(
 						<?php printCustomGalleryThumbImage(getCustomGalleryDesc(), null, 180, null, 180, 80); ?>
  						</a>
 				</div>
-				<h4><a href="<?php echo getSubgalleryURL();?>" title="View the gallery: 
+				<h4><a href="<?php echo getSubgalleryURL();?>" title="<?php echo gettext('View the gallery:'); ?> 
 				 			<?php echo getSubgalleryTitle(); ?>">
 				 			<?php printSubgalleryTitle(); ?></a></h4>
 			</li>
@@ -65,8 +65,8 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');normalizeColumns(
 		<small>
 		<?php printThemeInfo(); ?>
 		</small>
-		<a href="http://www.zenphoto.org" title="A simpler web photo album">Powered by <font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a><br/>
-		<?php printRSSLink('Gallery','', 'Gallery RSS', ''); ?>
+		<a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>"><?php echo gettext("Powered by"); ?> <font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a><br/>
+		<?php printRSSLink('Gallery','', gettext('Gallery RSS'), ''); ?>
 	</div>
 		
 		<?php printAdminToolbox(); ?>
