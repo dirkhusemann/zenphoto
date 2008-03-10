@@ -259,17 +259,16 @@ function imageResizeAlpha(&$src, $w, $h) {
  * @param bool $allow_watermark set to true if image may be watermarked
  * @param bool $force_cache set to true to force the image into the cache folders
  */
-function cacheGalleryImage($newfilename, $imgfile, $args, $allow_watermark=false, $force_cache=false) {
+function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $force_cache=false) {
 	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
 	// Set the config variables for convenience.
 	$image_use_longest_side = getOption('image_use_longest_side');
 	$upscale = getOption('image_allow_upscale');
 	$sharpenthumbs = getOption('thumb_sharpen');
-
 	$newfile = SERVERCACHE . $newfilename;
 	// Check for GD
 	if (!function_exists('imagecreatetruecolor'))
-	imageError(gettext('The GD Library is not installed or not available.'), 'err-nogd.gif');
+		imageError(gettext('The GD Library is not installed or not available.'), 'err-nogd.gif');
 	// Check for the source image.
 	if (!file_exists($imgfile) || !is_readable($imgfile)) {
 		imageError(gettext('Image not found or is unreadable.'), 'err-imagenotfound.gif');

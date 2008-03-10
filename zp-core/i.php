@@ -127,7 +127,7 @@ if (file_exists($newfile)) {
 }
 // If the file hasn't been cached yet, create it.
 if ($process) {
-	cacheGalleryImage($newfilename, $imgfile, $args, $allowWatermark);
+	cacheImage($newfilename, $imgfile, $args, $allowWatermark);
 }
 if (!$debug) {
 	// ... and redirect the browser to it.

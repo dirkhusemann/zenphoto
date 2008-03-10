@@ -121,9 +121,21 @@ function printSubgalleryDesc() {
 }
 
 function getGalleryImage() {
-	global $_current_subgallery, $_current_gallery_image;
+	global $_current_subgallery, $_current_gallery_image, $zp_conf_vars;
 	$image = array();
 	setGalleyContext($_current_subgallery);
+	$pieces = explode('/', getAlbumFolder());
+	array_pop($pieces);
+	array_pop($pieces);
+	if (is_null($_zp_conf_vars['external_album_folder'])) {
+		if (is_null($zp_conf_vars['album_folder'])) {
+			$albumfolder = implode('/', $pieces). '/' . $_current_subgallery . '/albums/' ;
+		} else {
+			$albumfolder = implode('/', $pieces) . '/' . $_current_subgallery . $_zp_conf_vars['external_album_folder'];
+		}
+	} else {
+		$albumfolder = $_zp_conf_vars['external_album_folder'];
+	}
 	if (zp_loggedin()) {
 		$albumWhere = '';
 		$imageWhere = '';
@@ -147,7 +159,7 @@ function getGalleryImage() {
 		$albumWhere . $imageWhere . ' ORDER BY RAND() LIMIT 1');
 		$imageName = $result['filename'];
 		if (is_valid_image($imageName)) {
-			$image['folder'] = getAlbumFolder() . $result['folder']. '/' . $imageName;
+			$image['folder'] = $albumfolder . $result['folder']. '/' . $imageName;
 			$image['title'] = $result['title'];
 			$image['desc'] = $result['desc'];
 			$image['gallery'] = $_current_subgallery;
@@ -157,7 +169,7 @@ function getGalleryImage() {
 			return $image;
 		}
 	}
-	$image['folder'] = getAlbumFolder() . '/zen-logo.jpg';
+	$image['folder'] = $albumfolder . '/zen-logo.jpg';
 	return $image;
 }
 
@@ -167,7 +179,7 @@ function getCustomGalleryThumb($size, $width=NULL, $height=NULL, $cropw=NULL, $c
 	getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy))), 1);
 	if (!file_exists(SERVERCACHE . $cachefilename)) {
 		$img = getGalleryImage();
-		cacheGalleryImage($cachefilename, $img['folder'], getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy)));
+		cacheImage($cachefilename, $img['folder'], getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy)));
 	}
 	return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($cachefilename);
 }
@@ -177,7 +189,7 @@ function getGalleryThumb() {
 	$cachefilename = substr(getImageCacheFilename('', $_current_subgallery, getImageParameters(array('thumb'))), 1);
 	if (!file_exists(SERVERCACHE . $cachefilename)) {
 		$img = getGalleryImage();
-		cacheGalleryImage($cachefilename, $img['folder'], getImageParameters(array('thumb')));
+		cacheImage($cachefilename, $img['folder'], getImageParameters(array('thumb')));
 	}
 	return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($cachefilename);
 }

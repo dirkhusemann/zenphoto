@@ -10,7 +10,7 @@ function printGalleryHeadingImage() {
 		$img['gallery'] = '';
 	}
 	$cachefilename = substr(getImageCacheFilename('', '', getImageParameters(array('thumb'))), 1);
-	cacheGalleryImage($cachefilename, $img['folder'], getImageParameters(array(NULL, 620, 180, 620, 180, NULL, NULL, 
+	cacheImage($cachefilename, $img['folder'], getImageParameters(array(NULL, 620, 180, 620, 180, NULL, NULL, 
 						!getOption('Watermark_head_image'))), true, true);
 	$randomImageURL = WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($cachefilename);
 	echo '<div id="randomhead">';
