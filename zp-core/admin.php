@@ -16,7 +16,7 @@ $standardOptions = array('gallery_title','website_title','website_url','time_off
  												'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
  												'allowed_tags', 'full_image_quality', 'persistent_archive',
  												'protect_full_image', 'album_session', 'watermark_h_offset', 'watermark_w_offset',
- 												'Use_Captcha', 'locale');
+ 												'Use_Captcha', 'locale', 'date_format');
 $charsets = array("ASMO-708" => "Arabic",
 									"big5" => "Chinese Traditional",
 									"CP1026" => "IBM EBCDIC (Turkish Latin-5)",
@@ -552,6 +552,9 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				setBoolOption('persistent_archive', $_POST['persistent_archive']);
 				setBoolOption('album_session', $_POST['album_session']);
 				setOption('locale', $_POST['locale']);
+				$f = $_POST['date_format_list'];
+				if ($f == 'custom') $f = $_POST['date_format'];
+				setOption('date_format', $f);
 				$returntab = "#tab_gallery";
 			}
 
@@ -1705,6 +1708,38 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 			?>
 		</select></td>
 		<td><?php echo gettext("The internationalization & localization locale."); ?></td>
+	</tr>
+	<tr>
+		<td><?php echo gettext("Date format:"); ?></td>
+		<td>
+			<select id="date_format_list" name="date_format_list">
+			<?php
+			$formatlist = array(gettext('Custom')=>'custom', 
+											gettext('Local prefered format')=>'%c',
+											gettext('25-02-08')=>'%d-%m-%y',
+											gettext('25-02-2008')=>'%d-%m-%Y',
+											gettext('02/25/08')=>'%d/%m/%y',
+											gettext('02/25/2008')=>'%d/%m/%Y',
+											gettext('25-Feb-08')=>'%d-%b-%y',
+											gettext('25-Feb-2008')=>'%d-%b-%Y',
+											gettext('25.02.08')=>'%d.%m.%y',
+											gettext('25.02.2008')=>'%d.%m.%Y',
+											gettext('25. February 2008')=>'%d. %B %Y',
+											gettext('25. Feb. 08')=>'%d. %b %y',
+											gettext('25. Feb 2008')=>'%d. %B %Y',
+											gettext('2008-02-25')=>'%Y=%m-%d',
+											gettext('2008. February 25.')=>'%Y. %B %d.',
+											gettext('February 25, 2008')=>'%B %d, %Y',
+											gettext('25 February 2008')=>'%d %B %Y');
+			$cv = getOption("date_format");
+			
+			if (array_search($cv, $formatlist) === false) $cv = 'custom';
+			generateListFromArray(array($cv), $formatlist);
+			?>
+			</select><br />
+			<input type="text" size="40" name="date_format"
+			value="<?php echo getOption('date_format');?>" /></td>
+		<td><?php echo gettext('Format for dates. Select from the list or set to <code>custom</code> and provide a <a href="http://us2.php.net/manual/en/function.strftime.php"><code>strftime()</code></a> format string in the text box.'); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Charset:"); ?></td>

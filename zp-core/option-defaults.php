@@ -115,5 +115,6 @@ function setDefault($option, $default) {
 	}
 	
 	setDefault('locale', '');
+	setDefault('date_format', '%c');
 	
 ?>

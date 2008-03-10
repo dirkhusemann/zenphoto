@@ -251,7 +251,7 @@ function checked($checked, $current) {
 
 function genAlbumUploadList(&$list, $curAlbum=NULL) {
 	global $gallery;
-	$ablums = array();
+	$albums = array();
 	if (is_null($curAlbum)) {
 		$albumsprime = $gallery->getAlbums(0);
 		foreach ($albumsprime as $album) { // check for rights

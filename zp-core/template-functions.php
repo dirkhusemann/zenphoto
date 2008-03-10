@@ -704,7 +704,7 @@ function getAlbumDate($format=null) {
 	if (is_null($format)) {
 		return $d;
 	}
-	return date($format, strtotime($d));
+	return strftime($format, strtotime($d));
 }
 
 /**
@@ -714,7 +714,10 @@ function getAlbumDate($format=null) {
  * @param string $nonemessage Insert here the text to be printed if there is no date.
  * @param string $format Format string for the date formatting
  */
-function printAlbumDate($before='Date: ', $nonemessage='', $format='F jS, Y') {
+function printAlbumDate($before='Date: ', $nonemessage='', $format=null) {
+	if (is_null($format)) {
+		$format = getOption('date_format');
+	}
 	$date = getAlbumDate($format);
 	if ($date) {
 		echo $before . $date;
@@ -1270,7 +1273,7 @@ function getImageDate($format=null) {
 	if (is_null($format)) {
 		return $d;
 	}
-	return date($format, strtotime($d));
+	return strftime($format, strtotime($d));
 }
 
 /**
@@ -1280,7 +1283,10 @@ function getImageDate($format=null) {
  * @param string $nonemessage Text to put out if there is no date
  * @param string $format format string for the date
  */
-function printImageDate($before='Date: ', $nonemessage='', $format='F jS, Y') {
+function printImageDate($before='Date: ', $nonemessage='', $format=null) {
+	if (is_null($format)) {
+		$format = getOption('date_format');
+	}
 	$date = getImageDate($format);
 	if ($date) {
 		echo $before . $date;
@@ -3190,7 +3196,7 @@ function printAllDates($class='archive', $yearid='year', $monthid='month') {
 			$year = "no date";
 			$month = "";
 		} else {
-			$dt = date('Y-F', strtotime($key));
+			$dt = strftime('%Y-%B', strtotime($key));
 			$year = substr($dt, 0, 4);
 			$month = substr($dt, 5);
 		}
