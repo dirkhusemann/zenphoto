@@ -1148,17 +1148,16 @@ if (ini_get('safe_mode')) { ?>
 
 <form name="uploadform" enctype="multipart/form-data"
 	action="?action=upload" method="POST"
-	onSubmit="return validateFolder(document.uploadform.folder,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');"><input
-	type="hidden" name="processed" value="1" /> <input type="hidden"
-	name="existingfolder" value="false" />
+	onSubmit="return validateFolder(document.uploadform.folder,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');">
+	<input type="hidden" name="processed" value="1" /> 
+	<input type="hidden" name="existingfolder" value="false" />
 
 <div id="albumselect"><?php echo gettext("Upload to:"); ?> <?php if (isset($_GET['new'])) { 
 	$checked = "checked=\"1\"";
 } else {
 	$checked = '';
 }
-?> <select id="albumselectmenu" name="albumselect"
-	onChange="albumSwitch(this)">
+?> <select id="albumselectmenu" name="albumselect" onChange="albumSwitch(this)">
 	<?php
 	if (isMyAlbum('/', UPLOAD_RIGHTS)) {
 		?>
@@ -1712,33 +1711,58 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 	<tr>
 		<td><?php echo gettext("Date format:"); ?></td>
 		<td>
-			<select id="date_format_list" name="date_format_list">
+			<select id="date_format_list" name="date_format_list" >
 			<?php
 			$formatlist = array(gettext('Custom')=>'custom', 
-											gettext('Local prefered format')=>'%c',
-											gettext('25-02-08')=>'%d-%m-%y',
-											gettext('25-02-2008')=>'%d-%m-%Y',
+											gettext('02/25/08 15:30')=>'%d/%m/%y %H:%M',
 											gettext('02/25/08')=>'%d/%m/%y',
+											gettext('02/25/2008 15:30')=>'%d/%m/%Y %H:%M',
 											gettext('02/25/2008')=>'%d/%m/%Y',
-											gettext('25-Feb-08')=>'%d-%b-%y',
-											gettext('25-Feb-2008')=>'%d-%b-%Y',
-											gettext('25.02.08')=>'%d.%m.%y',
-											gettext('25.02.2008')=>'%d.%m.%Y',
-											gettext('25. February 2008')=>'%d. %B %Y',
-											gettext('25. Feb. 08')=>'%d. %b %y',
-											gettext('25. Feb 2008')=>'%d. %B %Y',
-											gettext('2008-02-25')=>'%Y=%m-%d',
+											gettext('02-25-08 15:30')=>'%d-%m-%y %H:%M',
+											gettext('02-25-08')=>'%d-%m-%y',
+											gettext('02-25-2008 15:30')=>'%d-%m-%Y %H:%M',
+											gettext('02-25-2008')=>'%d-%m-%Y',
+											gettext('2008. February 25. 15:30')=>'%Y. %B %d. %H:%M',
 											gettext('2008. February 25.')=>'%Y. %B %d.',
-											gettext('February 25, 2008')=>'%B %d, %Y',
-											gettext('25 February 2008')=>'%d %B %Y');
+											gettext('2008-02-25 15:30')=>'%Y-%m-%d %H:%M',
+											gettext('2008-02-25')=>'%Y-%m-%d',
+											gettext('25 Feb 2008 15:30')=>'%d %B %Y %H:%M',
+											gettext('25 Feb 2008')=>'%d %B %Y',
+											gettext('25 February 2008 15:30')=>'%d %B %Y %H:%M',
+											gettext('25 February 2008')=>'%d %B %Y',
+											gettext('25. Feb 2008 15:30')=>'%d. %B %Y %H:%M',
+											gettext('25. Feb 2008')=>'%d. %B %Y',
+											gettext('25. Feb. 08 15:30')=>'%d. %b %y %H:%M',
+											gettext('25. Feb. 08')=>'%d. %b %y',
+											gettext('25. February 2008 15:30')=>'%d. %B %Y %H:%M',
+											gettext('25. February 2008')=>'%d. %B %Y',
+											gettext('25.02.08 15:30')=>'%d.%m.%y %H:%M',
+											gettext('25.02.08')=>'%d.%m.%y',
+											gettext('25.02.2008 15:30')=>'%d.%m.%Y %H:%M',
+											gettext('25.02.2008')=>'%d.%m.%Y',
+											gettext('25-02-08 15:30')=>'%d-%m-%y %H:%M',
+											gettext('25-02-08')=>'%d-%m-%y',
+											gettext('25-02-2008 15:30')=>'%d-%m-%Y %H:%M',
+											gettext('25-02-2008')=>'%d-%m-%Y',
+											gettext('25-Feb-08 15:30')=>'%d-%b-%y %H:%M',
+											gettext('25-Feb-08')=>'%d-%b-%y',
+											gettext('25-Feb-2008 15:30')=>'%d-%b-%Y %H:%M',
+											gettext('25-Feb-2008')=>'%d-%b-%Y',
+											gettext('Feb 25 2008 15:30')=>'%b %d %Y %H:%M',
+											gettext('Feb 25 2008')=>'%b %d %Y',
+											gettext('February 25 2008 15:30')=>'%B %d %Y %H:%M',
+											gettext('February 25 2008')=>'%B %d %Y');
 			$cv = getOption("date_format");
 			
 			if (array_search($cv, $formatlist) === false) $cv = 'custom';
 			generateListFromArray(array($cv), $formatlist);
 			?>
 			</select><br />
+			<div id="customTextBox" name="customText">
 			<input type="text" size="40" name="date_format"
-			value="<?php echo getOption('date_format');?>" /></td>
+			value="<?php echo getOption('date_format');?>" />
+			</div>
+			</td>
 		<td><?php echo gettext('Format for dates. Select from the list or set to <code>custom</code> and provide a <a href="http://us2.php.net/manual/en/function.strftime.php"><code>strftime()</code></a> format string in the text box.'); ?></td>
 	</tr>
 	<tr>
