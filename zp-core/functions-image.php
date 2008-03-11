@@ -239,12 +239,12 @@ function imageResizeAlpha(&$src, $w, $h) {
 
 	/* making the new image transparent */
 	$background = imagecolorallocate($temp, 0, 0, 0);
-	ImageColorTransparent($temp, $background); // make the new temp image all transparent
+	imagecolortransparent($temp, $background); // make the new temp image all transparent
 	imagealphablending($temp, false); // turn off the alpha blending to keep the alpha channel
 
 	/* Resize the PNG file */
 	/* use imagecopyresized to gain some performance but loose some quality */
-	imagecopyresized($temp, $src, 0, 0, 0, 0, $w, $h, imagesx($src), imagesy($src));
+	imagecopyresampled($temp, $src, 0, 0, 0, 0, $w, $h, imagesx($src), imagesy($src));
 	/* use imagecopyresampled if you concern more about the quality */
 	//imagecopyresampled($temp, $src, 0, 0, 0, 0, $w, $h, imagesx($src), imagesy($src));
 	return $temp;
