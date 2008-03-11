@@ -627,7 +627,7 @@ function printAlbumButtons($album) {
 		echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
 		echo "<button type=\"submit\" id='edit_cache'><img src=\"images/cache.png\" style=\"border: 0px;\" />";
 		echo " ".gettext("Pre-Cache Images")."</Button>";
-		echo "<input type=\"checkbox\" name=\"clear\" checked=\"true\" /> ".gettext("Clear");
+		echo "<input type=\"checkbox\" name=\"clear\" checked=\"checked\" /> ".gettext("Clear");
 		echo "</form>\n</td>";
 		echo "<div id='edit_cache_tooltip' style='display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;'>";
 		echo gettext("Cache newly uploaded images.")."<br />";

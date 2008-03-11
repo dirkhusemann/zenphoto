@@ -316,7 +316,7 @@ if(function_exists("gettext")) {
 	// if native gettext support
 	$encoding = 'UTF-8';
 	$locale = getOption("locale");
-	putenv("LANG=$locale");
+	@putenv("LANG=$locale");
 	// gettext setup
 	@setlocale(LC_TIME, $locale);
 	@setlocale(LC_MESSAGES, $locale);

@@ -1171,7 +1171,7 @@ if (ini_get('safe_mode')) { ?>
 	<input type="hidden" name="existingfolder" value="false" />
 
 <div id="albumselect"><?php echo gettext("Upload to:"); ?> <?php if (isset($_GET['new'])) { 
-	$checked = "checked=\"1\"";
+	$checked = "checked=\"checked\"";
 } else {
 	$checked = '';
 }
@@ -1209,7 +1209,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 <?php echo $checked; ?> onClick="albumSwitch(this.form.albumselect)">
 <?php echo gettext("Make a new Album"); ?></label></div>
 <div id="publishtext"><?php echo gettext("and"); ?><label><input type="checkbox"
-	name="publishalbum" id="publishalbum" value="1" checked="1" /> <?php echo gettext("Publish the album so everyone can see it."); ?></label></div>
+	name="publishalbum" id="publishalbum" value="1" checked="checked" /> <?php echo gettext("Publish the album so everyone can see it."); ?></label></div>
 </div>
 
 <div id="albumtext" style="margin-top: 5px;"><?php echo gettext("called:"); ?> <input
@@ -1221,7 +1221,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 	style="display: none; color: #D66; position: absolute; z-index: 100; top: 2.5em; left: 0px;"></div>
 <input id="folderdisplay" size="18" type="text" name="folderdisplay"
 	disabled="1" onKeyUp="validateFolder(this,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');" /> <label><input
-	type="checkbox" name="autogenfolder" id="autogen" checked="1"
+	type="checkbox" name="autogenfolder" id="autogen" checked="checked"
 	onClick="toggleAutogen('folderdisplay', 'albumtitle', this);" />
 <?php echo gettext("Auto-generate"); ?></label> <br />
 <br />
@@ -2228,6 +2228,16 @@ $themeweb = WEBPATH . "/themes/$theme";
 	<?php } ?>
 	<li><a href="../"> &raquo; <?php echo gettext("Browse your <strong>gallery</strong> and edit on the go."); ?></a></li>
 </ul>
+<?php
+	if (!empty($msg)) { 
+		echo '<div class="messagebox" id="message">'; 
+		echo  "<h2>$msg</h2>"; 
+		echo '</div>'; 
+		echo '<script type="text/javascript">'; 
+		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);"; 
+		echo "</script>\n"; 
+	} 
+?>
 
 <hr />
 
@@ -2288,16 +2298,6 @@ foreach ($comments as $comment) {
 
 <div class="box" id="overview-stats">
 <h2 class="boxtitle"><?php echo gettext("Gallery Maintenance"); ?></h2>
-<?php
-	if (!empty($msg)) { 
-		echo '<div class="messagebox" id="message">'; 
-		echo  "<h2>$msg</h2>"; 
-		echo '</div>'; 
-		echo '<script type="text/javascript">'; 
-		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);"; 
-		echo "</script>\n"; 
-	} 
-?>
 <p><?php echo gettext("Your database is"); ?>: '<strong><?php echo getOption('mysql_database'); ?>'</strong><br /> 
 <?php echo gettext("Tables are prefixed by"); ?> <strong>'<?php echo getOption('mysql_prefix'); ?>'</strong></p>
 <?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?>
@@ -2336,7 +2336,7 @@ foreach ($comments as $comment) {
 	<div class="buttons" id="home_cache">
 	<button type="submit"><img src="images/cache.png" alt="" /> <?php echo gettext("Pre-Cache Images"); ?></button>
 	</div>
-	<input type="checkbox" name="clear" checked="1" /> <?php echo gettext("Clear"); ?><br clear="all" />
+	<input type="checkbox" name="clear" checked="checked" /> <?php echo gettext("Clear"); ?><br clear="all" />
 	<br clear="all" />
 	<div id="home_cache_tooltip"
 		style="display: none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
