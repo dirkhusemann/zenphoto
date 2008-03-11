@@ -2565,6 +2565,7 @@ function printTopRatedAlbums($number=5) {
  * @param string $option "popular" for the most popular images,
  *                       "latest" for the latest uploaded,
  *                       "latest" for the latest uploaded,
+ *                       "latest-date" for the latest uploaded, but fetched by date,
  *                       "mostrated" for the most voted,
  *                       "toprated" for the best voted
  * @param string $album title of an specific album
@@ -2594,6 +2595,8 @@ function getImageStatistic($number, $option, $album='') {
 	switch ($option) {
 		case "popular":
 			$sortorder = "images.hitcounter"; break;
+		case "latest-date":
+			$sortorder = "images.date"; break;
 		case "latest":
 			$sortorder = "images.id"; break;
 		case "mostrated":
@@ -2654,13 +2657,23 @@ function printPopularImages($number=5, $album='') {
 }
 
 /**
- * Prints the latest images
+ * Prints the latest images by ID (=upload order)
  *
  * @param string $number the number of images to get
  * @param string $album title of an specific album
  */
 function printLatestImages($number=5, $album='') {
 	printImageStatistic($number, "latest", $album);
+}
+
+/**
+ * Prints the latest images by date order
+ *
+ * @param string $number the number of images to get
+ * @param string $album title of an specific album
+ */
+function printLatestImagesByDate($number=5, $album='') {
+	printImageStatistic($number, "latest-date", $album);
 }
 
 /**
