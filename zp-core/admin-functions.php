@@ -394,6 +394,14 @@ function printAlbumEditForm($index, $album) {
 		$prefix = "$index-";
 		echo "<p><em><strong>" . $album->name . "</strong></em></p>";
 	}
+	if (isset($_GET['counters_reset'])) {
+		echo '<div class="messagebox" id="message">';
+		echo  "<h2>".gettext("Hitcounters have been reset")."</h2>";
+		echo '</div>';
+		echo '<script type="text/javascript">';
+		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
+		echo "</script>\n";
+	}
 
 	echo "\n<input type=\"hidden\" name=\"" . $prefix . "folder\" value=\"" . $album->name . "\" />";
 	echo "\n<div class=\"box\" style=\"padding: 15px;\">";
@@ -612,7 +620,6 @@ function printAlbumEditForm($index, $album) {
 function printAlbumButtons($album) {
 	if ($album->getNumImages() > 0) {
 		echo "\n<table class=\"buttons\"><tr>";
-
 		echo "\n<td valign=\"top\" width=30% style=\"padding: 0px 30px 0px 30px;\">";
 		echo "<form name=\"cache_images\" action=\"cache-images.php\" method=\"post\">";
 		echo "<input type=\"hidden\" name=\"album\" value=" . queryencode($album->name) . ">";
@@ -657,16 +664,6 @@ function printAlbumButtons($album) {
 		echo "<script type='text/javascript'>";
 		echo "var my_tooltip = new Tooltip('edit_hitcounter', 'edit_hitcounter_tooltip')";
 		echo "</script>";
-		
-		if (isset($_GET['counters_reset'])) {
-			echo '<div class="messagebox" id="message">';
-			echo  "<h2>".gettext("Hitcounters have been reset")."</h2>";
-			echo '</div>';
-			echo '<script type="text/javascript">';
-			echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
-			echo "</script>\n";
-		}
-
 	}
 }
 /**

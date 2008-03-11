@@ -10,14 +10,14 @@ function setDefault($option, $default) {
 }
 	require('zp-config.php');
 
-	global $_zp_conf_vars, $_zp_options;
+	global $_zp_conf_vars, $_zp_options, $_zp_logged_in;
 	$conf = $_zp_conf_vars;
 	
 	setOption('zenphoto_release', ZENPHOTO_RELEASE); 
 	
 	$admin = getOption('adminuser');
 	if (!empty($admin)) {   // transfer the old credentials and then remove them
-		if (count(getAdministrators()) == 0) {  // don't revert anything!
+		if ((count(getAdministrators()) == 0)) {  // don't revert anything!
 			saveAdmin($admin, getOption('adminpass'), getOption('admin_name') , getOption('admin_email'), ALL_RIGHTS, array());
 		}
 		$sql = 'DELETE FROM '.prefix('options').' WHERE `name`="adminuser"';
@@ -68,6 +68,7 @@ function setDefault($option, $default) {
 	setDefault('watermark_w_offset', 90);
 	setDefault('watermark_image', "watermarks/watermark.png");
 	setDefault('watermark_scale', 5);
+	setDefault('watermark_allow_upscale', 1);
 	setDefault('perform_video_watermark', 0);
 	setDefault('video_watermark_image', "watermarks/watermark-video.png");
 	setDefault('spam_filter', 'none');

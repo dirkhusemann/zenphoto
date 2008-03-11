@@ -70,6 +70,9 @@ if (getOption('perform_watermark')) {
 			$imh = imagesy($newim);
 			$percent = getOption('watermark_scale')/100;
 			$r = sqrt(($imw * $imh * $percent) / ($watermark_width * $watermark_height));
+			if (!getOption('watermark_allow_upscale')) { 
+				$r = min(1, $r);
+			}
 			$nw = round($watermark_width * $r);
 			$nh = round($watermark_height * $r);
 			if (($nw != $watermark_width) || ($nh != $watermark_height)) {

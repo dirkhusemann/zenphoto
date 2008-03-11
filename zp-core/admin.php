@@ -10,7 +10,7 @@ $standardOptions = array('gallery_title','website_title','website_url','time_off
  												'image_allow_upscale','thumb_size','thumb_crop',
  												'thumb_crop_width','thumb_crop_height','thumb_sharpen',
  												'albums_per_page','images_per_page','perform_watermark',
- 												'watermark_image','watermark_scale', 'current_theme', 'spam_filter',
+ 												'watermark_image','watermark_scale', 'watermark_allow_upscale', 'current_theme', 'spam_filter',
  												'email_new_comments', 'perform_video_watermark', 'video_watermark_image',
  												'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'search_fields',
  												'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
@@ -460,6 +460,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			$woh = getOption('watermark_h_offset');
 			$wow = getOption('watermark_w_offset');
 			$ws = getOption('watermark_scale');
+			$wus = getOption('watermark_allow_upscale');
 			$notify = '';
 			$returntab = "";
 
@@ -575,6 +576,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				setBoolOption('perform_watermark', $_POST['perform_watermark']);
 				setOption('watermark_image', 'watermarks/' . $_POST['watermark_image'] . '.png');
 				setOption('watermark_scale', $_POST['watermark_scale']);
+				setBoolOption('watermark_allow_upscale', $_POST['watermark_allow_upscale']);
 				setOption('watermark_h_offset', $_POST['watermark_h_offset']);
 				setOption('watermark_w_offset', $_POST['watermark_w_offset']);
 				setBoolOption('perform_video_watermark', $_POST['perform_video_watermark']);
@@ -633,6 +635,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			($wow != getOption('watermark_w_offset'))  ||
 			($wm != getOption('watermark_image')) ||
 			($ws != getOption('watermark_scale')) ||
+			($wus != getOption('watermark_allow_upscale')) ||
 			($vwm != getOption('video_watermark_image'))) {
 				$gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the options haave changed
 			}
@@ -1990,6 +1993,8 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		<?php echo gettext('cover '); ?>
 		<input type="text" size="2" name="watermark_scale"
 				value="<?php echo getOption('watermark_scale');?>" /><?php echo gettext('% of image') ?>
+		<input type="checkbox" name="watermark_allow_upscale" value="1"
+		<?php echo checked('1', getOption('watermark_allow_upscale')); ?> />&nbsp;<?php echo gettext("allow upscale"); ?>
 		<br />
 		<?php echo gettext("offset h"); ?> 
 		<input type="text" size="2" name="watermark_h_offset"
@@ -1999,7 +2004,9 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		</td>
 		<td><?php echo gettext("The watermark image (png-24). (Place the image in the"); ?>" <?php echo ZENFOLDER; ?>/watermarks/
 		<?php echo gettext("directory."); ?>")<br />
-		<?php echo gettext("The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the	image. It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark."); ?></td>
+		<?php echo gettext("The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the	image. ").
+		           gettext("It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark. ").
+		           gettext("If <em>allow upscale</em> is not checked the watermark will not be made larger than the original watermark image."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Watermark videos:"); ?></td>
@@ -2210,6 +2217,13 @@ $themeweb = WEBPATH . "/themes/$theme";
 	if (isset($_GET['counters_reset'])) {
 		$msg = gettext("Hitcounters have been reset");
 	}
+	if (!empty($msg)) {
+		echo '<div class="messagebox" id="message">';
+		echo  "<h2>$msg</h2>";
+		echo '</div>';
+		echo "<script type=\"text/javascript\"> Fat.fade_and_hide_element('message', 30, 1000, 2000, Fat.get_bgcolor ('message'), '#FFFFFF')";
+		echo "</script>\n";
+	}
 	?>
 <ul id="home-actions">
 	<?php if ($_zp_loggedin & UPLOAD_RIGHTS)  { ?>
@@ -2353,14 +2367,6 @@ foreach ($comments as $comment) {
 					var my_tooltip = new Tooltip('home_refresh', 'home_refresh_tooltip')
 			</script></form>
 <?php 
-	if (!empty($msg)) {
-		echo '<div class="messagebox" id="message">';
-		echo  "<h2>$msg</h2>";
-		echo '</div>';
-		echo '<script type="text/javascript">';
-		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
-		echo "</script>\n";
-	}
 } 
 ?>
 </div>
