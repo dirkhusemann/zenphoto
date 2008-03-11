@@ -23,6 +23,9 @@ $conf['mysql_pass'] = "";
 $conf['mysql_host'] = "localhost"; // Won't need to change this 90% of the time.
 $conf['mysql_database'] = "";
 
+// If this is a new Zenphoto install, change the following to from 'false' to 'true'
+$conf['UTF-8'] = false;
+
 // If you're sharing the database with other tables, use a prefix to be safe.
 $conf['mysql_prefix'] = "zp_";
 

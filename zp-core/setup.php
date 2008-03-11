@@ -18,6 +18,9 @@ function updateItem($item, $value) {
 }
 if (isset($_POST['mysql'])) { //try to update the zp-config file
 	$zp_cfg = @file_get_contents('zp-config.php');
+	if (!$upgarde) {
+		updateItem('UTF-8', 'true');
+	}
 	if (isset($_POST['mysql_user'])) {
 		updateItem('mysql_user', $_POST['mysql_user']);
 	}

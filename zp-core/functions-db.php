@@ -60,12 +60,14 @@ $_zp_query_count = 0;
  */
 function query($sql, $noerrmsg = false) {
  /* TODO: Handle errors more gracefully. */
-	global $mysql_connection;
-	global $_zp_query_count;
+	global $mysql_connection, $_zp_query_count, $_zp_conf_vars;
 	if ($mysql_connection == null) {
 		db_connect();
 	}
 	$result = mysql_query($sql, $mysql_connection);
+	if ($_zp_conf_vars['UTF-8']) {
+		mysql_query("SET NAMES 'utf8' COLLATE 'utf8_unicode_ci'");
+	}
 	if (!$result && !$noerrmsg) {
 		$sql = sanitize($sql, true);
 		$error = gettext("MySQL Query")." ( <em>$sql</em> ) ".gettext("Failed. Error:").mysql_error();
