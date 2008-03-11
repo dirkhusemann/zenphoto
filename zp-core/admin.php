@@ -730,6 +730,12 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		$album->setSubalbumSortType('Manual');
 		$album->setSortDirection('album', 0);
 		$album->save();
+		echo '<div class="messagebox" id="message">';
+		echo  "<h2>".gettext("Subalbum order saved")."</h2>";
+		echo '</div>';
+		echo '<script type="text/javascript">';
+		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
+		echo "</script>\n";
 	}
 	?>
 <h1>Edit Album: <em><?php echo $album->name; ?></em></h1>
@@ -812,10 +818,8 @@ if (count($subalbums) > 0) {
 </table>
 
 <?php
-			if (isset($_GET['subalbumsaved'])) {
-				echo "<p>".gettext("Subalbum order saved")."</p>";
-			}
-} ?> <!-- Images List --> <a name="imageList"></a> <?php if (count($album->getSubalbums()) > 10) { ?>
+} ?> 
+<!-- Images List --> <a name="imageList"></a> <?php if (count($album->getSubalbums()) > 10) { ?>
 <p><a href="#subalbumList" title="<?php gettext('Scroll up to the sub-album list'); ?>">&laquo;
 <?php echo gettext("Subalbum List"); ?></a></p>
 <?php }
@@ -1054,6 +1058,13 @@ if (count($album->getImages())) {
 	if (isset($saved)) {
 		setOption('gallery_sorttype', 'Manual');
 		setOption('gallery_sortdirection', 0);
+		echo '<div class="messagebox" id="message">';
+		echo  "<h2>".gettext("Order saved")."</h2>";
+		echo '</div>';
+		echo '<script type="text/javascript">';
+		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
+		echo "</script>\n";
+
 	}
 	?>
 <p><?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?><?php echo gettext('Drag the albums into the order you wish them displayed.') ?><?php } ?> <?php echo gettext('Select an album to edit its description and data, or'); ?><a href="?page=edit&massedit"> <?php echo gettext('mass-edit all album data'); ?></a>.</p>
@@ -1098,9 +1109,6 @@ if (count($album->getImages())) {
 		?></div>
 
 <?php
-		if (isset($_GET['saved'])) {
-			echo "<p>".gettext("Gallery order saved.")."</p>";
-		}
 }  
 /**** UPLOAD ************************************************************************/
 /************************************************************************************/ 
