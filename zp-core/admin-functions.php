@@ -657,6 +657,16 @@ function printAlbumButtons($album) {
 		echo "<script type='text/javascript'>";
 		echo "var my_tooltip = new Tooltip('edit_hitcounter', 'edit_hitcounter_tooltip')";
 		echo "</script>";
+		
+		if (isset($_GET['counters_reset'])) {
+			echo '<div class="messagebox" id="message">';
+			echo  "<h2>".gettext("Hitcounters have been reset")."</h2>";
+			echo '</div>';
+			echo '<script type="text/javascript">';
+			echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
+			echo "</script>\n";
+		}
+
 	}
 }
 /**

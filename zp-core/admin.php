@@ -206,12 +206,12 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				if (isset($_GET['return'])) $rt = $_GET['return'];
 				if (isset($_POST['return'])) $rt = $_POST['return'];
 				if (isset($rt)) {
-					$return .= '&album=' . $rt;
+					$return .= '&album=' . $rt .'&counters_reset';
 				}
 			} else {
 				$where = '';
 				$imgwhere = '';
-				$return = '';
+				$return = '?counters_reset';
 			}
 			query("UPDATE " . prefix('albums') . " SET `hitcounter`= 0" . $where);
 			query("UPDATE " . prefix('images') . " SET `hitcounter`= 0" . $imgwhere);
@@ -748,18 +748,25 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	if (isset($_GET['saved'])) {
 		if (isset($_GET['mismatch'])) {
 			?>
-<div class="errorbox" id="message1">
-<h2><?php echo gettext("Your passwords did not match"); ?></h2>
-</div>
-			<?php
-} else {
-	?>
-<div class="messagebox" id="message1">
-<h2><?php echo gettext("Save Successful"); ?></h2>
-</div>
-	<?php } ?> <script type="text/javascript">
-						window.setTimeout('Effect.Fade($(\'message1\'))', 2500);
-					</script> <?php } ?> <!-- Album info box -->
+			<div class="errorbox" id="message1">
+			<h2><?php echo gettext("Your passwords did not match"); ?></h2>
+			</div>
+		<?php
+		} else {
+		?>
+			<div class="messagebox" id="message1">
+			<h2><?php echo gettext("Save Successful"); ?></h2>
+			</div>
+		<?php 
+		} 
+		?> 
+	<script type="text/javascript">
+	window.setTimeout('Effect.Fade($(\'message1\'))', 2500);
+	</script> 
+	<?php 
+	} 
+	?> 
+<!-- Album info box -->
 
 <form name="albumedit1"
 	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"
@@ -2193,6 +2200,16 @@ $themeweb = WEBPATH . "/themes/$theme";
 	} else {
 		echo "\n<div style=\"text-align:right;color:#0000ff;\"><a href=\"?check_for_update\">".gettext("Check for zenphoto update.")."</a></div>\n";
 	}
+	$msg = '';
+	if (isset($_GET['prune'])) {
+		$msg = gettext("Database was refreshed");
+	}
+	if ($_GET['action'] == 'clear_cache') {
+		$msg = gettext("Cache has been purged");
+	}
+	if (isset($_GET['counters_reset'])) {
+		$msg = gettext("Hitcounters have been reset");
+	}
 	?>
 <ul id="home-actions">
 	<?php if ($_zp_loggedin & UPLOAD_RIGHTS)  { ?>
@@ -2335,7 +2352,18 @@ foreach ($comments as $comment) {
 <script type="text/javascript">
 					var my_tooltip = new Tooltip('home_refresh', 'home_refresh_tooltip')
 			</script></form>
-<?php } ?></div>
+<?php 
+	if (!empty($msg)) {
+		echo '<div class="messagebox" id="message">';
+		echo  "<h2>$msg</h2>";
+		echo '</div>';
+		echo '<script type="text/javascript">';
+		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
+		echo "</script>\n";
+	}
+} 
+?>
+</div>
 
 
 <div class="box" id="overview-suggest">
@@ -2353,7 +2381,10 @@ if ($c != $t) {
 ?></p>
 </div>
 <p style="clear: both;"></p>
-<?php } ?></div>
+<?php 
+} 
+?>
+</div>
 <!-- content --> <?php
 printAdminFooter();
 if (issetPage('edit')) {
