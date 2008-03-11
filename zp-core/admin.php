@@ -2217,13 +2217,6 @@ $themeweb = WEBPATH . "/themes/$theme";
 	if (isset($_GET['counters_reset'])) {
 		$msg = gettext("Hitcounters have been reset");
 	}
-	if (!empty($msg)) {
-		echo '<div class="messagebox" id="message">';
-		echo  "<h2>$msg</h2>";
-		echo '</div>';
-		echo "<script type=\"text/javascript\"> Fat.fade_and_hide_element('message', 30, 1000, 2000, Fat.get_bgcolor ('message'), '#FFFFFF')";
-		echo "</script>\n";
-	}
 	?>
 <ul id="home-actions">
 	<?php if ($_zp_loggedin & UPLOAD_RIGHTS)  { ?>
@@ -2295,77 +2288,97 @@ foreach ($comments as $comment) {
 
 <div class="box" id="overview-stats">
 <h2 class="boxtitle"><?php echo gettext("Gallery Maintenance"); ?></h2>
+<?php
+	if (!empty($msg)) { 
+		echo '<div class="messagebox" id="message">'; 
+		echo  "<h2>$msg</h2>"; 
+		echo '</div>'; 
+		echo '<script type="text/javascript">'; 
+		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);"; 
+		echo "</script>\n"; 
+	} 
+?>
 <p><?php echo gettext("Your database is"); ?>: '<strong><?php echo getOption('mysql_database'); ?>'</strong><br /> 
 <?php echo gettext("Tables are prefixed by"); ?> <strong>'<?php echo getOption('mysql_prefix'); ?>'</strong></p>
 <?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?>
 <form name="prune_gallery" action="admin.php?prune=true"><input
-	type="hidden" name="prune" value="true">
-<div class="buttons pad_button" id="home_dbrefresh">
-<button type="submit"><img src="images/refresh.png" alt="" /> <?php echo gettext("Refresh the Database"); ?></button>
-</div>
-<br clear="all" />
-<br clear="all" />
-<div id="home_dbrefresh_tooltip"
-	style="display: none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
-<?php echo gettext("Cleans the database and removes any orphan entries for comments, images, and albums."); ?><br />
-</div>
-<script type="text/javascript">
-					var my_tooltip = new Tooltip('home_dbrefresh', 'home_dbrefresh_tooltip')
-			</script></form>
+		type="hidden" name="prune" value="true">
+	<div class="buttons pad_button" id="home_dbrefresh">
+	<button type="submit"><img src="images/refresh.png" alt="" /> <?php echo gettext("Refresh the Database"); ?></button>
+	</div>
+	<br clear="all" />
+	<br clear="all" />
+	<div id="home_dbrefresh_tooltip"
+		style="display: none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
+	<?php echo gettext("Cleans the database and removes any orphan entries for comments, images, and albums."); ?><br />
+	</div>
+	<script type="text/javascript">
+		var my_tooltip = new Tooltip('home_dbrefresh', 'home_dbrefresh_tooltip')
+	</script>
+</form>
+			
 <form name="clear_cache" action="admin.php?action=clear_cache=true"><input
-	type="hidden" name="action" value="clear_cache">
-<div class="buttons" id="home_refresh">
-<button type="submit"><img src="images/burst.png" alt="" /> <?php echo gettext("Purge Cache"); ?></button>
-</div>
-<br clear="all" />
-<br clear="all" />
-<div id="home_refresh_tooltip"
-	style="display: none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
-<?php echo gettext("Clears the image cache. Images will be re-cached as they are viewed. To clear the cache and renew it, use the <em>Pre-Cache Images</em> button below."); ?></div>
-<script type="text/javascript">
-					var my_tooltip = new Tooltip('home_cache_clear', 'home_cache_clear_tooltip')
-			</script></form>
+		type="hidden" name="action" value="clear_cache">
+	<div class="buttons" id="home_refresh">
+	<button type="submit"><img src="images/burst.png" alt="" /> <?php echo gettext("Purge Cache"); ?></button>
+	</div>
+	<br clear="all" />
+	<br clear="all" />
+	<div id="home_refresh_tooltip"
+		style="display: none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
+	<?php echo gettext("Clears the image cache. Images will be re-cached as they are viewed. To clear the cache and renew it, use the <em>Pre-Cache Images</em> button below."); ?></div>
+	<script type="text/javascript">
+		var my_tooltip = new Tooltip('home_refresh', 'home_refresh_tooltip')
+	</script>
+</form>
+
 <form name="cache_images" action="cache-images.php">
-<div class="buttons" id="home_cache">
-<button type="submit"><img src="images/cache.png" alt="" /> <?php echo gettext("Pre-Cache Images"); ?></button>
-</div>
-<input type="checkbox" name="clear" checked="1" /> <?php echo gettext("Clear"); ?><br clear="all" />
-<br clear="all" />
-<div id="home_cache_tooltip"
-	style="display: none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
-<?php echo gettext("Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser."); ?><br />
-</div>
-<script type="text/javascript">
-					var my_tooltip = new Tooltip('home_cache', 'home_cache_tooltip')
-			</script></form>
+	<div class="buttons" id="home_cache">
+	<button type="submit"><img src="images/cache.png" alt="" /> <?php echo gettext("Pre-Cache Images"); ?></button>
+	</div>
+	<input type="checkbox" name="clear" checked="1" /> <?php echo gettext("Clear"); ?><br clear="all" />
+	<br clear="all" />
+	<div id="home_cache_tooltip"
+		style="display: none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
+	<?php echo gettext("Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser."); ?><br />
+	</div>
+	<script type="text/javascript">
+		var my_tooltip = new Tooltip('home_cache', 'home_cache_tooltip')
+	</script>
+</form>
+
 <form name="refresh_metadata" action="refresh-metadata.php">
-<div class="buttons" id="home_exif">
-<button type="submit"><img src="images/warn.png" alt="" /> <?php echo gettext("Refresh Metadata"); ?></button>
-</div>
-<br clear="all" />
-<br clear="all" />
-<div id="home_exif_tooltip"
-	style="display: none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
-<?php echo gettext("Forces a refresh of the EXIF and IPTC data for all images."); ?><br />
-</div>
-<script type="text/javascript">
-					var my_tooltip = new Tooltip('home_exif', 'home_exif_tooltip')
-			</script></form>
+	<div class="buttons" id="home_exif">
+	<button type="submit"><img src="images/warn.png" alt="" /> <?php echo gettext("Refresh Metadata"); ?></button>
+	</div>
+	<br clear="all" />
+	<br clear="all" />
+	<div id="home_exif_tooltip"
+		style="display: none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
+	<?php echo gettext("Forces a refresh of the EXIF and IPTC data for all images."); ?><br />
+	</div>
+	<script type="text/javascript">
+		var my_tooltip = new Tooltip('home_exif', 'home_exif_tooltip')
+	</script>
+</form>
+			
 <form name="reset_hitcounters"
-	action="admin.php?action=reset_hitcounters=true"><input type="hidden"
-	name="action" value="reset_hitcounters">
-<div class="buttons" id="home_refresh">
-<button type="submit"><img src="images/reset.png" alt="" /> <?php echo gettext("Reset hitcounters"); ?></button>
-</div>
-<br clear="all" />
-<br clear="all" />
-<div id="home_refresh_tooltip"
-	style="display: none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
-<?php echo gettext("Sets all album and image hitcounters to zero."); ?><br />
-</div>
-<script type="text/javascript">
-					var my_tooltip = new Tooltip('home_refresh', 'home_refresh_tooltip')
-			</script></form>
+		action="admin.php?action=reset_hitcounters=true"><input type="hidden"
+		name="action" value="reset_hitcounters">
+	<div class="buttons" id="home_refresh">
+	<button type="submit"><img src="images/reset.png" alt="" /> <?php echo gettext("Reset hitcounters"); ?></button>
+	</div>
+	<br clear="all" />
+	<br clear="all" />
+	<div id="home_refresh_tooltip"
+		style="display: none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;">
+	<?php echo gettext("Sets all album and image hitcounters to zero."); ?><br />
+	</div>
+	<script type="text/javascript">
+		var my_tooltip = new Tooltip('home_refresh', 'home_refresh_tooltip')
+	</script>
+</form>
+
 <?php 
 } 
 ?>

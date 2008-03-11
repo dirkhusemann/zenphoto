@@ -58,6 +58,7 @@ function printAdminHeader() {
 	echo "\n  <script type=\"text/javascript\" src=\"js/prototype.js\"></script>";
 	echo "\n  <script type=\"text/javascript\" src=\"js/prototype.tooltip.js\"></script>";
 	echo "\n  <script type=\"text/javascript\" src=\"js/admin.js\"></script>";
+	echo "\n  <script src=\"js/scriptaculous/scriptaculous.js\" type=\"text/javascript\"></script>";
 }
 
 /**
