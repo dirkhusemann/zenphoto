@@ -2342,12 +2342,12 @@ function printAlbumZip(){
 }
 
 /**
- * Prints out latest comments for images and albums
+ * Gets latest comments for images and albums
  *
  * @param int $number how many comments you want.
  * @param string $shorten the number of characters to shorten the comment display
  */
-function printLatestComments($number, $shorten='123') {
+function getLatestComments($number, $shorten='123') {
 	if (zp_loggedin()) {
 		$passwordcheck1 = "";
 		$passwordcheck2 = "";
@@ -2377,6 +2377,17 @@ function printLatestComments($number, $shorten='123') {
 	. " WHERE c.ownerid = a.id AND c.type = 'albums'".$passwordcheck2
 	. " ORDER BY c.id DESC LIMIT $number");
 	$comments = array_merge($comments_images,$comments_albums);
+	return $comments;
+}
+	
+/**
+ * Prints out latest comments for images and albums
+ *
+ * @param int $number how many comments you want.
+ * @param string $shorten the number of characters to shorten the comment display
+ */
+function printLatestComments($number, $shorten='123') {
+	$comments = getLatestComments($number,$shorten); 
 	echo "<div id=\"showlatestcomments\">\n";
 	echo "<ul>\n";
 	$count = 0;

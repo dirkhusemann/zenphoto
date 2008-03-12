@@ -1306,7 +1306,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		<th><?php echo gettext("Comment"); ?>" <?php if(!$fulltext) { ?>(<a
 			href="?page=comments&fulltext<?php echo $viewall ? "&viewall":""; ?>"><?php echo gettext("View full text"); ?></a>) <?php } else { ?>(<a
 			href="?page=comments<?php echo $viewall ? "&viewall":""; ?>"><?php echo gettext("View truncated"); ?></a>)<?php } ?></th>
-		<th><?php echo gettext("E-Mail"); ?>/th>
+		<th><?php echo gettext("E-Mail"); ?></th>
 		<th><?php echo gettext("Spam"); ?></th>
 		<th><?php echo gettext("Edit"); ?></th>
 		<th><?php echo gettext("Delete"); ?>"
