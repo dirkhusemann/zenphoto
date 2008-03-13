@@ -813,8 +813,9 @@ if (file_exists("zp-config.php")) {
 		foreach($db_schema as $sql) {
 			$result = mysql_query($sql);
 			if (!$result) {
-				$error = "MySQL Query"." ( $sql ) "."Failed. Error:".mysql_error();
-				setupLog($error);
+				setupLog("MySQL Query"." ( $sql ) "."Failed. Error: ".mysql_error());
+			} else {
+				setupLog("MySQL Query"." ( $sql ) "."Success.");
 			}
 		}
 		// always run the update queries to insure the tables are up to current level
@@ -822,8 +823,9 @@ if (file_exists("zp-config.php")) {
 		foreach($sql_statements as $sql) {
 			$result = mysql_query($sql);
 			if (!$result) {
-				$error = "MySQL Query"." ( $sql ) "."Failed. Error:".mysql_error();
-				setupLog($error);
+				setupLog("MySQL Query"." ( $sql ) "."Failed. Error: ".mysql_error());
+			} else {
+				setupLog("MySQL Query"." ( $sql ) "."Success.");
 			}
 		}
 
