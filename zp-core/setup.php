@@ -5,9 +5,18 @@ $checked = isset($_GET['checked']);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 define('OFFSET_PATH', true);
 $upgrade = false;
-
+$debug = isset($_GET['debug']);
 if (!$checked && !file_exists('zp-config.php')) {
 	@copy('zp-config.php.example', 'zp-config.php');
+}
+function setupLog($message, $reset=false) {
+  global $debug;
+	if ($debug) {
+		if ($reset) { $mode = 'w'; } else { $mode = 'a'; }
+		$f = fopen(SERVERPATH . '/' . ZENFOLDER . '/setup_log.txt', $mode);
+		fwrite($f, $message . "\n");
+		fclose($f);
+	}
 }
 function updateItem($item, $value) {
 	global $zp_cfg;
@@ -17,6 +26,7 @@ function updateItem($item, $value) {
 	$zp_cfg = substr($zp_cfg, 0, $i) . '= "' . $value . '";' . substr($zp_cfg, $j);
 }
 if (isset($_POST['mysql'])) { //try to update the zp-config file
+	$debug = isset($_POST['debug']);
 	$zp_cfg = @file_get_contents('zp-config.php');
 	if (!$upgarde) {
 		updateItem('UTF-8', 'true');
@@ -344,7 +354,13 @@ if (!$checked) {
 <div class="error">
 <?php echo gettext("Fill in the missing information below and <strong>setup</strong> will attempt to update your <code>zp-config.php</code> file."); ?><br />
 <br />
-<form action="#" method="post"><input type="hidden" name="mysql"	value="yes" />
+<form action="#" method="post">
+<input type="hidden" name="mysql"	value="yes" />
+<?php 
+if ($debug) {
+	echo '<input type="hidden" name="debug" />';
+}
+?>
 <table>
 	<tr>
 		<td>MySQL admin user</td>
@@ -793,17 +809,27 @@ if (file_exists("zp-config.php")) {
 	if (isset($_GET['create']) || isset($_GET['update']) && db_connect()) {
 
 		echo "<h3>About to $task tables...</h3>";
-		// Bypass the error-handling in query()... we don't want it to stop.
-		// This is probably bad behavior, so maybe do some checks?
+		setupLog("Begin table creation", true);
 		foreach($db_schema as $sql) {
-			@mysql_query($sql);
+			$result = mysql_query($sql);
+			if (!$result) {
+				$error = "MySQL Query"." ( $sql ) "."Failed. Error:".mysql_error();
+				setupLog($error);
+			}
 		}
 		// always run the update queries to insure the tables are up to current level
+		setupLog("Begin table updates");
 		foreach($sql_statements as $sql) {
-			@mysql_query($sql);
+			$result = mysql_query($sql);
+			if (!$result) {
+				$error = "MySQL Query"." ( $sql ) "."Failed. Error:".mysql_error();
+				setupLog($error);
+			}
 		}
 
 		// set defaults on any options that need it
+		setupLog("Done with database creation and update");
+		
 		require('option-defaults.php');
 
 		echo "<h3>".gettext("Done with table $task!")."</h3>";
@@ -827,8 +853,11 @@ if (file_exists("zp-config.php")) {
 			}
 		}
 		if (($nc = count($create)) > 0) {
-			echo gettext("create the database table");
-			if ($nc > 1) { echo gettext("s"); }
+			if ($nc > 1) {
+			  echo gettext("create the database tables");
+			} else {
+			  echo gettext("create the database table");
+			}
 			echo ": $db_list ";
 		}
 		$db_list = '';
@@ -856,6 +885,9 @@ if (file_exists("zp-config.php")) {
 			} else {
 				$task .= "&update";
 			}
+		}
+		if ($debug) {
+			$task .= '&debug';
 		}
 		if (isset($_GET['mod_rewrite'])) {
 			$mod = '&mod_rewrite='.$_GET['mod_rewrite'];
