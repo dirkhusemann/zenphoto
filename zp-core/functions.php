@@ -892,7 +892,7 @@ function zp_mail($subject, $message, $headers = '', $admin_emails=null) {
 
 		// Send the mail
 		foreach ($admin_emails as $email) {
-			UTF8::send_mail("Admin <" . $email . ">", $subject, $message, $headers);
+			UTF8::send_mail($email, $subject, $message, $headers);
 		}
 	}
 }

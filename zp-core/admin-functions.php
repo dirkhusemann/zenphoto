@@ -155,7 +155,12 @@ function printLoginForm($redirect=null, $logo=true) {
 	if ($_zp_login_error == 1) {
 		echo "<div class=\"errorbox\" id=\"message\"><h2>".gettext("There was an error logging in.</h2> Check your username and password and try again.")."</div>";
 	} else if ($_zp_login_error == 2){
-		echo "<div class=\"messagebox\" id=\"message\"><h2>".gettext("A reset request has been sent.")."</h2></div>";
+		echo '<div class="messagebox" id="message">'; 
+		echo  "<h2>".gettext("A reset request has been sent.")."</h2>"; 
+		echo '</div>'; 
+		echo '<script type="text/javascript">'; 
+		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);"; 
+		echo "</script>\n"; 
 	}
 	echo "\n  <form name=\"login\" action=\"#\" method=\"POST\">";
 	echo "\n    <input type=\"hidden\" name=\"login\" value=\"1\" />";
