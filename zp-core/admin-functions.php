@@ -199,10 +199,14 @@ function printLogoAndLinks() {
 	global $_zp_current_admin;
 	echo "\n\n<a href=\"".WEBPATH."/" . ZENFOLDER . "/admin.php\" id=\"logo\"><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" /></a>";
 	echo "\n<div id=\"links\">";
+	echo "\n  ";
 	if (!is_null($_zp_current_admin)) {
-		echo "\n  ".gettext("Logged in as")." ".$_zp_current_admin['user']." &nbsp; | &nbsp <a href=\"?logout\">".gettext("Log Out")."</a> &nbsp; | &nbsp; ";
+		echo gettext("Logged in as")." ".$_zp_current_admin['user']." &nbsp; | &nbsp <a href=\"?logout\">".gettext("Log Out")."</a> &nbsp; | &nbsp; ";
 	}
-	echo "<a href=\"../\">".gettext("View Gallery")."</a>";
+	echo "<a href=\"../\">".gettext("View Gallery");
+	$t = getOption('gallery_title');
+	if (!empty($t))	echo ': ' . $t;
+	echo "</a>";
 	echo "\n</div>";
 }
 

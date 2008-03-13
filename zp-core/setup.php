@@ -809,7 +809,8 @@ if (file_exists("zp-config.php")) {
 	if (isset($_GET['create']) || isset($_GET['update']) && db_connect()) {
 
 		echo "<h3>About to $task tables...</h3>";
-		setupLog("Begin table creation", true);
+		setupLog("Zenphoto Setup v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE.']', true);
+		setupLog("Begin table creation");
 		foreach($db_schema as $sql) {
 			$result = mysql_query($sql);
 			if (!$result) {
