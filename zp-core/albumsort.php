@@ -56,6 +56,16 @@ if (!zp_loggedin()) {
  			<?php printAdminLinks("edit&album=". urlencode( ($album->getFolder()) ), gettext("Edit Album"), gettext("Edit Album")); ?> | 
  			<?php printViewLink($album, gettext("View Album"), gettext("View Album")); ?>
 		</p>
+				<?php
+				if (isset($saved)) {
+					echo '<div class="messagebox" id="message">';
+					echo  "<h2>".gettext("Image order saved");
+					echo '</h2></div>';
+					echo '<script type="text/javascript">';
+					echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
+					echo "</script>\n";
+				}
+				?>
 		
 		<div class="box" style="padding: 15px;">
 		
@@ -70,16 +80,6 @@ if (!zp_loggedin()) {
 			?>
 			
 			</div>
-				<?php
-				if (isset($_GET['saved'])) {
-					echo "<p>".gettext("Album order saved.");
-
-					if ($album->getSortType() == "Manual") {
-						echo gettext(" Album sorting set to Manual.");
-					}
-					echo "</p>";
-				}
-				?>
 			<br>
 
 			<div>

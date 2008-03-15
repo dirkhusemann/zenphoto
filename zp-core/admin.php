@@ -1069,7 +1069,7 @@ if (count($album->getImages())) {
 		setOption('gallery_sorttype', 'Manual');
 		setOption('gallery_sortdirection', 0);
 		echo '<div class="messagebox" id="message">';
-		echo  "<h2>".gettext("Order saved")."</h2>";
+		echo  "<h2>".gettext("Album order saved")."</h2>";
 		echo '</div>';
 		echo '<script type="text/javascript">';
 		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
