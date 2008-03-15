@@ -308,44 +308,6 @@ class PersistentObject {
 	}
 
 }
-
-/*******************************************************************************
-* native gettext respectivly php-gettext replacement							             *
-*******************************************************************************/
-if(function_exists("gettext")) {
-	// if native gettext support
-	$encoding = 'UTF-8';
-	$locale = getOption("locale");
-	@putenv("LANG=$locale");
-	// gettext setup
-	@setlocale(LC_TIME, $locale);
-	@setlocale(LC_MESSAGES, $locale);
-	// Set the text domain as 'messages'
-	$domain = 'zenphoto';
-	bindtextdomain($domain, "locale/");
-	
-	// function only since php 4.2.0
-	if(function_exists('bind_textdomain_codeset')) {
-		bind_textdomain_codeset($domain, $encoding);
-	}
-	textdomain($domain);
-} else {
-
-	// load php gettext replacement
-	require_once('lib-gettext/gettext.inc');
-	$encoding = 'UTF-8';
-	$locale = getOption("locale");
-	putenv("LANG=$locale");
-	// gettext setup
-	T_setlocale(LC_TIME, $locale);
-	T_setlocale(LC_MESSAGES, $locale);
-	// Set the text domain as 'messages'
-	$domain = 'zenphoto';
-	T_bindtextdomain($domain, "locale/");
-	T_bind_textdomain_codeset($domain, $encoding);
-	T_textdomain($domain);
-}
-
 /*******************************************************************************
 * Load the base classes for Image, Album, and Gallery                          *
 *******************************************************************************/

@@ -9,6 +9,10 @@ $debug = isset($_GET['debug']);
 if (!$checked && !file_exists('zp-config.php')) {
 	@copy('zp-config.php.example', 'zp-config.php');
 }
+if(!function_exists("gettext")) {
+	// load the drop-in replacement library
+	require_once('lib-gettext/gettext.inc');
+}
 function setupLog($message, $reset=false) {
   global $debug;
 	if ($debug) {
