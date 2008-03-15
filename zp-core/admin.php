@@ -3,20 +3,21 @@ define('OFFSET_PATH', true);
 require_once("sortable.php");
 if (!$session_started) session_start();
 $sortby = array(gettext('Filename') => 'Filename', gettext('Date') => 'Date', gettext('Title') => 'Title', gettext('ID') => 'ID' );
-$standardOptions = array('gallery_title','website_title','website_url','time_offset',
- 												'gmaps_apikey','mod_rewrite','mod_rewrite_image_suffix',
- 												'server_protocol','charset','image_quality',
- 												'thumb_quality','image_size','image_use_longest_side',
- 												'image_allow_upscale','thumb_size','thumb_crop',
- 												'thumb_crop_width','thumb_crop_height','thumb_sharpen',
- 												'albums_per_page','images_per_page','perform_watermark',
- 												'watermark_image','watermark_scale', 'watermark_allow_upscale', 'current_theme', 'spam_filter',
- 												'email_new_comments', 'perform_video_watermark', 'video_watermark_image',
- 												'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'search_fields',
- 												'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
- 												'allowed_tags', 'full_image_quality', 'persistent_archive',
- 												'protect_full_image', 'album_session', 'watermark_h_offset', 'watermark_w_offset',
- 												'Use_Captcha', 'locale', 'date_format');
+$standardOptions = array(	'gallery_title','website_title','website_url','time_offset',
+ 													'gmaps_apikey','mod_rewrite','mod_rewrite_image_suffix',
+ 													'server_protocol','charset','image_quality',
+ 													'thumb_quality','image_size','image_use_longest_side',
+ 													'image_allow_upscale','thumb_size','thumb_crop',
+ 													'thumb_crop_width','thumb_crop_height','thumb_sharpen',
+ 													'albums_per_page','images_per_page','perform_watermark',
+ 													'watermark_image','watermark_scale', 'watermark_allow_upscale', 'current_theme', 'spam_filter',
+ 													'email_new_comments', 'perform_video_watermark', 'video_watermark_image',
+ 													'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'search_fields',
+ 													'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
+ 													'allowed_tags', 'full_image_quality', 'persistent_archive',
+ 													'protect_full_image', 'album_session', 'watermark_h_offset', 'watermark_w_offset',
+ 													'Use_Captcha', 'locale', 'date_format', 'hotlink_protection'
+												 );
 $charsets = array("ASMO-708" => "Arabic",
 									"big5" => "Chinese Traditional",
 									"CP1026" => "IBM EBCDIC (Turkish Latin-5)",
@@ -137,8 +138,6 @@ $charsets = array("ASMO-708" => "Arabic",
 									"x-mac-korean" => "Korean (Mac)",
 									"x-mac-turkish" => "Turkish (Mac)"
 									);
-?>
-<?php
 if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	
 	//check for security incursions
@@ -583,6 +582,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				setOption('video_watermark_image', 'watermarks/' . $_POST['video_watermark_image'] . '.png');
 				setOption('full_image_quality', $_POST['full_image_quality']);
 				setOption('protect_full_image', $_POST['protect_full_image']);
+				setBoolOption('hotlink_protection', $_POST['hotlink_protection']);
 				$returntab = "#tab_image";
 			}
 			/*** Comment options ***/
@@ -1732,44 +1732,44 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 			<select id="date_format_list" name="date_format_list" >
 			<?php
 			$formatlist = array(gettext('Custom')=>'custom', 
-											gettext('02/25/08 15:30')=>'%d/%m/%y %H:%M',
-											gettext('02/25/08')=>'%d/%m/%y',
-											gettext('02/25/2008 15:30')=>'%d/%m/%Y %H:%M',
-											gettext('02/25/2008')=>'%d/%m/%Y',
-											gettext('02-25-08 15:30')=>'%d-%m-%y %H:%M',
-											gettext('02-25-08')=>'%d-%m-%y',
-											gettext('02-25-2008 15:30')=>'%d-%m-%Y %H:%M',
-											gettext('02-25-2008')=>'%d-%m-%Y',
-											gettext('2008. February 25. 15:30')=>'%Y. %B %d. %H:%M',
-											gettext('2008. February 25.')=>'%Y. %B %d.',
-											gettext('2008-02-25 15:30')=>'%Y-%m-%d %H:%M',
-											gettext('2008-02-25')=>'%Y-%m-%d',
-											gettext('25 Feb 2008 15:30')=>'%d %B %Y %H:%M',
-											gettext('25 Feb 2008')=>'%d %B %Y',
-											gettext('25 February 2008 15:30')=>'%d %B %Y %H:%M',
-											gettext('25 February 2008')=>'%d %B %Y',
-											gettext('25. Feb 2008 15:30')=>'%d. %B %Y %H:%M',
-											gettext('25. Feb 2008')=>'%d. %B %Y',
-											gettext('25. Feb. 08 15:30')=>'%d. %b %y %H:%M',
-											gettext('25. Feb. 08')=>'%d. %b %y',
-											gettext('25. February 2008 15:30')=>'%d. %B %Y %H:%M',
-											gettext('25. February 2008')=>'%d. %B %Y',
-											gettext('25.02.08 15:30')=>'%d.%m.%y %H:%M',
-											gettext('25.02.08')=>'%d.%m.%y',
-											gettext('25.02.2008 15:30')=>'%d.%m.%Y %H:%M',
-											gettext('25.02.2008')=>'%d.%m.%Y',
-											gettext('25-02-08 15:30')=>'%d-%m-%y %H:%M',
-											gettext('25-02-08')=>'%d-%m-%y',
-											gettext('25-02-2008 15:30')=>'%d-%m-%Y %H:%M',
-											gettext('25-02-2008')=>'%d-%m-%Y',
-											gettext('25-Feb-08 15:30')=>'%d-%b-%y %H:%M',
-											gettext('25-Feb-08')=>'%d-%b-%y',
-											gettext('25-Feb-2008 15:30')=>'%d-%b-%Y %H:%M',
-											gettext('25-Feb-2008')=>'%d-%b-%Y',
-											gettext('Feb 25 2008 15:30')=>'%b %d %Y %H:%M',
-											gettext('Feb 25 2008')=>'%b %d %Y',
-											gettext('February 25 2008 15:30')=>'%B %d %Y %H:%M',
-											gettext('February 25 2008')=>'%B %d %Y');
+					gettext('02/25/08 15:30')=>'%d/%m/%y %H:%M',
+					gettext('02/25/08')=>'%d/%m/%y',
+					gettext('02/25/2008 15:30')=>'%d/%m/%Y %H:%M',
+					gettext('02/25/2008')=>'%d/%m/%Y',
+					gettext('02-25-08 15:30')=>'%d-%m-%y %H:%M',
+					gettext('02-25-08')=>'%d-%m-%y',
+					gettext('02-25-2008 15:30')=>'%d-%m-%Y %H:%M',
+					gettext('02-25-2008')=>'%d-%m-%Y',
+					gettext('2008. February 25. 15:30')=>'%Y. %B %d. %H:%M',
+					gettext('2008. February 25.')=>'%Y. %B %d.',
+					gettext('2008-02-25 15:30')=>'%Y-%m-%d %H:%M',
+					gettext('2008-02-25')=>'%Y-%m-%d',
+					gettext('25 Feb 2008 15:30')=>'%d %B %Y %H:%M',
+					gettext('25 Feb 2008')=>'%d %B %Y',
+					gettext('25 February 2008 15:30')=>'%d %B %Y %H:%M',
+					gettext('25 February 2008')=>'%d %B %Y',
+					gettext('25. Feb 2008 15:30')=>'%d. %B %Y %H:%M',
+					gettext('25. Feb 2008')=>'%d. %B %Y',
+					gettext('25. Feb. 08 15:30')=>'%d. %b %y %H:%M',
+					gettext('25. Feb. 08')=>'%d. %b %y',
+					gettext('25. February 2008 15:30')=>'%d. %B %Y %H:%M',
+					gettext('25. February 2008')=>'%d. %B %Y',
+					gettext('25.02.08 15:30')=>'%d.%m.%y %H:%M',
+					gettext('25.02.08')=>'%d.%m.%y',
+					gettext('25.02.2008 15:30')=>'%d.%m.%Y %H:%M',
+					gettext('25.02.2008')=>'%d.%m.%Y',
+					gettext('25-02-08 15:30')=>'%d-%m-%y %H:%M',
+					gettext('25-02-08')=>'%d-%m-%y',
+					gettext('25-02-2008 15:30')=>'%d-%m-%Y %H:%M',
+					gettext('25-02-2008')=>'%d-%m-%Y',
+					gettext('25-Feb-08 15:30')=>'%d-%b-%y %H:%M',
+					gettext('25-Feb-08')=>'%d-%b-%y',
+					gettext('25-Feb-2008 15:30')=>'%d-%b-%Y %H:%M',
+					gettext('25-Feb-2008')=>'%d-%b-%Y',
+					gettext('Feb 25 2008 15:30')=>'%b %d %Y %H:%M',
+					gettext('Feb 25 2008')=>'%b %d %Y',
+					gettext('February 25 2008 15:30')=>'%B %d %Y %H:%M',
+					gettext('February 25 2008')=>'%B %d %Y');
 			$cv = getOption("date_format");
 			
 			if (array_search($cv, $formatlist) === false) $cv = 'custom';
@@ -2028,15 +2028,18 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		<td><?php echo gettext("Controls compression on full images."); ?></td>
 	</tr>
 	<tr>
-		<td><?php echo gettext("Full image protectin:"); ?></td>
+		<td><?php echo gettext("Full image protection:"); ?></td>
 		<td>
 		<?php 
 		echo "<select id=\"protect_full_image\" name=\"protect_full_image\">\n";
 		generateListFromArray(array(getOption('protect_full_image')), array(gettext('Unprotected') => 'Unprotected', gettext('Protected view') => 'Protected view', gettext('Download') => 'Download', gettext('No access') => 'No access'));
 		echo "</select>\n";
+		echo '<input type="checkbox" name="hotlink_protection" value="1"';
+		echo checked('1', getOption('hotlink_protection')). ' /> '.gettext('Disable hotlinking');
 		?>
 		</td>
-		<td><?php echo gettext("Select the level of protection for full sized images."); ?></td>
+		<td><?php echo gettext("Select the level of protection for full sized images."); 
+		echo ' '.gettext("Disabling hotlinking prevents linking to the full image from other domains. If enabled, external links are redirect to the image page. If you are having problems with full images being displayed, try disabling this setting. Hotlinking is not prevented if <em>Full image protection</em> is <em>Unprotected</em>."); ?></td>
 	</tr>
 	<tr>
 		<td></td>

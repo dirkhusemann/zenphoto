@@ -80,22 +80,23 @@ function setDefault($option, $default) {
 	setDefault('gallery_sortdirection', '0');
 	setDefault('image_sorttype', 'Filename');
 	setDefault('image_sortdirection', '0');
+	setDefault('hotlink_protection', '1');
 	setDefault('current_theme', 'default');
 	setDefault('feed_items', 10);
 	setDefault('search_fields', 32767);  
-	setOptionDefault('allowed_tags', "a => (href => () title => ()) \n".
-	 															"abbr => (title => ())\n" . 
-	 															"acronym => (title => ())\n" . 
-	 															"b => ()\n" .
-	 															"blockquote => (cite => ())\n" .
-	 															"code => ()\n" .
-	 															"em => ()\n" . 
-	 															"i => () \n" .
-	 															"strike => ()\n" . 
-	 															"strong => ()\n" .
-	 															"ul => ()\n" .
-	 															"ol => ()\n" .
-	 															"li => ()\n");
+	setOptionDefault(	'allowed_tags', "a => (href => () title => ()) \n".
+	 									"abbr => (title => ())\n" . 
+	 									"acronym => (title => ())\n" . 
+	 									"b => ()\n" .
+	 									"blockquote => (cite => ())\n" .
+	 									"code => ()\n" .
+	 									"em => ()\n" . 
+	 									"i => () \n" .
+	 									"strike => ()\n" . 
+	 									"strong => ()\n" .
+	 									"ul => ()\n" .
+	 									"ol => ()\n" .
+	 									"li => ()\n");
 	setDefault('comment_name_required', 1);
 	setDefault('comment_email_required', 1);
 	setDefault('comment_web_required', 0);
