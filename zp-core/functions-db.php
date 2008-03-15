@@ -65,8 +65,10 @@ function query($sql, $noerrmsg = false) {
 		db_connect();
 	}
 	$result = mysql_query($sql, $mysql_connection);
-	if ($_zp_conf_vars['UTF-8']) {
-		mysql_query("SET NAMES 'utf8' COLLATE 'utf8_unicode_ci'");
+	if (array_key_exists('UTF-8', $_zp_conf_vars)) {
+		if ($_zp_conf_vars['UTF-8']) {
+			mysql_query("SET NAMES 'utf8' COLLATE 'utf8_unicode_ci'");
+		}
 	}
 	if (!$result && !$noerrmsg) {
 		$sql = sanitize($sql, true);
