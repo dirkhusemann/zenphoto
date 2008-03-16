@@ -56,13 +56,15 @@ function printAdminHeader() {
 	echo "\n  <title>zenphoto administration</title>";
 	echo "\n  <link rel=\"stylesheet\" href=\"admin.css\" type=\"text/css\" />";
 	echo "\n  <script type=\"text/javascript\" src=\"js/prototype.js\"></script>";
-	echo "\n  <script type=\"text/javascript\" src=\"js/prototype.tooltip.js\"></script>";
 	echo "\n  <script type=\"text/javascript\" src=\"js/admin.js\"></script>";
 	echo "\n  <script src=\"js/scriptaculous/scriptaculous.js\" type=\"text/javascript\"></script>";
 	echo "\n  <script src=\"js/jquery.js\" type=\"text/javascript\"></script>";
+	echo "\n  <script src=\"js/jquery.dimensions.js\" type=\"text/javascript\"></script>";
+	echo "\n  <script src=\"js/jquery.tooltip.js\" type=\"text/javascript\"></script>";
 	echo "\n  <script type=\"text/javascript\">";
 	echo "\n  \tjQuery(function( $ ){";
 	echo "\n  \t\t $(\"#fade-message\").fadeTo(5000, 1).fadeOut(1000);";
+	echo "\n  \t\t $('.tooltip').tooltip();";
 	echo "\n  \t});";
 	echo "\n  </script>";
 }
@@ -631,30 +633,18 @@ function printAlbumButtons($album) {
 		echo "<form name=\"cache_images\" action=\"cache-images.php\" method=\"post\">";
 		echo "<input type=\"hidden\" name=\"album\" value=" . queryencode($album->name) . ">";
 		echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
-		echo "<button type=\"submit\" id='edit_cache'><img src=\"images/cache.png\" style=\"border: 0px;\" />";
+		echo "<button type=\"submit\" class=\"tooltip\" id='edit_cache' title=\"".gettext("Cache newly uploaded images.")."\"><img src=\"images/cache.png\" style=\"border: 0px;\" />";
 		echo " ".gettext("Pre-Cache Images")."</Button>";
 		echo "<input type=\"checkbox\" name=\"clear\" checked=\"checked\" /> ".gettext("Clear");
 		echo "</form>\n</td>";
-		echo "<div id='edit_cache_tooltip' style='display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;'>";
-		echo gettext("Cache newly uploaded images.")."<br />";
-		echo "</div>";
-		echo "<script type='text/javascript'>";
-		echo "var my_tooltip = new Tooltip('edit_cache', 'edit_cache_tooltip')";
-		echo "</script>";
 
 		echo "\n<td valign=\"top\" width = 30% style=\"padding: 0px 30px 0px 30px;\">";
 		echo "<form name=\"refresh_metadata\" action=\"refresh-metadata.php\"?album=" . queryencode($album->name) . "\" method=\"post\">";
 		echo "<input type=\"hidden\" name=\"album\" value=" . queryencode($album->name) . ">";
 		echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
-		echo "<button type=\"submit\" id='edit_refresh'><img src=\"images/warn.png\" style=\"border: 0px;\" /> ".gettext("Refresh Metadata")."</button>";
+		echo "<button type=\"submit\" class=\"tooltip\" id='edit_refresh' title=\"".gettext("Forces a refresh of the EXIF and IPTC data for all images in the album.")."\"><img src=\"images/warn.png\" style=\"border: 0px;\" /> ".gettext("Refresh Metadata")."</button>";
 		echo "</form>";
 		echo "\n</td>";
-		echo "<div id='edit_refresh_tooltip' style='display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;'>";
-		echo gettext("Forces a refresh of the EXIF and IPTC data for all images in the album.")."<br />";
-		echo "</div>";
-		echo "<script type='text/javascript'>";
-		echo "var my_tooltip = new Tooltip('edit_refresh', 'edit_refresh_tooltip')";
-		echo "</script>";
 			
 		echo "\n<td valign=\"top\" width = 30% style=\"padding: 0px 30px 0px 30px;\">";
 		echo "</form>";
@@ -662,15 +652,9 @@ function printAlbumButtons($album) {
 		echo "<input type=\"hidden\" name=\"action\" value=\"reset_hitcounters\">";
 		echo "<input type=\"hidden\" name=\"albumid\" value=" . $album->getAlbumID() . ">";
 		echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
-		echo "<button type=\"submit\" id='edit_hitcounter'><img src=\"images/reset.png\" style=\"border: 0px;\" /> ".gettext("Reset hitcounters")."</button>";
+		echo "<button type=\"submit\" class=\"tooltip\" id='edit_hitcounter' title=\"".gettext("Resets all hitcounters in the album.")."\"><img src=\"images/reset.png\" style=\"border: 0px;\" /> ".gettext("Reset hitcounters")."</button>";
 		echo "</form>";
 		echo "\n</tr></table>";
-		echo "<div id='edit_hitcounter_tooltip' style='display:none; width: 300px; margin: 5px; border: 1px solid #c2e1ef; background-color: white; padding-left: 5px;'>";
-		echo gettext("Resets all hitcounters in the album.")."<br />";
-		echo "</div>";
-		echo "<script type='text/javascript'>";
-		echo "var my_tooltip = new Tooltip('edit_hitcounter', 'edit_hitcounter_tooltip')";
-		echo "</script>";
 	}
 }
 /**
