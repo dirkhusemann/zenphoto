@@ -12,6 +12,9 @@ if (!$checked && !file_exists('zp-config.php')) {
 if(!function_exists("gettext")) {
 	// load the drop-in replacement library
 	require_once('lib-gettext/gettext.inc');
+	$noxlate = -1;
+} else {
+	$noxlate = 1;
 }
 function setupLog($message, $reset=false) {
   global $debug;
@@ -322,6 +325,8 @@ if (!$checked) {
 	                    "<br/>".gettext("To correct this you ").$mandate.gettext(" install GD with appropriate image support in your PHP"));
 		}
 	}
+	checkMark($noxlate, gettext("PHP <code>gettext()</code> support"), gettext(" [is not present]"), gettext("
+	Localization of Zenphoto currently requires native PHP <code>gettext()</code> support"));
 	$sql = extension_loaded('mysql');
 	$good = checkMark($sql, gettext(" PHP MySQL support"), '', gettext('You need to install MySQL support in your PHP')) && $good;
 	if (file_exists("zp-config.php")) {
@@ -802,6 +807,10 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_comments ADD INDEX (`ownerid`);";
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `dynamic` int(1) UNSIGNED default '0'";
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `search_params` text default NULL";
+	
+	//1v1.1.6
+	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `album_theme` text default ''";
+	
 
 	/**************************************************************************************
 	 ******                            END of UPGRADE SECTION                                                           ******
