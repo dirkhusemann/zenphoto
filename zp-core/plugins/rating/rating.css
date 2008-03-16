@@ -62,7 +62,6 @@
 	}
 	.star-rating li.current-rating{
 		background: url(alt_star.png) left center;
-		position: absolute;
 		height: 25px;
 		display: block;
 		text-indent: -9000px;
