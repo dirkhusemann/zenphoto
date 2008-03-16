@@ -61,10 +61,12 @@ function printAdminHeader() {
 	echo "\n  <script src=\"js/jquery.js\" type=\"text/javascript\"></script>";
 	echo "\n  <script src=\"js/jquery.dimensions.js\" type=\"text/javascript\"></script>";
 	echo "\n  <script src=\"js/jquery.tooltip.js\" type=\"text/javascript\"></script>";
+	echo "\n  <script src=\"js/jquery.tabs.js\" type=\"text/javascript\"></script>";
 	echo "\n  <script type=\"text/javascript\">";
 	echo "\n  \tjQuery(function( $ ){";
 	echo "\n  \t\t $(\"#fade-message\").fadeTo(5000, 1).fadeOut(1000);";
 	echo "\n  \t\t $('.tooltip').tooltip();";
+	echo "\n  \t\t $('#mainmenu > ul').tabs();";
 	echo "\n  \t});";
 	echo "\n  </script>";
 }
