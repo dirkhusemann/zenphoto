@@ -1443,17 +1443,17 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 ?>
 <div id="container">
 <div id="mainmenu">
-<ul id="tabs">
-	<li><a href="#tab_admin"><?php echo gettext("admin information"); ?></a></li>
+<ul>
+	<li><a href="#tab_admin"><span><?php echo gettext("admin information"); ?></span></a></li>
 	<?php if ((!$_zp_null_account) && ($_zp_loggedin & OPTIONS_RIGHTS)) { ?>
-	<li><a href="#tab_gallery"><?php echo gettext("gallery configuration"); ?></a></li>
-	<li><a href="#tab_image"><?php echo gettext("image display"); ?></a></li>
-	<li><a href="#tab_comments"><?php echo gettext("comment configuration"); ?></a></li>
-	<li><a href="#tab_theme"><?php echo gettext("theme options"); ?></a></li>
+	<li><a href="#tab_gallery"><span><?php echo gettext("gallery configuration"); ?></span></a></li>
+	<li><a href="#tab_image"><span><?php echo gettext("image display"); ?></a></span></li>
+	<li><a href="#tab_comments"><span><?php echo gettext("comment configuration"); ?></span></a></li>
+	<li><a href="#tab_theme"><span><?php echo gettext("theme options"); ?></span></a></li>
 	<?php } ?>
 </ul>
 </div>
-<div class="panel" id="tab_admin">
+<div id="tab_admin">
 <form action="?page=options&action=saveoptions" method="post"><input
 	type="hidden" name="saveadminoptions" value="yes" /> <?php
 	if ($_zp_loggedin & ADMIN_RIGHTS) {
@@ -1590,7 +1590,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 </form>
 </div>
 <!-- end of tab_admin div -->
-<div class="panel" id="tab_gallery">
+<div id="tab_gallery">
 <form action="?page=options&action=saveoptions" method="post"><input
 	type="hidden" name="savegalleryoptions" value="yes" /> <?php
 	if (isset($_GET['mismatch'])) {
@@ -1855,7 +1855,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 </form>
 </div>
 <!-- end of tab-gallery div -->
-<div class="panel" id="tab_image">
+<div id="tab_image">
 <form action="?page=options&action=saveoptions" method="post"><input
 	type="hidden" name="saveimageoptions" value="yes" /> <?php
 	if (isset($_GET['mismatch'])) {
@@ -2025,9 +2025,8 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 	</tr>
 </table>
 </form>
-</div>
-<!-- end of tab_image div -->
-<div class="panel" id="tab_comments">
+</div><!-- end of tab_image div -->
+<div id="tab_comments">
 <form action="?page=options&action=saveoptions" method="post"><input
 	type="hidden" name="savecommentoptions" value="yes" /> <?php
 	if (isset($_GET['tag_parse_error'])) {
@@ -2097,7 +2096,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 </form>
 </div>
 <!-- end of tab_comments div -->
-<div class="panel" id="tab_theme">
+<div id="tab_theme">
 <form action="?page=options&action=saveoptions" method="post"><input
 	type="hidden" name="savethemeoptions" value="yes" /> <?php
 	/* handle theme options */
@@ -2118,9 +2117,8 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		}
 	}
 	?></form>
-</div>
-<!-- end of tab_themne div --></div>
-<!-- container --> 
+</div><!-- end of tab_themne div -->
+</div><!-- end of container --> 
 <?php 
 /*** THEMES (Theme Switcher) *******************************************************/
 /************************************************************************************/ 

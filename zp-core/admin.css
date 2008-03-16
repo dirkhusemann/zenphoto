@@ -436,30 +436,23 @@ label:hover {
 }
 
 /* Option Tabs
-------------------------------------- */
+-------------------------------------*/
 .space {margin-top:40px;}
-.panel {
-	clear: both;
+.ui-tabs-hide {
 	display: none;
-	padding: 0px 1em;
 }
-.panel.active-tab-body {
-	display: block;
-}
-
-#tabs {
+.ui-tabs-nav {
 	list-style: none;
-	padding: 0px 13px;
-	margin: 0px;
-	height: 26px;
+	padding: 0;
+	margin: 0;
+	height: 17px;
 }
 
-#tabs li {
-	float: left;
+.ui-tabs-nav li {
+    float: left;
 }
-
-#tabs a {
-	float: left;
+.ui-tabs-nav a {
+  float: left;
 	padding: 6px 12px;
 	margin: 0px 10px 0px 0px;
 	text-decoration: none;
@@ -471,16 +464,31 @@ label:hover {
 	border-right: 1px solid #C7D3D8;
 }
 
-#tabs a:hover {
+.ui-tabs-nav a:hover {
 	background-color: #d6dbde;
 }
 
-#tabs a.active-tab {
+.ui-tabs-nav .ui-tabs-selected a {
 	background-color: #d6dbde;
 	border-top: 3px solid #6b7d84;
 	padding-top: 4px;
 	color: #6b7d84;
 }
+
+.ui-tabs-disabled {}
+.ui-tabs-panel {
+	padding: 1em 0px;
+	background: #fff; /* declare background color for container to avoid distorted fonts in IE while fading */
+}
+
+/* Additional IE specific bug fixes... */
+* html .ui-tabs-nav { /* auto clear, @ IE 6 & IE 7 Quirks Mode */
+	display: inline-block;
+}
+*:first-child+html .ui-tabs-nav  { /* @ IE 7 Standards Mode - do not group selectors, otherwise IE 6 will ignore complete rule (because of the unknown + combinator)... */
+	display: inline-block;
+}
+
 
 /* Pretty Buttons
 ------------------------------------- */
