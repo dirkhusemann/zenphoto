@@ -10,38 +10,25 @@
 	<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); echo "\n"; ?>
 	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/jquery.js" type="text/javascript"></script>
 	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.js" type="text/javascript"></script>
-	<script type="text/javascript">
-	function toggleComments() {
-		var commentDiv = document.getElementById("comments");
-		if (commentDiv.style.display == "block") {
-			commentDiv.style.display = "none";
-		} else {
-			commentDiv.style.display = "block";
-		}
-	}
-	</script>
 	<?php zenJavascript(); ?>
 	
 </head>
 <body>
 
-
-
 <div id="main">
 	<div id="gallerytitle">
-			<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?>
-					</a> | <?php printParentBreadcrumb(); printAlbumBreadcrumb("", " | "); ?>
-					</span> <?php printImageTitle(true); ?></h2>
-		</div>
+			<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> 
+      | <?php printParentBreadcrumb(); printAlbumBreadcrumb("", " | "); ?></span> <?php printImageTitle(true); ?></h2>
+	</div>
 	
-		<hr />
+	<hr />
 	
 	<!-- The Image -->
 	<?php if (!checkForPassword()) { ?>
 		<div class="image">
 		<div class="imgnav">
 			<?php if (hasPrevImage()) { ?> <a class="prev" href="<?php echo getPrevImageURL();?>" title="<?php echo gettext('Previous Image'); ?>">&laquo; <?php echo gettext("prev"); ?></a>
-			<?php } if (hasNextImage()) { ?> <a class="next" href="<?php echo getNextImageURL();?>" title="<?php echo gettext('Next Image'); ?>"><?php echo getttext("next");?> &raquo;</a><?php } ?>
+			<?php } if (hasNextImage()) { ?> <a class="next" href="<?php echo getNextImageURL();?>" title="<?php echo gettext('Next Image'); ?>"><?php echo gettext("next");?> &raquo;</a><?php } ?>
 		</div>
 			
 				<a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>">
@@ -53,10 +40,8 @@
 						<a href="<?php echo getProtectedImageURL();?>" title="<?php echo getImageTitle();?>"><?php echo gettext("Original Size:"); ?> 
 							<?php echo getFullWidth() . "x" . getFullHeight(); ?>
 						</a>
-								</em>
+						</em>
 					</div>
- 			
-					 	<div class="rating"><?php printImageRating(); ?></div> 
 					
 					<div id="meta_link">
 						<?php 
@@ -66,10 +51,11 @@
 					?>
 					</div>
 					
-						<br clear="all" />
+					<br clear="all" />
 					<?php printImageDesc(true); ?>
 					<?php printTags('links', gettext('<strong>Tags:</strong> '), 'taglist', ''); ?>
-				<?php printImageMap(); ?>
+					<?php printImageMap(); ?>
+          <div class="rating"><?php printImageRating(); ?></div> 
 				</div>
 			
 				<?php if (getOption('Allow_comments')) { ?>

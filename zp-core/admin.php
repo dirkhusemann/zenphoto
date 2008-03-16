@@ -733,12 +733,9 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		$album->setSubalbumSortType('Manual');
 		$album->setSortDirection('album', 0);
 		$album->save();
-		echo '<div class="messagebox" id="message">';
+		echo '<div class="messagebox" id="fade-message">';
 		echo  "<h2>".gettext("Subalbum order saved")."</h2>";
 		echo '</div>';
-		echo '<script type="text/javascript">';
-		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
-		echo "</script>\n";
 	}
 	?>
 <h1>Edit Album: <em><?php echo $album->name; ?></em></h1>
@@ -751,21 +748,18 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	if (isset($_GET['saved'])) {
 		if (isset($_GET['mismatch'])) {
 			?>
-			<div class="errorbox" id="message1">
+			<div class="errorbox" id="fade-message">
 			<h2><?php echo gettext("Your passwords did not match"); ?></h2>
 			</div>
 		<?php
 		} else {
 		?>
-			<div class="messagebox" id="message1">
+			<div class="messagebox" id="fade-message">
 			<h2><?php echo gettext("Save Successful"); ?></h2>
 			</div>
 		<?php 
 		} 
 		?> 
-	<script type="text/javascript">
-	window.setTimeout('Effect.Fade($(\'message1\'))', 2500);
-	</script> 
 	<?php 
 	} 
 	?> 
@@ -1000,11 +994,11 @@ if (count($album->getImages())) {
 } else if (isset($_GET['massedit'])) {
 	if (isset($_GET['saved'])) {
 		if (isset($_GET['mismatch'])) {
-			echo "\n<div class=\"errorbox\" id=\"message1\">";
+			echo "\n<div class=\"errorbox\" id=\"fade-message\">";
 			echo "\n<h2>".gettext("Your passwords did not match")."</h2>";
 			echo "\n</div>";
 		} else {
-			echo "\n<div class=\"messagebox\" id=\"message1\">";
+			echo "\n<div class=\"messagebox\" id=\"fade-message\">";
 			echo "\n<h2>".gettext("Save Successful")."</h2>";
 			echo "\n</div>";
 		}
@@ -1065,15 +1059,12 @@ if (count($album->getImages())) {
 <?php displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */ ?>
 
 <?php
-	if (isset($saved)) {
+	if (isset($_GET['saved'])) {
 		setOption('gallery_sorttype', 'Manual');
 		setOption('gallery_sortdirection', 0);
-		echo '<div class="messagebox" id="message">';
+		echo '<div class="messagebox" id="fade-message">';
 		echo  "<h2>".gettext("Album order saved")."</h2>";
 		echo '</div>';
-		echo '<script type="text/javascript">';
-		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
-		echo "</script>\n";
 
 	}
 	?>
@@ -1277,14 +1268,12 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 
 <?php /* Display a message if needed. Fade out and hide after 2 seconds. */
 	if ((isset($_GET['ndeleted']) && $_GET['ndeleted'] > 0) || isset($_GET['sedit'])) { ?>
-<div class="messagebox" id="message"><?php if (isset($_GET['ndeleted'])) { ?>
+<div class="messagebox" id="fade-message"><?php if (isset($_GET['ndeleted'])) { ?>
 <h2><?php echo $_GET['ndeleted']; ?> <?php echo gettext("Comments deleted successfully."); ?></h2>
 <?php } ?> <?php if (isset($_GET['sedit'])) { ?>
 <h2><?php echo gettext("Comment saved successfully."); ?></h2>
 <?php } ?></div>
-<script type="text/javascript">
-					Fat.fade_and_hide_element('message', 30, 1000, 2000, Fat.get_bgcolor('message'), '#FFFFFF')
-				</script> <?php } ?>
+<?php } ?>
 
 <p><?php echo gettext("You can edit or delete comments on your photos."); ?></p>
 <?php if($viewall) { ?>
@@ -1483,12 +1472,9 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		} else {
 			$msg = gettext('Your passwords did not match');
 		}
-		echo '<div class="errorbox" id="message">';
+		echo '<div class="errorbox" id="fade-message">';
 		echo  "<h2>$msg</h2>";
 		echo '</div>';
-		echo '<script type="text/javascript">';
-		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
-		echo "</script>\n";
 	}
 	?> <input type="hidden" name="totaladmins"
 	value="<?php echo count($admins); ?>" />
@@ -1608,20 +1594,14 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 <form action="?page=options&action=saveoptions" method="post"><input
 	type="hidden" name="savegalleryoptions" value="yes" /> <?php
 	if (isset($_GET['mismatch'])) {
-		echo '<div class="errorbox" id="message">';
+		echo '<div class="errorbox" id="fade-message">';
 		echo  "<h2>". gettext("Your "). $_GET['mismatch'] . gettext(" passwords did not match")."</h2>";
 		echo '</div>';
-		echo '<script type="text/javascript">';
-		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
-		echo "</script>\n";
 	}
 	if (isset($_GET['badurl'])) {
-		echo '<div class="errorbox" id="message">';
+		echo '<div class="errorbox" id="fade-message">';
 		echo  "<h2>".gettext("Your Website URL is not valid")."</h2>";
 		echo '</div>';
-		echo '<script type="text/javascript">';
-		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
-		echo "</script>\n";
 	}
 	?>
 <table class="bordered">
@@ -1879,12 +1859,9 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 <form action="?page=options&action=saveoptions" method="post"><input
 	type="hidden" name="saveimageoptions" value="yes" /> <?php
 	if (isset($_GET['mismatch'])) {
-		echo '<div class="errorbox" id="message">';
+		echo '<div class="errorbox" id="fade-message">';
 		echo  "<h2>".gettext("Your ") . $_GET['mismatch'] . gettext(" passwords did not match")."</h2>";
 		echo '</div>';
-		echo '<script type="text/javascript">';
-		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
-		echo "</script>\n";
 	}
 	?>
 <table class="bordered">
@@ -2054,12 +2031,9 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 <form action="?page=options&action=saveoptions" method="post"><input
 	type="hidden" name="savecommentoptions" value="yes" /> <?php
 	if (isset($_GET['tag_parse_error'])) {
-		echo '<div class="errorbox" id="message">';
+		echo '<div class="errorbox" id="fade-message">';
 		echo  "<h2>".gettext("Your Allowed tags change did not parse successfully.")."</h2>";
 		echo '</div>';
-		echo '<script type="text/javascript">';
-		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
-		echo "</script>\n";
 	}
 	?>
 <table class="bordered">
@@ -2233,12 +2207,9 @@ $themeweb = WEBPATH . "/themes/$theme";
 </ul>
 <?php
 	if (!empty($msg)) { 
-		echo '<div class="messagebox" id="message">'; 
+		echo '<div class="messagebox" id="fade-message">'; 
 		echo  "<h2>$msg</h2>"; 
 		echo '</div>'; 
-		echo '<script type="text/javascript">'; 
-		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);"; 
-		echo "</script>\n"; 
 	} 
 ?>
 

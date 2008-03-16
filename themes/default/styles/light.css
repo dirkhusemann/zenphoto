@@ -379,6 +379,7 @@ label:hover {
 	color: #000;
 }
 #map {margin-left: -77px;}
+#rating { margin-top: 10px; }
 
 /* Admin Toolbox
 ------------------------------ */

@@ -385,6 +385,8 @@ label {
 	padding: 10px 0;
 }
 
+#rating { margin-top: 10px; }
+
 /* Admin Toolbox
 ------------------------------ */
 #admin, #admin_data{

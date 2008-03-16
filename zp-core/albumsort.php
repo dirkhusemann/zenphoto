@@ -57,13 +57,10 @@ if (!zp_loggedin()) {
  			<?php printViewLink($album, gettext("View Album"), gettext("View Album")); ?>
 		</p>
 				<?php
-				if (isset($saved)) {
-					echo '<div class="messagebox" id="message">';
+				if (isset($_GET['saved'])) {
+					echo '<div class="messagebox" id="fade-message">';
 					echo  "<h2>".gettext("Image order saved");
 					echo '</h2></div>';
-					echo '<script type="text/javascript">';
-					echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
-					echo "</script>\n";
 				}
 				?>
 		

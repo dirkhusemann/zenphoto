@@ -138,8 +138,8 @@ blockquote {
 	color: #363630;
 }
 acronym {
-  	cursor: help;
-  	border-bottom: 1px solid;
+	cursor: help;
+  border-bottom: 1px solid;
 }
 
 /* Page Navigation
@@ -236,7 +236,7 @@ ul.pagelist li.next {
 /* Album Thumbnails
 ------------------------------ */
 #albums {
-        float: left;
+	float: left;
 }
 .album {
 	margin: 0 15px 15px 0;
@@ -365,20 +365,21 @@ label {
 
 .required {
 	color: #9C3;
-  	cursor: help;
+  cursor: help;
 }
 
 .gravatar {
-width: 20px;
-border: 1px grey solid;
-padding: 1px;
-vertical-align: middle;
+	width: 20px;
+	border: 1px grey solid;
+	padding: 1px;
+	vertical-align: middle;
 }
 
 #map{
 	margin-left:-85px;
 	padding: 10px 0;
 }
+#rating { margin-top: 10px; }
 
 /* Admin Toolbox
 ------------------------------ */
@@ -444,7 +445,7 @@ vertical-align: middle;
   color: #fff
 }
 #search li {
-width:150px;
+	width:150px;
 }
 .clear {
   clear:both;

@@ -59,6 +59,12 @@ function printAdminHeader() {
 	echo "\n  <script type=\"text/javascript\" src=\"js/prototype.tooltip.js\"></script>";
 	echo "\n  <script type=\"text/javascript\" src=\"js/admin.js\"></script>";
 	echo "\n  <script src=\"js/scriptaculous/scriptaculous.js\" type=\"text/javascript\"></script>";
+	echo "\n  <script src=\"js/jquery.js\" type=\"text/javascript\"></script>";
+	echo "\n  <script type=\"text/javascript\">";
+	echo "\n  \tjQuery(function( $ ){";
+	echo "\n  \t\t $(\"#fade-message\").fadeTo(5000, 1).fadeOut(1000);";
+	echo "\n  \t});";
+	echo "\n  </script>";
 }
 
 /**
@@ -155,12 +161,9 @@ function printLoginForm($redirect=null, $logo=true) {
 	if ($_zp_login_error == 1) {
 		echo "<div class=\"errorbox\" id=\"message\"><h2>".gettext("There was an error logging in.</h2> Check your username and password and try again.")."</div>";
 	} else if ($_zp_login_error == 2){
-		echo '<div class="messagebox" id="message">'; 
+		echo '<div class="messagebox" id="fade-message">'; 
 		echo  "<h2>".gettext("A reset request has been sent.")."</h2>"; 
 		echo '</div>'; 
-		echo '<script type="text/javascript">'; 
-		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);"; 
-		echo "</script>\n"; 
 	}
 	echo "\n  <form name=\"login\" action=\"#\" method=\"POST\">";
 	echo "\n    <input type=\"hidden\" name=\"login\" value=\"1\" />";
@@ -300,12 +303,9 @@ function displayDeleted() {
 			$msg = $msg . gettext("deleted successfully.");
 			$class = 'messagebox';
 		}
-		echo '<div class="' . $class . '" id="message">';
+		echo '<div class="' . $class . '" id="fade-message">';
 		echo  "<h2>" . $msg . "</h2>";
 		echo '</div>';
-		echo '<script type="text/javascript">';
-		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
-		echo '</script>';
 	}
 }
 
@@ -405,12 +405,9 @@ function printAlbumEditForm($index, $album) {
 		echo "<p><em><strong>" . $album->name . "</strong></em></p>";
 	}
 	if (isset($_GET['counters_reset'])) {
-		echo '<div class="messagebox" id="message">';
+		echo '<div class="messagebox" id="fade-message">';
 		echo  "<h2>".gettext("Hitcounters have been reset")."</h2>";
 		echo '</div>';
-		echo '<script type="text/javascript">';
-		echo "window.setTimeout('Effect.Fade(\$(\'message\'))', 2500);";
-		echo "</script>\n";
 	}
 
 	echo "\n<input type=\"hidden\" name=\"" . $prefix . "folder\" value=\"" . $album->name . "\" />";
