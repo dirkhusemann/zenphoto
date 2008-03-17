@@ -2108,13 +2108,19 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		$albumtitle = $album->getTitle();
 		$themename = $album->getAlbumTheme();
 	} else {
-		$alb = '';
-		$albumtitle = gettext("Gallery");
-		$themename = $gallery->getCurrentTheme();
+		foreach ($themelist as $albumtitle=>$alb) break;
+		if (empty($alb)) {
+			$themename = $gallery->getCurrentTheme();
+		} else {
+			$alb = urldecode($alb);
+			$album = new Album($gallery, $alb);
+			$albumtitle = $album->getTitle();
+			$themename = $album->getAlbumTheme();
+		}
 	}
 	$themes = $gallery->getThemes();
 	$theme = $themes[$themename];
-	if (count($themelist) > 0) {
+	if (count($themelist) > 1) {
 		echo '<form action="?page=options#tab_theme" method="post">';
 		echo gettext("Show theme for"). ': ';
 		echo '<select id="themealbum" name="themealbum" onchange="this.form.submit()">';
@@ -2123,7 +2129,11 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 //		echo ' <input type="submit" value='. gettext('select').' />' . "\n";
 		echo '</form>';
 	}	
-	if (count($themelist) > 0) {
+	if (count($themelist) == 0) {
+		echo '<div class="errorbox" id="no_themes">';
+		echo  "<h2>".gettext("There are no themes for which you have rights to administer.")."</h2>";
+		echo '</div>';
+	} else {
 ?>
 <form action="?page=options&action=saveoptions" method="post">
 <input type="hidden" name="savethemeoptions" value="yes" /> 
@@ -2209,9 +2219,13 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 <?php 
 /*** THEMES (Theme Switcher) *******************************************************/
 /************************************************************************************/ 
-} else if ($page == "themes") { ?>
+} else if ($page == "themes") { 
+$current_theme = $gallery->getCurrentTheme();
+$themes = $gallery->getThemes();
+$theme = $themes[$current_theme];
+?>
 
-<h1><?php echo gettext("Themes (current theme is"); ?> <em><?php echo $current_theme = $gallery->getCurrentTheme();?></em>)</h1>
+<h1><?php echo gettext("Themes (current theme is"); ?> <em><?php echo $theme['name']; ?></em>)</h1>
 <p><?php echo gettext("Themes allow you to visually change the entire look and feel of your gallery. All themes are located in your"); ?> <code>zenphoto/themes</code> <?php echo gettext("folder, and you can download more themes at the"); ?> <a
 	href="http://www.zenphoto.org/support/"><?php echo gettext("zenphoto forum"); ?></a> <?php echo gettext("and the"); ?> <a
 	href="http://www.zenphoto.org/zp/theme/"><?php echo gettext("zenphoto themes page"); ?></a>.</p>
