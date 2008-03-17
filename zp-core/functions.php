@@ -103,7 +103,6 @@ function getOption($key) {
 		if ($optionlist !== false) {
 			foreach($optionlist as $option) {
 				$_zp_options[$option['name']] = $option['value'];
-				$_zp_conf_vars[$option['name']] = $option['value'];  /* so that zp_conf will get the DB result */
 			}
 		}
 
@@ -137,7 +136,6 @@ function setOption($key, $value, $persistent=true) {
 	}
 	if ($result) {
 		$_zp_options[$key] = strip($value);
-		$_zp_conf_vars[$key] = strip($value);  /* so that zp_conf will get the DB result */
 		return true;
 	} else {
 		return false;
@@ -174,7 +172,6 @@ function setOptionDefault($key, $default) {
 		escape($default) . "');";
 		query($sql);
 		$_zp_options[$key] = $value;
-		$_zp_conf_vars[$key] = $value; /* so that zp_conf will get the DB result */
 	}
 }
 

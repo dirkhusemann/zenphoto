@@ -1733,7 +1733,15 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 	<tr>
 		<td><?php echo gettext("Date format:"); ?></td>
 		<td>
-			<select id="date_format_list" name="date_format_list" >
+			<script type="text/javascript">
+			function show(obj) {
+				no = obj.options[obj.selectedIndex].value;
+				document.getElementById('customTextBox').style.display = 'none';
+				if(no=='custom')
+					document.getElementById('customTextBox').style.display = 'block';
+			}
+			</script>
+			<select id="date_format_list" name="date_format_list" onchange="show(this)">
 			<?php
 			$formatlist = array(gettext('Custom')=>'custom', 
 					gettext('02/25/08 15:30')=>'%d/%m/%y %H:%M',
@@ -1770,17 +1778,22 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 					gettext('25-Feb-08')=>'%d-%b-%y',
 					gettext('25-Feb-2008 15:30')=>'%d-%b-%Y %H:%M',
 					gettext('25-Feb-2008')=>'%d-%b-%Y',
-					gettext('Feb 25 2008 15:30')=>'%b %d %Y %H:%M',
-					gettext('Feb 25 2008')=>'%b %d %Y',
-					gettext('February 25 2008 15:30')=>'%B %d %Y %H:%M',
-					gettext('February 25 2008')=>'%B %d %Y');
+					gettext('Feb 25, 2008 15:30')=>'%b %d, %Y %H:%M',
+					gettext('Feb 25, 2008')=>'%b %d, %Y',
+					gettext('February 25, 2008 15:30')=>'%B %d, %Y %H:%M',
+					gettext('February 25, 2008')=>'%B %d, %Y');
 			$cv = getOption("date_format");
-			
+			$flip = array_flip($formatlist);
+			if (isset($flip[$cv])) {
+				$dsp = 'none';
+			} else {
+				$dsp = 'block';
+			}
 			if (array_search($cv, $formatlist) === false) $cv = 'custom';
 			generateListFromArray(array($cv), $formatlist);
 			?>
 			</select><br />
-			<div id="customTextBox" name="customText">
+			<div id="customTextBox" name="customText" style="display:<?php echo $dsp; ?>">
 			<input type="text" size="40" name="date_format"
 			value="<?php echo getOption('date_format');?>" />
 			</div>
@@ -2104,10 +2117,10 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 	if (count($themelist) > 0) {
 		echo '<form action="?page=options#tab_theme" method="post">';
 		echo gettext("Show theme for"). ': ';
-		echo '<select id="themealbum" name="themealbum">';
+		echo '<select id="themealbum" name="themealbum" onchange="this.form.submit()">';
 		generateListFromArray(array(urlencode($alb)), $themelist);
 		echo '</select>';
-		echo ' <input type="submit" value='. gettext('select').' />' . "\n";
+//		echo ' <input type="submit" value='. gettext('select').' />' . "\n";
 		echo '</form>';
 	}	
 	if (count($themelist) > 0) {

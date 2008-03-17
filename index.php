@@ -25,7 +25,6 @@ if (!is_null($_zp_current_album)) {
 		if ($optionlist !== false) {
 			foreach($optionlist as $option) {
 				$_zp_options[$option['name']] = $option['value'];
-				$_zp_conf_vars[$option['name']] = $option['value'];  /* so that zp_conf will get the DB result */
 			}
 		}
   }
