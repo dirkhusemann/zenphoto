@@ -8,10 +8,10 @@ class ThemeOptions {
 	}
 	
 	function getOptionsSupported() {
-		return array(	gettext('Allow comments') => array('key' => 'Allow_comments', 'type' => 1, 'desc' => gettext('Set to enable comment section.')),
-									gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Set to enable search form.'))
+		return array(	gettext('Allow comments') => array('key' => 'Allow_comments', 'type' => 1, 'desc' => gettext('Check to enable comment section.')),
+									gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Check to enable search form.'))
 								);
 			}
-	function handleOption($option, $currentValue, $alb="") {}
+	function handleOption($option, $currentValue) {}
 }
 ?>

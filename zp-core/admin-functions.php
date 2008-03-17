@@ -313,6 +313,37 @@ function displayDeleted() {
 	}
 }
 
+function setThemeOption($table, $option, $value) {
+	$sql = "INSERT INTO ".prefix($table)." (name, value) VALUES ('".escape($option)."','".escape($value)."')".
+									 " ON DUPLICATE KEY UPDATE `value`='" . escape($value) . "'";
+	$result = query($sql);
+}
+
+function setBoolThemeOption($table, $option, $bool) {
+	if ($bool) {
+		$value = 1;
+	} else {
+		$value = 0;
+	}
+	setThemeOption($table, $option, $value);
+}
+
+function getThemeOption($alb, $option) {
+	if (!empty($alb)) $alb = $alb.'_';
+	$sql = "SELECT `value` FROM " . prefix($alb.'options') . " Where `name`='" . escape($option) . "';";
+	$db = query_single_row($sql);
+	if (!$db && !empty($alb)) {
+		$sql = "SELECT `value` FROM " . prefix('options') . " Where `name`='" . escape($option) . "';";
+		$db = query_single_row($sql);
+	}
+	if ($db) {
+		$v = $db['value'];
+	} else {
+		$v = 0;
+	}
+	return $v;
+}
+
 function customOptions($optionHandler, $indent="", $alb="") {
 	if (!empty($alb)) $alb = $alb.'_';
 	$supportedOptions = $optionHandler->getOptionsSupported();
@@ -331,28 +362,32 @@ function customOptions($optionHandler, $indent="", $alb="") {
 			}
 			$sql = "SELECT `value` FROM " . prefix($alb.'options') . " Where `name`='" . escape($key) . "';";
 			$db = query_single_row($sql);
-			if ($db === false) {
+			if (!$db && !empty($alb)) {
 				$sql = "SELECT `value` FROM " . prefix('options') . " Where `name`='" . escape($key) . "';";
 				$db = query_single_row($sql);
 			}
-			$v = $db['value'];
-
+			if ($db) {
+				$v = $db['value'];
+			} else {
+				$v = 0;
+			}
+			
 			echo "\n<tr>\n";
 			echo '<td width="175">' . $indent . $option . ":</td>\n";
 
 			switch ($type) {
 				case 0:  // text box
-					echo '<td width="200"><input type="text" size="40" name="' . $alb . $key . '" value="' . $v . '"></td>' . "\n";
+					echo '<td width="200"><input type="text" size="40" name="' . $key . '" value="' . $v . '"></td>' . "\n";
 					break;
 				case 1:  // check box
-					echo '<input type="hidden" name="chkbox-' . $alb . $key . '" value=0 />' . "\n";
-					echo '<td width="200"><input type="checkbox" name="' . $alb . $key . '" value="1"';
+					echo '<input type="hidden" name="chkbox-' . $key . '" value=0 />' . "\n";
+					echo '<td width="200"><input type="checkbox" name="' . $key . '" value="1"';
 					echo checked('1', $v);
 					echo " /></td>\n";
 					break;
 				case 2:  // custom handling
 					echo '<td width="200">' . "\n";
-					$optionHandler->handleOption($key, $v, $alb);
+					$optionHandler->handleOption($key, $v);
 					echo "</td>\n";
 			}
 			echo '<td>' . $desc . "</td>\n";
@@ -949,5 +984,4 @@ function fetchComments($number) {
 	}
 	return $comments;
 }
-
 ?>

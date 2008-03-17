@@ -454,6 +454,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			$sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
 			query($sql);
 		} else if ($action == 'saveoptions') {
+			$table = 'options';
 			$wm = getOption('watermark_image');
 			$vwm = getOption('video_watermark_image');
 			$wmo = getOption('perform_watermark');
@@ -564,16 +565,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			if (isset($_POST['saveimageoptions'])) {
 				setOption('image_quality', $_POST['image_quality']);
 				setOption('thumb_quality', $_POST['thumb_quality']);
-				setOption('image_size', $_POST['image_size']);
-				setBoolOption('image_use_longest_side', $_POST['image_use_longest_side']);
 				setBoolOption('image_allow_upscale', $_POST['image_allow_upscale']);
-				setOption('thumb_size', $_POST['thumb_size']);
-				setBoolOption('thumb_crop', $_POST['thumb_crop']);
-				setOption('thumb_crop_width', $_POST['thumb_crop_width']);
-				setOption('thumb_crop_height', $_POST['thumb_crop_height']);
 				setBoolOption('thumb_sharpen', $_POST['thumb_sharpen']);
-				setOption('albums_per_page', $_POST['albums_per_page']);
-				setOption('images_per_page', $_POST['images_per_page']);
 				setBoolOption('perform_watermark', $_POST['perform_watermark']);
 				setOption('watermark_image', 'watermarks/' . $_POST['watermark_image'] . '.png');
 				setOption('watermark_scale', $_POST['watermark_scale']);
@@ -609,9 +602,25 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			}
 			/*** Theme options ***/
 			if (isset($_POST['savethemeoptions'])) {
-				// all theme options are custom options, handled below
 				$returntab = "#tab_theme";
-			}
+				// all theme options are custom options, handled below
+				if (!empty($_POST['themealbum'])) {
+					$alb = urldecode($_POST['themealbum']);
+					$table = $alb.'_options';
+					$returntab = '&themealbum='.urlencode($alb).'#tab_theme';
+				} else {
+					$table = 'options';
+				}
+				setThemeOption($table, 'image_size', $_POST['image_size']);
+				setBoolThemeOption($table, 'image_use_longest_side', $_POST['image_use_longest_side']);
+				setThemeOption($table, 'thumb_size', $_POST['thumb_size']);
+				setBoolThemeOption($table, 'thumb_crop', $_POST['thumb_crop']);
+				setThemeOption($table, 'thumb_crop_width', $_POST['thumb_crop_width']);
+				setThemeOption($table, 'thumb_crop_height', $_POST['thumb_crop_height']);
+				setThemeOption($table, 'albums_per_page', $_POST['albums_per_page']);
+				setThemeOption($table, 'images_per_page', $_POST['images_per_page']);
+				}
+
 			/*** custom options ***/
 			$templateOptions = GetOptionList();
 
@@ -623,39 +632,13 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			$i = 0;
 			while ($i < count($keys)) {
 				if (isset($_POST[$keys[$i]])) {
-					setOption($keys[$i], $_POST[$keys[$i]]);
+					setThemeOption($table, $keys[$i], $_POST[$keys[$i]]);
 				} else {
 					if (isset($_POST['chkbox-' . $keys[$i]])) {
-						setOption($keys[$i], 0);
+						setThemeOption($table, $keys[$i], 0);
 					}
 				}
 				$i++;
-			}
-			$albs = $gallery->getAlbums();
-			foreach ($albs as $alb) {
-				$album = new Album($gallery, $alb);
-				$theme = $album->getAlbumTheme();
-				if (!empty($theme)) {
-					$i = 0;
-					while ($i < count($keys)) {
-						$hasv = false;
-						if (isset($_POST[$alb.'_'.$keys[$i]])) {
-							$v = $_POST[$alb.'_'.$keys[$i]];
-							$hasv = true;
-						} else {
-							if (isset($_POST['chkbox-'.$alb.'_'.$keys[$i]])) {
-								$v = 0;
-								$hasv = true;
-							}
-						}
-						if ($hasv) {
-							$sql = "INSERT INTO ".prefix($alb.'_'.'options')." (name, value) VALUES ('".escape($keys[$i])."','".escape($v)."')".
-									 " ON DUPLICATE KEY UPDATE `value`='" . escape($v) . "'";
-							$result = query($sql);
-						}
-						$i++;
-					}
-				}
 			}
 
 			if (($wmo != getOption('perform_watermark')) ||
@@ -1933,20 +1916,6 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		<td><?php echo gettext("JPEG Compression quality for all thumbnails."); ?></td>
 	</tr>
 	<tr>
-		<td><?php echo gettext("Image size:"); ?></td>
-		<td><input type="text" size="40" name="image_size"
-			value="<?php echo getOption('image_size');?>" /></td>
-		<td><?php echo gettext("Default image display width."); ?></td>
-	</tr>
-	<tr>
-		<td><?php echo gettext("Images size is longest size:"); ?></td>
-		<td><input type="checkbox" size="40" name="image_use_longest_side"
-			value="1"
-			<?php echo checked('1', getOption('image_use_longest_side')); ?> /></td>
-		<td><?php echo gettext("If this is set to true, then the longest side of the image will be	<em>image size</em>.");  
-		echo gettext("Otherwise, the <em>width</em> of the image will	be <em>image size</em>."); ?></td>
-	</tr>
-	<tr>
 		<td><?php echo gettext("Allow upscale:"); ?></td>
 		<td><input type="checkbox" size="40" name="image_allow_upscale"
 			value="1"
@@ -1954,47 +1923,10 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		<td><?php echo gettext("Allow images to be scaled up to the requested size. This could	result in loss of quality, so it's off by default."); ?></td>
 	</tr>
 	<tr>
-		<td><?php echo gettext("Thumb size:"); ?></td>
-		<td><input type="text" size="40" name="thumb_size"
-			value="<?php echo getOption('thumb_size');?>" /></td>
-		<td><?php echo gettext("Default thumbnail size and scale."); ?></td>
-	</tr>
-	<tr>
-		<td><?php echo gettext("Crop thumbnails:"); ?></td>
-		<td><input type="checkbox" size="40" name="thumb_crop" value="1"
-		<?php echo checked('1', getOption('thumb_crop')); ?> /></td>
-		<td><?php echo gettext("If set to true the thumbnail will be a centered portion of the	image with the given width and height after being resized to <em>thumb	size</em> (by shortest side)."); 
-		echo gettext("Otherwise, it will be the full image resized to <em>thumb size</em> (by shortest side)."); ?></td>
-	</tr>
-	<tr>
-		<td><?php echo gettext("Crop thumbnail width:"); ?></td>
-		<td><input type="text" size="40" name="thumb_crop_width"
-			value="<?php echo getOption('thumb_crop_width');?>" /></td>
-		<td><?php echo gettext("The <em>thumb crop width</em> should always be less than or equal	to <em>thumb size</em>"); ?></td>
-	</tr>
-	<tr>
-		<td><?php echo gettext("Crop thumbnail height:"); ?></td>
-		<td><input type="text" size="40" name="thumb_crop_height"
-			value="<?php echo getOption('thumb_crop_height');?>" /></td>
-		<td><?php echo gettext("The <em>thumb crop height</em> should always be less than or equal to <em>thumb size</em>"); ?></td>
-	</tr>
-	<tr>
 		<td><?php echo gettext("Sharpen thumbnails:"); ?></td>
 		<td><input type="checkbox" name="thumb_sharpen" value="1"
 		<?php echo checked('1', getOption('thumb_sharpen')); ?> /></td>
 		<td><?php echo gettext("Add a small amount of unsharp mask to thumbnails. Slows thumbnail	generation on slow servers."); ?></td>
-	</tr>
-	<tr>
-		<td><?php echo gettext("Albums per page:"); ?></td>
-		<td><input type="text" size="40" name="albums_per_page"
-			value="<?php echo getOption('albums_per_page');?>" /></td>
-		<td><?php echo gettext("Controls the number of albums on a page. You might need to change	this after switching themes to make it look better."); ?></td>
-	</tr>
-	<tr>
-		<td><?php echo gettext("Images per page:"); ?></td>
-		<td><input type="text" size="40" name="images_per_page"
-			value="<?php echo getOption('images_per_page');?>" /></td>
-		<td><?php echo gettext("Controls the number of images on a page. You might need to change	this after switching themes to make it look better."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Watermark images:"); ?></td>
@@ -2138,49 +2070,127 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 </div>
 <!-- end of tab_comments div -->
 <div id="tab_theme">
-<form action="?page=options&action=saveoptions" method="post"><input
-	type="hidden" name="savethemeoptions" value="yes" /> <?php
+<?php
+	$themelist = array();
+	if ($_zp_loggedin & ADMIN_RIGHTS) {
+		$themelist[gettext("Gallery")] = '';
+	}
+	$albums = $gallery->getAlbums(0);
+	foreach ($albums as $alb) {
+		if (isMyAlbum($alb, THEME_RIGHTS)) {
+			$album = new Album($gallery, $alb);
+			$theme = $album->getAlbumTheme();
+			if (!empty($theme)) {
+				$key = $album->getTitle();
+				if ($key != $alb) {
+					$key .= " ($alb)";
+				}	
+				$themelist[$key] = urlencode($alb);
+			}
+		}
+	}
+	if (!empty($_REQUEST['themealbum'])) {
+		$alb = urldecode($_REQUEST['themealbum']);
+		$album = new Album($gallery, $alb);
+		$albumtitle = $album->getTitle();
+		$themename = $album->getAlbumTheme();
+	} else {
+		$alb = '';
+		$albumtitle = gettext("Gallery");
+		$themename = $gallery->getCurrentTheme();
+	}
 	$themes = $gallery->getThemes();
-	$themename = $gallery->getCurrentTheme();
 	$theme = $themes[$themename];
+	if (count($themelist) > 0) {
+		echo '<form action="?page=options#tab_theme" method="post">';
+		echo gettext("Show theme for"). ': ';
+		echo '<select id="themealbum" name="themealbum">';
+		generateListFromArray(array(urlencode($alb)), $themelist);
+		echo '</select>';
+		echo ' <input type="submit" value='. gettext('select').' />' . "\n";
+		echo '</form>';
+	}	
+	if (count($themelist) > 0) {
+?>
+<form action="?page=options&action=saveoptions" method="post">
+<input type="hidden" name="savethemeoptions" value="yes" /> 
+<?php
 	/* handle theme options */
 	echo "<table class='bordered'>\n";
-	echo "<tr><th colspan='3'><h2>".gettext("Galery theme:")." <em>".$theme['name']."</em></h2></th></tr>\n";
+	echo "<input type=\"hidden\" name=\"themealbum\" value=\"".urlencode($alb)."\" />";
+	echo "<tr><th colspan='3'><h2>".gettext("Theme for")." <code>$albumtitle</code>: <em>".$theme['name']."</em></h2></th></tr>\n";
+	?>
+	<tr>
+		<td><?php echo gettext("Albums per page:"); ?></td>
+		<td><input type="text" size="40" name="albums_per_page"
+			value="<?php echo getThemeOption($alb, 'albums_per_page');?>" /></td>
+		<td><?php echo gettext("Controls the number of albums on a page. You might need to change	this after switching themes to make it look better."); ?></td>
+	</tr>
+	<tr>
+		<td><?php echo gettext("Images per page:"); ?></td>
+		<td><input type="text" size="40" name="images_per_page"
+			value="<?php echo getThemeOption($alb, 'images_per_page');?>" /></td>
+		<td><?php echo gettext("Controls the number of images on a page. You might need to change	this after switching themes to make it look better."); ?></td>
+	</tr>
+	<tr>
+		<td><?php echo gettext("Thumb size:"); ?></td>
+		<td><input type="text" size="40" name="thumb_size"
+			value="<?php echo getThemeOption($alb, 'thumb_size');?>" /></td>
+		<td><?php echo gettext("Default thumbnail size and scale."); ?></td>
+	</tr>
+	<tr>
+		<td><?php echo gettext("Crop thumbnails:"); ?></td>
+		<td><input type="checkbox" size="40" name="thumb_crop" value="1"
+		<?php echo checked('1', getThemeOption($alb, 'thumb_crop')); ?> /></td>
+		<td><?php echo gettext("If checked the thumbnail will be a centered portion of the	image with the given width and height after being resized to <em>thumb	size</em> (by shortest side)."); 
+		echo gettext("Otherwise, it will be the full image resized to <em>thumb size</em> (by shortest side)."); ?></td>
+	</tr>
+	<tr>
+		<td><?php echo gettext("Crop thumbnail width:"); ?></td>
+		<td><input type="text" size="40" name="thumb_crop_width"
+			value="<?php echo getThemeOption($alb, 'thumb_crop_width');?>" /></td>
+		<td><?php echo gettext("The <em>thumb crop width</em> should always be less than or equal	to <em>thumb size</em>"); ?></td>
+	</tr>
+	<tr>
+		<td><?php echo gettext("Crop thumbnail height:"); ?></td>
+		<td><input type="text" size="40" name="thumb_crop_height"
+			value="<?php echo getThemeOption($alb, 'thumb_crop_height');?>" /></td>
+		<td><?php echo gettext("The <em>thumb crop height</em> should always be less than or equal to <em>thumb size</em>"); ?></td>
+	</tr>
+	<tr>
+		<td><?php echo gettext("Image size:"); ?></td>
+		<td><input type="text" size="40" name="image_size"
+			value="<?php echo getThemeOption($alb, 'image_size');?>" /></td>
+		<td><?php echo gettext("Default image display width."); ?></td>
+	</tr>
+	<tr>
+		<td><?php echo gettext("Images size is longest size:"); ?></td>
+		<td><input type="checkbox" size="40" name="image_use_longest_side"
+			value="1"
+			<?php echo checked('1', getThemeOption($alb, 'image_use_longest_side')); ?> /></td>
+		<td><?php echo gettext("If this is checked the longest side of the image will be <em>image size</em>.");  
+		echo gettext("Otherwise, the <em>width</em> of the image will	be <em>image size</em>."); ?></td>
+	</tr>
+	<?php
 	if (!(false === ($requirePath = getPlugin('themeoptions.php', $themename)))) {
 		require_once($requirePath);
 		$optionHandler = new ThemeOptions();
 		$supportedOptions = $optionHandler->getOptionsSupported();
 		if (count($supportedOptions) > 0) {
-			customOptions($optionHandler);
+			customOptions($optionHandler, '', $alb);
 		}
 	}
-	echo "\n<tr>\n";
 		
-	$albums = $gallery->getAlbums(0);
-	foreach ($albums as $alb) {
-		$album = new Album($gallery, $alb);
-		$themename = $album->getAlbumTheme();
-		if (!empty($themename)) {
-			$theme = $themes[$themename];
-			echo "<tr><th colspan='3'><h2>".getText("Album").' '.$alb.' '.gettext("theme:")." <em>".$theme['name']."</em></h2></th></tr>\n";
-			if (!(false === ($requirePath = getPlugin('themeoptions.php', $themename)))) {
-//				require_once($requirePath);
-//				$optionHandler = new ThemeOptions();
-				$supportedOptions = $optionHandler->getOptionsSupported();
-				if (count($supportedOptions) > 0) {
-					customOptions($optionHandler, '', $alb);
-				}
-			}
-			echo "\n<tr>\n";
-		}
-	}
-
 	echo "<td></td>\n";
 	echo  '<td><input type="submit" value='. gettext('save').' /></td>' . "\n";
 	echo "<td></td>\n";
 	echo "</tr>\n";
 	echo "</table>\n";
-	?></form>
+	?>
+	</form>
+	<?php
+	}
+ ?>
 </div><!-- end of tab_themne div -->
 </div><!-- end of container --> 
 <?php 

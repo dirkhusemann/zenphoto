@@ -42,29 +42,28 @@ class ThemeOptions {
 
 	function getOptionsSupported() {
 		return array(	gettext('Theme logo') => array('key' => 'Theme_logo', 'type' => 0, 'desc' => gettext('The text for the them logo')),
-									gettext('Allow comments') => array('key' => 'Allow_comments', 'type' => 1, 'desc' => gettext('Set to enable comment section.')),
-									gettext('Watermark head_image') => array('key' => 'Watermark_head_image', 'type' => 1, 'desc' => gettext('Set to place a watermark on the heading image. (Image watermarking must be set.)')),
-									gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Set to enable search form.')),
-									gettext('Slideshow') => array('key' => 'Slideshow', 'type' => 1, 'desc' => gettext('Set to enable slideshow for the <em>Smooth</em> personality.')),
+									gettext('Allow comments') => array('key' => 'Allow_comments', 'type' => 1, 'desc' => gettext('Check to enable comment section.')),
+									gettext('Watermark head_image') => array('key' => 'Watermark_head_image', 'type' => 1, 'desc' => gettext('Check to place a watermark on the heading image. (Image watermarking must be set.)')),
+									gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Check to enable search form.')),
+									gettext('Slideshow') => array('key' => 'Slideshow', 'type' => 1, 'desc' => gettext('Check to enable slideshow for the <em>Smooth</em> personality.')),
 									gettext('Graphic logo') => array('key' => 'Graphic_logo', 'type' => 2, 'desc' => gettext('Select a logo (PNG files in the images folder) or leave empty for text logo.')),
 									gettext('Theme personality') => array('key' => 'Theme_personality', 'type' => 2, 'desc' => gettext('Select the theme personality')),
-									gettext('Theme colors') => array('key' => 'Theme_colors', 'type' => 2, 'desc' => gettext('Set the colors of the theme'))
+									gettext('Theme colors') => array('key' => 'Theme_colors', 'type' => 2, 'desc' => gettext('Select the colors of the theme'))
 								);
 	}
 
-	function handleOption($option, $currentValue, $alb="") {
+	function handleOption($option, $currentValue) {
 		switch ($option) {
 			case 'Theme_colors':
-				$gallery = new Gallery();
-				$theme = $gallery->getCurrentTheme();
+				$theme = array_pop(explode('/', dirname(__FILE__)));
 				$themeroot = SERVERPATH . "/themes/$theme/styles";
-				echo '<select id="themeselect" name="' . $alb . $option . '"' . ">\n";
+				echo '<select id="themeselect" name="' . $option . '"' . ">\n";
 				generateListFromFiles($currentValue, $themeroot , '.css');
 				echo "</select>\n";
 				break;
 
 			case 'Theme_personality':
-				echo '<select id="ef_personality" name="' . $alb . $option . '"' . ">\n";
+				echo '<select id="ef_personality" name="' . $option . '"' . ">\n";
 				generateListFromArray(array($currentValue), array(gettext('Image page') => 'Image page', gettext('Simpleviewer') => 'Simpleviewer', gettext('Slimbox') => 'Slimbox', gettext('Smoothgallery') => 'Smoothgallery'));
 				echo "</select>\n";
 				break;
@@ -73,7 +72,7 @@ class ThemeOptions {
 				$gallery = new Gallery();
 				$theme = $gallery->getCurrentTheme();
 				$themeroot = SERVERPATH . "/themes/$theme/images";
-				echo '<select id="themeselect" name="' . $alb . $option . '"' . ">\n";
+				echo '<select id="themeselect" name="' . $option . '"' . ">\n";
 				echo '<option></option>';
 				generateListFromFiles($currentValue, $themeroot , '.png');
 				echo "</select>\n";

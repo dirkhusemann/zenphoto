@@ -35,19 +35,18 @@ class ThemeOptions {
 	}
 	
 	function getOptionsSupported() {
-		return array(	gettext('Allow comments') => array('key' => 'Allow_comments', 'type' => 1, 'desc' => gettext('Set to enable comment section.')),
-									gettext('Allow ratings') => array('key' => 'Allow_ratings', 'type' => 1, 'desc' => gettext('Set to enable album and image ratings.')),
-									gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Set to enable search form.')),
-									gettext('Theme colors') => array('key' => 'Theme_colors', 'type' => 2, 'desc' => gettext('Set the colors of the theme'))
+		return array(	gettext('Allow comments') => array('key' => 'Allow_comments', 'type' => 1, 'desc' => gettext('Check to enable comment section.')),
+									gettext('Allow ratings') => array('key' => 'Allow_ratings', 'type' => 1, 'desc' => gettext('Check to enable album and image ratings.')),
+									gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Check to enable search form.')),
+									gettext('Theme colors') => array('key' => 'Theme_colors', 'type' => 2, 'desc' => gettext('Select the colors of the theme'))
 								);
 	}
 
-	function handleOption($option, $currentValue, $alb="") {
+	function handleOption($option, $currentValue) {
 		if ($option == 'Theme_colors') {
-			$gallery = new Gallery();
-			$theme = $gallery->getCurrentTheme();
+			$theme = array_pop(explode('/', dirname(__FILE__)));
 			$themeroot = SERVERPATH . "/themes/$theme/styles";
-			echo '<select id="themeselect" name="' . $alb . $option . '"' . ">\n";
+			echo '<select id="themeselect" name="' . $option . '"' . ">\n";
 			generateListFromFiles($currentValue, $themeroot , '.css');
 			echo "</select>\n";
 		}
