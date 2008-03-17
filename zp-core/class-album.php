@@ -719,10 +719,10 @@ class Album extends PersistentObject {
 	 * @return int
 	 */
 	function getGalleryPage() {
-		$albums_per_page = getOption('albums_per_page');
+		global $_zp_gallery_albums_per_page;
 		if ($this->index == null)
 		$this->index = array_search($this->name, $this->gallery->getAlbums(0));
-		return floor(($this->index / $albums_per_page)+1);
+		return floor(($this->index / $_zp_gallery_albums_per_page)+1);
 	}
 
 

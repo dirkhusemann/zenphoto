@@ -334,7 +334,7 @@ function getNumSubalbums() {
  * @return int
  */
 function getTotalPages($oneImagePage=false) {
-	global $_zp_gallery, $_zp_current_album;
+	global $_zp_gallery, $_zp_gallery_albums_per_page, $_zp_current_album;
 	if (in_context(ZP_ALBUM | ZP_SEARCH)) {
 		if (in_context(ZP_SEARCH)) {
 			$pageCount = ceil(getNumAlbums() / getOption('albums_per_page'));
@@ -348,7 +348,7 @@ function getTotalPages($oneImagePage=false) {
 		$pageCount = ($pageCount + ceil(($imageCount - getOption('images_first_page')) / getOption('images_per_page')));
 		return $pageCount;
 	} else if (in_context(ZP_INDEX)) {
-		return ceil($_zp_gallery->getNumAlbums() / getOption('albums_per_page'));
+		return ceil($_zp_gallery->getNumAlbums() / $_zp_gallery_albums_per_page);
 	} else {
 		return null;
 	}
@@ -1094,17 +1094,11 @@ function getNumImages() {
 }
 
 /**
-
 * Returns the count of all the images in the album and any subalbums
-
 *
-
 * @param object $album The album whose image count you want
-
 * @return int
-
 * @since 1.1.4
-
 */
 
 function getTotalImagesIn($album) {

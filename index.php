@@ -10,7 +10,7 @@ require_once(ZENFOLDER . "/template-functions.php");
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
 }
-
+$_zp_gallery_albums_per_page = getOption('albums_per_page');
 $themepath = 'themes';
 
 $theme = $_zp_gallery->getCurrentTheme();

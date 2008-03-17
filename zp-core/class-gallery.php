@@ -77,6 +77,7 @@ class Gallery {
 	 * @return  array
 	 */
 	function getAlbums($page=0, $sorttype=null, $direction=null) {
+		global $_zp_gallery_albums_per_page;
 
 		// Have the albums been loaded yet?
 		if (is_null($this->albums)) {
@@ -97,8 +98,7 @@ class Gallery {
 		if ($page == 0) {
 			return $this->albums;
 		} else {
-			$albums_per_page = getOption('albums_per_page');
-			return array_slice($this->albums, $albums_per_page*($page-1), $albums_per_page);
+			return array_slice($this->albums, $_zp_gallery_albums_per_page*($page-1), $_zp_gallery_albums_per_page);
 		}
 	}
 
