@@ -12,9 +12,26 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 }
 
 $themepath = 'themes';
+
 $theme = $_zp_gallery->getCurrentTheme();
+if (!is_null($_zp_current_album)) {
+	$parent = getUrAlbum($_zp_current_album);
+  $albumtheme = $parent->getAlbumTheme();
+  if (!empty($albumtheme)) {
+  	$theme = $albumtheme;
+  	//load the album theme options
+		$sql = "SELECT `name`, `value` FROM ".prefix($parent->name.'_options');
+		$optionlist = query_full_array($sql, true);
+		if ($optionlist !== false) {
+			foreach($optionlist as $option) {
+				$_zp_options[$option['name']] = $option['value'];
+				$_zp_conf_vars[$option['name']] = $option['value'];  /* so that zp_conf will get the DB result */
+			}
+		}
+  }
+}
 $_zp_themeroot = WEBPATH . "/$themepath/$theme";
-if (!(false === ($requirePath = getPlugin('themeoptions.php', true)))) {
+if (!(false === ($requirePath = getPlugin('themeoptions.php', $theme)))) {
 	require_once($requirePath);
 	$optionHandler = new ThemeOptions(); /* prime the theme options */
 }

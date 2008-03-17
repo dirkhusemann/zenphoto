@@ -1032,8 +1032,25 @@ class Album extends PersistentObject {
 		$params = $this->getSearchParams();
 		$params .= '&albumname='.$this->name;
 		$this->$searchengine->setSearchParams($params);
-		return $this->$searchengine;		
+		return $this->$searchengine;
 	}
-}
 
+	/**
+	 * Returns the theme for the album
+	 *
+	 * @return string
+	 */
+	function getAlbumTheme() {
+		return $this->get('album_theme');
+	}
+	/**
+	 * Sets the theme of the album
+	 *
+	 * @param string $theme
+	 */
+	function setAlbumTheme($theme) {
+		$this->set('album_theme', $theme);
+	}
+
+}
 ?>

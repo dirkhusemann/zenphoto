@@ -17,11 +17,11 @@ class ThemeOptions {
 									gettext('Mini slide selector') => array('key' => 'Mini_slide_selector', 'type' => 2, 'desc' => gettext('Select what you want for the six special slides.'))
 									);
 	}
-	function handleOption($option, $currentValue) {
+	function handleOption($option, $currentValue, $alb="") {
 		$selector = array(gettext('Recent images') => 'Recent images', gettext('Random images') => 'Random images');
 		switch ($option) {
 			case 'Mini_slide_selector':
-				echo '<select id="themeselect" name="' . $option . '"' . ">\n";
+				echo '<select id="themeselect" name="' . $alb . $option . '"' . ">\n";
 				generateListFromArray(array($currentValue), $selector);
 				echo "</select>\n";
 				break;

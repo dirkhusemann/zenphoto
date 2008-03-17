@@ -129,12 +129,8 @@ function setOption($key, $value, $persistent=true) {
 		return true;  // not changed
 	}
 	if ($persistent) {
-		if (array_key_exists($key, $_zp_options)) {
-			// option already exists.
-			$sql = "UPDATE " . prefix('options') . " SET `value`='" . escape($value) . "' WHERE `name`='" . escape($key) ."'";
-		} else {
-			$sql = "INSERT INTO " . prefix('options') . " (name, value) VALUES ('" . escape($key) . "','" . escape($value) . "')";
-		}
+		$sql = "INSERT INTO " . prefix('options') . " (name, value) VALUES ('" . escape($key) . "','" . escape($value) . "')" .
+							" ON DUPLICATE KEY UPDATE `value`='" . escape($value). "'";
 		$result = query($sql);
 	} else {
 		$result = true;
@@ -1151,9 +1147,7 @@ function getAlbumFolder($root=SERVERPATH) {
  * @return string
  */
 function getPlugin($plugin, $inTheme) {
-	$gallery = new Gallery();
-	$theme = $gallery->getCurrentTheme();
-	$_zp_themeroot = WEBPATH . "/themes/$theme";
+	$_zp_themeroot = WEBPATH . "/themes/$inTheme";
 	if ($inTheme) {
 		$pluginFile = $_zp_themeroot . '/' . $plugin;
 		$pluginFile = SERVERPATH . '/' . str_replace(WEBPATH, '', $pluginFile);

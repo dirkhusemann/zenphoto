@@ -46,19 +46,19 @@ class ThemeOptions {
 								);
 	}
 
-	function handleOption($option, $currentValue) {
+	function handleOption($option, $currentValue, $alb="") {
 		switch ($option) {
 			case 'Theme_colors':
 				$gallery = new Gallery();
 				$theme = $gallery->getCurrentTheme();
 				$themeroot = SERVERPATH . "/themes/$theme/styles";
-				echo '<select id="themeselect" name="' . $option . '"' . ">\n";
+				echo '<select id="themeselect" name="' . $alb . $option . '"' . ">\n";
 				generateListFromFiles($currentValue, $themeroot , '.css');
 				echo "</select>\n";
 				break;
 
 			case 'Theme_personality':
-				echo '<select id="ef_personality" name="' . $option . '"' . ">\n";
+				echo '<select id="ef_personality" name="' . $alb . $option . '"' . ">\n";
 				generateListFromArray(array($currentValue), array(gettext('Image page') => 'Image page', gettext('Simpleviewer') => 'Simpleviewer', gettext('Slimbox') => 'Slimbox', gettext('Smoothgallery') => 'Smoothgallery'));
 				echo "</select>\n";
 				break;
@@ -67,7 +67,7 @@ class ThemeOptions {
 				$gallery = new Gallery();
 				$theme = $gallery->getCurrentTheme();
 				$themeroot = SERVERPATH . "/themes/$theme/images";
-				echo '<select id="themeselect" name="' . $option . '"' . ">\n";
+				echo '<select id="themeselect" name="' . $alb . $option . '"' . ">\n";
 				echo '<option></option>';
 				generateListFromFiles($currentValue, $themeroot , '.png');
 				echo "</select>\n";

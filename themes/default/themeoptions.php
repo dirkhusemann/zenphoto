@@ -29,8 +29,8 @@ class ThemeOptions {
 	
 	function ThemeOptions() {
 		setOptionDefault('Allow_comments', true);
-	setOptionDefault('Allow_ratings', true);
-	setOptionDefault('Allow_search', true);
+		setOptionDefault('Allow_ratings', true);
+		setOptionDefault('Allow_search', true);
 		setOptionDefault('Theme_colors', 'light'); 
 	}
 	
@@ -42,12 +42,12 @@ class ThemeOptions {
 								);
 	}
 
-	function handleOption($option, $currentValue) {
+	function handleOption($option, $currentValue, $alb="") {
 		if ($option == 'Theme_colors') {
 			$gallery = new Gallery();
 			$theme = $gallery->getCurrentTheme();
 			$themeroot = SERVERPATH . "/themes/$theme/styles";
-			echo '<select id="themeselect" name="' . $option . '"' . ">\n";
+			echo '<select id="themeselect" name="' . $alb . $option . '"' . ">\n";
 			generateListFromFiles($currentValue, $themeroot , '.css');
 			echo "</select>\n";
 		}

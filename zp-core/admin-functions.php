@@ -313,7 +313,8 @@ function displayDeleted() {
 	}
 }
 
-function customOptions($optionHandler, $indent="") {
+function customOptions($optionHandler, $indent="", $alb="") {
+	if (!empty($alb)) $alb = $alb.'_';
 	$supportedOptions = $optionHandler->getOptionsSupported();
 	if (count($supportedOptions) > 0) {
 		$options = array_keys($supportedOptions);
@@ -328,8 +329,12 @@ function customOptions($optionHandler, $indent="") {
 				$key = $option;  
 				$option = str_replace('_', ' ', $option);
 			}
-			$sql = "SELECT `value` FROM " . prefix('options') . " Where `name`='" . escape($key) . "';";
+			$sql = "SELECT `value` FROM " . prefix($alb.'options') . " Where `name`='" . escape($key) . "';";
 			$db = query_single_row($sql);
+			if ($db === false) {
+				$sql = "SELECT `value` FROM " . prefix('options') . " Where `name`='" . escape($key) . "';";
+				$db = query_single_row($sql);
+			}
 			$v = $db['value'];
 
 			echo "\n<tr>\n";
@@ -337,17 +342,17 @@ function customOptions($optionHandler, $indent="") {
 
 			switch ($type) {
 				case 0:  // text box
-					echo '<td width="200"><input type="text" size="40" name="' . $key . '" value="' . $v . '"></td>' . "\n";
+					echo '<td width="200"><input type="text" size="40" name="' . $alb . $key . '" value="' . $v . '"></td>' . "\n";
 					break;
 				case 1:  // check box
-					echo '<input type="hidden" name="chkbox-' . $key . '" value=0 />' . "\n";
-					echo '<td width="200"><input type="checkbox" name="' . $key . '" value="1"';
+					echo '<input type="hidden" name="chkbox-' . $alb . $key . '" value=0 />' . "\n";
+					echo '<td width="200"><input type="checkbox" name="' . $alb . $key . '" value="1"';
 					echo checked('1', $v);
 					echo " /></td>\n";
 					break;
 				case 2:  // custom handling
 					echo '<td width="200">' . "\n";
-					$optionHandler->handleOption($key, $v);
+					$optionHandler->handleOption($key, $v, $alb);
 					echo "</td>\n";
 			}
 			echo '<td>' . $desc . "</td>\n";
@@ -398,7 +403,7 @@ function generateListFromFiles($currentValue, $root, $suffix) {
  *@since 1.1.3
  */
 function printAlbumEditForm($index, $album) {
-	global $sortby, $images;
+	global $sortby, $images, $gallery;
 	if ($index == 0) {
 		if (isset($saved)) {
 			$album->setSubalbumSortType('Manual');
@@ -517,7 +522,33 @@ function printAlbumEditForm($index, $album) {
 	}
 	echo "> ".gettext("Published")." ";
 	echo "</td>\n</tr>";
-	echo "\n<tr>";
+	if (is_null($album->getParent())) {
+		echo "\n<tr>";
+		echo "\n<td align=\"right\" valign=\"top\">".gettext("Album theme:")." </td> ";
+		echo "\n<td>";
+		echo "\n<select id=\"album_theme\" class=\"album_theme\" name=\"".$prefix."album_theme\" >";
+		$themes = $gallery->getThemes();
+		$oldtheme = $album->getAlbumTheme();
+		if (empty($oldtheme)) {
+			echo "<option value = \"\" selected=\"SELECTED\" />";
+		} else {
+			echo "<option value = \"\" />";
+		}
+		echo "</option>";
+
+		foreach ($themes as $theme=>$themeinfo) {
+			echo "<option value = \"$theme\"";
+			if ($oldtheme == $theme) {
+				echo "selected = \"SELECTED\"";
+			}
+			echo "	/>";
+			echo $themeinfo['name'];
+			echo "</option>";
+		}
+		echo "\n</select>";
+		echo "\n</td>";
+		echo "\n</tr>";
+	}
 	echo "\n<td align=\"right\" valign=\"top\">".gettext("Thumbnail:")." </td> ";
 	echo "\n<td>";
 	echo "\n<script type=\"text/javascript\">updateThumbPreview(document.getElementById('thumbselect'));</script>";
@@ -786,6 +817,29 @@ function processAlbumEdit($index, $album) {
 		}
 	} else {
 		$notify = '&mismatch=album';
+	}
+	$oldtheme = $album->getAlbumTheme();
+	$newtheme = strip($_POST[$prefix.'album_theme']);
+	if ($oldtheme != $newtheme) {
+		$album->setAlbumTheme($newtheme);
+		if (!empty($oldtheme) && empty($newtheme)) {
+			// clean out old theme option table
+			$tbl_options = prefix($album->name.'_options');
+			$sql = "DROP TABLE $tbl_options";
+			query($sql);
+		}
+		if (!empty($newtheme) && empty($oldtheme)) {
+			// setup new theme option table
+			$tbl_options = prefix($album->name.'_options');
+			$sql = "CREATE TABLE IF NOT EXISTS $tbl_options (
+							`id` int(11) unsigned NOT NULL auto_increment,
+							`name` varchar(64) NOT NULL,
+							`value` text NOT NULL,
+							PRIMARY KEY  (`id`),
+							UNIQUE (`name`)
+						);";
+			query($sql);
+		}
 	}
 	$album->setPasswordHint(strip($_POST[$prefix.'albumpass_hint']));
 	$album->setCustomData(strip($_POST[$prefix.'album_custom_data']));

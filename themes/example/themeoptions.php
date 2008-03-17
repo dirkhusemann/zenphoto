@@ -12,6 +12,6 @@ class ThemeOptions {
 									gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Set to enable search form.'))
 								);
 			}
-	function handleOption($option, $currentValue) {}
+	function handleOption($option, $currentValue, $alb="") {}
 }
 ?>

@@ -16,7 +16,9 @@ $standardOptions = array(	'gallery_title','website_title','website_url','time_of
  													'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
  													'allowed_tags', 'full_image_quality', 'persistent_archive',
  													'protect_full_image', 'album_session', 'watermark_h_offset', 'watermark_w_offset',
- 													'Use_Captcha', 'locale', 'date_format', 'hotlink_protection'
+ 													'Use_Captcha', 'locale', 'date_format', 'hotlink_protection', 'image_sortdirection',
+													'admin_reset_date', 'comment_name_required', 'comment_email_required',
+													'comment_web_required', 'full_image_download', 'zenphoto_release'
 												 );
 $charsets = array("ASMO-708" => "Arabic",
 									"big5" => "Chinese Traditional",
@@ -629,6 +631,33 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				}
 				$i++;
 			}
+			$albs = $gallery->getAlbums();
+			foreach ($albs as $alb) {
+				$album = new Album($gallery, $alb);
+				$theme = $album->getAlbumTheme();
+				if (!empty($theme)) {
+					$i = 0;
+					while ($i < count($keys)) {
+						$hasv = false;
+						if (isset($_POST[$alb.'_'.$keys[$i]])) {
+							$v = $_POST[$alb.'_'.$keys[$i]];
+							$hasv = true;
+						} else {
+							if (isset($_POST['chkbox-'.$alb.'_'.$keys[$i]])) {
+								$v = 0;
+								$hasv = true;
+							}
+						}
+						if ($hasv) {
+							$sql = "INSERT INTO ".prefix($alb.'_'.'options')." (name, value) VALUES ('".escape($keys[$i])."','".escape($v)."')".
+									 " ON DUPLICATE KEY UPDATE `value`='" . escape($v) . "'";
+							$result = query($sql);
+						}
+						$i++;
+					}
+				}
+			}
+
 			if (($wmo != getOption('perform_watermark')) ||
 			($vwmo != getOption('perform_video_watermark')) ||
 			($woh != getOption('watermark_h_offset')) ||
@@ -2099,23 +2128,46 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 <div id="tab_theme">
 <form action="?page=options&action=saveoptions" method="post"><input
 	type="hidden" name="savethemeoptions" value="yes" /> <?php
+	$themes = $gallery->getThemes();
+	$themename = $gallery->getCurrentTheme();
+	$theme = $themes[$themename];
 	/* handle theme options */
-	if (!(false === ($requirePath = getPlugin('themeoptions.php', true)))) {
+	echo "<table class='bordered'>\n";
+	echo "<tr><th colspan='3'><h2>".gettext("Galery theme:")." <em>".$theme['name']."</em></h2></th></tr>\n";
+	if (!(false === ($requirePath = getPlugin('themeoptions.php', $themename)))) {
 		require_once($requirePath);
 		$optionHandler = new ThemeOptions();
 		$supportedOptions = $optionHandler->getOptionsSupported();
 		if (count($supportedOptions) > 0) {
-			echo "<table class='bordered'>\n";
-			echo "<tr><th colspan='3'><h2>".gettext("Theme Options for")." <em>".$gallery->getCurrentTheme()."</em></h2></th></tr>\n";
 			customOptions($optionHandler);
-			echo "\n<tr>\n";
-			echo "<td></td>\n";
-			echo  '<td><input type="submit" value='. gettext('save').' /></td>' . "\n";
-			echo "<td></td>\n";
-			echo "</tr>\n";
-			echo "</table>\n";
 		}
 	}
+	echo "\n<tr>\n";
+		
+	$albums = $gallery->getAlbums(0);
+	foreach ($albums as $alb) {
+		$album = new Album($gallery, $alb);
+		$themename = $album->getAlbumTheme();
+		if (!empty($themename)) {
+			$theme = $themes[$themename];
+			echo "<tr><th colspan='3'><h2>".getText("Album").' '.$alb.' '.gettext("theme:")." <em>".$theme['name']."</em></h2></th></tr>\n";
+			if (!(false === ($requirePath = getPlugin('themeoptions.php', $themename)))) {
+//				require_once($requirePath);
+//				$optionHandler = new ThemeOptions();
+				$supportedOptions = $optionHandler->getOptionsSupported();
+				if (count($supportedOptions) > 0) {
+					customOptions($optionHandler, '', $alb);
+				}
+			}
+			echo "\n<tr>\n";
+		}
+	}
+
+	echo "<td></td>\n";
+	echo  '<td><input type="submit" value='. gettext('save').' /></td>' . "\n";
+	echo "<td></td>\n";
+	echo "</tr>\n";
+	echo "</table>\n";
 	?></form>
 </div><!-- end of tab_themne div -->
 </div><!-- end of container --> 
