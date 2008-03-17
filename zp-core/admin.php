@@ -668,7 +668,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			($vwm != getOption('video_watermark_image'))) {
 				$gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the options haave changed
 			}
-
+			if (empty($notify)) $notify = '&saved';
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=options".$notify.$returntab);
 			exit();
 
@@ -1094,7 +1094,6 @@ if (count($album->getImages())) {
 		echo '<div class="messagebox" id="fade-message">';
 		echo  "<h2>".gettext("Album order saved")."</h2>";
 		echo '</div>';
-
 	}
 	?>
 <p><?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?><?php echo gettext('Drag the albums into the order you wish them displayed.') ?><?php } ?> <?php echo gettext('Select an album to edit its description and data, or'); ?><a href="?page=edit&massedit"> <?php echo gettext('mass-edit all album data'); ?></a>.</p>
@@ -1471,15 +1470,28 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 } else if ($page == "options") {
 ?>
 <div id="container">
+<?php
+	if (isset($_GET['saved'])) {
+		setOption('gallery_sorttype', 'Manual');
+		setOption('gallery_sortdirection', 0);
+		echo '<div class="messagebox" id="fade-message">';
+		echo  "<h2>".gettext("Saved")."</h2>";
+		echo '</div>';
+	}
+?>
 <div id="mainmenu">
 <ul>
 	<li><a href="#tab_admin"><span><?php echo gettext("admin information"); ?></span></a></li>
-	<?php if ((!$_zp_null_account) && ($_zp_loggedin & OPTIONS_RIGHTS)) { ?>
-	<li><a href="#tab_gallery"><span><?php echo gettext("gallery configuration"); ?></span></a></li>
-	<li><a href="#tab_image"><span><?php echo gettext("image display"); ?></a></span></li>
-	<li><a href="#tab_comments"><span><?php echo gettext("comment configuration"); ?></span></a></li>
-	<li><a href="#tab_theme"><span><?php echo gettext("theme options"); ?></span></a></li>
-	<?php } ?>
+	<?php 
+	if ((!$_zp_null_account) && ($_zp_loggedin & OPTIONS_RIGHTS)) { 
+	?>
+		<li><a href="#tab_gallery"><span><?php echo gettext("gallery configuration"); ?></span></a></li>
+		<li><a href="#tab_image"><span><?php echo gettext("image display"); ?></a></span></li>
+		<li><a href="#tab_comments"><span><?php echo gettext("comment configuration"); ?></span></a></li>
+		<li><a href="#tab_theme"><span><?php echo gettext("theme options"); ?></span></a></li>
+	<?php 
+	} 
+	?>
 </ul>
 </div>
 <div id="tab_admin">
