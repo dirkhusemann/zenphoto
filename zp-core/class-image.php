@@ -654,8 +654,13 @@ class Image extends PersistentObject {
 	function getIndex() {
 		global $_zp_current_search;
 		if ($this->index == NULL) {
-			if (!is_null($_zp_current_search)) {
-				$images =  $_zp_current_search->getImages(0);
+			$album = $this->getAlbum();
+			if (!is_null($_zp_current_search) || $album->isDynamic()) {
+				if ($album->isDynamic()) {
+					$images = $album->getImages();
+				} else {
+					$images =  $_zp_current_search->getImages(0);
+				}
 				$i=0;
 				for ($i=0; $i < count($images); $i++) {
 					$image = $images[$i];

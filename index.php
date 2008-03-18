@@ -10,35 +10,13 @@ require_once(ZENFOLDER . "/template-functions.php");
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
 }
-$_zp_gallery_albums_per_page = getOption('albums_per_page');
 $themepath = 'themes';
-
-$theme = $_zp_gallery->getCurrentTheme();
-if (!is_null($_zp_current_album)) {
-	$parent = getUrAlbum($_zp_current_album);
-  $albumtheme = $parent->getAlbumTheme();
-  if (!empty($albumtheme)) {
-  	$theme = $albumtheme;
-  	//load the album theme options
-		$sql = "SELECT `name`, `value` FROM ".prefix($parent->name.'_options');
-		$optionlist = query_full_array($sql, true);
-		if ($optionlist !== false) {
-			foreach($optionlist as $option) {
-				$_zp_options[$option['name']] = $option['value'];
-			}
-		}
-  }
-}
-$_zp_themeroot = WEBPATH . "/$themepath/$theme";
-if (!(false === ($requirePath = getPlugin('themeoptions.php', $theme)))) {
-	require_once($requirePath);
-	$optionHandler = new ThemeOptions(); /* prime the theme options */
-}
 
 header ('Content-Type: text/html; charset=' . getOption('charset'));
 $obj = '';
 if (isset($_GET['p'])) {
 	// arbitrary PHP page, either in the theme on in the zenphoto core
+	$theme = setupTheme();
 	$page = str_replace(array('/','\\','.'), '', $_GET['p']);
 	if (substr($page, 0, 1) == "*") {
 		include ($obj = ZENFOLDER."/".substr($page, 1) . ".php");
@@ -51,6 +29,7 @@ if (isset($_GET['p'])) {
 } else if (in_context(ZP_IMAGE)) {
 	// image page
 	handleSearchParms($_zp_current_album->name, $_zp_current_image->filename);
+	$theme = setupTheme();
 	include($obj = "$themepath/$theme/image.php");
 } else if (in_context(ZP_ALBUM)) {
 	// album page
@@ -63,15 +42,18 @@ if (isset($_GET['p'])) {
 			if (WEBPATH == '') { $cookiepath = '/'; }
 			zp_setcookie("zenphoto_image_search_params", $search->getSearchParams(), 0, $cookiepath);
 			set_context(ZP_INDEX | ZP_ALBUM);
+			$theme = setupTheme();
 			include($obj = "$themepath/$theme/album.php");
 		} else {
 			handleSearchParms($_zp_current_album->name);
+			$theme = setupTheme();
 			include($obj = "$themepath/$theme/album.php"); 
 		}
 	} 
 } else if (in_context(ZP_INDEX)) {
 	// index page
 	handleSearchParms();
+	$theme = setupTheme();
 	include($obj = "$themepath/$theme/index.php");
 }
 if (!file_exists(SERVERPATH . "/" . $obj)) {

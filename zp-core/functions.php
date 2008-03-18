@@ -1835,6 +1835,51 @@ function handleSearchParms($album='', $image='') {
 }
 
 /**
+ * Returns the theme folder
+ * If there is an album theme, loads the theme options.
+ * 
+ * @return string
+ */
+function setupTheme() {
+	global $_zp_gallery_albums_per_page, $_zp_gallery, $_zp_current_album,
+					$_zp_current_search, $_zp_options, $_zp_themeroot, $themepath;
+	$albumtheme = '';
+	if (in_context(ZP_SEARCH_LINKED)) {
+		$name = $_zp_current_search->dynalbumname;
+		if (!empty($name)) {
+			$album = new Album($_zp_gallery, $name);
+		} else {
+			$album = NULL;
+		}
+	} else {
+		$album = $_zp_current_album;
+	}
+	$theme = $_zp_gallery->getCurrentTheme();
+	if (!is_null($album)) {
+		$parent = getUrAlbum($album);
+		$albumtheme = $parent->getAlbumTheme();
+	}
+	if (!(false === ($requirePath = getPlugin('themeoptions.php', $theme)))) {
+		require_once($requirePath);
+		$optionHandler = new ThemeOptions(); /* prime the theme options */
+	}
+	$_zp_gallery_albums_per_page = getOption('albums_per_page');
+	if (!empty($albumtheme)) {
+		$theme = $albumtheme;
+		//load the album theme options
+		$sql = "SELECT `name`, `value` FROM ".prefix($parent->name.'_options');
+		$optionlist = query_full_array($sql, true);
+		if ($optionlist !== false) {
+			foreach($optionlist as $option) {
+				$_zp_options[$option['name']] = $option['value'];
+			}
+		}
+	}
+	$_zp_themeroot = WEBPATH . "/$themepath/$theme";
+	return $theme;
+}
+
+/**
  * Returns true if the file has the dynamic album suffix
  *
  * @param string $path

@@ -462,9 +462,14 @@ class Album extends PersistentObject {
 	 */
 	function getImages($page=0, $firstPageCount=0, $sorttype=null, $sortdirection=null) {
 		if (is_null($this->images)) {
-			// Load, sort, and store the images in this Album.
-			$images = $this->loadFileNames();
-			$images = $this->sortImageArray($images, $sorttype, $sortdirection);
+			if ($this->isDynamic()) {
+				$searchengine = $this->getSearchEngine();
+				$images = $searchengine->getSearchImages();
+			} else {
+				// Load, sort, and store the images in this Album.
+				$images = $this->loadFileNames();
+				$images = $this->sortImageArray($images, $sorttype, $sortdirection);
+			}
 			$this->images = $images;
 		}
 		// Return the cut of images based on $page. Page 0 means show all.
@@ -570,10 +575,16 @@ class Album extends PersistentObject {
 	 * @return int
 	 */
 	function getImage($index) {
-		if ($index >= 0 && $index < $this->getNumImages()) {
-			return new Image($this, $this->images[$index]);
+		$images = $this->getImages();
+		if ($index >= 0 && $index < count($images)) {
+			if ($this->isDynamic()) {
+				$album = new Album($this->gallery, $images[$index]['folder']);
+				return new Image($album, $images['filename']);
+			} else {
+				return new Image($this, $this->images[$index]);
+			}
+			return false;
 		}
-		return false;
 	}
 
 	/**

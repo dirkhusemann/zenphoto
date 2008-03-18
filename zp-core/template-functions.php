@@ -596,10 +596,17 @@ function albumNumber() {
  */
 function getParentAlbums($album=null) {
 	if(!in_context(ZP_ALBUM)) return false;
-	global $_zp_current_album;
+	global $_zp_current_album, $_zp_current_search, $_zp_gallery;
 	$parents = array();
 	if (is_null($album)) {
-		$album = $_zp_current_album;
+		if (in_context(ZP_SEARCH_LINKED)) {
+			$name = $_zp_current_search->dynalbumname;
+			if (empty($name)) return $parents;
+			$album = new Album($_zp_gallery, $name);
+			array_unshift($parents, $album);
+		} else {
+			$album = $_zp_current_album;
+		}
 	}
 	while (!is_null($album = $album->getParent())) {
 		array_unshift($parents, $album);
@@ -984,8 +991,8 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
  * @return object
  */
 function getNextAlbum() {
-	global $_zp_current_album, $_zp_current_search;
-	if (in_context(ZP_SEARCH)) {
+	global $_zp_current_album, $_zp_current_search, $_zp_gallery;
+	if (in_context(ZP_SEARCH) || in_context(ZP_SEARCH_LINKED)) {
 		$nextalbum = $_zp_current_search->getNextAlbum($_zp_current_album->name);
 	} else if (in_context(ZP_ALBUM)) {
 		if ($_zp_current_album->isDynamic()) {
@@ -1021,7 +1028,7 @@ function getNextAlbumURL() {
  */
 function getPrevAlbum() {
 	global $_zp_current_album, $_zp_current_search;
-	if (in_context(ZP_SEARCH)) {
+	if (in_context(ZP_SEARCH) || in_context(ZP_SEARCH_LINKED)) {
 		$prevalbum = $_zp_current_search->getPrevAlbum($_zp_current_album->name);
 	} else if(in_context(ZP_ALBUM)) {
 		if ($_zp_current_album->isDynamic()) {
