@@ -227,4 +227,24 @@ function queryDecode($url) {
 	return urldecode(str_replace('%%2', '%23', $decode)); 
 }
 
+/**
+ * Creates (if needed) a table row and sets the value of the entry.
+ * returns the success of the operation.
+ *
+ * @param string $table the name of the database table (not prefixed!)
+ * @param string $keyfield the field name for the unique key
+ * @param string $key the record key
+ * @param string $valuefield the field name where the value goes
+ * @param mixed $value the value to be stored.
+ * @return boolean
+ */
+function insertOrUpdate($table, $keyfield, $key, $valuefield, $value) {
+	$sql = 'INSERT INTO '.prefix($table)."($keyfield, $valuefield) VALUES ($key, $value)";
+	$result = query($sql, true);
+	if (!$result) {
+		$sql = 'UPDATE '.prefix($table).' SET `'.$valuefield .'`="'.escape($value).'" WHERE `'.$keyfield.'`="'.escape($key).'"';
+		$result = Query($sql);
+	}
+	return $result;
+}
 ?>

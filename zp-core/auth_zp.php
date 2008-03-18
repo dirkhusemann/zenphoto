@@ -67,7 +67,7 @@ if (!isset($_POST['login'])) {
 unset($saved_auth, $check_auth, $user, $pass);
 // Handle a logout action.
 if (isset($_POST['logout']) || isset($_GET['logout'])) {
-	zp_setcookie("zenphoto_auth", "", time()-368000, $cookiepath);
+	zp_setcookie("zenphoto_auth", "*", time()-368000, $cookiepath);
 	$redirect = "";
 	if (isset($_GET['p'])) {
 		$redirect = "index.php?p=" . $_GET['p'];

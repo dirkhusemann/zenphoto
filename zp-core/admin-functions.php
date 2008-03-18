@@ -314,9 +314,12 @@ function displayDeleted() {
 }
 
 function setThemeOption($table, $option, $value) {
+	insertOrUpdate($table, 'name', $key, 'value', $value);
+	/*
 	$sql = "INSERT INTO ".prefix($table)." (name, value) VALUES ('".escape($option)."','".escape($value)."')".
 									 " ON DUPLICATE KEY UPDATE `value`='" . escape($value) . "'";
 	$result = query($sql);
+	*/
 }
 
 function setBoolThemeOption($table, $option, $bool) {

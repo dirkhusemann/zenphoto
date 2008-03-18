@@ -128,9 +128,12 @@ function setOption($key, $value, $persistent=true) {
 		return true;  // not changed
 	}
 	if ($persistent) {
+		$result = insertOrUpdate('options', 'name', $key, 'value', $value);
+		/*
 		$sql = "INSERT INTO " . prefix('options') . " (name, value) VALUES ('" . escape($key) . "','" . escape($value) . "')" .
 							" ON DUPLICATE KEY UPDATE `value`='" . escape($value). "'";
 		$result = query($sql);
+		*/
 	} else {
 		$result = true;
 	}
@@ -169,7 +172,7 @@ function setOptionDefault($key, $default) {
 	if (NULL == $_zp_options) { getOption('nil'); } // pre-load from the database
 	if (!array_key_exists($key, $_zp_options)) {
 		$sql = "INSERT INTO " . prefix('options') . " (`name`, `value`) VALUES ('" . escape($key) . "', '".
-		escape($default) . "');";
+						escape($default) . "');";
 		query($sql);
 		$_zp_options[$key] = $value;
 	}
