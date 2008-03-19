@@ -453,6 +453,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			query($sql);
 			$sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
 			query($sql);
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=options&deleted");
+			exit();
 		} else if ($action == 'saveoptions') {
 			$table = 'options';
 			$wm = getOption('watermark_image');
@@ -1498,6 +1500,11 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		}
 		echo '<div class="errorbox" id="fade-message">';
 		echo  "<h2>$msg</h2>";
+		echo '</div>';
+	}
+	if (isset($_GET['deleted'])) {
+		echo '<div class="messagebox" id="fade-message">';
+		echo  "<h2>Deleted</h2>";
 		echo '</div>';
 	}
 	?> <input type="hidden" name="totaladmins"

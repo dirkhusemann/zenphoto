@@ -1631,6 +1631,7 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums) {
  					"', `email`='" . escape($email) . $rightsset . "' WHERE `id`='" . $id ."'";
 		$result = query($sql);
 	} else {
+		if (is_null($pass)) $pass = md5($user);
 		$sql = "INSERT INTO " . prefix('administrators') . " (user, password, name, email, rights) VALUES ('" .
 		escape($user) . "','" . escape($pass) . "','" . escape($name) . "','" . escape($email) . "','" . $rights . "')";
 		$result = query($sql);
@@ -1684,6 +1685,7 @@ function getAdministrators() {
  */
 function checkAuthorization($authCode) {
 	global $_zp_current_admin;
+	if (empty($authCode)) return 0; 
 	$admins = getAdministrators();
 	$reset_date = getOption('admin_reset_date');
 	if ((count($admins) == 0) || empty($reset_date)) {
