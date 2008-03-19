@@ -84,9 +84,9 @@ function printNofM($what, $first, $last, $total) {
 	if (!is_null($first)) {
 		echo "<p align=\"center\">$what";
 		if ($first == $last) {
-			echo " $first";
+			echo " $first ";
 		} else {
-			echo "s $first-$last";
+			echo "s $first-$last ";
 		}
 		echo gettext('of') . " $total</p>";
 	}
