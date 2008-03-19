@@ -243,7 +243,7 @@ function insertOrUpdate($table, $keyfield, $key, $valuefield, $value) {
 	$result = query($sql, true);
 	if (!$result) {
 		$sql = 'UPDATE '.prefix($table).' SET `'.$valuefield .'`="'.escape($value).'" WHERE `'.$keyfield.'`="'.escape($key).'"';
-		$result = Query($sql);
+		$result = Query($sql, true);
 	}
 	return $result;
 }
