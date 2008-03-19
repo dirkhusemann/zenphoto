@@ -1869,7 +1869,7 @@ function setupTheme() {
 		require_once($requirePath);
 		$optionHandler = new ThemeOptions(); /* prime the theme options */
 	}
-	$_zp_gallery_albums_per_page = getOption('albums_per_page');
+	$_zp_gallery_albums_per_page = max(1, getOption('albums_per_page'));
 	if (!empty($albumtheme)) {
 		$theme = $albumtheme;
 		//load the album theme options

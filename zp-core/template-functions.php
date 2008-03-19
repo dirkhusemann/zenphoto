@@ -336,16 +336,18 @@ function getNumSubalbums() {
 function getTotalPages($oneImagePage=false) {
 	global $_zp_gallery, $_zp_gallery_albums_per_page, $_zp_current_album;
 	if (in_context(ZP_ALBUM | ZP_SEARCH)) {
+		$albums_per_page = max(1, getOption('albums_per_page'));
 		if (in_context(ZP_SEARCH)) {
-			$pageCount = ceil(getNumAlbums() / getOption('albums_per_page'));
+			$pageCount = ceil(getNumAlbums() / $albums_per_page);
 		} else {
-			$pageCount = ceil(getNumSubalbums() / getOption('albums_per_page'));
+			$pageCount = ceil(getNumSubalbums() / $albums_per_page);
 		}
 		$imageCount = getNumImages();
 		if ($oneImagePage) {
 			$imageCount = min(1, $imageCount);
 		}
-		$pageCount = ($pageCount + ceil(($imageCount - getOption('images_first_page')) / getOption('images_per_page')));
+		$images_per_page = max(1, getOption('images_first_page'));
+		$pageCount = ($pageCount + ceil(($imageCount - $images_per_page) / $images_per_page));
 		return $pageCount;
 	} else if (in_context(ZP_INDEX)) {
 		return ceil($_zp_gallery->getNumAlbums() / $_zp_gallery_albums_per_page);
@@ -815,8 +817,8 @@ function getAlbumLinkURL($album=NULL) {
 			$imageindex = $_zp_current_image->getIndex();
 			$numalbums = count($album->getSubalbums());
 		}
-		$imagepage = floor(($imageindex - $firstPageImages) / getOption('images_per_page')) + 1;
-		$albumpages = ceil($numalbums / getOption('albums_per_page'));
+		$imagepage = floor(($imageindex - $firstPageImages) / max(1, getOption('images_per_page'))) + 1;
+		$albumpages = ceil($numalbums / max(1, getOption('albums_per_page')));
 		$page = $albumpages + $imagepage;
 	}
 	if (in_context(ZP_IMAGE) && $page > 1) {
@@ -3641,11 +3643,11 @@ function getTheme(&$zenCSS, &$themeColor, $defaultColor) {
  */
 function normalizeColumns($albumColumns, $imageColumns) {
 	global $_zp_current_album;
-	$albcount = getOption('albums_per_page');
+	$albcount = max(1, getOption('albums_per_page'));
 	if (($albcount % $albumColumns) != 0) {
 		setOption('albums_per_page', $albcount = ((floor($albcount / $albumColumns) + 1) * $albumColumns), false);
 	}
-	$imgcount = getOption('images_per_page');
+	$imgcount = max(1, getOption('images_per_page'));
 	if (($imgcount % $imageColumns) != 0) {
 		setOption('images_per_page', $imgcount = ((floor($imgcount / $imageColumns) + 1) * $imageColumns - $imageReduction), false);
 	}
@@ -3659,7 +3661,7 @@ function normalizeColumns($albumColumns, $imageColumns) {
 			return 0;
 		}
 		$rowssused = ceil(($count % $albcount) / $albumColumns);     /* number of album rows unused */
-		$leftover = floor(getOption('images_per_page') / $imageColumns) - $rowssused;
+		$leftover = floor(max(1, getOption('images_per_page')) / $imageColumns) - $rowssused;
 		$firstPageImages = $leftover * $imageColumns;  /* number of images that fill the leftover rows */
 		if ($firstPageImages == $imgcount) {
 			return 0;
