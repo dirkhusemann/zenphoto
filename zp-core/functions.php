@@ -128,12 +128,13 @@ function setOption($key, $value, $persistent=true) {
 		return true;  // not changed
 	}
 	if ($persistent) {
-		$result = insertOrUpdate('options', 'name', $key, 'value', $value);
-		/*
-		$sql = "INSERT INTO " . prefix('options') . " (name, value) VALUES ('" . escape($key) . "','" . escape($value) . "')" .
-							" ON DUPLICATE KEY UPDATE `value`='" . escape($value). "'";
+		if (array_key_exists($key, $_zp_options)) {
+// option already exists.
+			$sql = "UPDATE " . prefix('options') . " SET `value`='" . escape($value) . "' WHERE `name`='" . escape($key) ."'";
+		} else {
+			$sql = "INSERT INTO " . prefix('options') . " (name, value) VALUES ('" . escape($key) . "','" . escape($value) . "')";
+		}
 		$result = query($sql);
-		*/
 	} else {
 		$result = true;
 	}

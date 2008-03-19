@@ -313,22 +313,23 @@ function displayDeleted() {
 	}
 }
 
-function setThemeOption($table, $option, $value) {
-	insertOrUpdate($table, 'name', $key, 'value', $value);
-	/*
-	$sql = "INSERT INTO ".prefix($table)." (name, value) VALUES ('".escape($option)."','".escape($value)."')".
-									 " ON DUPLICATE KEY UPDATE `value`='" . escape($value) . "'";
+function setThemeOption($table, $key, $value) {
+	$exists = query("SELECT `name`, `value` FROM ".prefix($table)." WHERE `name`='".escape($key)."'", true);
+	if ($exists) {
+		$sql = "UPDATE " . prefix($table) . " SET `value`='" . escape($value) . "' WHERE `name`='" . escape($key) ."'";
+	} else {
+		$sql = "INSERT INTO " . prefix($table) . " (name, value) VALUES ('" . escape($key) . "','" . escape($value) . "')";
+	}
 	$result = query($sql);
-	*/
 }
 
-function setBoolThemeOption($table, $option, $bool) {
+function setBoolThemeOption($table, $key, $bool) {
 	if ($bool) {
 		$value = 1;
 	} else {
 		$value = 0;
 	}
-	setThemeOption($table, $option, $value);
+	setThemeOption($table, $key, $value);
 }
 
 function getThemeOption($alb, $option) {

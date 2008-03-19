@@ -2093,7 +2093,11 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 <?php
 	$themelist = array();
 	if ($_zp_loggedin & ADMIN_RIGHTS) {
-		$themelist[gettext("Gallery")] = '';
+		$gallery_title = getOption('gallery_title');
+		if ($gallery_title != gettext("Gallery")) {
+			$gallery_title .= ' ('.gettext("Gallery").')';
+		}
+		$themelist[$gallery_title] = '';
 	}
 	$albums = $gallery->getAlbums(0);
 	foreach ($albums as $alb) {

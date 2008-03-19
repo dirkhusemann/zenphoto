@@ -64,12 +64,12 @@ function query($sql, $noerrmsg = false) {
 	if ($mysql_connection == null) {
 		db_connect();
 	}
-	$result = mysql_query($sql, $mysql_connection);
 	if (array_key_exists('UTF-8', $_zp_conf_vars)) {
 		if ($_zp_conf_vars['UTF-8']) {
 			mysql_query("SET NAMES 'utf8' COLLATE 'utf8_unicode_ci'");
 		}
 	}
+	$result = mysql_query($sql, $mysql_connection);
 	if (!$result && !$noerrmsg) {
 		$sql = sanitize($sql, true);
 		$error = gettext("MySQL Query")." ( <em>$sql</em> ) ".gettext("Failed. Error:").mysql_error();
@@ -225,26 +225,5 @@ function queryEncode($url) {
 function queryDecode($url) { 
 	$decode = str_replace('%%1', '%26', $url); 
 	return urldecode(str_replace('%%2', '%23', $decode)); 
-}
-
-/**
- * Creates (if needed) a table row and sets the value of the entry.
- * returns the success of the operation.
- *
- * @param string $table the name of the database table (not prefixed!)
- * @param string $keyfield the field name for the unique key
- * @param string $key the record key
- * @param string $valuefield the field name where the value goes
- * @param mixed $value the value to be stored.
- * @return boolean
- */
-function insertOrUpdate($table, $keyfield, $key, $valuefield, $value) {
-	$sql = 'INSERT INTO '.prefix($table)."($keyfield, $valuefield) VALUES ($key, $value)";
-	$result = query($sql, true);
-	if (!$result) {
-		$sql = 'UPDATE '.prefix($table).' SET `'.$valuefield .'`="'.escape($value).'" WHERE `'.$keyfield.'`="'.escape($key).'"';
-		$result = Query($sql, true);
-	}
-	return $result;
 }
 ?>
