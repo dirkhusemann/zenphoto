@@ -325,9 +325,9 @@ if ($_GET['format'] != 'xml') {
 <?php 
 $h = hitcounter('album');
 if ($h == 1) {
-	$h .= gettext('hit');
+	$h .= ' '.gettext('hit');
 } else {
-	$h .= gettext('hits');
+	$h .= ' '.gettext('hits');
 }
 echo "<p>$h ".gettext('on this album')."</p>";
 printThemeInfo();

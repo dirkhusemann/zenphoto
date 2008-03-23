@@ -155,9 +155,9 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 		<?php 
 		$h = hitcounter('image');
 		if ($h == 1) {
-			$h .= gettext(' hit');
+			$h .= ' '.gettext(' hit');
 		} else {
-			$h .= gettext(' hits');
+			$h .= ' '.gettext(' hits');
 		}
 		echo "<p>$h ".gettext('on this image')."</p>";
 		printThemeInfo(); 
