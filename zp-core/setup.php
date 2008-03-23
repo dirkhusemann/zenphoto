@@ -305,6 +305,7 @@ if (!$checked) {
 	$good = checkMark($gd, gettext(" PHP GD support"), gettext(' is not installed'), gettext('You need to install GD support in your PHP')) && $good;
 	if ($gd) {
 		$imgtypes = imagetypes();
+		$missing = array();
 		if (!($imgtypes & IMG_JPG)) { $missing[] = 'JPEG'; }
 		if (!($imgtypes & IMG_GIF)) { $missing[] = 'GIF'; }
 		if (!($imgtypes & IMG_PNG)) { $missing[] = 'PNG'; }

@@ -1468,14 +1468,18 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 <ul>
 	<li><a href="#tab_admin"><span><?php echo gettext("admin information"); ?></span></a></li>
 	<?php 
-	if ((!$_zp_null_account) && ($_zp_loggedin & OPTIONS_RIGHTS)) { 
+	if (!$_zp_null_account) {
+		if ($_zp_loggedin & OPTIONS_RIGHTS) { 
 	?>
-		<li><a href="#tab_gallery"><span><?php echo gettext("gallery configuration"); ?></span></a></li>
-		<li><a href="#tab_image"><span><?php echo gettext("image display"); ?></a></span></li>
-		<li><a href="#tab_comments"><span><?php echo gettext("comment configuration"); ?></span></a></li>
-		<li><a href="#tab_theme"><span><?php echo gettext("theme options"); ?></span></a></li>
+			<li><a href="#tab_gallery"><span><?php echo gettext("gallery configuration"); ?></span></a></li>
+			<li><a href="#tab_image"><span><?php echo gettext("image display"); ?></a></span></li>
+			<li><a href="#tab_comments"><span><?php echo gettext("comment configuration"); ?></span></a></li>
 	<?php 
-	} 
+		} 
+	?>
+		<li><a href="#tab_theme"><span><?php echo gettext("theme options"); ?></span></a></li>
+	<?php
+	}
 	?>
 </ul>
 </div>
@@ -1621,6 +1625,9 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 </form>
 </div>
 <!-- end of tab_admin div -->
+<?php
+if ($_zp_loggedin & ADMIN_RIGHTS) {
+?>
 <div id="tab_gallery">
 <form action="?page=options&action=saveoptions" method="post"><input
 	type="hidden" name="savegalleryoptions" value="yes" /> <?php
@@ -2089,6 +2096,9 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 </form>
 </div>
 <!-- end of tab_comments div -->
+<?php
+}
+?>
 <div id="tab_theme">
 <?php
 	$themelist = array();
@@ -2222,10 +2232,10 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 	echo "</table>\n";
 	?>
 	</form>
-	<?php
-	}
- ?>
 </div><!-- end of tab_themne div -->
+<?php
+}
+?>
 </div><!-- end of container --> 
 <?php 
 /*** THEMES (Theme Switcher) *******************************************************/
