@@ -985,7 +985,7 @@ function printAlbumThumbImage($alt, $class=NULL, $id=NULL) {
 		echo "<img src=\"" . htmlspecialchars(getAlbumThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
 		(($class) ? " class=\"$class\"" : "") . (($id) ? " id=\"$id\"" : "") . " />";
 	} else {
-		echo "<img src=\"".ZENFOLDER."/images/err-passwordprotected.gif\" height=\"".getOption('thumb_crop_height').
+		echo "<img src=\"". WEBPATH . '/' . ZENFOLDER."/images/err-passwordprotected.gif\" height=\"".getOption('thumb_crop_height').
 					"\" width=\"".getOption('thumb_crop_width')."\" />";
 	}
 }
@@ -1050,7 +1050,7 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 		echo "<img src=\"" . htmlspecialchars(getCustomAlbumThumb($size, $width, $height, $cropw, $croph, $cropx, $cropy)). "\"" . $sizing . " alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
 		(($class) ? " class=\"$class\"" : "") .	(($id) ? " id=\"$id\"" : "") . " />";
 	} else {
-		echo "<img src=\"".ZENFOLDER."/images/err-passwordprotected.gif\"".$sizing." />";
+		echo "<img src=\"" . WEBPATH . '/' . ZENFOLDER."/images/err-passwordprotected.gif\"".$sizing." />";
 	}
 }
 
