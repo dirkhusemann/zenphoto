@@ -1,6 +1,6 @@
 <?php
 define('ZENPHOTO_VERSION', '1.1.5');
-define('ZENPHOTO_RELEASE', 1339);
+define('ZENPHOTO_RELEASE', 1337);
 define('SAFE_GLOB', false);
 define('CHMOD_VALUE', 0777);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
@@ -1686,7 +1686,6 @@ function getAdministrators() {
  */
 function checkAuthorization($authCode) {
 	global $_zp_current_admin;
-	if (empty($authCode)) return 0; 
 	$admins = getAdministrators();
 	$reset_date = getOption('admin_reset_date');
 	if ((count($admins) == 0) || empty($reset_date)) {
@@ -1694,6 +1693,7 @@ function checkAuthorization($authCode) {
 		$_zp_current_admin = null;
 		return ADMIN_RIGHTS; //no admins or reset request
 	}
+	if (empty($authCode)) return 0; //  so we don't "match" with an empty password
 	$i = 0;
 	foreach($admins as $user) {
 		if ($user['pass'] == $authCode) {
