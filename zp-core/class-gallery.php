@@ -422,7 +422,9 @@ class Gallery {
 						/* date (for sorting) */
 						$newDate = strftime('%Y-%m-%d %T', filemtime($imageName));
 						if (isset($metadata['date'])) {
-							$newDate = $metadata['date'];
+							if (strtotime($metadata['date']) !== false) { // flaw in exif/iptc data?
+								$newDate = $metadata['date'];
+							}
 						}
 						$set .= ', `date`="'. $newDate . '"';
 
