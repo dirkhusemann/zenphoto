@@ -2459,9 +2459,8 @@ function printAlbumZip(){
  * Gets latest comments for images and albums
  *
  * @param int $number how many comments you want.
- * @param string $shorten the number of characters to shorten the comment display
  */
-function getLatestComments($number, $shorten='123') {
+function getLatestComments($number) {
 	if (zp_loggedin()) {
 		$passwordcheck1 = "";
 		$passwordcheck2 = "";
@@ -2485,8 +2484,15 @@ function getLatestComments($number, $shorten='123') {
 	. " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('albums')." AS a "
 	. " WHERE c.ownerid = a.id AND c.type = 'albums'".$passwordcheck2
 	. " ORDER BY c.id DESC LIMIT $number");
-	$comments = array_merge($comments_images,$comments_albums);
-	return $comments;
+	$comments = array();
+	foreach ($comments_albums as $comment) {
+		$comments[$comment['id']] = $comment;
+	}
+	foreach ($comments_images as $comment) {
+		$comments[$comment['id']] = $comment;
+	}
+	krsort($comments);
+	return array_slice($comments, 0, $number);
 }
 	
 /**
@@ -2504,11 +2510,7 @@ function printLatestComments($number, $shorten='123') {
 	$comments = getLatestComments($number,$shorten); 
 	echo "<div id=\"showlatestcomments\">\n";
 	echo "<ul>\n";
-	$count = 0;
 	foreach ($comments as $comment) {
-		if($count == $number) {
-			break;
-		}
 		$author = $comment['name'];
 		$album = $comment['folder'];
 		if($comment['type'] === "images") {
@@ -2524,7 +2526,6 @@ function printLatestComments($number, $shorten='123') {
 		if(!empty($title)) {
 			$title = ": ".$title;
 		}
-		$count++;
 		echo "<li><a href=\"".WEBPATH.$albumpath.$album.$imagetag."\" class=\"commentmeta\">".$albumtitle.$title." by ".$author."</a><br />\n";
 		echo "<span class=\"commentbody\">".$shortcomment."</span></li>";
 	}
