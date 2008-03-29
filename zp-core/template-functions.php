@@ -180,7 +180,8 @@ function zenJavascript() {
 	}
 	echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/scripts-common.js\"></script>\n";
 	if (in_context(ZP_IMAGE)) {
-		echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/flvplayer.js\"></script>\n";
+		echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/jquery.js\"></script>\n";
+		echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/jquery.flashembed.pack.js\"></script>\n";
 
 	}
 }
@@ -2003,13 +2004,20 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 		if ($ext == ".flv") {
 			//Player Embed...
 			echo '</a>
-			<p id="player"><a href="http://www.macromedia.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
-			<script type="text/javascript">
-			var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/flvplayer.swf","player","320","240","7");
-			so.addParam("allowfullscreen","true");
-			so.addVariable("file","' . getUnprotectedImageURL() . '&amp;title=' . getImageTitle() . '");
-			so.addVariable("displayheight","310");
-			so.write("player");
+			<p id="playerContainer"><a href="http://www.adobe.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
+			<script>
+			$("#playerContainer").flashembed({
+      	src:\'' . WEBPATH . '/' . ZENFOLDER . '/plugins/FlowPlayerLight.swf\',
+      	width:400, 
+      	height:300
+    	},
+    		{config: {  
+      		autoPlay: false,
+					loop: false,
+      		videoFile: \'' . getUnprotectedImageURL() . '\',
+      		initialScale: \'scale\'
+    		}} 
+  		);
 			</script><a>';
 		}
 		elseif ($ext == ".3gp") {
@@ -2188,13 +2196,20 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 		if ($ext == ".flv") {
 			//Player Embed...
 			echo '</a>
-			<p id="player"><a href="http://www.macromedia.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
-			<script type="text/javascript">
-			var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/flvplayer.swf","player","320","240","7");
-			so.addParam("allowfullscreen","true");
-			so.addVariable("file","' . getFullImageURL() . '&amp;title=' . getImageTitle() . '");
-			so.addVariable("displayheight","310");
-			so.write("player");
+			<p id="playerContainer"><a href="http://www.adobe.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
+			<script>
+			$("#playerContainer").flashembed({
+      	src:\'' . WEBPATH . '/' . ZENFOLDER . '/plugins/FlowPlayerLight.swf\',
+      	width:400, 
+      	height:300
+    	},
+    		{config: {  
+      		autoPlay: false,
+					loop: false,
+      		videoFile: \'' . getUnprotectedImageURL() . '\',
+      		initialScale: \'scale\'
+    		}} 
+  		);
 			</script><a>';
 		}
 		elseif ($ext == ".3gp") {
