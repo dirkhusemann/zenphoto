@@ -359,8 +359,15 @@ function formatData($type,$tag,$intel,$data) {
 		if (($tag == '011a' || $tag == '011b') && $bottom == 1) { // XResolution YResolution
 			$data = $top.' dots per ResolutionUnit';
 		} else if ($tag == '829a') { // Exposure Time
-			if ($top/10 == 1) $data = '1/'.round($bottom/10, 0).' sec'; 
-			else $data = $top.'/'.$bottom.' sec';
+			if (($bottom % $top) == 0) {
+				$data = '1/'.round($bottom/$top, 0).' sec'; 
+			}	else {
+				if ($bottom == 1) {
+					$data = $top.' sec';
+				} else {
+					$data = $top.'/'.$bottom.' sec';
+				}
+			}
 		} else if ($tag == '829d') { // FNumber
 			$data = 'f/'.$data;
 		} else if ($tag == '9204') { // ExposureBiasValue
