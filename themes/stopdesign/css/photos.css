@@ -767,8 +767,11 @@ html>body #desc h1 {
   padding:0 15px 0 0;
   }
 #desc #imageDesc {
-  padding-left:265px;
+  margin-left:265px; 
   }
+#desc div[style="display: block;"] { 
+	margin-left:255px; 
+	}
 #desc p.posted {
   margin-top:1.25em;
   }
