@@ -522,8 +522,6 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				} else {
 					setBoolOption('gallery_sortdirection', $_POST['gallery_sortdirection']);
 				}
-				setOption('image_sorttype', $_POST['image_sorttype']);
-				setBoolOption('image_sortdirection', $_POST['image_sortdirection']);
 				setOption('feed_items', $_POST['feed_items']);
 				$search = new SearchEngine();
 				setOption('search_fields', 32767, false); // make SearchEngine allow all options so parseQueryFields() will gives back what was choosen this time
@@ -580,6 +578,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				setOption('full_image_quality', $_POST['full_image_quality']);
 				setOption('protect_full_image', $_POST['protect_full_image']);
 				setBoolOption('hotlink_protection', $_POST['hotlink_protection']);
+				setOption('image_sorttype', $_POST['image_sorttype']);
+				setBoolOption('image_sortdirection', $_POST['image_sortdirection']);
 				$returntab = "#tab_image";
 			}
 			/*** Comment options ***/
@@ -1457,8 +1457,6 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 <div id="container">
 <?php
 	if (isset($_GET['saved'])) {
-		setOption('gallery_sorttype', 'Manual');
-		setOption('gallery_sortdirection', 0);
 		echo '<div class="messagebox" id="fade-message">';
 		echo  "<h2>".gettext("Saved")."</h2>";
 		echo '</div>';
