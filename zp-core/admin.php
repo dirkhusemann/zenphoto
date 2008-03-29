@@ -2244,7 +2244,7 @@ $themes = $gallery->getThemes();
 $theme = $themes[$current_theme];
 ?>
 
-<h1><?php echo gettext("Themes (current theme is"); ?> <em><?php echo $theme['name']; ?></em>)</h1>
+<h1><?php echo gettext("Themes (current Gallery theme is"); ?> <em><?php echo $theme['name']; ?></em>)</h1>
 <p><?php echo gettext("Themes allow you to visually change the entire look and feel of your gallery. All themes are located in your"); ?> <code>zenphoto/themes</code> <?php echo gettext("folder, and you can download more themes at the"); ?> <a
 	href="http://www.zenphoto.org/support/"><?php echo gettext("zenphoto forum"); ?></a> <?php echo gettext("and the"); ?> <a
 	href="http://www.zenphoto.org/zp/theme/"><?php echo gettext("zenphoto themes page"); ?></a>.</p>
