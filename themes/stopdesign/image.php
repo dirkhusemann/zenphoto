@@ -65,8 +65,9 @@
 				<?php 
 					if (getImageEXIFData()) {echo "<a href=\"#TB_inline?height=345&width=300&inlineId=imagemetadata\" title=\"".gettext("image details")."\" class=\"thickbox\">".gettext('Image Info')."</a>";
 						printImageMetadata('', false); 
+						echo "&nbsp;/&nbsp;";
 					} 
-				?> / <a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>"><?php echo gettext('Full Size'); ?></a>
+				?><a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>"><?php echo gettext('Full Size'); ?></a>
  					</li>
 				</ul>
 			</div>
