@@ -1522,7 +1522,7 @@ function getImageData($field) {
 			return $_zp_current_image->getState();
 			break;
 		case "country":
-			return $_zp_current_image->getContry();
+			return $_zp_current_image->getCountry();
 			break;
 		case "credit":
 			return $_zp_current_image->getCredit();

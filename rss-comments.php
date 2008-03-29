@@ -69,12 +69,17 @@ $comments_albums = query_full_array("SELECT c.id, a.folder, a.title AS albumtitl
 . " WHERE c.ownerid = a.id AND c.type = 'albums'".$passwordcheck2
 . " ORDER BY c.id DESC LIMIT $items"); 
 
-$comments = array_merge($comments_images,$comments_albums);
+$comments = array();
+foreach ($comments_albums as $comment) {
+	$comments[$comment['id']] = $comment;
+}
+foreach ($comments_images as $comment) {
+	$comments[$comment['id']] = $comment;
+}
+krsort($comments);
+$comments = array_slice($comments, 0, $items);
 $count = 0;
 foreach ($comments as $comment) {
-	if($count == $items) { 
-		break; 
-	}
 	$author = $comment['name'];
 	$album = $comment['folder'];
 	if($comment['type'] === "images") {
@@ -100,7 +105,7 @@ foreach ($comments as $comment) {
 <description><?php echo $shortcomment; ?></description>
 <category><?php echo $albumtitle; ?></category>
 <guid><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$album.$imagetag.']]>';?></guid>
-<pubDate><?php echo fixRSSDate($images['date']); ?></pubDate>
+<pubDate><?php echo fixRSSDate($date); ?></pubDate>
 </item>
 <?php } ?>
 </channel>

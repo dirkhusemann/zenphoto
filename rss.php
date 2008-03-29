@@ -71,7 +71,7 @@ $result = query_full_array("SELECT images.albumid, images.date AS date, images.f
 															prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
 															" WHERE ".$albumWhere." images.albumid = albums.id AND images.show=1 AND albums.show=1 ".
 															" AND albums.folder != ''".$passwordcheck.
-															" ORDER BY images.id DESC LIMIT ".$items);
+															" ORDER BY images.mtime DESC LIMIT ".$items);
 
 foreach ($result as $images) {
 	$imagpathnames = explode('/', $images['folder']);
