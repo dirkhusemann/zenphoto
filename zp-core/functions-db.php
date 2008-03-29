@@ -59,7 +59,7 @@ $_zp_query_count = 0;
  * @since 0.6
  */
 function query($sql, $noerrmsg = false) {
- /* TODO: Handle errors more gracefully. */
+	/* TODO: Handle errors more gracefully. */
 	global $mysql_connection, $_zp_query_count, $_zp_conf_vars;
 	if ($mysql_connection == null) {
 		db_connect();
@@ -70,16 +70,20 @@ function query($sql, $noerrmsg = false) {
 		}
 	}
 	$result = mysql_query($sql, $mysql_connection);
-	if (!$result && !$noerrmsg) {
-		$sql = sanitize($sql, true);
-		$error = gettext("MySQL Query")." ( <em>$sql</em> ) ".gettext("Failed. Error:").mysql_error();
-		// Changed this to mysql_query - *never* call query functions recursively...
-		if (!mysql_query("SELECT 1 FROM " . prefix('albums') . " LIMIT 0", $mysql_connection)) {
-			$error .= "<br>".gettext("It looks like your zenphoto tables haven't been created.") 
+	if (!$result) {
+		if($noerrmsg) {
+			return false;
+		} else {
+			$sql = sanitize($sql, true);
+			$error = gettext("MySQL Query")." ( <em>$sql</em> ) ".gettext("Failed. Error:").mysql_error();
+			// Changed this to mysql_query - *never* call query functions recursively...
+			if (!mysql_query("SELECT 1 FROM " . prefix('albums') . " LIMIT 0", $mysql_connection)) {
+				$error .= "<br>".gettext("It looks like your zenphoto tables haven't been created.")
 				.gettext("You may need to") . " <a href=\"" . WEBPATH . '/' . ZENFOLDER . "/setup.php\">".gettext("run the setup script")."</a>.";
+			}
+			zp_error($error);
+			return false;
 		}
-		zp_error($error);
-		return false;
 	}
 	$_zp_query_count++;
 	return $result;

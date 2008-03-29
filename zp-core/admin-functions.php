@@ -314,7 +314,7 @@ function displayDeleted() {
 }
 
 function setThemeOption($table, $key, $value) {
-	$exists = query("SELECT `name`, `value` FROM ".prefix($table)." WHERE `name`='".escape($key)."'", true);
+	$exists = query_single_row("SELECT `name`, `value` FROM ".prefix($table)." WHERE `name`='".escape($key)."'", true);
 	if ($exists) {
 		$sql = "UPDATE " . prefix($table) . " SET `value`='" . escape($value) . "' WHERE `name`='" . escape($key) ."'";
 	} else {
