@@ -2257,7 +2257,6 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 /************************************************************************************/ 
 } else if ($page == "themes") { 
 	$galleryTheme = $gallery->getCurrentTheme();
-	$current_theme = $galleryTheme;
 	$themelist = array();
 	if ($_zp_loggedin & ADMIN_RIGHTS) {
 		$gallery_title = getOption('gallery_title');
@@ -2282,11 +2281,9 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		$album = new Album($gallery, $alb);
 		$albumtitle = $album->getTitle();
 		$themename = $album->getAlbumTheme();
-		if (empty($themename)) {
-				$themename = $galleryTheme;
-		}
 		$current_theme = $themename;
 	} else {
+		$current_theme = $galleryTheme;
 		foreach ($themelist as $albumtitle=>$alb) break;
 		if (empty($alb)) {
 			$themename = $gallery->getCurrentTheme();
@@ -2298,7 +2295,15 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		}
 	}
 	$themes = $gallery->getThemes();
-	$theme = $themes[$themename];
+	if (empty($themename)) {
+		$current_theme = $galleryTheme;
+		$theme = $themes[$galleryTheme];
+		$themename = '<small>'.gettext("no theme assigned, defaulting to Gallery theme").'</small>';
+	} else {
+		$theme = $themes[$themename];
+		$themename = $theme['name'];
+	}
+	
 	if (count($themelist) > 1) {
 		echo '<form action="?page=themes" method="post">';
 		echo gettext("Show theme for"). ': ';
@@ -2313,7 +2318,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		echo '</div>';
 	} else {
 
-	echo "<h1>".gettext("Current theme for")." <code>$albumtitle</code>: <em>".$theme['name']."</em></h1>\n";
+	echo "<h1>".gettext("Current theme for")." <code>$albumtitle</code>: <em>".$themename."</em></h1>\n";
 ?>
 
 <p><?php echo gettext("Themes allow you to visually change the entire look and feel of your gallery. All themes are located in your"); ?> <code>zenphoto/themes</code> <?php echo gettext("folder, and you can download more themes at the"); ?> <a
