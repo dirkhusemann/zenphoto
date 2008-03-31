@@ -442,7 +442,7 @@ function generateListFromFiles($currentValue, $root, $suffix) {
  *@since 1.1.3
  */
 function printAlbumEditForm($index, $album) {
-	global $sortby, $images, $gallery;
+	global $sortby, $images, $gallery, $_zp_loggedin;
 	if ($index == 0) {
 		if (isset($saved)) {
 			$album->setSubalbumSortType('Manual');
@@ -565,7 +565,9 @@ function printAlbumEditForm($index, $album) {
 		echo "\n<tr>";
 		echo "\n<td align=\"right\" valign=\"top\">".gettext("Album theme:")." </td> ";
 		echo "\n<td>";
-		echo "\n<select id=\"album_theme\" class=\"album_theme\" name=\"".$prefix."album_theme\" >";
+		echo "\n<select id=\"album_theme\" class=\"album_theme\" name=\"".$prefix."album_theme\" ";
+		if (!($_zp_loggedin & THEMES_RIGHTS)) echo "DISABLED ";
+		echo ">";
 		$themes = $gallery->getThemes();
 		$oldtheme = $album->getAlbumTheme();
 		if (empty($oldtheme)) {
@@ -867,7 +869,7 @@ function processAlbumEdit($index, $album) {
 			$sql = "DROP TABLE $tbl_options";
 			query($sql);
 		}
-		if (!empty($newtheme) && empty($oldtheme)) {
+		if (!empty($newtheme)) {
 			// setup new theme option table
 			$tbl_options = prefix($album->name.'_options');
 			$sql = "CREATE TABLE IF NOT EXISTS $tbl_options (

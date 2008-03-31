@@ -661,7 +661,25 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			/*****************************************************************************/
 		} else if ($action == 'settheme') {
 			if (isset($_GET['theme'])) {
-				$gallery->setCurrentTheme($_GET['theme']);
+				$alb = urldecode($_GET['themealbum']);
+				if (empty($alb)) {
+					$gallery->setCurrentTheme($_GET['theme']);
+				} else {
+					$album = new Album($gallery, $alb);
+					$oldtheme = $album->getAlbumTheme();
+					$tbl_options = prefix($album->name.'_options');
+					$sql = "CREATE TABLE IF NOT EXISTS $tbl_options (
+									`id` int(11) unsigned NOT NULL auto_increment,
+									`name` varchar(64) NOT NULL,
+									`value` text NOT NULL,
+									PRIMARY KEY  (`id`),
+									UNIQUE (`name`)
+									);";
+					query($sql);
+					$album->setAlbumTheme($_GET['theme']);
+					$album->save();
+				}
+				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=themes&themealbum=".$_GET['themealbum']);
 			}
 		}
 	}
@@ -2109,7 +2127,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 	}
 	$albums = $gallery->getAlbums(0);
 	foreach ($albums as $alb) {
-		if (isMyAlbum($alb, THEME_RIGHTS)) {
+		if (isMyAlbum($alb, THEMES_RIGHTS)) {
 			$album = new Album($gallery, $alb);
 			$theme = $album->getAlbumTheme();
 			if (!empty($theme)) {
@@ -2145,7 +2163,6 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		echo '<select id="themealbum" name="themealbum" onchange="this.form.submit()">';
 		generateListFromArray(array(urlencode($alb)), $themelist);
 		echo '</select>';
-//		echo ' <input type="submit" value='. gettext('select').' />' . "\n";
 		echo '</form>';
 	}	
 	if (count($themelist) == 0) {
@@ -2239,12 +2256,66 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 /*** THEMES (Theme Switcher) *******************************************************/
 /************************************************************************************/ 
 } else if ($page == "themes") { 
-$current_theme = $gallery->getCurrentTheme();
-$themes = $gallery->getThemes();
-$theme = $themes[$current_theme];
+	$galleryTheme = $gallery->getCurrentTheme();
+	$current_theme = $galleryTheme;
+	$themelist = array();
+	if ($_zp_loggedin & ADMIN_RIGHTS) {
+		$gallery_title = getOption('gallery_title');
+		if ($gallery_title != gettext("Gallery")) {
+			$gallery_title .= ' ('.gettext("Gallery").')';
+		}
+		$themelist[$gallery_title] = '';
+	}
+	$albums = $gallery->getAlbums(0);
+	foreach ($albums as $alb) {
+		if (isMyAlbum($alb, THEMES_RIGHTS)) {
+			$album = new Album($gallery, $alb);
+			$key = $album->getTitle();
+			if ($key != $alb) {
+				$key .= " ($alb)";
+			}
+			$themelist[$key] = urlencode($alb);
+		}
+	}
+	if (!empty($_REQUEST['themealbum'])) {
+		$alb = urldecode($_REQUEST['themealbum']);
+		$album = new Album($gallery, $alb);
+		$albumtitle = $album->getTitle();
+		$themename = $album->getAlbumTheme();
+		if (empty($themename)) {
+				$themename = $galleryTheme;
+		}
+		$current_theme = $themename;
+	} else {
+		foreach ($themelist as $albumtitle=>$alb) break;
+		if (empty($alb)) {
+			$themename = $gallery->getCurrentTheme();
+		} else {
+			$alb = urldecode($alb);
+			$album = new Album($gallery, $alb);
+			$albumtitle = $album->getTitle();
+			$themename = $album->getAlbumTheme();
+		}
+	}
+	$themes = $gallery->getThemes();
+	$theme = $themes[$themename];
+	if (count($themelist) > 1) {
+		echo '<form action="?page=themes" method="post">';
+		echo gettext("Show theme for"). ': ';
+		echo '<select id="themealbum" name="themealbum" onchange="this.form.submit()">';
+		generateListFromArray(array(urlencode($alb)), $themelist);
+		echo '</select>';
+		echo '</form>';
+	}	
+	if (count($themelist) == 0) {
+		echo '<div class="errorbox" id="no_themes">';
+		echo  "<h2>".gettext("There are no themes for which you have rights to administer.")."</h2>";
+		echo '</div>';
+	} else {
+
+	echo "<h1>".gettext("Current theme for")." <code>$albumtitle</code>: <em>".$theme['name']."</em></h1>\n";
 ?>
 
-<h1><?php echo gettext("Themes (current Gallery theme is"); ?> <em><?php echo $theme['name']; ?></em>)</h1>
 <p><?php echo gettext("Themes allow you to visually change the entire look and feel of your gallery. All themes are located in your"); ?> <code>zenphoto/themes</code> <?php echo gettext("folder, and you can download more themes at the"); ?> <a
 	href="http://www.zenphoto.org/support/"><?php echo gettext("zenphoto forum"); ?></a> <?php echo gettext("and the"); ?> <a
 	href="http://www.zenphoto.org/zp/theme/"><?php echo gettext("zenphoto themes page"); ?></a>.</p>
@@ -2271,7 +2342,7 @@ $themeweb = WEBPATH . "/themes/$theme";
 		Version <?php echo $themeinfo['version']; ?>, <?php echo $themeinfo['date']; ?><br />
 		<?php echo $themeinfo['desc']; ?></td>
 		<td width="100" <?php echo $style; ?>><?php if (!($theme == $current_theme)) { ?>
-		<a href="?page=themes&action=settheme&theme=<?php echo $theme; ?>"
+		<a href="?page=themes&action=settheme&themealbum=<?php echo urlencode($alb) ?>&theme=<?php echo $theme; ?>"
 			title="Set this as your theme"><?php echo gettext("Use this Theme"); ?></a> <?php } else { echo "<strong>".gettext("Current Theme")."</strong>"; } ?>
 		</td>
 	</tr>
@@ -2281,7 +2352,7 @@ $themeweb = WEBPATH . "/themes/$theme";
 
 
 <?php 
-
+}
 /*** HOME ***************************************************************************/
 /************************************************************************************/ 
 
