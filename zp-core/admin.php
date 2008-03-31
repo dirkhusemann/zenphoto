@@ -662,22 +662,32 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 		} else if ($action == 'settheme') {
 			if (isset($_GET['theme'])) {
 				$alb = urldecode($_GET['themealbum']);
+				$newtheme = strip($_GET['theme']);
 				if (empty($alb)) {
-					$gallery->setCurrentTheme($_GET['theme']);
+					$gallery->setCurrentTheme($newtheme);
 				} else {
 					$album = new Album($gallery, $alb);
 					$oldtheme = $album->getAlbumTheme();
 					$tbl_options = prefix($album->name.'_options');
-					$sql = "CREATE TABLE IF NOT EXISTS $tbl_options (
-									`id` int(11) unsigned NOT NULL auto_increment,
-									`name` varchar(64) NOT NULL,
-									`value` text NOT NULL,
-									PRIMARY KEY  (`id`),
-									UNIQUE (`name`)
-									);";
-					query($sql);
-					$album->setAlbumTheme($_GET['theme']);
-					$album->save();
+					if (!empty($oldtheme) && empty($newtheme)) {
+						// clean out old theme option table
+						$sql = "DROP TABLE $tbl_options";
+						query($sql);
+						$album->setAlbumTheme($newtheme);
+						$album->save();
+					}
+					if (!empty($newtheme)) {
+						$sql = "CREATE TABLE IF NOT EXISTS $tbl_options (
+						`id` int(11) unsigned NOT NULL auto_increment,
+						`name` varchar(64) NOT NULL,
+						`value` text NOT NULL,
+						PRIMARY KEY  (`id`),
+						UNIQUE (`name`)
+						);";
+						query($sql);
+						$album->setAlbumTheme($newtheme);
+						$album->save();
+					}
 				}
 				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=themes&themealbum=".$_GET['themealbum']);
 			}
@@ -2177,7 +2187,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 	/* handle theme options */
 	echo "<table class='bordered'>\n";
 	echo "<input type=\"hidden\" name=\"themealbum\" value=\"".urlencode($alb)."\" />";
-	echo "<tr><th colspan='3'><h2>".gettext("Theme for")." <code>$albumtitle</code>: <em>".$theme['name']."</em></h2></th></tr>\n";
+	echo "<tr><th colspan='3'><h2>".gettext("Theme for")." <code><strong>$albumtitle</strong></code>: <em>".$theme['name']."</em></h2></th></tr>\n";
 	?>
 	<tr>
 		<td><?php echo gettext("Albums per page:"); ?></td>
@@ -2298,10 +2308,10 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 	if (empty($themename)) {
 		$current_theme = $galleryTheme;
 		$theme = $themes[$galleryTheme];
-		$themename = '<small>'.gettext("no theme assigned, defaulting to Gallery theme").'</small>';
+		$themenamedisplay = '</em><small>'.gettext("no theme assigned, defaulting to Gallery theme").'</small><em>';
 	} else {
 		$theme = $themes[$themename];
-		$themename = $theme['name'];
+		$themenamedisplay = $theme['name'];
 	}
 	
 	if (count($themelist) > 1) {
@@ -2318,7 +2328,12 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		echo '</div>';
 	} else {
 
-	echo "<h1>".gettext("Current theme for")." <code>$albumtitle</code>: <em>".$themename."</em></h1>\n";
+	echo "<h1>".gettext("Current theme for")." <code><strong>$albumtitle</strong></code>: <em>".$themenamedisplay."</em>";
+	if (!empty($alb) && !empty($themename)) {
+		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".'<a class="reset" href="?page=themes&action=settheme&themealbum='.urlencode($album->name).'&theme=" title="'.gettext('Clear theme assignment').$album->name.'">';
+		echo '<img src="images/fail.png" style="border: 0px;" alt="'.gettext('Clear theme assignment').'" /></a>';
+	}
+	echo "</h1>\n";
 ?>
 
 <p><?php echo gettext("Themes allow you to visually change the entire look and feel of your gallery. All themes are located in your"); ?> <code>zenphoto/themes</code> <?php echo gettext("folder, and you can download more themes at the"); ?> <a
