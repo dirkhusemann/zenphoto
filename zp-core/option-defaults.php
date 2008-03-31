@@ -122,4 +122,16 @@ function setDefault($option, $default) {
 	setDefault('locale', '');
 	setDefault('date_format', '%c');
 	
+	// template extensions
+	$curdir = getcwd();
+	chdir(SERVERPATH . "/" . ZENFOLDER . EXTENSION_FOLDER);
+	$filelist = safe_glob('*'.'php');
+	chdir($curdir);
+	foreach ($filelist as $extension) {
+		$ext = substr($extension, 0, strlen($extension)-4);
+		$opt = 'zp_extension_'.$ext;
+		setOptionDefault($opt, 0);
+	}
+	
+	
 ?>

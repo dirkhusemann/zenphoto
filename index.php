@@ -10,6 +10,19 @@ require_once(ZENFOLDER . "/template-functions.php");
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
 }
+
+//load extensions
+$curdir = getcwd();
+chdir(SERVERPATH . "/" . ZENFOLDER . EXTENSION_FOLDER);
+$filelist = safe_glob('*'.'php');
+chdir($curdir);
+foreach ($filelist as $extension) {
+	$opt = 'zp_extension_'.substr($extension, 0, strlen($extension)-4);
+	if (getOption($opt)) {
+		require_once(SERVERPATH . "/" . ZENFOLDER . EXTENSION_FOLDER . $extension);
+	}
+}
+
 $themepath = 'themes';
 
 header ('Content-Type: text/html; charset=' . getOption('charset'));

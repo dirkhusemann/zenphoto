@@ -79,6 +79,7 @@ $_zp_options = NULL;
  *  An external folder path overrides one located within the zenphotos folders.
  */
 define('ALBUMFOLDER', '/albums/');
+define('EXTENSION_FOLDER', '/template-extensions/');
 
 $session_started = getOption('album_session');
 if ($session_started) session_start();

@@ -691,6 +691,21 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				}
 				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=themes&themealbum=".$_GET['themealbum']);
 			}
+			
+			/** EXTENSIONS ***************************************************************/
+			/*****************************************************************************/
+		} else if ($action == 'saveextensions') {
+				
+
+			$curdir = getcwd();
+			chdir(SERVERPATH . "/" . ZENFOLDER . EXTENSION_FOLDER);
+			$filelist = safe_glob('*'.'php');
+			chdir($curdir);
+			foreach ($filelist as $extension) {
+				$opt = 'zp_extension_'.substr($extension, 0, strlen($extension)-4);
+				setBoolOption($opt, $_POST[$opt]);
+			}
+		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=extensions");
 		}
 	}
 
@@ -751,6 +766,9 @@ switch ($page) {
 		break;
 	case 'themes':
 		if (!($_zp_loggedin & THEMES_RIGHTS)) $page = '';
+		break;
+	case 'extensions':
+		if (!($_zp_loggedin & ADMIN_RIGHTS)) $page = '';
 		break;
 }
 /** EDIT ****************************************************************************/
@@ -2373,9 +2391,36 @@ $themeweb = WEBPATH . "/themes/$theme";
 
 <?php 
 }
+/*** EXTENSIONS *********************************************************************/
+/************************************************************************************/ 
+} else if ($page == 'extensions') {
+	$curdir = getcwd();
+	chdir(SERVERPATH . "/" . ZENFOLDER . EXTENSION_FOLDER);
+	$filelist = safe_glob('*'.'php');
+	chdir($curdir);
+
+	echo "<h1>Zenphoto Extensions</h1>";
+	echo '<form action="?page=extensions&action=saveextensions" method="post">';
+	echo '<input type="hidden" name="saveextensions" value="yes" />'; 
+	echo "<table class='bordered'>\n";
+	foreach ($filelist as $extension) {
+		$ext = substr($extension, 0, strlen($extension)-4);
+		$opt = 'zp_extension_'.$ext;
+		echo '<tr><td>';
+		echo $ext.'&nbsp';
+		echo '</td><td>';
+		echo '<input type="checkbox" size="40" name="'.$opt.'" value="1"';
+		echo checked('1', getOption($opt)); 
+		echo ' /> ';
+		echo gettext("Enabled"); 
+		echo '</td></tr>';
+	}
+	echo "</table>\n";
+	echo '<input type="submit" value='. gettext('save').' />' . "\n";
+	echo "</form>\n";
+
 /*** HOME ***************************************************************************/
 /************************************************************************************/ 
-
 } else { $page = "home"; ?>
 <h1><?php echo gettext("zenphoto Administration"); ?></h1>
 <?php

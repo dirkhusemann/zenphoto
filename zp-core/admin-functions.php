@@ -253,9 +253,12 @@ function printTabs() {
 	echo "\n    <li". ($page == "options" ? " class=\"current\""  : "") .
  			"> <a href=\"admin.php?page=options\">".gettext("options")."</a></li>";
 	if (($_zp_loggedin & THEMES_RIGHTS)) {
-
 		echo "\n    <li". ($page == "themes" ? " class=\"current\""  : "") .
  				"> <a href=\"admin.php?page=themes\">".gettext("themes")."</a></li>";
+	}
+	if (($_zp_loggedin & ADMIN_RIGHTS)) {
+		echo "\n    <li". ($page == "extensions" ? " class=\"current\""  : "") .
+ 				"> <a href=\"admin.php?page=extensions\">".gettext("extensions")."</a></li>";
 	}
 	echo "\n  </ul>";
 
@@ -425,6 +428,7 @@ function generateListFromArray($currentValue, $list) {
 }
 
 function generateListFromFiles($currentValue, $root, $suffix) {
+	$curdir = getcwd();
 	chdir($root);
 	$filelist = safe_glob('*'.$suffix);
 	sort($filelist);
@@ -433,6 +437,7 @@ function generateListFromFiles($currentValue, $root, $suffix) {
 		$list[] = str_replace($suffix, '', $file);
 	}
 	generateListFromArray(array($currentValue), $list);
+	chdir($curdir);
 }
 /**
  * emits the html for editing album information
