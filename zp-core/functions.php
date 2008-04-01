@@ -1584,7 +1584,9 @@ function zp_getCookie($name) {
  * @param string $path
  */
 function zp_setCookie($name, $value, $time=0, $path='/') {
-	setcookie($name, $value, $time, $path);
+	if (!getOption('album_session')) {
+		setcookie($name, $value, $time, $path);
+	}
 	if ($time < 0) {
 		unset($_SESSION[$name]);
 		unset($_COOKIE[$name]);

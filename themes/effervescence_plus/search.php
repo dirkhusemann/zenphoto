@@ -109,9 +109,9 @@ $backgroundImagePath="";
 				$searchwords .= $searchdate;
 			}
 			if ($total > 0 ) {
-				echo "$total " .gettext('Hit');
-				if ($total > 1) { echo "s"; }
-				echo gettext('for'). "<em>$searchwords</em>";
+				echo "$total ";
+				if ($total > 1) { echo gettext('Hits'); } else {echo gettext('Hit'); }
+				echo " ".gettext('for'). " <em>$searchwords</em>";
 			}
 		?>
 </div>
