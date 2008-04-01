@@ -106,6 +106,7 @@
 						echo gettext('Photos '). "$firstImage-$lastImage ". gettext('of ') . getNumImages(); } 
 						echo "</em>";
 				?>
+				<?php if (function_exists('printSlideShowLink')) printSlideShowLink(); ?>		
 				<?php if (hasPrevPage()) { ?>
 						<a href="<?php echo getPrevPageURL(); ?>" accesskey="x">&laquo; <?php echo gettext('prev page'); ?></a>
 				<?php } ?>
