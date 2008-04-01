@@ -13,13 +13,13 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 
 //load extensions
 $curdir = getcwd();
-chdir(SERVERPATH . "/" . ZENFOLDER . EXTENSION_FOLDER);
+chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
 $filelist = safe_glob('*'.'php');
 chdir($curdir);
 foreach ($filelist as $extension) {
-	$opt = 'zp_extension_'.substr($extension, 0, strlen($extension)-4);
+	$opt = 'zp_plugin_'.substr($extension, 0, strlen($extension)-4);
 	if (getOption($opt)) {
-		require_once(SERVERPATH . "/" . ZENFOLDER . EXTENSION_FOLDER . $extension);
+		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
 	}
 }
 

@@ -47,7 +47,7 @@
  * Prints a list of all albums context sensitive up to the 4th subalbum level.
  * 
  * Usage: add the following to the php page where you wish to use these menus:
- * require_once(SERVERPATH . "/" . ZENFOLDER . "/plugins/print_album_menu.php");
+ * enable this extension on the zenphoto admin plugins tab;
  * Call the function printAlbumMenu() at the point where you want the menu to appear.
  * 
  * @param string $option "list" for html list, "jump" for a jump drop down menu

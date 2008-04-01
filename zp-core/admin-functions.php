@@ -257,8 +257,8 @@ function printTabs() {
  				"> <a href=\"admin.php?page=themes\">".gettext("themes")."</a></li>";
 	}
 	if (($_zp_loggedin & ADMIN_RIGHTS)) {
-		echo "\n    <li". ($page == "extensions" ? " class=\"current\""  : "") .
- 				"> <a href=\"admin.php?page=extensions\">".gettext("extensions")."</a></li>";
+		echo "\n    <li". ($page == "plugins" ? " class=\"current\""  : "") .
+ 				"> <a href=\"admin.php?page=plugins\">".gettext("plugins")."</a></li>";
 	}
 	echo "\n  </ul>";
 

@@ -692,20 +692,20 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=themes&themealbum=".$_GET['themealbum']);
 			}
 			
-			/** EXTENSIONS ***************************************************************/
+			/** PLUGINS ******************************************************************/
 			/*****************************************************************************/
-		} else if ($action == 'saveextensions') {
+		} else if ($action == 'saveplugins') {
 				
 
 			$curdir = getcwd();
-			chdir(SERVERPATH . "/" . ZENFOLDER . EXTENSION_FOLDER);
+			chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
 			$filelist = safe_glob('*'.'php');
 			chdir($curdir);
 			foreach ($filelist as $extension) {
-				$opt = 'zp_extension_'.substr($extension, 0, strlen($extension)-4);
+				$opt = 'zp_plugin_'.substr($extension, 0, strlen($extension)-4);
 				setBoolOption($opt, $_POST[$opt]);
 			}
-		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=extensions");
+		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=plugins");
 		}
 	}
 
@@ -767,7 +767,7 @@ switch ($page) {
 	case 'themes':
 		if (!($_zp_loggedin & THEMES_RIGHTS)) $page = '';
 		break;
-	case 'extensions':
+	case 'plugins':
 		if (!($_zp_loggedin & ADMIN_RIGHTS)) $page = '';
 		break;
 }
@@ -2229,7 +2229,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		<td><?php echo gettext("Crop thumbnails:"); ?></td>
 		<td><input type="checkbox" size="40" name="thumb_crop" value="1"
 		<?php echo checked('1', getThemeOption($alb, 'thumb_crop')); ?> /></td>
-		<td><?php echo gettext("If checked the thumbnail will be a centered portion of the	image with the given width and height after being resized to <em>thumb	size</em> (by shortest side)."); 
+		<td><?php echo gettext("If checked the thumbnail will be a centered portion of the	image with the given width and height after being resized to <em>thumb	size</em> (by shortest side).").' '; 
 		echo gettext("Otherwise, it will be the full image resized to <em>thumb size</em> (by shortest side)."); ?></td>
 	</tr>
 	<tr>
@@ -2255,7 +2255,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		<td><input type="checkbox" size="40" name="image_use_longest_side"
 			value="1"
 			<?php echo checked('1', getThemeOption($alb, 'image_use_longest_side')); ?> /></td>
-		<td><?php echo gettext("If this is checked the longest side of the image will be <em>image size</em>.");  
+		<td><?php echo gettext("If this is checked the longest side of the image will be <em>image size</em>.").' ';  
 		echo gettext("Otherwise, the <em>width</em> of the image will	be <em>image size</em>."); ?></td>
 	</tr>
 	<?php
@@ -2391,21 +2391,21 @@ $themeweb = WEBPATH . "/themes/$theme";
 
 <?php 
 }
-/*** EXTENSIONS *********************************************************************/
+/*** PLUGINS ************************************************************************/
 /************************************************************************************/ 
-} else if ($page == 'extensions') {
+} else if ($page == 'plugins') {
 	$curdir = getcwd();
-	chdir(SERVERPATH . "/" . ZENFOLDER . EXTENSION_FOLDER);
+	chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
 	$filelist = safe_glob('*'.'php');
 	chdir($curdir);
 
-	echo "<h1>Zenphoto Extensions</h1>";
-	echo '<form action="?page=extensions&action=saveextensions" method="post">';
-	echo '<input type="hidden" name="saveextensions" value="yes" />'; 
+	echo "<h1>Zenphoto Plugins</h1>";
+	echo '<form action="?page=plugins&action=saveplugins" method="post">';
+	echo '<input type="hidden" name="saveplugins" value="yes" />'; 
 	echo "<table class='bordered'>\n";
 	foreach ($filelist as $extension) {
 		$ext = substr($extension, 0, strlen($extension)-4);
-		$opt = 'zp_extension_'.$ext;
+		$opt = 'zp_plugin_'.$ext;
 		echo '<tr><td>';
 		echo $ext.'&nbsp';
 		echo '</td><td>';

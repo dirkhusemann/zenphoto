@@ -22,7 +22,6 @@ if (!isset($_zp_conf_vars['server_protocol'])) $_zp_conf_vars['server_protocol']
 
 require_once('lib-kses.php');
 require_once('exif/exif.php');
-require_once('plugins/phooglelite.php');
 require_once('functions-db.php');
 
 /*******************************************************************************
@@ -79,7 +78,7 @@ $_zp_options = NULL;
  *  An external folder path overrides one located within the zenphotos folders.
  */
 define('ALBUMFOLDER', '/albums/');
-define('EXTENSION_FOLDER', '/template-extensions/');
+define('PLUGIN_FOLDER', '/plugins/');
 
 $session_started = getOption('album_session');
 if ($session_started) session_start();

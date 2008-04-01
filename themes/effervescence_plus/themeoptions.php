@@ -45,7 +45,7 @@ class ThemeOptions {
 									gettext('Allow comments') => array('key' => 'Allow_comments', 'type' => 1, 'desc' => gettext('Check to enable comment section.')),
 									gettext('Watermark head_image') => array('key' => 'Watermark_head_image', 'type' => 1, 'desc' => gettext('Check to place a watermark on the heading image. (Image watermarking must be set.)')),
 									gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Check to enable search form.')),
-									gettext('Slideshow') => array('key' => 'Slideshow', 'type' => 1, 'desc' => gettext('Check to enable slideshow for the <em>Smooth</em> personality.')),
+									gettext('Slideshow') => array('key' => 'Slideshow', 'type' => 1, 'desc' => gettext('Check to enable slideshow for the <em>Smoothgallery</em> personality.')),
 									gettext('Graphic logo') => array('key' => 'Graphic_logo', 'type' => 2, 'desc' => gettext('Select a logo (PNG files in the images folder) or leave empty for text logo.')),
 									gettext('Theme personality') => array('key' => 'Theme_personality', 'type' => 2, 'desc' => gettext('Select the theme personality')),
 									gettext('Theme colors') => array('key' => 'Theme_colors', 'type' => 2, 'desc' => gettext('Select the colors of the theme'))

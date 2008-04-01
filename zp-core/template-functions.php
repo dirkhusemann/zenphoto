@@ -157,7 +157,7 @@ function printAdminToolbox($context=null, $id='admin') {
  */
 function zenJavascript() {
 	global $_zp_phoogle, $_zp_current_album;
-	if(getOption('gmaps_apikey') != ''){$_zp_phoogle->printGoogleJS();}
+	if (!is_null($_zp_phoogle)) {$_zp_phoogle->printGoogleJS();}
 	if (($rights = zp_loggedin()) & EDIT_RIGHTS) {
 
 		if (in_context(ZP_ALBUM)) {
@@ -1776,86 +1776,6 @@ function printImageMetadata($title='Image Info', $toggle=true, $id='imagemetadat
 	}
 	echo "  </table>\n</div>\n\n";
 }
-/**
- * Causes a Google map to be printed based on the gps data in the current image
- * @param  string $zoomlevel the zoom in for the map
- * @param string $type of map to produce: allowed values are G_NORMAL_MAP | G_SATELLITE_MAP | G_HYBRID_MAP
- * @param int $width is the image width of the map. NULL will use the default
- * @param int $height is the image height of the map. NULL will use the default
- * @since 1.1.3
- */
-function printImageMap($zoomlevel='6', $type=NULL, $width=NULL, $height=NULL){
-	global $_zp_phoogle;
-	if(getOption('gmaps_apikey') != ''){
-		$exif = getImageEXIFData();
-		if(!empty($exif['EXIFGPSLatitude']) &&
-		!empty($exif['EXIFGPSLongitude'])){
-
-			$_zp_phoogle->setZoomLevel($zoomlevel);
-			if (!is_null($width)) { $_zp_phoogle->setWidth($width); }
-			if (!is_null($height)) { $_zp_phoogle->setHeight($height); }
-			if (!is_null($type)) { $_zp_phoogle->setMapType($type); }
-			$lat = $exif['EXIFGPSLatitude'];
-			$long = $exif['EXIFGPSLongitude'];
-			if($exif['EXIFGPSLatitudeRef'] == 'S'){  $lat = '-' . $lat; }
-			if($exif['EXIFGPSLongitudeRef'] == 'W'){  $long = '-' . $long; }
-			$_zp_phoogle->addGeoPoint($lat, $long);
-			$_zp_phoogle->showMap();
-		}
-	}
-}
-
-/**
- * Returns true if the curent image has EXIF location data
- *
- * @return bool
- */
-function hasMapData() {
-	if(getOption('gmaps_apikey') != ''){
-		$exif = getImageEXIFData();
-		if(!empty($exif['EXIFGPSLatitude']) && !empty($exif['EXIFGPSLongitude'])){
-			return true;
-		}
-	}
-	return false;
-}
-
-/**
- * Causes a Google map to be printed based on the gps data in all the images in the album
- * @param  string $zoomlevel the zoom in for the map. NULL will use the default (auto-zoom based on points)
- * @param string $type of map to produce: allowed values are G_NORMAL_MAP | G_SATELLITE_MAP | G_HYBRID_MAP
- * @param int $width is the image width of the map. NULL will use the default
- * @param int $height is the image height of the map. NULL will use the default
- * @since 1.1.3
- */
-function printAlbumMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL){
-	global $_zp_phoogle;
-	if(getOption('gmaps_apikey') != ''){
-		$foundLocation = false;
-		if($zoomlevel){ $_zp_phoogle->setZoomLevel($zoomlevel); }
-		if (!is_null($type)) { $_zp_phoogle->setMapType($type); }
-		if (!is_null($width)) { $_zp_phoogle->setWidth($width); }
-		if (!is_null($height)) { $_zp_phoogle->setHeight($height); }
-		while (next_image(false)) {
-			$exif = getImageEXIFData();
-			if(!empty($exif['EXIFGPSLatitude']) &&
-			!empty($exif['EXIFGPSLongitude'])){
-				$foundLocation = true;
-				$lat = $exif['EXIFGPSLatitude'];
-				$long = $exif['EXIFGPSLongitude'];
-				if($exif['EXIFGPSLatitudeRef'] == 'S'){  $lat = '-' . $lat; }
-				if($exif['EXIFGPSLongitudeRef'] == 'W'){  $long = '-' . $long; }
-				$infoHTML = '<a href="' . getImageLinkURL() . '"><img src="' .
-				getImageThumb() . '" alt="' . getImageDesc() . '" ' .
-					'style=" margin-left: 30%; margin-right: 10%; border: 0px; "/></a>' .
-					'<p>' . getImageDesc() . '</p>';
-				$_zp_phoogle->addGeoPoint($lat, $long, $infoHTML);
-			}
-		}
-		if($foundLocation){ $_zp_phoogle->showMap(); }
-	}
-}
-
 
 /**
  * Returns a link to a custom sized version of he current image
@@ -2007,7 +1927,7 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 			<p id="playerContainer"><a href="http://www.adobe.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
 			<script>
 			$("#playerContainer").flashembed({
-      	src:\'' . WEBPATH . '/' . ZENFOLDER . '/plugins/FlowPlayerLight.swf\',
+      	src:\'' . WEBPATH . '/' . ZENFOLDER . '/extensions/FlowPlayerLight.swf\',
       	width:400, 
       	height:300
     	},
@@ -2199,7 +2119,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 			<p id="playerContainer"><a href="http://www.adobe.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
 			<script>
 			$("#playerContainer").flashembed({
-      	src:\'' . WEBPATH . '/' . ZENFOLDER . '/plugins/FlowPlayerLight.swf\',
+      	src:\'' . WEBPATH . '/' . ZENFOLDER . '/extensions/FlowPlayerLight.swf\',
       	width:400, 
       	height:300
     	},

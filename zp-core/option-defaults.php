@@ -122,14 +122,16 @@ function setDefault($option, $default) {
 	setDefault('locale', '');
 	setDefault('date_format', '%c');
 	
-	// template extensions
+	// plugins--default to enabled
+	setOptionDefault('zp_plugin_google_maps', 1);
+	// plugins--default to disabled
 	$curdir = getcwd();
-	chdir(SERVERPATH . "/" . ZENFOLDER . EXTENSION_FOLDER);
+	chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
 	$filelist = safe_glob('*'.'php');
 	chdir($curdir);
 	foreach ($filelist as $extension) {
 		$ext = substr($extension, 0, strlen($extension)-4);
-		$opt = 'zp_extension_'.$ext;
+		$opt = 'zp_plugin_'.$ext;
 		setOptionDefault($opt, 0);
 	}
 	
