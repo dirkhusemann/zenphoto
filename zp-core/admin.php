@@ -2404,7 +2404,6 @@ $themeweb = WEBPATH . "/themes/$theme";
 	$curdir = getcwd();
 	chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
 	$filelist = safe_glob('*'.'php');
-	chdir($curdir);
 
 	echo "<h1>Zenphoto Plugins</h1>";
 	echo '<form action="?page=plugins&action=saveplugins" method="post">';
@@ -2413,19 +2412,29 @@ $themeweb = WEBPATH . "/themes/$theme";
 	foreach ($filelist as $extension) {
 		$ext = substr($extension, 0, strlen($extension)-4);
 		$opt = 'zp_plugin_'.$ext;
-		echo '<tr><td>';
-		echo $ext.'&nbsp';
-		echo '</td><td>';
+		$descriptionfile = $ext.'.txt';
+		if (file_exists($descriptionfile)) {
+			$desc = file_get_contents($descriptionfile);
+		} else {
+			$desc = '';
+		}
+		echo '<tr>';
+		echo '<td>';
 		echo '<input type="checkbox" size="40" name="'.$opt.'" value="1"';
 		echo checked('1', getOption($opt)); 
 		echo ' /> ';
-		echo gettext("Enabled"); 
-		echo '</td></tr>';
+		echo $ext;
+		echo '</td>';
+		echo '<td>';
+		echo $desc;
+		echo '</td>';
+		echo '</tr>';
 	}
 	echo "</table>\n";
 	echo '<input type="submit" value='. gettext('save').' />' . "\n";
 	echo "</form>\n";
-
+	chdir($curdir);
+	
 /*** HOME ***************************************************************************/
 /************************************************************************************/ 
 } else { $page = "home"; ?>

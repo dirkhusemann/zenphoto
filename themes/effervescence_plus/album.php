@@ -251,7 +251,8 @@ if ($_GET['format'] != 'xml') {
  									<?php 
 									} 
 								}
-						}
+					if (function_exists('printSlideShowLink')) printSlideShowLink(); 		
+					}
 					?>
  					</div>
  					</div>
