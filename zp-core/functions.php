@@ -1944,4 +1944,28 @@ function generateCaptcha(&$image) {
 
 	return $code;
 }
+
+/**
+* For internal use by the function printRating()
+* Returns true if the IP has voted
+*
+* @param int $id the record ID of the image
+* @param string $option 'image' or 'album' depending on the requestor
+* @return bool
+*/
+function checkIp($id, $option) {
+	$ip = $_SERVER['REMOTE_ADDR'];
+	switch($option) {
+		case "image":
+			$dbtable = prefix('images');
+			break;
+		case "album":
+			$dbtable = prefix('albums');
+			break;
+	}
+	$ipcheck = query_full_array("SELECT used_ips FROM $dbtable WHERE used_ips LIKE '%".$ip."%' AND id= $id");
+	return $ipcheck;
+}
+
+
 ?>
