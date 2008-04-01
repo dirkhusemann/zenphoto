@@ -1,6 +1,6 @@
 <?php
 if($apiKey = getOption('gmaps_apikey')){ 
-	require_once(WEBPATH.ZENFOLDER.'/extensions/phooglelite.php');
+	require_once(WEBPATH.ZENFOLDER.'/plugins/google_maps/phooglelite.php');
 	$_zp_phoogle = new PhoogleMapLite();
 	$_zp_phoogle->setAPIkey($apiKey);
 }
