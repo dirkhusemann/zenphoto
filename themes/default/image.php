@@ -4,8 +4,7 @@
 <head>
 	<title><?php printGalleryTitle(); ?> | <?php echo getAlbumTitle();?> | <?php echo getImageTitle();?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
-	<script type="text/javascript" src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/plugins/rating/rating.js"></script>
-	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/plugins/rating/rating.css" type="text/css" />
+	<?php if (function_exists('printRatingHead')) printRatingHead(); ?>
 	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
 	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/jquery.js" type="text/javascript"></script>
 	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.js" type="text/javascript"></script>
@@ -61,7 +60,7 @@
 		
 		<?php if (function_exists('printImageMap')) printImageMap(); ?>
     
-    <?php if (getOption('Allow_ratings')) { printImageRating(); }?>
+    <?php if (getOption('Allow_ratings') && function_exists('printImageRating')) { printImageRating(); }?>
 		
 		<?php if (getOption('Allow_comments')) { ?>
 				<div id="comments">

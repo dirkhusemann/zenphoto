@@ -4,8 +4,7 @@
 <head>
 	<title><?php printGalleryTitle(); ?> | <?php echo getAlbumTitle();?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
-	<script type="text/javascript" src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/plugins/rating/rating.js"></script>
-	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/plugins/rating/rating.css" type="text/css" />
+	<?php if (function_exists('printRatingHead')) printRatingHead(); ?>
 	<?php printRSSHeaderLink('Album',getAlbumTitle()); ?>
 	<?php zenJavascript(); ?>
 </head>
@@ -53,7 +52,7 @@
 				
 	</div>
 		
-	<?php if (getOption('Allow_ratings')) { printAlbumRating(); }?>
+	<?php if (getOption('Allow_ratings') && function_exists('printAlbumRating')) { printAlbumRating(); }?>
 		
 </div>
 

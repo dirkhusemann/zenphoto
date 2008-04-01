@@ -705,7 +705,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				$opt = 'zp_plugin_'.substr($extension, 0, strlen($extension)-4);
 				setBoolOption($opt, $_POST[$opt]);
 			}
-		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=plugins");
+		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=plugins&saved");
 		}
 	}
 
@@ -2394,6 +2394,13 @@ $themeweb = WEBPATH . "/themes/$theme";
 /*** PLUGINS ************************************************************************/
 /************************************************************************************/ 
 } else if ($page == 'plugins') {
+	
+	if (isset($_GET['saved'])) {
+		echo '<div class="messagebox" id="fade-message">';
+		echo  "<h2>".gettext("Saved")."</h2>";
+		echo '</div>';
+	}
+	
 	$curdir = getcwd();
 	chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
 	$filelist = safe_glob('*'.'php');

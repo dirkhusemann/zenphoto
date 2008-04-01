@@ -4,8 +4,7 @@
 <head>
 	<title><?php printGalleryTitle(); ?></title>
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
-	<script type="text/javascript" src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/plugins/rating/rating.js"></script>
-	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/plugins/rating/rating.css" type="text/css" />
+	<?php if (function_exists('printRatingHead')) printRatingHead(); ?>
 	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
 	<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); echo "\n"; ?>
 	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/jquery.js" type="text/javascript"></script>
@@ -55,7 +54,7 @@
 					<?php printImageDesc(true); ?>
 					<?php printTags('links', gettext('<strong>Tags:</strong> '), 'taglist', ''); ?>
 					<?php if (function_exists('printImageMap')) printImageMap(); ?>
-          <div class="rating"><?php printImageRating(); ?></div> 
+          <div class="rating"><?php if (function_exists('printImageRating')) printImageRating(); ?></div> 
 				</div>
 			
 				<?php if (getOption('Allow_comments')) { ?>
