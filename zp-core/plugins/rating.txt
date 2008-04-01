@@ -1,0 +1,1 @@
+Adds several theme functions to enable images and/or album rating by users.

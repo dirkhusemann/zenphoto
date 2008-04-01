@@ -1,0 +1,1 @@
+Adds a theme function to call a slideshow. Additionally the "slideshow.php" needs to be present in the theme folder.
