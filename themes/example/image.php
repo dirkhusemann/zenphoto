@@ -54,7 +54,7 @@
 					<br clear="all" />
 					<?php printImageDesc(true); ?>
 					<?php printTags('links', gettext('<strong>Tags:</strong> '), 'taglist', ''); ?>
-					<?php printImageMap(); ?>
+					<?php if (function_exists('printImageMap')) printImageMap(); ?>
           <div class="rating"><?php printImageRating(); ?></div> 
 				</div>
 			

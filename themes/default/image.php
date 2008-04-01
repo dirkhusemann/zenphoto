@@ -59,7 +59,7 @@
 		?>
 		<?php printTags('links', gettext('<strong>Tags:</strong> '), 'taglist', ''); ?>
 		
-		<?php printImageMap(); ?>
+		<?php if (function_exists('printImageMap')) printImageMap(); ?>
     
     <?php if (getOption('Allow_ratings')) { printImageRating(); }?>
 		

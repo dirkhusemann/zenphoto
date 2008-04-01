@@ -65,7 +65,7 @@ $firstPageImages = normalizeColumns(1, 7);
 		
 		<br clear="all" />
 			<div class="rating"><?php printAlbumRating(); ?></div>
-			<?php printAlbumMap(); ?>
+			<?php if (function_exists('printAlbumMap')) printAlbumMap(); ?>
 		</div>
  
  <!-- begin comment block -->     

@@ -313,7 +313,7 @@ if ($_GET['format'] != 'xml') {
 		printPageListWithNav("&laquo; " .gettext('prev'), gettext('next')." &raquo;", $oneImagePage); 
 		echo "</div></div>";
 	} 
-	printAlbumMap(8, 'G_HYBRID_MAP');
+	if (function_exists('printAlbumMap')) printAlbumMap(8, 'G_HYBRID_MAP');
 	echo "</div></div>";
 ?>
 
