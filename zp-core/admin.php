@@ -1939,7 +1939,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		<td><?php echo gettext("Enable gallery sessions:"); ?></td>
 		<td><input type="checkbox" name="album_session" value="1"
 		<?php echo checked('1', getOption('album_session')); ?> /></td>
-		<td><?php echo gettext("Put a checkmark here if you are having issues with with album	password cookies not being retained."); ?></td>
+		<td><?php echo gettext("Put a checkmark here if you are having issues with with album	password cookies not being retained. Setting the option causes zenphoto to use sessions rather than cookies."); ?></td>
 	</tr>
 	<tr>
 		<td></td>
