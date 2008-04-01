@@ -125,6 +125,7 @@ function setDefault($option, $default) {
 	// plugins--default to enabled
 	setOptionDefault('zp_plugin_google_maps', 1);
 	setOptionDefault('zp_plugin_rating', 1);
+	setOptionDefault('zp_plugin_image_album_statistics', 1);
 	// plugins--default to disabled
 	$curdir = getcwd();
 	chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);

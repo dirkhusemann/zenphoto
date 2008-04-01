@@ -65,33 +65,36 @@
 			</div>
 			<div class="module">
 				<?php $selector = getOption('Mini_slide_selector'); ?>
-				<h2><?php echo $selector; ?></h2>
 				<ul id="randomlist">
 					<?php 
-						switch($selector) {
+					switch($selector) {
 						case 'Recent images':
-							$images = getImageStatistic(6, "latest");
-							foreach ($images as $image) {
-								echo "<li><table><tr><td>\n";
-								$imageURL = getURL($image); 
-								echo '<a href="'.$imageURL.'" title="'.gettext("View image: ").
-								$image->getTitle() . '"><img src="' . 
-								$image->getCustomImage(null, 44.5, 33.5, null, null, null, null, true) . 
+							if (function_exists('getImageStatistic')) {
+								echo '<h2>Recent images</h2>';
+								$images = getImageStatistic(6, "latest");
+								foreach ($images as $image) {
+									echo "<li><table><tr><td>\n";
+									$imageURL = getURL($image);
+									echo '<a href="'.$imageURL.'" title="'.gettext("View image: ").
+									$image->getTitle() . '"><img src="' .
+									$image->getCustomImage(null, 44.5, 33.5, null, null, null, null, true) .
 																		'" width="44.5" height="33.5" alt="' . $image->getTitle() . "\"/></a>\n"; 
-								echo "</td></tr></table></li>\n";
+									echo "</td></tr></table></li>\n";
+								}
+								break;
 							}
-							break;
 						case 'Random images':
+							echo '<h2>Random images</h2>';
 							for ($i=1; $i<=6; $i++) {
-							echo "<li><table><tr><td>\n";
-							$randomImage = getRandomImages();
-							$randomImageURL = getURL($randomImage); 
-							echo '<a href="' . $randomImageURL . '" title="'.gettext("View image: ") . $randomImage->getTitle() . '">' .
+								echo "<li><table><tr><td>\n";
+								$randomImage = getRandomImages();
+								$randomImageURL = getURL($randomImage);
+								echo '<a href="' . $randomImageURL . '" title="'.gettext("View image: ") . $randomImage->getTitle() . '">' .
  								'<img src="' . $randomImage->getCustomImage(null, 44.5, 33.5, null, null, null, null, true) . 
 								'" width="44.5" height="33.5" alt="'.$randomImage->getTitle().'"'; 
-							echo "/></a></td></tr></table></li>\n";
+								echo "/></a></td></tr></table></li>\n";
 							}
-						break;
+							break;
 					}
 					?>
 				</ul>

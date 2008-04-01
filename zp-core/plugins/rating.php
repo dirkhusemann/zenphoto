@@ -163,7 +163,7 @@ function getAlbumRating($option, $id) {
  * @param int $number The number if images desired
  */
 function printTopRatedImages($number=5) {
-	printImageStatistic($number, "toprated");
+	if (function_exists('printImageStatistic')) printImageStatistic($number, "toprated");
 }
 
 
@@ -173,7 +173,7 @@ function printTopRatedImages($number=5) {
  * @param int $number The number if images desired
  */
 function printMostRatedImages($number=5) {
-	printImageStatistic($number, "mostrated");
+	if (function_exists('printImageStatistic')) printImageStatistic($number, "mostrated");
 }
 
 ?>
