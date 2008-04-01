@@ -69,10 +69,32 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 
 	<!-- The Image -->
 	<?php  
-		$s = getDefaultWidth() + 22;
-		$wide = "style=\"width:".$s."px;"; 
-		$s = getDefaultHeight() + 22;
-		$high = " height:".$s."px;\""; 
+		if (getImageVideo()) {
+			$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
+			switch ($ext) {
+				case '.flv':
+					$w = 400;
+					$h = 300;
+					break;
+				case '.3gp':
+					$w = 352;
+					$h = 304;
+					break;
+				case '.mov':
+					$w = 640;
+					$h = 496;
+					break;
+			}
+			$h += 22;
+			$w += 22;
+			$wide = "style=\"width:".$w."px;"; 
+			$high = " height:".$h."px;\""; 
+		} else {
+			$s = getDefaultWidth() + 22;
+			$wide = "style=\"width:".$s."px;"; 
+			$s = getDefaultHeight() + 22;
+			$high = " height:".$s."px;\""; 
+		}
 	?>
 		<div id="image" <?php echo $wide.$high; ?>>
 			<?php if ($show = !checkForPassword()) { ?>
@@ -82,11 +104,11 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 				</a>
 			</div>
 		<?php 
-		if (function_exists('printImageMap')) printImageMap(6, 'G_HYBRID_MAP');
 		if (getImageEXIFData()) {
 			echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=400&width=300&inlineId=imagemetadata\" title=\"".gettext("image details from exif")."\" class=\"thickbox\">".gettext('Image Info')."</a></div>";
 			printImageMetadata('', false); 
 		}
+		if (function_exists('printImageMap')) { printImageMap(6, 'G_HYBRID_MAP');	}
 	} ?>
 	</div>
 		<br clear="all" />
