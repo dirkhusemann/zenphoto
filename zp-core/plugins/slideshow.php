@@ -1,5 +1,5 @@
 <?php
-
+$plugin_description = gettext("Adds a theme function to call a slideshow. Additionally the <em>slideshow.php</em> needs to be present in the theme folder.");
 /**
  * Prints a link to call the slideshow
  * To be used on album.php and image.php

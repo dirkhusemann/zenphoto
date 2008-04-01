@@ -1,4 +1,6 @@
 <?php
+$plugin_description = gettext("Adds several theme functions to enable images and/or album rating by users.");
+
 // register the scripts needed
 addPluginScript('<script type="text/javascript" src="'.FULLWEBPATH."/".ZENFOLDER .'/plugins/rating/rating.js"></script>');
 addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/rating/rating.css" type="text/css" />');

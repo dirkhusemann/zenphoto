@@ -1969,4 +1969,14 @@ function checkIp($id, $option) {
 	return $ipcheck;
 }
 
+/**
+ * Allows plugins to add to the scripts output by zenJavascript()
+ *
+ * @param string $script the text to be added.
+ */
+function addPluginScript($script) {
+	global $_zp_plugin_scripts;
+	$_zp_plugin_scripts[] = $script;
+}
+
 ?>

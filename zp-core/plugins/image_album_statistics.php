@@ -1,4 +1,5 @@
 <?php
+$plugin_description = gettext("Functions that provide various statistics about images and albums in the gallery.");
 /**
  * Retuns a list of album statistic accordingly to $option
  *

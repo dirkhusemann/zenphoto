@@ -1,1 +1,0 @@
-This plugin contains functions to support image rotation. It is experimental.

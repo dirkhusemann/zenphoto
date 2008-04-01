@@ -2412,12 +2412,8 @@ $themeweb = WEBPATH . "/themes/$theme";
 	foreach ($filelist as $extension) {
 		$ext = substr($extension, 0, strlen($extension)-4);
 		$opt = 'zp_plugin_'.$ext;
-		$descriptionfile = $ext.'.txt';
-		if (file_exists($descriptionfile)) {
-			$desc = file_get_contents($descriptionfile);
-		} else {
-			$desc = '';
-		}
+		$plugin_description = '';
+		require_once($extension);
 		echo '<tr>';
 		echo '<td>';
 		echo '<input type="checkbox" size="40" name="'.$opt.'" value="1"';
@@ -2426,7 +2422,7 @@ $themeweb = WEBPATH . "/themes/$theme";
 		echo $ext;
 		echo '</td>';
 		echo '<td>';
-		echo $desc;
+		echo $plugin_description;
 		echo '</td>';
 		echo '</tr>';
 	}

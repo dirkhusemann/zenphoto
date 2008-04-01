@@ -152,17 +152,6 @@ function printAdminToolbox($context=null, $id='admin') {
 	}
 }
 
-
-/**
- * Allows plugins to add to the scripts output by zenJavascript()
- *
- * @param string $script the text to be added.
- */
-function addPluginScript($script) {
-	global $_zp_plugin_scripts;
-	$_zp_plugin_scripts[] = $script;
-}
-
 /**
  * Print any Javascript required by zenphoto. Every theme should include this somewhere in its <head>.
  */
