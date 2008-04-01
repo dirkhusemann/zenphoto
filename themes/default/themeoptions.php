@@ -29,14 +29,12 @@ class ThemeOptions {
 	
 	function ThemeOptions() {
 		setOptionDefault('Allow_comments', true);
-		setOptionDefault('Allow_ratings', true);
 		setOptionDefault('Allow_search', true);
 		setOptionDefault('Theme_colors', 'light'); 
 	}
 	
 	function getOptionsSupported() {
 		return array(	gettext('Allow_comments') => array('key' => 'Allow_comments', 'type' => 1, 'desc' => gettext('Check to enable comment section.')),
-									gettext('Allow_ratings') => array('key' => 'Allow_ratings', 'type' => 1, 'desc' => gettext('Check to enable album and image ratings.')),
 									gettext('Allow_search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Check to enable search form.')),
 									gettext('Theme_colors') => array('key' => 'Theme_colors', 'type' => 2, 'desc' => gettext('Select the colors of the theme'))
 								);

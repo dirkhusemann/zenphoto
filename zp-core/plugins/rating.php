@@ -1,12 +1,7 @@
 <?php
-/**
- * Puts out the script and style heads for ratings
- *
- */
-function printRatingHead() {
-	echo '<script type="text/javascript" src="'.FULLWEBPATH."/".ZENFOLDER .'/plugins/rating/rating.js"></script>';
-	echo '<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/rating/rating.css" type="text/css" />';
-}
+// register the scripts needed
+addPluginScript('<script type="text/javascript" src="'.FULLWEBPATH."/".ZENFOLDER .'/plugins/rating/rating.js"></script>');
+addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/rating/rating.css" type="text/css" />');
 
 /**
  * Returns the rating of the designated image

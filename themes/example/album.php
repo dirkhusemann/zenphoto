@@ -9,7 +9,6 @@ $firstPageImages = normalizeColumns(1, 7);
 <head>
 	<title><?php printGalleryTitle(); ?></title>
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
-	<?php if (function_exists('printRatingHead')) printRatingHead(); ?>
 	<?php printRSSHeaderLink('Album',getAlbumTitle()); ?>
 	<?php zenJavascript(); ?>
 </head>

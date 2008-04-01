@@ -4,7 +4,6 @@
 <head>
 	<title><?php printGalleryTitle(); ?> | <?php echo getAlbumTitle();?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
-	<?php if (function_exists('printRatingHead')) printRatingHead(); ?>
 	<?php printRSSHeaderLink('Album',getAlbumTitle()); ?>
 	<?php zenJavascript(); ?>
 </head>
@@ -52,7 +51,7 @@
 				
 	</div>
 		
-	<?php if (getOption('Allow_ratings') && function_exists('printAlbumRating')) { printAlbumRating(); }?>
+	<?php if (function_exists('printAlbumRating')) { printAlbumRating(); }?>
 		
 </div>
 

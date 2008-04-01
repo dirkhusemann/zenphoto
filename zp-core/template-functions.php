@@ -152,11 +152,25 @@ function printAdminToolbox($context=null, $id='admin') {
 	}
 }
 
+
+/**
+ * Allows plugins to add to the scripts output by zenJavascript()
+ *
+ * @param string $script the text to be added.
+ */
+function addPluginScript($script) {
+	global $_zp_plugin_scripts;
+	$_zp_plugin_scripts[] = $script;
+}
+
 /**
  * Print any Javascript required by zenphoto. Every theme should include this somewhere in its <head>.
  */
 function zenJavascript() {
-	global $_zp_phoogle, $_zp_current_album;
+	global $_zp_phoogle, $_zp_current_album, $_zp_plugin_scripts;
+	foreach ($_zp_plugin_scripts as $script) {
+		echo $script."\n";
+	}
 	if (!is_null($_zp_phoogle)) {$_zp_phoogle->printGoogleJS();}
 	if (($rights = zp_loggedin()) & EDIT_RIGHTS) {
 		if (in_context(ZP_ALBUM)) {

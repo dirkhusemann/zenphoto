@@ -1967,5 +1967,4 @@ function checkIp($id, $option) {
 	return $ipcheck;
 }
 
-
 ?>
