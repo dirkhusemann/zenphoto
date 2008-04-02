@@ -1906,17 +1906,28 @@ function printImageThumb($alt, $class=NULL, $id=NULL) {
  * @return string
  */
 function getFullImageURL() {
-
+	global $_zp_current_image;
 	$outcome = getOption('protect_full_image');
-
 	if ($outcome == 'No access') return null;
 	$url = getUnprotectedImageURL();
-	if (($outcome != 'Unprotected') && !is_valid_video($url)) {
-		return getProtectedImageURL();
-	} else {
-		return $url;
+	if (is_valid_video($url)) {  // Download, Protected View, and Unprotected access all allowed
+		$album = $_zp_current_image->getAlbum();
+		$folder = $album->getFolder();
+		$original = checkVideoOriginal(getAlbumFolder() . $folder, $_zp_current_image->getFileName());
+		if ($original) {
+			return getAlbumFolder(WEBPATH) .  $folder . "/" .$original;
+		} else {
+			return $url;
+		}
+	} else { // normal image
+		if ($outcome == 'Unprotected') {
+			return $url;
+		} else {
+			return getProtectedImageURL();
+		}
 	}
 }
+
 /**
  * Returns the "raw" url to the image in the albums folder
  *
@@ -2004,7 +2015,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 	$class = trim($class);
 	//Print videos
 	if(getImageVideo()) {
-		$ext = strtolower(strrchr(getFullImageURL(), "."));
+		$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
 		if ($ext == ".flv") {
 			//Player Embed...
 			echo '</a>
@@ -2027,22 +2038,22 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 		elseif ($ext == ".3gp") {
 			echo '</a>
 			<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="352" height="304" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
-				<param name="src" value="' . getFullImageURL() . '"/>
+				<param name="src" value="' . getUnprotectedImageURL() . '"/>
 				<param name="autoplay" value="false" />
 				<param name="type" value="video/quicktime" />
 				<param name="controller" value="true" />
-				<embed src="' . getFullImageURL() . '" width="352" height="304" autoplay="false" controller"true" type="video/quicktime"
+				<embed src="' . getUnprotectedImageURL() . '" width="352" height="304" autoplay="false" controller"true" type="video/quicktime"
 					pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
 					</object><a>';
 		}
 		elseif ($ext == ".mov") {
 			echo '</a>
 		 		<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="640" height="496" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
-			 	<param name="src" value="' . getFullImageURL() . '"/>
+			 	<param name="src" value="' . getUnprotectedImageURL() . '"/>
 			 	<param name="autoplay" value="false" />
 			 	<param name="type" value="video/quicktime" />
 			 	<param name="controller" value="true" />
-			 	<embed src="' . getFullImageURL() . '" width="640" height="496" autoplay="false" controller"true" type="video/quicktime"
+			 	<embed src="' . getUnprotectedImageURL() . '" width="640" height="496" autoplay="false" controller"true" type="video/quicktime"
 			 		pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
 				</object><a>';
 		}

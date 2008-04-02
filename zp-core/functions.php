@@ -334,6 +334,30 @@ function checkVideoThumb($album,$video){
 }
 
 /**
+ * Search for a high quality version of the video
+ *
+ * @param string $album folder path of the album
+ * @param string $video name of the target
+ * @return string
+ */
+function checkVideoOriginal($album, $video){
+	$extTab = array(".flv",".3gp",".mov",".FLV",".3GP",".MOV");
+	foreach($extTab as $ext) {
+		if (strrpos($video, $ext)) {
+			$video = str_replace($ext,"",$video);
+			break;
+		}
+	}
+	$extTab = array(".ogg",".OGG",".avi",".AVI",".wmv",".WMV");
+	foreach($extTab as $ext) {
+		if(file_exists($album."/".$video.$ext)) {
+			return $video.$ext;
+		}
+	}
+	return NULL;
+}
+
+/**
  * Returns a truncated string
  *
  * @param string $string souirce string
