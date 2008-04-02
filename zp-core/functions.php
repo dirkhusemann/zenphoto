@@ -321,7 +321,10 @@ function is_videoThumb($album, $filename){
 function checkVideoThumb($album,$video){
 	$extTab = array(".flv",".3gp",".mov",".FLV",".3GP",".MOV");
 	foreach($extTab as $ext) {
-		$video = str_replace($ext,"",$video);
+		if (strrpos($video, $ext)) {
+			$video = str_replace($ext,"",$video);
+			break;
+		}
 	}
 	$extTab = array(".jpg",".jpeg",".gif",".png");
 
