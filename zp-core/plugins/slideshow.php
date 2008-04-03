@@ -1,5 +1,5 @@
 ﻿<?php
-$plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the <em>slideshow.php</em> needs to be present in the theme folder.");
+$plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the theme file <em>slideshow.php</em> needs to be present in the theme folder. Copy it from one of the distributed themes");
 $plugin_author = "Malte Müller (acrylian)";
 $plugin_version = '1.0.0';
 /**
