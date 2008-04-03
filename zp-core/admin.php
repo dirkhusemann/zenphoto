@@ -2405,7 +2405,7 @@ $themeweb = WEBPATH . "/themes/$theme";
 	chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
 	$filelist = safe_glob('*'.'php');
 
-	echo "<h1>Zenphoto Plugins</h1>\n";
+	echo "<h1>Plugins</h1>\n";
 	echo '<p>';
 	echo gettext("Plugins provide optional functionality for zenphoto.").' ';
 	echo gettext("They may be provided as part of the Zenphoto distribution or as offereings from third parties.").' ';
@@ -2440,7 +2440,7 @@ $themeweb = WEBPATH . "/themes/$theme";
 		echo '</td>';
 		echo "</tr>\n";
 	}
-	echo "\n</table>\n";
+	echo "</table>\n";
 	echo '<input type="submit" value='. gettext('save').' />' . "\n";
 	echo "</form>\n";
 	chdir($curdir);
