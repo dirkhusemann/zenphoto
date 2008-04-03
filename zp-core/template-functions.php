@@ -157,9 +157,7 @@ function printAdminToolbox($context=null, $id='admin') {
  */
 function zenJavascript() {
 	global $_zp_phoogle, $_zp_current_album, $_zp_plugin_scripts;
-	foreach ($_zp_plugin_scripts as $script) {
-		echo $script."\n";
-	}
+	
 	if (!is_null($_zp_phoogle)) {$_zp_phoogle->printGoogleJS();}
 	if (($rights = zp_loggedin()) & EDIT_RIGHTS) {
 		if (in_context(ZP_ALBUM)) {
@@ -177,8 +175,10 @@ function zenJavascript() {
 	echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/scripts-common.js\"></script>\n";
 	if (in_context(ZP_IMAGE)) {
 		echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/jquery.js\"></script>\n";
-		echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/jquery.flashembed.pack.js\"></script>\n";
-
+		//echo '<script type="text/javascript" src="' . FULLWEBPATH . '/' . ZENFOLDER . '/plugins/flowplayer/jquery.flashembed.pack.js"></script>';
+	}
+	foreach ($_zp_plugin_scripts as $script) {
+		echo $script."\n";
 	}
 }
 
@@ -1817,22 +1817,13 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 		$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
 		if ($ext == ".flv") {
 			//Player Embed...
-			echo '</a>
-			<p id="playerContainer"><a href="http://www.adobe.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
-			<script>
-			$("#playerContainer").flashembed({
-      	src:\'' . WEBPATH . '/' . ZENFOLDER . '/extensions/FlowPlayerLight.swf\',
-      	width:400, 
-      	height:300
-    	},
-    		{config: {  
-      		autoPlay: false,
-					loop: false,
-      		videoFile: \'' . getUnprotectedImageURL() . '\',
-      		initialScale: \'scale\'
-    		}} 
-  		);
-			</script><a>';
+			if(function_exists("flowplayerConfig")) {
+				flowplayerConfig();
+			} else if(function_exists("flvplayerConfig")) {
+				flvplayerConfig();
+			}	else {
+				echo "No flash player installed.";
+			}
 		}
 		elseif ($ext == ".3gp") {
 			echo '</a>
@@ -2017,22 +2008,13 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 		$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
 		if ($ext == ".flv") {
 			//Player Embed...
-			echo '</a>
-			<p id="playerContainer"><a href="http://www.adobe.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
-			<script>
-			$("#playerContainer").flashembed({
-      	src:\'' . WEBPATH . '/' . ZENFOLDER . '/extensions/FlowPlayerLight.swf\',
-      	width:400, 
-      	height:300
-    	},
-    		{config: {  
-      		autoPlay: false,
-					loop: false,
-      		videoFile: \'' . getUnprotectedImageURL() . '\',
-      		initialScale: \'scale\'
-    		}} 
-  		);
-			</script><a>';
+			if(function_exists("flowplayerConfig")) {
+				flowplayerConfig();
+			} else if(function_exists("flvplayerConfig")) {
+				flvplayerConfig();
+			}	else {
+				echo "No flash player installed.";
+			}
 		}
 		elseif ($ext == ".3gp") {
 			echo '</a>

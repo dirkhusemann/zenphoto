@@ -1,5 +1,7 @@
-<?php	
+﻿<?php	
 $plugin_description = gettext("Adds a theme function printAlbumMenu() to print an album menu either as a nested list up to 4 sublevels or as a dropdown menu.");
+$plugin_author = "Malte Müller";
+$plugin_version = '1.0.0';
 /** printAlbumMenu Custom Function 1.3 for zenphoto 1.1 or newer 
  * 
  * Changelog

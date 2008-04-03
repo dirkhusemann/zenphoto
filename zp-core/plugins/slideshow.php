@@ -1,5 +1,7 @@
-<?php
+﻿<?php
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the <em>slideshow.php</em> needs to be present in the theme folder.");
+$plugin_author = "Malte Müller";
+$plugin_version = '1.0.0';
 /**
  * Prints a link to call the slideshow
  * To be used on album.php and image.php
@@ -147,7 +149,7 @@ function printSlideShow($option="jQuery", $effect='fade', $speed=500, $timeout=3
 			<p id="playerContainer"><a href="http://www.adobe.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
 			<script>
 			$("#playerContainer").flashembed({
-      	src:\'' . WEBPATH . '/' . ZENFOLDER . '/extensions/FlowPlayerLight.swf\',
+      	src:\'' . WEBPATH . '/' . ZENFOLDER . '/plugins/flowplayer/FlowPlayerLight.swf\',
       	width:400, 
       	height:300
     	},
@@ -191,7 +193,7 @@ function printSlideShow($option="jQuery", $effect='fade', $speed=500, $timeout=3
 
 case "flash":
 	echo "<span class='slideimage'><h4><strong>".$album['title']."</strong> (".$numberofimages." images) | <a style='color: white' href='".$returnpath."'>back</a></h4>";
-	echo "<span id='slideshow'></div>";
+	echo "<span id='slideshow'></span>";
 	?>	
 <script type="text/javascript">
 $("#slideshow").flashembed({
@@ -245,7 +247,7 @@ function printSlideShowCSS($size) {
 ?>
 	<script src="<?php echo FULLWEBPATH . '/' . ZENFOLDER ?>/js/jquery.js" type="text/javascript"></script>
 	<script src="<?php echo FULLWEBPATH . '/' . ZENFOLDER ?>/plugins/slideshow/jquery.cycle.all.pack.js" type="text/javascript"></script>
-	<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/js/jquery.flashembed.pack.js"></script>
+	<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/plugins/flowplayer/jquery.flashembed.pack.js"></script>
 	<style type="text/css" media="screen">
 		body {
 		background-color: black;

@@ -2413,15 +2413,23 @@ $themeweb = WEBPATH . "/themes/$theme";
 		$ext = substr($extension, 0, strlen($extension)-4);
 		$opt = 'zp_plugin_'.$ext;
 		$plugin_description = '';
+		$plugin_author = '';
+		$plugin_version = '';
 		require_once($extension);
 		echo '<tr>';
-		echo '<td>';
+		echo '<td width="30%">';
 		echo '<input type="checkbox" size="40" name="'.$opt.'" value="1"';
 		echo checked('1', getOption($opt)); 
 		echo ' /> ';
-		echo $ext;
+		echo '<strong>'.$ext.'</strong>';
+		if (!empty($plugin_version)) {
+			echo ' '.gettext("version").' '.$plugin_version;
+		}
 		echo '</td>';
 		echo '<td>';
+		if (!empty($plugin_author)) {
+			echo '<strong>'.gettext("Author").'</strong>: '.$plugin_author.'<br />';
+		}
 		echo $plugin_description;
 		echo '</td>';
 		echo '</tr>';
