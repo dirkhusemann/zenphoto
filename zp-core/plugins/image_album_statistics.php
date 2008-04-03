@@ -1,6 +1,6 @@
 ﻿<?php
 $plugin_description = gettext("Functions that provide various statistics about images and albums in the gallery.");
-$plugin_author = "Malte Müller";
+$plugin_author = "Malte Müller (acrylian)";
 $plugin_version = '1.0.0';
 /**
  * Retuns a list of album statistic accordingly to $option

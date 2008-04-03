@@ -1822,7 +1822,7 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 			} else if(function_exists("flvplayerConfig")) {
 				flvplayerConfig();
 			}	else {
-				echo "No flash player installed.";
+				echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='nNo flash player installed.' />";
 			}
 		}
 		elseif ($ext == ".3gp") {
@@ -2013,7 +2013,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 			} else if(function_exists("flvplayerConfig")) {
 				flvplayerConfig();
 			}	else {
-				echo "No flash player installed.";
+				echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='nNo flash player installed.' />";
 			}
 		}
 		elseif ($ext == ".3gp") {

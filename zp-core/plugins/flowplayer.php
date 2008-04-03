@@ -1,11 +1,14 @@
 ﻿<?php
-$plugin_description = gettext("Enable Flowplayer to handle the .flv video files. IMPORTANT: Only one flash player plugin can be enabled at the time.<br> Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its licence.");
-$plugin_author = "Malte Müller";
+$plugin_description = gettext("Enable Flowplayer to handle the .flv video files. IMPORTANT: Only one flash player plugin can be enabled at the time. If <strong>flowplayer</strong> is enabled it will override all other players.<br> Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its licence.");
+$plugin_author = "Malte Müller (acrylian)";
 $plugin_version = '1.0.0';
 // register the scripts needed
 addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/plugins/flowplayer/jquery.flashembed.pack.js"></script>');
 
-function flowplayerConfig() {
+function flowplayerConfig($moviepath='') {
+	if(empty($moviepath)) {
+		$moviepath = getUnprotectedImageURL();
+	}
 			echo '</a>
 			<p id="playerContainer"><a href="http://www.adobe.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
 			<script>
@@ -17,7 +20,7 @@ function flowplayerConfig() {
     		{config: {  
       		autoPlay: false,
 					loop: false,
-      		videoFile: \'' . getUnprotectedImageURL() . '\',
+      		videoFile: \'' . $moviepath . '\',
       		initialScale: \'scale\'
     		}} 
   		);

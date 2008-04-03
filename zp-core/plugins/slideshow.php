@@ -1,6 +1,6 @@
 ﻿<?php
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the <em>slideshow.php</em> needs to be present in the theme folder.");
-$plugin_author = "Malte Müller";
+$plugin_author = "Malte Müller (acrylian)";
 $plugin_version = '1.0.0';
 /**
  * Prints a link to call the slideshow
@@ -145,22 +145,13 @@ function printSlideShow($option="jQuery", $effect='fade', $speed=500, $timeout=3
 			echo "<span class='slideimage'><h4><strong>".$album['title'].":</strong> ".$image['title']." (".$count."/".$numberofimages.")</h4>";
 			if ($ext == ".flv") {
 				//Player Embed...
-				echo '</a>
-			<p id="playerContainer"><a href="http://www.adobe.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
-			<script>
-			$("#playerContainer").flashembed({
-      	src:\'' . WEBPATH . '/' . ZENFOLDER . '/plugins/flowplayer/FlowPlayerLight.swf\',
-      	width:400, 
-      	height:300
-    	},
-    		{config: {  
-      		autoPlay: false,
-					loop: true,
-      		videoFile: \'' . $imagepath . '\',
-      		initialScale: \'scale\'
-    		}} 
-  		);
-			</script><a>';
+				if(function_exists("flowplayerConfig")) {
+					flowplayerConfig($imagepath);
+				} else if(function_exists("flvplayerConfig")) {
+					flvplayerConfig($imagepath,$image['title']);
+				}	else {
+					echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='nNo flash player installed.' />";
+				}
 			}
 			elseif ($ext == ".3gp") {
 				echo '</a>
