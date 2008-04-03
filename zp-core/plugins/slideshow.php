@@ -1,5 +1,5 @@
 <?php
-$plugin_description = gettext("Adds a theme function to call a slideshow. Additionally the <em>slideshow.php</em> needs to be present in the theme folder.");
+$plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the <em>slideshow.php</em> needs to be present in the theme folder.");
 /**
  * Prints a link to call the slideshow
  * To be used on album.php and image.php
@@ -44,16 +44,22 @@ function printSlideShowLink($size='', $linktext='View slideshow') {
 
 /**
  * Prints the slideshow using the jQuery plugin Cycle: http://http://www.malsup.com/jquery/cycle/
- * If called from image.php it starts with that image, called from album.php it starts with the first image.
+ * or Flash based using Flowplayer http://flowplayer.org if installed
+ * If called from image.php it starts with that image, called from album.php it starts with the first image (jQuery only)
  * To be used on slideshow.php only and called from album.php or image.php. 
  * Image size is taken from the calling link or if not specified there the sized image size from the options
- * Basic video support, the slideshow has to be stopped to view a movie.
+ * In jQuery mode the slideshow has to be stopped to view a movie. 
+ *  
+ * NOTE: Since all images of an album are generated/listed in total, it can be that some images are skipped until all are generated
+ * And of course on slower connections this could take some time if you have many images.
  * 
+ * @param string $option "jQuery" (default) for JS ajax slideshow, "flash" for flash based slideshow
  * @param string $effect The Cycle slide effect to be used: "fade", "shuffle", "zoom", "slideX", "slideY" (crollUp/Down/Left/Right currently does not work)
- * @param int $speed Speed of the transition (any valid fx speed value) 
- * @param int $timeout milliseconds between slide transitions (0 to disable auto advance)
- */
-function printSlideShow($effect='fade', $speed=300, $timeout=3000, $showdesc=true) {
+ * @param int $speed Speed of the transition (milliseconds in jQuery, seconds in Flash mode)
+ * @param int $timeout milliseconds between slide transitions (0 to disable auto advance) (only "jQuery" option)
+ * @param string $showdesc true to show the image's description below the image , "false" if not
+  */
+function printSlideShow($option="jQuery", $effect='fade', $speed=500, $timeout=3000, $showdesc=true) {
 	if(empty($_POST['imagenumber'])) {
 		$imagenumber = 0; 
 		$count = 0;
@@ -69,8 +75,32 @@ function printSlideShow($effect='fade', $speed=300, $timeout=3000, $showdesc=tru
 	} 
 	
 	// jQuery Cycle slideshow config
+	// get slideshow data
+	$album = query_single_row("SELECT title, folder FROM ". prefix('albums') ." WHERE `show` = 1 AND id = ".$albumid);
+	if(!checkAlbumPassword($album['folder'], $hint)) {
+		echo "This album is password protected!"; exit;
+	}		
+	$images = query_full_array("SELECT title, filename, `desc` FROM ". prefix('images') ." WHERE `show` = 1 AND albumid = ".$albumid." ORDER BY sort_order");
+	
+	// return path to get back to the page we called the slideshow from
+	if (empty($_POST['imagenumber'])) {
+		if(getOption('mod_rewrite')) {
+			$returnpath = WEBPATH.'/'.$album['folder'].'/page/'.$_POST['pagenr'];
+		} else {
+			$returnpath = WEBPATH.'/index.php?album='.$album['folder'].'&page='.$_POST['pagenr'];
+		}
+	} else {
+		if(getOption('mod_rewrite')) {
+			$returnpath = WEBPATH.'/'.$album['folder'].'/'.$_POST['imagefile'].getOption('mod_rewrite_image_suffix');
+		} else {
+			$returnpath = WEBPATH.'/index.php?album='.$album['folder'].'&image='.$_POST['imagefile'];
+		}
+	}
+	// slideshow display section
+	switch($option) {
+		case "jQuery":
 ?>
-	<script type="text/javascript">
+<script type="text/javascript">
 		$(function() {
 			$('#pause').click(function() { $('#slides').cycle('pause'); return false; });
 			$('#play').click(function() { $('#slides').cycle('resume'); return false; });
@@ -91,45 +121,18 @@ function printSlideShow($effect='fade', $speed=300, $timeout=3000, $showdesc=tru
 			});
 		});
 	</script>
-<?php
-	// get slideshow data
-	$album = query_single_row("SELECT title, folder FROM ". prefix('albums') ." WHERE `show` = 1 AND id = ".$albumid);
-	if(!checkAlbumPassword($album['folder'], $hint)) {
-		echo "This album is password protected!"; exit;
-	}		
-	$images = query_full_array("SELECT title, filename, `desc` FROM ". prefix('images') ." WHERE `show` = 1 AND albumid = ".$albumid." ORDER BY sort_order");
-	
-	// slideshow display section
-	// 1. the slideshow controls
-	?>
-	<div id="slideshow" align="center">
+<div id="slideshow" align="center">
 		<div id="controls">
-		<div>
-			<span><a href="#" id="prev"></a></span>
-  	<?php
-			if (empty($_POST['imagenumber'])) {
-				if(getOption('mod_rewrite')) {
-					$returnpath = WEBPATH.'/'.$album['folder'].'/page/'.$_POST['pagenr'];
-				} else {
-					$returnpath = WEBPATH.'/index.php?album='.$album['folder'].'&page='.$_POST['pagenr'];
-				}
-			} else {
-				if(getOption('mod_rewrite')) {
-					$returnpath = WEBPATH.'/'.$album['folder'].'/'.$_POST['imagefile'].getOption('mod_rewrite_image_suffix');
-				} else {
-					$returnpath = WEBPATH.'/index.php?album='.$album['folder'].'&image='.$_POST['imagefile'];
-				}
-			}
-			?>
-			<a href="<?php echo $returnpath; ?>" id="stop"></a>
-  		<a href="#" id="pause"></a>
-			<a href="#" id="play"></a>
-			<a href="#" id="next"></a>
+			<div>
+				<span><a href="#" id="prev"></a></span>
+				<a href="<?php echo $returnpath; ?>" id="stop"></a>
+  			<a href="#" id="pause"></a>
+				<a href="#" id="play"></a>
+				<a href="#" id="next"></a>
+			</div>
 		</div>
-		</div>
-		<div id="slides" class="pics">  
-<?php
-		// 2. the slides
+<div id="slides" class="pics"><?php
+		// 1.2 the slides
 		foreach($images as $image) {
 			$count++;
 			if($count > $numberofimages){
@@ -150,7 +153,7 @@ function printSlideShow($effect='fade', $speed=300, $timeout=3000, $showdesc=tru
     	},
     		{config: {  
       		autoPlay: false,
-					loop: false,
+					loop: true,
       		videoFile: \'' . $imagepath . '\',
       		initialScale: \'scale\'
     		}} 
@@ -181,10 +184,52 @@ function printSlideShow($effect='fade', $speed=300, $timeout=3000, $showdesc=tru
 		} else { 
 			echo "<img src='".WEBPATH."/".ZENFOLDER."/i.php?a=".$album['folder']."&i=".$image['filename']."&s=".$imagesize."' alt=".$image['title']." title=".$image['title']." />";
 		}
-		echo "<p class='imgdesc'>".$image['desc']."</p></span>";
+		if($showdesc) { echo "<p class='imgdesc'>".$image['desc']."</p>"; }
+		echo "</span>";
 	}
-?>	
-		</div>
+	break;
+
+case "flash":
+	echo "<span class='slideimage'><h4><strong>".$album['title']."</strong> (".$numberofimages." images) | <a style='color: white' href='".$returnpath."'>back</a></h4>";
+	echo "<span id='slideshow'></div>";
+	?>	
+<script type="text/javascript">
+$("#slideshow").flashembed({
+      src:'<?php echo FULLWEBPATH . '/' . ZENFOLDER; ?>/extensions/FlowPlayerLight.swf',
+      width:<? echo $imagesize; ?>, 
+      height:<? echo $imagesize; ?>
+    },
+    {config: {  
+      autoPlay: true,
+      playList: [
+<?php
+	foreach($images as $image) {
+		$count++;
+		$ext = strtolower(strrchr($image['filename'], "."));
+		if($ext === ".flv") { 
+			$duration = ""; 
+		} else {
+			$duration = " duration: ".$speed;
+		}
+		echo "{ url: '".FULLWEBPATH."/albums/".$album['folder']."/".$image['filename']."', ".$duration." }";
+		if($count < $numberofimages) { echo ","; }
+	}
+?>     
+     ],
+      howPlayListButtons: true, 
+      showStopButton: true, 
+      controlBarBackgroundColor: 0,
+     	showPlayListButtons: true
+    }} 
+  );
+</script>	
+	
+	
+<?php
+	echo "</span>";
+	break;
+}
+?></div>
 <?php
 }
 
@@ -196,16 +241,16 @@ function printSlideShow($effect='fade', $speed=300, $timeout=3000, $showdesc=tru
  *
  */
 function printSlideShowCSS($size) {
-$controlsimage = FULLWEBPATH . "/" . ZENFOLDER."/plugins/slideshow/controls.png";
-
+	$controlsimage = FULLWEBPATH . "/" . ZENFOLDER."/plugins/slideshow/controls.png";
 ?>
 	<script src="<?php echo FULLWEBPATH . '/' . ZENFOLDER ?>/js/jquery.js" type="text/javascript"></script>
 	<script src="<?php echo FULLWEBPATH . '/' . ZENFOLDER ?>/plugins/slideshow/jquery.cycle.all.pack.js" type="text/javascript"></script>
 	<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/js/jquery.flashembed.pack.js"></script>
 	<style type="text/css" media="screen">
 		body {
-		background-color: #151515;
+		background-color: black;
 		text-align: center;
+		color: white;
 	}
 	
 	h4 {
