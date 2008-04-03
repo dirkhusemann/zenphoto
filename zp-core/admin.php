@@ -2410,7 +2410,7 @@ $themeweb = WEBPATH . "/themes/$theme";
 	echo gettext("Plugins provide optional functionality for zenphoto.").' ';
 	echo gettext("They may be provided as part of the Zenphoto distribution or as offereings from third parties.").' ';
 	echo gettext("Plugins are placed in the <code>zp-core/plugins</code> folder and are automatically discovered.").' ';
-	echo gettext("if the plugin checkbox is checked, the plugin will be loaded and its functions made available to theme pages. If the checkbox is not checked the plugin is disabled and occupies no resources.");
+	echo gettext("If the plugin checkbox is checked, the plugin will be loaded and its functions made available to theme pages. If the checkbox is not checked the plugin is disabled and occupies no resources.");
 	echo "</p>\n";
 	echo '<form action="?page=plugins&action=saveplugins" method="post">'."\n";
 	echo '<input type="hidden" name="saveplugins" value="yes" />'."\n"; 
