@@ -108,6 +108,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 			echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=400&width=300&inlineId=imagemetadata\" title=\"".gettext("image details from exif")."\" class=\"thickbox\">".gettext('Image Info')."</a></div>";
 			printImageMetadata('', false); 
 		}
+		echo '<br clear="all" />';
 		if (function_exists('printImageMap')) { printImageMap(6, 'G_HYBRID_MAP');	}
 	} ?>
 	</div>

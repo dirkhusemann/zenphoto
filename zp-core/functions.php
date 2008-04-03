@@ -2,7 +2,7 @@
 define('ZENPHOTO_VERSION', '1.1.5');
 define('ZENPHOTO_RELEASE', 1382);
 define('SAFE_GLOB', false);
-define('CHMOD_VALUE', 0777);
+if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 
 // Set the memory limit higher just in case -- supress errors if user doesn't have control.

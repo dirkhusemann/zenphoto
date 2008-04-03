@@ -769,7 +769,7 @@ function printAlbumPlace() {
 function getAlbumDesc() {
 	if(!in_context(ZP_ALBUM)) return false;
 	global $_zp_current_album;
-	return str_replace("\n", "<br />", $_zp_current_album->getDesc());
+	return $_zp_current_album->getDesc();
 }
 /**
  * Prints the album description of the current album.
@@ -778,11 +778,14 @@ function getAlbumDesc() {
  */
 function printAlbumDesc($editable=false) {
 	global $_zp_current_album;
+	$desc = htmlspecialchars(getAlbumDesc());
+	$desc = str_replace("\r\n", "\n", $_zp_current_album->getDesc());
+	$desc = str_replace("\n", '<br />', $desc);
 	if ($editable && zp_loggedin()) {
-		echo "<div id=\"albumDescEditable\" style=\"display: block;\">" . getAlbumDesc() . "</div>\n";
+		echo "<div id=\"albumDescEditable\" style=\"display: block;\">" . $desc . "</div>\n";
 		echo "<script type=\"text/javascript\">initEditableDesc('albumDescEditable');</script>";
 	} else {
-		echo getAlbumDesc();
+		echo $desc;
 	}
 }
 
@@ -805,6 +808,18 @@ function setAlbumCustomData($val) {
 	global $_zp_current_album;
 	$_zp_current_album->setCustomData($val);
 	$_zp_current_album->save();
+}
+
+/**
+ * A composit for getting album data
+ *
+ * @param string $field which field you want
+ * @return string
+ */
+function getAlbumData($field) {
+	if(!in_context(ZP_IMAGE)) return false;
+	global $_zp_album_image;
+	return $_zp_album_image->get($field);
 }
 
 /**
@@ -1391,11 +1406,14 @@ function getImageDesc() {
  */
 function printImageDesc($editable=false) {
 	global $_zp_current_image;
+	$desc = htmlspecialchars(getImageDesc());
+	$desc = str_replace("\r\n", "\n", $_zp_current_image->getDesc());
+	$desc = str_replace("\n", "<br/>", $desc);
 	if ($editable && zp_loggedin()) {
-		echo "<div id=\"imageDesc\" style=\"display: block;\">" . getImageDesc() . "</div>\n";
+		echo "<div id=\"imageDesc\" style=\"display: block;\">" . $desc . "</div>\n";
 		echo "<script type=\"text/javascript\">initEditableDesc('imageDesc');</script>";
 	} else {
-		echo "<div id=\"imageDesc\" style=\"display: block;\">" . getImageDesc() . "</div>\n";
+		echo "<div id=\"imageDesc\" style=\"display: block;\">" . $desc . "</div>\n";
 	}
 }
 
@@ -1408,26 +1426,7 @@ function printImageDesc($editable=false) {
 function getImageData($field) {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
-	switch ($field) {
-		case "location":
-			return $_zp_current_image->getLocation();
-			break;
-		case "city":
-			return $_zp_current_image->getCity();
-			break;
-		case "state":
-			return $_zp_current_image->getState();
-			break;
-		case "country":
-			return $_zp_current_image->getCountry();
-			break;
-		case "credit":
-			return $_zp_current_image->getCredit();
-			break;
-		case "copyright":
-			return $_zp_current_image->getCopyright();
-			break;
-	}
+	return $_zp_current_image->get($field);
 }
 
 /**
@@ -1459,8 +1458,8 @@ function setImageCustomData($val) {
  */
 function printImageData($field, $label) {
 	global $_zp_current_image;
-	if(getImageData($field)) { // only print it if there's something there
-		echo "<p class=\"metadata\"><strong>" . $label . "</strong> " . getImageData($field) . "</p>\n";
+	if($data = getImageData($field)) { // only print it if there's something there
+		echo "<p class=\"metadata\"><strong>" . $label . "</strong> " . htmlspecialchars(getImageData($field)) . "</p>\n";
 	}
 }
 

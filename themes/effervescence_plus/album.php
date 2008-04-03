@@ -196,8 +196,8 @@ if ($_GET['format'] != 'xml') {
 							if (!getImageVideo()) { // Smoothgallery does not do videos
 						?>
 							<div class="imageElement">
-								<h3><?=getImageTitle();?></h3>
-								<p><?=getImageDesc();?></p>
+								<h3><? echo htmlspecialchars(getImageTitle());?></h3>
+								<p><? echo htmlspecialchars(getImageDesc());?></p>
 								<a href="<?php echo getImageLinkURL();?>" title="<?php echo getImageTitle();?>" class="open"></a>
 								<?php printCustomSizedImage(getImageTitle(), null, 540, null, null, null, null, null, 'full'); ?>
 								<?php printImageThumb(getImageTitle(), 'thumbnail'); ?>
@@ -366,7 +366,7 @@ printThemeInfo();
 				<caption>
 				<![CDATA[<a href="<?php echo getImageLinkURL();?>" title="<?php echo gettext('Open In New Window'); ?>">
 					<font face="Times"><u><b><em><?php echo getImageTitle() ?></font></em></b></u></a></u>
-					<br /></font><?php echo getImageDesc(); ?>]]>
+					<br /></font><?php echo htmlspecialchars(getImageDesc()); ?>]]>
 			</caption>
 			</image>
 <?php

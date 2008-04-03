@@ -60,7 +60,7 @@
 						if (!empty($counters)) {
 							echo "<p><em>($counters)</em><br/>";
 						}
-						$text = getAlbumDesc(); 
+						$text = htmlspecialchars(getAlbumDesc()); 
 						if(strlen($text) > 50) {
 							$text = preg_replace("/[^ ]*$/", '', substr($text, 0, 50))."..."; 
 						}
