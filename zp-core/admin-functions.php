@@ -639,10 +639,16 @@ function printAlbumEditForm($index, $album) {
 			echo "</option>";
 		}
 	} else {
+		$thumb = $album->get('thumb');
+		echo "\n<option class=\"thumboption\" value=\"\"";
+		if (empty($thumb)) {
+			echo " selected=\"selected\"";
+		}
+		echo '> "'.gettext('randomly selected').'"';
+		echo '</option>';
 		if (count($album->getSubalbums()) > 0) {
 			$imagearray = array();
 			$albumnames = array();
-			$thumb = $album->get('thumb');
 			$strip = strlen($album->name) + 1;
 			$subIDs = getAllSubAlbumIDs($album->name);
 			if(!is_null($subIDs)) {
