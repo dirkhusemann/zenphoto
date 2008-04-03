@@ -1,5 +1,6 @@
 <?php
 $plugin_description = gettext("Support for providing Google Maps based on EXIF latitude and longitude in the images.");
+$plugin_author = 'Dustin Brewer (mankind)';
 $plugin_version = '1.0.0';
 
 if($apiKey = getOption('gmaps_apikey')){ 
