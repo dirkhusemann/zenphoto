@@ -409,7 +409,7 @@ class Gallery {
 							$set .= ', `state`="' . mysql_real_escape_string($metadata['state']) . '"';
 						}
 						if (isset($metadata['country'])) {
-							$set .= ', `state`="' . mysql_real_escape_string($metadata['country']) . '"';
+							$set .= ', `country`="' . mysql_real_escape_string($metadata['country']) . '"';
 						}
 						/* credit & copyright */
 						if (isset($metadata['credit'])) {
