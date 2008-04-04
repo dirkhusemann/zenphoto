@@ -2421,7 +2421,7 @@ $themeweb = WEBPATH . "/themes/$theme";
 		$plugin_description = '';
 		$plugin_author = '';
 		$plugin_version = '';
-		require_once($extension);
+		require($extension);
 		echo "<tr>";
 		echo '<td width="30%">';
 		echo '<input type="checkbox" size="40" name="'.$opt.'" value="1"';

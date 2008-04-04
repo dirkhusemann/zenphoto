@@ -1,15 +1,15 @@
 /* Zenphoto administration javascript. */
 
-function confirmDeleteAlbum(url) {
-  if (confirm("Are you sure you want to delete this entire album?")) {
-    if (confirm("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")) {
+function confirmDeleteAlbum(url, message1, message2) {
+  if (confirm(message1)) {
+    if (confirm(message2)) {
       window.location = url;
     }
   }
 }
 
-function confirmDeleteImage(url) {
-  if (confirm("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!")) {
+function confirmDeleteImage(url, message) {
+  if (confirm(message)) {
     window.location = url;
   }
 }
