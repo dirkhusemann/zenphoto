@@ -1,5 +1,5 @@
 ﻿<?php
-$plugin_description = gettext("Enable Flowplayer to handle the .flv video files. IMPORTANT: Only one flash player plugin can be enabled at the time. If <strong>flowplayer</strong> is enabled it will override all other players.<br> Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its licence.");
+$plugin_description = gettext("Enable <strong>flowplayer</strong> to handle the .flv video files. IMPORTANT: Only one flash player plugin can be enabled at the time. If <strong>flowplayer</strong> is enabled it will override all other players.<br> Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian)";
 $plugin_version = '1.0.0';
 // register the scripts needed

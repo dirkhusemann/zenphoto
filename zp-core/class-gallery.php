@@ -182,7 +182,12 @@ class Gallery {
 			if ($dp = @opendir($themedir)) {
 				while (false !== ($dir = readdir($dp))) {
 					if (substr($dir, 0, 1) != "." && is_dir("$themedir/$dir")) {
-						if (file_exists($themedir . "/$dir/theme.txt")) {
+						$themefile = $themedir . "/$dir/theme_description.php";
+						if (file_exists($themefile)) {
+							$theme_description = array();
+							require($themefile);
+							$themes[$dir] = $theme_description;
+						} else if (file_exists($themedir . "/$dir/theme.txt")) {
 							$themes[$dir] = parseThemeDef($themedir . "/$dir/theme.txt");
 						}
 					}

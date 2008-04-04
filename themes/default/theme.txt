@@ -1,6 +1,0 @@
-# Zenphoto theme definition file
-name::Default
-author::<a href="http://www.noscope.com" target="_blank">Joen Asmussen</a> and <a href="http://www.levibuzolic.com" target="_blank">Levi Buzolic</a>
-version::1.5
-date::10/20/2007
-desc::The default theme in 4 distinct flavors. After choosing this theme you can pick the theme color by going to the Admin Options tab and changing the "Theme colors" option

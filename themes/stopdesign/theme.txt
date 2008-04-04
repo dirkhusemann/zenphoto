@@ -1,6 +1,0 @@
-# Zenphoto theme definition file
-name::Stopdesign Theme
-author::Douglas Bowman (Ported to zenPhoto by Mark Galeassi and Stephen Billard)
-version::1.0.4
-date::10/10/2007
-desc::A theme based on the design from <a href="http://stopdesign.com/templates/photos/">Douglas Bowman</a>. This theme is licensed under the <a href="http://creativecommons.org/licenses/by-nc-sa/2.5/">Creative Commons Attribution-NonCommercial-ShareAlike 2.5</a> License.
