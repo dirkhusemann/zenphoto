@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $plugin_description = gettext("Adds several theme functions to enable images and/or album rating by users.");
 $plugin_author = "Malte Müller (acrylian)";
 $plugin_version = '1.0.0';
