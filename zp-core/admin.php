@@ -2407,7 +2407,7 @@ $themeweb = WEBPATH . "/themes/$theme";
 
 	echo "<h1>Plugins</h1>\n";
 	echo '<p>';
-	echo gettext("Plugins provide optional functionality for zenphoto.").' ';
+	echo gettext("Plugins provide optional functionality for Zenphoto.").' ';
 	echo gettext("They may be provided as part of the Zenphoto distribution or as offereings from third parties.").' ';
 	echo gettext("Plugins are placed in the <code>zp-core/plugins</code> folder and are automatically discovered.").' ';
 	echo gettext("If the plugin checkbox is checked, the plugin will be loaded and its functions made available to theme pages. If the checkbox is not checked the plugin is disabled and occupies no resources.");
