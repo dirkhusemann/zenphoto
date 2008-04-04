@@ -167,7 +167,7 @@ $backgroundImagePath="";
 							}
  						echo '<div class="image">' . "\n";
  						echo '<div class="imagethumb">' . "\n";
- 						echo '<a href="' . getImageLinkURL() .'" title="' . getImageTitle() . '">' . "\n";
+ 						echo '<a href="' . htmlspecialchars(getImageLinkURL()) .'" title="' . getImageTitle() . '">' . "\n";
  						echo printImageThumb(getImageTitle()) . "</a>\n";
  						echo "</div>\n";
  						echo "</div>\n";
@@ -276,6 +276,6 @@ $stagePadding.'" thumbnailColumns="'.$thumbnailColumns.'" thumbnailows="'.$thumb
 $navPosition.'" enableRightClickOpen="'.$enableRightClickOpen.'" backgroundImagePath="'.$backgroundImagePath.
 '" imagePath="'.$path.'" thumbPath="'.$path.'">'; ?>
 
-<?php while (next_image(true)): ?><image><filename><?php echo getFullImageURL();?></filename><caption><![CDATA[<a href="<?php echo getImageLinkURL();?>" title="<?php echo gettext('Open in a new window'); ?>">
+<?php while (next_image(true)): ?><image><filename><?php echo getFullImageURL();?></filename><caption><![CDATA[<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo gettext('Open in a new window'); ?>">
 <font face="Times"><u><b><em><?php echo getImageTitle() ?></font></em></b></u></a></u>
 <br></font><?php echo htmlspecialchars(getImageDesc()) ?>]]></caption></image><?php endwhile; ?></simpleviewerGallery><?php } ?>

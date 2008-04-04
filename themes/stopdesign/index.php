@@ -55,7 +55,7 @@
 					</li>
 				<?php if ($counter == 2) {echo "</ul><ul>";}; $counter++; endwhile; ?>
 				</ul>
-				<p class="mainbutton"><a href="<?php echo getCustomPageURL('albumarchive'); ?>" class="btn"><img src="<?php echo $_zp_themeroot ?>/img/btn_gallery_archive.gif" width="118" height="21" alt="<?php echo gettext(' Gallery Archive'); ?>" /></a></p>
+				<p class="mainbutton"><a href="<?php echo htmlspecialchars(getCustomPageURL('albumarchive')); ?>" class="btn"><img src="<?php echo $_zp_themeroot ?>/img/btn_gallery_archive.gif" width="118" height="21" alt="<?php echo gettext(' Gallery Archive'); ?>" /></a></p>
 		</div>
 
 		<div id="secondary">
@@ -77,7 +77,7 @@
 									$imageURL = getURL($image);
 									echo '<a href="'.$imageURL.'" title="'.gettext("View image: ").
 									$image->getTitle() . '"><img src="' .
-									$image->getCustomImage(null, 44.5, 33.5, null, null, null, null, true) .
+									htmlspecialchars($image->getCustomImage(null, 44.5, 33.5, null, null, null, null, true)) .
 																		'" width="44.5" height="33.5" alt="' . $image->getTitle() . "\"/></a>\n"; 
 									echo "</td></tr></table></li>\n";
 								}
@@ -90,7 +90,7 @@
 								$randomImage = getRandomImages();
 								$randomImageURL = getURL($randomImage);
 								echo '<a href="' . $randomImageURL . '" title="'.gettext("View image: ") . $randomImage->getTitle() . '">' .
- 								'<img src="' . $randomImage->getCustomImage(null, 44.5, 33.5, null, null, null, null, true) . 
+ 								'<img src="' . htmlspecialchars($randomImage->getCustomImage(null, 44.5, 33.5, null, null, null, null, true)) . 
 								'" width="44.5" height="33.5" alt="'.$randomImage->getTitle().'"'; 
 								echo "/></a></td></tr></table></li>\n";
 							}
@@ -103,7 +103,7 @@
 				<h2>Gallery data</h2>
 				<table cellspacing="0" class="gallerydata">
 						<tr>
-							<th><a href="<?php getCustomPageURL('albumarchive'); ?>"><?php echo gettext('Galleries'); ?></a></th>
+							<th><a href="<?php echo htmlspecialchars(getCustomPageURL('albumarchive')); ?>"><?php echo gettext('Galleries'); ?></a></th>
 							<td><?php $albumNumber = getNumAlbums(); echo $albumNumber ?></td>
 							<td></td>
 						</tr>

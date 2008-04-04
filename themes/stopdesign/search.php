@@ -93,7 +93,7 @@
 				$lastImage++;
 			}	
 			echo "\n<li class=\"thumb\"><span><em style=\"background-image:url(" . getImageThumb() . '); "><a href="' . 
-			getImageLinkURL() . '" title="' . getImageTitle() . '" style="background:#fff;">"'.
+			htmlspecialchars(getImageLinkURL()) . '" title="' . getImageTitle() . '" style="background:#fff;">"'.
 			getImageTitle().'"</a></em></span></li>';
 		}
 		if (!is_null($firstImage)  && hasNextPage()) { 

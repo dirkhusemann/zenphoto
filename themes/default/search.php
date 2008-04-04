@@ -60,7 +60,7 @@
 			<div id="images">
 				<?php while (next_image(false, $firstPageImages)): $c++;?>
 				<div class="image">
-					<div class="imagethumb"><a href="<?php echo getImageLinkURL();?>" title="<?php echo getImageTitle();?>"><?php printImageThumb(getImageTitle()); ?></a></div>
+					<div class="imagethumb"><a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo getImageTitle();?>"><?php printImageThumb(getImageTitle()); ?></a></div>
 				</div>
 				<?php endwhile; ?>
 			</div>

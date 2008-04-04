@@ -63,7 +63,7 @@ $firstPageImages = normalizeColumns(1, 7);
 		<?php while (next_image(false, $firstPageImages)): $c++;?>
 			<div class="image">
 					<div class="imagethumb">
-							<a href="<?php echo getImageLinkURL();?>" title="<?php echo getImageTitle();?>">
+							<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo getImageTitle();?>">
 						<?php printImageThumb(getImageTitle()); ?></a>
 						</div>
 			</div>

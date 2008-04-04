@@ -2026,8 +2026,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 				<embed src="' . getUnprotectedImageURL() . '" width="352" height="304" autoplay="false" controller"true" type="video/quicktime"
 					pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
 					</object><a>';
-		}
-		elseif ($ext == ".mov") {
+		}	elseif ($ext == ".mov") {
 			echo '</a>
 		 		<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="640" height="496" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
 			 	<param name="src" value="' . getUnprotectedImageURL() . '"/>
@@ -2749,7 +2748,7 @@ function printCustomPageURL($linktext, $page, $q='', $prev, $next, $class) {
 	if (!is_null($class)) {
 		$class = 'class="' . $class . '";';
 	}
-	echo $prev."<a href=\"".getCustomPageURL($page, $q)." $class \">$linktext</a>".$next;
+	echo $prev."<a href=\"".htmlspecialchars(getCustomPageURL($page, $q))." $class \">$linktext</a>".$next;
 }
 
 /**

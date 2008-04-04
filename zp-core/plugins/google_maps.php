@@ -77,7 +77,7 @@ function printAlbumMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL){
 				$long = $exif['EXIFGPSLongitude'];
 				if($exif['EXIFGPSLatitudeRef'] == 'S'){  $lat = '-' . $lat; }
 				if($exif['EXIFGPSLongitudeRef'] == 'W'){  $long = '-' . $long; }
-				$infoHTML = '<a href="' . getImageLinkURL() . '"><img src="' .
+				$infoHTML = '<a href="' . htmlspecialchars(getImageLinkURL()) . '"><img src="' .
 				getImageThumb() . '" alt="' . htmlspecialchars(getImageDesc()) . '" ' .
 					'style=" margin-left: 30%; margin-right: 10%; border: 0px; "/></a>' .
 					'<p>' . htmlspecialchars(getImageDesc()) . '</p>';

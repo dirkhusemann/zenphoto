@@ -198,7 +198,7 @@ if ($_GET['format'] != 'xml') {
 							<div class="imageElement">
 								<h3><? echo htmlspecialchars(getImageTitle());?></h3>
 								<p><? echo htmlspecialchars(getImageDesc());?></p>
-								<a href="<?php echo getImageLinkURL();?>" title="<?php echo getImageTitle();?>" class="open"></a>
+								<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo getImageTitle();?>" class="open"></a>
 								<?php printCustomSizedImage(getImageTitle(), null, 540, null, null, null, null, null, 'full'); ?>
 								<?php printImageThumb(getImageTitle(), 'thumbnail'); ?>
 							</div>
@@ -237,10 +237,10 @@ if ($_GET['format'] != 'xml') {
  									<div class="imagethumb">
  									<?php 
  									if ($personality == 'Slimbox') {
- 										echo "<a href=\"".getCustomImageURL(550, null)."\""; 
+ 										echo "<a href=\"".htmlspecialchars(getCustomImageURL(550, null))."\""; 
  										echo "rel=\"lightbox[".getAlbumTitle()."]\"\n"; 
  									} else {	
- 										echo '<a href="' . getImageLinkURL() . '"';
+ 										echo '<a href="' . htmlspecialchars(getImageLinkURL()) . '"';
  									} 
  									echo " title=\"".getImageTitle()."\">\n";
  									printImageThumb(getImageTitle()); 
@@ -364,7 +364,7 @@ printThemeInfo();
 ?>
 			<image><filename><?php echo getDefaultSizedImage();?></filename>
 				<caption>
-				<![CDATA[<a href="<?php echo getImageLinkURL();?>" title="<?php echo gettext('Open In New Window'); ?>">
+				<![CDATA[<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo gettext('Open In New Window'); ?>">
 					<font face="Times"><u><b><em><?php echo getImageTitle() ?></font></em></b></u></a></u>
 					<br /></font><?php echo htmlspecialchars(getImageDesc()); ?>]]>
 			</caption>
