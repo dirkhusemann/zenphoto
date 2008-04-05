@@ -1107,7 +1107,6 @@ if (count($album->getImages())) {
 		printAlbumEditForm($currentalbum, $album);
 	}
 	?></form>
-<?php printAlbumButtons($album) ?>
 
 </div>
 <?php 
