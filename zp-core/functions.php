@@ -2006,4 +2006,33 @@ function addPluginScript($script) {
 	$_zp_plugin_scripts[] = $script;
 }
 
+/**
+ * Grabs the entire galleries tags
+ * Returns an array with all the tags found (there may be duplicates)
+ *
+ * @return array
+ * @since 1.1
+ */
+$_zp_all_tags = null;
+function getAllTags() {
+	global $_zp_all_tags;
+	if (!is_null($_zp_all_tags)) { return $_zp_all_tags; }
+	$result = query_full_array("SELECT `tags` FROM ". prefix('images') ." WHERE `show` = 1");
+	foreach($result as $row){
+		$alltags = $alltags.$row['tags'].",";  // add comma after the last entry so that we can explode to array later
+	}
+	$result = query_full_array("SELECT `tags` FROM ". prefix('albums') ." WHERE `show` = 1");
+	foreach($result as $row){
+		$alltags = $alltags.$row['tags'].",";  // add comma after the last entry so that we can explode to array later
+	}
+	$alltags = explode(",",$alltags);
+	$_zp_all_tags = array();
+	foreach ($alltags as $tag) {
+		$clean = strtolower(trim($tag));
+		if (!empty($clean)) {
+			$_zp_all_tags[] = $clean;
+		}
+	}
+	return $_zp_all_tags;
+}
 ?>

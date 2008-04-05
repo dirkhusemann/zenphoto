@@ -423,7 +423,7 @@ function generateListFromArray($currentValue, $list) {
 			echo ' selected="selected"';
 		}
 		if ($localize) $display = $key; else $display = $item;
-		echo '>' . $display . "</option>\n";
+		echo '>' . $display . "</option>"."\n";
 	}
 }
 
@@ -439,6 +439,49 @@ function generateListFromFiles($currentValue, $root, $suffix) {
 	generateListFromArray(array($currentValue), $list);
 	chdir($curdir);
 }
+
+function tagSelector($that, $postit) {
+	echo "\n".'<script type="text/javascript">'.
+				'function newselected(obj) {'.
+					'no = obj.selectedIndex;'.
+					"document.getElementById('".$postit."customTextBox').style.display = 'none';".
+					"if(no==0)".
+						"document.getElementById(".$postit."'customTextBox).style.display = 'block';".
+				'}'.
+				'</script>'."\n";
+	$tags = $that->getTags();
+	foreach ($tags as $key=>$tag) {
+		$tags[$key] = strtolower(trim($tag));
+	}
+	$them = array_unique(getAllTags());
+	if (count($them) == 0) {
+		$dsp = 'block';
+	} else {
+		$dsp = 'none';
+	}
+	echo "<table>\n";
+	echo "<tr>\n";
+	echo '<td align="right" valign="top">'."\n";
+	echo "\n".'<select id="tagSelector" name="'.$postit.'tags[]" size="4" multiple=1 onchange="newselected(this)" >';
+	echo "\n".'<option value="*" style="background-color:#B1F7B6"';
+	if ($dsp == 'block') {
+		echo ' selected="selected"';
+	}
+	echo '>'.gettext('add new tag').'</option>'."\n";
+	generateListFromArray($tags, $them);
+	echo "</select>\n";
+	echo "</td>\n";
+	echo '<td align="middle" valign="top">'."\n";
+/*!!!!!!!!!temporary!!!!!!!!!!*/  $dsp = 'block';	// when show/hide of the text box works, delete this line.
+	echo '<div id="'.$postit.'customTextBox" name="'.$postit.'customText" style="display:'.$dsp.'">'."\n";
+	echo '<input type="text" size="15" name="'.$postit.'new_tag_value" '.
+				'value="" style="background-color:#B1F7B6" /><br />'.gettext("new tag value")."\n".
+				"\n</div>\n";
+	echo "</td>\n";
+	echo "</tr>\n";
+	echo "</table>\n";
+}
+
 /**
  * emits the html for editing album information
  * called in edit album and mass edit
@@ -494,8 +537,9 @@ function printAlbumEditForm($index, $album) {
 	echo "\n</tr>";
 	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Password hint:")." </td> <td><input type=\"text\" name=\"".$prefix."albumpass_hint\" class=\"tags\" value=\"" .
 	$album->getPasswordHint() . '" /></td></tr>';
-	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Tags:")." </td> <td><input type=\"text\" name=\"".$prefix."albumtags\" class=\"tags\" value=\"" .
-	$album->getTags() . '" /></td></tr>';
+	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Tags:")." </td> <td>";
+	tagSelector($album, $prefix);
+	echo '</td></tr>';
 
 	$d = $album->getDateTime();
 	if ($d == "0000-00-00 00:00:00") {
@@ -839,7 +883,19 @@ function processAlbumEdit($index, $album) {
 	$notify = '';
 	$album->setTitle(strip($_POST[$prefix.'albumtitle']));
 	$album->setDesc(strip($_POST[$prefix.'albumdesc']));
-	$album->setTags(strip($_POST[$prefix.'albumtags']));
+	
+	$tags = $_POST[$prefix.'tags'];
+	$key = array_search('*', $tags);
+	if ($key !== false) {		
+		$tag = strip($_POST[$prefix.'new_tag_value']);
+		if (!empty($tag)) {
+			$tags[$key] = $tag;
+		} else {
+			unset($tags[$key]);
+		}
+	}
+	$album->setTags($tags);
+	
 	$album->setDateTime(strip($_POST[$prefix."albumdate"]));
 	$album->setPlace(strip($_POST[$prefix.'albumplace']));
 	$album->setAlbumThumb(strip($_POST[$prefix.'thumb']));

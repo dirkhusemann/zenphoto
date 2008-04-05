@@ -354,14 +354,30 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getTags() { return $this->get('tags'); }
+	function getTags() { 
+	$tags = explode(",", $this->get('tags'));
+	sort($tags);
+	return $tags; 
+	}
 
 	/**
 	 * Sets the tags of the image
 	 *
 	 * @param string $tags the tag string
 	 */
-	function setTags($tags) { $this->set('tags', $tags); }
+	function setTags($tags) { 
+		if (!is_array($tags)) {
+			$tagary = explode(',', $tags);
+			$tags = array();
+			foreach ($tagary as $tag) {
+				if (!empty($tag)) {
+					$tags[] = trim($tag);
+				}
+			}
+		}
+		$tags = implode(",", $tags);
+		$this->set('tags', $tags); 
+	}
 
 	/**
 	 * Returns the unformatted date of the image

@@ -248,7 +248,19 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 							$image->setCountry(strip($_POST["$i-country"]));
 							$image->setCredit(strip($_POST["$i-credit"]));
 							$image->setCopyright(strip($_POST["$i-copyright"]));
-							$image->setTags(strip($_POST["$i-tags"]));
+							
+							$tags = $_POST[$i.'-tags'];
+							$key = array_search('*', $tags);
+							if ($key !== false) {
+								$tag = strip($_POST[$i.'-new_tag_value']);
+								if (!empty($tag)) {
+									$tags[$key] = $tag;
+								} else {
+									unset($tags[$key]);
+								}
+							}
+							$image->setTags($tags);
+
 							$image->setDateTime(strip($_POST["$i-date"]));
 							$image->setShow(strip($_POST["$i-Visible"]));
 							$image->setCommentsAllowed(strip($_POST["$i-allowcomments"]));
@@ -982,9 +994,9 @@ if (count($album->getImages())) {
 			</tr>
 			<tr>
 				<td align="right" valign="top"><?php echo gettext("Tags:"); ?></td>
-				<td><input type="text" size="56" style="width: 360px"
-					name="<?php echo $currentimage; ?>-tags"
-					value="<?php echo $image->getTags(); ?>" /></td>
+				<td>
+				<?php tagSelector($image, $currentimage.'-') ?>
+				</td>
 			</tr>
 			<tr>
 				<td align="right" valign="top"><?php echo gettext("Date:"); ?></td>
@@ -1089,7 +1101,7 @@ if (count($album->getImages())) {
 		}
 	}
 	?>
-<h1><?php echo gettext("Edit All Albums in"); ?>" <?php if (!isset($_GET['album'])) { echo gettext("Gallery");} else {echo "<em>" . $album->name . "</em>";}?></h1>
+<h1><?php echo gettext("Edit All Albums in"); ?> <?php if (!isset($_GET['album'])) { echo gettext("Gallery");} else {echo "<em>" . $album->name . "</em>";}?></h1>
 <p><a href="?page=edit<?php echo $albumdir ?>"
 	title="<?php gettext('Back to the list of albums (go up a level)'); ?>">&laquo; <?php echo gettext("Back"); ?></a></p>
 <div class="box" style="padding: 15px;">

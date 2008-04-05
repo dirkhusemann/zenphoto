@@ -2539,11 +2539,11 @@ function getTags() {
  * @since 1.1
  */
 function printTags($option='links',$preText=NULL,$class='taglist',$separator=', ',$editable=TRUE) {
-	$tags = getTags();
-	$singletag = explode(",", $tags);
-	if (empty($tags)) { $preText = ""; }
+	$singletag = getTags();
+	$tagstring = implode(', ', $singletag);
+	if (empty($tagstring)) { $preText = ""; }
 	if ($editable && zp_loggedin()) {
-		echo "<div id=\"tagContainer\">".$preText."<div id=\"imageTags\" style=\"display: inline;\">" . htmlspecialchars(getTags(), ENT_QUOTES) . "</div></div>\n";
+		echo "<div id=\"tagContainer\">".$preText."<div id=\"imageTags\" style=\"display: inline;\">" . htmlspecialchars($tagstring, ENT_QUOTES) . "</div></div>\n";
 		echo "<script type=\"text/javascript\">initEditableTags('imageTags');</script>";
 	} else {
 		if (!empty($tags)) {
@@ -2568,30 +2568,12 @@ function printTags($option='links',$preText=NULL,$class='taglist',$separator=', 
 }
 
 /**
- * Grabs the entire galleries tags
+ * Returns an array indexed by 'tag' with the element value the count of the tag
  *
- * @return string with all the tags
- * @since 1.1
+ * @return array
  */
-function getAllTags() {
-	$result = query_full_array("SELECT `tags` FROM ". prefix('images') ." WHERE `show` = 1");
-	foreach($result as $row){
-		$alltags = $alltags.$row['tags'].",";  // add comma after the last entry so that we can explode to array later
-	}
-	$result = query_full_array("SELECT `tags` FROM ". prefix('albums') ." WHERE `show` = 1");
-	foreach($result as $row){
-		$alltags = $alltags.$row['tags'].",";  // add comma after the last entry so that we can explode to array later
-	}
-	$alltags = explode(",",$alltags);
-	$cleantags = array();
-	foreach ($alltags as $tag) {
-		$clean = strtolower(trim($tag));
-		if (!empty($clean)) {
-			$cleantags[] = $clean;
-		}
-	}
-	$tagcount = array_count_values($cleantags);
-	return $tagcount;
+function getAllTagsCount() {
+	return array_count_values(getAllTags());
 }
 
 /**
@@ -2614,7 +2596,7 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 
 	$option = strtolower($option);
 	if ($class != "") { $class = "class=\"".$class."\""; }
-	$tagcount = getAllTags();
+	$tagcount = getAllTagsCount();
 	if (!is_array($tagcount)) { return false; }
 	if (!is_null($limit)) {
 		$tagcount = array_slice($tagcount, 0, $limit);
