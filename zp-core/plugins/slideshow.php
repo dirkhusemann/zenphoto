@@ -31,7 +31,7 @@ function printSlideShowLink($size='', $linktext='View slideshow') {
 	$numberofimages = getNumImages();
 	
 ?>	
-	<form name="slideshow" method="post" action="<?php echo htmlspecialchars(getCustomPageURL('slideshow'); ?>">
+	<form name="slideshow" method="post" action="<?php echo htmlspecialchars(getCustomPageURL('slideshow')); ?>">
 		<input type="hidden" name="pagenr" value="<?php echo $pagenr;?>" />
 		<input type="hidden" name="albumid" value="<?php echo getAlbumID();?>" />
 		<input type="hidden" name="size" value="<?php echo $size;?>" />
