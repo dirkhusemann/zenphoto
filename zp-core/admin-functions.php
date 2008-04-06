@@ -484,6 +484,9 @@ function tagSelector($that, $postit) {
 				'value="" style="background-color:#B1F7B6" /><br />'.gettext("new tag value")."\n".
 				"\n</div>\n";
 	echo "</td>\n";
+	echo "<td width = \"300\">\n";
+	echo gettext("Select one or more tags from the dropdown list. Select <em>add new tag</em> to create a new tag and add add it. (Enter the value of the new tag in the text field that will appear.)");
+	echo "</td>\n";
 	echo "</tr>\n";
 	echo "</table>\n";
 }

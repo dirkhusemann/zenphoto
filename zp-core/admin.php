@@ -1645,12 +1645,17 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Full name:"); ?> <br />
 		<br />
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("email:"); ?></td>
-		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="text" size="40" name="<?php echo $id ?>-admin_name"
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+			<input type="text" size="40" name="<?php echo $id ?>-admin_name"
 			value="<?php echo $user['name'];?>" /> <br />
 		<br />
 		<input type="text" size="40" name="<?php echo $id ?>-admin_email"
 			value="<?php echo $user['email'];?>" /></td>
-		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><?php
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+		<table>
+		<tr>
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+		<?php
 		echo "<select id=\"managed_albums\" name=\"managed_albums_".$id."[]\" size=\"4\" multiple=1".$alterrights.">\n";
 		$cv = array();
 		$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
@@ -1661,9 +1666,18 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 			$cv[] = $albumitem['folder'];
 		}
 		generateListFromArray($cv, $albumlist);
-		echo "</select>\n"
+		echo "</select>\n";
 		?>
-	
+		</td>
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+		<?php
+		if (empty($background)) {
+			echo gettext("Select one or more albums for the administrator to manage.").' ';
+			echo gettext("Administrators with <em>User admin</em> rights can manage all albums. All others may manage only those that are selected.");
+		}?>
+		</td>
+		</table>
+		</td>
 	
 	<tr>
 	</tr>
