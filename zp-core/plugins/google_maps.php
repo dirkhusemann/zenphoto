@@ -3,6 +3,25 @@ $plugin_description = gettext("Support for providing Google Maps based on EXIF l
 $plugin_author = 'Dustin Brewer (mankind)';
 $plugin_version = '1.0.0';
 $plugin_URL = Gettext("http://www.zenphoto.org/documentation/zenphoto/_plugins---google_maps.php.html");
+$option_interface = new google_mapsOptions();
+
+class google_mapsOptions {
+
+	function google_mapsOptions() {
+		/* put any setup code needed here */
+		setOptionDefault('Allow_comments', true);
+		setOptionDefault('Allow_search', true);
+	}
+	
+	function getOptionsSupported() {
+		return array(	gettext('Google Maps API key') => array('key' => 'gmaps_apikey', 'type' => 0, 
+										'desc' => gettext("If you're going to be using Google Maps,").
+											' <a	href="http://www.google.com/apis/maps/signup.html" target="_blank"> '.
+											gettext("get an API key</a> and enter it here."))
+		);
+	}
+	function handleOption($option, $currentValue) {}
+}
 
 if($apiKey = getOption('gmaps_apikey')){ 
 	require_once(SERVERPATH.'/'.ZENFOLDER.'/plugins/google_maps/phooglelite.php');

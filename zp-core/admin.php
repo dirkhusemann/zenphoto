@@ -4,7 +4,7 @@ require_once("sortable.php");
 if (!$session_started) session_start();
 $sortby = array(gettext('Filename') => 'Filename', gettext('Date') => 'Date', gettext('Title') => 'Title', gettext('ID') => 'ID' );
 $standardOptions = array(	'gallery_title','website_title','website_url','time_offset',
- 													'gmaps_apikey','mod_rewrite','mod_rewrite_image_suffix',
+ 													'mod_rewrite','mod_rewrite_image_suffix',
  													'server_protocol','charset','image_quality',
  													'thumb_quality','image_size','image_use_longest_side',
  													'image_allow_upscale','thumb_size','thumb_crop',
@@ -617,7 +617,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			/*** Theme options ***/
 			if (isset($_POST['savethemeoptions'])) {
 				$returntab = "#tab_theme";
-				// all theme options are custom options, handled below
+				// all theme specific options are custom options, handled below
 				if (!empty($_POST['themealbum'])) {
 					$alb = urldecode($_POST['themealbum']);
 					$table = $alb.'_options';
@@ -634,7 +634,11 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				setThemeOption($table, 'albums_per_page', $_POST['albums_per_page']);
 				setThemeOption($table, 'images_per_page', $_POST['images_per_page']);
 				}
-
+			/*** Plugin Options ***/
+			if (isset($_POST['savepluginoptions'])) {
+				// all plugin options are handled by the custom option code.
+				$returntab = "#tab_plugin";
+			}
 			/*** custom options ***/
 			$templateOptions = GetOptionList();
 
@@ -663,7 +667,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			($ws != getOption('watermark_scale')) ||
 			($wus != getOption('watermark_allow_upscale')) ||
 			($vwm != getOption('video_watermark_image'))) {
-				$gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the options haave changed
+			$gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the options haave changed
 			}
 			if (empty($notify)) $notify = '&saved';
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=options".$notify.$returntab);
@@ -1534,6 +1538,11 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 	?>
 		<li><a href="#tab_theme"><span><?php echo gettext("theme options"); ?></span></a></li>
 	<?php
+		if ($_zp_loggedin & ADMIN_RIGHTS) {
+	?>
+		<li><a href="#tab_plugin"><span><?php echo gettext("plugin options"); ?></span></a></li>
+	<?php
+		}
 	}
 	?>
 </ul>
@@ -1947,13 +1956,6 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		<td><?php echo gettext("The set of fields on which searches may be performed."); ?></td>
 	</tr>
 	<tr>
-		<td><?php echo gettext("Google Maps API key:"); ?></td>
-		<td><input type="text" size="40" name="gmaps_apikey"
-			value="<?php echo getOption('gmaps_apikey');?>" /></td>
-		<td><?php echo gettext("If you're going to be using Google Maps,"); ?> <a	href="http://www.google.com/apis/maps/signup.html" target="_blank">
-				<?php echo gettext("get an API key</a> and enter it here."); ?></td>
-	</tr>
-	<tr>
 		<td><?php echo gettext("Enable Persistent Archives:"); ?></td>
 		<td><input type="checkbox" name="persistent_archive" value="1"
 		<?php echo checked('1', getOption('persistent_archive')); ?> /></td>
@@ -2225,10 +2227,10 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 	} else {
 ?>
 <form action="?page=options&action=saveoptions" method="post">
-<input type="hidden" name="savethemeoptions" value="yes" /> 
+	<input type="hidden" name="savethemeoptions" value="yes" /> 
+	<table class='bordered'>
 <?php
 	/* handle theme options */
-	echo "<table class='bordered'>\n";
 	echo "<input type=\"hidden\" name=\"themealbum\" value=\"".urlencode($alb)."\" />";
 	echo "<tr><th colspan='3'><h2>".gettext("Theme for")." <code><strong>$albumtitle</strong></code>: <em>".$theme['name']."</em></h2></th></tr>\n";
 	?>
@@ -2293,15 +2295,66 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		}
 	}
 		
-	echo "<td></td>\n";
-	echo  '<td><input type="submit" value='. gettext('save').' /></td>' . "\n";
-	echo "<td></td>\n";
-	echo "</tr>\n";
-	echo "</table>\n";
 	?>
+	<tr>
+	<td></td>
+	<td><input type="submit" value= <?php echo gettext('save') ?> /></td>
+	<td></td>
+	</table>
 	</form>
-</div><!-- end of tab_themne div -->
+</div><!-- end of tab_theme div -->
+
+<div id="tab_plugin">
+<?php		
+if ($_zp_loggedin & ADMIN_RIGHTS) { 
+	$curdir = getcwd();
+	chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
+	$filelist = safe_glob('*'.'php');
+	$c = 0;
+?>
+	<form action="?action=saveoptions" method="post">
+	<input type="hidden" name="savepluginoptions" value="yes" /> 
+		<table class='bordered'>
+		<?php
+		foreach ($filelist as $extension) {
+			$ext = substr($extension, 0, strlen($extension)-4);
+			$opt = 'zp_plugin_'.$ext;
+			if (getOption($opt)) {
+				$option_interface = null;
+				require_once($extension);
+				if (!is_null($option_interface)) {
+					$c++;
+					echo '<th colspan="3" style="background-color: #ECF1F2;">'.$ext.'</th>';
+					$supportedOptions = $option_interface->getOptionsSupported();
+					if (count($supportedOptions) > 0) {
+						customOptions($option_interface);
+					}
+				}
+			}
+		}
+	?>
+	<tr>
+	<td></td>
+	<td>
+	<?php
+	if ($c == 0) {
+		echo gettext("There are no plugin options to adminsiter.");
+	} else {
+	?>
+		<input type="submit" value= <?php echo gettext('save') ?> />
+	<?php 
+	}
+	?>
+	</td>
+	<td></td>
+	</table>
+	</form>
 <?php
+	chdir($curdir);
+}
+?>
+</div><!-- end of tab_plugin div -->
+	<?php
 }
 ?>
 </div><!-- end of container --> 
