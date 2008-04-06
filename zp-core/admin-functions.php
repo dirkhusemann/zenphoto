@@ -441,14 +441,21 @@ function generateListFromFiles($currentValue, $root, $suffix) {
 }
 
 function tagSelector($that, $postit) {
-	echo "\n".'<script type="text/javascript">'.
-				'function newselected(obj) {'.
-					'no = obj.selectedIndex;'.
-					"document.getElementById('".$postit."customTextBox').style.display = 'none';".
-					"if(no==0)".
-						"document.getElementById(".$postit."'customTextBox).style.display = 'block';".
-				'}'.
-				'</script>'."\n";
+	
+	$javaprefix = preg_replace("/[^a-z0-9_]/","",strtolower($postit));
+	
+	// script to test for what is selected in and
+	echo '<script type="text/javascript">'."\n";
+	echo '  function '.$javaprefix.'show_add_tag(obj) {'."\n";
+	echo "		if(obj.selectedIndex == '0') {\n";
+	echo "			document.getElementById($javaprefix'new_tag_div_name').style.display = 'block';\n";
+	echo '			}'."\n";
+	echo '		else {'."\n";
+	echo "			document.getElementById($javaprefix'new_tag_div_name').style.display = 'none';\n";
+	echo ' 		}'."\n";
+	echo '	}'."\n";
+	echo '</script>'."\n";
+
 	$tags = $that->getTags();
 	foreach ($tags as $key=>$tag) {
 		$tags[$key] = strtolower(trim($tag));
@@ -462,7 +469,7 @@ function tagSelector($that, $postit) {
 	echo "<table>\n";
 	echo "<tr>\n";
 	echo '<td align="right" valign="top">'."\n";
-	echo "\n".'<select id="tagSelector" name="'.$postit.'tags[]" size="4" multiple=1 onchange="newselected(this)" >';
+	echo "\n".'<select id="tagSelector" name="'.$postit.'tags[]" size="4" multiple=1 onchange="'.$javaprefix.'show_add_tag(this)" >';
 	echo "\n".'<option value="*" style="background-color:#B1F7B6"';
 	if ($dsp == 'block') {
 		echo ' selected="selected"';
@@ -472,9 +479,8 @@ function tagSelector($that, $postit) {
 	echo "</select>\n";
 	echo "</td>\n";
 	echo '<td align="middle" valign="top">'."\n";
-/*!!!!!!!!!temporary!!!!!!!!!!*/  $dsp = 'block';	// when show/hide of the text box works, delete this line.
-	echo '<div id="'.$postit.'customTextBox" name="'.$postit.'customText" style="display:'.$dsp.'">'."\n";
-	echo '<input type="text" size="15" name="'.$postit.'new_tag_value" '.
+	echo '<div id="'.$javaprefix.'new_tag_div_name" name="'.$postit.'tagText" style="display:'.$dsp.'">'."\n";
+	echo '<input type="text" size="15" name="'.$javaprefix.'new_tag_value" '.
 				'value="" style="background-color:#B1F7B6" /><br />'.gettext("new tag value")."\n".
 				"\n</div>\n";
 	echo "</td>\n";
