@@ -442,16 +442,16 @@ function generateListFromFiles($currentValue, $root, $suffix) {
 
 function tagSelector($that, $postit) {
 	
-	$javaprefix = preg_replace("/[^a-z0-9_]/","",strtolower($postit));
+	$javaprefix = 'js_'.preg_replace("/[^a-z0-9_]/","",strtolower($postit));
 	
 	// script to test for what is selected in and
 	echo '<script type="text/javascript">'."\n";
 	echo '  function '.$javaprefix.'show_add_tag(obj) {'."\n";
 	echo "		if(obj.selectedIndex == '0') {\n";
-	echo "			document.getElementById($javaprefix'new_tag_div_name').style.display = 'block';\n";
+	echo "			document.getElementById('$javaprefix"."new_tag_div_name').style.display = 'block';\n";
 	echo '			}'."\n";
 	echo '		else {'."\n";
-	echo "			document.getElementById($javaprefix'new_tag_div_name').style.display = 'none';\n";
+	echo "			document.getElementById('$javaprefix"."new_tag_div_name').style.display = 'none';\n";
 	echo ' 		}'."\n";
 	echo '	}'."\n";
 	echo '</script>'."\n";
