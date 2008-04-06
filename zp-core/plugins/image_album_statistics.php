@@ -2,6 +2,7 @@
 $plugin_description = gettext("Functions that provide various statistics about images and albums in the gallery.");
 $plugin_author = "Malte Müller (acrylian)";
 $plugin_version = '1.0.0';
+$plugin_URL = Gettext("http://www.zenphoto.org/documentation/zenphoto/_plugins---image_album_statistics.php.html");
 /**
  * Retuns a list of album statistic accordingly to $option
  *

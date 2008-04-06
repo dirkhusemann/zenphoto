@@ -2446,6 +2446,7 @@ $themeweb = WEBPATH . "/themes/$theme";
 		$plugin_description = '';
 		$plugin_author = '';
 		$plugin_version = '';
+		$plugin_URL = '';
 		require($extension);
 		echo "<tr>";
 		echo '<td width="30%">';
@@ -2459,6 +2460,9 @@ $themeweb = WEBPATH . "/themes/$theme";
 		echo '</td>';
 		echo '<td>';
 		echo $plugin_description;
+		if (!empty($plugin_URL)) {
+			echo '<br /><a href="'.$plugin_URL.'"><strong>'.gettext("Usage information").'</strong></a>';
+		}
 		if (!empty($plugin_author)) {
 			echo '<br /><strong>'.gettext("Author").'</strong>: '.$plugin_author.'';
 		}

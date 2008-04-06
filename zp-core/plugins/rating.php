@@ -2,6 +2,7 @@
 $plugin_description = gettext("Adds several theme functions to enable images and/or album rating by users.");
 $plugin_author = "Malte Müller (acrylian)";
 $plugin_version = '1.0.0';
+$plugin_URL = Gettext("http://www.zenphoto.org/documentation/zenphoto/_plugins---rating.php.html");
 
 // register the scripts needed
 addPluginScript('<script type="text/javascript" src="'.FULLWEBPATH."/".ZENFOLDER .'/plugins/rating/rating.js"></script>');
