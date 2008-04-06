@@ -260,6 +260,9 @@ function printTabs() {
 		echo "\n    <li". ($page == "plugins" ? " class=\"current\""  : "") .
  				"> <a href=\"admin.php?page=plugins\">".gettext("plugins")."</a></li>";
 	}
+	if (($_zp_loggedin & ADMIN_RIGHTS) && getoption('zp_plugin_zenpage')) {
+		echo "\n    <li><a href=\"plugins/zenpage/page-admin.php\">zenPage</a></li>";
+	}	
 	echo "\n  </ul>";
 
 }
