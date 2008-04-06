@@ -472,7 +472,7 @@ function tagSelector($that, $postit) {
 	echo "<table>\n";
 	echo "<tr>\n";
 	echo '<td align="right" valign="top">'."\n";
-	echo "\n".'<select id="tagSelector" name="'.$postit.'tags[]" size="4" multiple=1 onchange="'.$javaprefix.'show_add_tag(this)" >';
+	echo "\n".'<select id="tagSelector" name="'.$postit.'tags[]" size="20" multiple=1 onchange="'.$javaprefix.'show_add_tag(this)" >';
 	echo "\n".'<option value="*" style="background-color:#B1F7B6"';
 	if ($dsp == 'block') {
 		echo ' selected="selected"';
@@ -481,15 +481,15 @@ function tagSelector($that, $postit) {
 	generateListFromArray($tags, $them);
 	echo "</select>\n";
 	echo "</td>\n";
-	echo '<td align="middle" valign="top">'."\n";
+	echo '<td valign="top">'."\n";
 	echo '<div id="'.$javaprefix.'new_tag_div_name" name="'.$postit.'tagText" style="display:'.$dsp.'">'."\n";
 	echo '<input type="text" size="15" name="'.$javaprefix.'new_tag_value" '.
 				'value="" style="background-color:#B1F7B6" /><br />'.gettext("new tag value")."\n".
 				"\n</div>\n";
 	echo "</td>\n";
-	echo "<td width = \"300\">\n";
+	echo "<td width = \"300\" valign=\"top\">\n";
 	echo gettext("Select one or more tags from the dropdown list. Select <em>add new tag</em> to create a new tag and add add it. (Enter the value of the new tag in the text field that will appear.)");
-	echo "</td>\n";
+	echo "</td valign=\"top\">\n";
 	echo "</tr>\n";
 	echo "</table>\n";
 }
@@ -521,6 +521,7 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<input type=\"hidden\" name=\"" . $prefix . "folder\" value=\"" . $album->name . "\" />";
 	echo "\n<div class=\"box\" style=\"padding: 15px;\">";
 	echo "\n<table>";
+	echo "\n<td><table><tr>";
 	echo "\n<tr>";
 	echo "<td align=\"right\" valign=\"top\">Album Title: </td> <td><input type=\"text\" name=\"".$prefix."albumtitle\" value=\"" .
 	$album->getTitle() . '" />';
@@ -549,9 +550,6 @@ function printAlbumEditForm($index, $album) {
 	echo "\n</tr>";
 	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Password hint:")." </td> <td><input type=\"text\" name=\"".$prefix."albumpass_hint\" class=\"tags\" value=\"" .
 	$album->getPasswordHint() . '" /></td></tr>';
-	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Tags:")." </td> <td>";
-	tagSelector($album, $prefix);
-	echo '</td></tr>';
 
 	$d = $album->getDateTime();
 	if ($d == "0000-00-00 00:00:00") {
@@ -756,6 +754,12 @@ function printAlbumEditForm($index, $album) {
 	echo "\n</select>";
 	echo "\n</td>";
 	echo "\n</tr>";
+	echo "\n</table></td>";
+	echo "\n<td valign=\"top\">";
+	echo gettext("Tags:");
+	tagSelector($album, $prefix);
+	echo '</td>';
+	
 	echo "\n</table>";
 	echo "\n<input type=\"submit\" value=\"".gettext("save")."\" />";
 

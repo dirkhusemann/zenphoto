@@ -997,12 +997,6 @@ if (count($album->getImages())) {
 					value="<?php echo $image->getCopyright(); ?>" /></td>
 			</tr>
 			<tr>
-				<td align="right" valign="top"><?php echo gettext("Tags:"); ?></td>
-				<td>
-				<?php tagSelector($image, $currentimage.'-') ?>
-				</td>
-			</tr>
-			<tr>
 				<td align="right" valign="top"><?php echo gettext("Date:"); ?></td>
 				<td><input type="text" size="56" style="width: 360px"
 					name="<?php echo $currentimage; ?>-date"
@@ -1030,12 +1024,30 @@ if (count($album->getImages())) {
 		</table>
 		</td>
 
-		<td style="padding-left: 1em;"><a
-			href="javascript: confirmDeleteImage('?page=edit&action=deleteimage&album=<?php echo queryEncode($album->name); ?>&image=<?php echo queryEncode($image->filename); ?>','<?php echo gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"); ?>');"
-			title="<?php gettext('Delete the image'); ?> <?php echo $image->filename; ?>"> <img
-			src="images/fail.png" style="border: 0px;"
-			alt="<?php gettext('Delete the image'); ?> <?php echo $image->filename; ?>" /></a></td>
-
+		<td>
+		<table>
+		<tr>
+			<td style="padding-left: 1em;">
+				<a href="javascript: confirmDeleteImage('?page=edit&action=deleteimage&album=<?php echo queryEncode($album->name); ?>&image=<?php echo queryEncode($image->filename); ?>','<?php echo gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"); ?>');"
+					title="<?php gettext('Delete the image'); ?> <?php echo $image->filename; ?>"> <img
+					src="images/fail.png" style="border: 0px;"
+					alt="<?php gettext('Delete the image'); ?> <?php echo $image->filename; ?>" /></a>
+			</td>
+		</tr>
+		<tr></tr>
+		<tr></tr>
+		<tr></tr>
+		<tr>
+			<td>
+				<?php 
+				echo gettext("Tags:");
+				tagSelector($image, $currentimage.'-') 
+				?>
+			</td>
+	</tr>
+	</table>
+	</td>
+	
 
 	</tr>
 
