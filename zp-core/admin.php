@@ -370,7 +370,6 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 					}
 				}
 
-
 				$album = new Album($gallery, $folder);
 				if ($album->exists) {
 					if (!isset($_POST['publishalbum'])) {
@@ -389,7 +388,6 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 					zp_error(gettext("The album couldn't be created in the 'albums' folder. This is usually a permissions problem. Try setting the permissions on the albums and cache folders to be world-writable using a shell:")." <code>chmod 777 " . $AlbumDirName . CACHEFOLDER ."</code>, "
 					. gettext("or use your FTP program to give everyone write permissions to those folders."));
 				}
-
 
 				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit&album=" . urlencode($folder));
 				exit();
@@ -439,7 +437,6 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=comments&ndeleted=0");
 				exit();
 			}
-
 
 		} else if ($action == 'savecomment') {
 			if (!isset($_POST['id'])) {

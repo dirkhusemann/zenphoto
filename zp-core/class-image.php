@@ -355,9 +355,14 @@ class Image extends PersistentObject {
 	 * @return string
 	 */
 	function getTags() { 
-	$tags = explode(",", $this->get('tags'));
-	sort($tags);
-	return $tags; 
+	$tagstring = trim($this->get('tags'));
+	if (empty($tagstring)) {
+		$tags = array();
+	} else {
+		$tags = explode(",", $tagstring);
+		sort($tags);
+	}
+		return $tags; 
 	}
 
 	/**

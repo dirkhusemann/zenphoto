@@ -464,6 +464,7 @@ function tagSelector($that, $postit) {
 		$tags[$key] = strtolower(trim($tag));
 	}
 	$them = array_unique(getAllTags());
+	$them = array_diff($them, $tags);
 	if (count($them) == 0) {
 		$dsp = 'block';
 	} else {
@@ -478,16 +479,15 @@ function tagSelector($that, $postit) {
 		echo ' selected="selected"';
 	}
 	echo '>'.gettext('add new tag').'</option>'."\n";
-	generateListFromArray($tags, $them);
+	generateListFromArray($tags, $tags);
+	generateListFromArray(array(), $them);
 	echo "</select>\n";
 	echo "</td>\n";
 	echo '<td valign="top">'."\n";
 	echo '<div id="'.$javaprefix.'new_tag_div_name" name="'.$postit.'tagText" style="display:'.$dsp.'">'."\n";
 	echo '<input type="text" size="15" name="'.$javaprefix.'new_tag_value" '.
-				'value="" style="background-color:#B1F7B6" /><br />'.gettext("new tag value")."\n".
+				'value="" style="background-color:#B1F7B6" /><br /><em>'.gettext("new tag value")."</em><br/><br/>\n".
 				"\n</div>\n";
-	echo "</td>\n";
-	echo "<td width = \"300\" valign=\"top\">\n";
 	echo gettext("Select one or more tags from the dropdown list. Select <em>add new tag</em> to create a new tag and add add it. (Enter the value of the new tag in the text field that will appear.)");
 	echo "</td valign=\"top\">\n";
 	echo "</tr>\n";
