@@ -148,23 +148,26 @@ function zp_handle_comment() {
 			$allowed_tags = "(".getOption('allowed_tags').")";
 			$allowed = parseAllowedTags($allowed_tags);
 			if ($allowed === false) { $allowed = array(); } // someone has screwed with the 'allowed_tags' option row in the database, but better safe than sorry
-			if(isset($_POST['imageid'])){
-	 		$activeImage = zp_load_image_from_id(strip_tags($_POST['imageid']));
-	 		if($activeImage !== false){
-	 			$commentadded = $activeImage->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']),
-	 											$website, kses($_POST['comment'], $allowed),
-	 											strip_tags($_POST['code']), $_POST['code_h']);
-	 			$redirectTo = FULLWEBPATH . '/' . zpurl(NULL, $activeImage->getAlbum(), $activeImage);
-				}
+			if(isset($_POST['imageid'])){  //used (only?) by the tricasa hack to know which image the client is working with.
+	 			$activeImage = zp_load_image_from_id(strip_tags($_POST['imageid']));
+	 			if($activeImage !== false){
+	 				$commentadded = $activeImage->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']),
+	 				$website, kses($_POST['comment'], $allowed),
+	 				strip_tags($_POST['code']), $_POST['code_h']);
+	 				//$redirectTo = FULLWEBPATH . '/' . zpurl(NULL, $activeImage->getAlbum(), $activeImage);
+	 				$redirectTo = $activeImage->getImageLink(); //ulfben 080406
+					}
 			} else {
 				if (in_context(ZP_IMAGE)) {
 					$commentobject = $_zp_current_image;
+					$redirectTo = $_zp_current_image->getImageLink(); //ulfben 080406
 				} else {
 					$commentobject = $_zp_current_album;
+					$redirectTo = $_zp_current_album->getAlbumLink(); //ulfben 080406 (untested)
 				}
 				$commentadded = $commentobject->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']),
-													$website, kses($_POST['comment'], $allowed),
-													strip_tags($_POST['code']), $_POST['code_h']);
+				$website, kses($_POST['comment'], $allowed),
+				strip_tags($_POST['code']), $_POST['code_h']);
 			}
 			if ($commentadded == 2) {
 				unset($_zp_comment_error);
@@ -182,6 +185,7 @@ function zp_handle_comment() {
 				$stored = array($_POST['name'], $_POST['email'], $website, $_POST['comment'], false);
 				if (isset($_POST['remember'])) $stored[3] = true;
 				$_zp_comment_error = 1 + $commentadded;
+				header('Location: ' . $redirectTo); //ulfben 080406 don't boot users for failing the captcha...
 			}
 		}
 	} else  if (!empty($cookie)) {
