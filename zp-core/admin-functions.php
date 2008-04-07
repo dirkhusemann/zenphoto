@@ -488,7 +488,7 @@ function tagSelector($that, $postit) {
 	echo '<input type="text" size="15" name="'.$javaprefix.'new_tag_value" '.
 				'value="" style="background-color:#B1F7B6" /><br /><em>'.gettext("new tag value")."</em><br/><br/>\n".
 				"\n</div>\n";
-	echo gettext("Select one or more tags from the dropdown list. Select <em>add new tag</em> to create a new tag and add add it. (Enter the value of the new tag in the text field that will appear.)");
+	echo gettext("Select one or more tags from the <em>Tags</em> selection list. To make a new tag, select <em>add new tag</em> and enter the name in the text field that will appear. If you need to add multiple new tags you will have to save after each one.");
 	echo "</td valign=\"top\">\n";
 	echo "</tr>\n";
 	echo "</table>\n";
