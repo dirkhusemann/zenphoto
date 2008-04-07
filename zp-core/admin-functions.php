@@ -900,7 +900,11 @@ function processAlbumEdit($index, $album) {
 	$album->setTitle(strip($_POST[$prefix.'albumtitle']));
 	$album->setDesc(strip($_POST[$prefix.'albumdesc']));
 	
-	$tags = $_POST[$prefix.'tags'];
+	if (isset($_POST[$prefix.'tags'])) {
+		$tags = $_POST[$prefix.'tags'];
+	} else {
+		$tags = array();
+	}
 	$key = array_search('*', $tags);
 	if ($key !== false) {		
 		$tag = strip($_POST[$prefix.'new_tag_value']);

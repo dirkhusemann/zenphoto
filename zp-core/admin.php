@@ -249,7 +249,11 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 							$image->setCredit(strip($_POST["$i-credit"]));
 							$image->setCopyright(strip($_POST["$i-copyright"]));
 							
-							$tags = $_POST[$i.'-tags'];
+							if (isset($_POST[$i.'-tags'])) {
+								$tags = $_POST[$i.'-tags'];
+							} else {
+								$tags =array();
+							}
 							$key = array_search('*', $tags);
 							if ($key !== false) {
 								$tag = strip($_POST[$i.'-new_tag_value']);
