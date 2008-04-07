@@ -1059,12 +1059,12 @@ class Album extends PersistentObject {
 	 */
 	function getSearchEngine() {
 		if (!$this->isDynamic()) return null;
-		if (!is_null($this->$searchengine)) return $this->$searchengine;
-		$this->$searchengine = new SearchEngine();
+		if (!is_null($this->searchengine)) return $this->searchengine;
+		$this->searchengine = new SearchEngine();
 		$params = $this->getSearchParams();
 		$params .= '&albumname='.$this->name;
-		$this->$searchengine->setSearchParams($params);
-		return $this->$searchengine;
+		$this->searchengine->setSearchParams($params);
+		return $this->searchengine;
 	}
 
 	/**
