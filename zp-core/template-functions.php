@@ -611,7 +611,6 @@ function getParentAlbums($album=null) {
 			$name = $_zp_current_search->dynalbumname;
 			if (empty($name)) return $parents;
 			$album = new Album($_zp_gallery, $name);
-			array_unshift($parents, $album);
 		} else {
 			$album = $_zp_current_album;
 		}
