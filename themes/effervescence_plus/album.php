@@ -174,7 +174,9 @@ if ($_GET['format'] != 'xml') {
 				?>
 			</ul> 
 			<div class="clearage"></div>
-			<?php printNofM(gettext("Album"), $firstAlbum, $lastAlbum, getNumSubAlbums()); ?>
+			<?php
+			printNofM(gettext("Album"), $firstAlbum, $lastAlbum, getNumSubAlbums()); 
+			?>
 		</div>
 
 		<!-- Wrap Main Body -->
@@ -251,13 +253,19 @@ if ($_GET['format'] != 'xml') {
  									<?php 
 									} 
 								}
-					if (function_exists('printSlideShowLink')) printSlideShowLink(); 		
 					}
 					?>
  					</div>
  					</div>
 	 			<div class="clearage"></div>
- 					<?php printNofM(gettext('Photo'), $firstImage, $lastImage, getNumImages()); ?>
+ 					<?php 
+					if (function_exists('printSlideShowLink')) {
+						echo "<p align=\"center\">";
+						printSlideShowLink(); 		
+						echo "</p>";
+					}
+ 					printNofM(gettext('Photo'), $firstImage, $lastImage, getNumImages()); 
+ 					?>
 		</div>
 			<?php 
 				} else {  /* flash */

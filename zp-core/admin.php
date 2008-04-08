@@ -256,11 +256,12 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 							}
 							$key = array_search('*', $tags);
 							if ($key !== false) {
-								$tag = strip($_POST[$i.'-new_tag_value']);
-								if (!empty($tag)) {
-									$tags[$key] = $tag;
-								} else {
-									unset($tags[$key]);
+								unset($tags[$key]);
+								for ($j=0; $j<4; $j++) {
+									$tag = trim(strip($_POST[$i.'-new_tag_value_'.$j]));
+									if (!empty($tag)) {
+										$tags[] = $tag;
+									}
 								}
 							}
 							$image->setTags($tags);

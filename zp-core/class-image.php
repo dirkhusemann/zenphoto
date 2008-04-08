@@ -380,6 +380,7 @@ class Image extends PersistentObject {
 				}
 			}
 		}
+		$tags = array_unique($tags);
 		$tags = implode(",", $tags);
 		$this->set('tags', $tags); 
 	}

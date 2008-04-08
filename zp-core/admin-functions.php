@@ -485,10 +485,17 @@ function tagSelector($that, $postit) {
 	echo "</td>\n";
 	echo '<td valign="top">'."\n";
 	echo '<div id="'.$javaprefix.'new_tag_div_name" name="'.$postit.'tagText" style="display:'.$dsp.'">'."\n";
-	echo '<input type="text" size="15" name="'.$javaprefix.'new_tag_value" '.
-				'value="" style="background-color:#B1F7B6" /><br /><em>'.gettext("new tag value")."</em><br/><br/>\n".
-				"\n</div>\n";
-	echo gettext("Select one or more tags from the <em>Tags</em> selection list. To make a new tag, select <em>add new tag</em> and enter the name in the text field that will appear. If you need to add multiple new tags you will have to save after each one.");
+	echo '<em>'.gettext("new tag values")."</em><br/>";
+	for ($i=0; $i<4; $i++) {
+		echo '<input type="text" size="15" name="'.$postit.'new_tag_value_'.$i.'" ';
+		echo 'value="" style="background-color:#B1F7B6" /><br /><br/>'."\n";
+	}
+	echo "\n</div>\n";
+	echo gettext("Select one or more tags from the <em>Tags</em> selection list.").' '.
+			 gettext("(Select a tag by pressing the <em>Ctrl-key</em>) {PC} or the <em>COMMAND-key</em> {MAC} and clicking on the item in the list.").' '.
+			 gettext("Selecting a tag without holding the key will deselect all other tags.)").' '.
+			 gettext("To add a new tag, select <em>add new tag</em> and enter the name(s) in the text fields that will appear.").' '.
+			 gettext("If you need to add more than four new tags you will have to save and select <em>add new tag</em> again.");
 	echo "</td valign=\"top\">\n";
 	echo "</tr>\n";
 	echo "</table>\n";
@@ -906,16 +913,17 @@ function processAlbumEdit($index, $album) {
 		$tags = array();
 	}
 	$key = array_search('*', $tags);
-	if ($key !== false) {		
-		$tag = strip($_POST[$prefix.'new_tag_value']);
-		if (!empty($tag)) {
-			$tags[$key] = $tag;
-		} else {
-			unset($tags[$key]);
+	if ($key !== false) {
+		unset($tags[$key]);
+		for ($i=0; $i<4; $i++) {
+			$tag = trim(strip($_POST[$prefix.'new_tag_value_'.$i]));
+			if (!empty($tag)) {
+				$tags[] = $tag;
+			}
 		}
 	}
 	$album->setTags($tags);
-	
+
 	$album->setDateTime(strip($_POST[$prefix."albumdate"]));
 	$album->setPlace(strip($_POST[$prefix.'albumplace']));
 	$album->setAlbumThumb(strip($_POST[$prefix.'thumb']));
