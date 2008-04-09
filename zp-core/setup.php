@@ -699,8 +699,6 @@ if (file_exists("zp-config.php")) {
 		PRIMARY KEY  (`id`),
 		KEY `ownerid` (`ownerid`)
 		);";
-		$db_schema[] = "ALTER TABLE $tbl_comments ".
-			"ADD CONSTRAINT $cst_comments FOREIGN KEY (`ownerid`) REFERENCES $tbl_images (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
 	}
 
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'images'])) {
@@ -804,9 +802,26 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `password` `password` varchar(255) NOT NULL DEFAULT ''";
 
 	//v1.1.5
+	$sql_statements[] = " ALTER TABLE `zp_comments` DROP FOREIGN KEY `zp_comments_ibfk1`";
 	$sql_statements[] = "ALTER TABLE $tbl_comments CHANGE `imageid` `ownerid` int(11) UNSIGNED NOT NULL default '0';";
-	$sql_statements[] = "ALTER TABLE $tbl_comments DROP INDEX `imageid`;";
-	$sql_statements[] = "ALTER TABLE $tbl_comments ADD INDEX (`ownerid`);";
+  //	$sql_statements[] = "ALTER TABLE $tbl_comments DROP INDEX `imageid`;";
+	$sql = "SHOW INDEX FROM `".$_zp_conf_vars['mysql_prefix']."comments`";
+	$result = mysql_query($sql, $mysql_connection);
+	$hasownerid = false;
+	if ($result) {
+		while ($row = mysql_fetch_row($result)) {
+			if ($row[2] == 'ownerid') {
+				$hasownerid = true;
+			} else {
+				if ($row[2] != 'PRIMARY') {
+					$sql_statements[] = "ALTER TABLE $tbl_comments DROP INDEX `".$row[2]."`;";
+				}
+			}
+		}
+	}
+	if (!hasownerid) {
+		$sql_statements[] = "ALTER TABLE $tbl_comments ADD INDEX (`ownerid`);";
+	}
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `dynamic` int(1) UNSIGNED default '0'";
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `search_params` text default NULL";
 	
