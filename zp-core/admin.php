@@ -1688,7 +1688,9 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		foreach($currentvalues as $albumitem) {
 			$cv[] = $albumitem['folder'];
 		}
-		generateListFromArray($cv, $albumlist);
+		generateListFromArray($cv, $cv);
+		$rest = array_diff($albumlist, $cv);
+		generateListFromArray($cv, $rest);
 		echo "</select>\n";
 		?>
 		</td>
