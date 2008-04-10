@@ -123,7 +123,7 @@ function printAdminToolbox($context=null, $id='admin') {
 					echo "<br />\n";
 				}
 				echo "<a href=\"javascript: confirmDeleteAlbum('".$zf."/admin.php?page=edit&action=deletealbum&album=" .
-				queryEncode($albumname) . "');\" title=\"".gettext("Delete the album")."\">".gettext("Delete album")."</a><br />\n";
+				urlencode($albumname) . "');\" title=\"".gettext("Delete the album")."\">".gettext("Delete album")."</a><br />\n";
 			}
 			if (isMyAlbum($albumname, UPLOAD_RIGHTS) && !$_zp_current_album->isDynamic()) {
 				printLink($zf . '/admin.php?page=upload&album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL);
@@ -133,7 +133,7 @@ function printAdminToolbox($context=null, $id='admin') {
 			}
 			$redirect = "&album=".urlencode($albumname)."&page=$page";
 		} else if (in_context(ZP_IMAGE)) {
-			$imagename = queryEncode($_zp_current_image->filename);
+			$imagename = urlencode($_zp_current_image->filename);
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				echo "<a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?page=edit&action=deleteimage&album=" .
 				urlencode($albumname) . "&image=". $imagename . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
@@ -2779,7 +2779,7 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
 			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
 		case "Album":
-			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php?albumnr=".getAlbumId()."&albumname=".getAlbumTitle()."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php?albumnr=".getAlbumId()."&albumname=".urlencode(getAlbumTitle())."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
 		case "Comments":
 			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss-comments.php\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
@@ -2801,7 +2801,7 @@ function printRSSHeaderLink($option, $linktext) {
 			echo "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss.php\" />\n";
 			break;
 		case "Album":
-			echo "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss.php?albumnr=".getAlbumId()."&albumname=".getAlbumTitle()."\" />\n";
+			echo "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss.php?albumnr=".getAlbumId()."&albumname=".urlencode(getAlbumTitle())."\" />\n";
 			break;
 		case "Comments":
 			echo "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss-comments.php\" />\n";

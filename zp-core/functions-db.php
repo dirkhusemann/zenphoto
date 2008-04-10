@@ -209,25 +209,4 @@ function getSetClause($new_unique_set) {
 	return $set;
 }
 
-/**
- * encodes a query
- *@param string $url url to encode
- *@return encoded url
- *@since 0.6
-	*/
-function queryEncode($url) {
-	$encode = str_replace('%26', '%%1', urlencode($url));  
-	return str_replace('%23', '%%2', $encode); 
-} 
-
-/**
- * decodes a query
- *@param string $url url to decode
- *@return decoded url
- *@since 0.6
-	*/
-function queryDecode($url) { 
-	$decode = str_replace('%%1', '%26', $url); 
-	return urldecode(str_replace('%%2', '%23', $decode)); 
-}
 ?>

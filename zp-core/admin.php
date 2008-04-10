@@ -145,7 +145,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	//check for security incursions
 	if (isset($_GET['album'])) {
 		if (!($_zp_loggedin & ADMIN_RIGHTS)) {
-			if (!isMyAlbum(queryDecode(strip($_GET['album'])), $_zp_loggedin)) {
+			if (!isMyAlbum(urldecode(strip($_GET['album'])), $_zp_loggedin)) {
 				unset($_GET['album']);
 				unset($_GET['page']);
 				$page = 'home';
@@ -180,7 +180,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 		/** Publish album  ************************************************************/
 		/******************************************************************************/
 		if ($action == "publish") {
-			$folder = queryDecode(strip($_GET['album']));
+			$folder = urldecode(strip($_GET['album']));
 			$album = new Album($gallery, $folder);
 			$album->setShow($_GET['value']);
 			$album->save();
@@ -226,7 +226,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			/** SAVE A SINGLE ALBUM *******************************************************/
 			if ($_POST['album']) {
 
-				$folder = queryDecode(strip($_POST['album']));
+				$folder = urldecode(strip($_POST['album']));
 				$album = new Album($gallery, $folder);
 				$notify = '';
 				if (isset($_POST['savealbuminfo'])) {
@@ -282,7 +282,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				/** SAVE MULTIPLE ALBUMS ******************************************************/
 			} else if ($_POST['totalalbums']) {
 				for ($i = 1; $i <= $_POST['totalalbums']; $i++) {
-					$folder = queryDecode(strip($_POST["$i-folder"]));
+					$folder = urldecode(strip($_POST["$i-folder"]));
 					$album = new Album($gallery, $folder);
 					$rslt = processAlbumEdit($i, $album);
 					if (!empty($rslt)) { $notify = $rslt; }
@@ -291,7 +291,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			// Redirect to the same album we saved.
 			$qs_albumsuffix = "&massedit";
 			if ($_GET['album']) {
-				$folder = queryDecode(strip($_GET['album']));
+				$folder = urldecode(strip($_GET['album']));
 				$qs_albumsuffix = '&album='.urlencode($folder);
 			}
 			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit' . $qs_albumsuffix . $notify . '&saved');
@@ -302,7 +302,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 		} else if ($action == "deletealbum") {
 			$albumdir = "";
 			if ($_GET['album']) {
-				$folder = queryDecode(strip($_GET['album']));
+				$folder = urldecode(strip($_GET['album']));
 				$album = new Album($gallery, $folder);
 				if ($album->deleteAlbum()) {
 					$nd = 3;
@@ -320,8 +320,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 
 		} else if ($action == "deleteimage") {
 			if ($_GET['album'] && $_GET['image']) {
-				$folder = queryDecode(strip($_GET['album']));
-				$file = queryDecode(strip($_GET['image']));
+				$folder = urldecode(strip($_GET['album']));
+				$file = urldecode(strip($_GET['image']));
 				$album = new Album($gallery, $folder);
 				$image = new Image($album, $file);
 				if ($image->deleteImage(true)) {
@@ -1030,10 +1030,10 @@ if (count($album->getImages())) {
 		<table>
 		<tr>
 			<td style="padding-left: 1em;">
-				<a href="javascript: confirmDeleteImage('?page=edit&action=deleteimage&album=<?php echo queryEncode($album->name); ?>&image=<?php echo queryEncode($image->filename); ?>','<?php echo gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"); ?>');"
-					title="<?php gettext('Delete the image'); ?> <?php echo $image->filename; ?>"> <img
+				<a href="javascript: confirmDeleteImage('?page=edit&action=deleteimage&album=<?php echo urlencode($album->name); ?>&image=<?php echo urlencode($image->filename); ?>','<?php echo gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"); ?>');"
+					title="<?php gettext('Delete the image'); ?> <?php echo xmlspecialchars($image->filename); ?>"> <img
 					src="images/fail.png" style="border: 0px;"
-					alt="<?php gettext('Delete the image'); ?> <?php echo $image->filename; ?>" /></a>
+					alt="<?php gettext('Delete the image'); ?> <?php echo xmlspecialchars($image->filename); ?>" /></a>
 			</td>
 		</tr>
 		<tr></tr>

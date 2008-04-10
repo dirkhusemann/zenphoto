@@ -86,6 +86,15 @@ if ($session_started) session_start();
 error_reporting(E_ALL ^ E_NOTICE);
 $_zp_error = false;
 
+/**
+ * wraps htmlspecialchars and makes it work for xml
+ *
+ * @param string $text
+ * @return string
+ */
+function xmlspecialchars($text) {
+	return str_replace("&#039;", '&apos;', htmlspecialchars($text, ENT_QUOTES));
+} 
 
 /**
  * Get a option stored in the database.

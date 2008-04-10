@@ -49,7 +49,7 @@ if (!zp_loggedin()) {
 		if (isset($_GET['album'])) $alb = $_GET['album'];
 		if (isset($_POST['album'])) $alb = $_POST['album'];
 		if (isset($alb)) {
-			$folder = querydecode(strip($alb));
+			$folder = urldecode(strip($alb));
 			if (!empty($folder)) {
 				$sql = "SELECT `id` FROM ". prefix('albums') . " WHERE `folder`=\"".mysql_real_escape_string($folder)."\";";
 				$row = query_single_row($sql);

@@ -783,7 +783,7 @@ function printAlbumButtons($album) {
 		echo "\n<table class=\"buttons\"><tr>";
 		echo "\n<td valign=\"top\" width=30% style=\"padding: 0px 30px 0px 30px;\">";
 		echo "<form name=\"cache_images\" action=\"cache-images.php\" method=\"post\">";
-		echo "<input type=\"hidden\" name=\"album\" value=" . queryencode($album->name) . ">";
+		echo "<input type=\"hidden\" name=\"album\" value=" . urlencode($album->name) . ">";
 		echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
 		echo "<button type=\"submit\" class=\"tooltip\" id='edit_cache' title=\"".gettext("Cache newly uploaded images.")."\"><img src=\"images/cache.png\" style=\"border: 0px;\" />";
 		echo " ".gettext("Pre-Cache Images")."</Button>";
@@ -791,8 +791,8 @@ function printAlbumButtons($album) {
 		echo "</form>\n</td>";
 
 		echo "\n<td valign=\"top\" width = 30% style=\"padding: 0px 30px 0px 30px;\">";
-		echo "<form name=\"refresh_metadata\" action=\"refresh-metadata.php\"?album=" . queryencode($album->name) . "\" method=\"post\">";
-		echo "<input type=\"hidden\" name=\"album\" value=" . queryencode($album->name) . ">";
+		echo "<form name=\"refresh_metadata\" action=\"refresh-metadata.php\"?album=" . urlencode($album->name) . "\" method=\"post\">";
+		echo "<input type=\"hidden\" name=\"album\" value=" . urlencode($album->name) . ">";
 		echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
 		echo "<button type=\"submit\" class=\"tooltip\" id='edit_refresh' title=\"".gettext("Forces a refresh of the EXIF and IPTC data for all images in the album.")."\"><img src=\"images/warn.png\" style=\"border: 0px;\" /> ".gettext("Refresh Metadata")."</button>";
 		echo "</form>";
@@ -857,22 +857,22 @@ function printAlbumEditRow($album) {
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	if ($album->getShow()) {
-		echo '<a class="publish" href="?action=publish&value=0&album=' . queryencode($album->name) .
+		echo '<a class="publish" href="?action=publish&value=0&album=' . urlencode($album->name) .
  				'" title="'.gettext('Publish the album').' ' . $album->name . '">';
 		echo '<img src="images/pass.png" style="border: 0px;" alt="'.gettext('Published').'" /></a>';
 	} else {
-		echo '<a class="publish" href="?action=publish&value=1&album=' . queryencode($album->name) .
+		echo '<a class="publish" href="?action=publish&value=1&album=' . urlencode($album->name) .
  				'" title="'.gettext('Publish the album').' ' . $album->name . '">';
 		echo '<img src="images/action.png" style="border: 0px;" alt="Publish the album ' . $album->name . '" /></a>';
 	}
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-	echo '<a class="cache" href="cache-images.php?page=edit&album=' . queryencode($album->name) . "&return=*" .
+	echo '<a class="cache" href="cache-images.php?page=edit&album=' . urlencode($album->name) . "&return=*" .
  			'" title="'.gettext('Pre-cache images in').' ' . $album->name . '">';
 	echo '<img src="images/cache.png" style="border: 0px;" alt="'.gettext('Cache the album').' ' . $album->name . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-	echo '<a class="warn" href="refresh-metadata.php?page=edit&album=' . queryencode($album->name) . "&return=*" .
+	echo '<a class="warn" href="refresh-metadata.php?page=edit&album=' . urlencode($album->name) . "&return=*" .
  			'" title="'.gettext('Refresh metadata for the album').' ' . $album->name . '">';
 	echo '<img src="images/warn.png" style="border: 0px;" alt="'.gettext('Refresh image metadata in the album').' ' . $album->name . '" /></a>';
 
@@ -881,8 +881,8 @@ function printAlbumEditRow($album) {
 	echo '<img src="images/reset.png" style="border: 0px;" alt="'.gettext('Reset hitcounters for the album').' ' . $album->name . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-	echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=" . queryEncode($album->name) . "','".gettext("Are you sure you want to delete this entire album?")."','".gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")."');\" title=\"".gettext("Delete the album")." " . $album->name . "\">";
-	echo '<img src="images/fail.png" style="border: 0px;" alt="'.gettext('Delete the album').' ' . $album->name . '" /></a>';
+	echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=" . urlencode($album->name) . "','".gettext("Are you sure you want to delete this entire album?")."','".gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")."');\" title=\"".gettext("Delete the album")." " . xmlspecialchars($album->name) . "\">";
+	echo '<img src="images/fail.png" style="border: 0px;" alt="'.gettext('Delete the album').' ' . xmlspecialchars($album->name) . '" /></a>';
 	echo "</td>\n</tr></table>\n</td>";
 
 	echo '</tr>';
