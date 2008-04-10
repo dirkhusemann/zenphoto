@@ -2545,7 +2545,7 @@ function printTags($option='links',$preText=NULL,$class='taglist',$separator=', 
 		echo "<div id=\"tagContainer\">".$preText."<div id=\"imageTags\" style=\"display: inline;\">" . htmlspecialchars($tagstring, ENT_QUOTES) . "</div></div>\n";
 		echo "<script type=\"text/javascript\">initEditableTags('imageTags');</script>";
 	} else {
-		if (!empty($tags)) {
+		if (count($singletag) > 0) {
 			echo "<ul class=\"".$class."\">\n";
 			if (!empty($preText)) {
 				echo "<li class=\"tags_title\">".$preText."</li>";
