@@ -2637,7 +2637,7 @@ foreach ($comments as $comment) {
 	}
 	$website = $comment['website'];
 	$comment = truncate_string($comment['comment'], 123);
-	echo "<li><div class=\"commentmeta\">$author commented on <a href=\""
+	echo "<li><div class=\"commentmeta\">".$author." ".gettext("commented on")." <a href=\""
 	. (getOption("mod_rewrite") ? "../$album/$image" : "../index.php?album=".urlencode($album)."&image=".urlencode($image))
 	. "\">$albumtitle $title</a>:</div><div class=\"commentbody\">$comment</div></li>";
 }

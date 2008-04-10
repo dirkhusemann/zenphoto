@@ -100,7 +100,7 @@ function printAdminToolbox($context=null, $id='admin') {
 		if (is_null($context)) { $context = get_context(); }
 		echo '<div id="' .$id. '">'."\n".'<a href="javascript: toggle('. "'" .$dataid."'".');"><h3>'.gettext('Admin Toolbox').'</h3></a>'."\n"."\n</div>";
 		echo '<div id="' .$dataid. '" style="display: none;">'."\n";
-		printAdminLink('Admin', '', "<br />\n");
+		printAdminLink(gettext('Admin'), '', "<br />\n");
 		$albumname = $_zp_current_album->name;
 		if ($context === ZP_INDEX) {
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
