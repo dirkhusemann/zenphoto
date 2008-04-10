@@ -47,9 +47,9 @@
 	</div>
 	
 	<div id="narrow">
-		
 		<?php printImageDesc(true); ?>
-		<hr />
+		<?php echo "albumID: ".getAlbumID(); printSlideShowLink(gettext('View Slideshow')); ?>
+		<hr /><br />
 		<?php 
 			if (getImageEXIFData()) {echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=345&width=300&inlineId=imagemetadata\" title=\"".gettext("Image Info")."\" class=\"thickbox\">".gettext("Image Info")."</a></div>";
 				printImageMetadata('', false); 

@@ -261,7 +261,7 @@ if ($_GET['format'] != 'xml') {
  					<?php 
 					if (function_exists('printSlideShowLink')) {
 						echo "<p align=\"center\">";
-						printSlideShowLink(); 		
+						printSlideShowLink(gettext('View Slideshow')); 		
 						echo "</p>";
 					}
  					printNofM(gettext('Photo'), $firstImage, $lastImage, getNumImages()); 

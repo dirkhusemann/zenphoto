@@ -43,7 +43,7 @@
 				<div class="imagethumb"><a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo getImageTitle();?>"><?php printImageThumb(getImageTitle()); ?></a></div>
 			</div>
 			<?php endwhile; ?>
-		<?php if (function_exists('printSlideShowLink')) printSlideShowLink(); ?>		
+		<?php if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow')); ?>		
 		</div>
 	
 		<?php printPageListWithNav("&laquo; ".gettext("prev"), gettext("next")." &raquo;"); ?>

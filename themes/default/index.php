@@ -36,7 +36,6 @@
 		</div>
 		<br clear="all" />
 		<?php printPageListWithNav("&laquo; ".gettext("prev"), gettext("next")." &raquo;"); ?>
-				
 	</div>
 
 </div>

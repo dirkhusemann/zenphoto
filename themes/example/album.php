@@ -62,7 +62,7 @@ $firstPageImages = normalizeColumns(1, 7);
 	 
 		
 		<br clear="all" />
-		<?php if (function_exists('printSlideShowLink')) printSlideShowLink(); ?>		
+		<?php if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow')); ?>		
 			<div class="rating"><?php if (function_exists('printAlbumRating')) printAlbumRating(); ?></div>
 			<?php if (function_exists('printAlbumMap')) printAlbumMap(); ?>
 		</div>

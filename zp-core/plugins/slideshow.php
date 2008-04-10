@@ -10,7 +10,7 @@ $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slidesh
  * @param int $size The size of the slideshow slides
  * @param string $linktext Text for the link
  */
-function printSlideShowLink($size='', $linktext='View slideshow') {
+function printSlideShowLink($linktext='', $size='') {
  	global $_zp_current_image;
 	if(empty($size)) {
 		$size = getOption('image_size');
@@ -81,7 +81,7 @@ function printSlideShow($option="jQuery", $effect='fade', $speed=500, $timeout=3
 	// get slideshow data
 	$album = query_single_row("SELECT title, folder FROM ". prefix('albums') ." WHERE `show` = 1 AND id = ".$albumid);
 	if(!checkAlbumPassword($album['folder'], $hint)) {
-		echo "This album is password protected!"; exit;
+		echo gettext("This album is password protected!"); exit;
 	}		
 	$images = query_full_array("SELECT title, filename, `desc` FROM ". prefix('images') ." WHERE `show` = 1 AND albumid = ".$albumid." ORDER BY sort_order");
 	
@@ -151,7 +151,7 @@ function printSlideShow($option="jQuery", $effect='fade', $speed=500, $timeout=3
 				} else if(function_exists("flvplayerConfig")) {
 					flvplayerConfig($imagepath,$image['title']);
 				}	else {
-					echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='nNo flash player installed.' />";
+					echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='No flash player installed.' />";
 				}
 			}
 			elseif ($ext == ".3gp") {
