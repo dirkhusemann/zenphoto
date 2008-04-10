@@ -2788,25 +2788,36 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
 }
 
 /**
+ * Returns the RSS link for use in the HTML HEAD
+ *
+ * @param string $option type of RSS (Gallery, Album, Comments)
+ * @param string $linktext title of the link
+ * 
+ * @return string
+ * @since 1.1
+ */
+function getRSSHeaderLink($option, $linktext) {
+	$host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
+	switch($option) {
+		case "Gallery":
+			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss.php\" />\n";
+		case "Album":
+			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss.php?albumnr=".getAlbumId()."&albumname=".urlencode(getAlbumTitle())."\" />\n";
+		case "Comments":
+			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss-comments.php\" />\n";
+	}
+}
+
+/**
  * Prints the RSS link for use in the HTML HEAD
  *
  * @param string $option type of RSS (Gallery, Album, Comments)
  * @param string $linktext title of the link
- * @since 1.1
+ * 
+ * @since 1.1.6
  */
 function printRSSHeaderLink($option, $linktext) {
-	$host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
-	switch($option) {
-		case "Gallery":
-			echo "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss.php\" />\n";
-			break;
-		case "Album":
-			echo "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss.php?albumnr=".getAlbumId()."&albumname=".urlencode(getAlbumTitle())."\" />\n";
-			break;
-		case "Comments":
-			echo "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss-comments.php\" />\n";
-			break;
-	}
+	echo getRSSHeaderLink($option, $linktext);
 }
 
 
