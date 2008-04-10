@@ -1545,7 +1545,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		if ($_zp_loggedin & OPTIONS_RIGHTS) { 
 	?>
 			<li><a href="#tab_gallery"><span><?php echo gettext("gallery configuration"); ?></span></a></li>
-			<li><a href="#tab_image"><span><?php echo gettext("image display"); ?></a></span></li>
+			<li><a href="#tab_image"><span><?php echo gettext("image display"); ?></span></a></li>
 			<li><a href="#tab_comments"><span><?php echo gettext("comment configuration"); ?></span></a></li>
 	<?php 
 		} 

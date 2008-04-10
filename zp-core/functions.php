@@ -35,8 +35,7 @@ $encoding = 'UTF-8';
 $locale = getOption("locale");
 @putenv("LANG=$locale");
 // gettext setup
-@setlocale(LC_TIME, $locale);
-@setlocale(LC_MESSAGES, $locale);
+@setlocale(LC_ALL, $locale);
 // Set the text domain as 'messages'
 $domain = 'zenphoto';
 bindtextdomain($domain, "locale/");
