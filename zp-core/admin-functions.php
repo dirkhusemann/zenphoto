@@ -447,7 +447,7 @@ function tagSelector($that, $postit) {
 	
 	$javaprefix = 'js_'.preg_replace("/[^a-z0-9_]/","",strtolower($postit));
 	
-	// script to test for what is selected in and
+	// script to test for what is selected
 	echo '<script type="text/javascript">'."\n";
 	echo '  function '.$javaprefix.'show_add_tag(obj) {'."\n";
 	echo "		if(obj.selectedIndex == '0') {\n";
@@ -496,7 +496,7 @@ function tagSelector($that, $postit) {
 			 gettext("Selecting a tag without holding the key will deselect all other tags.)").' '.
 			 gettext("To add a new tag, select <em>add new tag</em> and enter the name(s) in the text fields that will appear.").' '.
 			 gettext("If you need to add more than four new tags you will have to save and select <em>add new tag</em> again.");
-	echo "</td valign=\"top\">\n";
+	echo "\n</td>\n";
 	echo "</tr>\n";
 	echo "</table>\n";
 }
@@ -528,9 +528,9 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<input type=\"hidden\" name=\"" . $prefix . "folder\" value=\"" . $album->name . "\" />";
 	echo "\n<div class=\"box\" style=\"padding: 15px;\">";
 	echo "\n<table>";
-	echo "\n<td><table><tr>";
+	echo "\n<td width = \"60%\">\n<table>\n<tr>";
 	echo "\n<tr>";
-	echo "<td align=\"right\" valign=\"top\">Album Title: </td> <td><input type=\"text\" name=\"".$prefix."albumtitle\" value=\"" .
+	echo "<td align=\"right\" valign=\"top\" width=\"150\">Album Title: </td> <td><input type=\"text\" name=\"".$prefix."albumtitle\" value=\"" .
 	$album->getTitle() . '" />';
 	$id = $album->getAlbumId();
 	$result = query_single_row("SELECT `hitcounter` FROM " . prefix('albums') . " WHERE id = $id");
@@ -570,46 +570,83 @@ function printAlbumEditForm($index, $album) {
 	$prefix."album_custom_data\" class=\"tags\" value=\"" .
 	$album->getCustomData() . "\" /></td></tr>";
 	$sort = $sortby;
-	if ($album->isDynamic()) {
-		echo "\n<tr>";
-		echo "\n<td align=\"right\" valign=\"top\">".gettext("Dynamic album search:")."</td>";
-		echo "\n<td>";
-		echo "\n<table class=\"noinput\" >";
-		echo "\n<tr><td>" .	urldecode($album->getSearchParams()) . "</td></tr>";
-		echo "\n</table>";
-		echo "\n</td>";
-		echo "\n</tr>";
-	} else {
+	if (!$album->isDynamic()) {
 		$sort[gettext('Manual')] = 'Manual';
 	}
 	echo "\n<tr>";
 	echo "\n<td align=\"right\" valign=\"top\">".gettext("Sort subalbums by:")." </td>";
 	echo "\n<td>";
-	echo "\n<select id=\"sortselect\" name=\"".$prefix."subalbumsortby\">";
-	generateListFromArray(array($album->getSubalbumSortType()), $sort);
+
+	// script to test for what is selected 
+	$javaprefix = 'js_'.preg_replace("/[^a-z0-9_]/","",strtolower($prefix));
+	echo '<script type="text/javascript">'."\n";
+	echo '  function '.$javaprefix.'album_direction(obj) {'."\n";
+	echo "		if(obj.options[obj.selectedIndex].value == 'Manual') {\n";
+	echo "			document.getElementById('$javaprefix"."album_direction_div').style.display = 'none';\n";
+	echo '			}'."\n";
+	echo '		else {'."\n";
+	echo "			document.getElementById('$javaprefix"."album_direction_div').style.display = 'block';\n";
+	echo ' 		}'."\n";
+	echo '	}'."\n";
+	echo '</script>'."\n";
+	
+	echo "\n<table>\n<tr>\n<td>";
+	echo "\n<select id=\"sortselect\" name=\"".$prefix."subalbumsortby\" onchange=\"".$javaprefix."album_direction(this)\">";
+	generateListFromArray(array($type = $album->getSubalbumSortType()), $sort);
 	echo "\n</select>";
+	echo "\n</td>\n<td>";
+	if ($type == 'Manual') {
+		$dsp = 'none';
+	} else {
+		$dsp = 'block';
+	}
+	echo "\n<div id=\"".$javaprefix."album_direction_div\" style=\"display:".$dsp."\">";
 	echo "&nbsp;".gettext("Descending")." <input type=\"checkbox\" name=\"".$prefix."album_sortdirection\" value=\"1\"";
 
 	if ($album->getSortDirection('album')) {
 		echo "CHECKED";
 	}
 	echo ">";
+	echo '</div>';
+	echo "\n</td>\n</tr>\n</table>";
 	echo "\n</td>";
 	echo "\n</tr>";
 
 	echo "\n<tr>";
 	echo "\n<td align=\"right\" valign=\"top\">".gettext("Sort images by:")." </td>";
 	echo "\n<td>";
-	echo "\n<select id=\"sortselect\" name=\"".$prefix."sortby\">";
-	generateListFromArray(array($album->getSortType()), $sort);
+	
+	// script to test for what is selected 
+	$javaprefix = 'js_'.preg_replace("/[^a-z0-9_]/","",strtolower($prefix));
+	echo '<script type="text/javascript">'."\n";
+	echo '  function '.$javaprefix.'image_direction(obj) {'."\n";
+	echo "		if(obj.options[obj.selectedIndex].value == 'Manual') {\n";
+	echo "			document.getElementById('$javaprefix"."image_direction_div').style.display = 'none';\n";
+	echo '			}'."\n";
+	echo '		else {'."\n";
+	echo "			document.getElementById('$javaprefix"."image_direction_div').style.display = 'block';\n";
+	echo ' 		}'."\n";
+	echo '	}'."\n";
+	echo '</script>'."\n";
+	
+	echo "\n<table>\n<tr>\n<td>";
+	echo "\n<select id=\"sortselect\" name=\"".$prefix."sortby\" onchange=\"".$javaprefix."image_direction(this)\">";
+	generateListFromArray(array($type = $album->getSortType()), $sort);
 	echo "\n</select>";
+	echo "\n</td>\n<td>";
+	if ($type == 'Manual') {
+		$dsp = 'none';
+	} else {
+		$dsp = 'block';
+	}
+	echo "\n<div id=\"".$javaprefix."image_direction_div\" style=\"display:".$dsp."\">";
 	echo "&nbsp;".gettext("Descending")." <input type=\"checkbox\" name=\"".$prefix."image_sortdirection\" value=\"1\"";
-
 	if ($album->getSortDirection('image')) {
 		echo "CHECKED";
 	}
-
 	echo ">";
+	echo '</div>';
+	echo "\n</td>\n</tr>\n</table>";
 	echo "\n</td>";
 	echo "\n</tr>";
 
@@ -656,7 +693,30 @@ function printAlbumEditForm($index, $album) {
 		echo "\n</td>";
 		echo "\n</tr>";
 	}
-	echo "\n<td align=\"right\" valign=\"top\">".gettext("Thumbnail:")." </td> ";
+	
+	echo "\n</table>\n</td>";
+	echo "\n<td valign=\"top\">";
+	echo gettext("Tags:");
+	tagSelector($album, $prefix);
+	echo "\n</td>\n</tr>";
+	
+	echo "\n</table>";
+
+	echo  "\n<table>";
+	if ($album->isDynamic()) {
+		echo "\n<tr>";
+		echo "\n<td> </td>";
+		echo "\n<td align=\"right\" valign=\"top\" width=\"150\">".gettext("Dynamic album search:")."</td>";
+		echo "\n<td>";
+		echo "\n<table class=\"noinput\">";
+		echo "\n<tr><td >" .	urldecode($album->getSearchParams()) . "</td></tr>";
+		echo "\n</table>";
+		echo "\n</td>";
+		echo "\n</tr>";
+	} 
+	echo "\n<tr>";
+	echo "\n<td> </td>";
+	echo "\n<td align=\"right\" valign=\"top\" width=\"150\">".gettext("Thumbnail:")." </td> ";
 	echo "\n<td>";
 	echo "\n<script type=\"text/javascript\">updateThumbPreview(document.getElementById('thumbselect'));</script>";
 	echo "\n<select id=\"thumbselect\" class=\"thumbselect\" name=\"".$prefix."thumb\" onChange=\"updateThumbPreview(this)\">";
@@ -701,11 +761,11 @@ function printAlbumEditForm($index, $album) {
 		}
 	} else {
 		$thumb = $album->get('thumb');
-		echo "\n<option class=\"thumboption\" value=\"\"";
+		echo "\n<option class=\"thumboption\" value=\"\" style=\"background-color:#B1F7B6\"";
 		if (empty($thumb)) {
 			echo " selected=\"selected\"";
 		}
-		echo '> "'.gettext('randomly selected').'"';
+		echo '> '.gettext('randomly selected');
 		echo '</option>';
 		if (count($album->getSubalbums()) > 0) {
 			$imagearray = array();
@@ -761,13 +821,8 @@ function printAlbumEditForm($index, $album) {
 	echo "\n</select>";
 	echo "\n</td>";
 	echo "\n</tr>";
-	echo "\n</table></td>";
-	echo "\n<td valign=\"top\">";
-	echo gettext("Tags:");
-	tagSelector($album, $prefix);
-	echo '</td>';
-	
 	echo "\n</table>";
+	
 	echo "\n<input type=\"submit\" value=\"".gettext("save")."\" />";
 
 	echo "\n</div>";
@@ -806,7 +861,7 @@ function printAlbumButtons($album) {
 		echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
 		echo "<button type=\"submit\" class=\"tooltip\" id='edit_hitcounter' title=\"".gettext("Resets all hitcounters in the album.")."\"><img src=\"images/reset.png\" style=\"border: 0px;\" /> ".gettext("Reset hitcounters")."</button>";
 		echo "</form>";
-		echo "\n</tr></table>";
+		echo "\n</tr>\n</table>";
 	}
 }
 /**
