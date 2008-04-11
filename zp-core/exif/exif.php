@@ -4,7 +4,7 @@
 	Extracts EXIF information from digital photos.
 	
 	Originally created by:
-	Copyright © 2005 Jake Olefsky
+	Copyright ï¿½ 2005 Jake Olefsky
 	http:// www.offsky.com/software/exif/index.php
 	jake@olefsky.com
 	
@@ -37,7 +37,10 @@
 				Olympus C2040Z 
 				Olympus C960
 				Olumpus E-300
+				Olympus E-410
 				Olympus E-500
+				Olympus E-510
+				Olympus E-3
 				Canon Ixus
 				Canon EOS 300D
 				Canon Digital Rebel
@@ -125,13 +128,17 @@
 		+ Gives raw data output for IPTC, COM and APP2 fields which are sometimes set by other applications
 		+ Improvements to Nikon Makernote parsing
 			
-	1.6  March 25th, 2007 [Zenphoto]
+	1.6    March 25th, 2007 [Zenphoto]
 	
 		+ Adopted into the Zenphoto gallery project, at http://www.zenphoto.org
 		+ Fixed a bug where strings had trailing null bytes.
 		+ Formatted selected strings better.
 		+ Added calculation of 35mm-equivalent focal length when possible.
 		+ Cleaned up code for readability and efficiency.
+		
+	1.7    April 11th, 2008 [Zenphoto]
+	  
+	  + Fixed bug with newer Olympus cameras where number of fields was miscalculated leading to bad performance.
 		
 */
 
