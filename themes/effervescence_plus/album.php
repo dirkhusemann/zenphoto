@@ -287,7 +287,7 @@ if ($_GET['format'] != 'xml') {
 			 echo "</p>";
  						$flash_url = getAlbumLinkURL();	
  						if (substr($flash_url, -1, 1) == '/') {$flash_url= substr($flash_url, 0, -1);}
- 						$flash_url = $flash_url . (getOption("mod_rewrite") ? "?" : "&") . "format=xml";
+ 						$flash_url = $flash_url . (getOption("mod_rewrite") ? "?" : "&amp;") . "format=xml";
  						?>
  						<script type="text/javascript">
 									var fo = new SWFObject("<?php echo  $_zp_themeroot ?>/simpleviewer.swf", "viewer", "100%", "100%", "7", "<?php echo $backgroundColor ?>");	
