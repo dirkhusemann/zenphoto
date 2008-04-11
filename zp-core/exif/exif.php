@@ -139,6 +139,7 @@
 	1.7    April 11th, 2008 [Zenphoto]
 	  
 	  + Fixed bug with newer Olympus cameras where number of fields was miscalculated leading to bad performance.
+		+ More logical fraction calculation for shutter speed.
 		
 */
 
