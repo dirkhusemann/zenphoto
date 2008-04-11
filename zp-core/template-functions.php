@@ -643,11 +643,11 @@ function printAlbumBreadcrumb($before='', $after='', $title='Album Thumbnails') 
 			echo "<em>".gettext("Search")."</em></a>";
 		} else {
 			$album = new Album($_zp_current_gallery, $dynamic_album);
-			echo "<a href=\"" . getAlbumLinkURL($album) . "\">";
+			echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL($album)) . "\">";
 			echo $album->getTitle();
 		}
 	} else {
-		echo "<a href=\"" . getAlbumLinkURL(). "\" title=\"$title\">" . getAlbumTitle() . "</a>";
+		echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL()). "\" title=\"$title\">" . getAlbumTitle() . "</a>";
 	}
 	echo $after;
 }
@@ -845,12 +845,13 @@ function getAlbumLinkURL($album=NULL) {
 	}
 	if (in_context(ZP_IMAGE) && $page > 1) {
 		// Link to the page the current image belongs to.
-		return rewrite_path("/" . pathurlencode($album->name) . "/page/" . $page,
+		$link = rewrite_path("/" . pathurlencode($album->name) . "/page/" . $page,
 			"/index.php?album=" . urlencode($album->name) . "&page=" . $page);
 	} else {
-		return rewrite_path("/" . pathurlencode($album->name) . "/",
+		$link = rewrite_path("/" . pathurlencode($album->name) . "/",
 			"/index.php?album=" . urlencode($album->name));
 	}
+	return $link;
 }
 
 /**

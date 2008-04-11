@@ -25,10 +25,10 @@
 			<div class="album">
 				
 						<div class="thumb">
-					<a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View album:'); ?> <?php echo getAlbumTitle();?>"><?php printAlbumThumbImage(getAlbumTitle()); ?></a>
+					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:'); ?> <?php echo getAlbumTitle();?>"><?php printAlbumThumbImage(getAlbumTitle()); ?></a>
 						</div>
 				<div class="albumdesc">
-					<h3><a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View album:'); ?> <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
+					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:'); ?> <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
 								<small><?php printAlbumDate(""); ?></small>
 					<p><?php printAlbumDesc(); ?></p>
 				</div>

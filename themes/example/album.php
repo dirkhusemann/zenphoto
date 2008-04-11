@@ -33,11 +33,11 @@ $firstPageImages = normalizeColumns(1, 7);
 		<div id="albums">
 			<?php while (next_album()): ?>
 			<div class="album">
-					<div class="albumthumb"><a href="<?php echo getAlbumLinkURL();?>" title="<?php echo getAlbumTitle();?>">
+					<div class="albumthumb"><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo getAlbumTitle();?>">
 						<?php printAlbumThumbImage(getAlbumTitle()); ?></a>
 						</div>
 					<div class="albumtitle">
-									<h3><a href="<?php echo getAlbumLinkURL();?>" title="<?php echo getAlbumTitle();?>">
+									<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo getAlbumTitle();?>">
 							<?php printAlbumTitle(); ?></a></h3> <?php printAlbumDate(); ?>
 								</div>
 						<div class="albumdesc"><?php printAlbumDesc(); ?></div>

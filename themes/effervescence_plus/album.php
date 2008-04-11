@@ -164,10 +164,10 @@ if ($_GET['format'] != 'xml') {
 					?>
 				<li>
 					<div class="imagethumb">
-					<a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View the Album:'); echo getAlbumTitle(); printImage_AlbumCount(); ?>">
+					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the Album:'); echo getAlbumTitle(); printImage_AlbumCount(); ?>">
 					<?php printCustomAlbumThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?></a>
 					</div>
-					<h4><a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View the Album:'); echo getAlbumTitle(); printImage_AlbumCount(); ?>">
+					<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the Album:'); echo getAlbumTitle(); printImage_AlbumCount(); ?>">
 					<?php printAlbumTitle(); ?></a></h4></li>
 				<?php 
 						} 
@@ -285,7 +285,7 @@ if ($_GET['format'] != 'xml') {
  						} 
 			 printLinkWithQuery($url, 'noflash', gettext('View Gallery Without Flash'));
 			 echo "</p>";
- 						$flash_url = getAlbumLinkURL();	
+ 						$flash_url = htmlspecialchars(getAlbumLinkURL());	
  						if (substr($flash_url, -1, 1) == '/') {$flash_url= substr($flash_url, 0, -1);}
  						$flash_url = $flash_url . (getOption("mod_rewrite") ? "?" : "&amp;") . "format=xml";
  						?>

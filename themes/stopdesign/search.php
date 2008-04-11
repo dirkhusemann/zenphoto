@@ -46,8 +46,8 @@
 				}
 			?>
 				<li class="gal">
-					<a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View album: '); echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 230, null, 210, 60); ?></a>
-					<h3><a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View album: '); echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
+					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album: '); echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 230, null, 210, 60); ?></a>
+					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album: '); echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
 					<p>
 						<?php 
 						$number = getNumAlbums(); 

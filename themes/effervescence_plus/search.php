@@ -129,12 +129,12 @@ $backgroundImagePath="";
 				$lastAlbum++;
 			}
 			?>
-			<li><div class="imagethumb"><a href="<?php echo getAlbumLinkURL();?>" title="View the album: 
+			<li><div class="imagethumb"><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="View the album: 
 				<?php echo getAlbumTitle();
 				printImage_AlbumCount();
 			?>">
 				<?php printCustomAlbumThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?></a></div>
-				<h4><a href="<?php echo getAlbumLinkURL();?>" title="<?php echo gettext('View the Album: '); echo getAlbumTitle();
+				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the Album: '); echo getAlbumTitle();
 				printImage_AlbumCount();
 			?>">
 			<?php printAlbumTitle(); ?></a></h4></li>
