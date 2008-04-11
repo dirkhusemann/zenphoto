@@ -61,12 +61,12 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
 	// Extract the image parameters from the input variables
 	// This validates the input as well.
 	$args = getImageParameters(
-	array(
-	$_GET['s'], $_GET['w'], $_GET['h'], $_GET['cw'], $_GET['ch'], $_GET['cx'], $_GET['cy'], $_GET['q'])
-	);
+		array(
+			$_GET['s'], $_GET['w'], $_GET['h'], $_GET['cw'], $_GET['ch'], $_GET['cx'], $_GET['cy'], $_GET['q'])
+		);
 	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
 
-	if ($debug) debugLog("Album: [ " . $album . " ], Image: [ " . $image . " ]<br/><br/>");
+	if ($debug) debugLog("Album: [ " . $album . " ], Image: [ " . $image . " ]");
 	if ($debug) DebugLogArray("args", $args);
 
 } else {

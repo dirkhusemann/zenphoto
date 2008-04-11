@@ -662,14 +662,14 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			}
 
 			if (($wmo != getOption('perform_watermark')) ||
-			($vwmo != getOption('perform_video_watermark')) ||
-			($woh != getOption('watermark_h_offset')) ||
-			($wow != getOption('watermark_w_offset'))  ||
-			($wm != getOption('watermark_image')) ||
-			($ws != getOption('watermark_scale')) ||
-			($wus != getOption('watermark_allow_upscale')) ||
-			($vwm != getOption('video_watermark_image'))) {
-			$gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the options haave changed
+					($vwmo != getOption('perform_video_watermark')) ||
+					($woh != getOption('watermark_h_offset')) ||
+					($wow != getOption('watermark_w_offset'))  ||
+					($wm != getOption('watermark_image')) ||
+					($ws != getOption('watermark_scale')) ||
+					($wus != getOption('watermark_allow_upscale')) ||
+					($vwm != getOption('video_watermark_image'))) {
+				$gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the options haave changed
 			}
 			if (empty($notify)) $notify = '&saved';
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=options".$notify.$returntab);
@@ -2073,7 +2073,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		           gettext("If <em>allow upscale</em> is not checked the watermark will not be made larger than the original watermark image."); ?></td>
 	</tr>
 	<tr>
-		<td><?php echo gettext("Watermark videos:"); ?></td>
+		<td><?php echo gettext("Watermark video thumbs:"); ?></td>
 		<td><?php
 		$v = explode("/", getOption('video_watermark_image'));
 		$v = str_replace('.png', "", $v[count($v)-1]);
@@ -2083,7 +2083,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		?> <input type="checkbox" name="perform_video_watermark" value="1"
 		<?php echo checked('1', getOption('perform_video_watermark')); ?> />&nbsp;<?php echo gettext("Enabled"); ?>
 		</td>
-		<td><?php echo gettext("The watermark image (png-24). (Place the image in the"); ?> <?php echo ZENFOLDER; ?>/watermarks/ <?php echo gettext("directory"); ?>.)</td>
+		<td><?php echo gettext("The watermark image (png-24) that will be overlayed on the video thumbnail (if one exists). (Place the image in the"); ?> <?php echo ZENFOLDER; ?>/watermarks/ <?php echo gettext("directory"); ?>.)</td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Full image quality:"); ?></td>
