@@ -60,6 +60,8 @@
 		<?php if (function_exists('printImageMap')) printImageMap(); ?>
     
     <?php if (function_exists('printImageRating')) { printImageRating(); }?>
+    
+		<?php if (function_exists('printShutterfly')) printShutterfly(); ?>
 		
 		<?php if (getOption('Allow_comments')) { ?>
 				<div id="comments">

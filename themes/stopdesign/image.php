@@ -71,6 +71,7 @@
  					</li>
 				</ul>
 			</div>
+			<?php if (function_exists('printShutterfly')) printShutterfly(); ?>
 
 			<div class="main">
 				<?php if (getOption('Allow_comments')) { ?>
