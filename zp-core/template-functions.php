@@ -2928,9 +2928,10 @@ function zen_search_script() {
  *
  * @param string $prevtext text to go before the search form
  * @param string $id css id for the search form, default is 'search'
+ * @param string $buttonSource optional path to the image for the button
  * @since 1.1.3
  */
-function printSearchForm($prevtext=NULL, $id='search') {
+function printSearchForm($prevtext=NULL, $id="search", $buttonSource="") {
 	if (checkforPassword(silent)) { return; }
 	$zf = WEBPATH."/".ZENFOLDER;
 	$dataid = $id . '_data';
@@ -2946,13 +2947,19 @@ function printSearchForm($prevtext=NULL, $id='search') {
 	if ($multiple = cbone($fields, 8) > 1) {
 		$multiple = false; //disable until it works!		zen_search_script();
 	}
+	if (empty($buttonSource)) {
+		$type = 'submit';
+	} else {
+		$buttonSource = 'src="' . $buttonSource . '" alt="'.gettext("search").'"';
+		$type = 'image';
+	}
 
 	echo "\n<div id=\"search\">";
 	if (getOption('mod_rewrite')) { $searchurl = '/page/search/'; } else { $searchurl = "/index.php?p=search"; }
 	echo "\n<form method=\"post\" action=\"".WEBPATH.$searchurl."\" id=\"search_form\">";
 	echo "\n$prevtext<input type=\"text\" name=\"words\" value=".$searchwords." id=\"search_input\" size=\"10\" />";
 
-	echo "\n<input type=\"submit\" value=\"".gettext("Search")."\" class=\"pushbutton\" id=\"search_submit\" />";
+	echo "\n<input type=\"$type\" value=\"".gettext("Search")."\" class=\"pushbutton\" id=\"search_submit\" $buttonSource />";
 
 	if ($multiple) { //then there is some choice possible
 		echo "\n<a class=\"showmenu\" onclick=\"javascript: javascript:showMenu();\" title=\"".gettext("Show fields")." \">";

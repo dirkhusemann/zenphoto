@@ -71,7 +71,7 @@ $backgroundImagePath="";
 <!-- Logo -->
 	<div id="logo">
 	<?php
-	if (getOption('Allow_search')) {  printSearchForm(); }
+	if (getOption('Allow_search')) {  printSearchForm(NULL, '', $_zp_themeroot.'/images/search.png'); }
 		echo printLogo();
 	?>
 	</div>

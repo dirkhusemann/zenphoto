@@ -19,7 +19,10 @@
 	<!-- Logo -->
 		<div id="gallerytitle">
 			<div id="logo">
-				<?php if (getOption('Allow_search')) {  printSearchForm(''); }	echo printLogo(); ?>
+				<?php 
+				if (getOption('Allow_search')) {  printSearchForm(NULL, '', $_zp_themeroot.'/images/search.png'); }	
+				echo printLogo(); 
+				?>
 			</div>
 		</div>
 
