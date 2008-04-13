@@ -9,8 +9,7 @@ class google_mapsOptions {
 
 	function google_mapsOptions() {
 		/* put any setup code needed here */
-		setOptionDefault('Allow_comments', true);
-		setOptionDefault('Allow_search', true);
+		setOptionDefault('gmaps_apikey', '');
 	}
 	
 	function getOptionsSupported() {
