@@ -1881,10 +1881,17 @@ function printImageThumb($alt, $class=NULL, $id=NULL) {
 	if (zp_loggedin() && !empty($pwd)) {
 		$class .= " password_protected";
 	}
-
+	$h = getOption('thumb_crop_height');
+	if (!empty($h)) {
+		$h = " height=\"$h\"";
+	}
+	$w = getOption('thumb_crop_width');
+	if (!empty($w)) {
+		$w = "width=\"$w\"";
+	}
 	$class = trim($class);
 	echo "<img src=\"" . htmlspecialchars(getImageThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
-	((getOption('thumb_crop')) ? " width=\"".getOption('thumb_crop_width')."\" height=\"".getOption('thumb_crop_height')."\"" : "") .
+	((getOption('thumb_crop')) ? $w.$h : "") .
 	(($class) ? " class=\"$class\"" : "") .
 	(($id) ? " id=\"$id\"" : "") . " />";
 }
