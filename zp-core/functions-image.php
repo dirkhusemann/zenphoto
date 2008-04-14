@@ -389,7 +389,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			$nw = round($watermark_width * $r);
 			$nh = round($watermark_height * $r);
 			if (($nw != $watermark_width) || ($nh != $watermark_height)) {
-				$watermark = imageResizeAlpha(&$watermark, $nw, $nh);
+				$watermark = imageResizeAlpha($watermark, $nw, $nh);
 			}
 			// Position Overlay in Bottom Right
 			$dest_x = max(0, floor(($imw - $nw) * $offset_w));
