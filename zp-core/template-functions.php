@@ -1243,7 +1243,7 @@ function printImageTitle($editable=false) {
 		echo "<div id=\"imageTitle\" style=\"display: inline;\">" . htmlspecialchars(getImageTitle()) . "</div>\n";
 		echo "<script type=\"text/javascript\">initEditableTitle('imageTitle');</script>";
 	} else {
-		echo "<div id=\"imageTitle\" style=\"display: inline;\">" . htmlspecialchars(getImageTitle()) . "</div>\n";
+		echo "<span id=\"imageTitle\" style=\"display: inline;\">" . htmlspecialchars(getImageTitle()) . "</span>\n";
 	}
 }
 
@@ -1822,7 +1822,7 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 			} else if(function_exists("flvplayerConfig")) {
 				flvplayerConfig();
 			}	else {
-				echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='nNo flash player installed.' />";
+				echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='No flash player installed.' />";
 			}
 		}
 		elseif ($ext == ".3gp") {
@@ -1887,7 +1887,7 @@ function printImageThumb($alt, $class=NULL, $id=NULL) {
 	}
 	$w = getOption('thumb_crop_width');
 	if (!empty($w)) {
-		$w = "width=\"$w\"";
+		$w = " width=\"$w\"";
 	}
 	$class = trim($class);
 	echo "<img src=\"" . htmlspecialchars(getImageThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
@@ -2020,7 +2020,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 			} else if(function_exists("flvplayerConfig")) {
 				flvplayerConfig();
 			}	else {
-				echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='nNo flash player installed.' />";
+				echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='No flash player installed.' />";
 			}
 		}
 		elseif ($ext == ".3gp") {
@@ -2678,8 +2678,8 @@ function getAllDates() {
  */
 function printAllDates($class='archive', $yearid='year', $monthid='month') {
 	if (!empty($class)){ $class = "class=\"$class\""; }
-	if (!empty($yearid)){ $yearid = "id=\"$yearid\""; }
-	if (!empty($monthid)){ $monthid = "id=\"$monthid\""; }
+	if (!empty($yearid)){ $yearid = "class=\"$yearid\""; }
+	if (!empty($monthid)){ $monthid = "class=\"$monthid\""; }
 	$datecount = getAllDates();
 	$lastyear = "";
 	echo "\n<ul $class>\n";
@@ -2787,7 +2787,7 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
 			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
 		case "Album":
-			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php?albumnr=".getAlbumId()."&albumname=".urlencode(getAlbumTitle())."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php?albumnr=".getAlbumId()."&amp;albumname=".urlencode(getAlbumTitle())."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
 		case "Comments":
 			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss-comments.php\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
@@ -2810,7 +2810,7 @@ function getRSSHeaderLink($option, $linktext) {
 		case "Gallery":
 			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss.php\" />\n";
 		case "Album":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss.php?albumnr=".getAlbumId()."&albumname=".urlencode(getAlbumTitle())."\" />\n";
+			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss.php?albumnr=".getAlbumId()."&amp;albumname=".urlencode(getAlbumTitle())."\" />\n";
 		case "Comments":
 			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss-comments.php\" />\n";
 	}
