@@ -3,7 +3,7 @@ $plugin_description =   "<a href =\"http://blog.qelix.com/2008/04/07/paypal-inte
 	"zenPayPal</a> -- ".gettext("Paypal Integration for Zenphoto.");
 $plugin_author = 'Ebrahim Ezzy (Nimbuz) '.gettext("made into a plugin by ").'Stephen Billard (sbillard)';
 $plugin_version = '1.0.0';
-$plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slideshow.php.html";
+$plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---zenPaypal.php.html";
 $option_interface = new zenPaypalOptions();
 addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/zenPaypal/zenPaypal.css" type="text/css" />');
 
