@@ -4,7 +4,7 @@
  * for more robust SPAM filters
  * 
  * Interface functions:
- *     getFilterOptionsSupported()
+ *     getOptionsSupported()
  *        called from admin Options tab
  *        returns an array of the option names the theme supports
  *        the array is indexed by the option name. The value for each option is an array:
@@ -13,7 +13,7 @@
  *          'type' => 2 will cause admin to call handleOption to generate the HTML for the option
  *          'desc' => text to be displayed for the option description.
  *             
- *     handleFilterOption($option, $currentValue)
+ *     handleOption($option, $currentValue)
  *       $option is the name of the option being processed
  *       $currentValue is the "before" value of the option
  *

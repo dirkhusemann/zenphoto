@@ -1,4 +1,9 @@
 <?php
+/**
+ * flvplayer -- plugin support for the jquery flvplayer video player.
+ * 
+ */
+
 $plugin_description = gettext("Enable <strong>FLV</strong> player to handle the .flv video files. IMPORTANT: Only one flash player plugin can be enabled at the time.<br> Please see <a href='http://www.jeroenwijering.com/?item=JW_FLV_Player'>JW FLV media player </a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian)";
 $plugin_version = '1.0.0';

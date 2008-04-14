@@ -1,4 +1,19 @@
 <?php
+/** 
+ * zenPaypal -- PayPal ordering support
+ * 
+ * Provides a PayPal ordering form for image print ordering.
+ * 
+ * Plugin option 'zenPaypal_userid' allows setting the PayPal user email.
+ * Plugin option 'zenPaypal_pricelist' provides the default pricelist. 
+ * 
+ * Price lists can also be passed as a parameter to the zenPaypal() function. See also 
+ * zenPaypalPricelistFromString() for parsing a string into the pricelist array. This could be used, 
+ * for instance, by storing a pricelist string in the 'customdata' field of your images and then parsing and 
+ * passing it in the zenPaypal() call. This would give you individual pricing by image.
+ *  
+ */
+
 $plugin_description =   "<a href =\"http://blog.qelix.com/2008/04/07/paypal-integraion-for-zenphoto-zenpaypal/\">".
 	"zenPayPal</a> -- ".gettext("Paypal Integration for Zenphoto.");
 $plugin_author = 'Ebrahim Ezzy (Nimbuz) '.gettext("made into a plugin by ").'Stephen Billard (sbillard)';

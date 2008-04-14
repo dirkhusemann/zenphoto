@@ -1,8 +1,14 @@
 <?php
+/**
+ * slideshow -- Supports showing slideshows of images in an album.
+ * 
+ */
+
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the theme file <em>slideshow.php</em> needs to be present in the theme folder. Copy it from one of the distributed themes.");
 $plugin_author = "Malte Müller (acrylian)";
 $plugin_version = '1.0.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slideshow.php.html";
+
 /**
  * Prints a link to call the slideshow
  * To be used on album.php and image.php
