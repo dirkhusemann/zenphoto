@@ -65,9 +65,9 @@ class SpamFilter  {
  		if ($option=='Words_to_die_on') {
  			$list = explode(',', $currentValue);
  			sort($list);
-	 	echo '<textarea name="' . $option . '" cols="42" rows="4">' . implode(',', $list) . "</textarea>\n";
+	 		echo '<textarea name="' . $option . '" cols="42" rows="4">' . implode(',', $list) . "</textarea>\n";
  		} else if ($option=='Patterns_to_die_on') {
-	 	echo '<textarea name="' . $option . '" cols="42" rows="2">' . $currentValue . "</textarea>\n";
+	 		echo '<textarea name="' . $option . '" cols="42" rows="2">' . $currentValue . "</textarea>\n";
 	 }
 	}
 
