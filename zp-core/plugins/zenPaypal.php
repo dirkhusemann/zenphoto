@@ -42,12 +42,12 @@ class zenPaypalOptions {
 /**
  * Parses a price list element string and returns a pricelist array
  *
- * @param string $string
+ * @param string $prices A text string of price list elements in the form <size>:<media>=<price> <size>:<media>=<price> ...
  * @return array
  */
-function zenPaypalPricelistFromString($string) {
+function zenPaypalPricelistFromString($prices) {
 	$pricelist = array();
-	$pricelistelements = explode(' ', $string);
+	$pricelistelements = explode(' ', $prices);
 		foreach ($pricelistelements as $element) {
 			if (!empty($element)) {
 				$elementparts = explode('=', $element);
