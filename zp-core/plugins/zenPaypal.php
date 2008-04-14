@@ -1,8 +1,9 @@
 <?php
-$plugin_description = gettext("Paypal Integration for Zenphoto.");
+$plugin_description =   "<a href =\"http://blog.qelix.com/2008/04/07/paypal-integraion-for-zenphoto-zenpaypal/\">".
+	"zenPayPal</a> -- ".gettext("Paypal Integration for Zenphoto.");
 $plugin_author = 'Ebrahim Ezzy (Nimbuz) '.gettext("made into a plugin by ").'Stephen Billard (sbillard)';
 $plugin_version = '1.0.0';
-$plugin_URL = "http://blog.qelix.com/2008/04/07/paypal-integraion-for-zenphoto-zenpaypal/";
+$plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slideshow.php.html";
 $option_interface = new zenPaypalOptions();
 addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/zenPaypal/zenPaypal.css" type="text/css" />');
 
@@ -37,6 +38,25 @@ class zenPaypalOptions {
 	 }
 	}
 }
+
+/**
+ * Parses a price list element string and returns a pricelist array
+ *
+ * @param string $string
+ * @return array
+ */
+function zenPaypalPricelistFromString($string) {
+	$pricelist = array();
+	$pricelistelements = explode(' ', $string);
+		foreach ($pricelistelements as $element) {
+			if (!empty($element)) {
+				$elementparts = explode('=', $element);
+				$pricelist[$elementparts[0]] = $elementparts[1];
+			}
+		}
+	return $pricelist;
+}
+
 /**
  * Places a Paypal button on your form
  * 
@@ -44,15 +64,7 @@ class zenPaypalOptions {
  */
 function zenPaypal($pricelist=NULL) {
 	if (!is_array($pricelist)) {
-		$pricelist = array();
-		$pricelistoption = getOption('zenPaypal_pricelist');
-		$pricelistelements = explode(' ', $pricelistoption);
-		foreach ($pricelistelements as $element) {
-			if (!empty($element)) {
-				$elementparts = explode('=', $element);
-				$pricelist[$elementparts[0]] = $elementparts[1];
-			}
-		}
+		$pricelist = zenPaypalPricelistFromString(getOption('zenPaypal_pricelist'));
 	}
 ?>
 <script language="javascript">
