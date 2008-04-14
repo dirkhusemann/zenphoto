@@ -10,9 +10,9 @@ class zenPaypalOptions {
 
 	function zenPaypalOptions() {
 
-		$pricelist = array("4x6:Matte" => '5.75', "4x6:Glossy" => '10.00', "4x6:Paper" => '8.45', 
-								"8x10:Matte" => '15.00', "8x10:Glossy" => '20.00', "8x10:Paper" => '8.60', 
-								"11x14:Matte" => '25.65', "11x14:Glossy" => '26.75', "11x14:Paper" => '15.35', );
+		$pricelist = array("4x6:".gettext("Matte") => '5.75', "4x6:".gettext("Glossy") => '10.00', "4x6:".gettext("Paper") => '8.45', 
+								"8x10:".gettext("Matte") => '15.00', "8x10:".gettext("Glossy") => '20.00', "8x10:".gettext("Paper") => '8.60', 
+								"11x14:".gettext("Matte") => '25.65', "11x14:".gettext("Glossy") => '26.75', "11x14:".gettext("Paper") => '15.35', );
 		setOptionDefault('zenPaypal_userid', "");
 		$pricelistoption = '';
 		foreach ($pricelist as $item => $price) {
@@ -40,15 +40,18 @@ class zenPaypalOptions {
 /**
  * Places a Paypal button on your form
  * 
+ * @param array $pricelist optional array of specific pricing for the image.
  */
-function zenPaypal() {
-	$pricelist = array();
-	$pricelistoption = getOption('zenPaypal_pricelist');
-	$pricelistelements = explode(' ', $pricelistoption);
-	foreach ($pricelistelements as $element) {
-		if (!empty($element)) {
-			$elementparts = explode('=', $element);
-			$pricelist[$elementparts[0]] = $elementparts[1];		
+function zenPaypal($pricelist=NULL) {
+	if (!is_array($pricelist)) {
+		$pricelist = array();
+		$pricelistoption = getOption('zenPaypal_pricelist');
+		$pricelistelements = explode(' ', $pricelistoption);
+		foreach ($pricelistelements as $element) {
+			if (!empty($element)) {
+				$elementparts = explode('=', $element);
+				$pricelist[$elementparts[0]] = $elementparts[1];
+			}
 		}
 	}
 ?>
