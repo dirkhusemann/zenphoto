@@ -22,6 +22,10 @@ $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---zenPayp
 $option_interface = new zenPaypalOptions();
 addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/zenPaypal/zenPaypal.css" type="text/css" />');
 
+/**
+ * Plugin option handling class
+ *
+ */
 class zenPaypalOptions {
 
 	function zenPaypalOptions() {

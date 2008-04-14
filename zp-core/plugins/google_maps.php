@@ -11,6 +11,10 @@ $plugin_version = '1.0.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---google_maps.php.html";
 $option_interface = new google_mapsOptions();
 
+/**
+ * Plugin option handling class
+ *
+ */
 class google_mapsOptions {
 
 	function google_mapsOptions() {
