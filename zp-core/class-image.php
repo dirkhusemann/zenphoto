@@ -647,7 +647,7 @@ class Image extends PersistentObject {
 	function getThumb() {
 		if ($this->video) {      //The file is a video
 			if ($this->videoThumb == NULL) {
-				return WEBPATH . "/" . ZENFOLDER . "/i.php?a=.&i=videoDefault.png&s=thumb";
+				return WEBPATH . "/" . ZENFOLDER . "/i.php?a=.&i=multimediaDefault.png&s=thumb";
 			} else {
 				return WEBPATH . "/" . ZENFOLDER . "/i.php?a=".urlencode($this->album->name)."&i=".urlencode($this->videoThumb)."&s=thumb&vwm=".getOption('perform_video_watermark');
 			}

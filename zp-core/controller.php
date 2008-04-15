@@ -11,8 +11,8 @@ require_once('functions-controller.php');
 $_zp_gallery = new Gallery();
 $_zp_phoogle = null;
 
-if (!file_exists(getAlbumFolder() . 'videoDefault.png')) { copy(SERVERPATH . '/' . ZENFOLDER . '/images/videoDefault.png',  getAlbumFolder() . 'videoDefault.png'); }
-if (!file_exists(getAlbumFolder() . 'zen-logo.jpg')) { copy(SERVERPATH . '/' . ZENFOLDER . '/images/zen-logo.jpg',  getAlbumFolder() . 'zen-logo.jpg'); } 
+copy(SERVERPATH . '/' . ZENFOLDER . '/images/multimediaDefault.png',  getAlbumFolder() . 'multimediaDefault.png'); 
+copy(SERVERPATH . '/' . ZENFOLDER . '/images/zen-logo.jpg',  getAlbumFolder() . 'zen-logo.jpg');  
 
 $_zp_current_album = NULL;
 $_zp_current_album_restore = NULL;

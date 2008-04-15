@@ -2590,7 +2590,7 @@ function getAllTagsCount() {
  * @param string $class CSS class
  * @param string $sort "results" for relevance list, "abc" for alphabetical, blank for unsorted
  * @param bool $counter TRUE if you want the tag count within brackets behind the tag
- * @param bool $links text to go before the printed tags
+ * @param bool $links set to TRUE to have tag search links included with the tag.
  * @param int $maxfontsize largest font size the cloud should display
  * @param int $maxcount the maximum count for a tag to appear in the output
  * @param int $mincount the minimum count for a tag to appear in the output
