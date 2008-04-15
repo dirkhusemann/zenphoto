@@ -1822,7 +1822,7 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 			} else if(function_exists("flvplayerConfig")) {
 				flvplayerConfig();
 			}	else {
-				echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='No flash player installed.' />";
+				echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "/images/err-noflashplayer.gif' alt='No flash player installed.' />";
 			}
 		}
 		elseif ($ext == ".3gp") {
