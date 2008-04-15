@@ -19,8 +19,29 @@ addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLD
 function flowplayerConfig($moviepath='') {
 	if(empty($moviepath)) {
 		$moviepath = getUnprotectedImageURL();
+		$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
+	} else {
+		$ext = strtolower(strrchr($moviepath, "."));
 	}
+	if($ext === ".mp3") {
 			echo '</a>
+			<p id="playerContainer"><a href="http://www.adobe.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
+			<script>
+			$("#playerContainer").flashembed({
+      	src:\'' . WEBPATH . '/' . ZENFOLDER . '/plugins/flowplayer/FlowPlayerLight.swf\',
+      	width:400, 
+      	height:28
+    	},
+    		{config: {  
+      		autoPlay: false,
+					loop: false,
+      		videoFile: \'' . $moviepath . '\',
+      		initialScale: \'scale\'
+    		}} 
+  		);
+			</script><a>';
+	} else {
+		echo '</a>
 			<p id="playerContainer"><a href="http://www.adobe.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
 			<script>
 			$("#playerContainer").flashembed({
@@ -36,5 +57,6 @@ function flowplayerConfig($moviepath='') {
     		}} 
   		);
 			</script><a>';
+	}
 }
 ?>

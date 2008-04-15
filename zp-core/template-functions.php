@@ -1815,7 +1815,7 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 	//Print videos
 	if(getImageVideo()) {
 		$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
-		if ($ext == ".flv") {
+		if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
 			//Player Embed...
 			if(function_exists("flowplayerConfig")) {
 				flowplayerConfig();

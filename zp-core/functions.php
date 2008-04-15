@@ -285,6 +285,7 @@ function is_valid_image($filename) {
 	return in_array($ext, array('jpg','jpeg','gif','png'));
 }
 
+$_zp_supported_videos = array('flv','3gp','mov','mp3','mp4');
 //ZenVideo: Video utility functions
 /**
  * Returns true fi the file is a video file
@@ -293,8 +294,9 @@ function is_valid_image($filename) {
  * @return bool
  */
 function is_valid_video($filename) {
+	global $_zp_supported_videos;
 	$ext = strtolower(substr(strrchr($filename, "."), 1));
-	return in_array($ext, array('flv','3gp','mov'));
+	return in_array($ext, $_zp_supported_videos);
 }
 
 
@@ -309,12 +311,10 @@ function is_valid_video($filename) {
  * Don't use it in a loop!
  */
 function is_videoThumb($album, $filename){
-	$extTab = array(".flv",".3gp",".mov");
-	foreach($extTab as $ext) {
-		$video = $album.substr($filename,0,strrpos($filename,".")).$ext;
-		if(file_exists($video) && !is_valid_video($filename)){
-			return true;
-		}
+	global $_zp_supported_videos;
+	$ext = strtolower(substr($fext = strrchr($filename, "."), 1));
+	if (in_array($ext, $_zp_supported_videos)) {
+		return str_replace($fext, '', $filename);
 	}
 	return false;
 }
@@ -326,19 +326,14 @@ function is_videoThumb($album, $filename){
  * @param string $video name of the target
  * @return string
  */
-function checkVideoThumb($album,$video){
-	$extTab = array(".flv",".3gp",".mov",".FLV",".3GP",".MOV");
-	foreach($extTab as $ext) {
-		if (strrpos($video, $ext)) {
-			$video = str_replace($ext,"",$video);
-			break;
-		}
-	}
-	$extTab = array(".jpg",".jpeg",".gif",".png");
-
-	foreach($extTab as $ext) {
-		if(file_exists($album."/".$video.$ext)) {
-			return $video.$ext;
+function checkVideoThumb($album, $video){
+	$video = is_videoThumb($album, $video);
+	if($video) {
+		$extTab = array(".jpg",".jpeg",".gif",".png");
+		foreach($extTab as $ext) {
+			if(file_exists($album."/".$video.$ext)) {
+				return $video.$ext;
+			}
 		}
 	}
 	return NULL;
@@ -352,17 +347,13 @@ function checkVideoThumb($album,$video){
  * @return string
  */
 function checkVideoOriginal($album, $video){
-	$extTab = array(".flv",".3gp",".mov",".FLV",".3GP",".MOV");
-	foreach($extTab as $ext) {
-		if (strrpos($video, $ext)) {
-			$video = str_replace($ext,"",$video);
-			break;
-		}
-	}
-	$extTab = array(".ogg",".OGG",".avi",".AVI",".wmv",".WMV");
-	foreach($extTab as $ext) {
-		if(file_exists($album."/".$video.$ext)) {
-			return $video.$ext;
+	$video = is_videoThumb($album, $video);
+	if ($video) {
+		$extTab = array(".ogg",".OGG",".avi",".AVI",".wmv",".WMV");
+		foreach($extTab as $ext) {
+			if(file_exists($album."/".$video.$ext)) {
+				return $video.$ext;
+			}
 		}
 	}
 	return NULL;

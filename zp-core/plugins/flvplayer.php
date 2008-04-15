@@ -21,11 +21,25 @@ addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLD
 function flvplayerConfig($moviepath='',$imagetitle='') {
 	if(empty($moviepath)) {
 		$moviepath = getUnprotectedImageURL();
+		$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
+	} else {
+		$ext = strtolower(strrchr($moviepath, "."));
 	}
 	if(empty($imagetitle)) {
 		$imagetitle = getImageTitle();
 	}
+	if($ext === ".mp3") {
 			echo '</a>
+			<p id="player"><a href="http://www.macromedia.com/go/getflashplayer">Get Flash</a> to see this player.</p>
+			<script type="text/javascript">
+			var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/plugins/flvplayer/flvplayer.swf","player","320","240","7");
+			so.addParam("allowfullscreen","true");
+			so.addVariable("file","' . $moviepath . '&amp;title=' . $imagetitle . '");
+			so.addVariable("displayheight","0");
+			so.write("player");
+			</script><a>'; 
+	} else {
+		echo '</a>
 			<p id="player"><a href="http://www.macromedia.com/go/getflashplayer">Get Flash</a> to see this player.</p>
 			<script type="text/javascript">
 			var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/plugins/flvplayer/flvplayer.swf","player","320","240","7");
@@ -34,5 +48,6 @@ function flvplayerConfig($moviepath='',$imagetitle='') {
 			so.addVariable("displayheight","310");
 			so.write("player");
 			</script><a>'; 
+	}
 }
 ?>
