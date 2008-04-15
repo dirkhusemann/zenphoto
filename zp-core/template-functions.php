@@ -98,7 +98,7 @@ function printAdminToolbox($context=null, $id='admin') {
 		$redirect = '';
 		echo "\n<script type=\"text/javascript\" src=\"".$zf."/js/admin.js\"></script>\n";
 		if (is_null($context)) { $context = get_context(); }
-		echo '<div id="' .$id. '">'."\n".'<a href="javascript: toggle('. "'" .$dataid."'".');"><h3>'.gettext('Admin Toolbox').'</h3></a>'."\n"."\n</div>";
+		echo '<div id="' .$id. '">'."\n".'<h3><a href="javascript: toggle('. "'" .$dataid."'".');">'.gettext('Admin Toolbox').'</a></h3>'."\n"."\n</div>";
 		echo '<div id="' .$dataid. '" style="display: none;">'."\n";
 		printAdminLink(gettext('Admin'), '', "<br />\n");
 		$albumname = $_zp_current_album->name;
@@ -112,9 +112,9 @@ function printAdminToolbox($context=null, $id='admin') {
 				echo "<br />\n";
 			}
 			if (isset($_GET['p'])) {
-				$redirect = "&p=" . $_GET['p'];
+				$redirect = "&amp;p=" . $_GET['p'];
 			}
-			$redirect .= "&page=$page";
+			$redirect .= "&amp;page=$page";
 		} else if (!in_context(ZP_IMAGE)  && (!is_null($_zp_current_album))) {  // then it must be an album page
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				printSubalbumAdmin(gettext('Edit album'), '', "<br />\n");
@@ -131,7 +131,7 @@ function printAdminToolbox($context=null, $id='admin') {
 				printLink($zf . '/admin.php?page=upload&new&album=' . urlencode($albumname), gettext("New Album Here"), NULL, NULL, NULL);
 				echo "<br />\n";
 			}
-			$redirect = "&album=".urlencode($albumname)."&page=$page";
+			$redirect = "&amp;album=".urlencode($albumname)."&amp;page=$page";
 		} else if (in_context(ZP_IMAGE)) {
 			$imagename = urlencode($_zp_current_image->filename);
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
@@ -139,12 +139,12 @@ function printAdminToolbox($context=null, $id='admin') {
 				urlencode($albumname) . "&image=". $imagename . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
 				echo "<br />\n";
 			}
-			$redirect = "&album=".urlencode($albumname)."&image=$imagename";
+			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=$imagename";
 		} else if (in_context(ZP_SEARCH)&& !empty($_zp_current_search->words)) {
 			if ($_zp_loggedin & UPLOAD_RIGHTS) {
 				echo "<a href=\"".$zf."/dynamic.php\" title=\"".gettext("Create an album from the search")."\">".gettext("Create Album")."</a><br/>";
 			}
-			$redirect = "&p=search" . $_zp_current_search->getSearchParams() . "&page=$page";
+			$redirect = "&amp;p=search" . $_zp_current_search->getSearchParams() . "&amp;page=$page";
 		}
 
 		echo "<a href=\"".$zf."/admin.php?logout$redirect\">".gettext("Logout")."</a>\n";
@@ -558,7 +558,7 @@ function getAlbumTitle() {
 function printAlbumTitle($editable=false) {
 	global $_zp_current_album;
 	if ($editable && zp_loggedin()) {
-		echo "<div id=\"albumTitleEditable\" style=\"display: inline;\">" . htmlspecialchars(getAlbumTitle()) . "</div>\n";
+		echo "<span id=\"albumTitleEditable\" style=\"display: inline;\">" . htmlspecialchars(getAlbumTitle()) . "</span>\n";
 		echo "<script type=\"text/javascript\">initEditableTitle('albumTitleEditable');</script>";
 	} else {
 		echo htmlspecialchars(getAlbumTitle());
@@ -1240,7 +1240,7 @@ function getImageTitle() {
 function printImageTitle($editable=false) {
 	global $_zp_current_image;
 	if ($editable && zp_loggedin()) {
-		echo "<div id=\"imageTitle\" style=\"display: inline;\">" . htmlspecialchars(getImageTitle()) . "</div>\n";
+		echo "<span id=\"imageTitle\" style=\"display: inline;\">" . htmlspecialchars(getImageTitle()) . "</span>\n";
 		echo "<script type=\"text/javascript\">initEditableTitle('imageTitle');</script>";
 	} else {
 		echo "<span id=\"imageTitle\" style=\"display: inline;\">" . htmlspecialchars(getImageTitle()) . "</span>\n";
