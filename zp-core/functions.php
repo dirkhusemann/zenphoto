@@ -1445,7 +1445,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			$ur_album = getUrAlbum($receiver);
 		}
 		if (getOption('email_new_comments')) {
-			$message = gettext("A comment has been $action in your album");" $on\n" .
+			$message = gettext("A comment has been $action in your album")." $on\n" .
  										"\n" .
  										"Author: " . $name . "\n" .
  										"Email: " . $email . "\n" .
