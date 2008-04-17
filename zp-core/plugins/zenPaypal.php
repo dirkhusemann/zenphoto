@@ -6,7 +6,9 @@
  * 
  * Plugin option 'zenPaypal_userid' allows setting the PayPal user email.
  * Plugin option 'zenPaypal_pricelist' provides the default pricelist. 
- * 
+ * Plugin option 'zenPaypal_checkout_currency'
+ * Plugin option 'zenPaypal_checkout_ship_cost'
+ *   
  * Price lists can also be passed as a parameter to the zenPaypal() function. See also 
  * zenPaypalPricelistFromString() for parsing a string into the pricelist array. This could be used, 
  * for instance, by storing a pricelist string in the 'customdata' field of your images and then parsing and 
@@ -39,12 +41,18 @@ class zenPaypalOptions {
 			$pricelistoption .= $item.'='.$price.' ';
 		}
 		setOptionDefault('zenPaypal_pricelist', $pricelistoption);
+		setOptionDefault('zenPaypal_currency', 'USD');
+		setOptionDefault('zenPaypal_ship_cost', 0);
 	}
 	
 	
 	function getOptionsSupported() {
 		return array(	gettext('PayPal User ID') => array('key' => 'zenPaypal_userid', 'type' => 0, 
 										'desc' => gettext("Your PayPal User ID.")),
+									gettext('Currency') => array('key' => 'zenPaypal_currency', 'type' => 0, 
+										'desc' => gettext("The currency for your transactions.")),
+									gettext('Shipping cost') => array('key' => 'zenPaypal_ship_cost', 'type' => 0, 
+										'desc' => gettext("What you charge for shipping.")),
 									gettext('Price list') => array('key' => 'zenPaypal_pricelist', 'type' => 2,
 										'desc' => gettext("Your pricelist by size and media. The format of this option is <em>price elements</em> separated by spaces.<br/>".
 																			"A <em>price element</em> has the form: <em>size</em>:<em>media</em>=<em>price</em><br/>".
@@ -88,7 +96,7 @@ function zenPaypal($pricelist=NULL) {
 ?>
 <script language="javascript">
 
-function CalculateOrder(form) {
+function paypalCalculateOrder(form) {
 	<?php 
 	$sizes = array();
 	$media = array();
@@ -104,6 +112,11 @@ function CalculateOrder(form) {
 	?>        
 }
 
+<?php
+$locale = getOption('locale');
+if (empty($locale)) { $locale = 'en_US'; }
+?>
+
 </script>
 
 <form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" name="myform">
@@ -117,7 +130,7 @@ function CalculateOrder(form) {
 	}
 	 ?>
 </select> 
-<input type="hidden" name="on1" value="Color"> <label>Color</label>
+<input type="hidden" name="on1" value="Color"> <label><?php echo gettext("Stock"); ?></label>
 <select name="os1">
 	<?php
 	foreach ($media as $paper) {
@@ -125,15 +138,17 @@ function CalculateOrder(form) {
 	}
 	 ?>
 </select> 
-<input type="image" src="https://www.paypal.com/en_US/i/btn/x-click-butcc.gif" border="0"
-	name="submit" onClick="CalculateOrder(this.form)"
+<input type="image" src="https://www.paypal.com/<?php echo $locale ?>/i/btn/x-click-butcc.gif" border="0"
+	name="submit" onClick="paypalCalculateOrder(this.form)"
 	alt="Make payments with PayPal - it's fast, free and secure!"
-	class="buynow_button"> <input type="hidden" name="cmd" value="_xclick">
+	class="buynow_button"> 
+<input type="hidden" name="cmd" value="_xclick">
 <input type="hidden" name="business" value="<?php echo getOption('zenPaypal_userid'); ?>">
 <input type="hidden" name="item_name" value="Options Change Amount"> 
 <input type="hidden" name="amount" value="1.00"> 
-<input type="hidden" name="shipping" value="0.00"> <input type="hidden" name="no_note" value="1"> 
-<input type="hidden" name="currency_code" value="USD"> 
+<input type="hidden" name="shipping" value="<?php echo getOption('zenPaypal_ship_cost'); ?>"> 
+<input type="hidden" name="no_note" value="1"> 
+<input type="hidden" name="currency_code" value="<?php echo getOption('zenPaypal_currency'); ?>"> 
 <input type="hidden" name="return" value="<?php echo 'http://'. $_SERVER['SERVER_NAME']. getNextImageURL();?>">
 <input type="hidden" name="cancel_return" value="<?php echo 'http://'. $_SERVER['SERVER_NAME'].getImageLinkURL();?>">
 </form>

@@ -1,0 +1,13 @@
+#Checkout {
+	background:#f7f7f7;
+	border:1px solid #ccc;
+	text-align:center;
+	padding:10px;
+	margin:0 0 10px;
+}
+#Checkout input.checkout_button {
+	display:block;
+	clear:both;
+	text-align:center;
+	margin:10px auto 0;
+}
