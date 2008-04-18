@@ -647,7 +647,7 @@ button.positive,.buttons a.positive {
 .tagchecklist {
 	border: 1px solid #ccc;
 	list-style: none;
-	height: 20em;
+	height: 25em;
 	width: 15em;
 	overflow: auto;
 	background-color: white;
