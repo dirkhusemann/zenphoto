@@ -6,23 +6,81 @@
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the theme file <em>slideshow.php</em> needs to be present in the theme folder. Copy it from one of the distributed themes.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.0.0';
+$plugin_version = '1.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slideshow.php.html";
+$option_interface = new slideshowOptions();
+
+
+/**
+ * Plugin option handling class
+ *
+ */
+class slideshowOptions {
+
+	function slideshowOptions() {
+	 	setOptionDefault('slideshow_size', '595');
+		setOptionDefault('slideshow_mode', 'jQuery');
+		setOptionDefault('slideshow_effect', 'fade');
+		setOptionDefault('slideshow_speed', '500');
+		setOptionDefault('slideshow_timeout', '3000');
+		setOptionDefault('slideshow_showdesc', '');
+	}
+		
+	
+	function getOptionsSupported() {
+		return array(	gettext('Size') => array('key' => 'slideshow_size', 'type' => 0, 
+										'desc' => gettext("'Size of the images in the slideshow. If empty the normal image size set in the theme options is used (on jQuery mode)")),
+									gettext('Mode') => array('key' => 'slideshow_mode', 'type' => 2, 
+										'desc' => gettext("'jQuery' (default) for JS ajax slideshow, 'flash' for flash based slideshow (Flow player needs to be installed.).")),
+									gettext('Effect') => array('key' => 'slideshow_effect', 'type' => 2, 
+										'desc' => gettext("The Cycle slide effect to be used (only jQuery mode).")),
+									gettext('Speed') => array('key' => 'slideshow_speed', 'type' => 0,
+										'desc' => gettext("Speed of the transition (milliseconds in jQuery, seconds in Flash mode)")),
+									gettext('Timeout') => array('key' => 'slideshow_timeout', 'type' => 0,
+										'desc' => gettext("Milliseconds between slide transitions (0 to disable auto advance) (only jQuery mode).")),
+									gettext('Description') => array('key' => 'slideshow_showdesc', 'type' => 1,
+										'desc' => gettext("If you want to show the image's description below the image"))
+		);
+	}
+
+	function handleOption($option, $currentValue) {
+		if ($option=='slideshow_mode') {
+			$modes = array("jQuery", "flash");
+			echo "<select size='1' name='".$option."'>";
+			foreach($modes as $mode) {
+				if($mode === $currentValue) {
+					echo "<option value='".$mode."' selected='selected'>".$mode."</option>";		
+				} else {
+					echo "<option value='".$mode."'>".$mode."</option>";
+				}
+			}
+			echo "</select>";
+		}
+		if ($option=='slideshow_effect') {
+			$effects = array("fade", "shuffle", "zoom", "slideX", "slideY","scrollUp","scrollDown","scrollLeft","scrollRight");
+			echo "<select size='1' name='".$option."'>";
+			foreach($effects as $effect) {
+				if($effect === $currentValue) {
+					echo "<option value='".$effect."' selected='selected'>".$effect."</option>";		
+				} else {
+					echo "<option value='".$effect."'>".$effect."</option>";
+				}
+			}
+			echo "</select>";
+		}
+	}
+
+}
+
 
 /**
  * Prints a link to call the slideshow
  * To be used on album.php and image.php
  *
- * @param int $size The size of the slideshow slides
  * @param string $linktext Text for the link
  */
-function printSlideShowLink($linktext='', $size='') {
+function printSlideShowLink($linktext='') {
  	global $_zp_current_image;
-	if(empty($size)) {
-		$size = getOption('image_size');
-	} else {
-		$size = $size;
-	}
 	if(in_context(ZP_IMAGE)) {
 		$imagenumber = imageNumber();
 		$imagefile = $_zp_current_image->filename;
@@ -41,7 +99,6 @@ function printSlideShowLink($linktext='', $size='') {
 	<form name="slideshow" method="post" action="<?php echo htmlspecialchars(getCustomPageURL('slideshow')); ?>">
 		<input type="hidden" name="pagenr" value="<?php echo $pagenr;?>" />
 		<input type="hidden" name="albumid" value="<?php echo getAlbumID();?>" />
-		<input type="hidden" name="size" value="<?php echo $size;?>" />
 		<input type="hidden" name="numberofimages" value="<?php echo $numberofimages;?>" />
 		<input type="hidden" name="imagenumber" value="<?php echo $imagenumber;?>" />
 		<input type="hidden" name="imagefile" value="<?php echo $imagefile;?>" />
@@ -52,23 +109,18 @@ function printSlideShowLink($linktext='', $size='') {
 
 
 /**
- * Prints the slideshow using the jQuery plugin Cycle: http://http://www.malsup.com/jquery/cycle/
+ * Prints the slideshow using the jQuery plugin Cycle (http://http://www.malsup.com/jquery/cycle/)
  * or Flash based using Flowplayer http://flowplayer.org if installed
  * If called from image.php it starts with that image, called from album.php it starts with the first image (jQuery only)
  * To be used on slideshow.php only and called from album.php or image.php. 
  * Image size is taken from the calling link or if not specified there the sized image size from the options
  * In jQuery mode the slideshow has to be stopped to view a movie. 
  *  
- * NOTE: Since all images of an album are generated/listed in total, it can be that some images are skipped until all are generated
+ * NOTE: Since all images of an album are generated/listed in total, it can happen that some images are skipped until all are generated.
  * And of course on slower connections this could take some time if you have many images.
- * 
- * @param string $option "jQuery" (default) for JS ajax slideshow, "flash" for flash based slideshow
- * @param string $effect The Cycle slide effect to be used: "fade", "shuffle", "zoom", "slideX", "slideY" (crollUp/Down/Left/Right currently does not work)
- * @param int $speed Speed of the transition (milliseconds in jQuery, seconds in Flash mode)
- * @param int $timeout milliseconds between slide transitions (0 to disable auto advance) (only "jQuery" option)
- * @param string $showdesc true to show the image's description below the image , "false" if not
+ *
   */
-function printSlideShow($option="jQuery", $effect='fade', $speed=500, $timeout=3000, $showdesc=true) {
+function printSlideShow() {
 	if(empty($_POST['imagenumber'])) {
 		$imagenumber = 0; 
 		$count = 0;
@@ -78,11 +130,12 @@ function printSlideShow($option="jQuery", $effect='fade', $speed=500, $timeout=3
 	}
 	$numberofimages = sanitize_numeric($_POST['numberofimages']);
 	$albumid = sanitize_numeric($_POST['albumid']);
-	$imagesize = sanitize_numeric($_POST['size']);
-	if(empty($imagesize)) {
-		$imagesize = getOption('image_size');
-	} 
-	
+	if(getOption("slideshow_size")) {
+		$imagesize = getOption("slideshow_size");
+	} else {
+		$imagesize = getOption("image_size");
+	}
+	$option = getOption("slideshow_mode");
 	// jQuery Cycle slideshow config
 	// get slideshow data
 	$album = query_single_row("SELECT title, folder FROM ". prefix('albums') ." WHERE `show` = 1 AND id = ".$albumid);
@@ -120,9 +173,9 @@ function printSlideShow($option="jQuery", $effect='fade', $speed=500, $timeout=3
 			);
 						
 			$('#slides').cycle({
-					fx:     '<?php echo $effect; ?>',
-					speed:   <?php echo $speed; ?>,
-					timeout: <?php echo $timeout; ?>,
+					fx:     '<?php echo getOption("slideshow_effect"); ?>',
+					speed:   <?php echo getOption("slideshow_speed"); ?>,
+					timeout: <?php echo getOption("slideshow_timeout"); ?>,
 					next:   '#next',
 					prev:   '#prev',
 					delay: 2000,
@@ -150,7 +203,7 @@ function printSlideShow($option="jQuery", $effect='fade', $speed=500, $timeout=3
 			$imagepath = FULLWEBPATH."/albums/".$album['folder']."/".$image['filename'];
 			$ext = strtolower(strrchr($image['filename'], "."));
 			echo "<span class='slideimage'><h4><strong>".$album['title'].":</strong> ".$image['title']." (".$count."/".$numberofimages.")</h4>";
-			if ($ext == ".flv") {
+			if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
 				//Player Embed...
 				if(function_exists("flowplayerConfig")) {
 					flowplayerConfig($imagepath);
@@ -184,7 +237,7 @@ function printSlideShow($option="jQuery", $effect='fade', $speed=500, $timeout=3
 		} else { 
 			echo "<img src='".WEBPATH."/".ZENFOLDER."/i.php?a=".$album['folder']."&i=".$image['filename']."&s=".$imagesize."' alt=".$image['title']." title=".$image['title']." />";
 		}
-		if($showdesc) { echo "<p class='imgdesc'>".$image['desc']."</p>"; }
+		if(getOption("slideshow_desc")) { echo "<p class='imgdesc'>".$image['desc']."</p>"; }
 		echo "</span>";
 	}
 	break;
@@ -196,8 +249,8 @@ case "flash":
 <script type="text/javascript">
 $("#slideshow").flashembed({
       src:'<?php echo FULLWEBPATH . '/' . ZENFOLDER; ?>/extensions/FlowPlayerLight.swf',
-      width:<? echo $imagesize; ?>, 
-      height:<? echo $imagesize; ?>
+      width:<? echo getOption("flowplayer_width"); ?>, 
+      height:<? echo getOption("flowplayer_height"); ?>
     },
     {config: {  
       autoPlay: true,
@@ -206,10 +259,10 @@ $("#slideshow").flashembed({
 	foreach($images as $image) {
 		$count++;
 		$ext = strtolower(strrchr($image['filename'], "."));
-		if($ext === ".flv") { 
+		if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
 			$duration = ""; 
 		} else {
-			$duration = " duration: ".$speed;
+			$duration = " duration: ".getOption("slideshow_speed");
 		}
 		echo "{ url: '".FULLWEBPATH."/albums/".$album['folder']."/".$image['filename']."', ".$duration." }";
 		if($count < $numberofimages) { echo ","; }
@@ -240,8 +293,13 @@ $("#slideshow").flashembed({
  * To be used on slideshow.php
  *
  */
-function printSlideShowCSS($size) {
+function printSlideShowCSS() {
 	$controlsimage = FULLWEBPATH . "/" . ZENFOLDER."/plugins/slideshow/controls.png";
+	if(getOption("slideshow_size")) {
+		$imagesize = getOption("slideshow_size");
+	} else {
+		$imagesize = getOption("image_size");
+	}
 ?>
 	<script src="<?php echo FULLWEBPATH . '/' . ZENFOLDER ?>/js/jquery.js" type="text/javascript"></script>
 	<script src="<?php echo FULLWEBPATH . '/' . ZENFOLDER ?>/plugins/slideshow/jquery.cycle.all.pack.js" type="text/javascript"></script>
@@ -400,7 +458,7 @@ function printSlideShowCSS($size) {
 	}
 	
 	#slides {
-		width: <?php echo $_GET['size']; ?>px;
+		width: 100%;
 	}
 
 	.slideimage {

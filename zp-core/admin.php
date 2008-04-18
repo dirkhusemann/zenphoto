@@ -2366,7 +2366,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 				require_once($extension);
 				if (!is_null($option_interface)) {
 					$c++;
-					echo '<th colspan="3" style="background-color: #ECF1F2;">'.$ext.'</th>';
+					echo '<th colspan="3" style="background-color: #ECF1F2;"><strong>'.$ext.'</strong></th>';
 					$supportedOptions = $option_interface->getOptionsSupported();
 					if (count($supportedOptions) > 0) {
 						customOptions($option_interface);
