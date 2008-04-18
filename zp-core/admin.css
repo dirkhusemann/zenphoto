@@ -3,17 +3,16 @@
 	Zen Photo Admin
 	
 */
-
-
 /* Basics
 ------------------------------ */
 html { /* Force vertical scrollbar to prevent page shift "jog" */
 	/* IE */
-	overflow-y: scroll; 
+	overflow-y: scroll;
 	/* Moz */
 	height: 100%;
 	margin-bottom: 0.1em;
 }
+
 body {
 	font: normal 82% "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color: #5A5A4B;
@@ -22,7 +21,6 @@ body {
 	margin: 0;
 	padding: 0;
 }
-
 
 /* Main Layout
 ------------------------------ */
@@ -33,14 +31,17 @@ body {
 	width: 200px;
 	height: 47px;
 }
+
 #logo img {
 	border: 0;
 }
+
 #main {
 	text-align: left;
 	padding: 20px 0;
 	clear: both;
 }
+
 #footer {
 	clear: both;
 	color: #597580;
@@ -48,40 +49,45 @@ body {
 	margin: 8px 30px 0px;
 	text-align: right;
 }
+
 #footer a {
 	color: #597580;
 	text-decoration: none;
 	border-bottom: 1px dotted #597580;
 }
+
 #footer a:hover {
 	color: #4B636B;
 	text-decoration: none;
 	border-bottom: 1px solid #4B636B;
 }
+
 #links {
 	float: right;
 	font-size: 100%;
 	margin: 40px 30px 0 0;
 }
+
 #links a {
 	color: #597580;
 	text-decoration: none;
 	border-bottom: 1px dotted #597580;
 }
+
 #links a:hover {
 	color: #4B636B;
 	text-decoration: none;
 	border-bottom: 1px solid #4B636B;
 }
+
 #content {
 	padding: 30px;
 	background-color: #fff;
-  	border-top: 1px solid #BAC9CF;
+	border-top: 1px solid #BAC9CF;
 	border-bottom: 5px solid #BAC9CF;
 	min-height: 450px;
 	_height: 450px; /* IE Only */
 }
-
 
 /* Text Styles
 ------------------------------ */
@@ -91,20 +97,22 @@ h1 {
 	font-weight: normal;
 	margin: 0px 0px 20px 0px;
 }
+
 h2 {
 	font-size: 100%;
 	font-weight: bold;
 	margin: 0px 0px 5px 0px;
 }
+
 h3 {
 	font-size: 100%;
 	font-weight: normal;
 	margin: 0px 0px 5px 0px;
 }
+
 p {
 	line-height: 1.2em;
 }
-
 
 /* Menu
 ------------------------------ */
@@ -116,14 +124,15 @@ p {
 	height: 30px;
 	width: 80%;
 }
+
 #nav li {
 	display: inline;
 }
+
 #nav li a {
 	border-top: 1px solid #C7D3D8;
 	border-left: 1px solid #C7D3D8;
 	border-right: 1px solid #C7D3D8;
-
 	font-size: 120%;
 	display: block;
 	float: left;
@@ -134,45 +143,39 @@ p {
 	height: 17px;
 	color: #8797A5;
 	background: #E9ECEF;
-	
 	_position: relative; /* IE Only */
-	_top: 6px;	/* IE Only */
+	_top: 6px; /* IE Only */
 }
+
 #nav li a:hover {
 	border-top: 1px solid #BAC9CF;
 	border-left: 1px solid #BAC9CF;
 	border-right: 1px solid #BAC9CF;
-
 	color: #000;
 	background-color: #F7F8F9;
-
 	height: 21px;
 	_height: 24px;
-
 	position: relative;
 	top: -3px;
 	_top: 1px; /* IE Only */
 }
+
 #nav li.current a {
 	border-top: 1px solid #BAC9CF;
 	border-left: 1px solid #BAC9CF;
 	border-right: 1px solid #BAC9CF;
-
 	color: #4D646F;
 	background-color: #fff;
 	cursor: default;
-
 	height: 21px;
 	_height: 24px;
-
 	position: relative;
 	top: -3px;
 	_top: 1px; /* IE Only */
 }
 
-
 /* Messages 
------------------------------- */ 
+------------------------------ */
 .messagebox {
 	padding: 20px;
 	background-color: #B1F7B6;
@@ -180,13 +183,13 @@ p {
 	border-bottom: 5px solid #009966;
 	margin-bottom: 10px;
 }
+
 .messagebox h2 {
 	color: #006633;
 	font-size: 100%;
 	font-weight: bold;
 	margin: 0px;
 }
-	
 
 /* Error Messages
 ------------------------------ */
@@ -200,6 +203,7 @@ p {
 	margin-bottom: 10px;
 	font-size: 100%;
 }
+
 .errorbox h2 {
 	color: #DD6666;
 	font-size: 100%;
@@ -213,18 +217,22 @@ a {
 	color: #4D76CF;
 	text-decoration: none;
 }
+
 a img {
 	border-width: 1px;
 }
+
 a:hover {
 	color: #FF8A00;
 }
+
 hr {
 	height: 0px;
 	border: 0px;
 	border-bottom: 1px solid #BAC9CF;
 	margin: 1em 0px;
 }
+
 table.noinput {
 	width: 100%;
 	padding: 0px;
@@ -232,11 +240,13 @@ table.noinput {
 	background: #F1F2F3;
 	border: 1px solid #BAC9CF;
 }
+
 table.noinput td {
 	font-weight: normal;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 110%
 }
+
 table.bordered {
 	width: 100%;
 	padding: 0px;
@@ -245,71 +255,77 @@ table.bordered {
 	border: 1px solid #BAC9CF;
 	border-bottom-width: 5px;
 }
+
 table.bordered th {
 	font-weight: normal;
 	padding: 4px 12px;
 	border-bottom: 2px solid #BAC9CF;
 	background: #ECF1F2;
 }
+
 table.bordered .subhead {
 	border-top: 1px solid #BAC9CF;
 }
+
 table.bordered td {
 	padding: 8px 16px;
 	margin: 0px;
 	background-color: #fff;
 }
+
 table.bordered tr.alt td {
-  background-color: #f8f8f8;
+	background-color: #f8f8f8;
 }
 
 table.formlayout td {
-  padding: 2px;
-  vertical-align: top;
+	padding: 2px;
+	vertical-align: top;
 }
+
 table.checkboxes {
-  padding: 0px;
-  margin: 0px;
-  line-height: 10px;
-  border: 0px;
+	padding: 0px;
+	margin: 0px;
+	line-height: 10px;
+	border: 0px;
 }
+
 table.checkboxes tr {
-  padding: 0px;
-  margin: 0px;
+	padding: 0px;
+	margin: 0px;
 }
+
 table.checkboxes td {
-  padding: 0px;
-  margin: 0px;
+	padding: 0px;
+	margin: 0px;
 }
 
-
-.box { 
-  background: #F7F8F9;
+.box {
+	background: #F7F8F9;
 	border: 1px solid #BAC9CF;
-  border-bottom-width: 5px;
+	border-bottom-width: 5px;
 }
 
-.imagethumb { margin: 0px; padding: 1px;}
-
+.imagethumb {
+	margin: 0px;
+	padding: 1px;
+}
 
 /* Sortable Album Divs
 ------------------------------ */
-
 div.albumList {
 	list-style-type: none;
 	padding: 0px;
 	margin: 0px;
 }
+
 div.albumList div {
 	margin: 2px 2px;
 	border: 1px solid #F0F3F8;
 }
+
 td.handle {
 	cursor: move;
 }
-
-
-
 
 /* Forms
 ------------------------------ */
@@ -317,15 +333,15 @@ input {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 100%;
 }
+
 textarea {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 100%;
 }
 
 input.tags {
-	width:408px;
+	width: 408px;
 }
-
 
 /* Individual Page Styles
 ------------------------------ */
@@ -334,29 +350,40 @@ input.tags {
 	margin: 0px 0px 0px 10px;
 	padding: 0px;
 }
+
 #home-actions li {
 	margin-bottom: 3px;
 	font-size: 100%;
 }
 
-#overview-stats, #overview-suggest {
+#overview-stats,#overview-suggest {
 	width: 250px;
 	float: left;
 	margin: 0 0 10px 10px;
 	padding: 10px;
 }
+
 #overview-comments {
 	min-width: 410px;
 	_width: 410px;
 	float: left;
 	padding: 10px;
 }
-#overview-comments ul { list-style-type: none; padding: 0px; }
-#overview-comments ul li { margin-bottom: .5em; }
+
+#overview-comments ul {
+	list-style-type: none;
+	padding: 0px;
+}
+
+#overview-comments ul li {
+	margin-bottom: .5em;
+}
+
 #overview-comments .commentmeta {
 	font-size: 85%;
 	color: #999;
 }
+
 #overview-comments .commentbody {
 	font-size: 85%;
 }
@@ -364,23 +391,25 @@ input.tags {
 .fileuploadbox {
 	margin-bottom: 5px;
 }
+
 #albumselect {
 	padding: 10px;
-    background: #F7F8F9;
+	background: #F7F8F9;
 	border-top: 1px solid #BAC9CF;
 	border-left: 1px solid #BAC9CF;
 	border-right: 1px solid #BAC9CF;
 	border-bottom: 5px solid #BAC9CF;
 }
+
 #albumselect input {
 	padding: 4px;
 	font-weight: normal;
 	font-size: 100%;
 }
+
 acronym {
 	cursor: help;
 }
-
 
 /* Login
 ------------------------------ */
@@ -395,16 +424,20 @@ acronym {
 	border-right: 1px solid #BAC9CF;
 	border-bottom: 5px solid #BAC9CF;
 }
+
 .button {
 	cursor: pointer;
 	padding: 5px 10px;
 }
+
 label {
 	cursor: pointer;
 }
+
 label:hover {
 	color: #000;
 }
+
 #loginform input.textfield {
 	margin: 0px;
 	font-size: 100%;
@@ -415,32 +448,37 @@ label:hover {
 	margin: 0px auto;
 	border: 0px;
 }
-#loginform td { padding: 4px; }
 
+#loginform td {
+	padding: 4px;
+}
 
 /* Thumbnail Preview selectbox effect.
 ------------------------------------- */
-
 .thumbselect {
-  padding-left: 90px;
-  background-repeat: no-repeat;
-  background-position: center left;
-  height:90px;
+	padding-left: 90px;
+	background-repeat: no-repeat;
+	background-position: center left;
+	height: 90px;
 }
 
 .thumboption {
-  padding-left: 90px;
-  height: 40px;
-  margin-bottom: 2px;
-  background-position: center left;
+	padding-left: 90px;
+	height: 40px;
+	margin-bottom: 2px;
+	background-position: center left;
 }
 
 /* Option Tabs
 -------------------------------------*/
-.space {margin-top:40px;}
+.space {
+	margin-top: 40px;
+}
+
 .ui-tabs-hide {
 	display: none;
 }
+
 .ui-tabs-nav {
 	list-style: none;
 	padding: 0;
@@ -449,10 +487,11 @@ label:hover {
 }
 
 .ui-tabs-nav li {
-    float: left;
+	float: left;
 }
+
 .ui-tabs-nav a {
-  float: left;
+	float: left;
 	padding: 6px 12px;
 	margin: 0px 10px 0px 0px;
 	text-decoration: none;
@@ -475,97 +514,110 @@ label:hover {
 	color: #6b7d84;
 }
 
-.ui-tabs-disabled {}
+.ui-tabs-disabled {
+	
+}
+
 .ui-tabs-panel {
 	padding: 1em 0px;
-	background: #fff; /* declare background color for container to avoid distorted fonts in IE while fading */
+	background: #fff;
+	/* declare background color for container to avoid distorted fonts in IE while fading */
 }
 
 /* Additional IE specific bug fixes... */
 * html .ui-tabs-nav { /* auto clear, @ IE 6 & IE 7 Quirks Mode */
 	display: inline-block;
 }
-*:first-child+html .ui-tabs-nav  { /* @ IE 7 Standards Mode - do not group selectors, otherwise IE 6 will ignore complete rule (because of the unknown + combinator)... */
+
+* :first-child+html .ui-tabs-nav {
+	/* @ IE 7 Standards Mode - do not group selectors, otherwise IE 6 will ignore complete rule (because of the unknown + combinator)... */
 	display: inline-block;
 }
 
-
 /* Pretty Buttons
 ------------------------------------- */
-.buttons a, .buttons button{
-    display:block;
-    float:left;
-    margin:0 7px 0 0;
-    background-color:#f5f5f5;
-    border:1px solid #dedede;
-    border-top:1px solid #eee;
-    border-left:1px solid #eee;
-    font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
-    font-size:100%;
-    line-height:130%;
-    text-decoration:none;
-    font-weight:bold;
-    color:#565656;
-    cursor:pointer;
-    padding:5px 10px 6px 7px; /* Links */
+.buttons a,.buttons button {
+	display: block;
+	float: left;
+	margin: 0 7px 0 0;
+	background-color: #f5f5f5;
+	border: 1px solid #dedede;
+	border-top: 1px solid #eee;
+	border-left: 1px solid #eee;
+	font-family: "Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
+	font-size: 100%;
+	line-height: 130%;
+	text-decoration: none;
+	font-weight: bold;
+	color: #565656;
+	cursor: pointer;
+	padding: 5px 10px 6px 7px; /* Links */
 }
-.buttons button{
-    width:auto;
-    overflow:visible;
-    padding:4px 10px 3px 7px; /* IE6 */
+
+.buttons button {
+	width: auto;
+	overflow: visible;
+	padding: 4px 10px 3px 7px; /* IE6 */
 }
-.buttons button[type]{
-    padding:5px 10px 5px 7px; /* Firefox */
-    line-height:17px; /* Safari */
+
+.buttons button[type] {
+	padding: 5px 10px 5px 7px; /* Firefox */
+	line-height: 17px; /* Safari */
 }
-.buttons button img, .buttons a img{
-    margin:0 3px -3px 0 !important;
-    padding:0;
-    border:none;
-    width:16px;
-    height:16px;
+
+.buttons button img,.buttons a img {
+	margin: 0 3px -3px 0 !important;
+	padding: 0;
+	border: none;
+	width: 16px;
+	height: 16px;
 }
 
 /* standard buttons */
-button:hover, .buttons a:hover{
-    background-color:#dff4ff;
-    border:1px solid #c2e1ef;
-    color:#336699;
+button:hover,.buttons a:hover {
+	background-color: #dff4ff;
+	border: 1px solid #c2e1ef;
+	color: #336699;
 }
-.buttons a:active{
-    background-color:#6299c5;
-    border:1px solid #6299c5;
-    color:#fff;
+
+.buttons a:active {
+	background-color: #6299c5;
+	border: 1px solid #6299c5;
+	color: #fff;
 }
 
 /* positive buttons */
-button.positive, .buttons a.positive{
-    color:#529214;
+button.positive,.buttons a.positive {
+	color: #529214;
 }
-.buttons a.positive:hover, button.positive:hover{
-    background-color:#E6EFC2;
-    border:1px solid #C6D880;
-    color:#529214;
+
+.buttons a.positive:hover,button.positive:hover {
+	background-color: #E6EFC2;
+	border: 1px solid #C6D880;
+	color: #529214;
 }
-.buttons a.positive:active{
-    background-color:#529214;
-    border:1px solid #529214;
-    color:#fff;
+
+.buttons a.positive:active {
+	background-color: #529214;
+	border: 1px solid #529214;
+	color: #fff;
 }
 
 /* negative buttons */
-.buttons a.negative, button.negative{
-    color:#d12f19;
+.buttons a.negative,button.negative {
+	color: #d12f19;
 }
-.buttons a.negative:hover, button.negative:hover{
-    background:#fbe3e4;
-    border:1px solid #fbc2c4;
-    color:#d12f19;
+
+.buttons a.negative:hover,button.negative:hover {
+	background: #fbe3e4;
+	border: 1px solid #fbc2c4;
+	color: #d12f19;
 }
-.buttons a.negative:active{
-    background-color:#d12f19;
-    border:1px solid #d12f19;
-    color:#fff;
+
+.buttons a.negative:active {
+	background-color: #d12f19;
+	border: 1px solid #d12f19;
+	color: #fff;
 }
 
 #tooltip {
@@ -577,4 +629,88 @@ button.positive, .buttons a.positive{
 	opacity: 0.85;
 	width: 300px;
 }
-#tooltip h3, #tooltip div { margin: 0; }
+
+#tooltip h3,#tooltip div {
+	margin: 0;
+}
+
+/* scrollable checklists */ /*************************/
+	/* Undo some styles from the master stylesheet */
+.tagchecklist li {
+	background: none;
+	padding-left: 0;
+	text-align: left;
+	
+}
+
+/* CSS for tag checklists */
+.tagchecklist {
+	border: 1px solid #ccc;
+	list-style: none;
+	height: 20em;
+	width: 15em;
+	overflow: auto;
+	background-color: white;
+}
+
+.tagchecklist,.tagchecklist li {
+	margin: 0;
+	padding: 0;
+	border-bottom: 1px dotted #C6D880;
+}
+
+.tagchecklist label {
+	display: block;
+	padding: 0 0.2em 0 25px;
+	text-indent: -25px;
+}
+
+.tagchecklist label:hover,.tagchecklist label.hover {
+	background: #777;
+	color: #fff;
+}
+
+* html .tagchecklist label {
+	height: 1%;
+}
+
+/* scrollable checklists */ /*************************/
+	/* Undo some styles from the master stylesheet */
+.albumchecklist li {
+	background: none;
+	padding-left: 0;
+	text-align: left;
+	
+}
+
+/* CSS for album checklists */
+.albumchecklist {
+	border: 1px solid #ccc;
+	list-style: none;
+	height: 8em;
+	overflow: auto;
+	width: 20em;
+	background-color: white;
+}
+
+.albumchecklist,.albumchecklist li {
+	margin: 0;
+	padding: 0;
+	border-bottom: 1px dotted #C6D880;
+}
+
+.albumchecklist label {
+	display: block;
+	padding: 0 0.2em 0 25px;
+	text-indent: -25px;
+}
+
+.albumchecklist label:hover,.albumchecklist label.hover {
+	background: #777;
+	color: #fff;
+}
+
+* html .albumchecklist label {
+	height: 1%;
+}
+

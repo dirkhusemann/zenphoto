@@ -69,6 +69,58 @@ function printAdminHeader() {
 	echo "\n  \t\t $('#mainmenu > ul').tabs();";
 	echo "\n  \t});";
 	echo "\n  </script>";
+	?>
+<script type="text/javascript">
+		/*-----------------------------------------------------------+
+		 | addLoadEvent: Add event handler to body when window loads |
+		 +-----------------------------------------------------------*/
+		function addLoadEvent(func) {
+			var oldonload = window.onload;
+			
+			if (typeof window.onload != "function") {
+				window.onload = func;
+			} else {
+				window.onload = function () {
+					oldonload();
+					func();
+				}
+			}
+		}
+		
+		/*------------------------------------+
+		 | Functions to run when window loads |
+		 +------------------------------------*/
+		addLoadEvent(function () {
+			initChecklist();
+		});
+		
+		/*----------------------------------------------------------+
+		 | initChecklist: Add :hover functionality on labels for IE |
+		 +----------------------------------------------------------*/
+		function initChecklist() {
+			if (document.all && document.getElementById) {
+				// Get all unordered lists
+				var lists = document.getElementsByTagName("ul");
+				
+				for (i = 0; i < lists.length; i++) {
+					var theList = lists[i];
+					
+					// Only work with those having the class "checklist"
+					if (theList.className.indexOf("checklist") > -1) {
+						var labels = theList.getElementsByTagName("label");
+						
+						// Assign event handlers to labels within
+						for (var j = 0; j < labels.length; j++) {
+							var theLabel = labels[j];
+							theLabel.onmouseover = function() { this.className += " hover"; };
+							theLabel.onmouseout = function() { this.className = this.className.replace(" hover", ""); };
+						}
+					}
+				}
+			}
+		}
+	</script>
+<?php
 }
 
 /**
@@ -443,62 +495,68 @@ function generateListFromFiles($currentValue, $root, $suffix) {
 	chdir($curdir);
 }
 
-function tagSelector($that, $postit) {
-	
-	$javaprefix = 'js_'.preg_replace("/[^a-z0-9_]/","",strtolower($postit));
-	
-	// script to test for what is selected
-	echo '<script type="text/javascript">'."\n";
-	echo '  function '.$javaprefix.'show_add_tag(obj) {'."\n";
-	echo "		if(obj.selectedIndex == '0') {\n";
-	echo "			document.getElementById('$javaprefix"."new_tag_div_name').style.display = 'block';\n";
-	echo '			}'."\n";
-	echo '		else {'."\n";
-	echo "			document.getElementById('$javaprefix"."new_tag_div_name').style.display = 'none';\n";
-	echo ' 		}'."\n";
-	echo '	}'."\n";
-	echo '</script>'."\n";
 
+/**
+ * Encodes for use as a $_POST index
+ *
+ * @param string $str
+ */
+function postIndexEncode($str) {
+	$str = urlencode($str);
+	return str_replace('.','%2E', $str);
+}
+
+/**
+ * Decodes encoded $_POST index
+ *
+ * @param string $str
+ * @return string
+ */
+function postIndexDecode($str) {
+	$str = str_replace('%2E', '.', $str);
+	return urldecode($str);
+}
+
+/**
+ * Creates the body of an unordered list with checkbox label/input fields (scrollable sortables)
+ *
+ * @param array $currentValue list of items to be flagged as checked
+ * @param array $list the elements of the select list
+ */
+function generateUnorderedListFromArray($currentValue, $list, $prefix) {
+	$localize = !is_numeric(array_shift(array_keys($list)));
+	if ($localize) {
+		ksort($list);
+	} else {
+		sort($list);
+	}
+	$cv = array_flip($currentValue);
+	foreach($list as $key=>$item) {
+		$listitem = postIndexEncode($prefix.$item);
+		echo '<li><label for="'.$listitem.'"><input id="'.$listitem.'" name="'.$listitem.'" type="checkbox"';
+		if (isset($cv[$item])) {
+			echo ' checked="checked"';
+		}
+		if ($localize) $display = $key; else $display = $item;
+		echo ' />' . $display . "</label></li>"."\n";
+	}
+}
+
+
+function tagSelector($that, $postit) {
 	$tags = $that->getTags();
 	foreach ($tags as $key=>$tag) {
 		$tags[$key] = strtolower(trim($tag));
 	}
 	$them = array_unique(getAllTags());
 	$them = array_diff($them, $tags);
-	if (count($them) == 0) {
-		$dsp = 'block';
-	} else {
-		$dsp = 'none';
-	}
-	echo "<table>\n";
-	echo "<tr>\n";
-	echo '<td align="right" valign="top">'."\n";
-	echo "\n".'<select id="tagSelector" name="'.$postit.'tags[]" size="20" multiple=1 onchange="'.$javaprefix.'show_add_tag(this)" >';
-	echo "\n".'<option value="*" style="background-color:#B1F7B6"';
-	if ($dsp == 'block') {
-		echo ' selected="selected"';
-	}
-	echo '>'.gettext('add new tag').'</option>'."\n";
-	generateListFromArray($tags, $tags);
-	generateListFromArray(array(), $them);
-	echo "</select>\n";
-	echo "</td>\n";
-	echo '<td valign="top">'."\n";
-	echo '<div id="'.$javaprefix.'new_tag_div_name" name="'.$postit.'tagText" style="display:'.$dsp.'">'."\n";
-	echo '<em>'.gettext("new tag values")."</em><br/>";
+	echo '<ul class="tagchecklist">'."\n";
+	generateUnorderedListFromArray($tags, $tags, $postit);
 	for ($i=0; $i<4; $i++) {
-		echo '<input type="text" size="15" name="'.$postit.'new_tag_value_'.$i.'" ';
-		echo 'value="" style="background-color:#B1F7B6" /><br /><br/>'."\n";
+		echo '<li>'.gettext("new tag").' <input type="text" size="15" name="'.$postit.'new_tag_value_'.$i.'" value="" /></li>'."\n";
 	}
-	echo "\n</div>\n";
-	echo gettext("Select one or more tags from the <em>Tags</em> selection list.").' '.
-			 gettext("(Select a tag by pressing the <em>Ctrl-key</em>) {PC} or the <em>COMMAND-key</em> {MAC} and clicking on the item in the list.").' '.
-			 gettext("Selecting a tag without holding the key will deselect all other tags.)").' '.
-			 gettext("To add a new tag, select <em>add new tag</em> and enter the name(s) in the text fields that will appear.").' '.
-			 gettext("If you need to add more than four new tags you will have to save and select <em>add new tag</em> again.");
-	echo "\n</td>\n";
-	echo "</tr>\n";
-	echo "</table>\n";
+	generateUnorderedListFromArray(array(), $them, $postit);
+	echo '</ul>';
 }
 
 /**
@@ -697,7 +755,7 @@ function printAlbumEditForm($index, $album) {
 	echo "\n</table>\n</td>";
 	echo "\n<td valign=\"top\">";
 	echo gettext("Tags:");
-	tagSelector($album, $prefix);
+	tagSelector($album, 'tags_'.$prefix);
 	echo "\n</td>\n</tr>";
 	
 	echo "\n</table>";
@@ -958,27 +1016,31 @@ function processAlbumEdit($index, $album) {
 	} else {
 		$prefix = "$index-";
 	}
+	$tagsprefix = 'tags_'.$prefix;
 	$notify = '';
 	$album->setTitle(strip($_POST[$prefix.'albumtitle']));
 	$album->setDesc(strip($_POST[$prefix.'albumdesc']));
 	
-	if (isset($_POST[$prefix.'tags'])) {
-		$tags = $_POST[$prefix.'tags'];
-	} else {
-		$tags = array();
+	$tags = array();
+	for ($i=0; $i<4; $i++) {
+		$tag = trim(strip($_POST[$tagsprefix.'new_tag_value_'.$i]));
+		unset($_POST[$tagsprefix.'new_tag_value_'.$i]);
+		if (!empty($tag)) {
+			$tags[] = $tag;
+		}
 	}
-	$key = array_search('*', $tags);
-	if ($key !== false) {
-		unset($tags[$key]);
-		for ($i=0; $i<4; $i++) {
-			$tag = trim(strip($_POST[$prefix.'new_tag_value_'.$i]));
-			if (!empty($tag)) {
-				$tags[] = $tag;
+	$l = strlen($tagsprefix);
+	foreach ($_POST as $key => $value) {
+		$key = postIndexDecode($key);
+		if (substr($key, 0, $l) == $tagsprefix) {
+			if ($value) {
+				$tags[] = substr($key, $l);
 			}
 		}
 	}
+	$tags = array_unique($tags);
 	$album->setTags($tags);
-
+	
 	$album->setDateTime(strip($_POST[$prefix."albumdate"]));
 	$album->setPlace(strip($_POST[$prefix.'albumplace']));
 	$album->setAlbumThumb(strip($_POST[$prefix.'thumb']));

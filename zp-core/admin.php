@@ -248,23 +248,28 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 							$image->setCountry(strip($_POST["$i-country"]));
 							$image->setCredit(strip($_POST["$i-credit"]));
 							$image->setCopyright(strip($_POST["$i-copyright"]));
-							
-							if (isset($_POST[$i.'-tags'])) {
-								$tags = $_POST[$i.'-tags'];
-							} else {
-								$tags =array();
+
+							$tagsprefix = 'tags_'.$i.'-';
+							$tags = array();
+							for ($j=0; $j<4; $j++) {
+								$tag = trim(strip($_POST[$tagsprefix.'new_tag_value_'.$j]));
+								unset($_POST[$tagsprefix.'new_tag_value_'.$j]);
+								if (!empty($tag)) {
+									$tags[] = $tag;
+								}
 							}
-							$key = array_search('*', $tags);
-							if ($key !== false) {
-								unset($tags[$key]);
-								for ($j=0; $j<4; $j++) {
-									$tag = trim(strip($_POST[$i.'-new_tag_value_'.$j]));
-									if (!empty($tag)) {
-										$tags[] = $tag;
+							$l = strlen($tagsprefix);
+							foreach ($_POST as $key => $value) {
+								$key = postIndexDecode($key);
+								if (substr($key, 0, $l) == $tagsprefix) {
+									if ($value) {
+										$tags[] = substr($key, $l);
 									}
 								}
 							}
+							$tags = array_unique($tags);
 							$image->setTags($tags);
+
 
 							$image->setDateTime(strip($_POST["$i-date"]));
 							$image->setShow(strip($_POST["$i-Visible"]));
@@ -499,9 +504,26 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 							$themes_r = $_POST[$i.'-themes_rights'];
 							if (!isset($_POST['alter_enabled'])) {
 								$rights = MAIN_RIGHTS + $admin_r + $comment_r + $upload_r + $edit_r + $options_r + $themes_r;
-								$albums = $_POST['managed_albums_'.$i];
+
+								$managedalbums = array();
+
+								$l = strlen($albumsprefix = 'managed_albums_'.$i.'_');
+								foreach ($_POST as $key => $value) {
+									$key = postIndexDecode($key);
+									if (substr($key, 0, $l) == $albumsprefix) {
+										if ($value) {
+											$managedalbums[] = substr($key, $l);
+										}
+									}
+								}
+								if (count($$managedalbums > 0)) {
+									$albums = array_unique($managedalbums);
+								} else {
+									$albums = NULL;
+								}
 							} else {
 								$rights = null;
+								$albums = NULL;
 							}
 							if (empty($pass)) {
 								$pwd = null;
@@ -1043,7 +1065,7 @@ if (count($album->getImages())) {
 			<td>
 				<?php 
 				echo gettext("Tags:");
-				tagSelector($image, $currentimage.'-') 
+				tagSelector($image, 'tags_'.$currentimage.'-') 
 				?>
 			</td>
 	</tr>
@@ -1679,19 +1701,23 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		<tr>
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 		<?php
-		echo "<select id=\"managed_albums\" name=\"managed_albums_".$id."[]\" size=\"4\" multiple=1".$alterrights.">\n";
-		$cv = array();
-		$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
-		prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
-		$user['id']." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
-		$currentvalues = query_full_array($sql);
-		foreach($currentvalues as $albumitem) {
-			$cv[] = $albumitem['folder'];
+		if (empty($background)) {
+			$cv = array();
+			$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
+			prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
+			$user['id']." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
+			$currentvalues = query_full_array($sql);
+			foreach($currentvalues as $albumitem) {
+				$cv[] = $albumitem['folder'];
+			}
+			$rest = array_diff($albumlist, $cv);
+			$prefix = 'managed_albums_'.$id.'_';
+			echo gettext("Managed albums:");
+			echo '<ul class="albumchecklist"'.$alterrights.'>'."\n";;
+			generateUnorderedListFromArray($cv, $cv, $prefix);
+			generateUnorderedListFromArray(array(), $rest, $prefix);
+			echo '</ul>';
 		}
-		generateListFromArray($cv, $cv);
-		$rest = array_diff($albumlist, $cv);
-		generateListFromArray($cv, $rest);
-		echo "</select>\n";
 		?>
 		</td>
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
