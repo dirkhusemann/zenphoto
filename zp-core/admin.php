@@ -955,19 +955,19 @@ if (count($album->getImages())) {
 
 	<tr id=""
 	<?php echo ($currentimage % 2 == 0) ?  "class=\"alt\"" : ""; ?>>
-		<td valign="top" width="100"><img
-			id="thumb-<?php echo $currentimage; ?>"
+		<td valign="top" width="100"><img	id="thumb-<?php echo $currentimage; ?>"
 			src="<?php echo $image->getThumb();?>"
 			alt="<?php echo $image->filename;?>"
 			onclick="toggleBigImage('thumb-<?php echo $currentimage; ?>', '<?php echo $image->getSizedImage(getOption('image_size')); ?>');" />
 		</td>
 
-		<td width="240"><input type="hidden"
+		<td >
+		<input type="hidden"
 			name="<?php echo $currentimage; ?>-filename"
 			value="<?php echo $image->filename; ?>" />
 		<table border="0" class="formlayout">
 			<tr>
-				<td align="right" valign="top">Title:</td>
+				<td align="right" valign="top" width="100">Title:</td>
 				<td><input type="text" size="56" style="width: 360px"
 					name="<?php echo $currentimage; ?>-title"
 					value="<?php echo $image->getTitle(); ?>" /></td>
@@ -1028,7 +1028,7 @@ if (count($album->getImages())) {
 			</tr>
 			<tr>
 				<td align="right" valign="top"><?php echo gettext("Custom data:"); ?></td>
-				<td><textarea rows="3" cols="58"
+				<td><textarea rows="3" cols="60" style="width: 360px"
 					name="<?php echo $currentimage; ?>-custom_data"><?php echo trim($image->getCustomData()); ?></textarea></td>
 			</tr>
 			<tr>

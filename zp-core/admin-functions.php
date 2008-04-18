@@ -596,7 +596,7 @@ function printAlbumEditForm($index, $album) {
 	if (empty($hc)) { $hc = '0'; }
 	echo" ".gettext("Hit counter: "). $hc . " <input type=\"checkbox\" name=\"".gettext("reset_hitcounter")."\"> Reset</td>";
 	echo '</tr>';
-	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Album Description:")." </td> <td><textarea name=\"".$prefix."albumdesc\" cols=\"60\" rows=\"6\">" .
+	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Album Description:")." </td> <td><textarea name=\"".$prefix."albumdesc\" cols=\"60\" rows=\"6\" style=\"width: 360px\">" .
 	$album->getDesc() . "</textarea></td></tr>";
 	echo "\n<tr>";
 	echo "\n<td align=\"right\">".gettext("Album password:")." <br/>repeat: </td>";
@@ -613,7 +613,7 @@ function printAlbumEditForm($index, $album) {
 	echo "\nvalue=\"" . $x . '" />';
 	echo "\n</td>";
 	echo "\n</tr>";
-	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Password hint:")." </td> <td><input type=\"text\" name=\"".$prefix."albumpass_hint\" class=\"tags\" value=\"" .
+	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Password hint:")." </td> <td><input type=\"text\" name=\"".$prefix."albumpass_hint\" style=\"width: 360px\" value=\"" .
 	$album->getPasswordHint() . '" /></td></tr>';
 
 	$d = $album->getDateTime();
@@ -621,11 +621,11 @@ function printAlbumEditForm($index, $album) {
 		$d = "";
 	}
 
-	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Date:")." </td> <td><input type=\"text\" name=\"".$prefix."albumdate\" value=\"" . $d . '" /></td></tr>';
-	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Location:")." </td> <td><input type=\"text\" name=\"".$prefix."albumplace\" class=\"tags\" value=\"" .
+	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Date:")." </td> <td width = \"400\"><input type=\"text\" name=\"".$prefix."albumdate\" value=\"" . $d . '" /></td></tr>';
+	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Location:")." </td> <td><input type=\"text\" name=\"".$prefix."albumplace\" style=\"width: 360px\" value=\"" .
 	$album->getPlace() . "\" /></td></tr>";
 	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Custom data:").
-	"</td><td><textarea cols=\"58\" rows=\"3\" name=\"".
+	"</td><td><textarea cols=\"60\" rows=\"3\" style=\"width: 360px\" name=\"".
 	$prefix."album_custom_data\" >" .
 	trim($album->getCustomData()) . "</textarea></td></tr>";
 	$sort = $sortby;
