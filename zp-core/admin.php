@@ -1028,9 +1028,8 @@ if (count($album->getImages())) {
 			</tr>
 			<tr>
 				<td align="right" valign="top"><?php echo gettext("Custom data:"); ?></td>
-				<td><input type="text" size="56" style="width: 360px"
-					name="<?php echo $currentimage; ?>-custom_data"
-					value="<?php echo $image->getCustomData(); ?>" /></td>
+				<td><textarea rows="3" cols="58"
+					name="<?php echo $currentimage; ?>-custom_data"><?php echo trim($image->getCustomData()); ?></textarea></td>
 			</tr>
 			<tr>
 				<td align="right" valign="top" colspan="2"><label

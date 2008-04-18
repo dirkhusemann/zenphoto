@@ -624,9 +624,10 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Date:")." </td> <td><input type=\"text\" name=\"".$prefix."albumdate\" value=\"" . $d . '" /></td></tr>';
 	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Location:")." </td> <td><input type=\"text\" name=\"".$prefix."albumplace\" class=\"tags\" value=\"" .
 	$album->getPlace() . "\" /></td></tr>";
-	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Custom data:")." </td> <td><input type=\"text\" name=\"".
-	$prefix."album_custom_data\" class=\"tags\" value=\"" .
-	$album->getCustomData() . "\" /></td></tr>";
+	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Custom data:").
+	"</td><td><textarea cols=\"58\" rows=\"3\" name=\"".
+	$prefix."album_custom_data\" >" .
+	trim($album->getCustomData()) . "</textarea></td></tr>";
 	$sort = $sortby;
 	if (!$album->isDynamic()) {
 		$sort[gettext('Manual')] = 'Manual';
