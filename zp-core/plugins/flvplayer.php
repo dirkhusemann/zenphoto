@@ -7,10 +7,10 @@
   */
 
 $plugin_description = gettext("Enable <strong>FLV</strong> player to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time.<br> Please see <a href='http://www.jeroenwijering.com/?item=JW_FLV_Player'>JW FLV media player </a> for more info about the player and its licence.");
-$plugin_author = "Malte Müller (acrylian) ".gettext("and").' Stephen Billard( sbillard)';
+$plugin_author = "Malte Müller (acrylian), Stephen Billard( sbillard)";
 $plugin_version = '1.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---flvplayer.php.html";
-$option_interface = new flvplayerOptions();
+$option_interface = new flvplayer();
 $_zp_flash_player = $option_interface; // claim to be the flash player.
 // register the scripts needed
 addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/plugins/flvplayer/flvplayer.js"></script>');
@@ -20,9 +20,9 @@ addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLD
  * Plugin option handling class
  *
  */
-class flvplayerOptions {
+class flvplayer {
 
-	function flvplayerOptions() {
+	function flvplayer() {
 		setOptionDefault('flv_player_width', '320');
 		setOptionDefault('flv_player_height', '240');
 
@@ -31,9 +31,9 @@ class flvplayerOptions {
 
 	function getOptionsSupported() {
 		return array(	gettext('flv player width') => array('key' => 'flv_player_width', 'type' => 0,
-										'desc' => gettext("Player width (not for .mp3).")),
+										'desc' => gettext("Player width (ignored for <em>mp3</em> files.)")),
 		gettext('flv player height') => array('key' => 'flv_player_height', 'type' => 0,
-										'desc' => gettext("Player height (not for .mp3)."))
+										'desc' => gettext("Player height (ignored for .<em>mp3</em> files.)"))
 		);
 	}
 

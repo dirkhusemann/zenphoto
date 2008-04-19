@@ -18,7 +18,7 @@
 
 $plugin_description =   "<a href =\"http://blog.qelix.com/2008/04/07/paypal-integraion-for-zenphoto-zenpaypal/\">".
 	"zenPayPal</a> -- ".gettext("Paypal Integration for Zenphoto.");
-$plugin_author = 'Ebrahim Ezzy (Nimbuz) '.gettext("made into a plugin by ").'Stephen Billard (sbillard)';
+$plugin_author = 'Ebrahim Ezzy (Nimbuz) '.gettext("adapted as a plugin by ").'Stephen Billard (sbillard)';
 $plugin_version = '1.0.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---zenPaypal.php.html";
 $option_interface = new zenPaypalOptions();

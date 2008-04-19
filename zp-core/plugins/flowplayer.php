@@ -7,10 +7,10 @@
  */
 
 $plugin_description = gettext("Enable <strong>flowplayer</strong> to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time. <br> Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its licence.");
-$plugin_author = "Malte Müller (acrylian) ".gettext("and").' Stephen Billard( sbillard)';
+$plugin_author = "Malte Müller (acrylian), Stephen Billard( sbillard)";
 $plugin_version = '1.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---flowplayer.php.html";
-$option_interface = new flowplayerOptions();
+$option_interface = new flowplayer();
 $_zp_flash_player = $option_interface; // claim to be the flash player.
 // register the scripts needed
 addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/plugins/flowplayer/jquery.flashembed.pack.js"></script>');
@@ -19,9 +19,9 @@ addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLD
  * Plugin option handling class
  *
  */
-class flowplayerOptions {
+class flowplayer {
 
-	function flowplayerOptions() {
+	function flowplayer() {
 		setOptionDefault('flow_player_width', '320');
 		setOptionDefault('flow_player_height', '240');
 
@@ -30,9 +30,9 @@ class flowplayerOptions {
 
 	function getOptionsSupported() {
 		return array(	gettext('flow player width') => array('key' => 'flow_player_width', 'type' => 0,
-										'desc' => gettext("Player width (not for .mp3).")),
+										'desc' => gettext("Player width (ignored for <em>mp3</em> files.)")),
 		gettext('flow player height') => array('key' => 'flow_player_height', 'type' => 0,
-										'desc' => gettext("Player height (not for .mp3)."))
+										'desc' => gettext("Player height (ignored for <em>mp3</em> files.)"))
 		);
 	}
 

@@ -1,6 +1,6 @@
 <?php
 /** 
- * GoogleCheckout -- Google ordering support
+ * GoogleCheckout -- Google ordering support [experimental]
  * 
  * Provides a Google Checkout ordering form for image print ordering.
  * 

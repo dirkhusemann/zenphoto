@@ -14,8 +14,8 @@
  * theme, copy these files form the "default" theme of the Zenphoto distribution.
  */
 
-$plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder. Copy them from one of the distributed themes.");
-$plugin_author = "Malte Müller (acrylian) ".gettext("and").' Stephen Billard( sbillard)';
+$plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
+$plugin_author = "Malte Müller (acrylian), Stephen Billard( sbillard)";
 $plugin_version = '1.0.2';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
@@ -42,17 +42,17 @@ class slideshowOptions {
 	
 	function getOptionsSupported() {
 		return array(	gettext('Size') => array('key' => 'slideshow_size', 'type' => 0, 
-										'desc' => gettext("Size of the images in the slideshow. If empty the normal image size set in the theme options is used (on jQuery mode)")),
+										'desc' => gettext("Size of the images in the slideshow. <em>[jQuery mode option]</em><br />If empty the theme options <em>image size</em> is used.")),
 									gettext('Mode') => array('key' => 'slideshow_mode', 'type' => 2, 
-										'desc' => gettext("'jQuery' (default) for JS ajax slideshow, 'flash' for flash based slideshow (Flow player needs to be installed.).")),
+										'desc' => gettext("<em>jQuery</em> for JS ajax slideshow, <em>flash</em> for flash based slideshow (requires Flowplayer.)")),
 									gettext('Effect') => array('key' => 'slideshow_effect', 'type' => 2, 
-										'desc' => gettext("The Cycle slide effect to be used (only jQuery mode).")),
+										'desc' => gettext("The cycle slide effect to be used. <em>[jQuery mode option]</em>")),
 									gettext('Speed') => array('key' => 'slideshow_speed', 'type' => 0,
-										'desc' => gettext("Speed of the transition in milliseconds")),
+										'desc' => gettext("Speed of the transition in milliseconds.")),
 									gettext('Timeout') => array('key' => 'slideshow_timeout', 'type' => 0,
-										'desc' => gettext("Milliseconds between slide transitions (0 to disable auto advance) (only jQuery mode).")),
+										'desc' => gettext("Milliseconds between slide transitions (0 to disable auto advance.) <em>[jQuery mode option]</em>")),
 									gettext('Description') => array('key' => 'slideshow_showdesc', 'type' => 1,
-										'desc' => gettext("If you want to show the image's description below the image"))
+										'desc' => gettext("Check if you want to show the image's description below the slideshow."))
 		);
 	}
 
