@@ -2,6 +2,12 @@
 /**
  * slideshow -- Supports showing slideshows of images in an album.
  * 
+ * 	Plugin Option 'slideshow_size' -- Size of the images
+ *	Plugin Option 'slideshow_mode' -- The player to be used
+ *	Plugin Option 'slideshow_effect' -- The cycle effect
+ *	Plugin Option 'slideshow_speed' -- How fast it runs
+ *	Plugin Option 'slideshow_timeout' -- Transition time
+ *	Plugin Option 'slideshow_showdesc' -- Allows the show to display image descriptons
  */
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the theme file <em>slideshow.php</em> needs to be present in the theme folder. Copy it from one of the distributed themes.");
@@ -24,18 +30,21 @@ class slideshowOptions {
 		setOptionDefault('slideshow_speed', '500');
 		setOptionDefault('slideshow_timeout', '3000');
 		setOptionDefault('slideshow_showdesc', '');
+		// incase the flowplayer has not been enabled!!!
+		setOptionDefault('flow_player_width', '320');
+		setOptionDefault('flow_player_height', '240');
 	}
 		
 	
 	function getOptionsSupported() {
 		return array(	gettext('Size') => array('key' => 'slideshow_size', 'type' => 0, 
-										'desc' => gettext("'Size of the images in the slideshow. If empty the normal image size set in the theme options is used (on jQuery mode)")),
+										'desc' => gettext("Size of the images in the slideshow. If empty the normal image size set in the theme options is used (on jQuery mode)")),
 									gettext('Mode') => array('key' => 'slideshow_mode', 'type' => 2, 
 										'desc' => gettext("'jQuery' (default) for JS ajax slideshow, 'flash' for flash based slideshow (Flow player needs to be installed.).")),
 									gettext('Effect') => array('key' => 'slideshow_effect', 'type' => 2, 
 										'desc' => gettext("The Cycle slide effect to be used (only jQuery mode).")),
 									gettext('Speed') => array('key' => 'slideshow_speed', 'type' => 0,
-										'desc' => gettext("Speed of the transition (milliseconds in jQuery, seconds in Flash mode)")),
+										'desc' => gettext("Speed of the transition in milliseconds")),
 									gettext('Timeout') => array('key' => 'slideshow_timeout', 'type' => 0,
 										'desc' => gettext("Milliseconds between slide transitions (0 to disable auto advance) (only jQuery mode).")),
 									gettext('Description') => array('key' => 'slideshow_showdesc', 'type' => 1,
@@ -47,25 +56,13 @@ class slideshowOptions {
 		if ($option=='slideshow_mode') {
 			$modes = array("jQuery", "flash");
 			echo "<select size='1' name='".$option."'>";
-			foreach($modes as $mode) {
-				if($mode === $currentValue) {
-					echo "<option value='".$mode."' selected='selected'>".$mode."</option>";		
-				} else {
-					echo "<option value='".$mode."'>".$mode."</option>";
-				}
-			}
+			generateListFromArray(array($currentValue), $modes);
 			echo "</select>";
 		}
 		if ($option=='slideshow_effect') {
 			$effects = array("fade", "shuffle", "zoom", "slideX", "slideY","scrollUp","scrollDown","scrollLeft","scrollRight");
 			echo "<select size='1' name='".$option."'>";
-			foreach($effects as $effect) {
-				if($effect === $currentValue) {
-					echo "<option value='".$effect."' selected='selected'>".$effect."</option>";		
-				} else {
-					echo "<option value='".$effect."'>".$effect."</option>";
-				}
-			}
+			generateListFromArray(array($currentValue), $effects);
 			echo "</select>";
 		}
 	}
@@ -248,9 +245,9 @@ case "flash":
 	?>	
 <script type="text/javascript">
 $("#slideshow").flashembed({
-      src:'<?php echo FULLWEBPATH . '/' . ZENFOLDER; ?>/extensions/FlowPlayerLight.swf',
-      width:<? echo getOption("flowplayer_width"); ?>, 
-      height:<? echo getOption("flowplayer_height"); ?>
+      src:'<?php echo FULLWEBPATH . '/' . ZENFOLDER; ?>/plugins/flowplayer/FlowPlayerLight.swf',
+      width:<? echo getOption("flow_player_width"); ?>, 
+      height:<? echo getOption("flow_player_height"); ?>
     },
     {config: {  
       autoPlay: true,
@@ -262,9 +259,9 @@ $("#slideshow").flashembed({
 		if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
 			$duration = ""; 
 		} else {
-			$duration = " duration: ".getOption("slideshow_speed");
+			$duration = " duration: ".getOption("slideshow_speed")/10;
 		}
-		echo "{ url: '".FULLWEBPATH."/albums/".$album['folder']."/".$image['filename']."', ".$duration." }";
+		echo "{ url: '".FULLWEBPATH."/albums/".$album['folder']."/".$image['filename']."', ".$duration." }\n";
 		if($count < $numberofimages) { echo ","; }
 	}
 ?>     
