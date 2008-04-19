@@ -50,6 +50,7 @@ if(getOption('mod_rewrite')) {
 <?php
 	$admin = array_shift(getAdministrators());
 	$adminname = $admin['name'];
+
 	$adminemail = $admin['email'];
 ?>
 <managingEditor><?php echo "$adminemail ($adminname)"; ?></managingEditor>
@@ -66,7 +67,7 @@ if (is_numeric($albumnr) && $albumnr != "") {
 	$albumWhere = "";
 }
 
-$result = query_full_array("SELECT images.albumid, images.date AS date, images.filename AS filename, images.title AS title, " .
+$result = query_full_array("SELECT images.albumid, images.date AS date, images.filename AS filename, images.desc, images.title AS title, " .
  														"albums.folder AS folder, albums.title AS albumtitle, images.show, albums.show, albums.password FROM " . 
 															prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
 															" WHERE ".$albumWhere." images.albumid = albums.id AND images.show=1 AND albums.show=1 ".
@@ -80,13 +81,21 @@ foreach ($result as $images) {
 	}
 	$images['folder'] = implode('/', $imagpathnames);
 	$images['filename'] = rawurlencode($images['filename']);
+	$ext = strtolower(strrchr($images['filename'], "."));
 
 ?>
 <item>
 	<title><?php echo $images['title']; ?></title>
 	<link><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix. ']]>';?></link>
-	<description><?php echo '<![CDATA[<a title="'.$images['title'].' in '.$images['albumtitle'].'" href="http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix.'"><img border="0" src="http://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$images['folder'].'&i='.$images['filename'].'&s='.$s.'" alt="'. $images['title'] .'"></a>' . $images['desc'] . ']]>';?> <?php if($exif['datetime']) { echo '<![CDATA[Date: ' . $exif['datetime'] . ']]>'; } ?></description>
-		<category><?php echo $images['title']; ?></category>
+	<description>
+<?php
+if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4") ||  ($ext == ".3gp") ||  ($ext == ".mov")) {
+	echo '<![CDATA[<a title="'.$images['title'].' in '.$images['albumtitle'].'" href="http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix.'">'. $images['title'] .$ext.'</a><p>' . $images['desc'] . '</p>]]>';
+} else {
+	echo '<![CDATA[<a title="'.$images['title'].' in '.$images['albumtitle'].'" href="http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix.'"><img border="0" src="http://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$images['folder'].'&i='.$images['filename'].'&s='.$s.'" alt="'. $images['title'] .'"></a><p>' . $images['desc'] . '</p>]]>';?>
+	<?php if($exif['datetime']) { echo '<![CDATA[Date: ' . $exif['datetime'] . ']]>'; } }?>
+</description>
+<category><?php echo $images['title']; ?></category>
 	<guid><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix. ']]>';?></guid>
 	<pubDate><?php echo fixRSSDate($images['date']); ?></pubDate> 
 </item>

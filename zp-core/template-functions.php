@@ -1812,17 +1812,16 @@ function getDefaultSizedImage() {
  * @param string $id Optional style id
  */
 function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
+	global $_zp_flash_player;
 	//Print videos
 	if(getImageVideo()) {
 		$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
 		if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
 			//Player Embed...
-			if(function_exists("flowplayerConfig")) {
-				flowplayerConfig();
-			} else if(function_exists("flvplayerConfig")) {
-				flvplayerConfig();
-			}	else {
-				echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "/images/err-noflashplayer.gif' alt='No flash player installed.' />";
+			if (is_null($_zp_flash_player)) {
+				echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='No flash player installed.' />";
+			} else {
+				$_zp_flash_player->playerConfig($imagepath,$image['title']);
 			}
 		}
 		elseif ($ext == ".3gp") {
@@ -1998,7 +1997,7 @@ function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph
 
  * */
 function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $class=NULL, $id=NULL, $thumbStandin=false) {
-	global $_zp_current_album, $_zp_current_image;
+	global $_zp_current_album, $_zp_current_image, $_zp_flash_player;
 
 	$album = $_zp_current_image->getAlbum();
 	if (!$album->getShow()) {
@@ -2015,12 +2014,10 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 		$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
 		if ($ext == ".flv") {
 			//Player Embed...
-			if(function_exists("flowplayerConfig")) {
-				flowplayerConfig();
-			} else if(function_exists("flvplayerConfig")) {
-				flvplayerConfig();
-			}	else {
+			if (is_null($_zp_flash_player)) {
 				echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='No flash player installed.' />";
+			} else {
+				$_zp_flash_player->playerConfig($imagepath,$image['title']);
 			}
 		}
 		elseif ($ext == ".3gp") {

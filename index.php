@@ -13,6 +13,7 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 
 //load extensions
 $_zp_plugin_scripts = array();
+$_zp_flash_player = NULL;
 $curdir = getcwd();
 chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
 $filelist = safe_glob('*'.'php');

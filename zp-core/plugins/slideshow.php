@@ -11,7 +11,7 @@
  */
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the theme file <em>slideshow.php</em> needs to be present in the theme folder. Copy it from one of the distributed themes.");
-$plugin_author = "Malte Müller (acrylian)";
+$plugin_author = "Malte Müller (acrylian) ".gettext("and").' Stephen Billard( sbillard)';
 $plugin_version = '1.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
@@ -118,6 +118,7 @@ function printSlideShowLink($linktext='') {
  *
   */
 function printSlideShow() {
+	global $_zp_flash_player;
 	if(empty($_POST['imagenumber'])) {
 		$imagenumber = 0; 
 		$count = 0;
@@ -202,12 +203,10 @@ function printSlideShow() {
 			echo "<span class='slideimage'><h4><strong>".$album['title'].":</strong> ".$image['title']." (".$count."/".$numberofimages.")</h4>";
 			if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
 				//Player Embed...
-				if(function_exists("flowplayerConfig")) {
-					flowplayerConfig($imagepath);
-				} else if(function_exists("flvplayerConfig")) {
-					flvplayerConfig($imagepath,$image['title']);
-				}	else {
+				if (is_null($_zp_flash_player)) {
 					echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='No flash player installed.' />";
+				} else {
+					 $_zp_flash_player->playerConfig($imagepath,$image['title']);
 				}
 			}
 			elseif ($ext == ".3gp") {
