@@ -8,11 +8,15 @@
  *	Plugin Option 'slideshow_speed' -- How fast it runs
  *	Plugin Option 'slideshow_timeout' -- Transition time
  *	Plugin Option 'slideshow_showdesc' -- Allows the show to display image descriptons
+ * 
+ * The theme files 'slideshow.php', 'slideshow.css', and 'slideshow-controls.png' must reside in the theme
+ * folder of the Gallery theme. (Slideshows do not take on 'album themes'). If you are creating a custom
+ * theme, copy these files form the "default" theme of the Zenphoto distribution.
  */
 
-$plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the theme file <em>slideshow.php</em> needs to be present in the theme folder. Copy it from one of the distributed themes.");
+$plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder. Copy them from one of the distributed themes.");
 $plugin_author = "Malte Müller (acrylian) ".gettext("and").' Stephen Billard( sbillard)';
-$plugin_version = '1.0.1';
+$plugin_version = '1.0.2';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
 
@@ -77,7 +81,7 @@ class slideshowOptions {
  * @param string $linktext Text for the link
  */
 function printSlideShowLink($linktext='') {
- 	global $_zp_current_image;
+ 	global $_zp_current_image,$_zp_current_album;
 	if(in_context(ZP_IMAGE)) {
 		$imagenumber = imageNumber();
 		$imagefile = $_zp_current_image->filename;
@@ -91,9 +95,9 @@ function printSlideShowLink($linktext='') {
 		$pagenr = $_GET['page'];
 	}
 	$numberofimages = getNumImages();
-	
+	$slideshowlink = getCustomPageURL('slideshow');
 ?>	
-	<form name="slideshow" method="post" action="<?php echo htmlspecialchars(getCustomPageURL('slideshow')); ?>">
+	<form name="slideshow" method="post" action="<?php echo htmlspecialchars($slideshowlink); ?>">
 		<input type="hidden" name="pagenr" value="<?php echo $pagenr;?>" />
 		<input type="hidden" name="albumid" value="<?php echo getAlbumID();?>" />
 		<input type="hidden" name="numberofimages" value="<?php echo $numberofimages;?>" />
@@ -289,181 +293,12 @@ $("#slideshow").flashembed({
  * To be used on slideshow.php
  *
  */
-function printSlideShowCSS() {
-	$controlsimage = FULLWEBPATH . "/" . ZENFOLDER."/plugins/slideshow/controls.png";
-	if(getOption("slideshow_size")) {
-		$imagesize = getOption("slideshow_size");
-	} else {
-		$imagesize = getOption("image_size");
-	}
+function printSlideShowJS() {
 ?>
 	<script src="<?php echo FULLWEBPATH . '/' . ZENFOLDER ?>/js/jquery.js" type="text/javascript"></script>
 	<script src="<?php echo FULLWEBPATH . '/' . ZENFOLDER ?>/plugins/slideshow/jquery.cycle.all.pack.js" type="text/javascript"></script>
 	<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/plugins/flowplayer/jquery.flashembed.pack.js"></script>
-	<style type="text/css" media="screen">
-		body {
-		background-color: black;
-		text-align: center;
-		color: white;
-	}
-	
-	h4 {
-		margin-top: 30px;	
-		font-weight: normal;
-	}
-	
-	#slideshowpage {
-		position: relative;
-		padding-top: 0px;
-		margin: 0 auto;
-		width: 100%;
-		text-align:center;
-		border: 0px solid white;
-		font-size: 0.8em;
-	}
 
-	#slideshow { 
-		color: white;
-		width: 100%;
-	
-		text-align: center;
-	}
-	
-	#slideshow a img {
-		border: 0;
-	}
-	
-		
-	#controls { 
-		z-index: 1000; 
-		position: relative; 
-		top: 80px;
-		display: none;   
-		background-color: transparent; 
-    border: 0px solid #ddd; 
-    text-align: center;
-    margin: 0 auto; 
-    padding: 0; 
-    width: 217px; 
-    font-size: 0.8em;
-	}
-	
-	#prev { 
-		display: block;
-		width: 46px;
-		height: 41px;
-		margin: 0px; 
-		padding: 0;
-		float: left;
-		background-image:url(<?php echo $controlsimage; ?>);
-		background-position: 0 0;
-	}
-	
-	#prev:hover { 
-		background-image:url(<?php echo$controlsimage; ?>);
-		background-position: 0 -43px;
-	}
-	#prev:active { 
-		background-image:url(<?php echo $controlsimage; ?>);
-		background-position: 0 -86px;
-	}
-	
-	#stop { 
-		display: block;
-		width: 41px;
-		height: 41px;
-		margin: 0px; 
-		padding: 0;
-		float: left;
-		background-image:url(<?php echo $controlsimage; ?>);
-		background-position: -46px 0px;
-	}
-	
-	#stop:hover { 
-		background-image:url(<?php echo $controlsimage; ?>);
-		background-position: -46px -43px;
-	}
-	
-	#stop:active { 
-		background-image:url(<?php echo $controlsimage; ?>);
-		background-position: -46px -86px;
-	}
-	
-	#pause { 
-		display: block;
-		width: 39px;
-		height: 41px;
-		margin: 0px; 
-		padding: 0;
-		float: left;
-		background-image:url(<?php echo $controlsimage; ?>);
-		background-position: -85px 0px;
-	}
-	
-	#pause:hover { 
-		background-image:url(<?php echo $controlsimage; ?>);
-		background-position: -85px -43px;
-	}
-	
-	#pause:active { 
-		background-image:url(<?php echo $controlsimage; ?>);
-		background-position: -85px -86px;
-	}
-	
-	#play { 
-		display: block;
-		width: 41px;
-		height: 41px;
-		margin: 0px; 
-		padding: 0;
-		float: left;
-		background-image:url(<?php echo $controlsimage; ?>);
-		background-position: -126px 0px;
-	}
-	
-	#play:hover { 
-		background-image:url(<?php echo $controlsimage; ?>);
-		background-position: -126px -43px;
-	}
-	
-	#play:active { 
-		background-image:url(<?php $controlsimage; ?>);
-		background-position: -126px -86px;
-	}
-	
-	
-	#next { 
-		display: block;
-		width: 50px;
-		height: 41px;
-		margin: 0px; 
-		padding: 0;
-		float: left;
-		background-image:url(<?php echo $controlsimage; ?>);
-		background-position: -167px 0px;
-	}
-	
-	#next:hover { 
-		background-image:url(<?php echo $controlsimage; ?>);
-		background-position: -167px -43px;
-	}
-	
-	#next:active { 
-		background-image:url(<?php echo $controlsimage; ?>);
-		background-position: -167px -86px;
-	}
-	
-	#slides {
-		width: 100%;
-	}
-
-	.slideimage {
-		width: 100%;
-		text-align: center;
-		margin: 0 auto;
-	}
-
-	</style>
 <?php
 }
 

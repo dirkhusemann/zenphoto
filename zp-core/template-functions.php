@@ -1543,6 +1543,38 @@ function getPrevImageURL() {
 
 
 /**
+* Returns the url of the first image in current album.
+*
+* @return string
+* @author gerben
+*/
+function getFirstImageURL() {
+	if(!in_context(ZP_IMAGE)) return false;
+	global $_zp_current_album, $_zp_current_image;
+	$firstimg = $_zp_current_album->getImage(0);
+	return rewrite_path("/" . pathurlencode($firstimg->album->name) . "/" . urlencode($firstimg->filename) . im_suffix(),
+											"/index.php?album=" . urlencode($firstimg->album->name) . "&amp;image=" . urlencode($firstimg->filename));
+}
+
+
+/**
+* Returns the url of the last image in current album.
+*
+* @return string
+* @author gerben
+*/
+function getLastImageURL() {
+	if(!in_context(ZP_IMAGE)) return false;
+	global $_zp_current_album, $_zp_current_image;
+	$lastimg = $_zp_current_album->getImage($_zp_current_album->getNumImages() - 1);
+	return rewrite_path("/" . pathurlencode($lastimg->album->name) . "/" . urlencode($lastimg->filename) . im_suffix(),
+											"/index.php?album=" . urlencode($lastimg->album->name) . "&amp;image=" . urlencode($lastimg->filename));
+}
+
+
+
+
+/**
  * Prints out the javascript to preload the next and previous images
  *
  */
