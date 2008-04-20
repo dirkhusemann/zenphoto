@@ -10,8 +10,8 @@
  *	Plugin Option 'slideshow_showdesc' -- Allows the show to display image descriptons
  * 
  * The theme files 'slideshow.php', 'slideshow.css', and 'slideshow-controls.png' must reside in the theme
- * folder of the Gallery theme. (Slideshows do not take on 'album themes'). If you are creating a custom
- * theme, copy these files form the "default" theme of the Zenphoto distribution.
+ * folder. If you are creating a custom theme, copy these files form the "default" theme of the Zenphoto 
+ * distribution.
  */
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");

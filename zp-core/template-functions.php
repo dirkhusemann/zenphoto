@@ -2742,11 +2742,23 @@ function printAllDates($class='archive', $yearid='year', $monthid='month') {
  * @return string
  */
 function getCustomPageURL($page, $q='') {
+	global $_zp_current_album;
+	if (!is_null($_zp_current_album)) {
+		$album = urlencode($_zp_current_album->name);
+	} else {
+		$album = '';
+	}
 	if (getOption('mod_rewrite')) {
-		$result .= WEBPATH."/page/$page";
+		if (!empty($album)) {
+			$album = "/$album";
+		}
+		$result .= WEBPATH.$album."/page/$page";
 		if (!empty($q)) { $result .= "?$q"; }
 	} else {
-		$result .= WEBPATH."/index.php?p=$page";
+		if (!empty($album)) {
+			$album = "&album=$album";
+		}
+		$result .= WEBPATH."/index.php?p=$page".$album;
 		if (!empty($q)) { $result .= "&$q"; }
 	}
 	return $result;
