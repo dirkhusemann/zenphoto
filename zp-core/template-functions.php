@@ -2739,14 +2739,17 @@ function printAllDates($class='archive', $yearid='year', $monthid='month') {
  * @param string $linktext Text for the URL
  * @param int $page page number to include in URL
  * @param string $q query string to add to url
+ * @param string $album optional album for the page
  * @return string
  */
-function getCustomPageURL($page, $q='') {
+function getCustomPageURL($page, $q="", $album="") {
 	global $_zp_current_album;
-	if (!is_null($_zp_current_album)) {
-		$album = urlencode($_zp_current_album->name);
-	} else {
-		$album = '';
+	if (empty($album)) {
+		if (!is_null($_zp_current_album)) {
+			$album = urlencode($_zp_current_album->name);
+		} else {
+			$album = '';
+		}
 	}
 	if (getOption('mod_rewrite')) {
 		if (!empty($album)) {
