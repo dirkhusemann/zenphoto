@@ -16,7 +16,7 @@
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard( sbillard)";
-$plugin_version = '1.0.2';
+$plugin_version = '1.0.2.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
 
@@ -148,17 +148,9 @@ function printSlideShow() {
 	
 	// return path to get back to the page we called the slideshow from
 	if (empty($_POST['imagenumber'])) {
-		if(getOption('mod_rewrite')) {
-			$returnpath = WEBPATH.'/'.$album['folder'].'/page/'.$_POST['pagenr'];
-		} else {
-			$returnpath = WEBPATH.'/index.php?album='.$album['folder'].'&page='.$_POST['pagenr'];
-		}
+		$returnpath = rewrite_path('/'.$album['folder'].'/page/'.$_POST['pagenr'],'/index.php?album='.$album['folder'].'&page='.$_POST['pagenr']);
 	} else {
-		if(getOption('mod_rewrite')) {
-			$returnpath = WEBPATH.'/'.$album['folder'].'/'.$_POST['imagefile'].getOption('mod_rewrite_image_suffix');
-		} else {
-			$returnpath = WEBPATH.'/index.php?album='.$album['folder'].'&image='.$_POST['imagefile'];
-		}
+		$returnpath = rewrite_path('/'.$album['folder'].'/'.$_POST['imagefile'].getOption('mod_rewrite_image_suffix'),'/index.php?album='.$album['folder'].'&image='.$_POST['imagefile']);
 	}
 	// slideshow display section
 	switch($option) {

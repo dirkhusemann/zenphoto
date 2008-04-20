@@ -1,7 +1,10 @@
 <?php	
-/** printAlbumMenu Custom Function 1.3 for zenphoto 1.1 or newer 
+/** printAlbumMenu Custom Function 1.3 for zenphoto 1.1.5 svn 
  * 
  * Changelog
+ * 
+ * 1.3.2:
+ * - turned into a plugn for zenphoto 1.1.5 svn
  *
  * 1.3.1:
  * - support for album passwords
@@ -32,9 +35,9 @@
  * - New option for mod_rewrite (needs to be automatic...),
  * - bug fixes for the id-Tags, which didn't get used.
  * 
- * 1.2 What's new: Now works with sbillard's album publishing function.
+ * 1.2: Now works with sbillard's album publishing function.
  * 
- * 1.1. What's new:
+ * 1.1.:
  * - Option for album list or a drop down jump menu if you want to save space 
  * - Displays the number of images in the album (like e.g. wordpress does with articles)
  * - Option for disabling the counter
@@ -44,7 +47,7 @@
 
 $plugin_description = gettext("Adds a theme function printAlbumMenu() to print an album menu either as a nested list up to 4 sublevels (context sensitive) or as a dropdown menu.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.3.1';
+$plugin_version = '1.3.2.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---print_album_menu.php.html";
 
 /**
@@ -72,13 +75,9 @@ function printAlbumMenu($option,$option2,$css_id='',$css_id_active='',$css_class
 	if ($css_class != "") { $css_class = " class='".$css_class."'"; }
 	if ($css_class_active != "") { $css_class_active = " id='".$css_class_active."'"; }
 
-	if (getOption('mod_rewrite')) {
-		$albumlinkpath = WEBPATH."/";
-	} else 	{
-		$albumlinkpath = "index.php?album=";
-	}
+	$albumlinkpath = rewrite_path("/","index.php?album=");
 
- $albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
+	$albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
 	foreach($albumscheck as $albumcheck) {
 		if(!checkAlbumPassword($albumcheck['folder'], $hint)) {
 			$albumpasswordcheck = " AND id != ".$albumcheck['id'];
