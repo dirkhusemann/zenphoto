@@ -471,8 +471,8 @@ if ($debug) {
 	}
 
 	$msg = " <em>.htaccess</em> ".gettext("file");
-	if (!stristr($_SERVER['SERVER_SOFTWARE'], "apache")) {
-		checkMark(-1, gettext("Server seems not to be Apache, skipping <code>.htaccess</code> test"), "", "");
+	if (!stristr($_SERVER['SERVER_SOFTWARE'], "apache") && !stristr($_SERVER['SERVER_SOFTWARE'], "litespeed")) {
+		checkMark(-1, gettext("Server seems not to be Apache or Apache-compatible, skipping <code>.htaccess</code> test"), "", "");
 	}	else {
 		$htfile = '../.htaccess';
 		$ht = @file_get_contents($htfile);
@@ -482,7 +482,7 @@ if ($debug) {
 		if (empty($htu)) {
 			$ch = -1;
 			$err = gettext("is empty or does not exist");
-			$desc = gettext("Edit the <code>.htaccess</code> file in the root zenphoto folder if you have the mod_rewrite apache module, and want cruft-free URLs.")
+			$desc = gettext("Edit the <code>.htaccess</code> file in the root zenphoto folder if you have the mod_rewrite module, and want cruft-free URLs.")
 			.gettext("Just change the one line indicated to make it work. ") .
 						"<br/><br/>".gettext("You can ignore this warning if you do not intend to set the option <code>mod_rewrite</code>.");
 		} else {
