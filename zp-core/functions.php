@@ -1953,16 +1953,16 @@ function cbone($bits, $limit) {
 function generateCaptcha(&$image) {
 	require_once('lib-encryption.php');
 
-	$lettre='abcdefghijklmnpqrstuvwxyz';
-	$chiffre='123456789';
+	$lettre='abcdefghijkmnpqrstuvwxyz';
+	$chiffre='23456789';
 
-	$lettre1=$lettre[rand(0,24)];
-	$lettre2=$lettre[rand(0,24)];
-	$chiffre1=$chiffre[rand(0,8)];
-	if (rand(0,1)) {
-		$string = $lettre1.$lettre2.$chiffre1;
-	} else {
-		$string = $lettre1.$chiffre1.$lettre2;
+	$string = '';
+	for ($i=0; $i<=4; $i++) {
+		if (($i > 0) && rand(0, 4) > 2) {
+			$string .= $chiffre[rand(0,7)];
+		} else {
+			$string .= $lettre[rand(0,23)];
+		}
 	}
 	$key = 'zenphoto_captcha_string';
 	$cypher = urlencode(rc4($key, $string));
