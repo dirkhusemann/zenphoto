@@ -96,7 +96,7 @@ $firstPageImages = normalizeColumns(1, 7);
 										<tr><td><label for="website"><?php echo gettext("Site:"); ?></label></td> <td><input type="text" name="website" size="30" value="<?php echo $stored[2];?>" /></td></tr>
 												<?php printCaptcha('<tr><td>'.gettext('Enter').' ', ':</td><td>', '</td></tr>'); ?>
 									</table>
-									<textarea name="comment" rows="6" cols="40"></textarea><br />
+									<textarea name="comment" rows="6" cols="40"><?php echo $stored[3]; ?></textarea><br />
 									<input type="submit" value="<?php echo gettext('Add Comment'); ?>" />
 							</form>
 						</div>

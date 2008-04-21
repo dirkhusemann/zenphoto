@@ -114,7 +114,7 @@
  													</tr>
 												<?php } ?>
 					</table>
-					<textarea name="comment" rows="6" cols="40"></textarea>
+					<textarea name="comment" rows="6" cols="40"><?php echo $stored[3]; ?></textarea>
 					<br />
 					<input type="submit" value="<?php echo gettext('Add Comment'); ?>" class="pushbutton" /></div>
 				</form>

@@ -183,7 +183,7 @@ function zp_handle_comment() {
 				exit();
 			} else {
 				$stored = array($_POST['name'], $_POST['email'], $website, $_POST['comment'], false);
-				if (isset($_POST['remember'])) $stored[3] = true;
+				if (isset($_POST['remember'])) $stored[4] = true;
 				$_zp_comment_error = 1 + $commentadded;
 				if ($activeImage !== false) { // tricasa hack? Set the context to the image on which the comment was posted
 					$_zp_current_image = $activeImage;
@@ -194,9 +194,10 @@ function zp_handle_comment() {
 		}
 	} else  if (!empty($cookie)) {
 		// Comment form was not submitted; get the saved info from the cookie.
-		$stored = explode('|~*~|', stripslashes($cookie)); $stored[] = true;
+		$stored = explode('|~*~|', stripslashes($cookie)); 
+		$stored[4] = true;
 	} else {
-		$stored = array('','','', false);
+		$stored = array('','','', '', false);
 	}
 	return $_zp_comment_error;
 }

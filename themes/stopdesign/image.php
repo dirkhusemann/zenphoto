@@ -135,7 +135,7 @@
 								<?php printCaptcha("<tr valign=\"top\" align=\"left\"><th><label for=\"captcha\">" .gettext('Enter Captcha'), ":</label></th><td>", "</td></tr>\n", 8); ?>
 								<tr valign="top" align="left">
 									<th><label for="comment"><?php echo gettext('Comment'); ?>:</label></th>
-									<td><textarea tabindex="4" id="comment" name="comment" rows="10" cols="40"></textarea></td>
+									<td><textarea tabindex="4" id="comment" name="comment" rows="10" cols="40"><?php echo $stored[3]; ?></textarea></td>
 								</tr>
 								<tr valign="top" align="left">
 									<th class="buttons">&nbsp;</th>
