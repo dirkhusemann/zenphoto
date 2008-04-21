@@ -186,8 +186,8 @@ function zp_handle_comment() {
 				if (isset($_POST['remember'])) $stored[3] = true;
 				$_zp_comment_error = 1 + $commentadded;
 				if ($activeImage !== false) { // tricasa hack? Set the context to the image on which the comment was posted
-					$_zp_current_image = $activeimage;
-					$_zp_current_album = $activeimage->getAlbum();
+					$_zp_current_image = $activeImage;
+					$_zp_current_album = $activeImage->getAlbum();
 					set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX);
 				}
 			}
