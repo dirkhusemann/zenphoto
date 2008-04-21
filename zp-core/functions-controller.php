@@ -139,6 +139,7 @@ function fix_path_redirect() {
 
 function zp_handle_comment() {
 	global $_zp_current_image, $_zp_current_album, $stored, $_zp_comment_error;
+	$activeImage = false;
 	$redirectTo = FULLWEBPATH . '/' . zpurl();
 	unset($_zp_comment_error);
 	$cookie = zp_getCookie('zenphoto');
@@ -150,12 +151,11 @@ function zp_handle_comment() {
 			if ($allowed === false) { $allowed = array(); } // someone has screwed with the 'allowed_tags' option row in the database, but better safe than sorry
 			if (isset($_POST['imageid'])) {  //used (only?) by the tricasa hack to know which image the client is working with.
 	 			$activeImage = zp_load_image_from_id(strip_tags($_POST['imageid']));
-	 			if($activeImage !== false){
+	 			if ($activeImage !== false) {
 	 				$commentadded = $activeImage->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']),
 	 													$website, kses($_POST['comment'], $allowed),
 	 													strip_tags($_POST['code']), $_POST['code_h']);
-	 				//$redirectTo = FULLWEBPATH . '/' . zpurl(NULL, $activeImage->getAlbum(), $activeImage);
-	 				$redirectTo = $activeImage->getImageLink(); //ulfben 080406
+	 				$redirectTo = $activeImage->getImageLink(); 
 					}
 			} else {
 				if (in_context(ZP_IMAGE)) {
@@ -185,8 +185,10 @@ function zp_handle_comment() {
 				$stored = array($_POST['name'], $_POST['email'], $website, $_POST['comment'], false);
 				if (isset($_POST['remember'])) $stored[3] = true;
 				$_zp_comment_error = 1 + $commentadded;
-				if (isset($_POST['imageid'])) {
-					header('Location: ' . $redirectTo); // only for tricasa hack? This looses the error info.
+				if ($activeImage !== false) { // tricasa hack? Set the context to the image on which the comment was posted
+					$_zp_current_image = $activeimage;
+					$_zp_current_album = $activeimage->getAlbum();
+					set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX);
 				}
 			}
 		}
