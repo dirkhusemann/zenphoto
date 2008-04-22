@@ -5,7 +5,7 @@
 	<title><?php printGalleryTitle(); ?> | <?php echo getAlbumTitle();?> | <?php echo getImageTitle();?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
-	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/jquery.js" type="text/javascript"></script>
+	<?php zenJavascript(); ?>
 	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		function toggleComments() {
@@ -18,7 +18,7 @@
 		}
 	</script>
 		<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
-	<?php zenJavascript(); ?>
+
 </head>
 
 <body>
@@ -56,7 +56,7 @@
 			} 
 		?>
 		<?php printTags('links', gettext('<strong>Tags:</strong> '), 'taglist', ''); ?>
-		
+
 		<?php if (function_exists('printImageMap')) printImageMap(); ?>
     
     <?php if (function_exists('printImageRating')) { printImageRating(); }?>

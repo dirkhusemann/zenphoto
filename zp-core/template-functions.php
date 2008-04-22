@@ -173,10 +173,7 @@ function zenJavascript() {
 		}
 	}
 	echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/scripts-common.js\"></script>\n";
-	if (in_context(ZP_IMAGE)) {
-		echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/jquery.js\"></script>\n";
-		//echo '<script type="text/javascript" src="' . FULLWEBPATH . '/' . ZENFOLDER . '/plugins/flowplayer/jquery.flashembed.pack.js"></script>';
-	}
+	echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/jquery.js\"></script>\n";
 	foreach ($_zp_plugin_scripts as $script) {
 		echo $script."\n";
 	}
