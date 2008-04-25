@@ -16,7 +16,7 @@
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard( sbillard)";
-$plugin_version = '1.0.2.1';
+$plugin_version = '1.0.2.2';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
 
@@ -160,12 +160,7 @@ function printSlideShow() {
 		$(function() {
 			$('#pause').click(function() { $('#slides').cycle('pause'); return false; });
 			$('#play').click(function() { $('#slides').cycle('resume'); return false; });
-						
-			$('#slideshow').hover(
-					function() { $('#controls').fadeIn(); },
-					function() { $('#controls').fadeOut(); }
-			);
-						
+							
 			$('#slides').cycle({
 					fx:     '<?php echo getOption("slideshow_effect"); ?>',
 					speed:   <?php echo getOption("slideshow_speed"); ?>,
@@ -178,13 +173,13 @@ function printSlideShow() {
 		});
 	</script>
 <div id="slideshow" align="center">
-		<div id="controls">
+	<div id="controls">
 			<div>
-				<span><a href="#" id="prev"></a></span>
-				<a href="<?php echo $returnpath; ?>" id="stop"></a>
-  			<a href="#" id="pause"></a>
-				<a href="#" id="play"></a>
-				<a href="#" id="next"></a>
+				<span><a href="#" id="prev" title="Previous"></a></span>
+				<a href="<?php echo $returnpath; ?>" id="stop" title="Stop and return to album or image page"></a>
+  			<a href="#" id="pause" title="Pause (to stop the slideshow without returning)"></a>
+				<a href="#" id="play" title="Play"></a>
+				<a href="#" id="next" title="Next"></a>
 			</div>
 		</div>
 <div id="slides" class="pics"><?php
@@ -229,9 +224,10 @@ function printSlideShow() {
 		} else { 
 			echo "<img src='".WEBPATH."/".ZENFOLDER."/i.php?a=".$album['folder']."&i=".$image['filename']."&s=".$imagesize."' alt=".$image['title']." title=".$image['title']." />";
 		}
-		if(getOption("slideshow_desc")) { echo "<p class='imgdesc'>".$image['desc']."</p>"; }
+		if(getOption("slideshow_showdesc")) { echo "<p class='imgdesc'>".$image['desc']."</p>"; }
 		echo "</span>";
 	}
+
 	break;
 
 case "flash":
@@ -261,7 +257,7 @@ $("#slideshow").flashembed({
 	}
 ?>     
      ],
-      howPlayListButtons: true, 
+      showPlayListButtons: true, 
       showStopButton: true, 
       controlBarBackgroundColor: 0,
      	showPlayListButtons: true
@@ -274,7 +270,9 @@ $("#slideshow").flashembed({
 	echo "</span>";
 	break;
 }
-?></div>
+?>
+</div>
+</div>
 <?php
 }
 
