@@ -357,7 +357,11 @@ function getTotalPages($oneImagePage=false) {
 		$pageCount = ($pageCount + ceil(($imageCount - getOption('images_first_page')) / $images_per_page));
 		return $pageCount;
 	} else if (in_context(ZP_INDEX)) {
-		return ceil($_zp_gallery->getNumAlbums() / $_zp_gallery_albums_per_page);
+		if($_zp_gallery_albums_per_page != 0) {
+			return ceil($_zp_gallery->getNumAlbums() / $_zp_gallery_albums_per_page);
+		} else {
+			return NULL;
+		}
 	} else {
 		return null;
 	}
