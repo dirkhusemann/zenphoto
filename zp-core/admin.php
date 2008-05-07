@@ -1132,7 +1132,7 @@ if (count($album->getImages())) {
 		}
 	} else {
 		$albumsprime = $gallery->getAlbums();
-		$ablums = array();
+		$albums = array();
 		foreach ($albumsprime as $album) { // check for rights
 			if (isMyAlbum($album, EDIT_RIGHTS)) {
 				$albums[] = $album;
@@ -1187,7 +1187,7 @@ if (count($album->getImages())) {
 		<td style="padding: 0px 0px;" colspan="2">
 		<div id="albumList" class="albumList"><?php
 		$albumsprime = $gallery->getAlbums();
-		$ablums = array();
+		$albums = array();
 		foreach ($albumsprime as $album) { // check for rights
 			if (isMyAlbum($album, EDIT_RIGHTS)) {
 				$albums[] = $album;
