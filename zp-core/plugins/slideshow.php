@@ -95,7 +95,7 @@ function printSlideShowLink($linktext='') {
 		$pagenr = $_GET['page'];
 	}
 	$numberofimages = getNumImages();
-	$slideshowlink = getCustomPageURL('slideshow');
+	$slideshowlink = rewrite_path($_zp_current_album->getFolder()."/page/slideshow","index.php?p=slideshow&album=".$_zp_current_album->getFolder());
 ?>	
 	<form name="slideshow" method="post" action="<?php echo htmlspecialchars($slideshowlink); ?>">
 		<input type="hidden" name="pagenr" value="<?php echo $pagenr;?>" />
