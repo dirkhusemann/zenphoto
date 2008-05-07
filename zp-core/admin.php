@@ -1401,13 +1401,13 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		<th><?php echo gettext("Album/Image"); ?></th>
 		<th><?php echo gettext("Author/Link"); ?></th>
 		<th><?php echo gettext("Date/Time"); ?></th>
-		<th><?php echo gettext("Comment"); ?>" <?php if(!$fulltext) { ?>(<a
+		<th><?php echo gettext("Comment"); ?> <?php if(!$fulltext) { ?>(<a
 			href="?page=comments&fulltext<?php echo $viewall ? "&viewall":""; ?>"><?php echo gettext("View full text"); ?></a>) <?php } else { ?>(<a
 			href="?page=comments<?php echo $viewall ? "&viewall":""; ?>"><?php echo gettext("View truncated"); ?></a>)<?php } ?></th>
 		<th><?php echo gettext("E-Mail"); ?></th>
 		<th><?php echo gettext("Spam"); ?></th>
 		<th><?php echo gettext("Edit"); ?></th>
-		<th><?php echo gettext("Delete"); ?>"
+		<th><?php echo gettext("Delete"); ?>
 
 	<?php
 	foreach ($comments as $comment) {
