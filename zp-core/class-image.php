@@ -319,7 +319,7 @@ class Image extends PersistentObject {
 	 *
 	 * @param string $country text for the country filed
 	 */
-	function setcountry($country) { $this->set('country', $country); }
+	function setCountry($country) { $this->set('country', $country); }
 
 	/**
 	 * Returns the credit field of the image
