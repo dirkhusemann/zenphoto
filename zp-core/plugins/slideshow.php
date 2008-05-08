@@ -16,7 +16,7 @@
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard( sbillard)";
-$plugin_version = '1.0.2.2';
+$plugin_version = '1.0.2.3';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
 
@@ -140,17 +140,19 @@ function printSlideShow() {
 	$option = getOption("slideshow_mode");
 	// jQuery Cycle slideshow config
 	// get slideshow data
-	$album = query_single_row("SELECT title, folder FROM ". prefix('albums') ." WHERE `show` = 1 AND id = ".$albumid);
-	if(!checkAlbumPassword($album['folder'], $hint)) {
+	$albumq = query_single_row("SELECT title, folder FROM ". prefix('albums') ." WHERE `show` = 1 AND id = ".$albumid);
+	if(!checkAlbumPassword($albumq['folder'], $hint)) {
 		echo gettext("This album is password protected!"); exit;
 	}		
-	$images = query_full_array("SELECT title, filename, `desc` FROM ". prefix('images') ." WHERE `show` = 1 AND albumid = ".$albumid." ORDER BY sort_order");
+	$gallery = new Gallery();
+	$album = new Album($gallery, $albumq['folder']);
+	$images = $album->getImages(0);
 	
 	// return path to get back to the page we called the slideshow from
 	if (empty($_POST['imagenumber'])) {
-		$returnpath = rewrite_path('/'.$album['folder'].'/page/'.$_POST['pagenr'],'/index.php?album='.$album['folder'].'&page='.$_POST['pagenr']);
+		$returnpath = rewrite_path('/'.$album->name.'/page/'.$_POST['pagenr'],'/index.php?album='.$album->name.'&page='.$_POST['pagenr']);
 	} else {
-		$returnpath = rewrite_path('/'.$album['folder'].'/'.$_POST['imagefile'].getOption('mod_rewrite_image_suffix'),'/index.php?album='.$album['folder'].'&image='.$_POST['imagefile']);
+		$returnpath = rewrite_path('/'.$album->name.'/'.$_POST['imagefile'].getOption('mod_rewrite_image_suffix'),'/index.php?album='.$album->name.'&image='.$_POST['imagefile']);
 	}
 	// slideshow display section
 	switch($option) {
@@ -184,20 +186,21 @@ function printSlideShow() {
 		</div>
 <div id="slides" class="pics"><?php
 		// 1.2 the slides
-		foreach($images as $image) {
+		foreach($images as $filename) {
 			$count++;
 			if($count > $numberofimages){
 				$count = 1;
 			}
-			$imagepath = FULLWEBPATH."/albums/".$album['folder']."/".$image['filename'];
-			$ext = strtolower(strrchr($image['filename'], "."));
-			echo "<span class='slideimage'><h4><strong>".$album['title'].":</strong> ".$image['title']." (".$count."/".$numberofimages.")</h4>";
+			$image = new Image($album, $filename);
+			$imagepath = FULLWEBPATH.getAlbumFolder('').$album->name."/".$filename;
+			$ext = strtolower(strrchr($filename, "."));
+			echo "<span class='slideimage'><h4><strong>".$album->getTitle().":</strong> ".$image->getTitle()." (".$count."/".$numberofimages.")</h4>";
 			if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
 				//Player Embed...
 				if (is_null($_zp_flash_player)) {
 					echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='No flash player installed.' />";
 				} else {
-					 $_zp_flash_player->playerConfig($imagepath,$image['title']);
+					 $_zp_flash_player->playerConfig($imagepath,$image->getTitle());
 				}
 			}
 			elseif ($ext == ".3gp") {
@@ -222,37 +225,38 @@ function printSlideShow() {
 			 	pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
 				</object><a>';
 		} else { 
-			echo "<img src='".WEBPATH."/".ZENFOLDER."/i.php?a=".$album['folder']."&i=".$image['filename']."&s=".$imagesize."' alt=".$image['title']." title=".$image['title']." />";
+			echo "<img src='".WEBPATH."/".ZENFOLDER."/i.php?a=".$album->name."&i=".$filename."&s=".$imagesize."' alt=".$image->getTitle()." title=".$image->getTitle()." />";
 		}
-		if(getOption("slideshow_showdesc")) { echo "<p class='imgdesc'>".$image['desc']."</p>"; }
+		if(getOption("slideshow_showdesc")) { echo "<p class='imgdesc'>".$image->getDesc()."</p>"; }
 		echo "</span>";
 	}
 
 	break;
 
 case "flash":
-	echo "<span class='slideimage'><h4><strong>".$album['title']."</strong> (".$numberofimages." images) | <a style='color: white' href='".$returnpath."'>back</a></h4>";
+	echo "<span class='slideimage'><h4><strong>".$album->name."</strong> (".$numberofimages." images) | <a style='color: white' href='".$returnpath."'>back</a></h4>";
 	echo "<span id='slideshow'></span>";
 	?>	
 <script type="text/javascript">
 $("#slideshow").flashembed({
       src:'<?php echo FULLWEBPATH . '/' . ZENFOLDER; ?>/plugins/flowplayer/FlowPlayerLight.swf',
-      width:<? echo getOption("flow_player_width"); ?>, 
-      height:<? echo getOption("flow_player_height"); ?>
+      width:<?php echo getOption("flow_player_width"); ?>, 
+      height:<?php echo getOption("flow_player_height"); ?>
     },
     {config: {  
       autoPlay: true,
       playList: [
 <?php
-	foreach($images as $image) {
+	$count = 0;
+	foreach($images as $filename) {
 		$count++;
-		$ext = strtolower(strrchr($image['filename'], "."));
+		$ext = strtolower(strrchr($filename, "."));
 		if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
 			$duration = ""; 
 		} else {
 			$duration = " duration: ".getOption("slideshow_speed")/10;
 		}
-		echo "{ url: '".FULLWEBPATH."/albums/".$album['folder']."/".$image['filename']."', ".$duration." }\n";
+		echo "{ url: '".FULLWEBPATH.getAlbumFolder('').$album->name."/".$filename."', ".$duration." }\n";
 		if($count < $numberofimages) { echo ","; }
 	}
 ?>     
