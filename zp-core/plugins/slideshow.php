@@ -120,8 +120,9 @@ function printSlideShowLink($linktext='') {
  * NOTE: Since all images of an album are generated/listed in total, it can happen that some images are skipped until all are generated.
  * And of course on slower connections this could take some time if you have many images.
  *
-  */
-function printSlideShow() {
+ * @param bool $heading set to true (default) to emit the slideshow breadcrumbs in flash mode
+ */
+function printSlideShow($heading = true) {
 	global $_zp_flash_player;
 	if(empty($_POST['imagenumber'])) {
 		$imagenumber = 0; 
@@ -234,7 +235,9 @@ function printSlideShow() {
 	break;
 
 case "flash":
-	echo "<span class='slideimage'><h4><strong>".$album->name."</strong> (".$numberofimages." images) | <a style='color: white' href='".$returnpath."'>back</a></h4>";
+	if ($heading) {
+		echo "<span class='slideimage'><h4><strong>".$album->name."</strong> (".$numberofimages." images) | <a style='color: white' href='".$returnpath."'>back</a></h4>";
+	}
 	echo "<span id='slideshow'></span>";
 	?>	
 <script type="text/javascript">
