@@ -171,3 +171,9 @@ body {
 		position: relative;
 		left: 0px;
 	}
+	.footlinks {
+		position: relative;
+		top: 625px;
+		height: 100px;
+		width: 100%;
+	}
