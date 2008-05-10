@@ -2217,9 +2217,16 @@ function printCommentAuthorLink($title=NULL, $class=NULL, $id=NULL) {
  * @param string $format how to format the result
  * @return string
  */
-function getCommentDate($format = '%B %d, %Y') { 
+function getCommentDate($format = NULL) { 
 	if (is_null($format)) {
 		$format = getOption('date_format');
+		$time_tags = array('%H', '%I', '%R', '%T', '%r');
+		foreach ($time_tags as $tag) { // strip off any time formatting
+			$t = strpos($format, $tag);
+			if ($t !== false) {
+				$format = trim(substr($format, 0, $t));
+			}
+		}
 	}
 	global $_zp_current_comment; 
 	return myts_date($format, $_zp_current_comment['date']); 
@@ -2227,7 +2234,7 @@ function getCommentDate($format = '%B %d, %Y') {
 /**
  * Retrieves the time of the current comment
  * Returns a formatted time
-
+ 
  * @param string $format how to format the result
  * @return string
  */

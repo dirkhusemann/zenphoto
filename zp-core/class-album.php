@@ -82,6 +82,11 @@ class Album extends PersistentObject {
 			}
 			$this->save();
 		}
+		if ($this->name == '') { // "private" album for zp use.
+			$this->set('show', 0);
+			$this->set('commentson', 0);
+			$this->save();
+		}
 	}
 
 	/**
