@@ -1449,7 +1449,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 				$title = gettext('database error');
 			}
 		}
-		$date  = myts_date("n/j/Y, g:i a", $comment['date']);
+		$date  = myts_date('%m/%d/%Y %I:%M %p', $comment['date']);
 		$website = $comment['website'];
 		$shortcomment = truncate_string($comment['comment'], 123);
 		$fullcomment = $comment['comment'];

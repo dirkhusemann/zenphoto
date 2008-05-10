@@ -718,7 +718,7 @@ function getAlbumDate($format=null) {
 	if (is_null($format)) {
 		return $d;
 	}
-	return strftime($format, strtotime($d));
+	return zpFormattedDate($format, strtotime($d));
 }
 
 /**
@@ -1298,7 +1298,7 @@ function getImageDate($format=null) {
 	if (is_null($format)) {
 		return $d;
 	}
-	return strftime($format, strtotime($d));
+	return zpFormattedDate($format, strtotime($d));
 }
 
 /**
@@ -2217,7 +2217,13 @@ function printCommentAuthorLink($title=NULL, $class=NULL, $id=NULL) {
  * @param string $format how to format the result
  * @return string
  */
-function getCommentDate($format = 'F jS, Y') { global $_zp_current_comment; return myts_date($format, $_zp_current_comment['date']); }
+function getCommentDate($format = '%B %d, %Y') { 
+	if (is_null($format)) {
+		$format = getOption('date_format');
+	}
+	global $_zp_current_comment; 
+	return myts_date($format, $_zp_current_comment['date']); 
+}
 /**
  * Retrieves the time of the current comment
  * Returns a formatted time
@@ -2225,7 +2231,10 @@ function getCommentDate($format = 'F jS, Y') { global $_zp_current_comment; retu
  * @param string $format how to format the result
  * @return string
  */
-function getCommentTime($format = 'g:i a') { global $_zp_current_comment; return myts_date($format, $_zp_current_comment['date']); }
+function getCommentTime($format = '%I:%M %p') { 
+	global $_zp_current_comment; 
+	return myts_date($format, $_zp_current_comment['date']); 
+}
 
 /**
  * Returns the body of the current comment

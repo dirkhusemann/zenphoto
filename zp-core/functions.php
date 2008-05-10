@@ -708,7 +708,17 @@ function rewrite_path($rewrite, $plain) {
 	return WEBPATH . "/" . $path;
 }
 
-
+/**
+ * Returns a formated date for output
+ *
+ * @param string $format the "strftime" format string
+ * @param date $dt the date to be output
+ * @return string
+ */
+function zpFormattedDate($format, $dt) {
+	$fdate = strftime($format, $dt);
+	return utf8::convert($fdate, '', getOption('charset'));
+}
 
 /**
  * Simple mySQL timestamp formatting function.
@@ -731,7 +741,7 @@ function myts_date($format,$mytimestamp)
 	$sec    = substr($mytimestamp,12,2);
 
 	$epoch  = mktime($hour+$timezoneadjust,$min,$sec,$month,$day,$year);
-	$date   = date ($format, $epoch);
+	$date   = zpFormattedDate($format, $epoch);
 	return $date;
 }
 
