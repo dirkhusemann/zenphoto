@@ -267,11 +267,15 @@ class Gallery {
 		$result = query("SELECT * FROM " . prefix('albums'));
 		$dead = array();
 		$live = array();
+		$deadalbumthemes = array();
 		// Load the albums from disk
 		$albumfolder = getAlbumFolder();
 		while($row = mysql_fetch_assoc($result)) {
 			if (!file_exists($albumfolder.$row['folder']) || in_array($row['folder'], $live)) {
 				$dead[] = $row['id'];
+				if ($row['album_theme'] !== '') {  // orphaned album theme options table
+					$deadalbumthemes[] = $row['folder'];
+				}
 			} else {
 				$live[] = $row['folder'];
 			}
@@ -290,6 +294,14 @@ class Gallery {
 			$n = query($sql1);
 			if (!$full && $n > 0 && $cascade) {
 				query($sql2);
+				query($sql3);
+			}
+		}
+		if (count($deadalbumthemes) > 0) { // delete the album theme options tables for dead albums
+			foreach ($deadalbumthemes as $deadtable) {
+				$tbl_options = prefix($deadtable.'_options');
+				$sql = "DROP TABLE $tbl_options";
+				query($sql);
 			}
 		}
 
