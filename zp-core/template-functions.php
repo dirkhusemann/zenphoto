@@ -174,8 +174,10 @@ function zenJavascript() {
 	}
 	echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/scripts-common.js\"></script>\n";
 	echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/jquery.js\"></script>\n";
-	foreach ($_zp_plugin_scripts as $script) {
-		echo $script."\n";
+	if (is_array($_zp_plugin_scripts)) {
+		foreach ($_zp_plugin_scripts as $script) {
+			echo $script."\n";
+		}
 	}
 }
 
