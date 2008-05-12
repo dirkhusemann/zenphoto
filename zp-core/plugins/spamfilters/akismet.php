@@ -3,62 +3,66 @@
 /* This is plugin for Akismet SPAM filtering.
  * Plugin is based on the Akismet Hack by GameDudeX
  * ported to plugin functionality by Thinkdreams	
- * 
- * Interface functions:
- *     getOptionsSupported()
- *        called from admin Options tab
- *        returns an array of the option names the theme supports
- *        the array is indexed by the option name. The value for each option is an array:
- *          'type' => 0 says for admin to use a standard textbox for the option
- *          'type' => 1 says for admin to use a standard checkbox for the option
- *          'type' => 2 will cause admin to call handleOption to generate the HTML for the option
- *          'desc' => text to be displayed for the option description.
- *             
- *     handleOption($option, $currentValue)
- *       $option is the name of the option being processed
- *       $currentValue is the "before" value of the option
- *
- *       this function is called by admin from within the table row/column where the option field is placed
- *       It must write the HTML that does the option handling UI
- *
- *     filterMessage($author, $email, $website, $body, $imageLink)
- *       $author is the author field of the comment
- *       $email is the email field of the comment
- *       $website is the website field of the comment
- *       $body is the comment text
- *       $imageLink is the url to the full image
- *
- *       called from class-image as we are about to post the comment to the database and send an email
- * 
- *       returns:
- *         0 if the message is SPAM
- *         1 if the message might be SPAM (it will be marked for moderation)
- *         2 if the message is not SPAM
- *
- *       class-image conditions the database store and email on this result.
- * 			 
- *		 Required	Configuration Items: 
- *
- *				User must have Akismet key, by signing up for a Wordpress.com account
- *
  */
  
+/**
+ * This implements the standard SpamFilter class for the Akismet spam filter.
+ *
+ */
 class SpamFilter  {
  
+	/**
+	 * The SpamFilter class instantiation function.
+	 *
+	 * @return SpamFilter
+	 */
 	function SpamFilter() {
 		setOptionDefault('Akismet_key', '');
 		setOptionDefault('Forgiving', 0);
 	}												
  
+	/**
+	 * The admin options interface
+	 * called from admin Options tab
+	 *  returns an array of the option names the theme supports
+	 *  the array is indexed by the option name. The value for each option is an array:
+	 *          'type' => 0 says for admin to use a standard textbox for the option
+	 *          'type' => 1 says for admin to use a standard checkbox for the option
+	 *          'type' => 2 will cause admin to call handleOption to generate the HTML for the option
+	 *          'desc' => text to be displayed for the option description.
+	 *
+	 * @return array
+	 */
 	function getOptionsSupported() {
 		return array(	gettext('Akismet key') => array('key' => 'Akismet_key', 'type' => 0, 'desc' => gettext('Proper operation requires an Akismet key obtained by signing up for a <a href="http://www.wordpress.com">Wordpress.com</a> account.')),
 									gettext('Forgiving') => array('key' => 'Forgiving', 'type' => 1, 'desc' => gettext('Mark suspected SPAM for moderation rather than as SPAM')));
 
 	}
 	
+ 	/**
+ 	 * Handles custom formatting of options for Admin (of which, there are none for Akismet)
+ 	 *
+ 	 * @param string $option the option name of the option to be processed
+ 	 * @param mixed $currentValue the current value of the option (the "before" value)
+ 	 */
 	function handleOption($option, $currentValue) {
 	}
 
+	/**
+	 * The function for processing a message to see if it might be SPAM
+   *       returns:
+   *         0 if the message is SPAM
+   *         1 if the message might be SPAM (it will be marked for moderation)
+   *         2 if the message is not SPAM
+	 *
+	 * @param string $author Author field from the posting
+	 * @param string $email Email field from the posting
+	 * @param string $website Website field from the posting
+	 * @param string $body The text of the comment
+	 * @param string $imageLink A link to the album/image on which the post was made
+	 * 
+	 * @return int
+	 */
 	function filterMessage($author, $email, $website, $body, $imageLink) {
 		 	
 		$commentData = array(

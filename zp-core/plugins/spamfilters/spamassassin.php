@@ -1,44 +1,11 @@
 <?
 
-/* 
+/** 
  * This is plugin for Spamassassin filtering
  * Author: Jerome Blion : jerome@hebergement-pro.org
  * Website: http://www.hebergement-pro.org
  * Be fair, don't remove author names ;-)
  *
- * Interface functions:
- *     getOptionsSupported()
- *        called from admin Options tab
- *        returns an array of the option names the theme supports
- *        the array is indexed by the option name. The value for each option is an array:
- *          'type' => 0 says for admin to use a standard textbox for the option
- *          'type' => 1 says for admin to use a standard checkbox for the option
- *          'type' => 2 will cause admin to call handleOption to generate the HTML for the option
- *          'desc' => text to be displayed for the option description.
- *
- *     handleOption($option, $currentValue)
- *       $option is the name of the option being processed
- *       $currentValue is the "before" value of the option
- *
- *     filterMessage($author, $email, $website, $body, $imageLink)
- *       $author is the author field of the comment
- *       $email is the email field of the comment
- *       $website is the website field of the comment
- *       $body is the comment text
- *       $imageLink is the url to the full image (will not be used here)
- *
- *       called from class-image as we are about to post the comment to the database and send an email
- *
- *       returns:
- *         0 if the message is SPAM
- *         1 if you don't trust spamassassin and prefer to moderate comments
- *         2 if the message is not SPAM
- *
- *       class-image conditions the database store and email on this result.
- *
- *              Required Configuration Items:
- *
- *              		User must have Spamassassin available on a TCP port
  *
  *	 	TODO : Implement socket connexion
  *
@@ -46,6 +13,10 @@
  */
 
 
+/**
+ * This implements the standard SpamFilter class for the spamassassin spam filter.
+ *
+ */
 class SpamFilter {
 	var $spamassassin_host;		// Spamassassin server
 	var $spamassassin_ctype;	// Connexion type
@@ -60,6 +31,11 @@ class SpamFilter {
 	var $conn;			// Network connexion to Spamassassin
 	var $date;			// Date (RFC compliant)
 
+	/**
+	 * The SpamFilter class instantiation function.
+	 *
+	 * @return SpamFilter
+	 */
 	function SpamFilter() {	// constructor
 	
 		// setup default options
@@ -91,6 +67,18 @@ class SpamFilter {
 
 	}
 
+	/**
+	 * The admin options interface
+	 * called from admin Options tab
+	 *  returns an array of the option names the theme supports
+	 *  the array is indexed by the option name. The value for each option is an array:
+	 *          'type' => 0 says for admin to use a standard textbox for the option
+	 *          'type' => 1 says for admin to use a standard checkbox for the option
+	 *          'type' => 2 will cause admin to call handleOption to generate the HTML for the option
+	 *          'desc' => text to be displayed for the option description.
+	 *
+	 * @return array
+	 */
 	function getOptionsSupported() {
 		return array(
 			gettext('Forgiving') => array('key' => 'Forgiving', 'type' => '1' , 'desc' => gettext('Mark suspected SPAM for moderation rather than as SPAM')),
@@ -102,6 +90,12 @@ class SpamFilter {
 		);
 	}
 	
+ 	/**
+ 	 * Handles custom formatting of options for Admin
+ 	 *
+ 	 * @param string $option the option name of the option to be processed
+ 	 * @param mixed $currentValue the current value of the option (the "before" value)
+ 	 */
 	function handleOption($option, $currentValue) {
 		if ($option == 'SpamAssassin_ctype') {
 			echo '<select id="connectiontype" name="' . $option . '"' . " DISABLED>\n";
@@ -202,6 +196,21 @@ class SpamFilter {
 		}
 	}
 
+	/**
+	 * The function for processing a message to see if it might be SPAM
+   *       returns:
+   *         0 if the message is SPAM
+   *         1 if the message might be SPAM (it will be marked for moderation)
+   *         2 if the message is not SPAM
+	 *
+	 * @param string $author Author field from the posting
+	 * @param string $email Email field from the posting
+	 * @param string $website Website field from the posting
+	 * @param string $body The text of the comment
+	 * @param string $imageLink A link to the album/image on which the post was made
+	 * 
+	 * @return int
+	 */
 	function filterMessage($author, $email, $website, $comment, $image_name) {
 		$this->prepareHeaders();
 		$forgedMail = $this->comment2Mail($author, $email, $website, $comment);
