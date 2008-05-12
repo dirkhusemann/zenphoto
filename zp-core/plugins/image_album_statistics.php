@@ -7,7 +7,7 @@
 
 $plugin_description = gettext("Functions that provide various statistics about images and albums in the gallery.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.0';
+$plugin_version = '1.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---image_album_statistics.php.html";
 
 /**
@@ -20,7 +20,6 @@ $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---image_a
  * @return string
  */
 function getAlbumStatistic($number=5, $option) {
-
 	if (zp_loggedin()) {
 		$albumWhere = "";
 	} else {
@@ -50,7 +49,8 @@ function getAlbumStatistic($number=5, $option) {
 }
 
 /**
- * Prints album statistic according to $option
+ * Prints album statistic according to $option as an unordered HTML list
+ * A css class is attached by default named '$option_album'
  *
  * @param string $number the number of albums to get
  * @param string $option "popular" for the most popular albums,
@@ -58,25 +58,39 @@ function getAlbumStatistic($number=5, $option) {
  *                  "latest" for the latest uploaded,
  *                  "mostrated" for the most voted,
  *                  "toprated" for the best voted
+ * @param bool $showtitle if the album title should be shown
+ * @param bool $showdate if the album date should be shown
+ * @param bool $showdesc if the album desc should be shown
+ * @param integer $desclength the length of the desc to be shown
  */
-function printAlbumStatistic($number, $option) {
-
+function printAlbumStatistic($number, $option, $showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
 	$albums = getAlbumStatistic($number, $option);
-	echo "\n<div id=\"$option_albums\">\n";
+	echo "\n<div id=\"".$option."_album\">\n";
 	if (getOption('mod_rewrite'))
 	{ $albumlinkpath = WEBPATH."/";
 	} else {
 		$albumlinkpath = "index.php?album=";
 	}
-
+	echo "<ul>";
 	$gallery = new Gallery();
 	while ($album = mysql_fetch_array($albums)) {
 		$tempalbum = new Album($gallery, $album['folder']);
-
-		echo "<a href=\"".pathurlencode($tempalbum->name)."\" title=\"" . $tempalbum->getTitle() . "\">\n";
-		echo "<img src=\"".$tempalbum->getAlbumThumb()."\"></a>\n";
+		echo "<li><a href=\"".pathurlencode($tempalbum->name)."\" title=\"" . $tempalbum->getTitle() . "\">\n";
+		echo "<img src=\"".$tempalbum->getAlbumThumb()."\"></a>\n<br />";
+		if($showtitle) {
+			echo "<h3><a href=\"".pathurlencode($tempalbum->name)."\" title=\"" . $tempalbum->getTitle() . "\">\n";
+			echo $tempalbum->getTitle()."</a>\n";
+		}
+		echo "</h3>";
+		if($showdate) {
+			echo "<p>". zpFormattedDate(getOption('date_format'),strtotime($tempalbum->getDateTime()))."</p>";
+		}
+		if($showdesc) {
+			echo "<p>".my_truncate_string($tempalbum->getDesc(), $desclength)."</p>";
+		}
+		echo "</li>";
 	}
-	echo "</div>\n";
+	echo "</ul></div>\n";
 }
 
 /**
@@ -182,7 +196,8 @@ function getImageStatistic($number, $option, $album='') {
 }
 
 /**
- * Prints image statistic according to $option
+ * Prints image statistic according to $option as an unordered HTML list
+ * A css class is attached by default named accordingly'$option'
  *
  * @param string $number the number of albums to get
  * @param string $option "popular" for the most popular images,
@@ -193,14 +208,27 @@ function getImageStatistic($number, $option, $album='') {
  * @param string $album title of an specific album
  * @return string
  */
-function printImageStatistic($number, $option, $album='') {
+function printImageStatistic($number, $option, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
 	$images = getImageStatistic($number, $option, $album);
 	echo "\n<div id=\"$option\">\n";
+	echo "<ul>";
 	foreach ($images as $image) {
-		echo '<a href="' . $image->getImageLink() . '" title="' . htmlspecialchars($image->getTitle(), ENT_QUOTES) . "\">\n";
-		echo '<img src="' . $image->getThumb() . "\"  alt=\"" . htmlspecialchars($image->getTitle(),ENT_QUOTES) . "\" /></a>\n";
+		echo "<li><a href=\"" . $image->getImageLink() . "\" title=\"" . htmlspecialchars($image->getTitle(), ENT_QUOTES) . "\">\n";
+		echo "<img src=\"" . $image->getThumb() . "\"  alt=\"" . htmlspecialchars($image->getTitle(),ENT_QUOTES) . "\" /></a>\n";
+		if($showtitle) {
+			echo "<h3><a href=\"".pathurlencode($image->name)."\" title=\"" . $image->getTitle() . "\">\n";
+			echo $image->getTitle()."</a>\n";
+		}
+		echo "</h3>";
+		if($showdate) {
+			echo "<p>". zpFormattedDate(getOption('date_format'),strtotime($image->getDateTime()))."</p>";
+		}
+		if($showdesc) {
+			echo "<p>".my_truncate_string($image->getDesc(), $desclength)."</p>";
+		}
 	}
-	echo "</div>\n";
+	echo "</li>";
+	echo "</ul></div>\n";
 }
 
 /**

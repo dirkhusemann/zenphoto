@@ -301,7 +301,7 @@ class Gallery {
 			foreach ($deadalbumthemes as $deadtable) {
 				$tbl_options = prefix($deadtable.'_options');
 				$sql = "DROP TABLE $tbl_options";
-				query($sql);
+				query($sql, true);
 			}
 		}
 
