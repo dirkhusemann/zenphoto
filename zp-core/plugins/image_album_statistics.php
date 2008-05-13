@@ -7,7 +7,7 @@
 
 $plugin_description = gettext("Functions that provide various statistics about images and albums in the gallery.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.1';
+$plugin_version = '1.0.2';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---image_album_statistics.php.html";
 
 /**
@@ -239,6 +239,24 @@ function printImageStatistic($number, $option, $album='', $showtitle=false, $sho
  */
 function printPopularImages($number=5, $album='') {
 	printImageStatistic($number, "popular",$album);
+}
+
+/**
+ * Prints the most rated images
+ *
+ * @param string $number the number of images to get
+ */
+function printMostRatedImages($number=5) {
+	printImageStatistic($number,"mostrated");
+}
+
+/**
+ * Prints the top voted images
+ *
+ * @param string $number the number of images to get
+ */
+function printTopRatedImages($number=5) {
+	printImageStatistic($number,"toprated");
 }
 
 /**
