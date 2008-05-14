@@ -119,7 +119,7 @@ function printAlbumStatistic($number, $option, $showtitle=false, $showdate=false
  *
  * @param array $album the array that getAlbumsStatistic() submitted
  */
-function printAlbumStatisticItem($album, $showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
+function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
 	global $_zp_gallery;
 	$tempalbum = new Album($_zp_gallery, $album['folder']);
 		echo "<li><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . $tempalbum->getTitle() . "\">\n";
@@ -128,14 +128,29 @@ function printAlbumStatisticItem($album, $showtitle=false, $showdate=false, $sho
 			echo "<h3><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . $tempalbum->getTitle() . "\">\n";
 			echo $tempalbum->getTitle()."</a>\n";
 		}
-		echo "</h3>";
+		echo "</h3><div>";
 		if($showdate) {
-			echo "<p>Date: ". zpFormattedDate(getOption('date_format'),strtotime($tempalbum->getDateTime()))."</p>";
+			if($option === "latestupdated") {
+				$filechangedate = filectime(getAlbumFolder().$tempalbum->name);
+				$latestimage = query_single_row("SELECT mtime FROM " . prefix('images'). " WHERE albumid = ".$tempalbum->getAlbumID() . " AND `show` = 1 ORDER BY id DESC");
+				$lastuploaded = query("SELECT COUNT(*) FROM ".prefix('images')." WHERE albumid = ".$tempalbum->getAlbumID() . " AND mtime = ". $latestimage['mtime']);
+				$row = mysql_fetch_row($lastuploaded);
+				$count = $row[0];
+				echo "<p>".gettext("Last update: ").zpFormattedDate(getOption('date_format'),$filechangedate)."</p>";
+				if($count <= 1) {
+					$image = gettext("image");
+				} else {
+					$image = gettext("images");
+				}
+				echo "<span>".$count.gettext(" new ").$image."</span>";
+			} else {
+				echo "<p>". zpFormattedDate(getOption('date_format'),strtotime($tempalbum->getDateTime()))."</p>";
+			}
 		}
 		if($showdesc) {
 			echo "<p>".my_truncate_string($tempalbum->getDesc(), $desclength)."</p>";
 		}
-		echo "</li>";
+		echo "</div></li>";
 }
 
 /**
@@ -268,7 +283,7 @@ function printImageStatistic($number, $option, $album='', $showtitle=false, $sho
 		echo "<li><a href=\"" . $image->getImageLink() . "\" title=\"" . htmlspecialchars($image->getTitle(), ENT_QUOTES) . "\">\n";
 		echo "<img src=\"" . $image->getThumb() . "\"  alt=\"" . htmlspecialchars($image->getTitle(),ENT_QUOTES) . "\" /></a>\n";
 		if($showtitle) {
-			echo "<h3><a href=\"".pathurlencode($image->name)."\" title=\"" . $image->getTitle() . "\">\n";
+			echo "<h3><div><a href=\"".pathurlencode($image->name)."\" title=\"" . $image->getTitle() . "\">\n";
 			echo $image->getTitle()."</a>\n";
 		}
 		echo "</h3>";
@@ -279,7 +294,7 @@ function printImageStatistic($number, $option, $album='', $showtitle=false, $sho
 			echo "<p>".my_truncate_string($image->getDesc(), $desclength)."</p>";
 		}
 	}
-	echo "</li>";
+	echo "</div></li>";
 	echo "</ul></div>\n";
 }
 
