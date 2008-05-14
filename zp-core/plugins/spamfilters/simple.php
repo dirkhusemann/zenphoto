@@ -75,10 +75,11 @@ class SpamFilter  {
 	 * @param string $website Website field from the posting
 	 * @param string $body The text of the comment
 	 * @param string $imageLink A link to the album/image on which the post was made
+	 * @param string $ip the IP address of the comment poster
 	 * 
 	 * @return int
 	 */
-	function filterMessage($author, $email, $website, $body, $imageLink) {
+	function filterMessage($author, $email, $website, $body, $imageLink, $ip) {
 		$forgive = getOption('Forgiving');
 		$list = getOption('Words_to_die_on');
 		$list = strtolower($list);

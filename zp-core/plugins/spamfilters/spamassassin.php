@@ -208,10 +208,11 @@ class SpamFilter {
 	 * @param string $website Website field from the posting
 	 * @param string $body The text of the comment
 	 * @param string $imageLink A link to the album/image on which the post was made
+	 * @param string $ip the IP address of the comment poster
 	 * 
 	 * @return int
 	 */
-	function filterMessage($author, $email, $website, $comment, $image_name) {
+	function filterMessage($author, $email, $website, $comment, $image_name, $ip) {
 		$this->prepareHeaders();
 		$forgedMail = $this->comment2Mail($author, $email, $website, $comment);
 		$request = $this->prepareRequest ($forgedMail);

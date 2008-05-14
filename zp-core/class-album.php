@@ -993,10 +993,11 @@ class Album extends PersistentObject {
 	 * @param string $comment body of the comment
 	 * @param string $code Captcha code entered
 	 * @param string $code_ok Captcha md5 expected
+	 * @param string $ip the IP address of the comment poster
 	 * @return int
 	 */
-	function addComment($name, $email, $website, $comment, $code, $code_ok) {
-		$goodMessage = postComment($name, $email, $website, $comment, $code, $code_ok, $this);
+	function addComment($name, $email, $website, $comment, $code, $code_ok, $ip) {
+		$goodMessage = postComment($name, $email, $website, $comment, $code, $code_ok, $this, $ip);
 		return $goodMessage;
 	}
 

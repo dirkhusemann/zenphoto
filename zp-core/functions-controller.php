@@ -154,7 +154,8 @@ function zp_handle_comment() {
 	 			if ($activeImage !== false) {
 	 				$commentadded = $activeImage->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']),
 	 													$website, kses($_POST['comment'], $allowed),
-	 													strip_tags($_POST['code']), $_POST['code_h']);
+	 													strip_tags($_POST['code']), $_POST['code_h'],
+	 													sanitize($_SERVER['REMOTE_ADDR']));
 	 				$redirectTo = $activeImage->getImageLink(); 
 					}
 			} else {
@@ -167,7 +168,8 @@ function zp_handle_comment() {
 				}
 				$commentadded = $commentobject->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']),
 													$website, kses($_POST['comment'], $allowed),
-													strip_tags($_POST['code']), $_POST['code_h']);
+													strip_tags($_POST['code']), $_POST['code_h'], 
+													sanitize($_SERVER['REMOTE_ADDR']));
 			}
 			if ($commentadded == 2) {
 				unset($_zp_comment_error);

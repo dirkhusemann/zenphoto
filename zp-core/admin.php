@@ -1405,6 +1405,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 			href="?page=comments&fulltext<?php echo $viewall ? "&viewall":""; ?>"><?php echo gettext("View full text"); ?></a>) <?php } else { ?>(<a
 			href="?page=comments<?php echo $viewall ? "&viewall":""; ?>"><?php echo gettext("View truncated"); ?></a>)<?php } ?></th>
 		<th><?php echo gettext("E-Mail"); ?></th>
+		<th><?php echo gettext("IP address"); ?></th>
 		<th><?php echo gettext("Spam"); ?></th>
 		<th><?php echo gettext("Edit"); ?></th>
 		<th><?php echo gettext("Delete"); ?>
@@ -1467,6 +1468,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		<td align="center"><a
 			href="mailto:<?php echo $email; ?>?body=<?php echo commentReply($fullcomment, $author, $image, $albumtitle); ?>">
 		<img src="images/envelope.png" style="border: 0px;" alt="Reply" /></a></td>
+		<td><?php echo $comment['ip']; ?></td>
 		<td align="center"><?php
 		if ($inmoderation) {
 			echo "<a href=\"?action=moderation&id=" . $id . "\">";

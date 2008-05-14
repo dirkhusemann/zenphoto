@@ -1,6 +1,6 @@
 <?php
 define('ZENPHOTO_VERSION', '1.1.5');
-define('ZENPHOTO_RELEASE', 1535);
+define('ZENPHOTO_RELEASE', 1536);
 define('SAFE_GLOB', false);
 if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
@@ -1371,9 +1371,10 @@ function isValidURL($url) {
  * @param string $code_ok Captcha md5 expected
  * @param string $type 'albums' if it is an album or 'images' if it is an image comment
  * @param object $receiver the object (image or album) to which to post the comment
+ * @param string $ip the IP address of the comment poster
  * @return int
  */
-function postComment($name, $email, $website, $comment, $code, $code_ok, $receiver) {
+function postComment($name, $email, $website, $comment, $code, $code_ok, $receiver, $ip) {
 	if (strtolower(get_class($receiver)) == 'image') {
 		$type = 'images';
 	} else {
@@ -1408,7 +1409,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	if (!(false === ($requirePath = getPlugin('spamfilters/'.getOption('spam_filter').".php", false)))) {
 		require_once($requirePath);
 		$spamfilter = new SpamFilter();
-		$goodMessage = $spamfilter->filterMessage($name, $email, $website, $comment, $type=='images'?$receiver->getFullImage():NULL);
+		$goodMessage = $spamfilter->filterMessage($name, $email, $website, $comment, $type=='images'?$receiver->getFullImage():NULL, $ip);
 	}
 
 	if ($goodMessage) {
@@ -1419,7 +1420,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		}
 
 		// Update the database entry with the new comment
-		query("INSERT INTO " . prefix("comments") . " (`ownerid`, `name`, `email`, `website`, `comment`, `inmoderation`, `date`, `type`) VALUES " .
+		query("INSERT INTO " . prefix("comments") . " (`ownerid`, `name`, `email`, `website`, `comment`, `inmoderation`, `date`, `type`, `ip`) VALUES " .
 						" ('" . $receiver->id .
 						"', '" . escape($name) . 
 						"', '" . escape($email) . 
@@ -1427,7 +1428,8 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 						"', '" . escape($comment) . 
 						"', '" . $moderate . 
 						"', NOW()" .
-						", '$type')");
+						", '$type'" .
+						", '$ip')");
 
 		if ($moderate) {
 			$action = "placed in moderation";

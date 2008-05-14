@@ -1145,7 +1145,7 @@ function fetchComments($number) {
 	$comments = array();
 	if ($_zp_loggedin & ADMIN_RIGHTS) {
 		$sql = "SELECT `id`, `name`, `website`, `type`, `ownerid`,"
-		. " (date + 0) AS date, comment, email, inmoderation FROM ".prefix('comments')
+		. " (date + 0) AS date, `comment`, `email`, `inmoderation`, `ip` FROM ".prefix('comments')
 		. " ORDER BY id DESC$limit";
 		$comments = query_full_array($sql);
 	} else  if ($_zp_loggedin & COMMENT_RIGHTS) {
@@ -1159,7 +1159,7 @@ function fetchComments($number) {
 		}
 		if (count($albumIDs) > 0) {
 			$sql = "SELECT  `id`, `name`, `website`, `type`, `ownerid`,"
-			." (`date` + 0) AS date, comment, email, inmoderation "
+			." (`date` + 0) AS date, `comment`, `email`, `inmoderation`, `ip` "
 			." FROM ".prefix('comments')." WHERE ";
 
 			$sql .= " (`type`='albums' AND (";
@@ -1176,7 +1176,7 @@ function fetchComments($number) {
 				$comments[$comment['id']] = $comment;
 			}
 			$sql = "SELECT .".prefix('comments').".id as id, ".prefix('comments').".name as name, `website`, `type`, `ownerid`,"
-			." (".prefix('comments').".date + 0) AS date, comment, email, inmoderation, ".prefix('images').".`albumid` as albumid"
+			." (".prefix('comments').".date + 0) AS date, `comment`, `email`, `inmoderation`, `ip`, ".prefix('images').".`albumid` as albumid"
 			." FROM ".prefix('comments').",".prefix('images')." WHERE ";
 				
 			$sql .= "(`type`='images' AND(";
