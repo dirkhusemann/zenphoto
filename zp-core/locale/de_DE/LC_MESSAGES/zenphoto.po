@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zenphoto 1.1.6 [1538]\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-15 18:39+0100\n"
-"PO-Revision-Date: 2008-05-15 18:50+0100\n"
+"POT-Creation-Date: 2008-05-15 21:04+0100\n"
+"PO-Revision-Date: 2008-05-15 21:05+0100\n"
 "Last-Translator: acrylian <wartgart@gmx.net>\n"
 "Language-Team: Malte Müller (acrylian)\n"
 "MIME-Version: 1.0\n"
@@ -1938,8 +1938,9 @@ msgid "The watermark image (png-24). (Place the image in the"
 msgstr "Das Wasserzeichenbild (png-24). (Kopiere das Bild in den"
 
 #: zp-trunk/zp-core/admin.php:2104
-msgid "directory."
-msgstr "-Ordner"
+#: zp-trunk/zp-core/admin.php:2120
+msgid "directory"
+msgstr "Ordner"
 
 #: zp-trunk/zp-core/admin.php:2105
 msgid "The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the\timage. "
@@ -1960,10 +1961,6 @@ msgstr "Wasserzeichen für Video Thumbnails:"
 #: zp-trunk/zp-core/admin.php:2120
 msgid "The watermark image (png-24) that will be overlayed on the video thumbnail (if one exists). (Place the image in the"
 msgstr "Das Wasserzeichenbild (png-24), das über das Video-Thumbnail gelegt wird (sofern eines existiert). (Kopiere Sie das Bilnd in den "
-
-#: zp-trunk/zp-core/admin.php:2120
-msgid "directory"
-msgstr "Ordner"
 
 #: zp-trunk/zp-core/admin.php:2123
 msgid "Full image quality:"
@@ -3924,6 +3921,8 @@ msgstr "SpamAssassin-Benutzer"
 msgid "User to use on SpamAssassin box"
 msgstr "Der Benutzer, der bei SpamAssassin verwendet werden soll"
 
+#~ msgid "directory."
+#~ msgstr "-Ordner"
 #~ msgid "Allow_ratings"
 #~ msgstr "Bewertungen erlauben"
 #~ msgid "Check to enable album and image ratings."
