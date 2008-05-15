@@ -2100,7 +2100,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		<input type="text" size="2" name="watermark_w_offset"
 			value="<?php echo getOption('watermark_w_offset');?>" /><?php echo gettext("%"); ?>
 		</td>
-		<td><?php echo gettext("The watermark image (png-24). (Place the image in the"); ?>" <?php echo ZENFOLDER; ?>/watermarks/
+		<td><?php echo gettext("The watermark image (png-24). (Place the image in the"); ?> "<?php echo ZENFOLDER; ?>/watermarks/
 		<?php echo gettext("directory."); ?>")<br />
 		<?php echo gettext("The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the	image. ").
 		           gettext("It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark. ").
