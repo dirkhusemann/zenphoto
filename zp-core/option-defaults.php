@@ -83,6 +83,7 @@ function setDefault($option, $default) {
 	setDefault('hotlink_protection', '1');
 	setDefault('current_theme', 'default');
 	setDefault('feed_items', 10);
+	setDefault('feed_imagesize', 240);
 	setDefault('search_fields', 32767);  
 	setOptionDefault(	'allowed_tags', "a => (href => () title => ()) \n".
 	 									"abbr => (title => ())\n" . 

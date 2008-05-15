@@ -12,7 +12,7 @@ $standardOptions = array(	'gallery_title','website_title','website_url','time_of
  													'albums_per_page','images_per_page','perform_watermark',
  													'watermark_image','watermark_scale', 'watermark_allow_upscale', 'current_theme', 'spam_filter',
  													'email_new_comments', 'perform_video_watermark', 'video_watermark_image',
- 													'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'search_fields',
+ 													'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'feed_imagesize', 'search_fields',
  													'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
  													'allowed_tags', 'full_image_quality', 'persistent_archive',
  													'protect_full_image', 'album_session', 'watermark_h_offset', 'watermark_w_offset',
@@ -559,6 +559,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 					setBoolOption('gallery_sortdirection', $_POST['gallery_sortdirection']);
 				}
 				setOption('feed_items', $_POST['feed_items']);
+				setOption('feed_imagesize', $_POST['feed_imagesize']);
 				$search = new SearchEngine();
 				setOption('search_fields', 32767, false); // make SearchEngine allow all options so parseQueryFields() will gives back what was choosen this time
 				setOption('search_fields', $search->parseQueryFields());
@@ -1952,6 +1953,12 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		<td><input type="text" size="40" name="feed_items"
 			value="<?php echo getOption('feed_items');?>" /></td>
 		<td><?php echo gettext("The number of new images/albums/comments you want to appear in your site's RSS feed."); ?></td>
+	</tr>
+	<tr>
+		<td><?php echo gettext("Size of RSS feed images:"); ?></td>
+		<td><input type="text" size="40" name="feed_imagesize"
+			value="<?php echo getOption('feed_imagesize');?>" /></td>
+		<td><?php echo gettext("The size you want your images to have in your site's RSS feed."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Sort gallery by:"); ?></td>

@@ -56,7 +56,12 @@ if(getOption('mod_rewrite')) {
 <managingEditor><?php echo "$adminemail ($adminname)"; ?></managingEditor>
 <webMaster><?php echo "$adminemail ($adminname)"; ?></webMaster>
 <?php 
-$s = 240; // uncropped image size
+$size = sanitize_numeric($_GET['size']);
+if(is_numeric($size) && $size != "" && $size < getOption('feed_imagesize')) {
+  $s = $size;
+} else {
+	$s = getOption('feed_imagesize'); // uncropped image size
+}
 $items = getOption('feed_items'); // # of Items displayed on the feed
 
 db_connect();
