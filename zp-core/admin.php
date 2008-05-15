@@ -2101,7 +2101,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 			value="<?php echo getOption('watermark_w_offset');?>" /><?php echo gettext("%"); ?>
 		</td>
 		<td><?php echo gettext("The watermark image (png-24). (Place the image in the"); ?> "<?php echo ZENFOLDER; ?>/watermarks/
-		<?php echo gettext("directory."); ?>")<br />
+		<?php echo gettext("directory"); ?>".)<br />
 		<?php echo gettext("The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the	image. ").
 		           gettext("It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark. ").
 		           gettext("If <em>allow upscale</em> is not checked the watermark will not be made larger than the original watermark image."); ?></td>
@@ -2117,7 +2117,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		?> <input type="checkbox" name="perform_video_watermark" value="1"
 		<?php echo checked('1', getOption('perform_video_watermark')); ?> />&nbsp;<?php echo gettext("Enabled"); ?>
 		</td>
-		<td><?php echo gettext("The watermark image (png-24) that will be overlayed on the video thumbnail (if one exists). (Place the image in the"); ?> <?php echo ZENFOLDER; ?>/watermarks/ <?php echo gettext("directory"); ?>.)</td>
+		<td><?php echo gettext("The watermark image (png-24) that will be overlayed on the video thumbnail (if one exists). (Place the image in the"); ?> "<?php echo ZENFOLDER; ?>/watermarks/ <?php echo gettext("directory"); ?>".)</td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Full image quality:"); ?></td>
