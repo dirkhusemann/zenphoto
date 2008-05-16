@@ -1,5 +1,5 @@
 <?php
-define('ZENPHOTO_VERSION', '1.1.5');
+define('ZENPHOTO_VERSION', '1.1.6');
 define('ZENPHOTO_RELEASE', 1544);
 define('SAFE_GLOB', false);
 if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
