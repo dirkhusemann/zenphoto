@@ -2699,7 +2699,7 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
  *
  * @return array
  */
-function getAllDates() {
+function getAllDates($order='asc') {
 	$alldates = array();
 	$cleandates = array();
 	$sql = "SELECT `date` FROM ". prefix('images');
@@ -2714,7 +2714,11 @@ function getAllDates() {
 		}
 	}
 	$datecount = array_count_values($cleandates);
-	ksort($datecount);
+	if ($order == 'desc') {
+		krsort($datecount);
+	} else {
+		ksort($datecount);
+	}
 	return $datecount;
 }
 /**
@@ -2724,11 +2728,11 @@ function getAllDates() {
  * @param string $yearid optional class for "year"
  * @param string $monthid optional class for "month"
  */
-function printAllDates($class='archive', $yearid='year', $monthid='month') {
+function printAllDates($class='archive', $yearid='year', $monthid='month', $order='asc') {
 	if (!empty($class)){ $class = "class=\"$class\""; }
 	if (!empty($yearid)){ $yearid = "class=\"$yearid\""; }
 	if (!empty($monthid)){ $monthid = "class=\"$monthid\""; }
-	$datecount = getAllDates();
+	$datecount = getAllDates($order);
 	$lastyear = "";
 	echo "\n<ul $class>\n";
 	while (list($key, $val) = each($datecount)) {

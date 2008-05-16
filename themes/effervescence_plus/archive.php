@@ -43,7 +43,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 		<div id="main">
 		<?php if (!checkForPassword()) {?>
 			<!-- Date List -->
-			<div id="archive"><p><?php echo gettext('Images By Date'); ?></p><?php printAllDates(); ?></div>
+			<div id="archive"><p><?php echo gettext('Images By Date'); ?></p><?php printAllDates('archive', 'year', 'month', 'desc'); ?></div>
 			<div id="tag_cloud"><p><?php echo gettext('Popular Tags'); ?></p><?php printAllTagsAs('cloud', 'tags'); ?></div>
 		<?php } ?>
 		</div>
