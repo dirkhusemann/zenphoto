@@ -865,6 +865,13 @@ if (file_exists("zp-config.php")) {
 		setupLog("Done with database creation and update");
 		
 		require('option-defaults.php');
+		
+		// special cleanup section for plugins
+		$badplugs = array ('exifimagerotate.php', 'flip_image.php', 'image_mirror.php', 'image_rotate.php', 'supergallery-functions.php');
+		foreach ($badplugs as $plug) {
+			$path = SERVERPATH . '/' . ZENFOLDER . '/plugins/' . $plug;
+			unlink($path);
+		}
 
 		echo "<h3>".gettext("Done with table $task!")."</h3>";
 
