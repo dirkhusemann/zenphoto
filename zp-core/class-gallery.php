@@ -162,7 +162,7 @@ class Gallery {
 			$this->getAlbums();
 			$count = count($this->albums);
 		} else {
-			$sql = "SELECT count(*) FROM " . prefix('albums');
+			$sql = "SELECT count(*) FROM " . prefix('albums') . "WHERE `folder`!=''";
 			$result = query($sql);
 			$count = mysql_result($result, 0);
 		}
@@ -232,7 +232,9 @@ class Gallery {
 	 * @return int
 	 */
 	function getNumImages() {
-		$result = query_single_row("SELECT count(*) FROM ".prefix('images'));
+		$sql = "SELECT `id` FROM " . prefix('albums') . "WHERE `folder`=''";
+		$row = query_single_row($sql);
+		$result = query_single_row("SELECT count(*) FROM ".prefix('images')." WHERE `albumid`!=".$row['id']);
 		return array_shift($result);
 	}
 
