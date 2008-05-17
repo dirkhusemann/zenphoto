@@ -547,7 +547,6 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				$web = $_POST['website_url'];
 				setOption('website_url', $web);
 				setOption('time_offset', $_POST['time_offset']);
-				setOption('gmaps_apikey', $_POST['gmaps_apikey']);
 				setBoolOption('mod_rewrite', $_POST['mod_rewrite']);
 				setOption('mod_rewrite_image_suffix', $_POST['mod_rewrite_image_suffix']);
 				setOption('server_protocol', $_POST['server_protocol']);
