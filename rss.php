@@ -19,6 +19,7 @@ function fixRSSDate($bad_date) {
 
 $albumnr = sanitize_numeric($_GET['albumnr']);
 $albumname = sanitize(urldecode($_GET['albumname']), true);
+$albumfolder = sanitize(urldecode($_GET['folder']), true);
 $host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 
 // check passwords
@@ -29,7 +30,9 @@ foreach($albumscheck as $albumcheck) {
 		$passwordcheck = $passwordcheck.$albumpasswordcheck;
 	} 
 }
-if ($albumname != "") { $albumname = " - for album: ".$albumname; }
+if ($albumname != "") { 
+	$albumname = " (".$albumname.")"; 
+} 
 if(getOption('mod_rewrite')) {
 	$albumpath = "/"; $imagepath = "/"; $modrewritesuffix = getOption('mod_rewrite_image_suffix');
 } else  {
@@ -38,10 +41,10 @@ if(getOption('mod_rewrite')) {
 ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-<title><?php echo getOption('gallery_title'); ?><?php echo $albumname; ?></title>
+<title><?php echo htmlspecialchars(getOption('gallery_title')).htmlspecialchars($albumname); ?></title>
 <link><?php echo "http://".$host.WEBPATH; ?></link>
 <atom:link href="http://<?php echo $host.WEBPATH; ?>/rss.php" rel="self" type="application/rss+xml" />
-<description><?php echo getOption('gallery_title'); ?></description>
+<description><?php echo htmlspecialchars(getOption('gallery_title')); ?></description>
 <language>en-us</language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
 <lastBuildDate><?php echo date("r", time()); ?></lastBuildDate>
@@ -50,7 +53,6 @@ if(getOption('mod_rewrite')) {
 <?php
 	$admin = array_shift(getAdministrators());
 	$adminname = $admin['name'];
-
 	$adminemail = $admin['email'];
 ?>
 <managingEditor><?php echo "$adminemail ($adminname)"; ?></managingEditor>
@@ -68,6 +70,8 @@ db_connect();
 
 if (is_numeric($albumnr) && $albumnr != "") { 
 	$albumWhere = "images.albumid = $albumnr AND";
+} else if (isset($_GET["folder"])) {
+	$albumWhere = "folder LIKE '".$albumfolder."/%' AND "; 
 } else {
 	$albumWhere = "";
 }
@@ -87,10 +91,12 @@ foreach ($result as $images) {
 	$images['folder'] = implode('/', $imagpathnames);
 	$images['filename'] = rawurlencode($images['filename']);
 	$ext = strtolower(strrchr($images['filename'], "."));
-
+	$images['title'] = htmlspecialchars($images['title']);
+	$images['albumtitle'] = htmlspecialchars($images['albumtitle']);
+	$images['desc'] = htmlspecialchars($images['desc']);
 ?>
 <item>
-	<title><?php echo $images['title']; ?></title>
+	<title><?php echo $images['title']." (".$images['albumtitle'].")"; ?></title>
 	<link><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix. ']]>';?></link>
 	<description>
 <?php
@@ -100,7 +106,7 @@ if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4") ||  ($ext == ".3gp"
 	echo '<![CDATA[<a title="'.$images['title'].' in '.$images['albumtitle'].'" href="http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix.'"><img border="0" src="http://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$images['folder'].'&i='.$images['filename'].'&s='.$s.'" alt="'. $images['title'] .'"></a><p>' . $images['desc'] . '</p>]]>';?>
 	<?php if($exif['datetime']) { echo '<![CDATA[Date: ' . $exif['datetime'] . ']]>'; } }?>
 </description>
-<category><?php echo $images['title']; ?></category>
+<category><?php echo $images['albumtitle']; ?></category>
 	<guid><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix. ']]>';?></guid>
 	<pubDate><?php echo fixRSSDate($images['date']); ?></pubDate> 
 </item>

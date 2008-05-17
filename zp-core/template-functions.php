@@ -2697,6 +2697,7 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 /**
  * Retrieves a list of all unique years & months from the images in the gallery
  *
+ * @param string $order set to 'desc' for the list to be in descending order
  * @return array
  */
 function getAllDates($order='asc') {
@@ -2727,6 +2728,7 @@ function getAllDates($order='asc') {
  * @param string $class optional class
  * @param string $yearid optional class for "year"
  * @param string $monthid optional class for "month"
+ * @param string $order set to 'desc' for the list to be in descending order
  */
 function printAllDates($class='archive', $yearid='year', $monthid='month', $order='asc') {
 	if (!empty($class)){ $class = "class=\"$class\""; }
@@ -2832,7 +2834,10 @@ function getAlbumId() {
 /**
  * Prints a RSS link
  *
- * @param string $option type of RSS (Gallery, Album, Comments)
+ * @param string $option type of RSS: "Gallery" feed for the whole gallery 
+ * 																		"Album" for only the album it is called from 
+ * 																		"Collection" for the album it is called from and all of its subalbums
+ * 																		 "Comments" for all comments
  * @param string $prev text to before before the link
  * @param string $linktext title of the link
  * @param string $next text to appear after the link
@@ -2841,6 +2846,7 @@ function getAlbumId() {
  * @since 1.1
  */
 function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=null) {
+	global $_zp_current_album;
 	if ($printIcon) {
 		$icon = ' <img src="' . FULLWEBPATH . '/' . ZENFOLDER . '/images/rss.gif" alt="RSS Feed" />';
 	} else {
@@ -2856,6 +2862,9 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
 		case "Album":
 			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php?albumnr=".getAlbumId()."&amp;albumname=".urlencode(getAlbumTitle())."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
+		case "Collection":
+			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php?albumname=".urlencode(getAlbumTitle())."&amp;folder=".urlencode($_zp_current_album->getFolder())."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			break;	
 		case "Comments":
 			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss-comments.php\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;

@@ -88,7 +88,7 @@ foreach ($comments as $comment) {
 		$imagetag = "";
 	}
 	$date = $comment['date'];
-	$albumtitle = $comment['albumtitle'];
+	$albumtitle = htmlspecialchars($comment['albumtitle']);
 	if ($comment['title'] == "") $title = $image; else $title = $comment['title'];
 	$website = $comment['website'];
 	$shortcomment = truncate_string($comment['comment'], 123);
@@ -99,11 +99,11 @@ foreach ($comments as $comment) {
 ?>
 
 <item>
-<title><?php echo $albumtitle.$title." by ".$author; ?></title>
+<title><?php echo htmlspecialchars($albumtitle.$title." by ".$author); ?></title>
 <link><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$album.$imagetag.']]>';?></link>
-<dc:creator><?php echo $author; ?></dc:creator>
-<description><?php echo $shortcomment; ?></description>
-<category><?php echo $albumtitle; ?></category>
+<dc:creator><?php echo htmlspecialchars($author); ?></dc:creator>
+<description><?php echo htmlspecialchars($shortcomment); ?></description>
+<category><?php echo htmlspecialchars($albumtitle); ?></category>
 <guid><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$album.$imagetag.']]>';?></guid>
 <pubDate><?php echo fixRSSDate($date); ?></pubDate>
 </item>
