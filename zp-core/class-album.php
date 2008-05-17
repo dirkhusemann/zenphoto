@@ -301,10 +301,23 @@ class Album extends PersistentObject {
 	 */
 	function getSortDirection($what) {
 		if ($what == 'image') {
-			return $this->get('image_sortdirection');
+			$direction = $this->get('image_sortdirection');
 		} else {
-			return $this->get('album_sortdirection');
+			$direction = $this->get('album_sortdirection');
 		}
+		if (empty($direction)) {
+			$parentalbum = $this->getParent();
+			if (is_null($parentalbum)) {
+				if ($what == 'image') {
+					$direction = getOption('image_sortdirection');
+				} else {
+					$direction = getOption('gallery_sortdirection');
+				}
+			} else {
+				$direction = $parentalbum->getSortDirection($what);
+			}
+		}
+		return $direction;
 	}
 
 	/**
@@ -335,15 +348,8 @@ class Album extends PersistentObject {
 			$parentalbum = $this->getParent();
 			if (is_null($parentalbum)) {
 				$type = getOption('gallery_sorttype');
-				$direction = getOption('gallery_sortdirection');
 			} else {
-				$direction = $parentalbum->getSortDirection('album');
-				$type = $parentalbum->getSortType();
-			}
-			if (!empty($type)) {
-				$this->set('sort_type', $type);
-				$this->set('image_sortdirection', $direction);
-				$this->save();
+				$type = $parentalbum->getSortType();				
 			}
 		}
 		return $type;
@@ -369,15 +375,8 @@ class Album extends PersistentObject {
 			$parentalbum = $this->getParent();
 			if (is_null($parentalbum)) {
 				$type = getOption('gallery_sorttype');
-				$direction = getOption('gallery_sortdirection');
 			} else {
-				$direction = $parentalbum->getSortDirection('album');
 				$type = $parentalbum->getSortType();
-			}
-			if (!empty($type)) {
-				$this->set('subalbum_sort_type', $type);
-				$this->set('album_sortdirection', $direction);
-				$this->save();
 			}
 		}
 		return $type;

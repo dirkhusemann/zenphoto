@@ -640,7 +640,7 @@ function printAlbumEditForm($index, $album) {
 	$javaprefix = 'js_'.preg_replace("/[^a-z0-9_]/","",strtolower($prefix));
 	echo '<script type="text/javascript">'."\n";
 	echo '  function '.$javaprefix.'album_direction(obj) {'."\n";
-	echo "		if(obj.options[obj.selectedIndex].value == 'Manual') {\n";
+	echo "		if((obj.options[obj.selectedIndex].value == 'Manual') || (obj.options[obj.selectedIndex].value == '')) {\n";
 	echo "			document.getElementById('$javaprefix"."album_direction_div').style.display = 'none';\n";
 	echo '			}'."\n";
 	echo '		else {'."\n";
@@ -651,10 +651,16 @@ function printAlbumEditForm($index, $album) {
 	
 	echo "\n<table>\n<tr>\n<td>";
 	echo "\n<select id=\"sortselect\" name=\"".$prefix."subalbumsortby\" onchange=\"".$javaprefix."album_direction(this)\">";
-	generateListFromArray(array($type = $album->getSubalbumSortType()), $sort);
+	if (is_null($album->getParent())) {
+		$globalsort = gettext("gallery album sort order");
+	} else {
+		$globalsort = gettext("parent album subalbum sort order");
+	}
+	echo "\n<option value =''>$globalsort</option>"; 
+	generateListFromArray(array($type = $album->get('subalbum_sort_type')), $sort);
 	echo "\n</select>";
 	echo "\n</td>\n<td>";
-	if ($type == 'Manual') {
+	if (($type == 'Manual') || ($type == '')) {
 		$dsp = 'none';
 	} else {
 		$dsp = 'block';
@@ -679,7 +685,7 @@ function printAlbumEditForm($index, $album) {
 	$javaprefix = 'js_'.preg_replace("/[^a-z0-9_]/","",strtolower($prefix));
 	echo '<script type="text/javascript">'."\n";
 	echo '  function '.$javaprefix.'image_direction(obj) {'."\n";
-	echo "		if(obj.options[obj.selectedIndex].value == 'Manual') {\n";
+	echo "		if((obj.options[obj.selectedIndex].value == 'Manual') || (obj.options[obj.selectedIndex].value == '')) {\n";
 	echo "			document.getElementById('$javaprefix"."image_direction_div').style.display = 'none';\n";
 	echo '			}'."\n";
 	echo '		else {'."\n";
@@ -690,10 +696,16 @@ function printAlbumEditForm($index, $album) {
 	
 	echo "\n<table>\n<tr>\n<td>";
 	echo "\n<select id=\"sortselect\" name=\"".$prefix."sortby\" onchange=\"".$javaprefix."image_direction(this)\">";
-	generateListFromArray(array($type = $album->getSortType()), $sort);
+	if (is_null($album->getParent())) {
+		$globalsort = gettext("gallery default image sort order");
+	} else {
+		$globalsort = gettext("parent album image sort order");
+	}
+	echo "\n<option value =''>$globalsort</option>"; 
+	generateListFromArray(array($type = $album->get('sort_type')), $sort);
 	echo "\n</select>";
 	echo "\n</td>\n<td>";
-	if ($type == 'Manual') {
+	if (($type == 'Manual') || ($type == '')) {
 		$dsp = 'none';
 	} else {
 		$dsp = 'block';
@@ -1047,11 +1059,17 @@ function processAlbumEdit($index, $album) {
 	$album->setAlbumThumb(strip($_POST[$prefix.'thumb']));
 	$album->setShow(strip($_POST[$prefix.'Published']));
 	$album->setCommentsAllowed(strip($_POST[$prefix.'allowcomments']));
-	$album->setSortType(strip($_POST[$prefix.'sortby']));
-	if ($_POST[$prefix.'sortby'] == 'Manual') {
+	$sorttype = strip($_POST[$prefix.'sortby']);
+	$album->setSortType($sorttype);
+	if ($sorttype == 'Manual') {
 		$album->setSortDirection('image', 0);
 	} else {
-		$album->setSortDirection('image', strip($_POST[$prefix.'image_sortdirection']));
+		if (empty($sorttype)) {
+			$direction = '';
+		} else {
+			$direction = strip($_POST[$prefix.'image_sortdirection']);
+		}
+		$album->setSortDirection('image', $direction);
 	}
 	$album->setSubalbumSortType(strip($_POST[$prefix.'subalbumsortby']));
 	$album->setSortDirection('album', strip($_POST[$prefix.'album_sortdirection']));
