@@ -234,7 +234,10 @@ class Gallery {
 	function getNumImages() {
 		$sql = "SELECT `id` FROM " . prefix('albums') . "WHERE `folder`=''";
 		$row = query_single_row($sql);
-		$result = query_single_row("SELECT count(*) FROM ".prefix('images')." WHERE `albumid`!=".$row['id']);
+		if (!empty($row['id'])) {
+			$exclude = " WHERE `albumid`!=".$row['id'];
+		}
+		$result = query_single_row("SELECT count(*) FROM ".prefix('images').$exclude);
 		return array_shift($result);
 	}
 
