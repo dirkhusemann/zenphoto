@@ -2440,15 +2440,22 @@ function getRandomImages() {
 				$passwordcheck = $passwordcheck.$albumpasswordcheck;
 			}
 		}
-		$albumWhere = " AND ".prefix('albums') . ".`show`=1".$passwordcheck;
-		$imageWhere = " AND " . prefix('images') . ".`show`=1";
+		$albumWhere = " AND ".prefix('albums') . ".show=1".$passwordcheck;
+		$imageWhere = " AND " . prefix('images') . ".show=1";
 	}
 	$c = 0;
 	while ($c < 10) {
-		$result = query_single_row('SELECT '.prefix('images').'.filename,'.prefix('images').'.title, '.prefix('albums').
-														'.folder FROM '.prefix('images'). ' INNER JOIN '.prefix('albums').
-														' ON '.prefix('images').'.albumid = '.prefix('albums').'.id WHERE '.prefix('albums').'.folder!=""'.
-		$albumWhere . $imageWhere . ' ORDER BY RAND() LIMIT 1');
+		$result = query_single_row('SELECT FLOOR(RAND() * COUNT(*)) AS rand_row ' .
+                                ' FROM '.prefix('images'). ', '.prefix('albums').
+                                ' WHERE ' . prefix('albums') . '.folder!="" AND '.prefix('images').'.albumid = ' . 
+																prefix('albums') . '.id ' .    $albumWhere . $imageWhere );
+		$rand_row = $result['rand_row'];
+
+		$result = query_single_row('SELECT '.prefix('images').'.filename, '.prefix('albums').'.folder ' .
+                                ' FROM '.prefix('images').', '.prefix('albums') .
+                                ' WHERE '.prefix('images').'.albumid = '.prefix('albums').'.id  ' . $albumWhere . 
+																$imageWhere . ' LIMIT ' . $rand_row . ', 1');
+
 		$imageName = $result['filename'];
 		if (is_valid_image($imageName)) {
 			$image = new Image(new Album(new Gallery(), $result['folder']), $imageName );
@@ -2458,7 +2465,6 @@ function getRandomImages() {
 	}
 	return NULL;
 }
-
 /**
  * Returns  a randomly selected image from the album or its subalbums. (May be NULL if none exists)
  *
