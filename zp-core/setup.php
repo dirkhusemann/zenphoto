@@ -826,8 +826,8 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `search_params` text default NULL";
 	
 	//1v1.1.6
-	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `album_theme` text default ''";
-	$sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `IP` text default ''";
+	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `album_theme` text default NULL";
+	$sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `IP` text default NULL";
 	
 
 	/**************************************************************************************
