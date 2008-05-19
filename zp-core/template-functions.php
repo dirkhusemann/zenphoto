@@ -14,7 +14,6 @@ require_once('classes.php');
  */
 require_once('controller.php');
 
-
 //******************************************************************************
 //*** Template Functions *******************************************************
 //******************************************************************************
@@ -3193,10 +3192,36 @@ function getTheme(&$zenCSS, &$themeColor, $defaultColor) {
 }
 
 /**
- * Passed # of album columns, # of image columns of the theme.
+ * Passed # of album columns, # of image columns of the theme. 
+ * 
+ * NOTE: The values for these numbers of columns are determined by the theme
+ * CSS. They should be set to how many images or albums are displayed in a row.
+ * If you get this wrong, your theme will not behave as you expect.
+ * 
  * Updates (non-persistent) images_per_page and albums_per_page so that the rows are filled.
-
+ * 
+ * This means that the value you set for the images per page and albums per page options may 
+ * not be the same as what actually get shown. First, they will be rounded to be an even multiple 
+ * rows. So, if you have 6 columns of album thumbs your albums per page shown will be a multiple of
+ * six (assuming that there are enough albums.)
+ * 
+ * The "non-persistent" update means that the actual values for these options are not changed. Just
+ * the values that will be used for the display of the particular page.
+ * 
  * Returns # of images that will go on the album/image transition page.
+ * 
+ * When you have albums containing both subalbums and images there may be a page where the album
+ * thumbnails do not fill the page. This function returns a count of the images that can be used to 
+ * fill out this "transition" page. The return value should be passed as the second parameter to
+ * next_image() so that the the page is filled out with the proper number of images. If you do not
+ * pass this parameter it is assumed that album thumbs and image thumbs are not to be placed on 
+ * the same (transition) page. (If you do not wish to have an album/image transition page you need 
+ * not use this function at all.)
+ * 
+ * This function (combined with the parameter to next_image) impacts the pagination computations 
+ * zenphoto makes. For this reason, it is important to make identical calls to the function from
+ * your theme's index.php, albums.php and image.php pages. Otherwise page and breadcrumb navigation
+ * may not be correct.
  *
  * @param int $albumColumns number of album columns on the page
  * @param int $imageColumns number of image columns on the page
