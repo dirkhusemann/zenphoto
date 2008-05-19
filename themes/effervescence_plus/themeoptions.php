@@ -55,7 +55,7 @@ class ThemeOptions {
 	function handleOption($option, $currentValue) {
 		switch ($option) {
 			case 'Theme_colors':
-				$theme = array_pop(explode('/', dirname(__FILE__)));
+				$theme = basename(dirname(__FILE__));
 				$themeroot = SERVERPATH . "/themes/$theme/styles";
 				echo '<select id="themeselect" name="' . $option . '"' . ">\n";
 				generateListFromFiles($currentValue, $themeroot , '.css');
