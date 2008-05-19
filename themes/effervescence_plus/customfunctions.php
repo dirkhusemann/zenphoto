@@ -56,11 +56,11 @@ function getCustomAlbumDesc() {
 function printImage_AlbumCount() {
 	$c = getNumSubalbums();
 	if ($c > 0) {
-		echo "\n".$c. gettext('albums(s)');
+		echo "\n".$c. gettext("albums(s)");
 	}
 	$c = getNumImages();
 	if ($c > 0) {
-		echo "\n".$c. gettext('images(s)');
+		echo "\n".$c. gettext("images(s)");
 	}
 }
 function parseCSSDef($file) {
@@ -80,13 +80,13 @@ function parseCSSDef($file) {
 	return "#0b9577"; /* the default value */
 }
 
-function printNofM($what, $first, $last, $total) {
+function printNofM($whats, $whatp, $first, $last, $total) {
 	if (!is_null($first)) {
-		echo "<p align=\"center\">$what";
+		echo "<p align=\"center\">";
 		if ($first == $last) {
-			echo " $first ";
+			echo "$whats $first ";
 		} else {
-			echo "s $first-$last ";
+			echo "$whatp $first-$last ";
 		}
 		echo gettext('of') . " $total</p>";
 	}
@@ -99,7 +99,7 @@ function printThemeInfo() {
 	} else {
 		$themeColor = ": '$themeColor'";
 	}
-	if (!$themeResult) { $themeColor .= " (not found)"; }
+	if (!$themeResult) { $themeColor .= ' ' . gettext("(not found)"); }
 	$personality = getOption('Theme_personality');
 	if ($personality != 'Image page') {
 		if (($personality == 'Simpleviewer') && (!getOption('mod_rewrite') || $_noFlash)) {

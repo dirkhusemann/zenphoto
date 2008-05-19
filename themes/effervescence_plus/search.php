@@ -143,7 +143,7 @@ $backgroundImagePath="";
 		?>
 	</ul> 	
 	<div class="clearage"></div>
-	<?php printNofM('Album', $firstAlbum, $lastAlbum, getNumAlbums()); ?>
+	<?php printNofM(gettext("Album"), gettext("Albums"), $firstAlbum, $lastAlbum, getNumAlbums()); ?>
 </div>
 
 <!-- Wrap Main Body -->
@@ -175,7 +175,7 @@ $backgroundImagePath="";
  					</div>
  					</div>
 		 	<div class="clearage"></div>
- 					<?php printNofM('Photo', $firstImage, $lastImage, getNumImages()); ?>
+ 					<?php printNofM(gettext('Photo'), gettext('Photos'), $firstImage, $lastImage, getNumImages()); ?>
  					</div>
 	 		<?php   
 	 		} else {  /* flash */

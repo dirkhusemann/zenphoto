@@ -24,29 +24,6 @@ require_once('lib-kses.php');
 require_once('exif/exif.php');
 require_once('functions-db.php');
 
-/*******************************************************************************
- * native gettext respectivly php-gettext replacement							             *
- *******************************************************************************/
-if(!function_exists("gettext")) {
-	// load the drop-in replacement library
-	require_once('lib-gettext/gettext.inc');
-}
-$encoding = 'UTF-8';
-$locale = getOption("locale");
-@putenv("LANG=$locale");
-// gettext setup
-@setlocale(LC_ALL, $locale);
-// Set the text domain as 'messages'
-$domain = 'zenphoto';
-bindtextdomain($domain, "locale/");
-
-// function only since php 4.2.0
-if(function_exists('bind_textdomain_codeset')) {
-	bind_textdomain_codeset($domain, $encoding);
-}
-textdomain($domain);
-
-
 if (defined('OFFSET_PATH')) {
 	$const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
 } else {
@@ -78,6 +55,27 @@ $_zp_options = NULL;
  */
 define('ALBUMFOLDER', '/albums/');
 define('PLUGIN_FOLDER', '/plugins/');
+
+/*******************************************************************************
+ * native gettext respectivly php-gettext replacement							             *
+ *******************************************************************************/
+if(!function_exists("gettext")) {
+	// load the drop-in replacement library
+	require_once('lib-gettext/gettext.inc');
+}
+$encoding = 'UTF-8';
+$locale = getOption("locale");
+@putenv("LANG=$locale");
+// gettext setup
+setlocale(LC_ALL, $locale);
+// Set the text domain as 'messages'
+$domain = 'zenphoto';
+bindtextdomain($domain, SERVERPATH . "/" . ZENFOLDER . "/locale/");
+// function only since php 4.2.0
+if(function_exists('bind_textdomain_codeset')) {
+	bind_textdomain_codeset($domain, $encoding);
+}
+textdomain($domain);
 
 $session_started = getOption('album_session');
 if ($session_started) session_start();

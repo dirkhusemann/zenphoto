@@ -64,7 +64,7 @@
 			<?php } ?>
 		</ul>
 		<div class="clearage"></div>
-		<?php printNofM(gettext('Album'), $firstAlbum, $lastAlbum, getNumAlbums()); ?>
+		<?php printNofM(gettext('Album'),gettext('Albums') , $firstAlbum, $lastAlbum, getNumAlbums()); ?>
 	
 		<!-- Page Numbers -->
 		<div id="pagenumbers">
@@ -76,14 +76,14 @@
 	<!-- Footer -->
 	<div class="footlinks">
 		<small>
-			<p>Albums: <?php $albumNumber = getNumAlbums(); echo $albumNumber ?> &middot; 
-				SubAlbums: <?php show_subalbum_count(); ?> &middot; 
-				Images: <?php $photosArray = query_single_row("SELECT count(*) FROM ".prefix('images')); 
-				$photosNumber = array_shift($photosArray); echo $photosNumber ?> 
+			<p><?php $albumNumber = getNumAlbums(); echo gettext("Albums").': '.$albumNumber ?> &middot; 
+				<?php echo gettext("Subalbums").': '; show_subalbum_count(); ?> &middot; 
+				<?php $photosArray = query_single_row("SELECT count(*) FROM ".prefix('images')); 
+				$photosNumber = array_shift($photosArray); echo gettext("Images").': '.$photosNumber ?> 
 				<?php if (getOption('Allow_comments')) { ?>
 					&middot; 
-					Comments: <?php $commentsArray = query_single_row("SELECT count(*) FROM ".prefix('comments')." WHERE inmoderation = 0"); 
-					$commentsNumber = array_shift($commentsArray); echo $commentsNumber ?>
+					<?php $commentsArray = query_single_row("SELECT count(*) FROM ".prefix('comments')." WHERE inmoderation = 0"); 
+					$commentsNumber = array_shift($commentsArray); echo gettext("Comments").': '.$commentsNumber ?>
 				<?php } ?>
 			</p>
 			<?php printThemeInfo(); ?>
