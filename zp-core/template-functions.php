@@ -199,8 +199,8 @@ function printGalleryTitle() {
 }
 
 /**
- * Returns the name of the main website if zenphoto is part of a website without printing it
- * and if added this in zp-config.php..
+ * Returns the name of the main website as set by the "Website Title" option
+ * on the gallery options tab.
  *
  * @return string
  */
@@ -208,7 +208,8 @@ function getMainSiteName() {
 	return getOption('website_title');
 }
 /**
- * Returns the URL of the main website (from the admin options)
+ * Returns the URL of the main website as set by the "Website URL" option
+ * on the gallery options tab.
  *
  * @return string
  */
@@ -369,15 +370,15 @@ function getTotalPages($oneImagePage=false) {
 }
 
 /**
- * Returns the URL of a page. Use alway with a variable like getPageURL(1)
- * for the first page for example. Use this function when you know the total pages
+ * Returns the URL of the page number passed as a parameter
  *
- * @param int $page
- * @param int $total
+ * @param int $page Which page is desired
+ * @param int $total How many pages there are.
  * @return int
  */
-function getPageURL_($page, $total) {
+function getPageURL($page, $total=null) {
 	global $_zp_current_album, $_zp_gallery, $_zp_current_search;
+	if (is_null($total)) { $total = getTotalPages(); }
 	if (in_context(ZP_SEARCH)) {
 		$searchwords = $_zp_current_search->words;
 		$searchdate = $_zp_current_search->dates;
@@ -395,18 +396,6 @@ function getPageURL_($page, $total) {
 		}
 		return null;
 	}
-}
-
-/**
- * Returns the URL of a page. Use alway with a variable like getPageURL(1)
- * for the first page for example.
- *
- * @param int $page
- * @return string
- */
-function getPageURL($page) {
-	$total = getTotalPages();
-	return(getPageURL_($page, $total));
 }
 
 /**
@@ -526,7 +515,7 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 	}
 	for ($i=($j=max(1, min($current-2, $total-6))); $i <= min($total, $j+6); $i++) {
 		echo "\n  <li" . (($i == $current) ? " class=\"current\"" : "") . ">";
-		printLink(getPageURL_($i, $total), $i, "Page $i" . (($i == $current) ? gettext(" (Current Page)") : ""));
+		printLink(getPageURL($i, $total), $i, "Page $i" . (($i == $current) ? gettext(" (Current Page)") : ""));
 		echo "</li>";
 	}
 	if ($i <= $total) {echo "\n <li><a>" . ". . ." . "</a></li>"; }
@@ -2967,6 +2956,13 @@ function getSearchURL($words, $dates, $fields, $page) {
 	return $url;
 }
 
+/**
+ * Returns a "quoted" Tag.
+ * Places 'peck marks' around a trimmed tag.
+ *
+ * @param string $tag the Tag to be quoted
+ * @return string
+ */
 function quoteSearchTag($tag) {
 	$tag = trim($tag);
 	if (urlencode($tag) != $tag) {
@@ -3158,7 +3154,7 @@ define("ALBUM", 2);
  * @param int $what the degree of control desired allowed values: ALBUM, IMAGE, and ALBUM+IMAGE
  * @return bool
  */
-function OpenedForComments($what=3) {
+function openedForComments($what=3) {
 	global $_zp_current_image, $_zp_current_album;
 	$result = true;
 	if (IMAGE & $what) { $result = $result && $_zp_current_image->getCommentsAllowed(); }
@@ -3201,9 +3197,11 @@ function getTheme(&$zenCSS, &$themeColor, $defaultColor) {
  * Updates (non-persistent) images_per_page and albums_per_page so that the rows are filled.
  * 
  * This means that the value you set for the images per page and albums per page options may 
- * not be the same as what actually get shown. First, they will be rounded to be an even multiple 
+ * not be the same as what actually gets shown. First, they will be rounded to be an even multiple 
  * rows. So, if you have 6 columns of album thumbs your albums per page shown will be a multiple of
- * six (assuming that there are enough albums.)
+ * six (assuming that there are enough albums.) Second, there may be a page where both image and 
+ * album thumbs are shown--the "transition" page. Fewer than images_per_page will appear
+ * on this page.
  * 
  * The "non-persistent" update means that the actual values for these options are not changed. Just
  * the values that will be used for the display of the particular page.
@@ -3212,7 +3210,7 @@ function getTheme(&$zenCSS, &$themeColor, $defaultColor) {
  * 
  * When you have albums containing both subalbums and images there may be a page where the album
  * thumbnails do not fill the page. This function returns a count of the images that can be used to 
- * fill out this "transition" page. The return value should be passed as the second parameter to
+ * fill out this transition page. The return value should be passed as the second parameter to
  * next_image() so that the the page is filled out with the proper number of images. If you do not
  * pass this parameter it is assumed that album thumbs and image thumbs are not to be placed on 
  * the same (transition) page. (If you do not wish to have an album/image transition page you need 
@@ -3272,15 +3270,12 @@ function normalizeColumns($albumColumns, $imageColumns) {
  *
  * Returns true if a login form has been displayed
  *
- * The password protection is hereditary.
- *
- * This normally only impacts direct url access to an album or image since if
+ * The password protection is hereditary. This normally only impacts direct url access to an album or image since if
  * you are going down the tree you will be stopped at the first place a password is required.
  *
  * If the gallery is password protected then every album & image will require that password.
  *
  * If an album is password protected then all subalbums and images treed below that album will require
- *
  * the password. If there are multiple passwords in the tree and you direct link, the password that is
  * required will be that of the nearest parent that has a password. (The gallery is the ur-parrent to all
  * albums.)
@@ -3370,7 +3365,7 @@ function printPasswordForm($hint) {
 /**
  * Simple captcha for comments.
  *
- * Prints a captcha entry form and posts the input with the comment posts
+ * Prints a captcha entry field for a form such as the comments form.
  * @param string $preText lead-in text
  * @param string $midText text that goes between the captcha image and the input field
  * @param string $postText text that closes the captcha
