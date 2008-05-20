@@ -3,6 +3,10 @@
  * 
  * Changelog
  * 
+ * 1.4:
+ * - New options for more layout flexibility: "list-top" for only showing the toplevel albums, 
+ *   							"list-sub" for showing only sublevel albums if within a toplevel album or one of its subalbums
+ * 
  * 1.3.3:
  * - Code reworked, now uses the gallery/album objects so that protected and unpublished 
  * 	 albums as well as the album sortorder are handled automatically
@@ -53,7 +57,7 @@
 
 $plugin_description = gettext("Adds a theme function printAlbumMenu() to print an album menu either as a nested list up to 4 sublevels (context sensitive) or as a dropdown menu.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.3.3';
+$plugin_version = '1.4';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---print_album_menu.php.html";
 
 /**
@@ -86,7 +90,7 @@ function printAlbumMenu($option,$option2,$css_id='',$css_id_active='',$css_class
 	if ($css_class_active != "") { $css_class_active = " id='".$css_class_active."'"; }
 
 	/**** TOP LEVEL ALBUM  ****/
-	if($option === "list") {
+	if($option === "list" OR $option === "list-top") {
 		echo "<ul".$css_id.">\n"; // start top level list
 	} else if ($option === "jump") { ?>
 <form name="AutoListBox">
@@ -114,202 +118,204 @@ function printAlbumMenu($option,$option2,$css_id='',$css_id_active='',$css_class
 				$link_end = "</a>";
 				$active = "";
 			}
-			if($option === "list") {
+			if($option === "list" OR $option === "list-top") {
 				echo "<li".$active.">".$link_start.htmlspecialchars($topalbum->getTitle()).$link_end.$count;
 			} else if ($option === "jump") {
 				echo "<option value='".$albumpath.$topalbum->name."'>".htmlspecialchars($topalbum->getTitle()).$count."</option>";
 			}
 			$sub1_count = 0;
+				
+			if($option === "list" OR $option === "list-sub") { // show either only sublevels or sublevels with toplevel 
+				// 1st sublevel
+				$subalbums1 = $topalbum->getSubAlbums();
+				foreach($subalbums1 as $sublevelalbum1) {
+					$subalbum1 = new Album($gallery,$sublevelalbum1,true);
+					$sublevel_1_folder = explode("/",$subalbum1->name);
+					$sublevel_current = explode("/", $currentfolder);
+						
+					// if 2: (if in parentalbum) OR (if in subalbum)
+					if((strpos($subalbum1->name,$topalbum->name) === 0
+					AND strpos($subalbum1->name,$currentfolder) === 0
+					AND $currentfolder === $sublevel_1_folder[0])
+					OR
+					(getAlbumID() != $topalbum->getAlbumID()
+					AND strpos($subalbum1->name,$topalbum->name) === 0
+					AND $sublevel_current[0] === $topalbum->name)) {
+						$sub1_count++; // count subalbums for checking if to open or close the sublist
+						if ($sub1_count === 1) { // open sublevel 1 sublist once if subalbums
+							echo "<ul".$css_class.">\n";
+						}
+						if($option2 === "count" AND $subalbum1->getNumImages() > 0) {
+							$count = " (".$subalbum1->getNumImages().")";
+						} else {
+							$count = "";
+						}
+						if(getAlbumID() === $subalbum1->getAlbumID()) {
+							$link_start = "";
+							$link_end = "";
+							$active = $css_class_active;
+						} else {
+							$link_start = "<a href='".$albumpath.$subalbum1->name."'>";
+							$link_end = "</a>";
+							$active = "";
+						}
+						if ($option === "list" OR $option === "list-sub") {
+							echo "<li".$active.">".$link_start.htmlspecialchars($subalbum1->getTitle()).$link_end.$count;
+						} else if ($option === "jump") {
+							echo "<option value='".$albumpath.$subalbum1->name."'>&raquo; ".htmlspecialchars($subalbum1->getTitle()).$count."</option>";
+						}
+						$sub2_count = 0;
 
-			// 1st sublevel
-			$subalbums1 = $topalbum->getSubAlbums();
-			foreach($subalbums1 as $sublevelalbum1) {
-				$subalbum1 = new Album($gallery,$sublevelalbum1,true);
-				$sublevel_1_folder = explode("/",$subalbum1->name);
-				$sublevel_current = explode("/", $currentfolder);
-					
-				// if 2: (if in parentalbum) OR (if in subalbum)
-				if((strpos($subalbum1->name,$topalbum->name) === 0
-				AND strpos($subalbum1->name,$currentfolder) === 0
-				AND $currentfolder === $sublevel_1_folder[0])
-				OR
-				(getAlbumID() != $topalbum->getAlbumID()
-				AND strpos($subalbum1->name,$topalbum->name) === 0
-				AND $sublevel_current[0] === $topalbum->name)) {
-					$sub1_count++; // count subalbums for checking if to open or close the sublist
-					if ($sub1_count === 1) { // open sublevel 1 sublist once if subalbums
-						echo "<ul".$css_class.">\n";
-					}
-					if($option2 === "count" AND $subalbum1->getNumImages() > 0) {
-						$count = " (".$subalbum1->getNumImages().")";
-					} else {
-						$count = "";
-					}
-					if(getAlbumID() === $subalbum1->getAlbumID()) {
-						$link_start = "";
-						$link_end = "";
-						$active = $css_class_active;
-					} else {
-						$link_start = "<a href='".$albumpath.$subalbum1->name."'>";
-						$link_end = "</a>";
-						$active = "";
-					}
-					if ($option === "list") {
-						echo "<li".$active.">".$link_start.htmlspecialchars($subalbum1->getTitle()).$link_end.$count;
-					} else if ($option === "jump") {
-						echo "<option value='".$albumpath.$subalbum1->name."'>&raquo; ".htmlspecialchars($subalbum1->getTitle()).$count."</option>";
-					}
-					$sub2_count = 0;
+						// 2nd sublevel
+						$subalbums2 = $subalbum1->getSubAlbums();
+						foreach($subalbums2 as $sublevelalbum2) {
+							$subalbum2 = new Album($gallery,$sublevelalbum2,true);
+							$sublevel_2_folder = explode("/",$subalbum2->name);
+							$sublevel_current = explode("/", $currentfolder);
 
-					// 2nd sublevel
-					$subalbums2 = $subalbum1->getSubAlbums();
-					foreach($subalbums2 as $sublevelalbum2) {
-						$subalbum2 = new Album($gallery,$sublevelalbum2,true);
-						$sublevel_2_folder = explode("/",$subalbum2->name);
-						$sublevel_current = explode("/", $currentfolder);
+							// if 3
+							if((strpos($subalbum2->name,$subalbum1->name) === 0
+							AND strpos($subalbum2->name,$currentfolder) === 0
+							AND $currentfolder === $sublevel_2_folder[0]."/".$sublevel_2_folder[1])
+							OR
+							(getAlbumID() != $subalbum1->getAlbumID()
+							AND strpos($subalbum2->name,$subalbum1->name) === 0
+							AND $sublevel_current[1] === $sublevel_1_folder[1])) {
+								$sub2_count++; // count subalbums for checking if to open or close the sublist
+								if ($sub2_count === 1) { // open sublevel 1 sublist once if subalbums
+									echo "<ul".$css_class.">\n";
+								}
+								if($option2 === "count" AND $subalbum2->getNumImages() > 0) {
+									$count = " (".$subalbum2->getNumImages().")";
+								} else {
+									$count = "";
+								}
+								if(getAlbumID() === $subalbum2->getAlbumID()) {
+									$link_start = "";
+									$link_end = "";
+									$active = $css_class_active;
+								} else {
+									$link_start = "<a href='".$albumpath.$subalbum2->name."'>";
+									$link_end = "</a>";
+									$active = "";
+								}
+								if($option === "list" OR $option === "list-sub") {
+									echo "<li".$active.">".$link_start.htmlspecialchars($subalbum2->getTitle()).$link_end.$count;
+								} else if ($option === "jump") {
+									echo "<option value='".$albumpath.$subalbum2->name."'>&raquo; &raquo; ".htmlspecialchars($subalbum2->getTitle()).$count."</option>";
+								}
+								$sub3_count = 0;
 
-						// if 3
-						if((strpos($subalbum2->name,$subalbum1->name) === 0
-						AND strpos($subalbum2->name,$currentfolder) === 0
-						AND $currentfolder === $sublevel_2_folder[0]."/".$sublevel_2_folder[1])
-						OR
-						(getAlbumID() != $subalbum1->getAlbumID()
-						AND strpos($subalbum2->name,$subalbum1->name) === 0
-						AND $sublevel_current[1] === $sublevel_1_folder[1])) {
-							$sub2_count++; // count subalbums for checking if to open or close the sublist
-							if ($sub2_count === 1) { // open sublevel 1 sublist once if subalbums
-								echo "<ul".$css_class.">\n";
-							}
-							if($option2 === "count" AND $subalbum2->getNumImages() > 0) {
-								$count = " (".$subalbum2->getNumImages().")";
-							} else {
-								$count = "";
-							}
-							if(getAlbumID() === $subalbum2->getAlbumID()) {
-								$link_start = "";
-								$link_end = "";
-								$active = $css_class_active;
-							} else {
-								$link_start = "<a href='".$albumpath.$subalbum2->name."'>";
-								$link_end = "</a>";
-								$active = "";
-							}
-							if($option === "list") {
-								echo "<li".$active.">".$link_start.htmlspecialchars($subalbum2->getTitle()).$link_end.$count;
-							} else if ($option === "jump") {
-								echo "<option value='".$albumpath.$subalbum2->name."'>&raquo; &raquo; ".htmlspecialchars($subalbum2->getTitle()).$count."</option>";
-							}
-							$sub3_count = 0;
+								// 3rd sublevel
+								$subalbums3 = $subalbum2->getSubAlbums();
+								foreach($subalbums3 as $sublevelalbum3) {
+									$subalbum3 = new Album($gallery,$sublevelalbum3,true);
+									$sublevel_3_folder = explode("/",$subalbum3->name);
+									$sublevel_current = explode("/", $currentfolder);
 
-							// 3rd sublevel
-							$subalbums3 = $subalbum2->getSubAlbums();
-							foreach($subalbums3 as $sublevelalbum3) {
-								$subalbum3 = new Album($gallery,$sublevelalbum3,true);
-								$sublevel_3_folder = explode("/",$subalbum3->name);
-								$sublevel_current = explode("/", $currentfolder);
+									// if 4
+									if((strpos($subalbum3->name,$subalbum2->name) === 0
+									AND strpos($subalbum3->name,$currentfolder) === 0
+									AND $currentfolder === $sublevel_3_folder[0]."/".$sublevel_3_folder[1]."/".$sublevel_3_folder[2])
+									OR
+									(getAlbumID() != $subalbum2->getAlbumID()
+									AND strpos($subalbum3->name,$subalbum2->name) === 0
+									AND $sublevel_current[2] === $sublevel_3_folder[2])) {
+										$sub3_count++; // count subalbums for checking if to open or close the sublist
+										if ($sub3_count === 1) { echo "<ul".$css_class.">\n"; } // open sublevel 1 sublist once if subalbums
+										if($option2 === "count" AND $subalbum3->getNumImages() > 0) {
+											$count = " (".$subalbum3->getNumImages().")";
+										} else {
+											$count = "";
+										}
+										if(getAlbumID() === $subalbum3->getAlbumID()) {
+											$link_start = "";
+											$link_end = "";
+											$active = $css_class_active;
+										} else {
+											$link_start = "<a href='".$albumpath.$subalbum3->name."'>";
+											$link_end = "</a>";
+											$active = "";
+										}
+										if($option === "list" OR $option === "list-sub") {
+											echo "<li".$active.">".$link_start.htmlspecialchars($subalbum3->getTitle()).$link_end.$count;
+										} else if ($option === "jump") {
+											echo "<option value='".$albumpath.$subalbum3->name."'>&raquo; &raquo; &raquo; ".htmlspecialchars($subalbum3->getTitle()).$count."</option>";
+										}
+										$sub4_count = 0;
 
-								// if 4
-								if((strpos($subalbum3->name,$subalbum2->name) === 0
-								AND strpos($subalbum3->name,$currentfolder) === 0
-								AND $currentfolder === $sublevel_3_folder[0]."/".$sublevel_3_folder[1]."/".$sublevel_3_folder[2])
-								OR
-								(getAlbumID() != $subalbum2->getAlbumID()
-								AND strpos($subalbum3->name,$subalbum2->name) === 0
-								AND $sublevel_current[2] === $sublevel_3_folder[2])) {
-									$sub3_count++; // count subalbums for checking if to open or close the sublist
-									if ($sub3_count === 1) { echo "<ul".$css_class.">\n"; } // open sublevel 1 sublist once if subalbums
-									if($option2 === "count" AND $subalbum3->getNumImages() > 0) {
-										$count = " (".$subalbum3->getNumImages().")";
-									} else {
-										$count = "";
-									}
-									if(getAlbumID() === $subalbum3->getAlbumID()) {
-										$link_start = "";
-										$link_end = "";
-										$active = $css_class_active;
-									} else {
-										$link_start = "<a href='".$albumpath.$subalbum3->name."'>";
-										$link_end = "</a>";
-										$active = "";
-									}
-									if($option === "list") {
-										echo "<li".$active.">".$link_start.htmlspecialchars($subalbum3->getTitle()).$link_end.$count;
-									} else if ($option === "jump") {
-										echo "<option value='".$albumpath.$subalbum3->name."'>&raquo; &raquo; &raquo; ".htmlspecialchars($subalbum3->getTitle()).$count."</option>";
-									}
-									$sub4_count = 0;
+										/**** SUBALBUM LEVEL 4 ****/
+										$subalbums4 = $subalbum3->getSubAlbums();
+										foreach($subalbums4 as $sublevelalbum4) {
+											$subalbum4 = new Album($gallery,$sublevelalbum4,true);
+											$sublevel_4_folder = explode("/",$subalbum4->name);
+											$sublevel_current = explode("/", $currentfolder);
 
-									/**** SUBALBUM LEVEL 4 ****/
-									$subalbums4 = $subalbum3->getSubAlbums();
-									foreach($subalbums4 as $sublevelalbum4) {
-										$subalbum4 = new Album($gallery,$sublevelalbum4,true);
-										$sublevel_4_folder = explode("/",$subalbum4->name);
-										$sublevel_current = explode("/", $currentfolder);
-
-										// if 5
-										if((strpos($subalbum4->name,$subalbum3->name) === 0
-										AND strpos($subalbum4->name,$currentfolder) === 0
-										AND $currentfolder === $sublevel_4_folder[0]."/".$sublevel_4_folder[1]."/".$sublevel_4_folder[2]."/".$sublevel_4_folder[3])
-										OR
-										(getAlbumID() != $subalbum3->getAlbumID()
-										AND strpos($subalbum4->name,$subalbum3->name) === 0
-										AND $sublevel_current[3] === $sublevel_4_folder[3])){
-											$sub4_count++; // count subalbums for checking if to open or close the sublist
-											if ($sub4_count === 1) { echo "<ul".$css_class.">\n"; } // open sublevel 1 sublist once if subalbums
-											if($option2 === "count" AND $subalbum4->getNumImages() > 0) {
-												$count = " (".$subalbum4->getNumImages().")";
-											} else {
-												$count = "";
-											}
-											if(getAlbumID() === $subalbum4->getAlbumID()) {
-												$link_start = "";
-												$link_end = "";
-												$active = $css_class_active;
-											} else {
-												$link_start = "<a href='".$albumpath.$subalbum4->name."'>";
-												$link_end = "</a>";
-												$active = "";
-											}
-											if($option === "list") {
-												echo "<li".$active.">".$link_start.htmlspecialchars($subalbum4->getTitle()).$link_end.$count;
-											} else if ($option === "jump") {
-												echo "<option value='".$albumpath.$subalbum4->name."'>&raquo; &raquo; &raquo; &raquo; ".htmlspecialchars($subalbum4->getTitle()).$count."</option>";
-											}
-										} // if subalbum level 4 - end
-									}	// subalbum level 4 - end
-									if($sub4_count > 0 AND $option === "list") 	{ // sublevel 4 sublist end if subalbums
-										echo "</ul>\n";
-									}
-									if($option2 === "list")	{	// sub level 4 list item end
-										echo "</li>\n";
-									}
-								} // if subalbum level 3 - end
-							}	// subalbum level 3 - end
-							if($sub3_count > 0  AND $option === "list") { // sublevel 3 sublist end if subalbums
-								echo "</ul>\n";
-							}
-							if($option === "list") { // sub level 2 list item end
-								echo "</li>\n";
-							}
-						} // if subalbum level 2 - end
-					} // subalbum level 2 - end
-					if($sub2_count > 0 AND $option === "list") {// sublevel 2 sublist end if subalbums
-						echo "</ul>\n";
-					}
-					if($option === "list") { // sub level 1 list item end
-						echo "</li>\n";
-					}
-				}  // if subalbum level 1 - end
-			} // subalbum level 1 - end
-			if($sub1_count > 0 AND $option === "list") {// sublevel 1 sublist end if subalbums
-				echo "</ul>\n";
-			}
-			if($option === "list") { // top level list item end
-		 	echo "</li>\n";
-		 }
-		 //	} // if Top level albums - end
+											// if 5
+											if((strpos($subalbum4->name,$subalbum3->name) === 0
+											AND strpos($subalbum4->name,$currentfolder) === 0
+											AND $currentfolder === $sublevel_4_folder[0]."/".$sublevel_4_folder[1]."/".$sublevel_4_folder[2]."/".$sublevel_4_folder[3])
+											OR
+											(getAlbumID() != $subalbum3->getAlbumID()
+											AND strpos($subalbum4->name,$subalbum3->name) === 0
+											AND $sublevel_current[3] === $sublevel_4_folder[3])){
+												$sub4_count++; // count subalbums for checking if to open or close the sublist
+												if ($sub4_count === 1) { echo "<ul".$css_class.">\n"; } // open sublevel 1 sublist once if subalbums
+												if($option2 === "count" AND $subalbum4->getNumImages() > 0) {
+													$count = " (".$subalbum4->getNumImages().")";
+												} else {
+													$count = "";
+												}
+												if(getAlbumID() === $subalbum4->getAlbumID()) {
+													$link_start = "";
+													$link_end = "";
+													$active = $css_class_active;
+												} else {
+													$link_start = "<a href='".$albumpath.$subalbum4->name."'>";
+													$link_end = "</a>";
+													$active = "";
+												}
+												if($option === "list" OR $option === "list-sub") {
+													echo "<li".$active.">".$link_start.htmlspecialchars($subalbum4->getTitle()).$link_end.$count;
+												} else if ($option === "jump") {
+													echo "<option value='".$albumpath.$subalbum4->name."'>&raquo; &raquo; &raquo; &raquo; ".htmlspecialchars($subalbum4->getTitle()).$count."</option>";
+												}
+											} // if subalbum level 4 - end
+										}	// subalbum level 4 - end
+										if($sub4_count > 0 AND ($option === "list" OR $option === "list-sub")) 	{ // sublevel 4 sublist end if subalbums
+											echo "</ul>\n";
+										}
+										if($option === "list" OR $option === "list-sub")	{	// sub level 4 list item end
+											echo "</li>\n";
+										}
+									} // if subalbum level 3 - end
+								}	// subalbum level 3 - end
+								if($sub3_count > 0 AND ($option === "list" OR $option === "list-sub")) { // sublevel 3 sublist end if subalbums
+									echo "</ul>\n";
+								}
+								if($option === "list" OR $option === "list-sub") { // sub level 2 list item end
+									echo "</li>\n";
+								}
+							} // if subalbum level 2 - end
+						} // subalbum level 2 - end
+						if($sub2_count > 0 AND ($option === "list" OR $option === "list-sub")) {// sublevel 2 sublist end if subalbums
+							echo "</ul>\n";
+						}
+						if($option === "list" OR $option === "list-sub") { // sub level 1 list item end
+							echo "</li>\n";
+						}
+					}  // if subalbum level 1 - end
+				} // subalbum level 1 - end
+				if($sub1_count > 0 AND ($option === "list" OR $option === "list-sub")) {// sublevel 1 sublist end if subalbums
+					echo "</ul>\n";
+				}
+			} // main if end for option "list" or "list-sub" (subalbum loops)
+		if($option === "list" OR $option === "list-top") { // top level list item end
+			echo "</li>\n";
+		}
+		//	} // if Top level albums - end
 		} // top level album loop - end
-		if($option === "list"){
+		if($option === "list" OR $option === "list-top"){
 			echo "</ul>\n";
 		}
 		if($option === "jump") {
