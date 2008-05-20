@@ -157,6 +157,10 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
  * Prints the most popular albums
  *
  * @param string $number the number of albums to get
+ * @param bool $showtitle if the album title should be shown
+ * @param bool $showdate if the album date should be shown
+ * @param bool $showdesc if the album desc should be shown
+ * @param integer $desclength the length of the desc to be shown
  */
 function printPopularAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
 	printAlbumStatistic($number,"popular",$showtitle, $showdate, $showdesc, $desclength);
@@ -166,6 +170,10 @@ function printPopularAlbums($number=5,$showtitle=false, $showdate=false, $showde
  * Prints the latest albums
  *
  * @param string $number the number of albums to get
+ * @param bool $showtitle if the album title should be shown
+ * @param bool $showdate if the album date should be shown
+ * @param bool $showdesc if the album desc should be shown
+ * @param integer $desclength the length of the desc to be shown
  */
 function printLatestAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
 	printAlbumStatistic($number,"latest",$showtitle, $showdate, $showdesc, $desclength);
@@ -175,6 +183,10 @@ function printLatestAlbums($number=5,$showtitle=false, $showdate=false, $showdes
  * Prints the most rated albums
  *
  * @param string $number the number of albums to get
+ * @param bool $showtitle if the album title should be shown
+ * @param bool $showdate if the album date should be shown
+ * @param bool $showdesc if the album desc should be shown
+ * @param integer $desclength the length of the desc to be shown
  */
 function printMostRatedAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
 	printAlbumStatistic($number,"mostrated",$showtitle, $showdate, $showdesc, $desclength);
@@ -184,6 +196,10 @@ function printMostRatedAlbums($number=5,$showtitle=false, $showdate=false, $show
  * Prints the top voted albums
  *
  * @param string $number the number of albums to get
+ * @param bool $showtitle if the album title should be shown
+ * @param bool $showdate if the album date should be shown
+ * @param bool $showdesc if the album desc should be shown
+ * @param integer $desclength the length of the desc to be shown
  */
 function printTopRatedAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
 	printAlbumStatistic($number,"toprated",$showtitle, $showdate, $showdesc, $desclength);
@@ -193,6 +209,10 @@ function printTopRatedAlbums($number=5,$showtitle=false, $showdate=false, $showd
  * Prints the top voted albums
  *
  * @param string $number the number of albums to get
+ * @param bool $showtitle if the album title should be shown
+ * @param bool $showdate if the album date should be shown
+ * @param bool $showdesc if the album desc should be shown
+ * @param integer $desclength the length of the desc to be shown
  */
 function printLatestUpdatedAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
 	printAlbumStatistic($number,"latestupdated",$showtitle, $showdate, $showdesc, $desclength);
@@ -273,6 +293,10 @@ function getImageStatistic($number, $option, $album='') {
  *                       "mostrated" for the most voted,
  *                       "toprated" for the best voted
  * @param string $album title of an specific album
+ * @param bool $showtitle if the image title should be shown
+ * @param bool $showdate if the image date should be shown
+ * @param bool $showdesc if the image desc should be shown
+ * @param integer $desclength the length of the desc to be shown
  * @return string
  */
 function printImageStatistic($number, $option, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
@@ -303,15 +327,23 @@ function printImageStatistic($number, $option, $album='', $showtitle=false, $sho
  *
  * @param string $number the number of images to get
  * @param string $album title of an specific album
+ * @param bool $showtitle if the image title should be shown
+ * @param bool $showdate if the image date should be shown
+ * @param bool $showdesc if the image desc should be shown
+ * @param integer $desclength the length of the desc to be shown
  */
 function printPopularImages($number=5, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
 	printImageStatistic($number, "popular",$album, $showtitle, $showdate, $showdesc, $desclength);
 }
 
 /**
-* Prints the n top rated images
-*
-* @param int $number The number if images desired
+ * Prints the n top rated images
+ *
+ * @param int $number The number if images desired
+ * @param bool $showtitle if the image title should be shown
+ * @param bool $showdate if the image date should be shown
+ * @param bool $showdesc if the image desc should be shown
+ * @param integer $desclength the length of the desc to be shown
  */
 function printTopRatedImages($number=5, $showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
 	printImageStatistic($number, "toprated", $showtitle, $showdate, $showdesc, $desclength);
@@ -322,6 +354,10 @@ function printTopRatedImages($number=5, $showtitle=false, $showdate=false, $show
  * Prints the n most rated images
  *
  * @param int $number The number if images desired
+ * @param bool $showtitle if the image title should be shown
+ * @param bool $showdate if the image date should be shown
+ * @param bool $showdesc if the image desc should be shown
+ * @param integer $desclength the length of the desc to be shown 
  */
 function printMostRatedImages($number=5, $showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
 	printImageStatistic($number, "mostrated", $showtitle, $showdate, $showdesc, $desclength);
@@ -332,6 +368,10 @@ function printMostRatedImages($number=5, $showtitle=false, $showdate=false, $sho
  *
  * @param string $number the number of images to get
  * @param string $album title of an specific album
+ * @param bool $showtitle if the image title should be shown
+ * @param bool $showdate if the image date should be shown
+ * @param bool $showdesc if the image desc should be shown
+ * @param integer $desclength the length of the desc to be shown
  */
 function printLatestImages($number=5, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
 	printImageStatistic($number, "latest", $album, $showtitle, $showdate, $showdesc, $desclength);
@@ -342,6 +382,10 @@ function printLatestImages($number=5, $album='', $showtitle=false, $showdate=fal
  *
  * @param string $number the number of images to get
  * @param string $album title of an specific album
+ * @param bool $showtitle if the image title should be shown
+ * @param bool $showdate if the image date should be shown
+ * @param bool $showdesc if the image desc should be shown
+ * @param integer $desclength the length of the desc to be shown
  */
 function printLatestImagesByDate($number=5, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
 	printImageStatistic($number, "latest-date", $album, $showtitle, $showdate, $showdesc, $desclength);
