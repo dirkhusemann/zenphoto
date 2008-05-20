@@ -75,6 +75,7 @@
 
 	<!-- Footer -->
 	<div class="footlinks">
+		<?php if (function_exists('printLanguageSelector')) { printLanguageSelector(); } ?>
 		<small>
 			<p><?php $albumNumber = getNumAlbums(); echo gettext("Albums").': '.$albumNumber ?> &middot; 
 				<?php echo gettext("Subalbums").': '; show_subalbum_count(); ?> &middot; 

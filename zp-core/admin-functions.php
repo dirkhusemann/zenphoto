@@ -458,43 +458,6 @@ function customOptions($optionHandler, $indent="", $alb="") {
 	}
 }
 
-/**
- * Creates the body of a select list
- *
- * @param array $currentValue list of items to be flagged as checked
- * @param array $list the elements of the select list
- */
-function generateListFromArray($currentValue, $list) {
-	$localize = !is_numeric(array_shift(array_keys($list)));
-	if ($localize) {
-		ksort($list);
-	} else {
-		sort($list);
-	}
-	$cv = array_flip($currentValue);
-	foreach($list as $key=>$item) {
-		echo '<option value="' . $item . '"';
-		if (isset($cv[$item])) {
-			echo ' selected="selected"';
-		}
-		if ($localize) $display = $key; else $display = $item;
-		echo '>' . $display . "</option>"."\n";
-	}
-}
-
-function generateListFromFiles($currentValue, $root, $suffix) {
-	$curdir = getcwd();
-	chdir($root);
-	$filelist = safe_glob('*'.$suffix);
-	sort($filelist);
-	$list = array();
-	foreach($filelist as $file) {
-		$list[] = str_replace($suffix, '', $file);
-	}
-	generateListFromArray(array($currentValue), $list);
-	chdir($curdir);
-}
-
 
 /**
  * Encodes for use as a $_POST index

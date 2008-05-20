@@ -591,6 +591,9 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				setBoolOption('persistent_archive', $_POST['persistent_archive']);
 				setBoolOption('album_session', $_POST['album_session']);
 				setOption('locale', $_POST['locale']);
+				$cookiepath = WEBPATH;
+				if (WEBPATH == '') { $cookiepath = '/'; }
+				zp_setCookie('dynamic_locale', getOption('locale'), time()-368000, $cookiepath);  // clear the language cookie
 				$f = $_POST['date_format_list'];
 				if ($f == 'custom') $f = $_POST['date_format'];
 				setOption('date_format', $f);
@@ -1750,8 +1753,8 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 if ($_zp_loggedin & ADMIN_RIGHTS) {
 ?>
 <div id="tab_gallery">
-<form action="?page=options&action=saveoptions" method="post"><input
-	type="hidden" name="savegalleryoptions" value="yes" /> <?php
+<form action="?page=options&action=saveoptions" method="post">
+ <input	type="hidden" name="savegalleryoptions" value="yes" /> <?php
 	if (isset($_GET['mismatch'])) {
 		echo '<div class="errorbox" id="fade-message">';
 		echo  "<h2>". gettext("Your "). $_GET['mismatch'] . gettext(" passwords did not match")."</h2>";
@@ -1847,23 +1850,13 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		<td><?php echo gettext("If <em>mod_rewrite</em> is checked above, zenphoto will appended	this to the end (helps search engines). Examples: <em>.html, .php,	/view</em>, etc."); ?></td>
 	</tr>
 	<tr>
-		<td><?php echo gettext("Locale:"); ?></td>
+		<td><?php echo gettext("Language:"); ?></td>
 		<td><select id="locale" name="locale">
 			<?php
-			$dir = @opendir(SERVERPATH . "/" . ZENFOLDER ."/locale/");
-			$locales = array('');
-			if ($dir !== false) {
-				while ($dirname = readdir($dir)) {
-					if (is_dir(SERVERPATH . "/" . ZENFOLDER ."/locale/".$dirname) && (substr($dirname, 0, 1) != '.')) {
-						$locales[] = $dirname;
-					}
-				}
-				closedir($dir);
-			}
-			generateListFromArray(array(getOption('locale')), $locales);
+			generateLanguageOptionList();
 			?>
 		</select></td>
-		<td><?php echo gettext("The internationalization & localization locale."); ?></td>
+		<td><?php echo gettext("The language to display text in."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Date format:"); ?></td>
@@ -2535,6 +2528,7 @@ $themeweb = WEBPATH . "/themes/$theme";
 	$curdir = getcwd();
 	chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
 	$filelist = safe_glob('*'.'php');
+	ksort($filelist);
 
 	echo "<h1>Plugins</h1>\n";
 	echo '<p>';
@@ -2553,13 +2547,13 @@ $themeweb = WEBPATH . "/themes/$theme";
 		$plugin_author = '';
 		$plugin_version = '';
 		$plugin_URL = '';
-		require($extension);
 		echo "<tr>";
 		echo '<td width="30%">';
 		echo '<input type="checkbox" size="40" name="'.$opt.'" value="1"';
 		echo checked('1', getOption($opt)); 
 		echo ' /> ';
 		echo '<strong>'.$ext.'</strong>';
+		require($extension);
 		if (!empty($plugin_version)) {
 			echo ' v'.$plugin_version;
 		}

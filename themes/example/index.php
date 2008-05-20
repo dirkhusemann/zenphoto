@@ -34,6 +34,7 @@
 		
 			<?php endwhile; ?>
 		</div>
+		<?php if (function_exists('printLanguageSelector')) { printLanguageSelector(); } ?>
 	
 		<?php printPageNav("&laquo; ".gettext("prev"), "|", gettext("next")." &raquo;"); ?>
 	

@@ -77,8 +77,8 @@
 									$imageURL = getURL($image);
 									echo '<a href="'.$imageURL.'" title="'.gettext("View image: ").
 									$image->getTitle() . '"><img src="' .
-									htmlspecialchars($image->getCustomImage(null, 44.5, 33.5, null, null, null, null, true)) .
-																		'" width="44.5" height="33.5" alt="' . $image->getTitle() . "\"/></a>\n"; 
+									htmlspecialchars($image->getCustomImage(null, 44, 33, null, null, null, null, true)) .
+																		'" width="44" height="33" alt="' . $image->getTitle() . "\"/></a>\n"; 
 									echo "</td></tr></table></li>\n";
 								}
 								break;
@@ -90,8 +90,8 @@
 								$randomImage = getRandomImages();
 								$randomImageURL = getURL($randomImage);
 								echo '<a href="' . $randomImageURL . '" title="'.gettext("View image: ") . $randomImage->getTitle() . '">' .
- 								'<img src="' . htmlspecialchars($randomImage->getCustomImage(null, 44.5, 33.5, null, null, null, null, true)) . 
-								'" width="44.5" height="33.5" alt="'.$randomImage->getTitle().'"'; 
+ 								'<img src="' . htmlspecialchars($randomImage->getCustomImage(null, 44, 33, null, null, null, null, true)) . 
+								'" width="44" height="33" alt="'.$randomImage->getTitle().'"'; 
 								echo "/></a></td></tr></table></li>\n";
 							}
 							break;
@@ -126,6 +126,7 @@
 	<p id="path"><?php printHomeLink('', ' > '); echo getGalleryTitle(); ?></p>  
 	<div id="footer">
 		<hr />
+		<?php if (function_exists('printLanguageSelector')) { echo '<p>'; printLanguageSelector(); echo '</p>'; } ?>
 		<p>
 			<a href="http://stopdesign.com/templates/photos/"><?php echo gettext('Photo Templates</a> from'); ?> Stopdesign.
 			<?php echo gettext('Powered by'); ?><a href="http://www.zenphoto.org">ZenPhoto</a>.

@@ -59,23 +59,23 @@ define('PLUGIN_FOLDER', '/plugins/');
 /*******************************************************************************
  * native gettext respectivly php-gettext replacement							             *
  *******************************************************************************/
+
+require_once('functions-i18n.php');
+
+if (!defined('OFFSET_PATH')) { // don't do this for Admin
+	if (getOption('zp_plugin_dynamic-locale')) {
+		if (file_exists(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . 'dynamic-locale.php')) {
+			require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . 'dynamic-locale.php');
+			getUserLocale();
+		}
+	}
+}
+
 if(!function_exists("gettext")) {
 	// load the drop-in replacement library
 	require_once('lib-gettext/gettext.inc');
 }
-$encoding = getOption('charset');
-$locale = getOption("locale");
-@putenv("LANG=$locale");
-// gettext setup
-setlocale(LC_ALL, $locale);
-// Set the text domain as 'messages'
-$domain = 'zenphoto';
-bindtextdomain($domain, SERVERPATH . "/" . ZENFOLDER . "/locale/");
-// function only since php 4.2.0
-if(function_exists('bind_textdomain_codeset')) {
-	bind_textdomain_codeset($domain, $encoding);
-}
-textdomain($domain);
+setupCurrentLocale();
 
 $session_started = getOption('album_session');
 if ($session_started) session_start();
@@ -116,7 +116,11 @@ function getOption($key) {
 	if (array_key_exists($key, $_zp_options)) {
 		return $_zp_options[$key];
 	} else {
-		return $_zp_conf_vars[$key];
+		if (array_key_exists($key, $_zp_conf_vars)) {
+			return $_zp_conf_vars[$key];
+		} else {
+			return NULL;
+		}
 	}
 }
 
@@ -1609,7 +1613,7 @@ if (!function_exists('fnmatch')) {
 function zp_getCookie($name) {
 	if (isset($_SESSION[$name])) { return $_SESSION[$name]; }
 	if (isset($_COOKIE[$name])) { return $_COOKIE[$name]; }
-	return '';
+	return false;
 }
 /**
  * Sets a cookie both in the browser cookies and in $_SESSION[]
@@ -1629,7 +1633,7 @@ function zp_setCookie($name, $value, $time=0, $path='/') {
 	} else {
 		$_SESSION[$name] = $value;
 		$_COOKIE[$name] = $value;
-	}
+	}	
 }
 
 //admin user handling
@@ -2044,4 +2048,43 @@ function getAllTags() {
 	}
 	return $_zp_all_tags;
 }
+
+/**
+ * Creates the body of a select list
+ *
+ * @param array $currentValue list of items to be flagged as checked
+ * @param array $list the elements of the select list
+ */
+function generateListFromArray($currentValue, $list) {
+	$localize = !is_numeric(array_shift(array_keys($list)));
+	if ($localize) {
+		ksort($list);
+	} else {
+		sort($list);
+	}
+	$cv = array_flip($currentValue);
+	foreach($list as $key=>$item) {
+		echo '<option value="' . $item . '"';
+		if (isset($cv[$item])) {
+			echo ' selected="selected"';
+		}
+		if ($localize) $display = $key; else $display = $item;
+		echo '>' . $display . "</option>"."\n";
+	}
+}
+
+function generateListFromFiles($currentValue, $root, $suffix) {
+	$curdir = getcwd();
+	chdir($root);
+	$filelist = safe_glob('*'.$suffix);
+	sort($filelist);
+	$list = array();
+	foreach($filelist as $file) {
+		$list[] = str_replace($suffix, '', $file);
+	}
+	generateListFromArray(array($currentValue), $list);
+	chdir($curdir);
+}
+
+
 ?>
