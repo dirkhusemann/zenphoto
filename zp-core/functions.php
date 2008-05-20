@@ -63,7 +63,7 @@ if(!function_exists("gettext")) {
 	// load the drop-in replacement library
 	require_once('lib-gettext/gettext.inc');
 }
-$encoding = 'UTF-8';
+$encoding = getOption('charset');
 $locale = getOption("locale");
 @putenv("LANG=$locale");
 // gettext setup
