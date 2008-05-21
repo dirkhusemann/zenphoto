@@ -302,6 +302,10 @@ function printTabs() {
 		echo "\n    <li". ($page == "edit" ? " class=\"current\""     : "") .
  				"> <a href=\"admin.php?page=edit\">".gettext("edit")."</a></li>";
 	}
+	if (($_zp_loggedin & ADMIN_RIGHTS)) {
+		echo "\n    <li". ($page == "tags" ? " class=\"current\""     : "") .
+				"><a href=\"admin-tags.php?page=tags\">".gettext('tag management')."</a></li>";
+	}	
 	echo "\n    <li". ($page == "options" ? " class=\"current\""  : "") .
  			"> <a href=\"admin.php?page=options\">".gettext("options")."</a></li>";
 	if (($_zp_loggedin & THEMES_RIGHTS)) {
@@ -313,7 +317,8 @@ function printTabs() {
  				"> <a href=\"admin.php?page=plugins\">".gettext("plugins")."</a></li>";
 	}
 	if (($_zp_loggedin & ADMIN_RIGHTS) && getoption('zp_plugin_zenpage')) {
-		echo "\n    <li><a href=\"plugins/zenpage/page-admin.php\">zenPage</a></li>";
+		echo "\n    <li". ($page == "zenpage" ? " class=\"current\""     : "") .
+ 				"><a href=\"plugins/zenpage/page-admin.php?page=zenpage\">zenPage</a></li>";
 	}	
 	echo "\n  </ul>";
 
@@ -507,16 +512,22 @@ function generateUnorderedListFromArray($currentValue, $list, $prefix) {
 
 
 function tagSelector($that, $postit) {
-	$tags = $that->getTags();
-	foreach ($tags as $key=>$tag) {
-		$tags[$key] = strtolower(trim($tag));
-	}
 	$them = array_unique(getAllTags());
+	if (is_null($that)) {
+		$tags = array();
+	} else {
+		$tags = $that->getTags();
+		foreach ($tags as $key=>$tag) {
+			$tags[$key] = strtolower(trim($tag));
+		}
+	}
 	$them = array_diff($them, $tags);
 	echo '<ul class="tagchecklist">'."\n";
 	generateUnorderedListFromArray($tags, $tags, $postit);
-	for ($i=0; $i<4; $i++) {
-		echo '<li>'.gettext("new tag").' <input type="text" size="15" name="'.$postit.'new_tag_value_'.$i.'" value="" /></li>'."\n";
+	if (!is_null($that)) {
+		for ($i=0; $i<4; $i++) {
+			echo '<li>'.gettext("new tag").' <input type="text" size="15" name="'.$postit.'new_tag_value_'.$i.'" value="" /></li>'."\n";
+		}
 	}
 	generateUnorderedListFromArray(array(), $them, $postit);
 	echo '</ul>';
