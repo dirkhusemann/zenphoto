@@ -869,10 +869,9 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 <!-- Album info box -->
 
 <form name="albumedit1"
-	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"
-	method="post"><input type="hidden" name="album"
-	value="<?php echo $album->name; ?>" /> <input type="hidden"
-	name="savealbuminfo" value="1" /> <?php printAlbumEditForm(0, $album); ?>
+	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
+	<input type="hidden" name="album"	value="<?php echo $album->name; ?>" /> 
+	<input type="hidden"	name="savealbuminfo" value="1" /> <?php printAlbumEditForm(0, $album); ?>
 </form>
 <?php printAlbumButtons($album) ?> <?php if (!$album->isDynamic())  {?>
 <!-- Subalbum list goes here --> <a name="subalbumList"> <?php
@@ -933,11 +932,9 @@ if (count($subalbums) > 0) {
 if (count($album->getImages())) {
 	?>
 
-<form name="albumedit2"
-	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"
-	method="post"><input type="hidden" name="album"
-	value="<?php echo $album->name; ?>" /> <input type="hidden"
-	name="totalimages" value="<?php echo $totalimages; ?>" />
+<form name="albumedit2"	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
+	<input type="hidden" name="album"	value="<?php echo $album->name; ?>" /> 
+	<input type="hidden" name="totalimages" value="<?php echo $totalimages; ?>" />
 
 <table class="bordered">
 	<tr>

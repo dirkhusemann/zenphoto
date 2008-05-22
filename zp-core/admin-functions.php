@@ -304,7 +304,7 @@ function printTabs() {
 	}
 	if (($_zp_loggedin & ADMIN_RIGHTS)) {
 		echo "\n    <li". ($page == "tags" ? " class=\"current\""     : "") .
-				"><a href=\"admin-tags.php?page=tags\">".gettext('tag management')."</a></li>";
+				"><a href=\"admin-tags.php?page=tags\">".gettext('tags')."</a></li>";
 	}	
 	echo "\n    <li". ($page == "options" ? " class=\"current\""  : "") .
  			"> <a href=\"admin.php?page=options\">".gettext("options")."</a></li>";

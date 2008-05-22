@@ -674,6 +674,39 @@ button.positive,.buttons a.positive {
 	height: 1%;
 }
 
+/* CSS for tag rename lists */
+.tagrenamelist {
+	border: 1px solid #ccc;
+	list-style: none;
+	height: 25em;
+	width: 25em;
+	overflow: auto;
+	background-color: white;
+}
+
+.tagrenamelist,.tagrenamelist li {
+	margin: 0;
+	padding: 0;
+	border-bottom: 1px dotted #C6D880;
+}
+
+.tagrenamelist label {
+	display: block;
+	padding: 0 0.2em 0 25px;
+	text-indent: -25px;
+}
+
+.tagrenamelist label:hover,.tagrenamelist label.hover {
+	background: #777;
+	color: #fff;
+}
+
+* html .tagrenamelist label {
+	height: 1%;
+}
+
+
+
 /* scrollable checklists */ /*************************/
 	/* Undo some styles from the master stylesheet */
 .albumchecklist li {
