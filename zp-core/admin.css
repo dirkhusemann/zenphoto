@@ -122,7 +122,7 @@ p {
 	_padding: 0 0 0 30px;
 	margin: 0 0 0 30px;
 	height: 30px;
-	width: 80%;
+	width: 100%;
 }
 
 #nav li {
@@ -133,7 +133,7 @@ p {
 	border-top: 1px solid #C7D3D8;
 	border-left: 1px solid #C7D3D8;
 	border-right: 1px solid #C7D3D8;
-	font-size: 120%;
+	font-size: 115%;
 	display: block;
 	float: left;
 	padding: 6px 12px;
