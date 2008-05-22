@@ -784,6 +784,8 @@ echo "\n</head>";
 
 if (!zp_loggedin()) {
 	printLoginForm();
+	echo "\n</body>";
+	echo "\n</html>";
 	exit();
 
 } else { /* Admin-only content safe from here on. */
@@ -843,7 +845,10 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	?>
 <h1>Edit Album: <em><?php echo $album->name; ?></em></h1>
 <p><?php printAdminLinks(gettext("edit") . $albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
-| <?php printSortLink($album, gettext("Sort Album"), gettext("Sort Album")); ?> | <?php printViewLink($album, gettext("View Album"), gettext("View Album")); ?>
+ | <?php if ($album->getNumImages() > 1) { 
+   printSortLink($album, gettext("Sort Album"), gettext("Sort Album")); 
+   echo ' | '; }?>
+<?php printViewLink($album, gettext("View Album"), gettext("View Album")); ?>
 </p>
 
 	<?php displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */ ?>

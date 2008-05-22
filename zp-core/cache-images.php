@@ -26,14 +26,13 @@ function loadAlbum($album) {
 	}
 	return $count;
 }
-
-if (!zp_loggedin()) {
-	printLoginForm("/" . ZENFOLDER . "/cache-images.php");
-	exit(); 
-} else {
-	printAdminHeader();
-	echo "\n</head>";
-	echo "\n<body>";
+if (!($_zp_loggedin & ADMIN_RIGHTS)) {
+	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
+	exit();
+}
+printAdminHeader();
+echo "\n</head>";
+echo "\n<body>";
 	printLogoAndLinks();
 	echo "\n" . '<div id="main">';
 	printTabs();
@@ -83,7 +82,6 @@ if (!zp_loggedin()) {
 	echo "\n" . '</div>';
 
 	printAdminFooter();
-}
 
 echo "\n</body>";
 echo "\n</head>";

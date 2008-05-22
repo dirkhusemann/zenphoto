@@ -201,6 +201,9 @@ function adminPrintLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
 
 /**
  * Print the login form for ZP. This will take into account whether mod_rewrite is enabled or not.
+ * 
+ * @param string $redirect URL to return to after login
+ * @param bool $logo set to true to display the ADMIN zenphoto logo.
  *
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0

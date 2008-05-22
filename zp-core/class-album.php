@@ -927,10 +927,9 @@ class Album extends PersistentObject {
 		$files = array();
 		$videos = array();
 
-
 		while (false !== ($file = readdir($dir))) {
 			if ($dirs && (is_dir($albumdir.$file) && (substr($file, 0, 1) != '.') ||
-			hasDyanmicAlbumSuffix($file))) {
+							hasDyanmicAlbumSuffix($file))) {
 				$files[] = $file;
 			} else if (!$dirs && is_file($albumdir.$file)) {
 				if (is_valid_video($file)) {

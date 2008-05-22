@@ -601,6 +601,8 @@ if (file_exists("zp-config.php")) {
 			if (!($_zp_loggedin & ADMIN_RIGHTS) && (!isset($_GET['create']) && !isset($_GET['update']))) {  // Display the login form and exit.
 				if ($_zp_loggedin) { echo "<br/><br/>".gettext("You need <em>USER ADMIN</em> rights to run setup."); }
 				printLoginForm("/" . ZENFOLDER . "/setup.php?checked$mod", false);
+				echo "\n</body>";
+				echo "\</html>";
 				exit();
 			}
 		}

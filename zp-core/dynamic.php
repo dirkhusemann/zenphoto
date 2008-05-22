@@ -7,78 +7,83 @@ require_once("admin-functions.php");
 
 
 if (!zp_loggedin()) {
-	printLoginForm("/" . ZENFOLDER . "/refresh-metadata.php");
+	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
 	exit();
-} else {
-	$search = new SearchEngine();
-	if (isset($_POST['savealbum'])) {
-		$albumname = $_POST['album'];
-		$album = $_POST['albumselect'];
-		$words = $_POST['words'];
-		$thumb = $_POST['thumb'];
-		setOption('search_fields', 32767, false); // parse the search fields post
-		$fields = $search->fields;
-		$redirect = $album.'/'.$albumname.".alb";
-
-		if (!empty($albumname)) {
-			$f = fopen(getAlbumFolder().$redirect, 'w');
-			if ($f !== false) {
-				fwrite($f,"WORDS=$words\nTHUMB=$thumb\nFIELDS=$fields\n");
-				fclose($f);
-				// redirct to edit of this album
-				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit&album=" . urlencode($redirect));
-				exit();
-			}
-		}
+}
+$_GET['page'] = 'edit'; // pretend to be the edit page.
+printAdminHeader();
+echo "\n</head>";
+echo "\n<body>";
+printLogoAndLinks();
+echo "\n" . '<div id="main">';
+printTabs();
+echo "\n" . '<div id="content">';
+echo "<h1>".gettext("zenphoto Create Dynamic Album")."</h1>\n";
+$search = new SearchEngine();
+if (isset($_POST['savealbum'])) {
+	$albumname = $_POST['album'];
+	if (!isMyAlbum($albumname, EDIT_RIGHTS)) {
+		die(gettext("You do not have edit rights on this album."));
 	}
-	$_GET['page'] = 'upload'; // pretend to be the edit page.
-	printAdminHeader();
-	echo "\n</head>";
-	echo "\n<body>";
-	printLogoAndLinks();
-	echo "\n" . '<div id="main">';
-	printTabs();
-	echo "\n" . '<div id="content">';
-	echo "<h1>".gettext("zenphoto Create Dynamic Album")."</h1>\n";
-	if (isset($_POST['savealbum'])) { // we fell through, some kind of error
-		echo "<div class=\"errorbox space\">";
-		echo "<h2>".gettext("Failed to save the album file")."</h2>";
-		echo "</div>\n";
-	}
-	$gallery = new Gallery();
-	$albumlist = array();
-	genAlbumUploadList($albumlist);
-	$params = trim(zp_getCookie('zenphoto_image_search_params'));
-	$search->setSearchParams($params);
+	$album = $_POST['albumselect'];
+	$words = $_POST['words'];
+	$thumb = $_POST['thumb'];
+	setOption('search_fields', 32767, false); // parse the search fields post
 	$fields = $search->fields;
-	$words = urldecode(trim($search->words));
-	$images = $search->getImages(0);
-	$imagelist = array();
-	foreach ($images as $image) {
-		$folder = $image['folder'];
-		$filename = $image['filename'];
-		$imagelist[] = '/'.$folder.'/'.$filename;
-	}
-	$subalbums = $search->getAlbums(0);
-	foreach ($subalbums as $folder) {
-		$newalbum = new Album($gallery, $folder);
-		if (!$newalbum->isDynamic()) {
-			$images = $newalbum->getImages(0);
-			foreach ($images as $filename) {
-			$imagelist[] = '/'.$folder.'/'.$filename;
-			}
+	$redirect = $album.'/'.$albumname.".alb";
+
+	if (!empty($albumname)) {
+		$f = fopen(getAlbumFolder().$redirect, 'w');
+		if ($f !== false) {
+			fwrite($f,"WORDS=$words\nTHUMB=$thumb\nFIELDS=$fields\n");
+			fclose($f);
+			// redirct to edit of this album
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit&album=" . urlencode($redirect));
+			exit();
 		}
 	}
-	$albumname = sanitize(trim($words));
-	$albumname = str_replace('!', ' NOT ', $albumname);
-	$albumname = str_replace('&', ' AND ', $albumname);
-	$albumname = str_replace('|', ' OR ', $albumname);
-	$albumname = seoFriendlyURL($albumname);
-	while ($old != $albumname) {
-		$old = $albumname;
-		$albumname = str_replace('--', '-', $albumname);
+}
+
+if (isset($_POST['savealbum'])) { // we fell through, some kind of error
+	echo "<div class=\"errorbox space\">";
+	echo "<h2>".gettext("Failed to save the album file")."</h2>";
+	echo "</div>\n";
+}
+
+$gallery = new Gallery();
+$albumlist = array();
+genAlbumUploadList($albumlist);
+$params = trim(zp_getCookie('zenphoto_image_search_params'));
+$search->setSearchParams($params);
+$fields = $search->fields;
+$words = urldecode(trim($search->words));
+$images = $search->getImages(0);
+$imagelist = array();
+foreach ($images as $image) {
+	$folder = $image['folder'];
+	$filename = $image['filename'];
+	$imagelist[] = '/'.$folder.'/'.$filename;
+}
+$subalbums = $search->getAlbums(0);
+foreach ($subalbums as $folder) {
+	$newalbum = new Album($gallery, $folder);
+	if (!$newalbum->isDynamic()) {
+		$images = $newalbum->getImages(0);
+		foreach ($images as $filename) {
+			$imagelist[] = '/'.$folder.'/'.$filename;
+		}
 	}
-	?>
+}
+$albumname = sanitize(trim($words));
+$albumname = str_replace('!', ' NOT ', $albumname);
+$albumname = str_replace('&', ' AND ', $albumname);
+$albumname = str_replace('|', ' OR ', $albumname);
+$albumname = seoFriendlyURL($albumname);
+while ($old != $albumname) {
+	$old = $albumname;
+	$albumname = str_replace('--', '-', $albumname);
+}
+?>
 <form action="?savealbum" method="post"><input type="hidden"
 	name="savealbum" value="yes" />
 <table>
@@ -171,15 +176,17 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 	</tr>
 
 </table>
-<input type="submit" value="<?php echo gettext('Create the album');?>" class="button" /></form>
 
-				<?php
+<input type="submit" value="<?php echo gettext('Create the album');?>"
+	class="button" /></form>
 
-				echo "\n" . '</div>';
-				echo "\n" . '</div>';
+<?php
 
-				printAdminFooter();
-}
+echo "\n" . '</div>';
+echo "\n" . '</div>';
+
+printAdminFooter();
+
 echo "\n</body>";
 echo "\n</html>";
 ?>

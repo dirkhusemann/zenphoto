@@ -75,8 +75,8 @@ if (isset($_POST['logout']) || isset($_GET['logout'])) {
 		if (isset($_GET['words'])) { $redirect .= "&words=" . $_GET['words']; }
 		if (isset($_GET['date'])) { $redirect .= "&date=" . $_GET['date']; }
 	} else {
-		$redirect = "index.php?";
-		if (isset($_GET['album'])) { $redirect .= "album=" . $_GET['album']; }
+		$redirect = "index.php";
+		if (isset($_GET['album'])) { $redirect .= "?album=" . $_GET['album']; }
 		if (isset($_GET['image'])) { $redirect .= "&image=" . $_GET['image']; }
 	}
 	if (isset($_GET['page'])) {

@@ -10,7 +10,7 @@ function setDefault($option, $default) {
 }
 	require('zp-config.php');
 
-	global $_zp_conf_vars, $_zp_options, $_zp_logged_in;
+	global $_zp_conf_vars, $_zp_options;
 	$conf = $_zp_conf_vars;
 	
 	setOption('zenphoto_release', ZENPHOTO_RELEASE); 
