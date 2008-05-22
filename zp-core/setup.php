@@ -202,6 +202,47 @@ h4 {
 	text-decoration: none;
 	border-bottom: 1px solid #4B636B;
 }
+/* Login
+------------------------------ */
+#loginform {
+	padding: 10px;
+	width: 300px;
+	margin: 25px auto;
+	font-size: 100%;
+	background: #F7F8F9;
+	border-top: 1px solid #BAC9CF;
+	border-left: 1px solid #BAC9CF;
+	border-right: 1px solid #BAC9CF;
+	border-bottom: 5px solid #BAC9CF;
+}
+
+.button {
+	cursor: pointer;
+	padding: 5px 10px;
+}
+
+label {
+	cursor: pointer;
+}
+
+label:hover {
+	color: #000;
+}
+
+#loginform input.textfield {
+	margin: 0px;
+	font-size: 100%;
+	padding: 4px;
+}
+
+#loginform table {
+	margin: 0px auto;
+	border: 0px;
+}
+
+#loginform td {
+	padding: 4px;
+}
 </style>
 
 </head>
