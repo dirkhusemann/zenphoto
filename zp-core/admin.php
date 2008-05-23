@@ -845,7 +845,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	?>
 <h1>Edit Album: <em><?php echo $album->name; ?></em></h1>
 <p><?php printAdminLinks(gettext("edit") . $albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
- | <?php if ($album->getNumImages() > 1) { 
+ | <?php if (!$album->isDynamic() && $album->getNumImages() > 1) { 
    printSortLink($album, gettext("Sort Album"), gettext("Sort Album")); 
    echo ' | '; }?>
 <?php printViewLink($album, gettext("View Album"), gettext("View Album")); ?>

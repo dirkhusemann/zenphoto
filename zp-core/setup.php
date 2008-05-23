@@ -483,7 +483,7 @@ if ($debug) {
 				if (($found == $dbn) || ($found == "*.*")) {
 					if (isset($rights['ALL']) || (isset($rights['SELECT']) && isset($rights['CREATE']) && 
 							isset($rights['DROP']) && isset($rights['INSERT']) &&	isset($rights['UPDATE']) && 
-							isset($rights['DELETE']))) {
+							isset($rights['ALTER']) && isset($rights['DELETE']))) {
 						$access = 1;
 					}
 					$report .= " *";
@@ -493,7 +493,7 @@ if ($debug) {
 			$report = "<br/><br/>".gettext("The <em>SHOW GRANTS</em> query failed.");
 		}
 		checkMark($access, gettext(" MySQL access rights"), " [$rightsfound]",
- 											gettext("Your MySQL user must have <code>Create</code>, <code>Drop</code>, <code>Select</code>, <code>Insert</code>, <code>Update</code>, and <code>Delete</code> rights.") . $report);
+ 											gettext("Your MySQL user must have <code>Create</code>, <code>Drop</code>, <code>Select</code>, <code>Insert</code>, <code>Alter</code>, <code>Update</code>, and <code>Delete</code> rights.") . $report);
 
 		$sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$_zp_conf_vars['mysql_prefix']."%';";
 		$result = mysql_query($sql, $mysql_connection);
