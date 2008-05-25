@@ -3,6 +3,12 @@
  * 
  * Changelog
  * 
+ * 1.4.3: 
+ * - Divided the menu into two separate functions printAlbumMenuList() and printAlbumMenuJump(). The plan to always have the jump menu 
+ * mode showing top level albums and sub level albums was simply easier to achieve separated than within the more complicated and especially 
+ * context sensitive list mode code. printAlbumMenu() remains as a wrapper function so that it can be used as before.
+ * - Some documentation errors fixed
+ * 
  * 1.4.2: 
  * - Fixes lost count for jump menu in the 1.4.1
  * - Some more code optimizations: Another helper function checkAlbumDisplayLevel() added
@@ -73,25 +79,52 @@ $plugin_version = '1.4.2';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---print_album_menu.php.html";
 
 /**
- * Prints a list of all albums context sensitive up to the 4th subalbum level. 
- * NOTE: After $option2 there is a new option now, so update you installs
+ * Prints a list of all albums context sensitive up to the 4th subalbum level.
+ * Since 1.4.3 this is a wrapper function for the separate functions printAlbumMenuList() and printAlbumMenuJump().
+ * that was included to remain compatiblility with older installs of this menu.
  * 
  * Usage: add the following to the php page where you wish to use these menus:
  * enable this extension on the zenphoto admin plugins tab;
  * Call the function printAlbumMenu() at the point where you want the menu to appear.
  * 
- * @param string $option "list" for html list, "jump" for a jump drop down menu
- * @param string $option2 "count" for a image counter in brackets behind the album name, "" = for no image numbers or leave blank if you don't set css styles
- * @param string $css_id insert css id for the main album list, leave blank if you don't use 
- * @param string $css_id_active insert css class for the active link in the main album list
- * @param string $css_class insert css class for the sub album lists
- * @param string $css_class_active insert css class for the active link in the sub album lists
+ * @param string $option "list" for html list, "list-top" for only the top level albums, "list-sub" for only the subalbums if in one of theme or their toplevel album
+ * @param string $option2 "count" for a image counter in brackets behind the album name, "" = for no image numbers or leave blank
+ * @param string $css_id insert css id for the main album list, leave blank if you don't use (only list mode)
+ * @param string $css_id_active insert css class for the active link in the main album list (only list mode)
+ * @param string $css_class insert css class for the sub album lists (only list mode)
+ * @param string $css_class_active insert css class for the active link in the sub album lists (only list mode)
  * @param string $indexname insert the name how you want to call the link to the gallery index (insert "" if you don't use it, it is not printed then)
  * @return html list or drop down jump menu of the albums
  * @since 1.2
  */
 
+
 function printAlbumMenu($option,$option2,$css_id='',$css_id_active='',$css_class='',$css_class_active='', $indexname="Gallery Index") {
+	if($option === "list" OR $option === "list-top" OR $option === "list-sub") {
+		printAlbumMenuList($option,$option2,$css_id,$css_id_active,$css_class,$css_class_active, $indexname);
+	} else if ($option === "jump") {
+		printAlbumMenuJump($option,$indexname);
+	}
+}
+
+/**
+ * Prints a nested html list of all albums context sensitive up to the 4th subalbum level.
+ * 
+ * Usage: add the following to the php page where you wish to use these menus:
+ * enable this extension on the zenphoto admin plugins tab;
+ * Call the function printAlbumMenuList() at the point where you want the menu to appear.
+ * 
+ * @param string $option "list" for html list, "list-top" for only the top level albums, "list-sub" for only the subalbums if in one of theme or their toplevel album
+ * @param string $option2 "count" for a image counter in brackets behind the album name, "" = for no image numbers or leave blank
+ * @param string $css_id insert css id for the main album list, leave blank if you don't use (only list mode)
+ * @param string $css_id_active insert css class for the active link in the main album list (only list mode)
+ * @param string $css_class insert css class for the sub album lists (only list mode)
+ * @param string $css_class_active insert css class for the active link in the sub album lists (only list mode)
+ * @param string $indexname insert the name (default "Gallery Index") how you want to call the link to the gallery index, insert "" if you don't use it, it is not printed then.
+ * @return html list of the albums
+ */
+
+function printAlbumMenuList($option,$option2,$css_id='',$css_id_active='',$css_class='',$css_class_active='', $indexname="Gallery Index") {
 	global $_zp_gallery, $_zp_current_album;
 	$albumpath = rewrite_path("/", "/index.php?album=");
 	if(!empty($_zp_current_album)) {
@@ -109,16 +142,7 @@ function printAlbumMenu($option,$option2,$css_id='',$css_id_active='',$css_class
 		if(!empty($indexname)) {
 			echo "<li><a href='".getGalleryIndexURL()."' title='".$indexname."'>".$indexname."</a></li>";
 		}
-	} else if ($option === "jump") { ?>
-<form name="AutoListBox">
-<p><select name="ListBoxURL" size="1" language="javascript"
-		onchange="gotoLink(this.form);">
-		<?php 
-		if(!empty($indexname)) {
-			$selected = checkSelectedAlbum("", "index"); ?>
-		<option $selected value="<?php echo getGalleryIndexURL(); ?>"><?php echo $indexname; ?></option>
-		<?php } }
-
+	}
 		/**** TOPALBUM LEVEL ****/
 		$gallery = $_zp_gallery;
 		$albums = $_zp_gallery->getAlbums();
@@ -126,12 +150,10 @@ function printAlbumMenu($option,$option2,$css_id='',$css_id_active='',$css_class
 			$topalbum = new Album($gallery,$toplevelalbum,true);
 			if($option === "list" OR $option === "list-top") {
 				echo createAlbumMenuLink($topalbum,$option2,$css_id_active,$albumpath,"list");
-			} else if ($option === "jump") {
-				echo createAlbumMenuLink($topalbum,$option2,"",$albumpath,"jump",0);
-			}
+			} 
 			$sub1_count = 0;
 				
-			if($option === "list" OR $option === "list-sub" OR $option === "jump") { // show either only sublevels or sublevels with toplevel 
+			if($option === "list" OR $option === "list-sub") { // show either only sublevels or sublevels with toplevel 
 
 				/**** SUBALBUM LEVEL 1 ****/
 				$subalbums1 = $topalbum->getSubAlbums();
@@ -146,9 +168,7 @@ function printAlbumMenu($option,$option2,$css_id='',$css_id_active='',$css_class
 							}
 							if ($option === "list" OR $option === "list-sub") {
 								echo createAlbumMenuLink($subalbum1,$option2,$css_class_active,$albumpath,"list");
-							} else if ($option === "jump") {
-								echo createAlbumMenuLink($subalbum1,$option2,"",$albumpath,"jump",1);	
-							}
+							} 
 							$sub2_count = 0;
 						
 						/**** SUBALBUM LEVEL 2 ****/
@@ -164,9 +184,7 @@ function printAlbumMenu($option,$option2,$css_id='',$css_id_active='',$css_class
 								}
 								if($option === "list" OR $option === "list-sub") {
 									echo createAlbumMenuLink($subalbum2,$option2,$css_class_active,$albumpath,"list");
-								} else if ($option === "jump") {
-									echo createAlbumMenuLink($subalbum2,$option2,"",$albumpath,"jump",2);	
-								}
+								} 
 								$sub3_count = 0;
 
 								/**** SUBALBUM LEVEL 3 ****/
@@ -182,9 +200,7 @@ function printAlbumMenu($option,$option2,$css_id='',$css_id_active='',$css_class
 										} 
 										if($option === "list" OR $option === "list-sub") {
 											echo createAlbumMenuLink($subalbum3,$option2,$css_class_active,$albumpath,"list");
-										} else if ($option === "jump") {
-											echo createAlbumMenuLink($subalbum3,$option2,"",$albumpath,"jump",3);
-										}
+										} 
 										$sub4_count = 0;
 
 										/**** SUBALBUM LEVEL 4 ****/
@@ -200,9 +216,7 @@ function printAlbumMenu($option,$option2,$css_id='',$css_id_active='',$css_class
 												} 
 												if($option === "list" OR $option === "list-sub") {
 													echo createAlbumMenuLink($subalbum4,$option2,$css_class_active,$albumpath,"list");
-												} else if ($option === "jump") {
-													echo createAlbumMenuLink($subalbum4,$option2,"",$albumpath,"jump",4);
-												}
+												} 
 											} // if subalbum level 4 - end
 										}	// subalbum level 4 - end
 										if($sub4_count > 0 AND ($option === "list" OR $option === "list-sub")) 	{ // sublevel 4 sublist end if subalbums
@@ -241,8 +255,71 @@ function printAlbumMenu($option,$option2,$css_id='',$css_id_active='',$css_class
 		if($option === "list" OR $option === "list-top"){
 			echo "</ul>\n";
 		}
-		if($option === "jump") {
-			?>
+} // function end
+
+
+/**
+ * Prints a dropdown menu of all albums up to the 4 sublevel (not context sensitive)
+ * Is used by the wrapper function printAlbumMenu() if the options "jump" is choosen. For standalone use, too.
+ * 
+ * Usage: add the following to the php page where you wish to use these menus:
+ * enable this extension on the zenphoto admin plugins tab;
+ * Call the function printAlbumMenuJump() at the point where you want the menu to appear.
+ *
+ * @param string $option "count" for a image counter in brackets behind the album name, "" = for no image numbers
+ * @param string $indexname insert the name (default "Gallery Index") how you want to call the link to the gallery index, insert "" if you don't use it, it is not printed then.
+ */
+function printAlbumMenuJump($option="count", $indexname="Gallery Index") {
+	global $_zp_gallery, $_zp_current_album;
+	$albumpath = rewrite_path("/", "/index.php?album=");
+	if(!empty($_zp_current_album)) {
+		$currentfolder = $_zp_current_album->name;
+	}
+	?>
+<form name="AutoListBox">
+<p><select name="ListBoxURL" size="1" language="javascript"
+		onchange="gotoLink(this.form);">
+		<?php
+		if(!empty($indexname)) {
+			$selected = checkSelectedAlbum("", "index"); ?>
+		<option $selected value="<?php echo getGalleryIndexURL(); ?>"><?php echo $indexname; ?></option>
+		<?php }
+		/**** TOPALBUM LEVEL ****/
+		$gallery = $_zp_gallery;
+		$albums = $_zp_gallery->getAlbums();
+		foreach ($albums as $toplevelalbum) {
+			$topalbum = new Album($gallery,$toplevelalbum,true);
+			echo createAlbumMenuLink($topalbum,$option,"",$albumpath,"jump",0);
+			
+			/**** SUBALBUM LEVEL 1 ****/
+			$subalbums1 = $topalbum->getSubAlbums();
+			foreach($subalbums1 as $sublevelalbum1) {
+				$subalbum1 = new Album($gallery,$sublevelalbum1,true);
+				echo createAlbumMenuLink($subalbum1,$option,"",$albumpath,"jump",1);
+
+				/**** SUBALBUM LEVEL 2 ****/
+				$subalbums2 = $subalbum1->getSubAlbums();
+				foreach($subalbums2 as $sublevelalbum2) {
+					$subalbum2 = new Album($gallery,$sublevelalbum2,true);
+					echo createAlbumMenuLink($subalbum2,$option,"",$albumpath,"jump",2);
+
+					/**** SUBALBUM LEVEL 3 ****/
+					$subalbums3 = $subalbum2->getSubAlbums();
+					foreach($subalbums3 as $sublevelalbum3) {
+						$subalbum3 = new Album($gallery,$sublevelalbum3,true);
+						echo createAlbumMenuLink($subalbum3,$option,"",$albumpath,"jump",3);
+
+						/**** SUBALBUM LEVEL 4 ****/
+						$subalbums4 = $subalbum3->getSubAlbums();
+						foreach($subalbums4 as $sublevelalbum4) {
+							$subalbum4 = new Album($gallery,$sublevelalbum4,true);
+							echo createAlbumMenuLink($subalbum4,$option,"",$albumpath,"jump",4);
+						} 
+					}
+				}
+			}
+		}
+?>
 </select></p>
 <script language="JavaScript">
 <!--
@@ -251,9 +328,8 @@ function gotoLink(form) {
 	parent.location = form.ListBoxURL.options[OptionIndex].value;}
 //-->
 </script></form>
-			<?php }
-} // function end
-
+<?php	
+}
 
 /**
  * A printAlbumMenu() helper function for the list menu mode of printAlbumMenu() that only 
