@@ -30,39 +30,6 @@ $plugin_version = '1.0.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---dynamic-locale.php.html";
 
 /**
- * Returns a saved (or posted) locale. Posted locales are stored as a cookie.
- *
- * Sets the 'locale' option to the result (non-persistent)
- */
-function getUserLocale() {
-	global $_zp_languages;
-	$cookiepath = WEBPATH;
-	if (WEBPATH == '') { $cookiepath = '/'; }
-	if (isset($_POST['dynamic-locale'])) {
-		$locale = sanitize($_POST['dynamic-locale']);
-		zp_setCookie('dynamic_locale', $locale, time()+5184000, $cookiepath);
-	} else {
-		$locale = zp_getCookie('dynamic_locale');
-		if ($locale === false) {  // if one is not set, see if there is a match from 'HTTP_ACCEPT_LANGUAGE'
-			$userLang = parseHttpAcceptLanguage();
-			foreach ($userLang as $lang) {
-				$l = strtoupper($lang['fullcode']);
-				$languageSupport = generateLanguageList();
-				foreach ($languageSupport as $key=>$value) {
-					if (strtoupper($key) == $l) { // we got a match
-						$locale = $key;
-						break;
-					}
-				}
-			}
-		}
-	}
-	if ($locale !== false) {
-		setOption('locale', $locale, false);
-	}
-}
-
-/**
  * prints a form for selecting a locale
  * The POST handling is by getUserLocale() called in functions.php
  *

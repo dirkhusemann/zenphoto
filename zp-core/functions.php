@@ -54,7 +54,7 @@ $_zp_options = NULL;
  *  An external folder path overrides one located within the zenphotos folders.
  */
 define('ALBUMFOLDER', '/albums/');
-define('PLUGIN_FOLDER', '/plugins/');
+if (!defined('PLUGIN_FOLDER')) { define('PLUGIN_FOLDER', '/plugins/'); }
 
 /*******************************************************************************
  * native gettext respectivly php-gettext replacement							             *
@@ -62,14 +62,7 @@ define('PLUGIN_FOLDER', '/plugins/');
 
 require_once('functions-i18n.php');
 
-if (!defined('OFFSET_PATH')) { // don't do this for Admin
-	if (getOption('zp_plugin_dynamic-locale')) {
-		if (file_exists(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . 'dynamic-locale.php')) {
-			require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . 'dynamic-locale.php');
-			getUserLocale();
-		}
-	}
-}
+getUserLocale();
 
 if(!function_exists("gettext")) {
 	// load the drop-in replacement library
@@ -2087,6 +2080,5 @@ function generateListFromFiles($currentValue, $root, $suffix) {
 	generateListFromArray(array($currentValue), $list);
 	chdir($curdir);
 }
-
 
 ?>

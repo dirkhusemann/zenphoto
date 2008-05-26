@@ -4,6 +4,7 @@ define('HTACCESS_VERSION', '1.1.6.0');  // be sure to change this the one in .ht
 define('CHMOD_VALUE', 0777);
 $checked = isset($_GET['checked']);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
+if (!defined('PLUGIN_FOLDER')) { define('PLUGIN_FOLDER', '/plugins/'); }
 define('OFFSET_PATH', true);
 $upgrade = false;
 $debug = isset($_GET['debug']);
@@ -33,8 +34,9 @@ function updateItem($item, $value) {
 	$j = strpos($zp_cfg, "\n", $i);
 	$zp_cfg = substr($zp_cfg, 0, $i) . '= "' . $value . '";' . substr($zp_cfg, $j);
 }
+if (isset($_POST['debug'])) $debug = isset($_POST['debug']);
+
 if (isset($_POST['mysql'])) { //try to update the zp-config file
-	$debug = isset($_POST['debug']);
 	$zp_cfg = @file_get_contents('zp-config.php');
 	if (!$upgrade) {
 		updateItem('UTF-8', 'true');
@@ -75,7 +77,10 @@ if (file_exists("zp-config.php")) {
 			require_once("admin-functions.php");
 		}
 	}
-}?>
+}
+getUserLocale();
+setupCurrentLocale();
+?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-transitional.dtd">
 
@@ -549,7 +554,7 @@ if ($debug) {
 			}
 			$mod = '';
 			if (!empty($rw)) {
-				$msg .= gettext(" (<em>RewriteEngine</em> is ")."<strong>$rw</strong>)";
+				$msg .= gettext(" (<em>RewriteEngine</em> is").' '."<strong>$rw</strong>)";
 				$mod = "&mod_rewrite=$rw";
 			}
 		}
@@ -995,7 +1000,20 @@ if (file_exists("zp-config.php")) {
 }
  
 ?></div>
-<?php printAdminFooter(); ?>
+<?php
+echo "\n<div$class>\n";
+echo '<form action="#'.$action.'" method="post">'."\n";
+if ($debug) {
+	echo '<input type="hidden" name="debug" />';
+}
+echo gettext("Select a language:").' ';
+echo '<select id="dynamic-locale" name="dynamic-locale" onchange="this.form.submit()">'."\n";
+generateLanguageOptionList();
+echo "</select>\n";
+echo "</form>\n";
+echo "</div>\n";
+printAdminFooter();
+?>
 </div>
 </body>
 </html>

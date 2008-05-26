@@ -100,6 +100,7 @@ function generateLanguageOptionList() {
  */
 function setupCurrentLocale() {
 	$encoding = getOption('charset');
+	if (empty($encoding)) $encoding = 'UTF-8';
 	$locale = getOption("locale");
 	@putenv("LANG=$locale");
 	// gettext setup
@@ -119,12 +120,13 @@ function setupCurrentLocale() {
  * (or retrieve it from $_SERVER if not provided) and will return a sorted 
  * array. For example, it will parse fr;en-us;q=0.8 
  * 
- * Thanks to Fredbirs.org for this code.
+ * Thanks to Fredbird.org for this code.
  *
  * @param string $str optional language string
  * @return array
  */
 function parseHttpAcceptLanguage($str=NULL) {
+	if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) return array();
 	// getting http instruction if not provided
 	$str=$str?$str:$_SERVER['HTTP_ACCEPT_LANGUAGE'];
 	// exploding accepted languages 
@@ -152,4 +154,38 @@ function parseHttpAcceptLanguage($str=NULL) {
 	krsort($accepted);
 	return $accepted;
 }
+
+/**
+ * Returns a saved (or posted) locale. Posted locales are stored as a cookie.
+ *
+ * Sets the 'locale' option to the result (non-persistent)
+ */
+function getUserLocale() {
+	global $_zp_languages;
+	$cookiepath = WEBPATH;
+	if (WEBPATH == '') { $cookiepath = '/'; }
+	if (isset($_POST['dynamic-locale'])) {
+		$locale = sanitize($_POST['dynamic-locale']);
+		zp_setCookie('dynamic_locale', $locale, time()+5184000, $cookiepath);
+	} else {
+		$locale = zp_getCookie('dynamic_locale');
+		if ($locale === false) {  // if one is not set, see if there is a match from 'HTTP_ACCEPT_LANGUAGE'
+			$userLang = parseHttpAcceptLanguage();
+			foreach ($userLang as $lang) {
+				$l = strtoupper($lang['fullcode']);
+				$languageSupport = generateLanguageList();
+				foreach ($languageSupport as $key=>$value) {
+					if (strtoupper($key) == $l) { // we got a match
+						$locale = $key;
+						break;
+					}
+				}
+			}
+		}
+	}
+	if ($locale !== false) {
+		setOption('locale', $locale, false);
+	}
+}
+
 ?>
