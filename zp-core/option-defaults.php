@@ -64,6 +64,7 @@ function setDefault($option, $default) {
 	setDefault('thumb_crop_width', 85);
 	setDefault('thumb_crop_height', 85);
 	setDefault('thumb_sharpen', 0);
+	setDefault('image_sharpen', 0);
 	setDefault('albums_per_page', 5);
 	setDefault('images_per_page', 15);
 	setDefault('perform_watermark', 0);

@@ -265,6 +265,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 	$image_use_longest_side = getOption('image_use_longest_side');
 	$upscale = getOption('image_allow_upscale');
 	$sharpenthumbs = getOption('thumb_sharpen');
+	$sharpenimages = getOption('image_sharpen');
 	$newfile = SERVERCACHE . $newfilename;
 	// Check for GD
 	if (!function_exists('imagecreatetruecolor'))
@@ -358,7 +359,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			$newim = $newim_crop;
 		}
 
-		if ($thumb && $sharpenthumbs) {
+		if (($thumb && $sharpenthumbs) || (!$thumb && $sharpenIMAGES)) {
 			unsharp_mask($newim, 40, 0.5, 3);
 		}
 		$perform_watermark = false;

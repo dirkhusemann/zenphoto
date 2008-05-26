@@ -8,7 +8,7 @@ $standardOptions = array(	'gallery_title','website_title','website_url','time_of
  													'server_protocol','charset','image_quality',
  													'thumb_quality','image_size','image_use_longest_side',
  													'image_allow_upscale','thumb_size','thumb_crop',
- 													'thumb_crop_width','thumb_crop_height','thumb_sharpen',
+ 													'thumb_crop_width','thumb_crop_height','thumb_sharpen', 'image_sharpen',
  													'albums_per_page','images_per_page','perform_watermark',
  													'watermark_image','watermark_scale', 'watermark_allow_upscale', 'current_theme', 'spam_filter',
  													'email_new_comments', 'perform_video_watermark', 'video_watermark_image',
@@ -606,6 +606,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				setOption('thumb_quality', $_POST['thumb_quality']);
 				setBoolOption('image_allow_upscale', $_POST['image_allow_upscale']);
 				setBoolOption('thumb_sharpen', $_POST['thumb_sharpen']);
+				setBoolOption('image_sharpen', $_POST['image_sharpen']);
 				setBoolOption('perform_watermark', $_POST['perform_watermark']);
 				setOption('watermark_image', 'watermarks/' . $_POST['watermark_image'] . '.png');
 				setOption('watermark_scale', $_POST['watermark_scale']);
@@ -2065,10 +2066,12 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		<td><?php echo gettext("Allow images to be scaled up to the requested size. This could	result in loss of quality, so it's off by default."); ?></td>
 	</tr>
 	<tr>
-		<td><?php echo gettext("Sharpen thumbnails:"); ?></td>
-		<td><input type="checkbox" name="thumb_sharpen" value="1"
-		<?php echo checked('1', getOption('thumb_sharpen')); ?> /></td>
-		<td><?php echo gettext("Add a small amount of unsharp mask to thumbnails. Slows thumbnail	generation on slow servers."); ?></td>
+		<td><?php echo gettext("Sharpen:"); ?></td>
+		<td><input type="checkbox" name="image_sharpen" value="1"
+		<?php echo checked('1', getOption('image_sharpen')); ?> /> Images
+		<input type="checkbox" name="thumb_sharpen" value="1"
+		<?php echo checked('1', getOption('thumb_sharpen')); ?> /> Thumbs</td>
+		<td><?php echo gettext("Add a small amount of unsharp mask to images and/or thumbnails. <strong>Warning</strong>: can overload slow servers."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Watermark images:"); ?></td>
