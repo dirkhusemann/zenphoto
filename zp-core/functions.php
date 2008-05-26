@@ -1978,7 +1978,9 @@ function generateCaptcha(&$image) {
 			$string .= $lettre[rand(0,23)];
 		}
 	}
-	$key = 'zenphoto_captcha_string';
+	$admins = getAdministrators();
+	$admin = array_shift($admins);
+	$key = $admin['pass'];
 	$cypher = urlencode(rc4($key, $string));
 
 	$code=md5($string);
