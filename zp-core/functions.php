@@ -2057,10 +2057,10 @@ function generateListFromArray($currentValue, $list) {
 	} else {
 		sort($list);
 	}
-	$cv = array_flip($currentValue);
 	foreach($list as $key=>$item) {
 		echo '<option value="' . $item . '"';
-		if (isset($cv[$item])) {
+		$inx = array_search($item, $currentValue);
+		if ($inx !== false) {
 			echo ' selected="selected"';
 		}
 		if ($localize) $display = $key; else $display = $item;
