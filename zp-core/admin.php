@@ -1281,7 +1281,7 @@ if (ini_get('safe_mode')) { ?>
 } else {
 	$checked = '';
 }
-?> <select id="albumselectmenu" name="albumselect" onChange="albumSwitch(this)">
+?> <select id="albumselectmenu" name="albumselect" onChange="albumSwitch(this,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>')">
 	<?php
 	if (isMyAlbum('/', UPLOAD_RIGHTS)) {
 		?>
@@ -1312,7 +1312,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 
 <div id="newalbumbox" style="margin-top: 5px;">
 <div><label><input type="checkbox" name="newalbum"
-<?php echo $checked; ?> onClick="albumSwitch(this.form.albumselect)">
+<?php echo $checked; ?> onClick="albumSwitch(this.form.albumselect,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>')">
 <?php echo gettext("Make a new Album"); ?></label></div>
 <div id="publishtext"><?php echo gettext("and"); ?><label><input type="checkbox"
 	name="publishalbum" id="publishalbum" value="1" checked="checked" /> <?php echo gettext("Publish the album so everyone can see it."); ?></label></div>
@@ -1320,7 +1320,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 
 <div id="albumtext" style="margin-top: 5px;"><?php echo gettext("called:"); ?> <input
 	id="albumtitle" size="42" type="text" name="albumtitle" value=""
-	onKeyUp="updateFolder(this, 'folderdisplay', 'autogen');" />
+	onKeyUp="updateFolder(this, 'folderdisplay', 'autogen', '<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');" />
 
 <div style="position: relative; margin-top: 4px;"><?php echo gettext("with the folder name:"); ?>
 <div id="foldererror"
@@ -1365,7 +1365,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 </div>
 
 </form>
-<script type="text/javascript">albumSwitch(document.uploadform.albumselect);</script>
+<script type="text/javascript">albumSwitch(document.uploadform.albumselect,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');</script>
 
 <?php 
 

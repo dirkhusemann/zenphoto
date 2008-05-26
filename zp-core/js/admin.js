@@ -27,7 +27,7 @@ function addUploadBoxes(placeholderid, copyfromid, num) {
   }
 }
 
-function albumSwitch(sel) {
+function albumSwitch(sel, msg1, msg2) {
   var selected = sel.options[sel.selectedIndex];
   var albumtext = document.getElementById("albumtext");
   var publishtext = document.getElementById("publishtext");
@@ -66,7 +66,7 @@ function albumSwitch(sel) {
     titlebox.value = selected.text;
     exists.value = true;
   }
-  validateFolder(folder);
+  validateFolder(folder, msg1, msg2);
 }
 
 
@@ -79,7 +79,7 @@ function contains(arr, key) {
   return false;
 }
 
-function updateFolder(nameObj, folderID, checkboxID) {
+function updateFolder(nameObj, folderID, checkboxID, msg1, msg2) {
   var autogen = document.getElementById(checkboxID).checked;
   var folder = document.getElementById(folderID);
   var parentfolder = document.getElementById('albumselectmenu').value;
@@ -101,21 +101,21 @@ function updateFolder(nameObj, folderID, checkboxID) {
     }
   }
   folder.value = parentfolder + fname + fnamesuffix;
-  validateFolder(folder);
+  validateFolder(folder,msg1,msg2);
 }
 
-function validateFolder(folderObj) {
+function validateFolder(folderObj, msg1, msg2) {
   var errorDiv = document.getElementById("foldererror");
   var exists = document.uploadform.existingfolder.value != "false";
   var uploadBoxesDiv = document.getElementById("uploadboxes");
   if (!exists && albumArray && contains(albumArray, folderObj.value)) {
     errorDiv.style.display = "block";
-    errorDiv.innerHTML = "That name is already used.";
+    errorDiv.innerHTML = msg1;
     uploadBoxesDiv.style.display = "none";
     return false;
   } else if (folderObj.value == "") {
     errorDiv.style.display = "block";
-    errorDiv.innerHTML = "This upload has to have a folder. Type a title or folder name to continue...";
+    errorDiv.innerHTML = msg2;
     uploadBoxesDiv.style.display = "none";
     return false;
   } else {
