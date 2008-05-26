@@ -69,7 +69,7 @@ echo "\n<body>";
 			$count = $count + loadAlbum($album);
 		}
 	}
-	echo "\n" . "<br/>".gettext("Finished: Total of $count images.");
+	echo "\n" . "<br/>".gettext("Finished: Total of")." ".$count." ".gettext("images").".";
 	
 	if (isset($_GET['return'])) $ret = $_GET['return'];
 	if (isset($_POST['return'])) $ret = $_POST['return'];

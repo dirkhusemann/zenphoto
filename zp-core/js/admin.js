@@ -101,7 +101,7 @@ function updateFolder(nameObj, folderID, checkboxID, msg1, msg2) {
     }
   }
   folder.value = parentfolder + fname + fnamesuffix;
-  validateFolder(folder,msg1,msg2);
+  validateFolder(folder, msg1, msg2);
 }
 
 function validateFolder(folderObj, msg1, msg2) {
