@@ -135,7 +135,7 @@ function printAdminToolbox($context=null, $id='admin') {
 			$imagename = urlencode($_zp_current_image->filename);
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				echo "<a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?page=edit&action=deleteimage&album=" .
-				urlencode($albumname) . "&image=". $imagename . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
+				urlencode($albumname) . "&image=". urlencode($imagename) . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
 				echo "<br />\n";
 			}
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=$imagename";
