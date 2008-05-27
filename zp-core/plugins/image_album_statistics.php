@@ -126,9 +126,9 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
 		echo "<img src=\"".$tempalbum->getAlbumThumb()."\"></a>\n<br />";
 		if($showtitle) {
 			echo "<h3><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . $tempalbum->getTitle() . "\">\n";
-			echo $tempalbum->getTitle()."</a>\n";
+			echo $tempalbum->getTitle()."</a></h3>\n";
 		}
-		echo "</h3><div>";
+		echo "<div>";
 		if($showdate) {
 			if($option === "latestupdated") {
 				$filechangedate = filectime(getAlbumFolder().$tempalbum->name);
@@ -308,9 +308,8 @@ function printImageStatistic($number, $option, $album='', $showtitle=false, $sho
 		echo "<img src=\"" . $image->getThumb() . "\"  alt=\"" . htmlspecialchars($image->getTitle(),ENT_QUOTES) . "\" /></a>\n";
 		if($showtitle) {
 			echo "<h3><div><a href=\"".pathurlencode($image->name)."\" title=\"" . $image->getTitle() . "\">\n";
-			echo $image->getTitle()."</a>\n";
+			echo $image->getTitle()."</a></h3>\n";
 		}
-		echo "</h3>";
 		if($showdate) {
 			echo "<p>". zpFormattedDate(getOption('date_format'),strtotime($image->getDateTime()))."</p>";
 		}
