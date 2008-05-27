@@ -79,6 +79,11 @@ if (file_exists("zp-config.php")) {
 		}
 	}
 }
+if (!$connection) { // setup a primitive environment
+	define('SERVERPATH', dirname(dirname(__FILE__)));
+	require_once('setup-primitive.php');
+	require_once('functions-i18n.php');
+}
 getUserLocale();
 setupCurrentLocale();
 ?>
@@ -420,33 +425,33 @@ if ($debug) {
 ?>
 <table>
 	<tr>
-		<td>MySQL admin user</td>
+		<td><?php echo gettext("MySQL admin user") ?></td>
 		<td><input type="text" size="40" name="mysql_user"
 			value="<?php echo $_zp_conf_vars['mysql_user']?>" />&nbsp;*</td>
 	</tr>
 	<tr>
-		<td>MySQL admin password</td>
+		<td><?php echo gettext("MySQL admin password") ?></td>
 		<td><input type="password" size="40" name="mysql_pass"
 			value="<?php echo $_zp_conf_vars['mysql_pass']?>" />&nbsp;*</td>
 	</tr>
 	<tr>
-		<td>MySQL host</td>
+		<td><?php echo gettext("MySQL host") ?></td>
 		<td><input type="text" size="40" name="mysql_host"
 			value="<?php echo $_zp_conf_vars['mysql_host']?>" /></td>
 	</tr>
 	<tr>
-		<td>MySQL database</td>
+		<td><?php echo gettext("MySQL database") ?></td>
 		<td><input type="text" size="40" name="mysql_database"
 			value="<?php echo $_zp_conf_vars['mysql_database']?>" />&nbsp;*</td>
 	</tr>
 	<tr>
-		<td>Database table prefix</td>
+		<td><?php echo gettext("Database table prefix") ?></td>
 		<td><input type="text" size="40" name="mysql_prefix"
 			value="<?php echo $_zp_conf_vars['mysql_prefix']?>" /></td>
 	</tr>
 	<tr>
 		<td></td>
-		<td align="right">* required</td>
+		<td align="right">* <?php echo gettext("required") ?></td>
 	</tr>
 	<tr>
 		<td></td>
@@ -608,12 +613,30 @@ if ($debug) {
 		$dbmsg = "";
 	} else {
 		echo "<p>".gettext("You need to address the problems indicated above then run <code>setup.php</code> again.")."</p>";
+		echo "\n</div>";
+		echo "\n<div$class>\n";
+		echo '<form action="#'.$action.'" method="post">'."\n";
+		if ($debug) {
+			echo '<input type="hidden" name="debug" />';
+		}
+		echo gettext("Select a language:").' ';
+		echo '<select id="dynamic-locale" name="dynamic-locale" onchange="this.form.submit()">'."\n";
+		generateLanguageOptionList();
+		echo "</select>\n";
+		echo "</form>\n";
+		echo "</div>\n";
+		printadminfooter();
+		echo "</div>";
+		echo "</body>";
+		echo "</html>";
 		exit();
 	}
 } else {
 	$dbmsg = gettext("database connected");
 } // system check
+
 if (file_exists("zp-config.php")) {
+	
 	require("zp-config.php");
 	require_once('functions-db.php');
 	$task = '';
@@ -790,7 +813,7 @@ if (file_exists("zp-config.php")) {
 	 ******                                                                            ******
 	 ******                          Add all new fields below                          ******
 	 ******                                                                            ******
-	 *****************************************************************************************/
+	 ****************************************************************************************/
 	$sql_statements = array();
 
 	// v. 1.0.0b
@@ -880,7 +903,6 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `album_theme` text default NULL";
 	$sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `IP` text default NULL";
 	
-
 	/**************************************************************************************
 	 ******                            END of UPGRADE SECTION                                                           ******
 	 ******                                                                                                                                                     ******
@@ -998,8 +1020,9 @@ if (file_exists("zp-config.php")) {
 
 <?php
 }
- 
-?></div>
+
+?>
+</div>
 <?php
 echo "\n<div$class>\n";
 echo '<form action="#'.$action.'" method="post">'."\n";

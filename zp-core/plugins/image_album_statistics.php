@@ -315,7 +315,7 @@ function printImageStatistic($number, $option, $album='', $showtitle=false, $sho
 		if($showdesc) {
 			echo "<p>".my_truncate_string($image->getDesc(), $desclength)."</p>";
 		}
-	echo "</li>\n";
+		echo "</li>";
 	}
 	echo "</ul></div>\n";
 }

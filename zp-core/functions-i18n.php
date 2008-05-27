@@ -170,10 +170,10 @@ function getUserLocale() {
 	} else {
 		$locale = zp_getCookie('dynamic_locale');
 		if ($locale === false) {  // if one is not set, see if there is a match from 'HTTP_ACCEPT_LANGUAGE'
+			$languageSupport = generateLanguageList();
 			$userLang = parseHttpAcceptLanguage();
 			foreach ($userLang as $lang) {
 				$l = strtoupper($lang['fullcode']);
-				$languageSupport = generateLanguageList();
 				foreach ($languageSupport as $key=>$value) {
 					if (strtoupper($key) == $l) { // we got a match
 						$locale = $key;
