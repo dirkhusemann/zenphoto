@@ -1247,7 +1247,7 @@ if (count($album->getImages())) {
 <h1><?php echo gettext("Upload Photos"); ?></h1>
 <p><?php echo gettext("This web-based upload accepts image formats:"); ?> <acronym
 	title="Joint Picture Expert's Group">JPEG</acronym>, <acronym
-	title="Portable Network Graphics">PNG</acronym> and <acronym
+	title="Portable Network Graphics">PNG</acronym> <?php echo gettext("and"); ?> <acronym
 	title="Graphics Interchange Format">GIF</acronym>. <?php echo gettext("You can also upload a <strong>ZIP</strong> archive containing any of those file types."); ?></p>
 <!--<p><em>Note:</em> When uploading archives, <strong>all</strong> images in the archive are added to the album, regardles of directory structure.</p>-->
 <p><?php echo gettext("The maximum size for any one file is"); ?> <strong><?php echo ini_get('upload_max_filesize'); ?>B</strong>.

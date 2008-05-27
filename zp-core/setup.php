@@ -257,7 +257,7 @@ label:hover {
 <div id="main">
 
 <h1><img src="images/zen-logo.gif" title="Zen Photo Setup"
-	align="absbottom" /> <?php echo $upgrade ? "Upgrade" : "Setup" ; ?></h1>
+	align="absbottom" /> <?php echo $upgrade ? gettext("Upgrade") : gettext("Setup") ; ?></h1>
 
 <div id="content">
 <?php
@@ -889,7 +889,7 @@ if (file_exists("zp-config.php")) {
 
 	if (isset($_GET['create']) || isset($_GET['update']) && db_connect()) {
 
-		echo "<h3>About to $task tables...</h3>";
+		echo "<h3>".gettext("About to ").$task.gettext("tables...")."</h3>";
 		setupLog("Zenphoto Setup v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE.']', true);
 		setupLog("Begin table creation");
 		foreach($db_schema as $sql) {
@@ -905,9 +905,9 @@ if (file_exists("zp-config.php")) {
 		foreach($sql_statements as $sql) {
 			$result = mysql_query($sql);
 			if (!$result) {
-				setupLog("MySQL Query"." ( $sql ) "."Failed. Error: ".mysql_error());
+				setupLog("MySQL Query"." ( $sql ) ".gettext("Failed. Error: ").mysql_error());
 			} else {
-				setupLog("MySQL Query"." ( $sql ) "."Success.");
+				setupLog("MySQL Query"." ( $sql ) ".gettext("Success."));
 			}
 		}
 
@@ -923,7 +923,7 @@ if (file_exists("zp-config.php")) {
 			@unlink($path);
 		}
 
-		echo "<h3>".gettext("Done with table $task!")."</h3>";
+		echo "<h3>".gettext("Done with table ").$task."!</h3>";
 
 		$rsd = getOption('admin_reset_date');
 		if (empty($rsd)) {

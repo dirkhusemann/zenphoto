@@ -150,10 +150,10 @@ echo "\n</form>";
 echo "\n<td>";
 echo "\n<td valign='top'><p>".
 gettext('To delete tags from the gallery, place a checkmark in the box for each tag you wish to delete then press the <em>').
-gettext("delete checked tags").'</em> '.gettext("button").'".'.
+gettext("delete checked tags").'</em> '.gettext("button").'.'.
 			"</p><p>".
 gettext('To change the value of a tag enter a new value for the tag in the text box in front of the tag. Then press the <em>').
-gettext("rename tags").'</em> '.gettext("button").'".'.
+gettext("rename tags").'</em> '.gettext("button").'.'.
 			"</p></td>";
 echo "\n</tr>";
 echo "\n</table>";
