@@ -2525,8 +2525,8 @@ function getRandomImagesAlbum($rootAlbum=null) {
 function printRandomImages($number=5, $class=null, $option='all', $rootAlbum='') {
 	if (!is_null($class)) {
 		$class = ' class="' . $class . '"';
-		echo "<ul".$class.">";
 	}
+	echo "<ul".$class.">";
 	for ($i=1; $i<=$number; $i++) {
 		echo "<li>\n";
 		switch($option) {

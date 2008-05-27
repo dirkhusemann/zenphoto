@@ -128,7 +128,6 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
 			echo "<h3><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . $tempalbum->getTitle() . "\">\n";
 			echo $tempalbum->getTitle()."</a></h3>\n";
 		}
-		echo "<div>";
 		if($showdate) {
 			if($option === "latestupdated") {
 				$filechangedate = filectime(getAlbumFolder().$tempalbum->name);
@@ -150,7 +149,7 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
 		if($showdesc) {
 			echo "<p>".my_truncate_string($tempalbum->getDesc(), $desclength)."</p>";
 		}
-		echo "</div></li>";
+		echo "</li>";
 }
 
 /**
@@ -307,7 +306,7 @@ function printImageStatistic($number, $option, $album='', $showtitle=false, $sho
 		echo "<li><a href=\"" . $image->getImageLink() . "\" title=\"" . htmlspecialchars($image->getTitle(), ENT_QUOTES) . "\">\n";
 		echo "<img src=\"" . $image->getThumb() . "\"  alt=\"" . htmlspecialchars($image->getTitle(),ENT_QUOTES) . "\" /></a>\n";
 		if($showtitle) {
-			echo "<h3><div><a href=\"".pathurlencode($image->name)."\" title=\"" . $image->getTitle() . "\">\n";
+			echo "<h3><a href=\"".pathurlencode($image->name)."\" title=\"" . $image->getTitle() . "\">\n";
 			echo $image->getTitle()."</a></h3>\n";
 		}
 		if($showdate) {
@@ -317,7 +316,7 @@ function printImageStatistic($number, $option, $album='', $showtitle=false, $sho
 			echo "<p>".my_truncate_string($image->getDesc(), $desclength)."</p>";
 		}
 	}
-	echo "</div></li>";
+	echo "</li>";
 	echo "</ul></div>\n";
 }
 
