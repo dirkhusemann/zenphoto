@@ -1,4 +1,4 @@
-<?php
+<?php header ('Content-Type: text/html; charset=UTF-8');
 header ('Content-Type: text/html; charset=UTF-8');
 define('HTACCESS_VERSION', '1.1.6.0');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
 define('CHMOD_VALUE', 0777);
@@ -312,7 +312,7 @@ if (!$checked) {
 		$f = '';
 		if (!is_dir($path)) {
 			$e = '';
-			if (!$external) $d = " ".gettext("and ")."<strong>setup</strong> ".gettext("could not create it");
+			if (!$external) $d = " ".gettext("and <strong>setup</strong> could not create it");
 			$sfx = " [<em>$append</em> ".gettext("does not exist")."$d]";
 			$msg = " ".gettext("You must create the folder")." $folder. <code>mkdir($path, 0777)</code>.";
 		} else if (!is_writable($path)) {
@@ -324,7 +324,7 @@ if (!$checked) {
 			$f = " (<em>$append</em>)";
 		}
 
-		return checkMark(is_dir($path) && is_writable($path), " <em>$which</em> folder$f", $sfx, $msg);
+		return checkMark(is_dir($path) && is_writable($path), " <em>$which</em>".gettext(" folder").$f, $sfx, $msg);
 	}
 	function versionCheck($required, $found) {
 		$nr = explode(".", $required . '.0.0.0');
@@ -338,7 +338,7 @@ if (!$checked) {
 
 	$required = '4.1.0';
 	$phpv = phpversion();
-	$good = checkMark(versionCheck($required, $phpv), " ".gettext("PHP version")." $phpv", "", gettext("Version $required or greater is required.")) && $good;
+	$good = checkMark(versionCheck($required, $phpv), " ".gettext("PHP version")." $phpv", "", gettext("Version ").$required.gettext(" or greater is required.")) && $good;
 
 	if (ini_get('safe_mode')) {
 		$safe = -1;
@@ -464,7 +464,7 @@ if ($debug) {
 	}
 	$good = checkMark($connection, gettext(" connect to MySQL"), '', gettext("Could not connect to the <strong>MySQL</strong> server. Check the <code>user</code>, <code>password</code>, and <code>database host</code> in your <code>zp-config.php</code> file and try again. ")) && $good;
 	if ($connection) {
-		$good = checkMark($sqlv, gettext(" MySQL version $mysqlv"), "", gettext("Version $required or greater is required")) && $good;
+		$good = checkMark($sqlv, gettext(" MySQL version ").$mysqlv, "", gettext("Version ").$required.gettext(" or greater is required")) && $good;
 		$good = checkMark($db, gettext(" connect to the database <code>") . $_zp_conf_vars['mysql_database'] . "</code>", '',
 			gettext("Could not access the <strong>MySQL</strong> database")." (<code>" . $_zp_conf_vars['mysql_database'] ."</code>). ".gettext("Check the <code>user</code>, <code>password</code>, and <code>database name</code> and try again. ") .
 			gettext("Make sure the database has been created, and the <code>user</code> has access to it. ") .
@@ -508,7 +508,7 @@ if ($debug) {
 				$tableslist .= "<code>" . $row[0] . "</code>, ";
 			}
 		}
-		if (!empty($tableslist)) { $tableslist = " found " . substr($tableslist, 0, -2); }
+		if (!empty($tableslist)) { $tableslist = gettext(" found ") . substr($tableslist, 0, -2); }
 		if (!$result) { $result = -1; }
 		$dbn = $_zp_conf_vars['mysql_database'];
 		checkMark($result, gettext(" MySQL <em>show tables</em>")."$tableslist", gettext(" [Failed]"), gettext("MySQL did not return a list of the database tables for <code>$dbn</code>.") .
