@@ -89,7 +89,7 @@ function printSubalbumAdmin($text, $before='', $after='') {
  * @since 1.1
  */
 function printAdminToolbox($context=null, $id='admin') {
-	global $_zp_current_album, $_zp_current_image, $_zp_current_search, $_zp_loggedin;
+	global $_zp_current_album, $_zp_current_image, $_zp_current_search, $_zp_loggedin, $_zen_gallery_page;
 	if (zp_loggedin()) {
 		$zf = WEBPATH."/".ZENFOLDER;
 		$dataid = $id . '_data';
@@ -101,7 +101,7 @@ function printAdminToolbox($context=null, $id='admin') {
 		echo '<div id="' .$dataid. '" style="display: none;">'."\n";
 		printAdminLink(gettext('Admin'), '', "<br />\n");
 		$albumname = $_zp_current_album->name;
-		if ($context === ZP_INDEX) {
+		if ($_zen_gallery_page === 'index.php') {
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				printSortableGalleryLink(gettext('Sort gallery'), gettext('Manual sorting'));
 				echo "<br />\n";
@@ -114,7 +114,7 @@ function printAdminToolbox($context=null, $id='admin') {
 				$redirect = "&amp;p=" . $_GET['p'];
 			}
 			$redirect .= "&amp;page=$page";
-		} else if (!in_context(ZP_IMAGE)  && (!is_null($_zp_current_album))) {  // then it must be an album page
+		} else if ($_zen_gallery_page === 'album.php') {  
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				printSubalbumAdmin(gettext('Edit album'), '', "<br />\n");
 				if (!$_zp_current_album->isDynamic()) {
@@ -131,7 +131,7 @@ function printAdminToolbox($context=null, $id='admin') {
 				echo "<br />\n";
 			}
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;page=$page";
-		} else if (in_context(ZP_IMAGE)) {
+		} else if ($_zen_gallery_page === 'image.php') {
 			$imagename = urlencode($_zp_current_image->filename);
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				echo "<a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?page=edit&action=deleteimage&album=" .
@@ -139,7 +139,7 @@ function printAdminToolbox($context=null, $id='admin') {
 				echo "<br />\n";
 			}
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=$imagename";
-		} else if (in_context(ZP_SEARCH)&& !empty($_zp_current_search->words)) {
+		} else if (($_zen_gallery_page === 'search.php')&& !empty($_zp_current_search->words)) {
 			if ($_zp_loggedin & UPLOAD_RIGHTS) {
 				echo "<a href=\"".$zf."/dynamic.php\" title=\"".gettext("Create an album from the search")."\">".gettext("Create Album")."</a><br/>";
 			}

@@ -1,7 +1,8 @@
-<?php header ('Content-Type: text/html; charset=UTF-8');
+<?php 
 header ('Content-Type: text/html; charset=UTF-8');
 define('HTACCESS_VERSION', '1.1.6.0');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
 define('CHMOD_VALUE', 0777);
+$taskDisplay = array('create' => gettext("create"), 'update' => gettext("update"));
 $checked = isset($_GET['checked']);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 if (!defined('PLUGIN_FOLDER')) { define('PLUGIN_FOLDER', '/plugins/'); }
@@ -508,7 +509,7 @@ if ($debug) {
 				$tableslist .= "<code>" . $row[0] . "</code>, ";
 			}
 		}
-		if (!empty($tableslist)) { $tableslist = gettext(" found ") . substr($tableslist, 0, -2); }
+		if (!empty($tableslist)) { $tableslist = ' '.gettext("found").' '.substr($tableslist, 0, -2); }
 		if (!$result) { $result = -1; }
 		$dbn = $_zp_conf_vars['mysql_database'];
 		checkMark($result, gettext(" MySQL <em>show tables</em>")."$tableslist", gettext(" [Failed]"), gettext("MySQL did not return a list of the database tables for <code>$dbn</code>.") .
@@ -888,8 +889,7 @@ if (file_exists("zp-config.php")) {
 	 ***************************************************************************************/
 
 	if (isset($_GET['create']) || isset($_GET['update']) && db_connect()) {
-
-		echo "<h3>".gettext("About to ").$task.gettext("tables...")."</h3>";
+		echo "<h3>".gettext("About to").' '.$taskDisplay[substr($task,0,8)].' '.gettext("tables...")."</h3>";
 		setupLog("Zenphoto Setup v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE.']', true);
 		setupLog("Begin table creation");
 		foreach($db_schema as $sql) {
@@ -923,7 +923,7 @@ if (file_exists("zp-config.php")) {
 			@unlink($path);
 		}
 
-		echo "<h3>".gettext("Done with table ").$task."!</h3>";
+		echo "<h3>".gettext("Done with table").' '.$taskDisplay[substr($task,0,8)]."!</h3>";
 
 		$rsd = getOption('admin_reset_date');
 		if (empty($rsd)) {

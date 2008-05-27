@@ -235,14 +235,14 @@ function printLoginForm($redirect=null, $logo=true) {
 	if (count(getAdminEmail()) > 0) {
 		$captchaCode = generateCaptcha($img);
 		echo "\n      <tr><td></td><td>";
-		echo "\n      ".gettext("Enter ");
+		echo "\n      ".gettext("Enter").' ';
 		echo "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/>" .
  								"<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"absbottom\"/></label> ";
 		echo gettext(" to request a reset.");
 		//		echo "      <input type=\"text\" id=\"code\" name=\"code\" size=\"4\" class=\"inputbox\" />";
 		echo "      </td></tr>";
 	}
-	echo "\n      <tr><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"Log in\" /></td></tr>";
+	echo "\n      <tr><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"".gettext("Log in")."\" /></td></tr>";
 	echo "\n    </table>";
 	echo "\n  </form>";
 	echo "\n  </div>";
