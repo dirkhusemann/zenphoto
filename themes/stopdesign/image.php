@@ -122,7 +122,9 @@
 							<table cellspacing="0">
 								<tr valign="top" align="left" id="row-name">
 									<th><label for="name"><?php echo gettext('Name'); ?>:</label></th>
-									<td><input tabindex="1" id="name" name="name" class="text" value="<?php echo $stored[0];?>" /></td>
+									<td><input tabindex="1" id="name" name="name" class="text" value="<?php echo $stored[0];?>" />
+										(<input type="checkbox" name="anon" value="1"<?php if ($stored[6]) echo " CHECKED"; ?> /> <?php echo gettext("Not public"); ?>)
+									</td>
 								</tr>
 								<tr valign="top" align="left" id="row-email">
 									<th><label for="email"><?php echo gettext('Email'); ?>:</label></th>
@@ -133,6 +135,10 @@
 									<td><input tabindex="3" type="text" name="website" id="website" class="text" value="<?php echo $stored[2];?>" /></td>
 								</tr>
 								<?php printCaptcha("<tr valign=\"top\" align=\"left\"><th><label for=\"captcha\">" .gettext('Enter Captcha'), ":</label></th><td>", "</td></tr>\n", 8); ?>
+								<tr valign="top" align="left">
+									<th><label for="private"><?php echo gettext('Private comment'); ?>:</label></th>
+									<td><input type="checkbox" name="private" value="1"<?php if ($stored['5']) echo " CHECKED"; ?> /> <?php echo gettext("Comment is for album administrator only."); ?></td>								
+								</tr>
 								<tr valign="top" align="left">
 									<th><label for="comment"><?php echo gettext('Comment'); ?>:</label></th>
 									<td><textarea tabindex="4" id="comment" name="comment" rows="10" cols="40"><?php echo $stored[3]; ?></textarea></td>

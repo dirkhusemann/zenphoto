@@ -1412,6 +1412,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 			href="?page=comments<?php echo $viewall ? "&viewall":""; ?>"><?php echo gettext("View truncated"); ?></a>)<?php } ?></th>
 		<th><?php echo gettext("E-Mail"); ?></th>
 		<th><?php echo gettext("IP address"); ?></th>
+		<th><?php echo gettext("Show"); ?></th>
 		<th><?php echo gettext("Spam"); ?></th>
 		<th><?php echo gettext("Edit"); ?></th>
 		<th><?php echo gettext("Delete"); ?>
@@ -1461,6 +1462,8 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		$shortcomment = truncate_string($comment['comment'], 123);
 		$fullcomment = $comment['comment'];
 		$inmoderation = $comment['inmoderation'];
+		$private = $comment['private'];
+		$anon = $comment['anon'];
 		?>
 
 	<tr>
@@ -1468,13 +1471,27 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 			onClick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" /></td>
 		<td style="font-size: 7pt;"><?php echo "<a href=\"" . (getOption("mod_rewrite") ? "../$album/$image" : "../index.php?album=".urlencode($album).
 											"&image=".urlencode($image)) . "\">$albumtitle $title</a>"; ?></td>
-		<td><?php echo $website ? "<a href=\"$website\">$author</a>" : $author; ?></td>
+		<td>
+		<?php 
+		echo $website ? "<a href=\"$website\">$author</a>" : $author; 
+		if ($anon) {
+			echo ' <a><img src="images/action.png" style="border: 0px;" alt='. gettext("Anonymous").' /></a>';
+		}
+		?>
+		</td>
 		<td style="font-size: 7pt;"><?php echo $date; ?></td>
 		<td><?php echo ($fulltext) ? $fullcomment : $shortcomment; ?></td>
 		<td align="center"><a
 			href="mailto:<?php echo $email; ?>?body=<?php echo commentReply($fullcomment, $author, $image, $albumtitle); ?>">
 		<img src="images/envelope.png" style="border: 0px;" alt="Reply" /></a></td>
 		<td><?php echo $comment['ip']; ?></td>
+		<td align="center">
+			<?php 
+			if($private) {
+				echo '<a><img src="images/reset.png" style="border: 0px;" alt='. gettext("Private").' /></a>';
+			} 
+			?>
+		</td>
 		<td align="center"><?php
 		if ($inmoderation) {
 			echo "<a href=\"?action=moderation&id=" . $id . "\">";
@@ -1491,7 +1508,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 	</tr>
 	<?php } ?>
 	<tr>
-		<td colspan="9" class="subhead"><label><input type="checkbox"
+		<td colspan="11" class="subhead"><label><input type="checkbox"
 			name="allbox" onClick="checkAll(this.form, 'ids[]', this.checked);" />
 		<?php echo gettext("Check All"); ?></label></td>
 	</tr>

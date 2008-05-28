@@ -899,9 +899,14 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `dynamic` int(1) UNSIGNED default '0'";
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `search_params` text default NULL";
 	
-	//1v1.1.6
+	//v1.1.6
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `album_theme` text default NULL";
 	$sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `IP` text default NULL";
+	
+	//v1.2
+	$sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `private` int(1) UNSIGNED default 0";
+	$sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `anon` int(1) UNSIGNED default 0";
+	
 	
 	/**************************************************************************************
 	 ******                            END of UPGRADE SECTION                                                           ******
@@ -911,7 +916,7 @@ if (file_exists("zp-config.php")) {
 	 ***************************************************************************************/
 
 	if (isset($_GET['create']) || isset($_GET['update']) && db_connect()) {
-		echo "<h3>".gettext("About to").' '.$taskDisplay[substr($task,0,8)].' '.gettext("tables...")."</h3>";
+		echo "<h3>".gettext("About to").' '.$taskDisplay[substr($task,0,8)].' '.gettext("tables")."...</h3>";
 		setupLog("Zenphoto Setup v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE.']', true);
 		setupLog("Begin table creation");
 		foreach($db_schema as $sql) {
@@ -1024,20 +1029,21 @@ if (file_exists("zp-config.php")) {
 ?>
 </div>
 <?php
-echo "\n<div$class>\n";
-echo '<form action="#'.$action.'" method="post">'."\n";
-if ($debug) {
-	echo '<input type="hidden" name="debug" />';
+if (!isset($_GET['create']) && !isset($_GET['update'])) {
+	echo "\n<div$class>\n";
+	echo '<form action="#'.$action.'" method="post">'."\n";
+	if ($debug) {
+		echo '<input type="hidden" name="debug" />';
+	}
+	echo gettext("Select a language:").' ';
+	echo '<select id="dynamic-locale" name="dynamic-locale" onchange="this.form.submit()">'."\n";
+	generateLanguageOptionList();
+	echo "</select>\n";
+	echo "</form>\n";
+	echo "</div>\n";
 }
-echo gettext("Select a language:").' ';
-echo '<select id="dynamic-locale" name="dynamic-locale" onchange="this.form.submit()">'."\n";
-generateLanguageOptionList();
-echo "</select>\n";
-echo "</form>\n";
-echo "</div>\n";
 printAdminFooter();
-?>
-</div>
+?></div>
 </body>
 </html>
 

@@ -2154,6 +2154,9 @@ function next_comment() {
 		return false;
 	} else {
 		$_zp_current_comment = array_shift($_zp_comments);
+		if ($_zp_current_comment['anon']) {
+			$_zp_current_comment['name'] = '<'.gettext("Anonymous").'>';
+		}
 		return true;
 	}
 }

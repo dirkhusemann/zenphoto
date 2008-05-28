@@ -1367,9 +1367,11 @@ function isValidURL($url) {
  * @param string $type 'albums' if it is an album or 'images' if it is an image comment
  * @param object $receiver the object (image or album) to which to post the comment
  * @param string $ip the IP address of the comment poster
+ * @param bool $private set to true if the comment is for the admin only
+ * @param bool $anon set to true if the poster wishes to remain anonymous 
  * @return int
  */
-function postComment($name, $email, $website, $comment, $code, $code_ok, $receiver, $ip) {
+function postComment($name, $email, $website, $comment, $code, $code_ok, $receiver, $ip, $private, $anon) {
 	if (strtolower(get_class($receiver)) == 'image') {
 		$type = 'images';
 	} else {
@@ -1413,9 +1415,11 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		} else {
 			$moderate = 0;
 		}
-
+		if ($private) $private = 1; else $private = 0;
+		if ($anon) $anon = 1; else $anon = 0;
+		
 		// Update the database entry with the new comment
-		query("INSERT INTO " . prefix("comments") . " (`ownerid`, `name`, `email`, `website`, `comment`, `inmoderation`, `date`, `type`, `ip`) VALUES " .
+		query("INSERT INTO " . prefix("comments") . " (`ownerid`, `name`, `email`, `website`, `comment`, `inmoderation`, `date`, `type`, `ip`, `private`, `anon`) VALUES " .
 						" ('" . $receiver->id .
 						"', '" . escape($name) . 
 						"', '" . escape($email) . 
@@ -1424,7 +1428,9 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 						"', '" . $moderate . 
 						"', NOW()" .
 						", '$type'" .
-						", '$ip')");
+						", '$ip'" .
+						", '$private'" .
+						", '$anon')");
 
 		if ($moderate) {
 			$action = "placed in moderation";

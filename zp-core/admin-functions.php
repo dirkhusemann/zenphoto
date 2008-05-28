@@ -1140,7 +1140,7 @@ function fetchComments($number) {
 	$comments = array();
 	if ($_zp_loggedin & ADMIN_RIGHTS) {
 		$sql = "SELECT `id`, `name`, `website`, `type`, `ownerid`,"
-		. " (date + 0) AS date, `comment`, `email`, `inmoderation`, `ip` FROM ".prefix('comments')
+		. " (date + 0) AS date, `comment`, `email`, `inmoderation`, `ip`, `private`, `anon` FROM ".prefix('comments')
 		. " ORDER BY id DESC$limit";
 		$comments = query_full_array($sql);
 	} else  if ($_zp_loggedin & COMMENT_RIGHTS) {

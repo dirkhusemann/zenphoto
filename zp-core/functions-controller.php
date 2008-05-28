@@ -155,7 +155,8 @@ function zp_handle_comment() {
 	 				$commentadded = $activeImage->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']),
 	 													$website, kses($_POST['comment'], $allowed),
 	 													strip_tags($_POST['code']), $_POST['code_h'],
-	 													sanitize($_SERVER['REMOTE_ADDR']));
+	 													sanitize($_SERVER['REMOTE_ADDR']), $_POST['private'],
+	 													$_POST['anon']);
 	 				$redirectTo = $activeImage->getImageLink(); 
 					}
 			} else {
@@ -169,13 +170,14 @@ function zp_handle_comment() {
 				$commentadded = $commentobject->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']),
 													$website, kses($_POST['comment'], $allowed),
 													strip_tags($_POST['code']), $_POST['code_h'], 
-													sanitize($_SERVER['REMOTE_ADDR']));
+													sanitize($_SERVER['REMOTE_ADDR']), $_POST['private'],
+													$_POST['anon']);
 			}
 			if ($commentadded == 2) {
 				unset($_zp_comment_error);
 				if (isset($_POST['remember'])) {
 					// Should always re-cookie to update info in case it's changed...
-					$info = array(strip($_POST['name']), strip($_POST['email']), strip($website));
+					$info = array(strip($_POST['name']), strip($_POST['email']), strip($website), false, strip($_POST['private']), strip($_POST['anon']));
 					zp_setcookie('zenphoto', implode('|~*~|', $info), time()+5184000, '/');
 				} else {
 					zp_setcookie('zenphoto', '', time()-368000, '/');
@@ -184,7 +186,7 @@ function zp_handle_comment() {
 				header('Location: ' . $redirectTo);
 				exit();
 			} else {
-				$stored = array($_POST['name'], $_POST['email'], $website, $_POST['comment'], false);
+				$stored = array($_POST['name'], $_POST['email'], $website, $_POST['comment'], false, $_POST['private'], $_POST['anon']);
 				if (isset($_POST['remember'])) $stored[4] = true;
 				$_zp_comment_error = 1 + $commentadded;
 				if ($activeImage !== false) { // tricasa hack? Set the context to the image on which the comment was posted
@@ -199,7 +201,7 @@ function zp_handle_comment() {
 		$stored = explode('|~*~|', stripslashes($cookie)); 
 		$stored[4] = true;
 	} else {
-		$stored = array('','','', '', false);
+		$stored = array('','','', '', false, false, false);
 	}
 	return $_zp_comment_error;
 }

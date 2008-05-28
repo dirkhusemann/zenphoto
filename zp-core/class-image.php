@@ -515,13 +515,17 @@ class Image extends PersistentObject {
 	 * Returns an array of comments
 	 *
 	 * @param bool $moderated if false, comments in moderation are ignored
+	 * @param bool $private if false ignores private comments
 	 * @return array
 	 */
-	function getComments($moderated=false) {
+	function getComments($moderated=false, $private=false) {
 		$sql = "SELECT *, (date + 0) AS date FROM " . prefix("comments") .
  			" WHERE `type`='images' AND `ownerid`='" . $this->id . "'";
 		if (!$moderated) {
 			$sql .= " AND `inmoderation`=0";
+		}
+		if (!$private) {
+			$sql .= " AND `private`=0";
 		}
 		$sql .= " ORDER BY id";
 		$comments = query_full_array($sql);
@@ -545,10 +549,12 @@ class Image extends PersistentObject {
 	 * @param string $code Captcha code entered
 	 * @param string $code_ok Captcha md5 expected
 	 * @param string $ip the IP address of the comment poster
+	 * @param bool $private set to true if the comment is for the admin only
+	 * @param bool $anon set to true if the poster wishes to remain anonymous
 	 * @return int
 	 */
-	function addComment($name, $email, $website, $comment, $code, $code_ok, $ip) {
-		$goodMessage = postComment($name, $email, $website, $comment, $code, $code_ok, $this, $ip);
+	function addComment($name, $email, $website, $comment, $code, $code_ok, $ip, $private, $anon) {
+		$goodMessage = postComment($name, $email, $website, $comment, $code, $code_ok, $this, $ip, $private, $anon);
 		return $goodMessage;
 	}
 
@@ -560,7 +566,7 @@ class Image extends PersistentObject {
 	function getCommentCount() {
 		if (is_null($this->commentcount)) {
 			if ($this->comments == null) {
-				$count = query_single_row("SELECT COUNT(*) FROM " . prefix("comments") . " WHERE `type`='images' AND `inmoderation`=0 AND `ownerid`=" . $this->id);
+				$count = query_single_row("SELECT COUNT(*) FROM " . prefix("comments") . " WHERE `type`='images' AND `inmoderation`=0 AND `private`=0 AND `ownerid`=" . $this->id);
 				$this->commentcount = array_shift($count);
 			} else {
 				$this->commentcount = count($this->comments);
