@@ -7,7 +7,7 @@
 
 $plugin_description = gettext("Functions that provide various statistics about images and albums in the gallery.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.3';
+$plugin_version = '1.0.4';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---image_album_statistics.php.html";
 
 /**
@@ -82,11 +82,10 @@ function getAlbumStatistic($number=5, $option) {
 
 /**
  * Prints album statistic according to $option as an unordered HTML list
- * A css class is attached by default named '$option_album'
+ * A css id is attached by default named '$option_album'
  *
  * @param string $number the number of albums to get
  * @param string $option "popular" for the most popular albums,
- *                  "latest" for the latest uploaded,
  *                  "latest" for the latest uploaded,
  *                  "mostrated" for the most voted,
  *                  "toprated" for the best voted
@@ -95,8 +94,9 @@ function getAlbumStatistic($number=5, $option) {
  * @param bool $showdate if the album date should be shown
  * @param bool $showdesc if the album desc should be shown
  * @param integer $desclength the length of the desc to be shown
+ * @param bool $showstatistic true if the hitcounter (only for "popular"), the votes (only for "mostvoted") or the rating (only for "toprated") should be shown, false if not
  */
-function printAlbumStatistic($number, $option, $showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
+function printAlbumStatistic($number, $option, $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic=false) {
 	$albums = getAlbumStatistic($number, $option);
 	echo "\n<div id=\"".$option."_album\">\n";
 	$albumpath = rewrite_path("/", "index.php?album=");
@@ -118,14 +118,24 @@ function printAlbumStatistic($number, $option, $showtitle=false, $showdate=false
  * Not for standalone use.
  *
  * @param array $album the array that getAlbumsStatistic() submitted
+ * @param string $option "popular" for the most popular albums,
+ *                  "latest" for the latest uploaded,
+ *                  "mostrated" for the most voted,
+ *                  "toprated" for the best voted
+ * 									"latestupdated" for the latest updated
+ * @param bool $showtitle if the album title should be shown
+ * @param bool $showdate if the album date should be shown
+ * @param bool $showdesc if the album desc should be shown
+ * @param integer $desclength the length of the desc to be shown
+ * @param bool $showstatistic true if the hitcounter (only for "popular"), the votes (only for "mostvoted") or the rating (only for "toprated") should be shown, false if not
  */
-function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
+function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic=false) {
 	global $_zp_gallery;
 	$tempalbum = new Album($_zp_gallery, $album['folder']);
-		echo "<li><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . $tempalbum->getTitle() . "\">\n";
+		echo "<li><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . htmlspecialchars($tempalbum->getTitle()) . "\">\n";
 		echo "<img src=\"".$tempalbum->getAlbumThumb()."\"></a>\n<br />";
 		if($showtitle) {
-			echo "<h3><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . $tempalbum->getTitle() . "\">\n";
+			echo "<h3><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . htmlspecialchars($tempalbum->getTitle()) . "\">\n";
 			echo $tempalbum->getTitle()."</a></h3>\n";
 		}
 		if($showdate) {
@@ -146,6 +156,22 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
 				echo "<p>". zpFormattedDate(getOption('date_format'),strtotime($tempalbum->getDateTime()))."</p>";
 			}
 		}
+		if($showstatistic) {
+			switch($option) {
+				case "popular":
+					echo "<p>".gettext("Views: ").$tempalbum->get("hitcounter")."</p>";
+					break;
+				case "mostrated":
+					echo "<p>".gettext("Votes: ").$tempalbum->get("total_votes")."</p>";
+					break;
+				case "toprated":
+					$votes = $tempalbum->get("total_votes");
+					$value = $tempalbum->get("total_value");
+					$rating =  round($value/$votes, 1);
+					echo "<p>".gettext("Rating: ").$rating."</p>";
+					break;	
+			}
+		}
 		if($showdesc) {
 			echo "<p>".my_truncate_string($tempalbum->getDesc(), $desclength)."</p>";
 		}
@@ -160,9 +186,10 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
  * @param bool $showdate if the album date should be shown
  * @param bool $showdesc if the album desc should be shown
  * @param integer $desclength the length of the desc to be shown
+ * @param bool $showstatistic true if the hitcounter should be shown, false if not
  */
-function printPopularAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
-	printAlbumStatistic($number,"popular",$showtitle, $showdate, $showdesc, $desclength);
+function printPopularAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic=false) {
+	printAlbumStatistic($number,"popular",$showtitle, $showdate, $showdesc, $desclength,$showstatistic);
 }
 
 /**
@@ -186,9 +213,10 @@ function printLatestAlbums($number=5,$showtitle=false, $showdate=false, $showdes
  * @param bool $showdate if the album date should be shown
  * @param bool $showdesc if the album desc should be shown
  * @param integer $desclength the length of the desc to be shown
+ * @param bool $showstatistic true if the rating should be shown, false if not
  */
-function printMostRatedAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
-	printAlbumStatistic($number,"mostrated",$showtitle, $showdate, $showdesc, $desclength);
+function printMostRatedAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic=false) {
+	printAlbumStatistic($number,"mostrated",$showtitle, $showdate, $showdesc, $desclength,$showstatistic);
 }
 
 /**
@@ -199,9 +227,10 @@ function printMostRatedAlbums($number=5,$showtitle=false, $showdate=false, $show
  * @param bool $showdate if the album date should be shown
  * @param bool $showdesc if the album desc should be shown
  * @param integer $desclength the length of the desc to be shown
+ * @param bool $showstatistic true if the rating should be shown, false if not
  */
-function printTopRatedAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
-	printAlbumStatistic($number,"toprated",$showtitle, $showdate, $showdesc, $desclength);
+function printTopRatedAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic=false) {
+	printAlbumStatistic($number,"toprated",$showtitle, $showdate, $showdesc, $desclength,$showstatistic);
 }
 
 /**
@@ -222,7 +251,6 @@ function printLatestUpdatedAlbums($number=5,$showtitle=false, $showdate=false, $
  *
  * @param string $number the number of images to get
  * @param string $option "popular" for the most popular images,
- *                       "latest" for the latest uploaded,
  *                       "latest" for the latest uploaded,
  *                       "latest-date" for the latest uploaded, but fetched by date,
  *                       "mostrated" for the most voted,
@@ -283,12 +311,12 @@ function getImageStatistic($number, $option, $album='') {
 
 /**
  * Prints image statistic according to $option as an unordered HTML list
- * A css class is attached by default named accordingly'$option'
+ * A css id is attached by default named accordingly'$option'
  *
  * @param string $number the number of albums to get
  * @param string $option "popular" for the most popular images,
  *                       "latest" for the latest uploaded,
- *                       "latest" for the latest uploaded,
+ *                       "latest-date" for the latest uploaded, but fetched by date,
  *                       "mostrated" for the most voted,
  *                       "toprated" for the best voted
  * @param string $album title of an specific album
@@ -296,9 +324,10 @@ function getImageStatistic($number, $option, $album='') {
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image desc should be shown
  * @param integer $desclength the length of the desc to be shown
+ * @param bool $showstatistic true if the hitcounter (only for "popular"), the votes (only for "mostvoted") or the rating (only for "toprated") should be shown, false if not
  * @return string
  */
-function printImageStatistic($number, $option, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
+function printImageStatistic($number, $option, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic=false) {
 	$images = getImageStatistic($number, $option, $album);
 	echo "\n<div id=\"$option\">\n";
 	echo "<ul>";
@@ -306,11 +335,27 @@ function printImageStatistic($number, $option, $album='', $showtitle=false, $sho
 		echo "<li><a href=\"" . $image->getImageLink() . "\" title=\"" . htmlspecialchars($image->getTitle(), ENT_QUOTES) . "\">\n";
 		echo "<img src=\"" . $image->getThumb() . "\"  alt=\"" . htmlspecialchars($image->getTitle(),ENT_QUOTES) . "\" /></a>\n";
 		if($showtitle) {
-			echo "<h3><a href=\"".pathurlencode($image->name)."\" title=\"" . $image->getTitle() . "\">\n";
-			echo $image->getTitle()."</a></h3>\n";
+			echo "<h3><a href=\"".pathurlencode($image->name)."\" title=\"" . htmlspecialchars($image->getTitle(),ENT_QUOTES) . "\">\n";
+			echo htmlspecialchars($image->getTitle())."</a></h3>\n";
 		}
 		if($showdate) {
 			echo "<p>". zpFormattedDate(getOption('date_format'),strtotime($image->getDateTime()))."</p>";
+		}
+		if($showstatistic) {
+			switch($option) {
+				case "popular":
+					echo "<p>".gettext("Views: ").$image->get("hitcounter")."</p>";
+					break;
+				case "mostrated":
+					echo "<p>".gettext("Votes: ").$image->get("total_votes")."</p>";
+					break;
+				case "toprated":
+					$votes = $image->get("total_votes");
+					$value = $image->get("total_value");
+					$rating =  round($value/$votes, 1);
+					echo "<p>".gettext("Rating: ").$rating."</p>";
+					break;	
+			}
 		}
 		if($showdesc) {
 			echo "<p>".my_truncate_string($image->getDesc(), $desclength)."</p>";
@@ -329,8 +374,9 @@ function printImageStatistic($number, $option, $album='', $showtitle=false, $sho
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image desc should be shown
  * @param integer $desclength the length of the desc to be shown
+ * @param bool $showstatistic true if the hitcounter should be shown, false if not
  */
-function printPopularImages($number=5, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
+function printPopularImages($number=5, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic=false) {
 	printImageStatistic($number, "popular",$album, $showtitle, $showdate, $showdesc, $desclength);
 }
 
@@ -342,9 +388,10 @@ function printPopularImages($number=5, $album='', $showtitle=false, $showdate=fa
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image desc should be shown
  * @param integer $desclength the length of the desc to be shown
+ * @param bool $showstatistic true if the rating should be shown, false if not
  */
-function printTopRatedImages($number=5, $showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
-	printImageStatistic($number, "toprated", $showtitle, $showdate, $showdesc, $desclength);
+function printTopRatedImages($number=5, $album="", $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic=false) {
+	printImageStatistic($number, "toprated",$album, $showtitle, $showdate, $showdesc, $desclength);
 }
 
 
@@ -356,9 +403,10 @@ function printTopRatedImages($number=5, $showtitle=false, $showdate=false, $show
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image desc should be shown
  * @param integer $desclength the length of the desc to be shown 
+ * @param bool $showstatistic true if the total votes should be shown, false if not
  */
-function printMostRatedImages($number=5, $showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
-	printImageStatistic($number, "mostrated", $showtitle, $showdate, $showdesc, $desclength);
+function printMostRatedImages($number=5, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40, $showstatistic=false) {
+	printImageStatistic($number, "mostrated", $album, $showtitle, $showdate, $showdesc, $desclength);
 }
 
 /**
