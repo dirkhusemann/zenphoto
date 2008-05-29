@@ -4,6 +4,10 @@ define('ZENPHOTO_RELEASE', 1616);
 define('SAFE_GLOB', false);
 if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
+if(!function_exists("gettext")) {
+	// load the drop-in replacement library
+	require_once('lib-gettext/gettext.inc');
+}
 
 // Set the memory limit higher just in case -- supress errors if user doesn't have control.
 @ini_set('memory_limit','128M');
@@ -64,10 +68,6 @@ require_once('functions-i18n.php');
 
 getUserLocale();
 
-if(!function_exists("gettext")) {
-	// load the drop-in replacement library
-	require_once('lib-gettext/gettext.inc');
-}
 setupCurrentLocale();
 
 $session_started = getOption('album_session');

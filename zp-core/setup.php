@@ -2,6 +2,13 @@
 header ('Content-Type: text/html; charset=UTF-8');
 define('HTACCESS_VERSION', '1.1.6.0');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
 define('CHMOD_VALUE', 0777);
+if(!function_exists("gettext")) {
+	// load the drop-in replacement library
+	require_once('lib-gettext/gettext.inc');
+	$noxlate = -1;
+} else {
+	$noxlate = 1;
+}
 $taskDisplay = array('create' => gettext("create"), 'update' => gettext("update"));
 $checked = isset($_GET['checked']);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
@@ -11,13 +18,6 @@ $upgrade = false;
 $debug = isset($_GET['debug']);
 if (!$checked && !file_exists('zp-config.php')) {
 	@copy('zp-config.php.example', 'zp-config.php');
-}
-if(!function_exists("gettext")) {
-	// load the drop-in replacement library
-	require_once('lib-gettext/gettext.inc');
-	$noxlate = -1;
-} else {
-	$noxlate = 1;
 }
 function setupLog($message, $reset=false) {
   global $debug;
@@ -613,18 +613,20 @@ if ($debug) {
 		$dbmsg = "";
 	} else {
 		echo "<p>".gettext("You need to address the problems indicated above then run <code>setup.php</code> again.")."</p>";
-		echo "\n</div>";
-		echo "\n<div$class>\n";
-		echo '<form action="#'.$action.'" method="post">'."\n";
-		if ($debug) {
-			echo '<input type="hidden" name="debug" />';
+		if ($noxlate > 0) {
+			echo "\n</div>";
+			echo "\n<div$class>\n";
+			echo '<form action="#'.$action.'" method="post">'."\n";
+			if ($debug) {
+				echo '<input type="hidden" name="debug" />';
+			}
+			echo gettext("Select a language:").' ';
+			echo '<select id="dynamic-locale" name="dynamic-locale" onchange="this.form.submit()">'."\n";
+			generateLanguageOptionList();
+			echo "</select>\n";
+			echo "</form>\n";
+			echo "</div>\n";
 		}
-		echo gettext("Select a language:").' ';
-		echo '<select id="dynamic-locale" name="dynamic-locale" onchange="this.form.submit()">'."\n";
-		generateLanguageOptionList();
-		echo "</select>\n";
-		echo "</form>\n";
-		echo "</div>\n";
 		printadminfooter();
 		echo "</div>";
 		echo "</body>";
@@ -1029,7 +1031,7 @@ if (file_exists("zp-config.php")) {
 ?>
 </div>
 <?php
-if (!isset($_GET['create']) && !isset($_GET['update'])) {
+if (($noxlate > 0) && !isset($_GET['create']) && !isset($_GET['update'])) {
 	echo "\n<div$class>\n";
 	echo '<form action="#'.$action.'" method="post">'."\n";
 	if ($debug) {
