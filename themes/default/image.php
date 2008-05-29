@@ -94,7 +94,7 @@
 					<table border="0">
 						<tr>
 							<td><label for="name"><?php echo gettext("Name:"); ?></label>
-								(<input type="checkbox" name="anon" value="1"<?php if ($stored[6]) echo " CHECKED"; ?> /> <?php echo gettext("Not public"); ?>)
+								(<input type="checkbox" name="anon" value="1"<?php if ($stored[6]) echo " CHECKED"; ?> /> <?php echo gettext("not published."); ?>)
 							</td>
 							<td><input type="text" id="name" name="name" size="20" value="<?php echo $stored[0];?>" class="inputbox" />
 							</td>
@@ -115,7 +115,7 @@
  													<td><input type="text" id="code" name="code" size="20" class="inputbox" /><input type="hidden" name="code_h" value="<?php echo $captchaCode;?>"/></td>
  													</tr>
 												<?php } ?>
-							<tr><td colspan="2"><input type="checkbox" name="private" value="1"<?php if ($stored['5']) echo " CHECKED"; ?> /> <?php echo gettext("Comment is for album administrator only."); ?></td></tr>								
+							<tr><td colspan="2"><input type="checkbox" name="private" value="1"<?php if ($stored['5']) echo " CHECKED"; ?> /> <?php echo gettext("Private (not published.)"); ?></td></tr>								
 					</table>
 					<textarea name="comment" rows="6" cols="40"><?php echo $stored[3]; ?></textarea>
 					<br />

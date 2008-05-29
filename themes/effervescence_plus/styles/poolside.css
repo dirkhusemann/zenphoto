@@ -388,11 +388,7 @@ margin-top: 10px;
 }
 #commentbox input {
 font: 12px/22px Arial, Helvetica, Tahoma, Verdana, sans-serif;
-background: #fafaf9; /*Color of textbox when unfocused*/
-border-top: 1px solid #0E1433 ;
-border-left: 1px solid #0E1433 ;
-border-right: 1px solid #0E1433 ;
-border-bottom: 1px solid #0E1433 ;
+border: none;
 padding: 2px;
 color: #333333; /*Color of text in textbox*/
 }
@@ -414,7 +410,6 @@ width: 600px;
 #commentbox textarea:focus {
 background: #FFFFFF; /*Color of textarea when focused*/
 }
-
 
 /* Page Navigation
 ------------------------------ */

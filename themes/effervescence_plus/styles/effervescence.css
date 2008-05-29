@@ -359,11 +359,7 @@ body {
 }
 #commentbox input {
 	font: 12px/22px Arial, Helvetica, Tahoma, Verdana, sans-serif;
-	background: #fff;/*Color of textbox when unfocused*/
-	border-top: 1px solid #b1aea7;
-	border-right: 1px solid #b1aea7;
-	border-bottom: 1px solid #c4c2bb;
-	border-left: 1px solid #c4c2bb;
+	border: none;
 	padding: 2px;
 	color: #98958f;
 }

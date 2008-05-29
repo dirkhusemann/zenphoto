@@ -37,8 +37,8 @@ UL.pagelist LI.current A { background-color: #FF6600; color: #FFF; cursor: defau
 .commentmeta { color: #999; }
 .commentauthor { font-weight: bold; }
 .commentbody { margin: 5px 0px; line-height: 1.3em; }
-.imgcommentform INPUT { margin-top: 4px; border: 1px solid #eee; background-color: #f8f8f8; }
-.imgcommentform TEXTAREA { margin-top: 4px; font-family: Arial, helvetica, verdana, sans-serif; font-size: 10pt; border: 1px solid #eee;}
+.commentform INPUT { margin-top: 4px; border: none; }
+.commentform TEXTAREA { margin-top: 4px; font-family: Arial, helvetica, verdana, sans-serif; font-size: 10pt; border: 1px solid #eee;}
 .error { color: #C33; font-weight: bold; }
 #admin, #admin_data{position:fixed;right:0;top:0;border-left: 1px solid #E6E6DF;border-bottom: 1px solid #E6E6DF;background: #fff;width:120px;}
 #admin_data{top:15px;}
