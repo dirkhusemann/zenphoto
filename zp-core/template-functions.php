@@ -2871,7 +2871,10 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
 /**
  * Returns the RSS link for use in the HTML HEAD
  *
- * @param string $option type of RSS (Gallery, Album, Comments)
+ * @param string $option type of RSS: "Gallery" feed for the whole gallery 
+ * 																		"Album" for only the album it is called from 
+ * 																		"Collection" for the album it is called from and all of its subalbums
+ * 																		 "Comments" for all comments
  * @param string $linktext title of the link
  * 
  * @return string
@@ -2884,6 +2887,8 @@ function getRSSHeaderLink($option, $linktext) {
 			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss.php\" />\n";
 		case "Album":
 			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss.php?albumnr=".getAlbumId()."&amp;albumname=".urlencode(getAlbumTitle())."\" />\n";
+		case "Collection":
+			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss.php?albumname=".urlencode(getAlbumTitle())."&amp;folder=".urlencode($_zp_current_album->getFolder())."\" />\n";
 		case "Comments":
 			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss-comments.php\" />\n";
 	}
