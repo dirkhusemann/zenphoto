@@ -380,6 +380,12 @@ if (!$checked) {
 	                    "<br/>".gettext("To correct this you ").$mandate.gettext(" install GD with appropriate image support in your PHP"));
 		}
 	}
+
+	/* check to see if glob() works */
+	$list = safe_glob('*'.'php');
+	$gl = (count($list) > 0);
+	$good = checkMark($gl, gettext(" PHP <code>glob()</code> support"), gettext(' is disabled'), gettext('You need to set the define <code>SAFE_GLOB</code> to <code>true</code> in <code>functions.php</code>')) && $good;
+	
 	checkMark($noxlate, gettext("PHP <code>gettext()</code> support"), gettext(" [is not present]"), gettext("Localization of Zenphoto currently requires native PHP <code>gettext()</code> support"));
 	$sql = extension_loaded('mysql');
 	$good = checkMark($sql, gettext(" PHP MySQL support"), '', gettext('You need to install MySQL support in your PHP')) && $good;

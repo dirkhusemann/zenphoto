@@ -1568,7 +1568,13 @@ function debugLogBacktrace($message) {
  * @param bit $flags glob 'flags'
  */
 function safe_glob($pattern, $flags=0) {
-	if (!SAFE_GLOB) { return glob($pattern, $flags); }
+	if (!SAFE_GLOB) { 
+		$glob = glob($pattern, $flags); 
+		if (is_array($glob)) {
+			return $glob;
+		}
+		return Array();
+	}
 	$split=explode('/',$pattern);
 	$match=array_pop($split);
 	$path=implode('/',$split);
