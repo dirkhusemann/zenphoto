@@ -99,11 +99,10 @@ foreach ($comments as $comment) {
 ?>
 
 <item>
-<title><?php echo htmlspecialchars($albumtitle.$title." by ".$author); ?></title>
+<title><?php echo htmlspecialchars($albumtitle.$title." by ".$author, ENT_QUOTES); ?></title>
 <link><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$album.$imagetag.']]>';?></link>
-<dc:creator><?php echo htmlspecialchars($author); ?></dc:creator>
-<description><?php echo htmlspecialchars($shortcomment); ?></description>
-<category><?php echo htmlspecialchars($albumtitle); ?></category>
+<description><?php echo htmlspecialchars($shortcomment, ENT_QUOTES); ?></description>
+<category><?php echo htmlspecialchars($albumtitle, ENT_QUOTES); ?></category>
 <guid><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$album.$imagetag.']]>';?></guid>
 <pubDate><?php echo fixRSSDate($date); ?></pubDate>
 </item>

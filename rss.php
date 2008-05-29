@@ -91,9 +91,9 @@ foreach ($result as $images) {
 	$images['folder'] = implode('/', $imagpathnames);
 	$images['filename'] = rawurlencode($images['filename']);
 	$ext = strtolower(strrchr($images['filename'], "."));
-	$images['title'] = htmlspecialchars($images['title']);
-	$images['albumtitle'] = htmlspecialchars($images['albumtitle']);
-	$images['desc'] = htmlspecialchars($images['desc']);
+	$images['title'] = htmlspecialchars($images['title'], ENT_QUOTES);
+	$images['albumtitle'] = htmlspecialchars($images['albumtitle'], ENT_QUOTES);
+	$images['desc'] = htmlspecialchars($images['desc'], ENT_QUOTES);
 ?>
 <item>
 	<title><?php echo $images['title']." (".$images['albumtitle'].")"; ?></title>
