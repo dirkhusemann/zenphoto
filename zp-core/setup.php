@@ -9,7 +9,7 @@ if(!function_exists("gettext")) {
 } else {
 	$noxlate = 1;
 }
-$taskDisplay = array('create' => gettext("create"), 'update' => gettext("update"));
+
 $checked = isset($_GET['checked']);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 if (!defined('PLUGIN_FOLDER')) { define('PLUGIN_FOLDER', '/plugins/'); }
@@ -86,6 +86,7 @@ if (!$connection) { // setup a primitive environment
 }
 getUserLocale();
 setupCurrentLocale();
+$taskDisplay = array('create' => gettext("create"), 'update' => gettext("update"));
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-transitional.dtd">
