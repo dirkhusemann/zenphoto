@@ -122,7 +122,7 @@ function printAdminToolbox($context=null, $id='admin') {
 					echo "<br />\n";
 				}
 				echo "<a href=\"javascript: confirmDeleteAlbum('".$zf."/admin.php?page=edit&action=deletealbum&album=" .
-				urlencode($albumname) . "');\" title=\"".gettext("Delete the album")."\">".gettext("Delete album")."</a><br />\n";
+				urlencode($albumname) . "','".urlencode($albumname)."');\" title=\"".gettext("Delete the album")."\">".gettext("Delete album")."</a><br />\n";
 			}
 			if (isMyAlbum($albumname, UPLOAD_RIGHTS) && !$_zp_current_album->isDynamic()) {
 				printLink($zf . '/admin.php?page=upload&album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL);
@@ -135,7 +135,7 @@ function printAdminToolbox($context=null, $id='admin') {
 			$imagename = urlencode($_zp_current_image->filename);
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				echo "<a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?page=edit&action=deleteimage&album=" .
-				urlencode($albumname) . "&image=". urlencode($imagename) . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
+				urlencode($albumname) . "&image=". urlencode($imagename) . "','". urlencode($imagename) . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
 				echo "<br />\n";
 			}
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=$imagename";
