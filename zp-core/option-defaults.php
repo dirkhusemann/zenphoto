@@ -9,8 +9,11 @@ function setDefault($option, $default) {
 	setOptionDefault($option, $v); 
 }
 	require('zp-config.php');
-
-	global $_zp_conf_vars, $_zp_options;
+	
+	//clear out old admin user and cleartext password
+	unset($_zp_conf_vars['adminuser']);
+	unset($_zp_conf_vars['adminpass']);
+	
 	$conf = $_zp_conf_vars;
 	
 	setOption('zenphoto_release', ZENPHOTO_RELEASE); 
