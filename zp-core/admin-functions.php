@@ -321,7 +321,7 @@ function printTabs() {
 	}
 	if (($_zp_loggedin & ADMIN_RIGHTS) && getoption('zp_plugin_zenpage')) {
 		echo "\n    <li". ($page == "zenpage" ? " class=\"current\""     : "") .
- 				"><a href=\"plugins/zenpage/page-admin.php?page=zenpage\">zenPage</a></li>";
+ 				"><a href=\"plugins/zenpage/page-admin.php\">zenPage</a></li>";
 	}	
 	echo "\n  </ul>";
 
