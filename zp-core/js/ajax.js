@@ -1,4 +1,8 @@
 
+// Fallback for i18n not loaded.
+if (!zpstrings) {
+	zpstrings = {};
+}
 
 // Get the element's style (computed) for the attribute given.
 function getStyle(element, attribute) { 
@@ -39,8 +43,8 @@ function stripSlashes(text) {
 // Makes a DIV into an editable Title field. 
 function initEditableTitle(divID) {
   var div = document.getElementById(divID);
-  div.blankMessage = "Click to add a title...";
-  div.editMessage = "Click to edit title...";
+  div.blankMessage = zpstrings.ClickToAddATitle;
+  div.editMessage = zpstrings.ClickToEditTitle;
     
   div.saveChanges = function(form) {
     var formDiv = form.parentNode;
@@ -66,8 +70,8 @@ function initEditableTitle(divID) {
 // Makes a DIV into an editable Tags field. 
 function initEditableTags(divID) {
   var div = document.getElementById(divID);
-  div.blankMessage = "Click to add tags...";
-  div.editMessage = "Click to edit tags...";
+  div.blankMessage = zpstrings.ClickToAddTags;
+  div.editMessage = zpstrings.ClickToEditTags;
     
   div.saveChanges = function(form) {
     var formDiv = form.parentNode;
@@ -93,8 +97,8 @@ function initEditableTags(divID) {
 // Makes a DIV into an editable Description field.
 function initEditableDesc(divID) {
   var div = document.getElementById(divID);
-  div.blankMessage = "Click to add a description...";
-  div.editMessage = "Click to edit description...";
+  div.blankMessage = zpstrings.ClickToAddADescription;
+  div.editMessage = zpstrings.ClickToEditDescription;
 
   
   div.saveChanges = function(form) {
@@ -191,7 +195,7 @@ function initEditableDiv(divID) {
     
     var formHTML = '<form onsubmit="this.content.blur(); this.parentNode.displayDiv.saveChanges(this); return false;">';
     formHTML += this.getInputField();
-    formHTML += ' <input type="submit" value="save" \/>&nbsp;<input type="button" value="cancel" onclick="this.form.parentNode.displayDiv.stopEditing(); return false;" \/><\/form>';
+    formHTML += ' <input type="submit" value="'+zpstrings.Save+'" \/>&nbsp;<input type="button" value="'+zpstrings.Cancel+'" onclick="this.form.parentNode.displayDiv.stopEditing(); return false;" \/><\/form>';
     this.formDiv.innerHTML = formHTML;
     this.formDiv.form = this.formDiv.firstChild;
     this.formDiv.form.style.display = this.style_display;
@@ -226,7 +230,7 @@ function initEditableDiv(divID) {
     if (!document.currentlyEditing) {
       this.hilight();
     } else {
-      this.title = "Currently editing something else, save or cancel to edit this.";
+      this.title = zpstrings.CurrentlyEditingSomethingElse;
     }
   }
   div.onmouseout = function() { 
