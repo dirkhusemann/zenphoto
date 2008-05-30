@@ -1179,6 +1179,7 @@ function getAlbumFolder($root=SERVERPATH) {
  * @return string
  */
 function getPlugin($plugin, $inTheme) {
+	global $_zp_themeroot;
 	$_zp_themeroot = WEBPATH . "/themes/$inTheme";
 	if ($inTheme) {
 		$pluginFile = $_zp_themeroot . '/' . $plugin;

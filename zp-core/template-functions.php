@@ -914,6 +914,25 @@ function getAlbumThumb() {
 }
 
 /**
+ * Returns an img src link to the password protect thumb substitute
+ *
+ * @param string $extra extra stuff to put in the HTML
+ * @return string
+ */
+function getPasswordProtectImage($extra) {
+	global $_zp_themeroot;
+	$image = $_zp_themeroot."/images/err-passwordprotected.gif\"";
+	$themedir = SERVERPATH . "/themes/".basename($_zp_themeroot);
+	$imagebase = $themedir."/images/err-passwordprotected.gif";
+	if (file_exists($imagebase)) {
+		return "<img src=\"".$image." ".$extra." />";
+	} else {
+		return "<img src=\"". WEBPATH . '/' . ZENFOLDER."/images/err-passwordprotected.gif\" ".
+						$extra."\" />";
+	}
+}
+
+/**
  * Prints the album thumbnail image.
  *
  * @param string $alt Insert the text for the alternate image name here.
@@ -921,7 +940,7 @@ function getAlbumThumb() {
  * @param string $id Insert here the CSS-id name with with you want to style the link.
  *  */
 function printAlbumThumbImage($alt, $class=NULL, $id=NULL) {
-	global $_zp_current_album;
+	global $_zp_current_album, $_zp_themeroot;
 	if (!$_zp_current_album->getShow()) {
 		$class .= " not_visible";
 	} else {
@@ -935,8 +954,7 @@ function printAlbumThumbImage($alt, $class=NULL, $id=NULL) {
 		echo "<img src=\"" . htmlspecialchars(getAlbumThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
 		(($class) ? " class=\"$class\"" : "") . (($id) ? " id=\"$id\"" : "") . " />";
 	} else {
-		echo "<img src=\"". WEBPATH . '/' . ZENFOLDER."/images/err-passwordprotected.gif\" height=\"".getOption('thumb_crop_height').
-					"\" width=\"".getOption('thumb_crop_width')."\" />";
+		echo getPasswordProtectImage("\" width=\"".getOption('thumb_crop_width')."\"");
 	}
 }
 
@@ -1000,7 +1018,7 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 		echo "<img src=\"" . htmlspecialchars(getCustomAlbumThumb($size, $width, $height, $cropw, $croph, $cropx, $cropy)). "\"" . $sizing . " alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
 		(($class) ? " class=\"$class\"" : "") .	(($id) ? " id=\"$id\"" : "") . " />";
 	} else {
-		echo "<img src=\"" . WEBPATH . '/' . ZENFOLDER."/images/err-passwordprotected.gif\"".$sizing." />";
+		echo getPasswordProtectImage($sizing);
 	}
 }
 
