@@ -357,15 +357,16 @@ input.tags {
 }
 
 #overview-stats,#overview-suggest {
-	width: 250px;
+	min-width: 25%;
+	_width: 25%;
 	float: left;
 	margin: 0 0 10px 10px;
 	padding: 10px;
 }
 
 #overview-comments {
-	min-width: 410px;
-	_width: 410px;
+	min-width: 33%;
+	_width: 33%;
 	float: left;
 	padding: 10px;
 }
