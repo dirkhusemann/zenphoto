@@ -400,6 +400,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			} else {
 				// Handle the error and return to the upload page.
 				$page = "upload";
+				$_GET['page'] = 'upload';
 				$error = true;
 				if ($files_empty) {
 					$errormsg = gettext("You must upload at least one file.");
