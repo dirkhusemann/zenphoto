@@ -346,11 +346,10 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			$files_empty = true;
 			if (isset($_FILES['files']))
 			foreach($_FILES['files']['name'] as $name) { if (!empty($name)) $files_empty = false; }
-
+			$newAlbum = (($_POST['existingfolder'] == 'false') || isset($_POST['newalbum']));
 			// Make sure the folder exists. If not, create it.
-			if (isset($_POST['processed'])
-			&& !empty($_POST['folder'])
-			&& !$files_empty) {
+			if (isset($_POST['processed']) && !empty($_POST['folder'])
+				&& ($newAlbum || !$files_empty)) {
 
 				$folder = strip($_POST['folder']);
 				$uploaddir = $gallery->albumdir . $folder;
@@ -385,7 +384,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 					if (!(false === ($pos = strpos($title, ' (')))) {
 						$title = substr($title, 0, $pos);
 					}
-					if (!empty($title)  && isset($_POST['newalbum'])) {
+					if (!empty($title)  && $newalbum) {
 						$album->setTitle($title);
 					}
 					$album->save();
@@ -1256,7 +1255,7 @@ if (count($album->getImages())) {
 <?php echo gettext("to upload folders of images into the albums directory!"); ?></p>
 
 <?php if (isset($error) && $error) { ?>
-<div class="errorbox">
+<div class="errorbox" id="fade-message">
 <h2><?php echo gettext("Something went wrong..."); ?></h2>
 <?php echo (empty($errormsg) ? gettext("There was an error submitting the form. Please try again.") : $errormsg); ?>
 </div>
