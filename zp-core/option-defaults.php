@@ -143,5 +143,5 @@ function setDefault($option, $default) {
 		setOptionDefault($opt, 0);
 	}
 	
-	
+	setDefault('use_lock_image', 1);
 ?>

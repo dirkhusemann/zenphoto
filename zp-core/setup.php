@@ -382,8 +382,17 @@ if (!$checked) {
 	}
 
 	/* check to see if glob() works */
-	$list = safe_glob('*'.'php');
-	$gl = (count($list) > 0);
+	if (function_exists('safe_glob')) {
+		$list = safe_glob('*.php');
+		$gl = count($list) > 0;
+	} else {
+		$list = glob('*.php');
+		if ($list !== false) {
+			$gl = 1;
+		} else {
+			$gl = -1;
+		}
+	}
 	$good = checkMark($gl, gettext(" PHP <code>glob()</code> support"), gettext(' is disabled'), gettext('You need to set the define <code>SAFE_GLOB</code> to <code>true</code> in <code>functions.php</code>')) && $good;
 	
 	checkMark($noxlate, gettext("PHP <code>gettext()</code> support"), gettext(" [is not present]"), gettext("Localization of Zenphoto currently requires native PHP <code>gettext()</code> support"));

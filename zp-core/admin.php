@@ -11,7 +11,7 @@ $standardOptions = array(	'gallery_title','website_title','website_url','time_of
  													'thumb_crop_width','thumb_crop_height','thumb_sharpen', 'image_sharpen',
  													'albums_per_page','images_per_page','perform_watermark',
  													'watermark_image','watermark_scale', 'watermark_allow_upscale', 'current_theme', 'spam_filter',
- 													'email_new_comments', 'perform_video_watermark', 'video_watermark_image',
+ 													'email_new_comments', 'perform_video_watermark', 'video_watermark_image', 'use_lock_image',
  													'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'feed_imagesize', 'search_fields',
  													'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
  													'allowed_tags', 'full_image_quality', 'persistent_archive',
@@ -618,6 +618,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				setOption('full_image_quality', $_POST['full_image_quality']);
 				setOption('protect_full_image', $_POST['protect_full_image']);
 				setBoolOption('hotlink_protection', $_POST['hotlink_protection']);
+				setBoolOption('use_lock_image', $_POST['use_lock_image']);
 				setOption('image_sorttype', $_POST['image_sorttype']);
 				setBoolOption('image_sortdirection', $_POST['image_sortdirection']);
 				$returntab = "#tab_image";
@@ -2152,6 +2153,14 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		</td>
 		<td><?php echo gettext("Select the level of protection for full sized images."); 
 		echo ' '.gettext("Disabling hotlinking prevents linking to the full image from other domains. If enabled, external links are redirect to the image page. If you are having problems with full images being displayed, try disabling this setting. Hotlinking is not prevented if <em>Full image protection</em> is <em>Unprotected</em>."); ?></td>
+	</tr>
+		<td><?php echo gettext("Use lock image"); ?></td>
+		<td>
+			<input type="checkbox" name="use_lock_image" value="1"
+			<?php echo checked('1', getOption('use_lock_image')); ?> />&nbsp;<?php echo gettext("Enabled"); ?>		
+		</td>
+		<td><?php echo gettext("Substitute the <em>lock</em> image for thumbnails of password protected albums when the viewer has not supplied the password."); ?>
+	<tr>
 	</tr>
 	<tr>
 		<td></td>

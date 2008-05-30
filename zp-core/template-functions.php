@@ -950,7 +950,7 @@ function printAlbumThumbImage($alt, $class=NULL, $id=NULL) {
 		}
 	}
 	$class = trim($class);
-	if (checkAlbumPassword($_zp_current_album->name, $hint)) {
+	if (!getOption('use_lock_image') || checkAlbumPassword($_zp_current_album->name, $hint)) {
 		echo "<img src=\"" . htmlspecialchars(getAlbumThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
 		(($class) ? " class=\"$class\"" : "") . (($id) ? " id=\"$id\"" : "") . " />";
 	} else {
@@ -1014,7 +1014,7 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 	if ($sizeH = max(is_null($height) ? 0 : $height, is_null($croph) ? 0 : $croph)) {
 		$sizing = $sizing . ' height="' . $sizeH . '"';
 	}
-	if (checkAlbumPassword($_zp_current_album->name, $hint)){
+	if (!getOption('use_lock_image') || checkAlbumPassword($_zp_current_album->name, $hint)){
 		echo "<img src=\"" . htmlspecialchars(getCustomAlbumThumb($size, $width, $height, $cropw, $croph, $cropx, $cropy)). "\"" . $sizing . " alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
 		(($class) ? " class=\"$class\"" : "") .	(($id) ? " id=\"$id\"" : "") . " />";
 	} else {
