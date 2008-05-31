@@ -2478,9 +2478,11 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		$current_theme = $galleryTheme;
 		$theme = $themes[$galleryTheme];
 		$themenamedisplay = '</em><small>'.gettext("no theme assigned, defaulting to Gallery theme").'</small><em>';
+		$gallerydefault = true;
 	} else {
 		$theme = $themes[$themename];
 		$themenamedisplay = $theme['name'];
+		$gallerydefault = false;
 	}
 	
 	if (count($themelist) > 1) {
@@ -2517,9 +2519,9 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 $themes = $gallery->getThemes();
 $current_theme_style = "background-color: #ECF1F2;";
 foreach($themes as $theme => $themeinfo):
-$style = ($theme == $current_theme) ? " style=\"$current_theme_style\"" : "";
-$themedir = SERVERPATH . "/themes/$theme";
-$themeweb = WEBPATH . "/themes/$theme";
+	$style = ($theme == $current_theme) ? " style=\"$current_theme_style\"" : "";
+	$themedir = SERVERPATH . "/themes/$theme";
+	$themeweb = WEBPATH . "/themes/$theme";
 ?>
 	<tr>
 		<td style="margin: 0px; padding: 0px;"><?php
@@ -2534,9 +2536,21 @@ $themeweb = WEBPATH . "/themes/$theme";
 		<?php echo $themeinfo['author']; ?><br />
 		Version <?php echo $themeinfo['version']; ?>, <?php echo $themeinfo['date']; ?><br />
 		<?php echo $themeinfo['desc']; ?></td>
-		<td width="100" <?php echo $style; ?>><?php if (!($theme == $current_theme)) { ?>
-		<a href="?page=themes&action=settheme&themealbum=<?php echo urlencode($alb) ?>&theme=<?php echo $theme; ?>"
-			title="Set this as your theme"><?php echo gettext("Use this Theme"); ?></a> <?php } else { echo "<strong>".gettext("Current Theme")."</strong>"; } ?>
+		<td width="100" <?php echo $style; ?>>
+		<?php 
+		if ($theme != $current_theme) { 
+			echo '<a href="?page=themes&action=settheme&themealbum='.urlencode($alb).'&theme='.$theme.'" title=';
+			 echo gettext("Set this as your theme").'>'.gettext("Use this Theme");
+			echo '</a>'; 
+		} else { 
+			if ($gallerydefault) {
+				echo '<a href="?page=themes&action=settheme&themealbum='.urlencode($alb).'&theme='.$theme.'" title=';
+			  echo gettext("Assign this as your album theme").'>'.gettext("Assign Theme");
+				echo '</a>'; 
+			} else {
+				echo "<strong>".gettext("Current Theme")."</strong>"; 
+			}
+		} ?>
 		</td>
 	</tr>
 
