@@ -2159,7 +2159,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 			<input type="checkbox" name="use_lock_image" value="1"
 			<?php echo checked('1', getOption('use_lock_image')); ?> />&nbsp;<?php echo gettext("Enabled"); ?>		
 		</td>
-		<td><?php echo gettext("Substitute the <em>lock</em> image for thumbnails of password protected albums when the viewer has not supplied the password."); ?>
+		<td><?php echo gettext("Substitute a <em>lock</em> image for thumbnails of password protected albums when the viewer has not supplied the password. If your theme supplies an <code>images/err-passwordprotected.gif</code> image, it will be shown. Otherwise the zenphoto default lock image is displayed."); ?>
 	<tr>
 	</tr>
 	<tr>
