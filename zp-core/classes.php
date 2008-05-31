@@ -148,10 +148,11 @@ class PersistentObject {
 		$result = query('SELECT * FROM ' . prefix($this->table) .
 			getWhereClause($new_unique_set) . ' LIMIT 1;');
 		if (mysql_num_rows($result) == 0) {
-			$result = query('UPDATE ' . prefix($this->table) 
+			$sql = 'UPDATE ' . prefix($this->table) 
 				. getSetClause($new_unique_set) . ' '
-				. getWhereClause($this->unique_set));
-			if (mysql_affected_rows($result) == 1) {
+				. getWhereClause($this->unique_set);
+			$result = query($sql);
+			if (mysql_affected_rows() == 1) {
 				$this->unique_set = $new_unique_set;
 				return true;
 			}
@@ -170,7 +171,9 @@ class PersistentObject {
 		$result = query('SELECT * FROM ' . prefix($this->table) .
 			getWhereClause($new_unique_set) . ' LIMIT 1;');
 		if (mysql_num_rows($result) == 0) {
-			$insert_data = array_merge($new_unique_set, $this->updates, $this->tempdata);
+			// Note: It's important for $new_unique_set to come last, as its values should override.
+			$insert_data = array_merge($this->data, $this->updates, $this->tempdata, $new_unique_set);
+			unset($insert_data['id']);
 			if (empty($insert_data)) { return true; }
 			$sql = 'INSERT INTO ' . prefix($this->table) . ' (';
 			$i = 0;
@@ -183,11 +186,15 @@ class PersistentObject {
 			$i = 0;
 			foreach(array_values($insert_data) as $value) {
 				if ($i > 0) $sql .= ', ';
-				$sql .= "'" . mysql_escape_string($value) . "'";
+				if ($value == '') {
+					$sql .= 'NULL';
+				} else {
+					$sql .= "'" . mysql_escape_string($value) . "'";
+				}
 				$i++;
 			}
 			$sql .= ');';
-			$success = query($sql, __LINE__);
+			$success = query($sql);
 			if ($success == true && mysql_affected_rows() == 1) {
 				return true;
 			}
@@ -235,14 +242,14 @@ class PersistentObject {
 		}
 		// Re-check the database if: 1) not using cache, or 2) didn't get a hit.
 		if (empty($entry)) {
-			$entry = query_single_row($sql, __LINE__);
+			$entry = query_single_row($sql);
 		}
 		
 		// If we don't have an entry yet, this is a new record. Create it.
 		if (empty($entry)) {
 			$new = true;
 			$this->save();
-			$entry = query_single_row($sql, __LINE__);
+			$entry = query_single_row($sql);
 			// If we still don't have an entry, something went wrong...
 			if (!$entry) return null;
 			// Then save this new entry into the cache so we get a hit next time.
@@ -279,7 +286,7 @@ class PersistentObject {
 				$i++;
 			}
 			$sql .= ');';
-			$success = query($sql, __LINE__);
+			$success = query($sql);
 			if ($success == false || mysql_affected_rows() != 1) { return false; }
 			$this->id = mysql_insert_id();
 			$this->updates = array();
@@ -299,7 +306,7 @@ class PersistentObject {
 					$i++;
 				}
 				$sql .= ' WHERE id=' . $this->id . ';';
-				$success = query($sql, __LINE__);
+				$success = query($sql);
 				if ($success == false || mysql_affected_rows() != 1) { return false; }
 				$this->updates = array();
 			}

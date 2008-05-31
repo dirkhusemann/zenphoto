@@ -59,7 +59,6 @@ $_zp_query_count = 0;
  * @since 0.6
  */
 function query($sql, $noerrmsg = false) {
-	/* TODO: Handle errors more gracefully. */
 	global $mysql_connection, $_zp_query_count, $_zp_conf_vars;
 	if ($mysql_connection == null) {
 		db_connect();

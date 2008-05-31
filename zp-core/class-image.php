@@ -456,6 +456,8 @@ class Image extends PersistentObject {
 	 * @return bool
 	 */
 	function moveImage($newalbum, $newfilename=null) {
+		if (is_string($newalbum)) $newalbum = new Album($this->album->gallery, $newalbum, false);
+		echo "Album moving to: exists? " . $newalbum->exists ." - ". $newalbum->name;
 		if ($newfilename == null) $newfilename = $this->filename;
 		if ($newalbum->id == $this->album->id && $newfilename == $this->filename) {
 			// Nothing to do - moving the file to the same place.
@@ -485,6 +487,7 @@ class Image extends PersistentObject {
 	 * @param string $newalbum the destination album
 	 */
 	function copyImage($newalbum) {
+		if (is_string($newalbum)) $newalbum = new Album($this->album->gallery, $newalbum, false);
 		if ($newalbum->id == $this->album->id) {
 			// Nothing to do - moving the file to the same place.
 			return true;
@@ -492,7 +495,7 @@ class Image extends PersistentObject {
 		$newpath = getAlbumFolder() . $newalbum->name . "/" . $this->filename;
 		$result = @copy($this->localpath, $newpath);
 		if ($result) {
-			$result = $this->move(array('filename'=>$this->filename, 'albumid'=>$newalbum->id));
+			$result = $this->copy(array('filename'=>$this->filename, 'albumid'=>$newalbum->id));
 		}
 		return $result;
 	}
