@@ -11,6 +11,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
+	<?php zenJavascript(); ?>
 	<title>
 	<?php 
 		printGalleryTitle(); 
@@ -19,7 +20,7 @@
 	</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" type="text/css" media="screen, projection" href="<?php echo $_zp_themeroot ?>/css/master.css" />
-	<?php printRSSHeaderLink('Gallery','Gallery RSS'); zenJavascript(); global $_zp_gallery; ?>
+	<?php printRSSHeaderLink('Gallery','Gallery RSS'); ?>
 </head>
 
 <body class="gallery">

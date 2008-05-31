@@ -47,6 +47,7 @@ if ($_GET['format'] != 'xml') {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+	<?php zenJavascript(); ?>
 	<title><?php printGalleryTitle(); ?> | <?php echo getAlbumTitle();?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 <?php 
@@ -73,7 +74,6 @@ if ($_GET['format'] != 'xml') {
 		break;
 	}
 	echo "<script type=\"text/javascript\" src=\"$_zp_themeroot/scripts/bluranchors.js\"></script>\n";
-	zenJavascript(); 
 	global $_zp_current_album; 
 ?>
 </head>
@@ -259,7 +259,7 @@ if ($_GET['format'] != 'xml') {
  					</div>
 	 			<div class="clearage"></div>
  					<?php 
-					if (function_exists('printSlideShowLink')) {
+					if (function_exists('printSlideShowLink') && ($personality != 'Smoothgallery')) {
 						echo "<p align=\"center\">";
 						printSlideShowLink(gettext('View Slideshow')); 		
 						echo "</p>";
