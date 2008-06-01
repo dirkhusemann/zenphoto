@@ -7,7 +7,7 @@
 
 $plugin_description = gettext("Functions that provide various statistics about images and albums in the gallery.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.4';
+$plugin_version = '1.0.4.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---image_album_statistics.php.html";
 
 /**
@@ -99,15 +99,14 @@ function getAlbumStatistic($number=5, $option) {
 function printAlbumStatistic($number, $option, $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic=false) {
 	$albums = getAlbumStatistic($number, $option);
 	echo "\n<div id=\"".$option."_album\">\n";
-	$albumpath = rewrite_path("/", "index.php?album=");
 	echo "<ul>";
 	if ($option === "latestupdated") { // needs a "normal" array
 		foreach($albums as $album) {
-			printAlbumStatisticItem($album, $option,$showtitle, $showdate, $showdesc, $desclength);
+			printAlbumStatisticItem($album, $option,$showtitle, $showdate, $showdesc, $desclength,$showstatistic);
 		}
 	} else {
 		while ($album = mysql_fetch_array($albums)) { // needs a mysql array
-			printAlbumStatisticItem($album, $option,$showtitle, $showdate, $showdesc, $desclength);
+			printAlbumStatisticItem($album, $option,$showtitle, $showdate, $showdesc, $desclength,$showstatistic);
 		}
 		echo "</ul></div>\n";
 	}
@@ -131,6 +130,7 @@ function printAlbumStatistic($number, $option, $showtitle=false, $showdate=false
  */
 function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic=false) {
 	global $_zp_gallery;
+	$albumpath = rewrite_path("/", "index.php?album=");
 	$tempalbum = new Album($_zp_gallery, $album['folder']);
 		echo "<li><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . htmlspecialchars($tempalbum->getTitle()) . "\">\n";
 		echo "<img src=\"".$tempalbum->getAlbumThumb()."\"></a>\n<br />";
