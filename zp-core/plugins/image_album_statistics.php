@@ -7,7 +7,7 @@
 
 $plugin_description = gettext("Functions that provide various statistics about images and albums in the gallery.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.4.1';
+$plugin_version = '1.0.4.2';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---image_album_statistics.php.html";
 
 /**
@@ -94,9 +94,11 @@ function getAlbumStatistic($number=5, $option) {
  * @param bool $showdate if the album date should be shown
  * @param bool $showdesc if the album desc should be shown
  * @param integer $desclength the length of the desc to be shown
- * @param bool $showstatistic true if the hitcounter (only for "popular"), the votes (only for "mostvoted") or the rating (only for "toprated") should be shown, false if not
+  * @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
+ * 															"rating" for rating,
+ * 															"rating+hitcounter" for both.
  */
-function printAlbumStatistic($number, $option, $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic=false) {
+function printAlbumStatistic($number, $option, $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
 	$albums = getAlbumStatistic($number, $option);
 	echo "\n<div id=\"".$option."_album\">\n";
 	echo "<ul>";
@@ -126,9 +128,11 @@ function printAlbumStatistic($number, $option, $showtitle=false, $showdate=false
  * @param bool $showdate if the album date should be shown
  * @param bool $showdesc if the album desc should be shown
  * @param integer $desclength the length of the desc to be shown
- * @param bool $showstatistic true if the hitcounter (only for "popular"), the votes (only for "mostvoted") or the rating (only for "toprated") should be shown, false if not
+ * @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
+ * 															"rating" for rating,
+ * 															"rating+hitcounter" for both.
  */
-function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic=false) {
+function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
 	global $_zp_gallery;
 	$albumpath = rewrite_path("/", "index.php?album=");
 	$tempalbum = new Album($_zp_gallery, $album['folder']);
@@ -156,21 +160,18 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
 				echo "<p>". zpFormattedDate(getOption('date_format'),strtotime($tempalbum->getDateTime()))."</p>";
 			}
 		}
-		if($showstatistic) {
-			switch($option) {
-				case "popular":
-					echo "<p>".gettext("Views: ").$tempalbum->get("hitcounter")."</p>";
-					break;
-				case "mostrated":
-					echo "<p>".gettext("Votes: ").$tempalbum->get("total_votes")."</p>";
-					break;
-				case "toprated":
-					$votes = $tempalbum->get("total_votes");
-					$value = $tempalbum->get("total_value");
-					$rating =  round($value/$votes, 1);
-					echo "<p>".gettext("Rating: ").$rating."</p>";
-					break;	
+		if($showstatistic === "rating" OR $showstatistic === "rating+hitcounter") {
+			$votes = $tempalbum->get("total_votes");
+			$value = $tempalbum->get("total_value");
+			if($votes != 0) {
+				$rating =  round($value/$votes, 1);
 			}
+			echo "<p>".gettext("Rating: ").$rating.gettext(" (Votes: ").$tempalbum->get("total_votes").")</p>";
+		}
+		if($showstatistic === "hitcounter" OR $showstatistic === "rating+hitcounter") {
+			$hitcounter = $tempalbum->get("hitcounter");
+			if(empty($hitcounter)) { $hitcounter = "0"; }
+			echo "<p>".gettext("Views: ").$hitcounter."</p>";
 		}
 		if($showdesc) {
 			echo "<p>".my_truncate_string($tempalbum->getDesc(), $desclength)."</p>";
@@ -186,9 +187,11 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
  * @param bool $showdate if the album date should be shown
  * @param bool $showdesc if the album desc should be shown
  * @param integer $desclength the length of the desc to be shown
- * @param bool $showstatistic true if the hitcounter should be shown, false if not
+ * @param string $showstatistic "hitcounter" for showing the hitcounter (views),
+ * 															"rating" for rating,
+ * 															"rating+hitcounter" for both.
  */
-function printPopularAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic=false) {
+function printPopularAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='hitcounter') {
 	printAlbumStatistic($number,"popular",$showtitle, $showdate, $showdesc, $desclength,$showstatistic);
 }
 
@@ -200,9 +203,12 @@ function printPopularAlbums($number=5,$showtitle=false, $showdate=false, $showde
  * @param bool $showdate if the album date should be shown
  * @param bool $showdesc if the album desc should be shown
  * @param integer $desclength the length of the desc to be shown
+ * @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
+ * 															"rating" for rating,
+ * 															"rating+hitcounter" for both.
  */
-function printLatestAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
-	printAlbumStatistic($number,"latest",$showtitle, $showdate, $showdesc, $desclength);
+function printLatestAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
+	printAlbumStatistic($number,"latest",$showtitle, $showdate, $showdesc, $desclength,$showstatistic);
 }
 
 /**
@@ -213,9 +219,11 @@ function printLatestAlbums($number=5,$showtitle=false, $showdate=false, $showdes
  * @param bool $showdate if the album date should be shown
  * @param bool $showdesc if the album desc should be shown
  * @param integer $desclength the length of the desc to be shown
- * @param bool $showstatistic true if the rating should be shown, false if not
+ * @param string $showstatistic "hitcounter" for showing the hitcounter (views),
+ * 															"rating" for rating,
+ * 															"rating+hitcounter" for both.
  */
-function printMostRatedAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic=false) {
+function printMostRatedAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
 	printAlbumStatistic($number,"mostrated",$showtitle, $showdate, $showdesc, $desclength,$showstatistic);
 }
 
@@ -227,9 +235,11 @@ function printMostRatedAlbums($number=5,$showtitle=false, $showdate=false, $show
  * @param bool $showdate if the album date should be shown
  * @param bool $showdesc if the album desc should be shown
  * @param integer $desclength the length of the desc to be shown
- * @param bool $showstatistic true if the rating should be shown, false if not
+ * @param string $showstatistic "hitcounter" for showing the hitcounter (views),
+ * 															"rating" for rating,
+ * 															"rating+hitcounter" for both.
  */
-function printTopRatedAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic=false) {
+function printTopRatedAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
 	printAlbumStatistic($number,"toprated",$showtitle, $showdate, $showdesc, $desclength,$showstatistic);
 }
 
@@ -241,9 +251,12 @@ function printTopRatedAlbums($number=5,$showtitle=false, $showdate=false, $showd
  * @param bool $showdate if the album date should be shown
  * @param bool $showdesc if the album desc should be shown
  * @param integer $desclength the length of the desc to be shown
+ * @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
+ * 															"rating" for rating,
+ * 															"rating+hitcounter" for both.
  */
-function printLatestUpdatedAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
-	printAlbumStatistic($number,"latestupdated",$showtitle, $showdate, $showdesc, $desclength);
+function printLatestUpdatedAlbums($number=5,$showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
+	printAlbumStatistic($number,"latestupdated",$showtitle, $showdate, $showdesc, $desclength,$showstatistic);
 }
 
 /**
@@ -324,10 +337,12 @@ function getImageStatistic($number, $option, $album='') {
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image desc should be shown
  * @param integer $desclength the length of the desc to be shown
- * @param bool $showstatistic true if the hitcounter (only for "popular"), the votes (only for "mostvoted") or the rating (only for "toprated") should be shown, false if not
+ * @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
+ * 															"rating" for rating,
+ * 															"rating+hitcounter" for both.
  * @return string
  */
-function printImageStatistic($number, $option, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic=false) {
+function printImageStatistic($number, $option, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
 	$images = getImageStatistic($number, $option, $album);
 	echo "\n<div id=\"$option\">\n";
 	echo "<ul>";
@@ -341,21 +356,18 @@ function printImageStatistic($number, $option, $album='', $showtitle=false, $sho
 		if($showdate) {
 			echo "<p>". zpFormattedDate(getOption('date_format'),strtotime($image->getDateTime()))."</p>";
 		}
-		if($showstatistic) {
-			switch($option) {
-				case "popular":
-					echo "<p>".gettext("Views: ").$image->get("hitcounter")."</p>";
-					break;
-				case "mostrated":
-					echo "<p>".gettext("Votes: ").$image->get("total_votes")."</p>";
-					break;
-				case "toprated":
-					$votes = $image->get("total_votes");
-					$value = $image->get("total_value");
-					$rating =  round($value/$votes, 1);
-					echo "<p>".gettext("Rating: ").$rating."</p>";
-					break;	
+		if($showstatistic === "rating" OR $showstatistic === "rating+hitcounter") {
+			$votes = $image->get("total_votes");
+			$value = $image->get("total_value");
+			if($votes != 0) {
+				$rating =  round($value/$votes, 1);
 			}
+			echo "<p>".gettext("Rating: ").$rating.gettext(" (Votes: ").$votes.")</p>";
+		}
+		if($showstatistic === "hitcounter" OR $showstatistic === "rating+hitcounter") {
+			$hitcounter = $image->get("hitcounter");
+			if(empty($hitcounter)) { $hitcounter = "0"; }
+			echo "<p>".gettext("Views: ").$hitcounter."</p>";
 		}
 		if($showdesc) {
 			echo "<p>".my_truncate_string($image->getDesc(), $desclength)."</p>";
@@ -374,10 +386,12 @@ function printImageStatistic($number, $option, $album='', $showtitle=false, $sho
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image desc should be shown
  * @param integer $desclength the length of the desc to be shown
- * @param bool $showstatistic true if the hitcounter should be shown, false if not
+* @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
+ * 															"rating" for rating,
+ * 															"rating+hitcounter" for both.
  */
-function printPopularImages($number=5, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic=false) {
-	printImageStatistic($number, "popular",$album, $showtitle, $showdate, $showdesc, $desclength);
+function printPopularImages($number=5, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
+	printImageStatistic($number, "popular",$album, $showtitle, $showdate, $showdesc, $desclength,$showstatistic);
 }
 
 /**
@@ -388,10 +402,12 @@ function printPopularImages($number=5, $album='', $showtitle=false, $showdate=fa
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image desc should be shown
  * @param integer $desclength the length of the desc to be shown
- * @param bool $showstatistic true if the rating should be shown, false if not
+ * @param string $showstatistic "hitcounter" for showing the hitcounter (views),
+ * 															"rating" for rating,
+ * 															"rating+hitcounter" for both.
  */
-function printTopRatedImages($number=5, $album="", $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic=false) {
-	printImageStatistic($number, "toprated",$album, $showtitle, $showdate, $showdesc, $desclength);
+function printTopRatedImages($number=5, $album="", $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
+	printImageStatistic($number, "toprated",$album, $showtitle, $showdate, $showdesc, $desclength,$showstatistic);
 }
 
 
@@ -403,10 +419,12 @@ function printTopRatedImages($number=5, $album="", $showtitle=false, $showdate=f
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image desc should be shown
  * @param integer $desclength the length of the desc to be shown 
- * @param bool $showstatistic true if the total votes should be shown, false if not
+* @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
+ * 															"rating" for rating,
+ * 															"rating+hitcounter" for both.
  */
-function printMostRatedImages($number=5, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40, $showstatistic=false) {
-	printImageStatistic($number, "mostrated", $album, $showtitle, $showdate, $showdesc, $desclength);
+function printMostRatedImages($number=5, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
+	printImageStatistic($number, "mostrated", $album, $showtitle, $showdate, $showdesc, $desclength, $showstatistic);
 }
 
 /**
@@ -418,9 +436,12 @@ function printMostRatedImages($number=5, $album='', $showtitle=false, $showdate=
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image desc should be shown
  * @param integer $desclength the length of the desc to be shown
+* @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
+ * 															"rating" for rating,
+ * 															"rating+hitcounter" for both.
  */
-function printLatestImages($number=5, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
-	printImageStatistic($number, "latest", $album, $showtitle, $showdate, $showdesc, $desclength);
+function printLatestImages($number=5, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40, $showstatistic='') {
+	printImageStatistic($number, "latest", $album, $showtitle, $showdate, $showdesc, $desclength, $showstatistic);
 }
 
 /**
@@ -432,9 +453,12 @@ function printLatestImages($number=5, $album='', $showtitle=false, $showdate=fal
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image desc should be shown
  * @param integer $desclength the length of the desc to be shown
+* @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
+ * 															"rating" for rating,
+ * 															"rating+hitcounter" for both.
  */
-function printLatestImagesByDate($number=5, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40) {
-	printImageStatistic($number, "latest-date", $album, $showtitle, $showdate, $showdesc, $desclength);
+function printLatestImagesByDate($number=5, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
+	printImageStatistic($number, "latest-date", $album, $showtitle, $showdate, $showdesc, $desclength,$showstatistic);
 }
 
 ?>
