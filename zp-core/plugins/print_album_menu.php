@@ -3,6 +3,9 @@
  * 
  * Changelog
  * 
+ * 1.4.3.1: 
+ * - Some very minor code cleanup
+ * 
  * 1.4.3: 
  * - Divided the menu into two separate functions printAlbumMenuList() and printAlbumMenuJump(). The plan to always have the jump menu 
  * mode showing top level albums and sub level albums was simply easier to achieve separated than within the more complicated and especially 
@@ -149,7 +152,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_id_active='',$css_c
 		foreach ($albums as $toplevelalbum) {
 			$topalbum = new Album($gallery,$toplevelalbum,true);
 			if($option === "list" OR $option === "list-top") {
-				echo createAlbumMenuLink($topalbum,$option2,$css_id_active,$albumpath,"list");
+				createAlbumMenuLink($topalbum,$option2,$css_id_active,$albumpath,"list");
 			} 
 			$sub1_count = 0;
 				
@@ -167,7 +170,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_id_active='',$css_c
 								echo "<ul".$css_class.">\n";
 							}
 							if ($option === "list" OR $option === "list-sub") {
-								echo createAlbumMenuLink($subalbum1,$option2,$css_class_active,$albumpath,"list");
+								createAlbumMenuLink($subalbum1,$option2,$css_class_active,$albumpath,"list");
 							} 
 							$sub2_count = 0;
 						
@@ -183,7 +186,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_id_active='',$css_c
 									echo "<ul".$css_class.">\n";
 								}
 								if($option === "list" OR $option === "list-sub") {
-									echo createAlbumMenuLink($subalbum2,$option2,$css_class_active,$albumpath,"list");
+									createAlbumMenuLink($subalbum2,$option2,$css_class_active,$albumpath,"list");
 								} 
 								$sub3_count = 0;
 
@@ -199,7 +202,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_id_active='',$css_c
 											echo "<ul".$css_class.">\n"; 
 										} 
 										if($option === "list" OR $option === "list-sub") {
-											echo createAlbumMenuLink($subalbum3,$option2,$css_class_active,$albumpath,"list");
+											createAlbumMenuLink($subalbum3,$option2,$css_class_active,$albumpath,"list");
 										} 
 										$sub4_count = 0;
 
@@ -215,7 +218,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_id_active='',$css_c
 													echo "<ul".$css_class.">\n"; 
 												} 
 												if($option === "list" OR $option === "list-sub") {
-													echo createAlbumMenuLink($subalbum4,$option2,$css_class_active,$albumpath,"list");
+													createAlbumMenuLink($subalbum4,$option2,$css_class_active,$albumpath,"list");
 												} 
 											} // if subalbum level 4 - end
 										}	// subalbum level 4 - end
@@ -289,31 +292,31 @@ function printAlbumMenuJump($option="count", $indexname="Gallery Index") {
 		$albums = $_zp_gallery->getAlbums();
 		foreach ($albums as $toplevelalbum) {
 			$topalbum = new Album($gallery,$toplevelalbum,true);
-			echo createAlbumMenuLink($topalbum,$option,"",$albumpath,"jump",0);
+			createAlbumMenuLink($topalbum,$option,"",$albumpath,"jump",0);
 			
 			/**** SUBALBUM LEVEL 1 ****/
 			$subalbums1 = $topalbum->getSubAlbums();
 			foreach($subalbums1 as $sublevelalbum1) {
 				$subalbum1 = new Album($gallery,$sublevelalbum1,true);
-				echo createAlbumMenuLink($subalbum1,$option,"",$albumpath,"jump",1);
+				createAlbumMenuLink($subalbum1,$option,"",$albumpath,"jump",1);
 
 				/**** SUBALBUM LEVEL 2 ****/
 				$subalbums2 = $subalbum1->getSubAlbums();
 				foreach($subalbums2 as $sublevelalbum2) {
 					$subalbum2 = new Album($gallery,$sublevelalbum2,true);
-					echo createAlbumMenuLink($subalbum2,$option,"",$albumpath,"jump",2);
+					createAlbumMenuLink($subalbum2,$option,"",$albumpath,"jump",2);
 
 					/**** SUBALBUM LEVEL 3 ****/
 					$subalbums3 = $subalbum2->getSubAlbums();
 					foreach($subalbums3 as $sublevelalbum3) {
 						$subalbum3 = new Album($gallery,$sublevelalbum3,true);
-						echo createAlbumMenuLink($subalbum3,$option,"",$albumpath,"jump",3);
+						createAlbumMenuLink($subalbum3,$option,"",$albumpath,"jump",3);
 
 						/**** SUBALBUM LEVEL 4 ****/
 						$subalbums4 = $subalbum3->getSubAlbums();
 						foreach($subalbums4 as $sublevelalbum4) {
 							$subalbum4 = new Album($gallery,$sublevelalbum4,true);
-							echo createAlbumMenuLink($subalbum4,$option,"",$albumpath,"jump",4);
+							createAlbumMenuLink($subalbum4,$option,"",$albumpath,"jump",4);
 						} 
 					}
 				}
@@ -381,7 +384,7 @@ function createAlbumMenuLink($album,$option2,$css,$albumpath,$mode,$level='') {
 			$link = "<option $selected value='".htmlspecialchars($albumpath.$album->name)."'>".$arrow.htmlspecialchars($album->getTitle()).$count."</option>";
 			break;
 	}
-	return $link;
+	echo $link;
 }
 
 
@@ -395,20 +398,17 @@ function createAlbumMenuLink($album,$option2,$css,$albumpath,$mode,$level='') {
  * @return string returns nothing or "selected"
  */
 function checkSelectedAlbum($checkalbum, $option) {
+	$selected = "";
 	switch ($option) {
 		case "index":
 			if(getAlbumTitle() === "") {
 				$selected = "selected";
-			} else {
-				$selected = "";
-			}
+			} 
 			break;
 		case "album":
 			if(getAlbumTitle() === $checkalbum) {
 				$selected = "selected";
-			} else {
-				$selected = "";
-			}
+			} 
 			break;
 	}
 	return $selected;
