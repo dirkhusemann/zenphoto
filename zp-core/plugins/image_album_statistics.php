@@ -7,7 +7,7 @@
 
 $plugin_description = gettext("Functions that provide various statistics about images and albums in the gallery.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.4.2';
+$plugin_version = '1.0.4.3';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---image_album_statistics.php.html";
 
 /**
@@ -22,7 +22,7 @@ $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---image_a
  */
 function getAlbumStatistic($number=5, $option) {
 	if (zp_loggedin()) {
-		$albumWhere = "";
+		$albumWhere = "WHERE `folder` != ''";
 	} else {
 		$albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
 		foreach($albumscheck as $albumcheck) {
@@ -31,7 +31,7 @@ function getAlbumStatistic($number=5, $option) {
 				$passwordcheck = $passwordcheck.$albumpasswordcheck;
 			}
 		}
-		$albumWhere = "WHERE `show`=1".$passwordcheck;
+		$albumWhere = "WHERE `folder` != '' AND `show`=1".$passwordcheck;
 	}
 	switch($option) {
 		case "popular":
@@ -274,7 +274,7 @@ function printLatestUpdatedAlbums($number=5,$showtitle=false, $showdate=false, $
 function getImageStatistic($number, $option, $album='') {
 	global $_zp_gallery;
 	if (zp_loggedin()) {
-		$albumWhere = "";
+		$albumWhere = " AND albums.folder != ''";
 		$imageWhere = "";
 	} else {
 		$albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
@@ -284,7 +284,7 @@ function getImageStatistic($number, $option, $album='') {
 				$passwordcheck = $passwordcheck.$albumpasswordcheck;
 			}
 		}
-		$albumWhere = " AND albums.show=1".$passwordcheck;
+		$albumWhere = " AND albums.folder != '' AND albums.show=1".$passwordcheck;
 		$imageWhere = " AND images.show=1";
 	}
 	if(!empty($album)) {
