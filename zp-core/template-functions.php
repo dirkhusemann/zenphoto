@@ -2437,6 +2437,10 @@ function hitcounter($option='image', $viewonly=false, $id=NULL) {
 
 /**
  * Returns a where clause for filter password protected album. 
+ * Used by the random images functions.
+ * 
+ * If the viewer is not logged in as ADMIN this function fails all password protected albums. 
+ * It does not check to see if the viewer has credentials for an album.
  *
  * @return string
  */
