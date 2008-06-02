@@ -2436,6 +2436,39 @@ function hitcounter($option='image', $viewonly=false, $id=NULL) {
 }
 
 /**
+ * Returns a where clause for filter password protected album. 
+ *
+ * @return string
+ */
+
+function getProtectedAlbumsWhere() {
+	$result = query_single_row("SELECT MAX(LENGTH(folder) - LENGTH(REPLACE(folder, '/', ''))) AS max_depth FROM " . prefix('albums') );
+	$max_depth = $result['max_depth'];
+        
+	$sql = "SELECT level0.id FROM " . prefix('albums') . " AS level0 ";
+        $where = " WHERE (level0.password > ''";
+	$i = 1;
+	while ($i <= $max_depth) {
+		$sql = $sql . " LEFT JOIN " . prefix('albums') . "AS level" . $i . " ON level" . $i . ".id = level" . ($i - 1) . ".parentid";
+		$where = $where . " OR level" . $i . ".password > ''";
+		$i++;
+	}
+	$sql = $sql . $where . " )";
+
+        $result = query_full_array($sql);
+	if ($result) {
+		$albumWhere = prefix('albums') . ".id not in (";
+		foreach ($result as $row) {
+			$albumWhere = $albumWhere . $row['id'] . ", ";
+		}
+		$albumWhere = substr($albumWhere, 0, -2) . ')';
+	} else {
+		$albumWhere = "(1=1)";
+	}
+	return $albumWhere;
+}
+
+/**
  * Returns a randomly selected image from the gallery. (May be NULL if none exists)
  *
  * @return object
@@ -2445,17 +2478,10 @@ function getRandomImages() {
 		$albumWhere = '';
 		$imageWhere = '';
 	} else {
-		$albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
-		foreach($albumscheck as $albumcheck) {
-			if(!checkAlbumPassword($albumcheck['folder'], $hint)) {
-				$albumpasswordcheck= " AND ".prefix('albums').".id != ".$albumcheck['id'];
-				$passwordcheck = $passwordcheck.$albumpasswordcheck;
-			}
-		}
-		$albumWhere = " AND ".prefix('albums') . ".show=1".$passwordcheck;
+		$albumWhere = " AND " . prefix('albums') . ".show = 1 AND " . prefix('albums') . ".id not in (" . getProtectedAlbumsWhere()  . ")";
 		$imageWhere = " AND " . prefix('images') . ".show=1";
 	}
-	$c = 0;
+			$c = 0;
 	while ($c < 10) {
 		$result = query_single_row('SELECT FLOOR(RAND() * COUNT(*)) AS rand_row ' .
                                 ' FROM '.prefix('images'). ', '.prefix('albums').
@@ -2506,37 +2532,46 @@ function getRandomImagesAlbum($rootAlbum=null) {
 	} else {
 		if (zp_loggedin()) {
 			$imageWhere = '';
+			$albumInWhere = '';
+			$albumNotWhere = '';
 		} else {
-			$imageWhere = " AND `show`=1";
-		}
-		$images = array();
+			$imageWhere = " AND " . prefix('images'). ".show=1";
 
-		$albumnames = array();
-		$subIDs = getAllSubAlbumIDs($rootAlbum);
-		if(is_null($subIDs)) {return null;}; //no subdirs avaliable
-		foreach ($subIDs as $ID) {
-
-			if($ID['show'] && checkAlbumPassword($ID['folder'], $hint)) {
-
-				$albumnames[$ID['id']] = $ID['folder'];
-				$query = 'SELECT `id` , `albumid` , `filename` , `title` FROM '.prefix('images').' WHERE `albumid` = "'.
-				$ID['id'] .'"' . $imageWhere;
-				$images = array_merge($images, query_full_array($query));
+			$albumfolder = $album->getFolder();
+			$query = "SELECT id FROM " . prefix('albums') . " WHERE " . prefix('albums') . ".show = 1 AND folder LIKE '" . mysql_real_escape_string($albumfolder) . "%'";
+			$result = query_full_array($query);
+			$albumInWhere = prefix('albums') . ".id in (";
+			foreach ($result as $row) {
+				$albumInWhere = $albumInWhere . $row['id'] . ", ";
 			}
+        	
+			$albumInWhere =  ' AND '.substr($albumInWhere, 0, -2) . ')';
+			$albumNotWhere = ' AND '.getProtectedAlbumsWhere();
 		}
-		$image = NULL;
-		shuffle($images);
-		while (count($images) > 0) {
-			$randomImage = array_pop($images);
+		while ($c < 10) {
+			$result = query_single_row('SELECT COUNT(*) AS row_count ' .
+				' FROM '.prefix('images'). ', '.prefix('albums').
+				' WHERE ' . prefix('albums') . '.folder!="" AND '.prefix('images').'.albumid = ' . 
+				prefix('albums') . '.id ' . $albumInWhere . $albumNotWhere . $imageWhere );
+			$rand_row = rand(1, $result['row_count']);
 
-			if (is_valid_image($randomImage['filename'])) {
-				$image = new Image(new Album(new Gallery(), $albumnames[$randomImage['albumid']]), $randomImage['filename']);
+			$result = query_single_row('SELECT '.prefix('images').'.filename, '.prefix('albums').'.folder ' .
+				' FROM '.prefix('images').', '.prefix('albums') .
+				' WHERE '.prefix('images').'.albumid = '.prefix('albums').'.id  ' . $albumInWhere .  $albumNotWhere . 
+				$imageWhere . ' LIMIT ' . $rand_row . ', 1');
+
+			$imageName = $result['filename'];
+			if (is_valid_image($imageName)) {
+				$image = new Image(new Album(new Gallery(), $result['folder']), $imageName );
 				return $image;
 			}
+			$c++;
 		}
+
 	}
 	return null;
 }
+
 /**
  * Puts up random image thumbs from the gallery
  *
