@@ -384,7 +384,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 					if (!(false === ($pos = strpos($title, ' (')))) {
 						$title = substr($title, 0, $pos);
 					}
-					if (!empty($title)  && $newalbum) {
+					if (!empty($title) && $newAlbum) {
 						$album->setTitle($title);
 					}
 					$album->save();
