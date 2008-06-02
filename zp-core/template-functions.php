@@ -2478,16 +2478,16 @@ function getRandomImages() {
 		$albumWhere = '';
 		$imageWhere = '';
 	} else {
-		$albumWhere = " AND " . prefix('albums') . ".show = 1 AND " . prefix('albums') . ".id not in (" . getProtectedAlbumsWhere()  . ")";
+		$albumWhere = " AND " . prefix('albums') . ".show = 1 AND " . getProtectedAlbumsWhere() ;
 		$imageWhere = " AND " . prefix('images') . ".show=1";
 	}
-			$c = 0;
+	$c = 0;
 	while ($c < 10) {
-		$result = query_single_row('SELECT FLOOR(RAND() * COUNT(*)) AS rand_row ' .
+		$result = query_single_row('SELECT COUNT(*) AS row_count ' .
                                 ' FROM '.prefix('images'). ', '.prefix('albums').
                                 ' WHERE ' . prefix('albums') . '.folder!="" AND '.prefix('images').'.albumid = ' . 
 																prefix('albums') . '.id ' .    $albumWhere . $imageWhere );
-		$rand_row = $result['rand_row'];
+		$rand_row = rand(1, $result['row_count']);
 
 		$result = query_single_row('SELECT '.prefix('images').'.filename, '.prefix('albums').'.folder ' .
                                 ' FROM '.prefix('images').', '.prefix('albums') .
@@ -2503,6 +2503,7 @@ function getRandomImages() {
 	}
 	return NULL;
 }
+
 /**
  * Returns  a randomly selected image from the album or its subalbums. (May be NULL if none exists)
  *
