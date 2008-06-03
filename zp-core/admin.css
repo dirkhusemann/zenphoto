@@ -211,6 +211,26 @@ p {
 	margin: 0px;
 }
 
+/* Warning Messages
+------------------------------ */
+.warningbox {
+	padding: 20px;
+	background-color: #FFFF00;
+	border-top: 1px solid #996600;
+	border-left: 1px solid #996600;
+	border-right: 1px solid #996600;
+	border-bottom: 5px solid #996600;
+	margin-bottom: 10px;
+	font-size: 100%;
+}
+
+.warningbox h2 {
+	color: #663300;
+	font-size: 100%;
+	font-weight: bold;
+	margin: 0px;
+}
+
 /* Miscellaneous
 ------------------------------ */
 a {
