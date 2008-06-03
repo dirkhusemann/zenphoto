@@ -16,7 +16,7 @@
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard( sbillard)";
-$plugin_version = '1.0.2.3';
+$plugin_version = '1.0.2.4';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
 
@@ -75,8 +75,9 @@ class slideshowOptions {
 
 
 /**
- * Prints a link to call the slideshow
+ * Prints a link to call the slideshow (not shown if there are no images in the album)
  * To be used on album.php and image.php
+ * A CSS id names 'slideshowlink' is attached to the link so it can be directly styled.
  *
  * @param string $linktext Text for the link
  */
@@ -96,6 +97,7 @@ function printSlideShowLink($linktext='') {
 	}
 	$numberofimages = getNumImages();
 	$slideshowlink = rewrite_path($_zp_current_album->getFolder()."/page/slideshow","index.php?p=slideshow&album=".$_zp_current_album->getFolder());
+if($numberofimages != 0) {
 ?>	
 	<form name="slideshow" method="post" action="<?php echo htmlspecialchars($slideshowlink); ?>">
 		<input type="hidden" name="pagenr" value="<?php echo $pagenr;?>" />
@@ -103,9 +105,9 @@ function printSlideShowLink($linktext='') {
 		<input type="hidden" name="numberofimages" value="<?php echo $numberofimages;?>" />
 		<input type="hidden" name="imagenumber" value="<?php echo $imagenumber;?>" />
 		<input type="hidden" name="imagefile" value="<?php echo $imagefile;?>" />
-		<a href="javascript:document.slideshow.submit()"><?php echo $linktext; ?></a>
+		<a id="slideshowlink" href="javascript:document.slideshow.submit()"><?php echo $linktext; ?></a>
 	</form>
-<?php
+<?php }
 }
 
 
