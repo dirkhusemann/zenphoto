@@ -11,7 +11,7 @@
 function generateLanguageList() {
 	global $_zp_languages;
 	$dir = @opendir(SERVERPATH . "/" . ZENFOLDER ."/locale/");
-	$locales = array('Default (US English)' => '');
+	$locales = array(gettext('Default (US English)') => '');
 	if ($dir !== false) {
 		while ($dirname = readdir($dir)) {
 			if (is_dir(SERVERPATH . "/" . ZENFOLDER ."/locale/".$dirname) && (substr($dirname, 0, 1) != '.')) {
