@@ -2,64 +2,6 @@
 /**
  * functions-i18n.php -- support functions for internationalization
  */
-$_zp_languages = array(
-	'af' => gettext('Afrikaans'),
-	'ar' => gettext('Arabic'),
-	'bn_BD' => gettext('Bengali'),
-	'eu' => gettext('Basque'),
-	'be_BY' => gettext('Belarusian'),
-	'bg_BG' => gettext('Bulgarian'),
-	'ca' => gettext('Catalan'),
-	'zh_CN' => gettext('Chinese'),
-	'zh_HK' => gettext('Chinese Hong Kong'),
-	'zh_TW' => gettext('Chinese Taiwan'),
-	'hr' => gettext('Croatian'),
-	'cs_CZ' => gettext('Czech'),
-	'da_DK' => gettext('Danish'),
-	'nl_NL' => gettext('Dutch'),
-	'en_US' => gettext('English (US)'),
-	'en_UK' => gettext('English (UK)'),
-	'eo' => gettext('Esperanto'),
-	'et' => gettext('Estonian'),
-	'fo' => gettext('Faroese'),
-	'fi_FI' => gettext('Finnish'),
-	'fr_FR' => gettext('French'),
-	'gl_ES' => gettext('Galician'),
-	'de_DE' => gettext('German'),
-	'el' => gettext('Greek'),
-	'he_IL' => gettext('Hebrew'),
-	'hu_HU' => gettext('Hungarian'),
-	'is_IS' => gettext('Icelandic'),
-	'id_ID' => gettext('Indonesian'),
-	'it_IT' => gettext('Italian'),
-	'km_KH' => gettext('Cambodian'),
-	'ko_KR' => gettext('Korean'),
-	'lv' => gettext('Latvian'),
-	'lt' => gettext('Lithuanian'),
-	'mk_MK' => gettext('Macedonian'),
-	'mg_MG' => gettext('Malagasy'),
-	'ms_MY' => gettext('Malay'),
-	'ni_ID' => gettext('Nias'),
-	'nb_NO' => gettext('Norwegian'),
-	'pl_PL' => gettext('Polish'),
-	'pt_BR' => gettext('Brazilian Portuguese'),
-	'pt_PT' => gettext('European Portuguese'),
-	'ro' => gettext('Romanian'),
-	'ru_RU' => gettext('Russian'),
-	'sr_RS' => gettext('Serbian'),
-	'si_LK' => gettext('Sinhala'),
-	'sl_SI' => gettext('Slovenian'),
-	'sk' => gettext('Slovak'),
-	'es_ES' => gettext('Spanish'),
-	'sv_SE' => gettext('Swedish'),
-	'th' => gettext('Thai'),
-	'tr' => gettext('Turkish'),
-	'ua_UA' => gettext('Ukrainian'),
-	'uz_UZ' => gettext('Uzbek'),
-	'vi_VN' => gettext('vi_VN'),
-	'cy' => gettext('Welsh')
-);
-
 /**
  * Returns an array of available language locales.
  * 
@@ -99,6 +41,7 @@ function generateLanguageOptionList() {
  *
  */
 function setupCurrentLocale() {
+	global $_zp_languages;
 	$encoding = getOption('charset');
 	if (empty($encoding)) $encoding = 'UTF-8';
 	$locale = getOption("locale");
@@ -113,6 +56,64 @@ function setupCurrentLocale() {
 		bind_textdomain_codeset($domain, $encoding);
 	}
 	textdomain($domain);
+	$_zp_languages = array(
+		'af' => gettext('Afrikaans'),
+	'ar' => gettext('Arabic'),
+		'bn_BD' => gettext('Bengali'),
+		'eu' => gettext('Basque'),
+		'be_BY' => gettext('Belarusian'),
+		'bg_BG' => gettext('Bulgarian'),
+		'ca' => gettext('Catalan'),
+		'zh_CN' => gettext('Chinese'),
+		'zh_HK' => gettext('Chinese Hong Kong'),
+		'zh_TW' => gettext('Chinese Taiwan'),
+		'hr' => gettext('Croatian'),
+		'cs_CZ' => gettext('Czech'),
+		'da_DK' => gettext('Danish'),
+		'nl_NL' => gettext('Dutch'),
+		'en_US' => gettext('English (US)'),
+		'en_UK' => gettext('English (UK)'),
+		'eo' => gettext('Esperanto'),
+		'et' => gettext('Estonian'),
+		'fo' => gettext('Faroese'),
+		'fi_FI' => gettext('Finnish'),
+		'fr_FR' => gettext('French'),
+		'gl_ES' => gettext('Galician'),
+		'de_DE' => gettext('German'),
+		'el' => gettext('Greek'),
+		'he_IL' => gettext('Hebrew'),
+		'hu_HU' => gettext('Hungarian'),
+		'is_IS' => gettext('Icelandic'),
+		'id_ID' => gettext('Indonesian'),
+		'it_IT' => gettext('Italian'),
+		'km_KH' => gettext('Cambodian'),
+		'ko_KR' => gettext('Korean'),
+		'lv' => gettext('Latvian'),
+		'lt' => gettext('Lithuanian'),
+		'mk_MK' => gettext('Macedonian'),
+		'mg_MG' => gettext('Malagasy'),
+		'ms_MY' => gettext('Malay'),
+		'ni_ID' => gettext('Nias'),
+		'nb_NO' => gettext('Norwegian'),
+		'pl_PL' => gettext('Polish'),
+		'pt_BR' => gettext('Brazilian Portuguese'),
+		'pt_PT' => gettext('European Portuguese'),
+		'ro' => gettext('Romanian'),
+		'ru_RU' => gettext('Russian'),
+		'sr_RS' => gettext('Serbian'),
+		'si_LK' => gettext('Sinhala'),
+		'sl_SI' => gettext('Slovenian'),
+		'sk' => gettext('Slovak'),
+		'es_ES' => gettext('Spanish'),
+		'sv_SE' => gettext('Swedish'),
+		'th' => gettext('Thai'),
+		'tr' => gettext('Turkish'),
+		'ua_UA' => gettext('Ukrainian'),
+		'uz_UZ' => gettext('Uzbek'),
+		'vi_VN' => gettext('vi_VN'),
+		'cy' => gettext('Welsh')
+		);
+
 }
 
 /**
