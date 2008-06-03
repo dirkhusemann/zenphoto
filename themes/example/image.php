@@ -52,6 +52,23 @@
 					<br clear="all" />
 					<?php printImageDesc(true); ?>
 					<?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ''); ?>
+					<?php 
+					if (function_exists('zenPaypal')) { 
+					?>
+						<table>
+						<tr>
+						<td valign="bottom">
+						<?php	zenPaypalPrintPricelist(); ?>
+						</td>
+						<td>&nbsp;&nbsp;</td>
+						<td>
+						<?php	zenPaypal(); ?>
+						</td>
+						</tr>
+						</table>
+					<?php
+					}
+					?>
 					<?php if (function_exists('printShutterfly')) printShutterfly(); ?>
 					<?php if (function_exists('printImageMap')) printImageMap(); ?>
           <div class="rating"><?php if (function_exists('printImageRating')) printImageRating(); ?></div> 

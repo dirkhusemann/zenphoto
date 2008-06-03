@@ -74,3 +74,40 @@ ul.archive .month {	font-size: 14px; list-style:none; border-top:2px solid #E6E6
 .taglist .tags_title { background: none; padding-right: 5px; padding-left: 0;}
 
 .rating { margin-top: 15px; margin-bottom: 15px; }
+
+/* Paypal price list */
+#zenPaypalPricelist, zenPaypalPricelist_data {
+	text-align: left;
+  position: relative;
+  display: block;
+}
+
+#zenPaypalPricelist_data table {
+  line-height: 1em;
+  border: 1px solid #ccc;
+  top: 2em;
+  right: 0px;
+  background-color: #fafafa;
+  padding: 5px 8px;
+}
+
+#zenPaypalPricelist_data th {
+	text-align: center;
+  border-bottom: 1px solid #f0f0f0;
+  background-color: #f8f8f8;
+  padding: 5px 8px;
+}
+#zenPaypalPricelist_data td {
+  border-bottom: 1px solid #f0f0f0;
+  background-color: #f8f8f8;
+  padding: 5px 8px;
+}
+#zenPaypalPricelist_data table .price {
+	text-align: right;
+}
+#zenPaypalPricelist_data table .size {
+	text-align: center;
+}
+#zenPaypalPricelist_data table .media {
+	text-align: left;
+}

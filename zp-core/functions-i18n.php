@@ -58,7 +58,7 @@ function setupCurrentLocale() {
 	textdomain($domain);
 	$_zp_languages = array(
 		'af' => gettext('Afrikaans'),
-	'ar' => gettext('Arabic'),
+		'ar' => gettext('Arabic'),
 		'bn_BD' => gettext('Bengali'),
 		'eu' => gettext('Basque'),
 		'be_BY' => gettext('Belarusian'),
@@ -113,7 +113,6 @@ function setupCurrentLocale() {
 		'vi_VN' => gettext('vi_VN'),
 		'cy' => gettext('Welsh')
 		);
-
 }
 
 /**

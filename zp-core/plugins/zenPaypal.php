@@ -154,4 +154,57 @@ if (empty($locale)) { $locale = 'en_US'; }
 </form>
 <?php
 }
+
+/**
+ * Prints a link that will expose the zenPaypal Price list table
+ *
+ * @param array $pricelist the zenPaypal price list
+ * @param string $text The text to place for the link (defaults to "Price List")
+ * @param string $textTag HTML tag for the link text. E.g. h3, ...  
+ * @param string $id the division ID for the price list. (NB: a div named $id appended with "_data" is
+ * 										created for the hidden table.
+ * 
+ * CSS entries for the following should be created for proper formatting. 
+ *			#zenPaypalPricelist_data table {
+ *			#zenPaypalPricelist_data th {
+ *			#zenPaypalPricelist_data td {
+ *			#zenPaypalPricelist_data table .price {
+ *			#zenPaypalPricelist_data table .size {
+ *			#zenPaypalPricelist_data table .media {
+ * 
+ */
+function zenPaypalPrintPricelist($pricelist=NULL, $text=NULL, $textTag='', $id='zenPaypalPricelist'){
+	if (!is_array($pricelist)) {
+		$pricelist = zenPaypalPricelistFromString(getOption('zenPaypal_pricelist'));
+	}
+	if (is_null($text)) $text = gettext("Price List");
+	$dataid = $id . '_data';
+	if (!empty($textTag)) {
+		$textTagStart = '<'.$textTag.'>';
+		$textTagEnd = '</'.$textTag.'>';
+	}
+	echo '<div id="' .$id. '">'."\n".'<a href="javascript: toggle('. "'" .$dataid."'".');">'.$textTagStart.$text.'</a>'.$textTagEnd."\n"."\n</div>";
+	echo '<div id="' .$dataid. '" style="display: none;">'."\n";
+	echo '<table>'."\n";
+	echo '<table>'."\n";
+	echo '<tr>'."\n";
+	echo '<th>'.gettext("size").'</th>'."\n";
+	echo '<th>'.gettext("media").'</th>'."\n";
+	echo '<th>'.gettext("price").'</th>'."\n";
+	echo '</tr>'."\n";
+	$sizes = array();
+	$media = array();
+	foreach ($pricelist as $key=>$price) {
+		$itemparts = explode(':', $key);
+		echo '<tr>'."\n";
+		echo '<td class="size">'.$itemparts[0].'</td>'."\n";
+		echo '<td class="media">'.$itemparts[1].'</td>'."\n";
+		echo '<td class="price">'.$price.'</td>'."\n";
+		echo '</tr>'."\n";
+	}
+	echo '</table>'."\n";
+	echo '</div>'."\n";
+	echo "</div>\n";
+}
+
 ?>
