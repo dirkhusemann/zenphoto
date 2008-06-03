@@ -53,11 +53,11 @@
 			?>
 			<li>
 				<div class="imagethumb">
-				<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the album: '); echo getAlbumTitle(); printImage_AlbumCount(); ?>">
+				<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the album:').' '; echo getAlbumTitle(); printImage_AlbumCount(); ?>">
 						<?php printCustomAlbumThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?>
  				</a>
 				</div>
-				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the album: '); echo getAlbumTitle(); printImage_AlbumCount();?>"><?php printAlbumTitle(); ?></a></h4>
+				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the album:').' '; echo getAlbumTitle(); printImage_AlbumCount();?>"><?php printAlbumTitle(); ?></a></h4>
 			</li>
 			<?php } ?>
 		</ul>
@@ -87,7 +87,7 @@
 			</p>
 			<?php printThemeInfo(); ?>
 		</small>
-		<a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album');?>"><?php echo gettext('Powered by ');?><font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a><br/>
+		<a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album');?>"><?php echo gettext('Powered by').' ';?><font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a><br/>
 		<?php printRSSLink('Gallery','', 'Gallery RSS', ''); ?>
 	</div>
 		

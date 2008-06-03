@@ -441,7 +441,7 @@ class tar_file extends archive
 				}
 				else if ($this->options['overwrite'] == 0 && file_exists($file['name']))
 				{
-					$this->error[] = $file['name'].gettext(" already exists.");
+					$this->error[] = $file['name'].' '.gettext("already exists.");
 					continue;
 				}
 				else if ($file['type'] == 2)
@@ -585,7 +585,7 @@ class zip_file extends archive
 				unset ($temp);
 			}
 			else
-				$this->error[] = gettext("Could not open sfx module from ").$this->options['sfx'];
+				$this->error[] = gettext("Could not open sfx module from").' '.$this->options['sfx'];
 
 		$pwd = getcwd();
 		chdir($this->options['basedir']);

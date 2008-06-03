@@ -19,7 +19,7 @@
 
 <div id="content">
 
-	<h1><?php printGalleryTitle(); echo gettext(' | Archive'); ?></h1>
+	<h1><?php printGalleryTitle(); echo ' | '.gettext('Archive'); ?></h1>
 
 	<div class="galleries">
  	<?php if (!checkForPassword()) {?>
@@ -27,13 +27,13 @@
 		<ul>
 			<?php $counter = 0; while (next_album(true) and $counter < 999): ?>
 			<li class="gal">
-			<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album: '); echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
-			<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album: '); echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 210, 59, 210, 59); ?></a>
+			<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
+			<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 210, 59, 210, 59); ?></a>
 			<p>
 		<?php
 			$number = getNumsubalbums(); 
 			if ($number > 0) { 
-				if (!($number == 1)) {  $number .= gettext(' albums');} else {$number .=gettext(' album');}
+				if (!($number == 1)) {  $number .= ' '.gettext('albums');} else {$number .=' '.gettext('album');}
 				$counters = $number;
 			} else {
 				$counters = '';
@@ -41,7 +41,7 @@
 			$number = getNumImages();
 			if ($number > 0) {	
 				if (!empty($counters)) { $counters .= ",&nbsp;"; }					
-				if ($number != 1) $number .= gettext(' photos'); else $number .= gettext(' photo'); 
+				if ($number != 1) $number .= ' '.gettext('photos'); else $number .= ' '.gettext('photo'); 
 				$counters .= $number;
 			}
 			if (!empty($counters)) {
@@ -73,8 +73,8 @@
 <div id="footer">
 	<hr />
 	<p>
-		<a href="http://stopdesign.com/templates/photos/"><?php echo gettext('Photo Templates</a> from '); ?>Stopdesign.
-		<?php echo gettext('Powered by '); ?><a href="http://www.zenphoto.org">ZenPhoto</a>.
+		<a href="http://stopdesign.com/templates/photos/"><?php echo gettext('Photo Templates</a> from').' '; ?>Stopdesign.
+		<?php echo gettext('Powered by').' '; ?><a href="http://www.zenphoto.org">ZenPhoto</a>.
 	</p>
 </div>
 

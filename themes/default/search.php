@@ -50,7 +50,7 @@
 					<div class="albumdesc">
 						<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:');?> <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
 						<p><?php printAlbumDesc(); ?></p>
-						<small><?php printAlbumDate(gettext("Date: ")); ?></small>
+						<small><?php printAlbumDate(gettext("Date:").' '); ?> </small>
 					</div>
 					<p style="clear: both; "></p>
 				</div>

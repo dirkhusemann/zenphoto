@@ -83,8 +83,8 @@
 						$_zp_themeroot . "/img/btn_show.gif\" width=\"35\" height=\"11\" alt=\"".gettext("SHOW")."\" /></a> <a href=\"#content\" id=\"hidecomments\"><img src=\"" .
 						$_zp_themeroot . "/img/btn_hide.gif\" width=\"35\" height=\"11\" alt=\"".gettext("HIDE")."\" /></a>"; 
  						$num = getCommentCount(); if ($num == 0) echo "<h2>No comments yet</h2>"; 
- 						if ($num == 1) echo "<h2>" .gettext('1 comment so far '). "$showhide</h2>"; 
- 						if ($num > 1) echo "<h2>$num " .gettext('comments so far '). "$showhide</h2>"; 
+ 						if ($num == 1) echo "<h2>" .gettext('1 comment so far').' '. "$showhide</h2>"; 
+ 						if ($num > 1) echo "<h2>$num " .gettext('comments so far').' '. "$showhide</h2>"; 
  					?>
 					</h2>
 					<?php printCommentErrors(); ?>	  
@@ -98,8 +98,8 @@
 								$autonumber++;
 						?>
 							<dt id="comment<?php echo $autonmuber; ?>">
-								<a href="#comment<?php echo $autonumber; ?>" class="postno" title="<?php echo gettext('Link to Comment '); echo $autonumber; ?>"><?php echo $autonumber; ?>.</a>
-								<em>On <?php echo getCommentDate();?>, <?php printCommentAuthorLink(); echo gettext(' wrote:'); ?></em>
+								<a href="#comment<?php echo $autonumber; ?>" class="postno" title="<?php echo gettext('Link to Comment').' '; echo $autonumber; ?>"><?php echo $autonumber; ?>.</a>
+								<em>On <?php echo getCommentDate();?>, <?php printCommentAuthorLink(); echo ' '.gettext('wrote:'); ?></em>
 							</dt>
 							<dd><p><?php echo getCommentBody();?><?php printEditCommentLink(gettext('Edit'), ' | ', ''); ?></p></dd>
 							<?php endwhile; ?>
@@ -185,7 +185,7 @@
 			<hr />
 			<p>
 				<a href="http://stopdesign.com/templates/photos/"><?php echo gettext('Photo Templates</a> from'); ?> Stopdesign.
-				<?php echo gettext('Powered by '); ?><a href="http://www.zenphoto.org">ZenPhoto</a>.
+				<?php echo gettext('Powered by').' '; ?><a href="http://www.zenphoto.org">ZenPhoto</a>.
 			</p>
 		</div>
 		<?php printAdminToolbox(); ?>

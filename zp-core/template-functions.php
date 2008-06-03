@@ -518,7 +518,7 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 	}
 	for ($i=($j=max(1, min($current-2, $total-6))); $i <= min($total, $j+6); $i++) {
 		echo "\n  <li" . (($i == $current) ? " class=\"current\"" : "") . ">";
-		printLink(getPageURL($i, $total), $i, "Page $i" . (($i == $current) ? gettext(" (Current Page)") : ""));
+		printLink(getPageURL($i, $total), $i, "Page $i" . (($i == $current) ? ' '.gettext("(Current Page)") : ""));
 		echo "</li>";
 	}
 	if ($i <= $total) {echo "\n <li><a>" . ". . ." . "</a></li>"; }

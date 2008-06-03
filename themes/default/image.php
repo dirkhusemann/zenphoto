@@ -55,7 +55,7 @@
 				printImageMetadata('', false); 
 			} 
 		?>
-		<?php printTags('links', gettext('<strong>Tags:</strong> '), 'taglist', ''); ?>
+		<?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ''); ?>
 
 		<?php if (function_exists('printImageMap')) printImageMap(); ?>
     

@@ -47,7 +47,7 @@
 		</div>
 	
 		<?php printPageListWithNav("&laquo; ".gettext("prev"), gettext("next")." &raquo;"); ?>
-		<?php printTags('links', gettext('<strong>Tags:</strong> '), 'taglist', ''); ?>
+		<?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ''); ?>
 				
 	</div>
 	<?php if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow')); ?>	

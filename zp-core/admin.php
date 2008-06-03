@@ -1778,7 +1778,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
  <input	type="hidden" name="savegalleryoptions" value="yes" /> <?php
 	if (isset($_GET['mismatch'])) {
 		echo '<div class="errorbox" id="fade-message">';
-		echo  "<h2>". gettext("Your "). $_GET['mismatch'] . gettext(" passwords did not match")."</h2>";
+		echo  "<h2>". gettext("Your").' '. $_GET['mismatch'] . ' '.gettext("passwords did not match")."</h2>";
 		echo '</div>';
 	}
 	if (isset($_GET['badurl'])) {
@@ -2045,7 +2045,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 	type="hidden" name="saveimageoptions" value="yes" /> <?php
 	if (isset($_GET['mismatch'])) {
 		echo '<div class="errorbox" id="fade-message">';
-		echo  "<h2>".gettext("Your ") . $_GET['mismatch'] . gettext(" passwords did not match")."</h2>";
+		echo  "<h2>".gettext("Your").' ' . $_GET['mismatch'] . ' '.gettext("passwords did not match")."</h2>";
 		echo '</div>';
 	}
 	?>
@@ -2103,7 +2103,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		<input type="checkbox" name="perform_watermark" value="1"
 		<?php echo checked('1', getOption('perform_watermark')); ?> />&nbsp;<?php echo gettext("Enabled"); ?>
 		<br />
-		<?php echo gettext('cover '); ?>
+		<?php echo gettext('cover').' '; ?>
 		<input type="text" size="2" name="watermark_scale"
 				value="<?php echo getOption('watermark_scale');?>" /><?php echo gettext('% of image') ?>
 		<input type="checkbox" name="watermark_allow_upscale" value="1"
@@ -2117,8 +2117,8 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		</td>
 		<td><?php echo gettext("The watermark image (png-24). (Place the image in the"); ?> "<?php echo ZENFOLDER; ?>/watermarks/
 		<?php echo gettext("directory"); ?>".)<br />
-		<?php echo gettext("The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the	image. ").
-		           gettext("It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark. ").
+		<?php echo gettext("The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the	image.").' '.
+		           gettext("It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark.").' '.
 		           gettext("If <em>allow upscale</em> is not checked the watermark will not be made larger than the original watermark image."); ?></td>
 	</tr>
 	<tr>

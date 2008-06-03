@@ -103,7 +103,7 @@
 	{
 		if (!function_exists('gzopen'))
 		{
-			die(gettext('Abort ').basename(__FILE__).' : '.gettext('Missing zlib extensions'));
+			die(gettext('Abort').' '.basename(__FILE__).' : '.gettext('Missing zlib extensions'));
 		}
 		$this->zipname = $p_zipname;
 		$this->zip_fd = 0;
@@ -510,7 +510,7 @@
 			if (($this->zip_fd = @fopen($this->zipname, 'rb')) == 0)
 			{
 				$this->privSwapBackMagicQuotes();
-				PclZip::privErrorLog(PCLZIP_ERR_READ_OPEN_FAIL, gettext('Unable to open archive ').'\''.$this->zipname.'\' '.gettext('in binary read mode'));
+				PclZip::privErrorLog(PCLZIP_ERR_READ_OPEN_FAIL, gettext('Unable to open archive').' '.'\''.$this->zipname.'\' '.gettext('in binary read mode'));
 				return 0;
 			}
 			$v_central_dir = array();
@@ -2588,7 +2588,7 @@
 
 							PclZip::privErrorLog(PCLZIP_ERR_UNSUPPORTED_ENCRYPTION,
 			 											gettext("Unsupported encryption for")." "
-											 	.gettext(" filename")." '".$v_header['stored_filename']
+											 	.' '.gettext("filename")." '".$v_header['stored_filename']
 								 	."'");
 
 							//--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, PclZip::errorCode(), PclZip::errorInfo());
@@ -3786,7 +3786,7 @@
 			// ----- Error log
 			PclZip::privErrorLog(PCLZIP_ERR_BAD_FORMAT,
 	 											gettext('The central dir is not at the end of the archive.')
-						 	.gettext(' Some trailing bytes exists after the archive.'));
+						 	.' '.gettext('Some trailing bytes exists after the archive.'));
 
 			// ----- Return
 			//--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, PclZip::errorCode(), PclZip::errorInfo());

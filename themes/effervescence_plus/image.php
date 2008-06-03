@@ -182,14 +182,14 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 		<?php 
 		$h = hitcounter('image');
 		if ($h == 1) {
-			$h .= ' '.gettext(' hit');
+			$h .= ' '.gettext('hit');
 		} else {
-			$h .= ' '.gettext(' hits');
+			$h .= ' '.gettext('hits');
 		}
 		echo "<p>$h ".gettext('on this image')."</p>";
 		printThemeInfo(); 
 		?>
-		<a href="http://www.zenphoto.org" title="A simpler web photo album"><?php echo gettext('Powered by ');?>
+		<a href="http://www.zenphoto.org" title="A simpler web photo album"><?php echo gettext('Powered by').' ';?>
 		<font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font face="Arial Black" size="1">photo</font></span></a>
 	</div>
 		

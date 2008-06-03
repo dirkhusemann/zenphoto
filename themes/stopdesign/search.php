@@ -47,14 +47,14 @@
 				}
 			?>
 				<li class="gal">
-					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album: '); echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 230, null, 210, 60); ?></a>
-					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album: '); echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
+					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 230, null, 210, 60); ?></a>
+					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
 					<p>
 						<?php 
 						$number = getNumAlbums(); 
 						$results + $number;
 						if ($number > 0) { 
-						if (!($number == 1)) {  $number .= gettext(' albums');} else {$number .= gettext(' album');}
+						if (!($number == 1)) {  $number .= ' '.gettext('albums');} else {$number .= ' '.gettext('album');}
 							$counters = $number;
 						} else {
 							$counters = '';
@@ -62,7 +62,7 @@
 						$number = getNumImages();
 						if ($number > 0) {	
 							if (!empty($counters)) { $counters .= ",&nbsp;"; }					
-							if ($number != 1) $number .= gettext(' photos'); else $number .= gettext(' photo'); 
+							if ($number != 1) $number .= ' '.gettext('photos'); else $number .= ' '.gettext('photo'); 
 							$counters .= $number;
 						}
 						if (!empty($counters)) {
@@ -142,7 +142,7 @@
 
 	<div id="footer">
 		<hr />
-		<p><?php echo gettext('Powered by '); ?><a href="http://www.zenphoto.org">ZenPhoto</a>.</p>
+		<p><?php echo gettext('Powered by').' '; ?><a href="http://www.zenphoto.org">ZenPhoto</a>.</p>
 	</div>
 	<?php printAdminToolbox(); ?>
 </body>

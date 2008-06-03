@@ -25,13 +25,13 @@
 				<ul>
 					<?php $counter = 0; while (next_album() and $counter < 6): ?>
 						<li class="gal">
-							<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext("View album: "); echo getAlbumTitle(); ?>"><?php printAlbumTitle(); ?></a></h3>
-							<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext("View album: "); echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 210, 59, 210, 59); ?></a>
+							<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext("View album:").' '; echo getAlbumTitle(); ?>"><?php printAlbumTitle(); ?></a></h3>
+							<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext("View album:").' '; echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 210, 59, 210, 59); ?></a>
 							<p>
 					<?php 
 						$number = getNumsubalbums(); 
 						if ($number > 0) { 
-							if (!($number == 1)) {  $number .= gettext(" albums");} else {$number .= gettext(" album");}
+							if (!($number == 1)) {  $number .= ' '.gettext("albums");} else {$number .= ' '.gettext("album");}
 								$counters = $number;
 							} else {
 								$counters = '';
@@ -39,7 +39,7 @@
 							$number = getNumImages();
 							if ($number > 0) {	
 								if (!empty($counters)) { $counters .= ",&nbsp;"; }					
-							if ($number != 1) $number .= gettext(" photos"); else $number .= gettext(" photo"); 
+							if ($number != 1) $number .= ' '.gettext("photos"); else $number .= ' '.gettext("photo"); 
 							$counters .= $number;
 						}
 						if (!empty($counters)) {
@@ -55,7 +55,7 @@
 					</li>
 				<?php if ($counter == 2) {echo "</ul><ul>";}; $counter++; endwhile; ?>
 				</ul>
-				<p class="mainbutton"><a href="<?php echo htmlspecialchars(getCustomPageURL('albumarchive')); ?>" class="btn"><img src="<?php echo $_zp_themeroot ?>/img/btn_gallery_archive.gif" width="118" height="21" alt="<?php echo gettext(' Gallery Archive'); ?>" /></a></p>
+				<p class="mainbutton"><a href="<?php echo htmlspecialchars(getCustomPageURL('albumarchive')); ?>" class="btn"><img src="<?php echo $_zp_themeroot ?>/img/btn_gallery_archive.gif" width="118" height="21" alt="<?php echo ' '.gettext('Gallery Archive'); ?>" /></a></p>
 		</div>
 
 		<div id="secondary">
@@ -75,7 +75,7 @@
 								foreach ($images as $image) {
 									echo "<li><table><tr><td>\n";
 									$imageURL = getURL($image);
-									echo '<a href="'.$imageURL.'" title="'.gettext("View image: ").
+									echo '<a href="'.$imageURL.'" title="'.gettext("View image:").' '.
 									$image->getTitle() . '"><img src="' .
 									htmlspecialchars($image->getCustomImage(null, 44, 33, null, null, null, null, true)) .
 																		'" width="44" height="33" alt="' . $image->getTitle() . "\"/></a>\n"; 
@@ -89,7 +89,7 @@
 								echo "<li><table><tr><td>\n";
 								$randomImage = getRandomImages();
 								$randomImageURL = getURL($randomImage);
-								echo '<a href="' . $randomImageURL . '" title="'.gettext("View image: ") . $randomImage->getTitle() . '">' .
+								echo '<a href="' . $randomImageURL . '" title="'.gettext("View image:").' ' . $randomImage->getTitle() . '">' .
  								'<img src="' . htmlspecialchars($randomImage->getCustomImage(null, 44, 33, null, null, null, null, true)) . 
 								'" width="44" height="33" alt="'.$randomImage->getTitle().'"'; 
 								echo "/></a></td></tr></table></li>\n";

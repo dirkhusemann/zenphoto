@@ -51,7 +51,7 @@
 					
 					<br clear="all" />
 					<?php printImageDesc(true); ?>
-					<?php printTags('links', gettext('<strong>Tags:</strong> '), 'taglist', ''); ?>
+					<?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ''); ?>
 					<?php if (function_exists('printShutterfly')) printShutterfly(); ?>
 					<?php if (function_exists('printImageMap')) printImageMap(); ?>
           <div class="rating"><?php if (function_exists('printImageRating')) printImageRating(); ?></div> 
@@ -87,7 +87,7 @@
 										</td></tr>
 										<tr><td><label for="email"><?php echo gettext("E-Mail (won't be public):"); ?></label></td> <td><input type="text" name="email" size="20" value="<?php echo $stored[1];?>" /> </td></tr>
 										<tr><td><label for="website"><?php echo gettext("Site:"); ?></label></td> <td><input type="text" name="website" size="30" value="<?php echo $stored[2];?>" /></td></tr>
-												<?php printCaptcha('<tr><td>'.gettext('Enter '), ':</td><td>', '</td></tr>'); ?>
+												<?php printCaptcha('<tr><td>'.gettext('Enter').' ', ':</td><td>', '</td></tr>'); ?>
 										<tr><td colspan="2"><input type="checkbox" name="private" value="1" /> <?php echo gettext("Private (not published.)"); ?></td></tr>								
 									</table>
 									<textarea name="comment" rows="6" cols="40"><?php echo $stored[3]; ?></textarea><br />

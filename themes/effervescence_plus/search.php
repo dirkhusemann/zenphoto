@@ -134,7 +134,7 @@ $backgroundImagePath="";
 				printImage_AlbumCount();
 			?>">
 				<?php printCustomAlbumThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?></a></div>
-				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the Album: '); echo getAlbumTitle();
+				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the Album:').' '; echo getAlbumTitle();
 				printImage_AlbumCount();
 			?>">
 			<?php printAlbumTitle(); ?></a></h4></li>
@@ -181,7 +181,7 @@ $backgroundImagePath="";
 	 		} else {  /* flash */
 	 			if (isImagePage()) {
 	 			?>
- 					<div id="flash"><p align=center><font color=#663300><?php echo gettext('For the best viewing experience '); ?><a href="http://www.macromedia.com/go/getflashplayer/"><?php echo gettext('get Adobe Flash.'); ?></a></p> 
+ 					<div id="flash"><p align=center><font color=#663300><?php echo gettext('For the best viewing experience').' '; ?><a href="http://www.macromedia.com/go/getflashplayer/"><?php echo gettext('get Adobe Flash.'); ?></a></p> 
  					<p align="center"><a href="
  					<?php 
  					if ($imagePage) {
@@ -253,7 +253,7 @@ if (getOption('Use_Simpleviewer') && !getOption('mod_rewrite')) {
 } ?>
 
 <?php printThemeInfo(); ?>
-<a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>"><?php echo gettext('Powered by '); ?>
+<a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>"><?php echo gettext('Powered by').' '; ?>
 <font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font size="1" face="Arial Black">photo</font></span></a>
 
 </div>

@@ -274,7 +274,7 @@ if ($_GET['format'] != 'xml') {
 <!-- Simpleviewer section -->
 			<div id="flash">
 					<p align="center">
-			<font color=#663300><?php echo gettext('For the best viewing experience '); ?><a href="http://www.macromedia.com/go/getflashplayer/"><?php echo gettext('Get Adobe Flash.'); ?></a></font>
+			<font color=#663300><?php echo gettext('For the best viewing experience').' '; ?><a href="http://www.macromedia.com/go/getflashplayer/"><?php echo gettext('Get Adobe Flash.'); ?></a></font>
 			</p> 
 						<p align="center">
  						<?php 
@@ -341,7 +341,7 @@ if ($h == 1) {
 echo "<p>$h ".gettext('on this album')."</p>";
 printThemeInfo();
 ?>
-<a href="http://www.zenphoto.org" title="A simpler web photo album"><?php echo gettext('Powered by '); ?>
+<a href="http://www.zenphoto.org" title="A simpler web photo album"><?php echo gettext('Powered by').' '; ?>
 <font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font size="1" face="Arial Black">photo</font></span></a><br />
 <?php printRSSLink('Album', '', 'Album RSS', ''); ?>
 

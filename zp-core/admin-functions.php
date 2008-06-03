@@ -238,7 +238,7 @@ function printLoginForm($redirect=null, $logo=true) {
 		echo "\n      ".gettext("Enter").' ';
 		echo "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/>" .
  								"<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"absbottom\"/></label> ";
-		echo gettext(" to request a reset.");
+		echo ' '.gettext("to request a reset.");
 		//		echo "      <input type=\"text\" id=\"code\" name=\"code\" size=\"4\" class=\"inputbox\" />";
 		echo "      </td></tr>";
 	}
@@ -361,9 +361,9 @@ function displayDeleted() {
 	if (isset($_GET['ndeleted'])) {
 		$ntdel = strip($_GET['ndeleted']);
 		if ($ntdel <= 2) {
-			$msg = gettext("Image ");
+			$msg = gettext("Image").' ';
 		} else {
-			$msg = gettext("Album ");
+			$msg = gettext("Album").' ';
 			$ntdel = $ntdel - 2;
 		}
 		if ($ntdel == 2) {
@@ -571,7 +571,7 @@ function printAlbumEditForm($index, $album) {
 	$result = query_single_row("SELECT `hitcounter` FROM " . prefix('albums') . " WHERE id = $id");
 	$hc = $result['hitcounter'];
 	if (empty($hc)) { $hc = '0'; }
-	echo" ".gettext("Hit counter: "). $hc . " <input type=\"checkbox\" name=\"".gettext("reset_hitcounter")."\"> Reset</td>";
+	echo" ".gettext("Hit counter:").' '. $hc . " <input type=\"checkbox\" name=\"".gettext("reset_hitcounter")."\"> Reset</td>";
 	echo '</tr>';
 	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Album Description:")." </td> <td><textarea name=\"".$prefix."albumdesc\" cols=\"60\" rows=\"6\" style=\"width: 360px\">" .
 	$album->getDesc() . "</textarea></td></tr>";
