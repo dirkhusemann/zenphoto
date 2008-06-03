@@ -1263,7 +1263,7 @@ if (count($album->getImages())) {
 <?php
 }
 if (ini_get('safe_mode')) { ?>
-<div class="warningbox">
+<div class="warningbox" id="fade-message">
 <h2><?php echo gettext("PHP Safe Mode Restrictions in effect!"); ?></h2>
 <p><?php echo gettext("Zenphoto may be unable to perform uploads when PHP Safe Mode restrictions are in effect"); ?></p>
 </div>
