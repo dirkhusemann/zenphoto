@@ -228,7 +228,7 @@ function printSlideShow($heading = true) {
 			 	pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
 				</object><a>';
 		} else { 
-			echo "<img src='".WEBPATH."/".ZENFOLDER."/i.php?a=".$album->name."&i=".$filename."&s=".$imagesize."' alt=".$image->getTitle()." title=".$image->getTitle()." />";
+			echo "<img src='".WEBPATH."/".ZENFOLDER."/i.php?a=".$album->name."&i=".$filename."&s=".$imagesize."' alt='".$image->getTitle()."' title='".$image->getTitle()."' />";
 		}
 		if(getOption("slideshow_showdesc")) { echo "<p class='imgdesc'>".$image->getDesc()."</p>"; }
 		echo "</span>";

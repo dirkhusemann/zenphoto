@@ -341,8 +341,11 @@ function zp_load_album($folder, $force_nocache=false) {
  */
 function zp_load_image($folder, $filename) {
 	global $_zp_current_image, $_zp_current_album, $_zp_current_search;
-	if ($_zp_current_album == NULL || $_zp_current_album->name != $folder)
+	if ($_zp_current_album == NULL || $_zp_current_album->name != $folder) {
 		$album = zp_load_album($folder);
+	} else {
+		$album = $_zp_current_album;
+	}
 	$_zp_current_image = new Image($album, $filename);
 	if (!$_zp_current_image->exists) return false;
 	set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX);
