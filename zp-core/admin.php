@@ -1883,14 +1883,14 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		<td><?php echo gettext("Date format:"); ?></td>
 		<td>
 			<script type="text/javascript">
-			function show(obj) {
+			function showfield(obj) {
 				no = obj.options[obj.selectedIndex].value;
 				document.getElementById('customTextBox').style.display = 'none';
 				if(no=='custom')
 					document.getElementById('customTextBox').style.display = 'block';
 			}
 			</script>
-			<select id="date_format_list" name="date_format_list" onchange="show(this)">
+			<select id="date_format_list" name="date_format_list" onchange="showfield(this)">
 			<?php
 			$formatlist = array(gettext('Custom')=>'custom', 
 					gettext('02/25/08 15:30')=>'%d/%m/%y %H:%M',
