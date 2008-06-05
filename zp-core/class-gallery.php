@@ -154,15 +154,19 @@ class Gallery {
 	/**
 	 * Returns the total number of TOPLEVEL albums in the gallery (does not include sub-albums)
 	 * @param bool $db whether or not to use the database (includes ALL detected albums) or the directories
+	 * @param bool $publishedOnly set to true to exclude unpublished albums
 	 * @return int
 	 */
-	function getNumAlbums($db=false) {
+	function getNumAlbums($db=false, $publishedOnly=false) {
 		$count = -1;
 		if (!$db) {
 			$this->getAlbums();
 			$count = count($this->albums);
 		} else {
 			$sql = "SELECT count(*) FROM " . prefix('albums') . "WHERE `folder`!=''";
+			if ($publishedOnly) {
+				$sql .= ' AND `show`=1';
+			}
 			$result = query($sql);
 			$count = mysql_result($result, 0);
 		}
@@ -229,13 +233,35 @@ class Gallery {
 	/**
 	 * Returns the number of images from a database SELECT count(*)
 	 * Ideally one should call garbageCollect() before to make sure the database is current.
+	 * @parm bool $publishedOnly set to true to count only published images.
 	 * @return int
 	 */
-	function getNumImages() {
+	function getNumImages($publishedOnly=false) {
 		$sql = "SELECT `id` FROM " . prefix('albums') . "WHERE `folder`=''";
-		$row = query_single_row($sql);
-		if (!empty($row['id'])) {
-			$exclude = " WHERE `albumid`!=".$row['id'];
+		if ($publishedOnly) {
+			$sql .= " OR `show`=0";
+		}
+		$rows = query_full_array($sql);
+		if (is_array($rows)) {
+			$exclude = '';
+			foreach ($rows as $row)	{
+				if (!empty($row['id'])) {
+					$exclude .= " `albumid`!=".$row['id'].' AND ';
+				}
+			}
+			$exclude = substr($exclude, 0, strlen($exclude)-5);
+		} else {
+			$exclude = '';
+		}
+		if ($publishedOnly) {
+			if (empty($exclude)) {
+				$exclude = '`show`=1';
+			} else {
+				$exclude = ' `show`=1 AND '.$exclude;
+			}
+		}
+		if (!empty($exclude)) {
+			$exclude = ' WHERE '.$exclude;
 		}
 		$result = query_single_row("SELECT count(*) FROM ".prefix('images').$exclude);
 		return array_shift($result);

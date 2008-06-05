@@ -2781,15 +2781,25 @@ foreach ($comments as $comment) {
 
 <div class="box" id="overview-suggest">
 <h2 class="boxtitle"><?php echo gettext("Gallery Stats"); ?></h2>
-<p><strong><?php echo $gallery->getNumImages(); ?></strong> <?php echo gettext("images."); ?></p>
-<p><strong><?php echo $gallery->getNumAlbums(true); ?></strong> <?php echo gettext("albums."); ?></p>
+<p>
+<strong><?php echo $t = $gallery->getNumImages(); ?></strong> <?php echo gettext("images"); 
+$c = $t-$gallery->getNumImages(true);
+if ($c > 0) {
+	echo ' ('.$c.' '.gettext("unpublished").')';
+}
+?></p>
+<p><strong><?php echo $t = $gallery->getNumAlbums(true); ?></strong> <?php echo gettext("albums"); 
+$c = $t-$gallery->getNumAlbums(true,true);
+if ($c > 0) {
+	echo ' ('.$c.' '.gettext("unpublished").')';
+}
+?></p>
+
 <p><strong><?php echo $t = $gallery->getNumComments(true); ?></strong>
-<?php echo gettext("comments."); ?> <?php  
-$c = $gallery->getNumComments(false);
-if ($c != $t) {
-	$m = $t - $c;
-	if ($m > 1) $verb = gettext('are'); else $verb = gettext('is');
-	echo " ($m $verb ". gettext("in moderation.").")";
+<?php echo gettext("comments"); ?> <?php  
+$c = $t - $gallery->getNumComments(false);
+if ($c > 0) {
+	echo ' ('.$c.' '.gettext("in moderation").')';
 }
 ?></p>
 </div>
