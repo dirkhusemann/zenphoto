@@ -12,7 +12,9 @@ function generateLanguageList() {
 	global $_zp_languages;
 	$dir = @opendir(SERVERPATH . "/" . ZENFOLDER ."/locale/");
 	$locales = array();
-	$locales[gettext("HTTP Accept Language")] = '';
+	if (defined(OFFSET_PATH)) {  // for admin only
+		$locales[gettext("HTTP Accept Language")] = '';
+	}
 	if ($dir !== false) {
 		while ($dirname = readdir($dir)) {
 			if (is_dir(SERVERPATH . "/" . ZENFOLDER ."/locale/".$dirname) && (substr($dirname, 0, 1) != '.')) {
