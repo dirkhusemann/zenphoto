@@ -1877,7 +1877,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 			generateLanguageOptionList();
 			?>
 		</select></td>
-		<td><?php echo gettext("The language to display text in."); ?></td>
+		<td><?php echo gettext("The language to display text in. (Set to <em>HTTP Accept Language</em> to use the language preference specified by the viewer's browser.)"); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Date format:"); ?></td>

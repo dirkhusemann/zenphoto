@@ -91,8 +91,9 @@ function xmlspecialchars($text) {
  * Get a option stored in the database.
  * This function reads the options only once, in order to improve performance.
  * @param string $key the name of the option.
+ * @param bool $db set to true to force retrieval from the database.
  */
-function getOption($key) {
+function getOption($key, $db=false) {
 	global $_zp_conf_vars, $_zp_options;
 	if (is_null($_zp_options)) {
 		$_zp_options = array();
@@ -105,6 +106,12 @@ function getOption($key) {
 			}
 		}
 
+	} else {
+		if ($db) {
+			$sql = "SELECT `value` FROM ".prefix('options')." WHERE `name`='".$key."'";
+			$optionlist = query_single_row($sql);
+			return $optionlist['value'];
+		}
 	}
 	if (array_key_exists($key, $_zp_options)) {
 		return $_zp_options[$key];

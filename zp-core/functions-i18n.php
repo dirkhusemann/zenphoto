@@ -11,7 +11,8 @@
 function generateLanguageList() {
 	global $_zp_languages;
 	$dir = @opendir(SERVERPATH . "/" . ZENFOLDER ."/locale/");
-	$locales = array(gettext('Default (US English)') => '');
+	$locales = array();
+	$locales[gettext("HTTP Accept Language")] = '';
 	if ($dir !== false) {
 		while ($dirname = readdir($dir)) {
 			if (is_dir(SERVERPATH . "/" . ZENFOLDER ."/locale/".$dirname) && (substr($dirname, 0, 1) != '.')) {
@@ -33,7 +34,7 @@ function generateLanguageList() {
  */
 function generateLanguageOptionList() {
 	$locales = generateLanguageList();
-	generateListFromArray(array(getOption('locale')), $locales);
+	generateListFromArray(array(getOption('locale', OFFSET_PATH)), $locales);
 }
 
 /**
@@ -161,17 +162,17 @@ function parseHttpAcceptLanguage($str=NULL) {
  * Sets the 'locale' option to the result (non-persistent)
  */
 function getUserLocale() {
-	global $_zp_languages;
 	$cookiepath = WEBPATH;
 	if (WEBPATH == '') { $cookiepath = '/'; }
 	if (isset($_POST['dynamic-locale'])) {
 		$locale = sanitize($_POST['dynamic-locale']);
 		zp_setCookie('dynamic_locale', $locale, time()+5184000, $cookiepath);
 	} else {
+		$localeOption = getOption('locale');
 		$locale = zp_getCookie('dynamic_locale');
-		if ($locale === false) {  // if one is not set, see if there is a match from 'HTTP_ACCEPT_LANGUAGE'
+		if (empty($localeOption) && ($locale === false)) {  // if one is not set, see if there is a match from 'HTTP_ACCEPT_LANGUAGE'
 			$languageSupport = generateLanguageList();
-			$userLang = parseHttpAcceptLanguage();
+			$userLang = parseHttpAcceptLanguage();			
 			foreach ($userLang as $lang) {
 				$l = strtoupper($lang['fullcode']);
 				foreach ($languageSupport as $key=>$value) {
