@@ -7,7 +7,7 @@
 
 $plugin_description = gettext("Functions that provide various statistics about images and albums in the gallery.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.4.3';
+$plugin_version = '1.0.4.4';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---image_album_statistics.php.html";
 
 /**
@@ -110,8 +110,8 @@ function printAlbumStatistic($number, $option, $showtitle=false, $showdate=false
 		while ($album = mysql_fetch_array($albums)) { // needs a mysql array
 			printAlbumStatisticItem($album, $option,$showtitle, $showdate, $showdesc, $desclength,$showstatistic);
 		}
-		echo "</ul></div>\n";
 	}
+	echo "</ul></div>\n";
 }
 
 /**
