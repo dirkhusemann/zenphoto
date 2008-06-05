@@ -3,6 +3,10 @@
  * 
  * Changelog
  * 
+ * 1.4.4: 
+ * - Adds new list mode option '$showsubs' to optionally always show subalbums
+ * - Fixes a html validation error of using a CSS id several times for the active top level albums (now a class)
+  * 
  * 1.4.3.1: 
  * - Some very minor code cleanup
  * 
@@ -78,7 +82,7 @@
 
 $plugin_description = gettext("Adds a theme function printAlbumMenu() to print an album menu either as a nested list up to 4 sublevels (context sensitive) or as a dropdown menu.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.4.3';
+$plugin_version = '1.4.4';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---print_album_menu.php.html";
 
 /**
@@ -93,18 +97,18 @@ $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---print_a
  * @param string $option "list" for html list, "list-top" for only the top level albums, "list-sub" for only the subalbums if in one of theme or their toplevel album
  * @param string $option2 "count" for a image counter in brackets behind the album name, "" = for no image numbers or leave blank
  * @param string $css_id insert css id for the main album list, leave blank if you don't use (only list mode)
- * @param string $css_id_active insert css class for the active link in the main album list (only list mode)
+ * @param string $css_class_topactive insert css class for the active link in the main album list (only list mode)
  * @param string $css_class insert css class for the sub album lists (only list mode)
  * @param string $css_class_active insert css class for the active link in the sub album lists (only list mode)
  * @param string $indexname insert the name how you want to call the link to the gallery index (insert "" if you don't use it, it is not printed then)
+ * @param string $showsubs 'true' to always show the subalbums, 'false' for normal context sensitive behaviour (only list mode)
  * @return html list or drop down jump menu of the albums
  * @since 1.2
  */
 
-
-function printAlbumMenu($option,$option2,$css_id='',$css_id_active='',$css_class='',$css_class_active='', $indexname="Gallery Index") {
+function printAlbumMenu($option,$option2,$css_id='',$css_id_active='',$css_class='',$css_class_active='', $indexname="Gallery Index", $showsubs=false) {
 	if($option === "list" OR $option === "list-top" OR $option === "list-sub") {
-		printAlbumMenuList($option,$option2,$css_id,$css_id_active,$css_class,$css_class_active, $indexname);
+		printAlbumMenuList($option,$option2,$css_id,$css_id_active,$css_class,$css_class_active, $indexname, $showsubs);
 	} else if ($option === "jump") {
 		printAlbumMenuJump($option,$indexname);
 	}
@@ -124,10 +128,11 @@ function printAlbumMenu($option,$option2,$css_id='',$css_id_active='',$css_class
  * @param string $css_class insert css class for the sub album lists (only list mode)
  * @param string $css_class_active insert css class for the active link in the sub album lists (only list mode)
  * @param string $indexname insert the name (default "Gallery Index") how you want to call the link to the gallery index, insert "" if you don't use it, it is not printed then.
+ * @param string $showsubs 'true' to always show the subalbums, 'false' for normal context sensitive behaviour (only list mode)
  * @return html list of the albums
  */
 
-function printAlbumMenuList($option,$option2,$css_id='',$css_id_active='',$css_class='',$css_class_active='', $indexname="Gallery Index") {
+function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',$css_class='',$css_class_active='', $indexname="Gallery Index", $showsubs=false) {
 	global $_zp_gallery, $_zp_current_album;
 	$albumpath = rewrite_path("/", "/index.php?album=");
 	if(!empty($_zp_current_album)) {
@@ -135,7 +140,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_id_active='',$css_c
 	}
 	// check if css parameters are used
 	if ($css_id != "") { $css_id = " id='".$css_id."'"; }
-	if ($css_id_active != "") { $css_id_active = " id='".$css_id_active."'"; }
+	if ($css_class_topactive != "") { $css_class_topactive = " id='".$css_class_topactive."'"; }
 	if ($css_class != "") { $css_class = " class='".$css_class."'"; }
 	if ($css_class_active != "") { $css_class_active = " id='".$css_class_active."'"; }
 
@@ -152,7 +157,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_id_active='',$css_c
 		foreach ($albums as $toplevelalbum) {
 			$topalbum = new Album($gallery,$toplevelalbum,true);
 			if($option === "list" OR $option === "list-top") {
-				createAlbumMenuLink($topalbum,$option2,$css_id_active,$albumpath,"list");
+				createAlbumMenuLink($topalbum,$option2,$css_class_topactive,$albumpath,"list");
 			} 
 			$sub1_count = 0;
 				
@@ -164,7 +169,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_id_active='',$css_c
 					$subalbum1 = new Album($gallery,$sublevelalbum1,true);
 
 						// if 2: (if in parentalbum) OR (if in subalbum)
-						if(checkAlbumDisplayLevel($subalbum1,$topalbum,$currentfolder,1)) {
+						if(checkAlbumDisplayLevel($subalbum1,$topalbum,$currentfolder,1) OR $showsubs) {
 							$sub1_count++; // count subalbums for checking if to open or close the sublist
 							if ($sub1_count === 1) { // open sublevel 1 sublist once if subalbums
 								echo "<ul".$css_class.">\n";
@@ -180,7 +185,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_id_active='',$css_c
 							$subalbum2 = new Album($gallery,$sublevelalbum2,true);
 						
 							// if 3
-							if(checkAlbumDisplayLevel($subalbum2,$subalbum1,$currentfolder,2)) {
+							if(checkAlbumDisplayLevel($subalbum2,$subalbum1,$currentfolder,2) OR $showsubs) {
 								$sub2_count++; // count subalbums for checking if to open or close the sublist
 								if ($sub2_count === 1) { // open sublevel 1 sublist once if subalbums
 									echo "<ul".$css_class.">\n";
@@ -196,7 +201,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_id_active='',$css_c
 									$subalbum3 = new Album($gallery,$sublevelalbum3,true);
 								
 									// if 4
-									if(checkAlbumDisplayLevel($subalbum3,$subalbum2,$currentfolder,3)) {
+									if(checkAlbumDisplayLevel($subalbum3,$subalbum2,$currentfolder,3) OR $showsubs) {
 										$sub3_count++; // count subalbums for checking if to open or close the sublist
 										if ($sub3_count === 1) { // open sublevel 1 sublist once if subalbums
 											echo "<ul".$css_class.">\n"; 
@@ -212,7 +217,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_id_active='',$css_c
 											$subalbum4 = new Album($gallery,$sublevelalbum4,true);
 								
 											// if 5
-											if(checkAlbumDisplayLevel($subalbum4,$subalbum3,$currentfolder,4)){
+											if(checkAlbumDisplayLevel($subalbum4,$subalbum3,$currentfolder,4) OR $showsubs){
 												$sub4_count++; // count subalbums for checking if to open or close the sublist
 												if ($sub4_count === 1) { // open sublevel 1 sublist once if subalbums
 													echo "<ul".$css_class.">\n"; 
@@ -355,10 +360,11 @@ function createAlbumMenuLink($album,$option2,$css,$albumpath,$mode,$level='') {
 	}
 	switch($mode) {
 		case "list":
+			
 			if(getAlbumID() === $album->getAlbumID()) {
-				$link = "<li".$css.">".htmlspecialchars($album->getTitle()).$count."</li>";
+				$link = "<li".$css.">".htmlspecialchars($album->getTitle()).$count;
 			} else {
-				$link = "<li".$css."><a href='".htmlspecialchars($albumpath.$album->name)."' title='".htmlspecialchars($album->getTitle())."'>".htmlspecialchars($album->getTitle())."</a>".$count."</li>";
+				$link = "<li".$css."><a href='".htmlspecialchars($albumpath.$album->name)."' title='".htmlspecialchars($album->getTitle())."'>".htmlspecialchars($album->getTitle())."</a>".$count;
 			}
 			break;
 		case "jump":
@@ -466,5 +472,6 @@ function checkAlbumDisplayLevel($currentalbum,$parentalbum,$currentfolder,$level
 		return false;
 	}
 }
+
 
 ?>
