@@ -20,7 +20,7 @@
  *  
  */
 
-$plugin_description = gettext("GoogleCheckout Integration for Zenphoto. [experimental]");
+$plugin_description = gettext("GoogleCheckout Integration for Zenphoto.");
 $plugin_author = 'Stephen Billard (sbillard)';
 $plugin_version = '1.0.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---GoogleCheckout.php.html";
@@ -97,11 +97,15 @@ function GoogleCheckoutPricelistFromString($prices) {
 }
 
 /**
- * Places a Paypal button on your form
+ * Places a GoogleCheckout button on your form
  * 
  * @param array $pricelist optional array of specific pricing for the image.
+ * @param bool $pricelistlink set to true to include link for exposing pricelist
+ * @param string $text The text to place for the link (defaults to "Price List")
+ * @param string $textTag HTML tag for the link text. E.g. h3, ...  
+ * @param string $idtag the division ID for the price list. (NB: a div named $id appended with "_data" is
  */
-function googleCheckout($pricelist=NULL) {
+function googleCheckout($pricelist=NULL, $pricelistlink=false, $text=NULL, $textTag="l1", $idtag="GoogleCheckoutPricelist") {
 	if (!is_array($pricelist)) {
 		$pricelist = GoogleCheckoutPricelistFromString(getOption('GoogleCheckout_pricelist'));
 	}
@@ -128,12 +132,12 @@ function googleCalculateOrder(form) {
 <?php
 $locale = getOption('locale');
 if (empty($locale)) { $locale = 'en_US'; }
+$id = getOption('google_checkout_id');
 ?>
-
 </script>
-
+<div id="GoogleCheckout">
 <form method="POST"
-  action="https://checkout.google.com/api/checkout/v2/checkoutForm/Merchant/<?php echo $id = getOption('google_checkout_id'); ?>"
+  action="https://checkout.google.com/api/checkout/v2/checkoutForm/Merchant/<?php echo $id; ?>"
   accept-charset="utf-8" name="myform">
 <input type="hidden" name="on0"	value="Size"> <label>Size</label> 
 	<select name="os0" >
@@ -175,6 +179,12 @@ if (empty($locale)) { $locale = 'en_US'; }
 		/>
 
 </form>
+<?php 
+if ($pricelistlink) {
+	GoogleCheckoutPrintPricelist($pricelist,$text, $textTag, $idtag);
+}	
+?>
+</div>
 <?php
 }
 
@@ -186,17 +196,9 @@ if (empty($locale)) { $locale = 'en_US'; }
  * @param string $textTag HTML tag for the link text. E.g. h3, ...  
  * @param string $id the division ID for the price list. (NB: a div named $id appended with "_data" is
  * 										created for the hidden table.
- * 
- * CSS entries for the following should be created for proper formatting. 
- *			#GoogleCheckoutPricelist_data table {
- *			#GoogleCheckoutPricelist_data th {
- *			#GoogleCheckoutPricelist_data td {
- *			#GoogleCheckoutPricelist_data table .price {
- *			#GoogleCheckoutPricelist_data table .size {
- *			#GoogleCheckoutPricelist_data table .media {
- * 
+ *  
  */
-function GoogleCheckoutPrintPricelist($pricelist=NULL, $text=NULL, $textTag='', $id='GoogleCheckoutPricelist'){
+function GoogleCheckoutPrintPricelist($pricelist=NULL, $text=NULL, $textTag="l1", $id="GoogleCheckoutPricelist"){
 	if (!is_array($pricelist)) {
 		$pricelist = GoogleCheckoutFromString(getOption('GoogleCheckout_pricelist'));
 	}
@@ -206,7 +208,7 @@ function GoogleCheckoutPrintPricelist($pricelist=NULL, $text=NULL, $textTag='', 
 		$textTagStart = '<'.$textTag.'>';
 		$textTagEnd = '</'.$textTag.'>';
 	}
-	echo '<div id="' .$id. '">'."\n".'<a href="javascript: toggle('. "'" .$dataid."'".');">'.$textTagStart.$text.'</a>'.$textTagEnd."\n"."\n</div>";
+	echo '<div id="' .$id. '">'."\n".$textTagStart.'<a href="javascript: toggle('. "'" .$dataid."'".');">'.$text."</a>".$textTagEnd."\n</div>";
 	echo '<div id="' .$dataid. '" style="display: none;">'."\n";
 	echo '<table>'."\n";
 	echo '<table>'."\n";

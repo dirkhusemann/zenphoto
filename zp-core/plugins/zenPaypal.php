@@ -88,8 +88,12 @@ function zenPaypalPricelistFromString($prices) {
  * Places a Paypal button on your form
  * 
  * @param array $pricelist optional array of specific pricing for the image.
+ * @param bool $pricelistlink set to true to include link for exposing pricelist
+ * @param string $text The text to place for the link (defaults to "Price List")
+ * @param string $textTag HTML tag for the link text. E.g. h3, ...  
+ * @param string $idtag the division ID for the price list. (NB: a div named $id appended with "_data" is
  */
-function zenPaypal($pricelist=NULL) {
+function zenPaypal($pricelist=NULL, $pricelistlink=false, $text=NULL, $textTag="l1", $idtag="zenPaypalPricelist") {
 	if (!is_array($pricelist)) {
 		$pricelist = zenPaypalPricelistFromString(getOption('zenPaypal_pricelist'));
 	}
@@ -118,7 +122,7 @@ if (empty($locale)) { $locale = 'en_US'; }
 ?>
 
 </script>
-
+<div id="BuyNow">
 <form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" name="myform">
 <input type="hidden" name="on0"	value="Size"> <label>Size</label> 
 	<select name="os0">
@@ -152,6 +156,12 @@ if (empty($locale)) { $locale = 'en_US'; }
 <input type="hidden" name="return" value="<?php echo 'http://'. $_SERVER['SERVER_NAME']. getNextImageURL();?>">
 <input type="hidden" name="cancel_return" value="<?php echo 'http://'. $_SERVER['SERVER_NAME'].getImageLinkURL();?>">
 </form>
+<?php 
+if ($pricelistlink) {
+	zenPaypalPrintPricelist($pricelistlink, $text, $textTag, $idtag);
+}	
+?>
+</div>
 <?php
 }
 
@@ -164,16 +174,8 @@ if (empty($locale)) { $locale = 'en_US'; }
  * @param string $id the division ID for the price list. (NB: a div named $id appended with "_data" is
  * 										created for the hidden table.
  * 
- * CSS entries for the following should be created for proper formatting. 
- *			#zenPaypalPricelist_data table {
- *			#zenPaypalPricelist_data th {
- *			#zenPaypalPricelist_data td {
- *			#zenPaypalPricelist_data table .price {
- *			#zenPaypalPricelist_data table .size {
- *			#zenPaypalPricelist_data table .media {
- * 
  */
-function zenPaypalPrintPricelist($pricelist=NULL, $text=NULL, $textTag='', $id='zenPaypalPricelist'){
+function zenPaypalPrintPricelist($pricelist=NULL, $text=NULL, $textTag="l1", $id="zenPaypalPricelist"){
 	if (!is_array($pricelist)) {
 		$pricelist = zenPaypalPricelistFromString(getOption('zenPaypal_pricelist'));
 	}
@@ -183,7 +185,7 @@ function zenPaypalPrintPricelist($pricelist=NULL, $text=NULL, $textTag='', $id='
 		$textTagStart = '<'.$textTag.'>';
 		$textTagEnd = '</'.$textTag.'>';
 	}
-	echo '<div id="' .$id. '">'."\n".'<a href="javascript: toggle('. "'" .$dataid."'".');">'.$textTagStart.$text.'</a>'.$textTagEnd."\n"."\n</div>";
+	echo '<div id="' .$id. '">'."\n".$textTagStart.'<a href="javascript: toggle('. "'" .$dataid."'".');">'.$text."</a>".$textTagEnd."\n</div>";
 	echo '<div id="' .$dataid. '" style="display: none;">'."\n";
 	echo '<table>'."\n";
 	echo '<table>'."\n";
