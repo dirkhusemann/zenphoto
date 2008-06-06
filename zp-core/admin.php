@@ -1740,7 +1740,9 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 			echo gettext("Managed albums:");
 			echo '<ul class="albumchecklist">'."\n";;
 			generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights);
-			generateUnorderedListFromArray(array(), $rest, $prefix, $alterrights);
+			if (empty($alterrights)) {
+				generateUnorderedListFromArray(array(), $rest, $prefix);
+			}
 			echo '</ul>';
 		}
 		?>
@@ -1748,8 +1750,12 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 		<?php
 		if (empty($background)) {
-			echo gettext("Select one or more albums for the administrator to manage.").' ';
-			echo gettext("Administrators with <em>User admin</em> rights can manage all albums. All others may manage only those that are selected.");
+			if (!empty($alterrights)) {
+				echo gettext("You have rights to manage these albums.");
+			} else {
+				echo gettext("Select one or more albums for the administrator to manage.").' ';
+				echo gettext("Administrators with <em>User admin</em> rights can manage all albums. All others may manage only those that are selected.");
+			}
 		}?>
 		</td>
 		</table>
