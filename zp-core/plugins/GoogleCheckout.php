@@ -112,7 +112,7 @@ function googleCheckout($pricelist=NULL, $pricelistlink=false, $text=NULL, $text
 ?>
 <script language="javascript">
 
-function googleCalculateOrder(form) {
+function googleCalculateOrder(myform) {
 	<?php 
 	$sizes = array();
 	$media = array();
@@ -120,24 +120,24 @@ function googleCalculateOrder(form) {
 		$itemparts = explode(':', $key);
 		$media[] = $itemparts[1];
 		$sizes[] = $itemparts[0];
-		echo 'if (document.myform.os0.value == "'.$itemparts[0].'" && document.myform.os1.value == "'.$itemparts[1].'") {'."\n";
-		echo 'document.myform.item_price_1.value = '.$price.';'."\n";
-		echo 'document.myform.item_name_1.value = "'.getImageTitle().' - Photo Size '.$itemparts[0].' - '.$itemparts[1].'";'."\n";
-		echo 'document.myform.item_description_1.value = "'.getImageTitle().' - Photo Size '.$itemparts[0].' - '.$itemparts[1].'";'."\n";
+		echo 'if (myform.os0.value == "'.$itemparts[0].'" && myform.os1.value == "'.$itemparts[1].'") {'."\n";
+		echo 'myform.item_price_1.value = '.$price.';'."\n";
+		echo 'myform.item_name_1.value = "'.getImageTitle().' - Photo Size '.$itemparts[0].' - '.$itemparts[1].'";'."\n";
+		echo 'myform.item_description_1.value = "'.getImageTitle().' - Photo Size '.$itemparts[0].' - '.$itemparts[1].'";'."\n";
 		echo '}'."\n";
 	}
 	?>        
 }
+</script>
 
 <?php
 $locale = getOption('locale');
 if (empty($locale)) { $locale = 'en_US'; }
-$id = getOption('google_checkout_id');
+$googleid = getOption('GoogleCheckout_merchantID');
 ?>
-</script>
 <div id="GoogleCheckout">
 <form method="POST"
-  action="https://checkout.google.com/api/checkout/v2/checkoutForm/Merchant/<?php echo $id; ?>"
+  action="https://checkout.google.com/api/checkout/v2/checkoutForm/Merchant/<?php echo $googleid; ?>"
   accept-charset="utf-8" name="myform">
 <input type="hidden" name="on0"	value="Size"> <label>Size</label> 
 	<select name="os0" >
@@ -173,8 +173,7 @@ $id = getOption('google_checkout_id');
   <input type="hidden" name="_charset_"/>
 
   <input type="image" name="Google Checkout" alt="<?php echo gettext("Fast checkout through Google"); ?>" class="checkout_button"
-		src="http://checkout.google.com/buttons/checkout.gif?merchant_id=<?php echo $id; ?>
-		&w=180&h=46&style=white&variant=text&loc=<?php echo $locale; ?>"
+		src="http://checkout.google.com/buttons/checkout.gif?merchant_id=<?php echo $googleid; ?>&w=180&h=46&style=trans&variant=text&loc=<?php echo $locale; ?>"
 		onClick="googleCalculateOrder(this.form)"
 		/>
 

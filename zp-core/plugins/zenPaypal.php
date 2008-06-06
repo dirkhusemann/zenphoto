@@ -100,7 +100,7 @@ function zenPaypal($pricelist=NULL, $pricelistlink=false, $text=NULL, $textTag="
 ?>
 <script language="javascript">
 
-function paypalCalculateOrder(form) {
+function paypalCalculateOrder(myform) {
 	<?php 
 	$sizes = array();
 	$media = array();
@@ -108,20 +108,20 @@ function paypalCalculateOrder(form) {
 		$itemparts = explode(':', $key);
 		$media[] = $itemparts[1];
 		$sizes[] = $itemparts[0];
-		echo 'if (document.myform.os0.value == "'.$itemparts[0].'" && document.myform.os1.value == "'.$itemparts[1].'") {'."\n";
-		echo 'document.myform.amount.value = '.$price.';'."\n";
-		echo 'document.myform.item_name.value = "'.getImageTitle().' - Photo Size '.$itemparts[0].' - '.$itemparts[1].'";'."\n";
+		echo 'if (myform.os0.value == "'.$itemparts[0].'" && myform.os1.value == "'.$itemparts[1].'") {'."\n";
+		echo 'myform.amount.value = '.$price.';'."\n";
+		echo 'myform.item_name.value = "'.getImageTitle().' - Photo Size '.$itemparts[0].' - '.$itemparts[1].'";'."\n";
 		echo '}'."\n";
 	}
 	?>        
 }
+</script>
 
 <?php
 $locale = getOption('locale');
 if (empty($locale)) { $locale = 'en_US'; }
 ?>
 
-</script>
 <div id="BuyNow">
 <form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" name="myform">
 <input type="hidden" name="on0"	value="Size"> <label>Size</label> 
@@ -144,7 +144,7 @@ if (empty($locale)) { $locale = 'en_US'; }
 </select> 
 <input type="image" src="https://www.paypal.com/<?php echo $locale ?>/i/btn/x-click-butcc.gif" border="0"
 	name="submit" onClick="paypalCalculateOrder(this.form)"
-	alt="Make payments with PayPal - it's fast, free and secure!"
+	alt=<?php gettext("Make payments with PayPal - it's fast, free and secure!"); ?>
 	class="buynow_button"> 
 <input type="hidden" name="cmd" value="_xclick">
 <input type="hidden" name="business" value="<?php echo getOption('zenPaypal_userid'); ?>">
