@@ -25,13 +25,11 @@ class Image extends PersistentObject {
 	/**
 	 * Constructor for class-image
 	 *
-	 * @param object &$album the owning album
+	 * @param object $album the owning album
 	 * @param sting $filename the filename of the image
 	 * @return Image
 	 */
 	function Image(&$album, $filename) {
-
-
 		// $album is an Album object; it should already be created.
 		$this->album = &$album;
 		if ($album->name == '') {
@@ -61,6 +59,13 @@ class Image extends PersistentObject {
 
 		// This is where the magic happens...
 		$new = parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename');
+		$album_name = $album->name;
+		// If this image belongs to the root album, don't save it to the db.
+		if (empty($album_name)) {
+			$this->set('show', 0);
+			$this->set('commentson', 0);
+			$this->transient = true;
+		}
 		if ($new) {
 			$metadata = getImageMetadata($this->localpath);
 			if (isset($metadata['date'])) {
@@ -110,12 +115,6 @@ class Image extends PersistentObject {
 				$this->setCopyright($metadata['copyright']);
 			}
 			$this->set('mtime', filemtime($this->localpath));
-			$this->save();
-		}
-		$fn = $this->album->name;
-		if (empty($fn)) {  // special case images, hide as best as possible.
-			$this->set('show', 0);
-			$this->set('commentson', 0);
 			$this->save();
 		}
 	}

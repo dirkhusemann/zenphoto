@@ -50,6 +50,7 @@ class PersistentObject {
 	var $unique_set;
 	var $cache_by;
 	var $id;
+	var $transient;
 	
 	function PersistentObject($tablename, $unique_set, $cache_by=NULL, $use_cache=true) {
 		// Initialize the variables.
@@ -62,6 +63,7 @@ class PersistentObject {
 		$this->unique_set = $unique_set;
 		$this->cache_by = $cache_by;
 		$this->use_cache = $use_cache;
+		$this->transient = false;
 		
 		return $this->load();
 	}
@@ -266,6 +268,7 @@ class PersistentObject {
  	* true if successful, false if not.
  	*/
 	function save() {
+		if ($this->transient) return; // If this object isn't supposed to be persisted, don't save it.
 		if ($this->id == null) {
 			$this->setDefaults();
 			// Create a new object and set the id from the one returned.
