@@ -493,8 +493,10 @@ function postIndexDecode($str) {
  *
  * @param array $currentValue list of items to be flagged as checked
  * @param array $list the elements of the select list
+ * @param string $prefix prefix of the input item
+ * @param string $alterrights are the items changable.
  */
-function generateUnorderedListFromArray($currentValue, $list, $prefix) {
+function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrights="") {
 	$localize = !is_numeric(array_shift(array_keys($list)));
 	if ($localize) {
 		ksort($list);
@@ -509,7 +511,7 @@ function generateUnorderedListFromArray($currentValue, $list, $prefix) {
 			echo ' checked="checked"';
 		}
 		if ($localize) $display = $key; else $display = $item;
-		echo ' />' . $display . "</label></li>"."\n";
+		echo $alterrights.' />' . $display . "</label></li>"."\n";
 	}
 }
 

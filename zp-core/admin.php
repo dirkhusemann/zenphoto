@@ -1738,9 +1738,9 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 			$rest = array_diff($albumlist, $cv);
 			$prefix = 'managed_albums_'.$id.'_';
 			echo gettext("Managed albums:");
-			echo '<ul class="albumchecklist"'.$alterrights.'>'."\n";;
-			generateUnorderedListFromArray($cv, $cv, $prefix);
-			generateUnorderedListFromArray(array(), $rest, $prefix);
+			echo '<ul class="albumchecklist">'."\n";;
+			generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights);
+			generateUnorderedListFromArray(array(), $rest, $prefix, $alterrights);
 			echo '</ul>';
 		}
 		?>
