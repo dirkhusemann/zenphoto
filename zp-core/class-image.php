@@ -84,7 +84,7 @@ class Image extends PersistentObject {
 				if (empty($title)) $title = $this->name;
 			}
 			$this->set('title', $title);
-				
+
 			if (isset($metadata['desc'])) {
 				$this->set('desc', $metadata['desc']);
 			}
@@ -112,9 +112,12 @@ class Image extends PersistentObject {
 			$this->set('mtime', filemtime($this->localpath));
 			$this->save();
 		}
-
-
-
+		$fn = $this->album->name;
+		if (empty($fn)) {  // special case images, hide as best as possible.
+			$this->set('show', 0);
+			$this->set('commentson', 0);
+			$this->save();
+		}
 	}
 
 	/**
