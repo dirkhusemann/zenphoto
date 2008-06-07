@@ -13,7 +13,7 @@ function generateLanguageList() {
 	$dir = @opendir(SERVERPATH . "/" . ZENFOLDER ."/locale/");
 	$locales = array();
 	
-	if (OFFSET_PATH === true) {  // for admin only
+	if (OFFSET_PATH === 1) {  // for admin only
 		$locales[gettext("HTTP Accept Language")] = '';
 	}
 	if ($dir !== false) {
@@ -37,7 +37,7 @@ function generateLanguageList() {
  */
 function generateLanguageOptionList() {
 	$locales = generateLanguageList();
-	generateListFromArray(array(getOption('locale', OFFSET_PATH===true)), $locales);
+	generateListFromArray(array(getOption('locale', OFFSET_PATH===1)), $locales);
 }
 
 /**

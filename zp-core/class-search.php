@@ -245,12 +245,6 @@ class SearchEngine
 			$sql .= ",`albumid`,`filename`,`location`,`city`,`state`,`country`";
 		}
 		$sql .= " FROM ".prefix($tbl)." WHERE ";
-		if ($tbl=='albums') {
-			$sql .= "`folder`!='' AND ";
-		} else {
-			$special = new Album(new Gallery(), '');
-			$sql .= "`albumid`!='".$special->id."' AND ";
-		}
 		if(!zp_loggedin()) { $sql .= "`show` = 1 AND ("; }
 		$join = "";
 		$nrt = 0;

@@ -13,7 +13,7 @@ if(!function_exists("gettext")) {
 $checked = isset($_GET['checked']);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 if (!defined('PLUGIN_FOLDER')) { define('PLUGIN_FOLDER', '/plugins/'); }
-define('OFFSET_PATH', true);
+define('OFFSET_PATH', 2);
 $upgrade = false;
 $debug = isset($_GET['debug']);
 if (!$checked && !file_exists('zp-config.php')) {
@@ -959,6 +959,7 @@ if (file_exists("zp-config.php")) {
 		// set defaults on any options that need it
 		setupLog("Done with database creation and update");
 		
+		$prevRel = getOption('zenphoto_release');
 		require('option-defaults.php');
 		
 		// special cleanup section for plugins
@@ -966,6 +967,11 @@ if (file_exists("zp-config.php")) {
 		foreach ($badplugs as $plug) {
 			$path = SERVERPATH . '/' . ZENFOLDER . '/plugins/' . $plug;
 			@unlink($path);
+		}
+		
+		if ($prevRel < 1685) {  // cleanup root album DB records
+			$gallery = new Gallery();
+			$gallery->garbageCollect(true, true);
 		}
 
 		echo "<h3>".gettext("Done with table").' '.$taskDisplay[substr($task,0,8)]."!</h3>";

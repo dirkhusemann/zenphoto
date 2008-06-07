@@ -4,7 +4,7 @@
  * supplying an album name (ex: loadAlbums.php?album=newalbum) will only process the album named. 
  * Passing clear=on will purge the designated cache before generating cache images
  */
-define('OFFSET_PATH', true);
+define('OFFSET_PATH', 1);
 require_once("template-functions.php");
 require_once("admin-functions.php");
 

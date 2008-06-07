@@ -22,7 +22,7 @@ $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---image_a
  */
 function getAlbumStatistic($number=5, $option) {
 	if (zp_loggedin()) {
-		$albumWhere = "WHERE `folder` != ''";
+		$albumWhere = "";
 	} else {
 		$albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
 		foreach($albumscheck as $albumcheck) {
@@ -31,7 +31,7 @@ function getAlbumStatistic($number=5, $option) {
 				$passwordcheck = $passwordcheck.$albumpasswordcheck;
 			}
 		}
-		$albumWhere = "WHERE `folder` != '' AND `show`=1".$passwordcheck;
+		$albumWhere = "WHERE `show`=1".$passwordcheck;
 	}
 	switch($option) {
 		case "popular":

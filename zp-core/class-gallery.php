@@ -163,9 +163,9 @@ class Gallery {
 			$this->getAlbums();
 			$count = count($this->albums);
 		} else {
-			$sql = "SELECT count(*) FROM " . prefix('albums') . "WHERE `folder`!=''";
+			$sql = "SELECT count(*) FROM " . prefix('albums');
 			if ($publishedOnly) {
-				$sql .= ' AND `show`=1';
+				$sql .= ' WHERE `show`=1';
 			}
 			$result = query($sql);
 			$count = mysql_result($result, 0);
@@ -237,9 +237,9 @@ class Gallery {
 	 * @return int
 	 */
 	function getNumImages($publishedOnly=false) {
-		$sql = "SELECT `id` FROM " . prefix('albums') . "WHERE `folder`=''";
+		$sql = "SELECT `id` FROM " . prefix('albums');
 		if ($publishedOnly) {
-			$sql .= " OR `show`=0";
+			$sql .= " WHERE `show`=0";
 		}
 		$rows = query_full_array($sql);
 		if (is_array($rows)) {
@@ -297,7 +297,7 @@ class Gallery {
 		// Check for the existence of top-level albums (subalbums handled recursively).
 		$result = query("SELECT * FROM " . prefix('albums'));
 		$dead = array();
-		$live = array();
+		$live = array(''); // purge the root album if it exists
 		$deadalbumthemes = array();
 		// Load the albums from disk
 		$albumfolder = getAlbumFolder();
