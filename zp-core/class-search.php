@@ -249,7 +249,7 @@ class SearchEngine
 			$sql .= "`folder`!='' AND ";
 		} else {
 			$special = new Album(new Gallery(), '');
-			$sql .= "`albumid`!=".$special->id.' AND ';
+			$sql .= "`albumid`!='".$special->id."' AND ";
 		}
 		if(!zp_loggedin()) { $sql .= "`show` = 1 AND ("; }
 		$join = "";
