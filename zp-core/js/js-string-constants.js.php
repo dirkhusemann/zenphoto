@@ -18,5 +18,6 @@ zpstrings = {
 	'ClickToEditDescription' : "<?php echo gettext('Click to edit description'); ?>",
 	'Save' : "<?php echo gettext('save'); ?>",
 	'Cancel' : "<?php echo gettext('cancel'); ?>",
-	'CurrentlyEditingSomethingElse' : "<?php echo gettext('Currently editing something else, save or cancel to edit this.'); ?>"
+	'CurrentlyEditingSomethingElse' : "<?php echo gettext('Currently editing something else, save or cancel to edit this.'); ?>",
+	'ThanksForVoting' : "<?php echo gettext('Thanks for voting!') ?>"
 }

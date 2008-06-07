@@ -82,6 +82,6 @@ function rate(rating,id,votes,values,path,option)  {
 		nt = remotos.enviar(path+'/rating/update.php?rating='+rating+'&id='+id+'&option='+option);
 		rating = rating * 25;
 		document.getElementById('current-rating').style.width = rating+'px';
-		document.getElementById('vote').innerHTML="Rating: "+values+" (Total votes: "+votes+")<br />Thanks for voting!";
+		document.getElementById('vote').innerHTML="Rating: "+values+" (Total votes: "+votes+")<br />"+zpstrings.ThanksForVoting;
 		
 }
