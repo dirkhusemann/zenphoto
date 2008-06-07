@@ -969,7 +969,7 @@ if (file_exists("zp-config.php")) {
 			@unlink($path);
 		}
 		
-		if ($prevRel < 1685) {  // cleanup root album DB records
+		if ($prevRel < 1690) {  // cleanup root album DB records
 			$gallery = new Gallery();
 			$gallery->garbageCollect(true, true);
 		}
