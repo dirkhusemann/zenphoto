@@ -4,15 +4,12 @@
  * 
  * Provides a Google Checkout ordering form for image print ordering.
  * 
- * Plugin option 'GoogleCheckout_merchantID' allows setting the PayPal user email.
+ * Plugin option 'GoogleCheckout_merchantID' allows setting the GoogleCheckout user email.
  * Plugin option 'GoogleCheckout_pricelist' provides the default pricelist. 
- * Plugin option 'GoogleCheckout_pricelist'
  * Plugin option 'google_checkout_currency'
- * Plugin option 'google_checkout_tax'
- * Plugin option 'google_checkout_state'
  * Plugin option 'google_checkout_ship_method'
  * Plugin option 'google_checkout_ship_cost'
- *  
+  *  
  * Price lists can also be passed as a parameter to the GoogleCheckout() function. See also 
  * GoogleCheckoutPricelistFromString() for parsing a string into the pricelist array. This could be used, 
  * for instance, by storing a pricelist string in the 'customdata' field of your images and then parsing and 
@@ -21,11 +18,16 @@
  */
 
 $plugin_description = gettext("GoogleCheckout Integration for Zenphoto.");
-$plugin_author = 'Stephen Billard (sbillard)';
-$plugin_version = '1.0.0';
+$plugin_author = 'Jeremy Coleman (mammlouk), Stephen Billard (sbillard)';
+$plugin_version = '1.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---GoogleCheckout.php.html";
 $option_interface = new GoogleCheckoutOptions();
 addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/GoogleCheckout/GoogleCheckout.css" type="text/css" />');
+
+$id = getOption('GoogleCheckout_merchantID');
+$curr = getOption('google_checkout_currency');
+if (empty($curr)) { $curr = 'USD'; }
+addPluginScript('<script id="googlecart-script" type="text/javascript" src="http://checkout.google.com/seller/gsc/beta/cart-v1.js?mid='.$id.'&currency='.$curr.'"></script>');
 
 /**
  * Plugin option handling class
@@ -45,11 +47,9 @@ class GoogleCheckoutOptions {
 		}
 		setOptionDefault('GoogleCheckout_pricelist', $pricelistoption);
 		setOptionDefault('google_checkout_currency', 'USD');
-		setOptionDefault('google_checkout_tax', 0);
-		setOptionDefault('google_checkout_state', '');
-		setOptionDefault('google_checkout_ship_method', 'UPS Ground');
+		setOptionDefault('google_checkout_ship_method', 'UPS');
 		setOptionDefault('google_checkout_ship_cost', 0);
-		}
+	}
 	
 	
 	function getOptionsSupported() {
@@ -57,12 +57,8 @@ class GoogleCheckoutOptions {
 										'desc' => gettext("Your Google Merchant ID.")),
 									gettext('Currency') => array('key' => 'google_checkout_currency', 'type' => 0, 
 										'desc' => gettext("The currency for your transactions.")),
-									gettext('Tax') => array('key' => 'google_checkout_tax', 'type' => 0, 
-										'desc' => gettext("Your state tax rate.")),
-									gettext('State') => array('key' => 'google_checkout_state', 'type' => 0, 
-										'desc' => gettext("The state in which your business resides.")),
-									gettext('Ship method') => array('key' => 'google_checkout_ship_method', 'type' => 0, 
-										'desc' => gettext("How you ship the product.")),
+									gettext('Shipping method') => array('key' => 'google_checkout_ship_method', 'type' => 0, 
+										'desc' => gettext("How to ship.")),
 									gettext('Shipping cost') => array('key' => 'google_checkout_ship_cost', 'type' => 0, 
 										'desc' => gettext("What you charge for shipping.")),
 									gettext('Price list') => array('key' => 'GoogleCheckout_pricelist', 'type' => 2,
@@ -96,139 +92,37 @@ function GoogleCheckoutPricelistFromString($prices) {
 	return $pricelist;
 }
 
+
 /**
- * Places a GoogleCheckout button on your form
+ * Places Google Checkout Options on your page.
  * 
  * @param array $pricelist optional array of specific pricing for the image.
- * @param bool $pricelistlink set to true to include link for exposing pricelist
- * @param string $text The text to place for the link (defaults to "Price List")
- * @param string $textTag HTML tag for the link text. E.g. h3, ...  
- * @param string $idtag the division ID for the price list. (NB: a div named $id appended with "_data" is
  */
-function googleCheckout($pricelist=NULL, $pricelistlink=false, $text=NULL, $textTag="l1", $idtag="GoogleCheckoutPricelist") {
+function googleCheckout($pricelist=NULL) {
 	if (!is_array($pricelist)) {
 		$pricelist = GoogleCheckoutPricelistFromString(getOption('GoogleCheckout_pricelist'));
 	}
-?>
-<script language="javascript">
 
-function googleCalculateOrder(myform) {
+?>
+
+<div id="GoogleCheckout" class="product">
+   <input type="hidden" class="product-image" value="<?php echo getImageThumb(); ?>" />
+   <input type="hidden" class="product-title" value="Album: <?php echo getAlbumTitle();?> Photo: <?php echo getImageTitle(); ?>" />
+   <input type="hidden" class="product-shipping" value="<?php echo getOption('google_checkout_ship_cost'); ?>" />
+   Size/Finish: <select class="product-attr-sizefinish">
+	<option googlecart-set-product-price=""></option>
 	<?php 
-	$sizes = array();
-	$media = array();
 	foreach ($pricelist as $key=>$price) {
-		$itemparts = explode(':', $key);
-		$media[] = $itemparts[1];
-		$sizes[] = $itemparts[0];
-		echo 'if (myform.os0.value == "'.$itemparts[0].'" && myform.os1.value == "'.$itemparts[1].'") {'."\n";
-		echo 'myform.item_price_1.value = '.$price.';'."\n";
-		echo 'myform.item_name_1.value = "'.getImageTitle().' - Photo Size '.$itemparts[0].' - '.$itemparts[1].'";'."\n";
-		echo 'myform.item_description_1.value = "'.getImageTitle().' - Photo Size '.$itemparts[0].' - '.$itemparts[1].'";'."\n";
-		echo '}'."\n";
+	?>
+	<option googlecart-set-product-price="<?php echo $price; ?>"><?php echo $key; ?></option>
+   <?php
 	}
-	?>        
-}
-</script>
-
-<?php
-$locale = getOption('locale');
-if (empty($locale)) { $locale = 'en_US'; }
-$googleid = getOption('GoogleCheckout_merchantID');
-?>
-<div id="GoogleCheckout">
-<form method="POST"
-  action="https://checkout.google.com/api/checkout/v2/checkoutForm/Merchant/<?php echo $googleid; ?>"
-  accept-charset="utf-8" name="myform">
-<input type="hidden" name="on0"	value="Size"> <label>Size</label> 
-	<select name="os0" >
-	<?php
-	$media = array_unique($media);
-	$sizes = array_unique($sizes);
-	foreach ($sizes as $size) {
-		echo '<option value="'.$size.'" selected>'.$size."\n";
-	}
-	 ?>
-</select> 
-<input type="hidden" name="on1" value="Color"> <label><?php echo gettext("Stock"); ?></label>
-<select name="os1" >
-	<?php
-	foreach ($media as $paper) {
-		echo '<option value="'.$paper.'" selected>'.$paper."\n";
-	}
-	 ?>
-</select> 
-
-  <input type="hidden" name="item_name_1" value="<?php echo $item; ?>"/>
-  <input type="hidden" name="item_description_1" value="<?php echo $item_description; ?>"/>
-  <input type="hidden" name="item_quantity_1" value="1"/>
-  <input type="hidden" name="item_price_1" value="<?php echo $price ?>"/>
-  <input type="hidden" name="item_currency_1" value="<?php echo getOption('google_checkout_currency'); ?>"/>
-
-  <input type="hidden" name="ship_method_name_1" value="<?php echo getOption('google_checkout_ship_method'); ?> "/>
-  <input type="hidden" name="ship_method_price_1" value="<?php echo getOption('google_checkout_ship_cost'); ?>"/>
-
-  <input type="hidden" name="tax_rate" value="<?php echo getOption('google_checkout_tax'); ?>"/>
-  <input type="hidden" name="tax_us_state" value="<?php echo getOption('google_checkout_state'); ?>"/>
-
-  <input type="hidden" name="_charset_"/>
-
-  <input type="image" name="Google Checkout" alt="<?php echo gettext("Fast checkout through Google"); ?>" class="checkout_button"
-		src="http://checkout.google.com/buttons/checkout.gif?merchant_id=<?php echo $googleid; ?>&w=180&h=46&style=trans&variant=text&loc=<?php echo $locale; ?>"
-		onClick="googleCalculateOrder(this.form)"
-		/>
-
-</form>
-<?php 
-if ($pricelistlink) {
-	GoogleCheckoutPrintPricelist($pricelist,$text, $textTag, $idtag);
-}	
-?>
+	?>
+   </select><br />
+   Price: <span class="product-price">Choose Size/Finish</span><br />
+   How Many: <input type="text" class="googlecart-quantity" value="1" style="width:20px;" />&nbsp;&nbsp;
+   <span class="googlecart-add-button"></span>
 </div>
-<?php
+<?php 
 }
-
-/**
- * Prints a link that will expose the GoogleCheckout Price list table
- *
- * @param array $pricelist the GoogleCheckout price list
- * @param string $text The text to place for the link (defaults to "Price List")
- * @param string $textTag HTML tag for the link text. E.g. h3, ...  
- * @param string $id the division ID for the price list. (NB: a div named $id appended with "_data" is
- * 										created for the hidden table.
- *  
- */
-function GoogleCheckoutPrintPricelist($pricelist=NULL, $text=NULL, $textTag="l1", $id="GoogleCheckoutPricelist"){
-	if (!is_array($pricelist)) {
-		$pricelist = GoogleCheckoutFromString(getOption('GoogleCheckout_pricelist'));
-	}
-	if (is_null($text)) $text = gettext("Price List");
-	$dataid = $id . '_data';
-	if (!empty($textTag)) {
-		$textTagStart = '<'.$textTag.'>';
-		$textTagEnd = '</'.$textTag.'>';
-	}
-	echo '<div id="' .$id. '">'."\n".$textTagStart.'<a href="javascript: toggle('. "'" .$dataid."'".');">'.$text."</a>".$textTagEnd."\n</div>";
-	echo '<div id="' .$dataid. '" style="display: none;">'."\n";
-	echo '<table>'."\n";
-	echo '<table>'."\n";
-	echo '<tr>'."\n";
-	echo '<th>'.gettext("size").'</th>'."\n";
-	echo '<th>'.gettext("media").'</th>'."\n";
-	echo '<th>'.gettext("price").'</th>'."\n";
-	echo '</tr>'."\n";
-	$sizes = array();
-	$media = array();
-	foreach ($pricelist as $key=>$price) {
-		$itemparts = explode(':', $key);
-		echo '<tr>'."\n";
-		echo '<td class="size">'.$itemparts[0].'</td>'."\n";
-		echo '<td class="media">'.$itemparts[1].'</td>'."\n";
-		echo '<td class="price">'.$price.'</td>'."\n";
-		echo '</tr>'."\n";
-	}
-	echo '</table>'."\n";
-	echo '</div>'."\n";
-	echo "</div>\n";
-}
-
 ?>
