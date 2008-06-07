@@ -1005,7 +1005,7 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 		}
 	}
 	$class = trim($class);
-	/* set the HTML image width and height parameters in case this image was "zen-logo.gif" substituted for no thumbnail then the thumb layout is preserved */
+	/* set the HTML image width and height parameters in case this image was "zen-logo.jpg" substituted for no thumbnail then the thumb layout is preserved */
 	if ($sizeW = max(is_null($width) ? 0: $sizeW, is_null($cropw) ? 0 : $cropw)) {
 		$sizing = ' width="' . $sizeW . '"';
 	} else {
@@ -2762,7 +2762,9 @@ function getAllDates($order='asc') {
 	$alldates = array();
 	$cleandates = array();
 	$sql = "SELECT `date` FROM ". prefix('images');
-	if (!zp_loggedin()) { $sql .= " WHERE `show` = 1"; }
+	$special = new Album(new Gallery(), '');
+	$sql .= "WHERE `albumid`!=".$special->id;
+	if (!zp_loggedin()) { $sql .= " AND `show` = 1"; }
 	$result = query_full_array($sql);
 	foreach($result as $row){
 		$alldates[] = $row['date'];
