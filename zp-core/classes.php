@@ -52,7 +52,7 @@ class PersistentObject {
 	var $id;
 	var $transient;
 	
-	function PersistentObject($tablename, $unique_set, $cache_by=NULL, $use_cache=true) {
+	function PersistentObject($tablename, $unique_set, $cache_by=NULL, $use_cache=true, $is_transient=false) {
 		// Initialize the variables.
 		// Load the data into the data array using $this->load()
 		$this->data = array();
@@ -63,8 +63,8 @@ class PersistentObject {
 		$this->unique_set = $unique_set;
 		$this->cache_by = $cache_by;
 		$this->use_cache = $use_cache;
-		$this->transient = false;
-		
+		$this->transient = $is_transient;
+
 		return $this->load();
 	}
 	
@@ -249,13 +249,18 @@ class PersistentObject {
 		
 		// If we don't have an entry yet, this is a new record. Create it.
 		if (empty($entry)) {
-			$new = true;
-			$this->save();
-			$entry = query_single_row($sql);
-			// If we still don't have an entry, something went wrong...
-			if (!$entry) return null;
-			// Then save this new entry into the cache so we get a hit next time.
-			$this->cache($entry);
+			if ($this->transient) { // no don't save it in the DB!
+				$entry = array_merge($this->unique_set, $this->updates, $this->tempdata);
+				$entry['id'] = '';
+			} else {
+				$new = true;
+				$this->save();
+				$entry = query_single_row($sql);
+				// If we still don't have an entry, something went wrong...
+				if (!$entry) return null;
+				// Then save this new entry into the cache so we get a hit next time.
+				$this->cache($entry);
+			}
 		}
 		$this->data = $entry;
 		$this->id = $entry['id'];

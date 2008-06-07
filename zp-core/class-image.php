@@ -58,14 +58,8 @@ class Image extends PersistentObject {
 		}
 
 		// This is where the magic happens...
-		$new = parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename');
 		$album_name = $album->name;
-		// If this image belongs to the root album, don't save it to the db.
-		if (empty($album_name)) {
-			$this->set('show', 0);
-			$this->set('commentson', 0);
-			$this->transient = true;
-		}
+		$new = parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', false, empty($album_name));
 		if ($new) {
 			$metadata = getImageMetadata($this->localpath);
 			if (isset($metadata['date'])) {

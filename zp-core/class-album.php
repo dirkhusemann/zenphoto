@@ -42,13 +42,7 @@ class Album extends PersistentObject {
 			$this->exists = false;
 			return false;
 		}
-		$new = parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache);
-		// If this is the root album, don't save it to the db.
-		if (empty($folder)) { 
-			$this->set('show', 0);
-			$this->set('commentson', 0);
-			$this->transient = true;
-		}
+		$new = parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache, empty($folder));
 		if (hasDyanmicAlbumSuffix($folder)) {
 			if ($new || (filemtime($this->localpath) > $this->get('mtime'))) {
 				$data = file_get_contents($this->localpath);
