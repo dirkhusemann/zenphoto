@@ -41,7 +41,7 @@ class ThemeOptions {
 	}
 
 	function getOptionsSupported() {
-		return array(	gettext('Theme logo') => array('key' => 'Theme_logo', 'type' => 0, 'desc' => gettext('The text for the them logo')),
+		return array(	gettext('Theme logo') => array('key' => 'Theme_logo', 'type' => 0, 'desc' => gettext('The text for the theme logo')),
 									gettext('Allow comments') => array('key' => 'Allow_comments', 'type' => 1, 'desc' => gettext('Check to enable comment section.')),
 									gettext('Watermark head_image') => array('key' => 'Watermark_head_image', 'type' => 1, 'desc' => gettext('Check to place a watermark on the heading image. (Image watermarking must be set.)')),
 									gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Check to enable search form.')),
