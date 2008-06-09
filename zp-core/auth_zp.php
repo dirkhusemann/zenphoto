@@ -80,7 +80,7 @@ if (isset($_POST['logout']) || isset($_GET['logout'])) {
 		if (isset($_GET['image'])) { $redirect .= "&image=" . $_GET['image']; }
 	}
 	if (isset($_GET['page'])) {
-		if (empty($redirect)) {
+		if ($redirect=='index.php') {
 			$redirect = "?page=" . $_GET['page'];
 		} else {
 			$redirect .= "&page=" . $_GET['page'];
