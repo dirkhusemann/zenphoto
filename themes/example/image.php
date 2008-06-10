@@ -20,7 +20,6 @@
 	</div>
 	
 	<hr />
-	
 	<!-- The Image -->
 	<?php if (!checkForPassword()) { ?>
 		<div class="image">
@@ -53,7 +52,10 @@
 					<?php printImageDesc(true); ?>
 					<?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ''); ?>
 					<?php if (function_exists('zenPaypal')) { zenPaypal(NULL, true); } ?>
-					<?php if (function_exists('googleCheckout')) { googleCheckout(NULL, true); } ?>
+					<?php if (function_exists('googleCheckout')) { 
+						printGoogleCartWidget(); 
+						googleCheckout(NULL, true); 
+					} ?>
 					
 					
 					
