@@ -112,7 +112,7 @@
 			if (!empty($params)) {
 				if ($results != "0") {
 					echo '<em class="count">';
-					echo gettext('Photos') . $firstImage-$lastImage . gettext('of') . getNumImages();  
+					echo gettext('Photos') .' ' . $firstImage.'-'.$lastImage.' '.gettext('of').' '.getNumImages();  
 					echo "</em>";
 		?>
 				<?php if (hasPrevPage()) { ?>
