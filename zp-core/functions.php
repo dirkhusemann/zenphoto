@@ -1165,7 +1165,7 @@ function getAlbumFolder($root=SERVERPATH) {
 	if ($_zp_xternal_album_folder != null) return $_zp_xternal_album_folder;
 
 	if (!is_null($_zp_xternal_album_folder = getOption('external_album_folder'))) {
-		if (substr($_zp_xternal_album_folder, -1) != '/') $_zp_xternal_album_folder += '/';
+		if (substr($_zp_xternal_album_folder, -1) != '/') $_zp_xternal_album_folder .= '/';
 		return $_zp_xternal_album_folder;
 	} else {
 		if (is_null($_zp_album_folder = getOption('album_folder'))) {
