@@ -20,36 +20,62 @@ printTabs();
 echo "\n" . '<div id="content">';
 
 if (isset($_GET['convert'])) {
-	// convert the tags the table
-	$gallery = new Gallery();
-	$alltags = getAllTagsUnique();
-	foreach ($alltags as $tag) {
-		$sql = "INSERT INTO " . prefix('tags') . " (name) VALUES ('" . escape($tag) . "')";
-		query($sql);
-	}
-	$sql = "SELECT `id`, `tags` FROM ".prefix('albums');
-	$result = query_full_array($sql);
-	if (is_array($result)) {
-		foreach ($result as $row) {
-			if (!empty($row['tags'])) {
-				$tags = explode(",", strtolower($row['tags']));
-				storeTags($tags, $row['id'], 'albums');
+	if ($_GET['convert'] == 'table') {
+		// convert the tags to a table
+		$gallery = new Gallery();
+		$alltags = getAllTagsUnique();
+		foreach ($alltags as $tag) {
+			query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . escape($tag) . "')", true);
+		}
+		$sql = "SELECT `id`, `tags` FROM ".prefix('albums');
+		$result = query_full_array($sql);
+		if (is_array($result)) {
+			foreach ($result as $row) {
+				if (!empty($row['tags'])) {
+					$tags = explode(",", strtolower($row['tags']));
+					storeTags($tags, $row['id'], 'albums');
+				}
 			}
 		}
-	}
-	$sql = "SELECT `id`, `tags` FROM ".prefix('images');
-	$result = query_full_array($sql);
-	if (is_array($result)) {
-		foreach ($result as $row) {
-			if (!empty($row['tags'])) {
-				$tags = explode(",", strtolower($row['tags']));
-				storeTags($tags, $row['id'], 'images');
+		$sql = "SELECT `id`, `tags` FROM ".prefix('images');
+		$result = query_full_array($sql);
+		if (is_array($result)) {
+			foreach ($result as $row) {
+				if (!empty($row['tags'])) {
+					$tags = explode(",", strtolower($row['tags']));
+					storeTags($tags, $row['id'], 'images');
+				}
 			}
 		}
+		query("ALTER TABLE ".prefix('albums')." DROP COLUMN `tags`");
+		query("ALTER TABLE ".prefix('images')." DROP COLUMN `tags`");
+		$_zp_use_tag_table = 1;  // we have converted
+	} else {
+		// convert tagtable to strings
+		query('ALTER TABLE '.prefix('albums').' ADD COLUMN `tags` text;', true);
+		query('ALTER TABLE '.prefix('images').' ADD COLUMN `tags` text;', true);
+		$taglist = array();
+		$object = NULL;
+		$tbl = NULL;
+		$result = query_full_array('SELECT t.`name`,o.`type`,o.`objectid` FROM '.prefix('tags').' AS t,'.prefix('obj_to_tag').' AS o WHERE t.`id`=o.`tagid` ORDER BY o.`type`, o.`objectid`');
+		if (is_array($result)) {
+			foreach ($result as $row) {
+				if (($row['type'] != $tbl) || ($row['objectid'] != $object)) {
+					if (count($taglist) > 0) {
+						$tags = implode(',', $taglist);
+						query('UPDATE '.prefix($tbl).' SET `tags`="'.$tags.'" WHERE `id`='.$object);
+					}
+					$object = $row['objectid'];
+					$tbl = $row['type'];
+					$taglist = array();
+				}
+				$taglist[] = $row['name'];
+			}
+		}
+		query("DELETE FROM ".prefix('tags'));
+		query("DELETE FROM ".prefix('obj_to_tag'));
+		$_zp_use_tag_table = -1;
 	}
-	query("ALTER TABLE ".prefix('albums')." DROP COLUMN `tags`");
-	query("ALTER TABLE ".prefix('images')." DROP COLUMN `tags`");
-	$_zp_use_tag_table = 1;  // we have converted
 }
 
 if (count($_POST) > 0) {
@@ -65,6 +91,7 @@ if (count($_POST) > 0) {
 		}
 	}
 	if (isset($_GET['delete'])) {
+		$kill = array();
 		foreach ($_POST as $key => $value) {
 			$key = postIndexDecode($key);
 			$kill[] = $key;
@@ -89,11 +116,10 @@ if (count($_POST) > 0) {
 				query($sqlobjects);
 			}
 		} else {
-			$kill = array();
 			$x = $kill;
 			$first = array_shift($x);
 			$match = "'%".$first."%'";
-			foreach ($kill as $tag) {
+			foreach ($x as $tag) {
 				$match .= " OR `tags` LIKE '%".$tag."%'";
 			}
 			$sql = 'SELECT `id`, `tags` FROM '.prefix('images').' WHERE `tags` LIKE '.$match.';';
@@ -176,8 +202,6 @@ if (count($_POST) > 0) {
 
 			foreach ($albumlist as $row) {
 				$tags = explode(",", strtolower($row['tags']));
-				foreach ($imagelist as $row) {
-					$tags = explode(",", strtolower($row['tags']));
 					foreach ($tags as $key=>$tag) {
 						$tag = trim($tag);
 						$listkey = PostIndexEncode($tag);
@@ -188,7 +212,7 @@ if (count($_POST) > 0) {
 					$row['tags'] = implode(",", $tags);
 					$sql = 'UPDATE '.prefix('albums')."SET `tags`='".$row['tags']."' WHERE `id`='".$row['id']."'";
 					query($sql);
-				}
+
 
 			}
 		}
@@ -218,7 +242,7 @@ tagSelector(NULL, '');
 echo "\n<p><input type=\"submit\" value=\"".gettext("delete checked tags")."\" /></p>";
 echo "\n</form>";
 echo "\n</td>";
-echo "\n<td>&nbsp;&nbsp;</td>";
+echo "\n<td width='5'></td>";
 echo "\n<td>";
 echo "\n".'<form name="tag_rename" action="?page=tags&rename=true" method="post">';
 echo "\n<ul class=\"tagrenamelist\">";
@@ -233,7 +257,7 @@ echo "\n</ul>";
 echo "\n<p><input type=\"submit\" value=\"".gettext("rename tags")."\" /></p>";
 echo "\n</form>";
 echo "\n</td>";
-echo "\n<td>&nbsp;&nbsp;</td>";
+echo "\n<td width='5'></td>";
 echo "\n<td>";
 if ($newTags) {
 	echo '<form name="new_tags" action="?page=tags&newtags=true"method="post">';
@@ -254,13 +278,14 @@ gettext('To delete tags from the gallery, place a checkmark in the box for each 
 			"</p><p>".
 gettext('To change the value of a tag enter a new value for the tag in the text box in front of the tag. Then press the <em>rename tags</em>button').'</p>';
 if ($newTags) {
-	echo "\n<p>".gettext("Add tags to the list by entering their names in the input fields of the <em>New tags</em> list. Then press the <em>save new tags</em>button").'</p>';
-} else {
-	echo "\n<p>".gettext("Your tags are currently stored as strings in each album and image object recored. You can convert to using database tables to manage tags by clicking on the button below. This will result in a performance improvement on large galleries but it is not a reversable process.").'</p>';
-	echo "\n<p><form name='tag_convert' action='?page=tags&convert=true' method='post'>";
-	echo "\n<button type=\"submit\" class=\"tooltip\" id='convert_tags' title=\"".gettext("Converts the <em>tags</em> from strings in a record field to a database tag table structure. Warning, this cannot be reversed.")."\"> ".gettext("Convert tags to table")."</button>";
+	echo "\n<p>".gettext("Add tags to the list by entering their names in the input fields of the <em>New tags</em> list. Then press the <em>save new tags </em>button").'</p>';
+	echo "\n<p align='center'><form name='tag_convert' action='?page=tags&convert=string' method='post'>";
+	echo "\n<button type=\"submit\" class=\"tooltip\" id='convert_tags' title=\"".gettext("Converts the <em>tags</em> from the table structure to a string in a record field.")."\"> ".gettext("Revert tags to strings")."</button>";
 	echo "\n</form></p>";
-	echo "\n<p><strong>".gettext("STOP! Remember, this is a development build. Unless you are one of the Developers helping to test this feature I strongly recommend not touching the button.")."</strong></p>";
+} else {
+	echo "\n<p align='center'><form name='tag_convert' action='?page=tags&convert=table' method='post'>";
+	echo "\n<button type=\"submit\" class=\"tooltip\" id='convert_tags' title=\"".gettext("Converts the <em>tags</em> from strings in a record field to a database tag table structure.")."\"> ".gettext("Convert tags to table")."</button>";
+	echo "\n</form></p>";
 }
 echo "\n</td>";
 echo "\n</tr>";

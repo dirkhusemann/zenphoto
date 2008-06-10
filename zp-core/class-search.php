@@ -376,7 +376,7 @@ class SearchEngine
 	 * @return array
 	 */
 	function searchTags($searchstring, $tbl) {
-		$sql = 'SELECT `name`, `id` FROM '.prefix('tags').' WHERE ';
+		$sql = 'SELECT t.`name`, o.`objectid` FROM '.prefix('tags').' AS t, '.prefix('obj_to_tag').' AS o WHERE t.`id`=o.`tagid` AND (';
 		foreach($searchstring as $singlesearchstring){
 			switch ($singlesearchstring) {
 				case '&':
@@ -386,33 +386,20 @@ class SearchEngine
 				case ')':
 					break;
 				default:
-					$sql .= '`name`="'.$singlesearchstring.'" OR ';
+					$sql .= 't.`name`="'.$singlesearchstring.'" OR ';
 			}
 		}
-		$sql = substr($sql, 0, strlen($sql)-4);
-		$result = query_full_array($sql);
-		$tags = array();
-		if (!is_array($result)) { return NULL; }
-		if (count($result)==0) { return NULL; }
-		foreach ($result as $row) {
-			$tags[$row['id']] = $row['name'];
-		}
-
-		$sql = "SELECT `objectid`,`tagid` FROM ".prefix('obj_to_tag').' WHERE `type`="'.$tbl.'" AND (';
-		foreach ($tags as $tag=>$name) {
-		 	$sql .= '`tagid`='.$tag.' OR ';
-		}
-		$sql = substr($sql, 0, strlen($sql)-4).')';
+		$sql = substr($sql, 0, strlen($sql)-4).') ORDER BY t.`id`';
 		$objects = query_full_array($sql);
+
+		if (!is_array($objects)) { return NULL; }
 		$taglist = array();
-		if (!is_array($objects)) { return NULL; }
-		if (!is_array($objects)) { return NULL; }
+				
 		foreach ($objects as $object) {
-			$tagid = $tags[$object['tagid']];
+			$tagid = $object['name'];
 			if (!is_array($taglist[$tagid])) { $taglist[$tagid] = array(); }		
 			$taglist[$tagid][] = $object['objectid'];
 		}
-
 		
 		$op = '';
 		$idlist = array();

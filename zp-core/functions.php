@@ -2132,6 +2132,7 @@ function storeTags($tags, $id, $tbl) {
 			$tags[$key] = $tag;
 		}
 	}
+	$tags = array_unique($tags);
 	$sql = "SELECT `id`, `tagid` from ".prefix('obj_to_tag')." WHERE `objectid`='".$id."' AND `type`='".$tbl."'";
 	$result = query_full_array($sql);
 	$existing = array();
