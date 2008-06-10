@@ -1607,6 +1607,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 	}
 	?>
 </ul>
+
 </div>
 <div id="tab_admin">
 <form action="?page=options&action=saveoptions" method="post"><input
@@ -1777,7 +1778,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 </div>
 <!-- end of tab_admin div -->
 <?php
-if ($_zp_loggedin & ADMIN_RIGHTS) {
+if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 ?>
 <div id="tab_gallery">
 <form action="?page=options&action=saveoptions" method="post">
@@ -2176,6 +2177,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 </table>
 </form>
 </div><!-- end of tab_image div -->
+<?php if (!$_zp_null_account) { ?>
 <div id="tab_comments">
 <form action="?page=options&action=saveoptions" method="post"><input
 	type="hidden" name="savecommentoptions" value="yes" /> <?php
@@ -2245,14 +2247,16 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 </table>
 </form>
 </div>
+<?php } ?>
 <!-- end of tab_comments div -->
 <?php
 }
 ?>
 <div id="tab_theme">
 <?php
+	if (!$_zp_null_account) {
 	$themelist = array();
-	if ($_zp_loggedin & ADMIN_RIGHTS) {
+	if (($_zp_loggedin & ADMIN_RIGHTS)) {
 		$gallery_title = getOption('gallery_title');
 		if ($gallery_title != gettext("Gallery")) {
 			$gallery_title .= ' ('.gettext("Gallery").')';
@@ -2381,11 +2385,13 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 	<td></td>
 	</table>
 	</form>
-</div><!-- end of tab_theme div -->
+</div>
+<?php } ?>
+<!-- end of tab_theme div -->
 
 <div id="tab_plugin">
 <?php		
-if ($_zp_loggedin & ADMIN_RIGHTS) { 
+if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) { 
 	$curdir = getcwd();
 	chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
 	$filelist = safe_glob('*'.'php');

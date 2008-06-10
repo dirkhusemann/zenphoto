@@ -517,7 +517,7 @@ function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrig
 
 
 function tagSelector($that, $postit) {
-	$them = array_unique(getAllTags());
+	$them = getAllTagsUnique();
 	if (is_null($that)) {
 		$tags = array();
 	} else {
@@ -529,7 +529,7 @@ function tagSelector($that, $postit) {
 	$them = array_diff($them, $tags);
 	echo '<ul class="tagchecklist">'."\n";
 	generateUnorderedListFromArray($tags, $tags, $postit);
-	if (!is_null($that)) {
+	if (!is_null($that) && !useTagTable()) {
 		for ($i=0; $i<4; $i++) {
 			echo '<li>'.gettext("new tag").' <input type="text" size="15" name="'.$postit.'new_tag_value_'.$i.'" value="" /></li>'."\n";
 		}

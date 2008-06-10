@@ -656,7 +656,7 @@ button.positive,.buttons a.positive {
 }
 
 /* scrollable checklists */ /*************************/
-	/* Undo some styles from the master stylesheet */
+/* Undo some styles from the master stylesheet */
 .tagchecklist li {
 	background: none;
 	padding-left: 0;
@@ -726,6 +726,36 @@ button.positive,.buttons a.positive {
 	height: 1%;
 }
 
+/* CSS for tag new lists */
+.tagnewlist {
+	border: 1px solid #ccc;
+	list-style: none;
+	height: 25em;
+	width: 17em;
+	overflow: auto;
+	background-color: white;
+}
+
+.tagnewlist,.tagnewlist li {
+	margin: 0;
+	padding: 0;
+	border-bottom: 1px dotted #C6D880;
+}
+
+.tagnewlist label {
+	display: block;
+	padding: 0 0.2em 0 25px;
+	text-indent: -25px;
+}
+
+.tagnewlist label:hover,.tagnewlist label.hover {
+	background: #777;
+	color: #fff;
+}
+
+* html .tagnewlist label {
+	height: 1%;
+}
 
 
 /* scrollable checklists */ /*************************/

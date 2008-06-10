@@ -678,7 +678,8 @@ if (file_exists("zp-config.php")) {
 		}
 		$expected_tables = array($_zp_conf_vars['mysql_prefix'].'options', $_zp_conf_vars['mysql_prefix'].'albums',
 		$_zp_conf_vars['mysql_prefix'].'images', $_zp_conf_vars['mysql_prefix'].'comments',
-		$_zp_conf_vars['mysql_prefix'].'administrators', $_zp_conf_vars['mysql_prefix'].'admintoalbum');
+		$_zp_conf_vars['mysql_prefix'].'administrators', $_zp_conf_vars['mysql_prefix'].'admintoalbum',
+		$_zp_conf_vars['mysql_prefix'].'tags', $_zp_conf_vars['mysql_prefix'].'obj_to_tag');
 		foreach ($expected_tables as $needed) {
 			if (!isset($tables[$needed])) {
 				$tables[$needed] = 'create';
@@ -705,6 +706,8 @@ if (file_exists("zp-config.php")) {
 	$tbl_options  = prefix('options');
 	$tbl_administrators = prefix('administrators');
 	$tbl_admintoalbum = prefix('admintoalbum');
+	$tbl_tags = prefix('tags');
+	$tbl_obj_to_tag = prefix('obj_to_tag');
 	// Prefix the constraint names:
 	$cst_comments = prefix('comments_ibfk1');
 	$cst_images = prefix('images_ibfk1');
@@ -715,7 +718,25 @@ if (file_exists("zp-config.php")) {
 	 Add new fields in the upgrade section. This section should remain static except for new
 	 tables. This tactic keeps all changes in one place so that noting gets accidentaly omitted.
 		************************************************************************************/
-
+	//v1.1.7
+	if (isset($create[$_zp_conf_vars['mysql_prefix'].'tags'])) {
+		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_tags (
+		`id` int(11) unsigned NOT NULL auto_increment,
+		`name` varchar(256),
+		PRIMARY KEY  (`id`),
+		UNIQUE (`name`)
+		);";
+	}
+		if (isset($create[$_zp_conf_vars['mysql_prefix'].'obj_to_tag'])) {
+		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_obj_to_tag (
+		`id` int(11) unsigned NOT NULL auto_increment,
+		`tagid` int(11) unsigned NOT NULL,
+		`type` tinytext,
+		`objectid` int(11) unsigned NOT NULL,
+		PRIMARY KEY  (`id`)
+		);";
+	}
+	
 	// v. 1.1.5
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'administrators'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_administrators (
@@ -772,7 +793,6 @@ if (file_exists("zp-config.php")) {
 		`hitcounter` int(11) unsigned default NULL,
 		`password` varchar(255) default NULL,
 		`password_hint` text,
-		`tags` text,
 		PRIMARY KEY  (`id`),
 		KEY `folder` (`folder`)
 		);";
@@ -806,7 +826,6 @@ if (file_exists("zp-config.php")) {
 		`country` tinytext,
 		`credit` tinytext,
 		`copyright` tinytext,
-		`tags` text,
 		`commentson` int(1) NOT NULL default '1',
 		`show` int(1) NOT NULL default '1',
 		`date` datetime default NULL,
@@ -857,7 +876,7 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_options ADD UNIQUE (`name`);";
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `commentson` int(1) UNSIGNED NOT NULL default '1';";
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `subalbum_sort_type` varchar(20) default NULL;";
-	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `tags` text;";
+//v1.1.7 omits	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `tags` text;";
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `location` tinytext;";
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `city` tinytext;";
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `state` tinytext;";
@@ -865,7 +884,7 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `credit` tinytext;";
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `copyright` tinytext;";
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `date` datetime default NULL;";
-	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `tags` text;";
+//v1.1.7 omits	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `tags` text;";
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `EXIFValid` int(1) UNSIGNED default NULL;";
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `hitcounter` int(11) UNSIGNED default NULL;";
 	foreach (array_keys($_zp_exifvars) as $exifvar) {

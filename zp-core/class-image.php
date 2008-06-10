@@ -350,15 +350,19 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getTags() { 
-	$tagstring = trim($this->get('tags'));
-	if (empty($tagstring)) {
-		$tags = array();
-	} else {
-		$tags = explode(",", $tagstring);
-		sort($tags);
-	}
-		return $tags; 
+	function getTags() {
+		if (useTagTable()) {
+			$tags = readTags($this->id, 'images');
+		} else {
+			$tagstring = trim($this->get('tags'));
+			if (empty($tagstring)) {
+				$tags = array();
+			} else {
+				$tags = explode(",", $tagstring);
+				sort($tags);
+			}
+		}
+		return $tags;
 	}
 
 	/**
@@ -366,7 +370,7 @@ class Image extends PersistentObject {
 	 *
 	 * @param string $tags the tag string
 	 */
-	function setTags($tags) { 
+	function setTags($tags) { 	
 		if (!is_array($tags)) {
 			$tagary = explode(',', $tags);
 			$tags = array();
@@ -377,8 +381,12 @@ class Image extends PersistentObject {
 			}
 		}
 		$tags = array_unique($tags);
-		$tags = implode(",", $tags);
-		$this->set('tags', $tags); 
+		if (useTagTable()) {
+			storeTags($tags, $this->id, 'images');
+		} else {
+			$tags = implode(",", $tags);
+			$this->set('tags', $tags); 
+		}
 	}
 
 	/**

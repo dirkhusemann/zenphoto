@@ -10,15 +10,6 @@ if (!zp_loggedin()) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
 	exit();
 }
-$_GET['page'] = 'edit'; // pretend to be the edit page.
-printAdminHeader();
-echo "\n</head>";
-echo "\n<body>";
-printLogoAndLinks();
-echo "\n" . '<div id="main">';
-printTabs();
-echo "\n" . '<div id="content">';
-echo "<h1>".gettext("zenphoto Create Dynamic Album")."</h1>\n";
 $search = new SearchEngine();
 if (isset($_POST['savealbum'])) {
 	$albumname = $_POST['album'];
@@ -43,6 +34,15 @@ if (isset($_POST['savealbum'])) {
 		}
 	}
 }
+$_GET['page'] = 'edit'; // pretend to be the edit page.
+printAdminHeader();
+echo "\n</head>";
+echo "\n<body>";
+printLogoAndLinks();
+echo "\n" . '<div id="main">';
+printTabs();
+echo "\n" . '<div id="content">';
+echo "<h1>".gettext("zenphoto Create Dynamic Album")."</h1>\n";
 
 if (isset($_POST['savealbum'])) { // we fell through, some kind of error
 	echo "<div class=\"errorbox space\">";

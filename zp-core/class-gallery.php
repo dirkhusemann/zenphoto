@@ -408,7 +408,12 @@ class Gallery {
 
 			$deadman = strtotime('+ 10 sec');  // protect against too much processing.
 
-			$images = query_full_array('SELECT `id`, `albumid`, `filename`, `desc`, `title`, `date`, `tags`, `mtime` FROM ' . prefix('images') . ';');
+			$sql = 'SELECT `id`, `albumid`, `filename`, `desc`, `title`, `date`, `mtime`';
+			if (!useTagTable()) {
+				$sql .= ', `tags`';
+			}
+			$sql .= ' FROM ' . prefix('images');
+			$images = query_full_array($sql);
 			foreach($images as $image) {
 
 				$sql = 'SELECT `folder` FROM ' . prefix('albums') . ' WHERE `id`="' . $image['albumid'] . '";';
@@ -440,9 +445,14 @@ class Gallery {
 						}
 
 						/* tags */
-						if (is_null($row['tags'])) {
-							if (isset($metadata['tags'])) {
-								$set .= ', `tags`="' . mysql_real_escape_string($metadata['tags']) . '"';
+						if (useTagTable()) {
+							$tags = explode(',', $metadata['tags']);
+							storeTags($tags, $image['id'], 'images');
+						} else {
+							if (is_null($image['tags'])) {
+								if (isset($metadata['tags'])) {
+									$set .= ', `tags`="' . mysql_real_escape_string($metadata['tags']) . '"';
+								}
 							}
 						}
 

@@ -113,7 +113,9 @@ function printAdminToolbox($context=null, $id='admin') {
 			if (isset($_GET['p'])) {
 				$redirect = "&amp;p=" . $_GET['p'];
 			}
-			$redirect .= "&amp;page=$page";
+			if ($page>1) {
+				$redirect .= "&amp;page=$page";
+			}
 		} else if ($_zen_gallery_page === 'album.php') {  
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				printSubalbumAdmin(gettext('Edit album'), '', "<br />\n");
@@ -582,10 +584,11 @@ function albumNumber() {
 			$albums = $search->getAlbums();			
 		}
 	}
-	$ct = count($albums);
-	for ($c = 0; $c < $ct; $c++) {
-		if ($name == $albums[$c]) {
-			return $c+1;
+	$c = 0;
+	foreach ($albums as $albumfolder) {
+		$c++;
+		if ($name == $albumfolder) {
+			return $c;
 		}
 	}
 	return false;
@@ -1269,20 +1272,22 @@ function imageNumber() {
 	$name = $_zp_current_image->getFileName();
 	if (in_context(ZP_SEARCH)) {
 		$images = $_zp_current_search->getImages();
-		$ct = count($images);
-		for ($c = 0; $c < $ct; $c++) {
-			if ($name == $images[$c] ['filename']) {
-				return $c+1;
+		$c = 0;
+		foreach ($images as $image) {
+			$c++;
+			if ($name == $image['filename']) {
+				return $c;
 			}
 		}
 	} else {
 		if ($_zp_current_album->isDynamic()) {
 			$search = $_zp_current_album->getSearchEngine();
 			$images = $search->getImages();
-			$ct = count($images);
-			for ($c = 0; $c < $ct; $c++) {
-				if ($name == $images[$c] ['filename']) {
-					return $c+1;
+			$c = 0;
+			foreach ($images as $image) {
+				$c++;
+				if ($name == $image['filename']) {
+					return $c;
 				}
 			}
 		} else {
@@ -2680,13 +2685,31 @@ function printTags($option='links',$preText=NULL,$class='taglist',$separator=', 
 	}
 }
 
+$_zp_count_tags = NULL;
 /**
  * Returns an array indexed by 'tag' with the element value the count of the tag
  *
  * @return array
  */
 function getAllTagsCount() {
-	return array_count_values(getAllTags());
+	global $_zp_count_tags;
+	if (!is_null($_zp_count_tags)) return $_zp_count_tags;
+	if (useTagTable()) {
+		$_zp_count_tags = array();
+		$sql = "SELECT `name`, `id` from ".prefix('tags');
+		$tagresult = query_full_array($sql);
+		if (is_array($tagresult)) {
+			foreach ($tagresult as $row) {
+				$sql = "SELECT COUNT(*) AS row_count FROM ".prefix('obj_to_tag')." WHERE `id`='".$row['id']."'";
+				$countresult = query_single_row($sql);
+				$_zp_count_tags[$row['name']]	= $countresult['row_count'];
+			}
+		}
+		return $_zp_count_tags;
+	} else {
+		$_zp_count_tags = array_count_values(getAllTagsStrings());
+		return $_zp_count_tags;
+	}
 }
 
 /**
@@ -3165,7 +3188,7 @@ function printSearchForm($prevtext=NULL, $id="search", $buttonSource="") {
 function getSearchWords() {
 	global $_zp_current_search;
 	if (!in_context(ZP_SEARCH)) { return ''; }
-	$opChars = array ('&'=>1, '|'=>1, '!'=>1, ','=>1, ' '=>1);
+	$opChars = array ('('=>2, '&'=>1, '|'=>1, '!'=>1, ','=>1, ' '=>1);
 	$searchstring = $_zp_current_search->getSearchString();
 	$sanitizedwords = '';
 	if (is_array($searchstring)) {

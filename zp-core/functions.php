@@ -2034,15 +2034,40 @@ function addPluginScript($script) {
 	$_zp_plugin_scripts[] = $script;
 }
 
+$_zp_use_tag_table = 0;
+/**
+ * Returns true if we have converted to the database table for tags
+ *
+ * @return bool
+ */
+function useTagTable() {
+	global $_zp_use_tag_table;
+	if ($_zp_use_tag_table > 0) { 
+		return true; 
+	} else if ($_zp_use_tag_table < 0) {
+		return false;
+	}
+	$result = query_single_row("SELECT * FROM ".prefix('images')." LIMIT 1");
+	if (array_key_exists('tags', $result)) {
+		$_zp_use_tag_table = -1;
+		return false;
+	}else {
+		$_zp_use_tag_table = 1;
+		return true;
+	}
+}
+
+$_zp_all_tags = null;
 /**
  * Grabs the entire galleries tags
  * Returns an array with all the tags found (there may be duplicates)
+ * 
+ * Should be used internally only, works only on "old" tag format.
  *
  * @return array
  * @since 1.1
  */
-$_zp_all_tags = null;
-function getAllTags() {
+function getAllTagsStrings() {
 	global $_zp_all_tags;
 	if (!is_null($_zp_all_tags)) { return $_zp_all_tags; }
 	$result = query_full_array("SELECT `tags` FROM ". prefix('images') ." WHERE `show` = 1");
@@ -2062,6 +2087,93 @@ function getAllTags() {
 		}
 	}
 	return $_zp_all_tags;
+}
+
+$_zp_unique_tags = NULL;
+/**
+ * Returns an array of unique tag names
+ *
+ * @return unknown
+ */
+function getAllTagsUnique() {
+	global $_zp_unique_tags;
+	if (!is_null($_zp_unique_tags)) return $_zp_unique_tags;  // cache them.
+	if (useTagTable()) {
+		$sql = "SELECT `name` FROM ".prefix('tags');
+		$result = query_full_array($sql);
+		if (is_array($result)) {
+			$_zp_unique_tags = array();
+			foreach ($result as $row) {
+				$_zp_unique_tags[] = $row['name'];
+			}
+			return $_zp_unique_tags;
+		} else {
+			return array();
+		}
+	} else {
+		$_zp_unique_tags = array_unique(getAllTagsStrings());
+		return $_zp_unique_tags;
+	}
+}
+
+/**
+ * Stores tags for an album/image
+ *
+ * @param array $tags the tag values
+ * @param int $id the record id of the album/image
+ * @param string $tbl 'albums' or 'images'
+ */
+function storeTags($tags, $id, $tbl) {
+	foreach ($tags as $key=>$tag) {
+		$tag = strtolower(trim($tag));
+		if (empty($tag)) {
+			unset ($tags[$key]);
+		} else {
+			$tags[$key] = $tag;
+		}
+	}
+	$sql = "SELECT `id`, `tagid` from ".prefix('obj_to_tag')." WHERE `objectid`='".$id."' AND `type`='".$tbl."'";
+	$result = query_full_array($sql);
+	$existing = array();
+	if (is_array($result)) {
+		foreach ($result as $row) {
+			$dbtag = query_single_row("SELECT `name` FROM ".prefix('tags')." WHERE `id`='".$row['tagid']."'");
+			if (in_array($dbtag['name'], $tags)) { // tag already set no action needed
+				$existing[] = $dbtag['name'];
+			} else { // tag no longer set, remove it
+				query("DELETE FROM ".prefix('obj_to_tag')." WHERE `id`='".$row['id']."'");
+			}
+		}
+	}
+	$tags = array_diff($tags, $existing); // new tags for the object
+	foreach ($tags as $tag) {
+		$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".$tag."'");
+		if (!is_array($dbtag)) { // tag does not exist
+			query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . escape($tag) . "')");
+			$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".$tag."'");
+		}
+		query("INSERT INTO ".prefix('obj_to_tag'). "(`objectid`, `tagid`, `type`) VALUES (".$id.",".$dbtag['id'].",'".$tbl."')");
+	}
+}
+
+/**
+ * Retrieves the tags for an album/image
+ * Returns them in an array
+ *
+ * @param int $id the record id of the album/image
+ * @param string $tbl 'albums' or 'images'
+ * @return unknown
+ */
+function readTags($id, $tbl) {
+	$tags = array();
+	$result = query_full_array("SELECT `tagid` FROM ".prefix('obj_to_tag')." WHERE `type`='".$tbl."' AND `objectid`='".$id."'");
+	if (is_array($result)) {
+		foreach ($result as $row) {
+			$dbtag = query_single_row("SELECT `name` FROM".prefix('tags')." WHERE `id`='".$row['tagid']."'");
+			$tags[] = $dbtag['name'];
+		}
+	}
+	return $tags;
 }
 
 /**
