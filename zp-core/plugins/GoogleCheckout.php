@@ -6,10 +6,11 @@
  * 
  * Plugin option 'GoogleCheckout_merchantID' allows setting the GoogleCheckout user email.
  * Plugin option 'GoogleCheckout_pricelist' provides the default pricelist. 
- * Plugin option 'google_checkout_currency'
- * Plugin option 'google_checkout_ship_method'
- * Plugin option 'google_checkout_ship_cost'
-  *  
+ * Plugin option 'googleCheckout_currency'
+ * Plugin option 'googleCheckout_ship_method'
+ * Plugin option 'googleCheckout_ship_cost'
+ * Plugin option 'googleCheckout_cart_location'
+ *  
  * Price lists can also be passed as a parameter to the GoogleCheckout() function. See also 
  * GoogleCheckoutPricelistFromString() for parsing a string into the pricelist array. This could be used, 
  * for instance, by storing a pricelist string in the 'customdata' field of your images and then parsing and 
@@ -25,9 +26,11 @@ $option_interface = new GoogleCheckoutOptions();
 addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/GoogleCheckout/GoogleCheckout.css" type="text/css" />');
 
 $id = getOption('GoogleCheckout_merchantID');
-$curr = getOption('google_checkout_currency');
+$curr = getOption('googleCheckout_currency');
+$cartloc = getOption('googleCheckout_cart_location');
 if (empty($curr)) { $curr = 'USD'; }
 addPluginScript('<script id="googlecart-script" type="text/javascript" src="http://checkout.google.com/seller/gsc/beta/cart-v1.js?mid='.$id.'&currency='.$curr.'"></script>');
+addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/GoogleCheckout/GoogleCart'.$cartloc.'.css" type="text/css" />');
 
 /**
  * Plugin option handling class
@@ -46,31 +49,40 @@ class GoogleCheckoutOptions {
 			$pricelistoption .= $item.'='.$price.' ';
 		}
 		setOptionDefault('GoogleCheckout_pricelist', $pricelistoption);
-		setOptionDefault('google_checkout_currency', 'USD');
-		setOptionDefault('google_checkout_ship_method', 'UPS');
-		setOptionDefault('google_checkout_ship_cost', 0);
+		setOptionDefault('googleCheckout_currency', 'USD');
+		setOptionDefault('googleCheckout_ship_method', 'UPS');
+		setOptionDefault('googleCheckout_ship_cost', 0);
+		setOptionDefault('googleCheckout_cart_location', 'T');
 	}
 	
 	
 	function getOptionsSupported() {
 		return array(	gettext('Google Merchant ID') => array('key' => 'GoogleCheckout_merchantID', 'type' => 0, 
 										'desc' => gettext("Your Google Merchant ID.")),
-									gettext('Currency') => array('key' => 'google_checkout_currency', 'type' => 0, 
+									gettext('Currency') => array('key' => 'googleCheckout_currency', 'type' => 0, 
 										'desc' => gettext("The currency for your transactions.")),
-									gettext('Shipping method') => array('key' => 'google_checkout_ship_method', 'type' => 0, 
+									gettext('Shipping method') => array('key' => 'googleCheckout_ship_method', 'type' => 0, 
 										'desc' => gettext("How to ship.")),
-									gettext('Shipping cost') => array('key' => 'google_checkout_ship_cost', 'type' => 0, 
+									gettext('Shipping cost') => array('key' => 'googleCheckout_ship_cost', 'type' => 0, 
 										'desc' => gettext("What you charge for shipping.")),
 									gettext('Price list') => array('key' => 'GoogleCheckout_pricelist', 'type' => 2,
 										'desc' => gettext("Your pricelist by size and media. The format of this option is <em>price elements</em> separated by spaces.<br/>".
 																			"A <em>price element</em> has the form: <em>size</em>:<em>media</em>=<em>price</em><br/>".
-																			"example: <code>4x6:Matte=5.75 8x10:Glossy=20.00 11x14:Paper=15.35</code>."))
+																			"example: <code>4x6:Matte=5.75 8x10:Glossy=20.00 11x14:Paper=15.35</code>.")),
+									gettext('Cart Location') => array('key' => 'googleCheckout_cart_location', 'type' => 2, 
+										'desc' => gettext("The placement of the Google Cart on your pages."))
 		);
 	}
- 	function handleOption($option, $currentValue) {
- 		if ($option=='GoogleCheckout_pricelist') {
-	 		echo '<textarea name="' . $option . '" cols="42" rows="3">' . $currentValue . "</textarea>\n";
-	 }
+	function handleOption($option, $currentValue) {
+		if ($option=='GoogleCheckout_pricelist') {
+			echo '<textarea name="' . $option . '" cols="42" rows="3">' . $currentValue . "</textarea>\n";
+		}
+		if ($option=='googleCheckout_cart_location') {
+			$positons = array(gettext("top left")=>'TopLeft', gettext("top right")=>'Default');
+			echo '<select id="themeselect" name="' . $option . '"' . ">\n";
+			generateListFromArray(array($currentValue), $positons);
+			echo "</select>\n";
+		}
 	}
 }
 
@@ -92,6 +104,21 @@ function GoogleCheckoutPricelistFromString($prices) {
 	return $pricelist;
 }
 
+/**
+* Places Google Cart Widget inline on your page instead of attached to the browser
+*
+*/
+function printGoogleCartWidget() {
+	echo '<div id="googlecart-widget"></div><br />';
+}
+
+/**
+* Sets Google Checkout to Post to the Google Checkout Sandbox for configuraiton testing
+*
+*/
+function googleCheckoutTesting() {
+	addPluginScript('<script type="text/javascript" src="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/GoogleCheckout/GoogleCartPostToSandBox.js"></script>');
+}
 
 /**
  * Places Google Checkout Options on your page.
@@ -108,7 +135,7 @@ function googleCheckout($pricelist=NULL) {
 <div id="GoogleCheckout" class="product">
    <input type="hidden" class="product-image" value="<?php echo getImageThumb(); ?>" />
    <input type="hidden" class="product-title" value="Album: <?php echo getAlbumTitle();?> Photo: <?php echo getImageTitle(); ?>" />
-   <input type="hidden" class="product-shipping" value="<?php echo getOption('google_checkout_ship_cost'); ?>" />
+   <input type="hidden" class="product-shipping" value="<?php echo getOption('googleCheckout_ship_cost'); ?>" />
    Size/Finish: <select class="product-attr-sizefinish">
 	<option googlecart-set-product-price=""></option>
 	<?php 
@@ -125,4 +152,5 @@ function googleCheckout($pricelist=NULL) {
 </div>
 <?php 
 }
+
 ?>
