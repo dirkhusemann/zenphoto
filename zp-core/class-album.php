@@ -225,7 +225,7 @@ class Album extends PersistentObject {
 				$tags = array();
 			} else {
 				$tags = explode(",", $tagstring);
-				sort($tags);
+				natcasesort($tags);
 			}
 		}
 		return $tags;
@@ -238,15 +238,9 @@ class Album extends PersistentObject {
 	 */
 	function setTags($tags) { 
 		if (!is_array($tags)) {
-			$tagary = explode(',', $tags);
-			$tags = array();
-			foreach ($tagary as $tag) {
-				if (!empty($tag)) {
-					$tags[] = trim($tag);
-				}
-			}
+			$tags = explode(',', $tags);
 		}
-		$tags = array_unique($tags);
+		$tags = filterTags($tags);
 		if (useTagTable()) {
 			storeTags($tags, $this->id, 'albums');
 		} else {

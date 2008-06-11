@@ -82,10 +82,9 @@ if (count($_POST) > 0) {
 	if (isset($_GET['newtags'])) {
 		foreach ($_POST as $value) {
 			if (!empty($value)) {
-				$value = strtolower(trim($value));
-				$result = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".$value."'");
+				$result = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.$value.'"');
 				if (!is_array($result)) { // it really is a new tag
-					query("INSERT INTO ".prefix('tags')." (`name`) VALUES ('" . escape($value) . "')");
+					query('INSERT INTO '.prefix('tags').' (`name`) VALUES ("' . escape($value) . '")');
 				}
 			}
 		}
@@ -152,17 +151,21 @@ if (count($_POST) > 0) {
 	}
 	if (isset($_GET['rename'])) {
 		if (useTagTable()) {
-			foreach($_POST as $key=>$value) {
-				if (!empty($value)) {
+			foreach($_POST as $key=>$newName) {
+				if (!empty($newName)) {
 					$key = postIndexDecode($key);
-					$newName = strtolower(sanitize($value));
-					$newtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".$newName."'");
-					$oldtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".escape($key)."'");
+					$newtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.$newName.'"');
+					$oldtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.escape($key).'"');
 					if (is_array($newtag)) {
-						query("DELETE FROM ".prefix('tags')." WHERE `id`=".$oldtag['id']);
-						query("UPDATE ".prefix('obj_to_tag')." SET `tagid`=".$newtag['id']." WHERE `tagid`=".$oldtag['id']);
+						$old = strtolower($newtag['name'] == strtolower($newName));
 					} else {
-						query("UPDATE ".prefix('tags')." SET `name`='".escape($newName)." WHERE `id`=".$oldtag['id']);
+						$old = false;
+					}
+					if ($old) {
+						query('DELETE FROM '.prefix('tags').' WHERE `id`='.$oldtag['id']);
+						query('UPDATE '.prefix('obj_to_tag').' SET `tagid`='.$newtag['id'].' WHERE `tagid`='.$oldtag['id']);
+					} else {
+						query('UPDATE '.prefix('tags').' SET `name`="'.escape($newName).'" WHERE `id`='.$oldtag['id']);
 					}
 				}
 			}
@@ -171,7 +174,7 @@ if (count($_POST) > 0) {
 			$kill = array();
 			foreach($_POST as $key => $value) {
 				if (!empty($value)) {
-					$list[$key] = strtolower(sanitize($value));
+					$list[$key] = $value;
 					$key = postIndexDecode($key);
 					$kill[] = $key;
 				}
@@ -187,7 +190,7 @@ if (count($_POST) > 0) {
 			$albumlist = query_full_array($sql);
 
 			foreach ($imagelist as $row) {
-				$tags = explode(",", strtolower($row['tags']));
+				$tags = explode(",", $row['tags']);
 				foreach ($tags as $key=>$tag) {
 					$tag = trim($tag);
 					$listkey = PostIndexEncode($tag);
@@ -201,19 +204,17 @@ if (count($_POST) > 0) {
 			}
 
 			foreach ($albumlist as $row) {
-				$tags = explode(",", strtolower($row['tags']));
-					foreach ($tags as $key=>$tag) {
-						$tag = trim($tag);
-						$listkey = PostIndexEncode($tag);
-						if (array_key_exists($listkey, $list)) {
-							$tags[$key] = $list[$listkey];
-						}
+				$tags = explode(",", $row['tags']);
+				foreach ($tags as $key=>$tag) {
+					$tag = trim($tag);
+					$listkey = PostIndexEncode($tag);
+					if (array_key_exists($listkey, $list)) {
+						$tags[$key] = $list[$listkey];
 					}
-					$row['tags'] = implode(",", $tags);
-					$sql = 'UPDATE '.prefix('albums')."SET `tags`='".$row['tags']."' WHERE `id`='".$row['id']."'";
-					query($sql);
-
-
+				}
+				$row['tags'] = implode(",", $tags);
+				$sql = 'UPDATE '.prefix('albums')."SET `tags`='".$row['tags']."' WHERE `id`='".$row['id']."'";
+				query($sql);
 			}
 		}
 	}
@@ -239,7 +240,7 @@ echo "\n<tr>";
 echo "\n<td>";
 echo "\n".'<form name="tag_delete" action="?page=tags&delete=true" method="post">';
 tagSelector(NULL, '');
-echo "\n<p><input type=\"submit\" value=\"".gettext("delete checked tags")."\" /></p>";
+echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='delete_tags' value=\"".gettext("delete checked tags")."\" title=\"".gettext("Delete all the tags checked above.")."\"/></p>";
 echo "\n</form>";
 echo "\n</td>";
 echo "\n<td width='5'></td>";
@@ -247,14 +248,14 @@ echo "\n<td>";
 echo "\n".'<form name="tag_rename" action="?page=tags&rename=true" method="post">';
 echo "\n<ul class=\"tagrenamelist\">";
 $list = getAllTagsUnique();
-sort($list);
+natcasesort($list);
 foreach($list as $item) {
 	$listitem = postIndexEncode($item);
 	echo "\n".'<li><label for="'.$listitem.'"><input id="'.$listitem.'" name="'.$listitem.'" type="text"';
 	echo " /> ".$item."</label></li>";
 }
 echo "\n</ul>";
-echo "\n<p><input type=\"submit\" value=\"".gettext("rename tags")."\" /></p>";
+echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='rename_tags' value=\"".gettext("rename tags")."\" title=\"".gettext("Save all the changes entered above.")."\" /></p>";
 echo "\n</form>";
 echo "\n</td>";
 echo "\n<td width='5'></td>";
@@ -267,7 +268,7 @@ if ($newTags) {
 		echo " /></label></li>";
 	}
 	echo "\n</ul>";
-	echo "\n<p><input type=\"submit\" value=\"".gettext("save new tags")."\" /></p>";
+	echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='save_tags' value=\"".gettext("save new tags")."\" title=\"".gettext("Add all the tags entered above.")."\" /></p>";
 	echo "\n</form>";
 }
 echo "\n</td>";

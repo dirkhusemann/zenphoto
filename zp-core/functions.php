@@ -2057,6 +2057,29 @@ function useTagTable() {
 	}
 }
 
+/**
+ * Trims the tag values and eliminates duplicates.
+ * Tags are case insensitive so only the first of 'Tag' and 'tag' will be preserved
+ *
+ * Returns the filtered tag array.
+ * 
+ * @param array $tags
+ * @return array
+ */
+function filterTags($tags) {
+	$lc_tags = array();
+	$filtered_tags = array();
+	foreach ($tags as $key=>$tag) {
+		$tag = trim($tag);
+		$lc_tag = strtolower($tag);
+		if (!in_array($lc_tag, $lc_tags)) {
+			$lc_tags[] = $lc_tag;
+			$filtered_tags[] = $tag;
+		}
+	}
+	return $filtered_tags;
+}
+
 $_zp_all_tags = null;
 /**
  * Grabs the entire galleries tags
@@ -2124,15 +2147,7 @@ function getAllTagsUnique() {
  * @param string $tbl 'albums' or 'images'
  */
 function storeTags($tags, $id, $tbl) {
-	foreach ($tags as $key=>$tag) {
-		$tag = strtolower(trim($tag));
-		if (empty($tag)) {
-			unset ($tags[$key]);
-		} else {
-			$tags[$key] = $tag;
-		}
-	}
-	$tags = array_unique($tags);
+	$tags = filterTags($tags);
 	$sql = "SELECT `id`, `tagid` from ".prefix('obj_to_tag')." WHERE `objectid`='".$id."' AND `type`='".$tbl."'";
 	$result = query_full_array($sql);
 	$existing = array();
@@ -2186,9 +2201,11 @@ function readTags($id, $tbl) {
 function generateListFromArray($currentValue, $list) {
 	$localize = !is_numeric(array_shift(array_keys($list)));
 	if ($localize) {
-		ksort($list);
+		$list = array_flip($list);
+		natcasesort($list);
+		$list = array_flip($list);
 	} else {
-		sort($list);
+		natcasesort($list);
 	}
 	foreach($list as $key=>$item) {
 		echo '<option value="' . $item . '"';
@@ -2205,7 +2222,6 @@ function generateListFromFiles($currentValue, $root, $suffix) {
 	$curdir = getcwd();
 	chdir($root);
 	$filelist = safe_glob('*'.$suffix);
-	sort($filelist);
 	$list = array();
 	foreach($filelist as $file) {
 		$list[] = str_replace($suffix, '', $file);

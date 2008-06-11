@@ -391,12 +391,11 @@ class SearchEngine
 		}
 		$sql = substr($sql, 0, strlen($sql)-4).') ORDER BY t.`id`';
 		$objects = query_full_array($sql);
-
 		if (!is_array($objects)) { return NULL; }
 		$taglist = array();
 				
 		foreach ($objects as $object) {
-			$tagid = $object['name'];
+			$tagid = postIndexEncode(strtolower($object['name']));
 			if (!is_array($taglist[$tagid])) { $taglist[$tagid] = array(); }		
 			$taglist[$tagid][] = $object['objectid'];
 		}
@@ -448,7 +447,7 @@ class SearchEngine
 					$op = '';
 					break;
 				default:
-					$objectid = $taglist[$singlesearchstring];
+					$objectid = $taglist[postIndexEncode(strtolower($singlesearchstring))];
 					switch ($op) {
 						case '&':
 							if (is_array($objectid)) {
@@ -539,7 +538,7 @@ class SearchEngine
 			}
 		}
 
-		return $albums;
+		return array_merge($albums); // reindex 
 
 	}
 
@@ -664,7 +663,7 @@ class SearchEngine
 			}
 		}
 
-		return $images;
+		return array_merge($images);  // reindex
 
 	}
 

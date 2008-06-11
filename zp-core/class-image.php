@@ -359,7 +359,7 @@ class Image extends PersistentObject {
 				$tags = array();
 			} else {
 				$tags = explode(",", $tagstring);
-				sort($tags);
+				natcasesort($tags);
 			}
 		}
 		return $tags;
@@ -372,15 +372,9 @@ class Image extends PersistentObject {
 	 */
 	function setTags($tags) { 	
 		if (!is_array($tags)) {
-			$tagary = explode(',', $tags);
-			$tags = array();
-			foreach ($tagary as $tag) {
-				if (!empty($tag)) {
-					$tags[] = trim($tag);
-				}
-			}
+			$tags = explode(',', $tags);
 		}
-		$tags = array_unique($tags);
+		$tags = filterTags($tags);
 		if (useTagTable()) {
 			storeTags($tags, $this->id, 'images');
 		} else {
@@ -698,8 +692,8 @@ class Image extends PersistentObject {
 					$images =  $_zp_current_search->getImages(0);
 				}
 				$i=0;
-				for ($i=0; $i < count($images); $i++) {
-					$image = $images[$i];
+				foreach ($images as $image) {
+					$i++;
 					if ($this->filename == $image['filename']) {
 						$this->index = $i;
 						break;
@@ -708,8 +702,8 @@ class Image extends PersistentObject {
 			} else {
 				$images =  $this->album->getImages(0);
 				$i=0;
-				for ($i=0; $i < count($images); $i++) {
-					$image = $images[$i];
+				foreach ($images as $image) {
+					$i++;
 					if ($this->filename == $image) {
 						$this->index = $i;
 						break;
@@ -729,15 +723,11 @@ class Image extends PersistentObject {
 		global $_zp_current_search;
 		$index = $this->getIndex() + 1;
 		if (!is_null($_zp_current_search)) {
-			$image = $_zp_current_search->getImage($this->index+1);
+			$image = $_zp_current_search->getImage($index);
 		} else {
-			$image = $this->album->getImage($this->index+1);
+			$image = $this->album->getImage($index);
 		}
-		if ($image != NULL) {
-			return $image;
-		} else {
-			return NULL;
-		}
+		return $image;
 	}
 
 	/**
@@ -747,18 +737,13 @@ class Image extends PersistentObject {
 	 */
 	function getPrevImage() {
 		global $_zp_current_search;
-		$this->getIndex();
+		$index = $this->getIndex();
 		if (!is_null($_zp_current_search)) {
-			$image = $_zp_current_search->getImage($this->index-1);
+			$image = $_zp_current_search->getImage($index);
 		} else {
-			$image = $this->album->getImage($this->index-1);
+			$image = $this->album->getImage($index);
 		}
-
-		if ($image != NULL) {
-			return $image;
-		} else {
-			return NULL;
-		}
+		return $image;
 	}
 
 	/**

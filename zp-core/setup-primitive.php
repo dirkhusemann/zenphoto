@@ -35,9 +35,11 @@ function setOption($key, $value, $persistent=true) {
 function generateListFromArray($currentValue, $list) {
 	$localize = !is_numeric(array_shift(array_keys($list)));
 	if ($localize) {
-		ksort($list);
+		$list = array_flip($list);
+		natcasesort($list);
+		$list = array_flip($list);
 	} else {
-		sort($list);
+		natcasesort($list);
 	}
 	foreach($list as $key=>$item) {
 		echo '<option value="' . $item . '"';

@@ -499,9 +499,11 @@ function postIndexDecode($str) {
 function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrights="") {
 	$localize = !is_numeric(array_shift(array_keys($list)));
 	if ($localize) {
-		ksort($list);
+		$list = array_flip($list);
+		natcasesort($list);
+		$list = array_flip($list);
 	} else {
-		sort($list);
+		natcasesort($list);
 	}
 	$cv = array_flip($currentValue);
 	foreach($list as $key=>$item) {
