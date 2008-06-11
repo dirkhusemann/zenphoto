@@ -237,34 +237,34 @@ class Gallery {
 	 * @return int
 	 */
 	function getNumImages($publishedOnly=false) {
-		$sql = "SELECT `id` FROM " . prefix('albums');
 		if ($publishedOnly) {
-			$sql .= " WHERE `show`=0";
-		}
-		$rows = query_full_array($sql);
-		if (is_array($rows)) {
-			$exclude = '';
-			foreach ($rows as $row)	{
-				if (!empty($row['id'])) {
-					$exclude .= " `albumid`!=".$row['id'].' AND ';
+			$rows = query_full_array("SELECT `id` FROM " . prefix('albums')." WHERE `show`=0");
+			if (is_array($rows)) {
+				$exclude = '';
+				foreach ($rows as $row)	{
+					if (!empty($row['id'])) {
+						$exclude .= " `albumid`!=".$row['id'].' AND ';
+					}
+				}
+				$exclude = substr($exclude, 0, strlen($exclude)-5);
+			} else {
+				$exclude = '';
+			}
+			if ($publishedOnly) {
+				if (empty($exclude)) {
+					$exclude = '`show`=1';
+				} else {
+					$exclude = ' `show`=1 AND '.$exclude;
 				}
 			}
-			$exclude = substr($exclude, 0, strlen($exclude)-5);
+			if (!empty($exclude)) {
+				$exclude = ' WHERE '.$exclude;
+			}
 		} else {
 			$exclude = '';
 		}
-		if ($publishedOnly) {
-			if (empty($exclude)) {
-				$exclude = '`show`=1';
-			} else {
-				$exclude = ' `show`=1 AND '.$exclude;
-			}
-		}
-		if (!empty($exclude)) {
-			$exclude = ' WHERE '.$exclude;
-		}
-		$result = query_single_row("SELECT count(*) FROM ".prefix('images').$exclude);
-		return array_shift($result);
+		$result = query_single_row("SELECT count(*) as `image_count` FROM ".prefix('images').$exclude);
+		return $result['image_count'];
 	}
 
 
