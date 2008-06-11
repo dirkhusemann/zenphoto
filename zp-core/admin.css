@@ -669,7 +669,7 @@ button.positive,.buttons a.positive {
 	border: 1px solid #ccc;
 	list-style: none;
 	height: 25em;
-	width: 15em;
+	width: 20em;
 	overflow: auto;
 	background-color: white;
 }
@@ -700,7 +700,7 @@ button.positive,.buttons a.positive {
 	border: 1px solid #ccc;
 	list-style: none;
 	height: 25em;
-	width: 25em;
+	width: 30em;
 	overflow: auto;
 	background-color: white;
 }

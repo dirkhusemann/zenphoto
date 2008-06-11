@@ -237,14 +237,15 @@ echo "</th>";
 echo "\n</tr>";
 echo "\n<tr>";
 
-echo "\n<td>";
+echo "\n<td valign='top'>";
 echo "\n".'<form name="tag_delete" action="?page=tags&delete=true" method="post">';
-tagSelector(NULL, '');
+tagSelector(NULL, '', true);
 echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='delete_tags' value=\"".gettext("delete checked tags")."\" title=\"".gettext("Delete all the tags checked above.")."\"/></p>";
 echo "\n</form>";
+echo '<p>'.gettext('To delete tags frm the gallery, place a checkmark in the box for each tag you wish to delete then press the <em>delete checked tags</em> button. The brackets contain the number of times the tag appears.').'</p>';
 echo "\n</td>";
 echo "\n<td width='5'></td>";
-echo "\n<td>";
+echo "\n<td valign='top'>";
 echo "\n".'<form name="tag_rename" action="?page=tags&rename=true" method="post">';
 echo "\n<ul class=\"tagrenamelist\">";
 $list = getAllTagsUnique();
@@ -257,9 +258,10 @@ foreach($list as $item) {
 echo "\n</ul>";
 echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='rename_tags' value=\"".gettext("rename tags")."\" title=\"".gettext("Save all the changes entered above.")."\" /></p>";
 echo "\n</form>";
+echo '<p>'.gettext('To change the value of a tag enter a new value in the text box in front of the tag. Then press the <em>rename tags</em> button').'</p>';
 echo "\n</td>";
 echo "\n<td width='5'></td>";
-echo "\n<td>";
+echo "\n<td valign='top'>";
 if ($newTags) {
 	echo '<form name="new_tags" action="?page=tags&newtags=true"method="post">';
 	echo "\n<ul class=\"tagnewlist\">";
@@ -271,15 +273,12 @@ if ($newTags) {
 	echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='save_tags' value=\"".gettext("save new tags")."\" title=\"".gettext("Add all the tags entered above.")."\" /></p>";
 	echo "\n</form>";
 }
+echo "\n<p>".gettext("Add tags to the list by entering their names in the input fields of the <em>New tags</em> list. Then press the <em>save new tags </em>button").'</p>';
 echo "\n</td>";
 echo "\n</tr>";
 echo "\n<tr>";
-echo "\n<td colspan=5 valign='top'><p>".
-gettext('To delete tags from the gallery, place a checkmark in the box for each tag you wish to delete then press the <em>delete checked tags</em>button').'.'.
-			"</p><p>".
-gettext('To change the value of a tag enter a new value for the tag in the text box in front of the tag. Then press the <em>rename tags</em>button').'</p>';
+echo "\n<td colspan=5 valign='top'>";
 if ($newTags) {
-	echo "\n<p>".gettext("Add tags to the list by entering their names in the input fields of the <em>New tags</em> list. Then press the <em>save new tags </em>button").'</p>';
 	echo "\n<p align='center'><form name='tag_convert' action='?page=tags&convert=string' method='post'>";
 	echo "\n<button type=\"submit\" class=\"tooltip\" id='convert_tags' title=\"".gettext("Converts the <em>tags</em> from the table structure to a string in a record field.")."\"> ".gettext("Revert tags to strings")."</button>";
 	echo "\n</form></p>";

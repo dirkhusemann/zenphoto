@@ -518,8 +518,17 @@ function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrig
 }
 
 
-function tagSelector($that, $postit) {
-	$them = getAllTagsUnique();
+/**
+ * Creates an unordered checklist of the tags
+ *
+ * @param object $that Object for which to get the tags
+ * @param string $postit prefix to prepend for posting
+ * @param bool $showCounts set to true to get tag count displayed
+ */
+function tagSelector($that, $postit, $showCounts=false) {
+	global $_zp_loggedin;
+	$counts = getAllTagsCount();
+	$them = array_keys($counts);
 	if (is_null($that)) {
 		$tags = array();
 	} else {
@@ -529,14 +538,23 @@ function tagSelector($that, $postit) {
 		}
 	}
 	$them = array_diff($them, $tags);
+	if ($showCounts) {
+		$displaylist = array();
+		foreach ($them as $tag) {
+			$displaylist[$tag.' ['.$counts[$tag].']'] = $tag;
+		}
+	} else {
+		$displaylist = $them;
+	}
+	
 	echo '<ul class="tagchecklist">'."\n";
 	generateUnorderedListFromArray($tags, $tags, $postit);
-	if (!is_null($that) && !useTagTable()) {
+	if (!is_null($that) && !(useTagTable() && ($_zp_loggedin & ADMIN_RIGHTS))) {
 		for ($i=0; $i<4; $i++) {
 			echo '<li>'.gettext("new tag").' <input type="text" size="15" name="'.$postit.'new_tag_value_'.$i.'" value="" /></li>'."\n";
 		}
 	}
-	generateUnorderedListFromArray(array(), $them, $postit);
+	generateUnorderedListFromArray(array(), $displaylist, $postit);
 	echo '</ul>';
 }
 
