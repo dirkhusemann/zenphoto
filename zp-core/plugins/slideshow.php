@@ -16,7 +16,7 @@
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard( sbillard)";
-$plugin_version = '1.0.2.4';
+$plugin_version = '1.0.2.5';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
 
@@ -117,7 +117,7 @@ if($numberofimages != 0) {
  * If called from image.php it starts with that image, called from album.php it starts with the first image (jQuery only)
  * To be used on slideshow.php only and called from album.php or image.php. 
  * Image size is taken from the calling link or if not specified there the sized image size from the options
- * In jQuery mode the slideshow has to be stopped to view a movie. 
+ * In jQuery mode the slideshow has to be stopped to view a movie (flowplayer required!). 
  *  
  * NOTE: Since all images of an album are generated/listed in total, it can happen that some images are skipped until all are generated.
  * And of course on slower connections this could take some time if you have many images.
@@ -200,12 +200,26 @@ function printSlideShow($heading = true) {
 			echo "<span class='slideimage'><h4><strong>".$album->getTitle().":</strong> ".$image->getTitle()." (".$count."/".$numberofimages.")</h4>";
 			if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
 				//Player Embed...
-				if (is_null($_zp_flash_player)) {
-					echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='No flash player installed.' />";
-				} else {
-					 $_zp_flash_player->playerConfig($imagepath,$image->getTitle());
-				}
+				
+				echo '
+				<p id="playerContainer-'.$count.'"><a href="http://www.adobe.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</a></p>
+				<script>
+				$("#playerContainer-'.$count.'").flashembed({
+      		src:\'' . WEBPATH . '/' . ZENFOLDER . '/plugins/flowplayer/FlowPlayerLight.swf\',
+      		width:'.getOption('flow_player_width').', 
+      		height:'.getOption('flow_player_height').'
+    		},
+    			{config: {  
+      			autoPlay: false,
+						loop: false,
+						autoBuffering: true,
+      			videoFile: \'' . $imagepath . '\',
+      			initialScale: \'scale\'
+    			}} 
+  			);
+			</script>';
 			}
+			
 			elseif ($ext == ".3gp") {
 				echo '</a>
 				<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="352" height="304" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
