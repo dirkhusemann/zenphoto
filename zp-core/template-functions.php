@@ -770,14 +770,14 @@ function getAlbumDesc() {
 	return $_zp_current_album->getDesc();
 }
 /**
- * Prints the album description of the current album.
+ * Prints the album description of the current album. 
+ * Converts and displays line break in the admin field as <br />.
  *
  * @param bool $editable
  */
 function printAlbumDesc($editable=false) {
-	global $_zp_current_album;
 	$desc = htmlspecialchars(getAlbumDesc());
-	$desc = str_replace("\r\n", "\n", $_zp_current_album->getDesc());
+	$desc = str_replace("\r\n", "\n", $desc);
 	$desc = str_replace("\n", '<br />', $desc);
 	if ($editable && zp_loggedin()) {
 		echo "<div id=\"albumDescEditable\" style=\"display: block;\">" . $desc . "</div>\n";
@@ -795,6 +795,18 @@ function printAlbumDesc($editable=false) {
 function getAlbumCustomData() {
 	global $_zp_current_album;
 	return $_zp_current_album->getCustomData();
+}
+
+/**
+ * Prints the custom_data field of the current album. 
+ * Converts and displays line break in the admin field as <br />.
+ *
+ */
+function printAlbumCustomData() {
+	$data = htmlspecialchars(getAlbumCustomData());
+	$data = str_replace("\r\n", "\n", $data);
+	$data = str_replace("\n", '<br />', $data);
+	echo $data;
 }
 
 /**
@@ -1419,14 +1431,14 @@ function getImageDesc() {
 }
 
 /**
- * Prints the description field of the current image
+ * Prints the description field of the current image.
+ * Converts and displays line breaks set in the admin field as <br />. 
  *
  * @param bool $editable set true to allow editing by the admin
  */
 function printImageDesc($editable=false) {
-	global $_zp_current_image;
 	$desc = htmlspecialchars(getImageDesc());
-	$desc = str_replace("\r\n", "\n", $_zp_current_image->getDesc());
+	$desc = str_replace("\r\n", "\n", $desc);
 	$desc = str_replace("\n", "<br/>", $desc);
 	if ($editable && zp_loggedin()) {
 		echo "<div id=\"imageDesc\" style=\"display: block;\">" . $desc . "</div>\n";
@@ -1456,6 +1468,19 @@ function getImageData($field) {
 function getImageCustomData() {
 	Global $_zp_current_image;
 	return $_zp_current_image->getCustomData();
+}
+
+/**
+ * Prints the custom_data field of the current image.
+ * Converts and displays line breaks set in the admin field as <br />.
+ *
+ * @return string
+ */
+function printImageCustomData() {
+	$data = htmlspecialchars(getImageCustomData());
+	$data = str_replace("\r\n", "\n", $data);
+	$data = str_replace("\n", "<br/>", $data);
+	echo $data;
 }
 
 /**
