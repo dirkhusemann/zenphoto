@@ -8,7 +8,7 @@
 
 $plugin_description = gettext("Enable <strong>FLV</strong> player to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time.<br> Please see <a href='http://www.jeroenwijering.com/?item=JW_FLV_Player'>JW FLV media player </a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.2';
+$plugin_version = '1.0.2.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---flvplayer.php.html";
 $option_interface = new flvplayer();
 $_zp_flash_player = $option_interface; // claim to be the flash player.
@@ -75,7 +75,7 @@ class flvplayer {
 			}
 		}
 		if($ext === ".mp3") {
-			echo '</a>
+			echo '
 			<p id="player"><a href="http://www.macromedia.com/go/getflashplayer">Get Flash</a> to see this player.</p>
 			<script type="text/javascript">
 			var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/plugins/flvplayer/flvplayer.swf","player","320","240","7");
@@ -90,7 +90,7 @@ class flvplayer {
 			so.write("player");
 			</script><a>'; 
 		} else {
-			echo '</a>
+			echo '
 			<p id="player"><a href="http://www.macromedia.com/go/getflashplayer">Get Flash</a> to see this player.</p>
 			<script type="text/javascript">
 			var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/plugins/flvplayer/flvplayer.swf","player","'.getOption('flv_player_width').'","'.getOption('flv_player_height').'","7");
@@ -103,7 +103,7 @@ class flvplayer {
 			so.addVariable("screencolor","'.getOption('flv_player_screencolor').'");
 			so.addVariable("displayheight","'.getOption('flv_player_displayheight').'");
 			so.write("player");
-			</script><a>'; 
+			</script>'; 
 		}
 	}
 }

@@ -50,7 +50,7 @@ class flowplayer {
 			$ext = strtolower(strrchr($moviepath, "."));
 		}
 		if($ext === ".mp3") {
-			echo '</a>
+			echo '
 			<p id="playerContainer"><a href="http://www.adobe.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
 			<script>
 			$("#playerContainer").flashembed({
@@ -61,13 +61,14 @@ class flowplayer {
     		{config: {  
       		autoPlay: false,
 					loop: false,
+					autoBuffering: true,
       		videoFile: \'' . $moviepath . '\',
       		initialScale: \'scale\'
     		}} 
   		);
-			</script><a>';
-		} else {
-			echo '</a>
+			</script>';
+		} else { 
+			echo '
 			<p id="playerContainer"><a href="http://www.adobe.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
 			<script>
 			$("#playerContainer").flashembed({
@@ -82,8 +83,8 @@ class flowplayer {
       		initialScale: \'scale\'
     		}} 
   		);
-			</script><a>';
-		}
+			</script>';
+		 }
 	}
 }
 ?>
