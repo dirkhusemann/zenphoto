@@ -395,7 +395,7 @@ class SearchEngine
 		$taglist = array();
 				
 		foreach ($objects as $object) {
-			$tagid = postIndexEncode(strtolower($object['name']));
+			$tagid = strtolower($object['name']);
 			if (!is_array($taglist[$tagid])) { $taglist[$tagid] = array(); }		
 			$taglist[$tagid][] = $object['objectid'];
 		}
@@ -447,7 +447,7 @@ class SearchEngine
 					$op = '';
 					break;
 				default:
-					$objectid = $taglist[postIndexEncode(strtolower($singlesearchstring))];
+					$objectid = $taglist[strtolower($singlesearchstring)];
 					switch ($op) {
 						case '&':
 							if (is_array($objectid)) {

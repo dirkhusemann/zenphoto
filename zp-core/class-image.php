@@ -691,9 +691,8 @@ class Image extends PersistentObject {
 				} else {
 					$images =  $_zp_current_search->getImages(0);
 				}
-				$i=0;
-				foreach ($images as $image) {
-					$i++;
+				for ($i=0; $i < count($images); $i++) {
+					$image = $images[$i];
 					if ($this->filename == $image['filename']) {
 						$this->index = $i;
 						break;
@@ -701,9 +700,8 @@ class Image extends PersistentObject {
 				}
 			} else {
 				$images =  $this->album->getImages(0);
-				$i=0;
-				foreach ($images as $image) {
-					$i++;
+				for ($i=0; $i < count($images); $i++) {
+					$image = $images[$i];
 					if ($this->filename == $image) {
 						$this->index = $i;
 						break;
@@ -721,11 +719,11 @@ class Image extends PersistentObject {
 	 */
 	function getNextImage() {
 		global $_zp_current_search;
-		$index = $this->getIndex() + 1;
+		$index = $this->getIndex();
 		if (!is_null($_zp_current_search)) {
-			$image = $_zp_current_search->getImage($index);
+			$image = $_zp_current_search->getImage($index+1);
 		} else {
-			$image = $this->album->getImage($index);
+			$image = $this->album->getImage($index+1);
 		}
 		return $image;
 	}
@@ -739,9 +737,9 @@ class Image extends PersistentObject {
 		global $_zp_current_search;
 		$index = $this->getIndex();
 		if (!is_null($_zp_current_search)) {
-			$image = $_zp_current_search->getImage($index);
+			$image = $_zp_current_search->getImage($index-1);
 		} else {
-			$image = $this->album->getImage($index);
+			$image = $this->album->getImage($index-1);
 		}
 		return $image;
 	}
