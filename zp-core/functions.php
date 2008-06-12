@@ -2104,7 +2104,7 @@ function getAllTagsStrings() {
 	$alltags = explode(",",$alltags);
 	$_zp_all_tags = array();
 	foreach ($alltags as $tag) {
-		$clean = strtolower(trim($tag));
+		$clean = trim($tag);
 		if (!empty($clean)) {
 			$_zp_all_tags[] = $clean;
 		}
@@ -2136,6 +2136,33 @@ function getAllTagsUnique() {
 	} else {
 		$_zp_unique_tags = array_unique(getAllTagsStrings());
 		return $_zp_unique_tags;
+	}
+}
+
+$_zp_count_tags = NULL;
+/**
+ * Returns an array indexed by 'tag' with the element value the count of the tag
+ *
+ * @return array
+ */
+function getAllTagsCount() {
+	global $_zp_count_tags;
+	if (!is_null($_zp_count_tags)) return $_zp_count_tags;
+	if (useTagTable()) {
+		$_zp_count_tags = array();
+		$sql = "SELECT `name`, `id` from ".prefix('tags');
+		$tagresult = query_full_array($sql);
+		if (is_array($tagresult)) {
+			foreach ($tagresult as $row) {
+				$sql = "SELECT COUNT(*) AS row_count FROM ".prefix('obj_to_tag')." WHERE `tagid`='".$row['id']."'";
+				$countresult = query_single_row($sql);
+				$_zp_count_tags[$row['name']]	= $countresult['row_count'];
+			}
+		}
+		return $_zp_count_tags;
+	} else {
+		$_zp_count_tags = array_count_values(getAllTagsStrings());
+		return $_zp_count_tags;
 	}
 }
 

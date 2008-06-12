@@ -32,7 +32,7 @@ if (isset($_GET['convert'])) {
 		if (is_array($result)) {
 			foreach ($result as $row) {
 				if (!empty($row['tags'])) {
-					$tags = explode(",", strtolower($row['tags']));
+					$tags = explode(",", $row['tags']);
 					storeTags($tags, $row['id'], 'albums');
 				}
 			}
@@ -42,7 +42,7 @@ if (isset($_GET['convert'])) {
 		if (is_array($result)) {
 			foreach ($result as $row) {
 				if (!empty($row['tags'])) {
-					$tags = explode(",", strtolower($row['tags']));
+					$tags = explode(",", $row['tags']);
 					storeTags($tags, $row['id'], 'images');
 				}
 			}
