@@ -154,14 +154,14 @@ if (count($_POST) > 0) {
 			foreach($_POST as $key=>$newName) {
 				if (!empty($newName)) {
 					$key = postIndexDecode($key);
-					$newtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.$newName.'"');
+					$newtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.escape($newName).'"');
 					$oldtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.escape($key).'"');
-					if (is_array($newtag)) {
-						$old = strtolower($newtag['name'] == strtolower($newName));
+					if (is_array($newtag)) { // there is an existing tag of the same name
+						$existing = $newtag['id'] != $oldtag['id']; // but maybe it is actually the original in a different case.
 					} else {
-						$old = false;
+						$existing = false;
 					}
-					if ($old) {
+					if ($existing) {
 						query('DELETE FROM '.prefix('tags').' WHERE `id`='.$oldtag['id']);
 						query('UPDATE '.prefix('obj_to_tag').' SET `tagid`='.$newtag['id'].' WHERE `tagid`='.$oldtag['id']);
 					} else {

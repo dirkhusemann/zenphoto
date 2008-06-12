@@ -2071,10 +2071,12 @@ function filterTags($tags) {
 	$filtered_tags = array();
 	foreach ($tags as $key=>$tag) {
 		$tag = trim($tag);
-		$lc_tag = strtolower($tag);
-		if (!in_array($lc_tag, $lc_tags)) {
-			$lc_tags[] = $lc_tag;
-			$filtered_tags[] = $tag;
+		if (!empty($tag)) {
+			$lc_tag = strtolower($tag);
+			if (!in_array($lc_tag, $lc_tags)) {
+				$lc_tags[] = $lc_tag;
+				$filtered_tags[] = $tag;
+			}
 		}
 	}
 	return $filtered_tags;
