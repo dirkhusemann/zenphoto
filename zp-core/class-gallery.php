@@ -314,18 +314,21 @@ class Gallery {
 
 		if (count($dead) > 0) { /* delete the dead albums from the DB */
 			$first = array_pop($dead);
-			$sql1 = "DELETE FROM " . prefix('albums') . " WHERE `id` = '$first'";
-			$sql2 = "DELETE FROM " . prefix('images') . " WHERE `albumid` = '$first'";
-			$sql3 = "DELETE FROM " . prefix('comments') . " WHERE `type`='albums' AND `ownerid`= '$first'";
+			$sql1 = "DELETE FROM " . prefix('albums') . " WHERE `id`='$first'";
+			$sql2 = "DELETE FROM " . prefix('images') . " WHERE `albumid`='$first'";
+			$sql3 = "DELETE FROM " . prefix('comments') . " WHERE `type`='albums' AND `ownerid`='$first'";
+			$sql4 = "DELETE FROM " . prefix('obj_to_tag'). " WHERE `type`='albums' AND `objectid`='$first'";
 			foreach ($dead as $albumid) {
 				$sql1 .= " OR `id` = '$albumid'";
 				$sql2 .= " OR `albumid` = '$albumid'";
 				$sql3 .= " OR `ownerid` = '$albumid'";
+				$sql4 .= " OR `objectid` = '$albumid'";
 			}
 			$n = query($sql1);
 			if (!$full && $n > 0 && $cascade) {
 				query($sql2);
 				query($sql3);
+				query($sql4);
 			}
 		}
 		if (count($deadalbumthemes) > 0) { // delete the album theme options tables for dead albums
@@ -387,7 +390,9 @@ class Gallery {
 			if (count($orphans) > 0 ) { /* delete dead images from the DB */
 				$firstrow = array_pop($orphans);
 				$sql = "DELETE FROM ".prefix('images')." WHERE `albumid`='" . $firstrow . "'";
-				foreach($orphans as $id) $sql .= " OR `albumid`='" . $id . "'";
+				foreach($orphans as $id) {
+					$sql .= " OR `albumid`='" . $id . "'";			
+				}
 				query($sql);
 
 				// Then go into existing albums recursively to clean them... very invasive.
@@ -501,7 +506,7 @@ class Gallery {
 			}
 
 			/* clean the comments table */
-
+			/* do the images */
 			$imageids = query_full_array('SELECT `id` FROM ' . prefix('images'));      /* all the image IDs */
 			$idsofimages = array();
 			foreach($imageids as $row) { $idsofimages[] = $row['id']; }
@@ -513,8 +518,10 @@ class Gallery {
 
 			if (count($orphans) > 0 ) { /* delete dead comments from the DB */
 				$firstrow = array_pop($orphans);
-				$sql = "DELETE FROM " . prefix('comments') . "WHERE `type`='images' AND `ownerid`='" . $firstrow . "'";
-				foreach($orphans as $id) $sql .= " OR `ownerid`='" . $id . "'";
+				$sql = "DELETE FROM " . prefix('comments') . " WHERE `type`='images' AND `ownerid`='" . $firstrow . "'";
+				foreach($orphans as $id) {
+					$sql .= " OR `ownerid`='" . $id . "'";
+				}
 				query($sql);
 			}
 
@@ -529,8 +536,39 @@ class Gallery {
 			$orphans = array_diff($albumidsofcomments , $idsofalbums );                 /* album ids of comments with no album */
 			if (count($orphans) > 0 ) { /* delete dead comments from the DB */
 				$firstrow = array_pop($orphans);
-				$sql = "DELETE FROM " . prefix('comments') . "WHERE `type`='images' AND `ownerid`='" . $firstrow . "'";
-				foreach($orphans as $id) $sql .= " OR `ownerid`='" . $id . "'";
+				$sql = "DELETE FROM " . prefix('comments') . "WHERE `type`='albums' AND `ownerid`='" . $firstrow . "'";
+				foreach($orphans as $id) {
+					$sql .= " OR `ownerid`='" . $id . "'";
+				}
+				query($sql);
+			}
+
+			/* clean the tags table */
+			/* do the images */
+			$tagImages = query_full_array("SELECT DISTINCT `objectid` FROM ".prefix('obj_to_tag').'WHERE `type`="images"');                         /* imageids of all the comments */
+			$imageidsoftags = array();
+			foreach($tagImages as $row) { $imageidsoftags [] = $row['objectid']; }
+			$orphans = array_diff($imageidsoftags , $idsofimages );                 /* image ids of comments with no image */
+			if (count($orphans) > 0 ) { /* delete dead tags from the DB */
+				$firstrow = array_pop($orphans);
+				$sql = "DELETE FROM " . prefix('obj_to_tag') . " WHERE `type`='images' AND `objectid`='" . $firstrow . "'";
+				foreach($orphans as $id) {
+					$sql .= " OR `objectid`='" . $id . "'";
+				}
+				query($sql);
+			}
+
+			/* do the same for album tags */
+			$tagAlbums = query_full_array("SELECT DISTINCT `objectid` FROM ".prefix('obj_to_tag').'WHERE `type`="albums"');                         /* album ids of all the comments */
+			$albumidsoftags = array();
+			foreach($tagAlbums as $row) { $albumidsoftags [] = $row['objectid']; }
+			$orphans = array_diff($albumidsoftags , $idsofalbums );                 /* album ids of comments with no album */
+			if (count($orphans) > 0 ) { /* delete dead tags from the DB */
+				$firstrow = array_pop($orphans);
+				$sql = "DELETE FROM " . prefix('obj_to_tag') . "WHERE `type`='albums' AND `objectid`='" . $firstrow . "'";
+				foreach($orphans as $id) {
+					$sql .= " OR `objectid`='" . $id . "'";
+				}
 				query($sql);
 			}
 		}
