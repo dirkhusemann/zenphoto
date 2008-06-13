@@ -95,7 +95,7 @@ $firstPageImages = normalizeColumns(1, 7);
 									<table border="0">
 										<tr><td>
 											<label for="name"><?php echo gettext("Name:"); ?>
-											(<input type="checkbox" name="anon" value="1"<?php if ($stored[6]) echo " CHECKED"; ?> /> <?php echo gettext("not published."); ?>)
+											(<input type="checkbox" name="anon" value="1"<?php if ($stored[6]) echo " CHECKED"; ?> /> <?php echo gettext("don't publish"); ?>)
 											</label>
 											</td>    
 											<td><input type="text" name="name" size="20" value="<?php echo $stored[0];?>" />  
@@ -103,7 +103,7 @@ $firstPageImages = normalizeColumns(1, 7);
 										<tr><td><label for="email"><?php echo gettext("E-Mail (won't be public):"); ?></label></td> <td><input type="text" name="email" size="20" value="<?php echo $stored[1];?>" /> </td></tr>
 										<tr><td><label for="website"><?php echo gettext("Site:"); ?></label></td> <td><input type="text" name="website" size="30" value="<?php echo $stored[2];?>" /></td></tr>
 												<?php printCaptcha('<tr><td>'.gettext('Enter').' ', ':</td><td>', '</td></tr>'); ?>
-										<tr><td colspan="2"><input type="checkbox" name="private" value="1"<?php if ($stored['5']) echo " CHECKED"; ?> /> <?php echo gettext("Private (not published.)"); ?></td></tr>								
+										<tr><td colspan="2"><input type="checkbox" name="private" value="1"<?php if ($stored['5']) echo " CHECKED"; ?> /> <?php echo gettext("Private (don't publish)"); ?></td></tr>								
 									</table>
 									<textarea name="comment" rows="6" cols="40"><?php echo $stored[3]; ?></textarea><br />
 									<input type="submit" value="<?php echo gettext('Add Comment'); ?>" />

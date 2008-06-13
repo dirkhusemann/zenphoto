@@ -123,7 +123,7 @@
 								<tr valign="top" align="left" id="row-name">
 									<th><label for="name"><?php echo gettext('Name'); ?>:</label></th>
 									<td><input tabindex="1" id="name" name="name" class="text" value="<?php echo $stored[0];?>" />
-										(<input type="checkbox" name="anon" value="1"<?php if ($stored[6]) echo " CHECKED"; ?> /> <?php echo gettext("not published."); ?>)
+										(<input type="checkbox" name="anon" value="1"<?php if ($stored[6]) echo " CHECKED"; ?> /> <?php echo gettext("don't publish"); ?>)
 									</td>
 								</tr>
 								<tr valign="top" align="left" id="row-email">
@@ -137,7 +137,7 @@
 								<?php printCaptcha("<tr valign=\"top\" align=\"left\"><th><label for=\"captcha\">" .gettext('Enter Captcha'), ":</label></th><td>", "</td></tr>\n", 8); ?>
 								<tr valign="top" align="left">
 									<th><label for="private"><?php echo gettext('Private comment'); ?>:</label></th>
-									<td><input type="checkbox" name="private" value="1"<?php if ($stored['5']) echo " CHECKED"; ?> /> <?php echo gettext("Private (not published.)"); ?></td>								
+									<td><input type="checkbox" name="private" value="1"<?php if ($stored['5']) echo " CHECKED"; ?> /> <?php echo gettext("Private (don't publish)"); ?></td>								
 								</tr>
 								<tr valign="top" align="left">
 									<th><label for="comment"><?php echo gettext('Comment'); ?>:</label></th>
