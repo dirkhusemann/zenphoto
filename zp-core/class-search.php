@@ -491,6 +491,30 @@ class SearchEngine
 			$sql .= '(`id`='.$object.') OR ';
 		}
 		$sql = substr($sql, 0, strlen($sql)-4).')';
+		
+		if ($tbl == 'albums') {
+			if (empty($this->dynalbumname)) {
+				$key = subalbumSortKey(getOption('gallery_sorttype'));
+				if (getOption('gallery_sortdirection')) { $key .= " DESC"; }
+			} else {
+				$gallery = new Gallery();
+				$album = new Album($gallery, $this->dynalbumname);
+				$key = $album->getSubalbumSortKey();
+				if ($album->getSortDirection('album')) { $key .= " DESC"; }
+			}
+		} else {
+			if (empty($this->dynalbumname)) {
+				$key = albumSortKey(getOption('image_sorttype'));
+				if (getOption('image_sortdirection')) { $key .= " DESC"; }
+			} else {
+				$gallery = new Gallery();
+				$album = new Album($gallery, $this->dynalbumname);
+				$key = $album->getSortKey();
+				if ($album->getSortDirection('image')) { $key .= " DESC"; }
+			}
+		}
+		$sql .= " ORDER BY ".$key;
+		
 		$result = query_full_array($sql);	
 		return $result;
 	}
@@ -527,18 +551,22 @@ class SearchEngine
 			}
 		}
 
+		$seen = array();
 		foreach ($search_results as $row) {
-			$albumname = $row['folder'];
-			if ($albumname != $this->dynalbumname) {
-				if (file_exists($albumfolder . $albumname)) {
-					if (checkAlbumPassword($albumname, $hint)) {
-						$albums[$row['id']] = $row['folder'];
+			if (!isset($seen[$row['id']])) { // we haven't already have this one
+				$seen[$row['id']] = true;
+				$albumname = $row['folder'];
+				if ($albumname != $this->dynalbumname) {
+					if (file_exists($albumfolder . $albumname)) {
+						if (checkAlbumPassword($albumname, $hint)) {
+							$albums[] = $row['folder'];
+						}
 					}
 				}
 			}
 		}
 
-		return array_merge($albums); // reindex 
+		return $albums; 
 
 	}
 
@@ -651,19 +679,23 @@ class SearchEngine
 			}
 		}
 
+		$seen = array();
 		foreach ($search_results as $row) {
-			$albumid = $row['albumid'];
-			$query = "SELECT id, title, folder,`show` FROM ".prefix('albums')." WHERE id = $albumid";
-			$row2 = query_single_row($query); // id is unique
-			$albumname = $row2['folder'];
-			if (file_exists($albumfolder . $albumname . '/' . $row['filename'])) {
-				if (checkAlbumPassword($albumname, $hint)) {
-					$images[$row['id']] = array('filename' => $row['filename'], 'folder' => $albumname);
+			if (!isset($seen[$row['id']])){  // we have't already seen this one.
+				$seen[$row['id']] = true;
+				$albumid = $row['albumid'];
+				$query = "SELECT id, title, folder,`show` FROM ".prefix('albums')." WHERE id = $albumid";
+				$row2 = query_single_row($query); // id is unique
+				$albumname = $row2['folder'];
+				if (file_exists($albumfolder . $albumname . '/' . $row['filename'])) {
+					if (checkAlbumPassword($albumname, $hint)) {
+						$images[] = array('filename' => $row['filename'], 'folder' => $albumname);
+					}
 				}
 			}
 		}
 
-		return array_merge($images);  // reindex
+		return $images;  
 
 	}
 
