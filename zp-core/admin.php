@@ -1173,9 +1173,8 @@ if (count($album->getImages())) {
 
 } else { /* Display a list of albums to edit. */ ?>
 <h1><?php echo gettext("Edit Gallery"); ?></h1>
-<?php displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */ ?>
-
-<?php
+<?php 
+	displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */ 
 	if (isset($_GET['saved'])) {
 		setOption('gallery_sorttype', 'Manual');
 		setOption('gallery_sortdirection', 0);
@@ -1183,8 +1182,21 @@ if (count($album->getImages())) {
 		echo  "<h2>".gettext("Album order saved")."</h2>";
 		echo '</div>';
 	}
+	$albumsprime = $gallery->getAlbums();
+	$albums = array();
+	foreach ($albumsprime as $album) { // check for rights
+		if (isMyAlbum($album, EDIT_RIGHTS)) {
+			$albums[] = $album;
+		}
+	}
 	?>
-<p><?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?><?php echo gettext('Drag the albums into the order you wish them displayed.') ?><?php } ?> <?php echo gettext('Select an album to edit its description and data, or'); ?><a href="?page=edit&massedit"> <?php echo gettext('mass-edit all album data'); ?></a>.</p>
+<p><?php 
+	if (count($albums) > 0) {
+		if (($_zp_loggedin & ADMIN_RIGHTS) && (count($albums)) > 1) { 
+			echo gettext('Drag the albums into the order you wish them displayed.'); 
+		}
+		echo gettext('Select an album to edit its description and data, or'); 
+	?><a href="?page=edit&massedit"> <?php echo gettext('mass-edit all album data'); ?></a>.</p>
 
 <table class="bordered" width="100%">
 	<tr>
@@ -1193,14 +1205,7 @@ if (count($album->getImages())) {
 	<tr>
 		<td style="padding: 0px 0px;" colspan="2">
 		<div id="albumList" class="albumList"><?php
-		$albumsprime = $gallery->getAlbums();
-		$albums = array();
-		foreach ($albumsprime as $album) { // check for rights
-			if (isMyAlbum($album, EDIT_RIGHTS)) {
-				$albums[] = $album;
-			}
-		}
-		if (is_array($albums)) {
+		if (count($albums) > 0) {
 			foreach ($albums as $folder) {
 				$album = new Album($gallery, $folder);
 				printAlbumEditRow($album);
@@ -1220,12 +1225,15 @@ if (count($album->getImages())) {
 	src="images/reset.png" style="border: 0px;" alt="<?php gettext('Reset hitcounters'); ?>" /><?php echo gettext("Reset hitcounters"); ?>&nbsp; <img src="images/fail.png" style="border: 0px;"
 	alt="Delete" /><?php echo gettext("Delete"); ?></p>
 <?php
-		if ($_zp_loggedin & ADMIN_RIGHTS) {
-			zenSortablesSaveButton("?page=edit&saved", gettext("Save Order"));
-		}
-		?></div>
-
+  if ($_zp_loggedin & ADMIN_RIGHTS) {
+		zenSortablesSaveButton("?page=edit&saved", gettext("Save Order"));
+  }
+	?>
+</div>
 <?php
+	} else {
+		echo gettext("There are no albums for you to edit.");
+	}
 }  
 /**** UPLOAD ************************************************************************/
 /************************************************************************************/ 

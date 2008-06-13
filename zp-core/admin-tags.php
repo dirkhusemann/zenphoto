@@ -225,9 +225,7 @@ echo "<h1>".gettext("Tag Management")."</h1>";
 echo "\n<table class=\"bordered\">";
 echo "\n<tr>";
 echo "\n<th>".gettext("Delete tags from the gallery")."</th>";
-//echo "\n<th></th>";
 echo "\n<th>".gettext("Rename tags")."</th>";
-//echo "\n<th></th>";
 echo "\n<th>";
 $newTags = useTagTable();
 if ($newTags) {
@@ -244,7 +242,6 @@ echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='delete_ta
 echo "\n</form>";
 echo '<p>'.gettext('To delete tags frm the gallery, place a checkmark in the box for each tag you wish to delete then press the <em>delete checked tags</em> button. The brackets contain the number of times the tag appears.').'</p>';
 echo "\n</td>";
-//echo "\n<td width='5'></td>";
 echo "\n<td valign='top'>";
 echo "\n".'<form name="tag_rename" action="?page=tags&rename=true" method="post">';
 echo "\n<ul class=\"tagrenamelist\">";
@@ -260,7 +257,6 @@ echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='rename_ta
 echo "\n</form>";
 echo '<p>'.gettext('To change the value of a tag enter a new value in the text box in front of the tag. Then press the <em>rename tags</em> button').'</p>';
 echo "\n</td>";
-//echo "\n<td width='5'></td>";
 echo "\n<td valign='top'>";
 if ($newTags) {
 	echo '<form name="new_tags" action="?page=tags&newtags=true"method="post">';
@@ -277,7 +273,7 @@ echo "\n<p>".gettext("Add tags to the list by entering their names in the input 
 echo "\n</td>";
 echo "\n</tr>";
 echo "\n<tr>";
-echo "\n<td colspan=5 valign='top'>";
+echo "\n<td colspan=3 valign='top'>";
 if ($newTags) {
 	echo "\n<p align='center'><form name='tag_convert' action='?page=tags&convert=string' method='post'>";
 	echo "\n<button type=\"submit\" class=\"tooltip\" id='convert_tags' title=\"".gettext("Converts the <em>tags</em> from the table structure to a string in a record field.")."\"> ".gettext("Revert tags to strings")."</button>";

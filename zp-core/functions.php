@@ -1829,11 +1829,12 @@ function getManagedAlbumList() {
 function isMyAlbum($albumfolder, $action) {
 	global $_zp_loggedin, $_zp_admin_album_list, $_zp_current_admin;
 	if ($_zp_loggedin & ADMIN_RIGHTS) { return true; }
+	if (empty($albumfolder)) { return false; }
 	if ($_zp_loggedin & $action) {
 		if (is_null($_zp_admin_album_list)) {
 			getManagedAlbumList();
 		}
-		if (count($_zp_admin_album_list) == 0) { return true; }
+		if (count($_zp_admin_album_list) == 0) { return false; }
 		foreach ($_zp_admin_album_list as $key => $adminalbum) { // see if it is one of the managed folders or a subfolder there of
 			if (substr($albumfolder, 0, strlen($adminalbum)) == $adminalbum) { return true; }
 		}
