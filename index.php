@@ -4,6 +4,7 @@ if (!file_exists(dirname(__FILE__) . '/' . ZENFOLDER . "/zp-config.php")) {
 	$location = "http://". $_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']) . "/" . ZENFOLDER . "/setup.php";
 	header("Location: $location" );
 }
+define('OFFSET_PATH', 0);
 
 require_once(ZENFOLDER . "/template-functions.php");
 

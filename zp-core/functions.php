@@ -28,7 +28,7 @@ require_once('lib-kses.php');
 require_once('exif/exif.php');
 require_once('functions-db.php');
 
-if (defined('OFFSET_PATH')) {
+if (OFFSET_PATH) {
 	$const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
 } else {
 	$const_webpath = dirname($_SERVER['SCRIPT_NAME']);
