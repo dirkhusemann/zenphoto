@@ -8,7 +8,7 @@
 
 $plugin_description = gettext("Enable <strong>FLV</strong> player to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time.<br> Please see <a href='http://www.jeroenwijering.com/?item=JW_FLV_Player'>JW FLV media player </a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.2.2';
+$plugin_version = '1.0.2.3';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---flvplayer.php.html";
 $option_interface = new flvplayer();
 $_zp_flash_player = $option_interface; // claim to be the flash player.
@@ -30,6 +30,8 @@ class flvplayer {
 		setOptionDefault('flv_player_lightcolor', '0x000000');
 		setOptionDefault('flv_player_screencolor', '0x000000');
 		setOptionDefault('flv_player_displayheight', '240');
+		setOptionDefault('flv_player_autostart', 'true');
+		//setOptionDefault('flv_player_ignoresize_for_mp3', 'true');
 	}
 
 	function getOptionsSupported() {
@@ -46,7 +48,9 @@ class flvplayer {
 		gettext('Screencolor') => array('key' => 'flv_player_screencolor', 'type' => 0,
 										'desc' => gettext("Color of the display area, in HEX format.")),
 		gettext('Displayheight') => array('key' => 'flv_player_displayheight', 'type' => 0,
-										'desc' => gettext("The height of the player display. Generall it should be the same as the height.")),
+										'desc' => gettext("The height of the player display. Generally it should be the same as the height.")),
+		gettext('Autostart') => array('key' => 'flv_player_autostart', 'type' => 1,
+										'desc' => gettext("Should the video start automatically. Yes if selected.")),
 		);
 	}
 
@@ -56,7 +60,8 @@ class flvplayer {
 	 * @param string $moviepath the direct path of a movie (within the slideshow), if empty (within albums) the zenphoto function getUnprotectedImageURL() is used
 	 * @param string $imagetitle the title of the movie to be passed to the player for display (within slideshow), if empty (within albums) the function getImageTitle() is used
 	 */
-	function playerConfig($moviepath='',$imagetitle='',$count) {
+	function playerConfig($moviepath='',$imagetitle='',$count ='') {
+		global $_zp_current_image;
 		if(empty($moviepath)) {
 			$moviepath = getUnprotectedImageURL();
 			$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
@@ -69,45 +74,38 @@ class flvplayer {
 		if(!empty($count)) {
 			$count = "-".$count;
 		}
-		// check if an image/videothumb is available
+		// check if an image/videothumb is available - this shouldn't be hardcoded...
 		$imgextensions = array(".jpg",".jpeg",".gif",".png");
-		foreach($imgextensions as $imgext) {
-			$videoThumb = preg_replace("/".$ext."/i","".$imgext."",getFullImageURL());
-			if(file_exists($videoThumb)) {
+		
+		foreach ($imgextensions as $imgext){
+		
+			// this just won't work - here's a messy solution
+			$album = $_zp_current_image->getAlbum();
+			$albumfolder = $album->getFolder();
+
+			// again, the horrid problem with mixed / and \ or windows
+			$fullpath = str_replace('\\', '/', SERVERPATH . ALBUMFOLDER . $albumfolder . '/' . $_zp_current_image->getFileName());
+			$vt = preg_replace("/" . $ext . "/i", "" . $imgext . "", $fullpath);
+			if(file_exists($vt)) {
+				$videoThumb = substr(getFullImageURL(), 0, strrpos(getFullImageURL(), '.')) . $imgext;
 				break;
-			}
+			}		
 		}
-		if($ext === ".mp3") {
-			echo '
-			<p id="player'.$count.'"><a href="http://www.macromedia.com/go/getflashplayer">Get Flash</a> to see this player.</p>
-			<script type="text/javascript">
-			var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/plugins/flvplayer/flvplayer.swf","player'.$count.'","320","240","7");
-			so.addParam("allowfullscreen","true");
-			so.addVariable("file","' . $moviepath . '&amp;title=' . $imagetitle . '");
-			so.addVariable("image","' . $videoThumb . '");
-			so.addVariable("backcolor","'.getOption('flv_player_backcolor').'");
-			so.addVariable("frontcolor","'.getOption('flv_player_frontkcolor').'");
-			so.addVariable("lightcolor","'.getOption('flv_player_lightcolor').'");
-			so.addVariable("screencolor","'.getOption('flv_player_screencolor').'");
-			so.addVariable("displayheight","'.getOption('flv_player_displayheight').'");
-			so.write("player");
-			</script><a>'; 
-		} else {
-			echo '
+		echo '
 			<p id="player'.$count.'"><a href="http://www.macromedia.com/go/getflashplayer">Get Flash</a> to see this player.</p>
 			<script type="text/javascript">
 			var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/plugins/flvplayer/flvplayer.swf","player'.$count.'","'.getOption('flv_player_width').'","'.getOption('flv_player_height').'","7");
 			so.addParam("allowfullscreen","true");
 			so.addVariable("file","' . $moviepath . '&amp;title=' . $imagetitle . '");
-			so.addVariable("image","' . $videoThumb . '");
+			' . (isset($videoThumb) ? 'so.addVariable("image","' . $videoThumb . '")' : '') . '
 			so.addVariable("backcolor","'.getOption('flv_player_backcolor').'");
 			so.addVariable("frontcolor","'.getOption('flv_player_frontkcolor').'");
 			so.addVariable("lightcolor","'.getOption('flv_player_lightcolor').'");
 			so.addVariable("screencolor","'.getOption('flv_player_screencolor').'");
 			so.addVariable("displayheight","'.getOption('flv_player_displayheight').'");
+			so.addVariable("autostart","' . (getOption('flv_player_autostart') == 0 ? 'false' : 'true') . '");
 			so.write("player");
 			</script>'; 
-		}
 	}
 }
 ?>
