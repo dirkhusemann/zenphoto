@@ -8,7 +8,7 @@
 
 $plugin_description = gettext("Enable <strong>FLV</strong> player to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time.<br> Please see <a href='http://www.jeroenwijering.com/?item=JW_FLV_Player'>JW FLV media player </a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.2.3';
+$plugin_version = '1.0.2.4';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---flvplayer.php.html";
 $option_interface = new flvplayer();
 $_zp_flash_player = $option_interface; // claim to be the flash player.
@@ -76,20 +76,19 @@ class flvplayer {
 		}
 		// check if an image/videothumb is available - this shouldn't be hardcoded...
 		$imgextensions = array(".jpg",".jpeg",".gif",".png");
-		
-		foreach ($imgextensions as $imgext){
-		
-			// this just won't work - here's a messy solution
-			$album = $_zp_current_image->getAlbum();
-			$albumfolder = $album->getFolder();
+		// this just won't work - here's a messy solution
+		$album = $_zp_current_image->getAlbum();
+		$albumfolder = $album->getFolder();
 
-			// again, the horrid problem with mixed / and \ or windows
-			$fullpath = str_replace('\\', '/', SERVERPATH . ALBUMFOLDER . $albumfolder . '/' . $_zp_current_image->getFileName());
+		// again, the horrid problem with mixed / and \ or windows
+		$fullpath = str_replace('\\', '/', SERVERPATH . ALBUMFOLDER . $albumfolder . '/' . $_zp_current_image->getFileName());
+
+		foreach ($imgextensions as $imgext){				
 			$vt = preg_replace("/" . $ext . "/i", "" . $imgext . "", $fullpath);
 			if(file_exists($vt)) {
 				$videoThumb = substr(getFullImageURL(), 0, strrpos(getFullImageURL(), '.')) . $imgext;
 				break;
-			}		
+			}
 		}
 		echo '
 			<p id="player'.$count.'"><a href="http://www.macromedia.com/go/getflashplayer">Get Flash</a> to see this player.</p>
