@@ -237,7 +237,7 @@ class SearchEngine
 	 */
 	function getSearchSQL($searchstring, $searchdate, $tbl, $fields) {
 		global $_zp_current_album;
-		$sql = 'SELECT r.`id`, r.`show`,r.`title`,r.`desc`';
+		$sql = 'SELECT DISTINCT r.`id`, r.`show`,r.`title`,r.`desc`';
 		if (!useTagTable()) {
 			$sql .= ',r.`tags`';
 		}
@@ -380,9 +380,10 @@ class SearchEngine
 	 *
 	 * @param string $searchstring
 	 * @param string $tbl set to 'albums' or 'images'
+	 * @param array $idlist list of ids seeding the search from the other fields
 	 * @return array
 	 */
-	function searchTags($searchstring, $tbl) {
+	function searchTags($searchstring, $tbl, $idlist) {
 		$sql = 'SELECT t.`name`, o.`objectid` FROM '.prefix('tags').' AS t, '.prefix('obj_to_tag').' AS o WHERE t.`id`=o.`tagid` AND o.`type`="'.$tbl.'" AND (';
 		foreach($searchstring as $singlesearchstring){
 			switch ($singlesearchstring) {
@@ -398,94 +399,92 @@ class SearchEngine
 		}
 		$sql = substr($sql, 0, strlen($sql)-4).') ORDER BY t.`id`';
 		$objects = query_full_array($sql);
-		if (!is_array($objects)) { return NULL; }
-		$taglist = array();
-				
-		foreach ($objects as $object) {
-			$tagid = strtolower($object['name']);
-			if (!is_array($taglist[$tagid])) { $taglist[$tagid] = array(); }		
-			$taglist[$tagid][] = $object['objectid'];
-		}
-		
-		$op = '';
-		$idlist = array();
-		$idstack = array();
-		$opstack = array();
-		while (count($searchstring) > 0) {
-			$singlesearchstring = array_shift($searchstring);
-			switch ($singlesearchstring) {
-				case '&':
-				case '!':
-				case '|':
-					$op = $op.$singlesearchstring;
-					break;
-				case '(':
-					array_push($idstack, $idlist);
-					array_push($opstack, $op);				
-					$idlist = array();
-					$op = '';
-					break;
-				case ')':
-					$objectid = $idlist;
-					$idlist = array_pop($idstack);
-					$op = array_pop($opstack);
-					switch ($op) {
-						case '&':
-							if (is_array($objectid)) {
-								$idlist = array_intersect($idlist, $objectid);
-							} else {
-								$idlist = array();
-							}
-							break;
-						case '!':
-							break; // what to do with initial NOT?
-						case '&!':
-							if (is_array($objectid)) {
-								$idlist = array_diff($idlist, $objectid);
-							}
-							break;
-						case '';
-						case '|':
-							if (is_array($objectid)) {
-								$idlist = array_merge($idlist, $objectid);
-							}
-							break;
-					}
-					$op = '';
-					break;
-				default:
-					$objectid = $taglist[strtolower($singlesearchstring)];
-					switch ($op) {
-						case '&':
-							if (is_array($objectid)) {
-								$idlist = array_intersect($idlist, $objectid);
-							} else {
-								$idlist = array();
-							}
-							break;
-						case '!':
-							break; // what to do with initial NOT?
-						case '&!':
-							if (is_array($objectid)) {
-								$idlist = array_diff($idlist, $objectid);
-							}
-							break;
-						case '';
-						case '|':
-							if (is_array($objectid)) {
-								$idlist = array_merge($idlist, $objectid);
-							}
-							break;
-					}
-					$op = '';
-					break;
+		if (is_array($objects)) {
+			$taglist = array();
+
+			foreach ($objects as $object) {
+				$tagid = strtolower($object['name']);
+				if (!is_array($taglist[$tagid])) { $taglist[$tagid] = array(); }
+				$taglist[$tagid][] = $object['objectid'];
+			}
+
+			$op = '';
+			$idstack = array();
+			$opstack = array();
+			while (count($searchstring) > 0) {
+				$singlesearchstring = array_shift($searchstring);
+				switch ($singlesearchstring) {
+					case '&':
+					case '!':
+					case '|':
+						$op = $op.$singlesearchstring;
+						break;
+					case '(':
+						array_push($idstack, $idlist);
+						array_push($opstack, $op);
+						$idlist = array();
+						$op = '';
+						break;
+					case ')':
+						$objectid = $idlist;
+						$idlist = array_pop($idstack);
+						$op = array_pop($opstack);
+						switch ($op) {
+							case '&':
+								if (is_array($objectid)) {
+									$idlist = array_intersect($idlist, $objectid);
+								} else {
+									$idlist = array();
+								}
+								break;
+							case '!':
+								break; // what to do with initial NOT?
+							case '&!':
+								if (is_array($objectid)) {
+									$idlist = array_diff($idlist, $objectid);
+								}
+								break;
+							case '';
+							case '|':
+								if (is_array($objectid)) {
+									$idlist = array_merge($idlist, $objectid);
+								}
+								break;
+						}
+						$op = '';
+						break;
+							default:
+								$objectid = $taglist[strtolower($singlesearchstring)];
+								switch ($op) {
+									case '&':
+										if (is_array($objectid)) {
+											$idlist = array_intersect($idlist, $objectid);
+										} else {
+											$idlist = array();
+										}
+										break;
+									case '!':
+										break; // what to do with initial NOT?
+									case '&!':
+										if (is_array($objectid)) {
+											$idlist = array_diff($idlist, $objectid);
+										}
+										break;
+									case '';
+									case '|':
+										if (is_array($objectid)) {
+											$idlist = array_merge($idlist, $objectid);
+										}
+										break;
+								}
+								$op = '';
+								break;
+				}
 			}
 		}
-		
-		
 		if (count($idlist)==0) {return NULL; }
-		
-		$sql = 'SELECT `id`,`show`,`title`,`desc`,';
+
+		$sql = 'SELECT DISTINCT `id`,`show`,`title`,`desc`,';
 		if ($tbl=='albums') {
 			$sql .= "`folder` ";
 		} else {
@@ -498,7 +497,7 @@ class SearchEngine
 			$sql .= '(`id`='.$object.') OR ';
 		}
 		$sql = substr($sql, 0, strlen($sql)-4).')';
-		
+
 		if ($tbl == 'albums') {
 			if (empty($this->dynalbumname)) {
 				$key = subalbumSortKey(getOption('gallery_sorttype'));
@@ -521,8 +520,7 @@ class SearchEngine
 			}
 		}
 		$sql .= " ORDER BY ".$key;
-		
-		$result = query_full_array($sql);	
+		$result = query_full_array($sql);
 		return $result;
 	}
 
@@ -554,23 +552,23 @@ class SearchEngine
 		}
 		if (!SINGLE_SEARCH_SQL) {
 			if ($tagsSearch) {
-				$tagsfound = $this->searchTags($searchstring, 'albums');
+				$idlist = array();
+				foreach ($search_results as $row) {
+					$idlist[] = $row['id'];
+				}
+				$tagsfound = $this->searchTags($searchstring, 'albums', $idlist);
 				if (is_array($tagsfound)) {
-					$search_results = array_merge($tagsfound, $search_results);
+					$search_results = $tagsfound;
 				}
 			}
 		}
 
-		$seen = array();
 		foreach ($search_results as $row) {
-			if (!isset($seen[$row['id']])) { // we haven't already have this one
-				$seen[$row['id']] = true;
-				$albumname = $row['folder'];
-				if ($albumname != $this->dynalbumname) {
-					if (file_exists($albumfolder . $albumname)) {
-						if (checkAlbumPassword($albumname, $hint)) {
-							$albums[] = $row['folder'];
-						}
+			$albumname = $row['folder'];
+			if ($albumname != $this->dynalbumname) {
+				if (file_exists($albumfolder . $albumname)) {
+					if (checkAlbumPassword($albumname, $hint)) {
+						$albums[] = $row['folder'];
 					}
 				}
 			}
@@ -685,25 +683,25 @@ class SearchEngine
 		}
 		if (!SINGLE_SEARCH_SQL) {
 			if ($tagsSearch) {
-				$tagsfound = $this->searchTags($searchstring, 'images');
+				$idlist = array();
+				foreach ($search_results as $row) {
+					$idlist[] = $row['id'];
+				}
+				$tagsfound = $this->searchTags($searchstring, 'images', $idlist);
 				if (is_array($tagsfound)) {
-					$search_results = array_merge($tagsfound, $search_results);
+					$search_results = $tagsfound;
 				}
 			}
 		}
-
-		$seen = array();
+		
 		foreach ($search_results as $row) {
-			if (!isset($seen[$row['id']])){  // we have't already seen this one.
-				$seen[$row['id']] = true;
-				$albumid = $row['albumid'];
-				$query = "SELECT id, title, folder,`show` FROM ".prefix('albums')." WHERE id = $albumid";
-				$row2 = query_single_row($query); // id is unique
-				$albumname = $row2['folder'];
-				if (file_exists($albumfolder . $albumname . '/' . $row['filename'])) {
-					if (checkAlbumPassword($albumname, $hint)) {
-						$images[] = array('filename' => $row['filename'], 'folder' => $albumname);
-					}
+			$albumid = $row['albumid'];
+			$query = "SELECT id, title, folder,`show` FROM ".prefix('albums')." WHERE id = $albumid";
+			$row2 = query_single_row($query); // id is unique
+			$albumname = $row2['folder'];
+			if (file_exists($albumfolder . $albumname . '/' . $row['filename'])) {
+				if (checkAlbumPassword($albumname, $hint)) {
+					$images[] = array('filename' => $row['filename'], 'folder' => $albumname);
 				}
 			}
 		}

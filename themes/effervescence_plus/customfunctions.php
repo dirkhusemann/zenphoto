@@ -56,11 +56,11 @@ function getCustomAlbumDesc() {
 function printImage_AlbumCount() {
 	$c = getNumSubalbums();
 	if ($c > 0) {
-		echo "\n".$c. gettext("albums(s)");
+		echo "\n".$c.' '.gettext("albums(s)");
 	}
 	$c = getNumImages();
 	if ($c > 0) {
-		echo "\n".$c. gettext("images(s)");
+		echo "\n".$c.' '.gettext("images(s)");
 	}
 }
 function parseCSSDef($file) {
