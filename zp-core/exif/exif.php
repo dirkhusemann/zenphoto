@@ -367,7 +367,7 @@ function formatData($type,$tag,$intel,$data) {
 		if (($tag == '011a' || $tag == '011b') && $bottom == 1) { // XResolution YResolution
 			$data = $top.' dots per ResolutionUnit';
 		} else if ($tag == '829a') { // Exposure Time
-			if (($bottom % $top) == 0) {
+			if (($top > 0) && ($bottom % $top) == 0) {
 				$data = '1/'.round($bottom/$top, 0).' sec'; 
 			}	else {
 				if ($bottom == 1) {

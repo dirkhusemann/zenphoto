@@ -12,6 +12,7 @@ define('SEARCH_CITY', 32);
 define('SEARCH_STATE', 64);
 define('SEARCH_COUNTRY', 128);
 define('SEARCH_FOLDER', 256);
+define('SINGLE_SEARCH_SQL', false); // set to false until the tag search in getSearchSQL works
 
 class SearchEngine
 {
@@ -236,18 +237,22 @@ class SearchEngine
 	 */
 	function getSearchSQL($searchstring, $searchdate, $tbl, $fields) {
 		global $_zp_current_album;
-		$sql = 'SELECT `id`, `show`,`title`,`desc`';
+		$sql = 'SELECT r.`id`, r.`show`,r.`title`,r.`desc`';
 		if (!useTagTable()) {
-			$sql .= ',`tags`';
+			$sql .= ',r.`tags`';
 		}
 		if ($tbl=='albums') {
 			if ($fields & SEARCH_FILENAME) { $fields = $fields + SEARCH_FOLDER; } // for searching these are really the same thing, just named differently in the different tables
 			$fields = $fields & (SEARCH_TITLE + SEARCH_DESC + SEARCH_TAGS + SEARCH_FOLDER); // these are all albums have
-			$sql .= ",`folder`";
+			$sql .= ",r.`folder`";
 		} else {
-			$sql .= ",`albumid`,`filename`,`location`,`city`,`state`,`country`";
+			$sql .= ",r.`albumid`,r.`filename`,r.`location`,r.`city`,r.`state`,r.`country`";
 		}
-		$sql .= " FROM ".prefix($tbl)." WHERE ";
+		$sql .= " FROM ".prefix($tbl)." AS r";
+		if (useTagTable()) {
+			$sql .= ','.prefix('tags').' AS t,'.prefix('obj_to_tag').' AS o';
+		}
+		$sql .= " WHERE ";
 		if(!zp_loggedin()) { $sql .= "`show` = 1 AND ("; }
 		$join = "";
 		$nrt = 0;
@@ -280,10 +285,12 @@ class SearchEngine
 						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
 						$subsql .= " `desc` LIKE '%$singlesearchstring%'";
 					}	
-					if (!useTagTable()) {
-						if (SEARCH_TAGS & $fields) {
-							$nr++;
-							if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
+					if (SEARCH_TAGS & $fields) {  // this does not work correctly for tag-tables, so it is not currently used.
+						$nr++;
+						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
+						if (useTagTable()) {
+							$subsql .= '(t.`name`="'.$singlesearchstring.'" AND t.`id`=o.`tagid` AND o.`type`="'.$tbl.'" AND o.`objectid`=r.`id`)';
+						} else {
 							$subsql .= " `tags` LIKE '%$singlesearchstring%'";
 						}
 					}
@@ -376,7 +383,7 @@ class SearchEngine
 	 * @return array
 	 */
 	function searchTags($searchstring, $tbl) {
-		$sql = 'SELECT t.`name`, o.`objectid` FROM '.prefix('tags').' AS t, '.prefix('obj_to_tag').' AS o WHERE t.`id`=o.`tagid` AND (';
+		$sql = 'SELECT t.`name`, o.`objectid` FROM '.prefix('tags').' AS t, '.prefix('obj_to_tag').' AS o WHERE t.`id`=o.`tagid` AND o.`type`="'.$tbl.'" AND (';
 		foreach($searchstring as $singlesearchstring){
 			switch ($singlesearchstring) {
 				case '&':
@@ -530,11 +537,13 @@ class SearchEngine
 		$albumfolder = getAlbumFolder();
 		if (empty($searchstring)) { return $albums; } // nothing to find
 		$fields = $this->fields;
-		if (useTagTable()) {
-			$tagsSearch = $fields & SEARCH_TAGS;
-			$fields = $fields & ~SEARCH_TAGS;
-		} else {
-			$tagsSearch = false;
+		if (!SINGLE_SEARCH_SQL) {
+			if (useTagTable()) {
+				$tagsSearch = $fields & SEARCH_TAGS;
+				$fields = $fields & ~SEARCH_TAGS;
+			} else {
+				$tagsSearch = false;
+			}
 		}
 		$sql = $this->getSearchSQL($searchstring, '', 'albums', $fields);
 		if (!empty($sql)) { // valid fields exist
@@ -543,11 +552,12 @@ class SearchEngine
 		if (!is_array($search_results)) {
 			$search_results = array();
 		}
-
-		if ($tagsSearch) {
-			$tagsfound = $this->searchTags($searchstring, 'albums');
-			if (is_array($tagsfound)) {
-				$search_results = array_merge($tagsfound, $search_results);				
+		if (!SINGLE_SEARCH_SQL) {
+			if ($tagsSearch) {
+				$tagsfound = $this->searchTags($searchstring, 'albums');
+				if (is_array($tagsfound)) {
+					$search_results = array_merge($tagsfound, $search_results);
+				}
 			}
 		}
 
@@ -566,7 +576,7 @@ class SearchEngine
 			}
 		}
 
-		return $albums; 
+		return $albums;
 
 	}
 
@@ -658,11 +668,13 @@ class SearchEngine
 		if (empty($searchstring) && empty($searchdate)) { return $images; } // nothing to find
 		$albumfolder = getAlbumFolder();
 		$fields = $this->fields;
-		if (useTagTable()) {
-			$tagsSearch = $fields & SEARCH_TAGS;
-			$fields = $fields & ~SEARCH_TAGS;
-		} else {
-			$tagsSearch = false;
+		if (!SINGLE_SEARCH_SQL) {
+			if (useTagTable()) {
+				$tagsSearch = $fields & SEARCH_TAGS;
+				$fields = $fields & ~SEARCH_TAGS;
+			} else {
+				$tagsSearch = false;
+			}
 		}
 		$sql = $this->getSearchSQL($searchstring, $searchdate, 'images', $fields);
 		if (!empty($sql)) {  // valid fields exist
@@ -671,11 +683,12 @@ class SearchEngine
 		if (!is_array($search_results)) {
 			$search_results = array();
 		}
-		
-		if ($tagsSearch) {
-			$tagsfound = $this->searchTags($searchstring, 'images');
-			if (is_array($tagsfound)) {
-				$search_results = array_merge($tagsfound, $search_results);				
+		if (!SINGLE_SEARCH_SQL) {
+			if ($tagsSearch) {
+				$tagsfound = $this->searchTags($searchstring, 'images');
+				if (is_array($tagsfound)) {
+					$search_results = array_merge($tagsfound, $search_results);
+				}
 			}
 		}
 
@@ -695,7 +708,7 @@ class SearchEngine
 			}
 		}
 
-		return $images;  
+		return $images;
 
 	}
 

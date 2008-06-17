@@ -268,8 +268,8 @@ if ($newTags) {
 	echo "\n</ul>";
 	echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='save_tags' value=\"".gettext("save new tags")."\" title=\"".gettext("Add all the tags entered above.")."\" /></p>";
 	echo "\n</form>";
-}
 echo "\n<p>".gettext("Add tags to the list by entering their names in the input fields of the <em>New tags</em> list. Then press the <em>save new tags </em>button").'</p>';
+}
 echo "\n</td>";
 echo "\n</tr>";
 echo "\n<tr>";

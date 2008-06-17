@@ -33,7 +33,8 @@ if (OFFSET_PATH) {
 } else {
 	$const_webpath = dirname($_SERVER['SCRIPT_NAME']);
 }
-if ($const_webpath == '\\' || $const_webpath == '/') $const_webpath = '';
+$const_webpath = str_replace("\\", '/', $const_webpath);
+if ($const_webpath == '/') $const_webpath = '';
 if (!defined('WEBPATH')) { define('WEBPATH', $const_webpath); }
 define('SERVERPATH', dirname(dirname(__FILE__)));
 define('PROTOCOL', getOption('server_protocol'));
@@ -2043,19 +2044,20 @@ $_zp_use_tag_table = 0;
  */
 function useTagTable() {
 	global $_zp_use_tag_table;
-	if ($_zp_use_tag_table > 0) { 
-		return true; 
+	if ($_zp_use_tag_table > 0) {
+		return true;
 	} else if ($_zp_use_tag_table < 0) {
 		return false;
 	}
-	$result = query_single_row("SELECT * FROM ".prefix('images')." LIMIT 1");
-	if (array_key_exists('tags', $result)) {
-		$_zp_use_tag_table = -1;
-		return false;
-	}else {
-		$_zp_use_tag_table = 1;
-		return true;
+	$result = query_full_array("SHOW COLUMNS FROM ".prefix('images'));
+	foreach ($result as $row) {
+		if ($row['Field'] == 'tags') {
+			$_zp_use_tag_table = -1;
+			return false;
+		}
 	}
+	$_zp_use_tag_table = 1;
+	return true;
 }
 
 /**
