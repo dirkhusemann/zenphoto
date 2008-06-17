@@ -547,28 +547,26 @@ class SearchEngine
 		if (!empty($sql)) { // valid fields exist
 			$search_results = query_full_array($sql, true);
 		}
-		if (!is_array($search_results)) {
-			$search_results = array();
-		}
 		if (!SINGLE_SEARCH_SQL) {
 			if ($tagsSearch) {
 				$idlist = array();
-				foreach ($search_results as $row) {
-					$idlist[] = $row['id'];
+				if (is_array($search_results)) {
+					foreach ($search_results as $row) {
+						$idlist[] = $row['id'];
+					}
 				}
-				$tagsfound = $this->searchTags($searchstring, 'albums', $idlist);
-				if (is_array($tagsfound)) {
-					$search_results = $tagsfound;
-				}
+				$search_results = $this->searchTags($searchstring, 'albums', $idlist);
 			}
 		}
 
-		foreach ($search_results as $row) {
-			$albumname = $row['folder'];
-			if ($albumname != $this->dynalbumname) {
-				if (file_exists($albumfolder . $albumname)) {
-					if (checkAlbumPassword($albumname, $hint)) {
-						$albums[] = $row['folder'];
+		if (is_array($search_results)) {
+			foreach ($search_results as $row) {
+				$albumname = $row['folder'];
+				if ($albumname != $this->dynalbumname) {
+					if (file_exists($albumfolder . $albumname)) {
+						if (checkAlbumPassword($albumname, $hint)) {
+							$albums[] = $row['folder'];
+						}
 					}
 				}
 			}
@@ -678,30 +676,28 @@ class SearchEngine
 		if (!empty($sql)) {  // valid fields exist
 			$search_results = query_full_array($sql, true);
 		}
-		if (!is_array($search_results)) {
-			$search_results = array();
-		}
 		if (!SINGLE_SEARCH_SQL) {
 			if ($tagsSearch) {
 				$idlist = array();
-				foreach ($search_results as $row) {
-					$idlist[] = $row['id'];
+				if (is_array($search_results)) {
+					foreach ($search_results as $row) {
+						$idlist[] = $row['id'];
+					}
 				}
-				$tagsfound = $this->searchTags($searchstring, 'images', $idlist);
-				if (is_array($tagsfound)) {
-					$search_results = $tagsfound;
-				}
+				$search_results = $this->searchTags($searchstring, 'images', $idlist);
 			}
 		}
-		
-		foreach ($search_results as $row) {
-			$albumid = $row['albumid'];
-			$query = "SELECT id, title, folder,`show` FROM ".prefix('albums')." WHERE id = $albumid";
-			$row2 = query_single_row($query); // id is unique
-			$albumname = $row2['folder'];
-			if (file_exists($albumfolder . $albumname . '/' . $row['filename'])) {
-				if (checkAlbumPassword($albumname, $hint)) {
-					$images[] = array('filename' => $row['filename'], 'folder' => $albumname);
+
+		if (is_array($search_results)) {
+			foreach ($search_results as $row) {
+				$albumid = $row['albumid'];
+				$query = "SELECT id, title, folder,`show` FROM ".prefix('albums')." WHERE id = $albumid";
+				$row2 = query_single_row($query); // id is unique
+				$albumname = $row2['folder'];
+				if (file_exists($albumfolder . $albumname . '/' . $row['filename'])) {
+					if (checkAlbumPassword($albumname, $hint)) {
+						$images[] = array('filename' => $row['filename'], 'folder' => $albumname);
+					}
 				}
 			}
 		}
