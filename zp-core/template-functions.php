@@ -1023,7 +1023,7 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 	}
 	$class = trim($class);
 	/* set the HTML image width and height parameters in case this image was "zen-logo.jpg" substituted for no thumbnail then the thumb layout is preserved */
-	if ($sizeW = max(is_null($width) ? 0: $sizeW, is_null($cropw) ? 0 : $cropw)) {
+	if ($sizeW = max(is_null($width) ? 0: $width, is_null($cropw) ? 0 : $cropw)) {
 		$sizing = ' width="' . $sizeW . '"';
 	} else {
 		$sizing = null;
