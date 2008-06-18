@@ -88,11 +88,13 @@
 							for ($i=1; $i<=6; $i++) {
 								echo "<li><table><tr><td>\n";
 								$randomImage = getRandomImages();
-								$randomImageURL = getURL($randomImage);
-								echo '<a href="' . $randomImageURL . '" title="'.gettext("View image:").' ' . $randomImage->getTitle() . '">' .
- 								'<img src="' . htmlspecialchars($randomImage->getCustomImage(null, 44, 33, null, null, null, null, true)) . 
-								'" width="44" height="33" alt="'.$randomImage->getTitle().'"'; 
-								echo "/></a></td></tr></table></li>\n";
+								if (is_object($randomImage)) {
+									$randomImageURL = getURL($randomImage);
+									echo '<a href="' . $randomImageURL . '" title="'.gettext("View image:").' ' . $randomImage->getTitle() . '">' .
+ 												'<img src="' . htmlspecialchars($randomImage->getCustomImage(null, 44, 33, null, null, null, null, true)) . 
+												'" width="44" height="33" alt="'.$randomImage->getTitle().'"'; 
+									echo "/></a></td></tr></table></li>\n";
+								}
 							}
 							break;
 					}
