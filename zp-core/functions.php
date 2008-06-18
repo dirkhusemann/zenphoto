@@ -1,6 +1,6 @@
 <?php
 define('ZENPHOTO_VERSION', '1.1.6');
-define('ZENPHOTO_RELEASE', 1729);
+define('ZENPHOTO_RELEASE', 1734);
 define('SAFE_GLOB', false);
 if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
