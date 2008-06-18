@@ -36,7 +36,7 @@ if (OFFSET_PATH) {
 $const_webpath = str_replace("\\", '/', $const_webpath);
 if ($const_webpath == '/') $const_webpath = '';
 if (!defined('WEBPATH')) { define('WEBPATH', $const_webpath); }
-define('SERVERPATH', dirname(dirname(__FILE__)));
+define('SERVERPATH', str_replace("\\", '/', dirname(dirname(__FILE__))));
 define('PROTOCOL', getOption('server_protocol'));
 define('FULLWEBPATH', PROTOCOL."://" . $_SERVER['HTTP_HOST'] . WEBPATH);
 define('SAFE_MODE_ALBUM_SEP', '__');
