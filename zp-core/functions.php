@@ -2049,7 +2049,7 @@ function useTagTable() {
 	} else if ($_zp_use_tag_table < 0) {
 		return false;
 	}
-	$result = query_full_array("SHOW COLUMNS FROM ".prefix('images'));
+	$result = query_full_array("SHOW COLUMNS FROM ".prefix('images').' LIKE "%tags%"');	
 	foreach ($result as $row) {
 		if ($row['Field'] == 'tags') {
 			$_zp_use_tag_table = -1;
