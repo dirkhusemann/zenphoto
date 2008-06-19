@@ -237,24 +237,18 @@ class SearchEngine
 	 */
 	function getSearchSQL($searchstring, $searchdate, $tbl, $fields) {
 		global $_zp_current_album;
-		$sql = 'SELECT DISTINCT r.`id`, r.`show`,r.`title`,r.`desc`';
+		$sql = 'SELECT DISTINCT `id`, `show`,`title`,`desc`';
 		if (!useTagTable()) {
-			$sql .= ',r.`tags`';
+			$sql .= ',`tags`';
 		}
 		if ($tbl=='albums') {
 			if ($fields & SEARCH_FILENAME) { $fields = $fields + SEARCH_FOLDER; } // for searching these are really the same thing, just named differently in the different tables
 			$fields = $fields & (SEARCH_TITLE + SEARCH_DESC + SEARCH_TAGS + SEARCH_FOLDER); // these are all albums have
-			$sql .= ",r.`folder`";
+			$sql .= ",`folder`";
 		} else {
-			$sql .= ",r.`albumid`,r.`filename`,r.`location`,r.`city`,r.`state`,r.`country`";
+			$sql .= ",`albumid`,`filename`,`location`,`city`,`state`,`country`";
 		}
-		$sql .= " FROM ".prefix($tbl)." AS r";
-		if (SINGLE_SEARCH_SQL) {
-			if (useTagTable()) {
-				$sql .= ','.prefix('tags').' AS t,'.prefix('obj_to_tag').' AS o';
-			}
-		}
-		$sql .= " WHERE ";
+		$sql .= " FROM ".prefix($tbl)." WHERE ";
 		if(!zp_loggedin()) { $sql .= "`show` = 1 AND ("; }
 		$join = "";
 		$nrt = 0;
@@ -287,12 +281,10 @@ class SearchEngine
 						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
 						$subsql .= " `desc` LIKE '%$singlesearchstring%'";
 					}	
-					if (SEARCH_TAGS & $fields) {  // this does not work correctly for tag-tables, so it is not currently used.
-						$nr++;
-						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
-						if (useTagTable()) {
-							$subsql .= '(t.`name`="'.$singlesearchstring.'" AND t.`id`=o.`tagid` AND o.`type`="'.$tbl.'" AND o.`objectid`=r.`id`)';
-						} else {
+					if (SEARCH_TAGS & $fields) {  // this path is supressed for tag table searches.
+						if (!useTagTable()) {
+							$nr++;
+							if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
 							$subsql .= " `tags` LIKE '%$singlesearchstring%'";
 						}
 					}
@@ -396,7 +388,7 @@ class SearchEngine
 				case ')':
 					break;
 				default:
-					$sql .= '`name`="'.$singlesearchstring.'" OR ';
+					$sql .= 't.`name`="'.$singlesearchstring.'" OR ';
 			}
 		}
 		$sql = substr($sql, 0, strlen($sql)-4).') ORDER BY t.`id`';
@@ -409,7 +401,6 @@ class SearchEngine
 				if (!is_array($taglist[$tagid])) { $taglist[$tagid] = array(); }
 				$taglist[$tagid][] = $object['objectid'];
 			}
-
 			$op = '';
 			$idstack = array();
 			$opstack = array();
@@ -455,33 +446,35 @@ class SearchEngine
 						}
 						$op = '';
 						break;
-							default:
-								$objectid = $taglist[strtolower($singlesearchstring)];
-								switch ($op) {
-									case '&':
-										if (is_array($objectid)) {
-											$idlist = array_intersect($idlist, $objectid);
-										} else {
-											$idlist = array();
-										}
-										break;
-									case '!':
-										break; // what to do with initial NOT?
-									case '&!':
-										if (is_array($objectid)) {
-											$idlist = array_diff($idlist, $objectid);
-										}
-										break;
-									case '';
-									case '|':
-										if (is_array($objectid)) {
-											$idlist = array_merge($idlist, $objectid);
-										}
-										break;
+					default:
+						$objectid = $taglist[strtolower($singlesearchstring)];
+						switch ($op) {
+							case '&':
+								if (is_array($objectid)) {
+									$idlist = array_intersect($idlist, $objectid);
+								} else {
+									$idlist = array();
 								}
-								$op = '';
 								break;
+							case '!':
+								break; // what to do with initial NOT?
+							case '&!':
+								if (is_array($objectid)) {
+									$idlist = array_diff($idlist, $objectid);
+								}
+								break;
+							case '';
+							case '|':
+								if (is_array($objectid)) {
+									$idlist = array_merge($idlist, $objectid);
+								}
+								break;
+						}
+						$idlist = array_unique($idlist);
+						$op = '';
+						break;
 				}
+				$idlist = array_unique($idlist);
 			}
 		}
 		if (count($idlist)==0) {return NULL; }
