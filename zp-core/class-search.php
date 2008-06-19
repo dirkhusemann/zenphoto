@@ -548,7 +548,7 @@ class SearchEngine
 			$search_results = query_full_array($sql, true);
 		}
 		if (!SINGLE_SEARCH_SQL) {
-			if ($tagsSearch) {
+			if ($tagsSearch && count($searchstring) > 0) {
 				$idlist = array();
 				if (is_array($search_results)) {
 					foreach ($search_results as $row) {
@@ -571,7 +571,6 @@ class SearchEngine
 				}
 			}
 		}
-
 		return $albums;
 
 	}
@@ -677,7 +676,7 @@ class SearchEngine
 			$search_results = query_full_array($sql, true);
 		}
 		if (!SINGLE_SEARCH_SQL) {
-			if ($tagsSearch) {
+			if ($tagsSearch && count($searchstring) > 0) {
 				$idlist = array();
 				if (is_array($search_results)) {
 					foreach ($search_results as $row) {
@@ -687,7 +686,6 @@ class SearchEngine
 				$search_results = $this->searchTags($searchstring, 'images', $idlist);
 			}
 		}
-
 		if (is_array($search_results)) {
 			foreach ($search_results as $row) {
 				$albumid = $row['albumid'];
@@ -701,7 +699,6 @@ class SearchEngine
 				}
 			}
 		}
-
 		return $images;
 
 	}
@@ -775,5 +772,7 @@ class SearchEngine
 	}
 
 } // search class end
+
+
 
 ?>
