@@ -1426,8 +1426,7 @@ function getImageVideoThumb() {
 function getImageDesc() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
-	$desc = str_replace("\r\n", "\n", $_zp_current_image->getDesc());
-	return str_replace("\n", "<br/>", $desc);
+	return $_zp_current_image->getDesc();
 }
 
 /**
@@ -2047,8 +2046,7 @@ function getSizedImageURL($size) {
  * @param int $cropx crop part x axis
  * @param int $cropy crop part y axis
  * @param bool $thumbStandin set true to inhibit watermarking
-
- * * @return string
+ * @return string
  */
 function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $thumbStandin=false) {
 	global $_zp_current_image;
@@ -2127,6 +2125,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 		(($id) ? " id=\"$id\"" : "") . " />";
 	}
 }
+
 /**
  * Prints out a sized image up to $maxheight tall (as width the value set in the admin option is taken)
  *
@@ -2139,6 +2138,7 @@ function printCustomSizedImageMaxHeight($maxheight) {
 		printDefaultSizedImage(getImageTitle());
 	}
 }
+
 /**
  * Prints link to an image of specific size
  * @param int $size how big
@@ -2150,10 +2150,10 @@ function printCustomSizedImageMaxHeight($maxheight) {
 function printSizedImageLink($size, $text, $title, $class=NULL, $id=NULL) {
 	printLink(getSizedImageURL($size), $text, $title, $class, $id);
 }
+
 /**
 
 * Retuns the count of comments on the current image
-
 *
 * @return int
 */
@@ -2169,6 +2169,7 @@ function getCommentCount() {
 
 	}
 }
+
 /**
  * Returns true if neither the album nor the image have comments closed
  *
@@ -2182,6 +2183,7 @@ function getCommentsAllowed() {
 		return $_zp_current_album->getCommentsAllowed();
 	}
 }
+
 /**
  *Iterate through comments; use the ZP_COMMENT context.
  *Return true if there are more comments

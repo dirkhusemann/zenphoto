@@ -1097,13 +1097,13 @@ function processAlbumEdit($index, $album) {
 		$album->setAlbumTheme($newtheme);
 		if (!empty($oldtheme) && empty($newtheme)) {
 			// clean out old theme option table
-			$tbl_options = prefix($album->name.'_options');
+			$tbl_options = getOptionTableName($album->name);
 			$sql = "DROP TABLE $tbl_options";
 			query($sql);
 		}
 		if (!empty($newtheme)) {
 			// setup new theme option table
-			$tbl_options = prefix($album->name.'_options');
+			$tbl_options = getOptionTableName($album->name);
 			$sql = "CREATE TABLE IF NOT EXISTS $tbl_options (
 							`id` int(11) unsigned NOT NULL auto_increment,
 							`name` varchar(64) NOT NULL,

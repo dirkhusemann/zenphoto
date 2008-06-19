@@ -201,6 +201,14 @@ function getOptionList() {
 	return $_zp_options;
 }
 
+function getOptionTableName($albumname) {
+	$pfxlen = strlen(prefix(''));
+	if (strlen($albumname) > 54-$pfxlen) { // table names are limited to 62 characters
+		return prefix(substr(substr($albumname, 0, max(0,min(24-$pfxlen, 20))).'_'.md5($albumname),0,54-$pfxlen).'_options');  
+	}
+	return prefix($albumname.'_options');
+}
+
 /**
  * parses the 'allowed_tags' option for use by kses
  *
@@ -1930,7 +1938,7 @@ function setupTheme() {
 	if (!empty($albumtheme)) {
 		$theme = $albumtheme;
 		//load the album theme options
-		$sql = "SELECT `name`, `value` FROM ".prefix($parent->name.'_options');
+		$sql = "SELECT `name`, `value` FROM ".getOptionTable($parent->name);
 		$optionlist = query_full_array($sql, true);
 		if ($optionlist !== false) {
 			foreach($optionlist as $option) {

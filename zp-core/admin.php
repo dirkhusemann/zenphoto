@@ -649,7 +649,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				// all theme specific options are custom options, handled below
 				if (!empty($_POST['themealbum'])) {
 					$alb = urldecode($_POST['themealbum']);
-					$table = $alb.'_options';
+					$table = getOptionTableName($alb);
 					$returntab = '&themealbum='.urlencode($alb).'#tab_theme';
 				} else {
 					$table = 'options';
@@ -713,7 +713,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				} else {
 					$album = new Album($gallery, $alb);
 					$oldtheme = $album->getAlbumTheme();
-					$tbl_options = prefix($album->name.'_options');
+					$tbl_options = getOptionTableName($album->name);
 					if (!empty($oldtheme) && empty($newtheme)) {
 						// clean out old theme option table
 						$sql = "DROP TABLE $tbl_options";
