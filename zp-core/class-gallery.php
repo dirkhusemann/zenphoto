@@ -450,16 +450,21 @@ class Gallery {
 						}
 
 						/* tags */
-						if (useTagTable()) {
-							$tags = explode(',', $metadata['tags']);
-							storeTags($tags, $image['id'], 'images');
-						} else {
-							if (is_null($image['tags'])) {
-								if (isset($metadata['tags'])) {
-									$set .= ', `tags`="' . mysql_real_escape_string($metadata['tags']) . '"';
+						if (isset($metadata['tags'])) {
+							if (useTagTable()) {
+								$tags = $metadata['tags'];
+								storeTags($tags, $image['id'], 'images');
+							} else {
+								$s = '';
+								foreach ($metadata['tags'] as $tag) {
+									$s .= $tag.',';
+								}
+								if (!empty($s)) {
+									$set .= ', `tags`="' . mysql_real_escape_string(substr($s, 0, -1)) . '"';
 								}
 							}
 						}
+
 
 						/* location, city, state, and country */
 						if (isset($metadata['location'])) {

@@ -1230,6 +1230,20 @@ function getIPTCTag($tag) {
 }
 
 /**
+ * For internal use--fetches the IPTC array for a single tag.
+ *
+ * @param string $tag the metadata tag sought
+ * @return array
+ */
+function getIPTCTagArray($tag) {
+	global $iptc;
+	if (array_key_exists($tag, $iptc)) {
+		return $iptc[$tag];
+	}
+	return NULL;
+}
+
+/**
  * Parces IPTC data and returns those tags zenphoto is interested in
  * folds multiple tags into single zp data items based on precidence.
  *
@@ -1315,8 +1329,8 @@ function getImageMetadata($imageName) {
 			}
 
 			/* iptc keywords (tags) */
-			$keywords= getIPTCTag('2#025');
-			if (!empty($keywords)) {
+			$keywords = getIPTCTagArray('2#025');
+			if (is_array($keywords)) {
 				$result['tags'] = $keywords;
 			}
 		}
