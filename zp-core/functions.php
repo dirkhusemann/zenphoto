@@ -4,6 +4,7 @@ define('ZENPHOTO_RELEASE', 1741);
 define('SAFE_GLOB', false);
 if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
+if (!defined('OFFSET_PATH')) { define('OFFSET_PATH', 0); }
 if(!function_exists("gettext")) {
 	// load the drop-in replacement library
 	require_once('lib-gettext/gettext.inc');
@@ -1952,7 +1953,7 @@ function setupTheme() {
 	if (!empty($albumtheme)) {
 		$theme = $albumtheme;
 		//load the album theme options
-		$sql = "SELECT `name`, `value` FROM ".getOptionTable($parent->name);
+		$sql = "SELECT `name`, `value` FROM ".getOptionTableName($parent->name);
 		$optionlist = query_full_array($sql, true);
 		if ($optionlist !== false) {
 			foreach($optionlist as $option) {

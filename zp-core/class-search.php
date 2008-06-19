@@ -249,8 +249,10 @@ class SearchEngine
 			$sql .= ",r.`albumid`,r.`filename`,r.`location`,r.`city`,r.`state`,r.`country`";
 		}
 		$sql .= " FROM ".prefix($tbl)." AS r";
-		if (useTagTable()) {
-			$sql .= ','.prefix('tags').' AS t,'.prefix('obj_to_tag').' AS o';
+		if (SINGLE_SEARCH_SQL) {
+			if (useTagTable()) {
+				$sql .= ','.prefix('tags').' AS t,'.prefix('obj_to_tag').' AS o';
+			}
 		}
 		$sql .= " WHERE ";
 		if(!zp_loggedin()) { $sql .= "`show` = 1 AND ("; }
@@ -302,27 +304,27 @@ class SearchEngine
 					if (SEARCH_FILENAME & $fields) {
 						$nr++;
 						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
-						$subsql .= " `filename` LIKE '%$singlesearchstring%'";
+						$subsql .= "`filename` LIKE '%$singlesearchstring%'";
 					}
 					if (SEARCH_LOCATION & $fields) {
 						$nr++;
 						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
-						$subsql .= " `location` LIKE '%$singlesearchstring%'";
+						$subsql .= "`location` LIKE '%$singlesearchstring%'";
 					}
 					if (SEARCH_CITY & $fields) {
 						$nr++;
 						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
-						$subsql .= " `city` LIKE '%$singlesearchstring%'";
+						$subsql .= "`city` LIKE '%$singlesearchstring%'";
 					}
 					if (SEARCH_STATE & $fields) {
 						$nr++;
 						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
-						$subsql .= " `state` LIKE '%$singlesearchstring%'";
+						$subsql .= "`state` LIKE '%$singlesearchstring%'";
 					}
 					if (SEARCH_COUNTRY & $fields) {
 						$nr++;
 						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
-						$subsql .= " `country` LIKE '%$singlesearchstring%'";
+						$subsql .= "`country` LIKE '%$singlesearchstring%'";
 					}
 					if ($nr > 0) {
 						$nrt++;
@@ -394,7 +396,7 @@ class SearchEngine
 				case ')':
 					break;
 				default:
-					$sql .= 't.`name`="'.$singlesearchstring.'" OR ';
+					$sql .= '`name`="'.$singlesearchstring.'" OR ';
 			}
 		}
 		$sql = substr($sql, 0, strlen($sql)-4).') ORDER BY t.`id`';
