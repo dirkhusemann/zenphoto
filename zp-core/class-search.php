@@ -12,7 +12,6 @@ define('SEARCH_CITY', 32);
 define('SEARCH_STATE', 64);
 define('SEARCH_COUNTRY', 128);
 define('SEARCH_FOLDER', 256);
-define('SINGLE_SEARCH_SQL', false); // set to false until the tag search in getSearchSQL works
 
 class SearchEngine
 {
@@ -127,7 +126,7 @@ class SearchEngine
 	 */
 	function getSearchString() {
 		$searchstring = trim($this->words);
-		$opChars = array ('&'=>1, '|'=>1, '!'=>1, ','=>1, ' '=>1, '('=>2);
+		$opChars = array ('&'=>1, '|'=>1, '!'=>1, ','=>1, '('=>2);
 		$c1 = ' ';
 		$result = array();
 		$target = "";
@@ -147,7 +146,6 @@ class SearchEngine
 					}
 					$c1 = $c;
 					break;
-				case ' ':
 				case ',':
 					if (!empty($target)) {
 						$r = strtolower(trim($target));
@@ -225,7 +223,7 @@ class SearchEngine
 		$fields = $fields & getOption('search_fields');
 		return $fields;
 	}
-	
+
 	/**
 	 * returns the sql string for a search
 	 * @param string $searchstring the search target
@@ -280,7 +278,7 @@ class SearchEngine
 						$nr++;
 						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
 						$subsql .= " `desc` LIKE '%$singlesearchstring%'";
-					}	
+					}
 					if (SEARCH_TAGS & $fields) {  // this path is supressed for tag table searches.
 						if (!useTagTable()) {
 							$nr++;
@@ -367,7 +365,7 @@ class SearchEngine
 		$sql .= " ORDER BY ".$key;
 		return $sql;
 	}
-	
+
 	/**
 	 * Searches the table for tags
 	 * Returns an array of database records.
@@ -388,7 +386,7 @@ class SearchEngine
 				case ')':
 					break;
 				default:
-					$sql .= 't.`name`="'.$singlesearchstring.'" OR ';
+					$sql .= '`name`="'.$singlesearchstring.'" OR ';
 			}
 		}
 		$sql = substr($sql, 0, strlen($sql)-4).') ORDER BY t.`id`';
@@ -446,33 +444,33 @@ class SearchEngine
 						}
 						$op = '';
 						break;
-					default:
-						$objectid = $taglist[strtolower($singlesearchstring)];
-						switch ($op) {
-							case '&':
-								if (is_array($objectid)) {
-									$idlist = array_intersect($idlist, $objectid);
-								} else {
-									$idlist = array();
+							default:
+								$objectid = $taglist[strtolower($singlesearchstring)];
+								switch ($op) {
+									case '&':
+										if (is_array($objectid)) {
+											$idlist = array_intersect($idlist, $objectid);
+										} else {
+											$idlist = array();
+										}
+										break;
+									case '!':
+										break; // what to do with initial NOT?
+									case '&!':
+										if (is_array($objectid)) {
+											$idlist = array_diff($idlist, $objectid);
+										}
+										break;
+									case '';
+									case '|':
+										if (is_array($objectid)) {
+											$idlist = array_merge($idlist, $objectid);
+										}
+										break;
 								}
+								$idlist = array_unique($idlist);
+								$op = '';
 								break;
-							case '!':
-								break; // what to do with initial NOT?
-							case '&!':
-								if (is_array($objectid)) {
-									$idlist = array_diff($idlist, $objectid);
-								}
-								break;
-							case '';
-							case '|':
-								if (is_array($objectid)) {
-									$idlist = array_merge($idlist, $objectid);
-								}
-								break;
-						}
-						$idlist = array_unique($idlist);
-						$op = '';
-						break;
 				}
 				$idlist = array_unique($idlist);
 			}
@@ -530,28 +528,24 @@ class SearchEngine
 		$albumfolder = getAlbumFolder();
 		if (empty($searchstring)) { return $albums; } // nothing to find
 		$fields = $this->fields;
-		if (!SINGLE_SEARCH_SQL) {
-			if (useTagTable()) {
-				$tagsSearch = $fields & SEARCH_TAGS;
-				$fields = $fields & ~SEARCH_TAGS;
-			} else {
-				$tagsSearch = false;
-			}
+		if (useTagTable()) {
+			$tagsSearch = $fields & SEARCH_TAGS;
+			$fields = $fields & ~SEARCH_TAGS;
+		} else {
+			$tagsSearch = false;
 		}
 		$sql = $this->getSearchSQL($searchstring, '', 'albums', $fields);
 		if (!empty($sql)) { // valid fields exist
 			$search_results = query_full_array($sql, true);
 		}
-		if (!SINGLE_SEARCH_SQL) {
-			if ($tagsSearch && count($searchstring) > 0) {
-				$idlist = array();
-				if (is_array($search_results)) {
-					foreach ($search_results as $row) {
-						$idlist[] = $row['id'];
-					}
+		if ($tagsSearch && count($searchstring) > 0) {
+			$idlist = array();
+			if (is_array($search_results)) {
+				foreach ($search_results as $row) {
+					$idlist[] = $row['id'];
 				}
-				$search_results = $this->searchTags($searchstring, 'albums', $idlist);
 			}
+			$search_results = $this->searchTags($searchstring, 'albums', $idlist);
 		}
 
 		if (is_array($search_results)) {
@@ -658,28 +652,24 @@ class SearchEngine
 		if (empty($searchstring) && empty($searchdate)) { return $images; } // nothing to find
 		$albumfolder = getAlbumFolder();
 		$fields = $this->fields;
-		if (!SINGLE_SEARCH_SQL) {
-			if (useTagTable()) {
-				$tagsSearch = $fields & SEARCH_TAGS;
-				$fields = $fields & ~SEARCH_TAGS;
-			} else {
-				$tagsSearch = false;
-			}
+		if (useTagTable()) {
+			$tagsSearch = $fields & SEARCH_TAGS;
+			$fields = $fields & ~SEARCH_TAGS;
+		} else {
+			$tagsSearch = false;
 		}
 		$sql = $this->getSearchSQL($searchstring, $searchdate, 'images', $fields);
 		if (!empty($sql)) {  // valid fields exist
 			$search_results = query_full_array($sql, true);
 		}
-		if (!SINGLE_SEARCH_SQL) {
-			if ($tagsSearch && count($searchstring) > 0) {
-				$idlist = array();
-				if (is_array($search_results)) {
-					foreach ($search_results as $row) {
-						$idlist[] = $row['id'];
-					}
+		if ($tagsSearch && count($searchstring) > 0) {
+			$idlist = array();
+			if (is_array($search_results)) {
+				foreach ($search_results as $row) {
+					$idlist[] = $row['id'];
 				}
-				$search_results = $this->searchTags($searchstring, 'images', $idlist);
 			}
+			$search_results = $this->searchTags($searchstring, 'images', $idlist);
 		}
 		if (is_array($search_results)) {
 			foreach ($search_results as $row) {

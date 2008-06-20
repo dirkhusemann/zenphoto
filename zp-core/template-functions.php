@@ -3190,7 +3190,7 @@ function printSearchForm($prevtext=NULL, $id="search", $buttonSource="") {
 function getSearchWords() {
 	global $_zp_current_search;
 	if (!in_context(ZP_SEARCH)) { return ''; }
-	$opChars = array ('('=>2, '&'=>1, '|'=>1, '!'=>1, ','=>1, ' '=>1);
+	$opChars = array ('('=>2, '&'=>1, '|'=>1, '!'=>1, ','=>1);
 	$searchstring = $_zp_current_search->getSearchString();
 	$sanitizedwords = '';
 	if (is_array($searchstring)) {
