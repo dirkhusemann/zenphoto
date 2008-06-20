@@ -92,8 +92,8 @@ function getAlbumStatistic($number=5, $option) {
  * 									"latestupdated" for the latest updated
  * @param bool $showtitle if the album title should be shown
  * @param bool $showdate if the album date should be shown
- * @param bool $showdesc if the album desc should be shown
- * @param integer $desclength the length of the desc to be shown
+ * @param bool $showdesc if the album description should be shown
+ * @param integer $desclength the length of the description to be shown
   * @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
@@ -126,8 +126,8 @@ function printAlbumStatistic($number, $option, $showtitle=false, $showdate=false
  * 									"latestupdated" for the latest updated
  * @param bool $showtitle if the album title should be shown
  * @param bool $showdate if the album date should be shown
- * @param bool $showdesc if the album desc should be shown
- * @param integer $desclength the length of the desc to be shown
+ * @param bool $showdesc if the album description should be shown
+ * @param integer $desclength the length of the description to be shown
  * @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
@@ -185,8 +185,8 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
  * @param string $number the number of albums to get
  * @param bool $showtitle if the album title should be shown
  * @param bool $showdate if the album date should be shown
- * @param bool $showdesc if the album desc should be shown
- * @param integer $desclength the length of the desc to be shown
+ * @param bool $showdesc if the album description should be shown
+ * @param integer $desclength the length of the description to be shown
  * @param string $showstatistic "hitcounter" for showing the hitcounter (views),
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
@@ -201,8 +201,8 @@ function printPopularAlbums($number=5,$showtitle=false, $showdate=false, $showde
  * @param string $number the number of albums to get
  * @param bool $showtitle if the album title should be shown
  * @param bool $showdate if the album date should be shown
- * @param bool $showdesc if the album desc should be shown
- * @param integer $desclength the length of the desc to be shown
+ * @param bool $showdesc if the album description should be shown
+ * @param integer $desclength the length of the description to be shown
  * @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
@@ -217,8 +217,8 @@ function printLatestAlbums($number=5,$showtitle=false, $showdate=false, $showdes
  * @param string $number the number of albums to get
  * @param bool $showtitle if the album title should be shown
  * @param bool $showdate if the album date should be shown
- * @param bool $showdesc if the album desc should be shown
- * @param integer $desclength the length of the desc to be shown
+ * @param bool $showdesc if the album description should be shown
+ * @param integer $desclength the length of the description to be shown
  * @param string $showstatistic "hitcounter" for showing the hitcounter (views),
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
@@ -233,8 +233,8 @@ function printMostRatedAlbums($number=5,$showtitle=false, $showdate=false, $show
  * @param string $number the number of albums to get
  * @param bool $showtitle if the album title should be shown
  * @param bool $showdate if the album date should be shown
- * @param bool $showdesc if the album desc should be shown
- * @param integer $desclength the length of the desc to be shown
+ * @param bool $showdesc if the album description should be shown
+ * @param integer $desclength the length of the description to be shown
  * @param string $showstatistic "hitcounter" for showing the hitcounter (views),
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
@@ -249,8 +249,8 @@ function printTopRatedAlbums($number=5,$showtitle=false, $showdate=false, $showd
  * @param string $number the number of albums to get
  * @param bool $showtitle if the album title should be shown
  * @param bool $showdate if the album date should be shown
- * @param bool $showdesc if the album desc should be shown
- * @param integer $desclength the length of the desc to be shown
+ * @param bool $showdesc if the album description should be shown
+ * @param integer $desclength the length of the description to be shown
  * @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
@@ -335,8 +335,8 @@ function getImageStatistic($number, $option, $album='') {
  * @param string $album title of an specific album
  * @param bool $showtitle if the image title should be shown
  * @param bool $showdate if the image date should be shown
- * @param bool $showdesc if the image desc should be shown
- * @param integer $desclength the length of the desc to be shown
+ * @param bool $showdesc if the image description should be shown
+ * @param integer $desclength the length of the description to be shown
  * @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
@@ -384,8 +384,8 @@ function printImageStatistic($number, $option, $album='', $showtitle=false, $sho
  * @param string $album title of an specific album
  * @param bool $showtitle if the image title should be shown
  * @param bool $showdate if the image date should be shown
- * @param bool $showdesc if the image desc should be shown
- * @param integer $desclength the length of the desc to be shown
+ * @param bool $showdesc if the image description should be shown
+ * @param integer $desclength the length of the description to be shown
 * @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
@@ -400,8 +400,8 @@ function printPopularImages($number=5, $album='', $showtitle=false, $showdate=fa
  * @param int $number The number if images desired
  * @param bool $showtitle if the image title should be shown
  * @param bool $showdate if the image date should be shown
- * @param bool $showdesc if the image desc should be shown
- * @param integer $desclength the length of the desc to be shown
+ * @param bool $showdesc if the image description should be shown
+ * @param integer $desclength the length of the description to be shown
  * @param string $showstatistic "hitcounter" for showing the hitcounter (views),
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
@@ -417,8 +417,8 @@ function printTopRatedImages($number=5, $album="", $showtitle=false, $showdate=f
  * @param int $number The number if images desired
  * @param bool $showtitle if the image title should be shown
  * @param bool $showdate if the image date should be shown
- * @param bool $showdesc if the image desc should be shown
- * @param integer $desclength the length of the desc to be shown 
+ * @param bool $showdesc if the image description should be shown
+ * @param integer $desclength the length of the description to be shown 
 * @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
@@ -434,8 +434,8 @@ function printMostRatedImages($number=5, $album='', $showtitle=false, $showdate=
  * @param string $album title of an specific album
  * @param bool $showtitle if the image title should be shown
  * @param bool $showdate if the image date should be shown
- * @param bool $showdesc if the image desc should be shown
- * @param integer $desclength the length of the desc to be shown
+ * @param bool $showdesc if the image description should be shown
+ * @param integer $desclength the length of the description to be shown
 * @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
@@ -451,8 +451,8 @@ function printLatestImages($number=5, $album='', $showtitle=false, $showdate=fal
  * @param string $album title of an specific album
  * @param bool $showtitle if the image title should be shown
  * @param bool $showdate if the image date should be shown
- * @param bool $showdesc if the image desc should be shown
- * @param integer $desclength the length of the desc to be shown
+ * @param bool $showdesc if the image description should be shown
+ * @param integer $desclength the length of the description to be shown
 * @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
