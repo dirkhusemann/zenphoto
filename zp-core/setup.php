@@ -722,7 +722,7 @@ if (file_exists("zp-config.php")) {
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'tags'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_tags (
 		`id` int(11) unsigned NOT NULL auto_increment,
-		`name` varchar(256),
+		`name` varchar(255),
 		PRIMARY KEY  (`id`),
 		UNIQUE (`name`)
 		);";
@@ -943,7 +943,7 @@ if (file_exists("zp-config.php")) {
 	//v1.2
 	$sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `private` int(1) UNSIGNED default 0";
 	$sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `anon` int(1) UNSIGNED default 0";
-	
+	$sql_statements[] = "ALTER TABLE $tbl_comments CHANGE `name` `name` VARCHAR( 255 )"; 	
 	
 	/**************************************************************************************
 	 ******                            END of UPGRADE SECTION                                                           ******
