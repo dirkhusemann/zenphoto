@@ -3449,6 +3449,7 @@ function printPasswordForm($hint) {
 	echo "\n    <input type=\"hidden\" name=\"password\" value=\"1\" />";
 
 	echo "\n    <table>";
+	echo "\n      <tr><td>".gettext("Login")."</td><td><input class=\"textfield\" name=\"user\" size=\"20\" /></td></tr>";
 	echo "\n      <tr><td>".gettext("Password")."</td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
 	echo "\n      <tr><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"".gettext("Submit")."\" /></td></tr>";
 	if (!empty($hint)) {

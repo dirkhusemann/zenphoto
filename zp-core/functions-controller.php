@@ -216,6 +216,7 @@ function cookiecode($text) {
  *checks for album password posting
  */
 function zp_handle_password() {
+	global $_zp_loggedin;
 	if (zp_loggedin()) { return; } // who cares, we don't need any authorization
 	$cookiepath = WEBPATH;
 	if (WEBPATH == '') { $cookiepath = '/'; }
@@ -261,17 +262,23 @@ function zp_handle_password() {
 	}
 	// Handle the login form.
 	if (isset($_POST['password']) && isset($_POST['pass'])) {
-		$pass = md5($_POST['pass']);
-		if ($pass == $check_auth) {
-			// Correct auth info. Set the cookie.
-			zp_setcookie($authType, $pass, time()+5184000, $cookiepath);
+		$post_user = $_POST['user'];
+		$post_pass = $_POST['pass'];
+		if ($_zp_loggedin = checkLogon($post_user, $post_pass)) {	// allow Admin user login
+			$auth = md5($post_user . $post_pass);
+			zp_setcookie("zenphoto_auth", $auth, time()+5184000, $cookiepath);
 		} else {
-			// Clear the cookie, just in case
-			zp_setcookie($authType, "", time()-368000, $cookiepath);
-			$_zp_login_error = true;
+			$auth = md5($post_pass);
+			if ($auth == $check_auth) {
+				// Correct auth info. Set the cookie.
+				zp_setcookie($authType, $auth, time()+5184000, $cookiepath);
+			} else {
+				// Clear the cookie, just in case
+				zp_setcookie($authType, "", time()-368000, $cookiepath);
+				$_zp_login_error = true;
+			}
 		}
 	}
-
 }
 
 

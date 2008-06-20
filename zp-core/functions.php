@@ -1800,7 +1800,9 @@ function checkLogon($user, $pass) {
 	foreach ($admins as $admin) {
 		if ($admin['user'] == $user) {
 			$md5 = md5($user.$pass);
-			return $admin['pass'] == $md5;
+			if ($admin['pass'] == $md5) {
+				return checkAuthorization($md5);
+			}
 		}
 	}
 	return false;
