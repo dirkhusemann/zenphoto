@@ -52,8 +52,8 @@ if (isset($_GET['convert'])) {
 		$_zp_use_tag_table = 1;  // we have converted
 	} else {
 		// convert tagtable to strings
-		query('ALTER TABLE '.prefix('albums').' ADD COLUMN `tags` text;', true);
-		query('ALTER TABLE '.prefix('images').' ADD COLUMN `tags` text;', true);
+		query('ALTER TABLE '.prefix('albums').' ADD COLUMN `tags` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci;', true);
+		query('ALTER TABLE '.prefix('images').' ADD COLUMN `tags` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci;', true);
 		$taglist = array();
 		$object = NULL;
 		$tbl = NULL;
@@ -63,7 +63,7 @@ if (isset($_GET['convert'])) {
 				if (($row['type'] != $tbl) || ($row['objectid'] != $object)) {
 					if (count($taglist) > 0) {
 						$tags = implode(',', $taglist);
-						query('UPDATE '.prefix($tbl).' SET `tags`="'.$tags.'" WHERE `id`='.$object);
+						query('UPDATE '.prefix($tbl).' SET `tags`="'.escape($tags).'" WHERE `id`='.$object);
 					}
 					$object = $row['objectid'];
 					$tbl = $row['type'];
@@ -82,7 +82,7 @@ if (count($_POST) > 0) {
 	if (isset($_GET['newtags'])) {
 		foreach ($_POST as $value) {
 			if (!empty($value)) {
-				$result = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.$value.'"');
+				$result = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.escape($value).'"');
 				if (!is_array($result)) { // it really is a new tag
 					query('INSERT INTO '.prefix('tags').' (`name`) VALUES ("' . escape($value) . '")');
 				}
@@ -98,7 +98,7 @@ if (count($_POST) > 0) {
 		if (useTagTable()) {
 			$sql = "SELECT `id` FROM ".prefix('tags')." WHERE ";
 			foreach ($kill as $tag) {
-				$sql .= "`name`='".$tag."' OR ";
+				$sql .= "`name`='".escape($tag)."' OR ";
 			}
 			$sql = substr($sql, 0, strlen($sql)-4);
 			$dbtags = query_full_array($sql);

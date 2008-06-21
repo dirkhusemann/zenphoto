@@ -157,7 +157,7 @@ class Image extends PersistentObject {
 			// Put together an array of EXIF data to return
 			if ($this->get('EXIFValid') == 1) {
 				foreach($_zp_exifvars as $field => $exifvar) {
-					$exif[$field] = utf8::convert($this->get($field), '', getOption('charset'));
+					$exif[$field] = $this->get($field);
 				}
 			} else {
 				return false;

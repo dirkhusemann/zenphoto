@@ -1285,31 +1285,31 @@ function getImageMetadata($imageName) {
 				$title = getIPTCTag('2#105'); /* Headline */
 			}
 			if (!empty($title)) {
-				$result['title'] = $title;
+				$result['title'] = utf8::convert($title, 'ISO-8859-1');
 			}
 
 			/* iptc description */
 			$caption= getIPTCTag('2#120');
 			if (!empty($caption)) {
-				$result['desc'] = $caption;
+				$result['desc'] = utf8::convert($caption, 'ISO-8859-1');
 			}
 
 			/* iptc location, state, country */
 			$location = getIPTCTag('2#092');
 			if (!empty($location)) {
-				$result['location'] = $location;
+				$result['location'] = utf8::convert($location, 'ISO-8859-1');
 			}
 			$city = getIPTCTag('2#090');
 			if (!empty($city)) {
-				$result['city'] = $city;
+				$result['city'] = utf8::convert($city, 'ISO-8859-1');
 			}
 			$state = getIPTCTag('2#095');
 			if (!empty($state)) {
-				$result['state'] = $state;
+				$result['state'] = utf8::convert($state, 'ISO-8859-1');
 			}
 			$country = getIPTCTag('2#101');
 			if (!empty($country)) {
-				$result['country'] = $country;
+				$result['country'] = utf8::convert($country, 'ISO-8859-1');
 			}
 			/* iptc credit */
 			$credit= getIPTCTag('2#080'); /* by-line */
@@ -1320,19 +1320,23 @@ function getImageMetadata($imageName) {
 				$credit = getIPTCTag('2#115'); /* source */
 			}
 			if (!empty($credit)) {
-				$result['credit'] = $credit;
+				$result['credit'] = utf8::convert($credit, 'ISO-8859-1');
 			}
 
 			/* iptc copyright */
 			$copyright= getIPTCTag('2#116');
 			if (!empty($copyright)) {
-				$result['copyright'] = $copyright;
+				$result['copyright'] = utf8::convert($copyright, 'ISO-8859-1');
 			}
 
 			/* iptc keywords (tags) */
 			$keywords = getIPTCTagArray('2#025');
 			if (is_array($keywords)) {
-				$result['tags'] = $keywords;
+				$taglist = array();
+				foreach($keywords as $keyword) {
+					$taglist[] = utf8::convert($keyword, 'ISO-8859-1');
+				}
+				$result['tags'] = $taglist;
 			}
 		}
 	}
@@ -2220,10 +2224,10 @@ function storeTags($tags, $id, $tbl) {
 	}
 	$tags = array_diff($tags, $existing); // new tags for the object
 	foreach ($tags as $tag) {
-		$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".$tag."'");
+		$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".escape($tag)."'");
 		if (!is_array($dbtag)) { // tag does not exist
 			query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . escape($tag) . "')");
-			$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".$tag."'");
+			$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".escape($tag)."'");
 		}
 		query("INSERT INTO ".prefix('obj_to_tag'). "(`objectid`, `tagid`, `type`) VALUES (".$id.",".$dbtag['id'].",'".$tbl."')");
 	}

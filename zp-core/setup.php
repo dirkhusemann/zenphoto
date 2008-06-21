@@ -725,7 +725,7 @@ if (file_exists("zp-config.php")) {
 		`name` varchar(255) NOT NULL,
 		PRIMARY KEY  (`id`),
 		UNIQUE (`name`)
-		);";
+		)	CHARACTER SET utf8 COLLATE utf8_general_ci;";
 	}
 		if (isset($create[$_zp_conf_vars['mysql_prefix'].'obj_to_tag'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_obj_to_tag (
@@ -734,7 +734,7 @@ if (file_exists("zp-config.php")) {
 		`type` tinytext,
 		`objectid` int(11) unsigned NOT NULL,
 		PRIMARY KEY  (`id`)
-		);";
+		)	CHARACTER SET utf8 COLLATE utf8_general_ci;";
 	}
 	
 	// v. 1.1.5
@@ -748,7 +748,7 @@ if (file_exists("zp-config.php")) {
 		`rights` int,
 		PRIMARY KEY  (`id`),
 		UNIQUE (`user`)
-		);";
+		)	CHARACTER SET utf8 COLLATE utf8_general_ci;";
 	}
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'admintoalbum'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_admintoalbum (
@@ -756,7 +756,7 @@ if (file_exists("zp-config.php")) {
 		`adminid` int(11) unsigned NOT NULL,
 		`albumid` int(11) unsigned NOT NULL,
 		PRIMARY KEY  (`id`)
-		);";
+		)	CHARACTER SET utf8 COLLATE utf8_general_ci;";
 	}
 
 	// v. 1.1
@@ -767,7 +767,7 @@ if (file_exists("zp-config.php")) {
 		`value` text NOT NULL,
 		PRIMARY KEY  (`id`),
 		UNIQUE (`name`)
-		);";
+		)	CHARACTER SET utf8 COLLATE utf8_general_ci;";
 	}
 
 	// base implementation
@@ -795,7 +795,7 @@ if (file_exists("zp-config.php")) {
 		`password_hint` text,
 		PRIMARY KEY  (`id`),
 		KEY `folder` (`folder`)
-		);";
+		)	CHARACTER SET utf8 COLLATE utf8_general_ci;";
 	}
 
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'comments'])) {
@@ -810,7 +810,7 @@ if (file_exists("zp-config.php")) {
 		`inmoderation` int(1) unsigned NOT NULL default '0',
 		PRIMARY KEY  (`id`),
 		KEY `ownerid` (`ownerid`)
-		);";
+		)	CHARACTER SET utf8 COLLATE utf8_general_ci;";
 	}
 
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'images'])) {
@@ -840,7 +840,7 @@ if (file_exists("zp-config.php")) {
 		`used_ips` longtext,
 		PRIMARY KEY  (`id`),
 		KEY `filename` (`filename`,`albumid`)
-		);";
+		)	CHARACTER SET utf8 COLLATE utf8_general_ci;";
 		$db_schema[] = "ALTER TABLE $tbl_images ".
 			"ADD CONSTRAINT $cst_images FOREIGN KEY (`albumid`) REFERENCES $tbl_albums (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
 	}
@@ -943,7 +943,11 @@ if (file_exists("zp-config.php")) {
 	//v1.2
 	$sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `private` int(1) UNSIGNED default 0";
 	$sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `anon` int(1) UNSIGNED default 0";
-	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `user` varchar(255) default ''"; 	
+	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `user` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci default ''"; 	
+	$sql_statements[] = "ALTER TABLE $tbl_tags CHARACTER SET utf8 COLLATE utf8_general_ci";
+	$sql_statements[] = "ALTER TABLE $tbl_tags CHANGE `name` `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci";	
+	$sql_statements[] = "ALTER TABLE $tbl_administrators CHARACTER SET utf8 COLLATE utf8_general_ci";
+	$sql_statements[] = "ALTER TABLE $tbl_administrators CHANGE `name` `name` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci";	
 	
 	/**************************************************************************************
 	 ******                            END of UPGRADE SECTION                                                           ******

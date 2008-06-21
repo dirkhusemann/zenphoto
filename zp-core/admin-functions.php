@@ -533,11 +533,16 @@ function tagSelector($that, $postit, $showCounts=false) {
 		$tags = array();
 	} else {
 		$tags = $that->getTags();
-		foreach ($tags as $key=>$tag) {
-			$tags[$key] = strtolower(trim($tag));
+	}
+	$tagsLC = array();
+	foreach ($tags as $tag) {
+		$tagsLC[] = strtolower($tag);
+	}
+	foreach ($them as $key=>$tag) {
+		if (in_array(strtolower($tag), $tagsLC)) {
+			unset($them[$key]);
 		}
 	}
-	$them = array_diff($them, $tags);
 	if ($showCounts) {
 		$displaylist = array();
 		foreach ($them as $tag) {
