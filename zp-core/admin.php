@@ -562,17 +562,31 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				$search = new SearchEngine();
 				setOption('search_fields', 32767, false); // make SearchEngine allow all options so parseQueryFields() will gives back what was choosen this time
 				setOption('search_fields', $search->parseQueryFields());
+				$olduser = getOption('gallerly_user');
+				setOption('gallery_user', $newuser = $_POST['gallery_user']);
+				$pwd = trim($_POST['gallerypass']);
+				if ($olduser != $newuser) {
+					if (empty($pwd)) {
+						$_POST['gallerypass'] = 'xxx';  // invalidate, user changed but password not set
+					}
+				}
 				if ($_POST['gallerypass'] == $_POST['gallerypass_2']) {
-					$pwd = trim($_POST['gallerypass']);
 					if (empty($pwd)) {
 						if (empty($_POST['gallerypass'])) {
 							setOption('gallery_password', NULL);  // clear the gallery password
 						}
 					} else {
-						setOption('gallery_password', md5($pwd));
+						setOption('gallery_password', md5($newuser.$pwd));
 					}
 				} else {
 					$notify = '&mismatch=gallery';
+				}
+				$olduser = getOption('search_user');
+				setOption('search_user',$newuser = $_POST['search_user']);
+				if ($olduser != $newuser) {
+					if (empty($pwd)) {
+						$_POST['searchpass'] = 'xxx';  // invalidate, user changed but password not set
+					}
 				}
 				if ($_POST['searchpass'] == $_POST['searchpass_2']) {
 					$pwd = trim($_POST['searchpass']);
@@ -581,7 +595,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 							setOption('search_password', NULL);  // clear the gallery password
 						}
 					} else {
-						setOption('search_password', md5($pwd));
+						setOption('search_password', md5($newuser.$pwd));
 					}
 				} else {
 					$notify = '&mismatch=search';
@@ -1815,21 +1829,32 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 		<td><?php echo gettext("What you want to call your photo gallery."); ?></td>
 	</tr>
 	<tr>
+    <td><?php echo gettext("Gallery guest user:"); ?>    </td>
+    <td><input type="text" size="40" name="gallery_user" value="<?php echo getOption('gallery_user'); ?>" />		</td>
+		<td><?php echo gettext("User ID for the gallery guest user") ?></td>
+	</tr>
+	<tr>
 		<td><?php echo gettext("Gallery password:"); ?><br />
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php gettext("(repeat)"); ?>
 		</td>
-		<td><?php $x = getOption('gallery_password'); if (!empty($x)) { $x = '          '; } ?>
+		<td>
+		<?php $x = getOption('gallery_password'); if (!empty($x)) { $x = '          '; } ?>
 		<input type="password" size="40" name="gallerypass"
 			value="<?php echo $x; ?>" /><br />
 		<input type="password" size="40" name="gallerypass_2"
 			value="<?php echo $x; ?>" /></td>
-		<td><?php echo gettext("Master password for the gallery. If this is set, visitors must	know this password to view the gallery."); ?></td>
+		<td><?php echo gettext("Master password for the gallery. If this is set, visitors must know this password to view the gallery."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Gallery password hint:"); ?></td>
 		<td><input type="text" size="40" name="gallery_hint"
 			value="<?php echo getOption('gallery_hint');?>" /></td>
 		<td><?php echo gettext("A reminder hint for the password."); ?></td>
+	</tr>
+	<tr>
+    <td><?php echo gettext("Search guest user:"); ?>    </td>
+    <td><input type="text" size="40" name="search_user" value="<?php echo getOption('search_user'); ?>" />		</td>
+		<td><?php echo gettext("User ID for the search guest user") ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Search password:"); ?><br />
@@ -1840,7 +1865,7 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 			value="<?php echo $x; ?>" /><br />
 		<input type="password" size="40" name="searchpass_2"
 			value="<?php echo $x; ?>" /></td>
-		<td><?php echo gettext("Password for the searching. If this is set, visitors must know this password to view search results."); ?></td>
+		<td><?php echo gettext("Password for the the search guest user. If this is set, visitors must know this password to view search results."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Search password hint:"); ?></td>

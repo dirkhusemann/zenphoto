@@ -145,6 +145,20 @@ class Album extends PersistentObject {
 		}
 		return NULL;
 	}
+	
+	/**
+	 * Returns the album guest user 
+	 *
+	 * @return string
+	 */
+	function getUser() { return $this->get('user');	}
+	
+	/**
+	 * Sets the album guest user
+	 *
+	 * @param string $user
+	 */
+	function setUser($user) { $this->set('user', $user);	}
 
 	/**
 	 * Returns the album password
@@ -162,7 +176,7 @@ class Album extends PersistentObject {
 		if (empty($pwd)) {
 			$this->set('password', "");
 		} else {
-			$this->set('password', md5($pwd));
+			$this->set('password', md5($this->get('user').$pwd));
 		}
 	}
 

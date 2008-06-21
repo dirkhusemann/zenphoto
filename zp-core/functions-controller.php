@@ -224,17 +224,21 @@ function zp_handle_password() {
 	if (in_context(ZP_SEARCH)) {  // search page
 		$authType = 'zp_search_auth';
 		$check_auth = getOption('search_password');
+		$check_user = getOption('search_user');
 		if (empty($check_auth)) {
 			$authType = 'zp_gallery_auth';
 			$check_auth = getOption('gallery_password');
+			$check_user = getOption('gallery_user');
 		}
 	} else if (in_context(ZP_ALBUM)) { // album page
 		$authType = "zp_album_auth_" . cookiecode($_zp_current_album->name);
 		$check_auth = $_zp_current_album->getPassword();
+		$check_user = $_zp_current_album->getUser();
 		if (empty($check_auth)) {
 			$parent = $_zp_current_album->getParent();
 			while (!is_null($parent)) {
 				$check_auth = $parent->getPassword();
+				$check_user = $parent->getUser();
 				$authType = "zp_album_auth_" . cookiecode($parent->name);
 				if (!empty($check_auth)) { break; }
 				$parent = $parent->getParent();
@@ -243,11 +247,13 @@ function zp_handle_password() {
 				// revert all tlhe way to the gallery
 				$authType = 'zp_gallery_auth';
 				$check_auth = getOption('gallery_password');
+				$checK_user = getOption('gallery_user');
 			}
 		}
 	} else {  // index page
 		$authType = 'zp_gallery_auth';
 		$check_auth = getOption('gallery_password');
+		$check_user = getOption('gallery_user');
 	}
 	if (empty($check_auth)) { //no password on record
 		return;
@@ -264,12 +270,11 @@ function zp_handle_password() {
 	if (isset($_POST['password']) && isset($_POST['pass'])) {
 		$post_user = $_POST['user'];
 		$post_pass = $_POST['pass'];
+		$auth = md5($post_user . $post_pass);
 		if ($_zp_loggedin = checkLogon($post_user, $post_pass)) {	// allow Admin user login
-			$auth = md5($post_user . $post_pass);
 			zp_setcookie("zenphoto_auth", $auth, time()+5184000, $cookiepath);
 		} else {
-			$auth = md5($post_pass);
-			if ($auth == $check_auth) {
+			if (($auth == $check_auth) && $post_user == $check_user) {
 				// Correct auth info. Set the cookie.
 				zp_setcookie($authType, $auth, time()+5184000, $cookiepath);
 			} else {

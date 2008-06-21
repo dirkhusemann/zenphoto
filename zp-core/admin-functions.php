@@ -597,6 +597,8 @@ function printAlbumEditForm($index, $album) {
 	echo '</tr>';
 	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Album Description:")." </td> <td><textarea name=\"".$prefix."albumdesc\" cols=\"60\" rows=\"6\" style=\"width: 360px\">" .
 	$album->getDesc() . "</textarea></td></tr>";
+	echo "\n<tr><td align=\"right\" value=\"top\">".gettext("Album guest user:").'</td>';
+	echo "\n<td><input type='text' size='40' name='".$prefix."albumuser' value='".$album->getUser()."' /></td></tr>";
 	echo "\n<tr>";
 	echo "\n<td align=\"right\">".gettext("Album password:")." <br/>repeat: </td>";
 	echo "\n<td>";
@@ -1078,9 +1080,15 @@ function processAlbumEdit($index, $album) {
 		$id = $album->getAlbumID();
 		query("UPDATE " . prefix('albums') . " SET `hitcounter`= 0 WHERE `id` = $id");
 	}
-
+	$olduser = $album->getUser();
+	$album->setUser($newuser = $_POST[$prefix.'albumuser']);
+	$pwd = trim($_POST[$prefix.'albumpass']);
+	if (($olduser != $newuser)) {
+		if (empty($pwd)) {
+			$_POST[$prefix.'albumpass'] = 'xxx'; // invalidate password, user changed without password beign set
+		}
+	}
 	if ($_POST[$prefix.'albumpass'] == $_POST[$prefix.'albumpass_2']) {
-		$pwd = trim($_POST[$prefix.'albumpass']);
 		if (empty($pwd)) {
 			if (empty($_POST[$prefix.'albumpass'])) {
 				$album->setPassword(NULL);  // clear the gallery password
