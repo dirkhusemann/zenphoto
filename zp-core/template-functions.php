@@ -776,7 +776,7 @@ function getAlbumDesc() {
  * @param bool $editable
  */
 function printAlbumDesc($editable=false) {
-	$desc = htmlspecialchars(getAlbumDesc());
+	$desc = getAlbumDesc();
 	$desc = str_replace("\r\n", "\n", $desc);
 	$desc = str_replace("\n", '<br />', $desc);
 	if ($editable && zp_loggedin()) {
@@ -803,7 +803,7 @@ function getAlbumCustomData() {
  *
  */
 function printAlbumCustomData() {
-	$data = htmlspecialchars(getAlbumCustomData());
+	$data = getAlbumCustomData();
 	$data = str_replace("\r\n", "\n", $data);
 	$data = str_replace("\n", '<br />', $data);
 	echo $data;
@@ -1436,7 +1436,7 @@ function getImageDesc() {
  * @param bool $editable set true to allow editing by the admin
  */
 function printImageDesc($editable=false) {
-	$desc = htmlspecialchars(getImageDesc());
+	$desc = getImageDesc();
 	$desc = str_replace("\r\n", "\n", $desc);
 	$desc = str_replace("\n", "<br/>", $desc);
 	if ($editable && zp_loggedin()) {
@@ -1476,7 +1476,7 @@ function getImageCustomData() {
  * @return string
  */
 function printImageCustomData() {
-	$data = htmlspecialchars(getImageCustomData());
+	$data = getImageCustomData();
 	$data = str_replace("\r\n", "\n", $data);
 	$data = str_replace("\n", "<br/>", $data);
 	echo $data;
@@ -3138,7 +3138,6 @@ function printSearchForm($prevtext=NULL, $id="search", $buttonSource="") {
 	if (getOption('mod_rewrite')) { $searchurl = '/page/search/'; } else { $searchurl = "/index.php?p=search"; }
 	echo "\n<form method=\"post\" action=\"".WEBPATH.$searchurl."\" id=\"search_form\">";
 	echo "\n$prevtext<input type=\"text\" name=\"words\" value=".$searchwords." id=\"search_input\" size=\"10\" />";
-
 	echo "\n<input type=\"$type\" value=\"".gettext("Search")."\" class=\"pushbutton\" id=\"search_submit\" $buttonSource />";
 
 	if ($multiple) { //then there is some choice possible
