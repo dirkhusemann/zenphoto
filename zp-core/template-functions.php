@@ -3436,7 +3436,7 @@ function printPasswordForm($hint) {
 	if ($_zp_password_form_printed) { return; }
 	$_zp_password_form_printed = true;
 	if ($_zp_login_error) {
-		echo "<div class=\"errorbox\" id=\"message\"><h2>".gettext("There was an error logging in.")."</h2><br/>".gettext("Check your password and try again.")."</div>";
+		echo "<div class=\"errorbox\" id=\"message\"><h2>".gettext("There was an error logging in.")."</h2><br/>".gettext("Check your user and password and try again.")."</div>";
 	}
 	$action = "#";
 	if (in_context(ZP_SEARCH)) {
