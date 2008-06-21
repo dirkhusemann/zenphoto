@@ -8,7 +8,7 @@
 
 $plugin_description = gettext("Enable <strong>flowplayer</strong> to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time. <br> Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.1.2';
+$plugin_version = '1.0.1.3';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---flowplayer.php.html";
 $option_interface = new flowplayer();
 $_zp_flash_player = $option_interface; // claim to be the flash player.
@@ -42,7 +42,7 @@ class flowplayer {
 	 * @param string $moviepath the direct path of a movie (within the slideshow), if empty (within albums) the zenphoto function getUnprotectedImageURL() is used
 	 * @param string $imagetitle the title of the movie [not used by flowplayer]
 	 * 	 */
-	function playerConfig($moviepath='', $imagetitle,$count) {
+	function playerConfig($moviepath='', $imagetitle,$count='') {
 		if(empty($moviepath)) {
 			$moviepath = getUnprotectedImageURL();
 			$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
