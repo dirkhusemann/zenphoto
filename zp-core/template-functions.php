@@ -2938,7 +2938,7 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
 		$icon = '';
 	}
 	if (!is_null($class)) {
-		$class = 'class="' . $class . '";';
+		$class = 'class="' . $class . '"';
 	}
 	switch($option) {
 		case "Gallery":
