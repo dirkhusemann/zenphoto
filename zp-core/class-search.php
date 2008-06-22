@@ -148,7 +148,7 @@ class SearchEngine
 					break;
 				case ',':
 					if (!empty($target)) {
-						$r = strtolower(trim($target));
+						$r = trim($target);
 						if (!empty($r)) {
 							$result[] = $r;
 							$target = '';
@@ -166,7 +166,7 @@ class SearchEngine
 				case '(':
 				case ')':
 					if (!empty($target)) {
-						$r = strtolower(trim($target));
+						$r = trim($target);
 						if (!empty($r)) {
 							$result[] = $r;
 							$target = '';
@@ -182,7 +182,7 @@ class SearchEngine
 					break;
 			}
 		} while ($i++ < strlen($searchstring));
-		if (!empty($target)) { $result[] = strtolower(trim($target)); }
+		if (!empty($target)) { $result[] = trim($target); }
 		return $result;
 	}
 

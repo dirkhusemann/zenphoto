@@ -93,7 +93,7 @@ if (count($_POST) > 0) {
 		$kill = array();
 		foreach ($_POST as $key => $value) {
 			$key = postIndexDecode($key);
-			$kill[] = $key;
+			$kill[] = utf8::strtolower($key);
 		}
 		if (useTagTable()) {
 			$sql = "SELECT `id` FROM ".prefix('tags')." WHERE ";
@@ -127,9 +127,9 @@ if (count($_POST) > 0) {
 			$albumlist = query_full_array($sql);
 
 			foreach ($imagelist as $row) {
-				$tags = explode(",", strtolower($row['tags']));
+				$tags = explode(",", $row['tags']);
 				foreach ($tags as $key=>$tag) {
-					$tags[$key] = trim($tag);
+					$tags[$key] = utf8::strtolower(trim($tag));
 				}
 				$tags = array_diff($tags, $kill);
 				$row['tags'] = implode(",", $tags);
@@ -138,9 +138,9 @@ if (count($_POST) > 0) {
 			}
 
 			foreach ($albumlist as $row) {
-				$tags = explode(",", strtolower($row['tags']));
+				$tags = explode(",", $row['tags']);
 				foreach ($tags as $key=>$tag) {
-					$tags[$key] = trim($tag);
+					$tags[$key] = utf8::strtolower(trim($tag));
 				}
 				$tags = array_diff($tags, $kill);
 				$row['tags'] = implode(",", $tags);
@@ -174,9 +174,9 @@ if (count($_POST) > 0) {
 			$kill = array();
 			foreach($_POST as $key => $value) {
 				if (!empty($value)) {
-					$list[$key] = $value;
-					$key = postIndexDecode($key);
+					$key = utf8::strtolower(postIndexDecode($key));
 					$kill[] = $key;
+					$list[postIndexEncode($key)] = $value;
 				}
 			}
 			$first = array_shift($kill);
@@ -193,7 +193,7 @@ if (count($_POST) > 0) {
 				$tags = explode(",", $row['tags']);
 				foreach ($tags as $key=>$tag) {
 					$tag = trim($tag);
-					$listkey = PostIndexEncode($tag);
+					$listkey = postIndexEncode(utf8::strtolower($tag));
 					if (array_key_exists($listkey, $list)) {
 						$tags[$key] = $list[$listkey];
 					}
@@ -207,7 +207,7 @@ if (count($_POST) > 0) {
 				$tags = explode(",", $row['tags']);
 				foreach ($tags as $key=>$tag) {
 					$tag = trim($tag);
-					$listkey = PostIndexEncode($tag);
+					$listkey = postIndexEncode(utf8::strtolower($tag));
 					if (array_key_exists($listkey, $list)) {
 						$tags[$key] = $list[$listkey];
 					}

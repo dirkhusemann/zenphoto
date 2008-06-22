@@ -333,7 +333,7 @@ class Gallery {
 		}
 		if (count($deadalbumthemes) > 0) { // delete the album theme options tables for dead albums
 			foreach ($deadalbumthemes as $deadtable) {
-				$tbl_options = getOptionTableName($deadtable);
+				$tbl_options = prefix(getOptionTableName($deadtable));
 				$sql = "DROP TABLE $tbl_options";
 				query($sql, true);
 			}

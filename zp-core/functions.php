@@ -205,9 +205,9 @@ function getOptionList() {
 function getOptionTableName($albumname) {
 	$pfxlen = strlen(prefix(''));
 	if (strlen($albumname) > 54-$pfxlen) { // table names are limited to 62 characters
-		return prefix(substr(substr($albumname, 0, max(0,min(24-$pfxlen, 20))).'_'.md5($albumname),0,54-$pfxlen).'_options');  
+		return substr(substr($albumname, 0, max(0,min(24-$pfxlen, 20))).'_'.md5($albumname),0,54-$pfxlen).'_options';  
 	}
-	return prefix($albumname.'_options');
+	return 'options';
 }
 
 /**
@@ -1959,7 +1959,7 @@ function setupTheme() {
 	if (!empty($albumtheme)) {
 		$theme = $albumtheme;
 		//load the album theme options
-		$sql = "SELECT `name`, `value` FROM ".getOptionTableName($parent->name);
+		$sql = "SELECT `name`, `value` FROM ".prefix(getOptionTableName($parent->name));
 		$optionlist = query_full_array($sql, true);
 		if ($optionlist !== false) {
 			foreach($optionlist as $option) {
@@ -2127,11 +2127,11 @@ $_zp_all_tags = null;
 function getAllTagsStrings() {
 	global $_zp_all_tags;
 	if (!is_null($_zp_all_tags)) { return $_zp_all_tags; }
-	$result = query_full_array("SELECT `tags` FROM ". prefix('images') ." WHERE `show` = 1");
+	$result = query_full_array("SELECT `tags` FROM ". prefix('images'));
 	foreach($result as $row){
 		$alltags = $alltags.$row['tags'].",";  // add comma after the last entry so that we can explode to array later
 	}
-	$result = query_full_array("SELECT `tags` FROM ". prefix('albums') ." WHERE `show` = 1");
+	$result = query_full_array("SELECT `tags` FROM ". prefix('albums'));
 	foreach($result as $row){
 		$alltags = $alltags.$row['tags'].",";  // add comma after the last entry so that we can explode to array later
 	}
@@ -2168,7 +2168,17 @@ function getAllTagsUnique() {
 			return array();
 		}
 	} else {
-		$_zp_unique_tags = array_unique(getAllTagsStrings());
+		$taglist = getAllTagsStrings();
+		$seen = array();
+		foreach ($taglist as $key=>$tag) {
+			$tagLC = utf8::strtolower($tag);
+			if (in_array($tagLC, $seen)) {
+				unset($taglist[$key]);
+			} else {
+				$seen[] = $tagLC;
+			}
+		}
+		$_zp_unique_tags = array_merge($taglist);
 		return $_zp_unique_tags;
 	}
 }
@@ -2195,7 +2205,19 @@ function getAllTagsCount() {
 		}
 		return $_zp_count_tags;
 	} else {
-		$_zp_count_tags = array_count_values(getAllTagsStrings());
+		$alltags = getAllTagsStrings();
+		$list = array();
+		$tagsLC = array();
+		foreach ($alltags as $tag) {
+			$tagLC = utf8::strtolower($tag);
+			$list[$tagLC] = $tag;
+			$tagsLC[] = $tagLC;
+		}
+		$tagcounts = array_count_values($tagsLC);
+		$_zp_count_tags = array();
+		foreach ($tagcounts as $key=>$count) {
+			$_zp_count_tags[$list[$key]] = $count;
+		}
 		return $_zp_count_tags;
 	}
 }
@@ -2209,20 +2231,25 @@ function getAllTagsCount() {
  */
 function storeTags($tags, $id, $tbl) {
 	$tags = filterTags($tags);
+	$tagsLC = array();
+	foreach ($tags as $tag) {
+		$tagsLC[$tag] = utf8::strtolower($tag);
+	}
 	$sql = "SELECT `id`, `tagid` from ".prefix('obj_to_tag')." WHERE `objectid`='".$id."' AND `type`='".$tbl."'";
 	$result = query_full_array($sql);
 	$existing = array();
 	if (is_array($result)) {
 		foreach ($result as $row) {
 			$dbtag = query_single_row("SELECT `name` FROM ".prefix('tags')." WHERE `id`='".$row['tagid']."'");
-			if (in_array($dbtag['name'], $tags)) { // tag already set no action needed
-				$existing[] = $dbtag['name'];
+			$existingLC = utf8::strtolower($dbtag['name']);
+			if (in_array($existingLC, $tagsLC)) { // tag already set no action needed
+				$existing[] = $existingLC;
 			} else { // tag no longer set, remove it
 				query("DELETE FROM ".prefix('obj_to_tag')." WHERE `id`='".$row['id']."'");
 			}
 		}
 	}
-	$tags = array_diff($tags, $existing); // new tags for the object
+	$tags = array_flip(array_diff($tagsLC, $existing)); // new tags for the object
 	foreach ($tags as $tag) {
 		$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".escape($tag)."'");
 		if (!is_array($dbtag)) { // tag does not exist
