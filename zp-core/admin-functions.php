@@ -900,7 +900,7 @@ function printAlbumEditForm($index, $album) {
 	echo "\n</tr>";
 	echo "\n</table>";
 	
-	echo "\n<input type=\"submit\" value=\"".gettext("save")."\" />";
+	echo "\n<input type=\"submit\" value=\"".gettext("save album")."\" />";
 
 	echo "\n</div>";
 

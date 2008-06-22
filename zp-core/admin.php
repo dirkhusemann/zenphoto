@@ -866,6 +866,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
    echo ' | '; }?>
 <?php printViewLink($album, gettext("View Album"), gettext("View Album")); ?>
 </p>
+<p><?php echo gettext("<strong>Important:</strong> If you save an album all newly entered image data is lost. The same goes for all newly entered album data if image data is saved or an image is deleted."); ?></p>
 
 	<?php displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */ ?>
 	<?php
@@ -964,7 +965,7 @@ if (count($album->getImages())) {
 		</th>
 	</tr>
 	<tr>
-		<td><input type="submit" value="save" /></td>
+		<td><input type="submit" value="<?php echo gettext('save images'); ?>" /></td>
 		<td colspan="2"><?php echo gettext("Click the images for a larger version"); ?></td>
 	</tr>
 
@@ -1100,7 +1101,7 @@ if (count($album->getImages())) {
 }
 ?>
 	<tr>
-		<td colspan="3"><input type="submit" value="<?php echo gettext('save'); ?>" /></td>
+		<td colspan="3"><input type="submit" value="<?php echo gettext('save images'); ?>" /></td>
 	</tr>
 
 </table>
