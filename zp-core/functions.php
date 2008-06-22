@@ -577,8 +577,8 @@ function getImageParameters($args) {
 	if ($size == 'thumb') {
 		$thumb = true;
 		if ($thumb_crop) {
-			$cw = min($thumb_crop_width, $thumb_size);
-			$ch = min($thumb_crop_height, $thumb_size);
+			$cw = $thumb_crop_width;
+			$ch = $thumb_crop_height;
 		}
 		$size = round($thumb_size);
 		$quality = round($thumb_quality);

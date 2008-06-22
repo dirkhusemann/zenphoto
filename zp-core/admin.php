@@ -2374,13 +2374,13 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 		<td><?php echo gettext("Crop thumbnail width:"); ?></td>
 		<td><input type="text" size="40" name="thumb_crop_width"
 			value="<?php echo getThemeOption($alb, 'thumb_crop_width');?>" /></td>
-		<td><?php echo gettext("The <em>thumb crop width</em> should always be less than or equal	to <em>thumb size</em>"); ?></td>
+		<td><?php echo gettext("The <em>thumb crop width</em> is the maximum width when height is the shortest side"); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Crop thumbnail height:"); ?></td>
 		<td><input type="text" size="40" name="thumb_crop_height"
 			value="<?php echo getThemeOption($alb, 'thumb_crop_height');?>" /></td>
-		<td><?php echo gettext("The <em>thumb crop height</em> should always be less than or equal to <em>thumb size</em>"); ?></td>
+		<td><?php echo gettext("The <em>thumb crop height</em> is the maximum height when width is the shortest side"); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Image size:"); ?></td>
