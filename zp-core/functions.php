@@ -207,7 +207,7 @@ function getOptionTableName($albumname) {
 	if (strlen($albumname) > 54-$pfxlen) { // table names are limited to 62 characters
 		return substr(substr($albumname, 0, max(0,min(24-$pfxlen, 20))).'_'.md5($albumname),0,54-$pfxlen).'_options';  
 	}
-	return 'options';
+	return $albumname.'_options';
 }
 
 /**
