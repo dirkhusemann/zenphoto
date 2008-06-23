@@ -551,6 +551,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				setOption('mod_rewrite_image_suffix', $_POST['mod_rewrite_image_suffix']);
 				setOption('server_protocol', $_POST['server_protocol']);
 				setOption('charset', $_POST['charset']);
+				setBoolOption('album_use_new_image_date', $_POST['album_use_new_image_date']);
 				setOption('gallery_sorttype', $_POST['gallery_sorttype']);
 				if ($_POST['gallery_sorttype'] == 'Manual') {
 					setBoolOption('gallery_sortdirection', 0);
@@ -2010,6 +2011,15 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 		<td><?php echo gettext("The size you want your images to have in your site's RSS feed."); ?></td>
 	</tr>
 	<tr>
+		<td><?php echo gettext("Album date:"); ?></td>
+		<td>
+		<input type="checkbox" name="album_use_new_image_date" value="1"
+			<?php echo checked('1', getOption('album_use_new_image_date')); ?> />
+			<?php echo gettext("Use latest image date"); ?>
+		</td>
+		<td><?php echo gettext("Set this option if you wish your album date to reflect the date of the latest image uploaded. Otherwise it will initially be set to the date the album was created.") ?></td>
+	</tr>
+	<tr>
 		<td><?php echo gettext("Sort gallery by:"); ?></td>
 		<td><select id="sortselect" name="gallery_sorttype">
 			<?php
@@ -2017,7 +2027,8 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 		$sort[gettext('Manual')] = 'Manual'; // allow manual sorttype
 		generateListFromArray(array(getOption('gallery_sorttype')), $sort);
 		?>
-		</select> <input type="checkbox" name="gallery_sortdirection"
+		</select> 
+		<input type="checkbox" name="gallery_sortdirection"
 			value="1"
 			<?php echo checked('1', getOption('gallery_sortdirection')); ?> />
 		<?php echo gettext("Descending"); ?></td>

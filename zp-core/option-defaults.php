@@ -146,4 +146,5 @@ function setDefault($option, $default) {
 	setDefault('use_lock_image', 1);
 	setDefault('gallery_user', '');
 	setDefault('search_user', '');
+	setDefault('album_use_new_image_date', 0);
 ?>

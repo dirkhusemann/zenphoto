@@ -70,7 +70,7 @@ class Image extends PersistentObject {
 			$this->set('date', $newDate);
 			$alb = $this->album;
 			if (!is_null($alb)) {
-				if (is_null($alb->getDateTime())) {
+				if (is_null($alb->getDateTime()) || getOption('album_use_new_image_date')) {
 					$this->album->setDateTime($newDate);   //  not necessarily the right one, but will do. Can be changed in Admin
 					$this->album->save();
 				}
