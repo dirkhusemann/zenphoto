@@ -833,6 +833,18 @@ function getAlbumData($field) {
 }
 
 /**
+ * Prints arbitrary data from the album object
+ *
+ * @param string $field the field name of the data desired
+ * @param string $label the html label for the paragraph
+ */
+function printAlbumData($field, $label) {
+	if($data = getAlbumData($field)) { // only print it if there's something there
+		echo "<p class=\"metadata\"><strong>" . $label . "</strong> " . htmlspecialchars(getAlbumData($field)) . "</p>\n";
+	}
+}
+
+/**
  * Returns the album link url of the current album.
  *
  * @return string
@@ -1496,11 +1508,10 @@ function setImageCustomData($val) {
 /**
  * A composit for printing image data
  *
- * @param string $field which data you want
+ * @param string $field field name of the data desired
  * @param string $label the html label for the paragraph
  */
 function printImageData($field, $label) {
-	global $_zp_current_image;
 	if($data = getImageData($field)) { // only print it if there's something there
 		echo "<p class=\"metadata\"><strong>" . $label . "</strong> " . htmlspecialchars(getImageData($field)) . "</p>\n";
 	}
