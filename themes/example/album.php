@@ -49,15 +49,29 @@ $firstPageImages = normalizeColumns(1, 7);
 		<br />
 	
 		<div id="images">
-		<?php while (next_image(false, $firstPageImages)): ?>
-			<div class="image">
+		<?php 
+		if (function_exists('flvPlaylist') && getOption('Use_flv_playlist')) {
+			if (getOption('flv_playlist_option') == 'playlist') {
+				flvPlaylist('playlist');
+			} else {
+				while (next_image(false,$firstPageImages)) {
+					printImageTitle();
+					flvPlaylist("players");
+				}
+
+			}
+		} else {
+			while (next_image(false, $firstPageImages)) { ?>
+				<div class="image">
 					<div class="imagethumb">
 							<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo getImageTitle();?>">
-						<?php printImageThumb(getImageTitle()); ?></a>
+							<?php printImageThumb(getImageTitle()); ?></a>
 						</div>
-			</div>
-
-		<?php endwhile; ?>
+				</div>
+		<?php 
+			}
+		}
+		?>
 		
 	 
 		
