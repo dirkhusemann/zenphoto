@@ -10,7 +10,8 @@
 <body>
 <div id="main">
 		<div id="gallerytitle">
-			<h2><?php printHomeLink('', ' | '); echo getGalleryTitle(); ?><?php if (getOption('Allow_search')) {  printSearchForm(); } ?></h2>
+			<h2><?php printHomeLink('', ' | '); echo getGalleryTitle();?></h2> 
+			<?php	if (getOption('Allow_search')) {  printSearchForm(); } ?>
 		</div>
 	
 		<hr />
@@ -38,8 +39,13 @@
 	
 		<?php printPageNav("&laquo; ".gettext("prev"), "|", gettext("next")." &raquo;"); ?>
 	
-		<div id="credit"><?php printRSSLink('Gallery','','RSS', ''); ?> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a> | <a href="?p=archive"><?php echo gettext("Archive View"); ?></a></div>
-
+		<div id="credit"><?php printRSSLink('Gallery','','RSS', ''); ?> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a> | <a href="?p=archive"><?php echo gettext("Archive View"); ?></a>
+		<?php
+		if (function_exists('printUserLogout')) {
+			printUserLogout(" | ");
+		}
+		?>
+		</div>
 </div>
 
 <?php printAdminToolbox(); ?>
