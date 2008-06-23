@@ -52,7 +52,7 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 <generator>ZenPhoto Comment RSS Generator</generator>
 <?php
 	$admin = array_shift(getAdministrators());
-	$adminname = $admin['name'];
+	$adminname = $admin['user'];
 	$adminemail = $admin['email'];
 ?>
 <managingEditor><?php echo "$adminemail ($adminname)"; ?></managingEditor>

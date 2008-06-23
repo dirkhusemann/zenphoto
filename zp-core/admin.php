@@ -1665,7 +1665,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 <table class="bordered">
 	<tr>
 		<th colspan="3">
-		<h2><?php echo gettext("Admin login information"); ?></h2>
+		<h2><?php echo gettext("Admin login information (User name and e-mail adress of the master admin are used as contact data in the RSS feeds)"); ?></h2> 
 		</th>
 	</tr>
 	<?php
