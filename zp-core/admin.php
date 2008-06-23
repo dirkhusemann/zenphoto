@@ -1666,7 +1666,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 <table class="bordered">
 	<tr>
 		<th colspan="3">
-		<h2><?php echo gettext("Admin login information (User name and e-mail adress of the master admin are used as contact data in the RSS feeds)"); ?></h2> 
+		<h2><?php echo gettext("Admin login information"); ?></h2> 
 		</th>
 	</tr>
 	<?php
@@ -1692,9 +1692,9 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 			value="" /> <?php  } else { echo $userid.$master; ?> 
 			<input type="hidden" name="<?php echo $id ?>-adminuser"
 			value="<?php echo $userid ?>" /> <?php } ?></td>
-		<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>"><?php if(!empty($userid) && count($admins) > 1) { ?>
-		<a
-			href="javascript: if(confirm('Are you sure you want to delete this user?')) { window.location='?page=options&action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }"
+		<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
+		<?php if(!empty($userid) && count($admins) > 1) { ?>
+		<a href="javascript: if(confirm('Are you sure you want to delete this user?')) { window.location='?page=options&action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }"
 			title="Delete this user." style="color: #c33;"> <img
 			src="images/fail.png" style="border: 0px;" alt="Delete" /></a> <?php } ?>&nbsp;
 		</td>
@@ -1751,7 +1751,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		<tr>
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 		<?php
-		if (empty($background)) {
+		if (empty($master)) {
 			$cv = array();
 			$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
 			prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
@@ -1769,12 +1769,14 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 				generateUnorderedListFromArray(array(), $rest, $prefix);
 			}
 			echo '</ul>';
+		} else {
+			echo '<br />'.gettext("This account's username and email are used as contact data in the RSS feeds.");	
 		}
 		?>
 		</td>
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 		<?php
-		if (empty($background)) {
+		if (empty($master)) {
 			if (!empty($alterrights)) {
 				echo gettext("You have rights to manage these albums.");
 			} else {
