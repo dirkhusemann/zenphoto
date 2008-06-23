@@ -684,7 +684,10 @@ class Album extends PersistentObject {
 			$dp = opendir($albumdir);
 			while ($thumb = readdir($dp)) {
 				if (is_file($albumdir.$thumb) && is_valid_video($thumb)) {
-					return new Image($this, $thumb);
+					$videoThumb = checkVideoThumb($albumdir, $thumb);
+					if (!empty($videoThumb)) {
+						return new Image($this, $videoThumb);
+					}										
 				}
 			}
 		}
