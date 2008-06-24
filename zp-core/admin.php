@@ -18,7 +18,7 @@ $standardOptions = array(	'gallery_title','website_title','website_url','time_of
  													'protect_full_image', 'album_session', 'watermark_h_offset', 'watermark_w_offset',
  													'Use_Captcha', 'locale', 'date_format', 'hotlink_protection', 'image_sortdirection',
 													'admin_reset_date', 'comment_name_required', 'comment_email_required',
-													'comment_web_required', 'full_image_download', 'zenphoto_release'
+													'comment_web_required', 'full_image_download', 'zenphoto_release','gallery_user', 'search_user'
 												 );
 $charsets = array("ASMO-708" => "Arabic",
 									"BIG5" => "Chinese Traditional",
