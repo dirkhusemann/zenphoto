@@ -52,8 +52,8 @@ if (isset($_GET['convert'])) {
 		$_zp_use_tag_table = 1;  // we have converted
 	} else {
 		// convert tagtable to strings
-		query('ALTER TABLE '.prefix('albums').' ADD COLUMN `tags` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci;', true);
-		query('ALTER TABLE '.prefix('images').' ADD COLUMN `tags` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci;', true);
+		query('ALTER TABLE '.prefix('albums').' ADD COLUMN `tags` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci;', true);
+		query('ALTER TABLE '.prefix('images').' ADD COLUMN `tags` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci;', true);
 		$taglist = array();
 		$object = NULL;
 		$tbl = NULL;
