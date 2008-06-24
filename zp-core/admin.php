@@ -475,7 +475,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=options&deleted");
 			exit();
 		} else if ($action == 'saveoptions') {
-			$table = 'options';
+			$table = NULL;
 			$wm = getOption('watermark_image');
 			$vwm = getOption('video_watermark_image');
 			$wmo = getOption('perform_watermark');
@@ -639,6 +639,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				$returntab = "#tab_image";
 			}
 			/*** Comment options ***/
+			
 			if (isset($_POST['savecommentoptions'])) {
 				setOption('spam_filter', $_POST['spam_filter']);
 				setBoolOption('email_new_comments', $_POST['email_new_comments']);
@@ -1829,12 +1830,12 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 	<tr>
 		<td width="175"><?php echo gettext("Gallery title:"); ?></td>
 		<td width="200"><input type="text" size="40" name="gallery_title"
-			value="<?php echo getOption('gallery_title');?>" /></td>
+			value="<?php echo htmlspecialchars(getOption('gallery_title'));?>" /></td>
 		<td><?php echo gettext("What you want to call your photo gallery."); ?></td>
 	</tr>
 	<tr>
     <td><?php echo gettext("Gallery guest user:"); ?>    </td>
-    <td><input type="text" size="40" name="gallery_user" value="<?php echo getOption('gallery_user'); ?>" />		</td>
+    <td><input type="text" size="40" name="gallery_user" value="<?php echo htmlspecialchars(getOption('gallery_user')); ?>" />		</td>
 		<td><?php echo gettext("User ID for the gallery guest user") ?></td>
 	</tr>
 	<tr>
@@ -1852,12 +1853,12 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 	<tr>
 		<td><?php echo gettext("Gallery password hint:"); ?></td>
 		<td><input type="text" size="40" name="gallery_hint"
-			value="<?php echo getOption('gallery_hint');?>" /></td>
+			value="<?php echo htmlspecialchars(getOption('gallery_hint'));?>" /></td>
 		<td><?php echo gettext("A reminder hint for the password."); ?></td>
 	</tr>
 	<tr>
     <td><?php echo gettext("Search guest user:"); ?>    </td>
-    <td><input type="text" size="40" name="search_user" value="<?php echo getOption('search_user'); ?>" />		</td>
+    <td><input type="text" size="40" name="search_user" value="<?php echo htmlspecialchars(getOption('search_user')); ?>" />		</td>
 		<td><?php echo gettext("User ID for the search guest user") ?></td>
 	</tr>
 	<tr>
@@ -1874,32 +1875,32 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 	<tr>
 		<td><?php echo gettext("Search password hint:"); ?></td>
 		<td><input type="text" size="40" name="search_hint"
-			value="<?php echo getOption('search_hint');?>" /></td>
+			value="<?php echo htmlspecialchars(getOption('search_hint'));?>" /></td>
 		<td><?php echo gettext("A reminder hint for the password."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Website title:"); ?></td>
 		<td><input type="text" size="40" name="website_title"
-			value="<?php echo getOption('website_title');?>" /></td>
+			value="<?php echo htmlspecialchars(getOption('website_title'));?>" /></td>
 		<td><?php echo gettext("Your web site title."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Website url:"); ?></td>
 		<td><input type="text" size="40" name="website_url"
-			value="<?php echo getOption('website_url');?>" /></td>
+			value="<?php echo htmlspecialchars(getOption('website_url'));?>" /></td>
 		<td><?php echo gettext("This is used to link back to your main site, but your theme must	support it."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Server protocol:"); ?></td>
 		<td><input type="text" size="40" name="server_protocol"
-			value="<?php echo getOption('server_protocol');?>" /></td>
+			value="<?php echo htmlspecialchars(getOption('server_protocol'));?>" /></td>
 		<td><?php echo gettext("If you're running a secure server, change this to"); ?> <em>https</em>
 		<?php echo gettext("(Most people will leave this alone.)"); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Time offset (hours):"); ?></td>
 		<td><input type="text" size="40" name="time_offset"
-			value="<?php echo getOption('time_offset');?>" /></td>
+			value="<?php echo htmlspecialchars(getOption('time_offset'));?>" /></td>
 		<td><?php echo gettext("If you're in a different time zone from your server, set the	offset in hours."); ?></td>
 	</tr>
 	<tr>
@@ -1911,7 +1912,7 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 	<tr>
 		<td><?php echo gettext("Mod_rewrite Image suffix:"); ?></td>
 		<td><input type="text" size="40" name="mod_rewrite_image_suffix"
-			value="<?php echo getOption('mod_rewrite_image_suffix');?>" /></td>
+			value="<?php echo htmlspecialchars(getOption('mod_rewrite_image_suffix'));?>" /></td>
 		<td><?php echo gettext("If <em>mod_rewrite</em> is checked above, zenphoto will appended	this to the end (helps search engines). Examples: <em>.html, .php,	/view</em>, etc."); ?></td>
 	</tr>
 	<tr>
@@ -1988,7 +1989,7 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 			</select><br />
 			<div id="customTextBox" name="customText" style="display:<?php echo $dsp; ?>">
 			<input type="text" size="40" name="date_format"
-			value="<?php echo getOption('date_format');?>" />
+			value="<?php echo htmlspecialchars(getOption('date_format'));?>" />
 			</div>
 			</td>
 		<td><?php echo gettext('Format for dates. Select from the list or set to <code>custom</code> and provide a <a href="http://us2.php.net/manual/en/function.strftime.php"><code>strftime()</code></a> format string in the text box.'); ?></td>
@@ -2003,13 +2004,13 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 	<tr>
 		<td><?php echo gettext("Number of RSS feed items:"); ?></td>
 		<td><input type="text" size="40" name="feed_items"
-			value="<?php echo getOption('feed_items');?>" /></td>
+			value="<?php echo htmlspecialchars(getOption('feed_items'));?>" /></td>
 		<td><?php echo gettext("The number of new images/albums/comments you want to appear in your site's RSS feed."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Size of RSS feed images:"); ?></td>
 		<td><input type="text" size="40" name="feed_imagesize"
-			value="<?php echo getOption('feed_imagesize');?>" /></td>
+			value="<?php echo htmlspecialchars(getOption('feed_imagesize'));?>" /></td>
 		<td><?php echo gettext("The size you want your images to have in your site's RSS feed."); ?></td>
 	</tr>
 	<tr>
@@ -2116,13 +2117,13 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 	<tr>
 		<td width="175"><?php echo gettext("Image quality:"); ?></td>
 		<td width="200"><input type="text" size="40" name="image_quality"
-			value="<?php echo getOption('image_quality');?>" /></td>
+			value="<?php echo htmlspecialchars(getOption('image_quality'));?>" /></td>
 		<td><?php echo gettext("JPEG Compression quality for all images."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Thumb quality:"); ?></td>
 		<td><input type="text" size="40" name="thumb_quality"
-			value="<?php echo getOption('thumb_quality');?>" /></td>
+			value="<?php echo htmlspecialchars(getOption('thumb_quality'));?>" /></td>
 		<td><?php echo gettext("JPEG Compression quality for all thumbnails."); ?></td>
 	</tr>
 	<tr>
@@ -2154,15 +2155,15 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 		<br />
 		<?php echo gettext('cover').' '; ?>
 		<input type="text" size="2" name="watermark_scale"
-				value="<?php echo getOption('watermark_scale');?>" /><?php echo gettext('% of image') ?>
+				value="<?php echo htmlspecialchars(getOption('watermark_scale'));?>" /><?php echo gettext('% of image') ?>
 		<input type="checkbox" name="watermark_allow_upscale" value="1"
 		<?php echo checked('1', getOption('watermark_allow_upscale')); ?> />&nbsp;<?php echo gettext("allow upscale"); ?>
 		<br />
 		<?php echo gettext("offset h"); ?> 
 		<input type="text" size="2" name="watermark_h_offset"
-				value="<?php echo getOption('watermark_h_offset');?>" /><?php echo gettext("% w, "); ?> 
+				value="<?php echo htmlspecialchars(getOption('watermark_h_offset'));?>" /><?php echo gettext("% w, "); ?> 
 		<input type="text" size="2" name="watermark_w_offset"
-			value="<?php echo getOption('watermark_w_offset');?>" /><?php echo gettext("%"); ?>
+			value="<?php echo htmlspecialchars(getOption('watermark_w_offset'));?>" /><?php echo gettext("%"); ?>
 		</td>
 		<td><?php echo gettext("The watermark image (png-24). (Place the image in the"); ?> "<?php echo ZENFOLDER; ?>/watermarks/
 		<?php echo gettext("directory"); ?>".)<br />
@@ -2186,7 +2187,7 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 	<tr>
 		<td><?php echo gettext("Full image quality:"); ?></td>
 		<td><input type="text" size="40" name="full_image_quality"
-			value="<?php echo getOption('full_image_quality');?>" /></td>
+			value="<?php echo htmlspecialchars(getOption('full_image_quality'));?>" /></td>
 		<td><?php echo gettext("Controls compression on full images."); ?></td>
 	</tr>
 	<tr>
@@ -2243,7 +2244,7 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 	</tr>
 	<tr>
 		<td><?php echo gettext("Allowed tags:"); ?></td>
-		<td><textarea name="allowed_tags" cols="40" rows="10"><?php echo getOption('allowed_tags'); ?></textarea>
+		<td><textarea name="allowed_tags" cols="40" rows="10"><?php echo htmlspecialchars(getOption('allowed_tags')); ?></textarea>
 		</td>
 		<td><?php echo gettext("Tags and attributes allowed in comments"); ?><br />
 		<?php echo gettext("Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"); ?></td>
@@ -2299,7 +2300,7 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 	if (!$_zp_null_account) {
 	$themelist = array();
 	if (($_zp_loggedin & ADMIN_RIGHTS)) {
-		$gallery_title = getOption('gallery_title');
+		$gallery_title = htmlspecialchars(getOption('gallery_title'));
 		if ($gallery_title != gettext("Gallery")) {
 			$gallery_title .= ' ('.gettext("Gallery").')';
 		}
@@ -2493,7 +2494,7 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 	$galleryTheme = $gallery->getCurrentTheme();
 	$themelist = array();
 	if ($_zp_loggedin & ADMIN_RIGHTS) {
-		$gallery_title = getOption('gallery_title');
+		$gallery_title = htmlspecialchars(getOption('gallery_title'));
 		if ($gallery_title != gettext("Gallery")) {
 			$gallery_title .= ' ('.gettext("Gallery").')';
 		}

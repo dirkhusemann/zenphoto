@@ -266,7 +266,7 @@ function printLogoAndLinks() {
 		echo gettext("Logged in as")." ".$_zp_current_admin['user']." &nbsp; | &nbsp <a href=\"?logout\">".gettext("Log Out")."</a> &nbsp; | &nbsp; ";
 	}
 	echo "<a href=\"../\">".gettext("View Gallery");
-	$t = getOption('gallery_title');
+	$t = htmlspecialchars(getOption('gallery_title'));
 	if (!empty($t))	echo ': ' . $t;
 	echo "</a>";
 	echo "\n</div>";
@@ -319,7 +319,7 @@ function printTabs() {
 		echo "\n    <li". ($page == "plugins" ? " class=\"current\""  : "") .
  				"> <a href=\"admin.php?page=plugins\">".gettext("plugins")."</a></li>";
 	}
-	if (($_zp_loggedin & ADMIN_RIGHTS) && getoption('zp_plugin_zenpage')) {
+	if (($_zp_loggedin & ADMIN_RIGHTS) && getOption('zp_plugin_zenpage')) {
 		echo "\n    <li". ($page == "zenpage" ? " class=\"current\""     : "") .
  				"><a href=\"plugins/zenpage/page-admin.php\">zenPage</a></li>";
 	}	
@@ -384,14 +384,23 @@ function setThemeOption($album, $key, $value) {
 		setOption($key, $value);
 	} else {
 		if (ALBUM_OPTIONS_TABLE) {
-			$exists = query_single_row("SELECT `name`, `value`, `id` FROM ".prefix('options')." WHERE `name`='".escape($key)."' AND `ownerid`=".$album->id, true);
+			if (is_null($album)) {
+				$id = 0;
+			} else {
+				$id = $album->id;
+			}
+			$exists = query_single_row("SELECT `name`, `value`, `id` FROM ".prefix('options')." WHERE `name`='".escape($key)."' AND `ownerid`=".$id, true);
 			if ($exists) {
 				$sql = "UPDATE " . prefix('options') . " SET `value`='" . escape($value) . "' WHERE `id`=" . $exists['id'];
 			} else {
-				$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid) VALUES ('" . escape($key) . "','" . escape($value) . "','.$album->id.')";
+				$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid) VALUES ('" . escape($key) . "','" . escape($value) . "','.$id.')";
 			}
 		} else {
-			$tbl = prefix(getOptionTableName($album->name));
+			if (is_null($album)) {
+				$tbl = prefix('options');
+			} else {
+				$tbl = prefix(getOptionTableName($album->name));
+			}
 			$exists = query_single_row("SELECT `name`, `value`, `id` FROM ".$tbl." WHERE `name`='".escape($key)."'".$where, true);
 			if ($exists) {
 				$sql = "UPDATE " . $tbl . " SET `value`='" . escape($value) . "' WHERE `id`=" . $exists['id'];
