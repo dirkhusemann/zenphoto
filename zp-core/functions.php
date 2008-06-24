@@ -1,4 +1,5 @@
 <?php
+define('ALBUM_OPTIONS_TABLE', false);
 define('ZENPHOTO_VERSION', '1.1.6');
 define('ZENPHOTO_RELEASE', 1779);
 define('SAFE_GLOB', false);
@@ -100,17 +101,16 @@ function getOption($key, $db=false) {
 	if (is_null($_zp_options)) {
 		$_zp_options = array();
 
-		$sql = "SELECT `name`, `value` FROM ".prefix('options');
+		$sql = "SELECT `name`, `value` FROM ".prefix('options').' WHERE `ownerid`=0';
 		$optionlist = query_full_array($sql, true);
 		if ($optionlist !== false) {
 			foreach($optionlist as $option) {
 				$_zp_options[$option['name']] = $option['value'];
 			}
 		}
-
 	} else {
 		if ($db) {
-			$sql = "SELECT `value` FROM ".prefix('options')." WHERE `name`='".$key."'";
+			$sql = "SELECT `value` FROM ".prefix('options')." WHERE `name`='".$key."' AND `ownerid`=0";
 			$optionlist = query_single_row($sql);
 			return $optionlist['value'];
 		}
@@ -142,11 +142,11 @@ function setOption($key, $value, $persistent=true) {
 	if ($persistent) {
 		if (array_key_exists($key, $_zp_options)) {
 // option already exists.
-			$sql = "UPDATE " . prefix('options') . " SET `value`='" . escape($value) . "' WHERE `name`='" . escape($key) ."'";
+			$sql = "UPDATE " . prefix('options') . " SET `value`='" . escape($value) . "' WHERE `name`='" . escape($key) ."' AND `ownerid`=0";
 		} else {
-			$sql = "INSERT INTO " . prefix('options') . " (name, value) VALUES ('" . escape($key) . "','" . escape($value) . "')";
+			$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid) VALUES ('" . escape($key) . "','" . escape($value) . "', 0)";
 		}
-		$result = query($sql);
+		$result = query($sql, true);
 	} else {
 		$result = true;
 	}
@@ -184,9 +184,9 @@ function setOptionDefault($key, $default) {
 	global $_zp_conf_vars, $_zp_options;
 	if (NULL == $_zp_options) { getOption('nil'); } // pre-load from the database
 	if (!array_key_exists($key, $_zp_options)) {
-		$sql = "INSERT INTO " . prefix('options') . " (`name`, `value`) VALUES ('" . escape($key) . "', '".
-						escape($default) . "');";
-		query($sql);
+		$sql = "INSERT INTO " . prefix('options') . " (`name`, `value`, `ownerid`) VALUES ('" . escape($key) . "', '".
+						escape($default) . "', 0);";
+		query($sql, true);
 		$_zp_options[$key] = $value;
 	}
 }
@@ -1958,8 +1958,13 @@ function setupTheme() {
 	$_zp_gallery_albums_per_page = max(1, getOption('albums_per_page'));
 	if (!empty($albumtheme)) {
 		$theme = $albumtheme;
+		if (ALBUM_OPTIONS_TABLE) {
+			$tbl = prefix('options').' WHERE `ownerid`='.$parent->id;
+		} else {
+			$tbl = prefix(getOptionTableName($parent->name));
+		}
 		//load the album theme options
-		$sql = "SELECT `name`, `value` FROM ".prefix(getOptionTableName($parent->name));
+		$sql = "SELECT `name`, `value` FROM ".$tbl;
 		$optionlist = query_full_array($sql, true);
 		if ($optionlist !== false) {
 			foreach($optionlist as $option) {

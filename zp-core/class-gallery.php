@@ -305,7 +305,7 @@ class Gallery {
 			if (!file_exists($albumfolder.$row['folder']) || in_array($row['folder'], $live)) {
 				$dead[] = $row['id'];
 				if ($row['album_theme'] !== '') {  // orphaned album theme options table
-					$deadalbumthemes[] = $row['folder'];
+					$deadalbumthemes[$row['id']] = $row['folder'];
 				}
 			} else {
 				$live[] = $row['folder'];
@@ -332,10 +332,15 @@ class Gallery {
 			}
 		}
 		if (count($deadalbumthemes) > 0) { // delete the album theme options tables for dead albums
-			foreach ($deadalbumthemes as $deadtable) {
-				$tbl_options = prefix(getOptionTableName($deadtable));
-				$sql = "DROP TABLE $tbl_options";
+			foreach ($deadalbumthemes as $id=>$deadtable) {
+				if (ALBUM_OPTIONS_TABLE) {
+					$sql = 'DELETE FROM '.prefix('options').' WHERE `ownerid`='.$id;
+				} else {
+					$tbl_options = prefix(getOptionTableName($deadtable));
+					$sql = "DROP TABLE $tbl_options";
+				}
 				query($sql, true);
+
 			}
 		}
 

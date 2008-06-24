@@ -664,10 +664,10 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				// all theme specific options are custom options, handled below
 				if (!empty($_POST['themealbum'])) {
 					$alb = urldecode($_POST['themealbum']);
-					$table = getOptionTableName($alb);
+					$table = new Album(new Gallery(), $alb);
 					$returntab = '&themealbum='.urlencode($alb).'#tab_theme';
 				} else {
-					$table = 'options';
+					$table = NULL;
 				}
 				setThemeOption($table, 'image_size', $_POST['image_size']);
 				setBoolThemeOption($table, 'image_use_longest_side', $_POST['image_use_longest_side']);
@@ -728,34 +728,34 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				} else {
 					$album = new Album($gallery, $alb);
 					$oldtheme = $album->getAlbumTheme();
-					$tbl_options = prefix(getOptionTableName($album->name));
-					if (!empty($oldtheme) && empty($newtheme)) {
-						// clean out old theme option table
-						$sql = "DROP TABLE $tbl_options";
-						query($sql);
-						$album->setAlbumTheme($newtheme);
-						$album->save();
-					}
-					if (!empty($newtheme)) {
-						$sql = "CREATE TABLE IF NOT EXISTS $tbl_options (
-						`id` int(11) unsigned NOT NULL auto_increment,
-						`name` varchar(64) NOT NULL,
-						`value` text NOT NULL,
-						PRIMARY KEY  (`id`),
-						UNIQUE (`name`)
-						);";
-						query($sql);
-						$album->setAlbumTheme($newtheme);
-						$album->save();
+					$album->setAlbumTheme($newtheme);
+					$album->save();
+					if (!ALBUM_OPTIONS_TABLE) {
+						$tbl_options = prefix(getOptionTableName($album->name));
+						if (!empty($oldtheme) && empty($newtheme)) {
+							// clean out old theme option table
+							$sql = "DROP TABLE $tbl_options";
+							query($sql);
+						}
+						if (!empty($newtheme)) {
+							$sql = "CREATE TABLE IF NOT EXISTS $tbl_options (
+							`id` int(11) unsigned NOT NULL auto_increment,
+							`name` varchar(64) NOT NULL,
+							`value` text NOT NULL,
+							PRIMARY KEY  (`id`),
+							UNIQUE (`name`)
+							);";
+							query($sql);
+						}
 					}
 				}
 				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=themes&themealbum=".$_GET['themealbum']);
 			}
-			
+
 			/** PLUGINS ******************************************************************/
 			/*****************************************************************************/
 		} else if ($action == 'saveplugins') {
-				
+
 
 			$curdir = getcwd();
 			chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
@@ -2328,6 +2328,7 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 		foreach ($themelist as $albumtitle=>$alb) break;
 		if (empty($alb)) {
 			$themename = $gallery->getCurrentTheme();
+			$album = NULL;
 		} else {
 			$alb = urldecode($alb);
 			$album = new Album($gallery, $alb);
@@ -2362,51 +2363,51 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 	<tr>
 		<td><?php echo gettext("Albums per page:"); ?></td>
 		<td><input type="text" size="40" name="albums_per_page"
-			value="<?php echo getThemeOption($alb, 'albums_per_page');?>" /></td>
+			value="<?php echo getThemeOption($album, 'albums_per_page');?>" /></td>
 		<td><?php echo gettext("Controls the number of albums on a page. You might need to change	this after switching themes to make it look better."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Images per page:"); ?></td>
 		<td><input type="text" size="40" name="images_per_page"
-			value="<?php echo getThemeOption($alb, 'images_per_page');?>" /></td>
+			value="<?php echo getThemeOption($album, 'images_per_page');?>" /></td>
 		<td><?php echo gettext("Controls the number of images on a page. You might need to change	this after switching themes to make it look better."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Thumb size:"); ?></td>
 		<td><input type="text" size="40" name="thumb_size"
-			value="<?php echo getThemeOption($alb, 'thumb_size');?>" /></td>
+			value="<?php echo getThemeOption($album, 'thumb_size');?>" /></td>
 		<td><?php echo gettext("Default thumbnail size and scale."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Crop thumbnails:"); ?></td>
 		<td><input type="checkbox" size="40" name="thumb_crop" value="1"
-		<?php echo checked('1', getThemeOption($alb, 'thumb_crop')); ?> /></td>
+		<?php echo checked('1', getThemeOption($album, 'thumb_crop')); ?> /></td>
 		<td><?php echo gettext("If checked the thumbnail will be a centered portion of the	image with the given width and height after being resized to <em>thumb	size</em> (by shortest side).").' '; 
 		echo gettext("Otherwise, it will be the full image resized to <em>thumb size</em> (by shortest side)."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Crop thumbnail width:"); ?></td>
 		<td><input type="text" size="40" name="thumb_crop_width"
-			value="<?php echo getThemeOption($alb, 'thumb_crop_width');?>" /></td>
+			value="<?php echo getThemeOption($album, 'thumb_crop_width');?>" /></td>
 		<td><?php echo gettext("The <em>thumb crop width</em> is the maximum width when height is the shortest side"); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Crop thumbnail height:"); ?></td>
 		<td><input type="text" size="40" name="thumb_crop_height"
-			value="<?php echo getThemeOption($alb, 'thumb_crop_height');?>" /></td>
+			value="<?php echo getThemeOption($album, 'thumb_crop_height');?>" /></td>
 		<td><?php echo gettext("The <em>thumb crop height</em> is the maximum height when width is the shortest side"); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Image size:"); ?></td>
 		<td><input type="text" size="40" name="image_size"
-			value="<?php echo getThemeOption($alb, 'image_size');?>" /></td>
+			value="<?php echo getThemeOption($album, 'image_size');?>" /></td>
 		<td><?php echo gettext("Default image display width."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Images size is longest size:"); ?></td>
 		<td><input type="checkbox" size="40" name="image_use_longest_side"
 			value="1"
-			<?php echo checked('1', getThemeOption($alb, 'image_use_longest_side')); ?> /></td>
+			<?php echo checked('1', getThemeOption($album, 'image_use_longest_side')); ?> /></td>
 		<td><?php echo gettext("If this is checked the longest side of the image will be <em>image size</em>.").' ';  
 		echo gettext("Otherwise, the <em>width</em> of the image will	be <em>image size</em>."); ?></td>
 	</tr>
@@ -2416,7 +2417,7 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 		$optionHandler = new ThemeOptions();
 		$supportedOptions = $optionHandler->getOptionsSupported();
 		if (count($supportedOptions) > 0) {
-			customOptions($optionHandler, '', $alb);
+			customOptions($optionHandler, '', $album);
 		}
 	}
 		

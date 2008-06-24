@@ -801,6 +801,12 @@ class Album extends PersistentObject {
 				}
 			}
 		}
+		if (ALBUM_OPTIONS_TABLE) {
+			query("DELETE FROM " . prefix('options') . "WHERE `ownerid`=" . $this->id);
+		} else {
+			$tbl_options = prefix(getOptionTableName($this->name));
+			query("DROP TABLE $tbl_options", true);
+		}
 		query("DELETE FROM " . prefix('comments') . "WHERE `type`='albums' AND `ownerid`=" . $this->id);
 		query("DELETE FROM " . prefix('albums') . " WHERE `id` = " . $this->id);
 		if ($this->isDynamic()) {

@@ -709,7 +709,6 @@ if (file_exists("zp-config.php")) {
 	$tbl_tags = prefix('tags');
 	$tbl_obj_to_tag = prefix('obj_to_tag');
 	// Prefix the constraint names:
-	$cst_comments = prefix('comments_ibfk1');
 	$cst_images = prefix('images_ibfk1');
 
 	$db_schema = array();
@@ -717,22 +716,33 @@ if (file_exists("zp-config.php")) {
 	/***********************************************************************************
 	 Add new fields in the upgrade section. This section should remain static except for new
 	 tables. This tactic keeps all changes in one place so that noting gets accidentaly omitted.
-		************************************************************************************/
+	************************************************************************************/
+	
 	//v1.1.7
+	if (isset($create[$_zp_conf_vars['mysql_prefix'].'options'])) {
+		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_options (
+		`id` int(11) UNSIGNED NOT NULL auto_increment,
+		`ownerid` int(11) UNSIGNED NOT NULL,
+		`name` varchar(255) NOT NULL,
+		`value` text NOT NULL,
+		PRIMARY KEY  (`id`),
+		UNIQUE (`name`, `ownerid`)
+		)	CHARACTER SET utf8 COLLATE utf8_general_ci;";
+	}
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'tags'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_tags (
-		`id` int(11) unsigned NOT NULL auto_increment,
+		`id` int(11) UNSIGNED NOT NULL auto_increment,
 		`name` varchar(255) NOT NULL,
 		PRIMARY KEY  (`id`),
 		UNIQUE (`name`)
 		)	CHARACTER SET utf8 COLLATE utf8_general_ci;";
 	}
-		if (isset($create[$_zp_conf_vars['mysql_prefix'].'obj_to_tag'])) {
+	if (isset($create[$_zp_conf_vars['mysql_prefix'].'obj_to_tag'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_obj_to_tag (
-		`id` int(11) unsigned NOT NULL auto_increment,
-		`tagid` int(11) unsigned NOT NULL,
+		`id` int(11) UNSIGNED NOT NULL auto_increment,
+		`tagid` int(11) UNSIGNED NOT NULL,
 		`type` tinytext,
-		`objectid` int(11) unsigned NOT NULL,
+		`objectid` int(11) UNSIGNED NOT NULL,
 		PRIMARY KEY  (`id`)
 		)	CHARACTER SET utf8 COLLATE utf8_general_ci;";
 	}
@@ -740,7 +750,7 @@ if (file_exists("zp-config.php")) {
 	// v. 1.1.5
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'administrators'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_administrators (
-		`id` int(11) unsigned NOT NULL auto_increment,
+		`id` int(11) UNSIGNED NOT NULL auto_increment,
 		`user` varchar(64) NOT NULL,
 		`password` text NOT NULL,
 		`name` text,
@@ -752,9 +762,9 @@ if (file_exists("zp-config.php")) {
 	}
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'admintoalbum'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_admintoalbum (
-		`id` int(11) unsigned NOT NULL auto_increment,
-		`adminid` int(11) unsigned NOT NULL,
-		`albumid` int(11) unsigned NOT NULL,
+		`id` int(11) UNSIGNED NOT NULL auto_increment,
+		`adminid` int(11) UNSIGNED NOT NULL,
+		`albumid` int(11) UNSIGNED NOT NULL,
 		PRIMARY KEY  (`id`)
 		)	CHARACTER SET utf8 COLLATE utf8_general_ci;";
 	}
@@ -762,7 +772,7 @@ if (file_exists("zp-config.php")) {
 	// v. 1.1
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'options'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_options (
-		`id` int(11) unsigned NOT NULL auto_increment,
+		`id` int(11) UNSIGNED NOT NULL auto_increment,
 		`name` varchar(64) NOT NULL,
 		`value` text NOT NULL,
 		PRIMARY KEY  (`id`),
@@ -773,7 +783,7 @@ if (file_exists("zp-config.php")) {
 	// base implementation
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'albums'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_albums (
-		`id` int(11) unsigned NOT NULL auto_increment,
+		`id` int(11) UNSIGNED NOT NULL auto_increment,
 		`parentid` int(11) unsigned default NULL,
 		`folder` varchar(255) NOT NULL default '',
 		`title` varchar(255) NOT NULL default '',
@@ -790,7 +800,7 @@ if (file_exists("zp-config.php")) {
 		`sort_order` int(11) unsigned default NULL,
 		`image_sortdirection` int(1) UNSIGNED default '0',
 		`album_sortdirection` int(1) UNSIGNED default '0',
-		`hitcounter` int(11) unsigned default NULL,
+		`hitcounter` int(11) unsigned default 0,
 		`password` varchar(255) default NULL,
 		`password_hint` text,
 		PRIMARY KEY  (`id`),
@@ -834,7 +844,7 @@ if (file_exists("zp-config.php")) {
 		`width` int(10) unsigned default NULL,
 		`mtime` int(32) default NULL,
 		`EXIFValid` int(1) unsigned default NULL,
-		`hitcounter` int(11) unsigned default NULL,
+		`hitcounter` int(11) unsigned default 0,
 		`total_value` int(11) unsigned default '0',
 		`total_votes` int(11) unsigned default '0',
 		`used_ips` longtext,
@@ -886,7 +896,7 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `date` datetime default NULL;";
 //v1.1.7 omits	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `tags` text;";
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `EXIFValid` int(1) UNSIGNED default NULL;";
-	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `hitcounter` int(11) UNSIGNED default NULL;";
+	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `hitcounter` int(11) UNSIGNED default 0;";
 	foreach (array_keys($_zp_exifvars) as $exifvar) {
 		$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `$exifvar` varchar(52) default NULL;";
 	}
@@ -901,7 +911,7 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `used_ips` longtext;";
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `password` varchar(255) NOT NULL default '';";
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `password_hint` text;";
-	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `hitcounter` int(11) UNSIGNED default NULL;";
+	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `hitcounter` int(11) UNSIGNED default 0;";
 
 	//v1.1.4
 	$sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `type` varchar(52) NOT NULL default 'images';";
@@ -940,7 +950,7 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `album_theme` text default NULL";
 	$sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `IP` text default NULL";
 	
-	//v1.2
+	//v1.1.7
 	$sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `private` int(1) UNSIGNED default 0";
 	$sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `anon` int(1) UNSIGNED default 0";
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `user` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci default ''"; 	
@@ -948,6 +958,10 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_tags CHANGE `name` `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci";	
 	$sql_statements[] = "ALTER TABLE $tbl_administrators CHARACTER SET utf8 COLLATE utf8_general_ci";
 	$sql_statements[] = "ALTER TABLE $tbl_administrators CHANGE `name` `name` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci";	
+	$sql_statements[] = "ALTER TABLE $tbl_options ADD COLUMN `ownerid` int(1) UNSIGNED default 0";
+	$sql_statements[] = "ALTER TABLE $tbl_options DROP INDEX `name`";
+	$sql_statements[] = "ALTER TABLE $tbl_options ADD UNIQUE `unique_option` (`name`, `ownerid`)";
+	
 	
 	/**************************************************************************************
 	 ******                            END of UPGRADE SECTION                                                           ******
@@ -983,6 +997,7 @@ if (file_exists("zp-config.php")) {
 		setupLog("Done with database creation and update");
 		
 		$prevRel = getOption('zenphoto_release');
+		$gallery = new Gallery();
 		require('option-defaults.php');
 		
 		// special cleanup section for plugins
@@ -993,11 +1008,52 @@ if (file_exists("zp-config.php")) {
 		}
 		
 		if ($prevRel < 1690) {  // cleanup root album DB records
-			$gallery = new Gallery();
 			$gallery->garbageCollect(true, true);
 		}
+		
+		// conversion to/from the theme option tables
+		$albums = $gallery->getAlbums();
+		foreach ($albums as $albumname) {
+			$album = new Album($gallery, $albumname);
+			$theme = $album->getAlbumTheme();
+			if (!empty($theme)) {
+				if (ALBUM_OPTIONS_TABLE) { // convert any old style album theme option tables.
+					$tbl = prefix(getOptionTableName($album->name));
+					$sql = "SELECT `name`,`value` FROM " . $tbl;
+					$result = query_full_array($sql, true);
+					if (is_array($result)) {
+						foreach ($result as $row) {
+							setThemeOption($album, $row['name'], $row['value']);
+						}
+						query('DROP TABLE '.$tbl);
+					}
+				} else { // convert back to individual tables
+					$result = query_full_array('SELECT * FROM '.prefix('options'),' WHERE `ownerid`!=0');  
+					if (count($result) > 0) { // there was use of the album options in the options table
+						$tbl_options = prefix(getOptionTableName($album->name));
+						$sql = "CREATE TABLE IF NOT EXISTS $tbl_options (
+						`id` int(11) unsigned NOT NULL auto_increment,
+						`name` varchar(64) NOT NULL,
+						`value` text NOT NULL,
+						PRIMARY KEY  (`id`),
+						UNIQUE (`name`)
+						);";
+						query($sql);
+						$sql = "SELECT `name`,`value` FROM ".prefix('options').' WHERE `ownerid`='.$album->id;
+						$result = query_full_array($sql);
+						if (is_array($result)) {
+							foreach ($result as $option) {
+								query('INSERT INTO '.$tbl_options.'(`name`, `value`) VALUES ("'.$option['name'].'","'.$option['value'].'")');
+							}
+						}
+						query('DELETE FROM '.prefix('options').' WHERE `ownerid`!=0');
+					}
+				}
+			}
+		}
 
-		echo "<h3>".gettext("Done with table").' '.$taskDisplay[substr($task,0,8)]."!</h3>";
+
+echo "<h3>".gettext("Done with table").' '.$taskDisplay[substr($task,0,8)]."!</h3>";
 
 		$rsd = getOption('admin_reset_date');
 		if (empty($rsd)) {
