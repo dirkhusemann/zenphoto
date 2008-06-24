@@ -14,30 +14,32 @@ $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---user_lo
 $cookiepath = WEBPATH;
 if (WEBPATH == '') { $cookiepath = '/'; }
 
-if (in_context(ZP_SEARCH)) {  // search page
-	$authType = 'zp_search_auth';
-	$check_auth = getOption('search_password');
-	if (empty($check_auth)) {
-		$authType = 'zp_gallery_auth';
-	}
-} else if (in_context(ZP_ALBUM)) { // album page
-	$authType = "zp_album_auth_" . cookiecode($_zp_current_album->name);
-	$check_auth = $_zp_current_album->getPassword();
-	if (empty($check_auth)) {
-		$parent = $_zp_current_album->getParent();
-		while (!is_null($parent)) {
-			$authType = "zp_album_auth_" . cookiecode($parent->name);
-			$check_auth = $parent->getPassword();
-			if (!empty($check_auth)) { break; }
-			$parent = $parent->getParent();
-		}
+if (!OFFSET_PATH) {
+	if (in_context(ZP_SEARCH)) {  // search page
+		$authType = 'zp_search_auth';
+		$check_auth = getOption('search_password');
 		if (empty($check_auth)) {
-			// revert all tlhe way to the gallery
 			$authType = 'zp_gallery_auth';
 		}
+	} else if (in_context(ZP_ALBUM)) { // album page
+		$authType = "zp_album_auth_" . cookiecode($_zp_current_album->name);
+		$check_auth = $_zp_current_album->getPassword();
+		if (empty($check_auth)) {
+			$parent = $_zp_current_album->getParent();
+			while (!is_null($parent)) {
+				$authType = "zp_album_auth_" . cookiecode($parent->name);
+				$check_auth = $parent->getPassword();
+				if (!empty($check_auth)) { break; }
+				$parent = $parent->getParent();
+			}
+			if (empty($check_auth)) {
+				// revert all tlhe way to the gallery
+				$authType = 'zp_gallery_auth';
+			}
+		}
+	} else {  // index page
+		$authType = 'zp_gallery_auth';
 	}
-} else {  // index page
-	$authType = 'zp_gallery_auth';
 }
 $saved_auth = zp_getCookie($authType);
 if (isset($_GET['userlogout']) && !empty($saved_auth)) {
