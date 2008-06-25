@@ -1,8 +1,7 @@
 <?php
 define('ALBUM_OPTIONS_TABLE', false);  // todo: change this to true on 1.2. also change NO_RIGHTS define to 2 at the same time
-define('ZENPHOTO_VERSION', '1.1.6');
-define('ZENPHOTO_RELEASE', 1779);
 define('SAFE_GLOB', false);
+include('version.php'); // Include the version info.
 if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 if (!defined('OFFSET_PATH')) { define('OFFSET_PATH', 0); }
