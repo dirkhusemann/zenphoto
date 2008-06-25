@@ -148,7 +148,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			if (!isMyAlbum(urldecode(strip($_GET['album'])), $_zp_loggedin)) {
 				unset($_GET['album']);
 				unset($_GET['page']);
-				$page = 'home';
+				$page = '';
 			}
 		}
 	}
@@ -496,6 +496,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 						if ($pass == trim($_POST[$i.'-adminpass_2'])) {
 							$admin_n = trim($_POST[$i.'-admin_name']);
 							$admin_e = trim($_POST[$i.'-admin_email']);
+							$main_r = $_POST[$i.'-main_rights'];
 							$admin_r = $_POST[$i.'-admin_rights'];
 							$comment_r = $_POST[$i.'-comment_rights'];
 							$upload_r = $_POST[$i.'-upload_rights'];
@@ -503,7 +504,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 							$options_r = $_POST[$i.'-options_rights'];
 							$themes_r = $_POST[$i.'-themes_rights'];
 							if (!isset($_POST['alter_enabled'])) {
-								$rights = MAIN_RIGHTS + $admin_r + $comment_r + $upload_r + $edit_r + $options_r + $themes_r;
+								$rights = NO_RIGHTS + $admin_r + $comment_r + $upload_r + $edit_r + $options_r + $themes_r + $main_r;
 
 								$managedalbums = array();
 
@@ -772,7 +773,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 
 	// Redirect to a page if it's set
 	// (NOTE: Form POST data will be resent on refresh. Use header(Location...) instead, unless there's an error message.
-	if (isset($_GET['page'])) { $page = $_GET['page']; } else if (empty($page)) { $page = "home"; }
+	if (isset($_GET['page'])) { $page = $_GET['page']; } else if (empty($page)) { $page = ""; }
 
 }
 
@@ -834,6 +835,8 @@ switch ($page) {
 		if (!($_zp_loggedin & ADMIN_RIGHTS)) $page = '';
 		break;
 }
+if (empty($page) && !($_zp_loggedin & MAIN_RIGHTS)) $page='options';
+
 /** EDIT ****************************************************************************/
 /************************************************************************************/
 
@@ -1621,11 +1624,35 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 			<li><a href="#tab_comments"><span><?php echo gettext("comment configuration"); ?></span></a></li>
 	<?php 
 		} 
-	?>
-		<li><a href="#tab_theme"><span><?php echo gettext("theme options"); ?></span></a></li>
-	<?php
+		$themelist = array();
+		if (($_zp_loggedin & ADMIN_RIGHTS)) {
+			$gallery_title = htmlspecialchars(getOption('gallery_title'));
+			if ($gallery_title != gettext("Gallery")) {
+				$gallery_title .= ' ('.gettext("Gallery").')';
+			}
+			$themelist[$gallery_title] = '';
+		}
+		$albums = $gallery->getAlbums(0);
+		foreach ($albums as $alb) {
+			if (isMyAlbum($alb, THEMES_RIGHTS)) {
+				$album = new Album($gallery, $alb);
+				$theme = $album->getAlbumTheme();
+				if (!empty($theme)) {
+					$key = $album->getTitle();
+					if ($key != $alb) {
+						$key .= " ($alb)";
+					}	
+					$themelist[$key] = urlencode($alb);
+				}
+			}
+		}
+		if (count($themelist) > 0) {
+		?>
+			<li><a href="#tab_theme"><span><?php echo gettext("theme options"); ?></span></a></li>
+		<?php
+		}
 		if ($_zp_loggedin & ADMIN_RIGHTS) {
-	?>
+		?>
 		<li><a href="#tab_plugin"><span><?php echo gettext("plugin options"); ?></span></a></li>
 	<?php
 		}
@@ -1711,27 +1738,25 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 		<table class="checkboxes" >
 			<tr>
-				<td style="width: 40%; padding-bottom: 3px;<?php echo $background; ?>"><strong><?php echo gettext("Rights"); ?></strong>:
-				<input type="hidden" name="<?php echo $id ?>-main_rights"
-					value=<?php echo MAIN_RIGHTS; ?>></td>
+				<td style="padding-bottom: 3px;<?php echo $background; ?>"><strong><?php echo gettext("Rights"); ?></strong>:
 			</tr>
 			<tr>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-admin_rights"
-					value=<?php echo ADMIN_RIGHTS; if ($user['rights'] & ADMIN_RIGHTS) echo ' checked';echo $alterrights; ?>><?php echo gettext("User	admin"); ?>
-				</td>
+					value=<?php echo ADMIN_RIGHTS; if ($user['rights'] & ADMIN_RIGHTS) echo ' checked';echo $alterrights; ?>><?php echo gettext("User admin"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-options_rights"
-					value=<?php echo OPTIONS_RIGHTS; if ($user['rights'] & OPTIONS_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Options"); ?>
-				</td>
+					value=<?php echo OPTIONS_RIGHTS; if ($user['rights'] & OPTIONS_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Options"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-themes_rights"
 					value=<?php echo THEMES_RIGHTS; if ($user['rights'] & THEMES_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Themes"); ?></td>
-			</tr>
-			<tr>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-edit_rights"
 					value=<?php echo EDIT_RIGHTS; if ($user['rights'] & EDIT_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Edit"); ?></td>
+			</tr>
+			<tr>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-comment_rights"
 					value=<?php echo COMMENT_RIGHTS; if ($user['rights'] & COMMENT_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Comment"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-upload_rights"
 					value=<?php echo UPLOAD_RIGHTS; if ($user['rights'] & UPLOAD_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Upload"); ?></td>
+				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-main_rights"
+					value=<?php echo MAIN_RIGHTS; if ($user['rights'] & MAIN_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Overview"); ?></td>
 			</tr>
 		</table>
 
@@ -2297,29 +2322,7 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 ?>
 <div id="tab_theme">
 <?php
-	if (!$_zp_null_account) {
-	$themelist = array();
-	if (($_zp_loggedin & ADMIN_RIGHTS)) {
-		$gallery_title = htmlspecialchars(getOption('gallery_title'));
-		if ($gallery_title != gettext("Gallery")) {
-			$gallery_title .= ' ('.gettext("Gallery").')';
-		}
-		$themelist[$gallery_title] = '';
-	}
-	$albums = $gallery->getAlbums(0);
-	foreach ($albums as $alb) {
-		if (isMyAlbum($alb, THEMES_RIGHTS)) {
-			$album = new Album($gallery, $alb);
-			$theme = $album->getAlbumTheme();
-			if (!empty($theme)) {
-				$key = $album->getTitle();
-				if ($key != $alb) {
-					$key .= " ($alb)";
-				}	
-				$themelist[$key] = urlencode($alb);
-			}
-		}
-	}
+if (count($themelist) > 0) {
 	if (!empty($_REQUEST['themealbum'])) {
 		$alb = urldecode($_REQUEST['themealbum']);
 		$album = new Album($gallery, $alb);
@@ -2841,7 +2844,7 @@ foreach ($comments as $comment) {
 <strong><?php echo $t = $gallery->getNumImages(); ?></strong> <?php echo gettext("images"); 
 $c = $t-$gallery->getNumImages(true);
 if ($c > 0) {
-	echo ' ('.$c.' '.gettext("unpublished").')';
+	echo ' ('.$c.' '.gettext("not visible").')';
 }
 ?></p>
 <p><strong><?php echo $t = $gallery->getNumAlbums(true); ?></strong> <?php echo gettext("albums"); 

@@ -1678,14 +1678,14 @@ function zp_setCookie($name, $value, $time=0, $path='/') {
 }
 
 //admin user handling
-
-define('MAIN_RIGHTS', 1);
-define('UPLOAD_RIGHTS', 2);
-define('COMMENT_RIGHTS', 4);
-define('EDIT_RIGHTS', 8);
-define('THEMES_RIGHTS', 16);
-define('OPTIONS_RIGHTS', 32);
-define('ADMIN_RIGHTS', 16384);
+define('NO_RIGHTS', 2);
+define('MAIN_RIGHTS', 4);
+define('UPLOAD_RIGHTS', 16);
+define('COMMENT_RIGHTS', 64);
+define('EDIT_RIGHTS', 256);
+define('THEMES_RIGHTS', 1024);
+define('OPTIONS_RIGHTS', 8192);
+define('ADMIN_RIGHTS', 65536);
 define('ALL_RIGHTS', 07777777777);
 $_zp_current_admin = null;
 $_zp_admin_users = null;
@@ -1782,7 +1782,18 @@ function checkAuthorization($authCode) {
 		if ($user['pass'] == $authCode) {
 			$_zp_current_admin = $user;
 			if ($i == 0) { return $user['rights'] | ADMIN_RIGHTS; } // the first admin is the master.
-			return $user['rights'];
+			$rights = $user['rights'];
+			if ($rights & 1) { // old compressed rights
+				$newrights = MAIN_RIGHTS;
+				if ($rights & 2) $newrights = $newrights | COMMENT_RIGHTS;
+				if ($rights & 4) $newrights = $newrights | UPLOAD_RIGHTS;
+				if ($rights & 8) $newrights = $newrights | EDIT_RIGHTS;
+				if ($rights & 16) $newrights = $newrights | THEME_RIGHTS;
+				if ($rights & 32) $newrights = $newrights | OPTION_RIGHTS;
+				if ($rights & 16384) $newrights = $newrights | ADMIN_RIGHTS;
+				$rights = $newrights;
+			}
+			return $rights;
 		}
 		$i++;
 	}
