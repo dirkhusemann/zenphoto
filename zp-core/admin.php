@@ -1617,7 +1617,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 	<li><a href="#tab_admin"><span><?php echo gettext("admin information"); ?></span></a></li>
 	<?php 
 	if (!$_zp_null_account) {
-		if ($_zp_loggedin & OPTIONS_RIGHTS) { 
+		if ($_zp_loggedin & (OPTIONS_RIGHTS | ADMIN_RIGHTS)) { 
 	?>
 			<li><a href="#tab_gallery"><span><?php echo gettext("gallery configuration"); ?></span></a></li>
 			<li><a href="#tab_image"><span><?php echo gettext("image display"); ?></span></a></li>
@@ -1755,8 +1755,14 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 					value=<?php echo COMMENT_RIGHTS; if ($user['rights'] & COMMENT_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Comment"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-upload_rights"
 					value=<?php echo UPLOAD_RIGHTS; if ($user['rights'] & UPLOAD_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Upload"); ?></td>
+				<?php 
+				if (NO_RIGHTS > 0) {
+				?>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-main_rights"
 					value=<?php echo MAIN_RIGHTS; if ($user['rights'] & MAIN_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Overview"); ?></td>
+				<?php 
+				}
+				?>
 			</tr>
 		</table>
 

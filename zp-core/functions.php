@@ -1,5 +1,5 @@
 <?php
-define('ALBUM_OPTIONS_TABLE', false);
+define('ALBUM_OPTIONS_TABLE', false);  // todo: change this to true on 1.2. also change NO_RIGHTS define to 2 at the same time
 define('ZENPHOTO_VERSION', '1.1.6');
 define('ZENPHOTO_RELEASE', 1779);
 define('SAFE_GLOB', false);
@@ -1678,15 +1678,27 @@ function zp_setCookie($name, $value, $time=0, $path='/') {
 }
 
 //admin user handling
-define('NO_RIGHTS', 2);
-define('MAIN_RIGHTS', 4);
-define('UPLOAD_RIGHTS', 16);
-define('COMMENT_RIGHTS', 64);
-define('EDIT_RIGHTS', 256);
-define('THEMES_RIGHTS', 1024);
-define('OPTIONS_RIGHTS', 8192);
-define('ADMIN_RIGHTS', 65536);
+
+define('NO_RIGHTS', 0);
+if (NO_RIGHTS == 2) {
+	define('MAIN_RIGHTS', 4);
+	define('UPLOAD_RIGHTS', 16);
+	define('COMMENT_RIGHTS', 64);
+	define('EDIT_RIGHTS', 256);
+	define('THEMES_RIGHTS', 1024);
+	define('OPTIONS_RIGHTS', 8192);
+	define('ADMIN_RIGHTS', 65536);
+} else {
+	define('MAIN_RIGHTS', 1);
+	define('UPLOAD_RIGHTS', 2);
+	define('COMMENT_RIGHTS', 4);
+	define('EDIT_RIGHTS', 8);
+	define('THEMES_RIGHTS', 16);
+	define('OPTIONS_RIGHTS', 32);
+	define('ADMIN_RIGHTS', 16384);
+}
 define('ALL_RIGHTS', 07777777777);
+
 $_zp_current_admin = null;
 $_zp_admin_users = null;
 
@@ -1751,6 +1763,29 @@ function getAdministrators() {
 		$admins = query_full_array($sql, true);
 		if ($admins !== false) {
 			foreach($admins as $user) {
+				if (NO_RIGHTS == 2) {
+					if (($rights = $user['rights']) & 1) { // old compressed rights
+						$newrights = MAIN_RIGHTS;
+						if ($rights & 2) $newrights = $newrights | UPLOAD_RIGHTS;
+						if ($rights & 4) $newrights = $newrights | COMMENT_RIGHTS;
+						if ($rights & 8) $newrights = $newrights | EDIT_RIGHTS;
+						if ($rights & 16) $newrights = $newrights | THEMES_RIGHTS;
+						if ($rights & 32) $newrights = $newrights | OPTIONS_RIGHTS;
+						if ($rights & 16384) $newrights = $newrights | ADMIN_RIGHTS;
+						$user['rights'] = $newrights;
+					}
+				} else {
+					if (!(($rights = $user['rights']) & 1)) { // new expanded rights
+						$newrights = MAIN_RIGHTS;
+						if ($rights & 16) $newrights = $newrights | UPLOAD_RIGHTS;
+						if ($rights & 64) $newrights = $newrights | COMMENT_RIGHTS;
+						if ($rights & 256) $newrights = $newrights | EDIT_RIGHTS;
+						if ($rights & 1024) $newrights = $newrights | THEMES_RIGHTS;
+						if ($rights & 8192) $newrights = $newrights | OPTIONS_RIGHTS;
+						if ($rights & 65536) $newrights = $newrights | ADMIN_RIGHTS;
+						$user['rights'] = $newrights;
+					}
+				}
 				$_zp_admin_users[$user['id']] = array('user' => $user['user'], 'pass' => $user['password'],
  												'name' => $user['name'], 'email' => $user['email'], 'rights' => $user['rights'],
  												'id' => $user['id']);
@@ -1781,19 +1816,11 @@ function checkAuthorization($authCode) {
 	foreach($admins as $user) {
 		if ($user['pass'] == $authCode) {
 			$_zp_current_admin = $user;
-			if ($i == 0) { return $user['rights'] | ADMIN_RIGHTS; } // the first admin is the master.
-			$rights = $user['rights'];
-			if ($rights & 1) { // old compressed rights
-				$newrights = MAIN_RIGHTS;
-				if ($rights & 2) $newrights = $newrights | COMMENT_RIGHTS;
-				if ($rights & 4) $newrights = $newrights | UPLOAD_RIGHTS;
-				if ($rights & 8) $newrights = $newrights | EDIT_RIGHTS;
-				if ($rights & 16) $newrights = $newrights | THEME_RIGHTS;
-				if ($rights & 32) $newrights = $newrights | OPTION_RIGHTS;
-				if ($rights & 16384) $newrights = $newrights | ADMIN_RIGHTS;
-				$rights = $newrights;
-			}
-			return $rights;
+			$result = $user['rights']; 
+			if ($i == 0) { // the first admin is the master.
+				$result = $result | ADMIN_RIGHTS; 
+			} 
+			return $result;
 		}
 		$i++;
 	}
