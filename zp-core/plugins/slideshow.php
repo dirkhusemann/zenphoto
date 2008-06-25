@@ -35,8 +35,8 @@ class slideshowOptions {
 		setOptionDefault('slideshow_timeout', '3000');
 		setOptionDefault('slideshow_showdesc', '');
 		// incase the flowplayer has not been enabled!!!
-		setOptionDefault('flow_player_width', '320');
-		setOptionDefault('flow_player_height', '240');
+		setOptionDefault('slideshow_flow_player_width', '640');
+		setOptionDefault('slideshow_flow_player_height', '480');
 	}
 		
 	
@@ -52,7 +52,11 @@ class slideshowOptions {
 									gettext('Timeout') => array('key' => 'slideshow_timeout', 'type' => 0,
 										'desc' => gettext("Milliseconds between slide transitions (0 to disable auto advance.) <em>[jQuery mode option]</em>")),
 									gettext('Description') => array('key' => 'slideshow_showdesc', 'type' => 1,
-										'desc' => gettext("Check if you want to show the image's description below the slideshow."))
+										'desc' => gettext("Check if you want to show the image's description below the slideshow.")),
+									gettext('flow player width') => array('key' => 'slideshow_flow_player_width', 'type' => 0,
+										'desc' => gettext("Width of the Flowplayer display for thee slideshow <em>(Flash mode)</em>.")),
+									gettext('flow player height') => array('key' => 'slideshow_flow_player_height', 'type' => 0,
+										'desc' => gettext("Height of the Flowplayer display for thee slideshow <em>(Flash mode)</em>."))
 		);
 	}
 
@@ -238,18 +242,19 @@ function printSlideShow($heading = true) {
 
 case "flash":
 	if ($heading) {
-		echo "<span class='slideimage'><h4><strong>".$album->name."</strong> (".$numberofimages." images) | <a style='color: white' href='".$returnpath."'>back</a></h4>";
+		echo "<span class='slideimage'><h4><strong>".$album->name."</strong> (".$numberofimages." images) | <a style='color: white' href='".$returnpath."' title='".gettext("back")."'>".gettext("back")."</a></h4>";
 	}
 	echo "<span id='slideshow'></span>";
 	?>	
 <script type="text/javascript">
 $("#slideshow").flashembed({
       src:'<?php echo FULLWEBPATH . '/' . ZENFOLDER; ?>/plugins/flowplayer/FlowPlayerLight.swf',
-      width:<?php echo getOption("flow_player_width"); ?>, 
-      height:<?php echo getOption("flow_player_height"); ?>
+      width:<?php echo getOption("slideshow_flow_player_width"); ?>, 
+      height:<?php echo getOption("slideshow_flow_player_height"); ?>
     },
     {config: {  
       autoPlay: true,
+      useNativeFullScreen: true,
       playList: [
 <?php
 	$count = 0;
@@ -269,7 +274,7 @@ $("#slideshow").flashembed({
       showPlayListButtons: true, 
       showStopButton: true, 
       controlBarBackgroundColor: 0,
-     	showPlayListButtons: true
+     	showPlayListButtons: true,
     }} 
   );
 </script>	
@@ -277,6 +282,8 @@ $("#slideshow").flashembed({
 	
 <?php
 	echo "</span>";
+		echo "<p>Click on <img style='position: relative; top: 4px; border: 1px solid gray' src='".WEBPATH . "/" . ZENFOLDER."/plugins/slideshow/flowplayerfullsizeicon.png' /> on the right in the player control bar to view full size</p>";
+	
 	break;
 }
 ?>
