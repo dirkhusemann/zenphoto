@@ -5,13 +5,16 @@
  */
 
 $plugin_description = gettext("Adds several theme functions to enable images and/or album rating by users.");
-$plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.0.0';
+$plugin_author = "Malte Müller (acrylian) and Stephen Billard (sbillard)";
+$plugin_version = '1.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---rating.php.html";
 
 // register the scripts needed
 addPluginScript('<script type="text/javascript" src="'.FULLWEBPATH."/".ZENFOLDER .'/plugins/rating/rating.js"></script>');
 addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/rating/rating.css" type="text/css" />');
+
+require_once('rating/functions-rating.php');
+
 
 /**
  * Returns the rating of the designated image
@@ -55,6 +58,9 @@ function printImageRating() {
  *
  */
 function printRating($option) {
+	
+debugLog("printRating($option)");	
+	
 	switch($option) {
 		case "image":
 			$id = getImageID();
@@ -74,24 +80,30 @@ function printRating($option) {
 	echo "<div id=\"rating\">\n";
 	echo "<ul class=\"star-rating\">\n";
 	echo "<li class=\"current-rating\" id=\"current-rating\" style=\"width:".$ratingpx."px\"></li>\n";
-	$message1 = gettext("Rating: ");
-	$message2 = gettext(" (Total votes: ");
-	$message3 = gettext(")<br />Thanks for voting!");
-	if(!checkIP($id,$option)){
-		echo "<li><a href=\"javascript:rate(1,$id,$votes,$value,'".rawurlencode($zenpath)."','$option','$message1','$message2','$message3')\" title=\"".gettext("1 star out of 5")."\" class=\"one-star\">2</a></li>\n";
-		echo "<li><a href=\"javascript:rate(2,$id,$votes,$value,'".rawurlencode($zenpath)."','$option','$message1','$message2','$message3')\" title=\"".gettext("2 stars out of 5")."\" class=\"two-stars\">2</a></li>\n";
-		echo "<li><a href=\"javascript:rate(3,$id,$votes,$value,'".rawurlencode($zenpath)."','$option','$message1','$message2','$message3')\" title=\"".gettext("3 stars out of 5")."\" class=\"three-stars\">2</a></li>\n";
-		echo "<li><a href=\"javascript:rate(4,$id,$votes,$value,'".rawurlencode($zenpath)."','$option','$message1','$message2','$message3')\" title=\"".gettext("4 stars out of 5")."\" class=\"four-stars\">2</a></li>\n";
-		echo "<li><a href=\"javascript:rate(5,$id,$votes,$value,'".rawurlencode($zenpath)."','$option','$message1','$message2','$message3')\" title=\"".gettext("5 stars out of 5")."\" class=\"five-stars\">2</a></li>\n";
+	$msg1 = gettext("Rating");
+	$msg2 = gettext("Total votes");
+	$msg3 = gettext("Thanks for voting!");
+	
+debugLog("rating for $id");	
+	
+	if(!checkForIP(sanitize($_SERVER['REMOTE_ADDR']),$id,$option)){
+		
+debugLog("rating ok to rate");		
+		
+		echo "<li><a href=\"javascript:rate(1,$id,$votes,$value,'".rawurlencode($zenpath)."','$option','$msg1','$msg2','$msg3')\" title=\"".gettext("1 star out of 5")."\" class=\"one-star\">2</a></li>\n";
+		echo "<li><a href=\"javascript:rate(2,$id,$votes,$value,'".rawurlencode($zenpath)."','$option','$msg1','$msg2','$msg3')\" title=\"".gettext("2 stars out of 5")."\" class=\"two-stars\">2</a></li>\n";
+		echo "<li><a href=\"javascript:rate(3,$id,$votes,$value,'".rawurlencode($zenpath)."','$option','$msg1','$msg2','$msg3')\" title=\"".gettext("3 stars out of 5")."\" class=\"three-stars\">2</a></li>\n";
+		echo "<li><a href=\"javascript:rate(4,$id,$votes,$value,'".rawurlencode($zenpath)."','$option','$msg1','$msg2','$msg3')\" title=\"".gettext("4 stars out of 5")."\" class=\"four-stars\">2</a></li>\n";
+		echo "<li><a href=\"javascript:rate(5,$id,$votes,$value,'".rawurlencode($zenpath)."','$option','$msg1','$msg2','$msg3')\" title=\"".gettext("5 stars out of 5")."\" class=\"five-stars\">2</a></li>\n";
 	}
 	echo "</ul>\n";
 	echo "<div id =\"vote\">\n";
 	switch($option) {
 		case "image":
-			echo $message1.getImageRatingCurrent($id).$message2.$votes.gettext(")");
+			echo $msg1.' '.getImageRatingCurrent($id).' ('.$msg2.': '.$votes.")";
 			break;
 		case "album":
-			echo $message1.getAlbumRatingCurrent($id).$message2.$votes.gettext(")");
+			echo $msg1.' '.getAlbumRatingCurrent($id).' ('.$msg2.': '.$votes.")";
 			break;
 	}
 	echo "</div>\n";
@@ -108,6 +120,10 @@ function printRating($option) {
  * @return unknown
  */
 function getRating($option,$option2,$id) {
+	
+	
+debugLog("getRating($option,$option2,$id)")	;
+	
 	switch ($option) {
 		case "totalvalue":
 			$rating = "total_value"; break;

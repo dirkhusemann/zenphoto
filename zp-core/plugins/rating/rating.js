@@ -72,7 +72,7 @@ function _gr(reqseccion,divcont) {
 
 var urlBase = "/update.php";
 
-function rate(rating,id,votes,values,path,option)  {
+function rate(rating,id,votes,values,path,option,msg1,msg2,msg3)  {
 		votes = votes + 1;
 		values = (values+rating)/votes;
 		values = values*10;
@@ -82,6 +82,6 @@ function rate(rating,id,votes,values,path,option)  {
 		nt = remotos.enviar(path+'/rating/update.php?rating='+rating+'&id='+id+'&option='+option);
 		rating = rating * 25;
 		document.getElementById('current-rating').style.width = rating+'px';
-		document.getElementById('vote').innerHTML="Rating: "+values+" (Total votes: "+votes+")<br />"+zpstrings.ThanksForVoting;
+		document.getElementById('vote').innerHTML=msg1+": "+values+" ("+msg2+": "+votes+")<br />"+msg3;
 		
 }
