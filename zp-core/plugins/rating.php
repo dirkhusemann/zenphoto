@@ -58,9 +58,6 @@ function printImageRating() {
  *
  */
 function printRating($option) {
-	
-debugLog("printRating($option)");	
-	
 	switch($option) {
 		case "image":
 			$id = getImageID();
@@ -82,19 +79,12 @@ debugLog("printRating($option)");
 	echo "<li class=\"current-rating\" id=\"current-rating\" style=\"width:".$ratingpx."px\"></li>\n";
 	$msg1 = gettext("Rating");
 	$msg2 = gettext("Total votes");
-	$msg3 = gettext("Thanks for voting!");
-	
-debugLog("rating for $id");	
-	
 	if(!checkForIP(sanitize($_SERVER['REMOTE_ADDR']),$id,$option)){
-		
-debugLog("rating ok to rate");		
-		
-		echo "<li><a href=\"javascript:rate(1,$id,$votes,$value,'".rawurlencode($zenpath)."','$option','$msg1','$msg2','$msg3')\" title=\"".gettext("1 star out of 5")."\" class=\"one-star\">2</a></li>\n";
-		echo "<li><a href=\"javascript:rate(2,$id,$votes,$value,'".rawurlencode($zenpath)."','$option','$msg1','$msg2','$msg3')\" title=\"".gettext("2 stars out of 5")."\" class=\"two-stars\">2</a></li>\n";
-		echo "<li><a href=\"javascript:rate(3,$id,$votes,$value,'".rawurlencode($zenpath)."','$option','$msg1','$msg2','$msg3')\" title=\"".gettext("3 stars out of 5")."\" class=\"three-stars\">2</a></li>\n";
-		echo "<li><a href=\"javascript:rate(4,$id,$votes,$value,'".rawurlencode($zenpath)."','$option','$msg1','$msg2','$msg3')\" title=\"".gettext("4 stars out of 5")."\" class=\"four-stars\">2</a></li>\n";
-		echo "<li><a href=\"javascript:rate(5,$id,$votes,$value,'".rawurlencode($zenpath)."','$option','$msg1','$msg2','$msg3')\" title=\"".gettext("5 stars out of 5")."\" class=\"five-stars\">2</a></li>\n";
+		echo "<li><a href=\"javascript:rate(1,$id,'".rawurlencode($zenpath)."','$option')\" title=\"".gettext("1 star out of 5")."\" class=\"one-star\">2</a></li>\n";
+		echo "<li><a href=\"javascript:rate(2,$id,'".rawurlencode($zenpath)."','$option')\" title=\"".gettext("2 stars out of 5")."\" class=\"two-stars\">2</a></li>\n";
+		echo "<li><a href=\"javascript:rate(3,$id,'".rawurlencode($zenpath)."','$option')\" title=\"".gettext("3 stars out of 5")."\" class=\"three-stars\">2</a></li>\n";
+		echo "<li><a href=\"javascript:rate(4,$id,'".rawurlencode($zenpath)."','$option')\" title=\"".gettext("4 stars out of 5")."\" class=\"four-stars\">2</a></li>\n";
+		echo "<li><a href=\"javascript:rate(5,$id,'".rawurlencode($zenpath)."','$option')\" title=\"".gettext("5 stars out of 5")."\" class=\"five-stars\">2</a></li>\n";
 	}
 	echo "</ul>\n";
 	echo "<div id =\"vote\">\n";
@@ -120,10 +110,6 @@ debugLog("rating ok to rate");
  * @return unknown
  */
 function getRating($option,$option2,$id) {
-	
-	
-debugLog("getRating($option,$option2,$id)")	;
-	
 	switch ($option) {
 		case "totalvalue":
 			$rating = "total_value"; break;
