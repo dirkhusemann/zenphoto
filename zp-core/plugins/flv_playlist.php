@@ -40,7 +40,7 @@ if (!getOption('zp_plugin_flvplayer')) {
 
 $plugin_description = gettext("A plugin to show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players with flv player (some options are also shared with that plugin).").$flv_player_missing;
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.4';
+$plugin_version = '1.0.4.1';
 $plugin_URL = "";
 $option_interface = new flvplaylist();
 
@@ -55,6 +55,7 @@ class flvplaylist {
 		setOptionDefault('flvplaylist_height', '240');
 		setOptionDefault('flvplaylist_displaywidth', '320');
 		setOptionDefault('flvplaylist_displayheight', '240');
+		setOptionDefault('flvplaylist_thumbsinplaylist', 'true');
 	}
 
 	function getOptionsSupported() {
@@ -65,7 +66,9 @@ class flvplaylist {
 		gettext('Displaywidth') => array('key' => 'flvplaylist_displaywidth', 'type' => 0,
 										'desc' => gettext("Display width for the playlist. The display width is needed for the playlist menu to be shown. In this case the 'displaywidth - width = width of the playlist menu'. See the flv player site for more info about these options.")),
 		gettext('Displayheight') => array('key' => 'flvplaylist_displayheight', 'type' => 0,
-										'desc' => gettext("Display height for the playlist. If the width is too small to show the playlist menu, you can set the height higher to show it below the actual movie display. See the flv player site for more info about these options."))
+										'desc' => gettext("Display height for the playlist. If the width is too small to show the playlist menu, you can set the height higher to show it below the actual movie display. See the flv player site for more info about these options.")),
+		gettext('Thumbs in playlist') => array('key' => 'flvplaylist_thumbsinplaylist', 'type' => 1,
+										'desc' => gettext("Check if you want that thumbnails of the preview images should be shown in the playlist."))
 		);
 	}
 }
@@ -88,7 +91,7 @@ function flvPlaylist($option='') {
 	<script type="text/javascript">
 		var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER; ?>/plugins/flvplayer/flvplayer.swf','jstest','<?php echo getOption('flvplaylist_width'); ?>','<?php echo getOption('flvplaylist_height'); ?>','8');
 		so.addParam('allowfullscreen','true');
-		so.addParam('overstretch','none');
+		so.addParam('overstretch','false');
 		so.addVariable('displaywidth', '<?php echo getOption('flvplaylist_displaywidth'); ?>');
 		so.addVariable('displayheight','<?php echo getOption('flvplaylist_displayheight'); ?>');
 		so.addVariable('backcolor','<?php echo getOption('flv_player_backcolor'); ?>');
@@ -98,6 +101,7 @@ function flvPlaylist($option='') {
 		so.addVariable('file','<?php echo WEBPATH."/".ZENFOLDER; ?>/plugins/flv_playlist/playlist.php?albumid=<?php echo $albumid; ?>');
 		so.addVariable('javascriptid','jstest');
 		so.addVariable('enablejs','true');
+		so.addVariable('thumbsinplaylist','<?php echo (getOption('flvplaylist_thumbsinplaylist') ? 'true' : 'false') ?>');
 		so.write('flvplaylist');
 	</script>
 	<?php
