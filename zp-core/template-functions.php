@@ -3356,7 +3356,7 @@ function normalizeColumns($albumColumns, $imageColumns) {
 		}
 		$rowssused = ceil(($count % $albcount) / $albumColumns);     /* number of album rows unused */
 		$leftover = floor(max(1, getOption('images_per_page')) / $imageColumns) - $rowssused;
-		$firstPageImages = $leftover * $imageColumns;  /* number of images that fill the leftover rows */
+		$firstPageImages = max(0, $leftover * $imageColumns);  /* number of images that fill the leftover rows */
 		if ($firstPageImages == $imgcount) {
 			return 0;
 		} else {
