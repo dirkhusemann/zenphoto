@@ -52,7 +52,7 @@ class slideshowOptions {
 									gettext('Timeout') => array('key' => 'slideshow_timeout', 'type' => 0,
 										'desc' => gettext("Milliseconds between slide transitions (0 to disable auto advance.) <em>[jQuery mode option]</em>")),
 									gettext('Description') => array('key' => 'slideshow_showdesc', 'type' => 1,
-										'desc' => gettext("Check if you want to show the image's description below the slideshow.")),
+										'desc' => gettext("Check if you want to show the image's description below the slideshow <em>[jQuery mode option]</em>.")),
 									gettext('flow player width') => array('key' => 'slideshow_flow_player_width', 'type' => 0,
 										'desc' => gettext("Width of the Flowplayer display for thee slideshow <em>(Flash mode)</em>.")),
 									gettext('flow player height') => array('key' => 'slideshow_flow_player_height', 'type' => 0,
@@ -304,7 +304,6 @@ function printSlideShowJS() {
 	<script src="<?php echo FULLWEBPATH . '/' . ZENFOLDER ?>/js/jquery.js" type="text/javascript"></script>
 	<script src="<?php echo FULLWEBPATH . '/' . ZENFOLDER ?>/plugins/slideshow/jquery.cycle.all.pack.js" type="text/javascript"></script>
 	<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/plugins/flowplayer/jquery.flashembed.pack.js"></script>
-
 <?php
 }
 
