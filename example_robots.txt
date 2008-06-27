@@ -17,3 +17,4 @@ Disallow: /zenphoto/themes
 Disallow: /zenphoto/zp-core
 Disallow: /zenphoto/rss.php
 Disallow: /zenphoto/rss-comments.php
+Disallow: /zenphoto/page/search
