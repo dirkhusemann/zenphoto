@@ -10,7 +10,7 @@ if (!($_zp_loggedin & ADMIN_RIGHTS)) { // prevent nefarious access to this page.
 	exit();
 }
 $gallery = new Gallery();
-$_get['page'] = 'tags';
+$_GET['page'] = 'tags';
 printAdminHeader();
 echo "\n</head>";
 echo "\n<body>";

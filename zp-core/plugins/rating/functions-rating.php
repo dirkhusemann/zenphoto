@@ -20,6 +20,10 @@ function checkForIp($ip, $id, $option) {
 	}
 	$IPlist = query_single_row("SELECT used_ips FROM $dbtable WHERE id= $id");
 	if (is_array($IPlist)) {
+		if (empty($IPlist['used_ips'])) {
+			$_rating_current_IPlist = array();
+			return false;
+		}
 		$_rating_current_IPlist = unserialize($IPlist['used_ips']);
 		return in_array($ip, $_rating_current_IPlist);
 	} else {

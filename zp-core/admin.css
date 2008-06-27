@@ -798,3 +798,36 @@ button.positive,.buttons a.positive {
 	height: 1%;
 }
 
+
+
+/* image pagination on album edit page */
+#imagenav {
+	text-align:center; 
+	background: #ECF1F2;
+	border-bottom: 2px solid #BAC9CF;
+}
+ul.pagelist {
+	clear: both;
+	padding: 0;
+	margin: 20px 0 0 0;
+	list-style-type: none;
+}
+ul.pagelist li {
+	display: inline;
+}
+ul.pagelist li a, ul.pagelist span.disabledlink {
+	padding: 4px;
+}
+ul.pagelist li.current a {
+	font-weight: bold;
+	text-decoration: none;
+	cursor: default;
+	color: #748da0;
+}
+ul.pagelist li.prev {
+	margin-right: 10px;
+}
+ul.pagelist li.next {
+	margin-left: 10px;
+}
+

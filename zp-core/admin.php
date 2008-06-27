@@ -843,11 +843,22 @@ if (empty($page) && !($_zp_loggedin & MAIN_RIGHTS)) $page='options';
 if ($page == "edit") {  
 
 /** SINGLE ALBUM ********************************************************************/
+	
+define('IMAGES_PER_PAGE', 10);
+	
 if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	$folder = strip($_GET['album']);
 	$album = new Album($gallery, $folder);
-	$images = $album->getImages();
-	$totalimages = sizeof($images);
+	$allimages = $album->getImages();
+	$allimagecount = count($allimages);
+	if (isset($_GET['imagepage'])) {
+		$imagepage = $_GET['imagepage'];
+	} else {
+		$imagepage = 1;
+	}
+	$images = array_slice($allimages, ($imagepage-1)*IMAGES_PER_PAGE, IMAGES_PER_PAGE);
+	
+	$totalimages = count($images);
 	// TODO: Perhaps we can build this from the meta array of Album? Moreover, they should be a set of constants!
 	$albumdir = "";
 	$pieces = explode('/', $folder);
@@ -901,11 +912,15 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	<input type="hidden"	name="savealbuminfo" value="1" /> <?php printAlbumEditForm(0, $album); ?>
 </form>
 <?php printAlbumButtons($album) ?> <?php if (!$album->isDynamic())  {?>
-<!-- Subalbum list goes here --> <a name="subalbumList"> <?php
 
+<!-- Subalbum list goes here --> 
+
+<a name="subalbumList"> 
+<?php
 $subalbums = $album->getSubAlbums();
 if (count($subalbums) > 0) {
-	if ($album->getNumImages() > 0)  { ?>
+	if ($album->getNumImages() > 0)  { 
+?>
 <p>
 
 </a><a href="#imageList" title="<?php echo gettext('Scroll down to the image list.'); ?>">
@@ -952,12 +967,16 @@ if (count($subalbums) > 0) {
 
 <?php
 } ?> 
-<!-- Images List --> <a name="imageList"></a> <?php if (count($album->getSubalbums()) > 10) { ?>
+
+<!-- Images List --> 
+
+<a name="imageList"></a> 
+<?php if (count($album->getSubalbums()) > 10) { ?>
 <p><a href="#subalbumList" title="<?php gettext('Scroll up to the sub-album list'); ?>">&laquo;
 <?php echo gettext("Subalbum List"); ?></a></p>
 <?php }
-if (count($album->getImages())) {
-	?>
+if ($allimagecount) {
+?>
 
 <form name="albumedit2"	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
 	<input type="hidden" name="album"	value="<?php echo $album->name; ?>" /> 
@@ -965,10 +984,61 @@ if (count($album->getImages())) {
 
 <table class="bordered">
 	<tr>
-		<th colspan="3">
+		<th colspan="2">
 		<h1><?php echo gettext("Images"); ?></h1>
 		</th>
+		<th align="right" valign="top">
+		<?php
+		$totalpages = ceil(($allimagecount / IMAGES_PER_PAGE));
+		if ($totalpages > 1) {
+			echo gettext("Page").' '.($imagepage).' '.gettext("of").' '.($totalpages);
+		} else {
+			echo "&nbsp;";
+		}
+		?>
+		</th>
 	</tr>
+	<?php
+	if ($allimagecount != $totalimages) { // need pagination links
+	?>
+	<tr>
+	<td colspan ="3" class="bordered" id="imagenav">
+	<ul class="pagelist">
+	<?php
+		echo "<li class=\"prev\">";
+		if ($imagepage > 1) {
+			echo '<a href=admin.php?page=edit&amp;album='.urlencode($album->name).'&amp;imagepage='.($imagepage-1).'>'.'&laquo; '.gettext("Previous page").'</a>';
+		} else {
+			echo '<span class="disabledlink">&laquo; '.gettext("Previous page").'</span>';
+		}
+		echo "</li>";
+		$start = 1;
+		$total = $start+15;
+		if ($total > $totalpages) {
+			$total = $totalpages+1;
+		}
+		for ($i=$start; $i<$total; $i++) {
+			if ($i == $imagepage) {
+				echo "<li class=\"current\">".$i.'</li>';
+			} else {
+				echo '<li><a href=admin.php?page=edit&amp;album='.urlencode($album->name).'&amp;imagepage='.$i.'>'.$i.'</a></li>';
+			}
+		}
+		if ($i < $totalpages) {echo "\n <li><a>" . ". . ." . "</a></li>"; }
+		echo "\n  <li class=\"next\">";
+		if ($imagepage<$totalpages) {
+			echo '<a href=admin.php?page=edit&amp;album='.urlencode($album->name).'&amp;imagepage='.($imagepage+1).'>'.gettext("Next page").' &raquo;'.'</a>';
+		} else {
+			echo '<span class="disabledlink">'.gettext("Next page").' &raquo;</span>';
+		}
+		echo '</li>';
+	?>
+	</ul>
+	</td>
+	</tr>
+	<?php 
+	}
+ ?>
 	<tr>
 		<td><input type="submit" value="<?php echo gettext('save images'); ?>" /></td>
 		<td colspan="2"><?php echo gettext("Click the images for a larger version"); ?></td>
