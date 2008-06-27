@@ -851,12 +851,12 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	$album = new Album($gallery, $folder);
 	$allimages = $album->getImages();
 	$allimagecount = count($allimages);
-	if (isset($_GET['imagepage'])) {
-		$imagepage = $_GET['imagepage'];
+	if (isset($_GET['subpage'])) {
+		$pagenum = max(intval($_GET['subpage']));
 	} else {
-		$imagepage = 1;
+		$pagenum = 1;
 	}
-	$images = array_slice($allimages, ($imagepage-1)*IMAGES_PER_PAGE, IMAGES_PER_PAGE);
+	$images = array_slice($allimages, ($pagenum-1)*IMAGES_PER_PAGE, IMAGES_PER_PAGE);
 	
 	$totalimages = count($images);
 	// TODO: Perhaps we can build this from the meta array of Album? Moreover, they should be a set of constants!
@@ -991,7 +991,7 @@ if ($allimagecount) {
 		<?php
 		$totalpages = ceil(($allimagecount / IMAGES_PER_PAGE));
 		if ($totalpages > 1) {
-			echo gettext("Page").' '.($imagepage).' '.gettext("of").' '.($totalpages);
+			echo gettext("Page").' '.$pagenum.' '.gettext("of").' '.($totalpages);
 		} else {
 			echo "&nbsp;";
 		}
@@ -1006,8 +1006,8 @@ if ($allimagecount) {
 	<ul class="pagelist">
 	<?php
 		echo "<li class=\"prev\">";
-		if ($imagepage > 1) {
-			echo '<a href=admin.php?page=edit&amp;album='.urlencode($album->name).'&amp;imagepage='.($imagepage-1).'>'.'&laquo; '.gettext("Previous page").'</a>';
+		if ($pagenum > 1) {
+			echo '<a href=admin.php?page=edit&amp;album='.urlencode($album->name).'&amp;subpage='.($pagenum-1).'>'.'&laquo; '.gettext("Previous page").'</a>';
 		} else {
 			echo '<span class="disabledlink">&laquo; '.gettext("Previous page").'</span>';
 		}
@@ -1018,16 +1018,16 @@ if ($allimagecount) {
 			$total = $totalpages+1;
 		}
 		for ($i=$start; $i<$total; $i++) {
-			if ($i == $imagepage) {
+			if ($i == $pagenum) {
 				echo "<li class=\"current\">".$i.'</li>';
 			} else {
-				echo '<li><a href=admin.php?page=edit&amp;album='.urlencode($album->name).'&amp;imagepage='.$i.'>'.$i.'</a></li>';
+				echo '<li><a href=admin.php?page=edit&amp;album='.urlencode($album->name).'&amp;subpage='.$i.'>'.$i.'</a></li>';
 			}
 		}
 		if ($i < $totalpages) {echo "\n <li><a>" . ". . ." . "</a></li>"; }
 		echo "\n  <li class=\"next\">";
-		if ($imagepage<$totalpages) {
-			echo '<a href=admin.php?page=edit&amp;album='.urlencode($album->name).'&amp;imagepage='.($imagepage+1).'>'.gettext("Next page").' &raquo;'.'</a>';
+		if ($pagenum<$totalpages) {
+			echo '<a href=admin.php?page=edit&amp;album='.urlencode($album->name).'&amp;subpage='.($pagenum+1).'>'.gettext("Next page").' &raquo;'.'</a>';
 		} else {
 			echo '<span class="disabledlink">'.gettext("Next page").' &raquo;</span>';
 		}
@@ -1472,12 +1472,26 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 /************************************************************************************/ 
 } else if ($page == "comments") {
 	// Set up some view option variables.
-	if (isset($_GET['n'])) $pagenum = max(intval($_GET['n']), 1); else $pagenum = 1;
-	if (isset($_GET['fulltext'])) $fulltext = true; else $fulltext = false;
-	if (isset($_GET['viewall'])) $viewall = true; else $viewall = false;
+	
+	$allcomments = fetchComments(""); 
+	if (isset($_GET['subpage'])) $pagenum = max(intval($_GET['subpage']), 1); else $pagenum = 1;
+	if (isset($_GET['fulltext'])) {
+		define('COMMENTS_PER_PAGE',10);
+		$fulltext = true; 
+		$fulltexturl = '&amp;fulltext';
+	} else {
+		define('COMMENTS_PER_PAGE',20);
+		$fulltext = false;
+		$fulltexturl = '';
+	}
 
-	$comments = fetchComments($viewall ? "" : 20);
-	?>
+	$comments = array_slice($allcomments, ($pagenum-1)*COMMENTS_PER_PAGE, COMMENTS_PER_PAGE);
+	$allcommentscount = count($allcomments);
+	$totalpages = ceil(($allcommentscount / COMMENTS_PER_PAGE));
+	if ($totalpages > 1) {
+		echo '<div align="right">'.gettext("Page").' '.$pagenum.' '.gettext("of").' '.($totalpages).'</div>';
+	}
+?>
 <h1><?php echo gettext("Comments"); ?></h1>
 
 <?php /* Display a message if needed. Fade out and hide after 2 seconds. */
@@ -1490,13 +1504,43 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 <?php } ?>
 
 <p><?php echo gettext("You can edit or delete comments on your photos."); ?></p>
-<?php if($viewall) { ?>
-<p><?php echo gettext("Showing <strong>all</strong> comments."); ?> <a
-	href="?page=comments<?php echo ($fulltext ? "&fulltext":""); ?>"><strong><?php echo gettext("Just show 20."); ?></strong></a></p>
-<?php } else { ?>
-<p><?php echo gettext("Showing the latest <strong>20</strong> comments."); ?> <a
-	href="?page=comments&viewall<?php echo ($fulltext ? "&fulltext":""); ?>"><strong><?php echo gettext("View All"); ?></strong></a></p>
-<?php } ?>
+
+<?php if ($totalpages > 1) {?>
+	<div align="center">
+	<ul class="pagelist">
+	<?php
+		echo "<li class=\"prev\">";
+		if ($pagenum > 1) {
+			echo '<a href=admin.php?page=comments&amp;subpage='.($pagenum-1).$fulltexturl.'>'.'&laquo; '.gettext("Previous page").'</a>';
+		} else {
+			echo '<span class="disabledlink">&laquo; '.gettext("Previous page").'</span>';
+		}
+		echo "</li>";
+		$start = 1;
+		$total = $start+15;
+		if ($total > $totalpages) {
+			$total = $totalpages+1;
+		}
+		for ($i=$start; $i<$total; $i++) {
+			if ($i == $pagenum) {
+				echo "<li class=\"current\">".$i.'</li>';
+			} else {
+				echo '<li><a href=admin.php?page=comments&amp;subpage='.$i.$fulltexturl.'>'.$i.'</a></li>';
+			}
+		}
+		if ($i < $totalpages) {echo "\n <li><a>" . ". . ." . "</a></li>"; }
+		echo "\n  <li class=\"next\">";
+		if ($pagenum<$totalpages) {
+			echo '<a href=admin.php?page=comments&amp;subpage='.($pagenum+1).$fulltexturl.'>'.gettext("Next page").' &raquo;'.'</a>';
+		} else {
+			echo '<span class="disabledlink">'.gettext("Next page").' &raquo;</span>';
+		}
+		echo '</li>';
+	?>
+	</ul>
+	</div>
+	<?php } ?>
+
 <form name="comments" action="?page=comments&action=deletecomments"
 	method="post"
 	onSubmit="return confirm('<?php echo gettext("Are you sure you want to delete these comments?"); ?>');">
