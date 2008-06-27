@@ -8,7 +8,7 @@
 
 $plugin_description = gettext("Enable <strong>FLV</strong> player to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time.<br> Please see <a href='http://www.jeroenwijering.com/?item=JW_FLV_Player'>JW FLV media player </a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.2.6';
+$plugin_version = '1.0.2.7';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---flvplayer.php.html";
 $option_interface = new flvplayer();
 $_zp_flash_player = $option_interface; // claim to be the flash player.
@@ -30,7 +30,7 @@ class flvplayer {
 		setOptionDefault('flv_player_lightcolor', '0x000000');
 		setOptionDefault('flv_player_screencolor', '0x000000');
 		setOptionDefault('flv_player_displayheight', '240');
-		setOptionDefault('flv_player_autostart', 'true');
+		setOptionDefault('flv_player_autostart', '');
 		//setOptionDefault('flv_player_ignoresize_for_mp3', 'true');
 	}
 
@@ -108,7 +108,7 @@ class flvplayer {
 			so.addVariable("frontcolor","'.getOption('flv_player_frontkcolor').'");
 			so.addVariable("lightcolor","'.getOption('flv_player_lightcolor').'");
 			so.addVariable("screencolor","'.getOption('flv_player_screencolor').'");
-			so.addVariable("autostart","' . (getOption('flv_player_autostart') == 0 ? 'false' : 'true') . '");
+			so.addVariable("autostart","' . (getOption('flv_player_autostart') ? 'false' : 'true') . '");
 			so.write("player");
 			</script>'; 
 	}
