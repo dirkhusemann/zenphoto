@@ -40,7 +40,7 @@ if (!getOption('zp_plugin_flvplayer')) {
 
 $plugin_description = gettext("A plugin to show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players with flv player (some options are also shared with that plugin).").$flv_player_missing;
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.4.1';
+$plugin_version = '1.0.4.2';
 $plugin_URL = "";
 $option_interface = new flvplaylist();
 
@@ -55,7 +55,7 @@ class flvplaylist {
 		setOptionDefault('flvplaylist_height', '240');
 		setOptionDefault('flvplaylist_displaywidth', '320');
 		setOptionDefault('flvplaylist_displayheight', '240');
-		setOptionDefault('flvplaylist_thumbsinplaylist', 'true');
+		setOptionDefault('flvplaylist_thumbsinplaylist', '');
 	}
 
 	function getOptionsSupported() {
