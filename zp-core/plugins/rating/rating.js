@@ -69,9 +69,6 @@ function _gr(reqseccion,divcont) {
 
 
 //Estas dos son para guardar
-
-var urlBase = "/update.php";
-
 function rate(rating,id,path,option)  {
 		remotos = new datosServidor;
 		nt = remotos.enviar(path+'/rating/update.php?rating='+rating+'&id='+id+'&option='+option);	
