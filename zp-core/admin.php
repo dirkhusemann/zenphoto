@@ -222,6 +222,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			/** SAVE **********************************************************************/
 			/******************************************************************************/
 		} else if ($action == "save") {
+			$returntab = '';
 
 			/** SAVE A SINGLE ALBUM *******************************************************/
 			if ($_POST['album']) {
@@ -299,7 +300,12 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				$folder = urldecode(strip($_GET['album']));
 				$qs_albumsuffix = '&album='.urlencode($folder);
 			}
-			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit' . $qs_albumsuffix . $notify . '&saved');
+			if (isset($_POST['subpage'])) {
+				$pg = '&subpage='.$_POST['subpage'];
+			} else {
+				$pg = '';
+			}
+			header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin.php?page=edit'.$qs_albumsuffix.$notify.'&saved'.$pg.$returntab);
 			exit();
 
 			/** DELETION ******************************************************************/
@@ -847,7 +853,13 @@ define('IMAGES_PER_PAGE', 10);
 if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	$folder = strip($_GET['album']);
 	$album = new Album($gallery, $folder);
-	$allimages = $album->getImages();
+	if ($album->isDynamic()) {
+		$subalbums = array();
+		$allimages = array();
+	} else {
+		$subalbums = $album->getSubAlbums();
+		$allimages = $album->getImages();
+	}
 	$allimagecount = count($allimages);
 	if (isset($_GET['subpage'])) {
 		$pagenum = max(intval($_GET['subpage']),1);
@@ -907,7 +919,8 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 <form name="albumedit1"
 	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
 	<input type="hidden" name="album"	value="<?php echo $album->name; ?>" /> 
-	<input type="hidden"	name="savealbuminfo" value="1" /> <?php printAlbumEditForm(0, $album); ?>
+	<input type="hidden"	name="savealbuminfo" value="1" /> 
+	<?php printAlbumEditForm(0, $album); ?>
 </form>
 <br />
 <?php printAlbumButtons($album) ?> <?php if (!$album->isDynamic())  {?>
@@ -916,7 +929,6 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 
 <a name="subalbumList"> 
 <?php
-$subalbums = $album->getSubAlbums();
 if (count($subalbums) > 0) {
 	if ($album->getNumImages() > 0)  { 
 ?>
@@ -980,6 +992,7 @@ if ($allimagecount) {
 <form name="albumedit2"	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
 	<input type="hidden" name="album"	value="<?php echo $album->name; ?>" /> 
 	<input type="hidden" name="totalimages" value="<?php echo $totalimages; ?>" />
+	<input type="hidden" name="subpage" value="<?php echo $pagenum; ?>" />
 
 <?php	$totalpages = ceil(($allimagecount / IMAGES_PER_PAGE));	?>
 <table class="bordered">
@@ -1474,8 +1487,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 	<?php } ?>
 
 <form name="comments" action="?page=comments&action=deletecomments"
-	method="post"
-	onSubmit="return confirm('<?php echo gettext("Are you sure you want to delete these comments?"); ?>');">
+	method="post"	onSubmit="return confirm('<?php echo gettext("Are you sure you want to delete these comments?"); ?>');">
 <table class="bordered">
 	<tr>
 		<th>&nbsp;</th>
