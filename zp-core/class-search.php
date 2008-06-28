@@ -376,6 +376,7 @@ class SearchEngine
 	 * @return array
 	 */
 	function searchTags($searchstring, $tbl, $idlist) {
+		$allIDs = null;
 		$sql = 'SELECT t.`name`, o.`objectid` FROM '.prefix('tags').' AS t, '.prefix('obj_to_tag').' AS o WHERE t.`id`=o.`tagid` AND o.`type`="'.$tbl.'" AND (';
 		foreach($searchstring as $singlesearchstring){
 			switch ($singlesearchstring) {
@@ -455,7 +456,17 @@ class SearchEngine
 										}
 										break;
 									case '!':
-										break; // what to do with initial NOT?
+										if (is_null($allIDs)) {
+											$allIDs = array();
+											$result = query_full_array("SELECT `id` FROM ".prefix($tbl));
+											if (is_array($result)) {
+												foreach ($result as $row) {
+													$allIDs[] = $row['id'];
+												}
+											}
+										}
+										$idlist = array_merge($idlist, array_diff($allIDs, $objectid));		
+										break; 
 									case '&!':
 										if (is_array($objectid)) {
 											$idlist = array_diff($idlist, $objectid);
