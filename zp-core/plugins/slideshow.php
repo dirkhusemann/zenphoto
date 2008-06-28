@@ -54,9 +54,9 @@ class slideshowOptions {
 									gettext('Description') => array('key' => 'slideshow_showdesc', 'type' => 1,
 										'desc' => gettext("Check if you want to show the image's description below the slideshow <em>[jQuery mode option]</em>.")),
 									gettext('flow player width') => array('key' => 'slideshow_flow_player_width', 'type' => 0,
-										'desc' => gettext("Width of the Flowplayer display for thee slideshow <em>(Flash mode)</em>.")),
+										'desc' => gettext("Width of the Flowplayer display for the slideshow <em>(Flash mode)</em>.")),
 									gettext('flow player height') => array('key' => 'slideshow_flow_player_height', 'type' => 0,
-										'desc' => gettext("Height of the Flowplayer display for thee slideshow <em>(Flash mode)</em>."))
+										'desc' => gettext("Height of the Flowplayer display for the slideshow <em>(Flash mode)</em>."))
 		);
 	}
 
