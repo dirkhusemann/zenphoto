@@ -502,12 +502,10 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 							$upload_r = $_POST[$i.'-upload_rights'];
 							$edit_r = $_POST[$i.'-edit_rights'];
 							$options_r = $_POST[$i.'-options_rights'];
-							$themes_r = $_POST[$i.'-themes_rights'];
+							$themes_r = $_POST[$i.'-themes_rights'];							
 							if (!isset($_POST['alter_enabled'])) {
 								$rights = NO_RIGHTS + $admin_r + $comment_r + $upload_r + $edit_r + $options_r + $themes_r + $main_r;
-
 								$managedalbums = array();
-
 								$l = strlen($albumsprefix = 'managed_albums_'.$i.'_');
 								foreach ($_POST as $key => $value) {
 									$key = postIndexDecode($key);
@@ -1875,6 +1873,8 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-main_rights"
 					value=<?php echo MAIN_RIGHTS; if ($user['rights'] & MAIN_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Overview"); ?></td>
 				<?php 
+				} else{
+					echo '<input type="hidden" name="'.$id.'-main_rights" value=1>';
 				}
 				?>
 			</tr>
