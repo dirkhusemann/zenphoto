@@ -287,21 +287,21 @@ function printTabs() {
 	} else {
 		$page= "home";
 	}
-
+	
 	echo "\n  <ul id=\"nav\">";
-	if (($_zp_loggedin & (MAIN_RIGHTS || ADMIN_RIGHTS))) {
+	if (($_zp_loggedin & (MAIN_RIGHTS | ADMIN_RIGHTS))) {
 		echo "\n    <li". ($page == "home" ? " class=\"current\""     : "") .
  				"> <a href=\"admin.php?page=home\">".gettext("overview")."</a></li>";
 	}
-	if (($_zp_loggedin & (COMMENT_RIGHTS || ADMIN_RIGHTS))) {
+	if (($_zp_loggedin & (COMMENT_RIGHTS | ADMIN_RIGHTS))) {
 		echo "\n    <li". ($page == "comments" ? " class=\"current\"" : "") .
  				"> <a href=\"admin.php?page=comments\">".gettext("comments")."</a></li>";
 	}
-	if (($_zp_loggedin & (UPLOAD_RIGHTS || ADMIN_RIGHTS))) {
+	if (($_zp_loggedin & (UPLOAD_RIGHTS | ADMIN_RIGHTS))) {
 		echo "\n    <li". ($page == "upload" ? " class=\"current\""   : "") .
  				"> <a href=\"admin.php?page=upload\">".gettext("upload")."</a></li>";
 	}
-	if (($_zp_loggedin & (EDIT_RIGHTS || ADMIN_RIGHTS))) {
+	if (($_zp_loggedin & (EDIT_RIGHTS | ADMIN_RIGHTS))) {
 		echo "\n    <li". ($page == "edit" ? " class=\"current\""     : "") .
  				"> <a href=\"admin.php?page=edit\">".gettext("edit")."</a></li>";
 	}
@@ -311,7 +311,7 @@ function printTabs() {
 	}	
 	echo "\n    <li". ($page == "options" ? " class=\"current\""  : "") .
  			"> <a href=\"admin.php?page=options\">".gettext("options")."</a></li>";
-	if (($_zp_loggedin & (THEMES_RIGHTS || ADMIN_RIGHTS))) {
+	if (($_zp_loggedin & (THEMES_RIGHTS | ADMIN_RIGHTS))) {
 		echo "\n    <li". ($page == "themes" ? " class=\"current\""  : "") .
  				"> <a href=\"admin.php?page=themes\">".gettext("themes")."</a></li>";
 	}
