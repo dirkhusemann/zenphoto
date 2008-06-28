@@ -520,12 +520,22 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 		printPrevPageLink($prevtext, gettext("Previous Page"));
 		echo "</li>";
 	}
-	for ($i=($j=max(1, min($current-2, $total-6))); $i <= min($total, $j+6); $i++) {
+	$j=max(1, min($current-3, $total-6));
+	if ($j != 1) {
+		echo "\n <li>";
+		printLink(getPageURL($k=max($j-4,1), $total), '...', "Page $k");
+		echo '</li>'; 
+	}
+	for ($i=$j; $i <= min($total, $j+6); $i++) {
 		echo "\n  <li" . (($i == $current) ? " class=\"current\"" : "") . ">";
 		printLink(getPageURL($i, $total), $i, "Page $i" . (($i == $current) ? ' '.gettext("(Current Page)") : ""));
 		echo "</li>";
 	}
-	if ($i <= $total) {echo "\n <li><a>" . ". . ." . "</a></li>"; }
+	if ($i <= $total) {
+		echo "\n <li>";
+		printLink(getPageURL($k=min($j+10,$total), $total), '...', "Page $k");
+		echo '</li>'; 
+	}
 	if ($nextprev) {
 		echo "\n  <li class=\"next\">";
 		printNextPageLink($nexttext, gettext("Next Page"));

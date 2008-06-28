@@ -850,7 +850,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	$allimages = $album->getImages();
 	$allimagecount = count($allimages);
 	if (isset($_GET['subpage'])) {
-		$pagenum = max(intval($_GET['subpage']));
+		$pagenum = max(intval($_GET['subpage']),1);
 	} else {
 		$pagenum = 1;
 	}
@@ -999,41 +999,9 @@ if ($allimagecount) {
 	<?php
 	if ($allimagecount != $totalimages) { // need pagination links
 	?>
-	<tr>
-	<td colspan ="3" class="bordered" id="imagenav">
-	<ul class="pagelist">
-	<?php
-		echo "<li class=\"prev\">";
-		if ($pagenum > 1) {
-			echo '<a href=admin.php?page=edit&amp;album='.urlencode($album->name).'&amp;subpage='.($pagenum-1).'>'.'&laquo; '.gettext("Previous page").'</a>';
-		} else {
-			echo '<span class="disabledlink">&laquo; '.gettext("Previous page").'</span>';
-		}
-		echo "</li>";
-		$start = 1;
-		$total = $start+15;
-		if ($total > $totalpages) {
-			$total = $totalpages+1;
-		}
-		for ($i=$start; $i<$total; $i++) {
-			if ($i == $pagenum) {
-				echo "<li class=\"current\">".$i.'</li>';
-			} else {
-				echo '<li><a href=admin.php?page=edit&amp;album='.urlencode($album->name).'&amp;subpage='.$i.'>'.$i.'</a></li>';
-			}
-		}
-		if ($i < $totalpages) {echo "\n <li><a>" . ". . ." . "</a></li>"; }
-		echo "\n  <li class=\"next\">";
-		if ($pagenum<$totalpages) {
-			echo '<a href=admin.php?page=edit&amp;album='.urlencode($album->name).'&amp;subpage='.($pagenum+1).'>'.gettext("Next page").' &raquo;'.'</a>';
-		} else {
-			echo '<span class="disabledlink">'.gettext("Next page").' &raquo;</span>';
-		}
-		echo '</li>';
-	?>
-	</ul>
-	</td>
-	</tr>
+	<tr><td colspan ="3" class="bordered" id="imagenav">
+	<?php adminPageNav($pagenum,$totalpages,'admin.php?page=edit&amp;album='.urlencode($album->name)); ?>
+	</td></tr>
 	<?php 
 	}
  ?>
@@ -1471,8 +1439,6 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 } else if ($page == "comments") {
 	// Set up some view option variables.
 	
-	$allcomments = fetchComments(""); 
-	if (isset($_GET['subpage'])) $pagenum = max(intval($_GET['subpage']), 1); else $pagenum = 1;
 	if (isset($_GET['fulltext'])) {
 		define('COMMENTS_PER_PAGE',10);
 		$fulltext = true; 
@@ -1482,7 +1448,9 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		$fulltext = false;
 		$fulltexturl = '';
 	}
-
+	$allcomments = fetchComments(""); 
+	if (isset($_GET['subpage'])) $pagenum = max(intval($_GET['subpage']),1); else $pagenum = 1;
+	
 	$comments = array_slice($allcomments, ($pagenum-1)*COMMENTS_PER_PAGE, COMMENTS_PER_PAGE);
 	$allcommentscount = count($allcomments);
 	$totalpages = ceil(($allcommentscount / COMMENTS_PER_PAGE));
@@ -1505,37 +1473,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 
 <?php if ($totalpages > 1) {?>
 	<div align="center">
-	<ul class="pagelist">
-	<?php
-		echo "<li class=\"prev\">";
-		if ($pagenum > 1) {
-			echo '<a href=admin.php?page=comments&amp;subpage='.($pagenum-1).$fulltexturl.'>'.'&laquo; '.gettext("Previous page").'</a>';
-		} else {
-			echo '<span class="disabledlink">&laquo; '.gettext("Previous page").'</span>';
-		}
-		echo "</li>";
-		$start = 1;
-		$total = $start+15;
-		if ($total > $totalpages) {
-			$total = $totalpages+1;
-		}
-		for ($i=$start; $i<$total; $i++) {
-			if ($i == $pagenum) {
-				echo "<li class=\"current\">".$i.'</li>';
-			} else {
-				echo '<li><a href=admin.php?page=comments&amp;subpage='.$i.$fulltexturl.'>'.$i.'</a></li>';
-			}
-		}
-		if ($i < $totalpages) {echo "\n <li><a>" . ". . ." . "</a></li>"; }
-		echo "\n  <li class=\"next\">";
-		if ($pagenum<$totalpages) {
-			echo '<a href=admin.php?page=comments&amp;subpage='.($pagenum+1).$fulltexturl.'>'.gettext("Next page").' &raquo;'.'</a>';
-		} else {
-			echo '<span class="disabledlink">'.gettext("Next page").' &raquo;</span>';
-		}
-		echo '</li>';
-	?>
-	</ul>
+	<?php adminPageNav($pagenum,$totalpages,'admin.php?page=comments'.$fulltexturl); ?>
 	</div>
 	<?php } ?>
 

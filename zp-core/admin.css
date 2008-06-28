@@ -824,10 +824,4 @@ ul.pagelist li.current a {
 	cursor: default;
 	color: #748da0;
 }
-ul.pagelist li.prev {
-	margin-right: 10px;
-}
-ul.pagelist li.next {
-	margin-left: 10px;
-}
 

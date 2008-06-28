@@ -1268,4 +1268,32 @@ function fetchComments($number) {
 	}
 	return $comments;
 }
+
+function adminPageNav($pagenum,$totalpages,$url) {
+	echo '<ul class="pagelist"><li class=\"prev\">';
+	if ($pagenum > 1) {
+		echo '<a href='.$url.'&amp;subpage='.($p=$pagenum-1).' title="page '.$p.'">'.'&laquo; '.gettext("Previous page").'</a>';
+	} else {
+		echo '<span class="disabledlink">&laquo; '.gettext("Previous page").'</span>';
+	}
+	echo "</li>";
+	$start = max(1,$pagenum-7);
+	$total = min($start+15,$totalpages+1);
+	if ($start != 1) { echo "\n <li><a href=".$url.'&amp;subpage='.($p=max($start-8, 1)).' title="page '.$p.'">. . .</a></li>'; }
+	for ($i=$start; $i<$total; $i++) {
+		if ($i == $pagenum) {
+			echo "<li class=\"current\">".$i.'</li>';
+		} else {
+			echo '<li><a href='.$url.'&amp;subpage='.$i.' title="page '.$i.'">'.$i.'</a></li>';
+		}
+	}
+	if ($i < $totalpages) { echo "\n <li><a href=".$url.'&amp;subpage='.($p=min($pagenum+22,$totalpages+1)).' title="page '.$p.'">. . .</a></li>'; }
+	echo "<li class=\"next\">";
+	if ($pagenum<$totalpages) {
+		echo '<a href='.$url.'&amp;subpage='.($p=$pagenum+1).' title="page '.$p.'">'.gettext("Next page").' &raquo;'.'</a>';
+	} else {
+		echo '<span class="disabledlink">'.gettext("Next page").' &raquo;</span>';
+	}
+	echo '</li></ul>';
+}
 ?>
