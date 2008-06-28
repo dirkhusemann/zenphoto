@@ -226,15 +226,17 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 
 			/** SAVE A SINGLE ALBUM *******************************************************/
 			if ($_POST['album']) {
-
+				
 				$folder = urldecode(strip($_POST['album']));
 				$album = new Album($gallery, $folder);
 				$notify = '';
 				if (isset($_POST['savealbuminfo'])) {
 					$notify = processAlbumEdit(0, $album);
+					$returntab = '#tab_albuminfo';
 				}
 
 				if (isset($_POST['totalimages'])) {
+					$returntab = '#tab_imageinfo';
 					for ($i = 0; $i < $_POST['totalimages']; $i++) {
 						$filename = strip($_POST["$i-filename"]);
 
@@ -885,6 +887,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		echo '</div>';
 	}
 	?>
+
 <h1>Edit Album: <em><?php echo $album->name; ?></em></h1>
 <p><?php printAdminLinks(gettext("edit") . $albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
  | <?php if (!$album->isDynamic() && $album->getNumImages() > 1) { 
@@ -892,7 +895,21 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
    echo ' | '; }?>
 <?php printViewLink($album, gettext("View Album"), gettext("View Album")); ?>
 </p>
-<p><?php echo gettext("<strong>Important:</strong> If you save an album all newly entered image data is lost. The same goes for all newly entered album data if image data is saved or an image is deleted."); ?></p>
+
+<?php
+/* disable this until the 1.1.7 release is out
+echo '<div id="mainmenu">';
+echo '<ul>';
+echo '<li><a href="#tab_albuminfo"><span>'.gettext("Album").'</span></a></li>';
+if (count($subalbums) > 0) {
+	echo '<li><a href="#tab_subalbuminfo"><span>'.gettext("Subalbums").'</span></a></li>';
+} if ($allimagecount) { 
+	echo '<li><a href="#tab_imageinfo"><span>'.gettext("Images").'</span></a></li>';
+} 	
+echo '</ul>';
+echo '</div>';
+*/
+?>
 
 	<?php displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */ ?>
 	<?php
@@ -915,7 +932,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	} 
 	?> 
 <!-- Album info box -->
-
+<div id="tab_albuminfo">
 <form name="albumedit1"
 	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
 	<input type="hidden" name="album"	value="<?php echo $album->name; ?>" /> 
@@ -925,20 +942,14 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 <br />
 <?php printAlbumButtons($album) ?> <?php if (!$album->isDynamic())  {?>
 <br />
-<!-- Subalbum list goes here --> 
+</div>
 
+<!-- Subalbum list goes here --> 
+<div id="tab_subalbuminfo">
 <a name="subalbumList"> 
 <?php
 if (count($subalbums) > 0) {
-	if ($album->getNumImages() > 0)  { 
 ?>
-<p>
-
-</a><a href="#imageList" title="<?php echo gettext('Scroll down to the image list.'); ?>">
-<?php echo gettext("Image List"); ?> &raquo;</a>
-
-	<?php } ?>
-
 <table class="bordered" width="100%">
 	<input type="hidden" name="subalbumsortby" value="Manual" />
 	<tr>
@@ -971,21 +982,19 @@ if (count($subalbums) > 0) {
 			src="images/reset.png" style="border: 0px;" alt="Reset hitcounters" /><?php echo gettext("Reset	hitcounters"); ?>&nbsp; <img src="images/fail.png" style="border: 0px;"
 			alt="Delete" />Delete</p>
 			<?php
-			zenSortablesSaveButton("?page=edit&album=" . urlencode($album->name) . "&subalbumsaved", gettext("Save Order"));
+			zenSortablesSaveButton("?page=edit&album=" . urlencode($album->name) . "&subalbumsaved#tab_subalbuminfo", gettext("Save Order"));
 			?></td>
 	</tr>
 </table>
 <br />
 <?php
 } ?> 
+</div>
 
 <!-- Images List --> 
-
+<div id=tab_imageinfo>
 <a name="imageList"></a> 
-<?php if (count($album->getSubalbums()) > 10) { ?>
-<p><a href="#subalbumList" title="<?php gettext('Scroll up to the sub-album list'); ?>">&laquo;
-<?php echo gettext("Subalbum List"); ?></a></p>
-<?php }
+<?php 
 if ($allimagecount) {
 ?>
 
@@ -1005,7 +1014,7 @@ if ($allimagecount) {
 	if ($allimagecount != $totalimages) { // need pagination links
 	?>
 	<tr><td colspan ="3" class="bordered" id="imagenav">
-	<?php adminPageNav($pagenum,$totalpages,'admin.php?page=edit&amp;album='.urlencode($album->name)); ?>
+	<?php adminPageNav($pagenum,$totalpages,'admin.php?page=edit&amp;album='.urlencode($album->name),'#tab_imageinfo'); ?>
 	</td></tr>
 	<?php 
 	}
@@ -1148,7 +1157,7 @@ if ($allimagecount) {
 	if ($allimagecount != $totalimages) { // need pagination links
 	?>
 	<tr><td colspan ="3" class="bordered" id="imagenav">
-	<?php adminPageNav($pagenum,$totalpages,'admin.php?page=edit&amp;album='.urlencode($album->name)); ?>
+	<?php adminPageNav($pagenum,$totalpages,'admin.php?page=edit&amp;album='.urlencode($album->name),'#tab_imageinfo'); ?>
 	</td></tr>
 	<?php 
 	}
@@ -1168,7 +1177,9 @@ if ($allimagecount) {
 <?php
 }
 }
-}?> <!-- page trailer -->
+}?> 
+</div>
+<!-- page trailer -->
 <p><a href="?page=edit<?php echo $albumdir ?>"
 	title="<?php echo gettext('Back to the list of albums (go up one level)'); ?>">&laquo; <?php echo gettext("Back"); ?></a></p>
 
@@ -1488,6 +1499,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 
 <form name="comments" action="?page=comments&action=deletecomments"
 	method="post"	onSubmit="return confirm('<?php echo gettext("Are you sure you want to delete these comments?"); ?>');">
+<input type"hidden" name="subpage" value="<?php echo $pagenum ?>">
 <table class="bordered">
 	<tr>
 		<th>&nbsp;</th>
