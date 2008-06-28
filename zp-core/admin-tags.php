@@ -240,7 +240,7 @@ echo "\n".'<form name="tag_delete" action="?page=tags&delete=true" method="post"
 tagSelector(NULL, '', true);
 echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='delete_tags' value=\"".gettext("delete checked tags")."\" title=\"".gettext("Delete all the tags checked above.")."\"/></p>";
 echo "\n</form>";
-echo '<p>'.gettext('To delete tags frm the gallery, place a checkmark in the box for each tag you wish to delete then press the <em>delete checked tags</em> button. The brackets contain the number of times the tag appears.').'</p>';
+echo '<p>'.gettext('To delete tags from the gallery, place a checkmark in the box for each tag you wish to delete then press the <em>delete checked tags</em> button. The brackets contain the number of times the tag appears.').'</p>';
 echo "\n</td>";
 echo "\n<td valign='top'>";
 echo "\n".'<form name="tag_rename" action="?page=tags&rename=true" method="post">';
