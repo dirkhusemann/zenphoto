@@ -981,20 +981,11 @@ if ($allimagecount) {
 	<input type="hidden" name="album"	value="<?php echo $album->name; ?>" /> 
 	<input type="hidden" name="totalimages" value="<?php echo $totalimages; ?>" />
 
+<?php	$totalpages = ceil(($allimagecount / IMAGES_PER_PAGE));	?>
 <table class="bordered">
 	<tr>
-		<th colspan="2">
+		<th colspan="3">
 		<h2 class="subheadline"><?php echo gettext("Images"); ?></h2>
-		</th>
-		<th align="right" valign="top">
-		<?php
-	 	$totalpages = ceil(($allimagecount / IMAGES_PER_PAGE));
-		/* if ($totalpages > 1) {
-			echo gettext("Page").' '.$pagenum.' '.gettext("of").' '.($totalpages);
-		} else {
-			echo "&nbsp;";
-		} */
-		?>
 		</th>
 	</tr>
 	<?php
@@ -1462,9 +1453,6 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 	$comments = array_slice($allcomments, ($pagenum-1)*COMMENTS_PER_PAGE, COMMENTS_PER_PAGE);
 	$allcommentscount = count($allcomments);
 	$totalpages = ceil(($allcommentscount / COMMENTS_PER_PAGE));
-	if ($totalpages > 1) {
-		echo '<div align="right">'.gettext("Page").' '.$pagenum.' '.gettext("of").' '.($totalpages).'</div>';
-	}
 ?>
 <h1><?php echo gettext("Comments"); ?></h1>
 
