@@ -1270,7 +1270,7 @@ function fetchComments($number) {
 }
 
 function adminPageNav($pagenum,$totalpages,$url) {
-	echo '<ul class="pagelist"><li class=\"prev\">';
+	echo '<ul class="pagelist"><li class="prev">';
 	if ($pagenum > 1) {
 		echo '<a href='.$url.'&amp;subpage='.($p=$pagenum-1).' title="page '.$p.'">'.'&laquo; '.gettext("Previous page").'</a>';
 	} else {

@@ -909,8 +909,9 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	<input type="hidden" name="album"	value="<?php echo $album->name; ?>" /> 
 	<input type="hidden"	name="savealbuminfo" value="1" /> <?php printAlbumEditForm(0, $album); ?>
 </form>
+<br />
 <?php printAlbumButtons($album) ?> <?php if (!$album->isDynamic())  {?>
-
+<br />
 <!-- Subalbum list goes here --> 
 
 <a name="subalbumList"> 
@@ -930,7 +931,7 @@ if (count($subalbums) > 0) {
 	<input type="hidden" name="subalbumsortby" value="Manual" />
 	<tr>
 		<th colspan="8">
-		<h1><?php echo gettext("Albums"); ?></h1>
+		<h2 class="subheadline"><?php echo gettext("Albums"); ?></h2>
 		</th>
 	</tr>
 	<tr>
@@ -962,7 +963,7 @@ if (count($subalbums) > 0) {
 			?></td>
 	</tr>
 </table>
-
+<br />
 <?php
 } ?> 
 
@@ -983,16 +984,16 @@ if ($allimagecount) {
 <table class="bordered">
 	<tr>
 		<th colspan="2">
-		<h1><?php echo gettext("Images"); ?></h1>
+		<h2 class="subheadline"><?php echo gettext("Images"); ?></h2>
 		</th>
 		<th align="right" valign="top">
 		<?php
-		$totalpages = ceil(($allimagecount / IMAGES_PER_PAGE));
-		if ($totalpages > 1) {
+	 	$totalpages = ceil(($allimagecount / IMAGES_PER_PAGE));
+		/* if ($totalpages > 1) {
 			echo gettext("Page").' '.$pagenum.' '.gettext("of").' '.($totalpages);
 		} else {
 			echo "&nbsp;";
-		}
+		} */
 		?>
 		</th>
 	</tr>
@@ -1140,7 +1141,14 @@ if ($allimagecount) {
 	<?php
 	$currentimage++;
 }
-?>
+	if ($allimagecount != $totalimages) { // need pagination links
+	?>
+	<tr><td colspan ="3" class="bordered" id="imagenav">
+	<?php adminPageNav($pagenum,$totalpages,'admin.php?page=edit&amp;album='.urlencode($album->name)); ?>
+	</td></tr>
+	<?php 
+	}
+ ?>
 	<tr>
 		<td colspan="3"><input type="submit" value="<?php echo gettext('save images'); ?>" /></td>
 	</tr>

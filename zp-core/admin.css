@@ -104,6 +104,14 @@ h2 {
 	margin: 0px 0px 5px 0px;
 }
 
+/* edit page subheadlines like "images" or "albums" */
+.subheadline {
+	color: #000;
+	font-size: 136%;
+	font-weight: normal;
+	margin: 0px 0px 0px 0px;
+}
+
 h3 {
 	font-size: 100%;
 	font-weight: normal;
@@ -809,19 +817,18 @@ button.positive,.buttons a.positive {
 ul.pagelist {
 	clear: both;
 	padding: 0;
-	margin: 20px 0 0 0;
+	margin: 0px;
 	list-style-type: none;
 }
 ul.pagelist li {
-	display: inline;
-}
+	display: inline; }
 ul.pagelist li a, ul.pagelist span.disabledlink {
-	padding: 4px;
+	padding-left: 4px; padding-right: 4px;
 }
-ul.pagelist li.current a {
+ul.pagelist li.current {
 	font-weight: bold;
 	text-decoration: none;
 	cursor: default;
-	color: #748da0;
+	color: black; padding-left: 4px; padding-right: 4px;
 }
 
