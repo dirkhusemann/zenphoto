@@ -229,17 +229,16 @@ function printLoginForm($redirect=null, $logo=true) {
 	echo "\n    <input type=\"hidden\" name=\"redirect\" value=\"$redirect\" />";
 
 	echo "\n    <table>";
-	echo "\n      <tr><td>".gettext("Login")."</td><td><input class=\"textfield\" name=\"user\" type=\"text\" size=\"20\" value=\"$requestor\" /></td></tr>";
-	echo "\n      <tr><td>".gettext("Password")."</td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
+	echo "\n      <tr><td align=\"right\"><h2>".gettext("Login").'&nbsp;'."</h2></td><td><input class=\"textfield\" name=\"user\" type=\"text\" size=\"20\" value=\"$requestor\" /></td></tr>";
+	echo "\n      <tr><td align=\"right\"><h2>".gettext("Password").'*'."</h2></td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
 
 	if (count(getAdminEmail()) > 0) {
 		$captchaCode = generateCaptcha($img);
-		echo "\n      <tr><td></td><td>";
-		echo "\n      ".gettext("Enter").' ';
+		echo "\n      <tr><td colspan=\"2\">";
+		echo "\n      ".gettext("*Enter").' ';
 		echo "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/>" .
  								"<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"absbottom\"/></label> ";
-		echo ' '.gettext("to request a reset.");
-		//		echo "      <input type=\"text\" id=\"code\" name=\"code\" size=\"4\" class=\"inputbox\" />";
+		echo ' '.gettext("to email a password reset.");
 		echo "      </td></tr>";
 	}
 	echo "\n      <tr><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"".gettext("Log in")."\" /></td></tr>";
