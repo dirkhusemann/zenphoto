@@ -946,7 +946,7 @@ echo '</div>';
 
 <!-- Subalbum list goes here --> 
 <div id="tab_subalbuminfo">
-<a name="subalbumList"> 
+<a name="subalbumList"></a>
 <?php
 if (count($subalbums) > 0) {
 ?>
