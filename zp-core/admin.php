@@ -1499,7 +1499,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 
 <form name="comments" action="?page=comments&action=deletecomments"
 	method="post"	onSubmit="return confirm('<?php echo gettext("Are you sure you want to delete these comments?"); ?>');">
-<input type"hidden" name="subpage" value="<?php echo $pagenum ?>">
+<input type="hidden" name="subpage" value="<?php echo $pagenum ?>">
 <table class="bordered">
 	<tr>
 		<th>&nbsp;</th>
