@@ -1053,10 +1053,10 @@ if (file_exists("zp-config.php")) {
 		}
 
 
-echo "<h3>".gettext("Done with table").' '.$taskDisplay[substr($task,0,8)]."!</h3>";
+		echo "<h3>".gettext("Done with table").' '.$taskDisplay[substr($task,0,8)]."!</h3>";
 
 		$rsd = getOption('admin_reset_date');
-		if (empty($rsd) || (isset($create[$_zp_conf_vars['mysql_prefix'].'administrators']))) {
+		if (empty($rsd) || ($_zp_loggedin == ADMIN_RIGHTS)) {
 			echo "<p>".gettext("You need to")." <a href=\"admin.php?page=options\">".gettext("set your admin user and password")."</a>.</p>";
 		} else {
 			echo "<p>".gettext("You can now")." <a href=\"../\">".gettext("View your gallery")."</a>".gettext(", or")." <a href=\"admin.php\">".gettext("administrate.")."</a></p>";

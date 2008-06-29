@@ -215,7 +215,11 @@ function printLoginForm($redirect=null, $logo=true) {
 	if (empty($requestor)) { $requestor = sanitize($_GET['ref']); }
 
 	if ($logo) echo "<p><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" /></p>";
-
+	if (count(getAdminEmail()) > 0) {
+		$star = '*';
+	} else {
+		$star = '&nbsp;';
+	}
 	echo "\n  <div id=\"loginform\">";
 	if ($_zp_login_error == 1) {
 		echo "<div class=\"errorbox\" id=\"message\"><h2>".gettext("There was an error logging in.</h2> Check your username and password and try again.")."</div>";
@@ -230,9 +234,9 @@ function printLoginForm($redirect=null, $logo=true) {
 
 	echo "\n    <table>";
 	echo "\n      <tr><td align=\"right\"><h2>".gettext("Login").'&nbsp;'."</h2></td><td><input class=\"textfield\" name=\"user\" type=\"text\" size=\"20\" value=\"$requestor\" /></td></tr>";
-	echo "\n      <tr><td align=\"right\"><h2>".gettext("Password").'*'."</h2></td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
+	echo "\n      <tr><td align=\"right\"><h2>".gettext("Password").$star."</h2></td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
 
-	if (count(getAdminEmail()) > 0) {
+	if ($star == '*') {
 		$captchaCode = generateCaptcha($img);
 		echo "\n      <tr><td colspan=\"2\">";
 		echo "\n      ".gettext("*Enter").' ';
