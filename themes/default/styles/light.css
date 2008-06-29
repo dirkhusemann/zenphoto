@@ -385,7 +385,7 @@ label:hover {
 ------------------------------ */
 #admin, #admin_data{
 	position: fixed;
-    _position: absolute;
+  _position: absolute;
 	right: 0px;
 	top: 0px;
 	width: 130px;

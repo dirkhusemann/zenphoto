@@ -1096,6 +1096,7 @@ Comment Submission form
 ----------------------------------------------- */
 #admin, #admin_data{
 	position:absolute;
+  _position: absolute;
 	right:0;
 	top:0;
 	border-left: 1px solid #333;

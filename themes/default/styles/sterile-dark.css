@@ -385,6 +385,7 @@ label {
 ------------------------------ */
 #admin, #admin_data{
 	position:fixed;
+  _position: absolute;
 	right:0;
 	top:0;
 	border-left: 1px solid #2a2a2a;
