@@ -2352,7 +2352,7 @@ function printCommentErrors($class = 'error') {
 		echo "<div class=$class>";
 		switch ($_zp_comment_error) {
 			case -1: echo gettext("You must supply an e-mail address."); break;
-			case -2: echo gettext("You must entert your name."); break;
+			case -2: echo gettext("You must enter your name."); break;
 			case -3: echo gettext("You must supply an WEB page URL."); break;
 			case -4: echo gettext("Captcha verification failed."); break;
 			case -5: echo gettext("You must enter something in the comment text."); break;

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zenphoto 1.1.6 svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-29 20:28+0100\n"
-"PO-Revision-Date: 2008-06-29 20:36+0100\n"
+"POT-Creation-Date: 2008-06-30 12:36+0100\n"
+"PO-Revision-Date: 2008-06-30 12:36+0100\n"
 "Last-Translator: acrylian <wartgart@gmx.net>\n"
 "Language-Team: Malte Müller (acrylian)\n"
 "MIME-Version: 1.0\n"
@@ -2030,8 +2030,8 @@ msgid "Enable gallery sessions:"
 msgstr "Galeriesessions aktivieren."
 
 #: zp-trunk/zp-core/admin.php:2185
-msgid "Put a checkmark here if you are having issues with with album\tpassword cookies not being retained. Setting the option causes zenphoto to use sessions rather than cookies."
-msgstr "Aktivieren, falls Probleme mit den Albumpasswortcookies auftreten. Diese Einstellung zwingt Zenphoto Sessions anstatt Cookies zu verwenden."
+msgid "Put a checkmark here if you are having issues with with album password cookies not being retained. Setting the option causes zenphoto to use sessions rather than cookies."
+msgstr "Aktivieren Sie dies, falls Probleme mit den Albumpasswortcookies auftreten. Diese Einstellung zwingt Zenphoto Sessions anstatt Cookies zu verwenden."
 
 #: zp-trunk/zp-core/admin.php:2208
 msgid "Image Display"
@@ -3714,8 +3714,8 @@ msgid "MySQL setup in <em>zp-config.php</em>"
 msgstr "MySQL-Konfiguration in <em>zp-config.php</em>"
 
 #: zp-trunk/zp-core/setup.php:484
-msgid "You have not set your <strong>MySQL</strong> <code>user</code>, <code>password</code>, etc. in your <code>zp-confgi.php</code> file and <strong>setup</strong> is not able to write to the file."
-msgstr "Sie haben keinen <strong>MySQL</strong>-<code>Benutzer</code>, <code>-Passwort</code> etc. in Ihrer<code>zp-confgi.php</code>-Datei eingetragen, so dass <strong>setup</strong> die Datei nicht aktualisieren kann."
+msgid "You have not set your <strong>MySQL</strong> <code>user</code>, <code>password</code>, etc. in your <code>zp-config.php</code> file and <strong>setup</strong> is not able to write to the file."
+msgstr "Sie haben keinen <strong>MySQL</strong>-<code>Benutzer</code>, <code>-Passwort</code> etc. in Ihrer<code>zp-config.php</code>-Datei eingetragen, so dass <strong>setup</strong> die Datei nicht aktualisieren kann."
 
 #: zp-trunk/zp-core/setup.php:487
 msgid "connect to MySQL"
@@ -3999,7 +3999,7 @@ msgid "You must supply an e-mail address."
 msgstr "Es muss eine E-Mail-Adresse eingegeben werden"
 
 #: zp-trunk/zp-core/template-functions.php:2355
-msgid "You must entert your name."
+msgid "You must enter your name."
 msgstr "Sie müssen Ihren Namen eintragen."
 
 #: zp-trunk/zp-core/template-functions.php:2356
@@ -4153,13 +4153,13 @@ msgstr "Autostart"
 msgid "Should the video start automatically. Yes if selected."
 msgstr "Dies sollte das Video automatisch starten, wenn ausgewählt."
 
-#: zp-trunk/zp-core/plugins/flowplayer.php:71
-#: zp-trunk/zp-core/plugins/flowplayer.php:90
+#: zp-trunk/zp-core/plugins/flowplayer.php:72
+#: zp-trunk/zp-core/plugins/flowplayer.php:93
 msgid "Get Flash"
 msgstr "Flash installieren"
 
-#: zp-trunk/zp-core/plugins/flowplayer.php:71
-#: zp-trunk/zp-core/plugins/flowplayer.php:90
+#: zp-trunk/zp-core/plugins/flowplayer.php:72
+#: zp-trunk/zp-core/plugins/flowplayer.php:93
 msgid "to see this player."
 msgstr "um diesen Player zu sehen."
 
