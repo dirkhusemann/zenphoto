@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zenphoto 1.1.6 [1538]\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-30 20:17+0100\n"
-"PO-Revision-Date: 2008-06-30 20:30+0100\n"
+"POT-Creation-Date: 2008-06-30 23:59+0100\n"
+"PO-Revision-Date: 2008-06-30 23:59+0100\n"
 "Last-Translator: Samy RABIH <spongestats@gmail.com>\n"
 "Language-Team: Samy Rabih (Fetard)\n"
 "MIME-Version: 1.0\n"
@@ -551,9 +551,8 @@ msgid "Check and the theme will use the flv_playlist plugin in place of the next
 msgstr "Cocher cette case pour que le thème utilise l'extension flv_playlist à la place de la boucle next_image."
 
 #: G:\sites\zenphoto/themes/example/themeoptions.php:23
-#, fuzzy
 msgid "flv playlist option"
-msgstr "Extensions"
+msgstr "Option liste de lecture flv"
 
 #: G:\sites\zenphoto/themes/example/themeoptions.php:23
 msgid "Select the option for the <em>flv_playlist()</em> function."
@@ -1055,7 +1054,6 @@ msgid "Delete all the tags checked above."
 msgstr "Effacer tous les tags cochés ci-dessus."
 
 #: G:\sites\zenphoto/zp-core/admin-tags.php:243
-#, fuzzy
 msgid "To delete tags from the gallery, place a checkmark in the box for each tag you wish to delete then press the <em>delete checked tags</em> button. The brackets contain the number of times the tag appears."
 msgstr "Pour supprimer les tags de la galerie, cocher la case correspondant à chaque tag que vous désirez supprimer et cliquez sur le bouton <em>effacer les tags sélectionnés</em>. Le nombre d'occurences du tag apparaît alors entre parenthèses."
 
@@ -1068,9 +1066,8 @@ msgid "Save all the changes entered above."
 msgstr "Enregistrer tous les changements réalisés ci-dessus."
 
 #: G:\sites\zenphoto/zp-core/admin-tags.php:258
-#, fuzzy
 msgid "To change the value of a tag enter a new value in the text box in front of the tag. Then press the <em>rename tags</em> button"
-msgstr "Pour changer le contenu d'un tag, entrez pour celui-ci une nouvelle valeur dans le champ texte devant le tag concerné. Pressez ensuite le <em>"
+msgstr "Pour changer le contenu d'un tag, entrez pour celui-ci une nouvelle valeur dans le champ texte devant le tag concerné. Pressez ensuite le bouton <em>renommer les tags</em>"
 
 #: G:\sites\zenphoto/zp-core/admin-tags.php:269
 msgid "save new tags"
@@ -1082,24 +1079,23 @@ msgstr "Ajouter tous les tags saisis ci-dessus."
 
 #: G:\sites\zenphoto/zp-core/admin-tags.php:271
 msgid "Add tags to the list by entering their names in the input fields of the <em>New tags</em> list. Then press the <em>save new tags </em>button"
-msgstr ""
+msgstr "Ajoutez les tags à la liste en saisissant leurs noms dans les champs de formulaire de la liste <em>Nouveaux tags</em>. Pressez ensuite le bouton <em>enregistrer les nouveaux tags</em>."
 
 #: G:\sites\zenphoto/zp-core/admin-tags.php:279
 msgid "Converts the <em>tags</em> from the table structure to a string in a record field."
-msgstr ""
+msgstr "Convertit les <em>tags</em> depuis une structure en table vers une chaîne de caractères dans un enregistrement."
 
 #: G:\sites\zenphoto/zp-core/admin-tags.php:279
 msgid "Revert tags to strings"
-msgstr ""
+msgstr "Reconvertir les tags en chaînes de caractères"
 
 #: G:\sites\zenphoto/zp-core/admin-tags.php:283
 msgid "Converts the <em>tags</em> from strings in a record field to a database tag table structure."
-msgstr ""
+msgstr "Convertit les <em>tags</em> depuis des chaînes de caractères dans un enregistrement vers une structure sous forme de table."
 
 #: G:\sites\zenphoto/zp-core/admin-tags.php:283
-#, fuzzy
 msgid "Convert tags to table"
-msgstr "Opération effectuée sur la table : "
+msgstr "Convertir les tags en table"
 
 #: G:\sites\zenphoto/zp-core/admin.php:5
 msgid "Filename"
@@ -1963,7 +1959,7 @@ msgstr "Utiliser la date de la dernière image"
 
 #: G:\sites\zenphoto/zp-core/admin.php:2126
 msgid "Set this option if you wish your album date to reflect the date of the latest image uploaded. Otherwise it will initially be set to the date the album was created."
-msgstr ""
+msgstr "Activez cette option si vous voulez que la date de l'album soit calée sur celle de la dernière image mise sur le serveur. Sinon, c'est la date de création de l'album qui sera utilisée."
 
 #: G:\sites\zenphoto/zp-core/admin.php:2129
 msgid "Sort gallery by:"
@@ -3675,9 +3671,8 @@ msgid "You can find the file in the \"zp-core\" directory."
 msgstr "Vous pouvez trouver le fichier dans le dossier \"zp-core\"."
 
 #: G:\sites\zenphoto/zp-core/setup.php:428
-#, fuzzy
 msgid "MySQL setup in"
-msgstr " Paramètrage MySQL trouvé dans"
+msgstr " Paramètrage MySQL dans"
 
 #: G:\sites\zenphoto/zp-core/setup.php:433
 msgid "Fill in the missing information below and <strong>setup</strong> will attempt to update your <code>zp-config.php</code> file."
@@ -3708,7 +3703,6 @@ msgid "required"
 msgstr "obligatoire"
 
 #: G:\sites\zenphoto/zp-core/setup.php:483
-#, fuzzy
 msgid "MySQL setup in <em>zp-config.php</em>"
 msgstr " Paramètrage MySQL dans <em>zp-config.php</em>"
 
@@ -3769,7 +3763,6 @@ msgid "found"
 msgstr "Ont été trouvées "
 
 #: G:\sites\zenphoto/zp-core/setup.php:536
-#, fuzzy
 msgid "MySQL <em>show tables</em>"
 msgstr "La requête MySQL <em>SHOW TABLES</em>"
 
@@ -4101,7 +4094,7 @@ msgstr "Annuler"
 
 #: G:\sites\zenphoto/zp-core/js/js-string-constants.js.php:21
 msgid "Currently editing something else, save or cancel to edit this."
-msgstr ""
+msgstr "Vous éditez déja quelque chose, enregistrez ou annulez pour éditer ce texte."
 
 #: G:\sites\zenphoto/zp-core/plugins/dynamic-locale.php:27
 msgid "Enable <strong>dynamic-locale</strong> to allow viewers of your site to select the language translation of their choice."
@@ -4513,7 +4506,7 @@ msgstr "Retour"
 
 #: G:\sites\zenphoto/zp-core/plugins/tag_suggest.php:9
 msgid "Enables jQuery tag suggestions on the search field. Just activate the plugin and the feature is available on the theme's search field."
-msgstr ""
+msgstr "Active les suggestions de tags dans le champ de recherche (via jQuery). Activez juste l'extension et la fonctionnalité est disponiblle dans le champ de recherche du thème."
 
 #: G:\sites\zenphoto/zp-core/plugins/user_logout.php:9
 msgid "Provides a means for placing a user logout link on your theme pages."
