@@ -736,7 +736,7 @@ function getAlbumDate($format=null) {
  * @param string $nonemessage Insert here the text to be printed if there is no date.
  * @param string $format Format string for the date formatting
  */
-function printAlbumDate($before='Date: ', $nonemessage='', $format=null) {
+function printAlbumDate($before='', $nonemessage='', $format=null) {
 
 	if (is_null($format)) {
 
@@ -1360,7 +1360,7 @@ function getImageDate($format=null) {
  * @param string $nonemessage Text to put out if there is no date
  * @param string $format format string for the date
  */
-function printImageDate($before='Date: ', $nonemessage='', $format=null) {
+function printImageDate($before='', $nonemessage='', $format=null) {
 	if (is_null($format)) {
 		$format = getOption('date_format');
 	}
