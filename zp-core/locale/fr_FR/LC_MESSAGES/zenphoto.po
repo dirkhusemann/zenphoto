@@ -1,0 +1,4771 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: zenphoto 1.1.6 [1538]\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-06-30 20:17+0100\n"
+"PO-Revision-Date: 2008-06-30 20:30+0100\n"
+"Last-Translator: Samy RABIH <spongestats@gmail.com>\n"
+"Language-Team: Samy Rabih (Fetard)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: French\n"
+"X-Poedit-Country: FRANCE\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-Bookmarks: 56,761,353,-1,-1,-1,-1,-1,-1,-1\n"
+"X-Poedit-SearchPath-0: G:\\sites\\zenphoto\n"
+
+#: G:\sites\zenphoto/themes/default/album.php:16
+#: G:\sites\zenphoto/themes/default/image.php:36
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:134
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:62
+msgid "Albums Index"
+msgstr "Racine des albums"
+
+#: G:\sites\zenphoto/themes/default/album.php:28
+#: G:\sites\zenphoto/themes/default/album.php:31
+#: G:\sites\zenphoto/themes/default/index.php:26
+#: G:\sites\zenphoto/themes/default/index.php:29
+#: G:\sites\zenphoto/themes/default/search.php:48
+#: G:\sites\zenphoto/themes/default/search.php:51
+msgid "View album:"
+msgstr "Voir l'album:"
+
+#: G:\sites\zenphoto/themes/default/album.php:49
+#: G:\sites\zenphoto/themes/default/image.php:31
+#: G:\sites\zenphoto/themes/default/index.php:38
+#: G:\sites\zenphoto/themes/default/search.php:72
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:103
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:107
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:322
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:35
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:37
+#: G:\sites\zenphoto/themes/effervescence_plus/index.php:69
+msgid "prev"
+msgstr "précédent"
+
+#: G:\sites\zenphoto/themes/default/album.php:49
+#: G:\sites\zenphoto/themes/default/image.php:33
+#: G:\sites\zenphoto/themes/default/index.php:38
+#: G:\sites\zenphoto/themes/default/search.php:72
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:115
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:119
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:322
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:45
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:47
+#: G:\sites\zenphoto/themes/effervescence_plus/index.php:69
+msgid "next"
+msgstr "suivant"
+
+#: G:\sites\zenphoto/themes/default/album.php:50
+#: G:\sites\zenphoto/themes/default/image.php:58
+msgid "<strong>Tags:</strong>"
+msgstr "<strong>Tags:</strong> "
+
+#: G:\sites\zenphoto/themes/default/album.php:53
+#: G:\sites\zenphoto/themes/default/image.php:51
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:221
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:264
+msgid "View Slideshow"
+msgstr "Voir le diaporama"
+
+#: G:\sites\zenphoto/themes/default/album.php:58
+msgid "Album RSS"
+msgstr "Flux RSS de l'album"
+
+#: G:\sites\zenphoto/themes/default/album.php:58
+#: G:\sites\zenphoto/themes/default/archive.php:6
+#: G:\sites\zenphoto/themes/default/archive.php:17
+#: G:\sites\zenphoto/themes/default/image.php:132
+#: G:\sites\zenphoto/themes/default/index.php:44
+#: G:\sites\zenphoto/themes/default/search.php:79
+#: G:\sites\zenphoto/themes/effervescence_plus/archive.php:30
+msgid "Archive View"
+msgstr "Archives"
+
+#: G:\sites\zenphoto/themes/default/album.php:58
+#: G:\sites\zenphoto/themes/default/archive.php:32
+#: G:\sites\zenphoto/themes/default/image.php:132
+#: G:\sites\zenphoto/themes/default/index.php:44
+#: G:\sites\zenphoto/themes/default/search.php:79
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:344
+#: G:\sites\zenphoto/themes/effervescence_plus/archive.php:54
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:192
+#: G:\sites\zenphoto/themes/effervescence_plus/index.php:90
+msgid "Powered by"
+msgstr "Propulsé par"
+
+#: G:\sites\zenphoto/themes/default/album.php:58
+#: G:\sites\zenphoto/themes/default/archive.php:32
+#: G:\sites\zenphoto/themes/default/image.php:132
+#: G:\sites\zenphoto/themes/default/index.php:44
+#: G:\sites\zenphoto/themes/default/search.php:79
+#: G:\sites\zenphoto/themes/effervescence_plus/index.php:90
+msgid "A simpler web photo album"
+msgstr "Un album photo en ligne plus simple"
+
+#: G:\sites\zenphoto/themes/default/archive.php:8
+#: G:\sites\zenphoto/themes/default/image.php:20
+#: G:\sites\zenphoto/themes/default/index.php:8
+#: G:\sites\zenphoto/themes/default/search.php:13
+#: G:\sites\zenphoto/themes/default/search.php:79
+msgid "Gallery RSS"
+msgstr "RSS de la galerie"
+
+#: G:\sites\zenphoto/themes/default/archive.php:17
+msgid "Gallery Index"
+msgstr "Accueil de la galerie"
+
+#: G:\sites\zenphoto/themes/default/image.php:31
+msgid "Previous Image"
+msgstr "Image précédente"
+
+#: G:\sites\zenphoto/themes/default/image.php:33
+msgid "Next Image"
+msgstr "Image suivante"
+
+#: G:\sites\zenphoto/themes/default/image.php:54
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:108
+msgid "Image Info"
+msgstr "Détails sur l'image"
+
+#: G:\sites\zenphoto/themes/default/image.php:68
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:132
+#: G:\sites\zenphoto/themes/effervescence_plus/index.php:85
+msgid "Comments"
+msgstr "Commentaire"
+
+#: G:\sites\zenphoto/themes/default/image.php:72
+msgid "says:"
+msgstr "dit:"
+
+#: G:\sites\zenphoto/themes/default/image.php:81
+msgid "Edit"
+msgstr "Modifier"
+
+#: G:\sites\zenphoto/themes/default/image.php:89
+msgid "Add a comment:"
+msgstr "Ajouter un commentaire:"
+
+#: G:\sites\zenphoto/themes/default/image.php:96
+msgid "Name:"
+msgstr "Nom:"
+
+#: G:\sites\zenphoto/themes/default/image.php:97
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:160
+msgid "don't publish"
+msgstr "non publié"
+
+#: G:\sites\zenphoto/themes/default/image.php:103
+msgid "E-Mail:"
+msgstr "Mail:"
+
+#: G:\sites\zenphoto/themes/default/image.php:108
+msgid "Site:"
+msgstr "Site Web:"
+
+#: G:\sites\zenphoto/themes/default/image.php:114
+msgid "Enter Captcha:"
+msgstr "Saisir le captcha:"
+
+#: G:\sites\zenphoto/themes/default/image.php:118
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:164
+msgid "Private (don't publish)"
+msgstr "Privé (non publié)"
+
+#: G:\sites\zenphoto/themes/default/image.php:122
+msgid "Add Comment"
+msgstr "Ajouter un commentaire"
+
+#: G:\sites\zenphoto/themes/default/image.php:126
+msgid "Comments are closed."
+msgstr "Les commentaires sont fermés."
+
+#: G:\sites\zenphoto/themes/default/search.php:9
+#: G:\sites\zenphoto/themes/default/search.php:29
+msgid "Search"
+msgstr "Chercher"
+
+#: G:\sites\zenphoto/themes/default/search.php:40
+msgid "Total matches for"
+msgstr "Total des résultats pour"
+
+#: G:\sites\zenphoto/themes/default/search.php:53
+msgid "Date:"
+msgstr "Date:"
+
+#: G:\sites\zenphoto/themes/default/search.php:69
+msgid "Sorry, no image matches. Try refining your search."
+msgstr "Désolé, aucune image ne correspond. Essayez de préciser votre recherche."
+
+#: G:\sites\zenphoto/themes/default/themeoptions.php:37
+msgid "Allow_comments"
+msgstr "Autoriser commentaires"
+
+#: G:\sites\zenphoto/themes/default/themeoptions.php:37
+msgid "Check to enable comment section."
+msgstr "Cocher pour activer la partie commentaires."
+
+#: G:\sites\zenphoto/themes/default/themeoptions.php:38
+msgid "Allow_search"
+msgstr "Autoriser recherche"
+
+#: G:\sites\zenphoto/themes/default/themeoptions.php:38
+msgid "Check to enable search form."
+msgstr "Cocher pour activer le formulaire de recherche."
+
+#: G:\sites\zenphoto/themes/default/themeoptions.php:39
+msgid "Theme_colors"
+msgstr "Couleurs du thème"
+
+#: G:\sites\zenphoto/themes/default/themeoptions.php:39
+msgid "Select the colors of the theme"
+msgstr "Sélectionner les couleurs du thème"
+
+#: G:\sites\zenphoto/themes/default/theme_description.php:4
+msgid "and"
+msgstr "et"
+
+#: G:\sites\zenphoto/themes/default/theme_description.php:7
+msgid "The default theme in 4 distinct flavors. After choosing this theme you can pick the theme color by going to the Admin Options tab and changing the <em>Theme colors</em> option."
+msgstr "Le thème par défaut dans 4 coloris distincts. Après avoir choisi ce thème, vous pouvez choisir sa couleur en vous rendant dans Options d'administrations et en changeant l'option <em>Couleurs du thème</em>."
+
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:167
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:170
+msgid "View the Album:"
+msgstr "Voir l'album:"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:178
+#: G:\sites\zenphoto/themes/effervescence_plus/index.php:65
+msgid "Album"
+msgstr "Album"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:178
+#: G:\sites\zenphoto/themes/effervescence_plus/index.php:65
+#: G:\sites\zenphoto/themes/effervescence_plus/index.php:78
+msgid "Albums"
+msgstr "Albums"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:267
+msgid "Photo"
+msgstr "Photo"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:267
+msgid "Photos"
+msgstr "Photos"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:277
+msgid "For the best viewing experience"
+msgstr "Pour la meilleure expérience visuelle"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:277
+msgid "Get Adobe Flash."
+msgstr "Obtenez Adobe Flash."
+
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:286
+msgid "View Gallery Without Flash"
+msgstr "Voir la galerie sans Flash"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:311
+msgid "Album is empty"
+msgstr "L'album est vide"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:337
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:185
+msgid "hit"
+msgstr "affichage"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:339
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:187
+msgid "hits"
+msgstr "affichages"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:341
+msgid "on this album"
+msgstr "dans cet album"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/album.php:375
+msgid "Open In New Window"
+msgstr "Ouvrir dans une nouvelle fenêtre"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/archive.php:10
+msgid "Archive"
+msgstr "Archive"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/archive.php:44
+msgid "Images By Date"
+msgstr "Images par date"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/archive.php:45
+msgid "Popular Tags"
+msgstr "Tags populaires"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/customfunctions.php:33
+msgid "Random picture..."
+msgstr "Image au hasard..."
+
+#: G:\sites\zenphoto/themes/effervescence_plus/customfunctions.php:59
+msgid "albums(s)"
+msgstr "albums(s)"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/customfunctions.php:63
+msgid "images(s)"
+msgstr "images(s)"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/customfunctions.php:91
+msgid "of"
+msgstr "de"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/customfunctions.php:102
+msgid "(not found)"
+msgstr "non trouvé(e)"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:108
+msgid "image details from exif"
+msgstr "détails sur l'image basés sur exif"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:132
+msgid "Comment"
+msgstr "Commentaire"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:153
+msgid "Leave a Reply"
+msgstr "Laisser une réponse"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:159
+msgid "Name"
+msgstr "Nom"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:161
+msgid "Email"
+msgstr "Mail"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:162
+msgid "Website"
+msgstr "Site web"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:163
+msgid "Enter Captcha"
+msgstr "Entrer le captcha"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:166
+msgid "Submit"
+msgstr "Envoyer"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:172
+msgid "Closed for comments."
+msgstr "Fermé aux commentaires."
+
+#: G:\sites\zenphoto/themes/effervescence_plus/image.php:189
+msgid "on this image"
+msgstr "sur cette image"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/index.php:56
+#: G:\sites\zenphoto/themes/effervescence_plus/index.php:60
+msgid "View the album:"
+msgstr "Voir l'album:"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/index.php:79
+msgid "Subalbums"
+msgstr "Sous-albums"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/index.php:81
+msgid "Images"
+msgstr "Images"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/search.php:113
+msgid "Hits"
+msgstr "Affichages"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/search.php:113
+msgid "Hit"
+msgstr "Affichage"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/search.php:114
+msgid "for"
+msgstr "pour"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/search.php:184
+msgid "get Adobe Flash."
+msgstr "installer Adobe Flash."
+
+#: G:\sites\zenphoto/themes/effervescence_plus/search.php:219
+msgid "Enter your search criteria."
+msgstr "Entrez vos critères de recherche"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/search.php:221
+msgid "Sorry, no matches for <em>"
+msgstr "Désolé, pas de correspondances pour <em>"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/search.php:221
+msgid "</em>. Try refining your search."
+msgstr "</em>. Essayez de préciser votre recherche"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/search.php:251
+msgid "Simpleviewer requires <em>mod_rewrite</em> to be set. Simpleviewer is disabled."
+msgstr "Simpleviewer requiert que <em>mod_rewrite</em> soit activé. Simpleviewer est désactivé."
+
+#: G:\sites\zenphoto/themes/effervescence_plus/search.php:279
+msgid "Open in a new window"
+msgstr "Ouvrir dans une nouvelle fenêtre"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/themeoptions.php:44
+msgid "Theme logo"
+msgstr "Couleurs du thème"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/themeoptions.php:44
+msgid "The text for the theme logo"
+msgstr "Le texte pour le logo du thème"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/themeoptions.php:45
+#: G:\sites\zenphoto/themes/example/themeoptions.php:21
+msgid "Allow comments"
+msgstr "Autoriser les commentaires"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/themeoptions.php:46
+msgid "Watermark head_image"
+msgstr "Activer le filigrane sur l'image principale"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/themeoptions.php:46
+msgid "Check to place a watermark on the heading image. (Image watermarking must be set.)"
+msgstr "Cocher pour placer un filigrane sur l'image en une. (Le marquage d'image doit être activé.)"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/themeoptions.php:47
+#: G:\sites\zenphoto/themes/example/themeoptions.php:24
+msgid "Allow search"
+msgstr "Autoriser la recherche"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/themeoptions.php:48
+msgid "Slideshow"
+msgstr "Diaporama"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/themeoptions.php:48
+msgid "Check to enable slideshow for the <em>Smoothgallery</em> personality."
+msgstr "Cocher pour activer le diaporama dans le cas d'une présentation <em>Smoothgallery</em>."
+
+#: G:\sites\zenphoto/themes/effervescence_plus/themeoptions.php:49
+msgid "Graphic logo"
+msgstr "Logo graphique"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/themeoptions.php:49
+msgid "Select a logo (PNG files in the images folder) or leave empty for text logo."
+msgstr "Sélectionner un logo (un des fichiers PNG du dossier images) ou laisser vide pour avoir un logo textuel."
+
+#: G:\sites\zenphoto/themes/effervescence_plus/themeoptions.php:50
+msgid "Theme personality"
+msgstr "Présentation du thème"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/themeoptions.php:50
+msgid "Select the theme personality"
+msgstr "Choisir la présentation du thème"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/themeoptions.php:51
+msgid "Theme colors"
+msgstr "Couleurs du thème"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/themeoptions.php:67
+msgid "Image page"
+msgstr "Page d'images"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/themeoptions.php:67
+msgid "Simpleviewer"
+msgstr "Simpleviewer"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/themeoptions.php:67
+msgid "Slimbox"
+msgstr "Slimbox"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/themeoptions.php:67
+msgid "Smoothgallery"
+msgstr "Smoothgallery"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/theme_description.php:4
+msgid "with modifications by"
+msgstr "modifié par"
+
+#: G:\sites\zenphoto/themes/effervescence_plus/theme_description.php:7
+msgid "Based on Effervescence 1.1 with multiple personalities (slimbox, simpleviewer and smoothgallery) added. Select different color schemes and personalities from the Admin Options tab."
+msgstr "Basé sur Effervescence 1.1 avec de nombreuses personnalisations (slimbox, simpleviewer and smoothgallery) supplémentaires. Vous pouvez sélectionner différentes palettes de couleurs et tendances "
+
+#: G:\sites\zenphoto/themes/example/album.php:22
+msgid "Prev Album"
+msgstr "Album précédent"
+
+#: G:\sites\zenphoto/themes/example/album.php:22
+msgid "Next Album"
+msgstr "Album suivant"
+
+#: G:\sites\zenphoto/themes/example/album.php:87
+#: G:\sites\zenphoto/themes/example/image.php:69
+msgid "No comments"
+msgstr "Pas de commentaires"
+
+#: G:\sites\zenphoto/themes/example/album.php:87
+#: G:\sites\zenphoto/themes/example/image.php:69
+msgid "<strong>One</strong> comment"
+msgstr "<strong>Un</strong> commentaire"
+
+#: G:\sites\zenphoto/themes/example/album.php:87
+msgid "comments on this album:"
+msgstr "commentaires sur l'album:"
+
+#: G:\sites\zenphoto/themes/example/album.php:117
+#: G:\sites\zenphoto/themes/example/image.php:95
+msgid "E-Mail (won't be public):"
+msgstr "Mail (ne sera pas public):"
+
+#: G:\sites\zenphoto/themes/example/album.php:119
+#: G:\sites\zenphoto/themes/example/image.php:97
+msgid "Enter"
+msgstr "Entrer"
+
+#: G:\sites\zenphoto/themes/example/album.php:141
+#: G:\sites\zenphoto/themes/example/image.php:113
+#: G:\sites\zenphoto/themes/example/search.php:92
+msgid "Seconds"
+msgstr "Secondes"
+
+#: G:\sites\zenphoto/themes/example/image.php:37
+msgid "Original Size:"
+msgstr "Dimensions originales:"
+
+#: G:\sites\zenphoto/themes/example/image.php:69
+msgid "comments on this image:"
+msgstr "commentaires sur cette image:"
+
+#: G:\sites\zenphoto/themes/example/themeoptions.php:16
+msgid "The flv_playlist plugin is not enabled. It must be enabled for this option to have effect."
+msgstr "L'extension flv_playlist n'est pas activée. L'option doit être cochée pour qu'elle soit effective."
+
+#: G:\sites\zenphoto/themes/example/themeoptions.php:19
+msgid "The flvplayer plugin is not enabled. It must be enabled for this option to have effect."
+msgstr "L'extension flvplayer n'est pas activée. L'option doit être cochée pour qu'elle soit effective."
+
+#: G:\sites\zenphoto/themes/example/themeoptions.php:22
+msgid "Use flv playlist"
+msgstr "Utiliser la liste de lecture flv"
+
+#: G:\sites\zenphoto/themes/example/themeoptions.php:22
+msgid "Check and the theme will use the flv_playlist plugin in place of the next_image loop."
+msgstr "Cocher cette case pour que le thème utilise l'extension flv_playlist à la place de la boucle next_image."
+
+#: G:\sites\zenphoto/themes/example/themeoptions.php:23
+#, fuzzy
+msgid "flv playlist option"
+msgstr "Extensions"
+
+#: G:\sites\zenphoto/themes/example/themeoptions.php:23
+msgid "Select the option for the <em>flv_playlist()</em> function."
+msgstr "Sélectionnez le paramètre pour la fonction <em>flv_playlist()</em>."
+
+#: G:\sites\zenphoto/themes/example/themeoptions.php:28
+msgid "Players"
+msgstr "Lecteurs"
+
+#: G:\sites\zenphoto/themes/example/themeoptions.php:28
+msgid "Playlist"
+msgstr "Liste de lecture"
+
+#: G:\sites\zenphoto/themes/example/theme_description.php:7
+msgid "This theme was designed to show off many of ZenPhoto's features. It includes many template tags and doesn't look half bad. Also a great example if you want to make your own theme or integrate ZenPhoto into a blog."
+msgstr "Ce thème a été créé pour montrer de nombreuses possibilités de Zenphoto. Il comprend de nombreux tags pour la mise en page et ne rend pas si mal que ça :). Un bon exemple pour créer son propre thème ou intégrer Zenphoto dans un blog."
+
+#: G:\sites\zenphoto/themes/stopdesign/album.php:50
+#: G:\sites\zenphoto/themes/stopdesign/albumarchive.php:36
+#: G:\sites\zenphoto/themes/stopdesign/index.php:34
+msgid "albums"
+msgstr " albums"
+
+#: G:\sites\zenphoto/themes/stopdesign/album.php:50
+#: G:\sites\zenphoto/themes/stopdesign/albumarchive.php:36
+#: G:\sites\zenphoto/themes/stopdesign/index.php:34
+msgid "album"
+msgstr " album"
+
+#: G:\sites\zenphoto/themes/stopdesign/album.php:58
+#: G:\sites\zenphoto/themes/stopdesign/albumarchive.php:44
+#: G:\sites\zenphoto/themes/stopdesign/index.php:42
+msgid "photos"
+msgstr " photos"
+
+#: G:\sites\zenphoto/themes/stopdesign/album.php:58
+#: G:\sites\zenphoto/themes/stopdesign/albumarchive.php:44
+#: G:\sites\zenphoto/themes/stopdesign/index.php:42
+msgid "photo"
+msgstr " photo"
+
+#: G:\sites\zenphoto/themes/stopdesign/album.php:93
+msgid "Next page"
+msgstr "Page suivante"
+
+#: G:\sites\zenphoto/themes/stopdesign/album.php:101
+msgid "Album RSS feed"
+msgstr "Flux RSS de l'album"
+
+#: G:\sites\zenphoto/themes/stopdesign/album.php:112
+msgid "prev page"
+msgstr "page précédente"
+
+#: G:\sites\zenphoto/themes/stopdesign/album.php:115
+msgid "next page"
+msgstr "page suivante"
+
+#: G:\sites\zenphoto/themes/stopdesign/albumarchive.php:62
+msgid "Gallery Feeds"
+msgstr "Flux de la galerie"
+
+#: G:\sites\zenphoto/themes/stopdesign/albumarchive.php:71
+#: G:\sites\zenphoto/themes/stopdesign/index.php:58
+msgid "Gallery Archive"
+msgstr "Archives de la galerie"
+
+#: G:\sites\zenphoto/themes/stopdesign/albumarchive.php:76
+#: G:\sites\zenphoto/themes/stopdesign/image.php:187
+#: G:\sites\zenphoto/themes/stopdesign/index.php:133
+msgid "Photo Templates</a> from"
+msgstr "Maquettes</a> issues de"
+
+#: G:\sites\zenphoto/themes/stopdesign/image.php:66
+msgid "image details"
+msgstr "détails sur l'image"
+
+#: G:\sites\zenphoto/themes/stopdesign/image.php:70
+msgid "Full Size"
+msgstr "Pleine taille"
+
+#: G:\sites\zenphoto/themes/stopdesign/image.php:83
+msgid "SHOW"
+msgstr "AFFICHER"
+
+#: G:\sites\zenphoto/themes/stopdesign/image.php:84
+msgid "HIDE"
+msgstr "CACHER"
+
+#: G:\sites\zenphoto/themes/stopdesign/image.php:86
+msgid "1 comment so far"
+msgstr "déja 1 commentaire"
+
+#: G:\sites\zenphoto/themes/stopdesign/image.php:87
+msgid "comments so far"
+msgstr "commentaires jusqu'à maintenant"
+
+#: G:\sites\zenphoto/themes/stopdesign/image.php:101
+msgid "Link to Comment"
+msgstr "Lien vers le commentaire"
+
+#: G:\sites\zenphoto/themes/stopdesign/image.php:102
+msgid "wrote:"
+msgstr " a écrit:"
+
+#: G:\sites\zenphoto/themes/stopdesign/image.php:134
+msgid "URL"
+msgstr "URL"
+
+#: G:\sites\zenphoto/themes/stopdesign/image.php:139
+msgid "Private comment"
+msgstr "Commentaire privé"
+
+#: G:\sites\zenphoto/themes/stopdesign/image.php:151
+msgid "Avoid clicking &ldquo;Post&rdquo; more than once."
+msgstr "Evitez de cliquer sur &ldquo;Post&rdquo; plus d'une fois."
+
+#: G:\sites\zenphoto/themes/stopdesign/image.php:173
+msgid "Previous"
+msgstr "Précédente"
+
+#: G:\sites\zenphoto/themes/stopdesign/image.php:176
+msgid "Next"
+msgstr "Suivante"
+
+#: G:\sites\zenphoto/themes/stopdesign/index.php:24
+msgid "Recently Updated Galleries"
+msgstr "Galeries mises à jour récemment"
+
+#: G:\sites\zenphoto/themes/stopdesign/index.php:78
+#: G:\sites\zenphoto/themes/stopdesign/index.php:93
+msgid "View image:"
+msgstr "Voir l'image:"
+
+#: G:\sites\zenphoto/themes/stopdesign/index.php:108
+msgid "Galleries"
+msgstr "Galeries"
+
+#: G:\sites\zenphoto/themes/stopdesign/search.php:129
+msgid "Sorry, no matches. Try refining your search."
+msgstr "Désolé, pas de correspondances. Essayez de préciser votre recherche"
+
+#: G:\sites\zenphoto/themes/stopdesign/themeoptions.php:16
+msgid "Gallery description"
+msgstr "Détails sur la galerie"
+
+#: G:\sites\zenphoto/themes/stopdesign/themeoptions.php:16
+msgid "Place a brief descripton  your gallery here."
+msgstr "Saisissez ici une description rapide de votre galerie."
+
+#: G:\sites\zenphoto/themes/stopdesign/themeoptions.php:17
+msgid "Mini slide selector"
+msgstr "Mini sélecteur de diapositives"
+
+#: G:\sites\zenphoto/themes/stopdesign/themeoptions.php:17
+msgid "Select what you want for the six special slides."
+msgstr "Sélectionnez ce que vous voulez pour les six pages spéciales."
+
+#: G:\sites\zenphoto/themes/stopdesign/themeoptions.php:21
+msgid "Recent images"
+msgstr "Images récentes"
+
+#: G:\sites\zenphoto/themes/stopdesign/themeoptions.php:21
+msgid "Random images"
+msgstr "Images au hasard"
+
+#: G:\sites\zenphoto/themes/stopdesign/theme_description.php:4
+msgid "Ported to zenPhoto by Mark Galeassi and Stephen Billard"
+msgstr "Porté sur zenPhoto par Mark Galeassi et Stephen Billard"
+
+#: G:\sites\zenphoto/themes/stopdesign/theme_description.php:7
+msgid "A theme based on the design from <a href=\"http://stopdesign.com/templates/photos/\">Douglas Bowman</a>. This theme is licensed under the <a href=\"http://creativecommons.org/licenses/by-nc-sa/2.5/\">Creative Commons Attribution-NonCommercial-ShareAlike 2.5</a> License."
+msgstr "Un thème basé sur un design de <a href=\"http://stopdesign.com/templates/photos/\">Douglas Bowman</a>. Ce thème est sous une licence <a href=\"http://creativecommons.org/licenses/by-nc-sa/2.5/\">Creative Commons - Paternité-Pas d'Utilisation Commerciale-Partage des Conditions Initiales à l'Identique 2.5 Générique</a>."
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:225
+msgid "There was an error logging in.</h2> Check your username and password and try again."
+msgstr "Impossible de se connecter.</h2>Vérifiez vos informations et réessayez."
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:228
+msgid "A reset request has been sent."
+msgstr "Une demande de remise à zéro a été envoyée."
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:236
+msgid "Login"
+msgstr "Identifiant"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:237
+msgid "Password"
+msgstr "Mot de passe"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:242
+msgid "*Enter"
+msgstr "*Entrer"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:245
+msgid "to email a password reset."
+msgstr "pour envoyer une demande de remise à zéro du mot de passe."
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:248
+msgid "Log in"
+msgstr "Se connecter"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:269
+msgid "Logged in as"
+msgstr "Connecté sous"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:269
+msgid "Log Out"
+msgstr "Se déconnecter"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:271
+msgid "View Gallery"
+msgstr "Voir la galerie"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:297
+msgid "overview"
+msgstr "aperçu"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:301
+#: G:\sites\zenphoto/zp-core/admin.php:2936
+msgid "comments"
+msgstr "commentaires"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:305
+msgid "upload"
+msgstr "charger"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:309
+#: G:\sites\zenphoto/zp-core/admin.php:892
+#: G:\sites\zenphoto/zp-core/albumsort.php:54
+msgid "edit"
+msgstr "modifier"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:313
+msgid "tags"
+msgstr "tags"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:316
+msgid "options"
+msgstr "options"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:319
+msgid "themes"
+msgstr "thèmes"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:323
+msgid "plugins"
+msgstr "extensions"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:367
+msgid "Image"
+msgstr "Image"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:373
+msgid "failed to delete."
+msgstr "n'a pu être effacé(e)."
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:376
+msgid "deleted successfully."
+msgstr "a bien été supprimé(e)."
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:599
+msgid "new tag"
+msgstr "nouveau tag"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:626
+#: G:\sites\zenphoto/zp-core/admin.php:2786
+msgid "Hitcounters have been reset"
+msgstr "Les compteurs d'affichage ont été remis à zéro"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:641
+#: G:\sites\zenphoto/zp-core/admin.php:1057
+msgid "Hit counter:"
+msgstr "Compteur d'affichages:"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:641
+#: G:\sites\zenphoto/zp-core/admin.php:1057
+msgid "reset_hitcounter"
+msgstr "reset_hitcounter"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:643
+msgid "Album Description:"
+msgstr "Description de l'album:"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:645
+msgid "Album guest user:"
+msgstr "Identifiant invité de l'album:"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:648
+msgid "Album password:"
+msgstr "Mot de passe de l'album:"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:662
+msgid "Password hint:"
+msgstr "Astuce pour le mot de passe:"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:671
+#: G:\sites\zenphoto/zp-core/admin.php:1065
+msgid "Location:"
+msgstr "Lieu:"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:673
+#: G:\sites\zenphoto/zp-core/admin.php:1107
+msgid "Custom data:"
+msgstr "Données personnalisées:"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:679
+#: G:\sites\zenphoto/zp-core/admin.php:2133
+msgid "Manual"
+msgstr "Manuel"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:682
+msgid "Sort subalbums by:"
+msgstr "Trier les sous-albums par:"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:701
+msgid "gallery album sort order"
+msgstr "Ordre de tri des albums de la galerie"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:703
+msgid "parent album subalbum sort order"
+msgstr "Ordre de tri des albums du parent"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:715
+#: G:\sites\zenphoto/zp-core/admin-functions.php:760
+#: G:\sites\zenphoto/zp-core/admin.php:2140
+#: G:\sites\zenphoto/zp-core/admin.php:2217
+msgid "Descending"
+msgstr "Décroissant"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:727
+#: G:\sites\zenphoto/zp-core/admin.php:2212
+msgid "Sort images by:"
+msgstr "Trier les images par:"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:746
+msgid "gallery default image sort order"
+msgstr "Ordre de tri des images par défaut de la galerie"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:748
+msgid "parent album image sort order"
+msgstr "Ordre de tri des images du parent"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:776
+#: G:\sites\zenphoto/zp-core/admin.php:1117
+msgid "Allow Comments"
+msgstr "Autoriser les commentaires"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:782
+#: G:\sites\zenphoto/zp-core/admin-functions.php:1034
+#: G:\sites\zenphoto/zp-core/admin.php:978
+#: G:\sites\zenphoto/zp-core/admin.php:1300
+msgid "Published"
+msgstr "Publié"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:786
+msgid "Album theme:"
+msgstr "Thème de l'album:"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:816
+#: G:\sites\zenphoto/zp-core/admin.php:1143
+msgid "Tags:"
+msgstr "Tags:"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:826
+msgid "Dynamic album search:"
+msgstr "Recherche dynamique d'album:"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:836
+msgid "Thumbnail:"
+msgstr "Vignette:"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:885
+msgid "randomly selected"
+msgstr "sélectionnées au hasard"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:943
+msgid "save album"
+msgstr "Enregistrer l'album"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:960
+msgid "Cache newly uploaded images."
+msgstr "Mettre en cache les images récemment chargées."
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:961
+#: G:\sites\zenphoto/zp-core/admin.php:2889
+msgid "Pre-Cache Images"
+msgstr "Mettre en cache les images"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:962
+#: G:\sites\zenphoto/zp-core/admin.php:2891
+msgid "Clear"
+msgstr "Effacer"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:969
+msgid "Forces a refresh of the EXIF and IPTC data for all images in the album."
+msgstr "Force un rafraîchissement des données EXIF et IPTC sur toutes les images de l'album."
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:969
+#: G:\sites\zenphoto/zp-core/admin.php:2897
+msgid "Refresh Metadata"
+msgstr "Rafraîchir les méta-données"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:979
+msgid "Resets all hitcounters in the album."
+msgstr "Remettre à zéro tous les compteurs de cet album"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:979
+#: G:\sites\zenphoto/zp-core/admin.php:1304
+#: G:\sites\zenphoto/zp-core/admin.php:2907
+msgid "Reset hitcounters"
+msgstr "Remettre à zéro les compteurs"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:995
+#: G:\sites\zenphoto/zp-core/admin-functions.php:999
+msgid "Edit this album:"
+msgstr "Modifier cet album:"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:1009
+#: G:\sites\zenphoto/zp-core/admin-functions.php:1015
+#: G:\sites\zenphoto/zp-core/admin.php:1176
+msgid "Subalbum List"
+msgstr "Liste des sous-albums"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:1027
+#: G:\sites\zenphoto/zp-core/admin.php:1299
+msgid "Protected"
+msgstr "Protégé"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:1033
+#: G:\sites\zenphoto/zp-core/admin-functions.php:1037
+msgid "Publish the album"
+msgstr "Publier l'album"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:1043
+msgid "Pre-cache images in"
+msgstr "Générer les vignettes dans"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:1044
+#: G:\sites\zenphoto/zp-core/admin.php:1302
+msgid "Cache the album"
+msgstr "Mettre en cache l'album"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:1048
+msgid "Refresh metadata for the album"
+msgstr "Rafraichir les méta-données pour l'album"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:1049
+msgid "Refresh image metadata in the album"
+msgstr "Rafraîchir les méta-données des images dans l'album"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:1052
+msgid "Reset hitcounters for album"
+msgstr "Remetre à zéro les compteurs pour l'album"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:1053
+msgid "Reset hitcounters for the album"
+msgstr "Remettre à zéro les compteurs pour l'album"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:1057
+msgid "Are you sure you want to delete this entire album?"
+msgstr "Etes-vous sûr(e) de vouloir supprimer cet album dans sa globalité?"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:1057
+msgid "Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!"
+msgstr "Etes vous Absolument Sûr(e) de vouloir supprimer l'album? Ce qui est fait ne peut être défait !"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:1058
+#: G:\sites\zenphoto/zp-core/admin-functions.php:1059
+msgid "Delete the album"
+msgstr "Supprimer l'album"
+
+#: G:\sites\zenphoto/zp-core/admin-functions.php:1278
+#: G:\sites\zenphoto/zp-core/admin-functions.php:1280
+msgid "Previous page"
+msgstr "Page précédente"
+
+#: G:\sites\zenphoto/zp-core/admin-tags.php:223
+msgid "Tag Management"
+msgstr "Gestion des tags"
+
+#: G:\sites\zenphoto/zp-core/admin-tags.php:227
+msgid "Delete tags from the gallery"
+msgstr "Supprimer les tags de la galerie"
+
+#: G:\sites\zenphoto/zp-core/admin-tags.php:228
+msgid "Rename tags"
+msgstr "Renommer les tags"
+
+#: G:\sites\zenphoto/zp-core/admin-tags.php:232
+msgid "New tags"
+msgstr "Nouveaux tags"
+
+#: G:\sites\zenphoto/zp-core/admin-tags.php:241
+msgid "delete checked tags"
+msgstr "Supprimer les tags cochés"
+
+#: G:\sites\zenphoto/zp-core/admin-tags.php:241
+msgid "Delete all the tags checked above."
+msgstr "Effacer tous les tags cochés ci-dessus."
+
+#: G:\sites\zenphoto/zp-core/admin-tags.php:243
+#, fuzzy
+msgid "To delete tags from the gallery, place a checkmark in the box for each tag you wish to delete then press the <em>delete checked tags</em> button. The brackets contain the number of times the tag appears."
+msgstr "Pour supprimer les tags de la galerie, cocher la case correspondant à chaque tag que vous désirez supprimer et cliquez sur le bouton <em>effacer les tags sélectionnés</em>. Le nombre d'occurences du tag apparaît alors entre parenthèses."
+
+#: G:\sites\zenphoto/zp-core/admin-tags.php:256
+msgid "rename tags"
+msgstr "Renommer les tags"
+
+#: G:\sites\zenphoto/zp-core/admin-tags.php:256
+msgid "Save all the changes entered above."
+msgstr "Enregistrer tous les changements réalisés ci-dessus."
+
+#: G:\sites\zenphoto/zp-core/admin-tags.php:258
+#, fuzzy
+msgid "To change the value of a tag enter a new value in the text box in front of the tag. Then press the <em>rename tags</em> button"
+msgstr "Pour changer le contenu d'un tag, entrez pour celui-ci une nouvelle valeur dans le champ texte devant le tag concerné. Pressez ensuite le <em>"
+
+#: G:\sites\zenphoto/zp-core/admin-tags.php:269
+msgid "save new tags"
+msgstr "Enregistrer les nouveaux tags"
+
+#: G:\sites\zenphoto/zp-core/admin-tags.php:269
+msgid "Add all the tags entered above."
+msgstr "Ajouter tous les tags saisis ci-dessus."
+
+#: G:\sites\zenphoto/zp-core/admin-tags.php:271
+msgid "Add tags to the list by entering their names in the input fields of the <em>New tags</em> list. Then press the <em>save new tags </em>button"
+msgstr ""
+
+#: G:\sites\zenphoto/zp-core/admin-tags.php:279
+msgid "Converts the <em>tags</em> from the table structure to a string in a record field."
+msgstr ""
+
+#: G:\sites\zenphoto/zp-core/admin-tags.php:279
+msgid "Revert tags to strings"
+msgstr ""
+
+#: G:\sites\zenphoto/zp-core/admin-tags.php:283
+msgid "Converts the <em>tags</em> from strings in a record field to a database tag table structure."
+msgstr ""
+
+#: G:\sites\zenphoto/zp-core/admin-tags.php:283
+#, fuzzy
+msgid "Convert tags to table"
+msgstr "Opération effectuée sur la table : "
+
+#: G:\sites\zenphoto/zp-core/admin.php:5
+msgid "Filename"
+msgstr "Nom du fichier"
+
+#: G:\sites\zenphoto/zp-core/admin.php:5
+msgid "Date"
+msgstr "Date"
+
+#: G:\sites\zenphoto/zp-core/admin.php:5
+#: G:\sites\zenphoto/zp-core/admin.php:2149
+msgid "Title"
+msgstr "Titre"
+
+#: G:\sites\zenphoto/zp-core/admin.php:5
+msgid "ID"
+msgstr "ID"
+
+#: G:\sites\zenphoto/zp-core/admin.php:401
+msgid "The album couldn't be created in the 'albums' folder. This is usually a permissions problem. Try setting the permissions on the albums and cache folders to be world-writable using a shell:"
+msgstr "L'album ne peut être créé dans le dossier 'albums'. Il s'agit généralement d'un problème de permissions. Essayez de les modifier sur les dossiers d'albums et de cache pour rendre ceux-ci inscriptibles en utilisant une ligne de commande:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:402
+msgid "or use your FTP program to give everyone write permissions to those folders."
+msgstr "ou utilisez votre logiciel FTP pour donner les permissions à \"tout le monde\" sur ces dossiers."
+
+#: G:\sites\zenphoto/zp-core/admin.php:414
+msgid "You must upload at least one file."
+msgstr "Vous devez charger au moins un fichier."
+
+#: G:\sites\zenphoto/zp-core/admin.php:416
+msgid "You must enter a folder name for your new album."
+msgstr "Vous devez entrer un nom de répertoire pour votre nouvel album."
+
+#: G:\sites\zenphoto/zp-core/admin.php:418
+msgid "You've most likely exceeded the upload limits. Try uploading fewer files at a time, or use a ZIP file."
+msgstr "Vous avez sans doute dépassé les limites d'import de fichiers. Essayez d'en charger moins à la fois, ou compressez-les dans une archive ZIP."
+
+#: G:\sites\zenphoto/zp-core/admin.php:421
+msgid "There was an error submitting the form. Please try again. If this keeps happening, check your server and PHP configuration (make sure file uploads are enabled, and upload_max_filesize is set high enough)"
+msgstr "Une erreur s'est produite à la soumission du formulaire. Merci de réessayer. Si ce problème persiste, vérifiez votre configuration serveur ainsi que PHP (assurez-vous que le chargement de fichiers est activé, et que le paramètre est upload_max_filesize est à une taille suffisante)"
+
+#: G:\sites\zenphoto/zp-core/admin.php:422
+msgid "If you think this is a bug, file a bug report. Thanks!"
+msgstr "Si vous pensez qu'il s'agit d'un bug, remplissez un rapport de signalement. Merci !"
+
+#: G:\sites\zenphoto/zp-core/admin.php:824
+msgid "Password reset request.<br/>You may now set admin usernames and passwords."
+msgstr "Demande de remise à zéro du mot de passe.<br />Vous devriez maintenant spécifier les identifiant et mot de passe de l'administrateur."
+
+#: G:\sites\zenphoto/zp-core/admin.php:886
+msgid "Subalbum order saved"
+msgstr "Ordre des sous-albums sauvegardé"
+
+#: G:\sites\zenphoto/zp-core/admin.php:892
+#: G:\sites\zenphoto/zp-core/admin.php:1184
+#: G:\sites\zenphoto/zp-core/admin.php:1231
+#: G:\sites\zenphoto/zp-core/admin.php:1630
+#: G:\sites\zenphoto/zp-core/cache-images.php:80
+msgid "Back"
+msgstr "Retour"
+
+#: G:\sites\zenphoto/zp-core/admin.php:892
+#: G:\sites\zenphoto/zp-core/admin.php:1184
+msgid "Back to the list of albums (go up one level)"
+msgstr "Retour à la liste des albums (un niveau au-dessus)"
+
+#: G:\sites\zenphoto/zp-core/admin.php:894
+msgid "Sort Album"
+msgstr "Trier l'album"
+
+#: G:\sites\zenphoto/zp-core/admin.php:896
+#: G:\sites\zenphoto/zp-core/albumsort.php:56
+msgid "View Album"
+msgstr "Voir l'album"
+
+#: G:\sites\zenphoto/zp-core/admin.php:920
+#: G:\sites\zenphoto/zp-core/admin.php:1195
+#: G:\sites\zenphoto/zp-core/admin.php:1751
+msgid "Your passwords did not match"
+msgstr "Vos mots de passe ne correspondent pas"
+
+#: G:\sites\zenphoto/zp-core/admin.php:926
+#: G:\sites\zenphoto/zp-core/admin.php:1199
+msgid "Save Successful"
+msgstr "Enregistrement réussi"
+
+#: G:\sites\zenphoto/zp-core/admin.php:961
+msgid "Drag the albums into the order you wish them displayed. Select an album to edit its description and data, or"
+msgstr "Déplacez les albums dans l'ordre où vous souhaitez les afficher. Sélectionnez un album pour modifier sa description et ses infos, ou"
+
+#: G:\sites\zenphoto/zp-core/admin.php:962
+#: G:\sites\zenphoto/zp-core/admin.php:1278
+msgid "mass-edit all album data"
+msgstr "modifier en masse les données de l'album"
+
+#: G:\sites\zenphoto/zp-core/admin.php:977
+#: G:\sites\zenphoto/zp-core/admin.php:1299
+msgid "Has Password"
+msgstr "Possède un mot de passe"
+
+#: G:\sites\zenphoto/zp-core/admin.php:979
+#: G:\sites\zenphoto/zp-core/admin.php:1301
+msgid "Unpublished"
+msgstr "Non publié"
+
+#: G:\sites\zenphoto/zp-core/admin.php:980
+msgid "Cache\tthe album"
+msgstr "Mettre en cache l'album"
+
+#: G:\sites\zenphoto/zp-core/admin.php:981
+#: G:\sites\zenphoto/zp-core/admin.php:1303
+msgid "Refresh image metadata"
+msgstr "Rafraîchir les méta-données de l'image"
+
+#: G:\sites\zenphoto/zp-core/admin.php:982
+msgid "Reset\thitcounters"
+msgstr "Remettre à zéro les compteurs d'affichage"
+
+#: G:\sites\zenphoto/zp-core/admin.php:985
+#: G:\sites\zenphoto/zp-core/admin.php:1308
+msgid "Save Order"
+msgstr "Sauvegarder l'ordre"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1023
+#: G:\sites\zenphoto/zp-core/admin.php:1166
+msgid "save images"
+msgstr "Enregistrer les images"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1024
+msgid "Click the images for a larger version"
+msgstr "Cliquez sur les images pour les voir en plus grand"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1057
+msgid "Reset"
+msgstr "Remise à zéro"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1060
+msgid "Description:"
+msgstr "Description:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1071
+msgid "City:"
+msgstr "Ville:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1077
+msgid "State:"
+msgstr "Etat:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1083
+msgid "Country:"
+msgstr "Pays:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1089
+msgid "Credit:"
+msgstr "Crédits:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1095
+msgid "Copyright:"
+msgstr "Droits:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1122
+msgid "Visible"
+msgstr "Visible"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1131
+msgid "Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"
+msgstr "Etes-vous sûr(e) de vouloir supprimer cette image? Ce qui est fait ne peut être défait !"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1132
+#: G:\sites\zenphoto/zp-core/admin.php:1134
+msgid "Delete the image"
+msgstr "Supprimer l'image"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1175
+msgid "Scroll up to the sub-album list"
+msgstr "Remonter vers la liste des sous-albums"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1229
+msgid "Edit All Albums in"
+msgstr "Modifier tous les albums dans"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1229
+#: G:\sites\zenphoto/zp-core/admin.php:1700
+#: G:\sites\zenphoto/zp-core/admin.php:1701
+#: G:\sites\zenphoto/zp-core/admin.php:2579
+#: G:\sites\zenphoto/zp-core/admin.php:2580
+msgid "Gallery"
+msgstr "Galerie"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1231
+msgid "Back to the list of albums (go up a level)"
+msgstr "Retour à la liste des albums (un niveau au-dessus)"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1254
+msgid "Edit Gallery"
+msgstr "Modifier la galerie"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1261
+msgid "Album order saved"
+msgstr "Ordre des albums sauvegardé"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1275
+msgid "Drag the albums into the order you wish them displayed."
+msgstr "Déplacez les albums dans l'ordre où vous souhaitez les afficher."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1277
+msgid "Select an album to edit its description and data, or"
+msgstr "Sélectionnez un album pour modifier sa description et ses détails, ou"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1282
+msgid "Edit this album"
+msgstr "Modifier cet album"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1305
+#: G:\sites\zenphoto/zp-core/admin.php:1517
+msgid "Delete"
+msgstr "Supprimer"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1314
+msgid "There are no albums for you to edit."
+msgstr "Vous n'avez aucun album à éditer."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1335
+msgid "Upload Photos"
+msgstr "Charger de nouvelles photos"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1336
+msgid "This web-based upload accepts image formats:"
+msgstr "Cet outil de chargement via le web supporte ces formats d'image:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1339
+msgid "You can also upload a <strong>ZIP</strong> archive containing any of those file types."
+msgstr "Vous pouvez aussi charger sur le serveur une archive <strong>ZIP</strong> contenant l'un de ces formats d'image."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1341
+msgid "The maximum size for any one file is"
+msgstr "La taille maximum par fichier est"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1342
+msgid "Don't forget, you can also use"
+msgstr "N'oubliez pas, vous pouvez aussi utiliser"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1343
+msgid "to upload folders of images into the albums directory!"
+msgstr "pour charger les dossiers d'images directement dans les albums."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1347
+msgid "Something went wrong..."
+msgstr "Quelque chose ne s'est pas passé correctement..."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1348
+msgid "There was an error submitting the form. Please try again."
+msgstr "Une erreur s'est produite à la soumission du formulaire. Merci de réessayer."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1354
+msgid "PHP Safe Mode Restrictions in effect!"
+msgstr "Restrictions liées au safe_mode de PHP actives!"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1355
+msgid "Zenphoto may be unable to perform uploads when PHP Safe Mode restrictions are in effect"
+msgstr "Zenphoto ne peut charger des fichiers sur le serveur lorsque les restrictions imposées par le safe_mode de PHP sont actives."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1363
+#: G:\sites\zenphoto/zp-core/admin.php:1372
+#: G:\sites\zenphoto/zp-core/admin.php:1403
+#: G:\sites\zenphoto/zp-core/admin.php:1411
+#: G:\sites\zenphoto/zp-core/admin.php:1417
+#: G:\sites\zenphoto/zp-core/admin.php:1456
+msgid "That name is already used."
+msgstr "Ce nom est déja utilisé."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1363
+#: G:\sites\zenphoto/zp-core/admin.php:1372
+#: G:\sites\zenphoto/zp-core/admin.php:1403
+#: G:\sites\zenphoto/zp-core/admin.php:1411
+#: G:\sites\zenphoto/zp-core/admin.php:1417
+#: G:\sites\zenphoto/zp-core/admin.php:1456
+msgid "This upload has to have a folder. Type a title or folder name to continue..."
+msgstr "Cet chargement de fichiers doit avoir une cible. Tapez un titre ou un nom de dossier pour continuer..."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1367
+msgid "Upload to:"
+msgstr "Charger dans:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1404
+msgid "Make a new Album"
+msgstr "Créer un nouvel album"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1406
+msgid "Publish the album so everyone can see it."
+msgstr "Publier l'album afin que tout le monde puisse le voir."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1409
+msgid "called:"
+msgstr "appelé:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1413
+msgid "with the folder name:"
+msgstr "avec le nom de dossier:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1420
+msgid "Auto-generate"
+msgstr "Auto-génération"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1445
+msgid "Add more upload boxes"
+msgstr "Ajouter plus de champs de chargement de fichiers"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1446
+msgid "(won't reload the page, but remember your upload limits!)"
+msgstr "(ne va pas recharger la page, mais souvenez-vous de vos limites d'upload!)"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1449
+#: G:\sites\zenphoto/zp-core/admin.php:1827
+msgid "Upload"
+msgstr "Charger"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1486
+msgid "Comments deleted successfully."
+msgstr "Les commentaires ont bien été supprimés."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1488
+msgid "Comment saved successfully."
+msgstr "Les commentaires ont bien été enregistrés."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1492
+msgid "You can edit or delete comments on your photos."
+msgstr "Vous pouvez modifier ou supprimer les commentaires de vos photos."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1501
+msgid "Are you sure you want to delete these comments?"
+msgstr "Etes-vous sur de vous vouloir supprimer ces commentaires?"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1506
+msgid "Album/Image"
+msgstr "Album/Image"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1507
+msgid "Author/Link"
+msgstr "Auteur/Lien"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1508
+msgid "Date/Time"
+msgstr "Date/Heure"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1510
+msgid "View full text"
+msgstr "Voir le texte complet"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1511
+msgid "View truncated"
+msgstr "Voir le début"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1512
+msgid "E-Mail"
+msgstr "Mail"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1513
+msgid "IP address"
+msgstr "Adresse IP"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1514
+msgid "Show"
+msgstr "Affiché"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1515
+msgid "Spam"
+msgstr "Spam"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1540
+#: G:\sites\zenphoto/zp-core/admin.php:1543
+#: G:\sites\zenphoto/zp-core/admin.php:1556
+msgid "database error"
+msgstr "erreur de base de données"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1577
+msgid "Anonymous"
+msgstr "Anonyme"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1590
+msgid "Private"
+msgstr "Privé"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1597
+msgid "remove from moderation"
+msgstr "retirer de la modération"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1612
+msgid "Check All"
+msgstr "Tout cocher"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1618
+msgid "Delete Selected Comments"
+msgstr "Supprimer les commentaires sélectionnés"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1627
+msgid "edit comment"
+msgstr "modifier le commentaire"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1630
+msgid "No comment specified."
+msgstr "Pas de commentaire spécifié."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1641
+msgid "Author:"
+msgstr "Auteur:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1646
+msgid "Web Site:"
+msgstr "Site web:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1656
+msgid "Date/Time:"
+msgstr "Date/Heure:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1661
+msgid "Comment:"
+msgstr "Commentaire:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1666
+#: G:\sites\zenphoto/zp-core/admin.php:1903
+#: G:\sites\zenphoto/zp-core/admin.php:2189
+#: G:\sites\zenphoto/zp-core/admin.php:2320
+#: G:\sites\zenphoto/zp-core/admin.php:2390
+#: G:\sites\zenphoto/zp-core/admin.php:2509
+#: G:\sites\zenphoto/zp-core/admin.php:2554
+#: G:\sites\zenphoto/zp-core/admin.php:2755
+msgid "save"
+msgstr "enregistrer"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1681
+#: G:\sites\zenphoto/zp-core/admin.php:2706
+msgid "Saved"
+msgstr "Enregistré"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1687
+msgid "admin information"
+msgstr "Utilisateurs"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1692
+msgid "gallery configuration"
+msgstr "Galerie"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1693
+msgid "image display"
+msgstr "Images"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1694
+msgid "comment configuration"
+msgstr "Commentaires"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1721
+msgid "theme options"
+msgstr "Thèmes"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1726
+msgid "plugin options"
+msgstr "Extensions"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1749
+msgid "You must supply a password"
+msgstr "Vous devez fournir un mot de passe"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1767
+msgid "Admin login information"
+msgstr "Informations de connexion de l'administrateur"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1778
+msgid "Master"
+msgstr "Principal"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1787
+msgid "Username:"
+msgstr "Nom d'utilisateur"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1801
+msgid "Password:"
+msgstr "Mot de passe:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1802
+#: G:\sites\zenphoto/zp-core/admin.php:1946
+#: G:\sites\zenphoto/zp-core/admin.php:1969
+msgid "(repeat)"
+msgstr "(répéter)"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1811
+msgid "Rights"
+msgstr "Droits"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1815
+msgid "User admin"
+msgstr "Administrateur"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1817
+msgid "Options"
+msgstr "Options"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1819
+msgid "Themes"
+msgstr "Thèmes"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1832
+msgid "Overview"
+msgstr "Aperçu"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1844
+msgid "Full name:"
+msgstr "Nom complet:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1846
+msgid "email:"
+msgstr "Mail:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1869
+msgid "Managed albums:"
+msgstr "Albums gérés:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1877
+msgid "This account's username and email are used as contact data in the RSS feeds."
+msgstr "Le nom d'utilisateur et l'adresse mail de ce compte sont utilisés comme contact dans les flux RSS."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1885
+msgid "You have rights to manage these albums."
+msgstr "Vous avez pas des droits suffisants pour gérer ces albums."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1887
+msgid "Select one or more albums for the administrator to manage."
+msgstr "Sélectionnez un ou plusieurs albums à gérer par l'administrateur."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1888
+msgid "Administrators with <em>User admin</em> rights can manage all albums. All others may manage only those that are selected."
+msgstr "Les administrateurs avec les droits \"Super administrateur\" peuvent gérer tous les albums. Les autres ne peuvent gérer que ceux qui sont sélectionnés."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1918
+#: G:\sites\zenphoto/zp-core/admin.php:2201
+msgid "Your"
+msgstr "Vos"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1918
+#: G:\sites\zenphoto/zp-core/admin.php:2201
+msgid "passwords did not match"
+msgstr "mots de passe ne correspondent pas"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1923
+msgid "Your Website URL is not valid"
+msgstr "L'URL de votre site web n'est pas valide"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1930
+msgid "General Gallery Configuration"
+msgstr "Configuration générale de la galerie"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1934
+msgid "Gallery title:"
+msgstr "Titre de la galerie:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1937
+msgid "What you want to call your photo gallery."
+msgstr "Comment vous voulez nommer votre galerie."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1940
+msgid "Gallery guest user:"
+msgstr "Utilisateur invité pour la galerie:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1942
+msgid "User ID for the gallery guest user"
+msgstr "Identifiant pour l'utilisateur invité de la galerie"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1945
+msgid "Gallery password:"
+msgstr "Mot de passe de la galerie:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1954
+msgid "Master password for the gallery. If this is set, visitors must know this password to view the gallery."
+msgstr "Mot de passe général pour la galerie. S'il est spécifié, les visiteurs devront le connaître pour visualiser la galerie."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1957
+msgid "Gallery password hint:"
+msgstr "Astuce pour le mot de passe de la galerie:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1960
+#: G:\sites\zenphoto/zp-core/admin.php:1982
+msgid "A reminder hint for the password."
+msgstr "Un truc pour se souvenir du mot de passe."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1963
+msgid "Search guest user:"
+msgstr "Mot de passe pour la recherche:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1965
+msgid "User ID for the search guest user"
+msgstr "Identifiant pour l'utilisateur invité (recherche)"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1968
+msgid "Search password:"
+msgstr "Mot de passe pour la recherche:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1976
+msgid "Password for the the search guest user. If this is set, visitors must know this password to view search results."
+msgstr "Mot de passe pour l'utilisateur autorisé à utiliser la recherche. S'il est spécifié, les visiteurs devront le connaître pour visualiser les résultats de recherche."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1979
+msgid "Search password hint:"
+msgstr "Astuce pour le mot de passe de recherche:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1985
+msgid "Website title:"
+msgstr "Titre du site:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1988
+msgid "Your web site title."
+msgstr "Le titre de votre site web."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1991
+msgid "Website url:"
+msgstr "Adresse du site:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:1994
+msgid "This is used to link back to your main site, but your theme must\tsupport it."
+msgstr "Ceci est utilisé pour faire un lien de retour sur votre site principal, mais le thème que vous utilisez doit gérer cette option."
+
+#: G:\sites\zenphoto/zp-core/admin.php:1997
+msgid "Server protocol:"
+msgstr "Protocole du serveur:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2000
+msgid "If you're running a secure server, change this to"
+msgstr "Si vous utilisez un serveur sécurisé, modifiez le en"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2001
+msgid "(Most people will leave this alone.)"
+msgstr "(La plupart des gens n'ont pas à le changer.)"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2004
+msgid "Time offset (hours):"
+msgstr "Décalage horaire (en heures):"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2007
+msgid "If you're in a different time zone from your server, set the\toffset in hours."
+msgstr "Si vous êtes sur un fuseau horaire différent de votre serveur, spécifiez le décalage en heures."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2010
+msgid "Enable mod_rewrite:"
+msgstr "Activer l'option mod_rewrite:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2013
+msgid "If you have Apache <em>mod_rewrite</em>, put a checkmark here, and\tyou'll get nice cruft-free URLs."
+msgstr "Si la fonction <em>mod_rewrite</em> d'Apache est activée, cochez cette case pour avoir des URL \"propres\" (sans extension de fichier, etc)."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2016
+msgid "Mod_rewrite Image suffix:"
+msgstr "Suffixe d'image du module mod_rewrite:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2019
+msgid "If <em>mod_rewrite</em> is checked above, zenphoto will appended\tthis to the end (helps search engines). Examples: <em>.html, .php,\t/view</em>, etc."
+msgstr "Si l'option <em>mod_rewrite</em> est cochée au dessus, Zenphoto rajoutera cette extension en fin d'URL pour amailiorer le référencement par les moteurs de recherche (exemple : <em>.html, .php, /view</em>, etc."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2022
+msgid "Language:"
+msgstr "Langue"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2028
+msgid "The language to display text in. (Set to <em>HTTP Accept Language</em> to use the language preference specified by the viewer's browser.)"
+msgstr "La langue à afficher. (Choisir <em>HTTP Accept Language</em> pour utiliser le paramètre de langue fourni par le navigateur du visiteur.)"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2031
+msgid "Date format:"
+msgstr "Format de la date:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2043
+msgid "Custom"
+msgstr "Personnalisé"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2044
+msgid "02/25/08 15:30"
+msgstr "02/25/08 15:30"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2045
+msgid "02/25/08"
+msgstr "02/25/08"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2046
+msgid "02/25/2008 15:30"
+msgstr "02/25/2008 15:30"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2047
+msgid "02/25/2008"
+msgstr "02/25/2008"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2048
+msgid "02-25-08 15:30"
+msgstr "02-25-08 15:30"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2049
+msgid "02-25-08"
+msgstr "02-25-08"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2050
+msgid "02-25-2008 15:30"
+msgstr "02-25-2008 15:30"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2051
+msgid "02-25-2008"
+msgstr "02-25-2008"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2052
+msgid "2008. February 25. 15:30"
+msgstr "2008. Février 25. 15:30"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2053
+msgid "2008. February 25."
+msgstr "2008. Février 25."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2054
+msgid "2008-02-25 15:30"
+msgstr "2008-02-25 15:30"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2055
+msgid "2008-02-25"
+msgstr "2008-02-25"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2056
+msgid "25 Feb 2008 15:30"
+msgstr "25 Fév 2008 15:30"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2057
+msgid "25 Feb 2008"
+msgstr "25 Fév 2008"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2058
+msgid "25 February 2008 15:30"
+msgstr "25 Février 2008 15:30"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2059
+msgid "25 February 2008"
+msgstr "25 Février 2008"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2060
+msgid "25. Feb 2008 15:30"
+msgstr "25. Fév 2008 15:30"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2061
+msgid "25. Feb 2008"
+msgstr "25. Fév 2008"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2062
+msgid "25. Feb. 08 15:30"
+msgstr "25. Fév. 08 15:30"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2063
+msgid "25. Feb. 08"
+msgstr "25. Fév. 08"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2064
+msgid "25. February 2008 15:30"
+msgstr "25. Février 2008 15:30"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2065
+msgid "25. February 2008"
+msgstr "25. Février 2008"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2066
+msgid "25.02.08 15:30"
+msgstr "25.02.08 15:30"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2067
+msgid "25.02.08"
+msgstr "25.02.08"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2068
+msgid "25.02.2008 15:30"
+msgstr "25.02.2008 15:30"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2069
+msgid "25.02.2008"
+msgstr "25.02.2008"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2070
+msgid "25-02-08 15:30"
+msgstr "25-02-08 15:30"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2071
+msgid "25-02-08"
+msgstr "25-02-08"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2072
+msgid "25-02-2008 15:30"
+msgstr "25-02-2008 15:30"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2073
+msgid "25-02-2008"
+msgstr "25-02-2008"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2074
+msgid "25-Feb-08 15:30"
+msgstr "25-Fév-08 15:30"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2075
+msgid "25-Feb-08"
+msgstr "25-Fév-08"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2076
+msgid "25-Feb-2008 15:30"
+msgstr "25-Fév-2008 15:30"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2077
+msgid "25-Feb-2008"
+msgstr "25-Fév-2008"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2078
+msgid "Feb 25, 2008 15:30"
+msgstr "Fév 25, 2008 15:30"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2079
+msgid "Feb 25, 2008"
+msgstr "Fév 25, 2008"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2080
+msgid "February 25, 2008 15:30"
+msgstr "Février 25, 2008 15:30"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2081
+msgid "February 25, 2008"
+msgstr "Février 25, 2008"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2098
+msgid "Format for dates. Select from the list or set to <code>custom</code> and provide a <a href=\"http://us2.php.net/manual/en/function.strftime.php\"><code>strftime()</code></a> format string in the text box."
+msgstr "Format des dates. Sélectionnez-les dans la liste ou <code>personnalisez-les</code> en saisissant une chaîne de formatage pour <a href=\"http://us2.php.net/manual/en/function.strftime.php\"><code>strftime()</code></a> dans le champ texte."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2101
+msgid "Charset:"
+msgstr "Encodage:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2105
+msgid "The character encoding to use internally. Leave at <em>Unicode\t(UTF-8)</em> if you're unsure."
+msgstr "L'encodage à utiliser en interne (laissez <em>Unicode\t(UTF-8)</em> si vous n'êtes pas sûrs)."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2108
+msgid "Number of RSS feed items:"
+msgstr "Nombre d'items dans le flux RSS:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2111
+msgid "The number of new images/albums/comments you want to appear in your site's RSS feed."
+msgstr "Le nombre de nouveaux albums/commentaires/images que vous souhaitez voir apparaître dans le flux RSS de votre site."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2114
+msgid "Size of RSS feed images:"
+msgstr "Taille des images dans le flux RSS:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2117
+msgid "The size you want your images to have in your site's RSS feed."
+msgstr "La taille que vous voulez donner à vos images dans le flux RSS de votre site."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2120
+msgid "Album date:"
+msgstr "Date de l'album:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2124
+msgid "Use latest image date"
+msgstr "Utiliser la date de la dernière image"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2126
+msgid "Set this option if you wish your album date to reflect the date of the latest image uploaded. Otherwise it will initially be set to the date the album was created."
+msgstr ""
+
+#: G:\sites\zenphoto/zp-core/admin.php:2129
+msgid "Sort gallery by:"
+msgstr "Trier la galerie par:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2141
+msgid "Sort order for the albums on the index of the gallery"
+msgstr "Ordre de tri des albums sur la page principale de la galerie"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2144
+msgid "Search fields:"
+msgstr "Critères de recherche:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2151
+msgid "Description"
+msgstr "Description"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2153
+msgid "Tags"
+msgstr "Tags"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2158
+msgid "File/Folder name"
+msgstr "Nom du fichier/répertoire"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2160
+msgid "Location"
+msgstr "Lieu"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2162
+msgid "City"
+msgstr "Ville"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2166
+msgid "State"
+msgstr "Etat"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2168
+msgid "Country"
+msgstr "Pays"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2172
+msgid "The set of fields on which searches may be performed."
+msgstr "Les champs sur lequels une recherche peut être effectuée."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2175
+msgid "Enable Persistent Archives:"
+msgstr "Activer les archives persistantes:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2178
+msgid "Put a checkmark here to re-serve Zip Archive files. If not checked\tthey will be regenerated each time."
+msgstr "Cocher ici pour re-fournir les archives Zip. Sinon, elles seront regénérées à chaque fois.<br />"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2179
+msgid "<strong>Note: </strong>Setting\tthis option may impact password protected albums!"
+msgstr "<strong>N.B.: </strong>Activer cette option pourra impacter les albums protégés par mot de passe."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2182
+msgid "Enable gallery sessions:"
+msgstr "Utiliser les sessions pour la galerie:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2185
+msgid "Put a checkmark here if you are having issues with with album password cookies not being retained. Setting the option causes zenphoto to use sessions rather than cookies."
+msgstr "Cocher cette case si vous avez des problèmes avec les cookies de sécurité des albums qui ne restent pas. Activer cette option fera que Zenphoto utilisera des sessions à la place des cookies."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2208
+msgid "Image Display"
+msgstr "Affichage de l'image"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2218
+msgid "Default sort order for images"
+msgstr "Ordre de tri par défaut des images"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2221
+msgid "Image quality:"
+msgstr "Qualité de l'image:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2224
+msgid "JPEG Compression quality for all images."
+msgstr "Qualité de compression JPEG pour toutes les images."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2227
+msgid "Thumb quality:"
+msgstr "Qualité des vignettes:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2230
+msgid "JPEG Compression quality for all thumbnails."
+msgstr "Qualité de compression JPEG pour toutes les vignettes."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2233
+msgid "Allow upscale:"
+msgstr "Autoriser l'agrandissement:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2237
+msgid "Allow images to be scaled up to the requested size. This could\tresult in loss of quality, so it's off by default."
+msgstr "Autoriser l'agrandissement des images (pour atteindre la taille requise). Une perte de qualité pourrait en découleur, l'option est donc désactivée par défaut."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2240
+msgid "Sharpen:"
+msgstr "Renforcement:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2245
+msgid "Add a small amount of unsharp mask to images and/or thumbnails. <strong>Warning</strong>: can overload slow servers."
+msgstr "Ajouter un peu d'atténuation aux images et/ou aux vignettes. Attention : cela ralentira leur génération sur des serveurs peu rapides."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2248
+msgid "Watermark images:"
+msgstr "Images pour filigrane:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2257
+#: G:\sites\zenphoto/zp-core/admin.php:2286
+#: G:\sites\zenphoto/zp-core/admin.php:2313
+msgid "Enabled"
+msgstr "Activé"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2259
+msgid "cover"
+msgstr "couvre"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2261
+#, php-format
+msgid "% of image"
+msgstr "% de l'image <br />"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2263
+msgid "allow upscale"
+msgstr "autoriser l'agrandissement"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2265
+msgid "offset h"
+msgstr "décalage en hauteur"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2267
+msgid "% w, "
+msgstr "% l,"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2269
+msgid "%"
+msgstr "%"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2271
+msgid "The watermark image (png-24). (Place the image in the"
+msgstr "L'image de filigrane (PNG-24). (Placer l'image dans le dossier"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2272
+#: G:\sites\zenphoto/zp-core/admin.php:2288
+msgid "directory"
+msgstr " "
+
+#: G:\sites\zenphoto/zp-core/admin.php:2273
+msgid "The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the\timage."
+msgstr "L'image de filigrane est modifiée pour recouvrir le <em>pourcentage de couverture</em> de l'image et placée dans le coin supérieur gauche de la photo."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2274
+msgid "It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark."
+msgstr "Elle est décalée à partir de cette position (en allant vers le coin inférieur droit) selon la différence de pourcentage de <em>décalage</em> de la largeur et de la hauteur entre l'image et le filigrane."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2275
+msgid "If <em>allow upscale</em> is not checked the watermark will not be made larger than the original watermark image."
+msgstr "Si l'option <em>autoriser l'agrandissement</em> n'est pas cochée, le filigrane final ne sera pas plus grand que le filigrane d'origine."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2278
+msgid "Watermark video thumbs:"
+msgstr "Filigrane pour les vignettes des vidéos:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2288
+msgid "The watermark image (png-24) that will be overlayed on the video thumbnail (if one exists). (Place the image in the"
+msgstr "L'image (au format PNG-24) qui sera rajoutée en surimpression sur la vignette de la vidéo (si elle existe). (Placez l'image dans le dossier"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2291
+msgid "Full image quality:"
+msgstr "Qualité des images en pleine taille:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2294
+msgid "Controls compression on full images."
+msgstr "Contrôle la compression des images en pleine taille."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2297
+msgid "Full image protection:"
+msgstr "Protection de l'affichage en pleine taille:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2301
+msgid "Unprotected"
+msgstr "Déprotégé"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2301
+msgid "Protected view"
+msgstr "Affichage protégé"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2301
+msgid "Download"
+msgstr "Télécharger"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2301
+msgid "No access"
+msgstr "Pas d'accès"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2304
+msgid "Disable hotlinking"
+msgstr "Désactiver les liens externes"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2307
+msgid "Select the level of protection for full sized images."
+msgstr "Sélectionnez le niveau de protection pour les images en pleine taille"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2308
+msgid "Disabling hotlinking prevents linking to the full image from other domains. If enabled, external links are redirect to the image page. If you are having problems with full images being displayed, try disabling this setting. Hotlinking is not prevented if <em>Full image protection</em> is <em>Unprotected</em>."
+msgstr "Désactiver les liens externes prévient le fait que des sites extérieurs pointent vers les images en pleine taille. Si cette option est activée, les liens externes sont redirigées vers la page classique de l'image. Si vous rencontrez des problèmes pour afficher les images en pleine taille, essayez de désactiver cette option. Les liens externes ne sont pas détournés si la <em>Protection des images en pleine taille</em> est sur <em>Déprotégé</em>."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2310
+msgid "Use lock image"
+msgstr "Utiliser une image de verrou"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2315
+msgid "Substitute a <em>lock</em> image for thumbnails of password protected albums when the viewer has not supplied the password. If your theme supplies an <code>images/err-passwordprotected.gif</code> image, it will be shown. Otherwise the zenphoto default lock image is displayed."
+msgstr "Substituer une image de <em>verrou</em> à la vignette des albums protégés par mot de passe quand le visiteur n'en a pas fourni un. Si votre thème comprend une image <code>images/err-passwordprotected.gif</code>, celle-ci sera affichée ; dans le cas contraire, c'est l'image de verrou par défaut de Zenphoto qui sera utilisée."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2332
+msgid "Your Allowed tags change did not parse successfully."
+msgstr "Le changement de vos tags autorisés ne s'est pas déroulé correctement."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2339
+msgid "Comments options"
+msgstr "Options des commentaires"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2343
+msgid "Enable comment notification:"
+msgstr "Activer la notification des commentaires:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2346
+msgid "Email the Admin when new comments are posted"
+msgstr "Envoyer un mail à l'administrateur quand des nouveaux commentaires sont envoyés."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2349
+msgid "Allowed tags:"
+msgstr "Tags autorisés:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2352
+msgid "Tags and attributes allowed in comments"
+msgstr "Tags et attributs autorisés dans les commentaires"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2353
+msgid "Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"
+msgstr "Suivez le schéma suivant <em>tag</em> =&gt; (<em>attribut</em> =&gt; (<em>attribut</em>=&gt; (), <em>attribut</em> =&gt; ()...)))"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2357
+msgid "Spam filter:"
+msgstr "Filtre anti-spam:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2365
+msgid "The SPAM filter plug-in you wish to use to check comments for SPAM"
+msgstr "L'extension \"filtre anti-SPAM\" que vous souhaitez utiliser pour vérifier les commentaires "
+
+#: G:\sites\zenphoto/zp-core/admin.php:2377
+msgid "Require fields:"
+msgstr "Champs requis:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2385
+msgid "Captcha"
+msgstr "Captcha"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2386
+msgid "Checked fields must be valid in a comment posting."
+msgstr "Les champs cochés doivent être valides lorsqu'on soumet un commentaire."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2425
+#: G:\sites\zenphoto/zp-core/admin.php:2627
+msgid "Show theme for"
+msgstr "Afficher le thème pour"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2433
+#: G:\sites\zenphoto/zp-core/admin.php:2635
+msgid "There are no themes for which you have rights to administer."
+msgstr "Il n'y a pas de thèmes que vous puissiez administrer (étant donné vos droits)."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2443
+msgid "Theme for"
+msgstr "Thème pour"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2446
+msgid "Albums per page:"
+msgstr "Albums par page:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2449
+msgid "Controls the number of albums on a page. You might need to change\tthis after switching themes to make it look better."
+msgstr "Contrôle le nombre d'albums par page. Vous devrez peut être le changer après avoir changé de thème pour en arranger l'apparence."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2452
+msgid "Images per page:"
+msgstr "Images par page:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2455
+msgid "Controls the number of images on a page. You might need to change\tthis after switching themes to make it look better."
+msgstr "Contrôle le nombre dimages par page. Vous devrez peut être le changer après avoir changé de thème pour en arranger l'apparence."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2458
+msgid "Thumb size:"
+msgstr "Taille des vignettes:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2461
+msgid "Default thumbnail size and scale."
+msgstr "Taille et échelle par défaut des vignettes"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2464
+msgid "Crop thumbnails:"
+msgstr "Rogner les vignettes:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2467
+msgid "If checked the thumbnail will be a centered portion of the\timage with the given width and height after being resized to <em>thumb\tsize</em> (by shortest side)."
+msgstr "Si cette case est cochée, la vignette (aux dimensions spécifiées plus bas) sera prelevée au milieu de l'image redimensionnée à la <em>taille des vignettes</em>."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2468
+msgid "Otherwise, it will be the full image resized to <em>thumb size</em> (by shortest side)."
+msgstr "Dans le cas contraire, la vignette correspondra à l'image réduite à la <em>taille des vignettes</em> (par son plus petit coté)."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2471
+msgid "Crop thumbnail width:"
+msgstr "Largeur de rognage des vignettes:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2474
+msgid "The <em>thumb crop width</em> is the maximum width when height is the shortest side"
+msgstr "La <em>largeur de rognage des vignettes</em> est la largeur maximale quand la hauteur est la plus petite dimension"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2477
+msgid "Crop thumbnail height:"
+msgstr "Hauteur de rognage des vignettes:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2480
+msgid "The <em>thumb crop height</em> is the maximum height when width is the shortest side"
+msgstr "La <em>hauteur de rognage des vignettes</em> est la hauteur maximale quand la largeur est la plus petite dimension"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2483
+msgid "Image size:"
+msgstr "Taille de l'image:"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2486
+msgid "Default image display width."
+msgstr "Largeur d'affichage par défaut des images."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2489
+msgid "Images size is longest size:"
+msgstr "La taille des images est la plus grande taille"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2493
+msgid "If this is checked the longest side of the image will be <em>image size</em>."
+msgstr "Si cette option est activée, la dimension la plus grande de l'image sera la <em>taille de l'image</em>."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2494
+msgid "Otherwise, the <em>width</em> of the image will\tbe <em>image size</em>."
+msgstr "Sinon, la <em>largeur</em> de l'image sera <em>taille de l'image</em>."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2551
+msgid "There are no plugin options to adminsiter."
+msgstr "Il n'y a pas d'options d'extension à gérer."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2617
+msgid "no theme assigned, defaulting to Gallery theme"
+msgstr "pas de thème spécifié, application du thème de la galerie"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2639
+msgid "Current theme for"
+msgstr "Thème actuel pour"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2641
+#: G:\sites\zenphoto/zp-core/admin.php:2642
+msgid "Clear theme assignment"
+msgstr "Inverser la sélection de ce thème"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2647
+msgid "Themes allow you to visually change the entire look and feel of your gallery. Theme files are located in your"
+msgstr "Les thèmes vous permettent de changer l'apparence complète et le comportement de votre galerie. Les fichiers de thèmes sont rangés dans votre dossier"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2649
+msgid "folder. You can download more themes from the"
+msgstr ". Vous pouvez en télécharger d'autres depuis la"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2650
+msgid "zenphoto themes page"
+msgstr "page de thèmes Zenphoto"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2651
+msgid "Place the downloaded themes in the"
+msgstr "Mettez les thèmes chargés sur le serveur dans le dossier"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2651
+msgid "folder and they will be available for your use."
+msgstr " et ils seront utilisables par Zenphoto."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2680
+msgid "Set this as your theme"
+msgstr "Choisir ce thème"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2680
+msgid "Use this Theme"
+msgstr "Utiliser ce thème"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2685
+msgid "Assign this as your album theme"
+msgstr "Choisir ce thème pour votre album"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2685
+msgid "Assign Theme"
+msgstr "Utiliser ce thème"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2688
+msgid "Current Theme"
+msgstr "Thème actuel"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2717
+msgid "Plugins provide optional functionality for Zenphoto."
+msgstr "Les extensions fournissent des fonctionnalités optionnelles à Zenphoto."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2718
+msgid "They may be provided as part of the Zenphoto distribution or as offereings from third parties."
+msgstr "Elles peuvent être fournies au sein de Zenphoto ou proposées par des tierces parties."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2719
+msgid "Plugins are placed in the <code>zp-core/plugins</code> folder and are automatically discovered."
+msgstr "Les extensions sont placées dans le dossier <code>zp-core/plugins</code> et sont automatiquement détectées."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2720
+msgid "If the plugin checkbox is checked, the plugin will be loaded and its functions made available to theme pages. If the checkbox is not checked the plugin is disabled and occupies no resources."
+msgstr "Si la case à cocher de l'extension est activée, elle sera chargée et ses fonctions seront donc accessibles depuis les pages du thème. Dans le cas contraire, l'extension est désactivée et ne consomme aucune ressource."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2746
+msgid "Usage information"
+msgstr "Information sur l'utilisation"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2749
+msgid "Author"
+msgstr "Auteur"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2762
+msgid "zenphoto Administration"
+msgstr "Administration de Zenphoto"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2768
+msgid "Could not connect to"
+msgstr "Impossible de se connecter à"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2770
+msgid "zenphoto version"
+msgstr "La version"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2770
+msgid "is available."
+msgstr "de Zenphoto est disponible."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2773
+msgid "You are running the latest zenphoto version."
+msgstr "Vous utilisez actuellement la dernière version de Zenphoto."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2776
+msgid "Check for zenphoto update."
+msgstr "Vérifier s'il existe une mise à jour de Zenphoto"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2780
+msgid "Database was refreshed"
+msgstr "La base de données a été actualisée."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2783
+msgid "Cache has been purged"
+msgstr "Le cache a été vidé."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2791
+msgid "<strong>Upload</strong> pictures."
+msgstr "<strong>Charger</strong> de nouvelles images."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2793
+msgid "<strong>Edit</strong> titles, descriptions, and other metadata."
+msgstr "<strong>Modifier</strong> les titres, descriptions et autres méta-données."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2795
+msgid "Edit or delete <strong>comments</strong>."
+msgstr "Modifier ou supprimer les <strong>commentaires</strong>."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2797
+msgid "Browse your <strong>gallery</strong> and edit on the go."
+msgstr "Parcourir votre <strong>galerie</strong> et la modifier à la volée."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2810
+msgid "10 Most Recent Comments"
+msgstr "Les 10 derniers commentaires"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2855
+msgid "commented on"
+msgstr "a commenté sur"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2865
+msgid "Gallery Maintenance"
+msgstr "Maintenance de la galerie"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2866
+msgid "Your database is"
+msgstr "Votre base de données est"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2867
+msgid "Tables are prefixed by"
+msgstr "Les tables sont préfixées par"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2872
+msgid "Cleans the database and removes any orphan entries for comments, images, and albums."
+msgstr "Nettoie la base de données et supprime les orphelins (commentaires, images et albums)."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2872
+msgid "Refresh the Database"
+msgstr "Actualiser la base de données"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2881
+msgid "Clears the image cache. Images will be re-cached as they are viewed. To clear the cache and renew it, use the <em>Pre-Cache Images</em> button below."
+msgstr "Vide le cache d'images. Celles-ci seront remises en cache dès leur affichage. Pour re-générer le cache, utilisez le bouton <em>Mettre en cache</em> ci-dessous."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2881
+msgid "Purge Cache"
+msgstr "Vider le cache"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2889
+msgid "Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser."
+msgstr "Trouve les images récemment chargées sur le serveur qui n'ont pas encore été mises en cache (et en génére les vignettes). Cela actualise également les valeurs ci-dessus. Si vous avez un grand nombre d'images dans votre galerie, vous devriez plutôt utiliser le lien de <em>mise en cache</em> de chaque album séparément pour éviter de bloquer votre navigateur."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2897
+msgid "Forces a refresh of the EXIF and IPTC data for all images."
+msgstr "Forcer l'actualisation des données EXIF et IPTC pour toutes les images."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2907
+msgid "Sets all album and image hitcounters to zero."
+msgstr "Remettre à zéro les compteurs de tous les albums et images."
+
+#: G:\sites\zenphoto/zp-core/admin.php:2920
+msgid "Gallery Stats"
+msgstr "Statistiques de la galerie"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2922
+#: G:\sites\zenphoto/zp-core/cache-images.php:72
+msgid "images"
+msgstr "images"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2925
+msgid "not visible"
+msgstr "non visible"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2931
+msgid "unpublished"
+msgstr "non publié"
+
+#: G:\sites\zenphoto/zp-core/admin.php:2939
+msgid "in moderation"
+msgstr "modéré(s)."
+
+#: G:\sites\zenphoto/zp-core/albumsort.php:31
+msgid "No album provided to sort."
+msgstr "Aucun album proposé pour le tri."
+
+#: G:\sites\zenphoto/zp-core/albumsort.php:35
+msgid "You do not have rights to sort this album"
+msgstr "Vous n'avez pas des droits suffisants pour trier cet album."
+
+#: G:\sites\zenphoto/zp-core/albumsort.php:54
+msgid "back to the list"
+msgstr "retour à la liste"
+
+#: G:\sites\zenphoto/zp-core/albumsort.php:54
+msgid "Back to the list of albums"
+msgstr "Retour à la liste des albums"
+
+#: G:\sites\zenphoto/zp-core/albumsort.php:55
+msgid "Edit Album"
+msgstr "Modifier l'album"
+
+#: G:\sites\zenphoto/zp-core/albumsort.php:61
+msgid "Image order saved"
+msgstr "Ordre des images sauvegardé"
+
+#: G:\sites\zenphoto/zp-core/albumsort.php:68
+msgid "Sort the images by dragging them..."
+msgstr "Triez les images en les déplaçant..."
+
+#: G:\sites\zenphoto/zp-core/archive.php:95
+msgid "Could not create zip file."
+msgstr "Impossible de créer l'archive ZIP."
+
+#: G:\sites\zenphoto/zp-core/archive.php:102
+#: G:\sites\zenphoto/zp-core/archive.php:114
+#: G:\sites\zenphoto/zp-core/archive.php:126
+msgid "Could not create tar file."
+msgstr "Impossible de créer l'archive TAR."
+
+#: G:\sites\zenphoto/zp-core/archive.php:107
+msgid "Could not create bzip2 file."
+msgstr "Impossible de créer l'archive BZIP2."
+
+#: G:\sites\zenphoto/zp-core/archive.php:119
+msgid "Could not create gzip file."
+msgstr "Impossible de créer l'archive GZIP."
+
+#: G:\sites\zenphoto/zp-core/archive.php:295
+msgid "Can only use download_file() if archive is in memory. Redirect to file otherwise, it is faster."
+msgstr "Cette fonction ne peut être utilisée que si l'archive est en mémoire. Elle redirige vers le fichier sinon, c'est plus rapide."
+
+#: G:\sites\zenphoto/zp-core/archive.php:347
+msgid "Could not add"
+msgstr "Impossible d'ajouter"
+
+#: G:\sites\zenphoto/zp-core/archive.php:347
+msgid "to archive because the filename is too long."
+msgstr "à l'archive car le nom de fichier est trop long."
+
+#: G:\sites\zenphoto/zp-core/archive.php:380
+#: G:\sites\zenphoto/zp-core/archive.php:654
+msgid "Could not open file"
+msgstr "Impossible d'ouvrir le fichier"
+
+#: G:\sites\zenphoto/zp-core/archive.php:380
+#: G:\sites\zenphoto/zp-core/archive.php:654
+msgid "for reading. It was not added."
+msgstr "en lecture. Il n'a pas été rajouté."
+
+#: G:\sites\zenphoto/zp-core/archive.php:420
+msgid "This script does not support extracting this type of tar file."
+msgstr "Le script ne supporte pas l'extraction de ce type de fichier TAR."
+
+#: G:\sites\zenphoto/zp-core/archive.php:428
+msgid "Could not extract from"
+msgstr "Impossible d'extraire depuis"
+
+#: G:\sites\zenphoto/zp-core/archive.php:428
+msgid "it is corrupt."
+msgstr "le fichier est corrompu."
+
+#: G:\sites\zenphoto/zp-core/archive.php:444
+msgid "already exists."
+msgstr "existe déja."
+
+#: G:\sites\zenphoto/zp-core/archive.php:461
+#: G:\sites\zenphoto/zp-core/archive.php:506
+#: G:\sites\zenphoto/zp-core/archive.php:547
+msgid "Could not open"
+msgstr "Impossible d'ouvrir"
+
+#: G:\sites\zenphoto/zp-core/archive.php:461
+#: G:\sites\zenphoto/zp-core/archive.php:506
+#: G:\sites\zenphoto/zp-core/archive.php:547
+msgid "for writing."
+msgstr "en écriture."
+
+#: G:\sites\zenphoto/zp-core/archive.php:588
+msgid "Could not open sfx module from"
+msgstr "Impossible d'ouvrir le module d'effets depuis"
+
+#: G:\sites\zenphoto/zp-core/auth_zp.php:48
+msgid "from a user who tried to log in as"
+msgstr "initiée par un utilisateur qui a essayé de se connecter sous"
+
+#: G:\sites\zenphoto/zp-core/auth_zp.php:56
+msgid ""
+"\n"
+"You are receiving this e-mail because of a password reset request on your Zenphoto gallery"
+msgstr ""
+"\n"
+"Vous avez reçu ce message suite à une demande de réinitialisation de mot de passe sur votre galerie Zenphoto"
+
+#: G:\sites\zenphoto/zp-core/auth_zp.php:57
+msgid "To reset your Zenphoto Admin passwords visit:"
+msgstr "Pour remettre à zéro vos mots de passe administrateur Zenphoto, rendez-vous sur: "
+
+#: G:\sites\zenphoto/zp-core/auth_zp.php:58
+msgid "If you do not wish to reset your passwords just ignore this message. This ticket will automatically expire in 3 days."
+msgstr "Si vous ne souhaitez pas réinitialiser vos mots de passe, vous n'avez qu'à ignorer ce message. Cette demande expirera automatiquement dans 3 jours."
+
+#: G:\sites\zenphoto/zp-core/auth_zp.php:59
+msgid "The Zenphoto information you requested"
+msgstr "Les informations que vous avez demandé sur Zenphoto"
+
+#: G:\sites\zenphoto/zp-core/cache-images.php:42
+msgid "Clearing and"
+msgstr "Vidage et"
+
+#: G:\sites\zenphoto/zp-core/cache-images.php:55
+msgid "Refreshing cache for"
+msgstr " rafraîchissement du cache pour"
+
+#: G:\sites\zenphoto/zp-core/cache-images.php:62
+msgid "Refreshing cache for Gallery"
+msgstr "Rafraîchissement du cache de la galerie"
+
+#: G:\sites\zenphoto/zp-core/cache-images.php:72
+msgid "Finished: Total of"
+msgstr "Opération terminée, pour un total de"
+
+#: G:\sites\zenphoto/zp-core/class-album.php:938
+#: G:\sites\zenphoto/zp-core/class-gallery.php:25
+#: G:\sites\zenphoto/zp-core/class-gallery.php:114
+msgid "Error: The 'albums' directory"
+msgstr "Erreur: le dossier 'albums'"
+
+#: G:\sites\zenphoto/zp-core/class-album.php:940
+#: G:\sites\zenphoto/zp-core/class-gallery.php:27
+#: G:\sites\zenphoto/zp-core/class-gallery.php:116
+msgid "cannot be found."
+msgstr "ne peut être trouvé."
+
+#: G:\sites\zenphoto/zp-core/class-album.php:942
+#: G:\sites\zenphoto/zp-core/class-gallery.php:29
+#: G:\sites\zenphoto/zp-core/class-gallery.php:118
+msgid "is not readable."
+msgstr "n'est pas accessible en lecture."
+
+#: G:\sites\zenphoto/zp-core/dynamic.php:17
+msgid "You do not have edit rights on this album."
+msgstr "Vous n'avez pas des droits suffisants pour modifier cet album."
+
+#: G:\sites\zenphoto/zp-core/dynamic.php:45
+msgid "zenphoto Create Dynamic Album"
+msgstr "Création d'un album dynamique Zenphoto"
+
+#: G:\sites\zenphoto/zp-core/dynamic.php:49
+msgid "Failed to save the album file"
+msgstr "Impossible d'enregistrer le fichier de l'album"
+
+#: G:\sites\zenphoto/zp-core/dynamic.php:91
+msgid "Album name:"
+msgstr "Nom de lalbum"
+
+#: G:\sites\zenphoto/zp-core/dynamic.php:96
+msgid "Create in:"
+msgstr "Créer dans:"
+
+#: G:\sites\zenphoto/zp-core/dynamic.php:143
+msgid "Search criteria:"
+msgstr "Critères de recherche:"
+
+#: G:\sites\zenphoto/zp-core/dynamic.php:180
+msgid "Create the album"
+msgstr "Créer l'album"
+
+#: G:\sites\zenphoto/zp-core/functions-controller.php:408
+msgid "Zenphoto Error:</strong> the requested object was not found. Please go back and try again."
+msgstr "Erreur Zenphoto:</strong> l'objet demande n'a pas été trouvé. Revenez en arrière et réessayez."
+
+#: G:\sites\zenphoto/zp-core/functions-db.php:27
+msgid "MySQL Error: The PHP MySQL extentions have not been installed. Please ask your administrator to add MySQL support to your PHP installation."
+msgstr "Erreur MySQL : l'extension MySQL de PHP n'a pas été installée. Demandz à votre administrateur de l'activer."
+
+#: G:\sites\zenphoto/zp-core/functions-db.php:33
+msgid "MySQL Error: Zenphoto could not connect to the database server."
+msgstr "Erreur MySQL: Zenphoto ne peut pas se connecter au serveur de la base de données."
+
+#: G:\sites\zenphoto/zp-core/functions-db.php:34
+msgid "Check your <strong>zp-config.php</strong> file for the correct <em><strong>host</strong>, <strong>user name</strong>, and <strong>password</strong></em>."
+msgstr "Vérifiez dans votre fichier <strong>zp-config.php</strong> que les valeurs d'<em><strong>hôte</strong>, <strong>identifiant</strong>, et de <strong>mot de passe</strong></em> sont correctes."
+
+#: G:\sites\zenphoto/zp-core/functions-db.php:35
+msgid "Note that you may need to change the <em>host</em> from localhost if your web server uses a separate MySQL server, which is common in large shared hosting environments like Dreamhost and GoDaddy."
+msgstr "Note : vous aurez peut être besoin de modifier la valeur de l'<em>hôte</em> en autre chose que \"localhost\" si votre serveur Web utilise un serveur MySQL séparé, ce qui est courant dans les gros hébergements mutualisés comme Dreamhost ou OVH."
+
+#: G:\sites\zenphoto/zp-core/functions-db.php:36
+msgid "Also make sure the server is running, if you control it."
+msgstr "Vérifiez aussi que le serveur est démarré, si vous avez le contrôle dessus."
+
+#: G:\sites\zenphoto/zp-core/functions-db.php:41
+msgid "MySQL Error: The database is connected, but Zenphoto could not select the database \""
+msgstr "Erreur MySQL : la base de données est bien connectée mais Zenphoto ne peut sélectionner la base \""
+
+#: G:\sites\zenphoto/zp-core/functions-db.php:42
+msgid "Make sure it already exists, create it if you need to."
+msgstr "Vérifiez qu'elle existe, créez-là au besoin."
+
+#: G:\sites\zenphoto/zp-core/functions-db.php:43
+msgid "Also make sure the user you're trying to connect with has privileges to use this database."
+msgstr "Vérifiez aussi que l'utilisateur que vous essayez d'utiliser pour vous connecter a des droits d'utilisation sur cette base de données."
+
+#: G:\sites\zenphoto/zp-core/functions-db.php:77
+msgid "MySQL Query"
+msgstr "Reqûete MySQL"
+
+#: G:\sites\zenphoto/zp-core/functions-db.php:77
+msgid "Failed. Error:"
+msgstr "a échoué. Erreur:"
+
+#: G:\sites\zenphoto/zp-core/functions-db.php:80
+msgid "It looks like your zenphoto tables haven't been created."
+msgstr "Il apparaît que vos tables Zenphoto n'ont pas été créées."
+
+#: G:\sites\zenphoto/zp-core/functions-db.php:81
+msgid "You may need to"
+msgstr "You devriez peut être"
+
+#: G:\sites\zenphoto/zp-core/functions-db.php:81
+msgid "run the setup script"
+msgstr "lancer le script d'installation"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:17
+msgid "HTTP Accept Language"
+msgstr "HTTP Accept Language"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:64
+msgid "Afrikaans"
+msgstr "Afrikaans"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:65
+msgid "Arabic"
+msgstr "Arabic"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:66
+msgid "Bengali"
+msgstr "Bengali"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:67
+msgid "Basque"
+msgstr "Basque"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:68
+msgid "Belarusian"
+msgstr "Belarusian"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:69
+msgid "Bulgarian"
+msgstr "Bulgarian"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:70
+msgid "Catalan"
+msgstr "Catalan"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:71
+msgid "Chinese"
+msgstr "Chinese"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:72
+msgid "Chinese Hong Kong"
+msgstr "Chinese Hong Kong"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:73
+msgid "Chinese Taiwan"
+msgstr "Chinese Taiwan"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:74
+msgid "Croatian"
+msgstr "Croatian"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:75
+msgid "Czech"
+msgstr "Czech"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:76
+msgid "Danish"
+msgstr "Danish"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:77
+msgid "Dutch"
+msgstr "Dutch"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:78
+msgid "English (US)"
+msgstr "English (US)"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:79
+msgid "English (UK)"
+msgstr "English (UK)"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:80
+msgid "Esperanto"
+msgstr "Esperanto"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:81
+msgid "Estonian"
+msgstr "Estonian"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:82
+msgid "Faroese"
+msgstr "Faroese"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:83
+msgid "Finnish"
+msgstr "Finnish"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:84
+msgid "French"
+msgstr "Français"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:85
+msgid "Galician"
+msgstr "Galician"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:86
+msgid "German"
+msgstr "German"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:87
+msgid "Greek"
+msgstr "Greek"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:88
+msgid "Hebrew"
+msgstr "Hebrew"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:89
+msgid "Hungarian"
+msgstr "Hungarian"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:90
+msgid "Icelandic"
+msgstr "Icelandic"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:91
+msgid "Indonesian"
+msgstr "Indonesian"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:92
+msgid "Italian"
+msgstr "Italian"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:93
+msgid "Cambodian"
+msgstr "Cambodian"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:94
+msgid "Korean"
+msgstr "Korean"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:95
+msgid "Latvian"
+msgstr "Latvian"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:96
+msgid "Lithuanian"
+msgstr "Lithuanian"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:97
+msgid "Macedonian"
+msgstr "Macedonian"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:98
+msgid "Malagasy"
+msgstr "Malagasy"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:99
+msgid "Malay"
+msgstr "Malay"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:100
+msgid "Nias"
+msgstr "Nias"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:101
+msgid "Norwegian"
+msgstr "Norwegian"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:102
+msgid "Polish"
+msgstr "Polish"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:103
+msgid "Brazilian Portuguese"
+msgstr "Brazilian Portuguese"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:104
+msgid "European Portuguese"
+msgstr "European Portuguese"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:105
+msgid "Romanian"
+msgstr "Romanian"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:106
+msgid "Russian"
+msgstr "Russian"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:107
+msgid "Serbian"
+msgstr "Serbian"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:108
+msgid "Sinhala"
+msgstr "Sinhala"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:109
+msgid "Slovenian"
+msgstr "Slovenian"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:110
+msgid "Slovak"
+msgstr "Slovak"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:111
+msgid "Spanish"
+msgstr "Spanish"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:112
+msgid "Swedish"
+msgstr "Swedish"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:113
+msgid "Thai"
+msgstr "Thai"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:114
+msgid "Turkish"
+msgstr "Turkish"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:115
+msgid "Ukrainian"
+msgstr "Ukrainian"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:116
+msgid "Uzbek"
+msgstr "Uzbek"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:117
+msgid "vi_VN"
+msgstr "vi_VN"
+
+#: G:\sites\zenphoto/zp-core/functions-i18n.php:118
+msgid "Welsh"
+msgstr "Welsh"
+
+#: G:\sites\zenphoto/zp-core/functions-image.php:19
+msgid "Zenphoto Image Processing Error:"
+msgstr "Erreur lors du traitement d'images:"
+
+#: G:\sites\zenphoto/zp-core/functions-image.php:20
+msgid "Request URI:"
+msgstr "URI de requête:"
+
+#: G:\sites\zenphoto/zp-core/functions-image.php:22
+msgid "Cache:"
+msgstr "Cache:"
+
+#: G:\sites\zenphoto/zp-core/functions-image.php:23
+msgid "Image:"
+msgstr "Image:"
+
+#: G:\sites\zenphoto/zp-core/functions-image.php:37
+msgid "DEBUG"
+msgstr "DEBUG"
+
+#: G:\sites\zenphoto/zp-core/functions-image.php:37
+msgid "Arguments:"
+msgstr "Arguments:"
+
+#: G:\sites\zenphoto/zp-core/functions-image.php:38
+msgid "size ="
+msgstr "taille ="
+
+#: G:\sites\zenphoto/zp-core/functions-image.php:39
+msgid "width ="
+msgstr "largeur ="
+
+#: G:\sites\zenphoto/zp-core/functions-image.php:40
+msgid "height ="
+msgstr "hauteur = "
+
+#: G:\sites\zenphoto/zp-core/functions-image.php:41
+msgid "cw ="
+msgstr "cw (largeur de rognage) ="
+
+#: G:\sites\zenphoto/zp-core/functions-image.php:42
+msgid "ch ="
+msgstr "cw (hauteur de rognage) ="
+
+#: G:\sites\zenphoto/zp-core/functions-image.php:43
+msgid "cx ="
+msgstr "cx (position en largeur du rognage) ="
+
+#: G:\sites\zenphoto/zp-core/functions-image.php:44
+msgid "cy ="
+msgstr "cx (position en hauteur du rognage) ="
+
+#: G:\sites\zenphoto/zp-core/functions-image.php:45
+msgid "quality ="
+msgstr "qualité ="
+
+#: G:\sites\zenphoto/zp-core/functions-image.php:46
+msgid "thumb ="
+msgstr "vignettage ="
+
+#: G:\sites\zenphoto/zp-core/functions-image.php:47
+msgid "crop ="
+msgstr "rognage ="
+
+#: G:\sites\zenphoto/zp-core/functions-image.php:272
+msgid "The GD Library is not installed or not available."
+msgstr "La librairie GD n'est pas installée ou disponible."
+
+#: G:\sites\zenphoto/zp-core/functions-image.php:275
+msgid "Image not found or is unreadable."
+msgstr "L'image n'a pas été trouvée ou est illisible."
+
+#: G:\sites\zenphoto/zp-core/functions-image.php:308
+msgid "Unknown error! Please report to the developers at"
+msgstr "Erreur inconnu ! Merci d'avertir les développeurs sur"
+
+#: G:\sites\zenphoto/zp-core/functions.php:19
+msgid "Zenphoto error:</strong> zp-config.php not found. Perhaps you need to run"
+msgstr "Erreur Zenphoto :</strong> le fichier zp-config.php n'a pas été trouvé. Vous devriez peut être lancer"
+
+#: G:\sites\zenphoto/zp-core/functions.php:19
+msgid "(or migrate your old config.php)"
+msgstr "(ou migrer votre ancien config.php)"
+
+#: G:\sites\zenphoto/zp-core/functions.php:244
+msgid "Orientation"
+msgstr "Orientation"
+
+#: G:\sites\zenphoto/zp-core/functions.php:245
+msgid "Camera Maker"
+msgstr "Fabricant"
+
+#: G:\sites\zenphoto/zp-core/functions.php:246
+msgid "Camera Model"
+msgstr "Modèle d'appareil"
+
+#: G:\sites\zenphoto/zp-core/functions.php:247
+msgid "Shutter Speed"
+msgstr "Vitesse d'obturation"
+
+#: G:\sites\zenphoto/zp-core/functions.php:248
+msgid "Aperture"
+msgstr "Ouverture"
+
+#: G:\sites\zenphoto/zp-core/functions.php:249
+msgid "Focal Length"
+msgstr "Longueur de focale"
+
+#: G:\sites\zenphoto/zp-core/functions.php:250
+msgid "35mm Equivalent Focal Length"
+msgstr "Longueur de focale équivalente en 35mm"
+
+#: G:\sites\zenphoto/zp-core/functions.php:251
+msgid "ISO Sensitivity"
+msgstr "Sensibilité en ISO"
+
+#: G:\sites\zenphoto/zp-core/functions.php:252
+msgid "Time Taken"
+msgstr "Heure de prise de vue"
+
+#: G:\sites\zenphoto/zp-core/functions.php:253
+msgid "Exposure Compensation"
+msgstr "Compensation de l'exposition"
+
+#: G:\sites\zenphoto/zp-core/functions.php:254
+msgid "Metering Mode"
+msgstr "Mode de mesure"
+
+#: G:\sites\zenphoto/zp-core/functions.php:255
+msgid "Flash Fired"
+msgstr "Flash déclenché"
+
+#: G:\sites\zenphoto/zp-core/functions.php:256
+msgid "Original Width"
+msgstr "Largeur d'origine"
+
+#: G:\sites\zenphoto/zp-core/functions.php:257
+msgid "Original Height"
+msgstr "Hauteur d'origine"
+
+#: G:\sites\zenphoto/zp-core/functions.php:258
+msgid "Contrast Setting"
+msgstr "Valeur de contraste"
+
+#: G:\sites\zenphoto/zp-core/functions.php:259
+msgid "Sharpness Setting"
+msgstr "Paramètre de renforcement"
+
+#: G:\sites\zenphoto/zp-core/functions.php:260
+msgid "Saturation Setting"
+msgstr "Valeur de saturation"
+
+#: G:\sites\zenphoto/zp-core/functions.php:261
+msgid "Latitude"
+msgstr "Latitude"
+
+#: G:\sites\zenphoto/zp-core/functions.php:262
+msgid "Latitude Reference"
+msgstr "Valeur de latitude"
+
+#: G:\sites\zenphoto/zp-core/functions.php:263
+msgid "Longitude"
+msgstr "Longitude"
+
+#: G:\sites\zenphoto/zp-core/functions.php:264
+msgid "Longitude Reference"
+msgstr "Valeur de longitude"
+
+#: G:\sites\zenphoto/zp-core/functions.php:265
+msgid "Altitude"
+msgstr "Altitude"
+
+#: G:\sites\zenphoto/zp-core/functions.php:266
+msgid "Altitude Reference"
+msgstr "Valeur d'altitude"
+
+#: G:\sites\zenphoto/zp-core/functions.php:282
+msgid "ERROR: Assertion failed in"
+msgstr "ERREUR: erreur d'assertion sur"
+
+#: G:\sites\zenphoto/zp-core/i.php:39
+msgid "Too few arguments! Image not found."
+msgstr "Pas assez d'arguments! Image non trouvée."
+
+#: G:\sites\zenphoto/zp-core/i.php:95
+msgid "The cache directory does not exist. Please create it and set the permissions to 0777."
+msgstr "Le répertoire de cache n'existe pas. Créez-le et modifiez ses permissions en 0777."
+
+#: G:\sites\zenphoto/zp-core/i.php:100
+msgid "The cache directory is not writable! Attempts to chmod didn't work."
+msgstr "Le répertoire de cache n'est pas accessible en écriture ! Les tentatives de chmod n'ont pas abouti."
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:106
+msgid "Abort"
+msgstr "Annuler"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:106
+msgid "Missing zlib extensions"
+msgstr "Extensions ZLIB manquantes"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:145
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:238
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:368
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:443
+msgid "Invalid number / type of arguments"
+msgstr "Nombre / type d'arguments invalide"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:166
+msgid "Invalid variable type p_filelist"
+msgstr "Type de la variable p_filelist invalide"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:259
+msgid "Invalid variable type '"
+msgstr "Type de variable invalide '"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:259
+msgid "' for p_filelist"
+msgstr "' pour p_filelist"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:513
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1517
+msgid "Unable to open archive"
+msgstr "Impossible d'ouvrir le fichier d'archive"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:513
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1847
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:2247
+msgid "in binary read mode"
+msgstr "en mode de lecture binaire"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:541
+msgid "No file with filename"
+msgstr "Pas de fichier s'appelant"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:550
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:573
+msgid "Invalid variable type p_archive_to_add"
+msgstr "Type de la variable p_archive_to_add invalide"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:646
+msgid "Missing archive file"
+msgstr "Le fichier d'archive est manquant"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:650
+msgid "Unable to read archive"
+msgstr "Impossible de lire le fichier d'archive"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:661
+msgid "Invalid optional parameter"
+msgstr "Paramètre optionnel invalide"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:661
+msgid "for this method"
+msgstr "pour cette méthode"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:669
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:678
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:691
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:709
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:730
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:763
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:876
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:903
+msgid "Missing parameter value for option"
+msgstr "Paramètre manquant pour l'intervalle de l'option"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:701
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:716
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:746
+msgid "Wrong parameter value for option"
+msgstr "Valeur erronée pour cette option"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:791
+msgid "Value must be integer, string or array for option"
+msgstr "La valeur pour cette option doit être un entier, une chaîne de texte ou un tableau"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:825
+msgid "Too many values in index range for option"
+msgstr "Trop de valeurs pour l'intervalle de l'option"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:841
+msgid "Invalid order of index range for option"
+msgstr "Ordre invalide pour l'intervalle de l'option"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:917
+msgid "Function"
+msgstr "Fonction"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:917
+msgid "is not an existing function for option"
+msgstr "n'est pas une fonction existant pour cette option"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:932
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1080
+msgid "Unknown parameter"
+msgstr "Paramètre inconnu"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:953
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1095
+msgid "Missing mandatory parameter"
+msgstr "Un paramètre obligatoire est manquant"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:988
+msgid "Invalid file attribute"
+msgstr "Attribut de fichier invalide"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:999
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1017
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1034
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1052
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1063
+msgid "Invalid type"
+msgstr "Type invalide"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:999
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1017
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1034
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1052
+msgid "String expected for attribute"
+msgstr "Une chaîne de texte est attendue comme attribut"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1008
+msgid "Invalid empty filename for attribute"
+msgstr "Le nom de fichier en attribut est vide"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1026
+msgid "Invalid empty short filename for attribute"
+msgstr "Le nom court de fichier en attribut est vide"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1043
+msgid "Invalid empty full filename for attribute"
+msgstr "Le nom complet de fichier en attribut est vide"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1063
+msgid "Integer expected for attribute"
+msgstr "Un entier est attendu comme attribut"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1173
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1663
+msgid "File"
+msgstr "Fichier"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1358
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:4349
+msgid "Unable to open temporary file"
+msgstr "Impossible d'ouvrir le ficheir temporaire"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1358
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:4349
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:4500
+msgid "in binary write mode"
+msgstr "en mode d'écriture binaire"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1505
+msgid "Zip file"
+msgstr "Fichier Zip"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1505
+msgid "already open"
+msgstr "déja ouvert"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1517
+msgid "in"
+msgstr "dans"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1517
+msgid "mode"
+msgstr "mode"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1663
+msgid "does not exists"
+msgstr "n'existe pas"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1716
+msgid "Invalid file list parameter (invalid or empty list)"
+msgstr "La liste de fichier passée en paramètre n'est pas valide (ou vide)"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:1847
+msgid "Unable to open file"
+msgstr "Impossible d'ouvrir le fichier"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:2247
+msgid "Unable to open archiv"
+msgstr "Impossible d'ouvrir le fichier d'archive"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:2273
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:2443
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:2631
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:3877
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:4043
+msgid "Invalid archive size"
+msgstr "Taille de fichier d'archive invalide"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:2568
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:2830
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:2896
+msgid "is"
+msgstr "est"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:2569
+msgid "compressed by an unsupported compression"
+msgstr "compressé dans un mode non supporté"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:2570
+msgid "method"
+msgstr "méthode"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:2590
+msgid "Unsupported encryption for"
+msgstr "Encryptage non supporté pour"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:2591
+msgid "filename"
+msgstr " nom de fichier"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:2831
+msgid "outside"
+msgstr "en dehors"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:2897
+msgid "already used by an existing directory"
+msgstr "déja utilisé par un répertoire existant"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:2919
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:2948
+msgid "exists"
+msgstr "existe"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:2920
+msgid "and is write protected"
+msgstr "et est protégé en écriture"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:2948
+msgid "Newer version of '"
+msgstr "Une version plus récente de '"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:2949
+msgid "and option"
+msgstr "et l'option"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:2949
+msgid "is not selected"
+msgstr "n'est pas sélectionnée"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:3352
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:3479
+msgid "Invalid archive structure"
+msgstr "La structure du fichier d'archive est invalide"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:3370
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:3497
+msgid "Invalid block size :"
+msgstr "Taille de bloc invalide:"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:3662
+msgid "Unable to go to the end of the archive"
+msgstr "Impossible d'aller à la fin du fichier d'archive"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:3679
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:3711
+msgid "Unable to seek back to the middle of the archive"
+msgstr "Impossible de revenir au milieu du fichier d'archive"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:3747
+msgid "Unable to find End of Central Dir Record signature"
+msgstr "Impossible de trouver la fin de l'enregistrement du répertoire central (End of Central Dir Record)"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:3764
+msgid "Invalid End of Central Dir Record size :"
+msgstr "La taille de la fin de l'enregistrement du répertoire (End of Central Dir Record) est invalide:"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:3788
+msgid "The central dir is not at the end of the archive."
+msgstr "Le répertoire central n'est pas à la fin du fichier d'archive."
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:3789
+msgid "Some trailing bytes exists after the archive."
+msgstr " Des octets de bourrage existent après l'archive."
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:4238
+msgid "Unable to create directory"
+msgstr "Impossible de créer le répertoire"
+
+#: G:\sites\zenphoto/zp-core/lib-pclzip.php:4500
+msgid "Unable to open archive file"
+msgstr "Impossible d'ouvrir le fichier d'archive"
+
+#: G:\sites\zenphoto/zp-core/refresh-metadata.php:32
+msgid "zenphoto Metadata refresh"
+msgstr "Rafraîchissement des méta-données de Zenphoto"
+
+#: G:\sites\zenphoto/zp-core/refresh-metadata.php:46
+#: G:\sites\zenphoto/zp-core/setup.php:653
+msgid "database connected"
+msgstr "base de données connectée"
+
+#: G:\sites\zenphoto/zp-core/refresh-metadata.php:73
+msgid "not found"
+msgstr "non trouvé(e)"
+
+#: G:\sites\zenphoto/zp-core/refresh-metadata.php:80
+msgid "We're all set to refresh the"
+msgstr "Nous avons tous les paramètres nécessaires pour actualiser la "
+
+#: G:\sites\zenphoto/zp-core/refresh-metadata.php:81
+msgid "Refresh image metadata."
+msgstr "Rafraîchir les méta-données de l'image."
+
+#: G:\sites\zenphoto/zp-core/refresh-metadata.php:81
+#: G:\sites\zenphoto/zp-core/setup.php:1116
+msgid "Go!"
+msgstr "C'est parti!"
+
+#: G:\sites\zenphoto/zp-core/refresh-metadata.php:84
+msgid "database not connected"
+msgstr "base de données non connectée"
+
+#: G:\sites\zenphoto/zp-core/refresh-metadata.php:85
+msgid "Check the zp-config.php file to make sure you've got the right username, password, host, and database. If you haven't created the database yet, now would be a good time."
+msgstr "Vérifiez le fichier zp-config.php pour vous assurer que les identifiant, mot de passe et base de données sont les bons. Si vous n'avez pas encore créé la base de données, il serait peut être temps de le faire."
+
+#: G:\sites\zenphoto/zp-core/setup.php:89
+msgid "create"
+msgstr "créer"
+
+#: G:\sites\zenphoto/zp-core/setup.php:89
+msgid "update"
+msgstr "mettre à jour"
+
+#: G:\sites\zenphoto/zp-core/setup.php:267
+msgid "Upgrade"
+msgstr "Mise à jour"
+
+#: G:\sites\zenphoto/zp-core/setup.php:267
+msgid "Setup"
+msgstr "Installation"
+
+#: G:\sites\zenphoto/zp-core/setup.php:274
+msgid "Zenphoto has detected that you're upgrading to a new version."
+msgstr "Zenphoto a détecté que vous mettiez à jour votre installation vers une version plus récente."
+
+#: G:\sites\zenphoto/zp-core/setup.php:277
+msgid "Welcome to Zenphoto! This page will set up Zenphoto on your web server."
+msgstr "Bienvenue sur Zenphoto ! Cette page va vous permettre de paramétrer Zenphoto sur votre serveur."
+
+#: G:\sites\zenphoto/zp-core/setup.php:281
+msgid "Systems Check:"
+msgstr "Vérification système:"
+
+#: G:\sites\zenphoto/zp-core/setup.php:322
+msgid "and <strong>setup</strong> could not create it"
+msgstr "et <strong>l'installation</strong> ne peut pas le créer"
+
+#: G:\sites\zenphoto/zp-core/setup.php:323
+msgid "does not exist"
+msgstr "n'existe pas"
+
+#: G:\sites\zenphoto/zp-core/setup.php:324
+msgid "You must create the folder"
+msgstr "Vous devez créer le dossier"
+
+#: G:\sites\zenphoto/zp-core/setup.php:326
+msgid "is not writeable and"
+msgstr "n'est pas inscriptible et"
+
+#: G:\sites\zenphoto/zp-core/setup.php:326
+msgid "could not make it so]"
+msgstr "ne peut faire le nécessaire]"
+
+#: G:\sites\zenphoto/zp-core/setup.php:327
+msgid "Change the permissions on the"
+msgstr "Changez les permissions sur le"
+
+#: G:\sites\zenphoto/zp-core/setup.php:327
+msgid "folder to be writable by the server"
+msgstr "le dossier pour le rendre inscriptible par le serveur"
+
+#: G:\sites\zenphoto/zp-core/setup.php:334
+msgid "folder"
+msgstr " est présent"
+
+#: G:\sites\zenphoto/zp-core/setup.php:348
+msgid "PHP version"
+msgstr "Version de PHP :"
+
+#: G:\sites\zenphoto/zp-core/setup.php:348
+#: G:\sites\zenphoto/zp-core/setup.php:489
+msgid "Version"
+msgstr "La version "
+
+#: G:\sites\zenphoto/zp-core/setup.php:348
+msgid "or greater is required."
+msgstr "ou plus récente est requise."
+
+#: G:\sites\zenphoto/zp-core/setup.php:355
+msgid "PHP Safe Mode"
+msgstr "PHP en \"Safe mode\""
+
+#: G:\sites\zenphoto/zp-core/setup.php:355
+msgid "[is set]"
+msgstr "[est défini]"
+
+#: G:\sites\zenphoto/zp-core/setup.php:355
+msgid "Zenphoto functionality is reduced when PHP <code>safe mode</code> restrictions are in effect."
+msgstr "Les fonctionnalités de Zenphoto sont réduites quand PHP est en <code>safe mode</code>."
+
+#: G:\sites\zenphoto/zp-core/setup.php:359
+msgid "PHP GD support"
+msgstr "Le support de GD dans PHP"
+
+#: G:\sites\zenphoto/zp-core/setup.php:359
+msgid "is not installed"
+msgstr "n'est pas installé"
+
+#: G:\sites\zenphoto/zp-core/setup.php:359
+msgid "You need to install GD support in your PHP"
+msgstr "Vous devez installer la librairie GD dans votre configuration PHP"
+
+#: G:\sites\zenphoto/zp-core/setup.php:371
+msgid "should"
+msgstr "devrait"
+
+#: G:\sites\zenphoto/zp-core/setup.php:376
+msgid "need to"
+msgstr "a besoin de"
+
+#: G:\sites\zenphoto/zp-core/setup.php:378
+msgid "PHP GD image support"
+msgstr "Le support de GD dans PHP"
+
+#: G:\sites\zenphoto/zp-core/setup.php:378
+msgid "Your PHP GD does not support"
+msgstr "La librairie GD de votre configuration PHP ne supporte pas"
+
+#: G:\sites\zenphoto/zp-core/setup.php:379
+msgid "The unsupported image types will not be viewable in your albums."
+msgstr "Les types d'images non supportés ne seront pas visibles dans vos albums."
+
+#: G:\sites\zenphoto/zp-core/setup.php:380
+msgid "To correct this you"
+msgstr "Pour corriger cela, vous"
+
+#: G:\sites\zenphoto/zp-core/setup.php:380
+msgid "install GD with appropriate image support in your PHP"
+msgstr "installer la librairie GD avec les types d'image appropriés dans votre configuration PHP"
+
+#: G:\sites\zenphoto/zp-core/setup.php:396
+msgid "PHP <code>glob()</code> support"
+msgstr "Support de <code>glob()</code> dans PHP"
+
+#: G:\sites\zenphoto/zp-core/setup.php:396
+msgid "is disabled"
+msgstr "est désactivé"
+
+#: G:\sites\zenphoto/zp-core/setup.php:396
+msgid "You need to set the define <code>SAFE_GLOB</code> to <code>true</code> in <code>functions.php</code>"
+msgstr "Vous devez définir <code>SAFE_GLOB</code> comme étant égal à <code>true</code> dans <code>functions.php</code>"
+
+#: G:\sites\zenphoto/zp-core/setup.php:398
+msgid "PHP <code>gettext()</code> support"
+msgstr "Support de <code>gettext()</code> dans PHP"
+
+#: G:\sites\zenphoto/zp-core/setup.php:398
+msgid "[is not present]"
+msgstr "[n'est pas présent]"
+
+#: G:\sites\zenphoto/zp-core/setup.php:398
+msgid "Localization of Zenphoto currently requires native PHP <code>gettext()</code> support"
+msgstr "La localisation de Zenphoto nécessite l'activation de <code>gettext()</code> dans PHP"
+
+#: G:\sites\zenphoto/zp-core/setup.php:400
+msgid " PHP MySQL support"
+msgstr "Support de MySQL dans PHP"
+
+#: G:\sites\zenphoto/zp-core/setup.php:400
+msgid "You need to install MySQL support in your PHP"
+msgstr "Vous devez installer le support de MySQL dans votre configuration PHP"
+
+#: G:\sites\zenphoto/zp-core/setup.php:407
+#: G:\sites\zenphoto/zp-core/setup.php:541
+msgid "file"
+msgstr "est présent"
+
+#: G:\sites\zenphoto/zp-core/setup.php:407
+msgid "[does not exist]"
+msgstr "[n'existe pas]"
+
+#: G:\sites\zenphoto/zp-core/setup.php:408
+msgid "Edit the <code>zp-config.php.example</code> file and rename it to <code>zp-config.php</code>"
+msgstr "Modifiez le fichier <code>zp-config.php.example</code> et renommez-le en <code>zp-config.php</code>"
+
+#: G:\sites\zenphoto/zp-core/setup.php:409
+msgid "You can find the file in the \"zp-core\" directory."
+msgstr "Vous pouvez trouver le fichier dans le dossier \"zp-core\"."
+
+#: G:\sites\zenphoto/zp-core/setup.php:428
+#, fuzzy
+msgid "MySQL setup in"
+msgstr " Paramètrage MySQL trouvé dans"
+
+#: G:\sites\zenphoto/zp-core/setup.php:433
+msgid "Fill in the missing information below and <strong>setup</strong> will attempt to update your <code>zp-config.php</code> file."
+msgstr "Complétez les informations manquantes ci-dessous and <strong>l'installation</strong> essaiera de mettre à jour votre fichier <code>zp-config.php</code>."
+
+#: G:\sites\zenphoto/zp-core/setup.php:444
+msgid "MySQL admin user"
+msgstr "Utilisateur administrateur MySQL"
+
+#: G:\sites\zenphoto/zp-core/setup.php:449
+msgid "MySQL admin password"
+msgstr "Mot de passe administrateur MySQL"
+
+#: G:\sites\zenphoto/zp-core/setup.php:454
+msgid "MySQL host"
+msgstr "Hôte MySQL"
+
+#: G:\sites\zenphoto/zp-core/setup.php:459
+msgid "MySQL database"
+msgstr "Base de données MySQL"
+
+#: G:\sites\zenphoto/zp-core/setup.php:464
+msgid "Database table prefix"
+msgstr "Préfixe des tables de la base"
+
+#: G:\sites\zenphoto/zp-core/setup.php:470
+msgid "required"
+msgstr "obligatoire"
+
+#: G:\sites\zenphoto/zp-core/setup.php:483
+#, fuzzy
+msgid "MySQL setup in <em>zp-config.php</em>"
+msgstr " Paramètrage MySQL dans <em>zp-config.php</em>"
+
+#: G:\sites\zenphoto/zp-core/setup.php:484
+msgid "You have not set your <strong>MySQL</strong> <code>user</code>, <code>password</code>, etc. in your <code>zp-config.php</code> file and <strong>setup</strong> is not able to write to the file."
+msgstr "Vous n'avez pas spécifié vos données MySQL(<code>utilisateur</code>, <code>mot de passe</code>, etc.) dans votre fichier <code>zp-config.php</code> et l'installation n'est pas en mesure d'écrire dans ce fichier."
+
+#: G:\sites\zenphoto/zp-core/setup.php:487
+msgid "connect to MySQL"
+msgstr "connexion à MySQL"
+
+#: G:\sites\zenphoto/zp-core/setup.php:487
+msgid "Could not connect to the <strong>MySQL</strong> server. Check the <code>user</code>, <code>password</code>, and <code>database host</code> in your <code>zp-config.php</code> file and try again."
+msgstr "Impossible de se connecter au serveur <strong>MySQL</strong>. Vérifiez les paramètres <code>user</code>, <code>password</code>, et <code>database host</code> dans votre fichier <code>zp-config.php</code> puis  réessayez."
+
+#: G:\sites\zenphoto/zp-core/setup.php:489
+msgid "MySQL version"
+msgstr "Version de MySQL"
+
+#: G:\sites\zenphoto/zp-core/setup.php:490
+msgid "connect to the database <code>"
+msgstr "connexion à la base de données <code>"
+
+#: G:\sites\zenphoto/zp-core/setup.php:491
+msgid "Could not access the <strong>MySQL</strong> database"
+msgstr "Impossible d'accèder à la base de données MySQL"
+
+#: G:\sites\zenphoto/zp-core/setup.php:491
+msgid "Check the <code>user</code>, <code>password</code>, and <code>database name</code> and try again."
+msgstr "Vérifiez les <code>identifiant</code>, <code>mot de passe</code>, and <code>nom de base de données</code> et réessayez."
+
+#: G:\sites\zenphoto/zp-core/setup.php:492
+msgid "Make sure the database has been created, and the <code>user</code> has access to it."
+msgstr "Vérifiez que la base de données a été créée, et que l'<em>utilisateur</em> peut y accèder."
+
+#: G:\sites\zenphoto/zp-core/setup.php:493
+msgid "Also check the <code>MySQL host</code>."
+msgstr "Vérifiez aussi l'<em>hôte MySQL</em>."
+
+#: G:\sites\zenphoto/zp-core/setup.php:501
+msgid "Grants found:"
+msgstr "Habilitations trouvées:"
+
+#: G:\sites\zenphoto/zp-core/setup.php:520
+msgid "The <em>SHOW GRANTS</em> query failed."
+msgstr "La requête <em>SHOW GRANTS</em> a échoué."
+
+#: G:\sites\zenphoto/zp-core/setup.php:522
+msgid "MySQL access rights"
+msgstr "Droits d'accès MySQL"
+
+#: G:\sites\zenphoto/zp-core/setup.php:523
+msgid "Your MySQL user must have <code>Create</code>, <code>Drop</code>, <code>Select</code>, <code>Insert</code>, <code>Alter</code>, <code>Update</code>, and <code>Delete</code> rights."
+msgstr "Votre utilisateur MySQL doit avoir les droits <code>Create</code>, <code>Select</code>, <code>Insert</code>, <code>Alter</code>, <code>Update</code>, et <code>Delete</code>."
+
+#: G:\sites\zenphoto/zp-core/setup.php:533
+msgid "found"
+msgstr "Ont été trouvées "
+
+#: G:\sites\zenphoto/zp-core/setup.php:536
+#, fuzzy
+msgid "MySQL <em>show tables</em>"
+msgstr "La requête MySQL <em>SHOW TABLES</em>"
+
+#: G:\sites\zenphoto/zp-core/setup.php:536
+msgid "[Failed]"
+msgstr "[Echoué]"
+
+#: G:\sites\zenphoto/zp-core/setup.php:537
+msgid "<strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables."
+msgstr "<strong>L'installation</strong> va essayer de créer toutes les tables. Cela n'effacera pas celles qui existent déja."
+
+#: G:\sites\zenphoto/zp-core/setup.php:543
+msgid "Server seems not to be Apache or Apache-compatible, skipping <code>.htaccess</code> test"
+msgstr "Le serveur n'a pas l'air être Apache ou un compatible, le test <code>.htaccess</code> sera donc évité"
+
+#: G:\sites\zenphoto/zp-core/setup.php:552
+msgid "is empty or does not exist"
+msgstr "est vide ou n'existe pas"
+
+#: G:\sites\zenphoto/zp-core/setup.php:553
+msgid "Edit the <code>.htaccess</code> file in the root zenphoto folder if you have the mod_rewrite module, and want cruft-free URLs."
+msgstr "Modifiez le fichier <code>.htaccess</code> à la racine du dossier zenphoto si la fonction <em>mod_rewrite</em> d'Apache est activée et que vous souhaitez avoir des URL \"propres\" (sans extension de fichier, etc)."
+
+#: G:\sites\zenphoto/zp-core/setup.php:554
+msgid "Just change the one line indicated to make it work."
+msgstr "Changez juste la ligne indiquée pour le faire fonctionner."
+
+#: G:\sites\zenphoto/zp-core/setup.php:555
+msgid "You can ignore this warning if you do not intend to set the option <code>mod_rewrite</code>."
+msgstr "Vous pouvez ignorer cette alerte si vous ne comptez pas utiliser l'option <code>mod_rewrite</code>."
+
+#: G:\sites\zenphoto/zp-core/setup.php:564
+msgid "wrong version"
+msgstr "mauvaise version"
+
+#: G:\sites\zenphoto/zp-core/setup.php:565
+msgid "You need to upload the copy of the .htaccess file that was included with the zenphoto distribution."
+msgstr "Vous devez charger sur le serveur la copie du fichier .htaccess fournie avec zenphoto."
+
+#: G:\sites\zenphoto/zp-core/setup.php:579
+msgid "(<em>RewriteEngine</em> is"
+msgstr " (<em>RewriteEngine</em> est"
+
+#: G:\sites\zenphoto/zp-core/setup.php:593
+msgid "missing"
+msgstr "manque"
+
+#: G:\sites\zenphoto/zp-core/setup.php:615
+msgid "<em>.htaccess</em> RewriteBase is"
+msgstr "Le paramètre RewriteBase du fichier <em>.htaccess</em> est"
+
+#: G:\sites\zenphoto/zp-core/setup.php:615
+msgid "[Does not match install folder]"
+msgstr "[Ne correspond pas au dossier d'installation]"
+
+#: G:\sites\zenphoto/zp-core/setup.php:616
+msgid "Setup was not able to write to the file change RewriteBase match the install folder."
+msgstr "L'installation n'a pas été en mesure d'écrire le fichier, corrigez le paramètre RewriteBase pour correspondre à votre dossier d'installation."
+
+#: G:\sites\zenphoto/zp-core/setup.php:617
+msgid "Either make the file writeable or set <code>RewriteBase</code> in your <code>.htaccess</code> file to"
+msgstr "Deux possibilités : soit rendre le fichier inscriptible ou modifier le paramètre <code>RewriteBase</code> dans votre fichier <code>.htaccess</code> pour"
+
+#: G:\sites\zenphoto/zp-core/setup.php:631
+msgid "You need to address the problems indicated above then run <code>setup.php</code> again."
+msgstr "Vous devez corriger les problèmes mentionnés ci-dessus et relancer l'installation via <code>setup.php</code>."
+
+#: G:\sites\zenphoto/zp-core/setup.php:639
+#: G:\sites\zenphoto/zp-core/setup.php:1141
+msgid "Select a language:"
+msgstr "Choisissez une langue:"
+
+#: G:\sites\zenphoto/zp-core/setup.php:691
+msgid "You need <em>USER ADMIN</em> rights to run setup."
+msgstr "Vous avez besoin de droits <em>USER ADMIN</em> pour réaliser l'installation."
+
+#: G:\sites\zenphoto/zp-core/setup.php:974
+msgid "About to"
+msgstr "Prêt à "
+
+#: G:\sites\zenphoto/zp-core/setup.php:974
+msgid "tables"
+msgstr " les tables"
+
+#: G:\sites\zenphoto/zp-core/setup.php:992
+msgid "Success."
+msgstr "a réussi."
+
+#: G:\sites\zenphoto/zp-core/setup.php:1056
+msgid "Done with table"
+msgstr "Opération effectuée sur la table : "
+
+#: G:\sites\zenphoto/zp-core/setup.php:1060
+msgid "You need to"
+msgstr "Vous avez besoin de"
+
+#: G:\sites\zenphoto/zp-core/setup.php:1060
+msgid "set your admin user and password"
+msgstr " spécifier votre identifiant administrateur ainsi que son mot de passe"
+
+#: G:\sites\zenphoto/zp-core/setup.php:1062
+msgid "You can now"
+msgstr "Vous pouvez maintenant"
+
+#: G:\sites\zenphoto/zp-core/setup.php:1062
+msgid "View your gallery"
+msgstr "voir votre galerie"
+
+#: G:\sites\zenphoto/zp-core/setup.php:1062
+msgid ", or"
+msgstr ", ou"
+
+#: G:\sites\zenphoto/zp-core/setup.php:1062
+msgid "administrate."
+msgstr "l'administrer."
+
+#: G:\sites\zenphoto/zp-core/setup.php:1067
+msgid "We are all set to"
+msgstr "Nous avons tous les paramètres nécessaires pour "
+
+#: G:\sites\zenphoto/zp-core/setup.php:1078
+msgid "create the database tables"
+msgstr "créer les tables dans la base de données"
+
+#: G:\sites\zenphoto/zp-core/setup.php:1080
+msgid "create the database table"
+msgstr "créer la table de la base de données"
+
+#: G:\sites\zenphoto/zp-core/setup.php:1094
+msgid "update the database table"
+msgstr "mettre à jour la table de la base de données"
+
+#: G:\sites\zenphoto/zp-core/setup.php:1116
+msgid "create and or update the database tables."
+msgstr "créer et/ou mettre à jour les tables de la base de données."
+
+#: G:\sites\zenphoto/zp-core/setup.php:1119
+msgid "database did not connect"
+msgstr "La connexion à la base de données ne fonctionne pas"
+
+#: G:\sites\zenphoto/zp-core/setup.php:1120
+msgid "You should run setup.php to check your configuration. If you haven't created the database yet, now would be a good time."
+msgstr "Vous devriez lancer setup.php pour vérifier votre configuration. Si vous n'avez pas encore créé la base de données, il serait peut être temps de le faire."
+
+#: G:\sites\zenphoto/zp-core/setup.php:1127
+msgid "The zp-config.php file does not exist. You should run setup.php to check your configuration and create this file."
+msgstr "Le fichier zp-config.php n'existe pas. Vous devriez lancer setup.php pour vérifier votre configuration et créer ce fichier."
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:100
+msgid "Admin Toolbox"
+msgstr "Administration"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:102
+msgid "Admin"
+msgstr "Administrer"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:106
+msgid "Sort gallery"
+msgstr "Trier la galerie"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:106
+#: G:\sites\zenphoto/zp-core/template-functions.php:123
+msgid "Manual sorting"
+msgstr "Tri manuel"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:110
+msgid "New album"
+msgstr "Nouvel album"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:121
+msgid "Edit album"
+msgstr "Modifier l'album"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:123
+msgid "Sort album"
+msgstr "Trier l'album"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:129
+msgid "Delete album"
+msgstr "Supprimer l'album"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:132
+msgid "Upload Here"
+msgstr "Charger ici"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:134
+msgid "New Album Here"
+msgstr "Nouvel album ici"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:142
+msgid "Delete image"
+msgstr "Supprimer l'image"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:148
+msgid "Create an album from the search"
+msgstr "Créer un album à partir de cette recherche"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:148
+msgid "Create Album"
+msgstr "Créer un album"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:153
+msgid "Logout"
+msgstr "Se déconnecter"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:483
+#: G:\sites\zenphoto/zp-core/template-functions.php:520
+msgid "Previous Page"
+msgstr "Page précédente"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:485
+#: G:\sites\zenphoto/zp-core/template-functions.php:541
+msgid "Next Page"
+msgstr "Page suivante"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:531
+msgid "(Current Page)"
+msgstr " (Page courante)"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:919
+#: G:\sites\zenphoto/zp-core/template-functions.php:940
+msgid "Save"
+msgstr "Enregistrer"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:2354
+msgid "You must supply an e-mail address."
+msgstr "Vous devez fournir une adresse mail."
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:2355
+msgid "You must enter your name."
+msgstr "Vous devez entrer votre nom."
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:2356
+msgid "You must supply an WEB page URL."
+msgstr "Vous devez fournir une URL de page web."
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:2357
+msgid "Captcha verification failed."
+msgstr "Impossible de vérifier le captcha."
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:2358
+msgid "You must enter something in the comment text."
+msgstr "Vous devez entrer du texte pour ce commentaire."
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:2359
+msgid "Your comment failed the SPAM filter check."
+msgstr "Votre commentaire a été bloqué par le filtre anti-SPAM."
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:2360
+msgid "Your comment has been marked for moderation."
+msgstr "Votre commentaire a été marqué pour modération ultérieure."
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:2373
+msgid "Download Zip of the Album"
+msgstr "Télécharger une archive ZIP de l'album"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:2373
+msgid "Download a zip file of this album"
+msgstr "Télécharger une archive ZIP de cet album"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:3154
+msgid "search"
+msgstr "chercher"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:3165
+#: G:\sites\zenphoto/zp-core/template-functions.php:3166
+msgid "Show fields"
+msgstr "Voir les champs"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:3182
+msgid "File name"
+msgstr "Nom de fichier"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:3196
+msgid "Close"
+msgstr "Fermer"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:3256
+msgid "no date"
+msgstr "pas de date"
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:3460
+msgid "There was an error logging in."
+msgstr "Impossible de se connecter."
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:3460
+msgid "Check your user and password and try again."
+msgstr "Vérifiez vos identifiant et mot de passe et réessayez."
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:3466
+msgid "The page you are trying to view is password protected."
+msgstr "La page que vous essayez d'afficher est protégée par mot de passe."
+
+#: G:\sites\zenphoto/zp-core/template-functions.php:3476
+msgid "Hint:"
+msgstr "Astuce:"
+
+#: G:\sites\zenphoto/zp-core/js/js-string-constants.js.php:12
+msgid "Test"
+msgstr "Test"
+
+#: G:\sites\zenphoto/zp-core/js/js-string-constants.js.php:13
+msgid "Click to add a title..."
+msgstr "Cliquez ici pour ajouter un titre..."
+
+#: G:\sites\zenphoto/zp-core/js/js-string-constants.js.php:14
+msgid "Click to edit title..."
+msgstr "Cliquez ici pour modifier le titre..."
+
+#: G:\sites\zenphoto/zp-core/js/js-string-constants.js.php:15
+msgid "Click to add tags..."
+msgstr "Cliquez ici pour ajouter un/des tags..."
+
+#: G:\sites\zenphoto/zp-core/js/js-string-constants.js.php:16
+msgid "Click to edit tags..."
+msgstr "Cliquez ici pour modifier les tags..."
+
+#: G:\sites\zenphoto/zp-core/js/js-string-constants.js.php:17
+msgid "Click to add a description..."
+msgstr "Cliquez ici pour ajouter une description..."
+
+#: G:\sites\zenphoto/zp-core/js/js-string-constants.js.php:18
+msgid "Click to edit description"
+msgstr "Cliquez ici pour modifier la description"
+
+#: G:\sites\zenphoto/zp-core/js/js-string-constants.js.php:20
+msgid "cancel"
+msgstr "Annuler"
+
+#: G:\sites\zenphoto/zp-core/js/js-string-constants.js.php:21
+msgid "Currently editing something else, save or cancel to edit this."
+msgstr ""
+
+#: G:\sites\zenphoto/zp-core/plugins/dynamic-locale.php:27
+msgid "Enable <strong>dynamic-locale</strong> to allow viewers of your site to select the language translation of their choice."
+msgstr "Active l'option <strong>dynamic-locale</strong> pour mettre aux visiteurs de votre site de choisir la langue d'affichage de leur choix."
+
+#: G:\sites\zenphoto/zp-core/plugins/flowplayer.php:9
+msgid "Enable <strong>flowplayer</strong> to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time. <br> Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its licence."
+msgstr "Activez <strong>flowplayer</strong> pour gérer les fichiers multimédia. IMPORTANT : un seul lecteur peut être activé à la fois. <br /> Merci de consulter <a href='http://flowplayer.org'>flowplayer.org</a> pour plus d'informations sur le lecteur et sa licence associée."
+
+#: G:\sites\zenphoto/zp-core/plugins/flowplayer.php:34
+#: G:\sites\zenphoto/zp-core/plugins/slideshow.php:56
+msgid "flow player width"
+msgstr "Largeur du flowplayer"
+
+#: G:\sites\zenphoto/zp-core/plugins/flowplayer.php:35
+#: G:\sites\zenphoto/zp-core/plugins/flvplayer.php:39
+msgid "Player width (ignored for <em>mp3</em> files.)"
+msgstr "Largeur du lecteur (n'est pas utilisée pour les fichiers <em>.mp3</em>.)"
+
+#: G:\sites\zenphoto/zp-core/plugins/flowplayer.php:36
+#: G:\sites\zenphoto/zp-core/plugins/slideshow.php:58
+msgid "flow player height"
+msgstr "Hauteur du flowplayer"
+
+#: G:\sites\zenphoto/zp-core/plugins/flowplayer.php:37
+msgid "Player height (ignored for <em>mp3</em> files.)"
+msgstr "Hauteur du lecteur (n'est pas utilisé pour les fichiers <em>.mp3</em>.)"
+
+#: G:\sites\zenphoto/zp-core/plugins/flowplayer.php:38
+msgid "Controls background color"
+msgstr "Couleur de fond des éléments"
+
+#: G:\sites\zenphoto/zp-core/plugins/flowplayer.php:39
+msgid "Background color of the controls."
+msgstr "Couleur de fond des éléments."
+
+#: G:\sites\zenphoto/zp-core/plugins/flowplayer.php:40
+msgid "Control area border color"
+msgstr "Couleur de la bordure de la zone des éléments"
+
+#: G:\sites\zenphoto/zp-core/plugins/flowplayer.php:41
+msgid "Color of the border of the player controls"
+msgstr "Couleur de la bordure des contrôles du lecteur"
+
+#: G:\sites\zenphoto/zp-core/plugins/flowplayer.php:42
+msgid "Autoplay"
+msgstr "Lecture automatique"
+
+#: G:\sites\zenphoto/zp-core/plugins/flowplayer.php:43
+#: G:\sites\zenphoto/zp-core/plugins/flvplayer.php:53
+msgid "Should the video start automatically. Yes if selected."
+msgstr "Pour lancer la vidéo automatiquement. Oui si sélectionné."
+
+#: G:\sites\zenphoto/zp-core/plugins/flowplayer.php:72
+#: G:\sites\zenphoto/zp-core/plugins/flowplayer.php:93
+msgid "Get Flash"
+msgstr "Obtenez Adobe Flash"
+
+#: G:\sites\zenphoto/zp-core/plugins/flowplayer.php:72
+#: G:\sites\zenphoto/zp-core/plugins/flowplayer.php:93
+msgid "to see this player."
+msgstr "pour voir ce lecteur."
+
+#: G:\sites\zenphoto/zp-core/plugins/flvplayer.php:9
+msgid "Enable <strong>FLV</strong> player to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time.<br> Please see <a href='http://www.jeroenwijering.com/?item=JW_FLV_Player'>JW FLV media player </a> for more info about the player and its licence."
+msgstr "Activez le lecteur <strong>FLV</strong> pour gérer les fichiers multimédia. IMPORTANT : un seul lecteur peut être activé à la fois. <br /> Merci de consulter de <a href='http://www.jeroenwijering.com/?item=JW_FLV_Player'>http://www.jeroenwijering.com/?item=JW_FLV_Player</a> pour plus d'informations sur le lecteur et sa licence associée."
+
+#: G:\sites\zenphoto/zp-core/plugins/flvplayer.php:38
+msgid "flv player width"
+msgstr "largeur du lecteur FLV"
+
+#: G:\sites\zenphoto/zp-core/plugins/flvplayer.php:40
+msgid "flv player height"
+msgstr "hauteur du lecteur FLV"
+
+#: G:\sites\zenphoto/zp-core/plugins/flvplayer.php:41
+msgid "Player height (ignored for .<em>mp3</em> files if there is no preview image available.)"
+msgstr "Hauteur du lecteur (n'est pas utilisée pour les fichiers <em>.mp3</em> si aucune d'image d'aperçu n'est disponible.)"
+
+#: G:\sites\zenphoto/zp-core/plugins/flvplayer.php:42
+msgid "Backcolor"
+msgstr "Couleur de fond"
+
+#: G:\sites\zenphoto/zp-core/plugins/flvplayer.php:43
+msgid "Backgroundcolor of the controls, in HEX format."
+msgstr "Couleur de fond des éléments, au format héxadécimal."
+
+#: G:\sites\zenphoto/zp-core/plugins/flvplayer.php:44
+msgid "Frontcolor"
+msgstr "Couleur de premier plan"
+
+#: G:\sites\zenphoto/zp-core/plugins/flvplayer.php:45
+msgid "Texts & buttons color of the controls, in HEX format."
+msgstr "Couleur du texte et des boutons, au format héxadécimal."
+
+#: G:\sites\zenphoto/zp-core/plugins/flvplayer.php:46
+msgid "Lightcolor"
+msgstr "Couleur au survol"
+
+#: G:\sites\zenphoto/zp-core/plugins/flvplayer.php:47
+msgid "Rollover color of the controls, in HEX format."
+msgstr "Couleur au survol des boutons (au format HEX)."
+
+#: G:\sites\zenphoto/zp-core/plugins/flvplayer.php:48
+msgid "Screencolor"
+msgstr "Couleur de l'écran"
+
+#: G:\sites\zenphoto/zp-core/plugins/flvplayer.php:49
+msgid "Color of the display area, in HEX format."
+msgstr "Couleur de la zone d'affichage, au format HEX."
+
+#: G:\sites\zenphoto/zp-core/plugins/flvplayer.php:50
+#: G:\sites\zenphoto/zp-core/plugins/flv_playlist.php:68
+msgid "Displayheight"
+msgstr "Hauteur d'affichage"
+
+#: G:\sites\zenphoto/zp-core/plugins/flvplayer.php:51
+msgid "The height of the player display. Generally it should be the same as the height. (ignored for .<em>mp3</em> files if there is no preview image available.)"
+msgstr "La hauteur d'affichage du lecteur. Généralement, c'est la même chose que sa propre hauteur. (n'est pas utilisée pour les fichiers .<em>mp3</em> si aucune image d'apercu n'est disponible.)"
+
+#: G:\sites\zenphoto/zp-core/plugins/flvplayer.php:52
+msgid "Autostart"
+msgstr "Démarrage automatique"
+
+#: G:\sites\zenphoto/zp-core/plugins/flv_playlist.php:36
+msgid "The flvplayer plugin is not enabled. It must be enabled for this plugin to have effect."
+msgstr "L'extension flvplayer n'est pas activée. L'option doit être cochée pour qu'elle soit effective."
+
+#: G:\sites\zenphoto/zp-core/plugins/flv_playlist.php:41
+msgid "A plugin to show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players with flv player (some options are also shared with that plugin)."
+msgstr "Une extension pour afficher le contenu d'un album avec des fichiers audio/vidéo flv/.mp4/.mp3 comme une liste de lecture ou sous forme de lecteurs flv séparés (certains paramètres sont communs avec l'extension gérant celui-ci)."
+
+#: G:\sites\zenphoto/zp-core/plugins/flv_playlist.php:62
+msgid "Width"
+msgstr "Largeur"
+
+#: G:\sites\zenphoto/zp-core/plugins/flv_playlist.php:63
+msgid "Player width for the playlist"
+msgstr "Largeur du lecteur pour la liste de lecture"
+
+#: G:\sites\zenphoto/zp-core/plugins/flv_playlist.php:64
+msgid "Height"
+msgstr "Hauteur"
+
+#: G:\sites\zenphoto/zp-core/plugins/flv_playlist.php:65
+msgid "Player height for the playlist (ignored for .<em>mp3</em> files if there is no preview image available.)"
+msgstr "Hauteur du lecteur (n'est pas utilisée pour les fichiers <em>.mp3</em> si aucune d'image d'aperçu n'est disponible.)"
+
+#: G:\sites\zenphoto/zp-core/plugins/flv_playlist.php:66
+msgid "Displaywidth"
+msgstr "Largeur d'affichage"
+
+#: G:\sites\zenphoto/zp-core/plugins/flv_playlist.php:67
+msgid "Display width for the playlist. The display width is needed for the playlist menu to be shown. In this case the 'displaywidth - width = width of the playlist menu'. See the flv player site for more info about these options."
+msgstr "Largeur de la liste de lecture. La largeur d'affichage est nécessaire pour faire apparaître le menu de la liste de lecture. Dans ce cas-là, la 'largeur d'affichage - largeur = largeur du menu'. Consultez le site du lecteur flv pour plus d'informations sur ces paramètres."
+
+#: G:\sites\zenphoto/zp-core/plugins/flv_playlist.php:69
+msgid "Display height for the playlist. If the width is too small to show the playlist menu, you can set the height higher to show it below the actual movie display. See the flv player site for more info about these options."
+msgstr "Hauteur de la liste de lecture. Si la largeur est trop petite pour afficher le menu, vous pouvez augmenter la hauteur pour l'afficher sous la vidéo. Consultez le site du lecteur flv pour plus d'informations sur ces paramètres."
+
+#: G:\sites\zenphoto/zp-core/plugins/flv_playlist.php:70
+msgid "Thumbs in playlist"
+msgstr "Vignettes dans la liste de lecture"
+
+#: G:\sites\zenphoto/zp-core/plugins/flv_playlist.php:71
+msgid "Check if you want that thumbnails of the preview images should be shown in the playlist."
+msgstr "Cocher cette case si vous voulez que les vignettes des images de prévisualisation soient affichées sous la liste de lecture."
+
+#: G:\sites\zenphoto/zp-core/plugins/flv_playlist.php:90
+msgid "The flv player is not installed. Please install or activate the flv player plugin."
+msgstr "Le lecteur flv n'est pas installé. Merci d'installer ou d'activer l'extension correspondante..."
+
+#: G:\sites\zenphoto/zp-core/plugins/flv_playlist.php:112
+msgid "The flv player is not installed. Please install or activate the flv player plugin.."
+msgstr "Le lecteur flv n'est pas installé. Merci d'installer ou d'activer l'extension correspondante..."
+
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:21
+msgid "GoogleCheckout Integration for Zenphoto."
+msgstr "Integration de GoogleCheckout pour Zenphoto."
+
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:43
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:44
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:45
+msgid "Matte"
+msgstr "Mat"
+
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:43
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:44
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:45
+msgid "Glossy"
+msgstr "Brillant"
+
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:43
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:44
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:45
+msgid "Paper"
+msgstr "Papier"
+
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:60
+msgid "Google Merchant ID"
+msgstr "Identifiant Google Merchant"
+
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:61
+msgid "Your Google Merchant ID."
+msgstr "Votre identifiant Google Merchant."
+
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:62
+msgid "Currency"
+msgstr "Monnaie"
+
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:63
+msgid "The currency for your transactions."
+msgstr "La monnaie utilisée pour vos transactions."
+
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:64
+msgid "Shipping method"
+msgstr "Mode d'expédition"
+
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:65
+msgid "How to ship."
+msgstr "Comment expédier."
+
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:66
+msgid "Shipping cost"
+msgstr "Côut d'expédition"
+
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:67
+msgid "What you charge for shipping."
+msgstr "Montant des frais d'expéditions."
+
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:68
+msgid "Price list"
+msgstr "Liste de prix"
+
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:69
+msgid "Your pricelist by size and media. The format of this option is <em>price elements</em> separated by spaces.<br/>A <em>price element</em> has the form: <em>size</em>:<em>media</em>=<em>price</em><br/>example: <code>4x6:Matte=5.75 8x10:Glossy=20.00 11x14:Paper=15.35</code>."
+msgstr "Votre liste de prix par taille et média. Le format à utiliser pour cette option correspond aux <em>prix des élements</em> séparés par des espaces.<br />Le <em>prix d'un élément</em>se présente sous la forme suivante : <em>taille</em>:<em>media</em>=<em>prix</em><br/>exemple: <code>4x6:Matte=5.75 8x10:Glossy=20.00 11x14:Paper=15.35</code>."
+
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:72
+msgid "Cart Location"
+msgstr "Emplacement du panier"
+
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:73
+msgid "The placement of the Google Cart on your pages."
+msgstr "L'emplacement du panier Google sur vos pages."
+
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:81
+msgid "top left"
+msgstr "en haut à gauche"
+
+#: G:\sites\zenphoto/zp-core/plugins/GoogleCheckout.php:81
+msgid "top right"
+msgstr "en haut à droite"
+
+#: G:\sites\zenphoto/zp-core/plugins/google_maps.php:8
+msgid "Support for providing Google Maps based on EXIF latitude and longitude in the images."
+msgstr "Permet de produire des cartes Google Maps basées sur les latitude et longitude stockées dans les données EXIF des images."
+
+#: G:\sites\zenphoto/zp-core/plugins/google_maps.php:26
+msgid "Google Maps API key"
+msgstr "Clé d'API Google Maps"
+
+#: G:\sites\zenphoto/zp-core/plugins/google_maps.php:27
+msgid "If you're going to be using Google Maps,"
+msgstr "Si vous comptez utiliser Google Maps,"
+
+#: G:\sites\zenphoto/zp-core/plugins/google_maps.php:29
+msgid "get an API key</a> and enter it here."
+msgstr "obtenez une clé API</a> et saisissez-là ici."
+
+#: G:\sites\zenphoto/zp-core/plugins/image_album_statistics.php:8
+msgid "Functions that provide various statistics about images and albums in the gallery."
+msgstr "Fonctions qui fournissent de nombreuses statistiques sur les images et albums de la galerie."
+
+#: G:\sites\zenphoto/zp-core/plugins/image_album_statistics.php:152
+msgid "Last update: "
+msgstr "Dernière mise à jour:"
+
+#: G:\sites\zenphoto/zp-core/plugins/image_album_statistics.php:154
+msgid "image"
+msgstr "image"
+
+#: G:\sites\zenphoto/zp-core/plugins/image_album_statistics.php:158
+msgid " new "
+msgstr " nouveau"
+
+#: G:\sites\zenphoto/zp-core/plugins/image_album_statistics.php:169
+#: G:\sites\zenphoto/zp-core/plugins/image_album_statistics.php:365
+msgid "Rating: "
+msgstr "Note:"
+
+#: G:\sites\zenphoto/zp-core/plugins/image_album_statistics.php:169
+#: G:\sites\zenphoto/zp-core/plugins/image_album_statistics.php:365
+msgid " (Votes: "
+msgstr "(Votes:"
+
+#: G:\sites\zenphoto/zp-core/plugins/image_album_statistics.php:174
+#: G:\sites\zenphoto/zp-core/plugins/image_album_statistics.php:370
+msgid "Views: "
+msgstr "Affichages:"
+
+#: G:\sites\zenphoto/zp-core/plugins/print_album_menu.php:83
+msgid "Adds a theme function printAlbumMenu() to print an album menu either as a nested list up to 4 sublevels (context sensitive) or as a dropdown menu."
+msgstr "Ajoute au thème une fonction printAlbumMenu() qui permet d'afficher un menu d'album soit sous forme d'une liste (jusqu'à 4 niveaux, selon le contexte), ou un menu déroulant."
+
+#: G:\sites\zenphoto/zp-core/plugins/rating.php:7
+msgid "Adds several theme functions to enable images and/or album rating by users."
+msgstr "Ajoute de nombreuses fonctions au thème pour activer les possibilités de notation sur les images et/ou les albums."
+
+#: G:\sites\zenphoto/zp-core/plugins/rating.php:80
+msgid "Rating"
+msgstr "Note:"
+
+#: G:\sites\zenphoto/zp-core/plugins/rating.php:81
+msgid "Total votes"
+msgstr "Total des votes"
+
+#: G:\sites\zenphoto/zp-core/plugins/rating.php:83
+msgid "1 star out of 5"
+msgstr "1 étoile sur 5"
+
+#: G:\sites\zenphoto/zp-core/plugins/rating.php:84
+msgid "2 stars out of 5"
+msgstr "2 étoiles sur 5"
+
+#: G:\sites\zenphoto/zp-core/plugins/rating.php:85
+msgid "3 stars out of 5"
+msgstr "3 étoiles sur 5"
+
+#: G:\sites\zenphoto/zp-core/plugins/rating.php:86
+msgid "4 stars out of 5"
+msgstr "4 étoiles sur 5"
+
+#: G:\sites\zenphoto/zp-core/plugins/rating.php:87
+msgid "5 stars out of 5"
+msgstr "5 étoiles sur 5"
+
+#: G:\sites\zenphoto/zp-core/plugins/shutterfly.php:7
+msgid "Adds a link to allow requesting a single image print through Shutterfly."
+msgstr "Ajoute un lien pour obtenir directement une impression d'une image seule via le service Shutterfly."
+
+#: G:\sites\zenphoto/zp-core/plugins/shutterfly.php:8
+msgid "adapted as a plugin by"
+msgstr "adapté sous forme d'extension par"
+
+#: G:\sites\zenphoto/zp-core/plugins/slideshow.php:17
+msgid "Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder."
+msgstr "Ajoute au thème une fonction pour lancer un diaporama basé sur jQuery (par défaut) ou Flash (si Flowplayer est installé). Cependant, les fichiers <em>slideshow.php</em>, <em>slideshow.css</em> et <em>slideshow-controls.png</em> doivent être présents dans le dossier du thème."
+
+#: G:\sites\zenphoto/zp-core/plugins/slideshow.php:44
+msgid "Size"
+msgstr "Taille"
+
+#: G:\sites\zenphoto/zp-core/plugins/slideshow.php:45
+msgid "Size of the images in the slideshow. <em>[jQuery mode option]</em><br />If empty the theme options <em>image size</em> is used."
+msgstr "Taille des images dans le diaporama. <em>[option liée à jQuery]</em><br />Si cette valeur est vide, la <em>taille des images</em> spécifiée dans les options du thème est utilisée."
+
+#: G:\sites\zenphoto/zp-core/plugins/slideshow.php:46
+msgid "Mode"
+msgstr "Mode"
+
+#: G:\sites\zenphoto/zp-core/plugins/slideshow.php:47
+msgid "<em>jQuery</em> for JS ajax slideshow, <em>flash</em> for flash based slideshow (requires Flowplayer.)"
+msgstr "<em>jQuery</em> pour le diaporama Javascript, <em>Flash</em> pour le diaporama basé sur Flash (nécessite Flowplayer.)"
+
+#: G:\sites\zenphoto/zp-core/plugins/slideshow.php:48
+msgid "Effect"
+msgstr "Effet"
+
+#: G:\sites\zenphoto/zp-core/plugins/slideshow.php:49
+msgid "The cycle slide effect to be used. <em>[jQuery mode option]</em>"
+msgstr "L'effet de boucle à utiliser. <em>[option liée à jQuery]</em>"
+
+#: G:\sites\zenphoto/zp-core/plugins/slideshow.php:50
+msgid "Speed"
+msgstr "Vitesse"
+
+#: G:\sites\zenphoto/zp-core/plugins/slideshow.php:51
+msgid "Speed of the transition in milliseconds."
+msgstr "Vitesse de la transition en millisecondes."
+
+#: G:\sites\zenphoto/zp-core/plugins/slideshow.php:52
+msgid "Timeout"
+msgstr "Limite de temps"
+
+#: G:\sites\zenphoto/zp-core/plugins/slideshow.php:53
+msgid "Milliseconds between slide transitions (0 to disable auto advance.) <em>[jQuery mode option]</em>"
+msgstr "Nombre de millisecondes entre les transitions inter-images (mettre 0 pour désactiver la bascule automatique.) <em>[option liée à jQuery]</em>"
+
+#: G:\sites\zenphoto/zp-core/plugins/slideshow.php:55
+msgid "Check if you want to show the image's description below the slideshow <em>[jQuery mode option]</em>."
+msgstr "Cocher cette case pour afficher la description de l'image sous le diaporama <em>[option liée à jQuery]</em>."
+
+#: G:\sites\zenphoto/zp-core/plugins/slideshow.php:57
+msgid "Width of the Flowplayer display for the slideshow <em>(Flash mode)</em>."
+msgstr "Largeur d'affichage du Flowplayer pour le diaporama <em>(mode Flash)</em>."
+
+#: G:\sites\zenphoto/zp-core/plugins/slideshow.php:59
+msgid "Height of the Flowplayer display for the slideshow <em>(Flash mode)</em>."
+msgstr "Hauteur d'affichage du Flowplayer pour le diaporama <em>(mode Flash)</em>."
+
+#: G:\sites\zenphoto/zp-core/plugins/slideshow.php:152
+msgid "This album is password protected!"
+msgstr "Cet album est protégé par mot de passe!"
+
+#: G:\sites\zenphoto/zp-core/plugins/slideshow.php:245
+msgid "back"
+msgstr "Retour"
+
+#: G:\sites\zenphoto/zp-core/plugins/tag_suggest.php:9
+msgid "Enables jQuery tag suggestions on the search field. Just activate the plugin and the feature is available on the theme's search field."
+msgstr ""
+
+#: G:\sites\zenphoto/zp-core/plugins/user_logout.php:9
+msgid "Provides a means for placing a user logout link on your theme pages."
+msgstr "Fournit un outil vous permettant de placer un lien de déconnexion sur les pages de votre thème."
+
+#: G:\sites\zenphoto/zp-core/plugins/user_logout.php:59
+msgid "logout"
+msgstr "se déconnecter"
+
+#: G:\sites\zenphoto/zp-core/plugins/zenPaypal.php:20
+msgid "Paypal Integration for Zenphoto."
+msgstr "Intégration de PayPal à Zenphoto."
+
+#: G:\sites\zenphoto/zp-core/plugins/zenPaypal.php:21
+msgid "adapted as a plugin by "
+msgstr "adapté en plugin par"
+
+#: G:\sites\zenphoto/zp-core/plugins/zenPaypal.php:50
+msgid "PayPal User ID"
+msgstr "Identifiant PayPal"
+
+#: G:\sites\zenphoto/zp-core/plugins/zenPaypal.php:51
+msgid "Your PayPal User ID."
+msgstr "Votre identifiant PayPal."
+
+#: G:\sites\zenphoto/zp-core/plugins/zenPaypal.php:137
+msgid "Stock"
+msgstr "Stock"
+
+#: G:\sites\zenphoto/zp-core/plugins/zenPaypal.php:147
+msgid "Make payments with PayPal - it's fast, free and secure!"
+msgstr "Payez avec PayPal - c'est rapide, gratuit et sécurisé !"
+
+#: G:\sites\zenphoto/zp-core/plugins/zenPaypal.php:182
+msgid "Price List"
+msgstr "Liste de prix"
+
+#: G:\sites\zenphoto/zp-core/plugins/zenPaypal.php:193
+msgid "size"
+msgstr "taille"
+
+#: G:\sites\zenphoto/zp-core/plugins/zenPaypal.php:194
+msgid "media"
+msgstr "modifier"
+
+#: G:\sites\zenphoto/zp-core/plugins/zenPaypal.php:195
+msgid "price"
+msgstr "prix"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/akismet.php:37
+msgid "Akismet key"
+msgstr "Clé Akismet"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/akismet.php:37
+msgid "Proper operation requires an Akismet key obtained by signing up for a <a href=\"http://www.wordpress.com\">Wordpress.com</a> account."
+msgstr "Cette action nécessite une clé Akismet : il vous suffit pour cela d'ouvrir un compte <a href=\"http://www.wordpress.com\">Wordpress.com</a>."
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/akismet.php:38
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/simple.php:47
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/spamassassin.php:84
+msgid "Forgiving"
+msgstr "Pardon"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/akismet.php:38
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/simple.php:47
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/spamassassin.php:84
+msgid "Mark suspected SPAM for moderation rather than as SPAM"
+msgstr "Marquer plutôt \"à modérer\" le contenu suspecté d'être du SPAM"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/none.php:37
+msgid "Action"
+msgstr "Action"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/none.php:37
+msgid "This action will be taken for all messages."
+msgstr "Cette action sera appliquée pour tous les messages"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/none.php:49
+msgid "pass"
+msgstr "passer"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/none.php:49
+msgid "moderate"
+msgstr "modérer"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/none.php:49
+msgid "reject"
+msgstr "rejeter"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/simple.php:44
+msgid "Words to die on"
+msgstr "Mots sur lesquels s'arrêter"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/simple.php:44
+msgid "SPAM blacklist words (separate with commas)"
+msgstr "Mots pour la liste noire de SPAM (séparés par des virgules)"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/simple.php:45
+msgid "Patterns to die on"
+msgstr "Modèles sur lesquels s'arrêter"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/simple.php:45
+msgid "SPAM blacklist <a href=\"http://en.wikipedia.org/wiki/Regular_expression\">regular expressions</a> (separate with spaces)"
+msgstr "Liste noire de SPAM <a href=\"http://en.wikipedia.org/wiki/Regular_expression\">regular expressions</a>"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/simple.php:46
+msgid "Excessive URL count"
+msgstr "Nombre d'URLs excessif"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/simple.php:46
+msgid "Message is considered SPAM if there are more than this many URLs in it"
+msgstr "Un message est considéré comme du SPAM s'il comporte un plus grand nombre d'URLs que celui-ci"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/spamassassin.php:85
+msgid "SpamAssassin host"
+msgstr "Hôte SpamAssassin"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/spamassassin.php:85
+msgid "SpamAssassin server"
+msgstr "Serveur SpamAssassion"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/spamassassin.php:86
+msgid "SpamAssassin ctype"
+msgstr "Valeur de ctype pour SpamAssassin"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/spamassassin.php:86
+msgid "Connection type"
+msgstr "Type de connexion"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/spamassassin.php:87
+msgid "SpamAssassin port"
+msgstr "Port utilisé par SpamAssassion"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/spamassassin.php:87
+msgid "TCP port of SpamAssassin"
+msgstr "Port TCP de SpamAssassion"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/spamassassin.php:88
+msgid "SpamAssassin socket"
+msgstr "Socket de SpamAssassin"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/spamassassin.php:88
+msgid "Socket of SpamAssassin"
+msgstr "Socket de SpamAssassin"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/spamassassin.php:89
+msgid "SpamAssassin user"
+msgstr "Utilisateur SpamAssasin"
+
+#: G:\sites\zenphoto/zp-core/plugins/spamfilters/spamassassin.php:89
+msgid "User to use on SpamAssassin box"
+msgstr "Utilisateur pour SpamAssassin"
+
+#, fuzzy
+#~ msgid "to request a reset."
+#~ msgstr " pour demander une réinitialisation."
+#~ msgid "Scroll down to the image list."
+#~ msgstr "Descendre jusqu'à la liste des images."
+#~ msgid "Image List"
+#~ msgstr "Liste des images"
+
+#, fuzzy
+#~ msgid "Page"
+#~ msgstr "Images"
+#~ msgid "Showing <strong>all</strong> comments."
+#~ msgstr "Affichage de <strong>tous</strong> les commentaires."
+#~ msgid "Just show 20."
+#~ msgstr "En afficher juste 20."
+#~ msgid "Showing the latest <strong>20</strong> comments."
+#~ msgstr "Affichage des <strong>20</strong> derniers commentaires."
+#~ msgid "View All"
+#~ msgstr "Les voir tous"
+
+#, fuzzy
+#~ msgid "Thanks for voting!"
+#~ msgstr ")<br />Merci pour votre vote!"
+#~ msgid ")<br />Thanks for voting!"
+#~ msgstr ")<br />Merci pour votre vote!"
+#~ msgid ")"
+#~ msgstr ")"
+#~ msgid "button"
+#~ msgstr "pour confirmer"
+#~ msgid "Tax"
+#~ msgstr "Taxes"
+#~ msgid "Your state tax rate."
+#~ msgstr "Votre taux de taxes locales"
+#~ msgid "The state in which your business resides."
+#~ msgstr "L'état dans lequel votre entreprise se situe."
+#~ msgid "How you ship the product."
+#~ msgstr "Comment vous envoyez le produit."
+#~ msgid "Fast checkout through Google"
+#~ msgstr "Gestion simplifiée d'un panier à travers Google"
+#~ msgid "Date: "
+#~ msgstr "Date:"
+#~ msgid "Powered by "
+#~ msgstr "Propulsé par"
+#~ msgid " hit"
+#~ msgstr "affichage"
+#~ msgid " hits"
+#~ msgstr "affichages"
+#~ msgid "View the Album: "
+#~ msgstr "Voir l'album:"
+#~ msgid "Enter "
+#~ msgstr "Entrer"
+#~ msgid "View album: "
+#~ msgstr "Voir l'album:"
+#~ msgid "Photos "
+#~ msgstr "Photos "
+#~ msgid "of "
+#~ msgstr "de"
+#~ msgid " | Archive"
+#~ msgstr " | Archives"
+#~ msgid "Photo Templates</a> from "
+#~ msgstr "Maquettes</a> venant de"
+#~ msgid " Gallery Archive"
+#~ msgstr " Archives de la galerie"
+#~ msgid "View image: "
+#~ msgstr "Voir l'image:"
+#~ msgid "Image "
+#~ msgstr "Image "
+#~ msgid "Album "
+#~ msgstr "Album "
+#~ msgid "Hit counter: "
+#~ msgstr "Compteur d'affichages:"
+#~ msgid "The language to display text in."
+#~ msgstr "La langue dans laquelle afficher le texte."
+#~ msgid "images."
+#~ msgstr "images."
+#~ msgid "albums."
+#~ msgstr "albums."
+#~ msgid "comments."
+#~ msgstr "commentaires."
+#~ msgid "are"
+#~ msgstr "sont"
+#~ msgid "Unable to open archive "
+#~ msgstr "Impossible d'ouvrir le fichier d'archive"
+#~ msgid " or greater is required"
+#~ msgstr "ou plus récente est requise."
+#~ msgid "Failed. Error: "
+#~ msgstr "a échoué. Erreur:"
+#~ msgid "and "
+#~ msgstr "et"
+#~ msgid "could not create it"
+#~ msgstr "ne peut pas le créer"
+#~ msgid "Locale:"
+#~ msgstr "Paramètres régionaux:"
+#~ msgid "The internationalization & localization locale."
+#~ msgstr "Paramètres régionaux."
+#~ msgid "Sharpen thumbnails:"
+#~ msgstr "Appliquer un filtre de renforcement sur les vignettes:"
+
+#, fuzzy
+#~ msgid "This upload has to have a folder."
+#~ msgstr "test"
+
