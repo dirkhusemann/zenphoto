@@ -1,5 +1,5 @@
 <?php
-define('ALBUM_OPTIONS_TABLE', false);  // todo: change this to true on 1.2. also change NO_RIGHTS define to 2 at the same time
+define('ALBUM_OPTIONS_TABLE', true);  // TODO: 1.2 change this to true. See also the 1.2 todo list on the tasks tab
 define('SAFE_GLOB', false);
 include('version.php'); // Include the version info.
 if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
@@ -1678,7 +1678,8 @@ function zp_setCookie($name, $value, $time=0, $path='/') {
 
 //admin user handling
 
-define('NO_RIGHTS', 0);
+// TODO: 1.2 change this define to 2
+define('NO_RIGHTS', 2);
 if (NO_RIGHTS == 2) {
 	define('MAIN_RIGHTS', 4);
 	define('UPLOAD_RIGHTS', 16);
@@ -2338,4 +2339,19 @@ function generateListFromFiles($currentValue, $root, $suffix) {
 	chdir($curdir);
 }
 
+/**
+ * General link printing function
+ * @param string $url The link URL
+ * @param string $text The text to go with the link
+ * @param string $title Text for the title tag
+ * @param string $class optional class
+ * @param string $id optional id
+ */
+function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
+	echo "<a href=\"" . htmlspecialchars($url) . "\"" .
+	(($title) ? " title=\"" . htmlspecialchars($title, ENT_QUOTES) . "\"" : "") .
+	(($class) ? " class=\"$class\"" : "") .
+	(($id) ? " id=\"$id\"" : "") . ">" .
+	$text . "</a>";
+}
 ?>

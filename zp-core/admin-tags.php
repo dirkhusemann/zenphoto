@@ -272,6 +272,7 @@ echo "\n<p>".gettext("Add tags to the list by entering their names in the input 
 }
 echo "\n</td>";
 echo "\n</tr>";
+/* TODO: 1.2 disable these
 echo "\n<tr>";
 echo "\n<td colspan=3 valign='top'>";
 if ($newTags) {
@@ -285,6 +286,7 @@ if ($newTags) {
 }
 echo "\n</td>";
 echo "\n</tr>";
+*/
 echo "\n</table>";
 
 echo "\n" . '</div>';

@@ -137,7 +137,7 @@ function printAdminHeader() {
  */
 function printAdminLinks($action, $text, $title=NULL, $class=NULL, $id=NULL) {
 
-	adminPrintLink("admin.php?page=". $action, $text, $title, $class, $id);
+	printLink("admin.php?page=". $action, $text, $title, $class, $id);
 }
 
 /**
@@ -153,7 +153,7 @@ function printAdminLinks($action, $text, $title=NULL, $class=NULL, $id=NULL) {
  * @since  1.0.0
  */
 function printSortLink($album, $text, $title=NULL, $class=NULL, $id=NULL) {
-	adminPrintLink(WEBPATH . "/" . ZENFOLDER . "/albumsort.php?page=edit&album=". urlencode( ($album->getFolder()) ), $text, $title, $class, $id);
+	printLink(WEBPATH . "/" . ZENFOLDER . "/albumsort.php?page=edit&album=". urlencode( ($album->getFolder()) ), $text, $title, $class, $id);
 }
 
 /**
@@ -169,7 +169,7 @@ function printSortLink($album, $text, $title=NULL, $class=NULL, $id=NULL) {
  * @since  1.0.0
  */
 function printViewLink($album, $text, $title=NULL, $class=NULL, $id=NULL) {
-	adminPrintLink(WEBPATH . "/index.php?album=". urlencode( ($album->getFolder()) ), $text, $title, $class, $id);
+	printLink(WEBPATH . "/index.php?album=". urlencode( ($album->getFolder()) ), $text, $title, $class, $id);
 }
 
 /**
@@ -188,15 +188,6 @@ function adminPrintImageThumb($image, $class=NULL, $id=NULL) {
 	((getOption('thumb_crop')) ? " width=\"".getOption('thumb_crop_width')."\" height=\"".getOption('thumb_crop_height')."\"" : "") .
 	(($class) ? " class=\"$class\"" : "") .
 	(($id) ? " id=\"$id\"" : "") . " />";
-}
-
-// TODO: This is a copy of the function in template-functions. Refactor at some point
-function adminPrintLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
-	echo "<a href=\"" . $url . "\"" .
-	(($title) ? " title=\"$title\"" : "") .
-	(($class) ? " class=\"$class\"" : "") .
-	(($id) ? " id=\"$id\"" : "") . ">" .
-	$text . "</a>";
 }
 
 /**
@@ -1006,13 +997,13 @@ function printAlbumEditRow($album) {
 		if ($ci > 0) $si = "$ci image" . $si; else $si = "no image";
 		if ($ci != 1) {	$si .= "s"; } else  {	$si .= "&nbsp;"; }
 		if ($ci > 0) {
-			$si = '<a href="?page=edit&album=' . urlencode($album->name) .'#imageList" title="'.gettext('Subalbum List').'">'.$si.'</a>';
+			$si = '<a href="?page=edit&album=' . urlencode($album->name) .'#tab_imageinfo" title="'.gettext('Subalbum List').'">'.$si.'</a>';
 		}
 		$ca = count($album->getSubalbums());
 		if ($ca > 0) $sa = $ca . " album" . $sa;  else $ca = "&nbsp;";
 		if ($ca > 1) $sa .= "s";
 		if ($ca > 0) {
-			$sa = '<a href="?page=edit&album=' . urlencode($album->name) .'#subalbumList" title="'.gettext('Subalbum List').'">'.$sa.'</a>';
+			$sa = '<a href="?page=edit&album=' . urlencode($album->name) .'#tab_subalbuminfo" title="'.gettext('Subalbum List').'">'.$sa.'</a>';
 		}
 	}
 	echo "<td style=\"text-align: right;\" width=\"80\">" . $sa . "</td>";

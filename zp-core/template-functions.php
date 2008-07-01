@@ -22,21 +22,6 @@ require_once('controller.php');
 /******************************************/
 
 /**
- * General link printing function
- * @param string $url The link URL
- * @param string $text The text to go with the link
- * @param string $title Text for the title tag
- * @param string $class optional class
- * @param string $id optional id
- */
-function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
-	echo "<a href=\"" . htmlspecialchars($url) . "\"" .
-	(($title) ? " title=\"" . htmlspecialchars($title, ENT_QUOTES) . "\"" : "") .
-	(($class) ? " class=\"$class\"" : "") .
-	(($id) ? " id=\"$id\"" : "") . ">" .
-	$text . "</a>";
-}
-/**
  * Prints the zenphoto version string
  */
 function printVersion() {
@@ -915,7 +900,6 @@ function printSortableAlbumLink($text, $title, $class=NULL, $id=NULL) {
 			printLink(WEBPATH . "/" . ZENFOLDER . "/albumsort.php?page=edit&album=" . urlencode($_zp_current_album->getFolder()),
 			$text, $title, $class, $id);
 		} else {
-			// TODO: this doesn't really work yet
 			$_zp_sortable_list->printForm(getAlbumLinkURL(), 'POST', gettext('Save'), 'button');
 		}
 	}
@@ -936,7 +920,6 @@ function printSortableGalleryLink($text, $title, $class=NULL, $id=NULL) {
 		if (!isset($_GET['sortable'])) {
 			printLink(WEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit", $text, $title, $class, $id);
 		} else {
-			// TODO: this doesn't really work yet
 			$_zp_sortable_list->printForm(WEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit", 'POST', gettext('Save'), 'button');
 		}
 	}

@@ -97,7 +97,6 @@ function saveSortOrder($dbtable, $id, $sortorder) {
 	// This is a nasty hack really, but it works.. The hack being we need id_XX in the element id.
 	$real_id = substr($id, 0, 3);
 	
-	// TODO: Only issue the update when the order has changed. How do determine this?
 	query("UPDATE ".prefix($dbtable)." SET `sort_order`='" . mysql_escape_string($sortorder) .
 				"' WHERE `id`=".$id);
 }

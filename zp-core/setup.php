@@ -1000,7 +1000,7 @@ if (file_exists("zp-config.php")) {
 		$gallery = new Gallery();
 		require('option-defaults.php');
 		
-		// special cleanup section for plugins
+		// 1.1.6 special cleanup section for plugins
 		$badplugs = array ('exifimagerotate.php', 'flip_image.php', 'image_mirror.php', 'image_rotate.php', 'supergallery-functions.php');
 		foreach ($badplugs as $plug) {
 			$path = SERVERPATH . '/' . ZENFOLDER . '/plugins/' . $plug;
@@ -1011,7 +1011,7 @@ if (file_exists("zp-config.php")) {
 			$gallery->garbageCollect(true, true);
 		}
 		
-		// conversion to/from the theme option tables
+		// 1.1.7 conversion to/from the theme option tables
 		$albums = $gallery->getAlbums();
 		foreach ($albums as $albumname) {
 			$album = new Album($gallery, $albumname);
@@ -1052,6 +1052,66 @@ if (file_exists("zp-config.php")) {
 			}
 		}
 
+		// 1.2 force up-convert to tag tables
+		$convert = false;
+		$result = query_full_array("SHOW COLUMNS FROM ".prefix('images').' LIKE "%tags%"');
+		foreach ($result as $row) {
+			if ($row['Field'] == 'tags') {
+// TODO: 1.2 set this to true
+				$convert = true;
+				break;
+			}
+		}
+		if ($convert) {
+			// convert the tags to a table
+			$result = query_full_array("SELECT `tags` FROM ". prefix('images'));
+			foreach($result as $row){
+				$alltags = $alltags.$row['tags'].",";  // add comma after the last entry so that we can explode to array later
+			}
+			$result = query_full_array("SELECT `tags` FROM ". prefix('albums'));
+			foreach($result as $row){
+				$alltags = $alltags.$row['tags'].",";  // add comma after the last entry so that we can explode to array later
+			}
+			$alltags = explode(",",$alltags);
+			$taglist = array();
+			$seen = array();
+			foreach ($alltags as $tag) {
+				$clean = trim($tag);
+				if (!empty($clean)) {
+					$tagLC = utf8::strtolower($clean);
+					if (!in_array($tagLC, $seen)) {
+						$seen[] = $tagLC;
+						$taglist[] = $clean;
+					}
+				}
+			}
+			$alltags = array_merge($taglist);
+			foreach ($alltags as $tag) {
+				query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . escape($tag) . "')", true);
+			}
+			$sql = "SELECT `id`, `tags` FROM ".prefix('albums');
+			$result = query_full_array($sql);
+			if (is_array($result)) {
+				foreach ($result as $row) {
+					if (!empty($row['tags'])) {
+						$tags = explode(",", $row['tags']);
+						storeTags($tags, $row['id'], 'albums');
+					}
+				}
+			}
+			$sql = "SELECT `id`, `tags` FROM ".prefix('images');
+			$result = query_full_array($sql);
+			if (is_array($result)) {
+				foreach ($result as $row) {
+					if (!empty($row['tags'])) {
+						$tags = explode(",", $row['tags']);
+						storeTags($tags, $row['id'], 'images');
+					}
+				}
+			}
+			query("ALTER TABLE ".prefix('albums')." DROP COLUMN `tags`");
+			query("ALTER TABLE ".prefix('images')." DROP COLUMN `tags`");
+		}
 
 		echo "<h3>".gettext("Done with table").' '.$taskDisplay[substr($task,0,8)]."!</h3>";
 

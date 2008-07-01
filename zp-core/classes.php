@@ -205,8 +205,7 @@ class PersistentObject {
 	}
 	
 	/**
- 	* Remove this entry from the database permanently.
- 	* TODO
+ 	* TODO: Remove this entry from the database permanently.
  	*/
 	function remove() {
 		return false;

@@ -61,6 +61,14 @@ class Image extends PersistentObject {
 		$album_name = $album->name;
 		$new = parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', false, empty($album_name));
 		if ($new) {
+			if ($this->video) {
+				$size = array('320','240');
+			} else {
+				$size = getimagesize($this->localpath);
+			}
+			$this->set('width', $size[0]);
+			$this->set('height', $size[1]);
+			
 			$metadata = getImageMetadata($this->localpath);
 			if (isset($metadata['date'])) {
 				$newDate = $metadata['date'];
@@ -171,10 +179,7 @@ class Image extends PersistentObject {
 	 *
 	 */
 	function updateDimensions() {
-		/*
-		 * FIXME: Temporarily getting dimensions each time they're requested. Should be same as EXIF extraction (see TODO).
-		 * TODO: Update them if they change by looking at file modification time, which must be stored in the database.
-		 */
+		if (!$this->fileChanged()) return; // we already have the data
 		if ($this->video) {
 			$size = array('320','240');
 		} else {

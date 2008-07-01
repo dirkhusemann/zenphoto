@@ -49,7 +49,7 @@ if (!isset($SAJAX_INCLUDED)) {
 		} 
 		elseif ($type == "array" || $type == "object" ) {
 			//
-			// XXX Arrays with non-numeric indices are not
+			// Arrays with non-numeric indices are not
 			// permitted according to ECMAScript, yet everyone
 			// uses them.. We'll use an object.
 			// 

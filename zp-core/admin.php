@@ -464,7 +464,6 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			$date = escape($_POST['date']);
 			$comment = escape($_POST['comment']);
 
-			// TODO: Update date as well; no good input yet, so leaving out.
 			$sql = "UPDATE ".prefix('comments')." SET `name` = '$name', `email` = '$email', `website` = '$website', `comment` = '$comment' WHERE id = $id";
 			query($sql);
 
@@ -612,10 +611,12 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				setOption('search_hint', $_POST['search_hint']);
 				setBoolOption('persistent_archive', $_POST['persistent_archive']);
 				setBoolOption('album_session', $_POST['album_session']);
-				setOption('locale', $_POST['locale']);
-				$cookiepath = WEBPATH;
-				if (WEBPATH == '') { $cookiepath = '/'; }
-				zp_setCookie('dynamic_locale', getOption('locale'), time()-368000, $cookiepath);  // clear the language cookie
+				setOption('locale', $newloc = $_POST['locale']);
+				if ($loc != '') { // only clear the cookie if the option is not the default!
+					$cookiepath = WEBPATH;
+					if (WEBPATH == '') { $cookiepath = '/'; }
+					zp_setCookie('dynamic_locale', getOption('locale'), time()-368000, $cookiepath);  // clear the language cookie
+				}
 				$f = $_POST['date_format_list'];
 				if ($f == 'custom') $f = $_POST['date_format'];
 				setOption('date_format', $f);
@@ -871,7 +872,6 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	$images = array_slice($allimages, ($pagenum-1)*IMAGES_PER_PAGE, IMAGES_PER_PAGE);
 	
 	$totalimages = count($images);
-	// TODO: Perhaps we can build this from the meta array of Album? Moreover, they should be a set of constants!
 	$albumdir = "";
 	$pieces = explode('/', $folder);
 	if (($i = count($pieces)) > 1) {
@@ -896,20 +896,6 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 <?php printViewLink($album, gettext("View Album"), gettext("View Album")); ?>
 </p>
 
-<?php
-/* disable this until the 1.1.7 release is out
-echo '<div id="mainmenu">';
-echo '<ul>';
-echo '<li><a href="#tab_albuminfo"><span>'.gettext("Album").'</span></a></li>';
-if (count($subalbums) > 0) {
-	echo '<li><a href="#tab_subalbuminfo"><span>'.gettext("Subalbums").'</span></a></li>';
-} if ($allimagecount) { 
-	echo '<li><a href="#tab_imageinfo"><span>'.gettext("Images").'</span></a></li>';
-} 	
-echo '</ul>';
-echo '</div>';
-*/
-?>
 
 	<?php displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */ ?>
 	<?php
@@ -930,7 +916,19 @@ echo '</div>';
 		?> 
 	<?php 
 	} 
-	?> 
+//* TODO: 1.2 enable this
+	echo '<div id="mainmenu">';
+	echo '<ul>';
+	echo '<li><a href="#tab_albuminfo"><span>'.gettext("Album").'</span></a></li>';
+	if (count($subalbums) > 0) {
+		echo '<li><a href="#tab_subalbuminfo"><span>'.gettext("Subalbums").'</span></a></li>';
+	} if ($allimagecount) { 
+		echo '<li><a href="#tab_imageinfo"><span>'.gettext("Images").'</span></a></li>';
+	} 	
+	echo '</ul>';
+	echo '</div>'."\n";
+//*/
+	?>
 <!-- Album info box -->
 <div id="tab_albuminfo">
 <form name="albumedit1"
@@ -943,10 +941,8 @@ echo '</div>';
 <?php printAlbumButtons($album) ?> <?php if (!$album->isDynamic())  {?>
 <br />
 </div>
-
 <!-- Subalbum list goes here --> 
 <div id="tab_subalbuminfo">
-<a name="subalbumList"></a>
 <?php
 if (count($subalbums) > 0) {
 ?>
@@ -990,14 +986,11 @@ if (count($subalbums) > 0) {
 <?php
 } ?> 
 </div>
-
 <!-- Images List --> 
-<div id=tab_imageinfo>
-<a name="imageList"></a> 
+<div id="tab_imageinfo">
 <?php 
 if ($allimagecount) {
 ?>
-
 <form name="albumedit2"	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
 	<input type="hidden" name="album"	value="<?php echo $album->name; ?>" /> 
 	<input type="hidden" name="totalimages" value="<?php echo $totalimages; ?>" />
@@ -1171,12 +1164,8 @@ if ($allimagecount) {
 
 </form>
 
-<?php if (count($album->getSubalbums())) { ?>
-<p><a href="#subalbumList" title="<?php gettext('Scroll up to the sub-album list'); ?>">&nbsp;
-&nbsp; &nbsp;^ <?php echo gettext("Subalbum List"); ?></a></p>
-<?php
-}
-}
+<?php 
+	}
 }?> 
 </div>
 <!-- page trailer -->
@@ -1687,36 +1676,14 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 	<li><a href="#tab_admin"><span><?php echo gettext("admin information"); ?></span></a></li>
 	<?php 
 	if (!$_zp_null_account) {
-		if ($_zp_loggedin & (OPTIONS_RIGHTS | ADMIN_RIGHTS)) { 
+		if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) { 
 	?>
 			<li><a href="#tab_gallery"><span><?php echo gettext("gallery configuration"); ?></span></a></li>
 			<li><a href="#tab_image"><span><?php echo gettext("image display"); ?></span></a></li>
 			<li><a href="#tab_comments"><span><?php echo gettext("comment configuration"); ?></span></a></li>
-	<?php 
-		} 
-		$themelist = array();
-		if (($_zp_loggedin & ADMIN_RIGHTS)) {
-			$gallery_title = htmlspecialchars(getOption('gallery_title'));
-			if ($gallery_title != gettext("Gallery")) {
-				$gallery_title .= ' ('.gettext("Gallery").')';
-			}
-			$themelist[$gallery_title] = '';
+		<?php 
 		}
-		$albums = $gallery->getAlbums(0);
-		foreach ($albums as $alb) {
-			if (isMyAlbum($alb, THEMES_RIGHTS)) {
-				$album = new Album($gallery, $alb);
-				$theme = $album->getAlbumTheme();
-				if (!empty($theme)) {
-					$key = $album->getTitle();
-					if ($key != $alb) {
-						$key .= " ($alb)";
-					}	
-					$themelist[$key] = urlencode($alb);
-				}
-			}
-		}
-		if (count($themelist) > 0) {
+		if ($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
 		?>
 			<li><a href="#tab_theme"><span><?php echo gettext("theme options"); ?></span></a></li>
 		<?php
@@ -1882,7 +1849,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		<?php
 		if (empty($master)) {
 			if (!empty($alterrights)) {
-				echo gettext("You have rights to manage these albums.");
+				echo gettext("You may manage these albums subject to the above rights.");
 			} else {
 				echo gettext("Select one or more albums for the administrator to manage.").' ';
 				echo gettext("Administrators with <em>User admin</em> rights can manage all albums. All others may manage only those that are selected.");
@@ -1908,7 +1875,8 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 </div>
 <!-- end of tab_admin div -->
 <?php
-if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
+if (!$_zp_null_account) {
+if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 ?>
 <div id="tab_gallery">
 <form action="?page=options&action=saveoptions" method="post">
@@ -2193,6 +2161,10 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 </form>
 </div>
 <!-- end of tab-gallery div -->
+<?php
+}
+if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
+?>
 <div id="tab_image">
 <form action="?page=options&action=saveoptions" method="post"><input
 	type="hidden" name="saveimageoptions" value="yes" /> <?php
@@ -2323,7 +2295,10 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 </table>
 </form>
 </div><!-- end of tab_image div -->
-<?php if (!$_zp_null_account) { ?>
+<?php 
+}
+if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) { 
+?>
 <div id="tab_comments">
 <form action="?page=options&action=saveoptions" method="post"><input
 	type="hidden" name="savecommentoptions" value="yes" /> <?php
@@ -2395,14 +2370,33 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 </div>
 <?php } ?>
 <!-- end of tab_comments div -->
-<?php
-}
-?>
+<?php if ($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) { ?>
 <div id="tab_theme">
-<?php
-if (count($themelist) > 0) {
-	if (!empty($_REQUEST['themealbum'])) {
-		$alb = urldecode($_REQUEST['themealbum']);
+<?php 
+$themelist = array();
+if (($_zp_loggedin & ADMIN_RIGHTS)) {
+	$gallery_title = htmlspecialchars(getOption('gallery_title'));
+	if ($gallery_title != gettext("Gallery")) {
+		$gallery_title .= ' ('.gettext("Gallery").')';
+	}
+	$themelist[$gallery_title] = '';
+}
+$albums = $gallery->getAlbums(0);
+foreach ($albums as $alb) {
+	if (isMyAlbum($alb, THEMES_RIGHTS)) {
+		$album = new Album($gallery, $alb);
+		$theme = $album->getAlbumTheme();
+		if (!empty($theme)) {
+			$key = $album->getTitle();
+			if ($key != $alb) {
+				$key .= " ($alb)";
+			}
+			$themelist[$key] = urlencode($alb);
+		}
+	}
+}
+if (!empty($_REQUEST['themealbum'])) {
+	$alb = urldecode($_REQUEST['themealbum']);
 		$album = new Album($gallery, $alb);
 		$albumtitle = $album->getTitle();
 		$themename = $album->getAlbumTheme();
@@ -2510,18 +2504,18 @@ if (count($themelist) > 0) {
 	<td></td>
 	</table>
 	</form>
+<?php } ?>
 </div>
 <?php } ?>
 <!-- end of tab_theme div -->
-
-<div id="tab_plugin">
 <?php		
-if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) { 
+if ($_zp_loggedin & ADMIN_RIGHTS) { 
 	$curdir = getcwd();
 	chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
 	$filelist = safe_glob('*'.'php');
 	$c = 0;
 ?>
+	<div id="tab_plugin">
 	<form action="?action=saveoptions" method="post">
 	<input type="hidden" name="savepluginoptions" value="yes" /> 
 		<table class='bordered'>
@@ -2559,15 +2553,16 @@ if (($_zp_loggedin & ADMIN_RIGHTS) && !$_zp_null_account) {
 	<td></td>
 	</table>
 	</form>
+</div>
 <?php
 	chdir($curdir);
 }
+} // end of null account lockout
 ?>
-</div><!-- end of tab_plugin div -->
-	<?php
-}
-?>
-</div><!-- end of container --> 
+
+<!-- end of tab_plugin div -->
+</div>
+<!-- end of container --> 
 <?php 
 /*** THEMES (Theme Switcher) *******************************************************/
 /************************************************************************************/ 

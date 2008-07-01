@@ -20,7 +20,6 @@ if (!function_exists('mysql_real_escape_string')) {
  *@since 0.6
 	*/
 function db_connect() {
- /* TODO: Handle errors more gracefully. */
 	global $mysql_connection, $_zp_conf_vars;
 	$db = $_zp_conf_vars['mysql_database'];
 	if (!function_exists('mysql_connect')) {
@@ -113,10 +112,6 @@ function query_single_row($sql, $noerrmsg=false) {
  * @since 0.6
  */
 function query_full_array($sql, $noerrmsg = false) {
-/* TODO: This may not be very efficient. Could use a global resultset instead,
- * 			then use a next_db_entry()-like function to get the next row.
- *		But this is probably just fine.
- */
 	$result = query($sql, $noerrmsg);
 	if ($result) {
 		$allrows = array();

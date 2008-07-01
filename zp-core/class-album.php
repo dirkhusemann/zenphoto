@@ -632,7 +632,6 @@ class Album extends PersistentObject {
 	 * @return Image
 	 */
 	function getAlbumThumbImage() {
-		/* TODO: This should fail more gracefully when there are errors reading folders etc. */
 
 		$albumdir = getAlbumFolder() . $this->name ."/";
 		$thumb = $this->get('thumb');

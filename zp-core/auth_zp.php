@@ -37,7 +37,6 @@ if (!isset($_POST['login'])) {
 		$redirect = $_POST['redirect'];
 		if ($_zp_loggedin = checkLogon($post_user, $post_pass)) {
 			zp_setcookie("zenphoto_auth", md5($post_user . $post_pass), time()+5184000, $cookiepath);
-			//// FIXME: Breaks IIS
 			if (!empty($redirect)) { header("Location: " . FULLWEBPATH . $redirect); }
 		} else {
 			// Clear the cookie, just in case

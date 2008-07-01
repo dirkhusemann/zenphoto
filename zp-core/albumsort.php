@@ -26,7 +26,6 @@ echo "\n</head>";
 // Create our gallery
 $gallery = new Gallery();
 // Create our album
-// TODO: We could be a bit more defensive here when parsing the incoming args
 if (!isset($_GET['album'])) {
 	die(gettext("No album provided to sort."));
 } else {
