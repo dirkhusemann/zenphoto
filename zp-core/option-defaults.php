@@ -5,18 +5,20 @@ function setDefault($option, $default) {
 	$v = $conf[$option];
 	if (empty($v)) {
 		$v = $default;
+	} else {
+		if (get_magic_quotes_gpc()) {
+			$v = mysql_escape_string($v);	
+		}		
 	}
 	setOptionDefault($option, $v); 
 }
+
 	require('zp-config.php');
+	setOption('zenphoto_release', ZENPHOTO_RELEASE); 
 	
 	//clear out old admin user and cleartext password
 	unset($_zp_conf_vars['adminuser']);
 	unset($_zp_conf_vars['adminpass']);
-	
-	$conf = $_zp_conf_vars;
-	
-	setOption('zenphoto_release', ZENPHOTO_RELEASE); 
 	$admin = getOption('adminuser');
 	if (!empty($admin)) {   // transfer the old credentials and then remove them
 		if ((count(getAdministrators()) == 0)) {  // don't revert anything!
@@ -35,18 +37,13 @@ function setDefault($option, $default) {
 		$sql = 'DELETE FROM '.prefix('options').' WHERE `name`="admin_email"';
 		query($sql);
   }
-	
-	setDefault('gallery_title', "Gallery");
-	setDefault('gallery_password', '');
-	setDefault('gallery_hint', NULL);
-	setDefault('search_password', '');
-	setDefault('search_hint', NULL);
+  
+	// old zp-config.php opitons. preserve them
+	$conf = $_zp_conf_vars;
+  setDefault('gallery_title', "Gallery");
 	setDefault('website_title', "");
 	setDefault('website_url', "");
 	setDefault('time_offset', 0);
-	setDefault('gmaps_apikey', "");
-	setDefault('album_session', 0);  
-	
 	if ($_GET['mod_rewrite'] == 'ON') {
 		$rw = 1;
 	} else {
@@ -54,7 +51,6 @@ function setDefault($option, $default) {
 	}
 	setDefault('mod_rewrite', $rw); 
 	setDefault('mod_rewrite_image_suffix', ".php");
-	
 	setDefault('server_protocol', "http");
 	setDefault('charset', "UTF-8");
 	setDefault('image_quality', 85);
@@ -70,25 +66,32 @@ function setDefault($option, $default) {
 	setDefault('image_sharpen', 0);
 	setDefault('albums_per_page', 5);
 	setDefault('images_per_page', 15);
-	setDefault('perform_watermark', 0);
-	setDefault('watermark_h_offset', 90);
-	setDefault('watermark_w_offset', 90);
-	setDefault('watermark_image', "watermarks/watermark.png");
-	setDefault('watermark_scale', 5);
-	setDefault('watermark_allow_upscale', 1);
-	setDefault('perform_video_watermark', 0);
-	setDefault('video_watermark_image', "watermarks/watermark-video.png");
-	setDefault('spam_filter', 'none');
-	setDefault('email_new_comments', 1);
-	setDefault('gallery_sorttype', 'ID');
-	setDefault('gallery_sortdirection', '0');
-	setDefault('image_sorttype', 'Filename');
-	setDefault('image_sortdirection', '0');
-	setDefault('hotlink_protection', '1');
-	setDefault('current_theme', 'default');
-	setDefault('feed_items', 10);
-	setDefault('feed_imagesize', 240);
-	setDefault('search_fields', 32767);  
+	
+	setOptionDefault('gallery_password', '');
+	setOptionDefault('gallery_hint', NULL);
+	setOptionDefault('search_password', '');
+	setOptionDefault('search_hint', NULL);
+	setOptionDefault('gmaps_apikey', "");
+	setOptionDefault('album_session', 0);  
+	setOptionDefault('perform_watermark', 0);
+	setOptionDefault('watermark_h_offset', 90);
+	setOptionDefault('watermark_w_offset', 90);
+	setOptionDefault('watermark_image', "watermarks/watermark.png");
+	setOptionDefault('watermark_scale', 5);
+	setOptionDefault('watermark_allow_upscale', 1);
+	setOptionDefault('perform_video_watermark', 0);
+	setOptionDefault('video_watermark_image', "watermarks/watermark-video.png");
+	setOptionDefault('spam_filter', 'none');
+	setOptionDefault('email_new_comments', 1);
+	setOptionDefault('gallery_sorttype', 'ID');
+	setOptionDefault('gallery_sortdirection', '0');
+	setOptionDefault('image_sorttype', 'Filename');
+	setOptionDefault('image_sortdirection', '0');
+	setOptionDefault('hotlink_protection', '1');
+	setOptionDefault('current_theme', 'default');
+	setOptionDefault('feed_items', 10);
+	setOptionDefault('feed_imagesize', 240);
+	setOptionDefault('search_fields', 32767);  
 	setOptionDefault(	'allowed_tags', "a => (href => () title => ()) \n".
 	 									"abbr => (title => ())\n" . 
 	 									"acronym => (title => ())\n" . 
@@ -102,13 +105,13 @@ function setDefault($option, $default) {
 	 									"ul => ()\n" .
 	 									"ol => ()\n" .
 	 									"li => ()\n");
-	setDefault('comment_name_required', 1);
-	setDefault('comment_email_required', 1);
-	setDefault('comment_web_required', 0);
-	setDefault('Use_Captcha', true);
-	setDefault('full_image_quality', 75);
-	setDefault('persistent_archive', 0);
-	
+	setOptionDefault('comment_name_required', 1);
+	setOptionDefault('comment_email_required', 1);
+	setOptionDefault('comment_web_required', 0);
+	setOptionDefault('Use_Captcha', true);
+	setOptionDefault('full_image_quality', 75);
+	setOptionDefault('persistent_archive', 0);
+
 	if (getOption('protect_full_image') === '0') {
 		$protection = 'Unprotected';
 	} else if (getOption('protect_full_image') === '1') {
@@ -121,11 +124,11 @@ function setDefault($option, $default) {
 	if ($protection) {
 		setOption('protect_full_image', $protection);
 	} else {
-		setDefault('protect_full_image', 'Protected view');
+		setOptionDefault('protect_full_image', 'Protected view');
 	}
 	
-	setDefault('locale', '');
-	setDefault('date_format', '%c');
+	setOptionDefault('locale', '');
+	setOptionDefault('date_format', '%c');
 	
 	// plugins--default to enabled
 	setOptionDefault('zp_plugin_google_maps', 1);
@@ -143,8 +146,8 @@ function setDefault($option, $default) {
 		setOptionDefault($opt, 0);
 	}
 	
-	setDefault('use_lock_image', 1);
-	setDefault('gallery_user', '');
-	setDefault('search_user', '');
-	setDefault('album_use_new_image_date', 0);
+	setOptionDefault('use_lock_image', 1);
+	setOptionDefault('gallery_user', '');
+	setOptionDefault('search_user', '');
+	setOptionDefault('album_use_new_image_date', 0);
 ?>

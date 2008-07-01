@@ -79,6 +79,7 @@ function setupCurrentLocale() {
 		'en_UK' => gettext('English (UK)'),
 		'eo' => gettext('Esperanto'),
 		'et' => gettext('Estonian'),
+		'fa_IR' => gettext('Persian'), 
 		'fo' => gettext('Faroese'),
 		'fi_FI' => gettext('Finnish'),
 		'fr_FR' => gettext('French'),

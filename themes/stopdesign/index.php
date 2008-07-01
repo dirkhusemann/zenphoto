@@ -131,7 +131,7 @@
 		<?php if (function_exists('printLanguageSelector')) { echo '<p>'; printLanguageSelector(); echo '</p>'; } ?>
 		<p>
 			<a href="http://stopdesign.com/templates/photos/"><?php echo gettext('Photo Templates</a> from'); ?> Stopdesign.
-			<?php echo gettext('Powered by'); ?><a href="http://www.zenphoto.org">ZenPhoto</a>.
+			<?php echo gettext('Powered by'); ?> <a href="http://www.zenphoto.org">ZenPhoto</a>.
 		</p>
 	</div>
 
