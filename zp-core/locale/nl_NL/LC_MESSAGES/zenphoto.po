@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Zenphoto\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-06-30 16:42+0100\n"
-"PO-Revision-Date: \n"
-"Last-Translator: Vincent Osinga <vsosinga@gmail.com>\n"
+"PO-Revision-Date: 2008-07-01 10:23+0100\n"
+"Last-Translator: Foppe Benedictus <foppe.benedictus@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -42,7 +42,7 @@ msgstr "Bekijk album:"
 #: zenphoto/themes/effervescence_plus/image.php:37
 #: zenphoto/themes/effervescence_plus/index.php:69
 msgid "prev"
-msgstr "terug"
+msgstr "vorige"
 
 #: zenphoto/themes/default/album.php:49
 #: zenphoto/themes/default/image.php:33
@@ -55,7 +55,7 @@ msgstr "terug"
 #: zenphoto/themes/effervescence_plus/image.php:47
 #: zenphoto/themes/effervescence_plus/index.php:69
 msgid "next"
-msgstr "verder"
+msgstr "volgende"
 
 #: zenphoto/themes/default/album.php:50
 #: zenphoto/themes/default/image.php:58
@@ -110,11 +110,11 @@ msgstr "Een simpeler web foto album"
 #: zenphoto/themes/default/search.php:13
 #: zenphoto/themes/default/search.php:79
 msgid "Gallery RSS"
-msgstr "Gallerij RSS"
+msgstr "Galerij RSS"
 
 #: zenphoto/themes/default/archive.php:17
 msgid "Gallery Index"
-msgstr "Gallerij Index"
+msgstr "Galerij Index"
 
 #: zenphoto/themes/default/image.php:31
 msgid "Previous Image"
@@ -264,7 +264,7 @@ msgstr "Download Adobe Flash."
 
 #: zenphoto/themes/effervescence_plus/album.php:286
 msgid "View Gallery Without Flash"
-msgstr "Bekijk Gallerij Zonder Flash"
+msgstr "Bekijk Galerij Zonder Flash"
 
 #: zenphoto/themes/effervescence_plus/album.php:311
 msgid "Album is empty"
@@ -611,12 +611,12 @@ msgstr "volgende pagina"
 
 #: zenphoto/themes/stopdesign/albumarchive.php:62
 msgid "Gallery Feeds"
-msgstr "Gallerij Feeds"
+msgstr "Galerij Feeds"
 
 #: zenphoto/themes/stopdesign/albumarchive.php:71
 #: zenphoto/themes/stopdesign/index.php:58
 msgid "Gallery Archive"
-msgstr "Gallerijarchief"
+msgstr "Galerijarchief"
 
 #: zenphoto/themes/stopdesign/albumarchive.php:76
 #: zenphoto/themes/stopdesign/image.php:187
@@ -638,7 +638,7 @@ msgstr "TOON"
 
 #: zenphoto/themes/stopdesign/image.php:84
 msgid "HIDE"
-msgstr "Verberg"
+msgstr "VERBERG"
 
 #: zenphoto/themes/stopdesign/image.php:86
 msgid "1 comment so far"
@@ -678,7 +678,7 @@ msgstr "Volgende"
 
 #: zenphoto/themes/stopdesign/index.php:24
 msgid "Recently Updated Galleries"
-msgstr "Recent Geupdate Gallerijen"
+msgstr "Recent geupdate Galerijen"
 
 #: zenphoto/themes/stopdesign/index.php:78
 #: zenphoto/themes/stopdesign/index.php:93
@@ -687,7 +687,7 @@ msgstr "Bekijk afbeelding:"
 
 #: zenphoto/themes/stopdesign/index.php:108
 msgid "Galleries"
-msgstr "Gallerijen"
+msgstr "Galerijen"
 
 #: zenphoto/themes/stopdesign/search.php:129
 msgid "Sorry, no matches. Try refining your search."
@@ -695,11 +695,11 @@ msgstr "Sorry, geen resultaten. Probeer uw zoekopdracht te herformuleren."
 
 #: zenphoto/themes/stopdesign/themeoptions.php:16
 msgid "Gallery description"
-msgstr "Gallerijbeschrijving"
+msgstr "Galerijbeschrijving"
 
 #: zenphoto/themes/stopdesign/themeoptions.php:16
 msgid "Place a brief descripton  your gallery here."
-msgstr "Plaats hier een korte beschrijving van uw gallerij."
+msgstr "Plaats hier een korte beschrijving van uw galerij."
 
 #: zenphoto/themes/stopdesign/themeoptions.php:17
 msgid "Mini slide selector"
@@ -763,7 +763,7 @@ msgstr "Log uit"
 
 #: zenphoto/zp-core/admin-functions.php:271
 msgid "View Gallery"
-msgstr "Bekijk Gallerij"
+msgstr "Bekijk Galerij"
 
 #: zenphoto/zp-core/admin-functions.php:297
 msgid "overview"
@@ -868,7 +868,7 @@ msgstr "Sorteer subalbums op:"
 
 #: zenphoto/zp-core/admin-functions.php:701
 msgid "gallery album sort order"
-msgstr "gallerij album sorteer volgorde"
+msgstr "galerij album sorteer volgorde"
 
 #: zenphoto/zp-core/admin-functions.php:703
 msgid "parent album subalbum sort order"
@@ -888,7 +888,7 @@ msgstr "Sorteer afbeeldingen op:"
 
 #: zenphoto/zp-core/admin-functions.php:746
 msgid "gallery default image sort order"
-msgstr "gallerij standaard afbeelding sorteer volgorde"
+msgstr "galerij standaard afbeelding sorteer volgorde"
 
 #: zenphoto/zp-core/admin-functions.php:748
 msgid "parent album image sort order"
@@ -1025,9 +1025,8 @@ msgstr "Verwijder het album"
 
 #: zenphoto/zp-core/admin-functions.php:1278
 #: zenphoto/zp-core/admin-functions.php:1280
-#, fuzzy
 msgid "Previous page"
-msgstr "Vorige Pagina"
+msgstr "Vorige pagina"
 
 #: zenphoto/zp-core/admin-tags.php:223
 msgid "Tag Management"
@@ -1035,7 +1034,7 @@ msgstr "Tag Beheer"
 
 #: zenphoto/zp-core/admin-tags.php:227
 msgid "Delete tags from the gallery"
-msgstr "Verwijder tags uit de gallerij"
+msgstr "Verwijder tags uit de galerij"
 
 #: zenphoto/zp-core/admin-tags.php:228
 msgid "Rename tags"
@@ -1054,9 +1053,8 @@ msgid "Delete all the tags checked above."
 msgstr "Verwijder al de hierboven geselecteerde tags"
 
 #: zenphoto/zp-core/admin-tags.php:243
-#, fuzzy
 msgid "To delete tags from the gallery, place a checkmark in the box for each tag you wish to delete then press the <em>delete checked tags</em> button. The brackets contain the number of times the tag appears."
-msgstr "Om de tags uit een gallerij te verwijderen, plaats een vinkje in de box voor elke tag die u wilt verwijderen en druk daarna op de <em>verwijder geselecteerde tags</em> button. Tussen de brackets staat het aantal keer dat een tag voorkomt."
+msgstr "Om de tags uit een galerij te verwijderen, plaats een vinkje in de box voor elke tag die u wilt verwijderen en druk daarna op de <em>verwijder geselecteerde tags</em> button. Tussen de haakjes staat het aantal keer dat een tag voorkomt."
 
 #: zenphoto/zp-core/admin-tags.php:256
 msgid "rename tags"
@@ -1285,7 +1283,7 @@ msgstr "Bewerk alle Albums in"
 #: zenphoto/zp-core/admin.php:2579
 #: zenphoto/zp-core/admin.php:2580
 msgid "Gallery"
-msgstr "Gallerij"
+msgstr "Galerij"
 
 #: zenphoto/zp-core/admin.php:1231
 msgid "Back to the list of albums (go up a level)"
@@ -1293,7 +1291,7 @@ msgstr "Terug naar de lijst van albums (één niveau omhoog)"
 
 #: zenphoto/zp-core/admin.php:1254
 msgid "Edit Gallery"
-msgstr "Bewerk Gallerij"
+msgstr "Bewerk Galerij"
 
 #: zenphoto/zp-core/admin.php:1261
 msgid "Album order saved"
@@ -1539,7 +1537,7 @@ msgstr "admininformatie"
 
 #: zenphoto/zp-core/admin.php:1692
 msgid "gallery configuration"
-msgstr "gallerijconfiguratie"
+msgstr "galerijconfiguratie"
 
 #: zenphoto/zp-core/admin.php:1693
 msgid "image display"
@@ -1647,35 +1645,35 @@ msgstr "Uw Website URL is niet geldig"
 
 #: zenphoto/zp-core/admin.php:1930
 msgid "General Gallery Configuration"
-msgstr "Algemene Gallerij Configuratie"
+msgstr "Algemene Galerij Configuratie"
 
 #: zenphoto/zp-core/admin.php:1934
 msgid "Gallery title:"
-msgstr "Gallerijtitel:"
+msgstr "Galerijtitel:"
 
 #: zenphoto/zp-core/admin.php:1937
 msgid "What you want to call your photo gallery."
-msgstr "Hoe wilt u uw fotogallerij noemen."
+msgstr "Hoe wilt u uw fotogalerij noemen."
 
 #: zenphoto/zp-core/admin.php:1940
 msgid "Gallery guest user:"
-msgstr "Gallerij gastgebruiker:"
+msgstr "Galerij gastgebruiker:"
 
 #: zenphoto/zp-core/admin.php:1942
 msgid "User ID for the gallery guest user"
-msgstr "Gebruikers ID voor de gallerij gastgebruiker."
+msgstr "Gebruikers ID voor de galerij gastgebruiker."
 
 #: zenphoto/zp-core/admin.php:1945
 msgid "Gallery password:"
-msgstr "Gallerijwachtwoord:"
+msgstr "Galerijwachtwoord:"
 
 #: zenphoto/zp-core/admin.php:1954
 msgid "Master password for the gallery. If this is set, visitors must know this password to view the gallery."
-msgstr "Masterwachtwoord voor de gallerij. Als deze ingevuld is moeten bezoekers dit wachtwoord weten om de gallerij te bekijken."
+msgstr "Masterwachtwoord voor de galerij. Als deze ingevuld is moeten bezoekers dit wachtwoord weten om de galerij te bekijken."
 
 #: zenphoto/zp-core/admin.php:1957
 msgid "Gallery password hint:"
-msgstr "Gallerijwachtwoord hint:"
+msgstr "Galerijwachtwoord hint:"
 
 #: zenphoto/zp-core/admin.php:1960
 #: zenphoto/zp-core/admin.php:1982
@@ -1964,11 +1962,11 @@ msgstr "Zet deze optie aan als u uw albumdatum gelijk wilt laten zijn met de dat
 
 #: zenphoto/zp-core/admin.php:2129
 msgid "Sort gallery by:"
-msgstr "Sorteer gallerij op:"
+msgstr "Sorteer galerij op:"
 
 #: zenphoto/zp-core/admin.php:2141
 msgid "Sort order for the albums on the index of the gallery"
-msgstr "Sorteervolgorde voor de albums op de index van de gallerij"
+msgstr "Sorteervolgorde voor de albums op de index van de galerij"
 
 #: zenphoto/zp-core/admin.php:2144
 msgid "Search fields:"
@@ -2020,7 +2018,7 @@ msgstr "<strong> Let op: </strong>deze optie aanzetten kan invloed hebben op met
 
 #: zenphoto/zp-core/admin.php:2182
 msgid "Enable gallery sessions:"
-msgstr "Gallerij sessies:"
+msgstr "Galerij sessies:"
 
 #: zenphoto/zp-core/admin.php:2185
 msgid "Put a checkmark here if you are having issues with with album\tpassword cookies not being retained. Setting the option causes zenphoto to use sessions rather than cookies."
@@ -2318,7 +2316,7 @@ msgstr "Er zijn geen plugin optie's om te beheren."
 
 #: zenphoto/zp-core/admin.php:2617
 msgid "no theme assigned, defaulting to Gallery theme"
-msgstr "geen thema toegekend, wordt op het standaard Gallerij thema gezet"
+msgstr "geen thema toegekend, wordt op het standaard Galerij thema gezet"
 
 #: zenphoto/zp-core/admin.php:2639
 msgid "Current theme for"
@@ -2331,7 +2329,7 @@ msgstr "Reset thema toekenning"
 
 #: zenphoto/zp-core/admin.php:2647
 msgid "Themes allow you to visually change the entire look and feel of your gallery. Theme files are located in your"
-msgstr "Thema's stellen u in staat om de gehele look en feel van je gallerij aan te passen. Themabestanden kunt u vinden in uw"
+msgstr "Thema's stellen u in staat om de gehele look en feel van je galerij aan te passen. Themabestanden kunt u vinden in uw"
 
 #: zenphoto/zp-core/admin.php:2649
 msgid "folder. You can download more themes from the"
@@ -2439,7 +2437,7 @@ msgstr "Wijzig of verwijder <strong>reacties</strong>."
 
 #: zenphoto/zp-core/admin.php:2797
 msgid "Browse your <strong>gallery</strong> and edit on the go."
-msgstr "Bekijk uw <strong>gallerij</strong> en bewerk hem tegelijkertijd."
+msgstr "Bekijk uw <strong>galerij</strong> en bewerk hem tegelijkertijd."
 
 #: zenphoto/zp-core/admin.php:2810
 msgid "10 Most Recent Comments"
@@ -2451,7 +2449,7 @@ msgstr "gereageerd op"
 
 #: zenphoto/zp-core/admin.php:2865
 msgid "Gallery Maintenance"
-msgstr "Gallerij Onderhoud"
+msgstr "Galerij Onderhoud"
 
 #: zenphoto/zp-core/admin.php:2866
 msgid "Your database is"
@@ -2479,7 +2477,7 @@ msgstr "Verwijder Cache"
 
 #: zenphoto/zp-core/admin.php:2889
 msgid "Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser."
-msgstr "Vind nieuw geuploade afbeeldingen die nog niet gecached zijn en creëert eb gecachede versie. Het ververst ook de nummers hierboven. Als u een grote hoeveelheid afbeeldingen in uw gallerij heeft kunt u ook gebruik maken van de <em>pre-cache afbeelding</em> link voor elk album om te voorkomen dat uw browser vastloopt."
+msgstr "Vind nieuw geuploade afbeeldingen die nog niet gecached zijn en creëert de gecachede versie. Het ververst ook de nummers hierboven. Als u een grote hoeveelheid afbeeldingen in uw galerij heeft kunt u ook gebruik maken van de <em>pre-cache afbeelding</em> link voor elk album om te voorkomen dat uw browser vastloopt."
 
 #: zenphoto/zp-core/admin.php:2897
 msgid "Forces a refresh of the EXIF and IPTC data for all images."
@@ -2491,7 +2489,7 @@ msgstr "Zet alle album en afbeeldings-hittellers op nul."
 
 #: zenphoto/zp-core/admin.php:2920
 msgid "Gallery Stats"
-msgstr "Gallerij Statistieken"
+msgstr "Galerij Statistieken"
 
 #: zenphoto/zp-core/admin.php:2922
 #: zenphoto/zp-core/cache-images.php:72
@@ -2620,7 +2618,7 @@ msgid ""
 "You are receiving this e-mail because of a password reset request on your Zenphoto gallery"
 msgstr ""
 "\n"
-"U ontvangt deze e-mail vanwege een wachtwoord reset aanvraag op uw Zenphoto gallerij"
+"U ontvangt deze e-mail vanwege een wachtwoord reset aanvraag op uw Zenphoto galerij"
 
 #: zenphoto/zp-core/auth_zp.php:57
 msgid "To reset your Zenphoto Admin passwords visit:"
@@ -2644,7 +2642,7 @@ msgstr "Verversing van de cache voor"
 
 #: zenphoto/zp-core/cache-images.php:62
 msgid "Refreshing cache for Gallery"
-msgstr "Verversen van de cache voor gallerij"
+msgstr "Verversen van de cache voor galerij"
 
 #: zenphoto/zp-core/cache-images.php:72
 msgid "Finished: Total of"
@@ -3870,7 +3868,7 @@ msgstr "U kunt nu"
 
 #: zenphoto/zp-core/setup.php:1062
 msgid "View your gallery"
-msgstr "Uw gallerij bekijken"
+msgstr "Uw galerij bekijken"
 
 #: zenphoto/zp-core/setup.php:1062
 msgid ", or"
@@ -3922,7 +3920,7 @@ msgstr "Admin"
 
 #: zenphoto/zp-core/template-functions.php:106
 msgid "Sort gallery"
-msgstr "Sorteer gallerij"
+msgstr "Sorteer galerij"
 
 #: zenphoto/zp-core/template-functions.php:106
 #: zenphoto/zp-core/template-functions.php:123
@@ -4368,7 +4366,7 @@ msgstr "zorg dan voor een API sleutel</a> en voer deze hier in."
 
 #: zenphoto/zp-core/plugins/image_album_statistics.php:8
 msgid "Functions that provide various statistics about images and albums in the gallery."
-msgstr "Functies die diverse statistieken over afbeeldingen en albums in de gallerij leveren."
+msgstr "Functies die diverse statistieken over afbeeldingen en albums in de galerij leveren."
 
 #: zenphoto/zp-core/plugins/image_album_statistics.php:152
 msgid "Last update: "
@@ -4502,9 +4500,8 @@ msgid "This album is password protected!"
 msgstr "Dit is album is beveiligd met een wachtwoord!"
 
 #: zenphoto/zp-core/plugins/slideshow.php:245
-#, fuzzy
 msgid "back"
-msgstr "Terug"
+msgstr "terug"
 
 #: zenphoto/zp-core/plugins/tag_suggest.php:9
 msgid "Enables jQuery tag suggestions on the search field. Just activate the plugin and the feature is available on the theme's search field."
@@ -4515,9 +4512,8 @@ msgid "Provides a means for placing a user logout link on your theme pages."
 msgstr "Een middel voor het plaatsen van een gebruikers uitlog-link op uw themapagina's."
 
 #: zenphoto/zp-core/plugins/user_logout.php:59
-#, fuzzy
 msgid "logout"
-msgstr "Log uit"
+msgstr "log uit"
 
 #: zenphoto/zp-core/plugins/zenPaypal.php:20
 msgid "Paypal Integration for Zenphoto."
@@ -4657,7 +4653,7 @@ msgstr "Socket van SpamAssassin"
 
 #: zenphoto/zp-core/plugins/spamfilters/spamassassin.php:89
 msgid "SpamAssassin user"
-msgstr "SpamAssassin gebruiken"
+msgstr "SpamAssassin gebruiker"
 
 #: zenphoto/zp-core/plugins/spamfilters/spamassassin.php:89
 msgid "User to use on SpamAssassin box"
