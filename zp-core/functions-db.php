@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * database core functions
+ * @package core
+ */
 // functions-db.php - HEADERS NOT SENT YET!
 
 require_once("functions.php");

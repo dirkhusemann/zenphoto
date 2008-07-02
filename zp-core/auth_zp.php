@@ -1,4 +1,8 @@
 <?php
+/**
+ * processes the authorization (or login) of admin users
+ * @package admin
+ */
 require_once("lib-utf8.php");
 require_once("functions-db.php");
 

@@ -1,4 +1,9 @@
 <?php
+/**
+ * creates zip archives
+ * @package core
+ * @author Devin Doucette
+ */
 /*--------------------------------------------------
  | TAR/GZIP/BZIP2/ZIP ARCHIVE CLASSES 2.1
  | By Devin Doucette

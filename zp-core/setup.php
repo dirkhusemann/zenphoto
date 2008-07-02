@@ -1,4 +1,8 @@
 <?php 
+/**
+ * install routine for zenphoto
+ * @package setup
+ */
 header ('Content-Type: text/html; charset=UTF-8');
 define('HTACCESS_VERSION', '1.1.6.0');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
 define('CHMOD_VALUE', 0777);

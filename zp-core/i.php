@@ -1,6 +1,5 @@
 <?php
-
-/*******************************************************************************
+/**
  * i.php: Zenphoto image processor
  * All *uncached* image requests go through this file
  * (As of 1.0.8 images are requested directly from the cache if they exist)
@@ -23,6 +22,7 @@
  *     cropped on the remaining dimension. Image output will always be WxH.
  * - If none of s, h, or w are specified, the original image is returned.
  *******************************************************************************
+ * @package core
  */
 
 define('OFFSET_PATH', 1);

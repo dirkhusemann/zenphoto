@@ -1,5 +1,15 @@
 <?php
+/**
+ * stores all the default values for options
+ * @package setup
+ */
 
+/**
+ * sets option defaults from the zp-config.php file if they exist there.
+ *
+ * @param string $option
+ * @param mixed $default
+ */
 function setDefault($option, $default) {
 	global $conf;
 	$v = $conf[$option];

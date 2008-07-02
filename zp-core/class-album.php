@@ -1,7 +1,8 @@
 <?php
-//*******************************************************************************
-//* Album Class *****************************************************************
-//*******************************************************************************
+/**
+ * Album Class 
+ * @package classes
+ */
 
 class Album extends PersistentObject {
 
@@ -470,10 +471,12 @@ class Album extends PersistentObject {
 				$subalbums[] = $dir;
 			}
 			$key = $this->getSubalbumSortKey($sorttype);
-			if (is_null($sortdirection)) {
-				if ($this->getSortDirection('album')) { $key .= ' DESC'; }
-			} else {
-				$key .= ' ' . $sortdirection;
+			if ($key != 'sort_order') {
+				if (is_null($sortdirection)) {
+					if ($this->getSortDirection('album')) { $key .= ' DESC'; }
+				} else {
+					$key .= ' ' . $sortdirection;
+				}
 			}
 			$sortedSubalbums = sortAlbumArray($subalbums, $key);
 			$this->subalbums = $sortedSubalbums;
@@ -550,11 +553,13 @@ class Album extends PersistentObject {
 		$hidden = array();
 		$key = $this->getSortKey($sorttype);
 		$direction = '';
-		if (!is_null($sortdirection)) {
-			$direction = $sortdirection;
-		} else {
-			if ($this->getSortDirection('image')) {
-				$direction = ' DESC';
+		if ($key != 'sort_order') { // manual sort is always ascending
+			if (!is_null($sortdirection)) {
+				$direction = $sortdirection;
+			} else {
+				if ($this->getSortDirection('image')) {
+					$direction = ' DESC';
+				}
 			}
 		}
 		$result = query("SELECT `filename`, `title`, `sort_order`, `show`, `id` FROM " . prefix("images")

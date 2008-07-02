@@ -1,8 +1,11 @@
 <?php
-
+/**
+ * Load the Sortable lists now and set up the global sortable array
+ * @package admin
+ */
 require_once("admin-functions.php");
 
-// Load the Sortable lists now and set up the global sortable array
+
 $_zp_sortable_list = new SLLists('js');
 
 

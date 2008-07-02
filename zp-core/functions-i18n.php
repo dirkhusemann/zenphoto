@@ -1,6 +1,7 @@
 <?php
 /**
  * functions-i18n.php -- support functions for internationalization
+ * @package core
  */
 /**
  * Returns an array of available language locales.

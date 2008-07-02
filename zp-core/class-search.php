@@ -1,4 +1,8 @@
 <?php
+/**
+ * search class
+ * @package classes
+ */
 
 //*************************************************************
 //*ZENPHOTO SEARCH ENGINE CLASS *******************************
@@ -344,22 +348,38 @@ class SearchEngine
 		if ($tbl == 'albums') {
 			if (empty($this->dynalbumname)) {
 				$key = subalbumSortKey(getOption('gallery_sorttype'));
-				if (getOption('gallery_sortdirection')) { $key .= " DESC"; }
+				if ($key != 'sort_order') {
+					if (getOption('gallery_sortdirection')) {
+						$key .= " DESC";
+					}
+				}
 			} else {
 				$gallery = new Gallery();
 				$album = new Album($gallery, $this->dynalbumname);
 				$key = $album->getSubalbumSortKey();
-				if ($album->getSortDirection('album')) { $key .= " DESC"; }
+				if ($key != 'sort_order') {
+					if ($album->getSortDirection('album')) {
+						$key .= " DESC";
+					}
+				}
 			}
 		} else {
 			if (empty($this->dynalbumname)) {
 				$key = albumSortKey(getOption('image_sorttype'));
-				if (getOption('image_sortdirection')) { $key .= " DESC"; }
+				if ($key != 'sort_order') {
+					if (getOption('image_sortdirection')) {
+						$key .= " DESC";
+					}
+				}
 			} else {
 				$gallery = new Gallery();
 				$album = new Album($gallery, $this->dynalbumname);
 				$key = $album->getSortKey();
-				if ($album->getSortDirection('image')) { $key .= " DESC"; }
+				if ($key != 'sort_order') {
+					if ($album->getSortDirection('image')) {
+						$key .= " DESC";
+					}
+				}
 			}
 		}
 		$sql .= " ORDER BY ".$key;
@@ -510,7 +530,11 @@ class SearchEngine
 				$gallery = new Gallery();
 				$album = new Album($gallery, $this->dynalbumname);
 				$key = $album->getSubalbumSortKey();
-				if ($album->getSortDirection('album')) { $key .= " DESC"; }
+				if ($key != 'sort_order') {
+					if ($album->getSortDirection('album')) {
+						$key .= " DESC";
+				 }
+				}
 			}
 		} else {
 			if (empty($this->dynalbumname)) {
@@ -520,7 +544,11 @@ class SearchEngine
 				$gallery = new Gallery();
 				$album = new Album($gallery, $this->dynalbumname);
 				$key = $album->getSortKey();
-				if ($album->getSortDirection('image')) { $key .= " DESC"; }
+				if ($key != 'sort_order') {
+					if ($album->getSortDirection('image')) {
+						$key .= " DESC";
+					}
+				}
 			}
 		}
 		$sql .= " ORDER BY ".$key;

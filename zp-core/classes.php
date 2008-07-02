@@ -1,4 +1,8 @@
 <?php
+/**
+ * root object class
+ * @package classes
+ */
 
 // classes.php - HEADERS STILL NOT SENT! Do not output text from this file.
 

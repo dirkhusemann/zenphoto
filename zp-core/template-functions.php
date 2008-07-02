@@ -2,6 +2,7 @@
 
 /**
  * Functions used to display content in themes.
+ * @package functions
  */
 
 /**

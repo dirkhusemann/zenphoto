@@ -1,4 +1,8 @@
 <?php
+/**
+ * encryption support functions
+ * @package core
+ */
 
 /************************************************************/
 /*                                                          */

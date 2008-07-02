@@ -1,4 +1,14 @@
 <?php
+/**
+ * translates accented characters to unaccented ones
+ * @package core
+ */
+/**
+ * translates accented characters to unaccented ones
+ *
+ * @param string $string
+ * @return string
+ */
 function seoFriendlyURL($string) {
 	// strip/convert a few specific characters
 	$specialchars = array(

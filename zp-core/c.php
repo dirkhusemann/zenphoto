@@ -1,4 +1,8 @@
 <?php
+/**
+ * creates the captcha images
+ * @package core
+ */
 require_once('functions.php');
 require_once('lib-encryption.php');
 header ("Content-type: image/png");

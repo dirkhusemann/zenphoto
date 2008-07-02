@@ -1,4 +1,10 @@
-<?php  /* Don't put anything before this line! */
+<?php
+/**
+ * admin.php is the main script for administrative functions.
+ * @package admin
+ */
+
+/* Don't put anything before this line! */
 define('OFFSET_PATH', 1);
 require_once("sortable.php");
 if (!$session_started) session_start();

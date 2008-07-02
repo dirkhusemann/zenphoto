@@ -1,4 +1,8 @@
 <?php
+/**
+ * handles the watermarking and protecting of the full image link
+ * @package core
+ */
 /* Prevent hotlinking to the full image from other servers. */
 $server = $_SERVER['SERVER_NAME'];
 $test = strpos($_SERVER['HTTP_REFERER'], $server);

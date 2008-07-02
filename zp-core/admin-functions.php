@@ -1,4 +1,8 @@
 <?php
+/**
+ * support functions for Admin
+ * @package admin
+ */
 require_once("classes.php");
 require_once("functions.php");
 require_once("lib-seo.php"); // keep the function separate for easy modification by site admins
@@ -1110,8 +1114,12 @@ function processAlbumEdit($index, $album) {
 		}
 		$album->setSortDirection('image', $direction);
 	}
-	$album->setSubalbumSortType(strip($_POST[$prefix.'subalbumsortby']));
-	$album->setSortDirection('album', strip($_POST[$prefix.'album_sortdirection']));
+	$album->setSubalbumSortType($sorttype = strip($_POST[$prefix.'subalbumsortby']));
+	if ($sorttype == 'Manual') {
+		$album->setSortDirection('album', 0);
+	} else {
+		$album->setSortDirection('album', strip($_POST[$prefix.'album_sortdirection']));
+	}
 	if (isset($_POST['reset_hitcounter'])) {
 		$id = $album->getAlbumID();
 		query("UPDATE " . prefix('albums') . " SET `hitcounter`= 0 WHERE `id` = $id");

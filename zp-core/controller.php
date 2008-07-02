@@ -1,8 +1,10 @@
 <?php
 
-/*** controller.php ************************************************************
+/**
+ * controller.php 
  * Root-level include that handles all user requests.
- ******************************************************************************/
+ * @package core
+ */
  
 require_once('functions-controller.php');
 

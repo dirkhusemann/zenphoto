@@ -1,4 +1,8 @@
 <?php	
+/**
+ * AJAX in-line editing support
+ * @package core
+ */
 if (!isset($SAJAX_INCLUDED)) {
 
 	/*  

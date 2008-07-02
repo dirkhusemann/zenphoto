@@ -1,4 +1,9 @@
 <?php
+/**
+ * basic functions used by zenphoto core
+ * @package functions
+ *
+ */
 define('ALBUM_OPTIONS_TABLE', true);  // TODO: 1.2 change this to true. See also the 1.2 todo list on the tasks tab
 define('SAFE_GLOB', false);
 include('version.php'); // Include the version info.
