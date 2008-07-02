@@ -9,7 +9,7 @@
  */
  
 /**
- * This implements the standard SpamFilter class for ten none spam filter.
+ * This implements the standard SpamFilter class for the none spam filter.
  *
  */
 class SpamFilter  {

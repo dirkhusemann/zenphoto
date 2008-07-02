@@ -1,6 +1,7 @@
 <?php
 
-/** This is plugin for Akismet SPAM filtering.
+/** 
+ * This is plugin for Akismet SPAM filtering.
  * @Author: based on the Akismet Hack by GameDudeX ported to plugin functionality by Thinkdreams
  * @version: 1.0.0
  * @package plugins	 

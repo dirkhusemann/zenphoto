@@ -1,6 +1,6 @@
 <?php
 /** 
- * this is a "simple" SPAM filter. 
+ * This is a "simple" SPAM filter. 
  * It uses a word black list and checks for excessive URLs
  * 
  * @Author: Stephen Billard (sbillard)

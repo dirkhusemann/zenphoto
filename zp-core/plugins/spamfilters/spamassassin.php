@@ -1,12 +1,12 @@
 <?
 /** 
  * This is plugin for Spamassassin filtering
- * TODO : Implement socket connexion
  * @Author: Jerome Blion : jerome@hebergement-pro.org Website: http://www.hebergement-pro.org
  * @version: 1.0.0 (2007-11-06)
  * @package plugins	 
  */
 
+// TODO : Implement socket connexion
 
 /**
  * This implements the standard SpamFilter class for the spamassassin spam filter.
