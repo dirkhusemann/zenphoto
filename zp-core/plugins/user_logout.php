@@ -50,7 +50,7 @@ if (isset($_GET['userlogout']) && !empty($saved_auth)) {
  * Prints the logout link if the user is logged in.
  * This is for album passwords only, not admin users;
  *
- * @param string $before begore text
+ * @param string $before before text
  * @param string $after after text
  */
 function printUserLogout($before='', $after='') {
