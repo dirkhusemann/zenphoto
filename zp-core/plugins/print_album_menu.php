@@ -82,7 +82,7 @@
  * @author Malte Müller (acrylian)
  * @version 1.4.4
  * @package plugins
- * /
+ */
 
 $plugin_description = gettext("Adds a theme function printAlbumMenu() to print an album menu either as a nested list up to 4 sublevels (context sensitive) or as a dropdown menu.");
 $plugin_author = "Malte Müller (acrylian)";
