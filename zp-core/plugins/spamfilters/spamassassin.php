@@ -1,8 +1,9 @@
 <?
-/** 
+/**
  * This is plugin for Spamassassin filtering
- * @Author: Jerome Blion : jerome@hebergement-pro.org Website: http://www.hebergement-pro.org
- * @version: 1.0.0 (2007-11-06)
+ * 
+ * @author Jerome Blion : jerome@hebergement-pro.org Website: http://www.hebergement-pro.org
+ * @version 1.0.0 (2007-11-06)
  * @package plugins	 
  */
 

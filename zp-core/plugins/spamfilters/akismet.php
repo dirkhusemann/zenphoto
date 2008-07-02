@@ -1,9 +1,9 @@
 <?php
 
-/** 
+/**
  * This is plugin for Akismet SPAM filtering.
- * @Author: based on the Akismet Hack by GameDudeX ported to plugin functionality by Thinkdreams
- * @version: 1.0.0
+ * @author based on the Akismet Hack by GameDudeX ported to plugin functionality by Thinkdreams
+ * @version 1.0.0
  * @package plugins	 
  */
  
@@ -108,10 +108,17 @@ class SpamFilter  {
 
 }  // end of class SpamFilter
 
+// Error constants
+define("AKISMET_SERVER_NOT_FOUND",	0);
+define("AKISMET_RESPONSE_FAILED",	1);
+define("AKISMET_INVALID_KEY",		2);
+
 /**
  * 01.26.2006 12:29:28est
  * 
  * Akismet PHP4 class
+ * 
+ * Base class to assist in error handling between Akismet classes
  * 
  * <b>Usage</b>
  * <code>
@@ -139,19 +146,9 @@ class SpamFilter  {
  * @author Bret Kuhns {@link www.miphp.net}
  * @link http://www.miphp.net/blog/view/php4_akismet_class/
  * @version 0.3.3
- * @license http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License 
  */
 
-
-
-// Error constants
-define("AKISMET_SERVER_NOT_FOUND",	0);
-define("AKISMET_RESPONSE_FAILED",	1);
-define("AKISMET_INVALID_KEY",		2);
-
-
-
-// Base class to assist in error handling between Akismet classes
 class AkismetObject {
 	var $errors = array();
 	
