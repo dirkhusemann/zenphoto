@@ -1,5 +1,4 @@
 <?php
-
 /**
  * PhoogleMap Lite
  * ATTENTION: This is a modified version of Phoogle Maps
@@ -10,6 +9,7 @@
  * @class PhoogleMapLite
  * @author Mannkind
  * @copyright 2007 The Null Pointer
+ * @package plugins
  */
 
 /**

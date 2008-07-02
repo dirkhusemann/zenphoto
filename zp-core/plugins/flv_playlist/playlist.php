@@ -1,4 +1,11 @@
-<?php	// xspf playlist for flv player
+<?php	
+/**
+ * xspf playlist for flv player
+ * 
+ * @author Malte Müller (acrylian), Stephen Billard (sbillard)
+ * @version 1.0.2.7
+ * @package plugins 
+ */
 header("content-type:text/xml;charset=utf-8");
 require_once("../../template-functions.php");
 $albumid = sanitize_numeric($_GET["albumid"]);

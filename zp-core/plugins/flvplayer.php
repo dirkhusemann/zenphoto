@@ -2,9 +2,6 @@
 /**
  * flvplayer -- plugin support for the flvplayer flash video player.
  *
- *  Plugin option 'flv_player_width' -- width of the player window
- *  Plugin option 'flv_player_height' -- height of the player window
- * 
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
  * @version 1.0.2.7
  * @package plugins 
