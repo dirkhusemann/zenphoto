@@ -1,7 +1,9 @@
 <?php
 /**
  * rating -- Supports an image and album rating system
- * 
+ * @author Malte Müller (acrylian) and Stephen Billard (sbillard)
+ * @version 1.0.1
+ * @package plugins
  */
 
 $plugin_description = gettext("Adds several theme functions to enable images and/or album rating by users.");

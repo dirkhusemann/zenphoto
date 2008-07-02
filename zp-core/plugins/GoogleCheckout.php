@@ -16,6 +16,9 @@
  * for instance, by storing a pricelist string in the 'customdata' field of your images and then parsing and 
  * passing it in the GoogleCheckout() call. This would give you individual pricing by image.
  *  
+ * @author Jeremy Coleman (mammlouk), Stephen Billard (sbillard)
+ * @version 1.0.1
+ * @package plugins 
  */
 
 $plugin_description = gettext("GoogleCheckout Integration for Zenphoto.");

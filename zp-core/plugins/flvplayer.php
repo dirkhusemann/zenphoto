@@ -4,7 +4,11 @@
  *
  *  Plugin option 'flv_player_width' -- width of the player window
  *  Plugin option 'flv_player_height' -- height of the player window
-  */
+ * 
+ * @author Malte Müller (acrylian), Stephen Billard (sbillard)
+ * @version 1.0.2.7
+ * @package plugins 
+ */
 
 $plugin_description = gettext("Enable <strong>FLV</strong> player to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time.<br> Please see <a href='http://www.jeroenwijering.com/?item=JW_FLV_Player'>JW FLV media player </a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";

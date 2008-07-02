@@ -1,9 +1,12 @@
 <?php
-/*
+/**
  * Provides a link so that users who have logged into zenphoto can logout.
  *
  * Place a call on printUserLogout() where you want the logout link to appear.
  *
+ * @author Stephen Billard (sbillard)
+ * @version 1.0.0
+ * @package plugins
  */
 
 $plugin_description = gettext("Provides a means for placing a user logout link on your theme pages.");

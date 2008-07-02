@@ -21,8 +21,9 @@
  * Uses cookies to store the individual selection. Sets the 'locale' option
  * to the selected language (non-persistent.)
  * 
- * 
- *
+ * @author Stephen Billard (sbillard)
+ * @version 1.0.0
+ * @package plugins 
  */
 $plugin_description = gettext("Enable <strong>dynamic-locale</strong> to allow viewers of your site to select the language translation of their choice.");
 $plugin_author = "Stephen Billard (sbillard)";

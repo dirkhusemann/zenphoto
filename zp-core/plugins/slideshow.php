@@ -12,6 +12,10 @@
  * The theme files 'slideshow.php', 'slideshow.css', and 'slideshow-controls.png' must reside in the theme
  * folder. If you are creating a custom theme, copy these files form the "default" theme of the Zenphoto 
  * distribution.
+ * 
+ * @author Malte Müller (acrylian), Stephen Billard (sbillard)
+ * @version 1.0.2.7
+ * @package plugins 
  */
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");

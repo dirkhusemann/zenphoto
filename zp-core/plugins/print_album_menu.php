@@ -1,6 +1,6 @@
 <?php	
 /** printAlbumMenu for Zenphoto 1.1.6 
- * 
+  * 
  * Changelog
  * 
  * 1.4.4: 
@@ -78,7 +78,11 @@
  * - Option for disabling the counter
  * - Parameters for CSS-Ids for styling, separate ones for main album and subalbums
  * - Renamed the function name from show_album_menu() to more zp style printAlbumMenu()
- */
+ *
+ * @author Malte Müller (acrylian)
+ * @version 1.4.4
+ * @package plugins
+ * /
 
 $plugin_description = gettext("Adds a theme function printAlbumMenu() to print an album menu either as a nested list up to 4 sublevels (context sensitive) or as a dropdown menu.");
 $plugin_author = "Malte Müller (acrylian)";

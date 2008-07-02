@@ -3,6 +3,10 @@
  * google_maps -- provides for placing google maps on image and album pages.
  *
  * Plugin Option 'gmaps_apikey' is used to supply the sit Google Maps API key.
+ * 
+ * @author Dustin Brewer (mankind)
+ * @version 1.0.0
+ * @package plugins 
  */
 
 $plugin_description = gettext("Support for providing Google Maps based on EXIF latitude and longitude in the images.");

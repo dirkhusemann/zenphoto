@@ -1,10 +1,14 @@
 <?php
-/*
+/** 
  * flowplayer -- plugin support for the flowplayer flash video player.
- *
- *  Plugin option 'flow_player_width' -- width of the player window
- *  Plugin option 'flow_player_height' -- height of the player window
+ * Plugin option 'flow_player_width' -- width of the player window
+ * Plugin option 'flow_player_height' -- height of the player window
+ *  
+ * @author Malte Müller (acrylian), Stephen Billard (sbillard)
+ * @version 1.0.1.6
+ * @package plugins 
  */
+
 
 $plugin_description = gettext("Enable <strong>flowplayer</strong> to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time. <br> Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";

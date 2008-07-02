@@ -3,6 +3,10 @@
  * image_album_statistics -- support functions for "statistics" about images and albums.
  * 
  * Supports such statistics as "most popular", "latest", "top rated", etc.
+ * 
+ * @author Malte Müller (acrylian), Stephen Billard (sbillard)
+ * @version 1.0.4.4
+ * @package plugins 
  */
 
 $plugin_description = gettext("Functions that provide various statistics about images and albums in the gallery.");

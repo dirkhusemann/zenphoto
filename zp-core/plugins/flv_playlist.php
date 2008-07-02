@@ -30,6 +30,9 @@
  * ?>
  * Of course you can add further functions to b) like title, description, date etc., too.
  *  
+ * @author Malte Müller (acrylian), Stephen Billard (sbillard)
+ * @version 1.0.4.2
+ * @package plugins 
  */
 if (!getOption('zp_plugin_flvplayer')) {
 

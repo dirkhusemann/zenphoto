@@ -2,6 +2,9 @@
 /**
  * shutterfly -- Supports using Shutterfly for printing images from a gallery.
  * 
+ * @author Darrell Dudics (GameDudeX) adapted as a plugin by Stephen Billard (sbillard)
+ * @version 1.0.0
+ * @package plugins 
  */
 
 $plugin_description = gettext("Adds a link to allow requesting a single image print through Shutterfly.");
