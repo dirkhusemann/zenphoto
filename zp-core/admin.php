@@ -1764,7 +1764,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 			<input type="hidden" name="<?php echo $id ?>-adminuser"
 			value="<?php echo $userid ?>" /> <?php } ?></td>
 		<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
-		<?php if(!empty($userid) && count($admins) > 1) { ?>
+		<?php if(!empty($userid) && count($admins) > 2) { ?>
 		<a href="javascript: if(confirm('Are you sure you want to delete this user?')) { window.location='?page=options&action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }"
 			title="Delete this user." style="color: #c33;"> <img
 			src="images/fail.png" style="border: 0px;" alt="Delete" /></a> <?php } ?>&nbsp;
