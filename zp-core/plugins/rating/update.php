@@ -1,11 +1,11 @@
 <?php
-require('../../template-functions.php');
 /**
  * rating plugin - Updates the rating in the database
  * @author Malte Müller (acrylian) and Stephen Billard (sbillard)
  * @version 1.0.1
  * @package plugins
  */
+require('../../template-functions.php');
 require_once('functions-rating.php');
 $id = sanitize_numeric($_GET['id']); 
 $rating = sanitize_numeric($_GET['rating']);

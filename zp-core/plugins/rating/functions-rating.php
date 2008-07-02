@@ -1,4 +1,11 @@
 <?php
+/**
+ * rating plugin - Updates the rating in the database
+ * @author Malte Müller (acrylian) and Stephen Billard (sbillard)
+ * @version 1.0.1
+ * @package plugins
+ */
+
 $_rating_current_IPlist = array();
 /**
 * Returns true if the IP has voted
