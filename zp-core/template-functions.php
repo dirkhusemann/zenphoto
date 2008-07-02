@@ -1767,7 +1767,9 @@ function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
 	$h = $_zp_current_image->getHeight();
+	if ($h == 0) $h = 1; // protect against divide by zero
 	$w = $_zp_current_image->getWidth();
+	if ($w == 0) $w = 1; // protect against divide by zero
 	$ls = getOption('image_use_longest_side');
 	$us = getOption('image_allow_upscale');
 
