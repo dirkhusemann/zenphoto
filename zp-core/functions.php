@@ -149,12 +149,10 @@ function getOption($key, $db=false) {
  * otherwise it is preserved in the database
  */
 function setOption($key, $value, $persistent=true) {
-	global $_zp_conf_vars, $_zp_options;
-	if ($value == getOption($key)) {
-		return true;  // not changed
-	}
+global $_zp_conf_vars, $_zp_options;
 	if ($persistent) {
-		if (array_key_exists($key, $_zp_options)) {
+		$result = query_single_row("SELECT `value` FROM ".prefix('options')." WHERE `name`='".$key."' AND `ownerid`=0");
+		if (isset($result['value'])) {
 // option already exists.
 			$sql = "UPDATE " . prefix('options') . " SET `value`='" . escape($value) . "' WHERE `name`='" . escape($key) ."' AND `ownerid`=0";
 		} else {
@@ -1595,18 +1593,24 @@ function debugLogBacktrace($message) {
 	debugLog("Backtrace: $message");
 	// Get a backtrace.
 	$bt = debug_backtrace();
-	array_shift($bt); // Get rid of debugLogBacktrace in the backtrace.
-	array_shift($bt); // Get rid of caller in the backtrace.
-	$prefix = '  ';
+	array_shift($bt); // Get rid of debug_backtrace in the backtrace.
+	$prefix = '';
+	$line = '';
+	$caller = '';
 	foreach($bt as $b) {
-		$msg = $prefix . ' from '
-		. (isset($b['class']) ? $b['class'] : '')
-		. (isset($b['type']) ? $b['type'] : '')
-		. $b['function']
-		. ' (' . basename($b['file'])
-		. ' [' . $b['line'] . "])";
-		debugLog($msg);
-		$prefix .= '  ';
+		$caller = (isset($b['class']) ? $b['class'] : '')	. (isset($b['type']) ? $b['type'] : '')	. $b['function'];
+		if (!empty($line)) { // skip first output to match up functions with line where they are used.
+
+			$msg = $prefix . ' from ';
+			debugLog($msg.$caller.' ('.$line.')');
+			$prefix .= '  ';
+		} else {
+			debugLog($caller.' called');
+		}
+		$line = basename($b['file'])	. ' [' . $b['line'] . "]";
+	}
+	if (!empty($line)) {
+		debugLog($prefix.' from '.$line);
 	}
 }
 

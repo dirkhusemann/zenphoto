@@ -618,7 +618,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				setBoolOption('persistent_archive', $_POST['persistent_archive']);
 				setBoolOption('album_session', $_POST['album_session']);
 				setOption('locale', $newloc = $_POST['locale']);
-				if ($loc != '') { // only clear the cookie if the option is not the default!
+				if ($newloc != '') { // only clear the cookie if the option is not the default!
 					$cookiepath = WEBPATH;
 					if (WEBPATH == '') { $cookiepath = '/'; }
 					zp_setCookie('dynamic_locale', getOption('locale'), time()-368000, $cookiepath);  // clear the language cookie
