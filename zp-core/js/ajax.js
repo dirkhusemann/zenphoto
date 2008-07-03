@@ -1,7 +1,7 @@
 
 // Fallback for i18n not loaded.
 if (!zpstrings) {
-	zpstrings = {};
+	var zpstrings = {};
 }
 
 // Get the element's style (computed) for the attribute given.
