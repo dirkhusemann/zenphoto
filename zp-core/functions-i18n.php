@@ -41,21 +41,43 @@ function generateLanguageOptionList() {
 	generateListFromArray(array(getOption('locale', OFFSET_PATH===1)), $locales);
 }
 
+
+/**
+ * Sets the optional textdomain for separate translation files for plugins.
+ * The plugin translation files must be located within 
+ * zp-core/plugins/<plugin name>/locale/<language locale>/LC_MESSAGES/ and must 
+ * have the name of the plugin (<plugin name>.po  <plugin name>.mo)
+ *
+ * @param string $plugindomain The name of the plugin
+ */
+function setPluginDomain($plugindomain='') {
+	if(!empty($plugindomain)) {
+		setupCurrentLocale($plugindomain);
+	}
+}
+
 /**
  * Setup code for gettext translation
  *
  */
-function setupCurrentLocale() {
+function setupCurrentLocale($plugindomain='') {
 	global $_zp_languages;
+	if(empty($plugindomain)) {
 	$encoding = getOption('charset');
 	if (empty($encoding)) $encoding = 'UTF-8';
 	$locale = getOption("locale");
 	@putenv("LANG=$locale");
 	// gettext setup
 	setlocale(LC_ALL, $locale);
+	
 	// Set the text domain as 'messages'
 	$domain = 'zenphoto';
-	bindtextdomain($domain, SERVERPATH . "/" . ZENFOLDER . "/locale/");
+	$domainpath = SERVERPATH . "/" . ZENFOLDER . "/locale/";
+	} else {
+	$domain = $plugindomain;
+	$domainpath = SERVERPATH . "/" . ZENFOLDER . "/plugins/".$domain."/locale/";
+	}
+	bindtextdomain($domain, $domainpath);
 	// function only since php 4.2.0
 	if(function_exists('bind_textdomain_codeset')) {
 		bind_textdomain_codeset($domain, $encoding);
