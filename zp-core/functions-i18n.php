@@ -5,7 +5,7 @@
  */
 /**
  * Returns an array of available language locales.
- * 
+ *
  * @return array
  *
  */
@@ -13,7 +13,7 @@ function generateLanguageList() {
 	global $_zp_languages;
 	$dir = @opendir(SERVERPATH . "/" . ZENFOLDER ."/locale/");
 	$locales = array();
-	
+
 	if (OFFSET_PATH === 1) {  // for admin only
 		$locales[gettext("HTTP Accept Language")] = '';
 	}
@@ -44,16 +44,14 @@ function generateLanguageOptionList() {
 
 /**
  * Sets the optional textdomain for separate translation files for plugins.
- * The plugin translation files must be located within 
- * zp-core/plugins/<plugin name>/locale/<language locale>/LC_MESSAGES/ and must 
+ * The plugin translation files must be located within
+ * zp-core/plugins/<plugin name>/locale/<language locale>/LC_MESSAGES/ and must
  * have the name of the plugin (<plugin name>.po  <plugin name>.mo)
  *
  * @param string $plugindomain The name of the plugin
  */
-function setPluginDomain($plugindomain='') {
-	if(!empty($plugindomain)) {
-		setupCurrentLocale($plugindomain);
-	}
+function setPluginDomain($plugindomain) {
+	setupCurrentLocale($plugindomain);
 }
 
 /**
@@ -63,19 +61,19 @@ function setPluginDomain($plugindomain='') {
 function setupCurrentLocale($plugindomain='') {
 	global $_zp_languages;
 	if(empty($plugindomain)) {
-	$encoding = getOption('charset');
-	if (empty($encoding)) $encoding = 'UTF-8';
-	$locale = getOption("locale");
-	@putenv("LANG=$locale");
-	// gettext setup
-	setlocale(LC_ALL, $locale);
-	
-	// Set the text domain as 'messages'
-	$domain = 'zenphoto';
-	$domainpath = SERVERPATH . "/" . ZENFOLDER . "/locale/";
+		$encoding = getOption('charset');
+		if (empty($encoding)) $encoding = 'UTF-8';
+		$locale = getOption("locale");
+		@putenv("LANG=$locale");
+		// gettext setup
+		setlocale(LC_ALL, $locale);
+
+		// Set the text domain as 'messages'
+		$domain = 'zenphoto';
+		$domainpath = SERVERPATH . "/" . ZENFOLDER . "/locale/";
 	} else {
-	$domain = $plugindomain;
-	$domainpath = SERVERPATH . "/" . ZENFOLDER . "/plugins/".$domain."/locale/";
+		$domain = $plugindomain;
+		$domainpath = SERVERPATH . "/" . ZENFOLDER . "/plugins/".$domain."/locale/";
 	}
 	bindtextdomain($domain, $domainpath);
 	// function only since php 4.2.0
@@ -140,14 +138,14 @@ function setupCurrentLocale($plugindomain='') {
 		'uz_UZ' => gettext('Uzbek'),
 		'vi_VN' => gettext('vi_VN'),
 		'cy' => gettext('Welsh')
-		);
+	);
 }
 
 /**
- * This function will parse a given HTTP Accepted language instruction 
- * (or retrieve it from $_SERVER if not provided) and will return a sorted 
- * array. For example, it will parse fr;en-us;q=0.8 
- * 
+ * This function will parse a given HTTP Accepted language instruction
+ * (or retrieve it from $_SERVER if not provided) and will return a sorted
+ * array. For example, it will parse fr;en-us;q=0.8
+ *
  * Thanks to Fredbird.org for this code.
  *
  * @param string $str optional language string
@@ -157,7 +155,7 @@ function parseHttpAcceptLanguage($str=NULL) {
 	if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) return array();
 	// getting http instruction if not provided
 	$str=$str?$str:$_SERVER['HTTP_ACCEPT_LANGUAGE'];
-	// exploding accepted languages 
+	// exploding accepted languages
 	$langs=explode(',',$str);
 	// creating output list
 	$accepted=array();
@@ -175,7 +173,7 @@ function parseHttpAcceptLanguage($str=NULL) {
 		$coef=sprintf('%3.1f',$found[5]?$found[5]:'1');
 		// for sorting by coefficient
 		$key=$coef.'-'.$code;
-		// adding 
+		// adding
 		$accepted[$key]=array('code'=>$code,'coef'=>$coef,'morecode'=>$morecode,'fullcode'=>$fullcode);
 	}
 	// sorting the list by coefficient desc
@@ -199,7 +197,7 @@ function getUserLocale() {
 		$locale = zp_getCookie('dynamic_locale');
 		if (empty($localeOption) && ($locale === false)) {  // if one is not set, see if there is a match from 'HTTP_ACCEPT_LANGUAGE'
 			$languageSupport = generateLanguageList();
-			$userLang = parseHttpAcceptLanguage();			
+			$userLang = parseHttpAcceptLanguage();
 			foreach ($userLang as $lang) {
 				$l = strtoupper($lang['fullcode']);
 				foreach ($languageSupport as $key=>$value) {
