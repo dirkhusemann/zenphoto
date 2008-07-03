@@ -34,10 +34,20 @@ require_once('lib-kses.php');
 require_once('exif/exif.php');
 require_once('functions-db.php');
 
-if (OFFSET_PATH) {
-	$const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
-} else {
-	$const_webpath = dirname($_SERVER['SCRIPT_NAME']);
+switch (OFFSET_PATH) {
+	case 0:	// starts from the root index.php
+		$const_webpath = dirname($_SERVER['SCRIPT_NAME']);
+		break;
+	case 1:  // starts from the zp-core folder
+	case 2:	
+		$const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
+		break;
+	case 3: // starts from the plugins folder
+		$const_webpath = dirname(dirname(dirname($_SERVER['SCRIPT_NAME'])));
+		break;
+	case 4: // starts from within a folder within the plugins folder
+		$const_webpath = dirname(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))));
+		break;
 }
 $const_webpath = str_replace("\\", '/', $const_webpath);
 if ($const_webpath == '/') $const_webpath = '';
