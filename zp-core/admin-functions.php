@@ -265,7 +265,7 @@ function printLogoAndLinks() {
 	if (!is_null($_zp_current_admin)) {
 		echo gettext("Logged in as")." ".$_zp_current_admin['user']." &nbsp; | &nbsp <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?logout\">".gettext("Log Out")."</a> &nbsp; | &nbsp; ";
 	}
-	echo "<a href=\"".WEBPATH."\">".gettext("View Gallery");
+	echo "<a href=\"".WEBPATH."/index.php\">".gettext("View Gallery");
 	$t = htmlspecialchars(getOption('gallery_title'));
 	if (!empty($t))	echo ': ' . $t;
 	echo "</a>";
