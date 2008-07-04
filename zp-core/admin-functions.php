@@ -59,6 +59,7 @@ function printAdminHeader() {
 	echo "\n<head>";
 	echo "\n  <title>zenphoto administration</title>";
 	echo "\n  <link rel=\"stylesheet\" href=\"admin.css\" type=\"text/css\" />";
+	echo "\n  <link rel=\"stylesheet\" href=\"js/toggleElements.css\" type=\"text/css\" />";
 	echo "\n  <script type=\"text/javascript\" src=\"js/prototype.js\"></script>";
 	echo "\n  <script type=\"text/javascript\" src=\"js/admin.js\"></script>";
 	echo "\n  <script src=\"js/scriptaculous/scriptaculous.js\" type=\"text/javascript\"></script>";
@@ -66,6 +67,7 @@ function printAdminHeader() {
 	echo "\n  <script src=\"js/jquery.dimensions.js\" type=\"text/javascript\"></script>";
 	echo "\n  <script src=\"js/jquery.tooltip.js\" type=\"text/javascript\"></script>";
 	echo "\n  <script src=\"js/jquery.tabs.js\" type=\"text/javascript\"></script>";
+	echo "\n  <script type=\"text/javascript\" src=\"js/jquery.toggleElements.js\"></script>";
 	echo "\n  <script type=\"text/javascript\">";
 	echo "\n  \tjQuery(function( $ ){";
 	echo "\n  \t\t $(\"#fade-message\").fadeTo(5000, 1).fadeOut(1000);";
@@ -124,7 +126,7 @@ function printAdminHeader() {
 			}
 		}
 	</script>
-<?php
+	<?php
 }
 
 /**

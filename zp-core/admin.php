@@ -618,7 +618,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				setBoolOption('persistent_archive', $_POST['persistent_archive']);
 				setBoolOption('album_session', $_POST['album_session']);
 				setOption('locale', $newloc = $_POST['locale']);
-				if ($newloc != '') { // only clear the cookie if the option is not the default!
+				if ($loc != '') { // only clear the cookie if the option is not the default!
 					$cookiepath = WEBPATH;
 					if (WEBPATH == '') { $cookiepath = '/'; }
 					zp_setCookie('dynamic_locale', getOption('locale'), time()-368000, $cookiepath);  // clear the language cookie
@@ -2521,11 +2521,16 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 	$filelist = safe_glob('*'.'php');
 	$c = 0;
 ?>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('div.toggler-c').toggleElements( );
+	});
+	</script>
 	<div id="tab_plugin">
 	<form action="?action=saveoptions" method="post">
 	<input type="hidden" name="savepluginoptions" value="yes" /> 
-		<table class='bordered'>
-		<?php
+	
+ 		<?php
 		foreach ($filelist as $extension) {
 			$ext = substr($extension, 0, strlen($extension)-4);
 			$opt = 'zp_plugin_'.$ext;
@@ -2534,30 +2539,27 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 				require_once($extension);
 				if (!is_null($option_interface)) {
 					$c++;
-					echo '<th colspan="3" style="background-color: #ECF1F2;"><strong>'.$ext.'</strong></th>';
+					echo '<div class="toggler-c" title="'.$ext.' ">';
+					echo "\n<table class=\"bordered\">\n";
 					$supportedOptions = $option_interface->getOptionsSupported();
 					if (count($supportedOptions) > 0) {
 						customOptions($option_interface);
 					}
+					echo "</table>\n</div>\n";
 				}
 			}
 		}
 	?>
-	<tr>
-	<td></td>
-	<td>
-	<?php
+<?php
 	if ($c == 0) {
 		echo gettext("There are no plugin options to adminsiter.");
 	} else {
 	?>
+		<p style="float:right"><?php echo gettext("Click the plugin bar to open/close the options.") ?></p>
 		<input type="submit" value= <?php echo gettext('save') ?> />
 	<?php 
 	}
 	?>
-	</td>
-	<td></td>
-	</table>
 	</form>
 </div>
 <?php
