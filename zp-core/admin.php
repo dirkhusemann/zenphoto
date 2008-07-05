@@ -1029,8 +1029,7 @@ if ($allimagecount) {
 		$image = new Image($album, $filename);
 		?>
 
-	<tr id=""
-	<?php echo ($currentimage % 2 == 0) ?  "class=\"alt\"" : ""; ?>>
+	<tr id=""	<?php echo ($currentimage % 2 == 0) ?  "class=\"alt\"" : ""; ?>>
 		<td valign="top" width="100"><img	id="thumb-<?php echo $currentimage; ?>"
 			src="<?php echo $image->getThumb();?>"
 			alt="<?php echo $image->filename;?>"
@@ -1043,18 +1042,38 @@ if ($allimagecount) {
 			value="<?php echo $image->filename; ?>" />
 		<table border="0" class="formlayout">
 			<tr>
+				<td align="right" valign="top" width="100">Filename:</td>
+				<td><?php echo $image->filename; ?></td>
+			<td style="padding-left: 1em;">
+				<a href="javascript: confirmDeleteImage('?page=edit&action=deleteimage&album=<?php echo urlencode($album->name); ?>&image=<?php echo urlencode($image->filename); ?>','<?php echo gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"); ?>');"
+					title="<?php gettext('Delete the image'); ?> <?php echo xmlspecialchars($image->filename); ?>"> <img
+					src="images/fail.png" style="border: 0px;"
+					alt="<?php gettext('Delete the image'); ?> <?php echo xmlspecialchars($image->filename); ?>" /></a>
+			</td>
+			</tr>
+			<tr>
 				<td align="right" valign="top" width="100">Title:</td>
 				<td><input type="text" size="56" style="width: 360px"
 					name="<?php echo $currentimage; ?>-title"
 					value="<?php echo $image->getTitle(); ?>" /></td>
+				<td></td>
 			</tr>
+			<tr>
 			<?php
 			$id = $image->id;
 			$result = query_single_row("SELECT `hitcounter` FROM " . prefix('images') . " WHERE `id` = $id");
 			$hc = $result['hitcounter'];
 			if (empty($hc)) { $hc = '0'; }
-			echo "<td></td><td>". gettext("Hit counter:"). $hc . " <input type=\"checkbox\" name=\"".gettext("reset_hitcounter")."\"> ".gettext("Reset")."</td>";
+			echo "<td></td>";
+			echo "<td>". gettext("Hit counter:"). $hc . " <input type=\"checkbox\" name=\"".gettext("reset_hitcounter")."\"> ".gettext("Reset")."</td>";
 			?>
+				<td rowspan=11 style="padding-left: 1em;">
+				<?php 
+				echo gettext("Tags:");
+				tagSelector($image, 'tags_'.$currentimage.'-') 
+				?>
+				</td>
+			</tr>
 			<tr>
 				<td align="right" valign="top"><?php echo gettext("Description:"); ?></td>
 				<td><textarea name="<?php echo $currentimage; ?>-desc" cols="60"
@@ -1122,30 +1141,6 @@ if ($allimagecount) {
 			</tr>
 		</table>
 		</td>
-
-		<td>
-		<table>
-		<tr>
-			<td style="padding-left: 1em;">
-				<a href="javascript: confirmDeleteImage('?page=edit&action=deleteimage&album=<?php echo urlencode($album->name); ?>&image=<?php echo urlencode($image->filename); ?>','<?php echo gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"); ?>');"
-					title="<?php gettext('Delete the image'); ?> <?php echo xmlspecialchars($image->filename); ?>"> <img
-					src="images/fail.png" style="border: 0px;"
-					alt="<?php gettext('Delete the image'); ?> <?php echo xmlspecialchars($image->filename); ?>" /></a>
-			</td>
-		</tr>
-		<tr></tr>
-		<tr></tr>
-		<tr></tr>
-		<tr>
-			<td>
-				<?php 
-				echo gettext("Tags:");
-				tagSelector($image, 'tags_'.$currentimage.'-') 
-				?>
-			</td>
-	</tr>
-	</table>
-	</td>
 	
 
 	</tr>
