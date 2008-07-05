@@ -8,6 +8,144 @@ require_once("functions.php");
 require_once("lib-seo.php"); // keep the function separate for easy modification by site admins
 
 $_zp_admin_album_list = null;
+$sortby = array(gettext('Filename') => 'Filename', gettext('Date') => 'Date', gettext('Title') => 'Title', gettext('ID') => 'ID' );
+$standardOptions = array(	'gallery_title','website_title','website_url','time_offset',
+ 													'mod_rewrite','mod_rewrite_image_suffix',
+ 													'server_protocol','charset','image_quality',
+ 													'thumb_quality','image_size','image_use_longest_side',
+ 													'image_allow_upscale','thumb_size','thumb_crop',
+ 													'thumb_crop_width','thumb_crop_height','thumb_sharpen', 'image_sharpen',
+ 													'albums_per_page','images_per_page','perform_watermark',
+ 													'watermark_image','watermark_scale', 'watermark_allow_upscale', 'current_theme', 'spam_filter',
+ 													'email_new_comments', 'perform_video_watermark', 'video_watermark_image', 'use_lock_image',
+ 													'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'feed_imagesize', 'search_fields',
+ 													'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
+ 													'allowed_tags', 'full_image_quality', 'persistent_archive',
+ 													'protect_full_image', 'album_session', 'watermark_h_offset', 'watermark_w_offset',
+ 													'Use_Captcha', 'locale', 'date_format', 'hotlink_protection', 'image_sortdirection',
+													'admin_reset_date', 'comment_name_required', 'comment_email_required',
+													'comment_web_required', 'full_image_download', 'zenphoto_release','gallery_user', 'search_user'
+												 );
+$charsets = array("ASMO-708" => "Arabic",
+									"BIG5" => "Chinese Traditional",
+									"CP1026" => "IBM EBCDIC (Turkish Latin-5)",
+									"cp866" => "Cyrillic (DOS)",
+									"CP870" => "IBM EBCDIC (Multilingual Latin-2)",
+									"CISO2022JP" => "Japanese (JIS-Allow 1 byte Kana)",
+									"DOS-720" => "Arabic (DOS)",
+									"DOS-862" => "Hebrew (DOS)",
+									"EBCDIC-CP-US" => "IBM EBCDIC (US-Canada)",
+									"EUC-CN" => "Chinese Simplified (EUC)",
+									"EUC-JP" => "Japanese (EUC)",
+									"EUC-KR" => "Korean (EUC)",
+									"GB2312" => "Chinese Simplified (GB2312)",
+									"HZ-GB-2312" => "Chinese Simplified (HZ)",
+									"IBM437" => "OEM United States",
+									"IBM737" => "Greek (DOS)",
+									"IBM775" => "Baltic (DOS)",
+									"IBM850" => "Western European (DOS)",
+									"IBM852" => "Central European (DOS)",
+									"IBM857" => "Turkish (DOS)",
+									"IBM861" => "Icelandic (DOS)",
+									"IBM869" => "Greek, Modern (DOS)",
+									"ISO-2022-JP" => "Japanese (JIS)",
+									"ISO-2022-JP" => "Japanese (JIS-Allow 1 byte Kana - SO/SI)",
+									"ISO-2022-KR" => "Korean (ISO)",
+									"ISO-8859-1" => "Western European (ISO)",
+									"ISO-8859-15" => "Latin 9 (ISO)",
+									"ISO-8859-2" => "Central European (ISO)",
+									"ISO-8859-3" => "Latin 3 (ISO)",
+									"ISO-8859-4" => "Baltic (ISO)",
+									"ISO-8859-5" => "Cyrillic (ISO)",
+									"ISO-8859-6" => "Arabic (ISO)",
+									"ISO-8859-7" => "Greek (ISO)",
+									"ISO-8859-8" => "Hebrew (ISO-Visual)",
+									"ISO-8859-8-i" => "Hebrew (ISO-Logical)",
+									"ISO-8859-9" => "Turkish (ISO)",
+									"JOHAB" => "Korean (Johab)",
+									"KOi8-R" => "Cyrillic (KOI8-R)",
+									"KOi8-U" => "Cyrillic (KOI8-U)",
+									"KS_C_5601-1987" => "Korean",
+									"MACINTOSH" => "Western European (MAC)",
+									"SHIFT_JIS" => "Japanese (Shift-JIS)",
+									"UNICODE" => "Unicode",                  
+									"UNICODEFFFE" => "Unicode (Big-Endian)",
+									"US-ASCII" => "US-ASCII",
+									"UTF-7" => "Unicode (UTF-7)",
+									"UTF-8" => "Unicode (UTF-8)",
+									"WINDOWS-1250" => "Central European (Windows)",
+									"WINDOWS-1251" => "Cyrillic (Windows)",
+									"WINDOWS-1252" => "Western European (Windows)",
+									"WINDOWS-1253" => "Greek (Windows)",
+									"WINDOWS-1254" => "Turkish (Windows)",
+									"WINDOWS-1255" => "Hebrew (Windows)",
+									"WINDOWS-1256" => "Arabic (Windows)",
+									"WINDOWS-1257" => "Baltic (Windows)",                  
+									"WINDOWS-1258" => "Vietnamese (Windows)",
+									"WINDOWS-874" => "Thai (Windows)",
+									"X-CHINESE-CNS" => "Chinese Traditional (CNS)",
+									"X-CHINESE-ETEN" => "Chinese Traditional (Eten)",
+									"X-EBCDIC-Arabic" => "IBM EBCDIC (Arabic)",
+									"X-EBCDIC-CP-US-EURO" => "IBM EBCDIC (US-Canada-Euro)",
+									"X-EBCDIC-CYRILLICRUSSIAN" => "IBM EBCDIC (Cyrillic Russian)",
+									"X-EBCDIC-CYRILLICSERBIANBULGARIAN" => "IBM EBCDIC (Cyrillic Serbian-Bulgarian)",
+									"X-EBCDIC-DENMARKNORWAY" => "IBM EBCDIC (Denmark-Norway)",
+									"X-EBCDIC-DENMARKNORWAY-euro" => "IBM EBCDIC (Denmark-Norway-Euro)",
+									"X-EBCDIC-FINLANDSWEDEN" => "IBM EBCDIC (Finland-Sweden)",
+									"X-EBCDIC-FINLANDSWEDEN-EURO" => "IBM EBCDIC (Finland-Sweden-Euro)",
+									"X-EBCDIC-FINLANDSWEDEN-EURO" => "IBM EBCDIC (Finland-Sweden-Euro)",
+									"X-EBCDIC-FRANCE-EURO" => "IBM EBCDIC (France-Euro)",
+									"X-EBCDIC-GERMANY" => "IBM EBCDIC (Germany)",
+									"X-EBCDIC-GERMANY-EURO" => "IBM EBCDIC (Germany-Euro)",
+									"X-EBCDIC-GREEK" => "IBM EBCDIC (Greek)",
+									"X-EBCDIC-GREEKMODERN" => "IBM EBCDIC (Greek Modern)",
+									"X-EBCDIC-HEBREW" => "IBM EBCDIC (Hebrew)",
+									"X-EBCDIC-ICELANDIC" => "IBM EBCDIC (Icelandic)",
+									"X-EBCDIC-ICELANDIC-EURO" => "IBM EBCDIC (Icelandic-Euro)",
+									"X-EBCDIC-INTERNATIONAL-EURO" => "IBM EBCDIC (International-Euro)",
+									"X-EBCDIC-ITALY" => "IBM EBCDIC (Italy)",
+									"X-EBCDIC-ITALY-EURO" => "IBM EBCDIC (Italy-Euro)",
+									"X-EBCDIC-JAPANESEANDJAPANESELATIN" => "IBM EBCDIC (Japanese and Japanese-Latin)",
+									"X-EBCDIC-JAPANESEANDKANA" => "IBM EBCDIC (Japanese and Japanese Katakana)",
+									"X-EBCDIC-JAPANESEANDUSCANADA" => "IBM EBCDIC (Japanese and US-Canada)",                  
+									"X-EBCDIC-JAPANESEKATAKANA" => "IBM EBCDIC (Japanese katakana)",
+									"X-EBCDIC-KOREANANDKOREANEXTENDED" => "IBM EBCDIC (Korean and Korean EXtended)",
+									"X-EBCDIC-KOREANEXTENDED" => "IBM EBCDIC (Korean EXtended)",
+									"X-EBCDIC-SIMPLIFIEDCHINESE" => "IBM EBCDIC (Simplified Chinese)",
+									"X-EBCDIC-SPAIN" => "IBM EBCDIC (Spain)",
+									"X-ebcdic-SPAIN-EURO" => "IBM EBCDIC (Spain-Euro)",
+									"X-EBCDIC-THAI" => "IBM EBCDIC (Thai)",
+									"X-EBCDIC-TRADITIONALCHINESE" => "IBM EBCDIC (Traditional Chinese)",
+									"X-EBCDIC-TURKISH" => "IBM EBCDIC (Turkish)",
+									"X-EBCDIC-UK" => "IBM EBCDIC (UK)",
+									"X-EBCDIC-UK-EURO" => "IBM EBCDIC (UK-Euro)",
+									"X-EUROPA" => "Europa",
+									"X-IA5" => "Western European (IA5)",
+									"X-IA5-GERMAN" => "German (IA5)",
+									"X-IA5-NORWEGIAN" => "Norwegian (IA5)",
+									"X-IA5-SWEDISH" => "Swedish (IA5)",
+									"X-ISCII-AS" => "ISCII Assamese",
+									"X-ISCII-BE" => "ISCII Bengali",
+									"X-ISCII-DE" => "ISCII Devanagari",
+									"X-ISCII-GU" => "ISCII Gujarathi",
+									"X-ISCII-KA" => "ISCII Kannada",
+									"X-ISCII-MA" => "ISCII Malayalam",
+									"X-ISCII-OR" => "ISCII Oriya",
+									"X-ISCII-PA" => "ISCII Panjabi",
+									"X-ISCII-TA" => "ISCII Tamil",
+									"X-ISCII-TE" => "ISCII Telugu",
+									"X-MAC-ARABIC" => "Arabic (Mac)",
+									"X-MAC-CE" => "Central European (Mac)",
+									"X-MAC-CHINESESIMP" => "Chinese Simplified (Mac)",
+									"X-MAC-CHINESETRAD" => "Chinese Traditional (Mac)",
+									"X-MAC-CYRILLIC" => "Cyrillic (Mac)",
+									"X-MAC-GREEK" => "Greek (Mac)",
+									"X-MAC-HEBREW" => "Hebrew (Mac)",
+									"X-MAC-ICELANDIC" => "Icelandic (Mac)",
+									"X-MAC-JAPANESE" => "Japanese (Mac)",
+									"X-MAC-KOREAN" => "Korean (Mac)",
+									"X-MAC-TURKISH" => "Turkish (Mac)"
+									);
 
 /**
  * Test to see whether we should be displaying a particular page.
@@ -295,11 +433,11 @@ function printTabs() {
 	}
 	if (($_zp_loggedin & (COMMENT_RIGHTS | ADMIN_RIGHTS))) {
 		echo "\n    <li". ($page == "comments" ? " class=\"current\"" : "") .
- 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?page=comments\">".gettext("comments")."</a></li>";
+ 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-comments.php?page=comments\">".gettext("comments")."</a></li>";
 	}
 	if (($_zp_loggedin & (UPLOAD_RIGHTS | ADMIN_RIGHTS))) {
 		echo "\n    <li". ($page == "upload" ? " class=\"current\""   : "") .
- 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?page=upload\">".gettext("upload")."</a></li>";
+ 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-upload.php?page=upload\">".gettext("upload")."</a></li>";
 	}
 	if (($_zp_loggedin & (EDIT_RIGHTS | ADMIN_RIGHTS))) {
 		echo "\n    <li". ($page == "edit" ? " class=\"current\""     : "") .
@@ -310,14 +448,14 @@ function printTabs() {
 				"><a href=\"".WEBPATH."/".ZENFOLDER."/admin-tags.php?page=tags\">".gettext('tags')."</a></li>";
 	}	
 	echo "\n    <li". ($page == "options" ? " class=\"current\""  : "") .
- 			"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?page=options\">".gettext("options")."</a></li>";
+ 			"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-options.php?page=options\">".gettext("options")."</a></li>";
 	if (($_zp_loggedin & (THEMES_RIGHTS | ADMIN_RIGHTS))) {
 		echo "\n    <li". ($page == "themes" ? " class=\"current\""  : "") .
- 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?page=themes\">".gettext("themes")."</a></li>";
+ 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-themes.php?page=themes\">".gettext("themes")."</a></li>";
 	}
 	if (($_zp_loggedin & ADMIN_RIGHTS)) {
 		echo "\n    <li". ($page == "plugins" ? " class=\"current\""  : "") .
- 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?page=plugins\">".gettext("plugins")."</a></li>";
+ 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-plugins.php?page=plugins\">".gettext("plugins")."</a></li>";
 	}
 	if (($_zp_loggedin & ADMIN_RIGHTS) && getOption('zp_plugin_zenpage')) {
 		echo "\n    <li". ($page == "zenpage" ? " class=\"current\""     : "") .

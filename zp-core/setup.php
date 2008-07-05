@@ -1029,19 +1029,19 @@ if (file_exists("zp-config.php")) {
 						foreach ($result as $row) {
 							setThemeOption($album, $row['name'], $row['value']);
 						}
-						query('DROP TABLE '.$tbl);
 					}
+					query('DROP TABLE '.$tbl, true);
 				} else { // convert back to individual tables
 					$result = query_full_array('SELECT * FROM '.prefix('options'),' WHERE `ownerid`!=0');  
 					if (count($result) > 0) { // there was use of the album options in the options table
 						$tbl_options = prefix(getOptionTableName($album->name));
 						$sql = "CREATE TABLE IF NOT EXISTS $tbl_options (
-						`id` int(11) unsigned NOT NULL auto_increment,
-						`name` varchar(64) NOT NULL,
-						`value` text NOT NULL,
-						PRIMARY KEY  (`id`),
-						UNIQUE (`name`)
-						);";
+							`id` int(11) unsigned NOT NULL auto_increment,
+							`name` varchar(64) NOT NULL,
+							`value` text NOT NULL,
+							PRIMARY KEY  (`id`),
+							UNIQUE (`name`)
+							);";
 						query($sql);
 						$sql = "SELECT `name`,`value` FROM ".prefix('options').' WHERE `ownerid`='.$album->id;
 						$result = query_full_array($sql);
@@ -1050,8 +1050,8 @@ if (file_exists("zp-config.php")) {
 								query('INSERT INTO '.$tbl_options.'(`name`, `value`) VALUES ("'.$option['name'].'","'.$option['value'].'")');
 							}
 						}
-						query('DELETE FROM '.prefix('options').' WHERE `ownerid`!=0');
 					}
+					query('DELETE FROM '.prefix('options').' WHERE `ownerid`='.$album->id);
 				}
 			}
 		}
