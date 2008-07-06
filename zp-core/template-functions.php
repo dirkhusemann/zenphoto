@@ -93,7 +93,7 @@ function printAdminToolbox($context=null, $id='admin') {
 				echo "<br />\n";
 			}
 			if (isMyAlbum($albumname, UPLOAD_RIGHTS)) {
-				printLink($zf . '/admin.php?page=upload' . urlencode($_zp_current_album->name), gettext("New album"), NULL, NULL, NULL);
+				printLink($zf . '/admin-upload.php?page=upload' . urlencode($_zp_current_album->name), gettext("New album"), NULL, NULL, NULL);
 				echo "<br />\n";
 			}
 			if (isset($_GET['p'])) {
@@ -115,9 +115,9 @@ function printAdminToolbox($context=null, $id='admin') {
 					"');\" title=\"".gettext("Delete the album")."\">".gettext("Delete album")."</a><br />\n";
 			}
 			if (isMyAlbum($albumname, UPLOAD_RIGHTS) && !$_zp_current_album->isDynamic()) {
-				printLink($zf . '/admin.php?page=upload&album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL);
+				printLink($zf . '/admin-upload.php?page=upload&album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL);
 				echo "<br />\n";
-				printLink($zf . '/admin.php?page=upload&new&album=' . urlencode($albumname), gettext("New Album Here"), NULL, NULL, NULL);
+				printLink($zf . '/admin-upload.php?page=upload&new&album=' . urlencode($albumname), gettext("New Album Here"), NULL, NULL, NULL);
 				echo "<br />\n";
 			}
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;page=$page";
@@ -2322,7 +2322,7 @@ function printEditCommentLink($text, $before='', $after='', $title=NULL, $class=
 	global $_zp_current_comment;
 	if (zp_loggedin()) {
 		echo $before;
-		printLink(WEBPATH . '/' . ZENFOLDER . '/admin.php?page=editcomment&id=' . $_zp_current_comment['id'], $text, $title, $class, $id);
+		printLink(WEBPATH . '/' . ZENFOLDER . '/admin-comments.php?page=editcomment&id=' . $_zp_current_comment['id'], $text, $title, $class, $id);
 		echo $after;
 	}
 }

@@ -6,7 +6,6 @@
  */
 define('OFFSET_PATH', 1);
 require_once("sortable.php");
-// If they are not logged in, display the login form and exit
 if (!zp_loggedin()) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
 	exit();

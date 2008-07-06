@@ -8,7 +8,7 @@ require_once("admin-functions.php");
 
 function isolate($target, $str) {
 	$i = strpos($str, $target);
-	if ($i===false) return '';
+	if ($i === false) return false;
 	$str = substr($str, $i);
 	//$j = strpos($str, ";\n"); // This is wrong - PHP will not treat all newlines as \n.
 	$j = strpos($str, ";"); // This is also wrong; it disallows semicolons in strings. We need a regexp.
@@ -68,44 +68,82 @@ echo '<form action="?page=plugins&action=saveplugins" method="post">'."\n";
 echo '<input type="hidden" name="saveplugins" value="yes" />'."\n";
 echo "<table class=\"bordered\" width=\"100%\">\n";
 foreach ($filelist as $extension) {
-	$plugin_description = $plugin_author = $plugin_version = $plugin_URL = null;
+	
 	$ext = substr($extension, 0, strlen($extension)-4);
 	$opt = 'zp_plugin_'.$ext;
 	
 	$pluginStream = file_get_contents($extension);
-	// eval will return exactly FALSE if a parse error is encountered in the eval'd code.
-	// We should disable the plugin if that is the case.
-	$eval_plugin_ok = true;
-	$eval_plugin_ok &= (FALSE !== eval(isolate('$plugin_description', $pluginStream)));
-	$eval_plugin_ok &= (FALSE !== eval(isolate('$plugin_author', $pluginStream)));
-	$eval_plugin_ok &= (FALSE !== eval(isolate('$plugin_version', $pluginStream)));
-	$eval_plugin_ok &= (FALSE !== eval(isolate('$plugin_URL', $pluginStream)));
-	
-	if ($eval_plugin_ok) {
-		echo "<tr>";
-		echo '<td width="30%">';
-		echo '<input type="checkbox" size="40" name="'.$opt.'" value="1"';
-		echo checked('1', getOption($opt));
-		echo ' /> ';
-		echo '<strong>'.$ext.'</strong>';
-		
-		if (!empty($plugin_version)) {
-			echo ' v'.$plugin_version;
+	$parserr = 0;
+	$str = isolate('$plugin_description', $pluginStream);
+	if (false === $str) {
+		$plugin_description = '';
+	} else {
+		if (false === eval(isolate('$plugin_description', $pluginStream))) {
+			$parserr = $parserr | 1;
+			$plugin_description = '<strong>Error parsing <em>plugin_description</em> string!</strong> Try removing semicolons from string.';
 		}
-		echo '</td>';
-		echo '<td>';
-		echo $plugin_description;
-		if (!empty($plugin_URL)) {
+	}
+	$str = isolate('$plugin_author', $pluginStream);
+	if (false === $str) {
+		$plugin_author = '';
+	} else {
+		if (false === eval($str)) {
+			$parserr = $parserr | 2;
+			$plugin_author = '<strong>Error parsing <em>plugin_author</em> string!</strong> Try removing semicolons from string.';
+		}
+	}
+	$str = isolate('$plugin_version', $pluginStream);
+	if (false === $str) {
+		$plugin_version = '';
+	} else {
+		if (false === eval($str)) {
+			$parserr = $parserr | 4;
+			$plugin_version = ' <strong>Error parsing <em>plugin_version</em> string!</strong> Try removing semicolons from string.';
+		}
+	}
+	$str = isolate('$plugin_URL', $pluginStream);
+	if (false === $str) {
+		$plugin_url = '';
+	} else {
+		if (false === eval($str)) {
+			$parserr = $parserr | 8;
+			$plugin_URL = '<strong>Error parsing <em>plugin_URL</em> string!</strong> Try removing semicolons from string.';
+		}
+	}
+	
+	echo "<tr>";
+	echo '<td width="30%">';
+	echo '<input type="checkbox" size="40" name="'.$opt.'" value="1"';
+	if ($parserr) {
+		echo 'DISABLED';
+	} else {
+		echo checked('1', getOption($opt));
+	}
+	echo ' /> ';
+	echo '<strong>'.$ext.'</strong>';
+
+	if (!empty($plugin_version)) {
+		echo ' v'.$plugin_version;
+	}
+	echo '</td>';
+	echo '<td>';
+	echo $plugin_description;
+	if (!empty($plugin_URL)) {
+		if ($parserr & 8) {
+			echo '<br />'.$plugin_URL;
+		} else {
 			echo '<br /><a href="'.$plugin_URL.'"><strong>'.gettext("Usage information").'</strong></a>';
 		}
-		if (!empty($plugin_author)) {
-			echo '<br /><strong>'.gettext("Author").'</strong>: '.$plugin_author.'';
-		}
-		echo '</td>';
-		echo "</tr>\n";
-	} else {
-		echo "<!-- PLUGIN ERROR: Plugin could not be loaded because of a parse error (hint: try removing semicolons from your description strings): " . $ext . " -->\n";
 	}
+	if (!empty($plugin_author)) {
+		echo '<br />';
+		if (!($parserr & 2)) {
+			echo '<strong>'.gettext("Author").'</strong>: ';
+		}
+			echo $plugin_author;
+	}
+	echo '</td>';
+	echo "</tr>\n";
 }
 echo "</table>\n";
 echo '<input type="submit" value='. gettext('save').' />' . "\n";

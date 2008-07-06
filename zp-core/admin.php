@@ -235,21 +235,28 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	if (empty($page) && !($_zp_loggedin & MAIN_RIGHTS)) {
 		$page='options';
 	}
+	$q = '?page='.$page;
+	foreach ($_GET as $opt=>$value) {
+		if ($opt != 'page') {
+			$q .= '&'.$opt.'='.$value;
+		}
+	}
 	switch ($page) {
+		case 'editcomment':
 		case 'comments': 
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php");
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php".$q);
 			exit();
 		case 'upload': 
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-upload.php");
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-upload.php".$q);
 			exit();
 		case 'themes': 
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-themes.php");
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-themes.php".$q);
 			exit();
 		case 'plugins': 
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-plugins.php");
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-plugins.php".$q);
 			exit();
 		case 'options': 
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-options.php");
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-options.php".$q);
 			exit();
 		default:
 	}
