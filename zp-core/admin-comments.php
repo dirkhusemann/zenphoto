@@ -75,9 +75,55 @@ printLogoAndLinks();
 echo "\n" . '<div id="main">';
 printTabs();
 echo "\n" . '<div id="content">';
-?>
-<?php 
-if ($page == "comments") {
+
+if ($page == "editcomment") { ?>
+<h1><?php echo gettext("edit comment"); ?></h1>
+<?php
+	if (isset($_GET['id'])) $id = $_GET['id'];
+	else echo "<h2>". gettext("No comment specified.")." <a href=\"?page=comments\">&laquo ".gettext("Back")."</a></h2>";
+
+	$commentarr = query_single_row("SELECT name, website, date, comment, email FROM ".prefix('comments')." WHERE id = $id LIMIT 1");
+	extract($commentarr);
+	?>
+
+<form action="?page=comments&action=savecomment" method="post"><input
+	type="hidden" name="id" value="<?php echo $id; ?>" />
+<table>
+
+	<tr>
+		<td width="100"><?php echo gettext("Author:"); ?></td>
+		<td><input type="text" size="40" name="name"
+			value="<?php echo $name; ?>" /></td>
+	</tr>
+	<tr>
+		<td><?php echo gettext("Web Site:"); ?></td>
+		<td><input type="text" size="40" name="website"
+			value="<?php echo $website; ?>" /></td>
+	</tr>
+	<tr>
+		<td><?php echo gettext("E-Mail:"); ?></td>
+		<td><input type="text" size="40" name="email"
+			value="<?php echo $email; ?>" /></td>
+	</tr>
+	<tr>
+		<td><?php echo gettext("Date/Time:"); ?></td>
+		<td><input type="text" size="18" name="date"
+			value="<?php echo $date; ?>" /></td>
+	</tr>
+	<tr>
+		<td valign="top"><?php echo gettext("Comment:"); ?></td>
+		<td><textarea rows="8" cols="60" name="comment" /><?php echo $comment; ?></textarea></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><input type="submit" value="<?php echo gettext('save'); ?>" /> <input type="button"
+			value="cancel" onClick="window.location = '?page=comments';" />
+
+</table>
+</form>
+
+<?php
+} else {
 	// Set up some view option variables.
 	
 	if (isset($_GET['fulltext'])) {
@@ -90,12 +136,17 @@ if ($page == "comments") {
 		$fulltexturl = '';
 	}
 	$allcomments = fetchComments(""); 
-	if (isset($_GET['subpage'])) $pagenum = max(intval($_GET['subpage']),1); else $pagenum = 1;
+	
+	if (isset($_GET['subpage'])) {
+		$pagenum = max(intval($_GET['subpage']),1); 
+	} else {
+		$pagenum = 1;
+	}
 	
 	$comments = array_slice($allcomments, ($pagenum-1)*COMMENTS_PER_PAGE, COMMENTS_PER_PAGE);
 	$allcommentscount = count($allcomments);
 	$totalpages = ceil(($allcommentscount / COMMENTS_PER_PAGE));
-?>
+	?>
 <h1><?php echo gettext("Comments"); ?></h1>
 
 <?php /* Display a message if needed. Fade out and hide after 2 seconds. */
@@ -239,56 +290,7 @@ if ($page == "comments") {
 </form>
 
 <?php 
-/*** EDIT COMMENT *******************************************************************/
-/************************************************************************************/ 
-} else if ($page == "editcomment") { ?>
-<h1><?php echo gettext("edit comment"); ?></h1>
-<?php
-	if (isset($_GET['id'])) $id = $_GET['id'];
-	else echo "<h2>". gettext("No comment specified.")." <a href=\"?page=comments\">&laquo ".gettext("Back")."</a></h2>";
-
-	$commentarr = query_single_row("SELECT name, website, date, comment, email FROM ".prefix('comments')." WHERE id = $id LIMIT 1");
-	extract($commentarr);
-	?>
-
-<form action="?page=comments&action=savecomment" method="post"><input
-	type="hidden" name="id" value="<?php echo $id; ?>" />
-<table>
-
-	<tr>
-		<td width="100"><?php echo gettext("Author:"); ?></td>
-		<td><input type="text" size="40" name="name"
-			value="<?php echo $name; ?>" /></td>
-	</tr>
-	<tr>
-		<td><?php echo gettext("Web Site:"); ?></td>
-		<td><input type="text" size="40" name="website"
-			value="<?php echo $website; ?>" /></td>
-	</tr>
-	<tr>
-		<td><?php echo gettext("E-Mail:"); ?></td>
-		<td><input type="text" size="40" name="email"
-			value="<?php echo $email; ?>" /></td>
-	</tr>
-	<tr>
-		<td><?php echo gettext("Date/Time:"); ?></td>
-		<td><input type="text" size="18" name="date"
-			value="<?php echo $date; ?>" /></td>
-	</tr>
-	<tr>
-		<td valign="top"><?php echo gettext("Comment:"); ?></td>
-		<td><textarea rows="8" cols="60" name="comment" /><?php echo $comment; ?></textarea></td>
-	</tr>
-	<tr>
-		<td></td>
-		<td><input type="submit" value="<?php echo gettext('save'); ?>" /> <input type="button"
-			value="cancel" onClick="window.location = '?page=comments';" />
-
-</table>
-</form>
-
-<?php
-} 
+}
 
 echo "\n" . '</div>';  //content
 echo "\n" . '</div>';  //main
