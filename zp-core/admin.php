@@ -9,7 +9,7 @@ define('OFFSET_PATH', 1);
 require_once("sortable.php");
 if (!$session_started) session_start();
 if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
-	if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) { // user/password set required.
+	if (($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) || ($_zp_loggedin == NO_RIGHTS)) { // user/password set required.
 		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-options.php");
 	}
 
@@ -215,6 +215,44 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	// (NOTE: Form POST data will be resent on refresh. Use header(Location...) instead, unless there's an error message.
 	if (isset($_GET['page'])) { $page = $_GET['page']; } else if (empty($page)) { $page = ""; }
 
+	switch ($page) {
+		case 'comments':
+			if (!($_zp_loggedin & COMMENT_RIGHTS)) $page = '';
+			break;
+		case 'upload':
+			if (!($_zp_loggedin & UPLOAD_RIGHTS)) $page = '';
+			break;
+		case 'edit':
+			if (!($_zp_loggedin & EDIT_RIGHTS)) $page = '';
+			break;
+		case 'themes':
+			if (!($_zp_loggedin & THEMES_RIGHTS)) $page = '';
+			break;
+		case 'plugins':
+			if (!($_zp_loggedin & ADMIN_RIGHTS)) $page = '';
+			break;
+	}
+	if (empty($page) && !($_zp_loggedin & MAIN_RIGHTS)) {
+		$page='options';
+	}
+	switch ($page) {
+		case 'comments': 
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php");
+			exit();
+		case 'upload': 
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-upload.php");
+			exit();
+		case 'themes': 
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-themes.php");
+			exit();
+		case 'plugins': 
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-plugins.php");
+			exit();
+		case 'options': 
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-options.php");
+			exit();
+		default:
+	}
 }
 
 /* NO Admin-only content between this and the next check. */
@@ -252,24 +290,6 @@ if (!zp_loggedin()) {
 	?>
 <div id="main"><?php printTabs(); ?>
 <div id="content"><?php 
-switch ($page) {
-	case 'comments':
-		if (!($_zp_loggedin & COMMENT_RIGHTS)) $page = '';
-		break;
-	case 'upload':
-		if (!($_zp_loggedin & UPLOAD_RIGHTS)) $page = '';
-		break;
-	case 'edit':
-		if (!($_zp_loggedin & EDIT_RIGHTS)) $page = '';
-		break;
-	case 'themes':
-		if (!($_zp_loggedin & THEMES_RIGHTS)) $page = '';
-		break;
-	case 'plugins':
-		if (!($_zp_loggedin & ADMIN_RIGHTS)) $page = '';
-		break;
-}
-if (empty($page) && !($_zp_loggedin & MAIN_RIGHTS)) $page='options';
 
 /** EDIT ****************************************************************************/
 /************************************************************************************/

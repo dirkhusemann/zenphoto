@@ -78,9 +78,13 @@ foreach ($filelist as $extension) {
 	echo '<strong>'.$ext.'</strong>';
 	
 	$pluginStream = file_get_contents($extension);
+	$plugin_description = '';
 	eval(isolate('$plugin_description', $pluginStream));
+	$plugin_author = '';
 	eval(isolate('$plugin_author', $pluginStream));
+	$plugin_version = '';
 	eval(isolate('$plugin_version', $pluginStream));
+	$plugin_URL = '';
 	eval(isolate('$plugin_URL', $pluginStream));
 	
 	if (!empty($plugin_version)) {
