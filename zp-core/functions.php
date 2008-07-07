@@ -1519,7 +1519,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
  										"http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/index.php?$url\n" .
  										"\n" .
  										"You can edit the comment here:\n" .
- 										"http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/" . ZENFOLDER . "/admin-comments.php\n";
+ 										"http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/" . ZENFOLDER . "/admin-comments.php?page=comments\n";
 			$emails = array();
 			$admin_users = getAdministrators();
 			foreach ($admin_users as $admin) {  // mail anyone else with full rights

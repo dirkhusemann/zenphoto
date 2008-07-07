@@ -426,40 +426,39 @@ function printTabs() {
 		$page= "home";
 	}
 	
-	$currentpage = basename($_SERVER['REQUEST_URI']);
 	echo "\n  <ul id=\"nav\">";
 	if (($_zp_loggedin & (MAIN_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n    <li". (($page == "home") && ($currentpage == 'admin.php') ? " class=\"current\""     : "") .
- 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php\">".gettext("overview")."</a></li>";
+		echo "\n    <li". ($page == "home" ? " class=\"current\""     : "") .
+ 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?page=home\">".gettext("overview")."</a></li>";
 	}
 	if (($_zp_loggedin & (COMMENT_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n    <li". ($currentpage =='admin-comments.php' ? " class=\"current\"" : "") .
- 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-comments.php\">".gettext("comments")."</a></li>";
+		echo "\n    <li". ($page == "comments" ? " class=\"current\"" : "") .
+ 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-comments.php?page=comments\">".gettext("comments")."</a></li>";
 	}
 	if (($_zp_loggedin & (UPLOAD_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n    <li". ($currentpage == 'admin-upload.php' ? " class=\"current\""   : "") .
- 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-upload.php\">".gettext("upload")."</a></li>";
+		echo "\n    <li". ($page == "upload" ? " class=\"current\""   : "") .
+ 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-upload.php?page=upload\">".gettext("upload")."</a></li>";
 	}
 	if (($_zp_loggedin & (EDIT_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n    <li". (($currentpage == 'admin.php') && ($page == 'edit') ? " class=\"current\""     : "") .
+		echo "\n    <li". ($page == "edit" ? " class=\"current\""     : "") .
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?page=edit\">".gettext("edit")."</a></li>";
 	}
 	if (($_zp_loggedin & ADMIN_RIGHTS)) {
-		echo "\n    <li". ($currentpage == 'admin-tags.php' ? " class=\"current\""     : "") .
-				"><a href=\"".WEBPATH."/".ZENFOLDER."/admin-tags.php\">".gettext('tags')."</a></li>";
+		echo "\n    <li". ($page == "tags" ? " class=\"current\""     : "") .
+				"><a href=\"".WEBPATH."/".ZENFOLDER."/admin-tags.php?page=tags\">".gettext('tags')."</a></li>";
 	}	
-	echo "\n    <li". ($currentpage == 'admin-options.php'? " class=\"current\""  : "") .
- 			"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-options.php\">".gettext("options")."</a></li>";
+	echo "\n    <li". ($page == "options" ? " class=\"current\""  : "") .
+ 			"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-options.php?page=options\">".gettext("options")."</a></li>";
 	if (($_zp_loggedin & (THEMES_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n    <li". ($currentpage == 'admin-themes.php' ? " class=\"current\""  : "") .
- 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-themes.php\">".gettext("themes")."</a></li>";
+		echo "\n    <li". ($page == "themes" ? " class=\"current\""  : "") .
+ 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-themes.php?page=themes\">".gettext("themes")."</a></li>";
 	}
 	if (($_zp_loggedin & ADMIN_RIGHTS)) {
-		echo "\n    <li". ($currentpage == 'admin-plugins.php' ? " class=\"current\""  : "") .
- 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-plugins.php\">".gettext("plugins")."</a></li>";
+		echo "\n    <li". ($page == "plugins" ? " class=\"current\""  : "") .
+ 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-plugins.php?page=plugins\">".gettext("plugins")."</a></li>";
 	}
 	if (($_zp_loggedin & ADMIN_RIGHTS) && getOption('zp_plugin_zenpage')) {
-		echo "\n    <li". ($currentpage == 'zenpage.php' ? " class=\"current\""     : "") .
+		echo "\n    <li". ($page == "zenpage" ? " class=\"current\""     : "") .
  				"><a href=\"".WEBPATH."/".ZENFOLDER."/plugins/zenpage/page-admin.php\">zenPage</a></li>";
 	}	
 	echo "\n  </ul>";

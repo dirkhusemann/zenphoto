@@ -787,11 +787,11 @@ $page = "home"; ?>
 	?>
 <ul id="home-actions">
 	<?php if ($_zp_loggedin & UPLOAD_RIGHTS)  { ?>
-	<li><a href="admin-upload.php"> &raquo; <?php echo gettext("<strong>Upload</strong> pictures."); ?></a></li>
+	<li><a href="?page=upload"> &raquo; <?php echo gettext("<strong>Upload</strong> pictures."); ?></a></li>
 	<?php } if ($_zp_loggedin & EDIT_RIGHTS)  { ?>
 	<li><a href="?page=edit"> &raquo; <?php echo gettext("<strong>Edit</strong> titles, descriptions, and other metadata."); ?></a></li>
 	<?php } if ($_zp_loggedin & COMMENT_RIGHTS)  { ?>
-	<li><a href="admin-comments.php"> &raquo; <?php echo gettext("Edit or delete <strong>comments</strong>."); ?></a></li>
+	<li><a href="?page=comments"> &raquo; <?php echo gettext("Edit or delete <strong>comments</strong>."); ?></a></li>
 	<?php } ?>
 	<li><a href="../"> &raquo; <?php echo gettext("Browse your <strong>gallery</strong> and edit on the go."); ?></a></li>
 </ul>

@@ -238,14 +238,14 @@ echo "\n</tr>";
 echo "\n<tr>";
 
 echo "\n<td valign='top'>";
-echo "\n".'<form name="tag_delete" action="?delete=true" method="post">';
+echo "\n".'<form name="tag_delete" action="?page=tags&delete=true" method="post">';
 tagSelector(NULL, '', true);
 echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='delete_tags' value=\"".gettext("delete checked tags")."\" title=\"".gettext("Delete all the tags checked above.")."\"/></p>";
 echo "\n</form>";
 echo '<p>'.gettext('To delete tags from the gallery, place a checkmark in the box for each tag you wish to delete then press the <em>delete checked tags</em> button. The brackets contain the number of times the tag appears.').'</p>';
 echo "\n</td>";
 echo "\n<td valign='top'>";
-echo "\n".'<form name="tag_rename" action="?rename=true" method="post">';
+echo "\n".'<form name="tag_rename" action="?page=tags&rename=true" method="post">';
 echo "\n<ul class=\"tagrenamelist\">";
 $list = getAllTagsUnique();
 natcasesort($list);
@@ -261,7 +261,7 @@ echo '<p>'.gettext('To change the value of a tag enter a new value in the text b
 echo "\n</td>";
 echo "\n<td valign='top'>";
 if ($newTags) {
-	echo '<form name="new_tags" action="?newtags=true"method="post">';
+	echo '<form name="new_tags" action="?page=tags&newtags=true"method="post">';
 	echo "\n<ul class=\"tagnewlist\">";
 	for ($i=0; $i<40; $i++) {
 		echo "\n".'<li><label for="new_tag_'.$i.'"><input id="new_tag_'.$i.'" name="new_tag_'.$i.'" type="text"';
@@ -278,11 +278,11 @@ echo "\n</tr>";
 echo "\n<tr>";
 echo "\n<td colspan=3 valign='top'>";
 if ($newTags) {
-	echo "\n<p align='center'><form name='tag_convert' action='?convert=string' method='post'>";
+	echo "\n<p align='center'><form name='tag_convert' action='?page=tags&convert=string' method='post'>";
 	echo "\n<button type=\"submit\" class=\"tooltip\" id='convert_tags' title=\"".gettext("Converts the <em>tags</em> from the table structure to a string in a record field.")."\"> ".gettext("Revert tags to strings")."</button>";
 	echo "\n</form></p>";
 } else {
-	echo "\n<p align='center'><form name='tag_convert' action='?convert=table' method='post'>";
+	echo "\n<p align='center'><form name='tag_convert' action='?page=tags&convert=table' method='post'>";
 	echo "\n<button type=\"submit\" class=\"tooltip\" id='convert_tags' title=\"".gettext("Converts the <em>tags</em> from strings in a record field to a database tag table structure.")."\"> ".gettext("Convert tags to table")."</button>";
 	echo "\n</form></p>";
 }
