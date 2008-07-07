@@ -22,18 +22,22 @@ function getStyle(element, attribute) {
 
 
 function convertLineBreaks(text) {
+	if (!text) {var text = "";}
   return text.replace(/\n/g, '<br />\n');
 }
 
 function unconvertLineBreaks(text) {
+	if (!text) {var text = "";}
   return text.replace(/(<br \/>)|(<br\/>)|(<br>)/gi, '\n');
 }
 
 function addBlankLine(text) {
+	if (!text) {var text = "";}
   return text+"&nbsp;";
 }
 
 function stripSlashes(text) {
+	if (!text) {var text = "";}
   text = text.replace(/\\\\/g, '%%%%%');
   text = text.replace(/\\/g, '');
   return text.replace(/%%%%%/g, '\\');
