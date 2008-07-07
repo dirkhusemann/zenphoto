@@ -151,16 +151,16 @@ function getOption($key, $db=false) {
  * otherwise it is preserved in the database
  */
 function setOption($key, $value, $persistent=true) {
-global $_zp_conf_vars, $_zp_options;
+	global $_zp_conf_vars, $_zp_options;
 	if ($persistent) {
 		$result = query_single_row("SELECT `value` FROM ".prefix('options')." WHERE `name`='".$key."' AND `ownerid`=0");
-		if (isset($result['value'])) {
-// option already exists.
+		if (array_key_exists('value', $result)) { // option already exists.
 			$sql = "UPDATE " . prefix('options') . " SET `value`='" . escape($value) . "' WHERE `name`='" . escape($key) ."' AND `ownerid`=0";
+			$result = query($sql, true);
 		} else {
-			$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid) VALUES ('" . escape($key) . "','" . escape($value) . "', 0)";
+				$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid) VALUES ('" . escape($key) . "','" . escape($value) . "', 0)";
+				$result = query($sql, true);
 		}
-		$result = query($sql, true);
 	} else {
 		$result = true;
 	}
@@ -743,7 +743,7 @@ function rewrite_path($rewrite, $plain) {
  */
 function zpFormattedDate($format, $dt) {
 	$fdate = strftime($format, $dt);
-	return utf8::convert($fdate, '', getOption('charset'));
+	return utf8::convert($fdate, 'ISO-8859-1');
 }
 
 /**

@@ -5,10 +5,11 @@
  */
 define('OFFSET_PATH', 1);
 require_once("admin-functions.php");
-
-if (!$_zp_loggedin) { // prevent nefarious access to this page.
-	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
-	exit();
+if (!is_null(getOption('admin_reset_date'))) {
+	if (!$_zp_loggedin) { // prevent nefarious access to this page.
+		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
+		exit();
+	}
 }
 $gallery = new Gallery();
 $_GET['page'] = 'options';
@@ -80,12 +81,14 @@ if (isset($_GET['action'])) {
 							$pwd = md5($_POST[$i.'-adminuser'] . $pass);
 						}
 						saveAdmin($user, $pwd, $admin_n, $admin_e, $rights, $albums);
+						if ($i == 0) {
+							setOption('admin_reset_date', '1');
+						}
 					} else {
 						$notify = '&mismatch=password';
 					}
 				}
 			}
-			setOption('admin_reset_date', '1');
 			$returntab = "#tab_admin";
 		}
 
