@@ -180,7 +180,12 @@ class Image extends PersistentObject {
 	 *
 	 */
 	function updateDimensions() {
-		if (!$this->fileChanged()) return; // we already have the data
+		if (!$this->fileChanged()) {
+			if (!(($this->get('width') == 0) || ($this->get('height') == 0))) {
+				return; // we already have the data
+			}
+		}
+
 		if ($this->video) {
 			$size = array('320','240');
 		} else {
@@ -188,6 +193,7 @@ class Image extends PersistentObject {
 		}
 		$this->set('width', $size[0]);
 		$this->set('height', $size[1]);
+		$this->save();
 	}
 
 	/**

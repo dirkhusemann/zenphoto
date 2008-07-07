@@ -80,7 +80,7 @@ foreach ($filelist as $extension) {
 	} else {
 		if (false === eval(isolate('$plugin_description', $pluginStream))) {
 			$parserr = $parserr | 1;
-			$plugin_description = '<strong>Error parsing <em>plugin_description</em> string!</strong> Try removing semicolons from string.';
+			$plugin_description = gettext('<strong>Error parsing <em>plugin_description</em> string!</strong> Try removing semicolons from string.');
 		}
 	}
 	$str = isolate('$plugin_author', $pluginStream);
@@ -89,7 +89,7 @@ foreach ($filelist as $extension) {
 	} else {
 		if (false === eval($str)) {
 			$parserr = $parserr | 2;
-			$plugin_author = '<strong>Error parsing <em>plugin_author</em> string!</strong> Try removing semicolons from string.';
+			$plugin_author = gettext('<strong>Error parsing <em>plugin_author</em> string!</strong> Try removing semicolons from string.');
 		}
 	}
 	$str = isolate('$plugin_version', $pluginStream);
@@ -98,7 +98,7 @@ foreach ($filelist as $extension) {
 	} else {
 		if (false === eval($str)) {
 			$parserr = $parserr | 4;
-			$plugin_version = ' <strong>Error parsing <em>plugin_version</em> string!</strong> Try removing semicolons from string.';
+			$plugin_version = ' '.gettext('<strong>Error parsing <em>plugin_version</em> string!</strong> Try removing semicolons from string.');
 		}
 	}
 	$str = isolate('$plugin_URL', $pluginStream);
@@ -107,7 +107,7 @@ foreach ($filelist as $extension) {
 	} else {
 		if (false === eval($str)) {
 			$parserr = $parserr | 8;
-			$plugin_URL = '<strong>Error parsing <em>plugin_URL</em> string!</strong> Try removing semicolons from string.';
+			$plugin_URL = gettext('<strong>Error parsing <em>plugin_URL</em> string!</strong> Try removing semicolons from string.');
 		}
 	}
 	

@@ -1767,15 +1767,12 @@ function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
 	$h = $_zp_current_image->getHeight();
-	if ($h == 0) $h = 1; // protect against divide by zero
 	$w = $_zp_current_image->getWidth();
-	if ($w == 0) $w = 1; // protect against divide by zero
 	$ls = getOption('image_use_longest_side');
 	$us = getOption('image_allow_upscale');
 
 	$args = getImageParameters(array($size, $width, $height, $cw, $ch, $cx, $cy, null));
 	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
-
 	if (!empty($size)) {
 		$dim = $size;
 		$width = $height = false;
@@ -1787,8 +1784,16 @@ function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL
 		$size = $width = false;
 	}
 
-	$hprop = round(($h / $w) * $dim);
-	$wprop = round(($w / $h) * $dim);
+	if ($w == 0) {
+		$hprop = 1;
+	} else {
+		$hprop = round(($h / $w) * $dim);
+	}
+	if ($h == 0) {
+		$wprop = 1;
+	} else {
+		$wprop = round(($w / $h) * $dim);
+	}
 
 	if (($size && $ls && $h > $w)
 	|| $height) {
@@ -1933,8 +1938,8 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 	else {
 		echo "<img src=\"" . htmlspecialchars(getDefaultSizedImage()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
 			" width=\"" . getDefaultWidth() . "\" height=\"" . getDefaultHeight() . "\"" .
-		(($class) ? " class=\"$class\"" : "") .
-		(($id) ? " id=\"$id\"" : "") . " />";
+			(($class) ? " class=\"$class\"" : "") .
+			(($id) ? " id=\"$id\"" : "") . " />";
 	}
 }
 
