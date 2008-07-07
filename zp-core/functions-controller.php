@@ -256,17 +256,6 @@ function zp_handle_password() {
 		$check_auth = getOption('gallery_password');
 		$check_user = getOption('gallery_user');
 	}
-	if (empty($check_auth)) { //no password on record
-		return;
-	}
-	if (($saved_auth = zp_getCookie($authType)) != '') {
-		if ($saved_auth == $check_auth) {
-			return;
-		} else {
-			// Clear the cookie
-			zp_setcookie($authType, "", time()-368000, $cookiepath);
-		}
-	}
 	// Handle the login form.
 	if (isset($_POST['password']) && isset($_POST['pass'])) {
 		$post_user = $_POST['user'];
@@ -283,6 +272,18 @@ function zp_handle_password() {
 				zp_setcookie($authType, "", time()-368000, $cookiepath);
 				$_zp_login_error = true;
 			}
+		}
+		return;
+	}
+	if (empty($check_auth)) { //no password on record
+		return;
+	}
+	if (($saved_auth = zp_getCookie($authType)) != '') {
+		if ($saved_auth == $check_auth) {
+			return;
+		} else {
+			// Clear the cookie
+			zp_setcookie($authType, "", time()-368000, $cookiepath);
 		}
 	}
 }

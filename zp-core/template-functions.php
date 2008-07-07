@@ -93,7 +93,7 @@ function printAdminToolbox($context=null, $id='admin') {
 				echo "<br />\n";
 			}
 			if (isMyAlbum($albumname, UPLOAD_RIGHTS)) {
-				printLink($zf . '/admin-upload.php?page=upload' . urlencode($_zp_current_album->name), gettext("New album"), NULL, NULL, NULL);
+				printLink($zf . '/admin-upload.php' . urlencode($_zp_current_album->name), gettext("New album"), NULL, NULL, NULL);
 				echo "<br />\n";
 			}
 			if (isset($_GET['p'])) {
@@ -115,9 +115,9 @@ function printAdminToolbox($context=null, $id='admin') {
 					"');\" title=\"".gettext("Delete the album")."\">".gettext("Delete album")."</a><br />\n";
 			}
 			if (isMyAlbum($albumname, UPLOAD_RIGHTS) && !$_zp_current_album->isDynamic()) {
-				printLink($zf . '/admin-upload.php?page=upload&album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL);
+				printLink($zf . '/admin-upload.php?album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL);
 				echo "<br />\n";
-				printLink($zf . '/admin-upload.php?page=upload&new&album=' . urlencode($albumname), gettext("New Album Here"), NULL, NULL, NULL);
+				printLink($zf . '/admin-upload.php?new&album=' . urlencode($albumname), gettext("New Album Here"), NULL, NULL, NULL);
 				echo "<br />\n";
 			}
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;page=$page";
@@ -3439,11 +3439,12 @@ function checkforPassword($silent=false) {
 /**
  * Prints the album password form
  *
- * @param $hint hint to the password
+ * @param string $hint hint to the password
+ * @param bool $showProtected set false to supress the password protected message
  *
  *@since 1.1.3
  */
-function printPasswordForm($hint) {
+function printPasswordForm($hint, $showProtected=true) {
 	global $_zp_login_error, $_zp_password_form_printed, $_zp_current_search;
 	if ($_zp_password_form_printed) { return; }
 	$_zp_password_form_printed = true;
@@ -3452,11 +3453,13 @@ function printPasswordForm($hint) {
 	}
 	$action = "#";
 	if (in_context(ZP_SEARCH)) {
-		$action = "?p=search" . $_zp_current_search->getSearchParams();
+		$action = "&p=search" . $_zp_current_search->getSearchParams();
 	}
-	echo "\n<p>".gettext("The page you are trying to view is password protected.")."</p>";
+	if ($showProtected && !$_zp_login_error) {
+		echo "\n<p>".gettext("The page you are trying to view is password protected.")."</p>";
+	}
 	echo "\n<br/>";
-	echo "\n  <form name=\"password\" action=\"$action\" method=\"POST\">";
+	echo "\n  <form name=\"password\" action=\"?userlog=1$action\" method=\"POST\">";
 	echo "\n    <input type=\"hidden\" name=\"password\" value=\"1\" />";
 
 	echo "\n    <table>";

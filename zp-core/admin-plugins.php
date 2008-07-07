@@ -64,7 +64,7 @@ echo gettext("They may be provided as part of the Zenphoto distribution or as of
 echo gettext("Plugins are placed in the <code>zp-core/plugins</code> folder and are automatically discovered.").' ';
 echo gettext("If the plugin checkbox is checked, the plugin will be loaded and its functions made available to theme pages. If the checkbox is not checked the plugin is disabled and occupies no resources.");
 echo "</p>\n";
-echo '<form action="?page=plugins&action=saveplugins" method="post">'."\n";
+echo '<form action="?action=saveplugins" method="post">'."\n";
 echo '<input type="hidden" name="saveplugins" value="yes" />'."\n";
 echo "<table class=\"bordered\" width=\"100%\">\n";
 foreach ($filelist as $extension) {
