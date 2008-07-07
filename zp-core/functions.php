@@ -16,7 +16,9 @@ if(!function_exists("gettext")) {
 }
 
 // Set the memory limit higher just in case -- supress errors if user doesn't have control.
-@ini_set('memory_limit','128M');
+if (ini_get('memory_limit') < '128M') {
+	@ini_set('memory_limit','128M');
+}
 
 // functions.php - HEADERS NOT SENT YET!
 
