@@ -108,12 +108,13 @@ function validateFolder(folderObj, msg1, msg2) {
   var errorDiv = document.getElementById("foldererror");
   var exists = document.uploadform.existingfolder.value != "false";
   var uploadBoxesDiv = document.getElementById("uploadboxes");
-  if (!exists && albumArray && contains(albumArray, folderObj.value)) {
+  var folder = folderObj.value;
+  if (!exists && albumArray && contains(albumArray, folder)) {
     errorDiv.style.display = "block";
     errorDiv.innerHTML = msg1;
     uploadBoxesDiv.style.display = "none";
     return false;
-  } else if (folderObj.value == "") {
+  } else if ((folder == "") || folder.substr(folder.length-1, 1) == '/') {
     errorDiv.style.display = "block";
     errorDiv.innerHTML = msg2;
     uploadBoxesDiv.style.display = "none";
