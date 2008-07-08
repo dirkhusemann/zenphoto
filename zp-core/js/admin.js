@@ -91,6 +91,19 @@ function updateFolder(nameObj, folderID, checkboxID, msg1, msg2) {
   if (autogen && name != "") {
     fname = name;
     fname = fname.toLowerCase();
+
+    fname = fname.replace(/[àáâäãå]/, 'a');
+    fname = fname.replace(/ç/, 'c');
+    fname = fname.replace(/[èéêë]/, 'e');
+    fname = fname.replace(/[ìíîï]/, 'i');
+    fname = fname.replace(/[òóôö]/, 'o');
+    fname = fname.replace(/š/, 's');
+    fname = fname.replace(/[ùúûü]/, 'u');
+    fname = fname.replace(/[ýÿ]/, 'y');
+    fname = fname.replace(/ß/, 'ss');
+    fname = fname.replace(/æ/, 'ae');
+    fname = fname.replace(/œ/, 'oe');
+
     fname = fname.replace(/[\!@#$\%\^&*()\~`\'\"]/g, "");
     fname = fname.replace(/^\s+|\s+$/g, "");
     fname = fname.replace(/[^a-zA-Z0-9]/g, "-");
