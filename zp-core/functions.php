@@ -743,7 +743,7 @@ function rewrite_path($rewrite, $plain) {
  */
 function zpFormattedDate($format, $dt) {
 	$fdate = strftime($format, $dt);
-	return utf8::convert($fdate, 'ISO-8859-1');
+	return utf8::convert($fdate, '', getOption('charset'));
 }
 
 /**
