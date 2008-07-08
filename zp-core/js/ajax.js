@@ -43,6 +43,16 @@ function unconvertLineBreaks(text) {
   return text.replace(/(<br \/>)|(<br\/>)|(<br>)/gi, '\n');
 }
 
+function convertAmpersand(text) {
+        if (!text) {text = "";}
+  return text.replace(/&/g, '&amp;');
+}
+
+function unconvertAmpersand(text) {
+        if (!text) {text = "";}
+  return text.replace(/&amp;/g, '&');
+}
+
 function addBlankLine(text) {
 	if (!text) {text = "";}
   return text+"&nbsp;";
@@ -87,7 +97,7 @@ function initEditableDiv(divID) {
     this.isEditing = true;
                 this.unhilight();
                 var formDiv = this.getFormDiv();
-    formDiv.form.content.value = unconvertLineBreaks(this.textValue);
+    formDiv.form.content.value = unconvertLineBreaks(unconvertAmpersand(this.textValue));
                 formDiv.style.display = this.style_display;
     this.style.display = "none";
     var form = formDiv.firstChild;
@@ -127,7 +137,7 @@ function initEditableDiv(divID) {
       displayDiv.innerHTML = displayDiv.blankMessage;
       displayDiv.textValue = "";
     } else {
-      displayDiv.innerHTML = convertLineBreaks(savedText);
+      displayDiv.innerHTML = convertLineBreaks(convertAmpersand(savedText));
       displayDiv.textValue = savedText;
     }
   };
