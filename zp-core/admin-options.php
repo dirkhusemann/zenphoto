@@ -23,7 +23,7 @@ if (isset($_GET['action'])) {
 		query($sql);
 		$sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
 		query($sql);
-		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-options.php?page=options&deleted");
+		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-options.php?deleted");
 		exit();
 	} else if ($action == 'saveoptions') {
 		$table = NULL;
@@ -36,7 +36,7 @@ if (isset($_GET['action'])) {
 		$ws = getOption('watermark_scale');
 		$wus = getOption('watermark_allow_upscale');
 		$notify = '';
-		$returntab = "";
+		$returntab = '';
 
 		/*** admin options ***/
 		if (isset($_POST['saveadminoptions'])) {
@@ -85,7 +85,7 @@ if (isset($_GET['action'])) {
 							setOption('admin_reset_date', '1');
 						}
 					} else {
-						$notify = '&mismatch=password';
+						$notify = '?mismatch=password';
 					}
 				}
 			}
@@ -132,7 +132,7 @@ if (isset($_GET['action'])) {
 					setOption('gallery_password', md5($newuser.$pwd));
 				}
 			} else {
-				$notify = '&mismatch=gallery';
+				$notify = '?mismatch=gallery';
 			}
 			$olduser = getOption('search_user');
 			setOption('search_user',$newuser = $_POST['search_user']);
@@ -151,7 +151,7 @@ if (isset($_GET['action'])) {
 					setOption('search_password', md5($newuser.$pwd));
 				}
 			} else {
-				$notify = '&mismatch=search';
+				$notify = '?mismatch=search';
 			}
 			setOption('gallery_hint', $_POST['gallery_hint']);
 			setOption('search_hint', $_POST['search_hint']);
@@ -204,7 +204,7 @@ if (isset($_GET['action'])) {
 				setOption('allowed_tags', $tags);
 				$notify = '';
 			} else {
-				$notify = '&tag_parse_error';
+				$notify = '?tag_parse_error';
 			}
 			setBoolOption('comment_name_required', $_POST['comment_name_required']);
 			setBoolOption('comment_email_required', $_POST['comment_email_required']);
@@ -268,8 +268,8 @@ if (isset($_GET['action'])) {
 		($vwm != getOption('video_watermark_image'))) {
 			$gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the options haave changed
 		}
-		if (empty($notify)) $notify = '&saved';
-		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-options.php?page=options".$notify.$returntab);
+		if (empty($notify)) $notify = '?saved';
+		header("Location: " . $notify . $returntab);
 		exit();
 
 	}
@@ -327,7 +327,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 
 </div>
 <div id="tab_admin">
-<form action="?page=options&action=saveoptions" method="post"><input
+<form action="?action=saveoptions" method="post"><input
 	type="hidden" name="saveadminoptions" value="yes" /> <?php
 	if ($_zp_loggedin & ADMIN_RIGHTS) {
 		$alterrights = '';
@@ -387,7 +387,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 			value="<?php echo $userid ?>" /> <?php } ?></td>
 		<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
 		<?php if(!empty($userid) && count($admins) > 2) { ?>
-		<a href="javascript: if(confirm('Are you sure you want to delete this user?')) { window.location='?page=options&action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }"
+		<a href="javascript: if(confirm('Are you sure you want to delete this user?')) { window.location='?action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }"
 			title="Delete this user." style="color: #c33;"> <img
 			src="images/fail.png" style="border: 0px;" alt="Delete" /></a> <?php } ?>&nbsp;
 		</td>
@@ -507,11 +507,11 @@ if (!$_zp_null_account) {
 if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 ?>
 <div id="tab_gallery">
-<form action="?page=options&action=saveoptions" method="post">
+<form action="?action=saveoptions" method="post">
  <input	type="hidden" name="savegalleryoptions" value="yes" /> <?php
 	if (isset($_GET['mismatch'])) {
 		echo '<div class="errorbox" id="fade-message">';
-		echo  "<h2>". gettext("Your").' '. $_GET['mismatch'] . ' '.gettext("passwords did not match")."</h2>";
+		echo  "<h2>". gettext("Your").' '. $_GET['mismatch'] . ' '.gettext("passwords were empty or did not match")."</h2>";
 		echo '</div>';
 	}
 	if (isset($_GET['badurl'])) {
@@ -794,7 +794,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 ?>
 <div id="tab_image">
-<form action="?page=options&action=saveoptions" method="post"><input
+<form action="?action=saveoptions" method="post"><input
 	type="hidden" name="saveimageoptions" value="yes" /> <?php
 	if (isset($_GET['mismatch'])) {
 		echo '<div class="errorbox" id="fade-message">';
@@ -928,7 +928,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) { 
 ?>
 <div id="tab_comments">
-<form action="?page=options&action=saveoptions" method="post"><input
+<form action="?action=saveoptions" method="post"><input
 	type="hidden" name="savecommentoptions" value="yes" /> <?php
 	if (isset($_GET['tag_parse_error'])) {
 		echo '<div class="errorbox" id="fade-message">';
@@ -1043,7 +1043,7 @@ if (!empty($_REQUEST['themealbum'])) {
 	$themes = $gallery->getThemes();
 	$theme = $themes[$themename];
 	if (count($themelist) > 1) {
-		echo '<form action="?page=options#tab_theme" method="post">';
+		echo '<form action="#tab_theme" method="post">';
 		echo gettext("Show theme for"). ': ';
 		echo '<select id="themealbum" name="themealbum" onchange="this.form.submit()">';
 		generateListFromArray(array(urlencode($alb)), $themelist);
@@ -1056,7 +1056,7 @@ if (!empty($_REQUEST['themealbum'])) {
 		echo '</div>';
 	} else {
 ?>
-<form action="?page=options&action=saveoptions" method="post">
+<form action="?action=saveoptions" method="post">
 	<input type="hidden" name="savethemeoptions" value="yes" /> 
 	<table class='bordered'>
 <?php

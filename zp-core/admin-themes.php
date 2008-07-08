@@ -45,7 +45,7 @@ if (isset($_GET['action'])) {
 						}
 					}
 				}
-				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-themes.php?page=themes&themealbum=".$_GET['themealbum']);
+				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-themes.php?themealbum=".$_GET['themealbum']);
 			}
 		} 
 }
@@ -109,7 +109,7 @@ echo "\n" . '<div id="content">';
 	}
 	
 	if (count($themelist) > 1) {
-		echo '<form action="?page=themes" method="post">';
+		echo '<form action="#" method="post">';
 		echo gettext("Show theme for"). ': ';
 		echo '<select id="themealbum" name="themealbum" onchange="this.form.submit()">';
 		generateListFromArray(array(urlencode($alb)), $themelist);
@@ -124,7 +124,7 @@ echo "\n" . '<div id="content">';
 
 	echo "<h1>".gettext("Current theme for")." <code><strong>$albumtitle</strong></code>: <em>".$themenamedisplay."</em>";
 	if (!empty($alb) && !empty($themename)) {
-		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".'<a class="reset" href="?page=themes&action=settheme&themealbum='.urlencode($album->name).'&theme=" title="'.gettext('Clear theme assignment').$album->name.'">';
+		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".'<a class="reset" href="?action=settheme&themealbum='.urlencode($album->name).'&theme=" title="'.gettext('Clear theme assignment').$album->name.'">';
 		echo '<img src="images/fail.png" style="border: 0px;" alt="'.gettext('Clear theme assignment').'" /></a>';
 	}
 	echo "</h1>\n";
@@ -162,12 +162,12 @@ foreach($themes as $theme => $themeinfo):
 		<td width="100" <?php echo $style; ?>>
 		<?php 
 		if ($theme != $current_theme) { 
-			echo '<a href="?page=themes&action=settheme&themealbum='.urlencode($alb).'&theme='.$theme.'" title=';
+			echo '<a href="?action=settheme&themealbum='.urlencode($alb).'&theme='.$theme.'" title=';
 			 echo gettext("Set this as your theme").'>'.gettext("Use this Theme");
 			echo '</a>'; 
 		} else { 
 			if ($gallerydefault) {
-				echo '<a href="?page=themes&action=settheme&themealbum='.urlencode($alb).'&theme='.$theme.'" title=';
+				echo '<a href="?action=settheme&themealbum='.urlencode($alb).'&theme='.$theme.'" title=';
 			  echo gettext("Assign this as your album theme").'>'.gettext("Assign Theme");
 				echo '</a>'; 
 			} else {

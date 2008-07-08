@@ -21,7 +21,7 @@ if (isset($_GET['action'])) {
 	if ($action == "moderation") {
 		$sql = 'UPDATE ' . prefix('comments') . ' SET `inmoderation`=0 WHERE `id`=' . $_GET['id'] . ';';
 		query($sql);
-		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-comments.php?page=comments');
+		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-comments.php');
 		exit();
 	} else if ($action == 'deletecomments') {
 		if (isset($_POST['ids']) || isset($_GET['id'])) {
@@ -41,15 +41,15 @@ if (isset($_GET['action'])) {
 				}
 				query($sql);
 			}
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php?page=comments&ndeleted=$n");
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php?ndeleted=$n");
 			exit();
 		} else {
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php?page=comments&ndeleted=0");
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php?ndeleted=0");
 			exit();
 		}
 	} else if ($action == 'savecomment') {
 		if (!isset($_POST['id'])) {
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php?page=comments");
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php");
 			exit();
 		}
 		$id = $_POST['id'];
@@ -62,7 +62,7 @@ if (isset($_GET['action'])) {
 		$sql = "UPDATE ".prefix('comments')." SET `name` = '$name', `email` = '$email', `website` = '$website', `comment` = '$comment' WHERE id = $id";
 		query($sql);
 
-		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php?page=comments&sedit");
+		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php?sedit");
 		exit();
 	}
 }
@@ -80,13 +80,13 @@ if ($page == "editcomment") { ?>
 <h1><?php echo gettext("edit comment"); ?></h1>
 <?php
 	if (isset($_GET['id'])) $id = $_GET['id'];
-	else echo "<h2>". gettext("No comment specified.")." <a href=\"?page=comments\">&laquo ".gettext("Back")."</a></h2>";
+	else echo "<h2>". gettext("No comment specified.")." <a href=\"#\">&laquo ".gettext("Back")."</a></h2>";
 
 	$commentarr = query_single_row("SELECT name, website, date, comment, email FROM ".prefix('comments')." WHERE id = $id LIMIT 1");
 	extract($commentarr);
 	?>
 
-<form action="?page=comments&action=savecomment" method="post"><input
+<form action="?action=savecomment" method="post"><input
 	type="hidden" name="id" value="<?php echo $id; ?>" />
 <table>
 
@@ -117,7 +117,7 @@ if ($page == "editcomment") { ?>
 	<tr>
 		<td></td>
 		<td><input type="submit" value="<?php echo gettext('save'); ?>" /> <input type="button"
-			value="cancel" onClick="window.location = '?page=comments';" />
+			value="cancel" onClick="window.location = '#';" />
 
 </table>
 </form>
@@ -129,7 +129,7 @@ if ($page == "editcomment") { ?>
 	if (isset($_GET['fulltext'])) {
 		define('COMMENTS_PER_PAGE',10);
 		$fulltext = true; 
-		$fulltexturl = '&amp;fulltext';
+		$fulltexturl = '?fulltext';
 	} else {
 		define('COMMENTS_PER_PAGE',20);
 		$fulltext = false;
@@ -162,11 +162,11 @@ if ($page == "editcomment") { ?>
 
 <?php if ($totalpages > 1) {?>
 	<div align="center">
-	<?php adminPageNav($pagenum,$totalpages,'admin-comments.php?page=comments'.$fulltexturl); ?>
+	<?php adminPageNav($pagenum,$totalpages,'admin-comments.php'.$fulltexturl); ?>
 	</div>
 	<?php } ?>
 
-<form name="comments" action="?page=comments&action=deletecomments"
+<form name="comments" action="?action=deletecomments"
 	method="post"	onSubmit="return confirm('<?php echo gettext("Are you sure you want to delete these comments?"); ?>');">
 <input type="hidden" name="subpage" value="<?php echo $pagenum ?>">
 <table class="bordered">
@@ -175,9 +175,13 @@ if ($page == "editcomment") { ?>
 		<th><?php echo gettext("Album/Image"); ?></th>
 		<th><?php echo gettext("Author/Link"); ?></th>
 		<th><?php echo gettext("Date/Time"); ?></th>
-		<th><?php echo gettext("Comment"); ?> <?php if(!$fulltext) { ?>(<a
-			href="?page=comments&fulltext<?php echo $viewall ? "&viewall":""; ?>"><?php echo gettext("View full text"); ?></a>) <?php } else { ?>(<a
-			href="?page=comments<?php echo $viewall ? "&viewall":""; ?>"><?php echo gettext("View truncated"); ?></a>)<?php } ?></th>
+		<th><?php echo gettext("Comment"); ?> 
+		<?php if(!$fulltext) { ?>(
+			<a href="?fulltext<?php echo $viewall ? "&viewall":""; ?>"><?php echo gettext("View full text"); ?></a>) <?php 
+		} else { 
+			?>(<a	href="admin-comments.php"<?php echo $viewall ? "?viewall":""; ?>"><?php echo gettext("View truncated"); ?></a>)<?php 
+		} ?>
+		</th>
 		<th><?php echo gettext("E-Mail"); ?></th>
 		<th><?php echo gettext("IP address"); ?></th>
 		<th><?php echo gettext("Show"); ?></th>
@@ -270,7 +274,7 @@ if ($page == "editcomment") { ?>
 			title="Edit this comment."> <img src="images/pencil.png"
 			style="border: 0px;" alt="Edit" /></a></td>
 		<td align="center"><a
-			href="javascript: if(confirm('Are you sure you want to delete this comment?')) { window.location='?page=comments&action=deletecomments&id=<?php echo $id; ?>'; }"
+			href="javascript: if(confirm('Are you sure you want to delete this comment?')) { window.location='?action=deletecomments&id=<?php echo $id; ?>'; }"
 			title="Delete this comment." style="color: #c33;"> <img
 			src="images/fail.png" style="border: 0px;" alt="Delete" /></a></td>
 	</tr>
