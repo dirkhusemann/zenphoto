@@ -6,6 +6,14 @@
 header ('Content-Type: text/html; charset=UTF-8');
 define('HTACCESS_VERSION', '1.1.6.0');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
 define('CHMOD_VALUE', 0777);
+
+$debug = isset($_GET['debug']);
+if (isset($_POST['debug'])) {
+	$debug = isset($_POST['debug']);
+}
+$checked = isset($_GET['checked']);
+$upgrade = false;
+
 if(!function_exists("gettext")) {
 	// load the drop-in replacement library
 	require_once('lib-gettext/gettext.inc');
@@ -13,21 +21,15 @@ if(!function_exists("gettext")) {
 } else {
 	$noxlate = 1;
 }
-
-$checked = isset($_GET['checked']);
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 if (!defined('PLUGIN_FOLDER')) { define('PLUGIN_FOLDER', '/plugins/'); }
 define('OFFSET_PATH', 2);
-$upgrade = false;
-$debug = isset($_GET['debug']);
-if (!$checked && !file_exists('zp-config.php')) {
-	@copy('zp-config.php.example', 'zp-config.php');
-}
+
 function setupLog($message, $reset=false) {
   global $debug;
 	if ($debug) {
 		if ($reset) { $mode = 'w'; } else { $mode = 'a'; }
-		$f = fopen(SERVERPATH . '/' . ZENFOLDER . '/setup_log.txt', $mode);
+		$f = fopen(dirname(dirname(__FILE__)) . '/' . ZENFOLDER . '/setup_log.txt', $mode);
 		fwrite($f, $message . "\n");
 		fclose($f);
 	}
@@ -39,7 +41,40 @@ function updateItem($item, $value) {
 	$j = strpos($zp_cfg, "\n", $i);
 	$zp_cfg = substr($zp_cfg, 0, $i) . '= "' . $value . '";' . substr($zp_cfg, $j);
 }
-if (isset($_POST['debug'])) $debug = isset($_POST['debug']);
+
+if (!$checked) {
+	if (!file_exists('zp-config.php')) {
+		@copy('zp-config.php.example', 'zp-config.php');
+	}
+	setupLog("Zenphoto Setup v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE.']', true);  // initialize the log file
+} else {
+	setupLog("Completed system check");
+}
+
+if (file_exists("zp-config.php")) {
+	require("zp-config.php");
+	if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
+		if ($result = @mysql_select_db($_zp_conf_vars['mysql_database'])) {
+			$result = @mysql_query("SELECT `id` FROM " . $_zp_conf_vars['mysql_prefix'].'options' . " LIMIT 1", $connection);
+			if ($result) {
+				if (mysql_num_rows($result) > 0) $upgrade = true;
+			}
+			setupLog("Full environment");
+			require_once("admin-functions.php");
+		} else {  // failed the mysql_select_db, no db connection
+			setupLog("mysql_select_db failed)".':'.mysql_error());
+			$connection = false;
+		}
+	}
+}
+if (!$connection) { // setup a primitive environment
+	setupLog("Primitive environment");
+	define('SERVERPATH', dirname(dirname(__FILE__)));
+	require_once('setup-primitive.php');
+	require_once('functions-i18n.php');
+}
+getUserLocale();
+setupCurrentLocale();
 
 if (isset($_POST['mysql'])) { //try to update the zp-config file
 	$zp_cfg = @file_get_contents('zp-config.php');
@@ -65,31 +100,14 @@ if (isset($_POST['mysql'])) { //try to update the zp-config file
 	if (is_writeable('zp-config.php')) {
 		if ($handle = fopen('zp-config.php', 'w')) {
 			if (fwrite($handle, $zp_cfg)) {
+				setupLog("Updated zp-config.php");
 				$base = true;
 			}
 		}
 		fclose($handle);
 	}
 }
-if (file_exists("zp-config.php")) {
-	require("zp-config.php");
-	if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
-		if (@mysql_select_db($_zp_conf_vars['mysql_database'])) {
-			$result = @mysql_query("SELECT `id` FROM " . $_zp_conf_vars['mysql_prefix'].'options' . " LIMIT 1", $connection);
-			if ($result) {
-				if (mysql_num_rows($result) > 0) $upgrade = true;
-			}
-			require_once("admin-functions.php");
-		}
-	}
-}
-if (!$connection) { // setup a primitive environment
-	define('SERVERPATH', dirname(dirname(__FILE__)));
-	require_once('setup-primitive.php');
-	require_once('functions-i18n.php');
-}
-getUserLocale();
-setupCurrentLocale();
+
 $taskDisplay = array('create' => gettext("create"), 'update' => gettext("update"));
 ?>
 
@@ -293,18 +311,27 @@ if (!$checked) {
 	global $_zp_conf_vars;
 
 	function checkMark($check, $text, $sfx, $msg) {
+		$dsp = '';
 		if ($check > 0) {$check = 1; }
 		echo "\n<br/><span class=\"";
 		switch ($check) {
-			case 0: echo "fail"; break;
-			case -1: echo "warn"; break;
-			case 1: echo "pass"; break;
+			case 0: $dsp = "fail"; break;
+			case -1: $dsp = "warn"; break;
+			case 1: $dsp = "pass"; break;
 		}
-		echo "\">$text</span>";
+		echo $dsp."\">$text</span>";
+		$dsp .= ' '.trim($text);
 		if ($check <= 0) {
-			if (!empty($sfx)) { echo $sfx; }
-			if (!empty($msg)) { echo "\n<p class=\"error\">$msg</p>"; }
+			if (!empty($sfx)) { 
+				echo $sfx; 
+				$dsp .= ' '.trim($sfx);
+			}
+			if (!empty($msg)) { 
+				echo "\n<p class=\"error\">$msg</p>"; 
+				$dsp .= ' '.trim($msg);
+			}
 		}
+		setupLog($dsp);
 		return $check;
 	}
 	function folderCheck($which, $path, $external) {
@@ -976,7 +1003,6 @@ if (file_exists("zp-config.php")) {
 
 	if (isset($_GET['create']) || isset($_GET['update']) && db_connect()) {
 		echo "<h3>".gettext("About to").' '.$taskDisplay[substr($task,0,8)].' '.gettext("tables")."...</h3>";
-		setupLog("Zenphoto Setup v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE.']', true);
 		setupLog("Begin table creation");
 		foreach($db_schema as $sql) {
 			$result = mysql_query($sql);
