@@ -4,6 +4,7 @@
  * @package functions
  *
  */
+define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
 define('ALBUM_OPTIONS_TABLE', true);  // TODO: 1.2 change this to true. See also the 1.2 todo list on the tasks tab
 define('SAFE_GLOB', false);
 include('version.php'); // Include the version info.
@@ -154,7 +155,7 @@ function setOption($key, $value, $persistent=true) {
 	global $_zp_conf_vars, $_zp_options;
 	if ($persistent) {
 		$result = query_single_row("SELECT `value` FROM ".prefix('options')." WHERE `name`='".$key."' AND `ownerid`=0");
-		if (array_key_exists('value', $result)) { // option already exists.
+		if (is_array($result) && array_key_exists('value', $result)) { // option already exists.
 			$sql = "UPDATE " . prefix('options') . " SET `value`='" . escape($value) . "' WHERE `name`='" . escape($key) ."' AND `ownerid`=0";
 			$result = query($sql, true);
 		} else {
@@ -1734,10 +1735,13 @@ $_zp_admin_users = null;
  * @param array $albums an array of albums that the admin can access. (If empty, access is to all albums)
  */
 function saveAdmin($user, $pass, $name, $email, $rights, $albums) {
+
+	if (DEBUG_LOGIN) { debugLog("saveAdmin($user, $pass, $name, $email, $rights, $albums)"); }
+		
 	$sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '$user'";
 	$result = query_single_row($sql);
-	$id = $result['id'];
 	if ($result) {
+		$id = $result['id'];
 		if (!is_null($pass)) {
 			$password = "' ,`password`='" . escape($pass);
 		}
@@ -1747,6 +1751,9 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums) {
 		$sql = "UPDATE " . prefix('administrators') . "SET `name`='" . escape($name) . $password .
  					"', `email`='" . escape($email) . $rightsset . "' WHERE `id`='" . $id ."'";
 		$result = query($sql);
+		
+		if (DEBUG_LOGIN) { debugLog("updating[$id]:$result");	}	
+		
 	} else {
 		if (is_null($pass)) $pass = md5($user);
 		$sql = "INSERT INTO " . prefix('administrators') . " (user, password, name, email, rights) VALUES ('" .
@@ -1755,6 +1762,9 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums) {
 		$sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '$user'";
 		$result = query_single_row($sql);
 		$id = $result['id'];
+		
+		if (DEBUG_LOGIN) { debugLog("inserting[$id]:$result"); }	
+		
 	}
 	$sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
 	$result = query($sql);
@@ -1824,23 +1834,35 @@ function getAdministrators() {
  * @return bit
  */
 function checkAuthorization($authCode) {
+	
+	if (DEBUG_LOGIN) { debugLog("checkAuthorization($authCode)");	}
+	
 	global $_zp_current_admin;
 	$admins = getAdministrators();
 	$reset_date = getOption('admin_reset_date');
 	if ((count($admins) == 0) || empty($reset_date)) {
 		if ((count($admins) != 0)) setOption('admin_reset_date', 1);  // in case there is no save done in admin
 		$_zp_current_admin = null;
+		
+		if (DEBUG_LOGIN) { debugLog("no admin or reset request"); }		
+		
 		return ADMIN_RIGHTS; //no admins or reset request
 	}
 	if (empty($authCode)) return 0; //  so we don't "match" with an empty password
 	$i = 0;
 	foreach($admins as $user) {
+		
+	if (DEBUG_LOGIN) { debugLogArray("checking",$user);	}	
+		
 		if ($user['pass'] == $authCode) {
 			$_zp_current_admin = $user;
 			$result = $user['rights']; 
 			if ($i == 0) { // the first admin is the master.
 				$result = $result | ADMIN_RIGHTS; 
 			} 
+			
+			if (DEBUG_LOGIN) { debugLog("match");	}		
+			
 			return $result;
 		}
 		$i++;
