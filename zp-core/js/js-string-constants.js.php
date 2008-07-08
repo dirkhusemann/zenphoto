@@ -8,7 +8,7 @@ require_once('../functions.php');
 
 ?>
 
-zpstrings = {
+var zpstrings = {
 	'Test' : "<?php echo gettext('Test'); ?>",
 	'ClickToAddATitle' : "<?php echo gettext('Click to add a title...'); ?>",
 	'ClickToEditTitle' : "<?php echo gettext('Click to edit title...'); ?>",
@@ -19,4 +19,4 @@ zpstrings = {
 	'Save' : "<?php echo gettext('save'); ?>",
 	'Cancel' : "<?php echo gettext('cancel'); ?>",
 	'CurrentlyEditingSomethingElse' : "<?php echo gettext('Currently editing something else, save or cancel to edit this.'); ?>"
-}
+};
