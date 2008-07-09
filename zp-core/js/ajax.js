@@ -43,14 +43,22 @@ function unconvertLineBreaks(text) {
   return text.replace(/(<br \/>)|(<br\/>)|(<br>)/gi, '\n');
 }
 
-function convertAmpersand(text) {
-        if (!text) {text = "";}
-  return text.replace(/&/g, '&amp;');
+function convertHTMLSpecial(text) {
+	if (!text) {text = "";}
+	text = text.replace(/&/g, '&amp;');
+	text = text.replace(/>/g, '&gt;');
+	text = text.replace(/</g, '&lt;');
+	text = text.replace(/'"'/g, '&quot;');
+  return text;
 }
 
-function unconvertAmpersand(text) {
-        if (!text) {text = "";}
-  return text.replace(/&amp;/g, '&');
+function unconvertHTMLSpecial(text) {
+	if (!text) {text = "";}
+	text = text.replace(/&amp;/g, '&');
+	text = text.replace(/&gt;/g, '>');
+	text = text.replace(/&lt;/g, '<');
+	text = text.replace(/&quot;/g, '"');
+  return text;
 }
 
 function addBlankLine(text) {
@@ -97,7 +105,7 @@ function initEditableDiv(divID) {
     this.isEditing = true;
                 this.unhilight();
                 var formDiv = this.getFormDiv();
-    formDiv.form.content.value = unconvertLineBreaks(unconvertAmpersand(this.textValue));
+    formDiv.form.content.value = unconvertLineBreaks(unconvertHTMLSpecial(this.textValue));
                 formDiv.style.display = this.style_display;
     this.style.display = "none";
     var form = formDiv.firstChild;
@@ -137,7 +145,7 @@ function initEditableDiv(divID) {
       displayDiv.innerHTML = displayDiv.blankMessage;
       displayDiv.textValue = "";
     } else {
-      displayDiv.innerHTML = convertLineBreaks(convertAmpersand(savedText));
+      displayDiv.innerHTML = convertLineBreaks(convertHTMLSpecial(savedText));
       displayDiv.textValue = savedText;
     }
   };
