@@ -50,7 +50,6 @@ class utf8 {
 
 	/**
 	 * Detect the encoding of the string
-	 * A replacement for mb_detect_encoding()
 	 */
 	function detect($string) {
 		if (!ereg("[\x80-\xFF]", $string) && !ereg("\x1B", $string))

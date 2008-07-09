@@ -425,8 +425,16 @@ if (!$checked) {
 		}
 	}
 	$good = checkMark($gl, ' '.gettext("PHP <code>glob()</code> support"), ' '.gettext('is disabled'), gettext('You need to set the define <code>SAFE_GLOB</code> to <code>true</code> in <code>functions.php</code>')) && $good;
-	
+
 	checkMark($noxlate, gettext("PHP <code>gettext()</code> support"), ' '.gettext("[is not present]"), gettext("Localization of Zenphoto currently requires native PHP <code>gettext()</code> support"));
+
+	if (function_exists('mb_internal_encoding')) {
+		$mb = 1;
+	} else {
+		$mb= -1;
+	}
+	checkMark($mb, gettext("PHP <code>mbstring</code> package"), ' '.gettext("[is not present]"), gettext("Strings generated internally by PHP may not display correctly. (e.g. dates)"));
+
 	$sql = extension_loaded('mysql');
 	$good = checkMark($sql, ' '.gettext(" PHP MySQL support"), '', gettext('You need to install MySQL support in your PHP')) && $good;
 	if (file_exists("zp-config.php")) {
