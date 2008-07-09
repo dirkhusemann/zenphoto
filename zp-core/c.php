@@ -5,6 +5,7 @@
  */
 require_once('functions.php');
 require_once('lib-encryption.php');
+header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 header ("Content-type: image/png");
 $cypher = $_GET['i'];
 
