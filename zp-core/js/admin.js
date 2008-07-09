@@ -95,7 +95,7 @@ function updateFolder(nameObj, folderID, checkboxID, msg1, msg2) {
     fname = fname.replace(/[Çç]/g, 'c');
     fname = fname.replace(/[ÈÉÊËèéêë]/g, 'e');
     fname = fname.replace(/[ÌÍÎÏìíîï]/g, 'i');
-    fname = fname.replace(/[ÒÓÔòóô]/g, 'o');
+    fname = fname.replace(/[ÒÓÔÕØòóôõø]/g, 'o');
 	  fname = fname.replace(/[Öö]/g, 'oe');
     fname = fname.replace(/[Šš]/g, 's');
     fname = fname.replace(/[ÙÚÛùúû]/g, 'u');
@@ -104,6 +104,8 @@ function updateFolder(nameObj, folderID, checkboxID, msg1, msg2) {
     fname = fname.replace(/ß/g, 'ss');
     fname = fname.replace(/[Ææ]/g, 'ae');
     fname = fname.replace(/[Œœ]/g, 'oe');
+    fname = fname.replace(/[ÐðÞþ]/g, 'd');
+    fname = fname.replace(/[Ññ]/g, 'n');
     
     fname = fname.toLowerCase();
     fname = fname.replace(/[\!@#$\%\^&*()\~`\'\"]/g, "");
