@@ -15,6 +15,9 @@ if(!function_exists("gettext")) {
 	// load the drop-in replacement library
 	require_once('lib-gettext/gettext.inc');
 }
+if (function_exists('mb_internal_encoding')) {
+	mb_internal_encoding('UTF-8');
+}
 
 // Set the memory limit higher just in case -- supress errors if user doesn't have control.
 if (ini_get('memory_limit') < '128M') {
@@ -744,7 +747,12 @@ function rewrite_path($rewrite, $plain) {
  */
 function zpFormattedDate($format, $dt) {
 	$fdate = strftime($format, $dt);
-	return utf8::convert($fdate, '', getOption('charset'));
+	if (function_exists('mb_internal_encoding')) {
+		if(mb_internal_encoding() == 'UTF-8') {
+			return $fdate;
+		}
+	}
+	return utf8::convert($fdate, '');
 }
 
 /**
