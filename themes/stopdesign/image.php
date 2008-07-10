@@ -115,7 +115,7 @@
 						} else { 
 							echo '<div id="addcomment" style="display: none;">';
 						} ?>
-						<h2>Add a comment</h2>
+						<h2><?php gettext("Add a comment") ?></h2>
 						<form method="post" action="#" id="comments-form">
 							<input type="hidden" name="comment" value="1" />
 							<input type="hidden" name="remember" value="1" />
