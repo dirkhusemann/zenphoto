@@ -23,7 +23,7 @@
 
 	<div class="galleries">
  	<?php if (!checkForPassword()) {?>
-		<h2>All galleries</h2>
+		<h2><?php echo gettext("All galleries"); ?></h2>
 		<ul>
 			<?php $counter = 0; while (next_album(true) and $counter < 999): ?>
 			<li class="gal">

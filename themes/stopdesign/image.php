@@ -58,7 +58,7 @@
 			<?php if ($show) { ?>
 			<div id="meta">
 				<ul>
-					<li class="count"><?php if (($num = getNumImages()) > 1) { echo imageNumber() . " of " . getNumImages() . " photos"; }?></li>
+					<li class="count"><?php if (($num = getNumImages()) > 1) { echo imageNumber() ." ".gettext("of")." ". getNumImages() . " ".gettext("photos"); }?></li>
 					<li class="date"><?php printImageDate(); ?></li>
 					<li class="tags"><?php echo getAlbumPlace(); ?></li>
 					<li class="exif">
@@ -82,7 +82,7 @@
 					<?php $showhide = "<a href=\"#comments\" id=\"showcomments\"><img src=\"" . 
 						$_zp_themeroot . "/img/btn_show.gif\" width=\"35\" height=\"11\" alt=\"".gettext("SHOW")."\" /></a> <a href=\"#content\" id=\"hidecomments\"><img src=\"" .
 						$_zp_themeroot . "/img/btn_hide.gif\" width=\"35\" height=\"11\" alt=\"".gettext("HIDE")."\" /></a>"; 
- 						$num = getCommentCount(); if ($num == 0) echo "<h2>No comments yet</h2>"; 
+ 						$num = getCommentCount(); if ($num == 0) echo "<h2>".gettext("No comments yet")."</h2>"; 
  						if ($num == 1) echo "<h2>" .gettext('1 comment so far').' '. "$showhide</h2>"; 
  						if ($num > 1) echo "<h2>$num " .gettext('comments so far').' '. "$showhide</h2>"; 
  					?>
@@ -107,7 +107,7 @@
 								
 						<?php if (OpenedForComments()) { ?>
 							<p class="mainbutton" id="addcommentbutton"><a href="#addcomment" class="btn"><img src="<?php echo $_zp_themeroot ?>/img/btn_add_a_comment.gif" alt="" width="116" height="21" /></a></p>
-						<?php } else { echo '<h2>Comments are closed</h2>'; } ?>
+						<?php } else { echo '<h2>'.gettext('Comments are closed').'</h2>'; } ?>
 
 						<!-- BEGIN #addcomment -->
 						<?php if ($_zp_comment_error) { 
@@ -128,7 +128,7 @@
 								</tr>
 								<tr valign="top" align="left" id="row-email">
 									<th><label for="email"><?php echo gettext('Email'); ?>:</label></th>
-									<td><input tabindex="2" id="email" name="email" class="text" value="<?php echo $stored[1];?>" /> <em>(not displayed)</em></td>
+									<td><input tabindex="2" id="email" name="email" class="text" value="<?php echo $stored[1];?>" /> <em><?php echo gettext("(not displayed)"); ?></em></td>
 								</tr>
 								<tr valign="top" align="left">
 									<th><label for="website"><?php echo gettext('URL'); ?>:</label></th>

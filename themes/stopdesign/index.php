@@ -70,7 +70,7 @@
 					switch($selector) {
 						case 'Recent images':
 							if (function_exists('getImageStatistic')) {
-								echo '<h2>Recent images</h2>';
+								echo '<h2>'.gettext('Recent images').'</h2>';
 								$images = getImageStatistic(6, "latest");
 								foreach ($images as $image) {
 									echo "<li><table><tr><td>\n";
@@ -84,7 +84,7 @@
 								break;
 							}
 						case 'Random images':
-							echo '<h2>Random images</h2>';
+							echo '<h2>'.gettext('Random images').'</h2>';
 							for ($i=1; $i<=6; $i++) {
 								echo "<li><table><tr><td>\n";
 								$randomImage = getRandomImages();
@@ -102,7 +102,7 @@
 				</ul>
 			</div>
 			<div class="module">
-				<h2>Gallery data</h2>
+				<h2><?php echo gettext("Gallery data"); ?></h2>
 				<table cellspacing="0" class="gallerydata">
 						<tr>
 							<th><a href="<?php echo htmlspecialchars(getCustomPageURL('albumarchive')); ?>"><?php echo gettext('Galleries'); ?></a></th>
