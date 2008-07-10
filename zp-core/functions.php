@@ -40,12 +40,24 @@ require_once('lib-kses.php');
 require_once('exif/exif.php');
 require_once('functions-db.php');
 
+// allow reading of old Option tables--should be needed only during upgrade
+$hasownerid = false;
+$result = query_full_array("SHOW COLUMNS FROM ".prefix('options').' LIKE "%ownerid%"', true);
+if (is_array($result)) {
+	foreach ($result as $row) {
+		if ($row['Field'] == 'ownerid') {
+			$hasownerid = true;
+			break;
+		}
+	}
+}
+
 switch (OFFSET_PATH) {
 	case 0:	// starts from the root index.php
 		$const_webpath = dirname($_SERVER['SCRIPT_NAME']);
 		break;
 	case 1:  // starts from the zp-core folder
-	case 2:	
+	case 2:
 		$const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
 		break;
 	case 3: // starts from the plugins folder
@@ -121,7 +133,8 @@ function getOption($key, $db=false) {
 	if (is_null($_zp_options)) {
 		$_zp_options = array();
 
-		$sql = "SELECT `name`, `value` FROM ".prefix('options').' WHERE `ownerid`=0';
+		$sql = "SELECT `name`, `value` FROM ".prefix('options');
+		if ($hasownerid) $sql .= ' WHERE `ownerid`=0';
 		$optionlist = query_full_array($sql, true);
 		if ($optionlist !== false) {
 			foreach($optionlist as $option) {
@@ -130,7 +143,8 @@ function getOption($key, $db=false) {
 		}
 	} else {
 		if ($db) {
-			$sql = "SELECT `value` FROM ".prefix('options')." WHERE `name`='".$key."' AND `ownerid`=0";
+			$sql = "SELECT `value` FROM ".prefix('options')." WHERE `name`='".$key."'";
+			if ($hasownerid) $sql .= " AND `ownerid`=0";
 			$optionlist = query_single_row($sql);
 			return $optionlist['value'];
 		}
@@ -747,12 +761,13 @@ function rewrite_path($rewrite, $plain) {
  */
 function zpFormattedDate($format, $dt) {
 	$fdate = strftime($format, $dt);
+	$chrset = 'ISO-8859-1';
 	if (function_exists('mb_internal_encoding')) {
-		if(mb_internal_encoding() == 'UTF-8') {
+		if (($charset = mb_internal_encoding()) == 'UTF-8') {
 			return $fdate;
 		}
 	}
-	return utf8::convert($fdate, '');
+	return utf8::convert($fdate, $charset);
 }
 
 /**

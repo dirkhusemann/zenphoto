@@ -43,42 +43,17 @@ function updateItem($item, $value) {
 }
 
 if (!$checked) {
-	if (!file_exists('zp-config.php')) {
+	if ($oldconfig = !file_exists('zp-config.php')) {
 		@copy('zp-config.php.example', 'zp-config.php');
 	}
-	setupLog("Zenphoto Setup v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE.']', true);  // initialize the log file
 } else {
 	setupLog("Completed system check");
 }
 
-if (file_exists("zp-config.php")) {
-	require("zp-config.php");
-	if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
-		if ($result = @mysql_select_db($_zp_conf_vars['mysql_database'])) {
-			$result = @mysql_query("SELECT `id` FROM " . $_zp_conf_vars['mysql_prefix'].'options' . " LIMIT 1", $connection);
-			if ($result) {
-				if (mysql_num_rows($result) > 0) $upgrade = true;
-			}
-			setupLog("Full environment");
-			require_once("admin-functions.php");
-		} else {  // failed the mysql_select_db, no db connection
-			setupLog("mysql_select_db failed)".':'.mysql_error());
-			$connection = false;
-		}
-	}
-}
-if (!$connection) { // setup a primitive environment
-	setupLog("Primitive environment");
-	define('SERVERPATH', dirname(dirname(__FILE__)));
-	require_once('setup-primitive.php');
-	require_once('functions-i18n.php');
-}
-getUserLocale();
-setupCurrentLocale();
-
 if (isset($_POST['mysql'])) { //try to update the zp-config file
+	setupLog("MySQL POST handling");
 	$zp_cfg = @file_get_contents('zp-config.php');
-	if (!$upgrade) {
+	if (!$oldconfig) {
 		updateItem('UTF-8', 'true');
 	}
 	if (isset($_POST['mysql_user'])) {
@@ -107,6 +82,45 @@ if (isset($_POST['mysql'])) { //try to update the zp-config file
 		fclose($handle);
 	}
 }
+$result = true;
+if (file_exists("zp-config.php")) {
+	require("zp-config.php");
+	if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
+		if (@mysql_select_db($_zp_conf_vars['mysql_database'])) {
+			$result = @mysql_query("SELECT `id` FROM " . $_zp_conf_vars['mysql_prefix'].'options' . " LIMIT 1", $connection);
+			if ($result) {
+				if (mysql_num_rows($result) > 0) $upgrade = true;
+			}
+			$environ = true;
+			require_once("admin-functions.php");
+		}
+	}
+}
+if (!function_exists('setOption')) { // setup a primitive environment
+	$environ = false;
+	require_once('setup-primitive.php');
+	require_once('functions-i18n.php');
+}
+
+if (!$checked) {
+	if (!isset($_POST['mysql'])) {
+		setupLog("Zenphoto Setup v".ZENPHOTO_VERSION.'['.ZENPHOTO_RELEASE.']', true);  // initialize the log file
+	}
+	if ($environ) {
+		setupLog("Full environment");
+	} else {
+		setupLog("Primitive environment");
+		if ($result) {
+			setupLog("Query error: ".mysql_error());
+		}
+	}
+} else {
+	setupLog("Checked");
+}
+
+getUserLocale();
+setupCurrentLocale();
+
 
 $taskDisplay = array('create' => gettext("create"), 'update' => gettext("update"));
 ?>
@@ -357,9 +371,11 @@ if (!$checked) {
 			$sfx = " [<em>$append</em> ".gettext("is not writeable and").' '."<strong>setup</strong> ".gettext("could not make it so]");
 			$msg =  gettext("Change the permissions on the")." <code>$folder</code> ".gettext("folder to be writable by the server").' ' .
 							"(<code>chmod 777 " . $append . "</code>)";
-		} else if (($folder != $which) || $external) {
+		} else {
+			if (($folder != $which) || $external) {
+				$f = " (<em>$append</em>)";
+			}
 			$msg = '';
-			$f = " (<em>$append</em>)";
 		}
 
 		return checkMark(is_dir($path) && is_writable($path), " <em>$which</em>".' '.gettext("folder").$f, $sfx, $msg);
@@ -599,10 +615,8 @@ if ($debug) {
 				$vr = trim(substr($htu, $i+7, $j-$i-7));
 			}
 			$ch = $vr == HTACCESS_VERSION;
-			if (!$ch) {
-				$err = gettext("wrong version");
-				$desc = gettext("You need to upload the copy of the .htaccess file that was included with the zenphoto distribution.");
-			}
+			$err = gettext("wrong version");
+			$desc = gettext("You need to upload the copy of the .htaccess file that was included with the zenphoto distribution.");
 		}
 
 		if ($ch) {
@@ -761,7 +775,7 @@ if (file_exists("zp-config.php")) {
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'options'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_options (
 		`id` int(11) UNSIGNED NOT NULL auto_increment,
-		`ownerid` int(11) UNSIGNED NOT NULL,
+		`ownerid` int(11) UNSIGNED NOT NULL DEFAULT 0,
 		`name` varchar(255) NOT NULL,
 		`value` text NOT NULL,
 		PRIMARY KEY  (`id`),
@@ -997,9 +1011,13 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_tags CHANGE `name` `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci";	
 	$sql_statements[] = "ALTER TABLE $tbl_administrators CHARACTER SET utf8 COLLATE utf8_unicode_ci";
 	$sql_statements[] = "ALTER TABLE $tbl_administrators CHANGE `name` `name` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci";	
-	$sql_statements[] = "ALTER TABLE $tbl_options ADD COLUMN `ownerid` int(1) UNSIGNED default 0";
+	$sql_statements[] = "ALTER TABLE $tbl_options ADD COLUMN `ownerid` int(11) UNSIGNED NOT NULL DEFAULT 0";
 	$sql_statements[] = "ALTER TABLE $tbl_options DROP INDEX `name`";
 	$sql_statements[] = "ALTER TABLE $tbl_options ADD UNIQUE `unique_option` (`name`, `ownerid`)";
+
+	//v1.1.8 
+	$sql_statements[] = "ALTER TABLE $tbl_options CHANGE `ownerid` `ownerid` int(11) UNSIGNED NOT NULL DEFAULT 0"; 
+ 
 	
 	
 	/**************************************************************************************
@@ -1035,6 +1053,9 @@ if (file_exists("zp-config.php")) {
 		setupLog("Done with database creation and update");
 		
 		$prevRel = getOption('zenphoto_release');
+		
+		setupLog("Previous Release was $prevRel");
+		
 		$gallery = new Gallery();
 		require('option-defaults.php');
 		
@@ -1093,11 +1114,13 @@ if (file_exists("zp-config.php")) {
 		// 1.2 force up-convert to tag tables
 		$convert = false;
 		$result = query_full_array("SHOW COLUMNS FROM ".prefix('images').' LIKE "%tags%"');
-		foreach ($result as $row) {
-			if ($row['Field'] == 'tags') {
-// TODO: 1.2 set this to true
-				$convert = true;
-				break;
+		if (is_array($result)) {
+			foreach ($result as $row) {
+				if ($row['Field'] == 'tags') {
+					// TODO: 1.2 set this to true
+					$convert = true;
+					break;
+				}
 			}
 		}
 		if ($convert) {

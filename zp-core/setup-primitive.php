@@ -5,6 +5,13 @@
  * @package setup
  */
 
+include('version.php'); // Include the version info.
+$const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
+$const_webpath = str_replace("\\", '/', $const_webpath);
+if ($const_webpath == '/') $const_webpath = '';
+if (!defined('WEBPATH')) { define('WEBPATH', $const_webpath); }
+define('SERVERPATH', dirname(dirname(__FILE__)));
+
 function zp_getCookie($name) {
 	if (isset($_SESSION[$name])) { return $_SESSION[$name]; }
 	if (isset($_COOKIE[$name])) { return $_COOKIE[$name]; }
