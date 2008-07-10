@@ -5,13 +5,13 @@
  * Supports such statistics as "most popular", "latest", "top rated", etc.
  * 
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.4.4
+ * @version 1.0.4.5
  * @package plugins 
  */
 
 $plugin_description = gettext("Functions that provide various statistics about images and albums in the gallery.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.4.4';
+$plugin_version = '1.0.4.5';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---image_album_statistics.php.html";
 
 /**
@@ -354,7 +354,7 @@ function printImageStatistic($number, $option, $album='', $showtitle=false, $sho
 		echo "<li><a href=\"" . $image->getImageLink() . "\" title=\"" . htmlspecialchars($image->getTitle(), ENT_QUOTES) . "\">\n";
 		echo "<img src=\"" . $image->getThumb() . "\"  alt=\"" . htmlspecialchars($image->getTitle(),ENT_QUOTES) . "\" /></a>\n";
 		if($showtitle) {
-			echo "<h3><a href=\"".pathurlencode($image->name)."\" title=\"" . htmlspecialchars($image->getTitle(),ENT_QUOTES) . "\">\n";
+			echo "<h3><a href=\"".$image->getImageLink()."\" title=\"" . htmlspecialchars($image->getTitle(),ENT_QUOTES) . "\">\n";
 			echo htmlspecialchars($image->getTitle())."</a></h3>\n";
 		}
 		if($showdate) {
