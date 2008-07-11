@@ -1695,7 +1695,10 @@ if (!function_exists('fnmatch')) {
  *
  * @param string $name the name of the cookie
  */
-function zp_getCookie($name) {
+function zp_getCookie($name) {	
+	if (DEBUG_LOGIN) {
+		debugLog("zp_getCookie($name): SESSION[$name]=".$_SESSION[$name].', COOKIE[$name]='.$_COOKIE[$name]);
+	}
 	if (isset($_SESSION[$name])) { return $_SESSION[$name]; }
 	if (isset($_COOKIE[$name])) { return $_COOKIE[$name]; }
 	return false;
@@ -1710,6 +1713,9 @@ function zp_getCookie($name) {
  */
 function zp_setCookie($name, $value, $time=0, $path='/') {
 	if (!getOption('album_session')) {
+		if (DEBUG_LOGIN) {
+			debugLog("zp_setCookie($name, $value, $time, $path)");
+		}
 		setcookie($name, $value, $time, $path);
 	}
 	if ($time < 0) {
@@ -1858,7 +1864,7 @@ function getAdministrators() {
  */
 function checkAuthorization($authCode) {
 	
-	if (DEBUG_LOGIN) { debugLog("checkAuthorization($authCode)");	}
+	if (DEBUG_LOGIN) { debugLogBacktrace("checkAuthorization($authCode)");	}
 	
 	global $_zp_current_admin;
 	$admins = getAdministrators();
