@@ -5,13 +5,13 @@
  * Supports such statistics as "most popular", "latest", "top rated", etc.
  * 
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.4.5
+ * @version 1.0.4.6
  * @package plugins 
  */
 
 $plugin_description = gettext("Functions that provide various statistics about images and albums in the gallery.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.4.5';
+$plugin_version = '1.0.4.6';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---image_album_statistics.php.html";
 
 /**
@@ -79,7 +79,7 @@ function getAlbumStatistic($number=5, $option) {
 	if($option === "latestupdated") {
 		return $updatedalbums;
 	} else {
-		$albums = query("SELECT id, title, folder, thumb FROM " . prefix('albums') . $albumWhere . " ORDER BY ".$sortorder." DESC LIMIT $number");
+		$albums = query_full_array("SELECT id, title, folder, thumb FROM " . prefix('albums') . $albumWhere . " ORDER BY ".$sortorder." DESC LIMIT $number");
 		return $albums;
 	}
 }
@@ -106,14 +106,8 @@ function printAlbumStatistic($number, $option, $showtitle=false, $showdate=false
 	$albums = getAlbumStatistic($number, $option);
 	echo "\n<div id=\"".$option."_album\">\n";
 	echo "<ul>";
-	if ($option === "latestupdated") { // needs a "normal" array
-		foreach($albums as $album) {
-			printAlbumStatisticItem($album, $option,$showtitle, $showdate, $showdesc, $desclength,$showstatistic);
-		}
-	} else {
-		while ($album = mysql_fetch_array($albums)) { // needs a mysql array
-			printAlbumStatisticItem($album, $option,$showtitle, $showdate, $showdesc, $desclength,$showstatistic);
-		}
+	foreach($albums as $album) {
+		printAlbumStatisticItem($album, $option,$showtitle, $showdate, $showdesc, $desclength,$showstatistic);
 	}
 	echo "</ul></div>\n";
 }
