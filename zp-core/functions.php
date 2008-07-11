@@ -41,12 +41,11 @@ require_once('exif/exif.php');
 require_once('functions-db.php');
 
 // allow reading of old Option tables--should be needed only during upgrade
-$hasownerid = false;
 $result = query_full_array("SHOW COLUMNS FROM ".prefix('options').' LIKE "%ownerid%"', true);
 if (is_array($result)) {
 	foreach ($result as $row) {
 		if ($row['Field'] == 'ownerid') {
-			$hasownerid = true;
+			$_zp_optionDB_hasownerid = true;
 			break;
 		}
 	}
@@ -129,12 +128,12 @@ function xmlspecialchars($text) {
  * @param bool $db set to true to force retrieval from the database.
  */
 function getOption($key, $db=false) {
-	global $_zp_conf_vars, $_zp_options;
+	global $_zp_conf_vars, $_zp_options, $_zp_optionDB_hasownerid;
 	if (is_null($_zp_options)) {
 		$_zp_options = array();
 
 		$sql = "SELECT `name`, `value` FROM ".prefix('options');
-		if ($hasownerid) $sql .= ' WHERE `ownerid`=0';
+		if (isset($_zp_optionDB_hasownerid)) $sql .= ' WHERE `ownerid`=0';
 		$optionlist = query_full_array($sql, true);
 		if ($optionlist !== false) {
 			foreach($optionlist as $option) {
@@ -144,7 +143,7 @@ function getOption($key, $db=false) {
 	} else {
 		if ($db) {
 			$sql = "SELECT `value` FROM ".prefix('options')." WHERE `name`='".$key."'";
-			if ($hasownerid) $sql .= " AND `ownerid`=0";
+			if (isset($_zp_optionDB_hasownerid)) $sql .= " AND `ownerid`=0";
 			$optionlist = query_single_row($sql);
 			return $optionlist['value'];
 		}
