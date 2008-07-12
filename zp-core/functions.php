@@ -109,6 +109,7 @@ if ($session_started) session_start();
 
 // Set error reporting to the default if it's not.
 error_reporting(E_ALL ^ E_NOTICE);
+
 $_zp_error = false;
 
 /**
@@ -259,7 +260,7 @@ function parseAllowedTags(&$source) {
 		$tag = trim(substr($source, 0, $i));
 		$source = trim(substr($source, $i+2));
 		if (substr($source, 0, 1) != "(") { return false; }
-		$x = parseAllowedTags($source, $level);
+		$x = parseAllowedTags($source);
 		if ($x === false) { return false; }
 		$a[$tag] = $x;
 	}
@@ -1256,15 +1257,18 @@ function getPlugin($plugin, $inTheme) {
  */
 function getIPTCTag($tag) {
 	global $iptc;
-	$iptcTag = $iptc[$tag];
-	$r = "";
-	$ct = count($iptcTag);
-	for ($i=0; $i<$ct; $i++) {
-		$w = $iptcTag[$i];
-		if (!empty($r)) { $r .= ", "; }
-		$r .= $w;
+	if (isset($iptc[$tag])) {
+		$iptcTag = $iptc[$tag];
+		$r = "";
+		$ct = count($iptcTag);
+		for ($i=0; $i<$ct; $i++) {
+			$w = $iptcTag[$i];
+			if (!empty($r)) { $r .= ", "; }
+			$r .= $w;
+		}
+		return $r;
 	}
-	return $r;
+	return '';
 }
 
 /**
@@ -1294,14 +1298,21 @@ function getImageMetadata($imageName) {
 	$result = array();
 	getimagesize($imageName, $imageInfo);
 	if (is_array($imageInfo)) {
-		/* EXIF date */
 		$exifraw = read_exif_data_raw($imageName, false);
+		if (!isset($exifraw['SubIFD'])) {
+			return array();
+		}
 		$subIFD = $exifraw['SubIFD'];
-		$date = $subIFD['DateTime'];
-		if (empty($date)) {
+		/* EXIF date */
+		if (isset($subIFD['DateTime'])) {
+			$date = $subIFD['DateTime'];
+		} else {
+			$date = '';
+		}
+		if (empty($date) && isset($subIFD['DateTimeOriginal'])) {
 			$date = $subIFD['DateTimeOriginal'];
 		}
-		if (empty($date)) {
+		if (empty($date)  && isset($subIFD['DateTimeDigitized'])) {
 			$date = $subIFD['DateTimeDigitized'];
 		}
 		if (!empty($date)) {
@@ -1309,71 +1320,73 @@ function getImageMetadata($imageName) {
 		}
 
 		/* check IPTC data */
-		$iptc = iptcparse($imageInfo["APP13"]);
-		if ($iptc) {
-			/* iptc date */
-			$date = getIPTCTag('2#055');
-			if (!empty($date)) {
-				$result['date'] = substr($date, 0, 4).'-'.substr($date, 4, 2).'-'.substr($date, 6, 2);
-			}
-			/* iptc title */
-			$title = getIPTCTag('2#005');   /* Option Name */
-			if (empty($title)) {
-				$title = getIPTCTag('2#105'); /* Headline */
-			}
-			if (!empty($title)) {
-				$result['title'] = utf8::convert($title, 'ISO-8859-1');
-			}
-
-			/* iptc description */
-			$caption= getIPTCTag('2#120');
-			if (!empty($caption)) {
-				$result['desc'] = utf8::convert($caption, 'ISO-8859-1');
-			}
-
-			/* iptc location, state, country */
-			$location = getIPTCTag('2#092');
-			if (!empty($location)) {
-				$result['location'] = utf8::convert($location, 'ISO-8859-1');
-			}
-			$city = getIPTCTag('2#090');
-			if (!empty($city)) {
-				$result['city'] = utf8::convert($city, 'ISO-8859-1');
-			}
-			$state = getIPTCTag('2#095');
-			if (!empty($state)) {
-				$result['state'] = utf8::convert($state, 'ISO-8859-1');
-			}
-			$country = getIPTCTag('2#101');
-			if (!empty($country)) {
-				$result['country'] = utf8::convert($country, 'ISO-8859-1');
-			}
-			/* iptc credit */
-			$credit= getIPTCTag('2#080'); /* by-line */
-			if (empty($credit)) {
-				$credit = getIPTCTag('2#110'); /* credit */
-			}
-			if (empty($credit)) {
-				$credit = getIPTCTag('2#115'); /* source */
-			}
-			if (!empty($credit)) {
-				$result['credit'] = utf8::convert($credit, 'ISO-8859-1');
-			}
-
-			/* iptc copyright */
-			$copyright= getIPTCTag('2#116');
-			if (!empty($copyright)) {
-				$result['copyright'] = utf8::convert($copyright, 'ISO-8859-1');
-			}
-
-			/* iptc keywords (tags) */
-			$keywords = getIPTCTagArray('2#025');
-			if (is_array($keywords)) {
-				$taglist = array();
-				foreach($keywords as $keyword) {
-					$taglist[] = utf8::convert($keyword, 'ISO-8859-1');
+		if (isset($imageInfo["APP13"])) {
+			$iptc = iptcparse($imageInfo["APP13"]);
+			if ($iptc) {
+				/* iptc date */
+				$date = getIPTCTag('2#055');
+				if (!empty($date)) {
+					$result['date'] = substr($date, 0, 4).'-'.substr($date, 4, 2).'-'.substr($date, 6, 2);
 				}
-				$result['tags'] = $taglist;
+				/* iptc title */
+				$title = getIPTCTag('2#005');   /* Option Name */
+				if (empty($title)) {
+					$title = getIPTCTag('2#105'); /* Headline */
+				}
+				if (!empty($title)) {
+					$result['title'] = utf8::convert($title, 'ISO-8859-1');
+				}
+
+				/* iptc description */
+				$caption= getIPTCTag('2#120');
+				if (!empty($caption)) {
+					$result['desc'] = utf8::convert($caption, 'ISO-8859-1');
+				}
+
+				/* iptc location, state, country */
+				$location = getIPTCTag('2#092');
+				if (!empty($location)) {
+					$result['location'] = utf8::convert($location, 'ISO-8859-1');
+				}
+				$city = getIPTCTag('2#090');
+				if (!empty($city)) {
+					$result['city'] = utf8::convert($city, 'ISO-8859-1');
+				}
+				$state = getIPTCTag('2#095');
+				if (!empty($state)) {
+					$result['state'] = utf8::convert($state, 'ISO-8859-1');
+				}
+				$country = getIPTCTag('2#101');
+				if (!empty($country)) {
+					$result['country'] = utf8::convert($country, 'ISO-8859-1');
+				}
+				/* iptc credit */
+				$credit= getIPTCTag('2#080'); /* by-line */
+				if (empty($credit)) {
+					$credit = getIPTCTag('2#110'); /* credit */
+				}
+				if (empty($credit)) {
+					$credit = getIPTCTag('2#115'); /* source */
+				}
+				if (!empty($credit)) {
+					$result['credit'] = utf8::convert($credit, 'ISO-8859-1');
+				}
+
+				/* iptc copyright */
+				$copyright= getIPTCTag('2#116');
+				if (!empty($copyright)) {
+					$result['copyright'] = utf8::convert($copyright, 'ISO-8859-1');
+				}
+
+				/* iptc keywords (tags) */
+				$keywords = getIPTCTagArray('2#025');
+				if (is_array($keywords)) {
+					$taglist = array();
+					foreach($keywords as $keyword) {
+						$taglist[] = utf8::convert($keyword, 'ISO-8859-1');
+					}
+					$result['tags'] = $taglist;
+				}
 			}
 		}
 	}
@@ -1770,10 +1783,14 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums) {
 	$result = query_single_row($sql);
 	if ($result) {
 		$id = $result['id'];
-		if (!is_null($pass)) {
+		if (is_null($pass)) {
+			$password = '';
+		} else {
 			$password = "' ,`password`='" . escape($pass);
 		}
-		if (!is_null($rights)) {
+		if (is_null($rights)) {
+			$rights = '';
+		} else {
 			$rightsset = "', `rights`='" . escape($rights);
 		}
 		$sql = "UPDATE " . prefix('administrators') . "SET `name`='" . escape($name) . $password .

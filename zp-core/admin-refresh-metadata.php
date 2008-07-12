@@ -22,7 +22,7 @@ if (isset($_GET['refresh'])) {
 			$param = '?refresh=done';
 		}
 		$r = "&return=".$_GET['return'];
-		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/refresh-metadata.php" . $param . $r);
+		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-refresh-metadata.php" . $param . $r);
 	}
 }
 printAdminHeader();
@@ -33,7 +33,7 @@ echo "\n" . '<div id="main">';
 printTabs();
 echo "\n" . '<div id="content">';
 echo "<h1>".gettext("zenphoto Metadata refresh")."</h1>";
-
+$ret = '';
 if (isset($_GET['refresh']) && db_connect()) {
 	echo "<h3>Finished refreshing metadata.</h3>";
 	if (isset($_GET['return'])) $ret = $_GET['return'];
@@ -43,6 +43,8 @@ if (isset($_GET['refresh']) && db_connect()) {
 		if ($ret != '*') {
 			$r .= "&album=$ret";
 		}
+	} else {
+		$r = '';
 	}
 	echo "<p><a href=\"admin.php$r\">&laquo; Back</a></p>";
 } else if (db_connect()) {

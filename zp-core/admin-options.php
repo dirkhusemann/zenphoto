@@ -47,13 +47,13 @@ if (isset($_GET['action'])) {
 					if ($pass == trim($_POST[$i.'-adminpass_2'])) {
 						$admin_n = trim($_POST[$i.'-admin_name']);
 						$admin_e = trim($_POST[$i.'-admin_email']);
-						$main_r = $_POST[$i.'-main_rights'];
-						$admin_r = $_POST[$i.'-admin_rights'];
-						$comment_r = $_POST[$i.'-comment_rights'];
-						$upload_r = $_POST[$i.'-upload_rights'];
-						$edit_r = $_POST[$i.'-edit_rights'];
-						$options_r = $_POST[$i.'-options_rights'];
-						$themes_r = $_POST[$i.'-themes_rights'];
+						if (isset($_POST[$i.'-main_rights'])) $main_r = 1; else $main_r = 0;
+						if (isset($_POST[$i.'-admin_rights'])) $admin_r = 1; else $admin_r = 0;
+						if (isset($_POST[$i.'-comment_rights'])) $comment_r = 1; else $comment_r = 0;
+						if (isset($_POST[$i.'-upload_rights'])) $upload_r = 1; else $upload_r = 0;
+						if (isset($_POST[$i.'-edit_rights'])) $edit_r = 1; else $edit_r = 0;
+						if (isset($_POST[$i.'-options_rights'])) $options_r = 1; else $options_r = 0;
+						if (isset($_POST[$i.'-themes_rights'])) $themes_r = 1; else $themes_r = 0;
 						if (!isset($_POST['alter_enabled'])) {
 							$rights = NO_RIGHTS + $admin_r + $comment_r + $upload_r + $edit_r + $options_r + $themes_r + $main_r;
 							$managedalbums = array();
@@ -66,7 +66,7 @@ if (isset($_GET['action'])) {
 									}
 								}
 							}
-							if (count($$managedalbums > 0)) {
+							if (count($managedalbums > 0)) {
 								$albums = array_unique($managedalbums);
 							} else {
 								$albums = NULL;
@@ -99,16 +99,16 @@ if (isset($_GET['action'])) {
 			$web = $_POST['website_url'];
 			setOption('website_url', $web);
 			setOption('time_offset', $_POST['time_offset']);
-			setBoolOption('mod_rewrite', $_POST['mod_rewrite']);
+			setBoolOption('mod_rewrite', isset($_POST['mod_rewrite']));
 			setOption('mod_rewrite_image_suffix', $_POST['mod_rewrite_image_suffix']);
 			setOption('server_protocol', $_POST['server_protocol']);
 			setOption('charset', $_POST['charset']);
-			setBoolOption('album_use_new_image_date', $_POST['album_use_new_image_date']);
+			setBoolOption('album_use_new_image_date', isset($_POST['album_use_new_image_date']));
 			setOption('gallery_sorttype', $_POST['gallery_sorttype']);
 			if ($_POST['gallery_sorttype'] == 'Manual') {
 				setBoolOption('gallery_sortdirection', 0);
 			} else {
-				setBoolOption('gallery_sortdirection', $_POST['gallery_sortdirection']);
+				setBoolOption('gallery_sortdirection', isset($_POST['gallery_sortdirection']));
 			}
 			setOption('feed_items', $_POST['feed_items']);
 			setOption('feed_imagesize', $_POST['feed_imagesize']);
@@ -155,10 +155,10 @@ if (isset($_GET['action'])) {
 			}
 			setOption('gallery_hint', $_POST['gallery_hint']);
 			setOption('search_hint', $_POST['search_hint']);
-			setBoolOption('persistent_archive', $_POST['persistent_archive']);
-			setBoolOption('album_session', $_POST['album_session']);
+			setBoolOption('persistent_archive', isset($_POST['persistent_archive']));
+			setBoolOption('album_session', isset($_POST['album_session']));
 			setOption('locale', $newloc = $_POST['locale']);
-			if ($loc != '') { // only clear the cookie if the option is not the default!
+			if ($newloc != '') { // only clear the cookie if the option is not the default!
 				$cookiepath = WEBPATH;
 				if (WEBPATH == '') { $cookiepath = '/'; }
 				zp_setCookie('dynamic_locale', getOption('locale'), time()-368000, $cookiepath);  // clear the language cookie
@@ -173,30 +173,30 @@ if (isset($_GET['action'])) {
 		if (isset($_POST['saveimageoptions'])) {
 			setOption('image_quality', $_POST['image_quality']);
 			setOption('thumb_quality', $_POST['thumb_quality']);
-			setBoolOption('image_allow_upscale', $_POST['image_allow_upscale']);
-			setBoolOption('thumb_sharpen', $_POST['thumb_sharpen']);
-			setBoolOption('image_sharpen', $_POST['image_sharpen']);
-			setBoolOption('perform_watermark', $_POST['perform_watermark']);
+			setBoolOption('image_allow_upscale', isset($_POST['image_allow_upscale']));
+			setBoolOption('thumb_sharpen', isset($_POST['thumb_sharpen']));
+			setBoolOption('image_sharpen', isset($_POST['image_sharpen']));
+			setBoolOption('perform_watermark', isset($_POST['perform_watermark']));
 			setOption('watermark_image', 'watermarks/' . $_POST['watermark_image'] . '.png');
 			setOption('watermark_scale', $_POST['watermark_scale']);
-			setBoolOption('watermark_allow_upscale', $_POST['watermark_allow_upscale']);
+			setBoolOption('watermark_allow_upscale', isset($_POST['watermark_allow_upscale']));
 			setOption('watermark_h_offset', $_POST['watermark_h_offset']);
 			setOption('watermark_w_offset', $_POST['watermark_w_offset']);
-			setBoolOption('perform_video_watermark', $_POST['perform_video_watermark']);
+			setBoolOption('perform_video_watermark', isset($_POST['perform_video_watermark']));
 			setOption('video_watermark_image', 'watermarks/' . $_POST['video_watermark_image'] . '.png');
 			setOption('full_image_quality', $_POST['full_image_quality']);
 			setOption('protect_full_image', $_POST['protect_full_image']);
-			setBoolOption('hotlink_protection', $_POST['hotlink_protection']);
-			setBoolOption('use_lock_image', $_POST['use_lock_image']);
+			setBoolOption('hotlink_protection', isset($_POST['hotlink_protection']));
+			setBoolOption('use_lock_image', isset($_POST['use_lock_image']));
 			setOption('image_sorttype', $_POST['image_sorttype']);
-			setBoolOption('image_sortdirection', $_POST['image_sortdirection']);
+			setBoolOption('image_sortdirection', isset($_POST['image_sortdirection']));
 			$returntab = "#tab_image";
 		}
 		/*** Comment options ***/
 			
 		if (isset($_POST['savecommentoptions'])) {
 			setOption('spam_filter', $_POST['spam_filter']);
-			setBoolOption('email_new_comments', $_POST['email_new_comments']);
+			setBoolOption('email_new_comments', isset($_POST['email_new_comments']));
 			$tags = $_POST['allowed_tags'];
 			$test = "(".$tags.")";
 			$a = parseAllowedTags($test);
@@ -206,10 +206,10 @@ if (isset($_GET['action'])) {
 			} else {
 				$notify = '?tag_parse_error';
 			}
-			setBoolOption('comment_name_required', $_POST['comment_name_required']);
-			setBoolOption('comment_email_required', $_POST['comment_email_required']);
-			setBoolOption('comment_web_required', $_POST['comment_web_required']);
-			setBoolOption('Use_Captcha', $_POST['Use_Captcha']);
+			setBoolOption('comment_name_required', isset($_POST['comment_name_required']));
+			setBoolOption('comment_email_required',isset( $_POST['comment_email_required']));
+			setBoolOption('comment_web_required', isset($_POST['comment_web_required']));
+			setBoolOption('Use_Captcha', isset($_POST['Use_Captcha']));
 			$returntab = "#tab_comments";
 
 		}

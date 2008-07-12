@@ -5,7 +5,7 @@
 	Exifer
 	Extracts EXIF information from digital photos.
 	
-	Copyright © 2003 Jake Olefsky
+	Copyright ï¿½ 2003 Jake Olefsky
 	http://www.offsky.com/software/exif/index.php
 	jake@olefsky.com
 	
@@ -397,13 +397,24 @@ function parseCanon($block,&$result,$seek, $globalOffset) {
 			$value = bin2hex($value);
 			if($intel==1) $value = intel2Moto($value);
 			$v = fseek($seek,$globalOffset+hexdec($value));  //offsets are from TIFF header which is 12 bytes from the start of the file
-			if($v==0 && $bytesofdata < $GLOBALS['exiferFileSize']) {
+			if (isset($GLOBALS['exiferFileSize'])) {
+				$exiferFileSize = $GLOBALS['exiferFileSize'];
+			} else {
+				$exiferFileSize = 0;
+			}
+			if($v==0 && $bytesofdata < $exiferFileSize) {
 				$data = fread($seek, $bytesofdata);
 			} else if($v==-1) {
 				$result['Errors'] = $result['Errors']++;
 			}
 		}
-		$formated_data = formatCanonData($type,$tag,$intel,$data,$result,$result['SubIFD']['MakerNote'][$tag_name]);
+		$r2 = '';
+		if (isset($result['SubIFD']['MakerNote'])) {
+			if (isset($result['SubIFD']['MakerNote'][$tag_name])) {
+				$r2 = $result['SubIFD']['MakerNote'][$tag_name];
+			}
+		}
+		$formated_data = formatCanonData($type,$tag,$intel,$data,$result,$r2);
 		
 		if($result['VerboseOutput']==1) {
 			//$result['SubIFD']['MakerNote'][$tag_name] = $formated_data;

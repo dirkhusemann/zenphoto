@@ -38,10 +38,10 @@ function getImageRating($option, $id) {
 function getImageRatingCurrent($id) {
 	$votes = getImageRating("totalvotes",$id);
 	$value = getImageRating("totalvalue",$id);
-	if($votes != 0)
-	{ $rating =  round($value/$votes, 1);
+	if($votes != 0)	{ 
+		return round($value/$votes, 1);
 	}
-	return $rating;
+	return '';
 }
 
 /**
@@ -74,6 +74,8 @@ function printRating($option) {
 	}
 	if($votes != 0) {
 		$ratingpx = round(($value/$votes)*25);
+	} else {
+		$ratingpx = '';
 	}
 	$zenpath = WEBPATH."/".ZENFOLDER."/plugins";
 	echo "<div id=\"rating\">\n";
@@ -153,10 +155,10 @@ function printAlbumRating() {
 function getAlbumRatingCurrent($id) {
 	$votes = getAlbumRating("totalvotes",$id);
 	$value = getAlbumRating("totalvalue",$id);
-	if($votes != 0)
-	{ $rating =  round($value/$votes, 1);
+	if($votes != 0)	{ 
+		return round($value/$votes, 1);
 	}
-	return $rating;
+	return '';
 }
 
 /**

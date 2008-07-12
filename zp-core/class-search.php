@@ -33,8 +33,16 @@ class SearchEngine
 	 * @return SearchEngine
 	 */
 	function SearchEngine() {
+		if (isset($_REQUEST['words'])) {
 		$this->words = $_REQUEST['words'];
+		} else {
+			$this->words = '';
+		}
+		if (isset($_REQUEST['date'])) {
 		$this->dates = sanitize(urldecode($_REQUEST['date']), true);
+		} else {
+			$this->dates = '';
+		}
 		$this->fields = $this->parseQueryFields();
 		$this->images = null;
 		$this->albums = null;
@@ -417,7 +425,7 @@ class SearchEngine
 
 			foreach ($objects as $object) {
 				$tagid = strtolower($object['name']);
-				if (!is_array($taglist[$tagid])) { $taglist[$tagid] = array(); }
+				if (!isset($taglist[$tagid]) || !is_array($taglist[$tagid])) { $taglist[$tagid] = array(); }
 				$taglist[$tagid][] = $object['objectid'];
 			}
 			$op = '';
@@ -466,7 +474,11 @@ class SearchEngine
 						$op = '';
 						break;
 							default:
-								$objectid = $taglist[strtolower($singlesearchstring)];
+								if (isset($taglist[strtolower($singlesearchstring)])) {
+									$objectid = $taglist[strtolower($singlesearchstring)];
+								} else {
+									$objectid = '';
+								}
 								switch ($op) {
 									case '&':
 										if (is_array($objectid)) {
@@ -579,7 +591,7 @@ class SearchEngine
 		}
 		if ($tagsSearch && count($searchstring) > 0) {
 			$idlist = array();
-			if (is_array($search_results)) {
+			if (isset($search_results) && is_array($search_results)) {
 				foreach ($search_results as $row) {
 					$idlist[] = $row['id'];
 				}
@@ -703,7 +715,7 @@ class SearchEngine
 		}
 		if ($tagsSearch && count($searchstring) > 0) {
 			$idlist = array();
-			if (is_array($search_results)) {
+			if (isset($search_results) && is_array($search_results)) {
 				foreach ($search_results as $row) {
 					$idlist[] = $row['id'];
 				}

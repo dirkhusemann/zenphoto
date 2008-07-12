@@ -42,7 +42,7 @@ zp_load_request();
 zp_handle_password();
 
 // Handle any comments that might be posted.
-$_zp_comment_error = zp_handle_comment();
+zp_handle_comment();
 
 
 /*** Server-side AJAX Functions ***********

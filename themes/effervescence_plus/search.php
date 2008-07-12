@@ -13,7 +13,7 @@ if (isset($_GET['noflash'])) {
 	}
 	*/
 	
-if ($_GET['format'] != 'xml') { 
+if (!isset($_GET['format']) || $_GET['format'] != 'xml') { 
 require_once ('customfunctions.php');  
  
 // Change the configuration here

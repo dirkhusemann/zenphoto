@@ -1,7 +1,6 @@
 <?php
 /**
- * This template is used to reload metadata from images. Running it will process the entire gallery,
- * supplying an album name (ex: loadAlbums.php?album=newalbum) will only process the album named. 
+ * This script is used to create dynamic albums from a search.
  * @package core
  */
 define('OFFSET_PATH', 1);
@@ -82,6 +81,7 @@ $albumname = str_replace('!', ' NOT ', $albumname);
 $albumname = str_replace('&', ' AND ', $albumname);
 $albumname = str_replace('|', ' OR ', $albumname);
 $albumname = seoFriendlyURL($albumname);
+$old = '';
 while ($old != $albumname) {
 	$old = $albumname;
 	$albumname = str_replace('--', '-', $albumname);

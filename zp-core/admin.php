@@ -217,22 +217,22 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 
 	switch ($page) {
 		case 'comments':
-			if (!($_zp_loggedin & COMMENT_RIGHTS)) $page = '';
+			if (!($_zp_loggedin & (ADMIN_RIGHTS | COMMENT_RIGHTS))) $page = '';
 			break;
 		case 'upload':
-			if (!($_zp_loggedin & UPLOAD_RIGHTS)) $page = '';
+			if (!($_zp_loggedin & (ADMIN_RIGHTS | UPLOAD_RIGHTS))) $page = '';
 			break;
 		case 'edit':
-			if (!($_zp_loggedin & EDIT_RIGHTS)) $page = '';
+			if (!($_zp_loggedin & (ADMIN_RIGHTS | EDIT_RIGHTS))) $page = '';
 			break;
 		case 'themes':
-			if (!($_zp_loggedin & THEMES_RIGHTS)) $page = '';
+			if (!($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS))) $page = '';
 			break;
 		case 'plugins':
-			if (!($_zp_loggedin & ADMIN_RIGHTS)) $page = '';
+			if (!($_zp_loggedin & (ADMIN_RIGHTS | ADMIN_RIGHTS))) $page = '';
 			break;
 	}
-	if (empty($page) && !($_zp_loggedin & MAIN_RIGHTS)) {
+	if (empty($page) && !($_zp_loggedin & (ADMIN_RIGHTS | MAIN_RIGHTS))) {
 		$page='options';
 	}
 	$q = '?page='.$page;
@@ -327,10 +327,12 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	
 	$totalimages = count($images);
 	$albumdir = "";
-	$pieces = explode('/', $folder);
-	if (($i = count($pieces)) > 1) {
-		unset($pieces[$i-1]);
-		$albumdir = "&album=" . urlencode(implode('/', $pieces));
+	
+	$albumdir = dirname($folder);
+	if (($albumdir == '/') || ($albumdir == '.')) {
+		$albumdir = '';
+	} else {
+		$albumdir = "&album=" . urlencode($albumdir);
 	}
 	if (isset($_GET['subalbumsaved'])) {
 		$album->setSubalbumSortType('Manual');
@@ -778,7 +780,7 @@ $page = "home"; ?>
 	if (isset($_GET['prune'])) {
 		$msg = gettext("Database was refreshed");
 	}
-	if ($_GET['action'] == 'clear_cache') {
+	if (isset($_GET['action']) && $_GET['action'] == 'clear_cache') {
 		$msg = gettext("Cache has been purged");
 	}
 	if (isset($_GET['counters_reset'])) {
@@ -786,11 +788,11 @@ $page = "home"; ?>
 	}
 	?>
 <ul id="home-actions">
-	<?php if ($_zp_loggedin & UPLOAD_RIGHTS)  { ?>
+	<?php if ($_zp_loggedin & (ADMIN_RIGHTS | UPLOAD_RIGHTS))  { ?>
 	<li><a href="admin-upload.php"> &raquo; <?php echo gettext("<strong>Upload</strong> pictures."); ?></a></li>
-	<?php } if ($_zp_loggedin & EDIT_RIGHTS)  { ?>
+	<?php } if ($_zp_loggedin & (ADMIN_RIGHTS | EDIT_RIGHTS))  { ?>
 	<li><a href="?page=edit"> &raquo; <?php echo gettext("<strong>Edit</strong> titles, descriptions, and other metadata."); ?></a></li>
-	<?php } if ($_zp_loggedin & COMMENT_RIGHTS)  { ?>
+	<?php } if ($_zp_loggedin & (ADMIN_RIGHTS | COMMENT_RIGHTS))  { ?>
 	<li><a href="admin-comments.php"> &raquo; <?php echo gettext("Edit or delete <strong>comments</strong>."); ?></a></li>
 	<?php } ?>
 	<li><a href="../"> &raquo; <?php echo gettext("Browse your <strong>gallery</strong> and edit on the go."); ?></a></li>
@@ -827,7 +829,7 @@ foreach ($comments as $comment) {
 			if ($albmdata) {
 				$albumdata = $albmdata[0];
 				$album = $albumdata['folder'];
-				$albumtitle = $albumdata['albumtitle'];
+				$albumtitle = $albumdata['title'];
 				if (empty($albumtitle)) $albumtitle = $album;
 			} else {
 				$title = 'database error';
@@ -843,7 +845,7 @@ foreach ($comments as $comment) {
 		if ($albmdata) {
 			$albumdata = $albmdata[0];
 			$album = $albumdata['folder'];
-			$albumtitle = $albumdata['albumtitle'];
+			$albumtitle = $albumdata['title'];
 			if (empty($albumtitle)) $albumtitle = $album;
 		} else {
 			$title = 'database error';
@@ -883,7 +885,7 @@ foreach ($comments as $comment) {
 	<br clear="all" />
 </form>
 
-<form name="cache_images" action="cache-images.php">
+<form name="cache_images" action="admin-cache-images.php">
 	<div class="buttons" id="home_cache">
 	<button class="tooltip" type="submit" title="<?php echo gettext("Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser."); ?>"><img src="images/cache.png" title="hello" alt="" /> <?php echo gettext("Pre-Cache Images"); ?></button>
 	</div>
@@ -891,7 +893,7 @@ foreach ($comments as $comment) {
 	<br clear="all" />
 </form>
 
-<form name="refresh_metadata" action="refresh-metadata.php">
+<form name="refresh_metadata" action="admin-refresh-metadata.php">
 	<div class="buttons" id="home_exif">
 	<button class="tooltip" type="submit" title="<?php echo gettext("Forces a refresh of the EXIF and IPTC data for all images."); ?>"><img src="images/warn.png" alt="" /> <?php echo gettext("Refresh Metadata"); ?></button>
 	</div>

@@ -990,8 +990,16 @@ function ConvertToFraction($v, &$n, &$d)
 // Calculates the 35mm-equivalent focal length from the reported sensor resolution, by Tristan Harward.
 //================================================================================================
 function get35mmEquivFocalLength(&$result) {
+	if (isset($result['SubIFD']['ExifImageWidth'])) {
 	$width = $result['SubIFD']['ExifImageWidth'];
-	$units = $result['SubIFD']['FocalPlaneResolutionUnit'];
+	} else {
+		$width = 0;
+	}
+	if (isset($result['SubIFD']['FocalPlaneResolutionUnit'])) {
+		$units = $result['SubIFD']['FocalPlaneResolutionUnit'];
+	} else {
+		$units = '';
+	}
 	$unitfactor = 1;
 	switch ($units) {
 		case 'Inch' :       $unitfactor = 25.4; break;
@@ -999,8 +1007,16 @@ function get35mmEquivFocalLength(&$result) {
 		case 'No Unit' :    $unitfactor = 25.4; break;
 		default :           $unitfactor = 25.4;
 	}
-	$xres = $result['SubIFD']['FocalPlaneXResolution'];
-	$fl = $result['SubIFD']['FocalLength'];
+	if (isset($result['SubIFD']['FocalPlaneXResolution'])) {
+		$xres = $result['SubIFD']['FocalPlaneXResolution'];
+	} else {
+		$xres = '';
+	}
+	if (isset($result['SubIFD']['FocalLength'])) {
+		$fl = $result['SubIFD']['FocalLength'];
+	} else {
+		$fl = 0;
+	}
 	
 	if (($width != 0) && !empty($units) && !empty($xres) && !empty($fl) && !empty($width)) {
 		$ccdwidth = ($width * $unitfactor) / $xres;

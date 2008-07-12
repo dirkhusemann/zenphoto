@@ -168,9 +168,16 @@ function zp_handle_comment() {
 					$commentobject = $_zp_current_album;
 					$redirectTo = $_zp_current_album->getAlbumLink(); 
 				}
+				if (isset($_POST['code'])) {
+					$code1 = strip_tags($_POST['code']);
+					$code2 = $_POST['code_h'];
+				} else {
+					$code1 = '';
+					$code2 = '';
+				}
 				$commentadded = $commentobject->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']),
 													$website, kses($_POST['comment'], $allowed),
-													strip_tags($_POST['code']), $_POST['code_h'], 
+													$code1, $code2, 
 													sanitize($_SERVER['REMOTE_ADDR']), $_POST['private'],
 													$_POST['anon']);
 			}
@@ -201,10 +208,11 @@ function zp_handle_comment() {
 		// Comment form was not submitted; get the saved info from the cookie.
 		$stored = explode('|~*~|', stripslashes($cookie)); 
 		$stored[4] = true;
+		if (!isset($stored[5])) $stored[5] = false;
+		if (!isset($stored[6])) $stored[6] = false;
 	} else {
 		$stored = array('','','', '', false, false, false);
 	}
-	return $_zp_comment_error;
 }
 
 /**

@@ -376,6 +376,7 @@ if (!$checked) {
 				$f = " (<em>$append</em>)";
 			}
 			$msg = '';
+			$sfx = '';
 		}
 
 		return checkMark(is_dir($path) && is_writable($path), " <em>$which</em>".' '.gettext("folder").$f, $sfx, $msg);
@@ -479,7 +480,7 @@ if (!$checked) {
 	}
 	if ($cfg) {
 		@chmod('zp-config.php', CHMOD_VALUE);
-		if ((!$sql || !$connection  || !$db) && is_writable('zp-config.php')) {
+		if ($adminstuff = (!$sql || !$connection  || !$db) && is_writable('zp-config.php')) {
 			$good = checkMark(false, ' '.gettext("MySQL setup in").' zp-config.php', '', '') && $good;
 			// input form for the information
 			?>
@@ -535,13 +536,13 @@ if ($debug) {
 
 <?php
 		} else {
-			$good = checkMark(!$mySQLadmin, ' '.gettext("MySQL setup in <em>zp-config.php</em>"), '',
+			$good = checkMark(!$adminstuff, ' '.gettext("MySQL setup in <em>zp-config.php</em>"), '',
 											gettext("You have not set your <strong>MySQL</strong> <code>user</code>, <code>password</code>, etc. in your <code>zp-config.php</code> file and <strong>setup</strong> is not able to write to the file.")) && $good;
 		}
 	}
 	$good = checkMark($connection, ' '.gettext("connect to MySQL"), '', gettext("Could not connect to the <strong>MySQL</strong> server. Check the <code>user</code>, <code>password</code>, and <code>database host</code> in your <code>zp-config.php</code> file and try again.").' ') && $good;
 	if ($connection) {
-		$good = checkMark($sqlv, ' '.gettext("MySQL version").' '.$mysqlv, "", gettext("Version").' '.$required.gettext.' '.("or greater is required")) && $good;
+		$good = checkMark($sqlv, ' '.gettext("MySQL version").' '.$mysqlv, "", gettext("Version").' '.$required.' '.gettext("or greater is required")) && $good;
 		$good = checkMark($db, ' '.gettext("connect to the database <code>") . $_zp_conf_vars['mysql_database'] . "</code>", '',
 			gettext("Could not access the <strong>MySQL</strong> database")." (<code>" . $_zp_conf_vars['mysql_database'] ."</code>). ".gettext("Check the <code>user</code>, <code>password</code>, and <code>database name</code> and try again.").' ' .
 			gettext("Make sure the database has been created, and the <code>user</code> has access to it.").' ' .
@@ -579,7 +580,7 @@ if ($debug) {
 
 		$sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$_zp_conf_vars['mysql_prefix']."%';";
 		$result = mysql_query($sql, $mysql_connection);
-		$tablelist = '';
+		$tableslist = '';
 		if ($result) {
 			while ($row = mysql_fetch_row($result)) {
 				$tableslist .= "<code>" . $row[0] . "</code>, ";
@@ -684,8 +685,8 @@ if ($debug) {
 		echo "<p>".gettext("You need to address the problems indicated above then run <code>setup.php</code> again.")."</p>";
 		if ($noxlate > 0) {
 			echo "\n</div>";
-			echo "\n<div$class>\n";
-			echo '<form action="#'.$action.'" method="post">'."\n";
+			echo "\n<div>\n";
+			echo '<form action="#'.'" method="post">'."\n";
 			if ($debug) {
 				echo '<input type="hidden" name="debug" />';
 			}
@@ -993,7 +994,7 @@ if (file_exists("zp-config.php")) {
 			}
 		}
 	}
-	if (!hasownerid) {
+	if (!$hasownerid) {
 		$sql_statements[] = "ALTER TABLE $tbl_comments ADD INDEX (`ownerid`);";
 	}
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `dynamic` int(1) UNSIGNED default '0'";
@@ -1057,7 +1058,7 @@ if (file_exists("zp-config.php")) {
 		setupLog("Previous Release was $prevRel");
 		
 		$gallery = new Gallery();
-		require('option-defaults.php');
+		require('setup-option-defaults.php');
 		
 		// 1.1.6 special cleanup section for plugins
 		$badplugs = array ('exifimagerotate.php', 'flip_image.php', 'image_mirror.php', 'image_rotate.php', 'supergallery-functions.php');
@@ -1186,6 +1187,7 @@ if (file_exists("zp-config.php")) {
 		echo "<h3>$dbmsg</h3>";
 		echo "<p>".gettext("We are all set to")." ";
 		$db_list = '';
+		$create = array();
 		foreach ($expected_tables as $table) {
 			if ($tables[$table] == 'create') {
 				$create[] = $table;
@@ -1253,8 +1255,8 @@ if (file_exists("zp-config.php")) {
 </div>
 <?php
 if (($noxlate > 0) && !isset($_GET['create']) && !isset($_GET['update'])) {
-	echo "\n<div$class>\n";
-	echo '<form action="#'.$action.'" method="post">'."\n";
+	echo "\n<div>\n";
+	echo '<form action="#'.'" method="post">'."\n";
 	if ($debug) {
 		echo '<input type="hidden" name="debug" />';
 	}

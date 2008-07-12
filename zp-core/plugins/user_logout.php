@@ -71,7 +71,7 @@ if (!OFFSET_PATH) {
 function printUserLogout($before='', $after='', $showLoginForm=false) {
 	global $saved_auth;
 	if ($showLoginForm) {
-		$showLoginForm = !checkforPassword(silent);
+		$showLoginForm = !checkforPassword(true);
 	}
 	if (empty($saved_auth)) {
 		printPasswordForm('', false);

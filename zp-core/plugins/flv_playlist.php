@@ -34,17 +34,12 @@
  * @version 1.0.4.2
  * @package plugins 
  */
-if (!getOption('zp_plugin_flvplayer')) {
 
-	$flv_player_missing = ' <strong>'.gettext("The flvplayer plugin is not enabled. It must be enabled for this plugin to have effect.").'</strong>';
-
-}
-
-
-$plugin_description = gettext("A plugin to show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players with flv player (some options are also shared with that plugin).").$flv_player_missing;
+$plugin_description = gettext("A plugin to show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players with flv player (some options are also shared with that plugin).").
+	' <strong>'.gettext("Requires flvplayer plugin.").'</strong>';
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_version = '1.0.4.2';
-$plugin_URL = "";
+$plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---flv_playlist.php.html";
 $option_interface = new flvplaylist();
 
 /**

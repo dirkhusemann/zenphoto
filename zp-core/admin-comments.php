@@ -6,12 +6,16 @@
 define('OFFSET_PATH', 1);
 require_once("admin-functions.php");
 
-if (!($_zp_loggedin & (COMMENT_RIGHTS | ADMIN_RIGHTS))) { // prevent nefarious access to this page.
+if (!($_zp_loggedin & (ADMIN_RIGHTS | COMMENT_RIGHTS))) { // prevent nefarious access to this page.
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
 	exit();
 }
 $gallery = new Gallery();
-$_GET['page'] = 'comments';
+if (isset($_get['page'])) {
+	$page = $_GET['page'];
+} else {
+	$page = '';
+}
 
 /* handle posts */
 if (isset($_GET['action'])) {
@@ -207,7 +211,7 @@ if ($page == "editcomment") { ?>
 				if ($albmdata) {
 					$albumdata = $albmdata[0];
 					$album = $albumdata['folder'];
-					$albumtitle = $albumdata['albumtitle'];
+					$albumtitle = $albumdata['title'];
 					if (empty($albumtitle)) $albumtitle = $album;
 				} else {
 					$title = gettext('database error');
@@ -223,7 +227,7 @@ if ($page == "editcomment") { ?>
 			if ($albmdata) {
 				$albumdata = $albmdata[0];
 				$album = $albumdata['folder'];
-				$albumtitle = $albumdata['albumtitle'];
+				$albumtitle = $albumdata['title'];
 				if (empty($albumtitle)) $albumtitle = $album;
 			} else {
 				$title = gettext('database error');

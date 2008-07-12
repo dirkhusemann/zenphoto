@@ -12,8 +12,10 @@
  */
 function setDefault($option, $default) {
 	global $conf;
-	$v = $conf[$option];
-	if (empty($v)) {
+	if (isset($conf[$option])) {
+		$v = $conf[$option];
+	}
+	if (!isset($v) || empty($v)) {
 		$v = $default;
 	} else {
 		if (get_magic_quotes_gpc()) {
@@ -130,6 +132,8 @@ function setDefault($option, $default) {
 		} else {
 			$protection = 'Protected view';
 		}
+	} else {
+		$protection = 'Unprotected';
 	}
 	if ($protection) {
 		setOption('protect_full_image', $protection);

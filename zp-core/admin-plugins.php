@@ -32,7 +32,7 @@ if (isset($_GET['action'])) {
 		chdir($curdir);
 		foreach ($filelist as $extension) {
 			$opt = 'zp_plugin_'.substr($extension, 0, strlen($extension)-4);
-			setBoolOption($opt, $_POST[$opt]);
+			setBoolOption($opt, isset($_POST[$opt]));
 		}
 	}
 }

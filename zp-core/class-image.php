@@ -154,8 +154,10 @@ class Image extends PersistentObject {
 			$exifraw = read_exif_data_raw($this->localpath, false);
 			if ($exifraw['ValidEXIFData']) {
 				foreach($_zp_exifvars as $field => $exifvar) {
-					$exif[$field] = $exifraw[$exifvar[0]][$exifvar[1]];
-					$this->set($field, $exif[$field]);
+					if (isset($exifraw[$exifvar[0]][$exifvar[1]])) {
+						$exif[$field] = $exifraw[$exifvar[0]][$exifvar[1]];
+						$this->set($field, $exif[$field]);
+					}
 				}
 				$this->set('EXIFValid', 1);
 			} else {

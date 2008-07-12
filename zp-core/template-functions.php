@@ -86,14 +86,13 @@ function printAdminToolbox($context=null, $id='admin') {
 		echo '<div id="' .$id. '">'."\n".'<h3><a href="javascript: toggle('. "'" .$dataid."'".');">'.gettext('Admin Toolbox').'</a></h3>'."\n"."\n</div>";
 		echo '<div id="' .$dataid. '" style="display: none;">'."\n";
 		printAdminLink(gettext('Admin'), '', "<br />\n");
-		$albumname = $_zp_current_album->name;
 		if ($_zen_gallery_page === 'index.php') {
-			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
+			if ($_zp_loggedin & (ADMIN_RIGHTS | EDIT_RIGHTS)) {
 				printSortableGalleryLink(gettext('Sort gallery'), gettext('Manual sorting'));
 				echo "<br />\n";
 			}
-			if (isMyAlbum($albumname, UPLOAD_RIGHTS)) {
-				printLink($zf . '/admin-upload.php' . urlencode($_zp_current_album->name), gettext("New album"), NULL, NULL, NULL);
+			if ($_zp_loggedin & (ADMIN_RIGHTS | UPLOAD_RIGHTS)) {
+				printLink($zf . '/admin-upload.php', gettext("New album"), NULL, NULL, NULL);
 				echo "<br />\n";
 			}
 			if (isset($_GET['p'])) {
@@ -103,6 +102,7 @@ function printAdminToolbox($context=null, $id='admin') {
 				$redirect .= "&amp;page=$page";
 			}
 		} else if ($_zen_gallery_page === 'album.php') {  
+			$albumname = $_zp_current_album->name;
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				printSubalbumAdmin(gettext('Edit album'), '', "<br />\n");
 				if (!$_zp_current_album->isDynamic()) {
@@ -122,6 +122,7 @@ function printAdminToolbox($context=null, $id='admin') {
 			}
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;page=$page";
 		} else if ($_zen_gallery_page === 'image.php') {
+			$albumname = $_zp_current_album->name;
 			$imagename = urlencode($_zp_current_image->filename);
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				echo "<a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?page=edit&action=deleteimage&album=" .
@@ -130,8 +131,8 @@ function printAdminToolbox($context=null, $id='admin') {
 			}
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=$imagename";
 		} else if (($_zen_gallery_page === 'search.php')&& !empty($_zp_current_search->words)) {
-			if ($_zp_loggedin & UPLOAD_RIGHTS) {
-				echo "<a href=\"".$zf."/dynamic.php\" title=\"".gettext("Create an album from the search")."\">".gettext("Create Album")."</a><br/>";
+			if ($_zp_loggedin & (ADMIN_RIGHTS | UPLOAD_RIGHTS)) {
+				echo "<a href=\"".$zf."/admin-dynamic-album.php\" title=\"".gettext("Create an album from the search")."\">".gettext("Create Album")."</a><br/>";
 			}
 			$redirect = "&amp;p=search" . $_zp_current_search->getSearchParams() . "&amp;page=$page";
 		}
@@ -151,7 +152,7 @@ function zenJavascript() {
 	echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/js-string-constants.js.php\"></script>\n";
 	
 	if (!is_null($_zp_phoogle)) {$_zp_phoogle->printGoogleJS();}
-	if (($rights = zp_loggedin()) & EDIT_RIGHTS) {
+	if (($rights = zp_loggedin()) & (ADMIN_RIGHTS | EDIT_RIGHTS)) {
 		if (in_context(ZP_ALBUM)) {
 			$grant = isMyAlbum($_zp_current_album->name, EDIT_RIGHTS);
 		} else {
@@ -1133,6 +1134,7 @@ function isImagePage() {
  * @return bool
  */
 function isAlbumPage() {
+	global $_zp_page;
 	if (in_context(ZP_SEARCH)) {
 		$pageCount = Ceil(getNumAlbums() / getOption('albums_per_page'));
 	} else {
@@ -2599,6 +2601,7 @@ function getRandomImagesAlbum($rootAlbum=null) {
 			$albumInWhere =  ' AND '.substr($albumInWhere, 0, -2) . ')';
 			$albumNotWhere = ' AND '.getProtectedAlbumsWhere();
 		}
+		$c = 0;
 		while ($c < 10) {
 			$result = query_single_row('SELECT COUNT(*) AS row_count ' .
 				' FROM '.prefix('images'). ', '.prefix('albums').
@@ -2866,16 +2869,10 @@ function printAllDates($class='archive', $yearid='year', $monthid='month', $orde
  */
 function getCustomPageURL($page, $q="", $album="") {
 	global $_zp_current_album;
-	if (empty($album)) {
-		if (!is_null($_zp_current_album)) {
-			$album = urlencode($_zp_current_album->name);
-		} else {
-			$album = '';
-		}
-	}
+	$result = '';
 	if (getOption('mod_rewrite')) {
 		if (!empty($album)) {
-			$album = "/$album";
+			$album = '/'.urlencode($album);
 		}
 		$result .= WEBPATH.$album."/page/$page";
 		if (!empty($q)) { $result .= "?$q"; }
@@ -3124,7 +3121,7 @@ function zen_search_script() {
  * @since 1.1.3
  */
 function printSearchForm($prevtext=NULL, $id="search", $buttonSource="") {
-	if (checkforPassword(silent)) { return; }
+	if (checkforPassword(true)) { return; }
 	$zf = WEBPATH."/".ZENFOLDER;
 	$dataid = $id . '_data';
 	$searchwords = (isset($_POST['words']) ? $_REQUEST['words'] : '');
@@ -3134,7 +3131,6 @@ function printSearchForm($prevtext=NULL, $id="search", $buttonSource="") {
 		$searchwords = "'".$searchwords."'";
 	}
 
-	if ($fieldSelect === 0) { $fieldSelect = 32767; }
 	$fields = getOption('search_fields');
 	if ($multiple = cbone($fields, 8) > 1) {
 		$multiple = false; //disable until it works!		zen_search_script();
@@ -3342,7 +3338,7 @@ function normalizeColumns($albumColumns, $imageColumns) {
 	}
 	$imgcount = max(1, getOption('images_per_page'));
 	if (($imgcount % $imageColumns) != 0) {
-		setOption('images_per_page', $imgcount = ((floor($imgcount / $imageColumns) + 1) * $imageColumns - $imageReduction), false);
+		setOption('images_per_page', $imgcount = ((floor($imgcount / $imageColumns) + 1) * $imageColumns), false);
 	}
 	if (in_context(ZP_ALBUM | ZP_SEARCH)) {
 		if (in_context(ZP_SEARCH)) {

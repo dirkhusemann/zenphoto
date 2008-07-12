@@ -15,7 +15,7 @@ function show_sub_count_index() {
 
 function printHeadingImage($randomImage) {
 	$id = getAlbumId();
-	if (is_null($randomImage) || checkforPassword(silent)) {
+	if (is_null($randomImage) || checkforPassword(true)) {
 		$randomImage= new Image(new Album(new Gallery(), ''), 'zen-logo.jpg' );
 	}
 	if (!is_null($randomImage)) {

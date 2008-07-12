@@ -12,6 +12,7 @@ require_once("admin-functions.php");
 function loadAlbum($album) {
 	global $_zp_current_album;
 	$subalbums = $album->getSubAlbums();
+	$count = 0;
 	foreach ($subalbums as $folder) {
 		$subalbum = new Album($album, $folder);
 		$count = $count + loadAlbum($subalbum);
@@ -55,7 +56,7 @@ echo "\n<body>";
 		$folder = urldecode(strip($alb));
 		echo "\n<h2>".$clear.gettext("Refreshing cache for")." <em>$folder</em></h2>";
 		if (isset($_GET['clear']) || isset($_POST['clear'])) {
-		$gallery->clearCache(SERVERCACHE . '/' . $folder); // clean out what was there
+			$gallery->clearCache(SERVERCACHE . '/' . $folder); // clean out what was there
 		}
 		$album = new Album($album, $folder);
 		$count = loadAlbum($album);

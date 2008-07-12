@@ -346,8 +346,16 @@ function adminPrintImageThumb($image, $class=NULL, $id=NULL) {
 function printLoginForm($redirect=null, $logo=true) {
 	global $_zp_login_error, $_zp_current_admin;
 	if (is_null($redirect)) { $redirect = "/" . ZENFOLDER . "/admin.php"; }
-	$requestor = sanitize($_POST['user']);
-	if (empty($requestor)) { $requestor = sanitize($_GET['ref']); }
+	if (isset($_POST['user'])) {
+		$requestor = sanitize($_POST['user']);
+	} else {
+		$requestor = '';
+	}
+	if (empty($requestor)) { 
+		if (isset($_GET['ref'])) {
+			$requestor = sanitize($_GET['ref']); 
+		}
+	}
 
 	if ($logo) echo "<p><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" /></p>";
 	if (count(getAdminEmail()) > 0) {
@@ -922,7 +930,7 @@ function printAlbumEditForm($index, $album) {
 		echo "\n<td align=\"right\" valign=\"top\">".gettext("Album theme:")." </td> ";
 		echo "\n<td>";
 		echo "\n<select id=\"album_theme\" class=\"album_theme\" name=\"".$prefix."album_theme\" ";
-		if (!($_zp_loggedin & THEMES_RIGHTS)) echo "DISABLED ";
+		if (!($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS))) echo "DISABLED ";
 		echo ">";
 		$themes = $gallery->getThemes();
 		$oldtheme = $album->getAlbumTheme();
@@ -1090,7 +1098,7 @@ function printAlbumButtons($album) {
 	if ($album->getNumImages() > 0) {
 		echo "\n<table class=\"buttons\"><tr>";
 		echo "\n<td valign=\"top\" width=30% style=\"padding: 0px 30px 0px 30px;\">";
-		echo "<form name=\"cache_images\" action=\"cache-images.php\" method=\"post\">";
+		echo "<form name=\"cache_images\" action=\"admin-cache-images.php\" method=\"post\">";
 		echo "<input type=\"hidden\" name=\"album\" value=" . urlencode($album->name) . ">";
 		echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
 		echo "<button type=\"submit\" class=\"tooltip\" id='edit_cache' title=\"".gettext("Cache newly uploaded images.")."\"><img src=\"images/cache.png\" style=\"border: 0px;\" />";
@@ -1099,7 +1107,7 @@ function printAlbumButtons($album) {
 		echo "</form>\n</td>";
 
 		echo "\n<td valign=\"top\" width = 30% style=\"padding: 0px 30px 0px 30px;\">";
-		echo "<form name=\"refresh_metadata\" action=\"refresh-metadata.php\"?album=" . urlencode($album->name) . "\" method=\"post\">";
+		echo "<form name=\"refresh_metadata\" action=\"admin-refresh-metadata.php\"?album=" . urlencode($album->name) . "\" method=\"post\">";
 		echo "<input type=\"hidden\" name=\"album\" value=" . urlencode($album->name) . ">";
 		echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
 		echo "<button type=\"submit\" class=\"tooltip\" id='edit_refresh' title=\"".gettext("Forces a refresh of the EXIF and IPTC data for all images in the album.")."\"><img src=\"images/warn.png\" style=\"border: 0px;\" /> ".gettext("Refresh Metadata")."</button>";
@@ -1137,16 +1145,23 @@ function printAlbumEditRow($album) {
 
 	if ($album->isDynamic()) {
 		$si = "Dynamic";
+		$sa = '';
 	} else {
 		$ci = count($album->getImages());
-		if ($ci > 0) $si = "$ci image" . $si; else $si = "no image";
-		if ($ci != 1) {	$si .= "s"; } else  {	$si .= "&nbsp;"; }
+		if ($ci > 0) {
+			if ($ci > 1) 	$si = $ci.' '.gettext('images'); else $si = '1 '.gettext('image');
+		} else {
+			$si = gettext('no images');
+		}
 		if ($ci > 0) {
 			$si = '<a href="?page=edit&album=' . urlencode($album->name) .'#tab_imageinfo" title="'.gettext('Subalbum List').'">'.$si.'</a>';
 		}
 		$ca = count($album->getSubalbums());
-		if ($ca > 0) $sa = $ca . " album" . $sa;  else $ca = "&nbsp;";
-		if ($ca > 1) $sa .= "s";
+		if ($ca > 0) {
+			if ($ca > 1) $sa = $ca . ' ' . gettext("album");  else $sa = '1 '.gettext("album");
+		} else {
+			$sa = '&nbsp;';
+		}
 		if ($ca > 0) {
 			$sa = '<a href="?page=edit&album=' . urlencode($album->name) .'#tab_subalbuminfo" title="'.gettext('Subalbum List').'">'.$sa.'</a>';
 		}
@@ -1175,12 +1190,12 @@ function printAlbumEditRow($album) {
 	}
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-	echo '<a class="cache" href="cache-images.php?page=edit&album=' . urlencode($album->name) . "&return=*" .
+	echo '<a class="cache" href="admin-cache-images.php?page=edit&album=' . urlencode($album->name) . "&return=*" .
  			'" title="'.gettext('Pre-cache images in').' ' . $album->name . '">';
 	echo '<img src="images/cache.png" style="border: 0px;" alt="'.gettext('Cache the album').' ' . $album->name . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-	echo '<a class="warn" href="refresh-metadata.php?page=edit&album=' . urlencode($album->name) . "&return=*" .
+	echo '<a class="warn" href="admin-refresh-metadata.php?page=edit&album=' . urlencode($album->name) . "&return=*" .
  			'" title="'.gettext('Refresh metadata for the album').' ' . $album->name . '">';
 	echo '<img src="images/warn.png" style="border: 0px;" alt="'.gettext('Refresh image metadata in the album').' ' . $album->name . '" /></a>';
 
@@ -1220,10 +1235,12 @@ function processAlbumEdit($index, $album) {
 	
 	$tags = array();
 	for ($i=0; $i<4; $i++) {
-		$tag = trim(strip($_POST[$tagsprefix.'new_tag_value_'.$i]));
-		unset($_POST[$tagsprefix.'new_tag_value_'.$i]);
-		if (!empty($tag)) {
-			$tags[] = $tag;
+		if (isset($_POST[$tagsprefix.'new_tag_value_'.$i])) {
+			$tag = trim(strip($_POST[$tagsprefix.'new_tag_value_'.$i]));
+			unset($_POST[$tagsprefix.'new_tag_value_'.$i]);
+			if (!empty($tag)) {
+				$tags[] = $tag;
+			}
 		}
 	}
 	$l = strlen($tagsprefix);
@@ -1241,17 +1258,17 @@ function processAlbumEdit($index, $album) {
 	$album->setDateTime(strip($_POST[$prefix."albumdate"]));
 	$album->setPlace(strip($_POST[$prefix.'albumplace']));
 	$album->setAlbumThumb(strip($_POST[$prefix.'thumb']));
-	$album->setShow(strip($_POST[$prefix.'Published']));
-	$album->setCommentsAllowed(strip($_POST[$prefix.'allowcomments']));
+	$album->setShow(isset($_POST[$prefix.'Published']));
+	$album->setCommentsAllowed(isset($_POST[$prefix.'allowcomments']));
 	$sorttype = strip($_POST[$prefix.'sortby']);
 	$album->setSortType($sorttype);
 	if ($sorttype == 'Manual') {
 		$album->setSortDirection('image', 0);
 	} else {
 		if (empty($sorttype)) {
-			$direction = '';
+			$direction = 0;
 		} else {
-			$direction = strip($_POST[$prefix.'image_sortdirection']);
+			$direction = isset($_POST[$prefix.'image_sortdirection']);
 		}
 		$album->setSortDirection('image', $direction);
 	}
@@ -1259,7 +1276,7 @@ function processAlbumEdit($index, $album) {
 	if ($sorttype == 'Manual') {
 		$album->setSortDirection('album', 0);
 	} else {
-		$album->setSortDirection('album', strip($_POST[$prefix.'album_sortdirection']));
+		$album->setSortDirection('album', isset($_POST[$prefix.'album_sortdirection']));
 	}
 	if (isset($_POST['reset_hitcounter'])) {
 		$id = $album->getAlbumID();
@@ -1285,21 +1302,23 @@ function processAlbumEdit($index, $album) {
 		$notify = '&mismatch=album';
 	}
 	$oldtheme = $album->getAlbumTheme();
-	$newtheme = strip($_POST[$prefix.'album_theme']);
-	if ($oldtheme != $newtheme) {
-		$album->setAlbumTheme($newtheme);
-		if (!ALBUM_OPTIONS_TABLE) {
-			if (!empty($newtheme)) {
-				// setup new theme option table
-				$tbl_options = prefix(getOptionTableName($album->name));
-				$sql = "CREATE TABLE IF NOT EXISTS $tbl_options (
-				`id` int(11) unsigned NOT NULL auto_increment,
-				`name` varchar(64) NOT NULL,
-				`value` text NOT NULL,
-				PRIMARY KEY  (`id`),
-				UNIQUE (`name`)
-				);";
-				query($sql);
+	if (isset($_POST[$prefix.'album_theme'])) {
+		$newtheme = strip($_POST[$prefix.'album_theme']);
+		if ($oldtheme != $newtheme) {
+			$album->setAlbumTheme($newtheme);
+			if (!ALBUM_OPTIONS_TABLE) {
+				if (!empty($newtheme)) {
+					// setup new theme option table
+					$tbl_options = prefix(getOptionTableName($album->name));
+					$sql = "CREATE TABLE IF NOT EXISTS $tbl_options (
+					`id` int(11) unsigned NOT NULL auto_increment,
+					`name` varchar(64) NOT NULL,
+					`value` text NOT NULL,
+					PRIMARY KEY  (`id`),
+					UNIQUE (`name`)
+					);";
+					query($sql);
+				}
 			}
 		}
 	}
@@ -1347,6 +1366,8 @@ function checkForUpdate() {
 function fetchComments($number) {
 	if ($number) {
 		$limit = " LIMIT $number";
+	} else {
+		$limit = '';
 	}
 
 	global $_zp_loggedin;
@@ -1356,7 +1377,7 @@ function fetchComments($number) {
 		. " (date + 0) AS date, `comment`, `email`, `inmoderation`, `ip`, `private`, `anon` FROM ".prefix('comments')
 		. " ORDER BY id DESC$limit";
 		$comments = query_full_array($sql);
-	} else  if ($_zp_loggedin & COMMENT_RIGHTS) {
+	} else  if ($_zp_loggedin & (ADMIN_RIGHTS | COMMENT_RIGHTS)) {
 		$albumlist = getManagedAlbumList();
 		$albumIDs = array();
 		foreach ($albumlist as $albumname) {

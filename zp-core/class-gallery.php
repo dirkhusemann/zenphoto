@@ -449,7 +449,7 @@ class Gallery {
 						}
 
 						/* description */
-						if (is_null($row['desc'])) {
+						if (!isset($row['desc'])) {
 							if (isset($metadata['desc'])) {
 								$set .= ', `desc`="' . mysql_real_escape_string($metadata['desc']) . '"';
 							}
