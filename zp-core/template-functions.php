@@ -901,7 +901,7 @@ function printSortableAlbumLink($text, $title, $class=NULL, $id=NULL) {
 	global $_zp_sortable_list, $_zp_current_album;
 	if (zp_loggedin()) {
 		if (!isset($_GET['sortable'])) {
-			printLink(WEBPATH . "/" . ZENFOLDER . "/albumsort.php?page=edit&album=" . urlencode($_zp_current_album->getFolder()),
+			printLink(WEBPATH . "/" . ZENFOLDER . "/admin-albumsort.php?page=edit&album=" . urlencode($_zp_current_album->getFolder()),
 			$text, $title, $class, $id);
 		} else {
 			$_zp_sortable_list->printForm(getAlbumLinkURL(), 'POST', gettext('Save'), 'button');

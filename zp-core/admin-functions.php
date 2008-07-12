@@ -297,7 +297,7 @@ function printAdminLinks($action, $text, $title=NULL, $class=NULL, $id=NULL) {
  * @since  1.0.0
  */
 function printSortLink($album, $text, $title=NULL, $class=NULL, $id=NULL) {
-	printLink(WEBPATH . "/" . ZENFOLDER . "/albumsort.php?page=edit&album=". urlencode( ($album->getFolder()) ), $text, $title, $class, $id);
+	printLink(WEBPATH . "/" . ZENFOLDER . "/admin-albumsort.php?page=edit&album=". urlencode( ($album->getFolder()) ), $text, $title, $class, $id);
 }
 
 /**
@@ -448,8 +448,12 @@ function printTabs() {
 		echo "\n    <li". (strstr($currentpage,'admin-upload.php') ? " class=\"current\""   : "") .
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-upload.php\">".gettext("upload")."</a></li>";
 	}
+	
 	if (($_zp_loggedin & (EDIT_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n    <li". ((strstr($currentpage, 'admin.php') && ($page == 'edit')) ? " class=\"current\""     : "") .
+		echo "\n    <li". ((strstr($currentpage, 'admin.php') && ($page == 'edit') ||
+												strstr($currentpage, 'admin-albumsort.php') ||
+												strstr($currentpage, 'admin-dynamic-album.php')
+				) ? " class=\"current\""     : "") .
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?page=edit\">".gettext("edit")."</a></li>";
 	}
 	if (($_zp_loggedin & ADMIN_RIGHTS)) {
