@@ -211,9 +211,12 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 		}
 	}
 
-	// Redirect to a page if it's set
-	// (NOTE: Form POST data will be resent on refresh. Use header(Location...) instead, unless there's an error message.
-	if (isset($_GET['page'])) { $page = $_GET['page']; } else if (empty($page)) { $page = ""; }
+
+	if (isset($_GET['page'])) { 
+		$page = $_GET['page']; 
+	} else if (empty($page)) {
+		$page = ""; 
+	}
 
 	switch ($page) {
 		case 'comments':
@@ -235,6 +238,12 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	if (empty($page) && !($_zp_loggedin & (ADMIN_RIGHTS | MAIN_RIGHTS))) {
 		$page='options';
 	}
+	
+	
+	/* TODO: 	This should not be necessary if all the references really got changed on the restructure.
+						Only the redirect to the options page should be required--for no-rights admin users as
+						they can only view/change their credentials.
+  */
 	$q = '?page='.$page;
 	foreach ($_GET as $opt=>$value) {
 		if ($opt != 'page') {
@@ -345,7 +354,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	?>
 
 <h1>Edit Album: <em><?php echo $album->name; ?></em></h1>
-<p><?php printAdminLinks(gettext("edit") . $albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
+<p><?php printAdminLinks('edit' . $albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
  | <?php if (!$album->isDynamic() && $album->getNumImages() > 1) { 
    printSortLink($album, gettext("Sort Album"), gettext("Sort Album")); 
    echo ' | '; }?>
