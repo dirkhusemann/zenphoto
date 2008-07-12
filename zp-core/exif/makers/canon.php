@@ -406,6 +406,7 @@ function parseCanon($block,&$result,$seek, $globalOffset) {
 				$data = fread($seek, $bytesofdata);
 			} else if($v==-1) {
 				$result['Errors'] = $result['Errors']++;
+				$data = '';
 			}
 		}
 		$r2 = '';

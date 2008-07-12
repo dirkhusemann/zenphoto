@@ -42,14 +42,14 @@ $allowWatermark = true;
 if (isset($_GET['t'])) {
 	$allowWatermark = !$_GET['t'];
 } else {
-	if (isset($_GET[s])) {
+	if (isset($_GET['s'])) {
 		$allowWatermark = $_GET['s'] != 'thumb';
 	}
 }
 
 // Fix special characters in the album and image names if mod_rewrite is on:
 // URL looks like: "/album1/subalbum/image/picture.jpg"
-list($ralbum, $rimage, $search_link) = rewrite_get_album_image('a', 'i');
+list($ralbum, $rimage) = rewrite_get_album_image('a', 'i');
 $album = str_replace('..','', sanitize($ralbum));
 $image = str_replace(array('/',"\\"),'', sanitize($rimage));
 
@@ -60,10 +60,48 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
 
 	// Extract the image parameters from the input variables
 	// This validates the input as well.
-	$args = getImageParameters(
-		array(
-			$_GET['s'], $_GET['w'], $_GET['h'], $_GET['cw'], $_GET['ch'], $_GET['cx'], $_GET['cy'], $_GET['q'])
-		);
+	$args = array();
+	if (isset($_GET['s'])) {
+		$args[] = $_GET['s'];
+	} else {
+		$args[] = NULL;
+	}
+	if (isset($_GET['w'])) {
+		$args[] = $_GET['w'];
+	} else {
+		$args[] = NULL;
+	}
+		if (isset($_GET['h'])) {
+		$args[] = $_GET['h'];
+	} else {
+		$args[] = NULL;
+	}
+		if (isset($_GET['cw'])) {
+		$args[] = $_GET['cw'];
+	} else {
+		$args[] = NULL;
+	}
+		if (isset($_GET['ch'])) {
+		$args[] = $_GET['ch'];
+	} else {
+		$args[] = NULL;
+	}
+		if (isset($_GET['cx'])) {
+		$args[] = $_GET['cx'];
+	} else {
+		$args[] = NULL;
+	}
+		if (isset($_GET['cy'])) {
+		$args[] = $_GET['cy'];
+	} else {
+		$args[] = NULL;
+	}
+		if (isset($_GET['q'])) {
+		$args[] = $_GET['q'];
+	} else {
+		$args[] = NULL;
+	}
+	$args = getImageParameters($args);
 	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
 
 	if ($debug) debugLog("Album: [ " . $album . " ], Image: [ " . $image . " ]");

@@ -16,6 +16,8 @@ if (isset($_get['page'])) {
 } else {
 	$page = '';
 }
+if (isset($_GET['fulltext'])) $fulltext = true; else $fulltext = false;
+if (isset($_GET['viewall'])) $viewall = true; else $viewall = false;
 
 /* handle posts */
 if (isset($_GET['action'])) {

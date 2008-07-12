@@ -11,7 +11,6 @@ if (!($_zp_loggedin & (UPLOAD_RIGHTS | ADMIN_RIGHTS))) { // prevent nefarious ac
 	exit();
 }
 $gallery = new Gallery();
-$_GET['page'] = 'upload';
 
 /* handle posts */
 if (isset($_GET['action'])) {
@@ -32,24 +31,7 @@ if (isset($_GET['action'])) {
 				mkdir ($uploaddir, CHMOD_VALUE);
 			}
 			@chmod($uploaddir, CHMOD_VALUE);
-
-			$error = false;
-			foreach ($_FILES['files']['error'] as $key => $error) {
-				if ($_FILES['files']['name'][$key] == "") continue;
-				if ($error == UPLOAD_ERR_OK) {
-					$tmp_name = $_FILES['files']['tmp_name'][$key];
-					$name = $_FILES['files']['name'][$key];
-					$name = seoFriendlyURL($name);
-					if (is_valid_image($name)) {
-						$uploadfile = $uploaddir . '/' . $name;
-						move_uploaded_file($tmp_name, $uploadfile);
-						@chmod($uploadfile, 0666 & CHMOD_VALUE);
-					} else if (is_zip($name)) {
-						unzip($tmp_name, $uploaddir);
-					}
-				}
-			}
-
+			
 			$album = new Album($gallery, $folder);
 			if ($album->exists) {
 				if (!isset($_POST['publishalbum'])) {
@@ -67,6 +49,28 @@ if (isset($_GET['action'])) {
 				$AlbumDirName = str_replace(SERVERPATH, '', $gallery->albumdir);
 				zp_error(gettext("The album couldn't be created in the 'albums' folder. This is usually a permissions problem. Try setting the permissions on the albums and cache folders to be world-writable using a shell:")." <code>chmod 777 " . $AlbumDirName . CACHEFOLDER ."</code>, "
 				. gettext("or use your FTP program to give everyone write permissions to those folders."));
+			}
+			
+			$error = false;
+			foreach ($_FILES['files']['error'] as $key => $error) {
+				if ($_FILES['files']['name'][$key] == "") continue;
+				if ($error == UPLOAD_ERR_OK) {
+					$tmp_name = $_FILES['files']['tmp_name'][$key];
+					$name = $_FILES['files']['name'][$key];
+					$soename = seoFriendlyURL($name);
+					if (is_valid_image($name)) {
+						$uploadfile = $uploaddir . '/' . $soename;
+						move_uploaded_file($tmp_name, $uploadfile);
+						@chmod($uploadfile, 0666 & CHMOD_VALUE);
+						if ($name != $soename) {
+							$image = new Image($album, $soename);
+							$image->setTitle($name);
+							$image->save();
+						}
+					} else if (is_zip($name)) {
+						unzip($tmp_name, $uploaddir);
+					}
+				}
 			}
 
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit&album=" . urlencode($folder));
@@ -153,7 +157,7 @@ if (ini_get('safe_mode')) { ?>
 } else {
 	$checked = '';
 }
-?> <select id="albumselectmenu" name="albumselect" onChange="albumSwitch(this,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>')">
+?> <select id="albumselectmenu" name="albumselect" onChange="albumSwitch(this,true,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>')">
 	<?php
 	if (isMyAlbum('/', UPLOAD_RIGHTS)) {
 		?>
@@ -165,7 +169,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 	$singlefolder = $fullfolder;
 	$saprefix = "";
 	$salevel = 0;
-	if ($_GET['album'] == $fullfolder) {
+	if (isset($_GET['album']) && ($_GET['album'] == $fullfolder)) {
 		$selected = " SELECTED=\"true\" ";
 	} else {
 		$selected = "";
@@ -184,7 +188,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 
 <div id="newalbumbox" style="margin-top: 5px;">
 <div><label><input type="checkbox" name="newalbum"
-<?php echo $checked; ?> onClick="albumSwitch(this.form.albumselect,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>')">
+<?php echo $checked; ?> onClick="albumSwitch(this.form.albumselect,false,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>')">
 <?php echo gettext("Make a new Album"); ?></label></div>
 <div id="publishtext"><?php echo gettext("and"); ?><label><input type="checkbox"
 	name="publishalbum" id="publishalbum" value="1" checked="checked" /> <?php echo gettext("Publish the album so everyone can see it."); ?></label></div>
@@ -237,7 +241,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 </div>
 
 </form>
-<script type="text/javascript">albumSwitch(document.uploadform.albumselect,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');</script>
+<script type="text/javascript">albumSwitch(document.uploadform.albumselect,false,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');</script>
 
 <?php
 printAdminFooter();

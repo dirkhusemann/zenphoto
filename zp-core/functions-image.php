@@ -363,11 +363,11 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			$newim = $newim_crop;
 		}
 
-		if (($thumb && $sharpenthumbs) || (!$thumb && $sharpenIMAGES)) {
+		if (($thumb && $sharpenthumbs) || (!$thumb && $sharpenimages)) {
 			unsharp_mask($newim, 40, 0.5, 3);
 		}
 		$perform_watermark = false;
-		if ($_GET['vwm']) {
+		if (isset($_GET['vwm'])) {
 			if ($thumb) {
 				$perform_watermark = true;
 				$watermark_image = getOption('video_watermark_image');

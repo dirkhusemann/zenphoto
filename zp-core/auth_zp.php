@@ -48,7 +48,11 @@ if (!isset($_POST['login'])) {
 			// was it a request for a reset?
 			$code = md5(trim($_POST['pass']));
 			if ($code == $_POST['code_h']) {
-				if (!empty($post_user)) { $requestor = gettext("from a user who tried to log in as").' "'.$post_user.'"'; }
+				if (empty($post_user)) {
+					$requestor = '';
+				} else {
+					$requestor = gettext("from a user who tried to log in as").' "'.$post_user.'"'; 
+				}
 				$admins = getAdministrators();
 				$user = array_shift($admins);
 				$adm = $user['user'];

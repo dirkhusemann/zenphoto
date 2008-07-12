@@ -20,7 +20,7 @@
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.2.7';
+$plugin_version = '1.0.2.8';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
 
@@ -151,14 +151,13 @@ function printSlideShow($heading = true) {
 	$option = getOption("slideshow_mode");
 	// jQuery Cycle slideshow config
 	// get slideshow data
-	$albumq = query_single_row("SELECT title, folder FROM ". prefix('albums') ." WHERE `show` = 1 AND id = ".$albumid);
+	$albumq = query_single_row("SELECT title, folder FROM ". prefix('albums') ." WHERE id = ".$albumid);
 	if(!checkAlbumPassword($albumq['folder'], $hint)) {
 		echo gettext("This album is password protected!"); exit;
 	}		
 	$gallery = new Gallery();
 	$album = new Album($gallery, $albumq['folder']);
 	$images = $album->getImages(0);
-	
 	// return path to get back to the page we called the slideshow from
 	if (empty($_POST['imagenumber'])) {
 		$returnpath = rewrite_path('/'.$album->name.'/page/'.$_POST['pagenr'],'/index.php?album='.$album->name.'&page='.$_POST['pagenr']);

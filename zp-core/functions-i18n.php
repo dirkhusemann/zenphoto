@@ -131,6 +131,7 @@ function setupCurrentLocale($plugindomain='') {
 		'sl_SI' => gettext('Slovenian'),
 		'sk' => gettext('Slovak'),
 		'es_ES' => gettext('Spanish'),
+		'es_LA' => gettext('Spanish Latin America'),
 		'sv_SE' => gettext('Swedish'),
 		'th' => gettext('Thai'),
 		'tr' => gettext('Turkish'),

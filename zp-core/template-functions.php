@@ -221,6 +221,8 @@ function getGalleryIndexURL() {
 	if (in_context(ZP_ALBUM)) {
 		$album = getUrAlbum($_zp_current_album);
 		$page = $album->getGalleryPage();
+	} else {
+		$page = 0;
 	}
 	if ($page > 1) {
 		return rewrite_path("/page/" . $page, "/index.php?page=" . $page);
@@ -2837,6 +2839,7 @@ function printAllDates($class='archive', $yearid='year', $monthid='month', $orde
 	$datecount = getAllDates($order);
 	$lastyear = "";
 	echo "\n<ul $class>\n";
+	$nr = 0;
 	while (list($key, $val) = each($datecount)) {
 		$nr++;
 		if ($key == '0000-00-01') {

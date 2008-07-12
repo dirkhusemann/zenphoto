@@ -940,7 +940,7 @@ class Album extends PersistentObject {
 		$albumdir = getAlbumFolder() . $this->name . "/";
 		if (!is_dir($albumdir) || !is_readable($albumdir)) {
 			$msg = gettext("Error: The album")." '" . htmlspecialchars($this->name) . "' ";
-			if (!is_dir($this->albumdir)) {
+			if (!is_dir($albumdir)) {
 				$msg .= gettext("cannot be found.");
 			} else {
 				$msg .= gettext("is not readable.");

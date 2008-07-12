@@ -34,7 +34,7 @@ if (!getOption('perform_watermark')) { // no processing needed
 	} else {  // the web server does not have access to the image, have to supply it
 		$fp = fopen($image_path, 'rb');
 		// send the right headers
-		header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $fmt).' GMT');
+		header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		header("Content-Type: image/$suffix");
 		if (getOption('protect_full_image') == 'Download') {
 			header('Content-Disposition: attachment; filename="' . $_zp_current_image->name . '"');  // enable this to make the image a download
@@ -46,7 +46,7 @@ if (!getOption('perform_watermark')) { // no processing needed
 		exit();
 	}
 }
-header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $fmt).' GMT');
+header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 header("content-type: image/$suffix");
 switch ($suffix) {
 	case 'png':

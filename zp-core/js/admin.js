@@ -27,7 +27,7 @@ function addUploadBoxes(placeholderid, copyfromid, num) {
   }
 }
 
-function albumSwitch(sel, msg1, msg2) {
+function albumSwitch(sel, unchecknewalbum, msg1, msg2) {
   var selected = sel.options[sel.selectedIndex];
   var albumtext = document.getElementById("albumtext");
   var publishtext = document.getElementById("publishtext");
@@ -43,6 +43,9 @@ function albumSwitch(sel, msg1, msg2) {
     newalbumbox.disabled = true;
     newalbumbox.style.display = "none";
   } else {
+  	if (unchecknewalbum) {
+  		newalbumbox.checked = false;
+  	}
     newalbumbox.disabled = false;
     newalbumbox.style.display = "";
   }
