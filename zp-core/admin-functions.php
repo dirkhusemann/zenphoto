@@ -467,7 +467,7 @@ function printTabs() {
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-plugins.php\">".gettext("plugins")."</a></li>";
 	}
 	if (($_zp_loggedin & ADMIN_RIGHTS) && getOption('zp_plugin_zenpage')) {
-		echo "\n    <li". ($page == 'zenpage' ? " class=\"current\""     : "") .
+		echo "\n    <li". (strstr(dirname($_SERVER['REQUEST_URI']), '/plugins/zenpage') ? " class=\"current\""     : "") .
  				"><a href=\"".WEBPATH."/".ZENFOLDER."/plugins/zenpage/page-admin.php\">zenPage</a></li>";
 	}	
 	echo "\n  </ul>";
