@@ -14,7 +14,7 @@
  * distribution.
  * 
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.2.7
+ * @version 1.0.2.8
  * @package plugins 
  */
 

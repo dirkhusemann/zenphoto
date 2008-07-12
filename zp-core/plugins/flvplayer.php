@@ -3,13 +3,13 @@
  * flvplayer -- plugin support for the flvplayer flash video player.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.2.7
+ * @version 1.0.2.8
  * @package plugins 
  */
 
 $plugin_description = gettext("Enable <strong>FLV</strong> player to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time.<br> Please see <a href='http://www.jeroenwijering.com/?item=JW_FLV_Player'>JW FLV media player </a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.2.7';
+$plugin_version = '1.0.2.8';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---flvplayer.php.html";
 $option_interface = new flvplayer();
 $_zp_flash_player = $option_interface; // claim to be the flash player.
@@ -62,7 +62,7 @@ class flvplayer {
 	 * @param string $imagetitle the title of the movie to be passed to the player for display (within slideshow), if empty (within albums) the function getImageTitle() is used
 	 */
 	function playerConfig($moviepath='',$imagetitle='',$count ='') {
-		global $_zp_current_image;
+		global $_zp_current_image, $_zp_current_album;
 		if(empty($moviepath)) {
 			$moviepath = getUnprotectedImageURL();
 			$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
@@ -75,25 +75,21 @@ class flvplayer {
 		if(!empty($count)) {
 			$count = "-".$count;
 		}
-		// check if an image/videothumb is available - this shouldn't be hardcoded...
 		$imgextensions = array(".jpg",".jpeg",".gif",".png");
-		// this just won't work - here's a messy solution
-		if(!empty($_zp_current_image)) {
+		if(is_null($_zp_current_image)) {
+			$albumfolder = $moviepath;
+			$filename = $imagetitle;
+			$videoThumb = '';
+		} else {
 			$album = $_zp_current_image->getAlbum();
 			$albumfolder = $album->name;
 			$filename = $_zp_current_image->filename;
-		} else {
-			$albumfolder = $moviepath;
-			$filename = $imagetitle;
+			$videoThumb = checkVideoThumb(getAlbumFolder().$albumfolder, $filename);
+			if (!empty($videoThumb)) {
+				$videoThumb = getAlbumFolder(WEBPATH).$albumfolder.'/'.$videoThumb;
+			}
 		}
-		// again, the horrid problem with mixed / and \ or windows
-			$album = $_zp_current_image->getAlbum();
-				$videoThumb = checkVideoThumb(getAlbumFolder().$albumfolder, $filename);
-				if (!empty($videoThumb)) {
-					$videoThumb = getAlbumFolder(WEBPATH).$albumfolder.'/'.$videoThumb;
-				}		
-		echo '
-			<p id="player'.$count.'"><a href="http://www.macromedia.com/go/getflashplayer">Get Flash</a> to see this player.</p>
+		echo '<p id="player'.$count.'"><a href="http://www.macromedia.com/go/getflashplayer">'.gettext("Get Flash").'</a> to see this player.</p>
 			<script type="text/javascript">';
 		if($ext === ".mp3" AND !isset($videoThumb)) {
 			echo'	var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/plugins/flvplayer/flvplayer.swf","player'.$count.'","'.getOption('flv_player_width').'","20","7");';
@@ -104,7 +100,7 @@ class flvplayer {
 			echo '
 			so.addParam("allowfullscreen","true");
 			so.addVariable("file","' . $moviepath . '&amp;title=' . $imagetitle . '");
-			' . (isset($videoThumb) ? 'so.addVariable("image","' . $videoThumb . '")' : '') . '
+			' . (!empty($videoThumb) ? 'so.addVariable("image","' . $videoThumb . '")' : '') . '
 			so.addVariable("backcolor","'.getOption('flv_player_backcolor').'");
 			so.addVariable("frontcolor","'.getOption('flv_player_frontkcolor').'");
 			so.addVariable("lightcolor","'.getOption('flv_player_lightcolor').'");
