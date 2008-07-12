@@ -32,7 +32,7 @@ class Image extends PersistentObject {
 	 */
 	function Image(&$album, $filename) {
 		// $album is an Album object; it should already be created.
-		if (!is_object($album)) return false;
+		if (!is_object($album)) return NULL;
 		$this->album = &$album;
 		if ($album->name == '') {
 			$this->webpath = getAlbumFolder(WEBPATH) . $filename;
@@ -46,7 +46,7 @@ class Image extends PersistentObject {
 		// Check if the file exists.
 		if (!file_exists($this->localpath) || is_dir($this->localpath)) {
 			$this->exists = false;
-			return false;
+			return NULL;
 		}
 		$this->filename = $filename;
 		$this->filemtime = filemtime($this->localpath);

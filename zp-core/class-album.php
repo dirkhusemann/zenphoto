@@ -41,7 +41,7 @@ class Album extends PersistentObject {
 		// Second defense against upward folder traversal:
 		if(!file_exists($this->localpath) || strpos($this->localpath, '..') !== false) {
 			$this->exists = false;
-			return false;
+			return NULL;
 		}
 		$new = parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache, empty($folder));
 		if (hasDyanmicAlbumSuffix($folder)) {
@@ -939,7 +939,7 @@ class Album extends PersistentObject {
 		}
 		$albumdir = getAlbumFolder() . $this->name . "/";
 		if (!is_dir($albumdir) || !is_readable($albumdir)) {
-			$msg = gettext("Error: The 'albums' directory")." (" . $this->albumdir . ") ";
+			$msg = gettext("Error: The album")." '" . htmlspecialchars($this->name) . "' ";
 			if (!is_dir($this->albumdir)) {
 				$msg .= gettext("cannot be found.");
 			} else {
