@@ -22,6 +22,8 @@ function fixRSSDate($bad_date) {
 
 // check passwords
 $albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
+$passwordcheck1 = "";
+$passwordcheck2 = "";
 foreach($albumscheck as $albumcheck) {
 	if(!checkAlbumPassword($albumcheck['folder'], $hint)) {
 		$albumpasswordcheck1= " AND i.albumid != ".$albumcheck['id'];

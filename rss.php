@@ -18,12 +18,26 @@ function fixRSSDate($bad_date) {
 	return $rval;
 }
 
-$albumnr = sanitize_numeric($_GET['albumnr']);
-$albumname = sanitize(urldecode($_GET['albumname']), true);
-$albumfolder = sanitize(urldecode($_GET['folder']), true);
+if(isset($_GET['albumnr'])) {
+	$albumnr = sanitize_numeric($_GET['albumnr']);
+} else {
+	$albumnr = NULL;
+}
+if(isset($_GET['albumname'])) {
+	$albumname = sanitize(urldecode($_GET['albumname']), true);
+} else {
+	$albumname = NULL;
+}
+
+if(isset($_GET['folder'])) {
+	$albumfolder = sanitize(urldecode($_GET['folder']), true);
+} else {
+	$albumfolder = NULL;
+}
 $host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 
 // check passwords
+$passwordcheck = "";
 $albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
 foreach($albumscheck as $albumcheck) {
 	if(!checkAlbumPassword($albumcheck['folder'], $hint)) {
@@ -59,8 +73,12 @@ if(getOption('mod_rewrite')) {
 <managingEditor><?php echo "$adminemail ($adminname)"; ?></managingEditor>
 <webMaster><?php echo "$adminemail ($adminname)"; ?></webMaster>
 <?php 
+if(isset($_GET['size'])) {
 $size = sanitize_numeric($_GET['size']);
-if(is_numeric($size) && $size != "" && $size < getOption('feed_imagesize')) {
+} else {
+	$size = NULL;
+}
+if(is_numeric($size) && !is_null($size) && $size < getOption('feed_imagesize')) {
   $s = $size;
 } else {
 	$s = getOption('feed_imagesize'); // uncropped image size
@@ -69,15 +87,15 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 
 db_connect();
 
-if (is_numeric($albumnr) && $albumnr != "") { 
+if (is_numeric($albumnr) && !is_null($albumnr)) { 
 	$albumWhere = "images.albumid = $albumnr AND";
-} else if (isset($_GET["folder"])) {
+} else if (!is_null($albumfolder)) {
 	$albumWhere = "folder LIKE '".$albumfolder."/%' AND "; 
 } else {
 	$albumWhere = "";
 }
 
-$result = query_full_array("SELECT images.albumid, images.date AS date, images.filename AS filename, images.desc, images.title AS title, " .
+$result = query_full_array("SELECT images.albumid, images.date AS date, images.mtime AS mtime, images.filename AS filename, images.desc, images.title AS title, " .
  														"albums.folder AS folder, albums.title AS albumtitle, images.show, albums.show, albums.password FROM " . 
 															prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
 															" WHERE ".$albumWhere." images.albumid = albums.id AND images.show=1 AND albums.show=1 ".
@@ -104,8 +122,8 @@ foreach ($result as $images) {
 if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4") ||  ($ext == ".3gp") ||  ($ext == ".mov")) {
 	echo '<![CDATA[<a title="'.$images['title'].' in '.$images['albumtitle'].'" href="http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix.'">'. $images['title'] .$ext.'</a><p>' . $images['desc'] . '</p>]]>';
 } else {
-	echo '<![CDATA[<a title="'.$images['title'].' in '.$images['albumtitle'].'" href="http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix.'"><img border="0" src="http://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$images['folder'].'&i='.$images['filename'].'&s='.$s.'" alt="'. $images['title'] .'"></a><p>' . $images['desc'] . '</p>]]>';?>
-	<?php if($exif['datetime']) { echo '<![CDATA[Date: ' . $exif['datetime'] . ']]>'; } }?>
+	echo '<![CDATA[<a title="'.$images['title'].' in '.$images['albumtitle'].'" href="http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix.'"><img border="0" src="http://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$images['folder'].'&i='.$images['filename'].'&s='.$s.'" alt="'. $images['title'] .'"></a><p>' . $images['desc'] . '</p>]]>'; } ?>
+	<?php  echo '<![CDATA[Date: '.zpFormattedDate(getOption('date_format'),$images['mtime']).']]>'; ?>
 </description>
 <category><?php echo $images['albumtitle']; ?></category>
 	<guid><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix. ']]>';?></guid>
