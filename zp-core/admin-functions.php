@@ -8,7 +8,7 @@ require_once("functions.php");
 require_once("lib-seo.php"); // keep the function separate for easy modification by site admins
 
 $_zp_admin_album_list = null;
-$sortby = array(gettext('Filename') => 'Filename', gettext('Date') => 'Date', gettext('Title') => 'Title', gettext('ID') => 'ID' );
+$sortby = array(gettext('Filename') => 'Filename', gettext('Date') => 'Date', gettext('Title') => 'Title', gettext('ID') => 'ID', gettext('Filemtime') => 'mtime' );
 $standardOptions = array(	'gallery_title','website_title','website_url','time_offset',
  													'mod_rewrite','mod_rewrite_image_suffix',
  													'server_protocol','charset','image_quality',
@@ -425,53 +425,43 @@ function printLogoAndLinks() {
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function printTabs() {
+function printTabs($currenttab) {
 	global $_zp_loggedin;
-	// Which page should we highlight? Default is home.
-	if (isset($_GET['page'])) {
-		$page= $_GET['page'];
-	} else {
-		$page= "home";
-	}
 	
-	$currentpage = basename($_SERVER['REQUEST_URI']);
 	echo "\n  <ul id=\"nav\">";
 	if (($_zp_loggedin & (MAIN_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n    <li". (($page == "home") && (strstr($currentpage, 'admin.php')) ? " class=\"current\""     : "") .
+		echo "\n    <li". (($currenttab == "home") ? " class=\"current\""     : "") .
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php\">".gettext("overview")."</a></li>";
 	}
 	if (($_zp_loggedin & (COMMENT_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n    <li". (strstr($currentpage,'admin-comments.php') ? " class=\"current\"" : "") .
+		echo "\n    <li". (($currenttab == 'comments') ? " class=\"current\"" : "") .
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-comments.php\">".gettext("comments")."</a></li>";
 	}
 	if (($_zp_loggedin & (UPLOAD_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n    <li". (strstr($currentpage,'admin-upload.php') ? " class=\"current\""   : "") .
+		echo "\n    <li". (($currenttab =='upload') ? " class=\"current\""   : "") .
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-upload.php\">".gettext("upload")."</a></li>";
 	}
 	
 	if (($_zp_loggedin & (EDIT_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n    <li". ((strstr($currentpage, 'admin.php') && ($page == 'edit') ||
-												strstr($currentpage, 'admin-albumsort.php') ||
-												strstr($currentpage, 'admin-dynamic-album.php')
-				) ? " class=\"current\""     : "") .
+		echo "\n    <li". (($currenttab == 'edit') ? " class=\"current\""     : "") .
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?page=edit\">".gettext("edit")."</a></li>";
 	}
 	if (($_zp_loggedin & ADMIN_RIGHTS)) {
-		echo "\n    <li". (strstr($currentpage, 'admin-tags.php') ? " class=\"current\""     : "") .
+		echo "\n    <li". (($currenttab == 'tags') ? " class=\"current\""     : "") .
 				"><a href=\"".WEBPATH."/".ZENFOLDER."/admin-tags.php\">".gettext('tags')."</a></li>";
 	}	
-	echo "\n    <li". (strstr($currentpage, 'admin-options.php') ? " class=\"current\""  : "") .
+	echo "\n    <li". (($currenttab == 'options') ? " class=\"current\""  : "") .
  			"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-options.php\">".gettext("options")."</a></li>";
 	if (($_zp_loggedin & (THEMES_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n    <li". (strstr($currentpage, 'admin-themes.php') ? " class=\"current\""  : "") .
+		echo "\n    <li". (($currenttab == 'themes') ? " class=\"current\""  : "") .
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-themes.php\">".gettext("themes")."</a></li>";
 	}
 	if (($_zp_loggedin & ADMIN_RIGHTS)) {
-		echo "\n    <li". (strstr($currentpage, 'admin-plugins.php') ? " class=\"current\""  : "") .
+		echo "\n    <li". (($currenttab == 'plugins') ? " class=\"current\""  : "") .
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-plugins.php\">".gettext("plugins")."</a></li>";
 	}
 	if (($_zp_loggedin & ADMIN_RIGHTS) && getOption('zp_plugin_zenpage')) {
-		echo "\n    <li". (strstr(dirname($_SERVER['REQUEST_URI']), '/plugins/zenpage') ? " class=\"current\""     : "") .
+		echo "\n    <li". (($currenttab == 'zenpage') ? " class=\"current\""     : "") .
  				"><a href=\"".WEBPATH."/".ZENFOLDER."/plugins/zenpage/page-admin.php\">zenPage</a></li>";
 	}	
 	echo "\n  </ul>";

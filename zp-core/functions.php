@@ -109,6 +109,7 @@ if ($session_started) session_start();
 
 // Set error reporting to the default if it's not.
 error_reporting(E_ALL ^ E_NOTICE);
+error_reporting(E_ALL);
 
 $_zp_error = false;
 
@@ -449,6 +450,8 @@ function albumSortKey($sorttype) {
 			return 'date';
 		case "ID":
 			return 'id';
+		case 'mtime':
+			return 'mtime';
 	}
 	return 'filename';
 }
@@ -470,6 +473,8 @@ function subalbumSortKey($sorttype) {
 			return 'date';
 		case "ID":
 			return 'id';
+		case 'mtime':
+			return 'mtime';
 	}
 	return 'sort_order';
 }

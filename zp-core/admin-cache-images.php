@@ -37,7 +37,7 @@ echo "\n</head>";
 echo "\n<body>";
 	printLogoAndLinks();
 	echo "\n" . '<div id="main">';
-	printTabs();
+	printTabs(isset($_REQUEST['album']) ? 'edit' : 'home');
 	echo "\n" . '<div id="content">';
 
 	if (isset($_GET['clear']) || isset($_POST['clear'])) {

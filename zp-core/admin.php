@@ -215,7 +215,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	if (isset($_GET['page'])) { 
 		$page = $_GET['page']; 
 	} else if (empty($page)) {
-		$page = ""; 
+		$page = "home"; 
 	}
 
 	switch ($page) {
@@ -234,11 +234,13 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 		case 'plugins':
 			if (!($_zp_loggedin & (ADMIN_RIGHTS | ADMIN_RIGHTS))) $page = '';
 			break;
+		case 'home':
+			if (!($_zp_loggedin & (ADMIN_RIGHTS | MAIN_RIGHTS))) {
+				$page='options';
+			}
+			break;
 	}
-	if (empty($page) && !($_zp_loggedin & (ADMIN_RIGHTS | MAIN_RIGHTS))) {
-		$page='options';
-	}
-	
+
 	
 	/* TODO: 	This should not be necessary if all the references really got changed on the restructure.
 						Only the redirect to the options page should be required--for no-rights admin users as
@@ -304,8 +306,10 @@ if (!zp_loggedin()) {
 } else { /* Admin-only content safe from here on. */
 	printLogoAndLinks();
 	?>
-<div id="main"><?php printTabs(); ?>
-<div id="content"><?php 
+<div id="main">
+<?php printTabs($page); ?>
+<div id="content">
+<?php 
 
 /** EDIT ****************************************************************************/
 /************************************************************************************/

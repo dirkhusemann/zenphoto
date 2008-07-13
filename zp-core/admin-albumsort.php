@@ -47,7 +47,7 @@ if (!isset($_GET['album'])) {
 	printLogoAndLinks();
 	?>
 
-<div id="main"><?php printTabs(); ?>
+<div id="main"><?php printTabs('edit'); ?>
 
 
 <div id="content">

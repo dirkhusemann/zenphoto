@@ -41,7 +41,7 @@ echo "\n</head>";
 echo "\n<body>";
 printLogoAndLinks();
 echo "\n" . '<div id="main">';
-printTabs();
+printTabs('plugins');
 echo "\n" . '<div id="content">';
 
 /* Page code */

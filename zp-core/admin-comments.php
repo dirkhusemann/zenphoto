@@ -79,7 +79,7 @@ echo "\n</head>";
 echo "\n<body>";
 printLogoAndLinks();
 echo "\n" . '<div id="main">';
-printTabs();
+printTabs('comments');
 echo "\n" . '<div id="content">';
 
 if ($page == "editcomment") { ?>

@@ -42,7 +42,7 @@ echo "\n</head>";
 echo "\n<body>";
 printLogoAndLinks();
 echo "\n" . '<div id="main">';
-printTabs();
+printTabs('edit');
 echo "\n" . '<div id="content">';
 echo "<h1>".gettext("zenphoto Create Dynamic Album")."</h1>\n";
 

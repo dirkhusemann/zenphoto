@@ -18,7 +18,7 @@ echo "\n</head>";
 echo "\n<body>";
 printLogoAndLinks();
 echo "\n" . '<div id="main">';
-printTabs();
+printTabs('tags');
 echo "\n" . '<div id="content">';
 
 if (isset($_GET['convert'])) {

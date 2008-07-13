@@ -282,7 +282,7 @@ echo "\n</head>";
 echo "\n<body>";
 printLogoAndLinks();
 echo "\n" . '<div id="main">';
-printTabs();
+printTabs('options');
 echo "\n" . '<div id="content">';
 if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 	echo "<div class=\"errorbox space\">";

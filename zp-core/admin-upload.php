@@ -101,7 +101,7 @@ echo "\n</head>";
 echo "\n<body>";
 printLogoAndLinks();
 echo "\n" . '<div id="main">';
-printTabs();
+printTabs('upload');
 echo "\n" . '<div id="content">';
 
 			$albumlist = array();

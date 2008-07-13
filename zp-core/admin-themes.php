@@ -55,7 +55,7 @@ echo "\n</head>";
 echo "\n<body>";
 printLogoAndLinks();
 echo "\n" . '<div id="main">';
-printTabs();
+printTabs('themes');
 echo "\n" . '<div id="content">';
 
 	$galleryTheme = $gallery->getCurrentTheme();
