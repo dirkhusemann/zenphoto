@@ -60,9 +60,9 @@ function setPluginDomain($plugindomain) {
  */
 function setupCurrentLocale($plugindomain='') {
 	global $_zp_languages;
+	$encoding = getOption('charset');
+	if (empty($encoding)) $encoding = 'UTF-8';
 	if(empty($plugindomain)) {
-		$encoding = getOption('charset');
-		if (empty($encoding)) $encoding = 'UTF-8';
 		$locale = getOption("locale");
 		@putenv("LANG=$locale");
 		// gettext setup
