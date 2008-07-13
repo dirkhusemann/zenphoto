@@ -3391,8 +3391,8 @@ function normalizeColumns($albumColumns, $imageColumns) {
  * @since 1.1.3
  */
 function checkforPassword($silent=false) {
-	global $_zp_current_album, $_zp_current_search, $_zp_gallery;
-	if (zp_loggedin()) { return false; }  // you're the admin, you don't need the passwords.
+	global $_zp_current_album, $_zp_current_search, $_zp_gallery, $_zp_loggedin;
+	if (zp_loggedin(MAIN_RIGHTS | VIEWALL_RIGHTS)) { return false; }  // you're the admin, you don't need the passwords.
 	if (in_context(ZP_SEARCH)) {  // search page
 		$hash = getOption('search_password');
 		$hint = getOption('search_hint');
@@ -3421,6 +3421,7 @@ function checkforPassword($silent=false) {
 			return true;
 		}
 	} else {  // index page
+		if ($_zp_loggedin) return false;
 		$hash = getOption('gallery_password');
 		$hint = getOption('gallery_hint');
 		if (!empty($hash)) {
