@@ -94,24 +94,20 @@ $_zp_options = NULL;
 define('ALBUMFOLDER', '/albums/');
 if (!defined('PLUGIN_FOLDER')) { define('PLUGIN_FOLDER', '/plugins/'); }
 
-/*******************************************************************************
- * native gettext respectivly php-gettext replacement							             *
- *******************************************************************************/
+
+if (getOption('album_session') && OFFSET_PATH==0) {
+	session_start();
+}
+
+// Set error reporting to the default if it's not.
+error_reporting(E_ALL ^ E_NOTICE);
+$_zp_error = false;
 
 require_once('functions-i18n.php');
 
 getUserLocale();
 
 setupCurrentLocale();
-
-$session_started = getOption('album_session');
-if ($session_started) session_start();
-
-// Set error reporting to the default if it's not.
-error_reporting(E_ALL ^ E_NOTICE);
-
-$_zp_error = false;
-
 /**
  * wraps htmlspecialchars and makes it work for xml
  *
@@ -1716,7 +1712,17 @@ if (!function_exists('fnmatch')) {
  */
 function zp_getCookie($name) {	
 	if (DEBUG_LOGIN) {
-		debugLog("zp_getCookie($name): SESSION[$name]=".$_SESSION[$name].', COOKIE[$name]='.$_COOKIE[$name]);
+		if (isset($_SESSION[$name])) { 
+			$sessionv = $_SESSION[$name];
+		} else {
+			$sessionv = '';
+		}
+		if (isset($_COOKIE[$name])) { 
+			$cookiev = $_COOKIE[$name];
+		} else {
+			$cookiev = '';
+		}
+		debugLog("zp_getCookie($name): SESSION[".session_id()."]=".$sessionv.", COOKIE=".$cookiev);
 	}
 	if (isset($_SESSION[$name])) { return $_SESSION[$name]; }
 	if (isset($_COOKIE[$name])) { return $_COOKIE[$name]; }

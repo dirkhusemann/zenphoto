@@ -3,6 +3,7 @@
  * support functions for Admin
  * @package admin
  */
+if (session_id() == '') session_start();
 require_once("classes.php");
 require_once("functions.php");
 require_once("lib-seo.php"); // keep the function separate for easy modification by site admins

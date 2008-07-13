@@ -3,8 +3,6 @@
  * Load the Sortable lists now and set up the global sortable array
  * @package admin
  */
-require_once("admin-functions.php");
-
 
 $_zp_sortable_list = new SLLists('js');
 

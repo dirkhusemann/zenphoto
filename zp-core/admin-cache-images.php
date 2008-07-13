@@ -6,8 +6,8 @@
  * @package core
  */
 define('OFFSET_PATH', 1);
-require_once("template-functions.php");
 require_once("admin-functions.php");
+require_once("template-functions.php");
 
 function loadAlbum($album) {
 	global $_zp_current_album;

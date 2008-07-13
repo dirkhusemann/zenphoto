@@ -5,6 +5,7 @@
  *
  */
 define('OFFSET_PATH', 1);
+require_once('admin-functions.php');
 require_once("admin-sortable.php");
 if (!zp_loggedin()) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
