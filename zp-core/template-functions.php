@@ -643,6 +643,7 @@ function printAlbumBreadcrumb($before='', $after='', $title='Album Thumbnails') 
 			$album = new Album($_zp_current_gallery, $dynamic_album);
 			echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL($album)) . "\">";
 			echo $album->getTitle();
+			echo '</a>';
 		}
 	} else {
 		echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL()). "\" title=\"$title\">" . getAlbumTitle() . "</a>";
@@ -658,22 +659,38 @@ function printAlbumBreadcrumb($before='', $after='', $title='Album Thumbnails') 
  * @param string $after Insert here the text to be printed after the links
  */
 function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
+	global $_zp_current_search;
 	echo $before;
-	if (in_context(ZP_SEARCH)) {
-		$parents = array();
+	if (in_context(ZP_SEARCH_LINKED)) {
+		$page = $_zp_current_search->page;
+		$searchwords = $_zp_current_search->words;
+		$searchdate = $_zp_current_search->dates;
+		$searchfields = $_zp_current_search->fields;
+		$searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
+		$dynamic_album = $_zp_current_search->dynalbumname;
+		if (empty($dynamic_album)) {
+			echo "<a href=\"" . $searchpagepath . "\">";
+			echo "<em>".gettext("Search")."</em></a>";
+			$parents = array();
+		} else {
+			$album = new Album($_zp_current_gallery, $dynamic_album);
+			$parents = getParentAlbums($album);
+			$parents[] = $album;
+		}
 	} else {
 		$parents = getParentAlbums();
 	}
 	$n = count($parents);
-	if ($n == 0) return;
-	$i = 0;
-	foreach($parents as $parent) {
-		if ($i > 0) echo $between;
-		$url = rewrite_path("/" . pathurlencode($parent->name) . "/", "/index.php?album=" . urlencode($parent->name));
-		printLink($url, $parent->getTitle(), $parent->getDesc());
-		$i++;
+	if ($n > 0) {
+		$i = 0;
+		foreach($parents as $parent) {
+			if ($i > 0) echo $between;
+			$url = rewrite_path("/" . pathurlencode($parent->name) . "/", "/index.php?album=" . urlencode($parent->name));
+			printLink($url, $parent->getTitle(), $parent->getDesc());
+			$i++;
+		}
+		echo $after;
 	}
-	echo $after;
 }
 
 /**
