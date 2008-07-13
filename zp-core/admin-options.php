@@ -47,15 +47,16 @@ if (isset($_GET['action'])) {
 					if ($pass == trim($_POST[$i.'-adminpass_2'])) {
 						$admin_n = trim($_POST[$i.'-admin_name']);
 						$admin_e = trim($_POST[$i.'-admin_email']);
-						if (isset($_POST[$i.'-main_rights'])) $main_r = 1; else $main_r = 0;
-						if (isset($_POST[$i.'-admin_rights'])) $admin_r = 1; else $admin_r = 0;
-						if (isset($_POST[$i.'-comment_rights'])) $comment_r = 1; else $comment_r = 0;
-						if (isset($_POST[$i.'-upload_rights'])) $upload_r = 1; else $upload_r = 0;
-						if (isset($_POST[$i.'-edit_rights'])) $edit_r = 1; else $edit_r = 0;
-						if (isset($_POST[$i.'-options_rights'])) $options_r = 1; else $options_r = 0;
-						if (isset($_POST[$i.'-themes_rights'])) $themes_r = 1; else $themes_r = 0;
+						if (isset($_POST[$i.'-main_rights'])) $main_r = MAIN_RIGHTS; else $main_r = 0;
+						if (isset($_POST[$i.'-view_rights'])) $view_r = VIEWALL_RIGHTS; else $view_r = 0;
+						if (isset($_POST[$i.'-upload_rights'])) $upload_r = UPLOAD_RIGHTS; else $upload_r = 0;
+						if (isset($_POST[$i.'-comment_rights'])) $comment_r = COMMENT_RIGHTS; else $comment_r = 0;
+						if (isset($_POST[$i.'-edit_rights'])) $edit_r = EDIT_RIGHTS; else $edit_r = 0;
+						if (isset($_POST[$i.'-themes_rights'])) $themes_r = THEMES_RIGHTS; else $themes_r = 0;
+						if (isset($_POST[$i.'-options_rights'])) $options_r = OPTIONS_RIGHTS; else $options_r = 0;
+						if (isset($_POST[$i.'-admin_rights'])) $admin_r = ADMIN_RIGHTS; else $admin_r = 0;
 						if (!isset($_POST['alter_enabled'])) {
-							$rights = NO_RIGHTS + $admin_r + $comment_r + $upload_r + $edit_r + $options_r + $themes_r + $main_r;
+							$rights = NO_RIGHTS + $main_r + $view_r + $upload_r + $comment_r + $edit_r + $themes_r + $options_r + $admin_r;
 							$managedalbums = array();
 							$l = strlen($albumsprefix = 'managed_albums_'.$i.'_');
 							foreach ($_POST as $key => $value) {
@@ -423,6 +424,8 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 				<?php 
 				if (NO_RIGHTS > 0) {
 				?>
+				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-view_rights"
+					value=<?php echo VIEWALL_RIGHTS; if ($user['rights'] & VIEWALL_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("View all albums"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-main_rights"
 					value=<?php echo MAIN_RIGHTS; if ($user['rights'] & MAIN_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Overview"); ?></td>
 				<?php 

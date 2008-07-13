@@ -1081,8 +1081,11 @@ function pageError() {
  * @return bool
  */
 function checkAlbumPassword($albumname, &$hint) {
-	global $_zp_pre_authorization;
-	if (zp_loggedin()) { return true; }
+	global $_zp_pre_authorization, $_zp_loggedin;
+	if (zp_loggedin(ADMIN_RIGHTS | VIEWALL_RIGHTS)) { return true; }
+	if ($_zp_loggedin) {
+		if (isMyAlbum($albumname, ALL_RIGHTS)) { return true; }  // he is allowed to see it.
+	}
 	if (isset($_zp_pre_authorization[$albumname])) {
 		return true;
 	}
@@ -1745,6 +1748,7 @@ function zp_setCookie($name, $value, $time=0, $path='/') {
 define('NO_RIGHTS', 2);
 if (NO_RIGHTS == 2) {
 	define('MAIN_RIGHTS', 4);
+	define('VIEWALL_RIGHTS', 8);
 	define('UPLOAD_RIGHTS', 16);
 	define('COMMENT_RIGHTS', 64);
 	define('EDIT_RIGHTS', 256);

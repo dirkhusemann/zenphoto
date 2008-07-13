@@ -6,7 +6,7 @@
 
 /* Don't put anything before this line! */
 define('OFFSET_PATH', 1);
-require_once("sortable.php");
+require_once("admin-sortable.php");
 if (!$session_started) session_start();
 if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	if (($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) || ($_zp_loggedin == NO_RIGHTS)) { // user/password set required.

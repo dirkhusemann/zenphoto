@@ -685,7 +685,9 @@ function postIndexDecode($str) {
  * @param string $alterrights are the items changable.
  */
 function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrights="") {
-	$localize = !is_numeric(array_shift(array_keys($list)));
+	$keys = array_keys($list);
+	$item = array_shift($keys);
+	$localize = !is_numeric($item);
 	if ($localize) {
 		$list = array_flip($list);
 		natcasesort($list);
