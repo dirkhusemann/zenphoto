@@ -109,7 +109,6 @@ if ($session_started) session_start();
 
 // Set error reporting to the default if it's not.
 error_reporting(E_ALL ^ E_NOTICE);
-error_reporting(E_ALL);
 
 $_zp_error = false;
 
