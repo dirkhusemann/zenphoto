@@ -1,5 +1,6 @@
 #zp-shutterfly {
 	position: fixed;
+	_position: absolute;
 	bottom: 10px;
 	left: 10px;
 	margin: 0;
@@ -15,10 +16,11 @@
 }
 
 #zp-shutterfly #extended form input {
+	position: relative;
+	_position: absolute;
 	background-color: #FFF;
 	margin: 0 0 0 30px;
 	padding: 2px 3px;
-	position: relative;
 	top: 2px;
 	border: 2px solid #F90;
 	color: #F90;
