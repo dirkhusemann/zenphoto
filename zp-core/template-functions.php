@@ -671,7 +671,8 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
 		if (empty($dynamic_album)) {
 			echo "<a href=\"" . $searchpagepath . "\">";
 			echo "<em>".gettext("Search")."</em></a>";
-			$parents = array();
+			echo $after;
+			return;
 		} else {
 			$album = new Album($_zp_current_gallery, $dynamic_album);
 			$parents = getParentAlbums($album);
