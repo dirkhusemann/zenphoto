@@ -164,4 +164,6 @@ function setDefault($option, $default) {
 	setOptionDefault('gallery_user', '');
 	setOptionDefault('search_user', '');
 	setOptionDefault('album_use_new_image_date', 0);
+	setOptionDefault('thumb_select_images', 1);
+	
 ?>

@@ -25,7 +25,8 @@ $standardOptions = array(	'gallery_title','website_title','website_url','time_of
  													'protect_full_image', 'album_session', 'watermark_h_offset', 'watermark_w_offset',
  													'Use_Captcha', 'locale', 'date_format', 'hotlink_protection', 'image_sortdirection',
 													'admin_reset_date', 'comment_name_required', 'comment_email_required',
-													'comment_web_required', 'full_image_download', 'zenphoto_release','gallery_user', 'search_user'
+													'comment_web_required', 'full_image_download', 'zenphoto_release','gallery_user', 'search_user',
+													'thumb_select_images'
 												 );
 $charsets = array("ASMO-708" => "Arabic",
 									"BIG5" => "Chinese Traditional",
@@ -977,7 +978,10 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<td align=\"right\" valign=\"top\" width=\"150\">".gettext("Thumbnail:")." </td> ";
 	echo "\n<td>";
 	echo "\n<script type=\"text/javascript\">updateThumbPreview(document.getElementById('thumbselect'));</script>";
-	echo "\n<select id=\"thumbselect\" class=\"thumbselect\" name=\"".$prefix."thumb\" onChange=\"updateThumbPreview(this)\">";
+	$showThumb = getOption('thumb_select_images');
+	echo "\n<select id=\"thumbselect\"";
+	if ($showThumb) echo " class=\"thumbselect\"";
+	echo " name=\"".$prefix."thumb\" onChange=\"updateThumbPreview(this)\">";
 	if ($album->isDynamic()) {
 		$params = $album->getSearchParams();
 		$search = new SearchEngine();
@@ -1008,8 +1012,12 @@ function printAlbumEditForm($index, $album) {
 			$albumx = new Album($gallery, $folder);
 			$image = new Image($albumx, $filename);
 			$selected = ($imagepath == $thumb);
-			echo "\n<option class=\"thumboption\" style=\"background-image: url(" . $image->getThumb() .
-						"); background-repeat: no-repeat;\" value=\"".$imagepath."\"";
+			echo "\n<option";
+			if ($showThumb) {
+				echo " class=\"thumboption\"";
+				echo " style=\"background-image: url(" . $image->getThumb() .	"); background-repeat: no-repeat;\"";
+			}
+			echo " value=\"".$imagepath."\"";
 			if ($selected) {
 				echo " selected=\"selected\"";
 			}
@@ -1019,7 +1027,8 @@ function printAlbumEditForm($index, $album) {
 		}
 	} else {
 		$thumb = $album->get('thumb');
-		echo "\n<option class=\"thumboption\" value=\"\" style=\"background-color:#B1F7B6\"";
+		echo "\n<option";
+		if ($showThumb) echo " class=\"thumboption\" value=\"\" style=\"background-color:#B1F7B6\"";
 		if (empty($thumb)) {
 			echo " selected=\"selected\"";
 		}
@@ -1046,8 +1055,12 @@ function printAlbumEditForm($index, $album) {
 					$image = new Image($albumx, $filename);
 					if (is_valid_image($filename)) {
 						$selected = ($imagepath == $thumb);
-						echo "\n<option class=\"thumboption\" style=\"background-image: url(" . $image->getThumb() .
-									"); background-repeat: no-repeat;\" value=\"".$imagepath."\"";
+						echo "\n<option";
+						if (getOption('thumb_select_images')) {
+							echo " class=\"thumboption\"";
+							echo " style=\"background-image: url(" . $image->getThumb() . "); background-repeat: no-repeat;\"";
+						}
+						echo " value=\"".$imagepath."\"";
 						if ($selected) {
 							echo " selected=\"selected\"";
 						}
@@ -1062,8 +1075,12 @@ function printAlbumEditForm($index, $album) {
 				$image = new Image($album, $filename);
 				$selected = ($filename == $album->get('thumb'));
 				if (is_valid_image($filename)) {
-					echo "\n<option class=\"thumboption\" style=\"background-image: url(" . $image->getThumb() .
-						"); background-repeat: no-repeat;\" value=\"" . $filename . "\"";
+					echo "\n<option";
+					if (getOption('thumb_select_images')) {
+						echo " class=\"thumboption\"";
+						echo " style=\"background-image: url(" . $image->getThumb() . "); background-repeat: no-repeat;\"";
+					}
+					echo " value=\"" . $filename . "\"";
 					if ($selected) {
 						echo " selected=\"selected\"";
 					}

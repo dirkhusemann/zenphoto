@@ -167,6 +167,7 @@ if (isset($_GET['action'])) {
 			$f = $_POST['date_format_list'];
 			if ($f == 'custom') $f = $_POST['date_format'];
 			setOption('date_format', $f);
+			setBoolOption('thumb_select_images', isset($_POST['thumb_select_images']));
 			$returntab = "#tab_gallery";
 		}
 
@@ -782,6 +783,12 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		<td><input type="checkbox" name="album_session" value="1"
 		<?php echo checked('1', getOption('album_session')); ?> /></td>
 		<td><?php echo gettext("Put a checkmark here if you are having issues with with album password cookies not being retained. Setting the option causes zenphoto to use sessions rather than cookies."); ?></td>
+	</tr>
+	<tr>
+		<td><?php echo gettext("Visual Thumb selection:"); ?></td>
+		<td><input type="checkbox" name="thumb_select_images" value="1"
+		<?php echo checked('1', getOption('thumb_select_images')); ?> /></td>
+		<td><?php echo gettext("Setting this option places thumbnails in the album thumbnail selection list. This does not work on all browsers (Internet Explorer does not show the images) and may slow down loading the edit page if you have a lot images."); ?></td>
 	</tr>
 	<tr>
 		<td></td>

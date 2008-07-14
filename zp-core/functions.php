@@ -216,7 +216,7 @@ function setOptionDefault($key, $default) {
 		$sql = "INSERT INTO " . prefix('options') . " (`name`, `value`, `ownerid`) VALUES ('" . escape($key) . "', '".
 						escape($default) . "', 0);";
 		query($sql, true);
-		$_zp_options[$key] = $value;
+		$_zp_options[$key] = $default;
 	}
 }
 
