@@ -101,6 +101,7 @@ if (getOption('album_session') && OFFSET_PATH==0) {
 
 // Set error reporting to the default if it's not.
 error_reporting(E_ALL ^ E_NOTICE);
+//error_reporting(E_ALL);
 $_zp_error = false;
 
 require_once('functions-i18n.php');
@@ -313,6 +314,7 @@ function assert_handler($file, $line, $code) {
 // Set up assertion callback
 assert_options(ASSERT_CALLBACK, 'assert_handler');
 
+$_zp_supported_images = array('jpg','jpeg','gif','png');
 // Image utility functions
 /**
  * Returns true if the file is an image
@@ -321,8 +323,9 @@ assert_options(ASSERT_CALLBACK, 'assert_handler');
  * @return bool
  */
 function is_valid_image($filename) {
+	global $_zp_supported_images;
 	$ext = strtolower(substr(strrchr($filename, "."), 1));
-	return in_array($ext, array('jpg','jpeg','gif','png'));
+	return in_array($ext, $_zp_supported_images);
 }
 
 $_zp_supported_videos = array('flv','3gp','mov','mp3','mp4');
@@ -367,10 +370,10 @@ function is_videoThumb($album, $filename){
  * @return string
  */
 function checkVideoThumb($album, $video){
+	global $_zp_supported_images;
 	$video = is_videoThumb($album, $video);
 	if($video) {
-		$extTab = array(".jpg",".jpeg",".gif",".png");
-		foreach($extTab as $ext) {
+		foreach($_zp_supported_images as $ext) {
 			if(file_exists($album."/".$video.$ext)) {
 				return $video.$ext;
 			}
@@ -1408,14 +1411,16 @@ function unzip($file, $dir) { //check if zziplib is installed
 		$zip = zip_open($file);
 		if ($zip) {
 			while ($zip_entry = zip_read($zip)) { // Skip non-images in the zip file.
-				if (!is_valid_image(zip_entry_name($zip_entry))) continue;
-				if (zip_entry_open($zip, $zip_entry, "r")) {
-					$buf = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
-					$path_file = str_replace("/",DIRECTORY_SEPARATOR, $dir . '/' . zip_entry_name($zip_entry));
-					$fp = fopen($path_file, "w");
-					fwrite($fp, $buf);
-					fclose($fp);
-					zip_entry_close($zip_entry);
+				$fname = zip_entry_name($zip_entry);
+				if (is_valid_image($fname) || is_valid_video($fname)) {
+					if (zip_entry_open($zip, $zip_entry, "r")) {
+						$buf = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
+						$path_file = str_replace("/",DIRECTORY_SEPARATOR, $dir . '/' . $fname);
+						$fp = fopen($path_file, "w");
+						fwrite($fp, $buf);
+						fclose($fp);
+						zip_entry_close($zip_entry);
+					}
 				}
 			}
 			zip_close($zip);

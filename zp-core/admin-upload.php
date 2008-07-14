@@ -58,7 +58,7 @@ if (isset($_GET['action'])) {
 					$tmp_name = $_FILES['files']['tmp_name'][$key];
 					$name = $_FILES['files']['name'][$key];
 					$soename = seoFriendlyURL($name);
-					if (is_valid_image($name)) {
+					if (is_valid_image($name) || is_valid_video($name)) {
 						$uploadfile = $uploaddir . '/' . $soename;
 						move_uploaded_file($tmp_name, $uploadfile);
 						@chmod($uploadfile, 0666 & CHMOD_VALUE);
@@ -121,10 +121,23 @@ echo "\n" . '<div id="content">';
 			</script>
 
 <h1><?php echo gettext("Upload Photos"); ?></h1>
-<p><?php echo gettext("This web-based upload accepts image formats:"); ?> <acronym
-	title="Joint Picture Expert's Group">JPEG</acronym>, <acronym
-	title="Portable Network Graphics">PNG</acronym> <?php echo gettext("and"); ?> <acronym
-	title="Graphics Interchange Format">GIF</acronym>. <?php echo gettext("You can also upload a <strong>ZIP</strong> archive containing any of those file types."); ?></p>
+<p><?php echo gettext("This web-based upload accepts ZenPhoto formats:").' '; 
+$i = 1;
+natsort($_zp_supported_images);
+foreach ($_zp_supported_images as $suffix) {
+	if ($i > 1)  echo ', ';
+	echo strtoupper($suffix);
+	$i++;
+}
+$i = 1;
+natsort($_zp_supported_videos);
+foreach ($_zp_supported_videos as $suffix) {
+		if ($i < count($_zp_supported_videos)) echo ', '; else echo ', '.gettext('and').' ';
+	echo strtoupper($suffix);
+	$i++;
+}
+echo '. ';
+echo gettext("You can also upload a <strong>ZIP</strong> archive containing any of those file types."); ?></p>
 <!--<p><em>Note:</em> When uploading archives, <strong>all</strong> images in the archive are added to the album, regardles of directory structure.</p>-->
 <p><?php echo gettext("The maximum size for any one file is"); ?> <strong><?php echo ini_get('upload_max_filesize'); ?>B</strong>.
 <?php echo gettext("Don't forget, you can also use"); ?> <acronym title="File Transfer Protocol">FTP</acronym>
