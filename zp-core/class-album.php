@@ -14,6 +14,8 @@ class Album extends PersistentObject {
 	var $parentalbum = null; // The parent album's album object (lazy)
 	var $gallery;
 	var $searchengine;           // cache the search engine for dynamic albums
+	var $comments;      // Image comment array.
+	var $commentcount;  // The number of comments on this image.
 	var $index;
 	var $themeoverride;
 
