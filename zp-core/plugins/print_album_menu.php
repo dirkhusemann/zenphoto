@@ -3,6 +3,9 @@
   * 
  * Changelog
  * 
+ * 1.4.4.2.
+ * - HTML validation again (turns css id for subalbums into the valid css class) Thanks to miem for the find.
+ * 
  * 1.4.4.1
  * - Html validation changes
  * 
@@ -83,13 +86,13 @@
  * - Renamed the function name from show_album_menu() to more zp style printAlbumMenu()
  *
  * @author Malte Müller (acrylian)
- * @version 1.4.4.1
+ * @version 1.4.4.2
  * @package plugins
  */
 
 $plugin_description = gettext("Adds a theme function printAlbumMenu() to print an album menu either as a nested list up to 4 sublevels (context sensitive) or as a dropdown menu.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.4.4.1';
+$plugin_version = '1.4.4.2';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---print_album_menu.php.html";
 
 /**
@@ -149,7 +152,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',
 	if ($css_id != "") { $css_id = " id='".$css_id."'"; }
 	if ($css_class_topactive != "") { $css_class_topactive = " id='".$css_class_topactive."'"; }
 	if ($css_class != "") { $css_class = " class='".$css_class."'"; }
-	if ($css_class_active != "") { $css_class_active = " id='".$css_class_active."'"; }
+	if ($css_class_active != "") { $css_class_active = " class='".$css_class_active."'"; }
 
 	/**** Top level start with Index link  ****/
 	if($option === "list" OR $option === "list-top") {
