@@ -3505,8 +3505,8 @@ function printCaptcha($preText='', $midText='', $postText='', $size=4) {
 	if (getOption('Use_Captcha')) {
 		$captchaCode = generateCaptcha($img);
 		$inputBox =  "<input type=\"text\" id=\"code\" name=\"code\" size=\"" . $size . "\" class=\"inputbox\" />";
-		$captcha = "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/>" .
- 						"<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"absbottom\"/></label>&nbsp;";
+		$captcha = "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\" />" .
+ 						"<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"bottom\"/></label>&nbsp;";
 
 		echo $preText;
 		echo $captcha;

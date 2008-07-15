@@ -386,7 +386,7 @@ function printLoginForm($redirect=null, $logo=true) {
 		echo "\n      <tr><td colspan=\"2\">";
 		echo "\n      ".gettext("*Enter").' ';
 		echo "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/>" .
- 								"<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"absbottom\"/></label> ";
+ 								"<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"bottom\"/></label> ";
 		echo ' '.gettext("to email a password reset.");
 		echo "      </td></tr>";
 	}

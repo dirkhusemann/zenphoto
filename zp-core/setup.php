@@ -299,8 +299,9 @@ label:hover {
 
 <div id="main">
 
-<h1><img src="images/zen-logo.gif" title="Zen Photo Setup"
-	align="absbottom" /> <?php echo $upgrade ? gettext("Upgrade") : gettext("Setup") ; ?></h1>
+<h1><img src="images/zen-logo.gif" title="Zen Photo Setup" align="absbottom" /> 
+<?php echo $upgrade ? gettext("Upgrade") : gettext("Setup") ; ?>
+</h1>
 
 <div id="content">
 <?php

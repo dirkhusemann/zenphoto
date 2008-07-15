@@ -111,7 +111,9 @@
 												<?php if (getOption('Use_Captcha')) { 
  													$captchaCode=generateCaptcha($img); ?>
  													<tr>
- 													<td><label for="code"><?php echo gettext("Enter Captcha:"); ?><img src=<?php echo "\"$img\"";?> alt="Code" align="absbottom"/></label></td>
+ 													<td><label for="code"><?php echo gettext("Enter Captcha:"); ?>
+ 													<img src=<?php echo "\"$img\"";?> alt="Code" align="bottom"/>
+ 													</label></td>
  													<td><input type="text" id="code" name="code" size="20" class="inputbox" /><input type="hidden" name="code_h" value="<?php echo $captchaCode;?>"/></td>
  													</tr>
 												<?php } ?>
