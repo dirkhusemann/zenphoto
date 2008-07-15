@@ -374,8 +374,8 @@ function checkVideoThumb($album, $video){
 	$video = is_videoThumb($album, $video);
 	if($video) {
 		foreach($_zp_supported_images as $ext) {
-			if(file_exists($album."/".$video.$ext)) {
-				return $video.$ext;
+			if(file_exists($album."/".$video.'.'.$ext)) {
+				return $video.'.'.$ext;
 			}
 		}
 	}
