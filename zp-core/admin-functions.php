@@ -536,7 +536,7 @@ function setThemeOption($album, $key, $value) {
 			if ($exists) {
 				$sql = "UPDATE " . prefix('options') . " SET `value`='" . escape($value) . "' WHERE `id`=" . $exists['id'];
 			} else {
-				$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid) VALUES ('" . escape($key) . "','" . escape($value) . "','.$id.')";
+				$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid) VALUES ('" . escape($key) . "','" . escape($value) . "',$id)";
 			}
 		} else {
 			if (is_null($album)) {
