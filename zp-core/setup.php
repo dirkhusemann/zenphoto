@@ -1028,13 +1028,18 @@ if (file_exists("zp-config.php")) {
 	 ******                                                                                                                                                     ******
 	 ***************************************************************************************/
 
+	$createTables = true;
 	if (isset($_GET['create']) || isset($_GET['update']) && db_connect()) {
 		echo "<h3>".gettext("About to").' '.$taskDisplay[substr($task,0,8)].' '.gettext("tables")."...</h3>";
 		setupLog("Begin table creation");
 		foreach($db_schema as $sql) {
 			$result = mysql_query($sql);
 			if (!$result) {
+				$createTables = false;
 				setupLog("MySQL Query"." ( $sql ) "."Failed. Error: ".mysql_error());
+				echo '<div class="error">';
+				echo gettext('Table creation failure').': '.mysql_error(); 
+				echo '</div>';
 			} else {
 				setupLog("MySQL Query"." ( $sql ) "."Success.");
 			}
@@ -1175,12 +1180,16 @@ if (file_exists("zp-config.php")) {
 			query("ALTER TABLE ".prefix('images')." DROP COLUMN `tags`");
 		}
 
-		echo "<h3>".gettext("Done with table").' '.$taskDisplay[substr($task,0,8)]."!</h3>";
+		echo "<h3>".gettext("Done with table").' '.$taskDisplay[substr($task,0,8)];
+		if (!$createTables) echo ' '.gettext('with errors');
+		echo "!</h3>";
 
-		if ($_zp_loggedin == ADMIN_RIGHTS) {
-			echo "<p>".gettext("You need to")." <a href=\"admin-options.php\">".gettext("set your admin user and password")."</a>.</p>";
-		} else {
-			echo "<p>".gettext("You can now")." <a href=\"../\">".gettext("View your gallery")."</a>".gettext(", or")." <a href=\"admin.php\">".gettext("administrate.")."</a></p>";
+		if ($createTables) {
+			if ($_zp_loggedin == ADMIN_RIGHTS) {
+				echo "<p>".gettext("You need to")." <a href=\"admin-options.php\">".gettext("set your admin user and password")."</a>.</p>";
+			} else {
+				echo "<p>".gettext("You can now")." <a href=\"../\">".gettext("View your gallery")."</a>".gettext(", or")." <a href=\"admin.php\">".gettext("administrate.")."</a></p>";
+			}
 		}
 
 	} else if (db_connect()) {
@@ -1204,6 +1213,7 @@ if (file_exists("zp-config.php")) {
 			echo ": $db_list ";
 		}
 		$db_list = '';
+		$update = array();
 		foreach ($expected_tables as $table) {
 			if ($tables[$table] == 'update') {
 				$update[] = $table;
