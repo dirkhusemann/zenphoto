@@ -157,6 +157,7 @@ function printSlideShow($heading = true) {
 	}		
 	$gallery = new Gallery();
 	$album = new Album($gallery, $albumq['folder']);
+	$dynamic = $album->isDynamic();
 	$images = $album->getImages(0);
 	// return path to get back to the page we called the slideshow from
 	if (empty($_POST['imagenumber'])) {
@@ -196,13 +197,23 @@ function printSlideShow($heading = true) {
 		</div>
 <div id="slides" class="pics"><?php
 		// 1.2 the slides
-		foreach($images as $filename) {
+		foreach($images as $animage) {
 			$count++;
 			if($count > $numberofimages){
 				$count = 1;
 			}
-			$image = new Image($album, $filename);
-			$imagepath = FULLWEBPATH.getAlbumFolder('').$album->name."/".$filename;
+			if ($dynamic) {
+				$folder = $animage['folder'];
+				$dalbum = new Album($gallery, $folder);
+				$filename = $animage['filename'];
+				$image = new Image($dalbum, $filename);
+				$imagepath = FULLWEBPATH.getAlbumFolder('').$folder."/".$filename;
+			} else {
+				$folder = $album->name;
+				$filename = $animage;
+				$image = new Image($album, $filename);
+				$imagepath = FULLWEBPATH.getAlbumFolder('').$folder."/".$filename;
+			}
 			$ext = strtolower(strrchr($filename, "."));
 			echo "<span class='slideimage'><h4><strong>".$album->getTitle().":</strong> ".$image->getTitle()." (".$count."/".$numberofimages.")</h4>";
 			if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
@@ -235,7 +246,7 @@ function printSlideShow($heading = true) {
 			 	pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
 				</object><a>';
 		} else { 
-			echo "<img src='".WEBPATH."/".ZENFOLDER."/i.php?a=".$album->name."&i=".$filename."&s=".$imagesize."' alt='".$image->getTitle()."' title='".$image->getTitle()."' />";
+			echo "<img src='".WEBPATH."/".ZENFOLDER."/i.php?a=".$folder."&i=".$filename."&s=".$imagesize."' alt='".$image->getTitle()."' title='".$image->getTitle()."' />\n";
 		}
 		if(getOption("slideshow_showdesc")) { echo "<p class='imgdesc'>".$image->getDesc()."</p>"; }
 		echo "</span>";
@@ -261,7 +272,18 @@ $("#slideshow").flashembed({
       playList: [
 <?php
 	$count = 0;
-	foreach($images as $filename) {
+	foreach($images as $animage) {
+			if ($dynamic) {
+				$folder = $animage['folder'];
+				$filename = $animage['filename'];
+				$image = new Image($dalbum, $filename);
+				$imagepath = FULLWEBPATH.getAlbumFolder('').$salbum->name."/".$filename;
+			} else {
+				$folder = $album->name;
+				$filename = $animage;
+				$image = new Image($album, $filename);
+				$imagepath = FULLWEBPATH.getAlbumFolder('').$folder."/".$filename;
+			}
 		$count++;
 		$ext = strtolower(strrchr($filename, "."));
 		if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
@@ -269,7 +291,7 @@ $("#slideshow").flashembed({
 		} else {
 			$duration = " duration: ".getOption("slideshow_speed")/10;
 		}
-		echo "{ url: '".FULLWEBPATH.getAlbumFolder('').$album->name."/".$filename."', ".$duration." }\n";
+		echo "{ url: '".FULLWEBPATH.getAlbumFolder('').$folder."/".$filename."', ".$duration." }\n";
 		if($count < $numberofimages) { echo ","; }
 	}
 ?>     
