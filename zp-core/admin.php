@@ -357,7 +357,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	}
 	?>
 
-<h1>Edit Album: <em><?php echo $album->name; ?></em></h1>
+<h1><?php echo gettext("Edit Album:");?> <em><?php echo $album->name; ?></em></h1>
 <p><?php printAdminLinks('edit' . $albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
  | <?php if (!$album->isDynamic() && $album->getNumImages() > 1) { 
    printSortLink($album, gettext("Sort Album"), gettext("Sort Album")); 
@@ -507,7 +507,7 @@ if ($allimagecount) {
 						alt="<?php echo $image->filename;?>"
 						onclick="toggleBigImage('thumb-<?php echo $currentimage; ?>', '<?php echo $image->getSizedImage(getOption('image_size')); ?>');" />
 				</td>
-				<td align="right" valign="top" width="100">Filename:</td>
+				<td align="right" valign="top" width="100"><?php echo gettext("Filename:"); ?></td>
 				<td><?php echo $image->filename; ?></td>
 			<td style="padding-left: 1em;">
 				<a href="javascript: confirmDeleteImage('?page=edit&action=deleteimage&album=<?php echo urlencode($album->name); ?>&image=<?php echo urlencode($image->filename); ?>','<?php echo gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"); ?>');"
@@ -517,7 +517,7 @@ if ($allimagecount) {
 			</td>
 			</tr>
 			<tr>
-				<td align="right" valign="top" width="100">Title:</td>
+				<td align="right" valign="top" width="100"><?php echo gettext("Title:"); ?></td>
 				<td><input type="text" size="56" style="width: 360px"
 					name="<?php echo $currentimage; ?>-title"
 					value="<?php echo $image->getTitle(); ?>" /></td>
