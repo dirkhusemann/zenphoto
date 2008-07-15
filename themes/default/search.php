@@ -23,8 +23,8 @@
 			printSearchForm(); 
 		?>
 		<h2><span><?php printHomeLink('', ' | '); ?><a href="
-		<?php echo getGalleryIndexURL();?>" title="<?php echo ('Gallery Index'); ?>">
-		<?php echo getGalleryTitle();?></a></span> | 
+		<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo ('Gallery Index'); ?>">
+		<?php echo htmlspecialchars(getGalleryTitle());?></a></span> | 
 		<?php
 		  echo "<em>".gettext("Search")."</em>";
 		?>
@@ -76,7 +76,7 @@
 	
 </div>
 
-<div id="credit"><?php printRSSLink('Gallery', '', gettext('Gallery RSS'), ' | '); ?> <a href="<?php echo getGalleryIndexURL();?>?p=archive"><?php echo gettext("Archive View"); ?></a> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a></div>
+<div id="credit"><?php printRSSLink('Gallery', '', gettext('Gallery RSS'), ' | '); ?> <a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>?p=archive"><?php echo gettext("Archive View"); ?></a> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a></div>
 
 <?php printAdminToolbox(); ?>
 

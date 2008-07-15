@@ -99,7 +99,7 @@
 		}
 		if (!is_null($firstImage)  && hasNextPage()) { 
 		?>
-		<li class="thumb"><span class="forward"><em style="background-image:url('<?php echo $_zp_themeroot ?>/img/moreslide_next.gif');"><a href="<?php echo getNextPageURL(); ?>" style="background:#fff;"><?php echo gettext('Next page'); ?></a></em></span></li>
+		<li class="thumb"><span class="forward"><em style="background-image:url('<?php echo $_zp_themeroot ?>/img/moreslide_next.gif');"><a href="<?php echo htmlspecialchars(getNextPageURL()); ?>" style="background:#fff;"><?php echo gettext('Next page'); ?></a></em></span></li>
 		<?php
 		}
 		?>
@@ -116,11 +116,11 @@
 					echo "</em>";
 		?>
 				<?php if (hasPrevPage()) { ?>
-				<a href="<?php echo getPrevPageURL(); ?>" accesskey="x">&laquo; <?php echo gettext('prev page'); ?></a>
+				<a href="<?php echo htmlspecialcharsgetPrevPageURL()); ?>" accesskey="x">&laquo; <?php echo gettext('prev page'); ?></a>
 				<?php } 
 					if (hasNextPage()) { if (hasPrevPage()) { echo '&nbsp;'; } 
 			?>
-				<a href="<?php echo getNextPageURL(); ?>" accesskey="x"><?php echo gettext('next page'); ?> &raquo;</a>
+				<a href="<?php echo htmlspecialchars(getNextPageURL()); ?>" accesskey="x"><?php echo gettext('next page'); ?> &raquo;</a>
 			<?php
 					}
 					echo '</p>';
@@ -134,7 +134,7 @@
 	</div>
 
 	<p id="path"><?php printHomeLink('', ' > '); ?>
-	<a href="<?php echo getGalleryIndexURL();?>" title="<?php echo gettext('Albums Index'); ?>">
+	<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>">
 	<?php echo getGalleryTitle();?></a> &gt; 
 	<?php
 	echo "<em>".gettext('Search')."</em>";

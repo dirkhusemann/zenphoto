@@ -27,7 +27,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 		<!-- Crumb Trail Navigation -->
 		<div id="wrapnav">
 			<div id="navbar">
-				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a></span>  | <?php echo gettext('Archive View'); ?>
+				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="Albums Index"><?php echo getGalleryTitle();?></a></span>  | <?php echo gettext('Archive View'); ?>
 			</div>
 		</div>
 

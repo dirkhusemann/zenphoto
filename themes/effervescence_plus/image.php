@@ -32,7 +32,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 						global $_zp_current_image;
 						if (hasPrevImage()) { 
 							$image = $_zp_current_image->getPrevImage();
-							echo '<a href="' . getPrevImageURL() . '" title="' . $image->getTitle() . '">&laquo; '.gettext('prev').'</a>';
+							echo '<a href="' . htmlspecialchars(getPrevImageURL()) . '" title="' . $image->getTitle() . '">&laquo; '.gettext('prev').'</a>';
 						} else {
 							echo '<div class="imgdisabledlink">&laquo; '.gettext('prev').'</div>'; 
 						}
@@ -42,7 +42,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 					<?php
 					if (hasNextImage()) { 
 						$image = $_zp_current_image->getNextImage();
-						echo '<a href="' . getNextImageURL() . '" title="' . $image->getTitle() . '">'.gettext('next').' &raquo;</a>';
+						echo '<a href="' . htmlspecialchars(getNextImageURL()) . '" title="' . $image->getTitle() . '">'.gettext('next').' &raquo;</a>';
 					} else {
 						echo '<div class="imgdisabledlink">'.gettext('next').' &raquo;</div>';
 					}
@@ -59,7 +59,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 	<!-- Crumb Trail Navigation -->
 		<div id="wrapnav">
 			<div id="navbar">
-				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> | 
+				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> | 
 				<?php printParentBreadcrumb(); printAlbumBreadcrumb("", " | "); ?> 
 				</span> 
 				<?php printImageTitle(true); ?>
@@ -99,7 +99,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 		<div id="image" <?php echo $wide.$high; ?>>
 			<?php if ($show = !checkForPassword()) { ?>
 			<div id="image_container">
-				<a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>">
+				<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo getImageTitle();?>">
 					<?php printDefaultSizedImage(getImageTitle()); ?>
 				</a>
 			</div>

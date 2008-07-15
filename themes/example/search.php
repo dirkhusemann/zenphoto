@@ -24,7 +24,7 @@ $firstPageImages = normalizeColumns(1, 7);
 			printSearchForm(); 
 		?>
 		<h2><span><?php printHomeLink('', ' | '); ?><a href="
-		<?php echo getGalleryIndexURL();?>" title="Gallery Index">
+		<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="Gallery Index">
 		<?php echo getGalleryTitle();?></a> | 
 		<?php
 		  echo "<em>".gettext("Search")."</em>";

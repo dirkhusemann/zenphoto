@@ -18,7 +18,7 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 			</div>
 			<div id="wrapnav">
 				<div id="navbar">
-					<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> | 
+					<span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> | 
 					<?php printParentBreadcrumb(); printAlbumBreadcrumb("", " | "); ?> 
 					</span> 
 					Slideshow

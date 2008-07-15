@@ -67,7 +67,7 @@
 						printImageMetadata('', false); 
 						echo "&nbsp;/&nbsp;";
 					} 
-				?><a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>"><?php echo gettext('Full Size'); ?></a>
+				?><a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo getImageTitle();?>"><?php echo gettext('Full Size'); ?></a>
  					</li>
 				</ul>
 			</div>
@@ -170,16 +170,16 @@
 				<div id="prevnext">
 					<?php if (hasPrevImage()) { ?>
 					<div id="prev"><span class="thumb"><span>
-						<em style="background-image:url('<?php echo getPrevImageThumb(); ?>')"><a href="<?php echo getPrevImageURL();?>" accesskey="z" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Previous'); ?>: </strong>Crescent</a></em></span></span></div>
+						<em style="background-image:url('<?php echo htmlspecialchars(getPrevImageThumb()); ?>')"><a href="<?php echo getPrevImageURL();?>" accesskey="z" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Previous'); ?>: </strong>Crescent</a></em></span></span></div>
 						<?php } if (hasNextImage()) { ?>
 						<div id="next"><span class="thumb"><span>
-							<em style="background-image:url('<?php echo getNextImageThumb(); ?>')"><a href="<?php echo getNextImageURL();?>" accesskey="x" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Next'); ?>: </strong>Sagamor</a></em></span></span></div>
+							<em style="background-image:url('<?php echo htmlspecialchars(getNextImageThumb()); ?>')"><a href="<?php echo getNextImageURL();?>" accesskey="x" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Next'); ?>: </strong>Sagamor</a></em></span></span></div>
 						<?php } ?>
 				</div>
 
 		</div>
 
-		<p id="path"><?php printHomeLink('', ' > '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> &gt; <?php printParentBreadcrumb("", " > ", " > "); printAlbumBreadcrumb("", " > "); echo getImageTitle(); ?></p>
+		<p id="path"><?php printHomeLink('', ' > '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="Albums Index"><?php echo getGalleryTitle();?></a> &gt; <?php printParentBreadcrumb("", " > ", " > "); printAlbumBreadcrumb("", " > "); echo getImageTitle(); ?></p>
 
 		<div id="footer">
 			<hr />

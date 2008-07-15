@@ -3,13 +3,13 @@
  * shutterfly -- Supports using Shutterfly for printing images from a gallery.
  * 
  * @author Darrell Dudics (GameDudeX) adapted as a plugin by Stephen Billard (sbillard)
- * @version 1.0.0
+ * @version 1.0.1
  * @package plugins 
  */
 
 $plugin_description = gettext("Adds a link to allow requesting a single image print through Shutterfly.");
 $plugin_author = "Darrell Dudics (GameDudeX) ".gettext("adapted as a plugin by")." Stephen Billard (sbillard)";
-$plugin_version = '1.0.0';
+$plugin_version = '1.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---shutterfly.php.html";
 
 // register the scripts needed
@@ -48,13 +48,13 @@ echo '			<input type="hidden" name="pid" value="C4P" />'."\n";
 echo '			<input type="hidden" name="psid" value="AFFL" />'."\n";
 echo '			<input type="hidden" name="puid" value="visitor" />'."\n";
 echo '			<input type="hidden" name="imnum" value="1" />'."\n";
-echo '			<input type="hidden" name="imraw-1" value="http://'.$_SERVER['HTTP_HOST'].getUnprotectedImageURL().'" />'."\n";
+echo '			<input type="hidden" name="imraw-1" value="http://'.$_SERVER['HTTP_HOST'].htmlspecialchars(getUnprotectedImageURL()).'" />'."\n";
 echo '			<input type="hidden" name="imrawwidth-1" value="'.getFullWidth().'" />'."\n";
 echo '			<input type="hidden" name="imrawheight-1" value="'.getFullHeight().'" />'."\n";
 echo '			<input type="hidden" name="imthumb-1" value="http://'.$_SERVER['HTTP_HOST'].getImageThumb().'" />'."\n";
 echo '			<input type="hidden" name="imthumbheight-1" value="'.getOption('thumb_crop_height').'" />'."\n";
 echo '			<input type="hidden" name="imthumbwidth-1" value="'.getOption('thumb_crop_width').'" />'."\n";
-echo '			<input type="hidden" name="returl" value="http://'.$_SERVER['HTTP_HOST'].getImageLinkURL().'" />'."\n";
+echo '			<input type="hidden" name="returl" value="http://'.$_SERVER['HTTP_HOST'].htmlspecialchars(getImageLinkURL()).'" />'."\n";
 echo '			<input type="submit" value="Add to Shutterfly Cart &raquo;" />'."\n";
 echo '		</form>'."\n";
 echo '	</div>'."\n";

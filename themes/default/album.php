@@ -13,7 +13,7 @@
 <div id="main">
 
 	<div id="gallerytitle">
-		<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> | <?php printParentBreadcrumb(); ?></span> <?php printAlbumTitle(true);?></h2>
+		<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> | <?php printParentBreadcrumb(); ?></span> <?php printAlbumTitle(true);?></h2>
 	</div>
 		
 		<div id="padbox">
@@ -55,7 +55,7 @@
 		
 </div>
 
-<div id="credit"><?php printRSSLink('Album', '', gettext('Album RSS'), ''); ?> | <a href="<?php echo getGalleryIndexURL();?>?p=archive"><?php echo gettext("Archive View"); ?></a> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a></div>
+<div id="credit"><?php printRSSLink('Album', '', gettext('Album RSS'), ''); ?> | <a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>?p=archive"><?php echo gettext("Archive View"); ?></a> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a></div>
 
 <?php printAdminToolbox(); ?>
 

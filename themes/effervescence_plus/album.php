@@ -131,7 +131,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 		<!-- Crumb Trail Navigation -->
 		<div id="wrapnav">
 			<div id="navbar">
-				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> | <?php printParentBreadcrumb(); ?></span> 
+				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> | <?php printParentBreadcrumb(); ?></span> 
 				<?php printAlbumTitle(true);?>
 			</div>
 		</div>
@@ -213,9 +213,9 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 						<?php
 							if (!$show) {
 								if ($imagePage) {
-									$url = getPageURL(getTotalPages(true));
+									$url = htmlspecialchars(getPageURL(getTotalPages(true)));
 								} else {
-									$url = getPageURL(getCurrentPage());
+									$url = htmlspecialchars(getPageURL(getCurrentPage()));
 								} 
 								echo '<p align=center>';
 								printLinkWithQuery($url, 'slideshow', gettext('View Slideshow'));
@@ -279,9 +279,9 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 						<p align="center">
  						<?php 
  						if ($imagePage) {
- 							$url = getPageURL(getTotalPages(true));
+ 							$url = htmlspecialchars(getPageURL(getTotalPages(true)));
  						} else {
- 							$url = getPageURL(getCurrentPage());
+ 							$url = htmlspecialchars(getPageURL(getCurrentPage()));
  						} 
 			 printLinkWithQuery($url, 'noflash', gettext('View Gallery Without Flash'));
 			 echo "</p>";

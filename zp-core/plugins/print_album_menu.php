@@ -1,12 +1,15 @@
 <?php	
-/** printAlbumMenu for Zenphoto 1.1.6 
+/** printAlbumMenu for Zenphoto 
   * 
  * Changelog
+ * 
+ * 1.4.4.1
+ * - Html validation changes
  * 
  * 1.4.4: 
  * - Adds new list mode option '$showsubs' to optionally always show subalbums
  * - Fixes a html validation error of using a CSS id several times for the active top level albums (now a class)
-  * 
+ * 
  * 1.4.3.1: 
  * - Some very minor code cleanup
  * 
@@ -80,13 +83,13 @@
  * - Renamed the function name from show_album_menu() to more zp style printAlbumMenu()
  *
  * @author Malte Müller (acrylian)
- * @version 1.4.4
+ * @version 1.4.4.1
  * @package plugins
  */
 
 $plugin_description = gettext("Adds a theme function printAlbumMenu() to print an album menu either as a nested list up to 4 sublevels (context sensitive) or as a dropdown menu.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.4.4';
+$plugin_version = '1.4.4.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---print_album_menu.php.html";
 
 /**
@@ -152,7 +155,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',
 	if($option === "list" OR $option === "list-top") {
 		echo "<ul".$css_id.">\n"; // top level list
 		if(!empty($indexname)) {
-			echo "<li><a href='".getGalleryIndexURL()."' title='".$indexname."'>".$indexname."</a></li>";
+			echo "<li><a href='".htmlspecialchars(getGalleryIndexURL())."' title='".$indexname."'>".$indexname."</a></li>";
 		}
 	}
 		/**** TOPALBUM LEVEL ****/
@@ -294,7 +297,7 @@ function printAlbumMenuJump($option="count", $indexname="Gallery Index") {
 		<?php
 		if(!empty($indexname)) {
 			$selected = checkSelectedAlbum("", "index"); ?>
-		<option $selected value="<?php echo getGalleryIndexURL(); ?>"><?php echo $indexname; ?></option>
+		<option $selected value="<?php echo htmlspecialchars(getGalleryIndexURL()); ?>"><?php echo $indexname; ?></option>
 		<?php }
 		/**** TOPALBUM LEVEL ****/
 		$gallery = $_zp_gallery;

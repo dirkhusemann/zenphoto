@@ -82,7 +82,7 @@ $backgroundImagePath="";
 <div id="wrapnav">
 	<div id="navbar">
 		<span><?php printHomeLink('', ' | '); ?>
-		<a href="<?php echo getGalleryIndexURL();?>" title="Albums Index">
+		<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="Albums Index">
 		<?php echo getGalleryTitle();	?></a></span> | 
 		<?php
 		  echo "<em>".gettext('Search')."</em>";
@@ -185,9 +185,9 @@ $backgroundImagePath="";
  					<p align="center"><a href="
  					<?php 
  					if ($imagePage) {
- 						$url = getPageURL(getTotalPages(true));
+ 						$url = htmlspecialchars(getPageURL(getTotalPages(true)));
  					} else {
- 						$url = getPageURL(getCurrentPage());
+ 						$url = htmlspecialchars(getPageURL(getCurrentPage()));
  					} 
  					if (substr($url, -1, 1) == '/') {$url = substr($url, 0, (strlen($url)-1));}
  					echo $url = $url . (getOption("mod_rewrite") ? "?" : "&amp;") . 'noflash'; 
@@ -276,6 +276,6 @@ $stagePadding.'" thumbnailColumns="'.$thumbnailColumns.'" thumbnailows="'.$thumb
 $navPosition.'" enableRightClickOpen="'.$enableRightClickOpen.'" backgroundImagePath="'.$backgroundImagePath.
 '" imagePath="'.$path.'" thumbPath="'.$path.'">'; ?>
 
-<?php while (next_image(true)): ?><image><filename><?php echo getFullImageURL();?></filename><caption><![CDATA[<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo gettext('Open in a new window'); ?>">
+<?php while (next_image(true)): ?><image><filename><?php echo htmlspecialchars(getFullImageURL());?></filename><caption><![CDATA[<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo gettext('Open in a new window'); ?>">
 <font face="Times"><u><b><em><?php echo getImageTitle() ?></font></em></b></u></a></u>
 <br></font><?php echo htmlspecialchars(getImageDesc()) ?>]]></caption></image><?php endwhile; ?></simpleviewerGallery><?php } ?>

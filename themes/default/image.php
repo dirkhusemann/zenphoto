@@ -28,12 +28,12 @@
 	<div id="gallerytitle">
 		<div class="imgnav">
 			<?php if (hasPrevImage()) { ?>
-			<div class="imgprevious"><a href="<?php echo getPrevImageURL();?>" title="<?php echo gettext("Previous Image"); ?>">&laquo; <?php echo gettext("prev"); ?></a></div>
+			<div class="imgprevious"><a href="<?php echo htmlspecialchars(getPrevImageURL());?>" title="<?php echo gettext("Previous Image"); ?>">&laquo; <?php echo gettext("prev"); ?></a></div>
 			<?php } if (hasNextImage()) { ?>
-			<div class="imgnext"><a href="<?php echo getNextImageURL();?>" title="<?php echo gettext("Next Image"); ?>"><?php echo gettext("next"); ?> &raquo;</a></div>
+			<div class="imgnext"><a href="<?php echo htmlspecialchars(getNextImageURL());?>" title="<?php echo gettext("Next Image"); ?>"><?php echo gettext("next"); ?> &raquo;</a></div>
 			<?php } ?>
 		</div>
-		<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="<?php gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?>
+		<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?>
 			</a> | <?php printParentBreadcrumb("", " | ", " | "); printAlbumBreadcrumb("", " | "); ?> 
 			</span> <?php printImageTitle(true); ?>
 		</h2>
@@ -43,7 +43,7 @@
 	<!-- The Image -->
 	<?php if (!checkForPassword()) { ?>
 	<div id="image">
-		<a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>"><strong><?php printDefaultSizedImage(getImageTitle()); ?></strong></a> 
+		<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo getImageTitle();?>"><strong><?php printDefaultSizedImage(getImageTitle()); ?></strong></a> 
 	</div>
 	
 	<div id="narrow">
@@ -129,7 +129,7 @@
 		<?php } ?>
 </div>
 
-<div id="credit"><?php printRSSLink('Gallery','','RSS', ' | '); ?> <a href="<?php echo getGalleryIndexURL();?>?p=archive"><?php echo gettext("Archive View"); ?></a> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a></div>
+<div id="credit"><?php printRSSLink('Gallery','','RSS', ' | '); ?> <a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>?p=archive"><?php echo gettext("Archive View"); ?></a> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a></div>
 
 <?php printAdminToolbox(); ?>
 

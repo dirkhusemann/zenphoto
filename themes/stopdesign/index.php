@@ -74,7 +74,7 @@
 								$images = getImageStatistic(6, "latest");
 								foreach ($images as $image) {
 									echo "<li><table><tr><td>\n";
-									$imageURL = getURL($image);
+									$imageURL = htmlspecialchars(getURL($image));
 									echo '<a href="'.$imageURL.'" title="'.gettext("View image:").' '.
 									$image->getTitle() . '"><img src="' .
 									htmlspecialchars($image->getCustomImage(null, 44, 33, null, null, null, null, true)) .
@@ -89,7 +89,7 @@
 								echo "<li><table><tr><td>\n";
 								$randomImage = getRandomImages();
 								if (is_object($randomImage)) {
-									$randomImageURL = getURL($randomImage);
+									$randomImageURL = htmlspecialchars(getURL($randomImage));
 									echo '<a href="' . $randomImageURL . '" title="'.gettext("View image:").' ' . $randomImage->getTitle() . '">' .
  												'<img src="' . htmlspecialchars($randomImage->getCustomImage(null, 44, 33, null, null, null, null, true)) . 
 												'" width="44" height="33" alt="'.$randomImage->getTitle().'"'; 

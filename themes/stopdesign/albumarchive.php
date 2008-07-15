@@ -68,7 +68,7 @@
 
 </div>
 
-<p id="path"><?php printHomeLink('', ' > '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> &gt; <?php echo gettext('Gallery Archive'); ?></p>  
+<p id="path"><?php printHomeLink('', ' > '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="Albums Index"><?php echo getGalleryTitle();?></a> &gt; <?php echo gettext('Gallery Archive'); ?></p>  
 
 <div id="footer">
 	<hr />

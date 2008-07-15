@@ -248,7 +248,7 @@ if ($page == "editcomment") { ?>
 		<td><input type="checkbox" name="ids[]" value="<?php echo $id; ?>"
 			onClick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" /></td>
 		<td style="font-size: 7pt;"><?php echo "<a href=\"" . (getOption("mod_rewrite") ? "../$album/$image" : "../index.php?album=".urlencode($album).
-											"&image=".urlencode($image)) . "\">$albumtitle $title</a>"; ?></td>
+											"&amp;image=".urlencode($image)) . "\">$albumtitle $title</a>"; ?></td>
 		<td>
 		<?php 
 		echo $website ? "<a href=\"$website\">$author</a>" : $author; 

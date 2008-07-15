@@ -634,7 +634,7 @@ function printAlbumBreadcrumb($before='', $after='', $title='Album Thumbnails') 
 		$searchwords = $_zp_current_search->words;
 		$searchdate = $_zp_current_search->dates;
 		$searchfields = $_zp_current_search->fields;
-		$searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
+		$searchpagepath = htmlspecialchars(getSearchURL($searchwords, $searchdate, $searchfields, $page));
 		$dynamic_album = $_zp_current_search->dynalbumname;
 		if (empty($dynamic_album)) {
 			echo "<a href=\"" . $searchpagepath . "\">";
@@ -666,7 +666,7 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
 		$searchwords = $_zp_current_search->words;
 		$searchdate = $_zp_current_search->dates;
 		$searchfields = $_zp_current_search->fields;
-		$searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
+		$searchpagepath = htmlspecialchars(getSearchURL($searchwords, $searchdate, $searchfields, $page));
 		$dynamic_album = $_zp_current_search->dynalbumname;
 		if (empty($dynamic_album)) {
 			echo "<a href=\"" . $searchpagepath . "\">";
@@ -2668,9 +2668,9 @@ function printRandomImages($number=5, $class=null, $option='all', $rootAlbum='')
 			case "album":
 				$randomImage = getRandomImagesAlbum($rootAlbum); break;
 		}
-		$randomImageURL = getURL($randomImage);
+		$randomImageURL = htmlspecialchars(getURL($randomImage));
 		echo '<a href="' . $randomImageURL . '" title="'.gettext('View image:').' ' . htmlspecialchars($randomImage->getTitle(), ENT_QUOTES) . '">' .
-			'<img src="' . $randomImage->getThumb() .
+			'<img src="' . htmlspecialchars($randomImage->getThumb()) .
 			'" alt="'.htmlspecialchars($randomImage->getTitle(), ENT_QUOTES).'"';
 		echo "/></a></li>\n";
 	}
@@ -2737,7 +2737,7 @@ function printTags($option='links',$preText=NULL,$class='taglist',$separator=', 
 			for ($x = 0; $x < $ct; $x++) {
 				if ($x === $ct - 1) { $separator = ""; }
 				if ($option === "links") {
-					$links1 = "<a href=\"".getSearchURL(quoteSearchTag($singletag[$x]), '', SEARCH_TAGS, 0, 0)."\" title=\"".$singletag[$x]."\" rel=\"nofollow\">";
+					$links1 = "<a href=\"".htmlspecialcharsget(SearchURL(quoteSearchTag($singletag[$x]), '', SEARCH_TAGS, 0, 0))."\" title=\"".$singletag[$x]."\" rel=\"nofollow\">";
 					$links2 = "</a>";
 				}
 				echo "\t<li>".$links1.htmlspecialchars($singletag[$x], ENT_QUOTES).$links2.$separator."</li>\n";
@@ -2803,8 +2803,8 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 			} else {
 				$key = str_replace('"', '', $key);
 				echo "\t<li style=\"display:inline; list-style-type:none\"><a href=\"".
-				getSearchURL(quoteSearchTag($key), '', SEARCH_TAGS, 0, 0)."\"$size rel=\"nofollow\">".
-				$key.$counter."</a></li>\n";
+					htmlspecialchars(getSearchURL(quoteSearchTag($key), '', SEARCH_TAGS, 0, 0))."\"$size rel=\"nofollow\">".
+					$key.$counter."</a></li>\n";
 			}
 		}
 
@@ -2874,7 +2874,7 @@ function printAllDates($class='archive', $yearid='year', $monthid='month', $orde
 			if($nr != 1) {  echo "</ul>\n</li>\n";}
 			echo "<li $yearid>$year\n<ul $monthid>\n";
 		}
-		echo "<li><a href=\"".getSearchURl('', substr($key, 0, 7), 0, 0)."\" rel=\"nofollow\">$month ($val)</a></li>\n";
+		echo "<li><a href=\"".htmlspecialchars(getSearchURl('', substr($key, 0, 7), 0, 0))."\" rel=\"nofollow\">$month ($val)</a></li>\n";
 	}
 	echo "</ul>\n</li>\n</ul>\n";
 }

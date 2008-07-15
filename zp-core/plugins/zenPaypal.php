@@ -15,14 +15,14 @@
  * passing it in the zenPaypal() call. This would give you individual pricing by image.
  * 
  * @author Ebrahim Ezzy (Nimbuz) '.gettext("adapted as a plugin by ").'Stephen Billard (sbillard)
- * @version 1.0.0
+ * @version 1.0.1
  * @package plugins 
  */
 
 $plugin_description =   "<a href =\"http://blog.qelix.com/2008/04/07/paypal-integraion-for-zenphoto-zenpaypal/\">".
 	"zenPayPal</a> -- ".gettext("Paypal Integration for Zenphoto.");
 $plugin_author = 'Ebrahim Ezzy (Nimbuz) '.gettext("adapted as a plugin by ").'Stephen Billard (sbillard)';
-$plugin_version = '1.0.0';
+$plugin_version = '1.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---zenPaypal.php.html";
 $option_interface = new zenPaypalOptions();
 addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/zenPaypal/zenPaypal.css" type="text/css" />');
@@ -156,8 +156,8 @@ if (empty($locale)) { $locale = 'en_US'; }
 <input type="hidden" name="shipping" value="<?php echo getOption('zenPaypal_ship_cost'); ?>"> 
 <input type="hidden" name="no_note" value="1"> 
 <input type="hidden" name="currency_code" value="<?php echo getOption('zenPaypal_currency'); ?>"> 
-<input type="hidden" name="return" value="<?php echo 'http://'. $_SERVER['SERVER_NAME']. getNextImageURL();?>">
-<input type="hidden" name="cancel_return" value="<?php echo 'http://'. $_SERVER['SERVER_NAME'].getImageLinkURL();?>">
+<input type="hidden" name="return" value="<?php echo 'http://'. $_SERVER['SERVER_NAME']. htmlspecialchars(getNextImageURL());?>">
+<input type="hidden" name="cancel_return" value="<?php echo 'http://'. $_SERVER['SERVER_NAME'].htmlspecialchars(getImageLinkURL());?>">
 </form>
 <?php 
 if ($pricelistlink) {

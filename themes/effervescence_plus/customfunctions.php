@@ -29,7 +29,7 @@ function printHeadingImage($randomImage) {
 				$randomAlbum = $randomAlbum->getParent();
 			}
 		}
-		$randomImageURL = getURL($randomImage);
+		$randomImageURL = htmlspecialchars(getURL($randomImage));
 		echo "<a href='".$randomImageURL."' title='".gettext('Random picture...')."'><img src='".
 					htmlspecialchars($randomImage->getCustomImage(NULL, 620, 180, 620, 180, NULL, NULL, !getOption('Watermark_head_image'))).
 					"' width=620 height=180 alt=".'"'.

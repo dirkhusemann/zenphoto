@@ -15,7 +15,7 @@
 
 <div id="main">
 	<div id="gallerytitle">
-			<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo getGalleryIndexURL();?>" title="Albums Index"><?php echo getGalleryTitle();?></a> 
+			<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="Albums Index"><?php echo getGalleryTitle();?></a> 
       | <?php printParentBreadcrumb(); printAlbumBreadcrumb("", " | "); ?></span> <?php printImageTitle(true); ?></h2>
 	</div>
 	
@@ -24,17 +24,17 @@
 	<?php if (!checkForPassword()) { ?>
 		<div class="image">
 		<div class="imgnav">
-			<?php if (hasPrevImage()) { ?> <a class="prev" href="<?php echo getPrevImageURL();?>" title="<?php echo gettext('Previous Image'); ?>">&laquo; <?php echo gettext("prev"); ?></a>
-			<?php } if (hasNextImage()) { ?> <a class="next" href="<?php echo getNextImageURL();?>" title="<?php echo gettext('Next Image'); ?>"><?php echo gettext("next");?> &raquo;</a><?php } ?>
+			<?php if (hasPrevImage()) { ?> <a class="prev" href="<?php echo htmlspecialchars(getPrevImageURL());?>" title="<?php echo gettext('Previous Image'); ?>">&laquo; <?php echo gettext("prev"); ?></a>
+			<?php } if (hasNextImage()) { ?> <a class="next" href="<?php echo htmlspecialchars(getNextImageURL());?>" title="<?php echo gettext('Next Image'); ?>"><?php echo gettext("next");?> &raquo;</a><?php } ?>
 		</div>
 			
-				<a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>">
+				<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo getImageTitle();?>">
 				<?php printDefaultSizedImage(getImageTitle()); ?></a>
 
 				<div id="image_data">
 					<div id="fullsize_download_link">
 						<em>
-						<a href="<?php echo getFullImageURL();?>" title="<?php echo getImageTitle();?>"><?php echo gettext("Original Size:"); ?> 
+						<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo getImageTitle();?>"><?php echo gettext("Original Size:"); ?> 
 							<?php echo getFullWidth() . "x" . getFullHeight(); ?>
 						</a>
 						</em>
