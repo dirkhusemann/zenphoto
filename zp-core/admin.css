@@ -685,7 +685,7 @@ button.positive,.buttons a.positive {
 .tagchecklist,.tagchecklist li {
 	margin: 0;
 	padding: 0;
-	border-bottom: 1px dotted #C6D880;
+	border-bottom: 1px dotted #BAC9CF;
 }
 
 .tagchecklist label {
@@ -695,8 +695,8 @@ button.positive,.buttons a.positive {
 }
 
 .tagchecklist label:hover,.tagchecklist label.hover {
-	background: #777;
-	color: #fff;
+	background: #F1F2F3;
+	color: #333;
 }
 
 * html .tagchecklist label {
@@ -716,7 +716,7 @@ button.positive,.buttons a.positive {
 .tagrenamelist,.tagrenamelist li {
 	margin: 0;
 	padding: 0;
-	border-bottom: 1px dotted #C6D880;
+	border-bottom: 1px dotted #BAC9CF;
 }
 
 .tagrenamelist label {
@@ -726,8 +726,8 @@ button.positive,.buttons a.positive {
 }
 
 .tagrenamelist label:hover,.tagrenamelist label.hover {
-	background: #777;
-	color: #fff;
+	background: #F1F2F3;
+	color: #333;
 }
 
 * html .tagrenamelist label {
@@ -757,8 +757,8 @@ button.positive,.buttons a.positive {
 }
 
 .tagnewlist label:hover,.tagnewlist label.hover {
-	background: #777;
-	color: #fff;
+	background: #F1F2F3;
+	color: #333;
 }
 
 * html .tagnewlist label {
