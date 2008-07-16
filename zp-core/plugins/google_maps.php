@@ -111,7 +111,7 @@ function printAlbumMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL){
 				if($exif['EXIFGPSLatitudeRef'] == 'S'){  $lat = '-' . $lat; }
 				if($exif['EXIFGPSLongitudeRef'] == 'W'){  $long = '-' . $long; }
 				$infoHTML = '<a href="' . htmlspecialchars(getImageLinkURL()) . '"><img src="' .
-				getImageThumb() . '" alt="' . htmlspecialchars(getImageDesc()) . '" ' .
+				getImageThumb() . '" alt="' . getImageDesc() . '" ' .
 					'style=" margin-left: 30%; margin-right: 10%; border: 0px; "/></a>' .
 					'<p>' . htmlspecialchars(getImageDesc()) . '</p>';
 				$_zp_phoogle->addGeoPoint($lat, $long, $infoHTML);

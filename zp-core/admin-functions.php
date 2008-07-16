@@ -753,7 +753,7 @@ function tagSelector($that, $postit, $showCounts=false) {
  *@since 1.1.3
  */
 function printAlbumEditForm($index, $album) {
-	global $sortby, $images, $gallery, $_zp_loggedin;
+	global $sortby, $gallery, $_zp_loggedin;
 	if ($index == 0) {
 		if (isset($saved)) {
 			$album->setSubalbumSortType('Manual');
@@ -1071,6 +1071,7 @@ function printAlbumEditForm($index, $album) {
 				}
 			}
 		} else {
+			$images = $album->getImages();
 			foreach ($images as $filename) {
 				$image = new Image($album, $filename);
 				$selected = ($filename == $album->get('thumb'));

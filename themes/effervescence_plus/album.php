@@ -199,7 +199,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 						?>
 							<div class="imageElement">
 								<h3><? echo htmlspecialchars(getImageTitle());?></h3>
-								<p><? echo htmlspecialchars(getImageDesc());?></p>
+								<p><? echo getImageDesc();?></p>
 								<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo getImageTitle();?>" class="open"></a>
 								<?php printCustomSizedImage(getImageTitle(), null, 540, null, null, null, null, null, 'full'); ?>
 								<?php printImageThumb(getImageTitle(), 'thumbnail'); ?>
@@ -374,7 +374,7 @@ printThemeInfo();
 				<caption>
 				<![CDATA[<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo gettext('Open In New Window'); ?>">
 					<font face="Times"><u><b><em><?php echo getImageTitle() ?></font></em></b></u></a></u>
-					<br /></font><?php echo htmlspecialchars(getImageDesc()); ?>]]>
+					<br /></font><?php echo getImageDesc(); ?>]]>
 			</caption>
 			</image>
 <?php

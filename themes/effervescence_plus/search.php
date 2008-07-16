@@ -278,4 +278,4 @@ $navPosition.'" enableRightClickOpen="'.$enableRightClickOpen.'" backgroundImage
 
 <?php while (next_image(true)): ?><image><filename><?php echo htmlspecialchars(getFullImageURL());?></filename><caption><![CDATA[<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo gettext('Open in a new window'); ?>">
 <font face="Times"><u><b><em><?php echo getImageTitle() ?></font></em></b></u></a></u>
-<br></font><?php echo htmlspecialchars(getImageDesc()) ?>]]></caption></image><?php endwhile; ?></simpleviewerGallery><?php } ?>
+<br></font><?php echo getImageDesc() ?>]]></caption></image><?php endwhile; ?></simpleviewerGallery><?php } ?>
