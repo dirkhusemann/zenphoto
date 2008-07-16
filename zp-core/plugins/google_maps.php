@@ -113,7 +113,7 @@ function printAlbumMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL){
 				$infoHTML = '<a href="' . htmlspecialchars(getImageLinkURL()) . '"><img src="' .
 				getImageThumb() . '" alt="' . getImageDesc() . '" ' .
 					'style=" margin-left: 30%; margin-right: 10%; border: 0px; "/></a>' .
-					'<p>' . htmlspecialchars(getImageDesc()) . '</p>';
+					'<p>' . getImageDesc() . '</p>';
 				$_zp_phoogle->addGeoPoint($lat, $long, $infoHTML);
 			}
 		}

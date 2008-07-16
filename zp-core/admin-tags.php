@@ -90,7 +90,7 @@ if (count($_POST) > 0) {
 				}
 			}
 		}
-	}
+	} // newtags
 	if (isset($_GET['delete'])) {
 		$kill = array();
 		foreach ($_POST as $key => $value) {
@@ -150,12 +150,13 @@ if (count($_POST) > 0) {
 				query($sql);
 			}
 		}
-	}
+	} // delete
 	if (isset($_GET['rename'])) {
 		if (useTagTable()) {
 			foreach($_POST as $key=>$newName) {
 				if (!empty($newName)) {
 					$key = postIndexDecode($key);
+					$key = substr($key, 2); // strip off the 'R_'
 					$newtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.escape($newName).'"');
 					$oldtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.escape($key).'"');
 					if (is_array($newtag)) { // there is an existing tag of the same name
@@ -176,6 +177,7 @@ if (count($_POST) > 0) {
 			$kill = array();
 			foreach($_POST as $key => $value) {
 				if (!empty($value)) {
+					$key = substr(key, 2); // strip off the 'R_'
 					$key = utf8::strtolower(postIndexDecode($key));
 					$kill[] = $key;
 					$list[postIndexEncode($key)] = $value;
@@ -219,7 +221,7 @@ if (count($_POST) > 0) {
 				query($sql);
 			}
 		}
-	}
+	} // rename
 }
 
 echo "<h1>".gettext("Tag Management")."</h1>";
@@ -250,7 +252,7 @@ echo "\n<ul class=\"tagrenamelist\">";
 $list = getAllTagsUnique();
 natcasesort($list);
 foreach($list as $item) {
-	$listitem = postIndexEncode($item);
+	$listitem = 'R_'.postIndexEncode($item);
 	echo "\n".'<li><label for="'.$listitem.'"><input id="'.$listitem.'" name="'.$listitem.'" type="text"';
 	echo " /> ".$item."</label></li>";
 }

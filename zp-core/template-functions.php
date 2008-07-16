@@ -1297,10 +1297,10 @@ function getImageTitle() {
 function printImageTitle($editable=false) {
 	global $_zp_current_image;
 	if ($editable && zp_loggedin()) {
-		echo "<span id=\"imageTitle\" style=\"display: inline;\">" . htmlspecialchars(getImageTitle()) . "</span>\n";
+		echo "<span id=\"imageTitle\" style=\"display: inline;\">" . getImageTitle() . "</span>\n";
 		echo "<script type=\"text/javascript\">initEditableTitle('imageTitle');</script>";
 	} else {
-		echo "<span id=\"imageTitle\" style=\"display: inline;\">" . htmlspecialchars(getImageTitle()) . "</span>\n";
+		echo "<span id=\"imageTitle\" style=\"display: inline;\">" . getImageTitle() . "</span>\n";
 	}
 }
 
