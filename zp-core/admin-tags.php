@@ -254,7 +254,7 @@ natcasesort($list);
 foreach($list as $item) {
 	$listitem = 'R_'.postIndexEncode($item);
 	echo "\n".'<li><label for="'.$listitem.'"><input id="'.$listitem.'" name="'.$listitem.'" type="text"';
-	echo " /> ".$item."</label></li>";
+	echo " size='30'/> ".$item."</label></li>";
 }
 echo "\n</ul>";
 echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='rename_tags' value=\"".gettext("rename tags")."\" title=\"".gettext("Save all the changes entered above.")."\" /></p>";
@@ -267,7 +267,7 @@ if ($newTags) {
 	echo "\n<ul class=\"tagnewlist\">";
 	for ($i=0; $i<40; $i++) {
 		echo "\n".'<li><label for="new_tag_'.$i.'"><input id="new_tag_'.$i.'" name="new_tag_'.$i.'" type="text"';
-		echo " /></label></li>";
+		echo " size='30'/></label></li>";
 	}
 	echo "\n</ul>";
 	echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='save_tags' value=\"".gettext("save new tags")."\" title=\"".gettext("Add all the tags entered above.")."\" /></p>";

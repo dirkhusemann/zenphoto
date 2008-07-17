@@ -721,8 +721,6 @@ button.positive,.buttons a.positive {
 
 .tagrenamelist label {
 	display: block;
-	padding: 0 0.2em 0 25px;
-	text-indent: -25px;
 }
 
 .tagrenamelist label:hover,.tagrenamelist label.hover {
@@ -739,7 +737,7 @@ button.positive,.buttons a.positive {
 	border: 1px solid #ccc;
 	list-style: none;
 	height: 27em;
-	width: 17em;
+	width: 18em;
 	overflow: auto;
 	background-color: white;
 }
@@ -752,8 +750,6 @@ button.positive,.buttons a.positive {
 
 .tagnewlist label {
 	display: block;
-	padding: 0 0.2em 0 25px;
-	text-indent: -25px;
 }
 
 .tagnewlist label:hover,.tagnewlist label.hover {
@@ -832,3 +828,60 @@ ul.pagelist li.current {
 	color: black; padding-left: 4px; padding-right: 4px;
 }
 
+/* CSS for language_string_list */
+.language_string_list {
+	border: 1px solid #ccc;
+	list-style: none;
+	height: 4em;
+	width: 27.5em;
+	overflow: auto;
+	background-color: white;
+}
+
+.language_string_list,.language_string_list li {
+	margin: 0;
+	padding: 0;
+	border-bottom: 1px dotted #C6D880;
+}
+
+.language_string_list label {
+	display: block;
+}
+
+.language_string_list label:hover,.language_string_list label.hover {
+	background: #F1F2F3;
+	color: #333;
+}
+
+* html .language_string_list label {
+	height: 1%;
+}
+
+/* CSS for language_string_listbox */
+.language_string_listbox {
+	border: 1px solid #ccc;
+	list-style: none;
+	height: 7em;
+	width: 27.5em;
+	overflow: auto;
+	background-color: white;
+}
+
+.language_string_listbox,.language_string_listbox li {
+	margin: 0;
+	padding: 0;
+	border-bottom: 1px dotted #C6D880;
+}
+
+.language_string_listbox label {
+	display: block;
+}
+
+.language_string_listbox label:hover,.language_string_listbox label.hover {
+	background: #F1F2F3;
+	color: #333;
+}
+
+* html .language_string_listbox label {
+	height: 1%;
+}

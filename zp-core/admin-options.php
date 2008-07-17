@@ -378,6 +378,8 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 		}		
 		if (count($admins) > 2) {
 			$background = ($user['id'] == $_zp_current_admin['id']) ? " background-color: #ECF1F2;" : "";
+		} else {
+			$background = '';
 		}
 		?>
 	<tr>
