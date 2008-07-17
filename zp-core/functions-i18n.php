@@ -29,16 +29,21 @@ function generateLanguageList() {
 		}
 		closedir($dir);
 	}
+	natsort($locales);
 	return $locales;
 }
 
+$_zp_active_languages = NULL;
 /**
  * Generates the option list for the language selectin <select>
  *
  */
 function generateLanguageOptionList() {
-	$locales = generateLanguageList();
-	generateListFromArray(array(getOption('locale', OFFSET_PATH===1)), $locales);
+	global $_zp_active_languages;
+	if (is_null($_zp_active_languages)) {
+		$_zp_active_languages = generateLanguageList();
+	}
+	generateListFromArray(array(getOption('locale', OFFSET_PATH===1)), $_zp_active_languages);
 }
 
 
@@ -214,5 +219,33 @@ function getUserLocale() {
 		setOption('locale', $locale, false);
 	}
 }
+
+/**
+ * Returns the sring for the current language from a serialized set of language strings
+ * Defaults to the string for the current locale, the en_US string, or the first string which ever is present
+ *
+ * @param string $dbstring either a serialized languag string array or a single string
+ * @param string $locale optional locale of the translation desired
+ * @return string
+ */
+function get_language_string($dbstring, $locale=NULL) {
+	if (!preg_match('/^a:[0-9]+:{/', $dbstring)) {
+		return $dbstring;
+	}
+	$strings = unserialize($dbstring);
+	$actual_local = getOption('locale');
+	if (is_null($locale)) $locale = $actual_local;
+	if (isset($strings[$locale])) {
+		return $strings[$locale];
+	}
+	if (isset($strings[$actual_local])) {
+		return $strings[$actual_local];
+	}
+	if (isset($strings['en_US'])) {
+		return $strings['en_US'];
+	}
+	return array_shift($strings);
+}
+
 
 ?>

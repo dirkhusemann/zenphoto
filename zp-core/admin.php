@@ -106,22 +106,24 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 						// The file might no longer exist
 						$image = new Image($album, $filename);
 						if ($image->exists) {
-							$image->setTitle(strip($_POST["$i-title"]));
-							$image->setDesc(strip($_POST["$i-desc"]));
-							$image->setLocation(strip($_POST["$i-location"]));
-							$image->setCity(strip($_POST["$i-city"]));
-							$image->setState(strip($_POST["$i-state"]));
-							$image->setCountry(strip($_POST["$i-country"]));
-							$image->setCredit(strip($_POST["$i-credit"]));
-							$image->setCopyright(strip($_POST["$i-copyright"]));
+							$image->setTitle(process_language_string_save("$i-title"));
+							$image->setDesc(process_language_string_save("$i-desc"));
+							$image->setLocation(process_language_string_save("$i-location"));
+							$image->setCity(process_language_string_save("$i-city"));
+							$image->setState(process_language_string_save("$i-state"));
+							$image->setCountry(process_language_string_save("$i-country"));
+							$image->setCredit(process_language_string_save("$i-credit"));
+							$image->setCopyright(process_language_string_save("$i-copyright"));
 
 							$tagsprefix = 'tags_'.$i.'-';
 							$tags = array();
 							for ($j=0; $j<4; $j++) {
-								$tag = trim(strip($_POST[$tagsprefix.'new_tag_value_'.$j]));
-								unset($_POST[$tagsprefix.'new_tag_value_'.$j]);
-								if (!empty($tag)) {
-									$tags[] = $tag;
+								if (isset($_POST[$tagsprefix.'new_tag_value_'.$j])) {
+									$tag = trim(strip($_POST[$tagsprefix.'new_tag_value_'.$j]));
+									unset($_POST[$tagsprefix.'new_tag_value_'.$j]);
+									if (!empty($tag)) {
+										$tags[] = $tag;
+									}
 								}
 							}
 							$l = strlen($tagsprefix);
@@ -144,7 +146,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 								$id = $image->id;
 								query("UPDATE " . prefix('images') . " SET `hitcounter`= 0 WHERE `id` = $id");
 							}
-							$image->setCustomData(strip($_POST["$i-custom_data"]));
+							$image->setCustomData(process_language_string_save("$i-custom_data"));
 							$image->save();
 						}
 					}
@@ -518,9 +520,9 @@ if ($allimagecount) {
 			</tr>
 			<tr>
 				<td align="right" valign="top" width="100"><?php echo gettext("Title:"); ?></td>
-				<td><input type="text" size="56" style="width: 360px"
-					name="<?php echo $currentimage; ?>-title"
-					value="<?php echo $image->getTitle(); ?>" /></td>
+				<td>
+				<?php print_language_string_list($image->get('title'), $currentimage.'-title', false); ?>
+				</td>
 				<td></td>
 			</tr>
 			<tr>
@@ -541,44 +543,45 @@ if ($allimagecount) {
 			</tr>
 			<tr>
 				<td align="right" valign="top"><?php echo gettext("Description:"); ?></td>
-				<td><textarea name="<?php echo $currentimage; ?>-desc" cols="60"
-					rows="4" style="width: 360px"><?php echo $image->getDesc(); ?></textarea></td>
+				<td>
+				<?php print_language_string_list($image->get('desc'), $currentimage.'-desc', true); ?>
+				</td>
 			</tr>
 			<tr>
 				<td align="right" valign="top"><?php echo gettext("Location:"); ?></td>
-				<td><input type="text" size="56" style="width: 360px"
-					name="<?php echo $currentimage; ?>-location"
-					value="<?php echo $image->getLocation(); ?>" /></td>
+				<td>
+				<?php print_language_string_list($image->get('location'), $currentimage.'-location', false); ?>
+				</td>
 			</tr>
 			<tr>
 				<td align="right" valign="top"><?php echo gettext("City:"); ?></td>
-				<td><input type="text" size="56" style="width: 360px"
-					name="<?php echo $currentimage; ?>-city"
-					value="<?php echo $image->getCity(); ?>" /></td>
+				<td>
+				<?php print_language_string_list($image->get('city'), $currentimage.'-city', false); ?>
+				</td>
 			</tr>
 			<tr>
 				<td align="right" valign="top"><?php echo gettext("State:"); ?></td>
-				<td><input type="text" size="56" style="width: 360px"
-					name="<?php echo $currentimage; ?>-state"
-					value="<?php echo $image->getState(); ?>" /></td>
+				<td>
+				<?php print_language_string_list($image->get('state'), $currentimage.'-state', false); ?>
+				</td>
 			</tr>
 			<tr>
 				<td align="right" valign="top"><?php echo gettext("Country:"); ?></td>
-				<td><input type="text" size="56" style="width: 360px"
-					name="<?php echo $currentimage; ?>-country"
-					value="<?php echo $image->getCountry(); ?>" /></td>
+				<td>
+				<?php print_language_string_list($image->get('country'), $currentimage.'-country', false); ?>
+				</td>
 			</tr>
 			<tr>
 				<td align="right" valign="top"><?php echo gettext("Credit:"); ?></td>
-				<td><input type="text" size="56" style="width: 360px"
-					name="<?php echo $currentimage; ?>-credit"
-					value="<?php echo $image->getCredit(); ?>" /></td>
+				<td>
+				<?php print_language_string_list($image->get('credit'), $currentimage.'-credit', false); ?>
+				</td>
 			</tr>
 			<tr>
 				<td align="right" valign="top"><?php echo gettext("Copyright:"); ?></td>
-				<td><input type="text" size="56" style="width: 360px"
-					name="<?php echo $currentimage; ?>-copyright"
-					value="<?php echo $image->getCopyright(); ?>" /></td>
+				<td>
+				<?php print_language_string_list($image->get('copyright'), $currentimage.'-copyright', false); ?>
+				</td>
 			</tr>
 			<tr>
 				<td align="right" valign="top"><?php echo gettext("Date:"); ?></td>
@@ -588,8 +591,9 @@ if ($allimagecount) {
 			</tr>
 			<tr>
 				<td align="right" valign="top"><?php echo gettext("Custom data:"); ?></td>
-				<td><textarea rows="3" cols="60" style="width: 360px"
-					name="<?php echo $currentimage; ?>-custom_data"><?php echo trim($image->getCustomData()); ?></textarea></td>
+				<td>
+				<?php print_language_string_list($image->get('custom_data'), $currentimage.'-custom_data', true); ?>
+				</td>
 			</tr>
 			<tr>
 				<td align="right" valign="top" colspan="2"><label

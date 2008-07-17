@@ -56,10 +56,10 @@ if(getOption('mod_rewrite')) {
 ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-<title><?php echo htmlspecialchars(getOption('gallery_title')).htmlspecialchars($albumname); ?></title>
+<title><?php echo htmlspecialchars(get_language_string(getOption('gallery_title'), getOption('locale'))).htmlspecialchars($albumname); ?></title>
 <link><?php echo "http://".$host.WEBPATH; ?></link>
 <atom:link href="http://<?php echo $host.WEBPATH; ?>/rss.php" rel="self" type="application/rss+xml" />
-<description><?php echo htmlspecialchars(getOption('gallery_title')); ?></description>
+<description><?php echo htmlspecialchars(get_language_string(getOption('gallery_title'), getOption('locale'))); ?></description>
 <language>en-us</language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
 <lastBuildDate><?php echo date("r", time()); ?></lastBuildDate>

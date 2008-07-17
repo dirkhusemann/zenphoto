@@ -61,7 +61,7 @@ echo "\n" . '<div id="content">';
 	$galleryTheme = $gallery->getCurrentTheme();
 	$themelist = array();
 	if ($_zp_loggedin & ADMIN_RIGHTS) {
-		$gallery_title = htmlspecialchars(getOption('gallery_title'));
+		$gallery_title = htmlspecialchars(get_language_string(getOption('gallery_title')));
 		if ($gallery_title != gettext("Gallery")) {
 			$gallery_title .= ' ('.gettext("Gallery").')';
 		}

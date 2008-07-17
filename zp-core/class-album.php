@@ -188,7 +188,10 @@ class Album extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getPasswordHint() { return $this->get('password_hint'); }
+	function getPasswordHint() { 
+		$t =  $this->get('password_hint'); 
+		return get_language_string($t);
+	}
 
 	/**
 	 * Sets the album password hint
@@ -203,7 +206,10 @@ class Album extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getTitle() { return $this->get('title'); }
+	function getTitle() { 
+		$t = $this->get('title'); 
+		return get_language_string($t);
+	}
 
 	/**
 	 * Stores the album title
@@ -218,7 +224,10 @@ class Album extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getDesc() { return $this->get('desc'); }
+	function getDesc() { 
+		$t = $this->get('desc'); 
+		return get_language_string($t);
+	}
 
 	/**
 	 * Stores the album description
@@ -295,7 +304,10 @@ class Album extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getPlace() { return $this->get('place'); }
+	function getPlace() { 
+		$t =  $this->get('place'); 
+		return get_language_string($t);
+	}
 
 	/**
 	 * Stores the album place
@@ -1053,7 +1065,10 @@ class Album extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getCustomData() { return $this->get('custom_data'); }
+	function getCustomData() { 
+		$t =  $this->get('custom_data'); 
+		return get_language_string($t);
+	}
 
 	/**
 	 * Sets the custom data field

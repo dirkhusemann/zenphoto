@@ -991,7 +991,7 @@ function zp_mail($subject, $message, $headers = '', $admin_emails=null) {
 		}
 
 		if( $headers == '' ) {
-			$headers = "From: " . getOption('gallery_title') . "<zenphoto@" . $_SERVER['SERVER_NAME'] . ">";
+			$headers = "From: " . get_language_string(getOption('gallery_title'), getOption('locale')) . "<zenphoto@" . $_SERVER['SERVER_NAME'] . ">";
 		}
 
 		// Convert to UTF-8
@@ -1115,7 +1115,7 @@ function checkAlbumPassword($albumname, &$hint) {
 		$saved_auth = zp_getCookie($authType);
 		if (!empty($hash)) {
 			if ($saved_auth != $hash) {
-				$hint = getOption('gallery_hint');
+				$hint = get_language_string(getOption('gallery_hint'));
 				return false;
 			}
 		}
@@ -1581,7 +1581,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 					$emails[] = $admin['email'];
 				}
 			}
-			zp_mail("[" . getOption('gallery_title') . "] Comment posted on $on", $message, "", $emails);
+			zp_mail("[" . get_language_string(getOption('gallery_title'), getOption('locale')) . "] Comment posted on $on", $message, "", $emails);
 		}
 
 	}

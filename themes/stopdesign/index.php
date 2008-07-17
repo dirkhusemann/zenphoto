@@ -61,7 +61,7 @@
 		<div id="secondary">
 			<div class="module">
 				<h2>Description</h2>
-				<p><?php echo getOption('Gallery_description'); ?></p>
+				<p><?php printGalleryDesc(); ?></p>
 			</div>
 			<div class="module">
 				<?php $selector = getOption('Mini_slide_selector'); ?>

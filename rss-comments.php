@@ -43,10 +43,10 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-<title><?php echo getOption('gallery_title')." - latest comments"; ?></title>
+<title><?php echo get_language_string(getOption('gallery_title'), getOption('locale'))." - latest comments"; ?></title>
 <link><?php echo "http://".$host.WEBPATH; ?></link>
 <atom:link href="http://<?php echo $host.WEBPATH; ?>/rss.php" rel="self" type="application/rss+xml" />
-<description><?php echo getOption('gallery_title'); ?></description>
+<description><?php echo get_language_string(getOption('gallery_title'), getOption('locale')); ?></description>
 <language>en-us</language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
 <lastBuildDate><?php echo date("r", time()); ?></lastBuildDate>

@@ -252,7 +252,10 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getTitle() { return $this->get('title'); }
+	function getTitle() { 
+		$t = $this->get('title'); 
+		return get_language_string($t);
+	}
 
 	/**
 	 * Stores the title of this image
@@ -267,7 +270,10 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getDesc() { return $this->get('desc'); }
+	function getDesc() { 
+		$t = $this->get('desc'); 
+		return get_language_string($t);
+	}
 
 	/**
 	 * Stores the description of the image
@@ -281,7 +287,10 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getLocation() { return $this->get('location'); }
+	function getLocation() { 
+		$t = $this->get('location'); 
+		return get_language_string($t);
+	}
 
 	/**
 	 * Stores the location field of the image
@@ -295,7 +304,10 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getCity() { return $this->get('city'); }
+	function getCity() { 
+		$t = $this->get('city'); 
+		return get_language_string($t);
+	}
 
 	/**
 	 * Stores the city field of the image
@@ -309,7 +321,10 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getState() { return $this->get('state'); }
+	function getState() { 
+		$t = $this->get('state'); 
+		return get_language_string($t);
+	}
 
 	/**
 	 * Stores the state field of the image
@@ -323,7 +338,10 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getCountry() { return $this->get('country'); }
+	function getCountry() { 
+		$t = $this->get('country'); 
+		return get_language_string($t);
+	}
 
 	/**
 	 * Stores the country field of the image
@@ -337,7 +355,10 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getCredit() { return $this->get('credit'); }
+	function getCredit() { 
+		$t = $this->get('credit'); 
+		return get_language_string($t);
+	}
 
 	/**
 	 * Stores the credit field of the image
@@ -351,7 +372,10 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getCopyright() { return $this->get('copyright'); }
+	function getCopyright() { 
+		$t = $this->get('copyright'); 
+		return get_language_string($t);
+	}
 
 	/**
 	 * Stores the text for the copyright field of the image
@@ -764,7 +788,10 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getCustomData() { return $this->get('custom_data'); }
+	function getCustomData() { 
+		$t = $this->get('custom_data'); 
+		return get_language_string($t);
+	}
 
 	/**
 	 * Sets the custom data field

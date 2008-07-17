@@ -26,7 +26,7 @@ $standardOptions = array(	'gallery_title','website_title','website_url','time_of
  													'Use_Captcha', 'locale', 'date_format', 'hotlink_protection', 'image_sortdirection',
 													'admin_reset_date', 'comment_name_required', 'comment_email_required',
 													'comment_web_required', 'full_image_download', 'zenphoto_release','gallery_user', 'search_user',
-													'thumb_select_images'
+													'thumb_select_images', 'Gallery_description', 'multi_lingual'
 												 );
 $charsets = array("ASMO-708" => "Arabic",
 									"BIG5" => "Chinese Traditional",
@@ -414,7 +414,7 @@ function printLogoAndLinks() {
 		echo gettext("Logged in as")." ".$_zp_current_admin['user']." &nbsp; | &nbsp <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?logout\">".gettext("Log Out")."</a> &nbsp; | &nbsp; ";
 	}
 	echo "<a href=\"".WEBPATH."/index.php\">".gettext("View Gallery");
-	$t = htmlspecialchars(getOption('gallery_title'));
+	$t = htmlspecialchars(get_language_string(getOption('gallery_title')));
 	if (!empty($t))	echo ': ' . $t;
 	echo "</a>";
 	echo "\n</div>";
@@ -774,16 +774,20 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<table>";
 	echo "\n<td width = \"60%\">\n<table>\n<tr>";
 	echo "\n<tr>";
-	echo "<td align=\"right\" valign=\"top\" width=\"150\">Album Title: </td> <td><input type=\"text\" name=\"".$prefix."albumtitle\" value=\"" .
-	$album->getTitle() . '" />';
+	echo "<td align=\"right\" valign=\"top\" width=\"150\">Album Title: </td>"; 
+	echo '<td>';
+	print_language_string_list($album->get('title'), $prefix."albumtitle", false);
+	echo "</td></tr>\n";
+	echo '<tr><td></td>';
 	$id = $album->getAlbumId();
 	$result = query_single_row("SELECT `hitcounter` FROM " . prefix('albums') . " WHERE id = $id");
 	$hc = $result['hitcounter'];
 	if (empty($hc)) { $hc = '0'; }
-	echo" ".gettext("Hit counter:").' '. $hc . " <input type=\"checkbox\" name=\"".gettext("reset_hitcounter")."\"> Reset</td>";
+	echo "<td>".gettext("Hit counter:").' '. $hc . " <input type=\"checkbox\" name=\"".gettext("reset_hitcounter")."\"> Reset</td>";
 	echo '</tr>';
-	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Album Description:")." </td> <td><textarea name=\"".$prefix."albumdesc\" cols=\"60\" rows=\"6\" style=\"width: 360px\">" .
-	$album->getDesc() . "</textarea></td></tr>";
+	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Album Description:")." </td> <td>";
+	print_language_string_list($album->get('desc'), $prefix."albumdesc", true);
+	echo "</td></tr>";
 	echo "\n<tr><td align=\"right\" value=\"top\">".gettext("Album guest user:").'</td>';
 	echo "\n<td><input type='text' size='40' name='".$prefix."albumuser' value='".$album->getUser()."' /></td></tr>";
 	echo "\n<tr>";
@@ -801,8 +805,9 @@ function printAlbumEditForm($index, $album) {
 	echo "\nvalue=\"" . $x . '" />';
 	echo "\n</td>";
 	echo "\n</tr>";
-	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Password hint:")." </td> <td><input type=\"text\" name=\"".$prefix."albumpass_hint\" style=\"width: 360px\" value=\"" .
-	$album->getPasswordHint() . '" /></td></tr>';
+	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Password hint:")." </td> <td>";
+	print_language_string_list($album->get('albumpass_hint'), $prefix."albumpass_hint", false);
+	echo "</td></tr>";
 
 	$d = $album->getDateTime();
 	if ($d == "0000-00-00 00:00:00") {
@@ -810,12 +815,12 @@ function printAlbumEditForm($index, $album) {
 	}
 
 	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Date:")." </td> <td width = \"400\"><input type=\"text\" name=\"".$prefix."albumdate\" value=\"" . $d . '" /></td></tr>';
-	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Location:")." </td> <td><input type=\"text\" name=\"".$prefix."albumplace\" style=\"width: 360px\" value=\"" .
-	$album->getPlace() . "\" /></td></tr>";
-	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Custom data:").
-	"</td><td><textarea cols=\"60\" rows=\"3\" style=\"width: 360px\" name=\"".
-	$prefix."album_custom_data\" >" .
-	trim($album->getCustomData()) . "</textarea></td></tr>";
+	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Location:")." </td> <td>";
+	print_language_string_list($album->get('place'), $prefix."albumplace", false);
+	echo "</td></tr>";
+	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Custom data:").	"</td><td>";
+	print_language_string_list($album->get('custom_data'), $prefix."album_custom_data", true);
+	echo "</td></tr>";
 	$sort = $sortby;
 	if (!$album->isDynamic()) {
 		$sort[gettext('Manual')] = 'Manual';
@@ -1245,9 +1250,8 @@ function processAlbumEdit($index, $album) {
 	}
 	$tagsprefix = 'tags_'.$prefix;
 	$notify = '';
-	$album->setTitle(strip($_POST[$prefix.'albumtitle']));
-	$album->setDesc(strip($_POST[$prefix.'albumdesc']));
-	
+	$album->setTitle(process_language_string_save($prefix.'albumtitle'));
+	$album->setDesc(process_language_string_save($prefix.'albumdesc'));
 	$tags = array();
 	for ($i=0; $i<4; $i++) {
 		if (isset($_POST[$tagsprefix.'new_tag_value_'.$i])) {
@@ -1269,9 +1273,8 @@ function processAlbumEdit($index, $album) {
 	}
 	$tags = array_unique($tags);
 	$album->setTags($tags);
-	
 	$album->setDateTime(strip($_POST[$prefix."albumdate"]));
-	$album->setPlace(strip($_POST[$prefix.'albumplace']));
+	$album->setPlace(process_language_string_save($prefix.'albumplace'));
 	$album->setAlbumThumb(strip($_POST[$prefix.'thumb']));
 	$album->setShow(isset($_POST[$prefix.'Published']));
 	$album->setCommentsAllowed(isset($_POST[$prefix.'allowcomments']));
@@ -1337,8 +1340,8 @@ function processAlbumEdit($index, $album) {
 			}
 		}
 	}
-	$album->setPasswordHint(strip($_POST[$prefix.'albumpass_hint']));
-	$album->setCustomData(strip($_POST[$prefix.'album_custom_data']));
+	$album->setPasswordHint(process_language_string_save($prefix.'albumpass_hint'));
+	$album->setCustomData(process_language_string_save($prefix.'album_custom_data'));
 	$album->save();
 	return $notify;
 }
@@ -1475,4 +1478,103 @@ function adminPageNav($pagenum,$totalpages,$url,$tab='') {
 	}
 	echo '</li></ul>';
 }
+
+/**
+ * Generates an editable list of language strings
+ *
+ * @param string $dbstring either a serialized languag string array or a single string
+ * @param string $name the prefix for the label, id, and name tags
+ * @param bool $textbox set to true for a textbox rather than a text field
+ * @param string $locale optional locale of the translation desired
+ */
+function print_language_string_list($dbstring, $name, $textbox=false, $locale=NULL) {
+
+	debugLog(" print_language_string_list($dbstring, $name, $textbox, $locale)")	;
+
+	global $_zp_languages, $_zp_active_languages;
+	if (is_null($locale)) $locale = getOption('locale');
+	if (preg_match('/^a:[0-9]+:{/', $dbstring)) {
+		$strings =unserialize($dbstring);
+	} else {
+		$strings = array($locale=>$dbstring);
+	}
+	if (getOption('multi_lingual')) {
+		if (is_null($_zp_active_languages)) {
+			$_zp_active_languages = generateLanguageList();
+		}
+		$emptylang = array_flip($_zp_active_languages);
+		unset($emptylang['']);
+		natsort($emptylang);
+		if ($textbox) $class = 'box'; else $class = '';
+		echo "<ul class=\"language_string_list".$class."\">\n";
+		$empty = true;
+		foreach ($emptylang as $key=>$lang) {
+			if (isset($strings[$key])) {
+				$string = $strings[$key];
+				if (!empty($string)) {
+					unset($emptylang[$key]);
+					$empty = false;
+					echo '<li><label for="'.$name.'_'.$key.'">';
+					if ($textbox) {
+						echo '<textarea name="'.$name.'_'.$key.'" cols="60"	rows="4" style="width:18em">'.htmlspecialchars($string).'</textarea>';
+					} else {
+						echo '<input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.htmlspecialchars($string).'" size="35"/>';
+					}
+					echo ' '.$lang."</label></li>\n";
+				}
+			}
+		}
+		if ($empty) {
+			$element = $emptylang[$locale];
+			unset($emptylang[$locale]);
+			$emptylang = array_merge(array($locale=>$element), $emptylang);
+		}
+		foreach ($emptylang as $key=>$lang) {
+			echo '<li><label for="'.$name.'_'.$key.'">';
+			if ($textbox) {
+				echo '<textarea name="'.$name.'_'.$key.'" cols="60"	rows="4" style="width:18em"></textarea>';
+			} else {
+				echo '<input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="" size="35"/>';
+			}
+			echo ' '.$lang."</label></li>\n";
+
+		}
+		echo "</ul>\n";
+	} else {
+		if (empty($locale)) $locale = 'en_US';
+		if (isset($strings[$locale])) {
+			$dbstring = $strings[$locale];
+		} else {
+			$dbstring = array_shift($strings);
+		}
+		if ($textbox) {
+			echo '<textarea name="'.$name.'_'.$locale.'" cols="40"	rows="4" >'.$dbstring.'</textarea>';
+		} else {
+			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="40"/>';
+		}
+	}
+}
+
+/**
+ * process the post of a language string form
+ *
+ * @param string $name the prefix for the label, id, and name tags 
+ * @return string
+ */
+function process_language_string_save($name) {
+	$l = strlen($name)+1;
+	$strings = array();
+	foreach ($_POST as $key=>$value) {
+		if (!empty($value) && (strpos($key, $name) !== false)) {
+			$key = substr($key, $l);
+			$strings[$key] = $value;		
+		}
+	}
+	if (count($strings) > 1) {
+		return serialize($strings);
+	} else {
+		return array_shift($strings);
+	}
+}
+
 ?>

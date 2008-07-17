@@ -5,7 +5,7 @@
  */
 /* Prevent hotlinking to the full image from other servers. */
 $server = $_SERVER['SERVER_NAME'];
-$test = strpos($_SERVER['HTTP_REFERER'], $server);
+if (isset($_SERVER['HTTP_REFERER'])) $test = strpos($_SERVER['HTTP_REFERER'], $server); else $test = true;
 if ( $test == FALSE && getOption('hotlink_protection')) { /* It seems they are directly requesting the full image. */
 	$image = 'index.php?album='.$_zp_current_album->name . '&image=' . $_zp_current_image->name;
 	header("Location: {$image}");

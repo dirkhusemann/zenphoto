@@ -183,13 +183,21 @@ function zenJavascript() {
  * @return string
  */
 function getGalleryTitle() {
-	return getOption('gallery_title');
+	return get_language_string(getOption('gallery_title'));
 }
 /**
  * Prints the title of the gallery.
  */
 function printGalleryTitle() {
 	echo getGalleryTitle();
+}
+
+function getGalleryDesc() {
+	return get_language_string(getOption('Gallery_description'));
+}
+
+function printGalleryDesc() {
+	echo getGalleryDesc();
 }
 
 /**
@@ -199,7 +207,7 @@ function printGalleryTitle() {
  * @return string
  */
 function getMainSiteName() {
-	return getOption('website_title');
+	return get_language_string(getOption('website_title'));
 }
 /**
  * Returns the URL of the main website as set by the "Website URL" option
@@ -708,7 +716,7 @@ function printHomeLink($before='', $after='', $title=NULL, $class=NULL, $id=NULL
 	$site = getOption('website_url');
 	if (!empty($site)) {
 		if (substr($site,-1) == "/") { $site = substr($site, 0, -1); }
-		if (empty($name)) { $name = getOption('website_title'); }
+		if (empty($name)) { $name = get_language_string(getOption('website_title')); }
 		if (empty($name)) { $name = 'Home'; }
 		if ($site != FULLWEBPATH) {
 			echo $before;
@@ -1958,8 +1966,9 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 	}
 	//Print images
 	else {
-		echo "<img src=\"" . htmlspecialchars(getDefaultSizedImage()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
-			" width=\"" . getDefaultWidth() . "\" height=\"" . getDefaultHeight() . "\"" .
+		echo '<img src="' . htmlspecialchars(getDefaultSizedImage()) . '" alt="' . htmlspecialchars($alt, ENT_QUOTES) . '"' .
+			' title="' . htmlspecialchars($alt, ENT_QUOTES) . '"'.			
+			' width="' . getDefaultWidth() . '" height="' . getDefaultHeight() . '"' .
 			(($class) ? " class=\"$class\"" : "") .
 			(($id) ? " id=\"$id\"" : "") . " />";
 	}
@@ -2153,8 +2162,10 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 	//Print images
 	else {
 		$sizearr = getSizeCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy);
-		echo "<img src=\"" . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin)) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
-			" width=\"" . $sizearr[0] . "\" height=\"" . $sizearr[1] . "\"" .
+		echo "<img src=\"" . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin)) . 
+			"\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
+			"\" title=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
+		" width=\"" . $sizearr[0] . "\" height=\"" . $sizearr[1] . "\"" .
 		(($class) ? " class=\"$class\"" : "") .
 		(($id) ? " id=\"$id\"" : "") . " />";
 	}
@@ -3413,11 +3424,11 @@ function checkforPassword($silent=false) {
 	if (zp_loggedin(MAIN_RIGHTS | VIEWALL_RIGHTS)) { return false; }  // you're the admin, you don't need the passwords.
 	if (in_context(ZP_SEARCH)) {  // search page
 		$hash = getOption('search_password');
-		$hint = getOption('search_hint');
+		$hint = get_language_string(getOption('search_hint'));
 		$authType = 'zp_search_auth';
 		if (empty($hash)) {
 			$hash = getOption('gallery_password');
-			$hint = getOption('gallery_hint');
+			$hint = get_language_string(getOption('gallery_hint'));
 			$authType = 'zp_gallery_auth';
 		}
 		if (!empty($hash)) {
@@ -3441,7 +3452,7 @@ function checkforPassword($silent=false) {
 	} else {  // index page
 		if ($_zp_loggedin) return false;
 		$hash = getOption('gallery_password');
-		$hint = getOption('gallery_hint');
+		$hint = get_language_string(getOption('gallery_hint'));
 		if (!empty($hash)) {
 			if (zp_getCookie('zp_gallery_auth') != $hash) {
 				if (!$silent) {

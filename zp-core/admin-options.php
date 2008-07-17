@@ -95,8 +95,9 @@ if (isset($_GET['action'])) {
 
 		/*** Gallery options ***/
 		if (isset($_POST['savegalleryoptions'])) {
-			setOption('gallery_title', $_POST['gallery_title']);
-			setOption('website_title', $_POST['website_title']);
+			setOption('gallery_title', process_language_string_save('gallery_title'));
+			setoption('Gallery_description', process_language_string_save('Gallery_description'));
+			setOption('website_title', process_language_string_save('website_title'));
 			$web = $_POST['website_url'];
 			setOption('website_url', $web);
 			setOption('time_offset', $_POST['time_offset']);
@@ -154,8 +155,8 @@ if (isset($_GET['action'])) {
 			} else {
 				$notify = '?mismatch=search';
 			}
-			setOption('gallery_hint', $_POST['gallery_hint']);
-			setOption('search_hint', $_POST['search_hint']);
+			setOption('gallery_hint', process_language_string_save('gallery_hint'));
+			setOption('search_hint', process_language_string_save('search_hint'));
 			setBoolOption('persistent_archive', isset($_POST['persistent_archive']));
 			setBoolOption('album_session', isset($_POST['album_session']));
 			setOption('locale', $newloc = $_POST['locale']);
@@ -164,6 +165,7 @@ if (isset($_GET['action'])) {
 				if (WEBPATH == '') { $cookiepath = '/'; }
 				zp_setCookie('dynamic_locale', getOption('locale'), time()-368000, $cookiepath);  // clear the language cookie
 			}
+			setBoolOption('multi_lingual', isset($_POST['multi_lingual']));
 			$f = $_POST['date_format_list'];
 			if ($f == 'custom') $f = $_POST['date_format'];
 			setOption('date_format', $f);
@@ -534,9 +536,17 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	</tr>
 	<tr>
 		<td width="175"><?php echo gettext("Gallery title:"); ?></td>
-		<td width="200"><input type="text" size="40" name="gallery_title"
-			value="<?php echo htmlspecialchars(getOption('gallery_title'));?>" /></td>
+		<td width="200">
+		<?php print_language_string_list(getOption('gallery_title'), 'gallery_title', false) ?>
+		</td>
 		<td><?php echo gettext("What you want to call your photo gallery."); ?></td>
+	</tr>
+	<tr>
+		<td width="175"><?php echo gettext("Gallery description:"); ?></td>
+		<td width="200">
+		<?php print_language_string_list(getOption('Gallery_description'), 'Gallery_description', true) ?>
+		</td>
+		<td><?php echo gettext("A brief description of your gallery. Some themes may display this text."); ?></td>
 	</tr>
 	<tr>
     <td><?php echo gettext("Gallery guest user:"); ?>    </td>
@@ -557,8 +567,9 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	</tr>
 	<tr>
 		<td><?php echo gettext("Gallery password hint:"); ?></td>
-		<td><input type="text" size="40" name="gallery_hint"
-			value="<?php echo htmlspecialchars(getOption('gallery_hint'));?>" /></td>
+		<td>
+		<?php print_language_string_list(getOption('gallery_hint'), 'gallery_hint', false) ?>
+		</td>
 		<td><?php echo gettext("A reminder hint for the password."); ?></td>
 	</tr>
 	<tr>
@@ -579,14 +590,16 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	</tr>
 	<tr>
 		<td><?php echo gettext("Search password hint:"); ?></td>
-		<td><input type="text" size="40" name="search_hint"
-			value="<?php echo htmlspecialchars(getOption('search_hint'));?>" /></td>
+		<td>
+		<?php print_language_string_list(getOption('search_hint'), 'search_hint', false) ?>
+		</td>
 		<td><?php echo gettext("A reminder hint for the password."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Website title:"); ?></td>
-		<td><input type="text" size="40" name="website_title"
-			value="<?php echo htmlspecialchars(getOption('website_title'));?>" /></td>
+		<td>
+		<?php print_language_string_list(getOption('website_title'), 'website_title', false) ?>
+		</td>
 		<td><?php echo gettext("Your web site title."); ?></td>
 	</tr>
 	<tr>
@@ -623,11 +636,18 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	<tr>
 		<td><?php echo gettext("Language:"); ?></td>
 		<td><select id="locale" name="locale">
-			<?php
-			generateLanguageOptionList();
-			?>
-		</select></td>
-		<td><?php echo gettext("The language to display text in. (Set to <em>HTTP Accept Language</em> to use the language preference specified by the viewer's browser.)"); ?></td>
+			<?php	generateLanguageOptionList();	?>
+		</select>
+		<input type="checkbox" name="multi_lingual" value="1"	<?php echo checked('1', getOption('multi_lingual')); ?> /> 
+		<?php echo gettext('Multi-lingual'); ?>
+		</td>
+		<td>
+		<?php 
+		echo gettext("The language to display text in. (Set to <em>HTTP Accept Language</em> to use the language preference specified by the viewer's browser.)"); 
+		echo ' '.gettext("Set <em>Multi-lingual</em> to enable multiple languages for database fields.");
+		echo ' '.gettext("<strong>Note:</strong> if you have created multi-language strings, uncheck this option, then save anything, you will loose your strings.");
+		?>
+		</td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Date format:"); ?></td>
@@ -1015,7 +1035,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 <?php 
 $themelist = array();
 if (($_zp_loggedin & ADMIN_RIGHTS)) {
-	$gallery_title = htmlspecialchars(getOption('gallery_title'));
+	$gallery_title = htmlspecialchars(get_language_string(getOption('gallery_title')));
 	if ($gallery_title != gettext("Gallery")) {
 		$gallery_title .= ' ('.gettext("Gallery").')';
 	}
@@ -1186,7 +1206,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 	?>
 <?php
 	if ($c == 0) {
-		echo gettext("There are no plugin options to adminsiter.");
+		echo gettext("There are no plugin options to adminisiter.");
 	} else {
 	?>
 		<p style="float:right"><?php echo gettext("Click the plugin bar to open/close the options.") ?></p>
