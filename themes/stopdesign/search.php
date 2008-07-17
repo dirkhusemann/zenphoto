@@ -116,7 +116,7 @@
 					echo "</em>";
 		?>
 				<?php if (hasPrevPage()) { ?>
-				<a href="<?php echo htmlspecialcharsgetPrevPageURL()); ?>" accesskey="x">&laquo; <?php echo gettext('prev page'); ?></a>
+				<a href="<?php echo htmlspecialchars(getPrevPageURL()); ?>" accesskey="x">&laquo; <?php echo gettext('prev page'); ?></a>
 				<?php } 
 					if (hasNextPage()) { if (hasPrevPage()) { echo '&nbsp;'; } 
 			?>
