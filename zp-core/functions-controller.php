@@ -139,10 +139,10 @@ function fix_path_redirect() {
  ******************************************************************************/
 
 function zp_handle_comment() {
-	global $_zp_current_image, $_zp_current_album, $stored, $_zp_comment_error;
+	global $_zp_current_image, $_zp_current_album, $stored;
 	$activeImage = false;
 	$redirectTo = FULLWEBPATH . '/' . zpurl();
-	unset($_zp_comment_error);
+	$comment_error = 0;
 	$cookie = zp_getCookie('zenphoto');
 	if (isset($_POST['comment'])) {
 		if (in_context(ZP_ALBUM) && isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
@@ -178,14 +178,14 @@ function zp_handle_comment() {
 				$commentadded = $commentobject->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']),
 													$website, kses($_POST['comment'], $allowed),
 													$code1, $code2, 
-													sanitize($_SERVER['REMOTE_ADDR']), $_POST['private'],
-													$_POST['anon']);
+													sanitize($_SERVER['REMOTE_ADDR']), isset($_POST['private']),
+													isset($_POST['anon']));
 			}
 			if ($commentadded == 2) {
-				unset($_zp_comment_error);
+				$comment_error = 0;
 				if (isset($_POST['remember'])) {
 					// Should always re-cookie to update info in case it's changed...
-					$info = array(strip($_POST['name']), strip($_POST['email']), strip($website), false, strip($_POST['private']), strip($_POST['anon']));
+					$info = array(strip($_POST['name']), strip($_POST['email']), strip($website), false, isset($_POST['private']), isset($_POST['anon']));
 					zp_setcookie('zenphoto', implode('|~*~|', $info), time()+5184000, '/');
 				} else {
 					zp_setcookie('zenphoto', '', time()-368000, '/');
@@ -194,9 +194,9 @@ function zp_handle_comment() {
 				header('Location: ' . $redirectTo);
 				exit();
 			} else {
-				$stored = array($_POST['name'], $_POST['email'], $website, $_POST['comment'], false, $_POST['private'], $_POST['anon']);
+				$stored = array($_POST['name'], $_POST['email'], $website, $_POST['comment'], false, isset($_POST['private']), isset($_POST['anon']));
 				if (isset($_POST['remember'])) $stored[4] = true;
-				$_zp_comment_error = 1 + $commentadded;
+				$comment_error = 1 + $commentadded;
 				if ($activeImage !== false) { // tricasa hack? Set the context to the image on which the comment was posted
 					$_zp_current_image = $activeImage;
 					$_zp_current_album = $activeImage->getAlbum();
@@ -213,6 +213,7 @@ function zp_handle_comment() {
 	} else {
 		$stored = array('','','', '', false, false, false);
 	}
+return $comment_error;		
 }
 
 /**
