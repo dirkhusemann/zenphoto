@@ -277,11 +277,11 @@ if ($page == "editcomment") { ?>
 		}
 		?></td>
 		<td align="center"><a href="?page=editcomment&id=<?php echo $id; ?>"
-			title="Edit this comment."> <img src="images/pencil.png"
+			title="<?php echo gettext('Edit this comment.'); ?>Edit this comment."> <img src="images/pencil.png"
 			style="border: 0px;" alt="Edit" /></a></td>
 		<td align="center"><a
 			href="javascript: if(confirm('Are you sure you want to delete this comment?')) { window.location='?action=deletecomments&id=<?php echo $id; ?>'; }"
-			title="Delete this comment." style="color: #c33;"> <img
+			title="<?php echo gettext('Delete this comment.'); ?>" style="color: #c33;"> <img
 			src="images/fail.png" style="border: 0px;" alt="Delete" /></a></td>
 	</tr>
 	<?php } ?>

@@ -140,7 +140,7 @@ echo '. ';
 echo gettext("You can also upload a <strong>ZIP</strong> archive containing any of those file types."); ?></p>
 <!--<p><em>Note:</em> When uploading archives, <strong>all</strong> images in the archive are added to the album, regardles of directory structure.</p>-->
 <p><?php echo gettext("The maximum size for any one file is"); ?> <strong><?php echo ini_get('upload_max_filesize'); ?>B</strong>.
-<?php echo gettext("Don't forget, you can also use"); ?> <acronym title="File Transfer Protocol">FTP</acronym>
+<?php echo gettext("Don't forget, you can also use"); ?> <acronym title="<?php echo gettext('File Transfer Protocol'); ?>">FTP</acronym>
 <?php echo gettext("to upload folders of images into the albums directory!"); ?></p>
 
 <?php if (isset($error) && $error) { ?>
@@ -243,7 +243,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 <div id="place" style="display: none;"></div>
 <!-- New boxes get inserted before this -->
 
-<p><a href="javascript:addUploadBoxes('place','filetemplate',5)"	title="Doesn't reload!">+ <?php echo gettext("Add more upload boxes"); ?></a> <small>
+<p><a href="javascript:addUploadBoxes('place','filetemplate',5)"	title="<?php echo gettext("Doesn't reload!"); ?>">+ <?php echo gettext("Add more upload boxes"); ?></a> <small>
 <?php echo gettext("(won't reload the page, but remember your upload limits!)"); ?></small></p>
 
 

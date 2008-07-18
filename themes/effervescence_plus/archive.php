@@ -27,7 +27,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 		<!-- Crumb Trail Navigation -->
 		<div id="wrapnav">
 			<div id="navbar">
-				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="Albums Index"><?php echo getGalleryTitle();?></a></span>  | <?php echo gettext('Archive View'); ?>
+				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a></span>  | <?php echo gettext('Archive View'); ?>
 			</div>
 		</div>
 
@@ -51,7 +51,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 	<!-- Footer -->
 	<div class="footlinks">
 		<small><?php printThemeInfo(); ?></small>
-		<a href="http://www.zenphoto.org" title="A simpler web photo album"><?php echo gettext('Powered by').' '; ?><font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a><br/>
+		<a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>"><?php echo gettext('Powered by').' '; ?><font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a><br/>
 		<?php printRSSLink('Gallery','', 'Gallery RSS', ''); ?>
 	</div>
 		

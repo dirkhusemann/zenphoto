@@ -99,7 +99,7 @@ class flvplayer {
 		}	
 			echo '
 			so.addParam("allowfullscreen","true");
-			so.addVariable("file","' . $moviepath . '&amp;title=' . $imagetitle . '");
+			so.addVariable("file","' . $moviepath . '&amp;title=' . htmlspecialchars(strip_tags($imagetitle),ENT_QUOTES) . '");
 			' . (!empty($videoThumb) ? 'so.addVariable("image","' . $videoThumb . '")' : '') . '
 			so.addVariable("backcolor","'.getOption('flv_player_backcolor').'");
 			so.addVariable("frontcolor","'.getOption('flv_player_frontkcolor').'");

@@ -110,10 +110,9 @@ foreach ($result as $images) {
 	$images['folder'] = implode('/', $imagpathnames);
 	$images['filename'] = rawurlencode($images['filename']);
 	$ext = strtolower(strrchr($images['filename'], "."));
-	$images['title'] = htmlspecialchars(get_language_string($images['title'],getOption('locale')), ENT_QUOTES);
-	$images['albumtitle'] = htmlspecialchars(get_language_string($images['albumtitle'], getOption('locale')), ENT_QUOTES);
-	$images['desc'] = htmlspecialchars(get_language_string($images['desc'], getOption('locale')), ENT_QUOTES);
-	
+	$images['title'] = htmlspecialchars(strip_tags(get_language_string($images['title'],getOption('locale'))), ENT_QUOTES);
+	$images['albumtitle'] = htmlspecialchars(strip_tags(get_language_string($images['albumtitle'], getOption('locale'))), ENT_QUOTES);
+	$images['desc'] = htmlspecialchars(strip_tags(get_language_string($images['desc'], getOption('locale'))), ENT_QUOTES);
 ?>
 <item>
 	<title><?php echo $images['title']." (".$images['albumtitle'].")"; ?></title>

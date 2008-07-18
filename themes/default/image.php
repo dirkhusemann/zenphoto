@@ -43,7 +43,7 @@
 	<!-- The Image -->
 	<?php if (!checkForPassword()) { ?>
 	<div id="image">
-		<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo getImageTitle();?>"><strong><?php printDefaultSizedImage(getImageTitle()); ?></strong></a> 
+		<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES);?>"><strong><?php printDefaultSizedImage(getImageTitle()); ?></strong></a> 
 	</div>
 	
 	<div id="narrow">

@@ -86,7 +86,7 @@
 				} else {
 					$lastImage++;
 				}    
-			echo '<li class="thumb"><span><em style="background-image:url(' . getImageThumb() . '); "><a href="' . htmlspecialchars(getImageLinkURL()) . '" title="' . getImageTitle() . '" style="background:#fff;">"'.getImageTitle().'"</a></em></span></li>';
+			echo '<li class="thumb"><span><em style="background-image:url(' . getImageThumb() . '); "><a href="' . htmlspecialchars(getImageLinkURL()) . '" title="' . htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES) . '" style="background:#fff;">"'.getImageTitle().'"</a></em></span></li>';
 			}
 			if (!is_null($firstImage)  && hasNextPage()) { 
 			?>

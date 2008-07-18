@@ -904,7 +904,7 @@ foreach ($comments as $comment) {
 
 <form name="cache_images" action="admin-cache-images.php">
 	<div class="buttons" id="home_cache">
-	<button class="tooltip" type="submit" title="<?php echo gettext("Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser."); ?>"><img src="images/cache.png" title="hello" alt="" /> <?php echo gettext("Pre-Cache Images"); ?></button>
+	<button class="tooltip" type="submit" title="<?php echo gettext("Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser."); ?>"><img src="images/cache.png" title="<?php echo gettext('Pre-Cache Images'); ?>" alt="" /> <?php echo gettext("Pre-Cache Images"); ?></button>
 	</div>
 	<input type="checkbox" name="clear" checked="checked" /> <?php echo gettext("Clear"); ?><br clear="all" />
 	<br clear="all" />

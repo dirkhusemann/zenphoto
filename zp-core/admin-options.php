@@ -394,7 +394,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 		<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
 		<?php if(!empty($userid) && count($admins) > 2) { ?>
 		<a href="javascript: if(confirm('Are you sure you want to delete this user?')) { window.location='?action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }"
-			title="Delete this user." style="color: #c33;"> <img
+			title="<?php echo gettext('Delete this user.'); ?>" style="color: #c33;"> <img
 			src="images/fail.png" style="border: 0px;" alt="Delete" /></a> <?php } ?>&nbsp;
 		</td>
 	</tr>

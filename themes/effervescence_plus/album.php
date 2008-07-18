@@ -104,7 +104,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 							} else {
 							echo '<a href="' . 
 									rewrite_path("/" . pathurlencode($album->name), "/index.php?album=" . urlencode($album->name)) .
-									'" title="' . $album->getTitle() . '">&laquo; '.gettext('prev').'</a>';
+									'" title="' . htmlspecialchars(strip_tags($album->getTitle()),ENT_QUOTES) . '">&laquo; '.gettext('prev').'</a>';
 							} 
 						?>
 					</div>
@@ -116,7 +116,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 							} else {
 								echo '<a href="' . 
 										rewrite_path("/" . pathurlencode($album->name), "/index.php?album=" . urlencode($album->name)) .
-										'" title="' . $album->getTitle() . '">'.gettext('next').' &raquo;</a>';
+										'" title="' . htmlspecialchars(strip_tags($album->getTitle()),ENT_QUOTES) . '">'.gettext('next').' &raquo;</a>';
 							} 
 						?>
 					</div>
@@ -200,7 +200,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 							<div class="imageElement">
 								<h3><? echo getImageTitle();?></h3>
 								<p><? echo getImageDesc();?></p>
-								<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo getImageTitle();?>" class="open"></a>
+								<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES);?>" class="open"></a>
 								<?php printCustomSizedImage(getImageTitle(), null, 540, null, null, null, null, null, 'full'); ?>
 								<?php printImageThumb(getImageTitle(), 'thumbnail'); ?>
 							</div>
@@ -244,7 +244,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
  									} else {	
  										echo '<a href="' . htmlspecialchars(getImageLinkURL()) . '"';
  									} 
- 									echo " title=\"".getImageTitle()."\">\n";
+ 									echo " title=\"".htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES)."\">\n";
  									printImageThumb(getImageTitle()); 
  									echo "</a>"
 									?>
@@ -341,7 +341,7 @@ if ($h == 1) {
 echo "<p>$h ".gettext('on this album')."</p>";
 printThemeInfo();
 ?>
-<a href="http://www.zenphoto.org" title="A simpler web photo album"><?php echo gettext('Powered by').' '; ?>
+<a href="http://www.zenphoto.org" title="<?php gettext("A simpler web photo album") ?>"><?php echo gettext('Powered by').' '; ?>
 <font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font size="1" face="Arial Black">photo</font></span></a><br />
 <?php printRSSLink('Album', '', 'Album RSS', ''); ?>
 

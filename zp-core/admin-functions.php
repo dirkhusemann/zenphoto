@@ -178,9 +178,9 @@ function issetPage($page) {
  */
 function printAdminFooter() {
 	echo "<div id=\"footer\">";
-	echo "\n  <a href=\"http://www.zenphoto.org\" title=\"A simpler web photo album\">zen<strong>photo</strong></a>";
+	echo "\n  <a href=\"http://www.zenphoto.org\" title=\"".gettext('A simpler web photo album')."\">zen<strong>photo</strong></a>";
 	echo " version ". ZENPHOTO_VERSION.' ['.ZENPHOTO_RELEASE.']';
-	echo " | <a href=\"http://www.zenphoto.org/support/\" title=\"Forum\">Forum</a> | <a href=\"http://www.zenphoto.org/trac/\" title=\"Trac\">Trac</a> | <a href=\"".WEBPATH."/".ZENFOLDER."/changelog.html\" title=\"View Changelog\">Changelog</a>\n</div>";
+	echo " | <a href=\"http://www.zenphoto.org/support/\" title=\"".gettext('Forum')."\">Forum</a> | <a href=\"http://www.zenphoto.org/trac/\" title=\"Trac\">Trac</a> | <a href=\"".WEBPATH."/".ZENFOLDER."/changelog.html\" title=\"".gettext('View Changelog')."\">Changelog</a>\n</div>";
 }
 
 /**
@@ -1454,25 +1454,25 @@ function fetchComments($number) {
 function adminPageNav($pagenum,$totalpages,$url,$tab='') {
 	echo '<ul class="pagelist"><li class="prev">';
 	if ($pagenum > 1) {
-		echo '<a href='.$url.'&amp;subpage='.($p=$pagenum-1).$tab.' title="page '.$p.'">'.'&laquo; '.gettext("Previous page").'</a>';
+		echo '<a href='.$url.'&amp;subpage='.($p=$pagenum-1).$tab.' title="'.gettext('page').' '.$p.'">'.'&laquo; '.gettext("Previous page").'</a>';
 	} else {
 		echo '<span class="disabledlink">&laquo; '.gettext("Previous page").'</span>';
 	}
 	echo "</li>";
 	$start = max(1,$pagenum-7);
 	$total = min($start+15,$totalpages+1);
-	if ($start != 1) { echo "\n <li><a href=".$url.'&amp;subpage='.($p=max($start-8, 1)).$tab.' title="page '.$p.'">. . .</a></li>'; }
+	if ($start != 1) { echo "\n <li><a href=".$url.'&amp;subpage='.($p=max($start-8, 1)).$tab.' title="'.gettext('page').' '.$p.'">. . .</a></li>'; }
 	for ($i=$start; $i<$total; $i++) {
 		if ($i == $pagenum) {
 			echo "<li class=\"current\">".$i.'</li>';
 		} else {
-			echo '<li><a href='.$url.'&amp;subpage='.$i.$tab.' title="page '.$i.'">'.$i.'</a></li>';
+			echo '<li><a href='.$url.'&amp;subpage='.$i.$tab.' title="'.gettext('page').' '.$i.'">'.$i.'</a></li>';
 		}
 	}
-	if ($i < $totalpages) { echo "\n <li><a href=".$url.'&amp;subpage='.($p=min($pagenum+22,$totalpages+1)).$tab.' title="page '.$p.'">. . .</a></li>'; }
+	if ($i < $totalpages) { echo "\n <li><a href=".$url.'&amp;subpage='.($p=min($pagenum+22,$totalpages+1)).$tab.' title="'.gettext('page').' '.$p.'">. . .</a></li>'; }
 	echo "<li class=\"next\">";
 	if ($pagenum<$totalpages) {
-		echo '<a href='.$url.'&amp;subpage='.($p=$pagenum+1).$tab.' title="page '.$p.'">'.gettext("Next page").' &raquo;'.'</a>';
+		echo '<a href='.$url.'&amp;subpage='.($p=$pagenum+1).$tab.' title="'.gettext('page').' '.$p.'">'.gettext("Next page").' &raquo;'.'</a>';
 	} else {
 		echo '<span class="disabledlink">'.gettext("Next page").' &raquo;</span>';
 	}

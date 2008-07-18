@@ -34,7 +34,7 @@
 		<div id="padbox">
 		<?php 
 		if (($total = getNumImages() + getNumAlbums()) > 0) {
-			if ($_REQUEST['date']){
+			if (isset($_REQUEST['date'])){
 				$searchwords = getSearchDate();
  		} else { $searchwords = getSearchWords(); }
 			echo "<p>".gettext("Total matches for")." <em>".$searchwords."</em>: $total</p>";
@@ -60,7 +60,7 @@
 			<div id="images">
 				<?php while (next_image(false, $firstPageImages)): $c++;?>
 				<div class="image">
-					<div class="imagethumb"><a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo getImageTitle();?>"><?php printImageThumb(getImageTitle()); ?></a></div>
+					<div class="imagethumb"><a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES);?>"><?php printImageThumb(getImageTitle()); ?></a></div>
 				</div>
 				<?php endwhile; ?>
 			</div>

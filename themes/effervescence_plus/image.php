@@ -32,7 +32,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 						global $_zp_current_image;
 						if (hasPrevImage()) { 
 							$image = $_zp_current_image->getPrevImage();
-							echo '<a href="' . htmlspecialchars(getPrevImageURL()) . '" title="' . $image->getTitle() . '">&laquo; '.gettext('prev').'</a>';
+							echo '<a href="' . htmlspecialchars(getPrevImageURL()) . '" title="' . htmlspecialchars(strip_tags($image->getTitle()),ENT_QUOTES) . '">&laquo; '.gettext('prev').'</a>';
 						} else {
 							echo '<div class="imgdisabledlink">&laquo; '.gettext('prev').'</div>'; 
 						}
@@ -42,7 +42,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 					<?php
 					if (hasNextImage()) { 
 						$image = $_zp_current_image->getNextImage();
-						echo '<a href="' . htmlspecialchars(getNextImageURL()) . '" title="' . $image->getTitle() . '">'.gettext('next').' &raquo;</a>';
+						echo '<a href="' . htmlspecialchars(getNextImageURL()) . '" title="' . htmlspecialchars(strip_tags($image->getTitle()),ENT_QUOTES) . '">'.gettext('next').' &raquo;</a>';
 					} else {
 						echo '<div class="imgdisabledlink">'.gettext('next').' &raquo;</div>';
 					}
@@ -99,7 +99,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 		<div id="image" <?php echo $wide.$high; ?>>
 			<?php if ($show = !checkForPassword()) { ?>
 			<div id="image_container">
-				<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo getImageTitle();?>">
+				<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES);?>">
 					<?php printDefaultSizedImage(getImageTitle()); ?>
 				</a>
 			</div>
@@ -189,7 +189,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 		echo "<p>$h ".gettext('on this image')."</p>";
 		printThemeInfo(); 
 		?>
-		<a href="http://www.zenphoto.org" title="A simpler web photo album"><?php echo gettext('Powered by').' ';?>
+		<a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>"><?php echo gettext('Powered by').' ';?>
 		<font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font face="Arial Black" size="1">photo</font></span></a>
 	</div>
 		

@@ -2456,7 +2456,7 @@ function generateListFromFiles($currentValue, $root, $suffix) {
  */
 function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
 	echo "<a href=\"" . htmlspecialchars($url) . "\"" .
-	(($title) ? " title=\"" . htmlspecialchars($title, ENT_QUOTES) . "\"" : "") .
+	(($title) ? " title=\"" . htmlspecialchars(strip_tags($title), ENT_QUOTES) . "\"" : "") .
 	(($class) ? " class=\"$class\"" : "") .
 	(($id) ? " id=\"$id\"" : "") . ">" .
 	$text . "</a>";

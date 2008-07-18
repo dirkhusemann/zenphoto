@@ -67,7 +67,7 @@
 						printImageMetadata('', false); 
 						echo "&nbsp;/&nbsp;";
 					} 
-				?><a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo getImageTitle();?>"><?php echo gettext('Full Size'); ?></a>
+				?><a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES);?>"><?php echo gettext('Full Size'); ?></a>
  					</li>
 				</ul>
 			</div>
@@ -179,7 +179,7 @@
 
 		</div>
 
-		<p id="path"><?php printHomeLink('', ' > '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="Albums Index"><?php echo getGalleryTitle();?></a> &gt; <?php printParentBreadcrumb("", " > ", " > "); printAlbumBreadcrumb("", " > "); echo getImageTitle(); ?></p>
+		<p id="path"><?php printHomeLink('', ' > '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> &gt; <?php printParentBreadcrumb("", " > ", " > "); printAlbumBreadcrumb("", " > "); echo getImageTitle(); ?></p>
 
 		<div id="footer">
 			<hr />

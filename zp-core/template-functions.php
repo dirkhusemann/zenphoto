@@ -634,7 +634,8 @@ function getParentAlbums($album=null) {
  * @param string $after Text to place after the breadcrumb
  * @param string $title Text to be used as the URL title tag
  */
-function printAlbumBreadcrumb($before='', $after='', $title='Album Thumbnails') {
+function printAlbumBreadcrumb($before='', $after='', $title=NULL) {
+	if (is_null($title)) $title = gettext('Album Thumbnails');
 	global $_zp_current_search, $_zp_current_gallery;	
 	echo $before;
 	if (in_context(ZP_SEARCH_LINKED)) {
@@ -650,11 +651,11 @@ function printAlbumBreadcrumb($before='', $after='', $title='Album Thumbnails') 
 		} else {
 			$album = new Album($_zp_current_gallery, $dynamic_album);
 			echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL($album)) . "\">";
-			echo $album->getTitle();
+			echo strip_tags($album->getTitle());
 			echo '</a>';
 		}
 	} else {
-		echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL()). "\" title=\"$title\">" . getAlbumTitle() . "</a>";
+		echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL()). "\" title=\"$title\">" . htmlspecialchars(strip_tags(getAlbumTitle()),ENT_QUOTES) . "</a>";
 	}
 	echo $after;
 }
@@ -1729,7 +1730,7 @@ function printImageLink($text, $title, $class=NULL, $id=NULL) {
  */
 function printImageDiv() {
 	if (!isset($_GET['sortable'])) {
-		echo '<a href="'.htmlspecialchars(getImageLinkURL()).'" title="'.htmlspecialchars(getImageTitle(), ENT_QUOTES).'">';
+		echo '<a href="'.htmlspecialchars(getImageLinkURL()).'" title="'.htmlspecialchars(strip_tags(getImageTitle()), ENT_QUOTES).'">';
 	}
 	printImageThumb(getImageTitle());
 
@@ -1762,7 +1763,8 @@ function printImageEXIFData() { if (getImageVideo()) { } else { printImageMetada
  * @param string $id style class id
  * @param string $class style class
  */
-function printImageMetadata($title='Image Info', $toggle=true, $id='imagemetadata', $class=null) {
+function printImageMetadata($title=NULL, $toggle=true, $id='imagemetadata', $class=null) {
+	if (is_null($title)) $title = gettext('Image Info');
 	global $_zp_exifvars;
 	if (false === ($exif = getImageEXIFData())) { return; }
 	$dataid = $id . '_data';
@@ -1967,7 +1969,7 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 	//Print images
 	else {
 		echo '<img src="' . htmlspecialchars(getDefaultSizedImage()) . '" alt="' . htmlspecialchars($alt, ENT_QUOTES) . '"' .
-			' title="' . htmlspecialchars($alt, ENT_QUOTES) . '"'.			
+			' title="' . htmlspecialchars(strip_tags($alt), ENT_QUOTES) . '"'.			
 			' width="' . getDefaultWidth() . '" height="' . getDefaultHeight() . '"' .
 			(($class) ? " class=\"$class\"" : "") .
 			(($id) ? " id=\"$id\"" : "") . " />";
@@ -2164,7 +2166,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 		$sizearr = getSizeCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy);
 		echo "<img src=\"" . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin)) . 
 			"\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
-			"\" title=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
+			"\" title=\"" . htmlspecialchars(strip_tags($alt), ENT_QUOTES) . "\"" .
 		" width=\"" . $sizearr[0] . "\" height=\"" . $sizearr[1] . "\"" .
 		(($class) ? " class=\"$class\"" : "") .
 		(($id) ? " id=\"$id\"" : "") . " />";
@@ -2297,7 +2299,7 @@ function printCommentAuthorLink($title=NULL, $class=NULL, $id=NULL) {
 	if (empty($site)) {
 		echo htmlspecialchars($name);
 	} else {
-		if (is_null($title)) $title = "Visit $name";
+		if (is_null($title)) $title = "Visit ".htmlspecialchars(strip_tags($name),ENT_QUOTES);
 		printLink($site, $name, $title, $class, $id);
 	}
 }
@@ -3013,13 +3015,13 @@ function getRSSHeaderLink($option, $linktext) {
 	$host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 	switch($option) {
 		case "Gallery":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss.php\" />\n";
+			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$host.WEBPATH."/rss.php\" />\n";
 		case "Album":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss.php?albumnr=".getAlbumId()."&amp;albumname=".urlencode(getAlbumTitle())."\" />\n";
+			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$host.WEBPATH."/rss.php?albumnr=".getAlbumId()."&amp;albumname=".urlencode(getAlbumTitle())."\" />\n";
 		case "Collection":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss.php?albumname=".urlencode(getAlbumTitle())."&amp;folder=".urlencode($_zp_current_album->getFolder())."\" />\n";
+			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$host.WEBPATH."/rss.php?albumname=".urlencode(getAlbumTitle())."&amp;folder=".urlencode($_zp_current_album->getFolder())."\" />\n";
 		case "Comments":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$linktext."\" href=\"http://".$host.WEBPATH."/rss-comments.php\" />\n";
+			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$host.WEBPATH."/rss-comments.php\" />\n";
 	}
 }
 

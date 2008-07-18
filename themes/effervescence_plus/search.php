@@ -82,7 +82,7 @@ $backgroundImagePath="";
 <div id="wrapnav">
 	<div id="navbar">
 		<span><?php printHomeLink('', ' | '); ?>
-		<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="Albums Index">
+		<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>">
 		<?php echo getGalleryTitle();	?></a></span> | 
 		<?php
 		  echo "<em>".gettext('Search')."</em>";
@@ -129,10 +129,8 @@ $backgroundImagePath="";
 				$lastAlbum++;
 			}
 			?>
-			<li><div class="imagethumb"><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="View the album: 
-				<?php echo getAlbumTitle();
-				printImage_AlbumCount();
-			?>">
+			<li><div class="imagethumb"><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the album:').' '.
+				 getAlbumTitle();	printImage_AlbumCount(); ?>">
 				<?php printCustomAlbumThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?></a></div>
 				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the Album:').' '; echo getAlbumTitle();
 				printImage_AlbumCount();
@@ -167,7 +165,7 @@ $backgroundImagePath="";
 							}
  						echo '<div class="image">' . "\n";
  						echo '<div class="imagethumb">' . "\n";
- 						echo '<a href="' . htmlspecialchars(getImageLinkURL()) .'" title="' . getImageTitle() . '">' . "\n";
+ 						echo '<a href="' . htmlspecialchars(getImageLinkURL()) .'" title="' . htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES) . '">' . "\n";
  						echo printImageThumb(getImageTitle()) . "</a>\n";
  						echo "</div>\n";
  						echo "</div>\n";

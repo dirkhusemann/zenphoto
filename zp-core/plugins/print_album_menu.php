@@ -158,7 +158,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',
 	if($option === "list" OR $option === "list-top") {
 		echo "<ul".$css_id.">\n"; // top level list
 		if(!empty($indexname)) {
-			echo "<li><a href='".htmlspecialchars(getGalleryIndexURL())."' title='".$indexname."'>".$indexname."</a></li>";
+			echo "<li><a href='".htmlspecialchars(getGalleryIndexURL())."' title='".htmlspecialchars(strip_tags($indexname),ENT_QUOTES)."'>".$indexname."</a></li>";
 		}
 	}
 		/**** TOPALBUM LEVEL ****/
@@ -374,7 +374,7 @@ function createAlbumMenuLink($album,$option2,$css,$albumpath,$mode,$level='') {
 			if(getAlbumID() === $album->getAlbumID()) {
 				$link = "<li".$css.">".htmlspecialchars($album->getTitle()).$count;
 			} else {
-				$link = "<li".$css."><a href='".htmlspecialchars($albumpath.$album->name)."' title='".htmlspecialchars($album->getTitle())."'>".htmlspecialchars($album->getTitle())."</a>".$count;
+				$link = "<li".$css."><a href='".htmlspecialchars($albumpath.$album->name)."' title='".htmlspecialchars(strip_tags($album->getTitle()),ENT_QUOTES)."'>".htmlspecialchars($album->getTitle())."</a>".$count;
 			}
 			break;
 		case "jump":

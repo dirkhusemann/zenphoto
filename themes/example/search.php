@@ -24,7 +24,7 @@ $firstPageImages = normalizeColumns(1, 7);
 			printSearchForm(); 
 		?>
 		<h2><span><?php printHomeLink('', ' | '); ?><a href="
-		<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="Gallery Index">
+		<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Gallery Index') ?>">
 		<?php echo getGalleryTitle();?></a> | 
 		<?php
 		  echo "<em>".gettext("Search")."</em>";
@@ -36,21 +36,22 @@ $firstPageImages = normalizeColumns(1, 7);
 
 		<?php
 			if (($total = getNumImages() + getNumAlbums()) > 0) {
-				if ($_REQUEST['date'])
-	 		{ $searchwords = getSearchDate();
-	 		} else { $searchwords = getSearchWords(); }
+				if (isset($_REQUEST['date']))	{
+					$searchwords = getSearchDate();
+	 		} else { 
+	 			$searchwords = getSearchWords(); }
 				echo "<p>".gettext("Total matches for")." <em>".$searchwords."</em>: $total</p>";
 			}
-		$c = 0;
+			$c = 0;
 		?>
 <div id="albums">
 			<?php while (next_album()): $c++;?>
 			<div class="album">
-					<div class="albumthumb"><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo getAlbumTitle();?>">
+					<div class="albumthumb"><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo htmlspecialchars(strip_tags(getAlbumTitle()),ENT_QUOTES);?>">
 						<?php printAlbumThumbImage(getAlbumTitle()); ?></a>
 						</div>
 					<div class="albumtitle">
-									<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo getAlbumTitle();?>">
+									<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo htmlspecialchars(strip_tags(getAlbumTitle()),ENT_QUOTES);?>">
 							<?php printAlbumTitle(); ?></a></h3> <?php printAlbumDate(); ?>
 								</div>
 						<div class="albumdesc"><?php printAlbumDesc(); ?></div>
@@ -63,7 +64,7 @@ $firstPageImages = normalizeColumns(1, 7);
 		<?php while (next_image(false, $firstPageImages)): $c++;?>
 			<div class="image">
 					<div class="imagethumb">
-							<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo getImageTitle();?>">
+							<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES);?>">
 						<?php printImageThumb(getImageTitle()); ?></a>
 						</div>
 			</div>
