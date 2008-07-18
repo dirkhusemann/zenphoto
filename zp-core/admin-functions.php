@@ -1488,9 +1488,6 @@ function adminPageNav($pagenum,$totalpages,$url,$tab='') {
  * @param string $locale optional locale of the translation desired
  */
 function print_language_string_list($dbstring, $name, $textbox=false, $locale=NULL) {
-
-	debugLog(" print_language_string_list($dbstring, $name, $textbox, $locale)")	;
-
 	global $_zp_languages, $_zp_active_languages;
 	if (is_null($locale)) $locale = getOption('locale');
 	if (preg_match('/^a:[0-9]+:{/', $dbstring)) {
