@@ -20,6 +20,12 @@ function fixRSSDate($bad_date) {
 	return $rval;
 }
 
+if(isset($_GET['lang'])) {
+	$locale = sanitize($_GET['lang']);
+} else {
+	$locale = getOption('locale');
+}
+
 // check passwords
 $albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
 $passwordcheck1 = "";
@@ -43,10 +49,10 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-<title><?php echo get_language_string(getOption('gallery_title'), getOption('locale'))." - latest comments"; ?></title>
+<title><?php echo get_language_string(getOption('gallery_title'), $locale)." - latest comments"; ?></title>
 <link><?php echo "http://".$host.WEBPATH; ?></link>
 <atom:link href="http://<?php echo $host.WEBPATH; ?>/rss.php" rel="self" type="application/rss+xml" />
-<description><?php echo get_language_string(getOption('gallery_title'), getOption('locale')); ?></description>
+<description><?php echo get_language_string(getOption('gallery_title'), $locale); ?></description>
 <language>en-us</language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
 <lastBuildDate><?php echo date("r", time()); ?></lastBuildDate>
@@ -91,8 +97,8 @@ foreach ($comments as $comment) {
 		$imagetag = "";
 	}
 	$date = $comment['date'];
-	$albumtitle = htmlspecialchars($comment['albumtitle']);
-	if ($comment['title'] == "") $title = $image; else $title = $comment['title'];
+	$albumtitle = htmlspecialchars(get_language_string($comment['albumtitle'], $locale));
+	if ($comment['title'] == "") $title = $image; else $title = get_language_string($comment['title'], $locale);
 	$website = $comment['website'];
 	$shortcomment = truncate_string($comment['comment'], 123);
 	if(!empty($title)) {

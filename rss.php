@@ -34,6 +34,12 @@ if(isset($_GET['folder'])) {
 } else {
 	$albumfolder = NULL;
 }
+
+if(isset($_GET['lang'])) {
+	$locale = sanitize($_GET['lang']);
+} else {
+	$locale = getOption('locale');
+}
 $host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 
 // check passwords
@@ -56,10 +62,10 @@ if(getOption('mod_rewrite')) {
 ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-<title><?php echo htmlspecialchars(get_language_string(getOption('gallery_title'), getOption('locale'))).htmlspecialchars($albumname); ?></title>
+<title><?php echo htmlspecialchars(get_language_string(getOption('gallery_title'), $locale)).htmlspecialchars($albumname); ?></title>
 <link><?php echo "http://".$host.WEBPATH; ?></link>
 <atom:link href="http://<?php echo $host.WEBPATH; ?>/rss.php" rel="self" type="application/rss+xml" />
-<description><?php echo htmlspecialchars(get_language_string(getOption('gallery_title'), getOption('locale'))); ?></description>
+<description><?php echo htmlspecialchars(get_language_string(getOption('gallery_title'), $locale)); ?></description>
 <language>en-us</language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
 <lastBuildDate><?php echo date("r", time()); ?></lastBuildDate>
@@ -110,9 +116,9 @@ foreach ($result as $images) {
 	$images['folder'] = implode('/', $imagpathnames);
 	$images['filename'] = rawurlencode($images['filename']);
 	$ext = strtolower(strrchr($images['filename'], "."));
-	$images['title'] = htmlspecialchars(strip_tags(get_language_string($images['title'],getOption('locale'))), ENT_QUOTES);
-	$images['albumtitle'] = htmlspecialchars(strip_tags(get_language_string($images['albumtitle'], getOption('locale'))), ENT_QUOTES);
-	$images['desc'] = htmlspecialchars(strip_tags(get_language_string($images['desc'], getOption('locale'))), ENT_QUOTES);
+	$images['title'] = htmlspecialchars(strip_tags(get_language_string($images['title'],$locale)), ENT_QUOTES);
+	$images['albumtitle'] = htmlspecialchars(strip_tags(get_language_string($images['albumtitle'], $locale)), ENT_QUOTES);
+	$images['desc'] = htmlspecialchars(strip_tags(get_language_string($images['desc'], $locale)), ENT_QUOTES);
 ?>
 <item>
 	<title><?php echo $images['title']." (".$images['albumtitle'].")"; ?></title>
