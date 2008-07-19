@@ -855,7 +855,7 @@ function setAlbumCustomData($val) {
 function getAlbumData($field) {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_album_image;
-	return $_zp_album_image->get($field);
+	return get_language_string($_zp_album_image->get($field));
 }
 
 /**
@@ -1493,7 +1493,7 @@ function printImageDesc($editable=false) {
 function getImageData($field) {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
-	return $_zp_current_image->get($field);
+	return get_language_string($_zp_current_image->get($field));
 }
 
 /**

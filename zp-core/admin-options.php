@@ -712,7 +712,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 			generateListFromArray(array($cv), $formatlist);
 			?>
 			</select><br />
-			<div id="customTextBox" name="customText" style="display:<?php echo $dsp; ?>">
+			<div id="customTextBox" class="customText" style="display:<?php echo $dsp; ?>">
 			<input type="text" size="40" name="date_format"
 			value="<?php echo htmlspecialchars(getOption('date_format'));?>" />
 			</div>

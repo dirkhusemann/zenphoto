@@ -210,7 +210,7 @@ $backgroundImagePath="";
 			?>
 				<div id="main3">
 				<div id="main2">
-				<br>
+				<br />
 				<p align="center">
 			<?php 
 				if (empty($searchwords)) {

@@ -5,7 +5,7 @@
 	Exifer
 	Extracts EXIF information from digital photos.
 	
-	Copyright © 2003 Jake Olefsky
+	Copyright ï¿½ 2003 Jake Olefsky
 	http://www.offsky.com/software/exif/index.php
 	jake@olefsky.com
 	
@@ -69,16 +69,16 @@ function formatSanyoData($type,$tag,$intel,$data) {
 		$data=hexdec($data);
 		
 		if($tag=="0200") { //SpecialMode
-			if($data == 0) $data = "Normal";
-			else $data = "Unknown: ".$data;
+			if($data == 0) $data = gettext("Normal");
+			else $data = gettext("Unknown").": ".$data;
 		}
 		if($tag=="0201") { //Quality
-			if($data == 2) $data = "High";
-			else $data = "Unknown: ".$data;
+			if($data == 2) $data = gettext("High");
+			else $data = gettext("Unknown").": ".$data;
 		}
 		if($tag=="0202") { //Macro
-			if($data == 0) $data = "Normal";
-			else $data = "Unknown: ".$data;
+			if($data == 0) $data = gettext("Normal");
+			else $data = gettext("Unknown").": ".$data;
 		}
 	} else if($type=="UNDEFINED") {
 		

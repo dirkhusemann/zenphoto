@@ -101,7 +101,7 @@ while ($old != $albumname) {
 		<?php
 		if (isMyAlbum('/', UPLOAD_RIGHTS)) {
 			?>
-			<option value="" selected="1" style="font-weight: bold;">/</option>
+			<option value="" selected="SELECTED" style="font-weight: bold;">/</option>
 			<?php
 }
 $bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');
@@ -134,7 +134,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 			if (is_valid_image($filename)) {
 				echo "\n<option class=\"thumboption\" style=\"background-image: url(" . $image->getThumb() .
 									"); background-repeat: no-repeat;\" value=\"".$imagepath."\"";
-				echo ">" . $image->get('title');
+				echo ">" . $image->getTitle();
 				echo  " ($imagepath)";
 				echo "</option>";
 			}

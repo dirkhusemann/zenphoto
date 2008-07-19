@@ -1026,7 +1026,7 @@ function printAlbumEditForm($index, $album) {
 			if ($selected) {
 				echo " selected=\"selected\"";
 			}
-			echo ">" . $image->get('title');
+			echo ">" . $image->getTitle();
 			echo  " ($imagepath)";
 			echo "</option>";
 		}
@@ -1069,7 +1069,7 @@ function printAlbumEditForm($index, $album) {
 						if ($selected) {
 							echo " selected=\"selected\"";
 						}
-						echo ">" . $image->get('title');
+						echo ">" . $image->getTitle();
 						echo  " ($imagepath)";
 						echo "</option>";
 					}
@@ -1090,8 +1090,8 @@ function printAlbumEditForm($index, $album) {
 					if ($selected) {
 						echo " selected=\"selected\"";
 					}
-					echo ">" . $image->get('title');
-					if ($filename != $image->get('title')) {
+					echo ">" . $image->getTitle();
+					if ($filename != $image->getTitle()) {
 						echo  " ($filename)";
 					}
 					echo "</option>";

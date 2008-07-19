@@ -5,7 +5,7 @@
 	Exifer
 	Extracts EXIF information from digital photos.
 	
-	Copyright © 2003 Jake Olefsky
+	Copyright ï¿½ 2003 Jake Olefsky
 	http://www.offsky.com/software/exif/index.php
 	jake@olefsky.com
 	
@@ -80,12 +80,12 @@ function formatOlympusData($type,$tag,$intel,$data) {
 			if($data == 1) $data = "SQ";
 			else if($data == 2) $data = "HQ";
 			else if($data == 3) $data = "SHQ";
-			else $data = "Unknown: ".$data;
+			else $data = gettext("Unknown").": ".$data;
 		}
 		if($tag=="0202") { //Macro
 			if($data == 0) $data = "Normal";
 			else if($data == 1) $data = "Macro";
-			else $data = "Unknown: ".$data;
+			else $data = gettext("Unknown").": ".$data;
 		}
 	} else if($type=="UNDEFINED") {
 		

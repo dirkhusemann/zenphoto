@@ -419,131 +419,131 @@ function formatData($type,$tag,$intel,$data) {
 		if ($tag == '0112') { // Orientation
 			// Example of how all of these tag formatters should be...
 			switch ($data) {
-				case 1  :   $data = '1: Normal (0 deg)';      break;
-				case 2  :   $data = '2: Mirrored';            break;
-				case 3  :   $data = '3: Upsidedown';          break;
-				case 4  :   $data = '4: Upsidedown Mirrored'; break;
-				case 5  :   $data = '5: 90 deg CW Mirrored';  break;
-				case 6  :   $data = '6: 90 deg CCW';          break;
-				case 7  :   $data = '7: 90 deg CCW Mirrored'; break;
-				case 8  :   $data = '8: 90 deg CW';           break;
-				default :   $data = 'Unknown: '.$data;
+				case 1  :   $data = gettext('1: Normal (0 deg)');      break;
+				case 2  :   $data = gettext('2: Mirrored');            break;
+				case 3  :   $data = gettext('3: Upsidedown');          break;
+				case 4  :   $data = gettext('4: Upsidedown Mirrored'); break;
+				case 5  :   $data = gettext('5: 90 deg CW Mirrored');  break;
+				case 6  :   $data = gettext('6: 90 deg CCW');          break;
+				case 7  :   $data = gettext('7: 90 deg CCW Mirrored'); break;
+				case 8  :   $data = gettext('8: 90 deg CW');           break;
+				default :   $data = gettext('Unknown').': '.$data;
 			}
 			
 		} else if ($tag == '0128' || $tag == 'a210' || $tag == '0128') {  // ResolutionUnit and FocalPlaneResolutionUnit and ThumbnailResolutionUnit
-			if ($data == 1)         $data = 'No Unit';
-			else if ($data == 2)    $data = 'Inch';
-			else if ($data == 3)    $data = 'Centimeter';
+			if ($data == 1)         $data = gettext('No Unit');
+			else if ($data == 2)    $data = gettext('Inch');
+			else if ($data == 3)    $data = gettext('Centimeter');
 			
 		} else if ($tag == '0213') { // YCbCrPositioning
-			if ($data == 1)         $data = 'Center of Pixel Array';
-			else if ($data == 2)    $data = 'Datum Point';
+			if ($data == 1)         $data = gettext('Center of Pixel Array');
+			else if ($data == 2)    $data = gettext('Datum Point');
 			
 		} else if ($tag == '8822') { // ExposureProgram
-			if ($data == 1)         $data = 'Manual';
-			else if ($data == 2)    $data = 'Program';
-			else if ($data == 3)    $data = 'Aperature Priority';
-			else if ($data == 4)    $data = 'Shutter Priority';
-			else if ($data == 5)    $data = 'Program Creative';
-			else if ($data == 6)    $data = 'Program Action';
-			else if ($data == 7)    $data = 'Portrat';
-			else if ($data == 8)    $data = 'Landscape';
-			else                    $data = 'Unknown: '.$data;
+			if ($data == 1)         $data = gettext('Manual');
+			else if ($data == 2)    $data = gettext('Program');
+			else if ($data == 3)    $data = gettext('Aperature Priority');
+			else if ($data == 4)    $data = gettext('Shutter Priority');
+			else if ($data == 5)    $data = gettext('Program Creative');
+			else if ($data == 6)    $data = gettext('Program Action');
+			else if ($data == 7)    $data = gettext('Portrat');
+			else if ($data == 8)    $data = gettext('Landscape');
+			else                    $data = gettext('Unknown').': '.$data;
 			
 		} else if ($tag == '9207') { // MeteringMode
-			if ($data == 0) $data = 'Unknown';
-			else if ($data == 1)    $data = 'Average';
-			else if ($data == 2)    $data = 'Center Weighted Average';
-			else if ($data == 3)    $data = 'Spot';
-			else if ($data == 4)    $data = 'Multi-Spot';
-			else if ($data == 5)    $data = 'Multi-Segment';
-			else if ($data == 6)    $data = 'Partial';
-			else if ($data == 255)  $data = 'Other';
-			else                    $data = 'Unknown: '.$data;
+			if ($data == 0) $data = gettext('Unknown');
+			else if ($data == 1)    $data = gettext('Average');
+			else if ($data == 2)    $data = gettext('Center Weighted Average');
+			else if ($data == 3)    $data = gettext('Spot');
+			else if ($data == 4)    $data = gettext('Multi-Spot');
+			else if ($data == 5)    $data = gettext('Multi-Segment');
+			else if ($data == 6)    $data = gettext('Partial');
+			else if ($data == 255)  $data = gettext('Other');
+			else                    $data = gettext('Unknown').': '.$data;
 			
 		} else if ($tag == '9208') { // LightSource
-			if ($data == 0) $data = 'Unknown or Auto';
-			else if ($data == 1)    $data = 'Daylight';
-			else if ($data == 2)    $data = 'Flourescent';
-			else if ($data == 3)    $data = 'Tungsten';
-			else if ($data == 10)   $data = 'Flash';
-			else if ($data == 17)   $data = 'Standard Light A';
-			else if ($data == 18)   $data = 'Standard Light B';
-			else if ($data == 19)   $data = 'Standard Light C';
-			else if ($data == 20)   $data = 'D55';
-			else if ($data == 21)   $data = 'D65';
-			else if ($data == 22)   $data = 'D75';
-			else if ($data == 255)  $data = 'Other';
-			else                    $data = 'Unknown: '.$data;
+			if ($data == 0) $data = gettext('Unknown or Auto');
+			else if ($data == 1)    $data = gettext('Daylight');
+			else if ($data == 2)    $data = gettext('Flourescent');
+			else if ($data == 3)    $data = gettext('Tungsten');
+			else if ($data == 10)   $data = gettext('Flash');
+			else if ($data == 17)   $data = gettext('Standard Light A');
+			else if ($data == 18)   $data = gettext('Standard Light B');
+			else if ($data == 19)   $data = gettext('Standard Light C');
+			else if ($data == 20)   $data = gettext('D55');
+			else if ($data == 21)   $data = gettext('D65');
+			else if ($data == 22)   $data = gettext('D75');
+			else if ($data == 255)  $data = gettext('Other');
+			else                    $data = gettext('Unknown').': '.$data;
 			
 		} else if ($tag == '9209') { // Flash
-			if ($data == 0) $data = 'No Flash';
-			else if ($data == 1)    $data = 'Flash';
-			else if ($data == 5)    $data = 'Flash, strobe return light not detected';
-			else if ($data == 7)    $data = 'Flash, strob return light detected';
-			else if ($data == 9)    $data = 'Compulsory Flash';
-			else if ($data == 13)   $data = 'Compulsory Flash, Return light not detected';
-			else if ($data == 15)   $data = 'Compulsory Flash, Return light detected';
-			else if ($data == 16)   $data = 'No Flash';
-			else if ($data == 24)   $data = 'No Flash';
-			else if ($data == 25)   $data = 'Flash, Auto-Mode';
-			else if ($data == 29)   $data = 'Flash, Auto-Mode, Return light not detected';
-			else if ($data == 31)   $data = 'Flash, Auto-Mode, Return light detected';
-			else if ($data == 32)   $data = 'No Flash';
-			else if ($data == 65)   $data = 'Red Eye';
-			else if ($data == 69)   $data = 'Red Eye, Return light not detected';
-			else if ($data == 71)   $data = 'Red Eye, Return light detected';
-			else if ($data == 73)   $data = 'Red Eye, Compulsory Flash';
-			else if ($data == 77)   $data = 'Red Eye, Compulsory Flash, Return light not detected';
-			else if ($data == 79)   $data = 'Red Eye, Compulsory Flash, Return light detected';
-			else if ($data == 89)   $data = 'Red Eye, Auto-Mode';
-			else if ($data == 93)   $data = 'Red Eye, Auto-Mode, Return light not detected';
-			else if ($data == 95)   $data = 'Red Eye, Auto-Mode, Return light detected';
-			else                    $data = 'Unknown: '.$data;
+			if ($data == 0) $data = gettext('No Flash');
+			else if ($data == 1)    $data = gettext('Flash');
+			else if ($data == 5)    $data = gettext('Flash, strobe return light not detected');
+			else if ($data == 7)    $data = gettext('Flash, strob return light detected');
+			else if ($data == 9)    $data = gettext('Compulsory Flash');
+			else if ($data == 13)   $data = gettext('Compulsory Flash, Return light not detected');
+			else if ($data == 15)   $data = gettext('Compulsory Flash, Return light detected');
+			else if ($data == 16)   $data = gettext('No Flash');
+			else if ($data == 24)   $data = gettext('No Flash');
+			else if ($data == 25)   $data = gettext('Flash, Auto-Mode');
+			else if ($data == 29)   $data = gettext('Flash, Auto-Mode, Return light not detected');
+			else if ($data == 31)   $data = gettext('Flash, Auto-Mode, Return light detected');
+			else if ($data == 32)   $data = gettext('No Flash');
+			else if ($data == 65)   $data = gettext('Red Eye');
+			else if ($data == 69)   $data = gettext('Red Eye, Return light not detected');
+			else if ($data == 71)   $data = gettext('Red Eye, Return light detected');
+			else if ($data == 73)   $data = gettext('Red Eye, Compulsory Flash');
+			else if ($data == 77)   $data = gettext('Red Eye, Compulsory Flash, Return light not detected');
+			else if ($data == 79)   $data = gettext('Red Eye, Compulsory Flash, Return light detected');
+			else if ($data == 89)   $data = gettext('Red Eye, Auto-Mode');
+			else if ($data == 93)   $data = gettext('Red Eye, Auto-Mode, Return light not detected');
+			else if ($data == 95)   $data = gettext('Red Eye, Auto-Mode, Return light detected');
+			else                    $data = gettext('Unknown').': '.$data;
 			
 		} else if ($tag == 'a001') { // ColorSpace
-			if ($data == 1)         $data = 'sRGB';
-			else                    $data = 'Uncalibrated';
+			if ($data == 1)         $data = gettext('sRGB');
+			else                    $data = gettext('Uncalibrated');
 			
 		} else if ($tag == 'a002' || $tag == 'a003') { // ExifImageWidth/Height
-			$data = $data. ' pixels';
+			$data = $data. ' '.gettext('pixels');
 			
 		} else if ($tag == '0103') { // Compression
-			if ($data == 1)      $data = 'No Compression';
-			else if ($data == 6) $data = 'Jpeg Compression';
-			else                 $data = 'Unknown: '.$data;
+			if ($data == 1)      $data = gettext('No Compression');
+			else if ($data == 6) $data = gettext('Jpeg Compression');
+			else                 $data = gettext('Unknown').': '.$data;
 			
 		} else if ($tag == 'a217') { // SensingMethod
-			if ($data == 1)      $data = 'Not defined';
-			if ($data == 2)      $data = 'One Chip Color Area Sensor';
-			if ($data == 3)      $data = 'Two Chip Color Area Sensor';
-			if ($data == 4)      $data = 'Three Chip Color Area Sensor';
-			if ($data == 5)      $data = 'Color Sequential Area Sensor';
-			if ($data == 7)      $data = 'Trilinear Sensor';
-			if ($data == 8)      $data = 'Color Sequential Linear Sensor';
-			else                 $data = 'Unknown: '.$data;
+			if ($data == 1)      $data = gettext('Not defined');
+			if ($data == 2)      $data = gettext('One Chip Color Area Sensor');
+			if ($data == 3)      $data = gettext('Two Chip Color Area Sensor');
+			if ($data == 4)      $data = gettext('Three Chip Color Area Sensor');
+			if ($data == 5)      $data = gettext('Color Sequential Area Sensor');
+			if ($data == 7)      $data = gettext('Trilinear Sensor');
+			if ($data == 8)      $data = gettext('Color Sequential Linear Sensor');
+			else                 $data = gettext('Unknown').': '.$data;
 			
 		} else if ($tag == '0106') { // PhotometricInterpretation
-			if ($data == 1)      $data = 'Monochrome';
-			else if ($data == 2) $data = 'RGB';
-			else if ($data == 6) $data = 'YCbCr';
-			else                 $data = 'Unknown: '.$data;
+			if ($data == 1)      $data = gettext('Monochrome');
+			else if ($data == 2) $data = gettext('RGB');
+			else if ($data == 6) $data = gettext('YCbCr');
+			else                 $data = gettext('Unknown').': '.$data;
 		}
 	
 	} else if ($type == 'UNDEFINED') {
 		
 		if ($tag == '9000' || $tag == 'a000' || $tag == '0002') { // ExifVersion,FlashPixVersion,InteroperabilityVersion
-			$data='version '.$data/100;
+			$data=gettext('version').' '.$data/100;
 		}
 		if ($tag == 'a300') { // FileSource
 			$data = bin2hex($data);
 			$data = str_replace('00','',$data);
-			$data = str_replace('03','Digital Still Camera',$data);
+			$data = str_replace('03',gettext('Digital Still Camera'),$data);
 		}
 		if ($tag == 'a301') { // SceneType
 			$data = bin2hex($data);
 			$data = str_replace('00','',$data);
-			$data = str_replace('01','Directly Photographed',$data);
+			$data = str_replace('01',gettext('Directly Photographed'),$data);
 		}
 		if ($tag == '9101') {  // ComponentsConfiguration
 			$data = bin2hex($data);
@@ -693,7 +693,7 @@ function read_exif_data_raw($path,$verbose) {
 	
 	if (!$in || !$seek) {  // if the path was invalid, this error will catch it
 		$result['Errors'] = 1;
-		$result['Error'][$result['Errors']] = 'The file could not be found.';
+		$result['Error'][$result['Errors']] = gettext('The file could not be found.');
 		return $result;
 	}
 	
@@ -854,7 +854,7 @@ function read_exif_data_raw($path,$verbose) {
 	$v = fseek($in,$globalOffset+$ExitOffset);
 	if ($v == -1) {
 		$result['Errors'] = $result['Errors']+1;
-		$result['Error'][$result['Errors']] = 'Couldnt Find SubIFD';
+		$result['Error'][$result['Errors']] = gettext('Couldnt Find SubIFD');
 	}
 	
 	//===========================================================
@@ -870,7 +870,7 @@ function read_exif_data_raw($path,$verbose) {
 		}
 	} else {
 		$result['Errors'] = $result['Errors']+1;
-		$result['Error'][$result['Errors']] = 'Illegal size for SubIFD';
+		$result['Error'][$result['Errors']] = gettext('Illegal size for SubIFD');
 	}
 	
 	// Add the 35mm equivalent focal length:
@@ -886,7 +886,7 @@ function read_exif_data_raw($path,$verbose) {
 	$v = fseek($in,$globalOffset+$result['IFD1Offset']);
 	if ($v == -1) {
 		$result['Errors'] = $result['Errors']+1;
-		$result['Error'][$result['Errors']] = 'Couldnt Find IFD1';
+		$result['Error'][$result['Errors']] = gettext('Couldnt Find IFD1');
 	}
 	
 	//===========================================================
@@ -902,7 +902,7 @@ function read_exif_data_raw($path,$verbose) {
 		}
 	} else {
 		$result['Errors'] = $result['Errors']+1;
-		$result['Error'][$result['Errors']] = 'Illegal size for IFD1';
+		$result['Error'][$result['Errors']] = gettext('Illegal size for IFD1');
 	}
 	// If verbose output is on, include the thumbnail raw data...
 	if ($result['VerboseOutput'] == 1 && $result['IFD1']['JpegIFOffset']>0 && $result['IFD1']['JpegIFByteCount']>0) {
@@ -926,7 +926,7 @@ function read_exif_data_raw($path,$verbose) {
 	$v = fseek($in,$globalOffset+$result['SubIFD']['ExifInteroperabilityOffset']);
 	if ($v == -1) {
 		$result['Errors'] = $result['Errors']+1;
-		$result['Error'][$result['Errors']] = 'Couldnt Find InteroperabilityIFD';
+		$result['Error'][$result['Errors']] = gettext('Couldnt Find InteroperabilityIFD');
 	}
 	
 	//===========================================================
@@ -942,7 +942,7 @@ function read_exif_data_raw($path,$verbose) {
 		}
 	} else {
 		$result['Errors'] = $result['Errors']+1;
-		$result['Error'][$result['Errors']] = 'Illegal size for InteroperabilityIFD';
+		$result['Error'][$result['Errors']] = gettext('Illegal size for InteroperabilityIFD');
 	}
 	fclose($in);
 	fclose($seek);

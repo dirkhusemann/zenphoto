@@ -174,7 +174,7 @@ if (ini_get('safe_mode')) { ?>
 	<?php
 	if (isMyAlbum('/', UPLOAD_RIGHTS)) {
 		?>
-	<option value="" selected="1" style="font-weight: bold;">/</option>
+	<option value="" selected="SELECTED" style="font-weight: bold;">/</option>
 	<?php
 }
 $bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');
@@ -215,7 +215,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 <div id="foldererror"
 	style="display: none; color: #D66; position: absolute; z-index: 100; top: 2.5em; left: 0px;"></div>
 <input id="folderdisplay" size="18" type="text" name="folderdisplay"
-	disabled="1" onKeyUp="validateFolder(this,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');" /> <label><input
+	disabled="DISABLED" onKeyUp="validateFolder(this,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');" /> <label><input
 	type="checkbox" name="autogenfolder" id="autogen" checked="checked"
 	onClick="toggleAutogen('folderdisplay', 'albumtitle', this);" />
 <?php echo gettext("Auto-generate"); ?></label> <br />
