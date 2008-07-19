@@ -791,7 +791,7 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<tr><td align=\"right\" value=\"top\">".gettext("Album guest user:").'</td>';
 	echo "\n<td><input type='text' size='40' name='".$prefix."albumuser' value='".$album->getUser()."' /></td></tr>";
 	echo "\n<tr>";
-	echo "\n<td align=\"right\">".gettext("Album password:")." <br/>repeat: </td>";
+	echo "\n<td align=\"right\">".gettext("Album password:")." <br/>".gettext("repeat:")." </td>";
 	echo "\n<td>";
 	$x = $album->getPassword();
 

@@ -1206,7 +1206,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 	?>
 <?php
 	if ($c == 0) {
-		echo gettext("There are no plugin options to adminisiter.");
+		echo gettext("There are no plugin options to administer.");
 	} else {
 	?>
 		<p style="float:right"><?php echo gettext("Click the plugin bar to open/close the options.") ?></p>
