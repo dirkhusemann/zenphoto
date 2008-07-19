@@ -5,18 +5,13 @@
  * language option for its language.
  * 
  * Only the zenphoto and theme gettext() string are localized by this facility. 
- * if you want to support image descriptions, etc. in multiple languages you will
- * have to add code to your theme to do so. We suggest you create a set of custom 
- * functions to handle database strings. You will also need a scheme for storing
- * multiple versions of your text.
  * 
- * In your custom function use a switch statement to see which language is selected
- * and output the appropriate translation.
- * switch (getOption('locale')) {
- *   case 'de_DE': <German string>; break;
- *   case 'fr_FR': <French string>; break;
- *   etc.
- * }
+ * If you want to support image descriptions, etc. in multiple languages you will
+ * have to enable the multi-lingual option found next to the language selector on
+ * the admin gallery configuration page. Then you will have to provide appropriate 
+ * alternate translations for the fields you use. While there will be a place for 
+ * strings for all zenphoto supported languages you need supply only those you choose. 
+ * The others language strings will default to your local language. 
  *
  * Uses cookies to store the individual selection. Sets the 'locale' option
  * to the selected language (non-persistent.)
