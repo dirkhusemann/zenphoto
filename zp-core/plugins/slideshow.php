@@ -229,9 +229,14 @@ function printSlideShow($heading = true) {
 			// falling back to old C-style for() looping, hope it doesn't bite me later!
 						
 			for ($cntr = 0, $idx = $imagenumber; $cntr < $numberofimages; $cntr++, $idx++) {
-				$filename = $images[$idx];
-				$image = new Image($album, $filename);
-				$img = WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . $album->name . '&i=' . fixPixPath($filename) . '&s=' . $imagesize;
+				if ($dynamic) {
+					$filename = $images[$idx]['filename'];
+					$image = new Image(new Album($gallery, $images[$idx]['folder']), $filename);
+				} else {
+					$filename = $images[$idx];
+					$image = new Image($album, $filename);
+				}
+				$img = WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . $image->album->name . '&i=' . fixPixPath($filename) . '&s=' . $imagesize;
 				echo 'ImageList[' . $cntr . '] = "' . $img . '";'. chr(13);
 				echo 'TitleList[' . $cntr . '] = "' . $image->getTitle() . '";'. chr(13);
 				// I'm replicating this test from the main php loop below, since it seems excessive to declare
@@ -338,23 +343,14 @@ function printSlideShow($heading = true) {
 			}
 // 7/16/08dp Glad I noticed! I forgot to add this test: otherwise get counter like (17 of 16)!
 			if ($idx >= $numberofimages) { $idx = 0; }
-			
-// 7/16/08dp I am unclear why the if ($dynamic) {} else {} block is needed here?: i assume it may be
-// part of a change in a later version than 1.0.2.3 from which my initial hack was performed?
-// NOW I WORRY :( - if a test IS NEEDED HERE for $dynamic, then the javascript code above (around line 230 where the image array[]
-// is created), may need to be modified as well (to mimic what is being done here related to $animage).  I wont do anything
-// yet, until I fully understand what's going on. 
 			if ($dynamic) {
-				$folder = $animage['folder'];
+				$folder = $images[$idx]['folder'];
 				$dalbum = new Album($gallery, $folder);
-				$filename = $animage['filename'];
+				$filename = $images[$idx]['filename'];
 				$image = new Image($dalbum, $filename);
 				$imagepath = FULLWEBPATH.getAlbumFolder('').$folder."/".$filename;
 			} else { 
 				$folder = $album->name;
-// 7/16/08dp  The value of $animage is not correct (don't even know what it actually is?! - must be in a newer release of code than my orig.)
-// We need to use the image that is actually assigned to the Nth member of the $images[] array represented by $idx - 
-// in this case, it's always ONLY $imagenumber or $imagenumber + 1 (remember we are not necessarily starting with the 1st image)
 				$filename = fixPixPath($images[$idx]); 		// again, minor mystery why & and ' are thowing <img> attributes off (haywire)? 
 				//$filename = $animage;
 				$image = new Image($album, $filename);
