@@ -14,10 +14,8 @@
  * folder. If you are creating a custom theme, copy these files form the "default" theme of the Zenphoto 
  * distribution.
  * 
- * NOTE: Slideshow 1.0.3 adds experimental progressive preloading provided by Don Peterson for the jQuery mode that does not work 100% correctly yet. 
- * 
  * @author Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)
- * @version 1.0.4
+ * @version 1.0.4.1
  * @package plugins 
  */
 
@@ -36,8 +34,8 @@ utilizing the addslide option, so I suppose experimentation is the best option t
 */
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
-$plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson";
-$plugin_version = '1.0.4';
+$plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)";
+$plugin_version = '1.0.4.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
 
@@ -326,11 +324,11 @@ function printSlideShow($heading = true) {
 <div id="slideshow" align="center">
 	<div id="controls">
 			<div>
-				<span><a href="#" id="prev" title="Previous"></a></span>
-				<a href="<?php echo $returnpath; ?>" id="stop" title="Stop and return to album or image page"></a>
-  			<a href="#" id="pause" title="Pause (to stop the slideshow without returning)"></a>
-				<a href="#" id="play" title="Play"></a>
-				<a href="#" id="next" title="Next"></a>
+				<span><a href="#" id="prev" title="<?php echo gettext("Previous"); ?>"></a></span>
+				<a href="<?php echo $returnpath; ?>" id="stop" title="<?php echo gettext("Stop and return to album or image page"); ?>"></a>
+  			<a href="#" id="pause" title="<?php echo gettext("Pause (to stop the slideshow without returning)"); ?>"></a>
+				<a href="#" id="play" title="<?php echo gettext("Play"); ?>"></a>
+				<a href="#" id="next" title="<?php echo gettext("Next"); ?>"></a>
 			</div>
 		</div>
 <div id="slides" class="pics">
@@ -373,7 +371,7 @@ function printSlideShow($heading = true) {
 			if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
 				//Player Embed...
 				if (is_null($_zp_flash_player)) {
-					echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='No flash player installed.' />";
+					echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='".gettext("No flash player installed.")."' />";
 				} else {
 					$_zp_flash_player->playerConfig($imagepath,$image->getTitle(),$count);
 				}
@@ -464,7 +462,7 @@ $("#slideshow").flashembed({
 	
 <?php
 	echo "</span>";
-		echo "<p>Click on <img style='position: relative; top: 4px; border: 1px solid gray' src='".WEBPATH . "/" . ZENFOLDER."/plugins/slideshow/flowplayerfullsizeicon.png' /> on the right in the player control bar to view full size</p>";
+		echo "<p>".gettext("Click on")." <img style='position: relative; top: 4px; border: 1px solid gray' src='".WEBPATH . "/" . ZENFOLDER."/plugins/slideshow/flowplayerfullsizeicon.png' /> ".gettext("on the right in the player control bar to view full size")."</p>";
 	
 	break;
 }
