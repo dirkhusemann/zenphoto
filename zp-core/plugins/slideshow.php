@@ -17,7 +17,7 @@
  * NOTE: Slideshow 1.0.3 adds experimental progressive preloading provided by Don Peterson for the jQuery mode that does not work 100% correctly yet. 
  * 
  * @author Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)
- * @version 1.0.3
+ * @version 1.0.4
  * @package plugins 
  */
 
@@ -37,7 +37,7 @@ utilizing the addslide option, so I suppose experimentation is the best option t
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson";
-$plugin_version = '1.0.3';
+$plugin_version = '1.0.4';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
 
@@ -51,6 +51,12 @@ is breaking up the original <img src="Don's & John's big adventure.jpg"> into so
 lines of <img Don="", John="", src="big", blablabla="jpg"> .  Got me on that one- I suspect cycle
 is the culprit?  This fixPixPath seems to make things all better. 
 */
+/**
+ * Removes apostrophies and ampersands from a path
+ *
+ * @param string $s
+ * @return string
+ */
 function fixPixPath($s) {
 	return str_replace("&","%26",str_replace("'","%27",$s));
 }
