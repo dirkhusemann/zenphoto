@@ -19,7 +19,12 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 			<div id="wrapnav">
 				<div id="navbar">
 					<span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> | 
-					<?php printParentBreadcrumb(); printAlbumBreadcrumb("", " | "); ?> 
+					<?php
+					if (!is_null($_zp_current_album)) {
+						printParentBreadcrumb(); 
+						printAlbumBreadcrumb("", " | "); 
+					}
+					?> 
 					</span> 
 					Slideshow
 				</div>

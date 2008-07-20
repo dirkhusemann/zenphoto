@@ -73,6 +73,11 @@ $firstPageImages = normalizeColumns(1, 7);
 
 	<br clear="all" />
 	<?php
+			if (function_exists('printSlideShowLink')) {
+				echo "<p align=\"center\">";
+				printSlideShowLink(gettext('View Slideshow')); 		
+				echo "</p>";
+			}
 			if ($c == 0) { 
 				echo "<p>".gettext("Sorry, no image matches. Try refining your search.")."</p>"; 
 			}

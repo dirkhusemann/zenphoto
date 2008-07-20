@@ -114,7 +114,10 @@
 					echo '<em class="count">';
 					echo gettext('Photos') .' ' . $firstImage.'-'.$lastImage.' '.gettext('of').' '.getNumImages();  
 					echo "</em>";
-		?>
+				if (function_exists('printSlideShowLink')) {
+					printSlideShowLink(gettext('View Slideshow')); 		
+				}
+					?>
 				<?php if (hasPrevPage()) { ?>
 				<a href="<?php echo htmlspecialchars(getPrevPageURL()); ?>" accesskey="x">&laquo; <?php echo gettext('prev page'); ?></a>
 				<?php } 

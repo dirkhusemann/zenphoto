@@ -173,7 +173,14 @@ $backgroundImagePath="";
  					</div>
  					</div>
 		 	<div class="clearage"></div>
- 					<?php printNofM(gettext('Photo'), gettext('Photos'), $firstImage, $lastImage, getNumImages()); ?>
+ 					<?php 
+					if (function_exists('printSlideShowLink')) {
+						echo "<p align=\"center\">";
+						printSlideShowLink(gettext('View Slideshow')); 		
+						echo "</p>";
+					}
+ 					printNofM(gettext('Photo'), gettext('Photos'), $firstImage, $lastImage, getNumImages()); 
+ 					?>
  					</div>
 	 		<?php   
 	 		} else {  /* flash */

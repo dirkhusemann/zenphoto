@@ -15,7 +15,7 @@
  * distribution.
  * 
  * @author Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)
- * @version 1.0.4.1
+ * @version 1.0.5
  * @package plugins 
  */
 
@@ -35,7 +35,7 @@ utilizing the addslide option, so I suppose experimentation is the best option t
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)";
-$plugin_version = '1.0.4.1';
+$plugin_version = '1.0.5';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
 
@@ -124,31 +124,41 @@ class slideshowOptions {
  * @param string $linktext Text for the link
  */
 function printSlideShowLink($linktext='') {
- 	global $_zp_current_image,$_zp_current_album;
-	if(in_context(ZP_IMAGE)) {
-		$imagenumber = imageNumber();
-		$imagefile = $_zp_current_image->filename;
-	} else {
-		$imagenumber = "";
-		$imagefile = "";	
-	}
-	if(empty($_GET['page'])) { 
-		$pagenr = 1; 
+	global $_zp_current_image, $_zp_current_album, $_zp_current_search;
+	if(empty($_GET['page'])) {
+		$pagenr = 1;
 	} else {
 		$pagenr = $_GET['page'];
 	}
+	if (in_context(ZP_SEARCH)) {
+		$imagenumber = '';
+		$imagefile = '';
+		$albumnr = 0;
+		$slideshowlink = rewrite_path("/page/slideshow","index.php?p=slideshow");
+	} else {
+		if(in_context(ZP_IMAGE)) {
+			$imagenumber = imageNumber();
+			$imagefile = $_zp_current_image->filename;
+		} else {
+			$imagenumber = "";
+			$imagefile = "";
+		}
+		$albumnr = getAlbumID();
+		$slideshowlink = rewrite_path($_zp_current_album->getFolder()."/page/slideshow","index.php?p=slideshow&amp;album=".$_zp_current_album->getFolder());
+	}
 	$numberofimages = getNumImages();
-	$slideshowlink = rewrite_path($_zp_current_album->getFolder()."/page/slideshow","index.php?p=slideshow&album=".$_zp_current_album->getFolder());
-if($numberofimages != 0) {
-?>	
-	<form name="slideshow" method="post" action="<?php echo htmlspecialchars($slideshowlink); ?>">
-		<input type="hidden" name="pagenr" value="<?php echo $pagenr;?>" />
-		<input type="hidden" name="albumid" value="<?php echo getAlbumID();?>" />
-		<input type="hidden" name="numberofimages" value="<?php echo $numberofimages;?>" />
-		<input type="hidden" name="imagenumber" value="<?php echo $imagenumber;?>" />
-		<input type="hidden" name="imagefile" value="<?php echo $imagefile;?>" />
-		<a id="slideshowlink" href="javascript:document.slideshow.submit()"><?php echo $linktext; ?></a>
-	</form>
+	if($numberofimages != 0) {
+		?>
+<form name="slideshow" method="post"
+	action="<?php echo htmlspecialchars($slideshowlink); ?>"><input
+	type="hidden" name="pagenr" value="<?php echo $pagenr;?>" /> <input
+	type="hidden" name="albumid" value="<?php echo $albumnr;?>" /> <input
+	type="hidden" name="numberofimages"
+	value="<?php echo $numberofimages;?>" /> <input type="hidden"
+	name="imagenumber" value="<?php echo $imagenumber;?>" /> <input
+	type="hidden" name="imagefile" value="<?php echo $imagefile;?>" /> <a
+	id="slideshowlink" href="javascript:document.slideshow.submit()"><?php echo $linktext; ?></a>
+</form>
 <?php }
 }
 
@@ -184,19 +194,35 @@ function printSlideShow($heading = true) {
 	$option = getOption("slideshow_mode");
 	// jQuery Cycle slideshow config
 	// get slideshow data
-	$albumq = query_single_row("SELECT title, folder FROM ". prefix('albums') ." WHERE id = ".$albumid);
-	if(!checkAlbumPassword($albumq['folder'], $hint)) {
-		echo gettext("This album is password protected!"); exit;
-	}		
+	
 	$gallery = new Gallery();
-	$album = new Album($gallery, $albumq['folder']);
-	$dynamic = $album->isDynamic();
-	$images = $album->getImages(0);
-	// return path to get back to the page we called the slideshow from
-	if (empty($_POST['imagenumber'])) {
-		$returnpath = rewrite_path('/'.$album->name.'/page/'.$_POST['pagenr'],'/index.php?album='.$album->name.'&page='.$_POST['pagenr']);
+	if ($albumid == 0) { // search page
+		$dynamic = 2;
+		$search = new SearchEngine();
+		$params = trim(zp_getCookie('zenphoto_image_search_params'));
+		$search->setSearchParams($params);
+		$images = $search->getImages(0);
+		$searchwords = $search->words;
+		$searchdate = $search->dates;
+		$searchfields = $search->fields;
+		$page = $search->page;
+		$returnpath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
+		$albumtitle = 'Search';
 	} else {
-		$returnpath = rewrite_path('/'.$album->name.'/'.$_POST['imagefile'].getOption('mod_rewrite_image_suffix'),'/index.php?album='.$album->name.'&image='.$_POST['imagefile']);
+		$albumq = query_single_row("SELECT title, folder FROM ". prefix('albums') ." WHERE id = ".$albumid);
+		$album = new Album($gallery, $albumq['folder']);
+		$albumtitle = $album->getTitle();
+		if(!checkAlbumPassword($albumq['folder'], $hint)) {
+			echo gettext("This album is password protected!"); exit;
+		}
+		$dynamic = $album->isDynamic();
+		$images = $album->getImages(0);
+		// return path to get back to the page we called the slideshow from
+		if (empty($_POST['imagenumber'])) {
+			$returnpath = rewrite_path('/'.$album->name.'/page/'.$_POST['pagenr'],'/index.php?album='.$album->name.'&page='.$_POST['pagenr']);
+		} else {
+			$returnpath = rewrite_path('/'.$album->name.'/'.$_POST['imagefile'].getOption('mod_rewrite_image_suffix'),'/index.php?album='.$album->name.'&image='.$_POST['imagefile']);
+		}
 	}
 	// slideshow display section
 	switch($option) {
@@ -219,7 +245,7 @@ function printSlideShow($heading = true) {
 		// making ThisGallery a global - no sense (i dont think) in calling $album->getTitle() multiple times, since I assume
 		// only 1 gallery is being shown at one time.
 		
-              var ThisGallery = '<?php echo $album->getTitle(); ?>';
+              var ThisGallery = '<?php echo $albumtitle; ?>';
               var ImageList = new Array();
               var TitleList = new Array();
               var DescList = new Array();
@@ -366,7 +392,7 @@ function printSlideShow($heading = true) {
 // the caller may have started the show at a specific image order location e.g. the 5th image in the album.
 // If $count is used, it will be the wrong sequence number potentially.
 		//	echo "<span class='slideimage'><h4><strong>".$album->getTitle().":</strong> ".$image->getTitle()." (".$count."/".$numberofimages.")</h4>";
-			echo "<span class='slideimage'><h4><strong>".$album->getTitle().":</strong> ".$image->getTitle()." (". ($idx + 1) ."/".$numberofimages.")</h4>";
+			echo "<span class='slideimage'><h4><strong>".$albumtitle.":</strong> ".$image->getTitle()." (". ($idx + 1) ."/".$numberofimages.")</h4>";
 		
 			if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
 				//Player Embed...
@@ -408,7 +434,7 @@ function printSlideShow($heading = true) {
 
 case "flash":
 	if ($heading) {
-		echo "<span class='slideimage'><h4><strong>".$album->name."</strong> (".$numberofimages." images) | <a style='color: white' href='".$returnpath."' title='".gettext("back")."'>".gettext("back")."</a></h4>";
+		echo "<span class='slideimage'><h4><strong>".htmlspecialchars($albumtitle)."</strong> (".$numberofimages." images) | <a style='color: white' href='".$returnpath."' title='".gettext("back")."'>".gettext("back")."</a></h4>";
 	}
 	echo "<span id='slideshow'></span>";
 	?>	
