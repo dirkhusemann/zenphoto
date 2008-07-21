@@ -2390,7 +2390,7 @@ function printEditCommentLink($text, $before='', $after='', $title=NULL, $class=
 function printCommentErrors($class = 'error') {
 	global $_zp_comment_error;
 	if (isset($_zp_comment_error)) {
-		echo "<div class=$class>";
+		echo "<div class=\"$class\">";
 		switch ($_zp_comment_error) {
 			case -1: echo gettext("You must supply an e-mail address."); break;
 			case -2: echo gettext("You must enter your name."); break;
