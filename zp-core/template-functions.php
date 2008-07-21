@@ -45,7 +45,7 @@ function printVersion() {
 function printAdminLink($text, $before='', $after='', $title=NULL, $class=NULL, $id=NULL) {
 	if (zp_loggedin()) {
 		echo $before;
-		printLink(WEBPATH.'/' . ZENFOLDER . '/admin.php', $text, $title, $class, $id);
+		printLink(WEBPATH.'/' . ZENFOLDER . '/admin.php', $text, strip_tags($title), $class, $id);
 		echo $after;
 		return true;
 	}
@@ -634,22 +634,28 @@ function getParentAlbums($album=null) {
  * @param string $after Text to place after the breadcrumb
  * @param string $title Text to be used as the URL title tag
  */
-function printAlbumBreadcrumb($before='', $after='', $title=NULL) {
+function printAlbumBreadcrumb($before='', $after='', $title=NULL) {	
+	global $_zp_current_search, $_zp_current_gallery, $_zp_current_album;
 	if (is_null($title)) $title = gettext('Album Thumbnails');
-	global $_zp_current_search, $_zp_current_gallery;	
 	echo $before;
 	if (in_context(ZP_SEARCH_LINKED)) {
-		$page = $_zp_current_search->page;
-		$searchwords = $_zp_current_search->words;
-		$searchdate = $_zp_current_search->dates;
-		$searchfields = $_zp_current_search->fields;
-		$searchpagepath = htmlspecialchars(getSearchURL($searchwords, $searchdate, $searchfields, $page));
 		$dynamic_album = $_zp_current_search->dynalbumname;
 		if (empty($dynamic_album)) {
-			echo "<a href=\"" . $searchpagepath . "\">";
-			echo "<em>".gettext("Search")."</em></a>";
+			if (!is_null($_zp_current_album)) {
+				if ($_zp_current_search->getAlbumIndex($_zp_current_album->name) !== false) {
+					echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL()). "\" title=\"$title\">" . htmlspecialchars(strip_tags(getAlbumTitle()),ENT_QUOTES) . "</a>";
+				} else {
+					$after = '';
+				}
+			} else {
+				$after = '';
+			}
 		} else {
-			$album = new Album($_zp_current_gallery, $dynamic_album);
+			if (in_context(ZP_IMAGE) && in_context(ZP_ALBUM_LINKED)) {
+				$album = $_zp_current_album;		
+			} else {
+				$album = new Album($_zp_current_gallery, $dynamic_album);	
+			}
 			echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL($album)) . "\">";
 			echo strip_tags($album->getTitle());
 			echo '</a>';
@@ -668,7 +674,7 @@ function printAlbumBreadcrumb($before='', $after='', $title=NULL) {
  * @param string $after Insert here the text to be printed after the links
  */
 function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
-	global $_zp_current_search;
+	global $_zp_current_search, $_zp_current_album;
 	echo $before;
 	if (in_context(ZP_SEARCH_LINKED)) {
 		$page = $_zp_current_search->page;
@@ -685,10 +691,13 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
 		} else {
 			$album = new Album($_zp_current_gallery, $dynamic_album);
 			$parents = getParentAlbums($album);
-			$parents[] = $album;
+			if (in_context(ZP_ALBUM_LINKED)) {
+				array_push($parents, $album);
+			}
 		}
 	} else {
 		$parents = getParentAlbums();
+		
 	}
 	$n = count($parents);
 	if ($n > 0) {
@@ -889,8 +898,9 @@ function getAlbumLinkURL($album=NULL) {
 			$numalbums = count($album->getSubalbums());
 		}
 		$imagepage = floor(($imageindex - $firstPageImages) / max(1, getOption('images_per_page'))) + 1;
+		if ($firstPageImages > 0) $imagepage++;
 		$albumpages = ceil($numalbums / max(1, getOption('albums_per_page')));
-		$page = $albumpages + $imagepage;
+		$page = $albumpages + $imagepage;		
 	}
 	if (in_context(ZP_IMAGE) && $page > 1) {
 		// Link to the page the current image belongs to.

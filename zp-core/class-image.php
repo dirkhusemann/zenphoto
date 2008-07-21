@@ -721,21 +721,21 @@ class Image extends PersistentObject {
 	 * @return int
 	 */
 	function getIndex() {
-		global $_zp_current_search;
+		global $_zp_current_search, $_zp_current_album;
 		if ($this->index == NULL) {
 			$album = $this->getAlbum();
-			if (!is_null($_zp_current_search) || $album->isDynamic()) {
+			if (!is_null($_zp_current_search) && !in_context(ZP_ALBUM_LINKED) || $album->isDynamic()) {
 				if ($album->isDynamic()) {
 					$images = $album->getImages();
-				} else {
-					$images =  $_zp_current_search->getImages(0);
-				}
-				for ($i=0; $i < count($images); $i++) {
-					$image = $images[$i];
-					if ($this->filename == $image['filename']) {
-						$this->index = $i;
-						break;
+					for ($i=0; $i < count($images); $i++) {
+						$image = $images[$i];
+						if ($this->filename == $image['filename']) {
+							$this->index = $i;
+							break;
+						}
 					}
+				} else {
+					$this->index = $_zp_current_search->getImageIndex($this->album->name, $this->filename);
 				}
 			} else {
 				$images =  $this->album->getImages(0);
@@ -759,7 +759,7 @@ class Image extends PersistentObject {
 	function getNextImage() {
 		global $_zp_current_search;
 		$index = $this->getIndex();
-		if (!is_null($_zp_current_search)) {
+		if (!is_null($_zp_current_search) && !in_context(ZP_ALBUM_LINKED)) {
 			$image = $_zp_current_search->getImage($index+1);
 		} else {
 			$image = $this->album->getImage($index+1);
@@ -775,7 +775,7 @@ class Image extends PersistentObject {
 	function getPrevImage() {
 		global $_zp_current_search;
 		$index = $this->getIndex();
-		if (!is_null($_zp_current_search)) {
+		if (!is_null($_zp_current_search) && !in_context(ZP_ALBUM_LINKED)) {
 			$image = $_zp_current_search->getImage($index-1);
 		} else {
 			$image = $this->album->getImage($index-1);

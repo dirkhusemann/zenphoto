@@ -743,7 +743,7 @@ if (file_exists("zp-config.php")) {
 		
 		if (!($tables[$_zp_conf_vars['mysql_prefix'].'administrators'] == 'create')) {
 			if (!($_zp_loggedin & ADMIN_RIGHTS) && (!isset($_GET['create']) && !isset($_GET['update']))) {  // Display the login form and exit.
-				if ($_zp_loggedin) { echo "<br/><br/>".gettext("You need <em>USER ADMIN</em> rights to run setup."); }
+				if ($_zp_loggedin) { echo "<br /><br/>".gettext("You need <em>USER ADMIN</em> rights to run setup."); }
 				printLoginForm("/" . ZENFOLDER . "/setup.php?checked$mod", false);
 				echo "\n</div>";
 				printAdminFooter();

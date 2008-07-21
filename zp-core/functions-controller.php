@@ -21,6 +21,7 @@ define("ZP_IMAGE",   4);
 define("ZP_COMMENT", 8);
 define("ZP_SEARCH", 16);
 define("ZP_SEARCH_LINKED", 32);
+define("ZP_ALBUM_LINKED", 64);
 
 function get_context() {
 	global $_zp_current_context;

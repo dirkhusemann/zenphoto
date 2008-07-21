@@ -81,7 +81,7 @@ if (file_exists(SERVERPATH . "/" . $obj)) {
 	echo "\n</body>\n</html>";
 }
 $a = basename($obj);
-if ($a[count($a)-1] != 'full-image.php') {
-	echo "\n<!-- zenphoto version " . ZENPHOTO_VERSION . " [" . ZENPHOTO_RELEASE . "] Theme: " . $theme . " (" . $a[count($a)-1] . ") -->";
+if ($a != 'full-image.php') {
+	echo "\n<!-- zenphoto version " . ZENPHOTO_VERSION . " [" . ZENPHOTO_RELEASE . "] Theme: " . $theme . " (" . $a . ") -->";
 }
 ?>

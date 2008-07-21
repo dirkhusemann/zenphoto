@@ -780,6 +780,9 @@ class SearchEngine
 	 * @return int
 	 */
 	function getImageIndex($album, $filename) {
+		if (is_null($this->images)) {
+			$this->images = $this->getSearchImages();
+		}
 		$images = $this->getImages();
 		$c = 0;
 		foreach($images as $image) {
@@ -798,11 +801,12 @@ class SearchEngine
 	 */
 	function getImage($index) {
 		global $_zp_gallery;
+		if (!is_null($this->images)) {
+			$this->getImages();
+		}
 		if ($index >= 0 && $index < $this->getNumImages()) {
-			if (!is_null($this->images)) {
-				$img = $this->images[$index];
-				return new Image(new Album($_zp_gallery, $img['folder']), $img['filename']);
-			}
+			$img = $this->images[$index];
+			return new Image(new Album($_zp_gallery, $img['folder']), $img['filename']);
 		}
 		return false;
 	}

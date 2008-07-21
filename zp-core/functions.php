@@ -2061,10 +2061,15 @@ function handleSearchParms($album='', $image='') {
 				$_zp_current_search = null;
 				return;
 			}
-		} else {
+		} 
+		if (!empty($album)) {
 			if ($_zp_current_search->getAlbumIndex($album) === false) {
-				$_zp_current_search = null;
-				return;
+				if (empty($image)) {
+					$_zp_current_search = null;
+					return;
+				}
+			} else {
+				$_zp_current_context = $_zp_current_context | ZP_ALBUM_LINKED;
 			}
 		}
 		set_context($_zp_current_context | ZP_SEARCH_LINKED);

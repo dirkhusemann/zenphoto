@@ -23,9 +23,19 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 					if (!is_null($_zp_current_album)) {
 						printParentBreadcrumb(); 
 						printAlbumBreadcrumb("", " | "); 
+					} else {
+						$search = new SearchEngine();
+						$params = trim(zp_getCookie('zenphoto_image_search_params'));
+						$search->setSearchParams($params);
+						$images = $search->getImages(0);
+						$searchwords = $search->words;
+						$searchdate = $search->dates;
+						$searchfields = $search->fields;
+						$page = $search->page;
+						$returnpath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
+						echo '<a href='.$returnpath.'><em>'.gettext('Search').'</em></a> | ';
 					}
-					?> 
-					</span> 
+					?> </span> 
 					Slideshow
 				</div>
 			</div>

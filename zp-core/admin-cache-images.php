@@ -19,7 +19,7 @@ function loadAlbum($album) {
 	}
 	$_zp_current_album = $album;
 	if (getNumImages() > 0) {
-		echo "<br/>" . $album->name . "{";
+		echo "<br />" . $album->name . "{";
 		while (next_image(true)) {
 			echo '<img src="' . getImageThumb() . '" height="8" width="8" /> | <img src="' . getDefaultSizedImage() . '" height="20" width="20" />' . "\n";
 			$count++;
