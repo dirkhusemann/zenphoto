@@ -2044,35 +2044,38 @@ function getAllSubAlbumIDs($albumfolder='') {
  * @param string $image Name of the image
  */
 function handleSearchParms($album='', $image='') {
-	global $_zp_current_search, $_zp_current_context;
+	global $_zp_current_search;
 	$cookiepath = WEBPATH;
 	if (WEBPATH == '') { $cookiepath = '/'; }
 	if (empty($album)) { // clear the cookie
 		zp_setcookie("zenphoto_image_search_params", "", time()-368000, $cookiepath);
 		return;
 	}
+	$context = get_context();
 	$params = zp_getCookie('zenphoto_image_search_params');
 	if (!empty($params)) {
 		$_zp_current_search = new SearchEngine();
 		$_zp_current_search->setSearchParams($params);
 		// check to see if we are still "in the search context"
 		if (!empty($image)) {
-			if ($_zp_current_search->getImageIndex($album, $image) === false) {
-				$_zp_current_search = null;
-				return;
-			}
-		} 
-		if (!empty($album)) {
-			if ($_zp_current_search->getAlbumIndex($album) === false) {
-				if (empty($image)) {
-					$_zp_current_search = null;
-					return;
-				}
-			} else {
-				$_zp_current_context = $_zp_current_context | ZP_ALBUM_LINKED;
+			if ($_zp_current_search->getImageIndex($album, $image) !== false) {
+				$context = $context | ZP_SEARCH_LINKED;
 			}
 		}
-		set_context($_zp_current_context | ZP_SEARCH_LINKED);
+		if (!empty($album)) {
+			$albumlist = $_zp_current_search->getAlbums(0);
+			foreach ($albumlist as $searchalbum) {
+				if (strpos($album, $searchalbum) !== false) {
+					$context = $context | ZP_ALBUM_LINKED | ZP_SEARCH_LINKED;
+					break;
+				}
+			}
+		}
+		if (($context & ZP_SEARCH_LINKED)) {
+			set_context($context);
+		} else {
+			$_zp_current_search = null;
+		}
 	}
 }
 

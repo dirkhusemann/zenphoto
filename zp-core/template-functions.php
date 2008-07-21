@@ -613,7 +613,7 @@ function getParentAlbums($album=null) {
 	global $_zp_current_album, $_zp_current_search, $_zp_gallery;
 	$parents = array();
 	if (is_null($album)) {
-		if (in_context(ZP_SEARCH_LINKED)) {
+		if (in_context(ZP_SEARCH_LINKED) && !in_context(ZP_ALBUM_LINKED)) {
 			$name = $_zp_current_search->dynalbumname;
 			if (empty($name)) return $parents;
 			$album = new Album($_zp_gallery, $name);
@@ -642,7 +642,7 @@ function printAlbumBreadcrumb($before='', $after='', $title=NULL) {
 		$dynamic_album = $_zp_current_search->dynalbumname;
 		if (empty($dynamic_album)) {
 			if (!is_null($_zp_current_album)) {
-				if ($_zp_current_search->getAlbumIndex($_zp_current_album->name) !== false) {
+				if (in_context(ZP_ALBUM_LINKED) && $_zp_current_search->getAlbumIndex($_zp_current_album->name) === false) {
 					echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL()). "\" title=\"$title\">" . htmlspecialchars(strip_tags(getAlbumTitle()),ENT_QUOTES) . "</a>";
 				} else {
 					$after = '';
@@ -683,11 +683,16 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
 		$searchfields = $_zp_current_search->fields;
 		$searchpagepath = htmlspecialchars(getSearchURL($searchwords, $searchdate, $searchfields, $page));
 		$dynamic_album = $_zp_current_search->dynalbumname;
-		if (empty($dynamic_album)) {
-			echo "<a href=\"" . $searchpagepath . "\">";
+		if (empty($dynamic_album)) {		
+			echo "<a href=\"" . $searchpagepath . "\" title=\"Return to search\">";
 			echo "<em>".gettext("Search")."</em></a>";
-			echo $after;
-			return;
+			if (is_null($_zp_current_album)) {
+				echo $after;
+				return;
+			} else {
+				$parents = getParentAlbums();	
+				echo $between;
+			}
 		} else {
 			$album = new Album($_zp_current_gallery, $dynamic_album);
 			$parents = getParentAlbums($album);

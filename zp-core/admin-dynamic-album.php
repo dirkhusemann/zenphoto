@@ -7,6 +7,21 @@ define('OFFSET_PATH', 1);
 require_once("template-functions.php");
 require_once("admin-functions.php");
 
+$imagelist = array();
+
+function getSubalbumImages($folder) {
+	global $imagelist;
+	if (hasDyanmicAlbumSuffix($folder)) { return; }
+	$album = new Album($gallery, $folder);
+	$images = $album->getImages();
+	foreach ($images as $image) {
+		$imagelist[] = '/'.$folder.'/'.$image;
+	}
+	$albums = $album->getSubalbums();
+	foreach ($albums as $folder) {
+		getSubalbumImages($folder);
+	}
+}
 
 if (!zp_loggedin()) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
@@ -20,7 +35,11 @@ if (isset($_POST['savealbum'])) {
 	}
 	$album = $_POST['albumselect'];
 	$words = $_POST['words'];
-	$thumb = $_POST['thumb'];
+	if (isset($_POST['thumb'])) {
+		$thumb = $_POST['thumb'];
+	} else {
+		$thumb = '';
+	}
 	setOption('search_fields', 32767, false); // parse the search fields post
 	$fields = $search->fields;
 	$redirect = $album.'/'.$albumname.".alb";
@@ -60,7 +79,6 @@ $search->setSearchParams($params);
 $fields = $search->fields;
 $words = urldecode(trim($search->words));
 $images = $search->getImages(0);
-$imagelist = array();
 foreach ($images as $image) {
 	$folder = $image['folder'];
 	$filename = $image['filename'];
@@ -68,13 +86,7 @@ foreach ($images as $image) {
 }
 $subalbums = $search->getAlbums(0);
 foreach ($subalbums as $folder) {
-	$newalbum = new Album($gallery, $folder);
-	if (!$newalbum->isDynamic()) {
-		$images = $newalbum->getImages(0);
-		foreach ($images as $filename) {
-			$imagelist[] = '/'.$folder.'/'.$filename;
-		}
-	}
+	getSubalbumImages($folder);
 }
 $albumname = sanitize(trim($words));
 $albumname = str_replace('!', ' NOT ', $albumname);
@@ -116,7 +128,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		$salevel++;
 	}
 	echo '<option value="' . $fullfolder . '"' . ($salevel > 0 ? ' style="background-color: '.$bglevels[$salevel].'; border-bottom: 1px dotted #ccc;"' : '')
-	. "$selected>" . $saprefix . $singlefolder . " (" . $albumtitle . ')' . "</option>\n";
+	. ">" . $saprefix . $singlefolder . " (" . $albumtitle . ')' . "</option>\n";
 }
 ?>
 		</select></td>
