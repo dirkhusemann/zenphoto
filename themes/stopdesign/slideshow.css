@@ -171,3 +171,7 @@ body {
 		position: relative;
 		left: 0px;
 	}
+	
+	#speedcontrol {
+		float:right;
+	}

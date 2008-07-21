@@ -42,7 +42,7 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 			<div id="content">
  				<div id="main">
 					<div id="slideshowpage">
-					<?php printSlideShow(false); ?>
+					<?php printSlideShow(false,true); ?>
 					</div>
 				</div>
 			</div>

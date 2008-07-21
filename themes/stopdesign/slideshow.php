@@ -7,7 +7,7 @@
 </head>
 <body>
 	<div id="slideshowpage">
-			<?php printSlideShow(); ?>
+			<?php printSlideShow(true,true); ?>
 	</div>
 
 </body>

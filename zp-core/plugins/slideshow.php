@@ -1,5 +1,4 @@
 <?php
-
 /**
  * slideshow -- Supports showing slideshows of images in an album.
  * 
@@ -15,40 +14,16 @@
  * distribution.
  * 
  * @author Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)
- * @version 1.0.5
+ * @version 1.0.6
  * @package plugins 
  */
 
-/* 7/13/08dp (Don Peterson)  dongayle@centurytel.net
-This is the original slideshow.php in core/plugins, revised to handle use of
-the jquery cycle addslide option to allow the use of progressive image loading.
-This IS NOT A FINISHED PRODUCT, just a prelim prototype, which happens (maybe by luck) to 
-seem to work correctly. Where I have made changes, I preface them with
-the date and my initials. Note: this apparently is an older version of the plugin,
-and I found the jquery cycle plugin was also older, and needed updating to include
-the new addslide option.  As more of a disclaimer, I haven't tested, nor have inclination to
-test any adverse affects these hacks might have on the flash-related components of this code.
-Sorry :) .
-Oh, and, per malsups advice on cycle page, some of the fx can be kind of funky when 
-utilizing the addslide option, so I suppose experimentation is the best option there. 
-*/
-
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)";
-$plugin_version = '1.0.5';
+$plugin_version = '1.0.6';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
 
-/* added by dp 7/13/08
-Lots of the photos in the galleries I have been pursuaded by relatives to create,
-have ampersands and apostrophes in their names (I try to tell my relatives NOT TO USE THEM, and
-I'm too busy to 'cleanse' and rename them, so - it's a lost cause).
-Something (either the php or cycle plugin), gags on them, causing the <img> attributes to
-get messed up, resulting in "image not found", or the like - somehow, somewhere, ?something?
-is breaking up the original <img src="Don's & John's big adventure.jpg"> into something along the
-lines of <img Don="", John="", src="big", blablabla="jpg"> .  Got me on that one- I suspect cycle
-is the culprit?  This fixPixPath seems to make things all better. 
-*/
 /**
  * Removes apostrophies and ampersands from a path
  *
@@ -171,11 +146,10 @@ function printSlideShowLink($linktext='') {
  * Image size is taken from the calling link or if not specified there the sized image size from the options
  * In jQuery mode the slideshow has to be stopped to view a movie. 
  *  
- * NOTE: slideshow 1.0.3 adds experimental progressive preloading that does not work 100% correctly yet.
- *
  * @param bool $heading set to true (default) to emit the slideshow breadcrumbs in flash mode
+ * @param bool $speedctl controls whether an option box for controlling transition speed is displayed
  */
-function printSlideShow($heading = true) {
+function printSlideShow($heading = true, $speedctl = false) {
 	global $_zp_flash_player;
 	if(empty($_POST['imagenumber'])) {
 		$imagenumber = 0; 
@@ -229,35 +203,14 @@ function printSlideShow($heading = true) {
 		case "jQuery":
 ?>
 <script type="text/javascript">
+	$(document).ready(function(){	
 		$(function() {
-
-		// ***************************************************************************
-		// ***************************************************************************
-		// dp 7/13/08
-		// Expose some of the interesting data created via php to javascript, so it can be had by the cycle plugin.
-		// Basically, plug 3 hardwired arrays into the page: 1 for the image paths, 1 for the titles, and 1 for descriptions
-		// If I knew more javascript (or had more time) i suppose 1 multi-dimensional array would be more elegant.
-		// Also as an aside, i wonder if there is any benefit to writing this data into the <head> section rather than the body,
-		// since if it were in <head> then maybe the "document.ready" capabilities of jquery might eliminate some other 'quirks'
-		// that seem to show up somewhat randomly depending on the slideshow image set (like controls not immediately appearing).
-		//  Use of chr(13) just for readability when checking results during prototyping.
-		
-		// making ThisGallery a global - no sense (i dont think) in calling $album->getTitle() multiple times, since I assume
-		// only 1 gallery is being shown at one time.
-		
               var ThisGallery = '<?php echo $albumtitle; ?>';
               var ImageList = new Array();
               var TitleList = new Array();
               var DescList = new Array();
+			var DynTime=(<?php echo getOption("slideshow_timeout"); ?>) * 1.0;	// force numeric
 <?php 
-
-			// a bit of a 'gotcha' here: the caller may have passed a starting slide # other than 1,
-			// so this array  must be built in the relative order that would be seen by the viewer,
-			// >>> AND SO <<< the cycle parameter for startingSlide: php echo $imagenumber should not be present
-			// in this version (see below where cycle() is initialized! 
-			// But this is where my php skill level breaks down, being a mostly non-php, (and mostly non-javascript) coder:
-			// falling back to old C-style for() looping, hope it doesn't bite me later!
-						
 			for ($cntr = 0, $idx = $imagenumber; $cntr < $numberofimages; $cntr++, $idx++) {
 				if ($dynamic) {
 					$filename = $images[$idx]['filename'];
@@ -269,8 +222,6 @@ function printSlideShow($heading = true) {
 				$img = WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . $image->album->name . '&i=' . fixPixPath($filename) . '&s=' . $imagesize;
 				echo 'ImageList[' . $cntr . '] = "' . $img . '";'. chr(13);
 				echo 'TitleList[' . $cntr . '] = "' . $image->getTitle() . '";'. chr(13);
-				// I'm replicating this test from the main php loop below, since it seems excessive to declare
-				// and populate an array that may not get used.
 				if(getOption("slideshow_showdesc")) {
 					echo 'DescList[' . $cntr . '] = "' . $image->getDesc() . '";'. chr(13);
 				}
@@ -279,75 +230,81 @@ function printSlideShow($heading = true) {
 			echo chr(13);
 	
 ?>		
-			
-			// the following is adapted (most comments left intact) from malsup demo 2 of the addslide option.
-			
-            // set totalSlideCount var; 
-            // we'll be adding slides to the slideshow 
-			
-			// dp 4/13/08 need to give javascript the starting image # passed in, so it can show the (X/X) count correctly
-			var countOffset = <?php echo $imagenumber; ?>
+						var countOffset = <?php echo $imagenumber; ?>
 			
             var totalSlideCount = <?php echo $numberofimages; ?>; 
-            var currentslide = 2;		// dp. be sure to have at least 2 'normal' slides set up for the callback to work correctly.
-										// In this case, the '2 slides' will be the slides = $imagenumber & $imagenumber+1 (but this
-										// callback function doesnt 'know' it :) .
+            var currentslide = 2;		
+										
             function onBefore(curr, next, opts) { 
-            	
-                // on the first pass, addSlide is undefined (plugin hasn't yet created the fn); 
-                // when we're finshed adding slides we'll null it out again 
+ 			  if (opts.timeout != DynTime) {
+                	opts.timeout = DynTime;
+                }
                 if (!opts.addSlide) 
                     return; 
-        
-                // on Before arguments: 
-                //  curr == DOM element for the slide that is currently being displayed 
-                //  next == DOM element for the slide that is about to be displayed 
-                //  opts == slideshow options 
-                     
+                                     
                 var currentImageNum = currentslide;
                 currentslide++;
                 if (currentImageNum == totalSlideCount) { 
-                    // final slide in our slide slideshow is about to be displayed 
-                    // so there are no more to fetch 
-                    opts.addSlide = null; 
+                  opts.addSlide = null; 
                 	return; 
             	} 
     
-                // add our next slide 
-				// braindrain: display slide sequence # (x/x) in correct sequence (not the same as array's index).
-				var relativeSlot = (currentslide + countOffset) % totalSlideCount;
-				if (relativeSlot == 0) {relativeSlot = totalSlideCount;}
+			  var relativeSlot = (currentslide + countOffset) % totalSlideCount;
+			  if (relativeSlot == 0) {relativeSlot = totalSlideCount;}
                 var htmlblock = "<span class='slideimage'><h4><strong>" + ThisGallery + ":</strong> ";
-//				htmlblock += TitleList[currentImageNum]  + " (" + currentslide + "/" + totalSlideCount + ")</h4>";
-				htmlblock += TitleList[currentImageNum]  + " (" + relativeSlot + "/" + totalSlideCount + ")</h4>";
+			  htmlblock += TitleList[currentImageNum]  + " (" + relativeSlot + "/" + totalSlideCount + ")</h4>";
                 htmlblock += "<img src='" + ImageList[currentImageNum] + "'/>";
                 htmlblock += "<p class='imgdesc'>" + DescList[currentImageNum] + "</p></span>";        
                 opts.addSlide(htmlblock); 
     	
     	}; 
-		// remove the option for startingSlide:  (also removed delay: not sure why it was needed)	
-		// AND... IE and cycle don't play well regarding text if the FX = fade, so I'm adding the 
-		// cleartype: option since cycle is now dynamically outputting the header and title.
-		// See the cycle page: http://malsup.com/jquery/cycle/cleartype.html?v3.
+		
 		$('#slides').cycle({
 					fx:     '<?php echo getOption("slideshow_effect"); ?>',
 					speed:   <?php echo getOption("slideshow_speed"); ?>,
-					timeout: <?php echo getOption("slideshow_timeout"); ?>,
+					timeout: DynTime,
 					next:   '#next',
 					prev:   '#prev',
-        			cleartype: 1,
+        				cleartype: 1,
 					before: onBefore 
 			});
-	
-		// ***************************************************************************
-		// ***************************************************************************
-		// END OF dp 7/13/08
-						
-			$('#pause').click(function() { $('#slides').cycle('pause'); return false; });
-			$('#play').click(function() { $('#slides').cycle('resume'); return false; });
+
+			$('#speed').change(function () {
+              	DynTime = this.value;
+                	return false;
+         });
+							
+		$('#pause').click(function() { $('#slides').cycle('pause'); return false; });
+		$('#play').click(function() { $('#slides').cycle('resume'); return false; });
 		});
+
+	});	// Documentready()
+
 	</script>
 <div id="slideshow" align="center">
+<?php	
+// 7/21/08dp
+if ($speedctl) {
+      echo '<div id="speedcontrol">'; // just to keep it away from controls for sake of this demo 
+      $minto = getOption("slideshow_speed");
+      while ($minto % 500 != 0) {
+      	$minto += 100;
+      	if ($minto > 10000) { break; }  // emergency bailout!
+      }
+      $dflttimeout = getOption("slideshow_timeout");
+	  /* don't let min timeout = speed */
+	  $thistimeout = ($minto == getOption("slideshow_speed")? $minto + 250 : $minto);
+	  echo 'Select Speed: <select id="speed" name="speed">';
+      while ( $thistimeout <= 60000) {  // "around" 1 minute :)  
+      	echo "<option value=$thistimeout " . ($thistimeout == $dflttimeout?" selected='selected'>" :">") . round($thistimeout/1000,1) . " sec</option>";
+		  /* put back timeout to even increments of .5 */
+		if ($thistimeout % 500 != 0) { $thistimeout -= 250; }
+      	$thistimeout += ($thistimeout < 1000? 500:($thistimeout < 10000? 1000:5000));
+      }
+      echo "</select> </div>";
+}
+?>
+
 	<div id="controls">
 			<div>
 				<span><a href="#" id="prev" title="<?php echo gettext("Previous"); ?>"></a></span>
@@ -360,13 +317,8 @@ function printSlideShow($heading = true) {
 <div id="slides" class="pics">
 
 <?php
-		// 7/13/08dp  note Here I am doing the same klunky replacement of foreach(), and also limit the number of 'normal' slides to 2, and letting
-		// the cycle callback add the remainder  (I left $count alone, since I'm too lazy and tired to see where else it's used other than the image count display.
-		// 1.2 the slides
-		
+
 		for ($cntr = 0, $idx = $imagenumber; $cntr < 2; $cntr++, $idx++) {
-// 7/16/08dp moved to below. $filename = fixPixPath($images[$idx]); 		// again, minor mystery why & and ' are thowing <img> attributes off (haywire)? 
-		
 			$count++;
 			if($count > $numberofimages){
 				$count = 1;
@@ -387,11 +339,6 @@ function printSlideShow($heading = true) {
 				$imagepath = FULLWEBPATH.getAlbumFolder('').$folder."/".$filename;
 			}
 			$ext = strtolower(strrchr($filename, "."));
-// 7/16/08dp  Note that $count CANNOT be used as an index into the count of the series any longer, since
-// the only 2 slides being drawn (by virtue of the forced "$cntr < 2" in the for() loop, may not actually be the 1st and 2nd slides in the album-
-// the caller may have started the show at a specific image order location e.g. the 5th image in the album.
-// If $count is used, it will be the wrong sequence number potentially.
-		//	echo "<span class='slideimage'><h4><strong>".$album->getTitle().":</strong> ".$image->getTitle()." (".$count."/".$numberofimages.")</h4>";
 			echo "<span class='slideimage'><h4><strong>".$albumtitle.":</strong> ".$image->getTitle()." (". ($idx + 1) ."/".$numberofimages.")</h4>";
 		
 			if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
