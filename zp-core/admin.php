@@ -214,10 +214,10 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	}
 
 
-	if (isset($_GET['page'])) { 
-		$page = $_GET['page']; 
+	if (isset($_GET['page'])) {
+		$page = $_GET['page'];
 	} else if (empty($page)) {
-		$page = "home"; 
+		$page = "home";
 	}
 
 	switch ($page) {
@@ -243,7 +243,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			break;
 	}
 
-	
+
 	/* TODO: 	This should not be necessary if all the references really got changed on the restructure.
 						Only the redirect to the options page should be required--for no-rights admin users as
 						they can only view/change their credentials.
@@ -256,19 +256,19 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	}
 	switch ($page) {
 		case 'editcomment':
-		case 'comments': 
+		case 'comments':
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php".$q);
 			exit();
-		case 'upload': 
+		case 'upload':
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-upload.php".$q);
 			exit();
-		case 'themes': 
+		case 'themes':
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-themes.php".$q);
 			exit();
-		case 'plugins': 
+		case 'plugins':
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-plugins.php".$q);
 			exit();
-		case 'options': 
+		case 'options':
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-options.php".$q);
 			exit();
 		default:
@@ -311,17 +311,17 @@ if (!zp_loggedin()) {
 <div id="main">
 <?php printTabs($page); ?>
 <div id="content">
-<?php 
+<?php
 
 /** EDIT ****************************************************************************/
 /************************************************************************************/
 
-if ($page == "edit") {  
+if ($page == "edit") {
 
 /** SINGLE ALBUM ********************************************************************/
-	
+
 define('IMAGES_PER_PAGE', 10);
-	
+
 if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	$folder = strip($_GET['album']);
 	$album = new Album($gallery, $folder);
@@ -339,10 +339,10 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		$pagenum = 1;
 	}
 	$images = array_slice($allimages, ($pagenum-1)*IMAGES_PER_PAGE, IMAGES_PER_PAGE);
-	
+
 	$totalimages = count($images);
 	$albumdir = "";
-	
+
 	$albumdir = dirname($folder);
 	if (($albumdir == '/') || ($albumdir == '.')) {
 		$albumdir = '';
@@ -361,8 +361,8 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 
 <h1><?php echo gettext("Edit Album:");?> <em><?php echo $album->name; ?></em></h1>
 <p><?php printAdminLinks('edit' . $albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
- | <?php if (!$album->isDynamic() && $album->getNumImages() > 1) { 
-   printSortLink($album, gettext("Sort Album"), gettext("Sort Album")); 
+ | <?php if (!$album->isDynamic() && $album->getNumImages() > 1) {
+   printSortLink($album, gettext("Sort Album"), gettext("Sort Album"));
    echo ' | '; }?>
 <?php printViewLink($album, gettext("View Album"), gettext("View Album")); ?>
 </p>
@@ -382,20 +382,20 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 			<div class="messagebox" id="fade-message">
 			<h2><?php echo gettext("Save Successful"); ?></h2>
 			</div>
-		<?php 
-		} 
-		?> 
-	<?php 
-	} 
+		<?php
+		}
+		?>
+	<?php
+	}
 //* TODO: 1.2 enable this
 	echo '<div id="mainmenu">';
 	echo '<ul>';
 	echo '<li><a href="#tab_albuminfo"><span>'.gettext("Album").'</span></a></li>';
 	if (count($subalbums) > 0) {
 		echo '<li><a href="#tab_subalbuminfo"><span>'.gettext("Subalbums").'</span></a></li>';
-	} if ($allimagecount) { 
+	} if ($allimagecount) {
 		echo '<li><a href="#tab_imageinfo"><span>'.gettext("Images").'</span></a></li>';
-	} 	
+	}
 	echo '</ul>';
 	echo '</div>'."\n";
 //*/
@@ -404,15 +404,15 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 <div id="tab_albuminfo">
 <form name="albumedit1"
 	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
-	<input type="hidden" name="album"	value="<?php echo $album->name; ?>" /> 
-	<input type="hidden"	name="savealbuminfo" value="1" /> 
+	<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
+	<input type="hidden"	name="savealbuminfo" value="1" />
 	<?php printAlbumEditForm(0, $album); ?>
 </form>
 <br />
 <?php printAlbumButtons($album) ?> <?php if (!$album->isDynamic())  {?>
 <br />
 </div>
-<!-- Subalbum list goes here --> 
+<!-- Subalbum list goes here -->
 <div id="tab_subalbuminfo">
 <?php
 if (count($subalbums) > 0) {
@@ -436,7 +436,7 @@ if (count($subalbums) > 0) {
 			printAlbumEditRow($subalbum);
 		}
 		?></div>
-	
+
 	</tr>
 	<tr>
 		<td colspan="8">
@@ -455,15 +455,15 @@ if (count($subalbums) > 0) {
 </table>
 <br />
 <?php
-} ?> 
+} ?>
 </div>
-<!-- Images List --> 
+<!-- Images List -->
 <div id="tab_imageinfo">
-<?php 
+<?php
 if ($allimagecount) {
 ?>
 <form name="albumedit2"	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
-	<input type="hidden" name="album"	value="<?php echo $album->name; ?>" /> 
+	<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 	<input type="hidden" name="totalimages" value="<?php echo $totalimages; ?>" />
 	<input type="hidden" name="subpage" value="<?php echo $pagenum; ?>" />
 
@@ -480,7 +480,7 @@ if ($allimagecount) {
 	<tr><td colspan ="3" class="bordered" id="imagenav">
 	<?php adminPageNav($pagenum,$totalpages,'admin.php?page=edit&amp;album='.urlencode($album->name),'#tab_imageinfo'); ?>
 	</td></tr>
-	<?php 
+	<?php
 	}
  ?>
 	<tr>
@@ -512,7 +512,7 @@ if ($allimagecount) {
 				<td align="right" valign="top" width="100"><?php echo gettext("Filename:"); ?></td>
 				<td><?php echo $image->filename; ?></td>
 			<td style="padding-left: 1em;">
-				<a href="javascript: confirmDeleteImage('?page=edit&action=deleteimage&album=<?php echo urlencode($album->name); ?>&image=<?php echo urlencode($image->filename); ?>','<?php echo gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"); ?>');"
+				<a href="javascript: confirmDeleteImage('?page=edit&action=deleteimage&album=<?php echo urlencode(urlencode($album->name)); ?>&image=<?php echo urlencode(urlencode($image->filename)); ?>','<?php echo gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"); ?>');"
 					title="<?php gettext('Delete the image'); ?> <?php echo xmlspecialchars($image->filename); ?>"> <img
 					src="images/fail.png" style="border: 0px;"
 					alt="<?php gettext('Delete the image'); ?> <?php echo xmlspecialchars($image->filename); ?>" /></a>
@@ -535,9 +535,9 @@ if ($allimagecount) {
 			echo "<td>". gettext("Hit counter:"). $hc . " <input type=\"checkbox\" name=\"".gettext("reset_hitcounter")."\"> ".gettext("Reset")."</td>";
 			?>
 				<td rowspan=11 style="padding-left: 1em;">
-				<?php 
+				<?php
 				echo gettext("Tags:");
-				tagSelector($image, 'tags_'.$currentimage.'-') 
+				tagSelector($image, 'tags_'.$currentimage.'-')
 				?>
 				</td>
 			</tr>
@@ -610,7 +610,7 @@ if ($allimagecount) {
 			</tr>
 		</table>
 		</td>
-	
+
 
 	</tr>
 
@@ -622,7 +622,7 @@ if ($allimagecount) {
 	<tr><td colspan ="3" class="bordered" id="imagenav">
 	<?php adminPageNav($pagenum,$totalpages,'admin.php?page=edit&amp;album='.urlencode($album->name),'#tab_imageinfo'); ?>
 	</td></tr>
-	<?php 
+	<?php
 	}
  ?>
 	<tr>
@@ -634,18 +634,18 @@ if ($allimagecount) {
 
 </form>
 
-<?php 
+<?php
 	}
-}?> 
+}?>
 </div>
 <!-- page trailer -->
 <p><a href="?page=edit<?php echo $albumdir ?>"
 	title="<?php echo gettext('Back to the list of albums (go up one level)'); ?>">&laquo; <?php echo gettext("Back"); ?></a></p>
 
 
-<?php 
+<?php
 
-/*** MULTI-ALBUM ***************************************************************************/ 
+/*** MULTI-ALBUM ***************************************************************************/
 
 } else if (isset($_GET['massedit'])) {
 	if (isset($_GET['saved'])) {
@@ -705,14 +705,14 @@ if ($allimagecount) {
 	?></form>
 
 </div>
-<?php 
+<?php
 
-/*** EDIT ALBUM SELECTION *********************************************************************/ 
+/*** EDIT ALBUM SELECTION *********************************************************************/
 
 } else { /* Display a list of albums to edit. */ ?>
 <h1><?php echo gettext("Edit Gallery"); ?></h1>
-<?php 
-	displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */ 
+<?php
+	displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */
 	if (isset($_GET['saved'])) {
 		setOption('gallery_sorttype', 'Manual');
 		setOption('gallery_sortdirection', 0);
@@ -728,12 +728,12 @@ if ($allimagecount) {
 		}
 	}
 	?>
-<p><?php 
+<p><?php
 	if (count($albums) > 0) {
-		if (($_zp_loggedin & ADMIN_RIGHTS) && (count($albums)) > 1) { 
-			echo gettext('Drag the albums into the order you wish them displayed.'); 
+		if (($_zp_loggedin & ADMIN_RIGHTS) && (count($albums)) > 1) {
+			echo gettext('Drag the albums into the order you wish them displayed.');
 		}
-		echo gettext('Select an album to edit its description and data, or'); 
+		echo gettext('Select an album to edit its description and data, or');
 	?><a href="?page=edit&massedit"> <?php echo gettext('mass-edit all album data'); ?></a>.</p>
 
 <table class="bordered" width="100%">
@@ -772,10 +772,10 @@ if ($allimagecount) {
 	} else {
 		echo gettext("There are no albums for you to edit.");
 	}
-}  
+}
 /*** HOME ***************************************************************************/
-/************************************************************************************/ 
-} else { 
+/************************************************************************************/
+} else {
 $page = "home"; ?>
 <h1><?php echo gettext("zenphoto Administration"); ?></h1>
 <?php
@@ -815,11 +815,11 @@ $page = "home"; ?>
 	<li><a href="../"> &raquo; <?php echo gettext("Browse your <strong>gallery</strong> and edit on the go."); ?></a></li>
 </ul>
 <?php
-	if (!empty($msg)) { 
-		echo '<div class="messagebox" id="fade-message">'; 
-		echo  "<h2>$msg</h2>"; 
-		echo '</div>'; 
-	} 
+	if (!empty($msg)) {
+		echo '<div class="messagebox" id="fade-message">';
+		echo  "<h2>$msg</h2>";
+		echo '</div>';
+	}
 ?>
 
 <hr />
@@ -881,7 +881,7 @@ foreach ($comments as $comment) {
 
 <div class="box" id="overview-stats">
 <h2 class="boxtitle"><?php echo gettext("Gallery Maintenance"); ?></h2>
-<p><?php echo gettext("Your database is"); ?>: '<strong><?php echo getOption('mysql_database'); ?>'</strong><br /> 
+<p><?php echo gettext("Your database is"); ?>: '<strong><?php echo getOption('mysql_database'); ?>'</strong><br />
 <?php echo gettext("Tables are prefixed by"); ?> <strong>'<?php echo getOption('mysql_prefix'); ?>'</strong></p>
 <?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?>
 <form name="prune_gallery" action="admin.php?prune=true"><input
@@ -892,7 +892,7 @@ foreach ($comments as $comment) {
 	<br clear="all" />
 	<br clear="all" />
 </form>
-			
+
 <form name="clear_cache" action="admin.php?action=clear_cache=true"><input
 		type="hidden" name="action" value="clear_cache">
 	<div class="buttons" id="home_refresh">
@@ -917,7 +917,7 @@ foreach ($comments as $comment) {
 	<br clear="all" />
 	<br clear="all" />
 </form>
-			
+
 <form name="reset_hitcounters"
 		action="admin.php?action=reset_hitcounters=true"><input type="hidden"
 		name="action" value="reset_hitcounters">
@@ -928,8 +928,8 @@ foreach ($comments as $comment) {
 	<br clear="all" />
 </form>
 
-<?php 
-} 
+<?php
+}
 ?>
 </div>
 
@@ -937,13 +937,13 @@ foreach ($comments as $comment) {
 <div class="box" id="overview-suggest">
 <h2 class="boxtitle"><?php echo gettext("Gallery Stats"); ?></h2>
 <p>
-<strong><?php echo $t = $gallery->getNumImages(); ?></strong> <?php echo gettext("images"); 
+<strong><?php echo $t = $gallery->getNumImages(); ?></strong> <?php echo gettext("images");
 $c = $t-$gallery->getNumImages(true);
 if ($c > 0) {
 	echo ' ('.$c.' '.gettext("not visible").')';
 }
 ?></p>
-<p><strong><?php echo $t = $gallery->getNumAlbums(true); ?></strong> <?php echo gettext("albums"); 
+<p><strong><?php echo $t = $gallery->getNumAlbums(true); ?></strong> <?php echo gettext("albums");
 $c = $t-$gallery->getNumAlbums(true,true);
 if ($c > 0) {
 	echo ' ('.$c.' '.gettext("unpublished").')';
@@ -951,7 +951,7 @@ if ($c > 0) {
 ?></p>
 
 <p><strong><?php echo $t = $gallery->getNumComments(true); ?></strong>
-<?php echo gettext("comments"); ?> <?php  
+<?php echo gettext("comments"); ?> <?php
 $c = $t - $gallery->getNumComments(false);
 if ($c > 0) {
 	echo ' ('.$c.' '.gettext("in moderation").')';
@@ -959,8 +959,8 @@ if ($c > 0) {
 ?></p>
 </div>
 <p style="clear: both;"></p>
-<?php 
-} 
+<?php
+}
 ?>
 </div>
 <!-- content --> <?php

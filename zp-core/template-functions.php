@@ -101,7 +101,7 @@ function printAdminToolbox($context=null, $id='admin') {
 			if ($page>1) {
 				$redirect .= "&amp;page=$page";
 			}
-		} else if ($_zen_gallery_page === 'album.php') {  
+		} else if ($_zen_gallery_page === 'album.php') {
 			$albumname = $_zp_current_album->name;
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				printSubalbumAdmin(gettext('Edit album'), '', "<br />\n");
@@ -110,7 +110,7 @@ function printAdminToolbox($context=null, $id='admin') {
 					echo "<br />\n";
 				}
 				echo "<a href=\"javascript: confirmDeleteAlbum('".$zf."/admin.php?page=edit&action=deletealbum&album=" .
-					urlencode($albumname) . 
+					urlencode($albumname) .
 					"','".gettext("Are you sure you want to delete this entire album?")."','".gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!").
 					"');\" title=\"".gettext("Delete the album")."\">".gettext("Delete album")."</a><br />\n";
 			}
@@ -126,7 +126,7 @@ function printAdminToolbox($context=null, $id='admin') {
 			$imagename = urlencode($_zp_current_image->filename);
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				echo "<a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?page=edit&action=deleteimage&album=" .
-				urlencode($albumname) . "&image=". urlencode($imagename) . "','". gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!") . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
+				urlencode(urlencode($albumname)) . "&image=". urlencode(urlencode($imagename)) . "','". gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!") . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
 				echo "<br />\n";
 			}
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=$imagename";
@@ -147,10 +147,10 @@ function printAdminToolbox($context=null, $id='admin') {
  */
 function zenJavascript() {
 	global $_zp_phoogle, $_zp_current_album, $_zp_plugin_scripts;
-	
+
 	// i18n Javascript constant strings.
 	echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/js-string-constants.js.php\"></script>\n";
-	
+
 	if (!is_null($_zp_phoogle)) {$_zp_phoogle->printGoogleJS();}
 	if (($rights = zp_loggedin()) & (ADMIN_RIGHTS | EDIT_RIGHTS)) {
 		if (in_context(ZP_ALBUM)) {
@@ -521,7 +521,7 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 	if ($j != 1) {
 		echo "\n <li>";
 		printLink(getPageURL($k=max($j-4,1), $total), '...', "Page $k");
-		echo '</li>'; 
+		echo '</li>';
 	}
 	for ($i=$j; $i <= min($total, $j+6); $i++) {
 		echo "\n  <li" . (($i == $current) ? " class=\"current\"" : "") . ">";
@@ -531,7 +531,7 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 	if ($i <= $total) {
 		echo "\n <li>";
 		printLink(getPageURL($k=min($j+10,$total), $total), '...', "Page $k");
-		echo '</li>'; 
+		echo '</li>';
 	}
 	if ($nextprev) {
 		echo "\n  <li class=\"next\">";
@@ -590,7 +590,7 @@ function albumNumber() {
 			}
 		} else {
 			$search = $_zp_dynamic_album->getSearchEngine();
-			$albums = $search->getAlbums();			
+			$albums = $search->getAlbums();
 		}
 	}
 	$c = 0;
@@ -634,7 +634,7 @@ function getParentAlbums($album=null) {
  * @param string $after Text to place after the breadcrumb
  * @param string $title Text to be used as the URL title tag
  */
-function printAlbumBreadcrumb($before='', $after='', $title=NULL) {	
+function printAlbumBreadcrumb($before='', $after='', $title=NULL) {
 	global $_zp_current_search, $_zp_current_gallery, $_zp_current_album;
 	if (is_null($title)) $title = gettext('Album Thumbnails');
 	echo $before;
@@ -652,9 +652,9 @@ function printAlbumBreadcrumb($before='', $after='', $title=NULL) {
 			}
 		} else {
 			if (in_context(ZP_IMAGE) && in_context(ZP_ALBUM_LINKED)) {
-				$album = $_zp_current_album;		
+				$album = $_zp_current_album;
 			} else {
-				$album = new Album($_zp_current_gallery, $dynamic_album);	
+				$album = new Album($_zp_current_gallery, $dynamic_album);
 			}
 			echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL($album)) . "\">";
 			echo strip_tags($album->getTitle());
@@ -683,14 +683,14 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
 		$searchfields = $_zp_current_search->fields;
 		$searchpagepath = htmlspecialchars(getSearchURL($searchwords, $searchdate, $searchfields, $page));
 		$dynamic_album = $_zp_current_search->dynalbumname;
-		if (empty($dynamic_album)) {		
+		if (empty($dynamic_album)) {
 			echo "<a href=\"" . $searchpagepath . "\" title=\"Return to search\">";
 			echo "<em>".gettext("Search")."</em></a>";
 			if (is_null($_zp_current_album)) {
 				echo $after;
 				return;
 			} else {
-				$parents = getParentAlbums();	
+				$parents = getParentAlbums();
 				echo $between;
 			}
 		} else {
@@ -702,7 +702,7 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
 		}
 	} else {
 		$parents = getParentAlbums();
-		
+
 	}
 	$n = count($parents);
 	if ($n > 0) {
@@ -810,7 +810,7 @@ function getAlbumDesc() {
 	return $_zp_current_album->getDesc();
 }
 /**
- * Prints the album description of the current album. 
+ * Prints the album description of the current album.
  * Converts and displays line break in the admin field as <br />.
  *
  * @param bool $editable
@@ -838,7 +838,7 @@ function getAlbumCustomData() {
 }
 
 /**
- * Prints the custom_data field of the current album. 
+ * Prints the custom_data field of the current album.
  * Converts and displays line break in the admin field as <br />.
  *
  */
@@ -905,7 +905,7 @@ function getAlbumLinkURL($album=NULL) {
 		$imagepage = floor(($imageindex - $firstPageImages) / max(1, getOption('images_per_page'))) + 1;
 		if ($firstPageImages > 0) $imagepage++;
 		$albumpages = ceil($numalbums / max(1, getOption('albums_per_page')));
-		$page = $albumpages + $imagepage;		
+		$page = $albumpages + $imagepage;
 	}
 	if (in_context(ZP_IMAGE) && $page > 1) {
 		// Link to the page the current image belongs to.
@@ -1194,14 +1194,14 @@ function isAlbumPage() {
  */
 function getNumImages() {
 	global $_zp_current_album, $_zp_current_search;
-	if (in_context(ZP_SEARCH)) {  
+	if (in_context(ZP_SEARCH)) {
 		return $_zp_current_search->getNumImages();
 	} else {
 		if ($_zp_current_album->isDynamic()) {
 			$search = $_zp_current_album->getSearchEngine();
 			return $search->getNumImages();
 		} else {
-			return $_zp_current_album->getNumImages();	
+			return $_zp_current_album->getNumImages();
 		}
 	}
 }
@@ -1483,7 +1483,7 @@ function getImageDesc() {
 
 /**
  * Prints the description field of the current image.
- * Converts and displays line breaks set in the admin field as <br />. 
+ * Converts and displays line breaks set in the admin field as <br />.
  *
  * @param bool $editable set true to allow editing by the admin
  */
@@ -1984,7 +1984,7 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 	//Print images
 	else {
 		echo '<img src="' . htmlspecialchars(getDefaultSizedImage()) . '" alt="' . htmlspecialchars($alt, ENT_QUOTES) . '"' .
-			' title="' . htmlspecialchars(strip_tags($alt), ENT_QUOTES) . '"'.			
+			' title="' . htmlspecialchars(strip_tags($alt), ENT_QUOTES) . '"'.
 			' width="' . getDefaultWidth() . '" height="' . getDefaultHeight() . '"' .
 			(($class) ? " class=\"$class\"" : "") .
 			(($id) ? " id=\"$id\"" : "") . " />";
@@ -2179,7 +2179,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 	//Print images
 	else {
 		$sizearr = getSizeCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy);
-		echo "<img src=\"" . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin)) . 
+		echo "<img src=\"" . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin)) .
 			"\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
 			"\" title=\"" . htmlspecialchars(strip_tags($alt), ENT_QUOTES) . "\"" .
 		" width=\"" . $sizearr[0] . "\" height=\"" . $sizearr[1] . "\"" .
@@ -2327,7 +2327,7 @@ function printCommentAuthorLink($title=NULL, $class=NULL, $id=NULL) {
  * @param string $format how to format the result
  * @return string
  */
-function getCommentDate($format = NULL) { 
+function getCommentDate($format = NULL) {
 	if (is_null($format)) {
 		$format = getOption('date_format');
 		$time_tags = array('%H', '%I', '%R', '%T', '%r');
@@ -2338,19 +2338,19 @@ function getCommentDate($format = NULL) {
 			}
 		}
 	}
-	global $_zp_current_comment; 
-	return myts_date($format, $_zp_current_comment['date']); 
+	global $_zp_current_comment;
+	return myts_date($format, $_zp_current_comment['date']);
 }
 /**
  * Retrieves the time of the current comment
  * Returns a formatted time
- 
+
  * @param string $format how to format the result
  * @return string
  */
-function getCommentTime($format = '%I:%M %p') { 
-	global $_zp_current_comment; 
-	return myts_date($format, $_zp_current_comment['date']); 
+function getCommentTime($format = '%I:%M %p') {
+	global $_zp_current_comment;
+	return myts_date($format, $_zp_current_comment['date']);
 }
 
 /**
@@ -2453,7 +2453,7 @@ function getLatestComments($number) {
 	krsort($comments);
 	return array_slice($comments, 0, $number);
 }
-	
+
 /**
  * Prints out latest comments for images and albums
  *
@@ -2466,7 +2466,7 @@ function printLatestComments($number, $shorten='123') {
 	} else {
 		$albumpath = "/index.php?album="; $imagepath = "&image="; $modrewritesuffix = "";
 	}
-	$comments = getLatestComments($number,$shorten); 
+	$comments = getLatestComments($number,$shorten);
 	echo "<div id=\"showlatestcomments\">\n";
 	echo "<ul>\n";
 	foreach ($comments as $comment) {
@@ -2532,10 +2532,10 @@ function hitcounter($option='image', $viewonly=false, $id=NULL) {
 }
 
 /**
- * Returns a where clause for filter password protected album. 
+ * Returns a where clause for filter password protected album.
  * Used by the random images functions.
- * 
- * If the viewer is not logged in as ADMIN this function fails all password protected albums. 
+ *
+ * If the viewer is not logged in as ADMIN this function fails all password protected albums.
  * It does not check to see if the viewer has credentials for an album.
  *
  * @return string
@@ -2544,7 +2544,7 @@ function hitcounter($option='image', $viewonly=false, $id=NULL) {
 function getProtectedAlbumsWhere() {
 	$result = query_single_row("SELECT MAX(LENGTH(folder) - LENGTH(REPLACE(folder, '/', ''))) AS max_depth FROM " . prefix('albums') );
 	$max_depth = $result['max_depth'];
-        
+
 	$sql = "SELECT level0.id FROM " . prefix('albums') . " AS level0 ";
         $where = " WHERE (level0.password > ''";
 	$i = 1;
@@ -2585,13 +2585,13 @@ function getRandomImages() {
 	while ($c < 10) {
 		$result = query_single_row('SELECT COUNT(*) AS row_count ' .
                                 ' FROM '.prefix('images'). ', '.prefix('albums').
-                                ' WHERE ' . prefix('albums') . '.folder!="" AND '.prefix('images').'.albumid = ' . 
+                                ' WHERE ' . prefix('albums') . '.folder!="" AND '.prefix('images').'.albumid = ' .
 																prefix('albums') . '.id ' .    $albumWhere . $imageWhere );
 		$rand_row = rand(1, $result['row_count']);
 
 		$result = query_single_row('SELECT '.prefix('images').'.filename, '.prefix('albums').'.folder ' .
                                 ' FROM '.prefix('images').', '.prefix('albums') .
-                                ' WHERE '.prefix('images').'.albumid = '.prefix('albums').'.id  ' . $albumWhere . 
+                                ' WHERE '.prefix('images').'.albumid = '.prefix('albums').'.id  ' . $albumWhere .
 																$imageWhere . ' LIMIT ' . $rand_row . ', 1');
 
 		$imageName = $result['filename'];
@@ -2645,7 +2645,7 @@ function getRandomImagesAlbum($rootAlbum=null) {
 			foreach ($result as $row) {
 				$albumInWhere = $albumInWhere . $row['id'] . ", ";
 			}
-        	
+
 			$albumInWhere =  ' AND '.substr($albumInWhere, 0, -2) . ')';
 			$albumNotWhere = ' AND '.getProtectedAlbumsWhere();
 		}
@@ -2653,13 +2653,13 @@ function getRandomImagesAlbum($rootAlbum=null) {
 		while ($c < 10) {
 			$result = query_single_row('SELECT COUNT(*) AS row_count ' .
 				' FROM '.prefix('images'). ', '.prefix('albums').
-				' WHERE ' . prefix('albums') . '.folder!="" AND '.prefix('images').'.albumid = ' . 
+				' WHERE ' . prefix('albums') . '.folder!="" AND '.prefix('images').'.albumid = ' .
 				prefix('albums') . '.id ' . $albumInWhere . $albumNotWhere . $imageWhere );
 			$rand_row = rand(1, $result['row_count']);
 
 			$result = query_single_row('SELECT '.prefix('images').'.filename, '.prefix('albums').'.folder ' .
 				' FROM '.prefix('images').', '.prefix('albums') .
-				' WHERE '.prefix('images').'.albumid = '.prefix('albums').'.id  ' . $albumInWhere .  $albumNotWhere . 
+				' WHERE '.prefix('images').'.albumid = '.prefix('albums').'.id  ' . $albumInWhere .  $albumNotWhere .
 				$imageWhere . ' LIMIT ' . $rand_row . ', 1');
 
 			$imageName = $result['filename'];
@@ -2977,8 +2977,8 @@ function getAlbumId() {
 /**
  * Prints a RSS link
  *
- * @param string $option type of RSS: "Gallery" feed for the whole gallery 
- * 																		"Album" for only the album it is called from 
+ * @param string $option type of RSS: "Gallery" feed for the whole gallery
+ * 																		"Album" for only the album it is called from
  * 																		"Collection" for the album it is called from and all of its subalbums
  * 																		 "Comments" for all comments
  * @param string $prev text to before before the link
@@ -3007,7 +3007,7 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
 			break;
 		case "Collection":
 			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php?albumname=".urlencode(getAlbumTitle())."&amp;folder=".urlencode($_zp_current_album->getFolder())."&amp;lang=".getOption("locale")."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
-			break;	
+			break;
 		case "Comments":
 			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss-comments.php?lang=".getOption("locale")."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
@@ -3017,12 +3017,12 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
 /**
  * Returns the RSS link for use in the HTML HEAD
  *
- * @param string $option type of RSS: "Gallery" feed for the whole gallery 
- * 																		"Album" for only the album it is called from 
+ * @param string $option type of RSS: "Gallery" feed for the whole gallery
+ * 																		"Album" for only the album it is called from
  * 																		"Collection" for the album it is called from and all of its subalbums
  * 																		 "Comments" for all comments
  * @param string $linktext title of the link
- * 
+ *
  * @return string
  * @since 1.1
  */
@@ -3045,7 +3045,7 @@ function getRSSHeaderLink($option, $linktext) {
  *
  * @param string $option type of RSS (Gallery, Album, Comments)
  * @param string $linktext title of the link
- * 
+ *
  * @since 1.1.6
  */
 function printRSSHeaderLink($option, $linktext) {
@@ -3340,35 +3340,35 @@ function getTheme(&$zenCSS, &$themeColor, $defaultColor) {
 }
 
 /**
- * Passed # of album columns, # of image columns of the theme. 
- * 
+ * Passed # of album columns, # of image columns of the theme.
+ *
  * NOTE: The values for these numbers of columns are determined by the theme
  * CSS. They should be set to how many images or albums are displayed in a row.
  * If you get this wrong, your theme will not behave as you expect.
- * 
+ *
  * Updates (non-persistent) images_per_page and albums_per_page so that the rows are filled.
- * 
- * This means that the value you set for the images per page and albums per page options may 
- * not be the same as what actually gets shown. First, they will be rounded to be an even multiple 
+ *
+ * This means that the value you set for the images per page and albums per page options may
+ * not be the same as what actually gets shown. First, they will be rounded to be an even multiple
  * rows. So, if you have 6 columns of album thumbs your albums per page shown will be a multiple of
- * six (assuming that there are enough albums.) Second, there may be a page where both image and 
+ * six (assuming that there are enough albums.) Second, there may be a page where both image and
  * album thumbs are shown--the "transition" page. Fewer than images_per_page will appear
  * on this page.
- * 
+ *
  * The "non-persistent" update means that the actual values for these options are not changed. Just
  * the values that will be used for the display of the particular page.
- * 
+ *
  * Returns # of images that will go on the album/image transition page.
- * 
+ *
  * When you have albums containing both subalbums and images there may be a page where the album
- * thumbnails do not fill the page. This function returns a count of the images that can be used to 
+ * thumbnails do not fill the page. This function returns a count of the images that can be used to
  * fill out this transition page. The return value should be passed as the second parameter to
  * next_image() so that the the page is filled out with the proper number of images. If you do not
- * pass this parameter it is assumed that album thumbs and image thumbs are not to be placed on 
- * the same (transition) page. (If you do not wish to have an album/image transition page you need 
+ * pass this parameter it is assumed that album thumbs and image thumbs are not to be placed on
+ * the same (transition) page. (If you do not wish to have an album/image transition page you need
  * not use this function at all.)
- * 
- * This function (combined with the parameter to next_image) impacts the pagination computations 
+ *
+ * This function (combined with the parameter to next_image) impacts the pagination computations
  * zenphoto makes. For this reason, it is important to make identical calls to the function from
  * your theme's index.php, albums.php and image.php pages. Otherwise page and breadcrumb navigation
  * may not be correct.

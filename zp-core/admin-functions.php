@@ -70,7 +70,7 @@ $charsets = array("ASMO-708" => "Arabic",
 									"KS_C_5601-1987" => "Korean",
 									"MACINTOSH" => "Western European (MAC)",
 									"SHIFT_JIS" => "Japanese (Shift-JIS)",
-									"UNICODE" => "Unicode",                  
+									"UNICODE" => "Unicode",
 									"UNICODEFFFE" => "Unicode (Big-Endian)",
 									"US-ASCII" => "US-ASCII",
 									"UTF-7" => "Unicode (UTF-7)",
@@ -82,7 +82,7 @@ $charsets = array("ASMO-708" => "Arabic",
 									"WINDOWS-1254" => "Turkish (Windows)",
 									"WINDOWS-1255" => "Hebrew (Windows)",
 									"WINDOWS-1256" => "Arabic (Windows)",
-									"WINDOWS-1257" => "Baltic (Windows)",                  
+									"WINDOWS-1257" => "Baltic (Windows)",
 									"WINDOWS-1258" => "Vietnamese (Windows)",
 									"WINDOWS-874" => "Thai (Windows)",
 									"X-CHINESE-CNS" => "Chinese Traditional (CNS)",
@@ -109,7 +109,7 @@ $charsets = array("ASMO-708" => "Arabic",
 									"X-EBCDIC-ITALY-EURO" => "IBM EBCDIC (Italy-Euro)",
 									"X-EBCDIC-JAPANESEANDJAPANESELATIN" => "IBM EBCDIC (Japanese and Japanese-Latin)",
 									"X-EBCDIC-JAPANESEANDKANA" => "IBM EBCDIC (Japanese and Japanese Katakana)",
-									"X-EBCDIC-JAPANESEANDUSCANADA" => "IBM EBCDIC (Japanese and US-Canada)",                  
+									"X-EBCDIC-JAPANESEANDUSCANADA" => "IBM EBCDIC (Japanese and US-Canada)",
 									"X-EBCDIC-JAPANESEKATAKANA" => "IBM EBCDIC (Japanese katakana)",
 									"X-EBCDIC-KOREANANDKOREANEXTENDED" => "IBM EBCDIC (Korean and Korean EXtended)",
 									"X-EBCDIC-KOREANEXTENDED" => "IBM EBCDIC (Korean EXtended)",
@@ -222,7 +222,7 @@ function printAdminHeader() {
 		 +-----------------------------------------------------------*/
 		function addLoadEvent(func) {
 			var oldonload = window.onload;
-			
+
 			if (typeof window.onload != "function") {
 				window.onload = func;
 			} else {
@@ -232,14 +232,14 @@ function printAdminHeader() {
 				}
 			}
 		}
-		
+
 		/*------------------------------------+
 		 | Functions to run when window loads |
 		 +------------------------------------*/
 		addLoadEvent(function () {
 			initChecklist();
 		});
-		
+
 		/*----------------------------------------------------------+
 		 | initChecklist: Add :hover functionality on labels for IE |
 		 +----------------------------------------------------------*/
@@ -247,14 +247,14 @@ function printAdminHeader() {
 			if (document.all && document.getElementById) {
 				// Get all unordered lists
 				var lists = document.getElementsByTagName("ul");
-				
+
 				for (i = 0; i < lists.length; i++) {
 					var theList = lists[i];
-					
+
 					// Only work with those having the class "checklist"
 					if (theList.className.indexOf("checklist") > -1) {
 						var labels = theList.getElementsByTagName("label");
-						
+
 						// Assign event handlers to labels within
 						for (var j = 0; j < labels.length; j++) {
 							var theLabel = labels[j];
@@ -338,7 +338,7 @@ function adminPrintImageThumb($image, $class=NULL, $id=NULL) {
 
 /**
  * Print the login form for ZP. This will take into account whether mod_rewrite is enabled or not.
- * 
+ *
  * @param string $redirect URL to return to after login
  * @param bool $logo set to true to display the ADMIN zenphoto logo.
  *
@@ -353,9 +353,9 @@ function printLoginForm($redirect=null, $logo=true) {
 	} else {
 		$requestor = '';
 	}
-	if (empty($requestor)) { 
+	if (empty($requestor)) {
 		if (isset($_GET['ref'])) {
-			$requestor = sanitize($_GET['ref']); 
+			$requestor = sanitize($_GET['ref']);
 		}
 	}
 
@@ -369,9 +369,9 @@ function printLoginForm($redirect=null, $logo=true) {
 	if ($_zp_login_error == 1) {
 		echo "<div class=\"errorbox\" id=\"message\"><h2>".gettext("There was an error logging in.</h2> Check your username and password and try again.")."</div>";
 	} else if ($_zp_login_error == 2){
-		echo '<div class="messagebox" id="fade-message">'; 
-		echo  "<h2>".gettext("A reset request has been sent.")."</h2>"; 
-		echo '</div>'; 
+		echo '<div class="messagebox" id="fade-message">';
+		echo  "<h2>".gettext("A reset request has been sent.")."</h2>";
+		echo '</div>';
 	}
 	echo "\n  <form name=\"login\" action=\"#\" method=\"POST\">";
 	echo "\n    <input type=\"hidden\" name=\"login\" value=\"1\" />";
@@ -429,7 +429,7 @@ function printLogoAndLinks() {
  */
 function printTabs($currenttab) {
 	global $_zp_loggedin;
-	
+
 	echo "\n  <ul id=\"nav\">";
 	if (($_zp_loggedin & (MAIN_RIGHTS | ADMIN_RIGHTS))) {
 		echo "\n    <li". (($currenttab == "home") ? " class=\"current\""     : "") .
@@ -443,7 +443,7 @@ function printTabs($currenttab) {
 		echo "\n    <li". (($currenttab =='upload') ? " class=\"current\""   : "") .
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-upload.php\">".gettext("upload")."</a></li>";
 	}
-	
+
 	if (($_zp_loggedin & (EDIT_RIGHTS | ADMIN_RIGHTS))) {
 		echo "\n    <li". (($currenttab == 'edit') ? " class=\"current\""     : "") .
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?page=edit\">".gettext("edit")."</a></li>";
@@ -451,7 +451,7 @@ function printTabs($currenttab) {
 	if (($_zp_loggedin & ADMIN_RIGHTS)) {
 		echo "\n    <li". (($currenttab == 'tags') ? " class=\"current\""     : "") .
 				"><a href=\"".WEBPATH."/".ZENFOLDER."/admin-tags.php\">".gettext('tags')."</a></li>";
-	}	
+	}
 	echo "\n    <li". (($currenttab == 'options') ? " class=\"current\""  : "") .
  			"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-options.php\">".gettext("options")."</a></li>";
 	if (($_zp_loggedin & (THEMES_RIGHTS | ADMIN_RIGHTS))) {
@@ -465,7 +465,7 @@ function printTabs($currenttab) {
 	if (($_zp_loggedin & ADMIN_RIGHTS) && getOption('zp_plugin_zenpage')) {
 		echo "\n    <li". (($currenttab == 'zenpage') ? " class=\"current\""     : "") .
  				"><a href=\"".WEBPATH."/".ZENFOLDER."/plugins/zenpage/page-admin.php\">zenPage</a></li>";
-	}	
+	}
 	echo "\n  </ul>";
 
 }
@@ -607,7 +607,7 @@ function customOptions($optionHandler, $indent="", $album=NULL) {
 				if (ALBUM_OPTIONS_TABLE) {
 					$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . escape($key) .
 										"' AND `ownerid`=".$album->id;
-						
+
 				} else {
 					$sql = "SELECT `value` FROM " . prefix(getOptionTableName($album->name)) . " WHERE `name`='" . escape($key) . "'";
 				}
@@ -733,7 +733,7 @@ function tagSelector($that, $postit, $showCounts=false) {
 	} else {
 		$displaylist = $them;
 	}
-	
+
 	echo '<ul class="tagchecklist">'."\n";
 	generateUnorderedListFromArray($tags, $tags, $postit);
 	if (!is_null($that) && !(useTagTable() && ($_zp_loggedin & ADMIN_RIGHTS))) {
@@ -774,7 +774,7 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<table>";
 	echo "\n<td width = \"60%\">\n<table>\n<tr>";
 	echo "\n<tr>";
-	echo "<td align=\"right\" valign=\"top\" width=\"150\">Album Title: </td>"; 
+	echo "<td align=\"right\" valign=\"top\" width=\"150\">Album Title: </td>";
 	echo '<td>';
 	print_language_string_list($album->get('title'), $prefix."albumtitle", false);
 	echo "</td></tr>\n";
@@ -829,7 +829,7 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<td align=\"right\" valign=\"top\">".gettext("Sort subalbums by:")." </td>";
 	echo "\n<td>";
 
-	// script to test for what is selected 
+	// script to test for what is selected
 	$javaprefix = 'js_'.preg_replace("/[^a-z0-9_]/","",strtolower($prefix));
 	echo '<script type="text/javascript">'."\n";
 	echo '  function '.$javaprefix.'album_direction(obj) {'."\n";
@@ -841,7 +841,7 @@ function printAlbumEditForm($index, $album) {
 	echo ' 		}'."\n";
 	echo '	}'."\n";
 	echo '</script>'."\n";
-	
+
 	echo "\n<table>\n<tr>\n<td>";
 	echo "\n<select id=\"sortselect\" name=\"".$prefix."subalbumsortby\" onchange=\"".$javaprefix."album_direction(this)\">";
 	if (is_null($album->getParent())) {
@@ -849,7 +849,7 @@ function printAlbumEditForm($index, $album) {
 	} else {
 		$globalsort = gettext("parent album subalbum sort order");
 	}
-	echo "\n<option value =''>$globalsort</option>"; 
+	echo "\n<option value =''>$globalsort</option>";
 	generateListFromArray(array($type = $album->get('subalbum_sort_type')), $sort);
 	echo "\n</select>";
 	echo "\n</td>\n<td>";
@@ -873,8 +873,8 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<tr>";
 	echo "\n<td align=\"right\" valign=\"top\">".gettext("Sort images by:")." </td>";
 	echo "\n<td>";
-	
-	// script to test for what is selected 
+
+	// script to test for what is selected
 	$javaprefix = 'js_'.preg_replace("/[^a-z0-9_]/","",strtolower($prefix));
 	echo '<script type="text/javascript">'."\n";
 	echo '  function '.$javaprefix.'image_direction(obj) {'."\n";
@@ -886,7 +886,7 @@ function printAlbumEditForm($index, $album) {
 	echo ' 		}'."\n";
 	echo '	}'."\n";
 	echo '</script>'."\n";
-	
+
 	echo "\n<table>\n<tr>\n<td>";
 	echo "\n<select id=\"sortselect\" name=\"".$prefix."sortby\" onchange=\"".$javaprefix."image_direction(this)\">";
 	if (is_null($album->getParent())) {
@@ -894,7 +894,7 @@ function printAlbumEditForm($index, $album) {
 	} else {
 		$globalsort = gettext("parent album image sort order");
 	}
-	echo "\n<option value =''>$globalsort</option>"; 
+	echo "\n<option value =''>$globalsort</option>";
 	generateListFromArray(array($type = $album->get('sort_type')), $sort);
 	echo "\n</select>";
 	echo "\n</td>\n<td>";
@@ -957,13 +957,13 @@ function printAlbumEditForm($index, $album) {
 		echo "\n</td>";
 		echo "\n</tr>";
 	}
-	
+
 	echo "\n</table>\n</td>";
 	echo "\n<td valign=\"top\">";
 	echo gettext("Tags:");
 	tagSelector($album, 'tags_'.$prefix);
 	echo "\n</td>\n</tr>";
-	
+
 	echo "\n</table>";
 
 	echo  "\n<table>";
@@ -977,7 +977,7 @@ function printAlbumEditForm($index, $album) {
 		echo "\n</table>";
 		echo "\n</td>";
 		echo "\n</tr>";
-	} 
+	}
 	echo "\n<tr>";
 	echo "\n<td> </td>";
 	echo "\n<td align=\"right\" valign=\"top\" width=\"150\">".gettext("Thumbnail:")." </td> ";
@@ -1103,7 +1103,7 @@ function printAlbumEditForm($index, $album) {
 	echo "\n</td>";
 	echo "\n</tr>";
 	echo "\n</table>";
-	
+
 	echo "\n<input type=\"submit\" value=\"".gettext("save album")."\" />";
 
 	echo "\n</div>";
@@ -1133,7 +1133,7 @@ function printAlbumButtons($album) {
 		echo "<button type=\"submit\" class=\"tooltip\" id='edit_refresh' title=\"".gettext("Forces a refresh of the EXIF and IPTC data for all images in the album.")."\"><img src=\"images/warn.png\" style=\"border: 0px;\" /> ".gettext("Refresh Metadata")."</button>";
 		echo "</form>";
 		echo "\n</td>";
-			
+
 		echo "\n<td valign=\"top\" width = 30% style=\"padding: 0px 30px 0px 30px;\">";
 		echo "</form>";
 		echo "<form name=\"reset_hitcounters\" action=\"?action=reset_hitcounters\"" . " method=\"post\">";
@@ -1224,7 +1224,7 @@ function printAlbumEditRow($album) {
 	echo '<img src="images/reset.png" style="border: 0px;" alt="'.gettext('Reset hitcounters for the album').' ' . $album->name . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-	echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=" . urlencode($album->name) . 
+	echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=" . urlencode(urlencode($album->name)) .
 			"','".gettext("Are you sure you want to delete this entire album?")."','".gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!").
 			"');\" title=\"".gettext("Delete the album")." " . xmlspecialchars($album->name) . "\">";
 	echo '<img src="images/fail.png" style="border: 0px;" alt="'.gettext('Delete the album').' ' . xmlspecialchars($album->name) . '" /></a>';
@@ -1425,7 +1425,7 @@ function fetchComments($number) {
 			$sql = "SELECT .".prefix('comments').".id as id, ".prefix('comments').".name as name, `website`, `type`, `ownerid`,"
 			." (".prefix('comments').".date + 0) AS date, `comment`, `email`, `inmoderation`, `ip`, ".prefix('images').".`albumid` as albumid"
 			." FROM ".prefix('comments').",".prefix('images')." WHERE ";
-				
+
 			$sql .= "(`type`='images' AND(";
 			$i = 0;
 			foreach ($albumIDs as $ID) {
@@ -1555,7 +1555,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 /**
  * process the post of a language string form
  *
- * @param string $name the prefix for the label, id, and name tags 
+ * @param string $name the prefix for the label, id, and name tags
  * @return string
  */
 function process_language_string_save($name) {
@@ -1564,7 +1564,7 @@ function process_language_string_save($name) {
 	foreach ($_POST as $key=>$value) {
 		if (!empty($value) && (strpos($key, $name) !== false)) {
 			$key = substr($key, $l);
-			$strings[$key] = $value;		
+			$strings[$key] = $value;
 		}
 	}
 	if (count($strings) > 1) {
