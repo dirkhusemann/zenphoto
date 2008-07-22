@@ -286,7 +286,7 @@ function getImageStatistic($number, $option, $album='') {
 		$imageWhere = " AND images.show=1";
 	}
 	if(!empty($album)) {
-		$specificalbum = " albums.title = '".$album."' AND ";
+		$specificalbum = " albums.title LIKE '%".$album."%' AND ";
 	} else {
 		$specificalbum = "";
 	}
