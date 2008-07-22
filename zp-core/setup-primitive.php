@@ -11,6 +11,7 @@ $const_webpath = str_replace("\\", '/', $const_webpath);
 if ($const_webpath == '/') $const_webpath = '';
 if (!defined('WEBPATH')) { define('WEBPATH', $const_webpath); }
 define('SERVERPATH', dirname(dirname(__FILE__)));
+if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 
 function zp_getCookie($name) {
 	if (isset($_SESSION[$name])) { return $_SESSION[$name]; }
@@ -72,4 +73,58 @@ function printAdminFooter() {
 	echo "\n  <a href=\"http://www.zenphoto.org\" title=\"".gettext('A simpler web photo album')."\">zen<strong>photo</strong></a>";
 	echo " | <a href=\"http://www.zenphoto.org/support/\" title=\"".gettext('Forum').'">'.gettext('Forum')."</a> | <a href=\"http://www.zenphoto.org/trac/\" title=\"Trac\">Trac</a> | <a href=\"changelog.html\" title=\"".gettext('View Changelog')."\">Changelog</a>\n</div>";
 }
+
+function debugLog($message, $reset=false) {
+	if ($reset) { $mode = 'w'; } else { $mode = 'a'; }
+	$f = fopen(SERVERPATH . '/' . ZENFOLDER . '/debug_log.txt', $mode);
+	fwrite($f, $message . "\n");
+	fclose($f);
+}
+
+function debugLogArray($name, $source) {
+	$msg = "Array $name( ";
+	if (is_array($source)) {
+		if (count($source) > 0) {
+			foreach ($source as $key => $val) {
+				if (strlen($msg) > 72) {
+					debugLog($msg);
+					$msg = '';
+				}
+				$msg .= $key . " => " . $val . ", ";
+			}
+			$msg = substr($msg, 0, strrpos($msg, ',')) . " )";
+		} else {
+			$msg .= ")";
+		}
+		debugLog($msg);
+	} else {
+		debugLog($msg . ")");
+	}
+}
+
+function debugLogBacktrace($message) {
+	debugLog("Backtrace: $message");
+	// Get a backtrace.
+	$bt = debug_backtrace();
+	array_shift($bt); // Get rid of debug_backtrace in the backtrace.
+	$prefix = '';
+	$line = '';
+	$caller = '';
+	foreach($bt as $b) {
+		$caller = (isset($b['class']) ? $b['class'] : '')	. (isset($b['type']) ? $b['type'] : '')	. $b['function'];
+		if (!empty($line)) { // skip first output to match up functions with line where they are used.
+
+			$msg = $prefix . ' from ';
+			debugLog($msg.$caller.' ('.$line.')');
+			$prefix .= '  ';
+		} else {
+			debugLog($caller.' called');
+		}
+		$line = basename($b['file'])	. ' [' . $b['line'] . "]";
+	}
+	if (!empty($line)) {
+		debugLog($prefix.' from '.$line);
+	}
+}
+
 ?>

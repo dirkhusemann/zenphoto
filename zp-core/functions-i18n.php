@@ -3,6 +3,9 @@
  * functions-i18n.php -- support functions for internationalization
  * @package core
  */
+
+define ('DEBUG_LOCALE', false); // used for examining language selection problems
+
 /**
  * Returns an array of available language locales.
  *
@@ -80,6 +83,7 @@ function setupCurrentLocale($plugindomain='') {
 		$domain = $plugindomain;
 		$domainpath = SERVERPATH . "/" . ZENFOLDER . "/plugins/".$domain."/locale/";
 	}
+	if (DEBUG_LOCALE) debugLog("setupCurrentLocale($plugindomain): locale=$locale");	
 	bindtextdomain($domain, $domainpath);
 	// function only since php 4.2.0
 	if(function_exists('bind_textdomain_codeset')) {
@@ -184,6 +188,7 @@ function parseHttpAcceptLanguage($str=NULL) {
 	}
 	// sorting the list by coefficient desc
 	krsort($accepted);
+	if (DEBUG_LOCALE) debugLogArray("parseHttpAcceptLanguage($str)", $accepted);	
 	return $accepted;
 }
 
@@ -193,14 +198,19 @@ function parseHttpAcceptLanguage($str=NULL) {
  * Sets the 'locale' option to the result (non-persistent)
  */
 function getUserLocale() {
+	if (DEBUG_LOCALE) debugLog("getUserLocale()");	
 	$cookiepath = WEBPATH;
 	if (WEBPATH == '') { $cookiepath = '/'; }
 	if (isset($_POST['dynamic-locale'])) {
 		$locale = sanitize($_POST['dynamic-locale']);
 		zp_setCookie('dynamic_locale', $locale, time()+5184000, $cookiepath);
+		
+	if (DEBUG_LOCALE) debugLog("dynamic_locale post: $locale");		
+		
 	} else {
 		$localeOption = getOption('locale');
 		$locale = zp_getCookie('dynamic_locale');
+		if (DEBUG_LOCALE) debugLog("locale from option: ".$localeOption.'; dynamic locale='.$locale);		
 		if (empty($localeOption) && ($locale === false)) {  // if one is not set, see if there is a match from 'HTTP_ACCEPT_LANGUAGE'
 			$languageSupport = generateLanguageList();
 			$userLang = parseHttpAcceptLanguage();
@@ -209,6 +219,7 @@ function getUserLocale() {
 				foreach ($languageSupport as $key=>$value) {
 					if (strtoupper($key) == $l) { // we got a match
 						$locale = $key;
+						if (DEBUG_LOCALE) debugLog("locale set from HTTP Accept Language: ".$locale);						
 						break;
 					}
 				}
