@@ -93,6 +93,7 @@ $_zp_options = NULL;
  */
 define('ALBUMFOLDER', '/albums/');
 if (!defined('PLUGIN_FOLDER')) { define('PLUGIN_FOLDER', '/plugins/'); }
+define("THEMEFOLDER", 'themes');
 
 
 if (getOption('album_session') && OFFSET_PATH==0) {
@@ -2087,7 +2088,7 @@ function handleSearchParms($album='', $image='') {
  */
 function setupTheme() {
 	global $_zp_gallery_albums_per_page, $_zp_gallery, $_zp_current_album,
-					$_zp_current_search, $_zp_options, $_zp_themeroot, $themepath;
+					$_zp_current_search, $_zp_options, $_zp_themeroot;
 	$albumtheme = '';
 	if (in_context(ZP_SEARCH_LINKED)) {
 		$name = $_zp_current_search->dynalbumname;
@@ -2125,7 +2126,7 @@ function setupTheme() {
 			}
 		}
 	}
-	$_zp_themeroot = WEBPATH . "/$themepath/$theme";
+	$_zp_themeroot = WEBPATH . "/".THEMEFOLDER."/$theme";
 	return $theme;
 }
 

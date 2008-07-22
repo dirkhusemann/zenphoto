@@ -90,23 +90,26 @@
 				<form id="commentform" action="#" method="post">
 				<div><input type="hidden" name="comment" value="1" />
 							<input type="hidden" name="remember" value="1" />
-								<?php printCommentErrors(); ?>
+								<?php
+								printCommentErrors();
+								$stored = getCommentStored();
+								?>
 					<table border="0">
 						<tr>
 							<td><label for="name"><?php echo gettext("Name:"); ?></label>
-								(<input type="checkbox" name="anon" value="1"<?php if ($stored[6]) echo " CHECKED"; ?> /> <?php echo gettext("don't publish"); ?>)
+								(<input type="checkbox" name="anon" value="1"<?php if ($stored['anon']) echo " CHECKED"; ?> /> <?php echo gettext("don't publish"); ?>)
 							</td>
-							<td><input type="text" id="name" name="name" size="20" value="<?php echo $stored[0];?>" class="inputbox" />
+							<td><input type="text" id="name" name="name" size="20" value="<?php echo $stored['name'];?>" class="inputbox" />
 							</td>
 						</tr>
 						<tr>
 							<td><label for="email"><?php echo gettext("E-Mail:"); ?></label></td>
-							<td><input type="text" id="email" name="email" size="20" value="<?php echo $stored[1];?>" class="inputbox" />
+							<td><input type="text" id="email" name="email" size="20" value="<?php echo $stored['email'];?>" class="inputbox" />
 							</td>
 						</tr>
 						<tr>
 							<td><label for="website"><?php echo gettext("Site:"); ?></label></td>
-							<td><input type="text" id="website" name="website" size="40" value="<?php echo $stored[2];?>" class="inputbox" /></td>
+							<td><input type="text" id="website" name="website" size="40" value="<?php echo $stored['website'];?>" class="inputbox" /></td>
 						</tr>
 												<?php if (getOption('Use_Captcha')) { 
  													$captchaCode=generateCaptcha($img); ?>
@@ -117,9 +120,9 @@
  													<td><input type="text" id="code" name="code" size="20" class="inputbox" /><input type="hidden" name="code_h" value="<?php echo $captchaCode;?>"/></td>
  													</tr>
 												<?php } ?>
-							<tr><td colspan="2"><input type="checkbox" name="private" value="1"<?php if ($stored['5']) echo " CHECKED"; ?> /> <?php echo gettext("Private (don't publish)"); ?></td></tr>								
+							<tr><td colspan="2"><input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo " CHECKED"; ?> /> <?php echo gettext("Private (don't publish)"); ?></td></tr>								
 					</table>
-					<textarea name="comment" rows="6" cols="40"><?php echo $stored[3]; ?></textarea>
+					<textarea name="comment" rows="6" cols="40"><?php echo $stored['comment']; ?></textarea>
 					<br />
 					<input type="submit" value="<?php echo gettext('Add Comment'); ?>" class="pushbutton" /></div>
 				</form>

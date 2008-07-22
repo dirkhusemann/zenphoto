@@ -140,7 +140,7 @@ function fix_path_redirect() {
  ******************************************************************************/
 
 function zp_handle_comment() {
-	global $_zp_current_image, $_zp_current_album, $stored;
+	global $_zp_current_image, $_zp_current_album, $_zp_comment_stored;
 	$activeImage = false;
 	$redirectTo = FULLWEBPATH . '/' . zpurl();
 	$comment_error = 0;
@@ -195,8 +195,8 @@ function zp_handle_comment() {
 				header('Location: ' . $redirectTo);
 				exit();
 			} else {
-				$stored = array($_POST['name'], $_POST['email'], $website, $_POST['comment'], false, isset($_POST['private']), isset($_POST['anon']));
-				if (isset($_POST['remember'])) $stored[4] = true;
+				$_zp_comment_stored = array($_POST['name'], $_POST['email'], $website, $_POST['comment'], false, isset($_POST['private']), isset($_POST['anon']));
+				if (isset($_POST['remember'])) $_zp_comment_stored[4] = true;
 				$comment_error = 1 + $commentadded;
 				if ($activeImage !== false) { // tricasa hack? Set the context to the image on which the comment was posted
 					$_zp_current_image = $activeImage;
@@ -207,12 +207,12 @@ function zp_handle_comment() {
 		}
 	} else  if (!empty($cookie)) {
 		// Comment form was not submitted; get the saved info from the cookie.
-		$stored = explode('|~*~|', stripslashes($cookie)); 
-		$stored[4] = true;
-		if (!isset($stored[5])) $stored[5] = false;
-		if (!isset($stored[6])) $stored[6] = false;
+		$_zp_comment_stored = explode('|~*~|', stripslashes($cookie)); 
+		$_zp_comment_stored[4] = true;
+		if (!isset($_zp_comment_stored[5])) $_zp_comment_stored[5] = false;
+		if (!isset($_zp_comment_stored[6])) $_zp_comment_stored[6] = false;
 	} else {
-		$stored = array('','','', '', false, false, false);
+		$_zp_comment_stored = array('','','', '', false, false, false);
 	}
 return $comment_error;		
 }

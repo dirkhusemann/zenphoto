@@ -696,7 +696,6 @@ class SearchEngine
 	 * @return array
 	 */
 	function getSearchImages() {
-		global $_zp_current_gallery;
 		$images = array();
 		$searchstring = $this->getSearchString();
 		$searchdate = $this->dates;

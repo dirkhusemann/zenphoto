@@ -114,7 +114,8 @@
 							echo '<div id="addcomment" style="display: block;">';
 						} else { 
 							echo '<div id="addcomment" style="display: none;">';
-						} ?>
+						} 
+						$stored = getCommentStored(); ?>
 						<h2><?php gettext("Add a comment") ?></h2>
 						<form method="post" action="#" id="comments-form">
 							<input type="hidden" name="comment" value="1" />
@@ -122,26 +123,26 @@
 							<table cellspacing="0">
 								<tr valign="top" align="left" id="row-name">
 									<th><label for="name"><?php echo gettext('Name'); ?>:</label></th>
-									<td><input tabindex="1" id="name" name="name" class="text" value="<?php echo $stored[0];?>" />
-										(<input type="checkbox" name="anon" value="1"<?php if ($stored[6]) echo " CHECKED"; ?> /> <?php echo gettext("don't publish"); ?>)
+									<td><input tabindex="1" id="name" name="name" class="text" value="<?php echo $stored['name'];?>" />
+										(<input type="checkbox" name="anon" value="1"<?php if ($stored['anon']) echo " CHECKED"; ?> /> <?php echo gettext("don't publish"); ?>)
 									</td>
 								</tr>
 								<tr valign="top" align="left" id="row-email">
 									<th><label for="email"><?php echo gettext('Email'); ?>:</label></th>
-									<td><input tabindex="2" id="email" name="email" class="text" value="<?php echo $stored[1];?>" /> <em><?php echo gettext("(not displayed)"); ?></em></td>
+									<td><input tabindex="2" id="email" name="email" class="text" value="<?php echo $stored['email'];?>" /> <em><?php echo gettext("(not displayed)"); ?></em></td>
 								</tr>
 								<tr valign="top" align="left">
 									<th><label for="website"><?php echo gettext('URL'); ?>:</label></th>
-									<td><input tabindex="3" type="text" name="website" id="website" class="text" value="<?php echo $stored[2];?>" /></td>
+									<td><input tabindex="3" type="text" name="website" id="website" class="text" value="<?php echo $stored['website'];?>" /></td>
 								</tr>
 								<?php printCaptcha("<tr valign=\"top\" align=\"left\"><th><label for=\"captcha\">" .gettext('Enter Captcha'), ":</label></th><td>", "</td></tr>\n", 8); ?>
 								<tr valign="top" align="left">
 									<th><label for="private"><?php echo gettext('Private comment'); ?>:</label></th>
-									<td><input type="checkbox" name="private" value="1"<?php if ($stored['5']) echo " CHECKED"; ?> /> <?php echo gettext("Private (don't publish)"); ?></td>								
+									<td><input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo " CHECKED"; ?> /> <?php echo gettext("Private (don't publish)"); ?></td>								
 								</tr>
 								<tr valign="top" align="left">
 									<th><label for="comment"><?php echo gettext('Comment'); ?>:</label></th>
-									<td><textarea tabindex="4" id="comment" name="comment" rows="10" cols="40"><?php echo $stored[3]; ?></textarea></td>
+									<td><textarea tabindex="4" id="comment" name="comment" rows="10" cols="40"><?php echo $stored['comment']; ?></textarea></td>
 								</tr>
 								<tr valign="top" align="left">
 									<th class="buttons">&nbsp;</th>

@@ -635,7 +635,7 @@ function getParentAlbums($album=null) {
  * @param string $title Text to be used as the URL title tag
  */
 function printAlbumBreadcrumb($before='', $after='', $title=NULL) {
-	global $_zp_current_search, $_zp_current_gallery, $_zp_current_album;
+	global $_zp_current_search, $_zp_gallery, $_zp_current_album;
 	if (is_null($title)) $title = gettext('Album Thumbnails');
 	echo $before;
 	if (in_context(ZP_SEARCH_LINKED)) {
@@ -654,7 +654,7 @@ function printAlbumBreadcrumb($before='', $after='', $title=NULL) {
 			if (in_context(ZP_IMAGE) && in_context(ZP_ALBUM_LINKED)) {
 				$album = $_zp_current_album;
 			} else {
-				$album = new Album($_zp_current_gallery, $dynamic_album);
+				$album = new Album($_zp_gallery, $dynamic_album);
 			}
 			echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL($album)) . "\">";
 			echo strip_tags($album->getTitle());
@@ -694,7 +694,7 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
 				echo $between;
 			}
 		} else {
-			$album = new Album($_zp_current_gallery, $dynamic_album);
+			$album = new Album($_zp_gallery, $dynamic_album);
 			$parents = getParentAlbums($album);
 			if (in_context(ZP_ALBUM_LINKED)) {
 				array_push($parents, $album);
@@ -2276,6 +2276,24 @@ function next_comment() {
 		}
 		return true;
 	}
+}
+
+/**
+ * Returns the data from the last comment posted
+ * @param bool $numeric Set to true for old themes to get 0->6 indices rather than descriptive ones
+ *
+ * @return array
+ */
+function getCommentStored($numeric=false) {
+	global $_zp_comment_stored;
+	$stored = array('name'=>$_zp_comment_stored[0],'email'=>$_zp_comment_stored[1],
+							 'website'=>$_zp_comment_stored[2],'comment'=>$_zp_comment_stored[3],
+							 'saved'=>$_zp_comment_stored[4],'private'=>$_zp_comment_stored[5],
+							 'anon'=>$_zp_comment_stored[6]);
+	if ($numeric) {
+		return Array_merge($stored);
+	}
+	return $stored;
 }
 
 /*** Comment Context **********************/

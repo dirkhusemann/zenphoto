@@ -3,7 +3,6 @@ if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 define('OFFSET_PATH', 0);
 header('Content-Type: application/xml');
 require_once(ZENFOLDER . "/template-functions.php");
-$themepath = 'themes';
 
 function fixRSSDate($bad_date) {
 	$rval = FALSE;

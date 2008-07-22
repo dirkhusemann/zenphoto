@@ -11,7 +11,7 @@ if (!($_zp_loggedin & (ADMIN_RIGHTS | COMMENT_RIGHTS))) { // prevent nefarious a
 	exit();
 }
 $gallery = new Gallery();
-if (isset($_get['page'])) {
+if (isset($_GET['page'])) {
 	$page = $_GET['page'];
 } else {
 	$page = '';

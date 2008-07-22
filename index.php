@@ -16,8 +16,6 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 $_zp_plugin_scripts = array();
 $_zp_flash_player = NULL;
 
-$themepath = 'themes';
-
 header ('Content-Type: text/html; charset=' . getOption('charset'));
 $obj = '';
 if (isset($_GET['p'])) {
@@ -27,7 +25,7 @@ if (isset($_GET['p'])) {
 	if (substr($page, 0, 1) == "*") {
 		$_zen_gallery_page = basename($obj = ZENFOLDER."/".substr($page, 1) . ".php");
 	} else {
-		$obj = "$themepath/$theme/$page.php";
+		$obj = THEMEFOLDER."/$theme/$page.php";
 		$_zen_gallery_page = basename($obj);
 		if (file_exists(SERVERPATH . "/" . $obj)) {
 		}
@@ -36,7 +34,7 @@ if (isset($_GET['p'])) {
 	// image page
 	handleSearchParms($_zp_current_album->name, $_zp_current_image->filename);
 	$theme = setupTheme();
-	$_zen_gallery_page = basename($obj = "$themepath/$theme/image.php");
+	$_zen_gallery_page = basename($obj = THEMEFOLDER."/$theme/image.php");
 } else if (in_context(ZP_ALBUM)) {
 // album page
 	if(isset($_GET['zipfile']) && is_dir(realpath(getAlbumFolder() . $_GET['album']))){
@@ -49,18 +47,18 @@ if (isset($_GET['p'])) {
 			zp_setcookie("zenphoto_image_search_params", $search->getSearchParams(), 0, $cookiepath);
 			set_context(ZP_INDEX | ZP_ALBUM);
 			$theme = setupTheme();
-			$_zen_gallery_page = basename($obj = "$themepath/$theme/album.php");
+			$_zen_gallery_page = basename($obj = THEMEFOLDER."/$theme/album.php");
 		} else {
 			handleSearchParms($_zp_current_album->name);
 			$theme = setupTheme();
-			$_zen_gallery_page = basename($obj = "$themepath/$theme/album.php");
+			$_zen_gallery_page = basename($obj = THEMEFOLDER."/$theme/album.php");
 		}
 	}
 } else if (in_context(ZP_INDEX)) {
 	// index page
 	handleSearchParms();
 	$theme = setupTheme();
-	$_zen_gallery_page = basename($obj = "$themepath/$theme/index.php");
+	$_zen_gallery_page = basename($obj = THEMEFOLDER."/$theme/index.php");
 }
 if (file_exists(SERVERPATH . "/" . $obj)) {
 	$curdir = getcwd();
