@@ -7,13 +7,13 @@
  * C A U T I O N: With 1.0.4.7 the usage to get an specific album changes. You now have to pass the foldername of an album instead the album title.
  * 
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.4.7
+ * @version 1.0.4.9
  * @package plugins 
  */
 
 $plugin_description = gettext("Functions that provide various statistics about images and albums in the gallery.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.4.8';
+$plugin_version = '1.0.4.9';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---image_album_statistics.php.html";
 
 /**
@@ -136,11 +136,11 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
 	global $_zp_gallery;
 	$albumpath = rewrite_path("/", "index.php?album=");
 	$tempalbum = new Album($_zp_gallery, $album['folder']);
-		echo "<li><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . htmlspecialchars(strip_tags(get_language_string($tempalbum->getTitle())),ENT_QUOTES) . "\">\n";
+		echo "<li><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . htmlspecialchars(strip_tags(get_language_string($tempalbum->getTitle(),getOption('locale'))),ENT_QUOTES) . "\">\n";
 		echo "<img src=\"".$tempalbum->getAlbumThumb()."\"></a>\n<br />";
 		if($showtitle) {
-			echo "<h3><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . htmlspecialchars(strip_tags(get_language_string($tempalbum->getTitle())),ENT_QUOTES) . "\">\n";
-			echo get_language_string($tempalbum->getTitle())."</a></h3>\n";
+			echo "<h3><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . htmlspecialchars(strip_tags(get_language_string($tempalbum->getTitle(),getOption('locale'))),ENT_QUOTES) . "\">\n";
+			echo get_language_string($tempalbum->getTitle(),getOption('locale'))."</a></h3>\n";
 		}
 		if($showdate) {
 			if($option === "latestupdated") {
@@ -174,7 +174,7 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
 			echo "<p>".gettext("Views: ").$hitcounter."</p>";
 		}
 		if($showdesc) {
-			echo "<p>".my_truncate_string(get_language_string($tempalbum->getDesc()), $desclength)."</p>";
+			echo "<p>".my_truncate_string(get_language_string($tempalbum->getDesc(),getOption('locale')), $desclength)."</p>";
 		}
 		echo "</li>";
 }
@@ -347,11 +347,11 @@ function printImageStatistic($number, $option, $albumfolder='', $showtitle=false
 	echo "\n<div id=\"$option\">\n";
 	echo "<ul>";
 	foreach ($images as $image) {
-		echo "<li><a href=\"" . $image->getImageLink() . "\" title=\"" . htmlspecialchars(strip_tags(get_language_string($image->getTitle())),ENT_QUOTES) . "\">\n";
-		echo "<img src=\"" . $image->getThumb() . "\"  alt=\"" . htmlspecialchars(get_language_string($image->getTitle()),ENT_QUOTES) . "\" /></a>\n";
+		echo "<li><a href=\"" . $image->getImageLink() . "\" title=\"" . htmlspecialchars(strip_tags(get_language_string($image->getTitle(),getOption('locale'))),ENT_QUOTES) . "\">\n";
+		echo "<img src=\"" . $image->getThumb() . "\"  alt=\"" . htmlspecialchars(get_language_string($image->getTitle(),getOption('locale')),ENT_QUOTES) . "\" /></a>\n";
 		if($showtitle) {
-			echo "<h3><a href=\"".$image->getImageLink()."\" title=\"" . htmlspecialchars(strip_tags(get_language_string($image->getTitle())),ENT_QUOTES) . "\">\n";
-			echo htmlspecialchars(get_language_string($image->getTitle()))."</a></h3>\n";
+			echo "<h3><a href=\"".$image->getImageLink()."\" title=\"" . htmlspecialchars(strip_tags(get_language_string($image->getTitle(),getOption('locale'))),ENT_QUOTES) . "\">\n";
+			echo htmlspecialchars(get_language_string($image->getTitle(),getOption('locale')))."</a></h3>\n";
 		}
 		if($showdate) {
 			echo "<p>". zpFormattedDate(getOption('date_format'),strtotime($image->getDateTime()))."</p>";
@@ -370,7 +370,7 @@ function printImageStatistic($number, $option, $albumfolder='', $showtitle=false
 			echo "<p>".gettext("Views: ").$hitcounter."</p>";
 		}
 		if($showdesc) {
-			echo "<p>".my_truncate_string(get_language_string($image->getDesc()), $desclength)."</p>";
+			echo "<p>".my_truncate_string(get_language_string($image->getDesc(),getOption('locale')), $desclength)."</p>";
 		}
 		echo "</li>";
 	}
