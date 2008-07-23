@@ -839,14 +839,14 @@ foreach ($comments as $comment) {
 		if ($imagedata) {
 			$imgdata = $imagedata[0];
 			$image = $imgdata['filename'];
-			if ($imgdata['title'] == "") $title = $image; else $title = $imgdata['title'];
+			if ($imgdata['title'] == "") $title = $image; else $title = get_language_string($imgdata['title']);
 			$title = '/ ' . $title;
 			$albmdata = query_full_array("SELECT `folder`, `title` FROM ". prefix('albums') .
  											" WHERE `id`=" . $imgdata['albumid']);
 			if ($albmdata) {
 				$albumdata = $albmdata[0];
 				$album = $albumdata['folder'];
-				$albumtitle = $albumdata['title'];
+				$albumtitle = get_language_string($albumdata['title']);
 				if (empty($albumtitle)) $albumtitle = $album;
 			} else {
 				$title = 'database error';
@@ -862,7 +862,7 @@ foreach ($comments as $comment) {
 		if ($albmdata) {
 			$albumdata = $albmdata[0];
 			$album = $albumdata['folder'];
-			$albumtitle = $albumdata['title'];
+			$albumtitle = get_language_string($albumdata['title']);
 			if (empty($albumtitle)) $albumtitle = $album;
 		} else {
 			$title = 'database error';

@@ -26,7 +26,7 @@ $standardOptions = array(	'gallery_title','website_title','website_url','time_of
  													'Use_Captcha', 'locale', 'date_format', 'hotlink_protection', 'image_sortdirection',
 													'admin_reset_date', 'comment_name_required', 'comment_email_required',
 													'comment_web_required', 'full_image_download', 'zenphoto_release','gallery_user', 'search_user',
-													'thumb_select_images', 'Gallery_description', 'multi_lingual'
+													'thumb_select_images', 'Gallery_description', 'multi_lingual', 'login_user_field'
 												 );
 $charsets = array("ASMO-708" => "Arabic",
 									"BIG5" => "Chinese Traditional",
@@ -774,7 +774,7 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<table>";
 	echo "\n<td width = \"60%\">\n<table>\n<tr>";
 	echo "\n<tr>";
-	echo "<td align=\"right\" valign=\"top\" width=\"150\">Album Title: </td>";
+	echo "<td align=\"right\" valign=\"top\" >".gettext("Album Title").": </td>";
 	echo '<td>';
 	print_language_string_list($album->get('title'), $prefix."albumtitle", false);
 	echo "</td></tr>\n";
@@ -1275,7 +1275,7 @@ function processAlbumEdit($index, $album) {
 	$album->setTags($tags);
 	$album->setDateTime(strip($_POST[$prefix."albumdate"]));
 	$album->setPlace(process_language_string_save($prefix.'albumplace'));
-	$album->setAlbumThumb(strip($_POST[$prefix.'thumb']));
+	if (isset($_POST[$prefix.'thumb'])) $album->setAlbumThumb(strip($_POST[$prefix.'thumb']));
 	$album->setShow(isset($_POST[$prefix.'Published']));
 	$album->setCommentsAllowed(isset($_POST[$prefix.'allowcomments']));
 	$sorttype = strip($_POST[$prefix.'sortby']);
@@ -1489,7 +1489,10 @@ function adminPageNav($pagenum,$totalpages,$url,$tab='') {
  */
 function print_language_string_list($dbstring, $name, $textbox=false, $locale=NULL) {
 	global $_zp_languages, $_zp_active_languages;
-	if (is_null($locale)) $locale = getOption('locale');
+	if (is_null($locale)) {
+		$locale = getOption('locale');
+		if (empty($locale)) $locale = 'en_US'; // HTTP Accept Language and no locale
+	}
 	if (preg_match('/^a:[0-9]+:{/', $dbstring)) {
 		$strings =unserialize($dbstring);
 	} else {

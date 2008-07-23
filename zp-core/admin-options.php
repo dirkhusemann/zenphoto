@@ -116,9 +116,11 @@ if (isset($_GET['action'])) {
 			setOption('feed_imagesize', $_POST['feed_imagesize']);
 			$search = new SearchEngine();
 			setOption('search_fields', 32767, false); // make SearchEngine allow all options so parseQueryFields() will gives back what was choosen this time
+			setBoolOption('login_user_field', isset($_POST['login_user_field']));
 			setOption('search_fields', $search->parseQueryFields());
 			$olduser = getOption('gallerly_user');
 			setOption('gallery_user', $newuser = $_POST['gallery_user']);
+			if (!empty($newuser)) setOption('login_user_field', 1);
 			$pwd = trim($_POST['gallerypass']);
 			if ($olduser != $newuser) {
 				if (empty($pwd)) {
@@ -138,6 +140,7 @@ if (isset($_GET['action'])) {
 			}
 			$olduser = getOption('search_user');
 			setOption('search_user',$newuser = $_POST['search_user']);
+			if (!empty($newuser)) setOption('login_user_field', 1);
 			if ($olduser != $newuser) {
 				if (empty($pwd)) {
 					$_POST['searchpass'] = 'xxx';  // invalidate, user changed but password not set
@@ -159,8 +162,9 @@ if (isset($_GET['action'])) {
 			setOption('search_hint', process_language_string_save('search_hint'));
 			setBoolOption('persistent_archive', isset($_POST['persistent_archive']));
 			setBoolOption('album_session', isset($_POST['album_session']));
+			$oldloc = getOption('locale', true); // get the option as stored in the database, not what might have been set by a cookie
 			setOption('locale', $newloc = $_POST['locale']);
-			if ($newloc != '') { // only clear the cookie if the option is not the default!
+			if ($newloc != $oldloc) { // clear any cookies so things start fresh.
 				$cookiepath = WEBPATH;
 				if (WEBPATH == '') { $cookiepath = '/'; }
 				zp_setCookie('dynamic_locale', getOption('locale'), time()-368000, $cookiepath);  // clear the language cookie
@@ -547,6 +551,12 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		<?php print_language_string_list(getOption('Gallery_description'), 'Gallery_description', true) ?>
 		</td>
 		<td><?php echo gettext("A brief description of your gallery. Some themes may display this text."); ?></td>
+	</tr>
+	<tr>
+		<td><?php echo gettext("Enable user name login field:"); ?></td>
+		<td><input type="checkbox" name="login_user_field" value="1"
+		<?php echo checked('1', getOption('login_user_field')); ?> /></td>
+		<td><?php echo gettext("This option places a field on the gallery (search, album) login form for entering a user name. This is necessary if you have set guest login user names. It is also useful to allow Admin users to log in on these pages rather than at the Admin login."); ?></td>
 	</tr>
 	<tr>
     <td><?php echo gettext("Gallery guest user:"); ?>    </td>

@@ -1009,6 +1009,26 @@ function zp_mail($subject, $message, $headers = '', $admin_emails=null) {
 }
 
 /**
+ * Sorts the results of a DB search by the current locale title string
+ *
+ * @param array $dbresult the result of the DB query
+ * @param bool $descending the direction of the sort
+ * @return array the sorted result
+ */
+function sortByTitle($dbresult, $descending) {
+	$temp = array();
+	foreach ($dbresult as $row) {
+		$temp[] = get_language_string($row['title']);
+	}
+	natcasesort($temp);
+	$result = array();
+	foreach ($temp as $key=>$title) {
+		$result[] = $dbresult[$key];
+	}
+	return $result;
+}
+
+/**
  * Sort the album array based on either according to the sort key.
  * Default is to sort on the `sort_order` field.
  *
@@ -1025,13 +1045,20 @@ function sortAlbumArray($albums, $sortkey='sort_order') {
 	global $_zp_loggedin;
 
 	$hidden = array();
-	$result = query("SELECT folder, sort_order, `show`, `dynamic`, `search_params` FROM " .
-	prefix("albums") . " ORDER BY " . $sortkey);
+	$result = query("SELECT folder, sort_order, `title`, `show`, `dynamic`, `search_params` FROM " .
+						prefix("albums") . " ORDER BY " . $sortkey);
 
+	$results = array();
+	while ($row = mysql_fetch_assoc($result)) {
+		$results[] = $row;
+	}
+	if (strpos('title', $sortkey) !== false) {
+		$results = sortByTitle($results, strpos('DESC', $sortkey) !== false);
+	}
 	$i = 0;
 	$albums_r = array_flip($albums);
 	$albums_touched = array();
-	while ($row = mysql_fetch_assoc($result)) {
+	foreach ($results as $row) {
 		$folder = $row['folder'];
 		if (array_key_exists($folder, $albums_r)) {
 			$albums_r[$folder] = $i;
@@ -1564,7 +1591,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			$newcomment['date'] = time();
 			$receiver->comments[] = $newcomment;
 			$action = "posted";
-		}		
+		}
 	// switch added for zenpage support
 		switch ($type) {
 			case "images":
@@ -1579,13 +1606,13 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 				$ur_album = getUrAlbum($receiver);
 				break;
 			case "news":
-				$on = $receiver->zenpages['title'];
+				$on = get_language_string($receiver->zenpages['title']);
 				$url = "p=".ZENPAGE_NEWS."&title=" . urlencode($receiver->zenpages['titlelink']);
 				//$album = $receiver->getAlbum();
 				//$ur_album = getUrAlbum($album);
 				break;
 			case "pages":
-				$on = $receiver->zenpages['title'];
+				$on = get_language_string($receiver->zenpages['title']);
 				$url = "p=".ZENPAGE_PAGES."&title=" . urlencode($receiver->zenpages['titlelink']);
 				//$album = $receiver->getAlbum();
 				//$ur_album = getUrAlbum($album);

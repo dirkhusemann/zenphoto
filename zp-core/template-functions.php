@@ -1955,7 +1955,7 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 			if (is_null($_zp_flash_player)) {
 				echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='No flash player installed.' />";
 			} else {
-				$_zp_flash_player->playerConfig($imagepath,$image['title']);
+				$_zp_flash_player->playerConfig($imagepath,get_language_string($image['title']));
 			}
 		}
 		elseif ($ext == ".3gp") {
@@ -2151,7 +2151,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 			if (is_null($_zp_flash_player)) {
 				echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='No flash player installed.' />";
 			} else {
-				$_zp_flash_player->playerConfig($imagepath,$image['title']);
+				$_zp_flash_player->playerConfig($imagepath,get_language_string($image['title']));
 			}
 		}
 		elseif ($ext == ".3gp") {
@@ -2499,7 +2499,7 @@ function printLatestComments($number, $shorten='123') {
 		}
 		$date = $comment['date'];
 		$albumtitle = $comment['albumtitle'];
-		if ($comment['title'] == "") $title = $image; else $title = $comment['title'];
+		if ($comment['title'] == "") $title = $image; else $title = get_language_string($comment['title']);
 		$website = $comment['website'];
 		$shortcomment = truncate_string($comment['comment'], $shorten);
 		if(!empty($title)) {
@@ -3529,7 +3529,9 @@ function printPasswordForm($hint, $showProtected=true) {
 	echo "\n    <input type=\"hidden\" name=\"password\" value=\"1\" />";
 
 	echo "\n    <table>";
-	echo "\n      <tr><td>".gettext("Login")."</td><td><input class=\"textfield\" name=\"user\" size=\"20\" /></td></tr>";
+	if (getOption('login_user_field')) {
+		echo "\n      <tr><td>".gettext("Login")."</td><td><input class=\"textfield\" name=\"user\" size=\"20\" /></td></tr>";
+	}
 	echo "\n      <tr><td>".gettext("Password")."</td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
 	echo "\n      <tr><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"".gettext("Submit")."\" /></td></tr>";
 	if (!empty($hint)) {

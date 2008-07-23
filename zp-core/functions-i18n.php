@@ -198,15 +198,13 @@ function parseHttpAcceptLanguage($str=NULL) {
  * Sets the 'locale' option to the result (non-persistent)
  */
 function getUserLocale() {
-	if (DEBUG_LOCALE) debugLog("getUserLocale()");	
+	if (DEBUG_LOCALE) debugLogBackTrace("getUserLocale()");	
 	$cookiepath = WEBPATH;
 	if (WEBPATH == '') { $cookiepath = '/'; }
 	if (isset($_POST['dynamic-locale'])) {
 		$locale = sanitize($_POST['dynamic-locale']);
 		zp_setCookie('dynamic_locale', $locale, time()+5184000, $cookiepath);
-		
-	if (DEBUG_LOCALE) debugLog("dynamic_locale post: $locale");		
-		
+		if (DEBUG_LOCALE) debugLog("dynamic_locale post: $locale");		
 	} else {
 		$localeOption = getOption('locale');
 		$locale = zp_getCookie('dynamic_locale');

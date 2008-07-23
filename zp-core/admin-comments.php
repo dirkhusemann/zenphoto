@@ -213,14 +213,14 @@ if ($page == "editcomment") { ?>
 				if ($imagedata) {
 					$imgdata = $imagedata[0];
 					$image = $imgdata['filename'];
-					if ($imgdata['title'] == "") $title = $image; else $title = $imgdata['title'];
+					if ($imgdata['title'] == "") $title = $image; else $title = get_language_string($imgdata['title']);
 					$title = '/ ' . $title;
 					$albmdata = query_full_array("SELECT `folder`, `title` FROM ". prefix('albums') .
  											" WHERE `id`=" . $imgdata['albumid']);
 					if ($albmdata) {
 						$albumdata = $albmdata[0];
 						$album = $albumdata['folder'];
-						$albumtitle = $albumdata['title'];
+						$albumtitle = get_language_string($albumdata['title']);
 						$link = "<a href=\"".rewrite_path("/$album/$image","/index.php?album=".urlencode($album).	"&amp;image=".urlencode($image))."\">".$albumtitle.$title."</a>";
 						if (empty($albumtitle)) $albumtitle = $album;
 					} else {
@@ -238,7 +238,7 @@ if ($page == "editcomment") { ?>
 				if ($albmdata) {
 					$albumdata = $albmdata[0];
 					$album = $albumdata['folder'];
-					$albumtitle = $albumdata['title'];
+					$albumtitle = get_language_string($albumdata['title']);
 					$link = "<a href=\"".rewrite_path("/$album","/index.php?album=".urlencode($album))."\">".$albumtitle.$title."</a>";
 					if (empty($albumtitle)) $albumtitle = $album;
 				} else {
@@ -254,7 +254,7 @@ if ($page == "editcomment") { ?>
 					if ($newsdata) {
 						$newsdata = $newsdata[0];
 						$titlelink = $newsdata['titlelink'];
-						$title = $newsdata['title'];
+						$title = get_language_string($newsdata['title']);
 				  $link = "<a href=\"".rewrite_path("/".ZENPAGE_NEWS."/".$titlelink,"/index.php?p=".ZENPAGE_NEWS."&amp;title=".urlencode($titlelink))."\">".$title."</a><br /> ".gettext("[news]");
 					} else {
 						$title = gettext('database error');
@@ -270,7 +270,7 @@ if ($page == "editcomment") { ?>
 					if ($pagesdata) {
 						$pagesdata = $pagesdata[0];
 						$titlelink = $pagesdata['titlelink'];
-						$title = $pagesdata['title'];
+						$title = get_language_string($pagesdata['title']);
 						$link = "<a href=\"".rewrite_path("/".ZENPAGE_PAGES."/".$titlelink,"/index.php?p=".ZENPAGE_PAGES."&amp;title=".urlencode($titlelink))."\">".$title."</a><br /> ".gettext("[page]");
 					} else {
 						$title = gettext('database error');

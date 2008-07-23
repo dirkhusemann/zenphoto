@@ -576,15 +576,21 @@ class Album extends PersistentObject {
 				}
 			}
 		}
-		$result = query("SELECT `filename`, `title`, `sort_order`, `show`, `id` FROM " . prefix("images")
-		. " WHERE `albumid`=" . $this->id . " ORDER BY " . $key . $direction);
-
+		$result = query("SELECT `filename`, `title`, `sort_order`, `title`, `show`, `id` FROM " . prefix("images")
+										. " WHERE `albumid`=" . $this->id . " ORDER BY " . $key . $direction);
+		$results = array();
+		while ($row = mysql_fetch_assoc($result)) {
+			$results[] = $row;
+		}							
+		if ($key == 'title') {
+			$results = sortByTitle($results, strpos('DESC', $direction) !== false);
+		}
 		$i = 0;
 		$flippedimages = array_flip($images);
 		$images_to_keys = array();
 		$images_in_db = array();
 		$images_invisible = array();
-		while ($row = mysql_fetch_assoc($result)) { // see what images are in the database so we can check for visible
+			foreach ($results as $row) { // see what images are in the database so we can check for visible
 			$filename = $row['filename'];
 			if (isset($flippedimages[$filename])) { // ignore db entries for images that no longer exist.
 				if ($_zp_loggedin || $row['show']) {
