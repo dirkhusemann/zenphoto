@@ -2184,8 +2184,7 @@ function generateCaptcha(&$image) {
 	$admins = getAdministrators();
 	$admin = array_shift($admins);
 	$key = $admin['pass'];
-	$cypher = urlencode(rc4($key, $string));
-
+	$cypher = implode('', unpack("H*", rc4($key, $string)));
 	$code=md5($string);
 	$image = WEBPATH . '/' . ZENFOLDER . "/c.php?i=$cypher";
 
