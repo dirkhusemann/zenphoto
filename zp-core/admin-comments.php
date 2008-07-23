@@ -201,7 +201,7 @@ if ($page == "editcomment") { ?>
 		$author = $comment['name'];
 		$email = $comment['email'];
 		
-		if(!class_exists("Zenpage")) {
+		if(getOption("zp_plugin_zenpage")) {
 			require_once("plugins/zenpage/zenpage-class.php");
 			$zenpage = new Zenpage("","");
 		}
