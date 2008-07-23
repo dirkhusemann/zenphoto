@@ -22,7 +22,10 @@ define("ZP_COMMENT", 8);
 define("ZP_SEARCH", 16);
 define("ZP_SEARCH_LINKED", 32);
 define("ZP_ALBUM_LINKED", 64);
-
+// ZENPAGE: load zenpage class if present, used for zp_handle_comment() only
+if(getOption('zp_plugin_zenpage')) {
+	require_once("plugins/zenpage/zenpage-class.php");
+}
 function get_context() {
 	global $_zp_current_context;
 	return $_zp_current_context;
@@ -142,33 +145,68 @@ function fix_path_redirect() {
 function zp_handle_comment() {
 	global $_zp_current_image, $_zp_current_album, $_zp_comment_stored;
 	$activeImage = false;
-	$redirectTo = FULLWEBPATH . '/' . zpurl();
+	// ZENPAGE:  if else constructs added
+	if(getOption('zp_plugin_zenpage')) {
+		$zenpage = new Zenpage("","");
+		$zenpage_news_context = $zenpage->isPage(ZENPAGE_NEWS);
+		$zenpage_pages_context = $zenpage->isPage(ZENPAGE_PAGES);
+	} else {
+		$zenpage_news_context = FALSE;
+		$zenpage_pages_context = FALSE;
+	}
+	if($zenpage_news_context) {
+		$zenpage_news = $zenpage->zenpages;
+	 //	$zenpage_news = $zenpage->getNewsArticle(sanitize($_GET['title']),true);
+		$redirectTo = FULLWEBPATH . '/index.php?p='.ZENPAGE_NEWS.'&title='.$zenpage_news['titlelink'];
+	} else if ($zenpage_pages_context) {
+		$zenpage_page = $zenpage->zenpages;
+		$redirectTo = FULLWEBPATH . '/index.php?p='.ZENPAGE_NEWS.'&title='.$zenpage_page['titlelink'];
+	} else {
+		$redirectTo = FULLWEBPATH . '/' . zpurl();
+	}
+	// $redirectTo = FULLWEBPATH . '/' . zpurl();
 	$comment_error = 0;
 	$cookie = zp_getCookie('zenphoto');
 	if (isset($_POST['comment'])) {
-		if (in_context(ZP_ALBUM) && isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
+		if ((in_context(ZP_ALBUM) OR $zenpage_news_context OR $zenpage_pages_context) && isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
 			if (isset($_POST['website'])) $website = strip_tags($_POST['website']); else $website = "";
 			$allowed_tags = "(".getOption('allowed_tags').")";
 			$allowed = parseAllowedTags($allowed_tags);
 			if ($allowed === false) { $allowed = array(); } // someone has screwed with the 'allowed_tags' option row in the database, but better safe than sorry
 			if (isset($_POST['imageid'])) {  //used (only?) by the tricasa hack to know which image the client is working with.
-	 			$activeImage = zp_load_image_from_id(strip_tags($_POST['imageid']));
-	 			if ($activeImage !== false) {
-	 				$commentadded = $activeImage->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']),
-	 													$website, kses($_POST['comment'], $allowed),
-	 													strip_tags($_POST['code']), $_POST['code_h'],
-	 													sanitize($_SERVER['REMOTE_ADDR']), $_POST['private'],
+				$activeImage = zp_load_image_from_id(strip_tags($_POST['imageid']));
+				if ($activeImage !== false) {
+					$commentadded = $activeImage->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']),
+					$website, kses($_POST['comment'], $allowed),
+					strip_tags($_POST['code']), $_POST['code_h'],
+					sanitize($_SERVER['REMOTE_ADDR']), $_POST['private'],
 	 													$_POST['anon']);
 	 				$redirectTo = $activeImage->getImageLink(); 
 					}
 			} else {
-				if (in_context(ZP_IMAGE)) {
+				// ZENPAGE: if else change
+				if (in_context(ZP_IMAGE) AND in_context(ZP_ALBUM)) {
+					$commentobject = $_zp_current_image;
+					$redirectTo = $_zp_current_image->getImageLink();
+				} else if (!in_context(ZP_IMAGE) AND in_context(ZP_ALBUM)){
+					$commentobject = $_zp_current_album;
+					$redirectTo = $_zp_current_album->getAlbumLink();
+				} else 	if($zenpage_news_context) {
+					//$zenpage_news = $zenpage->getNewsArticle(sanitize($_GET['title']),true);
+					$commentobject = $zenpage;
+					$redirectTo = FULLWEBPATH . '/index.php?p='.ZENPAGE_NEWS.'&title='.$zenpage_news['titlelink'];
+				} else if ($zenpage_pages_context) {
+					//$zenpage_page = $zenpage->getPage(sanitize($_GET['title']),true);
+					$commentobject = $zenpage;
+					$redirectTo = FULLWEBPATH . '/index.php?p='.ZENPAGE_NEWS.'&title='.$zenpage_page['titlelink'];
+				}
+  			/*	if (in_context(ZP_IMAGE)) {
 					$commentobject = $_zp_current_image;
 					$redirectTo = $_zp_current_image->getImageLink(); 
 				} else {
 					$commentobject = $_zp_current_album;
 					$redirectTo = $_zp_current_album->getAlbumLink(); 
-				}
+				} */
 				if (isset($_POST['code'])) {
 					$code1 = strip_tags($_POST['code']);
 					$code2 = $_POST['code_h'];
@@ -198,7 +236,8 @@ function zp_handle_comment() {
 				$_zp_comment_stored = array($_POST['name'], $_POST['email'], $website, $_POST['comment'], false, isset($_POST['private']), isset($_POST['anon']));
 				if (isset($_POST['remember'])) $_zp_comment_stored[4] = true;
 				$comment_error = 1 + $commentadded;
-				if ($activeImage !== false) { // tricasa hack? Set the context to the image on which the comment was posted
+				// ZENPAGE: if statements added
+				if ($activeImage !== false AND !$zenpage_news_context AND !$zenpage_pages_context) { // tricasa hack? Set the context to the image on which the comment was posted
 					$_zp_current_image = $activeImage;
 					$_zp_current_album = $activeImage->getAlbum();
 					set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX);

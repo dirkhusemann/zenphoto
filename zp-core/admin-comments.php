@@ -200,40 +200,83 @@ if ($page == "editcomment") { ?>
 		$id = $comment['id'];
 		$author = $comment['name'];
 		$email = $comment['email'];
-		if ($comment['type']=='images') {
-			$imagedata = query_full_array("SELECT `title`, `filename`, `albumid` FROM ". prefix('images') .
+		
+		if(!class_exists("Zenpage")) {
+			require_once("plugins/zenpage/zenpage-class.php");
+			$zenpage = new Zenpage("","");
+		}
+		// ZENPAGE: switch added for zenpage comment support
+		switch ($comment['type']) {
+			case "images":
+				$imagedata = query_full_array("SELECT `title`, `filename`, `albumid` FROM ". prefix('images') .
  										" WHERE `id`=" . $comment['ownerid']);
-			if ($imagedata) {
-				$imgdata = $imagedata[0];
-				$image = $imgdata['filename'];
-				if ($imgdata['title'] == "") $title = $image; else $title = $imgdata['title'];
-				$title = '/ ' . $title;
-				$albmdata = query_full_array("SELECT `folder`, `title` FROM ". prefix('albums') .
+				if ($imagedata) {
+					$imgdata = $imagedata[0];
+					$image = $imgdata['filename'];
+					if ($imgdata['title'] == "") $title = $image; else $title = $imgdata['title'];
+					$title = '/ ' . $title;
+					$albmdata = query_full_array("SELECT `folder`, `title` FROM ". prefix('albums') .
  											" WHERE `id`=" . $imgdata['albumid']);
+					if ($albmdata) {
+						$albumdata = $albmdata[0];
+						$album = $albumdata['folder'];
+						$albumtitle = $albumdata['title'];
+						$link = "<a href=\"".rewrite_path("/$album/$image","/index.php?album=".urlencode($album).	"&amp;image=".urlencode($image))."\">".$albumtitle.$title."</a>";
+						if (empty($albumtitle)) $albumtitle = $album;
+					} else {
+						$title = gettext('database error');
+					}
+				} else {
+					$title = gettext('database error');
+				}
+				break;
+			case "albums":
+				$image = '';
+				$title = '';
+				$albmdata = query_full_array("SELECT `title`, `folder` FROM ". prefix('albums') .
+ 										" WHERE `id`=" . $comment['ownerid']);
 				if ($albmdata) {
 					$albumdata = $albmdata[0];
 					$album = $albumdata['folder'];
 					$albumtitle = $albumdata['title'];
+					$link = "<a href=\"".rewrite_path("/$album","/index.php?album=".urlencode($album))."\">".$albumtitle.$title."</a>";
 					if (empty($albumtitle)) $albumtitle = $album;
 				} else {
 					$title = gettext('database error');
 				}
-			} else {
-				$title = gettext('database error');
-			}
-		} else {
-			$image = '';
-			$title = '';
-			$albmdata = query_full_array("SELECT `title`, `folder` FROM ". prefix('albums') .
+				break;
+			case "news": // ZENPAGE: if plugin is installed
+				if(getOption("zp_plugin_zenpage")) {
+					$titlelink = '';
+					$title = '';
+					$newsdata = query_full_array("SELECT `title`, `titlelink` FROM ". prefix('zenpage_news') .
  										" WHERE `id`=" . $comment['ownerid']);
-			if ($albmdata) {
-				$albumdata = $albmdata[0];
-				$album = $albumdata['folder'];
-				$albumtitle = $albumdata['title'];
-				if (empty($albumtitle)) $albumtitle = $album;
-			} else {
-				$title = gettext('database error');
-			}
+					if ($newsdata) {
+						$newsdata = $newsdata[0];
+						$titlelink = $newsdata['titlelink'];
+						$title = $newsdata['title'];
+				  $link = "<a href=\"".rewrite_path("/".ZENPAGE_NEWS."/".$titlelink,"/index.php?p=".ZENPAGE_NEWS."&amp;title=".urlencode($titlelink))."\">".$title."</a><br /> ".gettext("[news]");
+					} else {
+						$title = gettext('database error');
+					}
+				}
+				break;
+			case "pages": // ZENPAGE: if plugin is installed
+				if(getOption("zp_plugin_zenpage")) {
+					$image = '';
+					$title = '';
+					$pagesdata = query_full_array("SELECT `title`, `titlelink` FROM ". prefix('zenpage_pages') .
+ 										" WHERE `id`=" . $comment['ownerid']);
+					if ($pagesdata) {
+						$pagesdata = $pagesdata[0];
+						$titlelink = $pagesdata['titlelink'];
+						$title = $pagesdata['title'];
+						$link = "<a href=\"".rewrite_path("/".ZENPAGE_PAGES."/".$titlelink,"/index.php?p=".ZENPAGE_PAGES."&amp;title=".urlencode($titlelink))."\">".$title."</a><br /> ".gettext("[page]");
+					} else {
+						$title = gettext('database error');
+					}
+				}
+				break;
 		}
 		$date  = myts_date('%m/%d/%Y %I:%M %p', $comment['date']);
 		$website = $comment['website'];
@@ -247,8 +290,7 @@ if ($page == "editcomment") { ?>
 	<tr>
 		<td><input type="checkbox" name="ids[]" value="<?php echo $id; ?>"
 			onClick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" /></td>
-		<td style="font-size: 7pt;"><?php echo "<a href=\"" . (getOption("mod_rewrite") ? "../$album/$image" : "../index.php?album=".urlencode($album).
-											"&amp;image=".urlencode($image)) . "\">$albumtitle $title</a>"; ?></td>
+		<td style="font-size: 7pt;"><?php echo $link; ?></td>
 		<td>
 		<?php 
 		echo $website ? "<a href=\"$website\">$author</a>" : $author; 

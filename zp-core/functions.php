@@ -1467,11 +1467,31 @@ function isValidURL($url) {
  * @return int
  */
 function postComment($name, $email, $website, $comment, $code, $code_ok, $receiver, $ip, $private, $anon) {
+// added for zenpage support
+	$class = strtolower(get_class($receiver));
+	echo "Class: ".$class;
+	switch ($class) {
+		case "image":
+			$type = "images";
+			break;
+		case "albums":
+			$type = "albums";
+			break;
+		case "zenpage":
+			if($receiver->isPage(ZENPAGE_NEWS)) {
+				$type = "news";
+			}
+			if($receiver->isPage(ZENPAGE_PAGES)) {
+				$type = "pages";
+			}
+			break;
+	} 
+	/*
 	if (strtolower(get_class($receiver)) == 'image') {
 		$type = 'images';
 	} else {
 		$type = 'albums';
-	}
+	} */
 	$receiver->getComments();
 	$name = trim($name);
 	$email = trim($email);
@@ -1513,9 +1533,21 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		if ($private) $private = 1; else $private = 0;
 		if ($anon) $anon = 1; else $anon = 0;
 		
+		// added for zenpage support - $receiver->id in the query below changed to $receiverid
+		if($type === "images" OR $type === "albums") {
+			$receiverid = $receiver->id;
+		}
+		if(getOption("zp_plugin_zenpage")) {
+			if($type === "news") {
+				$receiverid = $receiver->zenpages['id'];
+			}
+			if($type === "pages") {
+				$receiverid = $receiver->zenpages['id'];
+			}
+		}
 		// Update the database entry with the new comment
 		query("INSERT INTO " . prefix("comments") . " (`ownerid`, `name`, `email`, `website`, `comment`, `inmoderation`, `date`, `type`, `ip`, `private`, `anon`) VALUES " .
-						" ('" . $receiver->id .
+						" ('" . $receiverid .
 						"', '" . escape($name) . 
 						"', '" . escape($email) . 
 						"', '" . escape($website) . 
@@ -1542,6 +1574,34 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			$action = "posted";
 		}
 
+		
+	// switch added for zenpage support
+		switch ($type) {
+			case "images":
+				$on = $receiver->getAlbumName() . " about " . $receiver->getTitle();
+				$url = "album=" . urlencode($receiver->album->name) . "&image=" . urlencode($receiver->filename);
+				$album = $receiver->getAlbum();
+				$ur_album = getUrAlbum($album);
+				break;
+			case "albums":
+				$on = $receiver->name;
+				$url = "album=" . urlencode($receiver->name);
+				$ur_album = getUrAlbum($receiver);
+				break;
+			case "news":
+				$on = $receiver->zenpages['title'];
+				$url = "p=".ZENPAGE_NEWS."&title=" . urlencode($receiver->zenpages['titlelink']);
+				//$album = $receiver->getAlbum();
+				//$ur_album = getUrAlbum($album);
+				break;
+			case "pages":
+				$on = $receiver->zenpages['title'];
+				$url = "p=".ZENPAGE_PAGES."&title=" . urlencode($receiver->zenpages['titlelink']);
+				//$album = $receiver->getAlbum();
+				//$ur_album = getUrAlbum($album);
+				break;
+		}
+		/*
 		if ($type == 'images') {
 			$on = $receiver->getAlbumName() . " about " . $receiver->getTitle();
 			$url = "album=" . urlencode($receiver->album->name) . "&image=" . urlencode($receiver->filename);
@@ -1551,7 +1611,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			$on = $receiver->name;
 			$url = "album=" . urlencode($receiver->name);
 			$ur_album = getUrAlbum($receiver);
-		}
+		} */
 		if (getOption('email_new_comments')) {
 			$message = gettext("A comment has been $action in your album")." $on\n" .
  										"\n" .
@@ -1573,13 +1633,16 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 					unset($admin_users[$admin['id']]);
 				}
 			}
-			$id = $ur_album->getAlbumID();
-			$sql = "SELECT `adminid` FROM ".prefix('admintoalbum')." WHERE `albumid`=$id";
-			$result = query_full_array($sql);
-			foreach ($result as $anadmin) {
-				$admin = $admin_users[$anadmin['adminid']];
-				if (!empty($admin['email'])) {
-					$emails[] = $admin['email'];
+			// take out for zenpage comments since there are no album admins
+			if($type === "images" OR $type === "albums") {
+				$id = $ur_album->getAlbumID();
+				$sql = "SELECT `adminid` FROM ".prefix('admintoalbum')." WHERE `albumid`=$id";
+				$result = query_full_array($sql);
+				foreach ($result as $anadmin) {
+					$admin = $admin_users[$anadmin['adminid']];
+					if (!empty($admin['email'])) {
+						$emails[] = $admin['email'];
+					}
 				}
 			}
 			zp_mail("[" . get_language_string(getOption('gallery_title'), getOption('locale')) . "] Comment posted on $on", $message, "", $emails);
