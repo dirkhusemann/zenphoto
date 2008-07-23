@@ -102,7 +102,7 @@ if (getOption('album_session') && OFFSET_PATH==0) {
 
 // Set error reporting to the default if it's not.
 error_reporting(E_ALL ^ E_NOTICE);
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
 $_zp_error = false;
 
 require_once('functions-i18n.php');
