@@ -1469,7 +1469,6 @@ function isValidURL($url) {
 function postComment($name, $email, $website, $comment, $code, $code_ok, $receiver, $ip, $private, $anon) {
 // added for zenpage support
 	$class = strtolower(get_class($receiver));
-	echo "Class: ".$class;
 	switch ($class) {
 		case "image":
 			$type = "images";
@@ -1498,7 +1497,6 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	$website = trim($website);
 	$code = md5(trim($code));
 	$code_ok = trim($code_ok);
-
 	// Let the comment have trailing line breaks and space? Nah...
 	// Also (in)validate HTML here, and in $name.
 	$comment = trim($comment);
@@ -1511,11 +1509,9 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	if (empty($comment)) {
 		return -6;
 	}
-
 	if (!empty($website) && substr($website, 0, 7) != "http://") {
 		$website = "http://" . $website;
 	}
-
 	$goodMessage = 2;
 	$gallery = new gallery();
 	if (!(false === ($requirePath = getPlugin('spamfilters/'.getOption('spam_filter').".php", false)))) {
@@ -1523,7 +1519,6 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		$spamfilter = new SpamFilter();
 		$goodMessage = $spamfilter->filterMessage($name, $email, $website, $comment, $type=='images'?$receiver->getFullImage():NULL, $ip);
 	}
-
 	if ($goodMessage) {
 		if ($goodMessage == 1) {
 			$moderate = 1;
@@ -1532,7 +1527,6 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		}
 		if ($private) $private = 1; else $private = 0;
 		if ($anon) $anon = 1; else $anon = 0;
-		
 		// added for zenpage support - $receiver->id in the query below changed to $receiverid
 		if($type === "images" OR $type === "albums") {
 			$receiverid = $receiver->id;
@@ -1558,12 +1552,10 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 						", '$ip'" .
 						", '$private'" .
 						", '$anon')");
-
 		if ($moderate) {
 			$action = "placed in moderation";
 		} else {
 			//  add to comments array and notify the admin user
-
 			$newcomment = array();
 			$newcomment['name'] = $name;
 			$newcomment['email'] = $email;
@@ -1572,9 +1564,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			$newcomment['date'] = time();
 			$receiver->comments[] = $newcomment;
 			$action = "posted";
-		}
-
-		
+		}		
 	// switch added for zenpage support
 		switch ($type) {
 			case "images":
@@ -1647,7 +1637,6 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			}
 			zp_mail("[" . get_language_string(getOption('gallery_title'), getOption('locale')) . "] Comment posted on $on", $message, "", $emails);
 		}
-
 	}
 	return $goodMessage;
 }
