@@ -12,7 +12,7 @@ $cypher = $_GET['i'];
 $admins = getAdministrators();
 $admin = array_shift($admins);
 $key = $admin['pass'];
-$string = rc4($key, pack("H*", $cypher));
+$string = rc4($key, urldecode(pack("H*", $cypher)));
 
 $image = imagecreate(65, 20);
 $background = imagecreatefrompng(SERVERPATH.'/'.ZENFOLDER.'/images/captcha_background.png');

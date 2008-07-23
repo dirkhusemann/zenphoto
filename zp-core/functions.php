@@ -102,7 +102,7 @@ if (getOption('album_session') && OFFSET_PATH==0) {
 
 // Set error reporting to the default if it's not.
 error_reporting(E_ALL ^ E_NOTICE);
-//error_reporting(E_ALL);
+error_reporting(E_ALL);
 $_zp_error = false;
 
 require_once('functions-i18n.php');
@@ -2184,7 +2184,7 @@ function generateCaptcha(&$image) {
 	$admins = getAdministrators();
 	$admin = array_shift($admins);
 	$key = $admin['pass'];
-	$cypher = implode('', unpack("H*", rc4($key, $string)));
+	$cypher = urlencode(implode('', unpack("H*", rc4($key, $string))));
 	$code=md5($string);
 	$image = WEBPATH . '/' . ZENFOLDER . "/c.php?i=$cypher";
 
