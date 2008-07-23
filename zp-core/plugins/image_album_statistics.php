@@ -4,14 +4,16 @@
  * 
  * Supports such statistics as "most popular", "latest", "top rated", etc.
  * 
+ * C A U T I O N: 1.0.4.7 changes the usage to get an specific album. You now have to pass the foldername of an album instead the album title.
+ * 
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.4.6
+ * @version 1.0.4.7
  * @package plugins 
  */
 
 $plugin_description = gettext("Functions that provide various statistics about images and albums in the gallery.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.4.6';
+$plugin_version = '1.0.4.7';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---image_album_statistics.php.html";
 
 /**
@@ -266,10 +268,10 @@ function printLatestUpdatedAlbums($number=5,$showtitle=false, $showdate=false, $
  *                       "latest-date" for the latest uploaded, but fetched by date,
  *                       "mostrated" for the most voted,
  *                       "toprated" for the best voted
- * @param string $album title of an specific album
+ * @param string $albumfolder foldername of an specific album
  * @return string
  */
-function getImageStatistic($number, $option, $album='') {
+function getImageStatistic($number, $option, $albumfolder='') {
 	global $_zp_gallery;
 	if (zp_loggedin()) {
 		$albumWhere = " AND albums.folder != ''";
@@ -285,8 +287,8 @@ function getImageStatistic($number, $option, $album='') {
 		$albumWhere = " AND albums.folder != '' AND albums.show=1".$passwordcheck;
 		$imageWhere = " AND images.show=1";
 	}
-	if(!empty($album)) {
-		$specificalbum = " albums.title LIKE '%".$album."%' AND ";
+	if(!empty($albumfolder)) {
+		$specificalbum = " albums.folder = '".$albumfolder."' AND ";
 	} else {
 		$specificalbum = "";
 	}
@@ -311,10 +313,10 @@ function getImageStatistic($number, $option, $album='') {
 															" ORDER BY ".$sortorder." DESC LIMIT $number");
 	foreach ($images as $imagerow) {
 		$filename = $imagerow['filename'];
-		$albumfolder = $imagerow['folder'];
+		$albumfolder2 = $imagerow['folder'];
 		$desc = $imagerow['title'];
 		// Album is set as a reference, so we can't re-assign to the same variable!
-		$image = new Image(new Album($_zp_gallery, $albumfolder), $filename);
+		$image = new Image(new Album($_zp_gallery, $albumfolder2), $filename);
 		$imageArray [] = $image;
 	}
 	return $imageArray;
@@ -330,7 +332,7 @@ function getImageStatistic($number, $option, $album='') {
  *                       "latest-date" for the latest uploaded, but fetched by date,
  *                       "mostrated" for the most voted,
  *                       "toprated" for the best voted
- * @param string $album title of an specific album
+ * @param string $albumfolder foldername of an specific album
  * @param bool $showtitle if the image title should be shown
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image description should be shown
@@ -340,8 +342,8 @@ function getImageStatistic($number, $option, $album='') {
  * 															"rating+hitcounter" for both.
  * @return string
  */
-function printImageStatistic($number, $option, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
-	$images = getImageStatistic($number, $option, $album);
+function printImageStatistic($number, $option, $albumfolder='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
+	$images = getImageStatistic($number, $option, $albumfolder);
 	echo "\n<div id=\"$option\">\n";
 	echo "<ul>";
 	foreach ($images as $image) {
@@ -379,7 +381,7 @@ function printImageStatistic($number, $option, $album='', $showtitle=false, $sho
  * Prints the most popular images
  *
  * @param string $number the number of images to get
- * @param string $album title of an specific album
+ * @param string $albumfolder folder of an specific album
  * @param bool $showtitle if the image title should be shown
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image description should be shown
@@ -388,14 +390,15 @@ function printImageStatistic($number, $option, $album='', $showtitle=false, $sho
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
  */
-function printPopularImages($number=5, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
-	printImageStatistic($number, "popular",$album, $showtitle, $showdate, $showdesc, $desclength,$showstatistic);
+function printPopularImages($number=5, $albumfolder='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
+	printImageStatistic($number, "popular",$albumfolder, $showtitle, $showdate, $showdesc, $desclength,$showstatistic);
 }
 
 /**
  * Prints the n top rated images
  *
  * @param int $number The number if images desired
+ * @param string $albumfolder folder of an specific album
  * @param bool $showtitle if the image title should be shown
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image description should be shown
@@ -404,8 +407,8 @@ function printPopularImages($number=5, $album='', $showtitle=false, $showdate=fa
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
  */
-function printTopRatedImages($number=5, $album="", $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
-	printImageStatistic($number, "toprated",$album, $showtitle, $showdate, $showdesc, $desclength,$showstatistic);
+function printTopRatedImages($number=5, $albumfolder="", $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
+	printImageStatistic($number, "toprated",$albumfolder, $showtitle, $showdate, $showdesc, $desclength,$showstatistic);
 }
 
 
@@ -413,6 +416,7 @@ function printTopRatedImages($number=5, $album="", $showtitle=false, $showdate=f
  * Prints the n most rated images
  *
  * @param int $number The number if images desired
+ * @param string $albumfolder folder of an specific album
  * @param bool $showtitle if the image title should be shown
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image description should be shown
@@ -421,15 +425,15 @@ function printTopRatedImages($number=5, $album="", $showtitle=false, $showdate=f
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
  */
-function printMostRatedImages($number=5, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
-	printImageStatistic($number, "mostrated", $album, $showtitle, $showdate, $showdesc, $desclength, $showstatistic);
+function printMostRatedImages($number=5, $albumfolder='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
+	printImageStatistic($number, "mostrated", $albumfolder, $showtitle, $showdate, $showdesc, $desclength, $showstatistic);
 }
 
 /**
  * Prints the latest images by ID (=upload order)
  *
  * @param string $number the number of images to get
- * @param string $album title of an specific album
+ * @param string $albumfolder folder of an specific album
  * @param bool $showtitle if the image title should be shown
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image description should be shown
@@ -438,15 +442,15 @@ function printMostRatedImages($number=5, $album='', $showtitle=false, $showdate=
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
  */
-function printLatestImages($number=5, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40, $showstatistic='') {
-	printImageStatistic($number, "latest", $album, $showtitle, $showdate, $showdesc, $desclength, $showstatistic);
+function printLatestImages($number=5, $albumfolder='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40, $showstatistic='') {
+	printImageStatistic($number, "latest", $albumfolder, $showtitle, $showdate, $showdesc, $desclength, $showstatistic);
 }
 
 /**
  * Prints the latest images by date order
  *
  * @param string $number the number of images to get
- * @param string $album title of an specific album
+ * @param string $albumfolder folder of an specific album
  * @param bool $showtitle if the image title should be shown
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image description should be shown
@@ -455,8 +459,8 @@ function printLatestImages($number=5, $album='', $showtitle=false, $showdate=fal
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
  */
-function printLatestImagesByDate($number=5, $album='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
-	printImageStatistic($number, "latest-date", $album, $showtitle, $showdate, $showdesc, $desclength,$showstatistic);
+function printLatestImagesByDate($number=5, $albumfolder='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
+	printImageStatistic($number, "latest-date", $albumfolder, $showtitle, $showdate, $showdesc, $desclength,$showstatistic);
 }
 
 ?>
