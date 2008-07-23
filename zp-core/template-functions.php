@@ -2220,15 +2220,11 @@ function printSizedImageLink($size, $text, $title, $class=NULL, $id=NULL) {
 * @return int
 */
 function getCommentCount() {
-	global $_zp_current_image, $_zp_current_album;
-
+	global $_zp_current_image, $_zp_current_album, $current_zenpage;
 	if (in_context(ZP_IMAGE)) {
 		return $_zp_current_image->getCommentCount();
-
 	} else {
-
 		return $_zp_current_album->getCommentCount();
-
 	}
 }
 
@@ -2253,12 +2249,18 @@ function getCommentsAllowed() {
  *@return bool
  */
 function next_comment() {
-	global $_zp_current_image, $_zp_current_album, $_zp_current_comment, $_zp_comments;
+	global $_zp_current_image, $_zp_current_album, $_zp_current_comment, $_zp_comments, $current_zenpage;
+	//ZENPAGE: comments support
 	if (is_null($_zp_current_comment)) {
-		if (in_context(ZP_IMAGE)) {
+		if (in_context(ZP_IMAGE) AND in_context(ZP_ALBUM)) {
 			$_zp_comments = $_zp_current_image->getComments();
-		} else {
+		} else if (!in_context(ZP_IMAGE) AND in_context(ZP_ALBUM)) {
 			$_zp_comments = $_zp_current_album->getComments();
+		}
+		if(getOption('zp_plugin_zenpage')) {
+			if (is_NewsArticle() OR is_Pages()) {
+				$_zp_comments = $current_zenpage->getComments();
+			}
 		}
 		if (empty($_zp_comments)) { return false; }
 		$_zp_current_comment = array_shift($_zp_comments);
