@@ -583,7 +583,7 @@ class Album extends PersistentObject {
 			$results[] = $row;
 		}							
 		if ($key == 'title') {
-			$results = sortByTitle($results, strpos('DESC', $direction) !== false);
+			$results = sortByTitle($results, $direction == ' DESC');
 		}
 		$i = 0;
 		$flippedimages = array_flip($images);

@@ -1023,7 +1023,11 @@ function sortByTitle($dbresult, $descending) {
 	natcasesort($temp);
 	$result = array();
 	foreach ($temp as $key=>$title) {
-		$result[] = $dbresult[$key];
+		if ($descending) {
+			array_unshift($result, $dbresult[$key]);
+		} else {
+			$result[] = $dbresult[$key];
+		}
 	}
 	return $result;
 }
@@ -1052,8 +1056,8 @@ function sortAlbumArray($albums, $sortkey='sort_order') {
 	while ($row = mysql_fetch_assoc($result)) {
 		$results[] = $row;
 	}
-	if (strpos('title', $sortkey) !== false) {
-		$results = sortByTitle($results, strpos('DESC', $sortkey) !== false);
+	if (strpos($sortkey,'title') !== false) {
+		$results = sortByTitle($results, strpos($sortkey,'DESC') !== false);
 	}
 	$i = 0;
 	$albums_r = array_flip($albums);
@@ -1809,8 +1813,12 @@ function zp_getCookie($name) {
 		}
 		debugLog("zp_getCookie($name): SESSION[".session_id()."]=".$sessionv.", COOKIE=".$cookiev);
 	}
-	if (isset($_SESSION[$name])) { return $_SESSION[$name]; }
-	if (isset($_COOKIE[$name])) { return $_COOKIE[$name]; }
+	if (isset($_COOKIE[$name]) && !empty($_COOKIE[$name])) { 
+		return $_COOKIE[$name]; 
+	}
+	if (isset($_SESSION[$name])) { 
+		return $_SESSION[$name]; 
+	}
 	return false;
 }
 /**
