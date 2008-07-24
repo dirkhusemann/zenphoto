@@ -3461,17 +3461,19 @@ function checkforPassword($silent=false) {
 	if (zp_loggedin(MAIN_RIGHTS | VIEWALL_RIGHTS)) { return false; }  // you're the admin, you don't need the passwords.
 	if (in_context(ZP_SEARCH)) {  // search page
 		$hash = getOption('search_password');
+		$show = (getOption('search_user') != '');
 		$hint = get_language_string(getOption('search_hint'));
 		$authType = 'zp_search_auth';
 		if (empty($hash)) {
 			$hash = getOption('gallery_password');
+			$show = (getOption('gallery_user') != '');
 			$hint = get_language_string(getOption('gallery_hint'));
 			$authType = 'zp_gallery_auth';
 		}
 		if (!empty($hash)) {
 			if (zp_getCookie($authType) != $hash) {
 				if (!$silent) {
-					printPasswordForm($hint);
+					printPasswordForm($hint, true, getOption('login_user_field') || $show);
 				}
 				return true;
 			}
@@ -3482,7 +3484,8 @@ function checkforPassword($silent=false) {
 			return false;
 		} else {
 			if (!$silent) {
-				printPasswordForm($hint);
+				$alb = new Album($_zp_gallery, $album);
+				printPasswordForm($hint, true,  getOption('login_user_field') || $alb->getUser() != '');
 			}
 			return true;
 		}
@@ -3493,7 +3496,7 @@ function checkforPassword($silent=false) {
 		if (!empty($hash)) {
 			if (zp_getCookie('zp_gallery_auth') != $hash) {
 				if (!$silent) {
-					printPasswordForm($hint);
+					printPasswordForm($hint, true, getOption('login_user_field') || getOption('gallery_user') != '');
 				}
 				return true;
 			}
@@ -3510,8 +3513,9 @@ function checkforPassword($silent=false) {
  *
  *@since 1.1.3
  */
-function printPasswordForm($hint, $showProtected=true) {
+function printPasswordForm($hint, $showProtected=true, $showuser=NULL) {
 	global $_zp_login_error, $_zp_password_form_printed, $_zp_current_search;
+	if (is_null($showuser)) { $showuser = getOption('login_user_field'); }
 	if ($_zp_password_form_printed) { return; }
 	$_zp_password_form_printed = true;
 	if ($_zp_login_error) {
@@ -3529,7 +3533,7 @@ function printPasswordForm($hint, $showProtected=true) {
 	echo "\n    <input type=\"hidden\" name=\"password\" value=\"1\" />";
 
 	echo "\n    <table>";
-	if (getOption('login_user_field')) {
+	if ($showuser) {
 		echo "\n      <tr><td>".gettext("Login")."</td><td><input class=\"textfield\" name=\"user\" size=\"20\" /></td></tr>";
 	}
 	echo "\n      <tr><td>".gettext("Password")."</td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
