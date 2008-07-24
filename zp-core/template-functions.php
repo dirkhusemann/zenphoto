@@ -2221,10 +2221,15 @@ function printSizedImageLink($size, $text, $title, $class=NULL, $id=NULL) {
 */
 function getCommentCount() {
 	global $_zp_current_image, $_zp_current_album, $current_zenpage;
-	if (in_context(ZP_IMAGE)) {
+	if (in_context(ZP_IMAGE) AND in_context(ZP_ALBUM)) {
 		return $_zp_current_image->getCommentCount();
-	} else {
+	} else if (!in_context(ZP_IMAGE) AND in_context(ZP_ALBUM)) {
 		return $_zp_current_album->getCommentCount();
+	} 
+	if(getOption("zp_plugin_zenpage")) {
+		if(is_News() OR is_Pages()) {
+			return $current_zenpage->getCommentCount();
+		}
 	}
 }
 
