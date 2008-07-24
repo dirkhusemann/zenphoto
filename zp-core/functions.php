@@ -1045,13 +1045,17 @@ function sortByTitle($dbresult, $descending) {
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function sortAlbumArray($albums, $sortkey='sort_order') {
+function sortAlbumArray($albumid, $albums, $sortkey='sort_order') {
 	global $_zp_loggedin;
 
 	$hidden = array();
-	$result = query("SELECT folder, sort_order, `title`, `show`, `dynamic`, `search_params` FROM " .
-						prefix("albums") . " ORDER BY " . $sortkey);
-
+	if (is_null($albumid)) {
+		$albumid = ' IS NULL';
+	} else {
+		$albumid = '='.$albumid;
+	}
+	$result = query($sql = 'SELECT folder, sort_order, `title`, `show`, `dynamic`, `search_params` FROM ' .
+						prefix("albums") . 'WHERE `parentid`'.$albumid.' ORDER BY ' . $sortkey);
 	$results = array();
 	while ($row = mysql_fetch_assoc($result)) {
 		$results[] = $row;

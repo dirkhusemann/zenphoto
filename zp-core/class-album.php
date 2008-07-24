@@ -492,7 +492,7 @@ class Album extends PersistentObject {
 					$key .= ' ' . $sortdirection;
 				}
 			}
-			$sortedSubalbums = sortAlbumArray($subalbums, $key);
+			$sortedSubalbums = sortAlbumArray($this->id, $subalbums, $key);
 			$this->subalbums = $sortedSubalbums;
 		}
 		if ($page == 0) {

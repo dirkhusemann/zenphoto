@@ -90,7 +90,7 @@ class Gallery {
 			} else {
 				$key .= ' '.$direction;
 			}
-			$albums = sortAlbumArray($albumnames, $key);
+			$albums = sortAlbumArray(NULL, $albumnames, $key);
 
 			// Store the values
 			$this->albums = $albums;
