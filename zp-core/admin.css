@@ -663,7 +663,8 @@ button.positive,.buttons a.positive {
 	margin: 0;
 }
 
-/* scrollable checklists */ /*************************/
+/* scrollable checklists 
+-----------------------------*/
 /* Undo some styles from the master stylesheet */
 .tagchecklist li {
 	background: none;
@@ -732,7 +733,8 @@ button.positive,.buttons a.positive {
 	height: 1%;
 }
 
-/* CSS for tag new lists */
+/* CSS for tag new lists 
+-----------------------------*/
 .tagnewlist {
 	border: 1px solid #ccc;
 	list-style: none;
@@ -762,7 +764,8 @@ button.positive,.buttons a.positive {
 }
 
 
-/* scrollable checklists */ /*************************/
+/* scrollable checklists 
+-----------------------------*/
 	/* Undo some styles from the master stylesheet */
 .albumchecklist li {
 	background: none;
@@ -804,7 +807,8 @@ button.positive,.buttons a.positive {
 
 
 
-/* image pagination on album edit page */
+/* image pagination on album edit page 
+-------------------------------------------*/
 #imagenav {
 	text-align:center; 
 	background: #ECF1F2;
@@ -857,7 +861,8 @@ ul.pagelist li.current {
 	height: 1%;
 }
 
-/* CSS for language_string_listbox */
+/* CSS for language_string_listbox 
+--------------------------------------*/
 .language_string_listbox {
 	border: 1px solid #ccc;
 	list-style: none;
@@ -885,3 +890,22 @@ ul.pagelist li.current {
 * html .language_string_listbox label {
 	height: 1%;
 }
+
+/* icon legend 
+------------------*/
+.iconlegend {
+	
+	height: 20px;
+	text-align: right;
+}
+
+.iconlegend li  {
+	display: inline;
+	margin-right: 10px;
+}
+
+.iconlegend li img {
+	position: relative;
+	top: 3px;
+	margin: 0 2px 0 0;
+} 

@@ -436,23 +436,20 @@ if (count($subalbums) > 0) {
 			printAlbumEditRow($subalbum);
 		}
 		?></div>
-
-	</tr>
-	<tr>
-		<td colspan="8">
-		<p align="right"><img src="images/lock.png" style="border: 0px;"
-			alt="Protected" /><?php echo gettext("Has Password"); ?>&nbsp; <img src="images/pass.png"
-			style="border: 0px;" alt="Published" /><?php echo gettext("Published"); ?>&nbsp; <img
-			src="images/action.png" style="border: 0px;" alt="Unpublished" /><?php echo gettext("Unpublished"); ?>&nbsp;
-		<img src="images/cache.png" style="border: 0px;" alt="Cache the album" /><?php echo gettext("Cache	the album"); ?>&nbsp; <img src="images/warn.png" style="border: 0px;"
-			alt="Refresh image metadata" /><?php echo gettext("Refresh image metadata"); ?>&nbsp; <img
-			src="images/reset.png" style="border: 0px;" alt="Reset hitcounters" /><?php echo gettext("Reset	hitcounters"); ?>&nbsp; <img src="images/fail.png" style="border: 0px;"
-			alt="Delete" />Delete</p>
-			<?php
-			zenSortablesSaveButton("?page=edit&album=" . urlencode($album->name) . "&subalbumsaved#tab_subalbuminfo", gettext("Save Order"));
-			?></td>
 	</tr>
 </table>
+		<ul class="iconlegend">
+		<li><img src="images/lock.png" alt="Protected" /><?php echo gettext("Has Password"); ?></li>
+		<li><img src="images/pass.png" alt="Published" /><img src="images/action.png" alt="Unpublished" /><?php echo gettext("Published/Unpublished"); ?></li> 
+		<li><img src="images/cache.png" alt="Cache the album" /><?php echo gettext("Cache	the album"); ?></li>
+		<li><img src="images/warn.png" alt="Refresh image metadata" /><?php echo gettext("Refresh image metadata"); ?></li>
+		<li><img src="images/reset.png" alt="Reset hitcounters" /><?php echo gettext("Reset	hitcounters"); ?></li>
+		<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
+		</ul>		
+	<?php
+			zenSortablesSaveButton("?page=edit&album=" . urlencode($album->name) . "&subalbumsaved#tab_subalbuminfo", gettext("Save Order"));
+			?>
+
 <br />
 <?php
 } ?>
@@ -754,14 +751,14 @@ if ($allimagecount) {
 	</tr>
 </table>
 <div>
-<p align="right"><img src="images/lock.png" style="border: 0px;"
-	alt="<?php gettext('Protected'); ?>" /><?php echo gettext("Has Password"); ?>&nbsp; <img src="images/pass.png"
-	style="border: 0px;" alt="<?php gettext('Published'); ?>" /><?php echo gettext("Published"); ?>&nbsp; <img
-	src="images/action.png" style="border: 0px;" alt="<?php gettext('Unpublished'); ?>" /><?php echo gettext("Unpublished"); ?>&nbsp;
-<img src="images/cache.png" style="border: 0px;" alt="<?php gettext('Cache the album'); ?>" /><?php echo gettext("Cache the album"); ?>&nbsp; <img src="images/warn.png" style="border: 0px;"
-	alt="<?php gettext('Refresh image metadata'); ?>" /><?php echo gettext("Refresh image metadata"); ?>&nbsp; <img
-	src="images/reset.png" style="border: 0px;" alt="<?php gettext('Reset hitcounters'); ?>" /><?php echo gettext("Reset hitcounters"); ?>&nbsp; <img src="images/fail.png" style="border: 0px;"
-	alt="Delete" /><?php echo gettext("Delete"); ?></p>
+<ul class="iconlegend">
+		<li><img src="images/lock.png" alt="Protected" /><?php echo gettext("Has Password"); ?></li>
+		<li><img src="images/pass.png" alt="Published" /><img src="images/action.png" alt="Unpublished" /><?php echo gettext("Published/Unpublished"); ?></li> 
+		<li><img src="images/cache.png" alt="Cache the album" /><?php echo gettext("Cache	the album"); ?></li>
+		<li><img src="images/warn.png" alt="Refresh image metadata" /><?php echo gettext("Refresh image metadata"); ?></li>
+		<li><img src="images/reset.png" alt="Reset hitcounters" /><?php echo gettext("Reset	hitcounters"); ?></li>
+		<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
+		</ul>		
 <?php
   if ($_zp_loggedin & ADMIN_RIGHTS) {
 		zenSortablesSaveButton("?page=edit&saved", gettext("Save Order"));
@@ -833,46 +830,90 @@ foreach ($comments as $comment) {
 	$id = $comment['id'];
 	$author = $comment['name'];
 	$email = $comment['email'];
-	if ($comment['type']=='images') {
-		$imagedata = query_full_array("SELECT `title`, `filename`, `albumid` FROM ". prefix('images') .
+		if(getOption("zp_plugin_zenpage")) {
+			require_once("plugins/zenpage/zenpage-class.php");
+			$zenpage = new Zenpage("","");
+		}
+		// ZENPAGE: switch added for zenpage comment support
+		switch ($comment['type']) {
+			case "images":
+				$imagedata = query_full_array("SELECT `title`, `filename`, `albumid` FROM ". prefix('images') .
  										" WHERE `id`=" . $comment['ownerid']);
-		if ($imagedata) {
-			$imgdata = $imagedata[0];
-			$image = $imgdata['filename'];
-			if ($imgdata['title'] == "") $title = $image; else $title = get_language_string($imgdata['title']);
-			$title = '/ ' . $title;
-			$albmdata = query_full_array("SELECT `folder`, `title` FROM ". prefix('albums') .
+				if ($imagedata) {
+					$imgdata = $imagedata[0];
+					$image = $imgdata['filename'];
+					if ($imgdata['title'] == "") $title = $image; else $title = get_language_string($imgdata['title']);
+					$title = '/ ' . $title;
+					$albmdata = query_full_array("SELECT `folder`, `title` FROM ". prefix('albums') .
  											" WHERE `id`=" . $imgdata['albumid']);
-			if ($albmdata) {
-				$albumdata = $albmdata[0];
-				$album = $albumdata['folder'];
-				$albumtitle = get_language_string($albumdata['title']);
-				if (empty($albumtitle)) $albumtitle = $album;
-			} else {
-				$title = 'database error';
-			}
-		} else {
-			$title = 'database error';
-		}
-	} else {
-		$image = '';
-		$title = '';
-		$albmdata = query_full_array("SELECT `title`, `folder` FROM ". prefix('albums') .
+					if ($albmdata) {
+						$albumdata = $albmdata[0];
+						$album = $albumdata['folder'];
+						$albumtitle = get_language_string($albumdata['title']);
+						$link = "<a href=\"".rewrite_path("/$album/$image","/index.php?album=".urlencode($album).	"&amp;image=".urlencode($image))."\">".$albumtitle.$title."</a>";
+						if (empty($albumtitle)) $albumtitle = $album;
+					} else {
+						$title = gettext('database error');
+					}
+				} else {
+					$title = gettext('database error');
+				}
+				break;
+			case "albums":
+				$image = '';
+				$title = '';
+				$albmdata = query_full_array("SELECT `title`, `folder` FROM ". prefix('albums') .
  										" WHERE `id`=" . $comment['ownerid']);
-		if ($albmdata) {
-			$albumdata = $albmdata[0];
-			$album = $albumdata['folder'];
-			$albumtitle = get_language_string($albumdata['title']);
-			if (empty($albumtitle)) $albumtitle = $album;
-		} else {
-			$title = 'database error';
+				if ($albmdata) {
+					$albumdata = $albmdata[0];
+					$album = $albumdata['folder'];
+					$albumtitle = get_language_string($albumdata['title']);
+					$link = "<a href=\"".rewrite_path("/$album","/index.php?album=".urlencode($album))."\">".$albumtitle.$title."</a>";
+					if (empty($albumtitle)) $albumtitle = $album;
+				} else {
+					$title = gettext('database error');
+				}
+				break;
+			case "news": // ZENPAGE: if plugin is installed
+				if(getOption("zp_plugin_zenpage")) {
+					$titlelink = '';
+					$title = '';
+					$newsdata = query_full_array("SELECT `title`, `titlelink` FROM ". prefix('zenpage_news') .
+ 										" WHERE `id`=" . $comment['ownerid']);
+					if ($newsdata) {
+						$newsdata = $newsdata[0];
+						$titlelink = $newsdata['titlelink'];
+						$title = get_language_string($newsdata['title']);
+				  $link = "<a href=\"".rewrite_path("/".ZENPAGE_NEWS."/".$titlelink,"/index.php?p=".ZENPAGE_NEWS."&amp;title=".urlencode($titlelink))."\">".$title."</a> ".gettext("[news]");
+					} else {
+						$title = gettext('database error');
+					}
+				}
+				break;
+			case "pages": // ZENPAGE: if plugin is installed
+				if(getOption("zp_plugin_zenpage")) {
+					$image = '';
+					$title = '';
+					$pagesdata = query_full_array("SELECT `title`, `titlelink` FROM ". prefix('zenpage_pages') .
+ 										" WHERE `id`=" . $comment['ownerid']);
+					if ($pagesdata) {
+						$pagesdata = $pagesdata[0];
+						$titlelink = $pagesdata['titlelink'];
+						$title = get_language_string($pagesdata['title']);
+						$link = "<a href=\"".rewrite_path("/".ZENPAGE_PAGES."/".$titlelink,"/index.php?p=".ZENPAGE_PAGES."&amp;title=".urlencode($titlelink))."\">".$title."</a> ".gettext("[page]");
+					} else {
+						$title = gettext('database error');
+					}
+				}
+				break;
 		}
-	}
-	$website = $comment['website'];
-	$comment = truncate_string($comment['comment'], 123);
-	echo "<li><div class=\"commentmeta\">".$author." ".gettext("commented on")." <a href=\""
-	. (getOption("mod_rewrite") ? "../$album/$image" : "../index.php?album=".urlencode($album)."&amp;image=".urlencode($image))
-	. "\">$albumtitle $title</a>:</div><div class=\"commentbody\">$comment</div></li>";
+		$date  = myts_date('%m/%d/%Y %I:%M %p', $comment['date']);
+		$website = $comment['website'];
+		$comment = truncate_string($comment['comment'], 123);
+		$inmoderation = $comment['inmoderation'];
+		$private = $comment['private'];
+		$anon = $comment['anon'];
+	echo "<li><div class=\"commentmeta\">".$author." ".gettext("commented on")." ".$link.":</div><div class=\"commentbody\">$comment</div></li>";
 }
 ?>
 </ul>
