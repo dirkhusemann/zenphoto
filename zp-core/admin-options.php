@@ -165,6 +165,9 @@ if (isset($_GET['action'])) {
 			$oldloc = getOption('locale', true); // get the option as stored in the database, not what might have been set by a cookie
 			setOption('locale', $newloc = $_POST['locale']);
 			if ($newloc != $oldloc) { // clear any cookies so things start fresh.
+			if (!empty($newloc) && setlocale(LC_ALL, $newloc) === false) {
+					$notify = '?local_failed='.strip($_POST['locale']);
+				}
 				$cookiepath = WEBPATH;
 				if (WEBPATH == '') { $cookiepath = '/'; }
 				zp_setCookie('dynamic_locale', getOption('locale'), time()-368000, $cookiepath);  // clear the language cookie
@@ -348,7 +351,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 		echo "<input type=\"hidden\" name=\"alter_enabled\" value=\"no\" />";
 	}
 	if (isset($_GET['mismatch'])) {
-		if ($_GET['mismatch'] == 'newuser') {
+		if ($_GET['mismatch'] == 'mismatch') {
 			$msg = gettext('You must supply a password');
 		} else {
 			$msg = gettext('Your passwords did not match');
@@ -526,6 +529,15 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		echo  "<h2>". gettext("Your").' '. $_GET['mismatch'] . ' '.gettext("passwords were empty or did not match")."</h2>";
 		echo '</div>';
 	}
+	if (isset($_GET['local_failed'])) {
+		$locale = $_GET['local_failed'];
+		echo '<div class="errorbox" id="fade-message">';
+		echo  "<h2>".
+					'<em>'.$_zp_languages[$locale].'</em> '.gettext("is not available.").
+					' '.gettext("The locale").' '.$locale.' '.gettext("is not supported on your server.").
+					"</h2>";
+		echo '</div>';
+	}		
 	if (isset($_GET['badurl'])) {
 		echo '<div class="errorbox" id="fade-message">';
 		echo  "<h2>".gettext("Your Website URL is not valid")."</h2>";

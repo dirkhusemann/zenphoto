@@ -119,8 +119,7 @@ if (!$checked) {
 }
 
 getUserLocale();
-setupCurrentLocale();
-
+$setlocaleresult = setupCurrentLocale();
 
 $taskDisplay = array('create' => gettext("create"), 'update' => gettext("update"));
 ?>
@@ -445,7 +444,9 @@ if (!$checked) {
 	$good = checkMark($gl, ' '.gettext("PHP <code>glob()</code> support"), ' '.gettext('is disabled'), gettext('You need to set the define <code>SAFE_GLOB</code> to <code>true</code> in <code>functions.php</code>')) && $good;
 
 	checkMark($noxlate, gettext("PHP <code>gettext()</code> support"), ' '.gettext("[is not present]"), gettext("Localization of Zenphoto currently requires native PHP <code>gettext()</code> support"));
-
+	if ($setlocaleresult === false) {
+		checkMark(-1, 'PHP <code>setlocale()</code>', ' '.gettext("failed"), gettext("Locale functionality is not implemented on your platform or the specified locale does not exist. Language translation may not work."));
+	}
 	if (function_exists('mb_internal_encoding')) {
 		$mb = 1;
 	} else {

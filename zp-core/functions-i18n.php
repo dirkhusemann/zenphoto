@@ -64,7 +64,9 @@ function setPluginDomain($plugindomain) {
 
 /**
  * Setup code for gettext translation
+ * Returns the result of the setlocale call
  *
+ * @return mixed
  */
 function setupCurrentLocale($plugindomain='') {
 	global $_zp_languages;
@@ -74,7 +76,7 @@ function setupCurrentLocale($plugindomain='') {
 		$locale = getOption("locale");
 		@putenv("LANG=$locale");
 		// gettext setup
-		setlocale(LC_ALL, $locale);
+		$result = setlocale(LC_ALL, $locale);
 
 		// Set the text domain as 'messages'
 		$domain = 'zenphoto';
@@ -82,6 +84,7 @@ function setupCurrentLocale($plugindomain='') {
 	} else {
 		$domain = $plugindomain;
 		$domainpath = SERVERPATH . "/" . ZENFOLDER . "/plugins/".$domain."/locale/";
+		$result = false;
 	}
 	if (DEBUG_LOCALE) debugLog("setupCurrentLocale($plugindomain): locale=$locale");	
 	bindtextdomain($domain, $domainpath);
@@ -149,6 +152,7 @@ function setupCurrentLocale($plugindomain='') {
 		'vi_VN' => gettext('vi_VN'),
 		'cy' => gettext('Welsh')
 	);
+	return $result;
 }
 
 /**
@@ -255,6 +259,5 @@ function get_language_string($dbstring, $locale=NULL) {
 	}
 	return array_shift($strings);
 }
-
 
 ?>
