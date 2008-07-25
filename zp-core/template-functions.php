@@ -85,7 +85,7 @@ function printAdminToolbox($context=null, $id='admin') {
 		if (is_null($context)) { $context = get_context(); }
 		echo '<div id="' .$id. '">'."\n".'<h3><a href="javascript: toggle('. "'" .$dataid."'".');">'.gettext('Admin Toolbox').'</a></h3>'."\n"."\n</div>";
 		echo '<div id="' .$dataid. '" style="display: none;">'."\n";
-		echo "<ul style='list-style-type: none; margin-left: -30px'>";
+		echo "<ul style='list-style-type: none;'>";
 		echo "<li>"; 
 		printAdminLink(gettext('Admin'), '', "</li>\n");
 		if ($_zen_gallery_page === 'index.php') {
