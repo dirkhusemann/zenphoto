@@ -85,15 +85,19 @@ function printAdminToolbox($context=null, $id='admin') {
 		if (is_null($context)) { $context = get_context(); }
 		echo '<div id="' .$id. '">'."\n".'<h3><a href="javascript: toggle('. "'" .$dataid."'".');">'.gettext('Admin Toolbox').'</a></h3>'."\n"."\n</div>";
 		echo '<div id="' .$dataid. '" style="display: none;">'."\n";
-		printAdminLink(gettext('Admin'), '', "<br />\n");
+		echo "<ul style='list-style-type: none; margin-left: -30px'>";
+		echo "<li>"; 
+		printAdminLink(gettext('Admin'), '', "</li>\n");
 		if ($_zen_gallery_page === 'index.php') {
 			if ($_zp_loggedin & (ADMIN_RIGHTS | EDIT_RIGHTS)) {
+				echo "<li>"; 
 				printSortableGalleryLink(gettext('Sort gallery'), gettext('Manual sorting'));
-				echo "<br />\n";
+				echo "</li>\n";
 			}
 			if ($_zp_loggedin & (ADMIN_RIGHTS | UPLOAD_RIGHTS)) {
+				echo "<li>"; 
 				printLink($zf . '/admin-upload.php', gettext("New album"), NULL, NULL, NULL);
-				echo "<br />\n";
+				echo "</li>\n";
 			}
 			if (isset($_GET['p'])) {
 				$redirect = "&amp;p=" . $_GET['p'];
@@ -104,41 +108,45 @@ function printAdminToolbox($context=null, $id='admin') {
 		} else if ($_zen_gallery_page === 'album.php') {
 			$albumname = $_zp_current_album->name;
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
-				printSubalbumAdmin(gettext('Edit album'), '', "<br />\n");
+				echo "<li>"; 
+				printSubalbumAdmin(gettext('Edit album'), '', "</li>\n");
 				if (!$_zp_current_album->isDynamic()) {
+					echo "<li>"; 
 					printSortableAlbumLink(gettext('Sort album'), gettext('Manual sorting'));
-					echo "<br />\n";
+					echo "</li>\n";
 				}
-				echo "<a href=\"javascript: confirmDeleteAlbum('".$zf."/admin.php?page=edit&action=deletealbum&album=" .
+				echo "<li><a href=\"javascript: confirmDeleteAlbum('".$zf."/admin.php?page=edit&action=deletealbum&album=" .
 					urlencode($albumname) .
 					"','".gettext("Are you sure you want to delete this entire album?")."','".gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!").
-					"');\" title=\"".gettext("Delete the album")."\">".gettext("Delete album")."</a><br />\n";
+					"');\" title=\"".gettext("Delete the album")."\">".gettext("Delete album")."</a></li>\n";
 			}
 			if (isMyAlbum($albumname, UPLOAD_RIGHTS) && !$_zp_current_album->isDynamic()) {
+				echo "<li>"; 
 				printLink($zf . '/admin-upload.php?album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL);
-				echo "<br />\n";
+				echo "</li>\n";
+				echo "<li>"; 
 				printLink($zf . '/admin-upload.php?new&album=' . urlencode($albumname), gettext("New Album Here"), NULL, NULL, NULL);
-				echo "<br />\n";
+				echo "</li>\n";
 			}
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;page=$page";
 		} else if ($_zen_gallery_page === 'image.php') {
 			$albumname = $_zp_current_album->name;
 			$imagename = urlencode($_zp_current_image->filename);
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
-				echo "<a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?page=edit&action=deleteimage&album=" .
+				echo "<li><a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?page=edit&action=deleteimage&album=" .
 				urlencode(urlencode($albumname)) . "&image=". urlencode(urlencode($imagename)) . "','". gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!") . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
-				echo "<br />\n";
+				echo "</li>\n";
 			}
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=$imagename";
 		} else if (($_zen_gallery_page === 'search.php')&& !empty($_zp_current_search->words)) {
 			if ($_zp_loggedin & (ADMIN_RIGHTS | UPLOAD_RIGHTS)) {
-				echo "<a href=\"".$zf."/admin-dynamic-album.php\" title=\"".gettext("Create an album from the search")."\">".gettext("Create Album")."</a><br/>";
+				echo "<li><a href=\"".$zf."/admin-dynamic-album.php\" title=\"".gettext("Create an album from the search")."\">".gettext("Create Album")."</a></li>";
 			}
 			$redirect = "&amp;p=search" . $_zp_current_search->getSearchParams() . "&amp;page=$page";
 		}
 
-		echo "<a href=\"".$zf."/admin.php?logout$redirect\">".gettext("Logout")."</a>\n";
-		echo "</div>\n";
+		echo "<li><a href=\"".$zf."/admin.php?logout$redirect\">".gettext("Logout")."</a></li>\n";
+		echo "</ul></div>\n";
 	}
 }
 
