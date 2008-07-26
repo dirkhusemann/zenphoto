@@ -555,6 +555,16 @@ if ($debug) {
 		$result = mysql_query($sql, $mysql_connection);
 		$access = -1;
 		$rightsfound = 'unknown';
+		$rightsneeded = array(gettext('Select')=>'SELECT',gettext('Create')=>'CREATE',gettext('Drop')=>'DROP',gettext('Insert')=>'INSERT',
+																	gettext('Update')=>'UPDATE',gettext('Alter')=>'ALTER',gettext('Delete')=>'DELETE',gettext('Index')=>'INDEX');
+		ksort($rightsneeded);
+		$neededlist = '';
+		foreach ($rightsneeded as $right=>$value) {
+				$neededlist .= '<code>'.$right.'</code>, ';
+		}
+		$neededlist = substr($neededlist, 0, -2).' ';
+		$i = strrpos($neededlist, ',');
+		$neededlist = substr($neededlist, 0, $i).' '.gettext('and').substr($neededlist, $i+1);
 		if ($result) {
 			$report = "<br/><br/><em>".gettext("Grants found:")."</em>";
 			while ($row = mysql_fetch_row($result)) {
@@ -566,9 +576,13 @@ if ($debug) {
 				$rights = array_flip(explode(' ', $r));
 				$rightsfound = 'insufficient';
 				if (($found == $dbn) || ($found == "*.*")) {
-					if (isset($rights['ALL']) || (isset($rights['SELECT']) && isset($rights['CREATE']) && 
-							isset($rights['DROP']) && isset($rights['INSERT']) &&	isset($rights['UPDATE']) && 
-							isset($rights['ALTER']) && isset($rights['DELETE']))) {
+					$allow = true;
+					foreach ($rightsneeded as $key=>$right) {
+						if (!isset($rights[$right])) {
+							$allow = false;
+						}
+					}
+					if (isset($rights['ALL']) || $allow) {
 						$access = 1;
 					}
 					$report .= " *";
@@ -578,7 +592,8 @@ if ($debug) {
 			$report = "<br/><br/>".gettext("The <em>SHOW GRANTS</em> query failed.");
 		}
 		checkMark($access, ' '.gettext("MySQL access rights"), " [$rightsfound]",
- 											gettext("Your MySQL user must have <code>Create</code>, <code>Drop</code>, <code>Select</code>, <code>Insert</code>, <code>Alter</code>, <code>Update</code>, and <code>Delete</code> rights.") . $report);
+ 											gettext("Your MySQL user must have".' '.$neededlist."rights.") . $report);
+ 											
 
 		$sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$_zp_conf_vars['mysql_prefix']."%';";
 		$result = mysql_query($sql, $mysql_connection);
