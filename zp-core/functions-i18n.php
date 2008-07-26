@@ -76,8 +76,10 @@ function setupCurrentLocale($plugindomain='') {
 		$locale = getOption("locale");
 		@putenv("LANG=$locale");
 		// gettext setup
-		$result = setlocale(LC_ALL, $locale);
-
+		$result = setlocale(LC_ALL, $locale.'.'.$encoding);
+		if ($result === false) {
+			$result = setlocale(LC_ALL, $locale);
+		}
 		// Set the text domain as 'messages'
 		$domain = 'zenphoto';
 		$domainpath = SERVERPATH . "/" . ZENFOLDER . "/locale/";

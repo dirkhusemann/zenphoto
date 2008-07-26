@@ -175,14 +175,22 @@ if (isset($_GET['action'])) {
 			setBoolOption('persistent_archive', isset($_POST['persistent_archive']));
 			setBoolOption('album_session', isset($_POST['album_session']));
 			$oldloc = getOption('locale', true); // get the option as stored in the database, not what might have been set by a cookie
-			setOption('locale', $newloc = $_POST['locale']);
+			$newloc = strip($_POST['locale']);
 			if ($newloc != $oldloc) { // clear any cookies so things start fresh.
-			if (!empty($newloc) && setlocale(LC_ALL, $newloc) === false) {
-					$notify = '?local_failed='.strip($_POST['locale']);
+				$encoding = getOption('charset');
+				if (empty($encoding)) $encoding = 'UTF-8';
+				$result = setlocale(LC_ALL, $newloc.'.'.$encoding);
+				if ($result === false) {
+					$result = setlocale(LC_ALL, $newloc);
 				}
-				$cookiepath = WEBPATH;
-				if (WEBPATH == '') { $cookiepath = '/'; }
-				zp_setCookie('dynamic_locale', getOption('locale'), time()-368000, $cookiepath);  // clear the language cookie
+				if (!empty($newloc) && ($result === false)) {
+					$notify = '?local_failed='.$newloc;
+				} else {
+					setOption('locale', $newloc);
+					$cookiepath = WEBPATH;
+					if (WEBPATH == '') { $cookiepath = '/'; }
+					zp_setCookie('dynamic_locale', getOption('locale'), time()-368000, $cookiepath);  // clear the language cookie
+				}
 			}
 			setBoolOption('multi_lingual', isset($_POST['multi_lingual']));
 			$f = $_POST['date_format_list'];

@@ -15,9 +15,6 @@ if(!function_exists("gettext")) {
 	// load the drop-in replacement library
 	require_once('lib-gettext/gettext.inc');
 }
-if (function_exists('mb_internal_encoding')) {
-	mb_internal_encoding('UTF-8');
-}
 
 // Set the memory limit higher just in case -- supress errors if user doesn't have control.
 if (ini_get('memory_limit') < '128M') {
