@@ -118,16 +118,18 @@ if (isset($_GET['action'])) {
 			setOption('search_fields', 32767, false); // make SearchEngine allow all options so parseQueryFields() will gives back what was choosen this time
 			setBoolOption('login_user_field', isset($_POST['login_user_field']));
 			setOption('search_fields', $search->parseQueryFields());
-			$olduser = getOption('gallerly_user');
-			setOption('gallery_user', $newuser = $_POST['gallery_user']);
+			$olduser = getOption('gallery_user');
+			$newuser = $_POST['gallery_user'];
 			if (!empty($newuser)) setOption('login_user_field', 1);
 			$pwd = trim($_POST['gallerypass']);
 			if ($olduser != $newuser) {
-				if (empty($pwd)) {
-					$_POST['gallerypass'] = 'xxx';  // invalidate, user changed but password not set
+				if ($pwd != $_POST['gallerypass_2']) {
+					$_POST['gallerypass'] = $pwd;  // invalidate, user changed but password not set
+					$fail = '?mismatch=user_gallery';
 				}
 			}
 			if ($_POST['gallerypass'] == $_POST['gallerypass_2']) {
+				setOption('gallery_user', $newuser);
 				if (empty($pwd)) {
 					if (empty($_POST['gallerypass'])) {
 						setOption('gallery_password', NULL);  // clear the gallery password
@@ -136,18 +138,24 @@ if (isset($_GET['action'])) {
 					setOption('gallery_password', md5($newuser.$pwd));
 				}
 			} else {
-				$notify = '?mismatch=gallery';
+				if (empty($fail)) {
+					$notify = '?mismatch=gallery';
+				} else {
+					$notify = $fail;
+				}
 			}
 			$olduser = getOption('search_user');
-			setOption('search_user',$newuser = $_POST['search_user']);
+			$newuser = $_POST['search_user'];
 			if (!empty($newuser)) setOption('login_user_field', 1);
+			$pwd = trim($_POST['searchpass']);
 			if ($olduser != $newuser) {
-				if (empty($pwd)) {
-					$_POST['searchpass'] = 'xxx';  // invalidate, user changed but password not set
+				if ($pwd != $_POST['searchpass_2']) {
+					$_POST['searchpass'] = $pwd;  // invalidate, user changed but password not set
+					$fail = '?mismatch=user_search';
 				}
 			}
 			if ($_POST['searchpass'] == $_POST['searchpass_2']) {
-				$pwd = trim($_POST['searchpass']);
+				setOption('search_user',$newuser);
 				if (empty($pwd)) {
 					if (empty($_POST['searchpass'])) {
 						setOption('search_password', NULL);  // clear the gallery password
@@ -156,7 +164,11 @@ if (isset($_GET['action'])) {
 					setOption('search_password', md5($newuser.$pwd));
 				}
 			} else {
-				$notify = '?mismatch=search';
+				if (empty($notify)) {
+					$notify = '?mismatch=search';
+				} else {
+					$notify = $fail;
+				}
 			}
 			setOption('gallery_hint', process_language_string_save('gallery_hint'));
 			setOption('search_hint', process_language_string_save('search_hint'));
@@ -526,7 +538,18 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
  <input	type="hidden" name="savegalleryoptions" value="yes" /> <?php
 	if (isset($_GET['mismatch'])) {
 		echo '<div class="errorbox" id="fade-message">';
-		echo  "<h2>". gettext("Your").' '. $_GET['mismatch'] . ' '.gettext("passwords were empty or did not match")."</h2>";
+		switch ($_GET['mismatch']) {
+			case 'gallery':
+			case 'search':
+				echo  "<h2>". gettext("Your").' '. $_GET['mismatch'] . ' '.gettext("passwords were empty or did not match")."</h2>";
+				break;
+			case 'user_gallery':
+				echo  "<h2>". gettext("You must supply a password for the Gallery guest user")."</h2>";
+				break;
+			case 'user_search':
+				echo  "<h2>". gettext("You must supply a password for the Search guest user")."</h2>";
+				break;
+		}
 		echo '</div>';
 	}
 	if (isset($_GET['local_failed'])) {
