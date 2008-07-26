@@ -23,7 +23,12 @@
 		<div class="galleries">
 				<h2><?php echo gettext('Recently Updated Galleries'); ?></h2>
 				<ul>
-					<?php $counter = 0; while (next_album() and $counter < 6): ?>
+					<?php 
+					$counter = 0; 
+					setOption('gallery_sorttype', 'ID', false);  // set the sort type so we get most recent albums
+					setOption('gallery_sortdirection', '1', false);	
+					while (next_album() and $counter < 6): 
+					?>
 						<li class="gal">
 							<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext("View album:").' '; echo getAlbumTitle(); ?>"><?php printAlbumTitle(); ?></a></h3>
 							<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext("View album:").' '; echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 210, 59, 210, 59); ?></a>
@@ -53,7 +58,13 @@
 					?></p>
 							<div class="date"><?php printAlbumDate(); ?></div>
 					</li>
-				<?php if ($counter == 2) {echo "</ul><ul>";}; $counter++; endwhile; ?>
+				<?php 
+				if ($counter == 2) {
+					echo "</ul><ul>";
+				} 
+				$counter++; 
+				endwhile; 
+				?>
 				</ul>
 				<p class="mainbutton"><a href="<?php echo htmlspecialchars(getCustomPageURL('albumarchive')); ?>" class="btn"><img src="<?php echo $_zp_themeroot ?>/img/btn_gallery_archive.gif" width="118" height="21" alt="<?php echo ' '.gettext('Gallery Archive'); ?>" /></a></p>
 		</div>

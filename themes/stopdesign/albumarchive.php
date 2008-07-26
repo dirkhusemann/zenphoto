@@ -25,7 +25,10 @@
  	<?php if (!checkForPassword()) {?>
 		<h2><?php echo gettext("All galleries"); ?></h2>
 		<ul>
-			<?php $counter = 0; while (next_album(true) and $counter < 999): ?>
+			<?php 
+			$counter = 0; 
+			while (next_album(true) and $counter < 999): 
+			?>
 			<li class="gal">
 			<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
 			<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 210, 59, 210, 59); ?></a>
@@ -53,7 +56,13 @@
 			?></p>
 			<div class="date"><?php printAlbumDate(); ?></div>
 			</li>
-			<?php if ($counter == 2) {echo "</ul><ul>";}; $counter++; endwhile; ?>
+			<?php 
+			if ($counter == 2) {
+				echo "</ul><ul>";
+			}
+			$counter++; 
+			endwhile; 
+			?>
 		</ul>
 	<?php } ?>
 </div>
