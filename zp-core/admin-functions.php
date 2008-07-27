@@ -806,7 +806,7 @@ function printAlbumEditForm($index, $album) {
 	echo "\n</td>";
 	echo "\n</tr>";
 	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Password hint:")." </td> <td>";
-	print_language_string_list($album->get('albumpass_hint'), $prefix."albumpass_hint", false);
+	print_language_string_list($album->get('password_hint'), $prefix."albumpass_hint", false);
 	echo "</td></tr>";
 
 	$d = $album->getDateTime();
@@ -1301,14 +1301,17 @@ function processAlbumEdit($index, $album) {
 		query("UPDATE " . prefix('albums') . " SET `hitcounter`= 0 WHERE `id` = $id");
 	}
 	$olduser = $album->getUser();
-	$album->setUser($newuser = $_POST[$prefix.'albumuser']);
+	$newuser = $_POST[$prefix.'albumuser'];
 	$pwd = trim($_POST[$prefix.'albumpass']);
+	$fail = '';
 	if (($olduser != $newuser)) {
-		if (empty($pwd)) {
-			$_POST[$prefix.'albumpass'] = 'xxx'; // invalidate password, user changed without password beign set
+		if ($pwd != $_POST[$prefix.'albumpass_2']) {
+			$_POST[$prefix.'albumpass'] = $pwd; // invalidate password, user changed without password beign set
+			if (!empty($newuser)) $fail = '&mismatch=user';
 		}
 	}
 	if ($_POST[$prefix.'albumpass'] == $_POST[$prefix.'albumpass_2']) {
+		$album->setUser($newuser);
 		if (empty($pwd)) {
 			if (empty($_POST[$prefix.'albumpass'])) {
 				$album->setPassword(NULL);  // clear the gallery password
@@ -1317,7 +1320,11 @@ function processAlbumEdit($index, $album) {
 			$album->setPassword($pwd);
 		}
 	} else {
-		$notify = '&mismatch=album';
+		if (empty($fail)) {
+			$notify = '&mismatch=album';
+		} else {
+			$notify = $fail;
+		}
 	}
 	$oldtheme = $album->getAlbumTheme();
 	if (isset($_POST[$prefix.'album_theme'])) {

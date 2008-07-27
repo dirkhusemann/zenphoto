@@ -122,10 +122,11 @@ if (isset($_GET['action'])) {
 			$newuser = $_POST['gallery_user'];
 			if (!empty($newuser)) setOption('login_user_field', 1);
 			$pwd = trim($_POST['gallerypass']);
+			$fail = '';
 			if ($olduser != $newuser) {
 				if ($pwd != $_POST['gallerypass_2']) {
 					$_POST['gallerypass'] = $pwd;  // invalidate, user changed but password not set
-					$fail = '?mismatch=user_gallery';
+					if (!empty($newuser)) $fail = '?mismatch=user_gallery';
 				}
 			}
 			if ($_POST['gallerypass'] == $_POST['gallerypass_2']) {
@@ -151,7 +152,7 @@ if (isset($_GET['action'])) {
 			if ($olduser != $newuser) {
 				if ($pwd != $_POST['searchpass_2']) {
 					$_POST['searchpass'] = $pwd;  // invalidate, user changed but password not set
-					$fail = '?mismatch=user_search';
+					if (!empty($newuser)) $fail = '?mismatch=user_search';
 				}
 			}
 			if ($_POST['searchpass'] == $_POST['searchpass_2']) {

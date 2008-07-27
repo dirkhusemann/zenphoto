@@ -250,20 +250,22 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 									?>
 									</div>
  									</div>
- 									<?php 
-									} 
-								}
-					}
-					?>
+ 									<?php
+									}
+ 								}
+	 							echo '<div class="clearage"></div>';
+ 								if (function_exists('printSlideShowLink') && ($personality != 'Smoothgallery')) {
+									echo "<p align=\"center\">";
+ 									printSlideShowLink(gettext('View Slideshow'));
+ 									echo "</p>";
+ 								}
+ 								
+						}
+						?>
  					</div>
  					</div>
 	 			<div class="clearage"></div>
  					<?php 
-					if (function_exists('printSlideShowLink') && ($personality != 'Smoothgallery')) {
-						echo "<p align=\"center\">";
-						printSlideShowLink(gettext('View Slideshow')); 		
-						echo "</p>";
-					}
  					printNofM(gettext('Photo'), gettext('Photos'), $firstImage, $lastImage, getNumImages()); 
  					?>
 		</div>
@@ -344,6 +346,11 @@ printThemeInfo();
 <a href="http://www.zenphoto.org" title="<?php gettext("A simpler web photo album") ?>"><?php echo gettext('Powered by').' '; ?>
 <font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font size="1" face="Arial Black">photo</font></span></a><br />
 <?php printRSSLink('Album', '', 'Album RSS', ''); ?>
+<?php
+if (function_exists('printUserLogout')) {
+	printUserLogout('<br />', '', true);
+}
+?>
 
 </div>
 </div>

@@ -374,7 +374,13 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		if (isset($_GET['mismatch'])) {
 			?>
 			<div class="errorbox" id="fade-message">
-			<h2><?php echo gettext("Your passwords did not match"); ?></h2>
+			<?php if ($_GET['mismatch'] == 'user') { 
+				echo '<h2>'.gettext("You must supply a  password.").'</h2>';
+			} else { 
+				echo '<h2>'.gettext("Your passwords did not match.").'</h2>';
+			} 
+			?>
+			
 			</div>
 		<?php
 		} else {
