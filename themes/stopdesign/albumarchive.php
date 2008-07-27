@@ -70,7 +70,7 @@
 <div id="feeds">
 	<h2><?php echo gettext('Gallery Feeds'); ?></h2>
 	<ul>
-		<li><?php echo "<a href='http://".sanitize($_SERVER['HTTP_HOST']).WEBPATH."/rss.php?albumnr=".getAlbumId()."&amp;albumname=".getAlbumTitle()."' class=\"i\">"; ?><img src="<?php echo WEBPATH; ?>/zp-core/images/rss.gif" /> <?php echo gettext('Photos'); ?></a></li>
+		<li><?php echo "<a href='http://".sanitize($_SERVER['HTTP_HOST']).WEBPATH."/rss.php' class=\"i\">"; ?><img src="<?php echo WEBPATH; ?>/zp-core/images/rss.gif" /> <?php echo gettext('Photos'); ?></a></li>
 		<li><?php echo "<a href='http://".sanitize($_SERVER['HTTP_HOST']).WEBPATH."/rss-comments.php' class=\"i\">"; ?><img src="<?php echo WEBPATH; ?>/zp-core/images/rss.gif" /> <?php echo gettext('Comments'); ?></a></li>
 	</ul>
 </div>

@@ -115,7 +115,7 @@ ul {
   padding:0;
   }
 li {
-  background:url("../img/bullet_white.gif") no-repeat 5px .55em;
+  /* background:url("../img/bullet_white.gif") no-repeat 5px .55em;*/
   margin:0;
   padding:0 0 0 15px;
   list-style:none;
@@ -1105,12 +1105,16 @@ Comment Submission form
 	width:120px;
     padding: 2px 0px 4px 4px;
 }
+
+
+
 #admin_data{
 	top: 20px;
 }
 #admin_data a {
     color: #4480C7;
 }
+
 #admin h3 {
 	font: 100% "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-weight: bold;
