@@ -783,6 +783,12 @@ if (file_exists("zp-config.php")) {
 	$cst_images = prefix('images_ibfk1');
 
 	$db_schema = array();
+	
+	if (substr(trim(mysql_get_server_info()), 0, 1) > '4') {
+		$collation = ' COLLATE utf8_unicode_ci';
+	} else {
+		$collation = '';
+	}
 
 	/***********************************************************************************
 	 Add new fields in the upgrade section. This section should remain static except for new
@@ -798,7 +804,7 @@ if (file_exists("zp-config.php")) {
 		`value` text NOT NULL,
 		PRIMARY KEY  (`id`),
 		UNIQUE (`name`, `ownerid`)
-		)	CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
+		)	CHARACTER SET utf8$collation;";
 	}
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'tags'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_tags (
@@ -806,7 +812,7 @@ if (file_exists("zp-config.php")) {
 		`name` varchar(255) NOT NULL,
 		PRIMARY KEY  (`id`),
 		UNIQUE (`name`)
-		)	CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
+		)	CHARACTER SET utf8$collation;";
 	}
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'obj_to_tag'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_obj_to_tag (
@@ -815,7 +821,7 @@ if (file_exists("zp-config.php")) {
 		`type` tinytext,
 		`objectid` int(11) UNSIGNED NOT NULL,
 		PRIMARY KEY  (`id`)
-		)	CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
+		)	CHARACTER SET utf8$collation;";
 	}
 	
 	// v. 1.1.5
@@ -829,7 +835,7 @@ if (file_exists("zp-config.php")) {
 		`rights` int,
 		PRIMARY KEY  (`id`),
 		UNIQUE (`user`)
-		)	CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
+		)	CHARACTER SET utf8$collation;";
 	}
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'admintoalbum'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_admintoalbum (
@@ -837,7 +843,7 @@ if (file_exists("zp-config.php")) {
 		`adminid` int(11) UNSIGNED NOT NULL,
 		`albumid` int(11) UNSIGNED NOT NULL,
 		PRIMARY KEY  (`id`)
-		)	CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
+		)	CHARACTER SET utf8$collation;";
 	}
 
 	// v. 1.1
@@ -848,7 +854,7 @@ if (file_exists("zp-config.php")) {
 		`value` text NOT NULL,
 		PRIMARY KEY  (`id`),
 		UNIQUE (`name`)
-		)	CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
+		)	CHARACTER SET utf8$collation;";
 	}
 
 	// base implementation
@@ -876,7 +882,7 @@ if (file_exists("zp-config.php")) {
 		`password_hint` text,
 		PRIMARY KEY  (`id`),
 		KEY `folder` (`folder`)
-		)	CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
+		)	CHARACTER SET utf8$collation;";
 	}
 
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'comments'])) {
@@ -891,7 +897,7 @@ if (file_exists("zp-config.php")) {
 		`inmoderation` int(1) unsigned NOT NULL default '0',
 		PRIMARY KEY  (`id`),
 		KEY `ownerid` (`ownerid`)
-		)	CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
+		)	CHARACTER SET utf8$collation;";
 	}
 
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'images'])) {
@@ -921,7 +927,7 @@ if (file_exists("zp-config.php")) {
 		`used_ips` longtext,
 		PRIMARY KEY  (`id`),
 		KEY `filename` (`filename`,`albumid`)
-		)	CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
+		)	CHARACTER SET utf8$collation;";
 		$db_schema[] = "ALTER TABLE $tbl_images ".
 			"ADD CONSTRAINT $cst_images FOREIGN KEY (`albumid`) REFERENCES $tbl_albums (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
 	}

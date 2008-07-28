@@ -75,21 +75,12 @@ if (file_exists(SERVERPATH . "/" . $obj) && $zp_request) {
 	include($obj);
 } else {
 	list($album, $image) = rewrite_get_album_image('album','image');
-	$_zen_gallery_page = basename($errpage = THEMEFOLDER."/$theme/404.php");
+	$_zen_gallery_page = '404.php';
+	$errpage = THEMEFOLDER."/$theme/404.php";
 	if (file_exists(SERVERPATH . "/" . $errpage)) {
 		include($errpage);
 	} else {
-		echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
-		if ($zp_request) {
-			echo "\n<html>\n<head>\n</head>\n<body>\n<strong>Zenphoto error:</strong> missing theme page.";
-			echo "\n<!-- The requested page was not found: $obj -->";
-			echo "\n</body>\n</html>";
-		} else {
-			echo "\n<html xmlns=\"http://www.w3.org/1999/xhtml\"><head></head><body>";
-			echo "\n<strong>".gettext("Zenphoto Error:</strong> the requested object was not found. Please go back and try again.");
-			echo "\n<!-- The requested object (album=\"" . $album . "\": image=\"" . $image . "\") was not found. -->";
-			echo '</body></html>';
-		}
+		include(ZENFOLDER. '/404.php');
 	}
 }
 $a = basename($obj);

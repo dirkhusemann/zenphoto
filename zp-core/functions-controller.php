@@ -409,6 +409,7 @@ function zp_load_image($folder, $filename) {
 	} else {
 		$album = $_zp_current_album;
 	}
+	if (!$_zp_current_album->exists) return false;
 	$_zp_current_image = new Image($album, $filename);
 	if (!$_zp_current_image->exists) return false;
 	set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX);
