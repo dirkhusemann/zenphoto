@@ -442,7 +442,7 @@ function formatData($type,$tag,$intel,$data) {
 		} else if ($tag == '8822') { // ExposureProgram
 			if ($data == 1)         $data = gettext('Manual');
 			else if ($data == 2)    $data = gettext('Program');
-			else if ($data == 3)    $data = gettext('Aperature Priority');
+			else if ($data == 3)    $data = gettext('Aperture Priority');
 			else if ($data == 4)    $data = gettext('Shutter Priority');
 			else if ($data == 5)    $data = gettext('Program Creative');
 			else if ($data == 6)    $data = gettext('Program Action');
