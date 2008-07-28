@@ -2501,7 +2501,7 @@ function readTags($id, $tbl) {
 			$tags[] = $dbtag['name'];
 		}
 	}
-	natsort($tags);
+	natcasesort($tags);
 	return $tags;
 }
 
