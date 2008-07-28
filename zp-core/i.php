@@ -36,6 +36,7 @@ $debug = isset($_GET['debug']);
 
 // Check for minimum parameters.
 if (!isset($_GET['a']) || !isset($_GET['i'])) {
+	header("HTTP/1.0 404 Not Found");
 	imageError(gettext("Too few arguments! Image not found."), 'err-imagenotfound.gif');
 }
 $allowWatermark = true;
@@ -130,12 +131,16 @@ if (!is_dir(SERVERCACHE)) {
 	@mkdir(SERVERCACHE, CHMOD_VALUE);
 	@chmod(SERVERCACHE, CHMOD_VALUE);
 	if (!is_dir(SERVERCACHE))
-	imageError(gettext("The cache directory does not exist. Please create it and set the permissions to 0777."), 'err-cachewrite.gif');
+		imageError(gettext("The cache directory does not exist. Please create it and set the permissions to 0777."), 'err-cachewrite.gif');
 }
 if (!is_writable(SERVERCACHE)) {
 	@chmod(SERVERCACHE, CHMOD_VALUE);
 	if (!is_writable(SERVERCACHE))
-	imageError(gettext("The cache directory is not writable! Attempts to chmod didn't work."), 'err-cachewrite.gif');
+		imageError(gettext("The cache directory is not writable! Attempts to chmod didn't work."), 'err-cachewrite.gif');
+}
+if (!file_exists($imgfile)) {
+	header("HTTP/1.0 404 Not Found");
+	imageError(gettext("Image not found; file does not exist."), 'err-imagenotfound.gif');
 }
 
 // Make the directories for the albums in the cache, recursively.
