@@ -36,7 +36,7 @@ $_zp_pre_authorization = array();
 // the context. All that is done in functions-controller.php.
 
 // Handle the request for an image or album.
-zp_load_request();
+$zp_request = zp_load_request();
 
 // handle any album passwords that might have been posted
 zp_handle_password();
@@ -119,7 +119,5 @@ if (zp_loggedin()) {
 // and is mostly helpful for SEO, but also for users. Consistent URLs are a Good Thing.
 
 fix_path_redirect();
-
-
 
 ?>

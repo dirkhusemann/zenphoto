@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php printGalleryTitle(); ?> | Archive View</title>
+	<title><?php printGalleryTitle(); ?> | <?php echo gettext("Archive View"); ?></title>
 		<link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
 		<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
 </head>

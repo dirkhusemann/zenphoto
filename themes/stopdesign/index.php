@@ -11,6 +11,7 @@
 	printRSSHeaderLink('Gallery','Gallery RSS');
 	setOption('thumb_crop_width', 85, false);
 	setOption('thumb_crop_height', 85, false);
+	$archivepageURL = htmlspecialchars(getCustomPageURL('albumarchive'));
 	?>
 </head>
 
@@ -66,7 +67,7 @@
 				endwhile; 
 				?>
 				</ul>
-				<p class="mainbutton"><a href="<?php echo htmlspecialchars(getCustomPageURL('albumarchive')); ?>" class="btn"><img src="<?php echo $_zp_themeroot ?>/img/btn_gallery_archive.gif" width="118" height="21" alt="<?php echo ' '.gettext('Gallery Archive'); ?>" /></a></p>
+				<p class="mainbutton"><a href="<?php echo $archivepageURL; ?>" class="btn"><img src="<?php echo $_zp_themeroot ?>/img/btn_gallery_archive.gif" width="118" height="21" alt="<?php echo ' '.gettext('Gallery Archive'); ?>" /></a></p>
 		</div>
 
 		<div id="secondary">
@@ -116,7 +117,7 @@
 				<h2><?php echo gettext("Gallery data"); ?></h2>
 				<table cellspacing="0" class="gallerydata">
 						<tr>
-							<th><a href="<?php echo htmlspecialchars(getCustomPageURL('albumarchive')); ?>"><?php echo gettext('Galleries'); ?></a></th>
+							<th><a href="<?php echo $archivepageURL; ?>"><?php echo gettext('Galleries'); ?></a></th>
 							<td><?php $albumNumber = getNumAlbums(); echo $albumNumber ?></td>
 							<td></td>
 						</tr>

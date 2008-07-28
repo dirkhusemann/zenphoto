@@ -451,16 +451,7 @@ function zp_load_request() {
 		$page = str_replace(array('/','\\','.'), '', $_GET['p']);
 		if ($page == "search") { zp_load_search(); }
 	}
-	// Error message for objects not found.
-	if ($success === false) {
-		// Replace this with a redirect to an error page in the theme if it exists, or a default ZP error page.
-		header("HTTP/1.0 404 Not Found");
-		echo '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>';
-		echo "\n<strong>".gettext("Zenphoto Error:</strong> the requested object was not found. Please go back and try again.");
-		echo "\n<!-- The requested object (album=\"" . $album . "\": image=\"" . $image . "\") was not found. -->";
-		echo '</body></html>';
-		exit();
-	}
+	return $success;
 }
 
 ?>

@@ -12,6 +12,7 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
 }
 
+
 //load extensions
 $_zp_plugin_scripts = array();
 $_zp_flash_player = NULL;
@@ -60,7 +61,7 @@ if (isset($_GET['p'])) {
 	$theme = setupTheme();
 	$_zen_gallery_page = basename($obj = THEMEFOLDER."/$theme/index.php");
 }
-if (file_exists(SERVERPATH . "/" . $obj)) {
+if (file_exists(SERVERPATH . "/" . $obj) && $zp_request) {
 	$curdir = getcwd();
 	chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
 	$filelist = safe_glob('*'.'php');
@@ -73,10 +74,23 @@ if (file_exists(SERVERPATH . "/" . $obj)) {
 	}
 	include($obj);
 } else {
-	echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
-	echo "\n<html>\n<head>\n</head>\n<body>\n<strong>Zenphoto error:</strong> missing theme page.";
-	echo "\n<!-- The requested page was not found: $obj -->";
-	echo "\n</body>\n</html>";
+	list($album, $image) = rewrite_get_album_image('album','image');
+	$_zen_gallery_page = basename($errpage = THEMEFOLDER."/$theme/404.php");
+	if (file_exists(SERVERPATH . "/" . $errpage)) {
+		include($errpage);
+	} else {
+		echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
+		if ($zp_request) {
+			echo "\n<html>\n<head>\n</head>\n<body>\n<strong>Zenphoto error:</strong> missing theme page.";
+			echo "\n<!-- The requested page was not found: $obj -->";
+			echo "\n</body>\n</html>";
+		} else {
+			echo "\n<html xmlns=\"http://www.w3.org/1999/xhtml\"><head></head><body>";
+			echo "\n<strong>".gettext("Zenphoto Error:</strong> the requested object was not found. Please go back and try again.");
+			echo "\n<!-- The requested object (album=\"" . $album . "\": image=\"" . $image . "\") was not found. -->";
+			echo '</body></html>';
+		}
+	}
 }
 $a = basename($obj);
 if ($a != 'full-image.php') {
