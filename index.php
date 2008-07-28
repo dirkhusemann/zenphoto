@@ -19,8 +19,10 @@ $_zp_flash_player = NULL;
 
 header ('Content-Type: text/html; charset=' . getOption('charset'));
 $obj = '';
+
+// Display an arbitrary theme-included PHP page
+// If the 'p' parameter starts with * (star) then include the file from the zp-core folder.
 if (isset($_GET['p'])) {
-	// arbitrary PHP page, either in the theme on in the zenphoto core
 	$theme = setupTheme();
 	$page = str_replace(array('/','\\','.'), '', $_GET['p']);
 	if (substr($page, 0, 1) == "*") {
@@ -31,13 +33,15 @@ if (isset($_GET['p'])) {
 		if (file_exists(SERVERPATH . "/" . $obj)) {
 		}
 	}
+	
+// Display an Image page.
 } else if (in_context(ZP_IMAGE)) {
-	// image page
 	handleSearchParms($_zp_current_album->name, $_zp_current_image->filename);
 	$theme = setupTheme();
 	$_zen_gallery_page = basename($obj = THEMEFOLDER."/$theme/image.php");
+	
+// Display an Album page.
 } else if (in_context(ZP_ALBUM)) {
-// album page
 	if(isset($_GET['zipfile']) && is_dir(realpath(getAlbumFolder() . $_GET['album']))){
 		createAlbumZip($_GET['album']);
 	} else {
@@ -55,13 +59,17 @@ if (isset($_GET['p'])) {
 			$_zen_gallery_page = basename($obj = THEMEFOLDER."/$theme/album.php");
 		}
 	}
+
+// Display the Index page.	
 } else if (in_context(ZP_INDEX)) {
-	// index page
 	handleSearchParms();
 	$theme = setupTheme();
 	$_zen_gallery_page = basename($obj = THEMEFOLDER."/$theme/index.php");
 }
+
+// Load plugins, then load the requested $obj (page, image, album, or index; defined above).
 if (file_exists(SERVERPATH . "/" . $obj) && $zp_request) {
+	// TODO: Move plugin listing to an external function.
 	$curdir = getcwd();
 	chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
 	$filelist = safe_glob('*'.'php');
@@ -72,17 +80,24 @@ if (file_exists(SERVERPATH . "/" . $obj) && $zp_request) {
 			require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
 		}
 	}
+	// Include the appropriate page for the requested object, and a 200 OK header.
+	header("HTTP/1.0 200 OK");
 	include($obj);
+
+// If the requested object does not exist, issue a 404 and redirect to the theme's
+// 404.php page, or a 404.php in the zp-core folder.
 } else {
 	list($album, $image) = rewrite_get_album_image('album','image');
 	$_zen_gallery_page = '404.php';
 	$errpage = THEMEFOLDER."/$theme/404.php";
+	header("HTTP/1.0 404 Not Found");
 	if (file_exists(SERVERPATH . "/" . $errpage)) {
 		include($errpage);
 	} else {
 		include(ZENFOLDER. '/404.php');
 	}
 }
+
 $a = basename($obj);
 if ($a != 'full-image.php') {
 	echo "\n<!-- zenphoto version " . ZENPHOTO_VERSION . " [" . ZENPHOTO_RELEASE . "] Theme: " . $theme . " (" . $a . ") -->";
