@@ -3065,7 +3065,7 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
  * @return string
  * @since 1.1
  */
-function getRSSHeaderLink($option, $linktext, $lang) {
+function getRSSHeaderLink($option, $linktext='', $lang='') {
 	$host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 	if(empty($lang)) {
 		$lang = getOption("locale");
