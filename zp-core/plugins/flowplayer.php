@@ -5,7 +5,7 @@
  * Plugin option 'flow_player_height' -- height of the player window
  *  
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.1.6
+ * @version 1.0.1.7
  * @package plugins 
  */
 
@@ -70,7 +70,6 @@ class flowplayer {
 		} else {
 			$autoplay = ""; // actually false should work, but it doesn't...
 		}
-		echo $autoplay;
 		if($ext === ".mp3") {
 			echo '
 			<p id="playerContainer'.$count.'"><a href="http://www.adobe.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
@@ -81,7 +80,7 @@ class flowplayer {
       	height:28
     	},
     		{config: {  
-      		autoPlay: \'' . $autoplay . '\',
+      		autoPlay: '.$autoplay.',
       		useNativeFullScreen: true,
 					loop: false,
 					autoBuffering: true,
