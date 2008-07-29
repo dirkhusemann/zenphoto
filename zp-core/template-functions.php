@@ -2821,7 +2821,6 @@ function printTags($option='links',$preText=NULL,$class='taglist',$separator=', 
  * @param int $maxfontsize largest font size the cloud should display
  * @param int $maxcount the maximum count for a tag to appear in the output
  * @param int $mincount the minimum count for a tag to appear in the output
-
  * @param int $limit set to limit the number of tags displayed to the top $numtags
  * @since 1.1
  */
@@ -2832,14 +2831,11 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 	if ($class != "") { $class = "class=\"".$class."\""; }
 	$tagcount = getAllTagsCount();
 	if (!is_array($tagcount)) { return false; }
+	if ($sort == "results") {
+			arsort($tagcount);
+	}
 	if (!is_null($limit)) {
 		$tagcount = array_slice($tagcount, 0, $limit);
-	}
-	switch($sort) {
-		case "results":
-			arsort($tagcount); break;
-		case "abc":
-			ksort($tagcount); break;
 	}
 	echo "<ul style=\"display:inline; list-style-type:none\" ".$class.">\n";
 	while (list($key, $val) = each($tagcount)) {

@@ -2387,6 +2387,7 @@ function getAllTagsStrings() {
 			$_zp_all_tags[] = $clean;
 		}
 	}
+	natcasesort($_zp_all_tags);
 	return $_zp_all_tags;
 }
 
@@ -2400,7 +2401,7 @@ function getAllTagsUnique() {
 	global $_zp_unique_tags;
 	if (!is_null($_zp_unique_tags)) return $_zp_unique_tags;  // cache them.
 	if (useTagTable()) {
-		$sql = "SELECT `name` FROM ".prefix('tags');
+		$sql = "SELECT `name` FROM ".prefix('tags').' ORDER BY `name`';
 		$result = query_full_array($sql);
 		if (is_array($result)) {
 			$_zp_unique_tags = array();
@@ -2438,7 +2439,7 @@ function getAllTagsCount() {
 	if (!is_null($_zp_count_tags)) return $_zp_count_tags;
 	if (useTagTable()) {
 		$_zp_count_tags = array();
-		$sql = "SELECT `name`, `id` from ".prefix('tags');
+		$sql = "SELECT `name`, `id` from ".prefix('tags').' ORDER BY `name`';
 		$tagresult = query_full_array($sql);
 		if (is_array($tagresult)) {
 			foreach ($tagresult as $row) {
