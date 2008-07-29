@@ -1059,6 +1059,9 @@ function sortAlbumArray($albumid, $albums, $sortkey='sort_order') {
 	}
 	if (strpos($sortkey,'title') !== false) {
 		$results = sortByTitle($results, strpos($sortkey,'DESC') !== false);
+	} else if (strpos($sortkey, 'folder') !== false) {
+		if (strpos($sortkey,'DESC') !== false) $order = 'dsc'; else $order = 'asc';
+		$results = sortMultiArray($results, 'folder', $order, true, false);
 	}
 	$i = 0;
 	$albums_r = array_flip($albums);

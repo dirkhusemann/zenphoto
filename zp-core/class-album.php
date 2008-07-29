@@ -581,9 +581,12 @@ class Album extends PersistentObject {
 		$results = array();
 		while ($row = mysql_fetch_assoc($result)) {
 			$results[] = $row;
-		}							
+		}
 		if ($key == 'title') {
 			$results = sortByTitle($results, $direction == ' DESC');
+		} else if ($key == 'filename') {
+			if ($direction == 'DESC') $order = 'dsc'; else $order = 'asc';
+			$results = sortMultiArray($results, 'filename', $order, true, false);
 		}
 		$i = 0;
 		$flippedimages = array_flip($images);
