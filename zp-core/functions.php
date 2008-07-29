@@ -105,8 +105,8 @@ $_zp_error = false;
 require_once('functions-i18n.php');
 
 getUserLocale();
-
 setupCurrentLocale();
+
 /**
  * wraps htmlspecialchars and makes it work for xml
  *
@@ -1286,6 +1286,26 @@ function getPlugin($plugin, $inTheme) {
 	} else {
 		return false;
 	}
+}
+
+/**
+ * Returns an array of the currently enabled plugins
+ *
+ * @return array
+ */
+function getEnabledPlugins() {
+	$pluginlist = array();
+	$curdir = getcwd();
+	chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
+	$filelist = safe_glob('*'.'php');
+	chdir($curdir);
+	foreach ($filelist as $extension) {
+		$opt = 'zp_plugin_'.substr($extension, 0, strlen($extension)-4);
+		if (getOption($opt)) {
+			$pluginlist[] = $extension;
+		}
+	}
+	return $pluginlist;
 }
 
 /**

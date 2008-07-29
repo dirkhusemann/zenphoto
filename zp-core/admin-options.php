@@ -1224,9 +1224,6 @@ if (!empty($_REQUEST['themealbum'])) {
 <!-- end of tab_theme div -->
 <?php		
 if ($_zp_loggedin & ADMIN_RIGHTS) { 
-	$curdir = getcwd();
-	chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
-	$filelist = safe_glob('*'.'php');
 	$c = 0;
 ?>
 <script type="text/javascript">
@@ -1238,27 +1235,22 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 	<form action="?action=saveoptions" method="post">
 	<input type="hidden" name="savepluginoptions" value="yes" /> 
 	
- 		<?php
-		foreach ($filelist as $extension) {
-			$ext = substr($extension, 0, strlen($extension)-4);
-			$opt = 'zp_plugin_'.$ext;
-			if (getOption($opt)) {
-				$option_interface = null;
-				require_once($extension);
-				if (!is_null($option_interface)) {
-					$c++;
-					echo '<div class="toggler-c" title="'.$ext.' ">';
-					echo "\n<table class=\"bordered\">\n";
-					$supportedOptions = $option_interface->getOptionsSupported();
-					if (count($supportedOptions) > 0) {
-						customOptions($option_interface);
-					}
-					echo "</table>\n</div>\n";
-				}
+	<?php
+	foreach (getEnabledPlugins() as $extension) {
+		$ext = substr($extension, 0, strlen($extension)-4);
+		$option_interface = null;
+		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
+		if (!is_null($option_interface)) {
+			$c++;
+			echo '<div class="toggler-c" title="'.$ext.' ">';
+			echo "\n<table class=\"bordered\">\n";
+			$supportedOptions = $option_interface->getOptionsSupported();
+			if (count($supportedOptions) > 0) {
+				customOptions($option_interface);
 			}
+			echo "</table>\n</div>\n";
 		}
-	?>
-<?php
+	}
 	if ($c == 0) {
 		echo gettext("There are no plugin options to administer.");
 	} else {
@@ -1271,7 +1263,6 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 	</form>
 </div>
 <?php
-	chdir($curdir);
 }
 } // end of null account lockout
 ?>

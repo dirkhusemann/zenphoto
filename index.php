@@ -69,16 +69,8 @@ if (isset($_GET['p'])) {
 
 // Load plugins, then load the requested $obj (page, image, album, or index; defined above).
 if (file_exists(SERVERPATH . "/" . $obj) && $zp_request) {
-	// TODO: Move plugin listing to an external function.
-	$curdir = getcwd();
-	chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
-	$filelist = safe_glob('*'.'php');
-	chdir($curdir);
-	foreach ($filelist as $extension) {
-		$opt = 'zp_plugin_'.substr($extension, 0, strlen($extension)-4);
-		if (getOption($opt)) {
-			require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
-		}
+	foreach (getEnabledPlugins() as $extension) {
+		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
 	}
 	// Include the appropriate page for the requested object, and a 200 OK header.
 	header("HTTP/1.0 200 OK");
