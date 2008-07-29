@@ -3476,7 +3476,7 @@ function normalizeColumns($albumColumns, $imageColumns) {
  */
 function checkforPassword($silent=false) {
 	global $_zp_current_album, $_zp_current_search, $_zp_gallery, $_zp_loggedin;
-	if (zp_loggedin(MAIN_RIGHTS | VIEWALL_RIGHTS)) { return false; }  // you're the admin, you don't need the passwords.
+	if (zp_loggedin(MAIN_RIGHTS | VIEWALL_RIGHTS | ALL_ALBUMS_RIGHTS)) { return false; }  // you're the admin, you don't need the passwords.
 	if (in_context(ZP_SEARCH)) {  // search page
 		$hash = getOption('search_password');
 		$show = (getOption('search_user') != '');

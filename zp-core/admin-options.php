@@ -52,11 +52,12 @@ if (isset($_GET['action'])) {
 						if (isset($_POST[$i.'-upload_rights'])) $upload_r = UPLOAD_RIGHTS; else $upload_r = 0;
 						if (isset($_POST[$i.'-comment_rights'])) $comment_r = COMMENT_RIGHTS; else $comment_r = 0;
 						if (isset($_POST[$i.'-edit_rights'])) $edit_r = EDIT_RIGHTS; else $edit_r = 0;
+						if (isset($_POST[$i.'-all_album_rights'])) $all_album_r = ALL_ALBUMS_RIGHTS; else $all_album_r = 0;
 						if (isset($_POST[$i.'-themes_rights'])) $themes_r = THEMES_RIGHTS; else $themes_r = 0;
 						if (isset($_POST[$i.'-options_rights'])) $options_r = OPTIONS_RIGHTS; else $options_r = 0;
 						if (isset($_POST[$i.'-admin_rights'])) $admin_r = ADMIN_RIGHTS; else $admin_r = 0;
 						if (!isset($_POST['alter_enabled'])) {
-							$rights = NO_RIGHTS + $main_r + $view_r + $upload_r + $comment_r + $edit_r + $themes_r + $options_r + $admin_r;
+							$rights = NO_RIGHTS + $main_r + $view_r + $upload_r + $comment_r + $edit_r + $all_album_r + $themes_r + $options_r + $admin_r;
 							$managedalbums = array();
 							$l = strlen($albumsprefix = 'managed_albums_'.$i.'_');
 							foreach ($_POST as $key => $value) {
@@ -364,7 +365,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 	if ($_zp_loggedin & ADMIN_RIGHTS) {
 		$alterrights = '';
 		$admins = getAdministrators();
-		$admins [''] = array('id' => -1, 'user' => '', 'pass' => '', 'name' => '', 'email' => '', 'rights' => ALL_RIGHTS);
+		$admins [''] = array('id' => -1, 'user' => '', 'pass' => '', 'name' => '', 'email' => '', 'rights' => ALL_RIGHTS ^ ALL_ALBUMS_RIGHTS);
 	} else {
 		$alterrights = ' DISABLED';
 		global $_zp_current_admin;
@@ -446,10 +447,12 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 					value=<?php echo OPTIONS_RIGHTS; if ($user['rights'] & OPTIONS_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Options"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-themes_rights"
 					value=<?php echo THEMES_RIGHTS; if ($user['rights'] & THEMES_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Themes"); ?></td>
-				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-edit_rights"
-					value=<?php echo EDIT_RIGHTS; if ($user['rights'] & EDIT_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Edit"); ?></td>
+				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-all_album_rights"
+					value=<?php echo EDIT_RIGHTS; if ($user['rights'] & ALL_ALBUMS_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Manage all albums"); ?></td>
 			</tr>
 			<tr>
+				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-edit_rights"
+					value=<?php echo EDIT_RIGHTS; if ($user['rights'] & EDIT_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Edit"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-comment_rights"
 					value=<?php echo COMMENT_RIGHTS; if ($user['rights'] & COMMENT_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Comment"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-upload_rights"
@@ -484,43 +487,45 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 		<table>
 		<tr>
-		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-		<?php
-		if (empty($master)) {
-			$cv = array();
-			$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
-			prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
-			$user['id']." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
-			$currentvalues = query_full_array($sql);
-			foreach($currentvalues as $albumitem) {
-				$cv[] = $albumitem['folder'];
-			}
-			$rest = array_diff($albumlist, $cv);
-			$prefix = 'managed_albums_'.$id.'_';
-			echo gettext("Managed albums:");
-			echo '<ul class="albumchecklist">'."\n";;
-			generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights);
-			if (empty($alterrights)) {
-				generateUnorderedListFromArray(array(), $rest, $prefix);
-			}
-			echo '</ul>';
-		} else {
-			echo '<br />'.gettext("This account's username and email are used as contact data in the RSS feeds.");	
-		}
-		?>
-		</td>
-		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-		<?php
-		if (empty($master)) {
-			if (!empty($alterrights)) {
-				echo gettext("You may manage these albums subject to the above rights.");
-			} else {
-				echo gettext("Select one or more albums for the administrator to manage.").' ';
-				echo gettext("Administrators with <em>User admin</em> rights can manage all albums. All others may manage only those that are selected.");
-			}
-		}?>
-		</td>
-		</table>
+				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+				<?php
+				if (empty($master)) {
+					if (!($user['rights'] & ALL_ALBUMS_RIGHTS)) {
+						$cv = array();
+						$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
+						prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
+						$user['id']." AND ".prefix('albums').".id=".prefix('admintoalbum').".albumid";
+						$currentvalues = query_full_array($sql);
+						foreach($currentvalues as $albumitem) {
+							$cv[] = $albumitem['folder'];
+						}
+						$rest = array_diff($albumlist, $cv);
+						$prefix = 'managed_albums_'.$id.'_';
+						echo gettext("Managed albums:");
+						echo '<ul class="albumchecklist">'."\n";;
+						generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights);
+						if (empty($alterrights)) {
+							generateUnorderedListFromArray(array(), $rest, $prefix);
+						}
+						echo '</ul>';
+					}
+				} else {
+					echo '<br />'.gettext("This account's username and email are used as contact data in the RSS feeds.");
+				}
+				?></td>
+				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+				<?php
+				if (empty($master)) {
+					if (!($user['rights'] & ALL_ALBUMS_RIGHTS)) {
+						if (!empty($alterrights)) {
+							echo gettext("You may manage these albums subject to the above rights.");
+						} else {
+							echo gettext("Select one or more albums for the administrator to manage.").' ';
+							echo gettext("Administrators with <em>User admin</em> rights can manage all albums. All others may manage only those that are selected.");
+						}
+					}
+				}?>
+		</td></table>
 		</td>
 	
 	<tr>

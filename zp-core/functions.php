@@ -1121,7 +1121,7 @@ function pageError() {
  */
 function checkAlbumPassword($albumname, &$hint) {
 	global $_zp_pre_authorization, $_zp_loggedin;
-	if (zp_loggedin(ADMIN_RIGHTS | VIEWALL_RIGHTS)) { return true; }
+	if (zp_loggedin(ADMIN_RIGHTS | VIEWALL_RIGHTS | ALL_ALBUMS_RIGHTS)) { return true; }
 	if ($_zp_loggedin) {
 		if (isMyAlbum($albumname, ALL_RIGHTS)) { return true; }  // he is allowed to see it.
 	}
@@ -1879,6 +1879,7 @@ if (NO_RIGHTS == 2) {
 	define('UPLOAD_RIGHTS', 16);
 	define('COMMENT_RIGHTS', 64);
 	define('EDIT_RIGHTS', 256);
+	define('ALL_ALBUMS_RIGHTS', 512);
 	define('THEMES_RIGHTS', 1024);
 	define('OPTIONS_RIGHTS', 8192);
 	define('ADMIN_RIGHTS', 65536);
@@ -1942,10 +1943,10 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums) {
 		if (DEBUG_LOGIN) { debugLog("inserting[$id]:$result"); }	
 		
 	}
-	$sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
-	$result = query($sql);
 	$gallery = new Gallery();
 	if (is_array($albums)) {
+		$sql = "DELETE FROM ".prefix('admintoalbum')." WHERE `adminid`=$id";
+		$result = query($sql);
 		foreach ($albums as $albumname) {
 			$album = new Album($gallery, $albumname);
 			$albumid = $album->getAlbumID();
@@ -2115,7 +2116,7 @@ function getManagedAlbumList() {
  */
 function isMyAlbum($albumfolder, $action) {
 	global $_zp_loggedin, $_zp_admin_album_list, $_zp_current_admin;
-	if ($_zp_loggedin & ADMIN_RIGHTS) { return true; }
+	if ($_zp_loggedin & (ADMIN_RIGHTS | ALL_ALBUMS_RIGHTS)) { return true; }
 	if (empty($albumfolder)) { return false; }
 	if ($_zp_loggedin & $action) {
 		if (is_null($_zp_admin_album_list)) {
