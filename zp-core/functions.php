@@ -2579,4 +2579,43 @@ function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
 	(($id) ? " id=\"$id\"" : "") . ">" .
 	$text . "</a>";
 }
+
+// multidimensional array column sort - source: http://codingforums.com/showthread.php?t=71904
+
+/**
+ * multidimensional array column sort
+ *
+ * @param array $array The multidimensional array to be sorted
+ * @param string $index Which key should be sorted by
+ * @param string $order The order to sort by, "asc" or "desc"
+ * @param bool $natsort If natural order should be used
+ * @param bool $case_sensitive If the sort should be case sensitive
+ * @return array
+ * 
+ * @author redoc (http://codingforums.com/showthread.php?t=71904)
+ */
+function sortMultiArray($array, $index, $order='asc', $natsort=FALSE, $case_sensitive=FALSE) {
+	if(is_array($array) && count($array)>0) {
+		foreach(array_keys($array) as $key) {
+			$temp[$key]=$array[$key][$index];
+			if(!$natsort) {
+				($order=='asc')? asort($temp) : arsort($temp);
+			} else {
+				($case_sensitive)? natsort($temp) : natcasesort($temp);
+				if($order!='asc')  {
+					$temp=array_reverse($temp,TRUE);
+				}
+			}
+		}
+		foreach(array_keys($temp) as $key) {
+			if(is_numeric($key)) {
+				$sorted[]=$array[$key];
+			} else {
+				$sorted[$key]=$array[$key];
+			}
+		}
+		return $sorted;
+	}
+	return $array;
+}
 ?>
