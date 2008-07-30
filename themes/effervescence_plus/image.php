@@ -108,18 +108,22 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 			echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=400&amp;width=300&amp;inlineId=imagemetadata\" title=\"".gettext("image details from exif")."\" class=\"thickbox\">".gettext('Image Info')."</a></div>";
 			printImageMetadata('', false); 
 		}
-		echo '<br clear="all" />';
-		if (function_exists('printImageMap')) { printImageMap(6, 'G_HYBRID_MAP');	}
-		if (function_exists('printShutterfly')) printShutterfly();
 } ?>
 	</div>
 		<br clear="all" />
  	</div>  
 
 	<!-- Image Description -->
-	<?php if ($show) { ?><div id="description"><?php printImageDesc(true); ?>
+	<?php if ($show) { ?>
+	<div id="description">
+	<?php 
+	printImageDesc(true); 
+	if (function_exists('printImageMap')) { printImageMap(6, 'G_HYBRID_MAP');	 }
+	?>
 	</div> 
-	<?php } ?>
+	<?php } 
+		if (function_exists('printShutterfly')) printShutterfly();
+	?>
 </div>
 
 	<!-- Wrap Bottom Content -->

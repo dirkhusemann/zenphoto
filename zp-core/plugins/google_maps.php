@@ -64,7 +64,7 @@ function hasMapData() {
  * @param int $height is the image height of the map. NULL will use the default
  * @since 1.1.3
  */
-function printImageMap($zoomlevel='6', $type=NULL, $width=NULL, $height=NULL){
+function printImageMap($zoomlevel='6', $type=NULL, $width=NULL, $height=NULL, $text='', $toggle=true, $id='googlemap', $class=null){
 	global $_zp_phoogle;
 	if(getOption('gmaps_apikey') != ''){
 		$exif = getImageEXIFData();
@@ -80,7 +80,15 @@ function printImageMap($zoomlevel='6', $type=NULL, $width=NULL, $height=NULL){
 			if($exif['EXIFGPSLatitudeRef'] == 'S'){  $lat = '-' . $lat; }
 			if($exif['EXIFGPSLongitudeRef'] == 'W'){  $long = '-' . $long; }
 			$_zp_phoogle->addGeoPoint($lat, $long);
+			$dataid = $id.'_data';
+			if (empty($text)) $text = 'Google Map';
+			if ($toggle) echo "<a href=\"javascript: toggle('$dataid');\" title=\"".gettext('Display a Google Map locating the image.')."\">";
+			echo "<strong>$text</strong>";
+			if ($toggle) echo "</a>\n";
+			echo "  <div id=\"$dataid\"" . ($toggle ? " style=\"display: none;\"" : '') . ">\n";
 			$_zp_phoogle->showMap();
+			echo "  </div>\n</div>\n\n";
+			
 		}
 	}
 }
