@@ -58,13 +58,15 @@ function hasMapData() {
 
 /**
  * Causes a Google map to be printed based on the gps data in the current image
- * @param  string $zoomlevel the zoom in for the map
+ * @param string $zoomlevel the zoom in for the map
  * @param string $type of map to produce: allowed values are G_NORMAL_MAP | G_SATELLITE_MAP | G_HYBRID_MAP
  * @param int $width is the image width of the map. NULL will use the default
  * @param int $height is the image height of the map. NULL will use the default
- * @since 1.1.3
+ * @param unknown_type $text text for the pop-up link
+ * @param unknown_type $toggle set to true to hide initially
+ * @param unknown_type $id DIV id
  */
-function printImageMap($zoomlevel='6', $type=NULL, $width=NULL, $height=NULL, $text='', $toggle=true, $id='googlemap', $class=null){
+function printImageMap($zoomlevel='6', $type=NULL, $width=NULL, $height=NULL, $text='', $toggle=true, $id='googlemap') {
 	global $_zp_phoogle;
 	if(getOption('gmaps_apikey') != ''){
 		$exif = getImageEXIFData();
