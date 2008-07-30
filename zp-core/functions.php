@@ -5,6 +5,7 @@
  *
  */
 define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
+define('DEBUG_ERROR', false); // set to true to  supplies the calling sequence with zp_error messages
 define('ALBUM_OPTIONS_TABLE', true);  // TODO: 1.2 change this to true. See also the 1.2 todo list on the tasks tab
 define('SAFE_GLOB', false);
 include('version.php'); // Include the version info.
@@ -70,7 +71,6 @@ define('SERVERPATH', str_replace("\\", '/', dirname(dirname(__FILE__))));
 define('PROTOCOL', getOption('server_protocol'));
 define('FULLWEBPATH', PROTOCOL."://" . $_SERVER['HTTP_HOST'] . WEBPATH);
 define('SAFE_MODE_ALBUM_SEP', '__');
-if (!defined('DEBUG')) { define('DEBUG', false); }
 define('CACHEFOLDER', '/cache/');
 define('SERVERCACHE', SERVERPATH . substr(CACHEFOLDER, 0, -1));
 
@@ -697,7 +697,7 @@ function sanitize_path($filename) {
 
 /**
  * Formats an error message
- * If DEBUG is set, supplies the calling sequence
+ * If DEBUG_ERROR is set, supplies the calling sequence
  *
  * @param string $message
  */
@@ -706,7 +706,7 @@ function zp_error($message) {
 	if (!$_zp_error) {
 		echo '<div style="padding: 15px; border: 1px solid #F99; background-color: #FFF0F0; margin: 20px; font-family: Arial, Helvetica, sans-serif; font-size: 12pt;">'
 		. ' <h2 style="margin: 0px 0px 5px; color: #C30;">Zenphoto Error</h2><div style=" color:#000;">' . "\n\n" . $message . '</div>';
-		if (DEBUG) {
+		if (DEBUG_ERROR) {
 			// Get a backtrace.
 			$bt = debug_backtrace();
 			array_shift($bt); // Get rid of zp_error in the backtrace.

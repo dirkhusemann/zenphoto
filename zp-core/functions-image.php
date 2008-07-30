@@ -38,7 +38,7 @@ function imageError($errormessage, $errorimg='err-imagegeneral.gif') {
  */
 function imageDebug($args) {
 	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
-	echo "<strong>".gettext("DEBUG")." <code>i.php</code> | ".gettext("Arguments:")."</strong><br />\n\n"
+	echo "<strong>".gettext("Debug")." <code>i.php</code> | ".gettext("Arguments:")."</strong><br />\n\n"
 	.  "<ul><li>".gettext("size =")."    <strong>" . sanitize($size, true)     . "</strong></li>\n"
 	.  "<li>".gettext("width =")."   <strong>" . sanitize($width, true)    . "</strong></li>\n"
 	.  "<li>".gettext("height =")."  <strong>" . sanitize($height, true)   . "</strong></li>\n"

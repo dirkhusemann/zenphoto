@@ -75,7 +75,7 @@ function printSubalbumAdmin($text, $before='', $after='') {
  * @since 1.1
  */
 function printAdminToolbox($context=null, $id='admin') {
-	global $_zp_current_album, $_zp_current_image, $_zp_current_search, $_zp_loggedin, $_zen_gallery_page;
+	global $_zp_current_album, $_zp_current_image, $_zp_current_search, $_zp_loggedin, $_zp_gallery_page;
 	if (zp_loggedin()) {
 		$zf = WEBPATH."/".ZENFOLDER;
 		$dataid = $id . '_data';
@@ -88,7 +88,7 @@ function printAdminToolbox($context=null, $id='admin') {
 		echo "<ul style='list-style-type: none;'>";
 		echo "<li>"; 
 		printAdminLink(gettext('Admin'), '', "</li>\n");
-		if ($_zen_gallery_page === 'index.php') {
+		if ($_zp_gallery_page === 'index.php') {
 			if ($_zp_loggedin & (ADMIN_RIGHTS | EDIT_RIGHTS)) {
 				echo "<li>"; 
 				printSortableGalleryLink(gettext('Sort gallery'), gettext('Manual sorting'));
@@ -105,7 +105,7 @@ function printAdminToolbox($context=null, $id='admin') {
 			if ($page>1) {
 				$redirect .= "&amp;page=$page";
 			}
-		} else if ($_zen_gallery_page === 'album.php') {
+		} else if ($_zp_gallery_page === 'album.php') {
 			$albumname = $_zp_current_album->name;
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				echo "<li>"; 
@@ -129,7 +129,7 @@ function printAdminToolbox($context=null, $id='admin') {
 				echo "</li>\n";
 			}
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;page=$page";
-		} else if ($_zen_gallery_page === 'image.php') {
+		} else if ($_zp_gallery_page === 'image.php') {
 			$albumname = $_zp_current_album->name;
 			$imagename = urlencode($_zp_current_image->filename);
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
@@ -138,7 +138,7 @@ function printAdminToolbox($context=null, $id='admin') {
 				echo "</li>\n";
 			}
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=$imagename";
-		} else if (($_zen_gallery_page === 'search.php')&& !empty($_zp_current_search->words)) {
+		} else if (($_zp_gallery_page === 'search.php')&& !empty($_zp_current_search->words)) {
 			if ($_zp_loggedin & (ADMIN_RIGHTS | UPLOAD_RIGHTS)) {
 				echo "<li><a href=\"".$zf."/admin-dynamic-album.php\" title=\"".gettext("Create an album from the search")."\">".gettext("Create Album")."</a></li>";
 			}

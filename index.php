@@ -26,10 +26,10 @@ if (isset($_GET['p'])) {
 	$theme = setupTheme();
 	$page = str_replace(array('/','\\','.'), '', $_GET['p']);
 	if (substr($page, 0, 1) == "*") {
-		$_zen_gallery_page = basename($obj = ZENFOLDER."/".substr($page, 1) . ".php");
+		$_zp_gallery_page = basename($obj = ZENFOLDER."/".substr($page, 1) . ".php");
 	} else {
 		$obj = THEMEFOLDER."/$theme/$page.php";
-		$_zen_gallery_page = basename($obj);
+		$_zp_gallery_page = basename($obj);
 		if (file_exists(SERVERPATH . "/" . $obj)) {
 		}
 	}
@@ -38,7 +38,7 @@ if (isset($_GET['p'])) {
 } else if (in_context(ZP_IMAGE)) {
 	handleSearchParms($_zp_current_album->name, $_zp_current_image->filename);
 	$theme = setupTheme();
-	$_zen_gallery_page = basename($obj = THEMEFOLDER."/$theme/image.php");
+	$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/image.php");
 	
 // Display an Album page.
 } else if (in_context(ZP_ALBUM)) {
@@ -52,11 +52,11 @@ if (isset($_GET['p'])) {
 			zp_setcookie("zenphoto_image_search_params", $search->getSearchParams(), 0, $cookiepath);
 			set_context(ZP_INDEX | ZP_ALBUM);
 			$theme = setupTheme();
-			$_zen_gallery_page = basename($obj = THEMEFOLDER."/$theme/album.php");
+			$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/album.php");
 		} else {
 			handleSearchParms($_zp_current_album->name);
 			$theme = setupTheme();
-			$_zen_gallery_page = basename($obj = THEMEFOLDER."/$theme/album.php");
+			$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/album.php");
 		}
 	}
 
@@ -64,7 +64,7 @@ if (isset($_GET['p'])) {
 } else if (in_context(ZP_INDEX)) {
 	handleSearchParms();
 	$theme = setupTheme();
-	$_zen_gallery_page = basename($obj = THEMEFOLDER."/$theme/index.php");
+	$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/index.php");
 }
 
 // Load plugins, then load the requested $obj (page, image, album, or index; defined above).
@@ -80,7 +80,7 @@ if (file_exists(SERVERPATH . "/" . $obj) && $zp_request) {
 // 404.php page, or a 404.php in the zp-core folder.
 } else {
 	list($album, $image) = rewrite_get_album_image('album','image');
-	$_zen_gallery_page = '404.php';
+	$_zp_gallery_page = '404.php';
 	$errpage = THEMEFOLDER."/$theme/404.php";
 	header("HTTP/1.0 404 Not Found");
 	if (file_exists(SERVERPATH . "/" . $errpage)) {
