@@ -869,7 +869,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		<td><?php echo gettext("Visual Thumb selection:"); ?></td>
 		<td><input type="checkbox" name="thumb_select_images" value="1"
 		<?php echo checked('1', getOption('thumb_select_images')); ?> /></td>
-		<td><?php echo gettext("Setting this option places thumbnails in the album thumbnail selection list. This does not work on all browsers (Internet Explorer does not show the images) and may slow down loading the edit page if you have a lot images."); ?></td>
+		<td><?php echo gettext("Setting this option places thumbnails in the album thumbnail selection list (the dropdown list on each album's edit page). In Firefox the dropdown shows the thumbs, but in IE and Safari only the names are displayed (even if the thumbs are loaded!). In albums with many images loading these thumbs takes much time and is unnecessary when the browser won't display them. Uncheck this option and the images will not be loaded. "); ?></td>
 	</tr>
 	<tr>
 		<td></td>
