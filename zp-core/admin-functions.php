@@ -774,7 +774,7 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<table>";
 	echo "\n<td width = \"60%\">\n<table>\n<tr>";
 	echo "\n<tr>";
-	echo "<td align=\"right\" valign=\"top\" >".gettext("Album Title").": </td>";
+	echo "<td align=\"right\" valign=\"top\" width=\"150\">".gettext("Album Title").": </td>";
 	echo '<td>';
 	print_language_string_list($album->get('title'), $prefix."albumtitle", false);
 	echo "</td></tr>\n";

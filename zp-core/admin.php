@@ -330,7 +330,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		$allimages = array();
 	} else {
 		$subalbums = $album->getSubAlbums();
-		$allimages = $album->getImages();
+		$allimages = $album->getImages(0, 0, 'ID', 'DESC');
 	}
 	$allimagecount = count($allimages);
 	if (isset($_GET['subpage'])) {
@@ -393,6 +393,12 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		?>
 	<?php
 	}
+	if (isset($_GET['uploaded'])) {
+		echo '<div class="messagebox" id="fade-message">';
+		echo  "<h2>".gettext("Images uploaded")."</h2>";
+		echo '</div>';
+	}
+	
 //* TODO: 1.2 enable this
 	echo '<div id="mainmenu">';
 	echo '<ul>';

@@ -569,7 +569,7 @@ class Album extends PersistentObject {
 		$direction = '';
 		if ($key != 'sort_order') { // manual sort is always ascending
 			if (!is_null($sortdirection)) {
-				$direction = $sortdirection;
+				$direction = ' '.$sortdirection;
 			} else {
 				if ($this->getSortDirection('image')) {
 					$direction = ' DESC';

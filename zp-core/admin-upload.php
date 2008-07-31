@@ -72,8 +72,7 @@ if (isset($_GET['action'])) {
 					}
 				}
 			}
-
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit&album=" . urlencode($folder));
+			header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin.php?page=edit&album='.urlencode($folder).'&uploaded&subpage=1#tab_imageinfo');
 			exit();
 
 		} else {
