@@ -34,7 +34,7 @@ require("zp-config.php");
 // If the server protocol is not set, set it to the default (obscure zp-config.php change).
 if (!isset($_zp_conf_vars['server_protocol'])) $_zp_conf_vars['server_protocol'] = 'http';
 
-require_once('lib-kses.php');
+require_once('lib-htmlawed.php');
 require_once('exif/exif.php');
 require_once('functions-db.php');
 
@@ -115,7 +115,7 @@ setupCurrentLocale();
  */
 function xmlspecialchars($text) {
 	return str_replace("&#039;", '&apos;', htmlspecialchars($text, ENT_QUOTES));
-} 
+}
 
 /**
  * Get a option stored in the database.
@@ -232,13 +232,13 @@ function getOptionList() {
 function getOptionTableName($albumname) {
 	$pfxlen = strlen(prefix(''));
 	if (strlen($albumname) > 54-$pfxlen) { // table names are limited to 62 characters
-		return substr(substr($albumname, 0, max(0,min(24-$pfxlen, 20))).'_'.md5($albumname),0,54-$pfxlen).'_options';  
+		return substr(substr($albumname, 0, max(0,min(24-$pfxlen, 20))).'_'.md5($albumname),0,54-$pfxlen).'_options';
 	}
 	return $albumname.'_options';
 }
 
 /**
- * parses the 'allowed_tags' option for use by kses
+ * parses the 'allowed_tags' option for use by htmLawed
  *
  *@param string &$source by name, contains the string with the tag options
  *@return array the allowed_tags array.
@@ -1518,7 +1518,7 @@ function isValidURL($url) {
  * @param object $receiver the object (image or album) to which to post the comment
  * @param string $ip the IP address of the comment poster
  * @param bool $private set to true if the comment is for the admin only
- * @param bool $anon set to true if the poster wishes to remain anonymous 
+ * @param bool $anon set to true if the poster wishes to remain anonymous
  * @return int
  */
 function postComment($name, $email, $website, $comment, $code, $code_ok, $receiver, $ip, $private, $anon) {
@@ -1539,7 +1539,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 				$type = "pages";
 			}
 			break;
-	} 
+	}
 	/*
 	if (strtolower(get_class($receiver)) == 'image') {
 		$type = 'images';
@@ -1597,11 +1597,11 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		// Update the database entry with the new comment
 		query("INSERT INTO " . prefix("comments") . " (`ownerid`, `name`, `email`, `website`, `comment`, `inmoderation`, `date`, `type`, `ip`, `private`, `anon`) VALUES " .
 						" ('" . $receiverid .
-						"', '" . escape($name) . 
-						"', '" . escape($email) . 
-						"', '" . escape($website) . 
-						"', '" . escape($comment) . 
-						"', '" . $moderate . 
+						"', '" . escape($name) .
+						"', '" . escape($email) .
+						"', '" . escape($website) .
+						"', '" . escape($comment) .
+						"', '" . $moderate .
 						"', NOW()" .
 						", '$type'" .
 						", '$ip'" .
@@ -1776,8 +1776,8 @@ function debugLogBacktrace($message) {
  * @param bit $flags glob 'flags'
  */
 function safe_glob($pattern, $flags=0) {
-	if (!SAFE_GLOB) { 
-		$glob = glob($pattern, $flags); 
+	if (!SAFE_GLOB) {
+		$glob = glob($pattern, $flags);
 		if (is_array($glob)) {
 			return $glob;
 		}
@@ -1823,25 +1823,25 @@ if (!function_exists('fnmatch')) {
  *
  * @param string $name the name of the cookie
  */
-function zp_getCookie($name) {	
+function zp_getCookie($name) {
 	if (DEBUG_LOGIN) {
-		if (isset($_SESSION[$name])) { 
+		if (isset($_SESSION[$name])) {
 			$sessionv = $_SESSION[$name];
 		} else {
 			$sessionv = '';
 		}
-		if (isset($_COOKIE[$name])) { 
+		if (isset($_COOKIE[$name])) {
 			$cookiev = $_COOKIE[$name];
 		} else {
 			$cookiev = '';
 		}
 		debugLog("zp_getCookie($name): SESSION[".session_id()."]=".$sessionv.", COOKIE=".$cookiev);
 	}
-	if (isset($_COOKIE[$name]) && !empty($_COOKIE[$name])) { 
-		return $_COOKIE[$name]; 
+	if (isset($_COOKIE[$name]) && !empty($_COOKIE[$name])) {
+		return $_COOKIE[$name];
 	}
-	if (isset($_SESSION[$name])) { 
-		return $_SESSION[$name]; 
+	if (isset($_SESSION[$name])) {
+		return $_SESSION[$name];
 	}
 	return false;
 }
@@ -1866,7 +1866,7 @@ function zp_setCookie($name, $value, $time=0, $path='/') {
 	} else {
 		$_SESSION[$name] = $value;
 		$_COOKIE[$name] = $value;
-	}	
+	}
 }
 
 //admin user handling
@@ -1910,7 +1910,7 @@ $_zp_admin_users = null;
 function saveAdmin($user, $pass, $name, $email, $rights, $albums) {
 
 	if (DEBUG_LOGIN) { debugLog("saveAdmin($user, $pass, $name, $email, $rights, $albums)"); }
-		
+
 	$sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '$user'";
 	$result = query_single_row($sql);
 	if ($result) {
@@ -1928,9 +1928,9 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums) {
 		$sql = "UPDATE " . prefix('administrators') . "SET `name`='" . escape($name) . $password .
  					"', `email`='" . escape($email) . $rightsset . "' WHERE `id`='" . $id ."'";
 		$result = query($sql);
-		
-		if (DEBUG_LOGIN) { debugLog("updating[$id]:$result");	}	
-		
+
+		if (DEBUG_LOGIN) { debugLog("updating[$id]:$result");	}
+
 	} else {
 		if (is_null($pass)) $pass = md5($user);
 		$sql = "INSERT INTO " . prefix('administrators') . " (user, password, name, email, rights) VALUES ('" .
@@ -1939,9 +1939,9 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums) {
 		$sql = "SELECT `name`, `id` FROM " . prefix('administrators') . " WHERE `user` = '$user'";
 		$result = query_single_row($sql);
 		$id = $result['id'];
-		
-		if (DEBUG_LOGIN) { debugLog("inserting[$id]:$result"); }	
-		
+
+		if (DEBUG_LOGIN) { debugLog("inserting[$id]:$result"); }
+
 	}
 	$gallery = new Gallery();
 	if (is_array($albums)) {
@@ -2011,35 +2011,35 @@ function getAdministrators() {
  * @return bit
  */
 function checkAuthorization($authCode) {
-	
+
 	if (DEBUG_LOGIN) { debugLogBacktrace("checkAuthorization($authCode)");	}
-	
+
 	global $_zp_current_admin;
 	$admins = getAdministrators();
 	$reset_date = getOption('admin_reset_date');
 	if ((count($admins) == 0) || empty($reset_date)) {
 		if ((count($admins) != 0)) setOption('admin_reset_date', 1);  // in case there is no save done in admin
 		$_zp_current_admin = null;
-		
-		if (DEBUG_LOGIN) { debugLog("no admin or reset request"); }		
-		
+
+		if (DEBUG_LOGIN) { debugLog("no admin or reset request"); }
+
 		return ADMIN_RIGHTS; //no admins or reset request
 	}
 	if (empty($authCode)) return 0; //  so we don't "match" with an empty password
 	$i = 0;
 	foreach($admins as $user) {
-		
-	if (DEBUG_LOGIN) { debugLogArray("checking",$user);	}	
-		
+
+	if (DEBUG_LOGIN) { debugLogArray("checking",$user);	}
+
 		if ($user['pass'] == $authCode) {
 			$_zp_current_admin = $user;
-			$result = $user['rights']; 
+			$result = $user['rights'];
 			if ($i == 0) { // the first admin is the master.
-				$result = $result | ADMIN_RIGHTS; 
-			} 
-			
-			if (DEBUG_LOGIN) { debugLog("match");	}		
-			
+				$result = $result | ADMIN_RIGHTS;
+			}
+
+			if (DEBUG_LOGIN) { debugLog("match");	}
+
 			return $result;
 		}
 		$i++;
@@ -2195,7 +2195,7 @@ function handleSearchParms($album='', $image='') {
 /**
  * Returns the theme folder
  * If there is an album theme, loads the theme options.
- * 
+ *
  * @return string
  */
 function setupTheme() {
@@ -2326,7 +2326,7 @@ function useTagTable() {
 	} else if ($_zp_use_tag_table < 0) {
 		return false;
 	}
-	$result = query_full_array("SHOW COLUMNS FROM ".prefix('images').' LIKE "%tags%"');	
+	$result = query_full_array("SHOW COLUMNS FROM ".prefix('images').' LIKE "%tags%"');
 	foreach ($result as $row) {
 		if ($row['Field'] == 'tags') {
 			$_zp_use_tag_table = -1;
@@ -2342,7 +2342,7 @@ function useTagTable() {
  * Tags are case insensitive so only the first of 'Tag' and 'tag' will be preserved
  *
  * Returns the filtered tag array.
- * 
+ *
  * @param array $tags
  * @return array
  */
@@ -2366,7 +2366,7 @@ $_zp_all_tags = null;
 /**
  * Grabs the entire galleries tags
  * Returns an array with all the tags found (there may be duplicates)
- * 
+ *
  * Should be used internally only, works only on "old" tag format.
  *
  * @return array
@@ -2595,7 +2595,7 @@ function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
  * @param bool $natsort If natural order should be used
  * @param bool $case_sensitive If the sort should be case sensitive
  * @return array
- * 
+ *
  * @author redoc (http://codingforums.com/showthread.php?t=71904)
  */
 function sortMultiArray($array, $index, $order='asc', $natsort=FALSE, $case_sensitive=FALSE) {

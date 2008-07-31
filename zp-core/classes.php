@@ -6,41 +6,41 @@
 
 // classes.php - HEADERS STILL NOT SENT! Do not output text from this file.
 
-// Load the authentication functions, UTF-8 Library, and kses.
+// Load the authentication functions, UTF-8 Library, and htmLawed.
 require_once("auth_zp.php");
 require_once("lib-utf8.php");
-require_once("lib-kses.php");
+require_once("lib-htmlawed.php");
 
 
 /*******************************************************************************
  *******************************************************************************
  * Persistent Object Class *****************************************************
- *                                                                              
- * Parent ABSTRACT class of all persistent objects. This class should not be    
- * instantiated, only used for subclasses. This cannot be enforced, but please  
- * follow it!                                                                   
- *                                                                              
- * Documentation/Instructions:                                                  
- * A child class should run the follwing in its constructor:                    
- *                                                                              
- * $new = parent::PersistentObject('tablename',                                  
- *   array('uniquestring'=>$value, 'uniqueid'=>$uniqueid));                     
- *                                                                              
- * where 'tablename' is the name of the database table to use for this object   
- * type, and array('uniquestring'=>$value, ...) defines a unique set of columns 
- * (keys) and their current values which uniquely identifies a single record in 
- * that database table for this object. The return value of the constructor     
- * (stored in $new in the above example) will be (=== TRUE) if a new record was 
- * created, and (=== FALSE) if an existing record was updated. This can then be 
- * used to set() default values for NEW objects and save() them.                
- *                                                                              
- * Note: This is a persistable model that does not save automatically. You MUST 
- * call $this->save(); explicitly to persist the data in child classes.          
- *                                                                              
+ *
+ * Parent ABSTRACT class of all persistent objects. This class should not be
+ * instantiated, only used for subclasses. This cannot be enforced, but please
+ * follow it!
+ *
+ * Documentation/Instructions:
+ * A child class should run the follwing in its constructor:
+ *
+ * $new = parent::PersistentObject('tablename',
+ *   array('uniquestring'=>$value, 'uniqueid'=>$uniqueid));
+ *
+ * where 'tablename' is the name of the database table to use for this object
+ * type, and array('uniquestring'=>$value, ...) defines a unique set of columns
+ * (keys) and their current values which uniquely identifies a single record in
+ * that database table for this object. The return value of the constructor
+ * (stored in $new in the above example) will be (=== TRUE) if a new record was
+ * created, and (=== FALSE) if an existing record was updated. This can then be
+ * used to set() default values for NEW objects and save() them.
+ *
+ * Note: This is a persistable model that does not save automatically. You MUST
+ * call $this->save(); explicitly to persist the data in child classes.
+ *
  *******************************************************************************
  ******************************************************************************/
 
-// The query cache 
+// The query cache
 $_zp_object_cache = array();
 $_zp_object_update_cache = array();
 
@@ -55,7 +55,7 @@ class PersistentObject {
 	var $cache_by;
 	var $id;
 	var $transient;
-	
+
 	function PersistentObject($tablename, $unique_set, $cache_by=NULL, $use_cache=true, $is_transient=false) {
 		// Initialize the variables.
 		// Load the data into the data array using $this->load()
@@ -71,8 +71,8 @@ class PersistentObject {
 
 		return $this->load();
 	}
-	
-	
+
+
 	/**
  	* Caches the current set of objects defined by a variable key $cache_by.
  	* Uses a global array to store the results of a single database query,
@@ -82,14 +82,14 @@ class PersistentObject {
  	*/
 	function cache($entry=NULL) {
 		global $_zp_object_cache;
-		
+
 		if (is_null($this->cache_by)) return false;
 		$classname = get_class($this);
 		if (!isset($_zp_object_cache[$classname])) {
 			$_zp_object_cache[$classname] = array();
 		}
 		$cache_set = array_diff_assoc($this->unique_set, array($this->cache_by => $this->unique_set[$this->cache_by]));
-		
+
 		// This must be done here; the references do not work returned by a function.
 		$cache_location = &$_zp_object_cache[$classname];
 		foreach($cache_set as $key => $value) {
@@ -100,7 +100,7 @@ class PersistentObject {
 		}
 		// Exit if this object set is already cached.
 		if (!empty($cache_location)) return $cache_location;
-		
+
 		if (!is_null($entry)) {
 			$key = $entry[$this->cache_by];
 			$cache_location[$key] = $entry;
@@ -108,7 +108,7 @@ class PersistentObject {
 			$sql = 'SELECT * FROM ' . prefix($this->table) . getWhereClause($cache_set);
 			$result = query($sql);
 			if (mysql_num_rows($result) == 0) return false;
-			
+
 			while ($row = mysql_fetch_assoc($result)) {
 				$key = $row[$this->cache_by];
 				$cache_location[$key] = $row;
@@ -117,9 +117,9 @@ class PersistentObject {
 		return $cache_location;
 	}
 
-	
+
 	/**
- 	* Set a variable in this object. Does not persist to the database until 
+ 	* Set a variable in this object. Does not persist to the database until
  	* save() is called. So, IMPORTANT: Call save() after set() to persist.
  	* If the requested variable is not in the database, sets it in temp storage,
  	* which won't be persisted to the database.
@@ -133,8 +133,8 @@ class PersistentObject {
 		}
 		return true;
 	}
-	
-	
+
+
 	/**
  	* Sets default values for new objects using the set() method.
  	* Should do nothing in the base class; subclasses should override.
@@ -142,7 +142,7 @@ class PersistentObject {
 	function setDefaults() {
 		return;
 	}
-	
+
 	/**
  	* Change one or more values of the unique set assigned to this record.
  	* Checks if the record already exists first, if so returns false.
@@ -154,7 +154,7 @@ class PersistentObject {
 		$result = query('SELECT * FROM ' . prefix($this->table) .
 			getWhereClause($new_unique_set) . ' LIMIT 1;');
 		if (mysql_num_rows($result) == 0) {
-			$sql = 'UPDATE ' . prefix($this->table) 
+			$sql = 'UPDATE ' . prefix($this->table)
 				. getSetClause($new_unique_set) . ' '
 				. getWhereClause($this->unique_set);
 			$result = query($sql);
@@ -165,7 +165,7 @@ class PersistentObject {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Copy this record to another unique set. Checks if the record exists there
 	 * first, if so returns false. If successful returns true. No changes are made
@@ -207,14 +207,14 @@ class PersistentObject {
 		}
 		return false;
 	}
-	
+
 	/**
  	* TODO: Remove this entry from the database permanently.
  	*/
 	function remove() {
 		return false;
 	}
-	
+
 	/**
  	* Get the value of a variable. If $current is false, return the value
  	* as of the last save of this object.
@@ -230,8 +230,8 @@ class PersistentObject {
 			return null;
 		}
 	}
-	
-	/** 
+
+	/**
  	* Load the data array from the database, using the unique id set to get the unique record.
  	* @return false if the record already exists, true if a new record was created.
  	*/
@@ -249,7 +249,7 @@ class PersistentObject {
 		if (empty($entry)) {
 			$entry = query_single_row($sql);
 		}
-		
+
 		// If we don't have an entry yet, this is a new record. Create it.
 		if (empty($entry)) {
 			if ($this->transient) { // no don't save it in the DB!
@@ -271,7 +271,7 @@ class PersistentObject {
 		return $new;
 	}
 
-	/** 
+	/**
  	* Save the updates made to this object since the last update. Returns
  	* true if successful, false if not.
  	*/
