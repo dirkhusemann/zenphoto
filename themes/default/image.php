@@ -134,7 +134,7 @@
 		<?php } ?>
 </div>
 
-<div id="credit"><?php printRSSLink('Gallery','','RSS', ' | '); ?> <a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>?p=archive"><?php echo gettext("Archive View"); ?></a> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a></div>
+<div id="credit"><?php printRSSLink('Gallery','','RSS', ' | '); ?> <?php printCustomPageURL(gettext("Archive View"),"archive"); ?> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a></div>
 
 <?php printAdminToolbox(); ?>
 

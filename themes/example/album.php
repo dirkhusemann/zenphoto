@@ -132,7 +132,7 @@ $firstPageImages = normalizeColumns(1, 7);
  		<?php printPageNav("&laquo; ".gettext("prev"), "|", gettext("next")." &raquo;"); ?>
 
 		<div id="credit">
-		<?php printRSSLink('Album', '', gettext('Album RSS'), ''); ?> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a> | <a href="?p=archive"><?php echo gettext("Archive View"); ?></a>
+		<?php printRSSLink('Album', '', gettext('Album RSS'), ''); ?> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a> | <?php printCustomPageURL(gettext("Archive View"),"archive"); ?>
 		<?php
 		if (function_exists('printUserLogout')) {
 			printUserLogout(" | ");
