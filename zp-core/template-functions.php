@@ -2526,7 +2526,9 @@ function printLatestComments($number, $shorten='123') {
 }
 
 /**
- * Increments (optionally) and returns the hitcounter
+ * Increments (optionally) and returns the hitcounter if a page is viewed (image.php and album.php only). 
+ * Password protected albums are also counted. If you don't want those to be counted, protect the hitcounter 
+ * with a password check.
  * Does not increment the hitcounter if the viewer is logged in as the gallery admin
  *
  * @param string $option "image" for image hit counter (default), "album" for album hit counter
@@ -2940,7 +2942,7 @@ function printAllDates($class='archive', $yearid='year', $monthid='month', $orde
  * Produces the url to a custom page (e.g. one that is not album.php, image.php, or index.php)
  *
  * @param string $linktext Text for the URL
- * @param int $page page number to include in URL
+ * @param string $page page name to include in URL
  * @param string $q query string to add to url
  * @param string $album optional album for the page
  * @return string
@@ -2968,7 +2970,7 @@ function getCustomPageURL($page, $q="", $album="") {
  * Prints the url to a custom page (e.g. one that is not album.php, image.php, or index.php)
  *
  * @param string $linktext Text for the URL
- * @param int $page page number to include in URL
+ * @param string $page page name to include in URL
  * @param string $q query string to add to url
  * @param string $prev text to insert before the URL
  * @param string $next text to follow the URL
