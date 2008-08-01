@@ -1531,14 +1531,8 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			$type = "pages";
 		}
 	} else {
-		$type = $class;
+		$type = $class.'s'; // Historically we have stored "images" or "albums" as the type
 	}
-	/*
-	 if (strtolower(get_class($receiver)) == 'image') {
-		$type = 'images';
-	} else {
-		$type = 'albums';
-	} */
 	$receiver->getComments();
 	$name = trim($name);
 	$email = trim($email);
@@ -1609,13 +1603,13 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		}
 	// switch added for zenpage support
 		switch ($type) {
-			case "image":
+			case "images":
 				$on = $receiver->getAlbumName() . " about " . $receiver->getTitle();
 				$url = "album=" . urlencode($receiver->album->name) . "&image=" . urlencode($receiver->filename);
 				$album = $receiver->getAlbum();
 				$ur_album = getUrAlbum($album);
 				break;
-			case "album":
+			case "albums":
 				$on = $receiver->name;
 				$url = "album=" . urlencode($receiver->name);
 				$ur_album = getUrAlbum($receiver);
@@ -1633,17 +1627,6 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 				//$ur_album = getUrAlbum($album);
 				break;
 		}
-		/*
-		if ($type == 'images') {
-			$on = $receiver->getAlbumName() . " about " . $receiver->getTitle();
-			$url = "album=" . urlencode($receiver->album->name) . "&image=" . urlencode($receiver->filename);
-			$album = $receiver->getAlbum();
-			$ur_album = getUrAlbum($album);
-		} else {
-			$on = $receiver->name;
-			$url = "album=" . urlencode($receiver->name);
-			$ur_album = getUrAlbum($receiver);
-		} */
 		if (getOption('email_new_comments')) {
 			$message = gettext("A comment has been $action in your album")." $on\n" .
  										"\n" .

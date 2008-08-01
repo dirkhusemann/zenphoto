@@ -2976,7 +2976,7 @@ function getCustomPageURL($page, $q='', $album='') {
  * @param string $next text to follow the URL
  * @param string $class optional class
  */
-function printCustomPageURL($linktext, $page, $q='', $prev, $next, $class) {
+function printCustomPageURL($linktext, $page, $q='', $prev='', $next='', $class=NULL) {
 	if (!is_null($class)) {
 		$class = 'class="' . $class . '";';
 	}

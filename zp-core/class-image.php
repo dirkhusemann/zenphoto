@@ -567,7 +567,7 @@ class Image extends PersistentObject {
 		if (!$private) {
 			$sql .= " AND `private`=0";
 		}
-		$sql .= " ORDER BY id";
+		$sql .= " ORDER BY id DESC";
 		$comments = query_full_array($sql);
 		$this->comments = $comments;
 		return $this->comments;
