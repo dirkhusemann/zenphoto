@@ -38,9 +38,22 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	} else {
 		$gallery->garbageCollect();
 	}
-
 	if (isset($_GET['action'])) {
 		$action = $_GET['action'];
+		
+		/** reorder the tag list ******************************************************/
+		/******************************************************************************/
+		if ($action == 'sorttags') {
+			$sort = sanitize($_GET['sort']);
+			if (isset($_GET['subpage'])) {
+				$pg = '&subpage='.$_GET['subpage'];
+				$tab = '#tab_imageinfo';
+			} else {
+				$pg = '';
+				$tab = '';
+			}
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit&album='.$_GET['album'].$pg.'&tagsort='.$sort.$tab);
+		}
 
 		/** clear the cache ***********************************************************/
 		/******************************************************************************/
@@ -545,8 +558,22 @@ if ($allimagecount) {
 			?>
 				<td rowspan=11 style="padding-left: 1em;">
 				<?php
-				echo gettext("Tags:");
-				tagSelector($image, 'tags_'.$currentimage.'-')
+				if (isset($_GET['tagsort'])) {
+					$sort = sanitize($_GET['tagsort']);
+				} else {
+					$sort = 1;
+				}
+				tagSelector($image, 'tags_'.$currentimage.'-', false, $sort);
+				if ($sort == 1) {
+					echo '<a class="tagsort" href="?action=sorttags&amp;album='.urlencode($album->name).'&amp;subpage='.$pagenum.'&amp;sort=0' .
+ 								'" title="'.gettext('Sort the tags alphabetically').'">';
+					echo ' '.gettext('Order alphabetically').'</a>';
+				} else{
+					echo '<a class="tagsort" href="?action=sorttags&amp;album='.urlencode($album->name).'&amp;subpage='.$pagenum.'&amp;sort=1' .
+ 								'" title="'.gettext('Sort the tags by most used').'">';
+					echo ' '.gettext('Order by most used').'</a>';
+				}
+				echo '<br /><strong>'.gettext("note:").'</strong> '.gettext('Selected tags are always placed at the front of the list.');
 				?>
 				</td>
 			</tr>

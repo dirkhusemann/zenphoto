@@ -247,7 +247,7 @@ function get_language_string($dbstring, $locale=NULL) {
 	if (!preg_match('/^a:[0-9]+:{/', $dbstring)) {
 		return $dbstring;
 	}
-	$strings = unserialize($dbstring);
+	$strings = unserialize(strip($dbstring));
 	$actual_local = getOption('locale');
 	if (is_null($locale)) $locale = $actual_local;
 	if (isset($strings[$locale])) {

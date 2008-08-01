@@ -676,16 +676,18 @@ function postIndexDecode($str) {
  * @param string $prefix prefix of the input item
  * @param string $alterrights are the items changable.
  */
-function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrights="") {
+function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrights="", $sort=true) {
 	$keys = array_keys($list);
 	$item = array_shift($keys);
 	$localize = !is_numeric($item);
-	if ($localize) {
-		$list = array_flip($list);
-		natcasesort($list);
-		$list = array_flip($list);
-	} else {
-		natcasesort($list);
+	if ($sort) {
+		if ($localize) {
+			$list = array_flip($list);
+			natcasesort($list);
+			$list = array_flip($list);
+		} else {
+			natcasesort($list);
+		}
 	}
 	$cv = array_flip($currentValue);
 	foreach($list as $key=>$item) {
@@ -699,6 +701,22 @@ function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrig
 	}
 }
 
+/**
+ * Returns a array of tags marked for priority display
+ *
+ * @return array
+ */
+function getPriorityTags() {
+	$sql = 'SELECT `name` FROM '.prefix('tags').' WHERE `priority`=1';
+	$result = query_full_array($sql);
+	$prioritytags = array();
+	if (is_array($result)) {
+		foreach($result as $row) {
+			$prioritytags[] = $row['name'];
+		}
+	}
+	return $prioritytags;
+}
 
 /**
  * Creates an unordered checklist of the tags
@@ -707,10 +725,19 @@ function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrig
  * @param string $postit prefix to prepend for posting
  * @param bool $showCounts set to true to get tag count displayed
  */
-function tagSelector($that, $postit, $showCounts=false) {
+function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
 	global $_zp_loggedin;
 	$counts = getAllTagsCount();
-	$them = array_keys($counts);
+	if ($mostused) {
+		arsort($counts, SORT_NUMERIC);
+		$them = array();
+		foreach ($counts as $tag=>$count) {
+			$them[] = $tag;
+		}
+	} else {
+		$them = array_keys($counts);
+	}
+
 	if (is_null($that)) {
 		$tags = array();
 	} else {
@@ -725,6 +752,9 @@ function tagSelector($that, $postit, $showCounts=false) {
 			unset($them[$key]);
 		}
 	}
+	
+	echo '<ul class="tagchecklist">'."\n";
+	
 	if ($showCounts) {
 		$displaylist = array();
 		foreach ($them as $tag) {
@@ -733,15 +763,16 @@ function tagSelector($that, $postit, $showCounts=false) {
 	} else {
 		$displaylist = $them;
 	}
-
-	echo '<ul class="tagchecklist">'."\n";
-	generateUnorderedListFromArray($tags, $tags, $postit);
+	if (count($tags) > 0) {
+		generateUnorderedListFromArray($tags, $tags, $postit);
+		echo '<div class="rule"></div>';
+	}
 	if (!is_null($that) && !(useTagTable() && ($_zp_loggedin & ADMIN_RIGHTS))) {
 		for ($i=0; $i<4; $i++) {
 			echo '<li>'.gettext("new tag").' <input type="text" size="15" name="'.$postit.'new_tag_value_'.$i.'" value="" /></li>'."\n";
 		}
 	}
-	generateUnorderedListFromArray(array(), $displaylist, $postit);
+	generateUnorderedListFromArray(array(), $displaylist, $postit, '', false);
 	echo '</ul>';
 }
 
@@ -961,9 +992,24 @@ function printAlbumEditForm($index, $album) {
 	echo "\n</table>\n</td>";
 	echo "\n<td valign=\"top\">";
 	echo gettext("Tags:");
-	tagSelector($album, 'tags_'.$prefix);
+	if (isset($_GET['tagsort'])) {
+		$sort = sanitize($_GET['tagsort']);
+	} else {
+		$sort = 1;
+	}
+	tagSelector($album, 'tags_'.$prefix, false, $sort);
+	if ($sort == 1) {
+		echo '<a class="tagsort" href="?action=sorttags&amp;album='.urlencode($album->name).'&amp;sort=0' .
+ 				'" title="'.gettext('Sort the tags alphabetically').'">';
+		echo ' '.gettext('Order alphabetically').'</a>';
+	} else{
+		echo '<a class="tagsort" href="?action=sorttags&amp;album='.urlencode($album->name).'&amp;sort=1' .
+ 				'" title="'.gettext('Sort the tags by most used').'">';
+		echo ' '.gettext('Order by most used').'</a>';
+	}
+	echo '<br /><strong>'.gettext("note:").'</strong> '.gettext('Selected tags are always placed at the front of the list.');
 	echo "\n</td>\n</tr>";
-
+	
 	echo "\n</table>";
 
 	echo  "\n<table>";
@@ -1500,6 +1546,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 		$locale = getOption('locale');
 		if (empty($locale)) $locale = 'en_US'; // HTTP Accept Language and no locale
 	}
+	$dbstring = strip($dbstring);
 	if (preg_match('/^a:[0-9]+:{/', $dbstring)) {
 		$strings =unserialize($dbstring);
 	} else {
