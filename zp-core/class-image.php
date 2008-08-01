@@ -26,7 +26,7 @@ class Image extends PersistentObject {
 	/**
 	 * Constructor for class-image
 	 *
-	 * @param object $album the owning album
+	 * @param object &$album the owning album
 	 * @param sting $filename the filename of the image
 	 * @return Image
 	 */

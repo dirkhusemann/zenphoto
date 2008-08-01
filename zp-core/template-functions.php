@@ -2947,7 +2947,7 @@ function printAllDates($class='archive', $yearid='year', $monthid='month', $orde
  * @param string $album optional album for the page
  * @return string
  */
-function getCustomPageURL($page, $q="", $album="") {
+function getCustomPageURL($page, $q='', $album='') {
 	global $_zp_current_album;
 	$result = '';
 	if (getOption('mod_rewrite')) {
@@ -3209,7 +3209,7 @@ function zen_search_script() {
  * @param string $buttonSource optional path to the image for the button
  * @since 1.1.3
  */
-function printSearchForm($prevtext=NULL, $id="search", $buttonSource="") {
+function printSearchForm($prevtext=NULL, $id='search', $buttonSource='') {
 	if (checkforPassword(true)) { return; }
 	$zf = WEBPATH."/".ZENFOLDER;
 	$dataid = $id . '_data';

@@ -1835,10 +1835,10 @@ function zp_getCookie($name) {
 /**
  * Sets a cookie both in the browser cookies and in $_SESSION[]
  *
- * @param string $name
- * @param string $value
- * @param timestamp $time
- * @param string $path
+ * @param string $name The 'cookie' name
+ * @param string $value The value to be stored
+ * @param timestamp $time The time the cookie expires
+ * @param string $path The path on the server in which the cookie will be available on
  */
 function zp_setCookie($name, $value, $time=0, $path='/') {
 	if (!getOption('album_session')) {
