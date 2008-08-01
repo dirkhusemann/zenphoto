@@ -31,9 +31,18 @@ $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---dynamic
  *
  */
 function printLanguageSelector($class='') {
+	global $_zp_languages;
+	if (isset($_POST['dynamic-locale'])) {
+		$locale = sanitize($_POST['dynamic-locale']);
+		if (getOption('locale') != $locale) {
+			echo '<h2><em>'.$_zp_languages[$locale].'</em> '.gettext("is not available.").
+					 ' '.gettext("The locale").' '.$locale.' '.gettext("is not supported on your server.").'</h2>';
+		}
+	}
 	if (!empty($class)) { $class = " class='$class'"; }
 	echo "\n<div$class>\n";
 	echo '<form action="#" method="post">'."\n";
+	echo '<input type="hidden" name="oldlocale" value="'.getOption('locale').'" />';
 	echo gettext("Select a language:").' ';
 	echo '<select id="dynamic-locale" name="dynamic-locale" onchange="this.form.submit()">'."\n";
 	generateLanguageOptionList();

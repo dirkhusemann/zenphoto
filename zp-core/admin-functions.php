@@ -1546,7 +1546,6 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 		$locale = getOption('locale');
 		if (empty($locale)) $locale = 'en_US'; // HTTP Accept Language and no locale
 	}
-	$dbstring = strip($dbstring);
 	if (preg_match('/^a:[0-9]+:{/', $dbstring)) {
 		$strings =unserialize($dbstring);
 	} else {
@@ -1621,7 +1620,7 @@ function process_language_string_save($name) {
 	foreach ($_POST as $key=>$value) {
 		if (!empty($value) && (strpos($key, $name) !== false)) {
 			$key = substr($key, $l);
-			$strings[$key] = $value;
+			$strings[$key] = strip($value);
 		}
 	}
 	if (count($strings) > 1) {

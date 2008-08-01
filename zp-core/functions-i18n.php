@@ -80,6 +80,15 @@ function setupCurrentLocale($plugindomain='') {
 		if ($result === false) {
 			$result = setlocale(LC_ALL, $locale);
 		}
+		if (!$result) { // failed to set the locale
+			if (isset($_POST['dynamic-locale'])) { // and it was chosen via dynamic-locale
+				$cookiepath = WEBPATH;
+				if (WEBPATH == '') { $cookiepath = '/'; }
+				$locale = sanitize($_POST['oldlocale']);
+				setOption('locale', $locale, false);
+				zp_setCookie('dynamic_locale', '', time()-368000, $cookiepath);
+			}
+		}
 		// Set the text domain as 'messages'
 		$domain = 'zenphoto';
 		$domainpath = SERVERPATH . "/" . ZENFOLDER . "/locale/";
@@ -247,7 +256,7 @@ function get_language_string($dbstring, $locale=NULL) {
 	if (!preg_match('/^a:[0-9]+:{/', $dbstring)) {
 		return $dbstring;
 	}
-	$strings = unserialize(strip($dbstring));
+	$strings = unserialize($dbstring);
 	$actual_local = getOption('locale');
 	if (is_null($locale)) $locale = $actual_local;
 	if (isset($strings[$locale])) {
