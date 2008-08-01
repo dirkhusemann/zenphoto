@@ -1601,9 +1601,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 			$dbstring = array_shift($strings);
 		}
 		if ($textbox) {
-			echo '<textarea name="'.$name.'_'.$locale.'" cols="40"	rows="4" >'.$dbstring.'</textarea>';
+			echo '<textarea name="'.$name.'_'.$locale.'" cols="40"	rows="4" >'.htmlspecialchars($dbstring).'</textarea>';
 		} else {
-			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="40"/>';
+			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.htmlspecialchars($dbstring).'" size="40"/>';
 		}
 	}
 }

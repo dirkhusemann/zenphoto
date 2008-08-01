@@ -1524,24 +1524,17 @@ function isValidURL($url) {
 function postComment($name, $email, $website, $comment, $code, $code_ok, $receiver, $ip, $private, $anon) {
 // added for zenpage support
 	$class = strtolower(get_class($receiver));
-	switch ($class) {
-		case "image":
-			$type = "images";
-			break;
-		case "albums":
-			$type = "albums";
-			break;
-		case "zenpage":
-			if($receiver->isPage(ZENPAGE_NEWS)) {
-				$type = "news";
-			}
-			if($receiver->isPage(ZENPAGE_PAGES)) {
-				$type = "pages";
-			}
-			break;
+	if ($class == "zenpage") {
+		if($receiver->isPage(ZENPAGE_NEWS)) {
+			$type = "news";
+		} else if($receiver->isPage(ZENPAGE_PAGES)) {
+			$type = "pages";
+		}
+	} else {
+		$type = $class;
 	}
 	/*
-	if (strtolower(get_class($receiver)) == 'image') {
+	 if (strtolower(get_class($receiver)) == 'image') {
 		$type = 'images';
 	} else {
 		$type = 'albums';
@@ -1583,16 +1576,10 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		if ($private) $private = 1; else $private = 0;
 		if ($anon) $anon = 1; else $anon = 0;
 		// added for zenpage support - $receiver->id in the query below changed to $receiverid
-		if($type === "images" OR $type === "albums") {
+		if ($class === "zenpage") {
+			$receiverid = $receiver->zenpages['id'];
+		} else {
 			$receiverid = $receiver->id;
-		}
-		if(getOption("zp_plugin_zenpage")) {
-			if($type === "news") {
-				$receiverid = $receiver->zenpages['id'];
-			}
-			if($type === "pages") {
-				$receiverid = $receiver->zenpages['id'];
-			}
 		}
 		// Update the database entry with the new comment
 		query("INSERT INTO " . prefix("comments") . " (`ownerid`, `name`, `email`, `website`, `comment`, `inmoderation`, `date`, `type`, `ip`, `private`, `anon`) VALUES " .
@@ -1622,13 +1609,13 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		}
 	// switch added for zenpage support
 		switch ($type) {
-			case "images":
+			case "image":
 				$on = $receiver->getAlbumName() . " about " . $receiver->getTitle();
 				$url = "album=" . urlencode($receiver->album->name) . "&image=" . urlencode($receiver->filename);
 				$album = $receiver->getAlbum();
 				$ur_album = getUrAlbum($album);
 				break;
-			case "albums":
+			case "album":
 				$on = $receiver->name;
 				$url = "album=" . urlencode($receiver->name);
 				$ur_album = getUrAlbum($receiver);
