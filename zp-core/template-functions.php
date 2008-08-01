@@ -2978,7 +2978,7 @@ function printCustomPageURL($linktext, $page, $q='', $prev, $next, $class) {
 	if (!is_null($class)) {
 		$class = 'class="' . $class . '";';
 	}
-	echo $prev."<a href=\"".htmlspecialchars(getCustomPageURL($page, $q))." $class \">$linktext</a>".$next;
+	echo $prev."<a href=\"".htmlspecialchars(getCustomPageURL($page, $q))."\" $class title=\"".htmlspecialchars($linktext)."\">".htmlspecialchars($linktext)."</a>".$next;
 }
 
 /**
