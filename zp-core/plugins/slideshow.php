@@ -13,14 +13,16 @@
  * folder. If you are creating a custom theme, copy these files form the "default" theme of the Zenphoto 
  * distribution.
  * 
+ * NOTE: The jQuery mode does not support movie and audio files anymore. If you need to show them please use the Flash mode. 
+ * 
  * @author Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)
- * @version 1.0.6
+ * @version 1.0.6.1
  * @package plugins 
  */
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)";
-$plugin_version = '1.0.6';
+$plugin_version = '1.0.6.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
 
@@ -144,8 +146,9 @@ function printSlideShowLink($linktext='') {
  * If called from image.php it starts with that image, called from album.php it starts with the first image (jQuery only)
  * To be used on slideshow.php only and called from album.php or image.php. 
  * Image size is taken from the calling link or if not specified there the sized image size from the options
- * In jQuery mode the slideshow has to be stopped to view a movie. 
- *  
+ * 
+ * NOTE: The jQuery mode does not support movie and audio files anymore. If you need to show them please use the Flash mode. 
+ *   
  * @param bool $heading set to true (default) to emit the slideshow breadcrumbs in flash mode
  * @param bool $speedctl controls whether an option box for controlling transition speed is displayed
  */
@@ -219,7 +222,14 @@ function printSlideShow($heading = true, $speedctl = false) {
 					$filename = $images[$idx];
 					$image = new Image($album, $filename);
 				}
-				$img = WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . $image->album->name . '&i=' . fixPixPath($filename) . '&s=' . $imagesize;
+				$ext = strtolower(strrchr($filename, "."));
+				
+				// 2008-08-02 acrylian: This at least make the urls correct, the flashplayer does not load anyway...
+				if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
+					$img = FULLWEBPATH.'/albums/'.$image->album->name .'/'. fixPixPath($filename);
+				} else {
+					$img = WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . $image->album->name . '&i=' . fixPixPath($filename) . '&s=' . $imagesize;
+				}
 				echo 'ImageList[' . $cntr . '] = "' . $img . '";'. chr(13);
 				echo 'TitleList[' . $cntr . '] = "' . $image->getTitle() . '";'. chr(13);
 				if(getOption("slideshow_showdesc")) {
@@ -337,7 +347,9 @@ if ($speedctl) {
 				//$filename = $animage;
 				$image = new Image($album, $filename);
 				$imagepath = FULLWEBPATH.getAlbumFolder('').$folder."/".$filename;
+				
 			}
+			echo $imagepath;
 			$ext = strtolower(strrchr($filename, "."));
 			echo "<span class='slideimage'><h4><strong>".$albumtitle.":</strong> ".$image->getTitle()." (". ($idx + 1) ."/".$numberofimages.")</h4>";
 		
