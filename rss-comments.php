@@ -48,11 +48,11 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-<title><?php echo get_language_string(getOption('gallery_title'), $locale)." - latest comments"; ?></title>
+<title><?php echo get_language_string(getOption('gallery_title'), $locale)." - ".htmlspecialchars(gettext("latest comments")); ?></title>
 <link><?php echo "http://".$host.WEBPATH; ?></link>
 <atom:link href="http://<?php echo $host.WEBPATH; ?>/rss.php" rel="self" type="application/rss+xml" />
 <description><?php echo get_language_string(getOption('gallery_title'), $locale); ?></description>
-<language>en-us</language>
+<language><?php echo getOption('locale'); ?></language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
 <lastBuildDate><?php echo date("r", time()); ?></lastBuildDate>
 <docs>http://blogs.law.harvard.edu/tech/rss</docs>

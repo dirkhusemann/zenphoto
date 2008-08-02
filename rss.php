@@ -65,7 +65,7 @@ if(getOption('mod_rewrite')) {
 <link><?php echo "http://".$host.WEBPATH; ?></link>
 <atom:link href="http://<?php echo $host.WEBPATH; ?>/rss.php" rel="self" type="application/rss+xml" />
 <description><?php echo htmlspecialchars(get_language_string(getOption('gallery_title'), $locale)); ?></description>
-<language>en-us</language>
+<language><?php echo getOption('locale'); ?></language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
 <lastBuildDate><?php echo date("r", time()); ?></lastBuildDate>
 <docs>http://blogs.law.harvard.edu/tech/rss</docs>
