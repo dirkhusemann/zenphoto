@@ -1010,9 +1010,10 @@ class Album extends PersistentObject {
 	 *
 	 * @param bool $moderated if false, ignores comments marked for moderation
 	 * @param bool $private if false ignores private comments
+	 * @param bool $desc set to true for descending order
 	 * @return array
 	 */
-	function getComments($moderated=false, $private=false) {
+	function getComments($moderated=false, $private=false, $desc=false) {
 		$sql = "SELECT *, (date + 0) AS date FROM " . prefix("comments") .
  			" WHERE `type`='albums' AND `ownerid`='" . $this->id . "'";
 		if (!$moderated) {
@@ -1021,7 +1022,10 @@ class Album extends PersistentObject {
 		if (!$private) {
 			$sql .= " AND `private`=0";
 		}
-		$sql .= " ORDER BY id DESC";
+		$sql .= " ORDER BY id";
+		if ($desc) {
+			$sql .= ' DESC';
+		}
 		$comments = query_full_array($sql);
 		$this->comments = $comments;
 		return $this->comments;

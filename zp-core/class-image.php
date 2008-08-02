@@ -556,9 +556,10 @@ class Image extends PersistentObject {
 	 *
 	 * @param bool $moderated if false, comments in moderation are ignored
 	 * @param bool $private if false ignores private comments
+	 * @param bool $desc set to true for descending order
 	 * @return array
 	 */
-	function getComments($moderated=false, $private=false) {
+	function getComments($moderated=false, $private=false, $desc=false) {
 		$sql = "SELECT *, (date + 0) AS date FROM " . prefix("comments") .
  			" WHERE `type`='images' AND `ownerid`='" . $this->id . "'";
 		if (!$moderated) {
@@ -567,7 +568,10 @@ class Image extends PersistentObject {
 		if (!$private) {
 			$sql .= " AND `private`=0";
 		}
-		$sql .= " ORDER BY id DESC";
+		$sql .= " ORDER BY id";
+		if ($desc) {
+			$sql .= ' DESC';
+		}
 		$comments = query_full_array($sql);
 		$this->comments = $comments;
 		return $this->comments;

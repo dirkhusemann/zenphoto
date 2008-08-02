@@ -2256,23 +2256,24 @@ function getCommentsAllowed() {
 }
 
 /**
- *Iterate through comments; use the ZP_COMMENT context.
- *Return true if there are more comments
+ * Iterate through comments; use the ZP_COMMENT context.
+ * Return true if there are more comments
+ * @param  bool $desc set true for desecnding order
  *
- *@return bool
+ * @return bool
  */
-function next_comment() {
+function next_comment($desc=false) {
 	global $_zp_current_image, $_zp_current_album, $_zp_current_comment, $_zp_comments, $current_zenpage;
 	//ZENPAGE: comments support
 	if (is_null($_zp_current_comment)) {
 		if (in_context(ZP_IMAGE) AND in_context(ZP_ALBUM)) {
-			$_zp_comments = $_zp_current_image->getComments();
+			$_zp_comments = $_zp_current_image->getComments(false, false, $desc);
 		} else if (!in_context(ZP_IMAGE) AND in_context(ZP_ALBUM)) {
-			$_zp_comments = $_zp_current_album->getComments();
+			$_zp_comments = $_zp_current_album->getComments(false, false, $desc);
 		}
 		if(getOption('zp_plugin_zenpage')) {
 			if (is_NewsArticle() OR is_Pages()) {
-				$_zp_comments = $current_zenpage->getComments();
+				$_zp_comments = $current_zenpage->getComments(false, false, $desc);
 			}
 		}
 		if (empty($_zp_comments)) { return false; }

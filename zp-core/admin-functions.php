@@ -4,11 +4,15 @@
  * @package admin
  */
 if (session_id() == '') session_start();
+
+$_zp_admin_ordered_taglist = NULL;
+$_zp_admin_LC_taglist = NULL;
+$_zp_admin_album_list = null;
+
 require_once("classes.php");
 require_once("functions.php");
 require_once("lib-seo.php"); // keep the function separate for easy modification by site admins
 
-$_zp_admin_album_list = null;
 $sortby = array(gettext('Filename') => 'Filename', gettext('Date') => 'Date', gettext('Title') => 'Title', gettext('ID') => 'ID', gettext('Filemtime') => 'mtime' );
 $standardOptions = array(	'gallery_title','website_title','website_url','time_offset',
  													'mod_rewrite','mod_rewrite_image_suffix',
@@ -726,16 +730,25 @@ function getPriorityTags() {
  * @param bool $showCounts set to true to get tag count displayed
  */
 function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
-	global $_zp_loggedin;
-	$counts = getAllTagsCount();
-	if ($mostused) {
-		arsort($counts, SORT_NUMERIC);
-		$them = array();
-		foreach ($counts as $tag=>$count) {
-			$them[] = $tag;
+	global $_zp_loggedin, $_zp_admin_ordered_taglist, $_zp_admin_LC_taglist;
+	if (is_null($_zp_admin_ordered_taglist)) {
+		$counts = getAllTagsCount();
+		if ($mostused) {
+			arsort($counts, SORT_NUMERIC);
+			$them = array();
+			foreach ($counts as $tag=>$count) {
+				$them[] = $tag;
+			}
+		} else {
+			$them = array_keys($counts);
+		}
+		$_zp_admin_ordered_taglist = $them;
+		$_zp_admin_LC_taglist = array();
+		foreach ($them as $tag) {
+			$_zp_admin_LC_taglist[] = utf8::strtolower($tag);
 		}
 	} else {
-		$them = array_keys($counts);
+		$them = $_zp_admin_ordered_taglist;
 	}
 
 	if (is_null($that)) {
@@ -743,18 +756,16 @@ function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
 	} else {
 		$tags = $that->getTags();
 	}
-	$tagsLC = array();
-	foreach ($tags as $tag) {
-		$tagsLC[] = utf8::strtolower($tag);
-	}
-	foreach ($them as $key=>$tag) {
-		if (in_array(utf8::strtolower($tag), $tagsLC)) {
-			unset($them[$key]);
+	if (count($tags) > 0) {
+		foreach ($tags as $tag) {
+			$tagLC = utf8::strtolower($tag);
+			$key = array_search($tagLC, $_zp_admin_LC_taglist);
+			if ($key !== false) {
+				unset($them[$key]);
+			}
 		}
 	}
-	
 	echo '<ul class="tagchecklist">'."\n";
-	
 	if ($showCounts) {
 		$displaylist = array();
 		foreach ($them as $tag) {
@@ -765,7 +776,7 @@ function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
 	}
 	if (count($tags) > 0) {
 		generateUnorderedListFromArray($tags, $tags, $postit);
-		echo '<div class="rule"></div>';
+		echo '<hr>';
 	}
 	if (!is_null($that) && !(useTagTable() && ($_zp_loggedin & ADMIN_RIGHTS))) {
 		for ($i=0; $i<4; $i++) {
