@@ -55,6 +55,7 @@ class flowplayer {
 	 * @param string $imagetitle the title of the movie [not used by flowplayer]
 	 * 	 */
 	function playerConfig($moviepath='', $imagetitle,$count='') {
+		define ('FLOW_PLYER_MP3_HEIGHT', 28);
 		global $_zp_current_image;
 		if(empty($moviepath)) {
 			$moviepath = getUnprotectedImageURL();
@@ -77,7 +78,7 @@ class flowplayer {
 			$("#playerContainer'.$count.'").flashembed({
       	src:\'' . WEBPATH . '/' . ZENFOLDER . '/plugins/flowplayer/FlowPlayerLight.swf\',
       	width:'.getOption('flow_player_width').', 
-      	height:28
+      	height:'.FLOW_PLYER_MP3_HEIGHT.'
     	},
     		{config: {  
       		autoPlay: '.$autoplay.',
@@ -110,8 +111,32 @@ class flowplayer {
       		controlsAreaBorderColor: \''.getOption('flow_player_controlsareabordercolor').'\'
     		}} 
   		);
-			</script>';
+			
+  		</script>';
 		 }
+	}
+	
+	/**
+	 * Returns the height of the player
+	 * @param object $image the image for which the width is requested
+	 *
+	 * @return int
+	 */
+	function getVideoWidth($image) {
+		return getOption('flow_player_width');
+	}
+	
+	/**
+	 * Returns the width of the player
+	 * @param object $image the image for which the height is requested
+	 *
+	 * @return int
+	 */
+	function getVideoHeigth($image) {
+		if (strtolower(strrchr($image->name, ".") == '.mp3')) {
+			return FLOW_PLAYER_MP3_HEIGHT;
+		}
+		return getOption('flow_player_height');
 	}
 }
 ?>

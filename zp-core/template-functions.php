@@ -1310,6 +1310,12 @@ function next_image($all=false, $firstPageCount=0, $sorttype=null, $overridePass
 //*** Image Context ************************
 //******************************************
 
+define('DEFAULT_MOV_HEIGHT', 496);
+define('DEFAULT_MOV_WIDTH', 640);
+define('DEFAULT_3GP_HEIGHT', 304);
+define('DEFAULT_3GP_WIDTHT', 352);
+
+
 /**
  * Returns the title of the current image.
  *
@@ -1820,7 +1826,29 @@ function printImageMetadata($title=NULL, $toggle=true, $id='imagemetadata', $cla
  */
 function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL, $cx=NULL, $cy=NULL) {
 	if(!in_context(ZP_IMAGE)) return false;
-	global $_zp_current_image;
+	global $_zp_current_image, $_zp_flash_player;
+	if ($_zp_current_image->video) { // size is determined by the player
+		$ext = strtolower(strrchr($_zp_current_image->name, "."));
+		if (is_null($_zp_flash_player) || $ext == '.3gp' || $ext == '.mov') {
+			switch ($ext) {
+				case '.3gp':
+					$h = DEFAULT_3GP_HEIGHT;
+					$w = DEFAULT_3GP_WIDTH;
+					break;
+				case '.mov':
+					$h = DEFAULT_MOV_HEIGHT;
+					$w = DEFAULT_MOMV_WIDTH;
+					break;
+				default:
+					$h = 240;
+					$w = 320;
+			}
+		} else {
+			$h = $_zp_flash_player->getVideoHeigth($_zp_current_image);
+			$w = $_zp_flash_player->getVideoWidth($_zp_current_image);
+		}
+		return array($w, $h);
+	}
 	$h = $_zp_current_image->getHeight();
 	$w = $_zp_current_image->getWidth();
 	$ls = getOption('image_use_longest_side');
@@ -1954,7 +1982,7 @@ function getDefaultSizedImage() {
  * @param string $id Optional style id
  */
 function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
-	global $_zp_flash_player;
+	global $_zp_flash_player, $_zp_current_image;
 	//Print videos
 	if(getImageVideo()) {
 		$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
@@ -1963,28 +1991,30 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 			if (is_null($_zp_flash_player)) {
 				echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='No flash player installed.' />";
 			} else {
-				$_zp_flash_player->playerConfig($imagepath,get_language_string($image['title']));
+				$_zp_flash_player->playerConfig('',$_zp_current_image->getTitle());
 			}
 		}
 		elseif ($ext == ".3gp") {
 			echo '</a>
-			<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="352" height="304" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
+			<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="'.
+				DEFAULT_3GP_WIDTH.'" height="'.DEFAULT_3GP_HEIGHT.
+				'" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
 				<param name="src" value="' . getUnprotectedImageURL() . '"/>
 				<param name="autoplay" value="false" />
 				<param name="type" value="video/quicktime" />
 				<param name="controller" value="true" />
-				<embed src="' . getUnprotectedImageURL() . '" width="352" height="304" autoplay="false" controller"true" type="video/quicktime"
+				<embed src="' . getUnprotectedImageURL() . '" width="'.DEFAULT_3GP_WIDTH.'" height="'.DEFAULT_3GP_HEIGHT.'" autoplay="false" controller"true" type="video/quicktime"
 					pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
 					</object><a>';
 		}
 		elseif ($ext == ".mov") {
 			echo '</a>
-		 		<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="640" height="496" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
+		 		<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="'.DEFAULT_MOV_WIDTH.'" height="'.DEFAULT_MOV_HEIGHT.'" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
 			 	<param name="src" value="' . getUnprotectedImageURL() . '"/>
 			 	<param name="autoplay" value="false" />
 			 	<param name="type" value="video/quicktime" />
 			 	<param name="controller" value="true" />
-			 	<embed src="' . getUnprotectedImageURL() . '" width="640" height="496" autoplay="false" controller"true" type="video/quicktime"
+			 	<embed src="' . getUnprotectedImageURL() . '" width="'.DEFAULT_MOV_WIDTH.'" height="'.DEFAULT_MOV_HEIGHT.'" autoplay="false" controller"true" type="video/quicktime"
 			 		pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
 				</object><a>';
 		}
@@ -2159,7 +2189,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 			if (is_null($_zp_flash_player)) {
 				echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='No flash player installed.' />";
 			} else {
-				$_zp_flash_player->playerConfig($imagepath,get_language_string($image['title']));
+				$_zp_flash_player->playerConfig('', $_zp_current_image->getTitle());
 			}
 		}
 		elseif ($ext == ".3gp") {

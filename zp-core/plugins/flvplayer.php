@@ -62,7 +62,8 @@ class flvplayer {
 	 * @param string $imagetitle the title of the movie to be passed to the player for display (within slideshow), if empty (within albums) the function getImageTitle() is used
 	 */
 	function playerConfig($moviepath='',$imagetitle='',$count ='') {
-		global $_zp_current_image, $_zp_current_album;
+		define ('FLV_PLAYER_MP3_HEIGHT', 20)
+;		global $_zp_current_image, $_zp_current_album;
 		if(empty($moviepath)) {
 			$moviepath = getUnprotectedImageURL();
 			$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
@@ -92,7 +93,7 @@ class flvplayer {
 		echo '<p id="player'.$count.'"><a href="http://www.macromedia.com/go/getflashplayer">'.gettext("Get Flash").'</a> to see this player.</p>
 			<script type="text/javascript">';
 		if($ext === ".mp3" AND !isset($videoThumb)) {
-			echo'	var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/plugins/flvplayer/flvplayer.swf","player'.$count.'","'.getOption('flv_player_width').'","20","7");';
+			echo'	var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/plugins/flvplayer/flvplayer.swf","player'.$count.'","'.getOption('flv_player_width').'","'.FLV_PLAYER_MP3_HEIGHT.'","7");';
 		} else {
 			echo'	var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/plugins/flvplayer/flvplayer.swf","player'.$count.'","'.getOption('flv_player_width').'","'.getOption('flv_player_height').'","7");
 			so.addVariable("displayheight","'.getOption('flv_player_displayheight').'");';
@@ -108,6 +109,29 @@ class flvplayer {
 			so.addVariable("autostart","' . (getOption('flv_player_autostart') ? 'false' : 'true') . '");
 			so.write("player'.$count.'");
 			</script>'; 
+	}
+	
+	/**
+	 * Returns the height of the player
+	 * @param object $image the image for which the width is requested
+	 *
+	 * @return int
+	 */
+	function getVideoWidth($image) {
+		return getOption('flv_player_width');
+	}
+	
+	/**
+	 * Returns the width of the player
+	 * @param object $image the image for which the height is requested
+	 *
+	 * @return int
+	 */
+	function getVideoHeigth($image) {
+		if (strtolower(strrchr($image->name, ".") == '.mp3')) {
+			return FLV_PLAYER_MP3_HEIGHT;
+		}
+		return getOption('flv_player_height');
 	}
 }
 ?>

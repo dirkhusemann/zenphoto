@@ -24,6 +24,7 @@ $gallery = new Gallery();
 $_GET['page'] = 'plugins';
 
 /* handle posts */
+$saved = false;
 if (isset($_GET['action'])) {
 	if ($_GET['action'] == 'saveplugins') {
 		$curdir = getcwd();
@@ -34,6 +35,7 @@ if (isset($_GET['action'])) {
 			$opt = 'zp_plugin_'.substr($extension, 0, strlen($extension)-4);
 			setBoolOption($opt, isset($_POST[$opt]));
 		}
+		$saved = true;
 	}
 }
 printAdminHeader();
@@ -46,7 +48,7 @@ echo "\n" . '<div id="content">';
 
 /* Page code */
 
-if (isset($_GET['saved'])) {
+if ($saved) {
 	echo '<div class="messagebox" id="fade-message">';
 	echo  "<h2>".gettext("Saved")."</h2>";
 	echo '</div>';
@@ -66,6 +68,7 @@ echo gettext("If the plugin checkbox is checked, the plugin will be loaded and i
 echo "</p>\n";
 echo '<form action="?action=saveplugins" method="post">'."\n";
 echo '<input type="hidden" name="saveplugins" value="yes" />'."\n";
+echo '<input type="submit" value='. gettext('save').' />' . "\n";
 echo "<table class=\"bordered\" width=\"100%\">\n";
 foreach ($filelist as $extension) {
 	

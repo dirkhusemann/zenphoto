@@ -69,32 +69,10 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 
 	<!-- The Image -->
 	<?php  
-		if (getImageVideo()) {
-			$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
-			switch ($ext) {
-				case '.flv':
-					$w = 400;
-					$h = 300;
-					break;
-				case '.3gp':
-					$w = 352;
-					$h = 304;
-					break;
-				case '.mov':
-					$w = 640;
-					$h = 496;
-					break;
-			}
-			$h += 22;
-			$w += 22;
-			$wide = "style=\"width:".$w."px;"; 
-			$high = " height:".$h."px;\""; 
-		} else {
 			$s = getDefaultWidth() + 22;
 			$wide = "style=\"width:".$s."px;"; 
 			$s = getDefaultHeight() + 22;
 			$high = " height:".$s."px;\""; 
-		}
 	?>
 		<div id="image" <?php echo $wide.$high; ?>>
 			<?php if ($show = !checkForPassword()) { ?>
