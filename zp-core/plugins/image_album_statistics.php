@@ -3,17 +3,17 @@
  * image_album_statistics -- support functions for "statistics" about images and albums.
  * 
  * Supports such statistics as "most popular", "latest", "top rated", etc.
- * 
+ *  
  * C A U T I O N: With 1.0.4.7 the usage to get an specific album changes. You now have to pass the foldername of an album instead the album title.
  * 
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.4.9
+ * @version 1.0.5
  * @package plugins 
  */
 
 $plugin_description = gettext("Functions that provide various statistics about images and albums in the gallery.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.4.9';
+$plugin_version = '1.0.5';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---image_album_statistics.php.html";
 
 /**
@@ -297,6 +297,8 @@ function getImageStatistic($number, $option, $albumfolder='') {
 			$sortorder = "images.hitcounter"; break;
 		case "latest-date":
 			$sortorder = "images.date"; break;
+		case "latest-mtime":
+			$sortorder = "images.mtime"; break;
 		case "latest":
 			$sortorder = "images.id"; break;
 		case "mostrated":
@@ -430,7 +432,7 @@ function printMostRatedImages($number=5, $albumfolder='', $showtitle=false, $sho
 }
 
 /**
- * Prints the latest images by ID (=upload order)
+ * Prints the latest images by ID (the order zenphoto recognized the images on the filesystem)
  *
  * @param string $number the number of images to get
  * @param string $albumfolder folder of an specific album
@@ -447,7 +449,7 @@ function printLatestImages($number=5, $albumfolder='', $showtitle=false, $showda
 }
 
 /**
- * Prints the latest images by date order
+ * Prints the latest images by date order (date taken order)
  *
  * @param string $number the number of images to get
  * @param string $albumfolder folder of an specific album
@@ -463,4 +465,20 @@ function printLatestImagesByDate($number=5, $albumfolder='', $showtitle=false, $
 	printImageStatistic($number, "latest-date", $albumfolder, $showtitle, $showdate, $showdesc, $desclength,$showstatistic);
 }
 
+/**
+ * Prints the latest images by mtime order (date uploaded order)
+ *
+ * @param string $number the number of images to get
+ * @param string $albumfolder folder of an specific album
+ * @param bool $showtitle if the image title should be shown
+ * @param bool $showdate if the image date should be shown
+ * @param bool $showdesc if the image description should be shown
+ * @param integer $desclength the length of the description to be shown
+* @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
+ * 															"rating" for rating,
+ * 															"rating+hitcounter" for both.
+ */
+function printLatestImagesByMtime($number=5, $albumfolder='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='') {
+	printImageStatistic($number, "latest-date", $albumfolder, $showtitle, $showdate, $showdesc, $desclength,$showstatistic);
+}
 ?>
