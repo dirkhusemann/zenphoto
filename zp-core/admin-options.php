@@ -1133,14 +1133,14 @@ if (!empty($_REQUEST['themealbum'])) {
 	}
 	$themes = $gallery->getThemes();
 	$theme = $themes[$themename];
-	if (count($themelist) > 1) {
+/*	if (count($themelist) > 1) {
 		echo '<form action="#tab_theme" method="post">';
 		echo gettext("Show theme for"). ': ';
 		echo '<select id="themealbum" name="themealbum" onchange="this.form.submit()">';
 		generateListFromArray(array(urlencode($alb)), $themelist);
 		echo '</select>';
 		echo '</form>';
-	}	
+	}	*/
 	if (count($themelist) == 0) {
 		echo '<div class="errorbox" id="no_themes">';
 		echo  "<h2>".gettext("There are no themes for which you have rights to administer.")."</h2>";
@@ -1153,7 +1153,17 @@ if (!empty($_REQUEST['themealbum'])) {
 <?php
 	/* handle theme options */
 	echo "<input type=\"hidden\" name=\"themealbum\" value=\"".urlencode($alb)."\" />";
-	echo "<tr><th colspan='3'><h2>".gettext("Theme for")." <code><strong>$albumtitle</strong></code>: <em>".$theme['name']."</em></h2></th></tr>\n";
+	echo "<tr><th colspan='2'><h2 style='float: left'>".gettext("Theme for")." <code><strong>$albumtitle</strong></code>: <em>".$theme['name']."</em></h2></th>\n";
+	echo "<th colspan='1' style='text-align: right'>";
+	if (count($themelist) > 1) {
+		echo '<form action="#tab_theme" method="post">';
+		echo gettext("Show theme for"). ': ';
+		echo '<select id="themealbum" name="themealbum" onchange="this.form.submit()">';
+		generateListFromArray(array(urlencode($alb)), $themelist);
+		echo '</select>';
+		echo '</form>';
+	}
+	echo "</th></tr>\n";
 	?>
 	<tr>
 		<td><?php echo gettext("Albums per page:"); ?></td>
