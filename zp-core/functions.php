@@ -2416,10 +2416,28 @@ function getAllTagsCount() {
 		$sql = "SELECT `name`, `id` from ".prefix('tags').' ORDER BY `name`';
 		$tagresult = query_full_array($sql);
 		if (is_array($tagresult)) {
-			foreach ($tagresult as $row) {
-				$sql = "SELECT COUNT(*) AS row_count FROM ".prefix('obj_to_tag')." WHERE `tagid`='".$row['id']."'";
-				$countresult = query_single_row($sql);
-				$_zp_count_tags[$row['name']]	= $countresult['row_count'];
+			$sql = 'SELECT `tagid`, `objectid` FROM '.prefix('obj_to_tag').' ORDER BY `tagid';
+			$countresult = query_full_array($sql);
+			if (is_array($countresult)) {
+				$id = 0;
+				$tagcounts = array();
+				foreach ($countresult as $row) {
+					if ($id != $row['tagid']) {
+						$tagcounts[$id = $row['tagid']] = 0;
+					}
+					$tagcounts[$id] ++;
+				}
+				foreach ($tagresult as $row) {
+					if (isset($tagcounts[$row['id']])) {
+						$_zp_count_tags[$row['name']] = $tagcounts[$row['id']];
+					} else {
+						$_zp_count_tags[$row['name']] = 0;
+					}
+				}
+			} else {
+				foreach ($tagresult as $tag) {
+					$_zp_count_tags[$tag] = 0;
+				}
 			}
 		}
 		return $_zp_count_tags;

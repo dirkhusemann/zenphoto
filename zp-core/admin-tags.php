@@ -225,7 +225,20 @@ if (count($_POST) > 0) {
 }
 
 echo "<h1>".gettext("Tag Management")."</h1>";
-
+if (isset($_GET['tagsort'])) {
+	$sort = sanitize($_GET['tagsort']);
+} else {
+	$sort = 0;
+}
+if ($sort == 1) {
+	echo '<a class="tagsort" href="?tagsort=0' .
+ 				'" title="'.gettext('Sort the tags alphabetically').'">';
+	echo ' '.gettext('Order alphabetically').'</a>';
+} else{
+	echo '<a class="tagsort" href="?tagsort=1' .
+ 				'" title="'.gettext('Sort the tags by most used').'">';
+	echo ' '.gettext('Order by most used').'</a>';
+}
 echo "\n<table class=\"bordered\">";
 echo "\n<tr>";
 echo "\n<th>".gettext("Delete tags from the gallery")."</th>";
@@ -241,7 +254,7 @@ echo "\n<tr>";
 
 echo "\n<td valign='top'>";
 echo "\n".'<form name="tag_delete" action="?delete=true" method="post">';
-tagSelector(NULL, '', true);
+tagSelector(NULL, '', true, $sort);
 echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='delete_tags' value=\"".gettext("delete checked tags")."\" title=\"".gettext("Delete all the tags checked above.")."\"/></p>";
 echo "\n</form>";
 echo '<p>'.gettext('To delete tags from the gallery, place a checkmark in the box for each tag you wish to delete then press the <em>delete checked tags</em> button. The brackets contain the number of times the tag appears.').'</p>';
@@ -249,8 +262,7 @@ echo "\n</td>";
 echo "\n<td valign='top'>";
 echo "\n".'<form name="tag_rename" action="?rename=true" method="post">';
 echo "\n<ul class=\"tagrenamelist\">";
-$list = getAllTagsUnique();
-natcasesort($list);
+$list = $_zp_admin_ordered_taglist;
 foreach($list as $item) {
 	$listitem = 'R_'.postIndexEncode($item);
 	echo "\n".'<li><label for="'.$listitem.'"><input id="'.$listitem.'" name="'.$listitem.'" type="text"';

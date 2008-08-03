@@ -1133,14 +1133,6 @@ if (!empty($_REQUEST['themealbum'])) {
 	}
 	$themes = $gallery->getThemes();
 	$theme = $themes[$themename];
-/*	if (count($themelist) > 1) {
-		echo '<form action="#tab_theme" method="post">';
-		echo gettext("Show theme for"). ': ';
-		echo '<select id="themealbum" name="themealbum" onchange="this.form.submit()">';
-		generateListFromArray(array(urlencode($alb)), $themelist);
-		echo '</select>';
-		echo '</form>';
-	}	*/
 	if (count($themelist) == 0) {
 		echo '<div class="errorbox" id="no_themes">';
 		echo  "<h2>".gettext("There are no themes for which you have rights to administer.")."</h2>";
