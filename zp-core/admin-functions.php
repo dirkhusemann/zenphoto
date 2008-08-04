@@ -1006,7 +1006,7 @@ function printAlbumEditForm($index, $album) {
 	if (isset($_GET['tagsort'])) {
 		$sort = sanitize($_GET['tagsort']);
 	} else {
-		$sort = 1;
+		$sort = 0;
 	}
 	tagSelector($album, 'tags_'.$prefix, false, $sort);
 	if ($sort == 1) {
