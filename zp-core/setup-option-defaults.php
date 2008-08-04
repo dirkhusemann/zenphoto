@@ -168,5 +168,6 @@ function setDefault($option, $default) {
 	setOptionDefault('Gallery_description', 'You can insert your Gallery description using on the Admin Options tab.');
 	setOptionDefault('multi_lingual', 0);
 	setOptionDefault('login_user_field', 1);
+	setOptionDefault('tagsort', 0);
 	
 ?>

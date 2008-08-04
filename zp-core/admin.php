@@ -13,11 +13,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-options.php");
 	}
 
-	if (isset($_REQUEST['tagsort'])) {
-		$tagsort = sanitize($_REQUEST['tagsort']);
-	} else {
-		$tagsort = 0;
-	}
+	$tagsort = getTagOrder();
 	//check for security incursions
 	if (isset($_GET['album'])) {
 		if (!($_zp_loggedin & ADMIN_RIGHTS)) {
@@ -123,48 +119,52 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 						// The file might no longer exist
 						$image = new Image($album, $filename);
 						if ($image->exists) {
-							$image->setTitle(process_language_string_save("$i-title"));
-							$image->setDesc(process_language_string_save("$i-desc"));
-							$image->setLocation(process_language_string_save("$i-location"));
-							$image->setCity(process_language_string_save("$i-city"));
-							$image->setState(process_language_string_save("$i-state"));
-							$image->setCountry(process_language_string_save("$i-country"));
-							$image->setCredit(process_language_string_save("$i-credit"));
-							$image->setCopyright(process_language_string_save("$i-copyright"));
+							if (isset($_POST[$i.'-Delete'])) {
+								$image->deleteImage(true);								
+							} else {
+								$image->setTitle(process_language_string_save("$i-title"));
+								$image->setDesc(process_language_string_save("$i-desc"));
+								$image->setLocation(process_language_string_save("$i-location"));
+								$image->setCity(process_language_string_save("$i-city"));
+								$image->setState(process_language_string_save("$i-state"));
+								$image->setCountry(process_language_string_save("$i-country"));
+								$image->setCredit(process_language_string_save("$i-credit"));
+								$image->setCopyright(process_language_string_save("$i-copyright"));
 
-							$tagsprefix = 'tags_'.$i.'-';
-							$tags = array();
-							for ($j=0; $j<4; $j++) {
-								if (isset($_POST[$tagsprefix.'new_tag_value_'.$j])) {
-									$tag = trim(strip($_POST[$tagsprefix.'new_tag_value_'.$j]));
-									unset($_POST[$tagsprefix.'new_tag_value_'.$j]);
-									if (!empty($tag)) {
-										$tags[] = $tag;
+								$tagsprefix = 'tags_'.$i.'-';
+								$tags = array();
+								for ($j=0; $j<4; $j++) {
+									if (isset($_POST[$tagsprefix.'new_tag_value_'.$j])) {
+										$tag = trim(strip($_POST[$tagsprefix.'new_tag_value_'.$j]));
+										unset($_POST[$tagsprefix.'new_tag_value_'.$j]);
+										if (!empty($tag)) {
+											$tags[] = $tag;
+										}
 									}
 								}
-							}
-							$l = strlen($tagsprefix);
-							foreach ($_POST as $key => $value) {
-								$key = postIndexDecode($key);
-								if (substr($key, 0, $l) == $tagsprefix) {
-									if ($value) {
-										$tags[] = substr($key, $l);
+								$l = strlen($tagsprefix);
+								foreach ($_POST as $key => $value) {
+									$key = postIndexDecode($key);
+									if (substr($key, 0, $l) == $tagsprefix) {
+										if ($value) {
+											$tags[] = substr($key, $l);
+										}
 									}
 								}
-							}
-							$tags = array_unique($tags);
-							$image->setTags($tags);
+								$tags = array_unique($tags);
+								$image->setTags($tags);
 
 
-							$image->setDateTime(strip($_POST["$i-date"]));
-							$image->setShow(strip($_POST["$i-Visible"]));
-							$image->setCommentsAllowed(strip($_POST["$i-allowcomments"]));
-							if (isset($_POST["$i-reset_hitcounter"])) {
-								$id = $image->id;
-								query("UPDATE " . prefix('images') . " SET `hitcounter`= 0 WHERE `id` = $id");
+								$image->setDateTime(strip($_POST["$i-date"]));
+								$image->setShow(strip($_POST["$i-Visible"]));
+								$image->setCommentsAllowed(strip($_POST["$i-allowcomments"]));
+								if (isset($_POST["$i-reset_hitcounter"])) {
+									$id = $image->id;
+									query("UPDATE " . prefix('images') . " SET `hitcounter`= 0 WHERE `id` = $id");
+								}
+								$image->setCustomData(process_language_string_save("$i-custom_data"));
+								$image->save();
 							}
-							$image->setCustomData(process_language_string_save("$i-custom_data"));
-							$image->save();
 						}
 					}
 				}
@@ -211,28 +211,6 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				}
 			}
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit" . $albumdir . "&ndeleted=");
-			exit();
-
-		} else if ($action == "deleteimage") {
-			if ($_GET['album'] && $_GET['image']) {
-				$folder = urldecode(strip($_GET['album']));
-				$file = urldecode(strip($_GET['image']));
-				$album = new Album($gallery, $folder);
-				$image = new Image($album, $file);
-				if ($image->deleteImage(true)) {
-					$nd = 1;
-				} else {
-					$nd = 2;
-				}
-			}
-			if (isset($_REQUEST['subpage'])) {
-				$pg = '&subpage='.$_REQUEST['subpage'];
-			} else {
-				$pg = '';
-			}
-			header("Location: ". FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit&album=" . 
-							urlencode($folder) . "&ndeleted=" . $nd . $pg .
-							'&tagsort='.$tagsort.'#tab_imageinfo');
 			exit();
 		}
 	}
@@ -411,7 +389,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		} else {
 		?>
 			<div class="messagebox" id="fade-message">
-			<h2><?php echo gettext("Save Successful"); ?></h2>
+			<h2><?php echo gettext("Changes saved"); ?></h2>
 			</div>
 		<?php
 		}
@@ -520,7 +498,7 @@ if ($allimagecount) {
  ?>
 	<tr>
 		<td>
-			<input type="submit" value="<?php echo gettext('save images'); ?>" />
+			<input type="submit" value="<?php echo gettext('save changes'); ?>" />
 			<br/><?php echo gettext("Click the images for a larger version"); ?>
 		</td>
 	</tr>
@@ -547,10 +525,8 @@ if ($allimagecount) {
 				<td align="right" valign="top" width="100"><?php echo gettext("Filename:"); ?></td>
 				<td><?php echo $image->filename; ?></td>
 			<td style="padding-left: 1em;">
-				<a href="javascript: confirmDeleteImage('?page=edit&amp;action=deleteimage&amp;album=<?php echo urlencode(urlencode($album->name)); ?>&amp;image=<?php echo urlencode(urlencode($image->filename)); ?>&amp;subpage=<?php echo $pagenum; ?>&amp;tagsort=<?php echo $tagsort; ?>','<?php echo gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"); ?>');"
-					title="<?php gettext('Delete the image'); ?> <?php echo xmlspecialchars($image->filename); ?>"> <img
-					src="images/fail.png" style="border: 0px;"
-					alt="<?php gettext('Delete the image'); ?> <?php echo xmlspecialchars($image->filename); ?>" /></a>
+				<input type="checkbox" id="<?php echo $currentimage; ?>-Delete"	name="<?php echo $currentimage; ?>-Delete" value="1" />
+				 <?php echo ' '.gettext("Delete this image.").'<br /> '.gettext('<strong>Warning</strong> this cannot be undone!'); ?>
 			</td>
 			</tr>
 			<tr>
@@ -572,6 +548,7 @@ if ($allimagecount) {
 				<td rowspan=11 style="padding-left: 1em;">
 				<?php
 				tagSelector($image, 'tags_'.$currentimage.'-', false, $tagsort);
+/*
 				if ($tagsort == 1) {
 					echo '<a class="tagsort" href="?action=sorttags&amp;album='.urlencode($album->name).'&amp;subpage='.$pagenum.'&amp;tagsort=0' .
  								'" title="'.gettext('Sort the tags alphabetically').'">';
@@ -582,6 +559,7 @@ if ($allimagecount) {
 					echo ' '.gettext('Order by most used').'</a>';
 				}
 				echo '<br /><strong>'.gettext("note:").'</strong> '.gettext('Selected tags are always placed at the front of the list.');
+*/
 				?>
 				</td>
 			</tr>
@@ -640,14 +618,14 @@ if ($allimagecount) {
 				</td>
 			</tr>
 			<tr>
-				<td align="right" valign="top" colspan="2"><label
-					for="<?php echo $currentimage; ?>-allowcomments"><input
-					type="checkbox" id="<?php echo $currentimage; ?>-allowcomments"
+				<td align="right" valign="top" colspan="2">
+				<label for="<?php echo $currentimage; ?>-allowcomments">
+				<input type="checkbox" id="<?php echo $currentimage; ?>-allowcomments"
 					name="<?php echo $currentimage; ?>-allowcomments" value="1"
 					<?php if ($image->getCommentsAllowed()) { echo "checked=\"checked\""; } ?> />
-				<?php echo gettext("Allow Comments"); ?></label> &nbsp; &nbsp; <label
-					for="<?php echo $currentimage; ?>-Visible"><input type="checkbox"
-					id="<?php echo $currentimage; ?>-Visible"
+				<?php echo gettext("Allow Comments"); ?></label> &nbsp; &nbsp; 
+				<label for="<?php echo $currentimage; ?>-Visible">
+				<input type="checkbox" id="<?php echo $currentimage; ?>-Visible"
 					name="<?php echo $currentimage; ?>-Visible" value="1"
 					<?php if ($image->getShow()) { echo "checked=\"checked\""; } ?> />
 				<?php echo gettext("Visible"); ?></label></td>
@@ -670,7 +648,7 @@ if ($allimagecount) {
 	}
  ?>
 	<tr>
-		<td colspan="3"><input type="submit" value="<?php echo gettext('save images'); ?>" /></td>
+		<td colspan="3"><input type="submit" value="<?php echo gettext('save changes'); ?>" /></td>
 	</tr>
 
 </table>

@@ -13,11 +13,14 @@ if (!($_zp_loggedin & ADMIN_RIGHTS)) { // prevent nefarious access to this page.
 }
 $gallery = new Gallery();
 $_GET['page'] = 'tags';
+
 if (isset($_REQUEST['tagsort'])) {
 	$tagsort = sanitize($_REQUEST['tagsort']);
+	setBoolOption('tagsort', $tagsort);
 } else {
-	$tagsort = 0;
+	$tagsort = getOption('tagsort');
 }
+
 printAdminHeader();
 echo "\n</head>";
 echo "\n<body>";

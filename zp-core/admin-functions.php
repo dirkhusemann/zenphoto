@@ -796,11 +796,7 @@ function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
  */
 function printAlbumEditForm($index, $album) {
 	global $sortby, $gallery, $_zp_loggedin;
-	if (isset($_GET['tagsort'])) {
-		$tagsort = sanitize($_REQUEST['tagsort']);
-	} else {
-		$tagsort = 0;
-	}
+	$tagsort = getTagOrder();
 	if ($index == 0) {
 		if (isset($saved)) {
 			$album->setSubalbumSortType('Manual');
@@ -1009,12 +1005,9 @@ function printAlbumEditForm($index, $album) {
 	echo "\n</table>\n</td>";
 	echo "\n<td valign=\"top\">";
 	echo gettext("Tags:");
-	if (isset($_GET['tagsort'])) {
-		$tagsort = sanitize($_REQUEST['tagsort']);
-	} else {
-		$tagsort = 0;
-	}
+	$tagsort = getTagOrder();
 	tagSelector($album, 'tags_'.$prefix, false, $tagsort);
+/*
 	if ($tagsort == 1) {
 		echo '<a class="tagsort" href="?action=sorttags&amp;album='.urlencode($album->name).'&amp;tagsort=0' .
  				'" title="'.gettext('Sort the tags alphabetically').'">';
@@ -1025,6 +1018,7 @@ function printAlbumEditForm($index, $album) {
 		echo ' '.gettext('Order by most used').'</a>';
 	}
 	echo '<br /><strong>'.gettext("note:").'</strong> '.gettext('Selected tags are always placed at the front of the list.');
+*/
 	echo "\n</td>\n</tr>";
 	
 	echo "\n</table>";
@@ -1645,6 +1639,21 @@ function process_language_string_save($name) {
 	} else {
 		return array_shift($strings);
 	}
+}
+
+/**
+ * Returns the desired tagsort order (0 for alphabetic, 1 for most used)
+ *
+ * @return int
+ */
+function getTagOrder() {
+	if (isset($_REQUEST['tagsort'])) {
+		$tagsort = sanitize($_REQUEST['tagsort']);
+		setBoolOption('tagsort', $tagsort);
+	} else {
+		$tagsort = getOption('tagsort');
+	}
+	return $tagsort;
 }
 
 ?>
