@@ -732,15 +732,15 @@ function getPriorityTags() {
 function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
 	global $_zp_loggedin, $_zp_admin_ordered_taglist, $_zp_admin_LC_taglist;
 	if (is_null($_zp_admin_ordered_taglist)) {
-		$counts = getAllTagsCount();
-		if ($mostused) {
-			arsort($counts, SORT_NUMERIC);
+		if ($mostused || $showCounts) {
+			$counts = getAllTagsCount();
+			if ($mostused) arsort($counts, SORT_NUMERIC);
 			$them = array();
 			foreach ($counts as $tag=>$count) {
 				$them[] = $tag;
 			}
 		} else {
-			$them = array_keys($counts);
+			$them = getAllTagsUnique();
 		}
 		$_zp_admin_ordered_taglist = $them;
 		$_zp_admin_LC_taglist = array();
