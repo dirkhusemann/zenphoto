@@ -3611,7 +3611,7 @@ function printCaptcha($preText='', $midText='', $postText='', $size=4) {
 		$captchaCode = generateCaptcha($img);
 		$inputBox =  "<input type=\"text\" id=\"code\" name=\"code\" size=\"" . $size . "\" class=\"inputbox\" />";
 		$captcha = "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\" />" .
- 						"<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"bottom\"/></label>&nbsp;";
+ 						"<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" vertical-align=\"bottom\"/></label>&nbsp;";
 
 		echo $preText;
 		echo $captcha;
