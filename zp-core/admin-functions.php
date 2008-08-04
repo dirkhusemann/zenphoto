@@ -796,6 +796,11 @@ function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
  */
 function printAlbumEditForm($index, $album) {
 	global $sortby, $gallery, $_zp_loggedin;
+	if (isset($_GET['tagsort'])) {
+		$tagsort = sanitize($_REQUEST['tagsort']);
+	} else {
+		$tagsort = 0;
+	}
 	if ($index == 0) {
 		if (isset($saved)) {
 			$album->setSubalbumSortType('Manual');
@@ -812,6 +817,7 @@ function printAlbumEditForm($index, $album) {
 	}
 
 	echo "\n<input type=\"hidden\" name=\"" . $prefix . "folder\" value=\"" . $album->name . "\" />";
+	echo "\n".'<input type="hidden" name="tagsort" value='.$tagsort.' />';
 	echo "\n<div class=\"box\" style=\"padding: 15px;\">";
 	echo "\n<table>";
 	echo "\n<td width = \"60%\">\n<table>\n<tr>";
@@ -1004,17 +1010,17 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<td valign=\"top\">";
 	echo gettext("Tags:");
 	if (isset($_GET['tagsort'])) {
-		$sort = sanitize($_GET['tagsort']);
+		$tagsort = sanitize($_REQUEST['tagsort']);
 	} else {
-		$sort = 0;
+		$tagsort = 0;
 	}
-	tagSelector($album, 'tags_'.$prefix, false, $sort);
-	if ($sort == 1) {
-		echo '<a class="tagsort" href="?action=sorttags&amp;album='.urlencode($album->name).'&amp;sort=0' .
+	tagSelector($album, 'tags_'.$prefix, false, $tagsort);
+	if ($tagsort == 1) {
+		echo '<a class="tagsort" href="?action=sorttags&amp;album='.urlencode($album->name).'&amp;tagsort=0' .
  				'" title="'.gettext('Sort the tags alphabetically').'">';
 		echo ' '.gettext('Order alphabetically').'</a>';
 	} else{
-		echo '<a class="tagsort" href="?action=sorttags&amp;album='.urlencode($album->name).'&amp;sort=1' .
+		echo '<a class="tagsort" href="?action=sorttags&amp;album='.urlencode($album->name).'&amp;tagsort=1' .
  				'" title="'.gettext('Sort the tags by most used').'">';
 		echo ' '.gettext('Order by most used').'</a>';
 	}

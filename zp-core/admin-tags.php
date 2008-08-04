@@ -13,6 +13,11 @@ if (!($_zp_loggedin & ADMIN_RIGHTS)) { // prevent nefarious access to this page.
 }
 $gallery = new Gallery();
 $_GET['page'] = 'tags';
+if (isset($_REQUEST['tagsort'])) {
+	$tagsort = sanitize($_REQUEST['tagsort']);
+} else {
+	$tagsort = 0;
+}
 printAdminHeader();
 echo "\n</head>";
 echo "\n<body>";
@@ -97,57 +102,59 @@ if (count($_POST) > 0) {
 			$key = postIndexDecode($key);
 			$kill[] = utf8::strtolower($key);
 		}
-		if (useTagTable()) {
-			$sql = "SELECT `id` FROM ".prefix('tags')." WHERE ";
-			foreach ($kill as $tag) {
-				$sql .= "`name`='".escape($tag)."' OR ";
-			}
-			$sql = substr($sql, 0, strlen($sql)-4);
-			$dbtags = query_full_array($sql);
-			if (is_array($dbtags)) {
-				$sqltags = "DELETE FROM ".prefix('tags')." WHERE ";
-				$sqlobjects = "DELETE FROM ".prefix('obj_to_tag')." WHERE ";
-				foreach ($dbtags as $tag) {
-					$sqltags .= "`id`='".$tag['id']."' OR ";
-					$sqlobjects .= "`tagid`='".$tag['id']."' OR ";
+		if (count($kill) > 0) {
+			if (useTagTable()) {
+				$sql = "SELECT `id` FROM ".prefix('tags')." WHERE ";
+				foreach ($kill as $tag) {
+					$sql .= "`name`='".escape($tag)."' OR ";
 				}
-				$sqltags = substr($sqltags, 0, strlen($sqltags)-4);
-				query($sqltags);
-				$sqlobjects = substr($sqlobjects, 0, strlen($sqlobjects)-4);
-				query($sqlobjects);
-			}
-		} else {
-			$x = $kill;
-			$first = array_shift($x);
-			$match = "'%".$first."%'";
-			foreach ($x as $tag) {
-				$match .= " OR `tags` LIKE '%".$tag."%'";
-			}
-			$sql = 'SELECT `id`, `tags` FROM '.prefix('images').' WHERE `tags` LIKE '.$match.';';
-			$imagelist = query_full_array($sql);
-			$sql = 'SELECT `id`, `tags` FROM '.prefix('albums').' WHERE `tags` LIKE '.$match.';';
-			$albumlist = query_full_array($sql);
+				$sql = substr($sql, 0, strlen($sql)-4);
+				$dbtags = query_full_array($sql);
+				if (is_array($dbtags)) {
+					$sqltags = "DELETE FROM ".prefix('tags')." WHERE ";
+					$sqlobjects = "DELETE FROM ".prefix('obj_to_tag')." WHERE ";
+					foreach ($dbtags as $tag) {
+						$sqltags .= "`id`='".$tag['id']."' OR ";
+						$sqlobjects .= "`tagid`='".$tag['id']."' OR ";
+					}
+					$sqltags = substr($sqltags, 0, strlen($sqltags)-4);
+					query($sqltags);
+					$sqlobjects = substr($sqlobjects, 0, strlen($sqlobjects)-4);
+					query($sqlobjects);
+				}
+			} else {
+				$x = $kill;
+				$first = array_shift($x);
+				$match = "'%".$first."%'";
+				foreach ($x as $tag) {
+					$match .= " OR `tags` LIKE '%".$tag."%'";
+				}
+				$sql = 'SELECT `id`, `tags` FROM '.prefix('images').' WHERE `tags` LIKE '.$match.';';
+				$imagelist = query_full_array($sql);
+				$sql = 'SELECT `id`, `tags` FROM '.prefix('albums').' WHERE `tags` LIKE '.$match.';';
+				$albumlist = query_full_array($sql);
 
-			foreach ($imagelist as $row) {
-				$tags = explode(",", $row['tags']);
-				foreach ($tags as $key=>$tag) {
-					$tags[$key] = utf8::strtolower(trim($tag));
+				foreach ($imagelist as $row) {
+					$tags = explode(",", $row['tags']);
+					foreach ($tags as $key=>$tag) {
+						$tags[$key] = utf8::strtolower(trim($tag));
+					}
+					$tags = array_diff($tags, $kill);
+					$row['tags'] = implode(",", $tags);
+					$sql = 'UPDATE '.prefix('images')."SET `tags`='".$row['tags']."' WHERE `id`='".$row['id']."'";
+					query($sql);
 				}
-				$tags = array_diff($tags, $kill);
-				$row['tags'] = implode(",", $tags);
-				$sql = 'UPDATE '.prefix('images')."SET `tags`='".$row['tags']."' WHERE `id`='".$row['id']."'";
-				query($sql);
-			}
 
-			foreach ($albumlist as $row) {
-				$tags = explode(",", $row['tags']);
-				foreach ($tags as $key=>$tag) {
-					$tags[$key] = utf8::strtolower(trim($tag));
+				foreach ($albumlist as $row) {
+					$tags = explode(",", $row['tags']);
+					foreach ($tags as $key=>$tag) {
+						$tags[$key] = utf8::strtolower(trim($tag));
+					}
+					$tags = array_diff($tags, $kill);
+					$row['tags'] = implode(",", $tags);
+					$sql = 'UPDATE '.prefix('albums')."SET `tags`='".$row['tags']."' WHERE `id`='".$row['id']."'";
+					query($sql);
 				}
-				$tags = array_diff($tags, $kill);
-				$row['tags'] = implode(",", $tags);
-				$sql = 'UPDATE '.prefix('albums')."SET `tags`='".$row['tags']."' WHERE `id`='".$row['id']."'";
-				query($sql);
 			}
 		}
 	} // delete
@@ -225,12 +232,7 @@ if (count($_POST) > 0) {
 }
 
 echo "<h1>".gettext("Tag Management")."</h1>";
-if (isset($_GET['tagsort'])) {
-	$sort = sanitize($_GET['tagsort']);
-} else {
-	$sort = 0;
-}
-if ($sort == 1) {
+if ($tagsort == 1) {
 	echo '<a class="tagsort" href="?tagsort=0' .
  				'" title="'.gettext('Sort the tags alphabetically').'">';
 	echo ' '.gettext('Order alphabetically').'</a>';
@@ -253,14 +255,15 @@ echo "\n</tr>";
 echo "\n<tr>";
 
 echo "\n<td valign='top'>";
-echo "\n".'<form name="tag_delete" action="?delete=true" method="post">';
-tagSelector(NULL, '', true, $sort);
+echo "\n".'<form name="tag_delete" action="?delete=true&amp;tagsort='.$tagsort.'" method="post">';
+tagSelector(NULL, '', true, $tagsort);
 echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='delete_tags' value=\"".gettext("delete checked tags")."\" title=\"".gettext("Delete all the tags checked above.")."\"/></p>";
 echo "\n</form>";
 echo '<p>'.gettext('To delete tags from the gallery, place a checkmark in the box for each tag you wish to delete then press the <em>delete checked tags</em> button. The brackets contain the number of times the tag appears.').'</p>';
 echo "\n</td>";
+
 echo "\n<td valign='top'>";
-echo "\n".'<form name="tag_rename" action="?rename=true" method="post">';
+echo "\n".'<form name="tag_rename" action="?rename=true&amp;tagsort='.$tagsort.'" method="post">';
 echo "\n<ul class=\"tagrenamelist\">";
 $list = $_zp_admin_ordered_taglist;
 foreach($list as $item) {
@@ -273,9 +276,10 @@ echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='rename_ta
 echo "\n</form>";
 echo '<p>'.gettext('To change the value of a tag enter a new value in the text box in front of the tag. Then press the <em>rename tags</em> button').'</p>';
 echo "\n</td>";
+
 echo "\n<td valign='top'>";
 if ($newTags) {
-	echo '<form name="new_tags" action="?newtags=true"method="post">';
+	echo '<form name="new_tags" action="?newtags=true&amp;tagsort='.$tagsort.'"method="post">';
 	echo "\n<ul class=\"tagnewlist\">";
 	for ($i=0; $i<40; $i++) {
 		echo "\n".'<li><label for="new_tag_'.$i.'"><input id="new_tag_'.$i.'" name="new_tag_'.$i.'" type="text"';

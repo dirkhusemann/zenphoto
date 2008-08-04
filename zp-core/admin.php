@@ -13,6 +13,11 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-options.php");
 	}
 
+	if (isset($_REQUEST['tagsort'])) {
+		$tagsort = sanitize($_REQUEST['tagsort']);
+	} else {
+		$tagsort = 0;
+	}
 	//check for security incursions
 	if (isset($_GET['album'])) {
 		if (!($_zp_loggedin & ADMIN_RIGHTS)) {
@@ -44,7 +49,6 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 		/** reorder the tag list ******************************************************/
 		/******************************************************************************/
 		if ($action == 'sorttags') {
-			$sort = sanitize($_GET['sort']);
 			if (isset($_GET['subpage'])) {
 				$pg = '&subpage='.$_GET['subpage'];
 				$tab = '#tab_imageinfo';
@@ -52,7 +56,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				$pg = '';
 				$tab = '';
 			}
-			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit&album='.$_GET['album'].$pg.'&tagsort='.$sort.$tab);
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit&album='.$_GET['album'].$pg.'&tagsort='.$tagsort.$tab);
 		}
 
 		/** clear the cache ***********************************************************/
@@ -108,11 +112,11 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				$notify = '';
 				if (isset($_POST['savealbuminfo'])) {
 					$notify = processAlbumEdit(0, $album);
-					$returntab = '#tab_albuminfo';
+					$returntab = '&tagsort='.$tagsort.'#tab_albuminfo';
 				}
 
 				if (isset($_POST['totalimages'])) {
-					$returntab = '#tab_imageinfo';
+					$returntab = '&tagsort='.$tagsort.'#tab_imageinfo';
 					for ($i = 0; $i < $_POST['totalimages']; $i++) {
 						$filename = strip($_POST["$i-filename"]);
 
@@ -206,7 +210,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 					$albumdir = "&album=" . urlencode(implode('/', $pieces));
 				}
 			}
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit" . $albumdir . "&ndeleted=" . $nd);
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit" . $albumdir . "&ndeleted=");
 			exit();
 
 		} else if ($action == "deleteimage") {
@@ -221,7 +225,14 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 					$nd = 2;
 				}
 			}
-			header("Location: ". FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit&album=" . urlencode($folder) . "&ndeleted=" . $nd);
+			if (isset($_REQUEST['subpage'])) {
+				$pg = '&subpage='.$_REQUEST['subpage'];
+			} else {
+				$pg = '';
+			}
+			header("Location: ". FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit&album=" . 
+							urlencode($folder) . "&ndeleted=" . $nd . $pg .
+							'&tagsort='.$tagsort.'#tab_imageinfo');
 			exit();
 		}
 	}
@@ -348,6 +359,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	$allimagecount = count($allimages);
 	if (isset($_GET['subpage'])) {
 		$pagenum = max(intval($_GET['subpage']),1);
+		if (($pagenum-1) * IMAGES_PER_PAGE >= $allimagecount) $pagenum --;
 	} else {
 		$pagenum = 1;
 	}
@@ -488,6 +500,7 @@ if ($allimagecount) {
 	<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 	<input type="hidden" name="totalimages" value="<?php echo $totalimages; ?>" />
 	<input type="hidden" name="subpage" value="<?php echo $pagenum; ?>" />
+	<input type="hidden" name="tagsort" value=<?php echo $tagsort ?> />
 
 <?php	$totalpages = ceil(($allimagecount / IMAGES_PER_PAGE));	?>
 <table class="bordered">
@@ -534,7 +547,7 @@ if ($allimagecount) {
 				<td align="right" valign="top" width="100"><?php echo gettext("Filename:"); ?></td>
 				<td><?php echo $image->filename; ?></td>
 			<td style="padding-left: 1em;">
-				<a href="javascript: confirmDeleteImage('?page=edit&action=deleteimage&album=<?php echo urlencode(urlencode($album->name)); ?>&image=<?php echo urlencode(urlencode($image->filename)); ?>','<?php echo gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"); ?>');"
+				<a href="javascript: confirmDeleteImage('?page=edit&amp;action=deleteimage&amp;album=<?php echo urlencode(urlencode($album->name)); ?>&amp;image=<?php echo urlencode(urlencode($image->filename)); ?>&amp;subpage=<?php echo $pagenum; ?>&amp;tagsort=<?php echo $tagsort; ?>','<?php echo gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"); ?>');"
 					title="<?php gettext('Delete the image'); ?> <?php echo xmlspecialchars($image->filename); ?>"> <img
 					src="images/fail.png" style="border: 0px;"
 					alt="<?php gettext('Delete the image'); ?> <?php echo xmlspecialchars($image->filename); ?>" /></a>
@@ -558,18 +571,13 @@ if ($allimagecount) {
 			?>
 				<td rowspan=11 style="padding-left: 1em;">
 				<?php
-				if (isset($_GET['tagsort'])) {
-					$sort = sanitize($_GET['tagsort']);
-				} else {
-					$sort = 0;
-				}
-				tagSelector($image, 'tags_'.$currentimage.'-', false, $sort);
-				if ($sort == 1) {
-					echo '<a class="tagsort" href="?action=sorttags&amp;album='.urlencode($album->name).'&amp;subpage='.$pagenum.'&amp;sort=0' .
+				tagSelector($image, 'tags_'.$currentimage.'-', false, $tagsort);
+				if ($tagsort == 1) {
+					echo '<a class="tagsort" href="?action=sorttags&amp;album='.urlencode($album->name).'&amp;subpage='.$pagenum.'&amp;tagsort=0' .
  								'" title="'.gettext('Sort the tags alphabetically').'">';
 					echo ' '.gettext('Order alphabetically').'</a>';
 				} else{
-					echo '<a class="tagsort" href="?action=sorttags&amp;album='.urlencode($album->name).'&amp;subpage='.$pagenum.'&amp;sort=1' .
+					echo '<a class="tagsort" href="?action=sorttags&amp;album='.urlencode($album->name).'&amp;subpage='.$pagenum.'&amp;tagsort=1' .
  								'" title="'.gettext('Sort the tags by most used').'">';
 					echo ' '.gettext('Order by most used').'</a>';
 				}
