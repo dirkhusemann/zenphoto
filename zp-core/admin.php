@@ -480,9 +480,24 @@ if (count($subalbums) > 0) {
 </div>
 <!-- Images List -->
 <div id="tab_imageinfo">
+<script type="text/javascript">
+  function deletemsg(obj, element, msg) {
+		if(obj.checked) {
+			if (confirm(msg)) {
+				document.getElementById(element).style.display = 'block';
+			} else {
+				obj.checked = false;
+			}
+		} else {
+			document.getElementById(element).style.display = 'none';
+ 		}
+	}
+</script>
 <?php
 if ($allimagecount) {
-?>
+
+
+	?>
 <form name="albumedit2"	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
 	<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 	<input type="hidden" name="totalimages" value="<?php echo $totalimages; ?>" />
@@ -535,11 +550,15 @@ if ($allimagecount) {
 				<td>
 				<?php echo $image->filename; ?>
 				</td>
-			<td style="padding-left: 1em;" rowspan="2">
-				<input type="checkbox" id="<?php echo $currentimage; ?>-Delete"	name="<?php echo $currentimage; ?>-Delete" value="1" />
-				 <?php echo ' '.gettext("Delete this image.").'<br /> '.gettext('<strong>Warning</strong> this cannot be undone!'); ?>
-				 
-			</td>
+				<td style="padding-left: 1em;" rowspan="2">
+					<input type="checkbox" id="<?php echo $currentimage; ?>-Delete"	
+							name="<?php echo $currentimage; ?>-Delete" value="1" 
+							onclick="deletemsg(this, 'deletemsg<?php echo $currentimage; ?>','<?php echo gettext("Are you sure you want to delete this image?"); ?>')" />
+				 	<?php echo ' '.gettext("Delete this image.") ?> 
+					<div id="deletemsg<?php echo $currentimage; ?>" style="color:red; display:none" >
+				 	<?php echo gettext('Image will be deleted when changes are saved.'); ?>
+				 	</div> 
+				</td>
 			</tr>
 			<tr>
 				<td align="right" valign="top" width="100"><?php echo gettext("Title:"); ?></td>
