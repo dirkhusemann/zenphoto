@@ -41,7 +41,6 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	}
 	if (isset($_GET['action'])) {
 		$action = $_GET['action'];
-		
 		/** reorder the tag list ******************************************************/
 		/******************************************************************************/
 		if ($action == 'sorttags') {
@@ -113,6 +112,11 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 
 				if (isset($_POST['totalimages'])) {
 					$returntab = '&tagsort='.$tagsort.'#tab_imageinfo';
+					if (isset($_POST['thumb'])) {
+						$thumbnail = sanitize_numeric($_POST['thumb']);
+					} else {
+						$thumbnail = -1;
+					}
 					for ($i = 0; $i < $_POST['totalimages']; $i++) {
 						$filename = strip($_POST["$i-filename"]);
 
@@ -122,6 +126,11 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 							if (isset($_POST[$i.'-Delete'])) {
 								$image->deleteImage(true);								
 							} else {
+								if ($thumbnail == $i) { //selected as album thumb
+									$album = $image->getAlbum();
+									$album->setAlbumThumb($image->filename);
+									$album->save();								
+								}
 								$image->setTitle(process_language_string_save("$i-title"));
 								$image->setDesc(process_language_string_save("$i-desc"));
 								$image->setLocation(process_language_string_save("$i-location"));
@@ -523,10 +532,13 @@ if ($allimagecount) {
 						onclick="toggleBigImage('thumb-<?php echo $currentimage; ?>', '<?php echo $image->getSizedImage(getOption('image_size')); ?>');" />
 				</td>
 				<td align="right" valign="top" width="100"><?php echo gettext("Filename:"); ?></td>
-				<td><?php echo $image->filename; ?></td>
-			<td style="padding-left: 1em;">
+				<td>
+				<?php echo $image->filename; ?>
+				</td>
+			<td style="padding-left: 1em;" rowspan="2">
 				<input type="checkbox" id="<?php echo $currentimage; ?>-Delete"	name="<?php echo $currentimage; ?>-Delete" value="1" />
 				 <?php echo ' '.gettext("Delete this image.").'<br /> '.gettext('<strong>Warning</strong> this cannot be undone!'); ?>
+				 
 			</td>
 			</tr>
 			<tr>
@@ -534,7 +546,14 @@ if ($allimagecount) {
 				<td>
 				<?php print_language_string_list($image->get('title'), $currentimage.'-title', false); ?>
 				</td>
-				<td></td>
+			</tr>
+			<tr>
+			<td></td>
+			<td>
+				<input type="radio" id="<?php echo $currentimage; ?>-thumb"	name="thumb" value="<?php echo $currentimage ?>" />
+				 <?php echo ' '.gettext("Select as album thumbnail."); ?>
+				</td>
+			<td></td>
 			</tr>
 			<tr>
 			<?php
@@ -543,7 +562,7 @@ if ($allimagecount) {
 			$hc = $result['hitcounter'];
 			if (empty($hc)) { $hc = '0'; }
 			echo "<td></td>";
-			echo "<td>". gettext("Hit counter:"). $hc . " <input type=\"checkbox\" name=\"".gettext("reset_hitcounter")."\"> ".gettext("Reset")."</td>";
+			echo "<td>". gettext("Hit counter:").' '. $hc . " <input type=\"checkbox\" name=\"".gettext("reset_hitcounter")."\"> ".gettext("Reset")."</td>";
 			?>
 				<td rowspan=11 style="padding-left: 1em;">
 				<?php
