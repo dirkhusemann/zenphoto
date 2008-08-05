@@ -875,19 +875,9 @@ function printAlbumEditForm($index, $album) {
 
 	// script to test for what is selected
 	$javaprefix = 'js_'.preg_replace("/[^a-z0-9_]/","",strtolower($prefix));
-	echo '<script type="text/javascript">'."\n";
-	echo '  function '.$javaprefix.'album_direction(obj) {'."\n";
-	echo "		if((obj.options[obj.selectedIndex].value == 'Manual') || (obj.options[obj.selectedIndex].value == '')) {\n";
-	echo "			document.getElementById('$javaprefix"."album_direction_div').style.display = 'none';\n";
-	echo '			}'."\n";
-	echo '		else {'."\n";
-	echo "			document.getElementById('$javaprefix"."album_direction_div').style.display = 'block';\n";
-	echo ' 		}'."\n";
-	echo '	}'."\n";
-	echo '</script>'."\n";
 
 	echo "\n<table>\n<tr>\n<td>";
-	echo "\n<select id=\"sortselect\" name=\"".$prefix."subalbumsortby\" onchange=\"".$javaprefix."album_direction(this)\">";
+	echo "\n<select id=\"sortselect\" name=\"".$prefix."subalbumsortby\" onchange=\"update_direction(this,'$javaprefix"."album_direction_div')\">";
 	if (is_null($album->getParent())) {
 		$globalsort = gettext("gallery album sort order");
 	} else {
@@ -920,19 +910,9 @@ function printAlbumEditForm($index, $album) {
 
 	// script to test for what is selected
 	$javaprefix = 'js_'.preg_replace("/[^a-z0-9_]/","",strtolower($prefix));
-	echo '<script type="text/javascript">'."\n";
-	echo '  function '.$javaprefix.'image_direction(obj) {'."\n";
-	echo "		if((obj.options[obj.selectedIndex].value == 'Manual') || (obj.options[obj.selectedIndex].value == '')) {\n";
-	echo "			document.getElementById('$javaprefix"."image_direction_div').style.display = 'none';\n";
-	echo '			}'."\n";
-	echo '		else {'."\n";
-	echo "			document.getElementById('$javaprefix"."image_direction_div').style.display = 'block';\n";
-	echo ' 		}'."\n";
-	echo '	}'."\n";
-	echo '</script>'."\n";
 
 	echo "\n<table>\n<tr>\n<td>";
-	echo "\n<select id=\"sortselect\" name=\"".$prefix."sortby\" onchange=\"".$javaprefix."image_direction(this)\">";
+	echo "\n<select id=\"sortselect\" name=\"".$prefix."sortby\" onchange=\"update_direction(this,'".$javaprefix."image_direction_div')\">";
 	if (is_null($album->getParent())) {
 		$globalsort = gettext("gallery default image sort order");
 	} else {
@@ -1039,11 +1019,11 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<td> </td>";
 	echo "\n<td align=\"right\" valign=\"top\" width=\"150\">".gettext("Thumbnail:")." </td> ";
 	echo "\n<td>";
-	echo "\n<script type=\"text/javascript\">updateThumbPreview(document.getElementById('thumbselect'));</script>";
 	$showThumb = getOption('thumb_select_images');
+	if ($showThumb) echo "\n<script type=\"text/javascript\">updateThumbPreview(document.getElementById('thumbselect'));</script>";
 	echo "\n<select id=\"thumbselect\"";
-	if ($showThumb) echo " class=\"thumbselect\"";
-	echo " name=\"".$prefix."thumb\" onChange=\"updateThumbPreview(this)\">";
+	if ($showThumb) echo " class=\"thumbselect\" onChange=\"updateThumbPreview(this)\"";
+	echo " name=\"".$prefix."thumb\">";
 	if ($album->isDynamic()) {
 		$params = $album->getSearchParams();
 		$search = new SearchEngine();
@@ -1094,7 +1074,7 @@ function printAlbumEditForm($index, $album) {
 		if (empty($thumb)) {
 			echo " selected=\"selected\"";
 		}
-		echo '> '.gettext('randomly selected');
+		echo '>'.gettext('randomly selected');
 		echo '</option>';
 		if (count($album->getSubalbums()) > 0) {
 			$imagearray = array();

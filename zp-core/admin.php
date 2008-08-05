@@ -370,7 +370,6 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		echo '</div>';
 	}
 	?>
-
 <h1><?php echo gettext("Edit Album:");?> <em><?php echo $album->name; ?></em></h1>
 <p><?php printAdminLinks('edit' . $albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
  | <?php if (!$album->isDynamic() && $album->getNumImages() > 1) {
@@ -480,19 +479,6 @@ if (count($subalbums) > 0) {
 </div>
 <!-- Images List -->
 <div id="tab_imageinfo">
-<script type="text/javascript">
-  function deletemsg(obj, element, msg) {
-		if(obj.checked) {
-			if (confirm(msg)) {
-				document.getElementById(element).style.display = 'block';
-			} else {
-				obj.checked = false;
-			}
-		} else {
-			document.getElementById(element).style.display = 'none';
- 		}
-	}
-</script>
 <?php
 if ($allimagecount) {
 
@@ -553,7 +539,7 @@ if ($allimagecount) {
 				<td style="padding-left: 1em;" rowspan="2">
 					<input type="checkbox" id="<?php echo $currentimage; ?>-Delete"	
 							name="<?php echo $currentimage; ?>-Delete" value="1" 
-							onclick="deletemsg(this, 'deletemsg<?php echo $currentimage; ?>','<?php echo gettext("Are you sure you want to delete this image?"); ?>')" />
+							onclick="image_deleteconfirm(this, 'deletemsg<?php echo $currentimage; ?>','<?php echo gettext("Are you sure you want to delete this image?"); ?>')" />
 				 	<?php echo ' '.gettext("Delete this image.") ?> 
 					<div id="deletemsg<?php echo $currentimage; ?>" style="color:red; display:none" >
 				 	<?php echo gettext('Image will be deleted when changes are saved.'); ?>
@@ -690,7 +676,6 @@ if ($allimagecount) {
 	</tr>
 
 </table>
-
 
 </form>
 

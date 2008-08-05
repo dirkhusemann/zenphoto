@@ -207,3 +207,25 @@ function updateThumbPreview(selectObj) {
   var thumb = selectObj.options[selectObj.selectedIndex].style.backgroundImage;
   selectObj.style.backgroundImage = thumb;
 }
+
+function update_direction(obj, element) {
+	if((obj.options[obj.selectedIndex].value == 'Manual') || (obj.options[obj.selectedIndex].value == '')) {
+		document.getElementById(element).style.display = 'none';
+		}
+	else {
+		document.getElementById(element).style.display = 'block';
+	}
+}
+
+function image_deleteconfirm(obj, element, msg) {
+	if(obj.checked) {
+		if (confirm(msg)) {
+			document.getElementById(element).style.display = 'block';
+		} else {
+			obj.checked = false;
+		}
+	} else {
+		document.getElementById(element).style.display = 'none';
+ 	}
+}
+
