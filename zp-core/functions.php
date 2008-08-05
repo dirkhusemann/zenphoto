@@ -2610,4 +2610,53 @@ function sortMultiArray($array, $index, $order='asc', $natsort=FALSE, $case_sens
 	}
 	return $array;
 }
+
+
+/**
+ * Copies a directory recursively
+ * @param string $srcdir the source directory.
+ * @param string $dstdir the destination directory.
+ * @return the total number of files copied.
+ */
+function dircopy($srcdir, $dstdir) {
+	$num = 0;
+	if(!is_dir($dstdir)) mkdir($dstdir);
+	if($curdir = opendir($srcdir)) {
+		while($file = readdir($curdir)) {
+			if($file != '.' && $file != '..') {
+				$srcfile = $srcdir . '/' . $file;
+				$dstfile = $dstdir . '/' . $file;
+				if(is_file($srcfile)) {
+					if(is_file($dstfile)) $ow = filemtime($srcfile) - filemtime($dstfile); else $ow = 1;
+					if($ow > 0) {
+						if(copy($srcfile, $dstfile)) {
+							touch($dstfile, filemtime($srcfile)); $num++;
+						}
+					}									 
+				}
+				else if(is_dir($srcfile)) {
+					$num += dircopy($srcfile, $dstfile, $verbose);
+				}
+			}
+		}
+		closedir($curdir);
+	}
+	return $num;
+}
+
+
+/**
+ * Makes directory recursively, returns TRUE if exists or was created sucessfuly.
+ * Note: PHP5 includes a recursive parameter to mkdir, but PHP4 does not, so this
+ *   is required to target PHP4.
+ * @param string $pathname The directory path to be created.
+ * @return boolean TRUE if exists or made or FALSE on failure.
+ */
+
+function mkdir_recursive($pathname, $mode=0777)
+{
+    is_dir(dirname($pathname)) || mkdir_recursive(dirname($pathname), $mode);
+    return is_dir($pathname) || @mkdir($pathname, $mode);
+}
+
 ?>

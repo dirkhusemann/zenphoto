@@ -843,6 +843,33 @@ class Album extends PersistentObject {
 		}
 	}
 
+	
+	function moveAlbum($newdirname) {
+		// First, ensure the new base directory exists.
+		$dest = getAlbumFolder().'/'.$newdirname;
+		// Check to see if the destination directory already exists
+		if (file_exists($dest)) {
+			// Disallow moving an album over an existing one.
+			return false;
+		}
+		if (mkdir_recursive($newdirname) === TRUE) {
+			// Make the move (rename).
+			$rename = @rename($this->localpath, $dest);
+			// Then: go through the db and change the album (and subalbum) paths. No ID changes are necessary for a move.
+		}
+		
+		
+	}
+	
+	function renameAlbum($newdirname) {
+		return $this->moveAlbum($newdirname);
+	}
+	
+	function copyAlbum($newdirname) {
+		// Simple: Recursively copy the directory structure entirely.
+		// Then: copy all album entries for the album, replacing the path with the new one.
+		// Then: copy all image entries for each album and subalbum, using the new album IDs.
+	}
 
 	/**
 	 * Returns true of comments are allowed
