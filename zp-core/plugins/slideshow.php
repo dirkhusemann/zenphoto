@@ -154,7 +154,7 @@ function printSlideShowLink($linktext='') {
  */
 function printSlideShow($heading = true, $speedctl = false) {
 	if (!isset($_POST['albumid'])) {
-		echo gettext('Invalid link to the slideshow');
+		echo "<div class=\"errorbox\" id=\"message\"><h2>".gettext("Invalid linking to the slideshow page.")."</h2></div>";
 		exit();
 	}
 	global $_zp_flash_player;
