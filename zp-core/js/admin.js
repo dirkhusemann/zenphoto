@@ -234,21 +234,20 @@ function image_deleteconfirm(obj, id, msg) {
 // Uses jQuery
 function toggleMoveCopyRename(id, operation) {
 	if (operation == '') {
-		// Hide the divs and 
 		jQuery('#'+id+'-movecopydiv').hide();
 		jQuery('#'+id+'-renamediv').hide();
-		jQuery('#'+id+'-move').checked = false;
-		jQuery('#'+id+'-copy').checked = false;
-		jQuery('#'+id+'-rename').checked = false;
+		jQuery('#'+id+'-move').attr('checked',false);
+		jQuery('#'+id+'-copy').attr('checked',false);
+		jQuery('#'+id+'-rename').attr('checked',false);
 	} else if (operation == 'movecopy') {
 		jQuery('#'+id+'-movecopydiv').show();
 		jQuery('#'+id+'-renamediv').hide();
-		jQuery('#'+id+'-Delete').checked = false;
+		jQuery('#'+id+'-Delete').attr('checked',false);
 		jQuery('#deletemsg'+id).hide();
 	} else if (operation == 'rename') {
 		jQuery('#'+id+'-movecopydiv').hide();
 		jQuery('#'+id+'-renamediv').show();
-		jQuery('#'+id+'-Delete').checked = false;
+		jQuery('#'+id+'-Delete').attr('checked',false);
 		jQuery('#deletemsg'+id).hide();
 	}
 }
