@@ -717,8 +717,8 @@ if ($allimagecount) {
 				
 				<tr>
 					<td colspan="3">
-						<span class="extrashow"><a href="javascript:toggleExtraInfo(<?php echo $currentimage;?>, true);"><?php echo gettext('Show More Fields');?></a></span>
-						<span style="display:none;" class="extrahide"><a href="javascript:toggleExtraInfo(<?php echo $currentimage;?>, false);"><?php echo gettext('Show Fewer Fields');?></a></span>
+						<span class="extrashow"><a href="javascript:toggleExtraInfo(<?php echo $currentimage;?>, true);"><?php echo gettext('show more fields');?></a></span>
+						<span style="display:none;" class="extrahide"><a href="javascript:toggleExtraInfo(<?php echo $currentimage;?>, false);"><?php echo gettext('show fewer fields');?></a></span>
 					</td>
 				</tr>
 				
