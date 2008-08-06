@@ -153,6 +153,10 @@ function printSlideShowLink($linktext='') {
  * @param bool $speedctl controls whether an option box for controlling transition speed is displayed
  */
 function printSlideShow($heading = true, $speedctl = false) {
+	if (!isset($_POST['albumid'])) {
+		echo gettext('Invalid link to the slideshow');
+		exit();
+	}
 	global $_zp_flash_player;
 	if(empty($_POST['imagenumber'])) {
 		$imagenumber = 0; 
