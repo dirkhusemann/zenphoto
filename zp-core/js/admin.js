@@ -254,7 +254,7 @@ function toggleMoveCopyRename(id, operation) {
 
 function toggleExtraInfo(id, show) {
 	var prefix = '';
-	if (id && id != '') prefix = '#image-'+id+' ';
+	if (id != null && id != '') prefix = '#image-'+id+' ';
 	if (show) {
 		jQuery(prefix+'.extrainfo').show();
 		jQuery(prefix+'.extrashow').hide();
