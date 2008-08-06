@@ -44,7 +44,7 @@ function updateItem($item, $value) {
 
 if (!$checked) {
 	if ($oldconfig = !file_exists('zp-config.php')) {
-		@copy('zp-config.php.example', 'zp-config.php');
+		@copy('zp-config.php.source', 'zp-config.php');
 	}
 } else {
 	setupLog("Completed system check");
@@ -463,7 +463,7 @@ if (!$checked) {
 		$cfg = false;
 	}
 	$good = checkMark($cfg, " <em>zp-config.php</em> ".gettext("file"), ' '.gettext("[does not exist]"),
- 							gettext("Edit the <code>zp-config.php.example</code> file and rename it to <code>zp-config.php</code>").' ' .
+ 							gettext("Edit the <code>zp-config.php.source</code> file and rename it to <code>zp-config.php</code>").' ' .
  							"<br/><br/>".gettext("You can find the file in the \"zp-core\" directory.")) && $good;
 	if ($sql) {
 		if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])) {
