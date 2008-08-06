@@ -1560,9 +1560,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 					$empty = false;
 					echo '<li><label for="'.$name.'_'.$key.'">';
 					if ($textbox) {
-						echo '<textarea name="'.$name.'_'.$key.'" cols="60"	rows="4" style="width:18em">'.htmlspecialchars($string).'</textarea>';
+						echo '<textarea name="'.$name.'_'.$key.'" cols="60"	rows="6" style="width:271px;">'.htmlspecialchars($string).'</textarea>';
 					} else {
-						echo '<input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.htmlspecialchars($string).'" size="35"/>';
+						echo '<input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.htmlspecialchars($string).'" size="35" style="width:271px;"/>';
 					}
 					echo ' '.$lang."</label></li>\n";
 				}
@@ -1576,9 +1576,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 		foreach ($emptylang as $key=>$lang) {
 			echo '<li><label for="'.$name.'_'.$key.'">';
 			if ($textbox) {
-				echo '<textarea name="'.$name.'_'.$key.'" cols="60"	rows="4" style="width:18em"></textarea>';
+				echo '<textarea name="'.$name.'_'.$key.'" cols="60"	rows="6" style="width:271px;"></textarea>';
 			} else {
-				echo '<input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="" size="35"/>';
+				echo '<input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="" size="35" style="width:271px;"/>';
 			}
 			echo ' '.$lang."</label></li>\n";
 
@@ -1592,9 +1592,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 			$dbstring = array_shift($strings);
 		}
 		if ($textbox) {
-			echo '<textarea name="'.$name.'_'.$locale.'" cols="40"	rows="4" >'.htmlspecialchars($dbstring).'</textarea>';
+			echo '<textarea name="'.$name.'_'.$locale.'" cols="40"	rows="6" style="width:271px;">'.htmlspecialchars($dbstring).'</textarea>';
 		} else {
-			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.htmlspecialchars($dbstring).'" size="40"/>';
+			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.htmlspecialchars($dbstring).'" size="40" style="width:271px;"/>';
 		}
 	}
 }

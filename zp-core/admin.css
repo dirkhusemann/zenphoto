@@ -302,7 +302,7 @@ table.bordered td {
 }
 
 table.bordered tr.alt td {
-	background-color: #f8f8f8;
+	background-color: #f0f0f0;
 }
 
 table.formlayout td {
@@ -685,7 +685,7 @@ button.positive,.buttons a.positive {
 .tagchecklist {
 	border: 1px solid #ccc;
 	list-style: none;
-	height: 27em;
+	height: 24em;
 	width: 20em;
 	overflow: auto;
 	background-color: white;

@@ -217,15 +217,53 @@ function update_direction(obj, element) {
 	}
 }
 
-function image_deleteconfirm(obj, element, msg) {
+// Uses jQuery
+function image_deleteconfirm(obj, id, msg) {
 	if(obj.checked) {
 		if (confirm(msg)) {
-			document.getElementById(element).style.display = 'block';
+			toggleMoveCopyRename(id, '');
+			jQuery('#deletemsg'+id).show();
 		} else {
 			obj.checked = false;
 		}
 	} else {
-		document.getElementById(element).style.display = 'none';
+		jQuery('#deletemsg'+id).hide();
  	}
+}
+
+// Uses jQuery
+function toggleMoveCopyRename(id, operation) {
+	if (operation == '') {
+		// Hide the divs and 
+		jQuery('#'+id+'-movecopydiv').hide();
+		jQuery('#'+id+'-renamediv').hide();
+		jQuery('#'+id+'-move').checked = false;
+		jQuery('#'+id+'-copy').checked = false;
+		jQuery('#'+id+'-rename').checked = false;
+	} else if (operation == 'movecopy') {
+		jQuery('#'+id+'-movecopydiv').show();
+		jQuery('#'+id+'-renamediv').hide();
+		jQuery('#'+id+'-Delete').checked = false;
+		jQuery('#deletemsg'+id).hide();
+	} else if (operation == 'rename') {
+		jQuery('#'+id+'-movecopydiv').hide();
+		jQuery('#'+id+'-renamediv').show();
+		jQuery('#'+id+'-Delete').checked = false;
+		jQuery('#deletemsg'+id).hide();
+	}
+}
+
+function toggleExtraInfo(id, show) {
+	var prefix = '';
+	if (id && id != '') prefix = '#image-'+id+' ';
+	if (show) {
+		jQuery(prefix+'.extrainfo').show();
+		jQuery(prefix+'.extrashow').hide();
+		jQuery(prefix+'.extrahide').show();
+	} else {
+		jQuery(prefix+'.extrainfo').hide();
+		jQuery(prefix+'.extrashow').show();
+		jQuery(prefix+'.extrahide').hide();
+	}
 }
 
