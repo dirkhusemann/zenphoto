@@ -716,7 +716,7 @@ button.positive,.buttons a.positive {
 .tagrenamelist {
 	border: 1px solid #ccc;
 	list-style: none;
-	height: 27em;
+	height: 24em;
 	width: 30em;
 	overflow: auto;
 	background-color: white;
@@ -746,7 +746,7 @@ button.positive,.buttons a.positive {
 .tagnewlist {
 	border: 1px solid #ccc;
 	list-style: none;
-	height: 27em;
+	height: 24em;
 	width: 18em;
 	overflow: auto;
 	background-color: white;
