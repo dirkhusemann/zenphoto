@@ -4,18 +4,25 @@ $conf = array();
 /** Do not edit above this line. **/
 /**********************************/
 
-///////////   zenPHOTO Configuration Variables   //////////////////////////////
-//  After you're done editing this file, load  
-//  http://www.yoursite.com/zenphotodir/zp-core/setup.php
-//  to run the setup (of course, replacing the paths where needed).
+/*//////////   zenPHOTO Configuration Variables   ///////////////////////////////
+Note: zp-config.php.source is the source file for zp-config.php
 
-// NOTE: web_path and server_path are no longer needed! If you're having problems
-// with the auto-detected paths, you can override them at the bottom of this file.
+For most installations Setup.php will copy zp-config.php.source to zp-config.php and 
+make the necessary changes to it. Unless this fails you most likely have no need even 
+to read this file.
+
+If for some reason setup.php is not able to edit the zp-config.php file and you cannot
+fix the file/folder permissions so that it can then you may have copy the 
+zp-config.php.source file to zp-config.php and make changes here manually.
+
+Advanced installations may wish to modify the album folder definitions below. 
+
+Also on some servers zenphoto has problems correctly determining the WEB path and SERVER
+path. For these cases you will need to implement the path overrides below.
+///////////////////////////////////////////////////////////////////////////////*/
+
 ////////////////////////////////////////////////////////////////////////////////
-
-
-////////////////////////////////////////////////////////////////////////////////
-// Database Information (the most important part!)
+// Database Information 
 ////////////////////////////////////////////////////////////////////////////////
 
 $conf['mysql_user'] = "";
@@ -43,7 +50,6 @@ $conf['external_album_folder'] = NULL;
 // Otherwise you should leave it at "http"
 $conf['server_protocol'] = "http";
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // Path Overrides
 ////////////////////////////////////////////////////////////////////////////////
@@ -55,8 +61,6 @@ $conf['server_protocol'] = "http";
 
 // define('WEBPATH', '/zenphoto');
 // define('SERVERPATH', '/full/server/path/to/zenphoto');
-
-
 
 /** Do not edit below this line. **/
 /**********************************/
