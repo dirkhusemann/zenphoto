@@ -305,6 +305,10 @@ table.bordered tr.alt td {
 	background-color: #f0f0f0;
 }
 
+table.bordered tr.alt1 td {
+	background-color: #ECF1F2;
+}
+
 table.formlayout td {
 	padding: 2px;
 	vertical-align: top;
