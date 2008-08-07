@@ -514,15 +514,13 @@ if ($allimagecount) {
 	<tr>
 		<td>
 			<input type="submit" value="<?php echo gettext('save changes'); ?>" />
-			<p><?php echo gettext("Click the images for a larger version"); ?></p>
-			<p><a href="javascript:toggleExtraInfo('',true);"><?php echo gettext('expand all fields');?></a> 
+			<a href="javascript:toggleExtraInfo('',true);"><?php echo gettext('expand all fields');?></a> 
 				| <a href="javascript:toggleExtraInfo('',false);"><?php echo gettext('collapse all fields');?></a>
-			</p>
-		</td>
+			  | 
+			<?php echo gettext("Click the images for a larger version"); ?>
+			</td>
 	</tr>
-
 	<?php
-	
 	$mcr_albumlist = array();
 	genAlbumUploadList($mcr_albumlist);
 	$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');
@@ -553,25 +551,35 @@ if ($allimagecount) {
 								</label>
 							</p>
 					</td>
-					
 					<td align="right" valign="top" width="100"><?php echo gettext("Title:"); ?></td>
 					<td>
 						<?php print_language_string_list($image->get('title'), $currentimage.'-title', false); ?>
 					</td>
-					
-					<td>
+					<td style="padding-left: 1em; text-align: left;" valign="top" colspan="1">
+					<label for="<?php echo $currentimage; ?>-allowcomments">
+					<input type="checkbox" id="<?php echo $currentimage; ?>-allowcomments"
+						name="<?php echo $currentimage; ?>-allowcomments" value="1"
+						<?php if ($image->getCommentsAllowed()) { echo "checked=\"checked\""; } ?> />
+					<?php echo gettext("Allow Comments"); ?></label> &nbsp; &nbsp; 
+					<label for="<?php echo $currentimage; ?>-Visible">
+					<input type="checkbox" id="<?php echo $currentimage; ?>-Visible"
+						name="<?php echo $currentimage; ?>-Visible" value="1"
+						<?php if ($image->getShow()) { echo "checked=\"checked\""; } ?> />
+					<?php echo gettext("Visible"); ?></label>
 					</td>
 				</tr>
-				
-				
-				
+
 				<tr>
 					<td align="right" valign="top"><?php echo gettext("Description:"); ?></td>
 					<td>
 						<?php print_language_string_list($image->get('desc'), $currentimage.'-desc', true); ?>
 					</td>
-					
 					<td style="padding-left: 1em;">
+					<p style="margin-top: 0; margin-bottom: 1em;"><?php
+						$hc = $image->get('hitcounter');
+						if (empty($hc)) { $hc = '0'; }
+						echo gettext("Hit counter:")." <strong>$hc</strong> <label for=\"$currentimage-resethits\"><input type=\"checkbox\" id=\"$currentimage-resethits\" name=\"".gettext("reset_hitcounter")."\"> ".gettext("Reset")."</label> ";
+					?></p>
 						<!-- Move/Copy/Rename this image -->
 						<label for="<?php echo $currentimage; ?>-move" style="padding-right: .5em">
 							<input type="radio" id="<?php echo $currentimage; ?>-move" name="<?php echo $currentimage; ?>-MoveCopyRename" value="move"
@@ -591,10 +599,9 @@ if ($allimagecount) {
 						<label for="<?php echo $currentimage; ?>-Delete">
 							<input type="radio" id="<?php echo $currentimage; ?>-Delete"	
 								name="<?php echo $currentimage; ?>-MoveCopyRename" value="delete" 
-								onclick="image_deleteconfirm(this, '<?php echo $currentimage; ?>','<?php echo gettext("Are you sure you want to delete this image?"); ?>')" />
+								onclick="image_deleteconfirm(this, '<?php echo $currentimage; ?>','<?php echo gettext("Are you sure you want to select this image for deletion?"); ?>')" />
 							<?php echo ' '.gettext("Delete image.") ?>
 						</label>
-						
 						<div id="<?php echo $currentimage; ?>-movecopydiv" style="padding-top: .5em; padding-left: .5em; display: none;">
 							<?php echo gettext("to"); ?>: <select id="<?php echo $currentimage; ?>-albumselectmenu" name="<?php echo $currentimage; ?>-albumselect" onChange="">
 								<?php
@@ -633,11 +640,8 @@ if ($allimagecount) {
 								<a href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><?php echo gettext("Cancel");?></a>
 							</p>
 						</div>
-						
 					</td>
-					
 				</tr>
-				
 				<tr class="extrainfo" style="display:none;">
 					<td align="right" valign="top"><?php echo gettext("Location:"); ?></td>
 					<td>
@@ -699,30 +703,6 @@ if ($allimagecount) {
 						<?php print_language_string_list($image->get('custom_data'), $currentimage.'-custom_data', true); ?>
 					</td>
 				</tr>
-				
-				<tr class="extrainfo" style="display:none;">
-					<td align="right" valign="top" colspan="2">
-					<label for="<?php echo $currentimage; ?>-allowcomments">
-					<input type="checkbox" id="<?php echo $currentimage; ?>-allowcomments"
-						name="<?php echo $currentimage; ?>-allowcomments" value="1"
-						<?php if ($image->getCommentsAllowed()) { echo "checked=\"checked\""; } ?> />
-					<?php echo gettext("Allow Comments"); ?></label> &nbsp; &nbsp; 
-					<label for="<?php echo $currentimage; ?>-Visible">
-					<input type="checkbox" id="<?php echo $currentimage; ?>-Visible"
-						name="<?php echo $currentimage; ?>-Visible" value="1"
-						<?php if ($image->getShow()) { echo "checked=\"checked\""; } ?> />
-					<?php echo gettext("Visible"); ?></label></td>
-				</tr>
-				
-				<tr class="extrainfo" style="display:none;">
-					<td></td>
-					<?php
-						$hc = $image->get('hitcounter');
-						if (empty($hc)) { $hc = '0'; }
-						echo "<td>". gettext("Hit counter:")." <strong>$hc</strong> <label for=\"$currentimage-resethits\"><input type=\"checkbox\" id=\"$currentimage-resethits\" name=\"".gettext("reset_hitcounter")."\"> ".gettext("Reset")."</label></td>";
-					?>
-				</tr>
-				
 				<tr>
 					<td colspan="3">
 						<span class="extrashow"><a href="javascript:toggleExtraInfo('<?php echo $currentimage;?>', true);"><?php echo gettext('show more fields');?></a></span>
