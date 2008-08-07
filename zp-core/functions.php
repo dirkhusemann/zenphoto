@@ -664,18 +664,53 @@ function sanitize_numeric($num) {
 }
 
 
-/** Takes a user input string (usually from the query string) and cleans out
- * HTML, null-bytes, and slashes (if magic_quotes_gpc is on) to prevent
- * XSS attacks and other malicious user input, and make strings generally clean.
- *
+/** Make strings generally clean.  Takes an input string and cleans out
+ * null-bytes, slashes (if magic_quotes_gpc is on), and optionally use KSES
+ * library to prevent XSS attacks and other malicious user input.
  * @param string $input_string is a string that needs cleaning.
- * @param string $deepclean is whether to replace HTML tags, javascript, etc.
+ * @param string $sanitize_level is a number between 0 and 2 that describes the
+ * amount of sanitizing to perform on $input_string.  The default is currently
+ * set to 0 for backwards compatability.  Default will be changed to 2 after all
+ * "sanitize" calls have been analyzed and updated accordingly.
+ *   0 - Basic sanitation. (Default)
+ *   1 - Advanced sanititation.
+ *   2 - Full sanitation.
  * @return string the sanitized string.
  */
-function sanitize($input_string, $deepclean=false) {
-	if (get_magic_quotes_gpc()) $input_string = stripslashes($input_string);
-	$input_string = str_replace(chr(0), " ", $input_string);
-	if ($deepclean) $input_string = kses($input_string, array());
+function sanitize($input_string, $sanitize_level=0) {
+	// Backwards compatability with previous function
+	if ($sanitize_level === false) {
+		$sanitize_level = 0;
+	} else if ($sanitize_level === true) {
+		$sanitize_level = 2;
+	}
+
+	// Make sure sanitation level is specified correctly.  If not set to default.
+	if (empty($sanitize_level) || !is_numeric($sanitize_level)) {
+		$sanitize_level = 0;
+	}
+
+	// Basic sanitation.  Only strips null bytes and slashes.  Not recommended for submitted form data.
+	if ($sanitize_level === 0) {
+		if (get_magic_quotes_gpc()) $input_string = stripslashes($input_string);
+		$input_string = str_replace(chr(0), " ", $input_string);
+
+	// Advanced sanitation.  Strips all code except allowable HTML.
+	} else if ($sanitize_level === 1) {
+		if (get_magic_quotes_gpc()) $input_string = stripslashes($input_string);
+		$input_string = str_replace(chr(0), " ", $input_string);
+		$allowed_tags = "(".getOption('allowed_tags').")";
+		$allowed = parseAllowedTags($allowed_tags);
+		if ($allowed === false) { $allowed = array(); } // someone has screwed with the 'allowed_tags' option row in the database, but better safe than sorry
+		$input_string = kses($input_string, $allowed);
+
+	// Full sanitation.  Strips all code.
+	} else if ($sanitize_level === 2) {
+		if (get_magic_quotes_gpc()) $input_string = stripslashes($input_string);
+		$input_string = str_replace(chr(0), " ", $input_string);
+		$allowed = array();
+		$input_string = kses($input_string, $allowed);
+	}
 	return $input_string;
 }
 
@@ -2632,7 +2667,7 @@ function dircopy($srcdir, $dstdir) {
 						if(copy($srcfile, $dstfile)) {
 							touch($dstfile, filemtime($srcfile)); $num++;
 						}
-					}									 
+					}
 				}
 				else if(is_dir($srcfile)) {
 					$num += dircopy($srcfile, $dstfile, $verbose);
