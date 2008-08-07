@@ -122,7 +122,7 @@ class flowplayer {
 	 *
 	 * @return int
 	 */
-	function getVideoWidth($image) {
+	function getVideoWidth($image=NULL) {
 		return getOption('flow_player_width');
 	}
 	
@@ -132,8 +132,8 @@ class flowplayer {
 	 *
 	 * @return int
 	 */
-	function getVideoHeigth($image) {
-		if (strtolower(strrchr($image->name, ".") == '.mp3')) {
+	function getVideoHeigth($image=NULL) {
+		if (!is_null($image) && strtolower(strrchr($image->name, ".") == '.mp3')) {
 			return FLOW_PLAYER_MP3_HEIGHT;
 		}
 		return getOption('flow_player_height');
