@@ -198,8 +198,8 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 							if (!getImageVideo()) { // Smoothgallery does not do videos
 						?>
 							<div class="imageElement">
-								<h3><? echo getImageTitle();?></h3>
-								<p><? echo getImageDesc();?></p>
+								<h3><?php echo getImageTitle();?></h3>
+								<p><?php echo getImageDesc();?></p>
 								<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES);?>" class="open"></a>
 								<?php printCustomSizedImage(getImageTitle(), null, 540, null, null, null, null, null, 'full'); ?>
 								<?php printImageThumb(getImageTitle(), 'thumbnail'); ?>

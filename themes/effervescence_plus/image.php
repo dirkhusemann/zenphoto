@@ -122,9 +122,9 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 					<?php while (next_comment()):  ?>
 					<div class="comment">
 							<div class="commentinfo">
-								<h4><?php printCommentAuthorLink(); ?></h4>: on <?=getCommentDate();?>, <?=getCommentTime();?><?php printEditCommentLink('Edit', ', ', ''); ?>
+								<h4><?php printCommentAuthorLink(); ?></h4>: on <?php echo getCommentDate();?>, <?php echo getCommentTime();?><?php printEditCommentLink('Edit', ', ', ''); ?>
 							</div>
-							<div class="commenttext"><?=getCommentBody();?></div>
+							<div class="commenttext"><?php echo getCommentBody();?></div>
 								</div>
 					<?php endwhile; ?>
 				</div>
@@ -139,10 +139,10 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 										<input type="hidden" name="comment" value="1" />
 									<input type="hidden" name="remember" value="1" />
 									<?php printCommentErrors(); ?>
-									<input type="text" name="name" id="name" class="textinput" value="<?=$stored['name'];?>" size="22" tabindex="1" /><label for="name"><small> <?php echo gettext('Name');?></small></label>
+									<input type="text" name="name" id="name" class="textinput" value="<?php echo $stored['name'];?>" size="22" tabindex="1" /><label for="name"><small> <?php echo gettext('Name');?></small></label>
 									(<input type="checkbox" name="anon" value="1"<?php if ($stored['anon']) echo " CHECKED"; ?> /> <?php echo gettext("don't publish"); ?>)
-									<br/><input type="text" name="email" id="email" class="textinput" value="<?=$stored['email'];?>" size="22" tabindex="2" /><label for="email"><small> <?php echo gettext('Email');?></small></label>
-												<br/><input type="text" name="website" id="website" class="textinput" value="<?=$stored['website'];?>" size="22" tabindex="3" /><label for="website"><small> <?php echo gettext('Website');?></small></label>
+									<br/><input type="text" name="email" id="email" class="textinput" value="<?php echo $stored['email'];?>" size="22" tabindex="2" /><label for="email"><small> <?php echo gettext('Email');?></small></label>
+												<br/><input type="text" name="website" id="website" class="textinput" value="<?php echo $stored['website'];?>" size="22" tabindex="3" /><label for="website"><small> <?php echo gettext('Website');?></small></label>
 												<?php printCaptcha('<br/>', '', ' <small>'.gettext("Enter Captcha").'</small>', 8); ?>
 									<br/><input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo " CHECKED"; ?> /> <?php echo gettext("Private (don't publish)"); ?>								
 									<textarea name="comment" id="comment" rows="5" cols="100%" tabindex="4"><?php echo $stored['comment']; ?></textarea>
