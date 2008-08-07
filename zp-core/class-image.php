@@ -494,13 +494,16 @@ class Image extends PersistentObject {
 	 */
 	function moveImage($newalbum, $newfilename=null) {
 		if (is_string($newalbum)) $newalbum = new Album($this->album->gallery, $newalbum, false);
-		echo "Album moving to: exists? " . $newalbum->exists ." - ". $newalbum->name;
 		if ($newfilename == null) $newfilename = $this->filename;
 		if ($newalbum->id == $this->album->id && $newfilename == $this->filename) {
 			// Nothing to do - moving the file to the same place.
 			return true;
 		}
 		$newpath = getAlbumFolder() . $newalbum->name . "/" . $newfilename;
+		if (file_exists($newpath)) {
+			// If the file exists, don't overwrite it.
+			return false;
+		}
 		$result = @rename($this->localpath, $newpath);
 		if ($result) {
 			$result = $this->move(array('filename'=>$newfilename, 'albumid'=>$newalbum->id));
@@ -530,6 +533,10 @@ class Image extends PersistentObject {
 			return true;
 		}
 		$newpath = getAlbumFolder() . $newalbum->name . "/" . $this->filename;
+		if (file_exists($newpath)) {
+			// If the file exists, don't overwrite it.
+			return false;
+		}
 		$result = @copy($this->localpath, $newpath);
 		if ($result) {
 			$result = $this->copy(array('filename'=>$this->filename, 'albumid'=>$newalbum->id));

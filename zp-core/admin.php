@@ -24,6 +24,8 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			}
 		}
 	}
+	
+	$mcr_errors = array();
 
 
 	$gallery = new Gallery();
@@ -178,6 +180,31 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 								}
 								$image->setCustomData(process_language_string_save("$i-custom_data"));
 								$image->save();
+								
+								// Process move/copy/rename
+								if ($movecopyrename_action == 'move') {
+									$dest = $_POST[$i.'-albumselect'];
+									if ($dest && $dest != $folder) {
+										if (!$image->moveImage($dest)) {
+											$notify = "&mcrerr=1";
+										}
+									} else {
+										// Cannot move image to same album.
+									}
+								} else if ($movecopyrename_action == 'copy') {
+									$dest = $_POST[$i.'-albumselect'];
+									if ($dest && $dest != $folder) {
+										if(!$image->copyImage($dest)) {
+											$notify = "&mcrerr=1";
+										}
+									} else {
+										// Cannot copy image to existing album.
+										// Or, copy with rename?
+									}
+								} else if ($movecopyrename_action == 'rename') {
+									$renameto = $_POST[$i.'-renameto'];
+									$image->renameImage($renameto);
+								}
 							}
 						}
 					}
@@ -374,6 +401,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		echo  "<h2>".gettext("Subalbum order saved")."</h2>";
 		echo '</div>';
 	}
+	
 	?>
 <h1><?php echo gettext("Edit Album:");?> <em><?php echo $album->name; ?></em></h1>
 <p><?php printAdminLinks('edit' . $albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
@@ -405,6 +433,11 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 			<h2><?php echo gettext("Changes saved"); ?></h2>
 			</div>
 		<?php
+		}
+		if (isset($_GET['mcrerr'])) {
+			echo '<div class="errorbox" id="fade-message2">';
+			echo  "<h2>".gettext("There was an error with a move, copy, or rename operation.")."</h2>";
+			echo '</div>';
 		}
 		?>
 	<?php
@@ -630,7 +663,7 @@ if ($allimagecount) {
 							</p>
 						</div>
 						<div id="<?php echo $currentimage; ?>-renamediv" style="padding-top: .5em; padding-left: .5em; display: none;">
-							<?php echo gettext("to"); ?>: <input type="text" size="35" value="<?php echo $image->filename;?>"/><br />
+							<?php echo gettext("to"); ?>: <input name="<?php echo $currentimage; ?>-renameto" type="text" size="35" value="<?php echo $image->filename;?>"/><br />
 							<p style="text-align: right; padding: .25em 0px;">
 								<a href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><?php echo gettext("Cancel");?></a>
 							</p>
