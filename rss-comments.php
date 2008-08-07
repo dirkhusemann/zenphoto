@@ -69,12 +69,12 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 db_connect();
 $comments_images = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.type, c.website," 
 . " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a " 
-. " WHERE c.ownerid = i.id AND i.albumid = a.id AND c.type = 'images'".$passwordcheck1
+. " WHERE i.show = 1 AND c.ownerid = i.id AND i.albumid = a.id AND c.type = 'images'".$passwordcheck1
 . " ORDER BY c.id DESC LIMIT $items");
 
 $comments_albums = query_full_array("SELECT c.id, a.folder, a.title AS albumtitle, c.name, c.type, c.website," 
 . " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('albums')." AS a " 
-. " WHERE c.ownerid = a.id AND c.type = 'albums'".$passwordcheck2
+. " WHERE a.show = 1 AND c.ownerid = a.id AND c.type = 'albums'".$passwordcheck2
 . " ORDER BY c.id DESC LIMIT $items"); 
 
 $comments = array();
