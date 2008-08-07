@@ -117,7 +117,7 @@ class flvplayer {
 	 *
 	 * @return int
 	 */
-	function getVideoWidth($image) {
+	function getVideoWidth($image=NULL) {
 		return getOption('flv_player_width');
 	}
 	
@@ -127,7 +127,7 @@ class flvplayer {
 	 *
 	 * @return int
 	 */
-	function getVideoHeigth($image) {
+	function getVideoHeigth($image=NULL) {
 		if (!is_null($image) && strtolower(strrchr($image->name, ".") == '.mp3')) {
 			return FLV_PLAYER_MP3_HEIGHT;
 		}
