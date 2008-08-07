@@ -17,6 +17,7 @@ $_GET['page'] = 'options';
 /* handle posts */
 if (isset($_GET['action'])) {
 	$action = $_GET['action'];
+	$themeswitch = false;
 	if ($action == 'deleteadmin') {
 		$id = $_GET['adminuser'];
 		$sql = "DELETE FROM ".prefix('administrators')." WHERE `id`=$id";
@@ -254,41 +255,49 @@ if (isset($_GET['action'])) {
 				$alb = urldecode($_POST['themealbum']);
 				$table = new Album(new Gallery(), $alb);
 				$returntab = '&themealbum='.urlencode($alb).'#tab_theme';
+				$themeswitch = $alb != urldecode($_POST['old_themealbum']);
 			} else {
 				$table = NULL;
+				$themeswitch = urldecode($_POST['old_themealbum']) != '';
 			}
-			setThemeOption($table, 'image_size', $_POST['image_size']);
-			setBoolThemeOption($table, 'image_use_longest_side', $_POST['image_use_longest_side']);
-			setThemeOption($table, 'thumb_size', $_POST['thumb_size']);
-			setBoolThemeOption($table, 'thumb_crop', $_POST['thumb_crop']);
-			setThemeOption($table, 'thumb_crop_width', $_POST['thumb_crop_width']);
-			setThemeOption($table, 'thumb_crop_height', $_POST['thumb_crop_height']);
-			setThemeOption($table, 'albums_per_page', $_POST['albums_per_page']);
-			setThemeOption($table, 'images_per_page', $_POST['images_per_page']);
-		}
-		/*** Plugin Options ***/
+			if ($themeswitch) {
+				$notify = '?switched';
+			} else {
+				if (isset($_POST['image_size'])) setThemeOption($table, 'image_size', $_POST['image_size']);
+				if (isset($_POST['image_use_longest_side'])) setBoolThemeOption($table, 'image_use_longest_side', $_POST['image_use_longest_side']);
+				if (isset($_POST['thumb_size'])) setThemeOption($table, 'thumb_size', $_POST['thumb_size']);
+				if (isset($_POST['thumb_crop'])) setBoolThemeOption($table, 'thumb_crop', $_POST['thumb_crop']);
+				if (isset($_POST['thumb_crop_width'])) setThemeOption($table, 'thumb_crop_width', $_POST['thumb_crop_width']);
+				if (isset($_POST['thumb_crop_height'])) setThemeOption($table, 'thumb_crop_height', $_POST['thumb_crop_height']);
+				if (isset($_POST['albums_per_page'])) setThemeOption($table, 'albums_per_page', $_POST['albums_per_page']);
+				if (isset($_POST['images_per_page'])) setThemeOption($table, 'images_per_page', $_POST['images_per_page']);
+			}
+}
+/*** Plugin Options ***/
 		if (isset($_POST['savepluginoptions'])) {
 			// all plugin options are handled by the custom option code.
 			$returntab = "#tab_plugin";
 		}
 		/*** custom options ***/
-		$templateOptions = GetOptionList();
+		if (!$themeswitch) { // was really a save.
+			$templateOptions = GetOptionList();
 
-		foreach($standardOptions as $option) {
-			unset($templateOptions[$option]);
-		}
-		unset($templateOptions['saveoptions']);
-		$keys = array_keys($templateOptions);
-		$i = 0;
-		while ($i < count($keys)) {
-			if (isset($_POST[$keys[$i]])) {
-				setThemeOption($table, $keys[$i], $_POST[$keys[$i]]);
-			} else {
-				if (isset($_POST['chkbox-' . $keys[$i]])) {
-					setThemeOption($table, $keys[$i], 0);
-				}
+			foreach($standardOptions as $option) {
+				unset($templateOptions[$option]);
 			}
-			$i++;
+			unset($templateOptions['saveoptions']);
+			$keys = array_keys($templateOptions);
+			$i = 0;
+			while ($i < count($keys)) {
+				if (isset($_POST[$keys[$i]])) {
+					setThemeOption($table, $keys[$i], $_POST[$keys[$i]]);
+				} else {
+					if (isset($_POST['chkbox-' . $keys[$i]])) {
+						setThemeOption($table, $keys[$i], 0);
+					}
+				}
+				$i++;
+			}
 		}
 
 		if (($wmo != getOption('perform_watermark')) ||
@@ -1147,16 +1156,14 @@ if (!empty($_REQUEST['themealbum'])) {
 	<table class='bordered'>
 <?php
 	/* handle theme options */
-	echo "<input type=\"hidden\" name=\"themealbum\" value=\"".urlencode($alb)."\" />";
+	echo "<input type=\"hidden\" name=\"old_themealbum\" value=\"".urlencode($alb)."\" />";
 	echo "<tr><th colspan='2'><h2 style='float: left'>".gettext("Theme for")." <code><strong>$albumtitle</strong></code>: <em>".$theme['name']."</em></h2></th>\n";
 	echo "<th colspan='1' style='text-align: right'>";
 	if (count($themelist) > 1) {
-		echo '<form action="#tab_theme" method="post">';
 		echo gettext("Show theme for"). ': ';
 		echo '<select id="themealbum" name="themealbum" onchange="this.form.submit()">';
 		generateListFromArray(array(urlencode($alb)), $themelist);
 		echo '</select>';
-		echo '</form>';
 	}
 	echo "</th></tr>\n";
 	?>
@@ -1264,7 +1271,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 			echo '</th></tr>';
 			$supportedOptions = $option_interface->getOptionsSupported();
 			if (count($supportedOptions) > 0) {
-				customOptions($option_interface);
+				customOptions($option_interface, '', NULL, true);
 			}
 		}
 	}

@@ -590,7 +590,7 @@ function getThemeOption($album, $option) {
 	return $db['value'];
 }
 
-function customOptions($optionHandler, $indent="", $album=NULL) {
+function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 	$supportedOptions = $optionHandler->getOptionsSupported();
 	if (count($supportedOptions) > 0) {
 		$options = array_keys($supportedOptions);
@@ -627,7 +627,7 @@ function customOptions($optionHandler, $indent="", $album=NULL) {
 				$v = 0;
 			}
 
-			echo "\n<tr class='extrainfo' style='display:none'>\n";
+			if ($hide) echo "\n<tr class='extrainfo' style='display:none'>\n";
 			echo '<td width="175">' . $indent . $option . ":</td>\n";
 
 			switch ($type) {
