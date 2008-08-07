@@ -830,13 +830,15 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 				<?php if ($fields & SEARCH_TITLE) echo ' checked'; ?>> <?php echo gettext("Title"); ?></td>
 				<td><input type="checkbox" name="sf_desc" value=1
 				<?php if ($fields & SEARCH_DESC) echo ' checked'; ?>> <?php echo gettext("Description"); ?></td>
-				<td><input type="checkbox" name="sf_tags" value=1
-				<?php if ($fields & SEARCH_TAGS) echo ' checked'; ?>> <?php echo gettext("Tags"); ?></td>
 			</tr>
 			<tr>
+				<td><input type="checkbox" name="sf_tags" value=1
+				<?php if ($fields & SEARCH_TAGS) echo ' checked'; ?>> <?php echo gettext("Tags"); ?></td>
 				<td><input type="checkbox" name="sf_filename" value=1
 				<?php if ($fields & SEARCH_FILENAME) echo ' checked'; ?>>
 				<?php echo gettext("File/Folder name"); ?></td>
+			</tr>
+			<tr>
 				<td><input type="checkbox" name="sf_location" value=1
 				<?php if ($fields & SEARCH_LOCATION) echo ' checked'; ?>> <?php echo gettext("Location"); ?></td>
 				<td><input type="checkbox" name="sf_city" value=1
@@ -847,6 +849,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 				<?php if ($fields & SEARCH_STATE) echo ' checked'; ?>> <?php echo gettext("State"); ?></td>
 				<td><input type="checkbox" name="sf_country" value=1
 				<?php if ($fields & SEARCH_COUNTRY) echo ' checked'; ?>> <?php echo gettext("Country"); ?></td>
+				<td></td>
 			</tr>
 		</table>
 		</td>
@@ -1233,15 +1236,18 @@ if (!empty($_REQUEST['themealbum'])) {
 if ($_zp_loggedin & ADMIN_RIGHTS) { 
 	$c = 0;
 ?>
-<script type="text/javascript">
-	$(document).ready(function(){
-		$('div.toggler-c').toggleElements( );
-	});
-	</script>
 	<div id="tab_plugin">
 	<form action="?action=saveoptions" method="post">
 	<input type="hidden" name="savepluginoptions" value="yes" /> 
-	
+	<table class="bordered">
+	<tr>
+		<th colspan="3">
+			<h2><?php echo gettext("Plugin Options"); ?> <span style="font-weight: normal"> <a href="javascript:togglePluginOptions('',true);"><?php echo gettext('Expand plugin options');?></a> 
+		| <a href="javascript:togglePluginOptions('',false);"><?php echo gettext('Collapse all plugin options');?></a></span></h2> 
+		</th>
+	</tr>
+	<tr>
+	<td style="padding: 0;margin:0">
 	<?php
 	foreach (getEnabledPlugins() as $extension) {
 		$ext = substr($extension, 0, strlen($extension)-4);
@@ -1249,26 +1255,35 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
 		if (!is_null($option_interface)) {
 			$c++;
-			echo '<div class="toggler-c" title="'.$ext.' ">';
-			echo "\n<table class=\"bordered\">\n";
+			echo '<table class="bordered" style="border: 0" id="plugin-'.$ext.'">';
+			echo '<tr><th colspan="3">';
+			?>
+			<span class="extrashow"><a href="javascript:togglePluginOptions('<?php echo $ext;?>', true);"><?php echo $ext; ?></a></span>
+			<span style="display:none;" class="extrahide"><a href="javascript:togglePluginOptions('<?php echo $ext;?>', false);"><?php echo $ext; ?></a></span>	
+			<?php 
+			echo '</th></tr>';
 			$supportedOptions = $option_interface->getOptionsSupported();
 			if (count($supportedOptions) > 0) {
 				customOptions($option_interface);
 			}
-			echo "</table>\n</div>\n";
 		}
 	}
 	if ($c == 0) {
 		echo gettext("There are no plugin options to administer.");
 	} else {
 	?>
-		<p style="float:right"><?php echo gettext("Click the plugin bar to open/close the options.") ?></p>
+		<tr>
+		<td colspan="3">
 		<input type="submit" value= <?php echo gettext('save') ?> />
+		</td>
+		</tr></table>
 	<?php 
 	}
 	?>
 	</form>
-</div>
+	<tr>
+	</td>
+	</table>
 <?php
 }
 } // end of null account lockout

@@ -266,3 +266,17 @@ function toggleExtraInfo(id, show) {
 	}
 }
 
+function togglePluginOptions(plugin, show) {
+	var prefix = '';
+	if (plugin != null && plugin != '') prefix = '#plugin-'+plugin+' ';
+	if (show) {
+		jQuery(prefix+'.extrainfo').show();
+		jQuery(prefix+'.extrashow').hide();
+		jQuery(prefix+'.extrahide').show();
+	} else {
+		jQuery(prefix+'.extrainfo').hide();
+		jQuery(prefix+'.extrashow').show();
+		jQuery(prefix+'.extrahide').hide();
+	}
+}
+

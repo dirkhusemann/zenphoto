@@ -211,7 +211,7 @@ function printAdminHeader() {
 	echo "\n  <script src=\"js/jquery.dimensions.js\" type=\"text/javascript\"></script>";
 	echo "\n  <script src=\"js/jquery.tooltip.js\" type=\"text/javascript\"></script>";
 	echo "\n  <script src=\"js/jquery.tabs.js\" type=\"text/javascript\"></script>";
-	echo "\n  <script type=\"text/javascript\" src=\"js/jquery.toggleElements.js\"></script>";
+	//echo "\n  <script type=\"text/javascript\" src=\"js/jquery.toggleElements.js\"></script>";
 	echo "\n  <script type=\"text/javascript\">";
 	echo "\n  \tjQuery(function( $ ){";
 	echo "\n  \t\t $(\"#fade-message\").fadeTo(5000, 1).fadeOut(1000);";
@@ -627,7 +627,7 @@ function customOptions($optionHandler, $indent="", $album=NULL) {
 				$v = 0;
 			}
 
-			echo "\n<tr>\n";
+			echo "\n<tr class='extrainfo' style='display:none'>\n";
 			echo '<td width="175">' . $indent . $option . ":</td>\n";
 
 			switch ($type) {
