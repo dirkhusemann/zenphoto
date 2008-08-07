@@ -204,8 +204,10 @@ function toggleBigImage(id, largepath) {
 
 
 function updateThumbPreview(selectObj) {
-  var thumb = selectObj.options[selectObj.selectedIndex].style.backgroundImage;
-  selectObj.style.backgroundImage = thumb;
+	if (selectObj) {
+		var thumb = selectObj.options[selectObj.selectedIndex].style.backgroundImage;
+		selectObj.style.backgroundImage = thumb;
+	}
 }
 
 function update_direction(obj, element) {
@@ -227,6 +229,8 @@ function image_deleteconfirm(obj, id, msg) {
 }
 
 // Uses jQuery
+// Toggles the interface for move/copy (select an album) or rename (text
+// field for new filename) or none.
 function toggleMoveCopyRename(id, operation) {
 	if (operation == '') {
 		jQuery('#'+id+'-movecopydiv').hide();
@@ -249,6 +253,7 @@ function toggleMoveCopyRename(id, operation) {
 	}
 }
 
+// Toggles the extra info in the edit image panel.
 function toggleExtraInfo(id, show) {
 	var prefix = '';
 	if (id != null && id != '') prefix = '#image-'+id+' ';

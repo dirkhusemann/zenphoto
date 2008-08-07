@@ -514,9 +514,10 @@ if ($allimagecount) {
 	<tr>
 		<td>
 			<input type="submit" value="<?php echo gettext('save changes'); ?>" />
+			&nbsp; &nbsp;
 			<a href="javascript:toggleExtraInfo('',true);"><?php echo gettext('expand all fields');?></a> 
 				| <a href="javascript:toggleExtraInfo('',false);"><?php echo gettext('collapse all fields');?></a>
-			  | 
+			  &nbsp; &nbsp;
 			<?php echo gettext("Click the images for a larger version"); ?>
 			</td>
 	</tr>
@@ -1111,7 +1112,9 @@ if ($c > 0) {
 </div>
 <!-- content --> <?php
 printAdminFooter();
-if (issetPage('edit')) {
+if (issetPage('edit') && 
+	((isset($albums) && count($albums) > 0) 
+		|| (isset($subalbums) && count($subalbums) > 0))) {
 	zenSortablesFooter();
 }
 } /* No admin-only content allowed after this bracket! */ ?></div>
