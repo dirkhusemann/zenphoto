@@ -1161,7 +1161,7 @@ if (!empty($_REQUEST['themealbum'])) {
 	echo "</th></tr>\n";
 	?>
 	<tr>
-		<td><?php echo gettext("Albums per page:"); ?></td>
+		<td style='width: 175px'><?php echo gettext("Albums per page:"); ?></td>
 		<td><input type="text" size="40" name="albums_per_page"
 			value="<?php echo getThemeOption($album, 'albums_per_page');?>" /></td>
 		<td><?php echo gettext("Controls the number of albums on a page. You might need to change	this after switching themes to make it look better."); ?></td>
