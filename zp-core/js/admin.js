@@ -219,16 +219,11 @@ function update_direction(obj, element) {
 
 // Uses jQuery
 function image_deleteconfirm(obj, id, msg) {
-	if(obj.checked) {
-		if (confirm(msg)) {
-			toggleMoveCopyRename(id, '');
-			jQuery('#deletemsg'+id).show();
-		} else {
-			obj.checked = false;
-		}
-	} else {
-		jQuery('#deletemsg'+id).hide();
- 	}
+	toggleMoveCopyRename(id, '');
+	if (confirm(msg)) {
+		jQuery('#deletemsg'+id).show();
+		obj.checked = true;
+	}
 }
 
 // Uses jQuery
@@ -236,9 +231,11 @@ function toggleMoveCopyRename(id, operation) {
 	if (operation == '') {
 		jQuery('#'+id+'-movecopydiv').hide();
 		jQuery('#'+id+'-renamediv').hide();
+		jQuery('#deletemsg'+id).hide();
 		jQuery('#'+id+'-move').attr('checked',false);
 		jQuery('#'+id+'-copy').attr('checked',false);
 		jQuery('#'+id+'-rename').attr('checked',false);
+		jQuery('#'+id+'-Delete').attr('checked',false);
 	} else if (operation == 'movecopy') {
 		jQuery('#'+id+'-movecopydiv').show();
 		jQuery('#'+id+'-renamediv').hide();

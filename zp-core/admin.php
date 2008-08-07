@@ -123,7 +123,12 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 						// The file might no longer exist
 						$image = new Image($album, $filename);
 						if ($image->exists) {
-							if (isset($_POST[$i.'-Delete'])) {
+							if (isset($_POST[$i.'-MoveCopyRename'])) {
+								$movecopyrename_action = $_POST[$i.'-MoveCopyRename'];
+							} else {
+								$movecopyrename_action = '';
+							}
+							if ($movecopyrename_action == 'delete') {
 								$image->deleteImage(true);								
 							} else {
 								if ($thumbnail == $i) { //selected as album thumb
@@ -554,16 +559,7 @@ if ($allimagecount) {
 						<?php print_language_string_list($image->get('title'), $currentimage.'-title', false); ?>
 					</td>
 					
-					<td style="padding-left: 1em;" rowspan="1">
-						<label for="<?php echo $currentimage; ?>-Delete">
-							<input type="checkbox" id="<?php echo $currentimage; ?>-Delete"	
-								name="<?php echo $currentimage; ?>-Delete" value="1" 
-								onclick="image_deleteconfirm(this, '<?php echo $currentimage; ?>','<?php echo gettext("Are you sure you want to delete this image?"); ?>')" />
-							<?php echo ' '.gettext("Delete this image.") ?>
-						</label>
-						<div id="deletemsg<?php echo $currentimage; ?>" style="color:red; display:none" >
-							<?php echo gettext('Image will be deleted when changes are saved.'); ?>
-						</div>
+					<td>
 					</td>
 				</tr>
 				
@@ -579,18 +575,24 @@ if ($allimagecount) {
 						<!-- Move/Copy/Rename this image -->
 						<label for="<?php echo $currentimage; ?>-move" style="padding-right: .5em">
 							<input type="radio" id="<?php echo $currentimage; ?>-move" name="<?php echo $currentimage; ?>-MoveCopyRename" value="move"
-								onchange="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'movecopy');"/>
+								onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'movecopy');"/>
 							<?php echo gettext("Move");?>
 						</label>
 						<label for="<?php echo $currentimage; ?>-copy" style="padding-right: .5em">
 							<input type="radio" id="<?php echo $currentimage; ?>-copy" name="<?php echo $currentimage; ?>-MoveCopyRename" value="copy"
-								onchange="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'movecopy');"/>
+								onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'movecopy');"/>
 							<?php echo gettext("Copy");?>
 						</label>
 						<label for="<?php echo $currentimage; ?>-rename" style="padding-right: .5em">
 							<input type="radio" id="<?php echo $currentimage; ?>-rename" name="<?php echo $currentimage; ?>-MoveCopyRename" value="rename"
-								onchange="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'rename');"/>
+								onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'rename');"/>
 							<?php echo gettext("Rename File");?>
+						</label>
+						<label for="<?php echo $currentimage; ?>-Delete">
+							<input type="radio" id="<?php echo $currentimage; ?>-Delete"	
+								name="<?php echo $currentimage; ?>-MoveCopyRename" value="delete" 
+								onclick="image_deleteconfirm(this, '<?php echo $currentimage; ?>','<?php echo gettext("Are you sure you want to delete this image?"); ?>')" />
+							<?php echo ' '.gettext("Delete image.") ?>
 						</label>
 						
 						<div id="<?php echo $currentimage; ?>-movecopydiv" style="padding-top: .5em; padding-left: .5em; display: none;">
@@ -621,6 +623,12 @@ if ($allimagecount) {
 						</div>
 						<div id="<?php echo $currentimage; ?>-renamediv" style="padding-top: .5em; padding-left: .5em; display: none;">
 							<?php echo gettext("to"); ?>: <input type="text" size="35" value="<?php echo $image->filename;?>"/><br />
+							<p style="text-align: right; padding: .25em 0px;">
+								<a href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><?php echo gettext("Cancel");?></a>
+							</p>
+						</div>
+						<div id="deletemsg<?php echo $currentimage; ?>" style="padding-top: .5em; padding-left: .5em; color:red; display:none" >
+							<?php echo gettext('Image will be deleted when changes are saved.'); ?>
 							<p style="text-align: right; padding: .25em 0px;">
 								<a href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><?php echo gettext("Cancel");?></a>
 							</p>
