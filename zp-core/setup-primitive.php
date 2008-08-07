@@ -1,6 +1,6 @@
 <?php
 /**
- * These are the functions that setup needs before the database can be accessed (so it can't include 
+ * These are the functions that setup needs before the database can be accessed (so it can't include
  * functions.php because that will cause a database connect error.)
  * @package setup
  */
@@ -27,7 +27,7 @@ function zp_setCookie($name, $value, $time=0, $path='/') {
 	} else {
 		$_SESSION[$name] = $value;
 		$_COOKIE[$name] = $value;
-	}	
+	}
 }
 $_options = array();
 function getOption($key) {
@@ -61,10 +61,44 @@ function generateListFromArray($currentValue, $list) {
 	}
 }
 
-function sanitize($input_string, $deepclean=false) {
+function sanitize($input_string, $sanitize_level=0) {
+	if ($sanitize_level === false) {
+		$sanitize_level = 0;
+	} else if ($sanitize_level === true) {
+		$sanitize_level = 2;
+	}
+
+	if (empty($sanitize_level) || !is_numeric($sanitize_level)) {
+		$sanitize_level = 0;
+	}
+
+	if (is_array($input_string)) {
+		foreach ($input_string as $output_key => $output_value) {
+			$output_string[$output_key] = sanitize_string($output_value, $sanitize_level);
+		}
+		unset($output_key, $output_value);
+	} else {
+		$output_string = sanitize_string($input_string, $sanitize_level);
+	}
+	return $output_string;
+}
+
+function sanitize_string($input_string, $sanitize_level) {
 	if (get_magic_quotes_gpc()) $input_string = stripslashes($input_string);
-	$input_string = str_replace(chr(0), " ", $input_string);
-	if ($deepclean) $input_string = kses($input_string, array());
+
+	if ($sanitize_level === 0) {
+		$input_string = str_replace(chr(0), " ", $input_string);
+
+	} else if ($sanitize_level === 1) {
+		$allowed_tags = "(".getOption('allowed_tags').")";
+		$allowed = parseAllowedTags($allowed_tags);
+		if ($allowed === false) { $allowed = array(); }
+		$input_string = kses($input_string, $allowed);
+
+	} else if ($sanitize_level === 2) {
+		$allowed = array();
+		$input_string = kses($input_string, $allowed);
+	}
 	return $input_string;
 }
 

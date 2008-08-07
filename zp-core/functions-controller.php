@@ -156,7 +156,7 @@ function zp_handle_comment() {
 	}
 	if($zenpage_news_context) {
 		$zenpage_news = $zenpage->zenpages;
-	 //	$zenpage_news = $zenpage->getNewsArticle(sanitize($_GET['title']),true);
+	 //	$zenpage_news = $zenpage->getNewsArticle(sanitize($_GET['title']), 2);
 		$redirectTo = FULLWEBPATH . '/index.php?p='.ZENPAGE_NEWS.'&title='.$zenpage_news['titlelink'];
 	} else if ($zenpage_pages_context) {
 		$zenpage_page = $zenpage->zenpages;
@@ -170,18 +170,14 @@ function zp_handle_comment() {
 	if (isset($_POST['comment'])) {
 		if ((in_context(ZP_ALBUM) OR $zenpage_news_context OR $zenpage_pages_context) && isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
 			if (isset($_POST['website'])) $website = strip_tags($_POST['website']); else $website = "";
-			$allowed_tags = "(".getOption('allowed_tags').")";
-			$allowed = parseAllowedTags($allowed_tags);
-			if ($allowed === false) { $allowed = array(); } // someone has screwed with the 'allowed_tags' option row in the database, but better safe than sorry
 			if (isset($_POST['imageid'])) {  //used (only?) by the tricasa hack to know which image the client is working with.
 				$activeImage = zp_load_image_from_id(strip_tags($_POST['imageid']));
 				if ($activeImage !== false) {
 					$commentadded = $activeImage->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']),
-					$website, kses($_POST['comment'], $allowed),
+					$website, sanitize($_POST['comment'], 1),
 					strip_tags($_POST['code']), $_POST['code_h'],
-					sanitize($_SERVER['REMOTE_ADDR']), $_POST['private'],
-	 													$_POST['anon']);
-	 				$redirectTo = $activeImage->getImageLink(); 
+					sanitize($_SERVER['REMOTE_ADDR'], 0), $_POST['private'], $_POST['anon']);
+	 				$redirectTo = $activeImage->getImageLink();
 					}
 			} else {
 				// ZENPAGE: if else change
@@ -192,20 +188,20 @@ function zp_handle_comment() {
 					$commentobject = $_zp_current_album;
 					$redirectTo = $_zp_current_album->getAlbumLink();
 				} else 	if($zenpage_news_context) {
-					//$zenpage_news = $zenpage->getNewsArticle(sanitize($_GET['title']),true);
+					//$zenpage_news = $zenpage->getNewsArticle(sanitize($_GET['title']), 2);
 					$commentobject = $zenpage;
 					$redirectTo = FULLWEBPATH . '/index.php?p='.ZENPAGE_NEWS.'&title='.$zenpage_news['titlelink'];
 				} else if ($zenpage_pages_context) {
-					//$zenpage_page = $zenpage->getPage(sanitize($_GET['title']),true);
+					//$zenpage_page = $zenpage->getPage(sanitize($_GET['title']), 2);
 					$commentobject = $zenpage;
 					$redirectTo = FULLWEBPATH . '/index.php?p='.ZENPAGE_NEWS.'&title='.$zenpage_page['titlelink'];
 				}
   			/*	if (in_context(ZP_IMAGE)) {
 					$commentobject = $_zp_current_image;
-					$redirectTo = $_zp_current_image->getImageLink(); 
+					$redirectTo = $_zp_current_image->getImageLink();
 				} else {
 					$commentobject = $_zp_current_album;
-					$redirectTo = $_zp_current_album->getAlbumLink(); 
+					$redirectTo = $_zp_current_album->getAlbumLink();
 				} */
 				if (isset($_POST['code'])) {
 					$code1 = strip_tags($_POST['code']);
@@ -215,9 +211,9 @@ function zp_handle_comment() {
 					$code2 = '';
 				}
 				$commentadded = $commentobject->addComment(strip_tags($_POST['name']), strip_tags($_POST['email']),
-													$website, kses($_POST['comment'], $allowed),
-													$code1, $code2, 
-													sanitize($_SERVER['REMOTE_ADDR']), isset($_POST['private']),
+													$website, sanitize($_POST['comment'], 1),
+													$code1, $code2,
+													sanitize($_SERVER['REMOTE_ADDR'], 0), isset($_POST['private']),
 													isset($_POST['anon']));
 			}
 			if ($commentadded == 2) {
@@ -246,14 +242,14 @@ function zp_handle_comment() {
 		}
 	} else  if (!empty($cookie)) {
 		// Comment form was not submitted; get the saved info from the cookie.
-		$_zp_comment_stored = explode('|~*~|', stripslashes($cookie)); 
+		$_zp_comment_stored = explode('|~*~|', stripslashes($cookie));
 		$_zp_comment_stored[4] = true;
 		if (!isset($_zp_comment_stored[5])) $_zp_comment_stored[5] = false;
 		if (!isset($_zp_comment_stored[6])) $_zp_comment_stored[6] = false;
 	} else {
 		$_zp_comment_stored = array('','','', '', false, false, false);
 	}
-return $comment_error;		
+return $comment_error;
 }
 
 /**

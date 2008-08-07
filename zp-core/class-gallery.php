@@ -191,7 +191,7 @@ class Gallery {
 						if (file_exists($themefile)) {
 							$theme_description = array();
 							require($themefile);
-							$themes[$dir] = $theme_description;
+							$themes[$dir] = sanitize($theme_description, 1);
 						} else if (file_exists($themedir . "/$dir/theme.txt")) {
 							$themes[$dir] = parseThemeDef($themedir . "/$dir/theme.txt");
 						}
@@ -397,7 +397,7 @@ class Gallery {
 				$firstrow = array_pop($orphans);
 				$sql = "DELETE FROM ".prefix('images')." WHERE `albumid`='" . $firstrow . "'";
 				foreach($orphans as $id) {
-					$sql .= " OR `albumid`='" . $id . "'";			
+					$sql .= " OR `albumid`='" . $id . "'";
 				}
 				query($sql);
 

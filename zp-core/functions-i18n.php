@@ -84,7 +84,7 @@ function setupCurrentLocale($plugindomain='') {
 			if (isset($_POST['dynamic-locale'])) { // and it was chosen via dynamic-locale
 				$cookiepath = WEBPATH;
 				if (WEBPATH == '') { $cookiepath = '/'; }
-				$locale = sanitize($_POST['oldlocale']);
+				$locale = sanitize($_POST['oldlocale'], 0);
 				setOption('locale', $locale, false);
 				zp_setCookie('dynamic_locale', '', time()-368000, $cookiepath);
 			}
@@ -97,7 +97,7 @@ function setupCurrentLocale($plugindomain='') {
 		$domainpath = SERVERPATH . "/" . ZENFOLDER . "/plugins/".$domain."/locale/";
 		$result = false;
 	}
-	if (DEBUG_LOCALE) debugLog("setupCurrentLocale($plugindomain): locale=$locale");	
+	if (DEBUG_LOCALE) debugLog("setupCurrentLocale($plugindomain): locale=$locale");
 	bindtextdomain($domain, $domainpath);
 	// function only since php 4.2.0
 	if(function_exists('bind_textdomain_codeset')) {
@@ -123,7 +123,7 @@ function setupCurrentLocale($plugindomain='') {
 		'en_UK' => gettext('English (UK)'),
 		'eo' => gettext('Esperanto'),
 		'et' => gettext('Estonian'),
-		'fa_IR' => gettext('Persian'), 
+		'fa_IR' => gettext('Persian'),
 		'fo' => gettext('Faroese'),
 		'fi_FI' => gettext('Finnish'),
 		'fr_FR' => gettext('French'),
@@ -203,7 +203,7 @@ function parseHttpAcceptLanguage($str=NULL) {
 	}
 	// sorting the list by coefficient desc
 	krsort($accepted);
-	if (DEBUG_LOCALE) debugLogArray("parseHttpAcceptLanguage($str)", $accepted);	
+	if (DEBUG_LOCALE) debugLogArray("parseHttpAcceptLanguage($str)", $accepted);
 	return $accepted;
 }
 
@@ -213,17 +213,17 @@ function parseHttpAcceptLanguage($str=NULL) {
  * Sets the 'locale' option to the result (non-persistent)
  */
 function getUserLocale() {
-	if (DEBUG_LOCALE) debugLogBackTrace("getUserLocale()");	
+	if (DEBUG_LOCALE) debugLogBackTrace("getUserLocale()");
 	$cookiepath = WEBPATH;
 	if (WEBPATH == '') { $cookiepath = '/'; }
 	if (isset($_POST['dynamic-locale'])) {
-		$locale = sanitize($_POST['dynamic-locale']);
+		$locale = sanitize($_POST['dynamic-locale'], 0);
 		zp_setCookie('dynamic_locale', $locale, time()+5184000, $cookiepath);
-		if (DEBUG_LOCALE) debugLog("dynamic_locale post: $locale");		
+		if (DEBUG_LOCALE) debugLog("dynamic_locale post: $locale");
 	} else {
 		$localeOption = getOption('locale');
 		$locale = zp_getCookie('dynamic_locale');
-		if (DEBUG_LOCALE) debugLog("locale from option: ".$localeOption.'; dynamic locale='.$locale);		
+		if (DEBUG_LOCALE) debugLog("locale from option: ".$localeOption.'; dynamic locale='.$locale);
 		if (empty($localeOption) && ($locale === false)) {  // if one is not set, see if there is a match from 'HTTP_ACCEPT_LANGUAGE'
 			$languageSupport = generateLanguageList();
 			$userLang = parseHttpAcceptLanguage();
@@ -232,7 +232,7 @@ function getUserLocale() {
 				foreach ($languageSupport as $key=>$value) {
 					if (strtoupper($key) == $l) { // we got a match
 						$locale = $key;
-						if (DEBUG_LOCALE) debugLog("locale set from HTTP Accept Language: ".$locale);						
+						if (DEBUG_LOCALE) debugLog("locale set from HTTP Accept Language: ".$locale);
 						break;
 					}
 				}

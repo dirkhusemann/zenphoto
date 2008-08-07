@@ -86,16 +86,16 @@ function printAdminToolbox($context=null, $id='admin') {
 		echo '<div id="' .$id. '">'."\n".'<h3><a href="javascript: toggle('. "'" .$dataid."'".');">'.gettext('Admin Toolbox').'</a></h3>'."\n"."\n</div>";
 		echo '<div id="' .$dataid. '" style="display: none;">'."\n";
 		echo "<ul style='list-style-type: none;'>";
-		echo "<li>"; 
+		echo "<li>";
 		printAdminLink(gettext('Admin'), '', "</li>\n");
 		if ($_zp_gallery_page === 'index.php') {
 			if ($_zp_loggedin & (ADMIN_RIGHTS | EDIT_RIGHTS)) {
-				echo "<li>"; 
+				echo "<li>";
 				printSortableGalleryLink(gettext('Sort gallery'), gettext('Manual sorting'));
 				echo "</li>\n";
 			}
 			if ($_zp_loggedin & (ADMIN_RIGHTS | UPLOAD_RIGHTS)) {
-				echo "<li>"; 
+				echo "<li>";
 				printLink($zf . '/admin-upload.php', gettext("New album"), NULL, NULL, NULL);
 				echo "</li>\n";
 			}
@@ -108,10 +108,10 @@ function printAdminToolbox($context=null, $id='admin') {
 		} else if ($_zp_gallery_page === 'album.php') {
 			$albumname = $_zp_current_album->name;
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
-				echo "<li>"; 
+				echo "<li>";
 				printSubalbumAdmin(gettext('Edit album'), '', "</li>\n");
 				if (!$_zp_current_album->isDynamic()) {
-					echo "<li>"; 
+					echo "<li>";
 					printSortableAlbumLink(gettext('Sort album'), gettext('Manual sorting'));
 					echo "</li>\n";
 				}
@@ -121,10 +121,10 @@ function printAdminToolbox($context=null, $id='admin') {
 					"');\" title=\"".gettext("Delete the album")."\">".gettext("Delete album")."</a></li>\n";
 			}
 			if (isMyAlbum($albumname, UPLOAD_RIGHTS) && !$_zp_current_album->isDynamic()) {
-				echo "<li>"; 
+				echo "<li>";
 				printLink($zf . '/admin-upload.php?album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL);
 				echo "</li>\n";
-				echo "<li>"; 
+				echo "<li>";
 				printLink($zf . '/admin-upload.php?new&album=' . urlencode($albumname), gettext("New Album Here"), NULL, NULL, NULL);
 				echo "</li>\n";
 			}
@@ -2263,7 +2263,7 @@ function getCommentCount() {
 		return $_zp_current_image->getCommentCount();
 	} else if (!in_context(ZP_IMAGE) AND in_context(ZP_ALBUM)) {
 		return $_zp_current_album->getCommentCount();
-	} 
+	}
 	if(getOption("zp_plugin_zenpage")) {
 		if(is_News() OR is_Pages()) {
 			return $current_zenpage->getCommentCount();
@@ -2557,8 +2557,8 @@ function printLatestComments($number, $shorten='123') {
 }
 
 /**
- * Increments (optionally) and returns the hitcounter if a page is viewed (image.php and album.php only). 
- * Password protected albums are also counted. If you don't want those to be counted, protect the hitcounter 
+ * Increments (optionally) and returns the hitcounter if a page is viewed (image.php and album.php only).
+ * Password protected albums are also counted. If you don't want those to be counted, protect the hitcounter
  * with a password check.
  * Does not increment the hitcounter if the viewer is logged in as the gallery admin
  *
@@ -3063,7 +3063,7 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
 	}
 	if(empty($lang)) {
 		$lang = getOption("locale");
-	} 
+	}
 	switch($option) {
 		case "Gallery":
 			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php?lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
@@ -3089,7 +3089,7 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
  * 																		 "Comments" for all comments
  * @param string $linktext title of the link
  * @param string $lang optional to display a feed link for a specific language. Enter the locale like "de_DE" (the locale must be installed on your Zenphoto to work of course). If empty the locale set in the admin option or the language selector (getOption('locale') is used.
- * 
+ *
  *
  * @return string
  * @since 1.1
@@ -3098,7 +3098,7 @@ function getRSSHeaderLink($option, $linktext='', $lang='') {
 	$host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 	if(empty($lang)) {
 		$lang = getOption("locale");
-	} 
+	}
 	switch($option) {
 		case "Gallery":
 			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$host.WEBPATH."/rss.php?lang=".$lang."\" />\n";
@@ -3338,9 +3338,9 @@ function getSearchWords() {
 						if ((strpos($singlesearchstring, $char) !== false)) $setQuote = true;
 					}
 					if ($setQuote) {
-						$sanitizedwords .= '&quot;'.sanitize($singlesearchstring, true).'&quot;';
+						$sanitizedwords .= '&quot;'.sanitize($singlesearchstring, 2).'&quot;';
 					} else {
-						$sanitizedwords .= ' '.sanitize($singlesearchstring, true).' ';
+						$sanitizedwords .= ' '.sanitize($singlesearchstring, 2).' ';
 					}
 			}
 		}

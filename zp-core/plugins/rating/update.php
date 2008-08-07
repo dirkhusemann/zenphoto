@@ -7,7 +7,7 @@
  */
 require('../../template-functions.php');
 require_once('functions-rating.php');
-$id = sanitize_numeric($_GET['id']); 
+$id = sanitize_numeric($_GET['id']);
 $rating = sanitize_numeric($_GET['rating']);
 $option = $_GET['option'];
 
@@ -19,15 +19,15 @@ $option = $_GET['option'];
 			$dbtable =  prefix('albums');
 			break;
 	}
-	
-if ($rating > 5) { 
+
+if ($rating > 5) {
 	$rating = 5;
 }
-	
-$ip = sanitize($_SERVER['REMOTE_ADDR']);  
-if(!checkForIP($ip,$id,$option)) { 
+
+$ip = sanitize($_SERVER['REMOTE_ADDR'], 0);
+if(!checkForIP($ip,$id,$option)) {
 	$_rating_current_IPlist[] = $ip;
 	$insertip = serialize($_rating_current_IPlist);
-	query("UPDATE ".$dbtable." SET total_votes = total_votes + 1, total_value = total_value + ".$rating.", used_ips='".$insertip."' WHERE id = '".$id."'"); 
+	query("UPDATE ".$dbtable." SET total_votes = total_votes + 1, total_value = total_value + ".$rating.", used_ips='".$insertip."' WHERE id = '".$id."'");
 }
 ?>

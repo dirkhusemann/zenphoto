@@ -15,7 +15,7 @@ $gallery = new Gallery();
 $_GET['page'] = 'tags';
 
 if (isset($_REQUEST['tagsort'])) {
-	$tagsort = sanitize($_REQUEST['tagsort']);
+	$tagsort = sanitize($_REQUEST['tagsort'], 0);
 	setBoolOption('tagsort', $tagsort);
 } else {
 	$tagsort = getOption('tagsort');

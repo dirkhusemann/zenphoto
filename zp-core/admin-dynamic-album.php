@@ -88,10 +88,11 @@ $subalbums = $search->getAlbums(0);
 foreach ($subalbums as $folder) {
 	getSubalbumImages($folder);
 }
-$albumname = sanitize(trim($words));
+$albumname = trim($words);
 $albumname = str_replace('!', ' NOT ', $albumname);
 $albumname = str_replace('&', ' AND ', $albumname);
 $albumname = str_replace('|', ' OR ', $albumname);
+$albumname = sanitize($albumname, 2);
 $albumname = seoFriendlyURL($albumname);
 $old = '';
 while ($old != $albumname) {

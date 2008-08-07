@@ -39,7 +39,7 @@ class SearchEngine
 			$this->words = '';
 		}
 		if (isset($_REQUEST['date'])) {
-		$this->dates = sanitize(urldecode($_REQUEST['date']), true);
+		$this->dates = sanitize(urldecode($_REQUEST['date']), 2);
 		} else {
 			$this->dates = '';
 		}
@@ -280,7 +280,7 @@ class SearchEngine
 				default:
 					$subsql = "";
 					$nr = 0;
-					$singlesearchstring = sanitize($singlesearchstring, true);
+					$singlesearchstring = sanitize($singlesearchstring, 2);
 					if (SEARCH_TITLE & $fields) {
 						$nr++;
 						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
@@ -497,8 +497,8 @@ class SearchEngine
 												}
 											}
 										}
-										$idlist = array_merge($idlist, array_diff($allIDs, $objectid));		
-										break; 
+										$idlist = array_merge($idlist, array_diff($allIDs, $objectid));
+										break;
 									case '&!':
 										if (is_array($objectid)) {
 											$idlist = array_diff($idlist, $objectid);

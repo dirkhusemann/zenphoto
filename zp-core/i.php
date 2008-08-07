@@ -53,8 +53,8 @@ if (isset($_GET['t'])) {
 // Fix special characters in the album and image names if mod_rewrite is on:
 // URL looks like: "/album1/subalbum/image/picture.jpg"
 list($ralbum, $rimage) = rewrite_get_album_image('a', 'i');
-$album = str_replace('..','', sanitize($ralbum));
-$image = str_replace(array('/',"\\"),'', sanitize($rimage));
+$album = str_replace('..','', sanitize($ralbum, 0));
+$image = str_replace(array('/',"\\"),'', sanitize($rimage, 0));
 
 // Disallow abusive size requests.
 if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)

@@ -38,7 +38,7 @@ function getImageRating($option, $id) {
 function getImageRatingCurrent($id) {
 	$votes = getImageRating("totalvotes",$id);
 	$value = getImageRating("totalvalue",$id);
-	if($votes != 0)	{ 
+	if($votes != 0)	{
 		return round($value/$votes, 1);
 	}
 	return '';
@@ -83,7 +83,7 @@ function printRating($option) {
 	echo "<li class=\"current-rating\" id=\"current-rating\" style=\"width:".$ratingpx."px\"></li>\n";
 	$msg1 = gettext("Rating");
 	$msg2 = gettext("Total votes");
-	if(!checkForIP(sanitize($_SERVER['REMOTE_ADDR']),$id,$option)){
+	if(!checkForIP(sanitize($_SERVER['REMOTE_ADDR'], 0),$id,$option)){
 		echo "<li><a href=\"javascript:rate(1,$id,'".rawurlencode($zenpath)."','$option')\" title=\"".gettext("1 star out of 5")."\" class=\"one-star\">2</a></li>\n";
 		echo "<li><a href=\"javascript:rate(2,$id,'".rawurlencode($zenpath)."','$option')\" title=\"".gettext("2 stars out of 5")."\" class=\"two-stars\">2</a></li>\n";
 		echo "<li><a href=\"javascript:rate(3,$id,'".rawurlencode($zenpath)."','$option')\" title=\"".gettext("3 stars out of 5")."\" class=\"three-stars\">2</a></li>\n";
@@ -155,7 +155,7 @@ function printAlbumRating() {
 function getAlbumRatingCurrent($id) {
 	$votes = getAlbumRating("totalvotes",$id);
 	$value = getAlbumRating("totalvalue",$id);
-	if($votes != 0)	{ 
+	if($votes != 0)	{
 		return round($value/$votes, 1);
 	}
 	return '';

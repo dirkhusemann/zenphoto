@@ -353,13 +353,13 @@ function printLoginForm($redirect=null, $logo=true) {
 	global $_zp_login_error, $_zp_current_admin;
 	if (is_null($redirect)) { $redirect = "/" . ZENFOLDER . "/admin.php"; }
 	if (isset($_POST['user'])) {
-		$requestor = sanitize($_POST['user']);
+		$requestor = sanitize($_POST['user'], 2);
 	} else {
 		$requestor = '';
 	}
 	if (empty($requestor)) {
 		if (isset($_GET['ref'])) {
-			$requestor = sanitize($_GET['ref']);
+			$requestor = sanitize($_GET['ref'], 0);
 		}
 	}
 
@@ -1000,7 +1000,7 @@ function printAlbumEditForm($index, $album) {
 	echo '<br /><strong>'.gettext("note:").'</strong> '.gettext('Selected tags are always placed at the front of the list.');
 */
 	echo "\n</td>\n</tr>";
-	
+
 	echo "\n</table>";
 
 	echo  "\n<table>";
@@ -1628,7 +1628,7 @@ function process_language_string_save($name) {
  */
 function getTagOrder() {
 	if (isset($_REQUEST['tagsort'])) {
-		$tagsort = sanitize($_REQUEST['tagsort']);
+		$tagsort = sanitize($_REQUEST['tagsort'], 0);
 		setBoolOption('tagsort', $tagsort);
 	} else {
 		$tagsort = getOption('tagsort');

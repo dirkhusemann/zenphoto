@@ -685,20 +685,38 @@ function sanitize($input_string, $sanitize_level=0) {
 		$sanitize_level = 2;
 	}
 
-	// Make sure sanitation level is specified correctly.  If not set to default.
+	// Make sure sanitation level is specified correctly.  If not, set it to default.
 	if (empty($sanitize_level) || !is_numeric($sanitize_level)) {
 		$sanitize_level = 0;
 	}
 
-	// Basic sanitation.  Only strips null bytes and slashes.  Not recommended for submitted form data.
+	if (is_array($input_string)) {
+		foreach ($input_string as $output_key => $output_value) {
+			$output_string[$output_key] = sanitize_string($output_value, $sanitize_level);
+		}
+		unset($output_key, $output_value);
+	} else {
+		$output_string = sanitize_string($input_string, $sanitize_level);
+	}
+	return $output_string;
+}
+
+
+/** returns a sanitized string for the sanitize function
+ * @param string $input_string
+ * @param string $sanitize_level
+ * @return string the sanitized string.
+ */
+function sanitize_string($input_string, $sanitize_level) {
+	// Strip slashes if get_magic_quotes_gpc is enabled.
+	if (get_magic_quotes_gpc()) $input_string = stripslashes($input_string);
+
+	// Basic sanitation.  Only strips null bytes.  Not recommended for submitted form data.
 	if ($sanitize_level === 0) {
-		if (get_magic_quotes_gpc()) $input_string = stripslashes($input_string);
 		$input_string = str_replace(chr(0), " ", $input_string);
 
 	// Advanced sanitation.  Strips all code except allowable HTML.
 	} else if ($sanitize_level === 1) {
-		if (get_magic_quotes_gpc()) $input_string = stripslashes($input_string);
-		$input_string = str_replace(chr(0), " ", $input_string);
 		$allowed_tags = "(".getOption('allowed_tags').")";
 		$allowed = parseAllowedTags($allowed_tags);
 		if ($allowed === false) { $allowed = array(); } // someone has screwed with the 'allowed_tags' option row in the database, but better safe than sorry
@@ -706,8 +724,6 @@ function sanitize($input_string, $sanitize_level=0) {
 
 	// Full sanitation.  Strips all code.
 	} else if ($sanitize_level === 2) {
-		if (get_magic_quotes_gpc()) $input_string = stripslashes($input_string);
-		$input_string = str_replace(chr(0), " ", $input_string);
 		$allowed = array();
 		$input_string = kses($input_string, $allowed);
 	}
@@ -973,9 +989,7 @@ function parseThemeDef($file) {
 		while($line = fgets($fp)) {
 			if (substr(trim($line), 0, 1) != "#") {
 				$item = explode("::", $line);
-				$allowed_tags = "(".getOption('allowed_tags').")";
-				$allowed = parseAllowedTags($allowed_tags);
-				$themeinfo[trim($item[0])] = kses(trim($item[1]), $allowed);
+				$themeinfo[trim($item[0])] = sanitize(trim($item[1]), 1);
 			}
 		}
 		return $themeinfo;
