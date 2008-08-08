@@ -176,7 +176,7 @@ function zp_handle_comment() {
 				$p_email = "";
 			}
 			if (isset($_POST['website'])) {
-				$p_website = sanitize($_POST['website'], 3));
+				$p_website = sanitize($_POST['website'], 3);
 			} else {
 				$p_website = "";
 			}
@@ -189,16 +189,8 @@ function zp_handle_comment() {
 				$code1 = '';
 				$code2 = '';
 			}
-			if isset($_POST['private']) {
-				$p_private = sanitize($_POST['private'], 3));
-			} else {
-				$p_private = "";
-			}
-			if isset($_POST['anon'])) {
-				$p_anon = sanitize($_POST['anon'], 3));
-			} else {
-				$p_anon = "";
-			}
+			$p_private = isset($_POST['private']);
+			$p_anon = isset($_POST['anon']);
 
 			if (isset($_POST['imageid'])) {  //used (only?) by the tricasa hack to know which image the client is working with.
 				$activeImage = zp_load_image_from_id(strip_tags($_POST['imageid']));
