@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * This is plugin for Spamassassin filtering
  * 
