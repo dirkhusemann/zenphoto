@@ -96,7 +96,7 @@
 										<tr><td><label for="email"><?php echo gettext("E-Mail (won't be public):"); ?></label></td> <td><input type="text" name="email" size="20" value="<?php echo $stored['email'];?>" /> </td></tr>
 										<tr><td><label for="website"><?php echo gettext("Site:"); ?></label></td> <td><input type="text" name="website" size="30" value="<?php echo $stored['website'];?>" /></td></tr>
 												<?php printCaptcha('<tr><td>'.gettext('Enter').' ', ':</td><td>', '</td></tr>'); ?>
-										<tr><td colspan="2"><input type="checkbox" name="private" value="1" /> <?php echo gettext("Private (don't publish)"); ?></td></tr>
+										<tr><td colspan="2"><input type="checkbox" name="private" value="1" <?php if ($stored['private']) echo " CHECKED"; ?>/> <?php echo gettext("Private (don't publish)"); ?></td></tr>
 									</table>
 									<textarea name="comment" rows="6" cols="40"><?php echo $stored['comment']; ?></textarea><br />
 									<input type="submit" value="Add Comment" />
