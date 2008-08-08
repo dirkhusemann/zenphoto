@@ -571,10 +571,10 @@ function getAlbumTitle() {
 function printAlbumTitle($editable=false) {
 	global $_zp_current_album;
 	if ($editable && zp_loggedin()) {
-		echo "<span id=\"albumTitleEditable\" style=\"display: inline;\">" . htmlspecialchars(getAlbumTitle()) . "</span>\n";
+		echo "<span id=\"albumTitleEditable\" style=\"display: inline;\">" . getAlbumTitle() . "</span>\n";
 		echo "<script type=\"text/javascript\">initEditableTitle('albumTitleEditable');</script>";
 	} else {
-		echo htmlspecialchars(getAlbumTitle());
+		echo getAlbumTitle();
 	}
 }
 
@@ -651,7 +651,7 @@ function printAlbumBreadcrumb($before='', $after='', $title=NULL) {
 		if (empty($dynamic_album)) {
 			if (!is_null($_zp_current_album)) {
 				if (in_context(ZP_ALBUM_LINKED) && $_zp_current_search->getAlbumIndex($_zp_current_album->name) === false) {
-					echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL()). "\" title=\"$title\">" . htmlspecialchars(strip_tags(getAlbumTitle()),ENT_QUOTES) . "</a>";
+					echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL()). "\" title=\"$title\">" . getAlbumTitle() . "</a>";
 				} else {
 					$after = '';
 				}
@@ -669,7 +669,7 @@ function printAlbumBreadcrumb($before='', $after='', $title=NULL) {
 			echo '</a>';
 		}
 	} else {
-		echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL()). "\" title=\"$title\">" . htmlspecialchars(strip_tags(getAlbumTitle()),ENT_QUOTES) . "</a>";
+		echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL()). "\" title=\"$title\">" . getAlbumTitle() . "</a>";
 	}
 	echo $after;
 }
@@ -1759,7 +1759,7 @@ function printImageLink($text, $title, $class=NULL, $id=NULL) {
  */
 function printImageDiv() {
 	if (!isset($_GET['sortable'])) {
-		echo '<a href="'.htmlspecialchars(getImageLinkURL()).'" title="'.htmlspecialchars(strip_tags(getImageTitle()), ENT_QUOTES).'">';
+		echo '<a href="'.htmlspecialchars(getImageLinkURL()).'" title="'.getImageTitle().'">';
 	}
 	printImageThumb(getImageTitle());
 
@@ -2767,9 +2767,9 @@ function printRandomImages($number=5, $class=null, $option='all', $rootAlbum='')
 				$randomImage = getRandomImagesAlbum($rootAlbum); break;
 		}
 		$randomImageURL = htmlspecialchars(getURL($randomImage));
-		echo '<a href="' . $randomImageURL . '" title="'.gettext('View image:').' ' . htmlspecialchars($randomImage->getTitle(), ENT_QUOTES) . '">' .
+		echo '<a href="' . $randomImageURL . '" title="'.gettext('View image:').' ' . $randomImage->getTitle() . '">' .
 			'<img src="' . htmlspecialchars($randomImage->getThumb()) .
-			'" alt="'.htmlspecialchars($randomImage->getTitle(), ENT_QUOTES).'"';
+			'" alt="'.$randomImage->getTitle().'"';
 		echo "/></a></li>\n";
 	}
 	echo "</ul>";
@@ -2823,7 +2823,7 @@ function printTags($option='links',$preText=NULL,$class='taglist',$separator=', 
 	$tagstring = implode(', ', $singletag);
 	if (empty($tagstring)) { $preText = ""; }
 	if ($editable && zp_loggedin()) {
-		echo "<div id=\"tagContainer\">".$preText."<div id=\"imageTags\" style=\"display: inline;\">" . htmlspecialchars($tagstring, ENT_QUOTES) . "</div></div>\n";
+		echo "<div id=\"tagContainer\">".$preText."<div id=\"imageTags\" style=\"display: inline;\">" . $tagstring . "</div></div>\n";
 		echo "<script type=\"text/javascript\">initEditableTags('imageTags');</script>";
 	} else {
 		if (count($singletag) > 0) {
@@ -2838,7 +2838,7 @@ function printTags($option='links',$preText=NULL,$class='taglist',$separator=', 
 					$links1 = "<a href=\"".htmlspecialchars(getSearchURL(quoteSearchTag($singletag[$x]), '', SEARCH_TAGS, 0, 0))."\" title=\"".$singletag[$x]."\" rel=\"nofollow\">";
 					$links2 = "</a>";
 				}
-				echo "\t<li>".$links1.htmlspecialchars($singletag[$x], ENT_QUOTES).$links2.$separator."</li>\n";
+				echo "\t<li>".$links1.$singletag[$x].$links2.$separator."</li>\n";
 			}
 
 			echo "</ul>";

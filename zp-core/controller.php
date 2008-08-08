@@ -1,11 +1,11 @@
 <?php
 
 /**
- * controller.php 
+ * controller.php
  * Root-level include that handles all user requests.
  * @package core
  */
- 
+
 require_once('functions-controller.php');
 
 
@@ -13,8 +13,8 @@ require_once('functions-controller.php');
 $_zp_gallery = new Gallery();
 $_zp_phoogle = null;
 
-copy(SERVERPATH . '/' . ZENFOLDER . '/images/multimediaDefault.png',  getAlbumFolder() . 'multimediaDefault.png'); 
-copy(SERVERPATH . '/' . ZENFOLDER . '/images/zen-logo.jpg',  getAlbumFolder() . 'zen-logo.jpg');  
+copy(SERVERPATH . '/' . ZENFOLDER . '/images/multimediaDefault.png',  getAlbumFolder() . 'multimediaDefault.png');
+copy(SERVERPATH . '/' . ZENFOLDER . '/images/zen-logo.jpg',  getAlbumFolder() . 'zen-logo.jpg');
 
 $_zp_current_album = NULL;
 $_zp_current_album_restore = NULL;
@@ -43,17 +43,17 @@ zp_handle_password();
 
 // Handle any comments that might be posted.
 
-$_zp_comment_error = zp_handle_comment();				
+$_zp_comment_error = zp_handle_comment();
 
 /*** Server-side AJAX Functions ***********
  ******************************************/
-// These handle asynchronous requests from the client for updating the 
+// These handle asynchronous requests from the client for updating the
 // title and description, but only if the user is logged in.
 
 if (zp_loggedin()) {
-	
+
 	function saveTitle($newtitle) {
-		if (get_magic_quotes_gpc()) $newtitle = stripslashes($newtitle);
+		$newtitle = sanitize($newtitle, 2);
 		global $_zp_current_image, $_zp_current_album;
 		if (in_context(ZP_IMAGE)) {
 			$_zp_current_image->setTitle($newtitle);
@@ -67,9 +67,9 @@ if (zp_loggedin()) {
 			return false;
 		}
 	}
-	
+
 	function saveTags($newtags) {
-		if (get_magic_quotes_gpc()) $newtags = stripslashes($newtags);
+		$newtags = sanitize($newtags, 3);
 		global $_zp_current_image, $_zp_current_album;
 		if (in_context(ZP_IMAGE)) {
 			$_zp_current_image->setTags($newtags);
@@ -83,9 +83,9 @@ if (zp_loggedin()) {
 			return false;
 		}
 	}
-	
+
 	function saveDesc($newdesc) {
-		if (get_magic_quotes_gpc()) $newdesc = stripslashes($newdesc);
+		$newdesc = sanitize($newdesc, 1);
 		global $_zp_current_image, $_zp_current_album;
 		if (in_context(ZP_IMAGE)) {
 			$_zp_current_image->setDesc($newdesc);
@@ -99,7 +99,7 @@ if (zp_loggedin()) {
 			return false;
 		}
 	}
-	
+
 	// Load Sajax (AJAX Library) now that we have all objects set.
 	require_once("lib-sajax.php");
 	sajax_init();
