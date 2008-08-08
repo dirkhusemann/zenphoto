@@ -1865,6 +1865,8 @@ function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL
 	} else if (!empty($height)) {
 		$dim = $height;
 		$size = $width = false;
+	} else {
+		$dim = 1;
 	}
 
 	if ($w == 0) {
@@ -1878,8 +1880,7 @@ function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL
 		$wprop = round(($w / $h) * $dim);
 	}
 
-	if (($size && $ls && $h > $w)
-	|| $height) {
+	if (($size && $ls && $h > $w)	|| $height) {
 		// Scale the height
 		$newh = $dim;
 		$neww = $wprop;
