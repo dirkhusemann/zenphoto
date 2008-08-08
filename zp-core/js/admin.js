@@ -253,6 +253,22 @@ function toggleMoveCopyRename(id, operation) {
 	}
 }
 
+function toggleAlbumMoveCopyRename(prefix, operation) {
+	if (operation == '') {
+		jQuery('#a-'+prefix+'movecopydiv').hide();
+		jQuery('#a-'+prefix+'renamediv').hide();
+		jQuery('#a-'+prefix+'move').attr('checked',false);
+		jQuery('#a-'+prefix+'copy').attr('checked',false);
+		jQuery('#a-'+prefix+'rename').attr('checked',false);
+	} else if (operation == 'movecopy') {
+		jQuery('#a-'+prefix+'movecopydiv').show();
+		jQuery('#a-'+prefix+'renamediv').hide();
+	} else if (operation == 'rename') {
+		jQuery('#a-'+prefix+'movecopydiv').hide();
+		jQuery('#a-'+prefix+'renamediv').show();
+	}
+}
+
 // Toggles the extra info in the edit image panel.
 function toggleExtraInfo(id, show) {
 	var prefix = '';

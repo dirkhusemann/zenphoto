@@ -796,6 +796,11 @@ function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
  *@since 1.1.3
  */
 function printAlbumEditForm($index, $album) {
+	// Note: This is some pretty confusing spaghetti code with all the echo statements.
+	// Please refactor it so the HTML is readable and easily editable.
+	// FYI: It's perfectly acceptable to drop out of php-parsing mode in a function.
+	// See the move/copy/rename block for an example.
+	
 	global $sortby, $gallery, $_zp_loggedin;
 	$tagsort = getTagOrder();
 	if ($index == 0) {
@@ -824,9 +829,7 @@ function printAlbumEditForm($index, $album) {
 	print_language_string_list($album->get('title'), $prefix."albumtitle", false);
 	echo "</td></tr>\n";
 	echo '<tr><td></td>';
-	$id = $album->getAlbumId();
-	$result = query_single_row("SELECT `hitcounter` FROM " . prefix('albums') . " WHERE id = $id");
-	$hc = $result['hitcounter'];
+	$hc = $album->get('hitcounter');
 	if (empty($hc)) { $hc = '0'; }
 	echo "<td>".gettext("Hit counter:").' '. $hc . " <input type=\"checkbox\" name=\"".gettext("reset_hitcounter")."\"> Reset</td>";
 	echo '</tr>';
@@ -985,21 +988,72 @@ function printAlbumEditForm($index, $album) {
 
 	echo "\n</table>\n</td>";
 	echo "\n<td valign=\"top\">";
+	
+	$mcr_albumlist = array();
+	genAlbumUploadList($mcr_albumlist);
+	$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');
+	
+	/* **************** Move/Copy/Rename ****************** */
+	?>
+	
+	<label for="a-<?php echo $prefix; ?>move" style="padding-right: .5em">
+		<input type="radio" id="a-<?php echo $prefix; ?>move" name="a-<?php echo $prefix; ?>MoveCopyRename" value="move"
+			onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
+		<?php echo gettext("Move");?>
+	</label>
+	<label for="a-<?php echo $prefix; ?>copy" style="padding-right: .5em">
+		<input type="radio" id="a-<?php echo $prefix; ?>copy" name="a-<?php echo $prefix; ?>MoveCopyRename" value="copy"
+			onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
+		<?php echo gettext("Copy");?>
+	</label>
+	<label for="a-<?php echo $prefix; ?>rename" style="padding-right: .5em">
+		<input type="radio" id="a-<?php echo $prefix; ?>rename" name="a-<?php echo $prefix; ?>MoveCopyRename" value="rename"
+			onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'rename');"/>
+		<?php echo gettext("Rename Folder");?>
+	</label>
+
+	
+	<div id="a-<?php echo $prefix; ?>movecopydiv" style="padding-top: .5em; padding-left: .5em; display: none;">
+		<?php echo gettext("to"); ?>: <select id="a-<?php echo $prefix; ?>albumselectmenu" name="a-<?php echo $prefix; ?>albumselect" onChange="">
+			<option value="" selected="selected">/</option>
+			<?php
+				foreach ($mcr_albumlist as $fullfolder => $albumtitle) {
+					$singlefolder = $fullfolder;
+					$saprefix = "";
+					$salevel = 0;
+					$selected = "";
+					if ($album->name == $fullfolder) {
+						continue;
+					}
+					// Get rid of the slashes in the subalbum, while also making a subalbum prefix for the menu.
+					while (strstr($singlefolder, '/') !== false) {
+						$singlefolder = substr(strstr($singlefolder, '/'), 1);
+						$saprefix = "&nbsp; &nbsp;&nbsp;" . $saprefix;
+						$salevel++;
+					}
+					echo '<option value="' . $fullfolder . '"' . ($salevel > 0 ? ' style="background-color: '.$bglevels[$salevel].';"' : '')
+					. "$selected>". $saprefix . $singlefolder ."</option>\n";
+				}
+			?>
+		</select>
+		<p style="text-align: right;">
+			<a href="javascript:toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', '');"><?php echo gettext("Cancel");?></a>
+		</p>
+	</div>
+	<div id="a-<?php echo $prefix; ?>renamediv" style="padding-top: .5em; padding-left: .5em; display: none;">
+		<?php echo gettext("to"); ?>: <input name="a-<?php echo $prefix; ?>renameto" type="text" size="35" value="<?php echo basename($album->name);?>"/><br />
+		<p style="text-align: right; padding: .25em 0px;">
+			<a href="javascript:toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', '');"><?php echo gettext("Cancel");?></a>
+		</p>
+	</div>
+	
+	<br/><br />
+	
+	<?php
+	
 	echo gettext("Tags:");
 	$tagsort = getTagOrder();
 	tagSelector($album, 'tags_'.$prefix, false, $tagsort);
-/*
-	if ($tagsort == 1) {
-		echo '<a class="tagsort" href="?action=sorttags&amp;album='.urlencode($album->name).'&amp;tagsort=0' .
- 				'" title="'.gettext('Sort the tags alphabetically').'">';
-		echo ' '.gettext('Order alphabetically').'</a>';
-	} else{
-		echo '<a class="tagsort" href="?action=sorttags&amp;album='.urlencode($album->name).'&amp;tagsort=1' .
- 				'" title="'.gettext('Sort the tags by most used').'">';
-		echo ' '.gettext('Order by most used').'</a>';
-	}
-	echo '<br /><strong>'.gettext("note:").'</strong> '.gettext('Selected tags are always placed at the front of the list.');
-*/
 	echo "\n</td>\n</tr>";
 
 	echo "\n</table>";
@@ -1388,6 +1442,55 @@ function processAlbumEdit($index, $album) {
 	$album->setPasswordHint(process_language_string_save($prefix.'albumpass_hint'));
 	$album->setCustomData(process_language_string_save($prefix.'album_custom_data'));
 	$album->save();
+	
+	// Move/Copy/Rename the album after saving.
+	$movecopyrename_action = '';
+	if (isset($_POST['a-'.$prefix.'MoveCopyRename'])) {
+		$movecopyrename_action = $_POST['a-'.$prefix.'MoveCopyRename'];
+	}
+	
+	if ($movecopyrename_action == 'move') {
+		$dest = $_POST['a'.$prefix.'-albumselect'];
+		// Append the album name.
+		$dest = ($dest ? $dest . '/' : '') . (strpos($album->name, '/') === FALSE ? $album->name : basename($album->name));
+		if ($dest && $dest != $album->name) {
+			if (!$album->moveAlbum($dest)) {
+				$notify .= "&mcrerr=1";
+			} else {
+				// A slight hack to redirect to the new album after moving.
+				$_GET['album'] = $dest;
+			}
+		} else {
+			// Cannot move album to same album.
+		}
+	} else if ($movecopyrename_action == 'copy') {
+		$dest = $_POST['a'.$prefix.'-albumselect'];
+		// Append the album name.
+		$dest = ($dest ? $dest . '/' : '') . (strpos($album->name, '/') === FALSE ? $album->name : basename($album->name));
+		if ($dest && $dest != $album->name) {
+			if(!$album->copyAlbum($dest)) {
+				$notify .= "&mcrerr=1";
+			}
+		} else {
+			// Cannot copy album to existing album.
+			// Or, copy with rename?
+		}
+	} else if ($movecopyrename_action == 'rename') {
+		$renameto = $_POST['a'.$prefix.'-renameto'];
+		$renameto = str_replace(array('/', '\\'), '', $renameto);
+		if (dirname($album->name) != '.') {
+			$renameto = dirname($album->name) . '/' . $renameto;
+		}
+		if ($renameto != $album->name) {
+			if (!$album->renameAlbum($renameto)) {
+				$notify .= "&mcrerr=1";
+			} else {
+				// A slight hack to redirect to the new album after moving.
+				$_GET['album'] = $renameto;
+			}
+		}
+	}
+	
 	return $notify;
 }
 

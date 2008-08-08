@@ -843,32 +843,124 @@ class Album extends PersistentObject {
 		}
 	}
 
-	
-	function moveAlbum($newdirname) {
+	/**
+	 * Move this album to the location specified by $newfolder, copying all
+	 * metadata, subalbums, and subalbums' metadata with it.
+	 * @param $newfolder string the folder to move to, including the name of the current folder (possibly renamed).
+	 * @return boolean true on success and false on failure.
+	 *
+	 */
+	function moveAlbum($newfolder) {
 		// First, ensure the new base directory exists.
-		$dest = getAlbumFolder().'/'.$newdirname;
+		$oldfolder = $this->name;
+		$dest = getAlbumFolder().'/'.$newfolder;
 		// Check to see if the destination directory already exists
+		
 		if (file_exists($dest)) {
 			// Disallow moving an album over an existing one.
 			return false;
 		}
-		if (mkdir_recursive($newdirname) === TRUE) {
+		if (substr($newfolder, count($oldfolder)) == $oldfolder) {
+			// Disallow moving to a subfolder of the current folder.
+			return false;
+		}
+		if (mkdir_recursive(dirname($dest)) === TRUE) {
 			// Make the move (rename).
 			$rename = @rename($this->localpath, $dest);
 			// Then: go through the db and change the album (and subalbum) paths. No ID changes are necessary for a move.
+			// Get the subalbums.
+			$oldf = mysql_real_escape_string($oldfolder);
+			$sql = "SELECT id, folder FROM " . prefix('albums') . " WHERE folder LIKE '$oldf%'";
+			$result = query_full_array($sql);
+			foreach ($result as $subrow) {
+				$newsubfolder = $subrow['folder'];
+				$newsubfolder = $newfolder . substr($newsubfolder, strlen($oldfolder));
+				$newsubfolder = mysql_real_escape_string($newsubfolder);
+				$sql = "UPDATE ".prefix('albums'). " SET folder='$newsubfolder' WHERE id=".$subrow['id'];
+				$subresult = query($sql);
+				// Handle result here.
+			}
+			$this->name = $newfolder;
+			return true;
 		}
-		
-		
+		return false;
+	}
+	/**
+	 * Rename this album folder. Alias for moveAlbum($newfoldername);
+	 * @param $newfolder the new folder name of this album (including subalbum paths)
+	 * @return boolean true on success or false on failure.
+	 */
+	function renameAlbum($newfolder) {
+		return $this->moveAlbum($newfolder);
 	}
 	
-	function renameAlbum($newdirname) {
-		return $this->moveAlbum($newdirname);
-	}
-	
-	function copyAlbum($newdirname) {
-		// Simple: Recursively copy the directory structure entirely.
-		// Then: copy all album entries for the album, replacing the path with the new one.
-		// Then: copy all image entries for each album and subalbum, using the new album IDs.
+	/**
+	 * Copy this album to the location specified by $newfolder, copying all
+	 * metadata, subalbums, and subalbums' metadata with it.
+	 * @param $newfolder string the folder to copy to, including the name of the current folder (possibly renamed).
+	 * @return boolean true on success and false on failure.
+	 *
+	 */
+	function copyAlbum($newfolder) {
+		// First, ensure the new base directory exists.
+		$oldfolder = $this->name;
+		$dest = getAlbumFolder().'/'.$newfolder;
+		// Check to see if the destination directory already exists
+		
+		if (file_exists($dest)) {
+			// Disallow moving an album over an existing one.
+			return false;
+		}
+		if (substr($newfolder, count($oldfolder)) == $oldfolder) {
+			// Disallow copying to a subfolder of the current folder (infinite loop).
+			return false;
+		}
+		if (mkdir_recursive(dirname($dest)) === TRUE) {
+			// Make the move (rename).
+			$num = dircopy($this->localpath, $dest);
+			// Get the subalbums.
+			$oldf = mysql_real_escape_string($oldfolder);
+			$sql = "SELECT * FROM " . prefix('albums') . " WHERE folder LIKE '$oldf%'";
+			$result = query_full_array($sql);
+			
+			$allsuccess = true;
+			foreach ($result as $subrow) {
+				$newsubfolder = $subrow['folder'];
+				$newsubfolder = $newfolder . substr($newsubfolder, strlen($oldfolder));
+				$newsubfolder = mysql_real_escape_string($newsubfolder);
+				$subrow['folder'] = $newsubfolder;
+				// From PersistentObject::copy()
+				$insert_data = $subrow;
+				unset($insert_data['id']);
+				if (empty($insert_data)) { continue; }
+				$sql = 'INSERT INTO ' . prefix('albums') . ' (';
+				$i = 0;
+				foreach(array_keys($insert_data) as $col) {
+					if ($i > 0) $sql .= ", ";
+					$sql .= "`$col`";
+					$i++;
+				}
+				$sql .= ') VALUES (';
+				$i = 0;
+				foreach(array_values($insert_data) as $value) {
+					if ($i > 0) $sql .= ', ';
+					if ($value == '') {
+						$sql .= "''";
+					} else {
+						$sql .= "'" . mysql_real_escape_string($value) . "'";
+					}
+					$i++;
+				}
+				$sql .= ');';
+				$success = query($sql);
+				if (!($success == true && mysql_affected_rows() == 1)) {
+					$allsuccess = false;
+				}
+			}
+			$this->name = $newfolder;
+			return $allsuccess;
+		}
+		return false;
 	}
 
 	/**

@@ -609,11 +609,12 @@ if ($allimagecount) {
 						<?php print_language_string_list($image->get('desc'), $currentimage.'-desc', true); ?>
 					</td>
 					<td style="padding-left: 1em;">
-					<p style="margin-top: 0; margin-bottom: 1em;"><?php
-						$hc = $image->get('hitcounter');
-						if (empty($hc)) { $hc = '0'; }
-						echo gettext("Hit counter:")." <strong>$hc</strong> <label for=\"$currentimage-resethits\"><input type=\"checkbox\" id=\"$currentimage-resethits\" name=\"".gettext("reset_hitcounter")."\"> ".gettext("Reset")."</label> ";
-					?></p>
+						<p style="margin-top: 0; margin-bottom: 1em;"><?php
+							$hc = $image->get('hitcounter');
+							if (empty($hc)) { $hc = '0'; }
+							echo gettext("Hit counter:")." <strong>$hc</strong> <label for=\"$currentimage-resethits\"><input type=\"checkbox\" id=\"$currentimage-resethits\" name=\"".gettext("reset_hitcounter")."\"> ".gettext("Reset")."</label> ";
+						?></p>
+						
 						<!-- Move/Copy/Rename this image -->
 						<label for="<?php echo $currentimage; ?>-move" style="padding-right: .5em">
 							<input type="radio" id="<?php echo $currentimage; ?>-move" name="<?php echo $currentimage; ?>-MoveCopyRename" value="move"
@@ -676,6 +677,7 @@ if ($allimagecount) {
 						</div>
 					</td>
 				</tr>
+				
 				<tr class="extrainfo" style="display:none;">
 					<td align="right" valign="top"><?php echo gettext("Location:"); ?></td>
 					<td>
