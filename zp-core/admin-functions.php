@@ -25,7 +25,7 @@ $standardOptions = array(	'gallery_title','website_title','website_url','time_of
  													'email_new_comments', 'perform_video_watermark', 'video_watermark_image', 'use_lock_image',
  													'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'feed_imagesize', 'search_fields',
  													'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
- 													'allowed_tags', 'full_image_quality', 'persistent_archive',
+ 													'allowed_tags', 'style_tags', 'full_image_quality', 'persistent_archive',
  													'protect_full_image', 'album_session', 'watermark_h_offset', 'watermark_w_offset',
  													'Use_Captcha', 'locale', 'date_format', 'hotlink_protection', 'image_sortdirection',
 													'admin_reset_date', 'comment_name_required', 'comment_email_required',
@@ -354,7 +354,7 @@ function printLoginForm($redirect=null, $logo=true) {
 	global $_zp_login_error, $_zp_current_admin;
 	if (is_null($redirect)) { $redirect = "/" . ZENFOLDER . "/admin.php"; }
 	if (isset($_POST['user'])) {
-		$requestor = sanitize($_POST['user'], 2);
+		$requestor = sanitize($_POST['user'], 3);
 	} else {
 		$requestor = '';
 	}

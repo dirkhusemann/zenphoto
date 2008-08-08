@@ -19,15 +19,15 @@ function setDefault($option, $default) {
 		$v = $default;
 	} else {
 		if (get_magic_quotes_gpc()) {
-			$v = mysql_escape_string($v);	
-		}		
+			$v = mysql_escape_string($v);
+		}
 	}
-	setOptionDefault($option, $v); 
+	setOptionDefault($option, $v);
 }
 
 	require('zp-config.php');
-	setOption('zenphoto_release', ZENPHOTO_RELEASE); 
-	
+	setOption('zenphoto_release', ZENPHOTO_RELEASE);
+
 	//clear out old admin user and cleartext password
 	unset($_zp_conf_vars['adminuser']);
 	unset($_zp_conf_vars['adminpass']);
@@ -49,7 +49,7 @@ function setDefault($option, $default) {
 		$sql = 'DELETE FROM '.prefix('options').' WHERE `name`="admin_email"';
 		query($sql);
   }
-  
+
 	// old zp-config.php opitons. preserve them
 	$conf = $_zp_conf_vars;
   setDefault('gallery_title', "Gallery");
@@ -61,7 +61,7 @@ function setDefault($option, $default) {
 	} else {
 		$rw = 0;
 	}
-	setDefault('mod_rewrite', $rw); 
+	setDefault('mod_rewrite', $rw);
 	setDefault('mod_rewrite_image_suffix', ".php");
 	setDefault('server_protocol', "http");
 	setDefault('charset', "UTF-8");
@@ -78,13 +78,13 @@ function setDefault($option, $default) {
 	setDefault('image_sharpen', 0);
 	setDefault('albums_per_page', 5);
 	setDefault('images_per_page', 15);
-	
+
 	setOptionDefault('gallery_password', '');
 	setOptionDefault('gallery_hint', NULL);
 	setOptionDefault('search_password', '');
 	setOptionDefault('search_hint', NULL);
 	setOptionDefault('gmaps_apikey', "");
-	setOptionDefault('album_session', 0);  
+	setOptionDefault('album_session', 0);
 	setOptionDefault('perform_watermark', 0);
 	setOptionDefault('watermark_h_offset', 90);
 	setOptionDefault('watermark_w_offset', 90);
@@ -103,20 +103,27 @@ function setDefault($option, $default) {
 	setOptionDefault('current_theme', 'default');
 	setOptionDefault('feed_items', 10);
 	setOptionDefault('feed_imagesize', 240);
-	setOptionDefault('search_fields', 32767);  
-	setOptionDefault(	'allowed_tags', "a => (href => () title => ()) \n".
-	 									"abbr => (title => ())\n" . 
-	 									"acronym => (title => ())\n" . 
+	setOptionDefault('search_fields', 32767);
+	setOptionDefault(	'allowed_tags', "a => (href => () title => ())\n" .
+	 									"abbr => (title => ())\n" .
+	 									"acronym => (title => ())\n" .
 	 									"b => ()\n" .
 	 									"blockquote => (cite => ())\n" .
 	 									"code => ()\n" .
-	 									"em => ()\n" . 
+	 									"em => ()\n" .
 	 									"i => () \n" .
-	 									"strike => ()\n" . 
+	 									"strike => ()\n" .
 	 									"strong => ()\n" .
 	 									"ul => ()\n" .
 	 									"ol => ()\n" .
 	 									"li => ()\n");
+	setOptionDefault(	'style_tags', "abbr => (title => ())\n" .
+	 									"acronym => (title => ())\n" .
+	 									"b => ()\n" .
+	 									"em => ()\n" .
+	 									"i => () \n" .
+	 									"strike => ()\n" .
+	 									"strong => ()\n");
 	setOptionDefault('comment_name_required', 1);
 	setOptionDefault('comment_email_required', 1);
 	setOptionDefault('comment_web_required', 0);
@@ -140,10 +147,10 @@ function setDefault($option, $default) {
 	} else {
 		setOptionDefault('protect_full_image', 'Protected view');
 	}
-	
+
 	setOptionDefault('locale', '');
 	setOptionDefault('date_format', '%c');
-	
+
 	// plugins--default to enabled
 	setOptionDefault('zp_plugin_google_maps', 1);
 	setOptionDefault('zp_plugin_rating', 1);
@@ -159,7 +166,7 @@ function setDefault($option, $default) {
 		$opt = 'zp_plugin_'.$ext;
 		setOptionDefault($opt, 0);
 	}
-	
+
 	setOptionDefault('use_lock_image', 1);
 	setOptionDefault('gallery_user', '');
 	setOptionDefault('search_user', '');
@@ -169,5 +176,5 @@ function setDefault($option, $default) {
 	setOptionDefault('multi_lingual', 0);
 	setOptionDefault('login_user_field', 1);
 	setOptionDefault('tagsort', 0);
-	
+
 ?>

@@ -75,7 +75,7 @@ function query($sql, $noerrmsg = false) {
 		if($noerrmsg) {
 			return false;
 		} else {
-			$sql = sanitize($sql, 2);
+			$sql = sanitize($sql, 3);
 			$error = gettext("MySQL Query")." ( <em>$sql</em> ) ".gettext("Failed. Error:").mysql_error();
 			// Changed this to mysql_query - *never* call query functions recursively...
 			if (!mysql_query("SELECT 1 FROM " . prefix('albums') . " LIMIT 0", $mysql_connection)) {

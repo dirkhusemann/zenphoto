@@ -39,7 +39,7 @@ class SearchEngine
 			$this->words = '';
 		}
 		if (isset($_REQUEST['date'])) {
-		$this->dates = sanitize(urldecode($_REQUEST['date']), 2);
+		$this->dates = sanitize(urldecode($_REQUEST['date']), 3);
 		} else {
 			$this->dates = '';
 		}
@@ -280,7 +280,7 @@ class SearchEngine
 				default:
 					$subsql = "";
 					$nr = 0;
-					$singlesearchstring = sanitize($singlesearchstring, 2);
+					$singlesearchstring = sanitize($singlesearchstring, 3);
 					if (SEARCH_TITLE & $fields) {
 						$nr++;
 						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings

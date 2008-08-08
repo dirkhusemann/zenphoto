@@ -3338,9 +3338,9 @@ function getSearchWords() {
 						if ((strpos($singlesearchstring, $char) !== false)) $setQuote = true;
 					}
 					if ($setQuote) {
-						$sanitizedwords .= '&quot;'.sanitize($singlesearchstring, 2).'&quot;';
+						$sanitizedwords .= '&quot;'.sanitize($singlesearchstring, 3).'&quot;';
 					} else {
-						$sanitizedwords .= ' '.sanitize($singlesearchstring, 2).' ';
+						$sanitizedwords .= ' '.sanitize($singlesearchstring, 3).' ';
 					}
 			}
 		}

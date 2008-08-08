@@ -21,10 +21,10 @@ function imageError($errormessage, $errorimg='err-imagegeneral.gif') {
 	$debug = isset($_GET['debug']);
 	if ($debug) {
 		echo('<strong>'.gettext('Zenphoto Image Processing Error:').'</strong> ' . $errormessage
-		. '<br /><br />'.gettext('Request URI:').' [ <code>' . sanitize($_SERVER['REQUEST_URI'], 2) . '</code> ]'
-		. '<br />PHP_SELF:    [ <code>' . sanitize($_SERVER['PHP_SELF'], 2) . '</code> ]'
-		. (empty($newfilename) ? '' : '<br />'.gettext('Cache:').' [<code> ' . substr(CACHEFOLDER, 0, -1) . sanitize($newfilename, 2) . '</code>]')
-		. (empty($image) || empty($album) ? '' : ' <br />'.gettext('Image:').' [<code> '.sanitize($album.'/'.$image, 2).' </code>]<br />'));
+		. '<br /><br />'.gettext('Request URI:').' [ <code>' . sanitize($_SERVER['REQUEST_URI'], 3) . '</code> ]'
+		. '<br />PHP_SELF:    [ <code>' . sanitize($_SERVER['PHP_SELF'], 3) . '</code> ]'
+		. (empty($newfilename) ? '' : '<br />'.gettext('Cache:').' [<code> ' . substr(CACHEFOLDER, 0, -1) . sanitize($newfilename, 3) . '</code>]')
+		. (empty($image) || empty($album) ? '' : ' <br />'.gettext('Image:').' [<code> '.sanitize($album.'/'.$image, 3).' </code>]<br />'));
 	} else {
 		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/images/' . $errorimg);
 		exit();
@@ -39,16 +39,16 @@ function imageError($errormessage, $errorimg='err-imagegeneral.gif') {
 function imageDebug($args) {
 	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
 	echo "<strong>".gettext("Debug")." <code>i.php</code> | ".gettext("Arguments:")."</strong><br />\n\n"
-	.  "<ul><li>".gettext("size =")."    <strong>" . sanitize($size, 2)     . "</strong></li>\n"
-	.  "<li>".gettext("width =")."   <strong>" . sanitize($width, 2)    . "</strong></li>\n"
-	.  "<li>".gettext("height =")."  <strong>" . sanitize($height, 2)   . "</strong></li>\n"
-	.  "<li>".gettext("cw =")."      <strong>" . sanitize($cw, 2)       . "</strong></li>\n"
-	.  "<li>".gettext("ch =")."      <strong>" . sanitize($ch, 2)       . "</strong></li>\n"
-	.  "<li>".gettext("cx =")."      <strong>" . sanitize($cx, 2)       . "</strong></li>\n"
-	.  "<li>".gettext("cy =")."      <strong>" . sanitize($cy, 2)       . "</strong></li>\n"
-	.  "<li>".gettext("quality =")." <strong>" . sanitize($quality, 2)  . "</strong></li>\n"
-	.  "<li>".gettext("thumb =")."   <strong>" . sanitize($thumb, 2)    . "</strong></li>\n"
-	.  "<li>".gettext("crop =")."    <strong>" . sanitize($crop, 2)     . "</strong></li></ul>\n";
+	.  "<ul><li>".gettext("size =")."    <strong>" . sanitize($size, 3)     . "</strong></li>\n"
+	.  "<li>".gettext("width =")."   <strong>" . sanitize($width, 3)    . "</strong></li>\n"
+	.  "<li>".gettext("height =")."  <strong>" . sanitize($height, 3)   . "</strong></li>\n"
+	.  "<li>".gettext("cw =")."      <strong>" . sanitize($cw, 3)       . "</strong></li>\n"
+	.  "<li>".gettext("ch =")."      <strong>" . sanitize($ch, 3)       . "</strong></li>\n"
+	.  "<li>".gettext("cx =")."      <strong>" . sanitize($cx, 3)       . "</strong></li>\n"
+	.  "<li>".gettext("cy =")."      <strong>" . sanitize($cy, 3)       . "</strong></li>\n"
+	.  "<li>".gettext("quality =")." <strong>" . sanitize($quality, 3)  . "</strong></li>\n"
+	.  "<li>".gettext("thumb =")."   <strong>" . sanitize($thumb, 3)    . "</strong></li>\n"
+	.  "<li>".gettext("crop =")."    <strong>" . sanitize($crop, 3)     . "</strong></li></ul>\n";
 
 }
 

@@ -238,7 +238,7 @@ function getOptionTableName($albumname) {
 }
 
 /**
- * parses the 'allowed_tags' option for use by htmLawed
+ * parses the allowed HTML tags for use by htmLawed
  *
  *@param string &$source by name, contains the string with the tag options
  *@return array the allowed_tags array.
@@ -668,26 +668,18 @@ function sanitize_numeric($num) {
  * null-bytes, slashes (if magic_quotes_gpc is on), and optionally use KSES
  * library to prevent XSS attacks and other malicious user input.
  * @param string $input_string is a string that needs cleaning.
- * @param string $sanitize_level is a number between 0 and 2 that describes the
- * amount of sanitizing to perform on $input_string.  The default is currently
- * set to 0 for backwards compatability.  Default will be changed to 2 after all
- * "sanitize" calls have been analyzed and updated accordingly.
- *   0 - Basic sanitation. (Default)
- *   1 - Advanced sanititation.
- *   2 - Full sanitation.
+ * @param string $sanitize_level is a number between 0 and 3 that describes the
+ * type of sanitizing to perform on $input_string.
+ *   0 - Basic sanitation. Only strips null bytes. Not recommended for submitted form data.
+ *   1 - User specified. (User defined code is allowed. Used for descriptions and comments.)
+ *   2 - Text style/formatting. (Text style codes allowed. Used for titles.)
+ *   3 - Full sanitation. (Default. No code allowed. Used for text only fields)
  * @return string the sanitized string.
  */
-function sanitize($input_string, $sanitize_level=0) {
-	// Backwards compatability with previous function
-	if ($sanitize_level === false) {
-		$sanitize_level = 0;
-	} else if ($sanitize_level === true) {
-		$sanitize_level = 2;
-	}
-
+function sanitize($input_string, $sanitize_level=3) {
 	// Make sure sanitation level is specified correctly.  If not, set it to default.
 	if (empty($sanitize_level) || !is_numeric($sanitize_level)) {
-		$sanitize_level = 0;
+		$sanitize_level = 3;
 	}
 
 	if (is_array($input_string)) {
@@ -711,21 +703,28 @@ function sanitize_string($input_string, $sanitize_level) {
 	// Strip slashes if get_magic_quotes_gpc is enabled.
 	if (get_magic_quotes_gpc()) $input_string = stripslashes($input_string);
 
-	// Basic sanitation.  Only strips null bytes.  Not recommended for submitted form data.
+	// Basic sanitation.
 	if ($sanitize_level === 0) {
 		$input_string = str_replace(chr(0), " ", $input_string);
 
-	// Advanced sanitation.  Strips all code except allowable HTML.
+	// User specified sanititation.
 	} else if ($sanitize_level === 1) {
-		$allowed_tags = "(".getOption('allowed_tags').")";
-		$allowed = parseAllowedTags($allowed_tags);
-		if ($allowed === false) { $allowed = array(); } // someone has screwed with the 'allowed_tags' option row in the database, but better safe than sorry
-		$input_string = kses($input_string, $allowed);
+		$user_tags = "(".getOption('allowed_tags').")";
+		$allowed_tags = parseAllowedTags($user_tags);
+		if ($allowed_tags === false) { $allowed_tags = array(); } // someone has screwed with the 'allowed_tags' option row in the database, but better safe than sorry
+		$input_string = kses($input_string, $allowed_tags);
+
+	// Text formatting sanititation.
+	} else if ($sanitize_level === 2) {
+		$style_tags = "(".getOption('style_tags').")";
+		$allowed_tags = parseAllowedTags($style_tags);
+		if ($allowed_tags === false) { $allowed_tags = array(); } // someone has screwed with the 'allowed_tags' option row in the database, but better safe than sorry
+		$input_string = kses($input_string, $allowed_tags);
 
 	// Full sanitation.  Strips all code.
-	} else if ($sanitize_level === 2) {
-		$allowed = array();
-		$input_string = kses($input_string, $allowed);
+	} else if ($sanitize_level === 3) {
+		$allowed_tags = array();
+		$input_string = kses($input_string, $allowed_tags);
 	}
 	return $input_string;
 }
