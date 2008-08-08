@@ -1626,17 +1626,17 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		}
 		// Update the database entry with the new comment
 		query("INSERT INTO " . prefix("comments") . " (`ownerid`, `name`, `email`, `website`, `comment`, `inmoderation`, `date`, `type`, `ip`, `private`, `anon`) VALUES " .
-						" ('" . $receiverid .
-						"', '" . escape($name) .
-						"', '" . escape($email) .
-						"', '" . escape($website) .
-						"', '" . escape($comment) .
-						"', '" . $moderate .
-						"', NOW()" .
-						", '$type'" .
-						", '$ip'" .
-						", '$private'" .
-						", '$anon')");
+						' ("' . $receiverid .
+						'", "' . mysql_real_escape_string($name) .
+						'", "' . mysql_real_escape_string($email) .
+						'", "' . mysql_real_escape_string($website) .
+						'", "' . mysql_real_escape_string ($comment) .
+						'", "' . $moderate .
+						'", NOW()'.
+						', "'.$type.
+						'", "'.$ip .
+						'", "'.$private.
+						'", "'.$anon.'")');
 		if ($moderate) {
 			$action = "placed in moderation";
 		} else {
