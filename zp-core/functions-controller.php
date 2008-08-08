@@ -169,14 +169,14 @@ function zp_handle_comment() {
 	$cookie = zp_getCookie('zenphoto');
 	if (isset($_POST['comment'])) {
 		if ((in_context(ZP_ALBUM) OR $zenpage_news_context OR $zenpage_pages_context) && isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
-			$p_name = sanitize($_POST['name'],2);
-			$p_email = sanitize($_POST['email'], 2);
+			$p_name = sanitize($_POST['name'],3);
+			$p_email = sanitize($_POST['email'], 3);
 			if (isset($_POST['website'])) $website = strip_tags(strip($_POST['website'])); else $website = "";
 			$p_comment = sanitize($_POST['comment'], 1);
-			$p_server = sanitize($_SERVER['REMOTE_ADDR'], 2);
+			$p_server = sanitize($_SERVER['REMOTE_ADDR'], 3);
 			if (isset($_POST['code'])) {
-				$code1 = sanitize($_POST['code'], 2);
-				$code2 = sanitize($_POST['code_h'], 2);
+				$code1 = sanitize($_POST['code'], 3);
+				$code2 = sanitize($_POST['code_h'], 3);
 			} else {
 				$code1 = '';
 				$code2 = '';
