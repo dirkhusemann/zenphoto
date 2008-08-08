@@ -37,6 +37,7 @@ if (!isset($_zp_conf_vars['server_protocol'])) $_zp_conf_vars['server_protocol']
 require_once('lib-htmlawed.php');
 require_once('exif/exif.php');
 require_once('functions-db.php');
+require_once('lib-encryption.php');
 
 // allow reading of old Option tables--should be needed only during upgrade
 $result = query_full_array("SHOW COLUMNS FROM ".prefix('options').' LIKE "%ownerid%"', true);
@@ -1595,7 +1596,10 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	$name = trim($name);
 	$email = trim($email);
 	$website = trim($website);
-	$code = md5(trim($code));
+	$admins = getAdministrators();
+	$admin = array_shift($admins);
+	$key = $admin['pass'];
+	$code = md5(urlencode(implode('', unpack("H*", rc4($key, trim($code))))));
 	$code_ok = trim($code_ok);
 	// Let the comment have trailing line breaks and space? Nah...
 	// Also (in)validate HTML here, and in $name.
@@ -2308,7 +2312,6 @@ function cbone($bits, $limit) {
  * @return string;
  */
 function generateCaptcha(&$image) {
-	require_once('lib-encryption.php');
 
 	$lettre='abcdefghijkmnpqrstuvwxyz';
 	$chiffre='23456789';
@@ -2325,7 +2328,7 @@ function generateCaptcha(&$image) {
 	$admin = array_shift($admins);
 	$key = $admin['pass'];
 	$cypher = urlencode(implode('', unpack("H*", rc4($key, $string))));
-	$code=md5($string);
+	$code=md5($cypher);
 	$image = WEBPATH . '/' . ZENFOLDER . "/c.php?i=$cypher";
 
 	return $code;
