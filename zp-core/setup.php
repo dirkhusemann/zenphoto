@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * install routine for zenphoto
  * @package setup
@@ -124,7 +124,7 @@ $setlocaleresult = setupCurrentLocale();
 $taskDisplay = array('create' => gettext("create"), 'update' => gettext("update"));
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -298,7 +298,7 @@ label:hover {
 
 <div id="main">
 
-<h1><img src="images/zen-logo.gif" title="<?php echo gettext('Zen Photo Setup'); ?>" align="absbottom" /> 
+<h1><img src="images/zen-logo.gif" title="<?php echo gettext('Zen Photo Setup'); ?>" align="absbottom" />
 <?php echo $upgrade ? gettext("Upgrade") : gettext("Setup") ; ?>
 </h1>
 
@@ -306,15 +306,15 @@ label:hover {
 <?php
 if (!$checked) {
 	// Some descriptions about setup/upgrade.
-  if ($upgrade) { 
+  if ($upgrade) {
     echo gettext("Zenphoto has detected that you're upgrading to a new version.");
 		echo '<br /><br />';
-	} else { 
-		echo gettext("Welcome to Zenphoto! This page will set up Zenphoto on your web server."); 
+	} else {
+		echo gettext("Welcome to Zenphoto! This page will set up Zenphoto on your web server.");
 	}
 	echo '<br /><br />';
 	echo '<strong>';
-	echo gettext("Systems Check:"); 
+	echo gettext("Systems Check:");
 	echo '</strong><br />';
 
 	/*****************************************************************************
@@ -336,12 +336,12 @@ if (!$checked) {
 		echo $dsp."\">$text</span>";
 		$dsp .= ' '.trim($text);
 		if ($check <= 0) {
-			if (!empty($sfx)) { 
-				echo $sfx; 
+			if (!empty($sfx)) {
+				echo $sfx;
 				$dsp .= ' '.trim($sfx);
 			}
-			if (!empty($msg)) { 
-				echo "\n<p class=\"error\">$msg</p>"; 
+			if (!empty($msg)) {
+				echo "\n<p class=\"error\">$msg</p>";
 				$dsp .= ' '.trim($msg);
 			}
 		}
@@ -492,7 +492,7 @@ if (!$checked) {
 <br />
 <form action="#" method="post">
 <input type="hidden" name="mysql"	value="yes" />
-<?php 
+<?php
 if ($debug) {
 	echo '<input type="hidden" name="debug" />';
 }
@@ -593,7 +593,7 @@ if ($debug) {
 		}
 		checkMark($access, ' '.gettext("MySQL access rights"), " [$rightsfound]",
  											gettext("Your MySQL user must have".' '.$neededlist."rights.") . $report);
- 											
+
 
 		$sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$_zp_conf_vars['mysql_prefix']."%';";
 		$result = mysql_query($sql, $mysql_connection);
@@ -725,7 +725,7 @@ if ($debug) {
 } // system check
 
 if (file_exists("zp-config.php")) {
-	
+
 	require("zp-config.php");
 	require_once('functions-db.php');
 	$task = '';
@@ -756,7 +756,7 @@ if (file_exists("zp-config.php")) {
 				$tables[$needed] = 'create';
 			}
 		}
-		
+
 		if (!($tables[$_zp_conf_vars['mysql_prefix'].'administrators'] == 'create')) {
 			if (!($_zp_loggedin & ADMIN_RIGHTS) && (!isset($_GET['create']) && !isset($_GET['update']))) {  // Display the login form and exit.
 				if ($_zp_loggedin) { echo "<br /><br/>".gettext("You need <em>USER ADMIN</em> rights to run setup."); }
@@ -783,7 +783,7 @@ if (file_exists("zp-config.php")) {
 	$cst_images = prefix('images_ibfk1');
 
 	$db_schema = array();
-	
+
 	if (substr(trim(mysql_get_server_info()), 0, 1) > '4') {
 		$collation = ' COLLATE utf8_unicode_ci';
 	} else {
@@ -794,7 +794,7 @@ if (file_exists("zp-config.php")) {
 	 Add new fields in the upgrade section. This section should remain static except for new
 	 tables. This tactic keeps all changes in one place so that noting gets accidentaly omitted.
 	************************************************************************************/
-	
+
 	//v1.1.7
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'options'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_options (
@@ -823,7 +823,7 @@ if (file_exists("zp-config.php")) {
 		PRIMARY KEY  (`id`)
 		)	CHARACTER SET utf8$collation;";
 	}
-	
+
 	// v. 1.1.5
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'administrators'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_administrators (
@@ -1022,29 +1022,29 @@ if (file_exists("zp-config.php")) {
 	}
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `dynamic` int(1) UNSIGNED default '0'";
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `search_params` text default NULL";
-	
+
 	//v1.1.6
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `album_theme` text default NULL";
 	$sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `IP` text default NULL";
-	
+
 	//v1.1.7
 	$sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `private` int(1) UNSIGNED default 0";
 	$sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `anon` int(1) UNSIGNED default 0";
-	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `user` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci default ''"; 	
+	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `user` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci default ''";
 	$sql_statements[] = "ALTER TABLE $tbl_tags CHARACTER SET utf8 COLLATE utf8_unicode_ci";
-	$sql_statements[] = "ALTER TABLE $tbl_tags CHANGE `name` `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci";	
+	$sql_statements[] = "ALTER TABLE $tbl_tags CHANGE `name` `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci";
 	$sql_statements[] = "ALTER TABLE $tbl_administrators CHARACTER SET utf8 COLLATE utf8_unicode_ci";
-	$sql_statements[] = "ALTER TABLE $tbl_administrators CHANGE `name` `name` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci";	
+	$sql_statements[] = "ALTER TABLE $tbl_administrators CHANGE `name` `name` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci";
 	$sql_statements[] = "ALTER TABLE $tbl_options ADD COLUMN `ownerid` int(11) UNSIGNED NOT NULL DEFAULT 0";
 	$sql_statements[] = "ALTER TABLE $tbl_options DROP INDEX `name`";
 	$sql_statements[] = "ALTER TABLE $tbl_options ADD UNIQUE `unique_option` (`name`, `ownerid`)";
 
-	//v1.1.8 
-	$sql_statements[] = "ALTER TABLE $tbl_options CHANGE `ownerid` `ownerid` int(11) UNSIGNED NOT NULL DEFAULT 0"; 
+	//v1.1.8
+	$sql_statements[] = "ALTER TABLE $tbl_options CHANGE `ownerid` `ownerid` int(11) UNSIGNED NOT NULL DEFAULT 0";
 	$sql_statements[] = "ALTER TABLE $tbl_admintoalbum CHARACTER SET utf8 COLLATE utf8_unicode_ci";
 	$sql_statements[] = "ALTER TABLE $tbl_obj_to_tag CHARACTER SET utf8 COLLATE utf8_unicode_ci";
 	$sql_statements[] = "ALTER TABLE $tbl_options CHANGE `name` `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci";
-	$hastagidindex = false;	
+	$hastagidindex = false;
 	$sql = "SHOW INDEX FROM `".$_zp_conf_vars['mysql_prefix']."obj_to_tag`";
 	$result = mysql_query($sql, $mysql_connection);
 	if ($result) {
@@ -1058,8 +1058,8 @@ if (file_exists("zp-config.php")) {
 		$sql_statements[] = "ALTER TABLE $tbl_obj_to_tag ADD INDEX (`tagid`)";
 		$sql_statements[] = "ALTER TABLE $tbl_obj_to_tag ADD INDEX (`objectid`)";
 	}
-	
-	
+
+
 	/**************************************************************************************
 	 ******                            END of UPGRADE SECTION                                                           ******
 	 ******                                                                                                                                                     ******
@@ -1077,7 +1077,7 @@ if (file_exists("zp-config.php")) {
 				$createTables = false;
 				setupLog("MySQL Query"." ( $sql ) "."Failed. Error: ".mysql_error());
 				echo '<div class="error">';
-				echo gettext('Table creation failure').': '.mysql_error(); 
+				echo gettext('Table creation failure').': '.mysql_error();
 				echo '</div>';
 			} else {
 				setupLog("MySQL Query"." ( $sql ) "."Success.");
@@ -1096,25 +1096,25 @@ if (file_exists("zp-config.php")) {
 
 		// set defaults on any options that need it
 		setupLog("Done with database creation and update");
-		
+
 		$prevRel = getOption('zenphoto_release');
-		
+
 		setupLog("Previous Release was $prevRel");
-		
+
 		$gallery = new Gallery();
 		require('setup-option-defaults.php');
-		
+
 		// 1.1.6 special cleanup section for plugins
 		$badplugs = array ('exifimagerotate.php', 'flip_image.php', 'image_mirror.php', 'image_rotate.php', 'supergallery-functions.php');
 		foreach ($badplugs as $plug) {
 			$path = SERVERPATH . '/' . ZENFOLDER . '/plugins/' . $plug;
 			@unlink($path);
 		}
-		
+
 		if ($prevRel < 1690) {  // cleanup root album DB records
 			$gallery->garbageCollect(true, true);
 		}
-		
+
 		// 1.1.7 conversion to/from the theme option tables
 		$albums = $gallery->getAlbums();
 		foreach ($albums as $albumname) {
@@ -1132,7 +1132,7 @@ if (file_exists("zp-config.php")) {
 					}
 					query('DROP TABLE '.$tbl, true);
 				} else { // convert back to individual tables
-					$result = query_full_array('SELECT * FROM '.prefix('options'),' WHERE `ownerid`!=0');  
+					$result = query_full_array('SELECT * FROM '.prefix('options'),' WHERE `ownerid`!=0');
 					if (count($result) > 0) { // there was use of the album options in the options table
 						$tbl_options = prefix(getOptionTableName($album->name));
 						$sql = "CREATE TABLE IF NOT EXISTS $tbl_options (
