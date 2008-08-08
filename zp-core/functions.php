@@ -1396,9 +1396,19 @@ function getIPTCTagArray($tag) {
 	return NULL;
 }
 
+
+function prepIPTCString($iptcstring) {
+	$iptcstring = utf8::convert($iptcstring, 'ISO-8859-1');
+	// Remove null byte at the end of the string if it exists.
+	if (substr($iptcstring, -1) == 0x0) {
+		$iptcstring = substr($iptcstring, 0, -1);
+	}
+	return $iptcstring;
+}
+
 /**
  * Parces IPTC data and returns those tags zenphoto is interested in
- * folds multiple tags into single zp data items based on precidence.
+ * folds multiple tags into single zp data items based on precedence.
  *
  * @param string $imageName the name of the image
  * @return array
@@ -1445,31 +1455,31 @@ function getImageMetadata($imageName) {
 					$title = getIPTCTag('2#105'); /* Headline */
 				}
 				if (!empty($title)) {
-					$result['title'] = utf8::convert($title, 'ISO-8859-1');
+					$result['title'] = prepIPTCString($title);
 				}
 
 				/* iptc description */
 				$caption= getIPTCTag('2#120');
 				if (!empty($caption)) {
-					$result['desc'] = utf8::convert($caption, 'ISO-8859-1');
+					$result['desc'] = prepIPTCString($caption);
 				}
 
 				/* iptc location, state, country */
 				$location = getIPTCTag('2#092');
 				if (!empty($location)) {
-					$result['location'] = utf8::convert($location, 'ISO-8859-1');
+					$result['location'] = prepIPTCString($location);
 				}
 				$city = getIPTCTag('2#090');
 				if (!empty($city)) {
-					$result['city'] = utf8::convert($city, 'ISO-8859-1');
+					$result['city'] = prepIPTCString($city);
 				}
 				$state = getIPTCTag('2#095');
 				if (!empty($state)) {
-					$result['state'] = utf8::convert($state, 'ISO-8859-1');
+					$result['state'] = prepIPTCString($state);
 				}
 				$country = getIPTCTag('2#101');
 				if (!empty($country)) {
-					$result['country'] = utf8::convert($country, 'ISO-8859-1');
+					$result['country'] = prepIPTCString($country);
 				}
 				/* iptc credit */
 				$credit= getIPTCTag('2#080'); /* by-line */
@@ -1480,13 +1490,13 @@ function getImageMetadata($imageName) {
 					$credit = getIPTCTag('2#115'); /* source */
 				}
 				if (!empty($credit)) {
-					$result['credit'] = utf8::convert($credit, 'ISO-8859-1');
+					$result['credit'] = prepIPTCString($credit);
 				}
 
 				/* iptc copyright */
 				$copyright= getIPTCTag('2#116');
 				if (!empty($copyright)) {
-					$result['copyright'] = utf8::convert($copyright, 'ISO-8859-1');
+					$result['copyright'] = prepIPTCString($copyright);
 				}
 
 				/* iptc keywords (tags) */
@@ -1494,7 +1504,7 @@ function getImageMetadata($imageName) {
 				if (is_array($keywords)) {
 					$taglist = array();
 					foreach($keywords as $keyword) {
-						$taglist[] = utf8::convert($keyword, 'ISO-8859-1');
+						$taglist[] = prepIPTCString($keyword);
 					}
 					$result['tags'] = $taglist;
 				}
