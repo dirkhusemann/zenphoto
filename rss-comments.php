@@ -68,13 +68,13 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 <?php
 db_connect();
 $comments_images = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.type, c.website," 
-. " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a " 
-. " WHERE i.show = 1 AND c.ownerid = i.id AND i.albumid = a.id AND c.type = 'images'".$passwordcheck1
+. " c.date, c.anon, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a " 
+. " WHERE i.show = 1 AND c.ownerid = i.id AND i.albumid = a.id AND c.private = 0 AND c.type = 'images'".$passwordcheck1
 . " ORDER BY c.id DESC LIMIT $items");
 
 $comments_albums = query_full_array("SELECT c.id, a.folder, a.title AS albumtitle, c.name, c.type, c.website," 
-. " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('albums')." AS a " 
-. " WHERE a.show = 1 AND c.ownerid = a.id AND c.type = 'albums'".$passwordcheck2
+. " c.date, c.anon, c.comment FROM ".prefix('comments')." AS c, ".prefix('albums')." AS a " 
+. " WHERE a.show = 1 AND c.ownerid = a.id AND c.private = 0 AND c.type = 'albums'".$passwordcheck2
 . " ORDER BY c.id DESC LIMIT $items"); 
 
 $comments = array();
@@ -88,7 +88,11 @@ krsort($comments);
 $comments = array_slice($comments, 0, $items);
 $count = 0;
 foreach ($comments as $comment) {
-	$author = $comment['name'];
+	if($comment['anon'] === "0") {
+		$author = " ".gettext("by")." ".$comment['name'];
+	} else {
+		$author = "";
+	}
 	$album = $comment['folder'];
 	if($comment['type'] === "images") {
 		$imagetag = $imagepath.$comment['filename'].$modrewritesuffix;
@@ -107,7 +111,7 @@ foreach ($comments as $comment) {
 ?>
 
 <item>
-<title><?php echo htmlspecialchars($albumtitle.$title." by ".$author, ENT_QUOTES); ?></title>
+<title><?php echo htmlspecialchars($albumtitle.$title.$author, ENT_QUOTES); ?></title>
 <link><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$album.$imagetag.']]>';?></link>
 <description><?php echo htmlspecialchars($shortcomment, ENT_QUOTES); ?></description>
 <category><?php echo htmlspecialchars($albumtitle, ENT_QUOTES); ?></category>

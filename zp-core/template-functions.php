@@ -2500,12 +2500,12 @@ function getLatestComments($number) {
 		}
 	}
 	$comments_images = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.type, c.website,"
-	. " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
-	. " WHERE c.ownerid = i.id AND i.albumid = a.id AND c.type = 'images'".$passwordcheck1
+	. " c.date, c.anon, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
+	. " WHERE i.show = 1 AND c.ownerid = i.id AND i.albumid = a.id AND c.private = 0 AND c.type = 'images'".$passwordcheck1
 	. " ORDER BY c.id DESC LIMIT $number");
 	$comments_albums = query_full_array("SELECT c.id, a.folder, a.title AS albumtitle, c.name, c.type, c.website,"
-	. " c.date, c.comment FROM ".prefix('comments')." AS c, ".prefix('albums')." AS a "
-	. " WHERE c.ownerid = a.id AND c.type = 'albums'".$passwordcheck2
+	. " c.date, c.anon, c.comment FROM ".prefix('comments')." AS c, ".prefix('albums')." AS a "
+	. " WHERE a.show = 1 AND c.ownerid = a.id AND c.private = 0 AND c.type = 'albums'".$passwordcheck2
 	. " ORDER BY c.id DESC LIMIT $number");
 	$comments = array();
 	foreach ($comments_albums as $comment) {
@@ -2534,7 +2534,11 @@ function printLatestComments($number, $shorten='123') {
 	echo "<div id=\"showlatestcomments\">\n";
 	echo "<ul>\n";
 	foreach ($comments as $comment) {
-		$author = $comment['name'];
+		if($comment['anon'] === "0") {
+			$author = " ".gettext("by")." ".$comment['name'];
+		} else {
+			$author = "";
+		}
 		$album = $comment['folder'];
 		if($comment['type'] === "images") {
 			$imagetag = $imagepath.$comment['filename'].$modrewritesuffix;
@@ -2549,7 +2553,7 @@ function printLatestComments($number, $shorten='123') {
 		if(!empty($title)) {
 			$title = ": ".$title;
 		}
-		echo "<li><a href=\"".WEBPATH.$albumpath.$album.$imagetag."\" class=\"commentmeta\">".$albumtitle.$title." by ".$author."</a><br />\n";
+		echo "<li><a href=\"".WEBPATH.$albumpath.$album.$imagetag."\" class=\"commentmeta\">".$albumtitle.$title.$author."</a><br />\n";
 		echo "<span class=\"commentbody\">".$shortcomment."</span></li>";
 	}
 	echo "</ul>\n";
