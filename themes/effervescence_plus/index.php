@@ -53,11 +53,11 @@
 			?>
 			<li>
 				<div class="imagethumb">
-				<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the album:').' '; echo getAlbumTitle(); printImage_AlbumCount(); ?>">
+				<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the album:').' '; echo strip_tags(getAlbumTitle()); printImage_AlbumCount(); ?>">
 						<?php printCustomAlbumThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?>
  				</a>
 				</div>
-				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the album:').' '; echo getAlbumTitle(); printImage_AlbumCount();?>"><?php printAlbumTitle(); ?></a></h4>
+				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the album:').' '; echo strip_tags(getAlbumTitle()); printImage_AlbumCount();?>"><?php printAlbumTitle(); ?></a></h4>
 			</li>
 			<?php } ?>
 		</ul>

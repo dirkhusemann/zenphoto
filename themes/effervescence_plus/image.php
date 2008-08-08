@@ -8,7 +8,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php printGalleryTitle(); ?> | <?php echo getAlbumTitle();?> | <?php echo getImageTitle();?></title>
+	<title><?php printGalleryTitle(); ?> | <?php echo strip_tags(getAlbumTitle());?> | <?php echo strip_tags(getImageTitle());?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
@@ -32,7 +32,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 						global $_zp_current_image;
 						if (hasPrevImage()) {
 							$image = $_zp_current_image->getPrevImage();
-							echo '<a href="' . htmlspecialchars(getPrevImageURL()) . '" title="' . htmlspecialchars(strip_tags($image->getTitle()),ENT_QUOTES) . '">&laquo; '.gettext('prev').'</a>';
+							echo '<a href="' . htmlspecialchars(getPrevImageURL()) . '" title="' . strip_tags($image->getTitle()) . '">&laquo; '.gettext('prev').'</a>';
 						} else {
 							echo '<div class="imgdisabledlink">&laquo; '.gettext('prev').'</div>';
 						}
@@ -42,7 +42,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 					<?php
 					if (hasNextImage()) {
 						$image = $_zp_current_image->getNextImage();
-						echo '<a href="' . htmlspecialchars(getNextImageURL()) . '" title="' . htmlspecialchars(strip_tags($image->getTitle()),ENT_QUOTES) . '">'.gettext('next').' &raquo;</a>';
+						echo '<a href="' . htmlspecialchars(getNextImageURL()) . '" title="' . strip_tags($image->getTitle()) . '">'.gettext('next').' &raquo;</a>';
 					} else {
 						echo '<div class="imgdisabledlink">'.gettext('next').' &raquo;</div>';
 					}
@@ -77,7 +77,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 		<div id="image" <?php echo $wide.$high; ?>>
 			<?php if ($show = !checkForPassword()) { ?>
 			<div id="image_container">
-				<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES);?>">
+				<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo strip_tags(getImageTitle());?>">
 					<?php printDefaultSizedImage(getImageTitle()); ?>
 				</a>
 			</div>

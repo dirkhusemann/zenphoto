@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php printGalleryTitle(); ?> | <?php echo getAlbumTitle();?></title>
+	<title><?php printGalleryTitle(); ?> | <?php echo strip_tags(getAlbumTitle());?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 	<?php printRSSHeaderLink('Album',getAlbumTitle()); ?>
 </head>
@@ -25,10 +25,10 @@
 			<div class="album">
 
 						<div class="thumb">
-					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:'); ?> <?php echo getAlbumTitle();?>"><?php printAlbumThumbImage(getAlbumTitle()); ?></a>
+					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:'); ?> <?php echo strip_tags(getAlbumTitle());?>"><?php printAlbumThumbImage(getAlbumTitle()); ?></a>
 						</div>
 				<div class="albumdesc">
-					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:'); ?> <?php echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
+					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:'); ?> <?php echo strip_tags(getAlbumTitle());?>"><?php printAlbumTitle(); ?></a></h3>
 								<small><?php printAlbumDate(""); ?></small>
 					<p><?php printAlbumDesc(); ?></p>
 				</div>
@@ -40,7 +40,7 @@
 			<div id="images">
 			<?php while (next_image(false, $firstPageImages)): ?>
 			<div class="image">
-				<div class="imagethumb"><a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES);?>"><?php printImageThumb(getImageTitle()); ?></a></div>
+				<div class="imagethumb"><a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo strip_tags(getImageTitle();?>"><?php printImageThumb(getImageTitle()); ?></a></div>
 			</div>
 			<?php endwhile; ?>
 

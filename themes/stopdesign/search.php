@@ -47,8 +47,8 @@
 				}
 			?>
 				<li class="gal">
-					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 230, null, 210, 60); ?></a>
-					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
+					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo strip_tags(getAlbumTitle());?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 230, null, 210, 60); ?></a>
+					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo strip_tags(getAlbumTitle());?>"><?php printAlbumTitle(); ?></a></h3>
 					<p>
 						<?php
 						$number = getNumAlbums();
@@ -94,7 +94,7 @@
 				$lastImage++;
 			}
 			echo "\n<li class=\"thumb\"><span><em style=\"background-image:url(" . getImageThumb() . '); "><a href="' .
-			htmlspecialchars(getImageLinkURL()) . '" title="' . htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES) . '" style="background:#fff;">"'.
+			htmlspecialchars(getImageLinkURL()) . '" title="' . strip_tags(getImageTitle()) . '" style="background:#fff;">"'.
 			getImageTitle().'"</a></em></span></li>';
 		}
 		if (!is_null($firstImage)  && hasNextPage()) {

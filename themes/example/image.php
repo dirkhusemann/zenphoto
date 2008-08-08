@@ -28,13 +28,13 @@
 			<?php } if (hasNextImage()) { ?> <a class="next" href="<?php echo htmlspecialchars(getNextImageURL());?>" title="<?php echo gettext('Next Image'); ?>"><?php echo gettext("next");?> &raquo;</a><?php } ?>
 		</div>
 
-				<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES);?>">
+				<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo strip_tags(getImageTitle());?>">
 				<?php printDefaultSizedImage(getImageTitle()); ?></a>
 
 				<div id="image_data">
 					<div id="fullsize_download_link">
 						<em>
-						<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES);?>"><?php echo gettext("Original Size:"); ?>
+						<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo strip_tags(getImageTitle());?>"><?php echo gettext("Original Size:"); ?>
 							<?php echo getFullWidth() . "x" . getFullHeight(); ?>
 						</a>
 						</em>

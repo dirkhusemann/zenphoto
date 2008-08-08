@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php printGalleryTitle(); ?> | <?php echo getAlbumTitle();?> | <?php echo getImageTitle();?></title>
+	<title><?php printGalleryTitle(); ?> | <?php echo strip_tags(getAlbumTitle());?> | <?php echo strip_tags(getImageTitle());?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
 	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.js" type="text/javascript"></script>
@@ -43,7 +43,7 @@
 	<!-- The Image -->
 	<?php if (!checkForPassword()) { ?>
 	<div id="image">
-		<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES);?>"><strong><?php printDefaultSizedImage(getImageTitle()); ?></strong></a>
+		<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo strip_tags(getImageTitle());?>"><strong><?php printDefaultSizedImage(getImageTitle()); ?></strong></a>
 	</div>
 
 	<div id="narrow">

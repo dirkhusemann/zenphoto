@@ -47,11 +47,11 @@ $firstPageImages = normalizeColumns(1, 7);
 <div id="albums">
 			<?php while (next_album()): $c++;?>
 			<div class="album">
-					<div class="albumthumb"><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo htmlspecialchars(strip_tags(getAlbumTitle()),ENT_QUOTES);?>">
+					<div class="albumthumb"><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo strip_tags(getAlbumTitle());?>">
 						<?php printAlbumThumbImage(getAlbumTitle()); ?></a>
 						</div>
 					<div class="albumtitle">
-									<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo htmlspecialchars(strip_tags(getAlbumTitle()),ENT_QUOTES);?>">
+									<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo strip_tags(getAlbumTitle());?>">
 							<?php printAlbumTitle(); ?></a></h3> <?php printAlbumDate(); ?>
 								</div>
 						<div class="albumdesc"><?php printAlbumDesc(); ?></div>
@@ -64,7 +64,7 @@ $firstPageImages = normalizeColumns(1, 7);
 		<?php while (next_image(false, $firstPageImages)): $c++;?>
 			<div class="image">
 					<div class="imagethumb">
-							<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES);?>">
+							<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo strip_tags(getImageTitle());?>">
 						<?php printImageThumb(getImageTitle()); ?></a>
 						</div>
 			</div>

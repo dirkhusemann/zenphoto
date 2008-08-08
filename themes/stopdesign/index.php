@@ -31,8 +31,8 @@
 					while (next_album() and $counter < 6):
 					?>
 						<li class="gal">
-							<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext("View album:").' '; echo getAlbumTitle(); ?>"><?php printAlbumTitle(); ?></a></h3>
-							<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext("View album:").' '; echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 210, 59, 210, 59); ?></a>
+							<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext("View album:").' '; echo strip_tags(getAlbumTitle()); ?>"><?php printAlbumTitle(); ?></a></h3>
+							<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext("View album:").' '; echo strip_tags(getAlbumTitle());?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 210, 59, 210, 59); ?></a>
 							<p>
 					<?php
 						$number = getNumsubalbums();
@@ -88,9 +88,9 @@
 									echo "<li><table><tr><td>\n";
 									$imageURL = htmlspecialchars(getURL($image));
 									echo '<a href="'.$imageURL.'" title="'.gettext("View image:").' '.
-									$image->getTitle() . '"><img src="' .
+									strip_tags($image->getTitle()) . '"><img src="' .
 									htmlspecialchars($image->getCustomImage(null, 44, 33, null, null, null, null, true)) .
-																		'" width="44" height="33" alt="' . $image->getTitle() . "\"/></a>\n";
+																		'" width="44" height="33" alt="' . strip_tags($image->getTitle()) . "\"/></a>\n";
 									echo "</td></tr></table></li>\n";
 								}
 								break;
@@ -102,9 +102,9 @@
 								$randomImage = getRandomImages();
 								if (is_object($randomImage)) {
 									$randomImageURL = htmlspecialchars(getURL($randomImage));
-									echo '<a href="' . $randomImageURL . '" title="'.gettext("View image:").' ' . $randomImage->getTitle() . '">' .
+									echo '<a href="' . $randomImageURL . '" title="'.gettext("View image:").' ' . strip_tags($randomImage->getTitle()) . '">' .
  												'<img src="' . htmlspecialchars($randomImage->getCustomImage(null, 44, 33, null, null, null, null, true)) .
-												'" width="44" height="33" alt="'.$randomImage->getTitle().'"';
+												'" width="44" height="33" alt="'.strip_tags($randomImage->getTitle()).'"';
 									echo "/></a></td></tr></table></li>\n";
 								}
 							}

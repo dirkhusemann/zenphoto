@@ -130,9 +130,9 @@ $backgroundImagePath="";
 			}
 			?>
 			<li><div class="imagethumb"><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the album:').' '.
-				 getAlbumTitle();	printImage_AlbumCount(); ?>">
+				 strip_tags(getAlbumTitle());	printImage_AlbumCount(); ?>">
 				<?php printCustomAlbumThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?></a></div>
-				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the Album:').' '; echo getAlbumTitle();
+				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the Album:').' '; echo strip_tags(getAlbumTitle());
 				printImage_AlbumCount();
 			?>">
 			<?php printAlbumTitle(); ?></a></h4></li>
@@ -165,7 +165,7 @@ $backgroundImagePath="";
 							}
  						echo '<div class="image">' . "\n";
  						echo '<div class="imagethumb">' . "\n";
- 						echo '<a href="' . htmlspecialchars(getImageLinkURL()) .'" title="' . htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES) . '">' . "\n";
+ 						echo '<a href="' . htmlspecialchars(getImageLinkURL()) .'" title="' . strip_tags(getImageTitle()) . '">' . "\n";
  						echo printImageThumb(getImageTitle()) . "</a>\n";
  						echo "</div>\n";
  						echo "</div>\n";
