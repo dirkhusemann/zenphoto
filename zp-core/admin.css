@@ -307,6 +307,7 @@ table.bordered tr.alt td {
 
 table.bordered tr.alt1 td {
 	background-color: #ECF1F2;
+	border-bottom: 2px solid #BAC9CF; 
 }
 
 table.formlayout td {

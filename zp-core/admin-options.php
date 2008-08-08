@@ -1169,55 +1169,55 @@ if (!empty($_REQUEST['themealbum'])) {
 	?>
 	
 	<tr class="alt1">
-		<td colspan="2" align="center">
-			<?php echo gettext('Standard options') ?>
+		<td colspan="2" align="left">
+			<?php echo gettext('<strong>Standard options</strong>') ?>
 		</td>
 		<td><em><?php echo gettext('These image and album presentation options are standard to all themes.'); ?></em></td>
 	</tr>
-	<tr class="alt1">
+	<tr>
 		<td style='width: 175px'><?php echo gettext("Albums per page:"); ?></td>
 		<td><input type="text" size="40" name="albums_per_page"
 			value="<?php echo getThemeOption($album, 'albums_per_page');?>" /></td>
 		<td><?php echo gettext("Controls the number of albums on a page. You might need to change	this after switching themes to make it look better."); ?></td>
 	</tr>
-	<tr class="alt1">
+	<tr>
 		<td><?php echo gettext("Images per page:"); ?></td>
 		<td><input type="text" size="40" name="images_per_page"
 			value="<?php echo getThemeOption($album, 'images_per_page');?>" /></td>
 		<td><?php echo gettext("Controls the number of images on a page. You might need to change	this after switching themes to make it look better."); ?></td>
 	</tr>
-	<tr class="alt1">
+	<tr>
 		<td><?php echo gettext("Thumb size:"); ?></td>
 		<td><input type="text" size="40" name="thumb_size"
 			value="<?php echo getThemeOption($album, 'thumb_size');?>" /></td>
 		<td><?php echo gettext("Default thumbnail size and scale."); ?></td>
 	</tr>
-	<tr class="alt1">
+	<tr>
 		<td><?php echo gettext("Crop thumbnails:"); ?></td>
 		<td><input type="checkbox" size="40" name="thumb_crop" value="1"
 		<?php echo checked('1', getThemeOption($album, 'thumb_crop')); ?> /></td>
 		<td><?php echo gettext("If checked the thumbnail will be a centered portion of the	image with the given width and height after being resized to <em>thumb	size</em> (by shortest side).").' '; 
 		echo gettext("Otherwise, it will be the full image resized to <em>thumb size</em> (by shortest side)."); ?></td>
 	</tr>
-	<tr class="alt1">
+	<tr>
 		<td><?php echo gettext("Crop thumbnail width:"); ?></td>
 		<td><input type="text" size="40" name="thumb_crop_width"
 			value="<?php echo getThemeOption($album, 'thumb_crop_width');?>" /></td>
 		<td><?php echo gettext("The <em>thumb crop width</em> is the maximum width when height is the shortest side"); ?></td>
 	</tr>
-	<tr class="alt1">
+	<tr>
 		<td><?php echo gettext("Crop thumbnail height:"); ?></td>
 		<td><input type="text" size="40" name="thumb_crop_height"
 			value="<?php echo getThemeOption($album, 'thumb_crop_height');?>" /></td>
 		<td><?php echo gettext("The <em>thumb crop height</em> is the maximum height when width is the shortest side"); ?></td>
 	</tr>
-	<tr class="alt1">
+	<tr>
 		<td><?php echo gettext("Image size:"); ?></td>
 		<td><input type="text" size="40" name="image_size"
 			value="<?php echo getThemeOption($album, 'image_size');?>" /></td>
 		<td><?php echo gettext("Default image display width."); ?></td>
 	</tr>
-	<tr class="alt1">
+	<tr>
 		<td><?php echo gettext("Images size is longest size:"); ?></td>
 		<td><input type="checkbox" size="40" name="image_use_longest_side"
 			value="1"
@@ -1232,9 +1232,9 @@ if (!empty($_REQUEST['themealbum'])) {
 		$supportedOptions = $optionHandler->getOptionsSupported();
 		if (count($supportedOptions) > 0) {
 		?>
-	<tr>
-		<td colspan="2" align="center">
-			<?php echo gettext('Custom theme options') ?>
+	<tr class="alt1" >
+		<td colspan="2" align="left">
+			<?php echo gettext('<strong>Custom theme options</strong>') ?>
 		</td>
 		<td><em><?php echo gettext('The following are options specifically implemented by the theme.'); ?></em></td>
 	</tr>
