@@ -170,8 +170,16 @@ function zp_handle_comment() {
 	if (isset($_POST['comment'])) {
 		if ((in_context(ZP_ALBUM) OR $zenpage_news_context OR $zenpage_pages_context) && isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
 			$p_name = sanitize($_POST['name'],3);
-			$p_email = sanitize($_POST['email'], 3);
-			if (isset($_POST['website'])) $website = strip_tags(strip($_POST['website'])); else $website = "";
+			if (isset($_POST['email'])) {
+				$p_email = sanitize($_POST['email'], 3);
+			} else {
+				$p_email = "";
+			}
+			if (isset($_POST['website'])) {
+				$p_website = sanitize($_POST['website'], 3));
+			} else {
+				$p_website = "";
+			}
 			$p_comment = sanitize($_POST['comment'], 1);
 			$p_server = sanitize($_SERVER['REMOTE_ADDR'], 3);
 			if (isset($_POST['code'])) {
@@ -181,11 +189,22 @@ function zp_handle_comment() {
 				$code1 = '';
 				$code2 = '';
 			}
+			if isset($_POST['private']) {
+				$p_private = sanitize($_POST['private'], 3));
+			} else {
+				$p_private = "";
+			}
+			if isset($_POST['anon'])) {
+				$p_anon = sanitize($_POST['anon'], 3));
+			} else {
+				$p_anon = "";
+			}
+
 			if (isset($_POST['imageid'])) {  //used (only?) by the tricasa hack to know which image the client is working with.
 				$activeImage = zp_load_image_from_id(strip_tags($_POST['imageid']));
 				if ($activeImage !== false) {
-					$commentadded = $activeImage->addComment($p_name, $p_email,	$website, $p_comment,
-					$code1, $code2,	$p_server, isset($_POST['private']), isset($_POST['anon']));
+					$commentadded = $activeImage->addComment($p_name, $p_email,	$p_website, $p_comment,
+					$code1, $code2,	$p_server, $p_private, $p_anon);
 	 				$redirectTo = $activeImage->getImageLink();
 					}
 			} else {
@@ -205,14 +224,14 @@ function zp_handle_comment() {
 					$commentobject = $zenpage;
 					$redirectTo = FULLWEBPATH . '/index.php?p='.ZENPAGE_NEWS.'&title='.$zenpage_page['titlelink'];
 				}
-				$commentadded = $commentobject->addComment($p_name, $p_email, $website, $p_comment,
-													$code1, $code2,	$p_server, isset($_POST['private']), isset($_POST['anon']));
+				$commentadded = $commentobject->addComment($p_name, $p_email, $p_website, $p_comment,
+													$code1, $code2,	$p_server, $p_private, $p_anon);
 			}
 			if ($commentadded == 2) {
 				$comment_error = 0;
 				if (isset($_POST['remember'])) {
 					// Should always re-cookie to update info in case it's changed...
-					$info = array($p_name, $p_email, $website, false, isset($_POST['private']), isset($_POST['anon']));
+					$info = array($p_name, $p_email, $p_website, false, $p_private, $p_anon);
 					zp_setcookie('zenphoto', implode('|~*~|', $info), time()+5184000, '/');
 				} else {
 					zp_setcookie('zenphoto', '', time()-368000, '/');
@@ -221,7 +240,7 @@ function zp_handle_comment() {
 				header('Location: ' . $redirectTo);
 				exit();
 			} else {
-				$_zp_comment_stored = array($p_name, $p_email, $website, $p_comment, false, isset($_POST['private']), isset($_POST['anon']));
+				$_zp_comment_stored = array($p_name, $p_email, $p_website, $p_comment, false, $p_private, $p_anon);
 				if (isset($_POST['remember'])) $_zp_comment_stored[4] = true;
 				$comment_error = 1 + $commentadded;
 				// ZENPAGE: if statements added
