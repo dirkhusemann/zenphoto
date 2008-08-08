@@ -2373,13 +2373,20 @@ function getCommentAuthorSite() { global $_zp_current_comment; return $_zp_curre
  * @param string $id optional id tag
  */
 function printCommentAuthorLink($title=NULL, $class=NULL, $id=NULL) {
-	$site = getCommentAuthorSite();
-	$name = getCommentAuthorName();
+	global $_zp_current_comment;
+	$site = $_zp_current_comment['website'];
+	$name = $_zp_current_comment['name'];
+	if ($_zp_current_comment['anon']) {
+		$name = substr($name, 1, strlen($name)-2); // strip off the < and >
+	}
+	$namecoded = htmlspecialchars($_zp_current_comment['name'],ENT_QUOTES);
 	if (empty($site)) {
-		echo htmlspecialchars($name);
+		echo $namecoded;
 	} else {
-		if (is_null($title)) $title = "Visit ".htmlspecialchars(strip_tags($name),ENT_QUOTES);
-		printLink($site, $name, $title, $class, $id);
+		if (is_null($title)) {
+			$title = "Visit ".$name;
+		}
+		printLink($site, $namecoded, $title, $class, $id);
 	}
 }
 
