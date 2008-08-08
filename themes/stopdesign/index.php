@@ -1,5 +1,5 @@
 <?php if (!defined('WEBPATH')) die(); normalizeColumns(3, 6); ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -7,7 +7,7 @@
 	<title><?php printGalleryTitle(); ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" type="text/css" media="screen, projection" href="<?php echo $_zp_themeroot ?>/css/master.css" />
-	<?php 
+	<?php
 	printRSSHeaderLink('Gallery','Gallery RSS');
 	setOption('thumb_crop_width', 85, false);
 	setOption('thumb_crop_height', 85, false);
@@ -24,47 +24,47 @@
 		<div class="galleries">
 				<h2><?php echo gettext('Recently Updated Galleries'); ?></h2>
 				<ul>
-					<?php 
-					$counter = 0; 
+					<?php
+					$counter = 0;
 					setOption('gallery_sorttype', 'ID', false);  // set the sort type so we get most recent albums
-					setOption('gallery_sortdirection', '1', false);	
-					while (next_album() and $counter < 6): 
+					setOption('gallery_sortdirection', '1', false);
+					while (next_album() and $counter < 6):
 					?>
 						<li class="gal">
 							<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext("View album:").' '; echo getAlbumTitle(); ?>"><?php printAlbumTitle(); ?></a></h3>
 							<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext("View album:").' '; echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 210, 59, 210, 59); ?></a>
 							<p>
-					<?php 
-						$number = getNumsubalbums(); 
-						if ($number > 0) { 
+					<?php
+						$number = getNumsubalbums();
+						if ($number > 0) {
 							if (!($number == 1)) {  $number .= ' '.gettext("albums");} else {$number .= ' '.gettext("album");}
 								$counters = $number;
 							} else {
 								$counters = '';
 							}
 							$number = getNumImages();
-							if ($number > 0) {	
-								if (!empty($counters)) { $counters .= ",&nbsp;"; }					
-							if ($number != 1) $number .= ' '.gettext("photos"); else $number .= ' '.gettext("photo"); 
+							if ($number > 0) {
+								if (!empty($counters)) { $counters .= ",&nbsp;"; }
+							if ($number != 1) $number .= ' '.gettext("photos"); else $number .= ' '.gettext("photo");
 							$counters .= $number;
 						}
 						if (!empty($counters)) {
 							echo "<p><em>($counters)</em><br/>";
 						}
-						$text = getAlbumDesc(); 
+						$text = getAlbumDesc();
 						if(strlen($text) > 50) {
 							$text = preg_replace("/[^ ]*$/", '', substr($text, 0, 50)) . "...";
 						}
-						echo $text; 
+						echo $text;
 					?></p>
 							<div class="date"><?php printAlbumDate(); ?></div>
 					</li>
-				<?php 
+				<?php
 				if ($counter == 2) {
 					echo "</ul><ul>";
-				} 
-				$counter++; 
-				endwhile; 
+				}
+				$counter++;
+				endwhile;
 				?>
 				</ul>
 				<p class="mainbutton"><a href="<?php echo $archivepageURL; ?>" class="btn"><img src="<?php echo $_zp_themeroot ?>/img/btn_gallery_archive.gif" width="118" height="21" alt="<?php echo ' '.gettext('Gallery Archive'); ?>" /></a></p>
@@ -78,7 +78,7 @@
 			<div class="module">
 				<?php $selector = getOption('Mini_slide_selector'); ?>
 				<ul id="randomlist">
-					<?php 
+					<?php
 					switch($selector) {
 						case 'Recent images':
 							if (function_exists('getImageStatistic')) {
@@ -90,7 +90,7 @@
 									echo '<a href="'.$imageURL.'" title="'.gettext("View image:").' '.
 									$image->getTitle() . '"><img src="' .
 									htmlspecialchars($image->getCustomImage(null, 44, 33, null, null, null, null, true)) .
-																		'" width="44" height="33" alt="' . $image->getTitle() . "\"/></a>\n"; 
+																		'" width="44" height="33" alt="' . $image->getTitle() . "\"/></a>\n";
 									echo "</td></tr></table></li>\n";
 								}
 								break;
@@ -103,8 +103,8 @@
 								if (is_object($randomImage)) {
 									$randomImageURL = htmlspecialchars(getURL($randomImage));
 									echo '<a href="' . $randomImageURL . '" title="'.gettext("View image:").' ' . $randomImage->getTitle() . '">' .
- 												'<img src="' . htmlspecialchars($randomImage->getCustomImage(null, 44, 33, null, null, null, null, true)) . 
-												'" width="44" height="33" alt="'.$randomImage->getTitle().'"'; 
+ 												'<img src="' . htmlspecialchars($randomImage->getCustomImage(null, 44, 33, null, null, null, null, true)) .
+												'" width="44" height="33" alt="'.$randomImage->getTitle().'"';
 									echo "/></a></td></tr></table></li>\n";
 								}
 							}
@@ -137,7 +137,7 @@
 			</div>
 		</div>
 	</div>
-	<p id="path"><?php printHomeLink('', ' > '); echo getGalleryTitle(); ?></p>  
+	<p id="path"><?php printHomeLink('', ' > '); echo getGalleryTitle(); ?></p>
 	<div id="footer">
 		<hr />
 		<?php if (function_exists('printLanguageSelector')) { echo '<p>'; printLanguageSelector(); echo '</p>'; } ?>

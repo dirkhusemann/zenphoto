@@ -1,20 +1,20 @@
-<?php 
+<?php
 	if (!defined('WEBPATH')) die();
 		$firstPageImages = normalizeColumns(3, 6);
 	setOption('images_per_page', getOption('images_per_page') - 1, false);
 		if ($firstPageImages > 0)  { $firstPageImages = $firstPageImages - 1; }
 	setOption('thumb_crop_width', 89, false);
 	setOption('thumb_crop_height', 67, false);
-	global $_zp_current_image; 
+	global $_zp_current_image;
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<?php zenJavascript(); ?>
 	<title>
-	<?php 
-		printGalleryTitle(); 
+	<?php
+		printGalleryTitle();
 		echo " | " .gettext('Search');
 		?>
 	</title>
@@ -39,7 +39,7 @@
  		?>
 		<?php
 			$first = true;
-			while (next_album()) { 
+			while (next_album()) {
 				if ($first) {
 					echo '<div class="galleries">';
 					echo "\n<h2></h2>\n<ul>\n";
@@ -50,54 +50,54 @@
 					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 230, null, 210, 60); ?></a>
 					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
 					<p>
-						<?php 
-						$number = getNumAlbums(); 
+						<?php
+						$number = getNumAlbums();
 						$results + $number;
-						if ($number > 0) { 
+						if ($number > 0) {
 						if (!($number == 1)) {  $number .= ' '.gettext('albums');} else {$number .= ' '.gettext('album');}
 							$counters = $number;
 						} else {
 							$counters = '';
 						}
 						$number = getNumImages();
-						if ($number > 0) {	
-							if (!empty($counters)) { $counters .= ",&nbsp;"; }					
-							if ($number != 1) $number .= ' '.gettext('photos'); else $number .= ' '.gettext('photo'); 
+						if ($number > 0) {
+							if (!empty($counters)) { $counters .= ",&nbsp;"; }
+							if ($number != 1) $number .= ' '.gettext('photos'); else $number .= ' '.gettext('photo');
 							$counters .= $number;
 						}
 						if (!empty($counters)) {
 							echo "<p><em>($counters)</em><br/>";
 						}
-						$text = getAlbumDesc(); 
+						$text = getAlbumDesc();
 							if(strlen($text) > 50) {
-							$text = preg_replace("/[^ ]*$/", '', substr($text, 0, 50))."..."; 
+							$text = preg_replace("/[^ ]*$/", '', substr($text, 0, 50))."...";
 						}
-						echo $text; 
+						echo $text;
 						?>
 					</p>
 				</li>
-			<?php 
-			} 
+			<?php
+			}
 			if (!$first) { echo "\n</ul>\n</div>\n"; }
 			?>
-		
+
 	<ul class="slideset">
-		<?php  
+		<?php
 		$results = $results + getNumImages();
 		$firstImage = null;
 		$lastImage = null;
-		while (next_image(false, $firstPageImages)) { 
-			if (is_null($firstImage)) { 
+		while (next_image(false, $firstPageImages)) {
+			if (is_null($firstImage)) {
 				$lastImage = imageNumber();
-				$firstImage = $lastImage; 
+				$firstImage = $lastImage;
 			} else {
 				$lastImage++;
-			}	
-			echo "\n<li class=\"thumb\"><span><em style=\"background-image:url(" . getImageThumb() . '); "><a href="' . 
+			}
+			echo "\n<li class=\"thumb\"><span><em style=\"background-image:url(" . getImageThumb() . '); "><a href="' .
 			htmlspecialchars(getImageLinkURL()) . '" title="' . htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES) . '" style="background:#fff;">"'.
 			getImageTitle().'"</a></em></span></li>';
 		}
-		if (!is_null($firstImage)  && hasNextPage()) { 
+		if (!is_null($firstImage)  && hasNextPage()) {
 		?>
 		<li class="thumb"><span class="forward"><em style="background-image:url('<?php echo $_zp_themeroot ?>/img/moreslide_next.gif');"><a href="<?php echo htmlspecialchars(getNextPageURL()); ?>" style="background:#fff;"><?php echo gettext('Next page'); ?></a></em></span></li>
 		<?php
@@ -107,21 +107,21 @@
 
 	<div class="galleryinfo">
 		<p>Feed for this album: <?php printRSSLink('Album','','','',true,'i'); ?></p>
-		<?php 
+		<?php
 			$params = $_zp_current_search->getSearchParams();
 			if (!empty($params)) {
 				if ($results != "0") {
 					echo '<em class="count">';
-					echo gettext('Photos') .' ' . $firstImage.'-'.$lastImage.' '.gettext('of').' '.getNumImages();  
+					echo gettext('Photos') .' ' . $firstImage.'-'.$lastImage.' '.gettext('of').' '.getNumImages();
 					echo "</em>";
 				if (function_exists('printSlideShowLink')) {
-					printSlideShowLink(gettext('View Slideshow')); 		
+					printSlideShowLink(gettext('View Slideshow'));
 				}
 					?>
 				<?php if (hasPrevPage()) { ?>
 				<a href="<?php echo htmlspecialchars(getPrevPageURL()); ?>" accesskey="x">&laquo; <?php echo gettext('prev page'); ?></a>
-				<?php } 
-					if (hasNextPage()) { if (hasPrevPage()) { echo '&nbsp;'; } 
+				<?php }
+					if (hasNextPage()) { if (hasPrevPage()) { echo '&nbsp;'; }
 			?>
 				<a href="<?php echo htmlspecialchars(getNextPageURL()); ?>" accesskey="x"><?php echo gettext('next page'); ?> &raquo;</a>
 			<?php
@@ -129,7 +129,7 @@
 					echo '</p>';
 					echo "<em class=\"count\">"  .gettext('Total matches for').  "<em>".getSearchWords()."</em>: ".$results."</em>";
 				} else {
-					echo "<p>".gettext('Sorry, no matches. Try refining your search.')."</p>"; 
+					echo "<p>".gettext('Sorry, no matches. Try refining your search.')."</p>";
 				}
 			}
 			?>
@@ -138,7 +138,7 @@
 
 	<p id="path"><?php printHomeLink('', ' > '); ?>
 	<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>">
-	<?php echo getGalleryTitle();?></a> &gt; 
+	<?php echo getGalleryTitle();?></a> &gt;
 	<?php
 	echo "<em>".gettext('Search')."</em>";
 	?>

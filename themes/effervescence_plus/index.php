@@ -1,5 +1,5 @@
 <?php require ('customfunctions.php'); $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');normalizeColumns(3, 5);?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
@@ -17,9 +17,9 @@
 	<!-- Logo -->
 		<div id="gallerytitle">
 			<div id="logo">
-				<?php 
-				if (getOption('Allow_search')) {  printSearchForm(NULL, '', $_zp_themeroot.'/images/search.png'); }	
-				echo printLogo(); 
+				<?php
+				if (getOption('Allow_search')) {  printSearchForm(NULL, '', $_zp_themeroot.'/images/search.png'); }
+				echo printLogo();
 				?>
 			</div>
 		</div>
@@ -43,10 +43,10 @@
 			<?php
 			$firstAlbum = null;
 			$lastAlbum = null;
-			while (next_album()){ 
-				if (is_null($firstAlbum)) { 
+			while (next_album()){
+				if (is_null($firstAlbum)) {
 					$lastAlbum = albumNumber();
-					$firstAlbum = $lastAlbum; 
+					$firstAlbum = $lastAlbum;
 				} else {
 					$lastAlbum++;
 				}
@@ -63,25 +63,25 @@
 		</ul>
 		<div class="clearage"></div>
 		<?php printNofM(gettext('Album'),gettext('Albums') , $firstAlbum, $lastAlbum, getNumAlbums()); ?>
-	
+
 		<!-- Page Numbers -->
 		<div id="pagenumbers">
 			<?php printPageListWithNav("&laquo; ".gettext('prev'), gettext('next')." &raquo;"); ?>
 		</div>
-	
+
 	</div>
 
 	<!-- Footer -->
 	<div class="footlinks">
 		<?php if (function_exists('printLanguageSelector')) { printLanguageSelector(); } ?>
 		<small>
-			<p><?php $albumNumber = getNumAlbums(); echo gettext("Albums").': '.$albumNumber ?> &middot; 
-				<?php echo gettext("Subalbums").': '; show_subalbum_count(); ?> &middot; 
-				<?php $photosArray = query_single_row("SELECT count(*) FROM ".prefix('images')); 
-				$photosNumber = array_shift($photosArray); echo gettext("Images").': '.$photosNumber ?> 
+			<p><?php $albumNumber = getNumAlbums(); echo gettext("Albums").': '.$albumNumber ?> &middot;
+				<?php echo gettext("Subalbums").': '; show_subalbum_count(); ?> &middot;
+				<?php $photosArray = query_single_row("SELECT count(*) FROM ".prefix('images'));
+				$photosNumber = array_shift($photosArray); echo gettext("Images").': '.$photosNumber ?>
 				<?php if (getOption('Allow_comments')) { ?>
-					&middot; 
-					<?php $commentsArray = query_single_row("SELECT count(*) FROM ".prefix('comments')." WHERE inmoderation = 0"); 
+					&middot;
+					<?php $commentsArray = query_single_row("SELECT count(*) FROM ".prefix('comments')." WHERE inmoderation = 0");
 					$commentsNumber = array_shift($commentsArray); echo gettext("Comments").': '.$commentsNumber ?>
 				<?php } ?>
 			</p>
@@ -93,7 +93,7 @@
 			printUserLogout('<br />', '', true);
 		}
 		?></div>
-		
+
 		<?php printAdminToolbox(); ?>
 
 </body>

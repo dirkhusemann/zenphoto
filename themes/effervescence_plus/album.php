@@ -1,7 +1,7 @@
-<?php 
+<?php
 define('ALBUMCOLUMNS', 3);
 define('IMAGECOLUMNS', 5);
-if (!defined('WEBPATH')) die(); 
+if (!defined('WEBPATH')) die();
 $_noFlash = false;
 if ((($personality = getOption('Theme_personality'))!="Simpleviewer") || !getOption('mod_rewrite')) {
 	$_noFlash = true;
@@ -34,23 +34,23 @@ if ((($personality = getOption('Theme_personality'))!="Simpleviewer") || !getOpt
 	// End of Simpeviewer config
 }
 
-if (!isset($_GET['format']) || $_GET['format'] != 'xml') { 
-	require_once ('customfunctions.php');  
+if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
+	require_once ('customfunctions.php');
 	$themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 	$firstPageImages = normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 	if ($_noFlash) {
 		$backgroundColor = "#0";  // who cares, we won't use it
 	} else {
-		$backgroundColor = parseCSSDef($zenCSS);  
+		$backgroundColor = parseCSSDef($zenCSS);
 	}
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
 	<title><?php printGalleryTitle(); ?> | <?php echo getAlbumTitle();?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
-<?php 
+<?php
 	$oneImagePage = false;
 	$show = false;
 	switch ($personality) {
@@ -58,7 +58,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 	echo "<script type=\"text/javascript\" src=\"$_zp_themeroot/scripts/swfobject.js\"></script>\n";
 	$oneImagePage = true;
 	break;
-	case 'Slimbox': 
+	case 'Slimbox':
 		echo "<link rel=\"stylesheet\" href=\"$_zp_themeroot/slimbox.css\" type=\"text/css\" media=\"screen\" />\n";
 	echo "<script type=\"text/javascript\" src=\"$_zp_themeroot/scripts/mootools.v1.11.js\"></script>\n";
 	echo "<script type=\"text/javascript\" src=\"$_zp_themeroot/scripts/slimbox.js\"></script>\n";
@@ -74,7 +74,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 		break;
 	}
 	echo "<script type=\"text/javascript\" src=\"$_zp_themeroot/scripts/bluranchors.js\"></script>\n";
-	global $_zp_current_album; 
+	global $_zp_current_album;
 ?>
 </head>
 
@@ -102,10 +102,10 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 	 						if (is_null($album)) {
 								echo '<div class="albdisabledlink">&laquo;  '.gettext('prev').'</div>';
 							} else {
-							echo '<a href="' . 
+							echo '<a href="' .
 									rewrite_path("/" . pathurlencode($album->name), "/index.php?album=" . urlencode($album->name)) .
 									'" title="' . htmlspecialchars(strip_tags($album->getTitle()),ENT_QUOTES) . '">&laquo; '.gettext('prev').'</a>';
-							} 
+							}
 						?>
 					</div>
 					<div class="albnext">
@@ -114,10 +114,10 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 							if (is_null($album)) {
 									echo '<div class="albdisabledlink">'.gettext('next').' &raquo;</div>';
 							} else {
-								echo '<a href="' . 
+								echo '<a href="' .
 										rewrite_path("/" . pathurlencode($album->name), "/index.php?album=" . urlencode($album->name)) .
 										'" title="' . htmlspecialchars(strip_tags($album->getTitle()),ENT_QUOTES) . '">'.gettext('next').' &raquo;</a>';
-							} 
+							}
 						?>
 					</div>
 				</div>
@@ -131,7 +131,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 		<!-- Crumb Trail Navigation -->
 		<div id="wrapnav">
 			<div id="navbar">
-				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> | <?php printParentBreadcrumb(); ?></span> 
+				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> | <?php printParentBreadcrumb(); ?></span>
 				<?php printAlbumTitle(true);?>
 			</div>
 		</div>
@@ -150,14 +150,14 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 			</div>
 
 			<!-- SubAlbum List -->
-			<ul id="albums"> 
+			<ul id="albums">
 					<?php
 					$firstAlbum = null;
 					$lastAlbum = null;
-					while (next_album()){ 
-						if (is_null($firstAlbum)) { 
+					while (next_album()){
+						if (is_null($firstAlbum)) {
 							$lastAlbum = albumNumber();
-							$firstAlbum = $lastAlbum; 
+							$firstAlbum = $lastAlbum;
 						} else {
 							$lastAlbum++;
 						}
@@ -169,32 +169,32 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 					</div>
 					<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the Album:'); echo getAlbumTitle(); printImage_AlbumCount(); ?>">
 					<?php printAlbumTitle(); ?></a></h4></li>
-				<?php 
-						} 
+				<?php
+						}
 				?>
-			</ul> 
+			</ul>
 			<div class="clearage"></div>
 			<?php
-			printNofM(gettext("Album"), gettext("Albums"), $firstAlbum, $lastAlbum, getNumSubAlbums()); 
+			printNofM(gettext("Album"), gettext("Albums"), $firstAlbum, $lastAlbum, getNumSubAlbums());
 			?>
 		</div>
 
 		<!-- Wrap Main Body -->
-				<?php 
+				<?php
 					if (getNumImages() > 0){  /* Only print if we have images. */
 						if ($_noFlash) {
 			?>
 		<div id="content">
  					<div id="main">
  						<div id="images">
- 						<?php 
+ 						<?php
 						if ($personality == 'Smoothgallery') {
 							if (isImagePage()) {
 								?>
-<!-- Smoothimage section -->					
+<!-- Smoothimage section -->
 						<div id="smoothImages">
-						<?php 
-						while (next_image(false, $firstPageImages)){ 
+						<?php
+						while (next_image(false, $firstPageImages)){
 							if (!getImageVideo()) { // Smoothgallery does not do videos
 						?>
 							<div class="imageElement">
@@ -204,11 +204,11 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 								<?php printCustomSizedImage(getImageTitle(), null, 540, null, null, null, null, null, 'full'); ?>
 								<?php printImageThumb(getImageTitle(), 'thumbnail'); ?>
 							</div>
-							<?php 
+							<?php
 							}
-						} 
+						}
 						?>
-						
+
 						</div>
 						<?php
 							if (!$show) {
@@ -216,7 +216,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 									$url = htmlspecialchars(getPageURL(getTotalPages(true)));
 								} else {
 									$url = htmlspecialchars(getPageURL(getCurrentPage()));
-								} 
+								}
 								echo '<p align=center>';
 								printLinkWithQuery($url, 'slideshow', gettext('View Slideshow'));
 								echo '</p>';
@@ -226,26 +226,26 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 							$firstImage = null;
  								$lastImage = null;
  								while (next_image(false, $firstPageImages)){
-									if (!(($personality == 'Slimbox') && getImageVideo())) { // Slimbox does not do video 						
- 										if (is_null($firstImage)) { 
+									if (!(($personality == 'Slimbox') && getImageVideo())) { // Slimbox does not do video
+ 										if (is_null($firstImage)) {
  											$lastImage = imageNumber();
- 											$firstImage = $lastImage; 
+ 											$firstImage = $lastImage;
  										} else {
  											$lastImage++;
- 										} 
+ 										}
  						?>
 <!-- Image thumbnails or no flash -->
  									<div class="image">
  									<div class="imagethumb">
- 									<?php 
+ 									<?php
  									if ($personality == 'Slimbox') {
- 										echo "<a href=\"".htmlspecialchars(getCustomImageURL(550, null))."\""; 
- 										echo "rel=\"lightbox[".getAlbumTitle()."]\"\n"; 
- 									} else {	
+ 										echo "<a href=\"".htmlspecialchars(getCustomImageURL(550, null))."\"";
+ 										echo "rel=\"lightbox[".getAlbumTitle()."]\"\n";
+ 									} else {
  										echo '<a href="' . htmlspecialchars(getImageLinkURL()) . '"';
- 									} 
+ 									}
  									echo " title=\"".htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES)."\">\n";
- 									printImageThumb(getImageTitle()); 
+ 									printImageThumb(getImageTitle());
  									echo "</a>"
 									?>
 									</div>
@@ -259,17 +259,17 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
  									printSlideShowLink(gettext('View Slideshow'));
  									echo "</p>";
  								}
- 								
+
 						}
 						?>
  					</div>
  					</div>
 	 			<div class="clearage"></div>
- 					<?php 
- 					printNofM(gettext('Photo'), gettext('Photos'), $firstImage, $lastImage, getNumImages()); 
+ 					<?php
+ 					printNofM(gettext('Photo'), gettext('Photos'), $firstImage, $lastImage, getNumImages());
  					?>
 		</div>
-			<?php 
+			<?php
 				} else {  /* flash */
 	 			if (isImagePage() && !checkforPassword()) {
 			?>
@@ -277,31 +277,31 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 			<div id="flash">
 					<p align="center">
 			<font color=#663300><?php echo gettext('For the best viewing experience').' '; ?><a href="http://www.macromedia.com/go/getflashplayer/"><?php echo gettext('Get Adobe Flash.'); ?></a></font>
-			</p> 
+			</p>
 						<p align="center">
- 						<?php 
+ 						<?php
  						if ($imagePage) {
  							$url = htmlspecialchars(getPageURL(getTotalPages(true)));
  						} else {
  							$url = htmlspecialchars(getPageURL(getCurrentPage()));
- 						} 
+ 						}
 			 printLinkWithQuery($url, 'noflash', gettext('View Gallery Without Flash'));
 			 echo "</p>";
- 						$flash_url = htmlspecialchars(getAlbumLinkURL());	
+ 						$flash_url = htmlspecialchars(getAlbumLinkURL());
  						if (substr($flash_url, -1, 1) == '/') {$flash_url= substr($flash_url, 0, -1);}
  						$flash_url = $flash_url . (getOption("mod_rewrite") ? "?" : "&amp;") . "format=xml";
  						?>
  						<script type="text/javascript">
-									var fo = new SWFObject("<?php echo  $_zp_themeroot ?>/simpleviewer.swf", "viewer", "100%", "100%", "7", "<?php echo $backgroundColor ?>");	
+									var fo = new SWFObject("<?php echo  $_zp_themeroot ?>/simpleviewer.swf", "viewer", "100%", "100%", "7", "<?php echo $backgroundColor ?>");
 									fo.addVariable("preloaderColor", "<?php echo $preloaderColor ?>");
 									fo.addVariable("xmlDataPath", "<?php echo $flash_url ?>");
 									fo.addVariable("width", "100%");
-									fo.addVariable("height", "100%");	
-					fo.addParam("wmode", "opaque");	
+									fo.addVariable("height", "100%");
+					fo.addParam("wmode", "opaque");
 									fo.write("flash");
  						</script>
 			</div>
- 						<?php 
+ 						<?php
 	 			}
 	 		} /* image loop */
 	 	} else { /* no images to display */
@@ -313,17 +313,17 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 					<p align="center"><?php echo gettext('Album is empty'); ?></font></p>
 					</div>
 					</div>
-				<?php 
-	 		} 
+				<?php
+	 		}
 	 	} ?>
 
 <!-- Page Numbers -->
 <?php
 	echo '<div id="submain"><div id="pagenumbers">';
 	if ((getNumSubalbums() != 0) || !$oneImagePage){
-		printPageListWithNav("&laquo; " .gettext('prev'), gettext('next')." &raquo;", $oneImagePage); 
+		printPageListWithNav("&laquo; " .gettext('prev'), gettext('next')." &raquo;", $oneImagePage);
 		echo "</div></div>";
-	} 
+	}
 	if (function_exists('printAlbumMap')) printAlbumMap(8, 'G_HYBRID_MAP');
 	echo "</div></div>";
 ?>
@@ -333,7 +333,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 <!-- Footer -->
 <div class="footlinks">
 
-<?php 
+<?php
 $h = hitcounter('album');
 if ($h == 1) {
 	$h .= ' '.gettext('hit');
@@ -373,8 +373,8 @@ if (function_exists('printUserLogout')) {
 		'" textColor="'.$textColor.'" frameColor="'.$frameColor.'" frameWidth="'.$frameWidth.'" stagePadding="'.
 		$stagePadding.'" thumbnailColumns="'.$thumbnailColumns.'" thumbnailRows="'.$thumbnailRows.'" navPosition="'.
 		$navPosition.'" enableRightClickOpen="'.$enableRightClickOpen.'" backgroundImagePath="'.$backgroundImagePath.
-		'" imagePath="'.$path.'" thumbPath="'.$path.'">'; 
-	while (next_image(true, 0, NULL, true)){ 
+		'" imagePath="'.$path.'" thumbPath="'.$path.'">';
+	while (next_image(true, 0, NULL, true)){
 		if (!getImageVideo()) {  // simpleviewer does not do videos
 ?>
 			<image><filename><?php echo getDefaultSizedImage();?></filename>
@@ -388,5 +388,5 @@ if (function_exists('printUserLogout')) {
 		}
 	}
 	echo "</simpleviewerGallery>";
-} 
+}
 ?>

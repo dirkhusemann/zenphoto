@@ -1,15 +1,15 @@
-<?php 
-if (!defined('WEBPATH')) die(); 
-$startTime = array_sum(explode(" ",microtime())); 
+<?php
+if (!defined('WEBPATH')) die();
+$startTime = array_sum(explode(" ",microtime()));
 $firstPageImages = normalizeColumns(1, 7);
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
 	<title>
-	<?php 
-		printGalleryTitle(); 
+	<?php
+		printGalleryTitle();
 		echo " | ".gettext("Search");
 		?>
 	</title>
@@ -20,25 +20,25 @@ $firstPageImages = normalizeColumns(1, 7);
 
 <div id="main">
 	<div id="gallerytitle">
-		<?php 
-			printSearchForm(); 
+		<?php
+			printSearchForm();
 		?>
 		<h2><span><?php printHomeLink('', ' | '); ?><a href="
 		<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Gallery Index') ?>">
-		<?php echo getGalleryTitle();?></a> | 
+		<?php echo getGalleryTitle();?></a> |
 		<?php
 		  echo "<em>".gettext("Search")."</em>";
 		?>
 		</span></h2>
 		</div>
-	
+
 		<hr />
 
 		<?php
 			if (($total = getNumImages() + getNumAlbums()) > 0) {
 				if (isset($_REQUEST['date']))	{
 					$searchwords = getSearchDate();
-	 		} else { 
+	 		} else {
 	 			$searchwords = getSearchWords(); }
 				echo "<p>".gettext("Total matches for")." <em>".$searchwords."</em>: $total</p>";
 			}
@@ -59,7 +59,7 @@ $firstPageImages = normalizeColumns(1, 7);
 				<hr />
  		<?php endwhile; ?>
 		</div>
-		
+
 		<div id="images">
 		<?php while (next_image(false, $firstPageImages)): $c++;?>
 			<div class="image">
@@ -75,17 +75,17 @@ $firstPageImages = normalizeColumns(1, 7);
 	<?php
 			if (function_exists('printSlideShowLink')) {
 				echo "<p align=\"center\">";
-				printSlideShowLink(gettext('View Slideshow')); 		
+				printSlideShowLink(gettext('View Slideshow'));
 				echo "</p>";
 			}
-			if ($c == 0) { 
-				echo "<p>".gettext("Sorry, no image matches. Try refining your search.")."</p>"; 
+			if ($c == 0) {
+				echo "<p>".gettext("Sorry, no image matches. Try refining your search.")."</p>";
 			}
-	
+
 			echo '<br clear="all" />';
 			printPageListWithNav("&laquo; ".gettext("prev"),gettext("next")." &raquo;");
-	?> 
-	
+	?>
+
 
 		<div id="credit">
 			<?php printRSSLink('Gallery', '', gettext('Gallery RSS'), ''); ?> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a> | <?php printCustomPageURL(gettext("Archive View"),"archive"); ?>

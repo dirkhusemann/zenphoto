@@ -1,8 +1,8 @@
-<?php 
+<?php
 define('ALBUMCOLUMNS', 3);
 define('IMAGECOLUMNS', 5);
-if (!defined('WEBPATH')) die(); 
-$_noFlash = true;  /* don't know how to deal with the variable folder depth file names 
+if (!defined('WEBPATH')) die();
+$_noFlash = true;  /* don't know how to deal with the variable folder depth file names
 if ((getOption('Use_Simpleviewer')==0) || !getOption('mod_rewrite')) { $_noFlash = true; }
 
 if (isset($_GET['noflash'])) {
@@ -12,10 +12,10 @@ if (isset($_GET['noflash'])) {
 	$_noFlash = true;
 	}
 	*/
-	
-if (!isset($_GET['format']) || $_GET['format'] != 'xml') { 
-require_once ('customfunctions.php');  
- 
+
+if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
+require_once ('customfunctions.php');
+
 // Change the configuration here
 
 $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
@@ -23,7 +23,7 @@ $firstPageImages = normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 if ($_noFlash) {
 	$backgroundColor = "#0";  /* who cares, we won't use it */
 } else {
-	$backgroundColor = parseCSSDef($zenCSS);  
+	$backgroundColor = parseCSSDef($zenCSS);
 }
 
 $maxImageWidth="600";
@@ -46,13 +46,13 @@ $backgroundImagePath="";
 // End of config
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
 	<title>
-	<?php 
-		printGalleryTitle(); 
+	<?php
+		printGalleryTitle();
 		echo " | ".gettext('Search');
 		?>
 	</title>
@@ -67,7 +67,7 @@ $backgroundImagePath="";
 <!-- Wrap Header -->
 <div id="header">
 	<div id="gallerytitle">
- 
+
 <!-- Logo -->
 	<div id="logo">
 	<?php
@@ -83,7 +83,7 @@ $backgroundImagePath="";
 	<div id="navbar">
 		<span><?php printHomeLink('', ' | '); ?>
 		<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>">
-		<?php echo getGalleryTitle();	?></a></span> | 
+		<?php echo getGalleryTitle();	?></a></span> |
 		<?php
 		  echo "<em>".gettext('Search')."</em>";
 		?>
@@ -115,16 +115,16 @@ $backgroundImagePath="";
 			}
 		?>
 </div>
- 					
+
 	<!-- Album List -->
-	<ul id="albums"> 
+	<ul id="albums">
 		<?php
 		$firstAlbum = null;
 		$lastAlbum = null;
-		while (next_album()){ 
-			if (is_null($firstAlbum)) { 
+		while (next_album()){
+			if (is_null($firstAlbum)) {
 				$lastAlbum = albumNumber();
-				$firstAlbum = $lastAlbum; 
+				$firstAlbum = $lastAlbum;
 			} else {
 				$lastAlbum++;
 			}
@@ -136,30 +136,30 @@ $backgroundImagePath="";
 				printImage_AlbumCount();
 			?>">
 			<?php printAlbumTitle(); ?></a></h4></li>
-		<?php 
-			} 
+		<?php
+			}
 		?>
-	</ul> 	
+	</ul>
 	<div class="clearage"></div>
 	<?php printNofM(gettext("Album"), gettext("Albums"), $firstAlbum, $lastAlbum, getNumAlbums()); ?>
 </div>
 
 <!-- Wrap Main Body -->
- 	<?php 
+ 	<?php
  	if (getNumImages() > 0){  /* Only print if we have images. */
  		if ($_noFlash) {
 	 ?>
  			<div id="content">
  			<div id="main">
  			<div id="images">
- 			<?php 
- 					
+ 			<?php
+
 			$firstImage = null;
 			$lastImage = null;
-			while (next_image(false, $firstPageImages)){  
-							if (is_null($firstImage)) { 
+			while (next_image(false, $firstPageImages)){
+							if (is_null($firstImage)) {
 								$lastImage = imageNumber();
-								$firstImage = $lastImage; 
+								$firstImage = $lastImage;
 							} else {
 								$lastImage++;
 							}
@@ -173,43 +173,43 @@ $backgroundImagePath="";
  					</div>
  					</div>
 		 	<div class="clearage"></div>
- 					<?php 
+ 					<?php
 					if (function_exists('printSlideShowLink')) {
 						echo "<p align=\"center\">";
-						printSlideShowLink(gettext('View Slideshow')); 		
+						printSlideShowLink(gettext('View Slideshow'));
 						echo "</p>";
 					}
- 					printNofM(gettext('Photo'), gettext('Photos'), $firstImage, $lastImage, getNumImages()); 
+ 					printNofM(gettext('Photo'), gettext('Photos'), $firstImage, $lastImage, getNumImages());
  					?>
  					</div>
-	 		<?php   
+	 		<?php
 	 		} else {  /* flash */
 	 			if (isImagePage()) {
 	 			?>
- 					<div id="flash"><p align=center><font color=#663300><?php echo gettext('For the best viewing experience').' '; ?><a href="http://www.macromedia.com/go/getflashplayer/"><?php echo gettext('get Adobe Flash.'); ?></a></p> 
+ 					<div id="flash"><p align=center><font color=#663300><?php echo gettext('For the best viewing experience').' '; ?><a href="http://www.macromedia.com/go/getflashplayer/"><?php echo gettext('get Adobe Flash.'); ?></a></p>
  					<p align="center"><a href="
- 					<?php 
+ 					<?php
  					if ($imagePage) {
  						$url = htmlspecialchars(getPageURL(getTotalPages(true)));
  					} else {
  						$url = htmlspecialchars(getPageURL(getCurrentPage()));
- 					} 
+ 					}
  					if (substr($url, -1, 1) == '/') {$url = substr($url, 0, (strlen($url)-1));}
- 					echo $url = $url . (getOption("mod_rewrite") ? "?" : "&amp;") . 'noflash'; 
+ 					echo $url = $url . (getOption("mod_rewrite") ? "?" : "&amp;") . 'noflash';
  					?>">
  					View gallery without Flash</a>.</p></div>
  					<?php
- 					$flash_url = "index.php?p=search" . getSearchParams() . "&amp;format=xml";	
+ 					$flash_url = "index.php?p=search" . getSearchParams() . "&amp;format=xml";
  					?>
  					<script type="text/javascript">
-									var fo = new SWFObject("<?php echo  $_zp_themeroot ?>/simpleviewer.swf", "viewer", "100%", "100%", "7", "<?php echo $backgroundColor ?>");	
+									var fo = new SWFObject("<?php echo  $_zp_themeroot ?>/simpleviewer.swf", "viewer", "100%", "100%", "7", "<?php echo $backgroundColor ?>");
 									fo.addVariable("preloaderColor", "<?php echo $preloaderColor ?>");
 									fo.addVariable("xmlDataPath", "<?php echo $flash_url ?>");
 									fo.addVariable("width", "100%");
-									fo.addVariable("height", "100%");		
+									fo.addVariable("height", "100%");
 									fo.write("flash");
  					</script>
- 					<?php 
+ 					<?php
 	 			}
 	 		} /* image loop */
 	 	} else { /* no images to display */
@@ -219,7 +219,7 @@ $backgroundImagePath="";
 				<div id="main2">
 				<br />
 				<p align="center">
-			<?php 
+			<?php
 				if (empty($searchwords)) {
 					echo gettext('Enter your search criteria.');
 				} else {
@@ -229,18 +229,18 @@ $backgroundImagePath="";
 			</font></p>
 			</div>
 			</div>
-		<?php 
-	 		} 
+		<?php
+	 		}
 	 	} ?>
 
 <!-- Page Numbers -->
 <?php
 	echo '<div id="submain"><div id="pagenumbers">';
-		
+
 	if ((getNumAlbums() != 0) || $_noFlash){
-		printPageListWithNav("&laquo; prev", "next &raquo;", !$_noFlash); 
+		printPageListWithNav("&laquo; prev", "next &raquo;", !$_noFlash);
 		echo "</div></div>";
-	} 
+	}
 	echo "</div></div>";
 ?>
 
@@ -249,12 +249,12 @@ $backgroundImagePath="";
 <!-- Footer -->
 <div class="footlinks">
 
-<?php 
-if (getOption('Use_Simpleviewer') && !getOption('mod_rewrite')) { 
+<?php
+if (getOption('Use_Simpleviewer') && !getOption('mod_rewrite')) {
 	/* display missing css file error */
-	echo '<div class="errorbox" id="message">'; 
-	echo  "<h2>" . gettext('Simpleviewer requires <em>mod_rewrite</em> to be set. Simpleviewer is disabled.') . "</h2>";  
-	echo '</div>'; 
+	echo '<div class="errorbox" id="message">';
+	echo  "<h2>" . gettext('Simpleviewer requires <em>mod_rewrite</em> to be set. Simpleviewer is disabled.') . "</h2>";
+	echo '</div>';
 } ?>
 
 <?php printThemeInfo(); ?>

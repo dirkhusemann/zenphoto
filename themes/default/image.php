@@ -1,5 +1,5 @@
 <?php if (!defined('WEBPATH')) die(); $themeResult = getTheme($zenCSS, $themeColor, 'light'); $firstPageImages = normalizeColumns('2', '6');?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
@@ -34,42 +34,42 @@
 			<?php } ?>
 		</div>
 		<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?>
-			</a> | <?php printParentBreadcrumb("", " | ", " | "); printAlbumBreadcrumb("", " | "); ?> 
+			</a> | <?php printParentBreadcrumb("", " | ", " | "); printAlbumBreadcrumb("", " | "); ?>
 			</span> <?php printImageTitle(true); ?>
 		</h2>
-		
+
 	</div>
 
 	<!-- The Image -->
 	<?php if (!checkForPassword()) { ?>
 	<div id="image">
-		<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES);?>"><strong><?php printDefaultSizedImage(getImageTitle()); ?></strong></a> 
+		<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES);?>"><strong><?php printDefaultSizedImage(getImageTitle()); ?></strong></a>
 	</div>
-	
+
 	<div id="narrow">
 		<?php printImageDesc(true); ?>
-		<?php if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow')); ?>	
+		<?php if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow')); ?>
 		<hr /><br />
-		<?php 
+		<?php
 			if (getImageEXIFData()) {echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=345&amp;width=300&amp;inlineId=imagemetadata\" title=\"".gettext("Image Info")."\" class=\"thickbox\">".gettext("Image Info")."</a></div>";
-				printImageMetadata('', false); 
-			} 
+				printImageMetadata('', false);
+			}
 		?>
 		<?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ''); ?>
 
 		<?php if (function_exists('printImageMap')) printImageMap(); ?>
-    
+
     <?php if (function_exists('printImageRating')) { printImageRating(); }?>
-    
+
 		<?php if (function_exists('printShutterfly')) printShutterfly(); ?>
-		
+
 		<?php if (getOption('Allow_comments')) { ?>
 				<div id="comments">
 		<?php $num = getCommentCount(); echo ($num == 0) ? "" : ("<h3>".gettext("Comments")." ($num)</h3><hr />"); ?>
 			<?php while (next_comment()){  ?>
 			<div class="comment">
 				<div class="commentmeta">
-					<span class="commentauthor"><?php printCommentAuthorLink(); ?></span> <?php gettext("says:"); ?> 
+					<span class="commentauthor"><?php printCommentAuthorLink(); ?></span> <?php gettext("says:"); ?>
 				</div>
 				<div class="commentbody">
 					<?php echo getCommentBody();?>
@@ -82,7 +82,7 @@
 				</div>
 			</div>
 			<?php }; ?>
-						
+
 			<?php if (OpenedForComments()) { ?>
 			<div class="imgcommentform">
 							<!-- If comments are on for this image AND album... -->
@@ -111,7 +111,7 @@
 							<td><label for="website"><?php echo gettext("Site:"); ?></label></td>
 							<td><input type="text" id="website" name="website" size="40" value="<?php echo $stored['website'];?>" class="inputbox" /></td>
 						</tr>
-												<?php if (getOption('Use_Captcha')) { 
+												<?php if (getOption('Use_Captcha')) {
  													$captchaCode=generateCaptcha($img); ?>
  													<tr>
  													<td><label for="code"><?php echo gettext("Enter Captcha:"); ?>
@@ -120,7 +120,7 @@
  													<td><input type="text" id="code" name="code" size="20" class="inputbox" /><input type="hidden" name="code_h" value="<?php echo $captchaCode;?>"/></td>
  													</tr>
 												<?php } ?>
-							<tr><td colspan="2"><input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo " CHECKED"; ?> /> <?php echo gettext("Private (don't publish)"); ?></td></tr>								
+							<tr><td colspan="2"><input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo " CHECKED"; ?> /> <?php echo gettext("Private (don't publish)"); ?></td></tr>
 					</table>
 					<textarea name="comment" rows="6" cols="40"><?php echo $stored['comment']; ?></textarea>
 					<br />

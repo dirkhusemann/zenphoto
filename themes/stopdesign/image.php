@@ -1,5 +1,5 @@
 <?php if (!defined('WEBPATH')) die(); normalizeColumns(3, 6); ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -13,12 +13,12 @@
 	<script type="text/javascript" src="<?php echo $_zp_themeroot ?>/js/comments.js"></script>
 	<script type="text/javascript" src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/jquery.js"></script>
 	<script type="text/javascript" src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.js"></script>
-	<?php 
+	<?php
 		printRSSHeaderLink('Gallery','Gallery RSS');
 		setOption('thumb_crop_width', 85, false);
 		setOption('thumb_crop_height', 85, false);
 		setOption('images_per_page', getOption('images_per_page') - 1, false);
-		global $_zp_current_image; 
+		global $_zp_current_image;
 	?>
 </head>
 
@@ -35,13 +35,13 @@
 			</div>
 
 			<?php
-				$ls = isLandscape(); 
+				$ls = isLandscape();
 				if (!$ls) {
 					$s = getDefaultWidth();
 					$h = getDefaultHeight();
 					$r = 480/$h;
 					$s = round($r*$s)+22;
-					$wide = "style=\"width:".$s."px;\""; 
+					$wide = "style=\"width:".$s."px;\"";
 				} else {
 					$wide = '';
 				}
@@ -62,11 +62,11 @@
 					<li class="date"><?php printImageDate(); ?></li>
 					<li class="tags"><?php echo getAlbumPlace(); ?></li>
 					<li class="exif">
-				<?php 
+				<?php
 					if (getImageEXIFData()) {echo "<a href=\"#TB_inline?height=345&amp;width=300&amp;inlineId=imagemetadata\" title=\"".gettext("image details")."\" class=\"thickbox\">".gettext('Image Info')."</a>";
-						printImageMetadata('', false); 
+						printImageMetadata('', false);
 						echo "&nbsp;/&nbsp;";
-					} 
+					}
 				?><a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo htmlspecialchars(strip_tags(getImageTitle()),ENT_QUOTES);?>"><?php echo gettext('Full Size'); ?></a>
  					</li>
 				</ul>
@@ -79,22 +79,22 @@
 					<div id="commentblock">
 
 					<h2>
-					<?php $showhide = "<a href=\"#comments\" id=\"showcomments\"><img src=\"" . 
+					<?php $showhide = "<a href=\"#comments\" id=\"showcomments\"><img src=\"" .
 						$_zp_themeroot . "/img/btn_show.gif\" width=\"35\" height=\"11\" alt=\"".gettext("SHOW")."\" /></a> <a href=\"#content\" id=\"hidecomments\"><img src=\"" .
-						$_zp_themeroot . "/img/btn_hide.gif\" width=\"35\" height=\"11\" alt=\"".gettext("HIDE")."\" /></a>"; 
- 						$num = getCommentCount(); if ($num == 0) echo "<h2>".gettext("No comments yet")."</h2>"; 
- 						if ($num == 1) echo "<h2>" .gettext('1 comment so far').' '. "$showhide</h2>"; 
- 						if ($num > 1) echo "<h2>$num " .gettext('comments so far').' '. "$showhide</h2>"; 
+						$_zp_themeroot . "/img/btn_hide.gif\" width=\"35\" height=\"11\" alt=\"".gettext("HIDE")."\" /></a>";
+ 						$num = getCommentCount(); if ($num == 0) echo "<h2>".gettext("No comments yet")."</h2>";
+ 						if ($num == 1) echo "<h2>" .gettext('1 comment so far').' '. "$showhide</h2>";
+ 						if ($num > 1) echo "<h2>$num " .gettext('comments so far').' '. "$showhide</h2>";
  					?>
 					</h2>
-					<?php printCommentErrors(); ?>	  
-								
+					<?php printCommentErrors(); ?>
+
 					<!-- BEGIN #comments -->
 					<div id="comments">
 						<dl class="commentlist">
-						<?php 
+						<?php
 							$autonumber = 0;
-							while (next_comment()):  
+							while (next_comment()):
 								$autonumber++;
 						?>
 							<dt id="comment<?php echo $autonmuber; ?>">
@@ -104,17 +104,17 @@
 							<dd><p><?php echo getCommentBody();?><?php printEditCommentLink(gettext('Edit'), ' | ', ''); ?></p></dd>
 							<?php endwhile; ?>
 						</dl>
-								
+
 						<?php if (OpenedForComments()) { ?>
 							<p class="mainbutton" id="addcommentbutton"><a href="#addcomment" class="btn"><img src="<?php echo $_zp_themeroot ?>/img/btn_add_a_comment.gif" alt="" width="116" height="21" /></a></p>
 						<?php } else { echo '<h2>'.gettext('Comments are closed').'</h2>'; } ?>
 
 						<!-- BEGIN #addcomment -->
-						<?php if ($_zp_comment_error) { 
+						<?php if ($_zp_comment_error) {
 							echo '<div id="addcomment" style="display: block;">';
-						} else { 
+						} else {
 							echo '<div id="addcomment" style="display: none;">';
-						} 
+						}
 						$stored = getCommentStored(); ?>
 						<h2><?php gettext("Add a comment") ?></h2>
 						<form method="post" action="#" id="comments-form">
@@ -138,7 +138,7 @@
 								<?php printCaptcha("<tr valign=\"top\" align=\"left\"><th><label for=\"captcha\">" .gettext('Enter Captcha'), ":</label></th><td>", "</td></tr>\n", 8); ?>
 								<tr valign="top" align="left">
 									<th><label for="private"><?php echo gettext('Private comment'); ?>:</label></th>
-									<td><input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo " CHECKED"; ?> /> <?php echo gettext("Private (don't publish)"); ?></td>								
+									<td><input type="checkbox" name="private" value="1"<?php if ($stored['private']) echo " CHECKED"; ?> /> <?php echo gettext("Private (don't publish)"); ?></td>
 								</tr>
 								<tr valign="top" align="left">
 									<th><label for="comment"><?php echo gettext('Comment'); ?>:</label></th>
@@ -147,7 +147,7 @@
 								<tr valign="top" align="left">
 									<th class="buttons">&nbsp;</th>
 									<td class="buttons">
-										<!--<input type="submit" name="preview" tabindex="5" value="Preview" id="btn-preview" />--> 
+										<!--<input type="submit" name="preview" tabindex="5" value="Preview" id="btn-preview" />-->
 										<input type="submit" name="post" tabindex="6" value="Post" id="btn-post" />
 										<p><?php echo gettext('Avoid clicking &ldquo;Post&rdquo; more than once.'); ?></p>
 									</td>
@@ -157,13 +157,13 @@
 
 					</div>
 					<!-- END #addcomment -->
-										
+
 					</div>
 					<!-- END #comments -->
 
 					</div>
 					<!-- END #commentblock -->
-					<?php } 
+					<?php }
 				} ?>
 
 				</div>

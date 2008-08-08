@@ -1,9 +1,9 @@
-<?php require ('customfunctions.php'); 
+<?php require ('customfunctions.php');
 define('ALBUMCOLUMNS', 3);
 define('IMAGECOLUMNS', 5);
 $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
@@ -46,7 +46,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 		<?php } ?>
 		</div>
 	</div>
-	
+
 
 	<!-- Footer -->
 	<div class="footlinks">
@@ -54,7 +54,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 		<a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>"><?php echo gettext('Powered by').' '; ?><font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a><br/>
 		<?php printRSSLink('Gallery','', 'Gallery RSS', ''); ?>
 	</div>
-		
+
 	<?php printAdminToolbox(); ?>
 
 </body>

@@ -2,7 +2,7 @@
 require_once ('customfunctions.php');
 $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
@@ -15,7 +15,7 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 	<!-- Wrap Everything -->
 	<div id="main4">
  		<div id="main2">
-	
+
 			<!-- Wrap Header -->
 			<div id="galleryheader">
 				<div id="gallerytitle">
@@ -23,14 +23,14 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 					<?php printLogo(); ?>
 					</div>
 				</div> <!-- gallery title -->
-				
+
 				<div id="wrapnav">
 					<div id="navbar">
-						<span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> | 
+						<span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> |
 						<?php
 						if (!is_null($_zp_current_album)) {
-							printParentBreadcrumb(); 
-							printAlbumBreadcrumb("", " | "); 
+							printParentBreadcrumb();
+							printAlbumBreadcrumb("", " | ");
 						} else {
 							$search = new SearchEngine();
 							$params = trim(zp_getCookie('zenphoto_image_search_params'));
@@ -43,7 +43,7 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 							$returnpath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
 							echo '<a href='.$returnpath.'><em>'.gettext('Search').'</em></a> | ';
 						}
-						?> </span> 
+						?> </span>
 						Slideshow
 					</div> <!-- navbar -->
 				</div> <!-- wrapnav -->
@@ -59,8 +59,8 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 	</div> <!-- main2 -->
 	<!-- Footer -->
 	<div class="footlinks">
-		<?php 
-		printThemeInfo(); 
+		<?php
+		printThemeInfo();
 		?>
 		<a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>"><?php echo gettext('Powered by').' ';?>
 		<font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font face="Arial Black" size="1">photo</font></span></a>
