@@ -223,7 +223,7 @@ function zp_handle_comment() {
 				$comment_error = 0;
 				if (isset($_POST['remember'])) {
 					// Should always re-cookie to update info in case it's changed...
-					$info = array($p_name, $p_email, $p_website, false, $p_private, $p_anon);
+					$info = array($p_name, $p_email, $p_website, '', false, $p_private, $p_anon);
 					zp_setcookie('zenphoto', implode('|~*~|', $info), time()+5184000, '/');
 				} else {
 					zp_setcookie('zenphoto', '', time()-368000, '/');
