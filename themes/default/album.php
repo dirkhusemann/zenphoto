@@ -40,7 +40,7 @@
 			<div id="images">
 			<?php while (next_image(false, $firstPageImages)): ?>
 			<div class="image">
-				<div class="imagethumb"><a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo strip_tags(getImageTitle();?>"><?php printImageThumb(getImageTitle()); ?></a></div>
+				<div class="imagethumb"><a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo strip_tags(getImageTitle());?>"><?php printImageThumb(getImageTitle()); ?></a></div>
 			</div>
 			<?php endwhile; ?>
 
