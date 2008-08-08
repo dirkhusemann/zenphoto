@@ -1759,7 +1759,7 @@ function printImageLink($text, $title, $class=NULL, $id=NULL) {
  */
 function printImageDiv() {
 	if (!isset($_GET['sortable'])) {
-		echo '<a href="'.htmlspecialchars(getImageLinkURL()).'" title="'.getImageTitle().'">';
+		echo '<a href="'.htmlspecialchars(getImageLinkURL()).'" title="'.strip_tags(getImageTitle()).'">';
 	}
 	printImageThumb(getImageTitle());
 
@@ -2767,9 +2767,9 @@ function printRandomImages($number=5, $class=null, $option='all', $rootAlbum='')
 				$randomImage = getRandomImagesAlbum($rootAlbum); break;
 		}
 		$randomImageURL = htmlspecialchars(getURL($randomImage));
-		echo '<a href="' . $randomImageURL . '" title="'.gettext('View image:').' ' . $randomImage->getTitle() . '">' .
+		echo '<a href="' . $randomImageURL . '" title="'.gettext('View image:').' ' . strip_tags($randomImage->getTitle()) . '">' .
 			'<img src="' . htmlspecialchars($randomImage->getThumb()) .
-			'" alt="'.$randomImage->getTitle().'"';
+			'" alt="'.strip_tags($randomImage->getTitle()).'"';
 		echo "/></a></li>\n";
 	}
 	echo "</ul>";
