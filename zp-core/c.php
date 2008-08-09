@@ -7,12 +7,12 @@ require_once('functions.php');
 require_once('lib-encryption.php');
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 header ("Content-type: image/png");
-$cypher = $_GET['i'];
+$cypher = preg_replace('/[^0-9a-f]/', '', $_GET['i']);
 
 $admins = getAdministrators();
 $admin = array_shift($admins);
 $key = $admin['pass'];
-$string = rc4($key, urldecode(pack("H*", $cypher)));
+$string = rc4($key, pack("H*", $cypher));
 
 $image = imagecreate(65, 20);
 $background = imagecreatefrompng(SERVERPATH.'/'.ZENFOLDER.'/images/captcha_background.png');

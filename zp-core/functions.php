@@ -8,6 +8,7 @@ define('DEBUG_LOGIN', false); // set to true to log admin saves and login attemp
 define('DEBUG_ERROR', false); // set to true to  supplies the calling sequence with zp_error messages
 define('ALBUM_OPTIONS_TABLE', true);  // TODO: 1.2 change this to true. See also the 1.2 todo list on the tasks tab
 define('SAFE_GLOB', false);
+define('CAPTCHA_LENGTH', 5);
 include('version.php'); // Include the version info.
 if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
@@ -100,7 +101,7 @@ if (getOption('album_session') && OFFSET_PATH==0) {
 
 // Set error reporting to the default if it's not.
 error_reporting(E_ALL ^ E_NOTICE);
-//error_reporting(E_ALL);
+error_reporting(E_ALL);
 $_zp_error = false;
 
 require_once('functions-i18n.php');
@@ -1599,7 +1600,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	$admins = getAdministrators();
 	$admin = array_shift($admins);
 	$key = $admin['pass'];
-	$code = md5(urlencode(implode('', unpack("H*", rc4($key, trim($code))))));
+	$code_cypher = md5(implode('', unpack("H*", rc4($key, trim($code)))));
 	$code_ok = trim($code_ok);
 	// Let the comment have trailing line breaks and space? Nah...
 	// Also (in)validate HTML here, and in $name.
@@ -1608,7 +1609,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	if (getOption('comment_name_required') && empty($name)) { return -3; }
 	if (getOption('comment_web_required') && (empty($website) || !isValidURL($website))) { return -4; }
 	if (getOption('Use_Captcha')) {
-		if ($code != $code_ok) { return -5; }
+		if ($code_cypher != $code_ok || strlen($code) != CAPTCHA_LENGTH) { return -5; }
 	}
 	if (empty($comment)) {
 		return -6;
@@ -2313,21 +2314,16 @@ function cbone($bits, $limit) {
  */
 function generateCaptcha(&$image) {
 
-	$lettre='abcdefghijkmnpqrstuvwxyz';
-	$chiffre='23456789';
+	$lettre='abcdefghijkmnpqrstuvwxyz23456789';
 
 	$string = '';
-	for ($i=0; $i<=4; $i++) {
-		if (($i > 0) && rand(0, 4) > 2) {
-			$string .= $chiffre[rand(0,7)];
-		} else {
-			$string .= $lettre[rand(0,23)];
-		}
+	for ($i=0; $i < CAPTCHA_LENGTH; $i++) {
+		$string .= $lettre[rand(0,31)];
 	}
 	$admins = getAdministrators();
 	$admin = array_shift($admins);
 	$key = $admin['pass'];
-	$cypher = urlencode(implode('', unpack("H*", rc4($key, $string))));
+	$cypher = implode('', unpack("H*", rc4($key, $string)));
 	$code=md5($cypher);
 	$image = WEBPATH . '/' . ZENFOLDER . "/c.php?i=$cypher";
 
