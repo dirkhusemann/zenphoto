@@ -101,7 +101,7 @@ if (getOption('album_session') && OFFSET_PATH==0) {
 
 // Set error reporting to the default if it's not.
 error_reporting(E_ALL ^ E_NOTICE);
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
 $_zp_error = false;
 
 require_once('functions-i18n.php');
@@ -1610,6 +1610,11 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	if (getOption('comment_web_required') && (empty($website) || !isValidURL($website))) { return -4; }
 	if (getOption('Use_Captcha')) {
 		if ($code_cypher != $code_ok || strlen($code) != CAPTCHA_LENGTH) { return -5; }
+		query('DELETE FROM '.prefix('captcha').' WHERE `ptime`<'.(time()-3600)); // expired tickets
+		$result = query('DELETE FROM '.prefix('captcha').' WHERE `hash`="'.$code_cypher.'"');
+		$result = query('SELECT ROW_COUNT()');
+		$count = mysql_result($result, 0);
+		if ($count != 1) { return -5; } // no ticket
 	}
 	if (empty($comment)) {
 		return -6;
@@ -2325,6 +2330,8 @@ function generateCaptcha(&$image) {
 	$key = $admin['pass'];
 	$cypher = implode('', unpack("H*", rc4($key, $string)));
 	$code=md5($cypher);
+	query('DELETE FROM '.prefix('captcha').' WHERE `ptime`<'.(time()-3600));  // expired tickets
+	query("INSERT INTO " . prefix('captcha') . " (ptime, hash) VALUES ('" . escape(time()) . "','" . escape($code) . "')");
 	$image = WEBPATH . '/' . ZENFOLDER . "/c.php?i=$cypher";
 
 	return $code;

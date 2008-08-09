@@ -750,7 +750,8 @@ if (file_exists("zp-config.php")) {
 		$expected_tables = array($_zp_conf_vars['mysql_prefix'].'options', $_zp_conf_vars['mysql_prefix'].'albums',
 		$_zp_conf_vars['mysql_prefix'].'images', $_zp_conf_vars['mysql_prefix'].'comments',
 		$_zp_conf_vars['mysql_prefix'].'administrators', $_zp_conf_vars['mysql_prefix'].'admintoalbum',
-		$_zp_conf_vars['mysql_prefix'].'tags', $_zp_conf_vars['mysql_prefix'].'obj_to_tag');
+		$_zp_conf_vars['mysql_prefix'].'tags', $_zp_conf_vars['mysql_prefix'].'obj_to_tag',
+		$_zp_conf_vars['mysql_prefix'].'captcha');
 		foreach ($expected_tables as $needed) {
 			if (!isset($tables[$needed])) {
 				$tables[$needed] = 'create';
@@ -779,6 +780,7 @@ if (file_exists("zp-config.php")) {
 	$tbl_admintoalbum = prefix('admintoalbum');
 	$tbl_tags = prefix('tags');
 	$tbl_obj_to_tag = prefix('obj_to_tag');
+	$tbl_captcha = prefix('captcha');
 	// Prefix the constraint names:
 	$cst_images = prefix('images_ibfk1');
 
@@ -794,7 +796,16 @@ if (file_exists("zp-config.php")) {
 	 Add new fields in the upgrade section. This section should remain static except for new
 	 tables. This tactic keeps all changes in one place so that noting gets accidentaly omitted.
 	************************************************************************************/
-
+	
+	//v1.2
+	if (isset($create[$_zp_conf_vars['mysql_prefix'].'captcha'])) {
+		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_captcha (
+		`id` int(11) UNSIGNED NOT NULL auto_increment,
+		`ptime` int(32) UNSIGNED NOT NULL,
+		`hash` varchar(255) NOT NULL,
+		PRIMARY KEY  (`id`)
+		)	CHARACTER SET utf8$collation;";		
+	}
 	//v1.1.7
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'options'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_options (
