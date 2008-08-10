@@ -2,7 +2,10 @@
 /** printAlbumMenu for Zenphoto 
   * 
  * Changelog
- * 
+ *
+ * 1.4.4.3.
+ * -  Minor bug fix, used the album title instead of the unique album folder name at one place.
+ *  
  * 1.4.4.2.
  * - HTML validation again (turns css id for subalbums into the valid css class) Thanks to miem for the find.
  * 
@@ -86,13 +89,13 @@
  * - Renamed the function name from show_album_menu() to more zp style printAlbumMenu()
  *
  * @author Malte Müller (acrylian)
- * @version 1.4.4.2
+ * @version 1.4.4.3
  * @package plugins
  */
 
 $plugin_description = gettext("Adds a theme function printAlbumMenu() to print an album menu either as a nested list up to 4 sublevels (context sensitive) or as a dropdown menu.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.4.4.2';
+$plugin_version = '1.4.4.3';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---print_album_menu.php.html";
 
 /**
@@ -396,7 +399,7 @@ function createAlbumMenuLink($album,$option2,$css,$albumpath,$mode,$level='') {
 					$arrow = $arrow.$arrow.$arrow.$arrow;
 					break;
 			}
-			$selected = checkSelectedAlbum($album->getTitle(), "album");
+			$selected = checkSelectedAlbum($album->name, "album");
 			$link = "<option $selected value='".htmlspecialchars($albumpath.$album->name)."'>".$arrow.htmlspecialchars($album->getTitle()).$count."</option>";
 			break;
 	}
@@ -414,15 +417,16 @@ function createAlbumMenuLink($album,$option2,$css,$albumpath,$mode,$level='') {
  * @return string returns nothing or "selected"
  */
 function checkSelectedAlbum($checkalbum, $option) {
+	global $_zp_current_album;
 	$selected = "";
 	switch ($option) {
 		case "index":
-			if(getAlbumTitle() === "") {
+			if($_zp_current_album->name === "") {
 				$selected = "selected";
 			} 
 			break;
 		case "album":
-			if(getAlbumTitle() === $checkalbum) {
+			if($_zp_current_album->name === $checkalbum) {
 				$selected = "selected";
 			} 
 			break;
