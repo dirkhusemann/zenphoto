@@ -319,6 +319,8 @@ if (isset($_GET['action'])) {
 }
 
 printAdminHeader();
+echo "\n  <script src=\"js/thickbox.js\" type=\"text/javascript\"></script>";
+echo "\n  <link rel=\"stylesheet\" href=\"js/thickbox.css\" type=\"text/css\" />";
 echo "\n</head>";
 echo "\n<body>";
 printLogoAndLinks();
