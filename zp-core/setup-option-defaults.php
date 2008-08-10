@@ -127,7 +127,7 @@ function setDefault($option, $default) {
 	setOptionDefault('comment_name_required', 1);
 	setOptionDefault('comment_email_required', 1);
 	setOptionDefault('comment_web_required', 0);
-	setOptionDefault('Use_Captcha', true);
+	setOptionDefault('Use_Captcha', false);
 	setOptionDefault('full_image_quality', 75);
 	setOptionDefault('persistent_archive', 0);
 
