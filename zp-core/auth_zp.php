@@ -36,9 +36,9 @@ if (!isset($_POST['login'])) {
 } else {
 	// Handle the login form.
 	if (isset($_POST['login']) && isset($_POST['user']) && isset($_POST['pass'])) {
-		$post_user = $_POST['user'];
-		$post_pass = $_POST['pass'];
-		$redirect = $_POST['redirect'];
+		$post_user = sanitize($_POST['user'],3);
+		$post_pass = sanitize($_POST['pass'],3);
+		$redirect = sanitize($_POST['redirect'],3);
 		if ($_zp_loggedin = checkLogon($post_user, $post_pass)) {
 			zp_setcookie("zenphoto_auth", md5($post_user . $post_pass), time()+5184000, $cookiepath);
 			if (!empty($redirect)) { header("Location: " . FULLWEBPATH . $redirect); }
@@ -49,8 +49,13 @@ if (!isset($_POST['login'])) {
 			$admins = getAdministrators();
 			$admin = array_shift($admins);
 			$key = $admin['pass'];
-			$code_cypher = md5(implode('', unpack("H*", rc4($key, trim(sanitize($_POST['pass'], 3))))));
-			if ($code_cypher == sanitize($_POST['code_h'],3)) {
+			$code_cypher = md5(implode('', unpack("H*", rc4($key, trim($post_pass)))));
+			if (isset($_POST['code_h'])) {
+				$code_hash = sanitize($_POST['code_h'],3);
+			} else {
+				$code_hash = '';
+			}
+			if (($code_cypher == $code_hash) && strlen(trim($post_pass)) == CAPTCHA_LENGTH) {
 				if (empty($post_user)) {
 					$requestor = '';
 				} else {

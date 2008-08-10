@@ -131,6 +131,7 @@ $taskDisplay = array('create' => gettext("create"), 'update' => gettext("update"
 <head>
 
 <title>zenphoto <?php echo $upgrade ? "upgrade" : "setup" ; ?></title>
+<link rel="stylesheet" href="admin.css" type="text/css" />
 
 <style type="text/css">
 body {
@@ -231,100 +232,6 @@ h4 {
 	margin-left: 2em;
 	margin-bottom: .15em;
 	margin-top: .35em;
-}
-#footer {
-	clear: both;
-	color: #597580;
-	font-size: 85%;
-	margin: 8px 30px 0px;
-	text-align: right;
-}
-#footer a {
-	color: #597580;
-	text-decoration: none;
-	border-bottom: 1px dotted #597580;
-}
-#footer a:hover {
-	color: #4B636B;
-	text-decoration: none;
-	border-bottom: 1px solid #4B636B;
-}
-/* Login
------------------------------- */
-#loginform {
-	padding: 10px;
-	width: 300px;
-	margin: 25px auto;
-	font-size: 100%;
-	background: #F7F8F9;
-	border-top: 1px solid #BAC9CF;
-	border-left: 1px solid #BAC9CF;
-	border-right: 1px solid #BAC9CF;
-	border-bottom: 5px solid #BAC9CF;
-}
-
-.button {
-	cursor: pointer;
-	padding: 5px 10px;
-}
-
-label {
-	cursor: pointer;
-}
-
-label:hover {
-	color: #000;
-}
-
-#loginform input.textfield {
-	margin: 0px;
-	font-size: 100%;
-	padding: 4px;
-}
-
-#loginform table {
-	margin: 0px auto;
-	border: 0px;
-}
-
-#loginform td {
-	padding: 4px;
-}
-/* Messages 
------------------------------- */
-.messagebox {
-	padding: 20px;
-	background-color: #B1F7B6;
-	border: 1px solid #009966;
-	border-bottom: 5px solid #009966;
-	margin-bottom: 10px;
-}
-
-.messagebox h2 {
-	color: #006633;
-	font-size: 100%;
-	font-weight: bold;
-	margin: 0px;
-}
-
-/* Error Messages
------------------------------- */
-.errorbox {
-	padding: 20px;
-	background-color: #FDD;
-	border-top: 1px solid #FAA;
-	border-left: 1px solid #FAA;
-	border-right: 1px solid #FAA;
-	border-bottom: 5px solid #FAA;
-	margin-bottom: 10px;
-	font-size: 100%;
-}
-
-.errorbox h2 {
-	color: #DD6666;
-	font-size: 100%;
-	font-weight: bold;
-	margin: 0px;
 }
 </style>
 
@@ -1330,6 +1237,8 @@ if (file_exists("zp-config.php")) {
 		}
 		if (isset($_GET['mod_rewrite'])) {
 			$mod = '&mod_rewrite='.$_GET['mod_rewrite'];
+		} else {
+			$mod = '';
 		}
 		echo "<p><a href=\"?checked&$task$mod\" title=\"".gettext("create and or update the database tables.")."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Go!")."</a></p>";
 	} else {

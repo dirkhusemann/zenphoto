@@ -396,7 +396,7 @@ function printLoginForm($redirect=null, $logo=true) {
 		echo ' '.gettext("to email a password reset.");
 		echo "      </td></tr>";
 	}
-	echo "\n      <tr><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"".gettext("Log in")."\" /></td></tr>";
+	echo "\n      <tr><td></td><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"".gettext("Log in")."\" /></td></tr>";
 	echo "\n    </table>";
 	echo "\n  </form>";
 	echo "\n  </div>";

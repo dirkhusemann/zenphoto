@@ -168,7 +168,7 @@ function getOption($key, $db=false) {
 function setOption($key, $value, $persistent=true) {
 	global $_zp_conf_vars, $_zp_options;
 	if ($persistent) {
-		$result = query_single_row("SELECT `value` FROM ".prefix('options')." WHERE `name`='".$key."' AND `ownerid`=0");
+		$result = query_single_row("SELECT `value` FROM ".prefix('options')." WHERE `name`='".$key."' AND `ownerid`=0", true);
 		if (is_array($result) && array_key_exists('value', $result)) { // option already exists.
 			$sql = "UPDATE " . prefix('options') . " SET `value`='" . escape($value) . "' WHERE `name`='" . escape($key) ."' AND `ownerid`=0";
 			$result = query($sql, true);
