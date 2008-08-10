@@ -209,7 +209,9 @@ function printAdminHeader() {
 	echo "\n  <script src=\"js/jquery.dimensions.js\" type=\"text/javascript\"></script>";
 	echo "\n  <script src=\"js/jquery.tooltip.js\" type=\"text/javascript\"></script>";
 	echo "\n  <script src=\"js/jquery.tabs.js\" type=\"text/javascript\"></script>";
-	echo "\n  <script src=\"js/thickbox.js\" type=\"text/javascript\"></script>";
+	if (isset($_GET['page']) && $_GET['page'] != 'edit') { // for some reason this breaks the sub-tabs on the edit page (but not the options page.)
+		echo "\n  <script src=\"js/thickbox.js\" type=\"text/javascript\"></script>";
+	}
 	echo "\n  <link rel=\"stylesheet\" href=\"js/thickbox.css\" type=\"text/css\" />";
 	echo "\n  <script type=\"text/javascript\">";
 	echo "\n  \tjQuery(function( $ ){";

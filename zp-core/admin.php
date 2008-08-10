@@ -330,7 +330,6 @@ if (issetPage('edit')) {
 
 // Print our header
 printAdminHeader();
-echo "\n  <link rel=\"stylesheet\" href=\"js/thickbox.css\" type=\"text/css\" />";
 
 if (issetPage('edit')) {
 	zenSortablesHeader('albumList','albumOrder','div', "handle:'handle'");
