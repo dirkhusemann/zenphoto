@@ -195,9 +195,7 @@ function printAdminFooter() {
  * @since  1.0.0
  */
 function printAdminHeader() {
-
 	header ('Content-Type: text/html; charset=' . getOption('charset'));
-
 	echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
 	echo "\n<html xmlns=\"http://www.w3.org/1999/xhtml\">";
 	echo "\n<head>";
@@ -211,7 +209,8 @@ function printAdminHeader() {
 	echo "\n  <script src=\"js/jquery.dimensions.js\" type=\"text/javascript\"></script>";
 	echo "\n  <script src=\"js/jquery.tooltip.js\" type=\"text/javascript\"></script>";
 	echo "\n  <script src=\"js/jquery.tabs.js\" type=\"text/javascript\"></script>";
-	//echo "\n  <script type=\"text/javascript\" src=\"js/jquery.toggleElements.js\"></script>";
+	echo "\n  <script src=\"js/thickbox.js\" type=\"text/javascript\"></script>";
+	echo "\n  <link rel=\"stylesheet\" href=\"js/thickbox.css\" type=\"text/css\" />";
 	echo "\n  <script type=\"text/javascript\">";
 	echo "\n  \tjQuery(function( $ ){";
 	echo "\n  \t\t $(\"#fade-message\").fadeTo(5000, 1).fadeOut(1000);";
