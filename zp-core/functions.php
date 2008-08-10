@@ -2330,8 +2330,8 @@ function generateCaptcha(&$image) {
 	$key = $admin['pass'];
 	$cypher = implode('', unpack("H*", rc4($key, $string)));
 	$code=md5($cypher);
-	query('DELETE FROM '.prefix('captcha').' WHERE `ptime`<'.(time()-3600));  // expired tickets
-	query("INSERT INTO " . prefix('captcha') . " (ptime, hash) VALUES ('" . escape(time()) . "','" . escape($code) . "')");
+	query('DELETE FROM '.prefix('captcha').' WHERE `ptime`<'.(time()-3600), true);  // expired tickets
+	query("INSERT INTO " . prefix('captcha') . " (ptime, hash) VALUES ('" . escape(time()) . "','" . escape($code) . "')", true);
 	$image = WEBPATH . '/' . ZENFOLDER . "/c.php?i=$cypher";
 
 	return $code;

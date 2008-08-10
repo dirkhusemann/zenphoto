@@ -290,6 +290,42 @@ label:hover {
 #loginform td {
 	padding: 4px;
 }
+/* Messages 
+------------------------------ */
+.messagebox {
+	padding: 20px;
+	background-color: #B1F7B6;
+	border: 1px solid #009966;
+	border-bottom: 5px solid #009966;
+	margin-bottom: 10px;
+}
+
+.messagebox h2 {
+	color: #006633;
+	font-size: 100%;
+	font-weight: bold;
+	margin: 0px;
+}
+
+/* Error Messages
+------------------------------ */
+.errorbox {
+	padding: 20px;
+	background-color: #FDD;
+	border-top: 1px solid #FAA;
+	border-left: 1px solid #FAA;
+	border-right: 1px solid #FAA;
+	border-bottom: 5px solid #FAA;
+	margin-bottom: 10px;
+	font-size: 100%;
+}
+
+.errorbox h2 {
+	color: #DD6666;
+	font-size: 100%;
+	font-weight: bold;
+	margin: 0px;
+}
 </style>
 
 </head>

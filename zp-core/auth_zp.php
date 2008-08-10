@@ -46,8 +46,11 @@ if (!isset($_POST['login'])) {
 			// Clear the cookie, just in case
 			zp_setcookie("zenphoto_auth", "", time()-368000, $cookiepath);
 			// was it a request for a reset?
-			$code = md5(trim($_POST['pass']));
-			if ($code == $_POST['code_h']) {
+			$admins = getAdministrators();
+			$admin = array_shift($admins);
+			$key = $admin['pass'];
+			$code_cypher = md5(implode('', unpack("H*", rc4($key, trim(sanitize($_POST['pass'], 3))))));
+			if ($code_cypher == sanitize($_POST['code_h'],3)) {
 				if (empty($post_user)) {
 					$requestor = '';
 				} else {
