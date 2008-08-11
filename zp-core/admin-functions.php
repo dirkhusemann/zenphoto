@@ -1399,8 +1399,9 @@ function processAlbumEdit($index, $album) {
 	$fail = '';
 	if (($olduser != $newuser)) {
 		if ($pwd != $_POST[$prefix.'albumpass_2']) {
+			$pwd2 = trim($_POST[$prefix.'albumpass_2']);
 			$_POST[$prefix.'albumpass'] = $pwd; // invalidate password, user changed without password beign set
-			if (!empty($newuser)) $fail = '&mismatch=user';
+			if (!empty($newuser) && empty($pwd) && empty($pwd2)) $fail = '&mismatch=user';
 		}
 	}
 	if ($_POST[$prefix.'albumpass'] == $_POST[$prefix.'albumpass_2']) {
