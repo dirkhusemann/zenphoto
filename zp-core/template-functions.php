@@ -2882,7 +2882,7 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 	if (!is_null($limit)) {
 		$tagcount = array_slice($tagcount, 0, $limit);
 	}
-	echo "<ul style=\"display:inline; list-style-type:none\" ".$class.">\n";
+	echo "<ul ".$class.">\n";
 	while (list($key, $val) = each($tagcount)) {
 		if(!$counter) {
 			$counter = "";
@@ -2904,7 +2904,7 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 				echo "\t<li$size>".$key.$counter."</li>\n";
 			} else {
 				$key = str_replace('"', '', $key);
-				echo "\t<li style=\"display:inline; list-style-type:none\"><a href=\"".
+				echo "\t<li><a href=\"".
 					htmlspecialchars(getSearchURL(quoteSearchTag($key), '', SEARCH_TAGS, 0, 0))."\"$size rel=\"nofollow\">".
 					$key.$counter."</a></li>\n";
 			}

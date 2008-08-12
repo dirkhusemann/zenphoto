@@ -785,6 +785,10 @@ ul.archive .month {
 	text-align: center;
 	padding-bottom: 5px;
 }
+#tag_cloud ul li {
+	display: inline;
+	list-style-type: none;
+}
 #tag_cloud p {
 	padding:10px 0;
 	margin:20px 0;

@@ -543,7 +543,7 @@ border-bottom: 2px solid #9da878;
 background: #ECDFCC;
 }
 #albums li:hover h4 a {
-color: #FFFFFF; //albumnamnen, när du hovrar.
+color: #FFFFFF; //albumnamnen, nï¿½r du hovrar.
 }
 .imagethumb {
 float: left;
@@ -838,6 +838,12 @@ ul.archive .month {
 	text-align: center;
 	padding-bottom: 5px;
 }
+
+#tag_cloud ul li {
+	display: inline;
+	list-style-type: none;
+}
+
 #tag_cloud p {
 	padding:10px 0;
 	margin:20px 0;
