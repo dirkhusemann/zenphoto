@@ -175,8 +175,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 								$image->setShow(strip($_POST["$i-Visible"]));
 								$image->setCommentsAllowed(strip($_POST["$i-allowcomments"]));
 								if (isset($_POST["$i-reset_hitcounter"])) {
-									$id = $image->id;
-									query("UPDATE " . prefix('images') . " SET `hitcounter`= 0 WHERE `id` = $id");
+										$image->set('hitcounter', 0);
 								}
 								$image->setCustomData(process_language_string_save("$i-custom_data"));
 								$image->save();
@@ -612,7 +611,7 @@ if ($allimagecount) {
 						<p style="margin-top: 0; margin-bottom: 1em;"><?php
 							$hc = $image->get('hitcounter');
 							if (empty($hc)) { $hc = '0'; }
-							echo gettext("Hit counter:")." <strong>$hc</strong> <label for=\"$currentimage-resethits\"><input type=\"checkbox\" id=\"$currentimage-resethits\" name=\"".gettext("reset_hitcounter")."\"> ".gettext("Reset")."</label> ";
+							echo gettext("Hit counter:")." <strong>$hc</strong> <label for=\"$currentimage-reset_hitcounter\"><input type=\"checkbox\" id=\"$currentimage-reset_hitcounter\" name=\"$currentimage-reset_hitcounter\" value=1> ".gettext("Reset")."</label> ";
 						?></p>
 						
 						<!-- Move/Copy/Rename this image -->

@@ -1390,8 +1390,7 @@ function processAlbumEdit($index, $album) {
 		$album->setSortDirection('album', isset($_POST[$prefix.'album_sortdirection']));
 	}
 	if (isset($_POST['reset_hitcounter'])) {
-		$id = $album->getAlbumID();
-		query("UPDATE " . prefix('albums') . " SET `hitcounter`= 0 WHERE `id` = $id");
+		$album->set('hitcounter',0);
 	}
 	$olduser = $album->getUser();
 	$newuser = $_POST[$prefix.'albumuser'];
