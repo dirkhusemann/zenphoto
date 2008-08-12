@@ -92,9 +92,10 @@ if (count($_POST) > 0) {
 	if (isset($_GET['newtags'])) {
 		foreach ($_POST as $value) {
 			if (!empty($value)) {
-				$result = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.escape($value).'"');
+				$value = mysql_real_escape_string(sanitize($value, 3));
+				$result = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.$value.'"');
 				if (!is_array($result)) { // it really is a new tag
-					query('INSERT INTO '.prefix('tags').' (`name`) VALUES ("' . escape($value) . '")');
+					query('INSERT INTO '.prefix('tags').' (`name`) VALUES ("' . $value . '")');
 				}
 			}
 		}
@@ -109,7 +110,7 @@ if (count($_POST) > 0) {
 			if (useTagTable()) {
 				$sql = "SELECT `id` FROM ".prefix('tags')." WHERE ";
 				foreach ($kill as $tag) {
-					$sql .= "`name`='".escape($tag)."' OR ";
+					$sql .= "`name`='".(mysql_real_escape_string($tag))."' OR ";
 				}
 				$sql = substr($sql, 0, strlen($sql)-4);
 				$dbtags = query_full_array($sql);
@@ -130,7 +131,7 @@ if (count($_POST) > 0) {
 				$first = array_shift($x);
 				$match = "'%".$first."%'";
 				foreach ($x as $tag) {
-					$match .= " OR `tags` LIKE '%".$tag."%'";
+					$match .= " OR `tags` LIKE '%".mysql_real_escape_string($tag)."%'";
 				}
 				$sql = 'SELECT `id`, `tags` FROM '.prefix('images').' WHERE `tags` LIKE '.$match.';';
 				$imagelist = query_full_array($sql);

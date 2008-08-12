@@ -1401,7 +1401,7 @@ function getIPTCTagArray($tag) {
 function prepIPTCString($iptcstring) {
 	$iptcstring = utf8::convert($iptcstring, 'ISO-8859-1');
 	// Remove null byte at the end of the string if it exists.
-	if (substr($iptcstring, -1) == 0x0) {
+	if (substr($iptcstring, -1) === 0x0) {
 		$iptcstring = substr($iptcstring, 0, -1);
 	}
 	return $iptcstring;
@@ -2552,10 +2552,10 @@ function storeTags($tags, $id, $tbl) {
 	}
 	$tags = array_flip(array_diff($tagsLC, $existing)); // new tags for the object
 	foreach ($tags as $tag) {
-		$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".escape($tag)."'");
+		$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".mysql_real_escape_string($tag)."'");
 		if (!is_array($dbtag)) { // tag does not exist
-			query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . escape($tag) . "')");
-			$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".escape($tag)."'");
+			query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . mysql_real_escape_string($tag) . "')");
+			$dbtag = query_single_row("SELECT `id` FROM ".prefix('tags')." WHERE `name`='".mysql_real_escape_string($tag)."'");
 		}
 		query("INSERT INTO ".prefix('obj_to_tag'). "(`objectid`, `tagid`, `type`) VALUES (".$id.",".$dbtag['id'].",'".$tbl."')");
 	}
