@@ -1832,7 +1832,7 @@ function safe_glob($pattern, $flags=0) {
 			if (fnmatch($match,$file)) {
 				if ((is_dir("$path/$file"))||(!($flags&GLOB_ONLYDIR))) {
 					if ($flags&GLOB_MARK) $file.='/';
-					$glob[]=$file;
+					$glob[]=$path.'/'.$file;
 				}
 			}
 		}
@@ -1840,7 +1840,7 @@ function safe_glob($pattern, $flags=0) {
 		if (!($flags&GLOB_NOSORT)) sort($glob);
 		return $glob;
 	} else {
-		return false;
+		return array();
 	}
 }
 if (!function_exists('fnmatch')) {
@@ -2717,8 +2717,7 @@ function dircopy($srcdir, $dstdir) {
  * @return boolean TRUE if exists or made or FALSE on failure.
  */
 
-function mkdir_recursive($pathname, $mode=0777)
-{
+function mkdir_recursive($pathname, $mode=0777) {
     is_dir(dirname($pathname)) || mkdir_recursive(dirname($pathname), $mode);
     return is_dir($pathname) || @mkdir($pathname, $mode);
 }
