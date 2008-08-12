@@ -226,6 +226,15 @@ cite {
 	margin-left: 20px;
 }
 
+.warning {
+	line-height: 1;
+	border-top: 1px solid #FF6600;
+	border-bottom: 1px solid #FF6600;
+	background-color: #FFDDAA;
+	padding: 10px 8px 10px 8px;
+	margin-left: 20px;
+}
+
 h4 {
 	font-weight: normal;
 	font-size: 10pt;
@@ -284,7 +293,11 @@ if (!$checked) {
 				$dsp .= ' '.trim($sfx);
 			}
 			if (!empty($msg)) {
-				echo "\n<p class=\"error\">$msg</p>";
+				if ($check == 0) {
+					echo "\n<p class=\"error\">$msg</p>";
+				} else {
+					echo "\n<p class=\"warning\">$msg</p>";
+				}
 				$dsp .= ' '.trim($msg);
 			}
 		}
