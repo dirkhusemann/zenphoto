@@ -832,7 +832,7 @@ function printAlbumEditForm($index, $album) {
 	echo '<tr><td></td>';
 	$hc = $album->get('hitcounter');
 	if (empty($hc)) { $hc = '0'; }
-	echo "<td>".gettext("Hit counter:").' '. $hc . " <input type=\"checkbox\" name=\"".gettext("reset_hitcounter")."\"> Reset</td>";
+	echo "<td>".gettext("Hit counter:").' '. $hc . " <input type=\"checkbox\" name=\"reset_hitcounter\"> Reset</td>";
 	echo '</tr>';
 	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Album Description:")." </td> <td>";
 	print_language_string_list($album->get('desc'), $prefix."albumdesc", true);
