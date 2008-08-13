@@ -326,7 +326,7 @@ class Gallery {
 				$sql4 .= " OR `objectid` = '$albumid'";
 			}
 			$n = query($sql1);
-			if (!$full && $n > 0 && $cascade) {
+			if (!$complete && $n > 0 && $cascade) {
 				query($sql2);
 				query($sql3);
 				query($sql4);
@@ -404,14 +404,16 @@ class Gallery {
 				// Then go into existing albums recursively to clean them... very invasive.
 				foreach ($this->getAlbums(0) as $folder) {
 					$album = new Album($this, $folder);
-					if(is_null($album->getDateTime())) {  // see if we can get one from an image
-						$image = $album->getImage(0);
-						if(!($image === false)) {
-							$album->setDateTime($image->getDateTime());
+					if (!$album->isDynamic()) {
+						if(is_null($album->getDateTime())) {  // see if we can get one from an image
+							$image = $album->getImage(0);
+							if(!($image === false)) {
+								$album->setDateTime($image->getDateTime());
+							}
 						}
+						$album->garbageCollect(true);
+						$album->preLoad();
 					}
-					$album->garbageCollect(true);
-					$album->preLoad();
 				}
 			}
 
