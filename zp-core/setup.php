@@ -50,9 +50,19 @@ if (!$checked) {
 	setupLog("Completed system check");
 }
 
+
+	$zp_cfg = @file_get_contents('zp-config.php');
+	$i = strpos($zp_cfg, 'define("DEBUG", false);');
+	if ($i !== false) {
+		$updatezp_config = true;
+		$j = strpos($zp_cfg, "\n", $i);
+		$zp_cfg = substr($zp_cfg, 0, $i) . substr($zp_cfg, $j); // remove this so it won't be defined twice
+	} else {
+		$updatezp_config = false;
+	}
 if (isset($_POST['mysql'])) { //try to update the zp-config file
 	setupLog("MySQL POST handling");
-	$zp_cfg = @file_get_contents('zp-config.php');
+	$updatezp_config = true;
 	if (!$oldconfig) {
 		updateItem('UTF-8', 'true');
 	}
@@ -71,6 +81,8 @@ if (isset($_POST['mysql'])) { //try to update the zp-config file
 	if (isset($_POST['mysql_prefix'])) {
 		updateItem('mysql_prefix', $_POST['mysql_prefix']);
 	}
+}
+if ($updatezp_config) {
 	@chmod('zp-config.php', CHMOD_VALUE);
 	if (is_writeable('zp-config.php')) {
 		if ($handle = fopen('zp-config.php', 'w')) {
@@ -1139,6 +1151,7 @@ if (file_exists("zp-config.php")) {
 		if ($convert) {
 			// convert the tags to a table
 			$result = query_full_array("SELECT `tags` FROM ". prefix('images'));
+			$alltags = '';
 			foreach($result as $row){
 				$alltags = $alltags.$row['tags'].",";  // add comma after the last entry so that we can explode to array later
 			}
