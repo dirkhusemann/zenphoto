@@ -1,6 +1,7 @@
 <?php
 /**
  * basic functions used by zenphoto core
+ * Headers not sent yet!
  * @package functions
  *
  */
@@ -18,12 +19,10 @@ if(!function_exists("gettext")) {
 	require_once('lib-gettext/gettext.inc');
 }
 
-// Set the memory limit higher just in case -- supress errors if user doesn't have control.
+// Set the memory limit higher just in case -- suppress errors if user doesn't have control.
 if (ini_get('memory_limit') < '128M') {
 	@ini_set('memory_limit','128M');
 }
-
-// functions.php - HEADERS NOT SENT YET!
 
 if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
 	die ("<strong>".gettext("Zenphoto error:</strong> zp-config.php not found. Perhaps you need to run")." <a href=\"" . ZENFOLDER . "/setup.php\">setup</a> ".gettext("(or migrate your old config.php)"));
@@ -213,8 +212,8 @@ function setOptionDefault($key, $default) {
 	global $_zp_conf_vars, $_zp_options;
 	if (NULL == $_zp_options) { getOption('nil'); } // pre-load from the database
 	if (!array_key_exists($key, $_zp_options)) {
-		$sql = "INSERT INTO " . prefix('options') . " (`name`, `value`, `ownerid`) VALUES ('" . escape($key) . "', '".
-						escape($default) . "', 0);";
+		$sql = "INSERT INTO " . prefix('options') . " (`name`, `value`, `ownerid`) VALUES ('" . mysql_escape_string($key) . "', '".
+						mysql_escape_string($default) . "', 0);";
 		query($sql, true);
 		$_zp_options[$key] = $default;
 	}

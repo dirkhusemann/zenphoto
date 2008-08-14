@@ -10,8 +10,9 @@ $const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
 $const_webpath = str_replace("\\", '/', $const_webpath);
 if ($const_webpath == '/') $const_webpath = '';
 if (!defined('WEBPATH')) { define('WEBPATH', $const_webpath); }
-define('SERVERPATH', dirname(dirname(__FILE__)));
+if (!defined('SERVERPATH')) { define('SERVERPATH', dirname(dirname(__FILE__))); }
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
+if (!defined('THEMEFOLDER')) {define("THEMEFOLDER", 'themes'); }
 
 function zp_getCookie($name) {
 	if (isset($_SESSION[$name])) { return $_SESSION[$name]; }

@@ -13,14 +13,10 @@
 function setDefault($option, $default) {
 	global $conf;
 	if (isset($conf[$option])) {
-		$v = $conf[$option];
+		$v = sanitize($conf[$option],2);
 	}
 	if (!isset($v) || empty($v)) {
 		$v = $default;
-	} else {
-		if (get_magic_quotes_gpc()) {
-			$v = mysql_escape_string($v);
-		}
 	}
 	setOptionDefault($option, $v);
 }
@@ -176,5 +172,7 @@ function setDefault($option, $default) {
 	setOptionDefault('multi_lingual', 0);
 	setOptionDefault('login_user_field', 1);
 	setOptionDefault('tagsort', 0);
+	setOptionDefault('albumimagesort', 'ID');
+	setOptionDefault('albumimagedirection', 'DESC');
 
 ?>
