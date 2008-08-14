@@ -801,7 +801,7 @@ function printAlbumEditForm($index, $album) {
 	// Please refactor it so the HTML is readable and easily editable.
 	// FYI: It's perfectly acceptable to drop out of php-parsing mode in a function.
 	// See the move/copy/rename block for an example.
-	
+
 	global $sortby, $gallery, $_zp_loggedin;
 	$tagsort = getTagOrder();
 	if ($index == 0) {
@@ -832,7 +832,7 @@ function printAlbumEditForm($index, $album) {
 	echo '<tr><td></td>';
 	$hc = $album->get('hitcounter');
 	if (empty($hc)) { $hc = '0'; }
-	echo "<td>".gettext("Hit counter:").' '. $hc . " <input type=\"checkbox\" name=\"reset_hitcounter\"> Reset</td>";
+	echo "<td>".gettext("Hit counter:").' '. $hc . " <input type=\"checkbox\" name=\"reset_hitcounter\"> ".gettext("Reset")."</td>";
 	echo '</tr>';
 	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Album Description:")." </td> <td>";
 	print_language_string_list($album->get('desc'), $prefix."albumdesc", true);
@@ -989,14 +989,14 @@ function printAlbumEditForm($index, $album) {
 
 	echo "\n</table>\n</td>";
 	echo "\n<td valign=\"top\">";
-	
+
 	$mcr_albumlist = array();
 	genAlbumUploadList($mcr_albumlist);
 	$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');
-	
+
 	/* **************** Move/Copy/Rename ****************** */
 	?>
-	
+
 	<label for="a-<?php echo $prefix; ?>move" style="padding-right: .5em">
 		<input type="radio" id="a-<?php echo $prefix; ?>move" name="a-<?php echo $prefix; ?>MoveCopyRename" value="move"
 			onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
@@ -1013,7 +1013,7 @@ function printAlbumEditForm($index, $album) {
 		<?php echo gettext("Rename Folder");?>
 	</label>
 
-	
+
 	<div id="a-<?php echo $prefix; ?>movecopydiv" style="padding-top: .5em; padding-left: .5em; display: none;">
 		<?php echo gettext("to"); ?>: <select id="a-<?php echo $prefix; ?>albumselectmenu" name="a-<?php echo $prefix; ?>albumselect" onChange="">
 			<option value="" selected="selected">/</option>
@@ -1047,11 +1047,11 @@ function printAlbumEditForm($index, $album) {
 			<a href="javascript:toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', '');"><?php echo gettext("Cancel");?></a>
 		</p>
 	</div>
-	
+
 	<br/><br />
-	
+
 	<?php
-	
+
 	echo gettext("Tags:");
 	$tagsort = getTagOrder();
 	tagSelector($album, 'tags_'.$prefix, false, $tagsort);
@@ -1443,13 +1443,13 @@ function processAlbumEdit($index, $album) {
 	$album->setPasswordHint(process_language_string_save($prefix.'albumpass_hint'));
 	$album->setCustomData(process_language_string_save($prefix.'album_custom_data'));
 	$album->save();
-	
+
 	// Move/Copy/Rename the album after saving.
 	$movecopyrename_action = '';
 	if (isset($_POST['a-'.$prefix.'MoveCopyRename'])) {
 		$movecopyrename_action = $_POST['a-'.$prefix.'MoveCopyRename'];
 	}
-	
+
 	if ($movecopyrename_action == 'move') {
 		$dest = $_POST['a'.$prefix.'-albumselect'];
 		// Append the album name.
@@ -1491,7 +1491,7 @@ function processAlbumEdit($index, $album) {
 			}
 		}
 	}
-	
+
 	return $notify;
 }
 
