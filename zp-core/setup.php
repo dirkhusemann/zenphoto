@@ -518,9 +518,17 @@ if ($debug) {
 			gettext("Make sure the database has been created, and the <code>user</code> has access to it.").' ' .
 			gettext("Also check the <code>MySQL host</code>.")) && $good;
 
-		$dbn = "`".$_zp_conf_vars['mysql_database']. "`.*";
-		$sql = "SHOW GRANTS;";
-		$result = mysql_query($sql, $mysql_connection);
+		$dbn = "`".$_zp_conf_vars['mysql_database']. "`.*";	
+		if (versioncheck('4.2.1', $mysqlv)) {
+			$sql = "SHOW GRANTS FOR CURRENT_USER;";
+		} else {
+			$sql = "SHOW GRANTS FOR " . $_zp_conf_vars['mysql_user'].";";			
+		}
+		$result = mysql_query($sql, $mysql_connection);	
+		if (!$result) {
+			$result = mysql_query("SHOW GRANTS;", $mysql_connection);
+		}
+		
 		$access = -1;
 		$rightsfound = 'unknown';
 		$rightsneeded = array(gettext('Select')=>'SELECT',gettext('Create')=>'CREATE',gettext('Drop')=>'DROP',gettext('Insert')=>'INSERT',
