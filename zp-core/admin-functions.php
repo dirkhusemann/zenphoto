@@ -14,24 +14,6 @@ require_once("functions.php");
 require_once("lib-seo.php"); // keep the function separate for easy modification by site admins
 
 $sortby = array(gettext('Filename') => 'Filename', gettext('Date') => 'Date', gettext('Title') => 'Title', gettext('ID') => 'ID', gettext('Filemtime') => 'mtime' );
-$standardOptions = array(	'gallery_title','website_title','website_url','time_offset',
- 													'mod_rewrite','mod_rewrite_image_suffix',
- 													'server_protocol','charset','image_quality',
- 													'thumb_quality','image_size','image_use_longest_side',
- 													'image_allow_upscale','thumb_size','thumb_crop',
- 													'thumb_crop_width','thumb_crop_height','thumb_sharpen', 'image_sharpen',
- 													'albums_per_page','images_per_page','perform_watermark',
- 													'watermark_image','watermark_scale', 'watermark_allow_upscale', 'current_theme', 'spam_filter',
- 													'email_new_comments', 'perform_video_watermark', 'video_watermark_image', 'use_lock_image',
- 													'gallery_sorttype', 'gallery_sortdirection', 'feed_items', 'feed_imagesize', 'search_fields',
- 													'gallery_password', 'gallery_hint', 'search_password', 'search_hint',
- 													'allowed_tags', 'style_tags', 'full_image_quality', 'persistent_archive',
- 													'protect_full_image', 'album_session', 'watermark_h_offset', 'watermark_w_offset',
- 													'Use_Captcha', 'locale', 'date_format', 'hotlink_protection', 'image_sortdirection',
-													'admin_reset_date', 'comment_name_required', 'comment_email_required',
-													'comment_web_required', 'full_image_download', 'zenphoto_release','gallery_user', 'search_user',
-													'thumb_select_images', 'Gallery_description', 'multi_lingual', 'login_user_field'
-												 );
 $charsets = array("ASMO-708" => "Arabic",
 									"BIG5" => "Chinese Traditional",
 									"CP1026" => "IBM EBCDIC (Turkish Latin-5)",
@@ -592,6 +574,23 @@ function getThemeOption($album, $option) {
 	return $db['value'];
 }
 
+define ('CUSTOM_OPTION_PREFIX', '_CUSTOM_');
+/**
+ * Enter description here...
+ *
+ * @param object $optionHandler the object to handle custom options
+ * @param string $indent used to indent the option for nested options
+ * @param object $album if not null, the album to which the the option belongs
+ * @param bool $hide set to true to hide the output (used by the plugin-options folding
+ * 
+ * there are four type of custom options:
+ * 		0: a textbox
+ * 		1: a checkbox
+ * 		2: handled by $optionHandler->handleOption()
+ * 		3: a textarea
+ * 
+ * type 0 and 3 support multi-lingual strings.
+ */
 function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 	$supportedOptions = $optionHandler->getOptionsSupported();
 	if (count($supportedOptions) > 0) {
@@ -601,6 +600,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 			$row = $supportedOptions[$option];
 			$type = $row['type'];
 			$desc = $row['desc'];
+			$multilingual = isset($row['multilingual']) && $row['multilingual'];
 			if (isset($row['key'])) {
 				$key = $row['key'];
 			} else { // backward compatibility
@@ -634,18 +634,28 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 
 			switch ($type) {
 				case 0:  // text box
-					echo '<td width="200"><input type="text" size="40" name="' . $key . '" value="' . $v . '"></td>' . "\n";
+				case 3:  // text area
+					echo '<td width="200">';
+					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'text-'.$key.'" value=0 />'."\n";
+					if ($multilingual || $type) {
+						print_language_string_list($v, $key, $type);
+					} else {
+						echo '<input type="text" size="40" name="' . $key . '" value="' . htmlspecialchars($v) . '">' . "\n";
+					}
+					echo '</td>' . "\n";
 					break;
 				case 1:  // check box
-					echo '<input type="hidden" name="chkbox-' . $key . '" value=0 />' . "\n";
-					echo '<td width="200"><input type="checkbox" name="' . $key . '" value="1"';
+					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'chkbox-'.$key.'" value=0 />' . "\n";
+					echo '<td width="200"><input type="checkbox" name="'.$key.'" value="1"';
 					echo checked('1', $v);
 					echo " /></td>\n";
 					break;
 				case 2:  // custom handling
 					echo '<td width="200">' . "\n";
+					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'custom-'.$key.'" value=0 />' . "\n";
 					$optionHandler->handleOption($key, $v);
 					echo "</td>\n";
+					break;
 			}
 			echo '<td>' . $desc . "</td>\n";
 			echo "</tr>\n";
@@ -832,7 +842,7 @@ function printAlbumEditForm($index, $album) {
 	echo '<tr><td></td>';
 	$hc = $album->get('hitcounter');
 	if (empty($hc)) { $hc = '0'; }
-	echo "<td>".gettext("Hit counter:").' '. $hc . " <input type=\"checkbox\" name=\"reset_hitcounter\"> ".gettext("Reset")."</td>";
+	echo "<td>".gettext("Hit counter:").' '. $hc . " <input type=\"checkbox\" name=\"reset_hitcounter\"> Reset</td>";
 	echo '</tr>';
 	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Album Description:")." </td> <td>";
 	print_language_string_list($album->get('desc'), $prefix."albumdesc", true);
@@ -1491,7 +1501,7 @@ function processAlbumEdit($index, $album) {
 			}
 		}
 	}
-
+	
 	return $notify;
 }
 
@@ -1714,9 +1724,9 @@ function process_language_string_save($name) {
 	$l = strlen($name)+1;
 	$strings = array();
 	foreach ($_POST as $key=>$value) {
-		if (!empty($value) && (strpos($key, $name) !== false)) {
+		if (!empty($value) && preg_match('/'.$name.'_[a-z]{2}_[A-Z]{2}/', $key)) {
 			$key = substr($key, $l);
-			$strings[$key] = strip($value);
+			$strings[$key] = sanitize($value, 2);
 		}
 	}
 	if (count($strings) > 1) {

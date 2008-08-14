@@ -275,30 +275,34 @@ if (isset($_GET['action'])) {
 				if (isset($_POST['images_per_page'])) setThemeOption($table, 'images_per_page', $_POST['images_per_page']);
 			}
 }
-/*** Plugin Options ***/
+		/*** Plugin Options ***/
 		if (isset($_POST['savepluginoptions'])) {
 			// all plugin options are handled by the custom option code.
 			$returntab = "#tab_plugin";
 		}
 		/*** custom options ***/
-		if (!$themeswitch) { // was really a save.
-			$templateOptions = GetOptionList();
-
-			foreach($standardOptions as $option) {
-				unset($templateOptions[$option]);
-			}
-			unset($templateOptions['saveoptions']);
-			$keys = array_keys($templateOptions);
-			$i = 0;
-			while ($i < count($keys)) {
-				if (isset($_POST[$keys[$i]])) {
-					setThemeOption($table, $keys[$i], $_POST[$keys[$i]]);
-				} else {
-					if (isset($_POST['chkbox-' . $keys[$i]])) {
-						setThemeOption($table, $keys[$i], 0);
+		if (!$themeswitch) { // was really a save.		
+			foreach ($_POST as $postkey=>$value) {
+				$customtype = substr($postkey, 0, strpos($postkey, '-'));
+				if (strpos($customtype, CUSTOM_OPTION_PREFIX) !== false) { // custom option!
+					$key = substr($postkey, strlen($customtype)+1);
+					switch (substr($customtype, strlen(CUSTOM_OPTION_PREFIX))) {
+						case 'text':
+							$value = process_language_string_save($key);
+							break;
+						case 'chkbox':
+							if (isset($_POST[$key])) {
+								$value = 1;
+							} else {
+								$value = 0;
+							}
+							break;
+						case 'custom':
+							$value = sanitize($_POST[$key], 2);
+							break;
 					}
+					setThemeOption($table, $key, $value);
 				}
-				$i++;
 			}
 		}
 
