@@ -574,16 +574,16 @@ function getThemeOption($album, $option) {
 	return $db['value'];
 }
 
-define ('CUSTOM_OPTION_PREFIX', '_CUSTOM_');
+define ('CUSTOM_OPTION_PREFIX', '_ZP_CUSTOM_');
 /**
- * Enter description here...
+ * Generates the HTML for custom options (e.g. theme options, plugin options, etc.)
  *
  * @param object $optionHandler the object to handle custom options
  * @param string $indent used to indent the option for nested options
  * @param object $album if not null, the album to which the the option belongs
  * @param bool $hide set to true to hide the output (used by the plugin-options folding
  * 
- * there are four type of custom options:
+ * There are four type of custom options:
  * 		0: a textbox
  * 		1: a checkbox
  * 		2: handled by $optionHandler->handleOption()
@@ -1721,12 +1721,18 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
  * @return string
  */
 function process_language_string_save($name) {
+	global $_zp_active_languages;
+	if (is_null($_zp_active_languages)) {
+		$_zp_active_languages = generateLanguageList();
+	}
 	$l = strlen($name)+1;
 	$strings = array();
 	foreach ($_POST as $key=>$value) {
-		if (!empty($value) && preg_match('/'.$name.'_[a-z]{2}_[A-Z]{2}/', $key)) {
+		if (!empty($value) && preg_match('/^'.$name.'_[a-z]{2}_[A-Z]{2}/', $key)) {
 			$key = substr($key, $l);
-			$strings[$key] = sanitize($value, 2);
+			if (in_array($key, $_zp_active_languages)) {
+				$strings[$key] = sanitize($value, 2);
+			}
 		}
 	}
 	if (count($strings) > 1) {
