@@ -5,7 +5,7 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php printGalleryTitle(); ?> | <?php echo gettext('Object not found'); ?></title>
+	<title><?php echo strip_tags(getGalleryTitle()); ?> | <?php echo gettext('Object not found'); ?></title>
 	<link rel="stylesheet" href="<?php echo  $zenCSS ?>" type="text/css" />
 </head>
 

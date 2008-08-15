@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php printGalleryTitle(); ?></title>
+	<title><?php echo strip_tags(getGalleryTitle()); ?></title>
 	<link rel="stylesheet" href="<?php echo  $zenCSS ?>" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
 	<?php printRSSHeaderLink('Gallery','Gallery RSS'); 	?>

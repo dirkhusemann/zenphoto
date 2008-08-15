@@ -48,7 +48,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php printGalleryTitle(); ?> | <?php echo strip_tags(getAlbumTitle());?></title>
+	<title><?php echo strip_tags(getGalleryTitle()); ?> | <?php echo strip_tags(getAlbumTitle());?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 <?php
 	$oneImagePage = false;

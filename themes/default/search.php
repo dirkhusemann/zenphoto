@@ -3,12 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title>
-	<?php
-		printGalleryTitle();
-		echo " | ".gettext("Search");
-		?>
-	</title>
+	<title><?php echo strip_tags(getGalleryTitle()); ?> | <?php echo.gettext("Search"); ?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 	<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
   <script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/prototype.js" type="text/javascript"></script>

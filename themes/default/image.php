@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php printGalleryTitle(); ?> | <?php echo strip_tags(getAlbumTitle());?> | <?php echo strip_tags(getImageTitle());?></title>
+	<title><?php echo strip_tags(getGalleryTitle()); ?> | <?php echo strip_tags(getAlbumTitle());?> | <?php echo strip_tags(getImageTitle());?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
 	<script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.js" type="text/javascript"></script>

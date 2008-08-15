@@ -121,7 +121,7 @@ function printLinkWithQuery($url, $query, $text) {
 function printLogo() {
 	global $_zp_themeroot;
 	if ($img = getOption('Graphic_logo')) {
-		echo '<img src="'.$_zp_themeroot.'/images/'.$img.'.png" />';
+		echo '<img src="'.$_zp_themeroot.'/images/'.$img.'.png" alt="Logo"/>';
 	} else {
 		$name = getOption('Theme_logo');
 		if (empty($name)) {

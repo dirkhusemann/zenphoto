@@ -7,12 +7,7 @@ $firstPageImages = normalizeColumns(1, 7);
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title>
-	<?php
-		printGalleryTitle();
-		echo " | ".gettext("Search");
-		?>
-	</title>
+	<title><?php echo strip_tags(getGalleryTitle()); ?> | <?php echo.gettext("Search"); ?></title>
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
 	<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
 </head>
