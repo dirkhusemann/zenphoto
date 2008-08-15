@@ -48,7 +48,7 @@ function setDefault($option, $default) {
 
 	// old zp-config.php opitons. preserve them
 	$conf = $_zp_conf_vars;
-  setDefault('gallery_title', "Gallery");
+	setDefault('gallery_title', "Gallery");
 	setDefault('website_title', "");
 	setDefault('website_url', "");
 	setDefault('time_offset', 0);

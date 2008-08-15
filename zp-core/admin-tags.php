@@ -166,9 +166,10 @@ if (count($_POST) > 0) {
 		if (useTagTable()) {
 			foreach($_POST as $key=>$newName) {
 				if (!empty($newName)) {
+					$newName = sanitize($newName, 3);
 					$key = postIndexDecode($key);
 					$key = substr($key, 2); // strip off the 'R_'
-					$newtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.escape($newName).'"');
+					$newtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.mysql_real_escape_string($newName).'"');
 					$oldtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.escape($key).'"');
 					if (is_array($newtag)) { // there is an existing tag of the same name
 						$existing = $newtag['id'] != $oldtag['id']; // but maybe it is actually the original in a different case.

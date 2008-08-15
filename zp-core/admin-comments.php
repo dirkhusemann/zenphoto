@@ -59,11 +59,11 @@ if (isset($_GET['action'])) {
 			exit();
 		}
 		$id = $_POST['id'];
-		$name = escape($_POST['name']);
-		$email = escape($_POST['email']);
-		$website = escape($_POST['website']);
-		$date = escape($_POST['date']);
-		$comment = escape($_POST['comment']);
+		$name = mysql_real_escape_string(sanitize($_POST['name'], 3));
+		$email = mysql_real_escape_string(sanitize($_POST['email'], 3));
+		$website = mysql_real_escape_string(sanitize($_POST['website'], 3));
+		$date = mysql_real_escape_string(sanitize($_POST['date'], 3));
+		$comment = mysql_real_escape_string(sanitize($_POST['comment'], 1));
 
 		$sql = "UPDATE ".prefix('comments')." SET `name` = '$name', `email` = '$email', `website` = '$website', `comment` = '$comment' WHERE id = $id";
 		query($sql);
@@ -131,24 +131,24 @@ if ($page == "editcomment") { ?>
 <?php
 } else {
 	// Set up some view option variables.
-	
+
 	if (isset($_GET['fulltext'])) {
 		define('COMMENTS_PER_PAGE',10);
-		$fulltext = true; 
+		$fulltext = true;
 		$fulltexturl = '?fulltext';
 	} else {
 		define('COMMENTS_PER_PAGE',20);
 		$fulltext = false;
 		$fulltexturl = '';
 	}
-	$allcomments = fetchComments(""); 
-	
+	$allcomments = fetchComments("");
+
 	if (isset($_GET['subpage'])) {
-		$pagenum = max(intval($_GET['subpage']),1); 
+		$pagenum = max(intval($_GET['subpage']),1);
 	} else {
 		$pagenum = 1;
 	}
-	
+
 	$comments = array_slice($allcomments, ($pagenum-1)*COMMENTS_PER_PAGE, COMMENTS_PER_PAGE);
 	$allcommentscount = count($allcomments);
 	$totalpages = ceil(($allcommentscount / COMMENTS_PER_PAGE));
@@ -181,11 +181,11 @@ if ($page == "editcomment") { ?>
 		<th><?php echo gettext("Album/Image"); ?></th>
 		<th><?php echo gettext("Author/Link"); ?></th>
 		<th><?php echo gettext("Date/Time"); ?></th>
-		<th><?php echo gettext("Comment"); ?> 
+		<th><?php echo gettext("Comment"); ?>
 		<?php if(!$fulltext) { ?>(
-			<a href="?fulltext<?php echo $viewall ? "&viewall":""; ?>"><?php echo gettext("View full text"); ?></a>) <?php 
-		} else { 
-			?>(<a	href="admin-comments.php"<?php echo $viewall ? "?viewall":""; ?>"><?php echo gettext("View truncated"); ?></a>)<?php 
+			<a href="?fulltext<?php echo $viewall ? "&viewall":""; ?>"><?php echo gettext("View full text"); ?></a>) <?php
+		} else {
+			?>(<a	href="admin-comments.php"<?php echo $viewall ? "?viewall":""; ?>"><?php echo gettext("View truncated"); ?></a>)<?php
 		} ?>
 		</th>
 		<th><?php echo gettext("E-Mail"); ?></th>
@@ -200,7 +200,7 @@ if ($page == "editcomment") { ?>
 		$id = $comment['id'];
 		$author = $comment['name'];
 		$email = $comment['email'];
-		
+
 		if(getOption("zp_plugin_zenpage")) {
 			require_once("plugins/zenpage/zenpage-class.php");
 			$zenpage = new Zenpage("","");
@@ -292,8 +292,8 @@ if ($page == "editcomment") { ?>
 			onClick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" /></td>
 		<td style="font-size: 7pt;"><?php echo $link; ?></td>
 		<td>
-		<?php 
-		echo $website ? "<a href=\"$website\">$author</a>" : $author; 
+		<?php
+		echo $website ? "<a href=\"$website\">$author</a>" : $author;
 		if ($anon) {
 			echo ' <a><img src="images/action.png" style="border: 0px;" alt='. gettext("Anonymous").' /></a>';
 		}
@@ -306,10 +306,10 @@ if ($page == "editcomment") { ?>
 		<img src="images/envelope.png" style="border: 0px;" alt="Reply" /></a></td>
 		<td><?php echo $comment['ip']; ?></td>
 		<td align="center">
-			<?php 
+			<?php
 			if($private) {
 				echo '<a><img src="images/reset.png" style="border: 0px;" alt='. gettext("Private").' /></a>';
-			} 
+			}
 			?>
 		</td>
 		<td align="center"><?php
@@ -341,7 +341,7 @@ if ($page == "editcomment") { ?>
 
 </form>
 
-<?php 
+<?php
 }
 
 echo "\n" . '</div>';  //content

@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php echo strip_tags(getGalleryTitle()); ?> | <?php echo.gettext("Search"); ?></title>
+	<title><?php echo strip_tags(getGalleryTitle()); ?> | <?php echo gettext("Search"); ?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 	<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
   <script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/prototype.js" type="text/javascript"></script>
@@ -19,7 +19,7 @@
 		?>
 		<h2><span><?php printHomeLink('', ' | '); ?><a href="
 		<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo ('Gallery Index'); ?>">
-		<?php echo htmlspecialchars(getGalleryTitle());?></a></span> |
+		<?php echo getGalleryTitle();?></a></span> |
 		<?php
 		  echo "<em>".gettext("Search")."</em>";
 		?>
