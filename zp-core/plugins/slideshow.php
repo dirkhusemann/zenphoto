@@ -1,23 +1,23 @@
 <?php
 /**
  * slideshow -- Supports showing slideshows of images in an album.
- * 
+ *
  * 	Plugin Option 'slideshow_size' -- Size of the images
  *	Plugin Option 'slideshow_mode' -- The player to be used
  *	Plugin Option 'slideshow_effect' -- The cycle effect
  *	Plugin Option 'slideshow_speed' -- How fast it runs
  *	Plugin Option 'slideshow_timeout' -- Transition time
  *	Plugin Option 'slideshow_showdesc' -- Allows the show to display image descriptons
- * 
+ *
  * The theme files 'slideshow.php', 'slideshow.css', and 'slideshow-controls.png' must reside in the theme
- * folder. If you are creating a custom theme, copy these files form the "default" theme of the Zenphoto 
+ * folder. If you are creating a custom theme, copy these files form the "default" theme of the Zenphoto
  * distribution.
- * 
- * NOTE: The jQuery mode does not support movie and audio files anymore. If you need to show them please use the Flash mode. 
- * 
+ *
+ * NOTE: The jQuery mode does not support movie and audio files anymore. If you need to show them please use the Flash mode.
+ *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)
  * @version 1.0.6.2
- * @package plugins 
+ * @package plugins
  */
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
@@ -53,14 +53,14 @@ class slideshowOptions {
 		setOptionDefault('slideshow_flow_player_width', '640');
 		setOptionDefault('slideshow_flow_player_height', '480');
 	}
-		
-	
+
+
 	function getOptionsSupported() {
-		return array(	gettext('Size') => array('key' => 'slideshow_size', 'type' => 0, 
+		return array(	gettext('Size') => array('key' => 'slideshow_size', 'type' => 0,
 										'desc' => gettext("Size of the images in the slideshow. <em>[jQuery mode option]</em><br />If empty the theme options <em>image size</em> is used.")),
-									gettext('Mode') => array('key' => 'slideshow_mode', 'type' => 2, 
+									gettext('Mode') => array('key' => 'slideshow_mode', 'type' => 2,
 										'desc' => gettext("<em>jQuery</em> for JS ajax slideshow, <em>flash</em> for flash based slideshow (requires Flowplayer.)")),
-									gettext('Effect') => array('key' => 'slideshow_effect', 'type' => 2, 
+									gettext('Effect') => array('key' => 'slideshow_effect', 'type' => 2,
 										'desc' => gettext("The cycle slide effect to be used. <em>[jQuery mode option]</em>")),
 									gettext('Speed') => array('key' => 'slideshow_speed', 'type' => 0,
 										'desc' => gettext("Speed of the transition in milliseconds.")),
@@ -144,11 +144,11 @@ function printSlideShowLink($linktext='') {
  * Prints the slideshow using the jQuery plugin Cycle (http://http://www.malsup.com/jquery/cycle/)
  * or Flash based using Flowplayer http://flowplayer.org if installed
  * If called from image.php it starts with that image, called from album.php it starts with the first image (jQuery only)
- * To be used on slideshow.php only and called from album.php or image.php. 
+ * To be used on slideshow.php only and called from album.php or image.php.
  * Image size is taken from the calling link or if not specified there the sized image size from the options
- * 
- * NOTE: The jQuery mode does not support movie and audio files anymore. If you need to show them please use the Flash mode. 
- *   
+ *
+ * NOTE: The jQuery mode does not support movie and audio files anymore. If you need to show them please use the Flash mode.
+ *
  * @param bool $heading set to true (default) to emit the slideshow breadcrumbs in flash mode
  * @param bool $speedctl controls whether an option box for controlling transition speed is displayed
  */
@@ -159,7 +159,7 @@ function printSlideShow($heading = true, $speedctl = false) {
 	}
 	global $_zp_flash_player;
 	if(empty($_POST['imagenumber'])) {
-		$imagenumber = 0; 
+		$imagenumber = 0;
 		$count = 0;
 	} else {
 		$imagenumber = ($_POST['imagenumber']-1); // slideshows starts with 0, but zp with 1.
@@ -175,7 +175,7 @@ function printSlideShow($heading = true, $speedctl = false) {
 	$option = getOption("slideshow_mode");
 	// jQuery Cycle slideshow config
 	// get slideshow data
-	
+
 	$gallery = new Gallery();
 	if ($albumid == 0) { // search page
 		$dynamic = 2;
@@ -210,14 +210,14 @@ function printSlideShow($heading = true, $speedctl = false) {
 		case "jQuery":
 ?>
 <script type="text/javascript">
-	$(document).ready(function(){	
+	$(document).ready(function(){
 		$(function() {
               var ThisGallery = '<?php echo $albumtitle; ?>';
               var ImageList = new Array();
               var TitleList = new Array();
               var DescList = new Array();
 			var DynTime=(<?php echo getOption("slideshow_timeout"); ?>) * 1.0;	// force numeric
-<?php 
+<?php
 			for ($cntr = 0, $idx = $imagenumber; $cntr < $numberofimages; $cntr++, $idx++) {
 				if ($dynamic) {
 					$filename = $images[$idx]['filename'];
@@ -227,7 +227,7 @@ function printSlideShow($heading = true, $speedctl = false) {
 					$image = new Image($album, $filename);
 				}
 				$ext = strtolower(strrchr($filename, "."));
-				
+
 				// 2008-08-02 acrylian: This at least make the urls correct, the flashplayer does not load anyway...
 				if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
 					$img = FULLWEBPATH.'/albums/'.$image->album->name .'/'. fixPixPath($filename);
@@ -242,37 +242,37 @@ function printSlideShow($heading = true, $speedctl = false) {
 				if ($idx == $numberofimages - 1) { $idx = -1; }
 			}
 			echo chr(13);
-	
-?>		
+
+?>
 						var countOffset = <?php echo $imagenumber; ?>
-			
-            var totalSlideCount = <?php echo $numberofimages; ?>; 
-            var currentslide = 2;		
-										
-            function onBefore(curr, next, opts) { 
+
+            var totalSlideCount = <?php echo $numberofimages; ?>;
+            var currentslide = 2;
+
+            function onBefore(curr, next, opts) {
  			  if (opts.timeout != DynTime) {
                 	opts.timeout = DynTime;
                 }
-                if (!opts.addSlide) 
-                    return; 
-                                     
+                if (!opts.addSlide)
+                    return;
+
                 var currentImageNum = currentslide;
                 currentslide++;
-                if (currentImageNum == totalSlideCount) { 
-                  opts.addSlide = null; 
-                	return; 
-            	} 
-    
+                if (currentImageNum == totalSlideCount) {
+                  opts.addSlide = null;
+                	return;
+            	}
+
 			  var relativeSlot = (currentslide + countOffset) % totalSlideCount;
 			  if (relativeSlot == 0) {relativeSlot = totalSlideCount;}
                 var htmlblock = "<span class='slideimage'><h4><strong>" + ThisGallery + ":</strong> ";
 			  htmlblock += TitleList[currentImageNum]  + " (" + relativeSlot + "/" + totalSlideCount + ")</h4>";
                 htmlblock += "<img src='" + ImageList[currentImageNum] + "'/>";
-                htmlblock += "<p class='imgdesc'>" + DescList[currentImageNum] + "</p></span>";        
-                opts.addSlide(htmlblock); 
-    	
-    	}; 
-		
+                htmlblock += "<p class='imgdesc'>" + DescList[currentImageNum] + "</p></span>";
+                opts.addSlide(htmlblock);
+
+    	};
+
 		$('#slides').cycle({
 					fx:     '<?php echo getOption("slideshow_effect"); ?>',
 					speed:   <?php echo getOption("slideshow_speed"); ?>,
@@ -280,14 +280,14 @@ function printSlideShow($heading = true, $speedctl = false) {
 					next:   '#next',
 					prev:   '#prev',
         				cleartype: 1,
-					before: onBefore 
+					before: onBefore
 			});
 
 			$('#speed').change(function () {
               	DynTime = this.value;
                 	return false;
          });
-							
+
 		$('#pause').click(function() { $('#slides').cycle('pause'); return false; });
 		$('#play').click(function() { $('#slides').cycle('resume'); return false; });
 		});
@@ -296,10 +296,10 @@ function printSlideShow($heading = true, $speedctl = false) {
 
 	</script>
 <div id="slideshow" align="center">
-<?php	
+<?php
 // 7/21/08dp
 if ($speedctl) {
-      echo '<div id="speedcontrol">'; // just to keep it away from controls for sake of this demo 
+      echo '<div id="speedcontrol">'; // just to keep it away from controls for sake of this demo
       $minto = getOption("slideshow_speed");
       while ($minto % 500 != 0) {
       	$minto += 100;
@@ -309,7 +309,7 @@ if ($speedctl) {
 	  /* don't let min timeout = speed */
 	  $thistimeout = ($minto == getOption("slideshow_speed")? $minto + 250 : $minto);
 	  echo 'Select Speed: <select id="speed" name="speed">';
-      while ( $thistimeout <= 60000) {  // "around" 1 minute :)  
+      while ( $thistimeout <= 60000) {  // "around" 1 minute :)
       	echo "<option value=$thistimeout " . ($thistimeout == $dflttimeout?" selected='selected'>" :">") . round($thistimeout/1000,1) . " sec</option>";
 		  /* put back timeout to even increments of .5 */
 		if ($thistimeout % 500 != 0) { $thistimeout -= 250; }
@@ -345,17 +345,17 @@ if ($speedctl) {
 				$filename = $images[$idx]['filename'];
 				$image = new Image($dalbum, $filename);
 				$imagepath = FULLWEBPATH.getAlbumFolder('').$folder."/".$filename;
-			} else { 
+			} else {
 				$folder = $album->name;
-				$filename = fixPixPath($images[$idx]); 		// again, minor mystery why & and ' are thowing <img> attributes off (haywire)? 
+				$filename = fixPixPath($images[$idx]); 		// again, minor mystery why & and ' are thowing <img> attributes off (haywire)?
 				//$filename = $animage;
 				$image = new Image($album, $filename);
 				$imagepath = FULLWEBPATH.getAlbumFolder('').$folder."/".$filename;
-				
+
 			}
 			$ext = strtolower(strrchr($filename, "."));
 			echo "<span class='slideimage'><h4><strong>".$albumtitle.":</strong> ".$image->getTitle()." (". ($idx + 1) ."/".$numberofimages.")</h4>";
-		
+
 			if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
 				//Player Embed...
 				if (is_null($_zp_flash_player)) {
@@ -385,7 +385,7 @@ if ($speedctl) {
 			 	<embed src="'  . $imagepath. '" width="640" height="496" autoplay="false" controller"true" type="video/quicktime"
 			 	pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
 				</object><a>';
-		} else { 
+		} else {
 			echo "<img src='".WEBPATH."/".ZENFOLDER."/i.php?a=".$folder."&i=".$filename."&s=".$imagesize."' alt='".$image->getTitle()."' title='".$image->getTitle()."' />\n";
 		}
 		if(getOption("slideshow_showdesc")) { echo "<p class='imgdesc'>".$image->getDesc()."</p>"; }
@@ -396,17 +396,17 @@ if ($speedctl) {
 
 case "flash":
 	if ($heading) {
-		echo "<span class='slideimage'><h4><strong>".htmlspecialchars($albumtitle)."</strong> (".$numberofimages." images) | <a style='color: white' href='".$returnpath."' title='".gettext("back")."'>".gettext("back")."</a></h4>";
+		echo "<span class='slideimage'><h4><strong>".$albumtitle."</strong> (".$numberofimages." images) | <a style='color: white' href='".$returnpath."' title='".gettext("back")."'>".gettext("back")."</a></h4>";
 	}
 	echo "<span id='slideshow'></span>";
-	?>	
+	?>
 <script type="text/javascript">
 $("#slideshow").flashembed({
       src:'<?php echo FULLWEBPATH . '/' . ZENFOLDER; ?>/plugins/flowplayer/FlowPlayerLight.swf',
-      width:<?php echo getOption("slideshow_flow_player_width"); ?>, 
+      width:<?php echo getOption("slideshow_flow_player_width"); ?>,
       height:<?php echo getOption("slideshow_flow_player_height"); ?>
     },
-    {config: {  
+    {config: {
       autoPlay: true,
       useNativeFullScreen: true,
       playList: [
@@ -427,31 +427,31 @@ $("#slideshow").flashembed({
 		$count++;
 		$ext = strtolower(strrchr($filename, "."));
 		if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
-			$duration = ""; 
+			$duration = "";
 		} else {
 			$duration = " duration: ".getOption("slideshow_speed")/10;
 		}
 		echo "{ url: '".FULLWEBPATH.getAlbumFolder('').$folder."/".$filename."', ".$duration." }\n";
 		if($count < $numberofimages) { echo ","; }
 	}
-?>     
+?>
      ],
-      showPlayListButtons: true, 
-      showStopButton: true, 
+      showPlayListButtons: true,
+      showStopButton: true,
       controlBarBackgroundColor: 0,
      	showPlayListButtons: true,
      	controlsOverVideo: 'ease',
      	controlBarBackgroundColor: '<?php echo getOption('flow_player_controlbarbackgroundcolor'); ?>',
       controlsAreaBorderColor: '<?php echo getOption('flow_player_controlsareabordercolor'); ?>'
-    }} 
+    }}
   );
-</script>	
-	
-	
+</script>
+
+
 <?php
 	echo "</span>";
 		echo "<p>".gettext("Click on")." <img style='position: relative; top: 4px; border: 1px solid gray' src='".WEBPATH . "/" . ZENFOLDER."/plugins/slideshow/flowplayerfullsizeicon.png' /> ".gettext("on the right in the player control bar to view full size")."</p>";
-	
+
 	break;
 }
 ?>

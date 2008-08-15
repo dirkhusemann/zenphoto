@@ -4,7 +4,7 @@
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
  * @version 1.0.2.8.2
- * @package plugins 
+ * @package plugins
  */
 
 $plugin_description = gettext("Enable <strong>FLV</strong> player to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time.<br> Please see <a href='http://www.jeroenwijering.com/?item=JW_FLV_Player'>JW FLV media player </a> for more info about the player and its licence.");
@@ -97,10 +97,10 @@ class flvplayer {
 		} else {
 			echo'	var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/plugins/flvplayer/flvplayer.swf","player'.$count.'","'.getOption('flv_player_width').'","'.getOption('flv_player_height').'","7");
 			so.addVariable("displayheight","'.getOption('flv_player_displayheight').'");';
-		}	
+		}
 			echo '
 			so.addParam("allowfullscreen","true");
-			so.addVariable("file","' . $moviepath . '&amp;title=' . htmlspecialchars(strip_tags($imagetitle),ENT_QUOTES) . '");
+			so.addVariable("file","' . $moviepath . '&amp;title=' . strip_tags($imagetitle) . '");
 			' . (!empty($videoThumb) ? 'so.addVariable("image","' . $videoThumb . '")' : '') . '
 			so.addVariable("backcolor","'.getOption('flv_player_backcolor').'");
 			so.addVariable("frontcolor","'.getOption('flv_player_frontkcolor').'");
@@ -108,9 +108,9 @@ class flvplayer {
 			so.addVariable("screencolor","'.getOption('flv_player_screencolor').'");
 			so.addVariable("autostart","' . (getOption('flv_player_autostart') ? 'true' : 'false') . '");
 			so.write("player'.$count.'");
-			</script>'; 
+			</script>';
 	}
-	
+
 	/**
 	 * Returns the height of the player
 	 * @param object $image the image for which the width is requested
@@ -120,7 +120,7 @@ class flvplayer {
 	function getVideoWidth($image=NULL) {
 		return getOption('flv_player_width');
 	}
-	
+
 	/**
 	 * Returns the width of the player
 	 * @param object $image the image for which the height is requested

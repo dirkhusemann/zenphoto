@@ -1,52 +1,52 @@
-<?php	
-/** printAlbumMenu for Zenphoto 
-  * 
+<?php
+/** printAlbumMenu for Zenphoto
+  *
  * Changelog
  *
  * 1.4.4.3.
  * -  Minor bug fix, used the album title instead of the unique album folder name at one place.
- *  
+ *
  * 1.4.4.2.
  * - HTML validation again (turns css id for subalbums into the valid css class) Thanks to miem for the find.
- * 
+ *
  * 1.4.4.1
  * - Html validation changes
- * 
- * 1.4.4: 
+ *
+ * 1.4.4:
  * - Adds new list mode option '$showsubs' to optionally always show subalbums
  * - Fixes a html validation error of using a CSS id several times for the active top level albums (now a class)
- * 
- * 1.4.3.1: 
+ *
+ * 1.4.3.1:
  * - Some very minor code cleanup
- * 
- * 1.4.3: 
- * - Divided the menu into two separate functions printAlbumMenuList() and printAlbumMenuJump(). The plan to always have the jump menu 
- * mode showing top level albums and sub level albums was simply easier to achieve separated than within the more complicated and especially 
+ *
+ * 1.4.3:
+ * - Divided the menu into two separate functions printAlbumMenuList() and printAlbumMenuJump(). The plan to always have the jump menu
+ * mode showing top level albums and sub level albums was simply easier to achieve separated than within the more complicated and especially
  * context sensitive list mode code. printAlbumMenu() remains as a wrapper function so that it can be used as before.
  * - Some documentation errors fixed
- * 
- * 1.4.2: 
+ *
+ * 1.4.2:
  * - Fixes lost count for jump menu in the 1.4.1
  * - Some more code optimizations: Another helper function checkAlbumDisplayLevel() added
  * - Helper function checkIfActiveAlbum() renamed to checkSelectedAlbum()
  * - Helper function createAlbumMenuLink() extended for the jump menu variant
- * 
- * 1.4.1: 
+ *
+ * 1.4.1:
  * - Jump variant: 'choose an album' text removed , now the active album is always selected.
  * 	 This adds the helper function checkIfActiveAlbum()
  * - List variant: Adds missing index link and title atribute to the links and make its name editiable and and option (see below)
  * - List variant: Adds helper function createAlbumMenuLink() to generate the link / none link and get rid of some repetive lines of code
- *  
+ *
  * 1.4:
- * - New options for more layout flexibility: "list-top" for only showing the toplevel albums, 
+ * - New options for more layout flexibility: "list-top" for only showing the toplevel albums,
  *   							"list-sub" for showing only sublevel albums if within a toplevel album or one of its subalbums
- * 
+ *
  * 1.3.3:
- * - Code reworked, now uses the gallery/album objects so that protected and unpublished 
+ * - Code reworked, now uses the gallery/album objects so that protected and unpublished
  * 	 albums as well as the album sortorder are handled automatically
- * - For better usability selected album names in the list are now not links anymore as suggested 
+ * - For better usability selected album names in the list are now not links anymore as suggested
  *   on the forum a while ago (also the former used <strong> is skipped)
- * 
+ *
  * 1.3.2:
  * - turned into a plugin for zenphoto 1.1.5 svn/1.1.6
  *
@@ -54,35 +54,35 @@
  * - support for album passwords
  * - a little code reformatting
  * - the return of the somehow forgotten published or not published check
- * 
+ *
  * 1.3:
  * - only for zenphoto 1.1. or newer
  * - nearly completly rewritten
  * - Supports 4 subalbum levels with context sensitive fold out display
- * 	
+ *
  * 1.2.2.3:
- * - Automatic detection if mod_rewrite is enabled but it has to be set and save in the admin options. 
+ * - Automatic detection if mod_rewrite is enabled but it has to be set and save in the admin options.
  * - Better looking source code thanks to spacing and linebreaks implemented by aitf311
- * 
+ *
  * 1.2.2.2:
  * - Automatic disabling of the counter for main albums so that they don't show "(0)" anymore if you only use subalbums for images
  * now for subalbums, too.
- * 
+ *
  * 1.2.2.1:
  * - Automatic disabling of the counter for main albums so that they don't show "(0)" anymore if you only use subalbums for images
- * 
- * 1.2.2: 
+ *
+ * 1.2.2:
  * - Change Subalbum CSS-ID "$id2" to CLASS "$class" ((X)HTML Validation issue)
  * - Add htmlspecialchars to the printed album titles, so that validation does not fail because of ampersands in names.
- * 
- * 1.2.1: 
+ *
+ * 1.2.1:
  * - New option for mod_rewrite (needs to be automatic...),
  * - bug fixes for the id-Tags, which didn't get used.
- * 
+ *
  * 1.2: Now works with sbillard's album publishing function.
- * 
+ *
  * 1.1.:
- * - Option for album list or a drop down jump menu if you want to save space 
+ * - Option for album list or a drop down jump menu if you want to save space
  * - Displays the number of images in the album (like e.g. wordpress does with articles)
  * - Option for disabling the counter
  * - Parameters for CSS-Ids for styling, separate ones for main album and subalbums
@@ -102,11 +102,11 @@ $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---print_a
  * Prints a list of all albums context sensitive up to the 4th subalbum level.
  * Since 1.4.3 this is a wrapper function for the separate functions printAlbumMenuList() and printAlbumMenuJump().
  * that was included to remain compatiblility with older installs of this menu.
- * 
+ *
  * Usage: add the following to the php page where you wish to use these menus:
  * enable this extension on the zenphoto admin plugins tab;
  * Call the function printAlbumMenu() at the point where you want the menu to appear.
- * 
+ *
  * @param string $option "list" for html list, "list-top" for only the top level albums, "list-sub" for only the subalbums if in one of theme or their toplevel album
  * @param string $option2 "count" for a image counter in brackets behind the album name, "" = for no image numbers or leave blank
  * @param string $css_id insert css id for the main album list, leave blank if you don't use (only list mode)
@@ -129,11 +129,11 @@ function printAlbumMenu($option,$option2,$css_id='',$css_id_active='',$css_class
 
 /**
  * Prints a nested html list of all albums context sensitive up to the 4th subalbum level.
- * 
+ *
  * Usage: add the following to the php page where you wish to use these menus:
  * enable this extension on the zenphoto admin plugins tab;
  * Call the function printAlbumMenuList() at the point where you want the menu to appear.
- * 
+ *
  * @param string $option "list" for html list, "list-top" for only the top level albums, "list-sub" for only the subalbums if in one of theme or their toplevel album
  * @param string $option2 "count" for a image counter in brackets behind the album name, "" = for no image numbers or leave blank
  * @param string $css_id insert css id for the main album list, leave blank if you don't use (only list mode)
@@ -171,10 +171,10 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',
 			$topalbum = new Album($gallery,$toplevelalbum,true);
 			if($option === "list" OR $option === "list-top") {
 				createAlbumMenuLink($topalbum,$option2,$css_class_topactive,$albumpath,"list");
-			} 
+			}
 			$sub1_count = 0;
-				
-			if($option === "list" OR $option === "list-sub") { // show either only sublevels or sublevels with toplevel 
+
+			if($option === "list" OR $option === "list-sub") { // show either only sublevels or sublevels with toplevel
 
 				/**** SUBALBUM LEVEL 1 ****/
 				$subalbums1 = $topalbum->getSubAlbums();
@@ -189,14 +189,14 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',
 							}
 							if ($option === "list" OR $option === "list-sub") {
 								createAlbumMenuLink($subalbum1,$option2,$css_class_active,$albumpath,"list");
-							} 
+							}
 							$sub2_count = 0;
-						
+
 						/**** SUBALBUM LEVEL 2 ****/
 						$subalbums2 = $subalbum1->getSubAlbums();
 						foreach($subalbums2 as $sublevelalbum2) {
 							$subalbum2 = new Album($gallery,$sublevelalbum2,true);
-						
+
 							// if 3
 							if(checkAlbumDisplayLevel($subalbum2,$subalbum1,$currentfolder,2) OR $showsubs) {
 								$sub2_count++; // count subalbums for checking if to open or close the sublist
@@ -205,39 +205,39 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',
 								}
 								if($option === "list" OR $option === "list-sub") {
 									createAlbumMenuLink($subalbum2,$option2,$css_class_active,$albumpath,"list");
-								} 
+								}
 								$sub3_count = 0;
 
 								/**** SUBALBUM LEVEL 3 ****/
 								$subalbums3 = $subalbum2->getSubAlbums();
 								foreach($subalbums3 as $sublevelalbum3) {
 									$subalbum3 = new Album($gallery,$sublevelalbum3,true);
-								
+
 									// if 4
 									if(checkAlbumDisplayLevel($subalbum3,$subalbum2,$currentfolder,3) OR $showsubs) {
 										$sub3_count++; // count subalbums for checking if to open or close the sublist
 										if ($sub3_count === 1) { // open sublevel 1 sublist once if subalbums
-											echo "<ul".$css_class.">\n"; 
-										} 
+											echo "<ul".$css_class.">\n";
+										}
 										if($option === "list" OR $option === "list-sub") {
 											createAlbumMenuLink($subalbum3,$option2,$css_class_active,$albumpath,"list");
-										} 
+										}
 										$sub4_count = 0;
 
 										/**** SUBALBUM LEVEL 4 ****/
 										$subalbums4 = $subalbum3->getSubAlbums();
 										foreach($subalbums4 as $sublevelalbum4) {
 											$subalbum4 = new Album($gallery,$sublevelalbum4,true);
-								
+
 											// if 5
 											if(checkAlbumDisplayLevel($subalbum4,$subalbum3,$currentfolder,4) OR $showsubs){
 												$sub4_count++; // count subalbums for checking if to open or close the sublist
 												if ($sub4_count === 1) { // open sublevel 1 sublist once if subalbums
-													echo "<ul".$css_class.">\n"; 
-												} 
+													echo "<ul".$css_class.">\n";
+												}
 												if($option === "list" OR $option === "list-sub") {
 													createAlbumMenuLink($subalbum4,$option2,$css_class_active,$albumpath,"list");
-												} 
+												}
 											} // if subalbum level 4 - end
 										}	// subalbum level 4 - end
 										if($sub4_count > 0 AND ($option === "list" OR $option === "list-sub")) 	{ // sublevel 4 sublist end if subalbums
@@ -282,7 +282,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',
 /**
  * Prints a dropdown menu of all albums up to the 4 sublevel (not context sensitive)
  * Is used by the wrapper function printAlbumMenu() if the options "jump" is choosen. For standalone use, too.
- * 
+ *
  * Usage: add the following to the php page where you wish to use these menus:
  * enable this extension on the zenphoto admin plugins tab;
  * Call the function printAlbumMenuJump() at the point where you want the menu to appear.
@@ -311,7 +311,7 @@ function printAlbumMenuJump($option="count", $indexname="Gallery Index") {
 		foreach ($albums as $toplevelalbum) {
 			$topalbum = new Album($gallery,$toplevelalbum,true);
 			createAlbumMenuLink($topalbum,$option,"",$albumpath,"jump",0);
-			
+
 			/**** SUBALBUM LEVEL 1 ****/
 			$subalbums1 = $topalbum->getSubAlbums();
 			foreach($subalbums1 as $sublevelalbum1) {
@@ -335,7 +335,7 @@ function printAlbumMenuJump($option="count", $indexname="Gallery Index") {
 						foreach($subalbums4 as $sublevelalbum4) {
 							$subalbum4 = new Album($gallery,$sublevelalbum4,true);
 							createAlbumMenuLink($subalbum4,$option,"",$albumpath,"jump",4);
-						} 
+						}
 					}
 				}
 			}
@@ -349,11 +349,11 @@ function gotoLink(form) {
 	parent.location = form.ListBoxURL.options[OptionIndex].value;}
 //-->
 </script></form>
-<?php	
+<?php
 }
 
 /**
- * A printAlbumMenu() helper function for the list menu mode of printAlbumMenu() that only 
+ * A printAlbumMenu() helper function for the list menu mode of printAlbumMenu() that only
  * generates an list item, as a link if not the current album
  * Not for standalone use.
  *
@@ -373,11 +373,11 @@ function createAlbumMenuLink($album,$option2,$css,$albumpath,$mode,$level='') {
 	}
 	switch($mode) {
 		case "list":
-			
+
 			if(getAlbumID() === $album->getAlbumID()) {
-				$link = "<li".$css.">".htmlspecialchars($album->getTitle()).$count;
+				$link = "<li".$css.">".$album->getTitle().$count;
 			} else {
-				$link = "<li".$css."><a href='".htmlspecialchars($albumpath.$album->name)."' title='".htmlspecialchars(strip_tags($album->getTitle()),ENT_QUOTES)."'>".htmlspecialchars($album->getTitle())."</a>".$count;
+				$link = "<li".$css."><a href='".htmlspecialchars($albumpath.$album->name)."' title='".strip_tags($album->getTitle())."'>".htmlspecialchars($album->getTitle())."</a>".$count;
 			}
 			break;
 		case "jump":
@@ -400,7 +400,7 @@ function createAlbumMenuLink($album,$option2,$css,$albumpath,$mode,$level='') {
 					break;
 			}
 			$selected = checkSelectedAlbum($album->name, "album");
-			$link = "<option $selected value='".htmlspecialchars($albumpath.$album->name)."'>".$arrow.htmlspecialchars($album->getTitle()).$count."</option>";
+			$link = "<option $selected value='".htmlspecialchars($albumpath.$album->name)."'>".$arrow.strip_tags($album->getTitle()).$count."</option>";
 			break;
 	}
 	echo $link;
@@ -408,7 +408,7 @@ function createAlbumMenuLink($album,$option2,$css,$albumpath,$mode,$level='') {
 
 
 /**
- * A printAlbumMenu() helper function for the jump menu mode of printAlbumMenu() that only 
+ * A printAlbumMenu() helper function for the jump menu mode of printAlbumMenu() that only
  * checks which the current album so that the entry in the in the dropdown jump menu can be selected
  * Not for standalone use.
  *
@@ -423,24 +423,24 @@ function checkSelectedAlbum($checkalbum, $option) {
 		case "index":
 			if($_zp_current_album->name === "") {
 				$selected = "selected";
-			} 
+			}
 			break;
 		case "album":
 			if($_zp_current_album->name === $checkalbum) {
 				$selected = "selected";
-			} 
+			}
 			break;
 	}
 	return $selected;
 }
 
 /**
- * A printAlbumMenu() helper function that checks what subalbum level should be displayed. If you are in an subalbum 
- * that it itself an subalbum and containts subalbums it returns true and lets the album menu display the parent album, 
+ * A printAlbumMenu() helper function that checks what subalbum level should be displayed. If you are in an subalbum
+ * that it itself an subalbum and containts subalbums it returns true and lets the album menu display the parent album,
  * the current level and the next sublevel
  * Not for standalone use.
  *
- * @param object $currentalbum The album object of the current album in whose level we are 
+ * @param object $currentalbum The album object of the current album in whose level we are
  * @param object $parentalbum The album object of the parent album
  * @param string $currentfolder The current folder
  * @param int $level The level the function should check for (1-4 for sublevel 1 - 4)

@@ -1,14 +1,14 @@
 <?php
 /**
  * image_album_statistics -- support functions for "statistics" about images and albums.
- * 
+ *
  * Supports such statistics as "most popular", "latest", "top rated", etc.
- *  
+ *
  * C A U T I O N: With 1.0.4.7 the usage to get an specific album changes. You now have to pass the foldername of an album instead the album title.
- * 
+ *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
  * @version 1.0.5.1
- * @package plugins 
+ * @package plugins
  */
 
 $plugin_description = gettext("Functions that provide various statistics about images and albums in the gallery.");
@@ -100,7 +100,7 @@ function getAlbumStatistic($number=5, $option) {
  * @param bool $showdate if the album date should be shown
  * @param bool $showdesc if the album description should be shown
  * @param integer $desclength the length of the description to be shown
-  * @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
+  * @param string $showstatistic "hitcounter" for showing the hitcounter (views),
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
  */
@@ -128,7 +128,7 @@ function printAlbumStatistic($number, $option, $showtitle=false, $showdate=false
  * @param bool $showdate if the album date should be shown
  * @param bool $showdesc if the album description should be shown
  * @param integer $desclength the length of the description to be shown
- * @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
+ * @param string $showstatistic "hitcounter" for showing the hitcounter (views),
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
  */
@@ -203,7 +203,7 @@ function printPopularAlbums($number=5,$showtitle=false, $showdate=false, $showde
  * @param bool $showdate if the album date should be shown
  * @param bool $showdesc if the album description should be shown
  * @param integer $desclength the length of the description to be shown
- * @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
+ * @param string $showstatistic "hitcounter" for showing the hitcounter (views),
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
  */
@@ -251,7 +251,7 @@ function printTopRatedAlbums($number=5,$showtitle=false, $showdate=false, $showd
  * @param bool $showdate if the album date should be shown
  * @param bool $showdesc if the album description should be shown
  * @param integer $desclength the length of the description to be shown
- * @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
+ * @param string $showstatistic "hitcounter" for showing the hitcounter (views),
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
  */
@@ -339,7 +339,7 @@ function getImageStatistic($number, $option, $albumfolder='') {
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image description should be shown
  * @param integer $desclength the length of the description to be shown
- * @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
+ * @param string $showstatistic "hitcounter" for showing the hitcounter (views),
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
  * @return string
@@ -349,11 +349,11 @@ function printImageStatistic($number, $option, $albumfolder='', $showtitle=false
 	echo "\n<div id=\"$option\">\n";
 	echo "<ul>";
 	foreach ($images as $image) {
-		echo "<li><a href=\"" . $image->getImageLink() . "\" title=\"" . htmlspecialchars(strip_tags($image->getTitle()),ENT_QUOTES) . "\">\n";
-		echo "<img src=\"" . $image->getThumb() . "\"  alt=\"" . htmlspecialchars($image->getTitle(),ENT_QUOTES) . "\" /></a>\n";
+		echo "<li><a href=\"" . $image->getImageLink() . "\" title=\"" . strip_tags($image->getTitle()) . "\">\n";
+		echo "<img src=\"" . $image->getThumb() . "\"  alt=\"" . strip_tags($image->getTitle()) . "\" /></a>\n";
 		if($showtitle) {
-			echo "<h3><a href=\"".$image->getImageLink()."\" title=\"" . htmlspecialchars(strip_tags($image->getTitle()),ENT_QUOTES) . "\">\n";
-			echo htmlspecialchars($image->getTitle())."</a></h3>\n";
+			echo "<h3><a href=\"".$image->getImageLink()."\" title=\"" . strip_tags($image->getTitle())) . "\">\n";
+			echo $image->getTitle()."</a></h3>\n";
 		}
 		if($showdate) {
 			echo "<p>". zpFormattedDate(getOption('date_format'),strtotime($image->getDateTime()))."</p>";
@@ -388,7 +388,7 @@ function printImageStatistic($number, $option, $albumfolder='', $showtitle=false
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image description should be shown
  * @param integer $desclength the length of the description to be shown
-* @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
+* @param string $showstatistic "hitcounter" for showing the hitcounter (views),
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
  */
@@ -422,8 +422,8 @@ function printTopRatedImages($number=5, $albumfolder="", $showtitle=false, $show
  * @param bool $showtitle if the image title should be shown
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image description should be shown
- * @param integer $desclength the length of the description to be shown 
-* @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
+ * @param integer $desclength the length of the description to be shown
+* @param string $showstatistic "hitcounter" for showing the hitcounter (views),
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
  */
@@ -440,7 +440,7 @@ function printMostRatedImages($number=5, $albumfolder='', $showtitle=false, $sho
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image description should be shown
  * @param integer $desclength the length of the description to be shown
-* @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
+* @param string $showstatistic "hitcounter" for showing the hitcounter (views),
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
  */
@@ -457,7 +457,7 @@ function printLatestImages($number=5, $albumfolder='', $showtitle=false, $showda
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image description should be shown
  * @param integer $desclength the length of the description to be shown
-* @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
+* @param string $showstatistic "hitcounter" for showing the hitcounter (views),
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
  */
@@ -474,7 +474,7 @@ function printLatestImagesByDate($number=5, $albumfolder='', $showtitle=false, $
  * @param bool $showdate if the image date should be shown
  * @param bool $showdesc if the image description should be shown
  * @param integer $desclength the length of the description to be shown
-* @param string $showstatistic "hitcounter" for showing the hitcounter (views), 
+* @param string $showstatistic "hitcounter" for showing the hitcounter (views),
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
  */
