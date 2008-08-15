@@ -212,7 +212,7 @@ function printSlideShow($heading = true, $speedctl = false) {
 <script type="text/javascript">
 	$(document).ready(function(){
 		$(function() {
-			var ThisGallery = '<?php echo htmlspecialchars(strip_tags($albumtitle), ENT_QUOTES); ?>';
+			var ThisGallery = '<?php echo htmlspecialchars(strip_tags(htmlspecialchars_decode($albumtitle)), ENT_QUOTES); ?>';
 			var ImageList = new Array();
 			var TitleList = new Array();
 			var DescList = new Array();
@@ -235,7 +235,7 @@ function printSlideShow($heading = true, $speedctl = false) {
 					$img = WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . $image->album->name . '&i=' . fixPixPath($filename) . '&s=' . $imagesize;
 				}
 				echo 'ImageList[' . $cntr . '] = "' . $img . '";'. chr(13);
-				echo 'TitleList[' . $cntr . '] = "' . htmlspecialchars(strip_tags($image->getTitle()), ENT_QUOTES) . '";'. chr(13);
+				echo 'TitleList[' . $cntr . '] = "' . htmlspecialchars(strip_tags(htmlspecialchars_decode($image->getTitle())), ENT_QUOTES) . '";'. chr(13);
 				if(getOption("slideshow_showdesc")) {
 					echo 'DescList[' . $cntr . '] = "' . $image->getDesc() . '";'. chr(13);
 				}
