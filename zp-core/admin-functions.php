@@ -402,7 +402,7 @@ function printLogoAndLinks() {
 		echo gettext("Logged in as")." ".$_zp_current_admin['user']." &nbsp; | &nbsp <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?logout\">".gettext("Log Out")."</a> &nbsp; | &nbsp; ";
 	}
 	echo "<a href=\"".WEBPATH."/index.php\">".gettext("View Gallery");
-	$t = htmlspecialchars(get_language_string(getOption('gallery_title')));
+	$t = get_language_string(getOption('gallery_title'));
 	if (!empty($t))	echo ': ' . $t;
 	echo "</a>";
 	echo "\n</div>";
@@ -582,13 +582,13 @@ define ('CUSTOM_OPTION_PREFIX', '_ZP_CUSTOM_');
  * @param string $indent used to indent the option for nested options
  * @param object $album if not null, the album to which the the option belongs
  * @param bool $hide set to true to hide the output (used by the plugin-options folding
- * 
+ *
  * There are four type of custom options:
  * 		0: a textbox
  * 		1: a checkbox
  * 		2: handled by $optionHandler->handleOption()
  * 		3: a textarea
- * 
+ *
  * type 0 and 3 support multi-lingual strings.
  */
 function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
@@ -1501,7 +1501,7 @@ function processAlbumEdit($index, $album) {
 			}
 		}
 	}
-	
+
 	return $notify;
 }
 
@@ -1675,9 +1675,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 					$empty = false;
 					echo '<li><label for="'.$name.'_'.$key.'">';
 					if ($textbox) {
-						echo '<textarea name="'.$name.'_'.$key.'" cols="60"	rows="6" style="width:271px;">'.htmlspecialchars($string).'</textarea>';
+						echo '<textarea name="'.$name.'_'.$key.'" cols="60"	rows="6" style="width:271px;">'.$string.'</textarea>';
 					} else {
-						echo '<input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.htmlspecialchars($string).'" size="35" style="width:271px;"/>';
+						echo '<input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.$string.'" size="35" style="width:271px;"/>';
 					}
 					echo ' '.$lang."</label></li>\n";
 				}
@@ -1707,9 +1707,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 			$dbstring = array_shift($strings);
 		}
 		if ($textbox) {
-			echo '<textarea name="'.$name.'_'.$locale.'" cols="40"	rows="6" style="width:271px;">'.htmlspecialchars($dbstring).'</textarea>';
+			echo '<textarea name="'.$name.'_'.$locale.'" cols="40"	rows="6" style="width:271px;">'.$dbstring.'</textarea>';
 		} else {
-			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.htmlspecialchars($dbstring).'" size="40" style="width:271px;"/>';
+			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="40" style="width:271px;"/>';
 		}
 	}
 }
