@@ -352,7 +352,7 @@ function printImageStatistic($number, $option, $albumfolder='', $showtitle=false
 		echo "<li><a href=\"" . $image->getImageLink() . "\" title=\"" . strip_tags($image->getTitle()) . "\">\n";
 		echo "<img src=\"" . $image->getThumb() . "\"  alt=\"" . strip_tags($image->getTitle()) . "\" /></a>\n";
 		if($showtitle) {
-			echo "<h3><a href=\"".$image->getImageLink()."\" title=\"" . strip_tags($image->getTitle())) . "\">\n";
+			echo "<h3><a href=\"".$image->getImageLink()."\" title=\"" . strip_tags($image->getTitle()) . "\">\n";
 			echo $image->getTitle()."</a></h3>\n";
 		}
 		if($showdate) {
