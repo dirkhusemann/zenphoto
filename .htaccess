@@ -2,6 +2,10 @@
 # Update the above and the define in setup.php when you make changes to the rewrite rules!
 # NOTE: Change the RewriteBase below to the absolute path to your zenphoto directory. (Or let setup.php do it for you!)
 
+# Attempt to disable magic quotes
+php_flag magic_quotes_gpc Off
+php_flag magic_quotes_runtime Off
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   
