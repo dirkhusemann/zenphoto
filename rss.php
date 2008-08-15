@@ -115,19 +115,19 @@ foreach ($result as $images) {
 	$images['folder'] = implode('/', $imagpathnames);
 	$images['filename'] = rawurlencode($images['filename']);
 	$ext = strtolower(strrchr($images['filename'], "."));
-	$images['title'] = strip_tags(get_language_string($images['title'],$locale));
-	$images['albumtitle'] = strip_tags(get_language_string($images['albumtitle'], $locale));
-	$images['desc'] = strip_tags(get_language_string($images['desc'], $locale));
+	$images['title'] = get_language_string($images['title'],$locale);
+	$images['albumtitle'] = get_language_string($images['albumtitle'], $locale);
+	$images['desc'] = get_language_string($images['desc'], $locale);
 ?>
 <item>
-	<title><?php echo $images['title']." (".$images['albumtitle'].")"; ?></title>
+	<title><?php echo stip_tags($images['title'])." (".stip_tags($images['albumtitle']).")"; ?></title>
 	<link><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix. ']]>';?></link>
 	<description>
 <?php
 if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4") ||  ($ext == ".3gp") ||  ($ext == ".mov")) {
-	echo '<![CDATA[<a title="'.$images['title'].' in '.$images['albumtitle'].'" href="http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix.'">'. $images['title'] .$ext.'</a><p>' . $images['desc'] . '</p>]]>';
+	echo '<![CDATA[<a title="'.stip_tags($images['title']).' in '.stip_tags($images['albumtitle']).'" href="http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix.'">'. $images['title'] .$ext.'</a><p>' . $images['desc'] . '</p>]]>';
 } else {
-	echo '<![CDATA[<a title="'.$images['title'].' in '.$images['albumtitle'].'" href="http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix.'"><img border="0" src="http://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$images['folder'].'&i='.$images['filename'].'&s='.$s.'" alt="'. $images['title'] .'"></a><p>' . $images['desc'] . '</p>]]>'; } ?>
+	echo '<![CDATA[<a title="'.stip_tags($images['title']).' in '.stip_tags($images['albumtitle']).'" href="http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix.'"><img border="0" src="http://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$images['folder'].'&i='.$images['filename'].'&s='.$s.'" alt="'. stip_tags($images['title']) .'"></a><p>' . $images['desc'] . '</p>]]>'; } ?>
 	<?php  echo '<![CDATA[Date: '.zpFormattedDate(getOption('date_format'),$images['mtime']).']]>'; ?>
 </description>
 <category><?php echo $images['albumtitle']; ?></category>
