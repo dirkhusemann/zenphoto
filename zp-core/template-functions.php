@@ -1027,7 +1027,7 @@ function printAlbumThumbImage($alt, $class=NULL, $id=NULL) {
 	}
 	$class = trim($class);
 	if (!getOption('use_lock_image') || checkAlbumPassword($_zp_current_album->name, $hint)) {
-		echo "<img src=\"" . htmlspecialchars(getAlbumThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
+		echo "<img src=\"" . htmlspecialchars(getAlbumThumb()) . "\" alt=\"" . strip_tags($alt) . "\"" .
 		(($class) ? " class=\"$class\"" : "") . (($id) ? " id=\"$id\"" : "") . " />";
 	} else {
 		echo getPasswordProtectImage("\" width=\"".getOption('thumb_crop_width')."\"");
@@ -1091,7 +1091,7 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 		$sizing = $sizing . ' height="' . $sizeH . '"';
 	}
 	if (!getOption('use_lock_image') || checkAlbumPassword($_zp_current_album->name, $hint)){
-		echo "<img src=\"" . htmlspecialchars(getCustomAlbumThumb($size, $width, $height, $cropw, $croph, $cropx, $cropy)). "\"" . $sizing . " alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
+		echo "<img src=\"" . htmlspecialchars(getCustomAlbumThumb($size, $width, $height, $cropw, $croph, $cropx, $cropy)). "\"" . $sizing . " alt=\"" . strip_tags($alt) . "\"" .
 		(($class) ? " class=\"$class\"" : "") .	(($id) ? " id=\"$id\"" : "") . " />";
 	} else {
 		echo getPasswordProtectImage($sizing);
@@ -2022,8 +2022,8 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 	}
 	//Print images
 	else {
-		echo '<img src="' . htmlspecialchars(getDefaultSizedImage()) . '" alt="' . htmlspecialchars($alt, ENT_QUOTES) . '"' .
-			' title="' . htmlspecialchars(strip_tags($alt), ENT_QUOTES) . '"'.
+		echo '<img src="' . htmlspecialchars(getDefaultSizedImage()) . '" alt="' . strip_tags($alt) . '"' .
+			' title="' . strip_tags($alt) . '"'.
 			' width="' . getDefaultWidth() . '" height="' . getDefaultHeight() . '"' .
 			(($class) ? " class=\"$class\"" : "") .
 			(($id) ? " id=\"$id\"" : "") . " />";
@@ -2063,7 +2063,7 @@ function printImageThumb($alt, $class=NULL, $id=NULL) {
 		$w = " width=\"$w\"";
 	}
 	$class = trim($class);
-	echo "<img src=\"" . htmlspecialchars(getImageThumb()) . "\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
+	echo "<img src=\"" . htmlspecialchars(getImageThumb()) . "\" alt=\"" . strip_tags($alt) . "\"" .
 	((getOption('thumb_crop')) ? $w.$h : "") .
 	(($class) ? " class=\"$class\"" : "") .
 	(($id) ? " id=\"$id\"" : "") . " />";
@@ -2219,8 +2219,8 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 	else {
 		$sizearr = getSizeCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy);
 		echo "<img src=\"" . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin)) .
-			"\" alt=\"" . htmlspecialchars($alt, ENT_QUOTES) . "\"" .
-			"\" title=\"" . htmlspecialchars(strip_tags($alt), ENT_QUOTES) . "\"" .
+			"\" alt=\"" . strip_tags($alt) . "\"" .
+			"\" title=\"" . strip_tags($alt) . "\"" .
 		" width=\"" . $sizearr[0] . "\" height=\"" . $sizearr[1] . "\"" .
 		(($class) ? " class=\"$class\"" : "") .
 		(($id) ? " id=\"$id\"" : "") . " />";
