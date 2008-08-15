@@ -370,6 +370,15 @@ if (!$checked) {
 	}
 	checkMark($safe, gettext("PHP Safe Mode"), ' '.gettext("[is set]"), gettext("Zenphoto functionality is reduced when PHP <code>safe mode</code> restrictions are in effect."));
 
+	/* Disabled until post 1.2 release.
+	if (get_magic_quotes_gpc()) {
+		$magic_quotes_disabled = -1;
+	} else {
+		$magic_quotes_disabled = true;
+	}
+	checkMark($magic_quotes_disabled, gettext("PHP magic_quotes_gpc"), ' '.gettext("[is enabled]"), gettext("For better performance, turn of <code>magic_quotes_gpc</code> in php.ini, .htaccess or apache config."));
+	*/
+
 	/* Check for GD and JPEG support. */
 	$gd = extension_loaded('gd');
 	$good = checkMark($gd, ' '.gettext("PHP GD support"), ' '.gettext('is not installed'), gettext('You need to install GD support in your PHP')) && $good;
@@ -773,7 +782,7 @@ if (file_exists("zp-config.php")) {
 	 Add new fields in the upgrade section. This section should remain static except for new
 	 tables. This tactic keeps all changes in one place so that noting gets accidentaly omitted.
 	************************************************************************************/
-	
+
 	//v1.2
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'captcha'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_captcha (
@@ -781,7 +790,7 @@ if (file_exists("zp-config.php")) {
 		`ptime` int(32) UNSIGNED NOT NULL,
 		`hash` varchar(255) NOT NULL,
 		PRIMARY KEY  (`id`)
-		)	CHARACTER SET utf8$collation;";		
+		)	CHARACTER SET utf8$collation;";
 	}
 	//v1.1.7
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'options'])) {
