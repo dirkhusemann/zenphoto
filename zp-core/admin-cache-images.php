@@ -78,6 +78,8 @@ echo "\n<body>";
 	if (!empty($ret)) {
 		$r = "?page=edit";
 		if ($ret != '*') $r .= "&album=$ret";
+	} else {
+		$r = '';
 	}
 	echo "<p><a href=\"admin.php$r\">&laquo; ".gettext("Back")."</a></p>";
 	echo "\n" . '</div>';
