@@ -48,7 +48,7 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-<title><?php echo get_language_string(getOption('gallery_title'), $locale)." - ".htmlspecialchars(gettext("latest comments")); ?></title>
+<title><?php echo strip_tags(get_language_string(getOption('gallery_title'), $locale))." - ".gettext("latest comments"); ?></title>
 <link><?php echo "http://".$host.WEBPATH; ?></link>
 <atom:link href="http://<?php echo $host.WEBPATH; ?>/rss.php" rel="self" type="application/rss+xml" />
 <description><?php echo get_language_string(getOption('gallery_title'), $locale); ?></description>
@@ -67,15 +67,15 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 
 <?php
 db_connect();
-$comments_images = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.type, c.website," 
-. " c.date, c.anon, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a " 
+$comments_images = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.type, c.website,"
+. " c.date, c.anon, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
 . " WHERE i.show = 1 AND c.ownerid = i.id AND i.albumid = a.id AND c.private = 0 AND c.type = 'images'".$passwordcheck1
 . " ORDER BY c.id DESC LIMIT $items");
 
-$comments_albums = query_full_array("SELECT c.id, a.folder, a.title AS albumtitle, c.name, c.type, c.website," 
-. " c.date, c.anon, c.comment FROM ".prefix('comments')." AS c, ".prefix('albums')." AS a " 
+$comments_albums = query_full_array("SELECT c.id, a.folder, a.title AS albumtitle, c.name, c.type, c.website,"
+. " c.date, c.anon, c.comment FROM ".prefix('comments')." AS c, ".prefix('albums')." AS a "
 . " WHERE a.show = 1 AND c.ownerid = a.id AND c.private = 0 AND c.type = 'albums'".$passwordcheck2
-. " ORDER BY c.id DESC LIMIT $items"); 
+. " ORDER BY c.id DESC LIMIT $items");
 
 $comments = array();
 foreach ($comments_albums as $comment) {
@@ -100,21 +100,21 @@ foreach ($comments as $comment) {
 		$imagetag = "";
 	}
 	$date = $comment['date'];
-	$albumtitle = htmlspecialchars(get_language_string($comment['albumtitle'], $locale));
+	$albumtitle = get_language_string($comment['albumtitle'], $locale);
 	if ($comment['title'] == "") $title = $image; else $title = get_language_string($comment['title'], $locale);
 	$website = $comment['website'];
 	$shortcomment = truncate_string($comment['comment'], 123);
 	if(!empty($title)) {
 		$title = ": ".$title;
-	} 
+	}
 	$count++;
 ?>
 
 <item>
-<title><?php echo htmlspecialchars($albumtitle.$title.$author, ENT_QUOTES); ?></title>
+<title><?php echo strip_tags($albumtitle.$title.$author); ?></title>
 <link><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$album.$imagetag.']]>';?></link>
-<description><?php echo htmlspecialchars($shortcomment, ENT_QUOTES); ?></description>
-<category><?php echo htmlspecialchars($albumtitle, ENT_QUOTES); ?></category>
+<description><?php echo $shortcomment; ?></description>
+<category><?php echo strip_tags($albumtitle); ?></category>
 <guid><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$album.$imagetag.']]>';?></guid>
 <pubDate><?php echo fixRSSDate($date); ?></pubDate>
 </item>
