@@ -1611,8 +1611,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		if ($code_cypher != $code_ok || strlen($code) != CAPTCHA_LENGTH) { return -5; }
 		query('DELETE FROM '.prefix('captcha').' WHERE `ptime`<'.(time()-3600)); // expired tickets
 		$result = query('DELETE FROM '.prefix('captcha').' WHERE `hash`="'.$code_cypher.'"');
-		$result = query('SELECT ROW_COUNT()');
-		$count = mysql_result($result, 0);
+		$count = mysql_affected_rows();
 		if ($count != 1) { return -5; } // no ticket
 	}
 	if (empty($comment)) {
