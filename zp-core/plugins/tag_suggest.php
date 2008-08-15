@@ -2,10 +2,10 @@
 /**
  * tag suggest plugin draft based on Remy Sharp's jQuery Tag Suggestion plugin
  * Just activate the plugin and the feature is available on the theme's search field.
- *  
+ *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard) - an adaption of Remy Sharp's <a href='http://remysharp.com/2007/12/28/jquery-tag-suggestion/ '>jQuery Tag Suggestion</a>
  * @version 1.0.0
- * @package plugins 
+ * @package plugins
  */
 
 $plugin_description = gettext("Enables jQuery tag suggestions on the search field. Just activate the plugin and the feature is available on the theme's search field.");
@@ -23,7 +23,7 @@ $list = '';
 foreach ($taglist AS $tag) {
 	if ($c>0) $list .= ',';
 	$c++;
-	$list .= '"'.$tag.'"';
+	$list .= '"'.htmlspecialchars(htmlspecialchars_decode($tag), ENT_QUOTES).'"';
 }
 $js = '<script type="text/javascript">'.
 				'$(function () {'.
