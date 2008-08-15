@@ -48,11 +48,11 @@ foreach($albumscheck as $albumcheck) {
 	if(!checkAlbumPassword($albumcheck['folder'], $hint)) {
 		$albumpasswordcheck= " AND albums.id != ".$albumcheck['id'];
 		$passwordcheck = $passwordcheck.$albumpasswordcheck;
-	} 
+	}
 }
-if ($albumname != "") { 
-	$albumname = " (".$albumname.")"; 
-} 
+if ($albumname != "") {
+	$albumname = " (".$albumname.")";
+}
 if(getOption('mod_rewrite')) {
 	$albumpath = "/"; $imagepath = "/"; $modrewritesuffix = getOption('mod_rewrite_image_suffix');
 } else  {
@@ -61,10 +61,10 @@ if(getOption('mod_rewrite')) {
 ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-<title><?php echo htmlspecialchars(get_language_string(getOption('gallery_title'), $locale)).htmlspecialchars($albumname); ?></title>
+<title><?php echo strip_tags(get_language_string(getOption('gallery_title'), $locale)).strip_tags($albumname); ?></title>
 <link><?php echo "http://".$host.WEBPATH; ?></link>
 <atom:link href="http://<?php echo $host.WEBPATH; ?>/rss.php" rel="self" type="application/rss+xml" />
-<description><?php echo htmlspecialchars(get_language_string(getOption('gallery_title'), $locale)); ?></description>
+<description><?php echo strip_tags(get_language_string(getOption('gallery_title'), $locale)); ?></description>
 <language><?php echo getOption('locale'); ?></language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
 <lastBuildDate><?php echo date("r", time()); ?></lastBuildDate>
@@ -77,7 +77,7 @@ if(getOption('mod_rewrite')) {
 ?>
 <managingEditor><?php echo "$adminemail ($adminname)"; ?></managingEditor>
 <webMaster><?php echo "$adminemail ($adminname)"; ?></webMaster>
-<?php 
+<?php
 if(isset($_GET['size'])) {
 $size = sanitize_numeric($_GET['size']);
 } else {
@@ -92,16 +92,16 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 
 db_connect();
 
-if (is_numeric($albumnr) && !is_null($albumnr)) { 
+if (is_numeric($albumnr) && !is_null($albumnr)) {
 	$albumWhere = "images.albumid = $albumnr AND";
 } else if (!is_null($albumfolder)) {
-	$albumWhere = "folder LIKE '".$albumfolder."/%' AND "; 
+	$albumWhere = "folder LIKE '".$albumfolder."/%' AND ";
 } else {
 	$albumWhere = "";
 }
 
 $result = query_full_array("SELECT images.albumid, images.date AS date, images.mtime AS mtime, images.filename AS filename, images.desc, images.title AS title, " .
- 														"albums.folder AS folder, albums.title AS albumtitle, images.show, albums.show, albums.password FROM " . 
+ 														"albums.folder AS folder, albums.title AS albumtitle, images.show, albums.show, albums.password FROM " .
 															prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
 															" WHERE ".$albumWhere." images.albumid = albums.id AND images.show=1 AND albums.show=1 ".
 															" AND albums.folder != ''".$passwordcheck.
@@ -115,9 +115,9 @@ foreach ($result as $images) {
 	$images['folder'] = implode('/', $imagpathnames);
 	$images['filename'] = rawurlencode($images['filename']);
 	$ext = strtolower(strrchr($images['filename'], "."));
-	$images['title'] = htmlspecialchars(strip_tags(get_language_string($images['title'],$locale)), ENT_QUOTES);
-	$images['albumtitle'] = htmlspecialchars(strip_tags(get_language_string($images['albumtitle'], $locale)), ENT_QUOTES);
-	$images['desc'] = htmlspecialchars(strip_tags(get_language_string($images['desc'], $locale)), ENT_QUOTES);
+	$images['title'] = strip_tags(get_language_string($images['title'],$locale));
+	$images['albumtitle'] = strip_tags(get_language_string($images['albumtitle'], $locale));
+	$images['desc'] = strip_tags(get_language_string($images['desc'], $locale));
 ?>
 <item>
 	<title><?php echo $images['title']." (".$images['albumtitle'].")"; ?></title>
@@ -132,7 +132,7 @@ if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4") ||  ($ext == ".3gp"
 </description>
 <category><?php echo $images['albumtitle']; ?></category>
 	<guid><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix. ']]>';?></guid>
-	<pubDate><?php echo fixRSSDate($images['date']); ?></pubDate> 
+	<pubDate><?php echo fixRSSDate($images['date']); ?></pubDate>
 </item>
 <?php } ?>
 </channel>
