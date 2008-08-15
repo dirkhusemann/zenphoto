@@ -229,7 +229,7 @@ if (isset($_GET['action'])) {
 			$returntab = "#tab_image";
 		}
 		/*** Comment options ***/
-			
+
 		if (isset($_POST['savecommentoptions'])) {
 			setOption('spam_filter', $_POST['spam_filter']);
 			setBoolOption('email_new_comments', isset($_POST['email_new_comments']));
@@ -281,7 +281,7 @@ if (isset($_GET['action'])) {
 			$returntab = "#tab_plugin";
 		}
 		/*** custom options ***/
-		if (!$themeswitch) { // was really a save.		
+		if (!$themeswitch) { // was really a save.
 			foreach ($_POST as $postkey=>$value) {
 				$customtype = substr($postkey, 0, strpos($postkey, '-'));
 				if (strpos($customtype, CUSTOM_OPTION_PREFIX) !== false) { // custom option!
@@ -350,14 +350,14 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 <div id="mainmenu">
 <ul>
 	<li><a href="#tab_admin"><span><?php echo gettext("admin information"); ?></span></a></li>
-	<?php 
+	<?php
 	if (!$_zp_null_account) {
-		if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) { 
+		if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	?>
 			<li><a href="#tab_gallery"><span><?php echo gettext("gallery configuration"); ?></span></a></li>
 			<li><a href="#tab_image"><span><?php echo gettext("image display"); ?></span></a></li>
 			<li><a href="#tab_comments"><span><?php echo gettext("comment configuration"); ?></span></a></li>
-		<?php 
+		<?php
 		}
 		if ($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
 		?>
@@ -407,7 +407,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 <table class="bordered">
 	<tr>
 		<th colspan="3">
-		<h2><?php echo gettext("Admin login information"); ?></h2> 
+		<h2><?php echo gettext("Admin login information"); ?></h2>
 		</th>
 	</tr>
 	<?php
@@ -421,7 +421,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 				$master = " (<em>".gettext("Master")."</em>)";
 				$user['rights'] = $user['rights'] | ADMIN_RIGHTS;
 			}
-		}		
+		}
 		if (count($admins) > 2) {
 			$background = ($user['id'] == $_zp_current_admin['id']) ? " background-color: #ECF1F2;" : "";
 		} else {
@@ -432,7 +432,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 		<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" width="175"><strong><?php echo gettext("Username:"); ?></strong></td>
 		<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" width="200"><?php if (empty($userid)) {?>
 		<input type="text" size="40" name="<?php echo $id ?>-adminuser"
-			value="" /> <?php  } else { echo $userid.$master; ?> 
+			value="" /> <?php  } else { echo $userid.$master; ?>
 			<input type="hidden" name="<?php echo $id ?>-adminuser"
 			value="<?php echo $userid ?>" /> <?php } ?></td>
 		<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
@@ -472,14 +472,14 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 					value=<?php echo COMMENT_RIGHTS; if ($user['rights'] & COMMENT_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Comment"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-upload_rights"
 					value=<?php echo UPLOAD_RIGHTS; if ($user['rights'] & UPLOAD_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Upload"); ?></td>
-				<?php 
+				<?php
 				if (NO_RIGHTS > 0) {
 				?>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-view_rights"
 					value=<?php echo VIEWALL_RIGHTS; if ($user['rights'] & VIEWALL_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("View all albums"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-main_rights"
 					value=<?php echo MAIN_RIGHTS; if ($user['rights'] & MAIN_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Overview"); ?></td>
-				<?php 
+				<?php
 				} else{
 					echo '<input type="hidden" name="'.$id.'-main_rights" value=1>';
 				}
@@ -542,7 +542,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 				}?>
 		</td></table>
 		</td>
-	
+
 	<tr>
 	</tr>
 	<?php
@@ -589,7 +589,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 					' '.gettext("The locale").' '.$locale.' '.gettext("is not supported on your server.").
 					"</h2>";
 		echo '</div>';
-	}		
+	}
 	if (isset($_GET['badurl'])) {
 		echo '<div class="errorbox" id="fade-message">';
 		echo  "<h2>".gettext("Your Website URL is not valid")."</h2>";
@@ -712,12 +712,12 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		<td><select id="locale" name="locale">
 			<?php	generateLanguageOptionList();	?>
 		</select>
-		<input type="checkbox" name="multi_lingual" value="1"	<?php echo checked('1', getOption('multi_lingual')); ?> /> 
+		<input type="checkbox" name="multi_lingual" value="1"	<?php echo checked('1', getOption('multi_lingual')); ?> />
 		<?php echo gettext('Multi-lingual'); ?>
 		</td>
 		<td>
-		<?php 
-		echo gettext("The language to display text in. (Set to <em>HTTP Accept Language</em> to use the language preference specified by the viewer's browser.)"); 
+		<?php
+		echo gettext("The language to display text in. (Set to <em>HTTP Accept Language</em> to use the language preference specified by the viewer's browser.)");
 		echo ' '.gettext("Set <em>Multi-lingual</em> to enable multiple languages for database fields.");
 		echo ' '.gettext("<strong>Note:</strong> if you have created multi-language strings, uncheck this option, then save anything, you will loose your strings.");
 		?>
@@ -736,7 +736,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 			</script>
 			<select id="date_format_list" name="date_format_list" onchange="showfield(this)">
 			<?php
-			$formatlist = array(gettext('Custom')=>'custom', 
+			$formatlist = array(gettext('Custom')=>'custom',
 					gettext('02/25/08 15:30')=>'%d/%m/%y %H:%M',
 					gettext('02/25/08')=>'%d/%m/%y',
 					gettext('02/25/2008 15:30')=>'%d/%m/%Y %H:%M',
@@ -829,7 +829,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		$sort[gettext('Manual')] = 'Manual'; // allow manual sorttype
 		generateListFromArray(array(getOption('gallery_sorttype')), $sort);
 		?>
-		</select> 
+		</select>
 		<input type="checkbox" name="gallery_sortdirection"
 			value="1"
 			<?php echo checked('1', getOption('gallery_sortdirection')); ?> />
@@ -874,7 +874,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		<td><?php echo gettext("Enable Persistent Archives:"); ?></td>
 		<td><input type="checkbox" name="persistent_archive" value="1"
 		<?php echo checked('1', getOption('persistent_archive')); ?> /></td>
-		<td><?php echo gettext("Put a checkmark here to re-serve Zip Archive files. If not checked	they will be regenerated each time."); ?> 
+		<td><?php echo gettext("Put a checkmark here to re-serve Zip Archive files. If not checked	they will be regenerated each time."); ?>
 		<?php echo gettext("<strong>Note: </strong>Setting	this option may impact password protected albums!"); ?></td>
 	</tr>
 	<tr>
@@ -961,7 +961,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		echo "<select id=\"watermark_image\" name=\"watermark_image\">\n";
 		generateListFromFiles($v, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png');
 		echo "</select>\n";
-		?> 
+		?>
 		<input type="checkbox" name="perform_watermark" value="1"
 		<?php echo checked('1', getOption('perform_watermark')); ?> />&nbsp;<?php echo gettext("Enabled"); ?>
 		<br />
@@ -971,9 +971,9 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		<input type="checkbox" name="watermark_allow_upscale" value="1"
 		<?php echo checked('1', getOption('watermark_allow_upscale')); ?> />&nbsp;<?php echo gettext("allow upscale"); ?>
 		<br />
-		<?php echo gettext("offset h"); ?> 
+		<?php echo gettext("offset h"); ?>
 		<input type="text" size="2" name="watermark_h_offset"
-				value="<?php echo htmlspecialchars(getOption('watermark_h_offset'));?>" /><?php echo gettext("% w, "); ?> 
+				value="<?php echo htmlspecialchars(getOption('watermark_h_offset'));?>" /><?php echo gettext("% w, "); ?>
 		<input type="text" size="2" name="watermark_w_offset"
 			value="<?php echo htmlspecialchars(getOption('watermark_w_offset'));?>" /><?php echo gettext("%"); ?>
 		</td>
@@ -1005,7 +1005,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	<tr>
 		<td><?php echo gettext("Full image protection:"); ?></td>
 		<td>
-		<?php 
+		<?php
 		echo "<select id=\"protect_full_image\" name=\"protect_full_image\">\n";
 		generateListFromArray(array(getOption('protect_full_image')), array(gettext('Unprotected') => 'Unprotected', gettext('Protected view') => 'Protected view', gettext('Download') => 'Download', gettext('No access') => 'No access'));
 		echo "</select>\n";
@@ -1013,13 +1013,13 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		echo checked('1', getOption('hotlink_protection')). ' /> '.gettext('Disable hotlinking');
 		?>
 		</td>
-		<td><?php echo gettext("Select the level of protection for full sized images."); 
+		<td><?php echo gettext("Select the level of protection for full sized images.");
 		echo ' '.gettext("Disabling hotlinking prevents linking to the full image from other domains. If enabled, external links are redirect to the image page. If you are having problems with full images being displayed, try disabling this setting. Hotlinking is not prevented if <em>Full image protection</em> is <em>Unprotected</em>."); ?></td>
 	</tr>
 		<td><?php echo gettext("Use lock image"); ?></td>
 		<td>
 			<input type="checkbox" name="use_lock_image" value="1"
-			<?php echo checked('1', getOption('use_lock_image')); ?> />&nbsp;<?php echo gettext("Enabled"); ?>		
+			<?php echo checked('1', getOption('use_lock_image')); ?> />&nbsp;<?php echo gettext("Enabled"); ?>
 		</td>
 		<td><?php echo gettext("Substitute a <em>lock</em> image for thumbnails of password protected albums when the viewer has not supplied the password. If your theme supplies an <code>images/err-passwordprotected.gif</code> image, it will be shown. Otherwise the zenphoto default lock image is displayed."); ?>
 	<tr>
@@ -1032,9 +1032,9 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 </table>
 </form>
 </div><!-- end of tab_image div -->
-<?php 
+<?php
 }
-if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) { 
+if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 ?>
 <div id="tab_comments">
 <form action="?action=saveoptions" method="post"><input
@@ -1109,10 +1109,10 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 <!-- end of tab_comments div -->
 <?php if ($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) { ?>
 <div id="tab_theme">
-<?php 
+<?php
 $themelist = array();
 if (($_zp_loggedin & ADMIN_RIGHTS)) {
-	$gallery_title = htmlspecialchars(get_language_string(getOption('gallery_title')));
+	$gallery_title = get_language_string(getOption('gallery_title'));
 	if ($gallery_title != gettext("Gallery")) {
 		$gallery_title .= ' ('.gettext("Gallery").')';
 	}
@@ -1158,7 +1158,7 @@ if (!empty($_REQUEST['themealbum'])) {
 	} else {
 ?>
 <form action="?action=saveoptions" method="post">
-	<input type="hidden" name="savethemeoptions" value="yes" /> 
+	<input type="hidden" name="savethemeoptions" value="yes" />
 	<table class='bordered'>
 <?php
 	/* handle theme options */
@@ -1173,7 +1173,7 @@ if (!empty($_REQUEST['themealbum'])) {
 	}
 	echo "</th></tr>\n";
 	?>
-	
+
 	<tr class="alt1">
 		<td colspan="2" align="left">
 			<?php echo gettext('<strong>Standard options</strong>') ?>
@@ -1202,7 +1202,7 @@ if (!empty($_REQUEST['themealbum'])) {
 		<td><?php echo gettext("Crop thumbnails:"); ?></td>
 		<td><input type="checkbox" size="40" name="thumb_crop" value="1"
 		<?php echo checked('1', getThemeOption($album, 'thumb_crop')); ?> /></td>
-		<td><?php echo gettext("If checked the thumbnail will be a centered portion of the	image with the given width and height after being resized to <em>thumb	size</em> (by shortest side).").' '; 
+		<td><?php echo gettext("If checked the thumbnail will be a centered portion of the	image with the given width and height after being resized to <em>thumb	size</em> (by shortest side).").' ';
 		echo gettext("Otherwise, it will be the full image resized to <em>thumb size</em> (by shortest side)."); ?></td>
 	</tr>
 	<tr>
@@ -1228,7 +1228,7 @@ if (!empty($_REQUEST['themealbum'])) {
 		<td><input type="checkbox" size="40" name="image_use_longest_side"
 			value="1"
 			<?php echo checked('1', getThemeOption($album, 'image_use_longest_side')); ?> /></td>
-		<td><?php echo gettext("If this is checked the longest side of the image will be <em>image size</em>.").' ';  
+		<td><?php echo gettext("If this is checked the longest side of the image will be <em>image size</em>.").' ';
 		echo gettext("Otherwise, the <em>width</em> of the image will	be <em>image size</em>."); ?></td>
 	</tr>
 	<?php
@@ -1248,7 +1248,7 @@ if (!empty($_REQUEST['themealbum'])) {
 			customOptions($optionHandler, '', $album);
 		}
 	}
-		
+
 	?>
 	<tr>
 	<td></td>
@@ -1260,18 +1260,18 @@ if (!empty($_REQUEST['themealbum'])) {
 </div>
 <?php } ?>
 <!-- end of tab_theme div -->
-<?php		
-if ($_zp_loggedin & ADMIN_RIGHTS) { 
+<?php
+if ($_zp_loggedin & ADMIN_RIGHTS) {
 	$c = 0;
 ?>
 	<div id="tab_plugin">
 	<form action="?action=saveoptions" method="post">
-	<input type="hidden" name="savepluginoptions" value="yes" /> 
+	<input type="hidden" name="savepluginoptions" value="yes" />
 	<table class="bordered">
 	<tr>
 		<th colspan="3">
-			<h2><?php echo gettext("Plugin Options"); ?> <span style="font-weight: normal"> <a href="javascript:togglePluginOptions('',true);"><?php echo gettext('Expand plugin options');?></a> 
-		| <a href="javascript:togglePluginOptions('',false);"><?php echo gettext('Collapse all plugin options');?></a></span></h2> 
+			<h2><?php echo gettext("Plugin Options"); ?> <span style="font-weight: normal"> <a href="javascript:togglePluginOptions('',true);"><?php echo gettext('Expand plugin options');?></a>
+		| <a href="javascript:togglePluginOptions('',false);"><?php echo gettext('Collapse all plugin options');?></a></span></h2>
 		</th>
 	</tr>
 	<tr>
@@ -1287,8 +1287,8 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 			echo '<tr><th colspan="3">';
 			?>
 			<span class="extrashow"><a href="javascript:togglePluginOptions('<?php echo $ext;?>', true);"><?php echo $ext; ?></a></span>
-			<span style="display:none;" class="extrahide"><a href="javascript:togglePluginOptions('<?php echo $ext;?>', false);"><?php echo $ext; ?></a></span>	
-			<?php 
+			<span style="display:none;" class="extrahide"><a href="javascript:togglePluginOptions('<?php echo $ext;?>', false);"><?php echo $ext; ?></a></span>
+			<?php
 			echo '</th></tr>';
 			$supportedOptions = $option_interface->getOptionsSupported();
 			if (count($supportedOptions) > 0) {
@@ -1305,7 +1305,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		<input type="submit" value= <?php echo gettext('save') ?> />
 		</td>
 		</tr></table>
-	<?php 
+	<?php
 	}
 	?>
 	</form>
@@ -1319,7 +1319,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 
 <!-- end of tab_plugin div -->
 </div>
-<!-- end of container --> 
+<!-- end of container -->
 <?php
 echo '</div>'; // content
 echo '</div>'; // main
