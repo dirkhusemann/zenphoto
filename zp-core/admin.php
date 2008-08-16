@@ -250,7 +250,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 					$albumdir = "&album=" . urlencode(implode('/', $pieces));
 				}
 			}
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit" . $albumdir . "&ndeleted=");
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit" . $albumdir . "&ndeleted=".$nd);
 			exit();
 		}
 	}
