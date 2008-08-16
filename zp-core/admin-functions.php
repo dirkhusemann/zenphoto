@@ -1722,23 +1722,23 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
  */
 function process_language_string_save($name) {
 	global $_zp_active_languages;
-	if (is_null($_zp_active_languages)) {
-		$_zp_active_languages = generateLanguageList();
-	}
 	$l = strlen($name)+1;
 	$strings = array();
 	foreach ($_POST as $key=>$value) {
-		if (!empty($value) && preg_match('/^'.$name.'_[a-z]{2}_[A-Z]{2}/', $key)) {
+		if (!empty($value) && preg_match('/^'.$name.'_[a-z]{2}_[A-Z]{2}$/', $key)) {
 			$key = substr($key, $l);
 			if (in_array($key, $_zp_active_languages)) {
 				$strings[$key] = sanitize($value, 2);
 			}
 		}
 	}
-	if (count($strings) > 1) {
-		return serialize($strings);
-	} else {
-		return array_shift($strings);
+	switch (count($strings)) {
+		case 0:
+			return sanitize($_POST[$name], 2);
+		case 1:
+			return array_shift($strings);
+		default:
+			return serialize($strings);
 	}
 }
 
