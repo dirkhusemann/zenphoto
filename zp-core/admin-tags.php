@@ -297,21 +297,6 @@ echo "\n<p>".gettext("Add tags to the list by entering their names in the input 
 }
 echo "\n</td>";
 echo "\n</tr>";
-/* TODO: 1.2 disable these
-echo "\n<tr>";
-echo "\n<td colspan=3 valign='top'>";
-if ($newTags) {
-	echo "\n<p align='center'><form name='tag_convert' action='?convert=string' method='post'>";
-	echo "\n<button type=\"submit\" class=\"tooltip\" id='convert_tags' title=\"".gettext("Converts the <em>tags</em> from the table structure to a string in a record field.")."\"> ".gettext("Revert tags to strings")."</button>";
-	echo "\n</form></p>";
-} else {
-	echo "\n<p align='center'><form name='tag_convert' action='?convert=table' method='post'>";
-	echo "\n<button type=\"submit\" class=\"tooltip\" id='convert_tags' title=\"".gettext("Converts the <em>tags</em> from strings in a record field to a database tag table structure.")."\"> ".gettext("Convert tags to table")."</button>";
-	echo "\n</form></p>";
-}
-echo "\n</td>";
-echo "\n</tr>";
-*/
 echo "\n</table>";
 
 echo "\n" . '</div>';

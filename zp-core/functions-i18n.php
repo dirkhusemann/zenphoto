@@ -242,6 +242,7 @@ function getUserLocale() {
 	if ($locale !== false) {
 		setOption('locale', $locale, false);
 	}
+	return $locale;
 }
 
 /**

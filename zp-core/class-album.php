@@ -18,6 +18,8 @@ class Album extends PersistentObject {
 	var $commentcount;  // The number of comments on this image.
 	var $index;
 	var $themeoverride;
+	var $lastimagesort = NULL;  // remember the order for the last album/image sorts
+	var $lastsubalbumsort = NULL;
 
 	/**
 	 * Constructor for albums
@@ -467,7 +469,7 @@ class Album extends PersistentObject {
 	 */
 
 	function getSubAlbums($page=0, $sorttype=null, $sortdirection=null) {
-		if (is_null($this->subalbums)) {
+		if (is_null($this->subalbums) || $sorttype.$sortdirection !== $this->lastsubalbumsort ) {
 			$dirs = $this->loadFileNames(true);
 			$subalbums = array();
 
@@ -483,8 +485,9 @@ class Album extends PersistentObject {
 					$key .= ' ' . $sortdirection;
 				}
 			}
-			$sortedSubalbums = sortAlbumArray($this->id, $subalbums, $key);
+			$sortedSubalbums = sortAlbumArray($this, $subalbums, $key);
 			$this->subalbums = $sortedSubalbums;
+			$this->lastsubalbumsort = $sorttype.$sortdirection;
 		}
 		if ($page == 0) {
 			return $this->subalbums;
@@ -506,7 +509,7 @@ class Album extends PersistentObject {
 	 * @return array
 	 */
 	function getImages($page=0, $firstPageCount=0, $sorttype=null, $sortdirection=null) {
-		if (is_null($this->images)) {
+		if (is_null($this->images) || $sorttype.$sortdirection !== $this->lastimagesort) {
 			if ($this->isDynamic()) {
 				$searchengine = $this->getSearchEngine();
 				$images = $searchengine->getSearchImages();
@@ -516,6 +519,7 @@ class Album extends PersistentObject {
 				$images = $this->sortImageArray($images, $sorttype, $sortdirection);
 			}
 			$this->images = $images;
+			$this->lastimagesort = $sorttype.$sortdirection;
 		}
 		// Return the cut of images based on $page. Page 0 means show all.
 		if ($page == 0) {
@@ -552,7 +556,7 @@ class Album extends PersistentObject {
 	 * @param  string $sortdirection optional sort direction
 	 * @return array
 	 */
-	function sortImageArray($images, $sorttype=NULL, $sortdirection=NULL) {
+	function sortImageArray($images, $sorttype=NULL, $sortdirection=NULL, $recursed=false) {
 		global $_zp_loggedin;
 
 		$hidden = array();
@@ -567,7 +571,7 @@ class Album extends PersistentObject {
 				}
 			}
 		}
-		$result = query("SELECT `filename`, `title`, `sort_order`, `title`, `show`, `id` FROM " . prefix("images")
+		$result = query($sql = "SELECT `filename`, `title`, `sort_order`, `title`, `show`, `id` FROM " . prefix("images")
 										. " WHERE `albumid`=" . $this->id . " ORDER BY " . $key . $direction);
 		$results = array();
 		while ($row = mysql_fetch_assoc($result)) {
@@ -602,9 +606,13 @@ class Album extends PersistentObject {
 		// This is consistent with the sort oder of a NULL sort_order key in manual sorts
 		// but will almost certainly be wrong in all other cases.
 		$images_not_in_db = array_diff($images, $images_in_db);
-		foreach($images_not_in_db as $filename) {
-			$images_to_keys[$filename] = $i;
-			$i++;
+		if (count($images_not_in_db) > 0) {
+			foreach($images_not_in_db as $filename) {
+				$imgobj = new Image($this, $filename); // force it into the database
+				$images_to_keys[$filename] = $i;
+				$i++;
+			}
+			if (!$recursed) return $this->sortImageArray($images, $sorttype, $sortdirection, true);
 		}
 		$images = array_flip($images_to_keys);
 		ksort($images);
@@ -659,7 +667,7 @@ class Album extends PersistentObject {
 			$thumb = substr($thumb, 1); // strip off the slash
 			$albumdir = getAlbumFolder();
 		}
-		if ($thumb != NULL && file_exists($albumdir.$thumb)) {
+		if (!empty($thumb) && $thumb != '1' && file_exists($albumdir.$thumb)) {
 			if ($i===false) {
 				return new Image($this, $thumb);
 			} else {
@@ -672,15 +680,14 @@ class Album extends PersistentObject {
 				return new Image(new Album($this->gallery, $albumdir), $thumb);
 			}
 		} else if (!$this->isDynamic()) {
-			$dp = opendir($albumdir);
-			if (is_null($this->images)) {
-				$this->getImages(0);
-			}
+			$this->getImages(0, 0, 'ID', 'DESC');
 			$thumbs = $this->images;
 			if (!is_null($thumbs)) {
-				shuffle($thumbs);
+				if ($thumb !== '1') {
+					shuffle($thumbs);
+				} 
 				while (count($thumbs) > 0) {
-					$thumb = array_pop($thumbs);
+					$thumb = array_shift($thumbs);
 					if (is_valid_image($thumb)) {
 						return new Image($this, $thumb);
 					}
@@ -1049,9 +1056,6 @@ class Album extends PersistentObject {
 	function preLoad() {
 		if (!$this->isDynamic()) return; // nothing to do
 		$images = $this->getImages(0);
-		foreach($images as $filename) {
-			$image = new Image($this, $filename);
-		}
 		$subalbums = $this->getSubAlbums(0);
 		foreach($subalbums as $dir) {
 			$album = new Album($this->gallery, $dir);

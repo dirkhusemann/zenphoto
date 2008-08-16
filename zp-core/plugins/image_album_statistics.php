@@ -100,7 +100,7 @@ function getAlbumStatistic($number=5, $option) {
  * @param bool $showdate if the album date should be shown
  * @param bool $showdesc if the album description should be shown
  * @param integer $desclength the length of the description to be shown
-  * @param string $showstatistic "hitcounter" for showing the hitcounter (views),
+ * @param string $showstatistic "hitcounter" for showing the hitcounter (views),
  * 															"rating" for rating,
  * 															"rating+hitcounter" for both.
  */

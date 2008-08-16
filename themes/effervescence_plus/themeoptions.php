@@ -12,6 +12,7 @@
  *          'type' => 0 says for admin to use a standard textbox for the option
  *          'type' => 1 says for admin to use a standard checkbox for the option
  *          'type' => 2 will cause admin to call handleOption to generate the HTML for the option
+ * 					'multilingual' => 1 will cause type 0 fields to be rendered multilingual 
  *          'desc' => text to be displayed for the option description.
  *
  *     handleOption($option, $currentValue)
@@ -41,7 +42,7 @@ class ThemeOptions {
 	}
 
 	function getOptionsSupported() {
-		return array(	gettext('Theme logo') => array('key' => 'Theme_logo', 'type' => 0, 'desc' => gettext('The text for the theme logo')),
+		return array(	gettext('Theme logo') => array('key' => 'Theme_logo', 'type' => 0, 'multilingual' => 1, 'desc' => gettext('The text for the theme logo')),
 									gettext('Allow comments') => array('key' => 'Allow_comments', 'type' => 1, 'desc' => gettext('Check to enable comment section.')),
 									gettext('Watermark head_image') => array('key' => 'Watermark_head_image', 'type' => 1, 'desc' => gettext('Check to place a watermark on the heading image. (Image watermarking must be set.)')),
 									gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Check to enable search form.')),

@@ -7,7 +7,7 @@
  */
 define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
 define('DEBUG_ERROR', false); // set to true to  supplies the calling sequence with zp_error messages
-define('ALBUM_OPTIONS_TABLE', true);  // TODO: 1.2 change this to true. See also the 1.2 todo list on the tasks tab
+define('ALBUM_OPTIONS_TABLE', true);
 define('SAFE_GLOB', false);
 define('CAPTCHA_LENGTH', 5);
 include('version.php'); // Include the version info.
@@ -1104,17 +1104,16 @@ function sortByTitle($dbresult, $descending) {
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function sortAlbumArray($albumid, $albums, $sortkey='sort_order') {
-	global $_zp_loggedin;
-
+function sortAlbumArray($parentalbum, $albums, $sortkey='sort_order', $recursed=false) {
+	global $_zp_loggedin, $_zp_gallery;
 	$hidden = array();
-	if (is_null($albumid)) {
+	if (is_null($parentalbum)) {
 		$albumid = ' IS NULL';
 	} else {
-		$albumid = '='.$albumid;
+		$albumid = '='.$parentalbum->id;
 	}
-	$result = query($sql = 'SELECT folder, sort_order, `title`, `show`, `dynamic`, `search_params` FROM ' .
-						prefix("albums") . 'WHERE `parentid`'.$albumid.' ORDER BY ' . $sortkey);
+	$result = query('SELECT folder, sort_order, `title`, `show`, `dynamic`, `search_params` FROM ' .
+						prefix("albums") . ' WHERE `parentid`'.$albumid.' ORDER BY ' . $sortkey);
 	$results = array();
 	while ($row = mysql_fetch_assoc($result)) {
 		$results[] = $row;
@@ -1139,9 +1138,13 @@ function sortAlbumArray($albumid, $albums, $sortkey='sort_order') {
 	}
 
 	$albums_untouched = array_diff($albums, $albums_touched);
-	foreach($albums_untouched as $alb) {
-		$albums_r[$alb] = -$i;  /* place them in the front of the list */
-		$i++;
+	if (count($albums_untouched) > 0) { //found new albums
+		foreach($albums_untouched as $alb) {
+			$albobj = new Album($_zp_gallery, $alb); // force load to DB
+			$albums_r[$alb] = -$i;  // place them in the front of the list
+			$i++;
+		}
+		if (!$recursed) return sortAlbumArray($parentalbum, $albums, $sortkey, true);
 	}
 
 	foreach($hidden as $alb) {
@@ -1920,27 +1923,16 @@ function zp_setCookie($name, $value, $time=0, $path='/') {
 
 //admin user handling
 
-// TODO: 1.2 change this define to 2
 define('NO_RIGHTS', 2);
-if (NO_RIGHTS == 2) {
-	define('MAIN_RIGHTS', 4);
-	define('VIEWALL_RIGHTS', 8);
-	define('UPLOAD_RIGHTS', 16);
-	define('COMMENT_RIGHTS', 64);
-	define('EDIT_RIGHTS', 256);
-	define('ALL_ALBUMS_RIGHTS', 512);
-	define('THEMES_RIGHTS', 1024);
-	define('OPTIONS_RIGHTS', 8192);
-	define('ADMIN_RIGHTS', 65536);
-} else {
-	define('MAIN_RIGHTS', 1);
-	define('UPLOAD_RIGHTS', 2);
-	define('COMMENT_RIGHTS', 4);
-	define('EDIT_RIGHTS', 8);
-	define('THEMES_RIGHTS', 16);
-	define('OPTIONS_RIGHTS', 32);
-	define('ADMIN_RIGHTS', 16384);
-}
+define('MAIN_RIGHTS', 4);
+define('VIEWALL_RIGHTS', 8);
+define('UPLOAD_RIGHTS', 16);
+define('COMMENT_RIGHTS', 64);
+define('EDIT_RIGHTS', 256);
+define('ALL_ALBUMS_RIGHTS', 512);
+define('THEMES_RIGHTS', 1024);
+define('OPTIONS_RIGHTS', 8192);
+define('ADMIN_RIGHTS', 65536);
 define('ALL_RIGHTS', 07777777777);
 
 $_zp_current_admin = null;
@@ -2472,7 +2464,7 @@ function getAllTagsUnique() {
 				$seen[] = $tagLC;
 			}
 		}
-		$_zp_unique_tags = array_merge($taglist);
+		$_zp_unique_tags = array_values($taglist);
 		return $_zp_unique_tags;
 	}
 }

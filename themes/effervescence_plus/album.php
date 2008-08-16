@@ -297,7 +297,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 									fo.addVariable("xmlDataPath", "<?php echo $flash_url ?>");
 									fo.addVariable("width", "100%");
 									fo.addVariable("height", "100%");
-					fo.addParam("wmode", "opaque");
+									fo.addParam("wmode", "opaque");
 									fo.write("flash");
  						</script>
 			</div>

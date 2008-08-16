@@ -139,7 +139,7 @@ if ($page == "editcomment") { ?>
 	} else {
 		define('COMMENTS_PER_PAGE',20);
 		$fulltext = false;
-		$fulltexturl = '?fulltext=0';
+		$fulltexturl = '';
 	}
 	$allcomments = fetchComments("");
 
@@ -168,7 +168,7 @@ if ($page == "editcomment") { ?>
 
 <?php if ($totalpages > 1) {?>
 	<div align="center">
-	<?php adminPageNav($pagenum,$totalpages,'admin-comments.php'.$fulltexturl); ?>
+	<?php adminPageNav($pagenum,$totalpages,'admin-comments.php',$fulltexturl); ?>
 	</div>
 	<?php } ?>
 

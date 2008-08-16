@@ -283,10 +283,10 @@ if (isset($_GET['action'])) {
 		/*** custom options ***/
 		if (!$themeswitch) { // was really a save.
 			foreach ($_POST as $postkey=>$value) {
-				$customtype = substr($postkey, 0, strpos($postkey, '-'));
-				if (strpos($customtype, CUSTOM_OPTION_PREFIX) !== false) { // custom option!
-					$key = substr($postkey, strlen($customtype)+1);
-					switch (substr($customtype, strlen(CUSTOM_OPTION_PREFIX))) {
+				if (preg_match('/^'.CUSTOM_OPTION_PREFIX.'/', $postkey)) { // custom option!
+					$key = substr($postkey, strpos($postkey, '-')+1);				
+					$switch = substr($postkey, strlen(CUSTOM_OPTION_PREFIX), -strlen($key)-1);					
+					switch ($switch) {
 						case 'text':
 							$value = process_language_string_save($key);
 							break;
@@ -298,7 +298,11 @@ if (isset($_GET['action'])) {
 							}
 							break;
 						case 'custom':
-							$value = sanitize($_POST[$key], 2);
+							if (isset($_POST[$key])) {
+								$value = sanitize($_POST[$key], 2);
+							} else {
+								$value = '';
+							}
 							break;
 					}
 					setThemeOption($table, $key, $value);
@@ -1269,13 +1273,16 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 	<input type="hidden" name="savepluginoptions" value="yes" />
 	<table class="bordered">
 	<tr>
-		<th colspan="3">
-			<h2><?php echo gettext("Plugin Options"); ?> <span style="font-weight: normal"> <a href="javascript:togglePluginOptions('',true);"><?php echo gettext('Expand plugin options');?></a>
-		| <a href="javascript:togglePluginOptions('',false);"><?php echo gettext('Collapse all plugin options');?></a></span></h2>
+		<th>
+			<h2><?php echo gettext("Plugin Options"); ?> 	</h2>
+		</th>
+		<th colspan="2">
+			<span style="font-weight: normal"> <a href="javascript:togglePluginOptions('',true);"><?php echo gettext('Expand plugin options');?></a>
+		| <a href="javascript:togglePluginOptions('',false);"><?php echo gettext('Collapse all plugin options');?></a></span>
 		</th>
 	</tr>
 	<tr>
-	<td style="padding: 0;margin:0">
+	<td style="padding: 0;margin:0" colspan="3">
 	<?php
 	foreach (getEnabledPlugins() as $extension) {
 		$ext = substr($extension, 0, strlen($extension)-4);

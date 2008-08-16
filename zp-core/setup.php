@@ -60,6 +60,7 @@ if (!$checked) {
 	} else {
 		$updatezp_config = false;
 	}
+
 if (isset($_POST['mysql'])) { //try to update the zp-config file
 	setupLog("MySQL POST handling");
 	$updatezp_config = true;
@@ -357,6 +358,42 @@ if (!$checked) {
 		return ($vf >= $vr);
 	}
 
+	function setup_glob($pattern, $flags=0) {
+		$split=explode('/',$pattern);
+		$match=array_pop($split);
+		$path=implode('/',$split);
+		if (empty($path)) { $path = '.'; };
+
+		if (($dir=opendir($path))!==false) {
+			$glob=array();
+			while(($file=readdir($dir))!==false) {
+				if (fnmatch($match,$file)) {
+					if ((is_dir("$path/$file"))||(!($flags&GLOB_ONLYDIR))) {
+						if ($flags&GLOB_MARK) $file.='/';
+						$glob[]=$path.'/'.$file;
+					}
+				}
+			}
+			closedir($dir);
+			if (!($flags&GLOB_NOSORT)) sort($glob);
+			return $glob;
+		} else {
+			return array();
+		}
+	}
+	if (!function_exists('fnmatch')) {
+		/**
+		 * pattern match function in case it is not included in PHP
+		 *
+		 * @param string $pattern pattern
+		 * @param string $string haystack
+		 * @return bool
+		 */
+		function fnmatch($pattern, $string) {
+			return @preg_match('/^' . strtr(addcslashes($pattern, '\\.+^$(){}=!<>|'), array('*' => '.*', '?' => '.?')) . '$/i', $string);
+		}
+	}
+
 	$good = true;
 
 	$required = '4.1.0';
@@ -594,6 +631,86 @@ if ($debug) {
 		checkMark($result, ' '.gettext("MySQL <em>show tables</em>")."$tableslist", ' '.gettext("[Failed]"), gettext("MySQL did not return a list of the database tables for <code>$dbn</code>.") .
  											"<br/>".gettext("<strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables."));
 
+	}
+	
+	$rootfiles = array('../index.php', '../rss.php', '../rss-comments.php');
+	$zp_corefiles = setup_glob('../'.ZENFOLDER.'/*.php');
+	
+	$subfiles = array();
+	$handle = opendir('../'.ZENFOLDER.'/');
+	while (false !== ($filename = readdir($handle))) {
+		$fullname = '../'.ZENFOLDER.'/'.$filename;
+		if (is_dir($fullname) && !(substr($filename, 0, 1) == '.')) {
+			$subfiles = array_merge($subfiles, setup_glob($fullname.'/*.php'));
+		}
+	}
+	closedir($handle);
+	$themes = array('default', 'effervescence_plus', 'example', 'stopdesign');
+	$themefiles = array();
+	foreach ($themes as $theme) {
+		$themefiles = array_merge($themefiles, setup_glob('../'.THEMEFOLDER.'/'.$theme.'/*.php'));
+	}
+	
+	$zp_corefiles = array_flip($zp_corefiles);
+	unset($zp_corefiles['../'.ZENFOLDER.'/zp-config.php']);
+	
+	$count = 0;
+	$count_t = 0;
+	$sum = $cum_mean = filemtime('../'.ZENFOLDER.'/version.php');
+	if (isset($_GET['hours'])) {
+		$hours = sanitize($_GET['hours'], 3) * 3600;
+	} else {
+		$hours = 3600;
+	}
+	foreach ($zp_corefiles as $component=>$value) {
+		$value = filemtime($component);
+		$zp_corefiles[$component] = $value;
+			
+//echo "<br/>$component ".date('m/d/Y h:i:s A', $cum_mean-$hours).' : '.date('m/d/Y h:i:s A', $value).' : '.':'.date('m/d/Y h:i:s A', $cum_mean+$hours);	
+	
+				if ($value >= $cum_mean - $hours && $value <= $cum_mean + $hours) {
+			$count ++;		
+			$cum_mean = $sum / $count;
+			$sum = $sum + $value;
+			
+//echo " included";	
+	
+		} else {
+	
+//echo " excluded";		
+
+		}
+		$count_t ++;	
+	}
+	if ($count > 0.9*$count_t) {
+		$lowset = $cum_mean - $hours;
+		$highset = $cum_mean + $hours;
+
+		//echo "<br/>\$mean ".date('m/d/Y h:i:s A', $cum_mean). ' low='.date('m/d/Y h:i:s A', $lowset).' high='.date('m/d/Y h:i:s A', $highset);
+
+
+		$installed_files = array_flip(array_merge($rootfiles, $subfiles, $themefiles));
+		foreach ($installed_files as $component=>$value) {
+			$value = filemtime($component);
+			$installed_files[$component] = $value;
+		}
+		$installed_files = array_merge($installed_files, $zp_corefiles);
+		foreach ($installed_files as $component => $value) {
+			if ($value >= $lowset && $value <= $highset) {
+				unset($installed_files[$component]);
+			}
+		}
+		$filelist = implode("<br />", array_flip($installed_files));
+		if (count($installed_files) > 0) {
+			$mark = -1;
+		} else {
+			$mark = 1;
+		}
+		checkMark($mark, ' '.gettext("Zenphoto core files"), ' ['.gettext("Some <em>filemtimes</em> seem out of variance.").']',
+		gettext('Perhaps there was a problem with the upload. You should check the following files').': '.
+						'<br /><code>'.$filelist.'</code>'
+						.'<br /><br />'.gettext('This is an experimental check. The <em>mean</em> of the php file <em>filemtimes</em> in the zp-core folder is computed. Then the zenphoto php files are checked to be within '.($hours/3600).' hours of that <em>mean</em>. If you are getting warnings you feel are incorrect, please run setup with <code>.../zp-core/setup.php?hours=#</code> where <code>#</code> is the number of hours variance to allow. Please report your findings to the developers. Include the type of upload connection you are using.')
+						);
 	}
 
 	$msg = " <em>.htaccess</em> ".gettext("file");
@@ -1159,7 +1276,6 @@ if (file_exists("zp-config.php")) {
 		if (is_array($result)) {
 			foreach ($result as $row) {
 				if ($row['Field'] == 'tags') {
-					// TODO: 1.2 set this to true
 					$convert = true;
 					break;
 				}

@@ -11,6 +11,7 @@ class Gallery {
 	var $options = NULL;
 	var $theme;
 	var $themes;
+	var $lastalbumsort = NULL;
 
 	/**
 	 * Creates an instance of a gallery
@@ -81,7 +82,7 @@ class Gallery {
 		global $_zp_gallery_albums_per_page;
 
 		// Have the albums been loaded yet?
-		if (is_null($this->albums)) {
+		if (is_null($this->albums) || $sorttype.$direction !== $this->lastalbumsort) {
 
 			$albumnames = $this->loadAlbumNames();
 			$key = $this->getGallerySortKey($sorttype);
@@ -94,6 +95,7 @@ class Gallery {
 
 			// Store the values
 			$this->albums = $albums;
+			$this->lastalbumsort = $sorttype.$direction;
 		}
 
 		if ($page == 0) {

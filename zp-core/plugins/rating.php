@@ -5,17 +5,41 @@
  * @version 1.0.1
  * @package plugins
  */
+require_once(dirname(dirname(__FILE__)).'/functions.php');
 
 $plugin_description = gettext("Adds several theme functions to enable images and/or album rating by users.");
 $plugin_author = "Malte Müller (acrylian) and Stephen Billard (sbillard)";
 $plugin_version = '1.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---rating.php.html";
+$option_interface = new rating();
 
 // register the scripts needed
 addPluginScript('<script type="text/javascript" src="'.FULLWEBPATH."/".ZENFOLDER .'/plugins/rating/rating.js"></script>');
 addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/rating/rating.css" type="text/css" />');
 
 require_once('rating/functions-rating.php');
+
+class rating {
+	
+	function staticCache() {
+		setOptionDefault('clear_rating', '');
+	}
+
+	function getOptionsSupported() {
+		return array(	gettext('Clear ratings') => array('key' => 'clear_rating', 'type' => 2,
+										'desc' => gettext("Sets all images and albums to unrated."))
+								);
+	}
+
+	function handleOption($option, $currentValue) {
+		if($option=="clear_rating") {
+			echo "<div class='buttons'>";
+			echo "<a href='plugins/rating.php?clear_rating&height=100&width=250' class='thickbox' title='Clear ratings'><img src='images/burst.png' alt='' />".gettext("Clear ratings")."</a>";
+			echo "</div>";
+		}
+	}
+
+}
 
 
 /**
@@ -173,4 +197,26 @@ function getAlbumRating($option, $id) {
 	return $rating;
 }
 
+// creates the cache folders from the plugins page or clears the cache from the plugin options
+
+
+
+if (isset($_GET['clear_rating'])) {
+	echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
+	echo "\n<html xmlns=\"http://www.w3.org/1999/xhtml\">";
+	echo "\n<head>";
+	echo "\n  <title>".gettext("zenphoto administration")."</title>";
+	echo "\n  <link rel=\"stylesheet\" href=\"../admin.css\" type=\"text/css\" />";
+	echo "</head>";
+	echo "<body>";
+	query('UPDATE '.prefix('images').' SET total_value = 0, total_votes = 0, used_ips = "" ');
+	query('UPDATE '.prefix('albums').' SET total_value = 0, total_votes = 0, used_ips = "" ');	
+	echo '<div style="margin-top: 20px; text-align: left;">';
+	echo "<h2><img src='images/pass.png' style='position: relative; top: 3px; margin-right: 5px' />".gettext("Ratings have been reset!")."</h2>";
+	echo "<div class='buttons'><a href='#' onclick='self.parent.tb_remove();'>".gettext('Close')."</a></div>";
+	echo '</div>';
+	echo "</body>";
+	echo "</html>";
+	exit;
+}
 ?>

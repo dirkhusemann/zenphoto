@@ -16,6 +16,7 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 //load extensions
 $_zp_plugin_scripts = array();
 $_zp_flash_player = NULL;
+$_zp_HTML_cache = NULL;
 
 header ('Content-Type: text/html; charset=' . getOption('charset'));
 $obj = '';
@@ -72,6 +73,7 @@ if (file_exists(SERVERPATH . "/" . $obj) && $zp_request) {
 	foreach (getEnabledPlugins() as $extension) {
 		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
 	}
+if(!is_null($_zp_HTML_cache)) { $_zp_HTML_cache->startHTMLCache(); }
 	// Include the appropriate page for the requested object, and a 200 OK header.
 	header("HTTP/1.0 200 OK");
 	include($obj);
@@ -94,4 +96,6 @@ $a = basename($obj);
 if ($a != 'full-image.php') {
 	echo "\n<!-- zenphoto version " . ZENPHOTO_VERSION . " [" . ZENPHOTO_RELEASE . "] Theme: " . $theme . " (" . $a . ") -->";
 }
+if(!is_null($_zp_HTML_cache)) { $_zp_HTML_cache->endHTMLCache(); }
+
 ?>

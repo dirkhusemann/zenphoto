@@ -13,7 +13,12 @@ require_once("classes.php");
 require_once("functions.php");
 require_once("lib-seo.php"); // keep the function separate for easy modification by site admins
 
-$sortby = array(gettext('Filename') => 'Filename', gettext('Date') => 'Date', gettext('Title') => 'Title', gettext('ID') => 'ID', gettext('Filemtime') => 'mtime' );
+$sortby = array(gettext('Filename') => 'Filename',
+								gettext('Date') => 'Date',
+								gettext('Title') => 'Title',
+								gettext('ID') => 'ID',
+								gettext('Filemtime') => 'mtime'
+								);
 $charsets = array("ASMO-708" => "Arabic",
 									"BIG5" => "Chinese Traditional",
 									"CP1026" => "IBM EBCDIC (Turkish Latin-5)",
@@ -842,7 +847,18 @@ function printAlbumEditForm($index, $album) {
 	echo '<tr><td></td>';
 	$hc = $album->get('hitcounter');
 	if (empty($hc)) { $hc = '0'; }
-	echo "<td>".gettext("Hit counter:").' '. $hc . " <input type=\"checkbox\" name=\"reset_hitcounter\"> Reset</td>";
+	echo "<td>";
+	echo gettext("Hit counter:").' '. $hc . " <input type=\"checkbox\" name=\"reset_hitcounter\"> Reset";
+	$tv = $album->get('total_value');
+	$tc = $album->get('total_votes');
+	echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Rating:");
+	if ($tc > 0) {
+		$hc = $tv/$tc;
+		echo " <strong>$hc</strong> <label for=\"".$prefix."reset_rating\"><input type=\"checkbox\" id=\"".$prefix."reset_rating\" name=\"".$prefix."reset_rating\" value=1> ".gettext("Reset")."</label> ";
+	} else {
+		echo ' '.gettext("Unrated");
+	}
+	echo "</td>";
 	echo '</tr>';
 	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Album Description:")." </td> <td>";
 	print_language_string_list($album->get('desc'), $prefix."albumdesc", true);
@@ -1087,7 +1103,7 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<td>";
 	$showThumb = getOption('thumb_select_images');
 	if ($showThumb) echo "\n<script type=\"text/javascript\">updateThumbPreview(document.getElementById('thumbselect'));</script>";
-	echo "\n<select id=\"thumbselect\"";
+	echo "\n<select id=\"\"";
 	if ($showThumb) echo " class=\"thumbselect\" onChange=\"updateThumbPreview(this)\"";
 	echo " name=\"".$prefix."thumb\">";
 	if ($album->isDynamic()) {
@@ -1137,10 +1153,17 @@ function printAlbumEditForm($index, $album) {
 		$thumb = $album->get('thumb');
 		echo "\n<option";
 		if ($showThumb) echo " class=\"thumboption\" value=\"\" style=\"background-color:#B1F7B6\"";
-		if (empty($thumb)) {
+		if ($thumb === '1') {
 			echo " selected=\"selected\"";
 		}
-		echo '>'.gettext('randomly selected');
+		echo ' value="1">'.gettext('most recent');
+		echo '</option>';
+		echo "\n<option";
+		if ($showThumb) echo " class=\"thumboption\" value=\"\" style=\"background-color:#B1F7B6\"";
+		if (empty($thumb) && $thumb !== '1') {
+			echo " selected=\"selected\"";
+		}
+		echo ' value="">'.gettext('randomly selected');
 		echo '</option>';
 		if (count($album->getSubalbums()) > 0) {
 			$imagearray = array();
@@ -1399,8 +1422,13 @@ function processAlbumEdit($index, $album) {
 	} else {
 		$album->setSortDirection('album', isset($_POST[$prefix.'album_sortdirection']));
 	}
-	if (isset($_POST['reset_hitcounter'])) {
+	if (isset($_POST[$prefix.'reset_hitcounter'])) {
 		$album->set('hitcounter',0);
+	}
+	if (isset($_POST[$prefix.'reset_rating'])) {
+		$album->set('total_value', 0);
+		$album->set('total_votes', 0);
+		$album->set('used_ips', 0);
 	}
 	$olduser = $album->getUser();
 	$newuser = $_POST[$prefix.'albumuser'];
@@ -1610,34 +1638,40 @@ function fetchComments($number) {
 	return $comments;
 }
 
-function adminPageNav($pagenum,$totalpages,$url,$tab='') {
+function adminPageNav($pagenum,$totalpages,$adminpage,$parms,$tab='') {
+	if (empty($parms)) {
+		$url = '?';
+	} else {
+		$url = $parms.'&amp;';
+	}
 	echo '<ul class="pagelist"><li class="prev">';
 	if ($pagenum > 1) {
-		echo '<a href='.$url.'&amp;subpage='.($p=$pagenum-1).$tab.' title="'.gettext('page').' '.$p.'">'.'&laquo; '.gettext("Previous page").'</a>';
+		echo '<a href='.$url.'subpage='.($p=$pagenum-1).$tab.' title="'.gettext('page').' '.$p.'">'.'&laquo; '.gettext("Previous page").'</a>';
 	} else {
 		echo '<span class="disabledlink">&laquo; '.gettext("Previous page").'</span>';
 	}
 	echo "</li>";
 	$start = max(1,$pagenum-7);
 	$total = min($start+15,$totalpages+1);
-	if ($start != 1) { echo "\n <li><a href=".$url.'&amp;subpage='.($p=max($start-8, 1)).$tab.' title="'.gettext('page').' '.$p.'">. . .</a></li>'; }
+	if ($start != 1) { echo "\n <li><a href=".$url.'subpage='.($p=max($start-8, 1)).$tab.' title="'.gettext('page').' '.$p.'">. . .</a></li>'; }
 	for ($i=$start; $i<$total; $i++) {
 		if ($i == $pagenum) {
 			echo "<li class=\"current\">".$i.'</li>';
 		} else {
-			echo '<li><a href='.$url.'&amp;subpage='.$i.$tab.' title="'.gettext('page').' '.$i.'">'.$i.'</a></li>';
+			echo '<li><a href='.$url.'subpage='.$i.$tab.' title="'.gettext('page').' '.$i.'">'.$i.'</a></li>';
 		}
 	}
-	if ($i < $totalpages) { echo "\n <li><a href=".$url.'&amp;subpage='.($p=min($pagenum+22,$totalpages+1)).$tab.' title="'.gettext('page').' '.$p.'">. . .</a></li>'; }
+	if ($i < $totalpages) { echo "\n <li><a href=".$url.'subpage='.($p=min($pagenum+22,$totalpages+1)).$tab.' title="'.gettext('page').' '.$p.'">. . .</a></li>'; }
 	echo "<li class=\"next\">";
 	if ($pagenum<$totalpages) {
-		echo '<a href='.$url.'&amp;subpage='.($p=$pagenum+1).$tab.' title="'.gettext('page').' '.$p.'">'.gettext("Next page").' &raquo;'.'</a>';
+		echo '<a href='.$url.'subpage='.($p=$pagenum+1).$tab.' title="'.gettext('page').' '.$p.'">'.gettext("Next page").' &raquo;'.'</a>';
 	} else {
 		echo '<span class="disabledlink">'.gettext("Next page").' &raquo;</span>';
 	}
 	echo '</li></ul>';
 }
 
+$_zp_current_locale = NULL;
 /**
  * Generates an editable list of language strings
  *
@@ -1647,10 +1681,13 @@ function adminPageNav($pagenum,$totalpages,$url,$tab='') {
  * @param string $locale optional locale of the translation desired
  */
 function print_language_string_list($dbstring, $name, $textbox=false, $locale=NULL) {
-	global $_zp_languages, $_zp_active_languages;
+	global $_zp_languages, $_zp_active_languages, $_zp_current_locale;
 	if (is_null($locale)) {
-		$locale = getOption('locale');
-		if (empty($locale)) $locale = 'en_US'; // HTTP Accept Language and no locale
+		if (is_null($_zp_current_locale)) {
+			$_zp_current_locale = getUserLocale();
+			if (empty($_zp_current_locale)) $_zp_current_locale = 'en_US';
+		}
+		$locale = $_zp_current_locale;
 	}
 	if (preg_match('/^a:[0-9]+:{/', $dbstring)) {
 		$strings =unserialize($dbstring);
