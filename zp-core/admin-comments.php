@@ -16,7 +16,7 @@ if (isset($_GET['page'])) {
 } else {
 	$page = '';
 }
-if (isset($_GET['fulltext'])) $fulltext = true; else $fulltext = false;
+if (isset($_GET['fulltext']) && $_GET['fulltext']) $fulltext = true; else $fulltext = false;
 if (isset($_GET['viewall'])) $viewall = true; else $viewall = false;
 
 /* handle posts */
@@ -132,14 +132,14 @@ if ($page == "editcomment") { ?>
 } else {
 	// Set up some view option variables.
 
-	if (isset($_GET['fulltext'])) {
+	if (isset($_GET['fulltext']) && $_GET['fulltext']) {
 		define('COMMENTS_PER_PAGE',10);
 		$fulltext = true;
-		$fulltexturl = '?fulltext';
+		$fulltexturl = '?fulltext=1';
 	} else {
 		define('COMMENTS_PER_PAGE',20);
 		$fulltext = false;
-		$fulltexturl = '';
+		$fulltexturl = '?fulltext=0';
 	}
 	$allcomments = fetchComments("");
 
@@ -183,9 +183,9 @@ if ($page == "editcomment") { ?>
 		<th><?php echo gettext("Date/Time"); ?></th>
 		<th><?php echo gettext("Comment"); ?>
 		<?php if(!$fulltext) { ?>(
-			<a href="?fulltext<?php echo $viewall ? "&viewall":""; ?>"><?php echo gettext("View full text"); ?></a>) <?php
+			<a href="?fulltext=1<?php echo $viewall ? "&viewall":""; ?>"><?php echo gettext("View full text"); ?></a>) <?php
 		} else {
-			?>(<a	href="admin-comments.php"<?php echo $viewall ? "?viewall":""; ?>"><?php echo gettext("View truncated"); ?></a>)<?php
+			?>(<a	href="admin-comments.php?fulltext=0"<?php echo $viewall ? "?viewall":""; ?>"><?php echo gettext("View truncated"); ?></a>)<?php
 		} ?>
 		</th>
 		<th><?php echo gettext("E-Mail"); ?></th>
