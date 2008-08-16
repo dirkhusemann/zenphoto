@@ -1722,6 +1722,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
  */
 function process_language_string_save($name) {
 	global $_zp_active_languages;
+	if (is_null($_zp_active_languages)) {
+		$_zp_active_languages = generateLanguageList();
+	}
 	$l = strlen($name)+1;
 	$strings = array();
 	foreach ($_POST as $key=>$value) {
