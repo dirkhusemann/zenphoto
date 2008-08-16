@@ -119,6 +119,19 @@ function xmlspecialchars($text) {
 }
 
 /**
+ * Decodes HTML Special Characters.  Used in PHP 4 only.
+ *
+ * @param string $text
+ * @param string $quote_style
+ * @return string
+ */
+if (!function_exists("htmlspecialchars_decode")) {
+    function htmlspecialchars_decode($string, $quote_style = ENT_COMPAT) {
+        return strtr($string, array_flip(get_html_translation_table(HTML_SPECIALCHARS, $quote_style)));
+    }
+}
+
+/**
  * Get a option stored in the database.
  * This function reads the options only once, in order to improve performance.
  * @param string $key the name of the option.
