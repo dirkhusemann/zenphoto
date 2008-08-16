@@ -1737,7 +1737,11 @@ function process_language_string_save($name) {
 	}
 	switch (count($strings)) {
 		case 0:
-			return sanitize($_POST[$name], 2);
+			if (isset($_POST[$name])) {
+				return sanitize($_POST[$name], 2);
+			} else {
+				return '';
+			}
 		case 1:
 			return array_shift($strings);
 		default:
