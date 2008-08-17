@@ -2462,19 +2462,18 @@ function printEditCommentLink($text, $before='', $after='', $title=NULL, $class=
 function printCommentErrors($class = 'error') {
 	global $_zp_comment_error;
 	if (isset($_zp_comment_error)) {
-		echo "<div class=\"$class\">";
 		switch ($_zp_comment_error) {
-			case -1: echo gettext("You must supply an e-mail address."); break;
-			case -2: echo gettext("You must enter your name."); break;
-			case -3: echo gettext("You must supply an WEB page URL."); break;
-			case -4: echo gettext("Captcha verification failed."); break;
-			case -5: echo gettext("You must enter something in the comment text."); break;
-			case  1: echo gettext("Your comment failed the SPAM filter check."); break;
-			case  2: echo gettext("Your comment has been marked for moderation."); break;
+			case -1: echo "<div class=\"$class\">".gettext("You must supply an e-mail address.")."</div>"; break;
+			case -2: echo "<div class=\"$class\">".gettext("You must enter your name.")."</div>"; break;
+			case -3: echo "<div class=\"$class\">".gettext("You must supply an WEB page URL.")."</div>"; break;
+			case -4: echo "<div class=\"$class\">".gettext("Captcha verification failed.")."</div>"; break;
+			case -5: echo "<div class=\"$class\">".gettext("You must enter something in the comment text.")."</div>"; break;
+			case  1: echo "<div class=\"$class\">".gettext("Your comment failed the SPAM filter check.")."</div>"; break;
+			case  2: echo "<div class=\"$class\">".gettext("Your comment has been marked for moderation.")."</div>"; break;
 		}
-		echo "</div>";
+		return $_zp_comment_error;
 	}
-	return $_zp_comment_error;
+	return false;
 }
 /**
  * Creates an URL for to download of a zipped copy of the current album
