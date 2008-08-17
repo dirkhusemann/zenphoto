@@ -92,7 +92,8 @@
 		if (function_exists('printUserLogout')) {
 			printUserLogout('<br />', '', true);
 		}
-		?></div>
+		?>
+		</div>
 
 		<?php printAdminToolbox(); ?>
 

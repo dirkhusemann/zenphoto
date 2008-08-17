@@ -52,7 +52,11 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 	<div class="footlinks">
 		<small><?php printThemeInfo(); ?></small>
 		<a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>"><?php echo gettext('Powered by').' '; ?><font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a><br/>
-		<?php printRSSLink('Gallery','', 'Gallery RSS', ''); ?>
+		<?php printRSSLink('Gallery','', 'Gallery RSS', ''); 
+		if (function_exists('printUserLogout')) {
+			printUserLogout('<br />', '', true);
+		}
+		?>
 	</div>
 
 	<?php printAdminToolbox(); ?>

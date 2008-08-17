@@ -3577,16 +3577,29 @@ function checkforPassword($silent=false) {
  *@since 1.1.3
  */
 function printPasswordForm($hint, $showProtected=true, $showuser=NULL) {
-	global $_zp_login_error, $_zp_password_form_printed, $_zp_current_search;
+	global $_zp_login_error, $_zp_password_form_printed, $_zp_current_search, $_zp_gallery_page, 
+					$_zp_current_album, $_zp_current_image;
 	if (is_null($showuser)) { $showuser = getOption('login_user_field'); }
 	if ($_zp_password_form_printed) { return; }
 	$_zp_password_form_printed = true;
 	if ($_zp_login_error) {
 		echo "<div class=\"errorbox\" id=\"message\"><h2>".gettext("There was an error logging in.")."</h2><br/>".gettext("Check your user and password and try again.")."</div>";
 	}
-	$action = "#";
-	if (in_context(ZP_SEARCH)) {
-		$action = "&p=search" . $_zp_current_search->getSearchParams();
+	switch($_zp_gallery_page) {
+		case 'index.php':
+			$action = "";
+			break;
+		case 'album.php':
+			$action = '&album='.urlencode($_zp_current_album->name);
+			break;
+		case 'image.php':
+			$action = '&album='.urlencode($_zp_current_album->name).'&image='.urlencode($_zp_current_image->filename);
+		default:	
+		if (in_context(ZP_SEARCH)) {
+			$action = "&p=search" . $_zp_current_search->getSearchParams();
+		} else {
+			$action = '&p='.substr($_zp_gallery_page, 0, -4);
+		}
 	}
 	if ($showProtected && !$_zp_login_error) {
 		echo "\n<p>".gettext("The page you are trying to view is password protected.")."</p>";

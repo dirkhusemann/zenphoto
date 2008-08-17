@@ -40,7 +40,7 @@ if (!OFFSET_PATH) {
 					$parent = $parent->getParent();
 				}
 				if (empty($check_auth)) {
-					// revert all tlhe way to the gallery
+					// revert all the way to the gallery
 					$authType = 'zp_gallery_auth';
 				}
 			}
@@ -48,7 +48,7 @@ if (!OFFSET_PATH) {
 			$authType = 'zp_gallery_auth';
 		}
 	}
-		$saved_auth = zp_getCookie($authType);
+	$saved_auth = zp_getCookie($authType);
 	if (isset($_GET['userlog'])) { // process the logout.
 		if ($_GET['userlog'] == 0) {
 			$saved_auth = NULL;
