@@ -22,10 +22,9 @@ if (isset($_GET['action'])) {
 		foreach($_FILES['files']['name'] as $name) { if (!empty($name)) $files_empty = false; }
 		$newAlbum = (($_POST['existingfolder'] == 'false') || isset($_POST['newalbum']));
 		// Make sure the folder exists. If not, create it.
-		if (isset($_POST['processed']) && !empty($_POST['folder'])
-		&& ($newAlbum || !$files_empty)) {
+		if (isset($_POST['processed']) && !empty($_POST['folder']) && ($newAlbum || !$files_empty)) {
 
-			$folder = strip($_POST['folder']);
+			$folder = sanitize($_POST['folder'],3);
 			$uploaddir = $gallery->albumdir . $folder;
 			if (!is_dir($uploaddir)) {
 				mkdir ($uploaddir, CHMOD_VALUE);
@@ -37,10 +36,7 @@ if (isset($_GET['action'])) {
 				if (!isset($_POST['publishalbum'])) {
 					$album->setShow(false);
 				}
-				$title = strip($_POST['albumtitle']);
-				if (!(false === ($pos = strpos($title, ' (')))) {
-					$title = substr($title, 0, $pos);
-				}
+				$title = sanitize($_POST['albumtitle'], 2);
 				if (!empty($title) && $newAlbum) {
 					$album->setTitle($title);
 				}

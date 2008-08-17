@@ -911,7 +911,6 @@ function getAlbumLinkURL($album=NULL) {
 			$numalbums = count($album->getSubalbums());
 		}
 		$imagepage = floor(($imageindex - $firstPageImages) / max(1, getOption('images_per_page'))) + 1;
-		if ($firstPageImages > 0) $imagepage++;
 		$albumpages = ceil($numalbums / max(1, getOption('albums_per_page')));
 		$page = $albumpages + $imagepage;
 	}
