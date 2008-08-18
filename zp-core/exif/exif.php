@@ -367,15 +367,12 @@ function formatData($type,$tag,$intel,$data) {
 		if (($tag == '011a' || $tag == '011b') && $bottom == 1) { // XResolution YResolution
 			$data = $top.' dots per ResolutionUnit';
 		} else if ($tag == '829a') { // Exposure Time
-			if (($top > 0) && ($bottom % $top) == 0) {
-				$data = '1/'.round($bottom/$top, 0).' sec'; 
-			}	else {
-				if ($bottom == 1) {
-					$data = $top.' sec';
-				} else {
-					$data = $top.'/'.$bottom.' sec';
-				}
+			if ($bottom != 0) {
+				$data = $top / $bottom;
+			} else {
+				$data = 0;
 			}
+			$data = formatExposure($data);
 		} else if ($tag == '829d') { // FNumber
 			$data = 'f/'.$data;
 		} else if ($tag == '9204') { // ExposureBiasValue
@@ -394,17 +391,9 @@ function formatData($type,$tag,$intel,$data) {
 			// Where shutter is in APEX, log2(exposure) = ln(exposure)/ln(2)
 			// So final formula is : exposure = exp(-ln(2).shutter)
 			// The formula can be developed : exposure = 1/(exp(ln(2).shutter))
-			$data = exp($data * log(2)); 
-			if ($data > 1) $data = floor($data);  // Drop the decimal.
-			if ($data > 0) {
-				$data = 1/$data; // Final calculation. We now have a floating number. Transform it in a pretty number
-				$n=0; $d=0;
-				ConvertToFraction($data, $n, $d); 
-				if ($n >= 1 && $d == 1) $data = $n.' sec'; // To avoid exposure times style 3/1 sec.
-				else $data = $n.'/'.$d.' sec';
-			} else {
-				$data = 'Bulb';
-			}
+			$data = exp($data * log(2));
+			if ($data != 0) $data = 1/$data;
+			$data = formatExposure($data);
 		} 
 		
 	} else if ($type == 'USHORT' || $type == 'SSHORT' || $type == 'ULONG' || $type == 'SLONG' || $type == 'FLOAT' || $type == 'DOUBLE') {
@@ -563,7 +552,19 @@ function formatData($type,$tag,$intel,$data) {
 	return $data;
 }
 
-
+function formatExposure($data) {
+	if ($data > 0) {
+		if ($data > 1) {
+			return round($data, 2).' '.gettext('sec');
+		} else {
+			$n=0; $d=0;
+			ConvertToFraction($data, $n, $d);
+			return $n.'/'.$d.' '.gettext('sec');
+		}
+	} else {
+		return gettext('Bulb');
+	}
+}
 
 //================================================================================================
 // Reads one standard IFD entry
