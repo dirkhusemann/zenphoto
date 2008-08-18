@@ -354,7 +354,7 @@ if ($speedctl) {
 
 			}
 			$ext = strtolower(strrchr($filename, "."));
-			echo "<span class='slideimage'><h4><strong>".$albumtitle.":</strong> ".$image->getTitle()." (". ($idx + 1) ."/".$numberofimages.")</h4>";
+			echo "<span class='slideimage'><h4><strong>".$albumtitle.gettext(":")."</strong> ".$image->getTitle()." (". ($idx + 1) ."/".$numberofimages.")</h4>";
 
 			if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
 				//Player Embed...
