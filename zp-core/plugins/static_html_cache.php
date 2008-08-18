@@ -44,6 +44,8 @@ foreach($cachesubfolders as $cachesubfolder) {
  */
 class staticCache {
 
+	var $startmtime;
+	
 	function staticCache() {
 		setOptionDefault('clear_static_cache', '');
 		setOptionDefault('static_cache_expire', 86400);
@@ -72,9 +74,9 @@ class staticCache {
 	 *
 	 */
 	function startHTMLCache() {
+		$this->startmtime = microtime(true);
 		$cachefilepath = STATIC_CACHE_FOLDER."/".$this->createCacheFilepath();
 		if(file_exists($cachefilepath) AND !isset($_POST['comment']) && time()-filemtime($cachefilepath) < getOption("static_cache_expire")) { // don't use cache if comment is posted
-			//$start = microtime(true); // for speed testing
 			if(function_exists("file_get_contents")) {
 				echo file_get_contents($cachefilepath); // PHP >= 4.3
 			} else {
@@ -83,8 +85,8 @@ class staticCache {
 					echo $array;
 				}
 			}
-			//$end = microtime(true); // for speed testing
-			//$final = $end - $start; $final = round($final,4); echo $final." seconds";
+			$end = microtime(true); $final = $end - $this->startmtime; $final = round($final,4);
+			echo "\n<!-- Cached content served by static_html_cache in ".$final."s -->";
 			exit();
 		} else {
 			ob_start();
@@ -100,6 +102,10 @@ class staticCache {
 	function endHTMLCache() {
 		$cachefilepath = STATIC_CACHE_FOLDER."/".$this->createCacheFilepath();
 		if(!empty($cachefilepath)) {
+			// Display speed information.
+			$end = microtime(true); $final = $end - $this->startmtime; $final = round($final, 4);
+			echo "\n<!-- Content generated dynamically in ".$final."s and cached. -->";
+			// End
 			$pagecontent = ob_get_clean();
 			$fh = fopen($cachefilepath,"w");
 			fputs($fh, $pagecontent);
