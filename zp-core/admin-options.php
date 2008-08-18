@@ -265,14 +265,14 @@ if (isset($_GET['action'])) {
 			if ($themeswitch) {
 				$notify = '?switched';
 			} else {
-				if (isset($_POST['image_size'])) setThemeOption($table, 'image_size', $_POST['image_size']);
-				if (isset($_POST['image_use_longest_side'])) setBoolThemeOption($table, 'image_use_longest_side', $_POST['image_use_longest_side']);
-				if (isset($_POST['thumb_size'])) setThemeOption($table, 'thumb_size', $_POST['thumb_size']);
-				if (isset($_POST['thumb_crop'])) setBoolThemeOption($table, 'thumb_crop', $_POST['thumb_crop']);
-				if (isset($_POST['thumb_crop_width'])) setThemeOption($table, 'thumb_crop_width', $_POST['thumb_crop_width']);
-				if (isset($_POST['thumb_crop_height'])) setThemeOption($table, 'thumb_crop_height', $_POST['thumb_crop_height']);
-				if (isset($_POST['albums_per_page'])) setThemeOption($table, 'albums_per_page', $_POST['albums_per_page']);
-				if (isset($_POST['images_per_page'])) setThemeOption($table, 'images_per_page', $_POST['images_per_page']);
+				if (isset($_POST['image_size'])) setThemeOption($table, 'image_size', sanitize($_POST['image_size'],3));
+				setBoolThemeOption($table, 'image_use_longest_side', isset($_POST['image_use_longest_side']));
+				if (isset($_POST['thumb_size'])) setThemeOption($table, 'thumb_size', sanitize($_POST['thumb_size'],3));
+				setBoolThemeOption($table, 'thumb_crop', isset($_POST['thumb_crop']));
+				if (isset($_POST['thumb_crop_width'])) setThemeOption($table, 'thumb_crop_width', sanitize($_POST['thumb_crop_width'],3));
+				if (isset($_POST['thumb_crop_height'])) setThemeOption($table, 'thumb_crop_height', sanitize($_POST['thumb_crop_height'],3));
+				if (isset($_POST['albums_per_page'])) setThemeOption($table, 'albums_per_page', sanitize($_POST['albums_per_page'],3));
+				if (isset($_POST['images_per_page'])) setThemeOption($table, 'images_per_page', sanitize($_POST['images_per_page'],3));
 			}
 }
 		/*** Plugin Options ***/
