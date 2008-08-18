@@ -179,7 +179,7 @@ $backgroundImagePath="";
  					</div>
 	 		<?php
 	 		} else {  /* flash */
-	 			if (isImagePage()) {
+	 			if ($imagePage = isImagePage()) {
 	 			?>
  					<div id="flash"><p align=center><font color=#663300><?php echo gettext('For the best viewing experience').' '; ?><a href="http://www.macromedia.com/go/getflashplayer/"><?php echo gettext('get Adobe Flash.'); ?></a></p>
  					<p align="center"><a href="

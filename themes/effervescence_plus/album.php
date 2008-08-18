@@ -189,7 +189,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
  						<div id="images">
  						<?php
 						if ($personality == 'Smoothgallery') {
-							if (isImagePage()) {
+							if ($imagePage = isImagePage()) {
 								?>
 <!-- Smoothimage section -->
 						<div id="smoothImages">
@@ -271,7 +271,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 		</div>
 			<?php
 				} else {  /* flash */
-	 			if (isImagePage() && !checkforPassword()) {
+	 			if (($imagePage = isImagePage()) && !checkforPassword()) {
 			?>
 <!-- Simpleviewer section -->
 			<div id="flash">
