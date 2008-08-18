@@ -2,6 +2,11 @@
 /** printAlbumMenu for Zenphoto
   *
  * Changelog
+ * 
+ * 1.4.4.4:
+ * - Corrects an inconsistency about misslabeled css id and classes parameters: 
+ * There is now a class for the active toplevel element, so that you can use it for top and sub levels.
+ * - Also now not every list item gets the active class assigned anymore...
  *
  * 1.4.4.3.
  * -  Minor bug fix, used the album title instead of the unique album folder name at one place.
@@ -89,13 +94,13 @@
  * - Renamed the function name from show_album_menu() to more zp style printAlbumMenu()
  *
  * @author Malte Müller (acrylian)
- * @version 1.4.4.3
+ * @version 1.4.4.4
  * @package plugins
  */
 
 $plugin_description = gettext("Adds a theme function printAlbumMenu() to print an album menu either as a nested list up to 4 sublevels (context sensitive) or as a dropdown menu.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.4.4.3';
+$plugin_version = '1.4.4.4';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---print_album_menu.php.html";
 
 /**
@@ -119,9 +124,9 @@ $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---print_a
  * @since 1.2
  */
 
-function printAlbumMenu($option,$option2,$css_id='',$css_id_active='',$css_class='',$css_class_active='', $indexname="Gallery Index", $showsubs=false) {
+function printAlbumMenu($option,$option2,$css_id='',$css_class_topactive='',$css_class='',$css_class_active='', $indexname="Gallery Index", $showsubs=false) {
 	if($option === "list" OR $option === "list-top" OR $option === "list-sub") {
-		printAlbumMenuList($option,$option2,$css_id,$css_id_active,$css_class,$css_class_active, $indexname, $showsubs);
+		printAlbumMenuList($option,$option2,$css_id,$css_class_topactive,$css_class,$css_class_active, $indexname, $showsubs);
 	} else if ($option === "jump") {
 		printAlbumMenuJump($option,$indexname);
 	}
@@ -153,7 +158,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',
 	}
 	// check if css parameters are used
 	if ($css_id != "") { $css_id = " id='".$css_id."'"; }
-	if ($css_class_topactive != "") { $css_class_topactive = " id='".$css_class_topactive."'"; }
+	if ($css_class_topactive != "") { $css_class_topactive = " class='".$css_class_topactive."'"; }
 	if ($css_class != "") { $css_class = " class='".$css_class."'"; }
 	if ($css_class_active != "") { $css_class_active = " class='".$css_class_active."'"; }
 
@@ -377,7 +382,7 @@ function createAlbumMenuLink($album,$option2,$css,$albumpath,$mode,$level='') {
 			if(getAlbumID() === $album->getAlbumID()) {
 				$link = "<li".$css.">".$album->getTitle().$count;
 			} else {
-				$link = "<li".$css."><a href='".htmlspecialchars($albumpath.$album->name)."' title='".strip_tags($album->getTitle())."'>".htmlspecialchars($album->getTitle())."</a>".$count;
+				$link = "<li><a href='".htmlspecialchars($albumpath.$album->name)."' title='".strip_tags($album->getTitle())."'>".htmlspecialchars($album->getTitle())."</a>".$count;
 			}
 			break;
 		case "jump":
