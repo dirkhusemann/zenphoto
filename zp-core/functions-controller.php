@@ -294,7 +294,7 @@ function zp_handle_password() {
 	if (empty($check_auth)) { // anything else is controlled by the gallery credentials
 		$authType = 'zp_gallery_auth';
 		$check_auth = getOption('gallery_password');
-		$checK_user = getOption('gallery_user');
+		$check_user = getOption('gallery_user');
 	}
 	// Handle the login form.
 	if (isset($_POST['password']) && isset($_POST['pass'])) {
