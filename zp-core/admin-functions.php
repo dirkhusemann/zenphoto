@@ -1757,7 +1757,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
  * @param string $name the prefix for the label, id, and name tags
  * @return string
  */
-function process_language_string_save($name, $sanitize_level) {
+function process_language_string_save($name, $sanitize_level=3) {
 	global $_zp_active_languages;
 	if (is_null($_zp_active_languages)) {
 		$_zp_active_languages = generateLanguageList();
