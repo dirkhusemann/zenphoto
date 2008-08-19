@@ -633,64 +633,47 @@ if ($debug) {
 
 	}
 	
-	$rootfiles = array('../index.php', '../rss.php', '../rss-comments.php');
-	$zp_corefiles = setup_glob('../'.ZENFOLDER.'/*.php');
-	
-	$subfiles = array();
-	$handle = opendir('../'.ZENFOLDER.'/');
-	while (false !== ($filename = readdir($handle))) {
-		$fullname = '../'.ZENFOLDER.'/'.$filename;
-		if (is_dir($fullname) && !(substr($filename, 0, 1) == '.')) {
-			$subfiles = array_merge($subfiles, setup_glob($fullname.'/*.php'));
-		}
-	}
-	closedir($handle);
-	$themes = array('default', 'effervescence_plus', 'example', 'stopdesign');
-	$themefiles = array();
-	foreach ($themes as $theme) {
-		if (file_exists('../'.THEMEFOLDER.'/'.$theme.'/')) {
-			$themefiles = array_merge($themefiles, setup_glob('../'.THEMEFOLDER.'/'.$theme.'/*.php'));
-		}
-	}
-	
-	$zp_corefiles = array_flip($zp_corefiles);
-	unset($zp_corefiles['../'.ZENFOLDER.'/zp-config.php']);
-	
-	$count = 0;
-	$count_t = 0;
-	$sum = $cum_mean = filemtime('../'.ZENFOLDER.'/version.php');
-	if (isset($_GET['hours'])) {
-		$hours = sanitize($_GET['hours'], 3) * 3600;
-	} else {
-		$hours = 3600;
-	}
-	foreach ($zp_corefiles as $component=>$value) {
-		$value = filemtime($component);
-		$zp_corefiles[$component] = $value;
-			
-//echo "<br/>$component ".date('m/d/Y h:i:s A', $cum_mean-$hours).' : '.date('m/d/Y h:i:s A', $value).' : '.':'.date('m/d/Y h:i:s A', $cum_mean+$hours);	
-	
-				if ($value >= $cum_mean - $hours && $value <= $cum_mean + $hours) {
-			$count ++;		
-			$cum_mean = $sum / $count;
-			$sum = $sum + $value;
-			
-//echo " included";	
-	
-		} else {
-	
-//echo " excluded";		
+	if (defined("RELEASE")) {
+		$rootfiles = array('../index.php', '../rss.php', '../rss-comments.php');
+		$zp_corefiles = setup_glob('../'.ZENFOLDER.'/*.php');
 
+		$subfiles = array();
+		$handle = opendir('../'.ZENFOLDER.'/');
+		while (false !== ($filename = readdir($handle))) {
+			$fullname = '../'.ZENFOLDER.'/'.$filename;
+			if (is_dir($fullname) && !(substr($filename, 0, 1) == '.')) {
+				$subfiles = array_merge($subfiles, setup_glob($fullname.'/*.php'));
+			}
 		}
-		$count_t ++;	
-	}
-	if ($count > 0.9*$count_t) {
+		closedir($handle);
+		$themes = array('default', 'effervescence_plus', 'example', 'stopdesign');
+		$themefiles = array();
+		foreach ($themes as $theme) {
+			if (file_exists('../'.THEMEFOLDER.'/'.$theme.'/')) {
+				$themefiles = array_merge($themefiles, setup_glob('../'.THEMEFOLDER.'/'.$theme.'/*.php'));
+			}
+		}
+
+		$zp_corefiles = array_flip($zp_corefiles);
+		unset($zp_corefiles['../'.ZENFOLDER.'/zp-config.php']);
+
+		$count = 0;
+		$count_t = 0;
+		$sum = $cum_mean = filemtime('../'.ZENFOLDER.'/version.php');
+		$hours = 3600;
+		foreach ($zp_corefiles as $component=>$value) {
+			$value = filemtime($component);
+			$zp_corefiles[$component] = $value;
+			if ($value >= $cum_mean - $hours && $value <= $cum_mean + $hours) {
+				$count ++;
+				$cum_mean = $sum / $count;
+				$sum = $sum + $value;
+			} else {
+			}
+			$count_t ++;
+		}
 		$lowset = $cum_mean - $hours;
 		$highset = $cum_mean + $hours;
-
-		//echo "<br/>\$mean ".date('m/d/Y h:i:s A', $cum_mean). ' low='.date('m/d/Y h:i:s A', $lowset).' high='.date('m/d/Y h:i:s A', $highset);
-
-
 		$installed_files = array_flip(array_merge($rootfiles, $subfiles, $themefiles));
 		foreach ($installed_files as $component=>$value) {
 			$value = filemtime($component);
@@ -711,8 +694,9 @@ if ($debug) {
 		checkMark($mark, ' '.gettext("Zenphoto core files"), ' ['.gettext("Some <em>filemtimes</em> seem out of variance.").']',
 		gettext('Perhaps there was a problem with the upload. You should check the following files').': '.
 						'<br /><code>'.$filelist.'</code>'
-						.'<br /><br />'.gettext('This is an experimental check. The <em>mean</em> of the php file <em>filemtimes</em> in the zp-core folder is computed. Then the zenphoto php files are checked to be within '.($hours/3600).' hours of that <em>mean</em>. If you are getting warnings you feel are incorrect, please run setup with <code>.../zp-core/setup.php?hours=#</code> where <code>#</code> is the number of hours variance to allow. Please report your findings to the developers. Include the type of upload connection you are using.')
 						);
+	} else {
+		checkMark(-1, ' '.gettext("Zenphoto core files"), ' ['.gettext("This is not an official build.").']','');
 	}
 
 	$msg = " <em>.htaccess</em> ".gettext("file");

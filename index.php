@@ -94,7 +94,12 @@ if(!is_null($_zp_HTML_cache)) { $_zp_HTML_cache->startHTMLCache(); }
 
 $a = basename($obj);
 if ($a != 'full-image.php') {
-	echo "\n<!-- zenphoto version " . ZENPHOTO_VERSION . " [" . ZENPHOTO_RELEASE . "] Theme: " . $theme . " (" . $a . ") -->";
+	if (defined('RELEASE')) {
+		$official = 'Official Build';
+	} else {
+		$official = 'SVN';
+	}
+	echo "\n<!-- zenphoto version " . ZENPHOTO_VERSION . " [" . ZENPHOTO_RELEASE . "] ($official) Theme: " . $theme . " (" . $a . ") -->";
 }
 if(!is_null($_zp_HTML_cache)) { $_zp_HTML_cache->endHTMLCache(); }
 
