@@ -62,7 +62,7 @@ class staticCache {
 	function handleOption($option, $currentValue) {
 		if($option=="clear_static_cache") {
 			echo "<div class='buttons'>";
-			echo "<a href='plugins/static_html_cache.php?clearcache&height=100&width=250' class='thickbox' title='Clear cache'><img src='images/burst.png' alt='' />".gettext("Clear cache")."</a>";
+			echo "<a href='plugins/static_html_cache.php?clearcache&height=100&width=250' class='thickbox' title='".gettext("Clear cache")."'><img src='images/burst.png' alt='' />".gettext("Clear cache")."</a>";
 			echo "</div>";
 		}
 	}
@@ -86,7 +86,7 @@ class staticCache {
 				}
 			}
 			$end = microtime(true); $final = $end - $this->startmtime; $final = round($final,4);
-			echo "\n<!-- Cached content served by static_html_cache in ".$final."s -->";
+			echo "\n<!-- ".gettext("Cached content served by static_html_cache in")." ".$final.gettext("s")." -->";
 			exit();
 		} else {
 			ob_start();
@@ -104,7 +104,7 @@ class staticCache {
 		if(!empty($cachefilepath)) {
 			// Display speed information.
 			$end = microtime(true); $final = $end - $this->startmtime; $final = round($final, 4);
-			echo "\n<!-- Content generated dynamically in ".$final."s and cached. -->";
+			echo "\n<!-- ".gettext("Content generated dynamically in")." ".$final.gettext("s and cached.")." -->";
 			// End
 			$pagecontent = ob_get_clean();
 			$fh = fopen($cachefilepath,"w");
