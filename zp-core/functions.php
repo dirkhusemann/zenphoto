@@ -109,6 +109,16 @@ getUserLocale();
 setupCurrentLocale();
 
 /**
+ * encodes a string to be used in a Javascript alert box
+ *
+ * @param string $this_string
+ * @return string
+ */
+function js_encode($this_string) {
+	return preg_replace("/\r?\n/", "\\n", addslashes($this_string));
+}
+
+/**
  * wraps htmlspecialchars and makes it work for xml
  *
  * @param string $text

@@ -1351,7 +1351,7 @@ function printAlbumEditRow($album) {
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=" . urlencode(urlencode($album->name)) .
-			"','".gettext("Are you sure you want to delete this entire album?")."','".gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!").
+			"','".js_encode(gettext("Are you sure you want to delete this entire album?"))."','".js_encode(gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")).
 			"');\" title=\"".gettext("Delete the album")." " . xmlspecialchars($album->name) . "\">";
 	echo '<img src="images/fail.png" style="border: 0px;" alt="'.gettext('Delete the album').' ' . xmlspecialchars($album->name) . '" /></a>';
 	echo "</td>\n</tr></table>\n</td>";

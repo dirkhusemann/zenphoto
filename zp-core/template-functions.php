@@ -116,8 +116,8 @@ function printAdminToolbox($context=null, $id='admin') {
 					echo "</li>\n";
 				}
 				echo "<li><a href=\"javascript: confirmDeleteAlbum('".$zf."/admin.php?page=edit&action=deletealbum&album=" .
-					urlencode($albumname) .
-					"','".gettext("Are you sure you want to delete this entire album?")."','".gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!").
+					urlencode(urlencode($albumname)) .
+					"','".js_encode(gettext("Are you sure you want to delete this entire album?"))."','".js_encode(gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")).
 					"');\" title=\"".gettext("Delete the album")."\">".gettext("Delete album")."</a></li>\n";
 			}
 			if (isMyAlbum($albumname, UPLOAD_RIGHTS) && !$_zp_current_album->isDynamic()) {
@@ -134,7 +134,7 @@ function printAdminToolbox($context=null, $id='admin') {
 			$imagename = urlencode($_zp_current_image->filename);
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				echo "<li><a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?page=edit&action=deleteimage&album=" .
-				urlencode(urlencode($albumname)) . "&image=". urlencode(urlencode($imagename)) . "','". gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!") . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
+				urlencode(urlencode($albumname)) . "&image=". urlencode(urlencode($imagename)) . "','". js_encode(gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!")) . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
 				echo "</li>\n";
 			}
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=$imagename";
@@ -3574,7 +3574,7 @@ function checkforPassword($silent=false) {
  *@since 1.1.3
  */
 function printPasswordForm($hint, $showProtected=true, $showuser=NULL) {
-	global $_zp_login_error, $_zp_password_form_printed, $_zp_current_search, $_zp_gallery_page, 
+	global $_zp_login_error, $_zp_password_form_printed, $_zp_current_search, $_zp_gallery_page,
 					$_zp_current_album, $_zp_current_image;
 	if (is_null($showuser)) { $showuser = getOption('login_user_field'); }
 	if ($_zp_password_form_printed) { return; }
@@ -3591,7 +3591,7 @@ function printPasswordForm($hint, $showProtected=true, $showuser=NULL) {
 			break;
 		case 'image.php':
 			$action = '&album='.urlencode($_zp_current_album->name).'&image='.urlencode($_zp_current_image->filename);
-		default:	
+		default:
 		if (in_context(ZP_SEARCH)) {
 			$action = "&p=search" . $_zp_current_search->getSearchParams();
 		} else {
