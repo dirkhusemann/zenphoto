@@ -159,7 +159,6 @@ function zenJavascript() {
 	// i18n Javascript constant strings.
 	echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/js-string-constants.js.php\"></script>\n";
 
-	if (!is_null($_zp_phoogle)) {$_zp_phoogle->printGoogleJS();}
 	if (($rights = zp_loggedin()) & (ADMIN_RIGHTS | EDIT_RIGHTS)) {
 		if (in_context(ZP_ALBUM)) {
 			$grant = isMyAlbum($_zp_current_album->name, EDIT_RIGHTS);
