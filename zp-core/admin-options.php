@@ -97,6 +97,15 @@ if (isset($_GET['action'])) {
 
 		/*** Gallery options ***/
 		if (isset($_POST['savegalleryoptions'])) {
+			$tags = $_POST['allowed_tags'];
+			$test = "(".$tags.")";
+			$a = parseAllowedTags($test);
+			if ($a !== false) {
+				setOption('allowed_tags', $tags);
+				$notify = '';
+			} else {
+				$notify = '?tag_parse_error';
+			}
 			setOption('gallery_title', process_language_string_save('gallery_title', 2));
 			setoption('Gallery_description', process_language_string_save('Gallery_description', 1));
 			setOption('website_title', process_language_string_save('website_title', 2));
@@ -233,15 +242,6 @@ if (isset($_GET['action'])) {
 		if (isset($_POST['savecommentoptions'])) {
 			setOption('spam_filter', $_POST['spam_filter']);
 			setBoolOption('email_new_comments', isset($_POST['email_new_comments']));
-			$tags = $_POST['allowed_tags'];
-			$test = "(".$tags.")";
-			$a = parseAllowedTags($test);
-			if ($a !== false) {
-				setOption('allowed_tags', $tags);
-				$notify = '';
-			} else {
-				$notify = '?tag_parse_error';
-			}
 			setBoolOption('comment_name_required', isset($_POST['comment_name_required']));
 			setBoolOption('comment_email_required',isset( $_POST['comment_email_required']));
 			setBoolOption('comment_web_required', isset($_POST['comment_web_required']));
@@ -567,7 +567,13 @@ if (!$_zp_null_account) {
 if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 ?>
 <div id="tab_gallery">
-<form action="?action=saveoptions" method="post">
+<?php
+	if (isset($_GET['tag_parse_error'])) {
+		echo '<div class="errorbox" id="fade-message">';
+		echo  "<h2>".gettext("Your Allowed tags change did not parse successfully.")."</h2>";
+		echo '</div>';
+	}
+?><form action="?action=saveoptions" method="post">
  <input	type="hidden" name="savegalleryoptions" value="yes" /> <?php
 	if (isset($_GET['mismatch'])) {
 		echo '<div class="errorbox" id="fade-message">';
@@ -803,6 +809,13 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 			<?php generateListFromArray(array(getOption('charset')), array_flip($charsets)) ?>
 		</select></td>
 		<td><?php echo gettext("The character encoding to use internally. Leave at <em>Unicode	(UTF-8)</em> if you're unsure."); ?></td>
+	</tr>
+	<tr>
+		<td><?php echo gettext("Allowed tags:"); ?></td>
+		<td><textarea name="allowed_tags" cols="40" rows="10"><?php echo htmlspecialchars(getOption('allowed_tags')); ?></textarea>
+		</td>
+		<td><?php echo gettext("Tags and attributes allowed in comments, descriptions, and other fields."); ?><br />
+		<?php echo gettext("Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Number of RSS feed items:"); ?></td>
@@ -1043,11 +1056,6 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 <div id="tab_comments">
 <form action="?action=saveoptions" method="post"><input
 	type="hidden" name="savecommentoptions" value="yes" /> <?php
-	if (isset($_GET['tag_parse_error'])) {
-		echo '<div class="errorbox" id="fade-message">';
-		echo  "<h2>".gettext("Your Allowed tags change did not parse successfully.")."</h2>";
-		echo '</div>';
-	}
 	?>
 <table class="bordered">
 	<tr>
@@ -1060,13 +1068,6 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		<td><input type="checkbox" name="email_new_comments" value="1"
 		<?php echo checked('1', getOption('email_new_comments')); ?> /></td>
 		<td><?php echo gettext("Email the Admin when new comments are posted"); ?></td>
-	</tr>
-	<tr>
-		<td><?php echo gettext("Allowed tags:"); ?></td>
-		<td><textarea name="allowed_tags" cols="40" rows="10"><?php echo htmlspecialchars(getOption('allowed_tags')); ?></textarea>
-		</td>
-		<td><?php echo gettext("Tags and attributes allowed in comments"); ?><br />
-		<?php echo gettext("Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"); ?></td>
 	</tr>
 	<!-- SPAM filter options -->
 	<tr>

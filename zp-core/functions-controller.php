@@ -267,20 +267,15 @@ function cookiecode($text) {
  *checks for album password posting
  */
 function zp_handle_password() {
-	global $_zp_loggedin;
+	global $_zp_loggedin, $_zp_login_error, $_zp_current_album;
 	if (zp_loggedin()) { return; } // who cares, we don't need any authorization
 	$cookiepath = WEBPATH;
 	if (WEBPATH == '') { $cookiepath = '/'; }
-	global $_zp_login_error, $_zp_current_album;
+	$check_auth = '';
 	if (in_context(ZP_SEARCH)) {  // search page
 		$authType = 'zp_search_auth';
 		$check_auth = getOption('search_password');
 		$check_user = getOption('search_user');
-		if (empty($check_auth)) {
-			$authType = 'zp_gallery_auth';
-			$check_auth = getOption('gallery_password');
-			$check_user = getOption('gallery_user');
-		}
 	} else if (in_context(ZP_ALBUM)) { // album page
 		$authType = "zp_album_auth_" . cookiecode($_zp_current_album->name);
 		$check_auth = $_zp_current_album->getPassword();
@@ -294,17 +289,12 @@ function zp_handle_password() {
 				if (!empty($check_auth)) { break; }
 				$parent = $parent->getParent();
 			}
-			if (empty($check_auth)) {
-				// revert all tlhe way to the gallery
-				$authType = 'zp_gallery_auth';
-				$check_auth = getOption('gallery_password');
-				$checK_user = getOption('gallery_user');
-			}
 		}
-	} else {  // index page
+	}
+	if (empty($check_auth)) { // anything else is controlled by the gallery credentials
 		$authType = 'zp_gallery_auth';
 		$check_auth = getOption('gallery_password');
-		$check_user = getOption('gallery_user');
+		$checK_user = getOption('gallery_user');
 	}
 	// Handle the login form.
 	if (isset($_POST['password']) && isset($_POST['pass'])) {

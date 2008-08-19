@@ -62,10 +62,14 @@ class PhoogleMapLite {
  		* considered experimental
  		*/
 		function addGeoPoint($lat, $long, $infoHTML = null){
-				$pointer = count($this->validPoints);
-				$this->validPoints[$pointer]['lat'] = $lat;
-				$this->validPoints[$pointer]['long'] = $long;
-				$this->validPoints[$pointer]['htmlMessage'] = $infoHTML;
+			// make sure the number format is US decimal = period.
+			$lat = str_replace(',', '.', $lat);
+			$long = str_replace(',', '.', $long);
+			
+			$pointer = count($this->validPoints);
+			$this->validPoints[$pointer]['lat'] = $lat;
+			$this->validPoints[$pointer]['long'] = $long;
+			$this->validPoints[$pointer]['htmlMessage'] = $infoHTML;
 		}
 
 		/**
@@ -201,7 +205,9 @@ function setMapType($type) { $this->defaultType = $type; }
 
 				if (empty($this->centerMap)){
 						echo 'map.setCenter(new GLatLng(0,0), 0); ' . "\n";
-				} else { echo   $this->centerMap; }
+				} else { 
+					echo   $this->centerMap;
+				}
 				
 				echo "\n" . 
 						'}' . "\n" .

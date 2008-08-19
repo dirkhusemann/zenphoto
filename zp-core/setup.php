@@ -648,7 +648,9 @@ if ($debug) {
 	$themes = array('default', 'effervescence_plus', 'example', 'stopdesign');
 	$themefiles = array();
 	foreach ($themes as $theme) {
-		$themefiles = array_merge($themefiles, setup_glob('../'.THEMEFOLDER.'/'.$theme.'/*.php'));
+		if (file_exists('../'.THEMEFOLDER.'/'.$theme.'/')) {
+			$themefiles = array_merge($themefiles, setup_glob('../'.THEMEFOLDER.'/'.$theme.'/*.php'));
+		}
 	}
 	
 	$zp_corefiles = array_flip($zp_corefiles);

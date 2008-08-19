@@ -102,6 +102,7 @@ class slideshowOptions {
  */
 function printSlideShowLink($linktext='') {
 	global $_zp_current_image, $_zp_current_album, $_zp_current_search;
+	if (checkForPassword(true)) return;
 	if(empty($_GET['page'])) {
 		$pagenr = 1;
 	} else {

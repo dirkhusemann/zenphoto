@@ -70,8 +70,7 @@ function printImageMap($zoomlevel='6', $type=NULL, $width=NULL, $height=NULL, $t
 	global $_zp_phoogle;
 	if(getOption('gmaps_apikey') != ''){
 		$exif = getImageEXIFData();
-		if(!empty($exif['EXIFGPSLatitude']) &&
-		!empty($exif['EXIFGPSLongitude'])){
+		if(!empty($exif['EXIFGPSLatitude']) && !empty($exif['EXIFGPSLongitude'])){
 
 			$_zp_phoogle->setZoomLevel($zoomlevel);
 			if (!is_null($width)) { $_zp_phoogle->setWidth($width); }
@@ -80,7 +79,7 @@ function printImageMap($zoomlevel='6', $type=NULL, $width=NULL, $height=NULL, $t
 			$lat = $exif['EXIFGPSLatitude'];
 			$long = $exif['EXIFGPSLongitude'];
 			if($exif['EXIFGPSLatitudeRef'] == 'S'){  $lat = '-' . $lat; }
-			if($exif['EXIFGPSLongitudeRef'] == 'W'){  $long = '-' . $long; }
+			if($exif['EXIFGPSLongitudeRef'] == 'W'){  $long = '-' . $long; }			
 			$_zp_phoogle->addGeoPoint($lat, $long);
 			$dataid = $id.'_data';
 			if (empty($text)) $text = 'Google Map';
