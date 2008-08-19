@@ -1376,8 +1376,8 @@ function processAlbumEdit($index, $album) {
 	}
 	$tagsprefix = 'tags_'.$prefix;
 	$notify = '';
-	$album->setTitle(process_language_string_save($prefix.'albumtitle'));
-	$album->setDesc(process_language_string_save($prefix.'albumdesc'));
+	$album->setTitle(process_language_string_save($prefix.'albumtitle', 2));
+	$album->setDesc(process_language_string_save($prefix.'albumdesc', 1));
 	$tags = array();
 	for ($i=0; $i<4; $i++) {
 		if (isset($_POST[$tagsprefix.'new_tag_value_'.$i])) {
@@ -1400,7 +1400,7 @@ function processAlbumEdit($index, $album) {
 	$tags = array_unique($tags);
 	$album->setTags($tags);
 	$album->setDateTime(strip($_POST[$prefix."albumdate"]));
-	$album->setPlace(process_language_string_save($prefix.'albumplace'));
+	$album->setPlace(process_language_string_save($prefix.'albumplace', 3));
 	if (isset($_POST[$prefix.'thumb'])) $album->setAlbumThumb(strip($_POST[$prefix.'thumb']));
 	$album->setShow(isset($_POST[$prefix.'Published']));
 	$album->setCommentsAllowed(isset($_POST[$prefix.'allowcomments']));
@@ -1478,8 +1478,8 @@ function processAlbumEdit($index, $album) {
 			}
 		}
 	}
-	$album->setPasswordHint(process_language_string_save($prefix.'albumpass_hint'));
-	$album->setCustomData(process_language_string_save($prefix.'album_custom_data'));
+	$album->setPasswordHint(process_language_string_save($prefix.'albumpass_hint', 3));
+	$album->setCustomData(process_language_string_save($prefix.'album_custom_data', 1));
 	$album->save();
 
 	// Move/Copy/Rename the album after saving.
@@ -1757,7 +1757,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
  * @param string $name the prefix for the label, id, and name tags
  * @return string
  */
-function process_language_string_save($name) {
+function process_language_string_save($name, $sanitize_level) {
 	global $_zp_active_languages;
 	if (is_null($_zp_active_languages)) {
 		$_zp_active_languages = generateLanguageList();
@@ -1768,14 +1768,14 @@ function process_language_string_save($name) {
 		if (!empty($value) && preg_match('/^'.$name.'_[a-z]{2}_[A-Z]{2}$/', $key)) {
 			$key = substr($key, $l);
 			if (in_array($key, $_zp_active_languages)) {
-				$strings[$key] = sanitize($value, 2);
+				$strings[$key] = sanitize($value, $sanitize_level);
 			}
 		}
 	}
 	switch (count($strings)) {
 		case 0:
 			if (isset($_POST[$name])) {
-				return sanitize($_POST[$name], 2);
+				return sanitize($_POST[$name], $sanitize_level);
 			} else {
 				return '';
 			}

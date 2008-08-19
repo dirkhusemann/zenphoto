@@ -24,7 +24,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			}
 		}
 	}
-	
+
 	$mcr_errors = array();
 
 
@@ -147,14 +147,14 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 										$image->set('total_votes', 0);
 										$image->set('used_ips', 0);
 									}
-									$image->setTitle(process_language_string_save("$i-title"));
-									$image->setDesc(process_language_string_save("$i-desc"));
-									$image->setLocation(process_language_string_save("$i-location"));
-									$image->setCity(process_language_string_save("$i-city"));
-									$image->setState(process_language_string_save("$i-state"));
-									$image->setCountry(process_language_string_save("$i-country"));
-									$image->setCredit(process_language_string_save("$i-credit"));
-									$image->setCopyright(process_language_string_save("$i-copyright"));
+									$image->setTitle(process_language_string_save("$i-title", 2));
+									$image->setDesc(process_language_string_save("$i-desc", 1));
+									$image->setLocation(process_language_string_save("$i-location", 3));
+									$image->setCity(process_language_string_save("$i-city", 3));
+									$image->setState(process_language_string_save("$i-state", 3));
+									$image->setCountry(process_language_string_save("$i-country", 3));
+									$image->setCredit(process_language_string_save("$i-credit", 1));
+									$image->setCopyright(process_language_string_save("$i-copyright", 1));
 
 									$tagsprefix = 'tags_'.$i.'-';
 									$tags = array();
@@ -186,7 +186,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 									if (isset($_POST["$i-reset_hitcounter"])) {
 										$image->set('hitcounter', 0);
 									}
-									$image->setCustomData(process_language_string_save("$i-custom_data"));
+									$image->setCustomData(process_language_string_save("$i-custom_data", 1));
 									$image->save();
 
 									// Process move/copy/rename
@@ -243,10 +243,10 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			} else {
 				$pg = '';
 			}
-			if ($notify == '&') { 
+			if ($notify == '&') {
 				$notify = '';
 			} else {
-				$notify .= '&saved'; 
+				$notify .= '&saved';
 			}
 			header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin.php?page=edit'.$qs_albumsuffix.$notify.$pg.$returntab);
 			exit();
@@ -421,7 +421,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		echo  "<h2>".gettext("Subalbum order saved")."</h2>";
 		echo '</div>';
 	}
-	
+
 	?>
 <h1><?php echo gettext("Edit Album:");?> <em><?php echo $album->name; ?></em></h1>
 <p><?php printAdminLinks('edit' . $albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
@@ -438,13 +438,13 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		if (isset($_GET['mismatch'])) {
 			?>
 			<div class="errorbox" id="fade-message">
-			<?php if ($_GET['mismatch'] == 'user') { 
+			<?php if ($_GET['mismatch'] == 'user') {
 				echo '<h2>'.gettext("You must supply a  password.").'</h2>';
-			} else { 
+			} else {
 				echo '<h2>'.gettext("Your passwords did not match.").'</h2>';
-			} 
+			}
 			?>
-			
+
 			</div>
 		<?php
 		} else {
@@ -467,7 +467,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		echo  "<h2>".gettext("Images uploaded")."</h2>";
 		echo '</div>';
 	}
-	
+
 	echo '<div id="mainmenu">';
 	echo '<ul>';
 	echo '<li><a href="#tab_albuminfo"><span>'.gettext("Album").'</span></a></li>';
@@ -519,12 +519,12 @@ if (count($subalbums) > 0) {
 </table>
 		<ul class="iconlegend">
 		<li><img src="images/lock.png" alt="Protected" /><?php echo gettext("Has Password"); ?></li>
-		<li><img src="images/pass.png" alt="Published" /><img src="images/action.png" alt="Unpublished" /><?php echo gettext("Published/Unpublished"); ?></li> 
+		<li><img src="images/pass.png" alt="Published" /><img src="images/action.png" alt="Unpublished" /><?php echo gettext("Published/Unpublished"); ?></li>
 		<li><img src="images/cache.png" alt="Cache the album" /><?php echo gettext("Cache	the album"); ?></li>
 		<li><img src="images/warn.png" alt="Refresh image metadata" /><?php echo gettext("Refresh image metadata"); ?></li>
 		<li><img src="images/reset.png" alt="Reset hitcounters" /><?php echo gettext("Reset	hitcounters"); ?></li>
 		<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
-		</ul>		
+		</ul>
 	<?php
 			zenSortablesSaveButton("?page=edit&album=" . urlencode($album->name) . "&subalbumsaved#tab_subalbuminfo", gettext("Save Order"));
 			?>
@@ -585,7 +585,7 @@ if ($allimagecount) {
 	$mcr_albumlist = array();
 	genAlbumUploadList($mcr_albumlist);
 	$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');
-	
+
 	$currentimage = 0;
 	foreach ($images as $filename) {
 		$image = new Image($album, $filename);
@@ -922,12 +922,12 @@ if ($allimagecount) {
 <div>
 <ul class="iconlegend">
 		<li><img src="images/lock.png" alt="Protected" /><?php echo gettext("Has Password"); ?></li>
-		<li><img src="images/pass.png" alt="Published" /><img src="images/action.png" alt="Unpublished" /><?php echo gettext("Published/Unpublished"); ?></li> 
+		<li><img src="images/pass.png" alt="Published" /><img src="images/action.png" alt="Unpublished" /><?php echo gettext("Published/Unpublished"); ?></li>
 		<li><img src="images/cache.png" alt="Cache the album" /><?php echo gettext("Cache	the album"); ?></li>
 		<li><img src="images/warn.png" alt="Refresh image metadata" /><?php echo gettext("Refresh image metadata"); ?></li>
 		<li><img src="images/reset.png" alt="Reset hitcounters" /><?php echo gettext("Reset	hitcounters"); ?></li>
 		<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
-		</ul>		
+		</ul>
 <?php
   if ($_zp_loggedin & ADMIN_RIGHTS) {
 		zenSortablesSaveButton("?page=edit&saved", gettext("Save Order"));
@@ -1175,8 +1175,8 @@ if ($c > 0) {
 </div>
 <!-- content --> <?php
 printAdminFooter();
-if (issetPage('edit') && 
-	((isset($albums) && count($albums) > 0) 
+if (issetPage('edit') &&
+	((isset($albums) && count($albums) > 0)
 		|| (isset($subalbums) && count($subalbums) > 0))) {
 	zenSortablesFooter();
 }

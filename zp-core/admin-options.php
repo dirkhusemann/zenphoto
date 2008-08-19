@@ -97,9 +97,9 @@ if (isset($_GET['action'])) {
 
 		/*** Gallery options ***/
 		if (isset($_POST['savegalleryoptions'])) {
-			setOption('gallery_title', process_language_string_save('gallery_title'));
-			setoption('Gallery_description', process_language_string_save('Gallery_description'));
-			setOption('website_title', process_language_string_save('website_title'));
+			setOption('gallery_title', process_language_string_save('gallery_title', 2));
+			setoption('Gallery_description', process_language_string_save('Gallery_description', 1));
+			setOption('website_title', process_language_string_save('website_title', 2));
 			$web = $_POST['website_url'];
 			setOption('website_url', $web);
 			setOption('time_offset', $_POST['time_offset']);
@@ -175,8 +175,8 @@ if (isset($_GET['action'])) {
 					$notify = $fail;
 				}
 			}
-			setOption('gallery_hint', process_language_string_save('gallery_hint'));
-			setOption('search_hint', process_language_string_save('search_hint'));
+			setOption('gallery_hint', process_language_string_save('gallery_hint', 3));
+			setOption('search_hint', process_language_string_save('search_hint', 3));
 			setBoolOption('persistent_archive', isset($_POST['persistent_archive']));
 			setBoolOption('album_session', isset($_POST['album_session']));
 			$oldloc = getOption('locale', true); // get the option as stored in the database, not what might have been set by a cookie
@@ -284,11 +284,11 @@ if (isset($_GET['action'])) {
 		if (!$themeswitch) { // was really a save.
 			foreach ($_POST as $postkey=>$value) {
 				if (preg_match('/^'.CUSTOM_OPTION_PREFIX.'/', $postkey)) { // custom option!
-					$key = substr($postkey, strpos($postkey, '-')+1);				
-					$switch = substr($postkey, strlen(CUSTOM_OPTION_PREFIX), -strlen($key)-1);					
+					$key = substr($postkey, strpos($postkey, '-')+1);
+					$switch = substr($postkey, strlen(CUSTOM_OPTION_PREFIX), -strlen($key)-1);
 					switch ($switch) {
 						case 'text':
-							$value = process_language_string_save($key);
+							$value = process_language_string_save($key, 2);
 							break;
 						case 'chkbox':
 							if (isset($_POST[$key])) {
