@@ -18,5 +18,11 @@ var zpstrings = {
 	'ClickToEditDescription' : "<?php echo gettext('Click to edit description'); ?>",
 	'Save' : "<?php echo gettext('save'); ?>",
 	'Cancel' : "<?php echo gettext('cancel'); ?>",
-	'CurrentlyEditingSomethingElse' : "<?php echo gettext('Currently editing something else, save or cancel to edit this.'); ?>"
+	'CurrentlyEditingSomethingElse' : "<?php echo gettext('Currently editing something else, save or cancel to edit this.'); ?>",
+	'Close' : "<?php echo gettext('Close'); ?>",
+	'orEscKey' : "<?php echo gettext('or Esc Key'); ?>",
+	'Next' : "<?php echo gettext('Next'); ?>",
+	'Prev' : "<?php echo gettext('Prev'); ?>",
+	'Image' : "<?php echo gettext('Image'); ?>",
+	'of' : "<?php echo gettext('of'); ?>"
 };
