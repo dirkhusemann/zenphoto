@@ -114,7 +114,7 @@ function get_image($imgfile) {
 function unsharp_mask($img, $amount, $radius, $threshold) {
 	/*
 	 Unsharp Mask for PHP - version 2.0
-	 Unsharp mask algorithm by Torstein H�nsi 2003-06.
+	 Unsharp mask algorithm by Torstein H???nsi 2003-06.
 	 Please leave this notice.
 	 */
 
