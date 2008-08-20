@@ -111,7 +111,7 @@ function printImageMap($zoomlevel='6', $width=NULL, $height=NULL, $text='', $tog
 			$long = $exif['EXIFGPSLongitude'];
 			if($exif['EXIFGPSLatitudeRef'] == 'S'){  $lat = '-' . $lat; }
 			if($exif['EXIFGPSLongitudeRef'] == 'W'){  $long = '-' . $long; }
-			addPoint($lat, $long, mysql_real_escape_string(getImageDesc()));
+			addPoint($lat, $long, js_encode(getImageDesc()));
 			$dataid = $id.'_data';
 			if (empty($text)) $text = 'Google Map';
 			echo "<a href=\"javascript: toggle('$dataid');\" title=\"".gettext('Display or hide the Google Map.')."\">";
@@ -154,11 +154,11 @@ function printAlbumMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL, $
 				$long = $exif['EXIFGPSLongitude'];
 				if($exif['EXIFGPSLatitudeRef'] == 'S'){  $lat = '-' . $lat; }
 				if($exif['EXIFGPSLongitudeRef'] == 'W'){  $long = '-' . $long; }
-				$infoHTML = '<a href="' . mysql_real_escape_string(getImageLinkURL()) . '"><img src="' .
-				getImageThumb() . '" alt="' . getImageDesc() . '" ' .
+				$infoHTML = '<a href="' . getImageLinkURL() . '"><img src="' .
+					getImageThumb() . '" alt="' . getImageDesc() . '" ' .
 					'style=" margin-left: 30%; margin-right: 10%; border: 0px; "/></a>' .
-					'<p>' . mysql_real_escape_string(getImageDesc()) . '</p>';
-				addPoint($lat, $long, $infoHTML);
+					'<p>' . getImageDesc() . '</p>';
+				addPoint($lat, $long, js_encode($infoHTML));
 			}
 		}
 		if($foundLocation){
