@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php echo strip_tags(getImageTitle());?></title>
+	<title><?php echo GetBareImageTitle();?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" type="text/css" media="screen, projection" href="<?php echo $_zp_themeroot ?>/css/master.css" />
 	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
@@ -67,7 +67,7 @@
 						printImageMetadata('', false);
 						echo "&nbsp;/&nbsp;";
 					}
-				?><a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo strip_tags(getImageTitle());?>"><?php echo gettext('Full Size'); ?></a>
+				?><a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo GetBareImageTitle();?>"><?php echo gettext('Full Size'); ?></a>
  					</li>
 				</ul>
 			</div>

@@ -7,7 +7,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php echo strip_tags(getGalleryTitle()); ?> | <?php echo gettext('Archive'); ?></title>
+	<title><?php echo GetBareGalleryTitle(); ?> | <?php echo gettext('Archive'); ?></title>
 	<link rel="stylesheet" href="<?php echo  $zenCSS ?>" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
 </head>
@@ -52,7 +52,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 	<div class="footlinks">
 		<small><?php printThemeInfo(); ?></small>
 		<a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>"><?php echo gettext('Powered by').' '; ?><font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a><br/>
-		<?php printRSSLink('Gallery','', 'Gallery RSS', ''); 
+		<?php printRSSLink('Gallery','', 'Gallery RSS', '');
 		if (function_exists('printUserLogout')) {
 			printUserLogout('<br />', '', true);
 		}

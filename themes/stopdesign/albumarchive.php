@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php echo strip_tags(getGalleryTitle()); ?> <?php echo gettext("Archive"); ?></title>
+	<title><?php echo GetBareGalleryTitle(); ?> <?php echo gettext("Archive"); ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" type="text/css" media="screen, projection" href="<?php echo $_zp_themeroot ?>/css/master.css" />
 	<?php

@@ -12,7 +12,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php echo strip_tags(getGalleryTitle()); ?> | <?php echo gettext("Search"); ?></title>
+	<title><?php echo GetBareGalleryTitle(); ?> | <?php echo gettext("Search"); ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" type="text/css" media="screen, projection" href="<?php echo $_zp_themeroot ?>/css/master.css" />
 	<?php printRSSHeaderLink('Gallery','Gallery RSS'); ?>
@@ -42,8 +42,8 @@
 				}
 			?>
 				<li class="gal">
-					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo strip_tags(getAlbumTitle());?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 230, null, 210, 60); ?></a>
-					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo strip_tags(getAlbumTitle());?>"><?php printAlbumTitle(); ?></a></h3>
+					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo GetBareAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 230, null, 210, 60); ?></a>
+					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo GetBareAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
 					<p>
 						<?php
 						$number = getNumAlbums();
@@ -89,7 +89,7 @@
 				$lastImage++;
 			}
 			echo "\n<li class=\"thumb\"><span><em style=\"background-image:url(" . getImageThumb() . '); "><a href="' .
-			htmlspecialchars(getImageLinkURL()) . '" title="' . strip_tags(getImageTitle()) . '" style="background:#fff;">"'.
+			htmlspecialchars(getImageLinkURL()) . '" title="' . GetBareImageTitle() . '" style="background:#fff;">"'.
 			getImageTitle().'"</a></em></span></li>';
 		}
 		if (!is_null($firstImage)  && hasNextPage()) {

@@ -8,7 +8,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php echo strip_tags(getGalleryTitle()); ?> | <?php echo strip_tags(getAlbumTitle());?> | <?php echo strip_tags(getImageTitle());?></title>
+	<title><?php echo GetBareGalleryTitle(); ?> | <?php echo GetBareAlbumTitle();?> | <?php echo GetBareImageTitle();?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
@@ -79,7 +79,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 			<div id="image" <?php echo $wide.$high; ?>>
 				<?php if ($show = !checkForPassword()) { ?>
 					<div id="image_container">
-						<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo strip_tags(getImageTitle());?>">
+						<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo GetBareImageTitle();?>">
 							<?php printDefaultSizedImage(getImageTitle()); ?>
 						</a>
 					</div>

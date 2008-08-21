@@ -50,7 +50,7 @@ $backgroundImagePath="";
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php echo strip_tags(getGalleryTitle()); ?> | <?php echo gettext("Search"); ?></title>
+	<title><?php echo GetBareGalleryTitle(); ?> | <?php echo gettext("Search"); ?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/swfobject.js"></script>
@@ -125,9 +125,9 @@ $backgroundImagePath="";
 			}
 			?>
 			<li><div class="imagethumb"><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the album:').' '.
-				 strip_tags(getAlbumTitle());	printImage_AlbumCount(); ?>">
+				 GetBareAlbumTitle();	printImage_AlbumCount(); ?>">
 				<?php printCustomAlbumThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?></a></div>
-				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the Album:').' '; echo strip_tags(getAlbumTitle());
+				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the Album:').' '; echo GetBareAlbumTitle();
 				printImage_AlbumCount();
 			?>">
 			<?php printAlbumTitle(); ?></a></h4></li>
@@ -160,7 +160,7 @@ $backgroundImagePath="";
 							}
  						echo '<div class="image">' . "\n";
  						echo '<div class="imagethumb">' . "\n";
- 						echo '<a href="' . htmlspecialchars(getImageLinkURL()) .'" title="' . strip_tags(getImageTitle()) . '">' . "\n";
+ 						echo '<a href="' . htmlspecialchars(getImageLinkURL()) .'" title="' . GetBareImageTitle() . '">' . "\n";
  						echo printImageThumb(getImageTitle()) . "</a>\n";
  						echo "</div>\n";
  						echo "</div>\n";
