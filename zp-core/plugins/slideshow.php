@@ -16,13 +16,13 @@
  * NOTE: The jQuery mode does not support movie and audio files anymore. If you need to show them please use the Flash mode.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)
- * @version 1.0.6.2
+ * @version 1.0.6.3
  * @package plugins
  */
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)";
-$plugin_version = '1.0.6.2';
+$plugin_version = '1.0.6.3';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
 
@@ -239,6 +239,8 @@ function printSlideShow($heading = true, $speedctl = false) {
 				echo 'TitleList[' . $cntr . '] = "' . htmlspecialchars(strip_tags(htmlspecialchars_decode($image->getTitle())), ENT_QUOTES) . '";'. chr(13);
 				if(getOption("slideshow_showdesc")) {
 					echo 'DescList[' . $cntr . '] = "' . $image->getDesc() . '";'. chr(13);
+				} else {
+					echo 'DescList[' . $cntr . '] = "";'. chr(13);
 				}
 				if ($idx == $numberofimages - 1) { $idx = -1; }
 			}
