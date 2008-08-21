@@ -143,6 +143,7 @@ function printAlbumMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL, $
 		if($zoomlevel){
 			$_zp_phoogle->zoomLevel = $zoomlevel;
 		}
+		$dataid = $id.'_data';
 		//		if (!is_null($type)) { $_zp_phoogle->setMapType($type); }
 		if (!is_null($width)) { $_zp_phoogle->setWidth($width); }
 		if (!is_null($height)) { $_zp_phoogle->setHeight($height); }

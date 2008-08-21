@@ -172,6 +172,26 @@ if (file_exists($newfile)) {
 }
 // If the file hasn't been cached yet, create it.
 if ($process) {
+	// setup standard image options from the album theme if it exists
+	require_once('classes.php');
+	$parent = new Album(new Gallery, $album);
+	$albumtheme = $parent->getAlbumTheme();
+	if (!empty($albumtheme)) {
+		$theme = $albumtheme;
+		if (ALBUM_OPTIONS_TABLE) {
+			$tbl = prefix('options').' WHERE `ownerid`='.$parent->id;
+		} else {
+			$tbl = prefix(getOptionTableName($parent->name));
+		}
+		//load the album theme options
+		$sql = "SELECT `name`, `value` FROM ".$tbl;
+		$optionlist = query_full_array($sql, true);
+		if ($optionlist !== false) {
+			foreach($optionlist as $option) {
+				$_zp_options[$option['name']] = $option['value'];
+			}
+		}
+	}
 	cacheImage($newfilename, $imgfile, $args, $allowWatermark);
 }
 if (!$debug) {
