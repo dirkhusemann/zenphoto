@@ -90,7 +90,7 @@ if (isset($_POST['mysql'])) { //try to update the zp-config file
 	}
 }
 if ($updatezp_config) {
-	@chmod('zp-config.php', CHMOD_VALUE);
+	@chmod('zp-config.php', 0666 & CHMOD_VALUE);
 	if (is_writeable('zp-config.php')) {
 		if ($handle = fopen('zp-config.php', 'w')) {
 			if (fwrite($handle, $zp_cfg)) {
@@ -501,7 +501,7 @@ if (!$checked) {
 		$sqlv = versionCheck($required, $mysqlv);;
 	}
 	if ($cfg) {
-		@chmod('zp-config.php', CHMOD_VALUE);
+		@chmod('zp-config.php', 0666 & CHMOD_VALUE);
 		if ($adminstuff = (!$sql || !$connection  || !$db) && is_writable('zp-config.php')) {
 			$good = checkMark(false, ' '.gettext("MySQL setup in").' zp-config.php', '', '') && $good;
 			// input form for the information
@@ -764,7 +764,7 @@ if ($debug) {
 		}
 		$f = '';
 		if (!$base) { // try and fix it
-			@chmod($htfile, CHMOD_VALUE);
+			@chmod($htfile, 0666 & CHMOD_VALUE);
 			if (is_writeable($htfile)) {
 				$ht = substr($ht, 0, $i) . "RewriteBase $d\n" . substr($ht, $j+1);
 				if ($handle = fopen($htfile, 'w')) {
