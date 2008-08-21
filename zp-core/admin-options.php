@@ -1092,14 +1092,26 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	<!-- end of SPAM filter options -->
 	<tr>
 		<td><?php echo gettext("Require fields:"); ?></td>
-		<td><input type="checkbox" name="comment_name_required" value=1
-		<?php checked('1', getOption('comment_name_required')); ?>>&nbsp;<?php echo gettext("Name"); ?>
-		<input type="checkbox" name="comment_email_required" value=1
-		<?php checked('1', getOption('comment_email_required')); ?>>&nbsp;<?php echo gettext("Email"); ?>
-		<input type="checkbox" name="comment_web_required" value=1
-		<?php checked('1', getOption('comment_web_required')); ?>>&nbsp;<?php echo gettext("Website"); ?>
-		<input type="checkbox" name="Use_Captcha" value=1
-		<?php checked('1', getOption('Use_Captcha')); ?>>&nbsp;<?php echo gettext("Captcha"); ?></td>
+		<td>
+			<table class="checkboxes">
+				<tr>
+					<td><input type="checkbox" name="comment_name_required" value=1
+					<?php checked('1', getOption('comment_name_required')); ?>>&nbsp;<?php echo gettext("Name"); ?></td>
+				</tr>
+				<tr>
+					<td><input type="checkbox" name="comment_email_required" value=1
+					<?php checked('1', getOption('comment_email_required')); ?>>&nbsp;<?php echo gettext("Email"); ?></td>
+				</tr>
+				<tr>
+					<td><input type="checkbox" name="comment_web_required" value=1
+					<?php checked('1', getOption('comment_web_required')); ?>>&nbsp;<?php echo gettext("Website"); ?></td>
+				</tr>
+				<tr>
+					<td><input type="checkbox" name="Use_Captcha" value=1
+					<?php checked('1', getOption('Use_Captcha')); ?>>&nbsp;<?php echo gettext("Captcha"); ?></td>
+				</tr>
+			</table>
+		</td>
 		<td><?php echo gettext("Checked fields must be valid in a comment posting."); ?></td>
 	</tr>
 	<tr>
