@@ -13,7 +13,6 @@ if (isset($_POST['debug'])) {
 }
 $checked = isset($_GET['checked']);
 $upgrade = false;
-
 if(!function_exists("gettext")) {
 	// load the drop-in replacement library
 	require_once('lib-gettext/gettext.inc');
@@ -24,6 +23,13 @@ if(!function_exists("gettext")) {
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 if (!defined('PLUGIN_FOLDER')) { define('PLUGIN_FOLDER', '/plugins/'); }
 define('OFFSET_PATH', 2);
+
+
+$en_US = dirname(__FILE__).'/locale/en_US/';
+if (!file_exists($en_US)) {
+	@mkdir(dirname(__FILE__).'/locale/', CHMOD_VALUE);
+	@mkdir($en_US, CHMOD_VALUE);
+}
 
 function setupLog($message, $reset=false) {
   global $debug;
@@ -771,7 +777,7 @@ if ($debug) {
 				fclose($handle);
 			}
 		}
-		$good = checkMark($base, gettext("<em>.htaccess</em> RewriteBase is")." <code>$b</code> $f", ' '.gettext("[Does not match install folder]"),
+		$good = checkMark($base, gettext("<em>.htaccess</em> RewriteBase is")." <code>$b</code> $f", ' ['.gettext("Does not match install folder").']',
 											gettext("Setup was not able to write to the file change RewriteBase match the install folder.") .
 											"<br/>".gettext("Either make the file writeable or set <code>RewriteBase</code> in your <code>.htaccess</code> file to")." <code>$d</code>.") && $good;
 	}
@@ -783,6 +789,9 @@ if ($debug) {
 	}
 
 	$good = folderCheck('cache', dirname(dirname(__FILE__)) . "/cache/", false) && $good;
+	
+	$good = checkmark(file_exists($en_US), '<em>locale</em> '.gettext('folders'), ' ['.gettext('Are not complete').']', gettext('Be sure you have uploaded the complete Zenphoto package. You must have at least the <em>en_US</em> folder.')) && $good;
+	
 	if ($connection) { mysql_close($connection); }
 	if ($good) {
 		$dbmsg = "";
