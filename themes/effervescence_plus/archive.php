@@ -7,7 +7,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php echo GetBareGalleryTitle(); ?> | <?php echo gettext('Archive'); ?></title>
+	<title><?php echo getBareGalleryTitle(); ?> | <?php echo gettext('Archive'); ?></title>
 	<link rel="stylesheet" href="<?php echo  $zenCSS ?>" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
 </head>

@@ -50,7 +50,7 @@ $backgroundImagePath="";
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php echo GetBareGalleryTitle(); ?> | <?php echo gettext("Search"); ?></title>
+	<title><?php echo getBareGalleryTitle(); ?> | <?php echo gettext("Search"); ?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/bluranchors.js"></script>
 	<script type="text/javascript" src="<?php echo  $_zp_themeroot ?>/scripts/swfobject.js"></script>
@@ -127,7 +127,7 @@ $backgroundImagePath="";
 			<li><div class="imagethumb"><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the album:').' '.
 				 GetBareAlbumTitle();	printImage_AlbumCount(); ?>">
 				<?php printCustomAlbumThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?></a></div>
-				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the Album:').' '; echo GetBareAlbumTitle();
+				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the Album:').' '; echo getBareAlbumTitle();
 				printImage_AlbumCount();
 			?>">
 			<?php printAlbumTitle(); ?></a></h4></li>

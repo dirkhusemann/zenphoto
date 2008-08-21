@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php echo GetBareGalleryTitle(); ?> | <?php echo gettext("Search"); ?></title>
+	<title><?php echo getBareGalleryTitle(); ?> | <?php echo gettext("Search"); ?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 	<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
   <script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/prototype.js" type="text/javascript"></script>
@@ -40,10 +40,10 @@
 			<?php while (next_album()): $c++;?>
 				<div class="album">
 					<div class="thumb">
-						<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:');?> <?php echo GetBareAlbumTitle();?>"><?php printAlbumThumbImage(getAlbumTitle()); ?></a>
+						<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:');?> <?php echo getBareAlbumTitle();?>"><?php printAlbumThumbImage(getAlbumTitle()); ?></a>
 					</div>
 					<div class="albumdesc">
-						<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:');?> <?php echo GetBareAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
+						<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:');?> <?php echo getBareAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
 						<p><?php printAlbumDesc(); ?></p>
 						<small><?php printAlbumDate(gettext("Date:").' '); ?> </small>
 					</div>
@@ -55,7 +55,7 @@
 			<div id="images">
 				<?php while (next_image(false, $firstPageImages)): $c++;?>
 				<div class="image">
-					<div class="imagethumb"><a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo GetBareImageTitle();?>"><?php printImageThumb(getImageTitle()); ?></a></div>
+					<div class="imagethumb"><a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo getBareImageTitle();?>"><?php printImageThumb(getImageTitle()); ?></a></div>
 				</div>
 				<?php endwhile; ?>
 			</div>

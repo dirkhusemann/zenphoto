@@ -48,7 +48,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php echo GetBareGalleryTitle(); ?> | <?php echo GetBareAlbumTitle();?></title>
+	<title><?php echo getBareGalleryTitle(); ?> | <?php echo getBareAlbumTitle();?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 <?php
 	$oneImagePage = false;
@@ -164,10 +164,10 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 					?>
 				<li>
 					<div class="imagethumb">
-					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the Album:'); echo GetBareAlbumTitle(); printImage_AlbumCount(); ?>">
+					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the Album:'); echo getBareAlbumTitle(); printImage_AlbumCount(); ?>">
 					<?php printCustomAlbumThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?></a>
 					</div>
-					<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the Album:'); echo GetBareAlbumTitle(); printImage_AlbumCount(); ?>">
+					<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the Album:'); echo getBareAlbumTitle(); printImage_AlbumCount(); ?>">
 					<?php printAlbumTitle(); ?></a></h4></li>
 				<?php
 						}
@@ -200,7 +200,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 							<div class="imageElement">
 								<h3><?php echo getImageTitle();?></h3>
 								<p><?php echo getImageDesc();?></p>
-								<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo GetBareImageTitle();?>" class="open"></a>
+								<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo getBareImageTitle();?>" class="open"></a>
 								<?php printCustomSizedImage(getImageTitle(), null, 540, null, null, null, null, null, 'full'); ?>
 								<?php printImageThumb(getImageTitle(), 'thumbnail'); ?>
 							</div>

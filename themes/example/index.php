@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php echo GetBareGalleryTitle(); ?></title>
+	<title><?php echo getBareGalleryTitle(); ?></title>
 		<link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
 		<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
 </head>
@@ -22,11 +22,11 @@
 
  			<div class="album">
 					<div class="albumthumb">
-							<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo GetBareAlbumTitle();?>">
+							<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo getBareAlbumTitle();?>">
 						<?php printAlbumThumbImage(getAlbumTitle()); ?></a>
 						</div>
 					<div class="albumtitle">
-							<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo GetBareAlbumTitle();?>">
+							<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo getBareAlbumTitle();?>">
 						<?php printAlbumTitle(); ?></a></h3> <?php printAlbumDate(); ?>
 						</div>
 					<div class="albumdesc"><?php printAlbumDesc(); ?></div>

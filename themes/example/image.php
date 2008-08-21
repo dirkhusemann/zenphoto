@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php echo GetBareGalleryTitle(); ?></title>
+	<title><?php echo getBareGalleryTitle(); ?></title>
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
 	<link rel="stylesheet" href="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.css" type="text/css" />
 	<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); echo "\n"; ?>
@@ -28,13 +28,13 @@
 			<?php } if (hasNextImage()) { ?> <a class="next" href="<?php echo htmlspecialchars(getNextImageURL());?>" title="<?php echo gettext('Next Image'); ?>"><?php echo gettext("next");?> &raquo;</a><?php } ?>
 		</div>
 
-				<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo GetBareImageTitle();?>">
+				<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo getBareImageTitle();?>">
 				<?php printDefaultSizedImage(getImageTitle()); ?></a>
 
 				<div id="image_data">
 					<div id="fullsize_download_link">
 						<em>
-						<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo GetBareImageTitle();?>"><?php echo gettext("Original Size:"); ?>
+						<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo getBareImageTitle();?>"><?php echo gettext("Original Size:"); ?>
 							<?php echo getFullWidth() . "x" . getFullHeight(); ?>
 						</a>
 						</em>

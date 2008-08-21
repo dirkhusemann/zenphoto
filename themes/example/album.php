@@ -8,7 +8,7 @@ $firstPageImages = normalizeColumns(1, 7);
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php zenJavascript(); ?>
-	<title><?php echo GetBareGalleryTitle(); ?></title>
+	<title><?php echo getBareGalleryTitle(); ?></title>
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot ?>/zen.css" type="text/css" />
 	<?php printRSSHeaderLink('Album',getAlbumTitle()); ?>
 </head>
@@ -33,11 +33,11 @@ $firstPageImages = normalizeColumns(1, 7);
 		<div id="albums">
 			<?php while (next_album()): ?>
 			<div class="album">
-					<div class="albumthumb"><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo GetBareAlbumTitle();?>">
+					<div class="albumthumb"><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo getBareAlbumTitle();?>">
 						<?php printAlbumThumbImage(getAlbumTitle()); ?></a>
 						</div>
 					<div class="albumtitle">
-									<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo GetBareAlbumTitle();?>">
+									<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo getBareAlbumTitle();?>">
 							<?php printAlbumTitle(); ?></a></h3> <?php printAlbumDate(); ?>
 								</div>
 						<div class="albumdesc"><?php printAlbumDesc(); ?></div>
@@ -64,7 +64,7 @@ $firstPageImages = normalizeColumns(1, 7);
 			while (next_image(false, $firstPageImages)) { ?>
 				<div class="image">
 					<div class="imagethumb">
-							<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo GetBareImageTitle();?>">
+							<a href="<?php echo htmlspecialchars(getImageLinkURL());?>" title="<?php echo getBareImageTitle();?>">
 							<?php printImageThumb(getImageTitle()); ?></a>
 						</div>
 				</div>
