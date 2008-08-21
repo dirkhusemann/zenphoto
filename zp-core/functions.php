@@ -701,11 +701,6 @@ function sanitize_numeric($num) {
  * @return string the sanitized string.
  */
 function sanitize($input_string, $sanitize_level=3) {
-	// Make sure sanitation level is specified correctly.  If not, set it to default.
-	if (empty($sanitize_level) || !is_numeric($sanitize_level)) {
-		$sanitize_level = 3;
-	}
-
 	if (is_array($input_string)) {
 		foreach ($input_string as $output_key => $output_value) {
 			$output_string[$output_key] = sanitize_string($output_value, $sanitize_level);
