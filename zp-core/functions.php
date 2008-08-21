@@ -1446,10 +1446,11 @@ function getImageMetadata($imageName) {
 	getimagesize($imageName, $imageInfo);
 	if (is_array($imageInfo)) {
 		$exifraw = read_exif_data_raw($imageName, false);
-		if (!isset($exifraw['SubIFD'])) {
-			return array();
+		if (isset($exifraw['SubIFD'])) {
+			$subIFD = $exifraw['SubIFD'];
+		} else {
+			$subIFD = array();
 		}
-		$subIFD = $exifraw['SubIFD'];
 		/* EXIF date */
 		if (isset($subIFD['DateTime'])) {
 			$date = $subIFD['DateTime'];
