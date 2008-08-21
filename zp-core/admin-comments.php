@@ -190,7 +190,7 @@ if ($page == "editcomment") { ?>
 		</th>
 		<th><?php echo gettext("E-Mail"); ?></th>
 		<th><?php echo gettext("IP address"); ?></th>
-		<th><?php echo gettext("Show"); ?></th>
+		<th><?php echo gettext("Private"); ?></th>
 		<th><?php echo gettext("Spam"); ?></th>
 		<th><?php echo gettext("Edit"); ?></th>
 		<th><?php echo gettext("Delete"); ?>
