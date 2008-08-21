@@ -778,15 +778,17 @@ if ($allimagecount) {
 		</table>
 		</td>
 	</tr>
-	<tr>
-		<td colspan="4"><input type="submit"
-			value="<?php echo gettext('save changes'); ?>" /></td>
-	</tr>
 
 	<?php
 	$currentimage++;
 }
-	if ($allimagecount != $totalimages) { // need pagination links
+?>
+	<tr>
+		<td colspan="4"><input type="submit"
+			value="<?php echo gettext('save changes'); ?>" /></td>
+	</tr>
+<?php
+if ($allimagecount != $totalimages) { // need pagination links
 	?>
 	<tr>
 		<td colspan="4" class="bordered" id="imagenavb"><?php adminPageNav($pagenum,$totalpages,'admin.php','?page=edit&amp;album='.urlencode($album->name),'#tab_imageinfo'); ?>
