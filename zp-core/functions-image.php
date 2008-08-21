@@ -114,7 +114,7 @@ function get_image($imgfile) {
 function unsharp_mask($img, $amount, $radius, $threshold) {
 	/*
 	 Unsharp Mask for PHP - version 2.0
-	 Unsharp mask algorithm by Torstein H???nsi 2003-06.
+	 Unsharp mask algorithm by Torstein Hønsi 2003-06.
 	 Please leave this notice.
 	 */
 
@@ -159,7 +159,7 @@ function unsharp_mask($img, $amount, $radius, $threshold) {
 
 			// Move copies of the image around one pixel at the time and merge them with weight
 			// according to the matrix. The same matrix is simply repeated for higher radii.
-				
+
 			imagecopy      ($imgBlur, $imgCanvas, 0, 0, 1, 1, $w - 1, $h - 1); // up left
 			imagecopymerge ($imgBlur, $imgCanvas, 1, 1, 0, 0, $w, $h, 50); // down right
 			imagecopymerge ($imgBlur, $imgCanvas, 0, 1, 1, 0, $w - 1, $h, 33.33333); // down left
@@ -192,18 +192,18 @@ function unsharp_mask($img, $amount, $radius, $threshold) {
 	// and set the pixels
 	for ($x = 0; $x < $w; $x++)    { // each row
 		for ($y = 0; $y < $h; $y++)    { // each pixel
-				
+
 			$rgbOrig = ImageColorAt($imgCanvas2, $x, $y);
 			$rOrig = (($rgbOrig >> 16) & 0xFF);
 			$gOrig = (($rgbOrig >> 8) & 0xFF);
 			$bOrig = ($rgbOrig & 0xFF);
-				
+
 			$rgbBlur = ImageColorAt($imgCanvas, $x, $y);
-				
+
 			$rBlur = (($rgbBlur >> 16) & 0xFF);
 			$gBlur = (($rgbBlur >> 8) & 0xFF);
 			$bBlur = ($rgbBlur & 0xFF);
-				
+
 			// When the masked pixels differ less from the original
 			// than the threshold specifies, they are set to their original value.
 			$rNew = (abs($rOrig - $rBlur) >= $threshold)
@@ -215,7 +215,7 @@ function unsharp_mask($img, $amount, $radius, $threshold) {
 			$bNew = (abs($bOrig - $bBlur) >= $threshold)
 			? max(0, min(255, ($amount * ($bOrig - $bBlur)) + $bOrig))
 			: $bOrig;
-				
+
 			if (($rOrig != $rNew) || ($gOrig != $gNew) || ($bOrig != $bNew)) {
 				$pixCol = ImageColorAllocate($img, $rNew, $gNew, $bNew);
 				ImageSetPixel($img, $x, $y, $pixCol);
@@ -388,7 +388,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			$imh = imagesy($newim);
 			$percent = getOption('watermark_scale')/100;
 			$r = sqrt(($imw * $imh * $percent) / ($watermark_width * $watermark_height));
-			if (!getOption('watermark_allow_upscale')) { 
+			if (!getOption('watermark_allow_upscale')) {
 				$r = min(1, $r);
 			}
 			$nw = round($watermark_width * $r);
