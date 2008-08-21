@@ -179,6 +179,11 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 		?>
 		<a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>"><?php echo gettext('Powered by').' ';?>
 		<font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font face="Arial Black" size="1">photo</font></span></a>
+		<?php
+		if (function_exists('printUserLogout')) {
+			printUserLogout('<br />', '', true);
+		}
+		?>
 	</div>
 
 	<!-- Administration Toolbox -->

@@ -121,15 +121,25 @@ function zpurl($with_rewrite=NULL, $album=NULL, $image=NULL, $page=NULL, $specia
  */
 function fix_path_redirect() {
 	$sfx = im_suffix();
-	if (isset($_GET['p'])) {
-		$special = "p=".$_GET['p'];
+	$params = '';
+	$ignore = array('album', 'image');
+	foreach ($_GET as $q => $v) {
+		if (!in_array($q, $ignore)) {
+			$params .= '&'.$q;
+			if (!empty($q)) {
+				$params .= '='.$v;
+			}
+		}
+	}
+	if (!empty($params)) {
+		$special = substr($params, 1);
 		$sfx .= "?" . $special;
 	} else {
 		$special = '';
 	}
-
 	if (getOption('mod_rewrite') && strlen($sfx) > 0
-	&& in_context(ZP_IMAGE) && substr($_SERVER['REQUEST_URI'], -strlen($sfx)) != $sfx ) {
+				&& in_context(ZP_IMAGE) && substr($_SERVER['REQUEST_URI'], -strlen($sfx)) != $sfx ) {
+			
 		$redirecturl = zpurl(true, NULL, NULL, NULL, $special);
 		header("HTTP/1.0 301 Moved Permanently");
 		header('Location: ' . FULLWEBPATH . '/' . $redirecturl);

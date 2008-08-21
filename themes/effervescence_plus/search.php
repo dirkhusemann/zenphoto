@@ -255,6 +255,11 @@ if (getOption('Use_Simpleviewer') && !getOption('mod_rewrite')) {
 <?php printThemeInfo(); ?>
 <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>"><?php echo gettext('Powered by').' '; ?>
 <font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font size="1" face="Arial Black">photo</font></span></a>
+<?php
+if (function_exists('printUserLogout')) {
+	printUserLogout('<br />', '', true);
+}
+?>
 
 </div>
 </div>
