@@ -20,123 +20,128 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 
 	<!-- Wrap Everything -->
 	<div id="main4">
- 		<div id="main2">
+		<div id="main2">
 
 			<!-- Wrap Header -->
 			<div id="galleryheader">
 				<div id="gallerytitle">
-			<!-- Image Navigation -->
+
+					<!-- Image Navigation -->
 					<div class="imgnav">
 						<div class="imgprevious">
-						<?php
-						global $_zp_current_image;
-						if (hasPrevImage()) {
-							$image = $_zp_current_image->getPrevImage();
-							echo '<a href="' . htmlspecialchars(getPrevImageURL()) . '" title="' . strip_tags($image->getTitle()) . '">&laquo; '.gettext('prev').'</a>';
-						} else {
-							echo '<div class="imgdisabledlink">&laquo; '.gettext('prev').'</div>';
-						}
-						?>
+							<?php
+								global $_zp_current_image;
+								if (hasPrevImage()) {
+									$image = $_zp_current_image->getPrevImage();
+									echo '<a href="' . htmlspecialchars(getPrevImageURL()) . '" title="' . strip_tags($image->getTitle()) . '">&laquo; '.gettext('prev').'</a>';
+								} else {
+									echo '<div class="imgdisabledlink">&laquo; '.gettext('prev').'</div>';
+								}
+							?>
+						</div>
+						<div class="imgnext">
+							<?php
+								if (hasNextImage()) {
+									$image = $_zp_current_image->getNextImage();
+									echo '<a href="' . htmlspecialchars(getNextImageURL()) . '" title="' . strip_tags($image->getTitle()) . '">'.gettext('next').' &raquo;</a>';
+								} else {
+									echo '<div class="imgdisabledlink">'.gettext('next').' &raquo;</div>';
+								}
+							?>
+						</div>
 					</div>
-					<div class="imgnext">
-					<?php
-					if (hasNextImage()) {
-						$image = $_zp_current_image->getNextImage();
-						echo '<a href="' . htmlspecialchars(getNextImageURL()) . '" title="' . strip_tags($image->getTitle()) . '">'.gettext('next').' &raquo;</a>';
-					} else {
-						echo '<div class="imgdisabledlink">'.gettext('next').' &raquo;</div>';
-					}
-					?>
+
+					<!-- Logo -->
+					<div id="logo2">
+						<?php printLogo(); ?>
+					</div>
+				</div>
+
+				<!-- Crumb Trail Navigation -->
+				<div id="wrapnav">
+					<div id="navbar">
+						<span>
+							<?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> |
+							<?php printParentBreadcrumb(); printAlbumBreadcrumb("", " | "); ?>
+						</span>
+						<?php printImageTitle(true); ?>
+					</div>
 				</div>
 			</div>
 
-	<!-- Logo -->
-			<div id="logo2">
-			<?php printLogo(); ?>
+			<!-- The Image -->
+			<?php
+				$s = getDefaultWidth() + 22;
+				$wide = "style=\"width:".$s."px;";
+				$s = getDefaultHeight() + 22;
+				$high = " height:".$s."px;\"";
+			?>
+			<div id="image" <?php echo $wide.$high; ?>>
+				<?php if ($show = !checkForPassword()) { ?>
+					<div id="image_container">
+						<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo strip_tags(getImageTitle());?>">
+							<?php printDefaultSizedImage(getImageTitle()); ?>
+						</a>
+					</div>
+					<?php
+					if (getImageEXIFData()) {
+						echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=400&amp;width=300&amp;inlineId=imagemetadata\" title=\"".gettext("image details from exif")."\" class=\"thickbox\">".gettext('Image Info')."</a></div>";
+						printImageMetadata('', false);
+					}
+				} ?>
 			</div>
+			<br clear="all" />
 		</div>
 
-	<!-- Crumb Trail Navigation -->
-		<div id="wrapnav">
-			<div id="navbar">
-				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> |
-				<?php printParentBreadcrumb(); printAlbumBreadcrumb("", " | "); ?>
-				</span>
-				<?php printImageTitle(true); ?>
-			</div>
+		<!-- Image Description -->
+		<?php if ($show) { ?>
+		<div id="description">
+			<?php
+				printImageDesc(true);
+				if (function_exists('printImageMap')) {
+					printImageMap();
+				}
+			?>
 		</div>
+		<?php }
+			if (function_exists('printShutterfly')) printShutterfly();
+		?>
 	</div>
-
-	<!-- The Image -->
-	<?php
-			$s = getDefaultWidth() + 22;
-			$wide = "style=\"width:".$s."px;";
-			$s = getDefaultHeight() + 22;
-			$high = " height:".$s."px;\"";
-	?>
-		<div id="image" <?php echo $wide.$high; ?>>
-			<?php if ($show = !checkForPassword()) { ?>
-			<div id="image_container">
-				<a href="<?php echo htmlspecialchars(getFullImageURL());?>" title="<?php echo strip_tags(getImageTitle());?>">
-					<?php printDefaultSizedImage(getImageTitle()); ?>
-				</a>
-			</div>
-		<?php
-		if (getImageEXIFData()) {
-			echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=400&amp;width=300&amp;inlineId=imagemetadata\" title=\"".gettext("image details from exif")."\" class=\"thickbox\">".gettext('Image Info')."</a></div>";
-			printImageMetadata('', false);
-		}
-} ?>
-	</div>
-		<br clear="all" />
- 	</div>
-
-	<!-- Image Description -->
-	<?php if ($show) { ?>
-	<div id="description">
-	<?php
-	printImageDesc(true);
-	if (function_exists('printImageMap')) { printImageMap();	 }
-	?>
-	</div>
-	<?php }
-		if (function_exists('printShutterfly')) printShutterfly();
-	?>
-</div>
 
 	<!-- Wrap Bottom Content -->
 	<?php if ($show && getOption('Allow_comments')) { ?>
-	<div id="content">
+		<div id="content">
 
-	<!-- Headings -->
-		<div id="bottomheadings">
-			<div class="bottomfull">
-				<?php $num = getCommentCount(); echo ($num == 1) ? ("<h3>1 ".gettext("Comment")."</h3>") : ("<h3>$num ".gettext("Comments")."</h3>"); ?>
-		</div>
-					</div>
+			<!-- Headings -->
+			<div id="bottomheadings">
+				<div class="bottomfull">
+					<?php $num = getCommentCount(); echo ($num == 1) ? ("<h3>1 ".gettext("Comment")."</h3>") : ("<h3>$num ".gettext("Comments")."</h3>"); ?>
+				</div>
+			</div>
 
-		<!-- Wrap Comments -->
+			<!-- Wrap Comments -->
 			<div id="main3">
-
 				<div id="comments">
 					<?php while (next_comment()):  ?>
-					<div class="comment">
+						<div class="comment">
 							<div class="commentinfo">
 								<h4><?php printCommentAuthorLink(); ?></h4>: on <?php echo getCommentDate();?>, <?php echo getCommentTime();?><?php printEditCommentLink('Edit', ', ', ''); ?>
 							</div>
-							<div class="commenttext"><?php echo getCommentBody();?></div>
-								</div>
+							<div class="commenttext">
+								<?php echo getCommentBody();?>
+							</div>
+						</div>
 					<?php endwhile; ?>
 				</div>
 
-			<!-- Comment Box -->
-			<?php if (OpenedForComments()) {
-						$stored = getCommentStored();?>
+				<!-- Comment Box -->
+				<?php if (OpenedForComments()) {
+					$stored = getCommentStored();?>
 					<div id="commentbox">
 						<h2><?php echo gettext('Leave a Reply');?></h2>
 						<form id="commentform" action="#" method="post">
 								<div>
-										<input type="hidden" name="comment" value="1" />
+									<input type="hidden" name="comment" value="1" />
 									<input type="hidden" name="remember" value="1" />
 									<?php printCommentErrors(); ?>
 									<input type="text" name="name" id="name" class="textinput" value="<?php echo $stored['name'];?>" size="22" tabindex="1" /><label for="name"><small> <?php echo gettext('Name');?></small></label>
@@ -158,24 +163,25 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 
 			</div>
 		</div>
-		<?php } ?>
+	<?php } ?>
 
 	<!-- Footer -->
 	<div class="footlinks">
 		<?php
-		$h = hitcounter('image');
-		if ($h == 1) {
-			$h .= ' '.gettext('hit');
-		} else {
-			$h .= ' '.gettext('hits');
-		}
-		echo "<p>$h ".gettext('on this image')."</p>";
-		printThemeInfo();
+			$h = hitcounter('image');
+			if ($h == 1) {
+				$h .= ' '.gettext('hit');
+			} else {
+				$h .= ' '.gettext('hits');
+			}
+			echo "<p>$h ".gettext('on this image')."</p>";
+			printThemeInfo();
 		?>
 		<a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>"><?php echo gettext('Powered by').' ';?>
 		<font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font face="Arial Black" size="1">photo</font></span></a>
 	</div>
 
+	<!-- Administration Toolbox -->
 	<?php printAdminToolbox(); ?>
 
 </body>
