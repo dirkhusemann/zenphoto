@@ -185,13 +185,23 @@ function zenJavascript() {
 //******************************************
 
 /**
- * Returns the title of the ZenPhoto Gallery without printing it.
+ * Returns the raw title of the gallery.
  *
  * @return string
  */
 function getGalleryTitle() {
 	return get_language_string(getOption('gallery_title'));
 }
+
+/**
+ * Returns a text-only title of the gallery.
+ *
+ * @return string
+ */
+function GetBareGalleryTitle() {
+	return strip_tags(getGalleryTitle());
+}
+
 /**
  * Prints the title of the gallery.
  */
@@ -199,10 +209,27 @@ function printGalleryTitle() {
 	echo getGalleryTitle();
 }
 
+/**
+ * Returns the raw description of the gallery.
+ *
+ * @return string
+ */
 function getGalleryDesc() {
 	return get_language_string(getOption('Gallery_description'));
 }
 
+/**
+ * Returns a text-only description of the gallery.
+ *
+ * @return string
+ */
+function GetBareGalleryDesc() {
+	return strip_tags(getGalleryDesc());
+}
+
+/**
+ * Prints the description of the gallery.
+ */
 function printGalleryDesc() {
 	echo getGalleryDesc();
 }
@@ -216,6 +243,7 @@ function printGalleryDesc() {
 function getMainSiteName() {
 	return get_language_string(getOption('website_title'));
 }
+
 /**
  * Returns the URL of the main website as set by the "Website URL" option
  * on the gallery options tab.
@@ -553,7 +581,7 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 //******************************************
 
 /**
- * Returns the title of the current album.
+ * Returns the raw title of the current album.
  *
  * @return string
  */
@@ -562,8 +590,19 @@ function getAlbumTitle() {
 	global $_zp_current_album;
 	return $_zp_current_album->getTitle();
 }
+
 /**
- * Prints the title of the current album. If you are logged in you can click on this to modify the name on the fly.
+ * Returns a text-only title of the current album.
+ *
+ * @return string
+ */
+function GetBareAlbumTitle() {
+	return strip_tags(getAlbumTitle());
+}
+
+/**
+ * Prints an encapsulated title of the current album.
+ * If you are logged in you can click on this to modify the title on the fly.
  *
  * @param bool $editable set to true to allow editing (for the admin)
  */
@@ -807,7 +846,7 @@ function printAlbumPlace() {
 }
 
 /**
- * Returns the album description of the current album.
+ * Returns the raw description of the current album.
  *
  * @return string
  */
@@ -816,9 +855,19 @@ function getAlbumDesc() {
 	global $_zp_current_album;
 	return $_zp_current_album->getDesc();
 }
+
 /**
- * Prints the album description of the current album.
- * Converts and displays line break in the admin field as <br />.
+ * Returns a text-only description of the current album.
+ *
+ * @return string
+ */
+function GetBareAlbumDesc() {
+	return strip_tags(getAlbumDesc());
+}
+
+/**
+ * Prints an encapsulated description of the current album.
+ * If you are logged in you can click on this to modify the description on the fly.
  *
  * @param bool $editable
  */
@@ -1313,9 +1362,8 @@ define('DEFAULT_MOV_WIDTH', 640);
 define('DEFAULT_3GP_HEIGHT', 304);
 define('DEFAULT_3GP_WIDTHT', 352);
 
-
 /**
- * Returns the title of the current image.
+ * Returns the raw title of the current image.
  *
  * @return string
  */
@@ -1326,7 +1374,16 @@ function getImageTitle() {
 }
 
 /**
- * Returns the title of the current image.
+ * Returns a text-only title of the current image.
+ *
+ * @return string
+ */
+function GetBareImageTitle() {
+	return strip_tags(getImageTitle());
+}
+
+/**
+ * Prints an encapsulated title of the current image.
  *
  * @param bool $editable if set to true and the admin is logged in allows editing of the title
  */
@@ -1482,7 +1539,7 @@ function getImageVideoThumb() {
 }
 
 /**
- * Returns the description field of the current image
+ * Returns the raw description of the current image.
  * new lines are replaced with <br/> tags
  *
  * @return string
@@ -1494,7 +1551,16 @@ function getImageDesc() {
 }
 
 /**
- * Prints the description field of the current image.
+ * Returns a text-only description of the current image.
+ *
+ * @return string
+ */
+function GetBareImageDesc() {
+	return strip_tags(getImageDesc());
+}
+
+/**
+ * Prints the description of the current image.
  * Converts and displays line breaks set in the admin field as <br />.
  *
  * @param bool $editable set true to allow editing by the admin
