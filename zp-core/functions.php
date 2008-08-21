@@ -202,7 +202,7 @@ function setOption($key, $value, $persistent=true) {
 		$result = true;
 	}
 	if ($result) {
-		$_zp_options[$key] = strip($value);
+		$_zp_options[$key] = $value;
 		return true;
 	} else {
 		return false;
@@ -2240,14 +2240,21 @@ function handleSearchParms($album='', $image='') {
 }
 
 /**
+ * Returns the number of album thumbs that go on a gallery page
+ *
+ * @return int
+ */
+function galleryAlbumsPerPage() {
+	return max(1, getOption('albums_per_page'));
+}
+/**
  * Returns the theme folder
  * If there is an album theme, loads the theme options.
  *
  * @return string
  */
 function setupTheme() {
-	global $_zp_gallery_albums_per_page, $_zp_gallery, $_zp_current_album,
-					$_zp_current_search, $_zp_options, $_zp_themeroot;
+	global $_zp_gallery, $_zp_current_album, $_zp_current_search, $_zp_options, $_zp_themeroot;
 	$albumtheme = '';
 	if (in_context(ZP_SEARCH_LINKED)) {
 		$name = $_zp_current_search->dynalbumname;
@@ -2268,7 +2275,6 @@ function setupTheme() {
 		require_once($requirePath);
 		$optionHandler = new ThemeOptions(); /* prime the theme options */
 	}
-	$_zp_gallery_albums_per_page = max(1, getOption('albums_per_page'));
 	if (!empty($albumtheme)) {
 		$theme = $albumtheme;
 		if (ALBUM_OPTIONS_TABLE) {

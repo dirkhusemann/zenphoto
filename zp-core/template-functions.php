@@ -381,7 +381,7 @@ function getNumSubalbums() {
  * @return int
  */
 function getTotalPages($oneImagePage=false) {
-	global $_zp_gallery, $_zp_gallery_albums_per_page, $_zp_current_album;
+	global $_zp_gallery, $_zp_current_album;
 	if (in_context(ZP_ALBUM | ZP_SEARCH)) {
 		$albums_per_page = max(1, getOption('albums_per_page'));
 		if (in_context(ZP_SEARCH)) {
@@ -398,8 +398,8 @@ function getTotalPages($oneImagePage=false) {
 		$pageCount = ($pageCount + ceil(($imageCount - getOption('images_first_page')) / $images_per_page));
 		return $pageCount;
 	} else if (in_context(ZP_INDEX)) {
-		if($_zp_gallery_albums_per_page != 0) {
-			return ceil($_zp_gallery->getNumAlbums() / $_zp_gallery_albums_per_page);
+		if(galleryAlbumsPerPage() != 0) {
+			return ceil($_zp_gallery->getNumAlbums() / galleryAlbumsPerPage());
 		} else {
 			return NULL;
 		}
@@ -3525,7 +3525,6 @@ function getTheme(&$zenCSS, &$themeColor, $defaultColor) {
  * @since 1.1
  */
 function normalizeColumns($albumColumns, $imageColumns) {
-
 	global $_zp_current_album, $firstPageImages;
 	$albcount = max(1, getOption('albums_per_page'));
 	if (($albcount % $albumColumns) != 0) {
