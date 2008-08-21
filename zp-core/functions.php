@@ -742,7 +742,7 @@ function sanitize_string($input_string, $sanitize_level) {
 	} else if ($sanitize_level === 2) {
 		$style_tags = "(".getOption('style_tags').")";
 		$allowed_tags = parseAllowedTags($style_tags);
-		if ($allowed_tags === false) { $allowed_tags = array(); } // someone has screwed with the 'allowed_tags' option row in the database, but better safe than sorry
+		if ($allowed_tags === false) { $allowed_tags = array(); } // someone has screwed with the 'style_tags' option row in the database, but better safe than sorry
 		$input_string = kses($input_string, $allowed_tags);
 
 	// Full sanitation.  Strips all code.
