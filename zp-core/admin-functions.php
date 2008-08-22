@@ -1669,7 +1669,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 		$empty = true;
 		foreach ($emptylang as $key=>$lang) {
 			if (isset($strings[$key])) {
-				$string = htmlspecialchars($strings[$key]);
+				$string = $strings[$key];
 				if (!empty($string)) {
 					unset($emptylang[$key]);
 					$empty = false;
@@ -1677,7 +1677,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 					if ($textbox) {
 						echo '<textarea name="'.$name.'_'.$key.'" cols="60"	rows="6" style="width:271px;">'.$string.'</textarea>';
 					} else {
-						echo '<input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.$string.'" size="35" style="width:271px;"/>';
+						echo '<input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.htmlspecialchars($string, ENT_QUOTES, "UTF-8", FALSE).'" size="35" style="width:271px;"/>';
 					}
 					echo ' '.$lang."</label></li>\n";
 				}
@@ -1709,7 +1709,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 		if ($textbox) {
 			echo '<textarea name="'.$name.'_'.$locale.'" cols="40"	rows="6" style="width:271px;">'.$dbstring.'</textarea>';
 		} else {
-			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="40" style="width:271px;"/>';
+			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.htmlspecialchars($dbstring, ENT_QUOTES, "UTF-8", FALSE).'" size="40" style="width:271px;"/>';
 		}
 	}
 }
