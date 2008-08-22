@@ -108,13 +108,28 @@ getUserLocale();
 setupCurrentLocale();
 
 /**
+ * Decodes HTML Special Characters.  Function for backwards compatability with PHP 4.1.
+ *
+ * @param string $text
+ * @param string $quote_style
+ * @return string
+ */
+if (!function_exists("htmlspecialchars_decode")) {
+    function htmlspecialchars_decode($string, $quote_style = ENT_COMPAT) {
+        return strtr($string, array_flip(get_html_translation_table(HTML_SPECIALCHARS, $quote_style)));
+    }
+}
+
+/**
  * encodes a pre-sanitized string to be used in an HTML text-only field (value, alt, title, etc.)
  *
  * @param string $this_string
  * @return string
  */
-function html_encode($this_string) {
-	return htmlspecialchars(strip_tags($this_string), ENT_QUOTES, "UTF-8", FALSE);
+function html_encode($this_string, $striptags=true) {
+	if ($striptags) {$this_string = strip_tags($this_string);}
+	$this_string = htmlspecialchars_decode($this_string);
+	return htmlspecialchars($this_string, ENT_QUOTES, "UTF-8");
 }
 
 /**
@@ -135,19 +150,6 @@ function js_encode($this_string) {
  */
 function xmlspecialchars($text) {
 	return str_replace("&#039;", '&apos;', htmlspecialchars($text, ENT_QUOTES));
-}
-
-/**
- * Decodes HTML Special Characters.  Used in PHP 4 only.
- *
- * @param string $text
- * @param string $quote_style
- * @return string
- */
-if (!function_exists("htmlspecialchars_decode")) {
-    function htmlspecialchars_decode($string, $quote_style = ENT_COMPAT) {
-        return strtr($string, array_flip(get_html_translation_table(HTML_SPECIALCHARS, $quote_style)));
-    }
 }
 
 /**

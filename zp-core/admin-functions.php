@@ -1677,7 +1677,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 					if ($textbox) {
 						echo '<textarea name="'.$name.'_'.$key.'" cols="60"	rows="6" style="width:271px;">'.$string.'</textarea>';
 					} else {
-						echo '<input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.html_encode($string).'" size="35" style="width:271px;"/>';
+						echo '<input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.html_encode($string, $striptags=false).'" size="35" style="width:271px;"/>';
 					}
 					echo ' '.$lang."</label></li>\n";
 				}
@@ -1709,7 +1709,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 		if ($textbox) {
 			echo '<textarea name="'.$name.'_'.$locale.'" cols="40"	rows="6" style="width:271px;">'.$dbstring.'</textarea>';
 		} else {
-			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.html_encode($dbstring).'" size="40" style="width:271px;"/>';
+			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.html_encode($dbstring, $striptags=false).'" size="40" style="width:271px;"/>';
 		}
 	}
 }

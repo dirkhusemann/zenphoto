@@ -165,10 +165,10 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 				<li>
 					<?php $annotate =  sprintf(gettext('View the Album: %s'),getBareAlbumTitle()).getImage_AlbumCount();?>
 					<div class="imagethumb">
-					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo $annotate ?>">
+					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo html_encode($annotate) ?>">
 					<?php printCustomAlbumThumbImage($annotate, null, 180, null, 180, 80); ?></a>
 					</div>
-					<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo $annotate ?>">
+					<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo html_encode($annotate) ?>">
 					<?php printAlbumTitle(); ?></a></h4></li>
 				<?php
 						}
