@@ -108,7 +108,17 @@ getUserLocale();
 setupCurrentLocale();
 
 /**
- * encodes a string to be used in a Javascript alert box
+ * encodes a pre-sanitized string to be used in an HTML text-only field (value, alt, title, etc.)
+ *
+ * @param string $this_string
+ * @return string
+ */
+function html_encode($this_string) {
+	return htmlspecialchars(strip_tags($this_string), ENT_QUOTES, "UTF-8", FALSE);
+}
+
+/**
+ * encodes a pre-sanitized string to be used in a Javascript alert box
  *
  * @param string $this_string
  * @return string
@@ -2640,7 +2650,7 @@ function generateListFromFiles($currentValue, $root, $suffix) {
  */
 function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
 	echo "<a href=\"" . htmlspecialchars($url) . "\"" .
-	(($title) ? " title=\"" . htmlspecialchars(strip_tags($title), ENT_QUOTES) . "\"" : "") .
+	(($title) ? " title=\"" . html_encode($title) . "\"" : "") .
 	(($class) ? " class=\"$class\"" : "") .
 	(($id) ? " id=\"$id\"" : "") . ">" .
 	$text . "</a>";

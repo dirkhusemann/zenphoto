@@ -389,7 +389,7 @@ if ($speedctl) {
 			 	pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
 				</object><a>';
 		} else {
-			echo "<img src='".WEBPATH."/".ZENFOLDER."/i.php?a=".$folder."&i=".$filename."&s=".$imagesize."' alt='".strip_tags($image->getTitle())."' title='".strip_tags($image->getTitle())."' />\n";
+			echo "<img src='".WEBPATH."/".ZENFOLDER."/i.php?a=".$folder."&i=".$filename."&s=".$imagesize."' alt='".html_encode($image->getTitle())."' title='".html_encode($image->getTitle())."' />\n";
 		}
 		if(getOption("slideshow_showdesc")) { echo "<p class='imgdesc'>".$image->getDesc()."</p>"; }
 		echo "</span>";

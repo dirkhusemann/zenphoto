@@ -2,9 +2,9 @@
 /** printAlbumMenu for Zenphoto
   *
  * Changelog
- * 
+ *
  * 1.4.4.4:
- * - Corrects an inconsistency about misslabeled css id and classes parameters: 
+ * - Corrects an inconsistency about misslabeled css id and classes parameters:
  * There is now a class for the active toplevel element, so that you can use it for top and sub levels.
  * - Also now not every list item gets the active class assigned anymore...
  *
@@ -166,7 +166,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',
 	if($option === "list" OR $option === "list-top") {
 		echo "<ul".$css_id.">\n"; // top level list
 		if(!empty($indexname)) {
-			echo "<li><a href='".htmlspecialchars(getGalleryIndexURL())."' title='".htmlspecialchars(strip_tags($indexname),ENT_QUOTES)."'>".$indexname."</a></li>";
+			echo "<li><a href='".htmlspecialchars(getGalleryIndexURL())."' title='".html_encode($indexname)."'>".$indexname."</a></li>";
 		}
 	}
 		/**** TOPALBUM LEVEL ****/
@@ -382,7 +382,7 @@ function createAlbumMenuLink($album,$option2,$css,$albumpath,$mode,$level='') {
 			if(getAlbumID() === $album->getAlbumID()) {
 				$link = "<li".$css.">".$album->getTitle().$count;
 			} else {
-				$link = "<li><a href='".htmlspecialchars($albumpath.$album->name)."' title='".strip_tags($album->getTitle())."'>".htmlspecialchars($album->getTitle())."</a>".$count;
+				$link = "<li><a href='".htmlspecialchars($albumpath.$album->name)."' title='".html_encode($album->getTitle())."'>".htmlspecialchars($album->getTitle())."</a>".$count;
 			}
 			break;
 		case "jump":

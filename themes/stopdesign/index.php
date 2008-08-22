@@ -88,9 +88,9 @@
 									echo "<li><table><tr><td>\n";
 									$imageURL = htmlspecialchars(getURL($image));
 									echo '<a href="'.$imageURL.'" title="'.gettext("View image:").' '.
-									strip_tags($image->getTitle()) . '"><img src="' .
+									html_encode($image->getTitle()) . '"><img src="' .
 									htmlspecialchars($image->getCustomImage(null, 44, 33, null, null, null, null, true)) .
-																		'" width="44" height="33" alt="' . strip_tags($image->getTitle()) . "\"/></a>\n";
+																		'" width="44" height="33" alt="' . html_encode($image->getTitle()) . "\"/></a>\n";
 									echo "</td></tr></table></li>\n";
 								}
 								break;
@@ -102,9 +102,9 @@
 								$randomImage = getRandomImages();
 								if (is_object($randomImage)) {
 									$randomImageURL = htmlspecialchars(getURL($randomImage));
-									echo '<a href="' . $randomImageURL . '" title="'.gettext("View image:").' ' . strip_tags($randomImage->getTitle()) . '">' .
+									echo '<a href="' . $randomImageURL . '" title="'.gettext("View image:").' ' . html_encode($randomImage->getTitle()) . '">' .
  												'<img src="' . htmlspecialchars($randomImage->getCustomImage(null, 44, 33, null, null, null, null, true)) .
-												'" width="44" height="33" alt="'.strip_tags($randomImage->getTitle()).'"';
+												'" width="44" height="33" alt="'.html_encode($randomImage->getTitle()).'"';
 									echo "/></a></td></tr></table></li>\n";
 								}
 							}

@@ -136,10 +136,10 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
 	global $_zp_gallery;
 	$albumpath = rewrite_path("/", "index.php?album=");
 	$tempalbum = new Album($_zp_gallery, $album['folder']);
-		echo "<li><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . htmlspecialchars(strip_tags($tempalbum->getTitle()),ENT_QUOTES) . "\">\n";
+		echo "<li><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . html_encode($tempalbum->getTitle()) . "\">\n";
 		echo "<img src=\"".$tempalbum->getAlbumThumb()."\"></a>\n<br />";
 		if($showtitle) {
-			echo "<h3><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . htmlspecialchars(strip_tags($tempalbum->getTitle()),ENT_QUOTES) . "\">\n";
+			echo "<h3><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . html_encode($tempalbum->getTitle()) . "\">\n";
 			echo $tempalbum->getTitle()."</a></h3>\n";
 		}
 		if($showdate) {
@@ -349,10 +349,10 @@ function printImageStatistic($number, $option, $albumfolder='', $showtitle=false
 	echo "\n<div id=\"$option\">\n";
 	echo "<ul>";
 	foreach ($images as $image) {
-		echo "<li><a href=\"" . $image->getImageLink() . "\" title=\"" . strip_tags($image->getTitle()) . "\">\n";
-		echo "<img src=\"" . $image->getThumb() . "\"  alt=\"" . strip_tags($image->getTitle()) . "\" /></a>\n";
+		echo "<li><a href=\"" . $image->getImageLink() . "\" title=\"" . html_encode($image->getTitle()) . "\">\n";
+		echo "<img src=\"" . $image->getThumb() . "\"  alt=\"" . html_encode($image->getTitle()) . "\" /></a>\n";
 		if($showtitle) {
-			echo "<h3><a href=\"".$image->getImageLink()."\" title=\"" . strip_tags($image->getTitle()) . "\">\n";
+			echo "<h3><a href=\"".$image->getImageLink()."\" title=\"" . html_encode($image->getTitle()) . "\">\n";
 			echo $image->getTitle()."</a></h3>\n";
 		}
 		if($showdate) {

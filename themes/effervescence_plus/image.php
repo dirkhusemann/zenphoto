@@ -33,7 +33,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 								global $_zp_current_image;
 								if (hasPrevImage()) {
 									$image = $_zp_current_image->getPrevImage();
-									echo '<a href="' . htmlspecialchars(getPrevImageURL()) . '" title="' . strip_tags($image->getTitle()) . '">&laquo; '.gettext('prev').'</a>';
+									echo '<a href="' . htmlspecialchars(getPrevImageURL()) . '" title="' . html_encode($image->getTitle()) . '">&laquo; '.gettext('prev').'</a>';
 								} else {
 									echo '<div class="imgdisabledlink">&laquo; '.gettext('prev').'</div>';
 								}
@@ -43,7 +43,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 							<?php
 								if (hasNextImage()) {
 									$image = $_zp_current_image->getNextImage();
-									echo '<a href="' . htmlspecialchars(getNextImageURL()) . '" title="' . strip_tags($image->getTitle()) . '">'.gettext('next').' &raquo;</a>';
+									echo '<a href="' . htmlspecialchars(getNextImageURL()) . '" title="' . html_encode($image->getTitle()) . '">'.gettext('next').' &raquo;</a>';
 								} else {
 									echo '<div class="imgdisabledlink">'.gettext('next').' &raquo;</div>';
 								}

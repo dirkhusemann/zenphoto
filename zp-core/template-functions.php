@@ -45,7 +45,7 @@ function printVersion() {
 function printAdminLink($text, $before='', $after='', $title=NULL, $class=NULL, $id=NULL) {
 	if (zp_loggedin()) {
 		echo $before;
-		printLink(WEBPATH.'/' . ZENFOLDER . '/admin.php', $text, strip_tags($title), $class, $id);
+		printLink(WEBPATH.'/' . ZENFOLDER . '/admin.php', $text, $title, $class, $id);
 		echo $after;
 		return true;
 	}
@@ -198,8 +198,8 @@ function getGalleryTitle() {
  *
  * @return string
  */
-function GetBareGalleryTitle() {
-	return strip_tags(getGalleryTitle());
+function getBareGalleryTitle() {
+	return html_encode(getGalleryTitle());
 }
 
 /**
@@ -223,8 +223,8 @@ function getGalleryDesc() {
  *
  * @return string
  */
-function GetBareGalleryDesc() {
-	return strip_tags(getGalleryDesc());
+function getBareGalleryDesc() {
+	return html_encode(getGalleryDesc());
 }
 
 /**
@@ -596,8 +596,8 @@ function getAlbumTitle() {
  *
  * @return string
  */
-function GetBareAlbumTitle() {
-	return strip_tags(getAlbumTitle());
+function getBareAlbumTitle() {
+	return html_encode(getAlbumTitle());
 }
 
 /**
@@ -689,7 +689,7 @@ function printAlbumBreadcrumb($before='', $after='', $title=NULL) {
 		if (empty($dynamic_album)) {
 			if (!is_null($_zp_current_album)) {
 				if (in_context(ZP_ALBUM_LINKED) && $_zp_current_search->getAlbumIndex($_zp_current_album->name) === false) {
-					echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL()). "\" title=\"$title\">" . getAlbumTitle() . "</a>";
+					echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL()). "\" title=\"" . html_encode($title) . "\">" . getAlbumTitle() . "</a>";
 				} else {
 					$after = '';
 				}
@@ -703,11 +703,11 @@ function printAlbumBreadcrumb($before='', $after='', $title=NULL) {
 				$album = new Album($_zp_gallery, $dynamic_album);
 			}
 			echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL($album)) . "\">";
-			echo strip_tags($album->getTitle());
+			echo $album->getTitle();
 			echo '</a>';
 		}
 	} else {
-		echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL()). "\" title=\"$title\">" . getAlbumTitle() . "</a>";
+		echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL()). "\" title=\"" . html_encode($title) . "\">" . getAlbumTitle() . "</a>";
 	}
 	echo $after;
 }
@@ -861,8 +861,8 @@ function getAlbumDesc() {
  *
  * @return string
  */
-function GetBareAlbumDesc() {
-	return strip_tags(getAlbumDesc());
+function getBareAlbumDesc() {
+	return html_encode(getAlbumDesc());
 }
 
 /**
@@ -1074,7 +1074,7 @@ function printAlbumThumbImage($alt, $class=NULL, $id=NULL) {
 	}
 	$class = trim($class);
 	if (!getOption('use_lock_image') || checkAlbumPassword($_zp_current_album->name, $hint)) {
-		echo "<img src=\"" . htmlspecialchars(getAlbumThumb()) . "\" alt=\"" . strip_tags($alt) . "\"" .
+		echo "<img src=\"" . htmlspecialchars(getAlbumThumb()) . "\" alt=\"" . html_encode($alt) . "\"" .
 		(($class) ? " class=\"$class\"" : "") . (($id) ? " id=\"$id\"" : "") . " />";
 	} else {
 		echo getPasswordProtectImage("\" width=\"".getOption('thumb_crop_width')."\"");
@@ -1138,7 +1138,7 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 		$sizing = $sizing . ' height="' . $sizeH . '"';
 	}
 	if (!getOption('use_lock_image') || checkAlbumPassword($_zp_current_album->name, $hint)){
-		echo "<img src=\"" . htmlspecialchars(getCustomAlbumThumb($size, $width, $height, $cropw, $croph, $cropx, $cropy)). "\"" . $sizing . " alt=\"" . strip_tags($alt) . "\"" .
+		echo "<img src=\"" . htmlspecialchars(getCustomAlbumThumb($size, $width, $height, $cropw, $croph, $cropx, $cropy)). "\"" . $sizing . " alt=\"" . html_encode($alt) . "\"" .
 		(($class) ? " class=\"$class\"" : "") .	(($id) ? " id=\"$id\"" : "") . " />";
 	} else {
 		echo getPasswordProtectImage($sizing);
@@ -1378,8 +1378,8 @@ function getImageTitle() {
  *
  * @return string
  */
-function GetBareImageTitle() {
-	return strip_tags(getImageTitle());
+function getBareImageTitle() {
+	return html_encode(getImageTitle());
 }
 
 /**
@@ -1555,8 +1555,8 @@ function getImageDesc() {
  *
  * @return string
  */
-function GetBareImageDesc() {
-	return strip_tags(getImageDesc());
+function getBareImageDesc() {
+	return html_encode(getImageDesc());
 }
 
 /**
@@ -1823,7 +1823,7 @@ function printImageLink($text, $title, $class=NULL, $id=NULL) {
  */
 function printImageDiv() {
 	if (!isset($_GET['sortable'])) {
-		echo '<a href="'.htmlspecialchars(getImageLinkURL()).'" title="'.strip_tags(getImageTitle()).'">';
+		echo '<a href="'.htmlspecialchars(getImageLinkURL()).'" title="'.html_encode(getImageTitle()).'">';
 	}
 	printImageThumb(getImageTitle());
 
@@ -2086,8 +2086,8 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 	}
 	//Print images
 	else {
-		echo '<img src="' . htmlspecialchars(getDefaultSizedImage()) . '" alt="' . strip_tags($alt) . '"' .
-			' title="' . strip_tags($alt) . '"'.
+		echo '<img src="' . htmlspecialchars(getDefaultSizedImage()) . '" alt="' . html_encode($alt) . '"' .
+			' title="' . html_encode($alt) . '"'.
 			' width="' . getDefaultWidth() . '" height="' . getDefaultHeight() . '"' .
 			(($class) ? " class=\"$class\"" : "") .
 			(($id) ? " id=\"$id\"" : "") . " />";
@@ -2127,7 +2127,7 @@ function printImageThumb($alt, $class=NULL, $id=NULL) {
 		$w = " width=\"$w\"";
 	}
 	$class = trim($class);
-	echo "<img src=\"" . htmlspecialchars(getImageThumb()) . "\" alt=\"" . strip_tags($alt) . "\"" .
+	echo "<img src=\"" . htmlspecialchars(getImageThumb()) . "\" alt=\"" . html_encode($alt) . "\"" .
 	((getOption('thumb_crop')) ? $w.$h : "") .
 	(($class) ? " class=\"$class\"" : "") .
 	(($id) ? " id=\"$id\"" : "") . " />";
@@ -2283,8 +2283,8 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 	else {
 		$sizearr = getSizeCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy);
 		echo "<img src=\"" . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin)) .
-			"\" alt=\"" . strip_tags($alt) . "\"" .
-			"\" title=\"" . strip_tags($alt) . "\"" .
+			"\" alt=\"" . html_encode($alt) . "\"" .
+			"\" title=\"" . html_encode($alt) . "\"" .
 		" width=\"" . $sizearr[0] . "\" height=\"" . $sizearr[1] . "\"" .
 		(($class) ? " class=\"$class\"" : "") .
 		(($id) ? " id=\"$id\"" : "") . " />";
@@ -2838,9 +2838,9 @@ function printRandomImages($number=5, $class=null, $option='all', $rootAlbum='')
 				$randomImage = getRandomImagesAlbum($rootAlbum); break;
 		}
 		$randomImageURL = htmlspecialchars(getURL($randomImage));
-		echo '<a href="' . $randomImageURL . '" title="'.gettext('View image:').' ' . strip_tags($randomImage->getTitle()) . '">' .
+		echo '<a href="' . $randomImageURL . '" title="'.gettext('View image:').' ' . html_encode($randomImage->getTitle()) . '">' .
 			'<img src="' . htmlspecialchars($randomImage->getThumb()) .
-			'" alt="'.strip_tags($randomImage->getTitle()).'"';
+			'" alt="'.html_encode($randomImage->getTitle()).'"';
 		echo "/></a></li>\n";
 	}
 	echo "</ul>";
@@ -2906,7 +2906,7 @@ function printTags($option='links',$preText=NULL,$class='taglist',$separator=', 
 			for ($x = 0; $x < $ct; $x++) {
 				if ($x === $ct - 1) { $separator = ""; }
 				if ($option === "links") {
-					$links1 = "<a href=\"".htmlspecialchars(getSearchURL(quoteSearchTag($singletag[$x]), '', SEARCH_TAGS, 0, 0))."\" title=\"".$singletag[$x]."\" rel=\"nofollow\">";
+					$links1 = "<a href=\"".htmlspecialchars(getSearchURL(quoteSearchTag($singletag[$x]), '', SEARCH_TAGS, 0, 0))."\" title=\"".html_encode($singletag[$x])."\" rel=\"nofollow\">";
 					$links2 = "</a>";
 				}
 				echo "\t<li>".$links1.$singletag[$x].$links2.$separator."</li>\n";
@@ -3086,7 +3086,7 @@ function printCustomPageURL($linktext, $page, $q='', $prev='', $next='', $class=
 	if (!is_null($class)) {
 		$class = 'class="' . $class . '";';
 	}
-	echo $prev."<a href=\"".htmlspecialchars(getCustomPageURL($page, $q))."\" $class title=\"".htmlspecialchars($linktext)."\">".htmlspecialchars($linktext)."</a>".$next;
+	echo $prev."<a href=\"".htmlspecialchars(getCustomPageURL($page, $q))."\" $class title=\"".html_encode($linktext)."\">".htmlspecialchars($linktext)."</a>".$next;
 }
 
 /**
@@ -3176,13 +3176,13 @@ function getRSSHeaderLink($option, $linktext='', $lang='') {
 	}
 	switch($option) {
 		case "Gallery":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$host.WEBPATH."/rss.php?lang=".$lang."\" />\n";
+			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss.php?lang=".$lang."\" />\n";
 		case "Album":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$host.WEBPATH."/rss.php?albumnr=".getAlbumId()."&amp;albumname=".urlencode(getAlbumTitle())."&amp;lang=".$lang."\" />\n";
+			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss.php?albumnr=".getAlbumId()."&amp;albumname=".urlencode(getAlbumTitle())."&amp;lang=".$lang."\" />\n";
 		case "Collection":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$host.WEBPATH."/rss.php?albumname=".urlencode(getAlbumTitle())."&amp;folder=".urlencode($_zp_current_album->getFolder())."&amp;lang=".$lang."\" />\n";
+			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss.php?albumname=".urlencode(getAlbumTitle())."&amp;folder=".urlencode($_zp_current_album->getFolder())."&amp;lang=".$lang."\" />\n";
 		case "Comments":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".htmlspecialchars(strip_tags($linktext),ENT_QUOTES)."\" href=\"http://".$host.WEBPATH."/rss-comments.php?lang=".$lang."\" />\n";
+			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss-comments.php?lang=".$lang."\" />\n";
 	}
 }
 

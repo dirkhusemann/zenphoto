@@ -104,7 +104,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 							} else {
 							echo '<a href="' .
 									rewrite_path("/" . pathurlencode($album->name), "/index.php?album=" . urlencode($album->name)) .
-									'" title="' . strip_tags($album->getTitle()) . '">&laquo; '.gettext('prev').'</a>';
+									'" title="' . html_encode($album->getTitle()) . '">&laquo; '.gettext('prev').'</a>';
 							}
 						?>
 					</div>
@@ -116,7 +116,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 							} else {
 								echo '<a href="' .
 										rewrite_path("/" . pathurlencode($album->name), "/index.php?album=" . urlencode($album->name)) .
-										'" title="' . strip_tags($album->getTitle()) . '">'.gettext('next').' &raquo;</a>';
+										'" title="' . html_encode($album->getTitle()) . '">'.gettext('next').' &raquo;</a>';
 							}
 						?>
 					</div>
