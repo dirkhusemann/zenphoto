@@ -6,16 +6,17 @@
 <?php
 echo "\n<strong>".gettext("Zenphoto Error:</strong> the requested object was not found.");
 if (isset($album)) {
-	echo '<br />'.gettext("Album").': '.sanitize($album);
+	echo '<br />'.sprintf(gettext('Album: %s'),sanitize($album));
 }
 if (isset($image)) {
-	echo '<br />'.gettext("Image").': '.sanitize($image);
+	echo '<br />'.sprintf(gettext('Image: %s'),sanitize($image));
 }
 if (isset($obj)) {
-	echo '<br />'.gettext("Theme page").': '.substr(basename($obj),0,-4);
+	echo '<br />'.sprintf(gettext('Page: %s'),substr(basename($obj),0,-4));
 }
 ?>
 <br />
-<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo gettext("Return to").' '.getGalleryTitle();?></a>
+<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>"
+	title="<?php echo gettext('Albums Index'); ?>"><?php echo gettext("Return to").' '.getGalleryTitle();?></a>
 </body>
 </html>

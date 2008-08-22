@@ -104,9 +104,11 @@ $backgroundImagePath="";
 				$searchwords .= $searchdate;
 			}
 			if ($total > 0 ) {
-				echo "$total ";
-				if ($total > 1) { echo gettext('Hits'); } else {echo gettext('Hit'); }
-				echo " ".gettext('for'). " <em>$searchwords</em>";
+				if ($total > 1) { 
+					printf('%1$u Hits for <em>%2$s</em>', $total, $searchwords); 
+				} else {
+					printf('1 Hit for <em>%s</em>', $searchwords); 
+				}
 			}
 		?>
 </div>
@@ -124,12 +126,12 @@ $backgroundImagePath="";
 				$lastAlbum++;
 			}
 			?>
-			<li><div class="imagethumb"><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the album:').' '.
-				 GetBareAlbumTitle();	printImage_AlbumCount(); ?>">
+			<li>
+			<?php $annotate =  sprintf(gettext('View the Album: %s'),getBareAlbumTitle()).getImage_AlbumCount();?>
+			<div class="imagethumb">
+			<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo $annotate; ?>">
 				<?php printCustomAlbumThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?></a></div>
-				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the Album:').' '; echo getBareAlbumTitle();
-				printImage_AlbumCount();
-			?>">
+				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php $annotate;	?>">
 			<?php printAlbumTitle(); ?></a></h4></li>
 		<?php
 			}

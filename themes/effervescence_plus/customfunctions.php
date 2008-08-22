@@ -53,15 +53,18 @@ function getCustomAlbumDesc() {
 	}
 	return $desc;
 }
-function printImage_AlbumCount() {
+function getImage_AlbumCount() {
 	$c = getNumSubalbums();
 	if ($c > 0) {
-		echo "\n".$c.' '.gettext("albums(s)");
+		$result = "\n ".sprintf(gettext("%u albums(s)"),$c);
+	} else {
+		$result = '';
 	}
 	$c = getNumImages();
 	if ($c > 0) {
-		echo "\n".$c.' '.gettext("images(s)");
+		$result .=  "\n ".sprintf(gettext("%u images(s)"),$c);
 	}
+	return $result;
 }
 function parseCSSDef($file) {
 	$file = str_replace(WEBPATH, '', $file);

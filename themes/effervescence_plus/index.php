@@ -52,12 +52,13 @@
 				}
 			?>
 			<li>
+				<?php $annotate =  sprintf(gettext('View the Album: %s'),getBareAlbumTitle()).getImage_AlbumCount();?>
 				<div class="imagethumb">
-				<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the album:').' '; echo getBareAlbumTitle(); printImage_AlbumCount(); ?>">
+				<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo $annotate; ?>">
 						<?php printCustomAlbumThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?>
  				</a>
 				</div>
-				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View the album:').' '; echo getBareAlbumTitle(); printImage_AlbumCount();?>"><?php printAlbumTitle(); ?></a></h4>
+				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo $annotate; ?>"><?php printAlbumTitle(); ?></a></h4>
 			</li>
 			<?php } ?>
 		</ul>
@@ -75,14 +76,14 @@
 	<div class="footlinks">
 		<?php if (function_exists('printLanguageSelector')) { printLanguageSelector(); } ?>
 		<small>
-			<p><?php $albumNumber = getNumAlbums(); echo gettext("Albums").': '.$albumNumber ?> &middot;
-				<?php echo gettext("Subalbums").': '; show_subalbum_count(); ?> &middot;
+			<p><?php $albumNumber = getNumAlbums(); echo sprintf(gettext("Albums: %u"),$albumNumber); ?> &middot;
+				<?php echo sprintf(gettext("Subalbums: %s"),show_subalbum_count()); ?> &middot;
 				<?php $photosArray = query_single_row("SELECT count(*) FROM ".prefix('images'));
-				$photosNumber = array_shift($photosArray); echo gettext("Images").': '.$photosNumber ?>
+				$photosNumber = array_shift($photosArray); echo sprintf(gettext("Images: %u"),$photosNumber); ?>
 				<?php if (getOption('Allow_comments')) { ?>
 					&middot;
 					<?php $commentsArray = query_single_row("SELECT count(*) FROM ".prefix('comments')." WHERE inmoderation = 0");
-					$commentsNumber = array_shift($commentsArray); echo gettext("Comments").': '.$commentsNumber ?>
+					$commentsNumber = array_shift($commentsArray); echo sprintf(gettext("Comments: %u"),$commentsNumber); ?>
 				<?php } ?>
 			</p>
 			<?php printThemeInfo(); ?>
