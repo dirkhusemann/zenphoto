@@ -175,7 +175,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 			</ul>
 			<div class="clearage"></div>
 			<?php
-			printNofM(gettext("Album"), gettext("Albums"), $firstAlbum, $lastAlbum, getNumSubAlbums());
+			printNofM('Album', $firstAlbum, $lastAlbum, getNumSubAlbums());
 			?>
 		</div>
 
@@ -266,7 +266,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
  					</div>
 	 			<div class="clearage"></div>
  					<?php
- 					printNofM(gettext('Photo'), gettext('Photos'), $firstImage, $lastImage, getNumImages());
+ 					printNofM('Photo', $firstImage, $lastImage, getNumImages());
  					?>
 		</div>
 			<?php

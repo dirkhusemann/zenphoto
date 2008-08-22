@@ -62,7 +62,7 @@
 			<?php } ?>
 		</ul>
 		<div class="clearage"></div>
-		<?php printNofM(gettext('Album'),gettext('Albums') , $firstAlbum, $lastAlbum, getNumAlbums()); ?>
+		<?php printNofM('Album', $firstAlbum, $lastAlbum, getNumAlbums()); ?>
 
 		<!-- Page Numbers -->
 		<div id="pagenumbers">

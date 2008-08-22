@@ -80,15 +80,23 @@ function parseCSSDef($file) {
 	return "#0b9577"; /* the default value */
 }
 
-function printNofM($whats, $whatp, $first, $last, $total) {
+function printNofM($what, $first, $last, $total) {
 	if (!is_null($first)) {
 		echo "<p align=\"center\">";
 		if ($first == $last) {
-			echo "$whats $first ";
+			if ($what == 'Album') {
+				printf(gettext('Album %1$u of %2$u'), $first, $total);
+			} else {
+				printf(gettext('Photo %1$u of %2$u'), $first, $total);
+			}
 		} else {
-			echo "$whatp $first-$last ";
+			if ($what == 'Album') {
+				printf(gettext('Albums %1$u-%2$u of %3$u'), $first, $last, $total);
+			} else {
+				printf(gettext('Photos %1$u-%2$u of %3$u'), $first, $last, $total);
+			}
 		}
-		echo gettext('of') . " $total</p>";
+		echo "</p>";
 	}
 }
 

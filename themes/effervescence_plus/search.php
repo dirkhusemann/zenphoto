@@ -136,7 +136,7 @@ $backgroundImagePath="";
 		?>
 	</ul>
 	<div class="clearage"></div>
-	<?php printNofM(gettext("Album"), gettext("Albums"), $firstAlbum, $lastAlbum, getNumAlbums()); ?>
+	<?php printNofM('Album', $firstAlbum, $lastAlbum, getNumAlbums()); ?>
 </div>
 
 <!-- Wrap Main Body -->
@@ -174,7 +174,7 @@ $backgroundImagePath="";
 						printSlideShowLink(gettext('View Slideshow'));
 						echo "</p>";
 					}
- 					printNofM(gettext('Photo'), gettext('Photos'), $firstImage, $lastImage, getNumImages());
+ 					printNofM('Photo', $firstImage, $lastImage, getNumImages());
  					?>
  					</div>
 	 		<?php
