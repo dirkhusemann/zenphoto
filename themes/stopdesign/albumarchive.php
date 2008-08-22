@@ -82,7 +82,7 @@
 <div id="footer">
 	<hr />
 	<p>
-		<a href="http://stopdesign.com/templates/photos/"><?php echo gettext('Photo Templates</a> from').' '; ?>Stopdesign.
+		<?php echo gettext('<a href="http://stopdesign.com/templates/photos/">Photo Templates</a> from Stopdesign');?>.
 		<?php echo gettext('Powered by').' '; ?><a href="http://www.zenphoto.org">ZenPhoto</a>.
 	</p>
 </div>

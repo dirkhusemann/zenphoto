@@ -130,7 +130,7 @@ $backgroundImagePath="";
 			<?php $annotate =  sprintf(gettext('View the Album: %s'),getBareAlbumTitle()).getImage_AlbumCount();?>
 			<div class="imagethumb">
 			<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo $annotate; ?>">
-				<?php printCustomAlbumThumbImage(getCustomAlbumDesc(), null, 180, null, 180, 80); ?></a></div>
+				<?php printCustomAlbumThumbImage($annotate, null, 180, null, 180, 80); ?></a></div>
 				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php $annotate;	?>">
 			<?php printAlbumTitle(); ?></a></h4></li>
 		<?php

@@ -58,7 +58,9 @@
 			<?php if ($show) { ?>
 			<div id="meta">
 				<ul>
-					<li class="count"><?php if (($num = getNumImages()) > 1) { echo imageNumber() ." ".gettext("of")." ". getNumImages() . " ".gettext("photos"); }?></li>
+					<li class="count"><?php
+					 if (($num = getNumImages()) > 1) { printf(gettext('%1$u of %2$u photos'), imageNumber(), getNumImages()); }
+					 ?></li>
 					<li class="date"><?php printImageDate(); ?></li>
 					<li class="tags"><?php echo getAlbumPlace(); ?></li>
 					<li class="exif">
@@ -84,7 +86,7 @@
 						$_zp_themeroot . "/img/btn_hide.gif\" width=\"35\" height=\"11\" alt=\"".gettext("HIDE")."\" /></a>";
  						$num = getCommentCount(); if ($num == 0) echo "<h2>".gettext("No comments yet")."</h2>";
  						if ($num == 1) echo "<h2>" .gettext('1 comment so far').' '. "$showhide</h2>";
- 						if ($num > 1) echo "<h2>$num " .gettext('comments so far').' '. "$showhide</h2>";
+ 						if ($num > 1) echo "<h2>".sprintf(gettext('%u comments so far'),$num).' '. "$showhide</h2>";
  					?>
 					</h2>
 					<?php printCommentErrors(); ?>
@@ -98,7 +100,7 @@
 								$autonumber++;
 						?>
 							<dt id="comment<?php echo $autonmuber; ?>">
-								<a href="#comment<?php echo $autonumber; ?>" class="postno" title="<?php echo gettext('Link to Comment').' '; echo $autonumber; ?>"><?php echo $autonumber; ?>.</a>
+								<a href="#comment<?php echo $autonumber; ?>" class="postno" title="<?php printf(gettext('Link to Comment %u'),$autonumber); ?>"><?php echo $autonumber; ?>.</a>
 								<em>On <?php echo getCommentDate();?>, <?php printCommentAuthorLink(); echo ' '.gettext('wrote:'); ?></em>
 							</dt>
 							<dd><p><?php echo getCommentBody();?><?php printEditCommentLink(gettext('Edit'), ' | ', ''); ?></p></dd>

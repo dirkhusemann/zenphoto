@@ -31,25 +31,32 @@
 					while (next_album() and $counter < 6):
 					?>
 						<li class="gal">
-							<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext("View album:").' '; echo getBareAlbumTitle(); ?>"><?php printAlbumTitle(); ?></a></h3>
-							<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext("View album:").' '; echo getBareAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 210, 59, 210, 59); ?></a>
+							<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext("View album: %s"),getBareAlbumTitle()); ?>"><?php printAlbumTitle(); ?></a></h3>
+							<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext("View album: %s"), getBareAlbumTitle());?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 210, 59, 210, 59); ?></a>
 							<p>
 					<?php
-						$number = getNumsubalbums();
-						if ($number > 0) {
-							if (!($number == 1)) {  $number .= ' '.gettext("albums");} else {$number .= ' '.gettext("album");}
-								$counters = $number;
-							} else {
-								$counters = '';
+						$anumber = getNumsubalbums();
+						$inumber = getNumImages();
+						if ($anumber > 0 || $inumber > 0) {
+							echo '<p><em>(';
+							if ($anumber == 0 && $inumber == 1) {
+								printf(gettext('1 photo'));
+							} else if ($anumber == 0 && $inumber > 1) {
+								printf(gettext('%u photos'), $inumber);
+							} else if ($anumber == 1 && $inumber == 1) {
+								printf(gettext('1 album,&nbsp;1 photo'));
+							} else if ($anumber > 1 && $inumber == 1) {
+								printf(gettext('%u album,&nbsp;1 photo'), $anumber);
+							} else if ($anumber > 1 && $inumber > 1) {
+								printf(gettext('%1$u album,&nbsp;%2$u photos'), $anumber, $inumber);
+							} else if ($anumber == 1 && $inumber == 0) {
+								printf(gettext('1 album'));
+							} else if ($anumber > 1 && $inumber == 0) {
+								printf(gettext('%u album'),$anumber);
+							} else if ($anumber == 1 && $inumber > 1) {
+								printf(gettext('1 album,&nbsp;%u photos'), $inumber);
 							}
-							$number = getNumImages();
-							if ($number > 0) {
-								if (!empty($counters)) { $counters .= ",&nbsp;"; }
-							if ($number != 1) $number .= ' '.gettext("photos"); else $number .= ' '.gettext("photo");
-							$counters .= $number;
-						}
-						if (!empty($counters)) {
-							echo "<p><em>($counters)</em><br/>";
+							echo ')</em><br/>';
 						}
 						$text = getAlbumDesc();
 						if(strlen($text) > 50) {

@@ -35,7 +35,7 @@ $firstPageImages = normalizeColumns(1, 7);
 					$searchwords = getSearchDate();
 	 		} else {
 	 			$searchwords = getSearchWords(); }
-				echo "<p>".gettext("Total matches for")." <em>".$searchwords."</em>: $total</p>";
+				echo "<p>".sprintf(gettext('Total matches for <em>%1$s</em>: %2$u'),$searchwords,$total).'</p>';
 			}
 			$c = 0;
 		?>
@@ -90,7 +90,7 @@ $firstPageImages = normalizeColumns(1, 7);
 		}
 		?>
 		<br />
-		<?php echo round((array_sum(explode(" ",microtime())) - $startTime),4).' '.gettext('Seconds').'</strong>'; ?>
+			<?php printf(gettext("%u seconds"), round((array_sum(explode(" ",microtime())) - $startTime),4)); ?>
 	</div>
 </div>
 

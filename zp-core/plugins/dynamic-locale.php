@@ -36,8 +36,8 @@ function printLanguageSelector($class='') {
 		$locale = sanitize($_POST['dynamic-locale'], 0);
 		if (getOption('locale') != $locale) {
 			echo '<div class="errorbox">';
-			echo '<h2><em>'.$_zp_languages[$locale].'</em> '.gettext("is not available.").
-					 ' '.gettext("The locale").' '.$locale.' '.gettext("is not supported on your server.").'</h2>';
+			echo '<h2>'.sprintf(gettext('<em>%s</em> is not available.'),$_zp_languages[$locale]).
+					 ' '.sprintf(gettext('The locale %s is not supported on your server.'), $locale);
 			echo '</div>';
 		}
 	}

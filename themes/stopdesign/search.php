@@ -42,8 +42,8 @@
 				}
 			?>
 				<li class="gal">
-					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getBareAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 230, null, 210, 60); ?></a>
-					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getBareAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
+					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext('View album: %s'), getBareAlbumTitle());?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 230, null, 210, 60); ?></a>
+					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext('View album: %u'), getBareAlbumTitle());?>"><?php printAlbumTitle(); ?></a></h3>
 					<p>
 						<?php
 						$number = getNumAlbums();
@@ -107,7 +107,7 @@
 			if (!empty($params)) {
 				if ($results != "0") {
 					echo '<em class="count">';
-					echo gettext('Photos') .' ' . $firstImage.'-'.$lastImage.' '.gettext('of').' '.getNumImages();
+					printf( gettext('Photos %1$u-%2$u of %3$u'), $firstImage, $lastImage, getNumImages());
 					echo "</em>";
 				if (function_exists('printSlideShowLink')) {
 					printSlideShowLink(gettext('View Slideshow'));
@@ -122,7 +122,7 @@
 			<?php
 					}
 					echo '</p>';
-					echo "<em class=\"count\">"  .gettext('Total matches for').  "<em>".getSearchWords()."</em>: ".$results."</em>";
+					echo "<em class=\"count\">"  .sprintf(gettext('Total matches for <em>%1$s</em>: %2$u'),getSearchWords(), $results);
 				} else {
 					echo "<p>".gettext('Sorry, no matches. Try refining your search.')."</p>";
 				}

@@ -65,7 +65,7 @@
 
 		<?php if (getOption('Allow_comments')) { ?>
 				<div id="comments">
-		<?php $num = getCommentCount(); echo ($num == 0) ? "" : ("<h3>".gettext("Comments")." ($num)</h3><hr />"); ?>
+		<?php $num = getCommentCount(); echo ($num == 0) ? "" : ("<h3>".sprintf(gettext('Comments (%u)'), $num)."</h3><hr />"); ?>
 			<?php while (next_comment()){  ?>
 			<div class="comment">
 				<div class="commentmeta">

@@ -104,8 +104,9 @@
 				<?php
 					if (!is_null($firstImage)) {
 						echo '<em class="count">';
-						echo gettext('Photos').' '. "$firstImage-$lastImage ". gettext('of').' ' . getNumImages(); }
+						printf(gettext('photos %1$u of %2$u'), $firstImage-$lastImage, getNumImages());
 						echo "</em>";
+						}
 				?>
 				<?php if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow')); ?>
 				<?php if (hasPrevPage()) { ?>

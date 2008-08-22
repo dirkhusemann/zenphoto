@@ -32,7 +32,7 @@
 			if (isset($_REQUEST['date'])){
 				$searchwords = getSearchDate();
  		} else { $searchwords = getSearchWords(); }
-			echo "<p>".gettext("Total matches for")." <em>".$searchwords."</em>: $total</p>";
+			echo '<p>'.sprintf(gettext('Total matches for <em>%1$s</em>: %2$u'), $searchwords, $total).'</p>';
 		}
 		$c = 0;
 		?>

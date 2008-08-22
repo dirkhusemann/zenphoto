@@ -84,7 +84,19 @@ $firstPageImages = normalizeColumns(1, 7);
  <!-- begin comment block -->
 				<?php if (getOption('Allow_comments')  && getCurrentPage() == 1) { ?>
 				<div id="comments">
-					<div class="commentcount"><?php $num = getCommentCount(); echo ($num == 0) ? gettext("No comments") : (($num == 1) ? gettext("<strong>One</strong> comment") : "<strong>$num</strong> ".gettext("comments on this album:")); ?> </div>
+					<div class="commentcount"><?php
+						$num = getCommentCount();
+						switch ($num) {
+							case 0:
+								echo gettext("No comments");
+								break;
+							case 1:
+								echo gettext("<strong>One</strong> comment");
+								break;
+							default:
+								printf(gettext("<strong>%u</strong> comments on this album:"), $num);
+						}					 	
+				 ?> </div>
 
 						<?php while (next_comment()):  ?>
 						<div class="comment">
@@ -139,7 +151,7 @@ $firstPageImages = normalizeColumns(1, 7);
 		}
 		?>
 		<br />
-			<?php echo round((array_sum(explode(" ",microtime())) - $startTime),4).' '.gettext('Seconds').'</strong>'; ?>
+			<?php printf(gettext("%u seconds"), round((array_sum(explode(" ",microtime())) - $startTime),4)); ?>
 		</div>
 </div>
 
