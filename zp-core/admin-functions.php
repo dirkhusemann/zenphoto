@@ -1669,7 +1669,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 		$empty = true;
 		foreach ($emptylang as $key=>$lang) {
 			if (isset($strings[$key])) {
-				$string = $strings[$key];
+				$string = htmlspecialchars($strings[$key]);
 				if (!empty($string)) {
 					unset($emptylang[$key]);
 					$empty = false;
