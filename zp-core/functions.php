@@ -7,7 +7,6 @@
  */
 define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
 define('DEBUG_ERROR', false); // set to true to  supplies the calling sequence with zp_error messages
-define('ALBUM_OPTIONS_TABLE', true);
 define('SAFE_GLOB', false);
 define('CAPTCHA_LENGTH', 5);
 include('version.php'); // Include the version info.
@@ -192,10 +191,10 @@ function setOption($key, $value, $persistent=true) {
 	if ($persistent) {
 		$result = query_single_row("SELECT `value` FROM ".prefix('options')." WHERE `name`='".$key."' AND `ownerid`=0", true);
 		if (is_array($result) && array_key_exists('value', $result)) { // option already exists.
-			$sql = "UPDATE " . prefix('options') . " SET `value`='" . escape($value) . "' WHERE `name`='" . escape($key) ."' AND `ownerid`=0";
+			$sql = "UPDATE " . prefix('options') . " SET `value`='" . mysql_real_escape_string($value) . "' WHERE `name`='" . mysql_real_escape_string($key) ."' AND `ownerid`=0";
 			$result = query($sql, true);
 		} else {
-				$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid) VALUES ('" . escape($key) . "','" . escape($value) . "', 0)";
+				$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid) VALUES ('" . mysql_real_escape_string($key) . "','" . mysql_real_escape_string($value) . "', 0)";
 				$result = query($sql, true);
 		}
 	} else {
@@ -2277,11 +2276,7 @@ function setupTheme() {
 	}
 	if (!empty($albumtheme)) {
 		$theme = $albumtheme;
-		if (ALBUM_OPTIONS_TABLE) {
-			$tbl = prefix('options').' WHERE `ownerid`='.$parent->id;
-		} else {
-			$tbl = prefix(getOptionTableName($parent->name));
-		}
+		$tbl = prefix('options').' WHERE `ownerid`='.$parent->id;
 		//load the album theme options
 		$sql = "SELECT `name`, `value` FROM ".$tbl;
 		$optionlist = query_full_array($sql, true);

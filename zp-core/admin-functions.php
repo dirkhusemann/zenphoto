@@ -519,30 +519,16 @@ function setThemeOption($album, $key, $value) {
 	if (is_null($album)) {
 		setOption($key, $value);
 	} else {
-		if (ALBUM_OPTIONS_TABLE) {
-			if (is_null($album)) {
-				$id = 0;
-			} else {
-				$id = $album->id;
-			}
-			$exists = query_single_row("SELECT `name`, `value`, `id` FROM ".prefix('options')." WHERE `name`='".escape($key)."' AND `ownerid`=".$id, true);
-			if ($exists) {
-				$sql = "UPDATE " . prefix('options') . " SET `value`='" . escape($value) . "' WHERE `id`=" . $exists['id'];
-			} else {
-				$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid) VALUES ('" . escape($key) . "','" . escape($value) . "',$id)";
-			}
+		if (is_null($album)) {
+			$id = 0;
 		} else {
-			if (is_null($album)) {
-				$tbl = prefix('options');
-			} else {
-				$tbl = prefix(getOptionTableName($album->name));
-			}
-			$exists = query_single_row("SELECT `name`, `value`, `id` FROM ".$tbl." WHERE `name`='".escape($key)."'".$where, true);
-			if ($exists) {
-				$sql = "UPDATE " . $tbl . " SET `value`='" . escape($value) . "' WHERE `id`=" . $exists['id'];
-			} else {
-				$sql = "INSERT INTO " . $tbl . " (name, value) VALUES ('" . escape($key) . "','" . escape($value) . "')";
-			}
+			$id = $album->id;
+		}
+		$exists = query_single_row("SELECT `name`, `value`, `id` FROM ".prefix('options')." WHERE `name`='".mysql_real_escape_string($key)."' AND `ownerid`=".$id, true);
+		if ($exists) {
+			$sql = "UPDATE " . prefix('options') . " SET `value`='" . mysql_real_escape_string($value) . "' WHERE `id`=" . $exists['id'];
+		} else {
+			$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid) VALUES ('" . mysql_real_escape_string($key) . "','" . mysql_real_escape_string($value) . "',$id)";
 		}
 		$result = query($sql);
 	}
@@ -561,13 +547,8 @@ function getThemeOption($album, $option) {
 	if (is_null($album)) {
 		return getOption($option);
 	}
-	if (ALBUM_OPTIONS_TABLE) {
-		$alb = 'options';
-		$where = ' AND `ownerid`='.$album->id;
-	} else {
-		$alb = getOptionTableName($album->name);
-		$where = '';
-	}
+	$alb = 'options';
+	$where = ' AND `ownerid`='.$album->id;
 	if (empty($alb)) {
 		return getOption($option);
 	}
@@ -615,13 +596,9 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 			if (is_null($album)) {
 				$db = false;
 			} else {
-				if (ALBUM_OPTIONS_TABLE) {
-					$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . escape($key) .
+				$sql = "SELECT `value` FROM " . prefix('options') . " WHERE `name`='" . escape($key) .
 										"' AND `ownerid`=".$album->id;
 
-				} else {
-					$sql = "SELECT `value` FROM " . prefix(getOptionTableName($album->name)) . " WHERE `name`='" . escape($key) . "'";
-				}
 				$db = query_single_row($sql);
 			}
 			if (!$db) {
@@ -1462,20 +1439,6 @@ function processAlbumEdit($index, $album) {
 		$newtheme = strip($_POST[$prefix.'album_theme']);
 		if ($oldtheme != $newtheme) {
 			$album->setAlbumTheme($newtheme);
-			if (!ALBUM_OPTIONS_TABLE) {
-				if (!empty($newtheme)) {
-					// setup new theme option table
-					$tbl_options = prefix(getOptionTableName($album->name));
-					$sql = "CREATE TABLE IF NOT EXISTS $tbl_options (
-					`id` int(11) unsigned NOT NULL auto_increment,
-					`name` varchar(64) NOT NULL,
-					`value` text NOT NULL,
-					PRIMARY KEY  (`id`),
-					UNIQUE (`name`)
-					);";
-					query($sql);
-				}
-			}
 		}
 	}
 	$album->setPasswordHint(process_language_string_save($prefix.'albumpass_hint', 3));

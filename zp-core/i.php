@@ -178,11 +178,7 @@ if ($process) {
 	$albumtheme = $parent->getAlbumTheme();
 	if (!empty($albumtheme)) {
 		$theme = $albumtheme;
-		if (ALBUM_OPTIONS_TABLE) {
-			$tbl = prefix('options').' WHERE `ownerid`='.$parent->id;
-		} else {
-			$tbl = prefix(getOptionTableName($parent->name));
-		}
+		$tbl = prefix('options').' WHERE `ownerid`='.$parent->id;
 		//load the album theme options
 		$sql = "SELECT `name`, `value` FROM ".$tbl;
 		$optionlist = query_full_array($sql, true);

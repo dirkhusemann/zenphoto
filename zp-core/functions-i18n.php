@@ -84,7 +84,7 @@ function setupCurrentLocale($plugindomain='') {
 			if (isset($_POST['dynamic-locale'])) { // and it was chosen via dynamic-locale
 				$cookiepath = WEBPATH;
 				if (WEBPATH == '') { $cookiepath = '/'; }
-				$locale = sanitize($_POST['oldlocale'], 0);
+				$locale = sanitize($_POST['oldlocale'], 3);
 				setOption('locale', $locale, false);
 				zp_setCookie('dynamic_locale', '', time()-368000, $cookiepath);
 			}

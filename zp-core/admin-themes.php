@@ -26,24 +26,6 @@ if (isset($_GET['action'])) {
 					$oldtheme = $album->getAlbumTheme();
 					$album->setAlbumTheme($newtheme);
 					$album->save();
-					if (!ALBUM_OPTIONS_TABLE) {
-						$tbl_options = prefix(getOptionTableName($album->name));
-						if (!empty($oldtheme) && empty($newtheme)) {
-							// clean out old theme option table
-							$sql = "DROP TABLE $tbl_options";
-							query($sql);
-						}
-						if (!empty($newtheme)) {
-							$sql = "CREATE TABLE IF NOT EXISTS $tbl_options (
-							`id` int(11) unsigned NOT NULL auto_increment,
-							`name` varchar(64) NOT NULL,
-							`value` text NOT NULL,
-							PRIMARY KEY  (`id`),
-							UNIQUE (`name`)
-							);";
-							query($sql);
-						}
-					}
 				}
 				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-themes.php?themealbum=".$_GET['themealbum']);
 			}

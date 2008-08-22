@@ -109,28 +109,28 @@ if (isset($_GET['action'])) {
 			setOption('gallery_title', process_language_string_save('gallery_title', 2));
 			setoption('Gallery_description', process_language_string_save('Gallery_description', 1));
 			setOption('website_title', process_language_string_save('website_title', 2));
-			$web = $_POST['website_url'];
+			$web = sanitize($_POST['website_url'],3);
 			setOption('website_url', $web);
-			setOption('time_offset', $_POST['time_offset']);
+			setOption('time_offset', sanitize($_POST['time_offset']),3);
 			setBoolOption('mod_rewrite', isset($_POST['mod_rewrite']));
-			setOption('mod_rewrite_image_suffix', $_POST['mod_rewrite_image_suffix']);
-			setOption('server_protocol', $_POST['server_protocol']);
-			setOption('charset', $_POST['charset']);
+			setOption('mod_rewrite_image_suffix', sanitize($_POST['mod_rewrite_image_suffix']),3);
+			setOption('server_protocol', sanitize($_POST['server_protocol']),3);
+			setOption('charset', sanitize($_POST['charset']),3);
 			setBoolOption('album_use_new_image_date', isset($_POST['album_use_new_image_date']));
-			setOption('gallery_sorttype', $_POST['gallery_sorttype']);
+			setOption('gallery_sorttype', sanitize($_POST['gallery_sorttype']),3);
 			if ($_POST['gallery_sorttype'] == 'Manual') {
 				setBoolOption('gallery_sortdirection', 0);
 			} else {
 				setBoolOption('gallery_sortdirection', isset($_POST['gallery_sortdirection']));
 			}
-			setOption('feed_items', $_POST['feed_items']);
-			setOption('feed_imagesize', $_POST['feed_imagesize']);
+			setOption('feed_items', sanitize($_POST['feed_items']),3);
+			setOption('feed_imagesize', sanitize($_POST['feed_imagesize']),3);
 			$search = new SearchEngine();
 			setOption('search_fields', 32767, false); // make SearchEngine allow all options so parseQueryFields() will gives back what was choosen this time
 			setBoolOption('login_user_field', isset($_POST['login_user_field']));
 			setOption('search_fields', $search->parseQueryFields());
 			$olduser = getOption('gallery_user');
-			$newuser = $_POST['gallery_user'];
+			$newuser = sanitize($_POST['gallery_user'],3);
 			if (!empty($newuser)) setOption('login_user_field', 1);
 			$pwd = trim($_POST['gallerypass']);
 			$fail = '';
@@ -158,7 +158,7 @@ if (isset($_GET['action'])) {
 				}
 			}
 			$olduser = getOption('search_user');
-			$newuser = $_POST['search_user'];
+			$newuser = sanitize($_POST['search_user'],3);
 			if (!empty($newuser)) setOption('login_user_field', 1);
 			$pwd = trim($_POST['searchpass']);
 			if ($olduser != $newuser) {
@@ -189,7 +189,7 @@ if (isset($_GET['action'])) {
 			setBoolOption('persistent_archive', isset($_POST['persistent_archive']));
 			setBoolOption('album_session', isset($_POST['album_session']));
 			$oldloc = getOption('locale', true); // get the option as stored in the database, not what might have been set by a cookie
-			$newloc = strip($_POST['locale']);
+			$newloc = sanitize($_POST['locale'],3);
 			if ($newloc != $oldloc) { // clear any cookies so things start fresh.
 				$encoding = getOption('charset');
 				if (empty($encoding)) $encoding = 'UTF-8';
@@ -207,8 +207,8 @@ if (isset($_GET['action'])) {
 				}
 			}
 			setBoolOption('multi_lingual', isset($_POST['multi_lingual']));
-			$f = $_POST['date_format_list'];
-			if ($f == 'custom') $f = $_POST['date_format'];
+			$f = sanitize($_POST['date_format_list'],3);
+			if ($f == 'custom') $f = sanitize($_POST['date_format'],3);
 			setOption('date_format', $f);
 			setBoolOption('thumb_select_images', isset($_POST['thumb_select_images']));
 			$returntab = "#tab_gallery";
@@ -216,31 +216,31 @@ if (isset($_GET['action'])) {
 
 		/*** Image options ***/
 		if (isset($_POST['saveimageoptions'])) {
-			setOption('image_quality', $_POST['image_quality']);
-			setOption('thumb_quality', $_POST['thumb_quality']);
+			setOption('image_quality', sanitize($_POST['image_quality']),3);
+			setOption('thumb_quality', sanitize($_POST['thumb_quality']),3);
 			setBoolOption('image_allow_upscale', isset($_POST['image_allow_upscale']));
 			setBoolOption('thumb_sharpen', isset($_POST['thumb_sharpen']));
 			setBoolOption('image_sharpen', isset($_POST['image_sharpen']));
 			setBoolOption('perform_watermark', isset($_POST['perform_watermark']));
-			setOption('watermark_image', 'watermarks/' . $_POST['watermark_image'] . '.png');
-			setOption('watermark_scale', $_POST['watermark_scale']);
+			setOption('watermark_image', 'watermarks/' . sanitize($_POST['watermark_image'],3) . '.png');
+			setOption('watermark_scale', sanitize($_POST['watermark_scale']),3);
 			setBoolOption('watermark_allow_upscale', isset($_POST['watermark_allow_upscale']));
-			setOption('watermark_h_offset', $_POST['watermark_h_offset']);
-			setOption('watermark_w_offset', $_POST['watermark_w_offset']);
+			setOption('watermark_h_offset', sanitize($_POST['watermark_h_offset']),3);
+			setOption('watermark_w_offset', sanitize($_POST['watermark_w_offset']),3);
 			setBoolOption('perform_video_watermark', isset($_POST['perform_video_watermark']));
-			setOption('video_watermark_image', 'watermarks/' . $_POST['video_watermark_image'] . '.png');
-			setOption('full_image_quality', $_POST['full_image_quality']);
-			setOption('protect_full_image', $_POST['protect_full_image']);
+			setOption('video_watermark_image', 'watermarks/' . sanitize($_POST['video_watermark_image'],3) . '.png');
+			setOption('full_image_quality', sanitize($_POST['full_image_quality']),3);
+			setOption('protect_full_image', sanitize($_POST['protect_full_image']),3);
 			setBoolOption('hotlink_protection', isset($_POST['hotlink_protection']));
 			setBoolOption('use_lock_image', isset($_POST['use_lock_image']));
-			setOption('image_sorttype', $_POST['image_sorttype']);
+			setOption('image_sorttype', sanitize($_POST['image_sorttype'],3));
 			setBoolOption('image_sortdirection', isset($_POST['image_sortdirection']));
 			$returntab = "#tab_image";
 		}
 		/*** Comment options ***/
 
 		if (isset($_POST['savecommentoptions'])) {
-			setOption('spam_filter', $_POST['spam_filter']);
+			setOption('spam_filter', sanitize($_POST['spam_filter'],3));
 			setBoolOption('email_new_comments', isset($_POST['email_new_comments']));
 			setBoolOption('comment_name_required', isset($_POST['comment_name_required']));
 			setBoolOption('comment_email_required',isset( $_POST['comment_email_required']));
