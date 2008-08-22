@@ -17,7 +17,7 @@ function trim(s) {
 }
 
 // Get the element's style (computed) for the attribute given.
-function getStyle(element, attribute) { 
+function getStyle(element, attribute) {
   if (element.currentStyle) {
     // Internet Explorer:
     if (attribute == "font-family") {attribute = "fontFamily";}
@@ -177,20 +177,20 @@ function initEditableDiv(divID) {
 }
 
  ///////////////////////////////////////////////////////////////////////////////
-// Makes a DIV into an editable Title field. 
+// Makes a DIV into an editable Title field.
 function initEditableTitle(divID) {
   var div = document.getElementById(divID);
   div.blankMessage = zpstrings.ClickToAddATitle;
   div.editMessage = zpstrings.ClickToEditTitle;
-    
+
   div.saveChanges = function(form) {
     var formDiv = form.parentNode;
     document.callbackdiv = this;
-    this.innerHTML = "Saving...";
+    this.innerHTML = zpstrings.Saving+"...";
     x_saveTitle(form.content.value, this.saveChangesCB);
     return this.stopEditing();
   };
-  
+
   div.getInputField = function () {
     return '<input type="text" name="content" value="'+this.innerHTML+
       '" style="font-size: '+this.style_fontSize+
@@ -199,25 +199,25 @@ function initEditableTitle(divID) {
       '; font-style: '+this.style_fontStyle+
       ';" size="'+(this.innerHTML.length)+'"/>';
   };
-  
+
   initEditableDiv(divID);
 }
 
  ///////////////////////////////////////////////////////////////////////////////
-// Makes a DIV into an editable Tags field. 
+// Makes a DIV into an editable Tags field.
 function initEditableTags(divID) {
   var div = document.getElementById(divID);
   div.blankMessage = zpstrings.ClickToAddTags;
   div.editMessage = zpstrings.ClickToEditTags;
-    
+
   div.saveChanges = function(form) {
     var formDiv = form.parentNode;
     document.callbackdiv = this;
-    this.innerHTML = "Saving...";
+    this.innerHTML = zpstrings.Saving+"...";
     x_saveTags(form.content.value, this.saveChangesCB);
     return this.stopEditing();
   };
-  
+
   div.getInputField = function () {
     return '<input type="text" name="content" value="'+this.innerHTML+
       '" style="font-size: '+this.style_fontSize+
@@ -226,7 +226,7 @@ function initEditableTags(divID) {
       '; font-style: '+this.style_fontStyle+
       ';" size="'+(this.innerHTML.length)+'"/>';
   };
-  
+
   initEditableDiv(divID);
 }
 
@@ -237,16 +237,16 @@ function initEditableDesc(divID) {
   div.blankMessage = zpstrings.ClickToAddADescription;
   div.editMessage = zpstrings.ClickToEditDescription;
 
-  
+
   div.saveChanges = function(form) {
     var formDiv = form.parentNode;
     document.callbackdiv = this;
-    this.innerHTML = "Saving...";
+    this.innerHTML = zpstrings.Saving+"...";
     x_saveDesc(form.content.value, this.saveChangesCB);
     document.getElementById("zenphototempdiv").style.display = "none";
     return this.stopEditing();
   };
-  
+
   div.getInputField = function () {
     var tempDiv = document.getElementById("zenphototempdiv");
     if (!tempDiv) {
@@ -267,14 +267,14 @@ function initEditableDesc(divID) {
       '; width: '+this.style_width+'; height: '+this.style_height+
       '; margin: 0px;" rows="5" cols="50"></textarea><br />';
   };
-  
+
   // NOTE: in this function, *this* refers to an input field.
   div.contentOnKeyUp = function () {
     var tempdiv = document.getElementById("zenphototempdiv");
     tempdiv.innerHTML = addBlankLine(convertLineBreaks(this.value));
     this.style.height = getStyle(tempdiv, 'height');
   };
-  
+
   initEditableDiv(divID);
 }
 

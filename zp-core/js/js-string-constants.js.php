@@ -17,6 +17,7 @@ var zpstrings = {
 	'ClickToAddADescription' : "<?php echo gettext('Click to add a description...'); ?>",
 	'ClickToEditDescription' : "<?php echo gettext('Click to edit description'); ?>",
 	'Save' : "<?php echo gettext('save'); ?>",
+	'Saving' : "<?php echo gettext('Saving'); ?>",
 	'Cancel' : "<?php echo gettext('cancel'); ?>",
 	'CurrentlyEditingSomethingElse' : "<?php echo gettext('Currently editing something else, save or cancel to edit this.'); ?>",
 	'Close' : "<?php echo gettext('Close'); ?>",
