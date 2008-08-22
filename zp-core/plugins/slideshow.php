@@ -16,13 +16,13 @@
  * NOTE: The jQuery mode does not support movie and audio files anymore. If you need to show them please use the Flash mode.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)
- * @version 1.0.6.3
+ * @version 1.0.6.4
  * @package plugins
  */
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)";
-$plugin_version = '1.0.6.3';
+$plugin_version = '1.0.6.4';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
 
@@ -189,7 +189,7 @@ function printSlideShow($heading = true, $speedctl = false) {
 		$searchfields = $search->fields;
 		$page = $search->page;
 		$returnpath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
-		$albumtitle = 'Search';
+		$albumtitle = gettext('Search');
 	} else {
 		$albumq = query_single_row("SELECT title, folder FROM ". prefix('albums') ." WHERE id = ".$albumid);
 		$album = new Album($gallery, $albumq['folder']);
@@ -213,7 +213,7 @@ function printSlideShow($heading = true, $speedctl = false) {
 <script type="text/javascript">
 	$(document).ready(function(){
 		$(function() {
-			var ThisGallery = '<?php echo htmlspecialchars(strip_tags(htmlspecialchars_decode($albumtitle)), ENT_QUOTES); ?>';
+			var ThisGallery = '<?php echo js_encode($albumtitle); ?>';
 			var ImageList = new Array();
 			var TitleList = new Array();
 			var DescList = new Array();
@@ -236,9 +236,9 @@ function printSlideShow($heading = true, $speedctl = false) {
 					$img = WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . $image->album->name . '&i=' . fixPixPath($filename) . '&s=' . $imagesize;
 				}
 				echo 'ImageList[' . $cntr . '] = "' . $img . '";'. chr(13);
-				echo 'TitleList[' . $cntr . '] = "' . htmlspecialchars(strip_tags(htmlspecialchars_decode($image->getTitle())), ENT_QUOTES) . '";'. chr(13);
+				echo 'TitleList[' . $cntr . '] = "' . js_encode($image->getTitle()) . '";'. chr(13);
 				if(getOption("slideshow_showdesc")) {
-					echo 'DescList[' . $cntr . '] = "' . $image->getDesc() . '";'. chr(13);
+					echo 'DescList[' . $cntr . '] = "' . js_encode($image->getDesc()) . '";'. chr(13);
 				} else {
 					echo 'DescList[' . $cntr . '] = "";'. chr(13);
 				}
@@ -389,7 +389,7 @@ if ($speedctl) {
 			 	pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
 				</object><a>';
 		} else {
-			echo "<img src='".WEBPATH."/".ZENFOLDER."/i.php?a=".$folder."&i=".$filename."&s=".$imagesize."' alt='".$image->getTitle()."' title='".$image->getTitle()."' />\n";
+			echo "<img src='".WEBPATH."/".ZENFOLDER."/i.php?a=".$folder."&i=".$filename."&s=".$imagesize."' alt='".strip_tags($image->getTitle())."' title='".strip_tags($image->getTitle())."' />\n";
 		}
 		if(getOption("slideshow_showdesc")) { echo "<p class='imgdesc'>".$image->getDesc()."</p>"; }
 		echo "</span>";
