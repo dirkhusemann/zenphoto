@@ -116,22 +116,15 @@ echo "\n" . '<div id="content">';
 			</script>
 
 <h1><?php echo gettext("Upload Photos"); ?></h1>
-<p><?php echo gettext("This web-based upload accepts ZenPhoto formats:").' '; 
-$i = 1;
+<p>
+<?php 
 natsort($_zp_supported_images);
-foreach ($_zp_supported_images as $suffix) {
-	if ($i > 1)  echo ', ';
-	echo strtoupper($suffix);
-	$i++;
-}
-$i = 1;
 natsort($_zp_supported_videos);
-foreach ($_zp_supported_videos as $suffix) {
-		if ($i < count($_zp_supported_videos)) echo ', '; else echo ', '.gettext('and').' ';
-	echo strtoupper($suffix);
-	$i++;
-}
-echo '. ';
+$list = $_zp_supported_videos;
+$last = strtoupper(array_pop($list));
+$s1 = strtoupper(implode(', ', $_zp_supported_images));
+$s2 = strtoupper(implode(', ', $list));
+printf(gettext('This web-based upload accepts ZenPhoto formats: %s, %s, and %s.'), $s1, $s2, $last);
 echo gettext("You can also upload a <strong>ZIP</strong> archive containing any of those file types."); ?></p>
 <!--<p><em>Note:</em> When uploading archives, <strong>all</strong> images in the archive are added to the album, regardles of directory structure.</p>-->
 <p><?php echo gettext("The maximum size for any one file is"); ?> <strong><?php echo ini_get('upload_max_filesize'); ?>B</strong>.
