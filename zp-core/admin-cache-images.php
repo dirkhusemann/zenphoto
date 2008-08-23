@@ -40,10 +40,15 @@ echo "\n<body>";
 	printTabs(isset($_REQUEST['album']) ? 'edit' : 'home');
 	echo "\n" . '<div id="content">';
 
+	if (isset($alb)) {
+		$object = $folder;
+	} else {
+		$object = '<em>'.gettext('Gallery').'</em>';
+	}
 	if (isset($_GET['clear']) || isset($_POST['clear'])) {
-		$clear = gettext('Clearing and').' '; 
-	} else { 
-		$clear = ''; 
+		$clear = sprintf(gettext('Clearing and refreshing cache for %s'), $object);
+	} else {
+		$clear = sprintf(gettext('Refreshing cache for %s'), $object); 
 	}
 	global $_zp_gallery;
 	$count = 0;
@@ -54,14 +59,14 @@ echo "\n<body>";
 	if (isset($_POST['album'])) $alb = $_POST['album'];
 	if (isset($alb)) {
 		$folder = urldecode(strip($alb));
-		echo "\n<h2>".$clear.gettext("Refreshing cache for")." <em>$folder</em></h2>";
+		echo "\n<h2>".$clear."</h2>";
 		if (isset($_GET['clear']) || isset($_POST['clear'])) {
 			$gallery->clearCache(SERVERCACHE . '/' . $folder); // clean out what was there
 		}
 		$album = new Album($album, $folder);
 		$count = loadAlbum($album);
 	} else {
-		echo "\n<h2>".$clear.gettext("Refreshing cache for Gallery")."</h2>";
+		echo "\n<h2>".$clear."</h2>";
 		if (!empty($clear)) {
 			$gallery->clearCache(); // clean out what was there.
 		}
@@ -71,7 +76,7 @@ echo "\n<body>";
 			$count = $count + loadAlbum($album);
 		}
 	}
-	echo "\n" . "<br/>".gettext("Finished: Total of")." ".$count." ".gettext("images").".";
+	echo "\n" . "<br/>".spintf(gettext("Finished: Total of %u images."). $count);
 	
 	if (isset($_GET['return'])) $ret = $_GET['return'];
 	if (isset($_POST['return'])) $ret = $_POST['return'];

@@ -149,13 +149,13 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
 				$lastuploaded = query("SELECT COUNT(*) FROM ".prefix('images')." WHERE albumid = ".$tempalbum->getAlbumID() . " AND mtime = ". $latestimage['mtime']);
 				$row = mysql_fetch_row($lastuploaded);
 				$count = $row[0];
-				echo "<p>".gettext("Last update: ").zpFormattedDate(getOption('date_format'),$filechangedate)."</p>";
+				echo "<p>".sprintf(gettext("Last update: %s"),zpFormattedDate(getOption('date_format'),$filechangedate))."</p>";
 				if($count <= 1) {
 					$image = gettext("image");
 				} else {
 					$image = gettext("images");
 				}
-				echo "<span>".$count.gettext(" new ").$image."</span>";
+				echo "<span>".spintf(gettext('%1$u new %2$s'),$count,$image)."</span>";
 			} else {
 				echo "<p>". zpFormattedDate(getOption('date_format'),strtotime($tempalbum->getDateTime()))."</p>";
 			}
@@ -166,12 +166,12 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
 			if($votes != 0) {
 				$rating =  round($value/$votes, 1);
 			}
-			echo "<p>".gettext("Rating: ").$rating.gettext(" (Votes: ").$tempalbum->get("total_votes").")</p>";
+			echo "<p>".sprintf(gettext('Rating: %1$u (Votes: %2$u )'),$rating,$tempalbum->get("total_votes"))."</p>";
 		}
 		if($showstatistic === "hitcounter" OR $showstatistic === "rating+hitcounter") {
 			$hitcounter = $tempalbum->get("hitcounter");
 			if(empty($hitcounter)) { $hitcounter = "0"; }
-			echo "<p>".gettext("Views: ").$hitcounter."</p>";
+			echo "<p>".sprintf(gettext("Views: %u"),$hitcounter)."</p>";
 		}
 		if($showdesc) {
 			echo "<p>".my_truncate_string($tempalbum->getDesc(), $desclength)."</p>";
@@ -364,12 +364,12 @@ function printImageStatistic($number, $option, $albumfolder='', $showtitle=false
 			if($votes != 0) {
 				$rating =  round($value/$votes, 1);
 			}
-			echo "<p>".gettext("Rating: ").$rating.gettext(" (Votes: ").$votes.")</p>";
+			echo "<p>".sprintf(gettext('Rating: %1$u (Votes: %2$u)'),$rating,$votes)."</p>";
 		}
 		if($showstatistic === "hitcounter" OR $showstatistic === "rating+hitcounter") {
 			$hitcounter = $image->get("hitcounter");
 			if(empty($hitcounter)) { $hitcounter = "0"; }
-			echo "<p>".gettext("Views: ").$hitcounter."</p>";
+			echo "<p>".sprintf(gettext("Views: %u"),$hitcounter)."</p>";
 		}
 		if($showdesc) {
 			echo "<p>".my_truncate_string($image->getDesc(), $desclength)."</p>";

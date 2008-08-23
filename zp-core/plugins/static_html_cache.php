@@ -86,7 +86,7 @@ class staticCache {
 				}
 			}
 			$end = microtime(true); $final = $end - $this->startmtime; $final = round($final,4);
-			echo "\n<!-- ".gettext("Cached content served by static_html_cache in")." ".$final.gettext("s")." -->";
+			echo "\n<!-- ".sprintf(gettext("Cached content served by static_html_cache in %u seconds"),$final)." -->";
 			exit();
 		} else {
 			ob_start();
@@ -104,7 +104,7 @@ class staticCache {
 		if(!empty($cachefilepath)) {
 			// Display speed information.
 			$end = microtime(true); $final = $end - $this->startmtime; $final = round($final, 4);
-			echo "\n<!-- ".gettext("Content generated dynamically in")." ".$final.gettext("s and cached.")." -->";
+			echo "\n<!-- ".sprintf(gettext("Content generated dynamically in %u seconds"),$final)." -->";
 			// End
 			$pagecontent = ob_get_clean();
 			$fh = fopen($cachefilepath,"w");

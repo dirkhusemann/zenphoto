@@ -9,7 +9,7 @@
  */
 
 $plugin_description = gettext("Enables jQuery tag suggestions on the search field. Just activate the plugin and the feature is available on the theme's search field.");
-$plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard) - ".gettext("an adaption of Remy Sharp's")." <a href='http://remysharp.com/2007/12/28/jquery-tag-suggestion/ '>jQuery Tag Suggestion</a>";
+$plugin_author = gettext("Malte Müller (acrylian), Stephen Billard (sbillard) - an adaption of Remy Sharp's <a href='http://remysharp.com/2007/12/28/jquery-tag-suggestion/ '>jQuery Tag Suggestion</a>");
 $plugin_version = '1.0.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---tag_suggest.php.html";
 

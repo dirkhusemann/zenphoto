@@ -404,11 +404,16 @@ function printLogoAndLinks() {
 	echo "\n<div id=\"links\">";
 	echo "\n  ";
 	if (!is_null($_zp_current_admin)) {
-		echo gettext("Logged in as")." ".$_zp_current_admin['user']." &nbsp; | &nbsp <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?logout\">".gettext("Log Out")."</a> &nbsp; | &nbsp; ";
+		printf(gettext("Logged in as %s"), $_zp_current_admin['user']);
+		echo " &nbsp; | &nbsp <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?logout\">".gettext("Log Out")."</a> &nbsp; | &nbsp; ";
 	}
-	echo "<a href=\"".WEBPATH."/index.php\">".gettext("View Gallery");
+	echo "<a href=\"".WEBPATH."/index.php\">";
 	$t = get_language_string(getOption('gallery_title'));
-	if (!empty($t))	echo ': ' . $t;
+	if (!empty($t))	{
+		printf(gettext("View Gallery: %s"), $t);
+	} else {
+		echo gettext("View Gallery");
+	}
 	echo "</a>";
 	echo "\n</div>";
 }
@@ -497,16 +502,16 @@ function displayDeleted() {
 	if (isset($_GET['ndeleted'])) {
 		$ntdel = strip($_GET['ndeleted']);
 		if ($ntdel <= 2) {
-			$msg = gettext("Image").' ';
+			$msg = gettext("Image");
 		} else {
-			$msg = gettext("Album").' ';
+			$msg = gettext("Album");
 			$ntdel = $ntdel - 2;
 		}
 		if ($ntdel == 2) {
-			$msg = $msg . gettext("failed to delete.");
+			$msg = sprintf(gettext("%s failed to delete."),$msg);
 			$class = 'errorbox';
 		} else {
-			$msg = $msg . gettext("deleted successfully.");
+			$msg = sprintf(gettext("%s deleted successfully."),$msg);
 			$class = 'messagebox';
 		}
 		echo '<div class="' . $class . '" id="fade-message">';
@@ -825,7 +830,7 @@ function printAlbumEditForm($index, $album) {
 	$hc = $album->get('hitcounter');
 	if (empty($hc)) { $hc = '0'; }
 	echo "<td>";
-	echo gettext("Hit counter:").' '. $hc . " <input type=\"checkbox\" name=\"reset_hitcounter\"> Reset";
+	echo sprintf(gettext("Hit counter: %u"), $hc) . " <input type=\"checkbox\" name=\"reset_hitcounter\"> Reset";
 	$tv = $album->get('total_value');
 	$tc = $album->get('total_votes');
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Rating:");
@@ -1259,11 +1264,11 @@ function printAlbumEditRow($album) {
 	echo "\n<tr>";
 	echo '<td class="handle"><img src="images/drag_handle.png" style="border: 0px;" alt="Drag the album '."'".$album->name."'".'" /></td>';
 	echo '<td style="text-align: left;" width="80">';
-	echo '<a href="?page=edit&album=' . urlencode($album->name) .'" title="'.gettext('Edit this album:').' ' . $album->name .
+	echo '<a href="?page=edit&album=' . urlencode($album->name) .'" title="'.sprintf(gettext('Edit this album:%s'), $album->name) .
  			'"><img height="40" width="40" src="' . $album->getAlbumThumb() . '" /></a>';
 	echo "</td>\n";
 	echo '<td  style="text-align: left;font-size:110%;" width="300"> <a href="?page=edit&album=' . urlencode($album->name) .
- 			'" title="'.gettext('Edit this album:').' ' . $album->name . '">' . $album->getTitle() . '</a>';
+ 			'" title="'.sprintf(gettext('Edit this album: %s'), $album->name) . '">' . $album->getTitle() . '</a>';
 	echo "</td>\n";
 
 	if ($album->isDynamic()) {
@@ -1304,33 +1309,33 @@ function printAlbumEditRow($album) {
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	if ($album->getShow()) {
 		echo '<a class="publish" href="?action=publish&value=0&album=' . urlencode($album->name) .
- 				'" title="'.gettext('Publish the album').' ' . $album->name . '">';
+ 				'" title="'.sprintf(gettext('Publish the album %s'), $album->name) . '">';
 		echo '<img src="images/pass.png" style="border: 0px;" alt="'.gettext('Published').'" /></a>';
 	} else {
 		echo '<a class="publish" href="?action=publish&value=1&album=' . urlencode($album->name) .
- 				'" title="'.gettext('Publish the album').' ' . $album->name . '">';
+ 				'" title="'.sprintf(gettext('Publish the album %s'), $album->name) . '">';
 		echo '<img src="images/action.png" style="border: 0px;" alt="Publish the album ' . $album->name . '" /></a>';
 	}
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	echo '<a class="cache" href="admin-cache-images.php?page=edit&album=' . urlencode($album->name) . "&return=*" .
- 			'" title="'.gettext('Pre-cache images in').' ' . $album->name . '">';
-	echo '<img src="images/cache.png" style="border: 0px;" alt="'.gettext('Cache the album').' ' . $album->name . '" /></a>';
+ 			'" title="'.sprintf(gettext('Pre-cache images in %s'), $album->name) . '">';
+	echo '<img src="images/cache.png" style="border: 0px;" alt="'.sprintf(gettext('Cache the album %s'), $album->name) . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	echo '<a class="warn" href="admin-refresh-metadata.php?page=edit&album=' . urlencode($album->name) . "&return=*" .
- 			'" title="'.gettext('Refresh metadata for the album').' ' . $album->name . '">';
-	echo '<img src="images/warn.png" style="border: 0px;" alt="'.gettext('Refresh image metadata in the album').' ' . $album->name . '" /></a>';
+ 			'" title="'.sprintf(gettext('Refresh metadata for the album %s'), $album->name) . '">';
+	echo '<img src="images/warn.png" style="border: 0px;" alt="'.sprintf(gettext('Refresh image metadata in the album %s'), $album->name) . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-	echo '<a class="reset" href="?action=reset_hitcounters&albumid=' . $album->getAlbumID() . '" title="'.gettext('Reset hitcounters for album').' ' . $album->name . '">';
-	echo '<img src="images/reset.png" style="border: 0px;" alt="'.gettext('Reset hitcounters for the album').' ' . $album->name . '" /></a>';
+	echo '<a class="reset" href="?action=reset_hitcounters&albumid=' . $album->getAlbumID() . '" title="'.sprintf(gettext('Reset hitcounters for album %s'), $album->name) . '">';
+	echo '<img src="images/reset.png" style="border: 0px;" alt="'.sprintf(gettext('Reset hitcounters for the album %s'), $album->name) . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=" . urlencode(urlencode($album->name)) .
 			"','".js_encode(gettext("Are you sure you want to delete this entire album?"))."','".js_encode(gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")).
-			"');\" title=\"".gettext("Delete the album")." " . xmlspecialchars($album->name) . "\">";
-	echo '<img src="images/fail.png" style="border: 0px;" alt="'.gettext('Delete the album').' ' . xmlspecialchars($album->name) . '" /></a>';
+			"');\" title=\"".sprintf(gettext("Delete the album %s"), js_encode($album->name)) . "\">";
+	echo '<img src="images/fail.png" style="border: 0px;" alt="'.sprintf(gettext('Delete the album %s'), js_encode($album->name)) . '" /></a>';
 	echo "</td>\n</tr></table>\n</td>";
 
 	echo '</tr>';
@@ -1609,25 +1614,25 @@ function adminPageNav($pagenum,$totalpages,$adminpage,$parms,$tab='') {
 	}
 	echo '<ul class="pagelist"><li class="prev">';
 	if ($pagenum > 1) {
-		echo '<a href='.$url.'subpage='.($p=$pagenum-1).$tab.' title="'.gettext('page').' '.$p.'">'.'&laquo; '.gettext("Previous page").'</a>';
+		echo '<a href='.$url.'subpage='.($p=$pagenum-1).$tab.' title="'.sprintf(gettext('page %u'),$p).'">'.'&laquo; '.gettext("Previous page").'</a>';
 	} else {
 		echo '<span class="disabledlink">&laquo; '.gettext("Previous page").'</span>';
 	}
 	echo "</li>";
 	$start = max(1,$pagenum-7);
 	$total = min($start+15,$totalpages+1);
-	if ($start != 1) { echo "\n <li><a href=".$url.'subpage='.($p=max($start-8, 1)).$tab.' title="'.gettext('page').' '.$p.'">. . .</a></li>'; }
+	if ($start != 1) { echo "\n <li><a href=".$url.'subpage='.($p=max($start-8, 1)).$tab.' title="'.sprintf(gettext('page %u'),$p).'">. . .</a></li>'; }
 	for ($i=$start; $i<$total; $i++) {
 		if ($i == $pagenum) {
 			echo "<li class=\"current\">".$i.'</li>';
 		} else {
-			echo '<li><a href='.$url.'subpage='.$i.$tab.' title="'.gettext('page').' '.$i.'">'.$i.'</a></li>';
+			echo '<li><a href='.$url.'subpage='.$i.$tab.' title="'.sprintf(gettext('page %u'),$i).'">'.$i.'</a></li>';
 		}
 	}
-	if ($i < $totalpages) { echo "\n <li><a href=".$url.'subpage='.($p=min($pagenum+22,$totalpages+1)).$tab.' title="'.gettext('page').' '.$p.'">. . .</a></li>'; }
+	if ($i < $totalpages) { echo "\n <li><a href=".$url.'subpage='.($p=min($pagenum+22,$totalpages+1)).$tab.' title="'.sprintf(gettext('page %u'),$p).'">. . .</a></li>'; }
 	echo "<li class=\"next\">";
 	if ($pagenum<$totalpages) {
-		echo '<a href='.$url.'subpage='.($p=$pagenum+1).$tab.' title="'.gettext('page').' '.$p.'">'.gettext("Next page").' &raquo;'.'</a>';
+		echo '<a href='.$url.'subpage='.($p=$pagenum+1).$tab.' title="'.sprintf(gettext('page %u'),$p).'">'.gettext("Next page").' &raquo;'.'</a>';
 	} else {
 		echo '<span class="disabledlink">'.gettext("Next page").' &raquo;</span>';
 	}

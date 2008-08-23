@@ -349,7 +349,7 @@ class tar_file extends archive
 				$current['name2'] = substr($current['name2'], strlen($path));
 				if (strlen($path) > 154 || strlen($current['name2']) > 99)
 				{
-					$this->error[] = gettext("Could not add").$path.$current['name2'].gettext("to archive because the filename is too long.");
+					$this->error[] = sprintf(gettext("Could not add %s to archive because the filename is too long."),$path.$current['name2']);
 					continue;
 				}
 			}
@@ -382,7 +382,7 @@ class tar_file extends archive
 				fclose($fp);
 			}
 			else
-				$this->error[] = gettext("Could not open file").$current['name'].gettext("for reading. It was not added.");
+				$this->error[] = sprintf(gettext("Could not open file %s for reading. It was not added."),$current['name']);
 		}
 
 		$this->add_data(pack("a1024", ""));
@@ -430,7 +430,7 @@ class tar_file extends archive
 				for ($i = 0; $i < 512; $i++)
 					$checksum += ord(substr($block, $i, 1));
 				if ($file['checksum'] != $checksum)
-					$this->error[] = gettext("Could not extract from").$this->options['name'].gettext("it is corrupt.");
+					$this->error[] = sprintf(gettext("Could not extract from %s it is corrupt."),$this->options['name']);
 
 				if ($this->options['inmemory'] == 1)
 				{
@@ -463,7 +463,7 @@ class tar_file extends archive
 				}
 				else
 				{
-					$this->error[] = gettext("Could not open").$file['name'].gettext("for writing.");
+					$this->error[] = sprintf(gettext("Could not open %s for writing."),$file['name']);
 					continue;
 				}
 				chown($file['name'], $file['stat'][4]);
@@ -508,7 +508,7 @@ class gzip_file extends tar_file
 			}
 			else
 			{
-				$this->error[] = gettext("Could not open").$this->options['name'].gettext("for writing.");
+				$this->error[] = sprintf(gettext("Could not open %s for writing."),$this->options['name']);
 				chdir($pwd);
 				return 0;
 			}
@@ -549,7 +549,7 @@ class bzip_file extends tar_file
 			}
 			else
 			{
-				$this->error[] = gettext("Could not open").$this->options['name'].gettext("for writing.");
+				$this->error[] = sprintf(gettext("Could not open %s for writing."),$this->options['name']);
 				chdir($pwd);
 				return 0;
 			}
@@ -590,7 +590,7 @@ class zip_file extends archive
 				unset ($temp);
 			}
 			else
-				$this->error[] = gettext("Could not open sfx module from").' '.$this->options['sfx'];
+				$this->error[] = sprintf(gettext("Could not open sfx module from %s"),$this->options['sfx']);
 
 		$pwd = getcwd();
 		chdir($this->options['basedir']);
@@ -656,7 +656,7 @@ class zip_file extends archive
 				$offset += (30 + strlen($current['name2']) + $size);
 			}
 			else
-				$this->error[] = gettext("Could not open file").$current['name'].gettext("for reading. It was not added.");
+				$this->error[] = sprintf(gettext("Could not open file %s for reading. It was not added."),$current['name']);
 		}
 
 		$this->add_data($central);

@@ -633,15 +633,15 @@ if ($allimagecount) {
 				<p style="margin-top: 0; margin-bottom: 1em;"><?php
 							$hc = $image->get('hitcounter');
 							if (empty($hc)) { $hc = '0'; }
-							echo gettext("Hit counter:")." <strong>$hc</strong> <label for=\"$currentimage-reset_hitcounter\"><input type=\"checkbox\" id=\"$currentimage-reset_hitcounter\" name=\"$currentimage-reset_hitcounter\" value=1> ".gettext("Reset")."</label> ";
+							printf( gettext("Hit counter: <strong>%u</strong>"),$hc)." <label for=\"$currentimage-reset_hitcounter\"><input type=\"checkbox\" id=\"$currentimage-reset_hitcounter\" name=\"$currentimage-reset_hitcounter\" value=1> ".gettext("Reset")."</label> ";
 							$tv = $image->get('total_value');
 							$tc = $image->get('total_votes');
-							echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'. gettext("Rating:");
+							echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 							if ($tc > 0) {
 								$hc = $tv/$tc;
-								echo " <strong>$hc</strong> <label for=\"$currentimage-reset_rating\"><input type=\"checkbox\" id=\"$currentimage-reset_rating\" name=\"$currentimage-reset_rating\" value=1> ".gettext("Reset")."</label> ";
+								printf(gettext('Rating: <strong>%u</strong>'),$hc)." <label for=\"$currentimage-reset_rating\"><input type=\"checkbox\" id=\"$currentimage-reset_rating\" name=\"$currentimage-reset_rating\" value=1> ".gettext("Reset")."</label> ";
 							} else {
-								echo ' '.gettext("Unrated");
+								echo ' '.gettext("Rating: Unrated");
 							}
 							?></p>
 
@@ -951,9 +951,9 @@ $page = "home"; ?>
 		$v = checkForUpdate();
 		if (!empty($v)) {
 			if ($v == 'X') {
-				echo "\n<div style=\"font-size:150%;color:#ff0000;text-align:right;\">".gettext("Could not connect to")." <a href=\"http://www.zenphoto.org\">zenphoto.org</a>.</div>\n";
+				echo "\n<div style=\"font-size:150%;color:#ff0000;text-align:right;\">".gettext("Could not connect to  <a href=\"http://www.zenphoto.org\">zenphoto.org</a>")."</div>\n";
 			} else {
-				echo "\n<div style=\"font-size:150%;text-align:right;\"><a href=\"http://www.zenphoto.org\">". gettext("zenphoto version"). $v .gettext("is available.")."</a></div>\n";
+				echo "\n<div style=\"font-size:150%;text-align:right;\"><a href=\"http://www.zenphoto.org\">". sprinf(gettext("zenphoto version %s is available."), $v)."</a></div>\n";
 			}
 		} else {
 			echo "\n<div style=\"font-size:150%;color:#33cc33;text-align:right;\">".gettext("You are running the latest zenphoto version.")."</div>\n";
@@ -1084,7 +1084,7 @@ foreach ($comments as $comment) {
 		$inmoderation = $comment['inmoderation'];
 		$private = $comment['private'];
 		$anon = $comment['anon'];
-	echo "<li><div class=\"commentmeta\">".$author." ".gettext("commented on")." ".$link.":</div><div class=\"commentbody\">$comment</div></li>";
+	echo "<li><div class=\"commentmeta\">".sprintf(gettext('%1$s commented on %2$s:'),$author,$link)."</div><div class=\"commentbody\">$comment</div></li>";
 }
 ?>
 </ul>
@@ -1149,26 +1149,38 @@ foreach ($comments as $comment) {
 <div class="box" id="overview-suggest">
 <h2 class="boxtitle"><?php echo gettext("Gallery Stats"); ?></h2>
 <p>
-<strong><?php echo $t = $gallery->getNumImages(); ?></strong> <?php echo gettext("images");
+<?php 
+$t = $gallery->getNumImages(); 
 $c = $t-$gallery->getNumImages(true);
 if ($c > 0) {
-	echo ' ('.$c.' '.gettext("not visible").')';
+	printf(gettext('<strong>%1$u</strong> images (%2$u not visible)'),$t, $c);	
+} else {
+	printf(gettext('<strong>%u</strong> images'),$t);	
 }
-?></p>
-<p><strong><?php echo $t = $gallery->getNumAlbums(true); ?></strong> <?php echo gettext("albums");
+?>
+</p>
+<p>
+<?php 
+$t = $gallery->getNumAlbums(true);
 $c = $t-$gallery->getNumAlbums(true,true);
 if ($c > 0) {
-	echo ' ('.$c.' '.gettext("unpublished").')';
+	printf(gettext('<strong>%1$u</strong> albums (%2$u not published)'),$t, $c);	
+} else {
+	printf(gettext('<strong>%u</strong> albums'),$t);	
 }
-?></p>
+?>
+</p>
 
-<p><strong><?php echo $t = $gallery->getNumComments(true); ?></strong>
-<?php echo gettext("comments"); ?> <?php
+<p>
+<?php $t = $gallery->getNumComments(true); 
 $c = $t - $gallery->getNumComments(false);
 if ($c > 0) {
-	echo ' ('.$c.' '.gettext("in moderation").')';
+	printf(gettext('<strong>%1$u</strong> comments (%2$u in moderation)'),$t, $c);	
+} else {
+	printf(gettext('<strong>%u</strong> comments'),$t);	
 }
-?></p>
+?>
+</p>
 </div>
 <p style="clear: both;"></p>
 <?php

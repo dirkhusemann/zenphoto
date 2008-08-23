@@ -66,7 +66,7 @@ if (isset($_GET['refresh']) && db_connect()) {
 	}
 	if (!empty($id)) {
 		$id = "WHERE `albumid`=$id";
-		$r = " for <em>$folder</em>";
+		$r = " $folder";
 	} else {
 
 		$sql = "UPDATE " . prefix('albums') . " SET `mtime`=0 WHERE `dynamic`='1';";
@@ -75,14 +75,18 @@ if (isset($_GET['refresh']) && db_connect()) {
 
 	}
 	if (!empty($folder) && empty($id)) {
-		echo "<p><em>$folder</em> ".gettext("not found")."</p>";
+		echo "<p> ".sprintf(gettext("<em>%s</em> not found"),$folder)."</p>";
 	} else {
 		$sql = "UPDATE " . prefix('images') . " SET `mtime`=0 $id;";
 		query($sql);
 
 		if (isset($_GET['return'])) $ret = $_GET['return'];
 		if (isset($_POST['return'])) $ret = $_POST['return'];
-		echo "<p>".gettext("We're all set to refresh the")." metadata$r</p>";
+		if (empty($r)) {
+			echo "<p>".gettext("We're all set to refresh the metadata")."</p>";
+		} else {
+			echo "<p>".sprintf(gettext("We're all set to refresh the metadata for <em>%s</em>"),$r)."</p>";
+		}
 		echo "<p><a href=\"?refresh=start&return=$ret\" title=\"".gettext("Refresh image metadata.")."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Go!")."</a></p>";
 	}
 } else {

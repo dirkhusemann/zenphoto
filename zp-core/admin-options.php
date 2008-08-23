@@ -580,7 +580,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		switch ($_GET['mismatch']) {
 			case 'gallery':
 			case 'search':
-				echo  "<h2>". gettext("Your").' '. $_GET['mismatch'] . ' '.gettext("passwords were empty or did not match")."</h2>";
+				echo  "<h2>". sprintf(gettext("Your %s passwords were empty or did not match"), $_GET['mismatch'])."</h2>";
 				break;
 			case 'user_gallery':
 				echo  "<h2>". gettext("You must supply a password for the Gallery guest user")."</h2>";
@@ -595,8 +595,8 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		$locale = $_GET['local_failed'];
 		echo '<div class="errorbox" id="fade-message">';
 		echo  "<h2>".
-					'<em>'.$_zp_languages[$locale].'</em> '.gettext("is not available.").
-					' '.gettext("The locale").' '.$locale.' '.gettext("is not supported on your server.").
+					sprintf(gettext("<em>%s</em> is not available."),$_zp_languages[$locale]).
+					' '.sprintf(gettext("The locale %s is not supported on your server."),$locale).
 					"</h2>";
 		echo '</div>';
 	}
@@ -924,7 +924,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	type="hidden" name="saveimageoptions" value="yes" /> <?php
 	if (isset($_GET['mismatch'])) {
 		echo '<div class="errorbox" id="fade-message">';
-		echo  "<h2>".gettext("Your").' ' . $_GET['mismatch'] . ' '.gettext("passwords did not match")."</h2>";
+		echo  "<h2>".sprintf(gettext("Your %s passwords did not match"), $_GET['mismatch'])."</h2>";
 		echo '</div>';
 	}
 	?>
@@ -994,8 +994,8 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		<input type="text" size="2" name="watermark_w_offset"
 			value="<?php echo htmlspecialchars(getOption('watermark_w_offset'));?>" /><?php echo gettext("%"); ?>
 		</td>
-		<td><?php echo gettext("The watermark image (png-24). (Place the image in the"); ?> "<?php echo ZENFOLDER; ?>/watermarks/
-		<?php echo gettext("directory"); ?>".)<br />
+		<td><?php echo gettext("The watermark image (png-24).").sprintf(gettext('Place the image in the %s/watermarks/ folder.'),ZENFOLDER); ?>
+		<br />
 		<?php echo gettext("The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the	image.").' '.
 		           gettext("It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark.").' '.
 		           gettext("If <em>allow upscale</em> is not checked the watermark will not be made larger than the original watermark image."); ?></td>
@@ -1011,7 +1011,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		?> <input type="checkbox" name="perform_video_watermark" value="1"
 		<?php echo checked('1', getOption('perform_video_watermark')); ?> />&nbsp;<?php echo gettext("Enabled"); ?>
 		</td>
-		<td><?php echo gettext("The watermark image (png-24) that will be overlayed on the video thumbnail (if one exists). (Place the image in the"); ?> "<?php echo ZENFOLDER; ?>/watermarks/ <?php echo gettext("directory"); ?>".)</td>
+		<td><?php echo gettext("The watermark image (png-24) that will be overlayed on the video thumbnail (if one exists).").' ('.sprintf(gettext('Place the image in the %s/watermarks/ folder'), ZENFOLDER).')'; ?> </td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Full image quality:"); ?></td>
@@ -1180,10 +1180,10 @@ if (!empty($_REQUEST['themealbum'])) {
 <?php
 	/* handle theme options */
 	echo "<input type=\"hidden\" name=\"old_themealbum\" value=\"".urlencode($alb)."\" />";
-	echo "<tr><th colspan='2'><h2 style='float: left'>".gettext("Theme for")." <code><strong>$albumtitle</strong></code>: <em>".$theme['name']."</em></h2></th>\n";
+	echo "<tr><th colspan='2'><h2 style='float: left'>".sprintf(gettext('Theme for <code><strong>%1$s</strong></code>: <em>%2$s</em>'), $albumtitle,$theme['name'])."</h2></th>\n";
 	echo "<th colspan='1' style='text-align: right'>";
 	if (count($themelist) > 1) {
-		echo gettext("Show theme for"). ': ';
+		echo gettext("Show theme for:");
 		echo '<select id="themealbum" name="themealbum" onchange="this.form.submit()">';
 		generateListFromArray(array(urlencode($alb)), $themelist);
 		echo '</select>';

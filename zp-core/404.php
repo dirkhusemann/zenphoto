@@ -17,6 +17,6 @@ if (isset($obj)) {
 ?>
 <br />
 <a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>"
-	title="<?php echo gettext('Albums Index'); ?>"><?php echo gettext("Return to").' '.getGalleryTitle();?></a>
+	title="<?php echo gettext('Albums Index'); ?>"><?php echo sprintf(gettext("Return to %s"),getGalleryTitle());?></a>
 </body>
 </html>

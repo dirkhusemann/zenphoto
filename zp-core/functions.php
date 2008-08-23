@@ -143,16 +143,6 @@ function js_encode($this_string) {
 }
 
 /**
- * wraps htmlspecialchars and makes it work for xml
- *
- * @param string $text
- * @return string
- */
-function xmlspecialchars($text) {
-	return str_replace("&#039;", '&apos;', htmlspecialchars($text, ENT_QUOTES));
-}
-
-/**
  * Get a option stored in the database.
  * This function reads the options only once, in order to improve performance.
  * @param string $key the name of the option.

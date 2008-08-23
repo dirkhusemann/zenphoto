@@ -92,7 +92,7 @@ echo "\n" . '<div id="content">';
 
 	if (count($themelist) > 1) {
 		echo '<form action="#" method="post">';
-		echo gettext("Show theme for"). ': ';
+		echo gettext("Show theme for: ");
 		echo '<select id="themealbum" name="themealbum" onchange="this.form.submit()">';
 		generateListFromArray(array(urlencode($alb)), $themelist);
 		echo '</select>';
@@ -104,7 +104,7 @@ echo "\n" . '<div id="content">';
 		echo '</div>';
 	} else {
 
-	echo "<h1>".gettext("Current theme for")." <code><strong>$albumtitle</strong></code>: <em>".$themenamedisplay."</em>";
+	echo "<h1>".sprintf(gettext('Current theme for <code><strong>%1$s</strong></code>: <em>%2$s</em>'),$albumtitle,$themenamedisplay);
 	if (!empty($alb) && !empty($themename)) {
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".'<a class="reset" href="?action=settheme&themealbum='.urlencode($album->name).'&theme=" title="'.gettext('Clear theme assignment').$album->name.'">';
 		echo '<img src="images/fail.png" style="border: 0px;" alt="'.gettext('Clear theme assignment').'" /></a>';
