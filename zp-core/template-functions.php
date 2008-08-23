@@ -2838,7 +2838,7 @@ function printRandomImages($number=5, $class=null, $option='all', $rootAlbum='')
 				$randomImage = getRandomImagesAlbum($rootAlbum); break;
 		}
 		$randomImageURL = htmlspecialchars(getURL($randomImage));
-		echo '<a href="' . $randomImageURL . '" title="'.gettext('View image:').' ' . html_encode($randomImage->getTitle()) . '">' .
+		echo '<a href="' . $randomImageURL . '" title="'.sprintf(gettext('View image: %s'), html_encode($randomImage->getTitle())) . '">' .
 			'<img src="' . htmlspecialchars($randomImage->getThumb()) .
 			'" alt="'.html_encode($randomImage->getTitle()).'"';
 		echo "/></a></li>\n";
@@ -3677,7 +3677,7 @@ function printPasswordForm($hint, $showProtected=true, $showuser=NULL) {
 	echo "\n      <tr><td>".gettext("Password")."</td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
 	echo "\n      <tr><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"".gettext("Submit")."\" /></td></tr>";
 	if (!empty($hint)) {
-		echo "\n      <tr><td>".gettext("Hint:")." " . $hint . "</td></tr>";
+		echo "\n      <tr><td>".sprintf(gettext("Hint: %s"), $hint) . "</td></tr>";
 	}
 	echo "\n    </table>";
 	echo "\n  </form>";
