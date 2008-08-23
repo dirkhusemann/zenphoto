@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * processes the authorization (or login) of admin users
  * @package admin
