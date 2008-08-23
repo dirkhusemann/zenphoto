@@ -157,7 +157,7 @@ function zp_handle_comment() {
 	$activeImage = false;
 	// ZENPAGE:  if else constructs added
 	if(getOption('zp_plugin_zenpage')) {
-		$zenpage = new Zenpage("","");
+		$zenpage = new Zenpage();
 		$zenpage_news_context = $zenpage->isPage(ZENPAGE_NEWS);
 		$zenpage_pages_context = $zenpage->isPage(ZENPAGE_PAGES);
 	} else {

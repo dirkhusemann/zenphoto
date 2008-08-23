@@ -203,7 +203,7 @@ if ($page == "editcomment") { ?>
 
 		if(getOption("zp_plugin_zenpage")) {
 			require_once("plugins/zenpage/zenpage-class.php");
-			$zenpage = new Zenpage("","");
+			$zenpage = new Zenpage();
 		}
 		// ZENPAGE: switch added for zenpage comment support
 		switch ($comment['type']) {
