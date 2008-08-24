@@ -80,7 +80,7 @@ function query($sql, $noerrmsg = false) {
 			// Changed this to mysql_query - *never* call query functions recursively...
 			if (!mysql_query("SELECT 1 FROM " . prefix('albums') . " LIMIT 0", $mysql_connection)) {
 				$error .= "<br />".gettext("It looks like your zenphoto tables haven't been created.").' '.
-				sprintf(gettext('You may need to run <a href=\"%s/%s/setup.php\">the setup script.</a>'),WEBPATH,ZENFOLDER);
+				sprintf(gettext('You may need to run <a href="%s/%s/setup.php">the setup script.</a>'),WEBPATH,ZENFOLDER);
 			}
 			zp_error($error);
 			return false;
