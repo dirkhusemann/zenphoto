@@ -415,17 +415,20 @@ class SearchEngine
 				case ')':
 					break;
 				default:
-					$sql .= '`name`="'.$singlesearchstring.'" OR ';
+					$sql .= '`name` LIKE "%'.$singlesearchstring.'%" OR ';
 			}
 		}
 		$sql = substr($sql, 0, strlen($sql)-4).') ORDER BY t.`id`';
 		$objects = query_full_array($sql);
 		if (is_array($objects)) {
+			$tagid = '';
 			$taglist = array();
 
 			foreach ($objects as $object) {
 				$tagid = strtolower($object['name']);
-				if (!isset($taglist[$tagid]) || !is_array($taglist[$tagid])) { $taglist[$tagid] = array(); }
+				if (!isset($taglist[$tagid]) || !is_array($taglist[$tagid])) {
+					$taglist[$tagid] = array();
+				}
 				$taglist[$tagid][] = $object['objectid'];
 			}
 			$op = '';
@@ -474,10 +477,12 @@ class SearchEngine
 						$op = '';
 						break;
 							default:
-								if (isset($taglist[strtolower($singlesearchstring)])) {
-									$objectid = $taglist[strtolower($singlesearchstring)];
-								} else {
-									$objectid = '';
+								$lookfor = strtolower($singlesearchstring);
+								$objectid = '';
+								foreach ($taglist as $key => $value) {
+									if (preg_match('/'.$lookfor.'/', $key)) {
+										$objectid = $value;
+									}
 								}
 								switch ($op) {
 									case '&':
