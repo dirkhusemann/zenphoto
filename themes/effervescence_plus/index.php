@@ -77,7 +77,7 @@
 		<?php if (function_exists('printLanguageSelector')) { printLanguageSelector(); } ?>
 		<small>
 			<p><?php $albumNumber = getNumAlbums(); echo sprintf(gettext("Albums: %u"),$albumNumber); ?> &middot;
-				<?php echo sprintf(gettext("Subalbums: %s"),show_subalbum_count()); ?> &middot;
+				<?php echo sprintf(gettext("Subalbums: %u"),get_subalbum_count()); ?> &middot;
 				<?php $photosArray = query_single_row("SELECT count(*) FROM ".prefix('images'));
 				$photosNumber = array_shift($photosArray); echo sprintf(gettext("Images: %u"),$photosNumber); ?>
 				<?php if (getOption('Allow_comments')) { ?>

@@ -1,7 +1,10 @@
 <?php
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
+
 if (!file_exists(dirname(__FILE__) . '/' . ZENFOLDER . "/zp-config.php")) {
-	$location = "http://". $_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']) . "/" . ZENFOLDER . "/setup.php";
+	$dir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
+	if (substr($dir, -1) == '/') $dir = substr($dir, 0, -1);
+	$location = "http://". $_SERVER['HTTP_HOST']. $dir . "/" . ZENFOLDER . "/setup.php";
 	header("Location: $location" );
 }
 define('OFFSET_PATH', 0);

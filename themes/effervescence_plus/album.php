@@ -337,11 +337,10 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 <?php
 $h = hitcounter('album');
 if ($h == 1) {
-	$h .= ' '.gettext('hit');
-} else {
-	$h .= ' '.gettext('hits');
+	echo "<p>".gettext('1 hit on this album')."</p>";
+	} else {
+	echo "<p>".sprintf(gettext('%u hits on this album'),$h)."</p>";
 }
-echo "<p>$h ".gettext('on this album')."</p>";
 printThemeInfo();
 ?>
 <a href="http://www.zenphoto.org" title="<?php gettext("A simpler web photo album") ?>"><?php echo gettext('Powered by').' '; ?>

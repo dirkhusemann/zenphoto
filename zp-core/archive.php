@@ -446,7 +446,7 @@ class tar_file extends archive
 				}
 				else if ($this->options['overwrite'] == 0 && file_exists($file['name']))
 				{
-					$this->error[] = $file['name'].' '.gettext("already exists.");
+					$this->error[] = sprintf(gettext("%s already exists."),$file['name']);
 					continue;
 				}
 				else if ($file['type'] == 2)

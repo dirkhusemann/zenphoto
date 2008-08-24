@@ -115,7 +115,19 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 			<!-- Headings -->
 			<div id="bottomheadings">
 				<div class="bottomfull">
-					<?php $num = getCommentCount(); echo ($num == 1) ? ("<h3>1 ".gettext("Comment")."</h3>") : ("<h3>$num ".gettext("Comments")."</h3>"); ?>
+					<?php 
+					$num = getCommentCount(); 
+					switch ($num) {
+						case 0:
+							echo gettext('<h3>No Comments</h3>');
+							break;
+						case 1:
+							echo gettext('<h3>1 Comment</h3>');
+							break;
+						default:
+							printf(gettext('<h3>%u Comments</h3>'), $num);
+					}
+					?>
 				</div>
 			</div>
 
@@ -170,11 +182,10 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 		<?php
 			$h = hitcounter('image');
 			if ($h == 1) {
-				$h .= ' '.gettext('hit');
+				echo "<p>".gettext('1 hit on this image')."</p>";
 			} else {
-				$h .= ' '.gettext('hits');
+				echo "<p>".sprintf(gettext('%u hits on this image'),$h)."</p>";
 			}
-			echo "<p>$h ".gettext('on this image')."</p>";
 			printThemeInfo();
 		?>
 		<a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>"><?php echo gettext('Powered by').' ';?>

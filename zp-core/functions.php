@@ -24,7 +24,7 @@ if (ini_get('memory_limit') < '128M') {
 }
 
 if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
-	die ("<strong>".gettext("Zenphoto error:</strong> zp-config.php not found. Perhaps you need to run")." <a href=\"" . ZENFOLDER . "/setup.php\">setup</a> ".gettext("(or migrate your old config.php)"));
+	die (sprintf(gettext("<strong>Zenphoto error:</strong> zp-config.php not found. Perhaps you need to run <a href=\"%s/setup.php\">setup</a> (or migrate your old config.php)"),ZENFOLDER));
 }
 
 // Including zp-config.php more than once is OK, and avoids $conf missing.

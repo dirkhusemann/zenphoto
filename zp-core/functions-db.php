@@ -40,7 +40,7 @@ function db_connect() {
 	}
 
 	if (!@mysql_select_db($db)) {
-		zp_error(gettext('MySQL Error: The database is connected, but Zenphoto could not select the database "' . $db . '". ')
+		zp_error(sprintf(gettext('MySQL Error: The database is connected, but Zenphoto could not select the database %s.'),$db)
 			. gettext('Make sure it already exists, create it if you need to.')
 			. gettext('Also make sure the user you\'re trying to connect with has privileges to use this database.'));
 		return false;
@@ -76,11 +76,11 @@ function query($sql, $noerrmsg = false) {
 			return false;
 		} else {
 			$sql = sanitize($sql, 3);
-			$error = gettext("MySQL Query")." ( <em>$sql</em> ) ".gettext("Failed. Error:").mysql_error();
+			$error = sprintf(gettext('MySQL Query ( <em>%1$s</em> ) failed. Error: %2$s' ),$sql,mysql_error());
 			// Changed this to mysql_query - *never* call query functions recursively...
 			if (!mysql_query("SELECT 1 FROM " . prefix('albums') . " LIMIT 0", $mysql_connection)) {
-				$error .= "<br>".gettext("It looks like your zenphoto tables haven't been created.")
-				.gettext("You may need to") . " <a href=\"" . WEBPATH . '/' . ZENFOLDER . "/setup.php\">".gettext("run the setup script")."</a>.";
+				$error .= "<br />".gettext("It looks like your zenphoto tables haven't been created.").' '.
+				sprintf(gettext('You may need to run <a href=\"%s/%s/setup.php\">the setup script.</a>'),WEBPATH,ZENFOLDER);
 			}
 			zp_error($error);
 			return false;

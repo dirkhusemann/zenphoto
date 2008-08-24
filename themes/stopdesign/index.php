@@ -35,7 +35,7 @@
 							<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext("View album: %s"), getBareAlbumTitle());?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 210, 59, 210, 59); ?></a>
 							<p>
 					<?php
-						$anumber = getNumsubalbums();
+						$anumber = getNumSubalbums();
 						$inumber = getNumImages();
 						if ($anumber > 0 || $inumber > 0) {
 							echo '<p><em>(';
@@ -74,7 +74,7 @@
 				endwhile;
 				?>
 				</ul>
-				<p class="mainbutton"><a href="<?php echo $archivepageURL; ?>" class="btn"><img src="<?php echo $_zp_themeroot ?>/img/btn_gallery_archive.gif" width="118" height="21" alt="<?php echo ' '.gettext('Gallery Archive'); ?>" /></a></p>
+				<p class="mainbutton"><a href="<?php echo $archivepageURL; ?>" class="btn"><img src="<?php echo $_zp_themeroot ?>/img/btn_gallery_archive.gif" width="118" height="21" alt="<?php echo gettext('Gallery Archive'); ?>" /></a></p>
 		</div>
 
 		<div id="secondary">
@@ -149,7 +149,7 @@
 		<hr />
 		<?php if (function_exists('printLanguageSelector')) { echo '<p>'; printLanguageSelector(); echo '</p>'; } ?>
 		<p>
-			<a href="http://stopdesign.com/templates/photos/"><?php echo gettext('Photo Templates</a> from'); ?> Stopdesign.
+			<a href="http://stopdesign.com/templates/photos/"><?php echo gettext('Photo Templates</a> from Stopdesign.'); ?>
 			<?php echo gettext('Powered by'); ?> <a href="http://www.zenphoto.org">ZenPhoto</a>.
 		</p>
 	</div>

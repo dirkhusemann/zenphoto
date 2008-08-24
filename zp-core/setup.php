@@ -328,9 +328,8 @@ if (!$checked) {
 			@mkdir($path, CHMOD_VALUE);
 		}
 		@chmod($path, CHMOD_VALUE);
-		$folders = explode('/', $path);
-		$folder = $folders[count($folders)-1];
-		if (empty($folder)) $folder = $folders[count($folders)-2];  // trailing slash
+		$folder = basename($path);
+		if (empty($folder)) $folder = basename(basename($path));
 		if ($external) {
 			$append = $path;
 		} else {
@@ -339,13 +338,15 @@ if (!$checked) {
 		$f = '';
 		if (!is_dir($path)) {
 			$e = '';
-			if (!$external) $d = " ".gettext("and <strong>setup</strong> could not create it");
-			$sfx = " [<em>$append</em> ".gettext("does not exist")."$d]";
-			$msg = " ".gettext("You must create the folder")." $folder. <code>mkdir($path, 0777)</code>.";
+			if ($external) {
+				$sfx = ' '.sprintf(gettext("[<em>%s</em> does not exist]"),$append);
+			} else {
+				$sfx = ' '.sprintf(gettext("[<em>%s</em> does not exist and <strong>setup</strong> could not create it]"),$append);
+			}
+			$msg = " ".sprintf(gettext('You must create the folder %1$s <code>mkdir(%2$s, 0777)</code>.'),$folder,$path);
 		} else if (!is_writable($path)) {
-			$sfx = " [<em>$append</em> ".gettext("is not writeable and").' '."<strong>setup</strong> ".gettext("could not make it so]");
-			$msg =  gettext("Change the permissions on the")." <code>$folder</code> ".gettext("folder to be writable by the server").' ' .
-							"(<code>chmod 777 " . $append . "</code>)";
+			$sfx = ' '.sprintf(gettext('[<em>%s</em> is not writeable and <strong>setup</strong> could not make it so]'),$append);
+			$msg =  sprintf(gettext('Change the permissions on the <code>%1$s</code> folder to be writable by the server (<code>chmod 777 %2$s</code>)'),$folder,$append);
 		} else {
 			if (($folder != $which) || $external) {
 				$f = " (<em>$append</em>)";
@@ -354,7 +355,8 @@ if (!$checked) {
 			$sfx = '';
 		}
 
-		return checkMark(is_dir($path) && is_writable($path), " <em>$which</em>".' '.gettext("folder").$f, $sfx, $msg);
+
+		return checkMark(is_dir($path) && is_writable($path), sprintf(gettext(" <em>%s</em> folder"),$which).$f, $sfx, $msg);
 	}
 	function versionCheck($required, $found) {
 		$nr = explode(".", $required . '.0.0.0');
@@ -404,7 +406,7 @@ if (!$checked) {
 
 	$required = '4.1.0';
 	$phpv = phpversion();
-	$good = checkMark(versionCheck($required, $phpv), " ".gettext("PHP version")." $phpv", "", gettext("Version").' '.$required.' '.gettext("or greater is required.")) && $good;
+	$good = checkMark(versionCheck($required, $phpv), " ".sprintf(gettext("PHP version %s"),$phpv), "", sprintf(gettext("Version %s or greater is required."),$required)) && $good;
 
 	if (ini_get('safe_mode')) {
 		$safe = -1;
@@ -433,19 +435,22 @@ if (!$checked) {
 		if (!($imgtypes & IMG_PNG)) { $missing[] = 'PNG'; }
 		if (count($missing) > 0) {
 			if (count($missing) < 3) {
-				$imgmissing = $missing[0];
-				if (count($missing) == 2) { $imgmissing .= ' or '.$missing[1]; }
+				if (count($missing) == 2) { 
+					$imgmissing =sprintf(gettext('Your PHP GD does not support %1$s, or %2$s'),$missing[0],$missing[1]); 
+				} else {
+					$imgmissing = sprintf(gettext('Your PHP GD does not support %1$s'),$missing[0]);
+				}
 				$err = -1;
-				$mandate = gettext("should");
+				$mandate = gettext("To correct this you should install GD with appropriate image support in your PHP");
 			} else {
-				$imgmissing = $missing[0].', '.$missing[1].', or '.$missing[2];
+				$imgmissing = sprintf(gettext('Your PHP GD does not support %1$s, %2$s, or %3$s'),$missing[0],$missing[1],$missing[2]);
 				$err = 0;
 				$good = false;
-				$mandate = gettext("need to");
+				$mandate = gettext("To correct this you need to install GD with appropriate image support in your PHP");
 			}
-			checkMark($err, ' '.gettext("PHP GD image support"), '', gettext("Your PHP GD does not support")." $imgmissing. ".
+			checkMark($err, ' '.gettext("PHP GD image support"), '', $imgmissing.
 	                    "<br/>".gettext("The unsupported image types will not be viewable in your albums.").
-	                    "<br/>".gettext("To correct this you").' '.$mandate.' '.gettext("install GD with appropriate image support in your PHP"));
+	                    "<br/>".$mandate);
 		}
 	}
 
@@ -564,9 +569,9 @@ if ($debug) {
 	}
 	$good = checkMark($connection, ' '.gettext("connect to MySQL"), '', gettext("Could not connect to the <strong>MySQL</strong> server. Check the <code>user</code>, <code>password</code>, and <code>database host</code> in your <code>zp-config.php</code> file and try again.").' ') && $good;
 	if ($connection) {
-		$good = checkMark($sqlv, ' '.gettext("MySQL version").' '.$mysqlv, "", gettext("Version").' '.$required.' '.gettext("or greater is required")) && $good;
-		$good = checkMark($db, ' '.gettext("connect to the database <code>") . $_zp_conf_vars['mysql_database'] . "</code>", '',
-			gettext("Could not access the <strong>MySQL</strong> database")." (<code>" . $_zp_conf_vars['mysql_database'] ."</code>). ".gettext("Check the <code>user</code>, <code>password</code>, and <code>database name</code> and try again.").' ' .
+		$good = checkMark($sqlv, ' '.gettext("MySQL version").' '.$mysqlv, "", sprintf(gettext("Version %s or greater is required"),$required)) && $good;
+		$good = checkMark($db, ' '.sprintf(gettext("connect to the database <code> %s </code>"),$_zp_conf_vars['mysql_database']), '',
+			sprintf(gettext("Could not access the <strong>MySQL</strong> database (<code>%s</code>)."), $_zp_conf_vars['mysql_database']).' '.gettext("Check the <code>user</code>, <code>password</code>, and <code>database name</code> and try again.").' ' .
 			gettext("Make sure the database has been created, and the <code>user</code> has access to it.").' ' .
 			gettext("Also check the <code>MySQL host</code>.")) && $good;
 
@@ -594,7 +599,7 @@ if ($debug) {
 		$i = strrpos($neededlist, ',');
 		$neededlist = substr($neededlist, 0, $i).' '.gettext('and').substr($neededlist, $i+1);
 		if ($result) {
-			$report = "<br/><br/><em>".gettext("Grants found:")."</em>";
+			$report = "<br/><br/><em>".gettext("Grants found:")."</em> ";
 			while ($row = mysql_fetch_row($result)) {
 				$report .= "<br/><br/>".$row[0];
 				$r = str_replace(',', '', $row[0]);
@@ -620,7 +625,7 @@ if ($debug) {
 			$report = "<br/><br/>".gettext("The <em>SHOW GRANTS</em> query failed.");
 		}
 		checkMark($access, ' '.gettext("MySQL access rights"), " [$rightsfound]",
- 											gettext("Your MySQL user must have".' '.$neededlist."rights.") . $report);
+ 											sprintf(gettext("Your MySQL user must have %s rights."),$neededlist) . $report);
 
 
 		$sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$_zp_conf_vars['mysql_prefix']."%';";
@@ -631,10 +636,14 @@ if ($debug) {
 				$tableslist .= "<code>" . $row[0] . "</code>, ";
 			}
 		}
-		if (!empty($tableslist)) { $tableslist = ' '.gettext("found").' '.substr($tableslist, 0, -2); }
+		if (empty($tableslist)) {
+			$msg = gettext('MySQL <em>show tables</em> found no tables');
+		} else {
+			$msg = sprintf(gettext("MySQL <em>show tables</em> found: %s"),substr($tableslist, 0, -2));
+		}
 		if (!$result) { $result = -1; }
 		$dbn = $_zp_conf_vars['mysql_database'];
-		checkMark($result, ' '.gettext("MySQL <em>show tables</em>")."$tableslist", ' '.gettext("[Failed]"), gettext("MySQL did not return a list of the database tables for <code>$dbn</code>.") .
+		checkMark($result, ' '.$msg, ' '.gettext("[Failed]"), sprintf(gettext("MySQL did not return a list of the database tables for <code>%s</code>."),$dbn) .
  											"<br/>".gettext("<strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables."));
 
 	}
@@ -714,6 +723,7 @@ if ($debug) {
 		$htu = strtoupper($ht);
 		$vr = "";
 		$ch = 1;
+		$j = 0;
 		if (empty($htu)) {
 			$ch = -1;
 			$err = gettext("is empty or does not exist");
@@ -741,7 +751,7 @@ if ($debug) {
 			}
 			$mod = '';
 			if (!empty($rw)) {
-				$msg .= ' '.gettext("(<em>RewriteEngine</em> is").' '."<strong>$rw</strong>)";
+				$msg .= ' '.sprintf(gettext("(<em>RewriteEngine</em> is <strong>%s</strong>)"), $rw);
 				$mod = "&mod_rewrite=$rw";
 			}
 		}
@@ -754,13 +764,14 @@ if ($debug) {
 		$d = dirname(dirname($_SERVER['SCRIPT_NAME']));
 		$i = strpos($htu, 'REWRITEBASE', $j);
 		if ($i === false) {
-			$base = false;
-			$b = "<em>".gettext("missing")."</em>";
+			$base = false;	
+			$b = gettext("<em>.htaccess</em> RewriteBase is <em>missing</em>");		
 			$i = $j+1;
 		} else {
 			$j = strpos($htu, "\n", $i+11);
 			$b = trim(substr($ht, $i+11, $j-$i-11));
 			$base = ($b == $d);
+			$b = sprintf(gettext("<em>.htaccess</em> RewriteBase is <code>%s</code>"), $b);
 		}
 		$f = '';
 		if (!$base) { // try and fix it
@@ -770,16 +781,15 @@ if ($debug) {
 				if ($handle = fopen($htfile, 'w')) {
 					if (fwrite($handle, $ht)) {
 						$base = true;
-						$f = " (fixed)";
-						$b = $d;
+						$b =  sprintf(gettext("<em>.htaccess</em> RewriteBase is <code>%s</code> (fixed)"), $d);
 					}
 				}
 				fclose($handle);
 			}
 		}
-		$good = checkMark($base, gettext("<em>.htaccess</em> RewriteBase is")." <code>$b</code> $f", ' ['.gettext("Does not match install folder").']',
+		$good = checkMark($base, $b, ' ['.gettext("Does not match install folder").']',
 											gettext("Setup was not able to write to the file change RewriteBase match the install folder.") .
-											"<br/>".gettext("Either make the file writeable or set <code>RewriteBase</code> in your <code>.htaccess</code> file to")." <code>$d</code>.") && $good;
+											"<br/>".sprintf(gettext("Either make the file writeable or set <code>RewriteBase</code> in your <code>.htaccess</code> file to <code>%s</code>."),$d)) && $good;
 	}
 
 	if (is_null($_zp_conf_vars['external_album_folder'])) {
@@ -1178,7 +1188,11 @@ if (file_exists("zp-config.php")) {
 
 	$createTables = true;
 	if (isset($_GET['create']) || isset($_GET['update']) && db_connect()) {
-		echo "<h3>".gettext("About to").' '.$taskDisplay[substr($task,0,8)].' '.gettext("tables")."...</h3>";
+		if ($taskDisplay[substr($task,0,8)] == 'create') {
+			echo "<h3>".gettext("About to create tables")."...</h3>";
+		} else {
+			echo "<h3>".gettext("About to update tables")."...</h3>";
+		}
 		setupLog("Begin table creation");
 		foreach($db_schema as $sql) {
 			$result = mysql_query($sql);
@@ -1186,7 +1200,7 @@ if (file_exists("zp-config.php")) {
 				$createTables = false;
 				setupLog("MySQL Query"." ( $sql ) "."Failed. Error: ".mysql_error());
 				echo '<div class="error">';
-				echo gettext('Table creation failure').': '.mysql_error();
+				echo gettext('Table creation failure: ').mysql_error();
 				echo '</div>';
 			} else {
 				setupLog("MySQL Query"." ( $sql ) "."Success.");
@@ -1304,22 +1318,33 @@ if (file_exists("zp-config.php")) {
 			query("ALTER TABLE ".prefix('albums')." DROP COLUMN `tags`");
 			query("ALTER TABLE ".prefix('images')." DROP COLUMN `tags`");
 		}
-
-		echo "<h3>".gettext("Done with table").' '.$taskDisplay[substr($task,0,8)];
-		if (!$createTables) echo ' '.gettext('with errors');
-		echo "!</h3>";
+		echo "<h3>";
+		if ($taskDisplay[substr($task,0,8)] == 'create') {
+			if ($createTables) {
+				echo gettext('Done with table create!');
+			} else {
+				echo gettext('Done with table create with errors!');
+			}
+		} else {
+			if ($createTables) {
+				echo gettext('Done with table update');
+			} else {
+				echo gettext('Done with table update with errors');
+			}
+		}
+		echo "</h3>";
 
 		if ($createTables) {
 			if ($_zp_loggedin == ADMIN_RIGHTS) {
-				echo "<p>".gettext("You need to")." <a href=\"admin-options.php\">".gettext("set your admin user and password")."</a>.</p>";
+				echo "<p>".gettext("You need to <a href=\"admin-options.php\">set your admin user and password</a>")."</p>";
 			} else {
-				echo "<p>".gettext("You can now")." <a href=\"../\">".gettext("View your gallery")."</a>".gettext(", or")." <a href=\"admin.php\">".gettext("administrate.")."</a></p>";
+				echo "<p>".gettext("You can now  <a href=\"../\">View your gallery</a>, or <a href=\"admin.php\">administrate.")."</a></p>";
 			}
 		}
 
 	} else if (db_connect()) {
 		echo "<h3>$dbmsg</h3>";
-		echo "<p>".gettext("We are all set to")." ";
+		echo "<p>";
 		$db_list = '';
 		$create = array();
 		foreach ($expected_tables as $table) {
@@ -1330,12 +1355,7 @@ if (file_exists("zp-config.php")) {
 			}
 		}
 		if (($nc = count($create)) > 0) {
-			if ($nc > 1) {
-			  echo gettext("create the database tables");
-			} else {
-			  echo gettext("create the database table");
-			}
-			echo ": $db_list ";
+			printf(gettext("Database tables to create: %s"), $db_list);
 		}
 		$db_list = '';
 		$update = array();
@@ -1347,10 +1367,8 @@ if (file_exists("zp-config.php")) {
 			}
 		}
 		if (($nu = count($update)) > 0) {
-			if ($nc > 0) { echo "and "; }
-			echo gettext("update the database table");
-			if ($nu > 1) { echo "s"; }
-			echo ": $db_list";
+			if ($nc > 0) { echo "<br />"; }
+			printf(gettext("Database tables to update: %s"), $db_list);
 		}
 		echo ".</p>";
 		$task = '';

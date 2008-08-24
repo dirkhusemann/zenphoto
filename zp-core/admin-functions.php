@@ -833,12 +833,13 @@ function printAlbumEditForm($index, $album) {
 	echo sprintf(gettext("Hit counter: %u"), $hc) . " <input type=\"checkbox\" name=\"reset_hitcounter\"> Reset";
 	$tv = $album->get('total_value');
 	$tc = $album->get('total_votes');
-	echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.gettext("Rating:");
+	echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 	if ($tc > 0) {
 		$hc = $tv/$tc;
-		echo " <strong>$hc</strong> <label for=\"".$prefix."reset_rating\"><input type=\"checkbox\" id=\"".$prefix."reset_rating\" name=\"".$prefix."reset_rating\" value=1> ".gettext("Reset")."</label> ";
+		printf(gettext('Rating: <strong>%u</strong>'), $hc);
+		echo "<label for=\"".$prefix."reset_rating\"><input type=\"checkbox\" id=\"".$prefix."reset_rating\" name=\"".$prefix."reset_rating\" value=1> ".gettext("Reset")."</label> ";
 	} else {
-		echo ' '.gettext("Unrated");
+		echo gettext("Rating: Unrated");
 	}
 	echo "</td>";
 	echo '</tr>';
@@ -1277,7 +1278,11 @@ function printAlbumEditRow($album) {
 	} else {
 		$ci = count($album->getImages());
 		if ($ci > 0) {
-			if ($ci > 1) 	$si = $ci.' '.gettext('images'); else $si = '1 '.gettext('image');
+			if ($ci > 1) {
+				$si = sprintf(gettext('%u images'),$ci); 
+			}	else {
+				$si = gettext('1 image');
+			}
 		} else {
 			$si = gettext('no images');
 		}
@@ -1286,7 +1291,11 @@ function printAlbumEditRow($album) {
 		}
 		$ca = count($album->getSubalbums());
 		if ($ca > 0) {
-			if ($ca > 1) $sa = $ca . ' ' . gettext("album");  else $sa = '1 '.gettext("album");
+			if ($ca > 1) {
+				$sa = sprintf(gettext("%u albums"), $ca);  
+			} else {
+				$sa = gettext("1 album");
+			}
 		} else {
 			$sa = '&nbsp;';
 		}

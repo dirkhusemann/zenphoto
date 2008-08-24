@@ -20,11 +20,11 @@ function imageError($errormessage, $errorimg='err-imagegeneral.gif') {
 	global $newfilename, $album, $image;
 	$debug = isset($_GET['debug']);
 	if ($debug) {
-		echo('<strong>'.gettext('Zenphoto Image Processing Error:').'</strong> ' . $errormessage
-		. '<br /><br />'.gettext('Request URI:').' [ <code>' . sanitize($_SERVER['REQUEST_URI'], 3) . '</code> ]'
-		. '<br />PHP_SELF:    [ <code>' . sanitize($_SERVER['PHP_SELF'], 3) . '</code> ]'
-		. (empty($newfilename) ? '' : '<br />'.gettext('Cache:').' [<code> ' . substr(CACHEFOLDER, 0, -1) . sanitize($newfilename, 3) . '</code>]')
-		. (empty($image) || empty($album) ? '' : ' <br />'.gettext('Image:').' [<code> '.sanitize($album.'/'.$image, 3).' </code>]<br />'));
+		echo('<strong>'.sprintf(gettext('Zenphoto Image Processing Error: %s'), $errormessage).'</strong>'
+		. '<br /><br />'.sprintf(gettext('Request URI: [ <code>%s</code> ]'), sanitize($_SERVER['REQUEST_URI'], 3))
+		. '<br />PHP_SELF: [ <code>' . sanitize($_SERVER['PHP_SELF'], 3) . '</code> ]'
+		. (empty($newfilename) ? '' : '<br />'.sprintf(gettext('Cache: [<code>%s</code>]'), substr(CACHEFOLDER, 0, -1) . sanitize($newfilename, 3)).' ')
+		. (empty($image) || empty($album) ? '' : ' <br />'.sprintf(gettext('Image: [<code>%s</code>]'),sanitize($album.'/'.$image, 3)).' <br />'));
 	} else {
 		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/images/' . $errorimg);
 		exit();
@@ -114,7 +114,7 @@ function get_image($imgfile) {
 function unsharp_mask($img, $amount, $radius, $threshold) {
 	/*
 	 Unsharp Mask for PHP - version 2.0
-	 Unsharp mask algorithm by Torstein Hønsi 2003-06.
+	 Unsharp mask algorithm by Torstein HÃ¸nsi 2003-06.
 	 Please leave this notice.
 	 */
 

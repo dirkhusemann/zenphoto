@@ -178,7 +178,7 @@ function zp_handle_comment() {
 	$comment_error = 0;
 	$cookie = zp_getCookie('zenphoto');
 	if (isset($_POST['comment'])) {
-		if ((in_context(ZP_ALBUM) OR $zenpage_news_context OR $zenpage_pages_context) && isset($_POST['name']) && isset($_POST['email']) && isset($_POST['comment'])) {
+		if ((in_context(ZP_ALBUM) || $zenpage_news_context || $zenpage_pages_context)) {
 			$p_name = sanitize($_POST['name'],3);
 			if (isset($_POST['email'])) {
 				$p_email = sanitize($_POST['email'], 3);

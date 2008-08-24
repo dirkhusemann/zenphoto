@@ -1,12 +1,12 @@
 <?php
 
 /* SQL Counting Functions */
-function show_subalbum_count() {
+function get_subalbum_count() {
 	$sql = "SELECT COUNT(id) FROM ". prefix("albums") ." WHERE parentid IS NOT NULL";
 	if (!zp_loggedin()) {$sql .= " AND `show` = 1"; }  /* exclude the unpublished albums */
 	$result = query($sql);
 	$count = mysql_result($result, 0);
-	echo $count;
+	return $count;
 }
 
 function show_sub_count_index() {
@@ -107,20 +107,30 @@ function printThemeInfo() {
 	global $themeColor, $themeResult, $_noFlash;
 	if ($themeColor == 'effervescence') {
 		$themeColor = '';
-	} else {
-		$themeColor = ": '$themeColor'";
 	}
-	if (!$themeResult) { $themeColor .= ' ' . gettext("(not found)"); }
 	$personality = getOption('Theme_personality');
-	if ($personality != 'Image page') {
-		if (($personality == 'Simpleviewer') && (!getOption('mod_rewrite') || $_noFlash)) {
-			$personality = "<strike>$personality</strike>";
-		}
-		$personality = "+$personality$themeColor";
-	} else {
-		$personality = $themeColor;
+	if ($personality == 'Image page') {
+		$personality = '';
+	} else if (($personality == 'Simpleviewer') && (!getOption('mod_rewrite') || $_noFlash)) {
+		$personality = "<strike>$personality</strike>";
 	}
-	echo "<p><small>Effervescence$personality</small></p>";
+	if (empty($themeColor) && empty($personality)) {
+		echo '<p><small>Effervescence</small></p>';
+	} else if (empty($themeColor)) {
+		if ($themeResult) {
+			echo '<p><small>'.sprintf(gettext('Effervescence %s'),$personality).'</small></p>';
+		} else {
+			echo '<p><small>'.sprintf(gettext('Effervescence %s (not found)'),$personality).'</small></p>';
+		}
+	} else if (empty($personality)) {
+		echo '<p><small>'.sprintf(gettext('Effervescence %s'),$themeColor).'</small></p>';
+	} else {
+		if ($themeResult) {
+			echo '<p><small>'.sprintf(gettext('Effervescence %1$s %2$s'),$themeColor, $personality).'</small></p>';
+		} else {
+			echo '<p><small>'.sprintf(gettext('Effervescence %1$s %2$s (not found)'),$themeColor, $personality).'</small></p>';
+		}
+	}
 }
 
 function printLinkWithQuery($url, $query, $text) {

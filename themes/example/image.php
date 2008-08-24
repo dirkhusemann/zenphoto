@@ -66,7 +66,20 @@
 
 				<?php if (getOption('Allow_comments')) { ?>
 				<div id="comments">
-					<div class="commentcount"><?php $num = getCommentCount(); echo ($num == 0) ? gettext("No comments") : (($num == 1) ? gettext("<strong>One</strong> comment") : "<strong>$num</strong> ".gettext("comments on this image:")); ?></div>
+					<div class="commentcount">
+					<?php 
+					$num = getCommentCount(); 
+					switch ($num) {
+						case 0:
+							echo gettext('<h3>No Comments</h3>');
+							break;
+						case 1:
+							echo gettext('<h3>1 Comment</h3>');
+							break;
+						default:
+							printf(gettext('<h3>%u Comments</h3>'), $num);
+					}
+					?></div>
 
 						<?php while (next_comment()):  ?>
 						<div class="comment">
