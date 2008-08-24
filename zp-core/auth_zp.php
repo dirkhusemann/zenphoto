@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * processes the authorization (or login) of admin users
  * @package admin
@@ -59,7 +59,7 @@ if (!isset($_POST['login'])) {
 				if (empty($post_user)) {
 					$requestor = '';
 				} else {
-					$requestor = sprintf(gettext("from a user who tried to log in as %s"),$post_user); 
+					$requestor = sprintf(gettext("from a user who tried to log in as %s"),$post_user);
 				}
 				$admins = getAdministrators();
 				$user = array_shift($admins);
@@ -109,6 +109,5 @@ function zp_loggedin($rights=ALL_RIGHTS) {
 	global $_zp_loggedin;
 	return $_zp_loggedin & $rights;
 }
-
 
 ?>
