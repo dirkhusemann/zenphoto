@@ -90,15 +90,20 @@
 						case 'Recent images':
 							if (function_exists('getImageStatistic')) {
 								echo '<h2>'.gettext('Recent images').'</h2>';
-								$images = getImageStatistic(6, "latest");
+								$images = getImageStatistic(12, "latest");
+								$c = 0;
 								foreach ($images as $image) {
-									echo "<li><table><tr><td>\n";
-									$imageURL = htmlspecialchars(getURL($image));
-									echo '<a href="'.$imageURL.'" title="'.gettext("View image:").' '.
-									html_encode($image->getTitle()) . '"><img src="' .
-									htmlspecialchars($image->getCustomImage(null, 44, 33, null, null, null, null, true)) .
+									if (is_valid_image($image->name)) {
+										if ($c++ < 6) {
+											echo "<li><table><tr><td>\n";
+											$imageURL = htmlspecialchars(getURL($image));
+											echo '<a href="'.$imageURL.'" title="'.gettext("View image:").' '.
+											html_encode($image->getTitle()) . '"><img src="' .
+											htmlspecialchars($image->getCustomImage(null, 44, 33, null, null, null, null, true)) .
 																		'" width="44" height="33" alt="' . html_encode($image->getTitle()) . "\"/></a>\n";
-									echo "</td></tr></table></li>\n";
+											echo "</td></tr></table></li>\n";
+										}
+									}
 								}
 								break;
 							}
