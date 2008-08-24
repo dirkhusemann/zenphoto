@@ -76,7 +76,7 @@ echo "\n<body>";
 			$count = $count + loadAlbum($album);
 		}
 	}
-	echo "\n" . "<br/>".spintf(gettext("Finished: Total of %u images."). $count);
+	echo "\n" . "<br/>".sprintf(gettext("Finished: Total of %u images."), $count);
 	
 	if (isset($_GET['return'])) $ret = $_GET['return'];
 	if (isset($_POST['return'])) $ret = $_POST['return'];
