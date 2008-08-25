@@ -45,7 +45,6 @@ function printLanguageSelector($class='') {
 	echo "\n<div$class>\n";
 	echo '<form action="#" method="post">'."\n";
 	echo '<input type="hidden" name="oldlocale" value="'.getOption('locale').'" />';
-	echo gettext("Select a language:").' ';
 	echo '<select id="dynamic-locale" name="dynamic-locale" onchange="this.form.submit()">'."\n";
 	generateLanguageOptionList();
 	echo "</select>\n";

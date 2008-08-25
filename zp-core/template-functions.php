@@ -3314,7 +3314,12 @@ function zen_search_script() {
  * @param string $buttonSource optional path to the image for the button
  * @since 1.1.3
  */
-function printSearchForm($prevtext=NULL, $id='search', $buttonSource='') {
+function printSearchForm($prevtext=NULL, $id='search', $buttonSource='',$buttontext='') {
+	if(empty($buttontext)) {
+		$buttontext = gettext("Search");
+	} else {
+		$buttontext = sanitize($buttontext);
+	}
 	if (checkforPassword(true)) { return; }
 	$zf = WEBPATH."/".ZENFOLDER;
 	$dataid = $id . '_data';
@@ -3332,7 +3337,7 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource='') {
 	if (empty($buttonSource)) {
 		$type = 'submit';
 	} else {
-		$buttonSource = 'src="' . $buttonSource . '" alt="'.gettext("search").'"';
+		$buttonSource = 'src="' . $buttonSource . '" alt="'.$buttontext.'"';
 		$type = 'image';
 	}
 
@@ -3340,7 +3345,7 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource='') {
 	if (getOption('mod_rewrite')) { $searchurl = '/page/search/'; } else { $searchurl = "/index.php?p=search"; }
 	echo "\n<form method=\"post\" action=\"".WEBPATH.$searchurl."\" id=\"search_form\">";
 	echo "\n$prevtext<input type=\"text\" name=\"words\" value=".$searchwords." id=\"search_input\" size=\"10\" />";
-	echo "\n<input type=\"$type\" value=\"".gettext("Search")."\" class=\"pushbutton\" id=\"search_submit\" $buttonSource />";
+	echo "\n<input type=\"$type\" value=\"".$buttontext."\" class=\"pushbutton\" id=\"search_submit\" $buttonSource />";
 
 	if ($multiple) { //then there is some choice possible
 		echo "\n<a class=\"showmenu\" onclick=\"javascript: javascript:showMenu();\" title=\"".gettext("Show fields")." \">";
