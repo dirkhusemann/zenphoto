@@ -478,10 +478,14 @@ class SearchEngine
 						break;
 							default:
 								$lookfor = strtolower($singlesearchstring);
-								$objectid = '';
-								foreach ($taglist as $key => $value) {
-									if (preg_match('/'.$lookfor.'/', $key)) {
-										$objectid = $value;
+								$objectid = NULL;
+								foreach ($taglist as $key => $objlist) {
+									if (preg_match('%'.$lookfor.'%', $key)) {
+										if (is_array($objectid)) {
+											$objectid = array_merge($objectid, $objlist);
+										} else {
+											$objectid = $objlist;
+										}
 									}
 								}
 								switch ($op) {
