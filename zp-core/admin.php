@@ -1093,8 +1093,17 @@ foreach ($comments as $comment) {
 
 <div class="box" id="overview-stats">
 <h2 class="boxtitle"><?php echo gettext("Gallery Maintenance"); ?></h2>
-<p><?php echo gettext("Your database is"); ?>: '<strong><?php echo getOption('mysql_database'); ?>'</strong><br />
-<?php echo gettext("Tables are prefixed by"); ?> <strong>'<?php echo getOption('mysql_prefix'); ?>'</strong></p>
+<p>
+<?php echo gettext("Your database is"); ?>: '<strong><?php echo getOption('mysql_database'); ?>'</strong><br />
+<?php echo gettext("Tables are prefixed by"); ?> <strong>'<?php echo getOption('mysql_prefix'); ?>'</strong>
+</p>
+<p>
+<br />
+<?php 
+printf(gettext('PHP has <strong>%u</strong> megabytes of memory allocated.'),ini_get('memory_limit'));
+?>
+</p>
+<br />
 <?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?>
 <form name="prune_gallery" action="admin.php?prune=true"><input
 		type="hidden" name="prune" value="true">
