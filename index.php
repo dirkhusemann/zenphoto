@@ -102,7 +102,7 @@ if ($a != 'full-image.php') {
 	} else {
 		$official = 'SVN';
 	}
-	echo "\n<!-- zenphoto version " . ZENPHOTO_VERSION . " [" . ZENPHOTO_RELEASE . "] ($official) Theme: " . $theme . " (" . $a . ") -->";
+	echo "\n<!-- zenphoto version " . ZENPHOTO_VERSION . " [" . ZENPHOTO_RELEASE . "] ($official) Theme: " . $theme . " (" . $a . ") { memory: ".INI_GET('memory_limit')." } -->";
 }
 if(!is_null($_zp_HTML_cache)) { $_zp_HTML_cache->endHTMLCache(); }
 

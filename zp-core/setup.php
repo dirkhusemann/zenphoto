@@ -369,8 +369,12 @@ if (!$checked) {
 	function setup_glob($pattern, $flags=0) {
 		$split=explode('/',$pattern);
 		$match=array_pop($split);
-		$path=implode('/',$split);
-		if (empty($path)) { $path = '.'; };
+		$path_return = $path = implode('/',$split);
+		if (empty($path)) {
+			$path = '.'; 
+		} else {
+			$path_return = $path_return . '/';
+		}
 
 		if (($dir=opendir($path))!==false) {
 			$glob=array();
@@ -378,7 +382,7 @@ if (!$checked) {
 				if (fnmatch($match,$file)) {
 					if ((is_dir("$path/$file"))||(!($flags&GLOB_ONLYDIR))) {
 						if ($flags&GLOB_MARK) $file.='/';
-						$glob[]=$path.'/'.$file;
+						$glob[] = $path_return.$file;
 					}
 				}
 			}
