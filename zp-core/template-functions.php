@@ -3319,7 +3319,7 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource='') {
 	if (checkforPassword(true)) { return; }
 	$zf = WEBPATH."/".ZENFOLDER;
 	$dataid = $id . '_data';
-	$searchwords = (isset($_POST['words']) ? $_REQUEST['words'] : '');
+	$searchwords = (isset($_POST['words']) ? html_encode(sanitize($_REQUEST['words'],0),false) : '');
 	if (strpos($searchwords, '"') === false) {  // do our best
 		$searchwords = '"'.$searchwords.'"';
 	} else {
