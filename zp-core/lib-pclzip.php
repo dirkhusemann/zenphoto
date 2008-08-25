@@ -1848,7 +1848,7 @@
 
 					// ----- Open the source file
 					if (($v_file = @fopen($p_filename, "rb")) == 0) {
-						PclZip::privErrorLog(PCLZIP_ERR_READ_OPEN_FAIL, gettext("Unable to open file %s in binary read mode"),$p_filename));
+						PclZip::privErrorLog(PCLZIP_ERR_READ_OPEN_FAIL, gettext("Unable to open file %s in binary read mode"),$p_filename);
 						//--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, PclZip::errorCode(), PclZip::errorInfo());
 						return PclZip::errorCode();
 					}
@@ -2590,7 +2590,7 @@
 							$this->privSwapBackMagicQuotes();
 
 							PclZip::privErrorLog(PCLZIP_ERR_UNSUPPORTED_ENCRYPTION,
-			 											sprintf(gettext("Unsupported encryption for filename %s"),$v_header['stored_filename']);
+			 											sprintf(gettext("Unsupported encryption for filename %s"),$v_header['stored_filename']));
 
 							//--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, PclZip::errorCode(), PclZip::errorInfo());
 							return PclZip::errorCode();
@@ -2893,7 +2893,7 @@
 						//--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 2, "PCLZIP_OPT_STOP_ON_ERROR is selected, extraction will be stopped");
 
 						PclZip::privErrorLog(PCLZIP_ERR_ALREADY_A_DIRECTORY,
-			 										gettext("Filename %s is already used by an existing directory"),$p_entry['filename']));
+			 										gettext("Filename %s is already used by an existing directory"),$p_entry['filename']);
 
 						//--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, PclZip::errorCode(), PclZip::errorInfo());
 						return PclZip::errorCode();

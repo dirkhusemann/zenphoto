@@ -32,7 +32,7 @@ if (isset($_GET['action'])) {
 		$filelist = safe_glob('*'.'php');
 		chdir($curdir);
 		foreach ($filelist as $extension) {
-			$opt = 'zp_plugin_'.substr($extension, 0, strlen($extension)-4);
+			$opt = 'zp_plugin_'.substr($extension, 0, -4);
 			setBoolOption($opt, isset($_POST[$opt]));
 		}
 		$saved = true;
@@ -143,7 +143,7 @@ foreach ($filelist as $extension) {
 		if (!($parserr & 2)) {
 			echo '<strong>'.gettext("Author").'</strong>: ';
 		}
-			echo $plugin_author;
+		echo $plugin_author;
 	}
 	echo '</td>';
 	echo "</tr>\n";
