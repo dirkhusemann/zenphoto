@@ -2914,7 +2914,6 @@ function printTags($option='links',$preText=NULL,$class='taglist',$separator=', 
 
 			echo "</ul>";
 		}
-		echo "<br clear=\"all\" />\n";
 	}
 }
 
