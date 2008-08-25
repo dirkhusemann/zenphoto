@@ -28,7 +28,7 @@ $obj = '';
 // If the 'p' parameter starts with * (star) then include the file from the zp-core folder.
 if (isset($_GET['p'])) {
 	$theme = setupTheme();
-	$page = str_replace(array('/','\\','.'), '', $_GET['p']);
+	$page = str_replace(array('/','\\','.'), '', sanitize($_GET['p']));
 	if (substr($page, 0, 1) == "*") {
 		$_zp_gallery_page = basename($obj = ZENFOLDER."/".substr($page, 1) . ".php");
 	} else {
@@ -47,7 +47,7 @@ if (isset($_GET['p'])) {
 // Display an Album page.
 } else if (in_context(ZP_ALBUM)) {
 	if(isset($_GET['zipfile']) && is_dir(realpath(getAlbumFolder() . $_GET['album']))){
-		createAlbumZip($_GET['album']);
+		createAlbumZip(sanitize($_GET['album']));
 	} else {
 		if ($_zp_current_album->isDynamic()) {
 			$search = $_zp_current_album->getSearchEngine();
