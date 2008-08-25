@@ -337,7 +337,7 @@ class SearchEngine
 			}
 		}
 		$sql .= $join;
-
+		
 		if (!empty($searchdate)) {
 			if ($nrt > 1) { $sql = $sql." AND "; }
 			$nrt++;
@@ -415,11 +415,12 @@ class SearchEngine
 				case ')':
 					break;
 				default:
+					$targetfound = true;
 					$sql .= '`name` LIKE "%'.$singlesearchstring.'%" OR ';
 			}
 		}
 		$sql = substr($sql, 0, strlen($sql)-4).') ORDER BY t.`id`';
-		$objects = query_full_array($sql);
+		$objects = query_full_array($sql, true);
 		if (is_array($objects)) {
 			$tagid = '';
 			$taglist = array();
