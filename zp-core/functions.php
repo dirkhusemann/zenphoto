@@ -116,9 +116,13 @@ setupCurrentLocale();
  * @return string
  */
 if (!function_exists("htmlspecialchars_decode")) {
-    function htmlspecialchars_decode($string, $quote_style = ENT_COMPAT) {
-        return strtr($string, array_flip(get_html_translation_table(HTML_SPECIALCHARS, $quote_style)));
-    }
+	function htmlspecialchars_decode($string, $quote_style = ENT_COMPAT) {
+		$translation_table = get_html_translation_table(HTML_SPECIALCHARS, $quote_style);
+		if($translation_table["'"] != '&#039;') { # some versions of PHP match single quotes to &#39;
+			$translation_table["'"] = '&#039;';
+		}
+		return (strtr($string, array_flip($translation_table)));
+	}
 }
 
 /**
@@ -1847,7 +1851,7 @@ function safe_glob($pattern, $flags=0) {
 	$match=array_pop($split);
 	$path_return = $path = implode('/',$split);
 	if (empty($path)) {
-		$path = '.'; 
+		$path = '.';
 	} else {
 		$path_return = $path_return . '/';
 	}
