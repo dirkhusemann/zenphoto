@@ -163,7 +163,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 						}
 					?>
 				<li>
-					<?php $annotate =  sprintf(gettext('View the Album: %s'),getBareAlbumTitle()).getImage_AlbumCount();?>
+					<?php $annotate = annotateAlbum(); ?>
 					<div class="imagethumb">
 					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo html_encode($annotate) ?>">
 					<?php printCustomAlbumThumbImage($annotate, null, 180, null, 180, 80); ?></a>
@@ -239,14 +239,15 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
  									<div class="image">
  									<div class="imagethumb">
  									<?php
+ 									$annotate = annotateImage();
  									if ($personality == 'Slimbox') {
  										echo "<a href=\"".htmlspecialchars(getCustomImageURL(550, null))."\"";
  										echo "rel=\"lightbox[".getAlbumTitle()."]\"\n";
  									} else {
  										echo '<a href="' . htmlspecialchars(getImageLinkURL()) . '"';
  									}
- 									echo " title=\"".GetBareImageTitle()."\">\n";
- 									printImageThumb(getImageTitle());
+ 									echo " title=\"".$annotate."\">\n";
+ 									printImageThumb($annotate);
  									echo "</a>"
 									?>
 									</div>

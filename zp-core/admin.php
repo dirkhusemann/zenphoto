@@ -181,7 +181,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 
 
 									$image->setDateTime(strip($_POST["$i-date"]));
-									$image->setShow(strip($_POST["$i-Visible"]));
+									$image->setShow(isset($_POST["$i-Visible"]));
 									$image->setCommentsAllowed(strip($_POST["$i-allowcomments"]));
 									if (isset($_POST["$i-reset_hitcounter"])) {
 										$image->set('hitcounter', 0);

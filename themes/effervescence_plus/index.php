@@ -52,7 +52,7 @@
 				}
 			?>
 			<li>
-				<?php $annotate =  sprintf(gettext('View the Album: %s'),getBareAlbumTitle()).getImage_AlbumCount();?>
+				<?php $annotate =  annotateAlbum();	?>
 				<div class="imagethumb">
 				<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo $annotate; ?>">
 						<?php printCustomAlbumThumbImage($annotate, null, 180, null, 180, 80); ?>

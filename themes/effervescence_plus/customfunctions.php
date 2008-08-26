@@ -152,4 +152,27 @@ function printLogo() {
 	}
 }
 
+function annotateAlbum() {
+	global $_zp_current_album;
+	$tagit = '';
+	if (!$_zp_current_album->getShow()) {
+		$tagit = "\n".gettext('The album is not published.');
+	}
+	$pwd = $_zp_current_album->getPassword();
+	if (zp_loggedin() && !empty($pwd)) {
+		$tagit = "\n".gettext('The album is password protected.');
+	}
+	return  sprintf(gettext('View the Album: %s'),getBareAlbumTitle()).getImage_AlbumCount().$tagit;
+}
+
+function annotateImage() {
+	global $_zp_current_image;
+	if (!$_zp_current_image->getShow()) {
+		$tagit = "\n".gettext('The image is marked not visible.');
+	} else {
+		$tagit = '';
+	}
+	return  sprintf(gettext('View the image: %s'),GetBareImageTitle()).$tagit;
+}
+
 ?>
