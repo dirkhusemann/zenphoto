@@ -20,7 +20,7 @@ addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.'/plug
 require_once('rating/functions-rating.php');
 
 class rating {
-	
+
 	function staticCache() {
 		setOptionDefault('clear_rating', '');
 	}
@@ -34,7 +34,7 @@ class rating {
 	function handleOption($option, $currentValue) {
 		if($option=="clear_rating") {
 			echo "<div class='buttons'>";
-			echo "<a href='plugins/rating.php?clear_rating&height=100&width=250' class='thickbox' title='Clear ratings'><img src='images/burst.png' alt='' />".gettext("Clear ratings")."</a>";
+			echo "<a href='plugins/rating.php?clear_rating&height=100&width=250' class='thickbox' title='".gettext("Clear ratings")."'><img src='images/burst.png' alt='' />".gettext("Clear ratings")."</a>";
 			echo "</div>";
 		}
 	}
@@ -210,7 +210,7 @@ if (isset($_GET['clear_rating'])) {
 	echo "</head>";
 	echo "<body>";
 	query('UPDATE '.prefix('images').' SET total_value = 0, total_votes = 0, used_ips = "" ');
-	query('UPDATE '.prefix('albums').' SET total_value = 0, total_votes = 0, used_ips = "" ');	
+	query('UPDATE '.prefix('albums').' SET total_value = 0, total_votes = 0, used_ips = "" ');
 	echo '<div style="margin-top: 20px; text-align: left;">';
 	echo "<h2><img src='images/pass.png' style='position: relative; top: 3px; margin-right: 5px' />".gettext("Ratings have been reset!")."</h2>";
 	echo "<div class='buttons'><a href='#' onclick='self.parent.tb_remove();'>".gettext('Close')."</a></div>";
