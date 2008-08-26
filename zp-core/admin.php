@@ -1100,7 +1100,7 @@ foreach ($comments as $comment) {
 <p>
 <br />
 <?php 
-printf(gettext('PHP has <strong>%u</strong> megabytes of memory allocated.'),ini_get('memory_limit'));
+printf(gettext('PHP has <strong>%s</strong> of memory allocated.'),ini_get('memory_limit'));
 ?>
 </p>
 <br />
