@@ -390,7 +390,7 @@ if (!$checked) {
 		$match=array_pop($split);
 		$path_return = $path = implode('/',$split);
 		if (empty($path)) {
-			$path = '.'; 
+			$path = '.';
 		} else {
 			$path_return = $path_return . '/';
 		}
@@ -438,14 +438,12 @@ if (!$checked) {
 	}
 	checkMark($safe, gettext("PHP Safe Mode"), ' '.gettext("[is set]"), gettext("Zenphoto functionality is reduced when PHP <code>safe mode</code> restrictions are in effect."));
 
-	/* Disabled until post 1.2 release.
 	if (get_magic_quotes_gpc()) {
 		$magic_quotes_disabled = -1;
 	} else {
 		$magic_quotes_disabled = true;
 	}
-	checkMark($magic_quotes_disabled, gettext("PHP magic_quotes_gpc"), ' '.gettext("[is enabled]"), gettext("For better performance, turn of <code>magic_quotes_gpc</code> in php.ini, .htaccess or apache config."));
-	*/
+	checkMark($magic_quotes_disabled, gettext("PHP magic_quotes_gpc"), ' '.gettext("[is enabled]"), gettext("You should consider disabling <code>magic_quotes_gpc</code>. For more information <a href=\"http://www.zenphoto.org/2008/08/troubleshooting-zenphoto/#25\" target=\"_new\">click here</a>."));
 
 	/* Check for GD and JPEG support. */
 	$gd = extension_loaded('gd');
@@ -458,8 +456,8 @@ if (!$checked) {
 		if (!($imgtypes & IMG_PNG)) { $missing[] = 'PNG'; }
 		if (count($missing) > 0) {
 			if (count($missing) < 3) {
-				if (count($missing) == 2) { 
-					$imgmissing =sprintf(gettext('Your PHP GD does not support %1$s, or %2$s'),$missing[0],$missing[1]); 
+				if (count($missing) == 2) {
+					$imgmissing =sprintf(gettext('Your PHP GD does not support %1$s, or %2$s'),$missing[0],$missing[1]);
 				} else {
 					$imgmissing = sprintf(gettext('Your PHP GD does not support %1$s'),$missing[0]);
 				}
@@ -598,17 +596,17 @@ if ($debug) {
 			gettext("Make sure the database has been created, and the <code>user</code> has access to it.").' ' .
 			gettext("Also check the <code>MySQL host</code>.")) && $good;
 
-		$dbn = "`".$_zp_conf_vars['mysql_database']. "`.*";	
+		$dbn = "`".$_zp_conf_vars['mysql_database']. "`.*";
 		if (versioncheck('4.2.1', $mysqlv)) {
 			$sql = "SHOW GRANTS FOR CURRENT_USER;";
 		} else {
-			$sql = "SHOW GRANTS FOR " . $_zp_conf_vars['mysql_user'].";";			
+			$sql = "SHOW GRANTS FOR " . $_zp_conf_vars['mysql_user'].";";
 		}
-		$result = mysql_query($sql, $mysql_connection);	
+		$result = mysql_query($sql, $mysql_connection);
 		if (!$result) {
 			$result = mysql_query("SHOW GRANTS;", $mysql_connection);
 		}
-		
+
 		$access = -1;
 		$rightsfound = 'unknown';
 		$rightsneeded = array(gettext('Select')=>'SELECT',gettext('Create')=>'CREATE',gettext('Drop')=>'DROP',gettext('Insert')=>'INSERT',
@@ -670,7 +668,7 @@ if ($debug) {
  											"<br/>".gettext("<strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables."));
 
 	}
-	
+
 	if (defined("RELEASE")) {
 		$rootfiles = array('../index.php', '../rss.php', '../rss-comments.php');
 		$zp_corefiles = setup_glob('../'.ZENFOLDER.'/*.php');
@@ -787,8 +785,8 @@ if ($debug) {
 		$d = dirname(dirname($_SERVER['SCRIPT_NAME']));
 		$i = strpos($htu, 'REWRITEBASE', $j);
 		if ($i === false) {
-			$base = false;	
-			$b = gettext("<em>.htaccess</em> RewriteBase is <em>missing</em>");		
+			$base = false;
+			$b = gettext("<em>.htaccess</em> RewriteBase is <em>missing</em>");
 			$i = $j+1;
 		} else {
 			$j = strpos($htu, "\n", $i+11);
@@ -840,9 +838,9 @@ if ($debug) {
 	$good = folderCheck('albums', $albumfolder, $_zp_conf_vars['album_folder_class']) && $good;
 
 	$good = folderCheck('cache', dirname(dirname(__FILE__)) . "/cache/", 'std') && $good;
-	
+
 	$good = checkmark(file_exists($en_US), '<em>locale</em> '.gettext('folders'), ' ['.gettext('Are not complete').']', gettext('Be sure you have uploaded the complete Zenphoto package. You must have at least the <em>en_US</em> folder.')) && $good;
-	
+
 	if ($connection) { mysql_close($connection); }
 	if ($good) {
 		$dbmsg = "";

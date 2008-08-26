@@ -110,7 +110,7 @@ setupCurrentLocale();
 if (!function_exists("htmlspecialchars_decode")) {
 	function htmlspecialchars_decode($string, $quote_style = ENT_COMPAT) {
 		$translation_table = get_html_translation_table(HTML_SPECIALCHARS, $quote_style);
-		if($translation_table["'"] != '&#039;') { # some versions of PHP match single quotes to &#39;
+		if($translation_table["'"] != '&#039;') {
 			$translation_table["'"] = '&#039;';
 		}
 		return (strtr($string, array_flip($translation_table)));
