@@ -2751,7 +2751,7 @@ function parse_size($size) {
     'g' => 1073741824, // 1024 * 1024 * 1024
   );
   if (preg_match('/([0-9]+)\s*(k|m|g)?(b?(ytes?)?)/i', $size, $match)) {
-    return $match[1] * $suffixes[drupal_strtolower($match[2])];
+    return $match[1] * $suffixes[strtolower($match[2])];
   }
 }
 
