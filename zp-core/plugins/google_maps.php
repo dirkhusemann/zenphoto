@@ -15,10 +15,12 @@ $plugin_author = 'Dustin Brewer (mankind), Stephen Billard (sbillard)';
 $plugin_version = '1.2.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---google_maps.php.html";
 $option_interface = new google_mapsOptions();
+
+$mapkey = getOption('gmaps_apikey');
+if (isset($_zp_gallery_page) && $_zp_gallery_page != 'index.php' && !empty($mapkey)) {
 // NOTE: This is copied from the printGoogleJS function in the phoogle class.
 //       If you update the phoogle class be sure this has not changed.
-if (isset($_zp_gallery_page) && $_zp_gallery_page != 'index.php') {
-	addPluginScript("\n<script src=\"http://maps.google.com/maps?file=api&v=2&key=".getOption('gmaps_apikey')."\" type=\"text/javascript\"></script>\n");
+	addPluginScript("\n<script src=\"http://maps.google.com/maps?file=api&v=2&key=".$mapkey."\" type=\"text/javascript\"></script>\n");
 }
 /**
  * Plugin option handling class

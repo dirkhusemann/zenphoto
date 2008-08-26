@@ -25,9 +25,9 @@ class Gallery {
 
 		if (!is_dir($this->albumdir) || !is_readable($this->albumdir)) {
 			if (!is_dir($this->albumdir)) {
-				$msg .= sprintf(gettext('Error: The \'albums\' directory (%s) cannot be found.'),$this->albumdir);
+				$msg = sprintf(gettext('Error: The \'albums\' directory (%s) cannot be found.'),$this->albumdir);
 			} else {
-				$msg .= sprintf(gettext('Error: The \'albums\' directory (%s) is not readable.'),$this->albumdir);
+				$msg = sprintf(gettext('Error: The \'albums\' directory (%s) is not readable.'),$this->albumdir);
 			}
 			die($msg);
 		}

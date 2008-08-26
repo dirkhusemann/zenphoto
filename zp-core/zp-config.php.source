@@ -41,11 +41,16 @@ $conf['mysql_prefix'] = "zp_";
 ////////////////////////////////////////////////////////////////////////////////
 
 // location of album folder. 
-// change 'album_folder' to rename the album folder inside the zenphotos installation
-// change 'external_album_folder' to locate your album folder outside the zenphoto folders
+// 'album_folder' is the name of the folder for the zenphoto albums.
+// 'album_folder_class' determines how to interpret 'album_folder':
+//		'std'					--	the folder must be a simple name. It resides in the root of the zenphoto installation.
+//		'in_webpath'	--	the folder must be the full path of the album folder from the WEB root of the zenphoto installation.
+//		'external'		--	the folder must be a full server path to the album folder. Images within an external folder
+//											are not visible to web browsers, so certain features such as flash players cannot display them
 $conf['album_folder'] = '/albums/';
-$conf['external_album_folder'] = NULL;
+$conf['album_folder_class'] = 'std';
 
+// Server Protocol
 // Change this to "https" if you use an HTTPS server (a "https://..." url)
 // Otherwise you should leave it at "http"
 $conf['server_protocol'] = "http";

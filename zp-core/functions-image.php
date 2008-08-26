@@ -325,7 +325,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		}
 		if (!$upscale && $newh >= $h && $neww >= $w && !$crop) { // image is the same size or smaller than the request
 			if (!getOption('perform_watermark') && !$force_cache) { // no processing needed
-				if (is_null(getOption('external_album_folder'))) { // local album system, return the image directly
+				if (getOption('album_folder_class') != 'external') { // local album system, return the image directly
 					$image = substr(strrchr($imgfile, '/'), 1);
 					$album = substr($imgfile, strlen(getAlbumFolder()));
 					$album = substr($album, 0, strlen($album) - strlen($image) - 1);

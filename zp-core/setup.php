@@ -24,6 +24,11 @@ if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 if (!defined('PLUGIN_FOLDER')) { define('PLUGIN_FOLDER', '/plugins/'); }
 define('OFFSET_PATH', 2);
 
+$const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
+$const_webpath = str_replace("\\", '/', $const_webpath);
+if ($const_webpath == '/') $const_webpath = '';
+$serverpath = str_replace("\\", '/', dirname(dirname(__FILE__)));
+
 
 $en_US = dirname(__FILE__).'/locale/en_US/';
 if (!file_exists($en_US)) {
@@ -323,32 +328,46 @@ if (!$checked) {
 		setupLog($dsp);
 		return $check;
 	}
-	function folderCheck($which, $path, $external) {
-		if (!is_dir($path) && !$external) {
+	function folderCheck($which, $path, $class) {
+		global $const_webpath, $serverpath;
+		if (!is_dir($path) && $class == 'std') {
 			@mkdir($path, CHMOD_VALUE);
 		}
 		@chmod($path, CHMOD_VALUE);
 		$folder = basename($path);
 		if (empty($folder)) $folder = basename(basename($path));
-		if ($external) {
-			$append = $path;
-		} else {
-			$append = $folder;
+		switch ($class) {
+			case 'std':
+				$append = $folder;
+				break;
+			case 'in_webpath':
+				$serverpath = dirname(dirname(__FILE__));
+				if (empty($const_webpath)) {
+					$serverroot = $serverpath;
+				} else {
+					$serverroot = substr($serverpath, 0, strpos($serverpath, $const_webpath));
+				}
+				$append = substr($path, strlen($serverroot));
+				break;
+			case 'external':
+				$append = $path;
+				break;
 		}
 		$f = '';
 		if (!is_dir($path)) {
 			$e = '';
-			if ($external) {
+			if ($class != 'std') {
 				$sfx = ' '.sprintf(gettext("[<em>%s</em> does not exist]"),$append);
+				$folder = $append;
 			} else {
 				$sfx = ' '.sprintf(gettext("[<em>%s</em> does not exist and <strong>setup</strong> could not create it]"),$append);
 			}
-			$msg = " ".sprintf(gettext('You must create the folder %1$s <code>mkdir(%2$s, 0777)</code>.'),$folder,$path);
+			$msg = " ".sprintf(gettext('You must create the folder <em>%1$s</em><br /><code>mkdir(%2$s, 0777)</code>.'),$folder,$path);
 		} else if (!is_writable($path)) {
 			$sfx = ' '.sprintf(gettext('[<em>%s</em> is not writeable and <strong>setup</strong> could not make it so]'),$append);
 			$msg =  sprintf(gettext('Change the permissions on the <code>%1$s</code> folder to be writable by the server (<code>chmod 777 %2$s</code>)'),$folder,$append);
 		} else {
-			if (($folder != $which) || $external) {
+			if (($folder != $which) || $class != 'std') {
 				$f = " (<em>$append</em>)";
 			}
 			$msg = '';
@@ -796,13 +815,31 @@ if ($debug) {
 											"<br/>".sprintf(gettext("Either make the file writeable or set <code>RewriteBase</code> in your <code>.htaccess</code> file to <code>%s</code>."),$d)) && $good;
 	}
 
-	if (is_null($_zp_conf_vars['external_album_folder'])) {
-		$good = folderCheck('albums', dirname(dirname(__FILE__)) . $_zp_conf_vars['album_folder'], false) && $good;
+	if (isset($_zp_conf_vars['external_album_folder']) && !is_null($_zp_conf_vars['external_album_folder'])) {
+		checkmark(-1, 'albums', ' ['.gettext("<code>\$conf['album_folder']</code> is deprecated").']', gettext('You should update your zp-config.php file to conform to the current zp-config.php.example file.'));
+		$_zp_conf_vars['album_folder_class'] = 'external';
+		$albumfolder = $_zp_conf_vars['external_album_folder'];
 	} else {
-		$good = folderCheck('albums', $_zp_conf_vars['external_album_folder'], true) && $good;
+		if (!isset($_zp_conf_vars['album_folder_class'])) {
+			$_zp_conf_vars['album_folder_class'] = 'std';
+		}
+		$albumfolder = $_zp_conf_vars['album_folder'];
+		switch ($_zp_conf_vars['album_folder_class']) {
+			case 'std':
+				$albumfolder = dirname(dirname(__FILE__)) . $albumfolder;
+				break;
+			case 'in_webpath':
+				$root = dirname(dirname(__FILE__));
+				if (!empty($const_webpath)) {
+					$root = dirname($root);
+				}
+				$albumfolder = $root . $albumfolder;
+				break;
+		}
 	}
+	$good = folderCheck('albums', $albumfolder, $_zp_conf_vars['album_folder_class']) && $good;
 
-	$good = folderCheck('cache', dirname(dirname(__FILE__)) . "/cache/", false) && $good;
+	$good = folderCheck('cache', dirname(dirname(__FILE__)) . "/cache/", 'std') && $good;
 	
 	$good = checkmark(file_exists($en_US), '<em>locale</em> '.gettext('folders'), ' ['.gettext('Are not complete').']', gettext('Be sure you have uploaded the complete Zenphoto package. You must have at least the <em>en_US</em> folder.')) && $good;
 	

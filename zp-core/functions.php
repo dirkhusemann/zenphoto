@@ -81,14 +81,6 @@ $_zp_conf_vars['version'] = ZENPHOTO_VERSION;
 // the options array
 $_zp_options = NULL;
 
-/* album folder
- *  Name of the folder where albums are located.
- *  may be overridden by zp-config:
- *    Set conf['album_folder'] to the folder path that is located within the zenphoto folders.
- *      or
- *    Set conf['external_album_folder'] to an external folder path.
- *  An external folder path overrides one located within the zenphotos folders.
- */
 define('ALBUMFOLDER', '/albums/');
 if (!defined('PLUGIN_FOLDER')) { define('PLUGIN_FOLDER', '/plugins/'); }
 define("THEMEFOLDER", 'themes');
@@ -241,8 +233,8 @@ function setOptionDefault($key, $default) {
 	global $_zp_conf_vars, $_zp_options;
 	if (NULL == $_zp_options) { getOption('nil'); } // pre-load from the database
 	if (!array_key_exists($key, $_zp_options)) {
-		$sql = "INSERT INTO " . prefix('options') . " (`name`, `value`, `ownerid`) VALUES ('" . mysql_escape_string($key) . "', '".
-						mysql_escape_string($default) . "', 0);";
+		$sql = "INSERT INTO " . prefix('options') . " (`name`, `value`, `ownerid`) VALUES ('" . mysql_real_escape_string($key) . "', '".
+						mysql_real_escape_string($default) . "', 0);";
 		query($sql, true);
 		$_zp_options[$key] = $default;
 	}
@@ -1323,21 +1315,38 @@ function createAlbumZip($album){
  * @param string $root the base from whence the path dereives
  * @return sting
  */
-$_zp_xternal_album_folder = null;
 $_zp_album_folder = null;
 function getAlbumFolder($root=SERVERPATH) {
-	global $_zp_xternal_album_folder, $_zp_album_folder;
-	if (!is_null($_zp_album_folder)) return $root . $_zp_album_folder;
-	if ($_zp_xternal_album_folder != null) return $_zp_xternal_album_folder;
-
-	if (!is_null($_zp_xternal_album_folder = getOption('external_album_folder'))) {
-		if (substr($_zp_xternal_album_folder, -1) != '/') $_zp_xternal_album_folder .= '/';
-		return $_zp_xternal_album_folder;
-	} else {
-		if (is_null($_zp_album_folder = getOption('album_folder'))) {
-			$_zp_album_folder = ALBUMFOLDER;
+	global $_zp_album_folder, $_zp_conf_vars;
+	if (is_null($_zp_album_folder)) {
+		if (!isset($_zp_conf_vars['external_album_folder']) || is_null($_zp_conf_vars['external_album_folder'])) {
+			if (is_null($_zp_conf_vars['album_folder'])) {
+				$_zp_album_folder = ALBUMFOLDER;
+			} else {
+				$_zp_album_folder = $_zp_conf_vars['album_folder'];
+			}
+		} else {
+			$_zp_conf_vars['album_folder_class'] = 'external';
+			$_zp_album_folder = $_zp_conf_vars['external_album_folder'];
 		}
-		return $root . $_zp_album_folder;
+		if (substr($_zp_album_folder, -1) != '/') $_zp_album_folder .= '/';
+	}
+	if (!isset($_zp_conf_vars['album_folder_class'])) {
+		$_zp_conf_vars['album_folder_class'] = 'std';
+	}
+	switch ($_zp_conf_vars['album_folder_class']) {
+		case 'std':
+			return $root . $_zp_album_folder;
+		case 'in_webpath':
+			if (WEBPATH) { 			// strip off the WEBPATH
+				$root = dirname($root);
+				if ($root == '/') {
+					$root = '';
+				}
+			}
+			return $root . $_zp_album_folder;
+		case 'external':
+			return $_zp_album_folder;
 	}
 }
 

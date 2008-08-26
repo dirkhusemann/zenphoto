@@ -98,7 +98,7 @@ function saveSortOrder($dbtable, $id, $sortorder) {
 	// This is a nasty hack really, but it works.. The hack being we need id_XX in the element id.
 	$real_id = substr($id, 0, 3);
 	
-	query("UPDATE ".prefix($dbtable)." SET `sort_order`='" . mysql_escape_string($sortorder) .
+	query("UPDATE ".prefix($dbtable)." SET `sort_order`='" . mysql_real_escape_string($sortorder) .
 				"' WHERE `id`=".$id);
 }
 
