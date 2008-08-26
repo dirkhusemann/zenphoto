@@ -189,6 +189,7 @@ function printAdminHeader() {
 	echo "\n  <title>".gettext("zenphoto administration")."</title>";
 	echo "\n  <link rel=\"stylesheet\" href=\"admin.css\" type=\"text/css\" />";
 	echo "\n  <link rel=\"stylesheet\" href=\"js/toggleElements.css\" type=\"text/css\" />";
+	echo "\n  <script type=\"text/javascript\" src=\"js/js-string-constants.js.php\"></script>";
 	echo "\n  <script type=\"text/javascript\" src=\"js/prototype.js\"></script>";
 	echo "\n  <script type=\"text/javascript\" src=\"js/admin.js\"></script>";
 	echo "\n  <script src=\"js/scriptaculous/scriptaculous.js\" type=\"text/javascript\"></script>";
@@ -1279,7 +1280,7 @@ function printAlbumEditRow($album) {
 		$ci = count($album->getImages());
 		if ($ci > 0) {
 			if ($ci > 1) {
-				$si = sprintf(gettext('%u images'),$ci); 
+				$si = sprintf(gettext('%u images'),$ci);
 			}	else {
 				$si = gettext('1 image');
 			}
@@ -1292,7 +1293,7 @@ function printAlbumEditRow($album) {
 		$ca = count($album->getSubalbums());
 		if ($ca > 0) {
 			if ($ca > 1) {
-				$sa = sprintf(gettext("%u albums"), $ca);  
+				$sa = sprintf(gettext("%u albums"), $ca);
 			} else {
 				$sa = gettext("1 album");
 			}
