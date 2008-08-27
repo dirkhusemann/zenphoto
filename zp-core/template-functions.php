@@ -14,7 +14,6 @@ require_once('classes.php');
  * Invoke the controller to handle requests
  */
 require_once('controller.php');
-require_once("lib-utf8.php");
 
 //******************************************************************************
 //*** Template Functions *******************************************************
@@ -118,7 +117,7 @@ function printAdminToolbox($context=null, $id='admin') {
 				}
 				echo "<li><a href=\"javascript: confirmDeleteAlbum('".$zf."/admin.php?page=edit&action=deletealbum&album=" .
 					urlencode(urlencode($albumname)) .
-					"','".utf8::encode_javascript(gettext("Are you sure you want to delete this entire album?"))."','".utf8::encode_javascript(gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")).
+					"','".js_encode(gettext("Are you sure you want to delete this entire album?"))."','".js_encode(gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")).
 					"');\" title=\"".gettext("Delete the album")."\">".gettext("Delete album")."</a></li>\n";
 			}
 			if (isMyAlbum($albumname, UPLOAD_RIGHTS) && !$_zp_current_album->isDynamic()) {
@@ -135,7 +134,7 @@ function printAdminToolbox($context=null, $id='admin') {
 			$imagename = urlencode($_zp_current_image->filename);
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				echo "<li><a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?page=edit&action=deleteimage&album=" .
-				urlencode(urlencode($albumname)) . "&image=". urlencode(urlencode($imagename)) . "','". utf8::encode_javascript(gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!")) . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
+				urlencode(urlencode($albumname)) . "&image=". urlencode(urlencode($imagename)) . "','". js_encode(gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!")) . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
 				echo "</li>\n";
 			}
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=$imagename";

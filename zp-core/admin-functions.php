@@ -1343,9 +1343,9 @@ function printAlbumEditRow($album) {
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=" . urlencode(urlencode($album->name)) .
-			"','".utf8::encode_javascript(gettext("Are you sure you want to delete this entire album?"))."','".utf8::encode_javascript(gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")).
-			"');\" title=\"".sprintf(gettext("Delete the album %s"), utf8::encode_javascript($album->name)) . "\">";
-	echo '<img src="images/fail.png" style="border: 0px;" alt="'.sprintf(gettext('Delete the album %s'), utf8::encode_javascript($album->name)) . '" /></a>';
+			"','".js_encode(gettext("Are you sure you want to delete this entire album?"))."','".js_encode(gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")).
+			"');\" title=\"".sprintf(gettext("Delete the album %s"), js_encode($album->name)) . "\">";
+	echo '<img src="images/fail.png" style="border: 0px;" alt="'.sprintf(gettext('Delete the album %s'), js_encode($album->name)) . '" /></a>';
 	echo "</td>\n</tr></table>\n</td>";
 
 	echo '</tr>';
