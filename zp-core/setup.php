@@ -670,14 +670,18 @@ if ($debug) {
 	}
 
 	if (defined("RELEASE")) {
+		$zp = '../'.ZENFOLDER.'/';
+		$plg = '../'.ZENFOLDER.PLUGIN_FOLDER;
+		$thm = '../'.THEMEFOLDER.'/';
 		$rootfiles = array('../index.php', '../rss.php', '../rss-comments.php');
-		$zp_corefiles = setup_glob('../'.ZENFOLDER.'/*.php');
+		$pluginfiles = array($plg.'user_logout.php', $plg.'dynamic-locale.php', $plg.'google_maps', $plg.'rating', $plg.'image_album_statistics.php', $plg.'flowplayer');
+		$zp_corefiles = setup_glob($zp.'*.php');
 
 		$subfiles = array();
-		$handle = opendir('../'.ZENFOLDER.'/');
+		$handle = opendir($zp);
 		while (false !== ($filename = readdir($handle))) {
-			$fullname = '../'.ZENFOLDER.'/'.$filename;
-			if (is_dir($fullname) && !(substr($filename, 0, 1) == '.')) {
+			$fullname = $zp.$filename;
+			if (is_dir($fullname) && !(substr($filename, 0, 1) == '.') && ($filename != 'plugins')) {
 				$subfiles = array_merge($subfiles, setup_glob($fullname.'/*.php'));
 			}
 		}
@@ -685,17 +689,17 @@ if ($debug) {
 		$themes = array('default', 'effervescence_plus', 'example', 'stopdesign');
 		$themefiles = array();
 		foreach ($themes as $theme) {
-			if (file_exists('../'.THEMEFOLDER.'/'.$theme.'/')) {
-				$themefiles = array_merge($themefiles, setup_glob('../'.THEMEFOLDER.'/'.$theme.'/*.php'));
+			if (file_exists($thm.$theme.'/')) {
+				$themefiles = array_merge($themefiles, setup_glob($thm.$theme.'/*.php'));
 			}
 		}
 
 		$zp_corefiles = array_flip($zp_corefiles);
-		unset($zp_corefiles['../'.ZENFOLDER.'/zp-config.php']);
+		unset($zp_corefiles[$zp.'zp-config.php']);
 
 		$count = 0;
 		$count_t = 0;
-		$sum = $cum_mean = filemtime('../'.ZENFOLDER.'/version.php');
+		$sum = $cum_mean = filemtime($zp.'version.php');
 		$hours = 3600;
 		foreach ($zp_corefiles as $component=>$value) {
 			$value = filemtime($component);
@@ -710,7 +714,8 @@ if ($debug) {
 		}
 		$lowset = $cum_mean - $hours;
 		$highset = $cum_mean + $hours;
-		$installed_files = array_flip(array_merge($rootfiles, $subfiles, $themefiles));
+
+		$installed_files = array_flip(array_merge($rootfiles, $subfiles, $pluginfiles, $themefiles));
 		foreach ($installed_files as $component=>$value) {
 			$value = filemtime($component);
 			$installed_files[$component] = $value;
