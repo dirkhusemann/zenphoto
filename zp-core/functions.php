@@ -38,6 +38,7 @@ require_once('lib-htmlawed.php');
 require_once('exif/exif.php');
 require_once('functions-db.php');
 require_once('lib-encryption.php');
+require_once("lib-utf8.php");
 
 // allow reading of old Option tables--should be needed only during upgrade
 $result = query_full_array("SHOW COLUMNS FROM ".prefix('options').' LIKE "%ownerid%"', true);
@@ -127,16 +128,6 @@ function html_encode($this_string, $striptags=true) {
 	if ($striptags) {$this_string = strip_tags($this_string);}
 	$this_string = htmlspecialchars_decode($this_string);
 	return htmlspecialchars($this_string, ENT_QUOTES, "UTF-8");
-}
-
-/**
- * encodes a pre-sanitized string to be used in a Javascript alert box
- *
- * @param string $this_string
- * @return string
- */
-function js_encode($this_string) {
-	return preg_replace("/\r?\n/", "\\n", addslashes($this_string));
 }
 
 /**
@@ -719,6 +710,7 @@ function sanitize($input_string, $sanitize_level=3) {
 function sanitize_string($input_string, $sanitize_level) {
 	// Strip slashes if get_magic_quotes_gpc is enabled.
 	if (get_magic_quotes_gpc()) $input_string = stripslashes($input_string);
+	$input_string = utf8::encode_numericentity($input_string);
 
 	// Basic sanitation.
 	if ($sanitize_level === 0) {

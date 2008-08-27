@@ -114,7 +114,7 @@ function printImageMap($zoomlevel='6', $width=NULL, $height=NULL, $text='', $tog
 			$long = $exif['EXIFGPSLongitude'];
 			if($exif['EXIFGPSLatitudeRef'] == 'S'){  $lat = '-' . $lat; }
 			if($exif['EXIFGPSLongitudeRef'] == 'W'){  $long = '-' . $long; }
-			addPoint($lat, $long, js_encode(getImageDesc()));
+			addPoint($lat, $long, utf8::encode_javascript(getImageDesc()));
 			$dataid = $id.'_data';
 			if (empty($text)) $text = 'Google Map';
 			echo "<a href=\"javascript: toggle('$dataid');\" title=\"".gettext('Display or hide the Google Map.')."\">";
@@ -162,7 +162,7 @@ function printAlbumMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL, $
 					getImageThumb() . '" alt="' . getImageDesc() . '" ' .
 					'style=" margin-left: 30%; margin-right: 10%; border: 0px; "/></a>' .
 					'<p>' . getImageDesc() . '</p>';
-				addPoint($lat, $long, js_encode($infoHTML));
+				addPoint($lat, $long, utf8::encode_javascript($infoHTML));
 			}
 		}
 		if($foundLocation){
