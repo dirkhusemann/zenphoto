@@ -38,7 +38,7 @@ require_once('lib-htmlawed.php');
 require_once('exif/exif.php');
 require_once('functions-db.php');
 require_once('lib-encryption.php');
-require_once("lib-utf8.php")
+require_once("lib-utf8.php");
 
 // allow reading of old Option tables--should be needed only during upgrade
 $result = query_full_array("SHOW COLUMNS FROM ".prefix('options').' LIKE "%ownerid%"', true);
