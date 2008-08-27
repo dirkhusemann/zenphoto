@@ -1240,8 +1240,10 @@ function getPrevAlbumURL() {
  * @return bool
  */
 function isImagePage() {
-	global $_zp_page;
-	return ($_zp_page - getTotalPages(true)) >= 0;
+	global $_zp_page, $firstPageImages;
+	$imagestart = getTotalPages(true);
+	if (isset($firstPageImages) && $firstPageImages) $imagestart --; // then images start on the last album page.
+	return $_zp_page >= $imagestart;
 }
 
 /**
