@@ -127,11 +127,11 @@ $backgroundImagePath="";
 			}
 			?>
 			<li>
-			<?php $annotate =  sprintf(gettext('View the Album: %s'),getBareAlbumTitle()).getImage_AlbumCount();?>
+			<?php $annotate = annotateAlbum();?>
 			<div class="imagethumb">
 			<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo $annotate; ?>">
 				<?php printCustomAlbumThumbImage($annotate, null, 180, null, 180, 80); ?></a></div>
-				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php $annotate;	?>">
+				<h4><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo $annotate;	?>">
 			<?php printAlbumTitle(); ?></a></h4></li>
 		<?php
 			}
@@ -163,7 +163,7 @@ $backgroundImagePath="";
  						echo '<div class="image">' . "\n";
  						echo '<div class="imagethumb">' . "\n";
  						echo '<a href="' . htmlspecialchars(getImageLinkURL()) .'" title="' . GetBareImageTitle() . '">' . "\n";
- 						echo printImageThumb(getImageTitle()) . "</a>\n";
+ 						echo printImageThumb(annotateImage()) . "</a>\n";
  						echo "</div>\n";
  						echo "</div>\n";
  					} ?>

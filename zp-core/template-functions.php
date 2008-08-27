@@ -601,6 +601,23 @@ function getBareAlbumTitle() {
 }
 
 /**
+ * Returns an album title taged with of Not visible or password protected status
+ *
+ * @return string;
+ */
+function getAnnotatedAlbumTitle() {
+	global $_zp_current_album;
+	$title = getBareAlbumTitle();
+	$pwd = $_zp_current_album->getPassword();
+	if (zp_loggedin() && !empty($pwd)) {
+		$title .= "\n".gettext('The album is password protected.');
+	} else if (!$_zp_current_album->getShow()) {
+		$title .= "\n".gettext('The album is not published.');
+	}
+	return $title;
+}
+
+/**
  * Prints an encapsulated title of the current album.
  * If you are logged in you can click on this to modify the title on the fly.
  *
@@ -1382,6 +1399,19 @@ function getBareImageTitle() {
 	return html_encode(getImageTitle());
 }
 
+/**
+ * Returns the image title taged with not visible annotation.
+ *
+ * @return string
+ */
+function getAnnotatedImageTitle() {
+	global $_zp_current_image;
+	$title = getBareImageTitle();
+	if (!$_zp_current_image->getShow()) {
+		$title .= "\n".gettext('The image is marked not visible.');
+	}
+	return $title;
+}
 /**
  * Prints an encapsulated title of the current image.
  *

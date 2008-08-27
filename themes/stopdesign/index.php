@@ -31,8 +31,8 @@
 					while (next_album() and $counter < 6):
 					?>
 						<li class="gal">
-							<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext("View album: %s"),getBareAlbumTitle()); ?>"><?php printAlbumTitle(); ?></a></h3>
-							<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext("View album: %s"), getBareAlbumTitle());?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 210, 59, 210, 59); ?></a>
+							<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext("View album: %s"),getAnnotatedAlbumTitle()); ?>"><?php printAlbumTitle(); ?></a></h3>
+							<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext("View album: %s"), getAnnotatedAlbumTitle());?>" class="img"><?php printCustomAlbumThumbImage(getAnnotatedAlbumTitle(), null, 210, 59, 210, 59); ?></a>
 							<p>
 					<?php
 						$anumber = getNumSubalbums();

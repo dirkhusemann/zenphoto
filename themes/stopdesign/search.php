@@ -42,8 +42,8 @@
 				}
 			?>
 				<li class="gal">
-					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext('View album: %s'), getBareAlbumTitle());?>" class="img"><?php printCustomAlbumThumbImage(getAlbumTitle(), null, 230, null, 210, 60); ?></a>
-					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext('View album: %u'), getBareAlbumTitle());?>"><?php printAlbumTitle(); ?></a></h3>
+					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext('View album: %s'), getAnnotatedAlbumTitle());?>" class="img"><?php printCustomAlbumThumbImage(getAnnotatedAlbumTitle(), null, 230, null, 210, 60); ?></a>
+					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext('View album: %s'), getAnnotatedAlbumTitle());?>"><?php printAlbumTitle(); ?></a></h3>
 					<p>
 						<?php
 						$anumber = getNumAlbums();
@@ -95,7 +95,7 @@
 				$lastImage++;
 			}
 			echo "\n<li class=\"thumb\"><span><em style=\"background-image:url(" . getImageThumb() . '); "><a href="' .
-			htmlspecialchars(getImageLinkURL()) . '" title="' . GetBareImageTitle() . '" style="background:#fff;">"'.
+			htmlspecialchars(getImageLinkURL()) . '" title="' . getAnnotatedImageTitle() . '" style="background:#fff;">"'.
 			getImageTitle().'"</a></em></span></li>';
 		}
 		if (!is_null($firstImage)  && hasNextPage()) {
