@@ -294,7 +294,11 @@ class PersistentObject {
 			$i = 0;
 			foreach(array_values($insert_data) as $value) {
 				if ($i > 0) $sql .= ', ';
-				$sql .= "'" . mysql_real_escape_string($value) . "'";
+				if (is_null($value)) {
+					$sql .= "NULL";
+				} else {
+					$sql .= "'". mysql_real_escape_string($value) . "'";
+				}
 				$i++;
 			}
 			$sql .= ');';
@@ -313,7 +317,11 @@ class PersistentObject {
 				$i = 0;
 				foreach ($this->updates as $col => $value) {
 					if ($i > 0) $sql .= ",";
-					$sql .= " `$col` = '". mysql_real_escape_string($value) . "'";
+					if (is_null($value)) {
+						$sql .= " `$col` = NULL";
+					} else {
+						$sql .= " `$col` = '". mysql_real_escape_string($value) . "'";
+					}
 					$this->data[$col] = $value;
 					$i++;
 				}
