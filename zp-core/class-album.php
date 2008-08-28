@@ -1,6 +1,6 @@
 <?php
 /**
- * Album Class 
+ * Album Class
  * @package classes
  */
 
@@ -143,14 +143,14 @@ class Album extends PersistentObject {
 		}
 		return NULL;
 	}
-	
+
 	/**
-	 * Returns the album guest user 
+	 * Returns the album guest user
 	 *
 	 * @return string
 	 */
 	function getUser() { return $this->get('user');	}
-	
+
 	/**
 	 * Sets the album guest user
 	 *
@@ -183,8 +183,8 @@ class Album extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getPasswordHint() { 
-		$t =  $this->get('password_hint'); 
+	function getPasswordHint() {
+		$t =  $this->get('password_hint');
 		return get_language_string($t);
 	}
 
@@ -201,8 +201,8 @@ class Album extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getTitle() { 
-		$t = $this->get('title'); 
+	function getTitle() {
+		$t = $this->get('title');
 		return get_language_string($t);
 	}
 
@@ -219,8 +219,8 @@ class Album extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getDesc() { 
-		$t = $this->get('desc'); 
+	function getDesc() {
+		$t = $this->get('desc');
 		return get_language_string($t);
 	}
 
@@ -257,7 +257,7 @@ class Album extends PersistentObject {
 	 *
 	 * @param string $tags the tag string
 	 */
-	function setTags($tags) { 
+	function setTags($tags) {
 		if (!is_array($tags)) {
 			$tags = explode(',', $tags);
 		}
@@ -266,7 +266,7 @@ class Album extends PersistentObject {
 			storeTags($tags, $this->id, 'albums');
 		} else {
 			$tags = implode(",", $tags);
-			$this->set('tags', $tags); 
+			$this->set('tags', $tags);
 		}
 	}
 
@@ -299,8 +299,8 @@ class Album extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getPlace() { 
-		$t =  $this->get('place'); 
+	function getPlace() {
+		$t =  $this->get('place');
 		return get_language_string($t);
 	}
 
@@ -370,7 +370,7 @@ class Album extends PersistentObject {
 			if (is_null($parentalbum)) {
 				$type = getOption('gallery_sorttype');
 			} else {
-				$type = $parentalbum->getSortType();				
+				$type = $parentalbum->getSortType();
 			}
 		}
 		return $type;
@@ -687,7 +687,7 @@ class Album extends PersistentObject {
 			if (!is_null($thumbs)) {
 				if ($thumb !== '1') {
 					shuffle($thumbs);
-				} 
+				}
 				while (count($thumbs) > 0) {
 					$thumb = array_shift($thumbs);
 					if (is_valid_image($thumb)) {
@@ -714,7 +714,7 @@ class Album extends PersistentObject {
 					$videoThumb = checkVideoThumb($albumdir, $thumb);
 					if (!empty($videoThumb)) {
 						return new Image($this, $videoThumb);
-					}										
+					}
 				}
 			}
 		}
@@ -915,7 +915,7 @@ class Album extends PersistentObject {
 	function renameAlbum($newfolder) {
 		return $this->moveAlbum($newfolder);
 	}
-	
+
 	/**
 	 * Replicates the database data for copied albums.
 	 * Returns the success of the replication.
@@ -931,7 +931,7 @@ class Album extends PersistentObject {
 		$newsubfolder = $newfolder . substr($newsubfolder, strlen($oldfolder));
 		$newsubfolder = mysql_real_escape_string($newsubfolder);
 		$subrow['folder'] = $newsubfolder;
-		
+
 		if ($owner_row) {
 			$parentname = dirname($newfolder);
 			if ($parentname == '/' || $parentname == '.') $parentname = '';
@@ -968,7 +968,7 @@ class Album extends PersistentObject {
 		$sql .= ');';
 		return query($sql);
 	}
-	
+
 	/**
 	 * Copy this album to the location specified by $newfolder, copying all
 	 * metadata, subalbums, and subalbums' metadata with it.
@@ -1008,7 +1008,7 @@ class Album extends PersistentObject {
 				$oldf = mysql_real_escape_string($oldfolder);
 				$sql = "SELECT * FROM " . prefix('albums') . " WHERE folder LIKE '$oldf%'";
 				$result = query_full_array($sql);
-					
+
 				$allsuccess = true;
 				foreach ($result as $subrow) {
 					$success = $this->replicateDBRow($subrow, $oldfolder, $newfolder, $subrow['folder'] == $oldfolder);
@@ -1253,8 +1253,8 @@ class Album extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getCustomData() { 
-		$t =  $this->get('custom_data'); 
+	function getCustomData() {
+		$t =  $this->get('custom_data');
 		return get_language_string($t);
 	}
 
