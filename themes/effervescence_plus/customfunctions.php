@@ -155,12 +155,12 @@ function printLogo() {
 function annotateAlbum() {
 	global $_zp_current_album;
 	$tagit = '';
-	if (!$_zp_current_album->getShow()) {
-		$tagit = "\n".gettext('The album is not published.');
-	}
 	$pwd = $_zp_current_album->getPassword();
 	if (zp_loggedin() && !empty($pwd)) {
 		$tagit = "\n".gettext('The album is password protected.');
+	}
+	if (!$_zp_current_album->getShow()) {
+		$tagit .= "\n".gettext('The album is not published.');
 	}
 	return  sprintf(gettext('View the Album: %s'),getBareAlbumTitle()).getImage_AlbumCount().$tagit;
 }

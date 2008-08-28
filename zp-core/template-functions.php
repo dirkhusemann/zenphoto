@@ -611,7 +611,8 @@ function getAnnotatedAlbumTitle() {
 	$pwd = $_zp_current_album->getPassword();
 	if (zp_loggedin() && !empty($pwd)) {
 		$title .= "\n".gettext('The album is password protected.');
-	} else if (!$_zp_current_album->getShow()) {
+	} 
+	if (!$_zp_current_album->getShow()) {
 		$title .= "\n".gettext('The album is not published.');
 	}
 	return $title;
