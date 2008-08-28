@@ -1,6 +1,6 @@
 <?php
 /**
- *Image Class 
+ *Image Class
  * @package classes
  */
 
@@ -70,7 +70,7 @@ class Image extends PersistentObject {
 			}
 			$this->set('width', $size[0]);
 			$this->set('height', $size[1]);
-			
+
 			$metadata = getImageMetadata($this->localpath);
 			if (isset($metadata['date'])) {
 				$newDate = $metadata['date'];
@@ -92,31 +92,31 @@ class Image extends PersistentObject {
 				$title = substr($this->name, 0, strrpos($this->name, '.'));
 				if (empty($title)) $title = $this->name;
 			}
-			$this->set('title', $title);
+			$this->set('title', sanitize($title, 2));
 
 			if (isset($metadata['desc'])) {
-				$this->set('desc', $metadata['desc']);
+				$this->set('desc', sanitize($metadata['desc'], 1));
 			}
 			if (isset($metadata['tags'])) {
-				$this->setTags($metadata['tags']);
+				$this->setTags(sanitize($metadata['tags'], 3));
 			}
 			if (isset($metadata['location'])) {
-				$this->setLocation($metadata['location']);
+				$this->setLocation(sanitize($metadata['location'], 3));
 			}
 			if (isset($metadata['city'])) {
-				$this->setCity($metadata['city']);
+				$this->setCity(sanitize($metadata['city'], 3));
 			}
 			if (isset($metadata['state'])) {
-				$this->setState($metadata['state']);
+				$this->setState(sanitize($metadata['state'], 3));
 			}
 			if (isset($metadata['country'])) {
-				$this->setCountry($metadata['country']);
+				$this->setCountry(sanitize($metadata['country'], 3));
 			}
 			if (isset($metadata['credit'])) {
-				$this->setCredit($metadata['credit']);
+				$this->setCredit(sanitize($metadata['credit'], 1));
 			}
 			if (isset($metadata['copyright'])) {
-				$this->setCopyright($metadata['copyright']);
+				$this->setCopyright(sanitize($metadata['copyright'], 1));
 			}
 			$this->set('mtime', filemtime($this->localpath));
 			$this->save();
@@ -169,7 +169,7 @@ class Image extends PersistentObject {
 			// Put together an array of EXIF data to return
 			if ($this->get('EXIFValid') == 1) {
 				foreach($_zp_exifvars as $field => $exifvar) {
-					$exif[$field] = $this->get($field);
+					$exif[sanitize($field, 3)] = $this->get(sanitize($field, 3));
 				}
 			} else {
 				return false;
@@ -252,8 +252,8 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getTitle() { 
-		$t = $this->get('title'); 
+	function getTitle() {
+		$t = $this->get('title');
 		return get_language_string($t);
 	}
 
@@ -270,8 +270,8 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getDesc() { 
-		$t = $this->get('desc'); 
+	function getDesc() {
+		$t = $this->get('desc');
 		return get_language_string($t);
 	}
 
@@ -287,8 +287,8 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getLocation() { 
-		$t = $this->get('location'); 
+	function getLocation() {
+		$t = $this->get('location');
 		return get_language_string($t);
 	}
 
@@ -304,8 +304,8 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getCity() { 
-		$t = $this->get('city'); 
+	function getCity() {
+		$t = $this->get('city');
 		return get_language_string($t);
 	}
 
@@ -321,8 +321,8 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getState() { 
-		$t = $this->get('state'); 
+	function getState() {
+		$t = $this->get('state');
 		return get_language_string($t);
 	}
 
@@ -338,8 +338,8 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getCountry() { 
-		$t = $this->get('country'); 
+	function getCountry() {
+		$t = $this->get('country');
 		return get_language_string($t);
 	}
 
@@ -355,8 +355,8 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getCredit() { 
-		$t = $this->get('credit'); 
+	function getCredit() {
+		$t = $this->get('credit');
 		return get_language_string($t);
 	}
 
@@ -372,8 +372,8 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getCopyright() { 
-		$t = $this->get('copyright'); 
+	function getCopyright() {
+		$t = $this->get('copyright');
 		return get_language_string($t);
 	}
 
@@ -409,7 +409,7 @@ class Image extends PersistentObject {
 	 *
 	 * @param string $tags the tag string
 	 */
-	function setTags($tags) { 	
+	function setTags($tags) {
 		if (!is_array($tags)) {
 			$tags = explode(',', $tags);
 		}
@@ -418,7 +418,7 @@ class Image extends PersistentObject {
 			storeTags($tags, $this->id, 'images');
 		} else {
 			$tags = implode(",", $tags);
-			$this->set('tags', $tags); 
+			$this->set('tags', $tags);
 		}
 	}
 
@@ -799,8 +799,8 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getCustomData() { 
-		$t = $this->get('custom_data'); 
+	function getCustomData() {
+		$t = $this->get('custom_data');
 		return get_language_string($t);
 	}
 

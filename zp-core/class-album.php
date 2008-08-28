@@ -104,7 +104,7 @@ class Album extends PersistentObject {
 			$this->set('parentid', $parentalbum->getAlbumId());
 			$title = substr($title, strrpos($title, '/')+1);
 		}
-		$this->set('title', $title);
+		$this->set('title', sanitize($title, 2));
 
 		return true;
 	}
