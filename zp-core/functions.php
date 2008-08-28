@@ -126,7 +126,7 @@ if (!function_exists("htmlspecialchars_decode")) {
  */
 function html_encode($this_string, $striptags=true) {
 	if ($striptags) {$this_string = strip_tags($this_string);}
-	$this_string = htmlspecialchars_decode($this_string);
+	$this_string = htmlspecialchars_decode($this_string, ENT_QUOTES);
 	return htmlspecialchars($this_string, ENT_QUOTES, "UTF-8");
 }
 

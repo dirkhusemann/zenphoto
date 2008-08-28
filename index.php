@@ -37,13 +37,13 @@ if (isset($_GET['p'])) {
 		if (file_exists(SERVERPATH . "/" . $obj)) {
 		}
 	}
-	
+
 // Display an Image page.
 } else if (in_context(ZP_IMAGE)) {
 	handleSearchParms($_zp_current_album->name, $_zp_current_image->filename);
 	$theme = setupTheme();
 	$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/image.php");
-	
+
 // Display an Album page.
 } else if (in_context(ZP_ALBUM)) {
 	if(isset($_GET['zipfile']) && is_dir(realpath(getAlbumFolder() . $_GET['album']))){
@@ -64,7 +64,7 @@ if (isset($_GET['p'])) {
 		}
 	}
 
-// Display the Index page.	
+// Display the Index page.
 } else if (in_context(ZP_INDEX)) {
 	handleSearchParms();
 	$theme = setupTheme();

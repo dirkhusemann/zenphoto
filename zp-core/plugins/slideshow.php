@@ -27,16 +27,6 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---slidesho
 $option_interface = new slideshowOptions();
 
 /**
- * Removes apostrophies and ampersands from a path
- *
- * @param string $s
- * @return string
- */
-function fixPixPath($s) {
-	return str_replace("&","%26",str_replace("'","%27",$s));
-}
-
-/**
  * Plugin option handling class
  *
  */
@@ -122,19 +112,19 @@ function printSlideShowLink($linktext='') {
 			$imagefile = "";
 		}
 		$albumnr = getAlbumID();
-		$slideshowlink = rewrite_path($_zp_current_album->getFolder()."/page/slideshow","index.php?p=slideshow&amp;album=".$_zp_current_album->getFolder());
+		$slideshowlink = rewrite_path(rawurlencode($_zp_current_album->getFolder())."/page/slideshow","index.php?p=slideshow&amp;album=".urlencode($_zp_current_album->getFolder()));
 	}
 	$numberofimages = getNumImages();
 	if($numberofimages != 0) {
 		?>
 <form name="slideshow" method="post"
-	action="<?php echo htmlspecialchars($slideshowlink); ?>"><input
+	action="<?php echo $slideshowlink; ?>"><input
 	type="hidden" name="pagenr" value="<?php echo $pagenr;?>" /> <input
 	type="hidden" name="albumid" value="<?php echo $albumnr;?>" /> <input
 	type="hidden" name="numberofimages"
 	value="<?php echo $numberofimages;?>" /> <input type="hidden"
 	name="imagenumber" value="<?php echo $imagenumber;?>" /> <input
-	type="hidden" name="imagefile" value="<?php echo $imagefile;?>" /> <a
+	type="hidden" name="imagefile" value="<?php echo html_encode($imagefile);?>" /> <a
 	id="slideshowlink" href="javascript:document.slideshow.submit()"><?php echo $linktext; ?></a>
 </form>
 <?php }
@@ -156,6 +146,7 @@ function printSlideShowLink($linktext='') {
 function printSlideShow($heading = true, $speedctl = false) {
 	if (!isset($_POST['albumid'])) {
 		echo "<div class=\"errorbox\" id=\"message\"><h2>".gettext("Invalid linking to the slideshow page.")."</h2></div>";
+		echo "</div></body></html>";
 		exit();
 	}
 	global $_zp_flash_player;
@@ -201,9 +192,9 @@ function printSlideShow($heading = true, $speedctl = false) {
 		$images = $album->getImages(0);
 		// return path to get back to the page we called the slideshow from
 		if (empty($_POST['imagenumber'])) {
-			$returnpath = rewrite_path('/'.$album->name.'/page/'.$_POST['pagenr'],'/index.php?album='.$album->name.'&page='.$_POST['pagenr']);
+			$returnpath = rewrite_path('/'.rawurlencode($album->name).'/page/'.$_POST['pagenr'],'/index.php?album='.urlencode($album->name).'&page='.$_POST['pagenr']);
 		} else {
-			$returnpath = rewrite_path('/'.$album->name.'/'.$_POST['imagefile'].getOption('mod_rewrite_image_suffix'),'/index.php?album='.$album->name.'&image='.$_POST['imagefile']);
+			$returnpath = rewrite_path('/'.rawurlencode($album->name).'/'.rawurlencode($_POST['imagefile']).getOption('mod_rewrite_image_suffix'),'/index.php?album='.urlencode($album->name).'&image='.urlencode($_POST['imagefile']));
 		}
 	}
 	// slideshow display section
@@ -213,7 +204,7 @@ function printSlideShow($heading = true, $speedctl = false) {
 <script type="text/javascript">
 	$(document).ready(function(){
 		$(function() {
-			var ThisGallery = '<?php echo js_encode($albumtitle); ?>';
+			var ThisGallery = '<?php echo html_encode($albumtitle); ?>';
 			var ImageList = new Array();
 			var TitleList = new Array();
 			var DescList = new Array();
@@ -231,9 +222,9 @@ function printSlideShow($heading = true, $speedctl = false) {
 
 				// 2008-08-02 acrylian: This at least make the urls correct, the flashplayer does not load anyway...
 				if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
-					$img = FULLWEBPATH.'/albums/'.$image->album->name .'/'. fixPixPath($filename);
+					$img = FULLWEBPATH.'/albums/'.urlencode($image->album->name) .'/'. urlencode($filename);
 				} else {
-					$img = WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . $image->album->name . '&i=' . fixPixPath($filename) . '&s=' . $imagesize;
+					$img = WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . urlencode($image->album->name) . '&i=' . urlencode($filename) . '&s=' . $imagesize;
 				}
 				echo 'ImageList[' . $cntr . '] = "' . $img . '";'. chr(13);
 				echo 'TitleList[' . $cntr . '] = "' . js_encode($image->getTitle()) . '";'. chr(13);
@@ -326,7 +317,7 @@ if ($speedctl) {
 			<div>
 				<span><a href="#" id="prev" title="<?php echo gettext("Previous"); ?>"></a></span>
 				<a href="<?php echo $returnpath; ?>" id="stop" title="<?php echo gettext("Stop and return to album or image page"); ?>"></a>
-  			<a href="#" id="pause" title="<?php echo gettext("Pause (to stop the slideshow without returning)"); ?>"></a>
+  				<a href="#" id="pause" title="<?php echo gettext("Pause (to stop the slideshow without returning)"); ?>"></a>
 				<a href="#" id="play" title="<?php echo gettext("Play"); ?>"></a>
 				<a href="#" id="next" title="<?php echo gettext("Next"); ?>"></a>
 			</div>
@@ -347,13 +338,13 @@ if ($speedctl) {
 				$dalbum = new Album($gallery, $folder);
 				$filename = $images[$idx]['filename'];
 				$image = new Image($dalbum, $filename);
-				$imagepath = FULLWEBPATH.getAlbumFolder('').$folder."/".$filename;
+				$imagepath = FULLWEBPATH.getAlbumFolder('').urlencode($folder)."/".urlencode($filename);
 			} else {
 				$folder = $album->name;
-				$filename = fixPixPath($images[$idx]); 		// again, minor mystery why & and ' are thowing <img> attributes off (haywire)?
+				$filename = $images[$idx];
 				//$filename = $animage;
 				$image = new Image($album, $filename);
-				$imagepath = FULLWEBPATH.getAlbumFolder('').$folder."/".$filename;
+				$imagepath = FULLWEBPATH.getAlbumFolder('').urlencode($folder)."/".urlencode($filename);
 
 			}
 			$ext = strtolower(strrchr($filename, "."));
@@ -364,7 +355,7 @@ if ($speedctl) {
 				if (is_null($_zp_flash_player)) {
 					echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='".gettext("No flash player installed.")."' />";
 				} else {
-					$_zp_flash_player->playerConfig($imagepath,$image->getTitle(),$count);
+					$_zp_flash_player->playerConfig($imagepath,html_encode($image->getTitle()),$count);
 				}
 			}
 			elseif ($ext == ".3gp") {
@@ -389,7 +380,7 @@ if ($speedctl) {
 			 	pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
 				</object><a>';
 		} else {
-			echo "<img src='".WEBPATH."/".ZENFOLDER."/i.php?a=".$folder."&i=".$filename."&s=".$imagesize."' alt='".html_encode($image->getTitle())."' title='".html_encode($image->getTitle())."' />\n";
+			echo "<img src='".WEBPATH."/".ZENFOLDER."/i.php?a=".urlencode($folder)."&i=".urlencode($filename)."&s=".$imagesize."' alt='".html_encode($image->getTitle())."' title='".html_encode($image->getTitle())."' />\n";
 		}
 		if(getOption("slideshow_showdesc")) { echo "<p class='imgdesc'>".$image->getDesc()."</p>"; }
 		echo "</span>";
@@ -420,12 +411,12 @@ $("#slideshow").flashembed({
 				$folder = $animage['folder'];
 				$filename = $animage['filename'];
 				$image = new Image($dalbum, $filename);
-				$imagepath = FULLWEBPATH.getAlbumFolder('').$salbum->name."/".$filename;
+				$imagepath = FULLWEBPATH.getAlbumFolder('').urlencode($salbum->name)."/".urlencode($filename);
 			} else {
 				$folder = $album->name;
 				$filename = $animage;
 				$image = new Image($album, $filename);
-				$imagepath = FULLWEBPATH.getAlbumFolder('').$folder."/".$filename;
+				$imagepath = FULLWEBPATH.getAlbumFolder('').urlencode($folder)."/".urlencode($filename);
 			}
 		$count++;
 		$ext = strtolower(strrchr($filename, "."));
@@ -434,7 +425,7 @@ $("#slideshow").flashembed({
 		} else {
 			$duration = " duration: ".getOption("slideshow_speed")/10;
 		}
-		echo "{ url: '".FULLWEBPATH.getAlbumFolder('').$folder."/".$filename."', ".$duration." }\n";
+		echo "{ url: '".FULLWEBPATH.getAlbumFolder('').urlencode($folder)."/".urlencode($filename)."', ".$duration." }\n";
 		if($count < $numberofimages) { echo ","; }
 	}
 ?>
