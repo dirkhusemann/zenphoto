@@ -24,7 +24,7 @@
 $plugin_description = gettext("GoogleCheckout Integration for Zenphoto.");
 $plugin_author = 'Jeremy Coleman (mammlouk), Stephen Billard (sbillard)';
 $plugin_version = '1.0.1';
-$plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---GoogleCheckout.php.html";
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---GoogleCheckout.php.html";
 $option_interface = new GoogleCheckoutOptions();
 addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/GoogleCheckout/GoogleCheckout.css" type="text/css" />');
 

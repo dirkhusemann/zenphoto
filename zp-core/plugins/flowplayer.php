@@ -13,7 +13,7 @@
 $plugin_description = gettext("Enable <strong>flowplayer</strong> to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time. <br> Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_version = '1.0.1.6';
-$plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---flowplayer.php.html";
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flowplayer.php.html";
 $option_interface = new flowplayer();
 $_zp_flash_player = $option_interface; // claim to be the flash player.
 // register the scripts needed

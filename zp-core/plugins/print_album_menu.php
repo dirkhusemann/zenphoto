@@ -101,7 +101,7 @@
 $plugin_description = gettext("Adds a theme function printAlbumMenu() to print an album menu either as a nested list up to 4 sublevels (context sensitive) or as a dropdown menu.");
 $plugin_author = "Malte Müller (acrylian)";
 $plugin_version = '1.4.4.4';
-$plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---print_album_menu.php.html";
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---print_album_menu.php.html";
 
 /**
  * Prints a list of all albums context sensitive up to the 4th subalbum level.

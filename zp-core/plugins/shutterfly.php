@@ -10,7 +10,7 @@
 $plugin_description = gettext("Adds a link to allow requesting a single image print through Shutterfly.");
 $plugin_author = gettext("Darrell Dudics (GameDudeX) adapted as a plugin by Stephen Billard (sbillard)");
 $plugin_version = '1.0.1';
-$plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---shutterfly.php.html";
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---shutterfly.php.html";
 
 // register the scripts needed
 addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/shutterfly/shutterfly.css" type="text/css" />');

@@ -39,7 +39,7 @@ $plugin_description = gettext("A plugin to show the content of an media album wi
 	' <strong>'.gettext("Requires flvplayer plugin.").'</strong>';
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_version = '1.0.4.2';
-$plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---flv_playlist.php.html";
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flv_playlist.php.html";
 $option_interface = new flvplaylist();
 
 /**

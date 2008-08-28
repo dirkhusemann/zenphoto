@@ -10,7 +10,7 @@ require_once(dirname(dirname(__FILE__)).'/functions.php');
 $plugin_description = gettext("Adds several theme functions to enable images and/or album rating by users.");
 $plugin_author = "Malte Müller (acrylian) and Stephen Billard (sbillard)";
 $plugin_version = '1.0.1';
-$plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---rating.php.html";
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---rating.php.html";
 $option_interface = new rating();
 
 // register the scripts needed

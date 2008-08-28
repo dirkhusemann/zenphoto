@@ -13,7 +13,7 @@
 $plugin_description = gettext("Support for providing Google Maps based on EXIF latitude and longitude in the images.");
 $plugin_author = 'Dustin Brewer (mankind), Stephen Billard (sbillard)';
 $plugin_version = '1.2.0';
-$plugin_URL = "http://www.zenphoto.org/documentation/zenphoto/_plugins---google_maps.php.html";
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---google_maps.php.html";
 $option_interface = new google_mapsOptions();
 
 $mapkey = getOption('gmaps_apikey');
