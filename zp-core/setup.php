@@ -674,7 +674,18 @@ if ($debug) {
 		$plg = '../'.ZENFOLDER.PLUGIN_FOLDER;
 		$thm = '../'.THEMEFOLDER.'/';
 		$rootfiles = array('../index.php', '../rss.php', '../rss-comments.php');
-		$pluginfiles = array($plg.'user_logout.php', $plg.'dynamic-locale.php', $plg.'google_maps', $plg.'rating', $plg.'image_album_statistics.php', $plg.'flowplayer');
+		$zp_plugins = array('dynamic-locale', 'flowplayer', 'flv_playlist',
+												 'flvplayer', 'google_maps', 'GoogleCheckout', 
+												 'image_album_statistics', 'print_album_menu', 'rating', 
+												 'shutterfly', 'slideshow', 'static_html_cache', 
+												 'tag_suggest', 'user_logout', 'zenPaypal');
+		$pluginfiles = array();
+		foreach ($zp_plugins as $plugin) {
+			$pluginfiles[] = $plg.$plugin.'.php';
+			if (file_exists($plg.$plugin) && is_dir($plg.$plugin)) {
+				$pluginfiles = array_merge($pluginfiles, setup_glob($plg.$plugin.'/*.php'));
+			}	
+		}
 		$zp_corefiles = setup_glob($zp.'*.php');
 
 		$subfiles = array();
@@ -696,37 +707,24 @@ if ($debug) {
 
 		$zp_corefiles = array_flip($zp_corefiles);
 		unset($zp_corefiles[$zp.'zp-config.php']);
-
-		$count = 0;
-		$count_t = 0;
-		$sum = $cum_mean = filemtime($zp.'version.php');
+		$zp_corefiles = array_flip($zp_corefiles);
+		
+		$cum_mean = filemtime($zp.'version.php');
 		$hours = 3600;
-		foreach ($zp_corefiles as $component=>$value) {
-			$value = filemtime($component);
-			$zp_corefiles[$component] = $value;
-			if ($value >= $cum_mean - $hours && $value <= $cum_mean + $hours) {
-				$count ++;
-				$cum_mean = $sum / $count;
-				$sum = $sum + $value;
-			} else {
-			}
-			$count_t ++;
-		}
 		$lowset = $cum_mean - $hours;
 		$highset = $cum_mean + $hours;
 
-		$installed_files = array_flip(array_merge($rootfiles, $subfiles, $pluginfiles, $themefiles));
+		$installed_files = array_flip(array_merge($rootfiles, $zp_corefiles, $subfiles, $pluginfiles, $themefiles));
 		foreach ($installed_files as $component=>$value) {
-			$value = filemtime($component);
-			$installed_files[$component] = $value;
+			$installed_files[$component] = filemtime($component);
 		}
-		$installed_files = array_merge($installed_files, $zp_corefiles);
+		
 		foreach ($installed_files as $component => $value) {
 			if ($value >= $lowset && $value <= $highset) {
 				unset($installed_files[$component]);
 			}
 		}
-		$filelist = implode("<br />", array_flip($installed_files));
+		$filelist = implode("<br />", array_keys($installed_files));
 		if (count($installed_files) > 0) {
 			$mark = -1;
 		} else {
