@@ -38,6 +38,7 @@ function printLanguageSelector($class='') {
 			echo '<div class="errorbox">';
 			echo '<h2>'.sprintf(gettext('<em>%s</em> is not available.'),$_zp_languages[$locale]).
 					 ' '.sprintf(gettext('The locale %s is not supported on your server.'), $locale);
+			echo '</h2>';
 			echo '</div>';
 		}
 	}
