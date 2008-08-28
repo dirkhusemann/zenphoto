@@ -1527,10 +1527,17 @@ function checkForUpdate() {
 	if (empty($v)) {
 		$_zp_WEB_Version = 'X';
 	} else {
+		$pot = array(1000000000, 10000000, 100000, 1);
 		$wv = explode('.', $v);
+		$wvd = 0;
+		foreach ($wv as $i => $d) {
+			$wvd = $wvd + $d * $pot[$i];
+		}
 		$cv = explode('.', $c);
-		$wvd = $wv[0] * 1000000000 + $wv[1] * 10000000 + $wv[2] * 100000 + $wv[3];
-		$cvd = $cv[0] * 1000000000 + $cv[1] * 10000000 + $cv[2] * 100000 + $cv[3];
+		$cvd = 0;
+		foreach ($cv as $i => $d) {
+			$cvd = $cvd + $d * $pot[$i];
+		}
 		if ($wvd > $cvd) {
 			$_zp_WEB_Version = $v;
 		} else {
