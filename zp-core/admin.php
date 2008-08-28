@@ -177,7 +177,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 										}
 									}
 									$tags = array_unique($tags);
-									$image->setTags($tags);
+									$image->setTags(sanitize($tags, 3));
 
 
 									$image->setDateTime(strip($_POST["$i-date"]));
@@ -1099,7 +1099,7 @@ foreach ($comments as $comment) {
 </p>
 <p>
 <br />
-<?php 
+<?php
 printf(gettext('PHP has <strong>%s</strong> of memory allocated.'),ini_get('memory_limit'));
 ?>
 </p>
@@ -1158,35 +1158,35 @@ printf(gettext('PHP has <strong>%s</strong> of memory allocated.'),ini_get('memo
 <div class="box" id="overview-suggest">
 <h2 class="boxtitle"><?php echo gettext("Gallery Stats"); ?></h2>
 <p>
-<?php 
-$t = $gallery->getNumImages(); 
+<?php
+$t = $gallery->getNumImages();
 $c = $t-$gallery->getNumImages(true);
 if ($c > 0) {
-	printf(gettext('<strong>%1$u</strong> images (%2$u not visible)'),$t, $c);	
+	printf(gettext('<strong>%1$u</strong> images (%2$u not visible)'),$t, $c);
 } else {
-	printf(gettext('<strong>%u</strong> images'),$t);	
+	printf(gettext('<strong>%u</strong> images'),$t);
 }
 ?>
 </p>
 <p>
-<?php 
+<?php
 $t = $gallery->getNumAlbums(true);
 $c = $t-$gallery->getNumAlbums(true,true);
 if ($c > 0) {
-	printf(gettext('<strong>%1$u</strong> albums (%2$u not published)'),$t, $c);	
+	printf(gettext('<strong>%1$u</strong> albums (%2$u not published)'),$t, $c);
 } else {
-	printf(gettext('<strong>%u</strong> albums'),$t);	
+	printf(gettext('<strong>%u</strong> albums'),$t);
 }
 ?>
 </p>
 
 <p>
-<?php $t = $gallery->getNumComments(true); 
+<?php $t = $gallery->getNumComments(true);
 $c = $t - $gallery->getNumComments(false);
 if ($c > 0) {
-	printf(gettext('<strong>%1$u</strong> comments (%2$u in moderation)'),$t, $c);	
+	printf(gettext('<strong>%1$u</strong> comments (%2$u in moderation)'),$t, $c);
 } else {
-	printf(gettext('<strong>%u</strong> comments'),$t);	
+	printf(gettext('<strong>%u</strong> comments'),$t);
 }
 ?>
 </p>
