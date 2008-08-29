@@ -863,6 +863,11 @@ class Album extends PersistentObject {
 	 */
 	function moveAlbum($newfolder) {
 		// First, ensure the new base directory exists.
+		if ($this->isDynamic()) { // be sure there is a .alb suffix
+			if (substr($newfolder, -4) != '.alb') {
+				$newfolder .= '.alb';
+			}
+		}
 		$oldfolder = $this->name;
 		$dest = getAlbumFolder().$newfolder;
 		// Check to see if the destination already exists
@@ -880,10 +885,11 @@ class Album extends PersistentObject {
 				$sql = "UPDATE " . prefix('albums') . " SET folder='" . mysql_real_escape_string($newfolder) . "' WHERE `id` = '".$this->getAlbumID()."'";
 				$success = query($sql);
 				$this->updateParent($newfolder);
-				return $success;
-			} else {
-				return false;
+				if ($success) {
+					return $newfolder;
+				}
 			}
+			return false;
 		} else {
 			if (mkdir_recursive(dirname($dest)) === TRUE) {
 				// Make the move (rename).
@@ -902,7 +908,7 @@ class Album extends PersistentObject {
 					// Handle result here.
 				}
 				$this->updateParent($newfolder);
-				return true;
+				return $newfolder;
 			}
 		}
 		return false;

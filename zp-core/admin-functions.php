@@ -1471,11 +1471,11 @@ function processAlbumEdit($index, $album) {
 		// Append the album name.
 		$dest = ($dest ? $dest . '/' : '') . (strpos($album->name, '/') === FALSE ? $album->name : basename($album->name));
 		if ($dest && $dest != $album->name) {
-			if (!$album->moveAlbum($dest)) {
-				$notify .= "&mcrerr=1";
-			} else {
+			if ($returnalbum = $album->moveAlbum($dest)) {
 				// A slight hack to redirect to the new album after moving.
-				$_GET['album'] = $dest;
+				$_GET['album'] = $returnalbum;
+			} else {
+				$notify .= "&mcrerr=1";
 			}
 		} else {
 			// Cannot move album to same album.
@@ -1499,11 +1499,11 @@ function processAlbumEdit($index, $album) {
 			$renameto = dirname($album->name) . '/' . $renameto;
 		}
 		if ($renameto != $album->name) {
-			if (!$album->renameAlbum($renameto)) {
-				$notify .= "&mcrerr=1";
-			} else {
+			if ($returnalbum = $album->renameAlbum($renameto)) {
 				// A slight hack to redirect to the new album after moving.
-				$_GET['album'] = $renameto;
+				$_GET['album'] = $returnalbum;
+			} else {
+				$notify .= "&mcrerr=1";
 			}
 		}
 	}
