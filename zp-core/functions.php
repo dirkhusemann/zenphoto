@@ -192,11 +192,19 @@ function setOption($key, $value, $persistent=true) {
 	if ($persistent) {
 		$result = query_single_row("SELECT `value` FROM ".prefix('options')." WHERE `name`='".$key."' AND `ownerid`=0", true);
 		if (is_array($result) && array_key_exists('value', $result)) { // option already exists.
-			$sql = "UPDATE " . prefix('options') . " SET `value`='" . mysql_real_escape_string($value) . "' WHERE `name`='" . mysql_real_escape_string($key) ."' AND `ownerid`=0";
+			if (is_null($value)) {
+				$sql = "UPDATE " . prefix('options') . " SET `value`=NULL WHERE `name`='" . mysql_real_escape_string($key) ."' AND `ownerid`=0";
+			} else {
+				$sql = "UPDATE " . prefix('options') . " SET `value`='" . mysql_real_escape_string($value) . "' WHERE `name`='" . mysql_real_escape_string($key) ."' AND `ownerid`=0";
+			}
 			$result = query($sql, true);
 		} else {
+			if (is_null($value)) {
+				$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid) VALUES ('" . mysql_real_escape_string($key) . "',NULL, 0)";
+			} else {
 				$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid) VALUES ('" . mysql_real_escape_string($key) . "','" . mysql_real_escape_string($value) . "', 0)";
-				$result = query($sql, true);
+			}	
+			$result = query($sql, true);
 		}
 	} else {
 		$result = true;
@@ -235,8 +243,12 @@ function setOptionDefault($key, $default) {
 	global $_zp_conf_vars, $_zp_options;
 	if (NULL == $_zp_options) { getOption('nil'); } // pre-load from the database
 	if (!array_key_exists($key, $_zp_options)) {
+		if (is_null($default)) {
+		$sql = "INSERT INTO " . prefix('options') . " (`name`, `value`, `ownerid`) VALUES ('" . mysql_real_escape_string($key) . "', NULL, 0);";
+		} else {
 		$sql = "INSERT INTO " . prefix('options') . " (`name`, `value`, `ownerid`) VALUES ('" . mysql_real_escape_string($key) . "', '".
 						mysql_real_escape_string($default) . "', 0);";
+		}
 		query($sql, true);
 		$_zp_options[$key] = $default;
 	}
