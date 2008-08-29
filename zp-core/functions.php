@@ -2226,15 +2226,16 @@ function getAllSubAlbumIDs($albumfolder='') {
  * @param string $image Name of the image
  */
 function handleSearchParms($album='', $image='') {
-	global $_zp_current_search;
+	global $_zp_current_search, $zp_request;
 	$cookiepath = WEBPATH;
 	if (WEBPATH == '') { $cookiepath = '/'; }
-	if (empty($album)) { // clear the cookie
+	if ($zp_request && empty($album)) { // clear the cookie if we are loading the index page
 		zp_setcookie("zenphoto_image_search_params", "", time()-368000, $cookiepath);
 		return;
 	}
 	$context = get_context();
 	$params = zp_getCookie('zenphoto_image_search_params');
+	
 	if (!empty($params)) {
 		$_zp_current_search = new SearchEngine();
 		$_zp_current_search->setSearchParams($params);
