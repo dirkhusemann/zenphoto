@@ -2917,7 +2917,7 @@ function getTags() {
  * @param string $option links by default, if anything else the
  *               tags will not link to all other photos with the same tag
  * @param string $preText text to go before the printed tags
- * @param string $class css class to apply to the UL list
+ * @param string $class css class to apply to the div surrounding the UL list
  * @param string $separator what charactor shall separate the tags
  * @param bool $editable true to allow admin to edit the tags
  * @since 1.1
@@ -2931,7 +2931,7 @@ function printTags($option='links',$preText=NULL,$class='taglist',$separator=', 
 		echo "<script type=\"text/javascript\">initEditableTags('imageTags');</script>";
 	} else {
 		if (count($singletag) > 0) {
-			echo "<ul class=\"".$class."\">\n";
+			echo "<div class=\"".$class."\"><ul>\n";
 			if (!empty($preText)) {
 				echo "<li class=\"tags_title\">".$preText."</li>";
 			}
@@ -2945,7 +2945,7 @@ function printTags($option='links',$preText=NULL,$class='taglist',$separator=', 
 				echo "\t<li>".$links1.$singletag[$x].$links2.$separator."</li>\n";
 			}
 
-			echo "</ul>";
+			echo "</ul></div>";
 		}
 	}
 }
