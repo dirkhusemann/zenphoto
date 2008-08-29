@@ -174,5 +174,6 @@ function setDefault($option, $default) {
 	setOptionDefault('tagsort', 0);
 	setOptionDefault('albumimagesort', 'ID');
 	setOptionDefault('albumimagedirection', 'DESC');
+	setOptionDefault('cache_full_image', 0);
 
 ?>

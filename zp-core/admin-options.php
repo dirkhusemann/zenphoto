@@ -230,6 +230,7 @@ if (isset($_GET['action'])) {
 			setBoolOption('perform_video_watermark', isset($_POST['perform_video_watermark']));
 			setOption('video_watermark_image', 'watermarks/' . sanitize($_POST['video_watermark_image'],3) . '.png');
 			setOption('full_image_quality', sanitize($_POST['full_image_quality']),3);
+			setBoolOption('cache_full_image', isset($_POST['cache_full_image']));
 			setOption('protect_full_image', sanitize($_POST['protect_full_image']),3);
 			setBoolOption('hotlink_protection', isset($_POST['hotlink_protection']));
 			setBoolOption('use_lock_image', isset($_POST['use_lock_image']));
@@ -1022,16 +1023,27 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	<tr>
 		<td><?php echo gettext("Full image protection:"); ?></td>
 		<td>
-		<?php
-		echo "<select id=\"protect_full_image\" name=\"protect_full_image\">\n";
-		generateListFromArray(array(getOption('protect_full_image')), array(gettext('Unprotected') => 'Unprotected', gettext('Protected view') => 'Protected view', gettext('Download') => 'Download', gettext('No access') => 'No access'));
-		echo "</select>\n";
-		echo '<input type="checkbox" name="hotlink_protection" value="1"';
-		echo checked('1', getOption('hotlink_protection')). ' /> '.gettext('Disable hotlinking');
-		?>
+			<?php
+			echo "<select id=\"protect_full_image\" name=\"protect_full_image\">\n";
+			generateListFromArray(array(getOption('protect_full_image')), array(gettext('Unprotected') => 'Unprotected', gettext('Protected view') => 'Protected view', gettext('Download') => 'Download', gettext('No access') => 'No access'));
+			echo "</select>\n";
+			?>
+			<p>
+			<?php
+			echo '<input type="checkbox" name="hotlink_protection" value="1"';
+			echo checked('1', getOption('hotlink_protection')). ' /> '.gettext('Disable hotlinking');
+			?>
+			<?php
+			echo '<input type="checkbox" name="cache_full_image" value="1"';
+			echo checked('1', getOption('cache_full_image')). ' /> '.gettext('cache the full image');
+			?>
+			</p>
 		</td>
 		<td><?php echo gettext("Select the level of protection for full sized images.");
-		echo ' '.gettext("Disabling hotlinking prevents linking to the full image from other domains. If enabled, external links are redirect to the image page. If you are having problems with full images being displayed, try disabling this setting. Hotlinking is not prevented if <em>Full image protection</em> is <em>Unprotected</em>."); ?></td>
+		echo ' '.gettext("Disabling hotlinking prevents linking to the full image from other domains. If enabled, external links are redirect to the image page. If you are having problems with full images being displayed, try disabling this setting. Hotlinking is not prevented if <em>Full image protection</em> is <em>Unprotected</em>."); 
+		echo ' '.gettext("If <em>Cache the full image</em> is checked the full image will be loaded to the cache and served from there after the first reference.");
+		?>
+		</td>
 	</tr>
 		<td><?php echo gettext("Use lock image"); ?></td>
 		<td>
