@@ -19,7 +19,6 @@ if (checkforPassword(true)) {
 require_once('functions-image.php');
 $image_path = getAlbumFolder() . $_zp_current_album->name . "/" . $_zp_current_image->name;
 $cache_file = $_zp_current_album->name . "/" . $_zp_current_image->name . '_FULL';
-$cache_path = SERVERCACHE . '/' . $cache_file;
 $suffix = strtolower(substr(strrchr($image_path, "."), 1));
 switch ($suffix) {
 	case 'bmp':
@@ -31,11 +30,7 @@ switch ($suffix) {
 }
 
 if (getOption('cache_full_image')) {
-	if (file_exists($cache_path)) {
-		header('Content-Type: image/'.$suffix);
-		header("Location: " . FULLWEBPATH. CACHEFOLDER . $cache_file);
-		exit();
-	}
+	$cache_path = SERVERCACHE . '/' . $cache_file;
 } else {
 	$cache_path = NULL;
 }

@@ -2212,14 +2212,26 @@ function getUnprotectedImageURL() {
  **/
 function getProtectedImageURL() {
 	if(!in_context(ZP_IMAGE)) return false;
-	global $_zp_current_image;
-	$path = $_zp_current_image->getImageLink();
-	if (getOption('mod_rewrite')) {
-		$path .= "?p=*full-image";
+	global $_zp_current_image, $_zp_current_album;
+	$cache_file = $_zp_current_album->name . "/" . $_zp_current_image->name . '_FULL';
+	$cache_path = SERVERCACHE . '/' . $cache_file;
+	
+debugLog("getProtectedImageURL: $cache_path");	
+	
+	if (file_exists($cache_path)) {
+		return WEBPATH . CACHEFOLDER . pathurlencode($cache_file);
+		
+debugLog("serve from cache.");		
+		
 	} else {
-		$path .= "&p=*full-image";
+		$path = $_zp_current_image->getImageLink();
+		if (getOption('mod_rewrite')) {
+			$path .= "?p=*full-image";
+		} else {
+			$path .= "&p=*full-image";
+		}
+		return $path;
 	}
-	return $path;
 }
 
 /**
