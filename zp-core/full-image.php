@@ -18,8 +18,8 @@ if (checkforPassword(true)) {
 }
 require_once('functions-image.php');
 $image_path = getAlbumFolder() . $_zp_current_album->name . "/" . $_zp_current_image->name;
-$cache_file = $_zp_current_album->name . "/" . $_zp_current_image->name . '_FULL';
 $suffix = strtolower(substr(strrchr($image_path, "."), 1));
+$cache_file = $_zp_current_album->name . "/" . substr($_zp_current_image->name, 0, -strlen($suffix)-1) . '_FULL.' . $suffix;
 switch ($suffix) {
 	case 'bmp':
 		$suffix = 'wbmp';
