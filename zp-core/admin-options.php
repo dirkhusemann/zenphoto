@@ -190,7 +190,10 @@ if (isset($_GET['action'])) {
 			setBoolOption('album_session', isset($_POST['album_session']));
 			$oldloc = getOption('locale', true); // get the option as stored in the database, not what might have been set by a cookie
 			$newloc = sanitize($_POST['locale'],3);
-			if ($newloc != $oldloc) { // clear any cookies so things start fresh.
+			if ($newloc != $oldloc) {
+				$cookiepath = WEBPATH;
+				if (WEBPATH == '') { $cookiepath = '/'; }
+				zp_setCookie('dynamic_locale', getOption('locale'), time()-368000, $cookiepath);  // clear the language cookie
 				$encoding = getOption('charset');
 				if (empty($encoding)) $encoding = 'UTF-8';
 				$result = setlocale(LC_ALL, $newloc.'.'.$encoding);
@@ -201,9 +204,6 @@ if (isset($_GET['action'])) {
 					$notify = '?local_failed='.$newloc;
 				} else {
 					setOption('locale', $newloc);
-					$cookiepath = WEBPATH;
-					if (WEBPATH == '') { $cookiepath = '/'; }
-					zp_setCookie('dynamic_locale', getOption('locale'), time()-368000, $cookiepath);  // clear the language cookie
 				}
 			}
 			setBoolOption('multi_lingual', isset($_POST['multi_lingual']));

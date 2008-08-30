@@ -55,11 +55,15 @@ function generateLanguageOptionList() {
  * The plugin translation files must be located within
  * zp-core/plugins/<plugin name>/locale/<language locale>/LC_MESSAGES/ and must
  * have the name of the plugin (<plugin name>.po  <plugin name>.mo)
- *
+ * 
+ * Return value is the success of the setlocale() call
+ * 
  * @param string $plugindomain The name of the plugin
+ * @return bool 
+ * 
  */
 function setPluginDomain($plugindomain) {
-	setupCurrentLocale($plugindomain,"plugin");
+	return setupCurrentLocale($plugindomain,"plugin");
 }
 
 /**
@@ -68,10 +72,13 @@ function setPluginDomain($plugindomain) {
  * zenphoto/themes/<theme name>/locale/<language locale>/LC_MESSAGES/ and must
  * have the name of the theme (<theme name>.po  <theme name>.mo)
  *
+ * Return value is the success of the setlocale() call
+ * 
  * @param string $plugindomain The name of the theme
+ * @return bool
  */
 function setThemeDomain($themedomain) {
-	setupCurrentLocale($themedomain,"theme");
+	return setupCurrentLocale($themedomain,"theme");
 }
 
 /**
