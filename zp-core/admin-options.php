@@ -1033,16 +1033,18 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 			echo '<input type="checkbox" name="hotlink_protection" value="1"';
 			echo checked('1', getOption('hotlink_protection')). ' /> '.gettext('Disable hotlinking');
 			?>
+			<br />
 			<?php
 			echo '<input type="checkbox" name="cache_full_image" value="1"';
 			echo checked('1', getOption('cache_full_image')). ' /> '.gettext('cache the full image');
 			?>
 			</p>
 		</td>
-		<td><?php echo gettext("Select the level of protection for full sized images.");
-		echo ' '.gettext("Disabling hotlinking prevents linking to the full image from other domains. If enabled, external links are redirect to the image page. If you are having problems with full images being displayed, try disabling this setting. Hotlinking is not prevented if <em>Full image protection</em> is <em>Unprotected</em>."); 
-		echo ' '.gettext("If <em>Cache the full image</em> is checked the full image will be loaded to the cache and served from there after the first reference.");
-		?>
+		<td><?php echo gettext("Select the level of protection for full sized images. <em>Download</em> forces a download dialog rather than displaying the image. <em>No&nbsp;access</em> prevents a link to the image from being shown. <em>Protected&nbsp;view</em> forces image processing before the image is diaplayed, for instance to apply a watermark or to check passwords. <em>Unprotected</em> allows direct display of the image."); ?>
+		<br /><br />
+		<?php echo gettext("Disabling hotlinking prevents linking to the full image from other domains. If enabled, external links are redirect to the image page. If you are having problems with full images being displayed, try disabling this setting. Hotlinking is not prevented if <em>Full&nbsp;image&nbsp;protection</em> is <em>Unprotected</em> or if the image is cached."); ?>
+		<br /><br />
+		<?php echo ' '.gettext("If <em>Cache the full image</em> is checked the full image will be loaded to the cache and served from there after the first reference. <em>Full&nbsp;image&nbsp;protection</em> must be set to <em>Protected&nbsp;view</em> for the image to be cached. However, once cached, no protections are applied to the image."); ?>
 		</td>
 	</tr>
 		<td><?php echo gettext("Use lock image"); ?></td>
