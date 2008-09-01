@@ -136,7 +136,7 @@ function setDefault($option, $default) {
 			$protection = 'Protected view';
 		}
 	} else {
-		$protection = 'Unprotected';
+		$protection = false;
 	}
 	if ($protection) {
 		setOption('protect_full_image', $protection);

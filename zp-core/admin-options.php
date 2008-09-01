@@ -202,9 +202,8 @@ if (isset($_GET['action'])) {
 				}
 				if (!empty($newloc) && ($result === false)) {
 					$notify = '?local_failed='.$newloc;
-				} else {
-					setOption('locale', $newloc);
 				}
+				setOption('locale', $newloc);
 			}
 			setBoolOption('multi_lingual', isset($_POST['multi_lingual']));
 			$f = sanitize($_POST['date_format_list'],3);
