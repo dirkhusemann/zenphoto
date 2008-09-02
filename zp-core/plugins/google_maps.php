@@ -55,7 +55,10 @@ if($apiKey = getOption('gmaps_apikey')){
 	require_once(SERVERPATH.'/'.ZENFOLDER.'/plugins/google_maps/phoogle.php');
 	$_zp_phoogle = new PhoogleMap();
 	$_zp_phoogle->setAPIkey($apiKey);
+} else {
+	$_zp_phoogle = NULL;
 }
+
 /**
  * Returns true if the curent image has EXIF location data
  *
