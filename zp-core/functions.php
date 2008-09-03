@@ -714,10 +714,10 @@ function sanitize_numeric($num) {
  */
 function sanitize($input_string, $sanitize_level=3) {
 	if (is_array($input_string)) {
+		$output_string = array();
 		foreach ($input_string as $output_key => $output_value) {
 			$output_string[$output_key] = sanitize_string($output_value, $sanitize_level);
 		}
-		unset($output_key, $output_value);
 	} else {
 		$output_string = sanitize_string($input_string, $sanitize_level);
 	}
