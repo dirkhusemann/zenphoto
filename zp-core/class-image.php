@@ -703,26 +703,28 @@ class Image extends PersistentObject {
 	 * @return string
 	 */
 	function getThumb() {
-		if ($this->video) {      //The file is a video
-			if ($this->videoThumb == NULL) {
-				return WEBPATH . "/" . ZENFOLDER . "/i.php?a=.&i=multimediaDefault.png&s=thumb";
-			} else {
-				return WEBPATH . "/" . ZENFOLDER . "/i.php?a=".urlencode($this->album->name)."&i=".urlencode($this->videoThumb)."&s=thumb&vwm=".getOption('perform_video_watermark');
+		$filename = $this->filename;
+		$vmw = '';
+		if ($this->video) {
+			if ($this->videoThumb != NULL) {
+				$filename = $this->videoThumb;
+				$wmv = '&wmv='.getOption('perform_video_watermark');
 			}
 		}
-
-		$cachefilename = getImageCacheFilename($this->album->name, $this->filename, getImageParameters(array('thumb')));
-		if (file_exists(SERVERCACHE . $cachefilename)
-		&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
+		$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename, getImageParameters(array('thumb')));
+		if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
 			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($cachefilename);
 		} else {
-			$alb = $this->album->name;
-			$queryURL = ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($this->filename) . '&s=thumb';
-			if (empty($alb)) {
-				$alb = '/ ';
+			if (getOption('mod_rewrite') && empty($wmv)) {
+				if (empty($alb)) {
+					$alb = '/ ';
+				}
+				$path = pathurlencode($alb) . '/image/thumb/' . urlencode($filename);
+			} else {
+				$path = ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($filename) . '&s=thumb'.$wmv;
 			}
-			return rewrite_path(
-			pathurlencode($alb) . '/image/thumb/' . urlencode($this->filename), $queryURL);
+			if (substr($path, 0, 1) == "/") $path = substr($path, 1);
+			return WEBPATH . "/" . $path;
 		}
 	}
 

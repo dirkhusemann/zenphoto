@@ -262,8 +262,9 @@ function imageResizeAlpha(&$src, $w, $h) {
  * @param array $args the cropping arguments
  * @param bool $allow_watermark set to true if image may be watermarked
  * @param bool $force_cache set to true to force the image into the cache folders
+ * @param string $theme the current theme
  */
-function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $force_cache=false) {
+function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $force_cache=false, $theme) {
 	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
 	// Set the config variables for convenience.
 	$image_use_longest_side = getOption('image_use_longest_side');
@@ -277,6 +278,19 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 	// Check for the source image.
 	if (!file_exists($imgfile) || !is_readable($imgfile)) {
 		imageError(gettext('Image not found or is unreadable.'), 'err-imagenotfound.gif');
+	}
+	
+	$videoWM = false;
+	if (isset($_GET['wmv'])) {
+		$videoWM =  sanitize($_GET['wmv'],3);
+	}
+	if (is_valid_video($imgfile)) {
+		if (!isset($_GET['vwm'])) {  // choose a watermark for the image
+			$imgfile = SERVERPATH . '/' . THEMEFOLDER . '/' . $theme . '/images/multimediaDefault.png';
+			if (!file_exists($imgfile)) {
+				$imgfile = SERVERPATH . "/" . ZENFOLDER . '/images/multimediaDefault.png';
+			}
+		}
 	}
 
 	if ($im = get_image($imgfile)) {
@@ -367,7 +381,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			unsharp_mask($newim, 40, 0.5, 3);
 		}
 		$perform_watermark = false;
-		if (isset($_GET['vwm'])) {
+		if ($videoWM) {
 			if ($thumb) {
 				$perform_watermark = true;
 				$watermark_image = getOption('video_watermark_image');

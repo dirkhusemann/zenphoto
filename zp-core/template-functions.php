@@ -154,7 +154,7 @@ function printAdminToolbox($context=null, $id='admin') {
  * Print any Javascript required by zenphoto. Every theme should include this somewhere in its <head>.
  */
 function zenJavascript() {
-	global $_zp_phoogle, $_zp_current_album, $_zp_plugin_scripts;
+	global $_zp_current_album, $_zp_plugin_scripts;
 
 	// i18n Javascript constant strings.
 	echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/js-string-constants.js.php\"></script>\n";
@@ -2040,7 +2040,8 @@ function getDefaultHeight() {
  * @return int
  */
 function getFullWidth() {
-	$size = getSizeFullImage(); return $size[0];
+	global $_zp_current_image;
+	return $_zp_current_image->getWidth();
 }
 
 /**
@@ -2049,7 +2050,8 @@ function getFullWidth() {
  * @return int
  */
 function getFullHeight() {
-	$size = getSizeFullImage(); return $size[1];
+	global $_zp_current_image;
+	return $_zp_current_image->getHeight();
 }
 
 /**

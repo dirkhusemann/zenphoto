@@ -53,6 +53,7 @@ if (isset($_GET['t'])) {
 
 // Fix special characters in the album and image names if mod_rewrite is on:
 // URL looks like: "/album1/subalbum/image/picture.jpg"
+
 list($ralbum, $rimage) = rewrite_get_album_image('a', 'i');
 $album = str_replace('..','', sanitize($ralbum, 0));
 $image = str_replace(array('/',"\\"),'', sanitize($rimage, 0));
@@ -160,7 +161,6 @@ if (!ini_get("safe_mode")) {
 		}
 	}
 }
-
 $process = true;
 // If the file exists, check its modification time and update as needed.
 $fmt = filemtime($imgfile);
@@ -175,7 +175,9 @@ if (file_exists($newfile)) {
 if ($process) {
 	// setup standard image options from the album theme if it exists
 	require_once('classes.php');
-	$parent = new Album(new Gallery, $album);
+	$gallery = new Gallery();
+	$parent = new Album($gallery, $album);
+	$theme = $gallery->getCurrentTheme();
 	$albumtheme = $parent->getAlbumTheme();
 	if (!empty($albumtheme)) {
 		$theme = $albumtheme;
@@ -189,7 +191,7 @@ if ($process) {
 			}
 		}
 	}
-	cacheImage($newfilename, $imgfile, $args, $allowWatermark);
+	cacheImage($newfilename, $imgfile, $args, $allowWatermark, false, $theme);
 }
 if (!$debug) {
 	// ... and redirect the browser to it.
