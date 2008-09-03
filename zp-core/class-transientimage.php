@@ -15,18 +15,28 @@ class Transientimage extends image {
 	 * @return transientimage
 	 */
 	function Transientimage(&$gallery, $image) {
-		$album = new Album($gallery, '');
+		$this->album = new Album($gallery, '');
+		$this->localpath = $image;
 		
 		$folder = basename(dirname($image));
 		if ($folder == 'images') {
 			$folder = basename(dirname(dirname($image)));
 		}
 		$filename = $folder.'_'.basename($image);
+		$this->filename = $filename;
+		$this->filemtime = filemtime($this->localpath);
+		$this->name = $filename;
+		$this->comments = null;
+		if (is_valid_video($filename)) {
+			$this->video = true;
+		}
+		
 		if (!copy($image,  getAlbumFolder() . $filename)) {
 			return NULL;
 		}
 		@chmod($filename, CHMOD_VALUE & 0666);
-		parent::Image($album, $filename);
+		
+		parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', false, true);
 		
 	}
 }
