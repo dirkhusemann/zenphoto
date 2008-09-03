@@ -591,7 +591,7 @@ function getAlbumArray($albumstring, $includepaths=false) {
 }
 
 /**
- * Returns the name of an image for uses in caching it
+ * Returns the path of an image for uses in caching it
  *
  * @param string $album album folder
  * @param string $image image file name
@@ -601,11 +601,15 @@ function getAlbumArray($albumstring, $includepaths=false) {
 function getImageCacheFilename($album, $image, $args) {
 	// Set default variable values.
 	$postfix = getImageCachePostfix($args);
-	if (ini_get('safe_mode')) {
-		$albumsep = SAFE_MODE_ALBUM_SEP;
-		$album = str_replace(array('/',"\\"), $albumsep, $album);
+	if (empty($album)) {
+		$albumsep = '';
 	} else {
-		$albumsep = '/';
+		if (ini_get('safe_mode')) {
+			$albumsep = SAFE_MODE_ALBUM_SEP;
+			$album = str_replace(array('/',"\\"), $albumsep, $album);
+		} else {
+			$albumsep = '/';
+		}
 	}
 	return '/' . $album . $albumsep . $image . $postfix . '.jpg';
 }

@@ -669,6 +669,7 @@ class Album extends PersistentObject {
 			$thumb = substr($thumb, 1); // strip off the slash
 			$albumdir = getAlbumFolder();
 		}
+		$shuffle = $thumb != '1';
 		if (!empty($thumb) && $thumb != '1' && file_exists($albumdir.$thumb)) {
 			if ($i===false) {
 				return new Image($this, $thumb);
@@ -685,7 +686,7 @@ class Album extends PersistentObject {
 			$this->getImages(0, 0, 'ID', 'DESC');
 			$thumbs = $this->images;
 			if (!is_null($thumbs)) {
-				if ($thumb !== '1') {
+				if ($shuffle) {
 					shuffle($thumbs);
 				}
 				while (count($thumbs) > 0) {
@@ -698,11 +699,13 @@ class Album extends PersistentObject {
 			// Otherwise, look in sub-albums.
 			$subalbums = $this->getSubAlbums();
 			if (!is_null($subalbums)) {
-				shuffle($subalbums);
+				if ($shuffle) {
+					shuffle($subalbums);
+				}
 				while (count($subalbums) > 0) {
 					$subalbum = new Album($this->gallery, array_pop($subalbums));
 					$thumb = $subalbum->getAlbumThumbImage();
-					if ($thumb != NULL && $thumb->exists) {
+					if (strtolower(get_class($thumb)) !== 'transientimage' && $thumb->exists) {
 						return $thumb;
 					}
 				}
