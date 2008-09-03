@@ -1146,7 +1146,7 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 		}
 	}
 	$class = trim($class);
-	/* set the HTML image width and height parameters in case this image was "zen-logo.jpg" substituted for no thumbnail then the thumb layout is preserved */
+	/* set the HTML image width and height parameters in case this image was "imageDefault.png" substituted for no thumbnail then the thumb layout is preserved */
 	if ($sizeW = max(is_null($width) ? 0: $width, is_null($cropw) ? 0 : $cropw)) {
 		$sizing = ' width="' . $sizeW . '"';
 	} else {
@@ -2816,22 +2816,23 @@ function getRandomImagesAlbum($rootAlbum=null) {
 	} else {
 		if (zp_loggedin()) {
 			$imageWhere = '';
-			$albumInWhere = '';
 			$albumNotWhere = '';
 		} else {
 			$imageWhere = " AND " . prefix('images'). ".show=1";
-
-			$albumfolder = $album->getFolder();
-			$query = "SELECT id FROM " . prefix('albums') . " WHERE " . prefix('albums') . ".show = 1 AND folder LIKE '" . mysql_real_escape_string($albumfolder) . "%'";
-			$result = query_full_array($query);
-			$albumInWhere = prefix('albums') . ".id in (";
-			foreach ($result as $row) {
-				$albumInWhere = $albumInWhere . $row['id'] . ", ";
-			}
-
-			$albumInWhere =  ' AND '.substr($albumInWhere, 0, -2) . ')';
 			$albumNotWhere = ' AND '.getProtectedAlbumsWhere();
 		}
+		$albumInWhere = '';
+
+		$albumfolder = $album->getFolder();
+		$query = "SELECT id FROM " . prefix('albums') . " WHERE " . prefix('albums') . ".show = 1 AND folder LIKE '" . mysql_real_escape_string($albumfolder) . "%'";
+		$result = query_full_array($query);
+		$albumInWhere = prefix('albums') . ".id in (";
+		foreach ($result as $row) {
+			$albumInWhere = $albumInWhere . $row['id'] . ", ";
+		}
+
+		$albumInWhere =  ' AND '.substr($albumInWhere, 0, -2) . ')';
+
 		$c = 0;
 		while ($c < 10) {
 			$result = query_single_row('SELECT COUNT(*) AS row_count ' .
