@@ -1,4 +1,4 @@
-# htaccess file version 1.1.6.0
+# htaccess file version 1.2.1.0
 # Update the above and the define in setup.php when you make changes to the rewrite rules!
 # NOTE: Change the RewriteBase below to the absolute path to your zenphoto directory. (Or let setup.php do it for you!)
 
@@ -16,13 +16,13 @@
 
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
-  RewriteRule ^.*$ - [R,L]
+  RewriteRule ^.*$ - [L]
   
   RewriteRule index\.php$                     index.php [L,QSA]
   RewriteRule ^page/([0-9]+)/?$               index.php?page=$1 [L,QSA]
   RewriteRule ^page/([A-Za-z0-9\-_]+)/?$      index.php?p=$1 [L,QSA]
   RewriteRule ^(.*)/page/([0-9]+)/?$          index.php?album=$1&page=$2 [L,QSA]
-  RewriteRule ^(.*)page/([A-Za-z0-9\-_]+)/?$      index.php?album=$1&p=$2 [L,QSA]
+  RewriteRule ^(.*)/page/([A-Za-z0-9\-_]+)/?$      index.php?album=$1&p=$2 [L,QSA]
   
   #### Rewrite rule addtion for search
   RewriteRule ^page/([A-Za-z0-9\-_]+)/fields([0-9]+)/(.*)/([0-9]+)/?$      index.php?p=$1&searchfields=$2&words=$3&page=$4 [L,QSA]
