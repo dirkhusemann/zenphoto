@@ -718,8 +718,19 @@ class Album extends PersistentObject {
 				}
 			}
 		}
-		$noImage = new Album($this->gallery, '');
-		return new image($noImage, 'zen-logo.jpg');
+		$theme = $this->gallery->getCurrentTheme();
+		$albumtheme = $this->getAlbumTheme();
+		if (!empty($albumtheme)) {
+			$theme = $albumtheme;
+		}
+		$nullimage = SERVERPATH.'/'.ZENFOLDER.'/images/imageDefault.png';
+		if (!empty($theme)) {
+			$themeimage = SERVERPATH.'/'.THEMEFOLDER.'/'.$theme.'/images/imageDefault.png';
+			if (file_exists($themeimage)) {
+				$nullimage = $themeimage;
+			}
+		}
+		return new transientimage($this->gallery, $nullimage);
 	}
 
 	/**

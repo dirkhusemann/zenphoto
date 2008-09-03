@@ -12,8 +12,6 @@ require_once('functions-controller.php');
 // Initialize the global objects and object arrays:
 $_zp_gallery = new Gallery();
 
-copy(SERVERPATH . '/' . ZENFOLDER . '/images/zen-logo.jpg',  getAlbumFolder() . 'zen-logo.jpg');
-
 $_zp_current_album = NULL;
 $_zp_current_album_restore = NULL;
 $_zp_albums = NULL;

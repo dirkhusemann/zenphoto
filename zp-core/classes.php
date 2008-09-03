@@ -336,12 +336,13 @@ class PersistentObject {
 
 }
 /*******************************************************************************
-* Load the base classes for Image, Album, and Gallery                          *
+* Load the base classes (Image, Album, Gallery, etc.)                          *
 *******************************************************************************/
 
 require_once('class-image.php');
 require_once('class-album.php');
 require_once('class-gallery.php');
 require_once('class-search.php');
+require_once('class-transientimage.php');
 
 ?>
