@@ -14,12 +14,12 @@ function show_sub_count_index() {
 }
 
 function printHeadingImage($randomImage) {
+	global $_zp_themeroot;
 	$id = getAlbumId();
+	echo '<div id="randomhead">';
 	if (is_null($randomImage) || checkforPassword(true)) {
-		$randomImage= new Transientimage(new Gallery(), SERVERPATH.'/'.THEMEFOLDER.'/'.basename(dirname(__FILE__)).'/images/imageDefault.png' );
-	}
-	if (!is_null($randomImage)) {
-		echo '<div id="randomhead">';
+		echo '<img src="'.$_zp_themeroot.'/images/zen-logo.jpg" />';
+	} else {
 		$randomAlbum = $randomImage->getAlbum();
 		$randomAlt1 = $randomAlbum->getTitle();
 		if ($randomAlbum->getAlbumId() <> $id) {
@@ -36,8 +36,8 @@ function printHeadingImage($randomImage) {
 					htmlspecialchars($randomAlt1, ENT_QUOTES).
 					":\n".htmlspecialchars($randomImage->getTitle(), ENT_QUOTES).
 					'" /></a>';
-		echo '</div>';
 	}
+	echo '</div>';
 }
 
 
