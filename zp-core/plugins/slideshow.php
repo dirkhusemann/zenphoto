@@ -112,7 +112,7 @@ function printSlideShowLink($linktext='') {
 			$imagefile = "";
 		}
 		$albumnr = getAlbumID();
-		$slideshowlink = rewrite_path(rawurlencode($_zp_current_album->getFolder())."/page/slideshow","index.php?p=slideshow&amp;album=".urlencode($_zp_current_album->getFolder()));
+		$slideshowlink = rewrite_path(pathurlencode($_zp_current_album->getFolder())."/page/slideshow","index.php?p=slideshow&amp;album=".urlencode($_zp_current_album->getFolder()));
 	}
 	$numberofimages = getNumImages();
 	if($numberofimages != 0) {
