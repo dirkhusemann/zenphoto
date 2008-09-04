@@ -704,7 +704,7 @@ class Image extends PersistentObject {
 	 */
 	function getThumb() {
 		$filename = $this->filename;
-		$vmw = '';
+		$wmv = '';
 		if ($this->video) {
 			if ($this->videoThumb != NULL) {
 				$filename = $this->videoThumb;
