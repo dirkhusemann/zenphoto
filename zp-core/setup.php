@@ -53,6 +53,23 @@ function updateItem($item, $value) {
 	$zp_cfg = substr($zp_cfg, 0, $i) . '= "' . $value . '";' . substr($zp_cfg, $j);
 }
 
+function checkAlbumParentid($albumname, $id) {
+	Global $gallery;
+	$album = new Album($gallery, $albumname);
+	if (($oldid = $album->get('parentid')) !== $id) {
+		$album->set('parentid', $id);
+		$album->save();
+		if (is_null($oldid)) $oldid = '<em>NULL</em>';
+		if (is_null($id)) $id = '<em>NULL</em>';
+		printf('Fixed album <strong>%1$s</strong>: id was %2$s should have been %3$s<br />', $albumname,$oldid, $id);
+	}
+	$id = $album->id;
+	$albums = $album->getSubalbums();
+	foreach ($albums as $albumname) {
+		checkAlbumParentid($albumname, $id);
+	}
+}
+
 if (!$checked) {
 	if ($oldconfig = !file_exists('zp-config.php')) {
 		@copy('zp-config.php.source', 'zp-config.php');
@@ -1375,6 +1392,12 @@ if (file_exists("zp-config.php")) {
 			}
 		}
 		echo "</h3>";
+
+		// fixes 1.2 move/copy albums with wrong ids
+		$albums = $gallery->getAlbums();
+		foreach ($albums as $album) {
+			checkAlbumParentid($album, NULL);
+		}
 
 		if ($createTables) {
 			if ($_zp_loggedin == ADMIN_RIGHTS) {
