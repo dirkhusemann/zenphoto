@@ -138,6 +138,16 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		<td><?php echo gettext("Thumbnail:"); ?></td>
 		<td><select id="thumb" name="thumb">
 		<?php
+		$showThumb = getOption('thumb_select_images');
+		echo "\n<option";
+		if ($showThumb) echo " class=\"thumboption\" value=\"\" style=\"background-color:#B1F7B6\"";
+		echo ' value="1">'.gettext('most recent');
+		echo '</option>';
+		echo "\n<option";
+		if ($showThumb) echo " class=\"thumboption\" value=\"\" style=\"background-color:#B1F7B6\"";
+		echo " selected=\"selected\"";
+		echo ' value="">'.gettext('randomly selected');
+		echo '</option>';
 		foreach ($imagelist as $imagepath) {
 			$pieces = explode('/', $imagepath);
 			$filename = array_pop($pieces);;
@@ -145,8 +155,12 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 			$albumx = new Album($gallery, $folder);
 			$image = new Image($albumx, $filename);
 			if (is_valid_image($filename)) {
-				echo "\n<option class=\"thumboption\" style=\"background-image: url(" . $image->getThumb() .
-									"); background-repeat: no-repeat;\" value=\"".$imagepath."\"";
+				echo "\n<option class=\"thumboption\"";
+				if ($showThumb) {
+					echo " style=\"background-image: url(" . $image->getThumb() .
+									"); background-repeat: no-repeat;\"";
+				}
+				echo " value=\"".$imagepath."\"";
 				echo ">" . $image->getTitle();
 				echo  " ($imagepath)";
 				echo "</option>";

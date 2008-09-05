@@ -682,7 +682,22 @@ class Album extends PersistentObject {
 				if (!$root) { $albumdir = $this->name . "/" . $albumdir; } else { $albumdir = $albumdir . "/";}
 				return new Image(new Album($this->gallery, $albumdir), $thumb);
 			}
-		} else if (!$this->isDynamic()) {
+		} else if ($this->isDynamic()) {
+			$this->getImages(0, 0, 'ID', 'DESC');
+			$thumbs = $this->images;
+			if (!is_null($thumbs)) {
+				if ($shuffle) {
+					shuffle($thumbs);
+				}
+				while (count($thumbs) > 0) {
+					$thumb = array_shift($thumbs);
+					if (is_valid_image($thumb['filename'])) {
+						$alb = new Album($this->gallery, $thumb['folder']);
+						return new Image($alb, $thumb['filename']);
+					}
+				}
+			}
+		} else {
 			$this->getImages(0, 0, 'ID', 'DESC');
 			$thumbs = $this->images;
 			if (!is_null($thumbs)) {
