@@ -440,8 +440,14 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 			<input type="hidden" name="<?php echo $id ?>-adminuser"
 			value="<?php echo $userid ?>" /> <?php } ?></td>
 		<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
-		<?php if(!empty($userid) && count($admins) > 2) { ?>
-		<a href="javascript: if(confirm('Are you sure you want to delete this user?')) { window.location='?action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }"
+		<?php 
+		if(!empty($userid) && count($admins) > 2) { 
+			$msg = gettext('Are you sure you want to delete this user?');
+			if ($id == 0) {
+				$msg .= ' '.gettext('This is the master user account. If you delete it another user will be promoted to master user.');
+			}
+		?>
+		<a href="javascript: if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }"
 			title="<?php echo gettext('Delete this user.'); ?>" style="color: #c33;"> <img
 			src="images/fail.png" style="border: 0px;" alt="Delete" /></a> <?php } ?>&nbsp;
 		</td>
@@ -540,7 +546,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 							echo gettext("You may manage these albums subject to the above rights.");
 						} else {
 							echo gettext("Select one or more albums for the administrator to manage.").' ';
-							echo gettext("Administrators with <em>User admin</em> rights can manage all albums. All others may manage only those that are selected.");
+							echo gettext("Administrators with <em>User admin</em> or <em>Manage all albums</em> rights can manage all albums. All others may manage only those that are selected.");
 						}
 					}
 				}?>
