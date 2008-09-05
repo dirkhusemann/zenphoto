@@ -143,8 +143,30 @@ if (!is_writable(SERVERCACHE)) {
 		imageError(gettext("The cache directory is not writable! Attempts to chmod didn't work."), 'err-cachewrite.gif');
 }
 if (!file_exists($imgfile)) {
-	header("HTTP/1.0 404 Not Found");
-	imageError(gettext("Image not found; file does not exist."), 'err-imagenotfound.gif');
+	// then check to see if it is a transient image
+	$i = strpos($imgfile, '_{');
+	if ($i !== false) {
+		$j = strpos($imgfile, '}_');
+		$source = substr($imgfile, $i+2, $j-$i-2);
+		$imgfile = substr($imgfile, $j+1);
+		$i = strpos($imgfile, '_{');
+		if ($i !== false) {
+			$j = strpos($imgfile, '}_');
+			$source2 = '/'.substr($imgfile, $i+2, $j-$i-2);
+			$imgfile = substr($imgfile, $j+2);
+		} else {
+			$source2 = '';
+		}
+
+		if ($source != ZENFOLDER) {
+			$source = THEMEFOLDER.'/'.$source;
+		}
+		$imgfile = SERVERPATH.'/'.$source.$source2.'/'.$imgfile;
+	} 
+	if (!file_exists($imgfile)) {	
+		header("HTTP/1.0 404 Not Found");
+		imageError(gettext("Image not found; file does not exist."), 'err-imagenotfound.gif');
+	}
 }
 
 // Make the directories for the albums in the cache, recursively.

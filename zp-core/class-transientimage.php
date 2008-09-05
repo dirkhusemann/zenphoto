@@ -4,9 +4,6 @@
  * @package classes
  */
 class Transientimage extends image {
-	
-	//TODO: someday we should make it so that the image does not have to be copied to the albums folder.
-	
 	/**
 	 * creates a transient image (that is, one that is not stored in the database)
 	 *
@@ -20,9 +17,9 @@ class Transientimage extends image {
 		
 		$folder = basename(dirname($image));
 		if ($folder == 'images') {
-			$folder = basename(dirname(dirname($image)));
+			$folder = basename(dirname(dirname($image))).'}_{images';
 		}
-		$filename = $folder.'_'.basename($image);
+		$filename = '_{'.$folder.'}_'.basename($image);
 		$this->filename = $filename;
 		$this->filemtime = filemtime($this->localpath);
 		$this->name = $filename;
@@ -30,14 +27,7 @@ class Transientimage extends image {
 		if (is_valid_video($filename)) {
 			$this->video = true;
 		}
-		
-		if (!copy($image,  getAlbumFolder() . $filename)) {
-			return NULL;
-		}
-		@chmod($filename, CHMOD_VALUE & 0666);
-		
 		parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', false, true);
-		
 	}
 }
 ?>
