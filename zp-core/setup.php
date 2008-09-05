@@ -130,7 +130,7 @@ if (file_exists("zp-config.php")) {
 		if (@mysql_select_db($_zp_conf_vars['mysql_database'])) {
 			$result = @mysql_query("SELECT `id` FROM " . $_zp_conf_vars['mysql_prefix'].'options' . " LIMIT 1", $connection);
 			if ($result) {
-				if (mysql_num_rows($result) > 0) $upgrade = true;
+				if (@mysql_num_rows($result) > 0) $upgrade = true;
 			}
 			$environ = true;
 			require_once("admin-functions.php");
@@ -535,7 +535,7 @@ if (!$checked) {
 		}
 	}
 	if ($connection) {
-		$mysqlv = trim(mysql_get_server_info());
+		$mysqlv = trim(@mysql_get_server_info());
 		$i = strpos($mysqlv, "-");
 		if ($i !== false) {
 			$mysqlv = substr($mysqlv, 0, $i);
@@ -619,9 +619,9 @@ if ($debug) {
 		} else {
 			$sql = "SHOW GRANTS FOR " . $_zp_conf_vars['mysql_user'].";";
 		}
-		$result = mysql_query($sql, $mysql_connection);
+		$result = @mysql_query($sql, $mysql_connection);
 		if (!$result) {
-			$result = mysql_query("SHOW GRANTS;", $mysql_connection);
+			$result = @mysql_query("SHOW GRANTS;", $mysql_connection);
 		}
 
 		$access = -1;
@@ -638,7 +638,7 @@ if ($debug) {
 		$neededlist = substr($neededlist, 0, $i).' '.gettext('and').substr($neededlist, $i+1);
 		if ($result) {
 			$report = "<br/><br/><em>".gettext("Grants found:")."</em> ";
-			while ($row = mysql_fetch_row($result)) {
+			while ($row = @mysql_fetch_row($result)) {
 				$report .= "<br/><br/>".$row[0];
 				$r = str_replace(',', '', $row[0]);
 				$i = strpos($r, "ON");
@@ -667,10 +667,10 @@ if ($debug) {
 
 
 		$sql = "SHOW TABLES FROM `".$_zp_conf_vars['mysql_database']."` LIKE '".$_zp_conf_vars['mysql_prefix']."%';";
-		$result = mysql_query($sql, $mysql_connection);
+		$result = @mysql_query($sql, $mysql_connection);
 		$tableslist = '';
 		if ($result) {
-			while ($row = mysql_fetch_row($result)) {
+			while ($row = @mysql_fetch_row($result)) {
 				$tableslist .= "<code>" . $row[0] . "</code>, ";
 			}
 		}
@@ -861,7 +861,7 @@ if ($debug) {
 
 	$good = checkmark(file_exists($en_US), '<em>locale</em> '.gettext('folders'), ' ['.gettext('Are not complete').']', gettext('Be sure you have uploaded the complete Zenphoto package. You must have at least the <em>en_US</em> folder.')) && $good;
 
-	if ($connection) { mysql_close($connection); }
+	if ($connection) { @mysql_close($connection); }
 	if ($good) {
 		$dbmsg = "";
 	} else {
