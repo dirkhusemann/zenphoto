@@ -2334,6 +2334,45 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 }
 
 /**
+ * Returns a link to a uncropped custom sized version of he current image within the given height and width dimensions
+ *
+ * @param int $width width
+ * @param int $height height
+ * @return string
+ */
+function getCustomSizedImageMaxSpace($height='',$width='') { 
+	if(getFullWidth() === getFullHeight() OR getFullWidth() > getFullHeight()) {
+		getSizeCustomImage(null,$width,null);
+	} else {
+		getSizeCustomImage(null,null,$height);
+	}
+}
+
+/**
+ * Print normal video or uncropped within the given height and width dimensions
+ * Note: a class of 'not_visible' or 'password_protected' will be added as appropriate
+ * 
+ * @param string $alt Alt text for the url
+ * @param int $width width
+ * @param int $height height
+ * @param string $class Optional style class
+ * @param string $id Optional style id
+ * @param bool $thumbStandin set true to inhibit watermarking
+ * @return string
+ */
+function printCustomSizedImageMaxSpace($alt='',$height='',$width='',$class=NULL,$id=NULL,$thumbStandin=false) {
+	if(getFullWidth() === getFullHeight() OR getFullWidth() > getFullHeight()) {
+		printCustomSizedImage($alt, null, $height, NULL, NULL, NULL, NULL, NULL, $class, $id, $thumbStandin);
+	} else {
+		printCustomSizedImage($alt, null,NULL, $width, NULL, NULL, NULL, NULL, $class, $id, $thumbStandin);
+	}
+}
+
+
+/**
+ * CAUTION: This function is considered DEPRACTATED and will probably be removed after 1.2.1. 
+ * Please use the new replacement get/printCustomSizedImageMaxSpace(). 
+ * 
  * Prints out a sized image up to $maxheight tall (as width the value set in the admin option is taken)
  *
  * @param int $maxheight how bif the picture should be
