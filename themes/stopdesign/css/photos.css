@@ -10,7 +10,7 @@ http://stopdesign.com/templates/photos/
 ----------------------------------------------- */
 
 body {
-  background:#ddd url("../img/bg_page.jpg") repeat-x 0 0;
+  background:#ddd url("../images/bg_page.jpg") repeat-x 0 0;
   margin:0;
   padding:0;
   font:small Verdana,Sans-serif;
@@ -85,7 +85,7 @@ h2 .btn {
   color:#666;
   }
 .index h2, .galleries h2, .archive h2, .recentcomments h2 {
-  background:url("../img/slide_minis.gif") no-repeat 50% 0;
+  background:url("../images/slide_minis.gif") no-repeat 50% 0;
   margin:0 0 8px;
   padding:24px 0 0;
   font-size:100%;
@@ -115,7 +115,7 @@ ul {
   padding:0;
   }
 li {
-  /* background:url("../img/bullet_white.gif") no-repeat 5px .55em;*/
+  /* background:url("../images/bullet_white.gif") no-repeat 5px .55em;*/
   margin:0;
   padding:0 0 0 15px;
   list-style:none;
@@ -223,7 +223,7 @@ Breadcrumb navigation that gets positioned to
 the top of the page.
 ----------------------------------------------- */
 #path {
-  background:#000 url("../img/bg_path.gif");
+  background:#000 url("../images/bg_path.gif");
   position:absolute;
   top:0;
   left:0;
@@ -304,7 +304,7 @@ h1 img {
   border-width:0;
   }
 html>body .auto #titleimg {
-  background:url("../img/bg_shadow.png");
+  background:url("../images/bg_shadow.png");
   }
 .auto #titleimg img {
   display:block;
@@ -424,11 +424,11 @@ Module showing all galleries in system
   margin:0 4px;
   }
 .gal {
-  background:url("../img/bg_gal.gif") 11px -4px no-repeat;
+  background:url("../images/bg_gal.gif") 11px -4px no-repeat;
   margin:0;
   }
 html>body .gal {
-  background-image:url("../img/bg_gal.png");
+  background-image:url("../images/bg_gal.png");
   }
 
 
@@ -517,14 +517,14 @@ of most recent favorite photos
   list-style:none;
   }
 #randomlist li {
-  background:url("../img/bg_slide_sm.gif") 0 0 no-repeat;
+  background:url("../images/bg_slide_sm.gif") 0 0 no-repeat;
   float:left;
   width:62px;
   margin:0 6px 6px 0;
   padding:0;
   }
 html>body #randomlist li {
-  background-image:url("../img/bg_slide_sm.png");
+  background-image:url("../images/bg_slide_sm.png");
   }
 #randomlist table {
   width:62px;
@@ -588,14 +588,14 @@ Title, description, & prefs on Photo Gallery page
 Reusable style for thumbnail photos as slides
 ----------------------------------------------- */
 .thumb {
-  background:url("../img/bg_slide.gif") 0 0 no-repeat;
+  background:url("../images/bg_slide.gif") 0 0 no-repeat;
   display:block;
   float:left;
   margin:0;
   padding:0 3px 3px 0;
   }
 html>body .thumb {
-  background-image:url("../img/bg_slide.png");
+  background-image:url("../images/bg_slide.png");
   }
 .thumb span {
   background-repeat:no-repeat;
@@ -664,7 +664,7 @@ Normal group of slide-like thumbnails
   border-width:0;
   }
 html>body #photo strong {
-  background:url("../img/bg_shadow.png");
+  background:url("../images/bg_shadow.png");
   }
 #photo img {
   display:block;
@@ -717,18 +717,18 @@ The two hoverable regions overlaying the main photo
   top:0;
   }
 #prev a strong {
-  background:url("../img/photonav_prev.gif") no-repeat 50% -100px;
+  background:url("../images/photonav_prev.gif") no-repeat 50% -100px;
   right:-262px;
   }
 #next a strong {
-  background:url("../img/photonav_next.gif") no-repeat 50% -100px;
+  background:url("../images/photonav_next.gif") no-repeat 50% -100px;
   left:-265px;
   }
 html>body #prev a strong {
-  background-image:url("../img/photonav_prev.png");
+  background-image:url("../images/photonav_prev.png");
   }
 html>body #next a strong {
-  background-image:url("../img/photonav_next.png");
+  background-image:url("../images/photonav_next.png");
   }
 #prev a:hover strong, #next a:hover strong, #prev a:active strong, #next a:active strong {
   background-position:50% 10px;
@@ -747,7 +747,7 @@ Title and description of photo
   text-align:left;
   }
 #desc h1 {
-  background:url("../img/divider_r.gif") no-repeat 265px 0;
+  background:url("../images/divider_r.gif") no-repeat 265px 0;
   max-width:30em;
   margin:0;
   padding:10px 15px 5px 265px;
@@ -759,7 +759,7 @@ Title and description of photo
   text-align:left;
   }
 html>body #desc h1 {
-  background-image:url("../img/divider_r.png");
+  background-image:url("../images/divider_r.png");
   }
 #desc p {
   max-width:30em;
@@ -798,12 +798,12 @@ Photo x of y, date, and keywords
   text-align:right;
   }
 #meta li.count {
-  background:url("../img/divider_l.gif") no-repeat 100% 0;
+  background:url("../images/divider_l.gif") no-repeat 100% 0;
   padding-top:10px;
   padding-bottom:5px;
   }
 html>body #meta li.count {
-  background-image:url("../img/divider_l.png");
+  background-image:url("../images/divider_l.png");
   }
 
 
@@ -921,7 +921,7 @@ dl.commentlist, ul.commentlist {
   border-bottom:1px dotted #bbb;
   }
 .commentlist .postno {
-  background:url("../img/icon_pushpin.gif") no-repeat 0 50%;
+  background:url("../images/icon_pushpin.gif") no-repeat 0 50%;
   border-width:0;
   padding:0 0 0 18px;
   margin-right:2px;
@@ -945,7 +945,7 @@ p.comment-error {
   }
 
 .commentlink, .commentlink:visited {
-  background:url("../img/icon_pushpin.gif") no-repeat 0 50%;
+  background:url("../images/icon_pushpin.gif") no-repeat 0 50%;
   border-width:0;
   padding-left:17px;
   white-space:nowrap;
@@ -1089,8 +1089,8 @@ Comment Submission form
   
 /* Labels
 ----------------------------------------------- */
-.backward {background-image:url("../img/txt_backward.gif");}
-.forward {background-image:url("../img/txt_forward.gif");}
+.backward {background-image:url("../images/txt_backward.gif");}
+.forward {background-image:url("../images/txt_forward.gif");}
 
 /* Admin Toolbox
 ----------------------------------------------- */

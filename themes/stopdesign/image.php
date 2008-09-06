@@ -82,8 +82,8 @@
 
 					<h2>
 					<?php $showhide = "<a href=\"#comments\" id=\"showcomments\"><img src=\"" .
-						$_zp_themeroot . "/img/btn_show.gif\" width=\"35\" height=\"11\" alt=\"".gettext("SHOW")."\" /></a> <a href=\"#content\" id=\"hidecomments\"><img src=\"" .
-						$_zp_themeroot . "/img/btn_hide.gif\" width=\"35\" height=\"11\" alt=\"".gettext("HIDE")."\" /></a>";
+						$_zp_themeroot . "/images/btn_show.gif\" width=\"35\" height=\"11\" alt=\"".gettext("SHOW")."\" /></a> <a href=\"#content\" id=\"hidecomments\"><img src=\"" .
+						$_zp_themeroot . "/images/btn_hide.gif\" width=\"35\" height=\"11\" alt=\"".gettext("HIDE")."\" /></a>";
  						$num = getCommentCount(); 
  						if ($num == 0) echo "<h2>".gettext("No comments yet")."</h2>";
  						if ($num == 1) echo "<h2>" .gettext('1 comment so far').' '. "$showhide</h2>";
@@ -109,7 +109,7 @@
 						</dl>
 
 						<?php if (OpenedForComments()) { ?>
-							<p class="mainbutton" id="addcommentbutton"><a href="#addcomment" class="btn"><img src="<?php echo $_zp_themeroot ?>/img/btn_add_a_comment.gif" alt="" width="116" height="21" /></a></p>
+							<p class="mainbutton" id="addcommentbutton"><a href="#addcomment" class="btn"><img src="<?php echo $_zp_themeroot ?>/images/btn_add_a_comment.gif" alt="" width="116" height="21" /></a></p>
 						<?php } else { echo '<h2>'.gettext('Comments are closed').'</h2>'; } ?>
 
 						<!-- BEGIN #addcomment -->
