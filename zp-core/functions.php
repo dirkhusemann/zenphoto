@@ -2103,7 +2103,6 @@ function checkAuthorization($authCode) {
 	$admins = getAdministrators();
 	$reset_date = getOption('admin_reset_date');
 	if ((count($admins) == 0) || empty($reset_date)) {
-		if ((count($admins) != 0)) setOption('admin_reset_date', 1);  // in case there is no save done in admin
 		$_zp_current_admin = null;
 
 		if (DEBUG_LOGIN) { debugLog("no admin or reset request"); }
