@@ -192,9 +192,9 @@ function printSlideShow($heading = true, $speedctl = false) {
 		$images = $album->getImages(0);
 		// return path to get back to the page we called the slideshow from
 		if (empty($_POST['imagenumber'])) {
-			$returnpath = rewrite_path('/'.rawurlencode($album->name).'/page/'.$_POST['pagenr'],'/index.php?album='.urlencode($album->name).'&page='.$_POST['pagenr']);
+			$returnpath = rewrite_path('/'.pathurlencode($album->name).'/page/'.$_POST['pagenr'],'/index.php?album='.urlencode($album->name).'&page='.$_POST['pagenr']);
 		} else {
-			$returnpath = rewrite_path('/'.rawurlencode($album->name).'/'.rawurlencode($_POST['imagefile']).getOption('mod_rewrite_image_suffix'),'/index.php?album='.urlencode($album->name).'&image='.urlencode($_POST['imagefile']));
+			$returnpath = rewrite_path('/'.pathurlencode($album->name).'/'.rawurlencode($_POST['imagefile']).getOption('mod_rewrite_image_suffix'),'/index.php?album='.urlencode($album->name).'&image='.urlencode($_POST['imagefile']));
 		}
 	}
 	// slideshow display section
