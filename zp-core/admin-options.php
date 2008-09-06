@@ -384,7 +384,9 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 	if ($_zp_loggedin & ADMIN_RIGHTS) {
 		$alterrights = '';
 		$admins = getAdministrators();
-		$admins [''] = array('id' => -1, 'user' => '', 'pass' => '', 'name' => '', 'email' => '', 'rights' => ALL_RIGHTS ^ ALL_ALBUMS_RIGHTS);
+		if (!$_zp_null_account) {
+			$admins [''] = array('id' => -1, 'user' => '', 'pass' => '', 'name' => '', 'email' => '', 'rights' => ALL_RIGHTS ^ ALL_ALBUMS_RIGHTS);
+		}
 	} else {
 		$alterrights = ' DISABLED';
 		global $_zp_current_admin;
