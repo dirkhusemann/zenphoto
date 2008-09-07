@@ -1099,9 +1099,6 @@ foreach ($comments as $comment) {
 </p>
 <p>
 <br />
-<?php
-printf(gettext('PHP has <strong>%s</strong> of memory allocated.'),ini_get('memory_limit'));
-?>
 </p>
 <br />
 <?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?>
