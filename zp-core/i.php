@@ -197,6 +197,8 @@ if (file_exists($newfile)) {
 if ($process) {
 	// setup standard image options from the album theme if it exists
 	require_once('classes.php');
+	require_once('class-gallery.php');
+	require_once('class-album.php');
 	$gallery = new Gallery();
 	$parent = new Album($gallery, $album);
 	$theme = $gallery->getCurrentTheme();

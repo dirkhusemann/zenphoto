@@ -9,7 +9,7 @@ $_zp_admin_ordered_taglist = NULL;
 $_zp_admin_LC_taglist = NULL;
 $_zp_admin_album_list = null;
 
-require_once("classes.php");
+require_once("class-load.php");
 require_once("functions.php");
 require_once("lib-seo.php"); // keep the function separate for easy modification by site admins
 

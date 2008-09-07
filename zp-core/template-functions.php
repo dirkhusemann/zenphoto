@@ -8,7 +8,7 @@
 /**
  * Load the classes
  */
-require_once('classes.php');
+require_once('class-load.php');
 
 /**
  * Invoke the controller to handle requests

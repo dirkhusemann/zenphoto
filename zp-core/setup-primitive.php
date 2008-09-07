@@ -85,6 +85,7 @@ function sanitize($input_string, $sanitize_level=0) {
 }
 
 function sanitize_string($input_string, $sanitize_level) {
+	require_once('lib-htmlawed.php');
 	if (get_magic_quotes_gpc()) $input_string = stripslashes($input_string);
 
 	if ($sanitize_level === 0) {

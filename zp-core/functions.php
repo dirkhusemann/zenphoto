@@ -34,8 +34,6 @@ require("zp-config.php");
 // If the server protocol is not set, set it to the default (obscure zp-config.php change).
 if (!isset($_zp_conf_vars['server_protocol'])) $_zp_conf_vars['server_protocol'] = 'http';
 
-require_once('lib-htmlawed.php');
-require_once('exif/exif.php');
 require_once('functions-db.php');
 require_once('lib-encryption.php');
 require_once("lib-utf8.php");
@@ -735,6 +733,7 @@ function sanitize($input_string, $sanitize_level=3) {
  * @return string the sanitized string.
  */
 function sanitize_string($input_string, $sanitize_level) {
+	require_once('lib-htmlawed.php');
 	// Strip slashes if get_magic_quotes_gpc is enabled.
 	if (get_magic_quotes_gpc()) $input_string = stripslashes($input_string);
 	$input_string = utf8::encode_numericentity($input_string);
@@ -1469,6 +1468,7 @@ function prepIPTCString($iptcstring) {
  * @return array
  */
 function getImageMetadata($imageName) {
+	require_once('exif/exif.php');
 	global $iptc;
 
 	$result = array();

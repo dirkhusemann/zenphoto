@@ -6,11 +6,9 @@
 
 // classes.php - HEADERS STILL NOT SENT! Do not output text from this file.
 
-// Load the authentication functions, UTF-8 Library, and htmLawed.
+// Load the authentication functions and UTF-8 Library.
 require_once("auth_zp.php");
 require_once("lib-utf8.php");
-require_once("lib-htmlawed.php");
-
 
 /*******************************************************************************
  *******************************************************************************
@@ -335,14 +333,4 @@ class PersistentObject {
 	}
 
 }
-/*******************************************************************************
-* Load the base classes (Image, Album, Gallery, etc.)                          *
-*******************************************************************************/
-
-require_once('class-image.php');
-require_once('class-album.php');
-require_once('class-gallery.php');
-require_once('class-search.php');
-require_once('class-transientimage.php');
-
 ?>
