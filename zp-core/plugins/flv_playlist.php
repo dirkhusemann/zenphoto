@@ -31,14 +31,14 @@
  * Of course you can add further functions to b) like title, description, date etc., too.
  *  
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.4.2
+ * @version 1.0.4.3
  * @package plugins 
  */
 
 $plugin_description = gettext("A plugin to show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players with flv player (some options are also shared with that plugin).").
 	' <strong>'.gettext("Requires flvplayer plugin.").'</strong>';
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.4.2';
+$plugin_version = '1.0.4.3';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flv_playlist.php.html";
 $option_interface = new flvplaylist();
 
@@ -89,7 +89,7 @@ function flvPlaylist($option='') {
 	<script type="text/javascript">
 		var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER; ?>/plugins/flvplayer/flvplayer.swf','jstest','<?php echo getOption('flvplaylist_width'); ?>','<?php echo getOption('flvplaylist_height'); ?>','8');
 		so.addParam('allowfullscreen','true');
-		so.addParam('overstretch','false');
+		so.addParam('overstretch','true');
 		so.addVariable('displaywidth', '<?php echo getOption('flvplaylist_displaywidth'); ?>');
 		so.addVariable('displayheight','<?php echo getOption('flvplaylist_displayheight'); ?>');
 		so.addVariable('backcolor','<?php echo getOption('flv_player_backcolor'); ?>');
@@ -126,7 +126,7 @@ function flvPlaylist($option='') {
 			var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER; ?>/plugins/flvplayer/flvplayer.swf','jstest','<?php echo getOption('flvplaylist_width'); ?>','<?php echo getOption('flvplaylist_height'); ?>','8');
 		<?php } ?>
 			so.addParam('allowfullscreen','true');
-			so.addParam('overstretch','none');
+			so.addParam('overstretch','true');
 			so.addVariable("image",'<?php echo $videoThumb; ?>');
 			so.addVariable('backcolor','<?php echo getOption('flv_player_backcolor'); ?>');
 			so.addVariable('frontcolor','<?php echo getOption('flv_player_frontcolor'); ?>');
