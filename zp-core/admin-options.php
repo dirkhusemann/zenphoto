@@ -193,7 +193,7 @@ if (isset($_GET['action'])) {
 			if ($newloc != $oldloc) {
 				$cookiepath = WEBPATH;
 				if (WEBPATH == '') { $cookiepath = '/'; }
-				zp_setCookie('dynamic_locale', '', time()-368000, $cookiepath);  // clear the language cookie
+				zp_setCookie('dynamic_locale', $newloc, time()-368000, $cookiepath);  // clear the language cookie
 				$encoding = getOption('charset');
 				if (empty($encoding)) $encoding = 'UTF-8';
 				$result = setlocale(LC_ALL, $newloc.'.'.$encoding);

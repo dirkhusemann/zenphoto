@@ -5,7 +5,7 @@
 	Exifer
 	Extracts EXIF information from digital photos.
 	
-	Copyright � 2003 Jake Olefsky
+	Copyright © 2003 Jake Olefsky
 	http://www.offsky.com/software/exif/index.php
 	jake@olefsky.com
 	
@@ -411,13 +411,8 @@ function parseCanon($block,&$result,$seek, $globalOffset) {
 				$data = '';
 			}
 		}
-		$r2 = '';
-		if (isset($result['SubIFD']['MakerNote'])) {
-			if (isset($result['SubIFD']['MakerNote'][$tag_name])) {
-				$r2 = $result['SubIFD']['MakerNote'][$tag_name];
-			}
-		}
-		$formated_data = formatCanonData($type,$tag,$intel,$data,$result,$r2);
+		$result['SubIFD']['MakerNote'][$tag_name] = ''; // insure the index exists
+		$formated_data = formatCanonData($type,$tag,$intel,$data,$result,$result['SubIFD']['MakerNote'][$tag_name]);
 		
 		if($result['VerboseOutput']==1) {
 			//$result['SubIFD']['MakerNote'][$tag_name] = $formated_data;
