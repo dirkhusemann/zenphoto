@@ -31,6 +31,7 @@ class google_mapsOptions {
 	function google_mapsOptions() {
 		/* put any setup code needed here */
 		setOptionDefault('gmaps_apikey', '');
+		setOptionDefault('gmaps_show_all_album_points', 0);
 		setOptionDefault('gmaps_width', 595);
 		setOptionDefault('gmaps_height', 300);
 	}
@@ -40,6 +41,8 @@ class google_mapsOptions {
 										'desc' => gettext("If you're going to be using Google Maps,").
 											' <a	href="http://www.google.com/apis/maps/signup.html" target="_blank"> '.
 		gettext("get an API key</a> and enter it here.")),
+		gettext('All album points') => array ('key' => 'gmaps_show_all_album_points', 'type' => 1,
+										'desc' => gettext('Controls which image points are shown on an album page. Check to show points for all images in the album. If not checked points are shown only for those images whose thumbs are on the page.')),
 		gettext('Map width') => array('key' => 'gmaps_width', 'type' => 0,
 										'desc' => gettext('The default width of the map.')),
 		gettext('Map height') => array('key' => 'gmaps_height', 'type' => 0,
@@ -152,7 +155,7 @@ function printAlbumMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL, $
 		//		if (!is_null($type)) { $_zp_phoogle->setMapType($type); }
 		if (!is_null($width)) { $_zp_phoogle->setWidth($width); }
 		if (!is_null($height)) { $_zp_phoogle->setHeight($height); }
-		while (next_image(false)) {
+		while (next_image(getOption('gmaps_show_all_album_points'))) {
 			$exif = getImageEXIFData();
 			if(!empty($exif['EXIFGPSLatitude']) &&
 			!empty($exif['EXIFGPSLongitude'])){
