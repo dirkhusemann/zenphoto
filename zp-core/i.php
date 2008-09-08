@@ -109,9 +109,9 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
 	$args = getImageParameters($args);
 	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
 
-	if ($debug) debugLog("Album: [ " . $album . " ], Image: [ " . $image . " ]");
-	if ($debug) DebugLogArray("args", $args);
-
+  if ($debug) echo "Album: [ " . $album . " ], Image: [ " . $image . " ]<br/><br/>";
+  if ($debug) imageDebug($args);
+	
 } else {
 	// No image parameters specified or are out of bounds; return the original image.
 	//TODO: this will fail when the album folder is external to zp. Maybe should force the sizes within bounds.
