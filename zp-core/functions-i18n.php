@@ -187,7 +187,8 @@ function setupCurrentLocale($plugindomain='', $type='') {
 		'ua_UA' => gettext('Ukrainian'),
 		'uz_UZ' => gettext('Uzbek'),
 		'vi_VN' => gettext('vi_VN'),
-		'cy' => gettext('Welsh')
+		'cy' => gettext('Welsh'),
+		'ja_JP' => gettext('Japanese')
 	);
 	return $result;
 }
