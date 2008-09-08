@@ -1164,6 +1164,51 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 }
 
 /**
+ * Returns a link to a uncropped custom sized version of the current album thumb within the given height and width dimensions.
+  *
+ * @param int $width width
+ * @param int $height height
+ * @return string
+ */
+function getCustomAlbumThumbMaxSpace($width=NULL, $height=NULL) {
+	global $_zp_current_album;
+	$albumthumb = $_zp_current_album->getAlbumThumbImage();
+	$albumdata = $albumthumb->data; 
+	$fullwidth = $albumdata['width'];
+	$fullheight = $albumdata['height'];
+	if($fullwidth === $fullheight OR $fullwidth > $fullheight) {
+		getCustomAlbumThumb(NULL, $width, NULL, NULL, NULL, NULL, null);
+	} else {
+		getCustomAlbumThumb(NULL, NULL, $height, NULL, NULL, NULL, null);
+	}
+}
+
+/**
+ * Prints a uncropped custom sized album thumb within the given height and width dimensions.
+ * Note: a class of 'not_visible' or 'password_protected' will be added as appropriate
+ * 
+ * @param string $alt Alt text for the url
+ * @param int $width width
+ * @param int $height height
+ * @param string $class Optional style class
+ * @param string $id Optional style id
+ * @param bool $thumbStandin set true to inhibit watermarking
+ * @return string
+ */
+function printCustomAlbumThumbMaxSpace($alt='', $width=NULL, $height=NULL, $class=NULL, $id=NULL) {
+	global $_zp_current_album;
+	$albumthumb = $_zp_current_album->getAlbumThumbImage();
+	$albumdata = $albumthumb->data; 
+	$fullwidth = $albumdata['width'];
+	$fullheight = $albumdata['height'];
+	if($fullwidth === $fullheight OR $fullwidth > $fullheight) {
+		printCustomAlbumThumbImage($alt, NULL, $width, NULL, NULL, NULL, NULL, null, $class, $id);
+	} else {
+		printCustomAlbumThumbImage($alt, NULL, NULL, $height, NULL, NULL, NULL, null, $class, $id);
+	}
+}
+
+/**
  * Returns the next album
  *
  * @return object
@@ -2334,13 +2379,14 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 }
 
 /**
- * Returns a link to a uncropped custom sized version of he current image within the given height and width dimensions
+ * Returns a link to a uncropped custom sized version of the current image within the given height and width dimensions.
+ * Use for sized images or thumbnails in an album.
  *
  * @param int $width width
  * @param int $height height
  * @return string
  */
-function getCustomSizedImageMaxSpace($height='',$width='') { 
+function getCustomSizedImageMaxSpace($width=NULL,$height=NULL) {
 	if(getFullWidth() === getFullHeight() OR getFullWidth() > getFullHeight()) {
 		getSizeCustomImage(null,$width,null);
 	} else {
@@ -2349,7 +2395,7 @@ function getCustomSizedImageMaxSpace($height='',$width='') {
 }
 
 /**
- * Print normal video or uncropped within the given height and width dimensions
+ * Print normal video or uncropped within the given height and width dimensions. Use for sized images or thumbnails in an album.
  * Note: a class of 'not_visible' or 'password_protected' will be added as appropriate
  * 
  * @param string $alt Alt text for the url
@@ -2360,11 +2406,11 @@ function getCustomSizedImageMaxSpace($height='',$width='') {
  * @param bool $thumbStandin set true to inhibit watermarking
  * @return string
  */
-function printCustomSizedImageMaxSpace($alt='',$height='',$width='',$class=NULL,$id=NULL,$thumbStandin=false) {
+function printCustomSizedImageMaxSpace($alt='',$width=NULL,$height=NULL,$class=NULL,$id=NULL,$thumbStandin=false) {
 	if(getFullWidth() === getFullHeight() OR getFullWidth() > getFullHeight()) {
-		printCustomSizedImage($alt, null, $height, NULL, NULL, NULL, NULL, NULL, $class, $id, $thumbStandin);
+		printCustomSizedImage($alt, null, $width, NULL, NULL, NULL, NULL, NULL, $class, $id, $thumbStandin);
 	} else {
-		printCustomSizedImage($alt, null,NULL, $width, NULL, NULL, NULL, NULL, $class, $id, $thumbStandin);
+		printCustomSizedImage($alt, null,NULL, $height, NULL, NULL, NULL, NULL, $class, $id, $thumbStandin);
 	}
 }
 
