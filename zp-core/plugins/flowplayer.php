@@ -5,14 +5,14 @@
  * Plugin option 'flow_player_height' -- height of the player window
  *  
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.1.8
+ * @version 1.0.2
  * @package plugins 
  */
 
 
 $plugin_description = gettext("Enable <strong>flowplayer</strong> to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time. <br> Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.1.8';
+$plugin_version = '1.0.2';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flowplayer.php.html";
 $option_interface = new flowplayer();
 $_zp_flash_player = $option_interface; // claim to be the flash player.
@@ -31,6 +31,7 @@ class flowplayer {
 		setOptionDefault('flow_player_controlbarbackgroundcolor', '0x567890');
 		setOptionDefault('flow_player_controlsareabordercolor', '0x567890');
 		setOptionDefault('flow_player_autoplay', '');
+		setOptionDefault('flow_player_backgroundcolor', '');
 	}
 
 
@@ -44,7 +45,9 @@ class flowplayer {
 		gettext('Control area border color') => array('key' => 'flow_player_controlsareabordercolor', 'type' => 0,
 										'desc' => gettext("Color of the border of the player controls")),
 		gettext('Autoplay') => array('key' => 'flow_player_autoplay', 'type' => 1,
-										'desc' => gettext("Should the video start automatically. Yes if selected."))
+										'desc' => gettext("Should the video start automatically. Yes if selected.")),
+		gettext('Background color') => array('key' => 'flow_player_backgroundcolor', 'type' => 0,
+										'desc' => gettext("Changes the color of the Flowplayer's background canvas. By default the canvas is all black. You can specify a value of -1 and the background will not be drawn (only the video will be visible)."))
 		);
 	}
 
