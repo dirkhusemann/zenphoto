@@ -90,6 +90,7 @@ class flowplayer {
 					autoBuffering: true,
       		videoFile: \'' . $moviepath . '\',
       		initialScale: \'fit\',
+      		backgroundColor: \''.getOption('flow_player_backgroundcolor').'\',
       		controlBarBackgroundColor: \''.getOption('flow_player_controlbarbackgroundcolor').'\',
       		controlsAreaBorderColor: \''.getOption('flow_player_controlsareabordercolor').'\'
     		}} 
@@ -110,6 +111,7 @@ class flowplayer {
 					controlsOverVideo: \'ease\',
       		videoFile: \'' . $moviepath . '\',
       		initialScale: \'fit\',
+      		backgroundColor: \''.getOption('flow_player_backgroundcolor').'\',
       		controlBarBackgroundColor: \''.getOption('flow_player_controlbarbackgroundcolor').'\',
       		controlsAreaBorderColor: \''.getOption('flow_player_controlsareabordercolor').'\'
     		}} 
