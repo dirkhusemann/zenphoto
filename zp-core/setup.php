@@ -623,7 +623,10 @@ if ($debug) {
 		if (!$result) {
 			$result = @mysql_query("SHOW GRANTS;", $mysql_connection);
 		}
-
+		$MySQL_results = array();
+		while ($onerow = @mysql_fetch_row($result)) {
+			$MySQL_results[] = $onerow[0];
+		}
 		$access = -1;
 		$rightsfound = 'unknown';
 		$rightsneeded = array(gettext('Select')=>'SELECT',gettext('Create')=>'CREATE',gettext('Drop')=>'DROP',gettext('Insert')=>'INSERT',
@@ -638,15 +641,18 @@ if ($debug) {
 		$neededlist = substr($neededlist, 0, $i).' '.gettext('and').substr($neededlist, $i+1);
 		if ($result) {
 			$report = "<br/><br/><em>".gettext("Grants found:")."</em> ";
-			while ($row = @mysql_fetch_row($result)) {
-				$report .= "<br/><br/>".$row[0];
-				$r = str_replace(',', '', $row[0]);
+			foreach ($MySQL_results as $row) {
+				$row_report = "<br/><br/>".$row;
+				$r = str_replace(',', '', $row);
 				$i = strpos($r, "ON");
 				$j = strpos($r, "TO", $i);
 				$found = stripslashes(trim(substr($r, $i+2, $j-$i-2)));
+				if ($partial = (($i = strpos($found, '%')) !== false)) {
+					$found = substr($found, 0, $i);
+				}
 				$rights = array_flip(explode(' ', $r));
 				$rightsfound = 'insufficient';
-				if (($found == $dbn) || ($found == "*.*")) {
+				if (($found == $dbn) || ($found == "*.*") || $partial && preg_match('/^'.$found.'/', $dbn)) {
 					$allow = true;
 					foreach ($rightsneeded as $key=>$right) {
 						if (!isset($rights[$right])) {
@@ -656,7 +662,9 @@ if ($debug) {
 					if (isset($rights['ALL']) || $allow) {
 						$access = 1;
 					}
-					$report .= " *";
+					$report .= '<strong>'.$row_report.'</strong>';
+				} else {
+					$report .= $row_report;
 				}
 			}
 		} else {
