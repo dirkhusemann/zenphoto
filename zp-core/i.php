@@ -199,6 +199,7 @@ if ($process) {
 	require_once('classes.php');
 	require_once('class-gallery.php');
 	require_once('class-album.php');
+	if ($debug) echo '<br />Memory useage: '.memory_get_peak_usage();	
 	$gallery = new Gallery();
 	$parent = new Album($gallery, $album);
 	$theme = $gallery->getCurrentTheme();

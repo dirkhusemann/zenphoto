@@ -1772,4 +1772,66 @@ function getTagOrder() {
 	return $tagsort;
 }
 
+/**
+ * Unzips an image archive
+ *
+ * @param file $file the archive
+ * @param string $dir where the images go
+ */
+function unzip($file, $dir) { //check if zziplib is installed
+	if(function_exists('zip_open()')) {
+		$zip = zip_open($file);
+		if ($zip) {
+			while ($zip_entry = zip_read($zip)) { // Skip non-images in the zip file.
+				$fname = zip_entry_name($zip_entry);
+				if (is_valid_image($fname) || is_valid_video($fname)) {
+					if (zip_entry_open($zip, $zip_entry, "r")) {
+						$buf = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
+						$path_file = str_replace("/",DIRECTORY_SEPARATOR, $dir . '/' . $fname);
+						$fp = fopen($path_file, "w");
+						fwrite($fp, $buf);
+						fclose($fp);
+						zip_entry_close($zip_entry);
+					}
+				}
+			}
+			zip_close($zip);
+		}
+	} else { // Use Zlib http://www.phpconcept.net/pclzip/index.en.php
+		require_once('lib-pclzip.php');
+		$zip = new PclZip($file);
+		if ($zip->extract(PCLZIP_OPT_PATH, $dir, PCLZIP_OPT_REMOVE_ALL_PATH) == 0) {
+			die("Error : ".$zip->errorInfo(true));
+		}
+	}
+}
+
+/**
+ * Checks for a zip file
+ *
+ * @param string $filename name of the file
+ * @return bool
+ */
+function is_zip($filename) {
+	$ext = strtolower(strrchr($filename, "."));
+	return ($ext == ".zip");
+}
+
+/**
+ * Takes a comment and makes the body of an email.
+ *
+ * @param string $str comment
+ * @param string $name author
+ * @param string $albumtitle album
+ * @param string $imagetitle image
+ * @return string
+ */
+function commentReply($str, $name, $albumtitle, $imagetitle) {
+	$str = wordwrap(strip_tags($str), 75, '\n');
+	$lines = explode('\n', $str);
+	$str = implode('%0D%0A', $lines);
+	$str = "$name commented on $imagetitle in the album $albumtitle: %0D%0A%0D%0A" . $str;
+	return $str;
+}
+
 ?>
