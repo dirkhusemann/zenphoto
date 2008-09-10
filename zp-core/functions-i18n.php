@@ -161,6 +161,7 @@ function setupCurrentLocale($plugindomain='', $type='') {
 		'is_IS' => gettext('Icelandic'),
 		'id_ID' => gettext('Indonesian'),
 		'it_IT' => gettext('Italian'),
+		'ja_JP' => gettext('Japanese'),
 		'km_KH' => gettext('Cambodian'),
 		'ko_KR' => gettext('Korean'),
 		'lv' => gettext('Latvian'),
@@ -187,8 +188,7 @@ function setupCurrentLocale($plugindomain='', $type='') {
 		'ua_UA' => gettext('Ukrainian'),
 		'uz_UZ' => gettext('Uzbek'),
 		'vi_VN' => gettext('vi_VN'),
-		'cy' => gettext('Welsh'),
-		'ja_JP' => gettext('Japanese')
+		'cy' => gettext('Welsh')
 	);
 	return $result;
 }
@@ -261,6 +261,18 @@ function getUserLocale() {
 						$locale = $key;
 						if (DEBUG_LOCALE) debugLog("locale set from HTTP Accept Language: ".$locale);
 						break;
+					}
+				}
+			}
+			if ($locale === false) { // try partal matches
+				foreach ($userLang as $lang) {
+					$l = strtoupper($lang['fullcode']);
+					foreach ($languageSupport as $key=>$value) {
+						if (preg_match('/^'.strtoupper($key).'/', $l)) { // we got a partial match
+							$locale = $key;
+							if (DEBUG_LOCALE) debugLog("locale set from HTTP Accept Language (partial match): ".$locale);
+							break;
+						}
 					}
 				}
 			}
