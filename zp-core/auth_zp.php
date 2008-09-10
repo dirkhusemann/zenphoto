@@ -49,7 +49,7 @@ if (!isset($_POST['login'])) {
 			$admins = getAdministrators();
 			$admin = array_shift($admins);
 			$key = $admin['pass'];
-			$code_cypher = md5(implode('', unpack("H*", rc4($key, trim($post_pass)))));
+			$code_cypher = md5(bin2hex(rc4($key, trim($post_pass))));
 			if (isset($_POST['code_h'])) {
 				$code_hash = sanitize($_POST['code_h'],3);
 			} else {

@@ -1591,7 +1591,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	if (getOption('comment_name_required') && empty($name)) { return -3; }
 	if (getOption('comment_web_required') && (empty($website) || !isValidURL($website))) { return -4; }
 	if (getOption('Use_Captcha')) {
-		$code_cypher = md5(implode('', @unpack("H*", rc4($key, trim($code)))));
+		$code_cypher = md5(bin2hex(rc4($key, trim($code))));
 		$code_ok = trim($code_ok);
 		if ($code_cypher != $code_ok || strlen($code) != CAPTCHA_LENGTH) { return -5; }
 		query('DELETE FROM '.prefix('captcha').' WHERE `ptime`<'.(time()-3600)); // expired tickets
@@ -2306,7 +2306,7 @@ function generateCaptcha(&$image) {
 	$admins = getAdministrators();
 	$admin = array_shift($admins);
 	$key = $admin['pass'];
-	$cypher = implode('', unpack("H*", rc4($key, $string)));
+	$cypher = bin2hex(rc4($key, $string));
 	$code=md5($cypher);
 	query('DELETE FROM '.prefix('captcha').' WHERE `ptime`<'.(time()-3600), true);  // expired tickets
 	query("INSERT INTO " . prefix('captcha') . " (ptime, hash) VALUES ('" . escape(time()) . "','" . escape($code) . "')", true);
