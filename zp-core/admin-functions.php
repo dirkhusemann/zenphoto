@@ -714,23 +714,6 @@ function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrig
 }
 
 /**
- * Returns a array of tags marked for priority display
- *
- * @return array
- */
-function getPriorityTags() {
-	$sql = 'SELECT `name` FROM '.prefix('tags').' WHERE `priority`=1';
-	$result = query_full_array($sql);
-	$prioritytags = array();
-	if (is_array($result)) {
-		foreach($result as $row) {
-			$prioritytags[] = $row['name'];
-		}
-	}
-	return $prioritytags;
-}
-
-/**
  * Creates an unordered checklist of the tags
  *
  * @param object $that Object for which to get the tags
@@ -785,11 +768,6 @@ function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
 	if (count($tags) > 0) {
 		generateUnorderedListFromArray($tags, $tags, $postit);
 		echo '<hr>';
-	}
-	if (!is_null($that) && !(useTagTable() && ($_zp_loggedin & ADMIN_RIGHTS))) {
-		for ($i=0; $i<4; $i++) {
-			echo '<li>'.gettext("new tag").' <input type="text" size="15" name="'.$postit.'new_tag_value_'.$i.'" value="" /></li>'."\n";
-		}
 	}
 	generateUnorderedListFromArray(array(), $displaylist, $postit, '', false);
 	echo '</ul>';

@@ -201,7 +201,7 @@ function setOption($key, $value, $persistent=true) {
 				$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid) VALUES ('" . mysql_real_escape_string($key) . "',NULL, 0)";
 			} else {
 				$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid) VALUES ('" . mysql_real_escape_string($key) . "','" . mysql_real_escape_string($value) . "', 0)";
-			}	
+			}
 			$result = query($sql, true);
 		}
 	} else {
@@ -242,10 +242,10 @@ function setOptionDefault($key, $default) {
 	if (NULL == $_zp_options) { getOption('nil'); } // pre-load from the database
 	if (!array_key_exists($key, $_zp_options)) {
 		if (is_null($default)) {
-		$sql = "INSERT INTO " . prefix('options') . " (`name`, `value`, `ownerid`) VALUES ('" . mysql_real_escape_string($key) . "', NULL, 0);";
+			$sql = "INSERT INTO " . prefix('options') . " (`name`, `value`, `ownerid`) VALUES ('" . mysql_real_escape_string($key) . "', NULL, 0);";
 		} else {
-		$sql = "INSERT INTO " . prefix('options') . " (`name`, `value`, `ownerid`) VALUES ('" . mysql_real_escape_string($key) . "', '".
-						mysql_real_escape_string($default) . "', 0);";
+			$sql = "INSERT INTO " . prefix('options') . " (`name`, `value`, `ownerid`) VALUES ('" . mysql_real_escape_string($key) . "', '".
+			mysql_real_escape_string($default) . "', 0);";
 		}
 		query($sql, true);
 		$_zp_options[$key] = $default;
@@ -1639,7 +1639,7 @@ function isValidURL($url) {
  * @return int
  */
 function postComment($name, $email, $website, $comment, $code, $code_ok, $receiver, $ip, $private, $anon) {
-// added for zenpage support
+	// added for zenpage support
 	$class = strtolower(get_class($receiver));
 	if ($class == "zenpage") {
 		if($receiver->isPage(ZENPAGE_NEWS)) {
@@ -2115,7 +2115,7 @@ function checkAuthorization($authCode) {
 	$i = 0;
 	foreach($admins as $user) {
 
-	if (DEBUG_LOGIN) { debugLogArray("checking",$user);	}
+		if (DEBUG_LOGIN) { debugLogArray("checking",$user);	}
 
 		if ($user['pass'] == $authCode) {
 			$_zp_current_admin = $user;
@@ -2252,7 +2252,7 @@ function handleSearchParms($album='', $image='') {
 	}
 	$context = get_context();
 	$params = zp_getCookie('zenphoto_image_search_params');
-	
+
 	if (!empty($params)) {
 		$_zp_current_search = new SearchEngine();
 		$_zp_current_search->setSearchParams($params);
@@ -2398,30 +2398,6 @@ function addPluginScript($script) {
 	$_zp_plugin_scripts[] = $script;
 }
 
-$_zp_use_tag_table = 0;
-/**
- * Returns true if we have converted to the database table for tags
- *
- * @return bool
- */
-function useTagTable() {
-	global $_zp_use_tag_table;
-	if ($_zp_use_tag_table > 0) {
-		return true;
-	} else if ($_zp_use_tag_table < 0) {
-		return false;
-	}
-	$result = query_full_array("SHOW COLUMNS FROM ".prefix('images').' LIKE "%tags%"');
-	foreach ($result as $row) {
-		if ($row['Field'] == 'tags') {
-			$_zp_use_tag_table = -1;
-			return false;
-		}
-	}
-	$_zp_use_tag_table = 1;
-	return true;
-}
-
 /**
  * Trims the tag values and eliminates duplicates.
  * Tags are case insensitive so only the first of 'Tag' and 'tag' will be preserved
@@ -2447,39 +2423,6 @@ function filterTags($tags) {
 	return $filtered_tags;
 }
 
-$_zp_all_tags = null;
-/**
- * Grabs the entire galleries tags
- * Returns an array with all the tags found (there may be duplicates)
- *
- * Should be used internally only, works only on "old" tag format.
- *
- * @return array
- * @since 1.1
- */
-function getAllTagsStrings() {
-	global $_zp_all_tags;
-	if (!is_null($_zp_all_tags)) { return $_zp_all_tags; }
-	$result = query_full_array("SELECT `tags` FROM ". prefix('images'));
-	foreach($result as $row){
-		$alltags = $alltags.$row['tags'].",";  // add comma after the last entry so that we can explode to array later
-	}
-	$result = query_full_array("SELECT `tags` FROM ". prefix('albums'));
-	foreach($result as $row){
-		$alltags = $alltags.$row['tags'].",";  // add comma after the last entry so that we can explode to array later
-	}
-	$alltags = explode(",",$alltags);
-	$_zp_all_tags = array();
-	foreach ($alltags as $tag) {
-		$clean = trim($tag);
-		if (!empty($clean)) {
-			$_zp_all_tags[] = $clean;
-		}
-	}
-	natcasesort($_zp_all_tags);
-	return $_zp_all_tags;
-}
-
 $_zp_unique_tags = NULL;
 /**
  * Returns an array of unique tag names
@@ -2489,31 +2432,16 @@ $_zp_unique_tags = NULL;
 function getAllTagsUnique() {
 	global $_zp_unique_tags;
 	if (!is_null($_zp_unique_tags)) return $_zp_unique_tags;  // cache them.
-	if (useTagTable()) {
-		$sql = "SELECT `name` FROM ".prefix('tags').' ORDER BY `name`';
-		$result = query_full_array($sql);
-		if (is_array($result)) {
-			$_zp_unique_tags = array();
-			foreach ($result as $row) {
-				$_zp_unique_tags[] = $row['name'];
-			}
-			return $_zp_unique_tags;
-		} else {
-			return array();
+	$sql = "SELECT `name` FROM ".prefix('tags').' ORDER BY `name`';
+	$result = query_full_array($sql);
+	if (is_array($result)) {
+		$_zp_unique_tags = array();
+		foreach ($result as $row) {
+			$_zp_unique_tags[] = $row['name'];
 		}
-	} else {
-		$taglist = getAllTagsStrings();
-		$seen = array();
-		foreach ($taglist as $key=>$tag) {
-			$tagLC = utf8::strtolower($tag);
-			if (in_array($tagLC, $seen)) {
-				unset($taglist[$key]);
-			} else {
-				$seen[] = $tagLC;
-			}
-		}
-		$_zp_unique_tags = array_values($taglist);
 		return $_zp_unique_tags;
+	} else {
+		return array();
 	}
 }
 
@@ -2526,52 +2454,35 @@ $_zp_count_tags = NULL;
 function getAllTagsCount() {
 	global $_zp_count_tags;
 	if (!is_null($_zp_count_tags)) return $_zp_count_tags;
-	if (useTagTable()) {
-		$_zp_count_tags = array();
-		$sql = "SELECT `name`, `id` from ".prefix('tags').' ORDER BY `name`';
-		$tagresult = query_full_array($sql);
-		if (is_array($tagresult)) {
-			$sql = 'SELECT `tagid`, `objectid` FROM '.prefix('obj_to_tag').' ORDER BY `tagid';
-			$countresult = query_full_array($sql);
-			if (is_array($countresult)) {
-				$id = 0;
-				$tagcounts = array();
-				foreach ($countresult as $row) {
-					if ($id != $row['tagid']) {
-						$tagcounts[$id = $row['tagid']] = 0;
-					}
-					$tagcounts[$id] ++;
+	$_zp_count_tags = array();
+	$sql = "SELECT `name`, `id` from ".prefix('tags').' ORDER BY `name`';
+	$tagresult = query_full_array($sql);
+	if (is_array($tagresult)) {
+		$sql = 'SELECT `tagid`, `objectid` FROM '.prefix('obj_to_tag').' ORDER BY `tagid';
+		$countresult = query_full_array($sql);
+		if (is_array($countresult)) {
+			$id = 0;
+			$tagcounts = array();
+			foreach ($countresult as $row) {
+				if ($id != $row['tagid']) {
+					$tagcounts[$id = $row['tagid']] = 0;
 				}
-				foreach ($tagresult as $row) {
-					if (isset($tagcounts[$row['id']])) {
-						$_zp_count_tags[$row['name']] = $tagcounts[$row['id']];
-					} else {
-						$_zp_count_tags[$row['name']] = 0;
-					}
-				}
-			} else {
-				foreach ($tagresult as $tag) {
-					$_zp_count_tags[$tag] = 0;
+				$tagcounts[$id] ++;
+			}
+			foreach ($tagresult as $row) {
+				if (isset($tagcounts[$row['id']])) {
+					$_zp_count_tags[$row['name']] = $tagcounts[$row['id']];
+				} else {
+					$_zp_count_tags[$row['name']] = 0;
 				}
 			}
+		} else {
+			foreach ($tagresult as $tag) {
+				$_zp_count_tags[$tag] = 0;
+			}
 		}
-		return $_zp_count_tags;
-	} else {
-		$alltags = getAllTagsStrings();
-		$list = array();
-		$tagsLC = array();
-		foreach ($alltags as $tag) {
-			$tagLC = utf8::strtolower($tag);
-			$list[$tagLC] = $tag;
-			$tagsLC[] = $tagLC;
-		}
-		$tagcounts = array_count_values($tagsLC);
-		$_zp_count_tags = array();
-		foreach ($tagcounts as $key=>$count) {
-			$_zp_count_tags[$list[$key]] = $count;
-		}
-		return $_zp_count_tags;
 	}
+	return $_zp_count_tags;
 }
 
 /**
@@ -2769,8 +2680,8 @@ function dircopy($srcdir, $dstdir) {
  */
 
 function mkdir_recursive($pathname, $mode=0777) {
-    is_dir(dirname($pathname)) || mkdir_recursive(dirname($pathname), $mode);
-    return is_dir($pathname) || @mkdir($pathname, $mode);
+	is_dir(dirname($pathname)) || mkdir_recursive(dirname($pathname), $mode);
+	return is_dir($pathname) || @mkdir($pathname, $mode);
 }
 
 
@@ -2779,15 +2690,15 @@ function mkdir_recursive($pathname, $mode=0777) {
  * Parses a byte size from a size value (eg: 100M) for comparison.
  */
 function parse_size($size) {
-  $suffixes = array(
+	$suffixes = array(
     '' => 1,
     'k' => 1024,
     'm' => 1048576, // 1024 * 1024
     'g' => 1073741824, // 1024 * 1024 * 1024
-  );
-  if (preg_match('/([0-9]+)\s*(k|m|g)?(b?(ytes?)?)/i', $size, $match)) {
-    return $match[1] * $suffixes[strtolower($match[2])];
-  }
+	);
+	if (preg_match('/([0-9]+)\s*(k|m|g)?(b?(ytes?)?)/i', $size, $match)) {
+		return $match[1] * $suffixes[strtolower($match[2])];
+	}
 }
 
 

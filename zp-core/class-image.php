@@ -391,18 +391,7 @@ class Image extends PersistentObject {
 	 * @return string
 	 */
 	function getTags() {
-		if (useTagTable()) {
-			$tags = readTags($this->id, 'images');
-		} else {
-			$tagstring = trim($this->get('tags'));
-			if (empty($tagstring)) {
-				$tags = array();
-			} else {
-				$tags = explode(",", $tagstring);
-				natcasesort($tags);
-			}
-		}
-		return $tags;
+		return readTags($this->id, 'images');
 	}
 
 	/**
@@ -414,13 +403,7 @@ class Image extends PersistentObject {
 		if (!is_array($tags)) {
 			$tags = explode(',', $tags);
 		}
-		$tags = filterTags($tags);
-		if (useTagTable()) {
-			storeTags($tags, $this->id, 'images');
-		} else {
-			$tags = implode(",", $tags);
-			$this->set('tags', $tags);
-		}
+		storeTags(filterTags($tags), $this->id, 'images');
 	}
 
 	/**

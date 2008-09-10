@@ -34,12 +34,12 @@ class SearchEngine
 	 */
 	function SearchEngine() {
 		if (isset($_REQUEST['words'])) {
-		$this->words = $_REQUEST['words'];
+			$this->words = $_REQUEST['words'];
 		} else {
 			$this->words = '';
 		}
 		if (isset($_REQUEST['date'])) {
-		$this->dates = sanitize(urldecode($_REQUEST['date']), 3);
+			$this->dates = sanitize(urldecode($_REQUEST['date']), 3);
 		} else {
 			$this->dates = '';
 		}
@@ -248,9 +248,6 @@ class SearchEngine
 	function getSearchSQL($searchstring, $searchdate, $tbl, $fields) {
 		global $_zp_current_album;
 		$sql = 'SELECT DISTINCT `id`, `show`,`title`,`desc`';
-		if (!useTagTable()) {
-			$sql .= ',`tags`';
-		}
 		if ($tbl=='albums') {
 			if ($fields & SEARCH_FILENAME) { $fields = $fields + SEARCH_FOLDER; } // for searching these are really the same thing, just named differently in the different tables
 			$fields = $fields & (SEARCH_TITLE + SEARCH_DESC + SEARCH_TAGS + SEARCH_FOLDER); // these are all albums have
@@ -291,13 +288,6 @@ class SearchEngine
 						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
 						$subsql .= " `desc` LIKE '%$singlesearchstring%'";
 					}
-					if (SEARCH_TAGS & $fields) {  // this path is supressed for tag table searches.
-						if (!useTagTable()) {
-							$nr++;
-							if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
-							$subsql .= " `tags` LIKE '%$singlesearchstring%'";
-						}
-					}
 					if (SEARCH_FOLDER & $fields) {
 						$nr++;
 						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
@@ -337,7 +327,7 @@ class SearchEngine
 			}
 		}
 		$sql .= $join;
-		
+
 		if (!empty($searchdate)) {
 			if ($nrt > 1) { $sql = $sql." AND "; }
 			$nrt++;
@@ -589,12 +579,8 @@ class SearchEngine
 		$albumfolder = getAlbumFolder();
 		if (empty($searchstring)) { return $albums; } // nothing to find
 		$fields = $this->fields;
-		if (useTagTable()) {
-			$tagsSearch = $fields & SEARCH_TAGS;
-			$fields = $fields & ~SEARCH_TAGS;
-		} else {
-			$tagsSearch = false;
-		}
+		$tagsSearch = $fields & SEARCH_TAGS;
+		$fields = $fields & ~SEARCH_TAGS;
 		$sql = $this->getSearchSQL($searchstring, '', 'albums', $fields);
 		if (!empty($sql)) { // valid fields exist
 			$search_results = query_full_array($sql, true);
@@ -712,12 +698,8 @@ class SearchEngine
 		if (empty($searchstring) && empty($searchdate)) { return $images; } // nothing to find
 		$albumfolder = getAlbumFolder();
 		$fields = $this->fields;
-		if (useTagTable()) {
-			$tagsSearch = $fields & SEARCH_TAGS;
-			$fields = $fields & ~SEARCH_TAGS;
-		} else {
-			$tagsSearch = false;
-		}
+		$tagsSearch = $fields & SEARCH_TAGS;
+		$fields = $fields & ~SEARCH_TAGS;
 		$sql = $this->getSearchSQL($searchstring, $searchdate, 'images', $fields);
 		if (!empty($sql)) {  // valid fields exist
 			$search_results = query_full_array($sql, true);

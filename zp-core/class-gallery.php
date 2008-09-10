@@ -416,9 +416,6 @@ class Gallery {
 			$deadman = strtotime('+ 10 sec');  // protect against too much processing.
 
 			$sql = 'SELECT `id`, `albumid`, `filename`, `desc`, `title`, `date`, `mtime`';
-			if (!useTagTable()) {
-				$sql .= ', `tags`';
-			}
 			$sql .= ' FROM ' . prefix('images');
 			$images = query_full_array($sql);
 			foreach($images as $image) {
@@ -453,18 +450,8 @@ class Gallery {
 
 						/* tags */
 						if (isset($metadata['tags'])) {
-							if (useTagTable()) {
-								$tags = $metadata['tags'];
-								storeTags($tags, $image['id'], 'images');
-							} else {
-								$s = '';
-								foreach ($metadata['tags'] as $tag) {
-									$s .= $tag.',';
-								}
-								if (!empty($s)) {
-									$set .= ', `tags`="' . mysql_real_escape_string(substr($s, 0, -1)) . '"';
-								}
-							}
+							$tags = $metadata['tags'];
+							storeTags($tags, $image['id'], 'images');
 						}
 
 

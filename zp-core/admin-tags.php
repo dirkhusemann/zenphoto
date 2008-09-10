@@ -29,65 +29,6 @@ echo "\n" . '<div id="main">';
 printTabs('tags');
 echo "\n" . '<div id="content">';
 
-if (isset($_GET['convert'])) {
-	if ($_GET['convert'] == 'table') {
-		// convert the tags to a table
-		$gallery = new Gallery();
-		$alltags = getAllTagsUnique();
-		foreach ($alltags as $tag) {
-			query("INSERT INTO " . prefix('tags') . " (name) VALUES ('" . escape($tag) . "')", true);
-		}
-		$sql = "SELECT `id`, `tags` FROM ".prefix('albums');
-		$result = query_full_array($sql);
-		if (is_array($result)) {
-			foreach ($result as $row) {
-				if (!empty($row['tags'])) {
-					$tags = explode(",", $row['tags']);
-					storeTags($tags, $row['id'], 'albums');
-				}
-			}
-		}
-		$sql = "SELECT `id`, `tags` FROM ".prefix('images');
-		$result = query_full_array($sql);
-		if (is_array($result)) {
-			foreach ($result as $row) {
-				if (!empty($row['tags'])) {
-					$tags = explode(",", $row['tags']);
-					storeTags($tags, $row['id'], 'images');
-				}
-			}
-		}
-		query("ALTER TABLE ".prefix('albums')." DROP COLUMN `tags`");
-		query("ALTER TABLE ".prefix('images')." DROP COLUMN `tags`");
-		$_zp_use_tag_table = 1;  // we have converted
-	} else {
-		// convert tagtable to strings
-		query('ALTER TABLE '.prefix('albums').' ADD COLUMN `tags` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci;', true);
-		query('ALTER TABLE '.prefix('images').' ADD COLUMN `tags` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci;', true);
-		$taglist = array();
-		$object = NULL;
-		$tbl = NULL;
-		$result = query_full_array('SELECT t.`name`,o.`type`,o.`objectid` FROM '.prefix('tags').' AS t,'.prefix('obj_to_tag').' AS o WHERE t.`id`=o.`tagid` ORDER BY o.`type`, o.`objectid`');
-		if (is_array($result)) {
-			foreach ($result as $row) {
-				if (($row['type'] != $tbl) || ($row['objectid'] != $object)) {
-					if (count($taglist) > 0) {
-						$tags = implode(',', $taglist);
-						query('UPDATE '.prefix($tbl).' SET `tags`="'.escape($tags).'" WHERE `id`='.$object);
-					}
-					$object = $row['objectid'];
-					$tbl = $row['type'];
-					$taglist = array();
-				}
-				$taglist[] = $row['name'];
-			}
-		}
-		query("DELETE FROM ".prefix('tags'));
-		query("DELETE FROM ".prefix('obj_to_tag'));
-		$_zp_use_tag_table = -1;
-	}
-}
-
 if (count($_POST) > 0) {
 	if (isset($_GET['newtags'])) {
 		foreach ($_POST as $value) {
@@ -107,130 +48,45 @@ if (count($_POST) > 0) {
 			$kill[] = utf8::strtolower($key);
 		}
 		if (count($kill) > 0) {
-			if (useTagTable()) {
-				$sql = "SELECT `id` FROM ".prefix('tags')." WHERE ";
-				foreach ($kill as $tag) {
-					$sql .= "`name`='".(mysql_real_escape_string($tag))."' OR ";
+			$sql = "SELECT `id` FROM ".prefix('tags')." WHERE ";
+			foreach ($kill as $tag) {
+				$sql .= "`name`='".(mysql_real_escape_string($tag))."' OR ";
+			}
+			$sql = substr($sql, 0, strlen($sql)-4);
+			$dbtags = query_full_array($sql);
+			if (is_array($dbtags)) {
+				$sqltags = "DELETE FROM ".prefix('tags')." WHERE ";
+				$sqlobjects = "DELETE FROM ".prefix('obj_to_tag')." WHERE ";
+				foreach ($dbtags as $tag) {
+					$sqltags .= "`id`='".$tag['id']."' OR ";
+					$sqlobjects .= "`tagid`='".$tag['id']."' OR ";
 				}
-				$sql = substr($sql, 0, strlen($sql)-4);
-				$dbtags = query_full_array($sql);
-				if (is_array($dbtags)) {
-					$sqltags = "DELETE FROM ".prefix('tags')." WHERE ";
-					$sqlobjects = "DELETE FROM ".prefix('obj_to_tag')." WHERE ";
-					foreach ($dbtags as $tag) {
-						$sqltags .= "`id`='".$tag['id']."' OR ";
-						$sqlobjects .= "`tagid`='".$tag['id']."' OR ";
-					}
-					$sqltags = substr($sqltags, 0, strlen($sqltags)-4);
-					query($sqltags);
-					$sqlobjects = substr($sqlobjects, 0, strlen($sqlobjects)-4);
-					query($sqlobjects);
-				}
-			} else {
-				$x = $kill;
-				$first = array_shift($x);
-				$match = "'%".$first."%'";
-				foreach ($x as $tag) {
-					$match .= " OR `tags` LIKE '%".mysql_real_escape_string($tag)."%'";
-				}
-				$sql = 'SELECT `id`, `tags` FROM '.prefix('images').' WHERE `tags` LIKE '.$match.';';
-				$imagelist = query_full_array($sql);
-				$sql = 'SELECT `id`, `tags` FROM '.prefix('albums').' WHERE `tags` LIKE '.$match.';';
-				$albumlist = query_full_array($sql);
-
-				foreach ($imagelist as $row) {
-					$tags = explode(",", $row['tags']);
-					foreach ($tags as $key=>$tag) {
-						$tags[$key] = utf8::strtolower(trim($tag));
-					}
-					$tags = array_diff($tags, $kill);
-					$row['tags'] = implode(",", $tags);
-					$sql = 'UPDATE '.prefix('images')."SET `tags`='".$row['tags']."' WHERE `id`='".$row['id']."'";
-					query($sql);
-				}
-
-				foreach ($albumlist as $row) {
-					$tags = explode(",", $row['tags']);
-					foreach ($tags as $key=>$tag) {
-						$tags[$key] = utf8::strtolower(trim($tag));
-					}
-					$tags = array_diff($tags, $kill);
-					$row['tags'] = implode(",", $tags);
-					$sql = 'UPDATE '.prefix('albums')."SET `tags`='".$row['tags']."' WHERE `id`='".$row['id']."'";
-					query($sql);
-				}
+				$sqltags = substr($sqltags, 0, strlen($sqltags)-4);
+				query($sqltags);
+				$sqlobjects = substr($sqlobjects, 0, strlen($sqlobjects)-4);
+				query($sqlobjects);
 			}
 		}
 	} // delete
 	if (isset($_GET['rename'])) {
-		if (useTagTable()) {
-			foreach($_POST as $key=>$newName) {
-				if (!empty($newName)) {
-					$newName = sanitize($newName, 3);
-					$key = postIndexDecode($key);
-					$key = substr($key, 2); // strip off the 'R_'
-					$newtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.mysql_real_escape_string($newName).'"');
-					$oldtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.escape($key).'"');
-					if (is_array($newtag)) { // there is an existing tag of the same name
-						$existing = $newtag['id'] != $oldtag['id']; // but maybe it is actually the original in a different case.
-					} else {
-						$existing = false;
-					}
-					if ($existing) {
-						query('DELETE FROM '.prefix('tags').' WHERE `id`='.$oldtag['id']);
-						query('UPDATE '.prefix('obj_to_tag').' SET `tagid`='.$newtag['id'].' WHERE `tagid`='.$oldtag['id']);
-					} else {
-						query('UPDATE '.prefix('tags').' SET `name`="'.escape($newName).'" WHERE `id`='.$oldtag['id']);
-					}
+		foreach($_POST as $key=>$newName) {
+			if (!empty($newName)) {
+				$newName = sanitize($newName, 3);
+				$key = postIndexDecode($key);
+				$key = substr($key, 2); // strip off the 'R_'
+				$newtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.mysql_real_escape_string($newName).'"');
+				$oldtag = query_single_row('SELECT `id` FROM '.prefix('tags').' WHERE `name`="'.escape($key).'"');
+				if (is_array($newtag)) { // there is an existing tag of the same name
+					$existing = $newtag['id'] != $oldtag['id']; // but maybe it is actually the original in a different case.
+				} else {
+					$existing = false;
 				}
-			}
-		} else {
-			$list = array();
-			$kill = array();
-			foreach($_POST as $key => $value) {
-				if (!empty($value)) {
-					$key = substr(key, 2); // strip off the 'R_'
-					$key = utf8::strtolower(postIndexDecode($key));
-					$kill[] = $key;
-					$list[postIndexEncode($key)] = $value;
+				if ($existing) {
+					query('DELETE FROM '.prefix('tags').' WHERE `id`='.$oldtag['id']);
+					query('UPDATE '.prefix('obj_to_tag').' SET `tagid`='.$newtag['id'].' WHERE `tagid`='.$oldtag['id']);
+				} else {
+					query('UPDATE '.prefix('tags').' SET `name`="'.escape($newName).'" WHERE `id`='.$oldtag['id']);
 				}
-			}
-			$first = array_shift($kill);
-			$match = "'%".$first."%'";
-			foreach ($kill as $tag) {
-				$match .= " OR `tags` LIKE '%".$tag."%'";
-			}
-			$sql = 'SELECT `id`, `tags` FROM '.prefix('images').' WHERE `tags` LIKE '.$match.';';
-			$imagelist = query_full_array($sql);
-			$sql = 'SELECT `id`, `tags` FROM '.prefix('albums').' WHERE `tags` LIKE '.$match.';';
-			$albumlist = query_full_array($sql);
-
-			foreach ($imagelist as $row) {
-				$tags = explode(",", $row['tags']);
-				foreach ($tags as $key=>$tag) {
-					$tag = trim($tag);
-					$listkey = postIndexEncode(utf8::strtolower($tag));
-					if (array_key_exists($listkey, $list)) {
-						$tags[$key] = $list[$listkey];
-					}
-				}
-				$row['tags'] = implode(",", $tags);
-				$sql = 'UPDATE '.prefix('images')."SET `tags`='".$row['tags']."' WHERE `id`='".$row['id']."'";
-				query($sql);
-			}
-
-			foreach ($albumlist as $row) {
-				$tags = explode(",", $row['tags']);
-				foreach ($tags as $key=>$tag) {
-					$tag = trim($tag);
-					$listkey = postIndexEncode(utf8::strtolower($tag));
-					if (array_key_exists($listkey, $list)) {
-						$tags[$key] = $list[$listkey];
-					}
-				}
-				$row['tags'] = implode(",", $tags);
-				$sql = 'UPDATE '.prefix('albums')."SET `tags`='".$row['tags']."' WHERE `id`='".$row['id']."'";
-				query($sql);
 			}
 		}
 	} // rename
@@ -251,10 +107,7 @@ echo "\n<tr>";
 echo "\n<th>".gettext("Delete tags from the gallery")."</th>";
 echo "\n<th>".gettext("Rename tags")."</th>";
 echo "\n<th>";
-$newTags = useTagTable();
-if ($newTags) {
-	echo gettext("New tags");
-}
+echo gettext("New tags");
 echo "</th>";
 echo "\n</tr>";
 echo "\n<tr>";
@@ -283,18 +136,16 @@ echo '<p>'.gettext('To change the value of a tag enter a new value in the text b
 echo "\n</td>";
 
 echo "\n<td valign='top'>";
-if ($newTags) {
-	echo '<form name="new_tags" action="?newtags=true&amp;tagsort='.$tagsort.'"method="post">';
-	echo "\n<ul class=\"tagnewlist\">";
-	for ($i=0; $i<40; $i++) {
-		echo "\n".'<li><label for="new_tag_'.$i.'"><input id="new_tag_'.$i.'" name="new_tag_'.$i.'" type="text"';
-		echo " size='30'/></label></li>";
-	}
-	echo "\n</ul>";
-	echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='save_tags' value=\"".gettext("save new tags")."\" title=\"".gettext("Add all the tags entered above.")."\" /></p>";
-	echo "\n</form>";
-echo "\n<p>".gettext("Add tags to the list by entering their names in the input fields of the <em>New tags</em> list. Then press the <em>save new tags </em>button").'</p>';
+echo '<form name="new_tags" action="?newtags=true&amp;tagsort='.$tagsort.'"method="post">';
+echo "\n<ul class=\"tagnewlist\">";
+for ($i=0; $i<40; $i++) {
+	echo "\n".'<li><label for="new_tag_'.$i.'"><input id="new_tag_'.$i.'" name="new_tag_'.$i.'" type="text"';
+	echo " size='30'/></label></li>";
 }
+echo "\n</ul>";
+echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='save_tags' value=\"".gettext("save new tags")."\" title=\"".gettext("Add all the tags entered above.")."\" /></p>";
+echo "\n</form>";
+echo "\n<p>".gettext("Add tags to the list by entering their names in the input fields of the <em>New tags</em> list. Then press the <em>save new tags </em>button").'</p>';
 echo "\n</td>";
 echo "\n</tr>";
 echo "\n</table>";

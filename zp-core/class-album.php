@@ -238,18 +238,7 @@ class Album extends PersistentObject {
 	 * @return string
 	 */
 	function getTags() {
-		if (useTagTable()) {
-			$tags = readTags($this->id, 'albums');
-		} else {
-			$tagstring = trim($this->get('tags'));
-			if (empty($tagstring)) {
-				$tags = array();
-			} else {
-				$tags = explode(",", $tagstring);
-				natcasesort($tags);
-			}
-		}
-		return $tags;
+		return readTags($this->id, 'albums');
 	}
 
 	/**
@@ -261,13 +250,7 @@ class Album extends PersistentObject {
 		if (!is_array($tags)) {
 			$tags = explode(',', $tags);
 		}
-		$tags = filterTags($tags);
-		if (useTagTable()) {
-			storeTags($tags, $this->id, 'albums');
-		} else {
-			$tags = implode(",", $tags);
-			$this->set('tags', $tags);
-		}
+		storeTags(filterTags($tags), $this->id, 'albums');
 	}
 
 

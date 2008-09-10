@@ -1305,7 +1305,7 @@ if (file_exists("zp-config.php")) {
 			$gallery->garbageCollect(true, true);
 		}
 
-		// 1.1.7 conversion to/from the theme option tables
+		// 1.1.7 conversion to the theme option tables
 		$albums = $gallery->getAlbums();
 		foreach ($albums as $albumname) {
 			$album = new Album($gallery, $albumname);
