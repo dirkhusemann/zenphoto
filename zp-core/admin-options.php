@@ -728,7 +728,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	<tr>
 		<td><?php echo gettext("Language:"); ?></td>
 		<td><select id="locale" name="locale">
-			<?php	generateLanguageOptionList();	?>
+			<?php	generateLanguageOptionList(true);	?>
 		</select>
 		<input type="checkbox" name="multi_lingual" value="1"	<?php echo checked('1', getOption('multi_lingual')); ?> />
 		<?php echo gettext('Multi-lingual'); ?>

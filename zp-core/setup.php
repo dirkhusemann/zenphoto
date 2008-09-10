@@ -891,7 +891,7 @@ if ($debug) {
 			}
 			echo gettext("Select a language:").' ';
 			echo '<select id="dynamic-locale" name="dynamic-locale" onchange="this.form.submit()">'."\n";
-			generateLanguageOptionList();
+			generateLanguageOptionList(false);
 			echo "</select>\n";
 			echo "</form>\n";
 			echo "</div>\n";
@@ -1498,7 +1498,7 @@ if (($noxlate > 0) && !isset($_GET['create']) && !isset($_GET['update'])) {
 	}
 	echo gettext("Select a language:").' ';
 	echo '<select id="dynamic-locale" name="dynamic-locale" onchange="this.form.submit()">'."\n";
-	generateLanguageOptionList();
+	generateLanguageOptionList(false);
 	echo "</select>\n";
 	echo "</form>\n";
 	echo "</div>\n";

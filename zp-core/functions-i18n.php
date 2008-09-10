@@ -8,6 +8,7 @@ define ('DEBUG_LOCALE', false); // used for examining language selection problem
 
 /**
  * Returns an array of available language locales.
+ * @param bool $HTTPAccept set to true to omit the HTTP Accept Language item.
  *
  * @return array
  *
@@ -16,10 +17,6 @@ function generateLanguageList() {
 	global $_zp_languages;
 	$dir = @opendir(SERVERPATH . "/" . ZENFOLDER ."/locale/");
 	$locales = array();
-
-	if (OFFSET_PATH === 1) {  // for admin only
-		$locales[gettext("HTTP Accept Language")] = '';
-	}
 	if ($dir !== false) {
 		while ($dirname = readdir($dir)) {
 			if (is_dir(SERVERPATH . "/" . ZENFOLDER ."/locale/".$dirname) && (substr($dirname, 0, 1) != '.')) {
@@ -39,14 +36,19 @@ function generateLanguageList() {
 $_zp_active_languages = NULL;
 /**
  * Generates the option list for the language selectin <select>
+ * @param bool $HTTPAccept set to true to include the HTTPAccept item
  *
  */
-function generateLanguageOptionList() {
+function generateLanguageOptionList($HTTPAccept) {
 	global $_zp_active_languages;
 	if (is_null($_zp_active_languages)) {
 		$_zp_active_languages = generateLanguageList();
 	}
-	generateListFromArray(array(getOption('locale', OFFSET_PATH===1)), $_zp_active_languages);
+	$locales = $_zp_active_languages;
+	if ($HTTPAccept) {  // for admin only
+		$locales[gettext("HTTP Accept Language")] = '';
+	}
+	generateListFromArray(array(getOption('locale', $HTTPAccept)), $locales);
 }
 
 
@@ -252,7 +254,7 @@ function getUserLocale() {
 		$locale = zp_getCookie('dynamic_locale');
 		if (DEBUG_LOCALE) debugLog("locale from option: ".$localeOption.'; dynamic locale='.$locale);
 		if (empty($localeOption) && ($locale === false)) {  // if one is not set, see if there is a match from 'HTTP_ACCEPT_LANGUAGE'
-			$languageSupport = generateLanguageList();
+			$languageSupport = generateLanguageList(false);
 			$userLang = parseHttpAcceptLanguage();
 			foreach ($userLang as $lang) {
 				$l = strtoupper($lang['fullcode']);
@@ -268,7 +270,7 @@ function getUserLocale() {
 				foreach ($userLang as $lang) {
 					$l = strtoupper($lang['fullcode']);
 					foreach ($languageSupport as $key=>$value) {
-						if (preg_match('/^'.strtoupper($key).'/', $l)) { // we got a partial match
+						if (preg_match('/^'.$l.'/', strtoupper($key))) { // we got a partial match
 							$locale = $key;
 							if (DEBUG_LOCALE) debugLog("locale set from HTTP Accept Language (partial match): ".$locale);
 							break;
