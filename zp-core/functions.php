@@ -738,7 +738,6 @@ function sanitize_string($input_string, $sanitize_level) {
 	require_once('lib-htmlawed.php');
 	// Strip slashes if get_magic_quotes_gpc is enabled.
 	if (get_magic_quotes_gpc()) $input_string = stripslashes($input_string);
-	$input_string = utf8::encode_numericentity($input_string);
 
 	// Basic sanitation.
 	if ($sanitize_level === 0) {
