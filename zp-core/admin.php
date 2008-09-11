@@ -504,8 +504,25 @@ if (count($subalbums) > 0) {
 		</th>
 	</tr>
 	<tr>
-		<td colspan="8"><?php echo gettext("Drag the albums into the order you wish them displayed. Select an album to edit its description and data, or"); ?>
-		 <a	href="?page=edit&album=<?php echo urlencode($album->name)?>&massedit"><?php echo gettext("mass-edit all album data"); ?></a>.</td>
+		<td colspan="8">
+		<?php
+			$sorttype = $album->getSubalbumSortType();
+			if ($sorttype != 'Manual') {
+				if ($album->getSortDirection('album')) {
+					$dir = gettext(' descending');
+				} else {
+					$dir = '';
+				}
+				$sortNames = array_flip($sortby);
+				$sorttype = $sortNames[$sorttype];
+			} else {
+				$dir = '';
+			}
+			printf(gettext('Current sort: %1$s%2$s. '), $sorttype, $dir);
+			echo gettext('Drag the albums into the order you wish them displayed.').' ';
+			echo gettext("Select an album to edit its description and data, or");
+		?>
+		<a href="?page=edit&album=<?php echo urlencode($album->name)?>&massedit"><?php echo gettext("mass-edit all album data"); ?></a>.</td>
 	</tr>
 	<tr>
 		<td style="padding: 0px 0px;" colspan="8">
@@ -899,7 +916,20 @@ if ($allimagecount != $totalimages) { // need pagination links
 <p><?php
 	if (count($albums) > 0) {
 		if (($_zp_loggedin & ADMIN_RIGHTS) && (count($albums)) > 1) {
-			echo gettext('Drag the albums into the order you wish them displayed.');
+			$sorttype = getOption('gallery_sorttype');
+			if ($sorttype != 'Manual') {
+				if (getOption('gallery_sortdirection')) {
+					$dir = gettext(' descending');
+				} else {
+					$dir = '';
+				}
+				$sortNames = array_flip($sortby);
+				$sorttype = $sortNames[$sorttype];
+			} else {
+				$dir = '';
+			}
+			printf(gettext('Current sort: %1$s%2$s. '), $sorttype, $dir);
+			echo gettext('Drag the albums into the order you wish them displayed.').' ';
 		}
 		echo gettext('Select an album to edit its description and data, or');
 	?><a href="?page=edit&massedit"> <?php echo gettext('mass-edit all album data'); ?></a>.</p>
