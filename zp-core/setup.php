@@ -1057,10 +1057,10 @@ if (file_exists("zp-config.php")) {
 		`id` int(11) UNSIGNED NOT NULL auto_increment,
 		`parentid` int(11) unsigned default NULL,
 		`folder` varchar(255) NOT NULL default '',
-		`title` varchar(255) NOT NULL default '',
+		`title` text NOT NULL default '',
 		`desc` text,
 		`date` datetime default NULL,
-		`place` varchar(255) default NULL,
+		`place` text default NULL default '',
 		`show` int(1) unsigned NOT NULL default '1',
 		`closecomments` int(1) unsigned NOT NULL default '0',
 		`commentson` int(1) UNSIGNED NOT NULL default '1',
@@ -1099,14 +1099,14 @@ if (file_exists("zp-config.php")) {
 		`id` int(11) unsigned NOT NULL auto_increment,
 		`albumid` int(11) unsigned NOT NULL default '0',
 		`filename` varchar(255) NOT NULL default '',
-		`title` varchar(255) default NULL,
+		`title` text NOT NULL default '',
 		`desc` text,
-		`location` tinytext,
+		`location` text,
 		`city` tinytext,
 		`state` tinytext,
 		`country` tinytext,
-		`credit` tinytext,
-		`copyright` tinytext,
+		`credit` text,
+		`copyright` text,
 		`commentson` int(1) NOT NULL default '1',
 		`show` int(1) NOT NULL default '1',
 		`date` datetime default NULL,
@@ -1233,7 +1233,7 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_options DROP INDEX `name`";
 	$sql_statements[] = "ALTER TABLE $tbl_options ADD UNIQUE `unique_option` (`name`, `ownerid`)";
 
-	//v1.1.8
+	//v1.2
 	$sql_statements[] = "ALTER TABLE $tbl_options CHANGE `ownerid` `ownerid` int(11) UNSIGNED NOT NULL DEFAULT 0";
 	$sql_statements[] = "ALTER TABLE $tbl_admintoalbum CHARACTER SET utf8 COLLATE utf8_unicode_ci";
 	$sql_statements[] = "ALTER TABLE $tbl_obj_to_tag CHARACTER SET utf8 COLLATE utf8_unicode_ci";
@@ -1252,6 +1252,15 @@ if (file_exists("zp-config.php")) {
 		$sql_statements[] = "ALTER TABLE $tbl_obj_to_tag ADD INDEX (`tagid`)";
 		$sql_statements[] = "ALTER TABLE $tbl_obj_to_tag ADD INDEX (`objectid`)";
 	}
+	
+	//v1.2.1
+	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `title` `title` TEXT NOT NULL DEFAULT ''";
+	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `place` `place` TEXT NOT NULL DEFAULT ''";
+	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `title` `title` TEXT NOT NULL DEFAULT ''";
+	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `location` `location` TEXT";
+	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `credit` `credit` TEXT";
+	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `copyright` `copyright` TEXT";
+		
 
 
 	/**************************************************************************************
