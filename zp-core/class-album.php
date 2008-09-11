@@ -99,7 +99,7 @@ class Album extends PersistentObject {
 	function setDefaults() {
 		// Set default data for a new Album (title and parent_id)
 		$parentalbum = $this->getParent();
-		$title = trim(str_replace(array('-','_','+','~'), ' ', $this->name));
+		$title = trim($this->name);
 		if (!is_null($parentalbum)) {
 			$this->set('parentid', $parentalbum->getAlbumId());
 			$title = substr($title, strrpos($title, '/')+1);
