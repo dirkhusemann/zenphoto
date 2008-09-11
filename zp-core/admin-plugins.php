@@ -115,7 +115,7 @@ foreach ($filelist as $extension) {
 	}
 	$str = isolate('$plugin_disable', $pluginStream);
 	if (false === $str) {
-		$plugin_disable = true;
+		$plugin_disable = false;
 	} else {
 		if (false === eval($str)) {
 			$parserr = $parserr | 8;
@@ -131,7 +131,7 @@ foreach ($filelist as $extension) {
 	echo "<tr>";
 	echo '<td width="30%">';
 	echo '<input type="checkbox" size="40" name="'.$opt.'" value="1"';
-	if ($parserr) {
+	if ($parserr || $plugin_disable) {
 		echo 'DISABLED';
 	} else {
 		echo checked('1', getOption($opt));
