@@ -113,6 +113,20 @@ foreach ($filelist as $extension) {
 			$plugin_URL = gettext('<strong>Error parsing <em>plugin_URL</em> string!</strong> Try removing semicolons from string.');
 		}
 	}
+	$str = isolate('$plugin_disable', $pluginStream);
+	if (false === $str) {
+		$plugin_disable = true;
+	} else {
+		if (false === eval($str)) {
+			$parserr = $parserr | 8;
+			$plugin_URL = gettext('<strong>Error parsing <em>plugin_disable</em> string!</strong> Try removing semicolons from string.');
+		} else {
+			if ($plugin_disable) {
+				setOption($opt, 0);
+			}
+		}
+	}
+	
 	
 	echo "<tr>";
 	echo '<td width="30%">';
