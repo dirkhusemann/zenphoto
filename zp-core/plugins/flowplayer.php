@@ -1,6 +1,8 @@
 <?php
 /** 
  * flowplayer -- plugin support for the flowplayer flash video player.
+ * NOTE: Flash players do not support external albums!
+ * 
  * Plugin option 'flow_player_width' -- width of the player window
  * Plugin option 'flow_player_height' -- height of the player window
  *  
@@ -10,12 +12,15 @@
  */
 
 
-$plugin_description = gettext("Enable <strong>flowplayer</strong> to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time. <br> Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its licence.");
+$plugin_description = (getOption('album_folder_class') === 'extranal')? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext("Enable <strong>flowplayer</strong> to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time. <br> Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_version = '1.0.2';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flowplayer.php.html";
 $option_interface = new flowplayer();
 $_zp_flash_player = $option_interface; // claim to be the flash player.
+
+if (getOption('album_folder_class') === 'external') exit(); // players do not work with external albums!
+
 // register the scripts needed
 addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/plugins/flowplayer/jquery.flashembed.pack.js"></script>');
 
