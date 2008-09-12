@@ -463,7 +463,7 @@ function printTabs($currenttab) {
 	}
 	if (($_zp_loggedin & ADMIN_RIGHTS) && getOption('zp_plugin_zenpage')) {
 		echo "\n    <li". (($currenttab == 'zenpage') ? " class=\"current\""     : "") .
- 				"><a href=\"".WEBPATH."/".ZENFOLDER."/plugins/zenpage/page-admin.php\">zenPage</a></li>";
+ 				"><a href=\"".WEBPATH."/".ZENFOLDER."/plugins/zenpage/page-admin.php\">zenpage</a></li>";
 	}
 	echo "\n  </ul>";
 
