@@ -196,26 +196,7 @@ if (file_exists($newfile)) {
 // If the file hasn't been cached yet, create it.
 if ($process) {
 	// setup standard image options from the album theme if it exists
-	require_once('classes.php');
-	require_once('class-gallery.php');
-	require_once('class-album.php');
-	if ($debug) echo '<br />Memory useage: '.memory_get_peak_usage();	
-	$gallery = new Gallery();
-	$parent = new Album($gallery, $album);
-	$theme = $gallery->getCurrentTheme();
-	$albumtheme = $parent->getAlbumTheme();
-	if (!empty($albumtheme)) {
-		$theme = $albumtheme;
-		$tbl = prefix('options').' WHERE `ownerid`='.$parent->id;
-		//load the album theme options
-		$sql = "SELECT `name`, `value` FROM ".$tbl;
-		$optionlist = query_full_array($sql, true);
-		if ($optionlist !== false) {
-			foreach($optionlist as $option) {
-				$_zp_options[$option['name']] = $option['value'];
-			}
-		}
-	}
+	$theme = themeSetup($album);
 	cacheImage($newfilename, $imgfile, $args, $allowWatermark, false, $theme);
 }
 if (!$debug) {
@@ -232,5 +213,27 @@ if (!$debug) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+function themeSetup($album) {
+	// a real hack--but we need to conserve memory in i.php so loading the classes is out of the question.
+	$theme = getOption('current_theme');
+	$id = NULL;
+	$folders = explode('/', str_replace('\\', '/', $album));
+	$uralbum = $folders[0];
+	$sql = 'SELECT `id`, `album_theme` FROM '.prefix('albums').' WHERE `folder`="'.$uralbum.'"';
+	$result = query_single_row($sql);
+	if (!empty($result['album_theme'])) {
+		$theme = $result['album_theme'];
+		//load the album theme options
+		$sql = "SELECT `name`, `value` FROM ".prefix('options').' WHERE `ownerid`='.$result['id'];
+		$optionlist = query_full_array($sql, true);
+		if ($optionlist !== false) {
+			foreach($optionlist as $option) {
+				$_zp_options[$option['name']] = $option['value'];
+			}
+		}
+	}
+	return $theme;
+}
 
 ?>

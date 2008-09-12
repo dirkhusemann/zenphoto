@@ -322,7 +322,8 @@ if (!$checked) {
 	 *                                                                           *
 	 *                             SYSTEMS CHECK                                 *
 	 *                                                                           *
-	 ******************************************************************************/
+	 *****************************************************************************/
+
 	global $_zp_conf_vars;
 
 	function checkMark($check, $text, $sfx, $msg) {
@@ -1432,7 +1433,7 @@ if (file_exists("zp-config.php")) {
 			}
 		}
 
-	} else if (db_connect()) {
+	} else if (db_connect()) {		
 		echo "<h3>$dbmsg</h3>";
 		echo "<p>";
 		$db_list = '';
