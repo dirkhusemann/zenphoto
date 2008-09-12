@@ -570,8 +570,8 @@ if ($allimagecount) {
 		</th>
 		<th><?php echo gettext("Click the images for a larger version"); ?>	</th>
 		<th>
-			<a href="javascript:toggleExtraInfo('',true);"><?php echo gettext('expand all fields');?></a>
-			| <a href="javascript:toggleExtraInfo('',false);"><?php echo gettext('collapse all fields');?></a>
+			<a href="javascript:toggleExtraInfo('','image',true);"><?php echo gettext('expand all fields');?></a>
+			| <a href="javascript:toggleExtraInfo('','image',false);"><?php echo gettext('collapse all fields');?></a>
 		</th>
 		<th align="right"><?php
 			echo gettext("Display images by:");
@@ -785,9 +785,9 @@ if ($allimagecount) {
 			</tr>
 			<tr>
 				<td colspan="4"><span class="extrashow"><a
-					href="javascript:toggleExtraInfo('<?php echo $currentimage;?>', true);"><?php echo gettext('show more fields');?></a></span>
+					href="javascript:toggleExtraInfo('<?php echo $currentimage;?>', 'image', true);"><?php echo gettext('show more fields');?></a></span>
 				<span style="display: none;" class="extrahide"><a
-					href="javascript:toggleExtraInfo('<?php echo $currentimage;?>', false);"><?php echo gettext('show fewer fields');?></a></span>
+					href="javascript:toggleExtraInfo('<?php echo $currentimage;?>', 'image', false);"><?php echo gettext('show fewer fields');?></a></span>
 				</td>
 			</tr>
 

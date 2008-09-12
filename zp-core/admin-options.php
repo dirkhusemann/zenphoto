@@ -408,12 +408,16 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 		echo  "<h2>Deleted</h2>";
 		echo '</div>';
 	}
-	?> <input type="hidden" name="totaladmins"
-	value="<?php echo count($admins); ?>" />
+	?> 
+<input type="hidden" name="totaladmins" value="<?php echo count($admins); ?>" />
 <table class="bordered">
 	<tr>
-		<th colspan="3">
+		<th width=20%>
 		<h2><?php echo gettext("Admin login information"); ?></h2>
+		</th>
+		<th width=80%>
+			<span style="font-weight: normal"> <a href="javascript:toggleExtraInfo('','user',true);"><?php echo gettext('Expand all');?></a>
+		| <a href="javascript:toggleExtraInfo('','user',false);"><?php echo gettext('Collapse all');?></a></span>
 		</th>
 	</tr>
 	<?php
@@ -428,34 +432,69 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 				$user['rights'] = $user['rights'] | ADMIN_RIGHTS;
 			}
 		}
+		$current =  ($user['id'] == $_zp_current_admin['id']);
 		if (count($admins) > 2) {
-			$background = ($user['id'] == $_zp_current_admin['id']) ? " background-color: #ECF1F2;" : "";
+			$background = ($current) ? " background-color: #ECF1F2;" : "";
 		} else {
 			$background = '';
 		}
 		?>
 	<tr>
-		<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" width="175"><strong><?php echo gettext("Username:"); ?></strong></td>
-		<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" width="200"><?php if (empty($userid)) {?>
-		<input type="text" size="40" name="<?php echo $id ?>-adminuser"
-			value="" /> <?php  } else { echo $userid.$master; ?>
-			<input type="hidden" name="<?php echo $id ?>-adminuser"
-			value="<?php echo $userid ?>" /> <?php } ?></td>
-		<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
-		<?php 
-		if(!empty($userid) && count($admins) > 2) { 
-			$msg = gettext('Are you sure you want to delete this user?');
-			if ($id == 0) {
-				$msg .= ' '.gettext('This is the master user account. If you delete it another user will be promoted to master user.');
-			}
-		?>
-		<a href="javascript: if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }"
-			title="<?php echo gettext('Delete this user.'); ?>" style="color: #c33;"> <img
-			src="images/fail.png" style="border: 0px;" alt="Delete" /></a> <?php } ?>&nbsp;
-		</td>
+		<td colspan="3" style="margin: 0pt; padding: 0pt;">
+		<table class="bordered" style="border: 0" id='user-<?php echo $id;?>'>
+		<tr>
+			<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" width="175">
+				<span <?php if ($current) echo 'style="display:none"'; ?> class="extrashow">
+				<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',true);">
+				<?php if (empty($userid)) {
+					echo gettext("Add New Admin");
+				} else {
+					echo $userid; ?>
+					<input type="hidden" name="<?php echo $id ?>-adminuser" value="<?php echo $userid ?>" /> 
+				<?php
+				}
+				?>
+				</a>
+				</span>
+				<span <?php if ($current) echo 'style="display:block"'; else echo 'style="display:none;"'; ?> class="extrahide">
+				<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',false);">
+				<?php if (empty($userid)) {
+					echo gettext("Add New Admin");
+				} else {
+					echo $userid; ?>
+					<input type="hidden" name="<?php echo $id ?>-adminuser" value="<?php echo $userid ?>" />
+				<?php
+				}
+				?>
+				</a>
+				</span>
+			</td>
+			<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" width="280"><?php echo $master; ?>&nbsp</td>
+			<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
+				<?php 
+				if(!empty($userid) && count($admins) > 2) { 
+					$msg = gettext('Are you sure you want to delete this user?');
+					if ($id == 0) {
+						$msg .= ' '.gettext('This is the master user account. If you delete it another user will be promoted to master user.');
+					}
+				?>
+				<a href="javascript: if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }"
+					title="<?php echo gettext('Delete this user.'); ?>" style="color: #c33;"> <img
+					src="images/fail.png" style="border: 0px;" alt="Delete" /></a> 
+					<?php } ?>
+					&nbsp;
+				</td>
+			</tr>
+	<?php if (empty($userid)) { ?>
+	<tr style='display:none' class="extrainfo">
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Username:"); ?></td>
+		<td><input type="text" size="40" name="<?php echo $id ?>-adminuser" value="" /></td><td></td>
 	</tr>
-	<tr>
-		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Password:"); ?><br />
+	<?php } ?>
+	<tr style='display:<?php echo ($current)?'block':'none'; ?>' class="extrainfo">
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Password:"); ?><br />
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?></td>
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><?php $x = $user['pass']; if (!empty($x)) { $x = '          '; } ?>
 		<input type="password" size="40" name="<?php echo $id ?>-adminpass"
@@ -501,7 +540,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 
 		</td>
 	</tr>
-	<tr>
+	<tr style='display:<?php echo ($current)?'block':'none'; ?>' class="extrainfo">
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Full name:"); ?> <br />
 		<br />
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("email:"); ?></td>
@@ -513,10 +552,16 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 			value="<?php echo $user['email'];?>" /></td>
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 		<table>
-		<tr>
-				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+			<?php	if (!empty($master)) { ?>
+			<tr>
+				<td<?php if (!empty($background)) echo "style=\"$background\""; ?> colspan="2">
+				<?php	echo gettext("This account's username and email are used as contact data in the RSS feeds."); ?>
+				</td>
+			</tr>
+			<?php } ?>
+			<tr>
+				<td <?php if (!empty($background)) echo "style=\"$background\""; ?> >
 				<?php
-				if (empty($master)) {
 					if (!($user['rights'] & ALL_ALBUMS_RIGHTS)) {
 						$cv = array();
 						$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
@@ -536,13 +581,10 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 						}
 						echo '</ul>';
 					}
-				} else {
-					echo '<br />'.gettext("This account's username and email are used as contact data in the RSS feeds.");
-				}
-				?></td>
+				?>
+				</td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 				<?php
-				if (empty($master)) {
 					if (!($user['rights'] & ALL_ALBUMS_RIGHTS)) {
 						if (!empty($alterrights)) {
 							echo gettext("You may manage these albums subject to the above rights.");
@@ -551,20 +593,21 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 							echo gettext("Administrators with <em>User admin</em> or <em>Manage all albums</em> rights can manage all albums. All others may manage only those that are selected.");
 						}
 					}
-				}?>
-		</td></table>
-		</td>
+				?>
+			</td>
+			</tr>
+		</table>
+		</td></tr>
 
-	<tr>
-	</tr>
+</table></td></tr>
 	<?php
 	$id++;
 }
 ?>
 	<tr>
-		<td></td>
-		<td><input type="submit" value="<?php echo gettext('save'); ?>" /></td>
-		<td></td>
+		<td colspan="3">
+		<input type="submit" value= <?php echo gettext('save') ?> />
+		</td>
 	</tr>
 </table>
 </form>
@@ -641,8 +684,8 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		<td><?php echo gettext("This option places a field on the gallery (search, album) login form for entering a user name. This is necessary if you have set guest login user names. It is also useful to allow Admin users to log in on these pages rather than at the Admin login."); ?></td>
 	</tr>
 	<tr>
-    <td><?php echo gettext("Gallery guest user:"); ?>    </td>
-    <td><input type="text" size="40" name="gallery_user" value="<?php echo htmlspecialchars(getOption('gallery_user')); ?>" />		</td>
+		<td><?php echo gettext("Gallery guest user:"); ?>    </td>
+		<td><input type="text" size="40" name="gallery_user" value="<?php echo htmlspecialchars(getOption('gallery_user')); ?>" />		</td>
 		<td><?php echo gettext("User ID for the gallery guest user") ?></td>
 	</tr>
 	<tr>
@@ -665,8 +708,8 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		<td><?php echo gettext("A reminder hint for the password."); ?></td>
 	</tr>
 	<tr>
-    <td><?php echo gettext("Search guest user:"); ?>    </td>
-    <td><input type="text" size="40" name="search_user" value="<?php echo htmlspecialchars(getOption('search_user')); ?>" />		</td>
+		<td><?php echo gettext("Search guest user:"); ?>    </td>
+		<td><input type="text" size="40" name="search_user" value="<?php echo htmlspecialchars(getOption('search_user')); ?>" />		</td>
 		<td><?php echo gettext("User ID for the search guest user") ?></td>
 	</tr>
 	<tr>
@@ -1311,8 +1354,8 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 			<h2><?php echo gettext("Plugin Options"); ?> 	</h2>
 		</th>
 		<th colspan="2">
-			<span style="font-weight: normal"> <a href="javascript:togglePluginOptions('',true);"><?php echo gettext('Expand plugin options');?></a>
-		| <a href="javascript:togglePluginOptions('',false);"><?php echo gettext('Collapse all plugin options');?></a></span>
+			<span style="font-weight: normal"> <a href="javascript:toggleExtraInfo('','plugin',true);"><?php echo gettext('Expand plugin options');?></a>
+		| <a href="javascript:toggleExtraInfo('','plugin',false);"><?php echo gettext('Collapse all plugin options');?></a></span>
 		</th>
 	</tr>
 	<tr>
@@ -1327,8 +1370,8 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 			echo '<table class="bordered" style="border: 0" id="plugin-'.$ext.'">';
 			echo '<tr><th colspan="3">';
 			?>
-			<span class="extrashow"><a href="javascript:togglePluginOptions('<?php echo $ext;?>', true);"><?php echo $ext; ?></a></span>
-			<span style="display:none;" class="extrahide"><a href="javascript:togglePluginOptions('<?php echo $ext;?>', false);"><?php echo $ext; ?></a></span>
+			<span class="extrashow"><a href="javascript:toggleExtraInfo('<?php echo $ext;?>','plugin',true);"><?php echo $ext; ?></a></span>
+			<span style="display:none;" class="extrahide"><a href="javascript:toggleExtraInfo('<?php echo $ext;?>','plugin',false);"><?php echo $ext; ?></a></span>
 			<?php
 			echo '</th></tr>';
 			$supportedOptions = $option_interface->getOptionsSupported();

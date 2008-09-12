@@ -270,10 +270,10 @@ function toggleAlbumMoveCopyRename(prefix, operation) {
 	}
 }
 
-// Toggles the extra info in the edit image panel.
-function toggleExtraInfo(id, show) {
+// Toggles the extra info in the admin edit and options panels.
+function toggleExtraInfo(id, category, show) {
 	var prefix = '';
-	if (id != null && id != '') prefix = '#image-'+id+' ';
+	if (id != null && id != '') prefix = '#'+category+'-'+id+' ';
 	if (show) {
 		jQuery(prefix+'.extrainfo').show();
 		jQuery(prefix+'.extrashow').hide();
@@ -284,18 +284,3 @@ function toggleExtraInfo(id, show) {
 		jQuery(prefix+'.extrahide').hide();
 	}
 }
-
-function togglePluginOptions(plugin, show) {
-	var prefix = '';
-	if (plugin != null && plugin != '') prefix = '#plugin-'+plugin+' ';
-	if (show) {
-		jQuery(prefix+'.extrainfo').show();
-		jQuery(prefix+'.extrashow').hide();
-		jQuery(prefix+'.extrahide').show();
-	} else {
-		jQuery(prefix+'.extrainfo').hide();
-		jQuery(prefix+'.extrashow').show();
-		jQuery(prefix+'.extrahide').hide();
-	}
-}
-
