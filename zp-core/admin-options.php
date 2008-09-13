@@ -445,7 +445,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 		<tr>
 			<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" width=150>
 				<input type="hidden" name="<?php echo $id ?>-adminuser" value="<?php echo $userid ?>" />
-				<span <?php if ($current) echo 'style="display:none"'; ?> class="extrashow">
+				<span <?php if ($current) echo 'style="display:none;"'; ?> class="extrashow">
 				<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',true);">
 				<?php if (empty($userid)) {
 					echo gettext("Add New Admin");
@@ -456,7 +456,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 				?>
 				</a>
 				</span>
-				<span <?php if ($current) echo 'style="display:block"'; else echo 'style="display:none;"'; ?> class="extrahide">
+				<span <?php if ($current) echo 'style="display:block;"'; else echo 'style="display:none;"'; ?> class="extrahide">
 				<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',false);">
 				<?php if (empty($userid)) {
 					echo gettext("Add New Admin");
@@ -468,7 +468,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 				</a>
 				</span>
 			</td>
-			<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" width=250><?php echo $master; ?>&nbsp</td>
+			<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" width=280><?php echo $master; ?>&nbsp</td>
 			<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" >
 				<?php 
 				if(!empty($userid) && count($admins) > 2) { 
@@ -490,17 +490,17 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 	<tr style='display:none' class="extrainfo">
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?> width=150>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Username:"); ?></td>
-		<td width=250>
+		<td width=280>
 		<input type="text" size="40" name="<?php echo $id ?>-adminuser" value="" />
 		</td>
 		<td></td>
 	</tr>
 	<?php } ?>
-	<tr style='display:<?php echo ($current)?'"block"':'"none"'; ?>' class="extrainfo">
+	<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="extrainfo">
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?> width=150>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Password:"); ?><br />
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?></td>
-		<td <?php if (!empty($background)) echo "style=\"$background\""; ?> width=250><?php $x = $user['pass']; if (!empty($x)) { $x = '          '; } ?>
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?> width=280><?php $x = $user['pass']; if (!empty($x)) { $x = '          '; } ?>
 		<input type="password" size="40" name="<?php echo $id ?>-adminpass"
 			value="<?php echo $x; ?>" /><br />
 		<input type="password" size="40" name="<?php echo $id ?>-adminpass_2"
@@ -537,12 +537,12 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 
 		</td>
 	</tr>
-	<tr style='display:<?php echo ($current)?'"block"':'"none"'; ?>' class="extrainfo">
+	<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="extrainfo">
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?> width=150>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Full name:"); ?> <br />
 			<br />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("email:"); ?></td>
-		<td <?php if (!empty($background)) echo "style=\"$background\""; ?> width=250>
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?> width=280>
 			<input type="text" size="40" name="<?php echo $id ?>-admin_name"
 			value="<?php echo $user['name'];?>" /> <br />
 		<br />
