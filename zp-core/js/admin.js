@@ -273,14 +273,16 @@ function toggleAlbumMoveCopyRename(prefix, operation) {
 // Toggles the extra info in the admin edit and options panels.
 function toggleExtraInfo(id, category, show) {
 	var prefix = '';
-	if (id != null && id != '') prefix = '#'+category+'-'+id+' ';
+	if (id != null && id != '') {
+		prefix = '#'+category+'-'+id+' ';
+	}
 	if (show) {
-		jQuery(prefix+'.extrainfo').show();
-		jQuery(prefix+'.extrashow').hide();
-		jQuery(prefix+'.extrahide').show();
+		jQuery(prefix+'.'+category+'extrainfo').show();
+		jQuery(prefix+'.'+category+'extrashow').hide();
+		jQuery(prefix+'.'+category+'extrahide').show();
 	} else {
-		jQuery(prefix+'.extrainfo').hide();
-		jQuery(prefix+'.extrashow').show();
-		jQuery(prefix+'.extrahide').hide();
+		jQuery(prefix+'.'+category+'extrainfo').hide();
+		jQuery(prefix+'.'+category+'extrashow').show();
+		jQuery(prefix+'.'+category+'extrahide').hide();
 	}
 }

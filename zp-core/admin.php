@@ -730,7 +730,7 @@ if ($allimagecount) {
 				</td>
 			</tr>
 
-			<tr class="extrainfo" style="display: none;">
+			<tr class="imageextrainfo" style="display: none;">
 				<td align="right" valign="top"><?php echo gettext("Location:"); ?></td>
 				<td><?php print_language_string_list($image->get('location'), $currentimage.'-location', false); ?>
 				</td>
@@ -741,52 +741,52 @@ if ($allimagecount) {
 						?></td>
 			</tr>
 
-			<tr class="extrainfo" style="display: none;">
+			<tr class="imageextrainfo" style="display: none;">
 				<td align="right" valign="top"><?php echo gettext("City:"); ?></td>
 				<td><?php print_language_string_list($image->get('city'), $currentimage.'-city', false); ?>
 				</td>
 			</tr>
 
-			<tr class="extrainfo" style="display: none;">
+			<tr class="imageextrainfo" style="display: none;">
 				<td align="right" valign="top"><?php echo gettext("State:"); ?></td>
 				<td><?php print_language_string_list($image->get('state'), $currentimage.'-state', false); ?>
 				</td>
 			</tr>
 
-			<tr class="extrainfo" style="display: none;">
+			<tr class="imageextrainfo" style="display: none;">
 				<td align="right" valign="top"><?php echo gettext("Country:"); ?></td>
 				<td><?php print_language_string_list($image->get('country'), $currentimage.'-country', false); ?>
 				</td>
 			</tr>
 
-			<tr class="extrainfo" style="display: none;">
+			<tr class="imageextrainfo" style="display: none;">
 				<td align="right" valign="top"><?php echo gettext("Credit:"); ?></td>
 				<td><?php print_language_string_list($image->get('credit'), $currentimage.'-credit', false); ?>
 				</td>
 			</tr>
 
-			<tr class="extrainfo" style="display: none;">
+			<tr class="imageextrainfo" style="display: none;">
 				<td align="right" valign="top"><?php echo gettext("Copyright:"); ?></td>
 				<td><?php print_language_string_list($image->get('copyright'), $currentimage.'-copyright', false); ?>
 				</td>
 			</tr>
 
-			<tr class="extrainfo" style="display: none;">
+			<tr class="imageextrainfo" style="display: none;">
 				<td align="right" valign="top"><?php echo gettext("Date:"); ?></td>
 				<td><input type="text" size="44" style="width: 271px"
 					name="<?php echo $currentimage; ?>-date"
 					value="<?php $d=$image->getDateTime(); if ($d!='0000-00-00 00:00:00') { echo $d; } ?>" /></td>
 			</tr>
 
-			<tr class="extrainfo" style="display: none;">
+			<tr class="imageextrainfo" style="display: none;">
 				<td align="right" valign="top"><?php echo gettext("Custom data:"); ?></td>
 				<td><?php print_language_string_list($image->get('custom_data'), $currentimage.'-custom_data', true); ?>
 				</td>
 			</tr>
 			<tr>
-				<td colspan="4"><span class="extrashow"><a
+				<td colspan="4"><span class="imageextrashow"><a
 					href="javascript:toggleExtraInfo('<?php echo $currentimage;?>', 'image', true);"><?php echo gettext('show more fields');?></a></span>
-				<span style="display: none;" class="extrahide"><a
+				<span style="display: none;" class="imageextrahide"><a
 					href="javascript:toggleExtraInfo('<?php echo $currentimage;?>', 'image', false);"><?php echo gettext('show fewer fields');?></a></span>
 				</td>
 			</tr>

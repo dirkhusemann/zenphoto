@@ -625,7 +625,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 				$v = 0;
 			}
 
-			if ($hide) echo "\n<tr class='extrainfo' style='display:none'>\n";
+			if ($hide) echo "\n<tr class='".$hide."extrainfo' style='display:none'>\n";
 			echo '<td width="175">' . $indent . $option . ":</td>\n";
 
 			switch ($type) {

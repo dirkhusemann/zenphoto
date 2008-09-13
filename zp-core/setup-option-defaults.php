@@ -112,7 +112,8 @@ function setDefault($option, $default) {
 	 									"strong => ()\n" .
 	 									"ul => ()\n" .
 	 									"ol => ()\n" .
-	 									"li => ()\n");
+	 									"li => ()\n" .
+										"p => ()\n");
 	setOptionDefault(	'style_tags', "abbr => (title => ())\n" .
 	 									"acronym => (title => ())\n" .
 	 									"b => ()\n" .

@@ -288,7 +288,7 @@ if (isset($_GET['action'])) {
 					$switch = substr($postkey, strlen(CUSTOM_OPTION_PREFIX), -strlen($key)-1);
 					switch ($switch) {
 						case 'text':
-							$value = process_language_string_save($key, 2);
+							$value = process_language_string_save($key, 1);
 							break;
 						case 'chkbox':
 							if (isset($_POST[$key])) {
@@ -299,7 +299,7 @@ if (isset($_GET['action'])) {
 							break;
 						case 'custom':
 							if (isset($_POST[$key])) {
-								$value = sanitize($_POST[$key], 2);
+								$value = sanitize($_POST[$key], 1);
 							} else {
 								$value = '';
 							}
@@ -445,7 +445,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 		<tr>
 			<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" width=150>
 				<input type="hidden" name="<?php echo $id ?>-adminuser" value="<?php echo $userid ?>" />
-				<span <?php if ($current) echo 'style="display:none;"'; ?> class="extrashow">
+				<span <?php if ($current) echo 'style="display:none;"'; ?> class="userextrashow">
 				<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',true);">
 				<?php if (empty($userid)) {
 					echo gettext("Add New Admin");
@@ -456,7 +456,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 				?>
 				</a>
 				</span>
-				<span <?php if ($current) echo 'style="display:block;"'; else echo 'style="display:none;"'; ?> class="extrahide">
+				<span <?php if ($current) echo 'style="display:block;"'; else echo 'style="display:none;"'; ?> class="userextrahide">
 				<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',false);">
 				<?php if (empty($userid)) {
 					echo gettext("Add New Admin");
@@ -487,7 +487,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 				</td>
 			</tr>
 	<?php if (empty($userid)) { ?>
-	<tr style='display:none' class="extrainfo">
+	<tr style='display:none' class="userextrainfo">
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?> width=150>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Username:"); ?></td>
 		<td width=280>
@@ -496,7 +496,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 		<td></td>
 	</tr>
 	<?php } ?>
-	<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="extrainfo">
+	<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="userextrainfo">
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?> width=150>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Password:"); ?><br />
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?></td>
@@ -537,7 +537,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 
 		</td>
 	</tr>
-	<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="extrainfo">
+	<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="userextrainfo">
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?> width=150>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Full name:"); ?> <br />
 			<br />
@@ -1368,13 +1368,13 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 			echo '<table class="bordered" style="border: 0" id="plugin-'.$ext.'">';
 			echo '<tr><th colspan="3">';
 			?>
-			<span class="extrashow"><a href="javascript:toggleExtraInfo('<?php echo $ext;?>','plugin',true);"><?php echo $ext; ?></a></span>
-			<span style="display:none;" class="extrahide"><a href="javascript:toggleExtraInfo('<?php echo $ext;?>','plugin',false);"><?php echo $ext; ?></a></span>
+			<span class="pluginextrashow"><a href="javascript:toggleExtraInfo('<?php echo $ext;?>','plugin',true);"><?php echo $ext; ?></a></span>
+			<span style="display:none;" class="pluginextrahide"><a href="javascript:toggleExtraInfo('<?php echo $ext;?>','plugin',false);"><?php echo $ext; ?></a></span>
 			<?php
 			echo '</th></tr>';
 			$supportedOptions = $option_interface->getOptionsSupported();
 			if (count($supportedOptions) > 0) {
-				customOptions($option_interface, '', NULL, true);
+				customOptions($option_interface, '', NULL, 'plugin');
 			}
 		}
 	}
