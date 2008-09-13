@@ -443,14 +443,14 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 		<td colspan="3" style="margin: 0pt; padding: 0pt;">
 		<table class="bordered" style="border: 0" id='user-<?php echo $id;?>'>
 		<tr>
-			<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" width="175">
+			<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" width=150>
+				<input type="hidden" name="<?php echo $id ?>-adminuser" value="<?php echo $userid ?>" />
 				<span <?php if ($current) echo 'style="display:none"'; ?> class="extrashow">
 				<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',true);">
 				<?php if (empty($userid)) {
 					echo gettext("Add New Admin");
 				} else {
 					echo $userid; ?>
-					<input type="hidden" name="<?php echo $id ?>-adminuser" value="<?php echo $userid ?>" /> 
 				<?php
 				}
 				?>
@@ -462,15 +462,14 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 					echo gettext("Add New Admin");
 				} else {
 					echo $userid; ?>
-					<input type="hidden" name="<?php echo $id ?>-adminuser" value="<?php echo $userid ?>" />
 				<?php
 				}
 				?>
 				</a>
 				</span>
 			</td>
-			<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" width="280"><?php echo $master; ?>&nbsp</td>
-			<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
+			<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" width=250><?php echo $master; ?>&nbsp</td>
+			<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" >
 				<?php 
 				if(!empty($userid) && count($admins) > 2) { 
 					$msg = gettext('Are you sure you want to delete this user?');
@@ -481,22 +480,27 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 				<a href="javascript: if(confirm(<?php echo "'".$msg."'"; ?>)) { window.location='?action=deleteadmin&adminuser=<?php echo $user['id']; ?>'; }"
 					title="<?php echo gettext('Delete this user.'); ?>" style="color: #c33;"> <img
 					src="images/fail.png" style="border: 0px;" alt="Delete" /></a> 
-					<?php } ?>
-					&nbsp;
+				<?php
+				}
+				?>
+				&nbsp;
 				</td>
 			</tr>
 	<?php if (empty($userid)) { ?>
 	<tr style='display:none' class="extrainfo">
-		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?> width=150>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Username:"); ?></td>
-		<td><input type="text" size="40" name="<?php echo $id ?>-adminuser" value="" /></td><td></td>
+		<td width=250>
+		<input type="text" size="40" name="<?php echo $id ?>-adminuser" value="" />
+		</td>
+		<td></td>
 	</tr>
 	<?php } ?>
-	<tr style='display:<?php echo ($current)?'block':'none'; ?>' class="extrainfo">
-		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+	<tr style='display:<?php echo ($current)?'"block"':'"none"'; ?>' class="extrainfo">
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?> width=150>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Password:"); ?><br />
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?></td>
-		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><?php $x = $user['pass']; if (!empty($x)) { $x = '          '; } ?>
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?> width=250><?php $x = $user['pass']; if (!empty($x)) { $x = '          '; } ?>
 		<input type="password" size="40" name="<?php echo $id ?>-adminpass"
 			value="<?php echo $x; ?>" /><br />
 		<input type="password" size="40" name="<?php echo $id ?>-adminpass_2"
@@ -504,47 +508,41 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 		<table class="checkboxes" >
 			<tr>
-				<td style="padding-bottom: 3px;<?php echo $background; ?>"><strong><?php echo gettext("Rights"); ?></strong>:
+				<td style="padding-bottom: 3px;<?php echo $background; ?>" colspan="5"><strong><?php echo gettext("Rights"); ?></strong>:</td>
 			</tr>
 			<tr>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-admin_rights"
-					value=<?php echo ADMIN_RIGHTS; if ($user['rights'] & ADMIN_RIGHTS) echo ' checked';echo $alterrights; ?>><?php echo gettext("User admin"); ?></td>
+					value=<?php echo ADMIN_RIGHTS; if ($user['rights'] & ADMIN_RIGHTS) echo ' checked';echo $alterrights; ?>> <?php echo gettext("User admin"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-options_rights"
-					value=<?php echo OPTIONS_RIGHTS; if ($user['rights'] & OPTIONS_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Options"); ?></td>
+					value=<?php echo OPTIONS_RIGHTS; if ($user['rights'] & OPTIONS_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Options"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-themes_rights"
-					value=<?php echo THEMES_RIGHTS; if ($user['rights'] & THEMES_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Themes"); ?></td>
+					value=<?php echo THEMES_RIGHTS; if ($user['rights'] & THEMES_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Themes"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-all_album_rights"
-					value=<?php echo EDIT_RIGHTS; if ($user['rights'] & ALL_ALBUMS_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Manage all albums"); ?></td>
+					value=<?php echo EDIT_RIGHTS; if ($user['rights'] & ALL_ALBUMS_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Manage all albums"); ?></td>
+				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>></td>
 			</tr>
 			<tr>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-edit_rights"
-					value=<?php echo EDIT_RIGHTS; if ($user['rights'] & EDIT_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Edit"); ?></td>
+					value=<?php echo EDIT_RIGHTS; if ($user['rights'] & EDIT_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Edit"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-comment_rights"
-					value=<?php echo COMMENT_RIGHTS; if ($user['rights'] & COMMENT_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Comment"); ?></td>
+					value=<?php echo COMMENT_RIGHTS; if ($user['rights'] & COMMENT_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Comment"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-upload_rights"
-					value=<?php echo UPLOAD_RIGHTS; if ($user['rights'] & UPLOAD_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Upload"); ?></td>
-				<?php
-				if (NO_RIGHTS > 0) {
-				?>
+					value=<?php echo UPLOAD_RIGHTS; if ($user['rights'] & UPLOAD_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Upload"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-view_rights"
-					value=<?php echo VIEWALL_RIGHTS; if ($user['rights'] & VIEWALL_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("View all albums"); ?></td>
+					value=<?php echo VIEWALL_RIGHTS; if ($user['rights'] & VIEWALL_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("View all albums"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-main_rights"
-					value=<?php echo MAIN_RIGHTS; if ($user['rights'] & MAIN_RIGHTS) echo ' checked';echo$alterrights; ?>><?php echo gettext("Overview"); ?></td>
-				<?php
-				} else{
-					echo '<input type="hidden" name="'.$id.'-main_rights" value=1>';
-				}
-				?>
+					value=<?php echo MAIN_RIGHTS; if ($user['rights'] & MAIN_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Overview"); ?></td>
 			</tr>
 		</table>
 
 		</td>
 	</tr>
-	<tr style='display:<?php echo ($current)?'block':'none'; ?>' class="extrainfo">
-		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Full name:"); ?> <br />
-		<br />
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("email:"); ?></td>
-		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+	<tr style='display:<?php echo ($current)?'"block"':'"none"'; ?>' class="extrainfo">
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?> width=150>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Full name:"); ?> <br />
+			<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("email:"); ?></td>
+		<td <?php if (!empty($background)) echo "style=\"$background\""; ?> width=250>
 			<input type="text" size="40" name="<?php echo $id ?>-admin_name"
 			value="<?php echo $user['name'];?>" /> <br />
 		<br />
@@ -552,17 +550,10 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 			value="<?php echo $user['email'];?>" /></td>
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 		<table>
-			<?php	if (!empty($master)) { ?>
-			<tr>
-				<td<?php if (!empty($background)) echo "style=\"$background\""; ?> colspan="2">
-				<?php	echo gettext("This account's username and email are used as contact data in the RSS feeds."); ?>
-				</td>
-			</tr>
-			<?php } ?>
 			<tr>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?> >
 				<?php
-					if (!($user['rights'] & ALL_ALBUMS_RIGHTS)) {
+					if (!($user['rights'] & ALL_ALBUMS_RIGHTS) && !$current) {
 						$cv = array();
 						$sql = "SELECT ".prefix('albums').".`folder` FROM ".prefix('albums').", ".
 						prefix('admintoalbum')." WHERE ".prefix('admintoalbum').".adminid=".
@@ -580,12 +571,16 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 							generateUnorderedListFromArray(array(), $rest, $prefix);
 						}
 						echo '</ul>';
+					} else {
+						if (!empty($master)) {
+							echo gettext("This account's username and email are used as contact data in the RSS feeds.");
+						}
 					}
 				?>
 				</td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 				<?php
-					if (!($user['rights'] & ALL_ALBUMS_RIGHTS)) {
+					if (!($user['rights'] & ALL_ALBUMS_RIGHTS) && !$current) {
 						if (!empty($alterrights)) {
 							echo gettext("You may manage these albums subject to the above rights.");
 						} else {
@@ -597,9 +592,12 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 			</td>
 			</tr>
 		</table>
-		</td></tr>
+		</td>
+		</tr>
 
-</table></td></tr>
+</table>
+</td>
+</tr>
 	<?php
 	$id++;
 }

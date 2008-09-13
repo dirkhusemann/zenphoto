@@ -709,7 +709,7 @@ function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrig
 			echo ' checked="checked"';
 		}
 		if ($localize) $display = $key; else $display = $item;
-		echo $alterrights.' />' . $display . "</label></li>"."\n";
+		echo $alterrights.' /> ' . $display . "</label></li>"."\n";
 	}
 }
 
