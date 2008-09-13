@@ -408,7 +408,13 @@ function printLogoAndLinks() {
 		printf(gettext("Logged in as %s"), $_zp_current_admin['user']);
 		echo " &nbsp; | &nbsp <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?logout\">".gettext("Log Out")."</a> &nbsp; | &nbsp; ";
 	}
-	echo "<a href=\"".WEBPATH."/index.php\">";
+	echo "<a href=\"".WEBPATH."/index.php";
+	if ($specialpage = getOption('custom_index_page')) {
+		if (file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.$specialpage.'.php')) {
+			echo '?p='.$specialpage;
+		}
+	}
+	echo "\">";
 	$t = get_language_string(getOption('gallery_title'));
 	if (!empty($t))	{
 		printf(gettext("View Gallery: %s"), $t);

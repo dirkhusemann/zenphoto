@@ -267,9 +267,20 @@ function getGalleryIndexURL() {
 	} else {
 		$page = 0;
 	}
+	$gallink1 = '';
+	$gallink2 = '';
+	if ($specialpage = getOption('custom_index_page')) {
+		if (file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.$specialpage.'.php')) {
+			$gallink1 = $specialpage.'/';
+			$gallink2 = 'p='.$specialpage.'&';
+		}
+	}
 	if ($page > 1) {
-		return rewrite_path("/page/" . $page, "/index.php?page=" . $page);
+		return rewrite_path("/page/".$gallink1.$page, "/index.php?".$gallink2."page=".$page);
 	} else {
+		if ($specialpage) {
+			return rewrite_path('/page/'.$gallink1, '?'.substr($gallink2, 0, -1));
+		}
 		return WEBPATH . "/";
 	}
 }
@@ -416,7 +427,7 @@ function getTotalPages($oneImagePage=false) {
  * @return int
  */
 function getPageURL($page, $total=null) {
-	global $_zp_current_album, $_zp_gallery, $_zp_current_search;
+	global $_zp_current_album, $_zp_gallery, $_zp_current_search, $_zp_gallery_page;
 	if (is_null($total)) { $total = getTotalPages(); }
 	if (in_context(ZP_SEARCH)) {
 		$searchwords = $_zp_current_search->words;
@@ -425,13 +436,28 @@ function getPageURL($page, $total=null) {
 		$searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
 		return $searchpagepath;
 	} else {
+		if ($specialpage = !in_array($_zp_gallery_page, array('index.php', 'album.php', 'image.php', 'search.php'))) {
+			// handle custom page
+			$pg = substr($_zp_gallery_page, 0, -4);
+			$pagination1 = '/page/'.$pg.'/';
+			$pagination2 = 'p='.$pg.'&';
+		} else {
+			$pagination1 = '/page/';
+			$pagination2 = '';
+				
+		}
 		if ($page <= $total && $page > 0) {
 			if (in_context(ZP_ALBUM)) {
 				return rewrite_path( pathurlencode($_zp_current_album->name) . (($page > 1) ? "/page/" . $page . "/" : ""),
 					"/index.php?album=" . pathurlencode($_zp_current_album->name) . (($page > 1) ? "&page=" . $page : "") );
 			} else if (in_context(ZP_INDEX)) {
-				return rewrite_path((($page > 1) ? "/page/" . $page . "/" : "/"), "/index.php" . (($page > 1) ? "?page=" . $page : ""));
+				if ($page > 1) {
+					return rewrite_path($pagination1 . $page . "/", "/index.php?" . $pagination2 . 'page=' . $page);
+				}
 			}
+		}
+		if ($specialpage) {
+			return rewrite_path($pagination1, '?'.substr($pagination2, 0, -1));
 		}
 		return null;
 	}

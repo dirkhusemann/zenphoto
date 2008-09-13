@@ -176,5 +176,6 @@ function setDefault($option, $default) {
 	setOptionDefault('albumimagesort', 'ID');
 	setOptionDefault('albumimagedirection', 'DESC');
 	setOptionDefault('cache_full_image', 0);
+	setOptionDefault('custom_index_page', '');
 
 ?>

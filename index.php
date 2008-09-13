@@ -15,8 +15,6 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
 }
 
-
-//load extensions
 $_zp_plugin_scripts = array();
 $_zp_flash_player = NULL;
 $_zp_HTML_cache = NULL;

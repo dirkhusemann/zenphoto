@@ -273,6 +273,7 @@ if (isset($_GET['action'])) {
 				if (isset($_POST['thumb_crop_height'])) setThemeOption($table, 'thumb_crop_height', sanitize($_POST['thumb_crop_height'],3));
 				if (isset($_POST['albums_per_page'])) setThemeOption($table, 'albums_per_page', sanitize($_POST['albums_per_page'],3));
 				if (isset($_POST['images_per_page'])) setThemeOption($table, 'images_per_page', sanitize($_POST['images_per_page'],3));
+				if (isset($_POST['custom_index_page'])) setThemeOption($table, 'custom_index_page', sanitize($_POST['custom_index_page'], 3));
 			}
 }
 		/*** Plugin Options ***/
@@ -430,9 +431,10 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 			if ($_zp_loggedin & ADMIN_RIGHTS) {
 				$master = " (<em>".gettext("Master")."</em>)";
 				$user['rights'] = $user['rights'] | ADMIN_RIGHTS;
+				if ($_zp_null_account) $user['rights'] = $user['rights'] | ALL_ALBUMS_RIGHTS;
 			}
 		}
-		$current =  ($user['id'] == $_zp_current_admin['id']);
+		$current =  ($user['id'] == $_zp_current_admin['id']) || $_zp_null_account;
 		if (count($admins) > 2) {
 			$background = ($current) ? " background-color: #ECF1F2;" : "";
 		} else {
@@ -487,7 +489,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 				</td>
 			</tr>
 	<?php if (empty($userid)) { ?>
-	<tr style='display:none' class="userextrainfo">
+	<tr <?php if ($_zp_null_account) echo 'style="display:block;"'; else echo 'style="display:none;"'; ?> class="userextrainfo">
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?> width=150>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Username:"); ?></td>
 		<td width=280>
@@ -1310,7 +1312,19 @@ if (!empty($_REQUEST['themealbum'])) {
 		<td><?php echo gettext("If this is checked the longest side of the image will be <em>image size</em>.").' ';
 		echo gettext("Otherwise, the <em>width</em> of the image will	be <em>image size</em>."); ?></td>
 	</tr>
+	<?php if (is_null($album)) {?>
+	<tr>
+		<td><?php echo gettext("Custom index page:"); ?></td>
+		<td>
+			<select id="custom_index_page" name="custom_index_page">
+			<option value=''>
+			<?php generateListFromFiles(getThemeOption($album, 'custom_index_page'), SERVERPATH.'/'.THEMEFOLDER.'/'.$themename.'/', '.php');	?>
+			</select>
+		</td>
+		<td><?php echo gettext("If this option is not empty, the Gallery Index URL that would normally link to the theme <code>index.php</code> script will instead link to this script. This option applies only to the <em>Gallery</em> theme."); ?></td>
+	</tr>
 	<?php
+	}
 	if (!(false === ($requirePath = getPlugin('themeoptions.php', $themename)))) {
 		require_once($requirePath);
 		$optionHandler = new ThemeOptions();
