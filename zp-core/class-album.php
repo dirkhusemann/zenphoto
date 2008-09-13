@@ -563,7 +563,7 @@ class Album extends PersistentObject {
 			$results[] = $row;
 		}
 		if ($key == 'title') {
-			$results = sortByTitle($results, $direction == ' DESC');
+			$results = sortByMultilingual($results, 'title', $direction == ' DESC');
 		} else if ($key == 'filename') {
 			if ($direction == 'DESC') $order = 'dsc'; else $order = 'asc';
 			$results = sortMultiArray($results, 'filename', $order, true, false);

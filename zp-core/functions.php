@@ -1054,13 +1054,14 @@ function zp_mail($subject, $message, $headers = '', $admin_emails=null) {
  * Sorts the results of a DB search by the current locale title string
  *
  * @param array $dbresult the result of the DB query
+ * @param string $field the field name to sort on
  * @param bool $descending the direction of the sort
  * @return array the sorted result
  */
-function sortByTitle($dbresult, $descending) {
+function sortByMultilingual($dbresult, $field, $descending) {
 	$temp = array();
 	foreach ($dbresult as $row) {
-		$temp[] = get_language_string($row['title']);
+		$temp[] = get_language_string($row[$field]);
 	}
 	natcasesort($temp);
 	$result = array();
@@ -1102,7 +1103,7 @@ function sortAlbumArray($parentalbum, $albums, $sortkey='sort_order', $recursed=
 		$results[] = $row;
 	}
 	if (strpos($sortkey,'title') !== false) {
-		$results = sortByTitle($results, strpos($sortkey,'DESC') !== false);
+		$results = sortByTitle($results, 'title', strpos($sortkey,'DESC') !== false);
 	} else if (strpos($sortkey, 'folder') !== false) {
 		if (strpos($sortkey,'DESC') !== false) $order = 'dsc'; else $order = 'asc';
 		$results = sortMultiArray($results, 'folder', $order, true, false);
