@@ -48,7 +48,8 @@ class ThemeOptions {
 									gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Check to enable search form.')),
 									gettext('Slideshow') => array('key' => 'Slideshow', 'type' => 1, 'desc' => gettext('Check to enable slideshow for the <em>Smoothgallery</em> personality.')),
 									gettext('Graphic logo') => array('key' => 'Graphic_logo', 'type' => 2, 'desc' => gettext('Select a logo (PNG files in the images folder) or leave empty for text logo.')),
-									gettext('Theme personality') => array('key' => 'Theme_personality', 'type' => 2, 'desc' => gettext('Select the theme personality')),
+									gettext('Theme personality') => array('key' => 'Theme_personality', 'type' => 5, 'selections' => array(gettext('Image page') => 'Image page', gettext('Simpleviewer') => 'Simpleviewer', gettext('Slimbox') => 'Slimbox', gettext('Smoothgallery') => 'Smoothgallery'),
+													'desc' => gettext('Select the theme personality')),
 									gettext('Theme colors') => array('key' => 'Theme_colors', 'type' => 2, 'desc' => gettext('Select the colors of the theme'))
 								);
 	}
@@ -63,12 +64,6 @@ class ThemeOptions {
 				echo "</select>\n";
 				break;
 
-			case 'Theme_personality':
-				echo '<select id="ef_personality" name="' . $option . '"' . ">\n";
-				generateListFromArray(array($currentValue), array(gettext('Image page') => 'Image page', gettext('Simpleviewer') => 'Simpleviewer', gettext('Slimbox') => 'Slimbox', gettext('Smoothgallery') => 'Smoothgallery'));
-				echo "</select>\n";
-				break;
-				
 			case 'Graphic_logo':
 				$gallery = new Gallery();
 				$theme = $gallery->getCurrentTheme();

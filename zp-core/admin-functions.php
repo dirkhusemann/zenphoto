@@ -594,6 +594,8 @@ define ('CUSTOM_OPTION_PREFIX', '_ZP_CUSTOM_');
  * 		1: a checkbox
  * 		2: handled by $optionHandler->handleOption()
  * 		3: a textarea
+ * 		4: radio buttons (button names are in the 'buttons' index of the supported options array)
+ * 		5: selector (selection list is in the 'selections' index of the supported options array)
  *
  * type 0 and 3 support multi-lingual strings.
  */
@@ -662,6 +664,14 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 					echo '<td width="200">' . "\n";
 					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'radio-'.$key.'" value=0 />' . "\n";
 					generateRadiobuttonsFromArray($v,$row['buttons'],$option);
+					echo "</td>\n";
+					break;
+				case 5: // seletor
+					echo '<td width="200">' . "\n";
+					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'selector-'.$key.'" value=0 />' . "\n";
+					echo '<select id="'.$option.'" name="'.$option.'">'."\n";
+					generateListFromArray(array($v),$row['selections'],$option);
+					echo "</select>\n";
 					echo "</td>\n";
 					break;
 				}

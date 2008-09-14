@@ -1323,8 +1323,20 @@ if (!empty($_REQUEST['themealbum'])) {
 		<td><?php echo gettext("Custom index page:"); ?></td>
 		<td>
 			<select id="custom_index_page" name="custom_index_page">
-			<option value=''>
-			<?php generateListFromFiles(getThemeOption($album, 'custom_index_page'), SERVERPATH.'/'.THEMEFOLDER.'/'.$themename.'/', '.php');	?>
+				<option value=''>
+				<?php
+				$curdir = getcwd();
+				$root = SERVERPATH.'/'.THEMEFOLDER.'/'.$themename.'/';
+				chdir($root);
+				$filelist = safe_glob('*.php');
+				$list = array();
+				foreach($filelist as $file) {
+					$list[] = str_replace('.php', '', $file);
+				}
+				$list = array_diff($list, array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions'));
+				generateListFromArray(array(getThemeOption($album, 'custom_index_page')), $list);
+				chdir($curdir);
+				?>
 			</select>
 		</td>
 		<td><?php echo gettext("If this option is not empty, the Gallery Index URL that would normally link to the theme <code>index.php</code> script will instead link to this script. This option applies only to the main theme for the <em>Gallery</em>."); ?></td>
