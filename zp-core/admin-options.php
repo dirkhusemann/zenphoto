@@ -1327,7 +1327,7 @@ if (!empty($_REQUEST['themealbum'])) {
 			<?php generateListFromFiles(getThemeOption($album, 'custom_index_page'), SERVERPATH.'/'.THEMEFOLDER.'/'.$themename.'/', '.php');	?>
 			</select>
 		</td>
-		<td><?php echo gettext("If this option is not empty, the Gallery Index URL that would normally link to the theme <code>index.php</code> script will instead link to this script. This option applies only to the <em>Gallery</em> theme."); ?></td>
+		<td><?php echo gettext("If this option is not empty, the Gallery Index URL that would normally link to the theme <code>index.php</code> script will instead link to this script. This option applies only to the main theme for the <em>Gallery</em>."); ?></td>
 	</tr>
 	<?php
 	}

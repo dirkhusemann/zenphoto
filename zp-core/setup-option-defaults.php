@@ -177,5 +177,6 @@ function setDefault($option, $default) {
 	setOptionDefault('albumimagedirection', 'DESC');
 	setOptionDefault('cache_full_image', 0);
 	setOptionDefault('custom_index_page', '');
-
+	setOptionDefault('picture_of_the_day', serialize(array('day'=>NULL,'folder'=>NULL,'filename'=>NULL)));
+	
 ?>

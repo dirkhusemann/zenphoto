@@ -609,6 +609,17 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 //******************************************
 
 /**
+ * Sets the album passed as the current album
+ *
+ * @param object $album the album to be made current
+ */
+function makeAlbumCurrent($album) {
+	global $_zp_current_album;
+	$_zp_current_album = $album; 
+	set_context(ZP_INDEX | ZP_ALBUM);
+}
+
+/**
  * Returns the raw title of the current album.
  *
  * @return string
@@ -1454,6 +1465,18 @@ define('DEFAULT_MOV_HEIGHT', 496);
 define('DEFAULT_MOV_WIDTH', 640);
 define('DEFAULT_3GP_HEIGHT', 304);
 define('DEFAULT_3GP_WIDTHT', 352);
+
+/**
+ * Sets the image passed as the current image
+ *
+ * @param object $image the image to become current
+ */
+function makeImageCurrent($image) {
+	global $_zp_current_album, $_zp_current_image;
+	$_zp_current_image = $image;
+	$_zp_current_album = $_zp_current_image->getAlbum(); 
+	set_context(ZP_INDEX | ZP_ALBUM | ZP_IMAGE);
+}
 
 /**
  * Returns the raw title of the current image.
@@ -2866,10 +2889,20 @@ function getProtectedAlbumsWhere() {
 
 /**
  * Returns a randomly selected image from the gallery. (May be NULL if none exists)
+ * @param bool $daily set to true and the picture changes only once a day.
  *
  * @return object
  */
-function getRandomImages() {
+function getRandomImages($daily = false) {
+	global $_zp_gallery;
+	if ($daily) {
+		$potd = unserialize(getOption('picture_of_the_day'));
+		if (date('Y-m-d', $potd['day']) == date('Y-m-d')) {
+			$album = new Album($_zp_gallery, $potd['folder']);
+			$image = new Image($album, $potd['filename']);
+			if ($image->exists)	return $image;
+		}
+	}
 	if (zp_loggedin()) {
 		$albumWhere = '';
 		$imageWhere = '';
