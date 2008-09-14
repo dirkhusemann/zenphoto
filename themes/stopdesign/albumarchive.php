@@ -27,7 +27,7 @@
 		<ul>
 			<?php
 			$counter = 0;
-			while (next_album(true) and $counter < 999):
+			while (next_album()):
 			?>
 			<li class="gal">
 			<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAnnotatedAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
@@ -71,6 +71,17 @@
 			endwhile;
 			?>
 		</ul>
+			<div class="galleryinfo">
+				<br />
+				<p>
+				<?php if (hasPrevPage()) { ?>
+						<a href="<?php echo htmlspecialchars(getPrevPageURL()); ?>" accesskey="x">&laquo; <?php echo gettext('prev page'); ?></a>
+				<?php } ?>
+				<?php if (hasNextPage()) { if (hasPrevPage()) { echo '&nbsp;'; } ?>
+						<a href="<?php echo htmlspecialchars(getNextPageURL()); ?>" accesskey="x"><?php echo gettext('next page'); ?> &raquo;</a>
+				<?php } ?>
+				</p>
+			</div>
 	<?php } ?>
 </div>
 

@@ -273,6 +273,8 @@ function getGalleryIndexURL() {
 		if (file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.$specialpage.'.php')) {
 			$gallink1 = $specialpage.'/';
 			$gallink2 = 'p='.$specialpage.'&';
+		} else {
+			$specialpage = false;
 		}
 	}
 	if ($page > 1) {

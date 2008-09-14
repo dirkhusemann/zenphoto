@@ -16,8 +16,13 @@ if (!($_zp_loggedin & ADMIN_RIGHTS)) { // prevent nefarious access to this page.
 $gallery = new Gallery();
 if (isset($_GET['refresh'])) {
 	if ($_GET['refresh'] != 'done') {
+		if (isset($_GET['counter'])) {
+			$counter = sanitize_numeric($_GET['counter'])+1;
+		} else {
+			$counter = 2;
+		}
 		if ($gallery->garbageCollect(true, true)) {
-			$param = '?refresh=continue';
+			$param = '?refresh=continue&counter='.$counter;
 		} else {
 			$param = '?refresh=done';
 		}

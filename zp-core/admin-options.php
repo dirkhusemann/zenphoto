@@ -664,6 +664,11 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		</th>
 	</tr>
 	<tr>
+		<td></td>
+		<td><input type="submit" value="<?php echo gettext('save'); ?>" /></td>
+		<td></td>
+	</tr>
+	<tr>
 		<td width="175"><?php echo gettext("Gallery title:"); ?></td>
 		<td width="200">
 		<?php print_language_string_list(getOption('gallery_title'), 'gallery_title', false) ?>

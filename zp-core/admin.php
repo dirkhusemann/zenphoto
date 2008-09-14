@@ -31,8 +31,13 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	$gallery = new Gallery();
 	if (isset($_GET['prune'])) {
 		if ($_GET['prune'] != 'done') {
+			if (isset($_GET['counter'])) {
+				$counter = sanitize_numeric($_GET['counter'])+1;
+			} else {
+				$counter = 2;
+			}
 			if ($gallery->garbageCollect(true, true)) {
-				$param = '?prune=continue';
+				$param = '?prune=continue&counter='.$counter;
 			} else {
 				$param = '?prune=done';
 			}
