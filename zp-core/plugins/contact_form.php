@@ -188,7 +188,7 @@ function printContactForm() {
 			</div>
 			<?php
 			if(isset($_POST['confirm'])) {
-				//UTF8::send_mail(getOption("contactform_mailadress"), $subject, $message, $headers);
+				UTF8::send_mail(getOption("contactform_mailadress"), $subject, $message, $headers);
 				unset($mailcontent);
 			} 
 		}
