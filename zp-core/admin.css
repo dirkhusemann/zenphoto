@@ -326,10 +326,11 @@ table.checkboxes {
 table.checkboxes tr {
 	padding: 0px;
 	margin: 0px;
+	height: 18px;
 }
 
 table.checkboxes td {
-	padding: 0px;
+	padding: 0px 12px 0px 0px;
 	margin: 0px;
 }
 

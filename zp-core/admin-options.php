@@ -519,15 +519,16 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 					value=<?php echo OPTIONS_RIGHTS; if ($user['rights'] & OPTIONS_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Options"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-themes_rights"
 					value=<?php echo THEMES_RIGHTS; if ($user['rights'] & THEMES_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Themes"); ?></td>
-				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-all_album_rights"
-					value=<?php echo EDIT_RIGHTS; if ($user['rights'] & ALL_ALBUMS_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Manage all albums"); ?></td>
-				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>></td>
 			</tr>
 			<tr>
+				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-all_album_rights"
+					value=<?php echo EDIT_RIGHTS; if ($user['rights'] & ALL_ALBUMS_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Manage all albums"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-edit_rights"
 					value=<?php echo EDIT_RIGHTS; if ($user['rights'] & EDIT_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Edit"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-comment_rights"
 					value=<?php echo COMMENT_RIGHTS; if ($user['rights'] & COMMENT_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Comment"); ?></td>
+			</tr>
+			<tr>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-upload_rights"
 					value=<?php echo UPLOAD_RIGHTS; if ($user['rights'] & UPLOAD_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Upload"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-view_rights"
