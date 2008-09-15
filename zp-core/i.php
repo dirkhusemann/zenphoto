@@ -57,6 +57,7 @@ if (isset($_GET['t'])) {
 list($ralbum, $rimage) = rewrite_get_album_image('a', 'i');
 $album = str_replace('..','', sanitize($ralbum, 0));
 $image = str_replace(array('/',"\\"),'', sanitize($rimage, 0));
+$theme = themeSetup($album); // loads the theme based image options.
 
 // Disallow abusive size requests.
 if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
@@ -196,7 +197,6 @@ if (file_exists($newfile)) {
 // If the file hasn't been cached yet, create it.
 if ($process) {
 	// setup standard image options from the album theme if it exists
-	$theme = themeSetup($album);
 	cacheImage($newfilename, $imgfile, $args, $allowWatermark, false, $theme);
 }
 if (!$debug) {
