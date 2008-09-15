@@ -232,7 +232,12 @@ function parseHttpAcceptLanguage($str=NULL) {
 	}
 	// sorting the list by coefficient desc
 	krsort($accepted);
-	if (DEBUG_LOCALE) debugLogArray("parseHttpAcceptLanguage($str)", $accepted);
+	if (DEBUG_LOCALE) {
+		debugLog("parseHttpAcceptLanguage($str)");
+		foreach ($accepted as $key=>$lang) {
+			debugLogArray('     '.$key, $lang);
+		}
+	}
 	return $accepted;
 }
 
@@ -265,6 +270,7 @@ function getUserLocale() {
 						break;
 					}
 				}
+				if ($locale) break;
 			}
 			if ($locale === false) { // try partal matches
 				foreach ($userLang as $lang) {
@@ -277,12 +283,14 @@ function getUserLocale() {
 						}
 					}
 				}
+				if ($locale) break;
 			}
 		}
 	}
 	if ($locale !== false) {
 		setOption('locale', $locale, false);
 	}
+	if (DEBUG_LOCALE) debugLog("Returning locale: ".$locale);	
 	return $locale;
 }
 
