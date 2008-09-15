@@ -291,135 +291,140 @@ class Gallery {
 	 *
 	 * @param bool $cascade garbage collect every image and album in the gallery.
 	 * @param bool $complete garbage collect every image and album in the *database* - completely cleans the database.
+	 * @param  int $restart Image ID to restart scan from
 	 * @return bool
 	 */
-	function garbageCollect($cascade=true, $complete=false) {
-		// Check for the existence of top-level albums (subalbums handled recursively).
-		$result = query("SELECT * FROM " . prefix('albums'));
-		$dead = array();
-		$live = array(''); // purge the root album if it exists
-		$deadalbumthemes = array();
-		// Load the albums from disk
-		$albumfolder = getAlbumFolder();
-		while($row = mysql_fetch_assoc($result)) {
-			if (!file_exists($albumfolder.$row['folder']) || in_array($row['folder'], $live)) {
-				$dead[] = $row['id'];
-				if ($row['album_theme'] !== '') {  // orphaned album theme options table
-					$deadalbumthemes[$row['id']] = $row['folder'];
+	function garbageCollect($cascade=true, $complete=false, $restart='') {
+		if (empty($restart)) {
+			// Check for the existence of top-level albums (subalbums handled recursively).
+			$result = query("SELECT * FROM " . prefix('albums'));
+			$dead = array();
+			$live = array(''); // purge the root album if it exists
+			$deadalbumthemes = array();
+			// Load the albums from disk
+			$albumfolder = getAlbumFolder();
+			while($row = mysql_fetch_assoc($result)) {
+				if (!file_exists($albumfolder.$row['folder']) || in_array($row['folder'], $live)) {
+					$dead[] = $row['id'];
+					if ($row['album_theme'] !== '') {  // orphaned album theme options table
+						$deadalbumthemes[$row['id']] = $row['folder'];
+					}
+				} else {
+					$live[] = $row['folder'];
 				}
-			} else {
-				$live[] = $row['folder'];
 			}
-		}
 
-		if (count($dead) > 0) { /* delete the dead albums from the DB */
-			$first = array_pop($dead);
-			$sql1 = "DELETE FROM " . prefix('albums') . " WHERE `id`='$first'";
-			$sql2 = "DELETE FROM " . prefix('images') . " WHERE `albumid`='$first'";
-			$sql3 = "DELETE FROM " . prefix('comments') . " WHERE `type`='albums' AND `ownerid`='$first'";
-			$sql4 = "DELETE FROM " . prefix('obj_to_tag'). " WHERE `type`='albums' AND `objectid`='$first'";
-			foreach ($dead as $albumid) {
-				$sql1 .= " OR `id` = '$albumid'";
-				$sql2 .= " OR `albumid` = '$albumid'";
-				$sql3 .= " OR `ownerid` = '$albumid'";
-				$sql4 .= " OR `objectid` = '$albumid'";
+			if (count($dead) > 0) { /* delete the dead albums from the DB */
+				$first = array_pop($dead);
+				$sql1 = "DELETE FROM " . prefix('albums') . " WHERE `id`='$first'";
+				$sql2 = "DELETE FROM " . prefix('images') . " WHERE `albumid`='$first'";
+				$sql3 = "DELETE FROM " . prefix('comments') . " WHERE `type`='albums' AND `ownerid`='$first'";
+				$sql4 = "DELETE FROM " . prefix('obj_to_tag'). " WHERE `type`='albums' AND `objectid`='$first'";
+				foreach ($dead as $albumid) {
+					$sql1 .= " OR `id` = '$albumid'";
+					$sql2 .= " OR `albumid` = '$albumid'";
+					$sql3 .= " OR `ownerid` = '$albumid'";
+					$sql4 .= " OR `objectid` = '$albumid'";
+				}
+				$n = query($sql1);
+				if (!$complete && $n > 0 && $cascade) {
+					query($sql2);
+					query($sql3);
+					query($sql4);
+				}
 			}
-			$n = query($sql1);
-			if (!$complete && $n > 0 && $cascade) {
-				query($sql2);
-				query($sql3);
-				query($sql4);
-			}
-		}
-		if (count($deadalbumthemes) > 0) { // delete the album theme options tables for dead albums
-			foreach ($deadalbumthemes as $id=>$deadtable) {
-				$sql = 'DELETE FROM '.prefix('options').' WHERE `ownerid`='.$id;
-				query($sql, true);
+			if (count($deadalbumthemes) > 0) { // delete the album theme options tables for dead albums
+				foreach ($deadalbumthemes as $id=>$deadtable) {
+					$sql = 'DELETE FROM '.prefix('options').' WHERE `ownerid`='.$id;
+					query($sql, true);
 
+				}
 			}
 		}
 
 		if ($complete) {
+			if (empty($restart)) {
+				/* refresh 'metadata' of dynamic albums */
+				$albumfolder = getAlbumFolder();
+				$albumids = query_full_array("SELECT `id`, `mtime`, `folder` FROM " . prefix('albums') . " WHERE `dynamic`='1'");
+				foreach ($albumids as $album) {
+					if (($mtime=filemtime($albumfolder.$album['folder'])) > $album['mtime']) {  // refresh
+						$data = file_get_contents($albumfolder.$album['folder']);
+						while (!empty($data)) {
+							$data1 = trim(substr($data, 0, $i = strpos($data, "\n")));
+							if ($i === false) {
+								$data1 = $data;
+								$data = '';
+							} else {
+								$data = substr($data, $i + 1);
+							}
+							if (strpos($data1, 'WORDS=') !== false) {
+								$words = "words=".urlencode(substr($data1, 6));
+							}
+							if (strpos($data1, 'THUMB=') !== false) {
+								$thumb = trim(substr($data1, 6));
+							}
+							if (strpos($data1, 'FIELDS=') !== false) {
 
-			/* refresh 'metadata' of dynamic albums */
-			$albumfolder = getAlbumFolder();
-			$albumids = query_full_array("SELECT `id`, `mtime`, `folder` FROM " . prefix('albums') . " WHERE `dynamic`='1'");
-			foreach ($albumids as $album) {
-				if (($mtime=filemtime($albumfolder.$album['folder'])) > $album['mtime']) {  // refresh
-					$data = file_get_contents($albumfolder.$album['folder']);
-					while (!empty($data)) {
-						$data1 = trim(substr($data, 0, $i = strpos($data, "\n")));
-						if ($i === false) {
-							$data1 = $data;
-							$data = '';
-						} else {
-							$data = substr($data, $i + 1);
-						}
-						if (strpos($data1, 'WORDS=') !== false) {
-							$words = "words=".urlencode(substr($data1, 6));
-						}
-						if (strpos($data1, 'THUMB=') !== false) {
-							$thumb = trim(substr($data1, 6));
-						}
-						if (strpos($data1, 'FIELDS=') !== false) {
-
-							$fields = "&searchfields=".trim(substr($data1, 7));
-						}
-					}
-					if (!empty($words)) {
-						if (empty($fields)) {
-							$fields = '&searchfields=4';
-						}
-					}
-					$sql = "UPDATE ".prefix('albums')."SET `search_params`=\"$words.$fields\", `thumb`=\"$thumb\", `mtime`=\"$mtime\" WHERE `id`=\"".$album['id']."\"";
-					query($sql);
-				}
-			}
-
-
-			/* Delete all image entries that don't belong to an album at all. */
-
-			$albumids = query_full_array("SELECT `id` FROM " . prefix('albums'));                  /* all the album IDs */
-			$idsofalbums = array();
-			foreach($albumids as $row) { $idsofalbums[] = $row['id']; }
-			$imageAlbums = query_full_array("SELECT DISTINCT `albumid` FROM " . prefix('images')); /* albumids of all the images */
-			$albumidsofimages = array();
-			foreach($imageAlbums as $row) { $albumidsofimages[] = $row['albumid']; }
-			$orphans = array_diff($albumidsofimages, $idsofalbums);                                /* albumids of images with no album */
-
-			if (count($orphans) > 0 ) { /* delete dead images from the DB */
-				$firstrow = array_pop($orphans);
-				$sql = "DELETE FROM ".prefix('images')." WHERE `albumid`='" . $firstrow . "'";
-				foreach($orphans as $id) {
-					$sql .= " OR `albumid`='" . $id . "'";
-				}
-				query($sql);
-
-				// Then go into existing albums recursively to clean them... very invasive.
-				foreach ($this->getAlbums(0) as $folder) {
-					$album = new Album($this, $folder);
-					if (!$album->isDynamic()) {
-						if(is_null($album->getDateTime())) {  // see if we can get one from an image
-							$image = $album->getImage(0);
-							if(!($image === false)) {
-								$album->setDateTime($image->getDateTime());
+								$fields = "&searchfields=".trim(substr($data1, 7));
 							}
 						}
-						$album->garbageCollect(true);
-						$album->preLoad();
+						if (!empty($words)) {
+							if (empty($fields)) {
+								$fields = '&searchfields=4';
+							}
+						}
+						$sql = "UPDATE ".prefix('albums')."SET `search_params`=\"$words.$fields\", `thumb`=\"$thumb\", `mtime`=\"$mtime\" WHERE `id`=\"".$album['id']."\"";
+						query($sql);
+					}
+				}
+					
+				/* Delete all image entries that don't belong to an album at all. */
+
+				$albumids = query_full_array("SELECT `id` FROM " . prefix('albums'));                  /* all the album IDs */
+				$idsofalbums = array();
+				foreach($albumids as $row) { $idsofalbums[] = $row['id']; }
+				$imageAlbums = query_full_array("SELECT DISTINCT `albumid` FROM " . prefix('images')); /* albumids of all the images */
+				$albumidsofimages = array();
+				foreach($imageAlbums as $row) { $albumidsofimages[] = $row['albumid']; }
+				$orphans = array_diff($albumidsofimages, $idsofalbums);                                /* albumids of images with no album */
+
+				if (count($orphans) > 0 ) { /* delete dead images from the DB */
+					$firstrow = array_pop($orphans);
+					$sql = "DELETE FROM ".prefix('images')." WHERE `albumid`='" . $firstrow . "'";
+					foreach($orphans as $id) {
+						$sql .= " OR `albumid`='" . $id . "'";
+					}
+					query($sql);
+
+					// Then go into existing albums recursively to clean them... very invasive.
+					foreach ($this->getAlbums(0) as $folder) {
+						$album = new Album($this, $folder);
+						if (!$album->isDynamic()) {
+							if(is_null($album->getDateTime())) {  // see if we can get one from an image
+								$image = $album->getImage(0);
+								if(!($image === false)) {
+									$album->setDateTime($image->getDateTime());
+								}
+							}
+							$album->garbageCollect(true);
+							$album->preLoad();
+						}
 					}
 				}
 			}
 
 			/* Look for image records where the file no longer exists. While at it, check for images with IPTC data to update the DB */
 
-			$deadman = strtotime('+ 10 sec');  // protect against too much processing.
-
-			$sql = 'SELECT `id`, `albumid`, `filename`, `desc`, `title`, `date`, `mtime`';
-			$sql .= ' FROM ' . prefix('images');
+			$start = array_sum(explode(" ",microtime()));  // protect against too much processing.
+			if (!empty($restart)) {
+				$restartwhere = ' WHERE `id`>'.$restart;
+			} else {
+				$restartwhere = '';
+			}
+			$sql = 'SELECT `id`, `albumid`, `filename`, `desc`, `title`, `date`, `mtime` FROM ' . prefix('images').$restartwhere.' ORDER BY `id`';
 			$images = query_full_array($sql);
 			foreach($images as $image) {
-
 				$sql = 'SELECT `folder` FROM ' . prefix('albums') . ' WHERE `id`="' . $image['albumid'] . '";';
 				$row = query_single_row($sql);
 				$imageName = getAlbumFolder() . $row['folder'] . '/' . $image['filename'];
@@ -489,7 +494,6 @@ class Gallery {
 						$sql = "UPDATE " . prefix('images') . " SET `EXIFValid`=0,`mtime`=" . filemtime($imageName) . $set . " WHERE `id`='" . $image['id'] ."'";
 						query($sql);
 
-						if (time() > $deadman) { return true; }    // avoide excessive processing
 					}
 				} else {
 					$sql = 'DELETE FROM ' . prefix('images') . ' WHERE `id`="' . $image['id'] . '";';
@@ -497,6 +501,10 @@ class Gallery {
 					$sql = 'DELETE FROM ' . prefix('comments') . ' WHERE `type`="images" AND `ownerid` ="' . $image['id'] . '";';
 					$result = query($sql);
 				}
+				if (array_sum(explode(" ",microtime())) - $start >=10) {
+					return $image['id']; // avoide excessive processing
+				}
+
 			}
 
 			/* clean the comments table */

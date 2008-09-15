@@ -29,23 +29,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 
 
 	$gallery = new Gallery();
-	if (isset($_GET['prune'])) {
-		if ($_GET['prune'] != 'done') {
-			if (isset($_GET['counter'])) {
-				$counter = sanitize_numeric($_GET['counter'])+1;
-			} else {
-				$counter = 2;
-			}
-			if ($gallery->garbageCollect(true, true)) {
-				$param = '?prune=continue&counter='.$counter;
-			} else {
-				$param = '?prune=done';
-			}
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php" . $param);
-		}
-	} else {
-		$gallery->garbageCollect();
-	}
+	$gallery->garbageCollect();
 	if (isset($_GET['action'])) {
 		$action = $_GET['action'];
 		/** reorder the tag list ******************************************************/
@@ -997,9 +981,6 @@ $page = "home"; ?>
 		echo "\n<div style=\"text-align:right;color:#0000ff;\"><a href=\"?check_for_update\">".gettext("Check for zenphoto update.")."</a></div>\n";
 	}
 	$msg = '';
-	if (isset($_GET['prune'])) {
-		$msg = gettext("Database was refreshed");
-	}
 	if (isset($_GET['action']) && $_GET['action'] == 'clear_cache') {
 		$msg = gettext("Cache has been purged");
 	}
@@ -1137,8 +1118,8 @@ foreach ($comments as $comment) {
 </p>
 <br />
 <?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?>
-<form name="prune_gallery" action="admin.php?prune=true"><input
-		type="hidden" name="prune" value="true">
+<form name="prune_gallery" action="admin-refresh-metadata.php?prune">
+	<input type="hidden" name="prune" value="true">
 	<div class="buttons pad_button" id="home_dbrefresh">
 	<button class="tooltip" type="submit" title="<?php echo gettext("Cleans the database and removes any orphan entries for comments, images, and albums."); ?>"><img src="images/refresh.png" alt="" /> <?php echo gettext("Refresh the Database"); ?></button>
 	</div>

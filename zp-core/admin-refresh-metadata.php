@@ -1,7 +1,7 @@
 <?php
 /**
  * This template is used to reload metadata from images. Running it will process the entire gallery,
- * supplying an album name (ex: loadAlbums.php?album=newalbum) will only process the album named. 
+ * supplying an album name (ex: loadAlbums.php?album=newalbum) will only process the album named.
  * @package admin
  */
 define('OFFSET_PATH', 1);
@@ -14,22 +14,30 @@ if (!($_zp_loggedin & ADMIN_RIGHTS)) { // prevent nefarious access to this page.
 }
 
 $gallery = new Gallery();
+$imageid = '';
 if (isset($_GET['refresh'])) {
-	if ($_GET['refresh'] != 'done') {
-		if (isset($_GET['counter'])) {
-			$counter = sanitize_numeric($_GET['counter'])+1;
-		} else {
-			$counter = 2;
-		}
-		if ($gallery->garbageCollect(true, true)) {
-			$param = '?refresh=continue&counter='.$counter;
-		} else {
-			$param = '?refresh=done';
-		}
-		$r = "&return=".$_GET['return'];
-		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-refresh-metadata.php" . $param . $r);
+	if (isset($_GET['id'])) {
+		$imageid = sanitize_numeric($_GET['id']);
 	}
+	$imageid = $gallery->garbageCollect(true, true, $imageid);
 }
+
+if (isset($_GET['prune'])) {
+	$type = 'prune&';
+	$title = gettext('Refresh Database');
+	$finished = gettext('Finished refreshing the database');
+	$incomplete = gettext('Database refresh is incomplete');
+	$allset = gettext("We're all set to refresh the database");
+	$continue = gettext('Continue refreshing the database.');
+} else {
+	$type = '';
+	$title = gettext('Refresh Metadata');
+	$finished = gettext('Finished refershing the metadata');
+	$incomplete = gettext('Metadata refresh is incomplete');
+	$allset = gettext("We're all set to refresh the metadata");
+	$continue = gettext('Continue refreshing the metadata.');
+}
+
 printAdminHeader();
 echo "\n</head>";
 echo "\n<body>";
@@ -37,12 +45,10 @@ printLogoAndLinks();
 echo "\n" . '<div id="main">';
 printTabs(isset($_REQUEST['album']) ? 'edit' : 'home');
 echo "\n" . '<div id="content">';
-echo "<h1>".gettext("zenphoto Metadata refresh")."</h1>";
+echo "<h1>".$title."</h1>";
 $ret = '';
 if (isset($_GET['refresh']) && db_connect()) {
-	echo "<h3>Finished refreshing metadata.</h3>";
-	if (isset($_GET['return'])) $ret = $_GET['return'];
-	if (isset($_POST['return'])) $ret = $_POST['return'];
+	if (isset($_REQUEST['return'])) $ret = $_REQUEST['return'];
 	if (!empty($ret)) {
 		$r = "?page=edit";
 		if ($ret != '*') {
@@ -51,48 +57,57 @@ if (isset($_GET['refresh']) && db_connect()) {
 	} else {
 		$r = '';
 	}
-	echo "<p><a href=\"admin.php$r\">&laquo; Back</a></p>";
+	if (empty($imageid)) {
+		echo "<h3>".$finished."</h3>";
+		echo "<p><a href=\"admin.php$r\">&laquo; Back</a></p>";
+	} else {
+		echo '<h3>'.$incomplete.'</h3>';
+		echo "<p><a href=\"?".$type."refresh=continue&id=".$imageid."&return=$ret\" title=\"".$continue."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Continue!")."</a></p>";
+	}
 } else if (db_connect()) {
 	echo "<h3>".gettext("database connected")."</h3>";
 	$folder = '';
 	$id = '';
 	$r = "";
-	if (isset($_GET['album'])) $alb = $_GET['album'];
-	if (isset($_POST['album'])) $alb = $_POST['album'];
-	if (isset($alb)) {
-		$folder = urldecode(strip($alb));
-		if (!empty($folder)) {
-			$sql = "SELECT `id` FROM ". prefix('albums') . " WHERE `folder`=\"".mysql_real_escape_string($folder)."\";";
-			$row = query_single_row($sql);
-			$id = $row['id'];
-		} else {
-			$folder = '';
+	if ($type !== 'prune&') {
+		if (isset($_GET['album'])) $alb = $_GET['album'];
+		if (isset($_POST['album'])) $alb = $_POST['album'];
+		if (isset($alb)) {
+			$folder = urldecode(strip($alb));
+			if (!empty($folder)) {
+				$sql = "SELECT `id` FROM ". prefix('albums') . " WHERE `folder`=\"".mysql_real_escape_string($folder)."\";";
+				$row = query_single_row($sql);
+				$id = $row['id'];
+			} else {
+				$folder = '';
+			}
 		}
-	}
-	if (!empty($id)) {
-		$id = "WHERE `albumid`=$id";
-		$r = " $folder";
-	} else {
+		if (!empty($id)) {
+			$id = "WHERE `albumid`=$id";
+			$r = " $folder";
+		} else {
 
-		$sql = "UPDATE " . prefix('albums') . " SET `mtime`=0 WHERE `dynamic`='1';";
+			$sql = "UPDATE " . prefix('albums') . " SET `mtime`=0 WHERE `dynamic`='1';";
 
-		query($sql);
-
+			query($sql);
+		}
 	}
 	if (!empty($folder) && empty($id)) {
 		echo "<p> ".sprintf(gettext("<em>%s</em> not found"),$folder)."</p>";
 	} else {
-		$sql = "UPDATE " . prefix('images') . " SET `mtime`=0 $id;";
-		query($sql);
+		if ($type !== 'prune&') {
+			$sql = "UPDATE " . prefix('images') . " SET `mtime`=0 $id;";
+			query($sql);
+		}
 
 		if (isset($_GET['return'])) $ret = $_GET['return'];
 		if (isset($_POST['return'])) $ret = $_POST['return'];
 		if (empty($r)) {
-			echo "<p>".gettext("We're all set to refresh the metadata")."</p>";
+			echo "<p>".$allset."</p>";
 		} else {
 			echo "<p>".sprintf(gettext("We're all set to refresh the metadata for <em>%s</em>"),$r)."</p>";
 		}
-		echo "<p><a href=\"?refresh=start&return=$ret\" title=\"".gettext("Refresh image metadata.")."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Go!")."</a></p>";
+		echo "<p><a href=\"?".$type."refresh=start&return=$ret\" title=\"".gettext("Refresh image metadata.")."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Go!")."</a></p>";
 	}
 } else {
 	echo "<h3>".gettext("database not connected")."</h3>";
