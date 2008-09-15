@@ -62,7 +62,10 @@ if (isset($_GET['refresh']) && db_connect()) {
 		echo "<p><a href=\"admin.php$r\">&laquo; Back</a></p>";
 	} else {
 		echo '<h3>'.$incomplete.'</h3>';
-		echo "<p><a href=\"?".$type."refresh=continue&id=".$imageid."&return=$ret\" title=\"".$continue."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Continue!")."</a></p>";
+		$redirecturl = '?'.$type.'refresh=continue&amp;id='.$imageid.'&amp;return='.$ret; 
+		echo '<p>'.gettext('This process should continue automatically. If not press: ').'</p>';
+		echo "<p><a href=".$redirecturl."\" title=\"".$continue."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Continue!")."</a></p>";
+		echo '<meta HTTP-EQUIV="REFRESH" content="1; url='.$redirecturl.'">';
 	}
 } else if (db_connect()) {
 	echo "<h3>".gettext("database connected")."</h3>";
