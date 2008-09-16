@@ -467,7 +467,7 @@ function printTabs($currenttab) {
 		echo "\n    <li". (($currenttab == 'plugins') ? " class=\"current\""  : "") .
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-plugins.php\">".gettext("plugins")."</a></li>";
 	}
-	if (($_zp_loggedin & ADMIN_RIGHTS) && getOption('zp_plugin_zenpage')) {
+	if (($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) && getOption('zp_plugin_zenpage')) {
 		echo "\n    <li". (($currenttab == 'zenpage') ? " class=\"current\""     : "") .
  				"><a href=\"".WEBPATH."/".ZENFOLDER."/plugins/zenpage/page-admin.php\">zenpage</a></li>";
 	}
