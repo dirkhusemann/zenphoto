@@ -518,9 +518,8 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 					value=<?php echo ADMIN_RIGHTS; if ($user['rights'] & ADMIN_RIGHTS) echo ' checked';echo $alterrights; ?>> <?php echo gettext("User admin"); ?></td>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-options_rights"
 					value=<?php echo OPTIONS_RIGHTS; if ($user['rights'] & OPTIONS_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Options"); ?></td>
-				<?php if(getOption('zp_plugin_zenpage')) { $disabled = "";	} else {	$disabled = "DISABLED";	}?>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-zenpage_rights"
-					value=<?php echo MAIN_RIGHTS; if ($user['rights'] & ZENPAGE_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Zenpage"); ?></td>
+					<?php if(!getOption('zp_plugin_zenpage')) echo "DISABLED ";?>value=<?php echo ZENPAGE_RIGHTS; if ($user['rights'] & ZENPAGE_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Zenpage"); ?></td>
 			</tr>
 			<tr>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-themes_rights"
