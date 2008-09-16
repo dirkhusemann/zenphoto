@@ -1103,7 +1103,7 @@ function sortAlbumArray($parentalbum, $albums, $sortkey='sort_order', $recursed=
 		$results[] = $row;
 	}
 	if (strpos($sortkey,'title') !== false) {
-		$results = sortByTitle($results, 'title', strpos($sortkey,'DESC') !== false);
+		$results = sortByMultilingual($results, 'title', strpos($sortkey,'DESC') !== false);
 	} else if (strpos($sortkey, 'folder') !== false) {
 		if (strpos($sortkey,'DESC') !== false) $order = 'dsc'; else $order = 'asc';
 		$results = sortMultiArray($results, 'folder', $order, true, false);
