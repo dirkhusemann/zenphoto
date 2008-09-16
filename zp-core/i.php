@@ -229,7 +229,7 @@ function themeSetup($album) {
 		$optionlist = query_full_array($sql, true);
 		if ($optionlist !== false) {
 			foreach($optionlist as $option) {
-				$_zp_options[$option['name']] = $option['value'];
+				setOption($option['name'], $option['value'], false);
 			}
 		}
 	}
