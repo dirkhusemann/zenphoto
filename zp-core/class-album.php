@@ -723,7 +723,8 @@ class Album extends PersistentObject {
 		$nullimage = SERVERPATH.'/'.ZENFOLDER.'/images/imageDefault.png';
 		if (OFFSET_PATH == 0) { // check for theme imageDefault.png if we are in the gallery
 			$theme = '';
-			$albumtheme = getUralbum($this)->getAlbumTheme();
+			$uralbum = getUralbum($this);
+			$albumtheme = $uralbum->getAlbumTheme();
 			if (!empty($albumtheme)) {
 				$theme = $albumtheme;
 			} else {
