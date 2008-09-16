@@ -217,8 +217,12 @@ if (!$debug) {
 function themeSetup($album) {
 	// a real hack--but we need to conserve memory in i.php so loading the classes is out of the question.
 	$theme = getOption('current_theme');
-	$id = NULL;
 	$folders = explode('/', str_replace('\\', '/', $album));
+	if (isset($_GET['album'])) { //it is an album thumb
+		if (count($folders) <= 1) { // and the album is in the gallery
+			return $theme;
+		}
+	}
 	$uralbum = $folders[0];
 	$sql = 'SELECT `id`, `album_theme` FROM '.prefix('albums').' WHERE `folder`="'.$uralbum.'"';
 	$result = query_single_row($sql);

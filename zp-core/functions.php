@@ -534,8 +534,12 @@ function rewrite_get_album_image($albumvar, $imagevar) {
 			$pagepos  = strpos($path, '/page/');
 			$slashpos = strrpos($path, '/');
 			$imagepos = strpos($path, '/image/');
+			$albumpos = strpos($path, '/album/');
 			if ($imagepos !== false) {
 				$ralbum = substr($path, 0, $imagepos);
+				$rimage = substr($path, $slashpos+1);
+			} else if ($albumpos !== false) {
+				$ralbum = substr($path, 0, $albumpos);
 				$rimage = substr($path, $slashpos+1);
 			} else if ($pagepos !== false) {
 				$ralbum = substr($path, 0, $pagepos);
@@ -1737,6 +1741,7 @@ function debugLog($message, $reset=false) {
 /**
  * "print_r" equivalent for the debug log
  *
+ * @param string $name the name (or message) to display for the array
  * @param array $source
  */
 function debugLogArray($name, $source) {

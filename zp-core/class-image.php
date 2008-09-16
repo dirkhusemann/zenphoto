@@ -686,7 +686,7 @@ class Image extends PersistentObject {
 	 *
 	 * @return string
 	 */
-	function getThumb() {
+	function getThumb($type='image') {
 		$filename = $this->filename;
 		$wmv = '';
 		if ($this->video) {
@@ -700,9 +700,10 @@ class Image extends PersistentObject {
 			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($cachefilename);
 		} else {
 			if (getOption('mod_rewrite') && empty($wmv) && !empty($alb)) {
-				$path = pathurlencode($alb) . '/image/thumb/' . urlencode($filename);
+				$path = pathurlencode($alb) . '/'.$type.'/thumb/' . urlencode($filename);
 			} else {
 				$path = ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($filename) . '&s=thumb'.$wmv;
+				if ($type !== 'image') $path .= '&'.$type.'=true';
 			}
 			if (substr($path, 0, 1) == "/") $path = substr($path, 1);
 			return WEBPATH . "/" . $path;

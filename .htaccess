@@ -1,4 +1,4 @@
-# htaccess file version 1.2.1.1
+# htaccess file version 1.2.1.2
 # Update the above and the define in setup.php when you make changes to the rewrite rules!
 # NOTE: Change the RewriteBase below to the absolute path to your zenphoto directory. (Or let setup.php do it for you!)
 
@@ -37,6 +37,7 @@
    
   RewriteRule ^(.*)/image/(thumb|[0-9]{1,4})/([^/\\]+)$    zp-core/i.php?a=$1&i=$3&s=$2 [L,QSA]
   RewriteRule ^(.*)/image/([^/\\]+)$          zp-core/i.php?a=$1&i=$2 [L,QSA]
+  RewriteRule ^(.*)/album/(thumb|[0-9]{1,4})/([^/\\]+)$    zp-core/i.php?a=$1&i=$3&s=$2&album=true [L,QSA]
   ####
    
   # Catch-all - everything else gets handled in PHP for compatibility.

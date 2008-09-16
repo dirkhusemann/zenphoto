@@ -746,7 +746,7 @@ class Album extends PersistentObject {
 	 */
 	function getAlbumThumb() {
 		$image = $this->getAlbumThumbImage();
-		return $image->getThumb();
+		return $image->getThumb('album');
 	}
 
 	/**
