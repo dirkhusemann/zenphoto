@@ -77,6 +77,10 @@ function formatPanasonicData($type,$tag,$intel,$data) {
 		if($tag=="000f") { //AFMode
 			if($data == 256) $data = "9-area-focusing";
 			else if($data == 16) $data = "1-area-focusing";
+      else if($data == 4096) $data = gettext("3-area-focusing (High speed)");
+			else if($data == 4112) $data = gettext("1-area-focusing (High speed)");
+			else if($data == 16) $data = gettext("1-area-focusing");
+			else if($data == 1) $data = gettext("Spot-focusing");
 			else $data = "Unknown (".$data.")";
 		} 
 	
@@ -142,6 +146,7 @@ function formatPanasonicData($type,$tag,$intel,$data) {
 			else if($data == 9) $data = gettext("Macro");
 			else if($data == 11) $data = gettext("Manual");
 			else if($data == 13) $data = gettext("Panning");
+			else if($data == 14) $data = gettext("Simple");
 			else if($data == 18) $data = gettext("Fireworks");
 			else if($data == 19) $data = gettext("Party");
 			else if($data == 20) $data = gettext("Snow");
