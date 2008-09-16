@@ -11,8 +11,9 @@ class Transientimage extends image {
 	 * @param string $image the full path to the image
 	 * @return transientimage
 	 */
-	function Transientimage(&$gallery, $image) {
-		$this->album = new Album($gallery, '');
+	function Transientimage(&$album, $image) {
+		if (!is_object($album)) return NULL;
+		$this->album = $album;
 		$this->localpath = $image;
 		
 		$folder = basename(dirname($image));

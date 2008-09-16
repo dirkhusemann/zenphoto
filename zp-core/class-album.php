@@ -722,10 +722,12 @@ class Album extends PersistentObject {
 		
 		$nullimage = SERVERPATH.'/'.ZENFOLDER.'/images/imageDefault.png';
 		if (OFFSET_PATH == 0) { // check for theme imageDefault.png if we are in the gallery
-			$theme = $this->gallery->getCurrentTheme();
-			$albumtheme = $this->getAlbumTheme();
+			$theme = '';
+			$albumtheme = getUralbum($this)->getAlbumTheme();
 			if (!empty($albumtheme)) {
 				$theme = $albumtheme;
+			} else {
+				$theme = $this->gallery->getCurrentTheme();
 			}
 			if (!empty($theme)) {
 				$themeimage = SERVERPATH.'/'.THEMEFOLDER.'/'.$theme.'/images/imageDefault.png';
@@ -734,7 +736,7 @@ class Album extends PersistentObject {
 				}
 			}
 		}
-		return new transientimage($this->gallery, $nullimage);
+		return new transientimage($this, $nullimage);
 	}
 
 	/**
