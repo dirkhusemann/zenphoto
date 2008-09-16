@@ -344,8 +344,9 @@ if ($h == 1) {
 }
 printThemeInfo();
 ?>
-<a href="http://www.zenphoto.org" title="<?php gettext("A simpler web photo album") ?>"><?php echo gettext('Powered by').' '; ?>
-<font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps"><font size="1" face="Arial Black">photo</font></span></a><br />
+<a href="http://www.zenphoto.org" title="<?php gettext("A simpler web photo album") ?>">
+<?php echo gettext('Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album"><font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a>'); ?>
+<br />
 <?php printRSSLink('Album', '', 'Album RSS', ''); ?>
 <?php
 if (function_exists('printUserLogout')) {

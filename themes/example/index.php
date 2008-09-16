@@ -39,7 +39,9 @@
 
 		<?php printPageNav("&laquo; ".gettext("prev"), "|", gettext("next")." &raquo;"); ?>
 
-		<div id="credit"><?php printRSSLink('Gallery','','RSS', ''); ?> | <?php echo gettext("Powered by"); ?> <a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>">zenphoto</a> | <?php printCustomPageURL(gettext("Archive View"),"archive"); ?>
+		<div id="credit"><?php printRSSLink('Gallery','','RSS', ''); ?> | 
+		<?php echo gettext('Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album"><font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a>'); ?>
+		 | <?php printCustomPageURL(gettext("Archive View"),"archive"); ?>
 		<?php
 		if (function_exists('printUserLogout')) {
 			printUserLogout(' | ', '', true);
