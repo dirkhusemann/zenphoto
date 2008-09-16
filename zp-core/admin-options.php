@@ -56,10 +56,10 @@ if (isset($_GET['action'])) {
 						if (isset($_POST[$i.'-all_album_rights'])) $all_album_r = ALL_ALBUMS_RIGHTS; else $all_album_r = 0;
 						if (isset($_POST[$i.'-themes_rights'])) $themes_r = THEMES_RIGHTS; else $themes_r = 0;
 						if (isset($_POST[$i.'-options_rights'])) $options_r = OPTIONS_RIGHTS; else $options_r = 0;
-						if (isset($_POST[$i.'-zenpage_rights'])) $options_r = ZENPAGE_RIGHTS; else $options_r = 0;
+						if (isset($_POST[$i.'-zenpage_rights'])) $options_r = ZENPAGE_RIGHTS; else $zenpage_r = 0;
 						if (isset($_POST[$i.'-admin_rights'])) $admin_r = ADMIN_RIGHTS; else $admin_r = 0;
 						if (!isset($_POST['alter_enabled'])) {
-							$rights = NO_RIGHTS + $main_r + $view_r + $upload_r + $comment_r + $edit_r + $all_album_r + $themes_r + $options_r + $admin_r;
+							$rights = NO_RIGHTS + $main_r + $view_r + $upload_r + $comment_r + $edit_r + $all_album_r + $themes_r + $options_r + $zenpage_r + $admin_r;
 							$managedalbums = array();
 							$l = strlen($albumsprefix = 'managed_albums_'.$i.'_');
 							foreach ($_POST as $key => $value) {
@@ -537,12 +537,12 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-main_rights"
 					value=<?php echo MAIN_RIGHTS; if ($user['rights'] & MAIN_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Overview"); ?></td>
 			</tr>
-			<?php if(getOption('zp_plugin_zenpage')) { ?>
+			<?php if(getOption('zp_plugin_zenpage')) { $disabled = "DISABLED";	} else {	$disabled = "";	}?>
 			<tr>
 			<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-zenpage_rights"
-					value=<?php echo ZENPAGE_RIGHTS; if ($user['rights'] & ZENPAGE_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Zenpage"); ?></td>
+					value=<?php echo ZENPAGE_RIGHTS; if ($user['rights'] & ZENPAGE_RIGHTS) echo ' checked'.$disabled ;echo$alterrights; ?>> <?php echo gettext("Zenpage"); ?></td>
 			</tr>
-			<?php } ?>
+			
 		</table>
 
 		</td>
