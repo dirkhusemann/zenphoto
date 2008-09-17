@@ -282,8 +282,8 @@ function getUserLocale() {
 							break;
 						}
 					}
+					if ($locale) break;
 				}
-				if ($locale) break;
 			}
 		}
 	}
