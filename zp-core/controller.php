@@ -25,6 +25,13 @@ $_zp_current_context_restore = NULL;
 $_zp_current_search = NULL;
 $_zp_pre_authorization = array();
 
+// load the class plugins
+foreach (getEnabledPlugins() as $extension) {
+	if (strpos($extension, 'class-') !== false) {
+		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
+	}
+}
+
 /*** Request Handler **********************
  ******************************************/
 // This is the main top-level action handler for user requests. It parses a

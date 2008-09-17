@@ -13,7 +13,7 @@ if ( $test == FALSE && getOption('hotlink_protection')) { /* It seems they are d
 }
 
 if (checkforPassword(true)) {
-	pageError();
+	pageError(403, gettext("Forbidden"));
 	exit();
 }
 require_once('functions-image.php');
@@ -27,6 +27,13 @@ switch ($suffix) {
 	case 'jpg':
 		$suffix = 'jpeg';
 		break;
+	case 'png':
+	case 'gif':
+	case 'jpeg':
+		break;
+	default:
+		pageError(405, gettext("Method Not Allowed"));
+		exit();
 }
 
 if (getOption('cache_full_image')) {

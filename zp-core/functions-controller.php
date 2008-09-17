@@ -411,7 +411,7 @@ function zp_load_image($folder, $filename) {
 		$album = $_zp_current_album;
 	}
 	if (!$_zp_current_album->exists) return false;
-	$_zp_current_image = new Image($album, $filename);
+	$_zp_current_image = newImage($album, $filename);
 	if (!$_zp_current_image->exists) return false;
 	set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX);
 	return $_zp_current_image;
@@ -434,7 +434,7 @@ function zp_load_image_from_id($id){
 	$folder = $result['folder'];
 
 	$album = zp_load_album($folder);
-	$currentImage = new Image($album, $filename);
+	$currentImage = newImage($album, $filename);
 	if (!$currentImage->exists) return false;
 	return $currentImage;
 }

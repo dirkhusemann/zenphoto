@@ -144,6 +144,7 @@ if (!is_writable(SERVERCACHE)) {
 		imageError(gettext("The cache directory is not writable! Attempts to chmod didn't work."), 'err-cachewrite.gif');
 }
 if (!file_exists($imgfile)) {
+	$imgfile = $rimage; // undo the sanitize
 	// then check to see if it is a transient image
 	$i = strpos($imgfile, '_{');
 	if ($i !== false) {

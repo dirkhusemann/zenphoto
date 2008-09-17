@@ -1159,7 +1159,7 @@ function printAlbumEditForm($index, $album) {
 			unset($list[count($list)-1]);
 			$folder = implode('/', $list);
 			$albumx = new Album($gallery, $folder);
-			$image = new Image($albumx, $filename);
+			$image = newImage($albumx, $filename);
 			$selected = ($imagepath == $thumb);
 			echo "\n<option";
 			if ($showThumb) {
@@ -1193,7 +1193,7 @@ function printAlbumEditForm($index, $album) {
 					$imagepath = substr($folder, $strip).'/'.$filename;
 					if (substr($imagepath, 0, 1) == '/') { $imagepath = substr($imagepath, 1); }
 					$albumx = new Album($gallery, $folder);
-					$image = new Image($albumx, $filename);
+					$image = newImage($albumx, $filename);
 					if (is_valid_image($filename)) {
 						$selected = ($imagepath == $thumb);
 						echo "\n<option";
@@ -1214,7 +1214,7 @@ function printAlbumEditForm($index, $album) {
 		} else {
 			$images = $album->getImages();
 			foreach ($images as $filename) {
-				$image = new Image($album, $filename);
+				$image = newImage($album, $filename);
 				$selected = ($filename == $album->get('thumb'));
 				if (is_valid_image($filename)) {
 					echo "\n<option";

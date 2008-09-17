@@ -18,10 +18,13 @@ class Image extends PersistentObject {
 	var $sortorder;     // The position that this image should be shown in the album
 	var $filemtime;     // Last modified time of this image
 
-	// Zenvideo
-	var $video;   //Is the "image" a video ?
-	var $videoThumb = NULL; // Thumbnail of the video
-
+	// Video
+	var $video = false;
+	
+	// Plugin handler support
+	var $isPlugin = false;
+	var $objectsThumb = NULL; // Thumbnail image for the object
+	
 
 	/**
 	 * Constructor for class-image
@@ -53,21 +56,11 @@ class Image extends PersistentObject {
 		$this->name = $filename;
 		$this->comments = null;
 
-		// Zenvideo: Check if the image is a video or not
-		if (is_valid_video($filename)) {
-			$this->video = true;
-			$this->videoThumb = checkVideoThumb(getAlbumFolder() . $this->album->name, $filename);
-		}
-
 		// This is where the magic happens...
 		$album_name = $album->name;
 		$new = parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', false, empty($album_name));
 		if ($new) {
-			if ($this->video) {
-				$size = array('320','240');
-			} else {
-				$size = getimagesize($this->localpath);
-			}
+			$size = getimagesize($this->localpath);
 			$this->set('width', $size[0]);
 			$this->set('height', $size[1]);
 
@@ -190,11 +183,7 @@ class Image extends PersistentObject {
 			}
 		}
 
-		if ($this->video) {
-			$size = array('320','240');
-		} else {
-			$size = getimagesize($this->localpath);
-		}
+		$size = getimagesize($this->localpath);
 		$this->set('width', $size[0]);
 		$this->set('height', $size[1]);
 		$this->save();
@@ -226,13 +215,13 @@ class Image extends PersistentObject {
 	 * @return bool
 	 */
 	function getVideo() { return $this->video; }
-
+	
 	/**
-	 * Returns the thumbnail for this video
+	 * Returns true if the image is a standard photo type
 	 *
-	 * @return object
+	 * @return bool
 	 */
-	function getVideoThumb() { return $this->videoThumb; }
+	function isPhoto() { return !($this->video || $this->isPlugin); }
 
 	/**
 	 * Returns the album that holds this image
@@ -682,19 +671,11 @@ class Image extends PersistentObject {
 
 	/**
 	 * Get a default-sized thumbnail of this image.
-	 * ZenVideo: [OLD] Return a thumb or default Thumb, if the file is a video.
 	 *
 	 * @return string
 	 */
 	function getThumb($type='image') {
 		$filename = $this->filename;
-		$wmv = '';
-		if ($this->video) {
-			if ($this->videoThumb != NULL) {
-				$filename = $this->videoThumb;
-				$wmv = '&wmv='.getOption('perform_video_watermark');
-			}
-		}
 		$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename, getImageParameters(array('thumb')));
 		if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
 			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($cachefilename);
@@ -702,7 +683,7 @@ class Image extends PersistentObject {
 			if (getOption('mod_rewrite') && empty($wmv) && !empty($alb)) {
 				$path = pathurlencode($alb) . '/'.$type.'/thumb/' . urlencode($filename);
 			} else {
-				$path = ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($filename) . '&s=thumb'.$wmv;
+				$path = ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($filename) . '&s=thumb';
 				if ($type !== 'image') $path .= '&'.$type.'=true';
 			}
 			if (substr($path, 0, 1) == "/") $path = substr($path, 1);

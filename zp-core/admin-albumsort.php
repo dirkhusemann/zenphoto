@@ -73,7 +73,7 @@ if (!isset($_GET['album'])) {
 <div id="images"><?php
 $images = $album->getImages();
 foreach ($images as $image) {
-	adminPrintImageThumb(new Image($album, $image));
+	adminPrintImageThumb(newImage($album, $image));
 }
 ?></div>
 <br>

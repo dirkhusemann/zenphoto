@@ -111,7 +111,7 @@ function flvPlaylist($option='') {
 					
 				// check if an image/videothumb is available - this shouldn't be hardcoded...
 				$album = $_zp_current_image->getAlbum();
-				$videoThumb = checkVideoThumb(getAlbumFolder().$album->name, $_zp_current_image->filename);
+				$videoThumb = checkObjectsThumb(getAlbumFolder().$album->name, $_zp_current_image->filename);
 				if (!empty($videoThumb)) {
 					$videoThumb = getAlbumFolder(WEBPATH).$album->name.'/'.$videoThumb;
 				}										

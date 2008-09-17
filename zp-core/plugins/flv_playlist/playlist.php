@@ -24,7 +24,7 @@ foreach($playlist as $item) {
 	$image = new Image($album, $item);
 	$ext = strtolower(strrchr($item, "."));
 	if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
-		$videoThumb = checkVideoThumb(getAlbumFolder().$album->name, $item);
+		$videoThumb = checkObjectsThumb(getAlbumFolder().$album->name, $item);
 		if (!empty($videoThumb)) {
 			$videoThumb = '..'.$albumfolder.'/'.$videoThumb;
 		}

@@ -90,7 +90,7 @@ class flvplayer {
 			$album = $_zp_current_image->getAlbum();
 			$albumfolder = $album->name;
 			$filename = $_zp_current_image->filename;
-			$videoThumb = checkVideoThumb(getAlbumFolder().$albumfolder, $filename);
+			$videoThumb = checkObjectsThumb(getAlbumFolder().$albumfolder, $filename);
 			if (!empty($videoThumb)) {
 				$videoThumb = getAlbumFolder(WEBPATH).$albumfolder.'/'.$videoThumb;
 			}

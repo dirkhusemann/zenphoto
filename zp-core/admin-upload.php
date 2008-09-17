@@ -6,6 +6,13 @@
 define('OFFSET_PATH', 1);
 require_once("admin-functions.php");
 
+// load the class plugins
+foreach (getEnabledPlugins() as $extension) {
+	if (strpos($extension, 'class-') !== false) {
+		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
+	}
+}
+
 if (!($_zp_loggedin & (UPLOAD_RIGHTS | ADMIN_RIGHTS))) { // prevent nefarious access to this page.
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
 	exit();
@@ -59,7 +66,7 @@ if (isset($_GET['action'])) {
 						move_uploaded_file($tmp_name, $uploadfile);
 						@chmod($uploadfile, 0666 & CHMOD_VALUE);
 						if ($name != $soename) {
-							$image = new Image($album, $soename);
+							$image = newImage($album, $soename);
 							$image->setTitle($name);
 							$image->save();
 						}
@@ -119,11 +126,11 @@ echo "\n" . '<div id="content">';
 <p>
 <?php 
 natsort($_zp_supported_images);
-natsort($_zp_supported_videos);
-$list = $_zp_supported_videos;
-$last = strtoupper(array_pop($list));
+$types = array_keys($_zp_extra_filetypes);
+natsort($types);
+$last = strtoupper(array_pop($types));
 $s1 = strtoupper(implode(', ', $_zp_supported_images));
-$s2 = strtoupper(implode(', ', $list));
+$s2 = strtoupper(implode(', ', $types));
 printf(gettext('This web-based upload accepts ZenPhoto formats: %s, %s, and %s.'), $s1, $s2, $last);
 echo gettext("You can also upload a <strong>ZIP</strong> archive containing any of those file types."); ?></p>
 <!--<p><em>Note:</em> When uploading archives, <strong>all</strong> images in the archive are added to the album, regardles of directory structure.</p>-->

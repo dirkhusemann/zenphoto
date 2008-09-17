@@ -797,7 +797,7 @@ class SearchEngine
 		}
 		if ($index >= 0 && $index < $this->getNumImages()) {
 			$img = $this->images[$index];
-			return new Image(new Album($_zp_gallery, $img['folder']), $img['filename']);
+			return newImage(new Album($_zp_gallery, $img['folder']), $img['filename']);
 		}
 		return false;
 	}

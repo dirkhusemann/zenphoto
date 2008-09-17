@@ -593,7 +593,7 @@ class Album extends PersistentObject {
 		$images_not_in_db = array_diff($images, $images_in_db);
 		if (count($images_not_in_db) > 0) {
 			foreach($images_not_in_db as $filename) {
-				$imgobj = new Image($this, $filename); // force it into the database
+				$imgobj = newImage($this, $filename); // force it into the database
 				$images_to_keys[$filename] = $i;
 				$i++;
 			}
@@ -628,9 +628,9 @@ class Album extends PersistentObject {
 		if ($index >= 0 && $index < count($images)) {
 			if ($this->isDynamic()) {
 				$album = new Album($this->gallery, $images[$index]['folder']);
-				return new Image($album, $images['filename']);
+				return newImage($album, $images['filename']);
 			} else {
-				return new Image($this, $this->images[$index]);
+				return newImage($this, $this->images[$index]);
 			}
 			return false;
 		}
@@ -655,7 +655,7 @@ class Album extends PersistentObject {
 		$shuffle = $thumb != '1';
 		if (!empty($thumb) && $thumb != '1' && file_exists($albumdir.$thumb)) {
 			if ($i===false) {
-				return new Image($this, $thumb);
+				return newImage($this, $thumb);
 			} else {
 				$pieces = explode('/', $thumb);
 				$i = count($pieces);
@@ -663,7 +663,7 @@ class Album extends PersistentObject {
 				unset($pieces[$i-1]);
 				$albumdir = implode('/', $pieces);
 				if (!$root) { $albumdir = $this->name . "/" . $albumdir; } else { $albumdir = $albumdir . "/";}
-				return new Image(new Album($this->gallery, $albumdir), $thumb);
+				return newImage(new Album($this->gallery, $albumdir), $thumb);
 			}
 		} else if ($this->isDynamic()) {
 			$this->getImages(0, 0, 'ID', 'DESC');
@@ -676,7 +676,7 @@ class Album extends PersistentObject {
 					$thumb = array_shift($thumbs);
 					if (is_valid_image($thumb['filename'])) {
 						$alb = new Album($this->gallery, $thumb['folder']);
-						return new Image($alb, $thumb['filename']);
+						return newImage($alb, $thumb['filename']);
 					}
 				}
 			}
@@ -690,7 +690,7 @@ class Album extends PersistentObject {
 				while (count($thumbs) > 0) {
 					$thumb = array_shift($thumbs);
 					if (is_valid_image($thumb)) {
-						return new Image($this, $thumb);
+						return newImage($this, $thumb);
 					}
 				}
 			}
@@ -712,9 +712,9 @@ class Album extends PersistentObject {
 			$dp = opendir($albumdir);
 			while ($thumb = readdir($dp)) {
 				if (is_file($albumdir.$thumb) && is_valid_video($thumb)) {
-					$videoThumb = checkVideoThumb($albumdir, $thumb);
-					if (!empty($videoThumb)) {
-						return new Image($this, $videoThumb);
+					$othersThumb = checkObjectsThumb($albumdir, $thumb);
+					if (!empty($othersThumb)) {
+						return newImage($this, $othersThumb);
 					}
 				}
 			}
@@ -851,7 +851,7 @@ class Album extends PersistentObject {
 				$subalbum->deleteAlbum();
 			}
 			foreach($this->getImages() as $filename) {
-				$image = new Image($this, $filename);
+				$image = newImage($this, $filename);
 				$image->deleteImage(true);
 			}
 			chdir($this->localpath);
@@ -1171,34 +1171,34 @@ class Album extends PersistentObject {
 		}
 		$dir = opendir($albumdir);
 		$files = array();
-		$videos = array();
+		$others = array();
 
 		while (false !== ($file = readdir($dir))) {
 			if ($dirs && (is_dir($albumdir.$file) && (substr($file, 0, 1) != '.') ||
 							hasDyanmicAlbumSuffix($file))) {
 				$files[] = $file;
 			} else if (!$dirs && is_file($albumdir.$file)) {
-				if (is_valid_video($file)) {
+				if (is_valid_other_type($file)) {
 					$files[] = $file;
-					$videos[] = $file;
+					$others[] = $file;
 				} else if (is_valid_image($file)) {
 					$files[] = $file;
 				}
 			}
 		}
 		closedir($dir);
-		if (count($videos) > 0) {
-			$video_thumbs = array();
-			foreach($videos as $video) {
-				$video_root = substr($video, 0, strrpos($video,"."));
+		if (count($others) > 0) {
+			$others_thumbs = array();
+			foreach($others as $other) {
+				$others_root = substr($other, 0, strrpos($other,"."));
 				foreach($files as $image) {
 					$image_root = substr($image, 0, strrpos($image,"."));
-					if ($image_root == $video_root && $image != $video) {
-						$video_thumbs[] = $image;
+					if ($image_root == $others_root && $image != $other) {
+						$others_thumbs[] = $image;
 					}
 				}
 			}
-			$files = array_diff($files, $video_thumbs);
+			$files = array_diff($files, $others_thumbs);
 		}
 
 		return $files;

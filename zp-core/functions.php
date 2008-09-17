@@ -354,7 +354,6 @@ function is_valid_image($filename) {
 	return in_array($ext, $_zp_supported_images);
 }
 
-$_zp_supported_videos = array('flv','3gp','mov','mp3','mp4');
 //ZenVideo: Video utility functions
 /**
  * Returns true fi the file is a video file
@@ -363,9 +362,9 @@ $_zp_supported_videos = array('flv','3gp','mov','mp3','mp4');
  * @return bool
  */
 function is_valid_video($filename) {
-	global $_zp_supported_videos;
+	global $_zp_extra_filetypes;
 	$ext = strtolower(substr(strrchr($filename, "."), 1));
-	return in_array($ext, $_zp_supported_videos);
+	return isset($_zp_extra_filetypes[$ext]) && $_zp_extra_filetypes[$ext] == 'Video';
 }
 
 
@@ -379,10 +378,11 @@ function is_valid_video($filename) {
  * Note: this function is inefficient and slows down the image file loop a lot.
  * Don't use it in a loop!
  */
-function is_videoThumb($album, $filename){
-	global $_zp_supported_videos;
+function is_objectsThumb($album, $filename){
+	global $_zp_extra_filetypes;
+	$types = array_keys($_zp_extra_filetypes);
 	$ext = strtolower(substr($fext = strrchr($filename, "."), 1));
-	if (in_array($ext, $_zp_supported_videos)) {
+	if (in_array($ext, $types)) {
 		return str_replace($fext, '', $filename);
 	}
 	return false;
@@ -395,9 +395,9 @@ function is_videoThumb($album, $filename){
  * @param string $video name of the target
  * @return string
  */
-function checkVideoThumb($album, $video){
+function checkObjectsThumb($album, $video){
 	global $_zp_supported_images;
-	$video = is_videoThumb($album, $video);
+	$video = is_objectsThumb($album, $video);
 	if($video) {
 		foreach($_zp_supported_images as $ext) {
 			if(file_exists($album."/".$video.'.'.$ext)) {
@@ -416,7 +416,7 @@ function checkVideoThumb($album, $video){
  * @return string
  */
 function checkVideoOriginal($album, $video){
-	$video = is_videoThumb($album, $video);
+	$video = is_objectsThumb($album, $video);
 	if ($video) {
 		$extTab = array(".ogg",".OGG",".avi",".AVI",".wmv",".WMV");
 		foreach($extTab as $ext) {
@@ -1154,12 +1154,12 @@ function sortAlbumArray($parentalbum, $albums, $sortkey='sort_order', $recursed=
  * Emits a page error. Used for attempts to bypass password protection
  *
  */
-function pageError() {
-	header("HTTP/1.0 403 Forbidden");
-	echo "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head>	<title>403 - Forbidden</TITLE>	<META NAME=\"ROBOTS\" CONTENT=\"NOINDEX, FOLLOW\"></head>";
+function pageError($err,$text) {
+	header("HTTP/1.0 ".$err.' '.$text);
+	echo "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head>	<title>".$err." - ".$text."</TITLE>	<META NAME=\"ROBOTS\" CONTENT=\"NOINDEX, FOLLOW\"></head>";
 	echo "<BODY bgcolor=\"#ffffff\" text=\"#000000\" link=\"#0000ff\" vlink=\"#0000ff\" alink=\"#0000ff\">";
 	echo "<FONT face=\"Helvitica,Arial,Sans-serif\" size=\"2\">";
-	echo "<b>The page access is forbidden by the server (403)</b><br/><br/>";
+	echo "<b>".sprintf(gettext('Page access %2$s (%1$s)'),$err, $text)."</b><br/><br/>";
 	echo "</body></html>";
 }
 
@@ -2332,6 +2332,50 @@ function addPluginScript($script) {
 	$_zp_plugin_scripts[] = $script;
 }
 
+$_zp_extra_filetypes = array('flv' => 'Video', '3gp' => 'Video', 'mov' => 'Video', 'mp3' => 'Video', 'mp4' => 'Video');
+/**
+ * Registers a plugin as handler for a file extension
+ *
+ * @param string $suffix the file extension
+ * @param string $objectName the name of the object that handles this extension
+ */
+function addPluginType($suffix, $objectName) {
+	global $_zp_extra_filetypes;
+	$_zp_extra_filetypes[strtolower($suffix)] = $objectName;
+}
+
+/**
+ * Returns true if the file is handled by a plugin object
+ *
+ * @param string $filename
+ * @return bool
+ */
+function is_valid_other_type($filename) {
+	global $_zp_extra_filetypes;
+	$ext = strtolower(substr(strrchr($filename, "."), 1));
+	if (array_key_exists($ext, $_zp_extra_filetypes)) {
+		return $ext;
+	} else {
+		return false;
+	}
+}
+
+/**
+ * Returns a new "image" object based on the file extension
+ *
+ * @param object $album the owner album
+ * @param string $filename the filename
+ * @return object
+ */
+function newImage(&$album, $filename) {
+	global $_zp_extra_filetypes;
+	if ($ext = is_valid_other_type($filename)) {
+		$object = $_zp_extra_filetypes[$ext];
+		return new $object($album, $filename);
+	} else {
+		return New Image($album, $filename);
+	}
+}
 /**
  * Trims the tag values and eliminates duplicates.
  * Tags are case insensitive so only the first of 'Tag' and 'tag' will be preserved

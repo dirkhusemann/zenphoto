@@ -1435,9 +1435,9 @@ function next_image($all=false, $firstPageCount=0, $sorttype=null, $overridePass
 		$img = array_shift($_zp_images);
 		if (is_array($img)) {
 
-			$_zp_current_image = new Image(new Album($_zp_gallery, $img['folder']), $img['filename']);
+			$_zp_current_image = newImage(new Album($_zp_gallery, $img['folder']), $img['filename']);
 		} else {
-			$_zp_current_image = new Image($_zp_current_album, $img);
+			$_zp_current_image = newImage($_zp_current_album, $img);
 		}
 		save_context();
 		add_context(ZP_IMAGE);
@@ -1450,9 +1450,9 @@ function next_image($all=false, $firstPageCount=0, $sorttype=null, $overridePass
 	} else {
 		$img = array_shift($_zp_images);
 		if (is_array($img)) {
-			$_zp_current_image = new Image(new Album($_zp_gallery, $img['folder']), $img['filename']);
+			$_zp_current_image = newImage(new Album($_zp_gallery, $img['folder']), $img['filename']);
 		} else {
-			$_zp_current_image = new Image($_zp_current_album, $img);
+			$_zp_current_image = newImage($_zp_current_album, $img);
 		}
 		return true;
 	}
@@ -1657,14 +1657,14 @@ function getImageVideo() {
 }
 
 /**
- * Returns video Thumbnail of the current Image.
+ * Returns true if the image is a standard photo type
  *
- * @return string
+ * @return bool
  */
-function getImageVideoThumb() {
+function getImagePhoto() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
-	return $_zp_current_image->getVideoThumb();
+	return $_zp_current_image->getPhoto();
 }
 
 /**
@@ -2214,9 +2214,9 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 			 		pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
 				</object><a>';
 		}
-	}
-	//Print images
-	else {
+	}else if ($_zp_current_image->isPlugin) {
+		echo $_zp_current_image->getBody();
+	} else { //Print images
 		echo '<img src="' . htmlspecialchars(getDefaultSizedImage()) . '" alt="' . html_encode($alt) . '"' .
 			' title="' . html_encode($alt) . '"'.
 			' width="' . getDefaultWidth() . '" height="' . getDefaultHeight() . '"' .
@@ -2925,7 +2925,12 @@ function getRandomImages($daily = false) {
 
 		$imageName = $result['filename'];
 		if (is_valid_image($imageName)) {
-			$image = new Image(new Album(new Gallery(), $result['folder']), $imageName );
+			$album = new Album($_zp_gallery, $result['folder']);
+			$image = new Image($album, $imageName );
+			if ($daily) {
+				$potd = array('day' => time(), 'folder' => $result['folder'], 'filename' => $imageName);
+				setOption('picture_of_the_day', serialize($potd));
+			}
 			return $image;
 		}
 		$c++;

@@ -153,7 +153,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 			$filename = array_pop($pieces);;
 			$folder = implode('/', $pieces);
 			$albumx = new Album($gallery, $folder);
-			$image = new Image($albumx, $filename);
+			$image = newImage($albumx, $filename);
 			if (is_valid_image($filename)) {
 				echo "\n<option class=\"thumboption\"";
 				if ($showThumb) {
