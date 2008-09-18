@@ -12,6 +12,12 @@ $_zp_admin_album_list = null;
 require_once("class-load.php");
 require_once("functions.php");
 require_once("lib-seo.php"); // keep the function separate for easy modification by site admins
+// load the class plugins
+foreach (getEnabledPlugins() as $extension) {
+	if (strpos($extension, 'class-') !== false) {
+		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
+	}
+}
 
 $sortby = array(gettext('Filename') => 'Filename',
 								gettext('Date') => 'Date',
