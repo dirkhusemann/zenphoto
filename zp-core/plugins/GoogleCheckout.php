@@ -68,7 +68,7 @@ class GoogleCheckoutOptions {
 										'desc' => gettext("How to ship.")),
 									gettext('Shipping cost') => array('key' => 'googleCheckout_ship_cost', 'type' => 0, 
 										'desc' => gettext("What you charge for shipping.")),
-									gettext('Price list') => array('key' => 'GoogleCheckout_pricelist', 'type' => 2,
+									gettext('Price list') => array('key' => 'GoogleCheckout_pricelist', 'type' => 3, 'multilingual' => 1,
 										'desc' => gettext("Your pricelist by size and media. The format of this option is <em>price elements</em> separated by spaces.<br/>".
 																			"A <em>price element</em> has the form: <em>size</em>:<em>media</em>=<em>price</em><br/>".
 																			"example: <code>4x6:Matte=5.75 8x10:Glossy=20.00 11x14:Paper=15.35</code>.")),
@@ -77,9 +77,6 @@ class GoogleCheckoutOptions {
 		);
 	}
 	function handleOption($option, $currentValue) {
-		if ($option=='GoogleCheckout_pricelist') {
-			echo '<textarea name="' . $option . '" cols="42" rows="3">' . $currentValue . "</textarea>\n";
-		}
 		if ($option=='googleCheckout_cart_location') {
 			$positons = array(gettext("top left")=>'TopLeft', gettext("top right")=>'Default');
 			echo '<select id="themeselect" name="' . $option . '"' . ">\n";

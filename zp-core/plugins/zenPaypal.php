@@ -56,16 +56,13 @@ class zenPaypalOptions {
 										'desc' => gettext("The currency for your transactions.")),
 									gettext('Shipping cost') => array('key' => 'zenPaypal_ship_cost', 'type' => 0, 
 										'desc' => gettext("What you charge for shipping.")),
-									gettext('Price list') => array('key' => 'zenPaypal_pricelist', 'type' => 2,
+									gettext('Price list') => array('key' => 'zenPaypal_pricelist', 'type' => 3, 'multilingual' => 1,
 										'desc' => gettext("Your pricelist by size and media. The format of this option is <em>price elements</em> separated by spaces.<br/>".
 																			"A <em>price element</em> has the form: <em>size</em>:<em>media</em>=<em>price</em><br/>".
 																			"example: <code>4x6:Matte=5.75 8x10:Glossy=20.00 11x14:Paper=15.35</code>."))
 		);
 	}
  	function handleOption($option, $currentValue) {
- 		if ($option=='zenPaypal_pricelist') {
-	 		echo '<textarea name="' . $option . '" cols="42" rows="3">' . $currentValue . "</textarea>\n";
-	 }
 	}
 }
 
