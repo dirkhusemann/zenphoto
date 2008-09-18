@@ -70,7 +70,7 @@
 			<?php while (next_comment()){  ?>
 			<div class="comment">
 				<div class="commentmeta">
-					<span class="commentauthor"><?php printCommentAuthorLink(); ?></span> <?php gettext("says:"); ?>
+					<span class="commentauthor"><?php printCommentAuthorLink(); ?></span>
 				</div>
 				<div class="commentbody">
 					<?php echo getCommentBody();?>
