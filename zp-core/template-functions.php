@@ -1661,10 +1661,10 @@ function getImageVideo() {
  *
  * @return bool
  */
-function getImagePhoto() {
+function isImagePhoto() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
-	return $_zp_current_image->getPhoto();
+	return $_zp_current_image->isPhoto();
 }
 
 /**

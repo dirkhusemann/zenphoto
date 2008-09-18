@@ -196,7 +196,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 						<div id="smoothImages">
 						<?php
 						while (next_image(false, $firstPageImages)){
-							if (getImagePhoto()) { // Smoothgallery does not do videos
+							if (isImagePhoto()) { // Smoothgallery does not do videos
 						?>
 							<div class="imageElement">
 								<h3><?php echo getImageTitle();?></h3>
@@ -227,7 +227,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 							$firstImage = null;
  								$lastImage = null;
  								while (next_image(false, $firstPageImages)){
-									if (!(($personality == 'Slimbox') && getImagePhoto())) { // Slimbox does not do video
+									if (!(($personality == 'Slimbox') && isImagePhoto())) { // Slimbox does not do video
  										if (is_null($firstImage)) {
  											$lastImage = imageNumber();
  											$firstImage = $lastImage;
@@ -377,7 +377,7 @@ if (function_exists('printUserLogout')) {
 		$navPosition.'" enableRightClickOpen="'.$enableRightClickOpen.'" backgroundImagePath="'.$backgroundImagePath.
 		'" imagePath="'.$path.'" thumbPath="'.$path.'">';
 	while (next_image(true, 0, NULL, true)){
-		if (getImagePhoto()) {  // simpleviewer does not do videos
+		if (isImagePhoto()) {  // simpleviewer does not do videos
 ?>
 			<image><filename><?php echo getDefaultSizedImage();?></filename>
 				<caption>
