@@ -299,7 +299,7 @@ if (isset($_GET['action'])) {
 								$value = 0;
 							}
 							break;
-						case 'custom':
+						default:
 							if (isset($_POST[$key])) {
 								$value = sanitize($_POST[$key], 1);
 							} else {

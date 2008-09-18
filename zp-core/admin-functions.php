@@ -669,13 +669,13 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 				case 4: // radio button
 					echo '<td width="200">' . "\n";
 					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'radio-'.$key.'" value=0 />' . "\n";
-					generateRadiobuttonsFromArray($v,$row['buttons'],$option);
+					generateRadiobuttonsFromArray($v,$row['buttons'],$key);
 					echo "</td>\n";
 					break;
 				case 5: // seletor
 					echo '<td width="200">' . "\n";
 					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'selector-'.$key.'" value=0 />' . "\n";
-					echo '<select id="'.$option.'" name="'.$option.'">'."\n";
+					echo '<select id="'.$option.'" name="'.$key.'">'."\n";
 					generateListFromArray(array($v),$row['selections'],$option);
 					echo "</select>\n";
 					echo "</td>\n";
@@ -717,12 +717,12 @@ function postIndexDecode($str) {
  * @param string $option the name of the option for the input field name
  */
 function generateRadiobuttonsFromArray($currentvalue,$list,$option) {
-	foreach($list as $listitem=>$radiobutton) {
+	foreach($list as $text=>$value) {
 		$checked ="";
-		if($radiobutton == $currentvalue) {
+		if($value == $currentvalue) {
 			$checked = "checked='checked' "; //the checked() function uses quotes the other way round...
 		} 
-		echo "<input type='radio' name='".$option."' id='".$radiobutton."-".$option."' value='".$radiobutton."' ".$checked."/><label for='".$radiobutton."-".$option."'> ".$listitem."</label> ";
+		echo "<input type='radio' name='".$option."' id='".$value."-".$option."' value='".$value."' ".$checked."/><label for='".$value."-".$option."'> ".$text."</label> ";
 	}
 }
 
