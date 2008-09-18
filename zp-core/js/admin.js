@@ -94,7 +94,7 @@ function updateFolder(nameObj, folderID, checkboxID, msg1, msg2) {
 	if (autogen && name != "") {
 		fname = name;
 
-		fname = fname.replace(/[ÀÁÂÄÃÅàáâäãå]/g, 'a');
+		fname = fname.replace(/[ÀÁÂÄÃÅàáâãå]/g, 'a');
 		fname = fname.replace(/[Çç]/g, 'c');
 		fname = fname.replace(/[ÈÉÊËèéêë]/g, 'e');
 		fname = fname.replace(/[ÌÍÎÏìíîï]/g, 'i');
@@ -105,7 +105,7 @@ function updateFolder(nameObj, folderID, checkboxID, msg1, msg2) {
 		fname = fname.replace(/[Üü]/g, 'ue');
 		fname = fname.replace(/[ÝŸýÿ]/g, 'y');
 		fname = fname.replace(/ß/g, 'ss');
-		fname = fname.replace(/[Ææ]/g, 'ae');
+		fname = fname.replace(/[�?æä]/g, 'ae');
 		fname = fname.replace(/[ÐðÞþ]/g, 'd');
 		fname = fname.replace(/[Ññ]/g, 'n');
 
