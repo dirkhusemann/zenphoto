@@ -951,7 +951,7 @@ if ($allimagecount != $totalimages) { // need pagination links
 		<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
 		</ul>
 <?php
-  if ($_zp_loggedin & ADMIN_RIGHTS) {
+  if ($_zp_loggedin & (ADMIN_RIGHTS | ALL_ALBUMS_RIGHTS)) {
 		zenSortablesSaveButton("?page=edit&saved", gettext("Save Order"));
   }
 	?>

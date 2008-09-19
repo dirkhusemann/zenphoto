@@ -53,7 +53,7 @@ if (isset($_GET['action'])) {
 						if (isset($_POST[$i.'-upload_rights'])) $upload_r = UPLOAD_RIGHTS; else $upload_r = 0;
 						if (isset($_POST[$i.'-comment_rights'])) $comment_r = COMMENT_RIGHTS; else $comment_r = 0;
 						if (isset($_POST[$i.'-edit_rights'])) $edit_r = EDIT_RIGHTS; else $edit_r = 0;
-						if (isset($_POST[$i.'-all_album_rights'])) $all_album_r = ALL_ALBUMS_RIGHTS; else $all_album_r = 0;
+						if (isset($_POST[$i.'-all_album_rights'])) $all_album_r = ALL_ALBUMS_RIGHTS + EDIT_RIGHTS; else $all_album_r = 0;
 						if (isset($_POST[$i.'-themes_rights'])) $themes_r = THEMES_RIGHTS; else $themes_r = 0;
 						if (isset($_POST[$i.'-options_rights'])) $options_r = OPTIONS_RIGHTS; else $options_r = 0;
 						if (isset($_POST[$i.'-zenpage_rights'])) $zenpage_r = ZENPAGE_RIGHTS; else $zenpage_r = 0;
