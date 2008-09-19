@@ -127,8 +127,8 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 	// Prev thumbnails - show only if there is a prev page
 	if ($totalpages > 1)	{
 		$prevpageimagenr = ($currentpage * $imagesperpage) - ($imagesperpage+1);
-		$prevpageimage = new Image($_zp_current_album,$images[$prevpageimagenr]);
 		if ($currentpage > 1) {
+			$prevpageimage = new Image($_zp_current_album,$images[$prevpageimagenr]);
 			echo "<a href=\"".$prevpageimage->getImageLink()."\" title=\"".gettext("previous thumbs")."\">".$prev."</a>\n";
 		} 
 	}
