@@ -1650,10 +1650,10 @@ function getImageCountry() {
  *
  * @return bool
  */
-function getImageVideo() {
+function isImageVideo() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
-	return $_zp_current_image->getVideo();
+	return get_class($_zp_current_image) == 'Video';
 }
 
 /**
@@ -1664,7 +1664,7 @@ function getImageVideo() {
 function isImagePhoto() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
-	return $_zp_current_image->isPhoto();
+	return get_class($_zp_current_image) == 'Image';
 }
 
 /**
@@ -1975,7 +1975,7 @@ function getImageEXIFData() {
  * Prints image data. Deprecated, use printImageMetadata
  *
  */
-function printImageEXIFData() { if (getImageVideo()) { } else { printImageMetadata(); } }
+function printImageEXIFData() { if (isImageVideo()) { } else { printImageMetadata(); } }
 
 /**
  * Prints the EXIF data of the current image
@@ -2020,7 +2020,7 @@ function printImageMetadata($title=NULL, $toggle=true, $id='imagemetadata', $cla
 function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL, $cx=NULL, $cy=NULL) {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image, $_zp_flash_player;
-	if ($_zp_current_image->video) { // size is determined by the player
+	if (isImageVideo()) { // size is determined by the player
 		$ext = strtolower(strrchr($_zp_current_image->name, "."));
 		if (is_null($_zp_flash_player) || $ext == '.3gp' || $ext == '.mov') {
 			switch ($ext) {
@@ -2180,7 +2180,7 @@ function getDefaultSizedImage() {
 function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 	global $_zp_flash_player, $_zp_current_image;
 	//Print videos
-	if(getImageVideo()) {
+	if(isImageVideo()) {
 		$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
 		if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
 			//Player Embed...
@@ -2214,14 +2214,14 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 			 		pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
 				</object><a>';
 		}
-	}else if ($_zp_current_image->isPlugin) {
-		echo $_zp_current_image->getBody();
-	} else { //Print images
+	} else if (isImagePhoto()) { //Print images
 		echo '<img src="' . htmlspecialchars(getDefaultSizedImage()) . '" alt="' . html_encode($alt) . '"' .
 			' title="' . html_encode($alt) . '"'.
 			' width="' . getDefaultWidth() . '" height="' . getDefaultHeight() . '"' .
 			(($class) ? " class=\"$class\"" : "") .
 			(($id) ? " id=\"$id\"" : "") . " />";
+	} else { // better be a plugin class then
+		echo $_zp_current_image->getBody();
 	}
 }
 
@@ -2385,7 +2385,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 	}
 	$class = trim($class);
 	//Print videos
-	if(getImageVideo()) {
+	if(isImageVideo()) {
 		$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
 		if ($ext == ".flv") {
 			//Player Embed...

@@ -18,11 +18,8 @@ class Image extends PersistentObject {
 	var $sortorder;     // The position that this image should be shown in the album
 	var $filemtime;     // Last modified time of this image
 
-	// Video
-	var $video = false;
 	
 	// Plugin handler support
-	var $isPlugin = false;
 	var $objectsThumb = NULL; // Thumbnail image for the object
 	
 
@@ -36,25 +33,12 @@ class Image extends PersistentObject {
 	function Image(&$album, $filename) {
 		// $album is an Album object; it should already be created.
 		if (!is_object($album)) return NULL;
-		$this->album = &$album;
-		if ($album->name == '') {
-			$this->webpath = getAlbumFolder(WEBPATH) . $filename;
-			$this->encwebpath = getAlbumFolder(WEBPATH) . rawurlencode($filename);
-			$this->localpath = getAlbumFolder() . $filename;
-		} else {
-			$this->webpath = getAlbumFolder(WEBPATH) . $album->name . "/" . $filename;
-			$this->encwebpath = getAlbumFolder(WEBPATH) . pathurlencode($album->name) . "/" . rawurlencode($filename);
-			$this->localpath = getAlbumFolder() . $album->name . "/" . $filename;
-		}
+		$this->classSetup($album, $filename);
 		// Check if the file exists.
 		if (!file_exists($this->localpath) || is_dir($this->localpath)) {
 			$this->exists = false;
 			return NULL;
 		}
-		$this->filename = $filename;
-		$this->filemtime = filemtime($this->localpath);
-		$this->name = $filename;
-		$this->comments = null;
 
 		// This is where the magic happens...
 		$album_name = $album->name;
@@ -82,8 +66,7 @@ class Image extends PersistentObject {
 			if (isset($metadata['title'])) {
 				$title = $metadata['title'];
 			} else {
-				$title = substr($this->name, 0, strrpos($this->name, '.'));
-				if (empty($title)) $title = $this->name;
+				$title = $this->getDefaultTitle();
 			}
 			$this->set('title', sanitize($title, 2));
 
@@ -114,6 +97,29 @@ class Image extends PersistentObject {
 			$this->set('mtime', filemtime($this->localpath));
 			$this->save();
 		}
+	}
+	
+	function classSetup(&$album, $filename) {
+		$this->album = &$album;
+		if ($album->name == '') {
+			$this->webpath = getAlbumFolder(WEBPATH) . $filename;
+			$this->encwebpath = getAlbumFolder(WEBPATH) . rawurlencode($filename);
+			$this->localpath = getAlbumFolder() . $filename;
+		} else {
+			$this->webpath = getAlbumFolder(WEBPATH) . $album->name . "/" . $filename;
+			$this->encwebpath = getAlbumFolder(WEBPATH) . pathurlencode($album->name) . "/" . rawurlencode($filename);
+			$this->localpath = getAlbumFolder() . $album->name . "/" . $filename;
+		}
+		$this->filename = $filename;
+		$this->filemtime = filemtime($this->localpath);
+		$this->name = $filename;
+		$this->comments = null;
+	}
+	
+	function getDefaultTitle() {
+		$title = substr($this->name, 0, strrpos($this->name, '.'));
+		if (empty($title)) $title = $this->name;
+		return $title;
 	}
 
 	/**
@@ -208,20 +214,6 @@ class Image extends PersistentObject {
 		$this->updateDimensions();
 		return $this->get('height');
 	}
-
-	/**
-	 * Returns true if this image is a video
-	 *
-	 * @return bool
-	 */
-	function getVideo() { return $this->video; }
-	
-	/**
-	 * Returns true if the image is a standard photo type
-	 *
-	 * @return bool
-	 */
-	function isPhoto() { return !($this->video || $this->isPlugin); }
 
 	/**
 	 * Returns the album that holds this image

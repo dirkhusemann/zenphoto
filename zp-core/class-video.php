@@ -16,28 +16,15 @@ class Video extends Image {
 	function Video(&$album, $filename) {
 		// $album is an Album object; it should already be created.
 		if (!is_object($album)) return NULL;
-		$this->album = &$album;
-		if ($album->name == '') {
-			$this->webpath = getAlbumFolder(WEBPATH) . $filename;
-			$this->encwebpath = getAlbumFolder(WEBPATH) . rawurlencode($filename);
-			$this->localpath = getAlbumFolder() . $filename;
-		} else {
-			$this->webpath = getAlbumFolder(WEBPATH) . $album->name . "/" . $filename;
-			$this->encwebpath = getAlbumFolder(WEBPATH) . pathurlencode($album->name) . "/" . rawurlencode($filename);
-			$this->localpath = getAlbumFolder() . $album->name . "/" . $filename;
-		}
+		$this->classSetup($album, $filename);
+		$this->video = true;
+		$this->objectsThumb = checkObjectsThumb(getAlbumFolder() . $album->name, $filename);
 		// Check if the file exists.
 		if (!file_exists($this->localpath) || is_dir($this->localpath)) {
 			$this->exists = false;
 			return NULL;
 		}
-		$this->filename = $filename;
-		$this->filemtime = filemtime($this->localpath);
-		$this->name = $filename;
-		$this->comments = null;
 
-		$this->video = true;
-		$this->objectsThumb = checkObjectsThumb(getAlbumFolder() . $this->album->name, $filename);
 
 		// This is where the magic happens...
 		$album_name = $album->name;
@@ -55,10 +42,8 @@ class Video extends Image {
 				}
 			}
 
-			$title = substr($this->name, 0, strrpos($this->name, '.'));
-			if (empty($title)) $title = $this->name;
+			$title = $this->getDefaultTitle();
 			$this->set('title', sanitize($title, 2));
-
 			$this->set('mtime', filemtime($this->localpath));
 			$this->save();
 		}

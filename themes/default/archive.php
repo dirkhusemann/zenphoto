@@ -25,7 +25,7 @@
  		<?php if (!checkForPassword()) {?>
 		<div id="archive"><?php printAllDates(); ?></div>
 		<div id="tag_cloud">
-					<p>Popular Tags</p>
+					<p><? echo gettext('Popular Tags'); ?></p>
 			<?php printAllTagsAs('cloud', 'tags'); ?>
 				</div>
  		<?php } ?>

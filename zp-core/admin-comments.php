@@ -295,36 +295,35 @@ if ($page == "editcomment") { ?>
 		<?php
 		echo $website ? "<a href=\"$website\">$author</a>" : $author;
 		if ($anon) {
-			echo ' <a><img src="images/action.png" style="border: 0px;" alt='. gettext("Anonymous").' /></a>';
+			echo ' <a title="'.gettext('Anonymous posting').'"><img src="images/action.png" style="border: 0px;" alt="'. gettext("Anonymous posting").'" /></a>';
 		}
 		?>
 		</td>
 		<td style="font-size: 7pt;"><?php echo $date; ?></td>
 		<td><?php echo ($fulltext) ? $fullcomment : $shortcomment; ?></td>
 		<td align="center"><a
-			href="mailto:<?php echo $email; ?>?body=<?php echo commentReply($fullcomment, $author, $image, $albumtitle); ?>">
-		<img src="images/envelope.png" style="border: 0px;" alt="Reply" /></a></td>
+			href="mailto:<?php echo $email; ?>?body=<?php echo commentReply($fullcomment, $author, $image, $albumtitle); ?>" title="<?php echo gettext('Reply'); ?>">
+		<img src="images/envelope.png" style="border: 0px;" alt="<?php echo gettext('Reply'); ?>" /></a></td>
 		<td><?php echo $comment['ip']; ?></td>
 		<td align="center">
 			<?php
 			if($private) {
-				echo '<a><img src="images/reset.png" style="border: 0px;" alt='. gettext("Private").' /></a>';
+				echo '<a title="'.gettext("Private message").'"><img src="images/reset.png" style="border: 0px;" alt="'. gettext("Private message").'" /></a>';
 			}
 			?>
 		</td>
 		<td align="center"><?php
 		if ($inmoderation) {
-			echo "<a href=\"?action=moderation&id=" . $id . "\">";
-			echo '<img src="images/warn.png" style="border: 0px;" alt='. gettext("remove from moderation").' /></a>';
+			echo "<a href=\"?action=moderation&id=" . $id . "\" title=\"".gettext('Remove from moderation')."\">";
+			echo '<img src="images/warn.png" style="border: 0px;" alt="'. gettext("Remove from moderation").'" /></a>';
 		}
 		?></td>
-		<td align="center"><a href="?page=editcomment&id=<?php echo $id; ?>"
-			title="<?php echo gettext('Edit this comment.'); ?>Edit this comment."> <img src="images/pencil.png"
-			style="border: 0px;" alt="Edit" /></a></td>
-		<td align="center"><a
-			href="javascript: if(confirm('Are you sure you want to delete this comment?')) { window.location='?action=deletecomments&id=<?php echo $id; ?>'; }"
+		<td align="center"><a href="?page=editcomment&id=<?php echo $id; ?>" title="<?php echo gettext('Edit this comment.'); ?>"> 
+			<img src="images/pencil.png" style="border: 0px;" alt="<?php echo gettext('Edit'); ?>" /></a></td>
+		<td align="center">
+			<a href="javascript: if(confirm('Are you sure you want to delete this comment?')) { window.location='?action=deletecomments&id=<?php echo $id; ?>'; }"
 			title="<?php echo gettext('Delete this comment.'); ?>" style="color: #c33;"> <img
-			src="images/fail.png" style="border: 0px;" alt="Delete" /></a></td>
+			src="images/fail.png" style="border: 0px;" alt="<?php echo gettext('Delete'); ?>" /></a></td>
 	</tr>
 	<?php } ?>
 	<tr>

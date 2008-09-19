@@ -222,9 +222,9 @@ function printSlideShow($heading = true, $speedctl = false) {
 
 				// 2008-08-02 acrylian: This at least make the urls correct, the flashplayer does not load anyway...
 				if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
-					$img = FULLWEBPATH.'/albums/'.urlencode($image->album->name) .'/'. urlencode($filename);
+					$img = FULLWEBPATH.'/albums/'.pathurlencode($image->album->name) .'/'. urlencode($filename);
 				} else {
-					$img = WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . urlencode($image->album->name) . '&i=' . urlencode($filename) . '&s=' . $imagesize;
+					$img = WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . pathurlencode($image->album->name) . '&i=' . urlencode($filename) . '&s=' . $imagesize;
 				}
 				echo 'ImageList[' . $cntr . '] = "' . $img . '";'. chr(13);
 				echo 'TitleList[' . $cntr . '] = "' . js_encode($image->getTitle()) . '";'. chr(13);
@@ -331,20 +331,19 @@ if ($speedctl) {
 			if($count > $numberofimages){
 				$count = 1;
 			}
-// 7/16/08dp Glad I noticed! I forgot to add this test: otherwise get counter like (17 of 16)!
 			if ($idx >= $numberofimages) { $idx = 0; }
 			if ($dynamic) {
 				$folder = $images[$idx]['folder'];
 				$dalbum = new Album($gallery, $folder);
 				$filename = $images[$idx]['filename'];
 				$image = new Image($dalbum, $filename);
-				$imagepath = FULLWEBPATH.getAlbumFolder('').urlencode($folder)."/".urlencode($filename);
+				$imagepath = FULLWEBPATH.getAlbumFolder('').pathurlencode($folder)."/".urlencode($filename);
 			} else {
 				$folder = $album->name;
 				$filename = $images[$idx];
 				//$filename = $animage;
 				$image = new Image($album, $filename);
-				$imagepath = FULLWEBPATH.getAlbumFolder('').urlencode($folder)."/".urlencode($filename);
+				$imagepath = FULLWEBPATH.getAlbumFolder('').pathurlencode($folder)."/".urlencode($filename);
 
 			}
 			$ext = strtolower(strrchr($filename, "."));
@@ -411,12 +410,12 @@ $("#slideshow").flashembed({
 				$folder = $animage['folder'];
 				$filename = $animage['filename'];
 				$image = new Image($dalbum, $filename);
-				$imagepath = FULLWEBPATH.getAlbumFolder('').urlencode($salbum->name)."/".urlencode($filename);
+				$imagepath = FULLWEBPATH.getAlbumFolder('').pathurlencode($salbum->name)."/".urlencode($filename);
 			} else {
 				$folder = $album->name;
 				$filename = $animage;
 				$image = new Image($album, $filename);
-				$imagepath = FULLWEBPATH.getAlbumFolder('').urlencode($folder)."/".urlencode($filename);
+				$imagepath = FULLWEBPATH.getAlbumFolder('').pathurlencode($folder)."/".pathurlencode($filename);
 			}
 		$count++;
 		$ext = strtolower(strrchr($filename, "."));
@@ -425,7 +424,7 @@ $("#slideshow").flashembed({
 		} else {
 			$duration = " duration: ".getOption("slideshow_speed")/10;
 		}
-		echo "{ url: '".FULLWEBPATH.getAlbumFolder('').urlencode($folder)."/".urlencode($filename)."', ".$duration." }\n";
+		echo "{ url: '".FULLWEBPATH.getAlbumFolder('').pathurlencode($folder)."/".urlencode($filename)."', ".$duration." }\n";
 		if($count < $numberofimages) { echo ","; }
 	}
 ?>
