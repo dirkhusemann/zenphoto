@@ -137,17 +137,17 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 	$number = $startimg[$currentpage] - 2;
 	for ($nr = 1;$nr <= $imagesperpage; $nr++) {
 		$number++;
-		$image = new Image($_zp_current_album,$images[$number]);
 		if($number === $totalimages) {
 			break;
 		}
+		$image = new Image($_zp_current_album,$images[$number]);
 		if($image->id === getImageID()) {
 			$css = " id='pagedthumbsnav-active' ";
 		} else {
 			$css = "";
 		}
 		echo "<a $css href=\"".$image->getImageLink()."\" title=\"".strip_tags($image->getTitle())."\">";
-		if($image->getVideo()) {
+		if(isImageVideo($image)) {
 			// a little unconvenient hack because printSized/CustomImage does not work with videothumbs...
 			echo "<img src='".$image->getThumb()."' alt=\"".strip_tags($image->getTitle())."\" width='".$width."' height='".$height."'/>";
 		} else {
@@ -158,6 +158,7 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 			break;
 		}
 	}
+
 	
 	// next thumbnails - show only if there is a next page
 	echo "<div class=\"pagedthumbsnav-next\">\n";
