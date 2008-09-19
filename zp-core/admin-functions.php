@@ -1345,7 +1345,7 @@ function printAlbumEditRow($album) {
 
 	$pwd = $album->getPassword();
 	if (!empty($pwd)) {
-		echo '<img src="images/lock.png" style="border: 0px;" alt="'.gettext('Protected').'" /></a>';
+		echo '<a title="'.gettext('Password protected').'"><img src="images/lock.png" style="border: 0px;" alt="'.gettext('Password protected').'" /></a>';
 	}
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
