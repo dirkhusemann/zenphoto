@@ -155,29 +155,29 @@ function fix_path_redirect() {
 function zp_handle_comment() {
 	global $_zp_current_image, $_zp_current_album, $_zp_comment_stored;
 	$activeImage = false;
-	// ZENPAGE:  if else constructs added
-	if(getOption('zp_plugin_zenpage')) {
-		$zenpage = new Zenpage();
-		$zenpage_news_context = $zenpage->isPage(ZENPAGE_NEWS);
-		$zenpage_pages_context = $zenpage->isPage(ZENPAGE_PAGES);
-	} else {
-		$zenpage_news_context = FALSE;
-		$zenpage_pages_context = FALSE;
-	}
-	if($zenpage_news_context) {
-		$zenpage_news = $zenpage->zenpages;
-	 //	$zenpage_news = $zenpage->getNewsArticle(sanitize($_GET['title']), 3);
-		$redirectTo = FULLWEBPATH . '/index.php?p='.ZENPAGE_NEWS.'&title='.$zenpage_news['titlelink'];
-	} else if ($zenpage_pages_context) {
-		$zenpage_page = $zenpage->zenpages;
-		$redirectTo = FULLWEBPATH . '/index.php?p='.ZENPAGE_NEWS.'&title='.$zenpage_page['titlelink'];
-	} else {
-		$redirectTo = FULLWEBPATH . '/' . zpurl();
-	}
-	// $redirectTo = FULLWEBPATH . '/' . zpurl();
 	$comment_error = 0;
 	$cookie = zp_getCookie('zenphoto');
 	if (isset($_POST['comment'])) {
+		// ZENPAGE:  if else constructs added
+		if(getOption('zp_plugin_zenpage')) {
+			$zenpage = new Zenpage();
+			$zenpage_news_context = $zenpage->isPage(ZENPAGE_NEWS);
+			$zenpage_pages_context = $zenpage->isPage(ZENPAGE_PAGES);
+		} else {
+			$zenpage_news_context = FALSE;
+			$zenpage_pages_context = FALSE;
+		}
+		if($zenpage_news_context) {
+			$zenpage_news = $zenpage->zenpages;
+			//	$zenpage_news = $zenpage->getNewsArticle(sanitize($_GET['title']), 3);
+			$redirectTo = FULLWEBPATH . '/index.php?p='.ZENPAGE_NEWS.'&title='.$zenpage_news['titlelink'];
+		} else if ($zenpage_pages_context) {
+			$zenpage_page = $zenpage->zenpages;
+			$redirectTo = FULLWEBPATH . '/index.php?p='.ZENPAGE_NEWS.'&title='.$zenpage_page['titlelink'];
+		} else {
+			$redirectTo = FULLWEBPATH . '/' . zpurl();
+		}
+		// $redirectTo = FULLWEBPATH . '/' . zpurl();
 		if ((in_context(ZP_ALBUM) || $zenpage_news_context || $zenpage_pages_context)) {
 			$p_name = sanitize($_POST['name'],3);
 			if (isset($_POST['email'])) {
