@@ -257,9 +257,10 @@ function getMainSiteURL() {
 /**
  * Returns the URL of the main gallery page containing the current album
  *
+ * @param bool $relative set to false to get the true index page
  * @return string
  */
-function getGalleryIndexURL() {
+function getGalleryIndexURL($relative=true) {
 	global $_zp_current_album;
 	if (in_context(ZP_ALBUM)) {
 		$album = getUrAlbum($_zp_current_album);
@@ -269,7 +270,8 @@ function getGalleryIndexURL() {
 	}
 	$gallink1 = '';
 	$gallink2 = '';
-	if ($specialpage = getOption('custom_index_page')) {
+	$specialpage = false;
+	if ($relative && $specialpage = getOption('custom_index_page')) {
 		if (file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.$specialpage.'.php')) {
 			$gallink1 = $specialpage.'/';
 			$gallink2 = 'p='.$specialpage.'&';
