@@ -57,7 +57,6 @@ $backgroundImagePath="";
 </head>
 
 <body onload="blurAnchors()">
-<?php printAdminToolbox(); ?>
 
 <!-- Wrap Header -->
 <div id="header">
