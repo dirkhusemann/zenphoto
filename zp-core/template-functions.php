@@ -145,7 +145,7 @@ function printAdminToolbox($context=null, $id='admin') {
 			$redirect = "&amp;p=search" . $_zp_current_search->getSearchParams() . "&amp;page=$page";
 		}
 		if(getOption('zp_plugin_zenpage')) {
-			if ((is_NewsArticle() OR is_Pages() OR is_News()) && ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS))) {
+			if ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
 				echo "<li><a href=\"".$zf."/plugins/zenpage/page-admin.php\">".gettext("Zenpage")."</a></li>";
 			}
 			if (is_NewsArticle() && ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS))) {
