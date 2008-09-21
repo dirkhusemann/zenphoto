@@ -26,7 +26,16 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 
 				<div id="wrapnav">
 					<div id="navbar">
-						<span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> |
+						<span><?php printHomeLink('', ' | '); ?>
+						<?php
+						if (getOption('custom_index_page') === 'gallery') {
+						?>
+						<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> | 
+						<?php	
+						}
+						?>
+						<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>">
+						<?php echo getGalleryTitle();?></a> |
 						<?php
 						if (!is_null($_zp_current_album)) {
 							printParentBreadcrumb();
@@ -48,15 +57,16 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 					</div> <!-- navbar -->
 				</div> <!-- wrapnav -->
 			</div> <!-- galleryheader -->
-		</div> <!-- main4 -->
+		</div> <!-- main2 -->
 		<div id="content">
  			<div id="main">
 				<div id="slideshowpage">
 					<?php printSlideShow(false,true); ?>
 				</div>
-			</div>
+			</div> <!-- main -->
 		</div> <!-- content -->
-	</div> <!-- main2 -->
+	</div> <!-- main4 -->
+	<br style="clear:all" />	
 	<!-- Footer -->
 	<div class="footlinks">
 		<?php

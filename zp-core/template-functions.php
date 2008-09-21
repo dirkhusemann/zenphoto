@@ -2231,6 +2231,11 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 			(($class) ? " class=\"$class\"" : "") .
 			(($id) ? " id=\"$id\"" : "") . " />";
 	} else { // better be a plugin class then
+		
+//TODO: no one should get here until we tell people about this feature!	
+debugLog('image object method: '.$_zp_current_image->filename);	
+debugLog('image class: '.get_class($_zp_current_image));	
+		
 		echo $_zp_current_image->getBody();
 	}
 }

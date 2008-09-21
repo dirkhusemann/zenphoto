@@ -96,7 +96,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 
 			<!-- Subalbum Navigation -->
 				<div class="albnav">
-						<div class="albprevious">
+					<div class="albprevious">
 					<?php
 						$album = getPrevAlbum();
 	 						if (is_null($album)) {
@@ -107,7 +107,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 									'" title="' . html_encode($album->getTitle()) . '">&laquo; '.gettext('prev').'</a>';
 							}
 						?>
-					</div>
+					</div> <!-- albprevious -->
 					<div class="albnext">
 						<?php
 							$album = getNextAlbum();
@@ -119,26 +119,35 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 										'" title="' . html_encode($album->getTitle()) . '">'.gettext('next').' &raquo;</a>';
 							}
 						?>
-					</div>
-				</div>
+					</div><!-- albnext -->
+				</div> <!-- header -->
 
 			<!-- Logo -->
 				<div id="logo">
 				<?php printLogo(); ?>
 				</div>
-			</div>
+			</div> <!-- gallerytitle -->
 
 		<!-- Crumb Trail Navigation -->
 		<div id="wrapnav">
 			<div id="navbar">
-				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> | <?php printParentBreadcrumb(); ?></span>
+				<span><?php printHomeLink('', ' | '); ?>
+				<?php
+			if (getOption('custom_index_page') === 'gallery') {
+				?>
+				<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> | 
+				<?php	
+				}					
+				?>
+				<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> | 
+				<?php printParentBreadcrumb(); ?></span>
 				<?php printAlbumTitle(true);?>
 			</div>
-		</div>
+		</div> <!-- wrapnav -->
 
 		<!-- Random Image -->
 		<?php if (isAlbumPage()) {printHeadingImage(getRandomImagesAlbum()); } ?>
-	</div>
+	</div> <!-- header -->
 
 	<!-- Wrap Subalbums -->
 	<div id="subcontent">
@@ -178,7 +187,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 			<?php
 			printNofM('Album', $firstAlbum, $lastAlbum, getNumSubAlbums());
 			?>
-		</div>
+		</div> <!-- submain -->
 
 		<!-- Wrap Main Body -->
 				<?php
@@ -210,7 +219,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 						}
 						?>
 
-						</div>
+						</div> <!-- smoothImages -->
 						<?php
 							if (!$show) {
 								if ($imagePage) {
@@ -264,13 +273,13 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 
 						}
 						?>
- 					</div>
- 					</div>
+ 					</div> <!-- images -->
+ 					</div> <!-- main -->
 	 			<div class="clearage"></div>
  					<?php
  					printNofM('Photo', $firstImage, $lastImage, getNumImages());
  					?>
-		</div>
+		</div> <!-- content -->
 			<?php
 				} else {  /* flash */
 	 			if (($imagePage = isImagePage()) && !checkforPassword()) {
@@ -302,37 +311,38 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 									fo.addParam("wmode", "opaque");
 									fo.write("flash");
  						</script>
-			</div>
+			</div> <!-- flash -->
  						<?php
 	 			}
 	 		} /* image loop */
 	 	} else { /* no images to display */
 			if (getNumSubalbums() == 0){
 			?>
-					<div id="main3">
+				<div id="main3">
 					<div id="main2">
 					<br />
-					<p align="center"><?php echo gettext('Album is empty'); ?></font></p>
+					<p align="center"><?php echo gettext('Album is empty'); ?></p>
 					</div>
-					</div>
+				</div> <!-- main3 -->
 				<?php
 	 		}
 	 	} ?>
 
 <!-- Page Numbers -->
-<?php
-	echo '<div id="submain"><div id="pagenumbers">';
-	if ((getNumSubalbums() != 0) || !$oneImagePage){
-		printPageListWithNav("&laquo; " .gettext('prev'), gettext('next')." &raquo;", $oneImagePage);
-		echo "</div></div>";
-	}
-	if (function_exists('printAlbumMap')) printAlbumMap(8, 'G_HYBRID_MAP');
-	echo "</div></div>";
-?>
+		<div id="pagenumbers">
+		<?php
+			if ((getNumSubalbums() != 0) || !$oneImagePage){
+				printPageListWithNav("&laquo; " .gettext('prev'), gettext('next')." &raquo;", $oneImagePage);
+			}
+			if (function_exists('printAlbumMap')) printAlbumMap(8, 'G_HYBRID_MAP');
+		?>
+		</div> <!-- pagenumbers -->
 
-</div>
+
+</div> <!-- subcontent -->
 
 <!-- Footer -->
+<br style="clear:all" />
 <div class="footlinks">
 
 <?php
@@ -344,7 +354,6 @@ if ($h == 1) {
 }
 printThemeInfo();
 ?>
-<a href="http://www.zenphoto.org" title="<?php gettext("A simpler web photo album") ?>">
 <?php echo gettext('Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album"><font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a>'); ?>
 <br />
 <?php printRSSLink('Album', '', 'Album RSS', ''); ?>
@@ -354,8 +363,8 @@ if (function_exists('printUserLogout')) {
 }
 ?>
 
-</div>
-</div>
+</div> <!-- footlinks -->
+
 
 <?php printAdminToolbox(); ?>
 

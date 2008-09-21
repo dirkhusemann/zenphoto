@@ -24,7 +24,16 @@ $themeResult = getTheme($zenCSS, $themeColor, 'effervescence');
 		<!-- Crumb Trail Navigation -->
 		<div id="wrapnav">
 			<div id="navbar">
-				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a></span>  | <?php echo gettext('Object not found'); ?>
+				<span><?php printHomeLink('', ' | '); ?>
+				<?php
+			if (getOption('custom_index_page') === 'gallery') {
+				?>
+				<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> | 
+				<?php	
+				}					
+				?>
+				<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a></span>  | 
+				<?php echo gettext('Object not found'); ?>
 			</div>
 		</div>
 

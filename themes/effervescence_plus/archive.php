@@ -22,44 +22,62 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 			<div id="logo">
 			<?php printLogo(); ?>
 			</div>
-		</div>
+		</div> <!-- gallerytitle -->
 
 		<!-- Crumb Trail Navigation -->
 		<div id="wrapnav">
 			<div id="navbar">
-				<span><?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a></span>  | <?php echo gettext('Archive View'); ?>
+				<span><?php printHomeLink('', ' | '); ?>
+				<?php
+				if (getOption('custom_index_page') === 'gallery') {
+				?>
+				<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> | 
+				<?php	
+				}					
+				?>
+				<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a></span>  | <?php echo gettext('Archive View'); ?>
 			</div>
-		</div>
+		</div> <!-- wrapnav -->
 
 		<!-- Random Image -->
 		<?php printHeadingImage(getRandomImages()); ?>
-	</div>
+	</div> <!-- header -->
 
 	<!-- Wrap Main Body -->
 	<div id="content">
+	
 		<small>&nbsp;</small>
-		<div id="main">
-		<?php if (!checkForPassword()) {?>
-			<!-- Date List -->
-			<div id="archive"><p><?php echo gettext('Images By Date'); ?></p><?php printAllDates('archive', 'year', 'month', 'desc'); ?></div>
-			<div id="tag_cloud"><p><?php echo gettext('Popular Tags'); ?></p><?php printAllTagsAs('cloud', 'tags'); ?></div>
-		<?php } ?>
-		</div>
-	</div>
-
-
-	<!-- Footer -->
-	<div class="footlinks">
-		<small><?php printThemeInfo(); ?></small>
-		<?php echo gettext('Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album"><font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a>'); ?>
-		<?php
-		if (function_exists('printUserLogout')) {
-			printUserLogout('<br />', '', true);
-		}
+		<div id="main2">
+		<?php 
+		if ($zenpage = getOption('zp_plugin_zenpage')) {
 		?>
-	</div>
+			<div id="content-left">
+			<?php 
+		}
+			 if (!checkForPassword()) {?>
+				<!-- Date List -->
+				<div id="archive"><p><?php echo gettext('Images By Date'); ?></p><?php printAllDates('archive', 'year', 'month', 'desc'); ?></div>
+				<div id="tag_cloud"><p><?php echo gettext('Popular Tags'); ?></p><?php printAllTagsAs('cloud', 'tags'); ?></div>
+				<?php if ($zenpage = getOption('zp_plugin_zenpage')) { ?>
+					<hr />
+					<?php if(function_exists("printNewsArchive")) { ?>
+						<div id="archive_news"><p><?php echo('News archive') ?></p><?php printNewsArchive("archive");	?></div>
+					<?php }	?>
+					</div><!-- content left-->
+					<div id="sidebar">
+					<?php include("sidebar.php"); ?>
+					</div><!-- sidebar -->
+				<?php 
+				}
+			} ?>
+			<br style="clear:both" />
+		</div> <!-- main2 -->
+		
+	</div> <!-- content -->
 
-	<?php printAdminToolbox(); ?>
+<?php include('footer.php'); ?>
+		<!-- Administration Toolbox -->
+<?php if ($zenpage) printZenpageAdminToolbox(); else printAdminToolbox(); ?>
 
 </body>
 </html>

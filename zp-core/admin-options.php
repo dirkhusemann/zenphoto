@@ -1338,7 +1338,7 @@ if (!empty($_REQUEST['themealbum'])) {
 				foreach($filelist as $file) {
 					$list[] = str_replace('.php', '', $file);
 				}
-				$list = array_diff($list, array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions'));
+				$list = array_diff($list, array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions', 'news', 'pages'));
 				generateListFromArray(array(getThemeOption($album, 'custom_index_page')), $list);
 				chdir($curdir);
 				?>

@@ -61,7 +61,15 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 				<div id="wrapnav">
 					<div id="navbar">
 						<span>
-							<?php printHomeLink('', ' | '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> |
+							<?php printHomeLink('', ' | '); ?>
+							<?php
+							if (getOption('custom_index_page') === 'gallery') {
+							?>
+							<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> | 
+							<?php	
+							}					
+							?>
+							<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> |
 							<?php printParentBreadcrumb(); printAlbumBreadcrumb("", " | "); ?>
 						</span>
 						<?php printImageTitle(true); ?>

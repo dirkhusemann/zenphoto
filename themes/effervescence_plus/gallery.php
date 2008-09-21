@@ -22,15 +22,24 @@
 				echo printLogo();
 				?>
 			</div>
-		</div>
+		</div> <!-- gallerytitle -->
 
 	<!-- Crumb Trail Navigation -->
 		<div id="wrapnav">
 			<div id="navbar">
-				<span><?php printHomeLink('', ' | '); printGalleryTitle();?></span>
+				<span><?php printHomeLink('', ' | ');?>
+				<?php
+				if (getOption('custom_index_page') === 'gallery') {
+				?>
+				<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> | 
+				<?php	
+				}					
+ 				printGalleryTitle();
+ 				?>
+				</span>
 			</div>
-		</div>
-	</div>
+		</div> <!-- wrapnav -->
+	</div> <!-- header -->
 	<!-- Random Image -->
 	<?php printHeadingImage(getRandomImages()); ?>
 
@@ -70,9 +79,11 @@
 			<?php printPageListWithNav("&laquo; ".gettext('prev'), gettext('next')." &raquo;"); ?>
 		</div>
 
-	</div>
-
+		</div> <!-- main -->
+	</div> <!-- content -->
+	
 	<!-- Footer -->
+	<br style="clear:all" />	
 	<div class="footlinks">
 		<?php if (function_exists('printLanguageSelector')) { printLanguageSelector(); } ?>
 		<small>
@@ -95,7 +106,7 @@
 			printUserLogout('<br />', '', true);
 		}
 		?>
-		</div>
+		</div> <!-- footer -->
 
 		<?php printAdminToolbox(); ?>
 
