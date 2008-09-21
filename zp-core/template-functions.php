@@ -144,7 +144,25 @@ function printAdminToolbox($context=null, $id='admin') {
 			}
 			$redirect = "&amp;p=search" . $_zp_current_search->getSearchParams() . "&amp;page=$page";
 		}
-
+		if(getOption('zp_plugin_zenpage')) {
+			if ((is_NewsArticle() OR is_Pages() OR is_News()) && ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS))) {
+				echo "<li><a href=\"".$zf."/plugins/zenpage/page-admin.php\">".gettext("Zenpage")."</a></li>";
+			}
+			if (is_NewsArticle() && ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS))) {
+				echo "<li><a href=\"".$zf."/plugins/zenpage/news-article-edit.php?id=".getNewsID()."\">".gettext("Edit Article")."</li>";
+				?> 
+				<li><a href="javascript: confirmDeleteImage('<?php echo $zf; ?>/plugins/zenpage/news-article-admin.php?del=<?php echo getNewsID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete article"); ?>"><?php echo gettext("Delete Article"); ?></a></li>
+				<?php
+				echo "<li><a href=\"".$zf."/plugins/zenpage/news-article-add.php\">".gettext("Add Article")."</li>";
+			}
+			if (is_Pages() && ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS))) {
+				echo "<li><a href=\"".$zf."/plugins/zenpage/page-edit.php?id=".getPageID()."\">".gettext("Edit Page")."</li>";
+				?> 
+				<li><a href="javascript: confirmDeleteImage('<?php echo $zf; ?>/plugins/zenpage/page-admin.php?del=<?php echo getPageID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete page"); ?>"><?php echo gettext("Delete Page"); ?></a></li>
+				<?php	
+				echo "<li><a href=\"".FULLWEBPATH."/".ZENFOLDER."/plugins/zenpage/page-add.php\">".gettext("Add Page")."</li>";
+			}
+		}	
 		echo "<li><a href=\"".$zf."/admin.php?logout$redirect\">".gettext("Logout")."</a></li>\n";
 		echo "</ul></div>\n";
 	}
