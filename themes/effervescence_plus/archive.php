@@ -77,7 +77,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 
 <?php include('footer.php'); ?>
 		<!-- Administration Toolbox -->
-<?php if ($zenpage) printZenpageAdminToolbox(); else printAdminToolbox(); ?>
+<?php printAdminToolbox(); ?>
 
 </body>
 </html>

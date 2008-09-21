@@ -69,8 +69,8 @@ $backgroundImagePath="";
 	if (getOption('Allow_search')) {  printSearchForm(NULL, '', $_zp_themeroot.'/images/search.png'); }
 		echo printLogo();
 	?>
-	</div>
-</div>
+	</div> <!-- logo -->
+</div> <!-- gallerytitle -->
 
 <!-- Crumb Trail Navigation -->
 
@@ -90,9 +90,9 @@ $backgroundImagePath="";
 		  echo "<em>".gettext('Search')."</em>";
 		?>
 	</div>
-</div>
+</div> <!-- wrapnav -->
 
-</div>
+</div> <!-- header -->
 
 <!-- Wrap Subalbums -->
 <div id="subcontent">
@@ -154,8 +154,8 @@ $backgroundImagePath="";
  		if ($_noFlash) {
 	 ?>
  			<div id="content">
- 			<div id="main">
- 			<div id="images">
+ 				<div id="main">
+ 					<div id="images">
  			<?php
 
 			$firstImage = null;
@@ -175,8 +175,8 @@ $backgroundImagePath="";
  						echo "</div>\n";
  					} ?>
  					</div>
- 					</div>
-		 	<div class="clearage"></div>
+ 					</div> <!-- main -->
+		 			<div class="clearage"></div>
  					<?php
 					if (function_exists('printSlideShowLink')) {
 						echo "<p align=\"center\">";
@@ -185,12 +185,13 @@ $backgroundImagePath="";
 					}
  					printNofM('Photo', $firstImage, $lastImage, getNumImages());
  					?>
- 					</div>
+ 					</div> <!-- content -->
 	 		<?php
 	 		} else {  /* flash */
 	 			if ($imagePage = isImagePage()) {
 	 			?>
- 					<div id="flash"><p align=center><font color=#663300><?php echo gettext('For the best viewing experience').' '; ?><a href="http://www.macromedia.com/go/getflashplayer/"><?php echo gettext('get Adobe Flash.'); ?></a></p>
+ 					<div id="flash">
+ 					<p align=center><font color=#663300><?php echo gettext('For the best viewing experience').' '; ?><a href="http://www.macromedia.com/go/getflashplayer/"><?php echo gettext('get Adobe Flash.'); ?></a></p>
  					<p align="center"><a href="
  					<?php
  					if ($imagePage) {
@@ -201,7 +202,8 @@ $backgroundImagePath="";
  					if (substr($url, -1, 1) == '/') {$url = substr($url, 0, (strlen($url)-1));}
  					echo $url = $url . (getOption("mod_rewrite") ? "?" : "&amp;") . 'noflash';
  					?>">
- 					View gallery without Flash</a>.</p></div>
+ 					View gallery without Flash</a>.</p>
+ 					</div> <!-- flash -->
  					<?php
  					$flash_url = "index.php?p=search" . getSearchParams() . "&amp;format=xml";
  					?>
@@ -230,25 +232,23 @@ $backgroundImagePath="";
 					printf(gettext('Sorry, no matches for <em>%s</em>. Try refining your search.'),$searchwords);
 				}
 			?>
-			</font></p>
+			</p>
 			</div>
-			</div>
+			</div> <!-- main3 -->
 		<?php
 	 		}
 	 	} ?>
 
 <!-- Page Numbers -->
-<?php
-	echo '<div id="submain"><div id="pagenumbers">';
 
-	if ((getNumAlbums() != 0) || $_noFlash){
-		printPageListWithNav("&laquo; prev", "next &raquo;", !$_noFlash);
-		echo "</div></div>";
-	}
-	echo "</div></div>";
-?>
-
-</div>
+		<div id="pagenumbers">
+		<?php
+		if ((getNumAlbums() != 0) || $_noFlash){
+			printPageListWithNav("&laquo; prev", "next &raquo;", !$_noFlash);
+		}
+		?>
+		</div> <!-- pagenumbers -->
+</div> <!-- subcontent -->
 
 <!-- Footer -->
 <div class="footlinks">
@@ -269,8 +269,8 @@ if (function_exists('printUserLogout')) {
 }
 ?>
 
-</div>
-</div>
+</div> <!-- footerlinks -->
+
 
 <?php printAdminToolbox(); ?>
 

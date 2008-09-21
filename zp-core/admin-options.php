@@ -1262,6 +1262,8 @@ if (!empty($_REQUEST['themealbum'])) {
 		echo '<select id="themealbum" name="themealbum" onchange="this.form.submit()">';
 		generateListFromArray(array(urlencode($alb)), $themelist);
 		echo '</select>';
+	} else {
+		echo '&nbsp;';
 	}
 	echo "</th></tr>\n";
 	?>
