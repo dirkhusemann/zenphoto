@@ -821,24 +821,23 @@ font-size: 1.2em;
 }
 #content-left h3 {
 font-size: 1.4em;
-line-height: 0em;
 margin-left: 0px;
 margin-bottom: 0.5em;
 	color: #7b7973;
+}
+#content-left a:link {
+text-decoration:underline;
+color: #7b7973;
+}
+#content-left h3 a:link {
+text-decoration:none;
+color: #7b7973;
 }
 #content-left p {
 font-size: 1em;
 line-height: 1.1em;
 margin-bottom: 1em;
 clear: both;
-}
-#content-left a:link {
-	color: #7b7973;
-	text-decoration:underline;
-}
-#content-left a {
-	color: #7b7973;
-	text-decoration:underline;
 }
 #sidebar {
 width: 320px;
