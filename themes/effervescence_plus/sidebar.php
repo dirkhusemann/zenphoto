@@ -5,13 +5,16 @@
 </div>
 <?php } ?>
 
-<?php if(function_exists("printAlbumMenu")) { ?>
 <div class="menu">
 	<h3><?php echo gettext("Gallery"); ?></h3>
+<?php if(function_exists("printAlbumMenu")) { ?>
 	<?php printAlbumMenu("list","count","","menu-active","submenu","menu-active",""); ?>
-</div>
+<?php } else {?>
+	<ul>
+	<li><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Visit the photo gallery'); ?>"><?php echo getGalleryTitle();?></a></li>
+	</ul>
 <?php } ?>
-
+</div>
 <?php if(function_exists("printPageMenu")) { ?>
 <div class="menu">
 	<h3><?php echo gettext("Pages"); ?></h3>

@@ -51,9 +51,11 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 						<?php printCustomSizedImage(gettext('Visit the photo gallery'), floor(getOption('image_size') * $imagereduction)); ?>
 					</a>
 				</div>
+				<?php if (!$zenpage) { ?>
 				<p align="center">
 				<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo gettext('Visit the photo gallery');?></a>
 				</p>
+				<?php } ?>
 			</div> <!-- image -->
 			<br />
 	<?php if($zenpage)  {?>
