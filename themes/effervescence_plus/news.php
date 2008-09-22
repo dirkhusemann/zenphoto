@@ -53,15 +53,35 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 <?php 
 
 // single news article
-if(isset($_GET['title'])) { 
+if(is_NewsArticle()) {  
 	?>  
   <?php if(getPrevNewsURL()) { ?><div class="singlenews_prev"><?php printPrevNewsLink(); ?></div><?php } ?>
   <?php if(getPrevNewsURL()) { ?><div class="singlenews_next"><?php printNextNewsLink(); ?></div><?php } ?>
   <?php if(getPrevNewsURL() OR getPrevNewsURL()) { ?><br clear:both /><?php } ?>
   <h3><?php printNewsTitle(); ?></h3> 
-  <div class="newsarticlecredit"><span class="newsarticlecredit-left"><?php printNewsDate();?> | <?php echo gettext("Comments:"); ?> <?php echo getCommentCount(); ?> | </span> <?php printNewsCategories(", ",gettext("Categories: "),"newscategories"); ?></div>
+
+  <div class="newsarticlecredit">
+  	<span class="newsarticlecredit-left"> <?php 
+		$count = getCommentCount();
+		$cat = getNewsCategories();
+		printNewsDate();
+		if ($count > 0) {
+			echo ' | ';
+			printf(gettext("Comments: %d"),  $count);
+		}
+		if (!empty($cat)) {
+			echo ' | ';
+		}
+		?> 
+		</span> 
+		<?php 
+		if (!empty($cat)) {
+			printNewsCategories(", ",gettext("Categories: "),"newscategories"); 
+		}
+		?>
+
   <?php printNewsContent(); ?>
-  
+  </div>  
 <?php 
 // COMMENTS TEST
 if (getOption('zenpage_comments_allowed')) { ?>

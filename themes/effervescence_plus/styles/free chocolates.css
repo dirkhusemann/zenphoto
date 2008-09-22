@@ -871,14 +871,17 @@ font-size: 1.2em;
 #content-left h3 {
 font-size: 1.4em;
 line-height: 0em;
+margin-left: 0px;
 margin-bottom: 0.5em;
 }
-
 #content-left p {
-font-size: 1.1em;
-line-height: 1.5em;
+font-size: 1em;
+line-height: 1.1em;
 margin-bottom: 1em;
 clear: both;
+}
+#content-left a:link {
+text-decoration:underline;
 }
 #sidebar {
 width: 320px;
@@ -947,3 +950,54 @@ font-size: 1em;
 line-height: 1em;
 margin-bottom: 1em;	
 }
+#pagetext p {
+	line-height: 1em;
+}
+#content-left ul {
+	margin-left: 1em;
+}
+#content-left ul li {
+	margin-left: 1em;
+}
+/* News Articles
+------------------------------ */
+
+.newsarticle {
+padding-top: 1em;
+padding-bottom: 1em;
+border-bottom: 1px dotted #666666;
+line-height: 1em;
+}
+
+.newsarticlecredit {
+margin-top: 0px;
+margin-bottom: 10px;
+
+}
+
+.newsarticlecredit-left {
+float: left;
+margin-right: 0.3em;
+}
+
+.newscategories {
+margin: 0;
+padding: 0;
+}
+
+.newscategories li {
+display: inline;
+list-style: none;
+}
+
+.singlenews_prev {
+float: left;
+}
+.singlenews_next {
+float: right;
+}
+
+.newstype {
+font-size: 0.8em;
+}
+

@@ -68,19 +68,32 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 			<?php 
 			while (next_news()) { ;?> 
  				<div class="newsarticle"> 
-    		<h3><?php printNewsTitleLink(); ?><?php echo " <span class='newstype'>[".getNewsType()."]</span>"; ?></h3>
-					<div class="newsarticlecredit"><span class="newsarticlecredit-left"><?php printNewsDate();?> | <?php echo gettext("Comments:"); ?> <?php echo getCommentCount(); ?> | </span>
-				<?php
-				if(is_GalleryNewsType()) {
-					echo gettext("Album:")."<a href='".getNewsAlbumURL()."' title='".getBareNewsAlbumTitle()."'> ".getNewsAlbumTitle()."</a>";
-				} else {
-					printNewsCategories(", ",gettext("Categories: "),"newscategories");
-				}
-				?>
-				</div>
-    		<?php printNewsContent(); ?>
-    		<p><?php printNewsReadMoreLink(); ?></p>
-    		<?php printCodeblock(1); ?>
+    			<h3><?php printNewsTitleLink(); ?><?php echo " <span class='newstype'>[".getNewsType()."]</span>"; ?></h3>
+					<div class="newsarticlecredit">
+						<span class="newsarticlecredit-left">
+						<?php 
+							$count = getCommentCount();
+							$cat = getNewsCategories();
+							printNewsDate();
+							if ($count > 0) {
+								echo ' | ';
+						 		printf(gettext("Comments: %d"),  $count);  
+							}
+							if (!empty($cat)) {
+								echo ' | ';
+							}
+							?>
+						</span>
+
+						<?php
+						if (!empty($cat)) {
+							printNewsCategories(", ",gettext("Categories: "),"newscategories"); 
+						}
+						?>
+					</div> <!-- newsarticlecredit -->
+    			<?php printNewsContent(); ?>
+    			<p><?php printNewsReadMoreLink(); ?></p>
+    			<?php printCodeblock(1); ?>
     
     		</div>	
 			<?php
