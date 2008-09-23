@@ -184,27 +184,28 @@ function printAdminFooter() {
  * Print the header for all admin pages. Starts at <DOCTYPE> but does not include the </head> tag,
  * in case there is a need to add something further.
  *
+ * @param string $path path to the admin files for use by plugins which are not located in the zp-core
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function printAdminHeader() {
+function printAdminHeader($path='') {
 	header ('Content-Type: text/html; charset=' . getOption('charset'));
 	echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
 	echo "\n<html xmlns=\"http://www.w3.org/1999/xhtml\">";
 	echo "\n<head>";
 	echo "\n  <title>".gettext("zenphoto administration")."</title>";
-	echo "\n  <link rel=\"stylesheet\" href=\"admin.css\" type=\"text/css\" />";
-	echo "\n  <link rel=\"stylesheet\" href=\"js/toggleElements.css\" type=\"text/css\" />";
-	echo "\n  <script type=\"text/javascript\" src=\"js/js-string-constants.js.php\"></script>";
-	echo "\n  <script type=\"text/javascript\" src=\"js/prototype.js\"></script>";
-	echo "\n  <script type=\"text/javascript\" src=\"js/admin.js\"></script>";
-	echo "\n  <script src=\"js/scriptaculous/scriptaculous.js\" type=\"text/javascript\"></script>";
-	echo "\n  <script src=\"js/jquery.js\" type=\"text/javascript\"></script>";
-	echo "\n  <script src=\"js/jquery.dimensions.js\" type=\"text/javascript\"></script>";
-	echo "\n  <script src=\"js/jquery.tooltip.js\" type=\"text/javascript\"></script>";
-	echo "\n  <script src=\"js/jquery.tabs.js\" type=\"text/javascript\"></script>";
+	echo "\n  <link rel=\"stylesheet\" href=\"".$path."admin.css\" type=\"text/css\" />";
+	echo "\n  <link rel=\"stylesheet\" href=\"".$path."js/toggleElements.css\" type=\"text/css\" />";
+	echo "\n  <script type=\"text/javascript\" src=\"".$path."js/js-string-constants.js.php\"></script>";
+	echo "\n  <script type=\"text/javascript\" src=\"".$path."js/prototype.js\"></script>";
+	echo "\n  <script type=\"text/javascript\" src=\"".$path."js/admin.js\"></script>";
+	echo "\n  <script src=\"".$path."js/scriptaculous/scriptaculous.js\" type=\"text/javascript\"></script>";
+	echo "\n  <script src=\"".$path."js/jquery.js\" type=\"text/javascript\"></script>";
+	echo "\n  <script src=\"".$path."js/jquery.dimensions.js\" type=\"text/javascript\"></script>";
+	echo "\n  <script src=\"".$path."js/jquery.tooltip.js\" type=\"text/javascript\"></script>";
+	echo "\n  <script src=\"".$path."js/jquery.tabs.js\" type=\"text/javascript\"></script>";
 	if (isset($_GET['page']) && $_GET['page'] != 'edit') { // for some reason this breaks the sub-tabs on the edit page (but not the options page.)
-		echo "\n  <script src=\"js/thickbox.js\" type=\"text/javascript\"></script>";
+		echo "\n  <script src=\"".$path."js/thickbox.js\" type=\"text/javascript\"></script>";
 	}
 	echo "\n  <link rel=\"stylesheet\" href=\"js/thickbox.css\" type=\"text/css\" />";
 	echo "\n  <script type=\"text/javascript\">";
