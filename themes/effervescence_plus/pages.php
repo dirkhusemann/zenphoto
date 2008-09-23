@@ -137,7 +137,7 @@ if (getOption('zenpage_comments_allowed')) { ?>
 
 <?php include('footer.php'); ?>
 		<!-- Administration Toolbox -->
-<?php printZenpageAdminToolbox(); ?>
+<?php printAdminToolbox(); ?>
 
 </body>
 </html>
