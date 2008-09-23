@@ -484,7 +484,6 @@ function seoFriendlyURL($string) {
 	"ṕ"=>"p",
 	"ṗ"=>"p",
 	"ƥ"=>"p",
-	"q"=>"p",
 	"ŕ"=>"p",
 	"ṙ"=>"p",
 	"ř"=>"p",
