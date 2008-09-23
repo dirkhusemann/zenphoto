@@ -110,10 +110,10 @@ class Image extends PersistentObject {
 			$this->encwebpath = getAlbumFolder(WEBPATH) . pathurlencode($album->name) . "/" . rawurlencode($filename);
 			$this->localpath = getAlbumFolder() . $album->name . "/" . $filename;
 		}
-		$this->filename = $filename;
-		$this->filemtime = filemtime($this->localpath);
+		$this->filename = $filename;		
 		$this->name = $filename;
 		$this->comments = null;
+		$this->filemtime = @filemtime($this->localpath);
 	}
 	
 	function getDefaultTitle() {

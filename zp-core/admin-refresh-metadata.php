@@ -81,8 +81,6 @@ if (isset($_GET['refresh']) && db_connect()) {
 				$sql = "SELECT `id` FROM ". prefix('albums') . " WHERE `folder`=\"".mysql_real_escape_string($folder)."\";";
 				$row = query_single_row($sql);
 				$id = $row['id'];
-			} else {
-				$folder = '';
 			}
 		}
 		if (!empty($id)) {
@@ -103,8 +101,7 @@ if (isset($_GET['refresh']) && db_connect()) {
 			query($sql);
 		}
 
-		if (isset($_GET['return'])) $ret = $_GET['return'];
-		if (isset($_POST['return'])) $ret = $_POST['return'];
+		if (isset($_REQUEST['return'])) $ret = $_REQUEST['return'];
 		if (empty($r)) {
 			echo "<p>".$allset."</p>";
 		} else {

@@ -35,16 +35,19 @@ if (!($_zp_loggedin & ADMIN_RIGHTS)) {
 printAdminHeader();
 echo "\n</head>";
 echo "\n<body>";
-	printLogoAndLinks();
-	echo "\n" . '<div id="main">';
-	printTabs(isset($_REQUEST['album']) ? 'edit' : 'home');
-	echo "\n" . '<div id="content">';
-
-	if (isset($alb)) {
+	if (isset($_REQUEST['album'])) {
+		$alb = $_REQUEST['album'];
+		$folder = urldecode(strip($alb));
 		$object = $folder;
 	} else {
 		$object = '<em>'.gettext('Gallery').'</em>';
 	}
+
+	printLogoAndLinks();
+	echo "\n" . '<div id="main">';
+	printTabs(empty($alb) ? 'edit' : 'home');
+	echo "\n" . '<div id="content">';
+
 	if (isset($_GET['clear']) || isset($_POST['clear'])) {
 		$clear = sprintf(gettext('Clearing and refreshing cache for %s'), $object);
 	} else {
@@ -55,10 +58,7 @@ echo "\n<body>";
 	
 	$gallery = new Gallery();
 	
-	if (isset($_GET['album'])) $alb = $_GET['album'];
-	if (isset($_POST['album'])) $alb = $_POST['album'];
 	if (isset($alb)) {
-		$folder = urldecode(strip($alb));
 		echo "\n<h2>".$clear."</h2>";
 		if (isset($_GET['clear']) || isset($_POST['clear'])) {
 			$gallery->clearCache(SERVERCACHE . '/' . $folder); // clean out what was there
@@ -78,8 +78,7 @@ echo "\n<body>";
 	}
 	echo "\n" . "<br/>".sprintf(gettext("Finished: Total of %u images."), $count);
 	
-	if (isset($_GET['return'])) $ret = $_GET['return'];
-	if (isset($_POST['return'])) $ret = $_POST['return'];
+	if (isset($_REQUEST['return'])) $ret = $_REQUEST['return'];
 	if (!empty($ret)) {
 		$r = "?page=edit";
 		if ($ret != '*') $r .= "&album=$ret";
