@@ -451,6 +451,7 @@ function truncate_string($string, $length) {
  * @return object
  */
 function getUrAlbum($album) {
+	if (!is_object($album)) return NULL;
 	while (true) {
 		$parent = $album->getParent();
 		if (is_null($parent)) { return $album; }

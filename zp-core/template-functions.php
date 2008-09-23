@@ -280,7 +280,7 @@ function getMainSiteURL() {
  */
 function getGalleryIndexURL($relative=true) {
 	global $_zp_current_album, $_zp_gallery_page;
-	if ($relative && $_zp_gallery_page != 'index.php') {
+	if ($relative && ($_zp_gallery_page != 'index.php')  && in_context(ZP_ALBUM)) {
 		$album = getUrAlbum($_zp_current_album);
 		$page = $album->getGalleryPage();
 	} else {
