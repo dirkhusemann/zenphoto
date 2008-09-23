@@ -11,13 +11,13 @@
  * The contact form itself is a separate file and located within /contact_form/form.php so that it can be style as needed.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.1
+ * @version 1.1.1
  * @package plugins
  */
 
 $plugin_description = gettext("Prints a e-mail contact form that uses Zenphotos internal validation functions for e-mail and URL. Name, e-mail adress, subject and message (and if enabled Captcha) are required fields. You need to enter a custom mail adress that should be use for the messages. Supports Zenphoto's captcha and confirmation before the message is sent. No other spam filter support, since mail providers have this anyway.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.1';
+$plugin_version = '1.1.1';
 $plugin_URL = "";
 $option_interface = new contactformOptions();
 
@@ -33,17 +33,17 @@ class contactformOptions {
 		setOptionDefault('contactform_confirmtext', '<p>Please confirm that you really want to send this email. Thanks.</p>');
 		setOptionDefault('contactform_thankstext', '<p>Thanks for your message. A copy has been sent to your provided e-mail adress for your own records.</p>');
 		setOptionDefault('contactform_title', "show");
-		setOptionDefault('contactform_name', "show");
+		setOptionDefault('contactform_name', "required");
 		setOptionDefault('contactform_company', "show");
 		setOptionDefault('contactform_street',"show");
 		setOptionDefault('contactform_city', "show");
 		setOptionDefault('contactform_country', "show");
-		setOptionDefault('contactform_email', "show");
+		setOptionDefault('contactform_email', "required");
 		setOptionDefault('contactform_website', "show");
 		setOptionDefault('contactform_phone', "show");
 		setOptionDefault('contactform_captcha', 0);
-		setOptionDefault('contactform_subject', "show");
-		setOptionDefault('contactform_message', "show");
+		setOptionDefault('contactform_subject', "required");
+		setOptionDefault('contactform_message', "required");
 		setOptionDefault('contactform_mailaddress', "");
 	}
 
@@ -75,7 +75,7 @@ class contactformOptions {
 										'desc' => gettext("E-mail field.").$mailfieldinstruction),
 									gettext('08. Website field') => array('key' => 'contactform_website', 'type' => 4, 'buttons' => $list,
 										'desc' => gettext("Website field.").$mailfieldinstruction),
-									gettext('09. Captcha field') => array('key' => 'contactform_phone', 'type' => 1,
+									gettext('09. Captcha field') => array('key' => 'contactform_captcha', 'type' => 1,
 										'desc' => gettext("If Captcha should be required.")),
 									gettext('10. Phone field') => array('key' => 'contactform_phone', 'type' => 4, 'buttons' => $list,
 										'desc' => gettext("Phone number field.").$mailfieldinstruction),
