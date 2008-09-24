@@ -403,12 +403,16 @@ if (!$checked) {
 
 		return checkMark(is_dir($path) && is_writable($path), sprintf(gettext(" <em>%s</em> folder"),$which).$f, $sfx, $msg);
 	}
-	function versionCheck($required, $found) {
+	function versionCheck($required, $desired, $found) {
 		$nr = explode(".", $required . '.0.0.0');
 		$vr = $nr[0]*10000 + $nr[1]*100 + $nr[2];
 		$nf = explode(".", $found . '.0.0.0');
-		$vf = $nf[0]*10000 + $nf[1]*100 + $nf[2];
-		return ($vf >= $vr);
+		$vf = $nf[0]*10000 + $nf[1]*100 + $nf[2]; 
+		$nd = explode(".", $desired . '.0.0.0');
+		$vd = $nd[0]*10000 + $nd[1]*100 + $nd[2];
+		if ($vf < $vr) return 0;
+		if ($vf < $vd) return -1;
+		return 1;
 	}
 
 	function setup_glob($pattern, $flags=0) {
@@ -454,8 +458,9 @@ if (!$checked) {
 	$good = true;
 
 	$required = '4.1.0';
+	$desired = '4.1.0';
 	$phpv = phpversion();
-	$good = checkMark(versionCheck($required, $phpv), " ".sprintf(gettext("PHP version %s"),$phpv), "", sprintf(gettext("Version %s or greater is required."),$required)) && $good;
+	$good = checkMark(versionCheck($required, $desired, $phpv), " ".sprintf(gettext("PHP version %s"),$phpv), "", sprintf(gettext("Version %s or greater is required."),$required)) && $good;
 
 	if (ini_get('safe_mode')) {
 		$safe = -1;
@@ -550,7 +555,8 @@ if (!$checked) {
 			$mysqlv = substr($mysqlv, 0, $i);
 		}
 		$required = '3.23.36';
-		$sqlv = versionCheck($required, $mysqlv);;
+		$desired = '4.1.1';
+		$sqlv = versionCheck($required, $desired, $mysqlv);;
 	}
 	if ($cfg) {
 		@chmod('zp-config.php', 0666 & CHMOD_VALUE);
@@ -616,14 +622,14 @@ if ($debug) {
 	}
 	$good = checkMark($connection, ' '.gettext("connect to MySQL"), '', gettext("Could not connect to the <strong>MySQL</strong> server. Check the <code>user</code>, <code>password</code>, and <code>database host</code> in your <code>zp-config.php</code> file and try again.").' ') && $good;
 	if ($connection) {
-		$good = checkMark($sqlv, ' '.gettext("MySQL version").' '.$mysqlv, "", sprintf(gettext("Version %s or greater is required"),$required)) && $good;
+		$good = checkMark($sqlv, ' '.gettext("MySQL version").' '.$mysqlv, "", sprintf(gettext('Version %1$s or greater is required.<br />Version %2$s or greater is prefered.'),$required,$desired)) && $good;
 		$good = checkMark($db, ' '.sprintf(gettext("connect to the database <code> %s </code>"),$_zp_conf_vars['mysql_database']), '',
 			sprintf(gettext("Could not access the <strong>MySQL</strong> database (<code>%s</code>)."), $_zp_conf_vars['mysql_database']).' '.gettext("Check the <code>user</code>, <code>password</code>, and <code>database name</code> and try again.").' ' .
 			gettext("Make sure the database has been created, and the <code>user</code> has access to it.").' ' .
 			gettext("Also check the <code>MySQL host</code>.")) && $good;
 
 		$dbn = "`".$_zp_conf_vars['mysql_database']. "`.*";
-		if (versioncheck('4.2.1', $mysqlv)) {
+		if (versioncheck('4.2.1', '4.2.1', $mysqlv)) {
 			$sql = "SHOW GRANTS FOR CURRENT_USER;";
 		} else {
 			$sql = "SHOW GRANTS FOR " . $_zp_conf_vars['mysql_user'].";";
@@ -971,7 +977,7 @@ if (file_exists("zp-config.php")) {
 	$db_schema = array();
 
 	if (substr(trim(mysql_get_server_info()), 0, 1) > '4') {
-		$collation = ' COLLATE utf8_unicode_ci';
+		$collation = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci';
 	} else {
 		$collation = '';
 	}
@@ -988,7 +994,7 @@ if (file_exists("zp-config.php")) {
 		`ptime` int(32) UNSIGNED NOT NULL,
 		`hash` varchar(255) NOT NULL,
 		PRIMARY KEY  (`id`)
-		)	CHARACTER SET utf8$collation;";
+		)	$collation;";
 	}
 	//v1.1.7
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'options'])) {
@@ -999,7 +1005,7 @@ if (file_exists("zp-config.php")) {
 		`value` text NOT NULL,
 		PRIMARY KEY  (`id`),
 		UNIQUE (`name`, `ownerid`)
-		)	CHARACTER SET utf8$collation;";
+		)	$collation;";
 	}
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'tags'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_tags (
@@ -1007,7 +1013,7 @@ if (file_exists("zp-config.php")) {
 		`name` varchar(255) NOT NULL,
 		PRIMARY KEY  (`id`),
 		UNIQUE (`name`)
-		)	CHARACTER SET utf8$collation;";
+		)	$collation;";
 	}
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'obj_to_tag'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_obj_to_tag (
@@ -1016,7 +1022,7 @@ if (file_exists("zp-config.php")) {
 		`type` tinytext,
 		`objectid` int(11) UNSIGNED NOT NULL,
 		PRIMARY KEY  (`id`)
-		)	CHARACTER SET utf8$collation;";
+		)	$collation;";
 	}
 
 	// v. 1.1.5
@@ -1030,7 +1036,7 @@ if (file_exists("zp-config.php")) {
 		`rights` int,
 		PRIMARY KEY  (`id`),
 		UNIQUE (`user`)
-		)	CHARACTER SET utf8$collation;";
+		)	$collation;";
 	}
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'admintoalbum'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_admintoalbum (
@@ -1038,7 +1044,7 @@ if (file_exists("zp-config.php")) {
 		`adminid` int(11) UNSIGNED NOT NULL,
 		`albumid` int(11) UNSIGNED NOT NULL,
 		PRIMARY KEY  (`id`)
-		)	CHARACTER SET utf8$collation;";
+		)	$collation;";
 	}
 
 	// v. 1.1
@@ -1049,7 +1055,7 @@ if (file_exists("zp-config.php")) {
 		`value` text NOT NULL,
 		PRIMARY KEY  (`id`),
 		UNIQUE (`name`)
-		)	CHARACTER SET utf8$collation;";
+		)	$collation;";
 	}
 
 	// base implementation
@@ -1077,7 +1083,7 @@ if (file_exists("zp-config.php")) {
 		`password_hint` text,
 		PRIMARY KEY  (`id`),
 		KEY `folder` (`folder`)
-		)	CHARACTER SET utf8$collation;";
+		)	$collation;";
 	}
 
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'comments'])) {
@@ -1092,7 +1098,7 @@ if (file_exists("zp-config.php")) {
 		`inmoderation` int(1) unsigned NOT NULL default '0',
 		PRIMARY KEY  (`id`),
 		KEY `ownerid` (`ownerid`)
-		)	CHARACTER SET utf8$collation;";
+		)	$collation;";
 	}
 
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'images'])) {
@@ -1122,7 +1128,7 @@ if (file_exists("zp-config.php")) {
 		`used_ips` longtext,
 		PRIMARY KEY  (`id`),
 		KEY `filename` (`filename`,`albumid`)
-		)	CHARACTER SET utf8$collation;";
+		)	$collation;";
 		$db_schema[] = "ALTER TABLE $tbl_images ".
 			"ADD CONSTRAINT $cst_images FOREIGN KEY (`albumid`) REFERENCES $tbl_albums (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
 	}
