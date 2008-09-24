@@ -57,9 +57,9 @@ if (!isset($_POST['login'])) {
 			}
 			if (($code_cypher == $code_hash) && strlen(trim($post_pass)) == CAPTCHA_LENGTH) {
 				if (empty($post_user)) {
-					$requestor = '';
+					$requestor = 'You are receiving this e-mail because of a password reset request on your Zenphoto gallery.';
 				} else {
-					$requestor = sprintf(gettext("from a user who tried to log in as %s"),$post_user);
+					$requestor = sprintf(gettext("You are receiving this e-mail because of a password reset request on your Zenphoto gallery from a user who tried to log in as %s."),$post_user);
 				}
 				$admins = getAdministrators();
 				$user = array_shift($admins);
@@ -68,7 +68,7 @@ if (!isset($_POST['login'])) {
 				setOption('admin_reset_date', time());
 				$req = getOption('admin_reset_date');
 				$ref = md5($req . $adm . $pas);
-				$msg = "\n".sprintf(gettext("You are receiving this e-mail because of a password reset request on your Zenphoto gallery %s"),$requestor).
+				$msg = "\n".$requestor.
 						"\n".sprintf(gettext("To reset your Zenphoto Admin passwords visit: %s"),FULLWEBPATH."/".ZENFOLDER."/admin-options.php?ticket=$ref") .
 						"\n".gettext("If you do not wish to reset your passwords just ignore this message. This ticket will automatically expire in 3 days.");
 				zp_mail(gettext("The Zenphoto information you requested"),  $msg);

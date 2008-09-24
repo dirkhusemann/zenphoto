@@ -323,7 +323,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			$size = $width = false;
 		} else {
 			// There's a problem up there somewhere...
-			imageError(gettext("Unknown error! Please report to the developers at")." <a href=\"http://www.zenphoto.org/\">www.zenphoto.org</a>", 'err-imagegeneral.gif');
+			imageError(gettext("Unknown error! Please report to the developers at <a href=\"http://www.zenphoto.org/\">www.zenphoto.org</a>"), 'err-imagegeneral.gif');
 		}
 
 		// Calculate proportional height and width.
