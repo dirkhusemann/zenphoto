@@ -277,6 +277,7 @@ function getImageStatistic($number, $option, $albumfolder='') {
 	if (zp_loggedin()) {
 		$albumWhere = " AND albums.folder != ''";
 		$imageWhere = "";
+		$passwordcheck = "";
 	} else {
 		$albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
 		foreach($albumscheck as $albumcheck) {
