@@ -7,13 +7,13 @@
  * C A U T I O N: With 1.0.4.7 the usage to get an specific album changes. You now have to pass the foldername of an album instead the album title.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.5.1
+ * @version 1.0.5.2
  * @package plugins
  */
 
 $plugin_description = gettext("Functions that provide various statistics about images and albums in the gallery.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.5.1';
+$plugin_version = '1.0.5.2';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---image_album_statistics.php.html";
 
 /**
@@ -72,7 +72,7 @@ function getAlbumStatistic($number=5, $option) {
 						array_push($updatedalbums,$album);
 					}
 				}
-				if($count === $number) {
+				if($count == $number) {
 					break;
 				}
 			}
@@ -137,7 +137,8 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
 	$albumpath = rewrite_path("/", "index.php?album=");
 	$tempalbum = new Album($_zp_gallery, $album['folder']);
 		echo "<li><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . html_encode($tempalbum->getTitle()) . "\">\n";
-		echo "<img src=\"".$tempalbum->getAlbumThumb()."\"></a>\n<br />";
+		$albumthumb = $tempalbum->getAlbumThumbImage();
+		echo "<img src=\"".WEBPATH."/".ZENFOLDER."/i.php?a=".$tempalbum->name."&i=".$albumthumb->name."&s=75&cw=75&ch=75\"></a>\n<br />";
 		if($showtitle) {
 			echo "<h3><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . html_encode($tempalbum->getTitle()) . "\">\n";
 			echo $tempalbum->getTitle()."</a></h3>\n";
