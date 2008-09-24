@@ -2,6 +2,8 @@
 /** printAlbumMenu for Zenphoto
   *
  * Changelog
+ * 1.4.5:
+ * - Fixes some validation issues and an php warning
  * 
  * 1.4.4.5:
  * - Minor fix about a php notice for an undefined variable
@@ -97,13 +99,13 @@
  * - Renamed the function name from show_album_menu() to more zp style printAlbumMenu()
  *
  * @author Malte Müller (acrylian)
- * @version 1.4.4.5
+ * @version 1.4.5
  * @package plugins
  */
 
 $plugin_description = gettext("Adds a theme function printAlbumMenu() to print an album menu either as a nested list up to 4 sublevels (context sensitive) or as a dropdown menu.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.4.4.5';
+$plugin_version = '1.4.5';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---print_album_menu.php.html";
 
 /**
@@ -307,13 +309,13 @@ function printAlbumMenuJump($option="count", $indexname="Gallery Index") {
 		$currentfolder = $_zp_current_album->name;
 	}
 	?>
-<form name="AutoListBox">
-<p><select name="ListBoxURL" size="1" language="javascript"
+<form name="AutoListBox" action="#">
+<p><select name="ListBoxURL" size="1"
 		onchange="gotoLink(this.form);">
 		<?php
 		if(!empty($indexname)) {
 			$selected = checkSelectedAlbum("", "index"); ?>
-		<option $selected value="<?php echo htmlspecialchars(getGalleryIndexURL()); ?>"><?php echo $indexname; ?></option>
+		<option <?php echo $selected; ?> value="<?php echo htmlspecialchars(getGalleryIndexURL()); ?>"><?php echo $indexname; ?></option>
 		<?php }
 		/**** TOPALBUM LEVEL ****/
 		$gallery = $_zp_gallery;
@@ -352,7 +354,7 @@ function printAlbumMenuJump($option="count", $indexname="Gallery Index") {
 		}
 ?>
 </select></p>
-<script language="JavaScript">
+<script type="text/javaScript">
 <!--
 function gotoLink(form) {
  	var OptionIndex=form.ListBoxURL.selectedIndex;
@@ -459,7 +461,7 @@ function checkSelectedAlbum($checkalbum, $option) {
 function checkAlbumDisplayLevel($currentalbum,$parentalbum,$currentfolder,$level) {
 	$sublevel_folder = explode("/",$currentalbum->name);
 	$sublevel_current = explode("/", $currentfolder);
-
+ 
 	switch ($level) {
 		case 1:
 			$sublevelfolder = $sublevel_folder[0];
@@ -482,16 +484,19 @@ function checkAlbumDisplayLevel($currentalbum,$parentalbum,$currentfolder,$level
 			$sublevelcurrentfolder = $sublevel_folder[3];
 			break;
 	}
-
-	// if in parentalbum) OR (if in subalbum)
-	if((strpos($currentalbum->name,$parentalbum->name) === 0
-	AND strpos($currentalbum->name,$currentfolder) === 0
-	AND $currentfolder === $sublevelfolder)
-	OR
-	(getAlbumID() != $parentalbum->getAlbumID()
-	AND strpos($currentalbum->name,$parentalbum->name) === 0
-	AND $sublevelcurrent === $sublevelcurrentfolder)) {
-		return true;
+	if(!empty($currentfolder) AND !empty($parentalbum->name)) {
+		// if in parentalbum) OR (if in subalbum)
+		if((strpos($currentalbum->name,$parentalbum->name) === 0
+		AND strpos($currentalbum->name,$currentfolder) === 0
+		AND $currentfolder === $sublevelfolder)
+		OR
+		(getAlbumID() != $parentalbum->getAlbumID()
+		AND strpos($currentalbum->name,$parentalbum->name) === 0
+		AND $sublevelcurrent === $sublevelcurrentfolder)) {
+			return true;
+		} else {
+			return false;
+		}
 	} else {
 		return false;
 	}
