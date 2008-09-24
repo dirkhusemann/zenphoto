@@ -144,7 +144,7 @@ function printAdminToolbox($context=null, $id='admin') {
 			}
 			$redirect = "&amp;p=search" . $_zp_current_search->getSearchParams() . "&amp;page=$page";
 		}
-		if(getOption('zp_plugin_zenpage')) {
+		if(function_exists('is_NewsArticle')) {
 			if ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
 				echo "<li><a href=\"".$zf."/plugins/zenpage/page-admin.php\">".gettext("Zenpage")."</a></li>";
 			}
@@ -2536,7 +2536,7 @@ function getCommentCount() {
 	} else if (!in_context(ZP_IMAGE) AND in_context(ZP_ALBUM)) {
 		return $_zp_current_album->getCommentCount();
 	}
-	if(getOption("zp_plugin_zenpage")) {
+	if(function_exists('is_News')) {
 		if(is_News() OR is_Pages()) {
 			return $current_zenpage->getCommentCount();
 		}
@@ -2573,7 +2573,7 @@ function next_comment($desc=false) {
 		} else if (!in_context(ZP_IMAGE) AND in_context(ZP_ALBUM)) {
 			$_zp_comments = $_zp_current_album->getComments(false, false, $desc);
 		}
-		if(getOption('zp_plugin_zenpage')) {
+		if(function_exists('is_NewsArticle')) {
 			if (is_NewsArticle() OR is_Pages()) {
 				$_zp_comments = $current_zenpage->getComments(false, false, $desc);
 			}
