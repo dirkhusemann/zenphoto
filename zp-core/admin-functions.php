@@ -381,14 +381,11 @@ function printLoginForm($redirect=null, $logo=true) {
 	echo "\n    <table>";
 	echo "\n      <tr><td align=\"right\"><h2>".gettext("Login").'&nbsp;'."</h2></td><td><input class=\"textfield\" name=\"user\" type=\"text\" size=\"20\" value=\"$requestor\" /></td></tr>";
 	echo "\n      <tr><td align=\"right\"><h2>".gettext("Password").$star."</h2></td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
-
 	if ($star == '*') {
 		$captchaCode = generateCaptcha($img);
+		$html = "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/><label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"bottom\"/></label>";
 		echo "\n      <tr><td colspan=\"2\">";
-		echo "\n      ".gettext("*Enter").' ';
-		echo "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/>" .
- 								"<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"bottom\"/></label> ";
-		echo ' '.gettext("to email a password reset.");
+		echo "\n      ".sprintf(gettext("*Enter %s to email a password reset."), $html);
 		echo "      </td></tr>";
 	}
 	echo "\n      <tr><td></td><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"".gettext("Log in")."\" /></td></tr>";
