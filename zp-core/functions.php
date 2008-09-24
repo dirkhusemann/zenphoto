@@ -2528,15 +2528,24 @@ function readTags($id, $tbl) {
  *
  * @param array $currentValue list of items to be flagged as checked
  * @param array $list the elements of the select list
+ * @param bool $descending set true for a reverse order sort
  */
-function generateListFromArray($currentValue, $list) {
+function generateListFromArray($currentValue, $list, $descending=false) {
 	$localize = !is_numeric(array_shift(array_keys($list)));
 	if ($localize) {
 		$list = array_flip($list);
-		natcasesort($list);
+		if ($descending) {
+			rsort($list);
+		} else {
+			natcasesort($list);
+		}
 		$list = array_flip($list);
 	} else {
-		natcasesort($list);
+		if ($descending) {
+			rsort($list);
+		} else {
+			natcasesort($list);
+		}
 	}
 	foreach($list as $key=>$item) {
 		echo '<option value="' . $item . '"';
@@ -2549,7 +2558,15 @@ function generateListFromArray($currentValue, $list) {
 	}
 }
 
-function generateListFromFiles($currentValue, $root, $suffix) {
+/**
+ * Generates a selection list from files found on disk
+ *
+ * @param strig $currentValue the current value of the selector
+ * @param string $root directory path to search
+ * @param string $suffix suffix to select for
+ * @param bool $descending set true to get a reverse order sort
+ */
+function generateListFromFiles($currentValue, $root, $suffix, $descending=false) {
 	$curdir = getcwd();
 	chdir($root);
 	$filelist = safe_glob('*'.$suffix);
@@ -2557,7 +2574,7 @@ function generateListFromFiles($currentValue, $root, $suffix) {
 	foreach($filelist as $file) {
 		$list[] = str_replace($suffix, '', $file);
 	}
-	generateListFromArray(array($currentValue), $list);
+	generateListFromArray(array($currentValue), $list, $descending);
 	chdir($curdir);
 }
 
