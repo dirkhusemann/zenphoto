@@ -48,8 +48,7 @@
 
 		<?php printPageListWithNav("&laquo; ".gettext("prev"), gettext("next")." &raquo;"); ?>
 		<?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ''); ?>
- <br clear: all />
- 
+
 	</div>
 	<?php if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow')); ?>
 	<?php if (function_exists('printAlbumRating')) { printAlbumRating(); }?>
@@ -57,7 +56,7 @@
 </div>
 
 <div id="credit"><?php printRSSLink('Album', '', gettext('Album RSS'), ''); ?> | <?php printCustomPageURL(gettext("Archive View"),"archive"); ?> | 
-<?php echo gettext('Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album"><span id="zen-part">zen</span><span id="photo-part">PHOTO</span></a>'); ?>
+<?php echo gettext('Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album"><font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a>'); ?>
 </div>
 
 <?php printAdminToolbox(); ?>
