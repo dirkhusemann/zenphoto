@@ -447,3 +447,18 @@ ul.archive .month {
 	font-weight: bold;
 	margin: 0px;
 }
+
+/* Zenphoto link
+------------------------------ */
+
+#zen-part {
+ font-familiy: Arial, Helvetice, sans-serif;
+ font-size: 2em;
+ font-weight: thin;
+}
+
+#photo-part {
+font-familiy: Arial, Helvetice, sans-serif;
+ font-size: 0.9em;
+ font-weight: bold;
+}

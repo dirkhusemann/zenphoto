@@ -26,7 +26,7 @@
 	<?php } ?>
 
 	<div id="credit"><?php printRSSLink('Gallery','','RSS', ''); ?> | 
-	<?php echo gettext('Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album"><font face="Arial Narrow" size="4">zen</font><span style="font-variant: small-caps; font-weight: 700"><font face="Arial Black" size="1">photo</font></span></a>'); ?>
+	<?php echo gettext('Powered by <a href="http://www.zenphoto.org" title="A simpler web photo album"><span id="zen-part">zen</span><span id="photo-part">PHOTO</span></a>'); ?>
 </div>
 
 </div>

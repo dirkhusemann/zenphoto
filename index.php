@@ -104,4 +104,7 @@ if ($a != 'full-image.php') {
 }
 if(!is_null($_zp_HTML_cache)) { $_zp_HTML_cache->endHTMLCache(); }
 
+
+debugLog("memory_get_peak_usage():".memory_get_peak_usage().' memory_get_peak_usage(true):'.memory_get_peak_usage(true));
+
 ?>
