@@ -4,7 +4,7 @@
  * @package setup
  */
 header ('Content-Type: text/html; charset=UTF-8');
-define('HTACCESS_VERSION', '1.2.1.2');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
+define('HTACCESS_VERSION', '1.2.1.3');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
 if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
 
 $debug = isset($_GET['debug']);
