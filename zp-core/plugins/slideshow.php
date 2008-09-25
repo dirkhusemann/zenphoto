@@ -226,16 +226,19 @@ function printSlideShow($heading = true, $speedctl = false) {
 				} else {
 					$img = WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . pathurlencode($image->album->name) . '&i=' . urlencode($filename) . '&s=' . $imagesize;
 				}
-				echo 'ImageList[' . $cntr . '] = "' . $img . '";'. chr(13);
-				echo 'TitleList[' . $cntr . '] = "' . js_encode($image->getTitle()) . '";'. chr(13);
+				echo 'ImageList[' . $cntr . '] = "' . $img . '";'. "\n";
+				echo 'TitleList[' . $cntr . '] = "' . js_encode($image->getTitle()) . '";'. "\n";
 				if(getOption("slideshow_showdesc")) {
-					echo 'DescList[' . $cntr . '] = "' . js_encode($image->getDesc()) . '";'. chr(13);
+					$desc = $image->getDesc();
+					$desc = str_replace("\r\n", '<br />', $desc); 
+					$desc = str_replace("\r", '<br />', $desc); 
+					echo 'DescList[' . $cntr . '] = "' . js_encode($desc) . '";'. "\n";
 				} else {
-					echo 'DescList[' . $cntr . '] = "";'. chr(13);
+					echo 'DescList[' . $cntr . '] = "";'. "\n";
 				}
 				if ($idx == $numberofimages - 1) { $idx = -1; }
 			}
-			echo chr(13);
+			echo "\n";
 
 ?>
 						var countOffset = <?php echo $imagenumber; ?>
@@ -381,7 +384,12 @@ if ($speedctl) {
 		} else {
 			echo "<img src='".WEBPATH."/".ZENFOLDER."/i.php?a=".urlencode($folder)."&i=".urlencode($filename)."&s=".$imagesize."' alt='".html_encode($image->getTitle())."' title='".html_encode($image->getTitle())."' />\n";
 		}
-		if(getOption("slideshow_showdesc")) { echo "<p class='imgdesc'>".$image->getDesc()."</p>"; }
+		if(getOption("slideshow_showdesc")) { 
+			$desc = $image->getDesc();
+			$desc = str_replace("\r\n", '<br />', $desc); 
+			$desc = str_replace("\r", '<br />', $desc); 
+			echo "<p class='imgdesc'>".$desc."</p>"; 
+		}
 		echo "</span>";
 	}
 
