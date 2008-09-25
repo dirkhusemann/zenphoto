@@ -737,10 +737,21 @@ function sanitize_string($input_string, $sanitize_level) {
 
 	// Basic sanitation.
 	if ($sanitize_level === 0) {
-		$input_string = str_replace(chr(0), " ", $input_string);
+		return str_replace(chr(0), " ", $input_string);
     }
 	// User specified sanititation.
 	require_once('lib-htmlawed.php');
+	
+	$special = array('ß'=>'&szlig;', 'Ø'=>'&Oslash;','€'=>'&euro;', 'Ç'=>'&Ccedil;', 'Ñ'=>'&Ntilde;',
+									'Ã'=>'&Atilde;', 'Ä'=>'&Auml;', 'Â'=>'&Acirc;', 'Á'=>'&Aacute;', 'À'=>'&Agrav;',
+																	 'Ë'=>'&Euml;', 'Ê'=>'&Ecirc;', 'É'=>'&Eacute;', 'È'=>'&Egrav;',
+																	 'Ï'=>'&Iuml;', 'Î'=>'&Icirc;', 'Í'=>'&Iacute;', 'Ì'=>'&Igrav;',
+									'Õ'=>'&Otilde;', 'Ö'=>'&Ouml;', 'Ô'=>'&Ocirc;', 'Ó'=>'&Oacute;', 'Ò'=>'&Ograv;',
+																	 'Ü'=>'&Uuml;', 'Û'=>'&Ucirc;', 'Ú'=>'&Uacute;', 'Ù'=>'&Ugrav;',
+																	 'Ÿ'=>'&Yuml;', 'Ý'=>'&Yacute;',
+									);
+	$input_string = strtr($input_string, $special); // replace characters that can't be stored in the DB.
+		
 	if ($sanitize_level === 1) {
 		$user_tags = "(".getOption('allowed_tags').")";
 		$allowed_tags = parseAllowedTags($user_tags);
