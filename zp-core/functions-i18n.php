@@ -113,6 +113,7 @@ function setupCurrentLocale($plugindomain='', $type='') {
 		// Set the text domain as 'messages'
 		$domain = 'zenphoto';
 		$domainpath = SERVERPATH . "/" . ZENFOLDER . "/locale/";
+		if (DEBUG_LOCALE) debugLog("setupCurrentLocale($plugindomain): locale=$locale");
 	} else {
 		$domain = $plugindomain;
 		switch ($type) {
@@ -124,8 +125,8 @@ function setupCurrentLocale($plugindomain='', $type='') {
 				break;
 		}
 		$result = false;
+		if (DEBUG_LOCALE) debugLog("setupCurrentLocale($plugindomain): domainpath=$domainpath");
 	}
-	if (DEBUG_LOCALE) debugLog("setupCurrentLocale($plugindomain): locale=$locale");
 	bindtextdomain($domain, $domainpath);
 	// function only since php 4.2.0
 	if(function_exists('bind_textdomain_codeset')) {
@@ -330,29 +331,20 @@ function getUserLocale() {
 						$locale = $key;
 						if (DEBUG_LOCALE) debugLog("locale set from HTTP Accept Language: ".$locale);
 						break;
+					} else if (preg_match('/^'.$l.'/', strtoupper($key))) { // we got a partial match
+						$locale = $key;
+						if (DEBUG_LOCALE) debugLog("locale set from HTTP Accept Language (partial match): ".$locale);
+						break;
 					}
 				}
 				if ($locale) break;
-			}
-			if ($locale === false) { // try partal matches
-				foreach ($userLang as $lang) {
-					$l = strtoupper($lang['fullcode']);
-					foreach ($languageSupport as $key=>$value) {
-						if (preg_match('/^'.$l.'/', strtoupper($key))) { // we got a partial match
-							$locale = $key;
-							if (DEBUG_LOCALE) debugLog("locale set from HTTP Accept Language (partial match): ".$locale);
-							break;
-						}
-					}
-					if ($locale) break;
-				}
 			}
 		}
 	}
 	if ($locale !== false) {
 		setOption('locale', $locale, false);
 	}
-	if (DEBUG_LOCALE) debugLog("Returning locale: ".$locale);	
+	if (DEBUG_LOCALE) debugLog("Returning locale: ".$locale);
 	return $locale;
 }
 
