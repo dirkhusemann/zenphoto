@@ -725,7 +725,6 @@ function sanitize($input_string, $sanitize_level=3) {
 	return $output_string;
 }
 
-
 /** returns a sanitized string for the sanitize function
  * @param string $input_string
  * @param string $sanitize_level
@@ -734,7 +733,6 @@ function sanitize($input_string, $sanitize_level=3) {
 function sanitize_string($input_string, $sanitize_level) {
 	// Strip slashes if get_magic_quotes_gpc is enabled.
 	if (get_magic_quotes_gpc()) $input_string = stripslashes($input_string);
-
 	// Basic sanitation.
 	if ($sanitize_level === 0) {
 		return str_replace(chr(0), " ", $input_string);
@@ -742,13 +740,13 @@ function sanitize_string($input_string, $sanitize_level) {
 	// User specified sanititation.
 	require_once('lib-htmlawed.php');
 	
-	$special = array('ß'=>'&szlig;', 'Ø'=>'&Oslash;','€'=>'&euro;', 'Ç'=>'&Ccedil;', 'Ñ'=>'&Ntilde;',
-									'Ã'=>'&Atilde;', 'Ä'=>'&Auml;', 'Â'=>'&Acirc;', 'Á'=>'&Aacute;', 'À'=>'&Agrav;',
-																	 'Ë'=>'&Euml;', 'Ê'=>'&Ecirc;', 'É'=>'&Eacute;', 'È'=>'&Egrav;',
-																	 'Ï'=>'&Iuml;', 'Î'=>'&Icirc;', 'Í'=>'&Iacute;', 'Ì'=>'&Igrav;',
-									'Õ'=>'&Otilde;', 'Ö'=>'&Ouml;', 'Ô'=>'&Ocirc;', 'Ó'=>'&Oacute;', 'Ò'=>'&Ograv;',
-																	 'Ü'=>'&Uuml;', 'Û'=>'&Ucirc;', 'Ú'=>'&Uacute;', 'Ù'=>'&Ugrav;',
-																	 'Ÿ'=>'&Yuml;', 'Ý'=>'&Yacute;',
+	$special = array('ÃŸ'=>'&szlig;', 'Ã˜'=>'&Oslash;','â‚¬'=>'&euro;', 'Ã‡'=>'&Ccedil;', 'Ã‘'=>'&Ntilde;',
+									'Ãƒ'=>'&Atilde;', 'Ã„'=>'&Auml;', 'Ã‚'=>'&Acirc;', 'Ã'=>'&Aacute;', 'Ã€'=>'&Agrav;',
+																	 'Ã‹'=>'&Euml;', 'ÃŠ'=>'&Ecirc;', 'Ã‰'=>'&Eacute;', 'Ãˆ'=>'&Egrav;',
+																	 'Ã'=>'&Iuml;', 'ÃŽ'=>'&Icirc;', 'Ã'=>'&Iacute;', 'ÃŒ'=>'&Igrav;',
+									'Ã•'=>'&Otilde;', 'Ã–'=>'&Ouml;', 'Ã”'=>'&Ocirc;', 'Ã“'=>'&Oacute;', 'Ã’'=>'&Ograv;',
+																	 'Ãœ'=>'&Uuml;', 'Ã›'=>'&Ucirc;', 'Ãš'=>'&Uacute;', 'Ã™'=>'&Ugrav;',
+																	 'Å¸'=>'&Yuml;', 'Ã'=>'&Yacute;',
 									);
 	$input_string = strtr($input_string, $special); // replace characters that can't be stored in the DB.
 		
@@ -2388,6 +2386,7 @@ function newImage(&$album, $filename) {
 		return New Image($album, $filename);
 	}
 }
+
 /**
  * Trims the tag values and eliminates duplicates.
  * Tags are case insensitive so only the first of 'Tag' and 'tag' will be preserved
@@ -2707,6 +2706,7 @@ function parse_size($size) {
 		return $match[1] * $suffixes[strtolower($match[2])];
 	}
 }
+
 
 
 ?>

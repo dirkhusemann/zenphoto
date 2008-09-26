@@ -957,9 +957,11 @@ margin-bottom: 1em;
 }
 #content-left ul {
 	margin-left: 1em;
+	margin-bottom: 0.5em;
 }
 #content-left ul li {
 	margin-left: 1em;
+	margin-bottom: 0.5em;
 }
 /* News Articles
 ------------------------------ */

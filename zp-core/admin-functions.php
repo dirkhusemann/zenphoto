@@ -170,11 +170,15 @@ function issetPage($page) {
 /**
  * Print the footer <div> for the bottom of all admin pages.
  *
+ * @param string $addl additional text to output on the footer.
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function printAdminFooter() {
+function printAdminFooter($addl='') {
 	echo "<div id=\"footer\">";
+	if (!empty($addl)) {
+		echo $addl.' ';
+	}
 	echo "\n  <a href=\"http://www.zenphoto.org\" title=\"".gettext('A simpler web photo album')."\">zen<strong>photo</strong></a>";
 	echo " version ". ZENPHOTO_VERSION.' ['.ZENPHOTO_RELEASE.']';
 	echo " | <a href=\"http://www.zenphoto.org/support/\" title=\"".gettext('Forum')."\">Forum</a> | <a href=\"http://www.zenphoto.org/trac/\" title=\"Trac\">Trac</a> | <a href=\"".WEBPATH."/".ZENFOLDER."/changelog.html\" title=\"".gettext('View Changelog')."\">Changelog</a>\n</div>";
