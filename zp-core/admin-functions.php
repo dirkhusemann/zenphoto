@@ -678,7 +678,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 					echo '<td width="200">' . "\n";
 					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'selector-'.$key.'" value=0 />' . "\n";
 					echo '<select id="'.$option.'" name="'.$key.'">'."\n";
-					generateListFromArray(array($v),$row['selections'],$option);
+					generateListFromArray(array($v),$row['selections']);
 					echo "</select>\n";
 					echo "</td>\n";
 					break;

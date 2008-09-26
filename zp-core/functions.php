@@ -2667,7 +2667,7 @@ function generateListFromArray($currentValue, $list, $descending=false) {
 	if ($localize) {
 		$list = array_flip($list);
 		if ($descending) {
-			rsort($list);
+			arsort($list);
 		} else {
 			natcasesort($list);
 		}
