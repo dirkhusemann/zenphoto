@@ -929,12 +929,6 @@ background-position: 1px 0px;
 .menu-active {
 color: #002E5B;
 }
-.menu-active ul li {
-color: #002E5B;
-background-image: url(../images/dark_arrow_right.png);
-background-repeat: no-repeat;
-background-position: 1px 0px;
-}
 
 .submenu {
 list-style: none;
