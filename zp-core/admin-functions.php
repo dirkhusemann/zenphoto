@@ -176,11 +176,11 @@ function issetPage($page) {
  */
 function printAdminFooter($addl='') {
 	echo "<div id=\"footer\">";
-	if (!empty($addl)) {
-		echo $addl.' ';
-	}
 	echo "\n  <a href=\"http://www.zenphoto.org\" title=\"".gettext('A simpler web photo album')."\">zen<strong>photo</strong></a>";
 	echo " version ". ZENPHOTO_VERSION.' ['.ZENPHOTO_RELEASE.']';
+	if (!empty($addl)) {
+		echo ' | '. $addl;
+	}
 	echo " | <a href=\"http://www.zenphoto.org/support/\" title=\"".gettext('Forum')."\">Forum</a> | <a href=\"http://www.zenphoto.org/trac/\" title=\"Trac\">Trac</a> | <a href=\"".WEBPATH."/".ZENFOLDER."/changelog.html\" title=\"".gettext('View Changelog')."\">Changelog</a>\n</div>";
 }
 
