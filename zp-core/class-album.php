@@ -104,6 +104,7 @@ class Album extends PersistentObject {
 			$this->set('parentid', $parentalbum->getAlbumId());
 			$title = substr($title, strrpos($title, '/')+1);
 		}
+		$title = utf8::convert($title, 'ISO-8859-1'); // file system is not in UTF-8
 		$this->set('title', sanitize($title, 2));
 
 		return true;
