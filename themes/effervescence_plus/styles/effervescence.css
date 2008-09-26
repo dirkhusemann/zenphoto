@@ -865,6 +865,12 @@ margin-top: 0.7em;
 margin-left: 1.6em;
 border: 0px solid gray;
 }
+.menu a:hover {
+color: #7b0073;		
+}
+.menu a:link, a:active, a:visited {
+color: #7b7973;	
+}
 .menu ul {
 list-style: none;
 padding-left: 1.8em;
@@ -874,7 +880,7 @@ margin-top: 0.2em;
 .menu ul li {
 padding-left: 20px;
 padding-bottom: 3px;
-background-image: url(images/arrow_right.gif);
+background-image: url(../images/dark_arrow_right.png);
 background-repeat: no-repeat;
 background-position: 1px 0px;
 }
@@ -925,6 +931,12 @@ padding-top: 1em;
 padding-bottom: 1em;
 border-bottom: 1px dotted #666666;
 line-height: 1em;
+}
+.newsarticle a:hover {
+color: #7b0073;		
+}
+.newsarticle a:link, a:active, a:visited {
+color: #7b7973;	
 }
 
 .newsarticlecredit {

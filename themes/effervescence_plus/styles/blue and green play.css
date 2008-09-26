@@ -922,13 +922,20 @@ margin-top: 0.2em;
 .menu ul li {
 padding-left: 20px;
 padding-bottom: 3px;
-background-image: url(images/arrow_right.gif);
+background-image: url(../images/arrow_right.png);
 background-repeat: no-repeat;
 background-position: 1px 0px;
 }
 .menu-active {
-	color: #002E5B;
+color: #002E5B;
 }
+.menu-active ul li {
+color: #002E5B;
+background-image: url(../images/dark_arrow_right.png);
+background-repeat: no-repeat;
+background-position: 1px 0px;
+}
+
 .submenu {
 list-style: none;
 margin-left: -25px;
