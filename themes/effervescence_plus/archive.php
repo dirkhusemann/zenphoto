@@ -58,8 +58,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 				<!-- Date List -->
 				<div id="archive"><p><?php echo gettext('Images By Date'); ?></p><?php printAllDates('archive', 'year', 'month', 'desc'); ?></div>
 				<div id="tag_cloud"><p><?php echo gettext('Popular Tags'); ?></p><?php printAllTagsAs('cloud', 'tags'); ?></div>
-				<?php if ($zenpage = getOption('zp_plugin_zenpage')) { ?>
-					<hr />
+					<?php if ($zenpage = getOption('zp_plugin_zenpage')) { ?>
 					<?php if(function_exists("printNewsArchive")) { ?>
 						<div id="archive_news"><p><?php echo('News archive') ?></p><?php printNewsArchive("archive");	?></div>
 					<?php }	?>

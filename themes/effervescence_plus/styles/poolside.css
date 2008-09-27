@@ -808,6 +808,8 @@ width:150px;
 ---------------------------- */
 #archive{
 	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
 }
 #archive p {
 	padding:10px 0;
@@ -816,10 +818,10 @@ width:150px;
 	font-size: 18px;
 }
 ul.archive {
+	text-align: center;
 	padding:0;
 	list-style:none;
-	width:300px;
-	margin: 0 auto;
+	width:500px;
 }
 ul.archive .year {
 	text-align: center;
@@ -829,6 +831,7 @@ ul.archive .year {
 	color: #fff;
 }
 ul.archive .month {
+	text-align: center;
 	font-size: 14px;
 	list-style:none;
 	border-top:2px solid white;
@@ -839,8 +842,10 @@ ul.archive .month {
 	padding-bottom: 5px;
 }
 #tag_cloud ul li {
+	text-align: center;
 	display: inline;
 	list-style-type: none;
+	line-height: 2em;
 }
 #tag_cloud p {
 	padding:10px 0;
@@ -855,9 +860,11 @@ height: 100%;
 float: left;
 margin-top: 2em;
 margin-bottom: 2em;
+margin-left: 0;
+margin-right: 0;
 padding-top: 0.8em;
-padding-left: 3.6em;
-padding-right: 0em;
+padding-left: 45px;
+padding-right: 45px;
 font-size: 1.2em;
 line-height: 1.6em; 
 }
@@ -869,12 +876,6 @@ font-size: 1.2em;
 font-size: 1.4em;
 margin-left: 0px;
 margin-bottom: 0.5em;
-}
-#content-left a:link {
-text-decoration:underline;
-}
-#content-left h3 a:link {
-text-decoration:none;
 }
 #content-left p {
 font-size: 1em;
@@ -921,8 +922,9 @@ background-image: url(../images/arrow_right.png);
 background-repeat: no-repeat;
 background-position: 1px 0px;
 }
-.menu-active {
+.menu ul li.menu-active {
 	color: #002E5B;
+background-image: none;
 }
 .submenu {
 list-style: none;
@@ -952,13 +954,19 @@ margin-bottom: 1em;
 #pagetext p {
 	line-height: 1em;
 }
-#content-left ul {
+#pagetext ul {
 	margin-left: 1em;
 	margin-bottom: 0.5em;
 }
-#content-left ul li {
+#pagetext ul li {
 	margin-left: 1em;
 	margin-bottom: 0.5em;
+}
+#pagetext a:link {
+text-decoration:underline;
+}
+#pagetext h3 a:link {
+text-decoration:none;
 }
 /* News Articles
 ------------------------------ */
