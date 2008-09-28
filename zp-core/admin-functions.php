@@ -3,6 +3,9 @@
  * support functions for Admin
  * @package admin
  */
+
+// force UTF-8 Ø
+
 if (session_id() == '') session_start();
 
 $_zp_admin_ordered_taglist = NULL;
@@ -879,7 +882,7 @@ function printAlbumEditForm($index, $album) {
 	echo "</td>";
 	echo '</tr>';
 	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Album Description:")." </td> <td>";
-	print_language_string_list($album->get('desc'), $prefix."albumdesc", true);
+	print_language_string_list($album->get('desc'), $prefix."albumdesc", true, NULL, 'texteditor');
 	echo "</td></tr>";
 	echo "\n<tr><td align=\"right\" value=\"top\">".gettext("Album guest user:").'</td>';
 	echo "\n<td><input type='text' size='40' name='".$prefix."albumuser' value='".$album->getUser()."' /></td></tr>";
@@ -1699,8 +1702,9 @@ $_zp_current_locale = NULL;
  * @param bool $textbox set to true for a textbox rather than a text field
  * @param string $locale optional locale of the translation desired
  */
-function print_language_string_list($dbstring, $name, $textbox=false, $locale=NULL) {
+function print_language_string_list($dbstring, $name, $textbox=false, $locale=NULL, $edit='') {
 	global $_zp_languages, $_zp_active_languages, $_zp_current_locale;
+	if (!empty($edit)) $edit = ' class="'.$edit.'"';
 	if (is_null($locale)) {
 		if (is_null($_zp_current_locale)) {
 			$_zp_current_locale = getUserLocale();
@@ -1731,7 +1735,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 					$empty = false;
 					echo '<li><label for="'.$name.'_'.$key.'">';
 					if ($textbox) {
-						echo '<textarea name="'.$name.'_'.$key.'" cols="60"	rows="6" style="width:271px;">'.$string.'</textarea>';
+						echo '<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="60"	rows="6" style="width:271px;">'.$string.'</textarea>';
 					} else {
 						echo '<input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.$string.'" size="35" style="width:271px;"/>';
 					}
@@ -1747,7 +1751,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 		foreach ($emptylang as $key=>$lang) {
 			echo '<li><label for="'.$name.'_'.$key.'">';
 			if ($textbox) {
-				echo '<textarea name="'.$name.'_'.$key.'" cols="60"	rows="6" style="width:271px;"></textarea>';
+				echo '<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="60"	rows="6" style="width:271px;"></textarea>';
 			} else {
 				echo '<input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="" size="35" style="width:271px;"/>';
 			}
@@ -1763,7 +1767,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 			$dbstring = array_shift($strings);
 		}
 		if ($textbox) {
-			echo '<textarea name="'.$name.'_'.$locale.'" cols="40"	rows="6" style="width:271px;">'.$dbstring.'</textarea>';
+			echo '<textarea name="'.$name.'_'.$locale.'"'.$edit.' cols="40"	rows="6" style="width:271px;">'.$dbstring.'</textarea>';
 		} else {
 			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="40" style="width:271px;"/>';
 		}

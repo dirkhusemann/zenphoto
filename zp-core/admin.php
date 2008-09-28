@@ -640,7 +640,7 @@ if ($allimagecount) {
 
 			<tr>
 				<td align="right" valign="top"><?php echo gettext("Description:"); ?></td>
-				<td><?php print_language_string_list($image->get('desc'), $currentimage.'-desc', true); ?>
+				<td><?php print_language_string_list($image->get('desc'), $currentimage.'-desc', true, NULL, 'texteditor'); ?>
 				</td>
 				<td style="padding-left: 1em;">
 				<p style="margin-top: 0; margin-bottom: 1em;"><?php
