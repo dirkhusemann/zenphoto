@@ -4,10 +4,16 @@
  * @package admin
  */
 
+// force UTF-8 Ø
+
 /* Don't put anything before this line! */
 define('OFFSET_PATH', 1);
 require_once('admin-functions.php');
 require_once("admin-sortable.php");
+
+if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
+	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
+}
 
 if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	if (($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) || ($_zp_loggedin == NO_RIGHTS)) { // user/password set required.
@@ -370,7 +376,7 @@ if (!zp_loggedin()) {
 if ($page == "edit") {
 
 /** SINGLE ALBUM ********************************************************************/
-
+if (file_exists('js/editor_config.js')) require_once('js/editor_config.js');	
 define('IMAGES_PER_PAGE', 10);
 
 if (isset($_GET['album']) && !isset($_GET['massedit'])) {
