@@ -561,8 +561,8 @@ function rewrite_get_album_image($albumvar, $imagevar) {
 		}
 	}
 	// No mod_rewrite, or no album, etc. Just send back the query args.
-	$ralbum = isset($_GET[$albumvar]) ? $_GET[$albumvar] : null;
-	$rimage = isset($_GET[$imagevar]) ? $_GET[$imagevar] : null;
+	$ralbum = isset($_GET[$albumvar]) ? sanitize($_GET[$albumvar],0) : null;
+	$rimage = isset($_GET[$imagevar]) ? sanitize($_GET[$imagevar],0) : null;
 	return array($ralbum, $rimage);
 }
 
