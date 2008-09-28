@@ -885,7 +885,7 @@ function printAlbumEditForm($index, $album) {
 	print_language_string_list($album->get('desc'), $prefix."albumdesc", true, NULL, 'texteditor');
 	echo "</td></tr>";
 	echo "\n<tr><td align=\"right\" value=\"top\">".gettext("Album guest user:").'</td>';
-	echo "\n<td><input type='text' size='40' name='".$prefix."albumuser' value='".$album->getUser()."' /></td></tr>";
+	echo "\n<td><input type='text' size='48' name='".$prefix."albumuser' value='".$album->getUser()."' /></td></tr>";
 	echo "\n<tr>";
 	echo "\n<td align=\"right\">".gettext("Album password:")." <br/>".gettext("repeat:")." </td>";
 	echo "\n<td>";
@@ -895,9 +895,9 @@ function printAlbumEditForm($index, $album) {
 		$x = '          ';
 	}
 
-	echo "\n<input type=\"password\" size=\"40\" name=\"".$prefix."albumpass\"";
+	echo "\n<input type=\"password\" size=\"48\" name=\"".$prefix."albumpass\"";
 	echo "\nvalue=\"" . $x . '" /><br/>';
-	echo "\n<input type=\"password\" size=\"40\" name=\"".$prefix."albumpass_2\"";
+	echo "\n<input type=\"password\" size=\"48\" name=\"".$prefix."albumpass_2\"";
 	echo "\nvalue=\"" . $x . '" />';
 	echo "\n</td>";
 	echo "\n</tr>";
@@ -910,7 +910,7 @@ function printAlbumEditForm($index, $album) {
 		$d = "";
 	}
 
-	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Date:")." </td> <td width = \"400\"><input type=\"text\" name=\"".$prefix."albumdate\" value=\"" . $d . '" /></td></tr>';
+	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Date:")." </td> <td width = \"400\"><input type=\"text\" size='48' name=\"".$prefix."albumdate\" value=\"" . $d . '" /></td></tr>';
 	echo "\n<tr><td align=\"right\" valign=\"top\">".gettext("Location:")." </td> <td>";
 	print_language_string_list($album->get('place'), $prefix."albumplace", false);
 	echo "</td></tr>";
@@ -1734,12 +1734,13 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 					unset($emptylang[$key]);
 					$empty = false;
 					echo '<li><label for="'.$name.'_'.$key.'">';
+					echo $lang;
 					if ($textbox) {
-						echo '<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="60"	rows="6" style="width:271px;">'.$string.'</textarea>';
+						echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="50"	rows="6">'.$string.'</textarea>';
 					} else {
-						echo '<input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.$string.'" size="35" style="width:271px;"/>';
+						echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.$string.'" size="48" />';
 					}
-					echo ' '.$lang."</label></li>\n";
+					echo "</label></li>\n";
 				}
 			}
 		}
@@ -1750,12 +1751,13 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 		}
 		foreach ($emptylang as $key=>$lang) {
 			echo '<li><label for="'.$name.'_'.$key.'">';
+			echo $lang;
 			if ($textbox) {
-				echo '<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="60"	rows="6" style="width:271px;"></textarea>';
+				echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="50"	rows="6"></textarea>';
 			} else {
-				echo '<input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="" size="35" style="width:271px;"/>';
+				echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="" size="48" />';
 			}
-			echo ' '.$lang."</label></li>\n";
+			echo "</label></li>\n";
 
 		}
 		echo "</ul>\n";
@@ -1767,9 +1769,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 			$dbstring = array_shift($strings);
 		}
 		if ($textbox) {
-			echo '<textarea name="'.$name.'_'.$locale.'"'.$edit.' cols="40"	rows="6" style="width:271px;">'.$dbstring.'</textarea>';
+			echo '<textarea name="'.$name.'_'.$locale.'"'.$edit.' cols="50"	rows="6">'.$dbstring.'</textarea>';
 		} else {
-			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="40" style="width:271px;"/>';
+			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="48" />';
 		}
 	}
 }

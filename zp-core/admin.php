@@ -769,8 +769,7 @@ if ($allimagecount) {
 
 			<tr class="imageextrainfo" style="display: none;">
 				<td align="right" valign="top"><?php echo gettext("Date:"); ?></td>
-				<td><input type="text" size="44" style="width: 271px"
-					name="<?php echo $currentimage; ?>-date"
+				<td><input type="text" size="48" name="<?php echo $currentimage; ?>-date"
 					value="<?php $d=$image->getDateTime(); if ($d!='0000-00-00 00:00:00') { echo $d; } ?>" /></td>
 			</tr>
 

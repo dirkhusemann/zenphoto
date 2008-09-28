@@ -856,8 +856,8 @@ ul.pagelist li.current {
 .language_string_list {
 	border: 1px solid #ccc;
 	list-style: none;
-	height: 4em;
-	width: 33em;
+	height: 3em;
+	width: 26em;
 	overflow: auto;
 	background-color: white;
 }
@@ -865,6 +865,7 @@ ul.pagelist li.current {
 .language_string_list,.language_string_list li {
 	margin: 0;
 	padding: 0;
+	padding-bottom: 5px;
 	border-bottom: 1px dotted #C6D880;
 }
 
@@ -886,8 +887,8 @@ ul.pagelist li.current {
 .language_string_listbox {
 	border: 1px solid #ccc;
 	list-style: none;
-	height: 9em;
-	width: 33em;
+	height: 14em;
+	width: 26em;
 	overflow: auto;
 	background-color: white;
 }
@@ -895,6 +896,7 @@ ul.pagelist li.current {
 .language_string_listbox,.language_string_listbox li {
 	margin: 0;
 	padding: 0;
+	padding-bottom: 5px;
 	border-bottom: 1px dotted #C6D880;
 }
 
