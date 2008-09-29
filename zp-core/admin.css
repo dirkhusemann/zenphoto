@@ -857,7 +857,7 @@ ul.pagelist li.current {
 .language_string_list {
 	border: 1px solid #ccc;
 	list-style: none;
-	height: 3em;
+	height: 5.5em;
 	width: 26em;
 	overflow: auto;
 	background-color: white;

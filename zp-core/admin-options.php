@@ -497,7 +497,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?> width=150>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Username:"); ?></td>
 		<td width=280>
-		<input type="text" size="40" name="<?php echo $id ?>-adminuser" value="" />
+		<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminuser" value="" />
 		</td>
 		<td></td>
 	</tr>
@@ -507,9 +507,9 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Password:"); ?><br />
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?></td>
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?> width=280><?php $x = $user['pass']; if (!empty($x)) { $x = '          '; } ?>
-		<input type="password" size="40" name="<?php echo $id ?>-adminpass"
+		<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass"
 			value="<?php echo $x; ?>" /><br />
-		<input type="password" size="40" name="<?php echo $id ?>-adminpass_2"
+		<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass_2"
 			value="<?php echo $x; ?>" /></td>
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 		<table class="checkboxes" >
@@ -580,10 +580,10 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 			<br />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("email:"); ?></td>
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?> width=280>
-			<input type="text" size="40" name="<?php echo $id ?>-admin_name"
+			<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_name"
 			value="<?php echo $user['name'];?>" /> <br />
 		<br />
-		<input type="text" size="40" name="<?php echo $id ?>-admin_email"
+		<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_email"
 			value="<?php echo $user['email'];?>" /></td>
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 		<table>
@@ -726,7 +726,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	</tr>
 	<tr>
 		<td><?php echo gettext("Gallery guest user:"); ?>    </td>
-		<td><input type="text" size="40" name="gallery_user" value="<?php echo htmlspecialchars(getOption('gallery_user')); ?>" />		</td>
+		<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallery_user" value="<?php echo htmlspecialchars(getOption('gallery_user')); ?>" />		</td>
 		<td><?php echo gettext("User ID for the gallery guest user") ?></td>
 	</tr>
 	<tr>
@@ -735,9 +735,9 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		</td>
 		<td>
 		<?php $x = getOption('gallery_password'); if (!empty($x)) { $x = '          '; } ?>
-		<input type="password" size="40" name="gallerypass"
+		<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallerypass"
 			value="<?php echo $x; ?>" /><br />
-		<input type="password" size="40" name="gallerypass_2"
+		<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallerypass_2"
 			value="<?php echo $x; ?>" /></td>
 		<td><?php echo gettext("Master password for the gallery. If this is set, visitors must know this password to view the gallery."); ?></td>
 	</tr>
@@ -750,7 +750,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	</tr>
 	<tr>
 		<td><?php echo gettext("Search guest user:"); ?>    </td>
-		<td><input type="text" size="40" name="search_user" value="<?php echo htmlspecialchars(getOption('search_user')); ?>" />		</td>
+		<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="search_user" value="<?php echo htmlspecialchars(getOption('search_user')); ?>" />		</td>
 		<td><?php echo gettext("User ID for the search guest user") ?></td>
 	</tr>
 	<tr>
@@ -758,9 +758,9 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?>
 		</td>
 		<td><?php $x = getOption('search_password'); if (!empty($x)) { $x = '          '; } ?>
-		<input type="password" size="40" name="searchpass"
+		<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="searchpass"
 			value="<?php echo $x; ?>" /><br />
-		<input type="password" size="40" name="searchpass_2"
+		<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="searchpass_2"
 			value="<?php echo $x; ?>" /></td>
 		<td><?php echo gettext("Password for the the search guest user. If this is set, visitors must know this password to view search results."); ?></td>
 	</tr>
@@ -780,20 +780,20 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	</tr>
 	<tr>
 		<td><?php echo gettext("Website url:"); ?></td>
-		<td><input type="text" size="40" name="website_url"
+		<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="website_url"
 			value="<?php echo htmlspecialchars(getOption('website_url'));?>" /></td>
 		<td><?php echo gettext("This is used to link back to your main site, but your theme must	support it."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Server protocol:"); ?></td>
-		<td><input type="text" size="40" name="server_protocol"
+		<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="server_protocol"
 			value="<?php echo htmlspecialchars(getOption('server_protocol'));?>" /></td>
 		<td><?php echo gettext("If you're running a secure server, change this to"); ?> <em>https</em>
 		<?php echo gettext("(Most people will leave this alone.)"); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Time offset (hours):"); ?></td>
-		<td><input type="text" size="40" name="time_offset"
+		<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="time_offset"
 			value="<?php echo htmlspecialchars(getOption('time_offset'));?>" /></td>
 		<td><?php echo gettext("If you're in a different time zone from your server, set the	offset in hours."); ?></td>
 	</tr>
@@ -805,7 +805,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	</tr>
 	<tr>
 		<td><?php echo gettext("Mod_rewrite Image suffix:"); ?></td>
-		<td><input type="text" size="40" name="mod_rewrite_image_suffix"
+		<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="mod_rewrite_image_suffix"
 			value="<?php echo htmlspecialchars(getOption('mod_rewrite_image_suffix'));?>" /></td>
 		<td><?php echo gettext("If <em>mod_rewrite</em> is checked above, zenphoto will appended	this to the end (helps search engines). Examples: <em>.html, .php,	/view</em>, etc."); ?></td>
 	</tr>
@@ -889,7 +889,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 			?>
 			</select><br />
 			<div id="customTextBox" class="customText" style="display:<?php echo $dsp; ?>">
-			<input type="text" size="40" name="date_format"
+			<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="date_format"
 			value="<?php echo htmlspecialchars(getOption('date_format'));?>" />
 			</div>
 			</td>
@@ -904,20 +904,20 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	</tr>
 	<tr>
 		<td><?php echo gettext("Allowed tags:"); ?></td>
-		<td><textarea name="allowed_tags" cols="40" rows="10"><?php echo htmlspecialchars(getOption('allowed_tags')); ?></textarea>
+		<td><textarea name="allowed_tags" style="width: 342px" rows="10"><?php echo htmlspecialchars(getOption('allowed_tags')); ?></textarea>
 		</td>
 		<td><?php echo gettext("Tags and attributes allowed in comments, descriptions, and other fields."); ?><br />
 		<?php echo gettext("Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Number of RSS feed items:"); ?></td>
-		<td><input type="text" size="40" name="feed_items"
+		<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="feed_items"
 			value="<?php echo htmlspecialchars(getOption('feed_items'));?>" /></td>
 		<td><?php echo gettext("The number of new images/albums/comments you want to appear in your site's RSS feed."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Size of RSS feed images:"); ?></td>
-		<td><input type="text" size="40" name="feed_imagesize"
+		<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="feed_imagesize"
 			value="<?php echo htmlspecialchars(getOption('feed_imagesize'));?>" /></td>
 		<td><?php echo gettext("The size you want your images to have in your site's RSS feed."); ?></td>
 	</tr>
@@ -1037,19 +1037,19 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	</tr>
 	<tr>
 		<td width="175"><?php echo gettext("Image quality:"); ?></td>
-		<td width="200"><input type="text" size="40" name="image_quality"
+		<td width="200"><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="image_quality"
 			value="<?php echo htmlspecialchars(getOption('image_quality'));?>" /></td>
 		<td><?php echo gettext("JPEG Compression quality for all images."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Thumb quality:"); ?></td>
-		<td><input type="text" size="40" name="thumb_quality"
+		<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="thumb_quality"
 			value="<?php echo htmlspecialchars(getOption('thumb_quality'));?>" /></td>
 		<td><?php echo gettext("JPEG Compression quality for all thumbnails."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Allow upscale:"); ?></td>
-		<td><input type="checkbox" size="40" name="image_allow_upscale"
+		<td><input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="image_allow_upscale"
 			value="1"
 			<?php echo checked('1', getOption('image_allow_upscale')); ?> /></td>
 		<td><?php echo gettext("Allow images to be scaled up to the requested size. This could	result in loss of quality, so it's off by default."); ?></td>
@@ -1107,7 +1107,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	</tr>
 	<tr>
 		<td><?php echo gettext("Full image quality:"); ?></td>
-		<td><input type="text" size="40" name="full_image_quality"
+		<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="full_image_quality"
 			value="<?php echo htmlspecialchars(getOption('full_image_quality'));?>" /></td>
 		<td><?php echo gettext("Controls compression on full images."); ?></td>
 	</tr>
@@ -1306,50 +1306,50 @@ if (!empty($_REQUEST['themealbum'])) {
 	</tr>
 	<tr>
 		<td style='width: 175px'><?php echo gettext("Albums per page:"); ?></td>
-		<td><input type="text" size="40" name="albums_per_page"
+		<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="albums_per_page"
 			value="<?php echo getThemeOption($album, 'albums_per_page');?>" /></td>
 		<td><?php echo gettext("Controls the number of albums on a page. You might need to change	this after switching themes to make it look better."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Images per page:"); ?></td>
-		<td><input type="text" size="40" name="images_per_page"
+		<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="images_per_page"
 			value="<?php echo getThemeOption($album, 'images_per_page');?>" /></td>
 		<td><?php echo gettext("Controls the number of images on a page. You might need to change	this after switching themes to make it look better."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Thumb size:"); ?></td>
-		<td><input type="text" size="40" name="thumb_size"
+		<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="thumb_size"
 			value="<?php echo getThemeOption($album, 'thumb_size');?>" /></td>
 		<td><?php echo gettext("Default thumbnail size and scale."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Crop thumbnails:"); ?></td>
-		<td><input type="checkbox" size="40" name="thumb_crop" value="1"
+		<td><input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="thumb_crop" value="1"
 		<?php echo checked('1', getThemeOption($album, 'thumb_crop')); ?> /></td>
 		<td><?php echo gettext("If checked the thumbnail will be a centered portion of the	image with the given width and height after being resized to <em>thumb	size</em> (by shortest side).").' ';
 		echo gettext("Otherwise, it will be the full image resized to <em>thumb size</em> (by shortest side)."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Crop thumbnail width:"); ?></td>
-		<td><input type="text" size="40" name="thumb_crop_width"
+		<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="thumb_crop_width"
 			value="<?php echo getThemeOption($album, 'thumb_crop_width');?>" /></td>
 		<td><?php echo gettext("The <em>thumb crop width</em> is the maximum width when height is the shortest side"); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Crop thumbnail height:"); ?></td>
-		<td><input type="text" size="40" name="thumb_crop_height"
+		<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="thumb_crop_height"
 			value="<?php echo getThemeOption($album, 'thumb_crop_height');?>" /></td>
 		<td><?php echo gettext("The <em>thumb crop height</em> is the maximum height when width is the shortest side"); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Image size:"); ?></td>
-		<td><input type="text" size="40" name="image_size"
+		<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="image_size"
 			value="<?php echo getThemeOption($album, 'image_size');?>" /></td>
 		<td><?php echo gettext("Default image display width."); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Images size is longest size:"); ?></td>
-		<td><input type="checkbox" size="40" name="image_use_longest_side"
+		<td><input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="image_use_longest_side"
 			value="1"
 			<?php echo checked('1', getThemeOption($album, 'image_use_longest_side')); ?> /></td>
 		<td><?php echo gettext("If this is checked the longest side of the image will be <em>image size</em>.").' ';

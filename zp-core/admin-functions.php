@@ -11,7 +11,8 @@ if (session_id() == '') session_start();
 $_zp_admin_ordered_taglist = NULL;
 $_zp_admin_LC_taglist = NULL;
 $_zp_admin_album_list = null;
-
+define('TEXTAREA_COLUMNS', 50);
+define('TEXT_INPUT_SIZE', 48);
 require_once("class-load.php");
 require_once("functions.php");
 require_once("lib-seo.php"); // keep the function separate for easy modification by site admins
@@ -661,7 +662,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 					if ($multilingual || $type) {
 						print_language_string_list($v, $key, $type, NULL, $editor);
 					} else {
-						echo '<input type="text" size="40" name="' . $key . '" value="' . html_encode($v) . '">' . "\n";
+						echo '<input type="text" size="40" name="' . $key . '" style="width: 338px" value="' . html_encode($v) . '">' . "\n";
 					}
 					echo '</td>' . "\n";
 					break;
@@ -1742,9 +1743,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 					echo '<li><label for="'.$name.'_'.$key.'">';
 					echo $lang;
 					if ($textbox) {
-						echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="50"	rows="6">'.$string.'</textarea>';
+						echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.TEXTAREA_COLUMNS.'"	style="width: 310px" rows="6">'.$string.'</textarea>';
 					} else {
-						echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.$string.'" size="48" />';
+						echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.$string.'" style="width: 310px" size="'.TEXT_INPUT_SIZE.'" />';
 					}
 					echo "</label></li>\n";
 				}
@@ -1759,9 +1760,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 			echo '<li><label for="'.$name.'_'.$key.'">';
 			echo $lang;
 			if ($textbox) {
-				echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="50"	rows="6"></textarea>';
+				echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.TEXTAREA_COLUMNS.'"	style="width: 310px" rows="6"></textarea>';
 			} else {
-				echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="" size="48" />';
+				echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="" style="width: 310px" size="'.TEXT_INPUT_SIZE.'" />';
 			}
 			echo "</label></li>\n";
 
@@ -1775,9 +1776,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 			$dbstring = array_shift($strings);
 		}
 		if ($textbox) {
-			echo '<textarea name="'.$name.'_'.$locale.'"'.$edit.' cols="50"	rows="6">'.$dbstring.'</textarea>';
+			echo '<textarea name="'.$name.'_'.$locale.'"'.$edit.' cols="'.TEXTAREA_COLUMNS.'"	style="width: 342px" rows="6">'.$dbstring.'</textarea>';
 		} else {
-			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="48" />';
+			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" style="width: 338px" size="'.TEXT_INPUT_SIZE.'" />';
 		}
 	}
 }
