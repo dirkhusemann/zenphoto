@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zenphoto 1.2 svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-24 19:20+0100\n"
-"PO-Revision-Date: 2008-09-24 19:52+0100\n"
+"POT-Creation-Date: 2008-09-29 22:03+0100\n"
+"PO-Revision-Date: 2008-09-29 22:03+0100\n"
 "Last-Translator: acrylian <wartgart@gmx.net>\n"
 "Language-Team: Malte Müller (acrylian)\n"
 "MIME-Version: 1.0\n"
@@ -59,7 +59,7 @@ msgid "Page: %s"
 msgstr "Seite: %s"
 
 #: zp-trunk/themes/default/404.php:40
-#: zp-trunk/themes/default/album.php:60
+#: zp-trunk/themes/default/album.php:59
 #: zp-trunk/themes/default/archive.php:37
 #: zp-trunk/themes/default/image.php:139
 #: zp-trunk/themes/default/index.php:45
@@ -111,7 +111,7 @@ msgstr "weiter"
 msgid "<strong>Tags:</strong>"
 msgstr "<strong>Schlagworte:</strong>"
 
-#: zp-trunk/themes/default/album.php:54
+#: zp-trunk/themes/default/album.php:53
 #: zp-trunk/themes/default/image.php:51
 #: zp-trunk/themes/default/search.php:65
 #: zp-trunk/themes/effervescence_plus/album.php:231
@@ -119,11 +119,11 @@ msgstr "<strong>Schlagworte:</strong>"
 msgid "View Slideshow"
 msgstr "Diaschau ansehen"
 
-#: zp-trunk/themes/default/album.php:59
+#: zp-trunk/themes/default/album.php:58
 msgid "Album RSS"
 msgstr "Album-RSS"
 
-#: zp-trunk/themes/default/album.php:59
+#: zp-trunk/themes/default/album.php:58
 #: zp-trunk/themes/default/archive.php:6
 #: zp-trunk/themes/default/archive.php:20
 #: zp-trunk/themes/default/image.php:138
@@ -459,6 +459,10 @@ msgstr "1mal angesehen"
 #, php-format
 msgid "%u hits on this image"
 msgstr "%umal angesehen"
+
+#: zp-trunk/themes/effervescence_plus/indexpage.php:10
+msgid "zenphoto gallery"
+msgstr "Zenphoto-Galerie"
 
 #: zp-trunk/themes/effervescence_plus/indexpage.php:47
 msgid "Picture of the day"
@@ -1029,9 +1033,9 @@ msgstr "Fertig: Insgesamt %u  Bilder."
 
 #: zp-trunk/zp-core/admin-cache-images.php:88
 #: zp-trunk/zp-core/admin-comments.php:89
-#: zp-trunk/zp-core/admin.php:417
-#: zp-trunk/zp-core/admin.php:818
-#: zp-trunk/zp-core/admin.php:865
+#: zp-trunk/zp-core/admin.php:422
+#: zp-trunk/zp-core/admin.php:822
+#: zp-trunk/zp-core/admin.php:869
 msgid "Back"
 msgstr "Zurück"
 
@@ -1060,13 +1064,13 @@ msgid "Comment:"
 msgstr "Kommentar:"
 
 #: zp-trunk/zp-core/admin-comments.php:125
-#: zp-trunk/zp-core/admin-options.php:642
-#: zp-trunk/zp-core/admin-options.php:701
-#: zp-trunk/zp-core/admin-options.php:1000
-#: zp-trunk/zp-core/admin-options.php:1148
-#: zp-trunk/zp-core/admin-options.php:1221
-#: zp-trunk/zp-core/admin-options.php:1400
-#: zp-trunk/zp-core/admin-options.php:1453
+#: zp-trunk/zp-core/admin-options.php:644
+#: zp-trunk/zp-core/admin-options.php:704
+#: zp-trunk/zp-core/admin-options.php:1003
+#: zp-trunk/zp-core/admin-options.php:1151
+#: zp-trunk/zp-core/admin-options.php:1224
+#: zp-trunk/zp-core/admin-options.php:1403
+#: zp-trunk/zp-core/admin-options.php:1456
 #: zp-trunk/zp-core/admin-plugins.php:71
 #: zp-trunk/zp-core/admin-plugins.php:166
 msgid "save"
@@ -1126,8 +1130,8 @@ msgstr "Spam"
 
 #: zp-trunk/zp-core/admin-comments.php:196
 #: zp-trunk/zp-core/admin-comments.php:326
-#: zp-trunk/zp-core/admin.php:533
-#: zp-trunk/zp-core/admin.php:951
+#: zp-trunk/zp-core/admin.php:538
+#: zp-trunk/zp-core/admin.php:955
 msgid "Delete"
 msgstr "Löschen"
 
@@ -1136,21 +1140,21 @@ msgstr "Löschen"
 #: zp-trunk/zp-core/admin-comments.php:245
 #: zp-trunk/zp-core/admin-comments.php:260
 #: zp-trunk/zp-core/admin-comments.php:276
-#: zp-trunk/zp-core/admin.php:1044
-#: zp-trunk/zp-core/admin.php:1047
-#: zp-trunk/zp-core/admin.php:1062
-#: zp-trunk/zp-core/admin.php:1077
-#: zp-trunk/zp-core/admin.php:1093
+#: zp-trunk/zp-core/admin.php:1048
+#: zp-trunk/zp-core/admin.php:1051
+#: zp-trunk/zp-core/admin.php:1066
+#: zp-trunk/zp-core/admin.php:1081
+#: zp-trunk/zp-core/admin.php:1097
 msgid "database error"
 msgstr "Datenbankfehler"
 
 #: zp-trunk/zp-core/admin-comments.php:258
-#: zp-trunk/zp-core/admin.php:1075
+#: zp-trunk/zp-core/admin.php:1079
 msgid "[news]"
 msgstr "[Artikel]"
 
 #: zp-trunk/zp-core/admin-comments.php:274
-#: zp-trunk/zp-core/admin.php:1091
+#: zp-trunk/zp-core/admin.php:1095
 msgid "[page]"
 msgstr "[Seite]"
 
@@ -1209,17 +1213,17 @@ msgid "Create in:"
 msgstr "Erstellt in:"
 
 #: zp-trunk/zp-core/admin-dynamic-album.php:138
-#: zp-trunk/zp-core/admin-functions.php:1119
+#: zp-trunk/zp-core/admin-functions.php:1130
 msgid "Thumbnail:"
 msgstr "Thumbnail:"
 
 #: zp-trunk/zp-core/admin-dynamic-album.php:144
-#: zp-trunk/zp-core/admin-functions.php:1132
+#: zp-trunk/zp-core/admin-functions.php:1143
 msgid "most recent"
 msgstr "neuesten"
 
 #: zp-trunk/zp-core/admin-dynamic-album.php:149
-#: zp-trunk/zp-core/admin-functions.php:1139
+#: zp-trunk/zp-core/admin-functions.php:1150
 msgid "randomly selected"
 msgstr "zufällig ausgewählt"
 
@@ -1228,43 +1232,43 @@ msgid "Search criteria:"
 msgstr "Suchkriterium:"
 
 #: zp-trunk/zp-core/admin-dynamic-album.php:178
-#: zp-trunk/zp-core/admin-options.php:946
+#: zp-trunk/zp-core/admin-options.php:949
 msgid "Search fields:"
 msgstr "Suchfelder:"
 
 #: zp-trunk/zp-core/admin-dynamic-album.php:183
-#: zp-trunk/zp-core/admin-functions.php:24
-#: zp-trunk/zp-core/admin-options.php:951
+#: zp-trunk/zp-core/admin-functions.php:28
+#: zp-trunk/zp-core/admin-options.php:954
 msgid "Title"
 msgstr "Titel"
 
 #: zp-trunk/zp-core/admin-dynamic-album.php:185
-#: zp-trunk/zp-core/admin-options.php:953
+#: zp-trunk/zp-core/admin-options.php:956
 msgid "Description"
 msgstr "Beschreibung"
 
 #: zp-trunk/zp-core/admin-dynamic-album.php:187
-#: zp-trunk/zp-core/admin-options.php:957
+#: zp-trunk/zp-core/admin-options.php:960
 msgid "Tags"
 msgstr "Schlagworte"
 
 #: zp-trunk/zp-core/admin-dynamic-album.php:194
-#: zp-trunk/zp-core/admin-options.php:964
+#: zp-trunk/zp-core/admin-options.php:967
 msgid "Location"
 msgstr "Ort"
 
 #: zp-trunk/zp-core/admin-dynamic-album.php:196
-#: zp-trunk/zp-core/admin-options.php:966
+#: zp-trunk/zp-core/admin-options.php:969
 msgid "City"
 msgstr "Stadt"
 
 #: zp-trunk/zp-core/admin-dynamic-album.php:200
-#: zp-trunk/zp-core/admin-options.php:970
+#: zp-trunk/zp-core/admin-options.php:973
 msgid "State"
 msgstr "Land"
 
 #: zp-trunk/zp-core/admin-dynamic-album.php:202
-#: zp-trunk/zp-core/admin-options.php:972
+#: zp-trunk/zp-core/admin-options.php:975
 msgid "Country"
 msgstr "Staat"
 
@@ -1272,1338 +1276,1335 @@ msgstr "Staat"
 msgid "Create the album"
 msgstr "Album erstellen"
 
-#: zp-trunk/zp-core/admin-functions.php:22
+#: zp-trunk/zp-core/admin-functions.php:26
 msgid "Filename"
 msgstr "Dateiname"
 
-#: zp-trunk/zp-core/admin-functions.php:23
+#: zp-trunk/zp-core/admin-functions.php:27
 msgid "Date"
 msgstr "Datum"
 
-#: zp-trunk/zp-core/admin-functions.php:25
+#: zp-trunk/zp-core/admin-functions.php:29
 msgid "ID"
 msgstr "ID"
 
-#: zp-trunk/zp-core/admin-functions.php:26
+#: zp-trunk/zp-core/admin-functions.php:30
 msgid "Filemtime"
 msgstr "Filemtime"
 
-#: zp-trunk/zp-core/admin-functions.php:178
+#: zp-trunk/zp-core/admin-functions.php:183
 msgid "A simpler web photo album"
 msgstr "Die einfachere Internetbildgalerie"
 
-#: zp-trunk/zp-core/admin-functions.php:180
+#: zp-trunk/zp-core/admin-functions.php:188
 msgid "Forum"
 msgstr "Forum"
 
-#: zp-trunk/zp-core/admin-functions.php:180
+#: zp-trunk/zp-core/admin-functions.php:188
 msgid "View Changelog"
 msgstr "Versionsänderungen ansehen"
 
-#: zp-trunk/zp-core/admin-functions.php:196
+#: zp-trunk/zp-core/admin-functions.php:204
 msgid "zenphoto administration"
 msgstr "Zenphoto-Verwaltung"
 
-#: zp-trunk/zp-core/admin-functions.php:371
+#: zp-trunk/zp-core/admin-functions.php:380
 msgid "There was an error logging in."
 msgstr "Es ist ein Fehler beim Anmelden aufgetreten."
 
-#: zp-trunk/zp-core/admin-functions.php:371
+#: zp-trunk/zp-core/admin-functions.php:380
 msgid "Check your username and password and try again."
 msgstr "Überprüfen Sie Ihren Benutzer und Ihr Passwort und versuchen Sie es erneut."
 
-#: zp-trunk/zp-core/admin-functions.php:374
+#: zp-trunk/zp-core/admin-functions.php:383
 msgid "A reset request has been sent."
 msgstr "Eine Reset-Anfrage wurde gesendet."
 
-#: zp-trunk/zp-core/admin-functions.php:382
+#: zp-trunk/zp-core/admin-functions.php:391
 msgid "Login"
 msgstr "Anmelden"
 
-#: zp-trunk/zp-core/admin-functions.php:383
+#: zp-trunk/zp-core/admin-functions.php:392
 msgid "Password"
 msgstr "Passwort"
 
-#: zp-trunk/zp-core/admin-functions.php:388
-msgid "*Enter"
-msgstr "*Geben Sie"
+#: zp-trunk/zp-core/admin-functions.php:397
+#, php-format
+msgid "*Enter %s to email a password reset."
+msgstr "*Geben Sie  %s ein, um einen Passwortreset per E-Mail anzufordern."
 
-#: zp-trunk/zp-core/admin-functions.php:391
-msgid "to email a password reset."
-msgstr "ein, um ein Passwortreset per E-Mail zu schicken."
-
-#: zp-trunk/zp-core/admin-functions.php:394
+#: zp-trunk/zp-core/admin-functions.php:400
 msgid "Log in"
 msgstr "Anmelden"
 
-#: zp-trunk/zp-core/admin-functions.php:415
+#: zp-trunk/zp-core/admin-functions.php:421
 #, php-format
 msgid "Logged in as %s"
 msgstr "Angemeldet als  %s"
 
-#: zp-trunk/zp-core/admin-functions.php:416
+#: zp-trunk/zp-core/admin-functions.php:422
 msgid "Log Out"
 msgstr "Abmelden"
 
-#: zp-trunk/zp-core/admin-functions.php:427
+#: zp-trunk/zp-core/admin-functions.php:433
 #, php-format
 msgid "View Gallery: %s"
 msgstr "Gallerie %s ansehen"
 
-#: zp-trunk/zp-core/admin-functions.php:429
+#: zp-trunk/zp-core/admin-functions.php:435
 msgid "View Gallery"
 msgstr "Galerie ansehen"
 
-#: zp-trunk/zp-core/admin-functions.php:448
+#: zp-trunk/zp-core/admin-functions.php:454
 msgid "overview"
 msgstr "Überblick"
 
-#: zp-trunk/zp-core/admin-functions.php:452
+#: zp-trunk/zp-core/admin-functions.php:458
 msgid "comments"
 msgstr "Kommentare"
 
-#: zp-trunk/zp-core/admin-functions.php:456
+#: zp-trunk/zp-core/admin-functions.php:462
 msgid "upload"
 msgstr "Hochladen"
 
-#: zp-trunk/zp-core/admin-functions.php:461
+#: zp-trunk/zp-core/admin-functions.php:467
 msgid "edit"
 msgstr "Bearbeiten"
 
-#: zp-trunk/zp-core/admin-functions.php:465
+#: zp-trunk/zp-core/admin-functions.php:471
 msgid "tags"
 msgstr "Schlagworte"
 
-#: zp-trunk/zp-core/admin-functions.php:468
+#: zp-trunk/zp-core/admin-functions.php:474
 msgid "options"
 msgstr "Einstellungen"
 
-#: zp-trunk/zp-core/admin-functions.php:471
+#: zp-trunk/zp-core/admin-functions.php:477
 msgid "themes"
 msgstr "Themes"
 
-#: zp-trunk/zp-core/admin-functions.php:475
+#: zp-trunk/zp-core/admin-functions.php:481
 msgid "plugins"
 msgstr "Plugins"
 
-#: zp-trunk/zp-core/admin-functions.php:519
+#: zp-trunk/zp-core/admin-functions.php:525
 msgid "Image"
 msgstr "Bild"
 
-#: zp-trunk/zp-core/admin-functions.php:521
-#: zp-trunk/zp-core/admin.php:463
+#: zp-trunk/zp-core/admin-functions.php:527
+#: zp-trunk/zp-core/admin.php:468
 msgid "Album"
 msgstr "Album"
 
-#: zp-trunk/zp-core/admin-functions.php:525
+#: zp-trunk/zp-core/admin-functions.php:531
 #, php-format
 msgid "%s failed to delete."
 msgstr "%s konnte nicht gelöscht werden."
 
-#: zp-trunk/zp-core/admin-functions.php:528
+#: zp-trunk/zp-core/admin-functions.php:534
 #, php-format
 msgid "%s deleted successfully."
 msgstr "%s erfolgreich gelöscht."
 
-#: zp-trunk/zp-core/admin-functions.php:849
-#: zp-trunk/zp-core/admin.php:989
+#: zp-trunk/zp-core/admin-functions.php:860
+#: zp-trunk/zp-core/admin.php:993
 msgid "Hitcounters have been reset"
 msgstr "Die Besucherzähler wurden zurückgesetzt"
 
-#: zp-trunk/zp-core/admin-functions.php:859
+#: zp-trunk/zp-core/admin-functions.php:870
 msgid "Album Title"
 msgstr "Albumtitle"
 
-#: zp-trunk/zp-core/admin-functions.php:867
+#: zp-trunk/zp-core/admin-functions.php:878
 #, php-format
 msgid "Hit counter: %u"
 msgstr "Besucherzähler: %u"
 
-#: zp-trunk/zp-core/admin-functions.php:873
-#: zp-trunk/zp-core/admin.php:649
+#: zp-trunk/zp-core/admin-functions.php:884
+#: zp-trunk/zp-core/admin.php:654
 #, php-format
 msgid "Rating: <strong>%u</strong>"
 msgstr "Bewertung: <strong>%u</strong>"
 
-#: zp-trunk/zp-core/admin-functions.php:874
-#: zp-trunk/zp-core/admin.php:643
-#: zp-trunk/zp-core/admin.php:649
+#: zp-trunk/zp-core/admin-functions.php:885
+#: zp-trunk/zp-core/admin.php:648
+#: zp-trunk/zp-core/admin.php:654
 msgid "Reset"
 msgstr "Zurücksetzen"
 
-#: zp-trunk/zp-core/admin-functions.php:876
-#: zp-trunk/zp-core/admin.php:651
+#: zp-trunk/zp-core/admin-functions.php:887
+#: zp-trunk/zp-core/admin.php:656
 msgid "Rating: Unrated"
 msgstr "Bewertung: Keine"
 
-#: zp-trunk/zp-core/admin-functions.php:880
+#: zp-trunk/zp-core/admin-functions.php:891
 msgid "Album Description:"
 msgstr "Albumbeschreibung:"
 
-#: zp-trunk/zp-core/admin-functions.php:883
+#: zp-trunk/zp-core/admin-functions.php:894
 msgid "Album guest user:"
 msgstr "Album-Gastbenutzer:"
 
-#: zp-trunk/zp-core/admin-functions.php:886
+#: zp-trunk/zp-core/admin-functions.php:897
 msgid "Album password:"
 msgstr "Albumpasswort:"
 
-#: zp-trunk/zp-core/admin-functions.php:886
+#: zp-trunk/zp-core/admin-functions.php:897
 msgid "repeat:"
 msgstr "Wiederholen:"
 
-#: zp-trunk/zp-core/admin-functions.php:900
+#: zp-trunk/zp-core/admin-functions.php:911
 msgid "Password hint:"
 msgstr "Passwort-Hinweis:"
 
-#: zp-trunk/zp-core/admin-functions.php:910
-#: zp-trunk/zp-core/admin.php:724
+#: zp-trunk/zp-core/admin-functions.php:921
+#: zp-trunk/zp-core/admin.php:729
 msgid "Location:"
 msgstr "Ort:"
 
-#: zp-trunk/zp-core/admin-functions.php:913
-#: zp-trunk/zp-core/admin.php:772
+#: zp-trunk/zp-core/admin-functions.php:924
+#: zp-trunk/zp-core/admin.php:776
 msgid "Custom data:"
 msgstr "Sonderfeld:"
 
-#: zp-trunk/zp-core/admin-functions.php:918
-#: zp-trunk/zp-core/admin-options.php:935
+#: zp-trunk/zp-core/admin-functions.php:929
+#: zp-trunk/zp-core/admin-options.php:938
 msgid "Manual"
 msgstr "Manuell"
 
-#: zp-trunk/zp-core/admin-functions.php:921
+#: zp-trunk/zp-core/admin-functions.php:932
 msgid "Sort subalbums by:"
 msgstr "Unteralbumsortierung: "
 
-#: zp-trunk/zp-core/admin-functions.php:930
+#: zp-trunk/zp-core/admin-functions.php:941
 msgid "gallery album sort order"
 msgstr "Gallerie-Album-Sortierung"
 
-#: zp-trunk/zp-core/admin-functions.php:932
+#: zp-trunk/zp-core/admin-functions.php:943
 msgid "parent album subalbum sort order"
 msgstr "Unteralbum-Sortierung des übergeordneten Albums"
 
-#: zp-trunk/zp-core/admin-functions.php:944
-#: zp-trunk/zp-core/admin-functions.php:979
-#: zp-trunk/zp-core/admin-options.php:942
-#: zp-trunk/zp-core/admin-options.php:1032
-#: zp-trunk/zp-core/admin.php:573
+#: zp-trunk/zp-core/admin-functions.php:955
+#: zp-trunk/zp-core/admin-functions.php:990
+#: zp-trunk/zp-core/admin-options.php:945
+#: zp-trunk/zp-core/admin-options.php:1035
+#: zp-trunk/zp-core/admin.php:578
 msgid "Descending"
 msgstr "Absteigend"
 
-#: zp-trunk/zp-core/admin-functions.php:956
-#: zp-trunk/zp-core/admin-options.php:1027
+#: zp-trunk/zp-core/admin-functions.php:967
+#: zp-trunk/zp-core/admin-options.php:1030
 msgid "Sort images by:"
 msgstr "Bildersortierung: "
 
-#: zp-trunk/zp-core/admin-functions.php:965
+#: zp-trunk/zp-core/admin-functions.php:976
 msgid "gallery default image sort order"
 msgstr "Gallerie-Standardbildsortierung"
 
-#: zp-trunk/zp-core/admin-functions.php:967
+#: zp-trunk/zp-core/admin-functions.php:978
 msgid "parent album image sort order"
 msgstr "Bildsortierung des übergeordneten Albums"
 
-#: zp-trunk/zp-core/admin-functions.php:995
-#: zp-trunk/zp-core/admin.php:627
+#: zp-trunk/zp-core/admin-functions.php:1006
+#: zp-trunk/zp-core/admin.php:632
 msgid "Allow Comments"
 msgstr "Kommentare erlauben"
 
-#: zp-trunk/zp-core/admin-functions.php:1001
-#: zp-trunk/zp-core/admin-functions.php:1356
+#: zp-trunk/zp-core/admin-functions.php:1012
+#: zp-trunk/zp-core/admin-functions.php:1367
 msgid "Published"
 msgstr "Veröffentlicht"
 
-#: zp-trunk/zp-core/admin-functions.php:1005
+#: zp-trunk/zp-core/admin-functions.php:1016
 msgid "Album theme:"
 msgstr "Albumtheme:"
 
-#: zp-trunk/zp-core/admin-functions.php:1046
-#: zp-trunk/zp-core/admin.php:660
+#: zp-trunk/zp-core/admin-functions.php:1057
+#: zp-trunk/zp-core/admin.php:665
 msgid "Move"
 msgstr "Verschieben"
 
-#: zp-trunk/zp-core/admin-functions.php:1051
-#: zp-trunk/zp-core/admin.php:665
+#: zp-trunk/zp-core/admin-functions.php:1062
+#: zp-trunk/zp-core/admin.php:670
 msgid "Copy"
 msgstr "Kopieren"
 
-#: zp-trunk/zp-core/admin-functions.php:1056
+#: zp-trunk/zp-core/admin-functions.php:1067
 msgid "Rename Folder"
 msgstr "Ordner umbenennen"
 
-#: zp-trunk/zp-core/admin-functions.php:1061
-#: zp-trunk/zp-core/admin-functions.php:1088
-#: zp-trunk/zp-core/admin.php:678
-#: zp-trunk/zp-core/admin.php:706
+#: zp-trunk/zp-core/admin-functions.php:1072
+#: zp-trunk/zp-core/admin-functions.php:1099
+#: zp-trunk/zp-core/admin.php:683
+#: zp-trunk/zp-core/admin.php:711
 msgid "to"
 msgstr "nach"
 
-#: zp-trunk/zp-core/admin-functions.php:1084
-#: zp-trunk/zp-core/admin-functions.php:1090
-#: zp-trunk/zp-core/admin.php:702
-#: zp-trunk/zp-core/admin.php:710
-#: zp-trunk/zp-core/admin.php:717
+#: zp-trunk/zp-core/admin-functions.php:1095
+#: zp-trunk/zp-core/admin-functions.php:1101
+#: zp-trunk/zp-core/admin.php:707
+#: zp-trunk/zp-core/admin.php:715
+#: zp-trunk/zp-core/admin.php:722
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: zp-trunk/zp-core/admin-functions.php:1098
+#: zp-trunk/zp-core/admin-functions.php:1109
 msgid "Tags:"
 msgstr "Schlagworte:"
 
-#: zp-trunk/zp-core/admin-functions.php:1109
+#: zp-trunk/zp-core/admin-functions.php:1120
 msgid "Dynamic album search:"
 msgstr "Suche in dynamischen Alben:"
 
-#: zp-trunk/zp-core/admin-functions.php:1250
+#: zp-trunk/zp-core/admin-functions.php:1261
 msgid "save album"
 msgstr "Album sichern"
 
-#: zp-trunk/zp-core/admin-functions.php:1267
+#: zp-trunk/zp-core/admin-functions.php:1278
 msgid "Cache newly uploaded images."
 msgstr "Neu hochgeladene Bilder cachen."
 
-#: zp-trunk/zp-core/admin-functions.php:1268
-#: zp-trunk/zp-core/admin.php:1142
+#: zp-trunk/zp-core/admin-functions.php:1279
+#: zp-trunk/zp-core/admin.php:1146
 msgid "Pre-Cache Images"
 msgstr "Bilder cachen"
 
-#: zp-trunk/zp-core/admin-functions.php:1269
-#: zp-trunk/zp-core/admin.php:1144
+#: zp-trunk/zp-core/admin-functions.php:1280
+#: zp-trunk/zp-core/admin.php:1148
 msgid "Clear"
 msgstr "Löschen"
 
-#: zp-trunk/zp-core/admin-functions.php:1276
+#: zp-trunk/zp-core/admin-functions.php:1287
 msgid "Forces a refresh of the EXIF and IPTC data for all images in the album."
 msgstr "Führt eine Aktualisierung der EXIF- und IPTC-Daten aller Bilder in diesem Album durch."
 
-#: zp-trunk/zp-core/admin-functions.php:1276
+#: zp-trunk/zp-core/admin-functions.php:1287
 #: zp-trunk/zp-core/admin-refresh-metadata.php:34
-#: zp-trunk/zp-core/admin.php:1150
+#: zp-trunk/zp-core/admin.php:1154
 msgid "Refresh Metadata"
 msgstr "Metadaten aktualisieren."
 
-#: zp-trunk/zp-core/admin-functions.php:1286
+#: zp-trunk/zp-core/admin-functions.php:1297
 msgid "Resets all hitcounters in the album."
 msgstr "Besucherzähler dieses Albums zurücksetzen"
 
-#: zp-trunk/zp-core/admin-functions.php:1286
-#: zp-trunk/zp-core/admin.php:1160
+#: zp-trunk/zp-core/admin-functions.php:1297
+#: zp-trunk/zp-core/admin.php:1164
 msgid "Reset hitcounters"
 msgstr "Besucherzähler zurücksetzen"
 
-#: zp-trunk/zp-core/admin-functions.php:1302
+#: zp-trunk/zp-core/admin-functions.php:1313
 #, php-format
 msgid "Edit this album:%s"
 msgstr "Album %s bearbeiten"
 
-#: zp-trunk/zp-core/admin-functions.php:1306
+#: zp-trunk/zp-core/admin-functions.php:1317
 #, php-format
 msgid "Edit this album: %s"
 msgstr "Edit this album: %s"
 
-#: zp-trunk/zp-core/admin-functions.php:1316
+#: zp-trunk/zp-core/admin-functions.php:1327
 #, php-format
 msgid "%u images"
 msgstr "%u Bilder"
 
-#: zp-trunk/zp-core/admin-functions.php:1318
+#: zp-trunk/zp-core/admin-functions.php:1329
 msgid "1 image"
 msgstr "1 Bild"
 
-#: zp-trunk/zp-core/admin-functions.php:1321
+#: zp-trunk/zp-core/admin-functions.php:1332
 msgid "no images"
 msgstr "Keine Bilder"
 
-#: zp-trunk/zp-core/admin-functions.php:1324
-#: zp-trunk/zp-core/admin-functions.php:1337
+#: zp-trunk/zp-core/admin-functions.php:1335
+#: zp-trunk/zp-core/admin-functions.php:1348
 msgid "Subalbum List"
 msgstr "Subalbum-Übersicht"
 
-#: zp-trunk/zp-core/admin-functions.php:1329
+#: zp-trunk/zp-core/admin-functions.php:1340
 #, php-format
 msgid "%u albums"
 msgstr "%u albums"
 
-#: zp-trunk/zp-core/admin-functions.php:1349
+#: zp-trunk/zp-core/admin-functions.php:1360
 msgid "Password protected"
 msgstr "Passwortgeschützt"
 
-#: zp-trunk/zp-core/admin-functions.php:1355
-#: zp-trunk/zp-core/admin-functions.php:1359
+#: zp-trunk/zp-core/admin-functions.php:1366
+#: zp-trunk/zp-core/admin-functions.php:1370
 #, php-format
 msgid "Publish the album %s"
 msgstr "Album %s veröffentlichen"
 
-#: zp-trunk/zp-core/admin-functions.php:1365
+#: zp-trunk/zp-core/admin-functions.php:1376
 #, php-format
 msgid "Pre-cache images in %s"
 msgstr "Bilder in %s cachen"
 
-#: zp-trunk/zp-core/admin-functions.php:1366
+#: zp-trunk/zp-core/admin-functions.php:1377
 #, php-format
 msgid "Cache the album %s"
 msgstr "Album %s cachen"
 
-#: zp-trunk/zp-core/admin-functions.php:1370
+#: zp-trunk/zp-core/admin-functions.php:1381
 #, php-format
 msgid "Refresh metadata for the album %s"
 msgstr "Metadaten für das Album %s aktualisieren"
 
-#: zp-trunk/zp-core/admin-functions.php:1371
+#: zp-trunk/zp-core/admin-functions.php:1382
 #, php-format
 msgid "Refresh image metadata in the album %s"
 msgstr "Metadaten für das Album %s aktualisieren"
 
-#: zp-trunk/zp-core/admin-functions.php:1374
+#: zp-trunk/zp-core/admin-functions.php:1385
 #, php-format
 msgid "Reset hitcounters for album %s"
 msgstr "Besucherzähler für das Album %s zurücksetzen"
 
-#: zp-trunk/zp-core/admin-functions.php:1375
+#: zp-trunk/zp-core/admin-functions.php:1386
 #, php-format
 msgid "Reset hitcounters for the album %s"
 msgstr "Besucherzähler für das Album %s zurücksetzen"
 
-#: zp-trunk/zp-core/admin-functions.php:1379
+#: zp-trunk/zp-core/admin-functions.php:1390
 msgid "Are you sure you want to delete this entire album?"
 msgstr "Sind Sie sicher, dass Sie das ganze Album löschen wollen?"
 
-#: zp-trunk/zp-core/admin-functions.php:1379
+#: zp-trunk/zp-core/admin-functions.php:1390
 msgid "Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!"
 msgstr "Sind Sie wirklich sicher, dass Sie dieses Album löschen wollen? ES KANN NICHT RÜCKGÄNGIG GEMACHT WERDEN!"
 
-#: zp-trunk/zp-core/admin-functions.php:1380
-#: zp-trunk/zp-core/admin-functions.php:1381
+#: zp-trunk/zp-core/admin-functions.php:1391
+#: zp-trunk/zp-core/admin-functions.php:1392
 #, php-format
 msgid "Delete the album %s"
 msgstr "Album %s löschen"
 
-#: zp-trunk/zp-core/admin-functions.php:1667
-#: zp-trunk/zp-core/admin-functions.php:1674
-#: zp-trunk/zp-core/admin-functions.php:1679
-#: zp-trunk/zp-core/admin-functions.php:1682
+#: zp-trunk/zp-core/admin-functions.php:1678
 #: zp-trunk/zp-core/admin-functions.php:1685
+#: zp-trunk/zp-core/admin-functions.php:1690
+#: zp-trunk/zp-core/admin-functions.php:1693
+#: zp-trunk/zp-core/admin-functions.php:1696
 #, php-format
 msgid "page %u"
 msgstr "Seite %u"
 
-#: zp-trunk/zp-core/admin-functions.php:1667
-#: zp-trunk/zp-core/admin-functions.php:1669
+#: zp-trunk/zp-core/admin-functions.php:1678
+#: zp-trunk/zp-core/admin-functions.php:1680
 msgid "Previous page"
 msgstr "Vorherige Seite"
 
-#: zp-trunk/zp-core/admin-options.php:343
+#: zp-trunk/zp-core/admin-options.php:345
 msgid "Password reset request.<br/>You may now set admin usernames and passwords."
 msgstr "Passwort zurückgesetzt.<br/>Sie können nun Benutzernamen und Passworte festlegen."
 
-#: zp-trunk/zp-core/admin-options.php:353
+#: zp-trunk/zp-core/admin-options.php:355
 #: zp-trunk/zp-core/admin-plugins.php:53
 msgid "Saved"
 msgstr "Gesichert"
 
-#: zp-trunk/zp-core/admin-options.php:359
+#: zp-trunk/zp-core/admin-options.php:361
 msgid "admin information"
 msgstr "Benutzerverwaltung"
 
-#: zp-trunk/zp-core/admin-options.php:364
+#: zp-trunk/zp-core/admin-options.php:366
 msgid "gallery configuration"
 msgstr "Galerie"
 
-#: zp-trunk/zp-core/admin-options.php:365
+#: zp-trunk/zp-core/admin-options.php:367
 msgid "image display"
 msgstr "Bildanzeige"
 
-#: zp-trunk/zp-core/admin-options.php:366
+#: zp-trunk/zp-core/admin-options.php:368
 msgid "comment configuration"
 msgstr "Kommentare"
 
-#: zp-trunk/zp-core/admin-options.php:371
+#: zp-trunk/zp-core/admin-options.php:373
 msgid "theme options"
 msgstr "Theme"
 
-#: zp-trunk/zp-core/admin-options.php:376
+#: zp-trunk/zp-core/admin-options.php:378
 msgid "plugin options"
 msgstr "Plugins"
 
-#: zp-trunk/zp-core/admin-options.php:401
+#: zp-trunk/zp-core/admin-options.php:403
 msgid "You must supply a password"
 msgstr "Es muss ein Passwort eingegeben werden"
 
-#: zp-trunk/zp-core/admin-options.php:403
-#: zp-trunk/zp-core/admin.php:829
+#: zp-trunk/zp-core/admin-options.php:405
+#: zp-trunk/zp-core/admin.php:833
 msgid "Your passwords did not match"
 msgstr "Ihre Passworte stimmen nicht überein."
 
-#: zp-trunk/zp-core/admin-options.php:419
+#: zp-trunk/zp-core/admin-options.php:421
 msgid "Admin login information"
 msgstr "Benutzerdaten"
 
-#: zp-trunk/zp-core/admin-options.php:422
+#: zp-trunk/zp-core/admin-options.php:424
 msgid "Expand all"
 msgstr "Alle ausklappen"
 
-#: zp-trunk/zp-core/admin-options.php:423
+#: zp-trunk/zp-core/admin-options.php:425
 msgid "Collapse all"
 msgstr "Alle zusammenklappen"
 
-#: zp-trunk/zp-core/admin-options.php:434
+#: zp-trunk/zp-core/admin-options.php:436
 msgid "Master"
 msgstr "Master"
 
-#: zp-trunk/zp-core/admin-options.php:455
-#: zp-trunk/zp-core/admin-options.php:466
+#: zp-trunk/zp-core/admin-options.php:457
+#: zp-trunk/zp-core/admin-options.php:468
 msgid "Add New Admin"
 msgstr "Neuer Adminbenutzer"
 
-#: zp-trunk/zp-core/admin-options.php:479
+#: zp-trunk/zp-core/admin-options.php:481
 msgid "Are you sure you want to delete this user?"
 msgstr "Sind Sie sicher, dass Sie diesen Benutzer löschen wollen?"
 
-#: zp-trunk/zp-core/admin-options.php:481
+#: zp-trunk/zp-core/admin-options.php:483
 msgid "This is the master user account. If you delete it another user will be promoted to master user."
 msgstr "Dies ist das Masterbenutzerkonto. Wenn Sie dieses löschen, wird eine anderer Benutzer zum Masterbenutzer."
 
-#: zp-trunk/zp-core/admin-options.php:485
+#: zp-trunk/zp-core/admin-options.php:487
 msgid "Delete this user."
 msgstr "Diesen Benutzer löschen."
 
-#: zp-trunk/zp-core/admin-options.php:496
+#: zp-trunk/zp-core/admin-options.php:498
 msgid "Username:"
 msgstr "Benutzername:"
 
-#: zp-trunk/zp-core/admin-options.php:505
+#: zp-trunk/zp-core/admin-options.php:507
 msgid "Password:"
 msgstr "Passwort:"
 
-#: zp-trunk/zp-core/admin-options.php:506
-#: zp-trunk/zp-core/admin-options.php:731
-#: zp-trunk/zp-core/admin-options.php:755
+#: zp-trunk/zp-core/admin-options.php:508
+#: zp-trunk/zp-core/admin-options.php:734
+#: zp-trunk/zp-core/admin-options.php:758
 msgid "(repeat)"
 msgstr "(wiederholen)"
 
-#: zp-trunk/zp-core/admin-options.php:516
+#: zp-trunk/zp-core/admin-options.php:518
 msgid "Rights"
 msgstr "Rechte"
 
-#: zp-trunk/zp-core/admin-options.php:523
+#: zp-trunk/zp-core/admin-options.php:525
 msgid "User admin"
 msgstr "Benutzer"
 
-#: zp-trunk/zp-core/admin-options.php:528
+#: zp-trunk/zp-core/admin-options.php:530
 msgid "Options"
 msgstr "Einstellungen"
 
-#: zp-trunk/zp-core/admin-options.php:533
+#: zp-trunk/zp-core/admin-options.php:535
 msgid "Zenpage"
 msgstr "Zenpage"
 
-#: zp-trunk/zp-core/admin-options.php:539
+#: zp-trunk/zp-core/admin-options.php:541
 msgid "Themes"
 msgstr "Themes"
 
-#: zp-trunk/zp-core/admin-options.php:544
+#: zp-trunk/zp-core/admin-options.php:546
 msgid "Manage all albums"
 msgstr "Alle Alben verwalten"
 
-#: zp-trunk/zp-core/admin-options.php:560
+#: zp-trunk/zp-core/admin-options.php:562
 #: zp-trunk/zp-core/admin-upload.php:238
 msgid "Upload"
 msgstr "Hochladen"
 
-#: zp-trunk/zp-core/admin-options.php:565
+#: zp-trunk/zp-core/admin-options.php:567
 msgid "View all albums"
 msgstr "Alle Alben ansehen"
 
-#: zp-trunk/zp-core/admin-options.php:569
+#: zp-trunk/zp-core/admin-options.php:571
 msgid "Overview"
 msgstr "Überblick"
 
-#: zp-trunk/zp-core/admin-options.php:577
+#: zp-trunk/zp-core/admin-options.php:579
 msgid "Full name:"
 msgstr "Name:"
 
-#: zp-trunk/zp-core/admin-options.php:579
+#: zp-trunk/zp-core/admin-options.php:581
 msgid "email:"
 msgstr "E-Mail:"
 
-#: zp-trunk/zp-core/admin-options.php:602
+#: zp-trunk/zp-core/admin-options.php:604
 msgid "Managed albums:"
 msgstr "Verwaltete Alben:"
 
-#: zp-trunk/zp-core/admin-options.php:611
+#: zp-trunk/zp-core/admin-options.php:613
 msgid "This account's username and email are used as contact data in the RSS feeds."
 msgstr "Benutzername und E-Mail-Adresse dieses Kontos werden als Kontaktdaten in den RSS-Feeds verwendet."
 
-#: zp-trunk/zp-core/admin-options.php:620
+#: zp-trunk/zp-core/admin-options.php:622
 msgid "You may manage these albums subject to the above rights."
 msgstr "Sie können diese Alben nach Maßgabe der genannten Rechte verwalten."
 
-#: zp-trunk/zp-core/admin-options.php:622
+#: zp-trunk/zp-core/admin-options.php:624
 msgid "Select one or more albums for the administrator to manage."
 msgstr "Ein oder mehrere Alben für den Benutzer zum Verwalten auswählen."
 
-#: zp-trunk/zp-core/admin-options.php:623
+#: zp-trunk/zp-core/admin-options.php:625
 msgid "Administrators with <em>User admin</em> or <em>Manage all albums</em> rights can manage all albums. All others may manage only those that are selected."
 msgstr "Benutzer mit <em>Benutzerverwaltungs-</em> oder or <em>Alle-Alben-</em>Verwaltungsrechten haben Zugriff auf alle Alben. Alle anderen Benutzer können nur die ihnen zugewiesenen Alben verwalten."
 
-#: zp-trunk/zp-core/admin-options.php:657
+#: zp-trunk/zp-core/admin-options.php:659
 msgid "Your Allowed tags change did not parse successfully."
 msgstr "Die Änderung der erlaubten Schlagwort konnte nicht ausgeführt werden."
 
-#: zp-trunk/zp-core/admin-options.php:667
+#: zp-trunk/zp-core/admin-options.php:670
 #, php-format
 msgid "Your %s passwords were empty or did not match"
 msgstr "Ihre %s Passworte waren leer oder stimmten nicht überein"
 
-#: zp-trunk/zp-core/admin-options.php:670
+#: zp-trunk/zp-core/admin-options.php:673
 msgid "You must supply a password for the Gallery guest user"
 msgstr "Es muss ein Passwort für den Galeriegastbenutzer eingegeben werden"
 
-#: zp-trunk/zp-core/admin-options.php:673
+#: zp-trunk/zp-core/admin-options.php:676
 msgid "You must supply a password for the Search guest user"
 msgstr "Es muss ein Passwort für den Gastsuchbenutzer eingegeben werden"
 
-#: zp-trunk/zp-core/admin-options.php:682
+#: zp-trunk/zp-core/admin-options.php:685
 #, php-format
 msgid "<em>%s</em> is not available."
 msgstr "<em>%s</em> ist nicht verfügbar."
 
-#: zp-trunk/zp-core/admin-options.php:683
+#: zp-trunk/zp-core/admin-options.php:686
 #, php-format
 msgid "The locale %s is not supported on your server."
 msgstr "Die Locale %s wird von Ihrem Server nicht unterstützt."
 
-#: zp-trunk/zp-core/admin-options.php:689
+#: zp-trunk/zp-core/admin-options.php:692
 msgid "Your Website URL is not valid"
 msgstr "Die Webadresse ist nicht gültig."
 
-#: zp-trunk/zp-core/admin-options.php:696
+#: zp-trunk/zp-core/admin-options.php:699
 msgid "General Gallery Configuration"
 msgstr "Allgemeine Galerie-Einstellungen"
 
-#: zp-trunk/zp-core/admin-options.php:705
+#: zp-trunk/zp-core/admin-options.php:708
 msgid "Gallery title:"
 msgstr "Galeriename:"
 
-#: zp-trunk/zp-core/admin-options.php:709
+#: zp-trunk/zp-core/admin-options.php:712
 msgid "What you want to call your photo gallery."
 msgstr "Der gewünschte Name Ihrer Galerie."
 
-#: zp-trunk/zp-core/admin-options.php:712
+#: zp-trunk/zp-core/admin-options.php:715
 msgid "Gallery description:"
 msgstr "Galerie-Beschreibung:"
 
-#: zp-trunk/zp-core/admin-options.php:716
+#: zp-trunk/zp-core/admin-options.php:719
 msgid "A brief description of your gallery. Some themes may display this text."
 msgstr "Platz für eine kurze Beschreibung Ihrer Galerie. Einige Themes werden diesen Text möglicherweise anzeigen."
 
-#: zp-trunk/zp-core/admin-options.php:719
+#: zp-trunk/zp-core/admin-options.php:722
 msgid "Enable user name login field:"
 msgstr "Benutzername-Loginfeld aktivieren:"
 
-#: zp-trunk/zp-core/admin-options.php:722
+#: zp-trunk/zp-core/admin-options.php:725
 msgid "This option places a field on the gallery (search, album) login form for entering a user name. This is necessary if you have set guest login user names. It is also useful to allow Admin users to log in on these pages rather than at the Admin login."
 msgstr "Diese Einstellung platziert ein Feld im Galerie-Loginformular (search, album) zum Eingeben des Benutzernamens. Dies ist notwendig, wenn Sie Gastbenutzernamen vergeben haben. Es ist desweiteren hilfreich, um Benutzern (Admins) auf diesen Seiten das Einloggen direkt zu ermöglichen."
 
-#: zp-trunk/zp-core/admin-options.php:725
+#: zp-trunk/zp-core/admin-options.php:728
 msgid "Gallery guest user:"
 msgstr "Galerie-Gastbenutzer:"
 
-#: zp-trunk/zp-core/admin-options.php:727
+#: zp-trunk/zp-core/admin-options.php:730
 msgid "User ID for the gallery guest user"
 msgstr "Benutzer-ID für den Galerie-Gastbenutzer"
 
-#: zp-trunk/zp-core/admin-options.php:730
+#: zp-trunk/zp-core/admin-options.php:733
 msgid "Gallery password:"
 msgstr "Galeriepasswort:"
 
-#: zp-trunk/zp-core/admin-options.php:739
+#: zp-trunk/zp-core/admin-options.php:742
 msgid "Master password for the gallery. If this is set, visitors must know this password to view the gallery."
 msgstr "Hauptpasswort für die Galerie. Wenn es vergeben ist, müssen Besucher das Passwort kennen, um die Galerie ansehen zu können."
 
-#: zp-trunk/zp-core/admin-options.php:742
+#: zp-trunk/zp-core/admin-options.php:745
 msgid "Gallery password hint:"
 msgstr "Galeriepasswort-Hinweis:"
 
-#: zp-trunk/zp-core/admin-options.php:746
-#: zp-trunk/zp-core/admin-options.php:769
+#: zp-trunk/zp-core/admin-options.php:749
+#: zp-trunk/zp-core/admin-options.php:772
 msgid "A reminder hint for the password."
 msgstr "Eine Erinnungsstütze für das Passwort."
 
-#: zp-trunk/zp-core/admin-options.php:749
+#: zp-trunk/zp-core/admin-options.php:752
 msgid "Search guest user:"
 msgstr "Such-Gastbenutzer:"
 
-#: zp-trunk/zp-core/admin-options.php:751
+#: zp-trunk/zp-core/admin-options.php:754
 msgid "User ID for the search guest user"
 msgstr "Benutzer-ID für den Such-Gastbenutzer"
 
-#: zp-trunk/zp-core/admin-options.php:754
+#: zp-trunk/zp-core/admin-options.php:757
 msgid "Search password:"
 msgstr "Suchpasswort:"
 
-#: zp-trunk/zp-core/admin-options.php:762
+#: zp-trunk/zp-core/admin-options.php:765
 msgid "Password for the the search guest user. If this is set, visitors must know this password to view search results."
 msgstr "Passwort für den Such-Gastbenutzer. Wenn es gesetzt ist, müssen Besucher das Passwort kennen, um die Suche verwenden zu können."
 
-#: zp-trunk/zp-core/admin-options.php:765
+#: zp-trunk/zp-core/admin-options.php:768
 msgid "Search password hint:"
 msgstr "Suchpasswort-Hinweis:"
 
-#: zp-trunk/zp-core/admin-options.php:772
+#: zp-trunk/zp-core/admin-options.php:775
 msgid "Website title:"
 msgstr "Website-Name:"
 
-#: zp-trunk/zp-core/admin-options.php:776
+#: zp-trunk/zp-core/admin-options.php:779
 msgid "Your web site title."
 msgstr "Der Name Ihrer Website."
 
-#: zp-trunk/zp-core/admin-options.php:779
+#: zp-trunk/zp-core/admin-options.php:782
 msgid "Website url:"
 msgstr "Website-Adresse:"
 
-#: zp-trunk/zp-core/admin-options.php:782
+#: zp-trunk/zp-core/admin-options.php:785
 msgid "This is used to link back to your main site, but your theme must\tsupport it."
 msgstr "Dies wird verwendet, um zu Ihrer Hauptseite zurückzuverweisen, aber Ihr Theme muss dies unterstützen."
 
-#: zp-trunk/zp-core/admin-options.php:785
+#: zp-trunk/zp-core/admin-options.php:788
 msgid "Server protocol:"
 msgstr "Serverprotokoll:"
 
-#: zp-trunk/zp-core/admin-options.php:788
+#: zp-trunk/zp-core/admin-options.php:791
 msgid "If you're running a secure server, change this to"
 msgstr "Wenn Sie einen sicheren Server verwenden, ändern Sie dies in "
 
-#: zp-trunk/zp-core/admin-options.php:789
+#: zp-trunk/zp-core/admin-options.php:792
 msgid "(Most people will leave this alone.)"
 msgstr "(muss meist nicht geändert werden)"
 
-#: zp-trunk/zp-core/admin-options.php:792
+#: zp-trunk/zp-core/admin-options.php:795
 msgid "Time offset (hours):"
 msgstr "Zeitverschiebung (Stunden):"
 
-#: zp-trunk/zp-core/admin-options.php:795
+#: zp-trunk/zp-core/admin-options.php:798
 msgid "If you're in a different time zone from your server, set the\toffset in hours."
 msgstr "Falls Sie in einer anderen Zeitzone als Ihr Server sind, können Sie die Zeitverschiebung in Stunden angeben."
 
-#: zp-trunk/zp-core/admin-options.php:798
+#: zp-trunk/zp-core/admin-options.php:801
 msgid "Enable mod_rewrite:"
 msgstr "Mod_rewrite aktivieren:"
 
-#: zp-trunk/zp-core/admin-options.php:801
+#: zp-trunk/zp-core/admin-options.php:804
 msgid "If you have Apache <em>mod_rewrite</em>, put a checkmark here, and\tyou'll get nice cruft-free URLs."
 msgstr "Wenn der Server über Apache-<em>mod_rewrite</em>-Funktionalität verfügt, aktivieren Sie dies und Zenphoto erzeugt suchmaschinenfreundliche URLs."
 
-#: zp-trunk/zp-core/admin-options.php:804
+#: zp-trunk/zp-core/admin-options.php:807
 msgid "Mod_rewrite Image suffix:"
 msgstr "Mod_rewrite Bildsuffix:"
 
-#: zp-trunk/zp-core/admin-options.php:807
+#: zp-trunk/zp-core/admin-options.php:810
 msgid "If <em>mod_rewrite</em> is checked above, zenphoto will appended\tthis to the end (helps search engines). Examples: <em>.html, .php,\t/view</em>, etc."
 msgstr "Wenn <em>mod_rewrite</em> oben aktiviert ist, wird zenphoto dieses Suffix an die Dateien anhängen zenphoto (vorteilhaft für Suchmaschinen). Beispiele: <em>.html, .php, view</em> etc."
 
-#: zp-trunk/zp-core/admin-options.php:810
+#: zp-trunk/zp-core/admin-options.php:813
 msgid "Language:"
 msgstr "Sprache:"
 
-#: zp-trunk/zp-core/admin-options.php:815
+#: zp-trunk/zp-core/admin-options.php:818
 msgid "Multi-lingual"
 msgstr "Mehrsprachig"
 
-#: zp-trunk/zp-core/admin-options.php:819
+#: zp-trunk/zp-core/admin-options.php:822
 msgid "The language to display text in. (Set to <em>HTTP Accept Language</em> to use the language preference specified by the viewer's browser.)"
 msgstr "Die zu verwendende Sprache. (<em>HTTP Accept Language</em> auswählen, um automatisch die Browser/Server-Sprachvoreinstellung des des Betrachters zu verwenden.)"
 
-#: zp-trunk/zp-core/admin-options.php:820
+#: zp-trunk/zp-core/admin-options.php:823
 msgid "Set <em>Multi-lingual</em> to enable multiple languages for database fields."
 msgstr "Aktivieren Sie <em>Mehrsprachig</em>, um mehrere Sprachen für Datenbankfelder verwenden zu können."
 
-#: zp-trunk/zp-core/admin-options.php:821
+#: zp-trunk/zp-core/admin-options.php:824
 msgid "<strong>Note:</strong> if you have created multi-language strings, uncheck this option, then save anything, you will loose your strings."
 msgstr "<strong>Anmerkung:</strong> Wenn Sie diese Einstellung deaktiveren, gehen alle ggf. bereits erstellte mehrsprachige Textketten verloren."
 
-#: zp-trunk/zp-core/admin-options.php:826
+#: zp-trunk/zp-core/admin-options.php:829
 msgid "Date format:"
 msgstr "Datumformat:"
 
-#: zp-trunk/zp-core/admin-options.php:838
+#: zp-trunk/zp-core/admin-options.php:841
 msgid "Custom"
 msgstr "Benutzerdefiniert"
 
-#: zp-trunk/zp-core/admin-options.php:839
+#: zp-trunk/zp-core/admin-options.php:842
 msgid "02/25/08 15:30"
 msgstr "02/25/08 15:30"
 
-#: zp-trunk/zp-core/admin-options.php:840
+#: zp-trunk/zp-core/admin-options.php:843
 msgid "02/25/08"
 msgstr "02/25/08"
 
-#: zp-trunk/zp-core/admin-options.php:841
+#: zp-trunk/zp-core/admin-options.php:844
 msgid "02/25/2008 15:30"
 msgstr "02/25/2008 15:30"
 
-#: zp-trunk/zp-core/admin-options.php:842
+#: zp-trunk/zp-core/admin-options.php:845
 msgid "02/25/2008"
 msgstr "02/25/2008"
 
-#: zp-trunk/zp-core/admin-options.php:843
+#: zp-trunk/zp-core/admin-options.php:846
 msgid "02-25-08 15:30"
 msgstr "02-25-08 15:30"
 
-#: zp-trunk/zp-core/admin-options.php:844
+#: zp-trunk/zp-core/admin-options.php:847
 msgid "02-25-08"
 msgstr "02-25-08"
 
-#: zp-trunk/zp-core/admin-options.php:845
+#: zp-trunk/zp-core/admin-options.php:848
 msgid "02-25-2008 15:30"
 msgstr "02-25-2008 15:30"
 
-#: zp-trunk/zp-core/admin-options.php:846
+#: zp-trunk/zp-core/admin-options.php:849
 msgid "02-25-2008"
 msgstr "02-25-2008"
 
-#: zp-trunk/zp-core/admin-options.php:847
+#: zp-trunk/zp-core/admin-options.php:850
 msgid "2008. February 25. 15:30"
 msgstr "2008. Februar 25. 15:30"
 
-#: zp-trunk/zp-core/admin-options.php:848
+#: zp-trunk/zp-core/admin-options.php:851
 msgid "2008. February 25."
 msgstr "2008. Februar 25."
 
-#: zp-trunk/zp-core/admin-options.php:849
+#: zp-trunk/zp-core/admin-options.php:852
 msgid "2008-02-25 15:30"
 msgstr "2008-02-25 15:30"
 
-#: zp-trunk/zp-core/admin-options.php:850
+#: zp-trunk/zp-core/admin-options.php:853
 msgid "2008-02-25"
 msgstr "2008-02-25"
 
-#: zp-trunk/zp-core/admin-options.php:851
+#: zp-trunk/zp-core/admin-options.php:854
 msgid "25 Feb 2008 15:30"
 msgstr "25 Feb 2008 15:30"
 
-#: zp-trunk/zp-core/admin-options.php:852
+#: zp-trunk/zp-core/admin-options.php:855
 msgid "25 Feb 2008"
 msgstr "25 Feb 2008"
 
-#: zp-trunk/zp-core/admin-options.php:853
+#: zp-trunk/zp-core/admin-options.php:856
 msgid "25 February 2008 15:30"
 msgstr "25 Februar 2008 15:30"
 
-#: zp-trunk/zp-core/admin-options.php:854
+#: zp-trunk/zp-core/admin-options.php:857
 msgid "25 February 2008"
 msgstr "25 Februar 2008"
 
-#: zp-trunk/zp-core/admin-options.php:855
+#: zp-trunk/zp-core/admin-options.php:858
 msgid "25. Feb 2008 15:30"
 msgstr "25. Feb 2008 15:30"
 
-#: zp-trunk/zp-core/admin-options.php:856
+#: zp-trunk/zp-core/admin-options.php:859
 msgid "25. Feb 2008"
 msgstr "25. Feb 2008"
 
-#: zp-trunk/zp-core/admin-options.php:857
+#: zp-trunk/zp-core/admin-options.php:860
 msgid "25. Feb. 08 15:30"
 msgstr "25. Feb. 08 15:30"
 
-#: zp-trunk/zp-core/admin-options.php:858
+#: zp-trunk/zp-core/admin-options.php:861
 msgid "25. Feb. 08"
 msgstr "25. Feb. 08"
 
-#: zp-trunk/zp-core/admin-options.php:859
+#: zp-trunk/zp-core/admin-options.php:862
 msgid "25. February 2008 15:30"
 msgstr "25. Februar 2008 15:30"
 
-#: zp-trunk/zp-core/admin-options.php:860
+#: zp-trunk/zp-core/admin-options.php:863
 msgid "25. February 2008"
 msgstr "25. Februar 2008"
 
-#: zp-trunk/zp-core/admin-options.php:861
+#: zp-trunk/zp-core/admin-options.php:864
 msgid "25.02.08 15:30"
 msgstr "25.02.08 15:30"
 
-#: zp-trunk/zp-core/admin-options.php:862
+#: zp-trunk/zp-core/admin-options.php:865
 msgid "25.02.08"
 msgstr "25.02.08"
 
-#: zp-trunk/zp-core/admin-options.php:863
+#: zp-trunk/zp-core/admin-options.php:866
 msgid "25.02.2008 15:30"
 msgstr "25.02.2008 15:30"
 
-#: zp-trunk/zp-core/admin-options.php:864
+#: zp-trunk/zp-core/admin-options.php:867
 msgid "25.02.2008"
 msgstr "25.02.2008"
 
-#: zp-trunk/zp-core/admin-options.php:865
+#: zp-trunk/zp-core/admin-options.php:868
 msgid "25-02-08 15:30"
 msgstr "25-02-08 15:30"
 
-#: zp-trunk/zp-core/admin-options.php:866
+#: zp-trunk/zp-core/admin-options.php:869
 msgid "25-02-08"
 msgstr "25-02-08"
 
-#: zp-trunk/zp-core/admin-options.php:867
+#: zp-trunk/zp-core/admin-options.php:870
 msgid "25-02-2008 15:30"
 msgstr "25-02-2008 15:30"
 
-#: zp-trunk/zp-core/admin-options.php:868
+#: zp-trunk/zp-core/admin-options.php:871
 msgid "25-02-2008"
 msgstr "25-02-2008"
 
-#: zp-trunk/zp-core/admin-options.php:869
+#: zp-trunk/zp-core/admin-options.php:872
 msgid "25-Feb-08 15:30"
 msgstr "25-Feb-08 15:30"
 
-#: zp-trunk/zp-core/admin-options.php:870
+#: zp-trunk/zp-core/admin-options.php:873
 msgid "25-Feb-08"
 msgstr "25-Feb-08"
 
-#: zp-trunk/zp-core/admin-options.php:871
+#: zp-trunk/zp-core/admin-options.php:874
 msgid "25-Feb-2008 15:30"
 msgstr "25-Feb-2008 15:30"
 
-#: zp-trunk/zp-core/admin-options.php:872
+#: zp-trunk/zp-core/admin-options.php:875
 msgid "25-Feb-2008"
 msgstr "25-Feb-2008"
 
-#: zp-trunk/zp-core/admin-options.php:873
+#: zp-trunk/zp-core/admin-options.php:876
 msgid "Feb 25, 2008 15:30"
 msgstr "Feb 25, 2008 15:30"
 
-#: zp-trunk/zp-core/admin-options.php:874
+#: zp-trunk/zp-core/admin-options.php:877
 msgid "Feb 25, 2008"
 msgstr "Feb 25, 2008"
 
-#: zp-trunk/zp-core/admin-options.php:875
+#: zp-trunk/zp-core/admin-options.php:878
 msgid "February 25, 2008 15:30"
 msgstr "Februar 25, 2008 15:30"
 
-#: zp-trunk/zp-core/admin-options.php:876
+#: zp-trunk/zp-core/admin-options.php:879
 msgid "February 25, 2008"
 msgstr "Februar 25, 2008"
 
-#: zp-trunk/zp-core/admin-options.php:893
+#: zp-trunk/zp-core/admin-options.php:896
 msgid "Format for dates. Select from the list or set to <code>custom</code> and provide a <a href=\"http://us2.php.net/manual/en/function.strftime.php\"><code>strftime()</code></a> format string in the text box."
 msgstr "Format des Datums. Wählen Sie das entsprechend oder wählen Sie ein <code>benutzerdefiniertes</code> aus tragen Sie eine <a href=\"http://us2.php.net/manual/en/function.strftime.php\"><code>strftime()</code></a> -Formatierungszahlenkette ein."
 
-#: zp-trunk/zp-core/admin-options.php:896
+#: zp-trunk/zp-core/admin-options.php:899
 msgid "Charset:"
 msgstr "Zeichensatz:"
 
-#: zp-trunk/zp-core/admin-options.php:900
+#: zp-trunk/zp-core/admin-options.php:903
 msgid "The character encoding to use internally. Leave at <em>Unicode\t(UTF-8)</em> if you're unsure."
 msgstr "Die Zeichensatzkodierung, die intern benutzt werden soll. Verwenden Sie <em>Unicode (UTF-8)</em>, wenn Sie unsicher sind."
 
-#: zp-trunk/zp-core/admin-options.php:903
+#: zp-trunk/zp-core/admin-options.php:906
 msgid "Allowed tags:"
 msgstr "Erlaubte HTML-Befehle:"
 
-#: zp-trunk/zp-core/admin-options.php:906
+#: zp-trunk/zp-core/admin-options.php:909
 msgid "Tags and attributes allowed in comments, descriptions, and other fields."
 msgstr "Die Schlagworte und Steuerbefehle, die in Kommentaren, Beschreibungen und anderen Feldern erlaubt sind."
 
-#: zp-trunk/zp-core/admin-options.php:907
+#: zp-trunk/zp-core/admin-options.php:910
 msgid "Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"
 msgstr "Folge dem Schema <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"
 
-#: zp-trunk/zp-core/admin-options.php:910
+#: zp-trunk/zp-core/admin-options.php:913
 msgid "Number of RSS feed items:"
 msgstr "Anzahl der RSS-Einträge:"
 
-#: zp-trunk/zp-core/admin-options.php:913
+#: zp-trunk/zp-core/admin-options.php:916
 msgid "The number of new images/albums/comments you want to appear in your site's RSS feed."
 msgstr "Die Anzahl an neuen Bildern/Alben/Kommentare, die im RSS-Newsfeed erscheinen soll."
 
-#: zp-trunk/zp-core/admin-options.php:916
+#: zp-trunk/zp-core/admin-options.php:919
 msgid "Size of RSS feed images:"
 msgstr "Größe der Bilder im RSS-Feed:"
 
-#: zp-trunk/zp-core/admin-options.php:919
+#: zp-trunk/zp-core/admin-options.php:922
 msgid "The size you want your images to have in your site's RSS feed."
 msgstr "Die Größe, in der die Bilder im RSS-Newsfeed erscheinen sollen."
 
-#: zp-trunk/zp-core/admin-options.php:922
+#: zp-trunk/zp-core/admin-options.php:925
 msgid "Album date:"
 msgstr "Albumdatum:"
 
-#: zp-trunk/zp-core/admin-options.php:926
+#: zp-trunk/zp-core/admin-options.php:929
 msgid "Use latest image date"
 msgstr "Datum des neuestes Bildes verwenden"
 
-#: zp-trunk/zp-core/admin-options.php:928
+#: zp-trunk/zp-core/admin-options.php:931
 msgid "Set this option if you wish your album date to reflect the date of the latest image uploaded. Otherwise it will initially be set to the date the album was created."
 msgstr "Setzen Sie diese Einstellung, wenn Sie möchten, dass das Albumdatum das Datum des letzten in diese hochgeladene Bildes entspricht. Andernfalls zeigt es das Erstellungsdatum des Albums."
 
-#: zp-trunk/zp-core/admin-options.php:931
+#: zp-trunk/zp-core/admin-options.php:934
 msgid "Sort gallery by:"
 msgstr "Galeriesortierung: "
 
-#: zp-trunk/zp-core/admin-options.php:943
+#: zp-trunk/zp-core/admin-options.php:946
 msgid "Sort order for the albums on the index of the gallery"
 msgstr "Sortierung für die Alben auf der Galerie-Indexseite"
 
-#: zp-trunk/zp-core/admin-options.php:960
+#: zp-trunk/zp-core/admin-options.php:963
 msgid "File/Folder name"
 msgstr "Datei-/Ordnername"
 
-#: zp-trunk/zp-core/admin-options.php:977
+#: zp-trunk/zp-core/admin-options.php:980
 msgid "The set of fields on which searches may be performed."
 msgstr "Die Suchfelder, in denen gesucht werden soll."
 
-#: zp-trunk/zp-core/admin-options.php:980
+#: zp-trunk/zp-core/admin-options.php:983
 msgid "Enable Persistent Archives:"
 msgstr "Dauerhafte Archive aktivieren:"
 
-#: zp-trunk/zp-core/admin-options.php:983
+#: zp-trunk/zp-core/admin-options.php:986
 msgid "Put a checkmark here to re-serve Zip Archive files. If not checked\tthey will be regenerated each time."
 msgstr "Wenn dies deaktiviert ist, werden ZIP-Archive jedesmal erneut erstellt."
 
-#: zp-trunk/zp-core/admin-options.php:984
+#: zp-trunk/zp-core/admin-options.php:987
 msgid "<strong>Note: </strong>Setting\tthis option may impact password protected albums!"
 msgstr "<strong>Anmerkung: </strong>Diese Einstellung kann Auswirkungen auf passwort-geschützte Alben haben!"
 
-#: zp-trunk/zp-core/admin-options.php:987
+#: zp-trunk/zp-core/admin-options.php:990
 msgid "Enable gallery sessions:"
 msgstr "Galeriesessions aktivieren."
 
-#: zp-trunk/zp-core/admin-options.php:990
+#: zp-trunk/zp-core/admin-options.php:993
 msgid "Put a checkmark here if you are having issues with with album password cookies not being retained. Setting the option causes zenphoto to use sessions rather than cookies."
 msgstr "Aktivieren Sie dies, falls Probleme mit den Albumpasswortcookies auftreten. Diese Einstellung zwingt Zenphoto Sessions anstatt Cookies zu verwenden."
 
-#: zp-trunk/zp-core/admin-options.php:993
+#: zp-trunk/zp-core/admin-options.php:996
 msgid "Visual Thumb selection:"
 msgstr "Grafische Thumbnailauswahl:"
 
-#: zp-trunk/zp-core/admin-options.php:996
+#: zp-trunk/zp-core/admin-options.php:999
 msgid "Setting this option places thumbnails in the album thumbnail selection list (the dropdown list on each album's edit page). In Firefox the dropdown shows the thumbs, but in IE and Safari only the names are displayed (even if the thumbs are loaded!). In albums with many images loading these thumbs takes much time and is unnecessary when the browser won't display them. Uncheck this option and the images will not be loaded. "
 msgstr "Diese Einstellung zeigt Thumbnails in der Album-Thumbnail-Auswahllist (dem Ausklappmenu auf der Bearbeiten-Seite jedes Albums). In Firefox werden die Thumbnails angezeigt, in IE und Safari jedoch nur die Dateinamen (obwohl die Bilder geladen werden). Bei Alben mit sehr vielen Bildern kann dies die Ladezeit der Beabeiten-Seite sehr verlangsamen und ist zudem auch überflüssig, wenn der Browser sie ohnehin nicht darstellt. Deaktivieren Sie diese Eistellungen und die Bilder werden nicht geladen."
 
-#: zp-trunk/zp-core/admin-options.php:1016
+#: zp-trunk/zp-core/admin-options.php:1019
 #, php-format
 msgid "Your %s passwords did not match"
 msgstr "Ihre %s Passworte stimmen nicht überein"
 
-#: zp-trunk/zp-core/admin-options.php:1023
+#: zp-trunk/zp-core/admin-options.php:1026
 msgid "Image Display"
 msgstr "Bildeinstellungen"
 
-#: zp-trunk/zp-core/admin-options.php:1033
+#: zp-trunk/zp-core/admin-options.php:1036
 msgid "Default sort order for images"
 msgstr "Standardbildsortierung"
 
-#: zp-trunk/zp-core/admin-options.php:1036
+#: zp-trunk/zp-core/admin-options.php:1039
 msgid "Image quality:"
 msgstr "Bildqualität:"
 
-#: zp-trunk/zp-core/admin-options.php:1039
+#: zp-trunk/zp-core/admin-options.php:1042
 msgid "JPEG Compression quality for all images."
 msgstr "JPEG-Komprimierungsstufe für alle Bilder."
 
-#: zp-trunk/zp-core/admin-options.php:1042
+#: zp-trunk/zp-core/admin-options.php:1045
 msgid "Thumb quality:"
 msgstr "Thumbnailqualität:"
 
-#: zp-trunk/zp-core/admin-options.php:1045
+#: zp-trunk/zp-core/admin-options.php:1048
 msgid "JPEG Compression quality for all thumbnails."
 msgstr "JPEG-Komprimierungsqualität für alle Thumbnails."
 
-#: zp-trunk/zp-core/admin-options.php:1048
+#: zp-trunk/zp-core/admin-options.php:1051
 msgid "Allow upscale:"
 msgstr "Hochrechnen erlauben:"
 
-#: zp-trunk/zp-core/admin-options.php:1052
+#: zp-trunk/zp-core/admin-options.php:1055
 msgid "Allow images to be scaled up to the requested size. This could\tresult in loss of quality, so it's off by default."
 msgstr "Erlaubt, dass kleinere Bilder auf die eingestellte Größe hochgerechnet werden. Dies kann zu einem Qualitätsverlust führen und ist daher standardmäßig deaktiviert."
 
-#: zp-trunk/zp-core/admin-options.php:1055
+#: zp-trunk/zp-core/admin-options.php:1058
 msgid "Sharpen:"
 msgstr "Scharfzeichnen:"
 
-#: zp-trunk/zp-core/admin-options.php:1060
+#: zp-trunk/zp-core/admin-options.php:1063
 msgid "Add a small amount of unsharp mask to images and/or thumbnails. <strong>Warning</strong>: can overload slow servers."
 msgstr "Zeichnet Bilder und/oder Thumbnails leicht scharf. <strong>Warnung</strong>: Kann langsame Server überlasten."
 
-#: zp-trunk/zp-core/admin-options.php:1063
+#: zp-trunk/zp-core/admin-options.php:1066
 msgid "Watermark images:"
 msgstr "Bildwasserzeichen:"
 
-#: zp-trunk/zp-core/admin-options.php:1072
-#: zp-trunk/zp-core/admin-options.php:1101
-#: zp-trunk/zp-core/admin-options.php:1141
+#: zp-trunk/zp-core/admin-options.php:1075
+#: zp-trunk/zp-core/admin-options.php:1104
+#: zp-trunk/zp-core/admin-options.php:1144
 msgid "Enabled"
 msgstr "Aktiviert"
 
-#: zp-trunk/zp-core/admin-options.php:1074
+#: zp-trunk/zp-core/admin-options.php:1077
 msgid "cover"
 msgstr "Ausbreitung"
 
-#: zp-trunk/zp-core/admin-options.php:1076
+#: zp-trunk/zp-core/admin-options.php:1079
 #, php-format
 msgid "% of image"
 msgstr "% des Bildes"
 
-#: zp-trunk/zp-core/admin-options.php:1078
+#: zp-trunk/zp-core/admin-options.php:1081
 msgid "allow upscale"
 msgstr "Hochrechnen erlauben"
 
-#: zp-trunk/zp-core/admin-options.php:1080
+#: zp-trunk/zp-core/admin-options.php:1083
 msgid "offset h"
 msgstr "Position h"
 
-#: zp-trunk/zp-core/admin-options.php:1082
+#: zp-trunk/zp-core/admin-options.php:1085
 msgid "% w, "
 msgstr "% w "
 
-#: zp-trunk/zp-core/admin-options.php:1084
+#: zp-trunk/zp-core/admin-options.php:1087
 msgid "%"
 msgstr "%"
 
-#: zp-trunk/zp-core/admin-options.php:1086
+#: zp-trunk/zp-core/admin-options.php:1089
 msgid "The watermark image (png-24)."
 msgstr "Das Wasserzeichenbild (png-24)."
 
-#: zp-trunk/zp-core/admin-options.php:1086
+#: zp-trunk/zp-core/admin-options.php:1089
 #, php-format
 msgid "Place the image in the %s/watermarks/ folder."
 msgstr "Legen Sie das Bild in den %s/watermarks/-Ordner."
 
-#: zp-trunk/zp-core/admin-options.php:1088
+#: zp-trunk/zp-core/admin-options.php:1091
 msgid "The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the\timage."
 msgstr "Das Wasserzeichen wird skaliert, dass es die Fläche des Bildes zum angegebenen Prozentwert bedeckt und dabei relativ zur oberen linken Ecke des Bildes positioniert."
 
-#: zp-trunk/zp-core/admin-options.php:1089
+#: zp-trunk/zp-core/admin-options.php:1092
 msgid "It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark."
 msgstr "Es wird von dort, ausgehend von der unteren rechten Ecke, durch die <em>Positions</em>-Prozentangaben durch den Höhe- und Breiteunterschied zwischen Bild und Wasserzeichen positioniert."
 
-#: zp-trunk/zp-core/admin-options.php:1090
+#: zp-trunk/zp-core/admin-options.php:1093
 msgid "If <em>allow upscale</em> is not checked the watermark will not be made larger than the original watermark image."
 msgstr "Wenn <em>Hochrechnen erlaubt</em> nicht aktiviert ist, wird das Wasserzeichen nicht über seine reale Größe hinaus vergrößert."
 
-#: zp-trunk/zp-core/admin-options.php:1093
+#: zp-trunk/zp-core/admin-options.php:1096
 msgid "Watermark video thumbs:"
 msgstr "Wasserzeichen für Video Thumbnails:"
 
-#: zp-trunk/zp-core/admin-options.php:1103
+#: zp-trunk/zp-core/admin-options.php:1106
 msgid "The watermark image (png-24) that will be overlayed on the video thumbnail (if one exists)."
 msgstr "Das Wasserzeichenbild (png-24), dass über das Videothumbnail gelegt wird (sofern eines vorhanden ist)."
 
-#: zp-trunk/zp-core/admin-options.php:1103
+#: zp-trunk/zp-core/admin-options.php:1106
 #, php-format
 msgid "Place the image in the %s/watermarks/ folder"
 msgstr "Legen Sie das Bild in den %s/watermarks/-Ordner"
 
-#: zp-trunk/zp-core/admin-options.php:1106
+#: zp-trunk/zp-core/admin-options.php:1109
 msgid "Full image quality:"
 msgstr "Originalbildqualität:"
 
-#: zp-trunk/zp-core/admin-options.php:1109
+#: zp-trunk/zp-core/admin-options.php:1112
 msgid "Controls compression on full images."
 msgstr "Legt die Komprimierung des (hochgeladenen) Originalbildes fest."
 
-#: zp-trunk/zp-core/admin-options.php:1112
+#: zp-trunk/zp-core/admin-options.php:1115
 msgid "Full image protection:"
 msgstr "Originalbildschutz:"
 
-#: zp-trunk/zp-core/admin-options.php:1116
+#: zp-trunk/zp-core/admin-options.php:1119
 msgid "Unprotected"
 msgstr "Ungesichert"
 
-#: zp-trunk/zp-core/admin-options.php:1116
+#: zp-trunk/zp-core/admin-options.php:1119
 msgid "Protected view"
 msgstr "Geschützte Anzeige"
 
-#: zp-trunk/zp-core/admin-options.php:1116
+#: zp-trunk/zp-core/admin-options.php:1119
 msgid "Download"
 msgstr "Runterladen"
 
-#: zp-trunk/zp-core/admin-options.php:1116
+#: zp-trunk/zp-core/admin-options.php:1119
 msgid "No access"
 msgstr "Kein Zugriff"
 
-#: zp-trunk/zp-core/admin-options.php:1122
+#: zp-trunk/zp-core/admin-options.php:1125
 msgid "Disable hotlinking"
 msgstr "Hotlinking verhindern"
 
-#: zp-trunk/zp-core/admin-options.php:1127
+#: zp-trunk/zp-core/admin-options.php:1130
 msgid "cache the full image"
 msgstr "Originalbild zwischenspeichern"
 
-#: zp-trunk/zp-core/admin-options.php:1131
+#: zp-trunk/zp-core/admin-options.php:1134
 msgid "Select the level of protection for full sized images. <em>Download</em> forces a download dialog rather than displaying the image. <em>No&nbsp;access</em> prevents a link to the image from being shown. <em>Protected&nbsp;view</em> forces image processing before the image is diaplayed, for instance to apply a watermark or to check passwords. <em>Unprotected</em> allows direct display of the image."
 msgstr "Wählen Sie die Schutzstufe für die Originalbilder. <em>Download</em> setzt einen Downloaddialog in Gang anstatt das Bild anzuzeigen. <em>Kein&nbsp;Zugriff</em> verhindert, dass ein Link zum Originalbild gezeigt wird. <em>Geschütze&nbsp;Ansicht</em> löst eine Verarbeitung des Originalbildes in Gang bevor es angezeigt wird, zum Beispiel um ein Wasserzeichen hinzuzufügen oder um Passworte zu überprüfen. <em>Ungeschützt</em> erlaubt das direkte Anzeigen des Originalbildes"
 
-#: zp-trunk/zp-core/admin-options.php:1133
+#: zp-trunk/zp-core/admin-options.php:1136
 msgid "Disabling hotlinking prevents linking to the full image from other domains. If enabled, external links are redirect to the image page. If you are having problems with full images being displayed, try disabling this setting. Hotlinking is not prevented if <em>Full&nbsp;image&nbsp;protection</em> is <em>Unprotected</em> or if the image is cached."
 msgstr "Das Abschalten von Hotlinking verhindert, dass andere Websites auf das Originalbild direkt zugreifen können. In diesem Fall werden externe Links auf die Bildseite umgeleitet. Wenn Sie Probleme mit der Anzeige der Originalbilder haben, probieren Sie, ob Abschalten dieser Einstellung hilft. Hotlinking wird nicht verhindert, wenn der <em>Originalbildschutz</em> auf <em>ungeschützt</em> eingestellt ist."
 
-#: zp-trunk/zp-core/admin-options.php:1135
+#: zp-trunk/zp-core/admin-options.php:1138
 msgid "If <em>Cache the full image</em> is checked the full image will be loaded to the cache and served from there after the first reference. <em>Full&nbsp;image&nbsp;protection</em> must be set to <em>Protected&nbsp;view</em> for the image to be cached. However, once cached, no protections are applied to the image."
 msgstr "Wenn <em>Originalbild cachen</em> ausgewählt ist, wird das Originalbild in den Cache zwischengespeichert und von dort nach dem ersten Zugriff geladen. <em>Originalbildschutz</em> muß auf <em>Geschütze&nbsp;Ansicht</em> gestellt sein, damit das Bild zwischengespeichert werden kann. Jedenfalls, einmal im Cache werden keine weiteren Schutzmechanismen mehr auf das Bild angewendet.."
 
-#: zp-trunk/zp-core/admin-options.php:1138
+#: zp-trunk/zp-core/admin-options.php:1141
 msgid "Use lock image"
 msgstr "Schlossbild verwenden"
 
-#: zp-trunk/zp-core/admin-options.php:1143
+#: zp-trunk/zp-core/admin-options.php:1146
 msgid "Substitute a <em>lock</em> image for thumbnails of password protected albums when the viewer has not supplied the password. If your theme supplies an <code>images/err-passwordprotected.gif</code> image, it will be shown. Otherwise the zenphoto default lock image is displayed."
 msgstr "Ersetzt das Albumthumbnail bei passwortgeschützen Alben durch ein <em>Schlossbild</em>, wenn der Benutzer das Passwort nicht kennt. Wenn Ihr Theme über ein Bild namens <code>images/err-passwordprotected.gif</code> verfügt, wird dieses angezeicht. Anderfalls wird Zenphotos Standardschlossbild angezeigt."
 
-#: zp-trunk/zp-core/admin-options.php:1165
+#: zp-trunk/zp-core/admin-options.php:1168
 msgid "Comments options"
 msgstr "Kommentarseinstellungen"
 
-#: zp-trunk/zp-core/admin-options.php:1169
+#: zp-trunk/zp-core/admin-options.php:1172
 msgid "Enable comment notification:"
 msgstr "Kommentarbenachrichtigung aktivieren:"
 
-#: zp-trunk/zp-core/admin-options.php:1172
+#: zp-trunk/zp-core/admin-options.php:1175
 msgid "Email the Admin when new comments are posted"
 msgstr "Verschicke eine E-Mail, wenn neue Kommentare vorhanden sind."
 
-#: zp-trunk/zp-core/admin-options.php:1176
+#: zp-trunk/zp-core/admin-options.php:1179
 msgid "Spam filter:"
 msgstr "Spamfilter:"
 
-#: zp-trunk/zp-core/admin-options.php:1184
+#: zp-trunk/zp-core/admin-options.php:1187
 msgid "The SPAM filter plug-in you wish to use to check comments for SPAM"
 msgstr "Das Spamfilter-Plugin, das zum Überprüfen der Kommentare verwendet werden soll."
 
-#: zp-trunk/zp-core/admin-options.php:1196
+#: zp-trunk/zp-core/admin-options.php:1199
 msgid "Require fields:"
 msgstr "Notwendige Felder:"
 
-#: zp-trunk/zp-core/admin-options.php:1213
+#: zp-trunk/zp-core/admin-options.php:1216
 msgid "Captcha"
 msgstr "Captcha"
 
-#: zp-trunk/zp-core/admin-options.php:1217
+#: zp-trunk/zp-core/admin-options.php:1220
 msgid "Checked fields must be valid in a comment posting."
 msgstr "Aktivierte Felder müssen in einem Kommentar gültig sein."
 
-#: zp-trunk/zp-core/admin-options.php:1275
+#: zp-trunk/zp-core/admin-options.php:1278
 #: zp-trunk/zp-core/admin-themes.php:103
 msgid "There are no themes for which you have rights to administer."
 msgstr "Sie haben keine Rechte, Themes zu verwalten."
 
-#: zp-trunk/zp-core/admin-options.php:1285
+#: zp-trunk/zp-core/admin-options.php:1288
 #, php-format
 msgid "Theme for <code><strong>%1$s</strong></code>: <em>%2$s</em>"
 msgstr "Theme für <code><strong>%1$s</strong></code>: <em>%2$s</em>"
 
-#: zp-trunk/zp-core/admin-options.php:1288
+#: zp-trunk/zp-core/admin-options.php:1291
 msgid "Show theme for:"
 msgstr "Theme anzeigen für:"
 
-#: zp-trunk/zp-core/admin-options.php:1300
+#: zp-trunk/zp-core/admin-options.php:1303
 msgid "<strong>Standard options</strong>"
 msgstr "<strong>Standardeinstellungen</strong>"
 
-#: zp-trunk/zp-core/admin-options.php:1302
+#: zp-trunk/zp-core/admin-options.php:1305
 msgid "These image and album presentation options are standard to all themes."
 msgstr "Diese Bild- und Albumpräsentations-Einstellung sind Standard für all Themes."
 
-#: zp-trunk/zp-core/admin-options.php:1305
+#: zp-trunk/zp-core/admin-options.php:1308
 msgid "Albums per page:"
 msgstr "Alben pro Seite:"
 
-#: zp-trunk/zp-core/admin-options.php:1308
+#: zp-trunk/zp-core/admin-options.php:1311
 msgid "Controls the number of albums on a page. You might need to change\tthis after switching themes to make it look better."
 msgstr "Legt die Anzahl der Alben pro Seite fest. Möglicherweise muss der Wert angepasst werden, wenn Sie Ihr Theme gewechselt haben."
 
-#: zp-trunk/zp-core/admin-options.php:1311
+#: zp-trunk/zp-core/admin-options.php:1314
 msgid "Images per page:"
 msgstr "Bilder pro Seite:"
 
-#: zp-trunk/zp-core/admin-options.php:1314
+#: zp-trunk/zp-core/admin-options.php:1317
 msgid "Controls the number of images on a page. You might need to change\tthis after switching themes to make it look better."
 msgstr "Legt die Anzahl der Bilder pro Seite fest. Möglicherweise muss der Wert angepasst werden, wenn Sie Ihr Theme wechseln."
 
-#: zp-trunk/zp-core/admin-options.php:1317
+#: zp-trunk/zp-core/admin-options.php:1320
 msgid "Thumb size:"
 msgstr "Thumbnailgrösse:"
 
-#: zp-trunk/zp-core/admin-options.php:1320
+#: zp-trunk/zp-core/admin-options.php:1323
 msgid "Default thumbnail size and scale."
 msgstr "Standardgrösse der Thumbnails."
 
-#: zp-trunk/zp-core/admin-options.php:1323
+#: zp-trunk/zp-core/admin-options.php:1326
 msgid "Crop thumbnails:"
 msgstr "Thumbnails beschneiden:"
 
-#: zp-trunk/zp-core/admin-options.php:1326
+#: zp-trunk/zp-core/admin-options.php:1329
 msgid "If checked the thumbnail will be a centered portion of the\timage with the given width and height after being resized to <em>thumb\tsize</em> (by shortest side)."
 msgstr "Wenn angewählt, werden die Thumbnails aus dem Mittelteil des Bildes mit der eingestellten Breite und Höhe erstellt, nachdem das Bild auf die <em>Thumbnailgrösse</em> umgerechnet wurde (gemäß der kürzesten Seite)."
 
-#: zp-trunk/zp-core/admin-options.php:1327
+#: zp-trunk/zp-core/admin-options.php:1330
 msgid "Otherwise, it will be the full image resized to <em>thumb size</em> (by shortest side)."
 msgstr "Anderfalls wird das komplette Bild auf <em>Thumbnailgrösse</em> umgerechnet (gemäss der kürzesten Seite)."
 
-#: zp-trunk/zp-core/admin-options.php:1330
+#: zp-trunk/zp-core/admin-options.php:1333
 msgid "Crop thumbnail width:"
 msgstr "Thumbnailbeschnittbreite:"
 
-#: zp-trunk/zp-core/admin-options.php:1333
+#: zp-trunk/zp-core/admin-options.php:1336
 msgid "The <em>thumb crop width</em> is the maximum width when height is the shortest side"
 msgstr "Die <em>Thumbnailbeschnittbreite</em> ist die maximale Breite, wenn die Höhe die kürzeste Seite ist."
 
-#: zp-trunk/zp-core/admin-options.php:1336
+#: zp-trunk/zp-core/admin-options.php:1339
 msgid "Crop thumbnail height:"
 msgstr "Thumbnailbeschnitthöhe:"
 
-#: zp-trunk/zp-core/admin-options.php:1339
+#: zp-trunk/zp-core/admin-options.php:1342
 msgid "The <em>thumb crop height</em> is the maximum height when width is the shortest side"
 msgstr "Die <em>Thumbnailbeschnittehöhe</em> ist die maximale Höhe, wenn die Breite die kürzeste Seite ist."
 
-#: zp-trunk/zp-core/admin-options.php:1342
+#: zp-trunk/zp-core/admin-options.php:1345
 msgid "Image size:"
 msgstr "Bildgröße:"
 
-#: zp-trunk/zp-core/admin-options.php:1345
+#: zp-trunk/zp-core/admin-options.php:1348
 msgid "Default image display width."
 msgstr "Standardbildbreite:"
 
-#: zp-trunk/zp-core/admin-options.php:1348
+#: zp-trunk/zp-core/admin-options.php:1351
 msgid "Images size is longest size:"
 msgstr "Bildgröße gemäß längster Seite:"
 
-#: zp-trunk/zp-core/admin-options.php:1352
+#: zp-trunk/zp-core/admin-options.php:1355
 msgid "If this is checked the longest side of the image will be <em>image size</em>."
 msgstr "Wenn dies ausgewählt ist, wird die längste Seite eine Bildes als <em>Bildgröße</em> verwendet."
 
-#: zp-trunk/zp-core/admin-options.php:1353
+#: zp-trunk/zp-core/admin-options.php:1356
 msgid "Otherwise, the <em>width</em> of the image will\tbe <em>image size</em>."
 msgstr "Andernfalls wird die <em>Breite</em> des Bildes als <em>Bildgröße</em> verwendet."
 
-#: zp-trunk/zp-core/admin-options.php:1357
+#: zp-trunk/zp-core/admin-options.php:1360
 msgid "Custom index page:"
 msgstr "Benutzerdefinierte Index-Seite:"
 
-#: zp-trunk/zp-core/admin-options.php:1376
+#: zp-trunk/zp-core/admin-options.php:1379
 msgid "If this option is not empty, the Gallery Index URL that would normally link to the theme <code>index.php</code> script will instead link to this script. This option applies only to the main theme for the <em>Gallery</em>."
 msgstr "Wenn diese Einstellung nicht leer ist, zeigt die Galerie Index URL, die normalerweise zur <code>index.php</code>-Seite des Themes zeigt, auf dieses Skript.  Diese Einstellung hat nur Auswirkung auf das Hauptheme für die <em>Galerie</em>."
 
-#: zp-trunk/zp-core/admin-options.php:1388
+#: zp-trunk/zp-core/admin-options.php:1391
 msgid "<strong>Custom theme options</strong>"
 msgstr "<strong>Spezielle Theme-Einstellungen</strong>"
 
-#: zp-trunk/zp-core/admin-options.php:1390
+#: zp-trunk/zp-core/admin-options.php:1393
 msgid "The following are options specifically implemented by the theme."
 msgstr "Die folgenden Einstellungen sind nur speziell für dieses Theme."
 
-#: zp-trunk/zp-core/admin-options.php:1418
+#: zp-trunk/zp-core/admin-options.php:1421
 msgid "Plugin Options"
 msgstr "Plugin-Einstellungen"
 
-#: zp-trunk/zp-core/admin-options.php:1421
+#: zp-trunk/zp-core/admin-options.php:1424
 msgid "Expand plugin options"
 msgstr "Einstellungen aufklappen"
 
-#: zp-trunk/zp-core/admin-options.php:1422
+#: zp-trunk/zp-core/admin-options.php:1425
 msgid "Collapse all plugin options"
 msgstr "Einstellungen zusammenklappen"
 
-#: zp-trunk/zp-core/admin-options.php:1448
+#: zp-trunk/zp-core/admin-options.php:1451
 msgid "There are no plugin options to administer."
 msgstr "Es sind keine Plugin-Einstellungen vorhanden."
 
@@ -2982,346 +2983,346 @@ msgstr "Mehr Felder zum Hochladen hinzufügen"
 msgid "(won't reload the page, but remember your upload limits!)"
 msgstr "(lädt die Seite nicht neu, aber erinnert Ihre Grenze beim Hochladen!)"
 
-#: zp-trunk/zp-core/admin.php:411
+#: zp-trunk/zp-core/admin.php:416
 msgid "Subalbum order saved"
 msgstr "Unteralbumreihenfolge gesichert"
 
-#: zp-trunk/zp-core/admin.php:416
+#: zp-trunk/zp-core/admin.php:421
 msgid "Edit Album:"
 msgstr "Album bearbeiten:"
 
-#: zp-trunk/zp-core/admin.php:417
-#: zp-trunk/zp-core/admin.php:818
+#: zp-trunk/zp-core/admin.php:422
+#: zp-trunk/zp-core/admin.php:822
 msgid "Back to the list of albums (go up one level)"
 msgstr "Zurück zur Albumübersicht (eine Ebene zurück)"
 
-#: zp-trunk/zp-core/admin.php:419
+#: zp-trunk/zp-core/admin.php:424
 msgid "Sort Album"
 msgstr "Album sortieren"
 
-#: zp-trunk/zp-core/admin.php:432
+#: zp-trunk/zp-core/admin.php:437
 msgid "You must supply a  password."
 msgstr "Es muss ein Passwort eingegeben werden"
 
-#: zp-trunk/zp-core/admin.php:434
+#: zp-trunk/zp-core/admin.php:439
 msgid "Your passwords did not match."
 msgstr "Ihr Passwort stimmt nicht überein."
 
-#: zp-trunk/zp-core/admin.php:443
+#: zp-trunk/zp-core/admin.php:448
 msgid "Changes saved"
 msgstr "Änderungen gesichert"
 
-#: zp-trunk/zp-core/admin.php:449
+#: zp-trunk/zp-core/admin.php:454
 msgid "There was an error with a move, copy, or rename operation."
 msgstr "Es ist ein Fehler beim Verschieben, Kopieren oder Umbenennen aufgetreten."
 
-#: zp-trunk/zp-core/admin.php:457
+#: zp-trunk/zp-core/admin.php:462
 msgid "Images uploaded"
 msgstr "Hochgeladene Bilder"
 
-#: zp-trunk/zp-core/admin.php:465
+#: zp-trunk/zp-core/admin.php:470
 msgid "Subalbums"
 msgstr "Unteralben"
 
-#: zp-trunk/zp-core/admin.php:467
-#: zp-trunk/zp-core/admin.php:559
+#: zp-trunk/zp-core/admin.php:472
+#: zp-trunk/zp-core/admin.php:564
 msgid "Images"
 msgstr "Bilder"
 
-#: zp-trunk/zp-core/admin.php:493
+#: zp-trunk/zp-core/admin.php:498
 msgid "Albums"
 msgstr "Alben"
 
-#: zp-trunk/zp-core/admin.php:502
-#: zp-trunk/zp-core/admin.php:912
+#: zp-trunk/zp-core/admin.php:507
+#: zp-trunk/zp-core/admin.php:916
 msgid " descending"
 msgstr " Absteigend"
 
-#: zp-trunk/zp-core/admin.php:511
-#: zp-trunk/zp-core/admin.php:921
+#: zp-trunk/zp-core/admin.php:516
+#: zp-trunk/zp-core/admin.php:925
 #, php-format
 msgid "Current sort: %1$s%2$s. "
 msgstr "Aktuelle Sortierung: %1$s%2$s. "
 
-#: zp-trunk/zp-core/admin.php:512
-#: zp-trunk/zp-core/admin.php:922
+#: zp-trunk/zp-core/admin.php:517
+#: zp-trunk/zp-core/admin.php:926
 msgid "Drag the albums into the order you wish them displayed."
 msgstr "Verschieben Sie die Alben in die gewünschte Reihenfolge."
 
-#: zp-trunk/zp-core/admin.php:513
-#: zp-trunk/zp-core/admin.php:924
+#: zp-trunk/zp-core/admin.php:518
+#: zp-trunk/zp-core/admin.php:928
 msgid "Select an album to edit its description and data, or"
 msgstr "Wählen Sie ein Album zum Bearbeiten seiner Beschreibung und Daten aus oder"
 
-#: zp-trunk/zp-core/admin.php:515
-#: zp-trunk/zp-core/admin.php:925
+#: zp-trunk/zp-core/admin.php:520
+#: zp-trunk/zp-core/admin.php:929
 msgid "mass-edit all album data"
 msgstr "bearbeiten Sie alle Albendaten auf einmal"
 
-#: zp-trunk/zp-core/admin.php:528
-#: zp-trunk/zp-core/admin.php:946
+#: zp-trunk/zp-core/admin.php:533
+#: zp-trunk/zp-core/admin.php:950
 msgid "Has Password"
 msgstr "hat Passwort"
 
-#: zp-trunk/zp-core/admin.php:529
-#: zp-trunk/zp-core/admin.php:947
+#: zp-trunk/zp-core/admin.php:534
+#: zp-trunk/zp-core/admin.php:951
 msgid "Published/Unpublished"
 msgstr "Veröffentlicht/Unveröffentlicht"
 
-#: zp-trunk/zp-core/admin.php:530
-#: zp-trunk/zp-core/admin.php:948
+#: zp-trunk/zp-core/admin.php:535
+#: zp-trunk/zp-core/admin.php:952
 msgid "Cache\tthe album"
 msgstr "Bilder des Albums cachen"
 
-#: zp-trunk/zp-core/admin.php:531
-#: zp-trunk/zp-core/admin.php:949
+#: zp-trunk/zp-core/admin.php:536
+#: zp-trunk/zp-core/admin.php:953
 msgid "Refresh image metadata"
 msgstr "Bildmetadaten aktualisieren"
 
-#: zp-trunk/zp-core/admin.php:532
-#: zp-trunk/zp-core/admin.php:950
+#: zp-trunk/zp-core/admin.php:537
+#: zp-trunk/zp-core/admin.php:954
 msgid "Reset\thitcounters"
 msgstr "Besucherzähler zurücksetzen."
 
-#: zp-trunk/zp-core/admin.php:536
-#: zp-trunk/zp-core/admin.php:955
+#: zp-trunk/zp-core/admin.php:541
+#: zp-trunk/zp-core/admin.php:959
 msgid "Save Order"
 msgstr "Sortierung sichern"
 
-#: zp-trunk/zp-core/admin.php:561
+#: zp-trunk/zp-core/admin.php:566
 msgid "Click the images for a larger version"
 msgstr "Für eine grössere Ansicht auf das Bild klicken"
 
-#: zp-trunk/zp-core/admin.php:563
+#: zp-trunk/zp-core/admin.php:568
 msgid "expand all fields"
 msgstr "Alle Felder aufklappen"
 
-#: zp-trunk/zp-core/admin.php:564
+#: zp-trunk/zp-core/admin.php:569
 msgid "collapse all fields"
 msgstr "Alle Felder zusammenklappen"
 
-#: zp-trunk/zp-core/admin.php:567
+#: zp-trunk/zp-core/admin.php:572
 msgid "Display images by:"
 msgstr "Bilder anzeigen sortiert nach: "
 
-#: zp-trunk/zp-core/admin.php:588
-#: zp-trunk/zp-core/admin.php:795
+#: zp-trunk/zp-core/admin.php:593
+#: zp-trunk/zp-core/admin.php:799
 msgid "save changes"
 msgstr "Änderungen sichern"
 
-#: zp-trunk/zp-core/admin.php:615
+#: zp-trunk/zp-core/admin.php:620
 msgid "Select as album thumbnail."
 msgstr "Als Albumthumbnail auswählen."
 
-#: zp-trunk/zp-core/admin.php:618
+#: zp-trunk/zp-core/admin.php:623
 msgid "Title:"
 msgstr "Titel:"
 
-#: zp-trunk/zp-core/admin.php:632
+#: zp-trunk/zp-core/admin.php:637
 msgid "Visible"
 msgstr "Sichtbar"
 
-#: zp-trunk/zp-core/admin.php:636
+#: zp-trunk/zp-core/admin.php:641
 msgid "Description:"
 msgstr "Beschreibung:"
 
-#: zp-trunk/zp-core/admin.php:643
+#: zp-trunk/zp-core/admin.php:648
 #, php-format
 msgid "Hit counter: <strong>%u</strong>"
 msgstr "Besucherzähler: <strong>%u</strong>"
 
-#: zp-trunk/zp-core/admin.php:671
+#: zp-trunk/zp-core/admin.php:676
 msgid "Rename File"
 msgstr "Datei umbenennen"
 
-#: zp-trunk/zp-core/admin.php:675
+#: zp-trunk/zp-core/admin.php:680
 msgid "Are you sure you want to select this image for deletion?"
 msgstr "Sind Sie sicher, dass Sie dieses Bild zum Löschen markieren wollen?"
 
-#: zp-trunk/zp-core/admin.php:676
+#: zp-trunk/zp-core/admin.php:681
 msgid "Delete image."
 msgstr "Bild löschen."
 
-#: zp-trunk/zp-core/admin.php:715
+#: zp-trunk/zp-core/admin.php:720
 msgid "Image will be deleted when changes are saved."
 msgstr "Das Bild wird gelöscht, wenn die Änderungen gesichert werden."
 
-#: zp-trunk/zp-core/admin.php:735
+#: zp-trunk/zp-core/admin.php:740
 msgid "City:"
 msgstr "Stadt:"
 
-#: zp-trunk/zp-core/admin.php:741
+#: zp-trunk/zp-core/admin.php:746
 msgid "State:"
 msgstr "Land:"
 
-#: zp-trunk/zp-core/admin.php:747
+#: zp-trunk/zp-core/admin.php:752
 msgid "Country:"
 msgstr "Staat:"
 
-#: zp-trunk/zp-core/admin.php:753
+#: zp-trunk/zp-core/admin.php:758
 msgid "Credit:"
 msgstr "Credit:"
 
-#: zp-trunk/zp-core/admin.php:759
+#: zp-trunk/zp-core/admin.php:764
 msgid "Copyright:"
 msgstr "Copyright:"
 
-#: zp-trunk/zp-core/admin.php:778
+#: zp-trunk/zp-core/admin.php:782
 msgid "show more fields"
 msgstr "Mehr Felder zeigen"
 
-#: zp-trunk/zp-core/admin.php:780
+#: zp-trunk/zp-core/admin.php:784
 msgid "show fewer fields"
 msgstr "Weniger Felder zeigen"
 
-#: zp-trunk/zp-core/admin.php:833
+#: zp-trunk/zp-core/admin.php:837
 msgid "Save Successful"
 msgstr "Erfolgreich gesichert"
 
-#: zp-trunk/zp-core/admin.php:863
+#: zp-trunk/zp-core/admin.php:867
 msgid "Edit All Albums in"
 msgstr "Alle Alben bearbeiten in"
 
-#: zp-trunk/zp-core/admin.php:865
+#: zp-trunk/zp-core/admin.php:869
 msgid "Back to the list of albums (go up a level)"
 msgstr "Zurück zur Albumliste (eine Ebene zurück)"
 
-#: zp-trunk/zp-core/admin.php:888
+#: zp-trunk/zp-core/admin.php:892
 msgid "Edit Gallery"
 msgstr "Galerie bearbeiten"
 
-#: zp-trunk/zp-core/admin.php:895
+#: zp-trunk/zp-core/admin.php:899
 msgid "Album order saved"
 msgstr "Albumreihenfolge gesichert. "
 
-#: zp-trunk/zp-core/admin.php:929
+#: zp-trunk/zp-core/admin.php:933
 msgid "Edit this album"
 msgstr "Dieses Album bearbeiten"
 
-#: zp-trunk/zp-core/admin.php:961
+#: zp-trunk/zp-core/admin.php:965
 msgid "There are no albums for you to edit."
 msgstr "Es gibt keine Alben, die Sie bearbeiten können."
 
-#: zp-trunk/zp-core/admin.php:968
+#: zp-trunk/zp-core/admin.php:972
 msgid "zenphoto Administration"
 msgstr "Zenphoto-Verwaltung"
 
-#: zp-trunk/zp-core/admin.php:974
+#: zp-trunk/zp-core/admin.php:978
 msgid "Could not connect to  <a href=\"http://www.zenphoto.org\">zenphoto.org</a>"
 msgstr "Es konnte keine Verbindung mit  <a href=\"http://www.zenphoto.org\">zenphoto.org</a> hergestellt werden"
 
-#: zp-trunk/zp-core/admin.php:976
+#: zp-trunk/zp-core/admin.php:980
 #, php-format
 msgid "zenphoto version %s is available."
 msgstr "zenphoto-Version %s ist verfügbar."
 
-#: zp-trunk/zp-core/admin.php:979
+#: zp-trunk/zp-core/admin.php:983
 msgid "You are running the latest zenphoto version."
 msgstr "Sie verwenden bereits die neueste Zenphoto-Version."
 
-#: zp-trunk/zp-core/admin.php:982
+#: zp-trunk/zp-core/admin.php:986
 msgid "Check for zenphoto update."
 msgstr "Nach Zenphoto-Updates suchen."
 
-#: zp-trunk/zp-core/admin.php:986
+#: zp-trunk/zp-core/admin.php:990
 msgid "Cache has been purged"
 msgstr "Cache wurde gelöscht"
 
-#: zp-trunk/zp-core/admin.php:994
+#: zp-trunk/zp-core/admin.php:998
 msgid "<strong>Upload</strong> pictures."
 msgstr "Bilder <strong>hochladen</strong>."
 
-#: zp-trunk/zp-core/admin.php:996
+#: zp-trunk/zp-core/admin.php:1000
 msgid "<strong>Edit</strong> titles, descriptions, and other metadata."
 msgstr "Titel, Beschreibungen und andere Metadaten <strong>bearbeiten</strong>."
 
-#: zp-trunk/zp-core/admin.php:998
+#: zp-trunk/zp-core/admin.php:1002
 msgid "Edit or delete <strong>comments</strong>."
 msgstr "<strong>Kommentare</strong> löschen oder bearbeiten."
 
-#: zp-trunk/zp-core/admin.php:1000
+#: zp-trunk/zp-core/admin.php:1004
 msgid "Browse your <strong>gallery</strong> and edit on the go."
 msgstr "Die <strong>Galerie</strong> ansehen und währenddessen bearbeiten. "
 
-#: zp-trunk/zp-core/admin.php:1013
+#: zp-trunk/zp-core/admin.php:1017
 msgid "10 Most Recent Comments"
 msgstr "Die 10 neuesten Kommentare"
 
-#: zp-trunk/zp-core/admin.php:1104
+#: zp-trunk/zp-core/admin.php:1108
 #, php-format
 msgid "%1$s commented on %2$s:"
 msgstr "%1$s Kommentare zu %2$s:"
 
-#: zp-trunk/zp-core/admin.php:1112
+#: zp-trunk/zp-core/admin.php:1116
 msgid "Gallery Maintenance"
 msgstr "Galeriewartung"
 
-#: zp-trunk/zp-core/admin.php:1114
+#: zp-trunk/zp-core/admin.php:1118
 msgid "Your database is"
 msgstr "Ihre Datenbank heisst"
 
-#: zp-trunk/zp-core/admin.php:1115
+#: zp-trunk/zp-core/admin.php:1119
 msgid "Tables are prefixed by"
 msgstr "Die Tabellen haben das Prefix "
 
-#: zp-trunk/zp-core/admin.php:1125
+#: zp-trunk/zp-core/admin.php:1129
 msgid "Cleans the database and removes any orphan entries for comments, images, and albums."
 msgstr "Reinigt die Datenbank und entfernt verwaiste Einträge von Kommentaren, Bildern und Alben."
 
-#: zp-trunk/zp-core/admin.php:1125
+#: zp-trunk/zp-core/admin.php:1129
 msgid "Refresh the Database"
 msgstr "Datenbank aktualisieren"
 
-#: zp-trunk/zp-core/admin.php:1134
+#: zp-trunk/zp-core/admin.php:1138
 msgid "Clears the image cache. Images will be re-cached as they are viewed. To clear the cache and renew it, use the <em>Pre-Cache Images</em> button below."
 msgstr "Leert den Bildzwischenspeicher (Cache). Die Bilder werden erneut im Cache zwischengespeichert, wenn sie angesehen werden. Um den Cache zu leeren und gleichzeitig zu erneuern, verwende den Knopf <em>Bilder cachen</em> unten."
 
-#: zp-trunk/zp-core/admin.php:1134
+#: zp-trunk/zp-core/admin.php:1138
 msgid "Purge Cache"
 msgstr "Cache löschen"
 
-#: zp-trunk/zp-core/admin.php:1142
+#: zp-trunk/zp-core/admin.php:1146
 msgid "Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser."
 msgstr "Findet neue Bilder, die noch nicht im Cache zwischengespeichert sind und erstellt eine Zwischenspeicherdateien von ihnen. Es führt auch die beiden oberen Funktionen aus. Wenn Sie eine grosse Menge Bilder in Ihrer Galerie haben, sollten Sie besser die Funktion <em>Bilder cachen</em>, über die jedes einzelne Album verfügt, verwenden, um eine Überlastung Ihres Browsers zu vermeiden."
 
-#: zp-trunk/zp-core/admin.php:1150
+#: zp-trunk/zp-core/admin.php:1154
 msgid "Forces a refresh of the EXIF and IPTC data for all images."
 msgstr "Führt eine Aktualisierung der EXIF- und IPTC-Daten aller Bilder aus."
 
-#: zp-trunk/zp-core/admin.php:1160
+#: zp-trunk/zp-core/admin.php:1164
 msgid "Sets all album and image hitcounters to zero."
 msgstr "Setzt alle Album- und Bildbesucherzähler auf Null."
 
-#: zp-trunk/zp-core/admin.php:1173
+#: zp-trunk/zp-core/admin.php:1177
 msgid "Gallery Stats"
 msgstr "Galeriestatistik"
 
-#: zp-trunk/zp-core/admin.php:1179
+#: zp-trunk/zp-core/admin.php:1183
 #, php-format
 msgid "<strong>%1$u</strong> images (%2$u not visible)"
 msgstr "<strong>%1$u</strong> Bilder (%2$u nicht sichtbar)"
 
-#: zp-trunk/zp-core/admin.php:1181
+#: zp-trunk/zp-core/admin.php:1185
 #, php-format
 msgid "<strong>%u</strong> images"
 msgstr "<strong>%u</strong> Bilder"
 
-#: zp-trunk/zp-core/admin.php:1190
+#: zp-trunk/zp-core/admin.php:1194
 #, php-format
 msgid "<strong>%1$u</strong> albums (%2$u not published)"
 msgstr "<strong>%1$u</strong> Alben (%2$u nicht veröffentlicht)"
 
-#: zp-trunk/zp-core/admin.php:1192
+#: zp-trunk/zp-core/admin.php:1196
 #, php-format
 msgid "<strong>%u</strong> albums"
 msgstr "<strong>%u</strong> Alben"
 
-#: zp-trunk/zp-core/admin.php:1201
+#: zp-trunk/zp-core/admin.php:1205
 #, php-format
 msgid "<strong>%1$u</strong> comments (%2$u in moderation)"
 msgstr "<strong>%1$u</strong> Kommentare (%2$u zu moderieren)"
 
-#: zp-trunk/zp-core/admin.php:1203
+#: zp-trunk/zp-core/admin.php:1207
 #, php-format
 msgid "<strong>%u</strong> comments"
 msgstr "<strong>%u</strong> comments"
@@ -3403,12 +3404,12 @@ msgstr "Wenn Sie Ihr Passwort nicht zurücksetzen wollen, ignorieren Sie einfach
 msgid "The Zenphoto information you requested"
 msgstr "Die Zenphoto-Information, die Sie angefordert haben"
 
-#: zp-trunk/zp-core/class-album.php:1166
+#: zp-trunk/zp-core/class-album.php:1167
 #, php-format
 msgid "Error: The album %s cannot be found."
 msgstr "Fehler: Das Album %s wurde nicht gefunden."
 
-#: zp-trunk/zp-core/class-album.php:1168
+#: zp-trunk/zp-core/class-album.php:1169
 #, php-format
 msgid "Error: The album %s is not readable."
 msgstr "Fehler: Das Album %s ist nicht lesbar."
@@ -3484,483 +3485,483 @@ msgstr "Möglicherweise müssen Sie das <a href=\"%s/%s/setup.php\">Setup-Skript
 msgid "HTTP Accept Language"
 msgstr "HTTP Accept Language"
 
-#: zp-trunk/zp-core/functions-i18n.php:136
+#: zp-trunk/zp-core/functions-i18n.php:137
 msgid "Afrikaans"
 msgstr "Afrikaans"
 
-#: zp-trunk/zp-core/functions-i18n.php:137
+#: zp-trunk/zp-core/functions-i18n.php:138
 msgid "Albanian"
 msgstr "Albanisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:138
+#: zp-trunk/zp-core/functions-i18n.php:139
 msgid "Arabic (United Arab Emirates)"
 msgstr "Arabisch (Vereine Arabische Emirate)"
 
-#: zp-trunk/zp-core/functions-i18n.php:139
+#: zp-trunk/zp-core/functions-i18n.php:140
 msgid "Arabic (Bahrain)"
 msgstr "Arabisch (Bahrain)"
 
-#: zp-trunk/zp-core/functions-i18n.php:140
+#: zp-trunk/zp-core/functions-i18n.php:141
 msgid "Arabic (Algeria)"
 msgstr "Arabisch (Algerien)"
 
-#: zp-trunk/zp-core/functions-i18n.php:141
+#: zp-trunk/zp-core/functions-i18n.php:142
 msgid "Arabic (Egypt)"
 msgstr "Arabisch (Ägypten)"
 
-#: zp-trunk/zp-core/functions-i18n.php:142
+#: zp-trunk/zp-core/functions-i18n.php:143
 msgid "Arabic (Iran)"
 msgstr "Arabisch (Iran)"
 
-#: zp-trunk/zp-core/functions-i18n.php:143
+#: zp-trunk/zp-core/functions-i18n.php:144
 msgid "Arabic (Iraq)"
 msgstr "Arabisch (Irak)"
 
-#: zp-trunk/zp-core/functions-i18n.php:144
+#: zp-trunk/zp-core/functions-i18n.php:145
 msgid "Arabic (Jordan)"
 msgstr "Arabisch (Jordanien)"
 
-#: zp-trunk/zp-core/functions-i18n.php:145
+#: zp-trunk/zp-core/functions-i18n.php:146
 msgid "Arabic (Kuwait)"
 msgstr "Arabisch (Kuwait)"
 
-#: zp-trunk/zp-core/functions-i18n.php:146
+#: zp-trunk/zp-core/functions-i18n.php:147
 msgid "Arabic (Lebanon)"
 msgstr "Arabisch (Libanon)"
 
-#: zp-trunk/zp-core/functions-i18n.php:147
+#: zp-trunk/zp-core/functions-i18n.php:148
 msgid "Arabic (Libya)"
 msgstr "Arabisch (Libyen)"
 
-#: zp-trunk/zp-core/functions-i18n.php:148
+#: zp-trunk/zp-core/functions-i18n.php:149
 msgid "Arabic (Morocco)"
 msgstr "Arabisch (Marokko)"
 
-#: zp-trunk/zp-core/functions-i18n.php:149
+#: zp-trunk/zp-core/functions-i18n.php:150
 msgid "Arabic (Oman)"
 msgstr "Arabisch (Oman)"
 
-#: zp-trunk/zp-core/functions-i18n.php:150
+#: zp-trunk/zp-core/functions-i18n.php:151
 msgid "Arabic (Qatar)"
 msgstr "Arabisch (Katar)"
 
-#: zp-trunk/zp-core/functions-i18n.php:151
+#: zp-trunk/zp-core/functions-i18n.php:152
 msgid "Arabic (Saudi Arabia)"
 msgstr "Arabisch (Saudi-Arabien)"
 
-#: zp-trunk/zp-core/functions-i18n.php:152
+#: zp-trunk/zp-core/functions-i18n.php:153
 msgid "Arabic (Sudan)"
 msgstr "Arabisch (Sudan)"
 
-#: zp-trunk/zp-core/functions-i18n.php:153
+#: zp-trunk/zp-core/functions-i18n.php:154
 msgid "Arabic (Syria)"
 msgstr "Arabisch (Syrien)"
 
-#: zp-trunk/zp-core/functions-i18n.php:154
+#: zp-trunk/zp-core/functions-i18n.php:155
 msgid "Arabic (Tunisia)"
 msgstr "Arabisch (Tunesien)"
 
-#: zp-trunk/zp-core/functions-i18n.php:155
+#: zp-trunk/zp-core/functions-i18n.php:156
 msgid "Arabic (Yemen)"
 msgstr "Arabisch (Jemen)"
 
-#: zp-trunk/zp-core/functions-i18n.php:156
+#: zp-trunk/zp-core/functions-i18n.php:157
 msgid "Basque (Basque)"
 msgstr "Baskisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:157
+#: zp-trunk/zp-core/functions-i18n.php:158
 msgid "Belarusian"
 msgstr "Weißrussisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:158
+#: zp-trunk/zp-core/functions-i18n.php:159
 msgid "Bengali"
 msgstr "Bengali"
 
-#: zp-trunk/zp-core/functions-i18n.php:159
+#: zp-trunk/zp-core/functions-i18n.php:160
 msgid "Bulgarian"
 msgstr "Bulgarisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:160
+#: zp-trunk/zp-core/functions-i18n.php:161
 msgid "Catalan"
 msgstr "Katalanisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:161
+#: zp-trunk/zp-core/functions-i18n.php:162
 msgid "Chinese (Republic of China)"
 msgstr "Chinesisch (Volksrepublik China)"
 
-#: zp-trunk/zp-core/functions-i18n.php:162
+#: zp-trunk/zp-core/functions-i18n.php:163
 msgid "Chinese (Hong Kong)"
 msgstr "Chinesisch (Hong Kong)"
 
-#: zp-trunk/zp-core/functions-i18n.php:163
+#: zp-trunk/zp-core/functions-i18n.php:164
 msgid "Chinese (Taiwan)"
 msgstr "Chinesisch (Taiwan)"
 
-#: zp-trunk/zp-core/functions-i18n.php:164
+#: zp-trunk/zp-core/functions-i18n.php:165
 msgid "Croatian"
 msgstr "Kroatisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:165
+#: zp-trunk/zp-core/functions-i18n.php:166
 msgid "Czech"
 msgstr "Tschechisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:166
+#: zp-trunk/zp-core/functions-i18n.php:167
 msgid "Cambodian"
 msgstr "Kambodschanisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:167
+#: zp-trunk/zp-core/functions-i18n.php:168
 msgid "Danish"
 msgstr "Dänisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:168
+#: zp-trunk/zp-core/functions-i18n.php:169
 msgid "Dutch (Belgium)"
 msgstr "Niederländisch (Belgien)"
 
-#: zp-trunk/zp-core/functions-i18n.php:169
+#: zp-trunk/zp-core/functions-i18n.php:170
 msgid "Dutch (The Netherlands)"
 msgstr "Niederländisch (Niederlande)"
 
-#: zp-trunk/zp-core/functions-i18n.php:170
+#: zp-trunk/zp-core/functions-i18n.php:171
 msgid "English (Australia)"
 msgstr "Englisch (Australien)"
 
-#: zp-trunk/zp-core/functions-i18n.php:171
+#: zp-trunk/zp-core/functions-i18n.php:172
 msgid "English (Canada)"
 msgstr "Englisch (Kanada)"
 
-#: zp-trunk/zp-core/functions-i18n.php:172
+#: zp-trunk/zp-core/functions-i18n.php:173
 msgid "English (United Kingdom)"
 msgstr "Englisch (Grossbritannien)"
 
-#: zp-trunk/zp-core/functions-i18n.php:173
+#: zp-trunk/zp-core/functions-i18n.php:174
 msgid "English (India)"
 msgstr "Englisch (Indien)"
 
-#: zp-trunk/zp-core/functions-i18n.php:174
+#: zp-trunk/zp-core/functions-i18n.php:175
 msgid "English (New Zealand)"
 msgstr "Englisch (Neuseeland)"
 
-#: zp-trunk/zp-core/functions-i18n.php:175
+#: zp-trunk/zp-core/functions-i18n.php:176
 msgid "English (Philippines)"
 msgstr "Englisch (Philipinen)"
 
-#: zp-trunk/zp-core/functions-i18n.php:176
+#: zp-trunk/zp-core/functions-i18n.php:177
 msgid "English (United States)"
 msgstr "Englisch (USA)"
 
-#: zp-trunk/zp-core/functions-i18n.php:177
+#: zp-trunk/zp-core/functions-i18n.php:178
 msgid "English (South Africa)"
 msgstr "Englisch (Südafrika)"
 
-#: zp-trunk/zp-core/functions-i18n.php:178
+#: zp-trunk/zp-core/functions-i18n.php:179
 msgid "English (Zimbabwe)"
 msgstr "Englisch (Simbabwe)"
 
-#: zp-trunk/zp-core/functions-i18n.php:179
+#: zp-trunk/zp-core/functions-i18n.php:180
 msgid "Esperanto"
 msgstr "Esperanto"
 
-#: zp-trunk/zp-core/functions-i18n.php:180
+#: zp-trunk/zp-core/functions-i18n.php:181
 msgid "Estonian"
 msgstr "Estnisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:181
+#: zp-trunk/zp-core/functions-i18n.php:182
 msgid "Finnish"
 msgstr "Finnisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:182
+#: zp-trunk/zp-core/functions-i18n.php:183
 msgid "Faroese"
 msgstr "Färöisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:183
+#: zp-trunk/zp-core/functions-i18n.php:184
 msgid "French (Belgium)"
 msgstr "Französisch (Belgien)"
 
-#: zp-trunk/zp-core/functions-i18n.php:184
+#: zp-trunk/zp-core/functions-i18n.php:185
 msgid "French (Canada)"
 msgstr "Französisch (Kanada)"
 
-#: zp-trunk/zp-core/functions-i18n.php:185
+#: zp-trunk/zp-core/functions-i18n.php:186
 msgid "French (Switzerland)"
 msgstr "Französisch (Schweiz)"
 
-#: zp-trunk/zp-core/functions-i18n.php:186
+#: zp-trunk/zp-core/functions-i18n.php:187
 msgid "French (France)"
 msgstr "Französisch (Frankreich)"
 
-#: zp-trunk/zp-core/functions-i18n.php:187
+#: zp-trunk/zp-core/functions-i18n.php:188
 msgid "French (Luxembourg)"
 msgstr "Französisch (Luxemburg)"
 
-#: zp-trunk/zp-core/functions-i18n.php:188
+#: zp-trunk/zp-core/functions-i18n.php:189
 msgid "Galician"
 msgstr "Galizisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:189
+#: zp-trunk/zp-core/functions-i18n.php:190
 msgid "Gujarati"
 msgstr "Gujarati"
 
-#: zp-trunk/zp-core/functions-i18n.php:190
+#: zp-trunk/zp-core/functions-i18n.php:191
 msgid "Greek"
 msgstr "Griechisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:191
+#: zp-trunk/zp-core/functions-i18n.php:192
 msgid "German (Austria)"
 msgstr "Deutsch (Österreich)"
 
-#: zp-trunk/zp-core/functions-i18n.php:192
+#: zp-trunk/zp-core/functions-i18n.php:193
 msgid "German (Belgium)"
 msgstr "Deutsch (Belgien)"
 
-#: zp-trunk/zp-core/functions-i18n.php:193
+#: zp-trunk/zp-core/functions-i18n.php:194
 msgid "German (Switzerland)"
 msgstr "Deutsch (Schweiz)"
 
-#: zp-trunk/zp-core/functions-i18n.php:194
+#: zp-trunk/zp-core/functions-i18n.php:195
 msgid "German (Germany)"
 msgstr "Deutsch (Deutschland)"
 
-#: zp-trunk/zp-core/functions-i18n.php:195
+#: zp-trunk/zp-core/functions-i18n.php:196
 msgid "German (Luxembourg)"
 msgstr "Deutsch (Luxemburg)"
 
-#: zp-trunk/zp-core/functions-i18n.php:196
+#: zp-trunk/zp-core/functions-i18n.php:197
 msgid "Hebrew"
 msgstr "Hebräisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:197
+#: zp-trunk/zp-core/functions-i18n.php:198
 msgid "Hindi"
 msgstr "Hindi"
 
-#: zp-trunk/zp-core/functions-i18n.php:198
+#: zp-trunk/zp-core/functions-i18n.php:199
 msgid "Hungarian"
 msgstr "Ungarisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:199
+#: zp-trunk/zp-core/functions-i18n.php:200
 msgid "Indonesian"
 msgstr "Indonesisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:200
+#: zp-trunk/zp-core/functions-i18n.php:201
 msgid "Icelandic"
 msgstr "Isländisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:201
+#: zp-trunk/zp-core/functions-i18n.php:202
 msgid "Italian (Switzerland)"
 msgstr "Italienisch (Schweiz)"
 
-#: zp-trunk/zp-core/functions-i18n.php:202
+#: zp-trunk/zp-core/functions-i18n.php:203
 msgid "Italian (Italy)"
 msgstr "Italienisch (Italien)"
 
-#: zp-trunk/zp-core/functions-i18n.php:203
+#: zp-trunk/zp-core/functions-i18n.php:204
 msgid "Japanese"
 msgstr "Japanisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:204
+#: zp-trunk/zp-core/functions-i18n.php:205
 msgid "Korean"
 msgstr "Koreanisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:205
+#: zp-trunk/zp-core/functions-i18n.php:206
 msgid "Lithuanian"
 msgstr "Litauisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:206
+#: zp-trunk/zp-core/functions-i18n.php:207
 msgid "Latvian"
 msgstr "Lettisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:207
+#: zp-trunk/zp-core/functions-i18n.php:208
 msgid "Macedonian"
 msgstr "Makedonisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:208
+#: zp-trunk/zp-core/functions-i18n.php:209
 msgid "Mongolian"
 msgstr "Mongolisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:209
+#: zp-trunk/zp-core/functions-i18n.php:210
 msgid "Malay"
 msgstr "Malayisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:210
+#: zp-trunk/zp-core/functions-i18n.php:211
 msgid "Malagasy"
 msgstr "Madagassisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:211
+#: zp-trunk/zp-core/functions-i18n.php:212
 msgid "Norwegian (Bokml)"
 msgstr "Norwegisch (Bokml)"
 
-#: zp-trunk/zp-core/functions-i18n.php:212
+#: zp-trunk/zp-core/functions-i18n.php:213
 msgid "Norwegian"
 msgstr "Norwegisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:213
+#: zp-trunk/zp-core/functions-i18n.php:214
 msgid "Nias"
 msgstr "Nias"
 
-#: zp-trunk/zp-core/functions-i18n.php:214
+#: zp-trunk/zp-core/functions-i18n.php:215
 msgid "Polish"
 msgstr "Polnisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:215
+#: zp-trunk/zp-core/functions-i18n.php:216
 msgid "Portugese (Brazil)"
 msgstr "Portugiesisch (Brasilien)"
 
-#: zp-trunk/zp-core/functions-i18n.php:216
+#: zp-trunk/zp-core/functions-i18n.php:217
 msgid "Portugese (Portugal)"
 msgstr "Portugiesisch (Portugal)"
 
-#: zp-trunk/zp-core/functions-i18n.php:217
+#: zp-trunk/zp-core/functions-i18n.php:218
 msgid "Romanian"
 msgstr "Rumänisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:218
+#: zp-trunk/zp-core/functions-i18n.php:219
 msgid "Russian (Russia)"
 msgstr "Russisch (Russland)"
 
-#: zp-trunk/zp-core/functions-i18n.php:219
+#: zp-trunk/zp-core/functions-i18n.php:220
 msgid "Russian (Ukraine)"
 msgstr "Russisch (Ukraine)"
 
-#: zp-trunk/zp-core/functions-i18n.php:220
+#: zp-trunk/zp-core/functions-i18n.php:221
 msgid "Sinhala"
 msgstr "Singhalesisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:221
+#: zp-trunk/zp-core/functions-i18n.php:222
 msgid "Slovaka"
 msgstr "Slovakisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:222
+#: zp-trunk/zp-core/functions-i18n.php:223
 msgid "Slovenian"
 msgstr "Slowenisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:223
+#: zp-trunk/zp-core/functions-i18n.php:224
 msgid "Spanish (Argentina)"
 msgstr "Spanisch (Argentinien)"
 
-#: zp-trunk/zp-core/functions-i18n.php:224
+#: zp-trunk/zp-core/functions-i18n.php:225
 msgid "Spanish (Bolivia)"
 msgstr "Spanisch (Bolivien)"
 
-#: zp-trunk/zp-core/functions-i18n.php:225
+#: zp-trunk/zp-core/functions-i18n.php:226
 msgid "Spanish (Chile)"
 msgstr "Spanisch (Chile)"
 
-#: zp-trunk/zp-core/functions-i18n.php:226
+#: zp-trunk/zp-core/functions-i18n.php:227
 msgid "Spanish (Columbia)"
 msgstr "Spanisch (Kolumbien)"
 
-#: zp-trunk/zp-core/functions-i18n.php:227
+#: zp-trunk/zp-core/functions-i18n.php:228
 msgid "Spanish (Costa Rica)"
 msgstr "Spanisch (Costa Rica)"
 
-#: zp-trunk/zp-core/functions-i18n.php:228
+#: zp-trunk/zp-core/functions-i18n.php:229
 msgid "Spanish (Dominican Republic)"
 msgstr "Spanisch (Dominikanische Republik)"
 
-#: zp-trunk/zp-core/functions-i18n.php:229
+#: zp-trunk/zp-core/functions-i18n.php:230
 msgid "Spanish (Ecuador)"
 msgstr "Spanisch (Ecuador)"
 
-#: zp-trunk/zp-core/functions-i18n.php:230
+#: zp-trunk/zp-core/functions-i18n.php:231
 msgid "Spanish (Spain)"
 msgstr "Spanisch (Spanien)"
 
-#: zp-trunk/zp-core/functions-i18n.php:231
+#: zp-trunk/zp-core/functions-i18n.php:232
 msgid "Spanish (Guatemala)"
 msgstr "Spanisch (Guatemala)"
 
-#: zp-trunk/zp-core/functions-i18n.php:232
+#: zp-trunk/zp-core/functions-i18n.php:233
 msgid "Spanish (Honduras)"
 msgstr "Spanisch (Honduras)"
 
-#: zp-trunk/zp-core/functions-i18n.php:233
+#: zp-trunk/zp-core/functions-i18n.php:234
 msgid "Spanish (Mexico)"
 msgstr "Spanisch (Mexiko)"
 
-#: zp-trunk/zp-core/functions-i18n.php:234
+#: zp-trunk/zp-core/functions-i18n.php:235
 msgid "Spanish (Nicaragua)"
 msgstr "Spanisch (Nicaragua)"
 
-#: zp-trunk/zp-core/functions-i18n.php:235
+#: zp-trunk/zp-core/functions-i18n.php:236
 msgid "Spanish (Panama)"
 msgstr "Spanisch (Panama)"
 
-#: zp-trunk/zp-core/functions-i18n.php:236
+#: zp-trunk/zp-core/functions-i18n.php:237
 msgid "Spanish (Peru)"
 msgstr "Spanisch (Peru)"
 
-#: zp-trunk/zp-core/functions-i18n.php:237
+#: zp-trunk/zp-core/functions-i18n.php:238
 msgid "Spanish (Puerto Rico)"
 msgstr "Spanisch (Puerto Rico)"
 
-#: zp-trunk/zp-core/functions-i18n.php:238
+#: zp-trunk/zp-core/functions-i18n.php:239
 msgid "Spanish (Paraguay)"
 msgstr "Spanisch (Paraguay)"
 
-#: zp-trunk/zp-core/functions-i18n.php:239
+#: zp-trunk/zp-core/functions-i18n.php:240
 msgid "Spanish (El Salvador)"
 msgstr "Spanisch (El Salvador)"
 
-#: zp-trunk/zp-core/functions-i18n.php:240
+#: zp-trunk/zp-core/functions-i18n.php:241
 msgid "Spanish (United States)"
 msgstr "Spanisch (USA)"
 
-#: zp-trunk/zp-core/functions-i18n.php:241
+#: zp-trunk/zp-core/functions-i18n.php:242
 msgid "Spanish (Uruguay)"
 msgstr "Spanisch (Uruguay)"
 
-#: zp-trunk/zp-core/functions-i18n.php:242
+#: zp-trunk/zp-core/functions-i18n.php:243
 msgid "Spanish (Venezuela)"
 msgstr "Spanisch (Venezuela)"
 
-#: zp-trunk/zp-core/functions-i18n.php:243
+#: zp-trunk/zp-core/functions-i18n.php:244
 msgid "Spanish (Latin America)"
 msgstr "Spanisch (Lateinamerika)"
 
-#: zp-trunk/zp-core/functions-i18n.php:244
+#: zp-trunk/zp-core/functions-i18n.php:245
 msgid "Serbian"
 msgstr "Serbisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:245
+#: zp-trunk/zp-core/functions-i18n.php:246
 msgid "Swedish (Finland)"
 msgstr "Schwedisch (Finnland)"
 
-#: zp-trunk/zp-core/functions-i18n.php:246
+#: zp-trunk/zp-core/functions-i18n.php:247
 msgid "Swedish (Sweden)"
 msgstr "Schwedisch (Schweden)"
 
-#: zp-trunk/zp-core/functions-i18n.php:247
+#: zp-trunk/zp-core/functions-i18n.php:248
 msgid "Tamil"
 msgstr "Tamilisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:248
+#: zp-trunk/zp-core/functions-i18n.php:249
 msgid "Telugu"
 msgstr "Telugu"
 
-#: zp-trunk/zp-core/functions-i18n.php:249
+#: zp-trunk/zp-core/functions-i18n.php:250
 msgid "Thai"
 msgstr "Thai"
 
-#: zp-trunk/zp-core/functions-i18n.php:250
+#: zp-trunk/zp-core/functions-i18n.php:251
 msgid "Turkish"
 msgstr "Türkisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:251
+#: zp-trunk/zp-core/functions-i18n.php:252
 msgid "Ukrainian"
 msgstr "Ukrainisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:252
+#: zp-trunk/zp-core/functions-i18n.php:253
 msgid "Uzbek"
 msgstr "Usbekisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:253
+#: zp-trunk/zp-core/functions-i18n.php:254
 msgid "Urdu (Pakistan)"
 msgstr "Urdu (Pakistan)"
 
-#: zp-trunk/zp-core/functions-i18n.php:254
+#: zp-trunk/zp-core/functions-i18n.php:255
 msgid "Vietnamese"
 msgstr "Vietnamesisch"
 
-#: zp-trunk/zp-core/functions-i18n.php:255
+#: zp-trunk/zp-core/functions-i18n.php:256
 msgid "Welsh"
 msgstr "Walisisch"
 
@@ -4153,7 +4154,7 @@ msgstr "Höhenlagereferenz"
 msgid "ERROR: Assertion failed in"
 msgstr "Fehler: Erklärung scheiterte in"
 
-#: zp-trunk/zp-core/functions.php:1163
+#: zp-trunk/zp-core/functions.php:1295
 #, php-format
 msgid "Page access %2$s (%1$s)"
 msgstr "Seitenzugriff  %2$s (%1$s)"
@@ -4947,209 +4948,209 @@ msgstr "Sie sollten setup ausführen, um Ihre Konfiguration zu überprüfen. Wen
 msgid "The zp-config.php file does not exist. You should run setup.php to check your configuration and create this file."
 msgstr "Die zp-config.php-Datei existiert nicht. Sie sollten setup.php ausführen, um Ihre Konfiguration zu überprüfen und diese Datei zu erstellen. "
 
-#: zp-trunk/zp-core/template-functions.php:86
+#: zp-trunk/zp-core/template-functions.php:89
 msgid "Admin Toolbox"
 msgstr "Verwaltung"
 
-#: zp-trunk/zp-core/template-functions.php:90
+#: zp-trunk/zp-core/template-functions.php:93
 msgid "Admin"
 msgstr "Verwalten"
 
-#: zp-trunk/zp-core/template-functions.php:94
+#: zp-trunk/zp-core/template-functions.php:97
 msgid "Sort gallery"
 msgstr "Galerie sortieren"
 
-#: zp-trunk/zp-core/template-functions.php:94
-#: zp-trunk/zp-core/template-functions.php:115
+#: zp-trunk/zp-core/template-functions.php:97
+#: zp-trunk/zp-core/template-functions.php:118
 msgid "Manual sorting"
 msgstr "Manualles Sortieren"
 
-#: zp-trunk/zp-core/template-functions.php:99
+#: zp-trunk/zp-core/template-functions.php:102
 msgid "New album"
 msgstr "Neues Album"
 
-#: zp-trunk/zp-core/template-functions.php:112
+#: zp-trunk/zp-core/template-functions.php:115
 msgid "Edit album"
 msgstr "Album bearbeiten"
 
-#: zp-trunk/zp-core/template-functions.php:115
+#: zp-trunk/zp-core/template-functions.php:118
 msgid "Sort album"
 msgstr "Album sortieren"
 
-#: zp-trunk/zp-core/template-functions.php:121
+#: zp-trunk/zp-core/template-functions.php:124
 msgid "Delete the album"
 msgstr "Album löschen"
 
-#: zp-trunk/zp-core/template-functions.php:121
+#: zp-trunk/zp-core/template-functions.php:124
 msgid "Delete album"
 msgstr "Album löschen"
 
-#: zp-trunk/zp-core/template-functions.php:125
+#: zp-trunk/zp-core/template-functions.php:128
 msgid "Upload Here"
 msgstr "Hier hochladen"
 
-#: zp-trunk/zp-core/template-functions.php:128
+#: zp-trunk/zp-core/template-functions.php:131
 msgid "New Album Here"
 msgstr "Neues Album"
 
-#: zp-trunk/zp-core/template-functions.php:137
+#: zp-trunk/zp-core/template-functions.php:140
 msgid "Are you sure you want to delete the image? THIS CANNOT BE UNDONE!"
 msgstr "Sind Sie sicher, dass Sie dieses Bild löschen wollen? DIES KANN NICHT RÜCKGÄNGIG GEMACHT WERDEN!"
 
-#: zp-trunk/zp-core/template-functions.php:137
+#: zp-trunk/zp-core/template-functions.php:140
 msgid "Delete the image"
 msgstr "Bild löschen"
 
-#: zp-trunk/zp-core/template-functions.php:137
+#: zp-trunk/zp-core/template-functions.php:140
 msgid "Delete image"
 msgstr "Bild löschen"
 
-#: zp-trunk/zp-core/template-functions.php:143
+#: zp-trunk/zp-core/template-functions.php:146
 msgid "Create an album from the search"
 msgstr "Erstelle Album aus der Suche"
 
-#: zp-trunk/zp-core/template-functions.php:143
+#: zp-trunk/zp-core/template-functions.php:146
 msgid "Create Album"
 msgstr "Album erstellen"
 
-#: zp-trunk/zp-core/template-functions.php:152
+#: zp-trunk/zp-core/template-functions.php:155
 msgid "Edit Article"
 msgstr "Artikel bearbeiten"
 
-#: zp-trunk/zp-core/template-functions.php:154
+#: zp-trunk/zp-core/template-functions.php:157
 msgid "Are you sure you want to delete this article? THIS CANNOT BE UNDONE!"
 msgstr "Sind Sie sicher, dass Sie diesen Artikel löschen wollen? DIES KANN NICHT RÜCKGÄNGIG GEMACHT WERDEN!"
 
-#: zp-trunk/zp-core/template-functions.php:154
+#: zp-trunk/zp-core/template-functions.php:157
 msgid "Delete article"
 msgstr "Artikel löschen"
 
-#: zp-trunk/zp-core/template-functions.php:154
+#: zp-trunk/zp-core/template-functions.php:157
 msgid "Delete Article"
 msgstr "Artikel löschen"
 
-#: zp-trunk/zp-core/template-functions.php:156
+#: zp-trunk/zp-core/template-functions.php:159
 msgid "Add Article"
 msgstr "Artikel hinzufügen"
 
-#: zp-trunk/zp-core/template-functions.php:159
+#: zp-trunk/zp-core/template-functions.php:162
 msgid "Edit Page"
 msgstr "Seite bearbeiten"
 
-#: zp-trunk/zp-core/template-functions.php:161
+#: zp-trunk/zp-core/template-functions.php:164
 msgid "Are you sure you want to delete this page? THIS CANNOT BE UNDONE!"
 msgstr "Sind Sie sicher, dass Sie diese Seite löschen wollen? DIES KANN NICHT RÜCKGÄNGIG GEMACHT WERDEN!"
 
-#: zp-trunk/zp-core/template-functions.php:161
+#: zp-trunk/zp-core/template-functions.php:164
 msgid "Delete page"
 msgstr "Seite löschen"
 
-#: zp-trunk/zp-core/template-functions.php:161
+#: zp-trunk/zp-core/template-functions.php:164
 msgid "Delete Page"
 msgstr "Seite löschen"
 
-#: zp-trunk/zp-core/template-functions.php:163
+#: zp-trunk/zp-core/template-functions.php:166
 msgid "Add Page"
 msgstr "Seite hinzufügen"
 
-#: zp-trunk/zp-core/template-functions.php:166
+#: zp-trunk/zp-core/template-functions.php:169
 msgid "Logout"
 msgstr "Abmelden"
 
-#: zp-trunk/zp-core/template-functions.php:563
-#: zp-trunk/zp-core/template-functions.php:600
+#: zp-trunk/zp-core/template-functions.php:566
+#: zp-trunk/zp-core/template-functions.php:603
 msgid "Previous Page"
 msgstr "Vorherige Seite"
 
-#: zp-trunk/zp-core/template-functions.php:565
-#: zp-trunk/zp-core/template-functions.php:621
+#: zp-trunk/zp-core/template-functions.php:568
+#: zp-trunk/zp-core/template-functions.php:624
 msgid "Next Page"
 msgstr "Nächste Seite"
 
-#: zp-trunk/zp-core/template-functions.php:611
+#: zp-trunk/zp-core/template-functions.php:614
 msgid "(Current Page)"
 msgstr "(Aktuelle Seite)"
 
-#: zp-trunk/zp-core/template-functions.php:762
+#: zp-trunk/zp-core/template-functions.php:765
 msgid "Album Thumbnails"
 msgstr "Albumthumbnails"
 
-#: zp-trunk/zp-core/template-functions.php:1081
-#: zp-trunk/zp-core/template-functions.php:1101
+#: zp-trunk/zp-core/template-functions.php:1086
+#: zp-trunk/zp-core/template-functions.php:1106
 msgid "Save"
 msgstr "Sichern"
 
-#: zp-trunk/zp-core/template-functions.php:2593
+#: zp-trunk/zp-core/template-functions.php:2598
 msgid "Anonymous"
 msgstr "Anonym"
 
-#: zp-trunk/zp-core/template-functions.php:2737
+#: zp-trunk/zp-core/template-functions.php:2742
 msgid "You must supply an e-mail address."
 msgstr "Es muss eine E-Mail-Adresse eingegeben werden"
 
-#: zp-trunk/zp-core/template-functions.php:2738
+#: zp-trunk/zp-core/template-functions.php:2743
 msgid "You must enter your name."
 msgstr "Sie müssen Ihren Namen eintragen."
 
-#: zp-trunk/zp-core/template-functions.php:2739
+#: zp-trunk/zp-core/template-functions.php:2744
 msgid "You must supply an WEB page URL."
 msgstr "Sie müssen eine Websiteadresse angeben."
 
-#: zp-trunk/zp-core/template-functions.php:2740
+#: zp-trunk/zp-core/template-functions.php:2745
 msgid "Captcha verification failed."
 msgstr "Captcha-Verifizierung gescheitert."
 
-#: zp-trunk/zp-core/template-functions.php:2741
+#: zp-trunk/zp-core/template-functions.php:2746
 msgid "You must enter something in the comment text."
 msgstr "Sie müssen etwas Kommentartext eintragen."
 
-#: zp-trunk/zp-core/template-functions.php:2742
+#: zp-trunk/zp-core/template-functions.php:2747
 msgid "Your comment failed the SPAM filter check."
 msgstr "Ihr Kommentar ist am SPAM-Filtercheck gescheitert."
 
-#: zp-trunk/zp-core/template-functions.php:2743
+#: zp-trunk/zp-core/template-functions.php:2748
 msgid "Your comment has been marked for moderation."
 msgstr "Ihr Kommentar wurde zur Moderation vorgemerkt."
 
-#: zp-trunk/zp-core/template-functions.php:2756
+#: zp-trunk/zp-core/template-functions.php:2761
 msgid "Download Zip of the Album"
 msgstr "Zip-Archiv dieses Albums runterladen"
 
-#: zp-trunk/zp-core/template-functions.php:2756
+#: zp-trunk/zp-core/template-functions.php:2761
 msgid "Download a zip file of this album"
 msgstr "zip-Datei dieses Albums herunterladen"
 
-#: zp-trunk/zp-core/template-functions.php:3064
+#: zp-trunk/zp-core/template-functions.php:3069
 #, php-format
 msgid "View image: %s"
 msgstr "Bild %s ansehen"
 
-#: zp-trunk/zp-core/template-functions.php:3574
-#: zp-trunk/zp-core/template-functions.php:3575
+#: zp-trunk/zp-core/template-functions.php:3579
+#: zp-trunk/zp-core/template-functions.php:3580
 msgid "Show fields"
 msgstr "Felder anzeigen"
 
-#: zp-trunk/zp-core/template-functions.php:3591
+#: zp-trunk/zp-core/template-functions.php:3596
 msgid "File name"
 msgstr "Dateiname"
 
-#: zp-trunk/zp-core/template-functions.php:3605
+#: zp-trunk/zp-core/template-functions.php:3610
 msgid "Close"
 msgstr "Schließen"
 
-#: zp-trunk/zp-core/template-functions.php:3665
+#: zp-trunk/zp-core/template-functions.php:3670
 msgid "no date"
 msgstr "kein Datum"
 
-#: zp-trunk/zp-core/template-functions.php:3875
+#: zp-trunk/zp-core/template-functions.php:3880
 msgid "Check your user and password and try again."
 msgstr "Überprüfen Sie Ihr Benutzer-Passwort und versuchen Sie es erneut."
 
-#: zp-trunk/zp-core/template-functions.php:3894
+#: zp-trunk/zp-core/template-functions.php:3899
 msgid "The page you are trying to view is password protected."
 msgstr "Die Seite, die Sie sehen möchten, ist passwortgeschützt."
 
-#: zp-trunk/zp-core/template-functions.php:3907
+#: zp-trunk/zp-core/template-functions.php:3912
 #, php-format
 msgid "Hint: %s"
 msgstr "Hinweis: %s"
@@ -6792,12 +6793,12 @@ msgid "Rating: %1$u (Votes: %2$u )"
 msgstr "Bewertung: %1$u (Stimmen: %2$u )"
 
 #: zp-trunk/zp-core/plugins/image_album_statistics.php:175
-#: zp-trunk/zp-core/plugins/image_album_statistics.php:373
+#: zp-trunk/zp-core/plugins/image_album_statistics.php:374
 #, php-format
 msgid "Views: %u"
 msgstr "Besucher: %u"
 
-#: zp-trunk/zp-core/plugins/image_album_statistics.php:368
+#: zp-trunk/zp-core/plugins/image_album_statistics.php:369
 #, php-format
 msgid "Rating: %1$u (Votes: %2$u)"
 msgstr "Bewertung: %1$u (Stimmen: %2$u)"
@@ -6996,35 +6997,35 @@ msgstr "Ungültiger Aufruf der Diaschau-Seite."
 msgid "This album is password protected!"
 msgstr "Dieses Album ist passwortgeschützt!"
 
-#: zp-trunk/zp-core/plugins/slideshow.php:319
+#: zp-trunk/zp-core/plugins/slideshow.php:322
 msgid "Stop and return to album or image page"
 msgstr "Anhalten und zur Album- oder Bildseite zurückkehren"
 
-#: zp-trunk/zp-core/plugins/slideshow.php:320
+#: zp-trunk/zp-core/plugins/slideshow.php:323
 msgid "Pause (to stop the slideshow without returning)"
 msgstr "Pause (um die Diaschau anzuhalten, ohne zurückzukehren)"
 
-#: zp-trunk/zp-core/plugins/slideshow.php:321
+#: zp-trunk/zp-core/plugins/slideshow.php:324
 msgid "Play"
 msgstr "Abspielen"
 
-#: zp-trunk/zp-core/plugins/slideshow.php:350
+#: zp-trunk/zp-core/plugins/slideshow.php:353
 msgid ":"
 msgstr ":"
 
-#: zp-trunk/zp-core/plugins/slideshow.php:355
+#: zp-trunk/zp-core/plugins/slideshow.php:358
 msgid "No flash player installed."
 msgstr "Kein Flashplayer installiert."
 
-#: zp-trunk/zp-core/plugins/slideshow.php:392
+#: zp-trunk/zp-core/plugins/slideshow.php:400
 msgid "back"
 msgstr "Zurück"
 
-#: zp-trunk/zp-core/plugins/slideshow.php:446
+#: zp-trunk/zp-core/plugins/slideshow.php:454
 msgid "Click on"
 msgstr "Klicken Sie auf "
 
-#: zp-trunk/zp-core/plugins/slideshow.php:446
+#: zp-trunk/zp-core/plugins/slideshow.php:454
 msgid "on the right in the player control bar to view full size"
 msgstr "rechts auf der Playerkontrolleiste für den Vollbildmodus"
 
@@ -7294,6 +7295,8 @@ msgstr "SpamAssassin-Benutzer"
 msgid "User to use on SpamAssassin box"
 msgstr "Der Benutzer, der für SpamAssassin verwendet werden soll"
 
+#~ msgid "*Enter"
+#~ msgstr "*Geben Sie"
 #~ msgid ""
 #~ "There was an error logging in.</h2> Check your username and password and "
 #~ "try again."
