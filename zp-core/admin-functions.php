@@ -621,7 +621,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 			$type = $row['type'];
 			$desc = $row['desc'];
 			$multilingual = isset($row['multilingual']) && $row['multilingual'];
-			if (isset($row['texteditor'])) {
+			if (isset($row['texteditor']) && $row['texteditor']) {
 				$editor = 'texteditor';
 			} else {
 				$editor = '';
