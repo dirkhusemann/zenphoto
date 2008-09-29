@@ -111,7 +111,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 	</div> <!-- content -->
 	<?php } ?>
 <div class="aligncenter2">
-<?php echo getOption('Gallery_description'); ?>
+<?php printGalleryDesc(); ?>
 </div>
 	
 <?php include('footer.php'); ?>

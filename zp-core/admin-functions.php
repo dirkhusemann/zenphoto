@@ -275,6 +275,7 @@ function printAdminHeader($path='') {
 		}
 	</script>
 	<?php
+	if (file_exists('js/editor_config.js')) require_once('js/editor_config.js');	
 }
 
 /**
@@ -620,6 +621,11 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 			$type = $row['type'];
 			$desc = $row['desc'];
 			$multilingual = isset($row['multilingual']) && $row['multilingual'];
+			if (isset($row['texteditor'])) {
+				$editor = 'texteditor';
+			} else {
+				$editor = '';
+			}
 			if (isset($row['key'])) {
 				$key = $row['key'];
 			} else { // backward compatibility
@@ -653,7 +659,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 					echo '<td width="200">';
 					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'text-'.$key.'" value=0 />'."\n";
 					if ($multilingual || $type) {
-						print_language_string_list($v, $key, $type);
+						print_language_string_list($v, $key, $type, NULL, $editor);
 					} else {
 						echo '<input type="text" size="40" name="' . $key . '" value="' . html_encode($v) . '">' . "\n";
 					}

@@ -3,6 +3,9 @@
  * provides the Options tab of admin
  * @package admin
  */
+
+// force UTF-8 Ø
+
 define('OFFSET_PATH', 1);
 require_once("admin-functions.php");
 if (!is_null(getOption('admin_reset_date'))) {
@@ -330,7 +333,6 @@ if (isset($_GET['action'])) {
 	}
 
 }
-
 printAdminHeader();
 echo "\n</head>";
 echo "\n<body>";
@@ -657,8 +659,9 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		echo  "<h2>".gettext("Your Allowed tags change did not parse successfully.")."</h2>";
 		echo '</div>';
 	}
-?><form action="?action=saveoptions" method="post">
- <input	type="hidden" name="savegalleryoptions" value="yes" /> <?php
+	?>
+	<form action="?action=saveoptions" method="post">
+	<input	type="hidden" name="savegalleryoptions" value="yes" /> <?php
 	if (isset($_GET['mismatch'])) {
 		echo '<div class="errorbox" id="fade-message">';
 		switch ($_GET['mismatch']) {
@@ -711,7 +714,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	<tr>
 		<td width="175"><?php echo gettext("Gallery description:"); ?></td>
 		<td width="200">
-		<?php print_language_string_list(getOption('Gallery_description'), 'Gallery_description', true) ?>
+		<?php print_language_string_list(getOption('Gallery_description'), 'Gallery_description', true, NULL, 'texteditor') ?>
 		</td>
 		<td><?php echo gettext("A brief description of your gallery. Some themes may display this text."); ?></td>
 	</tr>

@@ -376,7 +376,6 @@ if (!zp_loggedin()) {
 if ($page == "edit") {
 
 /** SINGLE ALBUM ********************************************************************/
-if (file_exists('js/editor_config.js')) require_once('js/editor_config.js');	
 define('IMAGES_PER_PAGE', 10);
 
 if (isset($_GET['album']) && !isset($_GET['massedit'])) {
