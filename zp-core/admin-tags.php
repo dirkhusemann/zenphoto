@@ -98,9 +98,9 @@ if ($tagsort == 1) {
  				'" title="'.gettext('Sort the tags alphabetically').'">';
 	echo ' '.gettext('Order alphabetically').'</a>';
 } else{
-	echo '<a class="tagsort" href="?tagsort=1' .
+	echo '<p><a class="tagsort" href="?tagsort=1' .
  				'" title="'.gettext('Sort the tags by most used').'">';
-	echo ' '.gettext('Order by most used').'</a>';
+	echo ' '.gettext('Order by most used').'</a></p>';
 }
 echo "\n<table class=\"bordered\">";
 echo "\n<tr>";
