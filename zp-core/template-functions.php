@@ -5,6 +5,9 @@
  * @package functions
  */
 
+// force UTF-8 Ø
+
+
 /**
  * Load the classes
  */
@@ -950,8 +953,10 @@ function getBareAlbumDesc() {
  */
 function printAlbumDesc($editable=false) {
 	$desc = getAlbumDesc();
-	$desc = str_replace("\r\n", "\n", $desc);
-	$desc = str_replace("\n", '<br />', $desc);
+	if (!file_exists(SERVERPATH.'/'.ZENFOLDER.'/js/editor_config.js')) {
+		$desc = str_replace("\r\n", "\n", $desc);
+		$desc = str_replace("\n", '<br />', $desc);
+	}
 	if ($editable && zp_loggedin()) {
 		echo "<div id=\"albumDescEditable\" style=\"display: block;\">" . $desc . "</div>\n";
 		echo "<script type=\"text/javascript\">initEditableDesc('albumDescEditable');</script>";
