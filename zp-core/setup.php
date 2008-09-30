@@ -3,6 +3,9 @@
  * install routine for zenphoto
  * @package setup
  */
+
+// force UTF-8 Ø
+
 header ('Content-Type: text/html; charset=UTF-8');
 define('HTACCESS_VERSION', '1.2.1.3');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
 if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
@@ -1509,6 +1512,7 @@ if (file_exists("zp-config.php")) {
 if (($noxlate > 0) && !isset($_GET['create']) && !isset($_GET['update'])) {
 	echo "\n<div>\n";
 	echo '<form action="#'.'" method="post">'."\n";
+	echo '<input type="hidden" name="oldlocale" value="'.getOption('locale').'" />';
 	if ($debug) {
 		echo '<input type="hidden" name="debug" />';
 	}
