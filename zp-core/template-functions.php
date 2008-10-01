@@ -476,7 +476,10 @@ function getPageURL($page, $total=null) {
 				return rewrite_path( pathurlencode($_zp_current_album->name) . (($page > 1) ? "/page/" . $page . "/" : ""),
 					"/index.php?album=" . pathurlencode($_zp_current_album->name) . (($page > 1) ? "&page=" . $page : "") );
 			} else if (in_context(ZP_INDEX)) {
-				if ($page > 1) {
+				if ($page == 1) {
+					// Just return the gallery base path for ZP_INDEX (no /page/x)
+					return rewrite_path('/', '/');
+				} else if ($page > 1) {
 					return rewrite_path($pagination1 . $page . "/", "/index.php?" . $pagination2 . 'page=' . $page);
 				}
 			}
