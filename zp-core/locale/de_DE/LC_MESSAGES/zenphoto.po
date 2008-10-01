@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: zenphoto 1.2 svn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-29 22:03+0100\n"
-"PO-Revision-Date: 2008-09-29 22:03+0100\n"
+"PO-Revision-Date: 2008-10-01 18:42+0100\n"
 "Last-Translator: acrylian <wartgart@gmx.net>\n"
 "Language-Team: Malte Müller (acrylian)\n"
 "MIME-Version: 1.0\n"
@@ -1349,7 +1349,7 @@ msgstr "Abmelden"
 #: zp-trunk/zp-core/admin-functions.php:433
 #, php-format
 msgid "View Gallery: %s"
-msgstr "Gallerie %s ansehen"
+msgstr "Galerie %s ansehen"
 
 #: zp-trunk/zp-core/admin-functions.php:435
 msgid "View Gallery"
@@ -1478,7 +1478,7 @@ msgstr "Unteralbumsortierung: "
 
 #: zp-trunk/zp-core/admin-functions.php:941
 msgid "gallery album sort order"
-msgstr "Gallerie-Album-Sortierung"
+msgstr "Galerie-Album-Sortierung"
 
 #: zp-trunk/zp-core/admin-functions.php:943
 msgid "parent album subalbum sort order"
@@ -1499,7 +1499,7 @@ msgstr "Bildersortierung: "
 
 #: zp-trunk/zp-core/admin-functions.php:976
 msgid "gallery default image sort order"
-msgstr "Gallerie-Standardbildsortierung"
+msgstr "Galerie-Standardbildsortierung"
 
 #: zp-trunk/zp-core/admin-functions.php:978
 msgid "parent album image sort order"
