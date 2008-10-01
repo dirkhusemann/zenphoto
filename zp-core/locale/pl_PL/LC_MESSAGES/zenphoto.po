@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: zenphoto 1.2.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-30 10:43+0100\n"
-"PO-Revision-Date: 2008-09-30 11:11+0100\n"
+"PO-Revision-Date: 2008-09-30 23:06+0100\n"
 "Last-Translator: Miron Bogacki <norim@epf.pl>\n"
 "Language-Team: Miron\n"
 "MIME-Version: 1.0\n"
@@ -2436,7 +2436,7 @@ msgstr "Wybierz poziom zabezpieczeń pełnych obrazów. <em>Pobierz</em> zmusza 
 
 #: H:\zenphoto/zp-core/admin-options.php:1136
 msgid "Disabling hotlinking prevents linking to the full image from other domains. If enabled, external links are redirect to the image page. If you are having problems with full images being displayed, try disabling this setting. Hotlinking is not prevented if <em>Full&nbsp;image&nbsp;protection</em> is <em>Unprotected</em> or if the image is cached."
-msgstr ""
+msgstr "Wyłączenie hotlinking zabezpiecza od linkowania do pełnego obrazu z innych domen. Jeśli jest włączone, zewnętrzne linki są przekierowywane do strony obrazu. Jeśli masz problemy z wyświetlaniem pełnego obrazu spróbuj wyłączyć tą opcję. Hotlinking nie jest zalecane jeśli w opcji <em>Pełny&nbsp;obraz&nbsp;zabezpieczenie</em> jest wybrane<em>Niezabezpieczony</em> albo obraz jest w cache."
 
 #: H:\zenphoto/zp-core/admin-options.php:1138
 msgid "If <em>Cache the full image</em> is checked the full image will be loaded to the cache and served from there after the first reference. <em>Full&nbsp;image&nbsp;protection</em> must be set to <em>Protected&nbsp;view</em> for the image to be cached. However, once cached, no protections are applied to the image."
@@ -2510,7 +2510,7 @@ msgstr "Albumów na stronie:"
 
 #: H:\zenphoto/zp-core/admin-options.php:1311
 msgid "Controls the number of albums on a page. You might need to change\tthis after switching themes to make it look better."
-msgstr ""
+msgstr "Kontroluje liczbę albumów na stronie.  Być może będziesz musiał to zmienić \tthis po zmianie motywu żeby wyglądał lepiej."
 
 #: H:\zenphoto/zp-core/admin-options.php:1314
 msgid "Images per page:"
@@ -2518,7 +2518,7 @@ msgstr "Zdjęć na stronę:"
 
 #: H:\zenphoto/zp-core/admin-options.php:1317
 msgid "Controls the number of images on a page. You might need to change\tthis after switching themes to make it look better."
-msgstr ""
+msgstr "Kontroluje liczbę obrazów na stronie.  Być może będziesz musiał to\tthis zmienić po zmianie motywu żeby wyglądał lepiej."
 
 #: H:\zenphoto/zp-core/admin-options.php:1320
 msgid "Thumb size:"
@@ -4587,7 +4587,7 @@ msgstr "nieudane"
 
 #: H:\zenphoto/zp-core/setup.php:525
 msgid "Locale functionality is not implemented on your platform or the specified locale does not exist. Language translation may not work."
-msgstr ""
+msgstr "Lokalizacja nie jest zaimplementowana w twojej platwormie albo pliki twojego kraju nie istnieją. Tłumaczenie może nie działać."
 
 #: H:\zenphoto/zp-core/setup.php:532
 msgid "PHP <code>mbstring</code> package"
@@ -4748,12 +4748,12 @@ msgstr "Twój użytkownik MySQL musi posiadać %s prawa."
 
 #: H:\zenphoto/zp-core/setup.php:701
 msgid "MySQL <em>show tables</em> found no tables"
-msgstr ""
+msgstr "MySQL <em>pokaż tabele</em> nie znalazło żadnych tabel"
 
 #: H:\zenphoto/zp-core/setup.php:703
 #, php-format
 msgid "MySQL <em>show tables</em> found: %s"
-msgstr ""
+msgstr "MySQL <em>pokaż tabele</em> znalazło: %s"
 
 #: H:\zenphoto/zp-core/setup.php:707
 msgid "[Failed]"
@@ -4762,7 +4762,7 @@ msgstr "[Nieudane]"
 #: H:\zenphoto/zp-core/setup.php:707
 #, php-format
 msgid "MySQL did not return a list of the database tables for <code>%s</code>."
-msgstr ""
+msgstr "MySQL nie zwróciło listy tabel bazy danych dla <code>%s</code>."
 
 #: H:\zenphoto/zp-core/setup.php:708
 msgid "<strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables."
@@ -4942,7 +4942,7 @@ msgstr "brak połączenia z bazą danych"
 
 #: H:\zenphoto/zp-core/setup.php:1494
 msgid "You should run setup.php to check your configuration. If you haven't created the database yet, now would be a good time."
-msgstr ""
+msgstr "Powinienneś uruchomić plik setup.php"
 
 #: H:\zenphoto/zp-core/setup.php:1501
 msgid "The zp-config.php file does not exist. You should run setup.php to check your configuration and create this file."
@@ -5031,7 +5031,7 @@ msgstr "Skasuj Artykuł"
 
 #: H:\zenphoto/zp-core/template-functions.php:159
 msgid "Add Article"
-msgstr ""
+msgstr "Dodaj Artykuł"
 
 #: H:\zenphoto/zp-core/template-functions.php:162
 msgid "Edit Page"
@@ -5051,7 +5051,7 @@ msgstr "Skasuj Stronę"
 
 #: H:\zenphoto/zp-core/template-functions.php:166
 msgid "Add Page"
-msgstr ""
+msgstr "Dodaj Stronę"
 
 #: H:\zenphoto/zp-core/template-functions.php:169
 msgid "Logout"
@@ -6632,7 +6632,7 @@ msgstr "Miniatury w liście odtwarzania"
 
 #: H:\zenphoto/zp-core/plugins/flv_playlist.php:69
 msgid "Check if you want that thumbnails of the preview images should be shown in the playlist."
-msgstr ""
+msgstr "Zaznacz jeśli chcesz aby miniaturki obrazów były pokazane na plejliście."
 
 #: H:\zenphoto/zp-core/plugins/flv_playlist.php:88
 msgid "The flv player is not installed. Please install or activate the flv player plugin."
@@ -6873,12 +6873,12 @@ msgstr "poprzednia miniatura"
 
 #: H:\zenphoto/zp-core/plugins/paged_thumbs_nav.php:169
 msgid "next thumbs"
-msgstr ""
+msgstr "następna miniatura"
 
 #: H:\zenphoto/zp-core/plugins/paged_thumbs_nav.php:182
 #, php-format
 msgid "Images %1$u - %2$u of %3$u (%4$u/%5$u)"
-msgstr ""
+msgstr "Obrazy %1$u - %2$u of %3$u (%4$u/%5$u)"
 
 #: H:\zenphoto/zp-core/plugins/print_album_menu.php:106
 msgid "Adds a theme function printAlbumMenu() to print an album menu either as a nested list up to 4 sublevels (context sensitive) or as a dropdown menu."
@@ -6886,7 +6886,7 @@ msgstr ""
 
 #: H:\zenphoto/zp-core/plugins/rating.php:10
 msgid "Adds several theme functions to enable images and/or album rating by users."
-msgstr ""
+msgstr "Dodaje możliwość wystawiania ocen obrazom i albumom przez użytkowników."
 
 #: H:\zenphoto/zp-core/plugins/rating.php:29
 #: H:\zenphoto/zp-core/plugins/rating.php:37
