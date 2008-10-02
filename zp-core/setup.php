@@ -1436,7 +1436,12 @@ if (file_exists("zp-config.php")) {
 
 		if ($createTables) {
 			if ($_zp_loggedin == ADMIN_RIGHTS) {
-				echo "<p>".gettext("You need to <a href=\"admin-options.php\">set your admin user and password</a>")."</p>";
+				$filelist = safe_glob(SERVERPATH . "/" . BACKUPFOLDER . '/*.zdb');
+				if (count($filelist) > 0) {
+					echo "<p>".gettext("You may <a href=\"admin-options.php\">set your admin user and password</a> or <a href=\"plugins/backup_restore.php\">run backup-restore</a>")."</p>";
+				} else {
+					echo "<p>".gettext("You need to <a href=\"admin-options.php\">set your admin user and password</a>")."</p>";
+				}				
 			} else {
 				echo "<p>".gettext("You can now  <a href=\"../\">View your gallery</a> or <a href=\"admin.php\">administrate.</a>")."</p>";
 			}

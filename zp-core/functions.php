@@ -86,6 +86,7 @@ $_zp_options = NULL;
 define('ALBUMFOLDER', '/albums/');
 if (!defined('PLUGIN_FOLDER')) { define('PLUGIN_FOLDER', '/plugins/'); }
 define("THEMEFOLDER", 'themes');
+define('BACKUPFOLDER', 'backup');
 
 
 if (getOption('album_session') && OFFSET_PATH==0) {

@@ -13,7 +13,6 @@ $option_interface = NULL;
 $plugin_disable = true;
 
 define('OFFSET_PATH', 3);
-define('BACKUPFOLDER', 'backup');
 define('RECORD_SEPARATOR', ':****:');
 define('TABLE_SEPARATOR', '::');
 define('RESPOND_COUNTER', 1000);
