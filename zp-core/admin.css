@@ -779,6 +779,16 @@ button.positive,.buttons a.positive {
 	height: 1%;
 }
 
+/* search field checklist */
+.searchchecklist {
+	border: 1px solid #ccc;
+	list-style: none;
+	height: 6em;
+	width: 342px;
+	overflow: auto;
+	background-color: white;
+}
+
 
 /* scrollable checklists 
 -----------------------------*/
