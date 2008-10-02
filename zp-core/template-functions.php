@@ -3448,8 +3448,6 @@ function getSearchURL($words, $dates, $fields, $page) {
 	} else {
 		$url = WEBPATH."/index.php?p=search";
 	}
-	if ($fields == (SEARCH_TITLE + SEARCH_DESC + SEARCH_TAGS + SEARCH_FILENAME +
-	SEARCH_LOCATION + SEARCH_CITY + SEARCH_STATE + SEARCH_COUNTRY)) { $fields = 0; }
 	if (($fields != 0) && empty($dates)) {
 		if($mr) {
 			if ($fields == SEARCH_TAGS) {
