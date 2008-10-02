@@ -3562,9 +3562,6 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource='',$buttont
 	}
 
 	$fields = getOption('search_fields');
-	if ($multiple = cbone($fields, 8) > 1) {
-		$multiple = false; //disable until it works!		zen_search_script();
-	}
 	if (empty($buttonSource)) {
 		$type = 'submit';
 	} else {
@@ -3577,41 +3574,6 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource='',$buttont
 	echo "\n<form method=\"post\" action=\"".WEBPATH.$searchurl."\" id=\"search_form\">";
 	echo "\n$prevtext<input type=\"text\" name=\"words\" value=".$searchwords." id=\"search_input\" size=\"10\" />";
 	echo "\n<input type=\"$type\" value=\"".$buttontext."\" class=\"pushbutton\" id=\"search_submit\" $buttonSource />";
-
-	if ($multiple) { //then there is some choice possible
-		echo "\n<a class=\"showmenu\" onclick=\"javascript: javascript:showMenu();\" title=\"".gettext("Show fields")." \">";
-		echo '<img src="'.$zf.'/images/warn.png" style="border: 0px;" alt="'.gettext("Show fields").'" /></a>';
-
-		echo "\n<input id=\"hiddenStatusMenu\" type=\"hidden\" value=\"0\" />";
-		echo "\n<div class=\"searchoption\" id=\"searchmenu\" style=\"display:none; text-align:left\">";
-		echo "Choose search fields.<br />";
-
-		if ($fields & SEARCH_TITLE) {
-			echo "\n<input type=\"checkbox\" name=\"sf_title\" value=1 checked><label>".gettext("Title")."</label><br />";
-		}
-		if ($fields & SEARCH_DESC) {
-			echo "\n<input type=\"checkbox\" name=\"sf_desc\" value=1 checked><label>".gettext("Description")."</label><br />";
-		}
-		if ($fields & SEARCH_TAGS) {
-			echo "\n<input type=\"checkbox\" name=\"sf_tags\" value=1 checked><label>".gettext("Tags")."</label><br />";
-		}
-		if ($fields & SEARCH_FILENAME) {
-			echo "\n<input type=\"checkbox\" name=\"sf_filename\" value=1 checked><label>".gettext("File name")."</label><br />";
-		}
-		if ($fields & SEARCH_LOCATION) {
-			echo "\n<input type=\"checkbox\" name=\"sf_location\" value=1 checked><label>".gettext("Location")."</label><br />";
-		}
-		if ($fields & SEARCH_CITY) {
-			echo "\n<input type=\"checkbox\" name=\"sf_city\" value=1 checked><label>".gettext("City")."</label><br />";
-		}
-		if ($fields & SEARCH_STATE) {
-			echo "\n<input type=\"checkbox\" name=\"sf_state\" value=1 checked><label>".gettext("State")."</label><br />";
-		}
-		if ($fields & SEARCH_COUNTRY) {
-			echo "\n<input type=\"checkbox\" name=\"sf_country\" value=1 checked><label>".gettext("Country")."</label><br />";
-		}
-		echo "\n</a> <a href=\"#\" onclick=\"javscript:hideMenu()\">".gettext("Close")."</a></div>";
-	}
 
 	echo "\n</form>\n";
 	echo "\n</div>";  // search
