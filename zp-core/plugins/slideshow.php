@@ -451,8 +451,9 @@ $("#slideshow").flashembed({
 
 <?php
 	echo "</span>";
-		echo "<p>".gettext("Click on")." <img style='position: relative; top: 4px; border: 1px solid gray' src='".WEBPATH . "/" . ZENFOLDER."/plugins/slideshow/flowplayerfullsizeicon.png' /> ".gettext("on the right in the player control bar to view full size")."</p>";
-
+	echo "<p>";
+	printf (gettext("Click on %s on the right in the player control bar to view full size."), "<img style='position: relative; top: 4px; border: 1px solid gray' src='".WEBPATH . "/" . ZENFOLDER."/plugins/slideshow/flowplayerfullsizeicon.png' />");
+	echo "</p>";
 	break;
 }
 ?>
