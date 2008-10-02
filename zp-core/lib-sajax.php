@@ -3,6 +3,9 @@
  * AJAX in-line editing support
  * @package core
  */
+
+// force UTF-8 Ø
+
 if (!isset($SAJAX_INCLUDED)) {
 
 	/*

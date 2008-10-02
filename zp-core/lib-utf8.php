@@ -30,6 +30,9 @@
   * @package core
   */
 
+// force UTF-8 Ø
+
+
 class utf8 {
 	/**
 	 * Convert a foreign charset encoding from or to UTF-8

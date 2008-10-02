@@ -6,6 +6,9 @@
  * @package core
  */
 
+// force UTF-8 Ø
+
+
 require_once('functions-controller.php');
 
 

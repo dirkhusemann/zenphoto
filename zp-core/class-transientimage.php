@@ -3,6 +3,9 @@
  * class transientimage
  * @package classes
  */
+
+// force UTF-8 Ø
+
 class Transientimage extends image {
 	/**
 	 * creates a transient image (that is, one that is not stored in the database)

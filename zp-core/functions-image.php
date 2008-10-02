@@ -4,6 +4,9 @@
  * @package core
  *
  */
+
+// force UTF-8 Ø
+
 // functions-image.php - HEADERS NOT SENT YET!
 
 // Don't let anything get above this, to save the server from burning up...

@@ -4,6 +4,9 @@
  * @package classes
  */
 
+// force UTF-8 Ø
+
+
 class Gallery {
 
 	var $albumdir = NULL;

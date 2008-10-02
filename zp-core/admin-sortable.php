@@ -4,6 +4,9 @@
  * @package admin
  */
 
+// force UTF-8 Ø
+
+
 $_zp_sortable_list = new SLLists('js');
 
 

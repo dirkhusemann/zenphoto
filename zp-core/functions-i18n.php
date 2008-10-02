@@ -4,6 +4,9 @@
  * @package core
  */
 
+// force UTF-8 Ø
+
+
 define ('DEBUG_LOCALE', false); // used for examining language selection problems
 
 /**

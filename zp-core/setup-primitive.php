@@ -5,6 +5,9 @@
  * @package setup
  */
 
+// force UTF-8 Ø
+
+
 include('version.php'); // Include the version info.
 $const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
 $const_webpath = str_replace("\\", '/', $const_webpath);

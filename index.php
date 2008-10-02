@@ -1,4 +1,7 @@
 <?php
+
+// force UTF-8 Ø
+
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 
 if (!file_exists(dirname(__FILE__) . '/' . ZENFOLDER . "/zp-config.php")) {

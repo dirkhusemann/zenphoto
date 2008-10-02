@@ -5,6 +5,9 @@
  * @package functions
  *
  */
+
+// force UTF-8 Ø
+
 define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
 define('DEBUG_ERROR', false); // set to true to  supplies the calling sequence with zp_error messages
 define('SAFE_GLOB', false);

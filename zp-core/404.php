@@ -4,6 +4,9 @@
 </head>
 <body>
 <?php
+
+// force UTF-8 Ø
+
 echo "\n<strong>".gettext("Zenphoto Error:</strong> the requested object was not found.");
 if (isset($album)) {
 	echo '<br />'.sprintf(gettext('Album: %s'),sanitize($album));

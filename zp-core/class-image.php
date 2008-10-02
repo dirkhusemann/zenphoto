@@ -4,6 +4,9 @@
  * @package classes
  */
 
+// force UTF-8 Ø
+
+
 class Image extends PersistentObject {
 
 	var $filename;      // true filename of the image.

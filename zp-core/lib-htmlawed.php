@@ -4,6 +4,9 @@
  * @package core
  */
 
+// force UTF-8 Ø
+
+
 # htmLawed 1.1, 29 June 2008
 # Copyright Santosh Patnaik
 # GPL v3 license

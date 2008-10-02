@@ -4,6 +4,9 @@
  * supplying an album name (ex: loadAlbums.php?album=newalbum) will only process the album named.
  * @package admin
  */
+
+// force UTF-8 Ø
+
 define('OFFSET_PATH', 1);
 require_once("template-functions.php");
 require_once("admin-functions.php");

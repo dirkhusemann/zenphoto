@@ -3,6 +3,9 @@
  * processes the authorization (or login) of admin users
  * @package admin
  */
+
+// force UTF-8 Ø
+
 require_once("lib-utf8.php");
 require_once("functions-db.php");
 

@@ -3,6 +3,9 @@
  * provides the Themes tab of admin
  * @package admin
  */
+
+// force UTF-8 Ø
+
 define('OFFSET_PATH', 1);
 require_once("admin-functions.php");
 

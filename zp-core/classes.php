@@ -4,6 +4,8 @@
  * @package classes
  */
 
+// force UTF-8 Ø
+
 // classes.php - HEADERS STILL NOT SENT! Do not output text from this file.
 
 // Load the authentication functions and UTF-8 Library.

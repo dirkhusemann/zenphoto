@@ -4,6 +4,8 @@
  * @package classes
  */
 
+// force UTF-8 Ø
+
 class Album extends PersistentObject {
 
 	var $name;             // Folder name of the album (full path from the albums folder)

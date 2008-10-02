@@ -3,6 +3,9 @@
  * handles the watermarking and protecting of the full image link
  * @package core
  */
+
+// force UTF-8 Ø
+
 /* Prevent hotlinking to the full image from other servers. */
 $server = $_SERVER['SERVER_NAME'];
 if (isset($_SERVER['HTTP_REFERER'])) $test = strpos($_SERVER['HTTP_REFERER'], $server); else $test = true;
