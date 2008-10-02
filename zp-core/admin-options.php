@@ -130,10 +130,14 @@ if (isset($_GET['action'])) {
 			}
 			setOption('feed_items', sanitize($_POST['feed_items']),3);
 			setOption('feed_imagesize', sanitize($_POST['feed_imagesize']),3);
-			$search = new SearchEngine();
-			setOption('search_fields', 32767, false); // make SearchEngine allow all options so parseQueryFields() will gives back what was choosen this time
 			setBoolOption('login_user_field', isset($_POST['login_user_field']));
-			setOption('search_fields', $search->parseQueryFields());
+			$serachfields = 0;
+			foreach ($_POST as $key=>$value) {
+				if (strpos($key, '_SEARCH_') !== false) {
+					$serachfields = $serachfields | $value;
+				}
+			}
+			setOption('search_fields', $serachfields);
 			$olduser = getOption('gallery_user');
 			$newuser = sanitize($_POST['gallery_user'],3);
 			if (!empty($newuser)) setOption('login_user_field', 1);
@@ -684,6 +688,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		echo  "<h2>".
 					sprintf(gettext("<em>%s</em> is not available."),$_zp_languages[$locale]).
 					' '.sprintf(gettext("The locale %s is not supported on your server."),$locale).
+					'<br />'.gettext('See the troubleshooting guide on zenphoto.org for details.').
 					"</h2>";
 		echo '</div>';
 	}
@@ -706,14 +711,14 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	</tr>
 	<tr>
 		<td width="175"><?php echo gettext("Gallery title:"); ?></td>
-		<td width="200">
+		<td width="350">
 		<?php print_language_string_list(getOption('gallery_title'), 'gallery_title', false) ?>
 		</td>
 		<td><?php echo gettext("What you want to call your photo gallery."); ?></td>
 	</tr>
 	<tr>
 		<td width="175"><?php echo gettext("Gallery description:"); ?></td>
-		<td width="200">
+		<td width="350">
 		<?php print_language_string_list(getOption('Gallery_description'), 'Gallery_description', true, NULL, 'texteditor') ?>
 		</td>
 		<td><?php echo gettext("A brief description of your gallery. Some themes may display this text."); ?></td>
@@ -947,35 +952,13 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	</tr>
 	<tr>
 		<td><?php echo gettext("Search fields:"); ?></td>
-		<td><?php $fields = getOption('search_fields'); ?>
-		<table class="checkboxes">
-			<tr>
-				<td><input type="checkbox" name="sf_title" value=1
-				<?php if ($fields & SEARCH_TITLE) echo ' checked'; ?>> <?php echo gettext("Title"); ?></td>
-				<td><input type="checkbox" name="sf_desc" value=1
-				<?php if ($fields & SEARCH_DESC) echo ' checked'; ?>> <?php echo gettext("Description"); ?></td>
-			</tr>
-			<tr>
-				<td><input type="checkbox" name="sf_tags" value=1
-				<?php if ($fields & SEARCH_TAGS) echo ' checked'; ?>> <?php echo gettext("Tags"); ?></td>
-				<td><input type="checkbox" name="sf_filename" value=1
-				<?php if ($fields & SEARCH_FILENAME) echo ' checked'; ?>>
-				<?php echo gettext("File/Folder name"); ?></td>
-			</tr>
-			<tr>
-				<td><input type="checkbox" name="sf_location" value=1
-				<?php if ($fields & SEARCH_LOCATION) echo ' checked'; ?>> <?php echo gettext("Location"); ?></td>
-				<td><input type="checkbox" name="sf_city" value=1
-				<?php if ($fields & SEARCH_CITY) echo ' checked'; ?>> <?php echo gettext("City"); ?></td>
-			</tr>
-			<tr>
-				<td><input type="checkbox" name="sf_state" value=1
-				<?php if ($fields & SEARCH_STATE) echo ' checked'; ?>> <?php echo gettext("State"); ?></td>
-				<td><input type="checkbox" name="sf_country" value=1
-				<?php if ($fields & SEARCH_COUNTRY) echo ' checked'; ?>> <?php echo gettext("Country"); ?></td>
-				<td></td>
-			</tr>
-		</table>
+		<td>
+		<?php 
+		echo '<ul class="searchchecklist">'."\n";
+		$engine = new SearchEngine();
+		generateUnorderedListFromArray($engine->allowedSearchFields(), $engine->zp_search_fields, '_SEARCH_', '');
+		echo '</ul>';
+		?>		
 		</td>
 		<td><?php echo gettext("The set of fields on which searches may be performed."); ?></td>
 	</tr>
@@ -1037,7 +1020,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	</tr>
 	<tr>
 		<td width="175"><?php echo gettext("Image quality:"); ?></td>
-		<td width="200"><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="image_quality"
+		<td width="350"><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="image_quality"
 			value="<?php echo htmlspecialchars(getOption('image_quality'));?>" /></td>
 		<td><?php echo gettext("JPEG Compression quality for all images."); ?></td>
 	</tr>

@@ -4,18 +4,33 @@
  * @package classes
  */
 
+// force UTF-8 Ø
+
+
 //*************************************************************
 //*ZENPHOTO SEARCH ENGINE CLASS *******************************
 //*************************************************************
 define('SEARCH_TITLE', 1);
 define('SEARCH_DESC', 2);
 define('SEARCH_TAGS', 4);
-define('SEARCH_FILENAME', 8);
+define('SEARCH_FILENAME', 8); // includes folder for albums
 define('SEARCH_LOCATION', 16);
 define('SEARCH_CITY', 32);
 define('SEARCH_STATE', 64);
 define('SEARCH_COUNTRY', 128);
-define('SEARCH_FOLDER', 256);
+define('SEARCH_EXIFMake', 256);
+define('SEARCH_EXIFModel', 512); 
+define('SEARCH_EXIFExposureTime', 1024);
+define('SEARCH_EXIFFNumber', 2048);
+define('SEARCH_EXIFFocalLength', 4096);
+define('SEARCH_EXIFISOSpeedRatings', 8192);
+define('SEARCH_EXIFExposureBiasValue', 16384);
+define('SEARCH_EXIFMeteringMode', 32768);
+define('SEARCH_EXIFFlash', 65536);
+define('SEARCH_EXIFContrast', 131072);
+define('SEARCH_EXIFSharpness',  262144);
+define('SEARCH_EXIFSaturation', 524288);
+define('SEARCH_EXIFWhiteBalance',	1048576);
 
 class SearchEngine
 {
@@ -26,13 +41,37 @@ class SearchEngine
 	var $images;
 	var $albums;
 	var $dynalbumname;
-
+	var $zp_search_fields;			// translatable names
+	var $zp_search_fieldnames;	// database field names
+	
 	/**
 	 * Constuctor
 	 *
 	 * @return SearchEngine
 	 */
 	function SearchEngine() {
+		$this->zp_search_fields= array (gettext('Title')=>SEARCH_TITLE, gettext('Descripton')=>SEARCH_DESC, gettext('Tags')=>SEARCH_TAGS,
+																		gettext('File/Folder name')=>SEARCH_FILENAME,
+																		gettext('Location')=>SEARCH_LOCATION, gettext('City')=>SEARCH_CITY, gettext('State')=>SEARCH_STATE,
+																		gettext('Country')=>SEARCH_COUNTRY, 
+																		gettext('Camera Maker')=>SEARCH_EXIFMake, gettext('Camera Model')=>SEARCH_EXIFModel,
+																		gettext('Shutter Speed')=>SEARCH_EXIFExposureTime, gettext('Aperture')=>SEARCH_EXIFFNumber, gettext('Focal Length')=>SEARCH_EXIFFocalLength, gettext('ISO Sensitivity')=>SEARCH_EXIFISOSpeedRatings,
+																		gettext('Exposure Compensation')=>SEARCH_EXIFExposureBiasValue, gettext('Metering Mode')=>SEARCH_EXIFExposureBiasValue, gettext('Flash Fired')=>SEARCH_EXIFFlash,
+																		gettext('Contrast Setting')=>SEARCH_EXIFContrast, gettext('Sharpness Setting')=>SEARCH_EXIFSharpness, gettext('Saturation Setting')=>SEARCH_EXIFSaturation,
+																		gettext('White Balance')=>SEARCH_EXIFWhiteBalance
+																		);
+		
+		$this->zp_search_fieldnames = array ('title'=>SEARCH_TITLE, 'descripton'=>SEARCH_DESC,'File/Folder name'=>SEARCH_FILENAME,
+																				'Location'=>SEARCH_LOCATION, 'City'=>SEARCH_CITY, 'State'=>SEARCH_STATE,
+																				'Country'=>SEARCH_COUNTRY,
+																				'EXIFMake'=>SEARCH_EXIFMake, 'EXIFModel'=>SEARCH_EXIFModel,
+																				'EXIFExposureTime'=>SEARCH_EXIFExposureTime, 'EXIFFNumber'=>SEARCH_EXIFFNumber, 'EXIFFocalLength'=>SEARCH_EXIFFocalLength, 'EXIFISOSpeedRatings'=>SEARCH_EXIFISOSpeedRatings,
+																				'EXIFExposureBiasValue'=>SEARCH_EXIFExposureBiasValue, 'EXIFMeteringMode'=>SEARCH_EXIFExposureBiasValue, 'EXIFFlash'=>SEARCH_EXIFFlash,
+																				'EXIFContrast'=>SEARCH_EXIFContrast, 'EXIFSharpness'=>SEARCH_EXIFSharpness, 'EXIFSaturation'=>SEARCH_EXIFSaturation,
+																				'EXIFWhiteBalance'=>SEARCH_EXIFWhiteBalance
+																				);
+																		
+																		
 		if (isset($_REQUEST['words'])) {
 			$this->words = $_REQUEST['words'];
 		} else {
@@ -48,6 +87,21 @@ class SearchEngine
 		$this->albums = null;
 	}
 
+	/**
+	 * Returns an array of the enabled search fields
+	 *
+	 * @return array
+	 */
+	function allowedSearchFields() {
+		$fields = getOption('search_fields');
+		$setlist = array();
+		foreach ($this->zp_search_fields as $key=>$value) {
+			if ($fields & $value) {
+				$setlist[$key] = $value;
+			}
+		}
+		return $setlist;
+	}
 	/**
 	 * creates a search query from the search words
 	 *
@@ -221,17 +275,7 @@ class SearchEngine
 		} else {
 			$fields = 0;
 		}
-		if (isset($_REQUEST['sf_title'])) { $fields |= SEARCH_TITLE; }
-		if (isset($_REQUEST['sf_desc']))  { $fields |= SEARCH_DESC; }
-		if (isset($_REQUEST['sf_tags']))  { $fields |= SEARCH_TAGS; }
-		if (isset($_REQUEST['sf_filename'])) { $fields |= SEARCH_FILENAME; }
-		if (isset($_REQUEST['sf_location'])) { $fields |= SEARCH_LOCATION; }
-		if (isset($_REQUEST['sf_city'])) { $fields |= SEARCH_CITY; }
-		if (isset($_REQUEST['sf_state'])) { $fields |= SEARCH_STATE; }
-		if (isset($_REQUEST['sf_country'])) { $fields |= SEARCH_COUNTRY; }
-
-		if ($fields == 0) { $fields = SEARCH_TITLE | SEARCH_DESC | SEARCH_TAGS | SEARCH_FILENAME | SEARCH_LOCATION | SEARCH_CITY | SEARCH_STATE | SEARCH_COUNTRY; }
-
+		if ($fields == 0) { $fields = ~0; }
 		$fields = $fields & getOption('search_fields');
 		return $fields;
 	}
@@ -249,8 +293,7 @@ class SearchEngine
 		global $_zp_current_album;
 		$sql = 'SELECT DISTINCT `id`, `show`,`title`,`desc`';
 		if ($tbl=='albums') {
-			if ($fields & SEARCH_FILENAME) { $fields = $fields + SEARCH_FOLDER; } // for searching these are really the same thing, just named differently in the different tables
-			$fields = $fields & (SEARCH_TITLE + SEARCH_DESC + SEARCH_TAGS + SEARCH_FOLDER); // these are all albums have
+			$fields = $fields & (SEARCH_TITLE + SEARCH_DESC + SEARCH_FILENAME); // these are all albums have
 			$sql .= ",`folder`";
 		} else {
 			$sql .= ",`albumid`,`filename`,`location`,`city`,`state`,`country`";
@@ -278,46 +321,23 @@ class SearchEngine
 					$subsql = "";
 					$nr = 0;
 					$singlesearchstring = sanitize($singlesearchstring, 3);
-					if (SEARCH_TITLE & $fields) {
-						$nr++;
-						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
-						$subsql .= " `title` LIKE '%$singlesearchstring%'";
-					}
-					if (SEARCH_DESC & $fields) {
-						$nr++;
-						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
-						$subsql .= " `desc` LIKE '%$singlesearchstring%'";
-					}
-					if (SEARCH_FOLDER & $fields) {
-						$nr++;
-						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
-						$subsql .= " `folder` LIKE '%$singlesearchstring%'";
-					}
-					if (SEARCH_FILENAME & $fields) {
-						$nr++;
-						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
-						$subsql .= "`filename` LIKE '%$singlesearchstring%'";
-					}
-					if (SEARCH_LOCATION & $fields) {
-						$nr++;
-						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
-						$subsql .= "`location` LIKE '%$singlesearchstring%'";
-					}
-					if (SEARCH_CITY & $fields) {
-						$nr++;
-						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
-						$subsql .= "`city` LIKE '%$singlesearchstring%'";
-					}
-					if (SEARCH_STATE & $fields) {
-						$nr++;
-						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
-						$subsql .= "`state` LIKE '%$singlesearchstring%'";
-					}
-					if (SEARCH_COUNTRY & $fields) {
-						$nr++;
-						if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
-						$subsql .= "`country` LIKE '%$singlesearchstring%'";
-					}
+					
+					foreach ($this->zp_search_fieldnames as $fieldname=>$value) {
+						if (($value & $fields)) {
+							if ($value == SEARCH_FILENAME) {
+								if ($tbl == 'albums') {
+									$fieldname = 'folder';
+								} else {
+									$fieldname = 'filename';
+								}
+							} else {
+								$fieldname = strtolower($fieldname);
+							}
+							$nr++;
+							if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
+							$subsql .= " `".$fieldname."` LIKE '%$singlesearchstring%'";
+						}
+					}					
 					if ($nr > 0) {
 						$nrt++;
 						$sql .= $join;
@@ -380,7 +400,7 @@ class SearchEngine
 				}
 			}
 		}
-		$sql .= " ORDER BY ".$key;
+		$sql .= " ORDER BY `".$key."`";
 		return $sql;
 	}
 
@@ -563,7 +583,7 @@ class SearchEngine
 				}
 			}
 		}
-		$sql .= " ORDER BY ".$key;
+		$sql .= " ORDER BY `".$key."`";
 		$result = query_full_array($sql);
 		return $result;
 	}
@@ -595,7 +615,7 @@ class SearchEngine
 			$search_results = $this->searchTags($searchstring, 'albums', $idlist);
 		}
 
-		if (is_array($search_results)) {
+		if (isset($search_results) && is_array($search_results)) {
 			foreach ($search_results as $row) {
 				$albumname = $row['folder'];
 				if ($albumname != $this->dynalbumname) {
@@ -713,7 +733,7 @@ class SearchEngine
 			}
 			$search_results = $this->searchTags($searchstring, 'images', $idlist);
 		}
-		if (is_array($search_results)) {
+		if (isset($search_results) && is_array($search_results)) {
 			foreach ($search_results as $row) {
 				$albumid = $row['albumid'];
 				$query = "SELECT id, title, folder,`show` FROM ".prefix('albums')." WHERE id = $albumid";

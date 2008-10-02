@@ -764,8 +764,9 @@ function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrig
 		$listitem = postIndexEncode($prefix.$item);
 		echo '<li><label for="'.$listitem.'"><input id="'.$listitem.'" name="'.$listitem.'" type="checkbox"';
 		if (isset($cv[$item])) {
-			echo ' checked="checked"';
+			echo ' checked="checked" ';
 		}
+		echo ' value="'.$item.'" ';
 		if ($localize) $display = $key; else $display = $item;
 		echo $alterrights.' /> ' . $display . "</label></li>"."\n";
 	}

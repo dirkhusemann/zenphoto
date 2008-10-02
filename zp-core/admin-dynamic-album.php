@@ -3,6 +3,9 @@
  * This script is used to create dynamic albums from a search.
  * @package core
  */
+
+// force UTF-8 Ø
+
 define('OFFSET_PATH', 1);
 require_once("template-functions.php");
 require_once("admin-functions.php");
@@ -177,31 +180,12 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 	<tr>
 		<td><?php echo gettext("Search fields:"); ?></td>
 		<td>
-		<table class="checkboxes">
-			<tr>
-				<td><input type="checkbox" name="sf_title" value=1
-				<?php if ($fields & SEARCH_TITLE) echo ' checked'; ?>> <?php echo gettext("Title"); ?></td>
-				<td><input type="checkbox" name="sf_desc" value=1
-				<?php if ($fields & SEARCH_DESC) echo ' checked'; ?>> <?php echo gettext("Description"); ?></td>
-				<td><input type="checkbox" name="sf_tags" value=1
-				<?php if ($fields & SEARCH_TAGS) echo ' checked'; ?>> <?php echo gettext("Tags"); ?></td>
-			</tr>
-			<tr>
-				<td><input type="checkbox" name="sf_filename" value=1
-				<?php if ($fields & SEARCH_FILENAME) echo ' checked'; ?>>
-				File/Folder name</td>
-				<td><input type="checkbox" name="sf_location" value=1
-				<?php if ($fields & SEARCH_LOCATION) echo ' checked'; ?>> <?php echo gettext("Location"); ?></td>
-				<td><input type="checkbox" name="sf_city" value=1
-				<?php if ($fields & SEARCH_CITY) echo ' checked'; ?>> <?php echo gettext("City"); ?></td>
-			</tr>
-			<tr>
-				<td><input type="checkbox" name="sf_state" value=1
-				<?php if ($fields & SEARCH_STATE) echo ' checked'; ?>> <?php echo gettext("State"); ?></td>
-				<td><input type="checkbox" name="sf_country" value=1
-				<?php if ($fields & SEARCH_COUNTRY) echo ' checked'; ?>> <?php echo gettext("Country"); ?></td>
-			</tr>
-		</table>
+		<?php 
+		echo '<ul class="searchchecklist">'."\n";
+		$engine = new SearchEngine();
+		generateUnorderedListFromArray($engine->allowedSearchFields(), $engine->zp_search_fields, '_SEARCH_', '');
+		echo '</ul>';
+		?>		
 		</td>
 	</tr>
 
