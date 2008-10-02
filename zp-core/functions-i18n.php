@@ -23,11 +23,15 @@ function generateLanguageList() {
 	if ($dir !== false) {
 		while ($dirname = readdir($dir)) {
 			if (is_dir(SERVERPATH . "/" . ZENFOLDER ."/locale/".$dirname) && (substr($dirname, 0, 1) != '.')) {
-				$language = $_zp_languages[$dirname];
-				if (empty($language)) {
+				if (isset($_zp_languages[$dirname])) {
+					$language = $_zp_languages[$dirname];
+					if (empty($language)) {
+						$language = $dirname;
+					}
+					$locales[$language] = $dirname;
+				} else {
 					$language = $dirname;
 				}
-				$locales[$language] = $dirname;
 			}
 		}
 		closedir($dir);
@@ -246,6 +250,7 @@ function setupCurrentLocale($plugindomain='', $type='') {
 		'es_VE' => gettext('Spanish (Venezuela)'),
 		'es_LA' => gettext('Spanish (Latin America)'),
 		'sr_YU' => gettext('Serbian'),
+		'sr_RS' => gettext('Serbian'),
 		'sv_FI' => gettext('Swedish (Finland)'),
 		'sv_SE' => gettext('Swedish (Sweden)'),
 		'ta_IN' => gettext('Tamil'),
