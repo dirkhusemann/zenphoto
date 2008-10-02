@@ -1,4 +1,7 @@
 <?php
+
+// force UTF-8 Ø
+
 /**
  * stores all the default values for options
  * @package setup
@@ -113,7 +116,17 @@ function setDefault($option, $default) {
 	 									"ul => ()\n" .
 	 									"ol => ()\n" .
 	 									"li => ()\n" .
-										"p => ()\n");
+										"p => (style=>())\n" .
+										"h1=>(style=>())\n" .
+										"h2=>(style=>())\n" .
+										"h3=>(style=>())\n" .
+										"h4=>(style=>())\n" .
+										"h5=>(style=>())\n" .
+										"h6=>(style=>())\n" .
+										"pre=>(style=>())\n" .
+										"address=>(style=>())\n" .
+										"span=>(style=>())\n" 
+										);
 	setOptionDefault(	'style_tags', "abbr => (title => ())\n" .
 	 									"acronym => (title => ())\n" .
 	 									"b => ()\n" .
