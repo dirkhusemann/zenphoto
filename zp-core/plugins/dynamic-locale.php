@@ -37,7 +37,8 @@ function printLanguageSelector($class='') {
 		if (getOption('locale') != $locale) {
 			echo '<div class="errorbox">';
 			echo '<h2>'.sprintf(gettext('<em>%s</em> is not available.'),$_zp_languages[$locale]).
-					 ' '.sprintf(gettext('The locale %s is not supported on your server.'), $locale);
+					 ' '.sprintf(gettext('The locale %s is not supported on your server.').
+					 '<br />'.gettext('See the troubleshooting guide on zenphoto.org for details.'), $locale);
 			echo '</h2>';
 			echo '</div>';
 		}

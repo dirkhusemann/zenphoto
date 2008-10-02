@@ -4,7 +4,7 @@
  * @package setup
  */
 
-// force UTF-8 Ø
+// force UTF-8 Ã˜
 
 header ('Content-Type: text/html; charset=UTF-8');
 define('HTACCESS_VERSION', '1.2.1.3');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
@@ -525,7 +525,7 @@ if (!$checked) {
 
 	checkMark($noxlate, gettext("PHP <code>gettext()</code> support"), ' '.gettext("[is not present]"), gettext("Localization of Zenphoto currently requires native PHP <code>gettext()</code> support"));
 	if ($setlocaleresult === false) {
-		checkMark(-1, 'PHP <code>setlocale()</code>', ' '.gettext("failed"), gettext("Locale functionality is not implemented on your platform or the specified locale does not exist. Language translation may not work."));
+		checkMark(-1, 'PHP <code>setlocale()</code>', ' '.gettext("failed"), gettext("Locale functionality is not implemented on your platform or the specified locale does not exist. Language translation may not work.").'<br />'.gettext('See the troubleshooting guide on zenphoto.org for details.'));
 	}
 	if (function_exists('mb_internal_encoding')) {
 		$mb = 1;
