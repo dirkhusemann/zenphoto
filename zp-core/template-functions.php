@@ -956,7 +956,7 @@ function getBareAlbumDesc() {
  */
 function printAlbumDesc($editable=false) {
 	$desc = getAlbumDesc();
-	if (!file_exists(SERVERPATH.'/'.ZENFOLDER.'/js/editor_config.js')) {
+	if (!file_exists(SERVERPATH.'/'.ZENFOLDER.'/js/editor_config.js.php')) {
 		$desc = str_replace("\r\n", "\n", $desc);
 		$desc = str_replace("\n", '<br />', $desc);
 	}

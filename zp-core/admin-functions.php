@@ -276,7 +276,7 @@ function printAdminHeader($path='') {
 		}
 	</script>
 	<?php
-	if (file_exists('js/editor_config.js')) require_once('js/editor_config.js');	
+	if (file_exists('js/editor_config.js.php')) require_once('js/editor_config.js.php');	
 }
 
 /**
