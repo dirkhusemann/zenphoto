@@ -1067,7 +1067,7 @@ if (file_exists("zp-config.php")) {
 		`id` int(11) UNSIGNED NOT NULL auto_increment,
 		`parentid` int(11) unsigned default NULL,
 		`folder` varchar(255) NOT NULL default '',
-		`title` text NOT NULL default '',
+		`title` text NOT NULL,
 		`desc` text,
 		`date` datetime default NULL,
 		`place` text default NULL default '',
@@ -1109,7 +1109,7 @@ if (file_exists("zp-config.php")) {
 		`id` int(11) unsigned NOT NULL auto_increment,
 		`albumid` int(11) unsigned NOT NULL default '0',
 		`filename` varchar(255) NOT NULL default '',
-		`title` text NOT NULL default '',
+		`title` text NOT NULL,
 		`desc` text,
 		`location` text,
 		`city` tinytext,
@@ -1264,9 +1264,9 @@ if (file_exists("zp-config.php")) {
 	}
 	
 	//v1.2.1
-	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `title` `title` TEXT NOT NULL DEFAULT ''";
-	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `place` `place` TEXT NOT NULL DEFAULT ''";
-	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `title` `title` TEXT NOT NULL DEFAULT ''";
+	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `title` `title` TEXT NOT NULL";
+	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `place` `place` TEXT NOT NULL";
+	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `title` `title` TEXT NOT NULL";
 	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `location` `location` TEXT";
 	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `credit` `credit` TEXT";
 	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `copyright` `copyright` TEXT";
