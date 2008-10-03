@@ -34,10 +34,10 @@ function fillbuffer($handle) {
 function getrow($handle) {
 	global $buffer;
 	global $counter;
-	$end = strpos($buffer, RECORD_SEPARATOR);	
+	$end = strpos($buffer, RECORD_SEPARATOR);
 	while ($end === false) {
 		if ($end = fillbuffer($handle)) {
-			$end = strpos($buffer, RECORD_SEPARATOR);	
+			$end = strpos($buffer, RECORD_SEPARATOR);
 		} else {
 			return false;
 		}
@@ -62,8 +62,7 @@ echo "\n</head>";
 echo "\n<body>";
 printLogoAndLinks();
 ?>
-<div id="main">
-<?php
+<div id="main"><?php
 printTabs('database');
 ?>
 <div id="content">
@@ -105,7 +104,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 							break;
 						}
 						if ($writeresult === false) break;
-						$counter ++;			
+						$counter ++;
 						if ($counter >= RESPOND_COUNTER) {
 							echo ' ';
 							$counter = 0;
@@ -121,128 +120,128 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 		$writeresult = false;
 	}
 	if ($writeresult) {
-	?>
-		<div class="messagebox" id="fade-message">
-		<h2><?php echo gettext("backup complete"); ?></h2>
-		</div>
-	<?php
+		?>
+<div class="messagebox" id="fade-message">
+<h2><?php echo gettext("backup complete"); ?></h2>
+</div>
+		<?php
 	} else {
 		?>
-		<div class="errorbox" id="fade-message">
-		<h2><?php echo gettext("backup failed"); ?></h2>
-		</div>
+<div class="errorbox" id="fade-message">
+<h2><?php echo gettext("backup failed"); ?></h2>
+</div>
 		<?php
-		}
+	}
 } else if (isset($_REQUEST['restore']) && db_connect()) {
-		$success = false;
-		if (isset($_REQUEST['backupfile'])) {
-			$folder = SERVERPATH . '/' . BACKUPFOLDER .'/';
-			$filename = $folder . sanitize($_REQUEST['backupfile'], 3).'.zdb';
-			if (file_exists($filename)) {
-				$handle = fopen($filename, 'r');
-				if ($handle !== false) {
-					$success = true;
-					$string = getrow($handle);
-					$counter = 0;
-					while (!empty($string)) {
-						$sep = strpos($string, TABLE_SEPARATOR);
-						$table = substr($string, 0, $sep);
-						$row = unserialize(substr($string, $sep+strlen(TABLE_SEPARATOR)));
-						$items = '';
-						$values = '';
-						$updates = '';
-						foreach($row as $key=>$element) {
-							if (!empty($element)) {
-								$element = gzuncompress($element);
-							}
-							if ($key == 'id') {
-								$id = $element;
-							} else {
-								$items .= '`'.$key.'`,';
-								if (is_null($element)) {
-									$values .= 'NULL,';
-									$updates .= '`'.$key.'`=NULL,';
-								} else {
-									$values .= '"'.mysql_real_escape_string($element).'",';
-									$updates .= '`'.$key.'`="'.mysql_real_escape_string($element).'",';
-								}
-							}
+	$success = false;
+	if (isset($_REQUEST['backupfile'])) {
+		$folder = SERVERPATH . '/' . BACKUPFOLDER .'/';
+		$filename = $folder . sanitize($_REQUEST['backupfile'], 3).'.zdb';
+		if (file_exists($filename)) {
+			$handle = fopen($filename, 'r');
+			if ($handle !== false) {
+				$success = true;
+				$string = getrow($handle);
+				$counter = 0;
+				while (!empty($string)) {
+					$sep = strpos($string, TABLE_SEPARATOR);
+					$table = substr($string, 0, $sep);
+					$row = unserialize(substr($string, $sep+strlen(TABLE_SEPARATOR)));
+					$items = '';
+					$values = '';
+					$updates = '';
+					$special_keys = '';
+					$special_values = '';
+					foreach($row as $key=>$element) {
+						if (!empty($element)) {
+							$element = gzuncompress($element);
 						}
-						$items = substr($items,0,-1);
-						$values = substr($values,0,-1);
-						$updates = substr($updates,0,-1);
-						
-						$sql = 'INSERT INTO '.prefix($table).' (`id`,'.$items.') VALUES ('.$id.','.$values.') ON DUPLICATE KEY UPDATE '.$updates;
-						$success = query($sql);
-						if (!$success) break;
-						$counter ++;
-						if ($counter >= RESPOND_COUNTER) {
-							echo ' ';
-							$counter = 0;
+						$items .= '`'.$key.'`,';
+						if (is_null($element)) {
+							$values .= 'NULL,';
+							$updates .= '`'.$key.'`=NULL,';
+						} else {
+							$values .= '"'.mysql_real_escape_string($element).'",';
+							$updates .= '`'.$key.'`="'.mysql_real_escape_string($element).'",';
 						}
-						$string = getrow($handle);
 					}
-					fclose($handle);
+
+					$items = substr($items,0,-1);
+					$values = substr($values,0,-1);
+					$updates = substr($updates,0,-1);
+
+					$sql = 'REPLACE INTO '.prefix($table).' ('.$items.') VALUES ('.$values.')';
+					$success = query($sql);
+					if (!$success) break;
+					$counter ++;
+					if ($counter >= RESPOND_COUNTER) {
+						echo ' ';
+						$counter = 0;
+					}
+					$string = getrow($handle);
 				}
+				fclose($handle);
 			}
 		}
+	}
 	if ($success) {
 		?>
-		<div class="messagebox" id="fade-message">
-		<h2><?php echo gettext("restore complete"); ?></h2>
-		</div>
+<div class="messagebox" id="fade-message">
+<h2><?php echo gettext("restore complete"); ?></h2>
+</div>
 		<?php
 	} else {
 		?>
-		<div class="errorbox" id="fade-message">
-		<h2><?php echo gettext("restore failed"); ?></h2>
-		</div>
+<div class="errorbox" id="fade-message">
+<h2><?php echo gettext("restore failed"); ?></h2>
+</div>
 		<?php
 	}
 }
 if (db_connect()) {
 	?>
-	<h3><?php gettext("database connected"); ?></h3>
-	<p>
-	<?php echo gettext("Your database is"); ?>: '<strong><?php echo getOption('mysql_database'); ?>'</strong><br />
-	<?php echo gettext("Tables are prefixed by"); ?> <strong>'<?php echo getOption('mysql_prefix'); ?>'</strong>
-	</p>
-	<br /><br />
-	<form name="ackup_gallery" action="">
-		<input type="hidden" name="backup" value="true">
-			<div class="buttons pad_button" id="dbbackup">
-			<button class="tooltip" type="submit" title="
-			<?php echo gettext("Backup the tables in your database."); ?>">
-			<img src="<?php echo $webpath; ?>images/burst.png" alt="" /> <?php echo gettext("Backup the Database"); ?></button>
-		</div>
-		<br clear="all" />
-		<br clear="all" />
-	</form>
-	<br /><br />
-	<form name="restore_gallery" action="">
-		Select the database restor file:	
-		<br />
-		<select id="backupfile" name="backupfile">
-		<?php	generateListFromFiles('', SERVERPATH . "/" . BACKUPFOLDER, '.zdb', true);	?>
-		</select>
-		<input type="hidden" name="restore" value="true">
-		<div class="buttons pad_button" id="dbrestore">
-			<button class="tooltip" type="submit" title="
+<h3><?php gettext("database connected"); ?></h3>
+<p><?php echo gettext("Your database is"); ?>: '<strong><?php echo getOption('mysql_database'); ?>'</strong><br />
+<?php echo gettext("Tables are prefixed by"); ?> <strong>'<?php echo getOption('mysql_prefix'); ?>'</strong>
+</p>
+<br />
+<br />
+<form name="ackup_gallery" action=""><input type="hidden" name="backup"
+	value="true">
+<div class="buttons pad_button" id="dbbackup">
+<button class="tooltip" type="submit"
+	title="
+			<?php echo gettext("Backup the tables in your database."); ?>"><img
+	src="<?php echo $webpath; ?>images/burst.png" alt="" /> <?php echo gettext("Backup the Database"); ?></button>
+</div>
+<br clear="all" />
+<br clear="all" />
+</form>
+<br />
+<br />
+<form name="restore_gallery" action="">Select the database restor file:
+<br />
+<select id="backupfile" name="backupfile">
+<?php	generateListFromFiles('', SERVERPATH . "/" . BACKUPFOLDER, '.zdb', true);	?>
+</select> <input type="hidden" name="restore" value="true">
+<div class="buttons pad_button" id="dbrestore">
+<button class="tooltip" type="submit"
+	title="
 			<?php echo gettext("Restore the tables in your database from a previous backup."); ?>">
-			<img src="<?php echo $webpath; ?>images/cache.png" alt="" /> <?php echo gettext("Restore the Database"); ?></button>
-		</div>
-		<br clear="all" />
-		<br clear="all" />
-	</form>
-	
-	<?php
+<img src="<?php echo $webpath; ?>images/cache.png" alt="" /> <?php echo gettext("Restore the Database"); ?></button>
+</div>
+<br clear="all" />
+<br clear="all" />
+</form>
+
+			<?php
 } else {
 	echo "<h3>".gettext("database not connected")."</h3>";
 	echo "<p>".gettext("Check the zp-config.php file to make sure you've got the right username, password, host, and database. If you haven't created the database yet, now would be a good time.");
 }
-?>
-</div> <!-- content -->
-</div> <!-- main -->
+?></div>
+<!-- content --></div>
+<!-- main -->
 <?php
 printAdminFooter();
 
