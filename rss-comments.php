@@ -24,6 +24,7 @@ if(isset($_GET['lang'])) {
 } else {
 	$locale = getOption('locale');
 }
+$validlocale = strtr($locale,"_","-"); // for the <language> tag of the rss
 
 // check passwords
 $albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
@@ -52,7 +53,7 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 <link><?php echo "http://".$host.WEBPATH; ?></link>
 <atom:link href="http://<?php echo $host.WEBPATH; ?>/rss.php" rel="self" type="application/rss+xml" />
 <description><?php echo get_language_string(getOption('gallery_title'), $locale); ?></description>
-<language><?php echo getOption('locale'); ?></language>
+<language><?php echo $validlocale; ?></language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
 <lastBuildDate><?php echo date("r", time()); ?></lastBuildDate>
 <docs>http://blogs.law.harvard.edu/tech/rss</docs>

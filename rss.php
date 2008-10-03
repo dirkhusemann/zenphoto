@@ -39,6 +39,7 @@ if(isset($_GET['lang'])) {
 } else {
 	$locale = getOption('locale');
 }
+$validlocale = strtr($locale,"_","-"); // for the <language> tag of the rss
 $host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 
 // check passwords
@@ -65,7 +66,7 @@ if(getOption('mod_rewrite')) {
 <link><?php echo "http://".$host.WEBPATH; ?></link>
 <atom:link href="http://<?php echo $host.WEBPATH; ?>/rss.php" rel="self" type="application/rss+xml" />
 <description><?php echo strip_tags(get_language_string(getOption('gallery_title'), $locale)); ?></description>
-<language><?php echo getOption('locale'); ?></language>
+<language><?php echo $validlocale; ?></language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
 <lastBuildDate><?php echo date("r", time()); ?></lastBuildDate>
 <docs>http://blogs.law.harvard.edu/tech/rss</docs>
