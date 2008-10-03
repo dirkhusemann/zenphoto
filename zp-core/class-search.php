@@ -185,6 +185,7 @@ class SearchEngine
 	/**
 	 * Parses a search string
 	 * Items within quotations are treated as atomic
+	 * AND, OR and NOT are converted to &, |, and !
 	 *
 	 * Returns an array of search elements
 	 *
@@ -242,7 +243,52 @@ class SearchEngine
 					$target = '';
 					$result[] = $c;
 					break;
-				default:
+				case 'A':
+					if (substr($searchstring, $i, 4) == 'AND ') {
+						$searchstring = substr($searchstring, 3);
+						if (!empty($target)) {
+							$r = trim($target);
+							if (!empty($r)) {
+								$result[] = $r;
+								$target = '';
+							}
+						}
+						$c1 = $c;
+						$target = '';
+						$result[] = '&';
+						break;
+					}
+				case 'O':
+					if (substr($searchstring, $i, 3) == 'OR ') {
+						$searchstring = substr($searchstring, 2);
+						if (!empty($target)) {
+							$r = trim($target);
+							if (!empty($r)) {
+								$result[] = $r;
+								$target = '';
+							}
+						}
+						$c1 = $c;
+						$target = '';
+						$result[] = '|';
+						break;
+					}
+				case 'N':
+					if (substr($searchstring, $i, 4) == 'NOT ') {
+						$searchstring = substr($searchstring, 3);
+						if (!empty($target)) {
+							$r = trim($target);
+							if (!empty($r)) {
+								$result[] = $r;
+								$target = '';
+							}
+						}
+						$c1 = $c;
+						$target = '';
+						$result[] = '!';
+						break;
+					}
+					default:
 					$c1 = $c;
 					$target .= $c;
 					break;

@@ -455,7 +455,13 @@ function getPageURL($page, $total=null) {
 	global $_zp_current_album, $_zp_gallery, $_zp_current_search, $_zp_gallery_page;
 	if (is_null($total)) { $total = getTotalPages(); }
 	if (in_context(ZP_SEARCH)) {
-		$searchwords = $_zp_current_search->words;
+		$search = $_zp_current_search->getSearchString();
+		foreach ($search as $key=>$item) {
+			if ($item == '&') {
+				$search[$key] = 'AND';
+			}
+		}
+		$searchwords = implode(' ', $search);
 		$searchdate = $_zp_current_search->dates;
 		$searchfields = $_zp_current_search->fields;
 		$searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
@@ -3498,33 +3504,6 @@ function quoteSearchTag($tag) {
 	} else {
 		return $tag;
 	}
-}
-
-/**
- * Emits the javascript for the search form
- *
- */
-function zen_search_script() {
-	echo "\n<script src=\"" . FULLWEBPATH . "/" . ZENFOLDER . "/js/scriptaculous/scriptaculous.js\" type=\"text/javascript\"></script>";
-	echo "\n	<style type=\"text/css\">";
-	echo "\n		<div.searchoption{padding:8px; border:solid 1px #CCCCCC; width:100px;margin-left:2px; margin-bottom:10px; text-align: left;}";
-	echo "\n	</style>";
-	echo "\n<script language=\"javascript\">";
-	echo "\nfunction showMenu(){";
-	echo "\n	statusMenu = document.getElementById('hiddenStatusMenu');";
-	echo "\n	if(statusMenu.value==0){";
-	echo "\n		statusMenu.value=1;";
-	echo "\n		Effect.toggle('searchmenu','appear'); return false;";
-	echo "\n	}";
-	echo "\n}";
-	echo "\nfunction hideMenu(){";
-	echo "\n	statusMenu = document.getElementById('hiddenStatusMenu');";
-	echo  "\n	if(statusMenu.value==1){";
-	echo "\n		statusMenu.value=0;";
-	echo "\n		Effect.toggle('searchmenu','appear'); return false;";
-	echo "\n	}";
-	echo "\n}";
-	echo "\n</script>";
 }
 
 /**
