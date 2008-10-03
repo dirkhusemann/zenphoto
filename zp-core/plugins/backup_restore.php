@@ -58,13 +58,13 @@ $gallery = new Gallery();
 $webpath = WEBPATH.'/'.ZENFOLDER.'/';
 
 printAdminHeader($webpath);
-echo "\n</head>";
-echo "\n<body>";
-printLogoAndLinks();
+echo '</head>';
 ?>
-<div id="main"><?php
-printTabs('database');
-?>
+
+<body>
+<?php printLogoAndLinks(); ?>
+<div id="main">
+<?php printTabs('database'); ?>
 <div id="content">
 <h1><?php echo (gettext('Backup and Restore your Database')); ?></h1>
 <?php
@@ -201,53 +201,50 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 if (db_connect()) {
 	?>
 <h3><?php gettext("database connected"); ?></h3>
-<p><?php echo gettext("Your database is"); ?>: '<strong><?php echo getOption('mysql_database'); ?>'</strong><br />
-<?php echo gettext("Tables are prefixed by"); ?> <strong>'<?php echo getOption('mysql_prefix'); ?>'</strong>
+<p><?php printf(gettext("Your database is <strong>%s</strong>"),getOption('mysql_database')); ?><br />
+<?php printf(gettext("Tables are prefixed by <strong>%s</strong>"), getOption('mysql_prefix')); ?>
 </p>
 <br />
 <br />
 <form name="ackup_gallery" action=""><input type="hidden" name="backup"
 	value="true">
 <div class="buttons pad_button" id="dbbackup">
-<button class="tooltip" type="submit"
-	title="
-			<?php echo gettext("Backup the tables in your database."); ?>"><img
-	src="<?php echo $webpath; ?>images/burst.png" alt="" /> <?php echo gettext("Backup the Database"); ?></button>
+<button class="tooltip" type="submit" title="<?php echo gettext("Backup the tables in your database."); ?>">
+	<img src="<?php echo $webpath; ?>images/burst.png" alt="" /> <?php echo gettext("Backup the Database"); ?>
+</button>
 </div>
 <br clear="all" />
 <br clear="all" />
 </form>
 <br />
 <br />
-<form name="restore_gallery" action="">Select the database restor file:
+<form name="restore_gallery" action=""><?php echo gettext('Select the database restore file:'); ?>
 <br />
 <select id="backupfile" name="backupfile">
 <?php	generateListFromFiles('', SERVERPATH . "/" . BACKUPFOLDER, '.zdb', true);	?>
 </select> <input type="hidden" name="restore" value="true">
 <div class="buttons pad_button" id="dbrestore">
-<button class="tooltip" type="submit"
-	title="
-			<?php echo gettext("Restore the tables in your database from a previous backup."); ?>">
-<img src="<?php echo $webpath; ?>images/cache.png" alt="" /> <?php echo gettext("Restore the Database"); ?></button>
+<button class="tooltip" type="submit" title="<?php echo gettext("Restore the tables in your database from a previous backup."); ?>">
+	<img src="<?php echo $webpath; ?>images/cache.png" alt="" /> <?php echo gettext("Restore the Database"); ?>
+</button>
 </div>
 <br clear="all" />
 <br clear="all" />
 </form>
 
-			<?php
+<?php
 } else {
 	echo "<h3>".gettext("database not connected")."</h3>";
 	echo "<p>".gettext("Check the zp-config.php file to make sure you've got the right username, password, host, and database. If you haven't created the database yet, now would be a good time.");
 }
-?></div>
+?>
+</div>
 <!-- content --></div>
 <!-- main -->
-<?php
-printAdminFooter();
+<?php printAdminFooter(); ?>
+</body>
+</html>
 
-echo "\n</body>";
-echo "\n</html>";
-?>
 
 
 
