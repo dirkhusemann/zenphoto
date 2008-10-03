@@ -76,6 +76,15 @@ function setPluginDomain($plugindomain) {
 }
 
 /**
+ * Sets the locale, etc. to the zenphoto domain details.
+ *
+ */
+function setMainDomain() {
+	getUserLocale();
+	setupCurrentLocale();
+}
+
+/**
  * Sets the optional textdomain for separate translation files for themes.
  * The plugin translation files must be located within
  * zenphoto/themes/<theme name>/locale/<language locale>/LC_MESSAGES/ and must
@@ -100,7 +109,7 @@ function setupCurrentLocale($plugindomain='', $type='') {
 	global $_zp_languages;
 	$encoding = getOption('charset');
 	if (empty($encoding)) $encoding = 'UTF-8';
-	if(empty($plugindomain) AND empty($type)) {
+	if(empty($plugindomain) && empty($type)) {
 		$locale = getOption("locale");
 		@putenv("LANG=$locale");
 		// gettext setup
@@ -120,19 +129,19 @@ function setupCurrentLocale($plugindomain='', $type='') {
 		// Set the text domain as 'messages'
 		$domain = 'zenphoto';
 		$domainpath = SERVERPATH . "/" . ZENFOLDER . "/locale/";
-		if (DEBUG_LOCALE) debugLog("setupCurrentLocale($plugindomain): locale=$locale");
+		if (DEBUG_LOCALE) debugLogBacktrace("setupCurrentLocale($plugindomain): locale=$locale");
 	} else {
 		$domain = $plugindomain;
 		switch ($type) {
 			case "plugin":
-				$domainpath = SERVERPATH . "/" . ZENFOLDER . "/plugins/".$domain."/locale/";
+				$domainpath = SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $domain . "/locale/";
 				break;
 			case "theme":
-				$domainpath = SERVERPATH . "/themes/".$domain."/locale/";
+				$domainpath = SERVERPATH . "/" . THEMEFOLDER . "/" . $domain."/locale/";
 				break;
 		}
 		$result = false;
-		if (DEBUG_LOCALE) debugLog("setupCurrentLocale($plugindomain): domainpath=$domainpath");
+		if (DEBUG_LOCALE) debugLogBacktrace("setupCurrentLocale($plugindomain): domainpath=$domainpath");
 	}
 	bindtextdomain($domain, $domainpath);
 	// function only since php 4.2.0

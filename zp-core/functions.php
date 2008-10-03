@@ -100,8 +100,7 @@ $_zp_error = false;
 
 require_once('functions-i18n.php');
 
-getUserLocale();
-setupCurrentLocale();
+setMainDomain();
 
 /**
  * Decodes HTML Special Characters.  Function for backwards compatability with PHP 4.1.
