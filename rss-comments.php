@@ -51,7 +51,7 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 <channel>
 <title><?php echo strip_tags(get_language_string(getOption('gallery_title'), $locale))." - ".gettext("latest comments"); ?></title>
 <link><?php echo "http://".$host.WEBPATH; ?></link>
-<atom:link href="http://<?php echo $host.WEBPATH; ?>/rss.php" rel="self" type="application/rss+xml" />
+<atom:link href="http://<?php echo $host.WEBPATH; ?>/rss-comments.php" rel="self" type="application/rss+xml" />
 <description><?php echo get_language_string(getOption('gallery_title'), $locale); ?></description>
 <language><?php echo $validlocale; ?></language>
 <pubDate><?php echo date("r", time()); ?></pubDate>
