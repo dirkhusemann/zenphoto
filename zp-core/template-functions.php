@@ -463,7 +463,7 @@ function getPageURL($page, $total=null) {
 		}
 		$searchwords = implode(' ', $search);
 		$searchdate = $_zp_current_search->dates;
-		$searchfields = $_zp_current_search->fields;
+		$searchfields = $_zp_current_search->getFields();
 		$searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
 		return $searchpagepath;
 	} else {
@@ -815,7 +815,7 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
 		$page = $_zp_current_search->page;
 		$searchwords = $_zp_current_search->words;
 		$searchdate = $_zp_current_search->dates;
-		$searchfields = $_zp_current_search->fields;
+		$searchfields = $_zp_current_search->getFields();
 		$searchpagepath = htmlspecialchars(getSearchURL($searchwords, $searchdate, $searchfields, $page));
 		$dynamic_album = $_zp_current_search->dynalbumname;
 		if (empty($dynamic_album)) {
@@ -1436,7 +1436,7 @@ function getTotalImagesIn($album) {
  */
 function next_image($all=false, $firstPageCount=0, $sorttype=null, $overridePassword=false) {
 	global $_zp_images, $_zp_current_image, $_zp_current_album, $_zp_page, $_zp_current_image_restore,
-	$_zp_conf_vars, $_zp_current_search, $_zp_gallery;
+				 $_zp_conf_vars, $_zp_current_search, $_zp_gallery;
 	if (!$overridePassword) { if (checkforPassword()) { return false; } }
 	$imagePageOffset = getTotalPages(true) - 1; /* gives us the count of pages for album thumbs */
 	if ($all) {

@@ -7,7 +7,7 @@
 // force UTF-8 Ø
 
 header ('Content-Type: text/html; charset=UTF-8');
-define('HTACCESS_VERSION', '1.2.1.3');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
+define('HTACCESS_VERSION', '1.2.2.0');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
 if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
 
 $debug = isset($_GET['debug']);
@@ -800,10 +800,10 @@ if ($debug) {
 		} else {
 			$i = strpos($htu, 'VERSION');
 			if ($i !== false) {
-				$j = strpos($htu, "\n", $i+7);
+				$j = strpos($htu, ";");
 				$vr = trim(substr($htu, $i+7, $j-$i-7));
 			}
-			$ch = $vr == HTACCESS_VERSION;
+			$ch = !empty($vr) && ($vr == HTACCESS_VERSION);
 			$err = gettext("wrong version");
 			$desc = gettext("You need to upload the copy of the .htaccess file that was included with the zenphoto distribution.");
 		}

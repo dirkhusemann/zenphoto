@@ -10,27 +10,27 @@
 //*************************************************************
 //*ZENPHOTO SEARCH ENGINE CLASS *******************************
 //*************************************************************
-define('SEARCH_TITLE', 1);
-define('SEARCH_DESC', 2);
-define('SEARCH_TAGS', 4);
-define('SEARCH_FILENAME', 8); // includes folder for albums
-define('SEARCH_LOCATION', 16);
-define('SEARCH_CITY', 32);
-define('SEARCH_STATE', 64);
-define('SEARCH_COUNTRY', 128);
-define('SEARCH_EXIFMake', 256);
-define('SEARCH_EXIFModel', 512); 
-define('SEARCH_EXIFExposureTime', 1024);
-define('SEARCH_EXIFFNumber', 2048);
-define('SEARCH_EXIFFocalLength', 4096);
-define('SEARCH_EXIFISOSpeedRatings', 8192);
-define('SEARCH_EXIFExposureBiasValue', 16384);
-define('SEARCH_EXIFMeteringMode', 32768);
-define('SEARCH_EXIFFlash', 65536);
-define('SEARCH_EXIFContrast', 131072);
-define('SEARCH_EXIFSharpness',  262144);
-define('SEARCH_EXIFSaturation', 524288);
-define('SEARCH_EXIFWhiteBalance',	1048576);
+define('SEARCH_TITLE', 0x1);
+define('SEARCH_DESC', 0x2);
+define('SEARCH_TAGS', 0x4);
+define('SEARCH_FILENAME', 0x8); // includes folder for albums
+define('SEARCH_LOCATION', 0x10);
+define('SEARCH_CITY', 0x20);
+define('SEARCH_STATE', 0x40);
+define('SEARCH_COUNTRY', 0x80);
+define('SEARCH_EXIFMake', 0x100);
+define('SEARCH_EXIFModel', 0x200); 
+define('SEARCH_EXIFExposureTime', 0x400);
+define('SEARCH_EXIFFNumber', 0x800);
+define('SEARCH_EXIFFocalLength', 0x1000);
+define('SEARCH_EXIFISOSpeedRatings', 0x2000);
+define('SEARCH_EXIFExposureBiasValue', 0x4000);
+define('SEARCH_EXIFMeteringMode', 0x8000);
+define('SEARCH_EXIFFlash', 0x10000);
+define('SEARCH_EXIFContrast', 0x20000);
+define('SEARCH_EXIFSharpness',  0x40000);
+define('SEARCH_EXIFSaturation', 0x80000);
+define('SEARCH_EXIFWhiteBalance',	0x100000);
 
 class SearchEngine
 {
@@ -43,6 +43,7 @@ class SearchEngine
 	var $dynalbumname;
 	var $zp_search_fields;			// translatable names
 	var $zp_search_fieldnames;	// database field names
+	var $zp_search_all_fields;
 	
 	/**
 	 * Constuctor
@@ -56,7 +57,7 @@ class SearchEngine
 																		gettext('Country')=>SEARCH_COUNTRY, 
 																		gettext('Camera Maker')=>SEARCH_EXIFMake, gettext('Camera Model')=>SEARCH_EXIFModel,
 																		gettext('Shutter Speed')=>SEARCH_EXIFExposureTime, gettext('Aperture')=>SEARCH_EXIFFNumber, gettext('Focal Length')=>SEARCH_EXIFFocalLength, gettext('ISO Sensitivity')=>SEARCH_EXIFISOSpeedRatings,
-																		gettext('Exposure Compensation')=>SEARCH_EXIFExposureBiasValue, gettext('Metering Mode')=>SEARCH_EXIFExposureBiasValue, gettext('Flash Fired')=>SEARCH_EXIFFlash,
+																		gettext('Exposure Compensation')=>SEARCH_EXIFExposureBiasValue, gettext('Metering Mode')=>SEARCH_EXIFMeteringMode, gettext('Flash Fired')=>SEARCH_EXIFFlash,
 																		gettext('Contrast Setting')=>SEARCH_EXIFContrast, gettext('Sharpness Setting')=>SEARCH_EXIFSharpness, gettext('Saturation Setting')=>SEARCH_EXIFSaturation,
 																		gettext('White Balance')=>SEARCH_EXIFWhiteBalance
 																		);
@@ -66,12 +67,16 @@ class SearchEngine
 																				'Country'=>SEARCH_COUNTRY,
 																				'EXIFMake'=>SEARCH_EXIFMake, 'EXIFModel'=>SEARCH_EXIFModel,
 																				'EXIFExposureTime'=>SEARCH_EXIFExposureTime, 'EXIFFNumber'=>SEARCH_EXIFFNumber, 'EXIFFocalLength'=>SEARCH_EXIFFocalLength, 'EXIFISOSpeedRatings'=>SEARCH_EXIFISOSpeedRatings,
-																				'EXIFExposureBiasValue'=>SEARCH_EXIFExposureBiasValue, 'EXIFMeteringMode'=>SEARCH_EXIFExposureBiasValue, 'EXIFFlash'=>SEARCH_EXIFFlash,
+																				'EXIFExposureBiasValue'=>SEARCH_EXIFExposureBiasValue, 'EXIFMeteringMode'=>SEARCH_EXIFMeteringMode, 'EXIFFlash'=>SEARCH_EXIFFlash,
 																				'EXIFContrast'=>SEARCH_EXIFContrast, 'EXIFSharpness'=>SEARCH_EXIFSharpness, 'EXIFSaturation'=>SEARCH_EXIFSaturation,
 																				'EXIFWhiteBalance'=>SEARCH_EXIFWhiteBalance
 																				);
 																		
-																		
+		$this->zp_search_all_fields = SEARCH_TAGS;
+		foreach ($this->zp_search_fieldnames as $value) {
+			$this->zp_search_all_fields = $this->zp_search_all_fields + $value;		
+		}		
+		
 		if (isset($_REQUEST['words'])) {
 			$this->words = $_REQUEST['words'];
 		} else {
@@ -102,6 +107,18 @@ class SearchEngine
 		}
 		return $setlist;
 	}
+	
+	/**
+	 * returns the search fields bitmap
+	 *
+	 * @return bits
+	 */
+	function getFields() {
+		$fields = $this->fields;
+		if ($fields == $this->zp_search_all_fields) $fields = 0;
+		return $fields;
+	}
+	
 	/**
 	 * creates a search query from the search words
 	 *
@@ -768,7 +785,7 @@ class SearchEngine
 		$fields = $fields & ~SEARCH_TAGS;
 		$sql = $this->getSearchSQL($searchstring, $searchdate, 'images', $fields);
 		if (!empty($sql)) {  // valid fields exist
-			$search_results = query_full_array($sql, true);
+			$search_results = query_full_array($sql, true);			
 		}
 		if ($tagsSearch && count($searchstring) > 0) {
 			$idlist = array();
@@ -793,7 +810,6 @@ class SearchEngine
 			}
 		}
 		return $images;
-
 	}
 
 	/**

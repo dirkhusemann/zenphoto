@@ -129,7 +129,7 @@ function setupCurrentLocale($plugindomain='', $type='') {
 		// Set the text domain as 'messages'
 		$domain = 'zenphoto';
 		$domainpath = SERVERPATH . "/" . ZENFOLDER . "/locale/";
-		if (DEBUG_LOCALE) debugLogBacktrace("setupCurrentLocale($plugindomain): locale=$locale");
+		if (DEBUG_LOCALE) debugLogBacktrace("setupCurrentLocale($plugindomain, $type): locale=$locale");
 	} else {
 		$domain = $plugindomain;
 		switch ($type) {
@@ -141,7 +141,7 @@ function setupCurrentLocale($plugindomain='', $type='') {
 				break;
 		}
 		$result = false;
-		if (DEBUG_LOCALE) debugLogBacktrace("setupCurrentLocale($plugindomain): domainpath=$domainpath");
+		if (DEBUG_LOCALE) debugLogBacktrace("setupCurrentLocale($plugindomain, $type): domainpath=$domainpath");
 	}
 	bindtextdomain($domain, $domainpath);
 	// function only since php 4.2.0
@@ -229,8 +229,8 @@ function setupCurrentLocale($plugindomain='', $type='') {
 		'no_NO' => gettext('Norwegian'),
 		'ni_ID' => gettext('Nias'),
 		'pl_PL' => gettext('Polish'),
-		'pt_BR' => gettext('Portugese (Brazil)'),
-		'pt_PT' => gettext('Portugese (Portugal)'),
+		'pt_BR' => gettext('Portuguese (Brazil)'),
+		'pt_PT' => gettext('Portuguese (Portugal)'),
 		'ro_RO' => gettext('Romanian'),
 		'ru_RU' => gettext('Russian (Russia)'),
 		'ru_UA' => gettext('Russian (Ukraine)'),
