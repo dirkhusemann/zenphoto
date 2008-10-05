@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: zenphoto 1.2 svn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-29 22:03+0100\n"
-"PO-Revision-Date: 2008-10-01 18:42+0100\n"
+"PO-Revision-Date: 2008-10-05 11:45+0100\n"
 "Last-Translator: acrylian <wartgart@gmx.net>\n"
 "Language-Team: Malte Müller (acrylian)\n"
 "MIME-Version: 1.0\n"
@@ -2658,7 +2658,7 @@ msgstr "Datenbank aktualisieren"
 
 #: zp-trunk/zp-core/admin-refresh-metadata.php:28
 msgid "Finished refreshing the database"
-msgstr "Die Datenbank wird aktualisiert"
+msgstr "Die Datenbank wurde aktualisiert"
 
 #: zp-trunk/zp-core/admin-refresh-metadata.php:29
 msgid "Database refresh is incomplete"
