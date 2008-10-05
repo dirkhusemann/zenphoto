@@ -71,7 +71,6 @@ class Image extends PersistentObject {
 			} else {
 				$title = $this->getDefaultTitle();
 			}
-			$title = utf8::convert($title, 'ISO-8859-1'); // file system is not in UTF-8
 			$this->set('title', sanitize($title, 2));
 
 			if (isset($metadata['desc'])) {
@@ -123,6 +122,7 @@ class Image extends PersistentObject {
 	function getDefaultTitle() {
 		$title = substr($this->name, 0, strrpos($this->name, '.'));
 		if (empty($title)) $title = $this->name;
+		$title = utf8::convert($title, 'ISO-8859-1'); // file system is not in UTF-8
 		return $title;
 	}
 
