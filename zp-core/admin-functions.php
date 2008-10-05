@@ -1777,9 +1777,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 			$dbstring = array_shift($strings);
 		}
 		if ($textbox) {
-			echo '<textarea name="'.$name.'_'.$locale.'"'.$edit.' cols="'.TEXTAREA_COLUMNS.'"	style="width: 342px" rows="6">'.$dbstring.'</textarea>';
+			echo '<textarea name="'.$name.'_'.$locale.'"'.$edit.' cols="'.TEXTAREA_COLUMNS.'"	rows="6">'.$dbstring.'</textarea>';
 		} else {
-			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" style="width: 338px" size="'.TEXT_INPUT_SIZE.'" />';
+			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="'.TEXT_INPUT_SIZE.'" />';
 		}
 	}
 }

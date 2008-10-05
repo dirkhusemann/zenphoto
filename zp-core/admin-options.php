@@ -909,7 +909,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	</tr>
 	<tr>
 		<td><?php echo gettext("Allowed tags:"); ?></td>
-		<td><textarea name="allowed_tags" style="width: 342px" rows="10"><?php echo htmlspecialchars(getOption('allowed_tags')); ?></textarea>
+		<td><textarea name="allowed_tags" style="width: 310px" rows="10"><?php echo htmlspecialchars(getOption('allowed_tags')); ?></textarea>
 		</td>
 		<td><?php echo gettext("Tags and attributes allowed in comments, descriptions, and other fields."); ?><br />
 		<?php echo gettext("Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"); ?></td>
