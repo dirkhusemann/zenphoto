@@ -185,6 +185,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 			</ul>
 			<div class="clearage"></div>
 			<?php
+			if (function_exists('printAlbumMap')) printAlbumMap(8, 'G_HYBRID_MAP', NULL, NULL, '<p align="center">'.gettext('Google Map').'</p>', true);
 			printNofM('Album', $firstAlbum, $lastAlbum, getNumSubAlbums());
 			?>
 		</div> <!-- submain -->
@@ -331,10 +332,9 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 <!-- Page Numbers -->
 		<div id="pagenumbers">
 		<?php
-			if ((getNumSubalbums() != 0) || !$oneImagePage){
-				printPageListWithNav("&laquo; " .gettext('prev'), gettext('next')." &raquo;", $oneImagePage);
-			}
-			if (function_exists('printAlbumMap')) printAlbumMap(8, 'G_HYBRID_MAP');
+		if ((getNumSubalbums() != 0) || !$oneImagePage){
+			printPageListWithNav("&laquo; " .gettext('prev'), gettext('next')." &raquo;", $oneImagePage);
+		}
 		?>
 		</div> <!-- pagenumbers -->
 

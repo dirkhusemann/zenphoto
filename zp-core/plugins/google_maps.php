@@ -21,6 +21,7 @@ if (isset($_zp_gallery_page) && $_zp_gallery_page != 'index.php' && !empty($mapk
 // NOTE: This is copied from the printGoogleJS function in the phoogle class.
 //       If you update the phoogle class be sure this has not changed.
 	addPluginScript("\n<script src=\"http://maps.google.com/maps?file=api&v=2&key=".$mapkey."\" type=\"text/javascript\"></script>\n");
+	addPluginScript("\n<script type=\"text/javascript\">var map;</script>\n");
 }
 /**
  * Plugin option handling class
@@ -97,7 +98,7 @@ function addPoint($lat, $long, $html) {
  * @param bool $toggle set to true to hide initially
  * @param string $id DIV id
  */
-function printImageMap($zoomlevel='6', $width=NULL, $height=NULL, $text='', $toggle=false, $id='googlemap') {
+function printImageMap($zoomlevel='6', $width=NULL, $height=NULL, $text=NULL, $toggle=true, $id='googlemap') {
 	global $_zp_phoogle;
 	if(getOption('gmaps_apikey') != ''){
 
@@ -122,13 +123,13 @@ function printImageMap($zoomlevel='6', $width=NULL, $height=NULL, $text='', $tog
 			if($exif['EXIFGPSLongitudeRef'] == 'W'){  $long = '-' . $long; }
 			addPoint($lat, $long, js_encode(getImageDesc()));
 			$dataid = $id.'_data';
-			if (empty($text)) $text = 'Google Map';
-			echo "<a href=\"javascript: toggle('$dataid');\" title=\"".gettext('Display or hide the Google Map.')."\">";
+			if (is_null($text)) $text = gettext('Google Map');
+			echo "<a href=\"javascript: vtoggle('$dataid');\" title=\"".gettext('Display or hide the Google Map.')."\">";
 			echo "<strong>$text</strong>";
 			echo "</a>\n";
-			echo "  <div id=\"$dataid\"" . ($toggle ? " style=\"display: none;\"" : '') . ">\n";
-			$_zp_phoogle->showMap();
-			echo "  </div>\n</div>\n\n";
+			echo "  <div id=\"$dataid\"" . ($toggle ? " style=\"visibility: hidden;position:absolute;left: -3000px;top: -3000px\"" : '') . ">\n";
+			$_zp_phoogle->showMap(!$toggle);
+						echo "  </div>\n</div>\n\n";
 
 		}
 	}
@@ -144,8 +145,8 @@ function printImageMap($zoomlevel='6', $width=NULL, $height=NULL, $text='', $tog
  * @param bool $toggle set to true to hide initially
  * @param string $id DIV id
  */
-function printAlbumMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL, $text='', $toggle=false, $id='googlemap'){
-	global $_zp_phoogle;
+function printAlbumMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL, $text=NULL, $toggle=true, $id='googlemap'){
+	global $_zp_phoogle, $_zp_images;
 	if(getOption('gmaps_apikey') != ''){
 		$foundLocation = false;
 		if($zoomlevel){
@@ -155,10 +156,10 @@ function printAlbumMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL, $
 		//		if (!is_null($type)) { $_zp_phoogle->setMapType($type); }
 		if (!is_null($width)) { $_zp_phoogle->setWidth($width); }
 		if (!is_null($height)) { $_zp_phoogle->setHeight($height); }
+		$_zp_images = NULL; // start from scratch
 		while (next_image(getOption('gmaps_show_all_album_points'))) {
 			$exif = getImageEXIFData();
-			if(!empty($exif['EXIFGPSLatitude']) &&
-			!empty($exif['EXIFGPSLongitude'])){
+			if(!empty($exif['EXIFGPSLatitude']) && !empty($exif['EXIFGPSLongitude'])){
 				$foundLocation = true;
 				$lat = $exif['EXIFGPSLatitude'];
 				$long = $exif['EXIFGPSLongitude'];
@@ -173,11 +174,12 @@ function printAlbumMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL, $
 		}
 		if($foundLocation){
 			echo "<a href=\"javascript: toggle('$dataid');\" title=\"".gettext('Display or hide the Google Map.')."\">";
-			echo "<strong>$text</strong>";
+			if (is_null($text)) $text = gettext('Google Map');
+			echo $text;
 			echo "</a>\n";
 			echo "  <div id=\"$dataid\"" . ($toggle ? " style=\"display: none;\"" : '') . ">\n";
-			$_zp_phoogle->showMap();
-			echo "  </div>\n</div>\n\n";
+			$_zp_phoogle->showMap(!$toggle);
+			echo "  </div>\n\n";
 		}
 	}
 }

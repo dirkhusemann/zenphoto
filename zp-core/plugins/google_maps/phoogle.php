@@ -110,7 +110,7 @@ function addGeoPoint($lat,$long,$infoHTML){
 */
 
 function centerMap($lat,$long){
-    $this->centerMap = "map.centerAndZoom(new GPoint(".$long.",".$lat."), ".$this->zoomLevel.");\n";
+	$this->centerMap = "map.centerAndZoom(new GPoint(".$long.",".$lat."), ".$this->zoomLevel.");\n";
 }
     
     
@@ -235,17 +235,18 @@ function centerMap($lat,$long){
 /**
 * @function     showMap
 * @description  Displays the Google Map on the page
+* @param bool $initial_show set true to display on page load
 */
-	function showMap(){
+	function showMap($initial_show=true){
 		echo "\n<div id=\"map\" style=\"width: ".$this->mapWidth."px; height: ".$this->mapHeight."px\">\n</div>\n";
 		echo "    <script type=\"text/javascript\">\n
     	function showmap(){
 				//<![CDATA[\n
     		if (GBrowserIsCompatible()) {\n
-      		var map = new GMap(document.getElementById(\"map\"));\n";
-      		if (empty($this->centerMap)){
-             echo "map.centerAndZoom(new GPoint(".$this->validPoints[0]['long'].",".$this->validPoints[0]['lat']."), ".$this->zoomLevel.");\n";
-             }else{
+     		map = new GMap2(document.getElementById(\"map\"));\n";
+    		      		if (empty($this->centerMap)){
+             echo "map.setCenter(new GLatLng(".$this->validPoints[0]['lat'].",".$this->validPoints[0]['long']."), ".$this->zoomLevel.");\n";
+    		      			             }else{
                echo $this->centerMap;
                }
 		    echo "}\n
