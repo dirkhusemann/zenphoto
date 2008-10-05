@@ -143,10 +143,11 @@ function printImageMap($zoomlevel='6', $width=NULL, $height=NULL, $text=NULL, $t
  * @param int $height is the image height of the map. NULL will use the default
  * @param string $text text for the pop-up link
  * @param bool $toggle set to true to hide initially
+ * @param int $firstPageCount the number of images which can go on the page that transitions between albums and images
  * @param string $id DIV id
  */
-function printAlbumMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL, $text=NULL, $toggle=true, $id='googlemap'){
-	global $_zp_phoogle, $_zp_images;
+function printAlbumMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL, $text=NULL, $toggle=true, $id='googlemap', $firstPageImages=0){
+	global $_zp_phoogle, $_zp_images, $_zp_current_album;
 	if(getOption('gmaps_apikey') != ''){
 		$foundLocation = false;
 		if($zoomlevel){
@@ -156,8 +157,9 @@ function printAlbumMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL, $
 		//		if (!is_null($type)) { $_zp_phoogle->setMapType($type); }
 		if (!is_null($width)) { $_zp_phoogle->setWidth($width); }
 		if (!is_null($height)) { $_zp_phoogle->setHeight($height); }
-		$_zp_images = NULL; // start from scratch
-		while (next_image(getOption('gmaps_show_all_album_points'))) {
+		
+		resetCurrentAlbum(); // start from scratch
+		while (next_image(getOption('gmaps_show_all_album_points'), $firstPageImages)) {
 			$exif = getImageEXIFData();
 			if(!empty($exif['EXIFGPSLatitude']) && !empty($exif['EXIFGPSLongitude'])){
 				$foundLocation = true;
@@ -172,6 +174,8 @@ function printAlbumMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL, $
 				addPoint($lat, $long, js_encode($infoHTML));
 			}
 		}
+		resetCurrentAlbum(); // clear out any 'damage'
+		
 		if($foundLocation){
 			echo "<a href=\"javascript: toggle('$dataid');\" title=\"".gettext('Display or hide the Google Map.')."\">";
 			if (is_null($text)) $text = gettext('Google Map');

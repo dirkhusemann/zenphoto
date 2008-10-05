@@ -408,6 +408,13 @@ function getNumSubalbums() {
 	}
 }
 
+function resetCurrentAlbum() {
+	global $_zp_images, $_zp_current_album;
+	$_zp_images = NULL;
+	$_zp_current_album->images = NULL;
+	setOption('images_first_page', NULL);
+}
+
 /**
  * Returns the number of pages for the current object
  *
@@ -423,7 +430,6 @@ function getTotalPages($oneImagePage=false) {
 		if (in_context(ZP_SEARCH)) {
 			$pageCount = ceil(getNumAlbums() / $albums_per_page);
 		} else {
-
 			$pageCount = ceil(getNumSubalbums() / $albums_per_page);
 		}
 		$imageCount = getNumImages();
@@ -457,8 +463,16 @@ function getPageURL($page, $total=null) {
 	if (in_context(ZP_SEARCH)) {
 		$search = $_zp_current_search->getSearchString();
 		foreach ($search as $key=>$item) {
-			if ($item == '&') {
-				$search[$key] = 'AND';
+			switch ($item) {
+				case '&':
+					$search[$key] = 'AND';
+					break;
+				case '!':
+					$search[$key] = 'NOT';
+					break;
+				case '|':
+					$search[$key] = 'OR';
+					break;
 			}
 		}
 		$searchwords = implode(' ', $search);
