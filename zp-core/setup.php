@@ -103,9 +103,6 @@ if (!$checked) {
 if (isset($_POST['mysql'])) { //try to update the zp-config file
 	setupLog("MySQL POST handling");
 	$updatezp_config = true;
-	if (!$oldconfig) {
-		updateItem('UTF-8', 'true');
-	}
 	if (isset($_POST['mysql_user'])) {
 		updateItem('mysql_user', $_POST['mysql_user']);
 	}
@@ -271,20 +268,36 @@ cite {
 
 .error {
 	line-height: 1;
+	text-align: center;
 	border-top: 1px solid #FF9595;
 	border-bottom: 1px solid #FF9595;
 	background-color: #FFEAEA;
-	padding: 10px 8px 10px 8px;
+	padding: 2px 8px 0px 8px;
 	margin-left: 20px;
+	color: red;
+	font-weight : bold;
+}
+.error p {
+	text-align: left;
+	color: black;
+	font-weight : normal;
 }
 
 .warning {
 	line-height: 1;
+	text-align: center;
 	border-top: 1px solid #FF6600;
 	border-bottom: 1px solid #FF6600;
 	background-color: #FFDDAA;
-	padding: 10px 8px 10px 8px;
+	padding: 2px 8px 0px 8px;
 	margin-left: 20px;
+	color: #FF6600;
+	font-weight : bold;
+}
+.warning p {
+	text-align: left;
+	color: black;
+	font-weight : normal;
 }
 
 h4 {
@@ -347,9 +360,15 @@ if (!$checked) {
 			}
 			if (!empty($msg)) {
 				if ($check == 0) {
-					echo "\n<p class=\"error\">$msg</p>";
+					echo '<div class="error">';
+					echo gettext('Error!');
+					echo "<p>".$msg."</p>";
+					echo "</div>";
 				} else {
-					echo "\n<p class=\"warning\">$msg</p>";
+					echo '<div class="warning">';
+					echo gettext('Warning!');
+					echo "<p>".$msg."</p>";
+					echo "</div>";
 				}
 				$dsp .= ' '.trim($msg);
 			}
@@ -461,9 +480,8 @@ if (!$checked) {
 	$good = true;
 
 	$required = '4.1.0';
-	$desired = '4.1.0';
-	$phpv = phpversion();
-	$good = checkMark(versionCheck($required, $desired, $phpv), " ".sprintf(gettext("PHP version %s"),$phpv), "", sprintf(gettext("Version %s or greater is required."),$required)) && $good;
+	$desired = '4.3.0';
+	$good = checkMark(versionCheck($required, $desired, PHP_VERSION), " ".sprintf(gettext("PHP version %s"),PHP_VERSION), "", sprintf(gettext('Version %1$s or greater is required. However, if you do not have version %2$s or greater certain UTF-8 characters will be stored as HTML entities in the database.'),$required, $desired)) && $good;
 
 	if (ini_get('safe_mode')) {
 		$safe = -1;
@@ -824,7 +842,7 @@ if ($debug) {
 		}
 		checkMark($ch, $msg, " [$err]", $desc);
 	}
-
+	
 	$base = true;
 	$f = '';
 	if ($rw == 'ON') {
@@ -1066,7 +1084,7 @@ if (file_exists("zp-config.php")) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_albums (
 		`id` int(11) UNSIGNED NOT NULL auto_increment,
 		`parentid` int(11) unsigned default NULL,
-		`folder` varchar(255) NOT NULL default '',
+		`folder` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL default '',
 		`title` text NOT NULL,
 		`desc` text,
 		`date` datetime default NULL,
@@ -1108,7 +1126,7 @@ if (file_exists("zp-config.php")) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_images (
 		`id` int(11) unsigned NOT NULL auto_increment,
 		`albumid` int(11) unsigned NOT NULL default '0',
-		`filename` varchar(255) NOT NULL default '',
+		`filename` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL default '',
 		`title` text NOT NULL,
 		`desc` text,
 		`location` text,
@@ -1269,15 +1287,13 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `title` `title` TEXT NOT NULL";
 	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `location` `location` TEXT";
 	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `credit` `credit` TEXT";
-	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `copyright` `copyright` TEXT";
-		
-
+	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `copyright` `copyright` TEXT";	
 
 	/**************************************************************************************
-	 ******                            END of UPGRADE SECTION                                                           ******
-	 ******                                                                                                                                                     ******
-	 ******                           Add all new fields above                                                                  ******
-	 ******                                                                                                                                                     ******
+	 ******                            END of UPGRADE SECTION     
+	 ******                                                              
+	 ******                           Add all new fields above      
+	 ******                                                                         
 	 ***************************************************************************************/
 
 	$createTables = true;
