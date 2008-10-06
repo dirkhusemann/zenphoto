@@ -1265,10 +1265,14 @@ function getCustomAlbumThumbMaxSpace($width=NULL, $height=NULL) {
 	$albumdata = $albumthumb->data; 
 	$fullwidth = $albumdata['width'];
 	$fullheight = $albumdata['height'];
-	if($fullwidth === $fullheight OR $fullwidth > $fullheight) {
-		getCustomAlbumThumb(NULL, $width, NULL, NULL, NULL, NULL, null);
+	$percentuser = $width / 100;
+	$heightpercent = round($height / $percentuser);
+	$fullpercent = $fullwidth / 100;
+	$fullheightpercent = round($fullheight / $fullpercent);
+	if($fullwidth === $fullheight OR $fullheightpercent > $heightpercent) {
+		getCustomAlbumThumb(NULL, null, $height, NULL, NULL, NULL, null);
 	} else {
-		getCustomAlbumThumb(NULL, NULL, $height, NULL, NULL, NULL, null);
+		getCustomAlbumThumb(NULL, $width, NULL, NULL, NULL, NULL, null);
 	}
 }
 
@@ -1290,10 +1294,14 @@ function printCustomAlbumThumbMaxSpace($alt='', $width=NULL, $height=NULL, $clas
 	$albumdata = $albumthumb->data; 
 	$fullwidth = $albumdata['width'];
 	$fullheight = $albumdata['height'];
-	if($fullwidth === $fullheight OR $fullwidth > $fullheight) {
-		printCustomAlbumThumbImage($alt, NULL, $width, NULL, NULL, NULL, NULL, null, $class, $id);
+	$percentuser = $width / 100;
+	$heightpercent = round($height / $percentuser);
+	$fullpercent = $fullwidth / 100;
+	$fullheightpercent = round($fullheight / $fullpercent);
+	if($fullwidth === $fullheight OR $fullheightpercent > $heightpercent) {
+		printCustomAlbumThumbImage($alt, NULL, null, $height, NULL, NULL, NULL, null, $class, $id);
 	} else {
-		printCustomAlbumThumbImage($alt, NULL, NULL, $height, NULL, NULL, NULL, null, $class, $id);
+		printCustomAlbumThumbImage($alt, NULL, $width, null, NULL, NULL, NULL, null, $class, $id);
 	}
 }
 
@@ -2497,7 +2505,11 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
  * @return string
  */
 function getCustomSizedImageMaxSpace($width=NULL,$height=NULL) {
-	if(getFullWidth() === getFullHeight() OR getFullWidth() > getFullHeight()) {
+	$percentuser = $width / 100;
+	$heightpercent = round($height / $percentuser);
+	$fullpercent = getFullWidth() / 100;
+	$fullheightpercent = round(getFullHeight() / $fullpercent);
+	if(getFullWidth() === getFullHeight() OR $fullheightpercent > $heightpercent) {
 		getSizeCustomImage(null,$width,null);
 	} else {
 		getSizeCustomImage(null,null,$height);
@@ -2516,11 +2528,15 @@ function getCustomSizedImageMaxSpace($width=NULL,$height=NULL) {
  * @param bool $thumbStandin set true to inhibit watermarking
  * @return string
  */
-function printCustomSizedImageMaxSpace($alt='',$width=NULL,$height=NULL,$class=NULL,$id=NULL,$thumbStandin=false) {
-	if(getFullWidth() === getFullHeight() OR getFullWidth() > getFullHeight()) {
-		printCustomSizedImage($alt, null, $width, NULL, NULL, NULL, NULL, NULL, $class, $id, $thumbStandin);
+function printCustomSizedImageMaxSpace($alt='',$width=NULL,$width=NULL,$class=NULL,$id=NULL,$thumbStandin=false) {
+	$percentuser = $width / 100;
+	$heightpercent = round($height / $percentuser);
+	$fullpercent = getFullWidth() / 100;
+	$fullheightpercent = round(getFullHeight() / $fullpercent);
+	if (getFullWidth() === getFullHeight() OR $fullheightpercent > $heightpercent) {
+		printCustomSizedImage(getImageTitle(), null, null, 380, null, null, null, null,  getImageID());
 	} else {
-		printCustomSizedImage($alt, null,NULL, $height, NULL, NULL, NULL, NULL, $class, $id, $thumbStandin);
+		printCustomSizedImage(getImageTitle(), null, 550, null, null, null, null, null,  getImageID());
 	}
 }
 
