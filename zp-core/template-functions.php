@@ -189,7 +189,9 @@ function zenJavascript() {
 		if ($grant) {
 			echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/ajax.js\"></script>\n";
 			echo "  <script type=\"text/javascript\">\n";
+			echo "  //<![CDATA[\n";
 			sajax_show_javascript();
+			echo "  //]]>\n";
 			echo "  </script>\n";
 		}
 	}
