@@ -2477,12 +2477,12 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 	//Print images
 	else {
 		$sizearr = getSizeCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy);
-		echo "<img src=\"" . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin)) .
-			"\" alt=\"" . html_encode($alt) . "\"" .
-			"\" title=\"" . html_encode($alt) . "\"" .
-		" width=\"" . $sizearr[0] . "\" height=\"" . $sizearr[1] . "\"" .
-		(($class) ? " class=\"$class\"" : "") .
-		(($id) ? " id=\"$id\"" : "") . " />";
+		echo '<img src="' . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin)) . '"' .
+			' alt="' . html_encode($alt) . '"' .
+			' title="' . html_encode($alt) . '"' .
+			' width="' . $sizearr[0] . '" height="' . $sizearr[1] . '"' .
+			(($class) ? ' class="'.$class.'"' : '') .
+			(($id) ? ' id="'.$id.'"' : '') . ' />';
 	}
 }
 
@@ -3886,7 +3886,7 @@ function printCaptcha($preText='', $midText='', $postText='', $size=4) {
 		$captchaCode = generateCaptcha($img);
 		$inputBox =  "<input type=\"text\" id=\"code\" name=\"code\" size=\"" . $size . "\" class=\"inputbox\" />";
 		$captcha = "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\" />" .
- 						"<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" vertical-align=\"bottom\"/></label>&nbsp;";
+ 						"<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" style=\"vertical-align:bottom\"/></label>&nbsp;";
 
 		echo $preText;
 		echo $captcha;
