@@ -744,6 +744,11 @@ function sanitize_string($input_string, $sanitize_level) {
 	// User specified sanititation.
 	require_once('lib-htmlawed.php');
 	
+	
+	// TODO: fix keses!!
+	// the above library is mangling these characters so we have this horrendous kludge to preserve them
+	// see also the html_entities_decode() below and the warning in setup.php for PHP version 4.3.0 or greater.
+	//
 	$special = array('ß'=>'&szlig;', 'Ø'=>'&Oslash;','€'=>'&euro;', 'Ç'=>'&Ccedil;', 'Ñ'=>'&Ntilde;',
 									'Ã'=>'&Atilde;', 'Ä'=>'&Auml;', 'Â'=>'&Acirc;', 'Á'=>'&Aacute;', 'À'=>'&Agrav;',
 																	 'Ë'=>'&Euml;', 'Ê'=>'&Ecirc;', 'É'=>'&Eacute;', 'È'=>'&Egrav;',
@@ -894,6 +899,8 @@ function sanitize_string($input_string, $sanitize_level) {
 		$allowed_tags = array();
 		$input_string = kses($input_string, $allowed_tags);
 	}
+	// TODO: when keses is fixed remove this
+	if (version_compare(PHP_VERSION, '4.3.0') >= 0) $input_string = html_entity_decode($input_string, ENT_COMPAT, 'UTF-8');
 	return $input_string;
 }
 
@@ -1869,7 +1876,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
  */
 function debugLog($message, $reset=false) {
 	if ($reset) { $mode = 'w'; } else { $mode = 'a'; }
-	$f = fopen(SERVERPATH . '/' . ZENFOLDER . '/debug_log.txt', $mode);
+	$f = fopen(dirname(dirname(__FILE__)) . '/' . ZENFOLDER . '/debug_log.txt', $mode);
 	fwrite($f, $message . "\n");
 	fclose($f);
 }
