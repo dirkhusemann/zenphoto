@@ -48,10 +48,8 @@ function db_connect() {
 			. gettext('Also make sure the user you\'re trying to connect with has privileges to use this database.'));
 		return false;
 	}
-	if (array_key_exists('UTF-8', $_zp_conf_vars)) {
-		if ($_zp_conf_vars['UTF-8']) {
-			mysql_query("SET NAMES 'utf8' COLLATE 'utf8_unicode_ci'");
-		}
+	if (array_key_exists('UTF-8', $_zp_conf_vars) && $_zp_conf_vars['UTF-8']) {
+		mysql_query("SET NAMES 'utf8'");
 	}
 	return true;
 }
