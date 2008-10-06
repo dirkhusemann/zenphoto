@@ -900,7 +900,7 @@ function sanitize_string($input_string, $sanitize_level) {
 		$input_string = kses($input_string, $allowed_tags);
 	}
 	// TODO: when keses is fixed remove this
-	if (version_compare(PHP_VERSION, '4.3.0') >= 0) $input_string = html_entity_decode($input_string, ENT_COMPAT, 'UTF-8');
+	$input_string = strtr($input_string, array_flip($special)); // set them back to UTF-8 characters.
 	return $input_string;
 }
 

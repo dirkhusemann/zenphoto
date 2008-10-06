@@ -480,8 +480,8 @@ if (!$checked) {
 	$good = true;
 
 	$required = '4.1.0';
-	$desired = '4.3.0';
-	$good = checkMark(versionCheck($required, $desired, PHP_VERSION), " ".sprintf(gettext("PHP version %s"),PHP_VERSION), "", sprintf(gettext('Version %1$s or greater is required. However, if you do not have version %2$s or greater certain UTF-8 characters will be stored as HTML entities in the database.'),$required, $desired)) && $good;
+	$desired = '4.1.0';
+	$good = checkMark(versionCheck($required, $desired, PHP_VERSION), " ".sprintf(gettext("PHP version %s"), PHP_VERSION), "", sprintf(gettext('Version %1$s or greater is required.'),$required)) && $good;
 
 	if (ini_get('safe_mode')) {
 		$safe = -1;
@@ -1084,7 +1084,7 @@ if (file_exists("zp-config.php")) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_albums (
 		`id` int(11) UNSIGNED NOT NULL auto_increment,
 		`parentid` int(11) unsigned default NULL,
-		`folder` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL default '',
+		`folder` varchar(255) NOT NULL default '',
 		`title` text NOT NULL,
 		`desc` text,
 		`date` datetime default NULL,
@@ -1126,7 +1126,7 @@ if (file_exists("zp-config.php")) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_images (
 		`id` int(11) unsigned NOT NULL auto_increment,
 		`albumid` int(11) unsigned NOT NULL default '0',
-		`filename` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL default '',
+		`filename` varchar(255) NOT NULL default '',
 		`title` text NOT NULL,
 		`desc` text,
 		`location` text,
