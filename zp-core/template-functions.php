@@ -1270,9 +1270,9 @@ function getCustomAlbumThumbMaxSpace($width=NULL, $height=NULL) {
 	$fullpercent = $fullwidth / 100;
 	$fullheightpercent = round($fullheight / $fullpercent);
 	if($fullwidth === $fullheight OR $fullheightpercent > $heightpercent) {
-		getCustomAlbumThumb(NULL, null, $height, NULL, NULL, NULL, null);
+		return getCustomAlbumThumb(NULL, null, $height, NULL, NULL, NULL, null);
 	} else {
-		getCustomAlbumThumb(NULL, $width, NULL, NULL, NULL, NULL, null);
+		return getCustomAlbumThumb(NULL, $width, NULL, NULL, NULL, NULL, null);
 	}
 }
 
@@ -2510,9 +2510,9 @@ function getCustomSizedImageMaxSpace($width=NULL,$height=NULL) {
 	$fullpercent = getFullWidth() / 100;
 	$fullheightpercent = round(getFullHeight() / $fullpercent);
 	if(getFullWidth() === getFullHeight() OR $fullheightpercent > $heightpercent) {
-		getSizeCustomImage(null,$width,null);
+		return getSizeCustomImage(null,$width,null);
 	} else {
-		getSizeCustomImage(null,null,$height);
+		return getSizeCustomImage(null,null,$height);
 	}
 }
 
