@@ -118,7 +118,7 @@ function printAdminToolbox($context=null, $id='admin') {
 					printSortableAlbumLink(gettext('Sort album'), gettext('Manual sorting'));
 					echo "</li>\n";
 				}
-				echo "<li><a href=\"javascript: confirmDeleteAlbum('".$zf."/admin.php?page=edit&action=deletealbum&album=" .
+				echo "<li><a href=\"javascript: confirmDeleteAlbum('".$zf."/admin.php?page=edit&amp;action=deletealbum&amp;album=" .
 					urlencode(urlencode($albumname)) .
 					"','".js_encode(gettext("Are you sure you want to delete this entire album?"))."','".js_encode(gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")).
 					"');\" title=\"".gettext("Delete the album")."\">".gettext("Delete album")."</a></li>\n";
@@ -136,8 +136,8 @@ function printAdminToolbox($context=null, $id='admin') {
 			$albumname = $_zp_current_album->name;
 			$imagename = urlencode($_zp_current_image->filename);
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
-				echo "<li><a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?page=edit&action=deleteimage&album=" .
-				urlencode(urlencode($albumname)) . "&image=". urlencode(urlencode($imagename)) . "','". js_encode(gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!")) . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
+				echo "<li><a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?amp;page=edit&action=deleteimage&amp;album=" .
+				urlencode(urlencode($albumname)) . "&amp;image=". urlencode(urlencode($imagename)) . "','". js_encode(gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!")) . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
 				echo "</li>\n";
 			}
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=$imagename";
@@ -1921,7 +1921,7 @@ function getFirstImageURL() {
 	global $_zp_current_album, $_zp_current_image;
 	$firstimg = $_zp_current_album->getImage(0);
 	return rewrite_path("/" . pathurlencode($firstimg->album->name) . "/" . urlencode($firstimg->filename) . im_suffix(),
-											"/index.php?album=" . urlencode($firstimg->album->name) . "&amp;image=" . urlencode($firstimg->filename));
+											"/index.php?album=" . urlencode($firstimg->album->name) . "&image=" . urlencode($firstimg->filename));
 }
 
 
@@ -1936,7 +1936,7 @@ function getLastImageURL() {
 	global $_zp_current_album, $_zp_current_image;
 	$lastimg = $_zp_current_album->getImage($_zp_current_album->getNumImages() - 1);
 	return rewrite_path("/" . pathurlencode($lastimg->album->name) . "/" . urlencode($lastimg->filename) . im_suffix(),
-											"/index.php?album=" . urlencode($lastimg->album->name) . "&amp;image=" . urlencode($lastimg->filename));
+											"/index.php?album=" . urlencode($lastimg->album->name) . "&image=" . urlencode($lastimg->filename));
 }
 
 
@@ -2852,7 +2852,7 @@ function printLatestComments($number, $shorten='123') {
 	if(getOption('mod_rewrite')) {
 		$albumpath = "/"; $imagepath = "/"; $modrewritesuffix = getOption('mod_rewrite_image_suffix');
 	} else {
-		$albumpath = "/index.php?album="; $imagepath = "&image="; $modrewritesuffix = "";
+		$albumpath = "/index.php?album="; $imagepath = "&amp;image="; $modrewritesuffix = "";
 	}
 	$comments = getLatestComments($number,$shorten);
 	echo "<div id=\"showlatestcomments\">\n";
