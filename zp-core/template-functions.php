@@ -2528,15 +2528,15 @@ function getCustomSizedImageMaxSpace($width=NULL,$height=NULL) {
  * @param bool $thumbStandin set true to inhibit watermarking
  * @return string
  */
-function printCustomSizedImageMaxSpace($alt='',$width=NULL,$width=NULL,$class=NULL,$id=NULL,$thumbStandin=false) {
+function printCustomSizedImageMaxSpace($alt='',$width=NULL,$height=NULL,$class=NULL,$id=NULL,$thumbStandin=false) {
 	$percentuser = $width / 100;
 	$heightpercent = round($height / $percentuser);
 	$fullpercent = getFullWidth() / 100;
 	$fullheightpercent = round(getFullHeight() / $fullpercent);
 	if (getFullWidth() === getFullHeight() OR $fullheightpercent > $heightpercent) {
-		printCustomSizedImage(getImageTitle(), null, null, 380, null, null, null, null,  getImageID());
+		printCustomSizedImage(getImageTitle(), null, null, $height, null, null, null, null,  getImageID());
 	} else {
-		printCustomSizedImage(getImageTitle(), null, 550, null, null, null, null, null,  getImageID());
+		printCustomSizedImage(getImageTitle(), null, $width, null, null, null, null, null,  getImageID());
 	}
 }
 
