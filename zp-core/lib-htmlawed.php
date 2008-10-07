@@ -703,7 +703,7 @@ foreach($h as $k=>$v){
 }
 $C['cdata'] = $C['comment'] = $C['make_tag_strict'] = $C['no_deprecated_attr'] = $C['unique_ids'] = 0;
 $C['keep_bad'] = 0;
-$C['clean_ms_char'] = 1;
+$C['clean_ms_char'] = 0;
 $C['elements'] = count($h) ? strtolower(implode(',', array_keys($h))) : '-*';
 $C['hook'] = 'kses_hook';
 $C['schemes'] = '*:'. implode(',', $p);
