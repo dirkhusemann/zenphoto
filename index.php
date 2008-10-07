@@ -80,6 +80,7 @@ if (file_exists(SERVERPATH . "/" . $obj) && $zp_request) {
 if(!is_null($_zp_HTML_cache)) { $_zp_HTML_cache->startHTMLCache(); }
 	// Include the appropriate page for the requested object, and a 200 OK header.
 	header("HTTP/1.0 200 OK");
+	header("Status: 200 OK");
 	include($obj);
 
 // If the requested object does not exist, issue a 404 and redirect to the theme's
@@ -89,6 +90,7 @@ if(!is_null($_zp_HTML_cache)) { $_zp_HTML_cache->startHTMLCache(); }
 	$_zp_gallery_page = '404.php';
 	$errpage = THEMEFOLDER."/$theme/404.php";
 	header("HTTP/1.0 404 Not Found");
+	header("Status: 404 Not Found");
 	if (file_exists(SERVERPATH . "/" . $errpage)) {
 		include($errpage);
 	} else {
