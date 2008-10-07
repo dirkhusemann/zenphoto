@@ -85,7 +85,7 @@ if (getOption('protect_full_image') == 'Download') {
 	header('Content-Disposition: attachment; filename="' . $_zp_current_image->name . '"');  // enable this to make the image a download
 }
 if (getOption('perform_watermark')) {
-	$watermark_path = SERVERPATH . "/" . ZENFOLDER . "/" . getOption('watermark_image');
+	$watermark_path = SERVERPATH . "/" . ZENFOLDER . "/" . UTF8ToFileSystem(getOption('watermark_image'));
 	$offset_h = getOption('watermark_h_offset') / 100;
 	$offset_w = getOption('watermark_w_offset') / 100;
 	$watermark = imagecreatefrompng($watermark_path);

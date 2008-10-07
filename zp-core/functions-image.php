@@ -387,12 +387,12 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		if ($videoWM) {
 			if ($thumb) {
 				$perform_watermark = true;
-				$watermark_image = getOption('video_watermark_image');
+				$watermark_image = UTF8ToFileSystem(getOption('video_watermark_image'));
 			}
 		} else {
 			if ($allow_watermark) {
 				$perform_watermark = getOption('perform_watermark');
-				$watermark_image = SERVERPATH . '/' . ZENFOLDER . '/' . getOption('watermark_image');
+				$watermark_image = SERVERPATH . '/' . ZENFOLDER . '/' . UTF8ToFileSystem(getOption('watermark_image'));
 			}
 		}
 		if ($perform_watermark) {

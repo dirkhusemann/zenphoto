@@ -1048,8 +1048,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	<tr>
 		<td><?php echo gettext("Watermark images:"); ?></td>
 		<td><?php
-		$v = explode("/", getOption('watermark_image'));
-		$v = str_replace('.png', "", $v[count($v)-1]);
+		$v = str_replace('.png', "", basename(getOption('watermark_image')));
 		echo "<select id=\"watermark_image\" name=\"watermark_image\">\n";
 		generateListFromFiles($v, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png');
 		echo "</select>\n";
@@ -1078,8 +1077,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	<tr>
 		<td><?php echo gettext("Watermark video thumbs:"); ?></td>
 		<td><?php
-		$v = explode("/", getOption('video_watermark_image'));
-		$v = str_replace('.png', "", $v[count($v)-1]);
+		$v = str_replace('.png', "", basename(getOption('video_watermark_image')));
 		echo "<select id=\"videowatermarkimage\" name=\"video_watermark_image\">\n";
 		generateListFromFiles($v, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png');
 		echo "</select>\n";

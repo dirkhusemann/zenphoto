@@ -10,7 +10,6 @@
 
 define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
 define('DEBUG_ERROR', false); // set to true to  supplies the calling sequence with zp_error messages
-define('SAFE_GLOB', false);
 define('CAPTCHA_LENGTH', 5);
 include(dirname(__FILE__).'/version.php'); // Include the version info.
 if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
@@ -1755,7 +1754,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	}
 	$goodMessage = 2;
 	$gallery = new gallery();
-	if (!(false === ($requirePath = getPlugin('spamfilters/'.getOption('spam_filter').".php", false)))) {
+	if (!(false === ($requirePath = getPlugin('spamfilters/'.UTF8ToFileSystem(getOption('spam_filter')).".php", false)))) {
 		require_once($requirePath);
 		$spamfilter = new SpamFilter();
 		$goodMessage = $spamfilter->filterMessage($name, $email, $website, $comment, $type=='images'?$receiver->getFullImage():NULL, $ip);
@@ -1939,20 +1938,12 @@ function debugLogBacktrace($message) {
 }
 
 /**
- * Provide an alternative to glob if the ISP has disabled it
- * To enable the alternative, change the SAFE_GLOB define at the front to functions.php
+ * Provide an alternative to glob which does not return filenames with accented charactes in them
  *
  * @param string $pattern the 'pattern' for matching files
  * @param bit $flags glob 'flags'
  */
 function safe_glob($pattern, $flags=0) {
-	if (!SAFE_GLOB) {
-		$glob = glob($pattern, $flags);
-		if (is_array($glob)) {
-			return $glob;
-		}
-		return Array();
-	}
 	$split=explode('/',$pattern);
 	$match=array_pop($split);
 	$path_return = $path = implode('/',$split);
@@ -1965,7 +1956,7 @@ function safe_glob($pattern, $flags=0) {
 	if (($dir=opendir($path))!==false) {
 		$glob=array();
 		while(($file=readdir($dir))!==false) {
-			if (fnmatch($match,$file)) {
+			if (safe_fnmatch($match,$file)) {
 				if ((is_dir("$path/$file"))||(!($flags&GLOB_ONLYDIR))) {
 					if ($flags&GLOB_MARK) $file.='/';
 					$glob[]=$path_return.$file;
@@ -1979,17 +1970,15 @@ function safe_glob($pattern, $flags=0) {
 		return array();
 	}
 }
-if (!function_exists('fnmatch')) {
-	/**
-	 * pattern match function in case it is not included in PHP
-	 *
-	 * @param string $pattern pattern
-	 * @param string $string haystack
-	 * @return bool
-	 */
-	function fnmatch($pattern, $string) {
-		return @preg_match('/^' . strtr(addcslashes($pattern, '\\.+^$(){}=!<>|'), array('*' => '.*', '?' => '.?')) . '$/i', $string);
-	}
+/**
+ * pattern match function Works with accented characters where the PHP one does not.
+ *
+ * @param string $pattern pattern
+ * @param string $string haystack
+ * @return bool
+ */
+function safe_fnmatch($pattern, $string) {
+	return @preg_match('/^' . strtr(addcslashes($pattern, '\\.+^$(){}=!<>|'), array('*' => '.*', '?' => '.?')) . '$/i', $string);
 }
 
 /**
@@ -2674,6 +2663,7 @@ function readTags($id, $tbl) {
  * @param bool $descending set true for a reverse order sort
  */
 function generateListFromArray($currentValue, $list, $descending=false) {
+	$currentValue = array_flip($currentValue);
 	$localize = !is_numeric(array_shift(array_keys($list)));
 	if ($localize) {
 		$list = array_flip($list);
@@ -2691,9 +2681,8 @@ function generateListFromArray($currentValue, $list, $descending=false) {
 		}
 	}
 	foreach($list as $key=>$item) {
-		echo '<option value="' . $item . '"';
-		$inx = array_search($item, $currentValue);
-		if ($inx !== false) {
+		echo '<option value="' . $item . '"';		
+		if (isset($currentValue[$item])) {
 			echo ' selected="selected"';
 		}
 		if ($localize) $display = $key; else $display = $item;
@@ -2715,7 +2704,8 @@ function generateListFromFiles($currentValue, $root, $suffix, $descending=false)
 	$filelist = safe_glob('*'.$suffix);
 	$list = array();
 	foreach($filelist as $file) {
-		$list[] = str_replace($suffix, '', $file);
+		$file = str_replace($suffix, '', $file);
+		$list[] = fileSystemToUTF8($file);
 	}
 	generateListFromArray(array($currentValue), $list, $descending);
 	chdir($curdir);
@@ -2840,6 +2830,24 @@ function parse_size($size) {
 	}
 }
 
+/**
+ * Converts a file system filename to UTF-8 for zenphoto internal storage
+ *
+ * @param string $filename the file name to convert
+ * @return string
+ */
+function fileSystemToUTF8($filename) {
+	return utf8::convert($filename, 'ISO-8859-1', 'UTF-8');
+}
 
+/**
+ * Converts a Zenphoto Internal filename string to one compatible with the file system
+ *
+ * @param string $filename the file name to convert
+ * @return string
+ */
+function UTF8ToFileSystem($filename) {
+	return utf8::convert($filename, 'UTF-8', 'ISO-8859-1');
+}
 
 ?>
