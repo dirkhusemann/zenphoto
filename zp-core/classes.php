@@ -9,8 +9,8 @@
 // classes.php - HEADERS STILL NOT SENT! Do not output text from this file.
 
 // Load the authentication functions and UTF-8 Library.
-require_once("auth_zp.php");
-require_once("lib-utf8.php");
+require_once(dirname(__FILE__).'/auth_zp.php');
+require_once(dirname(__FILE__).'/lib-utf8.php');
 
 /*******************************************************************************
  *******************************************************************************

@@ -13,9 +13,9 @@ $_zp_admin_LC_taglist = NULL;
 $_zp_admin_album_list = null;
 define('TEXTAREA_COLUMNS', 50);
 define('TEXT_INPUT_SIZE', 48);
-require_once("class-load.php");
-require_once("functions.php");
-require_once("lib-seo.php"); // keep the function separate for easy modification by site admins
+require_once(dirname(__FILE__).'/class-load.php');
+require_once(dirname(__FILE__).'/functions.php');
+require_once(dirname(__FILE__).'/lib-seo.php'); // keep the function separate for easy modification by site admins
 // load the class plugins
 foreach (getEnabledPlugins() as $extension) {
 	if (strpos($extension, 'class-') !== false) {
@@ -276,7 +276,7 @@ function printAdminHeader($path='') {
 		}
 	</script>
 	<?php
-	if (file_exists('js/editor_config.js.php')) require_once('js/editor_config.js.php');	
+	if (file_exists(dirname(__FILE__).'/js/editor_config.js.php')) require_once(dirname(__FILE__).'/js/editor_config.js.php');	
 }
 
 /**
@@ -1860,7 +1860,7 @@ function unzip($file, $dir) { //check if zziplib is installed
 			zip_close($zip);
 		}
 	} else { // Use Zlib http://www.phpconcept.net/pclzip/index.en.php
-		require_once('lib-pclzip.php');
+		require_once(dirname(__FILE__).'/lib-pclzip.php');
 		$zip = new PclZip($file);
 		if ($zip->extract(PCLZIP_OPT_PATH, $dir, PCLZIP_OPT_REMOVE_ALL_PATH) == 0) {
 			die("Error : ".$zip->errorInfo(true));

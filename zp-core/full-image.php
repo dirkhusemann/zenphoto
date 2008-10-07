@@ -19,7 +19,7 @@ if (checkforPassword(true)) {
 	pageError(403, gettext("Forbidden"));
 	exit();
 }
-require_once('functions-image.php');
+require_once(dirname(__FILE__).'/functions-image.php');
 $image_path = getAlbumFolder() . $_zp_current_album->name . "/" . $_zp_current_image->name;
 $suffix = strtolower(substr(strrchr($image_path, "."), 1));
 $cache_file = $_zp_current_album->name . "/" . substr($_zp_current_image->name, 0, -strlen($suffix)-1) . '_FULL.' . $suffix;

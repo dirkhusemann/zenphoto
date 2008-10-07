@@ -151,7 +151,7 @@ class Image extends PersistentObject {
 	 * @return array
 	 */
 	function getExifData() {
-		require_once('exif/exif.php');
+		require_once(dirname(__FILE__).'/exif/exif.php');
 		global $_zp_exifvars;
 		$exif = array();
 		if (is_null($v = $this->get('EXIFValid')) || ($v != 1) || $this->fileChanged()) {

@@ -11,12 +11,12 @@
 /**
  * Load the classes
  */
-require_once('class-load.php');
+require_once(dirname(__FILE__).'/class-load.php');
 
 /**
  * Invoke the controller to handle requests
  */
-require_once('controller.php');
+require_once(dirname(__FILE__).'/controller.php');
 
 //******************************************************************************
 //*** Template Functions *******************************************************

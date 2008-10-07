@@ -12,13 +12,13 @@ define('DEBUG_LOGIN', false); // set to true to log admin saves and login attemp
 define('DEBUG_ERROR', false); // set to true to  supplies the calling sequence with zp_error messages
 define('SAFE_GLOB', false);
 define('CAPTCHA_LENGTH', 5);
-include('version.php'); // Include the version info.
+include(dirname(__FILE__).'/version.php'); // Include the version info.
 if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 if (!defined('OFFSET_PATH')) { define('OFFSET_PATH', 0); }
 if(!function_exists("gettext")) {
 	// load the drop-in replacement library
-	require_once('lib-gettext/gettext.inc');
+	require_once(dirname(__FILE__).'/lib-gettext/gettext.inc');
 }
 
 // Set the memory limit higher just in case -- suppress errors if user doesn't have control.
@@ -32,14 +32,14 @@ if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
 }
 
 // Including zp-config.php more than once is OK, and avoids $conf missing.
-require("zp-config.php");
+require(dirname(__FILE__).'/zp-config.php');
 
 // If the server protocol is not set, set it to the default (obscure zp-config.php change).
 if (!isset($_zp_conf_vars['server_protocol'])) $_zp_conf_vars['server_protocol'] = 'http';
 
-require_once('functions-db.php');
-require_once('lib-encryption.php');
-require_once("lib-utf8.php");
+require_once(dirname(__FILE__).'/functions-db.php');
+require_once(dirname(__FILE__).'/lib-encryption.php');
+require_once(dirname(__FILE__).'/lib-utf8.php');
 
 // allow reading of old Option tables--should be needed only during upgrade
 $result = query_full_array("SHOW COLUMNS FROM ".prefix('options').' LIKE "%ownerid%"', true);
@@ -98,7 +98,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 //error_reporting(E_ALL);
 $_zp_error = false;
 
-require_once('functions-i18n.php');
+require_once(dirname(__FILE__).'/functions-i18n.php');
 
 setMainDomain();
 
@@ -742,7 +742,7 @@ function sanitize_string($input_string, $sanitize_level) {
 		return str_replace(chr(0), " ", $input_string);
     }
 	// User specified sanititation.
-	require_once('lib-htmlawed.php');
+	require_once(dirname(__FILE__).'/lib-htmlawed.php');
 	
 	
 	// TODO: fix keses!!
@@ -1578,7 +1578,7 @@ function prepIPTCString($iptcstring) {
  * @return array
  */
 function getImageMetadata($imageName) {
-	require_once('exif/exif.php');
+	require_once(dirname(__FILE__).'/exif/exif.php');
 	global $iptc;
 
 	$result = array();

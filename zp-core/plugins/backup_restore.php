@@ -18,8 +18,8 @@ define('TABLE_SEPARATOR', '::');
 define('RESPOND_COUNTER', 1000);
 chdir(dirname(dirname(__FILE__)));
 
-require_once("template-functions.php");
-require_once("admin-functions.php");
+require_once(dirname(dirname(__FILE__)).'/template-functions.php');
+require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 
 $buffer = '';
 function fillbuffer($handle) {
@@ -243,7 +243,7 @@ if (db_connect()) {
 <!-- main -->
 <?php printAdminFooter(); ?>
 </body>
-</html>
+<?php echo "</html>"; ?>
 
 
 

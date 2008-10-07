@@ -18,7 +18,7 @@ $checked = isset($_GET['checked']);
 $upgrade = false;
 if(!function_exists("gettext")) {
 	// load the drop-in replacement library
-	require_once('lib-gettext/gettext.inc');
+	require_once(dirname(__FILE__).'/lib-gettext/gettext.inc');
 	$noxlate = -1;
 } else {
 	$noxlate = 1;
@@ -133,7 +133,7 @@ if ($updatezp_config) {
 }
 $result = true;
 if (file_exists("zp-config.php")) {
-	require("zp-config.php");
+	require(dirname(__FILE__).'/zp-config.php');
 	if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
 		if (@mysql_select_db($_zp_conf_vars['mysql_database'])) {
 			$result = @mysql_query("SELECT `id` FROM " . $_zp_conf_vars['mysql_prefix'].'options' . " LIMIT 1", $connection);
@@ -141,14 +141,14 @@ if (file_exists("zp-config.php")) {
 				if (@mysql_num_rows($result) > 0) $upgrade = true;
 			}
 			$environ = true;
-			require_once("admin-functions.php");
+			require_once(dirname(__FILE__).'/admin-functions.php');
 		}
 	}
 }
 if (!function_exists('setOption')) { // setup a primitive environment
 	$environ = false;
-	require_once('setup-primitive.php');
-	require_once('functions-i18n.php');
+	require_once(dirname(__FILE__).'/setup-primitive.php');
+	require_once(dirname(__FILE__).'/functions-i18n.php');
 }
 
 if (!$checked) {
@@ -555,7 +555,7 @@ if (!$checked) {
 	$sql = extension_loaded('mysql');
 	$good = checkMark($sql, ' '.gettext(" PHP MySQL support"), '', gettext('You need to install MySQL support in your PHP')) && $good;
 	if (file_exists("zp-config.php")) {
-		require("zp-config.php");
+		require(dirname(__FILE__).'/zp-config.php');
 		$cfg = true;
 	} else {
 		$cfg = false;
@@ -936,8 +936,8 @@ if ($debug) {
 
 if (file_exists("zp-config.php")) {
 
-	require("zp-config.php");
-	require_once('functions-db.php');
+	require(dirname(__FILE__).'/zp-config.php');
+	require_once(dirname(__FILE__).'/functions-db.php');
 	$task = '';
 	if (isset($_GET['create'])) {
 		$task = 'create';
@@ -1335,7 +1335,7 @@ if (file_exists("zp-config.php")) {
 		setupLog("Previous Release was $prevRel");
 
 		$gallery = new Gallery();
-		require('setup-option-defaults.php');
+		require(dirname(__FILE__).'/setup-option-defaults.php');
 
 		// 1.1.6 special cleanup section for plugins
 		$badplugs = array ('exifimagerotate.php', 'flip_image.php', 'image_mirror.php', 'image_rotate.php', 'supergallery-functions.php');

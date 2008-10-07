@@ -7,7 +7,7 @@
 // force UTF-8 Ø
 
 define('OFFSET_PATH', 1);
-require_once("admin-functions.php");
+require_once(dirname(__FILE__).'/admin-functions.php');
 
 if (!($_zp_loggedin & (ADMIN_RIGHTS | COMMENT_RIGHTS))) { // prevent nefarious access to this page.
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
@@ -205,7 +205,7 @@ if ($page == "editcomment") { ?>
 		$email = $comment['email'];
 
 		if(getOption("zp_plugin_zenpage")) {
-			require_once("plugins/zenpage/zenpage-class.php");
+			require_once(dirname(__FILE__).'/plugins/zenpage/zenpage-class.php');
 			$zenpage = new Zenpage();
 		}
 		// ZENPAGE: switch added for zenpage comment support

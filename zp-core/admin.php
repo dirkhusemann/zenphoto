@@ -8,8 +8,8 @@
 
 /* Don't put anything before this line! */
 define('OFFSET_PATH', 1);
-require_once('admin-functions.php');
-require_once("admin-sortable.php");
+require_once(dirname(__FILE__).'/admin-functions.php');
+require_once(dirname(__FILE__).'/admin-sortable.php');
 
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
@@ -1023,7 +1023,7 @@ foreach ($comments as $comment) {
 	$author = $comment['name'];
 	$email = $comment['email'];
 		if(getOption("zp_plugin_zenpage")) {
-			require_once("plugins/zenpage/zenpage-class.php");
+			require_once(dirname(__FILE__).'/plugins/zenpage/zenpage-class.php');
 			$zenpage = new Zenpage("","");
 		}
 		// ZENPAGE: switch added for zenpage comment support

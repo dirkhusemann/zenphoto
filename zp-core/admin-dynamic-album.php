@@ -7,8 +7,8 @@
 // force UTF-8 Ø
 
 define('OFFSET_PATH', 1);
-require_once("template-functions.php");
-require_once("admin-functions.php");
+require_once(dirname(__FILE__).'/template-functions.php');
+require_once(dirname(__FILE__).'/admin-functions.php');
 
 $imagelist = array();
 

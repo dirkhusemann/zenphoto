@@ -29,8 +29,8 @@
 
 
 define('OFFSET_PATH', 1);
-require_once('functions.php');
-require_once('functions-image.php');
+require_once(dirname(__FILE__).'/functions.php');
+require_once(dirname(__FILE__).'/functions-image.php');
 
 // Set the memory limit higher just in case -- supress errors if user doesn't have control.
 // 100663296 bytes = 96M

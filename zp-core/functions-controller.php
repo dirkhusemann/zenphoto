@@ -27,7 +27,7 @@ define("ZP_SEARCH_LINKED", 32);
 define("ZP_ALBUM_LINKED", 64);
 // ZENPAGE: load zenpage class if present, used for zp_handle_comment() only
 if(getOption('zp_plugin_zenpage')) {
-	require_once("plugins/zenpage/zenpage-class.php");
+	require_once(dirname(__FILE__).'/plugins/zenpage/zenpage-class.php');
 }
 function get_context() {
 	global $_zp_current_context;

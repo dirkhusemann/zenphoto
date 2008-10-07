@@ -9,7 +9,7 @@
 // force UTF-8 Ø
 
 
-require_once('functions-controller.php');
+require_once(dirname(__FILE__).'/functions-controller.php');
 
 
 // Initialize the global objects and object arrays:
@@ -107,7 +107,7 @@ if (zp_loggedin()) {
 	}
 
 	// Load Sajax (AJAX Library) now that we have all objects set.
-	require_once("lib-sajax.php");
+	require_once(dirname(__FILE__).'/lib-sajax.php');
 	sajax_init();
 	$sajax_debug_mode = 0;
 	sajax_export("saveTitle");
