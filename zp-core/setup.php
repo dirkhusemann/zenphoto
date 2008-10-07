@@ -1511,7 +1511,7 @@ if (file_exists("zp-config.php")) {
 		} else {
 			$mod = '';
 		}
-		echo "<p><a href=\"?checked&$task$mod\" title=\"".gettext("create and or update the database tables.")."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Go!")."</a></p>";
+		echo "<p><a href=\"?checked&$amp;task$mod\" title=\"".gettext("create and or update the database tables.")."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Go!")."</a></p>";
 	} else {
 		echo "<div class=\"error\">";
 		echo "<h3>".gettext("database did not connect")."</h3>";

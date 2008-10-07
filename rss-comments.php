@@ -42,7 +42,7 @@ foreach($albumscheck as $albumcheck) {
 if(getOption('mod_rewrite')) {
 	$albumpath = "/"; $imagepath = "/"; $modrewritesuffix = getOption('mod_rewrite_image_suffix');
 } else {
-	$albumpath = "/index.php?album="; $imagepath = "&image="; $modrewritesuffix = "";
+	$albumpath = "/index.php?album="; $imagepath = "&amp;image="; $modrewritesuffix = "";
 }
 $items = getOption('feed_items'); // # of Items displayed on the feed
 ?>

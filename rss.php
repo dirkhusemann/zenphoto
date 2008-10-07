@@ -57,7 +57,7 @@ if ($albumname != "") {
 if(getOption('mod_rewrite')) {
 	$albumpath = "/"; $imagepath = "/"; $modrewritesuffix = getOption('mod_rewrite_image_suffix');
 } else  {
-	$albumpath = "/index.php?album="; $imagepath = "&image="; $modrewritesuffix = ""; }
+	$albumpath = "/index.php?album="; $imagepath = "&amp;image="; $modrewritesuffix = ""; }
 
 ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
