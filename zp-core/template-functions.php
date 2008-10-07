@@ -3683,7 +3683,7 @@ function getTheme(&$zenCSS, &$themeColor, $defaultColor) {
 	$themeColor = getOption('Theme_colors');
 	$zenCSS = $_zp_themeroot . '/styles/' . $themeColor . '.css';
 	$unzenCSS = str_replace(WEBPATH, '', $zenCSS);
-	if (!file_exists(SERVERPATH . $unzenCSS)) {
+	if (!file_exists(SERVERPATH . UTF8ToFileSystem($unzenCSS))) {
 		$zenCSS = $_zp_themeroot. "/styles/" . $defaultColor . ".css";
 		return ($themeColor == '');
 	} else {

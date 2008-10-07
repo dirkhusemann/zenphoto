@@ -527,20 +527,6 @@ if (!$checked) {
 		}
 	}
 
-	/* check to see if glob() works */
-	if (function_exists('safe_glob')) {
-		$list = safe_glob('*.php');
-		$gl = count($list) > 0;
-	} else {
-		$list = glob('*.php');
-		if ($list !== false) {
-			$gl = 1;
-		} else {
-			$gl = -1;
-		}
-	}
-	$good = checkMark($gl, ' '.gettext("PHP <code>glob()</code> support"), ' '.gettext('is disabled'), gettext('You need to set the define <code>SAFE_GLOB</code> to <code>true</code> in <code>functions.php</code>')) && $good;
-
 	checkMark($noxlate, gettext("PHP <code>gettext()</code> support"), ' '.gettext("[is not present]"), gettext("Localization of Zenphoto currently requires native PHP <code>gettext()</code> support"));
 	if ($setlocaleresult === false) {
 		checkMark(-1, 'PHP <code>setlocale()</code>', ' '.gettext("failed"), gettext("Locale functionality is not implemented on your platform or the specified locale does not exist. Language translation may not work.").'<br />'.gettext('See the troubleshooting guide on zenphoto.org for details.'));
