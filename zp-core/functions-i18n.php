@@ -90,6 +90,7 @@ function setupLanguageArray() {
 		'nb_NO' => gettext('Norwegian (Bokml)'),
 		'no_NO' => gettext('Norwegian'),
 		'ni_ID' => gettext('Nias'),
+		'fa_IR' => gettext('Persian'),
 		'pl_PL' => gettext('Polish'),
 		'pt_BR' => gettext('Portuguese (Brazil)'),
 		'pt_PT' => gettext('Portuguese (Portugal)'),
