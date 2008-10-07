@@ -114,16 +114,14 @@ class Image extends PersistentObject {
 			$this->localpath = getAlbumFolder() . $album->name . "/" . $filename;
 		}
 		$this->filename = $filename;		
-		$this->name = $filename;
+		$this->name = substr($this->filename, 0, strrpos($this->filename, '.'));
+		if (empty($this->name)) $this->name = $this->filename;
 		$this->comments = null;
 		$this->filemtime = @filemtime($this->localpath);
 	}
 	
 	function getDefaultTitle() {
-		$title = substr($this->name, 0, strrpos($this->name, '.'));
-		if (empty($title)) $title = $this->name;
-		$title = utf8::convert($title, 'ISO-8859-1'); // file system is not in UTF-8
-		return $title;
+		return fileSystemToUTF8($this->name);
 	}
 
 	/**

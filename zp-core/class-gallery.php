@@ -443,7 +443,7 @@ class Gallery {
 						if (empty($defaultTitle )) {
 							$defaultTitle = $image['filename'];
 						}
-						$defaultTitle = utf8::convert($defaultTitle, 'ISO-8859-1'); // file system is not in UTF-8
+						$defaultTitle = fileSystemToUTF8($defaultTitle);
 						if ($defaultTitle == $image['title']) { /* default title */
 							if (isset($metadata['title'])) {
 								$set = ',`title`="' . mysql_real_escape_string($metadata['title']) . '"';

@@ -1309,13 +1309,13 @@ function printAlbumEditRow($album) {
 	echo "\n<div id=\"id_" . $album->getAlbumID() . '">';
 	echo '<table cellspacing="0" width="100%">';
 	echo "\n<tr>";
-	echo '<td class="handle"><img src="images/drag_handle.png" style="border: 0px;" alt="Drag the album '."'".$album->name."'".'" /></td>';
+	echo '<td class="handle"><img src="images/drag_handle.png" style="border: 0px;" alt="Drag the album '."'".fileSystemToUTF8($album->name)."'".'" /></td>';
 	echo '<td style="text-align: left;" width="80">';
-	echo '<a href="?page=edit&album=' . urlencode($album->name) .'" title="'.sprintf(gettext('Edit this album:%s'), $album->name) .
+	echo '<a href="?page=edit&album=' . urlencode($album->name) .'" title="'.sprintf(gettext('Edit this album:%s'), fileSystemToUTF8($album->name)) .
  			'"><img height="40" width="40" src="' . $album->getAlbumThumb() . '" /></a>';
 	echo "</td>\n";
 	echo '<td  style="text-align: left;font-size:110%;" width="300"> <a href="?page=edit&album=' . urlencode($album->name) .
- 			'" title="'.sprintf(gettext('Edit this album: %s'), $album->name) . '">' . $album->getTitle() . '</a>';
+ 			'" title="'.sprintf(gettext('Edit this album: %s'), fileSystemToUTF8($album->name)) . '">' . $album->getTitle() . '</a>';
 	echo "</td>\n";
 
 	if ($album->isDynamic()) {
@@ -1508,11 +1508,11 @@ function processAlbumEdit($index, $album) {
 	// Move/Copy/Rename the album after saving.
 	$movecopyrename_action = '';
 	if (isset($_POST['a-'.$prefix.'MoveCopyRename'])) {
-		$movecopyrename_action = $_POST['a-'.$prefix.'MoveCopyRename'];
+		$movecopyrename_action = sanitize($_POST['a-'.$prefix.'MoveCopyRename'],3);
 	}
 
 	if ($movecopyrename_action == 'move') {
-		$dest = $_POST['a'.$prefix.'-albumselect'];
+		$dest = UTF8ToFileSystem(sanitize($_POST['a'.$prefix.'-albumselect'],3));
 		// Append the album name.
 		$dest = ($dest ? $dest . '/' : '') . (strpos($album->name, '/') === FALSE ? $album->name : basename($album->name));
 		if ($dest && $dest != $album->name) {
@@ -1526,7 +1526,7 @@ function processAlbumEdit($index, $album) {
 			// Cannot move album to same album.
 		}
 	} else if ($movecopyrename_action == 'copy') {
-		$dest = $_POST['a'.$prefix.'-albumselect'];
+		$dest = UTF8ToFileSystem(sanitize($_POST['a'.$prefix.'-albumselect'],3));
 		// Append the album name.
 		$dest = ($dest ? $dest . '/' : '') . (strpos($album->name, '/') === FALSE ? $album->name : basename($album->name));
 		if ($dest && $dest != $album->name) {
@@ -1538,7 +1538,7 @@ function processAlbumEdit($index, $album) {
 			// Or, copy with rename?
 		}
 	} else if ($movecopyrename_action == 'rename') {
-		$renameto = $_POST['a'.$prefix.'-renameto'];
+		$renameto = UTF8ToFileSystem(sanitize($_POST['a'.$prefix.'-renameto'],3));
 		$renameto = str_replace(array('/', '\\'), '', $renameto);
 		if (dirname($album->name) != '.') {
 			$renameto = dirname($album->name) . '/' . $renameto;

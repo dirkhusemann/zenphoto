@@ -126,7 +126,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 							$image = newImage($album, $filename);
 							if ($image->exists) {
 								if (isset($_POST[$i.'-MoveCopyRename'])) {
-									$movecopyrename_action = $_POST[$i.'-MoveCopyRename'];
+									$movecopyrename_action = sanitize($_POST[$i.'-MoveCopyRename'],3);
 								} else {
 									$movecopyrename_action = '';
 								}
@@ -187,7 +187,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 
 									// Process move/copy/rename
 									if ($movecopyrename_action == 'move') {
-										$dest = $_POST[$i.'-albumselect'];
+										$dest = UTF8ToFileSystem(sanitize($_POST[$i.'-albumselect'], 3));
 										if ($dest && $dest != $folder) {
 											if (!$image->moveImage($dest)) {
 												$notify = "&mcrerr=1";
@@ -196,7 +196,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 											// Cannot move image to same album.
 										}
 									} else if ($movecopyrename_action == 'copy') {
-										$dest = $_POST[$i.'-albumselect'];
+										$dest = UTF8ToFileSystem(sanitize($_POST[$i.'-albumselect'],2));
 										if ($dest && $dest != $folder) {
 											if(!$image->copyImage($dest)) {
 												$notify = "&mcrerr=1";
@@ -206,7 +206,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 											// Or, copy with rename?
 										}
 									} else if ($movecopyrename_action == 'rename') {
-										$renameto = $_POST[$i.'-renameto'];
+										$renameto = UTF8ToFileSystem(sanitize($_POST[$i.'-renameto'],3));
 										$image->renameImage($renameto);
 									}
 								}
@@ -418,7 +418,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	}
 
 	?>
-<h1><?php echo gettext("Edit Album:");?> <em><?php echo $album->name; ?></em></h1>
+<h1><?php echo gettext("Edit Album:");?> <em><?php echo fileSystemToUTF8($album->name); ?></em></h1>
 <p><?php printAdminLinks('edit' . $albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
  | <?php if (!$album->isDynamic() && $album->getNumImages() > 1) {
    printSortLink($album, gettext("Sort Album"), gettext("Sort Album"));
@@ -614,7 +614,7 @@ if ($allimagecount) {
 					src="<?php echo $image->getThumb();?>"
 					alt="<?php echo $image->filename;?>"
 					onclick="toggleBigImage('thumb-<?php echo $currentimage; ?>', '<?php echo $image->getSizedImage(getOption('image_size')); ?>');" />
-				<p><strong><?php echo $image->filename; ?></strong></p>
+				<p><strong><?php echo fileSystemToUTF8($image->filename); ?></strong></p>
 				<p><label for="<?php echo $currentimage; ?>-thumb"><input
 					type="radio" id="<?php echo $currentimage; ?>-thumb" name="thumb"
 					value="<?php echo $currentimage ?>" /> <?php echo ' '.gettext("Select as album thumbnail."); ?>
