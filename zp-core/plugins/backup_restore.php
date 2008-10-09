@@ -1,7 +1,10 @@
 <?php
 /**
- * This template is used to reload metadata from images. Running it will process the entire gallery,
- * supplying an album name (ex: loadAlbums.php?album=newalbum) will only process the album named.
+ * Backup and restore of the zenphoto database tables
+ * 
+ * This plugin provides a means to make backups of your zenphoto database and
+ * at a later time restore the the database to the contents of one of these backups.
+ * 
  * @package admin
  */
 $plugin_version = "1.0.0";
@@ -206,7 +209,7 @@ if (db_connect()) {
 </p>
 <br />
 <br />
-<form name="ackup_gallery" action=""><input type="hidden" name="backup"
+<form name="backup_gallery" action=""><input type="hidden" name="backup"
 	value="true">
 <div class="buttons pad_button" id="dbbackup">
 <button class="tooltip" type="submit" title="<?php echo gettext("Backup the tables in your database."); ?>">
