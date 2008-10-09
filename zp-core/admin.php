@@ -55,7 +55,13 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 		/** clear the cache ***********************************************************/
 		/******************************************************************************/
 		if ($action == "clear_cache") {
-			$gallery->clearCache();
+			if (isset($_POST['album'])) {
+				$gallery->clearCache(SERVERCACHE . '/' . sanitize($_POST['album']));
+				header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit&cleared&album='.$_POST['album']);
+				exit();
+			} else {
+				$gallery->clearCache();
+			}
 		}
 
 		/** Publish album  ************************************************************/
@@ -460,6 +466,11 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	if (isset($_GET['uploaded'])) {
 		echo '<div class="messagebox" id="fade-message">';
 		echo  "<h2>".gettext("Images uploaded")."</h2>";
+		echo '</div>';
+	}
+	if (isset($_GET['cleared'])) {
+		echo '<div class="messagebox" id="fade-message">';
+		echo  "<h2>".gettext("Album cache purged")."</h2>";
 		echo '</div>';
 	}
 
@@ -1121,7 +1132,7 @@ foreach ($comments as $comment) {
 <?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?>
 <form name="prune_gallery" action="admin-refresh-metadata.php?prune">
 	<input type="hidden" name="prune" value="true">
-	<div class="buttons" id="home_dbrefresh">
+	<div class="buttons pad_button" id="home_dbrefresh">
 	<button class="tooltip" type="submit" title="<?php echo gettext("Cleans the database and removes any orphan entries for comments, images, and albums."); ?>"><img src="images/refresh.png" alt="" /> <?php echo gettext("Refresh the Database"); ?></button>
 	</div>
 	<br clear="all" />
@@ -1131,7 +1142,7 @@ foreach ($comments as $comment) {
 <form name="clear_cache" action="admin.php?action=clear_cache=true"><input
 		type="hidden" name="action" value="clear_cache">
 	<div class="buttons" id="home_refresh">
-	<button class="tooltip" type="submit" title="<?php echo gettext("Clears the image cache. Images will be re-cached as they are viewed. To clear the cache and renew it, use the <em>Pre-Cache Images</em> button below."); ?>"><img src="images/burst.png" alt="" /> <?php echo gettext("Purge Cache"); ?></button>
+	<button class="tooltip" type="submit" title="<?php echo gettext("Clears the image cache. Images will be re-cached as they are viewed."); ?>"><img src="images/burst.png" alt="" /> <?php echo gettext("Purge Cache"); ?></button>
 	</div>
 	<br clear="all" />
 	<br clear="all" />
@@ -1141,7 +1152,7 @@ foreach ($comments as $comment) {
 	<div class="buttons" id="home_cache">
 	<button class="tooltip" type="submit" title="<?php echo gettext("Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser."); ?>"><img src="images/cache.png" title="<?php echo gettext('Pre-Cache Images'); ?>" alt="" /> <?php echo gettext("Pre-Cache Images"); ?></button>
 	</div>
-	<input type="checkbox" name="clear" checked="checked" /> <?php echo gettext("Clear"); ?><br clear="all" />
+	<br clear="all" />
 	<br clear="all" />
 </form>
 

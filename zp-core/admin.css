@@ -730,14 +730,14 @@ button.positive,.buttons a.positive {
 	border: 1px solid #ccc;
 	list-style: none;
 	height: 24em;
-	width: 30em;
+	width: 19.2em;
 	overflow: auto;
 	background-color: white;
+	padding-left: 4px;
 }
 
 .tagrenamelist,.tagrenamelist li {
 	margin: 0;
-	padding: 0;
 	border-bottom: 1px dotted #BAC9CF;
 }
 
@@ -760,14 +760,14 @@ button.positive,.buttons a.positive {
 	border: 1px solid #ccc;
 	list-style: none;
 	height: 24em;
-	width: 18em;
+	width: 19.2em;
 	overflow: auto;
 	background-color: white;
+	padding-left: 4px;
 }
 
 .tagnewlist,.tagnewlist li {
 	margin: 0;
-	padding: 0;
 	border-bottom: 1px dotted #C6D880;
 }
 

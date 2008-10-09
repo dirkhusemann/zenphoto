@@ -51,7 +51,7 @@ echo "\n<body>";
 	printTabs(empty($alb) ? 'edit' : 'home');
 	echo "\n" . '<div id="content">';
 
-	if (isset($_GET['clear']) || isset($_POST['clear'])) {
+	if (isset($_REQUEST['clear'])) {
 		$clear = sprintf(gettext('Clearing and refreshing cache for %s'), $object);
 	} else {
 		$clear = sprintf(gettext('Refreshing cache for %s'), $object); 
@@ -63,7 +63,7 @@ echo "\n<body>";
 	
 	if (isset($alb)) {
 		echo "\n<h2>".$clear."</h2>";
-		if (isset($_GET['clear']) || isset($_POST['clear'])) {
+		if (isset($_REQUEST['clear'])) {
 			$gallery->clearCache(SERVERCACHE . '/' . $folder); // clean out what was there
 		}
 		$album = new Album($album, $folder);

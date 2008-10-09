@@ -255,7 +255,7 @@ if (db_connect()) {
 		<br />
 <div class="buttons pad_button" id="setdefaults">
 <button class="tooltip" type="submit" title="<?php echo gettext("Set defaults for album publishing and image visibility."); ?>">
-	<img src="<?php echo $webpath; ?>images/burst.png" alt="" /> <?php echo gettext("Set publish/visibility defaults"); ?>
+	<img src="<?php echo $webpath; ?>images/burst.png" alt="" /> <?php echo gettext("Set defaults"); ?>
 </button>
 </div>
 <br clear="all" />

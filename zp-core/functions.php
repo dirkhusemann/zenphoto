@@ -1814,8 +1814,8 @@ function safe_glob($pattern, $flags=0) {
 	} else {
 		$path_return = $path_return . '/';
 	}
-
-	if (is_dir($path) && ($dir=opendir($path))!==false) {
+	if (!is_dir($path)) return array();
+	if (($dir=opendir($path))!==false) {
 		$glob=array();
 		while(($file=readdir($dir))!==false) {
 			if (safe_fnmatch($match,$file)) {

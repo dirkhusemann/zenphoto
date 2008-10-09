@@ -1271,17 +1271,27 @@ function printAlbumEditForm($index, $album) {
  */
 function printAlbumButtons($album) {
 	if ($album->getNumImages() > 0) {
-		echo "\n<table class=\"buttons\"><tr>";
-		echo "\n<td valign=\"top\" width=30% style=\"padding: 0px 30px 0px 30px;\">";
+	?>
+	<table class="buttons">
+	<tr>
+	<?php
+		echo "\n<td valign=\"top\">";
+		echo "</form>";
+		echo "<form name=\"clear-cache\" action=\"?action=clear_cache\"" . " method=\"post\">";
+		echo "<input type=\"hidden\" name=\"action\" value=\"clear_cache\">";
+		echo "<input type=\"hidden\" name=\"album\" value=" . urlencode($album->name) . ">";
+		echo "<button type=\"submit\" class=\"tooltip\" id='edit_hitcounter' title=\"".gettext("Clears the album's cached images.")."\"><img src=\"images/burst.png\" style=\"border: 0px;\" /> ".gettext("Clear album cache")."</button>";
+		echo "</form>";
+
+		echo "\n<td valign=\"top\">";
 		echo "<form name=\"cache_images\" action=\"admin-cache-images.php\" method=\"post\">";
 		echo "<input type=\"hidden\" name=\"album\" value=" . urlencode($album->name) . ">";
 		echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
 		echo "<button type=\"submit\" class=\"tooltip\" id='edit_cache' title=\"".gettext("Cache newly uploaded images.")."\"><img src=\"images/cache.png\" style=\"border: 0px;\" />";
 		echo " ".gettext("Pre-Cache Images")."</Button>";
-		echo "<input type=\"checkbox\" name=\"clear\" checked=\"checked\" /> ".gettext("Clear");
 		echo "</form>\n</td>";
 
-		echo "\n<td valign=\"top\" width = 30% style=\"padding: 0px 30px 0px 30px;\">";
+		echo "\n<td valign=\"top\">";
 		echo "<form name=\"refresh_metadata\" action=\"admin-refresh-metadata.php\"?album=" . urlencode($album->name) . "\" method=\"post\">";
 		echo "<input type=\"hidden\" name=\"album\" value=" . urlencode($album->name) . ">";
 		echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
@@ -1289,7 +1299,7 @@ function printAlbumButtons($album) {
 		echo "</form>";
 		echo "\n</td>";
 
-		echo "\n<td valign=\"top\" width = 30% style=\"padding: 0px 30px 0px 30px;\">";
+		echo "\n<td valign=\"top\">";
 		echo "</form>";
 		echo "<form name=\"reset_hitcounters\" action=\"?action=reset_hitcounters\"" . " method=\"post\">";
 		echo "<input type=\"hidden\" name=\"action\" value=\"reset_hitcounters\">";
@@ -1297,7 +1307,10 @@ function printAlbumButtons($album) {
 		echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
 		echo "<button type=\"submit\" class=\"tooltip\" id='edit_hitcounter' title=\"".gettext("Resets all hitcounters in the album.")."\"><img src=\"images/reset.png\" style=\"border: 0px;\" /> ".gettext("Reset hitcounters")."</button>";
 		echo "</form>";
-		echo "\n</tr>\n</table>";
+?>
+			</tr>
+		</table>
+<?php		
 	}
 }
 /**

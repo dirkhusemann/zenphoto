@@ -126,13 +126,13 @@ echo "\n<ul class=\"tagrenamelist\">";
 $list = $_zp_admin_ordered_taglist;
 foreach($list as $item) {
 	$listitem = 'R_'.postIndexEncode($item);
-	echo "\n".'<li><label for="'.$listitem.'"><input id="'.$listitem.'" name="'.$listitem.'" type="text"';
-	echo " size='30'/> ".$item."</label></li>";
+	echo "\n".'<li><label for="'.$listitem.'">'.$item.'<br /><input id="'.$listitem.'" name="'.$listitem.'" type="text"';
+	echo " size='33'/></label></li>";
 }
 echo "\n</ul>";
 echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='rename_tags' value=\"".gettext("rename tags")."\" title=\"".gettext("Save all the changes entered above.")."\" /></p>";
 echo "\n</form>";
-echo '<p>'.gettext('To change the value of a tag enter a new value in the text box in front of the tag. Then press the <em>rename tags</em> button').'</p>';
+echo '<p>'.gettext('To change the value of a tag enter a new value in the text box below the tag. Then press the <em>rename tags</em> button').'</p>';
 echo "\n</td>";
 
 echo "\n<td valign='top'>";
@@ -140,7 +140,7 @@ echo '<form name="new_tags" action="?newtags=true&amp;tagsort='.$tagsort.'"metho
 echo "\n<ul class=\"tagnewlist\">";
 for ($i=0; $i<40; $i++) {
 	echo "\n".'<li><label for="new_tag_'.$i.'"><input id="new_tag_'.$i.'" name="new_tag_'.$i.'" type="text"';
-	echo " size='30'/></label></li>";
+	echo " size='33'/></label></li>";
 }
 echo "\n</ul>";
 echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='save_tags' value=\"".gettext("save new tags")."\" title=\"".gettext("Add all the tags entered above.")."\" /></p>";

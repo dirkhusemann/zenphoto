@@ -218,6 +218,12 @@ if (db_connect()) {
 </form>
 <br />
 <br />
+<?php
+$filelist = safe_glob(SERVERPATH . "/" . BACKUPFOLDER . '/*.zdb');
+	if (count($filelist) <= 0) {
+		echo gettext('You have not yet created a backup set.');
+	} else {
+?>
 <form name="restore_gallery" action=""><?php echo gettext('Select the database restore file:'); ?>
 <br />
 <select id="backupfile" name="backupfile">
@@ -233,6 +239,7 @@ if (db_connect()) {
 </form>
 
 <?php
+	}
 } else {
 	echo "<h3>".gettext("database not connected")."</h3>";
 	echo "<p>".gettext("Check the zp-config.php file to make sure you've got the right username, password, host, and database. If you haven't created the database yet, now would be a good time.");
