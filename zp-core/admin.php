@@ -1121,7 +1121,7 @@ foreach ($comments as $comment) {
 <?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?>
 <form name="prune_gallery" action="admin-refresh-metadata.php?prune">
 	<input type="hidden" name="prune" value="true">
-	<div class="buttons pad_button" id="home_dbrefresh">
+	<div class="buttons" id="home_dbrefresh">
 	<button class="tooltip" type="submit" title="<?php echo gettext("Cleans the database and removes any orphan entries for comments, images, and albums."); ?>"><img src="images/refresh.png" alt="" /> <?php echo gettext("Refresh the Database"); ?></button>
 	</div>
 	<br clear="all" />

@@ -657,6 +657,11 @@ button.positive,.buttons a.positive {
 	color: #fff;
 }
 
+.buttons .tooltip {
+	width: 220px;
+	text-align: left;
+}
+
 #tooltip {
 	position: absolute;
 	z-index: 3000;
