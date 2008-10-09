@@ -15,14 +15,10 @@
  * 
  * @package admin
  */
-$plugin_version = "1.0.0";
-$plugin_description = gettext("This plugin is a content scheduling facility for the Zenphoto database. <strong>Note</strong>: This plugin is different from other plugins in that it is an Admin function. It cannot be enabled as it does not support the front end environment.".
-	"<br /><br /><div class='buttons'><a href='plugins/scheduled_content.php'>Run Scheduled content</a></div> Press this button to operate the Scheduled_content process.".'<br clear:both />');
-$plugin_author = "Stephen Billard (sbillard)";
-$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---schedule_content.php.html";
-$option_interface = NULL;
-$plugin_disable = true;
 
+$button_text = gettext('Publish content');
+$button_hint = gettext('Manage unpublished content in your gallery.');
+$button_icon = 'images/calendar.png';
 
 define('OFFSET_PATH', 3);
 define('RECORD_SEPARATOR', ':****:');

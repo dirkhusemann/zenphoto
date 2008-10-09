@@ -86,6 +86,7 @@ define('ALBUMFOLDER', '/albums/');
 if (!defined('PLUGIN_FOLDER')) { define('PLUGIN_FOLDER', '/plugins/'); }
 define("THEMEFOLDER", 'themes');
 define('BACKUPFOLDER', 'backup');
+define('UTILITIES_FOLDER', '/utilities/');
 
 
 if (getOption('album_session') && OFFSET_PATH==0) {

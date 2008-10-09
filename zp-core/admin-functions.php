@@ -1896,4 +1896,21 @@ function commentReply($str, $name, $albumtitle, $imagetitle) {
 	return $str;
 }
 
+/**
+ * Extracts and returns a 'statement' from a PHP script for so that it may be 'evaled'
+ *
+ * @param string $target the pattern to match on
+ * @param string $str the PHP script
+ * @return string
+ */
+function isolate($target, $str) {
+	$i = strpos($str, $target);
+	if ($i === false) return false;
+	$str = substr($str, $i);
+	//$j = strpos($str, ";\n"); // This is wrong - PHP will not treat all newlines as \n.
+	$j = strpos($str, ";"); // This is also wrong; it disallows semicolons in strings. We need a regexp.
+	$str = substr($str, 0, $j+1);
+	return $str;
+}
+
 ?>

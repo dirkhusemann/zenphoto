@@ -1166,8 +1166,32 @@ foreach ($comments as $comment) {
 	<br clear="all" />
 	<br clear="all" />
 </form>
+<?php
+$curdir = getcwd();
+chdir(SERVERPATH . "/" . ZENFOLDER . UTILITIES_FOLDER);
+$filelist = safe_glob('*'.'php');
+natcasesort($filelist);
+foreach ($filelist as $utility) {
+	$button_text = '';
+	$button_hint = '';
+	$button_icon = '';
+	
+	$utilityStream = file_get_contents($utility);
+	eval(isolate('$button_text', $utilityStream));
+	eval(isolate('$button_hint', $utilityStream));
+	eval(isolate('$button_icon', $utilityStream));
+	
+?>
+	<form name="<?php echo $utility; ?>" action="utilities/<?php echo $utility; ?>">
+		<div class="buttons" id="home_exif">
+		<button class="tooltip" type="submit" title="<?php echo $button_hint; ?>"><?php if(!empty($button_icon)) echo '<img src="'.$button_icon.'" alt="" />'; echo $button_text; ?></button>
+		</div>
+		<br clear="all" />
+		<br clear="all" />
+	</form>
 
 <?php
+	}
 }
 ?>
 </div>

@@ -9,16 +9,6 @@
 define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 
-function isolate($target, $str) {
-	$i = strpos($str, $target);
-	if ($i === false) return false;
-	$str = substr($str, $i);
-	//$j = strpos($str, ";\n"); // This is wrong - PHP will not treat all newlines as \n.
-	$j = strpos($str, ";"); // This is also wrong; it disallows semicolons in strings. We need a regexp.
-	$str = substr($str, 0, $j+1);
-	return $str;
-}
-
 if (!($_zp_loggedin & ADMIN_RIGHTS)) { // prevent nefarious access to this page.
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
 	exit();

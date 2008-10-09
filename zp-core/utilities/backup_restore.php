@@ -7,13 +7,10 @@
  * 
  * @package admin
  */
-$plugin_version = "1.0.0";
-$plugin_description = gettext("This plugin is a backup/restore facility for the Zenphoto database. <strong>Note</strong>: Backup_restore is different from other plugins in that it is an Admin function. It cannot be enabled as it does not support the front end environment. Also, backup_restore requires MySQL 4.1.1!".
-	"<br /><br /><div class='buttons'><a href='plugins/backup_restore.php'>Run backup/restore</a></div> Press this button to operate the backup/restore process.".'<br clear:both />');
-$plugin_author = "Stephen Billard (sbillard)";
-$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---backup_restore.php.html";
-$option_interface = NULL;
-$plugin_disable = true;
+
+$button_text = gettext('Backup/Restore');
+$button_hint = gettext('Backup and restore your gallery database.');
+$button_icon = 'images/folder.png';
 
 define('OFFSET_PATH', 3);
 define('RECORD_SEPARATOR', ':****:');
