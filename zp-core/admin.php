@@ -1118,10 +1118,6 @@ foreach ($comments as $comment) {
 <?php echo gettext("Your database is"); ?>: '<strong><?php echo getOption('mysql_database'); ?>'</strong><br />
 <?php echo gettext("Tables are prefixed by"); ?> <strong>'<?php echo getOption('mysql_prefix'); ?>'</strong>
 </p>
-<p>
-<br />
-</p>
-<br />
 <?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?>
 <form name="prune_gallery" action="admin-refresh-metadata.php?prune">
 	<input type="hidden" name="prune" value="true">
