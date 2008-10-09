@@ -398,7 +398,7 @@ class SearchEngine
 							}
 							$nr++;
 							if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
-							$subsql .= " `".$fieldname."` LIKE '%$singlesearchstring%'";
+							$subsql .= ' `'.$fieldname.'` LIKE "%'.mysql_real_escape_string($singlesearchstring).'%"';
 						}
 					}					
 					if ($nr > 0) {
@@ -489,7 +489,7 @@ class SearchEngine
 					break;
 				default:
 					$targetfound = true;
-					$sql .= '`name` LIKE "%'.$singlesearchstring.'%" OR ';
+					$sql .= '`name` LIKE "%'.mysql_real_escape_string($singlesearchstring).'%" OR ';
 			}
 		}
 		$sql = substr($sql, 0, strlen($sql)-4).') ORDER BY t.`id`';
