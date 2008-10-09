@@ -13,9 +13,9 @@ if (!file_exists(dirname(__FILE__) . '/' . ZENFOLDER . "/zp-config.php")) {
 define('OFFSET_PATH', 0);
 
 require_once(ZENFOLDER . "/template-functions.php");
-
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
+	exit();
 }
 
 $_zp_plugin_scripts = array();
