@@ -1167,6 +1167,7 @@ foreach ($comments as $comment) {
 	<br clear="all" />
 </form>
 <?php
+}
 $curdir = getcwd();
 chdir(SERVERPATH . "/" . ZENFOLDER . UTILITIES_FOLDER);
 $filelist = safe_glob('*'.'php');
@@ -1175,12 +1176,16 @@ foreach ($filelist as $utility) {
 	$button_text = '';
 	$button_hint = '';
 	$button_icon = '';
+	$button_rights = false;
 	
 	$utilityStream = file_get_contents($utility);
 	eval(isolate('$button_text', $utilityStream));
 	eval(isolate('$button_hint', $utilityStream));
 	eval(isolate('$button_icon', $utilityStream));
-	
+	eval(isolate('$button_rights', $utilityStream));
+	$button_rights = $button_rights | ADMIN_RIGHTS;
+
+	if ($_zp_loggedin & $button_rights) {	
 ?>
 	<form name="<?php echo $utility; ?>" action="utilities/<?php echo $utility; ?>">
 		<div class="buttons" id="home_exif">

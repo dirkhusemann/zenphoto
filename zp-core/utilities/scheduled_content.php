@@ -19,6 +19,7 @@
 $button_text = gettext('Publish content');
 $button_hint = gettext('Manage unpublished content in your gallery.');
 $button_icon = 'images/calendar.png';
+$button_rights = EDIT_RIGHTS;
 
 define('OFFSET_PATH', 3);
 define('RECORD_SEPARATOR', ':****:');
@@ -29,7 +30,7 @@ chdir(dirname(dirname(__FILE__)));
 require_once(dirname(dirname(__FILE__)).'/template-functions.php');
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 
-	if (!($_zp_loggedin & ADMIN_RIGHTS)) { // prevent nefarious access to this page.
+	if (!($_zp_loggedin & (ADMIN_RIGHTS | EDIT_RIGHTS))) { // prevent nefarious access to this page.
 		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
 		exit();
 	}
@@ -200,8 +201,36 @@ if (db_connect()) {
 	} else {
 		$requestdate = date('Y-m-d H:i:s');
 	}
+	
+	$albumidlist = '';
+	$albumids = '';
+	if (!($_zp_loggedin & ADMIN_RIGHTS)) {
+		$albumlist = getManagedAlbumList();
+		$albumIDs = array();
+		foreach ($albumlist as $albumname) {
+			$subalbums = getAllSubAlbumIDs($albumname);
+			foreach($subalbums as $ID) {
+				$albumIDs[] = $ID['id'];
+			}
+		}
+		$i = 0;
+		foreach ($albumIDs as $ID) {
+			if ($i>0) {
+				$albumidlist .= ' OR ';
+				$albumids .= ' OR ';
+			}
+			$albumidlist .= prefix('images').'.albumid='.$ID;
+			$albumids .= '`id`='.$ID;
+			$i++;
+		}
+		if (!empty($albumlist)) {
+			$albumids = ' AND ('.$albumids.')';
+			$albumidlist = ' AND ('.$albumidlist.')';
+		}
+	}
+
 	$mtime = strtotime(sanitize($requestdate));
-	$sql = "SELECT `folder`, `id` FROM ".prefix('albums').' WHERE `show`="0"';
+	$sql = "SELECT `folder`, `id` FROM ".prefix('albums').' WHERE `show`="0"'.$albumids;
 	$result = query_full_array($sql);
 	if (is_array($result)) {
 		foreach ($result as $row) {
@@ -209,7 +238,7 @@ if (db_connect()) {
 		}
 	}
 	$sql = 'SELECT `filename`, '.prefix('images').'.id as id, folder FROM '.prefix('images').','.prefix('albums').' WHERE '.prefix('images').'.show="0" AND '.
-					prefix('images').'.mtime < "'.$mtime.'" AND '.prefix('albums').'.id='.prefix('images').'.albumid';
+					prefix('images').'.mtime < "'.$mtime.'" AND '.prefix('albums').'.id='.prefix('images').'.albumid'.$albumidlist;
 	$result = query_full_array($sql);
 	if (is_array($result)) {
 		foreach ($result as $row) {
@@ -217,7 +246,7 @@ if (db_connect()) {
 		}
 	}
 	?>
-
+<?php if ($_zp_loggedin & ADMIN_RIGHTS) { ?>
 <form name="set_publication" action="" method="post">
 <input type="hidden" name="set_defaults" value="true">
 		<input type="checkbox" name="album_default"	value=1<?php if ($albpublish) echo ' checked'; ?>> <?php echo gettext("Publish albums by default"); ?>
@@ -233,8 +262,10 @@ if (db_connect()) {
 <br clear="all" />
 </form>
 <br />
-
-<?php if (count($publish_albums_list) > 0) { ?>
+<?php 
+}
+if (count($publish_albums_list) > 0) { 
+?>
 	<form name="publish" action="" method="post"><?php echo gettext('Unpublished albums:'); ?>
 	<input type="hidden" name="publish_albums" value="true">
 	<ul class="schedulealbumchecklist">
@@ -254,9 +285,10 @@ if (db_connect()) {
 	}
 ?>
 
-<form name="review" action="" method="post"><?php echo gettext('Review images older than:'); ?>
+<form name="review" action="" method="post">
+<?php printf(gettext('Review images older than: %s'),'<input type="text" size="20" name="publish_date" value="'.$requestdate.'" />'); ?>
 <input type="hidden" name="review" value="true">
-<input type="text" size="20" name="publish_date" value="<?php echo $requestdate; ?>" />
+
 <div class="buttons pad_button" id="reviewobjects">
 <button class="tooltip" type="submit" title="<?php echo gettext("Review not visible images."); ?>">
 	<img src="<?php echo $webpath; ?>images/warn.png" alt="" /> <?php echo gettext("Review images"); ?>
