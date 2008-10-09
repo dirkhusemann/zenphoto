@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * htmLawed - KSES replacement for input cleansing
  * @package core
