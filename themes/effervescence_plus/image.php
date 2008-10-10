@@ -107,7 +107,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 			<?php
 				printImageDesc(true);
 				if (function_exists('printImageMap')) {
-					printImageMap();
+					printImageMap(NULL, 'G_HYBRID_MAP');
 				}
 			?>
 		</div>

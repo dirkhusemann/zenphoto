@@ -98,14 +98,16 @@ function addPoint($lat, $long, $html) {
  * @param bool $toggle set to true to hide initially
  * @param string $id DIV id
  */
-function printImageMap($zoomlevel='6', $width=NULL, $height=NULL, $text=NULL, $toggle=true, $id='googlemap') {
+function printImageMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL, $text=NULL, $toggle=true, $id='googlemap') {
 	global $_zp_phoogle;
 	if(getOption('gmaps_apikey') != ''){
 
 		$exif = getImageEXIFData();
 		if(!empty($exif['EXIFGPSLatitude']) && !empty($exif['EXIFGPSLongitude'])){
 
-			$_zp_phoogle->zoomLevel = $zoomlevel;
+			if($zoomlevel){
+				$_zp_phoogle->zoomLevel = $zoomlevel;
+			}
 			if (!is_null($width)) {
 				$_zp_phoogle->setWidth($width);
 			} else {
@@ -116,7 +118,7 @@ function printImageMap($zoomlevel='6', $width=NULL, $height=NULL, $text=NULL, $t
 			} else {
 				$_zp_phoogle->setHeight(getOption('gmaps_height'));
 			}
-			//			if (!is_null($type)) { $_zp_phoogle->setMapType($type); }
+			if (!is_null($type)) { $_zp_phoogle->setMapType($type); }
 			$lat = $exif['EXIFGPSLatitude'];
 			$long = $exif['EXIFGPSLongitude'];
 			if($exif['EXIFGPSLatitudeRef'] == 'S'){  $lat = '-' . $lat; }
@@ -154,10 +156,18 @@ function printAlbumMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL, $
 			$_zp_phoogle->zoomLevel = $zoomlevel;
 		}
 		$dataid = $id.'_data';
-		//		if (!is_null($type)) { $_zp_phoogle->setMapType($type); }
-		if (!is_null($width)) { $_zp_phoogle->setWidth($width); }
-		if (!is_null($height)) { $_zp_phoogle->setHeight($height); }
-		
+		if (!is_null($type)) { $_zp_phoogle->setMapType($type); }
+		if (!is_null($width)) {
+			$_zp_phoogle->setWidth($width);
+		} else {
+			$_zp_phoogle->setWidth(getOption('gmaps_width'));
+		}
+		if (!is_null($height)) {
+			$_zp_phoogle->setHeight($height);
+		} else {
+			$_zp_phoogle->setHeight(getOption('gmaps_height'));
+		}
+
 		resetCurrentAlbum(); // start from scratch
 		while (next_image(getOption('gmaps_show_all_album_points'), $firstPageImages)) {
 			$exif = getImageEXIFData();

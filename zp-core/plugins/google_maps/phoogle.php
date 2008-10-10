@@ -66,6 +66,7 @@ class PhoogleMap{
 */
     var $showControl = true;
 	
+		var $defaultType = 'G_NORMAL_MAP'; // allowed types: G_NORMAL_MAP | G_SATELLITE_MAP | G_HYBRID_MAP
 /**
 * showType
 * True/False whether to show map type controls or not
@@ -85,10 +86,16 @@ class PhoogleMap{
 * set's the initial zoom level of the map
 */
 
-    var $zoomLevel = 4;
+    var $zoomLevel = 6;
 
 
-
+/**
+* @param        $type:string
+* @returns      nothing
+* @description  Stores maptype in $defaultType
+*/
+function setMapType($type) { $this->defaultType = $type; }
+    
 
 /**
 * @function     addGeoPoint
@@ -265,7 +272,8 @@ function centerMap($lat,$long){
 		
 			}
 		if ($this->showType){
-		echo "map.addControl(new GMapTypeControl());\n";
+			echo "map.addControl(new GMapTypeControl());\n";
+			echo 'map.setMapType('. $this->defaultType .');';
 		}
 	
     $numPoints = count($this->validPoints);
