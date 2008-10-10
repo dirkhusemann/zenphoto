@@ -856,11 +856,6 @@ function printAlbumEditForm($index, $album) {
 		$prefix = "$index-";
 		echo "<p><em><strong>" . $album->name . "</strong></em></p>";
 	}
-	if (isset($_GET['counters_reset'])) {
-		echo '<div class="messagebox" id="fade-message">';
-		echo  "<h2>".gettext("Hitcounters have been reset")."</h2>";
-		echo '</div>';
-	}
 
 	echo "\n<input type=\"hidden\" name=\"" . $prefix . "folder\" value=\"" . $album->name . "\" />";
 	echo "\n".'<input type="hidden" name="tagsort" value='.$tagsort.' />';
@@ -1304,7 +1299,7 @@ function printAlbumButtons($album) {
 		echo "<form name=\"reset_hitcounters\" action=\"?action=reset_hitcounters\"" . " method=\"post\">";
 		echo "<input type=\"hidden\" name=\"action\" value=\"reset_hitcounters\">";
 		echo "<input type=\"hidden\" name=\"albumid\" value=" . $album->getAlbumID() . ">";
-		echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
+		echo "<input type=\"hidden\" name=\"album\" value=" . urlencode($album->name) . ">";
 		echo "<button type=\"submit\" class=\"tooltip\" id='edit_hitcounter' title=\"".gettext("Resets all hitcounters in the album.")."\"><img src=\"images/reset.png\" style=\"border: 0px;\" /> ".gettext("Reset hitcounters")."</button>";
 		echo "</form>";
 ?>
@@ -1376,31 +1371,31 @@ function printAlbumEditRow($album) {
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	if ($album->getShow()) {
-		echo '<a class="publish" href="?action=publish&value=0&album=' . urlencode($album->name) .
+		echo '<a class="publish" href="?action=publish&value=0&amp;album=' . urlencode($album->name) .
  				'" title="'.sprintf(gettext('Publish the album %s'), $album->name) . '">';
 		echo '<img src="images/pass.png" style="border: 0px;" alt="'.gettext('Published').'" /></a>';
 	} else {
-		echo '<a class="publish" href="?action=publish&value=1&album=' . urlencode($album->name) .
+		echo '<a class="publish" href="?action=publish&value=1&amp;album=' . urlencode($album->name) .
  				'" title="'.sprintf(gettext('Publish the album %s'), $album->name) . '">';
 		echo '<img src="images/action.png" style="border: 0px;" alt="Publish the album ' . $album->name . '" /></a>';
 	}
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-	echo '<a class="cache" href="admin-cache-images.php?page=edit&album=' . urlencode($album->name) . "&return=*" .
+	echo '<a class="cache" href="admin-cache-images.php?page=edit&amp;album='.urlencode($album->name)."&return=*".urlencode(dirname($album->name)).
  			'" title="'.sprintf(gettext('Pre-cache images in %s'), $album->name) . '">';
 	echo '<img src="images/cache.png" style="border: 0px;" alt="'.sprintf(gettext('Cache the album %s'), $album->name) . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-	echo '<a class="warn" href="admin-refresh-metadata.php?page=edit&album=' . urlencode($album->name) . "&return=*" .
+	echo '<a class="warn" href="admin-refresh-metadata.php?page=edit&amp;album=' . urlencode($album->name) . "&return=*".urlencode(dirname($album->name)) .
  			'" title="'.sprintf(gettext('Refresh metadata for the album %s'), $album->name) . '">';
 	echo '<img src="images/warn.png" style="border: 0px;" alt="'.sprintf(gettext('Refresh image metadata in the album %s'), $album->name) . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-	echo '<a class="reset" href="?action=reset_hitcounters&albumid=' . $album->getAlbumID() . '" title="'.sprintf(gettext('Reset hitcounters for album %s'), $album->name) . '">';
+	echo '<a class="reset" href="?action=reset_hitcounters&amp;albumid='.$album->getAlbumID().'&amp;album='.urlencode($album->name).'" title="'.sprintf(gettext('Reset hitcounters for album %s'), $album->name) . '">';
 	echo '<img src="images/reset.png" style="border: 0px;" alt="'.sprintf(gettext('Reset hitcounters for the album %s'), $album->name) . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-	echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&action=deletealbum&album=" . urlencode(urlencode($album->name)) .
+	echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&amp;action=deletealbum&amp;album=" . urlencode(urlencode($album->name)) .
 			"','".js_encode(gettext("Are you sure you want to delete this entire album?"))."','".js_encode(gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")).
 			"');\" title=\"".sprintf(gettext("Delete the album %s"), js_encode($album->name)) . "\">";
 	echo '<img src="images/fail.png" style="border: 0px;" alt="'.sprintf(gettext('Delete the album %s'), js_encode($album->name)) . '" /></a>';

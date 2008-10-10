@@ -35,20 +35,22 @@ if (!($_zp_loggedin & ADMIN_RIGHTS)) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
 	exit();
 }
-printAdminHeader();
-echo "\n</head>";
-echo "\n<body>";
 	if (isset($_REQUEST['album'])) {
 		$alb = $_REQUEST['album'];
 		$folder = urldecode(strip($alb));
 		$object = $folder;
+		$tab = 'edit';
 	} else {
 		$object = '<em>'.gettext('Gallery').'</em>';
+		$tab = 'home';
 	}
+printAdminHeader();
+echo "\n</head>";
+echo "\n<body>";
 
 	printLogoAndLinks();
 	echo "\n" . '<div id="main">';
-	printTabs(empty($alb) ? 'edit' : 'home');
+	printTabs($tab);
 	echo "\n" . '<div id="content">';
 
 	if (isset($_REQUEST['clear'])) {
@@ -81,10 +83,17 @@ echo "\n<body>";
 	}
 	echo "\n" . "<br/>".sprintf(gettext("Finished: Total of %u images."), $count);
 	
-	if (isset($_REQUEST['return'])) $ret = $_REQUEST['return'];
-	if (!empty($ret)) {
-		$r = "?page=edit";
-		if ($ret != '*') $r .= "&album=$ret";
+	if (isset($_REQUEST['return'])) {
+		$ret = sanitize($_REQUEST['return']);
+		if (substr($ret, 0, 1) == '*') {
+			if (empty($ret) || $ret == '*.' || $ret == '*/') {
+				$r = '?page=edit';
+			} else {
+				$r = '?page=edit&amp;album='.urlencode(substr($ret, 1)).'#tab_subalbuminfo';
+			}
+		} else {
+			$r = '?page=edit&amp;album='.urlencode($ret);
+		}
 	} else {
 		$r = '';
 	}

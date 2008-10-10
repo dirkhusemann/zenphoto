@@ -68,31 +68,43 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 		/** Publish album  ************************************************************/
 		/******************************************************************************/
 		if ($action == "publish") {
-			$folder = urldecode(strip($_GET['album']));
+			$folder = urldecode(sanitize($_GET['album']));
 			$album = new Album($gallery, $folder);
 			$album->setShow($_GET['value']);
 			$album->save();
-			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit');
+			$return = urlencode(dirname($folder));
+			if (!empty($return)) {
+				if ($return == '.' || $return == '/') {
+					$return = '';
+				} else {
+					$return = '&album='.$return.'#tab_subalbuminfo';
+				}
+			}
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit'.$return);
 			exit();
 
 			/** Reset hitcounters ***********************************************************/
 			/********************************************************************************/
 		} else if ($action == "reset_hitcounters") {
-			if (isset($_GET['albumid'])) $id = $_GET['albumid'];
-			if (isset($_POST['albumid'])) $id = $_POST['albumid'];
-			if(isset($id)) {
+			if (isset($_REQUEST['albumid'])) {
+				$id = sanitize_numeric($_REQUEST['albumid']);
 				$where = ' WHERE `id`='.$id;
 				$imgwhere = ' WHERE `albumid`='.$id;
-				$return = '?page=edit';
-				if (isset($_GET['return'])) $rt = $_GET['return'];
-				if (isset($_POST['return'])) $rt = $_POST['return'];
-				if (isset($rt)) {
-					$return .= '&album=' . $rt .'&counters_reset';
-				}
-			} else {
 				$where = '';
 				$imgwhere = '';
 				$return = '?counters_reset';
+				if (isset($_REQUEST['album'])) {
+					if (isset($_GET['album'])) {
+						$return = urlencode(dirname(sanitize($_REQUEST['album'])));
+					} else {
+						$return = urlencode(sanitize($_REQUEST['album']));	
+					}
+					if (empty($return) || $return == '.' || $return == '/') {
+						$return = '?page=edit&counters_reset';
+					} else {
+						$return = '?page=edit&album='.$return.'&counters_reset#tab_subalbuminfo';
+					}
+				}
 			}
 			query("UPDATE " . prefix('albums') . " SET `hitcounter`= 0" . $where);
 			query("UPDATE " . prefix('images') . " SET `hitcounter`= 0" . $imgwhere);
@@ -423,7 +435,12 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		echo  "<h2>".gettext("Subalbum order saved")."</h2>";
 		echo '</div>';
 	}
-
+	if (isset($_GET['counters_reset'])) {
+		echo '<div class="messagebox" id="fade-message">';
+		echo  "<h2>".gettext("Hitcounters have been reset")."</h2>";
+		echo '</div>';
+	}
+	
 	?>
 <h1><?php echo gettext("Edit Album:");?> <em><?php echo fileSystemToUTF8($album->name); ?></em></h1>
 <p><?php printAdminLinks('edit' . $albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
@@ -914,6 +931,16 @@ if ($allimagecount != $totalimages) { // need pagination links
 		echo  "<h2>".gettext("Album order saved")."</h2>";
 		echo '</div>';
 	}
+	if (isset($_GET['counters_reset'])) {
+		echo '<div class="messagebox" id="fade-message">';
+		echo  "<h2>".gettext("Hitcounters have been reset.")."</h2>";
+		echo '</div>';
+	}
+	if (isset($_GET['action']) && $_GET['action'] == 'clear_cache') {
+		echo '<div class="messagebox" id="fade-message">';
+		echo  "<h2>".gettext("Cache has been purged.")."</h2>";
+		echo '</div>';
+	}
 	$albumsprime = $gallery->getAlbums();
 	$albums = array();
 	foreach ($albumsprime as $album) { // check for rights
@@ -999,13 +1026,6 @@ $page = "home"; ?>
 		}
 	} else {
 		echo "\n<div style=\"text-align:right;color:#0000ff;\"><a href=\"?check_for_update\">".gettext("Check for zenphoto update.")."</a></div>\n";
-	}
-	$msg = '';
-	if (isset($_GET['action']) && $_GET['action'] == 'clear_cache') {
-		$msg = gettext("Cache has been purged");
-	}
-	if (isset($_GET['counters_reset'])) {
-		$msg = gettext("Hitcounters have been reset");
 	}
 	?>
 <ul id="home-actions">
