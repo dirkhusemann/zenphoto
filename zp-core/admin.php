@@ -13,6 +13,7 @@ require_once(dirname(__FILE__).'/admin-sortable.php');
 
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
+	exit();
 }
 
 if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
@@ -579,10 +580,13 @@ if ($allimagecount) {
 			<a href="javascript:toggleExtraInfo('','image',true);"><?php echo gettext('expand all fields');?></a>
 			| <a href="javascript:toggleExtraInfo('','image',false);"><?php echo gettext('collapse all fields');?></a>
 		</th>
-		<th align="right"><?php
-			echo gettext("Display images by:");
+		<th align="right">
+		<?php
+		$sort = $sortby;
+		$sort[gettext('Manual')] = 'Manual';
+		echo gettext("Display images by:");
 			echo '<select id="albumimagesort" name="albumimagesort" onchange="this.form.submit()">';
-			generateListFromArray(array($oldalbumimagesort), $sortby);
+			generateListFromArray(array($oldalbumimagesort), $sort);
 			echo '</select>';
 			?> <input type="checkbox" id="albumimagedirection"
 			name="albumimagedirection" value="DESC"
