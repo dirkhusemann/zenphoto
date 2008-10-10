@@ -50,10 +50,12 @@ class PersistentObject {
 
 	var $data;
 	var $updates;
+	var $loaded = false;
 	var $table;
 	var $unique_set;
 	var $cache_by;
 	var $id;
+	var $use_cache = false;
 	var $transient;
 
 	function PersistentObject($tablename, $unique_set, $cache_by=NULL, $use_cache=true, $is_transient=false) {
