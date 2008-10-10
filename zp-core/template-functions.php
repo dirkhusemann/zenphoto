@@ -140,7 +140,7 @@ function printAdminToolbox($context=null, $id='admin') {
 				urlencode(urlencode($albumname)) . "&amp;image=". urlencode(urlencode($imagename)) . "','". js_encode(gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!")) . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
 				echo "</li>\n";
 			}
-			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=$imagename";
+		  $redirect = "&amp;album=".urlencode($albumname)."&amp;image=$imagename";
 		} else if (($_zp_gallery_page === 'search.php')&& !empty($_zp_current_search->words)) {
 			if ($_zp_loggedin & (ADMIN_RIGHTS | UPLOAD_RIGHTS)) {
 				echo "<li><a href=\"".$zf."/admin-dynamic-album.php\" title=\"".gettext("Create an album from the search")."\">".gettext("Create Album")."</a></li>";
@@ -166,6 +166,11 @@ function printAdminToolbox($context=null, $id='admin') {
 				echo "<li><a href=\"".FULLWEBPATH."/".ZENFOLDER."/plugins/zenpage/page-add.php\">".gettext("Add Page")."</li>";
 			}
 		}	
+		if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
+			echo "<li>";
+			printLink($zf . '/admin-options.php', gettext("Options"), NULL, NULL, NULL);
+			echo "</li>\n";
+		}
 		echo "<li><a href=\"".$zf."/admin.php?logout$redirect\">".gettext("Logout")."</a></li>\n";
 		echo "</ul></div>\n";
 	}
@@ -3457,7 +3462,7 @@ function getRSSHeaderLink($option, $linktext='', $lang='') {
 /**
  * Prints the RSS link for use in the HTML HEAD
  *
- * @param string $option type of RSS (Gallery, Album, Comments)
+ * @param string $option type of RSS (Gallery, Album, Collection, Comments)
  * @param string $linktext title of the link
  *
  * @since 1.1.6
