@@ -93,7 +93,7 @@
 								$images = getImageStatistic(12, "latest");
 								$c = 0;
 								foreach ($images as $image) {
-									if (is_valid_image($image->name)) {
+									if (is_valid_image($image->filename)) {
 										if ($c++ < 6) {
 											echo "<li><table><tr><td>\n";
 											$imageURL = htmlspecialchars(getURL($image));
