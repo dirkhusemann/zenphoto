@@ -13,7 +13,7 @@ class Image extends PersistentObject {
 	var $exists = true; // Does the image exist?
 	var $webpath;       // The full URL path to the original image.
 	var $localpath;     // The full SERVER path to the original image.
-	var $name;          // $filename with the extension stripped off.
+	var $displayname;   // $filename with the extension stripped off.
 	var $album;         // An album object for the album containing this image.
 	var $comments;      // Image comment array.
 	var $commentcount;  // The number of comments on this image.
@@ -114,14 +114,14 @@ class Image extends PersistentObject {
 			$this->localpath = getAlbumFolder() . $album->name . "/" . $filename;
 		}
 		$this->filename = $filename;		
-		$this->name = substr($this->filename, 0, strrpos($this->filename, '.'));
-		if (empty($this->name)) $this->name = $this->filename;
+		$this->displayname = substr($this->filename, 0, strrpos($this->filename, '.'));
+		if (empty($this->displayname)) $this->displayname = $this->filename;
 		$this->comments = null;
 		$this->filemtime = @filemtime($this->localpath);
 	}
 	
 	function getDefaultTitle() {
-		return fileSystemToUTF8($this->name);
+		return fileSystemToUTF8($this->displayname);
 	}
 
 	/**

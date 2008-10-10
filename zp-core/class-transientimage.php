@@ -25,8 +25,8 @@ class Transientimage extends image {
 		}
 		$filename = '_{'.$folder.'}_'.basename($image);
 		$this->filename = $filename;
-		$this->name = substr(basename($image), 0, strrpos(basename($image), '.'));
-		if (empty($this->name)) $this->name = $this->filename;
+		$this->displayname = substr(basename($image), 0, strrpos(basename($image), '.'));
+		if (empty($this->displayname)) $this->displayname = $this->filename;
 		$this->filemtime = filemtime($this->localpath);
 		$this->comments = null;
 		if (is_valid_video($filename)) {

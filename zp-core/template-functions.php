@@ -140,7 +140,7 @@ function printAdminToolbox($context=null, $id='admin') {
 				urlencode(urlencode($albumname)) . "&amp;image=". urlencode(urlencode($imagename)) . "','". js_encode(gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!")) . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
 				echo "</li>\n";
 			}
-		  $redirect = "&amp;album=".urlencode($albumname)."&amp;image=$imagename";
+			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=$imagename";
 		} else if (($_zp_gallery_page === 'search.php')&& !empty($_zp_current_search->words)) {
 			if ($_zp_loggedin & (ADMIN_RIGHTS | UPLOAD_RIGHTS)) {
 				echo "<li><a href=\"".$zf."/admin-dynamic-album.php\" title=\"".gettext("Create an album from the search")."\">".gettext("Create Album")."</a></li>";
@@ -2383,8 +2383,8 @@ function getUnprotectedImageURL() {
 function getProtectedImageURL() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image, $_zp_current_album;
-	$suffix = strtolower(substr(strrchr($_zp_current_image->name, "."), 1));
-	$cache_file = $_zp_current_album->name . "/" . substr($_zp_current_image->name, 0, -strlen($suffix)-1) . '_FULL.' . $suffix;
+	$suffix = strtolower(substr(strrchr($_zp_current_image->filename, "."), 1));
+	$cache_file = $_zp_current_album->name . "/" . substr($_zp_current_image->filename, 0, -strlen($suffix)-1) . '_FULL.' . $suffix;
 	$cache_path = SERVERCACHE . '/' . $cache_file;
 	if (file_exists($cache_path)) {
 		return WEBPATH . CACHEFOLDER . pathurlencode($cache_file);
@@ -3260,9 +3260,9 @@ function getAllDates($order='asc') {
 	$alldates = array();
 	$cleandates = array();
 	$sql = "SELECT `date` FROM ". prefix('images');
-	$special = new Album(new Gallery(), '');
-	$sql .= "WHERE `albumid`!='".$special->id."'";
-	if (!zp_loggedin()) { $sql .= " AND `show` = 1"; }
+	if (!zp_loggedin()) {
+		$sql .= " AND `show` = 1";
+	}
 	$result = query_full_array($sql);
 	foreach($result as $row){
 		$alldates[] = $row['date'];
@@ -3369,9 +3369,9 @@ function printCustomPageURL($linktext, $page, $q='', $prev='', $next='', $class=
  */
 function getURL($image) {
 	if (getOption('mod_rewrite')) {
-		return WEBPATH . "/" . pathurlencode($image->getAlbumName()) . "/" . urlencode($image->name);
+		return WEBPATH . "/" . pathurlencode($image->getAlbumName()) . "/" . urlencode($image->filename);
 	} else {
-		return WEBPATH . "/index.php?album=" . pathurlencode($image->getAlbumName()) . "&image=" . urlencode($image->name);
+		return WEBPATH . "/index.php?album=" . pathurlencode($image->getAlbumName()) . "&image=" . urlencode($image->filename);
 	}
 }
 /**

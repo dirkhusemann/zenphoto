@@ -10,7 +10,7 @@
 $server = $_SERVER['SERVER_NAME'];
 if (isset($_SERVER['HTTP_REFERER'])) $test = strpos($_SERVER['HTTP_REFERER'], $server); else $test = true;
 if ( $test == FALSE && getOption('hotlink_protection')) { /* It seems they are directly requesting the full image. */
-	$image = 'index.php?album='.$_zp_current_album->name . '&image=' . $_zp_current_image->name;
+	$image = 'index.php?album='.$_zp_current_album->name . '&image=' . $_zp_current_image->filename;
 	header("Location: {$image}");
 	exit();
 }
@@ -20,9 +20,9 @@ if (checkforPassword(true)) {
 	exit();
 }
 require_once(dirname(__FILE__).'/functions-image.php');
-$image_path = getAlbumFolder() . $_zp_current_album->name . "/" . $_zp_current_image->name;
+$image_path = getAlbumFolder() . $_zp_current_album->name . "/" . $_zp_current_image->filename;
 $suffix = strtolower(substr(strrchr($image_path, "."), 1));
-$cache_file = $_zp_current_album->name . "/" . substr($_zp_current_image->name, 0, -strlen($suffix)-1) . '_FULL.' . $suffix;
+$cache_file = $_zp_current_album->name . "/" . substr($_zp_current_image->filename, 0, -strlen($suffix)-1) . '_FULL.' . $suffix;
 switch ($suffix) {
 	case 'bmp':
 		$suffix = 'wbmp';
@@ -48,7 +48,7 @@ if (getOption('cache_full_image')) {
 if (!getOption('perform_watermark')) { // no processing needed
 	if (getOption('album_folder_class') != 'external' && !getOption('protect_full_image') == 'Download') { // local album system, return the image directly
 		header('Content-Type: image/'.$suffix);
-		header("Location: " . getAlbumFolder(FULLWEBPATH) . pathurlencode($_zp_current_album->name) . "/" . rawurlencode($_zp_current_image->name));
+		header("Location: " . getAlbumFolder(FULLWEBPATH) . pathurlencode($_zp_current_album->name) . "/" . rawurlencode($_zp_current_image->filename));
 		exit();
 	} else {  // the web server does not have access to the image, have to supply it
 		$fp = fopen($image_path, 'rb');
@@ -56,7 +56,7 @@ if (!getOption('perform_watermark')) { // no processing needed
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 		header("Content-Type: image/$suffix");
 		if (getOption('protect_full_image') == 'Download') {
-			header('Content-Disposition: attachment; filename="' . $_zp_current_image->name . '"');  // enable this to make the image a download
+			header('Content-Disposition: attachment; filename="' . $_zp_current_image->filename . '"');  // enable this to make the image a download
 		}
 		header("Content-Length: " . filesize($image_path));
 		// dump the picture and stop the script
@@ -82,7 +82,7 @@ switch ($suffix) {
 		break;
 }
 if (getOption('protect_full_image') == 'Download') {
-	header('Content-Disposition: attachment; filename="' . $_zp_current_image->name . '"');  // enable this to make the image a download
+	header('Content-Disposition: attachment; filename="' . $_zp_current_image->filename . '"');  // enable this to make the image a download
 }
 if (getOption('perform_watermark')) {
 	$watermark_path = SERVERPATH . "/" . ZENFOLDER . "/" . UTF8ToFileSystem(getOption('watermark_image'));
