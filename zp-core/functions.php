@@ -2713,4 +2713,32 @@ function UTF8ToFileSystem($filename) {
 	return utf8::convert($filename, 'UTF-8', 'ISO-8859-1');
 }
 
+$_zp_not_viewable_album_list = NULL;
+/**
+ * Returns a list of album IDs that the current viewer is allowed to see
+ *
+ * @return array
+ */
+function getNotViewableAlbums() {
+	if (zp_loggedin(ADMIN_RIGHTS)) return array(); //admins can see all
+	$hint = '';
+	global $_zp_not_viewable_album_list;
+	if (is_null($_zp_not_viewable_album_list)) {
+		$sql = 'SELECT `folder`, `id`, `password` FROM '.prefix('albums').' WHERE `show`=0 OR `password`!=""';
+		$result = query_full_array($sql);
+		if (is_array($result)) {
+			$_zp_not_viewable_album_list = array();
+			foreach ($result as $row) {
+				if (!checkAlbumPassword($row['folder'], $hint)) {
+					$_zp_not_viewable_album_list[] = $row['id'];
+				} else {
+					if (!zp_loggedin() || !isMyAlbum($row['folder'])) {
+						$_zp_not_viewable_album_list[] = $row['id'];
+					}
+				}
+			}
+		}
+	}
+	return $_zp_not_viewable_album_list;
+}
 ?>

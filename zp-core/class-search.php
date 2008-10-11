@@ -424,6 +424,7 @@ class SearchEngine
 				$sql .= "`date` >= \"$d1\" AND `date` < \"$d2\"";
 			}
 		}
+
 		if(!zp_loggedin()) { $sql .= ")"; }
 		if ($nrt == 0) { return NULL; } // no valid fields
 		if ($tbl == 'albums') {
@@ -445,6 +446,12 @@ class SearchEngine
 				}
 			}
 		} else {
+			$hidealbums = getNotViewableAlbums();
+			if (!is_null($hidealbums)) {
+				foreach ($hidealbums as $id) {
+					$sql .= ' AND `albumid`!='.$id;
+				}
+			}
 			if (empty($this->dynalbumname)) {
 				$key = albumSortKey(getOption('image_sorttype'));
 				if ($key != 'sort_order') {

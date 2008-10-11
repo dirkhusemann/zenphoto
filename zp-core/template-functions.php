@@ -3261,7 +3261,19 @@ function getAllDates($order='asc') {
 	$cleandates = array();
 	$sql = "SELECT `date` FROM ". prefix('images');
 	if (!zp_loggedin()) {
-		$sql .= " AND `show` = 1";
+		$sql .= " WHERE `show` = 1";
+	}
+	$hidealbums = getNotViewableAlbums();	
+	if (!is_null($hidealbums)) {
+		if (zp_loggedin()) {
+			$sql .= ' WHERE ';
+		} else {
+			$sql .= ' AND ';
+		}
+		foreach ($hidealbums as $id) {
+			$sql .= '`albumid`!='.$id.' AND ';
+		}
+		$sql = substr($sql, 0, -5);
 	}
 	$result = query_full_array($sql);
 	foreach($result as $row){
