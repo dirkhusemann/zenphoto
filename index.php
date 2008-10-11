@@ -73,8 +73,10 @@ if (isset($_GET['p'])) {
 }
 
 // Load plugins, then load the requested $obj (page, image, album, or index; defined above).
+$_zp_loaded_plugins = array();
 if (file_exists(SERVERPATH . "/" . $obj) && $zp_request) {
 	foreach (getEnabledPlugins() as $extension) {
+		$_zp_loaded_plugins[] = $extension;
 		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
 	}
 if(!is_null($_zp_HTML_cache)) { $_zp_HTML_cache->startHTMLCache(); }
@@ -107,7 +109,14 @@ if ($a != 'full-image.php') {
 	}
 	echo "\n<!-- zenphoto version " . ZENPHOTO_VERSION . " [" . ZENPHOTO_RELEASE . "] ($official)";
 	if (isset($zenpage_version)) echo ' zenpage version '.$zenpage_version.' ['.ZENPAGE_RELEASE.'] ';
-	echo " Theme: " . $theme . " (" . $a . ") { memory: ".INI_GET('memory_limit')." } -->";
+	echo " Theme: " . $theme . " (" . $a . ") { memory: ".INI_GET('memory_limit')." }";
+	if (count($_zp_loaded_plugins) > 0) {
+		echo ' plugins: ';
+		foreach ($_zp_loaded_plugins as $plugin) {
+			echo $plugin.' ';
+		}
+	}
+	echo " -->";
 }
 if(!is_null($_zp_HTML_cache)) { $_zp_HTML_cache->endHTMLCache(); }
 
