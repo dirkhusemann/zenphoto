@@ -787,48 +787,58 @@ if ($debug) {
 
 	$msg = " <em>.htaccess</em> ".gettext("file");
 	if (!stristr($_SERVER['SERVER_SOFTWARE'], "apache") && !stristr($_SERVER['SERVER_SOFTWARE'], "litespeed")) {
-		checkMark(-1, gettext("Server seems not to be Apache or Apache-compatible, skipping <code>.htaccess</code> test"), "", "");
+		checkMark(-1, gettext("Server seems not to be Apache or Apache-compatible, <code>.htaccess</code> not required."), "", "");
+		$Apache = false;
 	}	else {
-		$htfile = '../.htaccess';
-		$ht = @file_get_contents($htfile);
-		$htu = strtoupper($ht);
-		$vr = "";
-		$ch = 1;
-		$j = 0;
-		if (empty($htu)) {
+		$Apache = true;
+	}
+	$htfile = '../.htaccess';
+	$ht = @file_get_contents($htfile);
+	$htu = strtoupper($ht);
+	$vr = "";
+	$ch = 1;
+	$j = 0;
+	if (empty($htu)) {
+		if ($Apache) {
 			$ch = -1;
 			$err = gettext("is empty or does not exist");
 			$desc = gettext("Edit the <code>.htaccess</code> file in the root zenphoto folder if you have the mod_rewrite module, and want cruft-free URLs.")
 			.gettext("Just change the one line indicated to make it work.").' ' .
 						"<br/><br/>".gettext("You can ignore this warning if you do not intend to set the option <code>mod_rewrite</code>.");
 		} else {
-			$i = strpos($htu, 'VERSION');
-			if ($i !== false) {
-				$j = strpos($htu, ";");
-				$vr = trim(substr($htu, $i+7, $j-$i-7));
-			}
-			$ch = !empty($vr) && ($vr == HTACCESS_VERSION);
-			$err = gettext("wrong version");
-			$desc = gettext("You need to upload the copy of the .htaccess file that was included with the zenphoto distribution.");
+			$ch = -2;
+			$err = '';
+			$desc = '';
 		}
-
-		if ($ch) {
-			$i = strpos($htu, 'REWRITEENGINE');
-			if ($i === false) {
-				$rw = '';
-			} else {
-				$j = strpos($htu, "\n", $i+13);
-				$rw = trim(substr($htu, $i+13, $j-$i-13));
-			}
-			$mod = '';
-			if (!empty($rw)) {
-				$msg .= ' '.sprintf(gettext("(<em>RewriteEngine</em> is <strong>%s</strong>)"), $rw);
-				$mod = "&mod_rewrite=$rw";
-			}
+	} else {
+		$i = strpos($htu, 'VERSION');
+		if ($i !== false) {
+			$j = strpos($htu, ";");
+			$vr = trim(substr($htu, $i+7, $j-$i-7));
 		}
-		checkMark($ch, $msg, " [$err]", $desc);
+		$ch = !empty($vr) && ($vr == HTACCESS_VERSION);
+		if (!$ch && !$Apache) $ch = -1;
+		$err = gettext("wrong version");
+		$desc = gettext("You need to upload the copy of the .htaccess file that was included with the zenphoto distribution.");
 	}
-	
+
+	if ($ch) {
+		$i = strpos($htu, 'REWRITEENGINE');
+		if ($i === false) {
+			$rw = '';
+		} else {
+			$j = strpos($htu, "\n", $i+13);
+			$rw = trim(substr($htu, $i+13, $j-$i-13));
+		}
+		$mod = '';
+		if (!empty($rw)) {
+			$msg .= ' '.sprintf(gettext("(<em>RewriteEngine</em> is <strong>%s</strong>)"), $rw);
+			$mod = "&mod_rewrite=$rw";
+		}
+	}
+	if ($Apache || $ch != -2) {
+		checkMark($ch, $msg, " [$err]", $desc);			
+	}
 	$base = true;
 	$f = '';
 	if ($rw == 'ON') {
