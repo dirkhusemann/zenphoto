@@ -127,11 +127,11 @@ function printImageMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL, $
 			$dataid = $id.'_data';
 			if (is_null($text)) $text = gettext('Google Map');
 			echo "<a href=\"javascript: vtoggle('$dataid');\" title=\"".gettext('Display or hide the Google Map.')."\">";
-			echo "<strong>$text</strong>";
+			echo $text;
 			echo "</a>\n";
-			echo "  <div id=\"$dataid\"" . ($toggle ? " style=\"visibility: hidden;position:absolute;left: -3000px;top: -3000px\"" : '') . ">\n";
+			echo "  <div id=\"$dataid\"" . ($toggle ? " style=\"color:black; visibility: hidden;position:absolute;left: -3000px;top: -3000px\"" : '') . ">\n";
 			$_zp_phoogle->showMap(!$toggle);
-						echo "  </div>\n</div>\n\n";
+			echo "  </div>\n</div>\n\n";
 
 		}
 	}
@@ -177,8 +177,8 @@ function printAlbumMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL, $
 				$long = $exif['EXIFGPSLongitude'];
 				if($exif['EXIFGPSLatitudeRef'] == 'S'){  $lat = '-' . $lat; }
 				if($exif['EXIFGPSLongitudeRef'] == 'W'){  $long = '-' . $long; }
-				$infoHTML = '<a href="' . getImageLinkURL() . '"><img src="' .
-					getImageThumb() . '" alt="' . getImageDesc() . '" ' .
+				$infoHTML = '<a href="' . pathurlencode(getImageLinkURL()) . '"><img src="' .
+					pathurlencode(getImageThumb()) . '" alt="' . getImageDesc() . '" ' .
 					'style=" margin-left: 30%; margin-right: 10%; border: 0px; "/></a>' .
 					'<p>' . getImageDesc() . '</p>';
 				addPoint($lat, $long, js_encode($infoHTML));
@@ -187,11 +187,12 @@ function printAlbumMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL, $
 		resetCurrentAlbum(); // clear out any 'damage'
 		
 		if($foundLocation){
-			echo "<a href=\"javascript: toggle('$dataid');\" title=\"".gettext('Display or hide the Google Map.')."\">";
+			$dataid = $id.'_data';
 			if (is_null($text)) $text = gettext('Google Map');
+			echo "<a href=\"javascript: vtoggle('$dataid');\" title=\"".gettext('Display or hide the Google Map.')."\">";
 			echo $text;
 			echo "</a>\n";
-			echo "  <div id=\"$dataid\"" . ($toggle ? " style=\"display: none;\"" : '') . ">\n";
+			echo "  <div id=\"$dataid\"" . ($toggle ? " style=\"color:black; visibility: hidden;position:absolute;left: -3000px;top: -3000px\"" : '') . ">\n";
 			$_zp_phoogle->showMap(!$toggle);
 			echo "  </div>\n\n";
 		}

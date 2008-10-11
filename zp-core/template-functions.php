@@ -3863,15 +3863,15 @@ function printPasswordForm($hint, $showProtected=true, $showuser=NULL) {
 			$action = "";
 			break;
 		case 'album.php':
-			$action = '&album='.urlencode($_zp_current_album->name);
+			$action = '&amp;album='.urlencode($_zp_current_album->name);
 			break;
 		case 'image.php':
-			$action = '&album='.urlencode($_zp_current_album->name).'&image='.urlencode($_zp_current_image->filename);
+			$action = '&amp;album='.urlencode($_zp_current_album->name).'&amp;image='.urlencode($_zp_current_image->filename);
 		default:
 		if (in_context(ZP_SEARCH)) {
-			$action = "&p=search" . $_zp_current_search->getSearchParams();
+			$action = "&amp;p=search" . $_zp_current_search->getSearchParams();
 		} else {
-			$action = '&p='.substr($_zp_gallery_page, 0, -4);
+			$action = '&amp;p='.substr($_zp_gallery_page, 0, -4);
 		}
 	}
 	if ($showProtected && !$_zp_login_error) {

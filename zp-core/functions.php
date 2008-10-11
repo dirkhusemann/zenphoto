@@ -138,8 +138,9 @@ function html_encode($this_string, $striptags=true) {
  * @return string
  */
 function js_encode($this_string) {
+	$this_string = preg_replace("/\r?\n/", "\\n", $this_string);
 	$this_string = utf8::encode_javascript($this_string);
-	return preg_replace("/\r?\n/", "\\n", addslashes($this_string));
+	return $this_string;
 }
 
 /**
