@@ -23,13 +23,13 @@ if(isset($_GET['albumnr'])) {
 	$albumnr = NULL;
 }
 if(isset($_GET['albumname'])) {
-	$albumname = sanitize(urldecode($_GET['albumname']), true);
+	$albumname = sanitize($_GET['albumname']);
 } else {
 	$albumname = NULL;
 }
 
 if(isset($_GET['folder'])) {
-	$albumfolder = sanitize(urldecode($_GET['folder']), true);
+	$albumfolder = sanitize($_GET['folder']);
 } else {
 	$albumfolder = NULL;
 }

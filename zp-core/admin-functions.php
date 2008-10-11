@@ -717,7 +717,7 @@ function postIndexEncode($str) {
  */
 function postIndexDecode($str) {
 	$str = str_replace('%2E', '.', strip($str));
-	return urldecode($str);
+	return $str;
 }
 
 
@@ -1116,7 +1116,7 @@ function printAlbumEditForm($index, $album) {
 		echo "\n<td align=\"right\" valign=\"top\" width=\"150\">".gettext("Dynamic album search:")."</td>";
 		echo "\n<td>";
 		echo "\n<table class=\"noinput\">";
-		echo "\n<tr><td >" .	urldecode($album->getSearchParams()) . "</td></tr>";
+		echo "\n<tr><td >" .	$album->getSearchParams() . "</td></tr>";
 		echo "\n</table>";
 		echo "\n</td>";
 		echo "\n</tr>";

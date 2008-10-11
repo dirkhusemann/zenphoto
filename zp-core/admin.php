@@ -25,7 +25,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	//check for security incursions
 	if (isset($_GET['album'])) {
 		if (!($_zp_loggedin & ADMIN_RIGHTS)) {
-			if (!isMyAlbum(urldecode(strip($_GET['album'])), $_zp_loggedin)) {
+			if (!isMyAlbum(sanitize($_GET['album']), $_zp_loggedin)) {
 				unset($_GET['album']);
 				unset($_GET['page']);
 				$page = '';
@@ -68,7 +68,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 		/** Publish album  ************************************************************/
 		/******************************************************************************/
 		if ($action == "publish") {
-			$folder = urldecode(sanitize($_GET['album']));
+			$folder = sanitize($_GET['album']);
 			$album = new Album($gallery, $folder);
 			$album->setShow($_GET['value']);
 			$album->save();
@@ -119,7 +119,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			/** SAVE A SINGLE ALBUM *******************************************************/
 			if ($_POST['album']) {
 
-				$folder = urldecode(strip($_POST['album']));
+				$folder = sanitize($_POST['album']);
 				$album = new Album($gallery, $folder);
 				$notify = '';
 				if (isset($_POST['savealbuminfo'])) {
@@ -241,7 +241,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				/** SAVE MULTIPLE ALBUMS ******************************************************/
 			} else if ($_POST['totalalbums']) {
 				for ($i = 1; $i <= $_POST['totalalbums']; $i++) {
-					$folder = urldecode(strip($_POST["$i-folder"]));
+					$folder = sanitize($_POST["$i-folder"]);
 					$album = new Album($gallery, $folder);
 					$rslt = processAlbumEdit($i, $album);
 					if (!empty($rslt)) { $notify = $rslt; }
@@ -250,7 +250,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			// Redirect to the same album we saved.
 			$qs_albumsuffix = "&massedit";
 			if ($_GET['album']) {
-				$folder = urldecode(strip($_GET['album']));
+				$folder = sanitize($_GET['album']);
 				$qs_albumsuffix = '&album='.urlencode($folder);
 			}
 			if (isset($_POST['subpage'])) {
@@ -271,7 +271,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 		} else if ($action == "deletealbum") {
 			$albumdir = "";
 			if ($_GET['album']) {
-				$folder = urldecode(strip($_GET['album']));
+				$folder = sanitize($_GET['album']);
 				$album = new Album($gallery, $folder);
 				if ($album->deleteAlbum()) {
 					$nd = 3;

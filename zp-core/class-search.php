@@ -83,7 +83,7 @@ class SearchEngine
 			$this->words = '';
 		}
 		if (isset($_REQUEST['date'])) {
-			$this->dates = sanitize(urldecode($_REQUEST['date']), 3);
+			$this->dates = sanitize($_REQUEST['date'], 3);
 		} else {
 			$this->dates = '';
 		}
@@ -151,7 +151,7 @@ class SearchEngine
 		foreach ($params as $param) {
 			$e = strpos($param, '=');
 			$p = substr($param, 0, $e);
-			$v = urldecode(substr($param, $e + 1));
+			$v = substr($param, $e + 1);
 			switch($p) {
 				case 'words':
 					$this->words = $v;

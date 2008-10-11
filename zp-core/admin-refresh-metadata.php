@@ -88,7 +88,7 @@ if (isset($_GET['refresh']) && db_connect()) {
 	if ($type !== 'prune&') {
 		if (isset($_REQUEST['album'])) {
 			$alb = $_REQUEST['album'];
-			$folder = urldecode(strip($alb));
+			$folder = sanitize(strip($alb));
 			if (!empty($folder)) {
 				$sql = "SELECT `id` FROM ". prefix('albums') . " WHERE `folder`=\"".mysql_real_escape_string($folder)."\";";
 				$row = query_single_row($sql);

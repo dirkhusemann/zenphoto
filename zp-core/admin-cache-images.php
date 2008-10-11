@@ -37,7 +37,7 @@ if (!($_zp_loggedin & ADMIN_RIGHTS)) {
 }
 	if (isset($_REQUEST['album'])) {
 		$alb = $_REQUEST['album'];
-		$folder = urldecode(strip($alb));
+		$folder = sanitize($alb);
 		$object = $folder;
 		$tab = 'edit';
 	} else {

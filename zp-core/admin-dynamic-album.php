@@ -80,7 +80,7 @@ genAlbumUploadList($albumlist);
 $params = trim(zp_getCookie('zenphoto_image_search_params'));
 $search->setSearchParams($params);
 $fields = $search->fields;
-$words = urldecode(trim($search->words));
+$words = trim($search->words);
 $images = $search->getImages(0);
 foreach ($images as $image) {
 	$folder = $image['folder'];

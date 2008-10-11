@@ -20,7 +20,7 @@ $_GET['page'] = 'themes';
 if (isset($_GET['action'])) {
 	if ($_GET['action'] == 'settheme') {
 			if (isset($_GET['theme'])) {
-				$alb = urldecode($_GET['themealbum']);
+				$alb = sanitize($_GET['themealbum']);
 				$newtheme = strip($_GET['theme']);
 				if (empty($alb)) {
 					$gallery->setCurrentTheme($newtheme);
@@ -64,7 +64,7 @@ echo "\n" . '<div id="content">';
 		}
 	}
 	if (!empty($_REQUEST['themealbum'])) {
-		$alb = urldecode($_REQUEST['themealbum']);
+		$alb = sanitize($_REQUEST['themealbum']);
 		$album = new Album($gallery, $alb);
 		$albumtitle = $album->getTitle();
 		$themename = $album->getAlbumTheme();
@@ -75,7 +75,7 @@ echo "\n" . '<div id="content">';
 		if (empty($alb)) {
 			$themename = $gallery->getCurrentTheme();
 		} else {
-			$alb = urldecode($alb);
+			$alb = sanitize($alb);
 			$album = new Album($gallery, $alb);
 			$albumtitle = $album->getTitle();
 			$themename = $album->getAlbumTheme();
