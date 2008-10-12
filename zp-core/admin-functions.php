@@ -684,7 +684,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 					generateRadiobuttonsFromArray($v,$row['buttons'],$key);
 					echo "</td>\n";
 					break;
-				case 5: // seletor
+				case 5: // selector
 					echo '<td width="200">' . "\n";
 					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'selector-'.$key.'" value=0 />' . "\n";
 					echo '<select id="'.$option.'" name="'.$key.'">'."\n";
@@ -1319,8 +1319,12 @@ function printAlbumEditRow($album) {
 	echo "\n<tr>";
 	echo '<td class="handle"><img src="images/drag_handle.png" style="border: 0px;" alt="Drag the album '."'".fileSystemToUTF8($album->name)."'".'" /></td>';
 	echo '<td style="text-align: left;" width="80">';
+	$thumb = $album->getAlbumThumb();
+	if (strpos($thumb, '_%7B') !== false) { // it is the default image
+		$thumb = 'images/imageDefault.png';
+	}
 	echo '<a href="?page=edit&album=' . urlencode($album->name) .'" title="'.sprintf(gettext('Edit this album:%s'), fileSystemToUTF8($album->name)) .
- 			'"><img height="40" width="40" src="' . $album->getAlbumThumb() . '" /></a>';
+ 			'"><img height="40" width="40" src="' . $thumb . '" /></a>';
 	echo "</td>\n";
 	echo '<td  style="text-align: left;font-size:110%;" width="300"> <a href="?page=edit&album=' . urlencode($album->name) .
  			'" title="'.sprintf(gettext('Edit this album: %s'), fileSystemToUTF8($album->name)) . '">' . $album->getTitle() . '</a>';
