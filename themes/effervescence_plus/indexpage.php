@@ -94,6 +94,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 					<br />
     			<?php printCodeblock(1); ?>
     			<?php printNewsContent(); ?>
+    			<?php printCodeblock(2); ?>
     			<p><?php printNewsReadMoreLink(); ?></p>
     
     		</div>	
