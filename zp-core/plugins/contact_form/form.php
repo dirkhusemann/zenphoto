@@ -62,6 +62,7 @@
 			<td><label for="phone"><?php printf(gettext("Phone<strong>%s</strong>:"),(checkRequiredField(getOption('contactform_phone')))); ?></label></td>
 			<td><input type="text" id="phone" name="phone" size="50" value="<?php echo $mailcontent['phone']; ?>" /></td>
 		</tr>
+		<?php } ?>
 		<?php if(getOption("contactform_captcha")) { $captchaCode=generateCaptcha($img); ?>
  		<tr>
  			<td><label for="code"><?php echo gettext("Enter Captcha<strong>*</strong>:"); ?>
@@ -71,6 +72,7 @@
  					<input type="hidden" name="code_h" value="<?php echo $captchaCode;?>"/></td>
  		</tr>
 		<?php } ?>
+		<?php if(showOrNotShowField(getOption('contactform_subject'))) { ?>
 		<tr>
 			<td><label for="subject"><?php printf(gettext("Subject<strong>%s</strong>:"),(checkRequiredField(getOption('contactform_subject')))); ?></label></td>
 			<td><input type="text" id="subject" name="subject" size="50" value="<?php echo $mailcontent['subject']; ?>" /></td>
