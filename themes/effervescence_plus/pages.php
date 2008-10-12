@@ -52,10 +52,11 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 			<div id="content-left">
 <h2><?php printPageTitle(); ?></h2>
 <div id="pagetext">
-<?php 
-printPageContent(); 
-printCodeblock(1); 
-?>
+<br/>
+<?php printCodeblock(1); ?>
+<?php printPageContent(); ?> 
+<?php printCodeblock(2); ?>
+
 </div>
 
 <?php 

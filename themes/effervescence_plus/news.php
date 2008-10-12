@@ -79,8 +79,9 @@ if(is_NewsArticle()) {
 			printNewsCategories(", ",gettext("Categories: "),"newscategories"); 
 		}
 		?>
-
-  <?php printNewsContent(); ?>
+	<br />
+	<?php printCodeblock(1); ?>
+	<?php printNewsContent(); ?>
   </div>  
 <?php 
 // COMMENTS TEST
@@ -155,7 +156,7 @@ if (getOption('zenpage_comments_allowed')) { ?>
 </div><?php } // comments allowed - end
 } else {
 // news article loop
-  while (next_news()): ;?> 
+  while (next_news()) {?> 
  <div class="newsarticle"> 
     <h3><?php printNewsTitleLink(); ?><?php echo " <span class='newstype'>[".getNewsType()."]</span>"; ?></h3>
         <div class="newsarticlecredit"><span class="newsarticlecredit-left"><?php printNewsDate();?> | <?php echo gettext("Comments:"); ?> <?php echo getCommentCount(); ?> | </span>
@@ -167,16 +168,16 @@ if(is_GalleryNewsType()) {
 }
 ?>
 </div>
+<br />
+    <?php printCodeblock(1); ?>
     <?php printNewsContent(); ?>
     <p><?php printNewsReadMoreLink(); ?></p>
-    <?php printCodeblock(1); ?>
     
     </div>	
 <?php
-  endwhile; 
+  } 
   printNewsPageListWithNav(gettext('next &raquo;'), gettext('&laquo; prev'));
 } ?> 
-
 
 			</div><!-- content left-->
 			<div id="sidebar">

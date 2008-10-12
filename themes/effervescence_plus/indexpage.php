@@ -91,9 +91,10 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 						}
 						?>
 					</div> <!-- newsarticlecredit -->
+					<br />
+    			<?php printCodeblock(1); ?>
     			<?php printNewsContent(); ?>
     			<p><?php printNewsReadMoreLink(); ?></p>
-    			<?php printCodeblock(1); ?>
     
     		</div>	
 			<?php
