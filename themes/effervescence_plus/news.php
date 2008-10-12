@@ -79,7 +79,6 @@ if(is_NewsArticle()) {
 			printNewsCategories(", ",gettext("Categories: "),"newscategories"); 
 		}
 		?>
-	<br />
 	<?php printCodeblock(1); ?>
 	<?php printNewsContent(); ?>
    <?php printCodeblock(2); ?>
@@ -169,7 +168,6 @@ if(is_GalleryNewsType()) {
 }
 ?>
 </div>
-<br />
     <?php printCodeblock(1); ?>
     <?php printNewsContent(); ?>
     <?php printCodeblock(2); ?>

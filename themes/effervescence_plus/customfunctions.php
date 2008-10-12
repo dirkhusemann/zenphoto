@@ -175,4 +175,14 @@ function annotateImage() {
 	return  sprintf(gettext('View the image: %s'),GetBareImageTitle()).$tagit;
 }
 
+function zenpageAlbumImage($albumname) {
+echo '<br />';
+$album = new Album($_zp_gallery, $albumname);
+makeImageCurrent($album->getAlbumThumbImage());
+rem_context(ZP_IMAGE);
+echo '<a href="'.htmlspecialchars(getAlbumLinkURL($album)).'"   title="'.sprintf(gettext('View the %s allbum'), $albumname).'">';
+add_context(ZP_IMAGE);
+printCustomSizedImage(sprintf(gettext('View the photo album'), $albumname), floor(getOption('image_size') * 0.5));
+echo '</a>';
+}
 ?>
