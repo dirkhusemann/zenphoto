@@ -11,13 +11,13 @@
  * The contact form itself is a separate file and located within /contact_form/form.php so that it can be style as needed.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.1.1
+ * @version 1.1.2
  * @package plugins
  */
 
 $plugin_description = gettext("Prints a e-mail contact form that uses Zenphotos internal validation functions for e-mail and URL. Name, e-mail adress, subject and message (and if enabled Captcha) are required fields. You need to enter a custom mail adress that should be use for the messages. Supports Zenphoto's captcha and confirmation before the message is sent. No other spam filter support, since mail providers have this anyway.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.1.1';
+$plugin_version = '1.1.2';
 $plugin_URL = "";
 $option_interface = new contactformOptions();
 
@@ -44,7 +44,10 @@ class contactformOptions {
 		setOptionDefault('contactform_captcha', 0);
 		setOptionDefault('contactform_subject', "required");
 		setOptionDefault('contactform_message', "required");
-		setOptionDefault('contactform_mailaddress', "");
+		$admin = array_shift(getAdministrators());
+		$adminname = $admin['user'];
+		$adminemail = $admin['email'];
+		setOptionDefault('contactform_mailaddress', $adminemail);
 	}
 
 
@@ -89,25 +92,40 @@ class contactformOptions {
 
 
 /**
+ * Retrieves the post field if it exists
+ *
+ * @param string $field
+ * @param int $level
+ * @return string
+ */
+function getField($field, $level=3) {
+	if (isset($_POST[$field])) {
+		return sanitize($_POST[$field], $level);
+	} else {
+		return '';
+	}
+}
+/**
  * Prints the mail contact form, handles checks and the mail sending. It uses Zenphoto's check for valid e-mail adress and website url and also supports Captcha.
  * The contact form itself is a separate file and is located within the /contact_form/form.php so that it can be style as needed.
  *
  */
 function printContactForm() {
+	$error = array();
 	if(isset($_POST['sendmail'])) {
 		$mailcontent = array();
-		$mailcontent['title'] = sanitize($_POST['title']);
-		$mailcontent['name'] = sanitize($_POST['name']);
-		$mailcontent['company'] = sanitize($_POST['company']);
-		$mailcontent['street'] = sanitize($_POST['street']);
-		$mailcontent['city'] = sanitize($_POST['city']);
-		$mailcontent['country'] = sanitize($_POST['country']);
-		$mailcontent['email'] = sanitize($_POST['email']);
-		$mailcontent['website'] = sanitize($_POST['website']);
-		$mailcontent['phone'] = sanitize($_POST['phone']);
-		$mailcontent['subject'] = sanitize($_POST['subject']);
-		$mailcontent['message'] = sanitize($_POST['message'],1);
-			
+		$mailcontent['title'] = getField('title');
+		$mailcontent['name'] = getField('name');
+		$mailcontent['company'] = sanitize('company');
+		$mailcontent['street'] = getField('street');
+		$mailcontent['city'] = getField('city');
+		$mailcontent['country'] = getField('country');
+		$mailcontent['email'] = getField('email');
+		$mailcontent['website'] = getField('website');
+		$mailcontent['phone'] = getField('phone');
+		$mailcontent['subject'] = getField('subject');
+		$mailcontent['message'] = getField('message',1);
+		
 		// if you want other required fiels or less add/modify their checks here
 		if (getOption('contactform_title') == "required" && empty($mailcontent['title'])) { $error[1] = gettext("a <strong>title</strong>"); }
 		if (getOption('contactform_name') == "required" && empty($mailcontent['name'])) { $error[2] = gettext("a <strong>name</strong>"); }
@@ -159,7 +177,9 @@ function printContactForm() {
 			}
 			echo gettext(". Thanks.</p>");
 		} else {
-			$headers = "From: ".$mailcontent['email']."\n";
+			$headers  = 'MIME-Version: 1.0' . "\r\n";
+			$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+			$headers .= "From: ".$mailcontent['email']."\n";
 			$headers .= "Reply-To: ".$mailcontent['email']."\n";
 			$headers .= "X-Mailer: PHP/" . phpversion() . "\n";
 			$headers .= "Cc: ".$mailcontent['email']."\n";
@@ -176,44 +196,48 @@ function printContactForm() {
 			if(!empty($mailcontent['website'])) { $message .= $mailcontent['website']."\n"; }
 			echo getOption("contactform_confirmtext");
 			?>
-			<div>
-			<form id="confirm" action="#" method="post" accept-charset="UTF-8" style="float:left">
-			<input type="hidden" id="confirm" name="confirm" value="confirm" /> 
-			<input type="submit" value="<?php echo gettext("Confirm"); ?>" />
-			</form>
-			<form id="discard" action="#" method="post" accept-charset="UTF-8">
-			<input type="hidden" id="discard" name="discard" value="discard" /> 
-			<input type="submit" value="<?php echo gettext("Discard"); ?>" />
-			</form>
-			</div>
+<div>
+	<form id="confirm" action="#" method="post" accept-charset="UTF-8" style="float: left">
+		<input type="hidden" id="confirm" name="confirm" value="confirm" />
+		<input type="hidden" id="subject" name="subject"	value="<?php echo $subject; ?>" />
+		<input type="hidden" id="message"	name="message" value="<?php echo $message; ?>" />
+		<input type="hidden" id="headers" name="headers" value="<?php echo $headers; ?>" />
+		<input type="submit" value="<?php echo gettext("Confirm"); ?>" />
+	</form>
+	<form id="discard" action="#" method="post" accept-charset="UTF-8">
+		<input type="hidden" id="discard" name="discard" value="discard" />
+		<input type="submit" value="<?php echo gettext("Discard"); ?>" />
+	</form>
+</div>
 			<?php
-			if(isset($_POST['confirm'])) {
-				UTF8::send_mail(getOption("contactform_mailadress"), $subject, $message, $headers);
-				unset($mailcontent);
-			} 
-		}
-	} else {
-		if(isset($_POST['confirm'])) {
-			echo getOption("contactform_thankstext");
-		} else {
-			$mailcontent = array();
-			$mailcontent['title'] = '';
-			$mailcontent['name'] = '';
-			$mailcontent['company'] = '';
-			$mailcontent['street'] = '';
-			$mailcontent['city'] = '';
-			$mailcontent['country'] = '';
-			$mailcontent['email'] = '';
-			$mailcontent['website'] = '';
-			$mailcontent['phone'] = '';
-			$mailcontent['subject'] = '';
-			$mailcontent['message'] ='';
-			echo getOption("contactform_introtext");
 		}
 	}
-	include(SERVERPATH . "/" . ZENFOLDER . "/plugins/contact_form/form.php");
+	if(isset($_POST['confirm'])) {
+		$subject = sanitize($_POST['subject']);
+		$message = sanitize($_POST['message'],1);
+		$headers = sanitize($_POST['headers']);
+		UTF8::send_mail(getOption("contactform_mailaddress"), $subject, $message, $headers);
+		echo getOption("contactform_thankstext");
+	}
+	if (count($error) <= 0) {
+		$mailcontent = array();
+		$mailcontent['title'] = '';
+		$mailcontent['name'] = '';
+		$mailcontent['company'] = '';
+		$mailcontent['street'] = '';
+		$mailcontent['city'] = '';
+		$mailcontent['country'] = '';
+		$mailcontent['email'] = '';
+		$mailcontent['website'] = '';
+		$mailcontent['phone'] = '';
+		$mailcontent['subject'] = '';
+		$mailcontent['message'] ='';
+	}
+	if (count($error) > 0 || !isset($_POST['sendmail'])) {
+		echo getOption("contactform_introtext");
+		include(SERVERPATH . "/" . ZENFOLDER . "/plugins/contact_form/form.php");
+	}
 }
-
 
 /**
  * Helper function that checks if a field should be shown ("required" or "show") or omitted ("ommitt").
