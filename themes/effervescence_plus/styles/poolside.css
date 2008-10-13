@@ -752,7 +752,7 @@ border-bottom: 1px dotted #fff;
 	top:0;
 	border-left: 1px solid #E6E6DF;
 	border-bottom: 1px solid #E6E6DF;
-	background: #0E1433;
+	background: transparent;
 	width:120px;
 }
 #admin_data{

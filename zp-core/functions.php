@@ -523,7 +523,7 @@ function subalbumSortKey($sorttype) {
  */
 function rewrite_get_album_image($albumvar, $imagevar) {
 	if (getOption('mod_rewrite')) {
-		$uri = sanitize($_SERVER['REQUEST_URI'], 0);
+		$uri = urldecode(sanitize($_SERVER['REQUEST_URI'], 0));
 		$path = substr($uri, strlen(WEBPATH)+1);
 		// Only extract the path when the request doesn't include the running php file (query request).
 		if (strlen($path) > 0 && strpos($_SERVER['REQUEST_URI'], $_SERVER['PHP_SELF']) === false && isset($_GET[$albumvar])) {
