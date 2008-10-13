@@ -3637,14 +3637,14 @@ function getSearchWords() {
  * @return string
  * @since 1.1
  */
-function getSearchDate($format='F Y') {
+function getSearchDate($format='%B %Y') {
 	if (in_context(ZP_SEARCH)) {
 		global $_zp_current_search;
 		$date = $_zp_current_search->getSearchDate();
 		if (empty($date)) { return ""; }
 		if ($date == '0000-00') { return gettext("no date"); };
 		$dt = strtotime($date."-01");
-		return date($format, $dt);
+		return zpFormattedDate($format, $dt);
 	}
 	return false;
 }
