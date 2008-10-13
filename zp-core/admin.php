@@ -647,7 +647,6 @@ if ($allimagecount) {
 					src="<?php echo $image->getThumb();?>"
 					alt="<?php echo $image->filename;?>"
 					onclick="toggleBigImage('thumb-<?php echo $currentimage; ?>', '<?php echo $image->getSizedImage(getOption('image_size')); ?>');" />
-<a href="admin-thumbcrop.php?album=<?php echo $album->name; ?>&image=<?php echo $image->filename; ?>"><?php echo gettext("Custom Thumb Crop"); ?></a>
 				<p><strong><?php echo $image->filename; ?></strong></p>
 				<p><label for="<?php echo $currentimage; ?>-thumb"><input
 					type="radio" id="<?php echo $currentimage; ?>-thumb" name="thumb"
