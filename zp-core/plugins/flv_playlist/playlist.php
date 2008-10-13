@@ -11,7 +11,7 @@ require_once("../../template-functions.php");
 $albumid = sanitize_numeric($_GET["albumid"]);
 $albumresult = query_single_row("SELECT folder from ". prefix('albums')." WHERE id = ".$albumid);
 $album = new Album(new Gallery(), $albumresult['folder']);
-$albumfolder = getAlbumFolder('').$album->name;
+$albumfolder = $album->localpath;
 $playlist = $album->getImages();
 
 echo "<playlist version='1' xmlns='http://xspf.org/ns/0/'>\n";
@@ -24,7 +24,7 @@ foreach($playlist as $item) {
 	$image = new Image($album, $item);
 	$ext = strtolower(strrchr($item, "."));
 	if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
-		$videoThumb = checkObjectsThumb(getAlbumFolder().$album->name, $item);
+		$videoThumb = checkObjectsThumb($album->localpath, $item);
 		if (!empty($videoThumb)) {
 			$videoThumb = '..'.$albumfolder.'/'.$videoThumb;
 		}

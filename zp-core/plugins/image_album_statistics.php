@@ -145,7 +145,7 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
 		}
 		if($showdate) {
 			if($option === "latestupdated") {
-				$filechangedate = filectime(getAlbumFolder().$tempalbum->name);
+				$filechangedate = filectime(getAlbumFolder().UTF8ToFilesystem($tempalbum->name));
 				$latestimage = query_single_row("SELECT mtime FROM " . prefix('images'). " WHERE albumid = ".$tempalbum->getAlbumID() . " AND `show` = 1 ORDER BY id DESC");
 				$lastuploaded = query("SELECT COUNT(*) FROM ".prefix('images')." WHERE albumid = ".$tempalbum->getAlbumID() . " AND mtime = ". $latestimage['mtime']);
 				$row = mysql_fetch_row($lastuploaded);

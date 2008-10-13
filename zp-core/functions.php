@@ -404,7 +404,7 @@ function checkObjectsThumb($album, $video){
 	$video = is_objectsThumb($album, $video);
 	if($video) {
 		foreach($_zp_supported_images as $ext) {
-			if(file_exists($album."/".$video.'.'.$ext)) {
+			if(file_exists(UTF8ToFilesystem($album."/".$video.'.'.$ext))) {
 				return $video.'.'.$ext;
 			}
 		}
@@ -424,7 +424,7 @@ function checkVideoOriginal($album, $video){
 	if ($video) {
 		$extTab = array(".ogg",".OGG",".avi",".AVI",".wmv",".WMV");
 		foreach($extTab as $ext) {
-			if(file_exists($album."/".$video.$ext)) {
+			if(file_exists(UTF8ToFilesystem($album."/".$video.$ext))) {
 				return $video.$ext;
 			}
 		}
@@ -553,7 +553,7 @@ function rewrite_get_album_image($albumvar, $imagevar) {
 			} else if ($slashpos !== false) {
 				$ralbum = substr($path, 0, $slashpos);
 				$rimage = substr($path, $slashpos+1);
-				if ((is_dir(getAlbumFolder() . $ralbum . '/' . $rimage)) || hasDyanmicAlbumSuffix($rimage)) {
+				if ((is_dir(getAlbumFolder() . UTF8ToFilesystem($ralbum . '/' . $rimage)) || hasDyanmicAlbumSuffix($rimage))) {
 					$ralbum = $ralbum . '/' . $rimage;
 					$rimage = null;
 				}
@@ -598,9 +598,10 @@ function getAlbumArray($albumstring, $includepaths=false) {
  * @param string $album album folder
  * @param string $image image file name
  * @param array $args cropping arguments
+ * $param bool $utf8 set to false if passing Latin1 strings
  * @return string
  */
-function getImageCacheFilename($album, $image, $args) {
+function getImageCacheFilename($album, $image, $args, $utf8=true) {
 	// Set default variable values.
 	$postfix = getImageCachePostfix($args);
 	if (empty($album)) {
@@ -613,7 +614,11 @@ function getImageCacheFilename($album, $image, $args) {
 			$albumsep = '/';
 		}
 	}
-	return '/' . $album . $albumsep . $image . $postfix . '.jpg';
+	if ($utf8) {
+		return UTF8ToFilesystem('/' . $album . $albumsep . $image . $postfix . '.jpg');
+	} else {
+		return '/' . $album . $albumsep . $image . $postfix . '.jpg';
+	}
 }
 
 /**
@@ -989,6 +994,7 @@ function size_readable($size, $unit = null, $retstring = null)
  * @return string
  */
 function parseThemeDef($file) {
+	$file = UTF8ToFilesystem($file);
 	$themeinfo = array();
 	if (is_readable($file) && $fp = @fopen($file, "r")) {
 		while($line = fgets($fp)) {
@@ -1266,6 +1272,7 @@ function createAlbumZip($album){
 		pageError();
 		exit();
 	}
+	$album = UTF8ToFilesystem($album);
 	$rp = realpath(getAlbumFolder() . $album) . '/';
 	$p = $album . '/';
 	include_once('archive.php');
@@ -1355,9 +1362,9 @@ function getPlugin($plugin, $inTheme) {
 	$_zp_themeroot = WEBPATH . "/themes/$inTheme";
 	if ($inTheme) {
 		$pluginFile = $_zp_themeroot . '/' . $plugin;
-		$pluginFile = SERVERPATH . '/' . str_replace(WEBPATH, '', $pluginFile);
+		$pluginFile = SERVERPATH . '/' . str_replace(WEBPATH, '', UTF8ToFilesystem($pluginFile));
 	} else {
-		$pluginFile = SERVERPATH . '/' . ZENFOLDER . '/plugins/' . $plugin;
+		$pluginFile = SERVERPATH . '/' . ZENFOLDER . '/plugins/' . UTF8ToFilesystem($plugin);
 	}
 	if (file_exists($pluginFile)) {
 		return $pluginFile;
@@ -1378,6 +1385,7 @@ function getEnabledPlugins() {
 	$filelist = safe_glob('*'.'php');
 	chdir($curdir);
 	foreach ($filelist as $extension) {
+		$extension = FilesystemToUTF8($extension);
 		$opt = 'zp_plugin_'.substr($extension, 0, strlen($extension)-4);
 		if (getOption($opt)) {
 			$pluginlist[] = $extension;
@@ -2568,7 +2576,7 @@ function generateListFromFiles($currentValue, $root, $suffix, $descending=false)
 	$list = array();
 	foreach($filelist as $file) {
 		$file = str_replace($suffix, '', $file);
-		$list[] = fileSystemToUTF8($file);
+		$list[] = FilesystemToUTF8($file);
 	}
 	generateListFromArray(array($currentValue), $list, $descending);
 	chdir($curdir);

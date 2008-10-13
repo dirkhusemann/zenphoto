@@ -127,6 +127,7 @@ class Gallery {
 		$albums = array();
 
 		while ($dirname = readdir($dir)) {
+			$dirname = FilesystemToUTF8($dirname);
 			if ((is_dir($albumdir.$dirname) && (substr($dirname, 0, 1) != '.')) ||
 			hasDyanmicAlbumSuffix($dirname)) {
 				$albums[] = $dirname;
@@ -190,12 +191,13 @@ class Gallery {
 				while (false !== ($dir = readdir($dp))) {
 					if (substr($dir, 0, 1) != "." && is_dir("$themedir/$dir")) {
 						$themefile = $themedir . "/$dir/theme_description.php";
+						$dir8 = FilesystemToUTF8($dir);
 						if (file_exists($themefile)) {
 							$theme_description = array();
 							require($themefile);
-							$themes[$dir] = sanitize($theme_description, 1);
+							$themes[$dir8] = sanitize($theme_description, 1);
 						} else if (file_exists($themedir . "/$dir/theme.txt")) {
-							$themes[$dir] = parseThemeDef($themedir . "/$dir/theme.txt");
+							$themes[$dir8] = parseThemeDef($themedir . "/$dir/theme.txt");
 						}
 					}
 				}
@@ -307,7 +309,7 @@ class Gallery {
 			// Load the albums from disk
 			$albumfolder = getAlbumFolder();
 			while($row = mysql_fetch_assoc($result)) {
-				if (!file_exists($albumfolder.$row['folder']) || in_array($row['folder'], $live)) {
+				if (!file_exists($albumfolder.UTF8ToFilesystem($row['folder'])) || in_array($row['folder'], $live)) {
 					$dead[] = $row['id'];
 					if ($row['album_theme'] !== '') {  // orphaned album theme options table
 						$deadalbumthemes[$row['id']] = $row['folder'];
@@ -351,8 +353,8 @@ class Gallery {
 				$albumfolder = getAlbumFolder();
 				$albumids = query_full_array("SELECT `id`, `mtime`, `folder` FROM " . prefix('albums') . " WHERE `dynamic`='1'");
 				foreach ($albumids as $album) {
-					if (($mtime=filemtime($albumfolder.$album['folder'])) > $album['mtime']) {  // refresh
-						$data = file_get_contents($albumfolder.$album['folder']);
+					if (($mtime=filemtime($albumfolder.UTF8ToFilesystem($album['folder']))) > $album['mtime']) {  // refresh
+						$data = file_get_contents($albumfolder.UTF8ToFilesystem($album['folder']));
 						while (!empty($data)) {
 							$data1 = trim(substr($data, 0, $i = strpos($data, "\n")));
 							if ($i === false) {
@@ -430,7 +432,7 @@ class Gallery {
 			foreach($images as $image) {
 				$sql = 'SELECT `folder` FROM ' . prefix('albums') . ' WHERE `id`="' . $image['albumid'] . '";';
 				$row = query_single_row($sql);
-				$imageName = getAlbumFolder() . $row['folder'] . '/' . $image['filename'];
+				$imageName = UTF8ToFilesystem(getAlbumFolder() . $row['folder'] . '/' . $image['filename']);
 				if (file_exists($imageName)) {
 
 					if ($image['mtime'] != filemtime($imageName)) { // file has changed since we last saw it
@@ -443,7 +445,6 @@ class Gallery {
 						if (empty($defaultTitle )) {
 							$defaultTitle = $image['filename'];
 						}
-						$defaultTitle = fileSystemToUTF8($defaultTitle);
 						if ($defaultTitle == $image['title']) { /* default title */
 							if (isset($metadata['title'])) {
 								$set = ',`title`="' . mysql_real_escape_string($metadata['title']) . '"';

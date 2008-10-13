@@ -689,7 +689,7 @@ class SearchEngine
 			foreach ($search_results as $row) {
 				$albumname = $row['folder'];
 				if ($albumname != $this->dynalbumname) {
-					if (file_exists($albumfolder . $albumname)) {
+					if (file_exists($albumfolder . UTF8ToFilesystem($albumname))) {
 						if (checkAlbumPassword($albumname, $hint)) {
 							$albums[] = $row['folder'];
 						}
@@ -809,7 +809,7 @@ class SearchEngine
 				$query = "SELECT id, title, folder,`show` FROM ".prefix('albums')." WHERE id = $albumid";
 				$row2 = query_single_row($query); // id is unique
 				$albumname = $row2['folder'];
-				if (file_exists($albumfolder . $albumname . '/' . $row['filename'])) {
+				if (file_exists($albumfolder . UTF8ToFilesystem($albumname) . '/' . UTF8ToFilesystem($row['filename']))) {
 					if (checkAlbumPassword($albumname, $hint)) {
 						$images[] = array('filename' => $row['filename'], 'folder' => $albumname);
 					}

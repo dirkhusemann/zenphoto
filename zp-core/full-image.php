@@ -20,7 +20,7 @@ if (checkforPassword(true)) {
 	exit();
 }
 require_once(dirname(__FILE__).'/functions-image.php');
-$image_path = getAlbumFolder() . $_zp_current_album->name . "/" . $_zp_current_image->filename;
+$image_path = $_zp_current_image->localpath;
 $suffix = strtolower(substr(strrchr($image_path, "."), 1));
 $cache_file = $_zp_current_album->name . "/" . substr($_zp_current_image->filename, 0, -strlen($suffix)-1) . '_FULL.' . $suffix;
 switch ($suffix) {
@@ -40,7 +40,7 @@ switch ($suffix) {
 }
 
 if (getOption('cache_full_image')) {
-	$cache_path = SERVERCACHE . '/' . $cache_file;
+	$cache_path = SERVERCACHE . '/' . UTF8ToFilesystem($cache_file);
 } else {
 	$cache_path = NULL;
 }

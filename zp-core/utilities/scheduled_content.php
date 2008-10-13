@@ -234,7 +234,7 @@ if (db_connect()) {
 	$result = query_full_array($sql);
 	if (is_array($result)) {
 		foreach ($result as $row) {
-			$publish_albums_list[fileSystemToUTF8($row['folder'])] = $row['id'];
+			$publish_albums_list[$row['folder']] = $row['id'];
 		}
 	}
 	$sql = 'SELECT `filename`, '.prefix('images').'.id as id, folder FROM '.prefix('images').','.prefix('albums').' WHERE '.prefix('images').'.show="0" AND '.
@@ -242,7 +242,7 @@ if (db_connect()) {
 	$result = query_full_array($sql);
 	if (is_array($result)) {
 		foreach ($result as $row) {
-			$publish_images_list[fileSystemToUTF8($row['folder'])][fileSystemToUTF8($row['filename'])] =$row['id'];
+			$publish_images_list[$row['folder']][$row['filename']] =$row['id'];
 		}
 	}
 	?>

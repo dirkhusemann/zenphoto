@@ -300,7 +300,7 @@ function getGalleryIndexURL($relative=true) {
 	$gallink2 = '';
 	$specialpage = false;
 	if ($relative && $specialpage = getOption('custom_index_page')) {
-		if (file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.$specialpage.'.php')) {
+		if (file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.UTF8ToFilesystem($specialpage).'.php')) {
 			$gallink1 = $specialpage.'/';
 			$gallink2 = 'p='.$specialpage.'&';
 		} else {
@@ -1159,7 +1159,7 @@ function getPasswordProtectImage($extra) {
 	$image = $_zp_themeroot."/images/err-passwordprotected.gif\"";
 	$themedir = SERVERPATH . "/themes/".basename($_zp_themeroot);
 	$imagebase = $themedir."/images/err-passwordprotected.gif";
-	if (file_exists($imagebase)) {
+	if (file_exists(UTF8ToFilesystem($imagebase))) {
 		return "<img src=\"".$image." ".$extra." />";
 	} else {
 		return "<img src=\"". WEBPATH . '/' . ZENFOLDER."/images/err-passwordprotected.gif\" ".
@@ -2386,7 +2386,7 @@ function getProtectedImageURL() {
 	$suffix = strtolower(substr(strrchr($_zp_current_image->filename, "."), 1));
 	$cache_file = $_zp_current_album->name . "/" . substr($_zp_current_image->filename, 0, -strlen($suffix)-1) . '_FULL.' . $suffix;
 	$cache_path = SERVERCACHE . '/' . $cache_file;
-	if (file_exists($cache_path)) {
+	if (file_exists(UTF8ToFilesystem($cache_path))) {
 		return WEBPATH . CACHEFOLDER . pathurlencode($cache_file);
 	} else {
 		$path = $_zp_current_image->getImageLink();
@@ -3180,7 +3180,7 @@ function printTags($option='links',$preText=NULL,$class='taglist',$separator=', 
 			for ($x = 0; $x < $ct; $x++) {
 				if ($x === $ct - 1) { $separator = ""; }
 				if ($option === "links") {
-					$links1 = "<a href=\"".htmlspecialchars(getSearchURL(quoteSearchTag($singletag[$x]), '', SEARCH_TAGS, 0, 0))."\" title=\"".html_encode($singletag[$x])."\" rel=\"nofollow\">";
+					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($singletag[$x], '', SEARCH_TAGS, 0, 0))."\" title=\"".html_encode($singletag[$x])."\" rel=\"nofollow\">";
 					$links2 = "</a>";
 				}
 				echo "\t<li>".$links1.$singletag[$x].$links2.$separator."</li>\n";
@@ -3219,7 +3219,7 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 		$tagcount = array_slice($tagcount, 0, $limit);
 	}
 	echo "<ul ".$class.">\n";
-	while (list($key, $val) = each($tagcount)) {
+	foreach ($tagcount as $key=>$val) {
 		if(!$counter) {
 			$counter = "";
 		} else {
@@ -3241,7 +3241,7 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 			} else {
 				$key = str_replace('"', '', $key);
 				echo "\t<li><a href=\"".
-					htmlspecialchars(getSearchURL(quoteSearchTag($key), '', SEARCH_TAGS, 0, 0))."\"$size rel=\"nofollow\">".
+					htmlspecialchars(getSearchURL($key, '', SEARCH_TAGS, 0, 0))."\"$size rel=\"nofollow\">".
 					$key.$counter."</a></li>\n";
 			}
 		}
@@ -3537,22 +3537,6 @@ function getSearchURL($words, $dates, $fields, $page) {
 		}
 	}
 	return $url;
-}
-
-/**
- * Returns a "quoted" Tag.
- * Places 'peck marks' around a trimmed tag.
- *
- * @param string $tag the Tag to be quoted
- * @return string
- */
-function quoteSearchTag($tag) {
-	$tag = trim($tag);
-	if (urlencode($tag) != $tag) {
-		return '`'.$tag.'`';
-	} else {
-		return $tag;
-	}
 }
 
 /**

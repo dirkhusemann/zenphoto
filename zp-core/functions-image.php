@@ -289,7 +289,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 	}
 	if (is_valid_video($imgfile)) {
 		if (!isset($_GET['vwm'])) {  // choose a watermark for the image
-			$imgfile = SERVERPATH . '/' . THEMEFOLDER . '/' . $theme . '/images/multimediaDefault.png';
+			$imgfile = SERVERPATH . '/' . THEMEFOLDER . '/' . UTF8ToFilesystem($theme) . '/images/multimediaDefault.png';
 			if (!file_exists($imgfile)) {
 				$imgfile = SERVERPATH . "/" . ZENFOLDER . '/images/multimediaDefault.png';
 			}
@@ -421,6 +421,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		}
 
 		// Create the cached file (with lots of compatibility)...
+		mkdir_recursive(dirname($newfile));
 		@touch($newfile);
 		imagejpeg($newim, $newfile, $quality);
 		@chmod($newfile, 0666 & CHMOD_VALUE);

@@ -423,7 +423,7 @@ function printLogoAndLinks() {
 	}
 	echo "<a href=\"".WEBPATH."/index.php";
 	if ($specialpage = getOption('custom_index_page')) {
-		if (file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.$specialpage.'.php')) {
+		if (file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.UTF8ToFilesystem($specialpage).'.php')) {
 			echo '?p='.$specialpage;
 		}
 	}
@@ -1116,7 +1116,7 @@ function printAlbumEditForm($index, $album) {
 		echo "\n<td align=\"right\" valign=\"top\" width=\"150\">".gettext("Dynamic album search:")."</td>";
 		echo "\n<td>";
 		echo "\n<table class=\"noinput\">";
-		echo "\n<tr><td >" .	$album->getSearchParams() . "</td></tr>";
+		echo "\n<tr><td >" . urldecode($album->getSearchParams()) . "</td></tr>";
 		echo "\n</table>";
 		echo "\n</td>";
 		echo "\n</tr>";
@@ -1146,7 +1146,7 @@ function printAlbumEditForm($index, $album) {
 		echo ' value="">'.gettext('randomly selected');
 		echo '</option>';
 	if ($album->isDynamic()) {
-		$params = $album->getSearchParams();
+		$params = urldecode($album->getSearchParams());
 		$search = new SearchEngine();
 		$search->setSearchParams($params);
 		$images = $search->getImages(0);
@@ -1317,17 +1317,17 @@ function printAlbumEditRow($album) {
 	echo "\n<div id=\"id_" . $album->getAlbumID() . '">';
 	echo '<table cellspacing="0" width="100%">';
 	echo "\n<tr>";
-	echo '<td class="handle"><img src="images/drag_handle.png" style="border: 0px;" alt="Drag the album '."'".fileSystemToUTF8($album->name)."'".'" /></td>';
+	echo '<td class="handle"><img src="images/drag_handle.png" style="border: 0px;" alt="Drag the album '."'".$album->name."'".'" /></td>';
 	echo '<td style="text-align: left;" width="80">';
 	$thumb = $album->getAlbumThumb();
 	if (strpos($thumb, '_%7B') !== false) { // it is the default image
 		$thumb = 'images/imageDefault.png';
 	}
-	echo '<a href="?page=edit&album=' . urlencode($album->name) .'" title="'.sprintf(gettext('Edit this album:%s'), fileSystemToUTF8($album->name)) .
+	echo '<a href="?page=edit&album=' . urlencode($album->name) .'" title="'.sprintf(gettext('Edit this album:%s'), $album->name) .
  			'"><img height="40" width="40" src="' . $thumb . '" /></a>';
 	echo "</td>\n";
 	echo '<td  style="text-align: left;font-size:110%;" width="300"> <a href="?page=edit&album=' . urlencode($album->name) .
- 			'" title="'.sprintf(gettext('Edit this album: %s'), fileSystemToUTF8($album->name)) . '">' . $album->getTitle() . '</a>';
+ 			'" title="'.sprintf(gettext('Edit this album: %s'), $album->name) . '">' . $album->getTitle() . '</a>';
 	echo "</td>\n";
 
 	if ($album->isDynamic()) {

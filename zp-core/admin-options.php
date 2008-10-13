@@ -1349,7 +1349,7 @@ if (!empty($_REQUEST['themealbum'])) {
 				$filelist = safe_glob('*.php');
 				$list = array();
 				foreach($filelist as $file) {
-					$list[] = str_replace('.php', '', $file);
+					$list[] = str_replace('.php', '', FilesystemToUTF8($file));
 				}
 				$list = array_diff($list, array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions', 'news', 'pages'));
 				generateListFromArray(array(getThemeOption($album, 'custom_index_page')), $list);

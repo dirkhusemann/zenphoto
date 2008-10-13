@@ -172,6 +172,7 @@ function setDefault($option, $default) {
 	$filelist = safe_glob('*'.'php');
 	chdir($curdir);
 	foreach ($filelist as $extension) {
+		$extension = FilesystemToUTF8($extension);
 		$ext = substr($extension, 0, strlen($extension)-4);
 		$opt = 'zp_plugin_'.$ext;
 		setOptionDefault($opt, 0);

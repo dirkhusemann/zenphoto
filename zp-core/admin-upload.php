@@ -28,7 +28,7 @@ if (isset($_GET['action'])) {
 		if (isset($_POST['processed']) && !empty($_POST['folder']) && ($newAlbum || !$files_empty)) {
 
 			$folder = sanitize($_POST['folder'],3);
-			$uploaddir = $gallery->albumdir . $folder;
+			$uploaddir = $gallery->albumdir . UTF8ToFilesystem($folder);
 			if (!is_dir($uploaddir)) {
 				mkdir ($uploaddir, CHMOD_VALUE);
 			}

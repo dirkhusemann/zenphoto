@@ -9,6 +9,7 @@
 class Album extends PersistentObject {
 
 	var $name;             // Folder name of the album (full path from the albums folder)
+	var $localpath;				 // Latin1 full server path to the album
 	var $exists = true;    // Does the folder exist?
 	var $images = null;    // Full images array storage.
 	var $subalbums = null; // Full album array storage.
@@ -38,7 +39,7 @@ class Album extends PersistentObject {
 		if (empty($folder)) {
 			$this->localpath = getAlbumFolder();
 		} else {
-			$this->localpath = getAlbumFolder() . $folder . "/";
+			$this->localpath = getAlbumFolder() . UTF8ToFilesystem($folder) . "/";
 		}
 		if (hasDyanmicAlbumSuffix($folder)) {
 			$this->localpath = substr($this->localpath, 0, -1);
@@ -106,7 +107,6 @@ class Album extends PersistentObject {
 			$this->set('parentid', $parentalbum->getAlbumId());
 			$title = substr($title, strrpos($title, '/')+1);
 		}
-		$title = fileSystemToUTF8($title);
 		$this->set('title', sanitize($title, 2));
 
 		return true;
@@ -648,7 +648,7 @@ class Album extends PersistentObject {
 	 */
 	function getAlbumThumbImage() {
 
-		$albumdir = getAlbumFolder() . $this->name ."/";
+		$albumdir = $this->localpath;
 		$thumb = $this->get('thumb');
 		$i = strpos($thumb, '/');
 		if ($root = ($i === 0)) {
@@ -656,7 +656,7 @@ class Album extends PersistentObject {
 			$albumdir = getAlbumFolder();
 		}
 		$shuffle = $thumb != '1';
-		if (!empty($thumb) && $thumb != '1' && file_exists($albumdir.$thumb)) {
+		if (!empty($thumb) && $thumb != '1' && file_exists($albumdir.UTF8ToFilesystem($thumb))) {
 			if ($i===false) {
 				return newImage($this, $thumb);
 			} else {
@@ -735,7 +735,7 @@ class Album extends PersistentObject {
 			}
 			if (!empty($theme)) {
 				$themeimage = SERVERPATH.'/'.THEMEFOLDER.'/'.$theme.'/images/imageDefault.png';
-				if (file_exists($themeimage)) {
+				if (file_exists(UTF8ToFilesystem($themeimage))) {
 					$nullimage = $themeimage;
 				}
 			}
@@ -890,7 +890,7 @@ class Album extends PersistentObject {
 			}
 		}
 		$oldfolder = $this->name;
-		$dest = getAlbumFolder().$newfolder;
+		$dest = getAlbumFolder().UTF8ToFilesystem($newfolder);
 		// Check to see if the destination already exists
 		if (file_exists($dest)) {
 			// Disallow moving an album over an existing one.
@@ -1006,7 +1006,7 @@ class Album extends PersistentObject {
 	function copyAlbum($newfolder) {
 		// First, ensure the new base directory exists.
 		$oldfolder = $this->name;
-		$dest = getAlbumFolder().'/'.$newfolder;
+		$dest = getAlbumFolder().'/'.UTF8ToFilesystem($newfolder);
 		// Check to see if the destination directory already exists
 
 		if (file_exists($dest)) {
@@ -1018,7 +1018,7 @@ class Album extends PersistentObject {
 			return false;
 		}
 		if ($this->isDynamic()) {
-			if (@copy(getAlbumFolder().$oldfolder, $dest)) {
+			if (@copy($this->localpath, $dest)) {
 				$oldf = mysql_real_escape_string($oldfolder);
 				$sql = "SELECT * FROM " . prefix('albums') . " WHERE `id` = '".$this->getAlbumID()."'";
 				$subrow = query_single_row($sql);
@@ -1108,7 +1108,7 @@ class Album extends PersistentObject {
 		$live = array();
 		// Does the dirname from the db row exist on disk?
 		while($row = mysql_fetch_assoc($result)) {
-			if (!is_dir(getAlbumFolder() . $row['folder']) || in_array($row['folder'], $live)
+			if (!is_dir(getAlbumFolder() . UTF8ToFilesystem($row['folder'])) || in_array($row['folder'], $live)
 			|| substr($row['folder'], -1) == '/' || substr($row['folder'], 0, 1) == '/') {
 				$dead[] = $row['id'];
 			} else {
@@ -1163,7 +1163,7 @@ class Album extends PersistentObject {
 		if ($this->isDynamic()) {  // there are no 'real' files
 			return array();
 		}
-		$albumdir = getAlbumFolder() . $this->name . "/";
+		$albumdir = $this->localpath;
 		if (!is_dir($albumdir) || !is_readable($albumdir)) {
 			if (!is_dir($albumdir)) {
 				$msg = sprintf(gettext("Error: The album %s cannot be found."), htmlspecialchars($this->name));
@@ -1177,15 +1177,15 @@ class Album extends PersistentObject {
 		$others = array();
 
 		while (false !== ($file = readdir($dir))) {
-			if ($dirs && (is_dir($albumdir.$file) && (substr($file, 0, 1) != '.') ||
-							hasDyanmicAlbumSuffix($file))) {
-				$files[] = $file;
+			$file8 = FilesystemToUTF8($file);
+			if ($dirs && (is_dir($albumdir.$file) && (substr($file, 0, 1) != '.') || hasDyanmicAlbumSuffix($file))) {
+				$files[] = $file8;
 			} else if (!$dirs && is_file($albumdir.$file)) {
 				if (is_valid_other_type($file)) {
-					$files[] = $file;
-					$others[] = $file;
+					$files[] = $file8;
+					$others[] = $file8;
 				} else if (is_valid_image($file)) {
-					$files[] = $file;
+					$files[] = $file8;
 				}
 			}
 		}
@@ -1328,7 +1328,7 @@ class Album extends PersistentObject {
 		if (!$this->isDynamic()) return null;
 		if (!is_null($this->searchengine)) return $this->searchengine;
 		$this->searchengine = new SearchEngine();
-		$params = $this->getSearchParams();
+		$params = urldecode($this->getSearchParams());
 		$params .= '&albumname='.$this->name;
 		$this->searchengine->setSearchParams($params);
 		return $this->searchengine;

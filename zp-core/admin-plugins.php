@@ -25,6 +25,7 @@ if (isset($_GET['action'])) {
 		$filelist = safe_glob('*'.'php');
 		chdir($curdir);
 		foreach ($filelist as $extension) {
+			$extension = FilesystemToUTF8($extension);
 			$opt = 'zp_plugin_'.substr($extension, 0, -4);
 			setBoolOption($opt, isset($_POST[$opt]));
 		}
@@ -50,6 +51,9 @@ if ($saved) {
 $curdir = getcwd();
 chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
 $filelist = safe_glob('*'.'php');
+foreach ($filelist as $key=>$plugin) {
+	$filelist[$key] = FilesystemToUTF8($plugin);
+}
 natcasesort($filelist);
 
 echo "<h1>Plugins</h1>\n";
@@ -68,7 +72,7 @@ foreach ($filelist as $extension) {
 	$ext = substr($extension, 0, strlen($extension)-4);
 	$opt = 'zp_plugin_'.$ext;
 	
-	$pluginStream = file_get_contents($extension);
+	$pluginStream = file_get_contents(UTF8ToFilesystem($extension));
 	$parserr = 0;
 	$str = isolate('$plugin_description', $pluginStream);
 	if (false === $str) {

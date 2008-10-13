@@ -532,11 +532,19 @@ if (!$checked) {
 		checkMark(-1, 'PHP <code>setlocale()</code>', ' '.gettext("failed"), gettext("Locale functionality is not implemented on your platform or the specified locale does not exist. Language translation may not work.").'<br />'.gettext('See the troubleshooting guide on zenphoto.org for details.'));
 	}
 	if (function_exists('mb_internal_encoding')) {
-		$mb = 1;
+		if (($charset = mb_internal_encoding()) == 'UTF-8') {
+			$mb = 1;
+		} else {
+			$mb = -1;
+		}
+		$m1 = sprintf(gettext('Your internal characater set is <strong>%s</strong>'), $charset);
+		$m2 = gettext('Setting <em>mbstring.internal_encoding</em> to <strong>UTF-8</strong> in your <em>php.ini</em> file is recommended to insure accented and multi-byte characters function properly.');
 	} else {
 		$mb= -1;
+		$m1 = gettext("[is not present]");
+		$m2 = gettext("Strings generated internally by PHP may not display correctly. (e.g. dates)");
 	}
-	checkMark($mb, gettext("PHP <code>mbstring</code> package"), ' '.gettext("[is not present]"), gettext("Strings generated internally by PHP may not display correctly. (e.g. dates)"));
+	checkMark($mb, gettext("PHP <code>mbstring</code> package"), ' '.$m1, $m2);
 
 	$sql = extension_loaded('mysql');
 	$good = checkMark($sql, ' '.gettext(" PHP MySQL support"), '', gettext('You need to install MySQL support in your PHP')) && $good;

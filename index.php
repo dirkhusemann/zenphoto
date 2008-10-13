@@ -35,7 +35,7 @@ if (isset($_GET['p'])) {
 	} else {
 		$obj = THEMEFOLDER."/$theme/$page.php";
 		$_zp_gallery_page = basename($obj);
-		if (file_exists(SERVERPATH . "/" . $obj)) {
+		if (file_exists(SERVERPATH . "/" . UTF8ToFilesystem($obj))) {
 		}
 	}
 
@@ -47,7 +47,7 @@ if (isset($_GET['p'])) {
 
 // Display an Album page.
 } else if (in_context(ZP_ALBUM)) {
-	if(isset($_GET['zipfile']) && is_dir(realpath(getAlbumFolder() . $_GET['album']))){
+	if(isset($_GET['zipfile']) && is_dir(realpath(getAlbumFolder() . UTF8ToFilesystem($_GET['album'])))){
 		createAlbumZip(sanitize($_GET['album']));
 	} else {
 		if ($_zp_current_album->isDynamic()) {
@@ -74,7 +74,7 @@ if (isset($_GET['p'])) {
 
 // Load plugins, then load the requested $obj (page, image, album, or index; defined above).
 $_zp_loaded_plugins = array();
-if (file_exists(SERVERPATH . "/" . $obj) && $zp_request) {
+if (file_exists(SERVERPATH . "/" . UTF8ToFilesystem($obj)) && $zp_request) {
 	foreach (getEnabledPlugins() as $extension) {
 		$_zp_loaded_plugins[] = $extension;
 		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
@@ -90,7 +90,7 @@ if(!is_null($_zp_HTML_cache)) { $_zp_HTML_cache->startHTMLCache(); }
 } else {
 	list($album, $image) = rewrite_get_album_image('album','image');
 	$_zp_gallery_page = '404.php';
-	$errpage = THEMEFOLDER."/$theme/404.php";
+	$errpage = THEMEFOLDER.'/'.UTF8ToFilesystem($theme).'/404.php';
 	header("HTTP/1.0 404 Not Found");
 	header("Status: 404 Not Found");
 	if (file_exists(SERVERPATH . "/" . $errpage)) {

@@ -12,7 +12,7 @@ class Image extends PersistentObject {
 	var $filename;      // true filename of the image.
 	var $exists = true; // Does the image exist?
 	var $webpath;       // The full URL path to the original image.
-	var $localpath;     // The full SERVER path to the original image.
+	var $localpath;     // Latin1 full SERVER path to the original image.
 	var $displayname;   // $filename with the extension stripped off.
 	var $album;         // An album object for the album containing this image.
 	var $comments;      // Image comment array.
@@ -107,11 +107,11 @@ class Image extends PersistentObject {
 		if ($album->name == '') {
 			$this->webpath = getAlbumFolder(WEBPATH) . $filename;
 			$this->encwebpath = getAlbumFolder(WEBPATH) . rawurlencode($filename);
-			$this->localpath = getAlbumFolder() . $filename;
+			$this->localpath = getAlbumFolder() . UTF8ToFilesystem($filename);
 		} else {
 			$this->webpath = getAlbumFolder(WEBPATH) . $album->name . "/" . $filename;
 			$this->encwebpath = getAlbumFolder(WEBPATH) . pathurlencode($album->name) . "/" . rawurlencode($filename);
-			$this->localpath = getAlbumFolder() . $album->name . "/" . $filename;
+			$this->localpath = $album->localpath . UTF8ToFilesystem($filename);
 		}
 		$this->filename = $filename;		
 		$this->displayname = substr($this->filename, 0, strrpos($this->filename, '.'));
@@ -121,7 +121,7 @@ class Image extends PersistentObject {
 	}
 	
 	function getDefaultTitle() {
-		return fileSystemToUTF8($this->displayname);
+		return $this->displayname;
 	}
 
 	/**
@@ -466,7 +466,7 @@ class Image extends PersistentObject {
 			// Nothing to do - moving the file to the same place.
 			return true;
 		}
-		$newpath = getAlbumFolder() . $newalbum->name . "/" . $newfilename;
+		$newpath = $newalbum->localpath . UTF8ToFilesystem($newfilename);
 		if (file_exists($newpath)) {
 			// If the file exists, don't overwrite it.
 			return false;
@@ -499,7 +499,7 @@ class Image extends PersistentObject {
 			// Nothing to do - moving the file to the same place.
 			return true;
 		}
-		$newpath = getAlbumFolder() . $newalbum->name . "/" . $this->filename;
+		$newpath = $newalbum->localpath . UTF8ToFilesystem($this->filename);
 		if (file_exists($newpath)) {
 			// If the file exists, don't overwrite it.
 			return false;
