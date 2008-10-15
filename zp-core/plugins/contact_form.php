@@ -11,13 +11,13 @@
  * The contact form itself is a separate file and located within /contact_form/form.php so that it can be style as needed.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.1.3
+ * @version 1.1.3.1
  * @package plugins
  */
 
 $plugin_description = gettext("Prints a e-mail contact form that uses Zenphotos internal validation functions for e-mail and URL. Name, e-mail adress, subject and message (and if enabled Captcha) are required fields. You need to enter a custom mail adress that should be use for the messages. Supports Zenphoto's captcha and confirmation before the message is sent. No other spam filter support, since mail providers have this anyway.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.1.3';
+$plugin_version = '1.1.3.1';
 $plugin_URL = "";
 $option_interface = new contactformOptions();
 
@@ -116,7 +116,7 @@ function printContactForm() {
 		$mailcontent = array();
 		$mailcontent['title'] = getField('title');
 		$mailcontent['name'] = getField('name');
-		$mailcontent['company'] = sanitize('company');
+		$mailcontent['company'] = getField('company');
 		$mailcontent['street'] = getField('street');
 		$mailcontent['city'] = getField('city');
 		$mailcontent['country'] = getField('country');
@@ -137,8 +137,10 @@ function printContactForm() {
 		if (getOption('contactform_website') == "required" && empty($mailcontent['website'])) {
 			$error[8] = gettext('a <strong>website</strong>');
 		} else {
-			if (substr($mailcontent['website'], 0, 7) != "http://") {
-				$mailcontent['website'] = "http://" . $mailcontent['website'];
+			if(!empty($mailcontent['website'])) {
+				if (substr($mailcontent['website'], 0, 7) != "http://") {
+					$mailcontent['website'] = "http://" . $mailcontent['website'];
+				}
 			}
 		}
 		if (getOption("contactform_phone") == "required" && empty($mailcontent['phone'])) { $error[9] = gettext("a <strong>phone number</strong>"); }
@@ -178,14 +180,11 @@ function printContactForm() {
 			echo gettext(". Thanks.</p>");
 		} else {
 			$mailaddress = $mailcontent['email'];
-			$headers  = 'MIME-Version: 1.0' . "\r\n";
-			$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-			$headers .= 'From: $mailaddress'."\r\n";
-			$headers .= 'Reply-To: $mailaddress'."\r\n";
-			$headers .= "X-Mailer: PHP/" . phpversion() . "\n";
-			$headers .= 'Cc: $mailaddress'."\r\n";
+			$name = $mailcontent['name'];
+			$headers = 'From: '.$mailaddress.''."\r\n";
+			//$headers .= 'Cc: '.$mailaddress.''."\r\n"; // somehow does not work on all servers!
 			$subject = $mailcontent['subject']." (".getBareGalleryTitle().")";
-			$message = $mailcontent['message']."\n\n";
+			$message = $mailcontent['message']."\n";
 			if(!empty($mailcontent['title'])) { $message .= $mailcontent['title']; }
 			if(!empty($mailcontent['name'])) { $message .= $mailcontent['name']."\n"; }
 			if(!empty($mailcontent['company'])) { $message .= $mailcontent['company']."\n"; }
@@ -195,6 +194,7 @@ function printContactForm() {
 			if(!empty($mailcontent['email'])) { $message .= $mailcontent['email']."\n"; }
 			if(!empty($mailcontent['phone'])) { $message .= $mailcontent['phone']."\n"; }
 			if(!empty($mailcontent['website'])) { $message .= $mailcontent['website']."\n"; }
+			$message .= "\n\n";
 			echo getOption("contactform_confirmtext");
 			?>
 <div>
@@ -203,6 +203,7 @@ function printContactForm() {
 		<input type="hidden" id="subject" name="subject"	value="<?php echo $subject; ?>" />
 		<input type="hidden" id="message"	name="message" value="<?php echo $message; ?>" />
 		<input type="hidden" id="headers" name="headers" value="<?php echo $headers; ?>" />
+		<input type="hidden" id="mailaddress" name="mailaddress" value="<?php echo $mailaddress; ?>" />
 		<input type="submit" value="<?php echo gettext("Confirm"); ?>" />
 	</form>
 	<form id="discard" action="#" method="post" accept-charset="UTF-8">
@@ -217,7 +218,8 @@ function printContactForm() {
 		$subject = sanitize($_POST['subject']);
 		$message = sanitize($_POST['message'],1);
 		$headers = sanitize($_POST['headers']);
-		UTF8::send_mail(getOption("contactform_mailaddress"), $subject, $message, $headers);
+		$mailaddress = sanitize($_POST['mailaddress']);
+		UTF8::send_mail(getOption("contactform_mailaddress").",".$mailaddress, $subject, $message, $headers);
 		echo getOption("contactform_thankstext");
 	}
 	if (count($error) <= 0) {
