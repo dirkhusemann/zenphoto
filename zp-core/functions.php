@@ -2534,7 +2534,6 @@ function readTags($id, $tbl) {
  * @param bool $descending set true for a reverse order sort
  */
 function generateListFromArray($currentValue, $list, $descending=false) {
-	$currentValue = array_flip($currentValue);
 	$localize = !is_numeric(array_shift(array_keys($list)));
 	if ($localize) {
 		$list = array_flip($list);
@@ -2553,7 +2552,7 @@ function generateListFromArray($currentValue, $list, $descending=false) {
 	}
 	foreach($list as $key=>$item) {
 		echo '<option value="' . $item . '"';		
-		if (isset($currentValue[$item])) {
+		if (in_array($item, $currentValue)) {
 			echo ' selected="selected"';
 		}
 		if ($localize) $display = $key; else $display = $item;
