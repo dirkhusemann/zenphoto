@@ -496,7 +496,6 @@ function getPageURL($page, $total=null) {
 		} else {
 			$pagination1 = '/page/';
 			$pagination2 = '';
-				
 		}
 		if ($page <= $total && $page > 0) {
 			if (in_context(ZP_ALBUM)) {
@@ -505,7 +504,11 @@ function getPageURL($page, $total=null) {
 			} else if (in_context(ZP_INDEX)) {
 				if ($page == 1) {
 					// Just return the gallery base path for ZP_INDEX (no /page/x)
-					return rewrite_path('/', '/');
+					if (empty($pagination2)) {
+						return rewrite_path('/', '/');
+					} else {
+						return rewrite_path($pagination1, "/index.php?" . substr($pagination2, 0, -1));
+					}
 				} else if ($page > 1) {
 					return rewrite_path($pagination1 . $page . "/", "/index.php?" . $pagination2 . 'page=' . $page);
 				}
