@@ -307,6 +307,11 @@ h4 {
 	margin-bottom: .15em;
 	margin-top: .35em;
 }
+.error .inputform {
+	text-align: left;
+	color: black;
+	font-weight : normal;
+}
 </style>
 
 </head>
@@ -581,8 +586,9 @@ if (!$checked) {
 			?>
 
 <div class="error">
-<?php echo gettext("Fill in the missing information below and <strong>setup</strong> will attempt to update your <code>zp-config.php</code> file."); ?><br />
-<br />
+<p>
+<?php echo gettext("Fill in the information below and <strong>setup</strong> will attempt to update your <code>zp-config.php</code> file."); ?><br />
+</p>
 <form action="#" method="post">
 <input type="hidden" name="mysql"	value="yes" />
 <?php
@@ -590,7 +596,7 @@ if ($debug) {
 	echo '<input type="hidden" name="debug" />';
 }
 ?>
-<table>
+<table class="inputform">
 	<tr>
 		<td><?php echo gettext("MySQL admin user") ?></td>
 		<td><input type="text" size="40" name="mysql_user"
@@ -1145,6 +1151,10 @@ if (file_exists("zp-config.php")) {
 		`sort_order` int(11) unsigned default NULL,
 		`height` int(10) unsigned default NULL,
 		`width` int(10) unsigned default NULL,
+		`thumbX` int(10) unsigned default NULL,
+		`thumbY` int(10) unsigned default NULL,
+		`thumbW` int(10) unsigned default NULL,
+		`thumbH` int(10) unsigned default NULL,
 		`mtime` int(32) default NULL,
 		`EXIFValid` int(1) unsigned default NULL,
 		`hitcounter` int(11) unsigned default 0,
@@ -1226,7 +1236,7 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `password` `password` varchar(255) NOT NULL DEFAULT ''";
 
 	//v1.1.5
-	$sql_statements[] = " ALTER TABLE `zp_comments` DROP FOREIGN KEY `zp_comments_ibfk1`";
+	$sql_statements[] = " ALTER TABLE `zp_comments` DROP FOREIGN KEY `comments_ibfk1`";
 	$sql_statements[] = "ALTER TABLE $tbl_comments CHANGE `imageid` `ownerid` int(11) UNSIGNED NOT NULL default '0';";
   //	$sql_statements[] = "ALTER TABLE $tbl_comments DROP INDEX `imageid`;";
 	$sql = "SHOW INDEX FROM `".$_zp_conf_vars['mysql_prefix']."comments`";
@@ -1291,7 +1301,14 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `title` `title` TEXT NOT NULL";
 	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `location` `location` TEXT";
 	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `credit` `credit` TEXT";
-	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `copyright` `copyright` TEXT";	
+	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `copyright` `copyright` TEXT";
+	
+	//v1.2.2
+	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `thumbX` int(10) UNSIGNED default NULL;";
+	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `thumbY` int(10) UNSIGNED default NULL;";
+	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `thumbW` int(10) UNSIGNED default NULL;";
+	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `thumbH` int(10) UNSIGNED default NULL;";
+	
 
 	/**************************************************************************************
 	 ******                            END of UPGRADE SECTION     
