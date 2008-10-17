@@ -18,6 +18,8 @@ require_once(dirname(__FILE__).'/class-load.php');
  */
 require_once(dirname(__FILE__).'/controller.php');
 
+$_zp_conf_vars['images_first_page'] = NULL; // insure it is initialized
+
 //******************************************************************************
 //*** Template Functions *******************************************************
 //******************************************************************************
@@ -416,10 +418,10 @@ function getNumSubalbums() {
 }
 
 function resetCurrentAlbum() {
-	global $_zp_images, $_zp_current_album;
+	global $_zp_images, $_zp_current_album, $_zp_conf_vars;
 	$_zp_images = NULL;
 	$_zp_current_album->images = NULL;
-	setOption('images_first_page', NULL);
+	$_zp_conf_vars['images_first_page'] =  NULL;
 }
 
 /**
@@ -431,6 +433,7 @@ function resetCurrentAlbum() {
  * @return int
  */
 function getTotalPages($oneImagePage=false) {
+	global $_zp_conf_vars;
 	global $_zp_gallery, $_zp_current_album;
 	if (in_context(ZP_ALBUM | ZP_SEARCH)) {
 		$albums_per_page = max(1, getOption('albums_per_page'));
@@ -444,7 +447,7 @@ function getTotalPages($oneImagePage=false) {
 			$imageCount = min(1, $imageCount);
 		}
 		$images_per_page = max(1, getOption('images_per_page'));
-		$pageCount = ($pageCount + ceil(($imageCount - getOption('images_first_page')) / $images_per_page));
+		$pageCount = ($pageCount + ceil(($imageCount - $_zp_conf_vars['images_first_page']) / $images_per_page));
 		return $pageCount;
 	} else if (in_context(ZP_INDEX)) {
 		if(galleryAlbumsPerPage() != 0) {
@@ -630,6 +633,8 @@ function printPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextpr
 	}
 	echo "<div" . (($id) ? " id=\"$id\"" : "") . " class=\"$class\">";
 	$current = getCurrentPage();
+	
+	
 	echo "\n<ul class=\"$class\">";
 	if ($nextprev) {
 		echo "\n  <li class=\"prev\">";
@@ -2494,11 +2499,9 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 	}
 	//Print images
 	else {
-		$sizearr = getSizeCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy);
 		echo '<img src="' . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin)) . '"' .
 			' alt="' . html_encode($alt) . '"' .
 			' title="' . html_encode($alt) . '"' .
-			' width="' . $sizearr[0] . '" height="' . $sizearr[1] . '"' .
 			(($class) ? ' class="'.$class.'"' : '') .
 			(($id) ? ' id="'.$id.'"' : '') . ' />';
 	}
