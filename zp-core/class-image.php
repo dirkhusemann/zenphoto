@@ -669,6 +669,29 @@ class Image extends PersistentObject {
 	 * @return string
 	 */
 	function getThumb($type='image') {
+		if (getOption('thumb_crop') && !is_null($cy = $this->get('thumbY'))) {
+			$ts = getOption('thumb_size');
+			$sw = getOption('thumb_crop_width');
+			$sh = getOption('thumb_crop_height');
+			$cx = $this->get('thumbX');
+			$cw = $this->get('thumbW');
+			$ch = $this->get('thumbH');
+			// upscale to thumb_size proportions
+			if ($sw == $sh) { // square crop, set the size/width to thumbsize
+				$sw = $sh = $ts;
+			} else {
+				if ($sw > $sh) {
+					$r = $ts/$sw;
+					$sw = $ts;
+					$sh = $sh * $r;
+				} else {
+					$r = $ts/$sh;
+					$sh = $ts;
+					$sh = $r * $sh;
+				}
+			}
+			return $this->getCustomImage(NULL, $sw, $sh, $cw, $ch, $cx, $cy, true);
+		}
 		$filename = $this->filename;
 		$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename, getImageParameters(array('thumb')));
 		if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {

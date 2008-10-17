@@ -305,19 +305,20 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			$dim = $size;
 			$width = $height = false;
 		} else if (!empty($width) && !empty($height)) {
+			$crop = true;
 			$ratio_in = $h / $w;
 			$ratio_out = $height / $width;
-			$crop = true;
 			if ($ratio_in > $ratio_out) {
 				$thumb = true;
 				$dim = $width;
-				$ch = $height;
+				if (!$cy) $ch = $height;
 			} else {
 				$dim = $height;
-				$cw = $width;
-				$height = true;
+				if (!$ch) {
+					$cw = $width;
+					$height = true;
+				}
 			}
-
 		} else if (!empty($width)) {
 			$dim = $width;
 			$size = $height = false;
@@ -363,23 +364,76 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			$neww = $w;
 			$newh = $h;
 		}
-		$newim = imagecreatetruecolor($neww, $newh);
-		imagecopyresampled($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
-
 		// Crop the image if requested.
 		if ($crop) {
-			if ($cw === false || $cw > $neww) $cw = $neww;
-			if ($ch === false || $ch > $newh) $ch = $newh;
-			if ($cx === false) $cx = round(($neww - $cw) / 2);
-			if ($cy === false) $cy = round(($newh - $ch) / 2);
-			if ($cw + $cx > $neww) $cx = $neww - $cw;
-			if ($ch + $cy > $newh) $cy = $newh - $ch;
-			$newim_crop = imagecreatetruecolor($cw, $ch);
-			imagecopy($newim_crop, $newim, 0, 0, $cx, $cy, $cw, $ch);
-			imagedestroy($newim);
-			$newim = $newim_crop;
-		}
-
+				if ($cw > $ch) {
+					$ir = $ch/$cw;
+				} else {
+					$ir = $cw/$ch;
+				}
+				if ($size) {
+					$ts = $size;
+					$neww = $size;
+					$newh = $ir*$size;
+				} else {
+					$neww = $width;
+					$newh = $height;
+					if ($neww > $newh) {
+						$ts = $neww;
+						if ($newh === false) {
+							$newh = $ir*$neww;
+						}
+					} else {
+						$ts = $newh;
+						if ($neww === false) {
+							$neww = $ir*$newh;
+						}
+					}
+				}
+			
+			$cr = min(array($w, $h))/$ts;
+			if (!$cx) {
+				if (!$cw) {
+					$cw = $w;
+				} else {
+					$cw = round($cw*$cr);
+				}
+				$cx = round(($w - $cw) / 2);
+			} else { // custom crop
+				if (!$cw || $cw > $w) $cw = $w;
+			}
+			if (!$cy) {
+				if (!$ch) {
+					$ch = $h;
+				} else {
+					$ch = round($ch*$cr);
+				}
+				$cy = round(($h - $ch) / 2);
+			} else { // custom crop
+				if (!$ch || $ch > $h) $ch = $h;
+			}
+			if ($cw + $cx > $w) $cx = $w - $cw;
+			if ($ch + $cy > $h) $cy = $h - $ch;
+			$newim = imagecreatetruecolor($neww, $newh);
+			
+debugLog("imagecopyresampled($newim, $im, 0, 0, $cx, $cy, $neww, $newh, $cw, $ch)")		;	
+			
+			imagecopyresampled($newim, $im, 0, 0, $cx, $cy, $neww, $newh, $cw, $ch);
+		} else {
+			$hprop = round(($h / $w) * $dim);
+			$wprop = round(($w / $h) * $dim);
+			if ((!$thumb && $size && $image_use_longest_side && $h > $w) || ($thumb && $h <= $w) || $height) {
+				$newh = $dim;
+				$neww = $wprop;
+			} else {
+				$newh = $hprop;
+				$neww = $dim;
+			}
+			$newim = imagecreatetruecolor($neww, $newh);
+			imagecopyresampled($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
+		}		
+		
+		
 		if (($thumb && $sharpenthumbs) || (!$thumb && $sharpenimages)) {
 			unsharp_mask($newim, 40, 0.5, 3);
 		}
@@ -422,7 +476,6 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 
 		// Create the cached file (with lots of compatibility)...
 		mkdir_recursive(dirname($newfile));
-		@touch($newfile);
 		imagejpeg($newim, $newfile, $quality);
 		@chmod($newfile, 0666 & CHMOD_VALUE);
 		imagedestroy($newim);

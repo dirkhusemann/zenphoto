@@ -274,15 +274,24 @@ if (isset($_GET['action'])) {
 			if ($themeswitch) {
 				$notify = '?switched';
 			} else {
+				
+				$cw = getOption('thumb_crop_width');
+				$ch = getOption('thumb_crop_height');
 				if (isset($_POST['image_size'])) setThemeOption($table, 'image_size', sanitize($_POST['image_size'],3));
 				setBoolThemeOption($table, 'image_use_longest_side', isset($_POST['image_use_longest_side']));
 				if (isset($_POST['thumb_size'])) setThemeOption($table, 'thumb_size', sanitize($_POST['thumb_size'],3));
 				setBoolThemeOption($table, 'thumb_crop', isset($_POST['thumb_crop']));
-				if (isset($_POST['thumb_crop_width'])) setThemeOption($table, 'thumb_crop_width', sanitize($_POST['thumb_crop_width'],3));
-				if (isset($_POST['thumb_crop_height'])) setThemeOption($table, 'thumb_crop_height', sanitize($_POST['thumb_crop_height'],3));
+				if (isset($_POST['thumb_crop_width'])) setThemeOption($table, 'thumb_crop_width', $ncw = sanitize($_POST['thumb_crop_width'],3));
+				if (isset($_POST['thumb_crop_height'])) setThemeOption($table, 'thumb_crop_height', $nch = sanitize($_POST['thumb_crop_height'],3));
 				if (isset($_POST['albums_per_page'])) setThemeOption($table, 'albums_per_page', sanitize($_POST['albums_per_page'],3));
 				if (isset($_POST['images_per_page'])) setThemeOption($table, 'images_per_page', sanitize($_POST['images_per_page'],3));
 				if (isset($_POST['custom_index_page'])) setThemeOption($table, 'custom_index_page', sanitize($_POST['custom_index_page'], 3));
+				
+				if ($nch != $ch || $ncw != $cw) { // the crop height/width has been changed
+					$sql = 'UPDATE '.prefix('images').' SET `thumbX`=NULL,`thumbY`=NULL,`thumbW`=NULL,`thumbH`=NULL WHERE `thumbY` IS NOT NULL';
+					query($sql);
+					$wmo = 99; // force cache clear as well.
+				}
 			}
 }
 		/*** Plugin Options ***/
@@ -388,8 +397,8 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 
 </div>
 <div id="tab_admin">
-<form action="?action=saveoptions" method="post"><input
-	type="hidden" name="saveadminoptions" value="yes" /> <?php
+<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
+<input type="hidden" name="saveadminoptions" value="yes" /> <?php
 	if ($_zp_loggedin & ADMIN_RIGHTS) {
 		$alterrights = '';
 		$admins = getAdministrators();
@@ -664,7 +673,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		echo '</div>';
 	}
 	?>
-	<form action="?action=saveoptions" method="post">
+	<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 	<input	type="hidden" name="savegalleryoptions" value="yes" /> <?php
 	if (isset($_GET['mismatch'])) {
 		echo '<div class="errorbox" id="fade-message">';
@@ -995,8 +1004,8 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 ?>
 <div id="tab_image">
-<form action="?action=saveoptions" method="post"><input
-	type="hidden" name="saveimageoptions" value="yes" /> <?php
+<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
+<input type="hidden" name="saveimageoptions" value="yes" /> <?php
 	if (isset($_GET['mismatch'])) {
 		echo '<div class="errorbox" id="fade-message">';
 		echo  "<h2>".sprintf(gettext("Your %s passwords did not match"), $_GET['mismatch'])."</h2>";
@@ -1140,8 +1149,8 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 ?>
 <div id="tab_comments">
-<form action="?action=saveoptions" method="post"><input
-	type="hidden" name="savecommentoptions" value="yes" /> <?php
+<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
+<input 	type="hidden" name="savecommentoptions" value="yes" /> <?php
 	?>
 <table class="bordered">
 	<tr>
@@ -1260,7 +1269,7 @@ if (!empty($_REQUEST['themealbum'])) {
 		echo '</div>';
 	} else {
 ?>
-<form action="?action=saveoptions" method="post">
+<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 	<input type="hidden" name="savethemeoptions" value="yes" />
 	<table class='bordered'>
 <?php
@@ -1305,36 +1314,35 @@ if (!empty($_REQUEST['themealbum'])) {
 	</tr>
 	<tr>
 		<td><?php echo gettext("Crop thumbnails:"); ?></td>
-		<td><input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="thumb_crop" value="1"
-		<?php echo checked('1', getThemeOption($album, 'thumb_crop')); ?> /></td>
-		<td><?php echo gettext("If checked the thumbnail will be a centered portion of the	image with the given width and height after being resized to <em>thumb	size</em> (by shortest side).").' ';
-		echo gettext("Otherwise, it will be the full image resized to <em>thumb size</em> (by shortest side)."); ?></td>
-	</tr>
-	<tr>
-		<td><?php echo gettext("Crop thumbnail width:"); ?></td>
-		<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="thumb_crop_width"
-			value="<?php echo getThemeOption($album, 'thumb_crop_width');?>" /></td>
-		<td><?php echo gettext("The <em>thumb crop width</em> is the maximum width when height is the shortest side"); ?></td>
-	</tr>
-	<tr>
-		<td><?php echo gettext("Crop thumbnail height:"); ?></td>
-		<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="thumb_crop_height"
-			value="<?php echo getThemeOption($album, 'thumb_crop_height');?>" /></td>
-		<td><?php echo gettext("The <em>thumb crop height</em> is the maximum height when width is the shortest side"); ?></td>
+		<td>
+			<input type="checkbox" name="thumb_crop" value="1"
+				<?php echo checked('1', getThemeOption($album, 'thumb_crop')); ?> />
+			Crop width <input type="text" size="5" name="thumb_crop_width"
+				value="<?php echo getThemeOption($album, 'thumb_crop_width');?>" />
+			Crop height <input type="text" size="5" name="thumb_crop_height"
+				value="<?php echo getThemeOption($album, 'thumb_crop_height');?>" />
+		</td>
+		<td>
+			<?php echo gettext("If checked the thumbnail cropped to the <em>width</em> and <em>height</em> indicated."); ?>
+			<br />
+			<?php echo gettext('<strong>Note</strong>: changing crop height or width will invaliate existing crops.'); ?>
+		</td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Image size:"); ?></td>
-		<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="image_size"
-			value="<?php echo getThemeOption($album, 'image_size');?>" /></td>
-		<td><?php echo gettext("Default image display width."); ?></td>
-	</tr>
-	<tr>
-		<td><?php echo gettext("Images size is longest size:"); ?></td>
-		<td><input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="image_use_longest_side"
-			value="1"
-			<?php echo checked('1', getThemeOption($album, 'image_use_longest_side')); ?> /></td>
-		<td><?php echo gettext("If this is checked the longest side of the image will be <em>image size</em>.").' ';
-		echo gettext("Otherwise, the <em>width</em> of the image will	be <em>image size</em>."); ?></td>
+		<td>
+			<input type="text" size="<?php echo 5; ?>" name="image_size"
+				value="<?php echo getThemeOption($album, 'image_size');?>" />
+			<input type="checkbox" name="image_use_longest_side"
+				value="1"	<?php echo checked('1', getThemeOption($album, 'image_use_longest_side')); ?> />
+			<?php echo gettext("Use longest side"); ?>
+		</td>
+		<td>
+			<?php echo gettext("Default image display width."); ?>
+			<br />
+			<?php echo gettext("If <em>Use longest side</em> is checked the longest side of the image will be <em>image size</em>.").' ';
+						echo gettext("Otherwise, the <em>width</em> of the image will	be <em>image size</em>."); ?>
+		</td>
 	</tr>
 	<?php if (is_null($album)) {?>
 	<tr>
@@ -1394,7 +1402,7 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 	$c = 0;
 ?>
 	<div id="tab_plugin">
-	<form action="?action=saveoptions" method="post">
+	<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 	<input type="hidden" name="savepluginoptions" value="yes" />
 	<table class="bordered">
 	<tr>

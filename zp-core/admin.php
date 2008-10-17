@@ -505,7 +505,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	?>
 <!-- Album info box -->
 <div id="tab_albuminfo">
-<form name="albumedit1"
+<form name="albumedit1" AUTOCOMPLETE=OFF
 	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
 	<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 	<input type="hidden"	name="savealbuminfo" value="1" />
@@ -579,7 +579,7 @@ if (count($subalbums) > 0) {
 <?php
 if ($allimagecount) {
 	?>
-<form name="albumedit2"	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
+<form name="albumedit2"	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post" AUTOCOMPLETE=OFF>
 	<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 	<input type="hidden" name="totalimages" value="<?php echo $totalimages; ?>" />
 	<input type="hidden" name="subpage" value="<?php echo $pagenum; ?>" />
@@ -592,7 +592,7 @@ if ($allimagecount) {
 		<th>
 			<h2 class="subheadline"><?php echo gettext("Images"); ?></h2>
 		</th>
-		<th><?php echo gettext("Click the images for a larger version"); ?>	</th>
+		<th><?php echo gettext("Click on the image to change the thumbnail cropping."); ?>	</th>
 		<th>
 			<a href="javascript:toggleExtraInfo('','image',true);"><?php echo gettext('expand all fields');?></a>
 			| <a href="javascript:toggleExtraInfo('','image',false);"><?php echo gettext('collapse all fields');?></a>
@@ -614,7 +614,7 @@ if ($allimagecount) {
 	if ($allimagecount != $totalimages) { // need pagination links
 	?>
 	<tr>
-		<td colspan="4" class="bordered" id="imagenav"><?php adminPageNav($pagenum,$totalpages,'admin.php','?page=edit&amp;album='.urlencode($album->name),'#tab_imageinfo'); ?>
+		<td colspan="4" class="bordered" id="imagenav"><?php adminPageNav($pagenum,$totalpages,'admin.php','?page=edit&amp;tagsort='.$tagsort.'&amp;album='.urlencode($album->name),'#tab_imageinfo'); ?>
 		</td>
 	</tr>
 	<?php
@@ -642,11 +642,14 @@ if ($allimagecount) {
 			id="image-<?php echo $currentimage; ?>">
 			<tr>
 				<td valign="top" width="150" rowspan="14">
+				
+				<a href="admin-thumbcrop.php?a=<?php echo urlencode($album->name); ?>&amp;i=<?php echo urlencode($image->filename); ?>&amp;subpage=<?php echo $pagenum; ?>&amp;tagsort=<?php echo $tagsort; ?>" >
 				<img
 					id="thumb-<?php echo $currentimage; ?>"
 					src="<?php echo $image->getThumb();?>"
 					alt="<?php echo $image->filename;?>"
-					onclick="toggleBigImage('thumb-<?php echo $currentimage; ?>', '<?php echo $image->getSizedImage(getOption('image_size')); ?>');" />
+					/>
+				</a>
 				<p><strong><?php echo $image->filename; ?></strong></p>
 				<p><label for="<?php echo $currentimage; ?>-thumb"><input
 					type="radio" id="<?php echo $currentimage; ?>-thumb" name="thumb"
@@ -902,9 +905,9 @@ if ($allimagecount != $totalimages) { // need pagination links
 	title="<?php gettext('Back to the list of albums (go up a level)'); ?>">&laquo; <?php echo gettext("Back"); ?></a></p>
 <div class="box" style="padding: 15px;">
 
-<form name="albumedit"
-	action="?page=edit&action=save<?php echo $albumdir ?>" method="POST"><input
-	type="hidden" name="totalalbums" value="<?php echo sizeof($albums); ?>" />
+<form name="albumedit" AUTOCOMPLETE=OFF
+	action="?page=edit&action=save<?php echo $albumdir ?>" method="POST">
+	<input type="hidden" name="totalalbums" value="<?php echo sizeof($albums); ?>" />
 <?php
 	$currentalbum = 0;
 	foreach ($albums as $folder) {

@@ -2329,6 +2329,32 @@ function printImageThumb($alt, $class=NULL, $id=NULL) {
 	if (zp_loggedin() && !empty($pwd)) {
 		$class .= " password_protected";
 	}
+	if (getOption('thumb_crop') && !is_null($cy = $_zp_current_image->get('thumbY'))) {
+		$ts = getOption('thumb_size');
+		$sw = getOption('thumb_crop_width');
+		$sh = getOption('thumb_crop_height');
+		$cx = $_zp_current_image->get('thumbX');
+		$cw = $_zp_current_image->get('thumbW');
+		$ch = $_zp_current_image->get('thumbH');
+		// upscale to thumb_size proportions
+		if ($sw == $sh) { // square crop, set the size/width to thumbsize
+			$sw = $sh = $ts;
+		} else {
+			if ($sw > $sh) {
+				$r = $ts/$sw;
+				$sw = $ts;
+				$sh = $sh * $r;
+			} else {
+				$r = $ts/$sh;
+				$sh = $ts;
+				$sh = $r * $sh;
+			}
+		}
+		$url = getCustomImageURL( NULL, $sw, $sh, $cw, $ch, $cx, $cy, $class, $id, true);
+	} else {
+		$url = getImageThumb();
+	}
+
 	$h = getOption('thumb_crop_height');
 	if (!empty($h)) {
 		$h = " height=\"$h\"";
@@ -2338,7 +2364,7 @@ function printImageThumb($alt, $class=NULL, $id=NULL) {
 		$w = " width=\"$w\"";
 	}
 	$class = trim($class);
-	echo "<img src=\"" . htmlspecialchars(getImageThumb()) . "\" alt=\"" . html_encode($alt) . "\"" .
+	echo "<img src=\"" . htmlspecialchars($url) . "\" alt=\"" . html_encode($alt) . "\"" .
 	((getOption('thumb_crop')) ? $w.$h : "") .
 	(($class) ? " class=\"$class\"" : "") .
 	(($id) ? " id=\"$id\"" : "") . " />";

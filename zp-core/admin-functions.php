@@ -939,7 +939,8 @@ function printAlbumEditForm($index, $album) {
 		$globalsort = gettext("parent album subalbum sort order");
 	}
 	echo "\n<option value =''>$globalsort</option>";
-	generateListFromArray(array($type = $album->get('subalbum_sort_type')), $sort);
+	$type = $album->get('subalbum_sort_type');
+	generateListFromArray(array($type), $sort);
 	echo "\n</select>";
 	echo "\n</td>\n<td>";
 	if (($type == 'Manual') || ($type == '')) {
@@ -974,7 +975,8 @@ function printAlbumEditForm($index, $album) {
 		$globalsort = gettext("parent album image sort order");
 	}
 	echo "\n<option value =''>$globalsort</option>";
-	generateListFromArray(array($type = $album->get('sort_type')), $sort);
+	$type = $album->get('sort_type');
+	generateListFromArray(array($type), $sort);
 	echo "\n</select>";
 	echo "\n</td>\n<td>";
 	if (($type == 'Manual') || ($type == '')) {
@@ -1323,8 +1325,14 @@ function printAlbumEditRow($album) {
 	if (strpos($thumb, '_%7B') !== false) { // it is the default image
 		$thumb = 'images/imageDefault.png';
 	}
+	if (getOption('thumb_crop')) {
+		$w = round(getOption('thumb_crop_width')/2);
+		$h = round(getOption('thumb_crop_height')/2);
+	} else {
+		$w = $h = round(getOption('thumb_size')/2);
+	}
 	echo '<a href="?page=edit&album=' . urlencode($album->name) .'" title="'.sprintf(gettext('Edit this album:%s'), $album->name) .
- 			'"><img height="40" width="40" src="' . $thumb . '" /></a>';
+ 			'"><img src="' . $thumb . '" width="'.$w.'" height="'.$h.'" /></a>';
 	echo "</td>\n";
 	echo '<td  style="text-align: left;font-size:110%;" width="300"> <a href="?page=edit&album=' . urlencode($album->name) .
  			'" title="'.sprintf(gettext('Edit this album: %s'), $album->name) . '">' . $album->getTitle() . '</a>';

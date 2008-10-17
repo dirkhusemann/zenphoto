@@ -1,6 +1,6 @@
 <?php
 /**
- * basic functions used by zenphoto core
+ * basic functions used by zenphoto
  * Headers not sent yet!
  * @package functions
  *
@@ -8,37 +8,12 @@
 
 // force UTF-8 Ø
 
-define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
-define('DEBUG_ERROR', false); // set to true to  supplies the calling sequence with zp_error messages
-define('CAPTCHA_LENGTH', 5);
-include(dirname(__FILE__).'/version.php'); // Include the version info.
-if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
-if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
-if (!defined('OFFSET_PATH')) { define('OFFSET_PATH', 0); }
+require_once(dirname(__FILE__).'/functions-basic.php');
+
 if(!function_exists("gettext")) {
 	// load the drop-in replacement library
 	require_once(dirname(__FILE__).'/lib-gettext/gettext.inc');
 }
-
-// Set the memory limit higher just in case -- suppress errors if user doesn't have control.
-// 100663296 bytes = 96M
-if (ini_get('memory_limit') && parse_size(ini_get('memory_limit')) < 100663296) {
-	@ini_set('memory_limit','96M');
-}
-
-if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
-	die (sprintf(gettext("<strong>Zenphoto error:</strong> zp-config.php not found. Perhaps you need to run <a href=\"%s/setup.php\">setup</a> (or migrate your old config.php)"),ZENFOLDER));
-}
-
-// Including zp-config.php more than once is OK, and avoids $conf missing.
-require(dirname(__FILE__).'/zp-config.php');
-
-// If the server protocol is not set, set it to the default (obscure zp-config.php change).
-if (!isset($_zp_conf_vars['server_protocol'])) $_zp_conf_vars['server_protocol'] = 'http';
-
-require_once(dirname(__FILE__).'/functions-db.php');
-require_once(dirname(__FILE__).'/lib-encryption.php');
-require_once(dirname(__FILE__).'/lib-utf8.php');
 
 // allow reading of old Option tables--should be needed only during upgrade
 $result = query_full_array("SHOW COLUMNS FROM ".prefix('options').' LIKE "%ownerid%"', true);
@@ -51,221 +26,13 @@ if (is_array($result)) {
 	}
 }
 
-switch (OFFSET_PATH) {
-	case 0:	// starts from the root index.php
-		$const_webpath = dirname($_SERVER['SCRIPT_NAME']);
-		break;
-	case 1:  // starts from the zp-core folder
-	case 2:
-		$const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
-		break;
-	case 3: // starts from the plugins folder
-		$const_webpath = dirname(dirname(dirname($_SERVER['SCRIPT_NAME'])));
-		break;
-	case 4: // starts from within a folder within the plugins folder
-		$const_webpath = dirname(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))));
-		break;
-}
-$const_webpath = str_replace("\\", '/', $const_webpath);
-if ($const_webpath == '/') $const_webpath = '';
-if (!defined('WEBPATH')) { define('WEBPATH', $const_webpath); }
-define('SERVERPATH', str_replace("\\", '/', dirname(dirname(__FILE__))));
-define('PROTOCOL', getOption('server_protocol'));
-define('FULLWEBPATH', PROTOCOL."://" . $_SERVER['HTTP_HOST'] . WEBPATH);
-define('SAFE_MODE_ALBUM_SEP', '__');
-define('CACHEFOLDER', '/cache/');
-define('SERVERCACHE', SERVERPATH . substr(CACHEFOLDER, 0, -1));
-
-// Set the version number.
-$_zp_conf_vars['version'] = ZENPHOTO_VERSION;
-
-// the options array
-$_zp_options = NULL;
-
-define('ALBUMFOLDER', '/albums/');
-if (!defined('PLUGIN_FOLDER')) { define('PLUGIN_FOLDER', '/plugins/'); }
-define("THEMEFOLDER", 'themes');
-define('BACKUPFOLDER', 'backup');
-define('UTILITIES_FOLDER', '/utilities/');
-
-
 if (getOption('album_session') && OFFSET_PATH==0) {
 	session_start();
 }
 
-// Set error reporting to the default if it's not.
-error_reporting(E_ALL ^ E_NOTICE);
-//error_reporting(E_ALL);
-$_zp_error = false;
-
 require_once(dirname(__FILE__).'/functions-i18n.php');
 
 setMainDomain();
-
-/**
- * Decodes HTML Special Characters.  Function for backwards compatability with PHP 4.1.
- *
- * @param string $text
- * @param string $quote_style
- * @return string
- */
-if (!function_exists("htmlspecialchars_decode")) {
-	function htmlspecialchars_decode($string, $quote_style = ENT_COMPAT) {
-		$translation_table = get_html_translation_table(HTML_SPECIALCHARS, $quote_style);
-		if($translation_table["'"] != '&#039;') {
-			$translation_table["'"] = '&#039;';
-		}
-		return (strtr($string, array_flip($translation_table)));
-	}
-}
-
-/**
- * encodes a pre-sanitized string to be used in an HTML text-only field (value, alt, title, etc.)
- *
- * @param string $this_string
- * @return string
- */
-function html_encode($this_string, $striptags=true) {
-	if ($striptags) {$this_string = strip_tags($this_string);}
-	$this_string = htmlspecialchars_decode($this_string, ENT_QUOTES);
-	return htmlspecialchars($this_string, ENT_QUOTES, "UTF-8");
-}
-
-/**
- * encodes a pre-sanitized string to be used in a Javascript alert box
- *
- * @param string $this_string
- * @return string
- */
-function js_encode($this_string) {
-	$this_string = preg_replace("/\r?\n/", "\\n", $this_string);
-	$this_string = utf8::encode_javascript($this_string);
-	return $this_string;
-}
-
-/**
- * Get a option stored in the database.
- * This function reads the options only once, in order to improve performance.
- * @param string $key the name of the option.
- * @param bool $db set to true to force retrieval from the database.
- */
-function getOption($key, $db=false) {
-	global $_zp_conf_vars, $_zp_options, $_zp_optionDB_hasownerid;
-	if (is_null($_zp_options)) {
-		$_zp_options = array();
-
-		$sql = "SELECT `name`, `value` FROM ".prefix('options');
-		if (isset($_zp_optionDB_hasownerid)) $sql .= ' WHERE `ownerid`=0';
-		$optionlist = query_full_array($sql, true);
-		if ($optionlist !== false) {
-			foreach($optionlist as $option) {
-				$_zp_options[$option['name']] = $option['value'];
-			}
-		}
-	} else {
-		if ($db) {
-			$sql = "SELECT `value` FROM ".prefix('options')." WHERE `name`='".$key."'";
-			if (isset($_zp_optionDB_hasownerid)) $sql .= " AND `ownerid`=0";
-			$optionlist = query_single_row($sql);
-			return $optionlist['value'];
-		}
-	}
-	if (array_key_exists($key, $_zp_options)) {
-		return $_zp_options[$key];
-	} else {
-		if (array_key_exists($key, $_zp_conf_vars)) {
-			return $_zp_conf_vars[$key];
-		} else {
-			return NULL;
-		}
-	}
-}
-
-/**
- * Stores an option value.
- *
- * @param string $key name of the option.
- * @param mixed $value new value of the option.
- * @param bool $persistent set to false if the option is stored in memory only
- * otherwise it is preserved in the database
- */
-function setOption($key, $value, $persistent=true) {
-	global $_zp_conf_vars, $_zp_options;
-	if ($persistent) {
-		$result = query_single_row("SELECT `value` FROM ".prefix('options')." WHERE `name`='".$key."' AND `ownerid`=0", true);
-		if (is_array($result) && array_key_exists('value', $result)) { // option already exists.
-			if (is_null($value)) {
-				$sql = "UPDATE " . prefix('options') . " SET `value`=NULL WHERE `name`='" . mysql_real_escape_string($key) ."' AND `ownerid`=0";
-			} else {
-				$sql = "UPDATE " . prefix('options') . " SET `value`='" . mysql_real_escape_string($value) . "' WHERE `name`='" . mysql_real_escape_string($key) ."' AND `ownerid`=0";
-			}
-			$result = query($sql, true);
-		} else {
-			if (is_null($value)) {
-				$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid) VALUES ('" . mysql_real_escape_string($key) . "',NULL, 0)";
-			} else {
-				$sql = "INSERT INTO " . prefix('options') . " (name, value, ownerid) VALUES ('" . mysql_real_escape_string($key) . "','" . mysql_real_escape_string($value) . "', 0)";
-			}
-			$result = query($sql, true);
-		}
-	} else {
-		$result = true;
-	}
-	if ($result) {
-		$_zp_options[$key] = $value;
-		return true;
-	} else {
-		return false;
-	}
-}
-
-/**
- * Converts a boolean value to 1 or 0 and sets the option with it
- *
- * @param string $key the option
- * @param bool $value the value to be set
- */
-function setBoolOption($key, $value) {
-	if ($value) {
-		setOption($key, '1');
-	} else {
-		setOption($key, '0');
-	}
-}
-
-/**
- * Sets the default value of an option.
- *
- * If the option has never been set it is set to the value passed
- *
- * @param string $key the option name
- * @param mixed $default the value to be used as the default
- */
-function setOptionDefault($key, $default) {
-	global $_zp_conf_vars, $_zp_options;
-	if (NULL == $_zp_options) { getOption('nil'); } // pre-load from the database
-	if (!array_key_exists($key, $_zp_options)) {
-		if (is_null($default)) {
-			$sql = "INSERT INTO " . prefix('options') . " (`name`, `value`, `ownerid`) VALUES ('" . mysql_real_escape_string($key) . "', NULL, 0);";
-		} else {
-			$sql = "INSERT INTO " . prefix('options') . " (`name`, `value`, `ownerid`) VALUES ('" . mysql_real_escape_string($key) . "', '".
-			mysql_real_escape_string($default) . "', 0);";
-		}
-		query($sql, true);
-		$_zp_options[$key] = $default;
-	}
-}
-
-/**
- * Retuns the option array
- *
- * @return array
- */
-function getOptionList() {
-	global $_zp_options;
-	if (NULL == $_zp_options) { getOption('nil'); } // pre-load from the database
-	return $_zp_options;
-}
 
 /**
  * parses the allowed HTML tags for use by htmLawed
@@ -325,24 +92,6 @@ $_zp_exifvars = array(
 		'EXIFGPSAltitude'       => array('GPS',    'Altitude',          gettext('Altitude'),               false),
 		'EXIFGPSAltitudeRef'    => array('GPS',    'Altitude Reference',gettext('Altitude Reference'),     false)
 );
-
-
-// Set up assertions for debugging.
-assert_options(ASSERT_ACTIVE, 0);
-assert_options(ASSERT_WARNING, 0);
-assert_options(ASSERT_QUIET_EVAL, 1);
-/**
- * Emits an assertion error
- *
- * @param string $file the script file
- * @param string $line the line of the assertion
- * @param string $code the error message
- */
-function assert_handler($file, $line, $code) {
-	dmesg(gettext("ERROR: Assertion failed in")." [$file:$line]: $code");
-}
-// Set up assertion callback
-assert_options(ASSERT_CALLBACK, 'assert_handler');
 
 $_zp_supported_images = array('jpg','jpeg','gif','png');
 // Image utility functions
@@ -508,68 +257,6 @@ function subalbumSortKey($sorttype) {
 	return 'sort_order';
 }
 
-/**
- * rewrite_get_album_image - Fix special characters in the album and image names if mod_rewrite is on:
- * This is redundant and hacky; we need to either make the rewriting completely internal,
- * or fix the bugs in mod_rewrite. The former is probably a good idea.
- *
- *  Old explanation:
- *    rewrite_get_album_image() parses the album and image from the requested URL
- *    if mod_rewrite is on, and replaces the query variables with corrected ones.
- *    This is because of bugs in mod_rewrite that disallow certain characters.
- *
- * @param string $albumvar "$_GET" parameter for the album
- * @param string $imagevar "$_GET" parameter for the image
- */
-function rewrite_get_album_image($albumvar, $imagevar) {
-	if (getOption('mod_rewrite')) {
-		$uri = urldecode(sanitize($_SERVER['REQUEST_URI'], 0));
-		$path = substr($uri, strlen(WEBPATH)+1);
-		// Only extract the path when the request doesn't include the running php file (query request).
-		if (strlen($path) > 0 && strpos($_SERVER['REQUEST_URI'], $_SERVER['PHP_SELF']) === false && isset($_GET[$albumvar])) {
-			$im_suffix = getOption('mod_rewrite_image_suffix');
-			$suf_len = strlen($im_suffix);
-			$qspos = strpos($path, '?');
-			if ($qspos !== false) $path = substr($path, 0, $qspos);
-			// Strip off the image suffix (could interfere with the rest, needs to go anyway).
-			if ($suf_len > 0 && substr($path, -($suf_len)) == $im_suffix) {
-				$path = substr($path, 0, -($suf_len));
-			}
-
-			if (substr($path, -1, 1) == '/') $path = substr($path, 0, strlen($path)-1);
-			$pagepos  = strpos($path, '/page/');
-			$slashpos = strrpos($path, '/');
-			$imagepos = strpos($path, '/image/');
-			$albumpos = strpos($path, '/album/');
-			if ($imagepos !== false) {
-				$ralbum = substr($path, 0, $imagepos);
-				$rimage = substr($path, $slashpos+1);
-			} else if ($albumpos !== false) {
-				$ralbum = substr($path, 0, $albumpos);
-				$rimage = substr($path, $slashpos+1);
-			} else if ($pagepos !== false) {
-				$ralbum = substr($path, 0, $pagepos);
-				$rimage = null;
-			} else if ($slashpos !== false) {
-				$ralbum = substr($path, 0, $slashpos);
-				$rimage = substr($path, $slashpos+1);
-				if ((is_dir(getAlbumFolder() . UTF8ToFilesystem($ralbum . '/' . $rimage)) || hasDyanmicAlbumSuffix($rimage))) {
-					$ralbum = $ralbum . '/' . $rimage;
-					$rimage = null;
-				}
-			} else {
-				$ralbum = $path;
-				$rimage = null;
-			}
-			return array($ralbum, $rimage);
-		}
-	}
-	// No mod_rewrite, or no album, etc. Just send back the query args.
-	$ralbum = isset($_GET[$albumvar]) ? sanitize($_GET[$albumvar],0) : null;
-	$rimage = isset($_GET[$imagevar]) ? sanitize($_GET[$imagevar],0) : null;
-	return array($ralbum, $rimage);
-}
-
 /** getAlbumArray - returns an array of folder names corresponding to the
  *     given album string.
  * @param string $albumstring is the path to the album as a string. Ex: album/subalbum/my-album
@@ -593,259 +280,6 @@ function getAlbumArray($albumstring, $includepaths=false) {
 }
 
 /**
- * Returns the path of an image for uses in caching it
- *
- * @param string $album album folder
- * @param string $image image file name
- * @param array $args cropping arguments
- * $param bool $utf8 set to false if passing Latin1 strings
- * @return string
- */
-function getImageCacheFilename($album, $image, $args, $utf8=true) {
-	// Set default variable values.
-	$postfix = getImageCachePostfix($args);
-	if (empty($album)) {
-		$albumsep = '';
-	} else {
-		if (ini_get('safe_mode')) {
-			$albumsep = SAFE_MODE_ALBUM_SEP;
-			$album = str_replace(array('/',"\\"), $albumsep, $album);
-		} else {
-			$albumsep = '/';
-		}
-	}
-	if ($utf8) {
-		return UTF8ToFilesystem('/' . $album . $albumsep . $image . $postfix . '.jpg');
-	} else {
-		return '/' . $album . $albumsep . $image . $postfix . '.jpg';
-	}
-}
-
-/**
- * Returns the crop/sizing string to postfix to a cache image
- *
- * @param array $args cropping arguments
- * @return string
- */
-function getImageCachePostfix($args) {
-	list($size, $width, $height, $cw, $ch, $cx, $cy) = $args;
-	$postfix_string = ($size ? "_$size" : "") . ($width ? "_w$width" : "")
-	. ($height ? "_h$height" : "") . ($cw ? "_cw$cw" : "") . ($ch ? "_ch$ch" : "")
-	. (is_numeric($cx) ? "_cx$cx" : "") . (is_numeric($cy) ? "_cy$cy" : "");
-	return $postfix_string;
-}
-
-
-/**
- * Validates and edits image size/cropping parameters
- *
- * @param array $args cropping arguments
- * @return array
- */
-function getImageParameters($args) {
-	$thumb_crop = getOption('thumb_crop');
-	$thumb_size = getOption('thumb_size');
-	$thumb_crop_width = getOption('thumb_crop_width');
-	$thumb_crop_height = getOption('thumb_crop_height');
-	$thumb_quality = getOption('thumb_quality');
-	$image_default_size = getOption('image_size');
-	$quality = getOption('image_quality');
-	// Set up the parameters
-	$thumb = $crop = false;
-	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality) = $args;
-
-	if ($size == 'thumb') {
-		$thumb = true;
-		if ($thumb_crop) {
-			$cw = $thumb_crop_width;
-			$ch = $thumb_crop_height;
-		}
-		$size = round($thumb_size);
-		$quality = round($thumb_quality);
-
-	} else if ((is_numeric($size) && is_numeric($cw) && is_numeric($ch))
-	|| (is_numeric($width) && is_numeric($height))) {
-		if (is_numeric($width) && is_numeric($height)) {
-			$size = max($width, $height);
-			$cw = $width;
-			$ch = $height;
-			$height = $width = false;
-		}
-		$thumb = true;
-		$cw = min($size, $cw);
-		$ch = min($size, $ch);
-
-	} else {
-		if ($size == 'default') {
-			$size = $image_default_size;
-		} else if (empty($size) || !is_numeric($size)) {
-			$size = false; // 0 isn't a valid size anyway, so this is OK.
-		} else {
-			$size = round($size);
-		}
-	}
-
-	// Round each numeric variable, or set it to false if not a number.
-	list($width, $height, $cw, $ch, $cx, $cy, $quality) =
-	array_map('sanitize_numeric', array($width, $height, $cw, $ch, $cx, $cy, $quality));
-	if (empty($cw) && empty($ch)) $crop = false; else $crop = true;
-	if (empty($quality)) $quality = getOption('image_quality');
-
-	// Return an array of parameters used in image conversion.
-	return array($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop);
-}
-
-
-/**
- * Checks if the input is numeric, rounds if so, otherwise returns false.
- *
- * @param mixed $num the number to be sanitized
- * @return int
- */
-function sanitize_numeric($num) {
-	if (is_numeric($num)) {
-		return abs(round($num));
-	} else {
-		return false;
-	}
-}
-
-
-/** Make strings generally clean.  Takes an input string and cleans out
- * null-bytes, slashes (if magic_quotes_gpc is on), and optionally use KSES
- * library to prevent XSS attacks and other malicious user input.
- * @param string $input_string is a string that needs cleaning.
- * @param string $sanitize_level is a number between 0 and 3 that describes the
- * type of sanitizing to perform on $input_string.
- *   0 - Basic sanitation. Only strips null bytes. Not recommended for submitted form data.
- *   1 - User specified. (User defined code is allowed. Used for descriptions and comments.)
- *   2 - Text style/formatting. (Text style codes allowed. Used for titles.)
- *   3 - Full sanitation. (Default. No code allowed. Used for text only fields)
- * @return string the sanitized string.
- */
-function sanitize($input_string, $sanitize_level=3) {
-	if (is_array($input_string)) {
-		$output_string = array();
-		foreach ($input_string as $output_key => $output_value) {
-			$output_string[$output_key] = sanitize_string($output_value, $sanitize_level);
-		}
-	} else {
-		$output_string = sanitize_string($input_string, $sanitize_level);
-	}
-	return $output_string;
-}
-
-/** returns a sanitized string for the sanitize function
- * @param string $input_string
- * @param string $sanitize_level
- * @return string the sanitized string.
- */
-function sanitize_string($input_string, $sanitize_level) {
-	// Strip slashes if get_magic_quotes_gpc is enabled.
-	if (get_magic_quotes_gpc()) $input_string = stripslashes($input_string);
-	// Basic sanitation.
-	if ($sanitize_level === 0) {
-		return str_replace(chr(0), " ", $input_string);
-    }
-	// User specified sanititation.
-	require_once(dirname(__FILE__).'/lib-htmlawed.php');
-
-	if ($sanitize_level === 1) {
-		$user_tags = "(".getOption('allowed_tags').")";
-		$allowed_tags = parseAllowedTags($user_tags);
-		if ($allowed_tags === false) { $allowed_tags = array(); } // someone has screwed with the 'allowed_tags' option row in the database, but better safe than sorry
-		$input_string = kses($input_string, $allowed_tags);
-
-	// Text formatting sanititation.
-	} else if ($sanitize_level === 2) {
-		$style_tags = "(".getOption('style_tags').")";
-		$allowed_tags = parseAllowedTags($style_tags);
-		if ($allowed_tags === false) { $allowed_tags = array(); } // someone has screwed with the 'style_tags' option row in the database, but better safe than sorry
-		$input_string = kses($input_string, $allowed_tags);
-
-	// Full sanitation.  Strips all code.
-	} else if ($sanitize_level === 3) {
-		$allowed_tags = array();
-		$input_string = kses($input_string, $allowed_tags);
-	}
-	return $input_string;
-}
-
-/** Takes user input meant to be used within a path to a file or folder and
- * removes anything that could be insecure or malicious, or result in duplicate
- * representations for the same physical file.
- *
- * Returns the sanitized path
- *
- * @param string $filename is the path text to filter.
- * @return string
- */
-function sanitize_path($filename) {
-	$filename = str_replace(chr(0), " ", $filename);
-	$filename = strip_tags($filename);
-	$filename = preg_replace(array('/^\/+/','/\/+$/','/\/\/+/','/\.\.+/'), '', $filename);
-	return $filename;
-}
-
-/**
- * Formats an error message
- * If DEBUG_ERROR is set, supplies the calling sequence
- *
- * @param string $message
- */
-function zp_error($message) {
-	global $_zp_error;
-	if (!$_zp_error) {
-		echo '<div style="padding: 15px; border: 1px solid #F99; background-color: #FFF0F0; margin: 20px; font-family: Arial, Helvetica, sans-serif; font-size: 12pt;">'
-		. ' <h2 style="margin: 0px 0px 5px; color: #C30;">Zenphoto Error</h2><div style=" color:#000;">' . "\n\n" . $message . '</div>';
-		if (DEBUG_ERROR) {
-			// Get a backtrace.
-			$bt = debug_backtrace();
-			array_shift($bt); // Get rid of zp_error in the backtrace.
-			$prefix = '  ';
-			echo "\n\n<p><strong>Backtrace:</strong> <br />\n<pre>\n";
-			foreach($bt as $b) {
-				echo $prefix . ' in '
-				. (isset($b['class']) ? $b['class'] : '')
-				. (isset($b['type']) ? $b['type'] : '')
-				. $b['function']
-				. ' (' . basename($b['file'])
-				. ' [' . $b['line'] . "])\n";
-				$prefix .= '  ';
-			}
-			echo "</p>\n";
-		}
-		echo "</div>\n";
-		$_zp_error = true;
-		exit();
-	}
-}
-
-/**
- * Returns either the rewrite path or the plain, non-mod_rewrite path
- * based on the mod_rewrite option in zp-config.php.
- * The given paths can start /with or without a slash, it doesn't matter.
- *
- * IDEA: this function could be used to specially escape items in
- * the rewrite chain, like the # character (a bug in mod_rewrite).
- *
- * This is here because it's used in both template-functions.php and in the classes.
- * @param string $rewrite is the path to return if rewrite is enabled. (eg: "/myalbum")
- * @param string $plain is the path if rewrite is disabled (eg: "/?album=myalbum")
- * @return string
- */
-function rewrite_path($rewrite, $plain) {
-	$path = null;
-	if (getOption('mod_rewrite')) {
-		$path = $rewrite;
-	} else {
-		$path = $plain;
-	}
-	if (substr($path, 0, 1) == "/") $path = substr($path, 1);
-	return WEBPATH . "/" . $path;
-}
-
-/**
  * Returns a formated date for output
  *
  * @param string $format the "strftime" format string
@@ -861,60 +295,6 @@ function zpFormattedDate($format, $dt) {
 		}
 	}
 	return utf8::convert($fdate, $charset);
-}
-
-/**
- * Simple mySQL timestamp formatting function.
- *
- * @param string $format formatting template
- * @param int $mytimestamp timestamp
- * @return string
- */
-function myts_date($format,$mytimestamp)
-{
-	// If your server is in a different time zone than you, set this.
-	$timezoneadjust = getOption('time_offset');
-
-	$month  = substr($mytimestamp,4,2);
-	$day    = substr($mytimestamp,6,2);
-	$year   = substr($mytimestamp,0,4);
-
-	$hour   = substr($mytimestamp,8,2);
-	$min    = substr($mytimestamp,10,2);
-	$sec    = substr($mytimestamp,12,2);
-
-	$epoch  = mktime($hour+$timezoneadjust,$min,$sec,$month,$day,$year);
-	$date   = zpFormattedDate($format, $epoch);
-	return $date;
-}
-
-// Text formatting and checking functions
-
-/**
- * Determines if the input is an e-mail address. Adapted from WordPress.
- * Name changed to avoid conflicts in WP integrations.
- *
- * @param string $input_email email address?
- * @return bool
- */
-function is_valid_email_zp($input_email) {
-	$chars = "/^([a-z0-9+_]|\\-|\\.)+@(([a-z0-9_]|\\-)+\\.)+[a-z]{2,6}\$/i";
-	if(strstr($input_email, '@') && strstr($input_email, '.')) {
-		if (preg_match($chars, $input_email)) {
-			return true;
-		}
-	}
-	return false;
-}
-
-/**
- * rawurlencode function that is path-safe (does not encode /)
- *
- * @param string $path URL
- * @return string
- */
-function pathurlencode($path) {
-	return implode("/", array_map("rawurlencode", explode("/", $path)));
 }
 
 /**
@@ -950,64 +330,25 @@ function dirsize($directory)
 	return $size;
 }
 
-/**
- * Return human readable sizes
- * From: http://aidan.dotgeek.org/lib/
- *
- * @param       int    $size        Size
- * @param       int    $unit        The maximum unit
- * @param       int    $retstring   The return string format
- * @author      Aidan Lister <aidan@php.net>
- * @version     1.1.0
- */
-function size_readable($size, $unit = null, $retstring = null)
-{
-	// Units
-	$sizes = array('B', 'KB', 'MB', 'GB', 'TB');
-	$ii = count($sizes) - 1;
-
-	// Max unit
-	$unit = array_search((string) $unit, $sizes);
-	if ($unit === null || $unit === false) {
-		$unit = $ii;
-	}
-
-	// Return string
-	if ($retstring === null) {
-		$retstring = '%01.2f %s';
-	}
-
-	// Loop
-	$i = 0;
-	while ($unit != $i && $size >= 1024 && $i < $ii) {
-		$size /= 1024;
-		$i++;
-	}
-
-	return sprintf($retstring, $size, $sizes[$i]);
-}
+// Text formatting and checking functions
 
 /**
- * Parses and sanitizes Theme definition text
+ * Determines if the input is an e-mail address. Adapted from WordPress.
+ * Name changed to avoid conflicts in WP integrations.
  *
- * @param file $file theme file
- * @return string
+ * @param string $input_email email address?
+ * @return bool
  */
-function parseThemeDef($file) {
-	$file = UTF8ToFilesystem($file);
-	$themeinfo = array();
-	if (is_readable($file) && $fp = @fopen($file, "r")) {
-		while($line = fgets($fp)) {
-			if (substr(trim($line), 0, 1) != "#") {
-				$item = explode("::", $line);
-				$themeinfo[trim($item[0])] = sanitize(trim($item[1]), 1);
-			}
+function is_valid_email_zp($input_email) {
+	$chars = "/^([a-z0-9+_]|\\-|\\.)+@(([a-z0-9_]|\\-)+\\.)+[a-z]{2,6}\$/i";
+	if(strstr($input_email, '@') && strstr($input_email, '.')) {
+		if (preg_match($chars, $input_email)) {
+			return true;
 		}
-		return $themeinfo;
-	} else {
-		return false;
 	}
+	return false;
 }
+
 
 /**
  * Send an mail to the admin user(s). We also attempt to intercept any form injection
@@ -1103,7 +444,7 @@ function sortByMultilingual($dbresult, $field, $descending) {
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function sortAlbumArray($parentalbum, $albums, $sortkey='sort_order', $recursed=false) {
+function sortAlbumArray($parentalbum, $albums, $sortkey='`sort_order`', $recursed=false) {
 	global $_zp_loggedin, $_zp_gallery;
 	$hidden = array();
 	if (is_null($parentalbum)) {
@@ -1111,7 +452,7 @@ function sortAlbumArray($parentalbum, $albums, $sortkey='sort_order', $recursed=
 	} else {
 		$albumid = '='.$parentalbum->id;
 	}
-	$result = query('SELECT folder, sort_order, `title`, `show`, `dynamic`, `search_params` FROM ' .
+	$result = query('SELECT `folder`, `sort_order`, `title`, `show`, `dynamic`, `search_params` FROM ' .
 						prefix("albums") . ' WHERE `parentid`'.$albumid.' ORDER BY ' . $sortkey);
 	$results = array();
 	while ($row = mysql_fetch_assoc($result)) {
@@ -1159,19 +500,6 @@ function sortAlbumArray($parentalbum, $albums, $sortkey='sort_order', $recursed=
 	}
 
 	return $albums_ordered;
-}
-
-/**
- * Emits a page error. Used for attempts to bypass password protection
- *
- */
-function pageError($err,$text) {
-	header("HTTP/1.0 ".$err.' '.$text);
-	echo "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head>	<title>".$err." - ".$text."</TITLE>	<META NAME=\"ROBOTS\" CONTENT=\"NOINDEX, FOLLOW\"></head>";
-	echo "<BODY bgcolor=\"#ffffff\" text=\"#000000\" link=\"#0000ff\" vlink=\"#0000ff\" alink=\"#0000ff\">";
-	echo "<FONT face=\"Helvitica,Arial,Sans-serif\" size=\"2\">";
-	echo "<b>".sprintf(gettext('Page access %2$s (%1$s)'),$err, $text)."</b><br/><br/>";
-	echo "</body></html>";
 }
 
 /**
@@ -1307,47 +635,6 @@ function createAlbumZip($album){
 }
 
 /**
- * Returns the fully qualified path to the album folders
- *
- * @param string $root the base from whence the path dereives
- * @return sting
- */
-$_zp_album_folder = null;
-function getAlbumFolder($root=SERVERPATH) {
-	global $_zp_album_folder, $_zp_conf_vars;
-	if (is_null($_zp_album_folder)) {
-		if (!isset($_zp_conf_vars['external_album_folder']) || is_null($_zp_conf_vars['external_album_folder'])) {
-			if (is_null($_zp_conf_vars['album_folder'])) {
-				$_zp_album_folder = ALBUMFOLDER;
-			} else {
-				$_zp_album_folder = $_zp_conf_vars['album_folder'];
-			}
-		} else {
-			$_zp_conf_vars['album_folder_class'] = 'external';
-			$_zp_album_folder = $_zp_conf_vars['external_album_folder'];
-		}
-		if (substr($_zp_album_folder, -1) != '/') $_zp_album_folder .= '/';
-	}
-	if (!isset($_zp_conf_vars['album_folder_class'])) {
-		$_zp_conf_vars['album_folder_class'] = 'std';
-	}
-	switch ($_zp_conf_vars['album_folder_class']) {
-		case 'std':
-			return $root . $_zp_album_folder;
-		case 'in_webpath':
-			if (WEBPATH) { 			// strip off the WEBPATH
-				$root = dirname($root);
-				if ($root == '/') {
-					$root = '';
-				}
-			}
-			return $root . $_zp_album_folder;
-		case 'external':
-			return $_zp_album_folder;
-	}
-}
-
-/**
  * Returns the fully qualified "require" file name of the plugin file.
  *
  * @param  string $plugin is the name of the plugin file, typically something.php
@@ -1429,7 +716,6 @@ function getIPTCTagArray($tag) {
 	}
 	return NULL;
 }
-
 
 function prepIPTCString($iptcstring) {
 	$iptcstring = utf8::convert($iptcstring, 'ISO-8859-1');
@@ -1549,16 +835,6 @@ function getImageMetadata($imageName) {
 	}
 
 	return $result;
-}
-
-/**
- * Checks to see if a URL is valid
- *
- * @param string $url the URL being checked
- * @return bool
- */
-function isValidURL($url) {
-	return preg_match('|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $url);
 }
 
 /**
@@ -1733,174 +1009,6 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		}
 	}
 	return $goodMessage;
-}
-
-/**
- * Write output to the debug log
- * Use this for debugging when echo statements would come before headers are sent
- * or would create havoc in the HTML.
- * Creates (or adds to) a file named debug_log.txt which is located in the zenphoto core folder
- *
- * @param string $message the debug information
- * @param bool $reset set to true to reset the log to zero before writing the message
- */
-function debugLog($message, $reset=false) {
-	if ($reset) { $mode = 'w'; } else { $mode = 'a'; }
-	$f = fopen(dirname(dirname(__FILE__)) . '/' . ZENFOLDER . '/debug_log.txt', $mode);
-	fwrite($f, $message . "\n");
-	fclose($f);
-}
-
-/**
- * "print_r" equivalent for the debug log
- *
- * @param string $name the name (or message) to display for the array
- * @param array $source
- */
-function debugLogArray($name, $source) {
-	$msg = "Array $name( ";
-	if (is_array($source)) {
-		if (count($source) > 0) {
-			foreach ($source as $key => $val) {
-				if (strlen($msg) > 72) {
-					debugLog($msg);
-					$msg = '';
-				}
-				$msg .= $key . " => " . $val . ", ";
-			}
-			$msg = substr($msg, 0, strrpos($msg, ',')) . " )";
-		} else {
-			$msg .= ")";
-		}
-		debugLog($msg);
-	} else {
-		debugLog($msg . ")");
-	}
-}
-
-/**
- * Logs the calling stack
- *
- * @ param string $message Message to prefix the backtrace
- */
-function debugLogBacktrace($message) {
-	debugLog("Backtrace: $message");
-	// Get a backtrace.
-	$bt = debug_backtrace();
-	array_shift($bt); // Get rid of debug_backtrace in the backtrace.
-	$prefix = '';
-	$line = '';
-	$caller = '';
-	foreach($bt as $b) {
-		$caller = (isset($b['class']) ? $b['class'] : '')	. (isset($b['type']) ? $b['type'] : '')	. $b['function'];
-		if (!empty($line)) { // skip first output to match up functions with line where they are used.
-
-			$msg = $prefix . ' from ';
-			debugLog($msg.$caller.' ('.$line.')');
-			$prefix .= '  ';
-		} else {
-			debugLog($caller.' called');
-		}
-		$line = basename($b['file'])	. ' [' . $b['line'] . "]";
-	}
-	if (!empty($line)) {
-		debugLog($prefix.' from '.$line);
-	}
-}
-
-/**
- * Provide an alternative to glob which does not return filenames with accented charactes in them
- *
- * @param string $pattern the 'pattern' for matching files
- * @param bit $flags glob 'flags'
- */
-function safe_glob($pattern, $flags=0) {
-	$split=explode('/',$pattern);
-	$match=array_pop($split);
-	$path_return = $path = implode('/',$split);
-	if (empty($path)) {
-		$path = '.';
-	} else {
-		$path_return = $path_return . '/';
-	}
-	if (!is_dir($path)) return array();
-	if (($dir=opendir($path))!==false) {
-		$glob=array();
-		while(($file=readdir($dir))!==false) {
-			if (safe_fnmatch($match,$file)) {
-				if ((is_dir("$path/$file"))||(!($flags&GLOB_ONLYDIR))) {
-					if ($flags&GLOB_MARK) $file.='/';
-					$glob[]=$path_return.$file;
-				}
-			}
-		}
-		closedir($dir);
-		if (!($flags&GLOB_NOSORT)) sort($glob);
-		return $glob;
-	} else {
-		return array();
-	}
-}
-/**
- * pattern match function Works with accented characters where the PHP one does not.
- *
- * @param string $pattern pattern
- * @param string $string haystack
- * @return bool
- */
-function safe_fnmatch($pattern, $string) {
-	return @preg_match('/^' . strtr(addcslashes($pattern, '\\.+^$(){}=!<>|'), array('*' => '.*', '?' => '.?')) . '$/i', $string);
-}
-
-/**
- * Returns the value of a cookie from either the cookies or from $_SESSION[]
- *
- * @param string $name the name of the cookie
- */
-function zp_getCookie($name) {
-	if (DEBUG_LOGIN) {
-		if (isset($_SESSION[$name])) {
-			$sessionv = $_SESSION[$name];
-		} else {
-			$sessionv = '';
-		}
-		if (isset($_COOKIE[$name])) {
-			$cookiev = $_COOKIE[$name];
-		} else {
-			$cookiev = '';
-		}
-		debugLog("zp_getCookie($name): SESSION[".session_id()."]=".$sessionv.", COOKIE=".$cookiev);
-	}
-	if (isset($_COOKIE[$name]) && !empty($_COOKIE[$name])) {
-		return $_COOKIE[$name];
-	}
-	if (isset($_SESSION[$name])) {
-		return $_SESSION[$name];
-	}
-	return false;
-}
-/**
- * Sets a cookie both in the browser cookies and in $_SESSION[]
- *
- * @param string $name The 'cookie' name
- * @param string $value The value to be stored
- * @param timestamp $time The time the cookie expires
- * @param string $path The path on the server in which the cookie will be available on
- */
-function zp_setCookie($name, $value, $time=0, $path='/') {
-	if (!getOption('album_session')) {
-		if (DEBUG_LOGIN) {
-			debugLog("zp_setCookie($name, $value, $time, $path)");
-		}
-		setcookie($name, $value, $time, $path);
-	}
-	if ($time < time()) {
-		if (isset($_SESSION))	unset($_SESSION[$name]);
-		if (isset($_COOKIE)) unset($_COOKIE[$name]);
-	} else {
-		$_SESSION[$name] = $value;
-		$_COOKIE[$name] = $value;
-	}
 }
 
 //admin user handling
@@ -2189,7 +1297,6 @@ function handleSearchParms($album='', $image='') {
 	}
 	$context = get_context();
 	$params = zp_getCookie('zenphoto_image_search_params');
-
 	if (!empty($params)) {
 		$_zp_current_search = new SearchEngine();
 		$_zp_current_search->setSearchParams($params);
@@ -2224,6 +1331,7 @@ function handleSearchParms($album='', $image='') {
 function galleryAlbumsPerPage() {
 	return max(1, getOption('albums_per_page'));
 }
+
 /**
  * Returns the theme folder
  * If there is an album theme, loads the theme options.
@@ -2297,35 +1405,6 @@ function cbone($bits, $limit) {
 }
 
 /**
- * generates a simple captcha for comments
- *
- * Thanks to gregb34 who posted the original code
- *
- * Returns the captcha code string and image URL (via the $image parameter).
- *
- * @return string;
- */
-function generateCaptcha(&$image) {
-
-	$lettre='abcdefghijkmnpqrstuvwxyz23456789';
-
-	$string = '';
-	for ($i=0; $i < CAPTCHA_LENGTH; $i++) {
-		$string .= $lettre[rand(0,31)];
-	}
-	$admins = getAdministrators();
-	$admin = array_shift($admins);
-	$key = $admin['pass'];
-	$cypher = bin2hex(rc4($key, $string));
-	$code=md5($cypher);
-	query('DELETE FROM '.prefix('captcha').' WHERE `ptime`<'.(time()-3600), true);  // expired tickets
-	query("INSERT INTO " . prefix('captcha') . " (ptime, hash) VALUES ('" . escape(time()) . "','" . escape($code) . "')", true);
-	$image = WEBPATH . '/' . ZENFOLDER . "/c.php?i=$cypher";
-
-	return $code;
-}
-
-/**
  * Allows plugins to add to the scripts output by zenJavascript()
  *
  * @param string $script the text to be added.
@@ -2364,22 +1443,35 @@ function is_valid_other_type($filename) {
 }
 
 /**
- * Returns a new "image" object based on the file extension
+ * generates a simple captcha for comments
  *
- * @param object $album the owner album
- * @param string $filename the filename
- * @return object
+ * Thanks to gregb34 who posted the original code
+ *
+ * Returns the captcha code string and image URL (via the $image parameter).
+ *
+ * @return string;
  */
-function newImage(&$album, $filename) {
-	global $_zp_extra_filetypes;
-	if ($ext = is_valid_other_type($filename)) {
-		$object = $_zp_extra_filetypes[$ext];
-		return new $object($album, $filename);
-	} else {
-		return New Image($album, $filename);
+function generateCaptcha(&$image) {
+
+	$lettre='abcdefghijkmnpqrstuvwxyz23456789';
+
+	$string = '';
+	for ($i=0; $i < CAPTCHA_LENGTH; $i++) {
+		$string .= $lettre[rand(0,31)];
 	}
+	$admins = getAdministrators();
+	$admin = array_shift($admins);
+	$key = $admin['pass'];
+	$cypher = bin2hex(rc4($key, $string));
+	$code=md5($cypher);
+	query('DELETE FROM '.prefix('captcha').' WHERE `ptime`<'.(time()-3600), true);  // expired tickets
+	query("INSERT INTO " . prefix('captcha') . " (ptime, hash) VALUES ('" . escape(time()) . "','" . escape($code) . "')", true);
+	$image = WEBPATH . '/' . ZENFOLDER . "/c.php?i=$cypher";
+
+	return $code;
 }
 
+// multidimensional array column sort - source: http://codingforums.com/showthread.php?t=71904
 /**
  * Trims the tag values and eliminates duplicates.
  * Tags are case insensitive so only the first of 'Tag' and 'tag' will be preserved
@@ -2597,8 +1689,6 @@ function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
 	$text . "</a>";
 }
 
-// multidimensional array column sort - source: http://codingforums.com/showthread.php?t=71904
-
 /**
  * multidimensional array column sort
  *
@@ -2634,70 +1724,6 @@ function sortMultiArray($array, $index, $order='asc', $natsort=FALSE, $case_sens
 		return $sorted;
 	}
 	return $array;
-}
-
-
-/**
- * Copies a directory recursively
- * @param string $srcdir the source directory.
- * @param string $dstdir the destination directory.
- * @return the total number of files copied.
- */
-function dircopy($srcdir, $dstdir) {
-	$num = 0;
-	if(!is_dir($dstdir)) mkdir($dstdir);
-	if($curdir = opendir($srcdir)) {
-		while($file = readdir($curdir)) {
-			if($file != '.' && $file != '..') {
-				$srcfile = $srcdir . '/' . $file;
-				$dstfile = $dstdir . '/' . $file;
-				if(is_file($srcfile)) {
-					if(is_file($dstfile)) $ow = filemtime($srcfile) - filemtime($dstfile); else $ow = 1;
-					if($ow > 0) {
-						if(copy($srcfile, $dstfile)) {
-							touch($dstfile, filemtime($srcfile)); $num++;
-						}
-					}
-				}
-				else if(is_dir($srcfile)) {
-					$num += dircopy($srcfile, $dstfile, $verbose);
-				}
-			}
-		}
-		closedir($curdir);
-	}
-	return $num;
-}
-
-
-/**
- * Makes directory recursively, returns TRUE if exists or was created sucessfuly.
- * Note: PHP5 includes a recursive parameter to mkdir, but PHP4 does not, so this
- *   is required to target PHP4.
- * @param string $pathname The directory path to be created.
- * @return boolean TRUE if exists or made or FALSE on failure.
- */
-
-function mkdir_recursive($pathname, $mode=0777) {
-	is_dir(dirname($pathname)) || mkdir_recursive(dirname($pathname), $mode);
-	return is_dir($pathname) || @mkdir($pathname, $mode);
-}
-
-
-
-/**
- * Parses a byte size from a size value (eg: 100M) for comparison.
- */
-function parse_size($size) {
-	$suffixes = array(
-    '' => 1,
-    'k' => 1024,
-    'm' => 1048576, // 1024 * 1024
-    'g' => 1073741824, // 1024 * 1024 * 1024
-	);
-	if (preg_match('/([0-9]+)\s*(k|m|g)?(b?(ytes?)?)/i', $size, $match)) {
-		return $match[1] * $suffixes[strtolower($match[2])];
-	}
 }
 
 /**
@@ -2748,4 +1774,196 @@ function getNotViewableAlbums() {
 	}
 	return $_zp_not_viewable_album_list;
 }
+
+/**
+ * Parses and sanitizes Theme definition text
+ *
+ * @param file $file theme file
+ * @return string
+ */
+function parseThemeDef($file) {
+	$file = UTF8ToFilesystem($file);
+	$themeinfo = array();
+	if (is_readable($file) && $fp = @fopen($file, "r")) {
+		while($line = fgets($fp)) {
+			if (substr(trim($line), 0, 1) != "#") {
+				$item = explode("::", $line);
+				$themeinfo[trim($item[0])] = sanitize(trim($item[1]), 1);
+			}
+		}
+		return $themeinfo;
+	} else {
+		return false;
+	}
+}
+
+/**
+ * Emits a page error. Used for attempts to bypass password protection
+ *
+ */
+function pageError($err,$text) {
+	header("HTTP/1.0 ".$err.' '.$text);
+	echo "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head>	<title>".$err." - ".$text."</TITLE>	<META NAME=\"ROBOTS\" CONTENT=\"NOINDEX, FOLLOW\"></head>";
+	echo "<BODY bgcolor=\"#ffffff\" text=\"#000000\" link=\"#0000ff\" vlink=\"#0000ff\" alink=\"#0000ff\">";
+	echo "<FONT face=\"Helvitica,Arial,Sans-serif\" size=\"2\">";
+	echo "<b>".sprintf(gettext('Page access %2$s (%1$s)'),$err, $text)."</b><br/><br/>";
+	echo "</body></html>";
+}
+
+/**
+ * Checks to see if a URL is valid
+ *
+ * @param string $url the URL being checked
+ * @return bool
+ */
+function isValidURL($url) {
+	return preg_match('|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $url);
+}
+
+/**
+ * Provide an alternative to glob which does not return filenames with accented charactes in them
+ *
+ * @param string $pattern the 'pattern' for matching files
+ * @param bit $flags glob 'flags'
+ */
+function safe_glob($pattern, $flags=0) {
+	$split=explode('/',$pattern);
+	$match=array_pop($split);
+	$path_return = $path = implode('/',$split);
+	if (empty($path)) {
+		$path = '.';
+	} else {
+		$path_return = $path_return . '/';
+	}
+	if (!is_dir($path)) return array();
+	if (($dir=opendir($path))!==false) {
+		$glob=array();
+		while(($file=readdir($dir))!==false) {
+			if (safe_fnmatch($match,$file)) {
+				if ((is_dir("$path/$file"))||(!($flags&GLOB_ONLYDIR))) {
+					if ($flags&GLOB_MARK) $file.='/';
+					$glob[]=$path_return.$file;
+				}
+			}
+		}
+		closedir($dir);
+		if (!($flags&GLOB_NOSORT)) sort($glob);
+		return $glob;
+	} else {
+		return array();
+	}
+}
+
+/**
+ * pattern match function Works with accented characters where the PHP one does not.
+ *
+ * @param string $pattern pattern
+ * @param string $string haystack
+ * @return bool
+ */
+function safe_fnmatch($pattern, $string) {
+	return @preg_match('/^' . strtr(addcslashes($pattern, '\\.+^$(){}=!<>|'), array('*' => '.*', '?' => '.?')) . '$/i', $string);
+}
+
+/**
+ * Returns the value of a cookie from either the cookies or from $_SESSION[]
+ *
+ * @param string $name the name of the cookie
+ */
+function zp_getCookie($name) {
+	if (DEBUG_LOGIN) {
+		if (isset($_SESSION[$name])) {
+			$sessionv = $_SESSION[$name];
+		} else {
+			$sessionv = '';
+		}
+		if (isset($_COOKIE[$name])) {
+			$cookiev = $_COOKIE[$name];
+		} else {
+			$cookiev = '';
+		}
+		debugLog("zp_getCookie($name): SESSION[".session_id()."]=".$sessionv.", COOKIE=".$cookiev);
+	}
+	if (isset($_COOKIE[$name]) && !empty($_COOKIE[$name])) {
+		return $_COOKIE[$name];
+	}
+	if (isset($_SESSION[$name])) {
+		return $_SESSION[$name];
+	}
+	return false;
+}
+
+/**
+ * Sets a cookie both in the browser cookies and in $_SESSION[]
+ *
+ * @param string $name The 'cookie' name
+ * @param string $value The value to be stored
+ * @param timestamp $time The time the cookie expires
+ * @param string $path The path on the server in which the cookie will be available on
+ */
+function zp_setCookie($name, $value, $time=0, $path='/') {
+	if (!getOption('album_session')) {
+		if (DEBUG_LOGIN) {
+			debugLog("zp_setCookie($name, $value, $time, $path)");
+		}
+		setcookie($name, $value, $time, $path);
+	}
+	if ($time < time()) {
+		if (isset($_SESSION))	unset($_SESSION[$name]);
+		if (isset($_COOKIE)) unset($_COOKIE[$name]);
+	} else {
+		$_SESSION[$name] = $value;
+		$_COOKIE[$name] = $value;
+	}
+}
+
+/**
+ * Returns a new "image" object based on the file extension
+ *
+ * @param object $album the owner album
+ * @param string $filename the filename
+ * @return object
+ */
+function newImage(&$album, $filename) {
+	global $_zp_extra_filetypes;
+	if ($ext = is_valid_other_type($filename)) {
+		$object = $_zp_extra_filetypes[$ext];
+		return new $object($album, $filename);
+	} else {
+		return New Image($album, $filename);
+	}
+}
+
+/**
+ * Copies a directory recursively
+ * @param string $srcdir the source directory.
+ * @param string $dstdir the destination directory.
+ * @return the total number of files copied.
+ */
+function dircopy($srcdir, $dstdir) {
+	$num = 0;
+	if(!is_dir($dstdir)) mkdir($dstdir);
+	if($curdir = opendir($srcdir)) {
+		while($file = readdir($curdir)) {
+			if($file != '.' && $file != '..') {
+				$srcfile = $srcdir . '/' . $file;
+				$dstfile = $dstdir . '/' . $file;
+				if(is_file($srcfile)) {
+					if(is_file($dstfile)) $ow = filemtime($srcfile) - filemtime($dstfile); else $ow = 1;
+					if($ow > 0) {
+						if(copy($srcfile, $dstfile)) {
+							touch($dstfile, filemtime($srcfile)); $num++;
+						}
+					}
+				}
+				else if(is_dir($srcfile)) {
+					$num += dircopy($srcfile, $dstfile, $verbose);
+				}
+			}
+		}
+		closedir($curdir);
+	}
+	return $num;
+}
+
 ?>
