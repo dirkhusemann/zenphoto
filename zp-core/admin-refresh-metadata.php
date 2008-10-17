@@ -71,7 +71,7 @@ if (isset($_GET['refresh']) && db_connect()) {
 	}
 	if (empty($imageid)) {
 		echo "<h3>".$finished."</h3>";
-		echo "<p><a href=\"admin.php$r\">&laquo; Back</a></p>";
+		echo "<p><a href=\"admin.php$r\">&laquo; ".gettext('Back')."</a></p>";
 	} else {
 		echo '<h3>'.$incomplete.'</h3>';
 		if (!empty($ret)) $ret = '&amp;return='.$ret;
@@ -122,7 +122,8 @@ if (isset($_GET['refresh']) && db_connect()) {
 		} else {
 			$album = '&amp;album='.$folder;
 		}
-		echo "<p><a href=\"?".$type."refresh=start".$album."&amp;return=$ret\" title=\"".gettext("Refresh image metadata.")."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Go!")."</a></p>";
+		if (!empty($ret)) $ret = '&amp;return='.$ret;
+		echo "<p><a href=\"?".$type."refresh=start".$album."$ret\" title=\"".gettext("Refresh image metadata.")."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Go!")."</a></p>";
 	}
 } else {
 	echo "<h3>".gettext("database not connected")."</h3>";
