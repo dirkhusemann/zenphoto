@@ -86,7 +86,7 @@ class Gallery {
 		if (is_null($this->albums) || $sorttype.$direction !== $this->lastalbumsort) {
 
 			$albumnames = $this->loadAlbumNames();
-			$key = $this->getGallerySortKey($sorttype);
+			$key = '`'.$this->getGallerySortKey($sorttype).'`';
 			if (is_null($direction)) {
 				if (getOption('gallery_sortdirection')) { $key .= ' DESC'; }
 			} else {

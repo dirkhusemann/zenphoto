@@ -429,8 +429,8 @@ class SearchEngine
 		if ($nrt == 0) { return NULL; } // no valid fields
 		if ($tbl == 'albums') {
 			if (empty($this->dynalbumname)) {
-				$key = subalbumSortKey(getOption('gallery_sorttype'));
-				if ($key != 'sort_order') {
+				$key = '`'.subalbumSortKey(getOption('gallery_sorttype')).'`';
+				if ($key != '`sort_order`') {
 					if (getOption('gallery_sortdirection')) {
 						$key .= " DESC";
 					}
@@ -438,8 +438,8 @@ class SearchEngine
 			} else {
 				$gallery = new Gallery();
 				$album = new Album($gallery, $this->dynalbumname);
-				$key = $album->getSubalbumSortKey();
-				if ($key != 'sort_order') {
+				$key = '`'.$album->getSubalbumSortKey().'`';
+				if ($key != '`sort_order`') {
 					if ($album->getSortDirection('album')) {
 						$key .= " DESC";
 					}
@@ -453,8 +453,8 @@ class SearchEngine
 				}
 			}
 			if (empty($this->dynalbumname)) {
-				$key = albumSortKey(getOption('image_sorttype'));
-				if ($key != 'sort_order') {
+				$key = '`'.albumSortKey(getOption('image_sorttype')).'`';
+				if ($key != '`sort_order`') {
 					if (getOption('image_sortdirection')) {
 						$key .= " DESC";
 					}
@@ -462,8 +462,8 @@ class SearchEngine
 			} else {
 				$gallery = new Gallery();
 				$album = new Album($gallery, $this->dynalbumname);
-				$key = $album->getSortKey();
-				if ($key != 'sort_order') {
+				$key = '`'.$album->getSortKey().'`';
+				if ($key != '`sort_order`') {
 					if ($album->getSortDirection('image')) {
 						$key .= " DESC";
 					}
@@ -626,13 +626,13 @@ class SearchEngine
 
 		if ($tbl == 'albums') {
 			if (empty($this->dynalbumname)) {
-				$key = subalbumSortKey(getOption('gallery_sorttype'));
+				$key = '`'.subalbumSortKey(getOption('gallery_sorttype')).'`';
 				if (getOption('gallery_sortdirection')) { $key .= " DESC"; }
 			} else {
 				$gallery = new Gallery();
 				$album = new Album($gallery, $this->dynalbumname);
-				$key = $album->getSubalbumSortKey();
-				if ($key != 'sort_order') {
+				$key = '`'.$album->getSubalbumSortKey().'`';
+				if ($key != '`sort_order`') {
 					if ($album->getSortDirection('album')) {
 						$key .= " DESC";
 				 }
@@ -645,15 +645,15 @@ class SearchEngine
 			} else {
 				$gallery = new Gallery();
 				$album = new Album($gallery, $this->dynalbumname);
-				$key = $album->getSortKey();
-				if ($key != 'sort_order') {
+				$key = '`'.$album->getSortKey().'`';
+				if ($key != '`sort_order`') {
 					if ($album->getSortDirection('image')) {
 						$key .= " DESC";
 					}
 				}
 			}
 		}
-		$sql .= " ORDER BY `".$key."`";
+		$sql .= " ORDER BY ".$key."";
 		$result = query_full_array($sql);
 		return $result;
 	}
