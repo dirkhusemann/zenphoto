@@ -62,7 +62,7 @@ class SearchEngine
 																		gettext('White Balance')=>SEARCH_EXIFWhiteBalance
 																		);
 		
-		$this->zp_search_fieldnames = array ('title'=>SEARCH_TITLE, 'descripton'=>SEARCH_DESC,'File/Folder name'=>SEARCH_FILENAME,
+		$this->zp_search_fieldnames = array ('title'=>SEARCH_TITLE, 'desc'=>SEARCH_DESC,'File/Folder name'=>SEARCH_FILENAME,
 																				'Location'=>SEARCH_LOCATION, 'City'=>SEARCH_CITY, 'State'=>SEARCH_STATE,
 																				'Country'=>SEARCH_COUNTRY,
 																				'EXIFMake'=>SEARCH_EXIFMake, 'EXIFModel'=>SEARCH_EXIFModel,
@@ -470,7 +470,7 @@ class SearchEngine
 				}
 			}
 		}
-		$sql .= " ORDER BY `".$key."`";
+		$sql .= " ORDER BY ".$key;
 		return $sql;
 	}
 
