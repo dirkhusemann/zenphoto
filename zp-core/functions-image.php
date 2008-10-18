@@ -415,9 +415,6 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			if ($cw + $cx > $w) $cx = $w - $cw;
 			if ($ch + $cy > $h) $cy = $h - $ch;
 			$newim = imagecreatetruecolor($neww, $newh);
-			
-debugLog("imagecopyresampled($newim, $im, 0, 0, $cx, $cy, $neww, $newh, $cw, $ch)")		;	
-			
 			imagecopyresampled($newim, $im, 0, 0, $cx, $cy, $neww, $newh, $cw, $ch);
 		} else {
 			$hprop = round(($h / $w) * $dim);

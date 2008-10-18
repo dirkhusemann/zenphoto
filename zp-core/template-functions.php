@@ -2350,7 +2350,7 @@ function printImageThumb($alt, $class=NULL, $id=NULL) {
 				$sh = $r * $sh;
 			}
 		}
-		$url = getCustomImageURL( NULL, $sw, $sh, $cw, $ch, $cx, $cy, $class, $id, true);
+		$url = getCustomImageURL(NULL, $sw, $sh, $cw, $ch, $cx, $cy, true);
 	} else {
 		$url = getImageThumb();
 	}

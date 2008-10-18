@@ -8,8 +8,6 @@
 
 // functions-db.php - HEADERS NOT SENT YET!
 
-require_once(dirname(__FILE__).'/functions.php');
-
 $mysql_connection = null;
 
 // Fix mysql_real_escape_string for PHP < 4.3.0

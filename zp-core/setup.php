@@ -947,7 +947,7 @@ if ($debug) {
 if (file_exists("zp-config.php")) {
 
 	require(dirname(__FILE__).'/zp-config.php');
-	require_once(dirname(__FILE__).'/functions-db.php');
+	require_once(dirname(__FILE__).'/functions.php');
 	$task = '';
 	if (isset($_GET['create'])) {
 		$task = 'create';

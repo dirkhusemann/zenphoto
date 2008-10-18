@@ -6,8 +6,7 @@
 
 // force UTF-8 Ø
 
-require_once(dirname(__FILE__).'/lib-utf8.php');
-require_once(dirname(__FILE__).'/functions-db.php');
+require_once(dirname(__FILE__).'/functions.php');
 
 // If the auth variable gets set somehow before this, get rid of it.
 if (isset($_zp_loggedin)) unset($_zp_loggedin);

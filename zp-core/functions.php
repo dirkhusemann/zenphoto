@@ -108,18 +108,6 @@ function is_valid_image($filename) {
 }
 
 //ZenVideo: Video utility functions
-/**
- * Returns true fi the file is a video file
- *
- * @param string $filename the name of the target
- * @return bool
- */
-function is_valid_video($filename) {
-	global $_zp_extra_filetypes;
-	$ext = strtolower(substr(strrchr($filename, "."), 1));
-	return isset($_zp_extra_filetypes[$ext]) && $_zp_extra_filetypes[$ext] == 'Video';
-}
-
 
 /**
  * Check if the image is a video thumb
@@ -255,28 +243,6 @@ function subalbumSortKey($sorttype) {
 			return 'mtime';
 	}
 	return 'sort_order';
-}
-
-/** getAlbumArray - returns an array of folder names corresponding to the
- *     given album string.
- * @param string $albumstring is the path to the album as a string. Ex: album/subalbum/my-album
- * @param string $includepaths is a boolean whether or not to include the full path to the album
- *    in each item of the array. Ex: when $includepaths==false, the above array would be
- *    ['album', 'subalbum', 'my-album'], and with $includepaths==true,
- *    ['album', 'album/subalbum', 'album/subalbum/my-album']
- *  @return array
- */
-function getAlbumArray($albumstring, $includepaths=false) {
-	if ($includepaths) {
-		$array = array($albumstring);
-		while($slashpos = strrpos($albumstring, '/')) {
-			$albumstring = substr($albumstring, 0, $slashpos);
-			array_unshift($array, $albumstring);
-		}
-		return $array;
-	} else {
-		return explode('/', $albumstring);
-	}
 }
 
 /**
@@ -1724,26 +1690,6 @@ function sortMultiArray($array, $index, $order='asc', $natsort=FALSE, $case_sens
 		return $sorted;
 	}
 	return $array;
-}
-
-/**
- * Converts a file system filename to UTF-8 for zenphoto internal storage
- *
- * @param string $filename the file name to convert
- * @return string
- */
-function fileSystemToUTF8($filename) {
-	return utf8::convert($filename, 'ISO-8859-1', 'UTF-8');
-}
-
-/**
- * Converts a Zenphoto Internal filename string to one compatible with the file system
- *
- * @param string $filename the file name to convert
- * @return string
- */
-function UTF8ToFileSystem($filename) {
-	return utf8::convert($filename, 'UTF-8', 'ISO-8859-1');
 }
 
 $_zp_not_viewable_album_list = NULL;
