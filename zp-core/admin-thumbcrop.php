@@ -8,6 +8,7 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 		// get full width and height
 		$albumobj = new Album(new Gallery,$albumname);
 		$imageobj = new Image($albumobj,$imagename);
+		$currentthumbimage = $imageobj->getThumb();
 		$width = $imageobj->getWidth();
 		$height = $imageobj->getHeight();
 		setOption('image_use_longest_side', 1, false);
@@ -82,11 +83,11 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 			jQuery(window).load(function(){
 
 				jQuery('#cropbox').Jcrop({
-//					onChange: showPreview,
+					onChange: showPreview,
 					onChange: showCoords,
-//					onSelect: showPreview,
-					bgOpacity:   .6,
-					bgColor:     'blue',
+					onSelect: showPreview,
+					bgOpacity:   .4,
+					bgColor:     'black',
 					setSelect: [ <?php echo $iX; ?>, <?php echo $iY; ?>, <?php echo $iX+$iW; ?>, <?php echo $iY+$iH; ?> ],					
 					aspectRatio: <?php echo $cropwidth; ?> / <?php echo $cropheight; ?>
 					});
@@ -134,17 +135,23 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 		<p><?php echo gettext("You can change the protion of your image which is shown in thumbnails by cropping it here."); ?></p>
 		
 		<div style="display:block">
-	<div style="width: <?php echo $sizedwidth; ?>px; height: <?php echo $sizedheight; ?>px; border: 1px solid gray; margin-bottom: 10px;float: left">
+	<div style="width: <?php echo $sizedwidth; ?>px; height: <?php echo $sizedheight; ?>px; border: 1px solid gray; margin-bottom: 10px; margin-right: 10px; float: left">
 		<!-- This is the image we're attaching Jcrop to -->
 		<img src="<?php echo $imageurl; ?>" id="cropbox" />
 	</div>
-<?php
-/*
-	<div style="width:<?php echo $cropwidth; ?>px;height:<?php echo $cropheight; ?>px; overflow:hidden; border: 1px solid gray; margin-left: 10px; float: left">
+	
+  <div style="float: left; width:<?php echo $cropwidth; ?>px; text-align: center; margin: 0px 10px 0px 10px;">
+	<div style="width:<?php echo $cropwidth; ?>px;height:<?php echo $cropheight; ?>px; overflow:hidden; border: 1px solid gray; float: left">
 		<img src="<?php echo $imageurl; ?>" id="preview" />
 	</div>
-*/
-?>
+	<?php echo gettext("preview"); ?>
+	</div>
+	
+	<div style="float: left; width:<?php echo $cropwidth; ?>px; text-align: center; margin: 0px 10px 0px 10px;">
+	<img src="<?php echo $currentthumbimage; ?>" style="width:<?php echo $cropwidth; ?>px;height:<?php echo $cropheight; ?>px; border: 1px solid gray; float: left"/>
+ <?php echo gettext("current"); ?>
+ </div>
+
 </div>
 	
 	<br style="clear:both" />
