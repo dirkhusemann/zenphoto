@@ -643,11 +643,13 @@ if ($allimagecount) {
 			<tr>
 				<td valign="top" width="150" rowspan="14">
 				
-				<a href="admin-thumbcrop.php?a=<?php echo urlencode($album->name); ?>&amp;i=<?php echo urlencode($image->filename); ?>&amp;subpage=<?php echo $pagenum; ?>&amp;tagsort=<?php echo $tagsort; ?>" >
+				<a href="admin-thumbcrop.php?a=<?php echo urlencode($album->name); ?>&amp;i=<?php echo urlencode($image->filename); ?>&amp;subpage=<?php echo $pagenum; ?>&amp;tagsort=<?php echo $tagsort; ?>"
+								title=<?php printf(gettext('crop %s'), $image->filename); ?>  >
 				<img
 					id="thumb-<?php echo $currentimage; ?>"
-					src="<?php echo $image->getThumb();?>"
-					alt="<?php echo $image->filename;?>"
+					src="<?php echo $image->getThumb(); ?>"
+					alt="<?php printf(gettext('crop %s'), $image->filename); ?>"
+					title="<?php printf(gettext('crop %s'), $image->filename); ?>"
 					/>
 				</a>
 				<p><strong><?php echo $image->filename; ?></strong></p>

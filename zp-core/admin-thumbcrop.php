@@ -83,12 +83,12 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 			jQuery(window).load(function(){
 
 				jQuery('#cropbox').Jcrop({
-					onChange: showPreview,
+					setSelect: [ <?php echo $iX; ?>, <?php echo $iY; ?>, <?php echo $iX+$iW; ?>, <?php echo $iY+$iH; ?> ],					
+//					onChange: showPreview,
+//					onSelect: showPreview,
 					onChange: showCoords,
-					onSelect: showPreview,
 					bgOpacity:   .4,
 					bgColor:     'black',
-					setSelect: [ <?php echo $iX; ?>, <?php echo $iY; ?>, <?php echo $iX+$iW; ?>, <?php echo $iY+$iH; ?> ],					
 					aspectRatio: <?php echo $cropwidth; ?> / <?php echo $cropheight; ?>
 					});
 			});
@@ -140,12 +140,14 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 		<img src="<?php echo $imageurl; ?>" id="cropbox" />
 	</div>
 	
+<?php /*
   <div style="float: left; width:<?php echo $cropwidth; ?>px; text-align: center; margin: 0px 10px 0px 10px;">
 	<div style="width:<?php echo $cropwidth; ?>px;height:<?php echo $cropheight; ?>px; overflow:hidden; border: 1px solid gray; float: left">
 		<img src="<?php echo $imageurl; ?>" id="preview" />
 	</div>
 	<?php echo gettext("preview"); ?>
 	</div>
+*/ ?>
 	
 	<div style="float: left; width:<?php echo $cropwidth; ?>px; text-align: center; margin: 0px 10px 0px 10px;">
 	<img src="<?php echo $currentthumbimage; ?>" style="width:<?php echo $cropwidth; ?>px;height:<?php echo $cropheight; ?>px; border: 1px solid gray; float: left"/>
