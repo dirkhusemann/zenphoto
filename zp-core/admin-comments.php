@@ -125,8 +125,10 @@ if ($page == "editcomment") { ?>
 	</tr>
 	<tr>
 		<td></td>
-		<td><input type="submit" value="<?php echo gettext('save'); ?>" /> <input type="button"
-			value="cancel" onClick="window.location = '#';" />
+		<td>
+		<input type="submit" value="<?php echo gettext('save'); ?>" /> 
+		<input type="button" value="<?php echo gettext('cancel'); ?>" onClick="window.location = '#';" />
+		</td>
 
 </table>
 </form>
