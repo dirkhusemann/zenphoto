@@ -27,6 +27,7 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---image_al
  * @return string
  */
 function getAlbumStatistic($number=5, $option) {
+	$passwordcheck = '';
 	if (zp_loggedin()) {
 		$albumWhere = "";
 	} else {

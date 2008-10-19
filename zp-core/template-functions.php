@@ -1274,18 +1274,17 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
  */
 function getCustomAlbumThumbMaxSpace($width=NULL, $height=NULL) {
 	global $_zp_current_album;
+	$destshape = $width > $height;
 	$albumthumb = $_zp_current_album->getAlbumThumbImage();
-	$albumdata = $albumthumb->data; 
-	$fullwidth = $albumdata['width'];
-	$fullheight = $albumdata['height'];
-	$percentuser = $width / 100;
-	$heightpercent = round($height / $percentuser);
-	$fullpercent = $fullwidth / 100;
-	$fullheightpercent = round($fullheight / $fullpercent);
-	if($fullwidth === $fullheight OR $fullheightpercent > $heightpercent) {
-		return getCustomAlbumThumb(NULL, null, $height, NULL, NULL, NULL, null);
-	} else {
-		return getCustomAlbumThumb(NULL, $width, NULL, NULL, NULL, NULL, null);
+	$sourceshape = $albumthumb->get('width') > $albumthumb->get('height');
+	if ($sourceshape == $destshape) { // the soruce and destination orientations are the same
+		getCustomAlbumThumb(min($width,$height), NULL, NULL, NULL, NULL, NULL);
+	} else{
+		if ($sourceshape > $destshape) { // landscape to portrait, width is constrained
+			getCustomAlbumThumb(NULL, $width, NULL, NULL, NULL, NULL, NULL);
+		} else { // portrait to landscape, height is constrained
+			getCustomAlbumThumb(NULL, NULL, $height, NULL, NULL, NULL, NULL);
+		}
 	}
 }
 
@@ -1303,18 +1302,17 @@ function getCustomAlbumThumbMaxSpace($width=NULL, $height=NULL) {
  */
 function printCustomAlbumThumbMaxSpace($alt='', $width=NULL, $height=NULL, $class=NULL, $id=NULL) {
 	global $_zp_current_album;
+	$destshape = $width > $height;
 	$albumthumb = $_zp_current_album->getAlbumThumbImage();
-	$albumdata = $albumthumb->data; 
-	$fullwidth = $albumdata['width'];
-	$fullheight = $albumdata['height'];
-	$percentuser = $width / 100;
-	$heightpercent = round($height / $percentuser);
-	$fullpercent = $fullwidth / 100;
-	$fullheightpercent = round($fullheight / $fullpercent);
-	if($fullwidth === $fullheight OR $fullheightpercent > $heightpercent) {
-		printCustomAlbumThumbImage($alt, NULL, null, $height, NULL, NULL, NULL, null, $class, $id);
-	} else {
-		printCustomAlbumThumbImage($alt, NULL, $width, null, NULL, NULL, NULL, null, $class, $id);
+	$sourceshape = $albumthumb->get('width') > $albumthumb->get('height');
+	if ($sourceshape == $destshape) { // the soruce and destination orientations are the same
+		printCustomAlbumThumbImage($alt, min($width, $height), NULL, NULL, NULL, NULL, NULL, NULL, $class, $id);
+	} else{
+		if ($sourceshape > $destshape) { // landscape to portrait, width is constrained
+			printCustomAlbumThumbImage($alt, NULL, $width, NULL, NULL, NULL, NULL, NULL, $class, $id);
+		} else { // portrait to landscape, height is constrained
+			printCustomAlbumThumbImage($alt, NULL, NULL, $height, NULL, NULL, NULL, NULL, $class, $id);
+		}
 	}
 }
 
@@ -2542,14 +2540,16 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
  * @return string
  */
 function getCustomSizedImageMaxSpace($width=NULL,$height=NULL) {
-	$percentuser = $width / 100;
-	$heightpercent = round($height / $percentuser);
-	$fullpercent = getFullWidth() / 100;
-	$fullheightpercent = round(getFullHeight() / $fullpercent);
-	if(getFullWidth() === getFullHeight() OR $fullheightpercent > $heightpercent) {
-		return getSizeCustomImage(null,$width,null);
-	} else {
-		return getSizeCustomImage(null,null,$height);
+	$destshape = $width > $height;
+	$sourceshape = getFullWidth() > getFullHeight();
+	if ($sourceshape == $destshape) { // the soruce and destination orientations are the same
+		getSizeCustomImage(min($width,$height), NULL, NULL);
+	} else{
+		if ($sourceshape > $destshape) { // landscape to portrait, width is constrained
+			getSizeCustomImage(NULL, $width, NULL);
+		} else { // portrait to landscape, height is constrained
+			getSizeCustomImage(NULL, NULL, $height);
+		}
 	}
 }
 
@@ -2566,14 +2566,16 @@ function getCustomSizedImageMaxSpace($width=NULL,$height=NULL) {
  * @return string
  */
 function printCustomSizedImageMaxSpace($alt='',$width=NULL,$height=NULL,$class=NULL,$id=NULL,$thumbStandin=false) {
-	$percentuser = $width / 100;
-	$heightpercent = round($height / $percentuser);
-	$fullpercent = getFullWidth() / 100;
-	$fullheightpercent = round(getFullHeight() / $fullpercent);
-	if (getFullWidth() === getFullHeight() OR $fullheightpercent > $heightpercent) {
-		printCustomSizedImage(getImageTitle(), null, null, $height, null, null, null, null,  getImageID());
-	} else {
-		printCustomSizedImage(getImageTitle(), null, $width, null, null, null, null, null,  getImageID());
+	$destshape = $width > $height;
+	$sourceshape = getFullWidth() > getFullHeight();
+	if ($sourceshape == $destshape) { // the soruce and destination orientations are the same
+		printCustomSizedImage($alt, min($width,$height), NULL, NULL, NULL, NULL, NULL, NULL, $class, $id, $thumbStandin);
+	} else{
+		if ($sourceshape > $destshape) { // landscape to portrait, width is constrained
+			printCustomSizedImage($alt, NULL, $width, NULL, NULL, NULL, NULL, NULL, $class, $id, $thumbStandin);
+		} else { // portrait to landscape, height is constrained
+			printCustomSizedImage($alt, NULL, NULL, $height, NULL, NULL, NULL, NULL, $class, $id, $thumbStandin);
+		}
 	}
 }
 

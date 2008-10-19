@@ -12,7 +12,7 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 		$width = $imageobj->getWidth();
 		$height = $imageobj->getHeight();
 		setOption('image_use_longest_side', 1, false);
-		$size = min(array(400, $width, $height));
+		$size = min(400, $width, $height);
 		$cropwidth = getOption("thumb_crop_width");
 		$cropheight = getOption("thumb_crop_height");
 		if ($width >= $height) {
@@ -32,8 +32,8 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 			$iW = round($imageobj->get('thumbW')*$sr);
 			$iH = round($imageobj->get('thumbH')*$sr);
 		} else {
-			$cr = max(array($cropwidth,$cropheight))/getOption('thumb_size');
-			$si = min(array($sizedwidth,$sizedheight));
+			$cr = max($cropwidth,$cropheight)/getOption('thumb_size');
+			$si = min($sizedwidth,$sizedheight);
 			$iW = round($si*$cr);
 			$iH = round($si*$cr);
 			$iX = round(($sizedwidth - $iW)/2);

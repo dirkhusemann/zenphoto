@@ -391,7 +391,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 					}
 				}
 			
-			$cr = min(array($w, $h))/$ts;
+			$cr = min($w, $h)/$ts;
 			if (!$cx) {
 				if (!$cw) {
 					$cw = $w;
