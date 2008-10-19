@@ -72,6 +72,8 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . $return);
 			exit();
 			}
+	$subpage = sanitize($_REQUEST['subpage']);
+	$tagsort = sanitize($_REQUEST['tagsort']);
 	printAdminHeader();
 ?>
 	
@@ -83,10 +85,10 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 			jQuery(window).load(function(){
 
 				jQuery('#cropbox').Jcrop({
-					setSelect: [ <?php echo $iX; ?>, <?php echo $iY; ?>, <?php echo $iX+$iW; ?>, <?php echo $iY+$iH; ?> ],					
 //					onChange: showPreview,
 //					onSelect: showPreview,
 					onChange: showCoords,
+					setSelect: [ <?php echo $iX; ?>, <?php echo $iY; ?>, <?php echo $iX+$iW; ?>, <?php echo $iY+$iH; ?> ],					
 					bgOpacity:   .4,
 					bgColor:     'black',
 					aspectRatio: <?php echo $cropwidth; ?> / <?php echo $cropheight; ?>
@@ -157,24 +159,25 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 </div>
 	
 	<br style="clear:both" />
-	
 		<!-- This is the form that our event handler fills -->
 		<form name="crop" id="crop" action="?crop" onsubmit="return checkCoords();">
-			<input type="hidden" size="4" id="x" name="x"  />
-			<input type="hidden" size="4" id="y" name="y" />
-			<input type="hidden" size="4" id="x2" name="x2" />
-			<input type="hidden" size="4" id="y2" name="y2" />
-			<input type="hidden" size="4" id="w" name="w" />
-			<input type="hidden" size="4" id="h" name="h"  />
+			<input type="hidden" size="4" id="x" name="x" value="<?php echo $iX ?>" />
+			<input type="hidden" size="4" id="y" name="y" value="<?php echo $iY ?>" />
+			<input type="hidden" size="4" id="x2" name="x2" value="<?php echo $iX+iW ?>" />
+			<input type="hidden" size="4" id="y2" name="y2" value="<?php echo $iY+iH ?>" />
+			<input type="hidden" size="4" id="w" name="w" value="<?php echo $iW ?>" />
+			<input type="hidden" size="4" id="h" name="h" value="<?php echo $iH ?>"  />
 			<input type="hidden" id="cropw" name="cropw" value="<?php echo $cropwidth; ?>" />
 			<input type="hidden" id="croph" name="croph" value="<?php echo $cropheight; ?>" />
 			<input type="hidden" id="a" name="a" value="<?php echo $albumname; ?>" />
 			<input type="hidden" id="i" name="i" value="<?php echo $imagename; ?>" />
-			<input type="hidden" id="tagsort" name="tagsort" value="<?php echo sanitize($_REQUEST['tagsort']); ?>" />
-			<input type="hidden" id="subpage" name="subpage" value="<?php echo sanitize($_REQUEST['subpage']); ?>" />
+			<input type="hidden" id="tagsort" name="tagsort" value="<?php echo $tagsort; ?>" />
+			<input type="hidden" id="subpage" name="subpage" value="<?php echo $subpage; ?>" />
 			<input type="hidden" id="crop" name="crop" value="crop" />
 			<input type="checkbox" name="clear_crop" value="1" /> <?php echo gettext("Reset to the default cropping"); ?><br>
 			<input type="submit" size="4" id="submit" name="submit" value="<?php echo gettext("Save the cropping"); ?>" style="margin-top: 10px" />
+			<input type="button"  value="<?php echo gettext("cancel"); ?>" style="margin-top: 10px" 
+								onClick="window.location='admin.php?page=edit&amp;album=<?php echo urlencode($albumname); ?>&amp;subpage=<?php echo $subpage; ?>&amp;tagsort=<?php echo $tagsort; ?>#tab_imageinfo'" />
 		</form>
 
 	</div>
