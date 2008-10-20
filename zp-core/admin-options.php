@@ -429,7 +429,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 <form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 <input type="hidden" name="saveadminoptions" value="yes" /> 
 <input type="hidden" name="totaladmins" value="<?php echo count($admins); ?>" />
-<table class="bordered">
+<table class="bordered"> <!-- main table -->
 	<tr>
 		<th width="20%">
 		<h2><?php echo gettext("Admin login information"); ?></h2>
@@ -461,7 +461,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 		?>
 	<tr>
 		<td colspan="2" style="margin: 0pt; padding: 0pt;">
-		<table class="bordered" style="border: 0" id='user-<?php echo $id;?>'>
+		<table class="bordered" style="border: 0" id='user-<?php echo $id;?>'> <!-- individual admin table -->
 		<tr>
 			<td width="150" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
 				<input type="hidden" name="<?php echo $id ?>-adminuser" value="<?php echo $userid ?>" />
@@ -481,7 +481,17 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 					echo $userid;
 				}?></a></span>
 			</td>
-			<td width="330" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>"><?php echo $master; ?>&nbsp</td>
+			<td width="330" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
+			<?php 
+			if (empty($userid)) {
+			?>
+				<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminuser" value="" />
+			<?php
+			} else {
+				echo $master;
+			}
+ 			?>
+ 			</td>
 			<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" >
 				<?php 
 				if(!empty($userid) && count($admins) > 2) { 
@@ -499,16 +509,6 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 				&nbsp;
 				</td>
 			</tr>
-	<?php if (empty($userid)) { ?>
-	<tr <?php if ($_zp_null_account) echo 'style="display:block;"'; else echo 'style="display:none;"'; ?> class="userextrainfo">
-		<td width="150" <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Username:"); ?></td>
-		<td width="330">
-			<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminuser" value="" />
-		</td>
-		<td></td>
-	</tr>
-	<?php } ?>
 	<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="userextrainfo">
 		<td width="150" <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Password:"); ?><br />
@@ -519,7 +519,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 		<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass_2"
 			value="<?php echo $x; ?>" /></td>
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-		<table class="checkboxes" >
+		<table class="checkboxes" > <!-- checkbox table -->
 			<tr>
 				<td style="padding-bottom: 3px;<?php echo $background; ?>" colspan="5">
 				<strong><?php echo gettext("Rights"); ?></strong>:
@@ -577,7 +577,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-main_rights"
 					value=<?php echo MAIN_RIGHTS; if ($user['rights'] & MAIN_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Overview"); ?></td>
 			</tr>
-		</table>
+		</table> <!-- end checkbox table -->
 
 		</td>
 	</tr>
@@ -595,7 +595,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 				value="<?php echo $user['email'];?>" />
 		</td>
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-		<table>
+		<table> <!-- album rights table -->
 			<tr>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?> >
 				<?php
@@ -637,22 +637,23 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 				?>
 			</td>
 			</tr>
-		</table>
+		</table> <!-- album rights table -->
 		</td>
 		</tr>
 
-</table>
+</table> <!-- end individual admin table -->
 </td>
 </tr>
-	<?php
+<?php
 	$id++;
 }
 ?>
-</table>
+</table> <!-- main admin table end -->
 <input type="submit" value= <?php echo gettext('save') ?> />
 </form>
 </div>
 <!-- end of tab_admin div -->
+
 <?php
 if (!$_zp_null_account) {
 if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
