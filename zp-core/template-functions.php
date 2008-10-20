@@ -996,7 +996,7 @@ function printAlbumDesc($editable=false) {
 		$desc = str_replace("\n", '<br />', $desc);
 	}
 	if ($editable && zp_loggedin()) {
-		echo "<div id=\"albumDescEditable\" style=\"display: block;\">" . $desc . "</div>\n";
+		echo "<span id=\"albumDescEditable\" >" . $desc . "</span>\n";
 		echo "<script type=\"text/javascript\">initEditableDesc('albumDescEditable');</script>";
 	} else {
 		echo $desc;
@@ -1777,10 +1777,10 @@ function printImageDesc($editable=false) {
 	$desc = str_replace("\r\n", "\n", $desc);
 	$desc = str_replace("\n", "<br/>", $desc);
 	if ($editable && zp_loggedin()) {
-		echo "<div id=\"imageDesc\" style=\"display: block;\">" . $desc . "</div>\n";
+		echo "<span id=\"imageDesc\" >" . $desc . "</span>\n";
 		echo "<script type=\"text/javascript\">initEditableDesc('imageDesc');</script>";
 	} else {
-		echo "<div id=\"imageDesc\" style=\"display: block;\">" . $desc . "</div>\n";
+		echo $desc;
 	}
 }
 
