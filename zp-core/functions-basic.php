@@ -10,7 +10,7 @@
 // force UTF-8 Ø
 
 define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
-define('DEBUG_ERROR', true); // set to true to  supplies the calling sequence with zp_error messages
+define('DEBUG_ERROR', false); // set to true to  supplies the calling sequence with zp_error messages
 define('CAPTCHA_LENGTH', 5);
 include(dirname(__FILE__).'/version.php'); // Include the version info.
 
@@ -77,7 +77,7 @@ define('UTILITIES_FOLDER', '/utilities/');
 
 // Set error reporting to the default if it's not.
 error_reporting(E_ALL ^ E_NOTICE);
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
 $_zp_error = false;
 
 /**
