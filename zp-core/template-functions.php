@@ -93,7 +93,19 @@ function printAdminToolbox($context=null, $id='admin') {
 		echo "<ul style='list-style-type: none;'>";
 		echo "<li>";
 		printAdminLink(gettext('Admin'), '', "</li>\n");
-		if ($_zp_gallery_page === 'index.php') {
+		if (isset($_GET['p'])) {
+			$redirect = "&amp;p=" . $_GET['p'];
+		}
+		if ($page>1) {
+			$redirect .= "&amp;page=$page";
+		}
+		$gal = getOption('custom_index_page');
+		if (empty($gal) || !file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.UTF8ToFilesystem($gal).'.php')) {
+			$gal = 'index.php';
+		} else {
+			$gal .= '.php';
+		}
+		if ($_zp_gallery_page === $gal) {
 			if ($_zp_loggedin & (ADMIN_RIGHTS | EDIT_RIGHTS)) {
 				echo "<li>";
 				printSortableGalleryLink(gettext('Sort gallery'), gettext('Manual sorting'));
@@ -103,12 +115,6 @@ function printAdminToolbox($context=null, $id='admin') {
 				echo "<li>";
 				printLink($zf . '/admin-upload.php', gettext("New album"), NULL, NULL, NULL);
 				echo "</li>\n";
-			}
-			if (isset($_GET['p'])) {
-				$redirect = "&amp;p=" . $_GET['p'];
-			}
-			if ($page>1) {
-				$redirect .= "&amp;page=$page";
 			}
 		} else if ($_zp_gallery_page === 'album.php') {
 			$albumname = $_zp_current_album->name;

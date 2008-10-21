@@ -444,7 +444,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 	$albumlist = $gallery->getAlbums();
 	foreach($admins as $user) {
 		$userid = $user['user'];
-		$master = '';
+		$master = '&nbsp;';
 		if ($id == 0) {
 			if ($_zp_loggedin & ADMIN_RIGHTS) {
 				$master = " (<em>".gettext("Master")."</em>)";

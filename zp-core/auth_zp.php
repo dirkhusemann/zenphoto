@@ -83,16 +83,15 @@ if (!isset($_POST['login'])) {
 }
 unset($saved_auth, $check_auth, $user, $pass);
 // Handle a logout action.
-if (isset($_POST['logout']) || isset($_GET['logout'])) {
+if (isset($_REQUEST['logout'])) {
 	zp_setcookie("zenphoto_auth", "*", time()-368000, $cookiepath);
-	$redirect = "";
+	$redirect = 'index.php';
 	if (isset($_GET['p'])) {
-		$redirect = "index.php?p=" . $_GET['p'];
+		$redirect .= "?p=" . $_GET['p'];
 		if (isset($_GET['searchfields'])) { $redirect .= "&searchfields=" . $_GET['searchfields']; }
 		if (isset($_GET['words'])) { $redirect .= "&words=" . $_GET['words']; }
 		if (isset($_GET['date'])) { $redirect .= "&date=" . $_GET['date']; }
 	} else {
-		$redirect = "index.php";
 		if (isset($_GET['album'])) { $redirect .= "?album=" . $_GET['album']; }
 		if (isset($_GET['image'])) { $redirect .= "&image=" . $_GET['image']; }
 	}
@@ -103,8 +102,9 @@ if (isset($_POST['logout']) || isset($_GET['logout'])) {
 			$redirect .= "&page=" . $_GET['page'];
 		}
 	}
-
 	header("Location: " . FULLWEBPATH . "/$redirect");
+	exit();
+	
 }
 
 function zp_loggedin($rights=ALL_RIGHTS) {
