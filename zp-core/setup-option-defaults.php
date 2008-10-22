@@ -103,11 +103,11 @@ function setDefault($option, $default) {
 	setOptionDefault('feed_items', 10);
 	setOptionDefault('feed_imagesize', 240);
 	setOptionDefault('search_fields', 32767);
-	setOptionDefault(	'allowed_tags', "a => (href => () title => ())\n" .
-	 									"abbr => (title => ())\n" .
-	 									"acronym => (title => ())\n" .
+	$a =							"a => (href => () title => ())\n" .
+	 									"abbr =>(title =>())\n" .
+	 									"acronym =>(title =>())\n" .
 	 									"b => ()\n" .
-	 									"blockquote => (cite => ())\n" .
+	 									"blockquote =>(cite =>())\n" .
 	 									"code => ()\n" .
 	 									"em => ()\n" .
 	 									"i => () \n" .
@@ -125,9 +125,13 @@ function setDefault($option, $default) {
 										"h6=>(style=>())\n" .
 										"pre=>(style=>())\n" .
 										"address=>(style=>())\n" .
-										"span=>(style=>())\n" 
-										);
-	setOptionDefault(	'style_tags', "abbr => (title => ())\n" .
+										"span=>(style=>())\n".
+										"img=>(style=>() src=>() title=>() alt=>() width=>() height=>())\n"
+										;
+	setOptionDefault('allowed_tags_default', $a); 
+	setOptionDefault('allowed_tags', $a);
+	setOptionDefault('style_tags', 
+										"abbr => (title => ())\n" .
 	 									"acronym => (title => ())\n" .
 	 									"b => ()\n" .
 	 									"em => ()\n" .

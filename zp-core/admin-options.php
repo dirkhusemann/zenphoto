@@ -102,14 +102,18 @@ if (isset($_GET['action'])) {
 
 		/*** Gallery options ***/
 		if (isset($_POST['savegalleryoptions'])) {
-			$tags = $_POST['allowed_tags'];
-			$test = "(".$tags.")";
-			$a = parseAllowedTags($test);
-			if ($a !== false) {
-				setOption('allowed_tags', $tags);
-				$notify = '';
+			if (isset($_POST['allowed_tags_reset'])) {
+				setOption('allowed_tags', getOption('allowed_tags_default'));
 			} else {
-				$notify = '?tag_parse_error';
+				$tags = $_POST['allowed_tags'];
+				$test = "(".$tags.")";
+				$a = parseAllowedTags($test);
+				if ($a !== false) {
+					setOption('allowed_tags', $tags);
+					$notify = '';
+				} else {
+					$notify = '?tag_parse_error';
+				}
 			}
 			setOption('gallery_title', process_language_string_save('gallery_title', 2));
 			setoption('Gallery_description', process_language_string_save('Gallery_description', 1));
@@ -911,10 +915,16 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	</tr>
 	<tr>
 		<td><?php echo gettext("Allowed tags:"); ?></td>
-		<td><textarea name="allowed_tags" style="width: 310px" rows="10"><?php echo htmlspecialchars(getOption('allowed_tags')); ?></textarea>
+		<td>
+			<textarea name="allowed_tags" style="width: 310px" rows="10"><?php echo htmlspecialchars(getOption('allowed_tags')); ?></textarea>
+			<input type="checkbox" name="allowed_tags_reset" value="1" /><?php echo gettext('restsore default allowed tags'); ?>
 		</td>
-		<td><?php echo gettext("Tags and attributes allowed in comments, descriptions, and other fields."); ?><br />
-		<?php echo gettext("Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"); ?></td>
+		<td><?php echo gettext("Tags and attributes allowed in comments, descriptions, and other fields."); ?>
+		<br />
+		<?php echo gettext("Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"); ?>
+		<br />
+		<?php echo gettext('Check <em>restore default allowed tags</em> to reset allowed tags to the zenphoto default values.') ?>
+		</td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Number of RSS feed items:"); ?></td>
