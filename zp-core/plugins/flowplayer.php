@@ -7,7 +7,7 @@
  * Plugin option 'flow_player_height' -- height of the player window
  *  
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.2
+ * @version 1.0.3
  * @package plugins 
  */
 
@@ -90,10 +90,9 @@ class flowplayer {
       	height:'.FLOW_PLYER_MP3_HEIGHT.'
     	},
     		{config: {  
-      		autoPlay: '.$autoplay.',
-      		useNativeFullScreen: true,
-					loop: false,
-					autoBuffering: true,
+      		autoPlay: \''.$autoplay.'\',
+    			loop: false,
+					controlsOverVideo: \'false\',
       		videoFile: \'' . $moviepath . '\',
       		initialScale: \'fit\',
       		backgroundColor: \''.getOption('flow_player_backgroundcolor').'\',
