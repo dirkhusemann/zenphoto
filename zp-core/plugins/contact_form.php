@@ -11,13 +11,13 @@
  * The contact form itself is a separate file and located within /contact_form/form.php so that it can be style as needed.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.1.3.1
+ * @version 1.1.3.2
  * @package plugins
  */
 
 $plugin_description = gettext("Prints a e-mail contact form that uses Zenphotos internal validation functions for e-mail and URL. Name, e-mail adress, subject and message (and if enabled Captcha) are required fields. You need to enter a custom mail adress that should be use for the messages. Supports Zenphoto's captcha and confirmation before the message is sent. No other spam filter support, since mail providers have this anyway.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.1.3.1';
+$plugin_version = '1.1.3.2';
 $plugin_URL = "";
 $option_interface = new contactformOptions();
 
@@ -198,7 +198,7 @@ function printContactForm() {
 			echo getOption("contactform_confirmtext");
 			?>
 <div>
-	<form id="confirm" action="#" method="post" accept-charset="UTF-8" style="float: left">
+	<form id="confirm" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post" accept-charset="UTF-8" style="float: left">
 		<input type="hidden" id="confirm" name="confirm" value="confirm" />
 		<input type="hidden" id="subject" name="subject"	value="<?php echo $subject; ?>" />
 		<input type="hidden" id="message"	name="message" value="<?php echo $message; ?>" />
@@ -206,7 +206,7 @@ function printContactForm() {
 		<input type="hidden" id="mailaddress" name="mailaddress" value="<?php echo $mailaddress; ?>" />
 		<input type="submit" value="<?php echo gettext("Confirm"); ?>" />
 	</form>
-	<form id="discard" action="#" method="post" accept-charset="UTF-8">
+	<form id="discard" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post" accept-charset="UTF-8">
 		<input type="hidden" id="discard" name="discard" value="discard" />
 		<input type="submit" value="<?php echo gettext("Discard"); ?>" />
 	</form>
