@@ -560,7 +560,7 @@ class Album extends PersistentObject {
 			}
 		}
 		$result = query($sql = "SELECT `filename`, `title`, `sort_order`, `title`, `show`, `id` FROM " . prefix("images")
-										. " WHERE `albumid`=" . $this->id . " ORDER BY " . $key . $direction);
+										. " WHERE `albumid`= '" . $this->id . "' ORDER BY " . $key . $direction);
 		$results = array();
 		while ($row = mysql_fetch_assoc($result)) {
 			$results[] = $row;
@@ -587,7 +587,7 @@ class Album extends PersistentObject {
 			} else {
 				$id = $row['id'];
 				query("DELETE FROM ".prefix('images')." WHERE `id`=$id"); // delete the record
-				query("DELETE FROM ".prefix('comments')." WHERE `type`='images' AND `ownerid`=$id"); // remove image comments
+				query("DELETE FROM ".prefix('comments')." WHERE `type`='images' AND `ownerid`= '$id'"); // remove image comments
 			}
 		}
 		// Place the images not yet in the database before those with sort columns.
