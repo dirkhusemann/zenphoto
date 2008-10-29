@@ -163,8 +163,8 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 		<form name="crop" id="crop" action="?crop" onsubmit="return checkCoords();">
 			<input type="hidden" size="4" id="x" name="x" value="<?php echo $iX ?>" />
 			<input type="hidden" size="4" id="y" name="y" value="<?php echo $iY ?>" />
-			<input type="hidden" size="4" id="x2" name="x2" value="<?php echo $iX+iW ?>" />
-			<input type="hidden" size="4" id="y2" name="y2" value="<?php echo $iY+iH ?>" />
+			<input type="hidden" size="4" id="x2" name="x2" value="<?php echo $iX+$iW ?>" />
+			<input type="hidden" size="4" id="y2" name="y2" value="<?php echo $iY+$iH ?>" />
 			<input type="hidden" size="4" id="w" name="w" value="<?php echo $iW ?>" />
 			<input type="hidden" size="4" id="h" name="h" value="<?php echo $iH ?>"  />
 			<input type="hidden" id="cropw" name="cropw" value="<?php echo $cropwidth; ?>" />

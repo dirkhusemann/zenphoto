@@ -16,46 +16,24 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---user_log
 
 $cookiepath = WEBPATH;
 if (WEBPATH == '') { $cookiepath = '/'; }
-$saved_auth = NULL;
 
 if (!OFFSET_PATH) {
-	if (zp_loggedin()) {
-		$authType = 'zenphoto_auth';
-	} else {
-		if (in_context(ZP_SEARCH)) {  // search page
-			$authType = 'zp_search_auth';
-			$check_auth = getOption('search_password');
-			if (empty($check_auth)) {
-				$authType = 'zp_gallery_auth';
-			}
-		} else if (in_context(ZP_ALBUM)) { // album page
-			$authType = "zp_album_auth_" . cookiecode($_zp_current_album->name);
-			$check_auth = $_zp_current_album->getPassword();
-			if (empty($check_auth)) {
-				$parent = $_zp_current_album->getParent();
-				while (!is_null($parent)) {
-					$authType = "zp_album_auth_" . cookiecode($parent->name);
-					$check_auth = $parent->getPassword();
-					if (!empty($check_auth)) { break; }
-					$parent = $parent->getParent();
-				}
-				if (empty($check_auth)) {
-					// revert all the way to the gallery
-					$authType = 'zp_gallery_auth';
-				}
-			}
-		} else {  // index page
-			$authType = 'zp_gallery_auth';
+	$cookies = array();
+	$candidate = array_unique(Array_merge(array_keys($_COOKIE), $_SESSION));
+	foreach ($candidate as $cookie) {
+		if ($cookie == 'zenphoto_auth' || $cookie == 'zp_gallery_auth' || $cookie == 'zp_search_auth' || strpos($cookie, 'zp_album_auth_') !== false) {
+			$cookies[] = $cookie;
 		}
 	}
-	$saved_auth = zp_getCookie($authType);
 	if (isset($_GET['userlog'])) { // process the logout.
 		if ($_GET['userlog'] == 0) {
-			$saved_auth = NULL;
-			zp_setcookie($authType, "", time()-368000, $cookiepath);
-			if ($authType == 'zenphoto_auth') {
-				$_zp_loggedin = false;
+			foreach($cookies as $cookie) {
+				zp_setcookie($cookie, "", time()-368000, $cookiepath);
 			}
+			$_zp_loggedin = false;
+			$saved_auth = NULL;
+			$cookies = array();
+			$_zp_pre_authorization = array();
 		}
 	}
 }
@@ -69,11 +47,11 @@ if (!OFFSET_PATH) {
  * @param bool $showLoginForm set to true to display a login form if no one is logged in
  */
 function printUserLogout($before='', $after='', $showLoginForm=false) {
-	global $saved_auth;
+	global $cookies;
 	if ($showLoginForm) {
 		$showLoginForm = !checkforPassword(true);
 	}
-	if (empty($saved_auth)) {
+	if (empty($cookies) && $showLoginForm) {
 		printPasswordForm('', false);
 	} else {
 		echo $before.'<a href="?userlog=0" title="'.gettext("logout").'" >'.gettext("logout").'</a>'.$after;
