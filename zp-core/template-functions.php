@@ -3271,6 +3271,7 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 			} else {
 				$size = min(max(round(($maxfontsize*($val-$mincount))/($maxcount-$mincount), 2), MINFONTSIZE), $maxfontsize);
 			}
+			$size = str_replace(',','.', $size);
 			$size = " style=\"font-size:".$size."em;\"";
 		} else {
 			$size = '';
