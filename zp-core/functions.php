@@ -1380,7 +1380,6 @@ function addPluginScript($script) {
 	$_zp_plugin_scripts[] = $script;
 }
 
-$_zp_extra_filetypes = array('flv' => 'Video', '3gp' => 'Video', 'mov' => 'Video', 'mp3' => 'Video', 'mp4' => 'Video');
 /**
  * Registers a plugin as handler for a file extension
  *
