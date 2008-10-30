@@ -198,7 +198,7 @@ function printContactForm() {
 			echo getOption("contactform_confirmtext");
 			?>
 <div>
-	<form id="confirm" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post" accept-charset="UTF-8" style="float: left">
+	<form id="confirm" action="<?php echo sanitize($_SERVER['REQUEST_URI']); ?>" method="post" accept-charset="UTF-8" style="float: left">
 		<input type="hidden" id="confirm" name="confirm" value="confirm" />
 		<input type="hidden" id="subject" name="subject"	value="<?php echo $subject; ?>" />
 		<input type="hidden" id="message"	name="message" value="<?php echo $message; ?>" />
@@ -206,7 +206,7 @@ function printContactForm() {
 		<input type="hidden" id="mailaddress" name="mailaddress" value="<?php echo $mailaddress; ?>" />
 		<input type="submit" value="<?php echo gettext("Confirm"); ?>" />
 	</form>
-	<form id="discard" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post" accept-charset="UTF-8">
+	<form id="discard" action="<?php echo sanitize($_SERVER['REQUEST_URI']); ?>" method="post" accept-charset="UTF-8">
 		<input type="hidden" id="discard" name="discard" value="discard" />
 		<input type="submit" value="<?php echo gettext("Discard"); ?>" />
 	</form>
