@@ -3004,7 +3004,9 @@ function getProtectedAlbumsWhere() {
 	} else {
 		$albumWhere = '';
 	}
-	return ' AND '.$albumWhere;
+	
+	if (!empty($albumWhere)) $albumWhere = ' AND '.$albumWhere;
+	return $albumWhere;
 }
 
 /**
