@@ -2994,7 +2994,7 @@ function getProtectedAlbumsWhere() {
 	}
 	$sql = $sql . $where . " )";
 
-        $result = query_full_array($sql);
+	$result = query_full_array($sql);
 	if ($result) {
 		$albumWhere = prefix('albums') . ".id not in (";
 		foreach ($result as $row) {
@@ -3002,9 +3002,9 @@ function getProtectedAlbumsWhere() {
 		}
 		$albumWhere = substr($albumWhere, 0, -2) . ')';
 	} else {
-		$albumWhere = "(1=1)";
+		$albumWhere = '';
 	}
-	return $albumWhere;
+	return ' AND '.$albumWhere;
 }
 
 /**
@@ -3027,7 +3027,7 @@ function getRandomImages($daily = false) {
 		$albumWhere = '';
 		$imageWhere = '';
 	} else {
-		$albumWhere = " AND " . prefix('albums') . ".show = 1 AND " . getProtectedAlbumsWhere() ;
+		$albumWhere = " AND " . prefix('albums') . ".show = 1" . getProtectedAlbumsWhere() ;
 		$imageWhere = " AND " . prefix('images') . ".show=1";
 	}
 	$c = 0;
@@ -3090,7 +3090,7 @@ function getRandomImagesAlbum($rootAlbum=null) {
 			$albumNotWhere = '';
 		} else {
 			$imageWhere = " AND " . prefix('images'). ".show=1";
-			$albumNotWhere = ' AND '.getProtectedAlbumsWhere();
+			$albumNotWhere = getProtectedAlbumsWhere();
 		}
 		$albumInWhere = '';
 
