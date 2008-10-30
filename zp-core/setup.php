@@ -53,7 +53,7 @@ function updateItem($item, $value) {
 	$i = strpos($zp_cfg, $item);
 	$i = strpos($zp_cfg, '=', $i);
 	$j = strpos($zp_cfg, "\n", $i);
-	$zp_cfg = substr($zp_cfg, 0, $i) . '= "' . $value . '";' . substr($zp_cfg, $j);
+	$zp_cfg = substr($zp_cfg, 0, $i) . '= \'' . str_replace('\'', '\\\'',$value) . '\';' . substr($zp_cfg, $j);
 }
 
 function checkAlbumParentid($albumname, $id) {
