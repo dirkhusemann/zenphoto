@@ -3922,12 +3922,12 @@ function printPasswordForm($hint, $showProtected=true, $showuser=NULL) {
 
 	echo "\n    <table>";
 	if ($showuser) {
-		echo "\n      <tr><td>".gettext("Login")."</td><td><input class=\"textfield\" name=\"user\" size=\"20\" /></td></tr>";
+		echo "\n      <tr><td style=\"text-align:right\">".gettext("Login")." </td><td style=\"text-align:left;\"><input type=\"text\" size=\"38\" name=\"user\" /></td></tr>";
 	}
-	echo "\n      <tr><td>".gettext("Password")."</td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
-	echo "\n      <tr><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"".gettext("Submit")."\" /></td></tr>";
+	echo "\n      <tr><td style=\"text-align:right\">".gettext("Password")." </td><td style=\"text-align:left;\"><input type=\"password\" size=\"40\" name=\"pass\" /></td></tr>";
+	echo "\n      <tr><td></td><td style=\"text-align:left\" ><input class=\"button\" type=\"submit\" value=\"".gettext("Submit")."\" /></td></tr>";
 	if (!empty($hint)) {
-		echo "\n      <tr><td>".sprintf(gettext("Hint: %s"), $hint) . "</td></tr>";
+		echo "\n      <tr><td style=\"text-align:left\">".sprintf(gettext("Hint: %s"), $hint) . "</td></tr>";
 	}
 	echo "\n    </table>";
 	echo "\n  </form>";
