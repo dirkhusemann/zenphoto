@@ -2128,7 +2128,7 @@ function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL
 	}
 	$h = $_zp_current_image->getHeight();
 	$w = $_zp_current_image->getWidth();
-	$ls = getOption('image_use_longest_side');
+	$side = getOption('image_use_side'); 
 	$us = getOption('image_allow_upscale');
 
 	$args = getImageParameters(array($size, $width, $height, $cw, $ch, $cx, $cy, null));
@@ -2157,7 +2157,7 @@ function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL
 		$wprop = round(($w / $h) * $dim);
 	}
 
-	if (($size && $ls && $h > $w)	|| $height) {
+	if (($size && ($side == 'longest' && $h > $w) || ($side == 'height'))	|| $height) {
 		// Scale the height
 		$newh = $dim;
 		$neww = $wprop;

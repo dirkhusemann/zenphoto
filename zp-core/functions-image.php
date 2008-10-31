@@ -270,7 +270,7 @@ function imageResizeAlpha(&$src, $w, $h) {
 function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $force_cache=false, $theme) {
 	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
 	// Set the config variables for convenience.
-	$image_use_longest_side = getOption('image_use_longest_side');
+	$image_use_side = getOption('image_use_side');
 	$upscale = getOption('image_allow_upscale');
 	$sharpenthumbs = getOption('thumb_sharpen');
 	$sharpenimages = getOption('image_sharpen');
@@ -334,7 +334,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		$hprop = round(($h / $w) * $dim);
 		$wprop = round(($w / $h) * $dim);
 
-		if ((!$thumb && $size && $image_use_longest_side && $h > $w) || ($thumb && $h <= $w) || $height) {
+		if ((!$thumb && $size && ($image_use_side == 'longest' && $h > $w) || ($image_use_side == 'height')) || ($thumb && $h <= $w) || $height) {
 			$newh = $dim;
 			$neww = $wprop;
 		} else {
@@ -419,7 +419,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		} else {
 			$hprop = round(($h / $w) * $dim);
 			$wprop = round(($w / $h) * $dim);
-			if ((!$thumb && $size && $image_use_longest_side && $h > $w) || ($thumb && $h <= $w) || $height) {
+			if ((!$thumb && $size && ($image_use_side == 'longest' && $h > $w) || ($image_use_side == 'height')) || ($thumb && $h <= $w) || $height) {
 				$newh = $dim;
 				$neww = $wprop;
 			} else {

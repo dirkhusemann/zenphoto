@@ -11,7 +11,7 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 		$currentthumbimage = $imageobj->getThumb();
 		$width = $imageobj->getWidth();
 		$height = $imageobj->getHeight();
-		setOption('image_use_longest_side', 1, false);
+		setOption('image_use_side', 'longest', false);
 		$size = min(400, $width, $height);
 		$cropwidth = getOption("thumb_crop_width");
 		$cropheight = getOption("thumb_crop_height");

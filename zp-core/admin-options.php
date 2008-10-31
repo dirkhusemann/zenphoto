@@ -283,7 +283,7 @@ if (isset($_GET['action'])) {
 				$cw = getOption('thumb_crop_width');
 				$ch = getOption('thumb_crop_height');
 				if (isset($_POST['image_size'])) setThemeOption($table, 'image_size', sanitize($_POST['image_size'],3));
-				setBoolThemeOption($table, 'image_use_longest_side', isset($_POST['image_use_longest_side']));
+				setOption('image_use_side', sanitize($_POST['image_use_side']));
 				if (isset($_POST['thumb_size'])) setThemeOption($table, 'thumb_size', sanitize($_POST['thumb_size'],3));
 				setBoolThemeOption($table, 'thumb_crop', isset($_POST['thumb_crop']));
 				if (isset($_POST['thumb_crop_width'])) setThemeOption($table, 'thumb_crop_width', $ncw = sanitize($_POST['thumb_crop_width'],3));
@@ -1352,17 +1352,16 @@ if (!empty($_REQUEST['themealbum'])) {
 	<tr>
 		<td><?php echo gettext("Image size:"); ?></td>
 		<td>
-			<input type="text" size="<?php echo 5; ?>" name="image_size"
-				value="<?php echo getThemeOption($album, 'image_size');?>" />
-			<input type="checkbox" name="image_use_longest_side"
-				value="1"	<?php echo checked('1', getThemeOption($album, 'image_use_longest_side')); ?> />
-			<?php echo gettext("Use longest side"); ?>
+			<input type="text" size="<?php echo 5; ?>" name="image_size" value="<?php echo getThemeOption($album, 'image_size');?>" />
+			<?php $side = getOption('image_use_side'); ?>
+			<input type="radio" id="image_use_side" name="image_use_side" value="height" <?php if ($side=='height') echo " CHECKED"?> /> <?php echo gettext('height') ?>
+			<input type="radio" id="image_use_side" name="image_use_side" value="width" <?php if ($side=='width') echo " CHECKED"?> /> <?php echo gettext('width') ?>
+			<input type="radio" id="image_use_side" name="image_use_side" value="longest" <?php if ($side=='longest') echo " CHECKED"?> /> <?php echo gettext('longest side') ?>
 		</td>
 		<td>
-			<?php echo gettext("Default image display width."); ?>
+			<?php echo gettext("Default image display size."); ?>
 			<br />
-			<?php echo gettext("If <em>Use longest side</em> is checked the longest side of the image will be <em>image size</em>.").' ';
-						echo gettext("Otherwise, the <em>width</em> of the image will	be <em>image size</em>."); ?>
+			<?php echo gettext("The image will be sized so that the <em>height</em>, <em>width</em>, or the <em>longest side</em> will be equal to <em>image size</em>."); ?>
 		</td>
 	</tr>
 	<?php if (is_null($album)) {?>
