@@ -142,6 +142,7 @@ if (isset($_GET['action'])) {
 				}
 			}
 			setOption('search_fields', $serachfields);
+			setOption('exact_tag_match', sanitize($_POST['tag_match']));
 			$olduser = getOption('gallery_user');
 			$newuser = sanitize($_POST['gallery_user'],3);
 			if (!empty($newuser)) setOption('login_user_field', 1);
@@ -966,13 +967,30 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		<td><?php echo gettext("Search fields:"); ?></td>
 		<td>
 		<?php 
-		echo '<ul class="searchchecklist">'."\n";
+		$exact = '<input type="radio" id="exact_tags" name="tag_match" value="1" ';
+		$partial = '<input type="radio" id="exact_tags" name="tag_match" value="0" ';
+		if (getOption('exact_tag_match')) {
+			$exact .= ' CHECKED ';
+		} else {
+			$partial .= ' CHECKED ';
+		}
+		$exact .= '/>'. gettext('exact');
+		$partial .= '/>'. gettext('partial');
 		$engine = new SearchEngine();
-		generateUnorderedListFromArray($engine->allowedSearchFields(), $engine->zp_search_fields, '_SEARCH_', '');
+		$fields = array_flip($engine->zp_search_fields);
+		$fields[SEARCH_TAGS] .= $exact.$partial;
+		$fields = array_flip($fields);
+		$set_fields = $engine->allowedSearchFields();
+		echo '<ul class="searchchecklist">'."\n";
+		generateUnorderedListFromArray($set_fields, $fields, '_SEARCH_', '');
 		echo '</ul>';
-		?>		
+		?>
 		</td>
-		<td><?php echo gettext("The set of fields on which searches may be performed."); ?></td>
+		<td>
+		<?php echo gettext("The set of fields on which searches may be performed."); ?>
+		<br /><br />
+		<?php echo gettext("Search does partial matches on all fields with the possible exception of <em>Tags</em>. This means that if the filed contains the search criteria anywhere within it a result will be returned. If <em>exact</em> is selected for <em>Tags</em> then the serach criteria must exactly match the tag for a result to be returned.") ?>
+		</td>
 	</tr>
 	<tr>
 		<td><?php echo gettext("Enable Persistent Archives:"); ?></td>

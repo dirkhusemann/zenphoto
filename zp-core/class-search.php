@@ -485,6 +485,7 @@ class SearchEngine
 	 */
 	function searchTags($searchstring, $tbl, $idlist) {
 		$allIDs = null;
+		$exact = getOption('exact_tag_match');
 		$sql = 'SELECT t.`name`, o.`objectid` FROM '.prefix('tags').' AS t, '.prefix('obj_to_tag').' AS o WHERE t.`id`=o.`tagid` AND o.`type`="'.$tbl.'" AND (';
 		foreach($searchstring as $singlesearchstring){
 			switch ($singlesearchstring) {
@@ -496,7 +497,11 @@ class SearchEngine
 					break;
 				default:
 					$targetfound = true;
-					$sql .= '`name` LIKE "%'.mysql_real_escape_string($singlesearchstring).'%" OR ';
+					if ($exact) {
+						$sql .= '`name` = "'.mysql_real_escape_string($singlesearchstring).'" OR ';
+					} else {
+						$sql .= '`name` LIKE "%'.mysql_real_escape_string($singlesearchstring).'%" OR ';
+					}
 			}
 		}
 		$sql = substr($sql, 0, strlen($sql)-4).') ORDER BY t.`id`';
@@ -561,7 +566,7 @@ class SearchEngine
 								$lookfor = strtolower($singlesearchstring);
 								$objectid = NULL;
 								foreach ($taglist as $key => $objlist) {
-									if (preg_match('%'.$lookfor.'%', $key)) {
+									if (($exact && $lookfor == $key) || (!$exact && preg_match('%'.$lookfor.'%', $key))) {
 										if (is_array($objectid)) {
 											$objectid = array_merge($objectid, $objlist);
 										} else {
