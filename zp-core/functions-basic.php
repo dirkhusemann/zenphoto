@@ -565,30 +565,6 @@ function rewrite_path($rewrite, $plain) {
 }
 
 /**
- * Simple mySQL timestamp formatting function.
- *
- * @param string $format formatting template
- * @param int $mytimestamp timestamp
- * @return string
- */
-function myts_date($format,$mytimestamp)
-{
-	// If your server is in a different time zone than you, set this.
-	$timezoneadjust = getOption('time_offset');
-
-	$month  = substr($mytimestamp,4,2);
-	$day    = substr($mytimestamp,6,2);
-	$year   = substr($mytimestamp,0,4);
-
-	$hour   = substr($mytimestamp,8,2);
-	$min    = substr($mytimestamp,10,2);
-	$sec    = substr($mytimestamp,12,2);
-
-	$epoch  = mktime($hour+$timezoneadjust,$min,$sec,$month,$day,$year);
-	$date   = zpFormattedDate($format, $epoch);
-	return $date;
-}
-/**
  * rawurlencode function that is path-safe (does not encode /)
  *
  * @param string $path URL
