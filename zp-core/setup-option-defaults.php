@@ -67,7 +67,7 @@ function setDefault($option, $default) {
 	setDefault('image_quality', 85);
 	setDefault('thumb_quality', 75);
 	setDefault('image_size', 595);
-	if (!getOption('image_use_longest_side')) {
+	if (!getOption('image_use_longest_side') === '0') {
 		setDefault('image_use_side', 'width');
 	} else {
 		setDefault('image_use_side', 'longest');
