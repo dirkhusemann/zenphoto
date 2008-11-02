@@ -1166,9 +1166,9 @@ class Album extends PersistentObject {
 		$albumdir = $this->localpath;
 		if (!is_dir($albumdir) || !is_readable($albumdir)) {
 			if (!is_dir($albumdir)) {
-				$msg = sprintf(gettext("Error: The album %s cannot be found."), htmlspecialchars($this->name));
+				$msg = sprintf(gettext("Error: The album %s cannot be found."), $this->name);
 			} else {
-				$msg = sprintf(gettext("Error: The album %s is not readable."), htmlspecialchars($this->name));
+				$msg = sprintf(gettext("Error: The album %s is not readable."), $this->name);
 			}
 			die($msg);
 		}

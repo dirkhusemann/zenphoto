@@ -55,22 +55,22 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 	$show = false;
 	switch ($personality) {
 	case 'Simpleviewer':
-	echo "<script type=\"text/javascript\" src=\"$_zp_themeroot/scripts/swfobject.js\"></script>\n";
-	$oneImagePage = true;
-	break;
+		echo "<script type=\"text/javascript\" src=\"$_zp_themeroot/scripts/swfobject.js\"></script>\n";
+		$oneImagePage = true;
+		break;
 	case 'Slimbox':
 		echo "<link rel=\"stylesheet\" href=\"$_zp_themeroot/slimbox.css\" type=\"text/css\" media=\"screen\" />\n";
-	echo "<script type=\"text/javascript\" src=\"$_zp_themeroot/scripts/mootools.v1.11.js\"></script>\n";
-	echo "<script type=\"text/javascript\" src=\"$_zp_themeroot/scripts/slimbox.js\"></script>\n";
-	break;
+		echo "<script type=\"text/javascript\" src=\"$_zp_themeroot/scripts/mootools.v1.11.js\"></script>\n";
+		echo "<script type=\"text/javascript\" src=\"$_zp_themeroot/scripts/slimbox.js\"></script>\n";
+		break;
 	case 'Smoothgallery':
 		echo "<link rel=\"stylesheet\" href=\"$_zp_themeroot/jd.gallery.css\" type=\"text/css\" media=\"screen\" charset=\"utf-8\" />\n";
-	echo "<script src=\"$_zp_themeroot/scripts/mootools.v1.11.js\" type=\"text/javascript\"></script>\n";
-	echo "<script src=\"$_zp_themeroot/scripts/jd.gallery.js\" type=\"text/javascript\"></script>\n";
-	setOption('thumb_crop_width', 100, false);
-	setOption('thumb_crop_height', 75, false);
-	$oneImagePage = true;
-	$show = getOption('Slideshow') || (isset($_GET['slideshow']));
+		echo "<script src=\"$_zp_themeroot/scripts/mootools.v1.11.js\" type=\"text/javascript\"></script>\n";
+		echo "<script src=\"$_zp_themeroot/scripts/jd.gallery.js\" type=\"text/javascript\"></script>\n";
+		setOption('thumb_crop_width', 100, false);
+		setOption('thumb_crop_height', 75, false);
+		$oneImagePage = true;
+		$show = getOption('Slideshow') || (isset($_GET['slideshow']));
 		break;
 	}
 	echo "<script type=\"text/javascript\" src=\"$_zp_themeroot/scripts/bluranchors.js\"></script>\n";
@@ -235,15 +235,15 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 							}
 						} else {
 							$firstImage = null;
- 								$lastImage = null;
- 								while (next_image(false, $firstPageImages)){
-									if (!(($personality == 'Slimbox') && isImagePhoto())) { // Slimbox does not do video
- 										if (is_null($firstImage)) {
- 											$lastImage = imageNumber();
- 											$firstImage = $lastImage;
- 										} else {
- 											$lastImage++;
- 										}
+ 							$lastImage = null;
+ 							while (next_image(false, $firstPageImages)){
+								if (!(($personality == 'Slimbox') && !isImagePhoto())) { // Slimbox does not do video
+ 									if (is_null($firstImage)) {
+ 										$lastImage = imageNumber();
+ 										$firstImage = $lastImage;
+ 									} else {
+ 										$lastImage++;
+ 									}
  						?>
 <!-- Image thumbnails or no flash -->
  									<div class="image">
@@ -277,9 +277,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
  					</div> <!-- images -->
  					</div> <!-- main -->
 	 			<div class="clearage"></div>
- 					<?php
- 					printNofM('Photo', $firstImage, $lastImage, getNumImages());
- 					?>
+ 					<?php if (isset($firstImage)) printNofM('Photo', $firstImage, $lastImage, getNumImages()); ?>
 		</div> <!-- content -->
 			<?php
 				} else {  /* flash */
