@@ -2,8 +2,8 @@
 define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 	
-		$albumname = sanitize($_REQUEST['a']);
-		$imagename = sanitize($_REQUEST['i']);
+		$albumname = sanitize_path($_REQUEST['a']);
+		$imagename = sanitize_path($_REQUEST['i']);
 		
 		// get full width and height
 		$albumobj = new Album(new Gallery,$albumname);

@@ -48,7 +48,7 @@ if (isset($_GET['p'])) {
 // Display an Album page.
 } else if (in_context(ZP_ALBUM)) {
 	if(isset($_GET['zipfile']) && is_dir(realpath(getAlbumFolder() . UTF8ToFilesystem($_GET['album'])))){
-		createAlbumZip(sanitize($_GET['album']));
+		createAlbumZip(sanitize_path($_GET['album']));
 	} else {
 		if ($_zp_current_album->isDynamic()) {
 			$search = $_zp_current_album->getSearchEngine();

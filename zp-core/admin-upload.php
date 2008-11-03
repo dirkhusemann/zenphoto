@@ -27,7 +27,7 @@ if (isset($_GET['action'])) {
 		// Make sure the folder exists. If not, create it.
 		if (isset($_POST['processed']) && !empty($_POST['folder']) && ($newAlbum || !$files_empty)) {
 
-			$folder = sanitize($_POST['folder'],3);
+			$folder = sanitize_path($_POST['folder']);
 			$uploaddir = $gallery->albumdir . UTF8ToFilesystem($folder);
 			if (!is_dir($uploaddir)) {
 				mkdir ($uploaddir, CHMOD_VALUE);

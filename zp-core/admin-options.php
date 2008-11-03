@@ -268,13 +268,13 @@ if (isset($_GET['action'])) {
 			$returntab = "#tab_theme";
 			// all theme specific options are custom options, handled below
 			if (!empty($_POST['themealbum'])) {
-				$alb = sanitize($_POST['themealbum']);
+				$alb = sanitize_path($_POST['themealbum']);
 				$table = new Album(new Gallery(), $alb);
 				$returntab = '&themealbum='.urlencode($alb).'#tab_theme';
-				$themeswitch = $alb != sanitize($_POST['old_themealbum']);
+				$themeswitch = $alb != sanitize_path($_POST['old_themealbum']);
 			} else {
 				$table = NULL;
-				$themeswitch = sanitize($_POST['old_themealbum']) != '';
+				$themeswitch = sanitize_path($_POST['old_themealbum']) != '';
 			}
 			if ($themeswitch) {
 				$notify = '?switched';
@@ -1266,7 +1266,7 @@ foreach ($albums as $alb) {
 	}
 }
 if (!empty($_REQUEST['themealbum'])) {
-	$alb = sanitize($_REQUEST['themealbum']);
+	$alb = sanitize_path($_REQUEST['themealbum']);
 		$album = new Album($gallery, $alb);
 		$albumtitle = $album->getTitle();
 		$themename = $album->getAlbumTheme();
@@ -1276,7 +1276,7 @@ if (!empty($_REQUEST['themealbum'])) {
 			$themename = $gallery->getCurrentTheme();
 			$album = NULL;
 		} else {
-			$alb = sanitize($alb);
+			$alb = sanitize_path($alb);
 			$album = new Album($gallery, $alb);
 			$albumtitle = $album->getTitle();
 			$themename = $album->getAlbumTheme();

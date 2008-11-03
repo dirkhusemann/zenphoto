@@ -37,7 +37,7 @@ if (!($_zp_loggedin & ADMIN_RIGHTS)) {
 }
 	if (isset($_REQUEST['album'])) {
 		$alb = $_REQUEST['album'];
-		$folder = sanitize($alb);
+		$folder = sanitize_path($alb);
 		$object = $folder;
 		$tab = 'edit';
 	} else {
@@ -84,7 +84,7 @@ echo "\n<body>";
 	echo "\n" . "<br/>".sprintf(gettext("Finished: Total of %u images."), $count);
 	
 	if (isset($_REQUEST['return'])) {
-		$ret = sanitize($_REQUEST['return']);
+		$ret = sanitize_path($_REQUEST['return']);
 		if (substr($ret, 0, 1) == '*') {
 			if (empty($ret) || $ret == '*.' || $ret == '*/') {
 				$r = '?page=edit';

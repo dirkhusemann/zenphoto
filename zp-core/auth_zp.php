@@ -40,7 +40,7 @@ if (!isset($_POST['login'])) {
 	if (isset($_POST['login']) && isset($_POST['user']) && isset($_POST['pass'])) {
 		$post_user = sanitize($_POST['user'],3);
 		$post_pass = sanitize($_POST['pass'],3);
-		$redirect = sanitize($_POST['redirect'],3);
+		$redirect = sanitize_path($_POST['redirect']);
 		if ($_zp_loggedin = checkLogon($post_user, $post_pass)) {
 			zp_setcookie("zenphoto_auth", md5($post_user . $post_pass), time()+5184000, $cookiepath);
 			if (!empty($redirect)) { header("Location: " . FULLWEBPATH . $redirect); }

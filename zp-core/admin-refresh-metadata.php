@@ -56,7 +56,7 @@ echo "<h1>".$title."</h1>";
 $ret = '';
 if (isset($_GET['refresh']) && db_connect()) {
 	if (isset($_REQUEST['return'])) {
-		$ret = sanitize($_REQUEST['return']);
+		$ret = sanitize_path($_REQUEST['return']);
 		if (substr($ret, 0, 1) == '*') {
 			if (empty($ret) || $ret == '*.' || $ret == '*/') {
 				$r = '?page=edit';
@@ -88,7 +88,7 @@ if (isset($_GET['refresh']) && db_connect()) {
 	if ($type !== 'prune&') {
 		if (isset($_REQUEST['album'])) {
 			$alb = $_REQUEST['album'];
-			$folder = sanitize(strip($alb));
+			$folder = sanitize_path($alb);
 			if (!empty($folder)) {
 				$sql = "SELECT `id` FROM ". prefix('albums') . " WHERE `folder`=\"".mysql_real_escape_string($folder)."\";";
 				$row = query_single_row($sql);
@@ -111,7 +111,7 @@ if (isset($_GET['refresh']) && db_connect()) {
 			query($sql);
 		}
 
-		if (isset($_REQUEST['return'])) $ret = sanitize($_REQUEST['return']);
+		if (isset($_REQUEST['return'])) $ret = sanitize_path($_REQUEST['return']);
 		if (empty($r)) {
 			echo "<p>".$allset."</p>";
 		} else {

@@ -25,7 +25,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	//check for security incursions
 	if (isset($_GET['album'])) {
 		if (!($_zp_loggedin & ADMIN_RIGHTS)) {
-			if (!isMyAlbum(sanitize($_GET['album']), $_zp_loggedin)) {
+			if (!isMyAlbum(sanitize_path($_GET['album']), $_zp_loggedin)) {
 				unset($_GET['album']);
 				unset($_GET['page']);
 				$page = '';
@@ -57,7 +57,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 		/******************************************************************************/
 		if ($action == "clear_cache") {
 			if (isset($_POST['album'])) {
-				$gallery->clearCache(SERVERCACHE . '/' . sanitize($_POST['album']));
+				$gallery->clearCache(SERVERCACHE . '/' . sanitize_path($_POST['album']));
 				header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit&cleared&album='.$_POST['album']);
 				exit();
 			} else {
@@ -68,7 +68,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 		/** Publish album  ************************************************************/
 		/******************************************************************************/
 		if ($action == "publish") {
-			$folder = sanitize($_GET['album']);
+			$folder = sanitize_path($_GET['album']);
 			$album = new Album($gallery, $folder);
 			$album->setShow($_GET['value']);
 			$album->save();
@@ -95,9 +95,9 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				$return = '?counters_reset';
 				if (isset($_REQUEST['album'])) {
 					if (isset($_GET['album'])) {
-						$return = urlencode(dirname(sanitize($_REQUEST['album'])));
+						$return = urlencode(dirname(sanitize_path($_REQUEST['album'])));
 					} else {
-						$return = urlencode(sanitize($_REQUEST['album']));	
+						$return = urlencode(sanitize_path($_REQUEST['album']));	
 					}
 					if (empty($return) || $return == '.' || $return == '/') {
 						$return = '?page=edit&counters_reset';
@@ -119,7 +119,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			/** SAVE A SINGLE ALBUM *******************************************************/
 			if ($_POST['album']) {
 
-				$folder = sanitize($_POST['album']);
+				$folder = sanitize_path($_POST['album']);
 				$album = new Album($gallery, $folder);
 				$notify = '';
 				if (isset($_POST['savealbuminfo'])) {
@@ -206,7 +206,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 
 									// Process move/copy/rename
 									if ($movecopyrename_action == 'move') {
-										$dest = sanitize($_POST[$i.'-albumselect'], 3);
+										$dest = sanitize_path($_POST[$i.'-albumselect'], 3);
 										if ($dest && $dest != $folder) {
 											if (!$image->moveImage($dest)) {
 												$notify = "&mcrerr=1";
@@ -215,7 +215,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 											// Cannot move image to same album.
 										}
 									} else if ($movecopyrename_action == 'copy') {
-										$dest = sanitize($_POST[$i.'-albumselect'],2);
+										$dest = sanitize_path($_POST[$i.'-albumselect'],2);
 										if ($dest && $dest != $folder) {
 											if(!$image->copyImage($dest)) {
 												$notify = "&mcrerr=1";
@@ -225,7 +225,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 											// Or, copy with rename?
 										}
 									} else if ($movecopyrename_action == 'rename') {
-										$renameto = sanitize($_POST[$i.'-renameto'],3);
+										$renameto = sanitize_path($_POST[$i.'-renameto'],3);
 										$image->renameImage($renameto);
 									}
 								}
@@ -241,7 +241,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				/** SAVE MULTIPLE ALBUMS ******************************************************/
 			} else if ($_POST['totalalbums']) {
 				for ($i = 1; $i <= $_POST['totalalbums']; $i++) {
-					$folder = sanitize($_POST["$i-folder"]);
+					$folder = sanitize_path($_POST["$i-folder"]);
 					$album = new Album($gallery, $folder);
 					$rslt = processAlbumEdit($i, $album);
 					if (!empty($rslt)) { $notify = $rslt; }
@@ -250,7 +250,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			// Redirect to the same album we saved.
 			$qs_albumsuffix = "&massedit";
 			if ($_GET['album']) {
-				$folder = sanitize($_GET['album']);
+				$folder = sanitize_path($_GET['album']);
 				$qs_albumsuffix = '&album='.urlencode($folder);
 			}
 			if (isset($_POST['subpage'])) {
@@ -271,7 +271,7 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 		} else if ($action == "deletealbum") {
 			$albumdir = "";
 			if ($_GET['album']) {
-				$folder = sanitize($_GET['album']);
+				$folder = sanitize_path($_GET['album']);
 				$album = new Album($gallery, $folder);
 				if ($album->deleteAlbum()) {
 					$nd = 3;
@@ -400,7 +400,7 @@ define('IMAGES_PER_PAGE', 10);
 if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	$oldalbumimagesort = getOption('albumimagesort');
 	$direction = getOption('albumimagedirection');
-	$folder = sanitize($_GET['album']);
+	$folder = sanitize_path($_GET['album']); 
 	$album = new Album($gallery, $folder);
 	if ($album->isDynamic()) {
 		$subalbums = array();
@@ -878,7 +878,7 @@ if ($allimagecount != $totalimages) { // need pagination links
 	}
 	$albumdir = "";
 	if (isset($_GET['album'])) {
-		$folder = sanitize($_GET['album']);
+		$folder = sanitize_path($_GET['album']);
 		if (isMyAlbum($folder, EDIT_RIGHTS)) {
 			$album = new Album($gallery, $folder);
 			$albums = $album->getSubAlbums();

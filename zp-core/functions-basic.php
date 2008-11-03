@@ -319,8 +319,8 @@ function rewrite_get_album_image($albumvar, $imagevar) {
 		}
 	}
 	// No mod_rewrite, or no album, etc. Just send back the query args.
-	$ralbum = isset($_GET[$albumvar]) ? sanitize($_GET[$albumvar],0) : null;
-	$rimage = isset($_GET[$imagevar]) ? sanitize($_GET[$imagevar],0) : null;
+	$ralbum = isset($_GET[$albumvar]) ? sanitize_path($_GET[$albumvar]) : null;
+	$rimage = isset($_GET[$imagevar]) ? sanitize_path($_GET[$imagevar]) : null;
 	return array($ralbum, $rimage);
 }
 
@@ -414,6 +414,21 @@ function getImageParameters($args) {
 	return array($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop);
 }
 
+/** Takes user input meant to be used within a path to a file or folder and
+ * removes anything that could be insecure or malicious, or result in duplicate
+ * representations for the same physical file.
+ *
+ * Returns the sanitized path
+ *
+ * @param string $filename is the path text to filter.
+ * @return string
+ */
+function sanitize_path($filename) {
+	$filename = str_replace(chr(0), " ", $filename);
+	$filename = strip_tags($filename);
+	$filename = preg_replace(array('/^\/+/','/\/+$/','/\/\/+/','/\.\.+/'), '', $filename);
+	return $filename;
+}
 
 /**
  * Checks if the input is numeric, rounds if so, otherwise returns false.
@@ -488,22 +503,6 @@ function sanitize_string($input_string, $sanitize_level) {
 		$input_string = kses($input_string, $allowed_tags);
 	}
 	return $input_string;
-}
-
-/** Takes user input meant to be used within a path to a file or folder and
- * removes anything that could be insecure or malicious, or result in duplicate
- * representations for the same physical file.
- *
- * Returns the sanitized path
- *
- * @param string $filename is the path text to filter.
- * @return string
- */
-function sanitize_path($filename) {
-	$filename = str_replace(chr(0), " ", $filename);
-	$filename = strip_tags($filename);
-	$filename = preg_replace(array('/^\/+/','/\/+$/','/\/\/+/','/\.\.+/'), '', $filename);
-	return $filename;
 }
 
 /**
