@@ -174,6 +174,7 @@ function setDefault($option, $default) {
 	setOptionDefault('zp_plugin_rating', 1);
 	setOptionDefault('zp_plugin_image_album_statistics', 1);
 	setOptionDefault('zp_plugin_flowplayer', 1);
+	setOptionDefault('zp_plugin_admin_toolbox', 1);
 	// plugins--default to disabled
 	$curdir = getcwd();
 	chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);

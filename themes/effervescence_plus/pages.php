@@ -140,7 +140,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 
 <?php include('footer.php'); ?>
 		<!-- Administration Toolbox -->
-<?php printAdminToolbox(); ?>
+<?php if (function_exists('printAdminToolbox')) printAdminToolbox(); ?>
 
 </body>
 </html>

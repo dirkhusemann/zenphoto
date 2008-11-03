@@ -205,7 +205,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 	</div>
 
 	<!-- Administration Toolbox -->
-	<?php printAdminToolbox(); ?>
+	<?php if (function_exists('printAdminToolbox')) printAdminToolbox(); ?>
 
 </body>
 </html>

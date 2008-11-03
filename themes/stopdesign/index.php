@@ -159,7 +159,7 @@
 		</p>
 	</div>
 
-	<?php printAdminToolbox(ZP_INDEX); ?>
+	<?php  if (function_exists('printAdminToolbox')) printAdminToolbox(); ?>
 
 </body>
 

@@ -271,7 +271,7 @@ if (function_exists('printUserLogout')) {
 </div> <!-- footerlinks -->
 
 
-<?php printAdminToolbox(); ?>
+<?php if (function_exists('printAdminToolbox')) printAdminToolbox(); ?>
 
 </body>
 </html>

@@ -130,7 +130,7 @@
 		</div>
 </div>
 
-<?php printAdminToolbox(); ?>
+<?php if (function_exists('printAdminToolbox')) printAdminToolbox(); ?>
 
 </body>
 </html>
