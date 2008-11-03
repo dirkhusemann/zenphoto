@@ -60,8 +60,8 @@ if (isset($_GET['t'])) {
 list($ralbum, $rimage) = rewrite_get_album_image('a', 'i');
 $ralbum = UTF8ToFileSystem($ralbum);
 $rimage = UTF8ToFileSystem($rimage);
-$album = str_replace('..','', sanitize($ralbum, 0));
-$image = str_replace(array('/',"\\"),'', sanitize($rimage, 0));
+$album = str_replace('..','', sanitize_path($ralbum));
+$image = str_replace(array('/',"\\"),'', sanitize_path($rimage));
 $theme = themeSetup($album); // loads the theme based image options.
 
 // Disallow abusive size requests.
@@ -196,7 +196,7 @@ $process = true;
 // If the file exists, check its modification time and update as needed.
 $fmt = filemtime($imgfile);
 if (file_exists($newfile)) {
-	if ($fmt = filemtime($newfile) < filemtime($imgfile)) {
+	if (filemtime($newfile) < filemtime($imgfile)) {
 		$process = true;
 	} else {
 		$process = false;
