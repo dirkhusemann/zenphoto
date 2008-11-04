@@ -703,11 +703,15 @@ ul.pagelist li.next {
 	border-left: 1px solid #E6E6DF;
 	border-bottom: 1px solid #E6E6DF;
 	background: transparent;
-	width:120px;
+	width: 10em;
 	color: #7b7973;
+	padding: 0.5em;
+}
+#admin, #admin_data ul {
+	text-align: left;
 }
 #admin_data{
-	top:20px;
+	top: 2em;
 }
 #admin h3 {
 	font: 100% "Helvetica Neue", Helvetica, Arial, sans-serif;

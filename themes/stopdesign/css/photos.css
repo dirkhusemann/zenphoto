@@ -1101,11 +1101,15 @@ Comment Submission form
 	border-left: 1px solid #333;
 	border-bottom: 1px solid #333;
 	background: #000;
-	width:120px;
-    padding: 2px 0px 4px 4px;
+	width:15em;
+  padding: 2px 0px 4px 4px;
 }
 
-
+#admin, #admin_data ul {
+	text-align:center;
+	margin: 0;
+	padding: 0;
+}
 
 #admin_data{
 	top: 20px;
@@ -1115,8 +1119,7 @@ Comment Submission form
 }
 
 #admin h3 {
-	font: 100% "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-weight: bold;
+	font-weight: normal;
 	color: #ccc;
 	border-bottom: 1px solid #333;
 	margin:0;

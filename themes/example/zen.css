@@ -229,15 +229,20 @@ UL.pagelist LI.current A {
 	font-weight: bold;
 }
 
-#admin,#admin_data {
+#admin, #admin_data {
 	position: fixed;
-	_position: absolute;
 	right: 0;
 	top: 0;
 	border-left: 1px solid #E6E6DF;
 	border-bottom: 1px solid #E6E6DF;
 	background: #fff;
 	width: 120px;
+}
+
+#admin, #admin_data ul {
+	text-align:center;
+	margin: 0;
+	padding: 0;
 }
 
 #admin_data {

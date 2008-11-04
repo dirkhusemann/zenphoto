@@ -752,10 +752,14 @@ border-bottom: 1px dotted #fff;
 	border-left: 1px solid #E6E6DF;
 	border-bottom: 1px solid #E6E6DF;
 	background: transparent;
-	width:120px;
+	width: 10em;
+	padding: 0.5em;
+}
+#admin, #admin_data ul {
+	text-align:left;
 }
 #admin_data{
-	top:20px;
+	top: 2em;
 }
 #admin h3 {
 	font: 100% "Helvetica Neue", Helvetica, Arial, sans-serif;
