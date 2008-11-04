@@ -387,7 +387,6 @@ label:hover {
 ------------------------------ */
 #admin, #admin_data{
 	position: fixed;
-  _position: absolute;
 	right: 0px;
 	top: 0px;
 	width: 130px;
@@ -519,13 +518,14 @@ ul.archive .month {
 ------------------------------ */
 
 #zen-part {
- font-familiy: Arial, Helvetice, sans-serif;
+ font-family: Arial, Helvetice, sans-serif;
  font-size: 1.8em;
- font-weight: thin;
+ font-weight: 100;
 }
 
 #photo-part {
- font-familiy: Arial, Helvetice, sans-serif;
+ font-family: Arial, Helvetice, sans-serif;
  font-size: 0.9em;
  font-weight: bold;
+ text-transform: uppercase;
 }

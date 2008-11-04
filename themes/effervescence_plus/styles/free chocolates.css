@@ -750,7 +750,6 @@ border-bottom: 1px dotted #fff;
 ------------------------------ */
 #admin, #admin_data{
 	position:fixed;
-  _position: absolute;
 	right:0;
 	top:0;
 	border-left: 1px solid #E6E6DF;
@@ -1014,3 +1013,18 @@ float: right;
 font-size: 0.8em;
 }
 
+/* Zenphoto link
+------------------------------ */
+
+#zen-part {
+ font-family: Arial, Helvetice, sans-serif;
+ font-size: 1.8em;
+ font-weight: 100;
+}
+
+#photo-part {
+ font-family: Arial, Helvetice, sans-serif;
+ font-size: 0.9em;
+ font-weight: bold;
+ text-transform: uppercase;
+}

@@ -1096,7 +1096,6 @@ Comment Submission form
 ----------------------------------------------- */
 #admin, #admin_data{
 	position:absolute;
-  _position: absolute;
 	right:0;
 	top:0;
 	border-left: 1px solid #333;
@@ -1235,13 +1234,14 @@ width:150px;
 ------------------------------ */
 
 #zen-part {
- font-familiy: Arial, Helvetice, sans-serif;
+ font-family: Arial, Helvetice, sans-serif;
  font-size: 1.6em;
- font-weight: thin;
+ font-weight: 100;
 }
 
 #photo-part {
-font-familiy: Arial, Helvetice, sans-serif;
+font-family: Arial, Helvetice, sans-serif;
  font-size: 0.6em;
  font-weight: bold;
+ text-transform: uppercase;
 }

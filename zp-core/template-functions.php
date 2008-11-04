@@ -3847,6 +3847,14 @@ function printCaptcha($preText='', $midText='', $postText='', $size=4) {
 	}
 }
 
+/**
+ * prints the zenphoto logo and link
+ *
+ */
+function printZenphotoLink() {
+	echo gettext("Powered by <a href=\"http://www.zenphoto.org\" title=\"A simpler web photo album\"><span id=\"zen-part\">zen</span><span id=\"photo-part\">photo</span></a>");	
+}
+
 /*** End template functions ***/
 
 ?>
