@@ -1443,42 +1443,46 @@ if ($_zp_loggedin & ADMIN_RIGHTS) {
 		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
 		if (!is_null($option_interface)) {
 			$c++;
-			echo '<table class="bordered" style="border: 0" id="plugin-'.$ext.'">';
-			echo '<tr><th colspan="3">';
 			?>
-			<span class="pluginextrashow"><a href="javascript:toggleExtraInfo('<?php echo $ext;?>','plugin',true);"><?php echo $ext; ?></a></span>
-			<span style="display:none;" class="pluginextrahide"><a href="javascript:toggleExtraInfo('<?php echo $ext;?>','plugin',false);"><?php echo $ext; ?></a></span>
+<!-- <?php echo $extension; ?> -->
+			<table class="bordered" style="border: 0" id="plugin-<?php echo $ext; ?>">
+				<tr>
+				<th colspan="3">
+					<span class="pluginextrashow"><a href="javascript:toggleExtraInfo('<?php echo $ext;?>','plugin',true);"><?php echo $ext; ?></a></span>
+					<span style="display:none;" class="pluginextrahide"><a href="javascript:toggleExtraInfo('<?php echo $ext;?>','plugin',false);"><?php echo $ext; ?></a></span>
+				</th>
+			</tr>
 			<?php
-			echo '</th></tr>';
 			$supportedOptions = $option_interface->getOptionsSupported();
 			if (count($supportedOptions) > 0) {
 				customOptions($option_interface, '', NULL, 'plugin');
 			}
+		?>
+		</table>
+		<?php
 		}
 	}
 	if ($c == 0) {
 		echo gettext("There are no plugin options to administer.");
 	} else {
 	?>
-		<tr>
-		<td colspan="3">
-		<input type="submit" value= <?php echo gettext('save') ?> />
-		</td>
-		</tr></table>
+			<tr>
+				<td colspan="3">
+					<input type="submit" value= <?php echo gettext('save') ?> />
+				</td>
+			</tr>
+		</table> <!-- plugin page table -->
 	<?php
 	}
 	?>
 	</form>
-	<tr>
-	</td>
-	</table>
 <?php
 }
 } // end of null account lockout
 ?>
 
-<!-- end of tab_plugin div -->
-</div>
+</div><!-- end of tab_plugin div -->
+
 <!-- end of container -->
 <?php
 echo '</div>'; // content

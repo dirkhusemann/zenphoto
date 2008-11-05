@@ -655,7 +655,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 			switch ($type) {
 				case 0:  // text box
 				case 3:  // text area
-					echo '<td width="200">';
+					echo '<td width="350px">';
 					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'text-'.$key.'" value=0 />'."\n";
 					if ($multilingual || $type) {
 						print_language_string_list($v, $key, $type, NULL, $editor);
@@ -666,24 +666,24 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 					break;
 				case 1:  // check box
 					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'chkbox-'.$key.'" value=0 />' . "\n";
-					echo '<td width="200"><input type="checkbox" name="'.$key.'" value="1"';
+					echo '<td width="350px"><input type="checkbox" name="'.$key.'" value="1"';
 					echo checked('1', $v);
 					echo " /></td>\n";
 					break;
 				case 2:  // custom handling
-					echo '<td width="200">' . "\n";
+					echo '<td width="350px">' . "\n";
 					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'custom-'.$key.'" value=0 />' . "\n";
 					$optionHandler->handleOption($key, $v);
 					echo "</td>\n";
 					break;
 				case 4: // radio button
-					echo '<td width="200">' . "\n";
+					echo '<td width="350px">' . "\n";
 					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'radio-'.$key.'" value=0 />' . "\n";
 					generateRadiobuttonsFromArray($v,$row['buttons'],$key);
 					echo "</td>\n";
 					break;
 				case 5: // selector
-					echo '<td width="200">' . "\n";
+					echo '<td width="350px">' . "\n";
 					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'selector-'.$key.'" value=0 />' . "\n";
 					echo '<select id="'.$option.'" name="'.$key.'">'."\n";
 					generateListFromArray(array($v),$row['selections']);
