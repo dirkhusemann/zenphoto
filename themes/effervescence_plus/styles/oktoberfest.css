@@ -971,7 +971,7 @@ margin-bottom: 1em;
 	margin-left: 1em;
 	margin-bottom: 0.5em;
 }
-#pagetext a:link {
+#pagetext a:link, a:active, a:visited {
 text-decoration:underline;
 }
 #pagetext h3 a:link {
