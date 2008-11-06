@@ -188,15 +188,15 @@ if ($page == "editcomment") { ?>
 		<th><?php echo gettext("Date/Time"); ?></th>
 		<th><?php echo gettext("Comment"); ?>
 		<?php if(!$fulltext) { ?>(
-			<a href="?fulltext=1<?php echo $viewall ? "&viewall":""; ?>"><?php echo gettext("View full text"); ?></a>) <?php
+			<a href="?fulltext=1<?php echo $viewall ? "&viewall":""; ?>"><?php echo gettext("View full text"); ?></a> ) <?php
 		} else {
-			?>(<a	href="admin-comments.php?fulltext=0"<?php echo $viewall ? "?viewall":""; ?>"><?php echo gettext("View truncated"); ?></a>)<?php
+			?>( <a	href="admin-comments.php?fulltext=0"<?php echo $viewall ? "?viewall":""; ?>"><?php echo gettext("View truncated"); ?></a> )<?php
 		} ?>
 		</th>
-		<th><?php echo gettext("E-Mail"); ?></th>
+		<th><?php echo gettext("E&#8209;Mail"); ?></th>
 		<th><?php echo gettext("IP address"); ?></th>
 		<th><?php echo gettext("Private"); ?></th>
-		<th><?php echo gettext("Spam"); ?></th>
+		<th><?php echo gettext("Pending<br />approval"); ?></th>
 		<th><?php echo gettext("Edit"); ?></th>
 		<th><?php echo gettext("Delete"); ?>
 
@@ -295,7 +295,7 @@ if ($page == "editcomment") { ?>
 	<tr>
 		<td><input type="checkbox" name="ids[]" value="<?php echo $id; ?>"
 			onClick="triggerAllBox(this.form, 'ids[]', this.form.allbox);" /></td>
-		<td style="font-size: 7pt;"><?php echo $link; ?></td>
+		<td><?php echo $link; ?></td>
 		<td>
 		<?php
 		echo $website ? "<a href=\"$website\">$author</a>" : $author;
@@ -304,7 +304,7 @@ if ($page == "editcomment") { ?>
 		}
 		?>
 		</td>
-		<td style="font-size: 7pt;"><?php echo $date; ?></td>
+		<td><?php echo $date; ?></td>
 		<td><?php echo ($fulltext) ? $fullcomment : $shortcomment; ?></td>
 		<td align="center"><a
 			href="mailto:<?php echo $email; ?>?body=<?php echo commentReply($fullcomment, $author, $image, $albumtitle); ?>" title="<?php echo gettext('Reply'); ?>">
@@ -319,15 +319,15 @@ if ($page == "editcomment") { ?>
 		</td>
 		<td align="center"><?php
 		if ($inmoderation) {
-			echo "<a href=\"?action=moderation&id=" . $id . "\" title=\"".gettext('Remove from moderation')."\">";
-			echo '<img src="images/warn.png" style="border: 0px;" alt="'. gettext("Remove from moderation").'" /></a>';
+			echo "<a href=\"?action=moderation&id=" . $id . "\" title=\"".gettext('Approve this message')."\">";
+			echo '<img src="images/warn.png" style="border: 0px;" alt="'. gettext("Approve this message").'" /></a>';
 		}
 		?></td>
 		<td align="center"><a href="?page=editcomment&id=<?php echo $id; ?>" title="<?php echo gettext('Edit this comment.'); ?>"> 
 			<img src="images/pencil.png" style="border: 0px;" alt="<?php echo gettext('Edit'); ?>" /></a></td>
 		<td align="center">
 			<a href="javascript: if(confirm('Are you sure you want to delete this comment?')) { window.location='?action=deletecomments&id=<?php echo $id; ?>'; }"
-			title="<?php echo gettext('Delete this comment.'); ?>" style="color: #c33;"> <img
+			title="<?php echo gettext('Delete this comment.'); ?>" > <img
 			src="images/fail.png" style="border: 0px;" alt="<?php echo gettext('Delete'); ?>" /></a></td>
 	</tr>
 	<?php } ?>

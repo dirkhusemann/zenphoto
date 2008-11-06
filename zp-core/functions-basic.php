@@ -9,6 +9,7 @@
 
 // force UTF-8 Ø
 
+define('FILESYSTEM_CHARSET', 'ISO-8859-1');
 define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
 define('DEBUG_ERROR', false); // set to true to  supplies the calling sequence with zp_error messages
 define('CAPTCHA_LENGTH', 5);
@@ -762,7 +763,7 @@ function parse_size($size) {
  * @return string
  */
 function fileSystemToUTF8($filename) {
-	return utf8::convert($filename, 'ISO-8859-1', 'UTF-8');
+	return utf8::convert($filename, FILESYSTEM_CHARSET, 'UTF-8');
 }
 
 /**
@@ -772,7 +773,7 @@ function fileSystemToUTF8($filename) {
  * @return string
  */
 function UTF8ToFileSystem($filename) {
-	return utf8::convert($filename, 'UTF-8', 'ISO-8859-1');
+	return utf8::convert($filename, 'UTF-8', FILESYSTEM_CHARSET);
 }
 
 /** getAlbumArray - returns an array of folder names corresponding to the
