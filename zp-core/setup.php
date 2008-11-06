@@ -1098,7 +1098,7 @@ if (file_exists("zp-config.php")) {
 		`title` text NOT NULL,
 		`desc` text,
 		`date` datetime default NULL,
-		`place` text default NULL default '',
+		`place` text,
 		`show` int(1) unsigned NOT NULL default '1',
 		`closecomments` int(1) unsigned NOT NULL default '0',
 		`commentson` int(1) UNSIGNED NOT NULL default '1',
