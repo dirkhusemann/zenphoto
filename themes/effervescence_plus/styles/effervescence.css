@@ -834,8 +834,10 @@ line-height: 2em;
 font-size: 1.4em;
 margin-left: 0px;
 margin-bottom: 0.5em;
-	color: #7b7973;
+color: #7b7973;
 }
+#content-left h3 a {
+text-decoration:none;
 }
 #content-left p {
 font-size: 1em;
@@ -888,6 +890,9 @@ background-image: url(../images/dark_arrow_right.png);
 background-repeat: no-repeat;
 background-position: 1px 0px;
 }
+.menu ul li a {
+text-decoration:none;
+}
 .menu ul li.menu-active {
 	color: #002E5B;
 background-image: none;
@@ -931,7 +936,7 @@ margin-bottom: 1em;
 #pagetext a:link, a:active, a:visited {
 text-decoration:underline;
 }
-#pagetext h3 a:link {
+#pagetext h3 a:link, a:active, a:visited {
 text-decoration:none;
 }
 /* News Articles
@@ -947,6 +952,7 @@ line-height: 1em;
 color: #7b0073;		
 }
 .newsarticle a:link, a:active, a:visited {
+text-decoration:underline;
 color: #7b7973;	
 }
 

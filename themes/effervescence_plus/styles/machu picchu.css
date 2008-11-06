@@ -815,6 +815,9 @@ font-size: 1.4em;
 margin-left: 0px;
 margin-bottom: 0.5em;
 }
+#content-left h3 a {
+text-decoration:none;
+}
 #content-left p {
 font-size: 1em;
 line-height: 1.1em;
@@ -860,6 +863,9 @@ background-image: url(../images/arrow_right.png);
 background-repeat: no-repeat;
 background-position: 1px 0px;
 }
+.menu ul li a {
+text-decoration:none;
+}
 .menu ul li.menu-active {
 	color: #002E5B;
 background-image: none;
@@ -903,7 +909,7 @@ margin-bottom: 1em;
 #pagetext a:link, a:active, a:visited {
 text-decoration:underline;
 }
-#pagetext h3 a:link {
+#pagetext h3 a:link, a:active, a:visited {
 text-decoration:none;
 }
 /* News Articles
@@ -916,6 +922,9 @@ border-bottom: 1px dotted #666666;
 line-height: 1em;
 }
 
+.newsarticle a:link, a:active, a:visited {
+text-decoration:underline;
+}
 .newsarticlecredit {
 margin-top: 0px;
 margin-bottom: 10px;
