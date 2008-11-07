@@ -392,17 +392,20 @@ input.tags {
 	font-size: 100%;
 }
 
-#overview-stats,#overview-suggest {
-	min-width: 25%;
-	_width: 25%;
+#overview-stats {
+	float: left;
+	margin: 0 0 10px 10px;
+	padding: 10px;
+}
+
+#overview-maint {
 	float: left;
 	margin: 0 0 10px 10px;
 	padding: 10px;
 }
 
 #overview-comments {
-	min-width: 33%;
-	_width: 33%;
+	width: 40%;
 	float: left;
 	padding: 10px;
 }

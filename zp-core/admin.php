@@ -1153,7 +1153,7 @@ foreach ($comments as $comment) {
 </div>
 
 
-<div class="box" id="overview-stats">
+<div class="box" id="overview-maint">
 <h2 class="boxtitle"><?php echo gettext("Gallery Maintenance"); ?></h2>
 <p>
 <?php echo gettext("Your database is"); ?>: '<strong><?php echo getOption('mysql_database'); ?>'</strong><br />
@@ -1239,7 +1239,7 @@ foreach ($filelist as $utility) {
 </div>
 
 
-<div class="box" id="overview-suggest">
+<div class="box" id="overview-stats">
 <h2 class="boxtitle"><?php echo gettext("Gallery Stats"); ?></h2>
 <p>
 <?php
