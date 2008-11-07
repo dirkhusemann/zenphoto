@@ -43,7 +43,7 @@ if (!isset($_POST['login'])) {
 		$redirect = sanitize_path($_POST['redirect']);
 		if ($_zp_loggedin = checkLogon($post_user, $post_pass)) {
 			zp_setcookie("zenphoto_auth", md5($post_user . $post_pass), time()+5184000, $cookiepath);
-			if (!empty($redirect)) { header("Location: " . FULLWEBPATH . $redirect); }
+			if (!empty($redirect)) { header("Location: " . FULLWEBPATH . '/'. $redirect); }
 		} else {
 			// Clear the cookie, just in case
 			zp_setcookie("zenphoto_auth", "", time()-368000, $cookiepath);
@@ -102,7 +102,7 @@ if (isset($_REQUEST['logout'])) {
 			$redirect .= "&page=" . $_GET['page'];
 		}
 	}
-	header("Location: " . FULLWEBPATH . "/$redirect");
+	header("Location: " . FULLWEBPATH . '/'. $redirect);
 	exit();
 	
 }
