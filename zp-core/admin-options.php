@@ -989,7 +989,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		<td>
 		<?php echo gettext("The set of fields on which searches may be performed."); ?>
 		<br /><br />
-		<?php echo gettext("Search does partial matches on all fields with the possible exception of <em>Tags</em>. This means that if the filed contains the search criteria anywhere within it a result will be returned. If <em>exact</em> is selected for <em>Tags</em> then the serach criteria must exactly match the tag for a result to be returned.") ?>
+		<?php echo gettext("Search does partial matches on all fields with the possible exception of <em>Tags</em>. This means that if the field contains the search criteria anywhere within it a result will be returned. If <em>exact</em> is selected for <em>Tags</em> then the serach criteria must exactly match the tag for a result to be returned.") ?>
 		</td>
 	</tr>
 	<tr>
