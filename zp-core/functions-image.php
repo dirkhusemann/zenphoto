@@ -316,7 +316,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 				$dim = $height;
 				if (!$ch) {
 					$cw = $width;
-					$height = true;
+					if (!$height) $height = true;
 				}
 			}
 		} else if (!empty($width)) {
