@@ -24,7 +24,7 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 			$sizedwidth = Round($width/$height*$size);
 			$sizedheight = $size;
 		}
-		$imageurl = "i.php?a=".$albumname."&i=".$imagename."&s=".$size.'&t=true';
+		$imageurl = "i.php?a=".pathurlencode($albumname)."&i=".urlencode($imagename)."&s=".$size.'&t=true';
 		
 		$iY = round($imageobj->get('thumbY')*$sr);
 		if ($iY) {
@@ -85,8 +85,8 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 			jQuery(window).load(function(){
 
 				jQuery('#cropbox').Jcrop({
-//					onChange: showPreview,
-//					onSelect: showPreview,
+					onChange: showPreview,
+					onSelect: showPreview,
 					onChange: showCoords,
 					setSelect: [ <?php echo $iX; ?>, <?php echo $iY; ?>, <?php echo $iX+$iW; ?>, <?php echo $iY+$iH; ?> ],					
 					bgOpacity:   .4,
@@ -142,18 +142,23 @@ require_once(dirname(__FILE__).'/admin-functions.php');
 		<img src="<?php echo $imageurl; ?>" id="cropbox" />
 	</div>
 	
-<?php /*
   <div style="float: left; width:<?php echo $cropwidth; ?>px; text-align: center; margin: 0px 10px 0px 10px;">
 	<div style="width:<?php echo $cropwidth; ?>px;height:<?php echo $cropheight; ?>px; overflow:hidden; border: 1px solid gray; float: left">
 		<img src="<?php echo $imageurl; ?>" id="preview" />
 	</div>
 	<?php echo gettext("preview"); ?>
 	</div>
-*/ ?>
-	
+	<script language="Javascript">
+		jQuery('#preview').css({
+			width: Math.round(<?php echo $cropwidth / $iW; ?> * <?php echo $sizedwidth; ?>) + 'px', // we need to calcutate the resized width and height here...
+			height: Math.round(<?php echo $cropheight / $iH; ?> * <?php echo $sizedheight; ?>) + 'px',
+			marginLeft: '-' + Math.round(<?php echo $cropwidth / $iW * $iX; ?>) + 'px',
+			marginTop: '-' + Math.round(<?php echo $cropheight / $iH * $iY; ?>) + 'px'
+		});
+	</script>
 	<div style="float: left; width:<?php echo $cropwidth; ?>px; text-align: center; margin: 0px 10px 0px 10px;">
 	<img src="<?php echo $currentthumbimage; ?>" style="width:<?php echo $cropwidth; ?>px;height:<?php echo $cropheight; ?>px; border: 1px solid gray; float: left"/>
- <?php echo gettext("current"); ?>
+ <?php echo gettext("current thumbnail"); ?>
  </div>
 
 </div>
