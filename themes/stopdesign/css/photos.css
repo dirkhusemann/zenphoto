@@ -411,7 +411,7 @@ Module showing all galleries in system
   }
 .galleries .img {
   position:absolute;
-  top:0;
+  top:4px;
   left:15px;
   }
 .galleries .img img {
@@ -424,7 +424,7 @@ Module showing all galleries in system
   margin:0 4px;
   }
 .gal {
-  background:url("../images/bg_gal.gif") 11px -4px no-repeat;
+  background:url("../images/bg_gal.gif") 11px 0px no-repeat;
   margin:0;
   }
 html>body .gal {
