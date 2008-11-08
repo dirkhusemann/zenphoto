@@ -278,6 +278,9 @@ body {
 	margin: 0 auto 0 auto;
 	padding-bottom: 10px;
 }
+#main a {
+text-decoration: none;
+}
 #subcontent {
     background: #e3e2dd; /*around the main div in sub-albums.*/
 	margin-bottom: 5px;
@@ -341,6 +344,9 @@ body {
 #pagenumbers {
 	text-align: center;
 	margin: 0 auto 20px auto;
+}
+#pagenumbers a {
+text-decoration: none;
 }
 #images {
 	padding: 25px 0 0 10px;
@@ -434,10 +440,15 @@ border: 6px solid #fff;
     background: #12a081;  /*nav bar in single-image.*/
 	margin-bottom: 30px;
 }
+#wrapnav a {
+text-decoration:none;
+}
+
 #header #wrapnav {
     background: #eceae7; /*navbar in subdirs.*/
 	margin-bottom: 0px;
 }
+
 #main2 #navbar {
 	padding: 4px 7px;
 	border: none;
@@ -663,12 +674,11 @@ ul.pagelist li.next {
 	clear: both;
 }
 .footlinks a {
-	color: #b1aea7;
-	border-bottom: 1px dotted #b1aea7;
+color: #b1aea7;
+text-decoration:underline;
 }
 .footlinks a:hover {
 	color: #fff;
-	border-bottom: 1px dotted #fff;
 }
 /* Error Messages
 ------------------------------ */
@@ -720,7 +730,6 @@ ul.pagelist li.next {
 	font: 100% "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-weight: bold;
 	color: #7b7973;
-	border-bottom: 1px dashed #E6E6DF;
 	margin:0;
 	padding:0;
 }

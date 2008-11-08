@@ -74,12 +74,11 @@
 		<div class="clearage"></div>
 		<?php printNofM('Album', $firstAlbum, $lastAlbum, getNumAlbums()); ?>
 
+		</div> <!-- main -->
 		<!-- Page Numbers -->
 		<div id="pagenumbers">
 			<?php printPageListWithNav("&laquo; ".gettext('prev'), gettext('next')." &raquo;"); ?>
 		</div>
-
-		</div> <!-- main -->
 	</div> <!-- content -->
 	
 	<!-- Footer -->
