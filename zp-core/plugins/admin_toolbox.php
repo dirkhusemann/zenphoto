@@ -94,10 +94,10 @@ function printAdminToolbox($id='admin') {
 			if (isMyAlbum($albumname, UPLOAD_RIGHTS) && !$_zp_current_album->isDynamic()) {
 				// provide an album upload link if the admin has upload rights for this album and it is not a dynamic album
 				echo "<li>";
-				printLink($zf . '/admin-upload.php?album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL);
+				printLink($zf . '/admin-upload.php?amp;album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL);
 				echo "</li>\n";
 				echo "<li>";
-				printLink($zf . '/admin-upload.php?new&album=' . urlencode($albumname), gettext("New Album Here"), NULL, NULL, NULL);
+				printLink($zf . '/admin-upload.php?new&amp;album=' . urlencode($albumname), gettext("New Album Here"), NULL, NULL, NULL);
 				echo "</li>\n";
 			}
 			// set the return to this album/page
@@ -109,12 +109,13 @@ function printAdminToolbox($id='admin') {
 			$imagename = urlencode($_zp_current_image->filename);
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				// if admin has edit rights on this album, provide a delete link for the image.
-				echo "<li><a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?amp;page=edit&action=deleteimage&amp;album=" .
+				echo "<li><a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?page=edit&amp;action=deleteimage&amp;album=" .
 				urlencode(urlencode($albumname)) . "&amp;image=". urlencode(urlencode($imagename)) . "','". js_encode(gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!")) . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
 				echo "</li>\n";
 			}
 			// set return to this image page
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=$imagename";
+			
 		} else if (($_zp_gallery_page === 'search.php') && !empty($_zp_current_search->words)) {
 		// script is search.php with a search string
 			if ($_zp_loggedin & (ADMIN_RIGHTS | UPLOAD_RIGHTS)) {

@@ -761,6 +761,9 @@ border-bottom: 1px dotted #fff;
 #admin, #admin_data ul {
 	text-align: left;
 }
+#admin, #admin_data a {
+	text-decoration:none;
+}
 #admin_data{
 	top: 2em;
 }
@@ -771,6 +774,9 @@ border-bottom: 1px dotted #fff;
 	border-bottom: 1px dashed #E6E6DF;
 	margin:0;
 	padding:0;
+}
+#admin h3 a {
+	text-decoration:none;
 }
 
 /* Search Box
