@@ -110,7 +110,23 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			query("UPDATE " . prefix('images') . " SET `hitcounter`= 0" . $imgwhere);
 			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php' . $return);
 			exit();
+			
+			//** DELETEIMAGE **************************************************************/
+			/******************************************************************************/
+		} else if ($action == 'deleteimage') {
+			$albumname = sanitize_path($_REQUEST['album']);
+			$imagename = sanitize_path($_REQUEST['image']);
+			$album = new Album($gallery, $albumname);
+			$image = new Image($album, $imagename);
+			if ($image->deleteImage(true)) {
+				$nd = 1;
+			} else {
+				$nd = 2;
+			}
 
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit&album='.pathurlencode($albumname).'&ndeleted='.$nd);
+			exit();
+			
 			/** SAVE **********************************************************************/
 			/******************************************************************************/
 		} else if ($action == "save") {
@@ -269,7 +285,6 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			/** DELETION ******************************************************************/
 			/*****************************************************************************/
 		} else if ($action == "deletealbum") {
-			$albumdir = "";
 			if ($_GET['album']) {
 				$folder = sanitize_path($_GET['album']);
 				$album = new Album($gallery, $folder);
@@ -278,10 +293,11 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				} else {
 					$nd = 4;
 				}
-				$pieces = explode('/', $folder);
-				if (($i = count($pieces)) > 1) {
-					unset($pieces[$i-1]);
-					$albumdir = "&album=" . urlencode(implode('/', $pieces));
+				$albumdir = dirname($folder);
+				if ($albumdir != '/' && $albumdir != '.') {
+					$albumdir = "&album=" . urlencode($albumdir);
+				} else {
+					$albumdir = '';
 				}
 			}
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit" . $albumdir . "&ndeleted=".$nd);

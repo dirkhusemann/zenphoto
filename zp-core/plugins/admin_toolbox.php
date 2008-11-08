@@ -110,7 +110,7 @@ function printAdminToolbox($id='admin') {
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				// if admin has edit rights on this album, provide a delete link for the image.
 				echo "<li><a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?page=edit&amp;action=deleteimage&amp;album=" .
-				urlencode(urlencode($albumname)) . "&amp;image=". urlencode(urlencode($imagename)) . "','". js_encode(gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!")) . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
+				urlencode(urlencode($albumname)) . "&amp;image=". urlencode($imagename) . "','". js_encode(gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!")) . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
 				echo "</li>\n";
 			}
 			// set return to this image page
