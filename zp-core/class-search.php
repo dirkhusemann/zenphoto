@@ -337,9 +337,15 @@ class SearchEngine
 			$fields = 0+strip($_GET['searchfields']);
 		} else {
 			$fields = 0;
+			foreach ($_REQUEST as $key=>$value) {
+				if (strpos($key, '_SEARCH_') !== false) {
+					$fields = $fields | $value;
+				}
+			}
 		}
-		if ($fields == 0) { $fields = ~0; }
-		$fields = $fields & getOption('search_fields');
+		if ($fields == 0) {
+			$fields = ~0 & getOption('search_fields');
+		}
 		return $fields;
 	}
 

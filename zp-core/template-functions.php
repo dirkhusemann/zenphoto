@@ -3514,8 +3514,26 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource='',$buttont
 	echo "\n<div id=\"search\">";
 	if (getOption('mod_rewrite')) { $searchurl = '/page/search/'; } else { $searchurl = "/index.php?p=search"; }
 	echo "\n<form method=\"post\" action=\"".WEBPATH.$searchurl."\" id=\"search_form\">";
-	echo "\n$prevtext<input type=\"text\" name=\"words\" value=".$searchwords." id=\"search_input\" size=\"10\" />";
+	echo "\n$prevtext";
+	echo "<input type=\"text\" name=\"words\" value=".$searchwords." id=\"search_input\" size=\"10\" />";
 	echo "\n<input type=\"$type\" value=\"".$buttontext."\" class=\"pushbutton\" id=\"search_submit\" $buttonSource />";
+	
+/* developmental code for selectable fields on the query
+	echo '<br />';
+	$style = 'style="	border: 1px solid #ccc; list-style: none; height: 4.5em; width: 20em; overflow: auto; background-color: transparent; "';
+	$engine = new SearchEngine();
+	$fields = $engine->zp_search_fields;
+	$set_fields = array();
+	$query_fields = $engine->parseQueryFields();
+	foreach ($fields as $key=>$value) {
+		if ($value & $query_fields) {
+			$set_fields[$key] =  $value;
+		}
+	}
+	echo '<ul '.$style.'>'."\n";
+	generateUnorderedListFromArray($set_fields, $fields, '_SEARCH_', '');
+	echo '</ul>';
+*/
 
 	echo "\n</form>\n";
 	echo "\n</div>";  // search
