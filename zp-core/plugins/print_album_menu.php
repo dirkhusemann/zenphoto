@@ -389,7 +389,7 @@ function createAlbumMenuLink($album,$option2,$css,$albumpath,$mode,$level='') {
 			if(getAlbumID() === $album->getAlbumID()) {
 				$link = "<li".$css.">".$album->getTitle().$count;
 			} else {
-				$link = "<li><a href='".htmlspecialchars($albumpath.$album->name)."' title='".html_encode($album->getTitle())."'>".htmlspecialchars($album->getTitle())."</a>".$count;
+				$link = "<li><a href='".htmlspecialchars($albumpath.urlencode($album->name))."' title='".html_encode($album->getTitle())."'>".html_encode($album->getTitle())."</a>".$count;
 			}
 			break;
 		case "jump":
