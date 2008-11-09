@@ -325,6 +325,9 @@ width: 630px;
 margin: 0 auto 0 auto;
 padding-bottom: 10px;
 }
+#submain a {
+text-decoration:none;
+}
 #main2 {
     background: #8597A5; /*div in single-image view.*/
     text-align: left;
