@@ -733,6 +733,12 @@ text-decoration:underline;
 #search a {
 text-decoration: none;
 }
+#search ul {
+border: 1px solid #ccc; position:absolute; text-align:left; list-style: none; 
+height: 8em; width: 20em; overflow: auto; 
+color: #fff;
+background-image:url(../images/50percent.png);
+}
 
 .clear {
   clear:both;

@@ -3485,9 +3485,11 @@ function getSearchURL($words, $dates, $fields, $page) {
  * @param string $prevtext text to go before the search form
  * @param string $id css id for the search form, default is 'search'
  * @param string $buttonSource optional path to the image for the button
+ * @param string $buttontext optional text for the button ("Search" will be the default text)
+ * @param string $iconsource optional theme based icon for the search fields toggle
  * @since 1.1.3
  */
-function printSearchForm($prevtext=NULL, $id='search', $buttonSource='',$buttontext='') {
+function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL,$buttontext='', $iconsource=NULL) {
 	if(empty($buttontext)) {
 		$buttontext = gettext("Search");
 	} else {
@@ -3505,6 +3507,9 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource='',$buttont
 		$buttonSource = 'src="' . $buttonSource . '" alt="'.$buttontext.'"';
 		$type = 'image';
 	}
+	if (empty($iconsource)) {
+		$iconsource = WEBPATH.'/'.ZENFOLDER.'/images/searchfields_icon.png';
+	}
 	if (getOption('mod_rewrite')) { $searchurl = '/page/search/'; } else { $searchurl = "/index.php?p=search"; }
 	$engine = new SearchEngine();
 	$fields = array_flip($engine->allowedSearchFields());
@@ -3516,9 +3521,9 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource='',$buttont
 	<?php echo $prevtext; ?>
 	<input type="text" name="words" value="<?php  echo $searchwords; ?>" id="search_input" size="10" />
 	<?php if(count($fields) > 1) { ?>
-	<a href="javascript: toggle('searchextrashow');">
-	<img src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/tag.png" alt="<?php echo gettext('select search fields'); ?>" />
-	</a>
+		<a href="javascript: toggle('searchextrashow');">
+		<img src="<?php echo $iconsource; ?>" alt="<?php echo gettext('select search fields'); ?>" />
+		</a>
 	<?php } ?>
 	<input type="<?php echo $type; ?>" value="<?php echo $buttontext; ?>" class="pushbutton" id="search_submit" <?php echo $buttonSource; ?> />
 	<br />
@@ -3529,7 +3534,7 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource='',$buttont
 		$query_fields = $engine->parseQueryFields();
 		?>
 		<span style="display:none;" id="searchextrashow">
-		<ul style="	border: 1px solid #ccc; position:absolute; text-align:left; list-style: none; height: 8em; width: 20em; overflow: auto; background-color: transparent; ">
+		<ul>
 		<?php
 		foreach ($fields as $key=>$item) {
 			echo '<li><label for="_SEARCH_'.$item.'"><input id="_SEARCH_'.$item.'" name="_SEARCH_'.$item.'" type="checkbox"';		

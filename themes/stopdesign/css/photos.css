@@ -1153,6 +1153,11 @@ text-decoration: none;
   background-color: #999;
   border: 1px solid #bbb;
 }
+#search ul {
+border: 1px solid #ccc; position:absolute; text-align:left; list-style: none; 
+height: 8em; width: 20em; overflow: auto; 
+background:transparent;
+}
 
 .clear {
   clear:both;

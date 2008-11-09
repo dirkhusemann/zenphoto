@@ -411,7 +411,7 @@ label {
 	text-align: left;
 	margin:0;
 	padding:0;
-	width: 155px;
+	width: 175px;
 }
 #search_form, #search_form * {
 	padding:0px;
@@ -423,6 +423,12 @@ label {
 }
 #search a {
 text-decoration: none;
+}
+#search ul {
+border: 1px solid #ccc; position:absolute; text-align:left; list-style: none; 
+height: 8em; width: 20em; overflow: auto; 
+color: #fff;
+background-image:url(../images/50percent.png);
 }
 
 .clear {
