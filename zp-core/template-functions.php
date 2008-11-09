@@ -3497,11 +3497,6 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource='',$buttont
 	$zf = WEBPATH."/".ZENFOLDER;
 	$dataid = $id . '_data';
 	$searchwords = (isset($_POST['words']) ? html_encode(sanitize($_REQUEST['words'],0),false) : '');
-	if (strpos($searchwords, '"') === false) {  // do our best
-		$searchwords = '"'.$searchwords.'"';
-	} else {
-		$searchwords = "'".$searchwords."'";
-	}
 
 	$fields = getOption('search_fields');
 	if (empty($buttonSource)) {
@@ -3510,34 +3505,48 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource='',$buttont
 		$buttonSource = 'src="' . $buttonSource . '" alt="'.$buttontext.'"';
 		$type = 'image';
 	}
-
-	echo "\n<div id=\"search\">";
 	if (getOption('mod_rewrite')) { $searchurl = '/page/search/'; } else { $searchurl = "/index.php?p=search"; }
-	echo "\n<form method=\"post\" action=\"".WEBPATH.$searchurl."\" id=\"search_form\">";
-	echo "\n$prevtext";
-	echo "<input type=\"text\" name=\"words\" value=".$searchwords." id=\"search_input\" size=\"10\" />";
-	echo "\n<input type=\"$type\" value=\"".$buttontext."\" class=\"pushbutton\" id=\"search_submit\" $buttonSource />";
-	
-/* developmental code for selectable fields on the query
-	echo '<br />';
-	$style = 'style="	border: 1px solid #ccc; list-style: none; height: 4.5em; width: 20em; overflow: auto; background-color: transparent; "';
 	$engine = new SearchEngine();
-	$fields = $engine->zp_search_fields;
-	$set_fields = array();
-	$query_fields = $engine->parseQueryFields();
-	foreach ($fields as $key=>$value) {
-		if ($value & $query_fields) {
-			$set_fields[$key] =  $value;
-		}
-	}
-	echo '<ul '.$style.'>'."\n";
-	generateUnorderedListFromArray($set_fields, $fields, '_SEARCH_', '');
-	echo '</ul>';
-*/
+	$fields = array_flip($engine->allowedSearchFields());
+	?>
+	<script type="text/javascript" src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/js/admin.js\"></script>
+	<div id="search"><!-- search form -->
 
-	echo "\n</form>\n";
-	echo "\n</div>";  // search
-	echo "\n<!-- end of search form -->\n";
+	<form method="post" action="<?php echo WEBPATH.$searchurl; ?>" id="search_form">
+	<?php echo $prevtext; ?>
+	<input type="text" name="words" value="<?php  echo $searchwords; ?>" id="search_input" size="10" />
+	<?php if(count($fields) > 1) { ?>
+	<a href="javascript: toggle('searchextrashow');">
+	<img src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/tag.png" alt="<?php echo gettext('select search fields'); ?>" />
+	</a>
+	<?php } ?>
+	<input type="<?php echo $type; ?>" value="<?php echo $buttontext; ?>" class="pushbutton" id="search_submit" <?php echo $buttonSource; ?> />
+	<br />
+	<?php
+	if (count($fields) > 1) {
+		natcasesort($fields);
+		$fields = array_flip($fields);
+		$query_fields = $engine->parseQueryFields();
+		?>
+		<span style="display:none;" id="searchextrashow">
+		<ul style="	border: 1px solid #ccc; position:absolute; text-align:left; list-style: none; height: 8em; width: 20em; overflow: auto; background-color: transparent; ">
+		<?php
+		foreach ($fields as $key=>$item) {
+			echo '<li><label for="_SEARCH_'.$item.'"><input id="_SEARCH_'.$item.'" name="_SEARCH_'.$item.'" type="checkbox"';		
+			if ($item & $query_fields) {
+				echo ' checked="checked" ';
+			}
+			echo ' value="'.$item.'"  /> ' . $key . "</label></li>"."\n";
+		}
+		?>
+		</ul>
+		</span>
+		<?php 
+	}
+	?>
+	</form>
+	</div><!-- end of search form -->
+	<?php
 }
 
 /**

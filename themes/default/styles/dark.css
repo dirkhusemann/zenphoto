@@ -410,34 +410,19 @@ label:hover {
 ------------------------------ */
 #search {
 	float: right;
-	text-align: center;
+	text-align: left;
+	margin:0;
+	padding:0;
 	background: #222;
 }
 #search input.pushbutton {
 	padding: 1px;
 	font-size: 80%;
 }
-#search ul {
-  position:absolute;
-  text-align: left;
-  width:20px;
-  margin:0px;
-  padding:2px;
-  list-style:none;
+#search a {
+text-decoration: none;
 }
-#search ul .item {
-  display:none;
-}
-#search ul:hover .item {
-  display:block;
-  padding:1px;
-  margin:0px;
-  background-color:#222;
-  color: #fff
-}
-#search li {
-width:150px;
-}
+
 .clear {
   clear:both;
   height:10px;

@@ -260,49 +260,15 @@ UL.pagelist LI.current A {
 
 #search {
 	float: right;
-	width: 150px;
+	text-align:left;
 	margin-top: -15px;
 }
 
 #search #search_input {
 	width: 75px;
 }
-
-#search ul {
-	position: absolute;
-	margin-top: 0px;
-	text-align: left;
-}
-
-#search ul .item {
-	display: none;
-}
-
-#search ul:hover .item {
-	display: block;
-	padding: 1px;
-	margin: 1px;
-}
-
-#search ul:hover .item a {
-	color: #000;
-	text-decoration: none;
-}
-
-#search ul:hover .item a:hover {
-	color: #999;
-}
-
-#search ul {
-	width: 20px;
-	float: left;
-	margin: 0px;
-	padding: 2px;
-	list-style: none;
-}
-
-#search li {
-	width: 150px;
+#search a {
+text-decoration: none;
 }
 
 .clear {

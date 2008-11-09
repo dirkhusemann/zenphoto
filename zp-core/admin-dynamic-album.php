@@ -182,8 +182,16 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 		<td>
 		<?php 
 		echo '<ul class="searchchecklist">'."\n";
+		$selected_fields = array();
 		$engine = new SearchEngine();
-		generateUnorderedListFromArray($engine->allowedSearchFields(), $engine->zp_search_fields, '_SEARCH_', '');
+		$available_fields = $engine->allowedSearchFields();
+		foreach ($available_fields as $key=>$value) {
+			if ($value & $fields) {
+				$selected_fields[$key] = $value;
+			}
+		}
+		
+		generateUnorderedListFromArray($selected_fields, $available_fields, '_SEARCH_', '');
 		echo '</ul>';
 		?>		
 		</td>

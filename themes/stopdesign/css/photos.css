@@ -1130,6 +1130,7 @@ Comment Submission form
 ----------------------------------------------- */
 #search {
 	position:absolute;
+	text-align:left;
 	top:4px;
 	left:5px;
 	width:200px;
@@ -1141,6 +1142,9 @@ Comment Submission form
   background-color: #999;
   border: 1px solid #bbb;
 }
+#search a {
+text-decoration: none;
+}
 #search #search_input:focus {
   background-color: #ccc; 
 }
@@ -1149,43 +1153,7 @@ Comment Submission form
   background-color: #999;
   border: 1px solid #bbb;
 }
-#search ul {
-  position:absolute;
-  text-decoration:none;
-  color:#fff;
-  text-align: left;
-  width:20px;
-  margin:0px;
-  padding:2px;
-  list-style:none;
-}
-#search ul .item {
-  display:none;
-}
-#search ul .top {
-  font-size: 14px;
-  color: #fff;
-}
-#search ul:hover .item {
-  display:block;
-  padding:1px;
-  margin:0px;
-  background: #000;
-  text-decoration:none;
-  list-style:none;
-}
-#search ul:hover .item a {
-  color:#000;
-  text-decoration:none;
-}
-#search ul:hover .item a:hover {
-  color:#999;
-}
-#search ul {
-}
-#search li {
-width:150px;
-}
+
 .clear {
   clear:both;
   height:10px;

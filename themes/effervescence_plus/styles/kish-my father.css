@@ -795,7 +795,7 @@ color: #fff;
 #search {
 	float: right;
 	width: 170px;
-	text-align: center;
+	text-align: left;
 	margin-top: 26px;
 	_margin-top: 24px; /* IE Only */
 }
@@ -803,25 +803,10 @@ color: #fff;
   padding: 1px;
   font-size: 80%;
 }
-#search ul {
-  position:absolute;
-  text-align: left;
-  width:20px;
-  margin:0px;
-  padding:2px;
-  list-style:none;
+#search a {
+text-decoration: none;
 }
-#search ul .item {
-  display:none;
-}
-#search ul:hover .item {
-  display:block;
-  padding:1px;
-  margin:0px;
-}
-#search li {
-width:150px;
-}
+
 .clear {
   clear:both;
   height:10px;

@@ -408,7 +408,7 @@ label {
 ------------------------------ */
 #search {
 	float: right;
-	text-align: center;
+	text-align: left;
 	margin:0;
 	padding:0;
 	width: 155px;
@@ -421,32 +421,10 @@ label {
   padding: 1px;
   font-size: 80%;
 }
-#search ul {
-  position:absolute;
-  text-align: left;
-  color: #000
-  width:20px;
-  margin:0px;
-  padding:2px;
-  list-style:none;
+#search a {
+text-decoration: none;
 }
-#search ul .top {
-  font-size: 14px;
-  color: #000;
-}
-#search ul .item {
-  display:none;
-}
-#search ul:hover .item {
-  display:block;
-  padding:1px;
-  margin:0px;
-  background-color:#1a1a1a;
-  color: #fff
-}
-#search li {
-	width:150px;
-}
+
 .clear {
   clear:both;
   height:10px;
