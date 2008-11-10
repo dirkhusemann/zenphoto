@@ -30,7 +30,7 @@
 		?>
 		</div>
 		<?php
-		$results = 0;
+		$results = getNumAlbums();
  		?>
 		<?php
 			$first = true;
@@ -42,7 +42,7 @@
 				}
 			?>
 				<li class="gal">
-					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext('View album: %s'), getAnnotatedAlbumTitle());?>" class="img"><?php printCustomAlbumThumbImage(getAnnotatedAlbumTitle(), null, 230, null, 210, 60); ?></a>
+					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext('View album: %s'), getAnnotatedAlbumTitle());?>" class="img"><?php printCustomAlbumThumbImage(getAnnotatedAlbumTitle(), null, 210, null, 210, 60); ?></a>
 					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext('View album: %s'), getAnnotatedAlbumTitle());?>"><?php printAlbumTitle(); ?></a></h3>
 					<p>
 						<?php
@@ -57,13 +57,13 @@
 							} else if ($anumber == 1 && $inumber == 1) {
 								printf(gettext('1 album,&nbsp;1 photo'));
 							} else if ($anumber > 1 && $inumber == 1) {
-								printf(gettext('%u album,&nbsp;1 photo'), $anumber);
+								printf(gettext('%u albums,&nbsp;1 photo'), $anumber);
 							} else if ($anumber > 1 && $inumber > 1) {
-								printf(gettext('%1$u album,&nbsp;%2$u photos'), $anumber, $inumber);
+								printf(gettext('%1$u albums,&nbsp;%2$u photos'), $anumber, $inumber);
 							} else if ($anumber == 1 && $inumber == 0) {
 								printf(gettext('1 album'));
 							} else if ($anumber > 1 && $inumber == 0) {
-								printf(gettext('%u album'),$anumber);
+								printf(gettext('%u albums'),$anumber);
 							} else if ($anumber == 1 && $inumber > 1) {
 								printf(gettext('1 album,&nbsp;%u photos'), $inumber);
 							}
@@ -112,12 +112,14 @@
 			$params = $_zp_current_search->getSearchParams();
 			if (!empty($params)) {
 				if ($results != "0") {
-					echo '<em class="count">';
-					printf( gettext('Photos %1$u-%2$u of %3$u'), $firstImage, $lastImage, getNumImages());
-					echo "</em>";
-				if (function_exists('printSlideShowLink')) {
-					printSlideShowLink(gettext('View Slideshow'));
-				}
+					if ($firstImage + $lastImage != 0) {
+						echo '<em class="count">';
+						printf( gettext('Photos %1$u-%2$u of %3$u'), $firstImage, $lastImage, getNumImages());
+						echo "</em>";
+						if (function_exists('printSlideShowLink')) {
+						printSlideShowLink(gettext('View Slideshow'));
+						}
+					}
 					?>
 				<?php if (hasPrevPage()) { ?>
 				<a href="<?php echo htmlspecialchars(getPrevPageURL()); ?>" accesskey="x">&laquo; <?php echo gettext('prev page'); ?></a>

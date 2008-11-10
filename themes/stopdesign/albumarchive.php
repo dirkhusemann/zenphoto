@@ -31,7 +31,7 @@
 			?>
 			<li class="gal">
 			<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAnnotatedAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
-			<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAnnotatedAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAnnotatedAlbumTitle(), null, 210, 59, 210, 59); ?></a>
+			<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAnnotatedAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAnnotatedAlbumTitle(), null, 210, NULL, 210, 60); ?></a>
 			<p>
 			<?php
 			$anumber = getNumSubalbums();
