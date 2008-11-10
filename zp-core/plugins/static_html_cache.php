@@ -5,14 +5,14 @@
  * Caches all Zenphoto pages (incl. Zenpage support) except search.php (search results, date archive) and the custom error page 404.php
  *
  * @author Malte Müller (acrylian)
- * @version 1.0.0.1
+ * @version 1.0.1
  * @package plugins
  */
 require_once(dirname(dirname(__FILE__)).'/functions.php');
 
 $plugin_description = gettext("Adds static html cache functionality to Zenphoto v1.2 or higher. Caches all Zenphoto pages (incl. Zenpage support) except search.php (search results, date archive) and the custom error page 404.php. This plugin creates the folder <em>cache_html</em> and it's subfolders <em>index, images, albums</em> and <em>pages</em> in Zenphoto's root folder.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.0.0.1';
+$plugin_version = '1.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---static_html_cache.php.html";
 $option_interface = new staticCache();
 $_zp_HTML_cache = $option_interface; // register as the HTML cache handler
@@ -74,22 +74,25 @@ class staticCache {
 	 *
 	 */
 	function startHTMLCache() {
-		$this->startmtime = microtime(true);
-		$cachefilepath = STATIC_CACHE_FOLDER."/".$this->createCacheFilepath();
-		if(file_exists($cachefilepath) AND !isset($_POST['comment']) && time()-filemtime($cachefilepath) < getOption("static_cache_expire")) { // don't use cache if comment is posted
-			if(function_exists("file_get_contents")) {
-				echo file_get_contents($cachefilepath); // PHP >= 4.3
-			} else {
-				$filearray = file($cachefilepath); // PHP < 4.3
-				foreach($filearray as $array) {
-					echo $array;
+		global $_zp_gallery_page;
+		if($_zp_gallery_page != "search.php") {
+			$this->startmtime = microtime(true);
+			$cachefilepath = STATIC_CACHE_FOLDER."/".$this->createCacheFilepath();
+			if(file_exists($cachefilepath) AND !isset($_POST['comment']) AND time()-filemtime($cachefilepath) < getOption("static_cache_expire")) { // don't use cache if comment is posted
+				if(function_exists("file_get_contents")) {
+					echo file_get_contents($cachefilepath); // PHP >= 4.3
+				} else {
+					$filearray = file($cachefilepath); // PHP < 4.3
+					foreach($filearray as $array) {
+						echo $array;
+					}
 				}
+				$end = microtime(true); $final = $end - $this->startmtime; $final = round($final,4);
+				echo "\n<!-- ".sprintf(gettext("Cached content served by static_html_cache in %u seconds"),$final)." -->";
+				exit();
+			} else {
+				ob_start();
 			}
-			$end = microtime(true); $final = $end - $this->startmtime; $final = round($final,4);
-			echo "\n<!-- ".sprintf(gettext("Cached content served by static_html_cache in %u seconds"),$final)." -->";
-			exit();
-		} else {
-			ob_start();
 		}
 	}
 
@@ -100,17 +103,20 @@ class staticCache {
 	 *
 	 */
 	function endHTMLCache() {
-		$cachefilepath = STATIC_CACHE_FOLDER."/".$this->createCacheFilepath();
-		if(!empty($cachefilepath)) {
-			// Display speed information.
-			$end = microtime(true); $final = $end - $this->startmtime; $final = round($final, 4);
-			echo "\n<!-- ".sprintf(gettext("Content generated dynamically in %u seconds"),$final)." -->";
-			// End
-			$pagecontent = ob_get_clean();
-			$fh = fopen($cachefilepath,"w");
-			fputs($fh, $pagecontent);
-			fclose($fh);
-			echo $pagecontent;
+		global $_zp_gallery_page;
+		if($_zp_gallery_page != "search.php") {
+			$cachefilepath = STATIC_CACHE_FOLDER."/".$this->createCacheFilepath();
+			if(!empty($cachefilepath)) {
+				// Display speed information.
+				$end = microtime(true); $final = $end - $this->startmtime; $final = round($final, 4);
+				echo "\n<!-- ".sprintf(gettext("Content generated dynamically in %u seconds"),$final)." -->";
+				// End
+				$pagecontent = ob_get_clean();
+				$fh = fopen($cachefilepath,"w");
+				fputs($fh, $pagecontent);
+				fclose($fh);
+				echo $pagecontent;
+			}
 		}
 	}
 
@@ -145,13 +151,13 @@ class staticCache {
 		}
 
 		// index.php
-		if(!isset($_GET['album']) AND !isset($_GET['image']) AND !isset($_GET['p'])) {
+		if($_zp_gallery_page === "index.php") {
 			$cachesubfolder = "index";
 			$cachefilepath = $cachesubfolder."/index".$page.$locale.".html";
 		}
 
 		// album.php/image.php
-		if(isset($_GET['album']) || isset($_GET['image'])) {
+		if($_zp_gallery_page === "album.php" OR $_zp_gallery_page === "image.php") {
 			$cachesubfolder = "albums";
 			$album = $_zp_current_album->name;
 			$album = str_replace("/","_",$album);
@@ -164,7 +170,7 @@ class staticCache {
 		}
 
 		// custom pages except error page and search
-		if(isset($_GET['p']) AND $_GET['p'] != "404" AND $_GET['p'] != "search") {
+		if(isset($_GET['p']) AND $_zp_gallery_page != "search.php") {
 			$cachesubfolder = "pages";
 			$custompage = sanitize($_GET['p']);
 			if(isset($_GET['title'])) {
