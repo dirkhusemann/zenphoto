@@ -185,10 +185,11 @@ printAdminHeader();
 							marginTop: '-' + <?php echo round($cropheight / $iH * $iY); ?> + 'px'
 						});
 					</script>
-		
+				<br style="clear: both" />
 				</div><!-- block -->
 	
 		</div><!-- content -->
+		
 	<?php printAdminFooter(); ?>
 	</div><!-- main -->
 </body>
