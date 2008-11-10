@@ -97,10 +97,8 @@ if (!checkForPassword()) {
 						<?php echo getCommentBody();?>
 					</div>
 					<div class="commentdate">
-						<?php echo getCommentDate();?>
-						,
-						<?php echo getCommentTime();?>
-									<?php printEditCommentLink(gettext('Edit'), ' | ', ''); ?>
+						<?php echo getCommentDateTime();?>
+						<?php printEditCommentLink(gettext('Edit'), ' | ', ''); ?>
 					</div>
 				</div>
 				<?php }; ?>

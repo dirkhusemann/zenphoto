@@ -145,7 +145,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 					<?php while (next_comment()):  ?>
 						<div class="comment">
 							<div class="commentinfo">
-								<h4><?php printCommentAuthorLink(); ?></h4>: on <?php echo getCommentDate();?>, <?php echo getCommentTime();?><?php printEditCommentLink('Edit', ', ', ''); ?>
+								<h4><?php printCommentAuthorLink(); ?></h4>: on <?php echo getCommentDateTime(); printEditCommentLink('Edit', ', ', ''); ?>
 							</div>
 							<div class="commenttext">
 								<?php echo getCommentBody();?>

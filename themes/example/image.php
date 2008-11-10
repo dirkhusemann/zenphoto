@@ -85,7 +85,7 @@
 						<div class="comment">
 							<div class="commentmeta">
 									<span class="commentauthor"><?php printCommentAuthorLink(); ?></span>
-									| <span class="commentdate"><?php echo getCommentDate();?>, <?php echo getCommentTime();?></span>
+									| <span class="commentdate"><?php echo getCommentDateTime();?></span>
  							</div>
 								<div class="commentbody"><?php echo getCommentBody();?></div>
 						</div>

@@ -1948,7 +1948,13 @@ function getImageEXIFData() {
  * Prints image data. Deprecated, use printImageMetadata
  *
  */
-function printImageEXIFData() { if (isImageVideo()) { } else { printImageMetadata(); } }
+function printImageEXIFData() {
+	trigger_error(gettext('printImageEXIFData is deprecated. Use printImageMetadata().'), E_USER_NOTICE);
+	if (isImageVideo()) {
+	} else {
+		printImageMetadata(); 
+	} 
+}
 
 /**
  * Prints the EXIF data of the current image
@@ -2476,7 +2482,7 @@ function printCustomSizedImageMaxSpace($alt='',$width=NULL,$height=NULL,$class=N
 
 
 /**
- * CAUTION: This function is considered DEPRACTATED and will probably be removed after 1.2.1. 
+ * This function is considered deprecated. 
  * Please use the new replacement get/printCustomSizedImageMaxSpace(). 
  * 
  * Prints out a sized image up to $maxheight tall (as width the value set in the admin option is taken)
@@ -2484,6 +2490,7 @@ function printCustomSizedImageMaxSpace($alt='',$width=NULL,$height=NULL,$class=N
  * @param int $maxheight how bif the picture should be
  */
 function printCustomSizedImageMaxHeight($maxheight) {
+	trigger_error(gettext('printCustomSizedImageMaxHeight is deprecated. Use printCustomSizedImageMaxSpace().'), E_USER_NOTICE);
 	if (getFullWidth() === getFullHeight() OR getDefaultHeight() > $maxheight) {
 		printCustomSizedImage(getImageTitle(), null, null, $maxheight, null, null, null, null, null, null);
 	} else {
@@ -2643,14 +2650,31 @@ function printCommentAuthorLink($title=NULL, $class=NULL, $id=NULL) {
 }
 
 /**
- * Retrieves the date of the current comment
+ * Returns a formatted date and time for the comment.
+ * Uses the "date_format" option for the formatting unless
+ * a format string is passed.
+ *
+ * @param string $format 'strftime' date/time format
+ * @return string
+ */
+function getCommentDateTime($format = NULL) {
+	if (is_null($format)) {
+		$format = getOption('date_format');
+	}
+	global $_zp_current_comment;
+	return myts_date($format, $_zp_current_comment['date']);
+}
 
+/**
+ * Retrieves the date of the current comment
+ * Deprecated--use getCommentDateTime()
  * Returns a formatted date
  *
  * @param string $format how to format the result
  * @return string
  */
 function getCommentDate($format = NULL) {
+	trigger_error(gettext('getCommentDate is deprecated. Use getCommentDateTime().'), E_USER_NOTICE);
 	if (is_null($format)) {
 		$format = getOption('date_format');
 		$time_tags = array('%H', '%I', '%R', '%T', '%r');
@@ -2666,12 +2690,14 @@ function getCommentDate($format = NULL) {
 }
 /**
  * Retrieves the time of the current comment
+ * Deprecated--use getCommentDateTime()
  * Returns a formatted time
 
  * @param string $format how to format the result
  * @return string
  */
 function getCommentTime($format = '%I:%M %p') {
+	trigger_error(gettext('getCommentTime is deprecated. Use getCommentDateTime().'), E_USER_NOTICE);
 	global $_zp_current_comment;
 	return myts_date($format, $_zp_current_comment['date']);
 }
