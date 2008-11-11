@@ -203,31 +203,20 @@ function setDefault($option, $default) {
 	setOptionDefault('picture_of_the_day', serialize(array('day'=>NULL,'folder'=>NULL,'filename'=>NULL)));
 	setOptionDefault('exact_tag_match', 0);
 	
-	setOptionDefault('EXIFOrientation', false);
-	setOptionDefault('EXIFMake', true);
-	setOptionDefault('EXIFModel', true);
-	setOptionDefault('EXIFExposureTime', true);
-	setOptionDefault('EXIFFNumber', true);
-	setOptionDefault('EXIFFocalLength', true);
-	setOptionDefault('EXIFFocalLength35mm', false);
-	setOptionDefault('EXIFISOSpeedRatings', true);
-	setOptionDefault('EXIFDateTimeOriginal', true);
-	setOptionDefault('EXIFExposureBiasValue', true);
-	setOptionDefault('EXIFMeteringMode', true);
-	setOptionDefault('EXIFFlash', true);
-	setOptionDefault('EXIFImageWidth', false);
-	setOptionDefault('EXIFImageHeight', false);
-	setOptionDefault('EXIFContrast', false);
-	setOptionDefault('EXIFSharpness', false);
-	setOptionDefault('EXIFSaturation', false);
-	setOptionDefault('EXIFWhiteBalance', false);
-	setOptionDefault('EXIFSubjectDistance', false);
-	setOptionDefault('EXIFGPSLatitude', false);
-	setOptionDefault('EXIFGPSLatitudeRef', false);
-	setOptionDefault('EXIFGPSLongitude', false);
-	setOptionDefault('EXIFGPSLongitudeRef', false);
-	setOptionDefault('EXIFGPSAltitude', false);
-	setOptionDefault('EXIFGPSAltitudeRef', false);
+	setOptionDefault('EXIFMake', 1);
+	setOptionDefault('EXIFModel', 1);
+	setOptionDefault('EXIFExposureTime', 1);
+	setOptionDefault('EXIFFNumber', 1);
+	setOptionDefault('EXIFFocalLength', 1);
+	setOptionDefault('EXIFFocalLength35mm', 1);
+	setOptionDefault('EXIFISOSpeedRatings', 1);
+	setOptionDefault('EXIFDateTimeOriginal', 1);
+	setOptionDefault('EXIFExposureBiasValue', 1);
+	setOptionDefault('EXIFMeteringMode', 1);
+	setOptionDefault('EXIFFlash', 1);
+	foreach ($_zp_exifvars as $key=>$item) {
+		setOptionDefault($key, 0);
+	}
 	
 	
 ?>

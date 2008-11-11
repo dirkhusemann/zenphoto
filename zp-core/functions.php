@@ -61,44 +61,46 @@ function parseAllowedTags(&$source) {
 	return $a;
 }
 
-$_zp_exifvars = array();
+	// Note: The database setup/upgrade uses this list, so if fields are added or deleted, setup.php should be
+	//   run or the new data won't be stored (but existing fields will still work; nothing breaks).
+	$_zp_exifvars = array(
+		// Database Field       	=> array('IFDX', 'ExifKey',          'ZP Display Text',        				 	 Display?)
+		'EXIFOrientation'       => array('IFD0',   'Orientation',       gettext('Orientation'),            false),
+		'EXIFMake'              => array('IFD0',   'Make',              gettext('Camera Maker'),           true),
+		'EXIFModel'             => array('IFD0',   'Model',             gettext('Camera Model'),           true),
+		'EXIFExposureTime'      => array('SubIFD', 'ExposureTime',      gettext('Shutter Speed'),          true),
+		'EXIFFNumber'           => array('SubIFD', 'FNumber',           gettext('Aperture'),               true),
+		'EXIFFocalLength'       => array('SubIFD', 'FocalLength',       gettext('Focal Length'),           true),
+		'EXIFFocalLength35mm'   => array('SubIFD', 'FocalLength35mmEquiv', gettext('35mm Equivalent Focal Length'), false),
+		'EXIFISOSpeedRatings'   => array('SubIFD', 'ISOSpeedRatings',   gettext('ISO Sensitivity'),        true),
+		'EXIFDateTimeOriginal'  => array('SubIFD', 'DateTimeOriginal',  gettext('Time Taken'),             true),
+		'EXIFExposureBiasValue' => array('SubIFD', 'ExposureBiasValue', gettext('Exposure Compensation'),  true),
+		'EXIFMeteringMode'      => array('SubIFD', 'MeteringMode',      gettext('Metering Mode'),          true),
+		'EXIFFlash'             => array('SubIFD', 'Flash',             gettext('Flash Fired'),            true),
+		'EXIFImageWidth'        => array('SubIFD', 'ExifImageWidth',    gettext('Original Width'),         false),
+		'EXIFImageHeight'       => array('SubIFD', 'ExifImageHeight',   gettext('Original Height'),        false),
+		'EXIFContrast'          => array('SubIFD', 'Contrast',          gettext('Contrast Setting'),       false),
+		'EXIFSharpness'         => array('SubIFD', 'Sharpness',         gettext('Sharpness Setting'),      false),
+		'EXIFSaturation'        => array('SubIFD', 'Saturation',        gettext('Saturation Setting'),     false),
+		'EXIFWhiteBalance'			=> array('SubIFD', 'WhiteBalance',			gettext('White Balance'),					 false),
+		'EXIFSubjectDistance'		=> array('SubIFD', 'SubjectDistance',		gettext('Subject Distance'),			 false),
+		'EXIFGPSLatitude'       => array('GPS',    'Latitude',          gettext('Latitude'),               false),
+		'EXIFGPSLatitudeRef'    => array('GPS',    'Latitude Reference',gettext('Latitude Reference'),     false),
+		'EXIFGPSLongitude'      => array('GPS',    'Longitude',         gettext('Longitude'),              false),
+		'EXIFGPSLongitudeRef'   => array('GPS',    'Longitude Reference',gettext('Longitude Reference'),   false),
+		'EXIFGPSAltitude'       => array('GPS',    'Altitude',          gettext('Altitude'),               false),
+		'EXIFGPSAltitudeRef'    => array('GPS',    'Altitude Reference',gettext('Altitude Reference'),     false)
+		);
 
 /**
- * initializes the $_zp_exifvars array
+ * initializes the $_zp_exifvars array display state
  *
  */
 function setexifvars() {
 	global $_zp_exifvars;
-	// Note: The database setup/upgrade uses this list, so if fields are added or deleted, setup.php should be
-	//   run or the new data won't be stored (but existing fields will still work; nothing breaks).
-	$_zp_exifvars = array(
-	// Database Field       		=> array('IFDX',   'ExifKey',           'ZP Display Text',        				Display?)
-			'EXIFOrientation'       => array('IFD0',   'Orientation',       gettext('Orientation'),            getOption('EXIFOrientation')),
-			'EXIFMake'              => array('IFD0',   'Make',              gettext('Camera Maker'),           getOption('EXIFMake')),
-			'EXIFModel'             => array('IFD0',   'Model',             gettext('Camera Model'),           getOption('EXIFModel')),
-			'EXIFExposureTime'      => array('SubIFD', 'ExposureTime',      gettext('Shutter Speed'),          getOption('EXIFExposureTime')),
-			'EXIFFNumber'           => array('SubIFD', 'FNumber',           gettext('Aperture'),               getOption('EXIFFNumber')),
-			'EXIFFocalLength'       => array('SubIFD', 'FocalLength',       gettext('Focal Length'),           getOption('EXIFFocalLength')),
-			'EXIFFocalLength35mm'   => array('SubIFD', 'FocalLength35mmEquiv', gettext('35mm Equivalent Focal Length'), getOption('EXIFFocalLength35mm')),
-			'EXIFISOSpeedRatings'   => array('SubIFD', 'ISOSpeedRatings',   gettext('ISO Sensitivity'),        getOption('EXIFISOSpeedRatings')),
-			'EXIFDateTimeOriginal'  => array('SubIFD', 'DateTimeOriginal',  gettext('Time Taken'),             getOption('EXIFDateTimeOriginal')),
-			'EXIFExposureBiasValue' => array('SubIFD', 'ExposureBiasValue', gettext('Exposure Compensation'),  getOption('EXIFExposureBiasValue')),
-			'EXIFMeteringMode'      => array('SubIFD', 'MeteringMode',      gettext('Metering Mode'),          getOption('EXIFMeteringMode')),
-			'EXIFFlash'             => array('SubIFD', 'Flash',             gettext('Flash Fired'),            getOption('EXIFFlash')),
-			'EXIFImageWidth'        => array('SubIFD', 'ExifImageWidth',    gettext('Original Width'),         getOption('EXIFImageWidth')),
-			'EXIFImageHeight'       => array('SubIFD', 'ExifImageHeight',   gettext('Original Height'),        getOption('EXIFImageHeight')),
-			'EXIFContrast'          => array('SubIFD', 'Contrast',          gettext('Contrast Setting'),       getOption('EXIFContrast')),
-			'EXIFSharpness'         => array('SubIFD', 'Sharpness',         gettext('Sharpness Setting'),      getOption('EXIFSharpness')),
-			'EXIFSaturation'        => array('SubIFD', 'Saturation',        gettext('Saturation Setting'),     getOption('EXIFSaturation')),
-			'EXIFWhiteBalance'			=> array('SubIFD', 'WhiteBalance',			gettext('White Balance'),					 getOption('EXIFWhiteBalance')),
-			'EXIFSubjectDistance'		=> array('SubIFD', 'SubjectDistance',		gettext('Subject Distance'),			 getOption('EXIFSubjectDistance')),
-			'EXIFGPSLatitude'       => array('GPS',    'Latitude',          gettext('Latitude'),               getOption('EXIFGPSLatitude')),
-			'EXIFGPSLatitudeRef'    => array('GPS',    'Latitude Reference',gettext('Latitude Reference'),     getOption('EXIFGPSLatitudeRef')),
-			'EXIFGPSLongitude'      => array('GPS',    'Longitude',         gettext('Longitude'),              getOption('EXIFGPSLongitude')),
-			'EXIFGPSLongitudeRef'   => array('GPS',    'Longitude Reference',gettext('Longitude Reference'),   getOption('EXIFGPSLongitudeRef')),
-			'EXIFGPSAltitude'       => array('GPS',    'Altitude',          gettext('Altitude'),               getOption('EXIFGPSAltitude')),
-			'EXIFGPSAltitudeRef'    => array('GPS',    'Altitude Reference',gettext('Altitude Reference'),     getOption('EXIFGPSAltitudeRef'))
-	);
+	foreach ($_zp_exifvars as $key=>$item) {
+		$_zp_exifvars[$key][3] = getOption($key);
+	}
 }
 
 $_zp_supported_images = array('jpg','jpeg','gif','png');
