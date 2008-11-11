@@ -300,7 +300,7 @@ function getCurrentPage() {
  */
 function getNumSubalbums() {
 	global $_zp_current_album, $_zp_current_search;
-	if (in_context(ZP_SEARCH)) {
+	if (in_context(ZP_SEARCH) && is_null($_zp_current_album)) {
 		return $_zp_current_search->getNumAlbums();
 	} else {
 		if ($_zp_current_album->isDynamic()) {
@@ -310,6 +310,7 @@ function getNumSubalbums() {
 			return count($_zp_current_album->getSubalbums());
 		}
 	}
+	return false;
 }
 
 function resetCurrentAlbum() {
@@ -1324,7 +1325,7 @@ function isAlbumPage() {
  */
 function getNumImages() {
 	global $_zp_current_album, $_zp_current_search;
-	if (in_context(ZP_SEARCH)) {
+	if (in_context(ZP_SEARCH) && is_null($_zp_current_album)) {
 		return $_zp_current_search->getNumImages();
 	} else {
 		if ($_zp_current_album->isDynamic()) {
@@ -1334,6 +1335,7 @@ function getNumImages() {
 			return $_zp_current_album->getNumImages();
 		}
 	}
+	return false;
 }
 
 /**

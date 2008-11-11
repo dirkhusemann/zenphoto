@@ -30,8 +30,8 @@
 		?>
 		</div>
 		<?php
-		$results = getNumAlbums();
- 		?>
+		$results = getNumAlbums() + getNumImages();
+		?>
 		<?php
 			$first = true;
 			while (next_album()) {
@@ -46,7 +46,7 @@
 					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php printf(gettext('View album: %s'), getAnnotatedAlbumTitle());?>"><?php printAlbumTitle(); ?></a></h3>
 					<p>
 						<?php
-						$anumber = getNumAlbums();
+						$anumber = getNumSubalbums();
 						$inumber = getNumImages();
 						if ($anumber > 0 || $inumber > 0) {
 							echo '<p><em>(';
@@ -84,7 +84,6 @@
 
 	<ul class="slideset">
 		<?php
-		$results = $results + getNumImages();
 		$firstImage = null;
 		$lastImage = null;
 		while (next_image(false, $firstPageImages)) {
