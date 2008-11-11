@@ -955,12 +955,7 @@ function printAlbumData($field, $label) {
 	}
 }
 
-/**
- * Returns the album link url of the current album.
- *
- * @return string
- */
-function getAlbumLinkURL($album=NULL) {
+function getAlbumPage($album = NULL) {
 	global $_zp_current_album, $_zp_current_image, $_zp_current_search, $firstPageImages;
 	if (is_null($album)) $album = $_zp_current_album;
 	$page = 0;
@@ -977,6 +972,18 @@ function getAlbumLinkURL($album=NULL) {
 		$albumpages = ceil($numalbums / max(1, getOption('albums_per_page')));
 		$page = $albumpages + $imagepage;
 	}
+	return $page;
+}
+
+/**
+ * Returns the album link url of the current album.
+ *
+ * @return string
+ */
+function getAlbumLinkURL($album=NULL) {
+	global $_zp_current_album;
+	if (is_null($album)) $album = $_zp_current_album;
+	$page = getAlbumPage($album);
 	if (in_context(ZP_IMAGE) && $page > 1) {
 		// Link to the page the current image belongs to.
 		$link = rewrite_path("/" . pathurlencode($album->name) . "/page/" . $page,

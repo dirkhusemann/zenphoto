@@ -157,7 +157,7 @@ class Image extends PersistentObject {
 			if (isset($exifraw['ValidEXIFData'])) {
 				foreach($_zp_exifvars as $field => $exifvar) {
 					if (isset($exifraw[$exifvar[0]][$exifvar[1]])) {
-						$exif[$field] = $exifraw[$exifvar[0]][$exifvar[1]];
+						$exif[$field] = sanitize($exifraw[$exifvar[0]][$exifvar[1]],3);
 						$this->set($field, $exif[$field]);
 					}
 				}
@@ -171,7 +171,7 @@ class Image extends PersistentObject {
 			// Put together an array of EXIF data to return
 			if ($this->get('EXIFValid') == 1) {
 				foreach($_zp_exifvars as $field => $exifvar) {
-					$exif[sanitize($field, 3)] = $this->get(sanitize($field, 3));
+					$exif[$field] = $this->get($field);
 				}
 			} else {
 				return false;

@@ -831,6 +831,32 @@ if ($allimagecount) {
 				<td><?php print_language_string_list($image->get('custom_data'), $currentimage.'-custom_data', true); ?>
 				</td>
 			</tr>
+			
+			<tr class="imageextrainfo" style="display: none;">
+				<td align="right" valign="top"><?php echo gettext("EXIF inforation:"); ?></td>
+				<td>
+				<?php
+					$data = '';
+					$exif = $image->getExifData();
+					if (false !== $exif) {
+						foreach ($exif as $field => $value) {
+							if (!empty($value)) {
+								$display = $_zp_exifvars[$field][3];
+								if ($display) {
+									$label = $_zp_exifvars[$field][2];
+									$data .= "<tr><td align=\"right\">$label: </td> <td>$value</td></tr>\n";
+								}
+							}
+						}
+					}
+					if (empty($data)) {
+						echo gettext('None');
+					} else {
+						echo '<table>'.$data.'</table>';
+					}
+					?>
+				</td>
+			</tr>
 			<tr>
 				<td colspan="4"><span class="imageextrashow"><a
 					href="javascript:toggleExtraInfo('<?php echo $currentimage;?>', 'image', true);"><?php echo gettext('show more fields');?></a></span>

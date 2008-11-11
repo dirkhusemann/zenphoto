@@ -249,6 +249,9 @@ if (isset($_GET['action'])) {
 			setBoolOption('use_lock_image', isset($_POST['use_lock_image']));
 			setOption('image_sorttype', sanitize($_POST['image_sorttype'],3));
 			setBoolOption('image_sortdirection', isset($_POST['image_sortdirection']));
+			foreach ($_zp_exifvars as $key=>$item) {
+				setBoolOption($key, array_key_exists($key, $_POST));
+			}
 			$returntab = "#tab_image";
 		}
 		/*** Comment options ***/
@@ -1149,14 +1152,32 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		<?php echo ' '.gettext("If <em>Cache the full image</em> is checked the full image will be loaded to the cache and served from there after the first reference. <em>Full&nbsp;image&nbsp;protection</em> must be set to <em>Protected&nbsp;view</em> for the image to be cached. However, once cached, no protections are applied to the image."); ?>
 		</td>
 	</tr>
+	<tr>
 		<td><?php echo gettext("Use lock image"); ?></td>
 		<td>
 			<input type="checkbox" name="use_lock_image" value="1"
 			<?php echo checked('1', getOption('use_lock_image')); ?> />&nbsp;<?php echo gettext("Enabled"); ?>
 		</td>
 		<td><?php echo gettext("Substitute a <em>lock</em> image for thumbnails of password protected albums when the viewer has not supplied the password. If your theme supplies an <code>images/err-passwordprotected.gif</code> image, it will be shown. Otherwise the zenphoto default lock image is displayed."); ?>
-	<tr>
 	</tr>
+	<tr>
+		<td><?php echo gettext("EXIF display"); ?></td>
+		<td>
+		<ul class="searchchecklist">
+		<?php
+		foreach ($_zp_exifvars as $key=>$item) {
+			echo '<li><label for="'.$key.'"><input id="'.$key.'" name="'.$key.'" type="checkbox"';		
+			if ($item[3]) {
+				echo ' checked="checked" ';
+			}
+			echo ' value="1"  /> ' . $item[2] . "</label></li>"."\n";
+		}
+		?>
+		</ul>
+		</td>
+		<td><?php echo gettext("CHeck those EXIF fields you wish displayed in image EXIF information."); ?>
+	</tr>
+	
 	<tr>
 		<td></td>
 		<td><input type="submit" value="<?php echo gettext('save'); ?>" /></td>
