@@ -95,9 +95,11 @@ require_once('normalizer.php');
 				}
 			echo '<li class="thumb"><span><em style="background-image:url(' . htmlspecialchars($_zp_current_image->getCustomImage(NULL, 89, NULL, 89, 67, NULL, NULL, true)) . '); "><a href="' . htmlspecialchars(getImageLinkURL()) . '" title="' . getAnnotatedImageTitle() . '" style="background:#fff;">"'.getImageTitle().'"</a></em></span></li>';
 			}
-			if (!is_null($firstImage)  && hasNextPage()) {
+			if (!is_null($lastImage)  && $lastImage < getNumImages()) {
+				$np = getCurrentPage()+1;
 			?>
-			<li class="thumb"><span class="forward"><em style="background-image:url('<?php echo $_zp_themeroot ?>/images/moreslide_next.gif');"><a href="<?php echo htmlspecialchars(getNextPageURL()); ?>" style="background:#fff;"><?php echo gettext('Next page'); ?></a></em></span></li>
+			<li class="thumb"><span class="forward"><em style="background-image:url('<?php echo $_zp_themeroot ?>/images/moreslide_next.gif');">
+			<a href="<?php echo htmlspecialchars(getPageURL($np, $np)); ?>" style="background:#fff;"><?php echo gettext('Next page'); ?></a></em></span></li>
 		<?php
 			}
 		?>
