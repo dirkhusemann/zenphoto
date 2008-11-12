@@ -127,11 +127,11 @@ class SearchEngine
 	function getSearchParams() {
 		global $_zp_page;
 		$r = '';
-		$w = urlencode($this->words);
+		$w = urlencode(trim($this->words));
 		if (!empty($w)) { $r .= '&words=' . $w; }
-		$d = $this->dates;
+		$d = trim($this->dates);
 		if (!empty($d)) { $r .= '&date=' . $d; }
-		$f = $this->fields;
+		$f = trim($this->fields);
 		if (!empty($f)) { $r .= '&searchfields=' . $f; }
 		$a = $this->dynalbumname;
 		if ($a) { $r .= '&albumname=' . $a; }

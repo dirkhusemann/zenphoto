@@ -1111,7 +1111,7 @@ function printAlbumThumbImage($alt, $class=NULL, $id=NULL) {
  * @param int $size the size of the image to have
  * @param int $width width
  * @param int $height height
- * @param int $cropw cropwidth
+ * @param int $cropw crop width
  * @param int $croph crop height
  * @param int $cropx crop part x axis
  * @param int $cropy crop part y axis
