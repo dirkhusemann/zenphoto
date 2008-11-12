@@ -2,6 +2,9 @@
 /** printAlbumMenu for Zenphoto
   *
  * Changelog
+ * 1.4.6:
+ * - Some url encoding issues fixed
+ * 
  * 1.4.5:
  * - Fixes some validation issues and an php warning
  * 
@@ -105,7 +108,7 @@
 
 $plugin_description = gettext("Adds a theme function printAlbumMenu() to print an album menu either as a nested list up to 4 sublevels (context sensitive) or as a dropdown menu.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.4.5';
+$plugin_version = '1.4.6';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---print_album_menu.php.html";
 
 /**
@@ -114,7 +117,7 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---print_al
  * that was included to remain compatiblility with older installs of this menu.
  *
  * Usage: add the following to the php page where you wish to use these menus:
- * enable this extension on the zenphoto admin plugins tab;
+ * enable this extension on the zenphoto admin plugins tab.
  * Call the function printAlbumMenu() at the point where you want the menu to appear.
  *
  * @param string $option "list" for html list, "list-top" for only the top level albums, "list-sub" for only the subalbums if in one of theme or their toplevel album
@@ -386,10 +389,10 @@ function createAlbumMenuLink($album,$option2,$css,$albumpath,$mode,$level='') {
 	switch($mode) {
 		case "list":
 
-			if(getAlbumID() === $album->getAlbumID()) {
+			if(getAlbumID() == $album->getAlbumID()) {
 				$link = "<li".$css.">".$album->getTitle().$count;
 			} else {
-				$link = "<li><a href='".htmlspecialchars($albumpath.urlencode($album->name))."' title='".html_encode($album->getTitle())."'>".html_encode($album->getTitle())."</a>".$count;
+				$link = "<li><a href='".htmlspecialchars($albumpath.pathurlencode($album->name))."' title='".html_encode($album->getTitle())."'>".html_encode($album->getTitle())."</a>".$count;
 			}
 			break;
 		case "jump":
@@ -412,7 +415,7 @@ function createAlbumMenuLink($album,$option2,$css,$albumpath,$mode,$level='') {
 					break;
 			}
 			$selected = checkSelectedAlbum($album->name, "album");
-			$link = "<option $selected value='".htmlspecialchars($albumpath.$album->name)."'>".$arrow.strip_tags($album->getTitle()).$count."</option>";
+			$link = "<option $selected value='".htmlspecialchars($albumpath.parthurlencode($album->name))."'>".$arrow.strip_tags($album->getTitle()).$count."</option>";
 			break;
 	}
 	echo $link;
