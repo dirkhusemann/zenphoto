@@ -93,7 +93,18 @@ require_once('normalizer.php');
 				} else {
 					$lastImage++;
 				}
-			echo '<li class="thumb"><span><em style="background-image:url(' . htmlspecialchars($_zp_current_image->getCustomImage(NULL, 89, NULL, 89, 67, NULL, NULL, true)) . '); "><a href="' . htmlspecialchars(getImageLinkURL()) . '" title="' . getAnnotatedImageTitle() . '" style="background:#fff;">"'.getImageTitle().'"</a></em></span></li>';
+			if (isLandscape()) {
+				$iw = 89;
+				$ih = NULL;
+				$cw = 89;
+				$ch = 67;
+			} else {
+				$iw = NULL;
+				$ih = 89;
+				$ch = 89;
+				$cw = 67;
+			}
+			echo '<li class="thumb"><span><em style="background-image:url(' . htmlspecialchars($_zp_current_image->getCustomImage(NULL, $iw, $ih, $cw, $ch, NULL, NULL, true)) . '); "><a href="' . htmlspecialchars(getImageLinkURL()) . '" title="' . getAnnotatedImageTitle() . '" style="background:#fff;">"'.getImageTitle().'"</a></em></span></li>';
 			}
 			if (!is_null($lastImage)  && $lastImage < getNumImages()) {
 				$np = getCurrentPage()+1;
@@ -128,7 +139,11 @@ require_once('normalizer.php');
 			</div>
 		</div>
 
-		<p id="path"><?php printHomeLink('', ' > '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> &gt; <?php printParentBreadcrumb("", " > ", " > "); ?> <?php printAlbumTitle(false);?></p>
+		<p id="path">
+			<?php printHomeLink('', ' > '); ?>
+			<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> &gt; 
+			<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> &gt; <?php printParentBreadcrumb("", " > ", " > "); ?> <?php printAlbumTitle(false);?>
+		</p>
 
 		<div id="footer">
 			<hr />

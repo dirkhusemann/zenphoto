@@ -17,4 +17,5 @@
 		}
 		setOption('images_per_page', $np - $link_slides, false);
 		$_zp_conf_vars['images_first_page'] = NULL;
+		setOption('custom_index_page', 'gallery', false);
 ?>

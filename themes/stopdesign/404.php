@@ -39,12 +39,15 @@
 	</div>
 	</div>
 
-	<p id="path"><?php printHomeLink('', ' > '); ?>
-	<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>">
-	<?php echo getGalleryTitle();?></a> &gt;
-	<?php
-	echo "<em>".gettext('Object not found')."</em>";
-	?>
+	<p id="path">
+		<?php printHomeLink('', ' > '); ?>
+		<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> &gt; 
+		<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>">
+		<?php echo getGalleryTitle();?></a> &gt;
+		<?php
+		echo "<em>".gettext('Object not found')."</em>";
+		?>
+	</p>
 
 	<div id="footer">
 		<hr />

@@ -175,23 +175,49 @@ require_once('normalizer.php');
 
 				<div id="prevnext">
 					<?php
-						$img = $_zp_current_image->getPrevImage();
-					 if ($img) { 
-					 ?>
-					<div id="prev"><span class="thumb"><span>
-						<em style="background-image:url('<?php echo htmlspecialchars($img->getCustomImage(NULL, 89, NULL, 89, 67, NULL, NULL, true)); ?>')"><a href="<?php echo getPrevImageURL();?>" accesskey="z" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Previous'); ?>: </strong>Crescent</a></em></span></span></div>
-						<?php 
-						} 
-						$img = $_zp_current_image->getNextImage();
-						if ($img) { ?>
+					$img = $_zp_current_image->getPrevImage();
+					if ($img) { 
+						if ($img->getWidth() >= $img->getHeight()) {
+							$iw = 89;
+							$ih = NULL;
+							$cw = 89;
+							$ch = 67;
+						} else {
+							$iw = NULL;
+							$ih = 89;
+							$ch = 89;
+							$cw = 67;
+						}
+					 	?>
+						<div id="prev"><span class="thumb"><span>
+							<em style="background-image:url('<?php echo htmlspecialchars($img->getCustomImage(89, NULL, NULL, NULL, NULL, NULL, NULL, true)); ?>')"><a href="<?php echo getPrevImageURL();?>" accesskey="z" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Previous'); ?>: </strong>Crescent</a></em></span></span></div>
+					<?php 
+					} 
+					$img = $_zp_current_image->getNextImage();
+					if ($img) { 
+						if ($img->getWidth() >= $img->getHeight()) {
+							$iw = 89;
+							$ih = NULL;
+							$cw = 89;
+							$ch = 67;
+						} else {
+							$iw = NULL;
+							$ih = 89;
+							$ch = 89;
+							$cw = 67;
+						}?>
 						<div id="next"><span class="thumb"><span>
-							<em style="background-image:url('<?php echo htmlspecialchars($img->getCustomImage(NULL, 89, NULL, 89, 67, NULL, NULL, true)); ?>')"><a href="<?php echo getNextImageURL();?>" accesskey="x" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Next'); ?>: </strong>Sagamor</a></em></span></span></div>
-						<?php } ?>
+						<em style="background-image:url('<?php echo htmlspecialchars($img->getCustomImage(NULL, $iw, $ih, $cw, $ch, NULL, NULL, true)); ?>')"><a href="<?php echo getNextImageURL();?>" accesskey="x" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Next'); ?>: </strong>Sagamor</a></em></span></span></div>
+					<?php } ?>
 				</div>
 
 		</div>
 
-		<p id="path"><?php printHomeLink('', ' > '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> &gt; <?php printParentBreadcrumb("", " > ", " > "); printAlbumBreadcrumb("", " > "); echo getImageTitle(); ?></p>
+		<p id="path">
+			<?php printHomeLink('', ' > '); ?>
+			<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> &gt;
+			<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> &gt; <?php printParentBreadcrumb("", " > ", " > "); printAlbumBreadcrumb("", " > "); echo getImageTitle(); ?>
+		</p>
 
 		<div id="footer">
 			<hr />

@@ -583,6 +583,43 @@ Title, description, & prefs on Photo Gallery page
   margin:0 0 .25em;
   }
 
+.archiveinfo {
+  clear:left;
+  float:left;
+  width:50%;
+  margin:0;
+  line-height:1.4em;
+  }
+.archiveinfo h1 {
+  margin:0 0 .5em;
+  text-align:left;
+  text-transform:none;
+  letter-spacing:0;
+  }
+.archiveinfo .desc {
+  line-height:1.6em;
+  margin-bottom:1em;
+  }
+.archiveinfo form {
+  margin:0 0 .5em;
+  padding:5px 0;
+  }
+.archiveinfo fieldset {
+  margin:0 0 .75em;
+  padding:.25em 0 .5em;
+  border-width:0;
+  border-bottom:1px dotted #ccc;
+  }
+.archiveinfo form strong {
+  display:block;
+  margin:0;
+  padding:0 0 .25em;
+  color:#222;
+  }
+.archiveinfo fieldset div {
+  margin:0 0 .25em;
+  }
+
 
 /* =Thumbs
 Reusable style for thumbnail photos as slides

@@ -74,7 +74,7 @@ require_once('normalizer.php');
 			endwhile;
 			?>
 		</ul>
-			<div class="galleryinfo">
+			<div class="archiveinfo">
 				<br />
 				<p>
 				<?php if (hasPrevPage()) { ?>
@@ -98,7 +98,11 @@ require_once('normalizer.php');
 
 </div>
 
-<p id="path"><?php printHomeLink('', ' > '); ?><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title=<?php echo gettext('Albums Index'); ?>""><?php echo getGalleryTitle();?></a> &gt; <?php echo gettext('Gallery Archive'); ?></p>
+<p id="path">
+	<?php printHomeLink('', ' > '); ?>
+	<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> &gt;
+	<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title=<?php echo gettext('Albums Index'); ?>""><?php echo getGalleryTitle();?></a> &gt; <?php echo gettext('Gallery Archive'); ?>
+</p>
 
 <div id="footer">
 	<hr />

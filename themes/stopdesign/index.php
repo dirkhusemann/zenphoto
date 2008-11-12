@@ -14,7 +14,7 @@ require_once('normalizer.php');
 	printRSSHeaderLink('Gallery','Gallery RSS');
 	setOption('thumb_crop_width', 85, false);
 	setOption('thumb_crop_height', 85, false);
-	$archivepageURL = htmlspecialchars(getCustomPageURL('albumarchive'));
+	$archivepageURL = htmlspecialchars(getGalleryIndexURL());
 	?>
 </head>
 
@@ -100,10 +100,21 @@ require_once('normalizer.php');
 										if ($c++ < 6) {
 											echo "<li><table><tr><td>\n";
 											$imageURL = htmlspecialchars(getURL($image));
+											if ($image->getWidth() >= $image->getHeight()) {
+												$iw = 44;
+												$ih = NULL;
+												$cw = 44;
+												$ch = 33;
+											} else {
+												$iw = NULL;
+												$ih = 44;
+												$ch = 44;
+												$cw = 33;
+											}
 											echo '<a href="'.$imageURL.'" title="'.gettext("View image:").' '.
 											html_encode($image->getTitle()) . '"><img src="' .
-											htmlspecialchars($image->getCustomImage(null, 44, null, 44, 33, null, null, true)) .
-																		'" width="44" height="33" alt="' . html_encode($image->getTitle()) . "\"/></a>\n";
+											htmlspecialchars($image->getCustomImage(NULL, $iw, $ih, $cw, $ch, NULL, NULL, true)) .
+																		'" alt="' . html_encode($image->getTitle()) . "\"/></a>\n";
 											echo "</td></tr></table></li>\n";
 										}
 									}
@@ -117,9 +128,20 @@ require_once('normalizer.php');
 								$randomImage = getRandomImages();
 								if (is_object($randomImage)) {
 									$randomImageURL = htmlspecialchars(getURL($randomImage));
+									if ($randomImage->getWidth() >= $randomImage->getHeight()) {
+										$iw = 44;
+										$ih = NULL;
+										$cw = 44;
+										$ch = 33;
+									} else {
+										$iw = NULL;
+										$ih = 44;
+										$ch = 44;
+										$cw = 33;
+									}
 									echo '<a href="' . $randomImageURL . '" title="'.gettext("View image:").' ' . html_encode($randomImage->getTitle()) . '">' .
- 												'<img src="' . htmlspecialchars($randomImage->getCustomImage(null, 44, null, 44, 33, null, null, true)) .
-												'" width="44" height="33" alt="'.html_encode($randomImage->getTitle()).'"';
+ 												'<img src="' . htmlspecialchars($randomImage->getCustomImage(NULL, $iw, $ih, $cw, $ch, NULL, NULL, true)) .
+												'" alt="'.html_encode($randomImage->getTitle()).'"';
 									echo "/></a></td></tr></table></li>\n";
 								}
 							}
@@ -152,7 +174,10 @@ require_once('normalizer.php');
 			</div>
 		</div>
 	</div>
-	<p id="path"><?php printHomeLink('', ' > '); echo getGalleryTitle(); ?></p>
+	<p id="path">
+		<?php printHomeLink('', ' > '); echo getGalleryTitle(); ?>
+		<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> &gt;
+		</p>
 	<div id="footer">
 		<hr />
 		<?php if (function_exists('printLanguageSelector')) { echo '<p>'; printLanguageSelector(); echo '</p>'; } ?>
