@@ -135,13 +135,13 @@ if (isset($_GET['action'])) {
 			setOption('feed_items', sanitize($_POST['feed_items']),3);
 			setOption('feed_imagesize', sanitize($_POST['feed_imagesize']),3);
 			setBoolOption('login_user_field', isset($_POST['login_user_field']));
-			$serachfields = 0;
+			$searchfields = 0;
 			foreach ($_POST as $key=>$value) {
 				if (strpos($key, '_SEARCH_') !== false) {
-					$serachfields = $serachfields | $value;
+					$searchfields = $searchfields | $value;
 				}
 			}
-			setOption('search_fields', $serachfields);
+			setOption('search_fields', $searchfields);
 			setOption('exact_tag_match', sanitize($_POST['tag_match']));
 			$olduser = getOption('gallery_user');
 			$newuser = sanitize($_POST['gallery_user'],3);
@@ -992,7 +992,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		<td>
 		<?php echo gettext("The set of fields on which searches may be performed."); ?>
 		<br /><br />
-		<?php echo gettext("Search does partial matches on all fields with the possible exception of <em>Tags</em>. This means that if the field contains the search criteria anywhere within it a result will be returned. If <em>exact</em> is selected for <em>Tags</em> then the serach criteria must exactly match the tag for a result to be returned.") ?>
+		<?php echo gettext("Search does partial matches on all fields with the possible exception of <em>Tags</em>. This means that if the field contains the search criteria anywhere within it a result will be returned. If <em>exact</em> is selected for <em>Tags</em> then the search criteria must exactly match the tag for a result to be returned.") ?>
 		</td>
 	</tr>
 	<tr>

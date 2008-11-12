@@ -51,7 +51,7 @@ class SearchEngine
 	 * @return SearchEngine
 	 */
 	function SearchEngine() {
-		$this->zp_search_fields= array (gettext('Title')=>SEARCH_TITLE, gettext('Descripton')=>SEARCH_DESC, gettext('Tags')=>SEARCH_TAGS,
+		$this->zp_search_fields= array (gettext('Title')=>SEARCH_TITLE, gettext('Description')=>SEARCH_DESC, gettext('Tags')=>SEARCH_TAGS,
 																		gettext('File/Folder name')=>SEARCH_FILENAME,
 																		gettext('Location')=>SEARCH_LOCATION, gettext('City')=>SEARCH_CITY, gettext('State')=>SEARCH_STATE,
 																		gettext('Country')=>SEARCH_COUNTRY, 

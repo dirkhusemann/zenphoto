@@ -7,7 +7,7 @@
  *	Plugin Option 'slideshow_effect' -- The cycle effect
  *	Plugin Option 'slideshow_speed' -- How fast it runs
  *	Plugin Option 'slideshow_timeout' -- Transition time
- *	Plugin Option 'slideshow_showdesc' -- Allows the show to display image descriptons
+ *	Plugin Option 'slideshow_showdesc' -- Allows the show to display image descriptions
  *
  * The theme files 'slideshow.php', 'slideshow.css', and 'slideshow-controls.png' must reside in the theme
  * folder. If you are creating a custom theme, copy these files form the "default" theme of the Zenphoto
