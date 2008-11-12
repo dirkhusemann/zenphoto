@@ -1,11 +1,6 @@
 <?php
-	if (!defined('WEBPATH')) die();
-		$firstPageImages = normalizeColumns(3, 6);
-	setOption('images_per_page', getOption('images_per_page') - 1, false);
-		if ($firstPageImages > 0)  { $firstPageImages = $firstPageImages - 1; }
-	setOption('thumb_crop_width', 89, false);
-	setOption('thumb_crop_height', 67, false);
-	global $_zp_current_image;
+if (!defined('WEBPATH')) die();
+require_once('normalizer.php');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -86,6 +81,11 @@
 		<?php
 		$firstImage = null;
 		$lastImage = null;
+		if ($myimagepage > 1) {
+		?>
+		<li class="thumb"><span class="backward"><em style="background-image:url('<?php echo $_zp_themeroot ?>/images/moreslide_prev.gif');"><a href="<?php echo htmlspecialchars(getPrevPageURL()); ?>" style="background:#fff;"><?php echo gettext('Next page'); ?></a></em></span></li>
+		<?php
+		}
 		while (next_image(false, $firstPageImages)) {
 			if (is_null($firstImage)) {
 				$lastImage = imageNumber();
@@ -93,7 +93,7 @@
 			} else {
 				$lastImage++;
 			}
-			echo "\n<li class=\"thumb\"><span><em style=\"background-image:url(" . getImageThumb() . '); "><a href="' .
+			echo "\n<li class=\"thumb\"><span><em style=\"background-image:url(" . htmlspecialchars($_zp_current_image->getCustomImage(NULL, 89, 67, NULL, NULL, NULL, NULL, true)) . '); "><a href="' .
 			htmlspecialchars(getImageLinkURL()) . '" title="' . getAnnotatedImageTitle() . '" style="background:#fff;">"'.
 			getImageTitle().'"</a></em></span></li>';
 		}

@@ -1,4 +1,6 @@
-<?php if (!defined('WEBPATH')) die(); normalizeColumns(3, 6); ?>
+<?php if (!defined('WEBPATH')) die(); 
+require_once('normalizer.php');
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -172,12 +174,18 @@
 				</div>
 
 				<div id="prevnext">
-					<?php if (hasPrevImage()) { ?>
+					<?php
+						$img = $_zp_current_image->getPrevImage();
+					 if ($img) { 
+					 ?>
 					<div id="prev"><span class="thumb"><span>
-						<em style="background-image:url('<?php echo htmlspecialchars(getPrevImageThumb()); ?>')"><a href="<?php echo getPrevImageURL();?>" accesskey="z" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Previous'); ?>: </strong>Crescent</a></em></span></span></div>
-						<?php } if (hasNextImage()) { ?>
+						<em style="background-image:url('<?php echo htmlspecialchars($img->getCustomImage(NULL, 89, 67, NULL, NULL, NULL, NULL, true)); ?>')"><a href="<?php echo getPrevImageURL();?>" accesskey="z" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Previous'); ?>: </strong>Crescent</a></em></span></span></div>
+						<?php 
+						} 
+						$img = $_zp_current_image->getNextImage();
+						if ($img) { ?>
 						<div id="next"><span class="thumb"><span>
-							<em style="background-image:url('<?php echo htmlspecialchars(getNextImageThumb()); ?>')"><a href="<?php echo getNextImageURL();?>" accesskey="x" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Next'); ?>: </strong>Sagamor</a></em></span></span></div>
+							<em style="background-image:url('<?php echo htmlspecialchars($img->getCustomImage(NULL, 89, 67, NULL, NULL, NULL, NULL, true)); ?>')"><a href="<?php echo getNextImageURL();?>" accesskey="x" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Next'); ?>: </strong>Sagamor</a></em></span></span></div>
 						<?php } ?>
 				</div>
 

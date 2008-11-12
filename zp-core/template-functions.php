@@ -971,6 +971,7 @@ function getAlbumPage($album = NULL) {
 		}
 		$imagepage = floor(($imageindex - $firstPageImages) / max(1, getOption('images_per_page'))) + 1;
 		$albumpages = ceil($numalbums / max(1, getOption('albums_per_page')));
+		if ($albumpages == 0 && $firstPageImages > 0) $imagepage++;
 		$page = $albumpages + $imagepage;
 	}
 	return $page;
@@ -1384,7 +1385,7 @@ function next_image($all=false, $firstPageCount=0, $sorttype=null, $overridePass
 		$_zp_conf_vars['images_first_page'] = $firstPageCount;  /* save this so pagination can see it */
 		$imagePage = $_zp_page - $imagePageOffset;
 	}
-	if ($firstPageCount > 0) {
+	if ($firstPageCount > 0 && $imagePageOffset > 0) {
 		$imagePage = $imagePage + 1;  /* can share with last album page */
 	}
 	if ($imagePage <= 0) {
