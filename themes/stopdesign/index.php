@@ -102,7 +102,7 @@ require_once('normalizer.php');
 											$imageURL = htmlspecialchars(getURL($image));
 											echo '<a href="'.$imageURL.'" title="'.gettext("View image:").' '.
 											html_encode($image->getTitle()) . '"><img src="' .
-											htmlspecialchars($image->getCustomImage(null, 44, 33, null, null, null, null, true)) .
+											htmlspecialchars($image->getCustomImage(null, 44, null, 44, 33, null, null, true)) .
 																		'" width="44" height="33" alt="' . html_encode($image->getTitle()) . "\"/></a>\n";
 											echo "</td></tr></table></li>\n";
 										}
@@ -118,7 +118,7 @@ require_once('normalizer.php');
 								if (is_object($randomImage)) {
 									$randomImageURL = htmlspecialchars(getURL($randomImage));
 									echo '<a href="' . $randomImageURL . '" title="'.gettext("View image:").' ' . html_encode($randomImage->getTitle()) . '">' .
- 												'<img src="' . htmlspecialchars($randomImage->getCustomImage(null, 44, 33, null, null, null, null, true)) .
+ 												'<img src="' . htmlspecialchars($randomImage->getCustomImage(null, 44, null, 44, 33, null, null, true)) .
 												'" width="44" height="33" alt="'.html_encode($randomImage->getTitle()).'"';
 									echo "/></a></td></tr></table></li>\n";
 								}

@@ -93,7 +93,7 @@ require_once('normalizer.php');
 			} else {
 				$lastImage++;
 			}
-			echo "\n<li class=\"thumb\"><span><em style=\"background-image:url(" . htmlspecialchars($_zp_current_image->getCustomImage(NULL, 89, 67, NULL, NULL, NULL, NULL, true)) . '); "><a href="' .
+			echo "\n<li class=\"thumb\"><span><em style=\"background-image:url(" . htmlspecialchars($_zp_current_image->getCustomImage(NULL, 89, NULL, 89, 67, NULL, NULL, true)) . '); "><a href="' .
 			htmlspecialchars(getImageLinkURL()) . '" title="' . getAnnotatedImageTitle() . '" style="background:#fff;">"'.
 			getImageTitle().'"</a></em></span></li>';
 		}

@@ -179,13 +179,13 @@ require_once('normalizer.php');
 					 if ($img) { 
 					 ?>
 					<div id="prev"><span class="thumb"><span>
-						<em style="background-image:url('<?php echo htmlspecialchars($img->getCustomImage(NULL, 89, 67, NULL, NULL, NULL, NULL, true)); ?>')"><a href="<?php echo getPrevImageURL();?>" accesskey="z" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Previous'); ?>: </strong>Crescent</a></em></span></span></div>
+						<em style="background-image:url('<?php echo htmlspecialchars($img->getCustomImage(NULL, 89, NULL, 89, 67, NULL, NULL, true)); ?>')"><a href="<?php echo getPrevImageURL();?>" accesskey="z" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Previous'); ?>: </strong>Crescent</a></em></span></span></div>
 						<?php 
 						} 
 						$img = $_zp_current_image->getNextImage();
 						if ($img) { ?>
 						<div id="next"><span class="thumb"><span>
-							<em style="background-image:url('<?php echo htmlspecialchars($img->getCustomImage(NULL, 89, 67, NULL, NULL, NULL, NULL, true)); ?>')"><a href="<?php echo getNextImageURL();?>" accesskey="x" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Next'); ?>: </strong>Sagamor</a></em></span></span></div>
+							<em style="background-image:url('<?php echo htmlspecialchars($img->getCustomImage(NULL, 89, NULL, 89, 67, NULL, NULL, true)); ?>')"><a href="<?php echo getNextImageURL();?>" accesskey="x" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Next'); ?>: </strong>Sagamor</a></em></span></span></div>
 						<?php } ?>
 				</div>
 
