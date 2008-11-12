@@ -175,8 +175,8 @@ require_once('normalizer.php');
 		</div>
 	</div>
 	<p id="path">
-		<?php printHomeLink('', ' > '); echo getGalleryTitle(); ?>
-		<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> &gt;
+		<?php printHomeLink('', ' > '); ?>
+		<?php echo getGalleryTitle(); ?>
 		</p>
 	<div id="footer">
 		<hr />

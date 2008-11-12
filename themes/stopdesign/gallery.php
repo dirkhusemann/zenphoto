@@ -101,7 +101,8 @@ require_once('normalizer.php');
 <p id="path">
 	<?php printHomeLink('', ' > '); ?>
 	<a href="<?php echo htmlspecialchars(getGalleryIndexURL(false));?>" title="<?php echo gettext('Main Index'); ?>"><?php echo gettext('Home');?></a> &gt;
-	<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title=<?php echo gettext('Albums Index'); ?>""><?php echo getGalleryTitle();?></a> &gt; <?php echo gettext('Gallery Archive'); ?>
+	<?php echo getGalleryTitle();?> 
+	<?php echo gettext('Gallery Archive'); ?>
 </p>
 
 <div id="footer">
