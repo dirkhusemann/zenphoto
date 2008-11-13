@@ -1296,9 +1296,9 @@ if (file_exists("zp-config.php")) {
 	}
 	
 	//v1.2.1
-	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `title` `title` TEXT NOT NULL";
-	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `place` `place` TEXT NOT NULL";
-	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `title` `title` TEXT NOT NULL";
+	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `title` `title` TEXT";
+	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `place` `place` TEXT";
+	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `title` `title` TEXT";
 	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `location` `location` TEXT";
 	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `credit` `credit` TEXT";
 	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `copyright` `copyright` TEXT";
