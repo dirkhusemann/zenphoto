@@ -1438,7 +1438,7 @@ function next_image($all=false, $firstPageCount=0, $sorttype=null, $overridePass
 define('DEFAULT_MOV_HEIGHT', 496);
 define('DEFAULT_MOV_WIDTH', 640);
 define('DEFAULT_3GP_HEIGHT', 304);
-define('DEFAULT_3GP_WIDTHT', 352);
+define('DEFAULT_3GP_WIDTH', 352);
 
 /**
  * Sets the image passed as the current image
