@@ -3558,7 +3558,7 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL,$butto
 	<input type="text" name="words" value="<?php  echo $searchwords; ?>" id="search_input" size="10" />
 	<?php if(count($fields) > 1) { ?>
 		<a href="javascript: toggle('searchextrashow');">
-		<img src="<?php echo $iconsource; ?>" alt="<?php echo gettext('select search fields'); ?>" />
+		<img src="<?php echo $iconsource; ?>" alt="<?php echo gettext('select search fields'); ?>" id="searchfields_icon" />
 		</a>
 	<?php } ?>
 	<input type="<?php echo $type; ?>" value="<?php echo $buttontext; ?>" class="pushbutton" id="search_submit" <?php echo $buttonSource; ?> />
