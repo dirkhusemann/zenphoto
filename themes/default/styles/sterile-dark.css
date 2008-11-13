@@ -430,7 +430,10 @@ height: 8em; width: 20em; overflow: auto;
 color: #fff;
 background-image:url(../images/50percent.png);
 }
-
+#searchfields_icon {
+position: relative;
+top: 4px;
+}
 .clear {
   clear:both;
   height:10px;

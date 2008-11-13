@@ -432,9 +432,13 @@ text-decoration: none;
 #search ul {
 border: 1px solid #ccc; position:absolute; text-align:left; list-style: none; 
 height: 8em; width: 20em; overflow: auto; 
-background:transparent;
+background-color: white;
 }
 
+#searchfields_icon {
+position: relative;
+top: 4px;
+}
 .clear {
   clear:both;
   height:10px;
