@@ -742,6 +742,10 @@ height: 8em; width: 20em; overflow: auto;
 color: #fff;
 background-image:url(../images/50percent.png);
 }
+#searchfields_icon {
+position: relative;
+top: 4px;
+}
 
 .clear {
   clear:both;
@@ -977,5 +981,4 @@ font-size: 0.8em;
  font-family: Arial, Helvetice, sans-serif;
  font-size: 0.9em;
  font-weight: bold;
- text-transform: uppercase;
 }
