@@ -103,16 +103,19 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 
 		<!-- Image Description -->
 		<?php if ($show) { ?>
-		<div id="description">
+			<div id="description">
 			<?php
 				printImageDesc(true);
-				if (function_exists('printImageMap')) {
-					printImageMap(NULL, 'G_HYBRID_MAP');
-				}
 			?>
-		</div>
-		<?php }
-			if (function_exists('printShutterfly')) printShutterfly();
+			</div>
+			<?php
+				if (function_exists('printImageMap')) {
+					echo '<div id="map_link">';
+					printImageMap(NULL, 'G_HYBRID_MAP');
+					echo '</div>';
+				}
+		}
+		if (function_exists('printShutterfly')) printShutterfly();
 		?>
 	</div>
 

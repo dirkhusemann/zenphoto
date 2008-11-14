@@ -757,6 +757,13 @@ color: #fff;
 	width: 595px;
 	margin: 0 auto;
 }
+#map_link {
+	text-align: center;
+}
+#map_link a {
+text-decroation: none;
+}
+
 /* Admin Toolbox
 ------------------------------ */
 #admin, #admin_data{

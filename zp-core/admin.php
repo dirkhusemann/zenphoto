@@ -622,7 +622,7 @@ if ($allimagecount) {
 		<?php
 		$sort = $sortby;
 		foreach ($sort as $key=>$value) {
-			$sort[$key.' '. gettext('(descending)')] = $value.'_desc';
+			$sort[sprintf(gettext('%s (descending)'),$key)] = $value.'_desc';
 		}
 		$sort[gettext('Manual')] = 'Manual';
 		ksort($sort);
