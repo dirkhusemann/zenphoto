@@ -415,10 +415,15 @@ if (!zp_loggedin()) {
 
 if ($page == "edit") {
 
-/** SINGLE ALBUM ********************************************************************/
-define('IMAGES_PER_PAGE', 10);
 
 if (isset($_GET['album']) && !isset($_GET['massedit'])) {
+	/** SINGLE ALBUM ********************************************************************/	
+	define('IMAGES_PER_PAGE', 10);
+	
+	// one time generation of this list.
+	$mcr_albumlist = array();
+	genAlbumUploadList($mcr_albumlist);
+	
 	$oldalbumimagesort = getOption('albumimagesort');
 	$direction = getOption('albumimagedirection');
 	$folder = sanitize_path($_GET['album']); 
@@ -650,8 +655,6 @@ if ($allimagecount) {
 		</td>
 	</tr>
 	<?php
-	$mcr_albumlist = array();
-	genAlbumUploadList($mcr_albumlist);
 	$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');
 
 	$currentimage = 0;
@@ -915,7 +918,11 @@ if ($allimagecount != $totalimages) { // need pagination links
 /*** MULTI-ALBUM ***************************************************************************/
 
 } else if (isset($_GET['massedit'])) {
-	if (isset($_GET['saved'])) {
+	// one time generation of this list.
+	$mcr_albumlist = array();
+	genAlbumUploadList($mcr_albumlist);
+	
+if (isset($_GET['saved'])) {
 		if (isset($_GET['mismatch'])) {
 			echo "\n<div class=\"errorbox\" id=\"fade-message\">";
 			echo "\n<h2>".gettext("Your passwords did not match")."</h2>";

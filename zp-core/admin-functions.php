@@ -843,7 +843,7 @@ function printAlbumEditForm($index, $album) {
 	// FYI: It's perfectly acceptable to drop out of php-parsing mode in a function.
 	// See the move/copy/rename block for an example.
 
-	global $sortby, $gallery, $_zp_loggedin;
+	global $sortby, $gallery, $_zp_loggedin, $mcr_albumlist;
 	$tagsort = getTagOrder();
 	if ($index == 0) {
 		if (isset($saved)) {
@@ -1040,8 +1040,6 @@ function printAlbumEditForm($index, $album) {
 	echo "\n</table>\n</td>";
 	echo "\n<td valign=\"top\">";
 
-	$mcr_albumlist = array();
-	genAlbumUploadList($mcr_albumlist);
 	$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');
 
 	/* **************** Move/Copy/Rename ****************** */
