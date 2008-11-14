@@ -3556,8 +3556,7 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL,$butto
 		$fields = array_flip($fields);
 		$query_fields = $engine->parseQueryFields();
 		?>
-		<span style="display:none;" id="searchextrashow">
-		<ul>
+		<ul style="display:none;" id="searchextrashow">
 		<?php
 		foreach ($fields as $key=>$item) {
 			echo '<li><label for="_SEARCH_'.$item.'"><input id="_SEARCH_'.$item.'" name="_SEARCH_'.$item.'" type="checkbox"';		
@@ -3568,7 +3567,6 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL,$butto
 		}
 		?>
 		</ul>
-		</span>
 		<?php 
 	}
 	?>
