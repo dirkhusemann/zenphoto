@@ -2858,28 +2858,23 @@ function printLatestComments($number, $shorten='123') {
  * Returns the hitcounter for the page viewed (image.php and album.php only).
  *
  * @param string $option "image" for image hit counter (default), "album" for album hit counter
- * @param int $id Optional record id of the object if not the current image or album
+ * @param object $id Optional object to get the counter from
  * @return string
  * @since 1.1.3
  */
-function hitcounter($option='image', $id=NULL) {
-	switch($option) {
-		case "image":
-			if (is_null($id)) {
-				$id = getImageID();
-			}
-			$dbtable = prefix('images');
-			break;
-		case "album":
-			if (is_null($id)) {
-				$id = getAlbumID();
-			}
-			$dbtable = prefix('albums');
-			break;
+function hitcounter($option='image', $object=NULL) {
+	global $_zp_current_album; $_zp_current_image;
+	if (is_null($object)) {
+		switch($option) {
+			case "image":
+				$object = $_zp_current_image;
+				break;
+			case "album":
+				$object = $_zp_current_album;
+				break;
+		}
 	}
-	$sql = "SELECT `hitcounter` FROM $dbtable WHERE `id` = $id";
-	$result = query_single_row($sql);
-	return $result['hitcounter'];
+	return $object->get('hitcounter');
 }
 
 /**
