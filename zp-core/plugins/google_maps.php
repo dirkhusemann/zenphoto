@@ -123,7 +123,9 @@ function printImageMap($zoomlevel=NULL, $type=NULL, $width=NULL, $height=NULL, $
 			$long = $exif['EXIFGPSLongitude'];
 			if($exif['EXIFGPSLatitudeRef'] == 'S'){  $lat = '-' . $lat; }
 			if($exif['EXIFGPSLongitudeRef'] == 'W'){  $long = '-' . $long; }
-			addPoint($lat, $long, js_encode(getImageDesc()));
+			$desc = getImageDesc();
+			if (empty($desc)) $desc = getImageTitle();
+			addPoint($lat, $long, js_encode($desc));
 			$dataid = $id.'_data';
 			if (is_null($text)) $text = gettext('Google Map');
 			echo "<a href=\"javascript: vtoggle('$dataid');\" title=\"".gettext('Display or hide the Google Map.')."\">";
