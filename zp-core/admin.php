@@ -90,8 +90,6 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 				$id = sanitize_numeric($_REQUEST['albumid']);
 				$where = ' WHERE `id`='.$id;
 				$imgwhere = ' WHERE `albumid`='.$id;
-				$where = '';
-				$imgwhere = '';
 				$return = '?counters_reset';
 				if (isset($_REQUEST['album'])) {
 					if (isset($_GET['album'])) {
@@ -105,6 +103,10 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 						$return = '?page=edit&album='.$return.'&counters_reset#tab_subalbuminfo';
 					}
 				}
+			} else {
+				$where = '';
+				$imgwhere = '';
+				$return = '';
 			}
 			query("UPDATE " . prefix('albums') . " SET `hitcounter`= 0" . $where);
 			query("UPDATE " . prefix('images') . " SET `hitcounter`= 0" . $imgwhere);

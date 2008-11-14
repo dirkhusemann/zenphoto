@@ -2855,44 +2855,31 @@ function printLatestComments($number, $shorten='123') {
 }
 
 /**
- * Increments (optionally) and returns the hitcounter if a page is viewed (image.php and album.php only).
- * Password protected albums are also counted. If you don't want those to be counted, protect the hitcounter
- * with a password check.
- * Does not increment the hitcounter if the viewer is logged in as the gallery admin
+ * Returns the hitcounter for the page viewed (image.php and album.php only).
  *
  * @param string $option "image" for image hit counter (default), "album" for album hit counter
- * @param bool $viewonly set to true if you don't want to increment the counter.
  * @param int $id Optional record id of the object if not the current image or album
  * @return string
  * @since 1.1.3
  */
-function hitcounter($option='image', $viewonly=false, $id=NULL) {
+function hitcounter($option='image', $id=NULL) {
 	switch($option) {
 		case "image":
 			if (is_null($id)) {
 				$id = getImageID();
 			}
 			$dbtable = prefix('images');
-			$doUpdate = true;
 			break;
 		case "album":
 			if (is_null($id)) {
 				$id = getAlbumID();
 			}
 			$dbtable = prefix('albums');
-			$doUpdate = getCurrentPage() == 1; // only count initial page for a hit on an album
 			break;
 	}
-	if (zp_loggedin() || $viewonly) { $doUpdate = false; }
 	$sql = "SELECT `hitcounter` FROM $dbtable WHERE `id` = $id";
-	if ($doUpdate) { $sql .= " FOR UPDATE"; }
 	$result = query_single_row($sql);
-	$resultupdate = $result['hitcounter'];
-	if ($doUpdate) {
-		$resultupdate++;
-		query("UPDATE $dbtable SET `hitcounter`= $resultupdate WHERE `id` = $id");
-	}
-	return $resultupdate;
+	return $result['hitcounter'];
 }
 
 /**

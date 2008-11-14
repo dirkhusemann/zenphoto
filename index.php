@@ -44,7 +44,11 @@ if (isset($_GET['p'])) {
 	handleSearchParms($_zp_current_album->name, $_zp_current_image->filename);
 	$theme = setupTheme();
 	$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/image.php");
-
+	//update hit counter
+	if (!zp_loggedin()) {
+		query("UPDATE ".prefix('images')." SET `hitcounter`= `hitcounter`+1 WHERE `id` =".getImageID());
+	}
+	
 // Display an Album page.
 } else if (in_context(ZP_ALBUM)) {
 	if(isset($_GET['zipfile']) && is_dir(realpath(getAlbumFolder() . UTF8ToFilesystem($_GET['album'])))){
@@ -64,7 +68,11 @@ if (isset($_GET['p'])) {
 			$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/album.php");
 		}
 	}
-
+	// update hit counter
+	if (!zp_loggedin() && getCurrentPage() == 1) {
+		query("UPDATE ".prefix('albums')." SET `hitcounter`=`hitcounter`+1  WHERE `id`=".getAlbumID());
+	}
+	
 // Display the Index page.
 } else if (in_context(ZP_INDEX)) {
 	handleSearchParms();
