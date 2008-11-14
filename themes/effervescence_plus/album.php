@@ -344,7 +344,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 <div class="footlinks">
 
 <?php
-$h = hitcounter('album');
+$h = getHitcounter();
 if ($h == 1) {
 	echo "<p>".gettext('1 hit on this album')."</p>";
 	} else {

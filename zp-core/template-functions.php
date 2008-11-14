@@ -2856,25 +2856,56 @@ function printLatestComments($number, $shorten='123') {
 
 /**
  * Returns the hitcounter for the page viewed (image.php and album.php only).
+ * Deprecated, use getHitcounter()
  *
  * @param string $option "image" for image hit counter (default), "album" for album hit counter
- * @param object $id Optional object to get the counter from
+ * @param bool $viewonly set to true if you don't want to increment the counter.
+ * @param int $id Optional record id of the object if not the current image or album
  * @return string
  * @since 1.1.3
  */
-function hitcounter($option='image', $object=NULL) {
-	global $_zp_current_album; $_zp_current_image;
-	if (is_null($object)) {
-		switch($option) {
-			case "image":
-				$object = $_zp_current_image;
-				break;
-			case "album":
-				$object = $_zp_current_album;
-				break;
-		}
+function hitcounter($option='image', $viewonly=false, $id=NULL) {
+	trigger_error(gettext('hitcounter is deprecated. Use getHitcounter().'), E_USER_NOTICE);
+	switch($option) {
+		case "image":
+			if (is_null($id)) {
+				$id = getImageID();
+			}
+			$dbtable = prefix('images');
+			break;
+		case "album":
+			if (is_null($id)) {
+				$id = getAlbumID();
+			}
+			$dbtable = prefix('albums');
+			break;
 	}
-	return $object->get('hitcounter');
+	$sql = "SELECT `hitcounter` FROM $dbtable WHERE `id` = $id";
+	$result = query_single_row($sql);
+	$resultupdate = $result['hitcounter'];
+	return $resultupdate;
+}
+
+/**
+ * returns the hitcounter for the current page or for the object passed
+ *
+ * @param object $obj the album or page object for which the hitcount is desired
+ * @return string
+ */
+function getHitcounter($obj=NULL) {
+	global $_zp_current_album, $_zp_current_image, $_zp_gallery_page;
+	if (is_null($obj)) {
+		switch ($_zp_gallery_page) {
+			case 'album.php':
+				$obj = $_zp_current_album;
+				break;
+			case 'image.php':
+				$obj = $_zp_current_image;
+				break;
+			default: return NULL; // not a valid object for hitcounter
+		}
+	return $obj->get('hitcounter');
+	}
 }
 
 /**

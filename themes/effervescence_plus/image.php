@@ -191,7 +191,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 	<!-- Footer -->
 	<div class="footlinks">
 		<?php
-			$h = hitcounter('image');
+			$h = getHitcounter();
 			if ($h == 1) {
 				echo "<p>".gettext('1 hit on this image')."</p>";
 			} else {

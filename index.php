@@ -46,7 +46,9 @@ if (isset($_GET['p'])) {
 	$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/image.php");
 	//update hit counter
 	if (!zp_loggedin()) {
-		query("UPDATE ".prefix('images')." SET `hitcounter`= `hitcounter`+1 WHERE `id` =".getImageID());
+		$hc = $_zp_current_image->get('hitcounter')+1;
+		$_zp_current_image->set('hitcounter', $hc);
+		$_zp_current_image->save();
 	}
 	
 // Display an Album page.
@@ -70,7 +72,9 @@ if (isset($_GET['p'])) {
 	}
 	// update hit counter
 	if (!zp_loggedin() && getCurrentPage() == 1) {
-		query("UPDATE ".prefix('albums')." SET `hitcounter`=`hitcounter`+1  WHERE `id`=".getAlbumID());
+		$hc = $_zp_current_album->get('hitcounter')+1;
+		$_zp_current_album->set('hitcounter', $hc);
+		$_zp_current_album->save();
 	}
 	
 // Display the Index page.
