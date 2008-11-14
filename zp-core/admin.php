@@ -151,9 +151,9 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 						$thumbnail = -1;
 					}
 					$oldsort = sanitize($_POST['oldalbumimagesort'], 3);
+					if (getOption('albumimagedirection')) $oldsort = $oldsort.'_desc';
 					$newsort = sanitize($_POST['albumimagesort'],3);
 					if ($oldsort == $newsort) {
-						setOption('albumimagedirection', isset($_POST['albumimagedirection'])?"DESC":"");
 						for ($i = 0; $i < $_POST['totalimages']; $i++) {
 							$filename = strip($_POST["$i-filename"]);
 
@@ -248,8 +248,13 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 							}
 						}
 					} else {
-						setOption('albumimagesort', $newsort);
-						setOption('albumimagedirection', isset($_POST['albumimagedirection'])?"DESC":"");
+						if (strpos($newsort, '_desc')) {
+							setOption('albumimagesort', substr($newsort, 0, -5));
+							setOption('albumimagedirection', 'DESC');
+						} else {
+							setOption('albumimagesort', $newsort);
+							setOption('albumimagedirection', '');
+						}
 						$notify = '&';
 					}
 				}
@@ -616,14 +621,17 @@ if ($allimagecount) {
 		<th align="right">
 		<?php
 		$sort = $sortby;
+		foreach ($sort as $key=>$value) {
+			$sort[$key.' '. gettext('(descending)')] = $value.'_desc';
+		}
 		$sort[gettext('Manual')] = 'Manual';
+		ksort($sort);
+		if ($direction) $oldalbumimagesort = $oldalbumimagesort.'_desc';
 		echo gettext("Display images by:");
 			echo '<select id="albumimagesort" name="albumimagesort" onchange="this.form.submit()">';
 			generateListFromArray(array($oldalbumimagesort), $sort);
 			echo '</select>';
-			?> <input type="checkbox" id="albumimagedirection"
-			name="albumimagedirection" value="DESC"
-			<?php if ($direction) { echo " CHECKED"; } ?> /><?php echo gettext("Descending");?>
+			?>
 		</th>
 	</tr>
 	<?php
