@@ -43,7 +43,6 @@ if (isset($_POST['savealbum'])) {
 	} else {
 		$thumb = '';
 	}
-	setOption('search_fields', 32767, false); // parse the search fields post
 	$fields = $search->fields;
 	$redirect = $album.'/'.$albumname.".alb";
 

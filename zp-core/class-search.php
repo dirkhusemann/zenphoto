@@ -143,6 +143,7 @@ class SearchEngine
 	}
 	/**
 	 * Parses and stores a search string
+	 * NOTE!! this function assumes that the 'words' part of the list has been urlencoded!!!
 	 *
 	 * @param string $paramstr the string containing the search words
 	 */
@@ -154,7 +155,7 @@ class SearchEngine
 			$v = substr($param, $e + 1);
 			switch($p) {
 				case 'words':
-					$this->words = $v;
+					$this->words = urldecode($v);
 					break;
 				case 'date':
 					$this->dates = $v;

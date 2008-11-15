@@ -1144,7 +1144,7 @@ function printAlbumEditForm($index, $album) {
 		echo ' value="">'.gettext('randomly selected');
 		echo '</option>';
 	if ($album->isDynamic()) {
-		$params = urldecode($album->getSearchParams());
+		$params = $album->getSearchParams();
 		$search = new SearchEngine();
 		$search->setSearchParams($params);
 		$images = $search->getImages(0);
@@ -1155,13 +1155,15 @@ function printAlbumEditForm($index, $album) {
 			$filename = $imagerow['filename'];
 			$imagelist[] = '/'.$folder.'/'.$filename;
 		}
-		$subalbums = $search->getAlbums(0);
-		foreach ($subalbums as $folder) {
-			$newalbum = new Album($gallery, $folder);
-			if (!$newalbum->isDynamic()) {
-				$images = $newalbum->getImages(0);
-				foreach ($images as $filename) {
-					$imagelist[] = '/'.$folder.'/'.$filename;
+		if (count($imagelist) == 0) {
+			$subalbums = $search->getAlbums(0);
+			foreach ($subalbums as $folder) {
+				$newalbum = new Album($gallery, $folder);
+				if (!$newalbum->isDynamic()) {
+					$images = $newalbum->getImages(0);
+					foreach ($images as $filename) {
+						$imagelist[] = '/'.$folder.'/'.$filename;
+					}
 				}
 			}
 		}
@@ -1187,7 +1189,8 @@ function printAlbumEditForm($index, $album) {
 			echo "</option>";
 		}
 	} else {
-		if (count($album->getSubalbums()) > 0) {
+		$images = $album->getImages();
+		if (count($images) == 0 && count($album->getSubalbums()) > 0) {
 			$imagearray = array();
 			$albumnames = array();
 			$strip = strlen($album->name) + 1;
@@ -1224,7 +1227,6 @@ function printAlbumEditForm($index, $album) {
 				}
 			}
 		} else {
-			$images = $album->getImages();
 			foreach ($images as $filename) {
 				$image = newImage($album, $filename);
 				$selected = ($filename == $album->get('thumb'));
