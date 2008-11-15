@@ -1175,7 +1175,7 @@ if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 		?>
 		</ul>
 		</td>
-		<td><?php echo gettext("CHeck those EXIF fields you wish displayed in image EXIF information."); ?>
+		<td><?php echo gettext("Check those EXIF fields you wish displayed in image EXIF information."); ?>
 	</tr>
 	
 	<tr>
@@ -1367,7 +1367,7 @@ if (!empty($_REQUEST['themealbum'])) {
 		<td>
 			<?php echo gettext("If checked the thumbnail cropped to the <em>width</em> and <em>height</em> indicated."); ?>
 			<br />
-			<?php echo gettext('<strong>Note</strong>: changing crop height or width will invaliate existing crops.'); ?>
+			<?php echo gettext('<strong>Note</strong>: changing crop height or width will invalidate existing crops.'); ?>
 		</td>
 	</tr>
 	<tr>

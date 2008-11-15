@@ -131,7 +131,7 @@ printAdminHeader();
 		<?php printTabs('edit'); ?>
 		<div id="content">
 				<h1><?php echo gettext("Custom thumbnail cropping"); ?></h1>
-				<p><?php echo gettext("You can change the protion of your image which is shown in thumbnails by cropping it here."); ?></p>
+				<p><?php echo gettext("You can change the portion of your image which is shown in thumbnails by cropping it here."); ?></p>
 		
 				<div style="display:block">
 					<div style="float: left; width:<?php echo $cropwidth; ?>px; text-align: center;margin-right: 18px;  margin-bottom: 10px;">
