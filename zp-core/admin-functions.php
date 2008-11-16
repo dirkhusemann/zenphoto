@@ -499,11 +499,11 @@ function printSubtabs($tabs) {
 		}
 	}
 	?>
-	<ul class="nav">
+	<ul class="subnav">
 	<?php
 	foreach ($tabs as $key=>$link) {
 		$tab = substr($link, strrpos($link, '=')+1);
-		echo '<li'.(($current == $tab) ? ' class="currentsubtab"' : '').'>'.
+		echo '<li'.(($current == $tab) ? ' class="current"' : '').'>'.
 				 '<a href = "'.WEBPATH.'/'.ZENFOLDER.'/'.$link.'">'.$key.'</a></li>'."\n";
 	}
 	?>
