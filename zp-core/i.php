@@ -115,8 +115,7 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
 	$args = getImageParameters($args);
 	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
 
-  if ($debug) echo "Album: [ " . $album . " ], Image: [ " . $image . " ]<br/><br/>";
-  if ($debug) imageDebug($args);
+  if ($debug || DEBUG_IMAGE) imageDebug($album, $image, $args);
 	
 } else {
 	// No image parameters specified or are out of bounds; return the original image.

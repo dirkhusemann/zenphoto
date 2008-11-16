@@ -36,7 +36,7 @@ function printAdminToolbox($id='admin') {
 		
 		// generic link to Admin.php
 		echo "<li>";
-			printAdminLink(gettext('Admin'), '', "</li>\n");
+		printAdminLink(gettext('Admin'), '', "</li>\n");
 		// setup for return links
 		if (isset($_GET['p'])) {
 			$redirect = "&amp;p=" . $_GET['p'];

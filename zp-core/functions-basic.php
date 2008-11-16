@@ -12,6 +12,7 @@
 define('FILESYSTEM_CHARSET', 'ISO-8859-1');
 define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
 define('DEBUG_ERROR', false); // set to true to  supplies the calling sequence with zp_error messages
+define('DEBUG_IMAGE', false); // set to true to log image processing debug information.
 define('CAPTCHA_LENGTH', 5);
 include(dirname(__FILE__).'/version.php'); // Include the version info.
 

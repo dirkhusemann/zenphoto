@@ -36,23 +36,29 @@ function imageError($errormessage, $errorimg='err-imagegeneral.gif') {
 
 /**
  * Prints debug information from the arguments to i.php.
- * @param args an array of the arguments to i.php in the standard order.
- * @return nothing.
+ *
+ * @param string $album alubm name
+ * @param string $image image name
+ * @param array $args size/crop arguments
  */
-function imageDebug($args) {
+function imageDebug($album, $image, $args) {
 	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
-	echo "<strong>".gettext("Debug")." <code>i.php</code> | ".gettext("Arguments:")."</strong><br />\n\n"
-	.  "<ul><li>".gettext("size =")."    <strong>" . sanitize($size, 3)     . "</strong></li>\n"
-	.  "<li>".gettext("width =")."   <strong>" . sanitize($width, 3)    . "</strong></li>\n"
-	.  "<li>".gettext("height =")."  <strong>" . sanitize($height, 3)   . "</strong></li>\n"
-	.  "<li>".gettext("cw =")."      <strong>" . sanitize($cw, 3)       . "</strong></li>\n"
-	.  "<li>".gettext("ch =")."      <strong>" . sanitize($ch, 3)       . "</strong></li>\n"
-	.  "<li>".gettext("cx =")."      <strong>" . sanitize($cx, 3)       . "</strong></li>\n"
-	.  "<li>".gettext("cy =")."      <strong>" . sanitize($cy, 3)       . "</strong></li>\n"
-	.  "<li>".gettext("quality =")." <strong>" . sanitize($quality, 3)  . "</strong></li>\n"
-	.  "<li>".gettext("thumb =")."   <strong>" . sanitize($thumb, 3)    . "</strong></li>\n"
-	.  "<li>".gettext("crop =")."    <strong>" . sanitize($crop, 3)     . "</strong></li></ul>\n";
-
+	if (DEBUG_IMAGE) {
+  	debugLog("processing Album: [ " . $album . " ], Image: [ " . $image . " ] \$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy,$quality=$quality, \$thumb=$thumb, \$crop=$crop");
+	} else {
+		echo "Album: [ " . $album . " ], Image: [ " . $image . " ]<br/><br/>";
+		echo "<strong>".gettext("Debug")." <code>i.php</code> | ".gettext("Arguments:")."</strong><br />\n\n"
+		.  "<ul><li>".gettext("size =")."    <strong>" . sanitize($size, 3)     . "</strong></li>\n"
+		.  "<li>".gettext("width =")."   <strong>" . sanitize($width, 3)    . "</strong></li>\n"
+		.  "<li>".gettext("height =")."  <strong>" . sanitize($height, 3)   . "</strong></li>\n"
+		.  "<li>".gettext("cw =")."      <strong>" . sanitize($cw, 3)       . "</strong></li>\n"
+		.  "<li>".gettext("ch =")."      <strong>" . sanitize($ch, 3)       . "</strong></li>\n"
+		.  "<li>".gettext("cx =")."      <strong>" . sanitize($cx, 3)       . "</strong></li>\n"
+		.  "<li>".gettext("cy =")."      <strong>" . sanitize($cy, 3)       . "</strong></li>\n"
+		.  "<li>".gettext("quality =")." <strong>" . sanitize($quality, 3)  . "</strong></li>\n"
+		.  "<li>".gettext("thumb =")."   <strong>" . sanitize($thumb, 3)    . "</strong></li>\n"
+		.  "<li>".gettext("crop =")."    <strong>" . sanitize($crop, 3)     . "</strong></li></ul>\n";
+	}
 }
 
 /**
@@ -301,6 +307,8 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		$h = imagesy($im);
 
 		// Give the sizing dimension to $dim
+		$ratio_in = '';
+		$ratio_out = '';
 		if (!empty($size)) {
 			$dim = $size;
 			$width = $height = false;
@@ -341,7 +349,14 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			$newh = $hprop;
 			$neww = $dim;
 		}
+		if (DEBUG_IMAGE) {
+			debugLog("cacheImage(\$newfilename=$newfilename,$imgfile=$imgfile, \$allow_watermark=$allow_watermark,$force_cache=$force_cache, \$theme=$theme)");
+			debugLog("cacheImage:computations:\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy,$quality=$quality, \$thumb=$thumb, \$crop=$crop");
+			debugLog("cacheImage:computations:\$newh=$newh, \$neww=$neww, \$hprop=$hprop, \$wprop=$wprop, \$dim=$dim, \$ratio_in=$ratio_in, \$ratio_out=$ratio_out");
+		}
+		
 		if (!$upscale && $newh >= $h && $neww >= $w && !$crop) { // image is the same size or smaller than the request
+			if (DEBUG_IMAGE) debugLog("Serve from original image.");
 			if (!getOption('perform_watermark') && !$force_cache) { // no processing needed
 				if (getOption('album_folder_class') != 'external') { // local album system, return the image directly
 					$image = substr(strrchr($imgfile, '/'), 1);
@@ -414,6 +429,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			}
 			if ($cw + $cx > $w) $cx = $w - $cw;
 			if ($ch + $cy > $h) $cy = $h - $ch;
+			debugLog("cacheImage:crop:\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy,$quality=$quality, \$thumb=$thumb, \$crop=$crop");
 			$newim = imagecreatetruecolor($neww, $newh);
 			imagecopyresampled($newim, $im, 0, 0, $cx, $cy, $neww, $newh, $cw, $ch);
 		} else {
@@ -426,6 +442,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 				$newh = $hprop;
 				$neww = $dim;
 			}
+			debugLog("cacheImage:no crop:\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy,$quality=$quality, \$thumb=$thumb, \$crop=$crop");
 			$newim = imagecreatetruecolor($neww, $newh);
 			imagecopyresampled($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
 		}		
@@ -467,6 +484,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			// Position Overlay in Bottom Right
 			$dest_x = max(0, floor(($imw - $nw) * $offset_w));
 			$dest_y = max(0, floor(($imh - $nh) * $offset_h));
+			debugLog("Watermark: \$offset_h=$offset_h, \$offset_w=$offset_w, \$watermark_height=$watermark_height, \$watermark_width=$watermark_width, \$imh=$imh, \$imh=$imh, \$percent=$percent, \$r=$r, \$nh=$nh, \$nh=$nh, \$dest_x=$dest_x, \$dest_y=$dest_y");
 			imagecopy($newim, $watermark, $dest_x, $dest_y, 0, 0, $nw, $nh);
 			imagedestroy($watermark);
 		}
