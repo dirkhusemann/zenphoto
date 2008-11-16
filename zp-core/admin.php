@@ -519,8 +519,12 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		echo '</div>';
 	}
 	$albumlink = '?page=edit&album='.urlencode($album->name);
-	$subtab = printSubtabs(array(gettext('Album')=>'admin.php'.$albumlink.'&tab=albuminfo',gettext('Subalbums')=>'admin.php'.$albumlink.'&tab=subalbuminfo',gettext('Images')=>'admin.php'.$albumlink.'&tab=imageinfo'));
-
+	$tabs = array(gettext('Album')=>'admin.php'.$albumlink.'&tab=albuminfo');
+	if (count($subalbums) > 0) $tabs[gettext('Subalbums')] = 'admin.php'.$albumlink.'&tab=subalbuminfo';
+	if ($allimagecount) $tabs[gettext('Images')] = 'admin.php'.$albumlink.'&tab=imageinfo';
+	$subtab = printSubtabs($tabs);
+	?>
+	<?php
 	if ($subtab == 'albuminfo') {
 	?>
 		<!-- Album info box -->
@@ -538,21 +542,12 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		} else if ($subtab == 'subalbuminfo' && !$album->isDynamic())  {
 		?>
 		<!-- Subalbum list goes here -->
-		<div id="tab_subalbuminfo">
 		<?php
 		if (count($subalbums) > 0) {
 		?>
-		<table class="tabbottom">
-			<th>
-			</th>
-		</table>
-		<table class="bordered" width="100%">
+		<div id="tab_subalbuminfo" class="box" style="padding: 15px;">
+			<table class="bordered" width="100%">
 			<input type="hidden" name="subalbumsortby" value="Manual" />
-			<tr>
-				<th colspan="8">
-				<h2 class="subheadline"><?php echo gettext("Albums"); ?></h2>
-				</th>
-			</tr>
 			<tr>
 				<td colspan="8">
 				<?php
@@ -596,19 +591,14 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 					zenSortablesSaveButton("?page=edit&album=" . urlencode($album->name) . "&subalbumsaved&tab=subalbuminfo", gettext("Save Order"));
 					?>
 		
-		<br />
+		</div>
 		<?php
 		} ?>
-		</div>
 <?php 
 	} else if ($subtab == 'imageinfo') {
 ?>
 		<!-- Images List -->
-		<div id="tab_imageinfo">
-		<table class="tabbottom">
-			<th>
-			</th>
-		</table>
+		<div id="tab_imageinfo" class="box" style="padding: 15px;">
 		<?php
 		if ($allimagecount) {
 			?>
@@ -622,9 +612,6 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		<?php	$totalpages = ceil(($allimagecount / IMAGES_PER_PAGE));	?>
 		<table class="bordered">
 			<tr>
-				<th>
-					<h2 class="subheadline"><?php echo gettext("Images"); ?></h2>
-				</th>
 				<th><?php echo gettext("Click on the image to change the thumbnail cropping."); ?>	</th>
 				<th>
 					<a href="javascript:toggleExtraInfo('','image',true);"><?php echo gettext('expand all fields');?></a>

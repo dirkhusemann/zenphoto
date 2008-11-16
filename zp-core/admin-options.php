@@ -395,7 +395,7 @@ $tabs = array(gettext("admin information")=>'admin-options.php?tab=admin');
 $subtab = printSubtabs($tabs);
 if ($subtab == 'admin') {
 ?>
-<div id="tab_admin">
+<div id="tab_admin" class="box" style="padding: 15px;">
 <?php
 	if ($_zp_loggedin & ADMIN_RIGHTS) {
 		$alterrights = '';
@@ -464,19 +464,12 @@ if ($subtab == 'admin') {
 	
 	
 ?> 
-<table class="tabbottom">
-	<th>
-	</th>
-</table>
 <form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 <input type="hidden" name="saveadminoptions" value="yes" /> 
 <input type="hidden" name="totaladmins" value="<?php echo count($admins); ?>" />
 <table class="bordered"> <!-- main table -->
 	<tr>
-		<th width="20%">
-		<h2><?php echo gettext("Admin login information"); ?></h2>
-		</th>
-		<th width="80%">
+		<th>
 			<span style="font-weight: normal"> <a href="javascript:toggleExtraInfo('','user',true);"><?php echo gettext('Expand all');?></a>
 		| <a href="javascript:toggleExtraInfo('','user',false);"><?php echo gettext('Collapse all');?></a></span>
 		</th>
@@ -700,20 +693,11 @@ if ($subtab == 'admin') {
 } else if (!$_zp_null_account) {
 	if ($subtab == 'gallery' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	?>
-	<div id="tab_gallery">
-		<table class="tabbottom">
-			<th>
-			</th>
-		</table>
+	<div id="tab_gallery" class="box" style="padding: 15px;">
 		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 		<input	type="hidden" name="savegalleryoptions" value="yes" /> <?php
 		?>
 	<table class="bordered">
-		<tr>
-			<th colspan="3">
-			<h2><?php echo gettext("General Gallery Configuration"); ?></h2>
-			</th>
-		</tr>
 		<tr>
 			<td></td>
 			<td><input type="submit" value="<?php echo gettext('save'); ?>" /></td>
@@ -1027,19 +1011,10 @@ if ($subtab == 'admin') {
 	}
 	if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	?>
-	<div id="tab_image">
-	<table class="tabbottom">
-		<th>
-		</th>
-	</table>
+	<div id="tab_image" class="box" style="padding: 15px;">
 	<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 	<input type="hidden" name="saveimageoptions" value="yes" /> 
 	<table class="bordered">
-		<tr>
-			<th colspan="3">
-			<h2><?php echo gettext("Image Display"); ?></h2>
-			</th>
-		</tr>
 		<tr>
 			<td><?php echo gettext("Sort images by:"); ?></td>
 			<td><select id="imagesortselect" name="image_sorttype">
@@ -1188,20 +1163,11 @@ if ($subtab == 'admin') {
 	}
 	if ($subtab == 'comments' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	?>
-	<div id="tab_comments">
-	<table class="tabbottom">
-		<th>
-		</th>
-	</table>
+	<div id="tab_comments" class="box" style="padding: 15px;">
 	<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 	<input 	type="hidden" name="savecommentoptions" value="yes" /> <?php
 		?>
 	<table class="bordered">
-		<tr>
-			<th colspan="3">
-			<h2><?php echo gettext("Comments options"); ?></h2>
-			</th>
-		</tr>
 		<tr>
 			<td><?php echo gettext("Enable comment notification:"); ?></td>
 			<td><input type="checkbox" name="email_new_comments" value="1"
@@ -1264,7 +1230,7 @@ if ($subtab == 'admin') {
 	<?php } ?>
 	<!-- end of tab_comments div -->
 	<?php if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) { ?>
-	<div id="tab_theme">
+	<div id="tab_theme" class="box" style="padding: 15px;">
 	<?php
 	$themelist = array();
 	if (($_zp_loggedin & ADMIN_RIGHTS)) {
@@ -1290,28 +1256,22 @@ if ($subtab == 'admin') {
 	}
 	if (!empty($_REQUEST['themealbum'])) {
 		$alb = sanitize_path($_REQUEST['themealbum']);
+		$album = new Album($gallery, $alb);
+		$albumtitle = $album->getTitle();
+		$themename = $album->getAlbumTheme();
+	} else {
+		foreach ($themelist as $albumtitle=>$alb) break;
+		if (empty($alb)) {
+			$themename = $gallery->getCurrentTheme();
+			$album = NULL;
+		} else {
+			$alb = sanitize_path($alb);
 			$album = new Album($gallery, $alb);
 			$albumtitle = $album->getTitle();
 			$themename = $album->getAlbumTheme();
-		} else {
-			foreach ($themelist as $albumtitle=>$alb) break;
-			if (empty($alb)) {
-				$themename = $gallery->getCurrentTheme();
-				$album = NULL;
-			} else {
-				$alb = sanitize_path($alb);
-				$album = new Album($gallery, $alb);
-				$albumtitle = $album->getTitle();
-				$themename = $album->getAlbumTheme();
-			}
 		}
-		$themes = $gallery->getThemes();
-		$theme = $themes[$themename];
+	}
 	?>
-	<table class="tabbottom">
-		<th>
-		</th>
-	</table>
 	<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 		<input type="hidden" name="savethemeoptions" value="yes" />
 		<table class='bordered'>
@@ -1327,6 +1287,8 @@ if ($subtab == 'admin') {
 			<?php
 		} else {
 			/* handle theme options */
+			$themes = $gallery->getThemes();
+			$theme = $themes[$themename];
 			echo "<input type=\"hidden\" name=\"old_themealbum\" value=\"".urlencode($alb)."\" />";
 			echo "<tr><th colspan='2'><h2 style='float: left'>".sprintf(gettext('Theme for <code><strong>%1$s</strong></code>: <em>%2$s</em>'), $albumtitle,$theme['name'])."</h2></th>\n";
 			echo "<th colspan='1' style='text-align: right'>";
@@ -1455,19 +1417,12 @@ if ($subtab == 'admin') {
 	if ($subtab == 'plugin' && $_zp_loggedin & ADMIN_RIGHTS) {
 		$c = 0;
 	?>
-		<div id="tab_plugin">
-		<table class="tabbottom">
-			<th>
-			</th>
-		</table>
+		<div id="tab_plugin" class="box" style="padding: 15px;">
 		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 		<input type="hidden" name="savepluginoptions" value="yes" />
 		<table class="bordered">
 		<tr>
-			<th>
-				<h2><?php echo gettext("Plugin Options"); ?> 	</h2>
-			</th>
-			<th colspan="2">
+			<th colspan="3">
 				<span style="font-weight: normal"> <a href="javascript:toggleExtraInfo('','plugin',true);"><?php echo gettext('Expand plugin options');?></a>
 			| <a href="javascript:toggleExtraInfo('','plugin',false);"><?php echo gettext('Collapse all plugin options');?></a></span>
 			</th>
