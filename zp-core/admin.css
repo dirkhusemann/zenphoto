@@ -125,7 +125,7 @@ p {
 
 /* Menu
 ------------------------------ */
-#nav {
+.nav {
 	list-style-type: none;
 	padding: 0;
 	_padding: 0 0 0 30px;
@@ -134,11 +134,11 @@ p {
 	width: 95%;
 }
 
-#nav li {
+.nav li {
 	display: inline;
 }
 
-#nav li a {
+.nav li a {
 	border-top: 1px solid #C7D3D8;
 	border-left: 1px solid #C7D3D8;
 	border-right: 1px solid #C7D3D8;
@@ -156,7 +156,7 @@ p {
 	_top: 6px; /* IE Only */
 }
 
-#nav li a:hover {
+.nav li a:hover {
 	border-top: 1px solid #BAC9CF;
 	border-left: 1px solid #BAC9CF;
 	border-right: 1px solid #BAC9CF;
@@ -169,7 +169,7 @@ p {
 	_top: 1px; /* IE Only */
 }
 
-#nav li.current a {
+.nav li.current a {
 	border-top: 1px solid #BAC9CF;
 	border-left: 1px solid #BAC9CF;
 	border-right: 1px solid #BAC9CF;
@@ -182,6 +182,32 @@ p {
 	top: -3px;
 	_top: 1px; /* IE Only */
 }
+
+.nav li.currentsubtab a {
+	border-top: 1px solid #BAC9CF;
+	border-left: 1px solid #BAC9CF;
+	border-right: 1px solid #BAC9CF;
+	color: #4D646F;
+	background-color: #F7F8F9;
+	cursor: default;
+	height: 21px;
+	_height: 24px;
+	position: relative;
+	top: -3px;
+	_top: 1px; /* IE Only */
+}
+
+table.tabbottom {
+	width: 100%;
+	height: 10px;
+	padding: 0px;
+	border-spacing: 1px;
+	background: #F7F8F9;
+	border-top: 1px solid #BAC9CF;
+	border-left: 1px solid #BAC9CF;
+	border-right: 1px solid #BAC9CF;
+}
+
 
 /* Messages 
 ------------------------------ */

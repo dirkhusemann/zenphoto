@@ -219,7 +219,6 @@ function printAdminHeader($path='') {
 	echo "\n  \t\t $(\"#fade-message\").fadeTo(5000, 1).fadeOut(1000);";
 	echo "\n  \t\t $(\"#fade-message2\").fadeTo(5000, 1).fadeOut(1000);";
 	echo "\n  \t\t $('.tooltip').tooltip();";
-	echo "\n  \t\t $('#mainmenu > ul').tabs();";
 	echo "\n  \t});";
 	echo "\n  </script>";
 	?>
@@ -446,7 +445,7 @@ function printLogoAndLinks() {
 function printTabs($currenttab) {
 	global $_zp_loggedin;
 
-	echo "\n  <ul id=\"nav\">";
+	echo "\n  <ul class=\"nav\">";
 	if (($_zp_loggedin & (MAIN_RIGHTS | ADMIN_RIGHTS))) {
 		echo "\n    <li". (($currenttab == "home") ? " class=\"current\""     : "") .
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php\">".gettext("overview")."</a></li>";
@@ -486,6 +485,32 @@ function printTabs($currenttab) {
 
 }
 
+function printSubtabs($tabs) {
+	if (isset($_GET['tab'])) {
+		$current = sanitize($_GET['tab']);
+	} else {
+		$current = $tabs;
+		$current = array_shift($current);
+		$i = strrpos($current, '=');
+		if ($i===false) {
+			$current = '';
+		} else {
+			$current = substr($current, $i+1);
+		}
+	}
+	?>
+	<ul class="nav">
+	<?php
+	foreach ($tabs as $key=>$link) {
+		$tab = substr($link, strrpos($link, '=')+1);
+		echo '<li'.(($current == $tab) ? ' class="currentsubtab"' : '').'>'.
+				 '<a href = "'.WEBPATH.'/'.ZENFOLDER.'/'.$link.'">'.$key.'</a></li>'."\n";
+	}
+	?>
+	</ul>
+	<?php
+	return $current;
+}
 function checked($checked, $current) {
 	if ( $checked == $current)
 	echo ' checked="checked"';
@@ -1351,7 +1376,7 @@ function printAlbumEditRow($album) {
 			$si = gettext('no images');
 		}
 		if ($ci > 0) {
-			$si = '<a href="?page=edit&album=' . urlencode($album->name) .'#tab_imageinfo" title="'.gettext('Subalbum List').'">'.$si.'</a>';
+			$si = '<a href="?page=edit&album=' . urlencode($album->name) .'&tab=imageinfo" title="'.gettext('Subalbum List').'">'.$si.'</a>';
 		}
 		$ca = count($album->getSubalbums());
 		if ($ca > 0) {
@@ -1364,7 +1389,7 @@ function printAlbumEditRow($album) {
 			$sa = '&nbsp;';
 		}
 		if ($ca > 0) {
-			$sa = '<a href="?page=edit&album=' . urlencode($album->name) .'#tab_subalbuminfo" title="'.gettext('Subalbum List').'">'.$sa.'</a>';
+			$sa = '<a href="?page=edit&album=' . urlencode($album->name) .'&tab=subalbuminfo" title="'.gettext('Subalbum List').'">'.$sa.'</a>';
 		}
 	}
 	echo "<td style=\"text-align: right;\" width=\"80\">" . $sa . "</td>";

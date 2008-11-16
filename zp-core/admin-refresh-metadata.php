@@ -61,7 +61,7 @@ if (isset($_GET['refresh']) && db_connect()) {
 			if (empty($ret) || $ret == '*.' || $ret == '*/') {
 				$r = '?page=edit';
 			} else {
-				$r = '?page=edit&amp;album='.urlencode(substr($ret, 1)).'#tab_subalbuminfo';
+				$r = '?page=edit&amp;album='.urlencode(substr($ret, 1)).'&amp;tab=subalbuminfo';
 			}
 		} else {
 			$r = '?page=edit&amp;album='.urlencode($ret);
