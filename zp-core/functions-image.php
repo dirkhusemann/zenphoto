@@ -312,6 +312,12 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		if (!empty($size)) {
 			$dim = $size;
 			$width = $height = false;
+			$crop = $crop || $thumb;
+			if ($crop) {		
+				$dim = $size;
+				if (!$cw) $ch = $size;
+				if (!$ch) $cw = $size;
+			}
 		} else if (!empty($width) && !empty($height)) {
 			$crop = true;
 			$ratio_in = $h / $w;
@@ -319,7 +325,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			if ($ratio_in > $ratio_out) {
 				$thumb = true;
 				$dim = $width;
-				if (!$cy) $ch = $height;
+				if (!$cw) $ch = $height;
 			} else {
 				$dim = $height;
 				if (!$ch) {
@@ -456,11 +462,13 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			if ($thumb) {
 				$perform_watermark = true;
 				$watermark_image = UTF8ToFileSystem(getOption('video_watermark_image'));
+				if (!file_exists($watermark_image)) $watermark_image = SERVERPATH . '/' . ZENFOLDER . '/images/imageDefault.png';
 			}
 		} else {
 			if ($allow_watermark) {
 				$perform_watermark = getOption('perform_watermark');
 				$watermark_image = SERVERPATH . '/' . ZENFOLDER . '/' . UTF8ToFileSystem(getOption('watermark_image'));
+				if (!file_exists($watermark_image)) $watermark_image = SERVERPATH . '/' . ZENFOLDER . '/images/imageDefault.png';
 			}
 		}
 		if ($perform_watermark) {
