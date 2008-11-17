@@ -484,11 +484,13 @@ if ($subtab == 'admin') {
 		} else {
 			$master = '&nbsp;';
 		}
+		$ismaster = false;
 		if ($id == 0) {
 			if ($_zp_loggedin & ADMIN_RIGHTS) {
 				$master = "(<em>".gettext("Master")."</em>)";
 				$user['rights'] = $user['rights'] | ADMIN_RIGHTS;
 				if ($_zp_null_account) $user['rights'] = $user['rights'] | ALL_ALBUMS_RIGHTS;
+				$ismaster = true;
 			}
 		}
 		$current =  ($user['id'] == $_zp_current_admin['id']) || $_zp_null_account;
@@ -657,7 +659,7 @@ if ($subtab == 'admin') {
 						}
 						echo '</ul>';
 					} else {
-						if (!empty($master)) {
+						if ($ismaster) {
 							echo gettext("This account's username and email are used as contact data in the RSS feeds.");
 						}
 					}

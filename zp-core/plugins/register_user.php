@@ -1,13 +1,13 @@
 <?php
 /**
- * Provides a means where visitors can register and get limited site priviledges.
+ * Provides a means where visitors can register and get limited site privileges.
  *
  * Place a call on printReistrationForm() where you want the form to appear.
  * Probably the best use is to create a new 'custom page' script just for handling these
  * user registrations. Then put a link to that script on your index page so that people
  * who wish to register will click on the link and be taken to the registration page.
  * 
- * When successfully registeres, a new admin user will be created with no logon rights. An e-mail
+ * When successfully registered, a new admin user will be created with no logon rights. An e-mail
  * will be sent to the user with a link to activate the user ID. When he clicks on that link
  * he will be taken to the registration page and the verification process will be completed. 
  * At this point the user ID rights is set to the value of the plugin Default user rights option 
@@ -34,12 +34,15 @@ class register_user_options {
 
 	function register_user_options() {
 		setOptionDefault('register_user_rights', NO_RIGHTS);
+		setOptionDefault('register_user_notify', 1);
 	}
 
 	function getOptionsSupported() {
 		return array(	gettext('Default user rights') => array('key' => 'register_user_rights', 'type' => 4,
 										'buttons' => array(gettext('No rights') => NO_RIGHTS, gettext('View Rights') => VIEWALL_RIGHTS | NO_RIGHTS),
 										'desc' => gettext("Initial rights for the new user.<br />Set to <em>No rights</em> if you want to approve the user.<br />Set to <em>View Rights</em> to allow viewing the gallery once the user is verified.")),
+									gettext('Notify') => array('key' => 'register_user_notify', 'type' => 1, 
+										'desc' => gettext('If checked, an e-mail notification is sent on new user registration.'))
 		);
 	}
 	function handleOption($option, $currentValue) {
@@ -60,16 +63,14 @@ if (!OFFSET_PATH) { // handle form post
 		if (!is_null($adminuser)) {
 			$rights = getOption('register_user_rights');
 			saveAdmin($adminuser['user'], NULL, $admin_n = $adminuser['name'], $admin_e = $adminuser['email'], $rights, NULL);
-			zp_mail(gettext('Zenphoto Gallery registration'),
+			if (getOption('register_user_notify')) {
+				zp_mail(gettext('Zenphoto Gallery registration'),
 				sprintf(gettext('%1$s (%2$s) has registered for the zenphoto gallery providing an e-mail address of %3$s.'),$admin_n, $adminuser['user'], $admin_e));
-				$notify = 'verified';
+			}
+			$notify = 'verified';
 		} else {
 			$notify = 'not_verified';
 		}
-	}
-	if (isset($_GET['userlog']) && $_GET['userlog']) {
-		header("Location: " . FULLWEBPATH . "/index.php");
-		exit();
 	}
 	if (isset($_POST['register_user'])) {
 		$pass = trim($_POST['adminpass']);
@@ -114,15 +115,19 @@ if (!OFFSET_PATH) { // handle form post
 function printReistrationForm($thanks=NULL) {
 	global $notify, $admin_e, $admin_n, $user;
 	if (zp_loggedin()) {
-		echo '<div class="errorbox" id="fade-message">';
-		echo  '<h2>'.gettext("you are already logged in.").'</h2>';
-		echo '</div>';
+		if (isset($_GET['userlog']) && $_GET['userlog'] == 1) {
+			echo '<meta HTTP-EQUIV="REFRESH" content="0; url=/">';
+		} else {
+			echo '<div class="errorbox" id="fade-message">';
+			echo  '<h2>'.gettext("you are already logged in.").'</h2>';
+			echo '</div>';
+		}
 		return;
 	}
 	if (isset($notify)) {
 		if ($notify == 'verified' || $notify == 'accepted') {
 			if ($notify == 'verified') {
-			if (is_null($thanks)) $thanks = gettext("Thank you for registering.");
+				if (is_null($thanks)) $thanks = gettext("Thank you for registering.");
 			} else {
 				$thanks = gettext('An email has been sent to you to verify your email address.');
 			}

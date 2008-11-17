@@ -407,8 +407,7 @@ function getImageParameters($args) {
 	}
 
 	// Round each numeric variable, or set it to false if not a number.
-	list($width, $height, $cw, $ch, $cx, $cy, $quality) =
-	array_map('sanitize_numeric', array($width, $height, $cw, $ch, $cx, $cy, $quality));
+	list($width, $height, $cw, $ch, $cx, $cy, $quality) =	array_map('sanitize_numeric', array($width, $height, $cw, $ch, $cx, $cy, $quality));
 	if (empty($cw) && empty($ch)) $crop = false; else $crop = true;
 	if (empty($quality)) $quality = getOption('image_quality');
 

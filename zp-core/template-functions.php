@@ -3853,6 +3853,7 @@ function checkforPassword($silent=false) {
  *
  * @param string $hint hint to the password
  * @param bool $showProtected set false to supress the password protected message
+ * @param bool $showuser set true to force the user name filed to be present
  *
  *@since 1.1.3
  */

@@ -484,7 +484,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			// Position Overlay in Bottom Right
 			$dest_x = max(0, floor(($imw - $nw) * $offset_w));
 			$dest_y = max(0, floor(($imh - $nh) * $offset_h));
-			debugLog("Watermark: \$offset_h=$offset_h, \$offset_w=$offset_w, \$watermark_height=$watermark_height, \$watermark_width=$watermark_width, \$imh=$imh, \$imh=$imh, \$percent=$percent, \$r=$r, \$nh=$nh, \$nh=$nh, \$dest_x=$dest_x, \$dest_y=$dest_y");
+			if (DEBUG_IMAGE) debugLog("Watermark: \$offset_h=$offset_h, \$offset_w=$offset_w, \$watermark_height=$watermark_height, \$watermark_width=$watermark_width, \$imh=$imh, \$imh=$imh, \$percent=$percent, \$r=$r, \$nh=$nh, \$nh=$nh, \$dest_x=$dest_x, \$dest_y=$dest_y");
 			imagecopy($newim, $watermark, $dest_x, $dest_y, 0, 0, $nw, $nh);
 			imagedestroy($watermark);
 		}
