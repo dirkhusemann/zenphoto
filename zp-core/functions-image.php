@@ -44,7 +44,7 @@ function imageError($errormessage, $errorimg='err-imagegeneral.gif') {
 function imageDebug($album, $image, $args) {
 	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
 	if (DEBUG_IMAGE) {
-  	debugLog("processing Album: [ " . $album . " ], Image: [ " . $image . " ] \$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy,$quality=$quality, \$thumb=$thumb, \$crop=$crop");
+  	debugLog("processing Album: [ " . $album . " ], Image: [ " . $image . " ] \$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop");
 	} else {
 		echo "Album: [ " . $album . " ], Image: [ " . $image . " ]<br/><br/>";
 		echo "<strong>".gettext("Debug")." <code>i.php</code> | ".gettext("Arguments:")."</strong><br />\n\n"
@@ -350,8 +350,8 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			$neww = $dim;
 		}
 		if (DEBUG_IMAGE) {
-			debugLog("cacheImage(\$newfilename=$newfilename,$imgfile=$imgfile, \$allow_watermark=$allow_watermark,$force_cache=$force_cache, \$theme=$theme)");
-			debugLog("cacheImage:computations:\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy,$quality=$quality, \$thumb=$thumb, \$crop=$crop");
+			debugLog("cacheImage(\$newfilename=$newfilename,$imgfile=$imgfile, \$allow_watermark=$allow_watermark, \$force_cache=$force_cache, \$theme=$theme)");
+			debugLog("cacheImage:computations:\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop");
 			debugLog("cacheImage:computations:\$newh=$newh, \$neww=$neww, \$hprop=$hprop, \$wprop=$wprop, \$dim=$dim, \$ratio_in=$ratio_in, \$ratio_out=$ratio_out");
 		}
 		
@@ -429,7 +429,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			}
 			if ($cw + $cx > $w) $cx = $w - $cw;
 			if ($ch + $cy > $h) $cy = $h - $ch;
-			if (DEBUG_IMAGE) debugLog("cacheImage:crop:\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy,$quality=$quality, \$thumb=$thumb, \$crop=$crop");
+			if (DEBUG_IMAGE) debugLog("cacheImage:crop:\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop");
 			$newim = imagecreatetruecolor($neww, $newh);
 			imagecopyresampled($newim, $im, 0, 0, $cx, $cy, $neww, $newh, $cw, $ch);
 		} else {
@@ -442,7 +442,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 				$newh = $hprop;
 				$neww = $dim;
 			}
-			if (DEBUG_IMAGE) debugLog("cacheImage:no crop:\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy,\$quality=$quality, \$thumb=$thumb, \$crop=$crop");
+			if (DEBUG_IMAGE) debugLog("cacheImage:no crop:\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop");
 			$newim = imagecreatetruecolor($neww, $newh);
 			imagecopyresampled($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
 		}		
