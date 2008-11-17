@@ -498,7 +498,7 @@ if ($subtab == 'admin') {
 		<td colspan="2" style="margin: 0pt; padding: 0pt;">
 		<table class="bordered" style="border: 0" id='user-<?php echo $id;?>'> <!-- individual admin table -->
 		<tr>
-			<td width="150" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
+			<td width="20%" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
 				<input type="hidden" name="<?php echo $id ?>-adminuser" value="<?php echo $userid ?>" />
 				<span <?php if ($current) echo 'style="display:none;"'; ?> class="userextrashow">
 				<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',true);"><?php
@@ -516,7 +516,7 @@ if ($subtab == 'admin') {
 					echo $userid;
 				}?></a></span>
 			</td>
-			<td width="330" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
+			<td width="35%" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
 			<?php 
 			if (empty($userid)) {
 			?>
@@ -545,10 +545,10 @@ if ($subtab == 'admin') {
 				</td>
 			</tr>
 	<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="userextrainfo">
-		<td width="150" <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+		<td width="20%" <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Password:"); ?><br />
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?></td>
-		<td width="330" <?php if (!empty($background)) echo "style=\"$background\""; ?>><?php $x = $user['pass']; if (!empty($x)) { $x = '          '; } ?>
+		<td width="35%" <?php if (!empty($background)) echo "style=\"$background\""; ?>><?php $x = $user['pass']; if (!empty($x)) { $x = '          '; } ?>
 		<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass"
 			value="<?php echo $x; ?>" /><br />
 		<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass_2"
@@ -617,12 +617,12 @@ if ($subtab == 'admin') {
 		</td>
 	</tr>
 	<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="userextrainfo">
-		<td width="150" <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+		<td width="20%" <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Full name:"); ?> <br />
 			<br />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("email:"); ?>
 		</td>
-		<td width="330" <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+		<td width="35%" <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 			<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-admin_name"
 				value="<?php echo $user['name'];?>" /> <br />
 			<br />
