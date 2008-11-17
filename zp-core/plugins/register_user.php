@@ -22,12 +22,13 @@ $option_interface = new register_user_options();
 class register_user_options {
 
 	function register_user_options() {
-		setOptionDefault('register_user_rights', 'NO_RIGHTS');
+		setOptionDefault('register_user_rights', NO_RIGHTS);
 	}
 
 	function getOptionsSupported() {
-		return array(	gettext('Default user rights') => array('key' => 'register_user_rights', 'type' => 0,
-										'desc' => gettext("Initial rights for the new user.<br />Set to NO_RIGHTS if you want to approve the user.<br />Set to VIEWALL_RIGHTS to allow viewing the gallery.")),
+		return array(	gettext('Default user rights') => array('key' => 'register_user_rights', 'type' => 4,
+										'buttons' => array(gettext('No rights') => NO_RIGHTS, gettext('View Rights') => VIEWALL_RIGHTS | NO_RIGHTS),
+										'desc' => gettext("Initial rights for the new user.<br />Set to <em>No rights</em> if you want to approve the user.<br />Set to <em>View Rights</em> to allow viewing the gallery.")),
 		);
 	}
 	function handleOption($option, $currentValue) {
@@ -61,9 +62,7 @@ if (!OFFSET_PATH) { // handle form post
 					}
 				}
 				if (empty($notify)) {
-					$rights = NO_RIGHTS;
-					$textrights = '$rights = NO_RIGHTS | '.getOption('register_user_rights');
-					@eval($textrights);
+					$rights = getOption('register_user_rights');
 					saveAdmin($user, $pwd, $admin_n, $admin_e, $rights, NULL);
 					zp_mail(gettext('Zenphoto allery registration'),
 						sprintf(gettext('%1$s has registered for the zenphoto gallery providing an e-mail address of %2$s.'),$admin_n, $admin_e));
