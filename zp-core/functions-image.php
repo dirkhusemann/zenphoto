@@ -429,7 +429,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			}
 			if ($cw + $cx > $w) $cx = $w - $cw;
 			if ($ch + $cy > $h) $cy = $h - $ch;
-			debugLog("cacheImage:crop:\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy,$quality=$quality, \$thumb=$thumb, \$crop=$crop");
+			if (DEBUG_IMAGE) debugLog("cacheImage:crop:\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy,$quality=$quality, \$thumb=$thumb, \$crop=$crop");
 			$newim = imagecreatetruecolor($neww, $newh);
 			imagecopyresampled($newim, $im, 0, 0, $cx, $cy, $neww, $newh, $cw, $ch);
 		} else {
@@ -442,7 +442,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 				$newh = $hprop;
 				$neww = $dim;
 			}
-			debugLog("cacheImage:no crop:\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy,$quality=$quality, \$thumb=$thumb, \$crop=$crop");
+			if (DEBUG_IMAGE) debugLog("cacheImage:no crop:\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy,\$quality=$quality, \$thumb=$thumb, \$crop=$crop");
 			$newim = imagecreatetruecolor($neww, $newh);
 			imagecopyresampled($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
 		}		
