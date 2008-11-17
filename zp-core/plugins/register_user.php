@@ -64,7 +64,7 @@ if (!OFFSET_PATH) { // handle form post
 				if (empty($notify)) {
 					$rights = getOption('register_user_rights');
 					saveAdmin($user, $pwd, $admin_n, $admin_e, $rights, NULL);
-					zp_mail(gettext('Zenphoto allery registration'),
+					zp_mail(gettext('Zenphoto Gallery registration'),
 						sprintf(gettext('%1$s has registered for the zenphoto gallery providing an e-mail address of %2$s.'),$admin_n, $admin_e));
 					$notify = 'success';
 				}
