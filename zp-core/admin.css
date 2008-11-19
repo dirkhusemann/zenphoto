@@ -439,6 +439,12 @@ table.checkboxes td {
 	border-bottom-width: 5px;
 }
 
+.innerbox {
+	background: #fff;
+	border: 1px solid #BAC9CF;
+	border-bottom-width: 5px;
+}
+
 .imagethumb {
 	margin: 0px;
 	padding: 1px;

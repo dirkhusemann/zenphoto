@@ -528,7 +528,8 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	if ($subtab == 'albuminfo') {
 	?>
 		<!-- Album info box -->
-		<div id="tab_albuminfo">
+		<div id="tab_albuminfo" class="box" style="padding: 15px;">
+		<div class="innerbox" style="padding: 15px;">
 		<form name="albumedit1" AUTOCOMPLETE=OFF
 			action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
 			<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
@@ -537,6 +538,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		</form>
 		<br />
 		<?php printAlbumButtons($album) ?> 
+		</div>
 		</div>
 		<?php
 		} else if ($subtab == 'subalbuminfo' && !$album->isDynamic())  {
@@ -971,7 +973,14 @@ if (isset($_GET['saved'])) {
 		$album = new Album($gallery, $folder);
 		$images = $album->getImages();
 		echo "\n<!-- " . $album->name . " -->\n";
+		?>
+		<div class="innerbox" style="padding: 15px;">
+		<?php
 		printAlbumEditForm($currentalbum, $album);
+		?>
+		</div>
+		<br />
+		<?php
 	}
 	?></form>
 

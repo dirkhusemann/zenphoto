@@ -879,7 +879,6 @@ function printAlbumEditForm($index, $album) {
 
 	echo "\n<input type=\"hidden\" name=\"" . $prefix . "folder\" value=\"" . $album->name . "\" />";
 	echo "\n".'<input type="hidden" name="tagsort" value='.$tagsort.' />';
-	echo "\n<div class=\"box\" style=\"padding: 15px;\">";
 	echo "\n<table>";
 	echo "\n<td width = \"60%\">\n<table>\n<tr>";
 	echo "\n<tr>";
@@ -1277,8 +1276,6 @@ function printAlbumEditForm($index, $album) {
 	echo "\n</table>";
 
 	echo "\n<input type=\"submit\" value=\"".gettext("save album")."\" />";
-
-	echo "\n</div>";
 
 }
 /**
