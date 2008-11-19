@@ -115,7 +115,7 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
 	$args = getImageParameters($args);
 	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
 
-  if ($debug || DEBUG_IMAGE) imageDebug($album, $image, $args);
+  if ($debug) imageDebug($album, $image, $args);
 	
 } else {
 	// No image parameters specified or are out of bounds; return the original image.
@@ -195,9 +195,7 @@ $process = true;
 // If the file exists, check its modification time and update as needed.
 $fmt = filemtime($imgfile);
 if (file_exists($newfile)) {
-	if (filemtime($newfile) < filemtime($imgfile)) {
-		$process = true;
-	} else {
+	if (filemtime($newfile) >= filemtime($imgfile)) {
 		$process = false;
 	}
 }

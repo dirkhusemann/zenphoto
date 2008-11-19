@@ -697,7 +697,7 @@ class Image extends PersistentObject {
 		if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
 			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($cachefilename);
 		} else {
-			if (getOption('mod_rewrite') && empty($wmv) && !empty($alb)) {
+			if (getOption('mod_rewrite') && !empty($alb)) {
 				$path = pathurlencode($alb) . '/'.$type.'/thumb/' . urlencode($filename);
 			} else {
 				$path = ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($filename) . '&s=thumb';

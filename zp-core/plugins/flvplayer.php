@@ -22,12 +22,13 @@ if ($external) return; // can't process external album images
 addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/plugins/flvplayer/flvplayer.js"></script>');
 
 
+define ('FLV_PLAYER_MP3_HEIGHT', 20);
 /**
  * Plugin option handling class
  *
  */
 class flvplayer {
-
+	
 	function flvplayer() {
 		setOptionDefault('flv_player_width', '320');
 		setOptionDefault('flv_player_height', '240');
@@ -70,8 +71,7 @@ class flvplayer {
 	 * @param string $imagetitle the title of the movie to be passed to the player for display (within slideshow), if empty (within albums) the function getImageTitle() is used
 	 */
 	function playerConfig($moviepath='',$imagetitle='',$count ='') {
-		define ('FLV_PLAYER_MP3_HEIGHT', 20)
-;		global $_zp_current_image, $_zp_current_album;
+		global $_zp_current_image, $_zp_current_album;
 		if(empty($moviepath)) {
 			$moviepath = getUnprotectedImageURL();
 			$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));

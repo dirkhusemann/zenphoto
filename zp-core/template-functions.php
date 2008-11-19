@@ -1176,7 +1176,7 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
  * @param int $height height
  * @return string
  */
-function getCustomAlbumThumbMaxSpace($width=NULL, $height=NULL) {
+function getCustomAlbumThumbMaxSpace($width, $height) {
 	global $_zp_current_album;
 	$destshape = $width > $height;
 	$albumthumb = $_zp_current_album->getAlbumThumbImage();
@@ -1204,7 +1204,7 @@ function getCustomAlbumThumbMaxSpace($width=NULL, $height=NULL) {
  * @param bool $thumbStandin set true to inhibit watermarking
  * @return string
  */
-function printCustomAlbumThumbMaxSpace($alt='', $width=NULL, $height=NULL, $class=NULL, $id=NULL) {
+function printCustomAlbumThumbMaxSpace($alt='', $width, $height, $class=NULL, $id=NULL) {
 	global $_zp_current_album;
 	$destshape = $width > $height;
 	$albumthumb = $_zp_current_album->getAlbumThumbImage();
@@ -2010,7 +2010,7 @@ function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image, $_zp_flash_player;
 	if (isImageVideo()) { // size is determined by the player
-		$ext = strtolower(strrchr($_zp_current_image->name, "."));
+		$ext = strtolower(strrchr($_zp_current_image->filename, "."));
 		if (is_null($_zp_flash_player) || $ext == '.3gp' || $ext == '.mov') {
 			switch ($ext) {
 				case '.3gp':
@@ -2388,7 +2388,6 @@ function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph
  * */
 function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $class=NULL, $id=NULL, $thumbStandin=false) {
 	global $_zp_current_album, $_zp_current_image, $_zp_flash_player;
-
 	$album = $_zp_current_image->getAlbum();
 	if (!$album->getShow()) {
 		$class .= " not_visible";
@@ -2400,7 +2399,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 	}
 	$class = trim($class);
 	//Print videos
-	if(isImageVideo()) {
+	if(isImageVideo() && !$thumbStandin) {
 		$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
 		if ($ext == ".flv") {
 			//Player Embed...
@@ -2450,16 +2449,16 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
  * @param int $height height
  * @return string
  */
-function getCustomSizedImageMaxSpace($width=NULL,$height=NULL) {
+function getCustomSizedImageMaxSpace($width, $height) {
 	$destshape = $width > $height;
 	$sourceshape = getFullWidth() > getFullHeight();
 	if ($sourceshape == $destshape) { // the soruce and destination orientations are the same
-		getSizeCustomImage(min($width,$height), NULL, NULL);
+		getSizeCustomImageURL(min($width,$height), NULL, NULL);
 	} else{
 		if ($sourceshape > $destshape) { // landscape to portrait, width is constrained
-			getSizeCustomImage(NULL, $width, NULL);
+			getSizeCustomImageURL(NULL, $width, NULL);
 		} else { // portrait to landscape, height is constrained
-			getSizeCustomImage(NULL, NULL, $height);
+			getSizeCustomImageURL(NULL, NULL, $height);
 		}
 	}
 }
@@ -2476,7 +2475,7 @@ function getCustomSizedImageMaxSpace($width=NULL,$height=NULL) {
  * @param bool $thumbStandin set true to inhibit watermarking
  * @return string
  */
-function printCustomSizedImageMaxSpace($alt='',$width=NULL,$height=NULL,$class=NULL,$id=NULL,$thumbStandin=false) {
+function printCustomSizedImageMaxSpace($alt='',$width,$height,$class=NULL,$id=NULL,$thumbStandin=false) {
 	$destshape = $width > $height;
 	$sourceshape = getFullWidth() > getFullHeight();
 	if ($sourceshape == $destshape) { // the soruce and destination orientations are the same

@@ -25,6 +25,7 @@ if ($external) return; // can't process external album images
 // register the scripts needed
 addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/plugins/flowplayer/jquery.flashembed.pack.js"></script>');
 
+define ('FLOW_PLYER_MP3_HEIGHT', 28);
 /**
  * Plugin option handling class
  *
@@ -64,7 +65,6 @@ class flowplayer {
 	 * @param string $imagetitle the title of the movie [not used by flowplayer]
 	 * 	 */
 	function playerConfig($moviepath='', $imagetitle,$count='') {
-		define ('FLOW_PLYER_MP3_HEIGHT', 28);
 		global $_zp_current_image;
 		if(empty($moviepath)) {
 			$moviepath = getUnprotectedImageURL();
