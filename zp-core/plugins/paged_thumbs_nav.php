@@ -20,12 +20,12 @@
  * @param bool $crop If you want cropped thumbs
  * 
  * @author Malte Müller (acrylian)
- * @version 1.0.0
+ * @version 1.0.1
  * @package plugins 
  */
 $plugin_description = gettext("Prints a paged thumbs navigation on image.php, independ of the album.php's thumbsThe function contains some predefined CSS ids you can use for styling. Please see the documentation for more info.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.0.0';
+$plugin_version = '1.0.1';
 $plugin_URL = "";
 $option_interface = new pagedthumbsOptions();
 
@@ -140,19 +140,14 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 		if($number === $totalimages) {
 			break;
 		}
-		$image = new Image($_zp_current_album,$images[$number]);
+		$image = newImage($_zp_current_album,$images[$number]);
 		if($image->id === getImageID()) {
 			$css = " id='pagedthumbsnav-active' ";
 		} else {
 			$css = "";
 		}
 		echo "<a $css href=\"".$image->getImageLink()."\" title=\"".strip_tags($image->getTitle())."\">";
-		if(isImageVideo($image)) {
-			// a little unconvenient hack because printSized/CustomImage does not work with videothumbs...
-			echo "<img src='".$image->getThumb()."' alt=\"".strip_tags($image->getTitle())."\" width='".$width."' height='".$height."'/>";
-		} else {
-			echo "<img src='".$image->getCustomImage($size, $width, $height, "", "", "", "", TRUE)."' alt=\"".strip_tags($image->getTitle())."\" width='".$width."' height='".$height."' />";
-		}
+		echo "<img src='".$image->getCustomImage(null, $width, $height, null,null, null, null, false)."' alt=\"".strip_tags($image->getTitle())."\" width='".$width."' height='".$height."' />";
 		echo "</a>\n";
 		if ($number === $endimg[$currentpage]) {
 			break;
