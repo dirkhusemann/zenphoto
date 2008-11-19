@@ -294,7 +294,9 @@ if (isset($_GET['action'])) {
 				if (isset($_POST['albums_per_page'])) setThemeOption($table, 'albums_per_page', sanitize($_POST['albums_per_page'],3));
 				if (isset($_POST['images_per_page'])) setThemeOption($table, 'images_per_page', sanitize($_POST['images_per_page'],3));
 				if (isset($_POST['custom_index_page'])) setThemeOption($table, 'custom_index_page', sanitize($_POST['custom_index_page'], 3));
-				
+				if (isset($_POST['user_registration_page'])) setThemeOption($table, 'user_registration_page', sanitize($_POST['user_registration_page'], 3));
+				process_language_string_save('user_registration_text', 3);
+				process_language_string_save('user_registration_tip', 3);
 				if ($nch != $ch || $ncw != $cw) { // the crop height/width has been changed
 					$sql = 'UPDATE '.prefix('images').' SET `thumbX`=NULL,`thumbY`=NULL,`thumbW`=NULL,`thumbH`=NULL WHERE `thumbY` IS NOT NULL';
 					query($sql);
@@ -1386,6 +1388,32 @@ if ($subtab == 'admin') {
 					</select>
 				</td>
 				<td><?php echo gettext("If this option is not empty, the Gallery Index URL that would normally link to the theme <code>index.php</code> script will instead link to this script. This option applies only to the main theme for the <em>Gallery</em>."); ?></td>
+			</tr>
+			<tr>
+				<td><?php echo gettext("User registration page:"); ?></td>
+				<td>
+					<select id="user_registration_page" name="user_registration_page">
+						<option value=''>
+						<?php
+						$curdir = getcwd();
+						$root = SERVERPATH.'/'.THEMEFOLDER.'/'.$themename.'/';
+						chdir($root);
+						$filelist = safe_glob('*.php');
+						$list = array();
+						foreach($filelist as $file) {
+							$list[] = str_replace('.php', '', FilesystemToUTF8($file));
+						}
+						$list = array_diff($list, array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions', 'news', 'pages'));
+						generateListFromArray(array(getThemeOption($album, 'user_registration_page')), $list);
+						chdir($curdir);
+						?>
+					</select>
+					<br />
+					<?php echo gettext('Link text').' '; print_language_string_list(getThemeOption($album, 'user_registration_text'), 'user_registration_text'); ?>
+					<br />
+					<?php echo gettext('Hint text').' '; print_language_string_list(getThemeOption($album, 'user_registration_tip'), 'user_registration_tip'); ?>
+				</td>
+				<td><?php echo gettext("If this option is not empty, the visitor login form will include a link to this page. The link text will be labeled with the text provided."); ?></td>
 			</tr>
 			<?php
 			}

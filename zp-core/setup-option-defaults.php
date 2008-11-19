@@ -217,6 +217,8 @@ function setDefault($option, $default) {
 	foreach ($_zp_exifvars as $key=>$item) {
 		setOptionDefault($key, 0);
 	}
-	
+	setOptionDefault('user_registration_page', '');
+	setOptionDefault('user_registration_text', gettext('Register'));
+	setOptionDefault('user_registration_tip', gettext('Click here to register for this site.'));
 	
 ?>

@@ -16,6 +16,12 @@ define('TEXT_INPUT_SIZE', 48);
 require_once(dirname(__FILE__).'/class-load.php');
 require_once(dirname(__FILE__).'/functions.php');
 require_once(dirname(__FILE__).'/lib-seo.php'); // keep the function separate for easy modification by site admins
+
+if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
+	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
+	exit();
+}
+
 // load the class plugins
 foreach (getEnabledPlugins() as $extension) {
 	if (strpos($extension, 'class-') !== false) {
@@ -1746,6 +1752,7 @@ $_zp_current_locale = NULL;
  * @param string $name the prefix for the label, id, and name tags
  * @param bool $textbox set to true for a textbox rather than a text field
  * @param string $locale optional locale of the translation desired
+ * @param string $edit optional class
  */
 function print_language_string_list($dbstring, $name, $textbox=false, $locale=NULL, $edit='') {
 	global $_zp_languages, $_zp_active_languages, $_zp_current_locale;

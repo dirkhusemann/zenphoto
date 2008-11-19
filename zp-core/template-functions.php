@@ -2453,12 +2453,12 @@ function getCustomSizedImageMaxSpace($width, $height) {
 	$destshape = $width > $height;
 	$sourceshape = getFullWidth() > getFullHeight();
 	if ($sourceshape == $destshape) { // the soruce and destination orientations are the same
-		getSizeCustomImageURL(min($width,$height), NULL, NULL);
+		getCustomImageURL(min($width,$height), NULL, NULL);
 	} else{
 		if ($sourceshape > $destshape) { // landscape to portrait, width is constrained
-			getSizeCustomImageURL(NULL, $width, NULL);
+			getCustomImageURL(NULL, $width, NULL);
 		} else { // portrait to landscape, height is constrained
-			getSizeCustomImageURL(NULL, NULL, $height);
+			getCustomImageURL(NULL, NULL, $height);
 		}
 	}
 }
@@ -2475,16 +2475,16 @@ function getCustomSizedImageMaxSpace($width, $height) {
  * @param bool $thumbStandin set true to inhibit watermarking
  * @return string
  */
-function printCustomSizedImageMaxSpace($alt='',$width,$height,$class=NULL,$id=NULL,$thumbStandin=false) {
+function printCustomSizedImageMaxSpace($alt='',$width,$height,$class=NULL,$id=NULL, $thumbstandin) {
 	$destshape = $width > $height;
 	$sourceshape = getFullWidth() > getFullHeight();
 	if ($sourceshape == $destshape) { // the soruce and destination orientations are the same
-		printCustomSizedImage($alt, min($width,$height), NULL, NULL, NULL, NULL, NULL, NULL, $class, $id, $thumbStandin);
+		printCustomSizedImage($alt, min($width,$height), NULL, NULL, NULL, NULL, NULL, NULL, $class, $id, 2 | $thumbstandin);
 	} else{
 		if ($sourceshape > $destshape) { // landscape to portrait, width is constrained
-			printCustomSizedImage($alt, NULL, $width, NULL, NULL, NULL, NULL, NULL, $class, $id, $thumbStandin);
+			printCustomSizedImage($alt, NULL, $width, NULL, NULL, NULL, NULL, NULL, $class, $id, 2 | $thumbstandin);
 		} else { // portrait to landscape, height is constrained
-			printCustomSizedImage($alt, NULL, NULL, $height, NULL, NULL, NULL, NULL, $class, $id, $thumbStandin);
+			printCustomSizedImage($alt, NULL, NULL, $height, NULL, NULL, NULL, NULL, $class, $id, 2 | $thumbstandin);
 		}
 	}
 }
@@ -3899,6 +3899,15 @@ function printPasswordForm($hint, $showProtected=true, $showuser=NULL) {
 	}
 	echo "\n    </table>";
 	echo "\n  </form>";
+	$registerpage = getOption('user_registration_page');
+	if (!empty($registerpage) && file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.UTF8ToFilesystem($registerpage).'.php')) {
+		if (getOption('mod_rewrite')) {
+			$link = '/page/'.$registerpage;
+		} else {
+			$link = 'index.php?p='.$registerpage;
+		}
+		printLink($link,get_language_string(getOption('user_registration_text')),get_language_string(getOption('user_registration_tip')));
+	}
 }
 
 /**

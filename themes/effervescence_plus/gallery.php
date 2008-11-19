@@ -100,11 +100,8 @@
 		</small>
 		<?php printZenphotoLink(); ?><br />
 		<?php printRSSLink('Gallery','', 'Gallery RSS', ''); ?> 
-		<?php
-		if (function_exists('printUserLogout')) {
-			printUserLogout('<br />', '', true);
-		}
-		?>
+		<?php if (function_exists('printUserLogout')) printUserLogout('<br />', '', true); ?>
+		<?php	if (function_exists('printContactForm')) printCustomPageURL(gettext('Contact us'), 'contact', '', '<br />');	?>
 		</div> <!-- footer -->
 
 		<?php if (function_exists('printAdminToolbox')) printAdminToolbox(); ?>

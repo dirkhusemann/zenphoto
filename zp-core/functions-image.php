@@ -291,7 +291,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		$videoWM =  sanitize($_GET['wmv'],3);
 	}
 	if (is_valid_video($imgfile)) {
-		if (!$videoWM) {  // choose a watermark for the image
+		if (!$videoWM) {  // choose a video thumb for the image
 			$imgfile = SERVERPATH . '/' . THEMEFOLDER . '/' . UTF8ToFilesystem($theme) . '/images/multimediaDefault.png';
 			if (!file_exists($imgfile)) {
 				$imgfile = SERVERPATH . "/" . ZENFOLDER . '/images/multimediaDefault.png';
@@ -455,7 +455,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		}
 		$perform_watermark = false;
 		if ($videoWM) {
-			if ($thumb) {
+			if ($thumb || !$allow_watermark) {
 				$perform_watermark = true;
 				$watermark_image = UTF8ToFileSystem(getOption('video_watermark_image'));
 				if (!file_exists($watermark_image)) $watermark_image = SERVERPATH . '/' . ZENFOLDER . '/images/imageDefault.png';
