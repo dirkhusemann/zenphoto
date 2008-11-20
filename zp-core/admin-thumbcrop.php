@@ -1,5 +1,10 @@
 <?php
 define('OFFSET_PATH', 1);
+if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
+	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
+	exit();
+}
+
 require_once(dirname(__FILE__).'/admin-functions.php');
 	
 $albumname = sanitize_path($_REQUEST['a']);
