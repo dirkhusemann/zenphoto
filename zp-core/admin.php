@@ -8,13 +8,13 @@
 
 /* Don't put anything before this line! */
 define('OFFSET_PATH', 1);
+require_once(dirname(__FILE__).'/admin-functions.php');
+require_once(dirname(__FILE__).'/admin-sortable.php');
+
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
 	exit();
 }
-
-require_once(dirname(__FILE__).'/admin-functions.php');
-require_once(dirname(__FILE__).'/admin-sortable.php');
 
 if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	if (($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) || ($_zp_loggedin == NO_RIGHTS)) { // user/password set required.
