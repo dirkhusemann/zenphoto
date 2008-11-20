@@ -270,7 +270,7 @@ function imageResizeAlpha(&$src, $w, $h) {
  * @param string $theme the current theme
  */
 function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $force_cache=false, $theme) {
-	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
+	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $videoWM) = $args;
 	// Set the config variables for convenience.
 	$image_use_side = getOption('image_use_side');
 	$upscale = getOption('image_allow_upscale');
@@ -286,11 +286,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		imageError(gettext('Image not found or is unreadable.'), 'err-imagenotfound.gif');
 	}
 	
-	$videoWM = false;
-	if (isset($_GET['wmv'])) {
-		$videoWM =  sanitize($_GET['wmv'],3);
-	}
-	if (is_valid_video($imgfile)) {
+	if (is_valid_video($imgfile) && ($thumb || $crop)) {
 		if (!$videoWM) {  // choose a video thumb for the image
 			$imgfile = SERVERPATH . '/' . THEMEFOLDER . '/' . UTF8ToFilesystem($theme) . '/images/multimediaDefault.png';
 			if (!file_exists($imgfile)) {
@@ -298,7 +294,6 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			}
 		}
 	}
-
 	if ($im = get_image($imgfile)) {
 		$w = imagesx($im);
 		$h = imagesy($im);

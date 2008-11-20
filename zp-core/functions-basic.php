@@ -386,7 +386,8 @@ function getImageParameters($args) {
 	$quality = getOption('image_quality');
 	// Set up the parameters
 	$thumb = $crop = false;
-	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality) = $args;
+	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumbstandin, $videoWM) = $args;
+	$thumb = $thumbstandin;
 	if ($size == 'thumb') {
 		$thumb = true;
 		if ($thumb_crop) {
@@ -412,7 +413,7 @@ function getImageParameters($args) {
 	if (empty($quality)) $quality = getOption('image_quality');
 
 	// Return an array of parameters used in image conversion.
-	return array($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop);
+	return array($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $videoWM);
 }
 
 /** Takes user input meant to be used within a path to a file or folder and

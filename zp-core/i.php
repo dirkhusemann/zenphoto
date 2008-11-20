@@ -45,14 +45,6 @@ if (!isset($_GET['a']) || !isset($_GET['i'])) {
 	header("HTTP/1.0 404 Not Found");
 	imageError(gettext("Too few arguments! Image not found."), 'err-imagenotfound.gif');
 }
-$allowWatermark = true;
-if (isset($_GET['t'])) {
-	$allowWatermark = !$_GET['t'];
-} else {
-	if (isset($_GET['s'])) {
-		$allowWatermark = $_GET['s'] != 'thumb';
-	}
-}
 
 // Fix special characters in the album and image names if mod_rewrite is on:
 // URL looks like: "/album1/subalbum/image/picture.jpg"
@@ -82,39 +74,50 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
 	} else {
 		$args[] = NULL;
 	}
-		if (isset($_GET['h'])) {
+	if (isset($_GET['h'])) {
 		$args[] = $_GET['h'];
 	} else {
 		$args[] = NULL;
 	}
-		if (isset($_GET['cw'])) {
+	if (isset($_GET['cw'])) {
 		$args[] = $_GET['cw'];
 	} else {
 		$args[] = NULL;
 	}
-		if (isset($_GET['ch'])) {
+	if (isset($_GET['ch'])) {
 		$args[] = $_GET['ch'];
 	} else {
 		$args[] = NULL;
 	}
-		if (isset($_GET['cx'])) {
+	if (isset($_GET['cx'])) {
 		$args[] = $_GET['cx'];
 	} else {
 		$args[] = NULL;
 	}
-		if (isset($_GET['cy'])) {
+	if (isset($_GET['cy'])) {
 		$args[] = $_GET['cy'];
 	} else {
 		$args[] = NULL;
 	}
-		if (isset($_GET['q'])) {
+	if (isset($_GET['q'])) {
 		$args[] = $_GET['q'];
+	} else {
+		$args[] = NULL;
+	}
+	if (isset($_GET['t'])) {
+		$args[] = $_GET['t'];
+	} else {
+		$args[] = NULL;
+	}
+	if (isset($_GET['wmv'])) {
+		$args[] = $_GET['wmv'];
 	} else {
 		$args[] = NULL;
 	}
 	$args = getImageParameters($args);
 	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
-
+	$allowWatermark = !$thumb;
+	
   if ($debug) imageDebug($album, $image, $args);
 	
 } else {
