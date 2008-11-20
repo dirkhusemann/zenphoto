@@ -112,6 +112,11 @@ if (!OFFSET_PATH) { // handle form post
 	}
 }
 
+/**
+ * places the user registration form
+ *
+ * @param string $thanks the message shown on successful registration
+ */
 function printReistrationForm($thanks=NULL) {
 	global $notify, $admin_e, $admin_n, $user;
 	if (zp_loggedin()) {
