@@ -628,10 +628,13 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 				}
 				$sort[gettext('Manual')] = 'Manual';
 				ksort($sort);
+				
+debugLogArray('sort', $sort);		
+				
 				if ($direction) $oldalbumimagesort = $oldalbumimagesort.'_desc';
 				echo gettext("Display images by:");
 					echo '<select id="albumimagesort" name="albumimagesort" onchange="this.form.submit()">';
-					generateListFromArray(array($oldalbumimagesort), $sort);
+					generateListFromArray(array($oldalbumimagesort), $sort, false, true);
 					echo '</select>';
 					?>
 				</th>

@@ -709,7 +709,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 					echo '<td width="350px">' . "\n";
 					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'selector-'.$key.'" value=0 />' . "\n";
 					echo '<select id="'.$option.'" name="'.$key.'">'."\n";
-					generateListFromArray(array($v),$row['selections']);
+					generateListFromArray(array($v),$row['selections'], false, true);
 					echo "</select>\n";
 					echo "</td>\n";
 					break;
@@ -767,10 +767,7 @@ function generateRadiobuttonsFromArray($currentvalue,$list,$option) {
  * @param string $prefix prefix of the input item
  * @param string $alterrights are the items changable.
  */
-function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrights="", $sort=true) {
-	$keys = array_keys($list);
-	$item = array_shift($keys);
-	$localize = !is_numeric($item);
+function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrights, $sort, $localize) {
 	if ($sort) {
 		if ($localize) {
 			$list = array_flip($list);
@@ -846,10 +843,10 @@ function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
 		$displaylist = $them;
 	}
 	if (count($tags) > 0) {
-		generateUnorderedListFromArray($tags, $tags, $postit);
+		generateUnorderedListFromArray($tags, $tags, $postit, false, true, false);
 		echo '<hr>';
 	}
-	generateUnorderedListFromArray(array(), $displaylist, $postit, '', false);
+	generateUnorderedListFromArray(array(), $displaylist, $postit, false, true, false);
 	echo '</ul>';
 }
 
@@ -960,7 +957,7 @@ function printAlbumEditForm($index, $album) {
 	}
 	echo "\n<option value =''>$globalsort</option>";
 	$type = $album->get('subalbum_sort_type');
-	generateListFromArray(array($type), $sort);
+	generateListFromArray(array($type), $sort, false, true);
 	echo "\n</select>";
 	echo "\n</td>\n<td>";
 	if (($type == 'Manual') || ($type == '')) {
@@ -996,7 +993,7 @@ function printAlbumEditForm($index, $album) {
 	}
 	echo "\n<option value =''>$globalsort</option>";
 	$type = $album->get('sort_type');
-	generateListFromArray(array($type), $sort);
+	generateListFromArray(array($type), $sort, false, true);
 	echo "\n</select>";
 	echo "\n</td>\n<td>";
 	if (($type == 'Manual') || ($type == '')) {

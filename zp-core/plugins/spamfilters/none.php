@@ -36,7 +36,9 @@ class SpamFilter  {
 	 * @return array
 	 */
 	function getOptionsSupported() {
-		return array(gettext('Action') => array('key' => 'Action', 'type' => 2, 'desc' => gettext('This action will be taken for all messages.')));
+		return array(gettext('Action') => array('key' => 'Action', 'type' => 5, 
+										'selections' => array(gettext('pass') => 'pass', gettext('moderate') => 'moderate', gettext('reject') => 'reject'),
+										'desc' => gettext('This action will be taken for all messages.')));
 	}
 	
  	/**
@@ -46,11 +48,6 @@ class SpamFilter  {
  	 * @param mixed $currentValue the current value of the option (the "before" value)
  	 */
 	function handleOption($option, $currentValue) {
-		if ($option == 'Action') {
-			echo "<select id=\"Action\" name=\"Action\">";
-			generateListFromArray(array($currentValue), array(gettext('pass') => 'pass', gettext('moderate') => 'moderate', gettext('reject') => 'reject'));
-			echo "</select>";
-		}
 	}
 
 	/**

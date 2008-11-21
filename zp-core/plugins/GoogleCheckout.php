@@ -72,17 +72,12 @@ class GoogleCheckoutOptions {
 										'desc' => gettext("Your pricelist by size and media. The format of this option is <em>price elements</em> separated by spaces.<br/>".
 																			"A <em>price element</em> has the form: <em>size</em>:<em>media</em>=<em>price</em><br/>".
 																			"example: <code>4x6:Matte=5.75 8x10:Glossy=20.00 11x14:Paper=15.35</code>.")),
-									gettext('Cart Location') => array('key' => 'googleCheckout_cart_location', 'type' => 2, 
+									gettext('Cart Location') => array('key' => 'googleCheckout_cart_location', 'type' => 5, 
+										'selections' => array(gettext("top left")=>'TopLeft', gettext("top right")=>'Default'),
 										'desc' => gettext("The placement of the Google Cart on your pages."))
 		);
 	}
 	function handleOption($option, $currentValue) {
-		if ($option=='googleCheckout_cart_location') {
-			$positons = array(gettext("top left")=>'TopLeft', gettext("top right")=>'Default');
-			echo '<select id="themeselect" name="' . $option . '"' . ">\n";
-			generateListFromArray(array($currentValue), $positons);
-			echo "</select>\n";
-		}
 	}
 }
 

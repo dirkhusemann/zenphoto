@@ -45,26 +45,6 @@ function setOption($key, $value, $persistent=true) {
 	$_options[$key] = $value;
 }
 
-function generateListFromArray($currentValue, $list) {
-	$localize = !is_numeric(array_shift(array_keys($list)));
-	if ($localize) {
-		$list = array_flip($list);
-		natcasesort($list);
-		$list = array_flip($list);
-	} else {
-		natcasesort($list);
-	}
-	foreach($list as $key=>$item) {
-		echo '<option value="' . $item . '"';
-		$inx = array_search($item, $currentValue);
-		if ($inx !== false) {
-			echo ' selected="selected"';
-		}
-		if ($localize) $display = $key; else $display = $item;
-		echo '>' . $display . "</option>"."\n";
-	}
-}
-
 function sanitize($input_string, $sanitize_level=0) {
 	if ($sanitize_level === false) {
 		$sanitize_level = 0;

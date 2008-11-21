@@ -24,15 +24,13 @@ class ThemeOptions {
 		}
 		return array(	gettext('Allow comments') => array('key' => 'Allow_comments', 'type' => 1, 'desc' => gettext('Check to enable comment section.')),
 		gettext('Use flv playlist') => array('key' => 'Use_flv_playlist', 'type' => 1, 'desc' => gettext('Check and the theme will use the flv_playlist plugin in place of the next_image loop.').$flv_playlist_missing.$flv_player_missing),
-		gettext('flv playlist option') => array('key' => 'flv_playlist_option', 'type' => 2, 'desc' => gettext('Select the option for the <em>flv_playlist()</em> function.')),
+		gettext('flv playlist option') => array('key' => 'flv_playlist_option', 'type' => 5,
+						'selections' => array(gettext('Players')=>'players', gettext('Playlist')=>'playlist'),
+						'desc' => gettext('Select the option for the <em>flv_playlist()</em> function.')),
 		gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Check to enable search form.'))
 		);
 	}
 	function handleOption($option, $currentValue) {
-		$playeroptions = array(gettext('Players')=>'players', gettext('Playlist')=>'playlist');
-		echo '<select id="themeselect" name="' . $option . '"' . ">\n";
-		generateListFromArray(array($currentValue), $playeroptions , '.css');
-		echo "</select>\n";
 	}
 }
 ?>

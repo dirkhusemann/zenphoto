@@ -183,7 +183,7 @@ function generateLanguageOptionList($HTTPAccept) {
 	if ($HTTPAccept) {  // for admin only
 		$locales[gettext("HTTP Accept Language")] = '';
 	}
-	generateListFromArray(array(getOption('locale', $HTTPAccept)), $locales);
+	generateListFromArray(array(getOption('locale', $HTTPAccept)), $locales, false, true);
 }
 
 

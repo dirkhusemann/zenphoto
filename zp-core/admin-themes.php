@@ -102,7 +102,7 @@ echo "\n" . '<div id="content">';
 		echo '<form action="#" method="post">';
 		echo gettext("Show theme for: ");
 		echo '<select id="themealbum" name="themealbum" onchange="this.form.submit()">';
-		generateListFromArray(array(urlencode($alb)), $themelist);
+		generateListFromArray(array(urlencode($alb)), $themelist, false, false);
 		echo '</select>';
 		echo '</form>';
 	}

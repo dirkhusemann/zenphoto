@@ -48,9 +48,11 @@ class slideshowOptions {
 	function getOptionsSupported() {
 		return array(	gettext('Size') => array('key' => 'slideshow_size', 'type' => 0,
 										'desc' => gettext("Size of the images in the slideshow. <em>[jQuery mode option]</em><br />If empty the theme options <em>image size</em> is used.")),
-									gettext('Mode') => array('key' => 'slideshow_mode', 'type' => 2,
+									gettext('Mode') => array('key' => 'slideshow_mode', 'type' => 5,
+										'selections' => array(gettext("jQuery")=>"jQuery", gettext("flash")=>"flash"),
 										'desc' => gettext("<em>jQuery</em> for JS ajax slideshow, <em>flash</em> for flash based slideshow (requires Flowplayer.)")),
-									gettext('Effect') => array('key' => 'slideshow_effect', 'type' => 2,
+									gettext('Effect') => array('key' => 'slideshow_effect', 'type' => 5,
+										'selections' => array(gettext('fade')=>"fade", gettext('shuffle')=>"shuffle", gettext('zoom')=>"zoom", gettext('slide X')=>"slideX", gettext('slide Y')=>"slideY", gettext('scroll up')=>"scrollUp", gettext('scroll down')=>"scrollDown", gettext('scroll left')=>"scrollLeft", gettext('scroll right')=>"scrollRight"),
 										'desc' => gettext("The cycle slide effect to be used. <em>[jQuery mode option]</em>")),
 									gettext('Speed') => array('key' => 'slideshow_speed', 'type' => 0,
 										'desc' => gettext("Speed of the transition in milliseconds.")),
@@ -66,18 +68,6 @@ class slideshowOptions {
 	}
 
 	function handleOption($option, $currentValue) {
-		if ($option=='slideshow_mode') {
-			$modes = array("jQuery", "flash");
-			echo "<select size='1' name='".$option."'>";
-			generateListFromArray(array($currentValue), $modes);
-			echo "</select>";
-		}
-		if ($option=='slideshow_effect') {
-			$effects = array("fade", "shuffle", "zoom", "slideX", "slideY","scrollUp","scrollDown","scrollLeft","scrollRight");
-			echo "<select size='1' name='".$option."'>";
-			generateListFromArray(array($currentValue), $effects);
-			echo "</select>";
-		}
 	}
 
 }

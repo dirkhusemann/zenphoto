@@ -661,9 +661,9 @@ if ($subtab == 'admin') {
 						$prefix = 'managed_albums_'.$id.'_';
 						echo gettext("Managed albums:");
 						echo '<ul class="albumchecklist">'."\n";;
-						generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights);
+						generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights, true, false);
 						if (empty($alterrights)) {
-							generateUnorderedListFromArray(array(), $rest, $prefix);
+							generateUnorderedListFromArray(array(), $rest, $prefix, false, true, false);
 						}
 						echo '</ul>';
 					} else {
@@ -898,7 +898,7 @@ if ($subtab == 'admin') {
 					$dsp = 'block';
 				}
 				if (array_search($cv, $formatlist) === false) $cv = 'custom';
-				generateListFromArray(array($cv), $formatlist);
+				generateListFromArray(array($cv), $formatlist, false, true);
 				?>
 				</select><br />
 				<div id="customTextBox" class="customText" style="display:<?php echo $dsp; ?>">
@@ -911,7 +911,7 @@ if ($subtab == 'admin') {
 		<tr>
 			<td><?php echo gettext("Charset:"); ?></td>
 			<td><select id="charset" name="charset">
-				<?php generateListFromArray(array(getOption('charset')), array_flip($charsets)) ?>
+				<?php generateListFromArray(array(getOption('charset')), array_flip($charsets), false, true) ?>
 			</select></td>
 			<td><?php echo gettext("The character encoding to use internally. Leave at <em>Unicode	(UTF-8)</em> if you're unsure."); ?></td>
 		</tr>
@@ -955,7 +955,7 @@ if ($subtab == 'admin') {
 				<?php
 			$sort = $sortby;
 			$sort[gettext('Manual')] = 'Manual'; // allow manual sorttype
-			generateListFromArray(array(getOption('gallery_sorttype')), $sort);
+			generateListFromArray(array(getOption('gallery_sorttype')), $sort, false, true);
 			?>
 			</select>
 			<input type="checkbox" name="gallery_sortdirection"
@@ -983,7 +983,7 @@ if ($subtab == 'admin') {
 			$fields = array_flip($fields);
 			$set_fields = $engine->allowedSearchFields();
 			echo '<ul class="searchchecklist">'."\n";
-			generateUnorderedListFromArray($set_fields, $fields, '_SEARCH_', '');
+			generateUnorderedListFromArray($set_fields, $fields, '_SEARCH_', false, true, true);
 			echo '</ul>';
 			?>
 			</td>
@@ -1032,7 +1032,7 @@ if ($subtab == 'admin') {
 		<tr>
 			<td><?php echo gettext("Sort images by:"); ?></td>
 			<td><select id="imagesortselect" name="image_sorttype">
-				<?php generateListFromArray(array(getOption('image_sorttype')), $sortby); ?>
+				<?php generateListFromArray(array(getOption('image_sorttype')), $sortby, false, true); ?>
 			</select> <input type="checkbox" name="image_sortdirection" value="1"
 			<?php echo checked('1', getOption('image_sortdirection')); ?> />
 			<?php echo gettext("Descending"); ?></td>
@@ -1117,7 +1117,7 @@ if ($subtab == 'admin') {
 			<td>
 				<?php
 				echo "<select id=\"protect_full_image\" name=\"protect_full_image\">\n";
-				generateListFromArray(array(getOption('protect_full_image')), array(gettext('Unprotected') => 'Unprotected', gettext('Protected view') => 'Protected view', gettext('Download') => 'Download', gettext('No access') => 'No access'));
+				generateListFromArray(array(getOption('protect_full_image')), array(gettext('Unprotected') => 'Unprotected', gettext('Protected view') => 'Protected view', gettext('Download') => 'Download', gettext('No access') => 'No access'), false, true);
 				echo "</select>\n";
 				?>
 				<p>
@@ -1269,7 +1269,7 @@ if ($subtab == 'admin') {
 		}
 	}
 	if (!empty($_REQUEST['themealbum'])) {
-		$alb = sanitize_path($_REQUEST['themealbum']);
+		$alb = urldecode(sanitize_path($_REQUEST['themealbum']));
 		$album = new Album($gallery, $alb);
 		$albumtitle = $album->getTitle();
 		$themename = $album->getAlbumTheme();
@@ -1309,7 +1309,7 @@ if ($subtab == 'admin') {
 			if (count($themelist) > 1) {
 				echo gettext("Show theme for:");
 				echo '<select id="themealbum" name="themealbum" onchange="this.form.submit()">';
-				generateListFromArray(array(urlencode($alb)), $themelist);
+				generateListFromArray(array(urlencode($alb)), $themelist, false, true);
 				echo '</select>';
 			} else {
 				echo '&nbsp;';
@@ -1388,7 +1388,7 @@ if ($subtab == 'admin') {
 							$list[] = str_replace('.php', '', FilesystemToUTF8($file));
 						}
 						$list = array_diff($list, array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions', 'news', 'pages'));
-						generateListFromArray(array(getThemeOption($album, 'custom_index_page')), $list);
+						generateListFromArray(array(getThemeOption($album, 'custom_index_page')), $list, false, false);
 						chdir($curdir);
 						?>
 					</select>
@@ -1410,7 +1410,7 @@ if ($subtab == 'admin') {
 							$list[] = str_replace('.php', '', FilesystemToUTF8($file));
 						}
 						$list = array_diff($list, array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions', 'news', 'pages'));
-						generateListFromArray(array(getThemeOption($album, 'user_registration_page')), $list);
+						generateListFromArray(array(getThemeOption($album, 'user_registration_page')), $list, false, false);
 						chdir($curdir);
 						?>
 					</select>

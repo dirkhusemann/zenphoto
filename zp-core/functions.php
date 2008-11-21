@@ -1625,8 +1625,7 @@ function readTags($id, $tbl) {
  * @param array $list the elements of the select list
  * @param bool $descending set true for a reverse order sort
  */
-function generateListFromArray($currentValue, $list, $descending=false) {
-	$localize = !is_numeric(array_shift(array_keys($list)));
+function generateListFromArray($currentValue, $list, $descending, $localize) {
 	if ($localize) {
 		$list = array_flip($list);
 		if ($descending) {
@@ -1669,7 +1668,7 @@ function generateListFromFiles($currentValue, $root, $suffix, $descending=false)
 		$file = str_replace($suffix, '', $file);
 		$list[] = FilesystemToUTF8($file);
 	}
-	generateListFromArray(array($currentValue), $list, $descending);
+	generateListFromArray(array($currentValue), $list, $descending, false);
 	chdir($curdir);
 }
 

@@ -269,7 +269,7 @@ if (count($publish_albums_list) > 0) {
 	<form name="publish" action="" method="post"><?php echo gettext('Unpublished albums:'); ?>
 	<input type="hidden" name="publish_albums" value="true">
 	<ul class="schedulealbumchecklist">
-	<?php	generateUnorderedListFromArray($publish_albums_list, $publish_albums_list, ''); ?>
+	<?php	generateUnorderedListFromArray($publish_albums_list, $publish_albums_list, '', false, true, true); ?>
 	</ul>
 	<div class="buttons pad_button" id="publishalbums">
 	<button class="tooltip" type="submit" title="<?php echo gettext("Publish waiting albums."); ?>">
@@ -307,7 +307,7 @@ if (count($publish_images_list) > 0) {
 	<?php
 	foreach ($publish_images_list as $key=>$imagelist) {
 		echo '<strong>'.$key.'</strong>';
-		generateUnorderedListFromArray($imagelist, $imagelist, ''); 
+		generateUnorderedListFromArray($imagelist, $imagelist, '', false, true, true); 
 	}
 	?>
 	</ul>
