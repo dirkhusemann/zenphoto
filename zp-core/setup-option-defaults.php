@@ -220,5 +220,6 @@ function setDefault($option, $default) {
 	setOptionDefault('user_registration_page', '');
 	setOptionDefault('user_registration_text', gettext('Register'));
 	setOptionDefault('user_registration_tip', gettext('Click here to register for this site.'));
+	setOptionDefault('auto_rotate', 0);
 	
 ?>

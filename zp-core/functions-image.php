@@ -285,19 +285,36 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 	if (!file_exists($imgfile) || !is_readable($imgfile)) {
 		imageError(gettext('Image not found or is unreadable.'), 'err-imagenotfound.gif');
 	}
-	
-	if (is_valid_video($imgfile) && ($thumb || $crop)) {
-		if (!$videoWM) {  // choose a video thumb for the image
-			$imgfile = SERVERPATH . '/' . THEMEFOLDER . '/' . UTF8ToFilesystem($theme) . '/images/multimediaDefault.png';
-			if (!file_exists($imgfile)) {
-				$imgfile = SERVERPATH . "/" . ZENFOLDER . '/images/multimediaDefault.png';
+	$rotate = false;
+	if (is_valid_video($imgfile)) {
+		if ($thumb || $crop) {
+			if (!$videoWM) {  // choose a video thumb for the image
+				$imgfile = SERVERPATH . '/' . THEMEFOLDER . '/' . UTF8ToFilesystem($theme) . '/images/multimediaDefault.png';
+				if (!file_exists($imgfile)) {
+					$imgfile = SERVERPATH . "/" . ZENFOLDER . '/images/multimediaDefault.png';
+				}
 			}
+		}
+	} else {
+		if (function_exists('imagerotate') && getOption('auto_rotate'))  {
+			$rotate = getImageRotation();
 		}
 	}
 	if ($im = get_image($imgfile)) {
+		if ($rotate) {
+			
+$w = imagesx($im);$h = imagesy($im);debugLog("pre-rotate: \$w=$w; \$h=$h");
+			
+			
+			$newim_rot = imagerotate($im, $rotate, 0);
+			imagedestroy($im);
+			$im = $newim_rot;
+		}
 		$w = imagesx($im);
 		$h = imagesy($im);
-
+		
+debugLog("using: \$w=$w; \$h=$h");		
+	
 		// Give the sizing dimension to $dim
 		$ratio_in = '';
 		$ratio_out = '';
@@ -352,7 +369,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		}
 		if (DEBUG_IMAGE) debugLog("cacheImage:".basename($imgfile).": \$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$newh=$newh, \$neww=$neww, \$hprop=$hprop, \$wprop=$wprop, \$dim=$dim, \$ratio_in=$ratio_in, \$ratio_out=$ratio_out");
 		
-		if (!$upscale && $newh >= $h && $neww >= $w && !($crop || $thumb)) { // image is the same size or smaller than the request
+		if (!$upscale && $newh >= $h && $neww >= $w && !($crop || $thumb || $rotate)) { // image is the same size or smaller than the request
 			if (DEBUG_IMAGE) debugLog("Serve ".basename($imgfile)." from original image.");
 			if (!getOption('perform_watermark') && !$force_cache) { // no processing needed
 				if (getOption('album_folder_class') != 'external') { // local album system, return the image directly
@@ -426,7 +443,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			}
 			if ($cw + $cx > $w) $cx = $w - $cw;
 			if ($ch + $cy > $h) $cy = $h - $ch;
-			if (DEBUG_IMAGE) debugLog("cacheImage:crop".basename($imgfile).":\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop");
+			if (DEBUG_IMAGE) debugLog("cacheImage:crop ".basename($imgfile).":\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$rotate=$rotate");
 			$newim = imagecreatetruecolor($neww, $newh);
 			imagecopyresampled($newim, $im, 0, 0, $cx, $cy, $neww, $newh, $cw, $ch);
 		} else {
@@ -439,7 +456,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 				$newh = $hprop;
 				$neww = $dim;
 			}
-			if (DEBUG_IMAGE) debugLog("cacheImage:no crop".basename($imgfile).":\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop");
+			if (DEBUG_IMAGE) debugLog("cacheImage:no crop ".basename($imgfile).":\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$rotate=$rotate");
 			$newim = imagecreatetruecolor($neww, $newh);
 			imagecopyresampled($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
 		}		
@@ -497,5 +514,35 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 	}
 }
 
+ /* Determines the rotation of the image looking EXIF information.  
+  *   
+  * @param string $imgfile the image name  
+  * @return false when the image should not be rotated, or the degrees the  
+  *         image should be rotated otherwise.  
+  *  
+  * FIXME: PHP GD do not support flips so when a flip is needed we make a  
+  * rotation that get close to that flip. But I don't think any camera will  
+  * fill a flipped value in the tag.  
+  */  
+function getImageRotation() {
+	list($ralbum, $rimage) = rewrite_get_album_image('a', 'i');
+	$result = query_single_row('SELECT `EXIFOrientation` FROM '.prefix('images').' AS i, '.prefix('albums').' AS a WHERE i.albumid = a.id');
+	if (is_array($result) && array_key_exists('EXIFOrientation', $result)) {
+		$splits = preg_split('/!([(0-9)])/', $result['EXIFOrientation']);
+		$rotation = $splits[0];
+		switch ($rotation) {
+			case 1 : return false; break;
+			case 2 : return false; break; // mirrored
+			case 3 : return 180;   break; // upsidedown (not 180 but close)
+			case 4 : return 180;   break; // upsidedown mirrored
+			case 5 : return 270;   break; // 90 CW mirrored (not 270 but close)
+			case 6 : return 270;   break; // 90 CCW
+			case 7 : return 90;    break; // 90 CCW mirrored (not 90 but close)
+			case 8 : return 90;    break; // 90 CW
+			default: return false;
+		}
+	}
+	return false;
+}
 
 ?>

@@ -46,6 +46,7 @@ class Image extends PersistentObject {
 		// This is where the magic happens...
 		$album_name = $album->name;
 		$new = parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', false, empty($album_name));
+		$this->getExifData(); // prime the exif fields
 		if ($new) {
 			$size = getimagesize($this->localpath);
 			$this->set('width', $size[0]);
@@ -98,7 +99,7 @@ class Image extends PersistentObject {
 				$this->setCopyright(sanitize($metadata['copyright'], 1));
 			}
 			$this->set('mtime', filemtime($this->localpath));
-			$this->save();
+				$this->save();
 		}
 	}
 	
@@ -192,6 +193,21 @@ class Image extends PersistentObject {
 		}
 
 		$size = getimagesize($this->localpath);
+		if (function_exists('imagerotate') && getOption('auto_rotate'))  {
+			// Swap the width and height values if the image should be rotated
+				
+			$splits = preg_split('/!([(0-9)])/', $this->get('EXIFOrientation'));
+			$rotation = $splits[0];
+			switch ($rotation) {
+				case 5:
+				case 6:
+				case 7:
+				case 8:
+					$size = array($size[1], $size[0]);
+					break;
+			}
+		}
+
 		$this->set('width', $size[0]);
 		$this->set('height', $size[1]);
 		$this->save();
