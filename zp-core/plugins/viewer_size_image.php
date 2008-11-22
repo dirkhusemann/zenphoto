@@ -209,7 +209,7 @@ function printUserSizeImage($alt, $default=NULL, $class=NULL, $id=NULL) {
 	$size = $width = $height = NULL;
 	getViewerImageSize($default, $size, $width, $height);
 	if (empty($size)) {
-		printCustomSizedImageMaxSpace($alt,$width,$height,$class,$id, false);
+		printCustomSizedImageMaxSpace($alt,$width,$height,$class,$id);
 	} else {
 		printCustomSizedImage($alt, $size, $width, $height, NULL, NULL, NULL, NULL, $class, $id, false);
 	}

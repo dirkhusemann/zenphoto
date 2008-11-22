@@ -1202,7 +1202,6 @@ function getCustomAlbumThumbMaxSpace($width, $height) {
  * @param string $class Optional style class
  * @param string $id Optional style id
  * @param bool $thumbStandin set true to inhibit watermarking
- * @return string
  */
 function printCustomAlbumThumbMaxSpace($alt='', $width, $height, $class=NULL, $id=NULL) {
 	global $_zp_current_album;
@@ -2464,6 +2463,19 @@ function getCustomSizedImageMaxSpace($width, $height) {
 }
 
 /**
+ * Creates image thumbnails which will fit uncropped within the width & height parameters given
+ *
+ * @param string $alt Alt text for the url
+ * @param int $width width
+ * @param int $height height
+ * @param string $class Optional style class
+ * @param string $id Optional style id
+  */
+function printCustomSizedImageThumbMaxSpace($alt='',$width,$height,$class=NULL,$id=NULL) {
+	printCustomSizedImageThumbMaxSpace($alt,$width,$height,$class,$id, true);
+}
+
+/**
  * Print normal video or uncropped within the given height and width dimensions. Use for sized images or thumbnails in an album.
  * Note: a class of 'not_visible' or 'password_protected' will be added as appropriate
  * 
@@ -2472,19 +2484,17 @@ function getCustomSizedImageMaxSpace($width, $height) {
  * @param int $height height
  * @param string $class Optional style class
  * @param string $id Optional style id
- * @param bool $thumbStandin set true to inhibit watermarking
- * @return string
  */
-function printCustomSizedImageMaxSpace($alt='',$width,$height,$class=NULL,$id=NULL, $thumbstandin) {
+function printCustomSizedImageMaxSpace($alt='',$width,$height,$class=NULL,$id=NULL, $thumb=false) {
 	$destshape = $width > $height;
 	$sourceshape = getFullWidth() > getFullHeight();
 	if ($sourceshape == $destshape) { // the soruce and destination orientations are the same
-		printCustomSizedImage($alt, min($width,$height), NULL, NULL, NULL, NULL, NULL, NULL, $class, $id, 2 | $thumbstandin);
+		printCustomSizedImage($alt, min($width,$height), NULL, NULL, NULL, NULL, NULL, NULL, $class, $id, 2 | $thumb);
 	} else{
 		if ($sourceshape > $destshape) { // landscape to portrait, width is constrained
-			printCustomSizedImage($alt, NULL, $width, NULL, NULL, NULL, NULL, NULL, $class, $id, 2 | $thumbstandin);
+			printCustomSizedImage($alt, NULL, $width, NULL, NULL, NULL, NULL, NULL, $class, $id, 2 | $thumb);
 		} else { // portrait to landscape, height is constrained
-			printCustomSizedImage($alt, NULL, NULL, $height, NULL, NULL, NULL, NULL, $class, $id, 2 | $thumbstandin);
+			printCustomSizedImage($alt, NULL, NULL, $height, NULL, NULL, NULL, NULL, $class, $id, 2 | $thumb);
 		}
 	}
 }

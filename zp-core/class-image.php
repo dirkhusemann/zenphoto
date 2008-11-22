@@ -674,7 +674,7 @@ class Image extends PersistentObject {
 			. ($size ? "&s=$size" : "" ) . ($width ? "&w=$width" : "") . ($height ? "&h=$height" : "")
 			. ($cropw ? "&cw=$cropw" : "") . ($croph ? "&ch=$croph" : "")
 			. ($cropx ? "&cx=$cropx" : "") . ($cropy ? "&cy=$cropy" : "")
-			. ($thumbStandin ? "&t=true" : "") ;
+			. (($thumbStandin & 1) ? "&t=true" : "") ;
 		}
 	}
 

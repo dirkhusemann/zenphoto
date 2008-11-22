@@ -302,19 +302,12 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 	}
 	if ($im = get_image($imgfile)) {
 		if ($rotate) {
-			
-$w = imagesx($im);$h = imagesy($im);debugLog("pre-rotate: \$w=$w; \$h=$h");
-			
-			
 			$newim_rot = imagerotate($im, $rotate, 0);
 			imagedestroy($im);
 			$im = $newim_rot;
 		}
 		$w = imagesx($im);
 		$h = imagesy($im);
-		
-debugLog("using: \$w=$w; \$h=$h");		
-	
 		// Give the sizing dimension to $dim
 		$ratio_in = '';
 		$ratio_out = '';
