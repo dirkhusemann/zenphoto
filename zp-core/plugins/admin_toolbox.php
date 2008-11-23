@@ -15,6 +15,9 @@ $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.0.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---admin_toolbox.php.html";
 
+addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.'/js/admin.js"></script>');
+$_zp_adminJS_loaded = true;
+
 /**
  * Prints the clickable drop down toolbox on any theme page with generic admin helpers
  * @param string $id the html/css theming id
@@ -27,7 +30,6 @@ function printAdminToolbox($id='admin') {
 		$page = getCurrentPage();
 		$redirect = '';
 		
-		echo "\n<script type=\"text/javascript\" src=\"".$zf."/js/admin.js\"></script>\n";
 		echo '<div id="' .$id. '">'."\n".'<h3><a href="javascript: toggle('. "'" .$dataid."'".');">'.gettext('Admin Toolbox').'</a></h3>'."\n"."\n</div>";
 		echo '<div id="' .$dataid. '" style="display: none;">'."\n";
 		

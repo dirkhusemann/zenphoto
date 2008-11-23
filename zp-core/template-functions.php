@@ -3548,6 +3548,7 @@ function getSearchURL($words, $dates, $fields, $page) {
  * @since 1.1.3
  */
 function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL,$buttontext='', $iconsource=NULL) {
+	global $_zp_adminJS_loaded;
 	if(empty($buttontext)) {
 		$buttontext = gettext("Search");
 	} else {
@@ -3571,8 +3572,13 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL,$butto
 	if (getOption('mod_rewrite')) { $searchurl = '/page/search/'; } else { $searchurl = "/index.php?p=search"; }
 	$engine = new SearchEngine();
 	$fields = array_flip($engine->allowedSearchFields());
+	if (!$_zp_adminJS_loaded) {
+		$_zp_adminJS_loaded = true;
 	?>
-	<script type="text/javascript" src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/js/admin.js\"></script>
+		<script type="text/javascript" src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/js/admin.js"></script>
+	<?php
+	}
+	?>
 	<div id="search"><!-- search form -->
 
 	<form method="post" action="<?php echo WEBPATH.$searchurl; ?>" id="search_form">
