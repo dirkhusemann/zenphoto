@@ -2472,7 +2472,7 @@ function getCustomSizedImageMaxSpace($width, $height) {
  * @param string $id Optional style id
   */
 function printCustomSizedImageThumbMaxSpace($alt='',$width,$height,$class=NULL,$id=NULL) {
-	printCustomSizedImageThumbMaxSpace($alt,$width,$height,$class,$id, true);
+	printCustomSizedImageMaxSpace($alt,$width,$height,$class,$id, true);
 }
 
 /**
