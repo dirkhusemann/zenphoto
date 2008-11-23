@@ -1178,11 +1178,18 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
  */
 function getCustomAlbumThumbMaxSpace($width, $height) {
 	global $_zp_current_album;
-	$destshape = $width > $height;
 	$albumthumb = $_zp_current_album->getAlbumThumbImage();
-	$sourceshape = $albumthumb->get('width') > $albumthumb->get('height');
+	$destshape = $width > $height;
+	$s_width = $albumthumb->get('width');
+	$s_height = $albumthumb->get('height');
+	$sourceshape = $s_width > $s_height;
 	if ($sourceshape == $destshape) { // the soruce and destination orientations are the same
-		getCustomAlbumThumb(min($width,$height), NULL, NULL, NULL, NULL, NULL);
+		if ($s_width > $s_height) { // width is constrained
+			$size = $width;
+		} else { // height is constrained
+			$size = $height;
+		}
+		getCustomAlbumThumb($size, NULL, NULL, NULL, NULL, NULL);
 	} else{
 		if ($sourceshape > $destshape) { // landscape to portrait, width is constrained
 			getCustomAlbumThumb(NULL, $width, NULL, NULL, NULL, NULL, NULL);
@@ -1205,11 +1212,18 @@ function getCustomAlbumThumbMaxSpace($width, $height) {
  */
 function printCustomAlbumThumbMaxSpace($alt='', $width, $height, $class=NULL, $id=NULL) {
 	global $_zp_current_album;
-	$destshape = $width > $height;
 	$albumthumb = $_zp_current_album->getAlbumThumbImage();
-	$sourceshape = $albumthumb->get('width') > $albumthumb->get('height');
+	$destshape = $width > $height;
+	$s_width = $albumthumb->get('width');
+	$s_height = $albumthumb->get('height');
+	$sourceshape = $s_width > $s_height;
 	if ($sourceshape == $destshape) { // the soruce and destination orientations are the same
-		printCustomAlbumThumbImage($alt, min($width, $height), NULL, NULL, NULL, NULL, NULL, NULL, $class, $id);
+		if ($s_width > $s_height) { // width is constrained
+			$size = $width;
+		} else { // height is constrained
+			$size = $height;
+		}
+		printCustomAlbumThumbImage($alt, $size, NULL, NULL, NULL, NULL, NULL, NULL, $class, $id);
 	} else{
 		if ($sourceshape > $destshape) { // landscape to portrait, width is constrained
 			printCustomAlbumThumbImage($alt, NULL, $width, NULL, NULL, NULL, NULL, NULL, $class, $id);
@@ -2398,7 +2412,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 	}
 	$class = trim($class);
 	//Print videos
-	if(isImageVideo() && !$thumbStandin) {
+	if(isImageVideo() && !($thumbStandin & 1)) {
 		$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
 		if ($ext == ".flv") {
 			//Player Embed...
@@ -2450,9 +2464,16 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
  */
 function getCustomSizedImageMaxSpace($width, $height) {
 	$destshape = $width > $height;
-	$sourceshape = getFullWidth() > getFullHeight();
+	$s_width = getFullWidth();
+	$s_height = getFullHeight();
+	$sourceshape = $s_width > $s_height;
 	if ($sourceshape == $destshape) { // the soruce and destination orientations are the same
-		getCustomImageURL(min($width,$height), NULL, NULL);
+		if ($s_width > $s_height) { // width is constrained
+			$size = $width;
+		} else { // height is constrained
+			$size = $height;
+		}
+		getCustomImageURL($size, NULL, NULL);
 	} else{
 		if ($sourceshape > $destshape) { // landscape to portrait, width is constrained
 			getCustomImageURL(NULL, $width, NULL);
@@ -2487,9 +2508,16 @@ function printCustomSizedImageThumbMaxSpace($alt='',$width,$height,$class=NULL,$
  */
 function printCustomSizedImageMaxSpace($alt='',$width,$height,$class=NULL,$id=NULL, $thumb=false) {
 	$destshape = $width > $height;
-	$sourceshape = getFullWidth() > getFullHeight();
+	$s_width = getFullWidth();
+	$s_height = getFullHeight();
+	$sourceshape = $s_width > $s_height;
 	if ($sourceshape == $destshape) { // the soruce and destination orientations are the same
-		printCustomSizedImage($alt, min($width,$height), NULL, NULL, NULL, NULL, NULL, NULL, $class, $id, 2 | $thumb);
+		if ($s_width > $s_height) { // width is constrained
+			$size = $width;
+		} else { // height is constrained
+			$size = $height;
+		}
+		printCustomSizedImage($alt, $size, NULL, NULL, NULL, NULL, NULL, NULL, $class, $id, 2 | $thumb);
 	} else{
 		if ($sourceshape > $destshape) { // landscape to portrait, width is constrained
 			printCustomSizedImage($alt, NULL, $width, NULL, NULL, NULL, NULL, NULL, $class, $id, 2 | $thumb);
