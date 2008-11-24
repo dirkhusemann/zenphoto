@@ -89,9 +89,9 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 				$table = array_shift($row);
 				$unprefixed_table = substr($table, strlen($prefix));
 				$sql = 'SELECT * from `'.$table.'` ORDER BY ID';
-				$tableresult = query_full_array($sql);
-				if (is_array($tableresult)) {
-					foreach ($tableresult as $tablerow) {
+				$result = query($sql);
+				if ($result) {
+					while ($tablerow = mysql_fetch_assoc($result)) {
 						foreach ($tablerow as $key=>$element) {
 							if (!empty($element)) {
 								$tablerow[$key] = gzcompress($element);
@@ -109,6 +109,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 							echo ' ';
 							$counter = 0;
 						}
+
 					}
 				}
 				if ($writeresult === false) break;
@@ -121,15 +122,15 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 	}
 	if ($writeresult) {
 		?>
-<div class="messagebox" id="fade-message">
-<h2><?php echo gettext("backup complete"); ?></h2>
-</div>
+		<div class="messagebox" id="fade-message">
+		<h2><?php echo gettext("backup complete"); ?></h2>
+		</div>
 		<?php
 	} else {
 		?>
-<div class="errorbox" id="fade-message">
-<h2><?php echo gettext("backup failed"); ?></h2>
-</div>
+		<div class="errorbox" id="fade-message">
+		<h2><?php echo gettext("backup failed"); ?></h2>
+		</div>
 		<?php
 	}
 } else if (isset($_REQUEST['restore']) && db_connect()) {
@@ -186,60 +187,60 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 	}
 	if ($success) {
 		?>
-<div class="messagebox" id="fade-message">
-<h2><?php echo gettext("restore complete"); ?></h2>
-</div>
+		<div class="messagebox" id="fade-message">
+		<h2><?php echo gettext("restore complete"); ?></h2>
+		</div>
 		<?php
 	} else {
 		?>
-<div class="errorbox" id="fade-message">
-<h2><?php echo gettext("restore failed"); ?></h2>
-</div>
+		<div class="errorbox" id="fade-message">
+		<h2><?php echo gettext("restore failed"); ?></h2>
+		</div>
 		<?php
 	}
 }
 if (db_connect()) {
 	?>
-<h3><?php gettext("database connected"); ?></h3>
-<p><?php printf(gettext("Your database is <strong>%s</strong>"),getOption('mysql_database')); ?><br />
-<?php printf(gettext("Tables are prefixed by <strong>%s</strong>"), getOption('mysql_prefix')); ?>
-</p>
-<br />
-<br />
-<form name="backup_gallery" action=""><input type="hidden" name="backup"
-	value="true">
-<div class="buttons pad_button" id="dbbackup">
-<button class="tooltip" type="submit" title="<?php echo gettext("Backup the tables in your database."); ?>">
-	<img src="<?php echo $webpath; ?>images/burst.png" alt="" /> <?php echo gettext("Backup the Database"); ?>
-</button>
-</div>
-<br clear="all" />
-<br clear="all" />
-</form>
-<br />
-<br />
-<?php
-$filelist = safe_glob(SERVERPATH . "/" . BACKUPFOLDER . '/*.zdb');
-	if (count($filelist) <= 0) {
-		echo gettext('You have not yet created a backup set.');
-	} else {
-?>
-<form name="restore_gallery" action=""><?php echo gettext('Select the database restore file:'); ?>
-<br />
-<select id="backupfile" name="backupfile">
-<?php	generateListFromFiles('', SERVERPATH . "/" . BACKUPFOLDER, '.zdb', true);	?>
-</select> <input type="hidden" name="restore" value="true">
-<div class="buttons pad_button" id="dbrestore">
-<button class="tooltip" type="submit" title="<?php echo gettext("Restore the tables in your database from a previous backup."); ?>">
-	<img src="<?php echo $webpath; ?>images/cache.png" alt="" /> <?php echo gettext("Restore the Database"); ?>
-</button>
-</div>
-<br clear="all" />
-<br clear="all" />
-</form>
-
-<?php
-	}
+	<h3><?php gettext("database connected"); ?></h3>
+	<p><?php printf(gettext("Your database is <strong>%s</strong>"),getOption('mysql_database')); ?><br />
+	<?php printf(gettext("Tables are prefixed by <strong>%s</strong>"), getOption('mysql_prefix')); ?>
+	</p>
+	<br />
+	<br />
+	<form name="backup_gallery" action=""><input type="hidden" name="backup"
+		value="true">
+	<div class="buttons pad_button" id="dbbackup">
+	<button class="tooltip" type="submit" title="<?php echo gettext("Backup the tables in your database."); ?>">
+		<img src="<?php echo $webpath; ?>images/burst.png" alt="" /> <?php echo gettext("Backup the Database"); ?>
+	</button>
+	</div>
+	<br clear="all" />
+	<br clear="all" />
+	</form>
+	<br />
+	<br />
+	<?php
+	$filelist = safe_glob(SERVERPATH . "/" . BACKUPFOLDER . '/*.zdb');
+		if (count($filelist) <= 0) {
+			echo gettext('You have not yet created a backup set.');
+		} else {
+	?>
+	<form name="restore_gallery" action=""><?php echo gettext('Select the database restore file:'); ?>
+	<br />
+	<select id="backupfile" name="backupfile">
+	<?php	generateListFromFiles('', SERVERPATH . "/" . BACKUPFOLDER, '.zdb', true);	?>
+	</select> <input type="hidden" name="restore" value="true">
+	<div class="buttons pad_button" id="dbrestore">
+	<button class="tooltip" type="submit" title="<?php echo gettext("Restore the tables in your database from a previous backup."); ?>">
+		<img src="<?php echo $webpath; ?>images/cache.png" alt="" /> <?php echo gettext("Restore the Database"); ?>
+	</button>
+	</div>
+	<br clear="all" />
+	<br clear="all" />
+	</form>
+	
+	<?php
+		}
 } else {
 	echo "<h3>".gettext("database not connected")."</h3>";
 	echo "<p>".gettext("Check the zp-config.php file to make sure you've got the right username, password, host, and database. If you haven't created the database yet, now would be a good time.");

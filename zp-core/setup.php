@@ -730,16 +730,53 @@ if ($debug) {
 
 	}
 
+	$zp = '../'.ZENFOLDER.'/';
+	$plg = '../'.ZENFOLDER.PLUGIN_FOLDER;
+	$utl = '../'.ZENFOLDER.UTILITIES_FOLDER;
+	$js = '../'.ZENFOLDER.'/js/';
+	$lcl = '../'.ZENFOLDER.'/locale/';
+	$wmk = '../'.ZENFOLDER.'/watermarks/';
+	$img = '../'.ZENFOLDER.'/images/';
+	$exf = '../'.ZENFOLDER.'/exif/';
+	$gtx = '../'.ZENFOLDER.'/lib-gettext/';
+	$thm = '../'.THEMEFOLDER.'/';
+	$plugins = array(
+								'class-textobject', 
+								'contact_form', 'flowplayer', 'flv_playlist',
+								'flvplayer', 'google_maps', 'GoogleCheckout', 
+								'rating', 'register_user',
+								'shutterfly', 'slideshow', 'spamfilters', 
+								'tag_suggest'
+								);
+	$required = array($plg, $thm, $utl, $js, $lcl, $wmk, $img, $exf, $gtx);
+	foreach ($plugins as $pluginfolder) {
+		$required[] = $plg.$pluginfolder.'/';
+	}
+
+	foreach($required as $key=>$folder) {;
+		if (is_dir($folder)) {
+			unset($required[$key]);
+		}
+	}
+	if (count($required) != 0) {
+		$good = false;
+		$missing = implode("<br />", $required);
+		checkMark(false, gettext('Zenphoto installation folders'), ' ['.gettext('Some of the folders of your installation are missing.').']',
+											gettext('Perhaps there was a problem with the upload. You are missing the following folders:').': '.
+											'<br /><code>'.$missing.'</code>');
+	}
 	if (defined("RELEASE")) {
-		$zp = '../'.ZENFOLDER.'/';
-		$plg = '../'.ZENFOLDER.PLUGIN_FOLDER;
-		$thm = '../'.THEMEFOLDER.'/';
 		$rootfiles = array('../index.php', '../rss.php', '../rss-comments.php');
-		$zp_plugins = array('dynamic-locale', 'flowplayer', 'flv_playlist',
-												 'flvplayer', 'google_maps', 'GoogleCheckout', 
-												 'image_album_statistics', 'print_album_menu', 'rating', 
-												 'shutterfly', 'slideshow', 'static_html_cache', 
-												 'tag_suggest', 'user_logout', 'zenPaypal');
+		$zp_plugins = array(
+												'admin_toolbox', 'class-textobject', 'contact_form',
+												'dynamic-locale', 'flowplayer', 'flv_playlist',
+												'flvplayer', 'google_maps', 'GoogleCheckout', 
+												'image_album_statistics', 'paged_thumbs_nav',
+												'print_album_menu', 'rating', 'register_user',
+												'shutterfly', 'slideshow', 'static_html_cache', 
+												'tag_suggest', 'user_logout', 'viewer_size_image',
+												'zenPaypal'
+												);
 		$pluginfiles = array();
 		foreach ($zp_plugins as $plugin) {
 			$pluginfiles[] = $plg.$plugin.'.php';
@@ -755,6 +792,7 @@ if ($debug) {
 			$fullname = $zp.$filename;
 			if (is_dir($fullname) && !(substr($filename, 0, 1) == '.') && ($filename != 'plugins')) {
 				$subfiles = array_merge($subfiles, setup_glob($fullname.'/*.php'));
+				$subfiles = array_merge($subfiles, setup_glob($fullname.'/*.js'));
 			}
 		}
 		closedir($handle);
