@@ -29,7 +29,8 @@ if ($width >= $height) {
 	$sizedwidth = Round($width/$height*$size);
 	$sizedheight = $size;
 }
-$imageurl = "i.php?a=".pathurlencode($albumname)."&i=".urlencode($imagename)."&s=".$size.'&t=true';
+
+$imageurl = "i.php?a=".pathurlencode($albumname)."&i=".urlencode($imagename)."&s=".$size.'&admin';
 
 $iY = round($imageobj->get('thumbY')*$sr);
 if ($iY) {
@@ -137,7 +138,6 @@ printAdminHeader();
 		<div id="content">
 				<h1><?php echo gettext("Custom thumbnail cropping"); ?></h1>
 				<p><?php echo gettext("You can change the portion of your image which is shown in thumbnails by cropping it here."); ?></p>
-		
 				<div style="display:block">
 					<div style="float: left; width:<?php echo $cropwidth; ?>px; text-align: center;margin-right: 18px;  margin-bottom: 10px;">
 						<img src="<?php echo $currentthumbimage; ?>" style="width:<?php echo $cropwidth; ?>px;height:<?php echo $cropheight; ?>px; border: 4px solid gray; float: left"/>

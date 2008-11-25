@@ -110,7 +110,8 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
 	}
 	$args = getImageParameters($args);
 	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
-	$allowWatermark = !$thumb;
+	$adminrequest = isset($_GET['admin']);
+	$allowWatermark = !$thumb && !$adminrequest;
 	
   if ($debug) imageDebug($album, $image, $args);
 	
@@ -191,7 +192,7 @@ if (!ini_get("safe_mode")) {
 $process = true;
 // If the file exists, check its modification time and update as needed.
 $fmt = filemtime($imgfile);
-if (file_exists($newfile)) {
+if (file_exists($newfile) & !$adminrequest) {
 	if (filemtime($newfile) >= filemtime($imgfile)) {
 		$process = false;
 	}
