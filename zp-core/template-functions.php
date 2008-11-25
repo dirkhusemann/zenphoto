@@ -1170,6 +1170,37 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 }
 
 /**
+ * Called by xxxMaxSpace functions to compute the parameters to be passed to xxCustomXXX functions.
+ *
+ * @param int $size
+ * @param int $width
+ * @param int $height
+ * @param object $image
+ */
+function getMaxSpaceContainer(&$size, &$width, &$height, $image) {
+	if ($height == $width) {
+		$size = $width;
+		$height = $width = NULL;
+	} else {
+
+		$s_width = $image->get('width');
+		if ($s_width == 0) $s_width = max($width,$height);
+		$s_height = $image->get('height');
+		if ($s_height == 0) $s_height = max($width,$height);
+		$source_orientation = $s_width > $s_height;
+		$dest_orientation = $width > $height;
+
+		$newW = round($height/$s_height*$s_width);
+		$newH = round($width/$s_width*$s_height);
+		if ($newW > $width) {
+			$height = $newH;
+		} else {
+			$width = $newW;
+		}
+	}
+}
+
+	/**
  * Returns a link to a uncropped custom sized version of the current album thumb within the given height and width dimensions.
   *
  * @param int $width width
@@ -1179,24 +1210,9 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 function getCustomAlbumThumbMaxSpace($width, $height) {
 	global $_zp_current_album;
 	$albumthumb = $_zp_current_album->getAlbumThumbImage();
-	$destshape = $width > $height;
-	$s_width = $albumthumb->get('width');
-	$s_height = $albumthumb->get('height');
-	$sourceshape = $s_width > $s_height;
-	if ($sourceshape == $destshape) { // the soruce and destination orientations are the same
-		if ($s_width > $s_height) { // width is constrained
-			$size = $width;
-		} else { // height is constrained
-			$size = $height;
-		}
-		getCustomAlbumThumb($size, NULL, NULL, NULL, NULL, NULL);
-	} else{
-		if ($sourceshape > $destshape) { // landscape to portrait, width is constrained
-			getCustomAlbumThumb(NULL, $width, NULL, NULL, NULL, NULL, NULL);
-		} else { // portrait to landscape, height is constrained
-			getCustomAlbumThumb(NULL, NULL, $height, NULL, NULL, NULL, NULL);
-		}
-	}
+	$size = NULL;
+	getMaxSpaceContainer($size, $width, $height, $albumthumb);
+	getCustomAlbumThumb($size, $width, $height, NULL, NULL, NULL, NULL);
 }
 
 /**
@@ -1213,24 +1229,9 @@ function getCustomAlbumThumbMaxSpace($width, $height) {
 function printCustomAlbumThumbMaxSpace($alt='', $width, $height, $class=NULL, $id=NULL) {
 	global $_zp_current_album;
 	$albumthumb = $_zp_current_album->getAlbumThumbImage();
-	$destshape = $width > $height;
-	$s_width = $albumthumb->get('width');
-	$s_height = $albumthumb->get('height');
-	$sourceshape = $s_width > $s_height;
-	if ($sourceshape == $destshape) { // the soruce and destination orientations are the same
-		if ($s_width > $s_height) { // width is constrained
-			$size = $width;
-		} else { // height is constrained
-			$size = $height;
-		}
-		printCustomAlbumThumbImage($alt, $size, NULL, NULL, NULL, NULL, NULL, NULL, $class, $id);
-	} else{
-		if ($sourceshape > $destshape) { // landscape to portrait, width is constrained
-			printCustomAlbumThumbImage($alt, NULL, $width, NULL, NULL, NULL, NULL, NULL, $class, $id);
-		} else { // portrait to landscape, height is constrained
-			printCustomAlbumThumbImage($alt, NULL, NULL, $height, NULL, NULL, NULL, NULL, $class, $id);
-		}
-	}
+	$size = NULL;
+	getMaxSpaceContainer($size, $width, $height, $albumthumb);
+	printCustomAlbumThumbImage($alt, $size, $width, $height, NULL, NULL, NULL, NULL, $class, $id);
 }
 
 /**
@@ -2463,24 +2464,10 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
  * @return string
  */
 function getCustomSizedImageMaxSpace($width, $height) {
-	$destshape = $width > $height;
-	$s_width = getFullWidth();
-	$s_height = getFullHeight();
-	$sourceshape = $s_width > $s_height;
-	if ($sourceshape == $destshape) { // the soruce and destination orientations are the same
-		if ($s_width > $s_height) { // width is constrained
-			$size = $width;
-		} else { // height is constrained
-			$size = $height;
-		}
-		getCustomImageURL($size, NULL, NULL);
-	} else{
-		if ($sourceshape > $destshape) { // landscape to portrait, width is constrained
-			getCustomImageURL(NULL, $width, NULL);
-		} else { // portrait to landscape, height is constrained
-			getCustomImageURL(NULL, NULL, $height);
-		}
-	}
+	global $_zp_current_image;
+	$size = NULL;
+	getMaxSpaceContainer($size, $width, $height, $_zp_current_image);
+	getCustomImageURL($size, $width, $height);
 }
 
 /**
@@ -2507,24 +2494,10 @@ function printCustomSizedImageThumbMaxSpace($alt='',$width,$height,$class=NULL,$
  * @param string $id Optional style id
  */
 function printCustomSizedImageMaxSpace($alt='',$width,$height,$class=NULL,$id=NULL, $thumb=false) {
-	$destshape = $width > $height;
-	$s_width = getFullWidth();
-	$s_height = getFullHeight();
-	$sourceshape = $s_width > $s_height;
-	if ($sourceshape == $destshape) { // the soruce and destination orientations are the same
-		if ($s_width > $s_height) { // width is constrained
-			$size = $width;
-		} else { // height is constrained
-			$size = $height;
-		}
-		printCustomSizedImage($alt, $size, NULL, NULL, NULL, NULL, NULL, NULL, $class, $id, 2 | $thumb);
-	} else{
-		if ($sourceshape > $destshape) { // landscape to portrait, width is constrained
-			printCustomSizedImage($alt, NULL, $width, NULL, NULL, NULL, NULL, NULL, $class, $id, 2 | $thumb);
-		} else { // portrait to landscape, height is constrained
-			printCustomSizedImage($alt, NULL, NULL, $height, NULL, NULL, NULL, NULL, $class, $id, 2 | $thumb);
-		}
-	}
+	global $_zp_current_image;
+	$size = NULL;
+	getMaxSpaceContainer($size, $width, $height, $_zp_current_image);
+	printCustomSizedImage($alt, $size, $width, $height, NULL, NULL, NULL, NULL, $class, $id, 2 | $thumb);
 }
 
 

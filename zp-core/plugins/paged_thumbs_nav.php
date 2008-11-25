@@ -69,7 +69,7 @@ class pagedthumbsOptions {
 
 }
 
-function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='', $size='', $width='', $height='', $crop='') {
+function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='', $size=NULL, $width=NULL, $height=NULL, $crop=false) {
 	global $_zp_current_album;
 	
 	// in case someone wants to override the options by parameter
@@ -81,7 +81,7 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 	} else {
 		$size = sanitize_numeric($size);
 	}
-	if(getOption("pagedthumbs_crop") OR $crop === TRUE) {
+	if(getOption("pagedthumbs_crop") OR $crop) {
 		if(empty($width)) {
 			$width = getOption("pagedthumbs_width");
 		} else {
@@ -137,7 +137,7 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 	$number = $startimg[$currentpage] - 2;
 	for ($nr = 1;$nr <= $imagesperpage; $nr++) {
 		$number++;
-		if($number === $totalimages) {
+		if($number == $totalimages) {
 			break;
 		}
 		$image = newImage($_zp_current_album,$images[$number]);
@@ -147,9 +147,9 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 			$css = "";
 		}
 		echo "<a $css href=\"".$image->getImageLink()."\" title=\"".strip_tags($image->getTitle())."\">";
-		echo "<img src='".$image->getCustomImage(null, $width, $height, null,null, null, null, false)."' alt=\"".strip_tags($image->getTitle())."\" width='".$width."' height='".$height."' />";
+		echo "<img src='".$image->getCustomImage(null, $width, $height, null,null, null, null, true)."' alt=\"".strip_tags($image->getTitle())."\" width='".$width."' height='".$height."' />";
 		echo "</a>\n";
-		if ($number === $endimg[$currentpage]) {
+		if ($number == $endimg[$currentpage]) {
 			break;
 		}
 	}
@@ -158,9 +158,9 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 	// next thumbnails - show only if there is a next page
 	echo "<div class=\"pagedthumbsnav-next\">\n";
 	if ($totalpages > 1)	{
-		$nextpageimagenr = $currentpage * $imagesperpage;
-		$nextpageimage = new Image($_zp_current_album,$images[$nextpageimagenr]);
 		if ($currentpage < $totalpages) 	{
+			$nextpageimagenr = $currentpage * $imagesperpage;
+			$nextpageimage = new Image($_zp_current_album,$images[$nextpageimagenr]);
 			echo "<a href=\"".$nextpageimage->getImageLink()."\" title=\"".gettext("next thumbs")."\">".$next."</a>\n";
 		} 
 	} //first if

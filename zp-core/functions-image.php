@@ -321,7 +321,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 				if (!$cw) $cw = $size;
 			}
 		} else if (!empty($width) && !empty($height)) {
-			$crop = true;
+			$crop = ($crop || $cw != 0 || $ch != 0);
 			$ratio_in = $h / $w;
 			$ratio_out = $height / $width;
 			if ($ratio_in > $ratio_out) { // image is taller than desired, $height is the determining factor
@@ -363,8 +363,8 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		if (DEBUG_IMAGE) debugLog("cacheImage:".basename($imgfile).": \$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$newh=$newh, \$neww=$neww, \$hprop=$hprop, \$wprop=$wprop, \$dim=$dim, \$ratio_in=$ratio_in, \$ratio_out=$ratio_out");
 		
 		if (!$upscale && $newh >= $h && $neww >= $w && !($crop || $thumb || $rotate)) { // image is the same size or smaller than the request
-			if (DEBUG_IMAGE) debugLog("Serve ".basename($imgfile)." from original image.");
 			if (!getOption('perform_watermark') && !$force_cache) { // no processing needed
+				if (DEBUG_IMAGE) debugLog("Serve ".basename($imgfile)." from original image.");
 				if (getOption('album_folder_class') != 'external') { // local album system, return the image directly
 					$image = substr(strrchr($imgfile, '/'), 1);
 					$album = substr($imgfile, strlen(getAlbumFolder()));
@@ -442,14 +442,28 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		} else {
 			$hprop = round(($h / $w) * $dim);
 			$wprop = round(($w / $h) * $dim);
-			if ((!$thumb && $size && ($image_use_side == 'longest' && $h > $w) || ($image_use_side == 'height')) || ($thumb && $h <= $w) || $height) {
-				$newh = $dim;
-				$neww = $wprop;
+			if ($size) {
+				if ((!$thumb && ($image_use_side == 'longest' && $h > $w || ($image_use_side == 'height')) 
+								|| ($thumb && $h <= $w))) {
+					$newh = $dim;
+					$neww = $wprop;
+				} else {
+					$newh = $hprop;
+					$neww = $dim;
+				}
 			} else {
-				$newh = $hprop;
-				$neww = $dim;
+				if ($height) {
+					$newh = $height;
+				} else {
+					$newh = $hprop;
+				}
+				if ($width) {
+					$neww = $width;
+				} else {
+					$neww = $wprop;
+				}
 			}
-			if (DEBUG_IMAGE) debugLog("cacheImage:no crop ".basename($imgfile).":\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$rotate=$rotate");
+			if (DEBUG_IMAGE) debugLog("cacheImage:no crop ".basename($imgfile).":\$size=$size, \$width=$width, \$height=$height, \$dim=$dim, \$wprop=$wprop, \$hprop=$hprop, \$neww=$neww; \$newh=$newh; \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$rotate=$rotate");
 			$newim = imagecreatetruecolor($neww, $newh);
 			imagecopyresampled($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
 		}		
