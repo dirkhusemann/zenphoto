@@ -331,7 +331,6 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			} else { // image is wider than desired, $width is the determining factor
 				$dim = $height;
 				if (!$cw) $cw = $width;
-				if (!$height) $height = true; //?
 			}
 		} else if (!empty($width)) {
 			$dim = $width;
@@ -351,9 +350,8 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		if ((!$thumb && $size && // thumbnails with size (as opposed to height or width)
 						 ($image_use_side == 'longest' && $h > $w)  // height is the longest side and the option is set to longest side
 					|| ($image_use_side == 'height')) // the option is set for height
-				|| ($thumb && $h <= $w) // it is a thumb, size is not set and the height is the shortest side
-				|| $height) // height exists so if all else fails, constrain on it.
-			{
+					|| ($thumb && $h <= $w)) // it is a thumb, size is not set and the height is the shortest side
+				{
 			$newh = $dim;
 			$neww = $wprop;
 		} else {
