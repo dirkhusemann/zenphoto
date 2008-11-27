@@ -1969,7 +1969,9 @@ function getImageEXIFData() {
 }
 
 /**
- * Prints image data. Deprecated, use printImageMetadata
+ * Prints image data. 
+ * 
+ * Deprecated, use printImageMetadata
  *
  */
 function printImageEXIFData() {
@@ -2686,8 +2688,10 @@ function getCommentDateTime($format = NULL) {
 }
 
 /**
- * Retrieves the date of the current comment
+ * Retrieves the date of the current comment.
+ * 
  * Deprecated--use getCommentDateTime()
+ * 
  * Returns a formatted date
  *
  * @param string $format how to format the result
@@ -2709,8 +2713,10 @@ function getCommentDate($format = NULL) {
 	return myts_date($format, $_zp_current_comment['date']);
 }
 /**
- * Retrieves the time of the current comment
+ * Retrieves the time of the current comment.
+ * 
  * Deprecated--use getCommentDateTime()
+ * 
  * Returns a formatted time
 
  * @param string $format how to format the result

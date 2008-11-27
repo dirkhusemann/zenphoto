@@ -1,7 +1,7 @@
 <?php
 /**
  * Provides a toolbox of admin functions.
- * Replaces the same function in template-functions.php so that it may be extended
+ * Replaces the same function in template-functions.php so that it may be extended.
  *
  * Place a call on printAdminToolbox() in scripts where you want the toolbox.
  *

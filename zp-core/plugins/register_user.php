@@ -10,7 +10,7 @@
  * When successfully registered, a new admin user will be created with no logon rights. An e-mail
  * will be sent to the user with a link to activate the user ID. When he clicks on that link
  * he will be taken to the registration page and the verification process will be completed. 
- * At this point the user ID rights is set to the value of the plugin Default user rights option 
+ * At this point the user ID rights is set to the value of the plugin default user rights option 
  * and an email is sent to the Gallery admin announcing the new registration.
  * 
  * NOTE: If you change the rights on a user pending verification you have verified the user.

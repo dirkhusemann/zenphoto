@@ -718,6 +718,12 @@ function getIPTCTagArray($tag) {
 	return NULL;
 }
 
+/**
+ * Returns the IPTC data converted into UTF8
+ *
+ * @param string $iptcstring the IPTC data
+ * @return string
+ */
 function prepIPTCString($iptcstring) {
 	$iptcstring = utf8::convert($iptcstring, 'ISO-8859-1');
 	// Remove null byte at the end of the string if it exists.

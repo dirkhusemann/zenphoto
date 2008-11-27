@@ -4,7 +4,7 @@
 	Extracts EXIF information from digital photos.
 	
 	Originally created by:
-	Copyright � 2005 Jake Olefsky
+	Copyright © 2005 Jake Olefsky
 	http:// www.offsky.com/software/exif/index.php
 	jake@olefsky.com
 	
