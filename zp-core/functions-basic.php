@@ -700,7 +700,7 @@ function debugLogArray($name, $source) {
 /**
  * Logs the calling stack
  *
- * @ param string $message Message to prefix the backtrace
+ * @param string $message Message to prefix the backtrace
  */
 function debugLogBacktrace($message) {
 	debugLog("Backtrace: $message");
