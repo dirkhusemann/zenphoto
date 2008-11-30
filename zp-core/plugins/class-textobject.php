@@ -3,10 +3,6 @@
  * Plugin handler for "text" files
  * Text can be displayed in place of an image in themes
  *
- * @author Stephen Billard (sbillard)
- * @version 1.0.0
- * @package plugins
- * 
  * This is not necessarily a useful "image" type. All you get is a block of text in place of an image.
  * The contents of the text file will be displayed. I guess you could stick HTML encoding into the file and
  * get some interesting results.
@@ -51,7 +47,12 @@
  * image, it will be used. Otherwise [for this object implementation] we will use a thumbnail image provided with the plugin.
  * The particular form of the file name used when there is no thumb stand-in image allows zenphoto to choose an image in the
  * plugin folder. 
- */
+ * 
+ * @author Stephen Billard (sbillard)
+ * @version 1.0.0
+ * @package plugins
+ * 
+ * */
 
 if (false) { // don't ever execute these lines, used only in the admin plugins processing
 
