@@ -1035,7 +1035,7 @@ if (isset($_GET['saved'])) {
 			} else {
 				$dir = '';
 			}
-			printf(gettext('Current sort: %1$s%2$s. '), $sorttype, $dir);
+			printf(gettext('Current sort: <em>%1$s%2$s</em>. '), $sorttype, $dir);
 			echo gettext('Drag the albums into the order you wish them displayed.').' ';
 		}
 		echo gettext('Select an album to edit its description and data, or');
