@@ -730,112 +730,41 @@ if ($debug) {
 
 	}
 
-	$zp = '../'.ZENFOLDER.'/';
-	$plg = '../'.ZENFOLDER.PLUGIN_FOLDER;
-	$utl = '../'.ZENFOLDER.UTILITIES_FOLDER;
-	$js = '../'.ZENFOLDER.'/js/';
-	$lcl = '../'.ZENFOLDER.'/locale/';
-	$wmk = '../'.ZENFOLDER.'/watermarks/';
-	$img = '../'.ZENFOLDER.'/images/';
-	$exf = '../'.ZENFOLDER.'/exif/';
-	$gtx = '../'.ZENFOLDER.'/lib-gettext/';
-	$thm = '../'.THEMEFOLDER.'/';
-	$plugins = array(
-								'class-textobject', 
-								'contact_form', 'flowplayer', 'flv_playlist',
-								'flvplayer', 'google_maps', 'GoogleCheckout', 
-								'rating', 'register_user',
-								'shutterfly', 'slideshow', 'spamfilters', 
-								'tag_suggest'
-								);
-	$required = array($plg, $thm, $utl, $js, $lcl, $wmk, $img, $exf, $gtx);
-	foreach ($plugins as $pluginfolder) {
-		$required[] = $plg.$pluginfolder.'/';
-	}
+	$cum_mean = filemtime(SERVERPATH.'/'.ZENFOLDER.'/version.php');
+	$hours = 3600;
+	$lowset = $cum_mean - $hours;
+	$highset = $cum_mean + $hours;
 
-	foreach($required as $key=>$folder) {;
-		if (is_dir($folder)) {
-			unset($required[$key]);
-		}
-	}
-	if (count($required) != 0) {
-		$good = false;
-		$missing = implode("<br />", $required);
-		checkMark(false, gettext('Zenphoto installation folders'), ' ['.gettext('Some of the folders of your installation are missing.').']',
-											gettext('Perhaps there was a problem with the upload. You are missing the following folders:').': '.
-											'<br /><code>'.$missing.'</code>');
-	}
-	if (defined("RELEASE")) {
-		$rootfiles = array('../index.php', '../rss.php', '../rss-comments.php');
-		$zp_plugins = array(
-												'admin_toolbox', 'class-textobject', 'contact_form',
-												'dynamic-locale', 'flowplayer', 'flv_playlist',
-												'flvplayer', 'google_maps', 'GoogleCheckout', 
-												'image_album_statistics', 'paged_thumbs_nav',
-												'print_album_menu', 'rating', 'register_user',
-												'shutterfly', 'slideshow', 'static_html_cache', 
-												'tag_suggest', 'user_logout', 'viewer_size_image',
-												'zenPaypal'
-												);
-		$pluginfiles = array();
-		foreach ($zp_plugins as $plugin) {
-			$pluginfiles[] = $plg.$plugin.'.php';
-			if (file_exists($plg.$plugin) && is_dir($plg.$plugin)) {
-				$pluginfiles = array_merge($pluginfiles, setup_glob($plg.$plugin.'/*.php'));
-			}	
-		}
-		$zp_corefiles = setup_glob($zp.'*.php');
-
-		$subfiles = array();
-		$handle = opendir($zp);
-		while (false !== ($filename = readdir($handle))) {
-			$fullname = $zp.$filename;
-			if (is_dir($fullname) && !(substr($filename, 0, 1) == '.') && ($filename != 'plugins')) {
-				$subfiles = array_merge($subfiles, setup_glob($fullname.'/*.php'));
-				$subfiles = array_merge($subfiles, setup_glob($fullname.'/*.js'));
+	$package = file_get_contents(SERVERPATH.'/Zenphoto.package');
+	$installed_files = explode("\n", $package);
+	foreach ($installed_files as $key=>$value) {
+		$component = SERVERPATH.'/'.$value;
+		if (file_exists($component)) {
+			$t = filemtime($component);
+			if (!defined("RELEASE") || ($t >= $lowset && $t <= $highset)) {
+				unset($installed_files[$key]);
 			}
 		}
-		closedir($handle);
-		$themes = array('default', 'effervescence_plus', 'example', 'stopdesign');
-		$themefiles = array();
-		foreach ($themes as $theme) {
-			if (file_exists($thm.$theme.'/')) {
-				$themefiles = array_merge($themefiles, setup_glob($thm.$theme.'/*.php'));
-			}
-		}
+	}
 
-		$zp_corefiles = array_flip($zp_corefiles);
-		unset($zp_corefiles[$zp.'zp-config.php']);
-		$zp_corefiles = array_flip($zp_corefiles);
-		
-		$cum_mean = filemtime($zp.'version.php');
-		$hours = 3600;
-		$lowset = $cum_mean - $hours;
-		$highset = $cum_mean + $hours;
-
-		$installed_files = array_flip(array_merge($rootfiles, $zp_corefiles, $subfiles, $pluginfiles, $themefiles));
-		foreach ($installed_files as $component=>$value) {
-			$installed_files[$component] = filemtime($component);
-		}
-		
-		foreach ($installed_files as $component => $value) {
-			if ($value >= $lowset && $value <= $highset) {
-				unset($installed_files[$component]);
-			}
-		}
-		$filelist = implode("<br />", array_keys($installed_files));
-		if (count($installed_files) > 0) {
-			$mark = -1;
-		} else {
-			$mark = 1;
-		}
-		checkMark($mark, ' '.gettext("Zenphoto core files"), ' ['.gettext("Some <em>filemtimes</em> seem out of variance.").']',
-		gettext('Perhaps there was a problem with the upload. You should check the following files').': '.
-						'<br /><code>'.$filelist.'</code>'
-						);
+	$filelist = implode("<br />", $installed_files);
+	if (count($installed_files) > 0) {
+		$msg1 = gettext("Some files are missing or their <em>filemtimes</em> seem out of variance.");
+		$msg2 = gettext('Perhaps there was a problem with the upload. You should check the following files: ').
+					'<br /><code>'.$filelist.'</code>';
+		$mark = -1;
 	} else {
-		checkMark(-1, ' '.gettext("Zenphoto core files"), ' ['.gettext("This is not an official build.").']','');
+		$msg1 = '';
+		$msg2 = '';
+		$mark = 1;
 	}
+	if (!defined("RELEASE")) {
+		$mark = -1;
+		if (!empty($msg1)) $msg1 = ' '.$msg1;
+		$msg1 = gettext("This is not an official build.").$msg1;
+	}
+	
+	checkMark($mark, ' '.gettext("Zenphoto core files"), ' ['.$msg1.']', $msg2);
 
 	$msg = " <em>.htaccess</em> ".gettext("file");
 	if (!stristr($_SERVER['SERVER_SOFTWARE'], "apache") && !stristr($_SERVER['SERVER_SOFTWARE'], "litespeed")) {
