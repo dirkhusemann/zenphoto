@@ -60,7 +60,7 @@ class flvplayer {
 		gettext('Autostart') => array('key' => 'flv_player_autostart', 'type' => 1,
 										'desc' => gettext("Should the video start automatically. Yes if selected.")),
 		gettext('BufferSize') => array('key' => 'flv_player_buffer', 'type' => 0,
-										'desc' => gettext("Size of the buffer in % before the video starts.")),
+										'desc' => /*xgettext:no-php-format*/ gettext("Size of the buffer in % before the video starts.")),
 		);
 	}
 

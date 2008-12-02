@@ -920,7 +920,7 @@ if ($subtab == 'admin') {
 			<td><?php echo gettext("Allowed tags:"); ?></td>
 			<td>
 				<textarea name="allowed_tags" style="width: 310px" rows="10"><?php echo htmlspecialchars(getOption('allowed_tags')); ?></textarea>
-				<input type="checkbox" name="allowed_tags_reset" value="1" /><?php echo gettext('restsore default allowed tags'); ?>
+				<input type="checkbox" name="allowed_tags_reset" value="1" /><?php echo gettext('restore default allowed tags'); ?>
 			</td>
 			<td><?php echo gettext("Tags and attributes allowed in comments, descriptions, and other fields."); ?>
 			<br />
@@ -1091,15 +1091,15 @@ if ($subtab == 'admin') {
 			<br />
 			<?php echo gettext('cover').' '; ?>
 			<input type="text" size="2" name="watermark_scale"
-					value="<?php echo htmlspecialchars(getOption('watermark_scale'));?>" /><?php echo gettext('% of image') ?>
+					value="<?php echo htmlspecialchars(getOption('watermark_scale'));?>" /><?php /*xgettext:no-php-format*/ echo gettext('% of image') ?>
 			<input type="checkbox" name="watermark_allow_upscale" value="1"
 			<?php echo checked('1', getOption('watermark_allow_upscale')); ?> />&nbsp;<?php echo gettext("allow upscale"); ?>
 			<br />
 			<?php echo gettext("offset h"); ?>
 			<input type="text" size="2" name="watermark_h_offset"
-					value="<?php echo htmlspecialchars(getOption('watermark_h_offset'));?>" /><?php echo gettext("% w, "); ?>
+					value="<?php echo htmlspecialchars(getOption('watermark_h_offset'));?>" /><?php echo /*xgettext:no-php-format*/ gettext("% w, "); ?>
 			<input type="text" size="2" name="watermark_w_offset"
-				value="<?php echo htmlspecialchars(getOption('watermark_w_offset'));?>" /><?php echo gettext("%"); ?>
+				value="<?php echo htmlspecialchars(getOption('watermark_w_offset'));?>" /><?php /*xgettext:no-php-format*/ echo gettext("%"); ?>
 			</td>
 			<td><?php echo gettext("The watermark image (png-24).").sprintf(gettext('Place the image in the %s/watermarks/ folder.'),ZENFOLDER); ?>
 			<br />
