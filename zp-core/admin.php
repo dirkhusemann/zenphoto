@@ -566,7 +566,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 					} else {
 						$dir = '';
 					}
-					printf(gettext('Current sort: %1$s%2$s. '), $sorttype, $dir);
+					printf(gettext('Current sort: <em>%1$s%2$s</em>. '), $sorttype, $dir);
 					echo gettext('Drag the albums into the order you wish them displayed.').' ';
 					echo gettext("Select an album to edit its description and data, or");
 				?>
@@ -784,6 +784,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 							href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><?php echo gettext("Cancel");?></a>
 						</p>
 						</div>
+						<p><br /><?php echo $image->getWidth(); ?> x  <?php echo $image->getHeight().' '.gettext('px'); ?> (<?php echo byteConvert($image->getImageFootprint()); ?>)</p>
 						</td>
 					</tr>
 		

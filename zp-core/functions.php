@@ -1967,5 +1967,22 @@ function dircopy($srcdir, $dstdir) {
 	return $num;
 }
 
+/**
+ * Returns a byte size from a size value (eg: 100M).
+ *
+ * @param int $bytes
+ * @return string
+ */
+function byteConvert( $bytes ) {
+
+	if ($bytes<=0)
+	return '0 Byte';
+
+	$convention=1024; //[1000->10^x|1024->2^x]
+	$s=array('Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB');
+	$e=floor(log($bytes,$convention));
+	return round($bytes/pow($convention,$e),2).' '.$s[$e];
+}
+
 setexifvars();
 ?>

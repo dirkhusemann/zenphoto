@@ -808,6 +808,15 @@ class Image extends PersistentObject {
 	 * @param string $val the value to be put in custom_data
 	 */
 	function setCustomData($val) { $this->set('custom_data', $val); }
+	
+	/**
+	 * Returns the disk size of the image
+	 *
+	 * @return string
+	 */
+	function getImageFootprint() {
+		return filesize($this->localpath); 
+	}
 
 }
 
