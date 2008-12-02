@@ -77,9 +77,8 @@ define("THEMEFOLDER", 'themes');
 define('BACKUPFOLDER', 'backup');
 define('UTILITIES_FOLDER', '/utilities/');
 
-// Set error reporting to the default if it's not.
-error_reporting(E_ALL ^ E_NOTICE);
-//error_reporting(E_ALL);
+// Set error reporting.
+error_reporting(E_ALL);
 $_zp_error = false;
 
 /**
