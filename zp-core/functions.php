@@ -64,7 +64,7 @@ function parseAllowedTags(&$source) {
 	// Note: The database setup/upgrade uses this list, so if fields are added or deleted, setup.php should be
 	//   run or the new data won't be stored (but existing fields will still work; nothing breaks).
 	$_zp_exifvars = array(
-		// Database Field       	=> array('IFDX', 'ExifKey',          'ZP Display Text',        				 	 Display?)
+		// Database Field       => array('IFDX', 	 'ExifKey',          'ZP Display Text',        				 	 Display?)
 		'EXIFOrientation'       => array('IFD0',   'Orientation',       gettext('Orientation'),            false),
 		'EXIFMake'              => array('IFD0',   'Make',              gettext('Camera Maker'),           true),
 		'EXIFModel'             => array('IFD0',   'Model',             gettext('Camera Model'),           true),
@@ -408,7 +408,7 @@ function zp_mail($subject, $message, $headers = '', $admin_emails=null) {
 }
 
 /**
- * Sorts the results of a DB search by the current locale title string
+ * Sorts the results of a DB search by the current locale string for $field
  *
  * @param array $dbresult the result of the DB query
  * @param string $field the field name to sort on
@@ -722,10 +722,12 @@ function getIPTCTagArray($tag) {
  * Returns the IPTC data converted into UTF8
  *
  * @param string $iptcstring the IPTC data
+ * @param string $characterset the internal encoding of the data
  * @return string
  */
-function prepIPTCString($iptcstring) {
-	$iptcstring = utf8::convert($iptcstring, 'ISO-8859-1');
+function prepIPTCString($iptcstring, $characterset) {
+	if ($characterset == 'UTF-8') return $iptcstring;
+	$iptcstring = utf8::convert($iptcstring, $characterset);
 	// Remove null byte at the end of the string if it exists.
 	if (substr($iptcstring, -1) === 0x0) {
 		$iptcstring = substr($iptcstring, 0, -1);
@@ -753,6 +755,7 @@ function getImageMetadata($imageName) {
 		} else {
 			$subIFD = array();
 		}
+		
 		/* EXIF date */
 		if (isset($subIFD['DateTime'])) {
 			$date = $subIFD['DateTime'];
@@ -773,6 +776,19 @@ function getImageMetadata($imageName) {
 		if (isset($imageInfo["APP13"])) {
 			$iptc = iptcparse($imageInfo["APP13"]);
 			if ($iptc) {
+				$characterset = getIPTCTag('1#090');
+				if (!$characterset) {
+					$characterset = getOption('IPTC_encoding');
+				} else if (substr($characterset, 0, 1) == chr(27)) { // IPTC escape encoding
+					$characterset = substr($characterset, 1);
+					if ($characterset == '%G') {
+						$characterset = 'UTF-8';
+					} else { // we don't know, need to understand the IPTC standard here. In the mean time, default it.
+						$characterset = getOption('IPTC_encoding');
+					}
+				} else if ($characterset == 'UTF8') {
+					$characterset = 'UTF-8';
+				}
 				/* iptc date */
 				$date = getIPTCTag('2#055');
 				if (!empty($date)) {
@@ -784,31 +800,31 @@ function getImageMetadata($imageName) {
 					$title = getIPTCTag('2#105'); /* Headline */
 				}
 				if (!empty($title)) {
-					$result['title'] = prepIPTCString($title);
+					$result['title'] = prepIPTCString($title, $characterset);
 				}
 
 				/* iptc description */
 				$caption= getIPTCTag('2#120');
 				if (!empty($caption)) {
-					$result['desc'] = prepIPTCString($caption);
+					$result['desc'] = prepIPTCString($caption, $characterset);
 				}
 
 				/* iptc location, state, country */
 				$location = getIPTCTag('2#092');
 				if (!empty($location)) {
-					$result['location'] = prepIPTCString($location);
+					$result['location'] = prepIPTCString($location, $characterset);
 				}
 				$city = getIPTCTag('2#090');
 				if (!empty($city)) {
-					$result['city'] = prepIPTCString($city);
+					$result['city'] = prepIPTCString($city, $characterset);
 				}
 				$state = getIPTCTag('2#095');
 				if (!empty($state)) {
-					$result['state'] = prepIPTCString($state);
+					$result['state'] = prepIPTCString($state, $characterset);
 				}
 				$country = getIPTCTag('2#101');
 				if (!empty($country)) {
-					$result['country'] = prepIPTCString($country);
+					$result['country'] = prepIPTCString($country, $characterset);
 				}
 				/* iptc credit */
 				$credit= getIPTCTag('2#080'); /* by-line */
@@ -819,13 +835,13 @@ function getImageMetadata($imageName) {
 					$credit = getIPTCTag('2#115'); /* source */
 				}
 				if (!empty($credit)) {
-					$result['credit'] = prepIPTCString($credit);
+					$result['credit'] = prepIPTCString($credit, $characterset);
 				}
 
 				/* iptc copyright */
 				$copyright= getIPTCTag('2#116');
 				if (!empty($copyright)) {
-					$result['copyright'] = prepIPTCString($copyright);
+					$result['copyright'] = prepIPTCString($copyright, $characterset);
 				}
 
 				/* iptc keywords (tags) */
@@ -833,7 +849,7 @@ function getImageMetadata($imageName) {
 				if (is_array($keywords)) {
 					$taglist = array();
 					foreach($keywords as $keyword) {
-						$taglist[] = prepIPTCString($keyword);
+						$taglist[] = prepIPTCString($keyword, $characterset);
 					}
 					$result['tags'] = $taglist;
 				}

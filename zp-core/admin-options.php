@@ -256,6 +256,7 @@ if (isset($_GET['action'])) {
 			setOption('image_sorttype', sanitize($_POST['image_sorttype'],3));
 			setBoolOption('image_sortdirection', isset($_POST['image_sortdirection']));
 			setBoolOption('auto_rotate', isset($_POST['auto_rotate']));
+			setOption('IPTC_encoding', $_POST['IPTC_encoding']);
 			foreach ($_zp_exifvars as $key=>$item) {
 				setBoolOption($key, array_key_exists($key, $_POST));
 			}
@@ -1177,7 +1178,13 @@ if ($subtab == 'admin') {
 			</td>
 			<td><?php echo gettext("Check those EXIF fields you wish displayed in image EXIF information."); ?>
 		</tr>
-		
+		<tr>
+			<td><?php echo gettext("IPTC encoding:"); ?></td>
+			<td><select id="IPTC_encoding" name="IPTC_encoding">
+				<?php generateListFromArray(array(getOption('IPTC_encoding')), array_flip($charsets), false, true) ?>
+			</select></td>
+			<td><?php echo gettext("The default character encoding of image IPTC metadata."); ?></td>
+		</tr>
 		<tr>
 			<td></td>
 			<td><input type="submit" value="<?php echo gettext('save'); ?>" /></td>
