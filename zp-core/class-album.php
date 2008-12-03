@@ -354,7 +354,7 @@ class Album extends PersistentObject {
 		if (empty($type)) {
 			$parentalbum = $this->getParent();
 			if (is_null($parentalbum)) {
-				$type = getOption('gallery_sorttype');
+				$type = getOption('image_sorttype');
 			} else {
 				$type = $parentalbum->getSortType();
 			}
@@ -383,7 +383,7 @@ class Album extends PersistentObject {
 			if (is_null($parentalbum)) {
 				$type = getOption('gallery_sorttype');
 			} else {
-				$type = $parentalbum->getSortType();
+				$type = $parentalbum->getSubalbumSortType();
 			}
 		}
 		return $type;
