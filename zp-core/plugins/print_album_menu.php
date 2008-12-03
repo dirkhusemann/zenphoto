@@ -2,6 +2,8 @@
 /** printAlbumMenu for Zenphoto
   *
  * Changelog
+ * 1.4.6.1: Typo in function name corrected
+ *
  * 1.4.6:
  * - Some url encoding issues fixed
  * 
@@ -102,7 +104,7 @@
  * - Renamed the function name from show_album_menu() to more zp style printAlbumMenu()
  *
  * @author Malte Müller (acrylian)
- * @version 1.4.5
+ * @version 1.4.6.1
  * @package plugins
  */
 
@@ -415,7 +417,7 @@ function createAlbumMenuLink($album,$option2,$css,$albumpath,$mode,$level='') {
 					break;
 			}
 			$selected = checkSelectedAlbum($album->name, "album");
-			$link = "<option $selected value='".htmlspecialchars($albumpath.parthurlencode($album->name))."'>".$arrow.strip_tags($album->getTitle()).$count."</option>";
+			$link = "<option $selected value='".htmlspecialchars($albumpath.pathurlencode($album->name))."'>".$arrow.strip_tags($album->getTitle()).$count."</option>";
 			break;
 	}
 	echo $link;
