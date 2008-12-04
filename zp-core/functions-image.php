@@ -311,17 +311,16 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		// Give the sizing dimension to $dim
 		$ratio_in = '';
 		$ratio_out = '';
+		$crop = ($crop || $cw != 0 || $ch != 0);
 		if (!empty($size)) {
 			$dim = $size;
 			$width = $height = false;
-			$crop = $crop || $thumb;
 			if ($crop) {		
 				$dim = $size;
 				if (!$ch) $ch = $size;
 				if (!$cw) $cw = $size;
 			}
 		} else if (!empty($width) && !empty($height)) {
-			$crop = ($crop || $cw != 0 || $ch != 0);
 			$ratio_in = $h / $w;
 			$ratio_out = $height / $width;
 			if ($ratio_in > $ratio_out) { // image is taller than desired, $height is the determining factor
@@ -350,7 +349,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		if ((!$thumb && $size && // thumbnails with size (as opposed to height or width)
 						 ($image_use_side == 'longest' && $h > $w)  // height is the longest side and the option is set to longest side
 					|| ($image_use_side == 'height')) // the option is set for height
-					|| ($thumb && $h <= $w)) // it is a thumb, size is not set and the height is the shortest side
+					|| ($thumb && $h >= $w)) // it is a thumb, size is not set and the height is the longest side
 				{
 			$newh = $dim;
 			$neww = $wprop;
@@ -358,7 +357,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			$newh = $hprop;
 			$neww = $dim;
 		}
-		if (DEBUG_IMAGE) debugLog("cacheImage:".basename($imgfile).": \$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$newh=$newh, \$neww=$neww, \$hprop=$hprop, \$wprop=$wprop, \$dim=$dim, \$ratio_in=$ratio_in, \$ratio_out=$ratio_out");
+		if (DEBUG_IMAGE) debugLog("cacheImage:".basename($imgfile).": \$size=$size, \$width=$width, \$height=$height, \$w=$w; \$h=$h; \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$newh=$newh, \$neww=$neww, \$hprop=$hprop, \$wprop=$wprop, \$dim=$dim, \$ratio_in=$ratio_in, \$ratio_out=$ratio_out");
 		
 		if (!$upscale && $newh >= $h && $neww >= $w && !($crop || $thumb || $rotate)) { // image is the same size or smaller than the request
 			if (!getOption('perform_watermark') && !$force_cache) { // no processing needed
@@ -441,8 +440,8 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			$hprop = round(($h / $w) * $dim);
 			$wprop = round(($w / $h) * $dim);
 			if ($size) {
-				if ((!$thumb && ($image_use_side == 'longest' && $h > $w || ($image_use_side == 'height')) 
-								|| ($thumb && $h <= $w))) {
+				if ((!$thumb && ($image_use_side == 'longest' && $h > $w || ($image_use_side == 'height'))) 
+								|| ($thumb && $h >= $w)) {
 					$newh = $dim;
 					$neww = $wprop;
 				} else {

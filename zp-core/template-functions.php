@@ -1178,25 +1178,19 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
  * @param object $image
  */
 function getMaxSpaceContainer(&$size, &$width, &$height, $image) {
-	if ($height == $width) {
-		$size = $width;
-		$height = $width = NULL;
+	$s_width = $image->get('width');
+	if ($s_width == 0) $s_width = max($width,$height);
+	$s_height = $image->get('height');
+	if ($s_height == 0) $s_height = max($width,$height);
+	$source_orientation = $s_width > $s_height;
+	$dest_orientation = $width > $height;
+
+	$newW = round($height/$s_height*$s_width);
+	$newH = round($width/$s_width*$s_height);
+	if ($newW > $width) {
+		$height = $newH;
 	} else {
-
-		$s_width = $image->get('width');
-		if ($s_width == 0) $s_width = max($width,$height);
-		$s_height = $image->get('height');
-		if ($s_height == 0) $s_height = max($width,$height);
-		$source_orientation = $s_width > $s_height;
-		$dest_orientation = $width > $height;
-
-		$newW = round($height/$s_height*$s_width);
-		$newH = round($width/$s_width*$s_height);
-		if ($newW > $width) {
-			$height = $newH;
-		} else {
-			$width = $newW;
-		}
+		$width = $newW;
 	}
 }
 
@@ -1212,7 +1206,7 @@ function getCustomAlbumThumbMaxSpace($width, $height) {
 	$albumthumb = $_zp_current_album->getAlbumThumbImage();
 	$size = NULL;
 	getMaxSpaceContainer($size, $width, $height, $albumthumb);
-	getCustomAlbumThumb($size, $width, $height, NULL, NULL, NULL, NULL);
+	return getCustomAlbumThumb($size, $width, $height, NULL, NULL, NULL, NULL);
 }
 
 /**
@@ -2459,7 +2453,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 
 /**
  * Returns a link to a uncropped custom sized version of the current image within the given height and width dimensions.
- * Use for sized images or thumbnails in an album.
+ * Use for sized images.
  *
  * @param int $width width
  * @param int $height height
@@ -2469,7 +2463,22 @@ function getCustomSizedImageMaxSpace($width, $height) {
 	global $_zp_current_image;
 	$size = NULL;
 	getMaxSpaceContainer($size, $width, $height, $_zp_current_image);
-	getCustomImageURL($size, $width, $height);
+	return getCustomImageURL($size, $width, $height);
+}
+
+/**
+ * Returns a link to a uncropped custom sized version of the current image within the given height and width dimensions.
+ * Use for sized thumbnails.
+ *
+ * @param int $width width
+ * @param int $height height
+ * @return string
+ */
+function getCustomSizedImageThumbMaxSpace($width, $height) {
+	global $_zp_current_image;
+	$size = NULL;
+	getMaxSpaceContainer($size, $width, $height, $_zp_current_image);
+	return getCustomImageURL($size, $width, $height, NULL, NULL, NULL, NULL, true);
 }
 
 /**
