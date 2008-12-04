@@ -20,10 +20,10 @@
   
   RewriteRule index\.php$                     index.php [L,QSA]
   RewriteRule ^page/([0-9]+)/?$               index.php?page=$1 [L,QSA]
-  RewriteRule ^page/([A-Za-z0-9\-_]+)/?$      index.php?p=$1 [L,QSA]
- 	RewriteRule ^page/([A-Za-z0-9\-_]+)/([0-9]+)/?$      index.php?p=$1&page=$2 [L,QSA]
+  RewriteRule ^page/([A-Za-z0-9_\-]+)/?$      index.php?p=$1 [L,QSA]
+ 	RewriteRule ^page/([A-Za-z0-9_\-]+)/([0-9]+)/?$      index.php?p=$1&page=$2 [L,QSA]
   RewriteRule ^(.*)/page/([0-9]+)/?$          index.php?album=$1&page=$2 [L,QSA]
-  RewriteRule ^(.*)/page/([A-Za-z0-9\-_]+)/?$      index.php?album=$1&p=$2 [L,QSA]
+  RewriteRule ^(.*)/page/([A-Za-z0-9_\-]+)/?$      index.php?album=$1&p=$2 [L,QSA]
    
   #### Rewrite rule addition for search
   RewriteRule ^page/search/fields([0-9]+)/(.*)/([0-9]+)/?$      index.php?p=search&searchfields=$1&words=$2&page=$3 [L,QSA]
