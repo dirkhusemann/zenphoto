@@ -1090,7 +1090,7 @@ $page = "home"; ?>
 			if ($v == 'X') {
 				echo "\n<div style=\"font-size:150%;color:#ff0000;text-align:right;\">".gettext("Could not connect to  <a href=\"http://www.zenphoto.org\">zenphoto.org</a>")."</div>\n";
 			} else {
-				echo "\n<div style=\"font-size:150%;text-align:right;\"><a href=\"http://www.zenphoto.org\">". sprinf(gettext("zenphoto version %s is available."), $v)."</a></div>\n";
+				echo "\n<div style=\"font-size:150%;text-align:right;\"><a href=\"http://www.zenphoto.org\">". sprintf(gettext("zenphoto version %s is available."), $v)."</a></div>\n";
 			}
 		} else {
 			echo "\n<div style=\"font-size:150%;color:#33cc33;text-align:right;\">".gettext("You are running the latest zenphoto version.")."</div>\n";
