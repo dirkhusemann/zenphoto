@@ -297,7 +297,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		}
 	} else {
 		if (function_exists('imagerotate') && getOption('auto_rotate'))  {
-			$rotate = getImageRotation();
+			$rotate = getImageRotation($imgfile);
 		}
 	}
 	if ($im = get_image($imgfile)) {
@@ -529,9 +529,9 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
   * rotation that get close to that flip. But I don't think any camera will  
   * fill a flipped value in the tag.  
   */  
-function getImageRotation() {
-	list($ralbum, $rimage) = rewrite_get_album_image('a', 'i');
-	$result = query_single_row('SELECT `EXIFOrientation` FROM '.prefix('images').' AS i, '.prefix('albums').' AS a WHERE i.albumid = a.id');
+function getImageRotation($imgfile) {
+	$imgfile = substr($imgfile, strlen(getAlbumFolder()));
+  $result = query_single_row('SELECT EXIFOrientation FROM '.prefix('images').' AS i JOIN '.prefix('albums').' as a ON i.albumid = a.id WHERE "'.$imgfile.'" = CONCAT(a.folder,"/",i.filename)');
 	if (is_array($result) && array_key_exists('EXIFOrientation', $result)) {
 		$splits = preg_split('/!([(0-9)])/', $result['EXIFOrientation']);
 		$rotation = $splits[0];
