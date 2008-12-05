@@ -27,6 +27,10 @@
  * @class        Phoogle Maps 2.0
  * @author       Justin Johnson <justinjohnson@system7designs.com>
  * @copyright    2005 system7designs
+ *
+ *
+ *@Modified in 2008 by Eric Bayard to include in Zenphoto
+ *
  */
 
 
@@ -53,73 +57,63 @@ class PhoogleMap{
 	 * height of the Google Map, in pixels
 	 */
 	var $mapHeight = 300;
-
 	/**
 	 * apiKey
 	 * Google API Key
 	 */
 	var $apiKey = "";
-
-	/**
-	 * showControl
-	 * True/False whether to show map controls or not
-	 */
-	var $showControl = true;
-
-	var $defaultType = 'G_NORMAL_MAP'; // allowed types: G_NORMAL_MAP | G_SATELLITE_MAP | G_HYBRID_MAP
-	/**
-	* showType
-	* True/False whether to show map type controls or not
-	*/
-	var $showType = true;
 	/**
 	 * controlType
-	 * string: can be 'small' or 'large'
-	 * display's either the large or the small controls on the map, small by default
+	 * display's either the large or the small controls on the map, or custom
 	 */
-
-	var $controlType = 'small';
-
+	var $controlType = '';
+	/**
+	 * mapTypeControl
+	 * Which type of map type control to display buttons, list or custom
+	 */
+	var $mapTypeControl = '';
 	/**
 	 * zoomLevel
 	 * int: 0-17
 	 * set's the initial zoom level of the map
 	 */
-
-	var $zoomLevel = 6;
-
-
+	var $zoomLevel = 4;
 	/**
-	 * @param        $type:string
-	 * @returns      nothing
-	 * @description  Stores maptype in $defaultType
+	 *physicalMap
+	 *add physical map
 	 */
-	function setMapType($type) { $this->defaultType = $type; }
-
-
+	var $physicalMap = '';
+	/**
+	 *ge3D
+	 *  add Google earth plugin
+	 */
+	var $ge3D = '';
+	/**
+	 * backGround
+	 * background color of the map
+	 */
+	var $backGround = '#E5E3DF';
+	/**
+	 * defaultMap
+	 * The default displayed map
+	 */
+	var $defaultMap = 'G_NORMAL_MAP';
+	/**
+	 * customJS
+	 * add custom javascript
+	 */
+	var $customJS = '';
 	/**
 	 * @function     addGeoPoint
 	 * @description  Add's an address to be displayed on the Google Map using latitude/longitude
 	 *               early version of this function, considered experimental
 	 */
-
 	function addGeoPoint($lat,$long,$infoHTML){
 		$pointer = count($this->validPoints);
 		$this->validPoints[$pointer]['lat'] = $lat;
 		$this->validPoints[$pointer]['long'] = $long;
 		$this->validPoints[$pointer]['htmlMessage'] = $infoHTML;
 	}
-
-	/**
-	 * @function     centerMap
-	 * @description  center's Google Map on a specific point
-	 *               (thus eliminating the need for two different show methods from version 1.0)
-	 */
-
-	function centerMap($lat,$long){
-		$this->centerMap = "map.centerAndZoom(new GPoint(".$long.",".$lat."), ".$this->zoomLevel.");\n";
-	}
-
 
 	/**
 	 * @function     addAddress
@@ -129,9 +123,9 @@ class PhoogleMap{
 	 *               (thus eliminating the need for two different show methods from version 1.0)
 	 */
 	function addAddress($address,$htmlMessage=null){
-	 if (!is_string($address)){
-	 	die("All Addresses must be passed as a string");
-	 }
+		if (!is_string($address)){
+			die("All Addresses must be passed as a string");
+		}
 		$apiURL = "http://maps.google.com/maps/geo?&output=xml&key=".$this->apiKey."&q=";
 		$addressData = file_get_contents($apiURL.urlencode($address));
 
@@ -149,8 +143,6 @@ class PhoogleMap{
 			$this->validPoints[$pointer]['passedAddress'] = $address;
 			$this->validPoints[$pointer]['htmlMessage'] = $htmlMessage;
 		}
-
-
 	}
 	/**
 	 * @function     showValidPoints
@@ -231,6 +223,99 @@ class PhoogleMap{
 		$this->apiKey = $key;
 	}
 	/**
+	 * @function     setControlMapType
+	 * @param        $controltype:string
+	 * @returns      nothing
+	 * @description  Set the type of controls needed to change map type
+	 */
+	function setControlMapType($controlmaptype){
+		if(!empty($controlmaptype)){
+			if($controlmaptype==1)
+			$this->mapTypeControl = 'map.addControl(new GMapTypeControl());';
+			elseif($controlmaptype==2)
+			$this->mapTypeControl = 'var mapControl = new GMenuMapTypeControl(true);
+map.addControl(mapControl);';	
+			else
+			$this->mapTypeControl = $controlmaptype;
+		}
+	}
+	/**
+	 * @function     setControlMap
+	 * @param        $controltype:string
+	 * @returns      nothing
+	 * @description  Set the type of controls needed to move,zoom,pan map
+	 */
+	function setControlMap($controlmap){
+		if(!empty($controlmap)){
+			if($controlmap=='None')
+			$this->controlType = '';
+			elseif($controlmap=='Small'){
+				$this->controlType = 'map.addControl(new GSmallMapControl());';
+			}
+			elseif($controlmap=='Large'){
+				$this->controlType = 'map.addControl(new GLargeMapControl());';
+			}
+			else{
+				$this->controlType = $controlmap;
+			}
+		}
+	}
+	/**
+	 * @function    addPhysicalMap
+	 * @returns      nothing
+	 * @description  adds the physical map type
+	 */
+	function addPhysicalMap($newMapType){
+		if($newMapType==1)
+		$this->physicalMap = 'map.addMapType(G_PHYSICAL_MAP);';
+
+	}
+	/**
+	 * @function    add3DMap
+	 * @returns      nothing
+	 * @description  adds the Google earth plugin 3D maps
+	 */
+	function add3DMap($newMapType){
+		if($newMapType==1)
+		$this->ge3D = 'map.addMapType(G_SATELLITE_3D_MAP);';
+	}
+	/**
+	 * @function    setMapType
+	 * @returns      nothing
+	 * @description  adds the Google earth plugin 3D maps
+	 */
+	function setMapType($MapType){
+		switch ($MapType) {
+			case 'Satellite':
+				$this->defaultMap = 'map.setMapType(G_SATELLITE_MAP);';
+				break;
+			case 'Map':
+				$this->defaultMap = 'map.setMapType(G_NORMAL_MAP);';
+				break;
+			case 'Hybrid':
+				$this->defaultMap = 'map.setMapType(G_HYBRID_MAP);';
+				break;
+			case 'Physical':
+				$this->defaultMap = 'map.setMapType(G_PHYSICAL_MAP);';
+				break;
+			case 'GE':
+				$this->defaultMap = 'map.setMapType(G_SATELLITE_3D_MAP);';
+				break;
+			default:
+			 $this->defaultMap = 'map.setMapType('.$MapType.');';
+		}
+	}
+	/**
+	 * @function    setBackGround
+	 * @returns      nothing
+	 * @description  Set the Map tiles background when loading the map
+	 */
+	function setBackGround($backgroundcolor){
+		if(!empty($backgroundcolor) && preg_match('#^\#[0-9a-f]{6}$#i', $backgroundcolor)){
+			$this->backGround=$backgroundcolor;
+		}
+	}
+	/**
 	 * @function     printGoogleJS
 	 * @returns      nothing
 	 * @description  Adds the necessary Javascript for the Google Map to function
@@ -242,46 +327,28 @@ class PhoogleMap{
 	/**
 	 * @function     showMap
 	 * @description  Displays the Google Map on the page
-	 * @param bool $initial_show set true to display on page load
 	 */
-	function showMap($initial_show=true){
+	function showMap(){
 		echo "\n<div id=\"map\" style=\"width: ".$this->mapWidth."px; height: ".$this->mapHeight."px\">\n</div>\n";
 		echo "    <script type=\"text/javascript\">\n
-    	function showmap(){
-				//<![CDATA[\n
-    		if (GBrowserIsCompatible()) {\n
-     		map = new GMap2(document.getElementById(\"map\"));\n";
-		if (empty($this->centerMap)){
-			echo "map.setCenter(new GLatLng(".$this->validPoints[0]['lat'].",".$this->validPoints[0]['long']."), ".$this->zoomLevel.");\n";
-		}else{
-			echo $this->centerMap;
-		}
-		echo "}\n
-			var icon = new GIcon();
-			icon.image = \"http://labs.google.com/ridefinder/images/mm_20_red.png\";
-			icon.shadow = \"http://labs.google.com/ridefinder/images/mm_20_shadow.png\";
-			icon.iconSize = new GSize(12, 20);
-			icon.shadowSize = new GSize(22, 20);
-			icon.iconAnchor = new GPoint(6, 20);
-			icon.infoWindowAnchor = new GPoint(5, 1);
-			
-			";
-		if ($this->showControl){
-			if ($this->controlType == 'small'){echo "map.addControl(new GSmallMapControl());\n";}
-			if ($this->controlType == 'large'){echo "map.addControl(new GLargeMapControl());\n";}
-
-		}
-		if ($this->showType){
-			echo "map.addControl(new GMapTypeControl());\n";
-			echo 'map.setMapType('. $this->defaultType .');';
-		}
+	
+	function showmap(){
+   	if (GBrowserIsCompatible()) {\n
+     	map = new GMap(document.getElementById(\"map\"), {backgroundColor:'".$this->backGround."'});\n";
+		echo "map.centerAndZoom(new GPoint(".$this->validPoints[0]['long'].",".$this->validPoints[0]['lat']."), ".$this->zoomLevel.");\n";
+		echo "map.enableScrollWheelZoom();\n";
+		echo $this->physicalMap."\n";
+		echo $this->ge3D."\n";
+		echo $this->mapTypeControl."\n";
+		echo $this->controlType."\n";
+		echo $this->defaultMap."\n";
 
 		$numPoints = count($this->validPoints);
 		for ($g = 0; $g<$numPoints; $g++){
 			echo "var point".$g." = new GPoint(".$this->validPoints[$g]['long'].",".$this->validPoints[$g]['lat'].")\n;
-              var marker".$g." = new GMarker(point".$g.");\n
-              map.addOverlay(marker".$g.")\n
-              GEvent.addListener(marker".$g.", \"click\", function() {\n";
+			var marker".$g." = new GMarker(point".$g.");\n
+			map.addOverlay(marker".$g.")\n
+			GEvent.addListener(marker".$g.", \"click\", function() {\n";
 			if (isset($this->validPoints[$g]['htmlMessage'])) {
 				echo "marker".$g.".openInfoWindowHtml(\"".$this->validPoints[$g]['htmlMessage']."\");\n";
 			}else{
@@ -294,9 +361,15 @@ class PhoogleMap{
 			}
 			echo "});\n";
 		}
-		echo "    	//]]>\n
-		}
-		window.onload = showmap;
+		echo $this->customJS."\n";
+		echo"}
+	else {
+		var text = document.createTextNode(\"".gettext('Your browser is not compatible with Google maps')."\");\n
+		document.getElementById(\"map\").appendChild(text);\n
+		}\n
+	}\n";
+		echo "window.onload = showmap;
+		
     	</script>\n";
 	}
 	///////////THIS BLOCK OF CODE IS FROM Roger Veciana's CLASS (assoc_array2xml) OBTAINED FROM PHPCLASSES.ORG//////////////
@@ -310,7 +383,6 @@ class PhoogleMap{
 		xml_parse($this->xml_parser,$xml,true);
 		xml_parser_free($this->xml_parser);
 		return $this->arrays[0];
-
 	}
 	function startElement($parser, $name, $attrs){
 		$this->keys[]=$name;
@@ -322,8 +394,7 @@ class PhoogleMap{
 		$this->arrays[$this->depth][$key]=$data;
 		$this->node_flag=0;
 	}
-	function endElement($parser, $name)
-	{
+	function endElement($parser, $name){
 		$key=array_pop($this->keys);
 		if($this->node_flag==1){
 			$this->arrays[$this->depth][$key]=$this->arrays[$this->depth+1];
