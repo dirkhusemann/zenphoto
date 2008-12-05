@@ -12,6 +12,7 @@
  * Load the classes
  */
 require_once(dirname(__FILE__).'/class-load.php');
+require_once(dirname(__FILE__).'/functions-image.php');
 
 /**
  * Invoke the controller to handle requests
@@ -1172,16 +1173,32 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 /**
  * Called by xxxMaxSpace functions to compute the parameters to be passed to xxCustomXXX functions.
  *
- * @param int $size
- * @param int $width
- * @param int $height
- * @param object $image
+ * @param int $width maxspace width
+ * @param int $height maxspace height
+ * @param object $image the image in question
+ * @param bool $thumb true if for a thumbnail
  */
-function getMaxSpaceContainer(&$size, &$width, &$height, $image) {
-	$s_width = $image->get('width');
-	if ($s_width == 0) $s_width = max($width,$height);
-	$s_height = $image->get('height');
-	if ($s_height == 0) $s_height = max($width,$height);
+function getMaxSpaceContainer(&$width, &$height, $image, $thumb=false) {
+	global $_zp_gallery;
+	if (isImageVideo($image) & $thumb) {
+		if ($image->objectsThumb != NULL) {
+			$imgfile = getAlbumFolder().$image->album->name.'/'.$image->objectsThumb;
+		} else {
+			$imgfile = SERVERPATH . '/' . THEMEFOLDER . '/' . UTF8ToFilesystem($_zp_gallery->getCurrentTheme()) . '/images/multimediaDefault.png';
+			if (!file_exists($imgfile)) {
+				$imgfile = SERVERPATH . "/" . ZENFOLDER . '/images/multimediaDefault.png';
+			}
+		}
+		$image = get_image($imgfile);
+		$s_width = imagesx($image);
+		$s_height = imagesy($image);
+	} else {
+		$s_width = $image->get('width');
+		if ($s_width == 0) $s_width = max($width,$height);
+		$s_height = $image->get('height');
+		if ($s_height == 0) $s_height = max($width,$height);
+	}
+	
 	$source_orientation = $s_width > $s_height;
 	$dest_orientation = $width > $height;
 
@@ -1204,9 +1221,8 @@ function getMaxSpaceContainer(&$size, &$width, &$height, $image) {
 function getCustomAlbumThumbMaxSpace($width, $height) {
 	global $_zp_current_album;
 	$albumthumb = $_zp_current_album->getAlbumThumbImage();
-	$size = NULL;
-	getMaxSpaceContainer($size, $width, $height, $albumthumb);
-	return getCustomAlbumThumb($size, $width, $height, NULL, NULL, NULL, NULL);
+	getMaxSpaceContainer($width, $height, $albumthumb, true);
+	return getCustomAlbumThumb(NULL, $width, $height, NULL, NULL, NULL, NULL);
 }
 
 /**
@@ -1223,9 +1239,8 @@ function getCustomAlbumThumbMaxSpace($width, $height) {
 function printCustomAlbumThumbMaxSpace($alt='', $width, $height, $class=NULL, $id=NULL) {
 	global $_zp_current_album;
 	$albumthumb = $_zp_current_album->getAlbumThumbImage();
-	$size = NULL;
-	getMaxSpaceContainer($size, $width, $height, $albumthumb);
-	printCustomAlbumThumbImage($alt, $size, $width, $height, NULL, NULL, NULL, NULL, $class, $id);
+	getMaxSpaceContainer($width, $height, $albumthumb, true);
+	printCustomAlbumThumbImage($alt, NULL, $width, $height, NULL, NULL, NULL, NULL, $class, $id);
 }
 
 /**
@@ -2461,9 +2476,8 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
  */
 function getCustomSizedImageMaxSpace($width, $height) {
 	global $_zp_current_image;
-	$size = NULL;
-	getMaxSpaceContainer($size, $width, $height, $_zp_current_image);
-	return getCustomImageURL($size, $width, $height);
+	getMaxSpaceContainer($width, $height, $_zp_current_image);
+	return getCustomImageURL(NULL, $width, $height);
 }
 
 /**
@@ -2476,9 +2490,8 @@ function getCustomSizedImageMaxSpace($width, $height) {
  */
 function getCustomSizedImageThumbMaxSpace($width, $height) {
 	global $_zp_current_image;
-	$size = NULL;
-	getMaxSpaceContainer($size, $width, $height, $_zp_current_image);
-	return getCustomImageURL($size, $width, $height, NULL, NULL, NULL, NULL, true);
+	getMaxSpaceContainer($width, $height, $_zp_current_image, true);
+	return getCustomImageURL(NULL, $width, $height, NULL, NULL, NULL, NULL, true);
 }
 
 /**
@@ -2491,7 +2504,9 @@ function getCustomSizedImageThumbMaxSpace($width, $height) {
  * @param string $id Optional style id
   */
 function printCustomSizedImageThumbMaxSpace($alt='',$width,$height,$class=NULL,$id=NULL) {
-	printCustomSizedImageMaxSpace($alt,$width,$height,$class,$id, true);
+	global $_zp_current_image;
+	getMaxSpaceContainer($width, $height, $_zp_current_image, true);
+	printCustomSizedImage($alt, NULL, $width, $height, NULL, NULL, NULL, NULL, $class, $id, 3);
 }
 
 /**
@@ -2506,9 +2521,8 @@ function printCustomSizedImageThumbMaxSpace($alt='',$width,$height,$class=NULL,$
  */
 function printCustomSizedImageMaxSpace($alt='',$width,$height,$class=NULL,$id=NULL, $thumb=false) {
 	global $_zp_current_image;
-	$size = NULL;
-	getMaxSpaceContainer($size, $width, $height, $_zp_current_image);
-	printCustomSizedImage($alt, $size, $width, $height, NULL, NULL, NULL, NULL, $class, $id, 2 | $thumb);
+	getMaxSpaceContainer($width, $height, $_zp_current_image);
+	printCustomSizedImage($alt, NULL, $width, $height, NULL, NULL, NULL, NULL, $class, $id, 2 | $thumb);
 }
 
 

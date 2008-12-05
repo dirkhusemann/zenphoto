@@ -23,6 +23,7 @@ class Album extends PersistentObject {
 	var $themeoverride;
 	var $lastimagesort = NULL;  // remember the order for the last album/image sorts
 	var $lastsubalbumsort = NULL;
+	var $albumthumbnail = NULL; // remember the album thumb for the duration of the script
 
 	/**
 	 * Constructor for albums
@@ -647,6 +648,8 @@ class Album extends PersistentObject {
 	 * @return Image
 	 */
 	function getAlbumThumbImage() {
+		
+		if (!is_null($this->albumthumbnail)) return $this->albumthumbnail;
 
 		$albumdir = $this->localpath;
 		$thumb = $this->get('thumb');
@@ -666,7 +669,8 @@ class Album extends PersistentObject {
 				unset($pieces[$i-1]);
 				$albumdir = implode('/', $pieces);
 				if (!$root) { $albumdir = $this->name . "/" . $albumdir; } else { $albumdir = $albumdir . "/";}
-				return newImage(new Album($this->gallery, $albumdir), $thumb);
+				$this->albumthumbnail = newImage(new Album($this->gallery, $albumdir), $thumb);
+				return $this->albumthumbnail;
 			}
 		} else if ($this->isDynamic()) {
 			$this->getImages(0, 0, 'ID', 'DESC');
@@ -679,7 +683,8 @@ class Album extends PersistentObject {
 					$thumb = array_shift($thumbs);
 					if (is_valid_image($thumb['filename'])) {
 						$alb = new Album($this->gallery, $thumb['folder']);
-						return newImage($alb, $thumb['filename']);
+						$this->albumthumbnail = newImage($alb, $thumb['filename']);
+						return $this->albumthumbnail;
 					}
 				}
 			}
@@ -693,7 +698,8 @@ class Album extends PersistentObject {
 				while (count($thumbs) > 0) {
 					$thumb = array_shift($thumbs);
 					if (is_valid_image($thumb)) {
-						return newImage($this, $thumb);
+						$this->albumthumbnail = newImage($this, $thumb);
+						return $this->albumthumbnail;
 					}
 				}
 			}
@@ -707,7 +713,8 @@ class Album extends PersistentObject {
 					$subalbum = new Album($this->gallery, array_pop($subalbums));
 					$thumb = $subalbum->getAlbumThumbImage();
 					if (strtolower(get_class($thumb)) !== 'transientimage' && $thumb->exists) {
-						return $thumb;
+						$this->albumthumbnail =  $thumb;
+						return $this->albumthumbnail;
 					}
 				}
 			}
@@ -717,7 +724,8 @@ class Album extends PersistentObject {
 				if (is_file($albumdir.$thumb) && is_valid_video($thumb)) {
 					$othersThumb = checkObjectsThumb($albumdir, $thumb);
 					if (!empty($othersThumb)) {
-						return newImage($this, $othersThumb);
+						$this->albumthumbnail = newImage($this, $othersThumb);
+						return $this->albumthumbnail;
 					}
 				}
 			}
@@ -740,7 +748,8 @@ class Album extends PersistentObject {
 				}
 			}
 		}
-		return new transientimage($this, $nullimage);
+		$this->albumthumbnail = new transientimage($this, $nullimage);
+		return $this->albumthumbnail;
 	}
 
 	/**

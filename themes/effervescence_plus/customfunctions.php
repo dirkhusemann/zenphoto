@@ -30,9 +30,16 @@ function printHeadingImage($randomImage) {
 			}
 		}
 		$randomImageURL = htmlspecialchars(getURL($randomImage));
+		if (getOption('allow_upscale')) {
+			$wide = 620;
+			$high = 180;
+		} else {
+			$wide = min(620, $randomImage->getWidth());
+			$high = min(180, $randomImage->getHeight());
+	}
 		echo "<a href='".$randomImageURL."' title='".gettext('Random picture...')."'><img src='".
-					htmlspecialchars($randomImage->getCustomImage(NULL, 620, 180, 620, 180, NULL, NULL, !getOption('Watermark_head_image'))).
-					"' width=620 height=180 alt=".'"'.
+					htmlspecialchars($randomImage->getCustomImage(NULL, $wide, $high, $wide, $high, NULL, NULL, !getOption('Watermark_head_image'))).
+					"' width=$wide height=$high alt=".'"'.
 					htmlspecialchars($randomAlt1, ENT_QUOTES).
 					":\n".htmlspecialchars($randomImage->getTitle(), ENT_QUOTES).
 					'" /></a>';

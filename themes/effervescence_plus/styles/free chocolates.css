@@ -437,6 +437,7 @@ color: #fbefdb; /*text in bread-crumb navigato. (last node and the pipes)*/
 	border: none;
 	line-height: 0px;
 	background: #fff;
+	text-align: center;
 }
 #randomhead img {
 	border: 6px solid #789048;
@@ -557,6 +558,7 @@ color: #FFFFFF; //albumnamnen, n�r du hovrar.
 }
 .imagethumb {
 float: left;
+text-align: center;
 }
 #albums .imagethumb {
 float: none;

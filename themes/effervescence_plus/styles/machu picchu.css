@@ -392,6 +392,7 @@ text-decoration: none;
 	border: none;
 	line-height: 0px;
 	background: #fff;
+	text-align: center;
 }
 #randomhead img {
 	border: 6px solid #789048;
@@ -502,6 +503,7 @@ ul.pagelist li.next {
 }
 .imagethumb {
 	float: left;
+	text-align: center;
 }
 #albums .imagethumb {
 	float: none;
