@@ -78,16 +78,7 @@ class PhoogleMap{
 	 * set's the initial zoom level of the map
 	 */
 	var $zoomLevel = 4;
-	/**
-	 *physicalMap
-	 *add physical map
-	 */
-	var $physicalMap = '';
-	/**
-	 *ge3D
-	 *  add Google earth plugin
-	 */
-	var $ge3D = '';
+	var $mapselections = ''; // list of the addmap calls
 	/**
 	 * backGround
 	 * background color of the map
@@ -103,7 +94,7 @@ class PhoogleMap{
 	 * add custom javascript
 	 */
 	var $customJS = '';
-	
+
 	/**
 	 * Add's an address to be displayed on the Google Map using latitude/longitude
 	 *
@@ -147,12 +138,12 @@ class PhoogleMap{
 			$this->validPoints[$pointer]['htmlMessage'] = $htmlMessage;
 		}
 	}
-	
+
 	/**
 	 * Displays either a table or a list of the address points that are valid.
 	 * Mainly used for debugging but could be useful for showing a list of addresses
 	 * on the map
-	 * 
+	 *
 	 * @param string $displayType
 	 * @param string $css_id
 	 */
@@ -176,7 +167,7 @@ class PhoogleMap{
 	/**
 	 * Displays either a table or a list of the address points that are invalid.
 	 * Mainly used for debugging shows only the points that are NOT on the map
-	 * 
+	 *
 	 * @param string $displayType
 	 * @param string $css_id
 	 */
@@ -199,7 +190,7 @@ class PhoogleMap{
 	}
 	/**
 	 * Sets the width of the map to be displayed
-	 * 
+	 *
 	 * @param int $width
 	 */
 	function setWidth($width){
@@ -223,7 +214,7 @@ class PhoogleMap{
 	}
 	/**
 	 * Set the type of controls needed to change map type
-	 * 
+	 *
 	 * @param string $controlmaptype the control type
 	 */
 	function setControlMapType($controlmaptype){
@@ -242,8 +233,8 @@ class PhoogleMap{
 	}
 	/**
 	 * Set the type of controls needed to move,zoom,pan map
-	 * 
-	 * @param string $controltype the 
+	 *
+	 * @param string $controltype the
 	 */
 	function setControlMap($controlmap){
 		if(!empty($controlmap)){
@@ -263,47 +254,49 @@ class PhoogleMap{
 		}
 	}
 	/**
-	 * Adds the physical map type
+	 * Returns Gmap type from google_maps option name
 	 *
-	 * @param unknown_type $newMapType
+	 * @param string $mapoption the google_maps option
+	 * @return string
 	 */
-	function addPhysicalMap($newMapType){
-		if($newMapType) $this->physicalMap = 'map.addMapType(G_PHYSICAL_MAP);';
-
+	function transformMapOption($mapoption) {
+		switch ($mapoption) {
+			case 'gmaps_maptype_sat':
+				return 'G_SATELLITE_MAP';
+			case 'gmaps_maptype_map':
+				return 'G_NORMAL_MAP';
+			case 'gmaps_maptype_hyb':
+				return 'G_HYBRID_MAP';
+			case 'gmaps_maptype_P':
+				return 'G_PHYSICAL_MAP';
+			case 'gmaps_maptype_3D':
+				return 'G_SATELLITE_3D_MAP';
+			default:
+				return strtoupper($newMapType);
+		}
 	}
 	/**
-	 * adds the Google earth plugin 3D maps
+	 * Sets the map selections to empty.
+	 *
+	 */
+	function clearMaps() {
+		$this->mapselections = '';
+	}
+	/**
+	 * adds a map type to the list of selectable maps
 	 *
 	 * @param string $newMapType
 	 */
-	function add3DMap($newMapType){
-		if($newMapType) $this->ge3D = 'map.addMapType(G_SATELLITE_3D_MAP);';
+	function addMap($newMapType){
+		$this->mapselections .= 'map.addMapType('.$this->transformMapOption($newMapType).'); ';
 	}
 	/**
-	 * adds the Google earth plugin 3D maps
+	 * sets the starting map type
 	 *
 	 * @param string $MapType
 	 */
 	function setMapType($MapType){
-		switch ($MapType) {
-			case 'Satellite':
-				$this->defaultMap = 'map.setMapType(G_SATELLITE_MAP);';
-				break;
-			case 'Map':
-				$this->defaultMap = 'map.setMapType(G_NORMAL_MAP);';
-				break;
-			case 'Hybrid':
-				$this->defaultMap = 'map.setMapType(G_HYBRID_MAP);';
-				break;
-			case 'Terrain':
-				$this->defaultMap = 'map.setMapType(G_PHYSICAL_MAP);';
-				break;
-			case 'GE':
-				$this->defaultMap = 'map.setMapType(G_SATELLITE_3D_MAP);';
-				break;
-			default:
-				$this->defaultMap = 'map.setMapType('.$MapType.');';
-		}
+		$this->defaultMap = 'map.setMapType('.$this->transformMapOption($MapType).');';
 	}
 	/**
 	 * Set the Map tiles background when loading the map
@@ -318,7 +311,7 @@ class PhoogleMap{
 	/**
 	 * The necessary Javascript for the Google Map to function
 	 * should be echoed in between the html <head></head> tags
-	 * 
+	 *
 	 * @return string
 	 */
 	function printGoogleJS(){
@@ -337,8 +330,7 @@ class PhoogleMap{
      	map = new GMap(document.getElementById(\"map\"), {backgroundColor:'".$this->backGround."'});\n";
 		echo "map.centerAndZoom(new GPoint(".$this->validPoints[0]['long'].",".$this->validPoints[0]['lat']."), ".$this->zoomLevel.");\n";
 		echo "map.enableScrollWheelZoom();\n";
-		echo $this->physicalMap."\n";
-		echo $this->ge3D."\n";
+		echo $this->mapselections."\n";
 		echo $this->mapTypeControl."\n";
 		echo $this->controlType."\n";
 		echo $this->defaultMap."\n";

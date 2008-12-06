@@ -630,6 +630,7 @@ define ('CUSTOM_OPTION_PREFIX', '_ZP_CUSTOM_');
  * 		3: a textarea
  * 		4: radio buttons (button names are in the 'buttons' index of the supported options array)
  * 		5: selector (selection list is in the 'selections' index of the supported options array)
+ * 		6: checkbox array (checkboxed list is in the 'checkboxes' index of the suppoprted options array.
  *
  * type 0 and 3 support multi-lingual strings.
  */
@@ -711,6 +712,24 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 					echo '<select id="'.$option.'" name="'.$key.'">'."\n";
 					generateListFromArray(array($v),$row['selections'], false, true);
 					echo "</select>\n";
+					echo "</td>\n";
+					break;
+				case 6: // checkbox array
+					echo "<td width=\"350px>\"\n";
+					foreach ($row['checkboxes'] as $display=>$checkbox) {
+						$ck_sql = str_replace($key, $checkbox, $sql);
+						$db = query_single_row($ck_sql);
+						if ($db) {
+							$v = $db['value'];
+						} else {
+							$v = 0;
+						}
+						$display = str_replace(' ', '&nbsp;', $display);
+						echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'chkbox-'.$checkbox.'" value=0 />' . "\n";
+						echo '<input type="checkbox" name="'.$checkbox.'" value="1"';
+						echo checked('1', $v);
+						echo " />&nbsp;$display\n";
+					}
 					echo "</td>\n";
 					break;
 				}

@@ -40,43 +40,54 @@ class google_mapsOptions {
 		setOptionDefault('gmaps_height', 300);
 		setOptionDefault('gmaps_maptype_P', 0);
 		setOptionDefault('gmaps_maptype_3D', 0);
-		setOptionDefault('gmaps_wiki_layer', 0);
+		setOptionDefault('gmaps_maptype_map', 1);
+		setOptionDefault('gmaps_maptype_hyb', 1);
+		setOptionDefault('gmaps_maptype_sat', 1);
 		setOptionDefault('gmaps_control_maptype', 1);
 		setOptionDefault('gmaps_control', 'None');
 		setOptionDefault('gmaps_background', '');
-		setOptionDefault('gmaps_starting_map', 'Satellite');
+		setOptionDefault('gmaps_starting_map', 'gmaps_maptype_map');
 	}
 
 	function getOptionsSupported() {
-		$MapTypes =  array(gettext('Satellite') => 'Satellite', gettext('Map') => 'Map', gettext('Hybrid') => 'Hybrid');
-		if (getOption('gmaps_maptype_P')) $MapTypes[gettext('Terrain')] = 'Terrain';
-		if (getOption('gmaps_maptype_3D')) $MapTypes[gettext('Google Earth')] = 'GE';
-
+		$MapTypes =  array(); // order matters here because the first allowed map is selected if the 'gmaps_starting_map' is not allowed
+		if (getOption('gmaps_maptype_map')) $MapTypes[gettext('Map')] = 'gmaps_maptype_map';
+		if (getOption('gmaps_maptype_hyb')) $MapTypes[gettext('Hybrid')] = 'gmaps_maptype_hyb';
+		if (getOption('gmaps_maptype_sat')) $MapTypes[gettext('Satellite')] = 'gmaps_maptype_sat';
+		if (getOption('gmaps_maptype_P')) $MapTypes[gettext('Terrain')] = 'gmaps_maptype_P';
+		if (getOption('gmaps_maptype_3D')) $MapTypes[gettext('Google Earth')] = 'gmaps_maptype_3D';
+		
+		$defaultmap = getOption('gmaps_starting_map');
+		if (array_search($defaultmap, $MapTypes) === false) { // the starting map is not allowed, pick a new one
+			$temp = $MapTypes;
+			$defaultmap = array_shift($temp);
+			setOption('gmaps_starting_map', $defaultmap);
+		}
+				
 		return array(	gettext('Google Maps API key') => array('key' => 'gmaps_apikey', 'type' => 0,
-										'desc' => gettext("If you're going to be using Google Maps,").
-											' <a	href="http://www.google.com/apis/maps/signup.html" target="_blank"> '.
-		gettext("get an API key</a> and enter it here.")),
-		gettext('All album points') => array ('key' => 'gmaps_show_all_album_points', 'type' => 1,
-										'desc' => gettext('Controls which image points are shown on an album page. Check to show points for all images in the album. If not checked points are shown only for those images whose thumbs are on the page.')),
-		gettext('Map dimensions—width') => array('key' => 'gmaps_width', 'type' => 0,
-										'desc' => gettext('The default width of the map.')),
-		gettext('Map dimensions—height') => array('key' => 'gmaps_height', 'type' => 0,
-										'desc' => gettext('The default height of the map.')),
-		gettext('Enable Terrain map') => array('key' => 'gmaps_maptype_P', 'type' => 1,
-										'desc' => gettext('Adds <code>Terrain map</code> to the possible map selections.')),
-		gettext('Enable Google Earth 3D') => array('key' => 'gmaps_maptype_3D', 'type' => 1,
-										'desc' => gettext('Adds <code>Google Earth 3D map</code> to the possible map selections.')),
-		gettext('Add Wikipedia') => array('key' => 'gmaps_wiki_layer', 'type' => 1,
-										'desc' => gettext('Adds wikipedia georeferenced data on your maps.')),
-		gettext('Map type selector') => array('key' => 'gmaps_control_maptype', 'type' => 4,'buttons' => array(gettext('Buttons') => 1,gettext('List') => 2),
-										'desc' => gettext('Use buttons or list for the map type selector.')),
-		gettext('Map controls') => array('key' => 'gmaps_control', 'type' => 4,'buttons' => array(gettext('None') => 'None',gettext('Small') => 'Small',gettext('Large') => 'Large'),
-										'desc' => gettext('Select the kind of map controls.')),
-		gettext('Map background') => array('key' => 'gmaps_background', 'type' => 0,
-										'desc' => gettext('Set the map background color to match the one of your theme. (Use the same <em>color</em> values as in your CSS background statements.)')),
-		gettext('Initial map display selection') => array('key' => 'gmaps_starting_map', 'type' => 5, 'selections' => $MapTypes,
-										'desc' => gettext('Select the initial type of map to display. <br /><strong>Note:</strong> If <code>Google Earth</code> is selected the <em>toggle</em> function which initially hides the map is ignored. The browser <em>Google Earth Plugin</em> does not initialize properly when the map is hidden.'))
-		);
+																	'desc' => gettext("If you're going to be using Google Maps,").
+																	' <a	href="http://www.google.com/apis/maps/signup.html" target="_blank"> '.
+																	gettext("get an API key</a> and enter it here.")),
+									gettext('All album points') => array ('key' => 'gmaps_show_all_album_points', 'type' => 1,
+																	'desc' => gettext('Controls which image points are shown on an album page. Check to show points for all images in the album. If not checked points are shown only for those images whose thumbs are on the page.')),
+									gettext('Map dimensions—width') => array('key' => 'gmaps_width', 'type' => 0,
+																	'desc' => gettext('The default width of the map.')),
+									gettext('Map dimensions—height') => array('key' => 'gmaps_height', 'type' => 0,
+																	'desc' => gettext('The default height of the map.')),
+									gettext('Allowed maps') => array('key' => 'gmaps_allowed_maps', 'type' => 6,
+																	'checkboxes' => array(gettext('Map') => 'gmaps_maptype_map', gettext('Satellite') => 'gmaps_maptype_sat' ,gettext('Hybrid') => 'gmaps_maptype_hyb' ,gettext('Terrain') => 'gmaps_maptype_P', gettext('Google Earth') => 'gmaps_maptype_3D'),
+																	'desc' => gettext('Select the map types that are allowed.')),
+									gettext('Add Wikipedia') => array('key' => 'gmaps_wiki_layer', 'type' => 1,
+																	'desc' => gettext('Adds wikipedia georeferenced data on your maps.')),
+									gettext('Map type selector') => array('key' => 'gmaps_control_maptype', 'type' => 4,'buttons' => array(gettext('Buttons') => 1,gettext('List') => 2),
+																	'desc' => gettext('Use buttons or list for the map type selector.')),
+									gettext('Map controls') => array('key' => 'gmaps_control', 'type' => 4,'buttons' => array(gettext('None') => 'None',gettext('Small') => 'Small',gettext('Large') => 'Large'),
+																	'desc' => gettext('Select the kind of map controls.')),
+									gettext('Map background') => array('key' => 'gmaps_background', 'type' => 0,
+																	'desc' => gettext('Set the map background color to match the one of your theme. (Use the same <em>color</em> values as in your CSS background statements.)')),
+									gettext('Initial map display selection') => array('key' => 'gmaps_starting_map', 'type' => 5, 'selections' => $MapTypes,
+																	'desc' => gettext('Select the initial type of map to display. <br /><strong>Note:</strong> If <code>Google Earth</code> is selected the <em>toggle</em> function which initially hides the map is ignored. The browser <em>Google Earth Plugin</em> does not initialize properly when the map is hidden.'))
+									);
 	}
 
 	function handleOption($option, $currentValue) {}
@@ -116,6 +127,29 @@ function addPoint($lat, $long, $html) {
 	$_zp_phoogle->addGeoPoint(str_replace(',', '.', $lat), str_replace(',', '.', $long), $html);
 }
 
+function setupAllowedMaps($defaultmap, $allowedmaps) {
+	global $_zp_phoogle;
+	if (is_null($allowedmaps)) {
+		$allowedmaps = array();
+		if (getOption('gmaps_maptype_map')) $allowedmaps[gettext('Map')] = 'gmaps_maptype_map';
+		if (getOption('gmaps_maptype_hyb')) $allowedmaps[gettext('Hybrid')] = 'gmaps_maptype_hyb';
+		if (getOption('gmaps_maptype_sat')) $allowedmaps[gettext('Satellite')] = 'gmaps_maptype_sat';
+		if (getOption('gmaps_maptype_P')) $allowedmaps[gettext('Terrain')] = 'gmaps_maptype_P';
+		if (getOption('gmaps_maptype_3D')) $allowedmaps[gettext('Google Earth')] = 'gmaps_maptype_3D';
+	}
+	if (is_null($defaultmap))	$defaultmap = getOption('gmaps_starting_map');
+	if (array_search($defaultmap, $allowedmaps) === false) { // the starting map is not allowed, pick a new one
+		$temp = $allowedmaps;
+		$defaultmap = array_shift($temp);
+	}
+	$_zp_phoogle->setMapType($defaultmap);
+	$_zp_phoogle->clearMaps();
+	foreach ($allowedmaps as $map) {
+		$_zp_phoogle->addMap($map);
+	}
+	$_zp_phoogle->setMapType($defaultmap);
+	return $defaultmap;
+}
 /**
  * Causes a Google map to be printed based on the gps data in the current image
  * @param string $zoomlevel the zoom in for the map
@@ -125,7 +159,7 @@ function addPoint($lat, $long, $html) {
  * @param string $text text for the pop-up link
  * @param bool $toggle set to true to hide initially
  * @param string $id DIV id
- * @param bool $add3D Enable 3D view on compatible browsers.
+ * @param array $mapselections array of the maps to be used.
  * @param bool $addphysical Adds physical map.
  * @param bool $addwiki Adds wikipedia georeferenced data on your maps
  * @param string $background the background color for the map
@@ -133,20 +167,18 @@ function addPoint($lat, $long, $html) {
  * @param string $maptypecontrol values Buttons | List
  * @param string $customJS the extra javascript needed by the theme
  */
-function printImageMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $height=NULL, $text=NULL, $toggle=true, $id='googlemap', $add3D=NULL, $addphysical=NULL, $addwiki=NULL, $background=NULL, $mapcontrol=NULL, $maptypecontrol=NULL, $customJS=NULL) {
+function printImageMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $height=NULL, $text=NULL, $toggle=true, $id='googlemap', $mapselections=NULL, $addwiki=NULL, $background=NULL, $mapcontrol=NULL, $maptypecontrol=NULL, $customJS=NULL) {
 	global $_zp_phoogle;
 	if(getOption('gmaps_apikey') != ''){
 
 		$exif = getImageEXIFData();
 		if(!empty($exif['EXIFGPSLatitude']) && !empty($exif['EXIFGPSLongitude'])){
 
+			$defaultmaptype = setupAllowedMaps($defaultmaptype, $mapselections);
+			
 			if($zoomlevel){
 				$_zp_phoogle->zoomLevel = $zoomlevel;
 			}
-			if (empty($defaultmaptype)) {
-				$defaultmaptype = getOption('gmaps_starting_map');
-			}
-			$_zp_phoogle->setMapType($defaultmaptype);
 			if (!is_null($width)) {
 				$_zp_phoogle->setWidth($width);
 			} else {
@@ -156,16 +188,6 @@ function printImageMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
 				$_zp_phoogle->setHeight($height);
 			} else {
 				$_zp_phoogle->setHeight(getOption('gmaps_height'));
-			}
-			if (!is_null($add3D)) {
-				$_zp_phoogle->add3DMap($add3D);
-			} else {
-				$_zp_phoogle->add3DMap(getOption('gmaps_maptype_3D'));
-			}
-			if (!is_null($addphysical)) {
-				$_zp_phoogle->addPhysicalMap($addphysical);
-			} else {
-				$_zp_phoogle->addPhysicalMap(getOption('gmaps_maptype_P'));
 			}
 			if (!is_null($mapcontrol)) {
 				$_zp_phoogle->setControlMap($mapcontrol);
@@ -196,7 +218,7 @@ function printImageMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
 			//to avoid problems with google earth and the toggle options, the toggle option is removed from here when GE is activated
 			//it is possible to have both functionnality work but the toogle option should then be integrated in the phoogle map class dirctly within the script
 			//that calls the map and should alos trigger a map type change. check Sobre theme or  have alook at www.kaugite.com for an example
-			$toggle = $toggle && $defaultmaptype != 'GE';
+			$toggle = $toggle && $defaultmaptype != 'gmaps_maptype_3D';
 			if (is_null($text)) $text = gettext('Google Map');
 			echo "<a href=\"javascript: vtoggle('$dataid');\" title=\"".gettext('Display or hide the Google Map.')."\">";
 			echo $text;
@@ -218,7 +240,7 @@ function printImageMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
  * @param bool $toggle set to true to hide initially
  * @param string $id DIV id
  * @param int $firstPageImages the number of images on transition pages.
- * @param bool $add3D Enable 3D view on compatible browsers.
+ * @param array $mapselections array of the maps to be used.
  * @param bool $addphysical Adds physical map.
  * @param bool $addwiki Adds wikipedia georeferenced data on your maps
  * @param string $background the background color for the map
@@ -226,17 +248,14 @@ function printImageMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
  * @param string $maptypecontrol values Buttons | List
  * @param string $customJS the extra javascript needed by the theme
  */
-function printAlbumMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $height=NULL, $text='', $toggle=true, $id='googlemap', $firstPageImages=0, $add3D=NULL, $addphysical=NULL, $addwiki=NULL, $background=NULL, $mapcontrol=NULL, $maptypecontrol=NULL, $customJS=NULL){
+function printAlbumMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $height=NULL, $text='', $toggle=true, $id='googlemap', $firstPageImages=0, $mapselections=NULL, $addwiki=NULL, $background=NULL, $mapcontrol=NULL, $maptypecontrol=NULL, $customJS=NULL){
 	global $_zp_phoogle, $_zp_images, $_zp_current_album, $_zp_current_image;
 	if(getOption('gmaps_apikey') != ''){
 		$foundLocation = false;
+		$defaultmaptype = setupAllowedMaps($defaultmaptype, $mapselections);		
 		if($zoomlevel){
 			$_zp_phoogle->zoomLevel = $zoomlevel;
 		}
-		if (empty($defaultmaptype)) {
-			$defaultmaptype = getOption('gmaps_starting_map');
-		}
-		$_zp_phoogle->setMapType($defaultmaptype);
 		if (!is_null($width)) {
 			$_zp_phoogle->setWidth($width);
 		} else {
@@ -246,16 +265,6 @@ function printAlbumMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
 			$_zp_phoogle->setHeight($height);
 		} else {
 			$_zp_phoogle->setHeight(getOption('gmaps_height'));
-		}
-		if (!is_null($add3D)) {
-			$_zp_phoogle->add3DMap($add3D);
-		} else {
-			$_zp_phoogle->add3DMap(getOption('gmaps_maptype_3D'));
-		}
-		if (!is_null($addphysical)) {
-			$_zp_phoogle->addPhysicalMap($addphysical);
-		} else {
-			$_zp_phoogle->addPhysicalMap(getOption('gmaps_maptype_P'));
 		}
 		if (!is_null($mapcontrol)) {
 			$_zp_phoogle->setControlMap($mapcontrol);
@@ -298,7 +307,7 @@ function printAlbumMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
 			//to avoid problems with google earth and the toggle options, the toggle option is removed from here when GE is activated
 			//it is possible to have both functionnality work but the toogle option should then be integrated in the phoogle map class dirctly within the script
 			//that calls the map and should alos trigger a map type change. check Sobre theme or  have alook at www.kaugite.com for an example
-			$toggle = $toggle && $defaultmaptype != 'GE';
+			$toggle = $toggle && $defaultmaptype != 'gmaps_maptype_3D';
 
 			if (is_null($text)) $text = gettext('Google Map');
 			echo "<a href=\"javascript: vtoggle('$dataid');\" title=\"".gettext('Display or hide the Google Map.')."\">";
