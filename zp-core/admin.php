@@ -188,7 +188,17 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 									$image->setCountry(process_language_string_save("$i-country", 3));
 									$image->setCredit(process_language_string_save("$i-credit", 1));
 									$image->setCopyright(process_language_string_save("$i-copyright", 1));
-
+									$oldrotation = sanitize_numeric($_POST[$i.'-oldrotation']);
+									if (isset($_POST[$i.'-rotation'])) {
+										$rotation = sanitize_numeric($_POST[$i.'-rotation']);
+									} else {
+										$rotation = 0;
+									}
+									if ($rotation != $oldrotation) {
+										$image->set('EXIFOrientation', $rotation);
+										$album = $image->getAlbum();
+										$gallery->clearCache(SERVERCACHE . '/' . $album->name);
+									}
 									$tagsprefix = 'tags_'.$i.'-';
 									$tags = array();
 									for ($j=0; $j<4; $j++) {
@@ -785,6 +795,18 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						</p>
 						</div>
 						<p><br /><?php echo $image->getWidth(); ?> x  <?php echo $image->getHeight().' '.gettext('px'); ?> (<?php echo byteConvert($image->getImageFootprint()); ?>)</p>
+						<p>
+							<?php
+							$splits = preg_split('/!([(0-9)])/', $image->get('EXIFOrientation'));
+							$rotation = $splits[0];
+							?>
+							<input type="hidden" name="<?php echo $currentimage; ?>-oldrotation" value="<?php echo $rotation; ?>" />
+							<?php	echo gettext('Rotation: ');	?>
+							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="0" <?php checked(0, $rotation); ?> /> <?php echo gettext('none'); ?>
+							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="8" <?php checked(8, $rotation); ?> /> <?php echo gettext('90 degrees'); ?>
+							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="3" <?php checked(3, $rotation); ?> /> <?php echo gettext('180 degrees'); ?>
+							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="6" <?php checked(6, $rotation); ?> /> <?php echo gettext('270 degrees'); ?>
+						</p>
 						</td>
 					</tr>
 		
