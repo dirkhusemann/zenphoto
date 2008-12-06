@@ -111,7 +111,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 			<?php
 				if (function_exists('printImageMap')) {
 					echo '<div id="map_link">';
-					printImageMap(NULL, 'Hybrid');
+					printImageMap();
 					echo '</div>';
 				}
 		}

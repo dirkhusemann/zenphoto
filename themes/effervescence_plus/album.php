@@ -185,7 +185,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 			</ul>
 			<div class="clearage"></div>
 			<?php
-			if (function_exists('printAlbumMap')) printAlbumMap(NULL, 'Hybrid', NULL, NULL, '<p align="center">'.gettext('Google Map').'</p>', true, 'googlemap', $firstPageImages);
+			if (function_exists('printAlbumMap')) printAlbumMap(NULL, NULL, NULL, NULL, '<p align="center">'.gettext('Google Map').'</p>', true, 'googlemap', $firstPageImages);
 			printNofM('Album', $firstAlbum, $lastAlbum, getNumSubAlbums());
 			?>
 		</div> <!-- submain -->

@@ -103,10 +103,13 @@ class PhoogleMap{
 	 * add custom javascript
 	 */
 	var $customJS = '';
+	
 	/**
-	 * @function     addGeoPoint
-	 * @description  Add's an address to be displayed on the Google Map using latitude/longitude
-	 *               early version of this function, considered experimental
+	 * Add's an address to be displayed on the Google Map using latitude/longitude
+	 *
+	 * @param string $lat latitude
+	 * @param string $long longitude
+	 * @param string $infoHTML HTML to show with the point
 	 */
 	function addGeoPoint($lat,$long,$infoHTML){
 		$pointer = count($this->validPoints);
@@ -116,11 +119,11 @@ class PhoogleMap{
 	}
 
 	/**
-	 * @function     addAddress
-	 * @param        $address:string
-	 * @returns      Boolean True:False (True if address has long/lat, false if it doesn't)
-	 * @description  Add's an address to be displayed on the Google Map
-	 *               (thus eliminating the need for two different show methods from version 1.0)
+	 * Add's an address to be displayed on the Google Map
+	 * (thus eliminating the need for two different show methods from version 1.0)
+	 *
+	 * @param string $address
+	 * @param string $htmlMessage
 	 */
 	function addAddress($address,$htmlMessage=null){
 		if (!is_string($address)){
@@ -144,14 +147,14 @@ class PhoogleMap{
 			$this->validPoints[$pointer]['htmlMessage'] = $htmlMessage;
 		}
 	}
+	
 	/**
-	 * @function     showValidPoints
-	 * @param        $displayType:string
-	 * @param        $css_id:string
-	 * @returns      nothing
-	 * @description  Displays either a table or a list of the address points that are valid.
-	 *               Mainly used for debugging but could be useful for showing a list of addresses
-	 *               on the map
+	 * Displays either a table or a list of the address points that are valid.
+	 * Mainly used for debugging but could be useful for showing a list of addresses
+	 * on the map
+	 * 
+	 * @param string $displayType
+	 * @param string $css_id
 	 */
 	function showValidPoints($displayType,$css_id){
 		$total = count($this->validPoints);
@@ -171,12 +174,11 @@ class PhoogleMap{
 		}
 	}
 	/**
-	 * @function     showInvalidPoints
-	 * @param        $displayType:string
-	 * @param        $css_id:string
-	 * @returns      nothing
-	 * @description  Displays either a table or a list of the address points that are invalid.
-	 *               Mainly used for debugging shows only the points that are NOT on the map
+	 * Displays either a table or a list of the address points that are invalid.
+	 * Mainly used for debugging shows only the points that are NOT on the map
+	 * 
+	 * @param string $displayType
+	 * @param string $css_id
 	 */
 	function showInvalidPoints($displayType,$css_id){
 		$total = count($this->invalidPoints);
@@ -196,93 +198,91 @@ class PhoogleMap{
 		}
 	}
 	/**
-	 * @function     setWidth
-	 * @param        $width:int
-	 * @returns      nothing
-	 * @description  Sets the width of the map to be displayed
+	 * Sets the width of the map to be displayed
+	 * 
+	 * @param int $width
 	 */
 	function setWidth($width){
 		$this->mapWidth = $width;
 	}
 	/**
-	 * @function     setHeight
-	 * @param        $height:int
-	 * @returns      nothing
-	 * @description  Sets the height of the map to be displayed
+	 * Sets the height of the map to be displayed
+	 *
+	 * @param int $height
 	 */
 	function setHeight($height){
 		$this->mapHeight = $height;
 	}
 	/**
-	 * @function     setAPIkey
-	 * @param        $key:string
-	 * @returns      nothing
-	 * @description  Stores the API Key acquired from Google
+	 * Stores the API Key acquired from Google
+	 *
+	 * @param string $key
 	 */
 	function setAPIkey($key){
 		$this->apiKey = $key;
 	}
 	/**
-	 * @function     setControlMapType
-	 * @param        $controltype:string
-	 * @returns      nothing
-	 * @description  Set the type of controls needed to change map type
+	 * Set the type of controls needed to change map type
+	 * 
+	 * @param string $controlmaptype the control type
 	 */
 	function setControlMapType($controlmaptype){
 		if(!empty($controlmaptype)){
-			if($controlmaptype==1)
-			$this->mapTypeControl = 'map.addControl(new GMapTypeControl());';
-			elseif($controlmaptype==2)
-			$this->mapTypeControl = 'var mapControl = new GMenuMapTypeControl(true);
-map.addControl(mapControl);';	
-			else
-			$this->mapTypeControl = $controlmaptype;
+			switch ($controlmaptype) {
+				case 1:
+					$this->mapTypeControl = 'map.addControl(new GMapTypeControl());';
+					break;
+				case 2:
+					$this->mapTypeControl = 'var mapControl = new GMenuMapTypeControl(true); map.addControl(mapControl);';
+					break;
+				default:
+					$this->mapTypeControl = $controlmaptype;
+			}
 		}
 	}
 	/**
-	 * @function     setControlMap
-	 * @param        $controltype:string
-	 * @returns      nothing
-	 * @description  Set the type of controls needed to move,zoom,pan map
+	 * Set the type of controls needed to move,zoom,pan map
+	 * 
+	 * @param string $controltype the 
 	 */
 	function setControlMap($controlmap){
 		if(!empty($controlmap)){
-			if($controlmap=='None')
-			$this->controlType = '';
-			elseif($controlmap=='Small'){
-				$this->controlType = 'map.addControl(new GSmallMapControl());';
-			}
-			elseif($controlmap=='Large'){
-				$this->controlType = 'map.addControl(new GLargeMapControl());';
-			}
-			else{
-				$this->controlType = $controlmap;
+			switch($controlmap) {
+				case 'None':
+					$this->controlType = '';
+					break;
+				case 'Small':
+					$this->controlType = 'map.addControl(new GSmallMapControl());';
+					break;
+				case 'Large':
+					$this->controlType = 'map.addControl(new GLargeMapControl());';
+					break;
+				default:
+					$this->controlType = $controlmap;
 			}
 		}
 	}
 	/**
-	 * @function    addPhysicalMap
-	 * @returns      nothing
-	 * @description  adds the physical map type
+	 * Adds the physical map type
+	 *
+	 * @param unknown_type $newMapType
 	 */
 	function addPhysicalMap($newMapType){
-		if($newMapType==1)
-		$this->physicalMap = 'map.addMapType(G_PHYSICAL_MAP);';
+		if($newMapType) $this->physicalMap = 'map.addMapType(G_PHYSICAL_MAP);';
 
 	}
 	/**
-	 * @function    add3DMap
-	 * @returns      nothing
-	 * @description  adds the Google earth plugin 3D maps
+	 * adds the Google earth plugin 3D maps
+	 *
+	 * @param string $newMapType
 	 */
 	function add3DMap($newMapType){
-		if($newMapType==1)
-		$this->ge3D = 'map.addMapType(G_SATELLITE_3D_MAP);';
+		if($newMapType) $this->ge3D = 'map.addMapType(G_SATELLITE_3D_MAP);';
 	}
 	/**
-	 * @function    setMapType
-	 * @returns      nothing
-	 * @description  adds the Google earth plugin 3D maps
+	 * adds the Google earth plugin 3D maps
+	 *
+	 * @param string $MapType
 	 */
 	function setMapType($MapType){
 		switch ($MapType) {
@@ -295,20 +295,20 @@ map.addControl(mapControl);';
 			case 'Hybrid':
 				$this->defaultMap = 'map.setMapType(G_HYBRID_MAP);';
 				break;
-			case 'Physical':
+			case 'Terrain':
 				$this->defaultMap = 'map.setMapType(G_PHYSICAL_MAP);';
 				break;
 			case 'GE':
 				$this->defaultMap = 'map.setMapType(G_SATELLITE_3D_MAP);';
 				break;
 			default:
-			 $this->defaultMap = 'map.setMapType('.$MapType.');';
+				$this->defaultMap = 'map.setMapType('.$MapType.');';
 		}
 	}
 	/**
-	 * @function    setBackGround
-	 * @returns      nothing
-	 * @description  Set the Map tiles background when loading the map
+	 * Set the Map tiles background when loading the map
+	 *
+	 * @param string $backgroundcolor
 	 */
 	function setBackGround($backgroundcolor){
 		if(!empty($backgroundcolor) && preg_match('#^\#[0-9a-f]{6}$#i', $backgroundcolor)){
@@ -316,17 +316,17 @@ map.addControl(mapControl);';
 		}
 	}
 	/**
-	 * @function     printGoogleJS
-	 * @returns      nothing
-	 * @description  Adds the necessary Javascript for the Google Map to function
-	 *               should be called in between the html <head></head> tags
+	 * The necessary Javascript for the Google Map to function
+	 * should be echoed in between the html <head></head> tags
+	 * 
+	 * @return string
 	 */
 	function printGoogleJS(){
-		echo "\n<script src=\"http://maps.google.com/maps?file=api&v=2&key=".$this->apiKey."\" type=\"text/javascript\"></script>\n";
+		return "\n<script src=\"http://maps.google.com/maps?file=api&v=2&key=".$this->apiKey."\" type=\"text/javascript\"></script>\n";
 	}
 	/**
-	 * @function     showMap
-	 * @description  Displays the Google Map on the page
+	 * Displays the Google Map on the page
+	 *
 	 */
 	function showMap(){
 		echo "\n<div id=\"map\" style=\"width: ".$this->mapWidth."px; height: ".$this->mapHeight."px\">\n</div>\n";
