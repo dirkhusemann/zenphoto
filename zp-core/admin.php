@@ -665,6 +665,11 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 			$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');
 		
 			$currentimage = 0;
+			if (getOption('auto_rotate')) {
+				$disablerotate = '';
+			} else {
+				$disablerotate = ' DISABLED';
+			}
 			foreach ($images as $filename) {
 				$image = newImage($album, $filename);
 				?>
@@ -802,10 +807,10 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 							?>
 							<input type="hidden" name="<?php echo $currentimage; ?>-oldrotation" value="<?php echo $rotation; ?>" />
 							<?php	echo gettext('Rotation: ');	?>
-							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="0" <?php checked(0, $rotation); ?> /> <?php echo gettext('none'); ?>
-							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="8" <?php checked(8, $rotation); ?> /> <?php echo gettext('90 degrees'); ?>
-							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="3" <?php checked(3, $rotation); ?> /> <?php echo gettext('180 degrees'); ?>
-							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="6" <?php checked(6, $rotation); ?> /> <?php echo gettext('270 degrees'); ?>
+							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="0" <?php checked(0, $rotation); echo $disablerotate ?> /> <?php echo gettext('none'); ?>
+							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="8" <?php checked(8, $rotation); echo $disablerotate ?> /> <?php echo gettext('90 degrees'); ?>
+							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="3" <?php checked(3, $rotation); echo $disablerotate ?> /> <?php echo gettext('180 degrees'); ?>
+							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="6" <?php checked(6, $rotation); echo $disablerotate ?> /> <?php echo gettext('270 degrees'); ?>
 						</p>
 						</td>
 					</tr>
