@@ -100,7 +100,7 @@ if (isset($_REQUEST['crop'])) {
 	$imageobj->set('thumbH', $ch);
 	$imageobj->save();
 
-	$return = '/admin.php?page=edit&album=' . urlencode($albumname).'&saved&subpage='.sanitize($_REQUEST['subpage']).'&tagsort='.sanitize($_REQUEST['tagsort']).'&tab=imageinfo';
+	$return = '/admin-edit.php?page=edit&album=' . urlencode($albumname).'&saved&subpage='.sanitize($_REQUEST['subpage']).'&tagsort='.sanitize($_REQUEST['tagsort']).'&tab=imageinfo';
 	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . $return);
 	exit();
 	}
@@ -198,7 +198,7 @@ printAdminHeader();
 								<input type="checkbox" name="clear_crop" value="1" /> <?php echo gettext("Reset to the default cropping"); ?><br>
 								<input type="submit" size="4" id="submit" name="submit" value="<?php echo gettext("Save the cropping"); ?>" style="margin-top: 10px" />
 								<input type="button"  value="<?php echo gettext("cancel"); ?>" style="margin-top: 10px" 
-													onClick="window.location='admin.php?page=edit&amp;album=<?php echo urlencode($albumname); ?>&amp;subpage=<?php echo $subpage; ?>&amp;tagsort=<?php echo $tagsort; ?>&amp;tab=imageinfo'" />
+													onClick="window.location='admin-edit.php?page=edit&amp;album=<?php echo urlencode($albumname); ?>&amp;subpage=<?php echo $subpage; ?>&amp;tagsort=<?php echo $tagsort; ?>&amp;tab=imageinfo'" />
 							<?php
 							} else {
 								echo gettext('Thumbnail cropping is disabled. Enable this option for the theme if you wish cropped thumbnails.');

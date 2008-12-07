@@ -57,7 +57,7 @@ if (isset($_POST['savealbum'])) {
 			fwrite($f,"WORDS=$words\nTHUMB=$thumb\nFIELDS=$fields\n");
 			fclose($f);
 			// redirct to edit of this album
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit&album=" . urlencode($redirect));
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-edit.php?page=edit&album=" . urlencode($redirect));
 			exit();
 		}
 	}

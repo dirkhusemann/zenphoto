@@ -63,8 +63,8 @@ if (!isset($_GET['album'])) {
 <div id="content">
 
 <h1>Sort Album: <?php echo $album->getTitle(); ?></h1>
-<p><?php printAdminLinks('edit', "&laquo; ".gettext("back to the album list"), gettext("Back to the list of albums"));?> 
-| <?php printAdminLinks("edit&album=". urlencode( ($album->getFolder()) ), gettext("edit album"), gettext("Edit Album")); ?> 
+<p><?php printAlbumEditLinks('', "&laquo; ".gettext("back to the album list"), gettext("Back to the list of albums"));?> 
+| <?php printAlbumEditLinks("&album=". urlencode( ($album->getFolder()) ), gettext("edit album"), gettext("Edit Album")); ?> 
 | <?php printViewLink($album, gettext("view album"), gettext("View Album")); ?>
 </p>
 	<?php

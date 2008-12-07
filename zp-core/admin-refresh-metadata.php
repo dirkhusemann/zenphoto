@@ -76,7 +76,7 @@ if (isset($_GET['refresh']) && db_connect()) {
 	}
 	if (empty($imageid)) {
 		echo "<h3>".$finished."</h3>";
-		echo "<p><a href=\"admin.php$r\">&laquo; ".gettext('Back')."</a></p>";
+		echo "<p><a href=\"admin.php$r\">&laquo; ".gettext('Back')."</a></p>"; //TODO: do we need a tab to return to?
 	} else {
 		echo '<h3>'.$incomplete.'</h3>';
 		if (!empty($ret)) $ret = '&amp;return='.$ret;

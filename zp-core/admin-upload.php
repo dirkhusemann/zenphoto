@@ -76,7 +76,7 @@ if (isset($_GET['action'])) {
 					}
 				}
 			}
-			header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin.php?page=edit&album='.urlencode($folder).'&uploaded&subpage=1&tab=imageinfo');
+			header('Location: '.FULLWEBPATH.'/'.ZENFOLDER.'/admin-edit.php?page=edit&album='.urlencode($folder).'&uploaded&subpage=1&tab=imageinfo');
 			exit();
 
 		} else {

@@ -69,7 +69,7 @@ function printSubalbumAdmin($text, $before='', $after='') {
 	global $_zp_current_album, $_zp_themeroot;
 	if (zp_loggedin()) {
 		echo $before;
-		printLink(WEBPATH.'/' . ZENFOLDER . '/admin.php?page=edit&album=' . urlencode($_zp_current_album->name), $text, NULL, NULL, NULL);
+		printLink(WEBPATH.'/' . ZENFOLDER . '/admin-edit.php?page=edit&album=' . urlencode($_zp_current_album->name), $text, NULL, NULL, NULL);
 		echo $after;
 	}
 }
@@ -1044,9 +1044,9 @@ function printSortableGalleryLink($text, $title, $class=NULL, $id=NULL) {
 	global $_zp_sortable_list, $_zp_current_album;
 	if (zp_loggedin()) {
 		if (!isset($_GET['sortable'])) {
-			printLink(WEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit", $text, $title, $class, $id);
+			printLink(WEBPATH . "/" . ZENFOLDER . "/admin-edit.php?page=edit", $text, $title, $class, $id);
 		} else {
-			$_zp_sortable_list->printForm(WEBPATH . "/" . ZENFOLDER . "/admin.php?page=edit", 'POST', gettext('Save'), 'button');
+			$_zp_sortable_list->printForm(WEBPATH . "/" . ZENFOLDER . "/admin-edit.php?page=edit", 'POST', gettext('Save'), 'button');
 		}
 	}
 }

@@ -88,7 +88,7 @@ function printAdminToolbox($id='admin') {
 					echo "</li>\n";
 				}
 				// and a delete link
-				echo "<li><a href=\"javascript: confirmDeleteAlbum('".$zf."/admin.php?page=edit&amp;action=deletealbum&amp;album=" .
+				echo "<li><a href=\"javascript: confirmDeleteAlbum('".$zf."/admin-edit.php?page=edit&amp;action=deletealbum&amp;album=" .
 					urlencode(urlencode($albumname)) .
 					"','".js_encode(gettext("Are you sure you want to delete this entire album?"))."','".js_encode(gettext("Are you Absolutely Positively sure you want to delete the album? THIS CANNOT BE UNDONE!")).
 					"');\" title=\"".gettext("Delete the album")."\">".gettext("Delete album")."</a></li>\n";
@@ -111,7 +111,7 @@ function printAdminToolbox($id='admin') {
 			$imagename = urlencode($_zp_current_image->filename);
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				// if admin has edit rights on this album, provide a delete link for the image.
-				echo "<li><a href=\"javascript: confirmDeleteImage('".$zf."/admin.php?page=edit&amp;action=deleteimage&amp;album=" .
+				echo "<li><a href=\"javascript: confirmDeleteImage('".$zf."/admin-edit.php?page=edit&amp;action=deleteimage&amp;album=" .
 				urlencode(urlencode($albumname)) . "&amp;image=". urlencode($imagename) . "','". js_encode(gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!")) . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
 				echo "</li>\n";
 			}

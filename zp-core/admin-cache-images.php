@@ -102,7 +102,7 @@ echo "\n<body>";
 	} else {
 		$r = '';
 	}
-	echo "<p><a href=\"admin.php$r\">&laquo; ".gettext("Back")."</a></p>";
+	echo "<p><a href=\"admin.php$r\">&laquo; ".gettext("Back")."</a></p>"; //TODO: do we need a tab to return to?
 	echo "\n" . '</div>';
 	echo "\n" . '</div>';
 

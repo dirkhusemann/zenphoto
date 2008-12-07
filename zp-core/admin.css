@@ -497,20 +497,35 @@ input.tags {
 }
 
 #overview-stats {
-	float: left;
+	float:left;
+	width: 40%;
 	margin: 0 0 10px 10px;
-	padding: 10px;
+	padding: 0px;
 }
 
 #overview-maint {
-	float: left;
+	float:left;
+	width: 40%;
 	margin: 0 0 10px 10px;
 	padding: 10px;
 }
+#overview-maint_l {
+	float:left;
+	width: 45%;
+	margin-left:0px;
+	margin-right:10px;
+}
+#overview-maint_r {
+	float:left;
+	width: 45%;
+	margin-left:0px;
+	margin-right:10px;
+}
 
 #overview-comments {
+	float:left;
 	width: 40%;
-	float: left;
+	margin: 0 0 10px 10px;
 	padding: 10px;
 }
 
@@ -1057,4 +1072,10 @@ ul.pagelist li.current {
 
 .jcExample p{
 	width: 400px;
+}
+#administration {
+	float:left;
+	text-align:left;
+	font-size: 2em;
+	text-decoration:none;
 }

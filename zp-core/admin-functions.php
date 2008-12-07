@@ -275,9 +275,9 @@ function printAdminHeader($path='') {
 }
 
 /**
- * Print a link to a particular admin page.
+ * Print a link to a particular album edit function.
  *
- * @param $action The action page that to which this link will point. E.g. edit, comment, etc.
+ * @param $param The album, etc parameters.
  * @param $text   Text for the hyperlink.
  * @param $title  Optional title attribute for the hyperlink. Default is NULL.
  * @param $class  Optional class attribute for the hyperlink.  Default is NULL.
@@ -286,9 +286,8 @@ function printAdminHeader($path='') {
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function printAdminLinks($action, $text, $title=NULL, $class=NULL, $id=NULL) {
-
-	printLink("admin.php?page=". $action, $text, $title, $class, $id);
+function printAlbumEditLinks($param, $text, $title=NULL, $class=NULL, $id=NULL) {
+	printLink("admin-edit.php?page=edit". $param, $text, $title, $class, $id);
 }
 
 /**
@@ -409,7 +408,11 @@ function printLoginForm($redirect=null, $logo=true) {
  */
 function printLogoAndLinks() {
 	global $_zp_current_admin;
-	echo "\n\n<a href=\"".WEBPATH."/". ZENFOLDER."/admin.php\" id=\"logo\"><img src=\"".WEBPATH."/".ZENFOLDER."/images/zen-logo.gif\" title=\"Zen Photo\" /></a>";
+	?>
+	<span id="administration"><img src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/images/zen-logo.gif" title="<?php echo gettext('Zenphoto Administration'); ?>" align="absbottom" />
+	<?php echo gettext("Administration"); ?>
+	</span>
+	<?php
 	echo "\n<div id=\"links\">";
 	echo "\n  ";
 	if (!is_null($_zp_current_admin)) {
@@ -459,7 +462,7 @@ function printTabs($currenttab) {
 
 	if (($_zp_loggedin & (EDIT_RIGHTS | ADMIN_RIGHTS))) {
 		echo "\n    <li". (($currenttab == 'edit') ? " class=\"current\""     : "") .
- 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php?page=edit\">".gettext("edit")."</a></li>";
+ 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-edit.php?page=edit\">".gettext("edit")."</a></li>";
 	}
 	if (($_zp_loggedin & ADMIN_RIGHTS)) {
 		echo "\n    <li". (($currenttab == 'tags') ? " class=\"current\""     : "") .

@@ -1,8 +1,8 @@
 <?php
 
 /* Plug-in for theme option handling
- * The Options page of admin.php tests for the presence of this file in a theme folder
- * If it is present admin.php links to it with a require_once call.
+ * The Admin Options page tests for the presence of this file in a theme folder
+ * If it is present it is linked to with a require_once call.
  * If it is not present, no theme options are displayed.
  *
  * Interface functions:
