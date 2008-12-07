@@ -1,7 +1,8 @@
 <?php
 define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
-	
+require_once(dirname(__FILE__).'/template-functions.php');
+
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
 	exit();
@@ -20,6 +21,31 @@ setOption('image_use_side', 'longest', false);
 $size = min(400, $width, $height);
 $cropwidth = getOption("thumb_crop_width");
 $cropheight = getOption("thumb_crop_height");
+if (getOption('thumb_crop')) {
+	$thumbcropwidth = $cropwidth;
+	$thumbcropheight = $cropheight;
+} else {	
+	if (isImageVideo($imageobj)) {
+		if ($imageobj->objectsThumb != NULL) {
+			$imgpath = getAlbumFolder().$imageobj->album->name.'/'.$imageobj->objectsThumb;
+		} else {
+			$imgpath = SERVERPATH . '/' . THEMEFOLDER . '/' . UTF8ToFilesystem($_zp_gallery->getCurrentTheme()) . '/images/multimediaDefault.png';
+			if (!file_exists($imgfile)) {
+				$imgpath = SERVERPATH . "/" . ZENFOLDER . '/images/multimediaDefault.png';
+			}
+		}
+		$timg = get_image($imgpath);
+		$thumbcropwidth = imagesx($timg);
+		$thumbcropheight = imagesy($timg);
+	} else {
+		$thumbcropwidth = $imageobj->getWidth();
+		$thumbcropheight = $imageobj->getHeight();
+	}
+	$tsize = getOption('thumb_size');
+	$max = max($thumbcropwidth, $thumbcropheight);
+	$thumbcropwidth = $thumbcropwidth * ($tsize/$max);
+	$thumbcropheight = $thumbcropheight * ($tsize/$max);
+}
 if ($width >= $height) {
 	$sr = $size/$width;
 	$sizedwidth = $size;
@@ -139,8 +165,8 @@ printAdminHeader();
 				<h1><?php echo gettext("Custom thumbnail cropping"); ?></h1>
 				<p><?php echo gettext("You can change the portion of your image which is shown in thumbnails by cropping it here."); ?></p>
 				<div style="display:block">
-					<div style="float: left; width:<?php echo $cropwidth; ?>px; text-align: center;margin-right: 18px;  margin-bottom: 10px;">
-						<img src="<?php echo $currentthumbimage; ?>" style="width:<?php echo $cropwidth; ?>px;height:<?php echo $cropheight; ?>px; border: 4px solid gray; float: left"/>
+					<div style="float: left; width:<?php echo $thumbcropwidth; ?>px; text-align: center;margin-right: 18px;  margin-bottom: 10px;">
+						<img src="<?php echo $currentthumbimage; ?>" style="width:<?php echo $thumbcropwidth; ?>px;height:<?php echo $thumbcropheight; ?>px; border: 4px solid gray; float: left"/>
 		 				<?php echo gettext("current thumbnail"); ?>
 		 			</div>
 		 			
@@ -166,10 +192,18 @@ printAdminHeader();
 							<input type="hidden" id="tagsort" name="tagsort" value="<?php echo $tagsort; ?>" />
 							<input type="hidden" id="subpage" name="subpage" value="<?php echo $subpage; ?>" />
 							<input type="hidden" id="crop" name="crop" value="crop" />
-							<input type="checkbox" name="clear_crop" value="1" /> <?php echo gettext("Reset to the default cropping"); ?><br>
-							<input type="submit" size="4" id="submit" name="submit" value="<?php echo gettext("Save the cropping"); ?>" style="margin-top: 10px" />
-							<input type="button"  value="<?php echo gettext("cancel"); ?>" style="margin-top: 10px" 
-												onClick="window.location='admin.php?page=edit&amp;album=<?php echo urlencode($albumname); ?>&amp;subpage=<?php echo $subpage; ?>&amp;tagsort=<?php echo $tagsort; ?>&amp;tab=imageinfo'" />
+							<?php 
+							if (getOption('thumb_crop')) {
+							?>
+								<input type="checkbox" name="clear_crop" value="1" /> <?php echo gettext("Reset to the default cropping"); ?><br>
+								<input type="submit" size="4" id="submit" name="submit" value="<?php echo gettext("Save the cropping"); ?>" style="margin-top: 10px" />
+								<input type="button"  value="<?php echo gettext("cancel"); ?>" style="margin-top: 10px" 
+													onClick="window.location='admin.php?page=edit&amp;album=<?php echo urlencode($albumname); ?>&amp;subpage=<?php echo $subpage; ?>&amp;tagsort=<?php echo $tagsort; ?>&amp;tab=imageinfo'" />
+							<?php
+							} else {
+								echo gettext('Thumbnail cropping is disabled. Enable this option for the theme if you wish cropped thumbnails.');
+							}
+							?>			
 						</form>
 
 					</div>
