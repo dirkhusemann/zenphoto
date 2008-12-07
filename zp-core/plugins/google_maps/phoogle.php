@@ -254,28 +254,6 @@ class PhoogleMap{
 		}
 	}
 	/**
-	 * Returns Gmap type from google_maps option name
-	 *
-	 * @param string $mapoption the google_maps option
-	 * @return string
-	 */
-	function transformMapOption($mapoption) {
-		switch ($mapoption) {
-			case 'gmaps_maptype_sat':
-				return 'G_SATELLITE_MAP';
-			case 'gmaps_maptype_map':
-				return 'G_NORMAL_MAP';
-			case 'gmaps_maptype_hyb':
-				return 'G_HYBRID_MAP';
-			case 'gmaps_maptype_P':
-				return 'G_PHYSICAL_MAP';
-			case 'gmaps_maptype_3D':
-				return 'G_SATELLITE_3D_MAP';
-			default:
-				return strtoupper($newMapType);
-		}
-	}
-	/**
 	 * Sets the map selections to empty.
 	 *
 	 */
@@ -288,7 +266,7 @@ class PhoogleMap{
 	 * @param string $newMapType
 	 */
 	function addMap($newMapType){
-		$this->mapselections .= 'map.addMapType('.$this->transformMapOption($newMapType).'); ';
+		$this->mapselections .= 'map.addMapType('.strtoupper($newMapType).'); ';
 	}
 	/**
 	 * sets the starting map type
@@ -296,7 +274,7 @@ class PhoogleMap{
 	 * @param string $MapType
 	 */
 	function setMapType($MapType){
-		$this->defaultMap = 'map.setMapType('.$this->transformMapOption($MapType).');';
+		$this->defaultMap = 'map.setMapType('.strtoupper($MapType).');';
 	}
 	/**
 	 * Set the Map tiles background when loading the map

@@ -46,16 +46,16 @@ class google_mapsOptions {
 		setOptionDefault('gmaps_control_maptype', 1);
 		setOptionDefault('gmaps_control', 'None');
 		setOptionDefault('gmaps_background', '');
-		setOptionDefault('gmaps_starting_map', 'gmaps_maptype_map');
+		setOptionDefault('gmaps_starting_map', 'G_SATELLITE_MAP');
 	}
 
 	function getOptionsSupported() {
 		$MapTypes =  array(); // order matters here because the first allowed map is selected if the 'gmaps_starting_map' is not allowed
-		if (getOption('gmaps_maptype_map')) $MapTypes[gettext('Map')] = 'gmaps_maptype_map';
-		if (getOption('gmaps_maptype_hyb')) $MapTypes[gettext('Hybrid')] = 'gmaps_maptype_hyb';
-		if (getOption('gmaps_maptype_sat')) $MapTypes[gettext('Satellite')] = 'gmaps_maptype_sat';
-		if (getOption('gmaps_maptype_P')) $MapTypes[gettext('Terrain')] = 'gmaps_maptype_P';
-		if (getOption('gmaps_maptype_3D')) $MapTypes[gettext('Google Earth')] = 'gmaps_maptype_3D';
+		if (getOption('gmaps_maptype_map')) $MapTypes[gettext('Map')] = 'G_NORMAL_MAP';
+		if (getOption('gmaps_maptype_hyb')) $MapTypes[gettext('Hybrid')] = 'G_HYBRID_MAP';
+		if (getOption('gmaps_maptype_sat')) $MapTypes[gettext('Satellite')] = 'G_SATELLITE_MAP';
+		if (getOption('gmaps_maptype_P')) $MapTypes[gettext('Terrain')] = 'G_PHYSICAL_MAP';
+		if (getOption('gmaps_maptype_3D')) $MapTypes[gettext('Google Earth')] = 'G_SATELLITE_3D_MAP';
 		
 		$defaultmap = getOption('gmaps_starting_map');
 		if (array_search($defaultmap, $MapTypes) === false) { // the starting map is not allowed, pick a new one
@@ -131,11 +131,11 @@ function setupAllowedMaps($defaultmap, $allowedmaps) {
 	global $_zp_phoogle;
 	if (is_null($allowedmaps)) {
 		$allowedmaps = array();
-		if (getOption('gmaps_maptype_map')) $allowedmaps[gettext('Map')] = 'gmaps_maptype_map';
-		if (getOption('gmaps_maptype_hyb')) $allowedmaps[gettext('Hybrid')] = 'gmaps_maptype_hyb';
-		if (getOption('gmaps_maptype_sat')) $allowedmaps[gettext('Satellite')] = 'gmaps_maptype_sat';
-		if (getOption('gmaps_maptype_P')) $allowedmaps[gettext('Terrain')] = 'gmaps_maptype_P';
-		if (getOption('gmaps_maptype_3D')) $allowedmaps[gettext('Google Earth')] = 'gmaps_maptype_3D';
+		if (getOption('gmaps_maptype_map')) $allowedmaps[gettext('Map')] = 'G_NORMAL_MAP';
+		if (getOption('gmaps_maptype_hyb')) $allowedmaps[gettext('Hybrid')] = 'G_HYBRID_MAP';
+		if (getOption('gmaps_maptype_sat')) $allowedmaps[gettext('Satellite')] = 'G_SATELLITE_MAP';
+		if (getOption('gmaps_maptype_P')) $allowedmaps[gettext('Terrain')] = 'G_PHYSICAL_MAP';
+		if (getOption('gmaps_maptype_3D')) $allowedmaps[gettext('Google Earth')] = 'G_SATELLITE_3D_MAP';
 	}
 	if (is_null($defaultmap))	$defaultmap = getOption('gmaps_starting_map');
 	if (array_search($defaultmap, $allowedmaps) === false) { // the starting map is not allowed, pick a new one
@@ -153,7 +153,7 @@ function setupAllowedMaps($defaultmap, $allowedmaps) {
 /**
  * Causes a Google map to be printed based on the gps data in the current image
  * @param string $zoomlevel the zoom in for the map
- * @param string $defaultmaptype the starting display of the map valid values are Satellite | Map | Mixed |Physical | GE
+ * @param string $defaultmaptype the starting display of the map valid values are G_NORMAL_MAP | G_SATELLITE_MAP | G_HYBRID_MAP | G_PHYSICAL_MAP | G_SATELLITE_3D_MAP
  * @param int $width is the image width of the map. NULL will use the default
  * @param int $height is the image height of the map. NULL will use the default
  * @param string $text text for the pop-up link
@@ -218,7 +218,7 @@ function printImageMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
 			//to avoid problems with google earth and the toggle options, the toggle option is removed from here when GE is activated
 			//it is possible to have both functionnality work but the toogle option should then be integrated in the phoogle map class dirctly within the script
 			//that calls the map and should alos trigger a map type change. check Sobre theme or  have alook at www.kaugite.com for an example
-			$toggle = $toggle && $defaultmaptype != 'gmaps_maptype_3D';
+			$toggle = $toggle && $defaultmaptype != 'G_SATELLITE_3D_MAP';
 			if (is_null($text)) $text = gettext('Google Map');
 			echo "<a href=\"javascript: vtoggle('$dataid');\" title=\"".gettext('Display or hide the Google Map.')."\">";
 			echo $text;
@@ -233,7 +233,7 @@ function printImageMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
 /**
  * Causes a Google map to be printed based on the gps data in all the images in the album
  * @param  string $zoomlevel the zoom in for the map. NULL will use the default (auto-zoom based on points)
- * @param string $defaultmaptype of map to produce: allowed values are Satellite | Map | Mixed |Physical | GE
+ * @param string $defaultmaptype the starting display of the map valid values are G_NORMAL_MAP | G_SATELLITE_MAP | G_HYBRID_MAP | G_PHYSICAL_MAP | G_SATELLITE_3D_MAP
  * @param int $width is the image width of the map. NULL will use the default
  * @param int $height is the image height of the map. NULL will use the default
  * @param string $text text for the pop-up link
@@ -307,7 +307,7 @@ function printAlbumMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
 			//to avoid problems with google earth and the toggle options, the toggle option is removed from here when GE is activated
 			//it is possible to have both functionnality work but the toogle option should then be integrated in the phoogle map class dirctly within the script
 			//that calls the map and should alos trigger a map type change. check Sobre theme or  have alook at www.kaugite.com for an example
-			$toggle = $toggle && $defaultmaptype != 'gmaps_maptype_3D';
+			$toggle = $toggle && $defaultmaptype != 'G_SATELLITE_3D_MAP';
 
 			if (is_null($text)) $text = gettext('Google Map');
 			echo "<a href=\"javascript: vtoggle('$dataid');\" title=\"".gettext('Display or hide the Google Map.')."\">";
