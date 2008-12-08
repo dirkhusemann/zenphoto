@@ -47,10 +47,8 @@ class Image extends PersistentObject {
 		$album_name = $album->name;
 		$new = parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', false, empty($album_name));
 		$this->getExifData(); // prime the exif fields
+		$this->updateDimensions();
 		if ($new) {
-			$size = getimagesize($this->localpath);
-			$this->set('width', $size[0]);
-			$this->set('height', $size[1]);
 
 			$metadata = getImageMetadata($this->localpath);
 			if (isset($metadata['date'])) {
@@ -186,16 +184,10 @@ class Image extends PersistentObject {
 	 *
 	 */
 	function updateDimensions() {
-		if (!$this->fileChanged()) {
-			if (!(($this->get('width') == 0) || ($this->get('height') == 0))) {
-				return; // we already have the data
-			}
-		}
-
 		$size = getimagesize($this->localpath);
 		if (function_exists('imagerotate') && getOption('auto_rotate'))  {
-			// Swap the width and height values if the image should be rotated
-				
+			// Swap the width and height values if the image should be rotated			
+			
 			$splits = preg_split('/!([(0-9)])/', $this->get('EXIFOrientation'));
 			$rotation = $splits[0];
 			switch ($rotation) {
@@ -210,7 +202,6 @@ class Image extends PersistentObject {
 
 		$this->set('width', $size[0]);
 		$this->set('height', $size[1]);
-		$this->save();
 	}
 
 	/**
@@ -219,7 +210,6 @@ class Image extends PersistentObject {
 	 * @return int
 	 */
 	function getWidth() {
-		$this->updateDimensions();
 		return $this->get('width');
 	}
 
@@ -229,7 +219,6 @@ class Image extends PersistentObject {
 	 * @return int
 	 */
 	function getHeight() {
-		$this->updateDimensions();
 		return $this->get('height');
 	}
 

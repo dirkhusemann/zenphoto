@@ -87,6 +87,7 @@ class TextObject extends Image {
 
 		if (parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', false, false)) {
 
+			$this->updateDimensions();
 			$this->set('width', getOption('image_size')); 
 			$this->set('height', floor((getOption('image_size') * 24) / 36));
 
@@ -138,23 +139,6 @@ class TextObject extends Image {
 	}
 
 
-	/**
-	 * Returns the height of the textarea
-	 *
-	 * @return int
-	 */
-	function getHeight() {
-		return floor((getOption('image_size') * 24) / 36);
-	}
-
-	/**
-	 * Returns the width of the textarea
-	 *
-	 * @return int
-	 */
-	function getWidth() {
-		return getOption('image_size');
-	}
 
 	function getCustomImage() {
 		return $this->getBody();
@@ -165,6 +149,9 @@ class TextObject extends Image {
 	}
 
 	function updateDimensions() {
+		$this->set('width', getOption('image_size')); 
+		$this->set('height', floor((getOption('image_size') * 24) / 36));
+		$this->save();
 	}
 	
 }

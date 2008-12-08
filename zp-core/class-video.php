@@ -31,10 +31,9 @@ class Video extends Image {
 
 		// This is where the magic happens...
 		$album_name = $album->name;
+		$this->updateDimensions();
 		if ( parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', false, empty($album_name))) {
-			$this->set('width', 320);
-			$this->set('height', 240);
-
+			
 			$newDate = strftime('%Y/%m/%d %T', filemtime($this->localpath));
 			$this->set('date', $newDate);
 			$alb = $this->album;
@@ -57,14 +56,8 @@ class Video extends Image {
 	 *
 	 */
 	function updateDimensions() {
-		if (!$this->fileChanged()) {
-			if (!(($this->get('width') == 0) || ($this->get('height') == 0))) {
-				return; // we already have the data
-			}
-		}
 		$this->set('width', 320);
 		$this->set('height', 240);
-		$this->save();
 	}
 
 	/**
