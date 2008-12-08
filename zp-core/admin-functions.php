@@ -1314,14 +1314,14 @@ function printAlbumButtons($album) {
 		echo "<form name=\"clear-cache\" action=\"?action=clear_cache\"" . " method=\"post\">";
 		echo "<input type=\"hidden\" name=\"action\" value=\"clear_cache\">";
 		echo "<input type=\"hidden\" name=\"album\" value=" . urlencode($album->name) . ">";
-		echo "<button type=\"submit\" class=\"tooltip\" id='edit_hitcounter' title=\"".gettext("Clears the album's cached images.")."\"><img src=\"images/burst.png\" style=\"border: 0px;\" /> ".gettext("Clear album cache")."</button>";
+		echo "<button type=\"submit\" class=\"tooltip\" id='edit_hitcounter' title=\"".gettext("Clears the album's cached images.")."\"><img src=\"images/edit-delete.png\" style=\"border: 0px;\" /> ".gettext("Clear album cache")."</button>";
 		echo "</form>";
 
 		echo "\n<td valign=\"top\">";
 		echo "<form name=\"cache_images\" action=\"admin-cache-images.php\" method=\"post\">";
 		echo "<input type=\"hidden\" name=\"album\" value=" . urlencode($album->name) . ">";
 		echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
-		echo "<button type=\"submit\" class=\"tooltip\" id='edit_cache' title=\"".gettext("Cache newly uploaded images.")."\"><img src=\"images/cache.png\" style=\"border: 0px;\" />";
+		echo "<button type=\"submit\" class=\"tooltip\" id='edit_cache' title=\"".gettext("Cache newly uploaded images.")."\"><img src=\"images/cache1.png\" style=\"border: 0px;\" />";
 		echo " ".gettext("Pre-Cache Images")."</Button>";
 		echo "</form>\n</td>";
 
@@ -1329,7 +1329,7 @@ function printAlbumButtons($album) {
 		echo "<form name=\"refresh_metadata\" action=\"admin-refresh-metadata.php\"?album=" . urlencode($album->name) . "\" method=\"post\">";
 		echo "<input type=\"hidden\" name=\"album\" value=" . urlencode($album->name) . ">";
 		echo "<input type=\"hidden\" name=\"return\" value=" . urlencode($album->name) . ">";
-		echo "<button type=\"submit\" class=\"tooltip\" id='edit_refresh' title=\"".gettext("Forces a refresh of the EXIF and IPTC data for all images in the album.")."\"><img src=\"images/warn.png\" style=\"border: 0px;\" /> ".gettext("Refresh Metadata")."</button>";
+		echo "<button type=\"submit\" class=\"tooltip\" id='edit_refresh' title=\"".gettext("Forces a refresh of the EXIF and IPTC data for all images in the album.")."\"><img src=\"images/redo.png\" style=\"border: 0px;\" /> ".gettext("Refresh Metadata")."</button>";
 		echo "</form>";
 		echo "\n</td>";
 
@@ -1339,7 +1339,7 @@ function printAlbumButtons($album) {
 		echo "<input type=\"hidden\" name=\"action\" value=\"reset_hitcounters\">";
 		echo "<input type=\"hidden\" name=\"albumid\" value=" . $album->getAlbumID() . ">";
 		echo "<input type=\"hidden\" name=\"album\" value=" . urlencode($album->name) . ">";
-		echo "<button type=\"submit\" class=\"tooltip\" id='edit_hitcounter' title=\"".gettext("Resets all hitcounters in the album.")."\"><img src=\"images/reset.png\" style=\"border: 0px;\" /> ".gettext("Reset hitcounters")."</button>";
+		echo "<button type=\"submit\" class=\"tooltip\" id='edit_hitcounter' title=\"".gettext("Resets all hitcounters in the album.")."\"><img src=\"images/reset1.png\" style=\"border: 0px;\" /> ".gettext("Reset hitcounters")."</button>";
 		echo "</form>";
 ?>
 			</tr>
@@ -1432,16 +1432,16 @@ function printAlbumEditRow($album) {
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	echo '<a class="cache" href="admin-cache-images.php?page=edit&amp;album='.urlencode($album->name)."&return=*".urlencode(dirname($album->name)).
  			'" title="'.sprintf(gettext('Pre-cache images in %s'), $album->name) . '">';
-	echo '<img src="images/cache.png" style="border: 0px;" alt="'.sprintf(gettext('Cache the album %s'), $album->name) . '" /></a>';
+	echo '<img src="images/cache1.png" style="border: 0px;" alt="'.sprintf(gettext('Cache the album %s'), $album->name) . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	echo '<a class="warn" href="admin-refresh-metadata.php?page=edit&amp;album=' . urlencode($album->name) . "&return=*".urlencode(dirname($album->name)) .
  			'" title="'.sprintf(gettext('Refresh metadata for the album %s'), $album->name) . '">';
-	echo '<img src="images/warn.png" style="border: 0px;" alt="'.sprintf(gettext('Refresh image metadata in the album %s'), $album->name) . '" /></a>';
+	echo '<img src="images/redo1.png" style="border: 0px;" alt="'.sprintf(gettext('Refresh image metadata in the album %s'), $album->name) . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	echo '<a class="reset" href="?action=reset_hitcounters&amp;albumid='.$album->getAlbumID().'&amp;album='.urlencode($album->name).'" title="'.sprintf(gettext('Reset hitcounters for album %s'), $album->name) . '">';
-	echo '<img src="images/reset.png" style="border: 0px;" alt="'.sprintf(gettext('Reset hitcounters for the album %s'), $album->name) . '" /></a>';
+	echo '<img src="images/reset1.png" style="border: 0px;" alt="'.sprintf(gettext('Reset hitcounters for the album %s'), $album->name) . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	echo "<a class=\"delete\" href=\"javascript: confirmDeleteAlbum('?page=edit&amp;action=deletealbum&amp;album=" . urlencode(urlencode($album->name)) .

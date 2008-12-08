@@ -358,7 +358,7 @@ $buttonlist = array();
 $buttonlist[gettext("Check for zenphoto update")] = array(
 							'formname'=>'check_updates',
 							'action'=>'admin.php?check_for_update',
-							'icon'=>'images/pass.png', 
+							'icon'=>'images/accept.png', 
 							'title'=>gettext("Queries the Zenphoto web site for the latest version and compares that with the one that is running."),
 							'alt'=>'',
 							'hidden'=> '<input type="hidden" name="action" value="check_for_update">',
@@ -376,7 +376,7 @@ $buttonlist[gettext("Refresh the Database")] = array(
 $buttonlist[gettext("Purge cache")] = array(
 							'formname'=>'clear_cache',
 							'action'=>'admin.php?action=clear_cache=true',
-							'icon'=>'images/burst.png', 
+							'icon'=>'images/edit-delete.png', 
 							'title'=>gettext("Clears the image cache. Images will be re-cached as they are viewed."),
 							'alt'=>'',
 							'hidden'=> '<input type="hidden" name="action" value="clear_cache">',
@@ -385,7 +385,7 @@ $buttonlist[gettext("Purge cache")] = array(
 $buttonlist[gettext("Pre-Cache Images")] = array(
 							'formname'=>'cache_images',
 							'action'=>'admin-cache-images.php',
-							'icon'=>'images/cache.png', 
+							'icon'=>'images/cache1.png', 
 							'title'=>gettext("Finds newly uploaded images that have not been cached and creates the cached version. It also refreshes the numbers above. If you have a large number of images in your gallery you might consider using the <em>pre-cache image</em> link for each album to avoid swamping your browser."),
 							'alt'=>'',
 							'hidden'=> '',
@@ -394,7 +394,7 @@ $buttonlist[gettext("Pre-Cache Images")] = array(
 $buttonlist[gettext("Refresh Metadata")] = array(
 							'formname'=>'refresh_metadata',
 							'action'=>'refresh_metadata',
-							'icon'=>'images/warn.png', 
+							'icon'=>'images/redo.png', 
 							'title'=>gettext("Forces a refresh of the EXIF and IPTC data for all images."),
 							'alt'=>'',
 							'hidden'=> '',
@@ -403,7 +403,7 @@ $buttonlist[gettext("Refresh Metadata")] = array(
 $buttonlist[gettext("Reset hitcounters")] = array(
 							'formname'=>'reset_hitcounters',
 							'action'=>'admin.php?action=reset_hitcounters=true',
-							'icon'=>'images/reset.png', 
+							'icon'=>'images/reset1.png', 
 							'title'=>gettext("Sets all album and image hitcounters to zero."),
 							'alt'=>'Reset hitcounters',
 							'hidden'=> '<input type="hidden" name="action" value="reset_hitcounters">',

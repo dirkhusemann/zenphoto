@@ -255,7 +255,7 @@ if (db_connect()) {
 		<br />
 <div class="buttons pad_button" id="setdefaults">
 <button class="tooltip" type="submit" title="<?php echo gettext("Set defaults for album publishing and image visibility."); ?>">
-	<img src="<?php echo $webpath; ?>images/burst.png" alt="" /> <?php echo gettext("Set defaults"); ?>
+	<img src="<?php echo $webpath; ?>images/burst1.png" alt="" /> <?php echo gettext("Set defaults"); ?>
 </button>
 </div>
 <br clear="all" />
@@ -273,7 +273,7 @@ if (count($publish_albums_list) > 0) {
 	</ul>
 	<div class="buttons pad_button" id="publishalbums">
 	<button class="tooltip" type="submit" title="<?php echo gettext("Publish waiting albums."); ?>">
-		<img src="<?php echo $webpath; ?>images/cache.png" alt="" /> <?php echo gettext("Publish albums"); ?>
+		<img src="<?php echo $webpath; ?>images/cache1.png" alt="" /> <?php echo gettext("Publish albums"); ?>
 	</button>
 	</div>
 	<br clear="all" />
@@ -313,7 +313,7 @@ if (count($publish_images_list) > 0) {
 	</ul>
 	<div class="buttons pad_button" id="setvisible">
 	<button class="tooltip" type="submit" title="<?php echo gettext("Set waiting images to visible."); ?>">
-		<img src="<?php echo $webpath; ?>images/cache.png" alt="" /> <?php echo gettext("Make images visible"); ?>
+		<img src="<?php echo $webpath; ?>images/cache1.png" alt="" /> <?php echo gettext("Make images visible"); ?>
 	</button>
 	</div>
 	<br clear="all" />

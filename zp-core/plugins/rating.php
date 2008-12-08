@@ -34,7 +34,7 @@ class rating {
 	function handleOption($option, $currentValue) {
 		if($option=="clear_rating") {
 			echo "<div class='buttons'>";
-			echo "<a href='plugins/rating.php?clear_rating&height=100&width=250' class='thickbox' title='".gettext("Clear ratings")."'><img src='images/burst.png' alt='' />".gettext("Clear ratings")."</a>";
+			echo "<a href='plugins/rating.php?clear_rating&height=100&width=250' class='thickbox' title='".gettext("Clear ratings")."'><img src='images/edit-delete.png' alt='' />".gettext("Clear ratings")."</a>";
 			echo "</div>";
 		}
 	}

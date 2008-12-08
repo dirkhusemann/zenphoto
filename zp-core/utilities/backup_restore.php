@@ -211,7 +211,7 @@ if (db_connect()) {
 		value="true">
 	<div class="buttons pad_button" id="dbbackup">
 	<button class="tooltip" type="submit" title="<?php echo gettext("Backup the tables in your database."); ?>">
-		<img src="<?php echo $webpath; ?>images/burst.png" alt="" /> <?php echo gettext("Backup the Database"); ?>
+		<img src="<?php echo $webpath; ?>images/burst1.png" alt="" /> <?php echo gettext("Backup the Database"); ?>
 	</button>
 	</div>
 	<br clear="all" />
@@ -232,7 +232,7 @@ if (db_connect()) {
 	</select> <input type="hidden" name="restore" value="true">
 	<div class="buttons pad_button" id="dbrestore">
 	<button class="tooltip" type="submit" title="<?php echo gettext("Restore the tables in your database from a previous backup."); ?>">
-		<img src="<?php echo $webpath; ?>images/cache.png" alt="" /> <?php echo gettext("Restore the Database"); ?>
+		<img src="<?php echo $webpath; ?>images/redo.png" alt="" /> <?php echo gettext("Restore the Database"); ?>
 	</button>
 	</div>
 	<br clear="all" />
