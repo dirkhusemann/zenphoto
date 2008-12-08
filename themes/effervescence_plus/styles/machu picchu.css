@@ -715,6 +715,9 @@ text-decroation: none;
 #admin, #admin_data a {
 	text-decoration:none;
 }
+#admin, #admin_data a:hover {
+	color:#d6e9ff;
+}
 #admin_data{
 	top: 2em;
 }

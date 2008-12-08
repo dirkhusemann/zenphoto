@@ -733,7 +733,11 @@ text-decroation: none;
 	text-align: left;
 }
 #admin, #admin_data a {
+	color: #7b7973;
 	text-decoration:none;
+}
+#admin, #admin_data a:hover {
+	color:#b1aea7;
 }
 #admin_data{
 	top: 2em;
@@ -746,7 +750,11 @@ text-decroation: none;
 	padding:0;
 }
 #admin h3 a {
+	color: #7b7973;
 	text-decoration:none;
+}
+#admin h3 a:hover {
+	color:#b1aea7;
 }
 
 /* Search Box
