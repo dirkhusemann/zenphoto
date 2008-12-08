@@ -232,7 +232,7 @@ if ($c > 0) {
 	if ($t != 1) {
 		printf(gettext('<strong>%u</strong> comments'),$t);
 	} else {
-		e(gettext('<strong>1</strong> comment'));
+		echo gettext('<strong>1</strong> comment');
 	}
 }
 ?>
