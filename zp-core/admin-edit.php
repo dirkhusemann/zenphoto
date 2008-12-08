@@ -372,11 +372,19 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		$allimages = $album->getImages(0, 0, $oldalbumimagesort, $direction);
 	}
 	$allimagecount = count($allimages);
-	if (isset($_GET['subpage'])) {
-		$pagenum = max(intval($_GET['subpage']),1);
-		if (($pagenum-1) * IMAGES_PER_PAGE >= $allimagecount) $pagenum --;
-	} else {
-		$pagenum = 1;
+	if (isset($_GET['tab']) && $_GET['tab']=='imageinfo' && isset($_GET['image'])) { // directed to an image
+		$imageno = array_search(urldecode($_GET['image']), $allimages);
+		if ($imageno !== false) {
+			$pagenum = ceil($imageno / IMAGES_PER_PAGE);
+		}
+	}
+	if (!isset($pagenum)) {
+		if (isset($_GET['subpage'])) {
+			$pagenum = max(intval($_GET['subpage']),1);
+			if (($pagenum-1) * IMAGES_PER_PAGE >= $allimagecount) $pagenum --;
+		} else {
+			$pagenum = 1;
+		}
 	}
 	$images = array_slice($allimages, ($pagenum-1)*IMAGES_PER_PAGE, IMAGES_PER_PAGE);
 
@@ -538,7 +546,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		<div id="tab_imageinfo" class="box" style="padding: 15px;">
 		<?php
 		if ($allimagecount) {
-			?>
+		?>
 		<form name="albumedit2"	action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post" AUTOCOMPLETE=OFF>
 			<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 			<input type="hidden" name="totalimages" value="<?php echo $totalimages; ?>" />

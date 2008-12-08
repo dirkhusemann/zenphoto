@@ -114,6 +114,8 @@ function printAdminToolbox($id='admin') {
 				echo "<li><a href=\"javascript: confirmDeleteImage('".$zf."/admin-edit.php?page=edit&amp;action=deleteimage&amp;album=" .
 				urlencode(urlencode($albumname)) . "&amp;image=". urlencode($imagename) . "','". js_encode(gettext("Are you sure you want to delete the image? THIS CANNOT BE UNDONE!")) . "');\" title=\"".gettext("Delete the image")."\">".gettext("Delete image")."</a>";
 				echo "</li>\n";
+				
+				echo '<li><a href="'.$zf.'/admin-edit.php?page=edit&amp;album='.urlencode(urlencode($albumname)).'&amp;image='.urlencode($imagename).'&amp;tab=imageinfo" title="'.gettext('Edit this image').'">'.gettext('Edit image').'</a></li>'."\n";
 			}
 			// set return to this image page
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=$imagename";
