@@ -924,6 +924,8 @@ class Album extends PersistentObject {
 			if (mkdir_recursive(dirname($dest)) === TRUE) {
 				// Make the move (rename).
 				$rename = @rename($this->localpath, $dest);
+				// Then: rename the cache folder
+				$cacherename = @rename(SERVERCACHE . '/' . $oldfolder, SERVERCACHE . '/' . $newfolder);
 				// Then: go through the db and change the album (and subalbum) paths. No ID changes are necessary for a move.
 				// Get the subalbums.
 				$oldf = mysql_real_escape_string($oldfolder);
