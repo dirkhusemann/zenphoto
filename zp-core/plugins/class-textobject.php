@@ -85,11 +85,8 @@ class TextObject extends Image {
 			return NULL;
 		}
 
+		$this->updateDimensions();
 		if (parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', false, false)) {
-
-			$this->updateDimensions();
-			$this->set('width', getOption('image_size')); 
-			$this->set('height', floor((getOption('image_size') * 24) / 36));
 
 			$title = $this->getDefaultTitle();
 			$this->set('title', $title);
