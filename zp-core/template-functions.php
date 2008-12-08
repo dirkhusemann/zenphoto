@@ -1643,37 +1643,6 @@ function getImageCountry() {
 }
 
 /**
- * Returns video argument of the current Image.
- *
- * @param object $image optional image object
- * @return bool
- */
-function isImageVideo($image=NULL) {
-	if (is_null($image)) {
-		if (!in_context(ZP_IMAGE)) return false;
-		global $_zp_current_image;
-		$image = $_zp_current_image;
-	}
-	return strtolower(get_class($image)) == 'video';
-}
-
-/**
- * Returns true if the image is a standard photo type
- *
- * @param object $image optional image object
- * @return bool
- */
-function isImagePhoto($image=NULL) {
-	if (is_null($image)) {
-		if (!in_context(ZP_IMAGE)) return false;
-		global $_zp_current_image;
-		$image = $_zp_current_image;
-	}
-	$class = strtolower(get_class($image));
-	return $class == 'image' || $class == 'transientimage';
-}
-
-/**
  * Returns the raw description of the current image.
  * new lines are replaced with <br/> tags
  *

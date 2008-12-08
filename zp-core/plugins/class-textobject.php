@@ -84,10 +84,8 @@ class TextObject extends Image {
 			$this->exists = false;
 			return NULL;
 		}
-
-		$this->updateDimensions();
 		if (parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', false, false)) {
-
+			$this->updateDimensions();
 			$title = $this->getDefaultTitle();
 			$this->set('title', $title);
 			$this->set('mtime', filemtime($this->localpath));
@@ -148,7 +146,6 @@ class TextObject extends Image {
 	function updateDimensions() {
 		$this->set('width', getOption('image_size')); 
 		$this->set('height', floor((getOption('image_size') * 24) / 36));
-		$this->save();
 	}
 	
 }

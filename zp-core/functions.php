@@ -1936,6 +1936,37 @@ function newImage(&$album, $filename) {
 }
 
 /**
+ * Returns video argument of the current Image.
+ *
+ * @param object $image optional image object
+ * @return bool
+ */
+function isImageVideo($image=NULL) {
+	if (is_null($image)) {
+		if (!in_context(ZP_IMAGE)) return false;
+		global $_zp_current_image;
+		$image = $_zp_current_image;
+	}
+	return strtolower(get_class($image)) == 'video';
+}
+
+/**
+ * Returns true if the image is a standard photo type
+ *
+ * @param object $image optional image object
+ * @return bool
+ */
+function isImagePhoto($image=NULL) {
+	if (is_null($image)) {
+		if (!in_context(ZP_IMAGE)) return false;
+		global $_zp_current_image;
+		$image = $_zp_current_image;
+	}
+	$class = strtolower(get_class($image));
+	return $class == 'image' || $class == 'transientimage';
+}
+
+/**
  * Copies a directory recursively
  * @param string $srcdir the source directory.
  * @param string $dstdir the destination directory.

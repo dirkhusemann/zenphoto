@@ -195,6 +195,7 @@ if (isset($_GET['album'])) {
 									}
 									if ($rotation != $oldrotation) {
 										$image->set('EXIFOrientation', $rotation);
+										$image->updateDimensions();
 										$album = $image->getAlbum();
 										$gallery->clearCache(SERVERCACHE . '/' . $album->name);
 									}
@@ -732,6 +733,9 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						</p>
 						</div>
 						<p><br /><?php echo $image->getWidth(); ?> x  <?php echo $image->getHeight().' '.gettext('px'); ?> (<?php echo byteConvert($image->getImageFootprint()); ?>)</p>
+						<?php
+						if (isImagePhoto($image)) {
+						?>
 						<p>
 							<?php
 							$splits = preg_split('/!([(0-9)])/', $image->get('EXIFOrientation'));
@@ -744,6 +748,9 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="3" <?php checked(3, $rotation); echo $disablerotate ?> /> <?php echo gettext('180 degrees'); ?>
 							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="6" <?php checked(6, $rotation); echo $disablerotate ?> /> <?php echo gettext('270 degrees'); ?>
 						</p>
+						<?php
+						} 
+						?>
 						</td>
 					</tr>
 		
