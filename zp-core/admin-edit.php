@@ -374,10 +374,13 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	}
 	$allimagecount = count($allimages);
 	if (isset($_GET['tab']) && $_GET['tab']=='imageinfo' && isset($_GET['image'])) { // directed to an image
-		$imageno = array_search(urldecode($_GET['image']), $allimages);
+		$target_image = urldecode($_GET['image']);
+		$imageno = array_search($target_image, $allimages);
 		if ($imageno !== false) {
-			$pagenum = ceil($imageno / IMAGES_PER_PAGE);
+			$pagenum = ceil(($imageno+1) / IMAGES_PER_PAGE);
 		}
+	} else {
+		$target_image = '';
 	}
 	if (!isset($pagenum)) {
 		if (isset($_GET['subpage'])) {
@@ -608,15 +611,23 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 				?>
 		
 			<tr <?php echo ($currentimage % 2 == 0) ?  "class=\"alt\"" : ""; ?>>
+			<?php
+				if ($target_image == $filename) {
+					$placemark = 'name="IT" ';
+					$expansion = 'block';
+				} else {
+					$placemark = '';
+					$expansion = 'none';
+				}
+			?>
 				<td colspan="4">
 				<input type="hidden" name="<?php echo $currentimage; ?>-filename"	value="<?php echo $image->filename; ?>" />
-				<table border="0" class="formlayout"
-					id="image-<?php echo $currentimage; ?>">
+				<table border="0" class="formlayout" id="image-<?php echo $currentimage; ?>">
 					<tr>
 						<td valign="top" width="150" rowspan="14">
 						
-						<a href="admin-thumbcrop.php?a=<?php echo urlencode($album->name); ?>&amp;i=<?php echo urlencode($image->filename); ?>&amp;subpage=<?php echo $pagenum; ?>&amp;tagsort=<?php echo $tagsort; ?>"
-										title=<?php printf(gettext('crop %s'), $image->filename); ?>  >
+						<a <?php echo $placemark; ?>href="admin-thumbcrop.php?a=<?php echo urlencode($album->name); ?>&amp;i=<?php echo urlencode($image->filename); ?>&amp;subpage=<?php echo $pagenum; ?>&amp;tagsort=<?php echo $tagsort; ?>"
+										title="<?php printf(gettext('crop %s'), $image->filename); ?>"  >
 						<img
 							id="thumb-<?php echo $currentimage; ?>"
 							src="<?php echo $image->getThumb(); ?>"
@@ -754,7 +765,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						</td>
 					</tr>
 		
-					<tr class="imageextrainfo" style="display: none;">
+					<tr class="imageextrainfo" style="display: <?php echo $expansion; ?>;">
 						<td align="right" valign="top"><?php echo gettext("Location:"); ?></td>
 						<td><?php print_language_string_list($image->get('location'), $currentimage.'-location', false); ?>
 						</td>
@@ -765,49 +776,49 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 								?></td>
 					</tr>
 		
-					<tr class="imageextrainfo" style="display: none;">
+					<tr class="imageextrainfo" style="display: <?php echo $expansion; ?>;">
 						<td align="right" valign="top"><?php echo gettext("City:"); ?></td>
 						<td><?php print_language_string_list($image->get('city'), $currentimage.'-city', false); ?>
 						</td>
 					</tr>
 		
-					<tr class="imageextrainfo" style="display: none;">
+					<tr class="imageextrainfo" style="display: <?php echo $expansion; ?>;">
 						<td align="right" valign="top"><?php echo gettext("State:"); ?></td>
 						<td><?php print_language_string_list($image->get('state'), $currentimage.'-state', false); ?>
 						</td>
 					</tr>
 		
-					<tr class="imageextrainfo" style="display: none;">
+					<tr class="imageextrainfo" style="display: <?php echo $expansion; ?>;">
 						<td align="right" valign="top"><?php echo gettext("Country:"); ?></td>
 						<td><?php print_language_string_list($image->get('country'), $currentimage.'-country', false); ?>
 						</td>
 					</tr>
 		
-					<tr class="imageextrainfo" style="display: none;">
+					<tr class="imageextrainfo" style="display: <?php echo $expansion; ?>;">
 						<td align="right" valign="top"><?php echo gettext("Credit:"); ?></td>
 						<td><?php print_language_string_list($image->get('credit'), $currentimage.'-credit', false); ?>
 						</td>
 					</tr>
 		
-					<tr class="imageextrainfo" style="display: none;">
+					<tr class="imageextrainfo" style="display: <?php echo $expansion; ?>;">
 						<td align="right" valign="top"><?php echo gettext("Copyright:"); ?></td>
 						<td><?php print_language_string_list($image->get('copyright'), $currentimage.'-copyright', false); ?>
 						</td>
 					</tr>
 		
-					<tr class="imageextrainfo" style="display: none;">
+					<tr class="imageextrainfo" style="display: <?php echo $expansion; ?>;">
 						<td align="right" valign="top"><?php echo gettext("Date:"); ?></td>
 						<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $currentimage; ?>-date"
 							value="<?php $d=$image->getDateTime(); if ($d!='0000-00-00 00:00:00') { echo $d; } ?>" /></td>
 					</tr>
 		
-					<tr class="imageextrainfo" style="display: none;">
+					<tr class="imageextrainfo" style="display: <?php echo $expansion; ?>;">
 						<td align="right" valign="top"><?php echo gettext("Custom data:"); ?></td>
 						<td><?php print_language_string_list($image->get('custom_data'), $currentimage.'-custom_data', true); ?>
 						</td>
 					</tr>
 					
-					<tr class="imageextrainfo" style="display: none;">
+					<tr class="imageextrainfo" style="display: <?php echo $expansion; ?>;">
 						<td align="right" valign="top"><?php echo gettext("EXIF inforation:"); ?></td>
 						<td>
 						<?php
@@ -833,10 +844,11 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						</td>
 					</tr>
 					<tr>
-						<td colspan="4"><span class="imageextrashow"><a
-							href="javascript:toggleExtraInfo('<?php echo $currentimage;?>', 'image', true);"><?php echo gettext('show more fields');?></a></span>
-						<span style="display: none;" class="imageextrahide"><a
-							href="javascript:toggleExtraInfo('<?php echo $currentimage;?>', 'image', false);"><?php echo gettext('show fewer fields');?></a></span>
+						<td colspan="4">
+						<span style="display: <?php if ($expansion == 'none') echo 'block'; else echo 'none'; ?>;" class="imageextrashow">
+						<a href="javascript:toggleExtraInfo('<?php echo $currentimage;?>', 'image', true);"><?php echo gettext('show more fields');?></a></span>
+						<span style="display: <?php echo $expansion; ?>;" class="imageextrahide">
+						<a href="javascript:toggleExtraInfo('<?php echo $currentimage;?>', 'image', false);"><?php echo gettext('show fewer fields');?></a></span>
 						</td>
 					</tr>
 		
