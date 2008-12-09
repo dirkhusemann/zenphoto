@@ -1,6 +1,9 @@
 <?php
 /**
  * Prints a paged thumbs navigation on image.php, independ of the album.php's thumbs
+ * 
+ * NOTE: With version 1.0.2 $size is no longer an option for this plugin. This plugin now uses the new maxspace function if crop set to false.
+ *  
  * The function contains some predefined CSS ids you can use for styling. The function prints the following html:
  *
  * <div id="pagedthumbsnav">
@@ -14,18 +17,17 @@
  * @param bool $counter If you want to show the counter of for example "Images 1 - 10 of 20 (1/3)"
  * @param string $prev The previous thumb list link text
  * @param string $next The next thumb list link text
- * @param int $size The thumbnail size if $crop = FALSE
  * @param int $width The thumbnail crop width, if empty the general admin setting is used
  * @param int $height The thumbnail crop height, if empty the general admin setting is used
  * @param bool $crop If you want cropped thumbs
  * 
  * @author Malte Müller (acrylian)
- * @version 1.0.1
+ * @version 1.0.2
  * @package plugins 
  */
-$plugin_description = gettext("Prints a paged thumbs navigation on image.php, independ of the album.php's thumbsThe function contains some predefined CSS ids you can use for styling. Please see the documentation for more info.");
+$plugin_description = gettext("Prints a paged thumbs navigation on image.php, independend of the album.php's thumbsThe function contains some predefined CSS ids you can use for styling. Please see the documentation for more info.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.0.1';
+$plugin_version = '1.0.2';
 $plugin_URL = "";
 $option_interface = new pagedthumbsOptions();
 
@@ -40,7 +42,6 @@ class pagedthumbsOptions {
 		setOptionDefault('pagedthumbs_counter', '');
 		setOptionDefault('pagedthumbs_prevtext', '« prev thumbs');
 		setOptionDefault('pagedthumbs_nexttext', 'next thumbs »');
-		setOptionDefault('pagedthumbs_size', '50');
 		setOptionDefault('pagedthumbs_width', '50');
 		setOptionDefault('pagedthumbs_height', '50');
 		setOptionDefault('pagedthumbs_crop', '1');
@@ -56,8 +57,6 @@ class pagedthumbsOptions {
 										'desc' => gettext("The text for the previous thumbs.")),
 									gettext('Nexttext') => array('key' => 'pagedthumbs_nexttext', 'type' => 0,
 										'desc' => gettext("The text for the next thumbs.")),
-									gettext('Size') => array('key' => 'pagedthumbs_size', 'type' => 0,
-										'desc' => gettext("Thumbnail size and scale.")),
 									gettext('Crop width') => array('key' => 'pagedthumbs_width', 'type' => 0,
 										'desc' => gettext("The thumb crop width is the maximum width when height is the shortest side")),
 									gettext('Crop height') => array('key' => 'pagedthumbs_height', 'type' => 0,
@@ -69,29 +68,21 @@ class pagedthumbsOptions {
 
 }
 
-function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='', $size=NULL, $width=NULL, $height=NULL, $crop=false) {
-	global $_zp_current_album;
-	
+function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='', $width=NULL, $height=NULL, $crop=false) {
+	global $_zp_current_album, $_zp_current_image;
 	// in case someone wants to override the options by parameter
 	if(empty($imagesperpage)) {
 		$imagesperpage = getOption("pagedthumbs_imagesperpage");
 	}
-	if(empty($size)) {
-		$size = getOption("pagedthumbs_size");
+	if(empty($width)) {
+		$width = getOption("pagedthumbs_width");
 	} else {
-		$size = sanitize_numeric($size);
+		$width = sanitize_numeric($width);
 	}
-	if(getOption("pagedthumbs_crop") OR $crop) {
-		if(empty($width)) {
-			$width = getOption("pagedthumbs_width");
-		} else {
-			$width = sanitize_numeric($width);
-		}
-		if(empty($height)) {
-			$height = getOption("pagedthumbs_height");
-		} else {
-			$height = sanitize_numeric($height);
-		}
+	if(empty($height)) {
+		$height = getOption("pagedthumbs_height");
+	} else {
+		$height = sanitize_numeric($height);
 	}
 	if(empty($prev)) {
 		$prev = getOption("pagedthumbs_prevtext");
@@ -147,7 +138,12 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 			$css = "";
 		}
 		echo "<a $css href=\"".$image->getImageLink()."\" title=\"".strip_tags($image->getTitle())."\">";
-		echo "<img src='".$image->getCustomImage(null, $width, $height, null,null, null, null, true)."' alt=\"".strip_tags($image->getTitle())."\" width='".$width."' height='".$height."' />";
+		if(getOption("pagedthumbs_crop") OR $crop) {
+			echo "<img src='".$image->getCustomImage(null, $width, $height, $width, $height, null, null, true)."' alt=\"".strip_tags($image->getTitle())."\" width='".$width."' height='".$height."' />";
+		} else {
+			$_zp_current_image = $image;
+			printCustomSizedImageThumbMaxSpace(strip_tags($image->getTitle()),$width,$height);
+		}
 		echo "</a>\n";
 		if ($number == $endimg[$currentpage]) {
 			break;
@@ -174,7 +170,7 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 		} else {
 			$toimage = $endimg[$currentpage];
 		}
-		echo "<p class=\"pagedthumbsnav-counter\">".sprintf(gettext('Images %1$u - %2$u of %3$u (%4$u/%5$u)'),$fromimage,$toimage,$totalimages,$currentpage,$totalpages)."</p>\n";
+		echo "<p id=\"pagedthumbsnav-counter\">".sprintf(gettext('Images %1$u-%2$u of %3$u (%4$u/%5$u)'),$fromimage,$toimage,$totalimages,$currentpage,$totalpages)."</p>\n";
 	}
 	echo "</div>\n";
 }
