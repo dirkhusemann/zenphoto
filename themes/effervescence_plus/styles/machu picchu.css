@@ -391,7 +391,7 @@ text-decoration: none;
 	width: 630px;
 	border: none;
 	line-height: 0px;
-	background: #fff;
+	background-color: transparent;
 	text-align: center;
 }
 #randomhead img {
@@ -416,32 +416,6 @@ text-decoration:none;
 	color: #a5e7d9; /*text in navbar in single-image, only the last node.*/
 }
 
-#randomhead {
-padding: 0;
-margin: 0 auto 14px auto;
-width: 630px;
-border: none;
-line-height: 0px;
-background: #fff; /*only visible while the image is loading*/
-
-/*If you wan't the borders of my gallery thumbs, for the random image too
-border-top: 2px solid #fbefdb;
-border-left: 2px solid #fbefdb;
-border-right: 2px solid #5c6c83;
-border-bottom: 2px solid #5c6c83; 
-} 
-
-If you want it to behave like a button
-#randomhead:hover {
-border-top: 2px solid #687A92;
-border-left: 2px solid #687A92;
-border-right: 2px solid #C1AD94;
-border-bottom: 2px solid #C1AD94;*/
-}
-
-#randomhead img {
-border: 8px solid #ECDFCC;
-}
 ul.pagelist {
 	clear: both;
 	padding: 0;

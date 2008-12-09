@@ -434,7 +434,7 @@ text-align: left;
 	width: 630px;
 	border: none;
 	line-height: 0px;
-	background: #fff;
+	background-color: transparent;
 	text-align: center;
 }
 #randomhead img {
@@ -461,32 +461,6 @@ text-decoration:none;
 	color: #a5e7d9;
 }
 
-#randomhead {
-    padding: 0;
-    margin: 0 auto 14px auto;
-    width: 630px;
-    border: none;
-    line-height: 0px;
-    background: #fff; /*only visible while the image is loading*/
-
-/*If you wan't the borders of my gallery thumbs, for the random image too
-    border-top: 2px solid #fff;
-    border-left: 2px solid #fff;
-    border-right: 2px solid #fff;
-    border-bottom: 2px solid #fff; 
-} 
-
-If you want it to behave like a button
-#randomhead:hover {
-    border-top: 2px solid #fff;
-    border-left: 2px solid #fff;
-    border-right: 2px solid #fff;
-    border-bottom: 2px solid #fff;*/
-}
-
-#randomhead img {
-    border: 8px solid #fff;
-}
 ul.pagelist {
 	clear: both;
 	padding: 0;
