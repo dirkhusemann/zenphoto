@@ -131,13 +131,11 @@ class TextObject extends Image {
 		return '<div class="textobject">'.$text.'</div>';
 	}
 
-
-
-	function getCustomImage() {
+	function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin=false) {
 		return $this->getBody();
 	}
 
-	function getSizedImage() {
+	function getSizedImage($size) {
 		return $this->getBody();
 	}
 

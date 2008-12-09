@@ -6,6 +6,10 @@
 
 // force UTF-8 Ø
 
+define('DEFAULT_MOV_HEIGHT', 496);
+define('DEFAULT_MOV_WIDTH', 640);
+define('DEFAULT_3GP_HEIGHT', 304);
+define('DEFAULT_3GP_WIDTH', 352);
 
 class Video extends Image {
 
@@ -31,8 +35,8 @@ class Video extends Image {
 
 		// This is where the magic happens...
 		$album_name = $album->name;
+		$this->updateDimensions();  // TODO: figure out how to know if this should change. I.e. old videos, changes of the flash player.
 		if ( parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', false, empty($album_name))) {
-			$this->updateDimensions();
 			$newDate = strftime('%Y/%m/%d %T', filemtime($this->localpath));
 			$this->set('date', $newDate);
 			$alb = $this->album;
@@ -51,12 +55,32 @@ class Video extends Image {
 	}
 
 	/**
-	 * Update this object's values for width and height. Uses lazy evaluation.
+	 * Update this object's values for width and height.
 	 *
 	 */
 	function updateDimensions() {
-		$this->set('width', 320);
-		$this->set('height', 240);
+		global $_zp_flash_player;
+		$ext = strtolower(strrchr($this->filename, "."));
+		if (is_null($_zp_flash_player) || $ext == '.3gp' || $ext == '.mov') {
+			switch ($ext) {
+				case '.3gp':
+					$h = DEFAULT_3GP_HEIGHT;
+					$w = DEFAULT_3GP_WIDTH;
+					break;
+				case '.mov':
+					$h = DEFAULT_MOV_HEIGHT;
+					$w = DEFAULT_MOMV_WIDTH;
+					break;
+				default:
+					$h = 240;
+					$w = 320;
+			}
+		} else {
+			$h = $_zp_flash_player->getVideoHeigth($this);
+			$w = $_zp_flash_player->getVideoWidth($this);
+		}
+		$this->set('width', $w);
+		$this->set('height', $h);
 	}
 
 	/**

@@ -91,6 +91,10 @@ if (file_exists(SERVERPATH . "/" . UTF8ToFilesystem($obj)) && $zp_request) {
 		$_zp_loaded_plugins[] = $extension;
 		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
 	}
+
+// re-initialize video dimensions if needed
+if (isImageVideo() & !is_null($_zp_flash_player)) $_zp_current_image->updateDimensions();
+
 if(!is_null($_zp_HTML_cache)) { $_zp_HTML_cache->startHTMLCache(); }
 	// Include the appropriate page for the requested object, and a 200 OK header.
 	header("HTTP/1.0 200 OK");

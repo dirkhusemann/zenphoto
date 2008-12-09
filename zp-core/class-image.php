@@ -179,7 +179,7 @@ class Image extends PersistentObject {
 	}
 
 	/**
-	 * Update this object's values for width and height. Uses lazy evaluation.
+	 * Update this object's values for width and height.
 	 *
 	 */
 	function updateDimensions() {

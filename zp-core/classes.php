@@ -10,7 +10,6 @@
 
 // Load the authentication functions and UTF-8 Library.
 require_once(dirname(__FILE__).'/auth_zp.php');
-require_once(dirname(__FILE__).'/lib-utf8.php');
 
 /*******************************************************************************
  *******************************************************************************

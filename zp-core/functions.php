@@ -647,12 +647,11 @@ function createAlbumZip($album){
  */
 function getPlugin($plugin, $inTheme) {
 	global $_zp_themeroot;
-	$_zp_themeroot = WEBPATH . "/themes/$inTheme";
+	$_zp_themeroot = WEBPATH . '/' . THEMEFOLDER . '/'. $inTheme;
 	if ($inTheme) {
-		$pluginFile = $_zp_themeroot . '/' . $plugin;
-		$pluginFile = SERVERPATH . '/' . str_replace(WEBPATH, '', UTF8ToFilesystem($pluginFile));
+		$pluginFile = SERVERPATH . '/' . THEMEFOLDER . '/'. UTF8ToFilesystem($inTheme . '/' . $plugin);
 	} else {
-		$pluginFile = SERVERPATH . '/' . ZENFOLDER . '/plugins/' . UTF8ToFilesystem($plugin);
+		$pluginFile = SERVERPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . UTF8ToFilesystem($plugin);
 	}
 	if (file_exists($pluginFile)) {
 		return $pluginFile;
