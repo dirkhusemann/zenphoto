@@ -324,10 +324,10 @@ echo '</head>';
 <a name="top"></a>
 <?php printTabs('database'); 
 // getting arrays of all image and albums
-$allalbums = query_full_array("SELECT * FROM " . prefix('albums'));
+$allalbums = query_full_array("SELECT id, title, folder, total_votes, total_value, hitcounter FROM " . prefix('albums'));
 $albumcount = $gallery->getNumAlbums(true);
 $albumscount_unpub = $albumcount-$gallery->getNumAlbums(true,true);
-$allimages = query_full_array("SELECT * FROM " . prefix('images'));
+$allimages = query_full_array("SELECT id, albumid, title, filename, total_votes, total_value, hitcounter  FROM " . prefix('images'));
 $imagecount = $gallery->getNumImages();
 $imagecount_unpub = $imagecount-$gallery->getNumImages(true);
 
