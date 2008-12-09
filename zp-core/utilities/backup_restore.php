@@ -221,30 +221,35 @@ if (db_connect()) {
 	<br />
 	<?php
 	$filelist = safe_glob(SERVERPATH . "/" . BACKUPFOLDER . '/*.zdb');
-		if (count($filelist) <= 0) {
-			echo gettext('You have not yet created a backup set.');
-		} else {
+	if (count($filelist) <= 0) {
+		echo gettext('You have not yet created a backup set.');
+	} else {
 	?>
-	<form name="restore_gallery" action=""><?php echo gettext('Select the database restore file:'); ?>
-	<br />
-	<select id="backupfile" name="backupfile">
-	<?php	generateListFromFiles('', SERVERPATH . "/" . BACKUPFOLDER, '.zdb', true);	?>
-	</select> <input type="hidden" name="restore" value="true">
-	<div class="buttons pad_button" id="dbrestore">
-	<button class="tooltip" type="submit" title="<?php echo gettext("Restore the tables in your database from a previous backup."); ?>">
-		<img src="<?php echo $webpath; ?>images/redo.png" alt="" /> <?php echo gettext("Restore the Database"); ?>
-	</button>
-	</div>
-	<br clear="all" />
-	<br clear="all" />
-	</form>
-	
+		<form name="restore_gallery" action=""><?php echo gettext('Select the database restore file:'); ?>
+		<br />
+		<select id="backupfile" name="backupfile">
+		<?php	generateListFromFiles('', SERVERPATH . "/" . BACKUPFOLDER, '.zdb', true);	?>
+		</select> <input type="hidden" name="restore" value="true">
+		<div class="buttons pad_button" id="dbrestore">
+		<button class="tooltip" type="submit" title="<?php echo gettext("Restore the tables in your database from a previous backup."); ?>">
+			<img src="<?php echo $webpath; ?>images/redo.png" alt="" /> <?php echo gettext("Restore the Database"); ?>
+		</button>
+		</div>
+		<br clear="all" />
+		<br clear="all" />
+		</form>
 	<?php
-		}
+	}
 } else {
 	echo "<h3>".gettext("database not connected")."</h3>";
 	echo "<p>".gettext("Check the zp-config.php file to make sure you've got the right username, password, host, and database. If you haven't created the database yet, now would be a good time.");
 }
+echo	'<p>';
+echo gettext('The backup facility creates database snapshots in the <code>backup</code> folder of your installation.').' '; 
+echo gettext('These backups are named in according to the date and time the backup was taken.').' ';
+echo gettext('You restore your database by selecting a backup and pressing the <em>Restore the Database</em> button').' ';
+echo gettext('The restore is “additive”. That is the database is not emptied before the restore is attempted.');
+echo '</p>'
 ?>
 </div>
 <!-- content --></div>
