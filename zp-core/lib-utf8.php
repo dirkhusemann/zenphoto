@@ -35,6 +35,13 @@
 
 class utf8 {
 	/**
+	 * Enter description here...
+	 *
+	 * @return utf8
+	 */
+	function utf8() {
+	}
+	/**
 	 * Convert a foreign charset encoding from or to UTF-8
 	 */
 	function convert($string, $encoding = '', $destination = 'UTF-8') {

@@ -50,7 +50,7 @@ if (count($_POST) > 0) {
 		$kill = array();
 		foreach ($_POST as $key => $value) {
 			$key = postIndexDecode($key);
-			$kill[] = utf8::strtolower($key);
+			$kill[] = $_zp_UTF8->strtolower($key);
 		}
 		if (count($kill) > 0) {
 			$sql = "SELECT `id` FROM ".prefix('tags')." WHERE ";

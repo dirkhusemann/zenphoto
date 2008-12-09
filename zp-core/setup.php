@@ -1382,7 +1382,7 @@ if (file_exists("zp-config.php")) {
 			foreach ($alltags as $tag) {
 				$clean = trim($tag);
 				if (!empty($clean)) {
-					$tagLC = utf8::strtolower($clean);
+					$tagLC = $_zp_UTF8->strtolower($clean);
 					if (!in_array($tagLC, $seen)) {
 						$seen[] = $tagLC;
 						$taglist[] = $clean;

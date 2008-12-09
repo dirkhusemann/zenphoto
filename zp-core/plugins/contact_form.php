@@ -44,7 +44,8 @@ class contactformOptions {
 		setOptionDefault('contactform_captcha', 0);
 		setOptionDefault('contactform_subject', "required");
 		setOptionDefault('contactform_message', "required");
-		$admin = array_shift(getAdministrators());
+		$admins = getAdministrators();
+		$admin = array_shift($admins);
 		$adminname = $admin['user'];
 		$adminemail = $admin['email'];
 		setOptionDefault('contactform_mailaddress', $adminemail);
@@ -111,6 +112,7 @@ function getField($field, $level=3) {
  *
  */
 function printContactForm() {
+	global $_zp_UTF8;
 	$error = array();
 	if(isset($_POST['sendmail'])) {
 		$mailcontent = array();
@@ -219,7 +221,7 @@ function printContactForm() {
 		$message = sanitize($_POST['message'],1);
 		$headers = sanitize($_POST['headers']);
 		$mailaddress = sanitize($_POST['mailaddress']);
-		UTF8::send_mail(getOption("contactform_mailaddress").",".$mailaddress, $subject, $message, $headers);
+		$_zp_UTF8->send_mail(getOption("contactform_mailaddress").",".$mailaddress, $subject, $message, $headers);
 		echo getOption("contactform_thankstext");
 	}
 	if (count($error) <= 0) {

@@ -43,6 +43,7 @@ if (!isset($SAJAX_INCLUDED)) {
 	// of an object in JavaScript.
 	//
 	function sajax_get_js_repr($value) {
+		global $_zp_UTF8;
 		$type = gettype($value);
 
 		if ($type == "boolean") {
@@ -79,7 +80,7 @@ if (!isset($SAJAX_INCLUDED)) {
 
 						// Convert from internal charset to UTF-8
 				if (getOption('charset') != 'UTF-8') {
-						$value = utf8::convert($value, getOption('charset'));
+						$value = $_zp_UTF8->convert($value, getOption('charset'));
 				}
 
 			$esc_val = sajax_escapeutf8($value);
@@ -89,7 +90,7 @@ if (!isset($SAJAX_INCLUDED)) {
 	}
 
 	function sajax_handle_client_request() {
-		global $sajax_export_list;
+		global $sajax_export_list, $_zp_UTF8;
 
 		$mode = "";
 
@@ -132,7 +133,7 @@ if (!isset($SAJAX_INCLUDED)) {
 				// Convert UTF-8 to internal charset
 				if (getOption('charset') != 'UTF-8') {
 						while (list($args_k,) = each($args)) {
-								$args[$args_k] = utf8::convert($args[$args_k], 'UTF-8', getOption('charset'));
+								$args[$args_k] = $_zp_UTF8->convert($args[$args_k], 'UTF-8', getOption('charset'));
 						}
 				}
 

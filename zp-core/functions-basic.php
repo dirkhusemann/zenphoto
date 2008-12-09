@@ -14,6 +14,10 @@ define('DEBUG_LOGIN', false); // set to true to log admin saves and login attemp
 define('DEBUG_ERROR', false); // set to true to  supplies the calling sequence with zp_error messages
 define('DEBUG_IMAGE', false); // set to true to log image processing debug information.
 define('CAPTCHA_LENGTH', 5);
+
+require_once(dirname(__FILE__).'/lib-utf8.php');
+$_zp_UTF8 = new utf8();
+
 include(dirname(__FILE__).'/version.php'); // Include the version info.
 
 if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
@@ -38,7 +42,6 @@ if (!isset($_zp_conf_vars['server_protocol'])) $_zp_conf_vars['server_protocol']
 
 require_once(dirname(__FILE__).'/functions-db.php');
 require_once(dirname(__FILE__).'/lib-encryption.php');
-require_once(dirname(__FILE__).'/lib-utf8.php');
 
 switch (OFFSET_PATH) {
 	case 0:	// starts from the root index.php
@@ -78,7 +81,7 @@ define('BACKUPFOLDER', 'backup');
 define('UTILITIES_FOLDER', '/utilities/');
 
 // Set error reporting.
-error_reporting(E_ALL);
+error_reporting(E_ALL | E_STRICT);
 $_zp_error = false;
 
 /**
@@ -117,8 +120,9 @@ function html_encode($this_string, $striptags=true) {
  * @return string
  */
 function js_encode($this_string) {
+	global $_zp_UTF8;
 	$this_string = preg_replace("/\r?\n/", "\\n", $this_string);
-	$this_string = utf8::encode_javascript($this_string);
+	$this_string = $_zp_UTF8->encode_javascript($this_string);
 	return $this_string;
 }
 
@@ -762,7 +766,8 @@ function parse_size($size) {
  * @return string
  */
 function fileSystemToUTF8($filename) {
-	return utf8::convert($filename, FILESYSTEM_CHARSET, 'UTF-8');
+	global $_zp_UTF8;
+	return $_zp_UTF8->convert($filename, FILESYSTEM_CHARSET, 'UTF-8');
 }
 
 /**
@@ -772,7 +777,8 @@ function fileSystemToUTF8($filename) {
  * @return string
  */
 function UTF8ToFileSystem($filename) {
-	return utf8::convert($filename, 'UTF-8', FILESYSTEM_CHARSET);
+	global $_zp_UTF8;
+	return $_zp_UTF8->convert($filename, 'UTF-8', FILESYSTEM_CHARSET);
 }
 
 /** getAlbumArray - returns an array of folder names corresponding to the

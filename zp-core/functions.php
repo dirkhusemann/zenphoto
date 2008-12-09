@@ -263,6 +263,7 @@ function subalbumSortKey($sorttype) {
  * @return string
  */
 function zpFormattedDate($format, $dt) {
+	global $_zp_UTF8;
 	$fdate = strftime($format, $dt);
 	$charset = 'ISO-8859-1';
 	if (function_exists('mb_internal_encoding')) {
@@ -270,7 +271,7 @@ function zpFormattedDate($format, $dt) {
 			return $fdate;
 		}
 	}
-	return utf8::convert($fdate, $charset);
+	return $_zp_UTF8->convert($fdate, $charset);
 }
 
 /**
@@ -364,6 +365,7 @@ function is_valid_email_zp($input_email) {
  * @since  1.0.0
  */
 function zp_mail($subject, $message, $headers = '', $admin_emails=null) {
+	global $_zp_UTF8;
 	if (is_null($admin_emails)) { $admin_emails = getAdminEmail(); }
 	if (count($admin_emails) > 0) {
 		// Make sure no one is trying to use our forms to send Spam
@@ -396,13 +398,13 @@ function zp_mail($subject, $message, $headers = '', $admin_emails=null) {
 
 		// Convert to UTF-8
 		if (getOption('charset') != 'UTF-8') {
-			$subject = utf8::convert($subject, getOption('charset'));
-			$message = utf8::convert($message, getOption('charset'));
+			$subject = $_zp_UTF8->convert($subject, getOption('charset'));
+			$message = $_zp_UTF8->convert($message, getOption('charset'));
 		}
 
 		// Send the mail
 		foreach ($admin_emails as $email) {
-			UTF8::send_mail($email, $subject, $message, $headers);
+			$_zp_UTF8->send_mail($email, $subject, $message, $headers);
 		}
 	}
 }
@@ -725,8 +727,9 @@ function getIPTCTagArray($tag) {
  * @return string
  */
 function prepIPTCString($iptcstring, $characterset) {
+	global $_zp_UTF8;
 	if ($characterset == 'UTF-8') return $iptcstring;
-	$iptcstring = utf8::convert($iptcstring, $characterset);
+	$iptcstring = $_zp_UTF8->convert($iptcstring, $characterset);
 	// Remove null byte at the end of the string if it exists.
 	if (substr($iptcstring, -1) === 0x0) {
 		$iptcstring = substr($iptcstring, 0, -1);
@@ -1588,10 +1591,11 @@ function getAllTagsCount() {
  * @param string $tbl 'albums' or 'images'
  */
 function storeTags($tags, $id, $tbl) {
+	global $_zp_UTF8;
 	$tags = filterTags($tags);
 	$tagsLC = array();
 	foreach ($tags as $tag) {
-		$tagsLC[$tag] = utf8::strtolower($tag);
+		$tagsLC[$tag] = $_zp_UTF8->strtolower($tag);
 	}
 	$sql = "SELECT `id`, `tagid` from ".prefix('obj_to_tag')." WHERE `objectid`='".$id."' AND `type`='".$tbl."'";
 	$result = query_full_array($sql);
@@ -1599,7 +1603,7 @@ function storeTags($tags, $id, $tbl) {
 	if (is_array($result)) {
 		foreach ($result as $row) {
 			$dbtag = query_single_row("SELECT `name` FROM ".prefix('tags')." WHERE `id`='".$row['tagid']."'");
-			$existingLC = utf8::strtolower($dbtag['name']);
+			$existingLC = $_zp_UTF8->strtolower($dbtag['name']);
 			if (in_array($existingLC, $tagsLC)) { // tag already set no action needed
 				$existing[] = $existingLC;
 			} else { // tag no longer set, remove it

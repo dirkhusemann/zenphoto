@@ -820,7 +820,7 @@ function generateUnorderedListFromArray($currentValue, $list, $prefix, $alterrig
  * @param bool $showCounts set to true to get tag count displayed
  */
 function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
-	global $_zp_loggedin, $_zp_admin_ordered_taglist, $_zp_admin_LC_taglist;
+	global $_zp_loggedin, $_zp_admin_ordered_taglist, $_zp_admin_LC_taglist, $_zp_UTF8;
 	if (is_null($_zp_admin_ordered_taglist)) {
 		if ($mostused || $showCounts) {
 			$counts = getAllTagsCount();
@@ -835,7 +835,7 @@ function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
 		$_zp_admin_ordered_taglist = $them;
 		$_zp_admin_LC_taglist = array();
 		foreach ($them as $tag) {
-			$_zp_admin_LC_taglist[] = utf8::strtolower($tag);
+			$_zp_admin_LC_taglist[] = $_zp_UTF8->strtolower($tag);
 		}
 	} else {
 		$them = $_zp_admin_ordered_taglist;
@@ -848,7 +848,7 @@ function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
 	}
 	if (count($tags) > 0) {
 		foreach ($tags as $tag) {
-			$tagLC = utf8::strtolower($tag);
+			$tagLC = 	$_zp_UTF8->strtolower($tag);
 			$key = array_search($tagLC, $_zp_admin_LC_taglist);
 			if ($key !== false) {
 				unset($them[$key]);

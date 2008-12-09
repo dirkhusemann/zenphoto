@@ -1180,6 +1180,7 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
  */
 function getMaxSpaceContainer(&$width, &$height, $image, $thumb=false) {
 	global $_zp_gallery;
+	
 	if (isImageVideo($image) & $thumb) {
 		if ($image->objectsThumb != NULL) {
 			$imgfile = getAlbumFolder().$image->album->name.'/'.$image->objectsThumb;
@@ -2469,7 +2470,7 @@ function printCustomSizedImageThumbMaxSpace($alt='',$width,$height,$class=NULL,$
  */
 function printCustomSizedImageMaxSpace($alt='',$width,$height,$class=NULL,$id=NULL, $thumb=false) {
 	global $_zp_current_image;
-	getMaxSpaceContainer($width, $height, $_zp_current_image);
+	getMaxSpaceContainer($width, $height, $_zp_current_image, $thumb);
 	printCustomSizedImage($alt, NULL, $width, $height, NULL, NULL, NULL, NULL, $class, $id, 2 | $thumb);
 }
 
