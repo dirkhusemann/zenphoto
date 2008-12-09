@@ -198,10 +198,14 @@ function printBarGraph($sortorder="mostimages",$type="albums",$limit=10) {
 				case "images":
 					$itemssorted = sortMultiArray($array,"id","desc",false,false);
 					$barsize = 0;
+					$maxvalue = 1;
 					$headline = $typename." - ".gettext("latest");
 					break;
 			}
 			break;
+	}
+	if($maxvalue == 0) {
+		$maxvalue = 1;
 	}
 	$count = 0;
 	$countlines = 0;
