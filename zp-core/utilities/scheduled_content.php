@@ -291,7 +291,7 @@ if (count($publish_albums_list) > 0) {
 
 <div class="buttons pad_button" id="reviewobjects">
 <button class="tooltip" type="submit" title="<?php echo gettext("Review not visible images."); ?>">
-	<img src="<?php echo $webpath; ?>images/warn.png" alt="" /> <?php echo gettext("Review images"); ?>
+	<img src="<?php echo $webpath; ?>images/quest.png" alt="" /> <?php echo gettext("Review images"); ?>
 </button>
 </div>
 <br clear="all" />
