@@ -166,6 +166,7 @@ zp-core/admin-albumsort.php
 zp-core/admin-cache-images.php
 zp-core/admin-comments.php
 zp-core/admin-dynamic-album.php
+zp-core/admin-edit.php
 zp-core/admin-functions.php
 zp-core/admin-options.php
 zp-core/admin-plugins.php
@@ -206,12 +207,17 @@ zp-core/functions-i18n.php
 zp-core/functions-image.php
 zp-core/functions.php
 zp-core/i.php
+zp-core/images/accept.png
 zp-core/images/action.png
+zp-core/images/bar_graph.png
 zp-core/images/burst.png
+zp-core/images/burst1.png
 zp-core/images/cache.png
+zp-core/images/cache1.png
 zp-core/images/calendar.png
 zp-core/images/captcha_background.png
 zp-core/images/drag_handle.png
+zp-core/images/edit-delete.png
 zp-core/images/envelope.png
 zp-core/images/err-cachewrite.gif
 zp-core/images/err-imagegeneral.gif
@@ -228,8 +234,12 @@ zp-core/images/movie.jpg
 zp-core/images/multimediaDefault.png
 zp-core/images/pass.png
 zp-core/images/pencil.png
+zp-core/images/quest.png
+zp-core/images/redo.png
+zp-core/images/redo1.png
 zp-core/images/refresh.png
 zp-core/images/reset.png
+zp-core/images/reset1.png
 zp-core/images/rss.gif
 zp-core/images/searchfields_icon.png
 zp-core/images/thickbox_loadingAnimation.gif
@@ -349,6 +359,7 @@ zp-core/setup.php
 zp-core/template-functions.php
 zp-core/upgrade.php
 zp-core/utilities/backup_restore.php
+zp-core/utilities/gallery_statistics.php
 zp-core/utilities/scheduled_content.php
 zp-core/version.php
 zp-core/watermarks/copyright.png
