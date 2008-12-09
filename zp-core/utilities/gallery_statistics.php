@@ -459,6 +459,9 @@ if(isset($_GET['type']) AND $_GET['type'] === "albums") {
 
 if(isset($_GET['type']) AND $_GET['type'] === "images") {
 	switch ($_GET['stats']) {
+		case "latest":
+			printBarGraph("latest","images",$imagecount);
+			break;
 		case "popular":
 			printBarGraph("popular","images",$imagecount);
 			break;
