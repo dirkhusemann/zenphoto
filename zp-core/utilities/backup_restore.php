@@ -103,13 +103,11 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 							echo gettext('failed writing to backup!');
 							break;
 						}
-						if ($writeresult === false) break;
 						$counter ++;
 						if ($counter >= RESPOND_COUNTER) {
 							echo ' ';
 							$counter = 0;
 						}
-
 					}
 				}
 				if ($writeresult === false) break;

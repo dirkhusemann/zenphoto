@@ -873,7 +873,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 			</tr>
 			<?php
 			}
-			if (!empty($target_image_nr)) {
+			if (!empty($target_image)) {
 				?>
 				<script language="Javascript">
 				javascript:toggleExtraInfo('<?php echo $target_image_nr;?>', 'image', true);
