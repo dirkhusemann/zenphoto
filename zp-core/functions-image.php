@@ -278,7 +278,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 	$sharpenthumbs = getOption('thumb_sharpen');
 	$sharpenimages = getOption('image_sharpen');
 	$newfile = SERVERCACHE . $newfilename;
-	if (DEBUG_IMAGE) debugLog("cacheImage(\$imgfile=".basename($imgfile).", \$newfilename=$newfilename, \$allow_watermark=$allow_watermark, \$force_cache=$force_cache, \$theme=$theme) \$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop");
+	if (DEBUG_IMAGE) debugLog("cacheImage(\$imgfile=".basename($imgfile).", \$newfilename=$newfilename, \$allow_watermark=$allow_watermark, \$force_cache=$force_cache, \$theme=$theme) \$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop \$image_use_side=$image_use_side; \$upscale=$upscale;");
 	// Check for GD
 	if (!function_exists('imagecreatetruecolor'))
 		imageError(gettext('The GD Library is not installed or not available.'), 'err-nogd.gif');
@@ -347,15 +347,16 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		$hprop = round(($h / $w) * $dim);
 		$wprop = round(($w / $h) * $dim);
 
-		if ((!$thumb && $size && // thumbnails with size (as opposed to height or width)
-						 ($image_use_side == 'longest' && $h > $w)  // height is the longest side and the option is set to longest side
-					|| ($image_use_side == 'height')) // the option is set for height
-					|| ($thumb && $h >= $w)) // it is a thumb, size is not set and the height is the longest side
+		if ((!$thumb && ($size && // images with size (as opposed to height or width)
+						 ($image_use_side == 'longest' && $h > $w))  // height is the longest side and the option is set to longest side
+					|| ($image_use_side == 'height') // the option is set for height
+					|| !$width) // or there is only a height specified
+					|| ($thumb && $h >= $w)) // it is a thumb and the height is the longest side
 				{
-			$newh = $dim;
+			$newh = $dim; // use height dimension
 			$neww = $wprop;
 		} else {
-			$newh = $hprop;
+			$newh = $hprop; // use width dimension
 			$neww = $dim;
 		}
 		if (DEBUG_IMAGE) debugLog("cacheImage:".basename($imgfile).": \$size=$size, \$width=$width, \$height=$height, \$w=$w; \$h=$h; \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$newh=$newh, \$neww=$neww, \$hprop=$hprop, \$wprop=$wprop, \$dim=$dim, \$ratio_in=$ratio_in, \$ratio_out=$ratio_out \$upscale=$upscale \$rotate=$rotate \$force_cache=$force_cache");
@@ -460,8 +461,10 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 				$hprop = round(($h / $w) * $dim);
 				$wprop = round(($w / $h) * $dim);
 				if ($size) {
-					if ((!$thumb && ($image_use_side == 'longest' && $h > $w || ($image_use_side == 'height')))
-					|| ($thumb && $h >= $w)) {
+					if ((!$thumb && ($image_use_side == 'longest' && $h > $w) 
+							|| ($image_use_side == 'height')
+							|| !$width)
+							|| ($thumb && $h >= $w)) {
 						$newh = $dim;
 						$neww = $wprop;
 					} else {
@@ -481,7 +484,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 					}
 				}
 			}
-			if (DEBUG_IMAGE) debugLog("cacheImage:no crop ".basename($imgfile).":\$size=$size, \$width=$width, \$height=$height, \$dim=$dim, \$wprop=$wprop, \$hprop=$hprop, \$neww=$neww; \$newh=$newh; \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$rotate=$rotate");
+			if (DEBUG_IMAGE) debugLog("cacheImage:no crop ".basename($imgfile).":\$size=$size, \$width=$width, \$height=$height, \$dim=$dim, \$wprop=$wprop, \$hprop=$hprop, \$neww=$neww; \$newh=$newh; \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$rotate=$rotate; \$allowscale=$allowscale;");
 			$newim = imagecreatetruecolor($neww, $newh);
 			imagecopyresampled($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
 		}		
@@ -525,7 +528,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			// Position Overlay in Bottom Right
 			$dest_x = max(0, floor(($imw - $nw) * $offset_w));
 			$dest_y = max(0, floor(($imh - $nh) * $offset_h));
-			if (DEBUG_IMAGE) debugLog("Watermark:".basename($imgfile).": \$offset_h=$offset_h, \$offset_w=$offset_w, \$watermark_height=$watermark_height, \$watermark_width=$watermark_width, \$imh=$imh, \$imh=$imh, \$percent=$percent, \$r=$r, \$nh=$nh, \$nh=$nh, \$dest_x=$dest_x, \$dest_y=$dest_y");
+			if (DEBUG_IMAGE) debugLog("Watermark:".basename($imgfile).": \$offset_h=$offset_h, \$offset_w=$offset_w, \$watermark_height=$watermark_height, \$watermark_width=$watermark_width, \$imw=$imw, \$imh=$imh, \$percent=$percent, \$r=$r, \$nw=$nw, \$nh=$nh, \$dest_x=$dest_x, \$dest_y=$dest_y");
 			imagecopy($newim, $watermark, $dest_x, $dest_y, 0, 0, $nw, $nh);
 			imagedestroy($watermark);
 		}
