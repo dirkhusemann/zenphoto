@@ -94,7 +94,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 					while ($tablerow = mysql_fetch_assoc($result)) {
 						foreach ($tablerow as $key=>$element) {
 							if (!empty($element)) {
-								$tablerow[$key] = gzcompress($element);
+								$tablerow[$key] = gzcompress($element, 4);
 							}
 						}
 						$storestring = $unprefixed_table.TABLE_SEPARATOR.serialize($tablerow).RECORD_SEPARATOR;
