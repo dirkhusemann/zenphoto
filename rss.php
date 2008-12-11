@@ -72,7 +72,8 @@ if(getOption('mod_rewrite')) {
 <docs>http://blogs.law.harvard.edu/tech/rss</docs>
 <generator>ZenPhoto RSS Generator</generator>
 <?php
-	$admin = array_shift(getAdministrators());
+	$admins = getAdministrators();
+	$admin = array_shift($admins);
 	$adminname = $admin['user'];
 	$adminemail = $admin['email'];
 ?>

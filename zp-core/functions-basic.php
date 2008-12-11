@@ -816,4 +816,10 @@ function is_valid_video($filename) {
 	return isset($_zp_extra_filetypes[$ext]) && $_zp_extra_filetypes[$ext] == 'Video';
 }
 
+if (function_exists('date_default_timezone_set')) {
+	$tz = date_default_timezone_get();
+	date_default_timezone_set($tz); 
+	ini_set('date.timezone', $tz);
+} 
+
 ?>
