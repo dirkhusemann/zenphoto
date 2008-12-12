@@ -59,7 +59,8 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 <docs>http://blogs.law.harvard.edu/tech/rss</docs>
 <generator>ZenPhoto Comment RSS Generator</generator>
 <?php
-	$admin = array_shift(getAdministrators());
+	$admin = getAdministrators();
+	$admin = array_shift($admin);
 	$adminname = $admin['user'];
 	$adminemail = $admin['email'];
 ?>
