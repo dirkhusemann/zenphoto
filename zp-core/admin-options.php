@@ -810,7 +810,16 @@ if ($subtab == 'admin') {
 			<td><?php echo gettext("Time offset (hours):"); ?></td>
 			<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="time_offset"
 				value="<?php echo htmlspecialchars(getOption('time_offset'));?>" /></td>
-			<td><?php echo gettext("If you're in a different time zone from your server, set the	offset in hours."); ?></td>
+			<td>
+				<?php
+					if (function_exists('date_default_timezone_get')) { 
+						$tz = date_default_timezone_get();
+						printf(gettext('Your server reports its timezone as: <code>%s</code>.'),date_default_timezone_get()); 
+						echo ' ';
+					} 
+					echo gettext("If you're in a different time zone from your server, set the	offset in hours of your timezone from that of the server. For instance if your server is on the US East Coast (<em>GMT</em> - 5) and you are on the Pacific Coast (<em>GMT</em> - 8), set the offset to 3 (-5 - (-8)).")
+				?>
+			</td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Enable mod_rewrite:"); ?></td>

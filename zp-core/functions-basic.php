@@ -9,6 +9,12 @@
 
 // force UTF-8 Ø
 
+if (function_exists('date_default_timezone_set')) { // insure a correct timezone 
+	$tz = date_default_timezone_get();
+	date_default_timezone_set($tz); 
+	ini_set('date.timezone', $tz);
+} 
+
 define('FILESYSTEM_CHARSET', 'ISO-8859-1');
 define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
 define('DEBUG_ERROR', false); // set to true to  supplies the calling sequence with zp_error messages
@@ -815,11 +821,5 @@ function is_valid_video($filename) {
 	$ext = strtolower(substr(strrchr($filename, "."), 1));
 	return isset($_zp_extra_filetypes[$ext]) && $_zp_extra_filetypes[$ext] == 'Video';
 }
-
-if (function_exists('date_default_timezone_set')) {
-	$tz = date_default_timezone_get();
-	date_default_timezone_set($tz); 
-	ini_set('date.timezone', $tz);
-} 
 
 ?>
