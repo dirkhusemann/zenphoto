@@ -243,7 +243,7 @@ class PersistentObject {
 		$sql = 'SELECT * FROM ' . prefix($this->table) . getWhereClause($this->unique_set) . ' LIMIT 1;';
 		// But first, try the cache.
 		if ($this->use_cache) {
-			$reporting = error_reporting(0);  // the following code is flagged by E_STRICT error reporting
+			$reporting = error_reporting(0);  // TODO: fix the following code. It is flagged by E_STRICT error reporting
 			$cache_location = &$this->cache();
 			$entry = &$cache_location[$this->unique_set[$this->cache_by]];
 			error_reporting($reporting);
