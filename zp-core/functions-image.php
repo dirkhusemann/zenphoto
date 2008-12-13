@@ -260,6 +260,49 @@ function imageResizeAlpha(&$src, $w, $h) {
 }
 
 /**
+ * Calculates proprotional width and height
+ * Used internally by cacheImage
+ * 
+ * Returns array containing the new width and height
+ *
+ * @param int $size
+ * @param int $width
+ * @param int $height
+ * @param int $w
+ * @param int $h
+ * @param int $thumb
+ * @param int $image_use_side
+ * @param int $dim
+ * @return array
+ */
+function propSizes($size, $width, $height, $w, $h, $thumb, $image_use_side, $dim) {	
+	$hprop = round(($h / $w) * $dim);
+	$wprop = round(($w / $h) * $dim);
+	if ($size) {
+		if ((($thumb || ($image_use_side == 'longest')) && $h > $w) || ($image_use_side == 'height')) {
+			$newh = $dim;  // height is the size and width is proportional
+			$neww = $wprop;
+		} else { // either width is longest or $image_use_side == 'width'
+			$neww = $dim;  // width is the size and height is proportional
+			$newh = $hprop; 
+		}
+	} else { // length and/or width is set, size is NULL (Thumbs work the same as image in this case)
+		if ($height) { 
+			$newh = $height;  // height is supplied, use it
+		} else {
+			$newh = $hprop;		// height not supplied, use the proprotional
+		}
+		if ($width) {
+			$neww = $width;   // width is supplied, use it
+		} else {
+			$neww = $wprop;   // width is not supplied, use the proportional
+		}
+	}
+	if (DEBUG_IMAGE) debugLog("propSizes($size, $width, $height, $w, $h, $thumb, $image_use_side, $wprop, $hprop)::\$neww=$neww; \$newh=$newh");	
+	return array($neww, $newh);
+}
+
+/**
  * Creates the cache folder version of the image, including watermarking
  *
  * @param string $newfilename the name of the file when it is in the cache
@@ -342,24 +385,11 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			// There's a problem up there somewhere...
 			imageError(gettext("Unknown error! Please report to the developers at <a href=\"http://www.zenphoto.org/\">www.zenphoto.org</a>"), 'err-imagegeneral.gif');
 		}
-
-		// Calculate proportional height and width.
-		$hprop = round(($h / $w) * $dim);
-		$wprop = round(($w / $h) * $dim);
-
-		if ((!$thumb && ($size && // images with size (as opposed to height or width)
-						 ($image_use_side == 'longest' && $h > $w))  // height is the longest side and the option is set to longest side
-					|| ($image_use_side == 'height') // the option is set for height
-					|| !$width) // or there is only a height specified
-					|| ($thumb && $h >= $w)) // it is a thumb and the height is the longest side
-				{
-			$newh = $dim; // use height dimension
-			$neww = $wprop;
-		} else {
-			$newh = $hprop; // use width dimension
-			$neww = $dim;
-		}
-		if (DEBUG_IMAGE) debugLog("cacheImage:".basename($imgfile).": \$size=$size, \$width=$width, \$height=$height, \$w=$w; \$h=$h; \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$newh=$newh, \$neww=$neww, \$hprop=$hprop, \$wprop=$wprop, \$dim=$dim, \$ratio_in=$ratio_in, \$ratio_out=$ratio_out \$upscale=$upscale \$rotate=$rotate \$force_cache=$force_cache");
+	
+		$sizes = propSizes($size, $width, $height, $w, $h, $thumb, $image_use_side, $dim);
+		list($neww, $newh) = $sizes;
+		
+		if (DEBUG_IMAGE) debugLog("cacheImage:".basename($imgfile).": \$size=$size, \$width=$width, \$height=$height, \$w=$w; \$h=$h; \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$newh=$newh, \$neww=$neww, \$dim=$dim, \$ratio_in=$ratio_in, \$ratio_out=$ratio_out \$upscale=$upscale \$rotate=$rotate \$force_cache=$force_cache");
 		
 		if (!$upscale && $newh >= $h && $neww >= $w) { // image is the same size or smaller than the request
 			if (!getOption('perform_watermark') && !($crop || $thumb || $rotate || $force_cache)) { // no processing needed
@@ -458,33 +488,11 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			imagecopyresampled($newim, $im, 0, 0, $cx, $cy, $neww, $newh, $cw, $ch);
 		} else {
 			if ($allowscale) {
-				$hprop = round(($h / $w) * $dim);
-				$wprop = round(($w / $h) * $dim);
-				if ($size) {
-					if ((!$thumb && ($image_use_side == 'longest' && $h > $w) 
-							|| ($image_use_side == 'height')
-							|| !$width)
-							|| ($thumb && $h >= $w)) {
-						$newh = $dim;
-						$neww = $wprop;
-					} else {
-						$newh = $hprop;
-						$neww = $dim;
-					}
-				} else {
-					if ($height) {
-						$newh = $height;
-					} else {
-						$newh = $hprop;
-					}
-					if ($width) {
-						$neww = $width;
-					} else {
-						$neww = $wprop;
-					}
-				}
+				$sizes = propSizes($size, $width, $height, $w, $h, $thumb, $image_use_side, $dim);
+				list($neww, $newh) = $sizes;
+				
 			}
-			if (DEBUG_IMAGE) debugLog("cacheImage:no crop ".basename($imgfile).":\$size=$size, \$width=$width, \$height=$height, \$dim=$dim, \$wprop=$wprop, \$hprop=$hprop, \$neww=$neww; \$newh=$newh; \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$rotate=$rotate; \$allowscale=$allowscale;");
+			if (DEBUG_IMAGE) debugLog("cacheImage:no crop ".basename($imgfile).":\$size=$size, \$width=$width, \$height=$height, \$dim=$dim, \$neww=$neww; \$newh=$newh; \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$rotate=$rotate; \$allowscale=$allowscale;");
 			$newim = imagecreatetruecolor($neww, $newh);
 			imagecopyresampled($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
 		}		
