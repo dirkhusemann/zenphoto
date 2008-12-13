@@ -17,9 +17,7 @@ define('TABLE_SEPARATOR', '::');
 define('RESPOND_COUNTER', 1000);
 chdir(dirname(dirname(__FILE__)));
 
-require_once(dirname(dirname(__FILE__)).'/template-functions.php');
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
-
 
 $gallery = new Gallery();
 $webpath = WEBPATH.'/'.ZENFOLDER.'/';
@@ -31,31 +29,41 @@ printAdminHeader($webpath);
 /**
  * Prints a table with a bar graph of the values.
  *
- * @param string $sortorder "popular", "mostrated","toprated","mostcommented" or "mostimages" (only if $type = "albums"!)
+ * @param string $sortorder "popular", "mostrated","toprated","mostcommented" or - only if $type = "albums"! - "mostimages" 
  * @param string_type $type "albums" or "images"
  * @param int $limit Number of entries to show
  */
-function printBarGraph($sortorder="mostimages",$type="albums",$limit=10) {
+function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $to_number=10) {
 	global $gallery, $webpath;
+	$limit = $from_number.",".$to_number;
+	$bargraphmaxsize = 400;
 	switch ($type) {
 		case "albums":
-		$typename = gettext("Albums");
-		$dbquery = "SELECT id, title, folder, hitcounter, total_votes, total_value FROM ".prefix('albums');
-		break;
+			$typename = gettext("Albums");
+			$dbquery = "SELECT id, title, folder, hitcounter, total_votes, total_value, `show` FROM ".prefix('albums');
+			break;
 		case "images":
-		$typename = gettext("Images");
-		$dbquery = "SELECT id, title, filename, albumid, hitcounter, total_votes, total_value FROM ".prefix('images');
-		break;
+			$typename = gettext("Images");
+			$dbquery = "SELECT id, title, filename, albumid, hitcounter, total_votes, total_value, `show` FROM ".prefix('images');
+			break;
 	}
 	switch($sortorder) {
 		case "popular":
 			$itemssorted = query_full_array($dbquery." ORDER BY hitcounter DESC LIMIT ".$limit);
-			$maxvalue = $itemssorted[0]['hitcounter'];
+			if(empty($itemssorted)) {
+				$maxvalue = 0;
+			} else {
+				$maxvalue = $itemssorted[0]['hitcounter'];
+			}
 			$headline = $typename." - ".gettext("most viewed");
 			break;
 		case "mostrated":
 			$itemssorted = query_full_array($dbquery." ORDER BY total_votes DESC LIMIT ".$limit);
-			$maxvalue = $itemssorted[0]['total_votes'];
+			if(empty($itemssorted)) {
+				$maxvalue = 0;
+			} else {
+				$maxvalue = $itemssorted[0]['total_votes'];
+			}
 			$headline = $typename." - ".gettext("most rated");
 			break;
 		case "toprated":
@@ -67,10 +75,14 @@ function printBarGraph($sortorder="mostimages",$type="albums",$limit=10) {
 					$itemssorted = query_full_array("SELECT * FROM " . prefix('images') ." ORDER BY (total_value/total_votes) DESC LIMIT $limit");
 					break;
 			}
-			if($itemssorted[0]['total_votes'] != 0) {
-				$maxvalue = ($itemssorted[0]['total_value'] / $itemssorted[0]['total_votes']);
-			} else {
+			if(empty($itemssorted)) {
 				$maxvalue = 0;
+			} else {
+				if($itemssorted[0]['total_votes'] != 0) {
+					$maxvalue = ($itemssorted[0]['total_value'] / $itemssorted[0]['total_votes']);
+				} else {
+					$maxvalue = 0;
+				}
 			}
 			$headline = $typename." - ".gettext("top rated");
 			break;
@@ -83,12 +95,20 @@ function printBarGraph($sortorder="mostimages",$type="albums",$limit=10) {
 					$itemssorted = query_full_array("SELECT comments.ownerid, count(*) as commentcount, images.* FROM ".prefix('comments')." AS comments, ".prefix('images')." AS images WHERE images.id=comments.ownerid AND type = 'images' GROUP BY comments.ownerid ORDER BY commentcount DESC LIMIT ".$limit); 
 					break;
 			}
-			$maxvalue = $itemssorted[0]['commentcount'];
+			if(empty($itemssorted)) {
+				$maxvalue = 0;
+			} else {
+				$maxvalue = $itemssorted[0]['commentcount'];
+			}
 			$headline = $typename." - ".gettext("most commented");
 			break;
 		case "mostimages":
 			$itemssorted = query_full_array("SELECT images.albumid, count(*) as imagenumber, albums.* FROM ".prefix('images')." AS images, ".prefix('albums')." AS albums WHERE albums.id=images.albumid GROUP BY images.albumid ORDER BY imagenumber DESC LIMIT ".$limit); 
-			$maxvalue = $itemssorted[0]['imagenumber'];
+			if(empty($itemssorted)) {
+				$maxvalue = 0;
+			} else {
+				$maxvalue =  $itemssorted[0]['imagenumber'];
+			}
 			$headline = $typename." - ".gettext("most images");
 			break;
 		case "latest":
@@ -98,13 +118,19 @@ function printBarGraph($sortorder="mostimages",$type="albums",$limit=10) {
 					$albums = array();
 					foreach ($allalbums as $album) {
 						$albumobj = new Album($gallery,$album['folder']);
-						$albumentry = array("id" => $albumobj->get('id'), "title" => $albumobj->getTitle(), "folder" => $albumobj->name,"imagenumber" => $albumobj->getNumImages());
+						$albumentry = array("id" => $albumobj->get('id'), "title" => $albumobj->getTitle(), "folder" => $albumobj->name,"imagenumber" => $albumobj->getNumImages(), "show" => $albumobj->get("show"));
 						array_unshift($albums,$albumentry);
 					}
-					$itemssorted = sortMultiArray($albums,"imagenumber","desc",false,false); // just to get the one with the most images
-					$maxvalue = $itemssorted[0]['imagenumber'];
-					$itemssorted = $albums; // The items are originally sorted by id;
+					if(empty($albums)) {
+						$maxvalue = 0;
+						$itemssorted = array();
+					} else {
+						$itemssorted = sortMultiArray($albums,"imagenumber","desc",false,false); // just to get the one with the most images for the graph max value
+						$maxvalue = $itemssorted[0]["imagenumber"];
+						$itemssorted = $albums; // The items are originally sorted by id;
+					}
 					$headline = $typename." - ".gettext("latest");
+					break;
 					break;
 				case "images":
 					$itemssorted = query_full_array($dbquery." ORDER BY id DESC LIMIT ".$limit);
@@ -114,24 +140,84 @@ function printBarGraph($sortorder="mostimages",$type="albums",$limit=10) {
 					break;
 			}
 			break;
+		 case "latestupdated":
+		 		// part taken from the image_albums_statistics - could probably be optimized regarding queries...
+		 		// get all albums
+		 		$allalbums = query_full_array("SELECT id, title, folder, `show` FROM " . prefix('albums'));
+		 		$albums = array();
+		 		$latestimages = array();
+		 		foreach ($allalbums as $album) {
+					$albumobj = new Album($gallery,$album['folder']);
+					$albumentry = array("id" => $albumobj->get('id'), "title" => $albumobj->getTitle(), "folder" => $albumobj->name,"imagenumber" => $albumobj->getNumImages(), "show" => $albumobj->get("show"));
+					array_unshift($albums,$albumentry);
+				}
+		 	 	// get latest images of each album
+				$count = 0;
+		 		foreach($albums as $album) {
+		 			$count++;
+		 			$image = query_single_row("SELECT id, albumid, mtime FROM " . prefix('images'). " WHERE albumid = ".$album['id'] . " ORDER BY id DESC LIMIT 1");
+		 			array_push($latestimages, $image);
+		 			if($count === $to_number) {
+		 				break;
+		 			}
+		 		} 
+		 		// sort latest image by mtime
+		 		$latestimages = sortMultiArray($latestimages,"mtime","desc",false,false);
+		 		//echo "<pre>"; print_r($albums); echo "</pre>";
+		 		$itemssorted = array();
+		 		$count = 0;
+		 		foreach($latestimages as $latestimage) {
+		 			$count++;
+		 			foreach($allalbums as $album) {
+		 				if($album['id'] === $latestimage['albumid']) {
+		 					array_push($albums,$album);
+		 				}
+		 			}
+		 			if($count === $to_number) {
+		 				break;
+		 			}
+		 		}
+		 		if($to_number < 1) {
+		 			$stopelement = 1;
+		 		} else {
+		 			$stopelement = $to_number;
+		 		}
+		 		$albums = array_slice($albums,0,$stopelement); // clear unnessesary items fron array
+		 		if(empty($albums)) {
+		 			$maxvalue = 0;
+		 			$itemssorted = array();
+		 		} else {
+		 			$itemssorted = sortMultiArray($albums,"imagenumber","desc",false,false); // just to get the one with the most images for the graph max value
+		 			$maxvalue = $itemssorted[0]["imagenumber"];
+		 			$itemssorted = $albums; // The items are originally sorted by id;
+		 		}
+		 		$headline = $typename." - ".gettext("latest updated");
+		 		//echo "<pre>"; print_r($albums); echo "</pre>";
+			break; 
 	}
-	if($maxvalue == 0) {
+	if($maxvalue == 0 OR empty($itemssorted)) {
 		$maxvalue = 1;
-		$no_statistic_message = "<tr><td><em>".gettext("No statistic available")."</em></td></tr>";
+		$no_statistic_message = "<tr><td><em>".gettext("No statistic available")."</em></td><td></td><td></td><td></td></tr>";
 	} else {
 		$no_statistic_message = "";
 	}
-	$count = 0;
+	if($from_number <= 1) {
+		$count = 1;
+	} else {
+		$count = $from_number;
+	}
 	$countlines = 0;
 	echo "<table class='bordered'>";
-	echo "<tr'><th colspan='4' ><strong>".$headline."</strong>";
+	echo "<tr><th colspan='4'><strong>".$headline."</strong>";
+	
 	if(isset($_GET['stats'])) {
 		echo "<a href='gallery_statistics.php'> | ".gettext("Back to the top 10 lists")."</a>";
 	} else {
-		echo "<a href='gallery_statistics.php?stats=".$sortorder."&amp;type=".$type."'> | ".gettext("View complete list")."</a>";
+		if(empty($no_statistic_message)) {
+			echo "<a href='gallery_statistics.php?stats=".$sortorder."&amp;type=".$type."'> | ".gettext("View more")."</a>";
+		}
 		echo "<a href='#top'> | ".gettext("top")."</a>";
 	}
-	
 	echo "</th></tr>";
 	echo $no_statistic_message;
 	foreach ($itemssorted as $item) {
@@ -142,12 +228,12 @@ function printBarGraph($sortorder="mostimages",$type="albums",$limit=10) {
 		}
 		switch($sortorder) {
 			case "popular":
-				$barsize = round($item['hitcounter'] / $maxvalue * 400);
+				$barsize = round($item['hitcounter'] / $maxvalue * $bargraphmaxsize);
 				$value = $item['hitcounter'];
 				break;
 			case "mostrated":
 				if($item['total_votes'] != 0) {
-					$barsize = round($item['total_votes'] / $maxvalue * 400);
+					$barsize = round($item['total_votes'] / $maxvalue * $bargraphmaxsize);
 				} else {
 					$barsize = 0;
 				}
@@ -155,7 +241,7 @@ function printBarGraph($sortorder="mostimages",$type="albums",$limit=10) {
 				break;
 			case "toprated":
 				if($item['total_votes'] != 0) {
-					$barsize = round(($item['total_value'] / $item['total_votes']) / $maxvalue * 400);
+					$barsize = round(($item['total_value'] / $item['total_votes']) / $maxvalue * $bargraphmaxsize);
 					$value = round($item['total_value'] / $item['total_votes']);
 				} else {
 					$barsize = 0;
@@ -164,20 +250,20 @@ function printBarGraph($sortorder="mostimages",$type="albums",$limit=10) {
 				break;
 			case "mostcommented":
 				if($maxvalue != 0) {
-					$barsize = round($item['commentcount'] / $maxvalue * 400);
+					$barsize = round($item['commentcount'] / $maxvalue * $bargraphmaxsize);
 				} else {
 					$barsize = 0;
 				}
 				$value = $item['commentcount'];
 				break;
 			case "mostimages":
-				$barsize = round($item['imagenumber'] / $maxvalue * 400);
+				$barsize = round($item['imagenumber'] / $maxvalue * $bargraphmaxsize);
 				$value = $item['imagenumber'];
 				break;
 			case "latest":
 				switch($type) {
 					case "albums":
-						$barsize = round($item['imagenumber'] / $maxvalue * 400);
+						$barsize = round($item['imagenumber'] / $maxvalue * $bargraphmaxsize);
 						$value = $item['imagenumber']; 
 						break;
 					case "images":
@@ -186,6 +272,10 @@ function printBarGraph($sortorder="mostimages",$type="albums",$limit=10) {
 						break;
 				}
 				break;		
+			case "latestupdated":
+				$barsize = round($item['imagenumber'] / $maxvalue * $bargraphmaxsize);
+				$value = $item['imagenumber']; 
+				break;
 		}
 		// counter to have a gray background of every second line
 		if($countlines === 1) {
@@ -201,29 +291,38 @@ function printBarGraph($sortorder="mostimages",$type="albums",$limit=10) {
 				$viewurl = WEBPATH."/index.php?album=".$name;
 				break;
 			case "images":
-				$getalbumfolder = query_single_row("SELECT title, folder from ".prefix("albums"). " WHERE id = ".$item['albumid']);
+				$getalbumfolder = query_single_row("SELECT title, folder, `show` from ".prefix("albums"). " WHERE id = ".$item['albumid']);
 				if($sortorder === "latest") {
-					$value = get_language_string($getalbumfolder['title'])." (".$getalbumfolder['folder'].")"; 
-				} 
+					$value = "<span";
+					if($getalbumfolder['show'] != "1") {
+						$value = $value." class='unpublished_item'";
+					}					
+					$value = $value.">".get_language_string($getalbumfolder['title'])."</span> (".$getalbumfolder['folder'].")";
+				}
 				$editurl=  $webpath."/admin.php?page=edit&amp;album=".$getalbumfolder['folder']."&amp;image=".$item['filename']."&amp;tab=imageinfo#IT";
 				$viewurl = WEBPATH."/index.php?album=".$getalbumfolder['folder']."&amp;image=".$name;
 				break;
 		}
+		if($item['show'] != "1") {
+			$show = " class='unpublished_item'";
+		} else {
+			$show = "";
+		}
 		if($value != 0 OR $sortorder === "latest") {
 		?>
 		<tr class="statistic_wrapper">
-		<td class="statistic_counter" <?php echo $style; ?>><?php echo ($count+1); ?></td>
-		<td class="statistic_title" <?php echo $style; ?>><strong><?php echo get_language_string($item['title']); ?></strong> (<?php echo $name; ?>)</td>
+		<td class="statistic_counter" <?php echo $style; ?>><?php echo $count; ?></td>
+		<td class="statistic_title" <?php echo $style; ?>><strong<?php echo $show; ?>><?php echo get_language_string($item['title']); ?></strong> (<?php echo $name; ?>)</td>
 		<td class="statistic_graphwrap" <?php echo $style; ?>><div class="statistic_bargraph" style="width: <?php echo $barsize; ?>px"></div><div class="statistic_value"><?php echo $value; ?></div></td>
 		<td class="statistic_link" <?php echo $style; ?>>
 		<?php
-		echo "<a href='".$editurl."' title='".$name."'>Edit</a> | <a href='".$viewurl."' title='".$name."'>View</a></td";
+		echo "<a href='".$editurl."' title='".$name."'>".gettext("Edit")."</a> | <a href='".$viewurl."' title='".$name."'>".gettext("View")."</a></td";
 		echo "</tr>";
 		$count++; 	
 		if($count === $limit) { break; }
 		} 
 	} // foreach end
-	echo "</table><br />";
+	echo "</table>";
 }
 echo '</head>';
 ?>
@@ -234,7 +333,7 @@ echo '</head>';
 <a name="top"></a>
 <?php printTabs('database'); 
 
-// getting arrays of all image and albums
+// getting the counts
 $albumcount = $gallery->getNumAlbums(true);
 $albumscount_unpub = $albumcount-$gallery->getNumAlbums(true,true);
 $imagecount = $gallery->getNumImages();
@@ -242,6 +341,8 @@ $imagecount_unpub = $imagecount-$gallery->getNumImages(true);
 ?>
 <div id="content">
 <h1><?php echo gettext("Gallery Statistics"); ?></h1>
+<p><?php echo gettext("This page shows more detailed statistics of your gallery. For album statistics the bar graph always shows the total number of images in that album. For image statistics always the album the image is in is shown.<br />Unpublished items are marked in darkred. Images are marked unpublished if their (direct) album is, too."); ?></p>
+
 <ul class="statistics_general"><li>
 <?php 
 if ($imagecount_unpub > 0) {
@@ -278,11 +379,12 @@ if ($commentcount_mod > 0) {
 }
 ?>
 </li></ul>
+	
 <?php
 if(!isset($_GET['stats']) AND !isset($_GET['fulllist'])) {
 	?>
 	<ul class="statistic_navlist">
-		<li><strong>Images</strong>
+		<li><strong><?php echo gettext("Images"); ?></strong>
 		<ul>
 				<li><a href="#images-latest"><?php echo gettext("latest"); ?></a> | </li>
 				<li><a href="#images-popular"><?php echo gettext("most viewed"); ?></a> | </li>
@@ -291,9 +393,10 @@ if(!isset($_GET['stats']) AND !isset($_GET['fulllist'])) {
 				<li><a href="#images-mostcommented"><?php echo gettext("most commented"); ?></a></li>
 		</ul>
 		</li>
-		<li><strong>Albums</strong>
+		<li><strong><?php echo gettext("Albums"); ?></strong>
 		<ul>
 				<li><a href="#albums-latest"><?php echo gettext("latest"); ?></a> | </li>
+				<li><a href="#albums-latestupdated"><?php echo gettext("latest updated"); ?></a> | </li>
 				<li><a href="#albums-mostimages"><?php echo gettext("most images"); ?></a> | </li>
 				<li><a href="#albums-popular"><?php echo gettext("most viewed"); ?></a> | </li>
 				<li><a href="#albums-mostrated"><?php echo gettext("most rated"); ?></a> | </li>
@@ -304,6 +407,7 @@ if(!isset($_GET['stats']) AND !isset($_GET['fulllist'])) {
 </ul>
 <br style="clear:both" />
 
+<!-- images --> 
 <a name="images-latest"></a>
 <?php printBarGraph("latest","images"); ?>
 	
@@ -319,8 +423,12 @@ if(!isset($_GET['stats']) AND !isset($_GET['fulllist'])) {
 <a name="images-mostcommented"></a>
 <?php printBarGraph("mostcommented","images"); ?>
 
+<!-- albums --> 
 <a name="albums-latest"></a>
 <?php printBarGraph("latest","albums"); ?>
+
+<a name="albums-latestupdated"></a>
+<?php printBarGraph("latestupdated","albums"); ?>
 
 <a name="albums-mostimages"></a>
 <?php printBarGraph("mostimages","albums"); ?>
@@ -336,49 +444,69 @@ if(!isset($_GET['stats']) AND !isset($_GET['fulllist'])) {
 
 <a name="albums-mostcommented"></a>
 <?php printBarGraph("mostcommented","albums"); ?>
-	
+
 <?php }
-
-//Default limit for full list to not overload
-if(!isset($_GET['number'])) {
-	$limit = 50;
-} else {
-	$limit = sanitize_numeric($_GET['number']);
-}
-
-// if a full list is requested
+// If a single list is requested
 if(isset($_GET['type'])) {
+	if(!isset($_GET['from_number'])) {
+		$from_number = 0;
+		$from_number_display = 1;
+	} else {
+		$from_number = sanitize_numeric($_GET['from_number'])-1;
+		$from_number_display = sanitize_numeric($_GET['from_number']);
+	}
+	if(!isset($_GET['to_number'])) {
+		$to_number = 50;
+		if($_GET['type'] === "images" AND $to_number > $imagecount) {
+			$to_number = $imagecount;
+		}
+		if($_GET['type'] === "albums" AND $to_number > $albumcount) {
+			$to_number = $albumcount;
+		} 
+		$to_number_display = $to_number;
+	} else {
+		$to_number = sanitize_numeric($_GET['to_number']);
+		$to_number_display = $to_number;
+		if($from_number < $to_number) {
+			$to_number_display = $to_number;
+			$to_number = $to_number-$from_number;
+		} 
+	}
 	?>
-		<form name="limit" id="limit" action="gallery_statistics.php"><label
-				for="number"><?php echo gettext("Type in the number of items to show: "); ?></label><input
-				type="text" size="10" id="number" name="number" value="<?php echo $limit; ?>" /> <input
-				type="hidden" name="stats"
-				value="<?php echo sanitize($_GET['stats']); ?>" /> <input
-				type="hidden" name="type"
-				value="<?php echo sanitize($_GET['type']); ?>" /> <input
-				type="submit" value="<?php echo gettext("Show"); ?>" /></form>
+		<form name="limit" id="limit" action="gallery_statistics.php">
+		<label for="from_number"><?php echo gettext("From "); ?></label>
+		<input type ="text" size="10" id="from_number" name="from_number" value="<?php echo $from_number_display; ?>" /> 
+		<label for="to_number"><?php echo gettext("to "); ?></label>
+		<input type ="text" size="10" id="to_number" name="to_number" value="<?php echo $to_number_display; ?>" /> 
+		<input type="hidden" name="stats"	value="<?php echo sanitize($_GET['stats']); ?>" /> 
+		<input type="hidden" name="type"value="<?php echo sanitize($_GET['type']); ?>" /> 
+		<input type="submit" value="<?php echo gettext("Show"); ?>" />
+		</form>
 		<br />
 		<?php
 		switch ($_GET['type']) {
 			case "albums":
 				switch ($_GET['stats']) {
 					case "latest":
-						printBarGraph("latest","albums",$limit);
+						printBarGraph("latest","albums",$from_number,$to_number);
+						break;
+					case "latestupdated":
+						printBarGraph("latestupdated","albums",$from_number,$to_number);
 						break;
 					case "popular":
-						printBarGraph("popular","albums",$limit);
+						printBarGraph("popular","albums",$from_number,$to_number);
 						break;
 					case "mostrated":
-						printBarGraph("mostrated","albums",$limit);
+						printBarGraph("mostrated","albums",$from_number,$to_number);
 						break;
 					case "toprated":
-						printBarGraph("toprated","albums",$limit);
+						printBarGraph("toprated","albums",$from_number,$to_number);
 						break;
 					case "mostcommented":
-						printBarGraph("mostcommented","albums",$limit);
+						printBarGraph("mostcommented","albums",$from_number,$to_number);
 						break;
 					case "mostimages":
-						printBarGraph("mostimages","albums",$limit);
+						printBarGraph("mostimages","albums",$from_number,$to_number);
 						break;
 				}
 				break;
@@ -386,19 +514,19 @@ if(isset($_GET['type'])) {
 
 						switch ($_GET['stats']) {
 							case "latest":
-								printBarGraph("latest","images",$limit);
+								printBarGraph("latest","images",$from_number,$to_number);
 								break;
 							case "popular":
-								printBarGraph("popular","images",$limit);
+								printBarGraph("popular","images",$from_number,$to_number);
 								break;
 							case "mostrated":
-								printBarGraph("mostrated","images",$limit);
+								printBarGraph("mostrated","images",$from_number,$to_number);
 								break;
 							case "toprated":
-								printBarGraph("toprated","images",$limit);
+								printBarGraph("toprated","images",$from_number,$to_number);
 								break;
 							case "mostcommented":
-								printBarGraph("mostcommented","images",$limit);
+								printBarGraph("mostcommented","images",$from_number,$to_number);
 								break;
 						}
 						break;
@@ -408,7 +536,7 @@ if(isset($_GET['type'])) {
 
 ?>
 </div><!-- content -->
-</div><!-- main -->
 <?php printAdminFooter(); ?>
+</div><!-- main -->
 </body>
 <?php echo "</html>"; ?>

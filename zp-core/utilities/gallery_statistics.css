@@ -2,6 +2,10 @@
 	font-weight: bold;
 }
 
+.bordered {
+	margin-bottom: 15px;
+}
+
 .statistic_wrapper tr {
 	width: 950px;
 	padding: 2px;
@@ -27,6 +31,7 @@
 .statistic_bargraph {
 	height: 15px;
 	background-color: darkred;
+	background-repeat: repeat-x;
 	margin-right: 0px;
 	margin-right: 5px;
 	float: left;
@@ -55,8 +60,17 @@
 }
 
 .statistics_general {
-margin-bottom: 15px;
+	border-top: 1px solid darkgray;
+	border-bottom: 1px solid darkgray;
+	padding: 8px 0px 8px 0px;
+	margin-bottom: 15px;
 }
+
 .statistics_general li {
-display: inline; margin-right: 10px;
+	display: inline;
+	margin-right: 25px;
+}
+
+.unpublished_item {
+	color: darkred;
 }
