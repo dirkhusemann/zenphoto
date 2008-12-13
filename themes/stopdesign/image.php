@@ -32,7 +32,7 @@ require_once('normalizer.php');
 			<div id="desc" style="z-index: 100">
 				<?php if (!checkForPassword(true)) { ?>
 					<h1><?php printImageTitle(true); ?></h1>
-					<?php printImageDesc(true); ?>
+					<div id="descText"><?php printImageDesc(true); ?></div>
 				<?php } ?>
 			</div>
 
@@ -190,7 +190,7 @@ require_once('normalizer.php');
 						}
 					 	?>
 						<div id="prev"><span class="thumb"><span>
-							<em style="background-image:url('<?php echo htmlspecialchars($img->getCustomImage(89, NULL, NULL, NULL, NULL, NULL, NULL, true)); ?>')"><a href="<?php echo getPrevImageURL();?>" accesskey="z" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Previous'); ?>: </strong>Crescent</a></em></span></span></div>
+							<em style="background-image:url('<?php echo htmlspecialchars($img->getCustomImage(NULL, $iw, $ih, $cw, $ch, NULL, NULL, true)); ?>')"><a href="<?php echo getPrevImageURL();?>" accesskey="z" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Previous'); ?>: </strong>Crescent</a></em></span></span></div>
 					<?php 
 					} 
 					$img = $_zp_current_image->getNextImage();

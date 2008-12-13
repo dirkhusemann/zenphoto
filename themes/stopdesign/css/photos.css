@@ -803,9 +803,10 @@ html>body #desc h1 {
   margin:0 0 .75em -250px;
   padding:0 15px 0 0;
   }
-#desc #imageDesc {
-  margin-left:265px; 
-  }
+#descText {
+	margin-left: 265px;
+	white-space: nowrap;
+}
 #desc div[style="display: block;"] { 
 	margin-left:255px; 
 	}
