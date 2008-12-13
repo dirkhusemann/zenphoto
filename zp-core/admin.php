@@ -21,21 +21,6 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-options.php");
 	}
 
-	$tagsort = getTagOrder();
-	//check for security incursions
-	if (isset($_GET['album'])) {
-		if (!($_zp_loggedin & ADMIN_RIGHTS)) {
-			if (!isMyAlbum(sanitize_path($_GET['album']), $_zp_loggedin)) {
-				unset($_GET['album']);
-				unset($_GET['page']);
-				$page = '';
-			}
-		}
-	}
-
-	$mcr_errors = array();
-
-
 	$gallery = new Gallery();
 	$gallery->garbageCollect();
 	if (isset($_GET['action'])) {
@@ -44,44 +29,16 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 		/** clear the cache ***********************************************************/
 		/******************************************************************************/
 		if ($action == "clear_cache") {
-			if (isset($_POST['album'])) {
-				$gallery->clearCache(SERVERCACHE . '/' . sanitize_path($_POST['album']));
-				header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?page=edit&cleared&album='.$_POST['album']);
-				exit();
-			} else {
-				$gallery->clearCache();
-			}
+			$gallery->clearCache();
+			$msg = gettext('Cache cleared.');
 		}
 
 		/** Reset hitcounters ***********************************************************/
 		/********************************************************************************/
 		if ($action == "reset_hitcounters") {
-			if (isset($_REQUEST['albumid'])) {
-				$id = sanitize_numeric($_REQUEST['albumid']);
-				$where = ' WHERE `id`='.$id;
-				$imgwhere = ' WHERE `albumid`='.$id;
-				$return = '?counters_reset';
-				if (isset($_REQUEST['album'])) {
-					if (isset($_GET['album'])) {
-						$return = urlencode(dirname(sanitize_path($_REQUEST['album'])));
-					} else {
-						$return = urlencode(sanitize_path($_REQUEST['album']));	
-					}
-					if (empty($return) || $return == '.' || $return == '/') {
-						$return = '?page=edit&counters_reset';
-					} else {
-						$return = '?page=edit&album='.$return.'&counters_reset&tab=subalbuminfo';
-					}
-				}
-			} else {
-				$where = '';
-				$imgwhere = '';
-				$return = '';
-			}
-			query("UPDATE " . prefix('albums') . " SET `hitcounter`= 0" . $where);
-			query("UPDATE " . prefix('images') . " SET `hitcounter`= 0" . $imgwhere);
-			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php' . $return);
-			exit();	
+			query("UPDATE " . prefix('albums') . " SET `hitcounter`= 0");
+			query("UPDATE " . prefix('images') . " SET `hitcounter`= 0");
+			$msg = gettext('Hitcounters reset');
 		}		
 	}
 
@@ -393,7 +350,7 @@ $buttonlist[gettext("Pre-Cache Images")] = array(
 							);
 $buttonlist[gettext("Refresh Metadata")] = array(
 							'formname'=>'refresh_metadata',
-							'action'=>'refresh_metadata',
+							'action'=>'refresh_metadata.png',
 							'icon'=>'images/redo.png', 
 							'title'=>gettext("Forces a refresh of the EXIF and IPTC data for all images."),
 							'alt'=>'',
