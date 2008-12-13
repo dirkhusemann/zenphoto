@@ -49,7 +49,7 @@ zp_handle_password();
 
 // Handle any comments that might be posted.
 
-$_zp_comment_error = zp_handle_comment();
+if (getOption('Allow_comments')) $_zp_comment_error = zp_handle_comment();
 
 /*** Server-side AJAX Functions ***********
  ******************************************/
