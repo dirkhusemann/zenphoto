@@ -106,16 +106,9 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 	}
 }
 
-if (issetPage('edit')) {
-	zenSortablesPostHandler('albumOrder', 'albumList', 'albums');
-}
-
 // Print our header
 printAdminHeader();
 
-if (issetPage('edit')) {
-	zenSortablesHeader('albumList','albumOrder','div', "handle:'handle'");
-}
 echo "\n</head>";
 ?>
 
@@ -439,11 +432,6 @@ $count = round($count/2);
 </div><!-- content -->
 <?php
 printAdminFooter();
-if (issetPage('edit') &&
-	((isset($albums) && count($albums) > 0)
-		|| (isset($subalbums) && count($subalbums) > 0))) {
-	zenSortablesFooter();
-}
 } /* No admin-only content allowed after this bracket! */ ?></div>
 <!-- main -->
 </body>

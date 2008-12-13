@@ -332,13 +332,22 @@ if (isset($_GET['album'])) {
 /************************************************************************************/
 	
 $page = "edit";
-zenSortablesPostHandler('albumOrder', 'albumList', 'albums');
 
+if (isset($_GET['tab'])) {
+	$subtab = sanitize($_GET['tab']);
+} else {
+	$subtab = '';
+}
+if (empty($subtab) || $subtab == 'subalbuminfo') {
+	zenSortablesPostHandler('albumOrder', 'albumList', 'albums');
+}
 
 // Print our header
 printAdminHeader();
 
-zenSortablesHeader('albumList','albumOrder','div', "handle:'handle'");
+if (empty($subtab) || $subtab == 'subalbuminfo') {
+	zenSortablesHeader('albumList','albumOrder','div', "handle:'handle'");
+}
 
 echo "\n</head>";
 ?>
@@ -537,8 +546,8 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 				<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
 				</ul>
 			<?php
-					zenSortablesSaveButton("?page=edit&album=" . urlencode($album->name) . "&subalbumsaved&tab=subalbuminfo", gettext("Save Order"));
-					?>
+				zenSortablesSaveButton("?page=edit&album=" . urlencode($album->name) . "&subalbumsaved&tab=subalbuminfo", gettext("Save Order"));
+			?>
 		
 		</div>
 		<?php
@@ -1066,9 +1075,7 @@ if (isset($_GET['saved'])) {
 </div>
 <!-- content --> <?php
 printAdminFooter();
-if (issetPage('edit') &&
-	((isset($albums) && count($albums) > 0)
-		|| (isset($subalbums) && count($subalbums) > 0))) {
+if (empty($subtab) || $subtab == 'subalbuminfo') {
 	zenSortablesFooter();
 }
 ?>

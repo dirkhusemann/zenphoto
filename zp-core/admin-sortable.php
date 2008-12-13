@@ -77,8 +77,9 @@ function zenSortablesSaveButton($link, $label="Save") {
  * @since  1.0.0
  */
 function zenSortablesPostHandler($orderedList, $sortContainerID, $dbtable) {
+	global $_zp_sortable_list;
 	if (isset($_POST['sortableListsSubmitted'])) {
-		$orderArray = SLLists::getOrderArray($_POST[$orderedList], $sortContainerID);
+		$orderArray = $_zp_sortable_list->getOrderArray($_POST[$orderedList], $sortContainerID);
 		foreach($orderArray as $item) {
 			saveSortOrder($dbtable, $item['element'], $item['order']);
 		}
