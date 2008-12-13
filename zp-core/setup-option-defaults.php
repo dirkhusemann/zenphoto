@@ -222,5 +222,6 @@ function setDefault($option, $default) {
 	setOptionDefault('user_registration_tip', gettext('Click here to register for this site.'));
 	setOptionDefault('auto_rotate', 0);
 	setOptionDefault('IPTC_encoding', 'ISO-8859-1');
+	setOptionDefault('Allow_comments', 1);
 	
 ?>
