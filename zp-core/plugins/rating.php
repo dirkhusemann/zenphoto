@@ -104,7 +104,11 @@ function printRating($option) {
 	$zenpath = WEBPATH."/".ZENFOLDER."/plugins";
 	echo "<div id=\"rating\">\n";
 	echo "<ul class=\"star-rating\">\n";
-	echo "<li class=\"current-rating\" id=\"current-rating\" style=\"width:".$ratingpx."px\"></li>\n";
+	echo "<li class=\"current-rating\" id=\"current-rating\"";
+	if (!empty($ratingpx)) {
+		echo " style=\"width: ".$ratingpx."px;\"";
+	}
+	echo "></li>\n";
 	$msg1 = gettext("Rating");
 	$msg2 = gettext("Total votes");
 	if(!checkForIP(sanitize($_SERVER['REMOTE_ADDR'], 0),$id,$option)){
