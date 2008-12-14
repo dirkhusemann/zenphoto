@@ -1008,7 +1008,7 @@ if ($subtab == 'admin') {
 			<td><?php echo gettext("Enable Persistent Archives:"); ?></td>
 			<td><input type="checkbox" name="persistent_archive" value="1"
 			<?php echo checked('1', getOption('persistent_archive')); ?> /></td>
-			<td><?php echo gettext("Put a checkmark here to re-serve Zip Archive files. If not checked	they will be regenerated each time."); ?>
+			<td><?php echo gettext("Put a checkmark here to re-serve Zip Archive files if you are using the optional template function <em>printAlbumZip()</em> to enable visitors of your site to download images of an album as .zip files. If not checked	that .zip file will be regenerated each time."); ?>
 			<?php echo gettext("<strong>Note: </strong>Setting	this option may impact password protected albums!"); ?></td>
 		</tr>
 		<tr>
