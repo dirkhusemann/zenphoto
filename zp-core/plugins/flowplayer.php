@@ -12,9 +12,9 @@
  */
 
 
-$plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext("Enable <strong>flowplayer</strong> to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time. <br> Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its licence.");
+$plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext("Enable <strong>flowplayer</strong> to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time. <br> <strong>NOTE:</strong> This plugin currently still uses Flowplayer 2. Please see <a href='http://flowplayer.org/v22'>flowplayer.org/v2</a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.2';
+$plugin_version = '1.0.3';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flowplayer.php.html";
 $option_interface = new flowplayer();
 $plugin_disable = $external;
