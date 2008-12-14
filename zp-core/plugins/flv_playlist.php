@@ -3,7 +3,7 @@
  * flvplayer playlist - A plugin to show the content of an media album with .flv/.mp4/.mp3 movie/audio files 
 
  * only as a playlist or as separate players with flv player (some options are also shared with that plugin)
- * NOTE: The flv player plugin needs to be installed.
+ * NOTE: The flv player plugin needs to be installed (This plugin currently only uses FLV player 3!)
  * 
  * The playlist is meant to replace the 'next_image()' loop on a theme's album.php.
  * It can be used with a special 'album theme' that can be assigned to media albums with with .flv/.mp4/.mp3s 
@@ -31,14 +31,14 @@
  * Of course you can add further functions to b) like title, description, date etc., too.
  *  
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.4.3
+ * @version 1.0.4.4
  * @package plugins 
  */
 
-$plugin_description = gettext("A plugin to show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players with flv player (some options are also shared with that plugin).").
-	' <strong>'.gettext("Requires flvplayer plugin.").'</strong>';
+$plugin_description = gettext("A plugin to show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players with flv player (some options are also shared with that plugin).<strong>Note:</strong>Currently supports only FLV player version 3.").
+	' <strong>'.gettext("Requires flvplayer plugin. Also note the usage licence of FLV player on its plugin description").'</strong>';
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.4.3';
+$plugin_version = '1.0.4.4';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flv_playlist.php.html";
 $option_interface = new flvplaylist();
 
@@ -87,7 +87,7 @@ function flvPlaylist($option='') {
 			?>
 	<div id="flvplaylist"><?php echo gettext("The flv player is not installed. Please install or activate the flv player plugin."); ?></div>
 	<script type="text/javascript">
-		var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER; ?>/plugins/flvplayer/flvplayer.swf','jstest','<?php echo getOption('flvplaylist_width'); ?>','<?php echo getOption('flvplaylist_height'); ?>','8');
+		var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER; ?>/plugins/flvplayer/player3.swf','jstest','<?php echo getOption('flvplaylist_width'); ?>','<?php echo getOption('flvplaylist_height'); ?>','8');
 		so.addParam('allowfullscreen','true');
 		so.addParam('overstretch','true');
 		so.addVariable('displaywidth', '<?php echo getOption('flvplaylist_displaywidth'); ?>');
@@ -121,9 +121,9 @@ function flvPlaylist($option='') {
 
 		 if(($ext == ".mp3") && empty($videoThumb)) { 
 		 ?> 
-			var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER; ?>/plugins/flvplayer/flvplayer.swf','jstest','<?php echo getOption('flvplaylist_width'); ?>','20','8');
+			var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER; ?>/plugins/flvplayer/player3.swf','jstest','<?php echo getOption('flvplaylist_width'); ?>','20','8');
 		<?php } else { ?>
-			var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER; ?>/plugins/flvplayer/flvplayer.swf','jstest','<?php echo getOption('flvplaylist_width'); ?>','<?php echo getOption('flvplaylist_height'); ?>','8');
+			var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER; ?>/plugins/flvplayer/player3.swf','jstest','<?php echo getOption('flvplaylist_width'); ?>','<?php echo getOption('flvplaylist_height'); ?>','8');
 		<?php } ?>
 			so.addParam('allowfullscreen','true');
 			so.addParam('overstretch','true');
