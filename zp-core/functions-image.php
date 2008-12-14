@@ -543,7 +543,11 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 
 		// Create the cached file (with lots of compatibility)...
 		mkdir_recursive(dirname($newfile));
-		imagejpeg($newim, $newfile, $quality);
+		if (imagejpeg($newim, $newfile, $quality)) {
+			if (DEBUG_IMAGE) debugLog('Finished:'.basename($imgfile));
+		} else {
+			if (DEBUG_IMAGE) debugLog('cacheImage: failed to create '.$newfile);
+		}
 		@chmod($newfile, 0666 & CHMOD_VALUE);
 		imagedestroy($newim);
 		imagedestroy($im);
