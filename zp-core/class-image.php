@@ -50,12 +50,16 @@ class Image extends PersistentObject {
 		if ($new) {
 			$this->updateDimensions();
 			$metadata = getImageMetadata($this->localpath);
+			$newDate = '';
 			if (isset($metadata['date'])) {
-				$newDate = $metadata['date'];
-			} else {
+				if (strtotime($metadata['date']) !== false) { // flaw in exif/iptc data?
+					$newDate = $metadata['date'];
+				}
+			} 
+			if (empty($newDate)) {
 				$newDate = strftime('%Y/%m/%d %T', filemtime($this->localpath));
 			}
-			$this->set('date', $newDate);
+			$this->setDateTime($newDate);
 			$alb = $this->album;
 			if (!is_null($alb)) {
 				if (is_null($alb->getDateTime()) || getOption('album_use_new_image_date')) {
