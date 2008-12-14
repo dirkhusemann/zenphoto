@@ -588,7 +588,7 @@ class Album extends PersistentObject {
 			} else {
 				$id = $row['id'];
 				query("DELETE FROM ".prefix('images')." WHERE `id`=$id"); // delete the record
-				query("DELETE FROM ".prefix('comments')." WHERE `type`='images' AND `ownerid`= '$id'"); // remove image comments
+				query("DELETE FROM ".prefix('comments')." WHERE (`type` IN (".zp_image_types("'").") AND `ownerid`= '$id'"); // remove image comments
 			}
 		}
 		// Place the images not yet in the database before those with sort columns.

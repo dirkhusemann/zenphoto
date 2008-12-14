@@ -503,7 +503,7 @@ class Gallery {
 				} else {
 					$sql = 'DELETE FROM ' . prefix('images') . ' WHERE `id`="' . $image['id'] . '";';
 					$result = query($sql);
-					$sql = 'DELETE FROM ' . prefix('comments') . ' WHERE `type`="images" AND `ownerid` ="' . $image['id'] . '";';
+					$sql = 'DELETE FROM ' . prefix('comments') . ' WHERE (`type` IN ('.zp_image_types('"').') AND `ownerid` ="' . $image['id'] . '";';
 					$result = query($sql);
 				}
 				if (array_sum(explode(" ",microtime())) - $start >=10) {
@@ -514,18 +514,18 @@ class Gallery {
 
 			/* clean the comments table */
 			/* do the images */
-			$imageids = query_full_array('SELECT `id` FROM ' . prefix('images'));      /* all the image IDs */
+			$imageids = query_full_array('SELECT `id` FROM ' . prefix('images'));       /* all the image IDs */
 			$idsofimages = array();
 			foreach($imageids as $row) { $idsofimages[] = $row['id']; }
 			$commentImages = query_full_array("SELECT DISTINCT `ownerid` FROM " .
-			prefix('comments') . 'WHERE `type`="images"');                         /* imageids of all the comments */
+							prefix('comments') . 'WHERE `type` IN ('.zp_image_types('"').')'); /* imageids of all the comments */
 			$imageidsofcomments = array();
 			foreach($commentImages as $row) { $imageidsofcomments [] = $row['ownerid']; }
 			$orphans = array_diff($imageidsofcomments , $idsofimages );                 /* image ids of comments with no image */
 
 			if (count($orphans) > 0 ) { /* delete dead comments from the DB */
 				$firstrow = array_pop($orphans);
-				$sql = "DELETE FROM " . prefix('comments') . " WHERE `type`='images' AND `ownerid`='" . $firstrow . "'";
+				$sql = "DELETE FROM " . prefix('comments') . " WHERE `type` IN (".zp_image_types("'").") AND `ownerid`='" . $firstrow . "'";
 				foreach($orphans as $id) {
 					$sql .= " OR `ownerid`='" . $id . "'";
 				}
@@ -552,13 +552,13 @@ class Gallery {
 
 			/* clean the tags table */
 			/* do the images */
-			$tagImages = query_full_array("SELECT DISTINCT `objectid` FROM ".prefix('obj_to_tag').'WHERE `type`="images"');                         /* imageids of all the comments */
+			$tagImages = query_full_array("SELECT DISTINCT `objectid` FROM ".prefix('obj_to_tag').'WHERE `type` IN ('.zp_image_types('"').')');                         /* imageids of all the comments */
 			$imageidsoftags = array();
 			foreach($tagImages as $row) { $imageidsoftags [] = $row['objectid']; }
 			$orphans = array_diff($imageidsoftags , $idsofimages );                 /* image ids of comments with no image */
 			if (count($orphans) > 0 ) { /* delete dead tags from the DB */
 				$firstrow = array_pop($orphans);
-				$sql = "DELETE FROM " . prefix('obj_to_tag') . " WHERE `type`='images' AND `objectid`='" . $firstrow . "'";
+				$sql = "DELETE FROM " . prefix('obj_to_tag') . " WHERE (`type` IN (".zp_image_types('"').") AND `objectid`='" . $firstrow . "'";
 				foreach($orphans as $id) {
 					$sql .= " OR `objectid`='" . $id . "'";
 				}

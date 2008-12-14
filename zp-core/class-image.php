@@ -120,6 +120,7 @@ class Image extends PersistentObject {
 		if (empty($this->displayname)) $this->displayname = $this->filename;
 		$this->comments = null;
 		$this->filemtime = @filemtime($this->localpath);
+		$this->imagetype = strtolower(get_class($this)).'s';
 	}
 	
 	function getDefaultTitle() {
@@ -452,7 +453,7 @@ class Image extends PersistentObject {
 	function deleteImage($clean=true) {
 		$result = @unlink($this->localpath);
 		if ($clean && $result) {
-			query("DELETE FROM ".prefix('comments') . "WHERE `type`='images' AND `ownerid`=" . $this->id);
+			query("DELETE FROM ".prefix('comments') . "WHERE `type`='".$this->imagetype."' AND `ownerid`=" . $this->id);
 			query("DELETE FROM ".prefix('images') . "WHERE `id` = " . $this->id);
 		}
 		return $result;
@@ -541,7 +542,7 @@ class Image extends PersistentObject {
 	 */
 	function getComments($moderated=false, $private=false, $desc=false) {
 		$sql = "SELECT *, (date + 0) AS date FROM " . prefix("comments") .
- 			" WHERE `type`='images' AND `ownerid`='" . $this->id . "'";
+ 			" WHERE `type`='".$this->imagetype."' AND `ownerid`='" . $this->id . "'";
 		if (!$moderated) {
 			$sql .= " AND `inmoderation`=0";
 		}
@@ -590,7 +591,7 @@ class Image extends PersistentObject {
 	function getCommentCount() {
 		if (is_null($this->commentcount)) {
 			if ($this->comments == null) {
-				$count = query_single_row("SELECT COUNT(*) FROM " . prefix("comments") . " WHERE `type`='images' AND `inmoderation`=0 AND `private`=0 AND `ownerid`=" . $this->id);
+				$count = query_single_row("SELECT COUNT(*) FROM " . prefix("comments") . " WHERE `type`='".$this->imagetype."' AND `inmoderation`=0 AND `private`=0 AND `ownerid`=" . $this->id);
 				$this->commentcount = array_shift($count);
 			} else {
 				$this->commentcount = count($this->comments);

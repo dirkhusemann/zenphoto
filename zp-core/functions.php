@@ -863,6 +863,26 @@ function getImageMetadata($imageName) {
 }
 
 /**
+ * Returns an array of $type, $class of the object passed
+ *
+ * @param object $receiver
+ * @return array
+ */
+function commentObjectClass($receiver) {
+	$class = strtolower(get_class($receiver));
+	if ($class == "zenpage") {
+		if($receiver->isPage(ZENPAGE_NEWS)) {
+			$type = "news";
+		} else if($receiver->isPage(ZENPAGE_PAGES)) {
+			$type = "pages";
+		}
+	} else {
+		$type = $class.'s'; // Historically we have stored "images" or "albums" as the type
+	}
+return array($type, $class);
+}
+
+/**
  * Generic comment adding routine. Called by album objects or image objects
  * to add comments.
  *
@@ -885,17 +905,8 @@ function getImageMetadata($imageName) {
  * @return int
  */
 function postComment($name, $email, $website, $comment, $code, $code_ok, $receiver, $ip, $private, $anon) {
-	// added for zenpage support
-	$class = strtolower(get_class($receiver));
-	if ($class == "zenpage") {
-		if($receiver->isPage(ZENPAGE_NEWS)) {
-			$type = "news";
-		} else if($receiver->isPage(ZENPAGE_PAGES)) {
-			$type = "pages";
-		}
-	} else {
-		$type = $class.'s'; // Historically we have stored "images" or "albums" as the type
-	}
+	$result = commentObjectClass($receiver);
+	list($type, $class) = $result;
 	$receiver->getComments();
 	$name = trim($name);
 	$email = trim($email);
@@ -929,7 +940,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	if (!(false === ($requirePath = getPlugin('spamfilters/'.UTF8ToFileSystem(getOption('spam_filter')).".php", false)))) {
 		require_once($requirePath);
 		$spamfilter = new SpamFilter();
-		$goodMessage = $spamfilter->filterMessage($name, $email, $website, $comment, $type=='images'?$receiver->getFullImage():NULL, $ip);
+		$goodMessage = $spamfilter->filterMessage($name, $email, $website, $comment, isImageClass($receiver)?$receiver->getFullImage():NULL, $ip);
 	}
 	if ($goodMessage) {
 		if ($goodMessage == 1) {
@@ -1938,7 +1949,33 @@ function newImage(&$album, $filename) {
 	}
 }
 
+function isImageClass($image=NULL) {
+	global $_zp_extra_filetypes;
+	if (is_null($image)) {
+		if (!in_context(ZP_IMAGE)) return false;
+		global $_zp_current_image;
+		$image = $_zp_current_image;
+	}
+	return in_array(get_class($image), $_zp_extra_filetypes);
+}
+
 /**
+ * returns a list of comment record 'types' for "images"
+ * @param string $quote quotation mark to use
+ *
+ * @return string
+ */
+function zp_image_types($quote) {
+	global $_zp_extra_filetypes;
+	$typelist = $quote.'images'.$quote.',';
+	$types = array_unique($_zp_extra_filetypes);
+	foreach ($types as $type) {
+		$typelist .= $quote.strtolower($type).'s'.$quote.',';
+	}
+	return substr($typelist, 0, -1);
+}
+/**
+
  * Returns video argument of the current Image.
  *
  * @param object $image optional image object

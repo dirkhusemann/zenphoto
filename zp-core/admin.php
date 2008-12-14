@@ -219,29 +219,6 @@ foreach ($comments as $comment) {
 		}
 		// ZENPAGE: switch added for zenpage comment support
 		switch ($comment['type']) {
-			case "images":
-				$imagedata = query_full_array("SELECT `title`, `filename`, `albumid` FROM ". prefix('images') .
- 										" WHERE `id`=" . $comment['ownerid']);
-				if ($imagedata) {
-					$imgdata = $imagedata[0];
-					$image = $imgdata['filename'];
-					if ($imgdata['title'] == "") $title = $image; else $title = get_language_string($imgdata['title']);
-					$title = '/ ' . $title;
-					$albmdata = query_full_array("SELECT `folder`, `title` FROM ". prefix('albums') .
- 											" WHERE `id`=" . $imgdata['albumid']);
-					if ($albmdata) {
-						$albumdata = $albmdata[0];
-						$album = $albumdata['folder'];
-						$albumtitle = get_language_string($albumdata['title']);
-						$link = "<a href=\"".rewrite_path("/$album/$image","/index.php?album=".urlencode($album).	"&amp;image=".urlencode($image))."\">".$albumtitle.$title."</a>";
-						if (empty($albumtitle)) $albumtitle = $album;
-					} else {
-						$title = gettext('database error');
-					}
-				} else {
-					$title = gettext('database error');
-				}
-				break;
 			case "albums":
 				$image = '';
 				$title = '';
@@ -287,6 +264,29 @@ foreach ($comments as $comment) {
 					} else {
 						$title = gettext('database error');
 					}
+				}
+				break;
+			default: // all of the image types
+				$imagedata = query_full_array("SELECT `title`, `filename`, `albumid` FROM ". prefix('images') .
+ 										" WHERE `id`=" . $comment['ownerid']);
+				if ($imagedata) {
+					$imgdata = $imagedata[0];
+					$image = $imgdata['filename'];
+					if ($imgdata['title'] == "") $title = $image; else $title = get_language_string($imgdata['title']);
+					$title = '/ ' . $title;
+					$albmdata = query_full_array("SELECT `folder`, `title` FROM ". prefix('albums') .
+ 											" WHERE `id`=" . $imgdata['albumid']);
+					if ($albmdata) {
+						$albumdata = $albmdata[0];
+						$album = $albumdata['folder'];
+						$albumtitle = get_language_string($albumdata['title']);
+						$link = "<a href=\"".rewrite_path("/$album/$image","/index.php?album=".urlencode($album).	"&amp;image=".urlencode($image))."\">".$albumtitle.$title."</a>";
+						if (empty($albumtitle)) $albumtitle = $album;
+					} else {
+						$title = gettext('database error');
+					}
+				} else {
+					$title = gettext('database error');
 				}
 				break;
 		}
