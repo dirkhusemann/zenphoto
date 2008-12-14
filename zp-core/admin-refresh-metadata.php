@@ -76,7 +76,14 @@ if (isset($_GET['refresh']) && db_connect()) {
 	}
 	if (empty($imageid)) {
 		echo "<h3>".$finished."</h3>";
-		echo "<p><a href=\"admin.php$r\">&laquo; ".gettext('Back')."</a></p>"; //TODO: do we need a tab to return to?
+		if (empty($r)) {
+			$backurl = 'admin.php';
+		} else {
+			$backurl = 'admin-edit.php'.$r;
+		}
+		echo '<p>'.gettext('you should return automatically. If not press: ').'</p>';
+		echo "<p><a href=\"$backurl\">&laquo; ".gettext('Back')."</a></p>"; //TODO: do we need a tab to return to?
+		echo '<meta HTTP-EQUIV="REFRESH" content="1; url='.$backurl.'">';
 	} else {
 		echo '<h3>'.$incomplete.'</h3>';
 		if (!empty($ret)) $ret = '&amp;return='.$ret;
@@ -128,7 +135,10 @@ if (isset($_GET['refresh']) && db_connect()) {
 			$album = '&amp;album='.$folder;
 		}
 		if (!empty($ret)) $ret = '&amp;return='.$ret;
-		echo "<p><a href=\"?".$type."refresh=start".$album."$ret\" title=\"".gettext("Refresh image metadata.")."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Go!")."</a></p>";
+		$starturl = '?'.$type.'refresh=start'.$album.$ret;
+		echo '<p>'.gettext('This process should start automatically. If not press: ').'</p>';
+		echo "<p><a href=\"$starturl\" title=\"".gettext("Refresh image metadata.")."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Go!")."</a></p>";
+		echo '<meta HTTP-EQUIV="REFRESH" content="1; url='.$starturl.'">';
 	}
 } else {
 	echo "<h3>".gettext("database not connected")."</h3>";

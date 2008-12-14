@@ -343,7 +343,7 @@ $buttonlist[gettext("Pre-Cache Images")] = array(
 							);
 $buttonlist[gettext("Refresh Metadata")] = array(
 							'formname'=>'refresh_metadata',
-							'action'=>'refresh_metadata.png',
+							'action'=>'admin-refresh-metadata.php',
 							'icon'=>'images/redo.png', 
 							'title'=>gettext("Forces a refresh of the EXIF and IPTC data for all images."),
 							'alt'=>'',

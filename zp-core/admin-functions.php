@@ -1440,7 +1440,7 @@ function printAlbumEditRow($album) {
 	echo '<img src="images/redo1.png" style="border: 0px;" alt="'.sprintf(gettext('Refresh image metadata in the album %s'), $album->name) . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
-	echo '<a class="reset" href="?action=reset_hitcounters&amp;albumid='.$album->getAlbumID().'&amp;album='.urlencode($album->name).'" title="'.sprintf(gettext('Reset hitcounters for album %s'), $album->name) . '">';
+	echo '<a class="reset" href="?action=reset_hitcounters&amp;albumid='.$album->getAlbumID().'&amp;album='.urlencode($album->name).'&subalbum=true" title="'.sprintf(gettext('Reset hitcounters for album %s'), $album->name) . '">';
 	echo '<img src="images/reset.png" style="border: 0px;" alt="'.sprintf(gettext('Reset hitcounters for the album %s'), $album->name) . '" /></a>';
 
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";

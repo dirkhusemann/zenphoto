@@ -55,13 +55,9 @@ if (isset($_GET['album'])) {
 		/** clear the cache ***********************************************************/
 		/******************************************************************************/
 		if ($action == "clear_cache") {
-			if (isset($_POST['album'])) {
-				$gallery->clearCache(SERVERCACHE . '/' . sanitize_path($_POST['album']));
-				header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit&cleared&album='.$_POST['album']);
-				exit();
-			} else {
-				$gallery->clearCache();
-			}
+			$gallery->clearCache(SERVERCACHE . '/' . sanitize_path($_POST['album']));
+			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php?page=edit&cleared&album='.$_POST['album']);
+			exit();
 		}
 
 		/** Publish album  ************************************************************/
@@ -85,28 +81,22 @@ if (isset($_GET['album'])) {
 			/** Reset hitcounters ***********************************************************/
 			/********************************************************************************/
 		} else if ($action == "reset_hitcounters") {
-			if (isset($_REQUEST['albumid'])) {
 				$id = sanitize_numeric($_REQUEST['albumid']);
 				$where = ' WHERE `id`='.$id;
 				$imgwhere = ' WHERE `albumid`='.$id;
 				$return = '?counters_reset';
-				if (isset($_REQUEST['album'])) {
-					if (isset($_GET['album'])) {
-						$return = urlencode(dirname(sanitize_path($_REQUEST['album'])));
-					} else {
-						$return = urlencode(sanitize_path($_REQUEST['album']));	
-					}
-					if (empty($return) || $return == '.' || $return == '/') {
-						$return = '?page=edit&counters_reset';
-					} else {
-						$return = '?page=edit&album='.$return.'&counters_reset&tab=subalbuminfo';
-					}
+				$subalbum = '';
+				if (isset($_REQUEST['subalbum'])) {
+					$return = urlencode(dirname(sanitize_path($_REQUEST['album'])));
+					$subalbum = '&tab=subalbuminfo';
+				} else {
+					$return = urlencode(sanitize_path(urldecode($_POST['album'])));	
 				}
-			} else {
-				$where = '';
-				$imgwhere = '';
-				$return = '';
-			}
+				if (empty($return) || $return == '.' || $return == '/') {
+					$return = '?page=edit&counters_reset';
+				} else {
+					$return = '?page=edit&album='.$return.'&counters_reset'.$subalbum;
+				}
 			query("UPDATE " . prefix('albums') . " SET `hitcounter`= 0" . $where);
 			query("UPDATE " . prefix('images') . " SET `hitcounter`= 0" . $imgwhere);
 			header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-edit.php' . $return);
@@ -338,14 +328,14 @@ if (isset($_GET['tab'])) {
 } else {
 	$subtab = '';
 }
-if (empty($subtab) || $subtab == 'subalbuminfo') {
+if ((empty($subtab) && !isset($_GET['album'])) || $subtab === 'subalbuminfo') {
 	zenSortablesPostHandler('albumOrder', 'albumList', 'albums');
 }
 
 // Print our header
 printAdminHeader();
 
-if (empty($subtab) || $subtab == 'subalbuminfo') {
+if ((empty($subtab) && !isset($_GET['album'])) || $subtab === 'subalbuminfo') {
 	zenSortablesHeader('albumList','albumOrder','div', "handle:'handle'");
 }
 
