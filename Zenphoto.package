@@ -311,7 +311,8 @@ zp-core/plugins/flowplayer/flowplayer_license.txt
 zp-core/plugins/flowplayer/jquery.flashembed.pack.js
 zp-core/plugins/flowplayer.php
 zp-core/plugins/flvplayer/flvplayer.js
-zp-core/plugins/flvplayer/flvplayer.swf
+zp-core/plugins/flvplayer/player3.swf
+zp-core/plugins/flvplayer/player4.swf
 zp-core/plugins/flvplayer.php
 zp-core/plugins/flv_playlist/playlist.php
 zp-core/plugins/flv_playlist.php
@@ -359,6 +360,7 @@ zp-core/setup.php
 zp-core/template-functions.php
 zp-core/upgrade.php
 zp-core/utilities/backup_restore.php
+zp-core/utilities/gallery_statistics.css
 zp-core/utilities/gallery_statistics.php
 zp-core/utilities/scheduled_content.php
 zp-core/version.php
