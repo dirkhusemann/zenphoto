@@ -383,7 +383,8 @@ if (function_exists('printUserLogout')) {
 		$stagePadding.'" thumbnailColumns="'.$thumbnailColumns.'" thumbnailRows="'.$thumbnailRows.'" navPosition="'.
 		$navPosition.'" enableRightClickOpen="'.$enableRightClickOpen.'" backgroundImagePath="'.$backgroundImagePath.
 		'" imagePath="'.$path.'" thumbPath="'.$path.'">';
-	while (next_image(true, 0, NULL, true)){
+
+	while (next_image(true, 0, NULL, NULL, true)){
 		if (isImagePhoto()) {  // simpleviewer does not do videos
 ?>
 			<image><filename><?php echo getDefaultSizedImage();?></filename>

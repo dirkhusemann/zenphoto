@@ -242,11 +242,12 @@ function getNumAlbums() {
  * Returns true if there are albums, false if none
  *
  * @param bool $all true to go through all the albums
- * @param string $sorttype what you want to sort the albums by
+ * @param string $sorttype overrides default sort type
+ * @param string $sortdirection overrides default sort direction
  * @return bool
  * @since 0.6
  */
-function next_album($all=false, $sorttype=null) {
+function next_album($all=false, $sorttype=null, $sortdirection=NULL) {
 	global $_zp_albums, $_zp_gallery, $_zp_current_album, $_zp_page, $_zp_current_album_restore, $_zp_current_search;
 	if (checkforPassword()) { return false; }
 	if (is_null($_zp_albums)) {
@@ -261,11 +262,11 @@ function next_album($all=false, $sorttype=null) {
 				$_zp_albums = $search->getAlbums($all ? 0 : $_zp_page);
 
 			} else {
-				$_zp_albums = $_zp_current_album->getSubAlbums($all ? 0 : $_zp_page, $sorttype);
+				$_zp_albums = $_zp_current_album->getSubAlbums($all ? 0 : $_zp_page, $sorttype, $sortdirection);
 
 			}
 		} else {
-			$_zp_albums = $_zp_gallery->getAlbums($all ? 0 : $_zp_page, $sorttype);
+			$_zp_albums = $_zp_gallery->getAlbums($all ? 0 : $_zp_page, $sorttype, $sortdirection);
 		}
 		if (empty($_zp_albums)) { return false; }
 		$_zp_current_album_restore = $_zp_current_album;
@@ -1390,15 +1391,16 @@ function getTotalImagesIn($album) {
 
  * Returns true if there is an image to be shown
  *
- *@param bool $all set to true disable pagination
- *@param int $firstPageCount the number of images which can go on the page that transitions between albums and images
- *@param string $sorttype overrides the default sort type
- *@param bool $overridePassword the password chedk
- *@return bool
+ * @param bool $all set to true disable pagination
+ * @param int $firstPageCount the number of images which can go on the page that transitions between albums and images
+ * @param string $sorttype overrides the default sort type
+ * @param string $sortdirection overrides the default sort direction.
+ * @param bool $overridePassword the password check
+ * @return bool
  *
  * @return bool
  */
-function next_image($all=false, $firstPageCount=0, $sorttype=null, $overridePassword=false) {
+function next_image($all=false, $firstPageCount=0, $sorttype=null, $sortdirection=NULL, $overridePassword=false) {
 	global $_zp_images, $_zp_current_image, $_zp_current_album, $_zp_page, $_zp_current_image_restore,
 				 $_zp_conf_vars, $_zp_current_search, $_zp_gallery;
 	if (!$overridePassword) { if (checkforPassword()) { return false; } }
@@ -1425,7 +1427,7 @@ function next_image($all=false, $firstPageCount=0, $sorttype=null, $overridePass
 				$search = $_zp_current_album->getSearchEngine();
 				$_zp_images = $search->getImages($all ? 0 : ($imagePage), $firstPageCount);
 			} else {
-				$_zp_images = $_zp_current_album->getImages($all ? 0 : ($imagePage), $firstPageCount, $sorttype);
+				$_zp_images = $_zp_current_album->getImages($all ? 0 : ($imagePage), $firstPageCount, $sorttype, $sortdirection);
 			}
 		}
 		if (empty($_zp_images)) { return false; }
