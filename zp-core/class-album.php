@@ -310,10 +310,12 @@ class Album extends PersistentObject {
 	function getSortDirection($what) {
 		if ($what == 'image') {
 			$direction = $this->get('image_sortdirection');
+			$type = $this->get('sort_type');
 		} else {
 			$direction = $this->get('album_sortdirection');
+			$type = $this->get('subalbum_sort_type');
 		}
-		if (empty($direction)) {
+		if (empty($type)) { // using inherited type, so use inherited direction
 			$parentalbum = $this->getParent();
 			if (is_null($parentalbum)) {
 				if ($what == 'image') {
