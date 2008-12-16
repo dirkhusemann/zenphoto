@@ -448,7 +448,7 @@ function sortByMultilingual($dbresult, $field, $descending) {
  * @since  1.0.0
  */
 function sortAlbumArray($parentalbum, $albums, $sortkey='`sort_order`', $recursed=false) {
-	global $_zp_loggedin, $_zp_gallery;
+	global $_zp_gallery;
 	$hidden = array();
 	if (is_null($parentalbum)) {
 		$albumid = ' IS NULL';
@@ -475,7 +475,7 @@ function sortAlbumArray($parentalbum, $albums, $sortkey='`sort_order`', $recurse
 		if (array_key_exists($folder, $albums_r)) {
 			$albums_r[$folder] = $i;
 			$albums_touched[] = $folder;
-			if (!$_zp_loggedin && !$row['show']) { $hidden[] = $folder; }
+			if (!zp_loggedin(ADMIN_RIGHTS | VIEWALL_RIGHTS | ALL_ALBUMS_RIGHTS) && !$row['show']) { $hidden[] = $folder; }
 		}
 		$i++;
 	}
@@ -1057,8 +1057,8 @@ define('COMMENT_RIGHTS', 64);
 define('EDIT_RIGHTS', 256);
 define('ALL_ALBUMS_RIGHTS', 512);
 define('THEMES_RIGHTS', 1024);
-define('OPTIONS_RIGHTS', 8192);
 define('ZENPAGE_RIGHTS',2048);
+define('OPTIONS_RIGHTS', 8192);
 define('ADMIN_RIGHTS', 65536);
 define('ALL_RIGHTS', 07777777777);
 
@@ -1280,6 +1280,7 @@ function getManagedAlbumList() {
  * Checks to see if the loggedin Admin has rights to the album
  *
  * @param string $albumfolder the album to be checked
+ * @param int $action what the user wishes to do
  */
 function isMyAlbum($albumfolder, $action) {
 	global $_zp_loggedin, $_zp_admin_album_list, $_zp_current_admin;
@@ -1780,7 +1781,7 @@ function getNotViewableAlbums() {
 				if (!checkAlbumPassword($row['folder'], $hint)) {
 					$_zp_not_viewable_album_list[] = $row['id'];
 				} else {
-					if (!zp_loggedin() || !isMyAlbum($row['folder'])) {
+					if (!zp_loggedin() || !isMyAlbum($row['folder'], 0)) {
 						$_zp_not_viewable_album_list[] = $row['id'];
 					}
 				}
