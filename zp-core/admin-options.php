@@ -57,18 +57,19 @@ if (isset($_GET['action'])) {
 					if ($pass == trim($_POST[$i.'-adminpass_2'])) {
 						$admin_n = trim($_POST[$i.'-admin_name']);
 						$admin_e = trim($_POST[$i.'-admin_email']);
-						if (isset($_POST[$i.'-main_rights'])) $main_r = NO_RIGHTS | MAIN_RIGHTS; else $main_r = 0;
-						if (isset($_POST[$i.'-view_rights'])) $view_r = NO_RIGHTS | VIEWALL_RIGHTS; else $view_r = 0;
-						if (isset($_POST[$i.'-upload_rights'])) $upload_r = NO_RIGHTS | UPLOAD_RIGHTS; else $upload_r = 0;
-						if (isset($_POST[$i.'-comment_rights'])) $comment_r = NO_RIGHTS | COMMENT_RIGHTS; else $comment_r = 0;
-						if (isset($_POST[$i.'-edit_rights'])) $edit_r = NO_RIGHTS | EDIT_RIGHTS; else $edit_r = 0;
-						if (isset($_POST[$i.'-all_album_rights'])) $all_album_r = NO_RIGHTS | ALL_ALBUMS_RIGHTS; else $all_album_r = 0;
-						if (isset($_POST[$i.'-themes_rights'])) $themes_r = NO_RIGHTS | THEMES_RIGHTS; else $themes_r = 0;
-						if (isset($_POST[$i.'-options_rights'])) $options_r = NO_RIGHTS | OPTIONS_RIGHTS; else $options_r = 0;
-						if (isset($_POST[$i.'-zenpage_rights'])) $zenpage_r = NO_RIGHTS | ZENPAGE_RIGHTS; else $zenpage_r = 0;
-						if (isset($_POST[$i.'-admin_rights'])) $admin_r = NO_RIGHTS | ADMIN_RIGHTS; else $admin_r = 0;
+						$rights = 0;
+						if (isset($_POST[$i.'-confirmed'])) $rights = $rights | NO_RIGHTS;
+						if (isset($_POST[$i.'-main_rights'])) $rights = $rights | MAIN_RIGHTS;
+						if (isset($_POST[$i.'-view_rights'])) $rights = $rights | VIEWALL_RIGHTS;
+						if (isset($_POST[$i.'-upload_rights'])) $rights = $rights | UPLOAD_RIGHTS;
+						if (isset($_POST[$i.'-comment_rights'])) $rights = $rights | COMMENT_RIGHTS;
+						if (isset($_POST[$i.'-edit_rights'])) $rights = $rights | EDIT_RIGHTS;
+						if (isset($_POST[$i.'-all_album_rights'])) $rights = $rights | ALL_ALBUMS_RIGHTS;
+						if (isset($_POST[$i.'-themes_rights'])) $rights = $rights | THEMES_RIGHTS;
+						if (isset($_POST[$i.'-options_rights'])) $rights = $rights | OPTIONS_RIGHTS;
+						if (isset($_POST[$i.'-zenpage_rights'])) $rights = $rights | ZENPAGE_RIGHTS;
+						if (isset($_POST[$i.'-admin_rights'])) $rights = $rights | ADMIN_RIGHTS;
 						if (!isset($_POST['alter_enabled'])) {
-							$rights = $main_r | $view_r | $upload_r | $comment_r | $edit_r | $all_album_r | $themes_r | $options_r | $zenpage_r | $admin_r;
 							if ($rights & ALL_ALBUMS_RIGHTS) $rights = $rights | EDIT_RIGHTS;
 							$managedalbums = array();
 							$l = strlen($albumsprefix = 'managed_albums_'.$i.'_');
@@ -540,6 +541,16 @@ if ($subtab == 'admin') {
 			<?php
 			} else {
 				echo $master;
+				if (!$user['rights']) {
+				?>
+					<input type="checkbox" name="<?php echo $id ?>-confirmed"
+						value=<?php echo NO_RIGHTS; echo $alterrights; ?>> <?php echo gettext("Authenticate user"); ?>
+				<?php
+				} else {
+					?>
+					<input type = "hidden" name="<?php echo $id ?>-confirmed"	value=<?php echo NO_RIGHTS; ?>>
+					<?php 
+				}
 			}
  			?>
  			</td>
