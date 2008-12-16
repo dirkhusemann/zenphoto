@@ -1700,7 +1700,7 @@ function fetchComments($number) {
 			." (".prefix('comments').".date + 0) AS date, `comment`, `email`, `inmoderation`, `ip`, ".prefix('images').".`albumid` as albumid"
 			." FROM ".prefix('comments').",".prefix('images')." WHERE ";
 			
-			$sql .= "(`type` IN (".zp_image_types("'").") AND(";
+			$sql .= "(`type` IN (".zp_image_types("'").") AND (";
 			$i = 0;
 			foreach ($albumIDs as $ID) {
 				if ($i>0) { $sql .= " OR "; }

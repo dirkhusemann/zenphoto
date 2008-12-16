@@ -503,7 +503,7 @@ class Gallery {
 				} else {
 					$sql = 'DELETE FROM ' . prefix('images') . ' WHERE `id`="' . $image['id'] . '";';
 					$result = query($sql);
-					$sql = 'DELETE FROM ' . prefix('comments') . ' WHERE (`type` IN ('.zp_image_types('"').') AND `ownerid` ="' . $image['id'] . '";';
+					$sql = 'DELETE FROM ' . prefix('comments') . ' WHERE `type` IN ('.zp_image_types('"').') AND `ownerid` ="' . $image['id'] . '";';
 					$result = query($sql);
 				}
 				if (array_sum(explode(" ",microtime())) - $start >=10) {
@@ -558,10 +558,11 @@ class Gallery {
 			$orphans = array_diff($imageidsoftags , $idsofimages );                 /* image ids of comments with no image */
 			if (count($orphans) > 0 ) { /* delete dead tags from the DB */
 				$firstrow = array_pop($orphans);
-				$sql = "DELETE FROM " . prefix('obj_to_tag') . " WHERE (`type` IN (".zp_image_types('"').") AND `objectid`='" . $firstrow . "'";
+				$sql = "DELETE FROM " . prefix('obj_to_tag') . " WHERE `type` IN (".zp_image_types('"').") AND (`objectid`='" . $firstrow . "'";
 				foreach($orphans as $id) {
 					$sql .= " OR `objectid`='" . $id . "'";
 				}
+				$sql .= ')';
 				query($sql);
 			}
 
