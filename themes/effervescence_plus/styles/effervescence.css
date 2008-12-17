@@ -698,7 +698,6 @@ text-decroation: none;
 	top:0;
 	border-left: 1px solid #E6E6DF;
 	border-bottom: 1px solid #E6E6DF;
-	background-image:url(../images/50percentwhite.png);
 	width: 10em;
 	color: #7b7973;
 	padding: 0.5em;
@@ -715,6 +714,7 @@ text-decroation: none;
 }
 #admin_data{
 	top: 2em;
+	background-image:url(../images/50percentwhite.png);
 }
 #admin h3 {
 	font: 100% "Helvetica Neue", Helvetica, Arial, sans-serif;
