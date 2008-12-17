@@ -3092,12 +3092,15 @@ function printRandomImages($number=5, $class=null, $option='all', $rootAlbum='')
 
 /**
  * Shortens a string to $length
+ * 
+ * Deprecated: use truncate_string
  *
  * @param string $string the string to be shortened
  * @param int $length the desired length for the string
  * @return string
  */
 function my_truncate_string($string, $length) {
+	trigger_error(gettext('my_truncate_string is deprecated. Use truncate_string().'), E_USER_NOTICE);
 	if (strlen($string) > $length) {
 		$short = substr($string, 0, $length);
 		return $short. '...';
