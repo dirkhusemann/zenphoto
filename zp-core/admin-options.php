@@ -304,8 +304,8 @@ if (isset($_GET['action'])) {
 				if (isset($_POST['images_per_page'])) setThemeOption($table, 'images_per_page', sanitize($_POST['images_per_page'],3));
 				if (isset($_POST['custom_index_page'])) setThemeOption($table, 'custom_index_page', sanitize($_POST['custom_index_page'], 3));
 				if (isset($_POST['user_registration_page'])) setThemeOption($table, 'user_registration_page', sanitize($_POST['user_registration_page'], 3));
-				process_language_string_save('user_registration_text', 3);
-				process_language_string_save('user_registration_tip', 3);
+				if (isset($_POST['user_registration_text'])) setThemeOption($table, 'user_registration_text', process_language_string_save('user_registration_text', 3));  
+				if (isset($_POST['user_registration_tip'])) setThemeOption($table, 'user_registration_tip', process_language_string_save('user_registration_tip', 3));  
 				if ($nch != $ch || $ncw != $cw) { // the crop height/width has been changed
 					$sql = 'UPDATE '.prefix('images').' SET `thumbX`=NULL,`thumbY`=NULL,`thumbW`=NULL,`thumbH`=NULL WHERE `thumbY` IS NOT NULL';
 					query($sql);
