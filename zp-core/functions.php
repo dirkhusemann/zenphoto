@@ -184,13 +184,14 @@ function checkVideoOriginal($album, $video){
  *
  * @param string $string souirce string
  * @param int $length how long it should be
+ * @param string $elipsis the text to tack on indicating shortening
  * @return string
  */
-function truncate_string($string, $length) {
+function truncate_string($string, $length, $elipsis='...') {
 	if (strlen($string) > $length) {
 		$pos = strpos($string, ' ', $length);
-		if ($pos === FALSE) return substr($string, 0, $length) . '...';
-		return substr($string, 0, $pos) . '...';
+		if ($pos === FALSE) return substr($string, 0, $length) . $elipsis;
+		return substr($string, 0, $pos) . $elipsis;
 	}
 	return $string;
 }
