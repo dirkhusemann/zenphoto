@@ -631,7 +631,7 @@ class Image extends PersistentObject {
 	function getSizedImage($size) {
 		$cachefilename = getImageCacheFilename($this->album->name, $this->filename, getImageParameters(array($size)));
 		if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
-			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($cachefilename);
+			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(fileSystemToUTF8($cachefilename));
 		} else {
 			return rewrite_path(
 			pathurlencode($this->album->name).'/image/'.$size.'/'.urlencode($this->filename),
