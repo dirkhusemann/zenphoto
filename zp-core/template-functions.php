@@ -3943,6 +3943,33 @@ function printZenphotoLink() {
 	echo gettext("Powered by <a href=\"http://www.zenphoto.org\" title=\"A simpler web photo album\"><span id=\"zen-part\">zen</span><span id=\"photo-part\">PHOTO</span></a>");	
 }
 
+/**
+ * Returns truncated html formatted content
+ *
+ * @param string $articlecontent the source string
+ * @param int $shorten new size
+ * @param string $shortenindicator
+ * @return string
+ */
+function shortenContent($articlecontent, $shorten, $shortenindicator) {
+	$short = truncate_string($articlecontent, $shorten, '');
+	// drop open tag strings
+	$open = strrpos($short, '<');
+	if ($open > strrpos($short, '>')) {
+		$short = substr($short, 0, $open);
+	}
+	// drop unbalanced tags
+	$short = sanitize($short.'</p>', 1);
+	// insert the elipsis
+	$i = strrpos($short, '</p>');
+	if ($i == strlen($short) - 4) {
+		$short = substr($short, 0, -4).' '.$shortenindicator.'</p>';
+	} else {
+		$short .= ' '.$shortenindicator;
+	}
+	return $short;
+}
+
 /*** End template functions ***/
 
 ?>
