@@ -985,12 +985,6 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		}
 	// switch added for zenpage support
 		switch ($type) {
-			case "images":
-				$on = $receiver->getAlbumName() . " about " . $receiver->getTitle();
-				$url = "album=" . urlencode($receiver->album->name) . "&image=" . urlencode($receiver->filename);
-				$album = $receiver->getAlbum();
-				$ur_album = getUrAlbum($album);
-				break;
 			case "albums":
 				$on = $receiver->name;
 				$url = "album=" . urlencode($receiver->name);
@@ -1007,6 +1001,12 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 				$url = "p=".ZENPAGE_PAGES."&title=" . urlencode($receiver->zenpages['titlelink']);
 				//$album = $receiver->getAlbum();
 				//$ur_album = getUrAlbum($album);
+				break;
+			default: // all image types
+				$on = $receiver->getAlbumName() . " about " . $receiver->getTitle();
+				$url = "album=" . urlencode($receiver->album->name) . "&image=" . urlencode($receiver->filename);
+				$album = $receiver->getAlbum();
+				$ur_album = getUrAlbum($album);
 				break;
 		}
 		if (getOption('email_new_comments')) {
