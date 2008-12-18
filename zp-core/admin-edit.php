@@ -750,6 +750,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 							<?php
 							$splits = preg_split('/!([(0-9)])/', $image->get('EXIFOrientation'));
 							$rotation = $splits[0];
+							if (!in_array($rotation,array(3, 6, 8))) $rotation = 0;
 							?>
 							<input type="hidden" name="<?php echo $currentimage; ?>-oldrotation" value="<?php echo $rotation; ?>" />
 							<?php	echo gettext('Rotation: ');	?>

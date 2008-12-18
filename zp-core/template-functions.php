@@ -1181,7 +1181,7 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
  */
 function getMaxSpaceContainer(&$width, &$height, $image, $thumb=false) {
 	global $_zp_gallery;
-	
+	$imagename = $image->filename;
 	if (isImageVideo($image) & $thumb) {
 		if ($image->objectsThumb != NULL) {
 			$imgfile = getAlbumFolder().$image->album->name.'/'.$image->objectsThumb;
@@ -1201,11 +1201,9 @@ function getMaxSpaceContainer(&$width, &$height, $image, $thumb=false) {
 		if ($s_height == 0) $s_height = max($width,$height);
 	}
 	
-	$source_orientation = $s_width > $s_height;
-	$dest_orientation = $width > $height;
-
 	$newW = round($height/$s_height*$s_width);
 	$newH = round($width/$s_width*$s_height);
+	if (DEBUG_IMAGE) debugLog("getMaxSpaceContainer($width, $height, $imagename, $thumb): \$s_width=$s_width; \$s_height=$s_height; \$newW=$newW; \$newH=$newH;");
 	if ($newW > $width) {
 		$height = $newH;
 	} else {
