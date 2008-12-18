@@ -1182,15 +1182,8 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 function getMaxSpaceContainer(&$width, &$height, $image, $thumb=false) {
 	global $_zp_gallery;
 	$imagename = $image->filename;
-	if (isImageVideo($image) & $thumb) {
-		if ($image->objectsThumb != NULL) {
-			$imgfile = getAlbumFolder().$image->album->name.'/'.$image->objectsThumb;
-		} else {
-			$imgfile = SERVERPATH . '/' . THEMEFOLDER . '/' . UTF8ToFilesystem($_zp_gallery->getCurrentTheme()) . '/images/multimediaDefault.png';
-			if (!file_exists($imgfile)) {
-				$imgfile = SERVERPATH . "/" . ZENFOLDER . '/images/multimediaDefault.png';
-			}
-		}
+	if (!isImagePhoto($image) & $thumb) {
+		$imgfile = $image->getThumbImageFile();
 		$image = get_image($imgfile);
 		$s_width = imagesx($image);
 		$s_height = imagesy($image);

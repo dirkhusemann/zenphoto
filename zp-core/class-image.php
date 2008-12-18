@@ -669,6 +669,14 @@ class Image extends PersistentObject {
 		}
 	}
 
+	/**
+	 * Returns the image file name for the thumbnail image.
+	 *
+	 * @return unknown
+	 */
+	function getThumbImageFile() {
+		return $this->localpath;
+	}
 
 	/**
 	 * Get a default-sized thumbnail of this image.

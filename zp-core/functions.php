@@ -2057,5 +2057,19 @@ function byteConvert( $bytes ) {
 	return round($bytes/pow($convention,$e),2).' '.$s[$e];
 }
 
+/**
+ * Returns an i.php "image name" for an image not within the albums structure
+ *
+ * @param string $image Path to the image
+ * @return string
+ */
+function makeSpecialImageName($image) {
+	$folder = basename(dirname($image));
+	if ($folder == 'images') {
+		$folder = basename(dirname(dirname($image))).'}_{images';
+	}
+	return '_{'.$folder.'}_'.basename($image);
+}
+
 setexifvars();
 ?>

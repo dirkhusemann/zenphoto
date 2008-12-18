@@ -19,10 +19,7 @@ class Transientimage extends image {
 		$this->album = $album;
 		$this->localpath = $image;
 		
-		$folder = basename(dirname($image));
-		if ($folder == 'images') {
-			$folder = basename(dirname(dirname($image))).'}_{images';
-		}
+		$filename = makeSpecialImageName($image);
 		$filename = '_{'.$folder.'}_'.basename($image);
 		$this->filename = $filename;
 		$this->displayname = substr(basename($image), 0, strrpos(basename($image), '.'));

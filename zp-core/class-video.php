@@ -84,6 +84,23 @@ class Video extends Image {
 	}
 
 	/**
+	 * Returns the image file name for the thumbnail image.
+	 *
+	 * @return unknown
+	 */
+	function getThumbImageFile() {
+		if ($this->objectsThumb != NULL) {
+			$imgfile = getAlbumFolder().$this->album->name.'/'.$this->objectsThumb;
+		} else {
+			$imgfile = SERVERPATH . '/' . THEMEFOLDER . '/' . UTF8ToFilesystem($this->album->gallery->getCurrentTheme()) . '/images/multimediaDefault.png';
+			if (!file_exists($imgfile)) {
+				$imgfile = SERVERPATH . "/" . ZENFOLDER . '/images/multimediaDefault.png';
+			}
+		}
+		return $imgfile;
+	}
+
+	/**
 	 * Get a default-sized thumbnail of this image.
 	 *
 	 * @return string
