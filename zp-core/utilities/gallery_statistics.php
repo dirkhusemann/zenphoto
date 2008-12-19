@@ -283,8 +283,8 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 			case "latest":
 				switch($type) {
 					case "albums":
-						$barsize = round($item['imagenumber'] / $maxvalue * $bargraphmaxsize);
-						$value = $item['imagenumber']; 
+						$barsize = 0; //round($item['imagenumber'] / $maxvalue * $bargraphmaxsize);
+						$value = sprintf(gettext("%s images"),$item['imagenumber']); 
 						break;
 					case "images":
 						$barsize = 0;
@@ -293,8 +293,8 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 				}
 				break;		
 			case "latestupdated":
-				$barsize = round($item['imagenumber'] / $maxvalue * $bargraphmaxsize);
-				$value = $item['imagenumber']; 
+				$barsize = 0; //round($item['imagenumber'] / $maxvalue * $bargraphmaxsize);
+				$value = sprintf(gettext("%s images"),$item['imagenumber']); 
 				break;
 		}
 		// counter to have a gray background of every second line
