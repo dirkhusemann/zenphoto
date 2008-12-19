@@ -123,7 +123,7 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
 }
 
 // Construct the filename to save the cached image.
-$newfilename = getImageCacheFilename($album, $image, $args, false);
+$newfilename = getImageCacheFilename(FilesystemToUTF8($album), filesystemToUTF8($image), $args);
 $newfile = SERVERCACHE . $newfilename;
 if (trim($album)=='') {
 	$imgfile = getAlbumFolder() . $image;
@@ -211,7 +211,6 @@ if (!$debug) {
 	exit();
 
 } else {
-
 	echo "\n<p>Image: <img src=\"" . FULLWEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($newfilename) ."\" /></p>";
 
 }

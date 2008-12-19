@@ -335,14 +335,17 @@ function rewrite_get_album_image($albumvar, $imagevar) {
 
 /**
  * Returns the path of an image for uses in caching it
+ * NOTE: character set if for the filesystem
  *
  * @param string $album album folder
  * @param string $image image file name
  * @param array $args cropping arguments
- * $param bool $utf8 set to false if passing Latin1 strings
  * @return string
  */
-function getImageCacheFilename($album, $image, $args, $utf8=true) {
+function getImageCacheFilename($album8, $image8, $args) {
+	// this function works in FILESYSTEM_CHARSET, so convert the file names
+	$album = UTF8ToFilesystem($album8);
+	$image = UTF8ToFilesystem($image8);
 	// Set default variable values.
 	$postfix = getImageCachePostfix($args);
 	if (empty($album)) {
@@ -355,11 +358,7 @@ function getImageCacheFilename($album, $image, $args, $utf8=true) {
 			$albumsep = '/';
 		}
 	}
-	if ($utf8) {
-		return UTF8ToFilesystem('/' . $album . $albumsep . $image . $postfix . '.jpg');
-	} else {
-		return '/' . $album . $albumsep . $image . $postfix . '.jpg';
-	}
+	return '/' . $album . $albumsep . $image . $postfix . '.jpg';
 }
 
 /**

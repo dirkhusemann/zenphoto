@@ -634,7 +634,7 @@ class Image extends PersistentObject {
 	function getSizedImage($size) {
 		$cachefilename = getImageCacheFilename($this->album->name, $this->filename, getImageParameters(array($size)));
 		if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
-			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(fileSystemToUTF8($cachefilename));
+			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($cachefilename);
 		} else {
 			return rewrite_path(
 			pathurlencode($this->album->name).'/image/'.$size.'/'.urlencode($this->filename),
@@ -660,9 +660,9 @@ class Image extends PersistentObject {
 	 */
 	function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin=false) {
 		$cachefilename = getImageCacheFilename($this->album->name, $this->filename,
-		getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy)));
+											getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy)));
 		if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
-			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(filesystemToUTF8($cachefilename));
+			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($cachefilename);
 		} else {
 			return WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($this->filename)
 			. ($size ? "&s=$size" : "" ) . ($width ? "&w=$width" : "") . ($height ? "&h=$height" : "")
@@ -713,7 +713,7 @@ class Image extends PersistentObject {
 		$filename = $this->filename;
 		$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename, getImageParameters(array('thumb')));
 		if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
-			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(filesystemToUTF8($cachefilename));
+			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($cachefilename);
 		} else {
 			if (getOption('mod_rewrite') && !empty($alb)) {
 				$path = pathurlencode($alb) . '/'.$type.'/thumb/' . urlencode($filename);
