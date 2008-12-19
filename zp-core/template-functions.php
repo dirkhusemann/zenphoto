@@ -1458,6 +1458,7 @@ function next_image($all=false, $firstPageCount=0, $sorttype=null, $sortdirectio
  * @param object $image the image to become current
  */
 function makeImageCurrent($image) {
+	if (!is_object($image)) return;
 	global $_zp_current_album, $_zp_current_image;
 	$_zp_current_image = $image;
 	$_zp_current_album = $_zp_current_image->getAlbum(); 
@@ -2355,6 +2356,7 @@ function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph
  * */
 function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $class=NULL, $id=NULL, $thumbStandin=false) {
 	global $_zp_current_album, $_zp_current_image, $_zp_flash_player;
+	if (!is_object($_zp_current_image)) return;
 	$album = $_zp_current_image->getAlbum();
 	if (!$album->getShow()) {
 		$class .= " not_visible";

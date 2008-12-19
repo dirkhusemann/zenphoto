@@ -121,16 +121,19 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 						$albumentry = array("id" => $albumobj->get('id'), "title" => $albumobj->getTitle(), "folder" => $albumobj->name,"imagenumber" => $albumobj->getNumImages(), "show" => $albumobj->get("show"));
 						array_unshift($albums,$albumentry);
 					}
+					$maxvalue = 0;
 					if(empty($albums)) {
-						$maxvalue = 0;
 						$itemssorted = array();
 					} else {
-						$itemssorted = sortMultiArray($albums,"imagenumber","desc",false,false); // just to get the one with the most images for the graph max value
-						$maxvalue = $itemssorted[0]["imagenumber"];
+						foreach ($albums as $entry) {
+							if (array_key_exists('imagenumber', $entry)) {
+								$v = $entry['imagenumber'];
+								if ($v > $maxvalue) $maxvalue = $v;
+							}
+						}
 						$itemssorted = $albums; // The items are originally sorted by id;
 					}
 					$headline = $typename." - ".gettext("latest");
-					break;
 					break;
 				case "images":
 					$itemssorted = query_full_array($dbquery." ORDER BY id DESC LIMIT ".$limit);
@@ -156,7 +159,7 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 		 		foreach($albums as $album) {
 		 			$count++;
 		 			$image = query_single_row("SELECT id, albumid, mtime FROM " . prefix('images'). " WHERE albumid = ".$album['id'] . " ORDER BY id DESC LIMIT 1");
-		 			array_push($latestimages, $image);
+					if (is_array($image)) array_push($latestimages, $image);
 		 			if($count === $to_number) {
 		 				break;
 		 			}
@@ -183,12 +186,16 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 		 			$stopelement = $to_number;
 		 		}
 		 		$albums = array_slice($albums,0,$stopelement); // clear unnessesary items fron array
+		 		$maxvalue = 0;
 		 		if(empty($albums)) {
-		 			$maxvalue = 0;
 		 			$itemssorted = array();
 		 		} else {
-		 			$itemssorted = sortMultiArray($albums,"imagenumber","desc",false,false); // just to get the one with the most images for the graph max value
-		 			$maxvalue = $itemssorted[0]["imagenumber"];
+					foreach ($albums as $entry) {
+						if (array_key_exists('imagenumber', $entry)) {
+							$v = $entry['imagenumber'];
+							if ($v > $maxvalue) $maxvalue = $v;
+						}
+					}
 		 			$itemssorted = $albums; // The items are originally sorted by id;
 		 		}
 		 		$headline = $typename." - ".gettext("latest updated");

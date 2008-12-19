@@ -274,9 +274,9 @@ class Album extends PersistentObject {
 		if ($datetime == "") {
 			$this->set('date', '0000-00-00 00:00:00');
 		} else {
-			$time = @strtotime($datetime);
-			if ($time == -1 || $time == false) return;
-			$this->set('date', date('Y-m-d H:i:s', $time));
+			$newtime = dateTimeConvert($datetime);
+			if ($newtime === false) return;
+			$this->set('date', $newtime);
 		}
 	}
 

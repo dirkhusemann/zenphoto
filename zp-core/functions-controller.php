@@ -256,13 +256,6 @@ function zp_handle_comment() {
 	}
 return $comment_error;
 }
-
-/**
- * encodes for cookie
- **/
-function cookiecode($text) {
-	return md5($text);
-}
 /**
  *checks for album password posting
  */

@@ -229,7 +229,7 @@ if (db_connect()) {
 		}
 	}
 
-	$mtime = strtotime(sanitize($requestdate));
+	$mtime = dateTimeConvert(sanitize($requestdate));
 	$sql = "SELECT `folder`, `id` FROM ".prefix('albums').' WHERE `show`="0"'.$albumids;
 	$result = query_full_array($sql);
 	if (is_array($result)) {

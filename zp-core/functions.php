@@ -1741,14 +1741,26 @@ function printLink($url, $text, $title=NULL, $class=NULL, $id=NULL) {
 function sortMultiArray($array, $index, $order='asc', $natsort=FALSE, $case_sensitive=FALSE) {
 	if(is_array($array) && count($array)>0) {
 		foreach(array_keys($array) as $key) {
-			$temp[$key]=$array[$key][$index];
-			if(!$natsort) {
-				($order=='asc')? asort($temp) : arsort($temp);
+			if (is_array($array[$key]) && array_key_exists($index, $array[$key])) {
+				$temp[$key]=$array[$key][$index];
 			} else {
-				($case_sensitive)? natsort($temp) : natcasesort($temp);
-				if($order!='asc')  {
-					$temp=array_reverse($temp,TRUE);
-				}
+				$temp[$key] = '';
+			}
+		}
+		if(!$natsort) {
+			if ($order=='asc') {
+				asort($temp);
+			} else {
+				arsort($temp);
+			}
+		} else {
+			if ($case_sensitive) {
+				natsort($temp);
+			} else {
+				natcasesort($temp);
+			}
+			if($order!='asc')  {
+				$temp=array_reverse($temp,TRUE);
 			}
 		}
 		foreach(array_keys($temp) as $key) {
@@ -1935,6 +1947,13 @@ function zp_setCookie($name, $value, $time=0, $path='/') {
 }
 
 /**
+ * encodes for cookie
+ **/
+function cookiecode($text) {
+	return md5($text);
+}
+
+/**
  * Returns a new "image" object based on the file extension
  *
  * @param object $album the owner album
@@ -2069,6 +2088,14 @@ function makeSpecialImageName($image) {
 		$folder = basename(dirname(dirname($image))).'}_{images';
 	}
 	return '_{'.$folder.'}_'.basename($image);
+}
+
+function dateTimeConvert($datetime) {
+	// Convert 'yyyy:mm:dd hh:mm:ss' to 'yyyy-mm-dd hh:mm:ss' for Windows' strtotime compatibility
+	$datetime = preg_replace('/(\d{4}):(\d{2}):(\d{2})/', ' \1-\2-\3', $datetime);
+	$time = @strtotime($datetime);
+	if ($time == -1 || $time == false) return false;
+	return date('Y-m-d H:i:s', $time);
 }
 
 setexifvars();

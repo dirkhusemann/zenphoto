@@ -809,7 +809,7 @@ function getAlbumArray($albumstring, $includepaths=false) {
 
 $_zp_extra_filetypes = array('flv' => 'Video', '3gp' => 'Video', 'mov' => 'Video', 'mp3' => 'Video', 'mp4' => 'Video');
 /**
- * Returns true fi the file is a video file
+ * Returns true if the file is a video file
  *
  * @param string $filename the name of the target
  * @return bool

@@ -126,7 +126,7 @@ class TextObject extends Image {
 			$filename = $this->objectsThumb;
 			$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename, getImageParameters(array('thumb')));
 			if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
-				return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($cachefilename);
+				return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(filesystemToUTF8($cachefilename));
 			} else {
 				if (getOption('mod_rewrite') && empty($wmv) && !empty($alb)) {
 					$path = pathurlencode($alb) . '/'.$type.'/thumb/' . urlencode($filename);
@@ -170,7 +170,7 @@ class TextObject extends Image {
 				$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename,
 				getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy)));
 				if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
-					return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($cachefilename);
+					return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(filesystemToUTF8($cachefilename));
 				} else {
 					$path = ZENFOLDER . '/i.php?a=' . urlencode($alb) . '&i=' . urlencode($filename);
 					if (substr($path, 0, 1) == "/") $path = substr($path, 1);

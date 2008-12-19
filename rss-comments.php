@@ -15,7 +15,7 @@ function fixRSSDate($bad_date) {
 	$year = $date_parts[0];
 	$month = $date_parts[2];
 	$day = $date_parts[1];
-	$rval = date("r",strtotime("$day/$month/$year $time"));
+	$rval = date("r",strtotime("$day-$month-$year $time"));
 	return $rval;
 }
 
