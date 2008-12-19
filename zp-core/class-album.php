@@ -548,9 +548,9 @@ class Album extends PersistentObject {
 	 * @return array
 	 */
 	function sortImageArray($images, $sorttype=NULL, $sortdirection=NULL, $recursed=false) {
-		global $_zp_loggedin;
 
 		$hidden = array();
+		$mine = isMyAlbum($this->name, ALL_RIGHTS);
 		$key = '`'.$this->getSortKey($sorttype).'`';
 		$direction = '';
 		if ($key != '`sort_order`') { // manual sort is always ascending
@@ -582,7 +582,7 @@ class Album extends PersistentObject {
 			foreach ($results as $row) { // see what images are in the database so we can check for visible
 			$filename = $row['filename'];
 			if (isset($flippedimages[$filename])) { // ignore db entries for images that no longer exist.
-				if ($_zp_loggedin || $row['show']) {
+				if ($row['show'] || $mine) {  // unpublished content available only to someone with rights on the album
 					$images_to_keys[$filename] = $i;
 					$i++;
 				}

@@ -473,10 +473,13 @@ function sortAlbumArray($parentalbum, $albums, $sortkey='`sort_order`', $recurse
 	$albums_touched = array();
 	foreach ($results as $row) {
 		$folder = $row['folder'];
+		$mine = isMyALbum($folder, ALL_RIGHTS);
 		if (array_key_exists($folder, $albums_r)) {
 			$albums_r[$folder] = $i;
 			$albums_touched[] = $folder;
-			if (!zp_loggedin(ADMIN_RIGHTS | VIEWALL_RIGHTS | ALL_ALBUMS_RIGHTS) && !$row['show']) { $hidden[] = $folder; }
+			if (!($row['show'] || $mine)) {  // you can see only your own unpublished content.
+				$hidden[] = $folder;
+			}
 		}
 		$i++;
 	}
@@ -1285,15 +1288,23 @@ function getManagedAlbumList() {
  */
 function isMyAlbum($albumfolder, $action) {
 	global $_zp_loggedin, $_zp_admin_album_list, $_zp_current_admin;
-	if ($_zp_loggedin & (ADMIN_RIGHTS | ALL_ALBUMS_RIGHTS)) { return true; }
-	if (empty($albumfolder)) { return false; }
+	if ($_zp_loggedin & (ADMIN_RIGHTS | ALL_ALBUMS_RIGHTS)) {
+		return true;
+	}
+	if (empty($albumfolder)) {
+		return false;
+	}
 	if ($_zp_loggedin & $action) {
 		if (is_null($_zp_admin_album_list)) {
 			getManagedAlbumList();
 		}
-		if (count($_zp_admin_album_list) == 0) { return false; }
+		if (count($_zp_admin_album_list) == 0) {
+			return false;
+		}
 		foreach ($_zp_admin_album_list as $key => $adminalbum) { // see if it is one of the managed folders or a subfolder there of
-			if (substr($albumfolder, 0, strlen($adminalbum)) == $adminalbum) { return true; }
+			if (substr($albumfolder, 0, strlen($adminalbum)) == $adminalbum) {
+				return true;
+			}
 		}
 		return false;
 	} else {
@@ -1782,11 +1793,11 @@ $_zp_not_viewable_album_list = NULL;
  * @return array
  */
 function getNotViewableAlbums() {
-	if (zp_loggedin(ADMIN_RIGHTS)) return array(); //admins can see all
+	if (zp_loggedin(ADMIN_RIGHTS | ALL_ALBUMS_RIGHTS)) return array(); //admins can see all
 	$hint = '';
 	global $_zp_not_viewable_album_list;
 	if (is_null($_zp_not_viewable_album_list)) {
-		$sql = 'SELECT `folder`, `id`, `password` FROM '.prefix('albums').' WHERE `show`=0 OR `password`!=""';
+		$sql = 'SELECT `folder`, `id`, `password`, `show` FROM '.prefix('albums').' WHERE `show`=0 OR `password`!=""';
 		$result = query_full_array($sql);
 		if (is_array($result)) {
 			$_zp_not_viewable_album_list = array();
@@ -1794,7 +1805,7 @@ function getNotViewableAlbums() {
 				if (!checkAlbumPassword($row['folder'], $hint)) {
 					$_zp_not_viewable_album_list[] = $row['id'];
 				} else {
-					if (!zp_loggedin() || !isMyAlbum($row['folder'], 0)) {
+					if (!($row['show'] || isMyAlbum($row['folder'], ALL_RIGHTS))) {
 						$_zp_not_viewable_album_list[] = $row['id'];
 					}
 				}
