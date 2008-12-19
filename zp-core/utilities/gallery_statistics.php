@@ -201,10 +201,12 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 		 		if(empty($albums)) {
 		 			$itemssorted = array();
 		 		} else {
-					foreach ($albums as $entry) {
+					foreach ($albums as $key=>$entry) {
 						if (array_key_exists('imagenumber', $entry)) {
 							$v = $entry['imagenumber'];
 							if ($v > $maxvalue) $maxvalue = $v;
+						} else {
+							unset($albums[$key]); // if it has no imagenumber it must not be a valid entry!
 						}
 					}
 		 			$itemssorted = $albums; // The items are originally sorted by id;
