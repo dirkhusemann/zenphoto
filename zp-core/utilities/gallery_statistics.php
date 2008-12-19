@@ -19,6 +19,17 @@ chdir(dirname(dirname(__FILE__)));
 
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 
+
+if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
+	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
+	exit();
+}
+
+if (!($_zp_loggedin & (ADMIN_RIGHTS | MAIN_RIGHTS))) { // prevent nefarious access to this page.
+	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
+	exit();
+}
+
 $gallery = new Gallery();
 $webpath = WEBPATH.'/'.ZENFOLDER.'/';
 

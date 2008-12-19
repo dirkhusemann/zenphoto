@@ -11,6 +11,7 @@
 $button_text = gettext('Backup/Restore');
 $button_hint = gettext('Backup and restore your gallery database.');
 $button_icon = 'images/folder.png';
+$button_rights = ADMIN_RIGHTS;
 
 define('OFFSET_PATH', 3);
 define('RECORD_SEPARATOR', ':****:');
@@ -20,6 +21,19 @@ chdir(dirname(dirname(__FILE__)));
 
 require_once(dirname(dirname(__FILE__)).'/template-functions.php');
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
+
+
+if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
+	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
+	exit();
+}
+
+if (!is_null(getOption('admin_reset_date'))) {
+	if (!($_zp_loggedin & ADMIN_RIGHTS)) { // prevent nefarious access to this page.
+		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
+		exit();
+	}
+}
 
 $buffer = '';
 function fillbuffer($handle) {
@@ -45,13 +59,6 @@ function getrow($handle) {
 	$result = substr($buffer, 0, $end);
 	$buffer = substr($buffer, $end+strlen(RECORD_SEPARATOR));
 	return $result;
-}
-
-if (!is_null(getOption('admin_reset_date'))) {
-	if (!($_zp_loggedin & ADMIN_RIGHTS)) { // prevent nefarious access to this page.
-		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
-		exit();
-	}
 }
 
 $gallery = new Gallery();
