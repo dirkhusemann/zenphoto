@@ -3058,10 +3058,12 @@ function getRandomImagesAlbum($rootAlbum=null) {
  * @param int $number how many images
  * @param string $class optional class
  * @param string $option what you want selected: all for all images, album for selected ones from an album
-
  * @param string $rootAlbum optional album from which to get the images
+ * @param integer $width the width/cropwidth of the thumb if crop=true else $width is longest size.
+ * @param integer $height the height/cropheight of the thumb if crop=true else not used
+ * @param bool $crop 'true' (default) if the thumb should be cropped, 'false' if not
  */
-function printRandomImages($number=5, $class=null, $option='all', $rootAlbum='') {
+function printRandomImages($number=5, $class=null, $option='all', $rootAlbum='',$width=100,$height=100,$crop=true) {
 	if (!is_null($class)) {
 		$class = ' class="' . $class . '"';
 	}
@@ -3075,10 +3077,13 @@ function printRandomImages($number=5, $class=null, $option='all', $rootAlbum='')
 				$randomImage = getRandomImagesAlbum($rootAlbum); break;
 		}
 		$randomImageURL = htmlspecialchars(getURL($randomImage));
-		echo '<a href="' . $randomImageURL . '" title="'.sprintf(gettext('View image: %s'), html_encode($randomImage->getTitle())) . '">' .
-			'<img src="' . htmlspecialchars($randomImage->getThumb()) .
-			'" alt="'.html_encode($randomImage->getTitle()).'"';
-		echo "/></a></li>\n";
+		echo '<a href="' . $randomImageURL . '" title="'.sprintf(gettext('View image: %s'), html_encode($randomImage->getTitle())) . '">';
+		if($crop) {
+			echo "<img src=\"".htmlspecialchars($randomImage->getCustomImage(NULL, $width, $height, $width, $height, NULL, NULL, TRUE))."\" alt=\"" . html_encode($randomImage->getTitle()) . "\" />\n";
+		} else {
+			echo "<img src=\"".htmlspecialchars($randomImage->getCustomImage($width, NULL, NULL, NULL, NULL, NULL, NULL, TRUE))."\" alt=\"" . html_encode($randomImage->getTitle()) . "\" />\n";
+		}
+		echo "</a></li>\n";
 	}
 	echo "</ul>";
 }
