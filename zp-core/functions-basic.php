@@ -87,7 +87,7 @@ define('BACKUPFOLDER', 'backup');
 define('UTILITIES_FOLDER', '/utilities/');
 
 // Set error reporting.
-error_reporting(E_ALL ^ E_STRICT);
+error_reporting(E_ALL | E_STRICT);
 $_zp_error = false;
 
 /**
