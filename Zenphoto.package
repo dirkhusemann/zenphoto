@@ -33,7 +33,9 @@ themes/effervescence_plus/customfunctions.php
 themes/effervescence_plus/footer.php
 themes/effervescence_plus/gallery.php
 themes/effervescence_plus/image.php
+themes/effervescence_plus/images/25percent.png
 themes/effervescence_plus/images/50percent.png
+themes/effervescence_plus/images/50percentwhite.png
 themes/effervescence_plus/images/arrow_right.png
 themes/effervescence_plus/images/dark_arrow_right.png
 themes/effervescence_plus/images/err-passwordprotected.gif
@@ -188,7 +190,6 @@ zp-core/class-image.php
 zp-core/class-load.php
 zp-core/class-search.php
 zp-core/class-transientimage.php
-zp-core/class-video.php
 zp-core/classes.php
 zp-core/controller.php
 zp-core/exif/exif.php
@@ -231,7 +232,6 @@ zp-core/images/imageDefault.png
 zp-core/images/lock.png
 zp-core/images/lock_open.png
 zp-core/images/movie.jpg
-zp-core/images/multimediaDefault.png
 zp-core/images/pass.png
 zp-core/images/pencil.png
 zp-core/images/quest.png
@@ -302,6 +302,8 @@ zp-core/locale/zh_TW/LC_MESSAGES/zenphoto.po
 zp-core/plugins/admin_toolbox.php
 zp-core/plugins/class-textobject/textDefault.png
 zp-core/plugins/class-textobject.php
+zp-core/plugins/class-video/multimediaDefault.png
+zp-core/plugins/class-video.php
 zp-core/plugins/contact_form/form.php
 zp-core/plugins/contact_form.php
 zp-core/plugins/dynamic-locale.php
