@@ -38,7 +38,10 @@ function isImageClass($image=NULL) {
 		global $_zp_current_image;
 		$image = $_zp_current_image;
 	}
-	return $image instanceof _Image;
+	$reporting = error_reporting(0); // supress deprecated message PHP 5.0.0 to 5.3.0
+	$rslt = is_a($image, _Image);
+	error_reporting($reporting);
+	return $rslt;
 }
 
 /**
