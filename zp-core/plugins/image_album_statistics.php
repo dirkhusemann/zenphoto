@@ -145,7 +145,7 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
 	$tempalbum = new Album($_zp_gallery, $album['folder']);
 		echo "<li><a href=\"".$albumpath.pathurlencode($tempalbum->name)."\" title=\"" . html_encode($tempalbum->getTitle()) . "\">\n";
 		$albumthumb = $tempalbum->getAlbumThumbImage();
-		$thumb = new Image($tempalbum, $albumthumb->filename);
+		$thumb = newImage($tempalbum, $albumthumb->filename);
 		if($crop) {
 			echo "<img src=\"".$thumb->getCustomImage(NULL, $width, $height, $width, $height, NULL, NULL, TRUE)."\" alt=\"" . html_encode($thumb->getTitle()) . "\" /></a>\n<br />";
 		} else {
@@ -349,7 +349,7 @@ function getImageStatistic($number, $option, $albumfolder='') {
 		$albumfolder2 = $imagerow['folder'];
 		$desc = $imagerow['title'];
 		// Album is set as a reference, so we can't re-assign to the same variable!
-		$image = new Image(new Album($_zp_gallery, $albumfolder2), $filename);
+		$image = newImage(new Album($_zp_gallery, $albumfolder2), $filename);
 		$imageArray [] = $image;
 	}
 	return $imageArray;

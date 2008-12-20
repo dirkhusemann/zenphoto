@@ -330,20 +330,10 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		imageError(gettext('Image not found or is unreadable.'), 'err-imagenotfound.gif');
 	}
 	$rotate = false;
-	if (is_valid_video($imgfile)) {
-		if ($thumb || $crop) {
-			if (!$videoWM) {  // choose a video thumb for the image
-				$imgfile = SERVERPATH . '/' . THEMEFOLDER . '/' . UTF8ToFilesystem($theme) . '/images/multimediaDefault.png';
-				if (!file_exists($imgfile)) {
-					$imgfile = SERVERPATH . "/" . ZENFOLDER . '/images/multimediaDefault.png';
-				}
-			}
-		}
-	} else {
-		if (function_exists('imagerotate') && getOption('auto_rotate'))  {
-			$rotate = getImageRotation($imgfile);
-		}
+	if (function_exists('imagerotate') && getOption('auto_rotate'))  {
+		$rotate = getImageRotation($imgfile);
 	}
+
 	if ($im = get_image($imgfile)) {
 		if ($rotate) {
 			$newim_rot = imagerotate($im, $rotate, 0);

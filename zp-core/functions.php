@@ -1965,33 +1965,6 @@ function cookiecode($text) {
 }
 
 /**
- * Returns a new "image" object based on the file extension
- *
- * @param object $album the owner album
- * @param string $filename the filename
- * @return object
- */
-function newImage(&$album, $filename) {
-	global $_zp_extra_filetypes;
-	if ($ext = is_valid_other_type($filename)) {
-		$object = $_zp_extra_filetypes[$ext];
-		return new $object($album, $filename);
-	} else {
-		return New Image($album, $filename);
-	}
-}
-
-function isImageClass($image=NULL) {
-	global $_zp_extra_filetypes;
-	if (is_null($image)) {
-		if (!in_context(ZP_IMAGE)) return false;
-		global $_zp_current_image;
-		$image = $_zp_current_image;
-	}
-	return in_array(get_class($image), $_zp_extra_filetypes);
-}
-
-/**
  * returns a list of comment record 'types' for "images"
  * @param string $quote quotation mark to use
  *
@@ -2035,7 +2008,7 @@ function isImagePhoto($image=NULL) {
 		$image = $_zp_current_image;
 	}
 	$class = strtolower(get_class($image));
-	return $class == 'image' || $class == 'transientimage';
+	return $class == '_image' || $class == 'transientimage';
 }
 
 /**
@@ -2094,11 +2067,14 @@ function byteConvert( $bytes ) {
  * @return string
  */
 function makeSpecialImageName($image) {
-	$folder = basename(dirname($image));
-	if ($folder == 'images') {
-		$folder = basename(dirname(dirname($image))).'}_{images';
+	$filename = basename($image);
+	$i = strpos($image, ZENFOLDER);
+	if ($i === false) {
+		$folder = '_{'.basename(dirname(dirname($image))).'}_{'.basename(dirname($image)).'}_';
+	} else {
+		$folder = '_{'.ZENFOLDER.'}_{'.substr($image, $i + strlen(ZENFOLDER) + 1 , - strlen($filename) - 1).'}_';
 	}
-	return '_{'.$folder.'}_'.basename($image);
+	return $folder.$filename;
 }
 
 function dateTimeConvert($datetime) {

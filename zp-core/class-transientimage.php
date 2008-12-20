@@ -6,7 +6,7 @@
 
 // force UTF-8 Ø
 
-class Transientimage extends image {
+class Transientimage extends _Image {
 	/**
 	 * creates a transient image (that is, one that is not stored in the database)
 	 *

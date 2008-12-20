@@ -230,6 +230,7 @@ if (isset($_GET['action'])) {
 			$f = sanitize($_POST['date_format_list'],3);
 			if ($f == 'custom') $f = sanitize($_POST['date_format'],3);
 			setOption('date_format', $f);
+			setBoolOption('UTF8_image_URI', isset($_POST['UTF8_image_URI']));
 			setBoolOption('thumb_select_images', isset($_POST['thumb_select_images']));
 			$returntab = "&tab=gallery";
 		}
@@ -833,10 +834,17 @@ if ($subtab == 'admin') {
 			</td>
 		</tr>
 		<tr>
-			<td><?php echo gettext("Enable mod_rewrite:"); ?></td>
-			<td><input type="checkbox" name="mod_rewrite" value="1"
-			<?php echo checked('1', getOption('mod_rewrite')); ?> /></td>
-			<td><?php echo gettext("If you have Apache <em>mod_rewrite</em>, put a checkmark here, and	you'll get nice cruft-free URLs."); ?></td>
+			<td><?php echo gettext("URL options:"); ?></td>
+			<td>
+			<input type="checkbox" name="mod_rewrite" value="1"<?php echo checked('1', getOption('mod_rewrite')); ?> /> <?php echo gettext('mod rewrite'); ?>
+			<br/>
+			<input type="checkbox" name="UTF8_image_URI" value="1"<?php echo checked('1', getOption('UTF8_image_URI')); ?> /> <?php echo gettext('UTF8 image URIs'); ?>
+			</td>
+			<td>
+				<?php echo gettext("If you have Apache <em>mod_rewrite</em>, put a checkmark on the <em>mod rewrite</em> option, and	you'll get nice cruft-free URLs."); ?>
+				<br /><br />
+				<?php echo gettext("If you are having problems with images who's names with contain accented characters try changing the <em>UTF8 image URIs</em> setting."); ?>
+			</td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Mod_rewrite Image suffix:"); ?></td>

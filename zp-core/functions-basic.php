@@ -806,7 +806,6 @@ function getAlbumArray($albumstring, $includepaths=false) {
 	}
 }
 
-$_zp_extra_filetypes = array('flv' => 'Video', '3gp' => 'Video', 'mov' => 'Video', 'mp3' => 'Video', 'mp4' => 'Video');
 /**
  * Returns true if the file is a video file
  *
@@ -817,6 +816,26 @@ function is_valid_video($filename) {
 	global $_zp_extra_filetypes;
 	$ext = strtolower(substr(strrchr($filename, "."), 1));
 	return isset($_zp_extra_filetypes[$ext]) && $_zp_extra_filetypes[$ext] == 'Video';
+}
+
+/**
+ * Returns true if we are running on a Windows server
+ *
+ * @return bool
+ */
+function isWin() {  
+	return (strtoupper (substr(PHP_OS, 0,3)) == 'WIN' ) ;  
+}  
+
+/**
+ * Returns an img src URI encoded based on the OS of the server
+ *
+ * @param string $uri uri in FILESYSTEM_CHARSET encoding
+ * @return string
+ */
+function imgSrcURI($uri) {
+	if (getOption('UTF8_image_URI')) return filesystemToUTF8($uri);
+	return $uri;
 }
 
 ?>

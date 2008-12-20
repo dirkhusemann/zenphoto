@@ -63,7 +63,7 @@ if ($plugin_disable) return;
 addPluginType('txt', 'TextObject');
 
 
-class TextObject extends Image {
+class TextObject extends _Image {
 
 	/**
 	 * creates a textobject (image standin)
@@ -94,13 +94,16 @@ class TextObject extends Image {
 	/**
 	 * Returns the image file name for the thumbnail image.
 	 *
-	 * @return unknown
+	 * @return s
 	 */
 	function getThumbImageFile() {
 		if ($this->objectsThumb != NULL) {
 			$imgfile = getAlbumFolder().$this->album->name.'/'.$this->objectsThumb;
 		} else {
-			$imgfile = SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . substr(basename(__FILE__), 0, -4).'/textDefault.png';
+			$imgfile = SERVERPATH . '/' . THEMEFOLDER . '/' . UTF8ToFilesystem($this->album->gallery->getCurrentTheme()) . '/images/textDefault.png';
+			if (!file_exists($imgfile)) {
+				$imgfile = SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . substr(basename(__FILE__), 0, -4). '/textDefault.png';
+			}
 		}
 	return $imgfile;
 	}
@@ -113,12 +116,7 @@ class TextObject extends Image {
 	 */
 	function getThumb($type='image') {
 		if ($this->objectsThumb == NULL) {
-			$imgfile = SERVERPATH . '/' . THEMEFOLDER . '/' . UTF8ToFilesystem($theme = $this->album->gallery->getCurrentTheme()) . '/images/textDefault.png';
-			if (file_exists($imgfile)) {
-				$filename = makeSpecialImageName($imgfile);
-			} else {
-				$filename = '_{'.ZENFOLDER.'}_{'.substr(PLUGIN_FOLDER,1).substr(basename(__FILE__), 0, -4).'}_textDefault.png';
-			}
+			$filename = makeSpecialImageName($this->getThumbImageFile());
 			$path = ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($filename) . '&s=thumb';
 			if ($type !== 'image') $path .= '&'.$type.'=true';
 			return WEBPATH . "/" . $path;
@@ -126,7 +124,7 @@ class TextObject extends Image {
 			$filename = $this->objectsThumb;
 			$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename, getImageParameters(array('thumb')));
 			if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
-				return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($cachefilename);
+				return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($cachefilename));
 			} else {
 				if (getOption('mod_rewrite') && empty($wmv) && !empty($alb)) {
 					$path = pathurlencode($alb) . '/'.$type.'/thumb/' . urlencode($filename);
@@ -153,12 +151,7 @@ class TextObject extends Image {
 	function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin=false) {
 		if ($thumbStandin) {
 			if ($this->objectsThumb == NULL) {
-				$imgfile = SERVERPATH . '/' . THEMEFOLDER . '/' . UTF8ToFilesystem($theme = $this->album->gallery->getCurrentTheme()) . '/images/textDefault.png';
-				if (file_exists($imgfile)) {
-					$filename = makeSpecialImageName($imgfile);
-				} else {
-					$filename = '_{'.ZENFOLDER.'}_{'.substr(PLUGIN_FOLDER,1).substr(basename(__FILE__), 0, -4).'}_textDefault.png';
-				}
+				$filename = makeSpecialImageName($this->getThumbImageFile());
 				$path = ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($filename);
 				return WEBPATH . "/" . $path
 				. ($size ? "&s=$size" : "" ) . ($width ? "&w=$width" : "") . ($height ? "&h=$height" : "")
@@ -170,7 +163,7 @@ class TextObject extends Image {
 				$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename,
 													getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy)));
 				if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
-					return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($cachefilename);
+					return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($cachefilename));
 				} else {
 					$path = ZENFOLDER . '/i.php?a=' . urlencode($alb) . '&i=' . urlencode($filename);
 					if (substr($path, 0, 1) == "/") $path = substr($path, 1);

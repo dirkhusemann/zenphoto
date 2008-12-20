@@ -6,8 +6,45 @@
 
 // force UTF-8 Ø
 
+$_zp_extra_filetypes = array(); // contains file extensions and the handler class
 
-class Image extends PersistentObject {
+/**
+ * Returns a new "image" object based on the file extension
+ *
+ * @param object $album the owner album
+ * @param string $filename the filename
+ * @return object
+ */
+function newImage(&$album, $filename) {
+	global $_zp_extra_filetypes;
+	if ($ext = is_valid_other_type($filename)) {
+		$object = $_zp_extra_filetypes[$ext];
+		return new $object($album, $filename);
+	} else {
+		return New _Image($album, $filename);
+	}
+}
+
+/**
+ * Returns true if the object is a zenphoto 'image'
+ *
+ * @param object $image
+ * @return bool
+ */
+function isImageClass($image=NULL) {
+	global $_zp_extra_filetypes;
+	if (is_null($image)) {
+		if (!in_context(ZP_IMAGE)) return false;
+		global $_zp_current_image;
+		$image = $_zp_current_image;
+	}
+	return $image instanceof _Image;
+}
+
+/**
+ * handles 'picture' images
+ */
+class _Image extends PersistentObject {
 
 	var $filename;      // true filename of the image.
 	var $exists = true; // Does the image exist?
@@ -28,12 +65,16 @@ class Image extends PersistentObject {
 
 	/**
 	 * Constructor for class-image
+	 * 
+	 * Do not call this constructor directly unless you really know what you are doing!
+	 * Use instead the function newImage() which will instantiate an object of the 
+	 * correct class for the file type.
 	 *
 	 * @param object &$album the owning album
 	 * @param sting $filename the filename of the image
 	 * @return Image
 	 */
-	function Image(&$album, $filename) {
+	function _Image(&$album, $filename) {
 		// $album is an Album object; it should already be created.
 		if (!is_object($album)) return NULL;
 		$this->classSetup($album, $filename);
@@ -634,7 +675,7 @@ class Image extends PersistentObject {
 	function getSizedImage($size) {
 		$cachefilename = getImageCacheFilename($this->album->name, $this->filename, getImageParameters(array($size)));
 		if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
-			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($cachefilename);
+			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($cachefilename));
 		} else {
 			return rewrite_path(
 			pathurlencode($this->album->name).'/image/'.$size.'/'.urlencode($this->filename),
@@ -662,7 +703,7 @@ class Image extends PersistentObject {
 		$cachefilename = getImageCacheFilename($this->album->name, $this->filename,
 											getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy)));
 		if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
-			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($cachefilename);
+			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($cachefilename));
 		} else {
 			return WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($this->filename)
 			. ($size ? "&s=$size" : "" ) . ($width ? "&w=$width" : "") . ($height ? "&h=$height" : "")
@@ -675,7 +716,7 @@ class Image extends PersistentObject {
 	/**
 	 * Returns the image file name for the thumbnail image.
 	 *
-	 * @return unknown
+	 * @return string
 	 */
 	function getThumbImageFile() {
 		return $this->localpath;
@@ -713,7 +754,7 @@ class Image extends PersistentObject {
 		$filename = $this->filename;
 		$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename, getImageParameters(array('thumb')));
 		if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
-			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($cachefilename);
+			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($cachefilename));
 		} else {
 			if (getOption('mod_rewrite') && !empty($alb)) {
 				$path = pathurlencode($alb) . '/'.$type.'/thumb/' . urlencode($filename);

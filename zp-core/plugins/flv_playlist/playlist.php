@@ -21,7 +21,7 @@ echo "<annotation>An example of a playlist with commercial</annotation>";
 echo "<trackList>\n";
 $imgextensions = array(".jpg",".jpeg",".gif",".png");
 foreach($playlist as $item) {
-	$image = new Image($album, $item);
+	$image = newImage($album, $item);
 	$ext = strtolower(strrchr($item, "."));
 	if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
 		$videoThumb = checkObjectsThumb($album->localpath, $item);

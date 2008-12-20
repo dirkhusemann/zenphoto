@@ -1,6 +1,7 @@
 <?php
 define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
+require_once(dirname(__FILE__).'/functions-image.php');
 
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
@@ -12,39 +13,52 @@ $imagename = sanitize_path($_REQUEST['i']);
 
 // get full width and height
 $albumobj = new Album(new Gallery,$albumname);
-$imageobj = new Image($albumobj,$imagename);
+$imageobj = newImage($albumobj,$imagename);
 $currentthumbimage = $imageobj->getThumb();
-$width = $imageobj->getWidth();
-$height = $imageobj->getHeight();
 setOption('image_use_side', 'longest', false);
-$size = min(400, $width, $height);
 $cropwidth = getOption("thumb_crop_width");
 $cropheight = getOption("thumb_crop_height");
+$imagepart = $imagename;
+
+
+if (isImagePhoto($imageobj)) {
+	$width = $imageobj->getWidth();
+	$height = $imageobj->getHeight();
+} else {
+	$imgpath = $imageobj->getThumbImageFile();
+	if ($imageobj->objectsThumb == NULL) {
+		$imagepart = makeSpecialImageName($imgpath);
+	} else {
+		$imagepart = basename($imgpath);
+	}
+	$timg = get_image($imgpath);
+	$width = imagesx($timg);
+	$height = imagesy($timg);
+}
 if (getOption('thumb_crop')) {
 	$thumbcropwidth = $cropwidth;
 	$thumbcropheight = $cropheight;
 } else {	
-	if (isImageVideo($imageobj)) {
-		if ($imageobj->objectsThumb != NULL) {
-			$imgpath = getAlbumFolder().$imageobj->album->name.'/'.$imageobj->objectsThumb;
-		} else {
-			$imgpath = SERVERPATH . '/' . THEMEFOLDER . '/' . UTF8ToFilesystem($_zp_gallery->getCurrentTheme()) . '/images/multimediaDefault.png';
-			if (!file_exists($imgfile)) {
-				$imgpath = SERVERPATH . "/" . ZENFOLDER . '/images/multimediaDefault.png';
-			}
-		}
-		$timg = get_image($imgpath);
-		$thumbcropwidth = imagesx($timg);
-		$thumbcropheight = imagesy($timg);
-	} else {
+	if (isImagePhoto($imageobj)) {
 		$thumbcropwidth = $imageobj->getWidth();
 		$thumbcropheight = $imageobj->getHeight();
+	} else {
+		$imgpath = getThumbImageFile();
+		if ($this->objectsThumb == NULL) {
+			$imagepart = makeSpecialImageName($imgpath);
+		} else {
+			$imagepart = basename($imgpath);
+		}
+		$thumbcropwidth = imagesx($timg);
+		$thumbcropheight = imagesy($timg);
 	}
 	$tsize = getOption('thumb_size');
 	$max = max($thumbcropwidth, $thumbcropheight);
 	$thumbcropwidth = $thumbcropwidth * ($tsize/$max);
 	$thumbcropheight = $thumbcropheight * ($tsize/$max);
 }
+	
+$size = min(400, $width, $height);
 if ($width >= $height) {
 	$sr = $size/$width;
 	$sizedwidth = $size;
@@ -55,7 +69,7 @@ if ($width >= $height) {
 	$sizedheight = $size;
 }
 
-$imageurl = "i.php?a=".pathurlencode($albumname)."&i=".urlencode($imagename)."&s=".$size.'&admin';
+$imageurl = "i.php?a=".pathurlencode($albumname)."&i=".urlencode($imagepart)."&s=".$size.'&admin';
 
 $iY = round($imageobj->get('thumbY')*$sr);
 if ($iY) {

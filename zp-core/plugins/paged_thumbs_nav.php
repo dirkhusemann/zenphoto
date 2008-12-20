@@ -119,7 +119,7 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 	if ($totalpages > 1)	{
 		$prevpageimagenr = ($currentpage * $imagesperpage) - ($imagesperpage+1);
 		if ($currentpage > 1) {
-			$prevpageimage = new Image($_zp_current_album,$images[$prevpageimagenr]);
+			$prevpageimage = newImage($_zp_current_album,$images[$prevpageimagenr]);
 			echo "<a href=\"".$prevpageimage->getImageLink()."\" title=\"".gettext("previous thumbs")."\">".$prev."</a>\n";
 		} 
 	}
@@ -156,7 +156,7 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 	if ($totalpages > 1)	{
 		if ($currentpage < $totalpages) 	{
 			$nextpageimagenr = $currentpage * $imagesperpage;
-			$nextpageimage = new Image($_zp_current_album,$images[$nextpageimagenr]);
+			$nextpageimage = newImage($_zp_current_album,$images[$nextpageimagenr]);
 			echo "<a href=\"".$nextpageimage->getImageLink()."\" title=\"".gettext("next thumbs")."\">".$next."</a>\n";
 		} 
 	} //first if

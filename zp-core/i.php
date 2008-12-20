@@ -207,11 +207,11 @@ if (!$debug) {
 	// ... and redirect the browser to it.
 	header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $fmt).' GMT');
 	header('Content-Type: image/jpeg');
-	header('Location: ' . FULLWEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($newfilename), true, 301);
+	header('Location: ' . FULLWEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($newfilename)), true, 301);
 	exit();
 
 } else {
-	echo "\n<p>Image: <img src=\"" . FULLWEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode($newfilename) ."\" /></p>";
+	echo "\n<p>Image: <img src=\"" . FULLWEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($newfilename)) ."\" /></p>";
 
 }
 

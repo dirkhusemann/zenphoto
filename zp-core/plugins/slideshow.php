@@ -203,10 +203,10 @@ function printSlideShow($heading = true, $speedctl = false) {
 			for ($cntr = 0, $idx = $imagenumber; $cntr < $numberofimages; $cntr++, $idx++) {
 				if ($dynamic) {
 					$filename = $images[$idx]['filename'];
-					$image = new Image(new Album($gallery, $images[$idx]['folder']), $filename);
+					$image = newImage(new Album($gallery, $images[$idx]['folder']), $filename);
 				} else {
 					$filename = $images[$idx];
-					$image = new Image($album, $filename);
+					$image = newImage($album, $filename);
 				}
 				$ext = strtolower(strrchr($filename, "."));
 
@@ -329,13 +329,13 @@ if ($speedctl) {
 				$folder = $images[$idx]['folder'];
 				$dalbum = new Album($gallery, $folder);
 				$filename = $images[$idx]['filename'];
-				$image = new Image($dalbum, $filename);
+				$image = newImage($dalbum, $filename);
 				$imagepath = FULLWEBPATH.getAlbumFolder('').pathurlencode($folder)."/".urlencode($filename);
 			} else {
 				$folder = $album->name;
 				$filename = $images[$idx];
 				//$filename = $animage;
-				$image = new Image($album, $filename);
+				$image = newImage($album, $filename);
 				$imagepath = FULLWEBPATH.getAlbumFolder('').pathurlencode($folder)."/".urlencode($filename);
 
 			}
@@ -407,12 +407,12 @@ $("#slideshow").flashembed({
 			if ($dynamic) {
 				$folder = $animage['folder'];
 				$filename = $animage['filename'];
-				$image = new Image($dalbum, $filename);
+				$image = newImage($dalbum, $filename);
 				$imagepath = FULLWEBPATH.getAlbumFolder('').pathurlencode($salbum->name)."/".urlencode($filename);
 			} else {
 				$folder = $album->name;
 				$filename = $animage;
-				$image = new Image($album, $filename);
+				$image = newImage($album, $filename);
 				$imagepath = FULLWEBPATH.getAlbumFolder('').pathurlencode($folder)."/".pathurlencode($filename);
 			}
 		$count++;
