@@ -79,8 +79,9 @@ class flvplayer {
 	 *
 	 * @param string $moviepath the direct path of a movie (within the slideshow), if empty (within albums) the zenphoto function getUnprotectedImageURL() is used
 	 * @param string $imagetitle the title of the movie to be passed to the player for display (within slideshow), if empty (within albums) the function getImageTitle() is used
+	 * @param string $count unique text for when there are multiple player items on a page
 	 */
-	function playerConfig($moviepath='',$imagetitle='',$count ='') {
+	function getPlayerConfig($moviepath='',$imagetitle='',$count ='') {
 		global $_zp_current_image, $_zp_current_album;
 		if(empty($moviepath)) {
 			$moviepath = getUnprotectedImageURL();
@@ -108,15 +109,16 @@ class flvplayer {
 				$videoThumb = getAlbumFolder(WEBPATH).$albumfolder.'/'.$videoThumb;
 			}
 		}
-		echo '<p id="player'.$count.'"><a href="http://www.macromedia.com/go/getflashplayer">'.gettext("Get Flash").'</a> to see this player.</p>
+		$output = '';
+		$output .= '<p id="player'.$count.'"><a href="http://www.macromedia.com/go/getflashplayer">'.gettext("Get Flash").'</a> to see this player.</p>
 			<script type="text/javascript">';
 		if($ext === ".mp3" AND !isset($videoThumb)) {
-			echo'	var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/plugins/flvplayer/'.getOption("flv_player_version").'.swf","player'.$count.'","'.getOption('flv_player_width').'","'.FLV_PLAYER_MP3_HEIGHT.'","7");';
+			$output .= '	var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/plugins/flvplayer/'.getOption("flv_player_version").'.swf","player'.$count.'","'.getOption('flv_player_width').'","'.FLV_PLAYER_MP3_HEIGHT.'","7");';
 		} else {
-			echo'	var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/plugins/flvplayer/'.getOption("flv_player_version").'.swf","player'.$count.'","'.getOption('flv_player_width').'","'.getOption('flv_player_height').'","7");';
-			echo 'so.addVariable("displayheight","'.getOption('flv_player_displayheight').'");';
+			$output .= '	var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/plugins/flvplayer/'.getOption("flv_player_version").'.swf","player'.$count.'","'.getOption('flv_player_width').'","'.getOption('flv_player_height').'","7");';
+			$output .=  'so.addVariable("displayheight","'.getOption('flv_player_displayheight').'");';
 		}
-			echo 'so.addParam("allowfullscreen","true");
+		$output .= 'so.addParam("allowfullscreen","true");
 			so.addVariable("file","' . $moviepath . '&amp;title=' . strip_tags($imagetitle) . '");
 			' . (!empty($videoThumb) ? 'so.addVariable("image","' . $videoThumb . '")' : '') . '
 			so.addVariable("backcolor","'.getOption('flv_player_backcolor').'");
@@ -129,6 +131,18 @@ class flvplayer {
 			so.addVariable("controlbar","'.getOption('flv_player_controlbar').'");
 			so.write("player'.$count.'");
 			</script>';
+		return $output;
+	}
+	
+	/**
+	 * outputs the player configuration HTML
+	 *
+	 * @param string $moviepath the direct path of a movie (within the slideshow), if empty (within albums) the zenphoto function getUnprotectedImageURL() is used
+	 * @param string $imagetitle the title of the movie to be passed to the player for display (within slideshow), if empty (within albums) the function getImageTitle() is used
+	 * @param string $count unique text for when there are multiple player items on a page
+	 */
+	function printPlayerConfig($moviepath='',$imagetitle='',$count ='') {
+		echo $this->getPlayerConfig($moviepath='',$imagetitle='',$count ='');
 	}
 
 	/**

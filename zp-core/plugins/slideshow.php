@@ -347,7 +347,7 @@ if ($speedctl) {
 				if (is_null($_zp_flash_player)) {
 					echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='".gettext("No flash player installed.")."' />";
 				} else {
-					$_zp_flash_player->playerConfig($imagepath,html_encode($image->getTitle()),$count);
+					$_zp_flash_player->printPlayerConfig($imagepath,html_encode($image->getTitle()),$count);
 				}
 			}
 			elseif ($ext == ".3gp") {

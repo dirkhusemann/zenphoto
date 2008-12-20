@@ -2134,44 +2134,8 @@ function getDefaultSizedImage() {
  * @param string $id Optional style id
  */
 function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
-	global $_zp_flash_player, $_zp_current_image;
-	if(isImageVideo()) { //Print videos`
-		$w = $_zp_current_image->getWidth();
-		$h = $_zp_current_image->getHeight();
-		$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
-		if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
-			//Player Embed...
-			if (is_null($_zp_flash_player)) {
-				echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='No flash player installed.' />";
-			} else {
-				$_zp_flash_player->playerConfig('',$_zp_current_image->getTitle());
-			}
-		}
-		elseif ($ext == ".3gp") {
-			echo '</a>
-			<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="'.
-				$w.'" height="'.$h.
-				'" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
-				<param name="src" value="' . getUnprotectedImageURL() . '"/>
-				<param name="autoplay" value="false" />
-				<param name="type" value="video/quicktime" />
-				<param name="controller" value="true" />
-				<embed src="' . getUnprotectedImageURL() . '" width="'.$w.'" height="'.$h.'" autoplay="false" controller"true" type="video/quicktime"
-					pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
-					</object><a>';
-		}
-		elseif ($ext == ".mov") {
-			echo '</a>
-		 		<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="'.$w.'" height="'.$h.'" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
-			 	<param name="src" value="' . getUnprotectedImageURL() . '"/>
-			 	<param name="autoplay" value="false" />
-			 	<param name="type" value="video/quicktime" />
-			 	<param name="controller" value="true" />
-			 	<embed src="' . getUnprotectedImageURL() . '" width="'.$w.'" height="'.$h.'" autoplay="false" controller"true" type="video/quicktime"
-			 		pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
-				</object><a>';
-		}
-	} else if (isImagePhoto()) { //Print images
+	global $_zp_current_image;
+	 if (isImagePhoto()) { //Print images
 		echo '<img src="' . htmlspecialchars(getDefaultSizedImage()) . '" alt="' . html_encode($alt) . '"' .
 			' title="' . html_encode($alt) . '"'.
 			' width="' . getDefaultWidth() . '" height="' . getDefaultHeight() . '"' .
@@ -2355,58 +2319,15 @@ function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph
 
  * */
 function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $class=NULL, $id=NULL, $thumbStandin=false) {
-	global $_zp_current_album, $_zp_current_image, $_zp_flash_player;
-	if (!is_object($_zp_current_image)) return;
-	$album = $_zp_current_image->getAlbum();
-	if (!$album->getShow()) {
-		$class .= " not_visible";
-	} else {
-		$pwd = $album->getPassword();
-		if (zp_loggedin() && !empty($pwd)) {
-			$class .= " password_protected";
-		}
-	}
-	$class = trim($class);
-	//Print videos
-	if(isImageVideo() && !($thumbStandin & 1)) {
-		$ext = strtolower(strrchr(getUnprotectedImageURL(), "."));
-		if ($ext == ".flv") {
-			//Player Embed...
-			if (is_null($_zp_flash_player)) {
-				echo "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='No flash player installed.' />";
-			} else {
-				$_zp_flash_player->playerConfig('', $_zp_current_image->getTitle());
-			}
-		}
-		elseif ($ext == ".3gp") {
-			echo '</a>
-			<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="352" height="304" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
-				<param name="src" value="' . getUnprotectedImageURL() . '"/>
-				<param name="autoplay" value="false" />
-				<param name="type" value="video/quicktime" />
-				<param name="controller" value="true" />
-				<embed src="' . getUnprotectedImageURL() . '" width="352" height="304" autoplay="false" controller"true" type="video/quicktime"
-					pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
-					</object><a>';
-		}	elseif ($ext == ".mov") {
-			echo '</a>
-		 		<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="640" height="496" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
-			 	<param name="src" value="' . getUnprotectedImageURL() . '"/>
-			 	<param name="autoplay" value="false" />
-			 	<param name="type" value="video/quicktime" />
-			 	<param name="controller" value="true" />
-			 	<embed src="' . getUnprotectedImageURL() . '" width="640" height="496" autoplay="false" controller"true" type="video/quicktime"
-			 		pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
-				</object><a>';
-		}
-	}
-	//Print images
-	else {
+	global $_zp_current_image;
+	if (isImagePhoto() || !($thumbStandin & 1)) {
 		echo '<img src="' . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin)) . '"' .
 			' alt="' . html_encode($alt) . '"' .
 			' title="' . html_encode($alt) . '"' .
 			(($class) ? ' class="'.$class.'"' : '') .
 			(($id) ? ' id="'.$id.'"' : '') . ' />';
+	} else { // better be a plugin
+		echo $_zp_current_image->getBody();
 	}
 }
 

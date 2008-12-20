@@ -49,6 +49,7 @@ $rimage = UTF8ToFileSystem($rimage);
 $album = str_replace('..','', sanitize_path($ralbum));
 $image = str_replace(array('/',"\\"),'', sanitize_path($rimage));
 $theme = themeSetup($album); // loads the theme based image options.
+$adminrequest = isset($_GET['admin']);
 
 // Disallow abusive size requests.
 if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
@@ -103,14 +104,13 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
 	} else {
 		$args[] = NULL;
 	}
-	if (isset($_GET['wmv'])) {
+	if (isset($_GET['wmv']) && !$adminrequest) {
 		$args[] = $_GET['wmv'];
 	} else {
 		$args[] = NULL;
 	}
 	$args = getImageParameters($args);
 	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
-	$adminrequest = isset($_GET['admin']);
 	$allowWatermark = !$thumb && !$adminrequest;
 	
   if ($debug) imageDebug($album, $image, $args);

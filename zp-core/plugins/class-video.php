@@ -23,7 +23,6 @@ define('DEFAULT_MOV_WIDTH', 640);
 define('DEFAULT_3GP_HEIGHT', 304);
 define('DEFAULT_3GP_WIDTH', 352);
 
-
 class Video extends _Image {
 
 	/**
@@ -126,7 +125,11 @@ class Video extends _Image {
 			return WEBPATH . "/" . $path;
 		} else {
 			$filename = $this->objectsThumb;
-			$wmv = '&wmv='.getOption('perform_video_watermark');
+			if (getOption('perform_video_watermark')) {
+				$wmv = '&wmv='.getOption('video_watermark_image');
+			} else {
+				$wmv = '';
+			}
 			$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename, getImageParameters(array('thumb')));
 			if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
 				return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($cachefilename));
@@ -171,7 +174,11 @@ class Video extends _Image {
 				. "&t=true";
 			} else {
 				$filename = $this->objectsThumb;
-				$wmv = '&wmv='.getOption('perform_video_watermark');
+				if (getOption('perform_video_watermark')) {
+					$wmv = '&wmv='.getOption('video_watermark_image');
+				} else {
+					$wmv = '';
+				}
 				$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename,
 				getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy)));
 				if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
@@ -198,6 +205,48 @@ class Video extends _Image {
 				. ($cropx ? "&cx=$cropx" : "") . ($cropy ? "&cy=$cropy" : "");
 			}
 		}
+	}
+	
+	function getBody() {
+		global $_zp_flash_player;
+		$w = $this->getWidth();
+		$h = $this->getHeight();
+		$ext = strtolower(strrchr($this->getFullImage(), "."));
+		switch ($ext) {
+			case '.flv':
+			case '.mp3':
+			case '.mp4':
+				if (is_null($_zp_flash_player)) {
+					return  "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='No flash player installed.' />";
+				} else {
+					return $_zp_flash_player->getPlayerConfig('',$this->getTitle());
+				}
+				break;
+			case '.3gp':
+				return '</a>
+				<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="'.
+					$w.'" height="'.$h.
+					'" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
+					<param name="src" value="' . $this->getFullImage() . '"/>
+					<param name="autoplay" value="false" />
+					<param name="type" value="video/quicktime" />
+					<param name="controller" value="true" />
+					<embed src="' . $this->getFullImage() . '" width="'.$w.'" height="'.$h.'" autoplay="false" controller"true" type="video/quicktime"
+						pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
+						</object><a>';
+				break;
+			case '.mov':
+				return '</a>
+			 		<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="'.$w.'" height="'.$h.'" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
+				 	<param name="src" value="' . $this->getFullImage() . '"/>
+				 	<param name="autoplay" value="false" />
+				 	<param name="type" value="video/quicktime" />
+				 	<param name="controller" value="true" />
+				 	<embed src="' . $this->getFullImage() . '" width="'.$w.'" height="'.$h.'" autoplay="false" controller"true" type="video/quicktime"
+				 		pluginspage="http://www.apple.com/quicktime/download/" cache="true"></embed>
+					</object><a>';
+				break;
+		}		
 	}
 
 }

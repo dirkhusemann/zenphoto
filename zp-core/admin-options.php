@@ -1136,18 +1136,26 @@ if ($subtab == 'admin') {
 			           gettext("It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark.").' '.
 			           gettext("If <em>allow upscale</em> is not checked the watermark will not be made larger than the original watermark image."); ?></td>
 		</tr>
+		<?php
+		if (getOption('zp_plugin_class-video')) {
+			$disableOption = '';
+		} else {
+			$disableOption = ' DISABLED';
+		}
+		?>
 		<tr>
-			<td><?php echo gettext("Watermark video thumbs:"); ?></td>
+			<td><?php echo gettext("Watermark thumbnails:"); ?></td>
 			<td><?php
 			$v = str_replace('.png', "", basename(getOption('video_watermark_image')));
 			echo "<select id=\"videowatermarkimage\" name=\"video_watermark_image\">\n";
 			generateListFromFiles($v, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png');
 			echo "</select>\n";
 			?> <input type="checkbox" name="perform_video_watermark" value="1"
-			<?php echo checked('1', getOption('perform_video_watermark')); ?> />&nbsp;<?php echo gettext("Enabled"); ?>
+			<?php echo checked('1', getOption('perform_video_watermark')); echo $disableOption; ?> />&nbsp;<?php echo gettext("Enabled"); ?>
 			</td>
-			<td><?php echo gettext("The watermark image (png-24) that will be overlayed on the video thumbnail (if one exists).").' ('.sprintf(gettext('Place the image in the %s/watermarks/ folder'), ZENFOLDER).')'; ?> </td>
+			<td><?php echo gettext("The watermark image (png-24) that will be overlayed on the alternate thumbnail, if one exists (such as videos for which there is an image of the same base name in the album).").'<br />'.sprintf(gettext('Images are located in the <code>%s/watermarks/</code> folder.'), ZENFOLDER); ?> </td>
 		</tr>
+		
 		<tr>
 			<td><?php echo gettext("Full image quality:"); ?></td>
 			<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="full_image_quality"
@@ -1520,7 +1528,10 @@ if ($subtab == 'admin') {
 		<?php
 		foreach (getEnabledPlugins() as $extension) {
 			$ext = substr($extension, 0, strlen($extension)-4);
-			$option_interface = null;
+			$option_interface = NULL;
+			if (array_key_exists($extension, $class_optionInterface)) {
+				$option_interface = $class_optionInterface[$extension];
+			}
 			require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
 			if (!is_null($option_interface)) {
 				$c++;

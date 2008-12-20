@@ -18,9 +18,14 @@ require_once(dirname(__FILE__).'/functions.php');
 require_once(dirname(__FILE__).'/lib-seo.php'); // keep the function separate for easy modification by site admins
 
 // load the class plugins
+$class_optionInterface = array();
 foreach (getEnabledPlugins() as $extension) {
 	if (strpos($extension, 'class-') !== false) {
+		$option_interface = NULL;
 		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
+		if (!is_null($option_interface)) {
+			$class_optionInterface[$extension] = $option_interface;
+		}
 	}
 }
 

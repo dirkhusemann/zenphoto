@@ -64,7 +64,7 @@ class flowplayer {
 	 * @param string $moviepath the direct path of a movie (within the slideshow), if empty (within albums) the zenphoto function getUnprotectedImageURL() is used
 	 * @param string $imagetitle the title of the movie [not used by flowplayer]
 	 * 	 */
-	function playerConfig($moviepath='', $imagetitle,$count='') {
+	function getPlayerConfig($moviepath='', $imagetitle,$count='') {
 		global $_zp_current_image;
 		if(empty($moviepath)) {
 			$moviepath = getUnprotectedImageURL();
@@ -81,7 +81,7 @@ class flowplayer {
 			$autoplay = ""; // actually false should work, but it doesn't...
 		}
 		if($ext === ".mp3") {
-			echo '
+			return '
 			<p id="playerContainer'.$count.'"><a href="http://www.adobe.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
 			<script>
 			$("#playerContainer'.$count.'").flashembed({
@@ -102,7 +102,7 @@ class flowplayer {
   		);
 			</script>';
 		} else { 
-			echo '
+			return '
 			<p id="playerContainer'.$count.'"><a href="http://www.adobe.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
 			<script>
 			$("#playerContainer'.$count.'").flashembed({
@@ -126,6 +126,17 @@ class flowplayer {
 		 }
 	}
 	
+	/**
+	 * outputs the player configuration HTML
+	 *
+	 * @param string $moviepath the direct path of a movie (within the slideshow), if empty (within albums) the zenphoto function getUnprotectedImageURL() is used
+	 * @param string $imagetitle the title of the movie to be passed to the player for display (within slideshow), if empty (within albums) the function getImageTitle() is used
+	 * @param string $count unique text for when there are multiple player items on a page
+	 */
+	function printPlayerConfig($moviepath='',$imagetitle='',$count ='') {
+		echo $this->getPlayerConfig($moviepath='',$imagetitle='',$count ='');
+	}
+
 	/**
 	 * Returns the height of the player
 	 * @param object $image the image for which the width is requested

@@ -313,7 +313,7 @@ function propSizes($size, $width, $height, $w, $h, $thumb, $image_use_side, $dim
  * @param string $theme the current theme
  */
 function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $force_cache=false, $theme) {
-	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $videoWM) = $args;
+	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM) = $args;
 	// Set the config variables for convenience.
 	$image_use_side = getOption('image_use_side');
 	$upscale = getOption('image_allow_upscale');
@@ -492,10 +492,10 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			unsharp_mask($newim, 40, 0.5, 3);
 		}
 		$perform_watermark = false;
-		if ($videoWM) {
+		if ($thumbWM) {
 			if ($thumb || !$allow_watermark) {
 				$perform_watermark = true;
-				$watermark_image = UTF8ToFileSystem(getOption('video_watermark_image'));
+				$watermark_image = UTF8ToFileSystem($thumbWM);
 				if (!file_exists($watermark_image)) $watermark_image = SERVERPATH . '/' . ZENFOLDER . '/images/imageDefault.png';
 			}
 		} else {
