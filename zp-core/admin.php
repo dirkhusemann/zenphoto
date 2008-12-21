@@ -144,9 +144,10 @@ if (!empty($msg)) {
 }
 ?>
 
-<div id="overview-stats">
-<h2><?php echo gettext("Gallery Stats"); ?></h2>
-<p>
+<div class="box" id="overview-comments">
+<h2 class="h2_bordered"><?php echo gettext("Gallery Stats"); ?></h2>
+<ul>
+<li>
 <?php
 $t = $gallery->getNumImages();
 $c = $t-$gallery->getNumImages(true);
@@ -156,8 +157,8 @@ if ($c > 0) {
 	printf(gettext('<strong>%u</strong> images'),$t);
 }
 ?>
-</p>
-<p>
+</li>
+<li>
 <?php
 $t = $gallery->getNumAlbums(true);
 $c = $t-$gallery->getNumAlbums(true,true);
@@ -167,9 +168,9 @@ if ($c > 0) {
 	printf(gettext('<strong>%u</strong> albums'),$t);
 }
 ?>
-</p>
+</li>
 
-<p>
+<li>
 <?php $t = $gallery->getNumComments(true);
 $c = $t - $gallery->getNumComments(false);
 if ($c > 0) {
@@ -186,7 +187,7 @@ if ($c > 0) {
 	}
 }
 ?>
-</p>
+</li></ul>
 </div>
 <br clear="all" />
 <?php
@@ -205,7 +206,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'check_for_update') {
 ?>
 <hr />
 <div class="box" id="overview-comments">
-<h2><?php echo gettext("10 Most Recent Comments"); ?></h2>
+<h2 class="h2_bordered"><?php echo gettext("10 Most Recent Comments"); ?></h2>
 <ul>
 	<?php
 $comments = fetchComments(10);
@@ -361,7 +362,7 @@ $buttonlist[gettext("Reset hitcounters")] = array(
 							);
 ?>
 <div class="box" id="overview-maint">
-<h2 class="boxtitle"><?php echo gettext("Utility functions"); ?></h2>
+<h2 class="h2_bordered"><?php echo gettext("Utility functions"); ?></h2>
 <?php
 $curdir = getcwd();
 chdir(SERVERPATH . "/" . ZENFOLDER . UTILITIES_FOLDER);
@@ -428,7 +429,7 @@ $count = round($count/2);
 	?>
 	</div>
 </div>
-
+<br clear="all" />
 </div><!-- content -->
 <?php
 printAdminFooter();

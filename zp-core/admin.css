@@ -104,6 +104,13 @@ h2 {
 	margin: 0px 0px 5px 0px;
 }
 
+h2.h2_bordered {
+	font-weight: bold;
+	padding: 4px 12px;
+	border-bottom: 2px solid #BAC9CF; 
+	background: #ECF1F2;
+	}
+
 /* edit page subheadlines like "images" or "albums" */
 .subheadline {
 	color: #000;
@@ -434,6 +441,7 @@ table.checkboxes td {
 }
 
 .box {
+	padding: 0;
 	background: #F7F8F9;
 	border: 1px solid #BAC9CF;
 	border-bottom-width: 5px;
@@ -506,14 +514,14 @@ input.tags {
 #overview-maint {
 	float:left;
 	width: 480px;
-	margin: 0 0 10px 10px;
-	padding: 10px;
+	margin: 0 0 10px 25px;
+	padding: 0px;
 }
 #overview-maint_l {
 	float:left;
 	width: 50%;
-	margin-left:0px;
-	margin-right:5px;
+	margin-left:10px;
+	margin-right:0px;
 }
 #overview-maint_r {
 	float:left;
@@ -526,12 +534,12 @@ input.tags {
 	float:left;
 	width: 40%;
 	margin: 0 0 10px 10px;
-	padding: 10px;
+	padding: 0px;
 }
 
 #overview-comments ul {
 	list-style-type: none;
-	padding: 0px;
+	padding: 10px;
 }
 
 #overview-comments ul li {
