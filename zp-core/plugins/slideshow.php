@@ -16,13 +16,13 @@
  * NOTE: The jQuery mode does not support movie and audio files anymore. If you need to show them please use the Flash mode.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)
- * @version 1.0.6.4
+ * @version 1.0.6.5
  * @package plugins
  */
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)";
-$plugin_version = '1.0.6.4';
+$plugin_version = '1.0.6.5';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
 
@@ -101,7 +101,11 @@ function printSlideShowLink($linktext='') {
 			$imagenumber = "";
 			$imagefile = "";
 		}
-		$albumnr = getAlbumID();
+		if (in_context(ZP_SEARCH_LINKED)) {
+			$albumnr = -getAlbumID();
+		} else {
+			$albumnr = getAlbumID();
+		}
 		$slideshowlink = rewrite_path(pathurlencode($_zp_current_album->getFolder())."/page/slideshow","index.php?p=slideshow&amp;album=".urlencode($_zp_current_album->getFolder()));
 	}
 	$numberofimages = getNumImages();
@@ -159,7 +163,7 @@ function printSlideShow($heading = true, $speedctl = false) {
 	// get slideshow data
 
 	$gallery = new Gallery();
-	if ($albumid == 0) { // search page
+	if ($albumid <= 0) { // search page
 		$dynamic = 2;
 		$search = new SearchEngine();
 		$params = trim(zp_getCookie('zenphoto_image_search_params'));
@@ -169,7 +173,13 @@ function printSlideShow($heading = true, $speedctl = false) {
 		$searchdate = $search->dates;
 		$searchfields = $search->fields;
 		$page = $search->page;
-		$returnpath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
+		if (empty($_POST['imagenumber'])) {
+			$albumq = query_single_row("SELECT title, folder FROM ". prefix('albums') ." WHERE id = ".abs($albumid));
+			$album = new Album($gallery, $albumq['folder']);
+			$returnpath = rewrite_path('/'.pathurlencode($album->name).'/page/'.$_POST['pagenr'],'/index.php?album='.urlencode($album->name).'&page='.$_POST['pagenr']);
+		} else {
+			$returnpath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
+		}
 		$albumtitle = gettext('Search');
 	} else {
 		$albumq = query_single_row("SELECT title, folder FROM ". prefix('albums') ." WHERE id = ".$albumid);
