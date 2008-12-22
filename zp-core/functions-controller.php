@@ -198,7 +198,7 @@ function zp_handle_comment() {
 				$activeImage = zp_load_image_from_id(strip_tags($_POST['imageid']));
 				if ($activeImage !== false) {
 					$commentadded = $activeImage->addComment($p_name, $p_email,	$p_website, $p_comment,
-					$code1, $code2,	$p_server, $p_private, $p_anon);
+																							$code1, $code2,	$p_server, $p_private, $p_anon);
 	 				$redirectTo = $activeImage->getImageLink();
 					}
 			} else {

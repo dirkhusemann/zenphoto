@@ -15,6 +15,8 @@ if(!function_exists("gettext")) {
 	require_once(dirname(__FILE__).'/lib-gettext/gettext.inc');
 }
 
+require_once(dirname(__FILE__).'/lib-captcha.php');
+
 // allow reading of old Option tables--should be needed only during upgrade
 $result = query_full_array("SHOW COLUMNS FROM ".prefix('options').' LIKE "%ownerid%"', true);
 if (is_array($result)) {
@@ -925,13 +927,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	if (getOption('comment_name_required') && empty($name)) { return -3; }
 	if (getOption('comment_web_required') && (empty($website) || !isValidURL($website))) { return -4; }
 	if (getOption('Use_Captcha')) {
-		$code_cypher = md5(bin2hex(rc4($key, trim($code))));
-		$code_ok = trim($code_ok);
-		if ($code_cypher != $code_ok || strlen($code) != CAPTCHA_LENGTH) { return -5; }
-		query('DELETE FROM '.prefix('captcha').' WHERE `ptime`<'.(time()-3600)); // expired tickets
-		$result = query('DELETE FROM '.prefix('captcha').' WHERE `hash`="'.$code_cypher.'"');
-		$count = mysql_affected_rows();
-		if ($count != 1) { return -5; } // no ticket
+		if (!checkCaptcha($code, $code_ok)) return -5;
 	}
 	if (empty($comment)) {
 		return -6;
@@ -1488,35 +1484,6 @@ function is_valid_other_type($filename) {
 	} else {
 		return false;
 	}
-}
-
-/**
- * generates a simple captcha for comments
- *
- * Thanks to gregb34 who posted the original code
- *
- * Returns the captcha code string and image URL (via the $image parameter).
- *
- * @return string;
- */
-function generateCaptcha(&$image) {
-
-	$lettre='abcdefghijkmnpqrstuvwxyz23456789';
-
-	$string = '';
-	for ($i=0; $i < CAPTCHA_LENGTH; $i++) {
-		$string .= $lettre[rand(0,31)];
-	}
-	$admins = getAdministrators();
-	$admin = array_shift($admins);
-	$key = $admin['pass'];
-	$cypher = bin2hex(rc4($key, $string));
-	$code=md5($cypher);
-	query('DELETE FROM '.prefix('captcha').' WHERE `ptime`<'.(time()-3600), true);  // expired tickets
-	query("INSERT INTO " . prefix('captcha') . " (ptime, hash) VALUES ('" . escape(time()) . "','" . escape($code) . "')", true);
-	$image = WEBPATH . '/' . ZENFOLDER . "/c.php?i=$cypher";
-
-	return $code;
 }
 
 // multidimensional array column sort - source: http://codingforums.com/showthread.php?t=71904

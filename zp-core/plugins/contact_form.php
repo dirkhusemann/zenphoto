@@ -151,16 +151,9 @@ function printContactForm() {
 				
 		// captcha start
 		if(getOption("contactform_captcha")) {
-			$admins = getAdministrators();
-			$admin = array_shift($admins);
-			$key = $admin['pass'];
-			$code_cypher = md5(implode('', unpack("H*", rc4($key, trim($_POST['code'])))));
 			$code_ok = trim($_POST['code_h']);
-			if ($code_cypher != $code_ok || strlen($_POST['code']) != CAPTCHA_LENGTH) { $error[5] = gettext("<strong>the correct captcha verification code</strong>"); }
-			query('DELETE FROM '.prefix('captcha').' WHERE `ptime`<'.(time()-3600)); // expired tickets
-			$result = query('DELETE FROM '.prefix('captcha').' WHERE `hash`="'.$code_cypher.'"');
-			$count = mysql_affected_rows();
-			if ($count != 1) { $error[5] = gettext("<strong>the correct captcha verification code</strong>"); } // no ticket
+			$code = trim($_POST['code']);
+			if (!checkCaptcha($code, $code_ok)) { $error[5] = gettext("<strong>the correct captcha verification code</strong>"); } // no ticket
 		} 
 		// captcha end
 		
