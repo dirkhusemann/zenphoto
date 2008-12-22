@@ -491,21 +491,22 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		if (($thumb && $sharpenthumbs) || (!$thumb && $sharpenimages)) {
 			unsharp_mask($newim, 40, 0.5, 3);
 		}
-		$perform_watermark = false;
+		$watermark_image = false;
 		if ($thumbWM) {
 			if ($thumb || !$allow_watermark) {
-				$perform_watermark = true;
-				$watermark_image = UTF8ToFileSystem($thumbWM);
+				$watermark_image = SERVERPATH . '/' . ZENFOLDER . '/watermarks/' . UTF8ToFileSystem($thumbWM).'.png';
 				if (!file_exists($watermark_image)) $watermark_image = SERVERPATH . '/' . ZENFOLDER . '/images/imageDefault.png';
 			}
 		} else {
 			if ($allow_watermark) {
-				$perform_watermark = getOption('perform_watermark');
-				$watermark_image = SERVERPATH . '/' . ZENFOLDER . '/' . UTF8ToFileSystem(getOption('watermark_image'));
-				if (!file_exists($watermark_image)) $watermark_image = SERVERPATH . '/' . ZENFOLDER . '/images/imageDefault.png';
+				$watermark_image = getOption('fullimage_watermark');
+				if ($watermark_image) {
+					$watermark_image = SERVERPATH . '/' . ZENFOLDER . '/watermarks/' . UTF8ToFileSystem($watermark_image).'.png';
+					if (!file_exists($watermark_image)) $watermark_image = SERVERPATH . '/' . ZENFOLDER . '/images/imageDefault.png';
+				}
 			}
 		}
-		if ($perform_watermark) {
+		if ($watermark_image) {
 			$offset_h = getOption('watermark_h_offset') / 100;
 			$offset_w = getOption('watermark_w_offset') / 100;
 			$watermark = imagecreatefrompng($watermark_image);

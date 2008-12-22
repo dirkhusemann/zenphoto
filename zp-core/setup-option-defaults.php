@@ -88,17 +88,21 @@ function setDefault($option, $default) {
 	setOptionDefault('search_hint', NULL);
 	setOptionDefault('gmaps_apikey', "");
 	setOptionDefault('album_session', 0);
-	setOptionDefault('perform_watermark', 0);
+	
+	if (getOption('perform_watermark')) {
+		$v = str_replace('.png', "", basename(getOption('watermark_image')));
+		setoptionDefault('fullimage_watermark', $v);
+	}
+	
 	setOptionDefault('watermark_h_offset', 90);
 	setOptionDefault('watermark_w_offset', 90);
-	setOptionDefault('watermark_image', "watermarks/watermark.png");
 	setOptionDefault('watermark_scale', 5);
 	setOptionDefault('watermark_allow_upscale', 1);
 	setOptionDefault('perform_video_watermark', 0);
-	setOptionDefault('video_watermark_image', "watermarks/watermark-video.png");
 	
 	if (getOption('perform_video_watermark')) {
-		setoptionDefault('Video_watermark', getOption('video_watermark_image'));
+		$v = str_replace('.png', "", basename(getOption('video_watermark_image')));
+		setoptionDefault('Video_watermark', $v);
 	}
 	
 	setOptionDefault('spam_filter', 'none');

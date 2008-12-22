@@ -37,8 +37,7 @@ if (isset($_GET['action'])) {
 		exit();
 	} else if ($action == 'saveoptions') {
 		$table = NULL;
-		$wm = getOption('watermark_image');
-		$wmo = getOption('perform_watermark');
+
 		$woh = getOption('watermark_h_offset');
 		$wow = getOption('watermark_w_offset');
 		$ws = getOption('watermark_scale');
@@ -240,26 +239,32 @@ if (isset($_GET['action'])) {
 			setBoolOption('image_allow_upscale', isset($_POST['image_allow_upscale']));
 			setBoolOption('thumb_sharpen', isset($_POST['thumb_sharpen']));
 			setBoolOption('image_sharpen', isset($_POST['image_sharpen']));
-			setBoolOption('perform_watermark', isset($_POST['perform_watermark']));
-			setOption('watermark_image', 'watermarks/' . sanitize($_POST['watermark_image'],3) . '.png');
+			
+			$wmchange = false;
+			$old = getOption('fullimage_watermark');
+			if (isset($_POST['fullimage_watermark'])) {
+				$new = sanitize($_POST['fullimage_watermark'], 3);
+				setOption('fullimage_watermark', $new);
+				$wmchange = $wmchange || $old != $new;
+			}
+			
 			setOption('watermark_scale', sanitize($_POST['watermark_scale']),3);
 			setBoolOption('watermark_allow_upscale', isset($_POST['watermark_allow_upscale']));
 			setOption('watermark_h_offset', sanitize($_POST['watermark_h_offset']),3);
 			setOption('watermark_w_offset', sanitize($_POST['watermark_w_offset']),3);
 			setBoolOption('perform_video_watermark', isset($_POST['perform_video_watermark']));
 			
-			$thumbwmchange = false;
 			$imageplugins = array_unique($_zp_extra_filetypes);
+			$imageplugins[] = 'Image';
 			foreach ($imageplugins as $plugin) {
 				$opt = $plugin.'_watermark';
 				$old = getOption($opt);
 				if (isset($_POST[$opt])) {
 					$new = sanitize($_POST[$opt], 3);
 					setOption($opt, $new);
-					$thumbwmchange = $thumbwmchange || $old != $new;
+					$wmchange = $wmchange || $old != $new;
 				}
 			}
-			
 			
 			setOption('full_image_quality', sanitize($_POST['full_image_quality']),3);
 			setBoolOption('cache_full_image', isset($_POST['cache_full_image']));
@@ -360,13 +365,11 @@ if (isset($_GET['action'])) {
 			}
 		}
 
-		if (($wmo != getOption('perform_watermark')) ||
-					($woh != getOption('watermark_h_offset')) ||
+		if (($woh != getOption('watermark_h_offset')) ||
 					($wow != getOption('watermark_w_offset'))  ||
-					($wm != getOption('watermark_image')) ||
 					($ws != getOption('watermark_scale')) ||
 					($wus != getOption('watermark_allow_upscale')) ||
-					$thumbwmchange) {
+					$wmchange) {
 			$gallery->clearCache(); // watermarks (or lack there of) are cached, need to start fresh if the options haave changed
 		}
 		if (empty($notify)) $notify = '?saved';
@@ -1119,14 +1122,15 @@ if ($subtab == 'admin') {
 		</tr>
 		<tr>
 			<td><?php echo gettext("Watermark images:"); ?></td>
-			<td><?php
-			$v = str_replace('.png', "", basename(getOption('watermark_image')));
-			echo "<select id=\"watermark_image\" name=\"watermark_image\">\n";
-			generateListFromFiles($v, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png');
-			echo "</select>\n";
-			?>
-			<input type="checkbox" name="perform_watermark" value="1"
-			<?php echo checked('1', getOption('perform_watermark')); ?> />&nbsp;<?php echo gettext("Enabled"); ?>
+			<td>
+				<?php
+				$current = getOption('fullimage_watermark');
+				echo gettext('watermark with');
+				?>
+				<select id="fullimage_watermark" name="fullimage_watermark">
+				<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?>>none</option>
+				<?php generateListFromFiles($current, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png'); ?>
+				</select>
 			<br />
 			<?php echo gettext('cover').' '; ?>
 			<input type="text" size="2" name="watermark_scale"
@@ -1140,15 +1144,23 @@ if ($subtab == 'admin') {
 			<input type="text" size="2" name="watermark_w_offset"
 				value="<?php echo htmlspecialchars(getOption('watermark_w_offset'));?>" /><?php /*xgettext:no-php-format*/ echo gettext("%"); ?>
 			</td>
-			<td><?php echo gettext("The watermark image (png-24).").sprintf(gettext('Place the image in the %s/watermarks/ folder.'),ZENFOLDER); ?>
-			<br />
-			<?php echo gettext("The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the	image.").' '.
-			           gettext("It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark.").' '.
-			           gettext("If <em>allow upscale</em> is not checked the watermark will not be made larger than the original watermark image."); ?></td>
+			<td>
+			<?php
+				echo gettext("The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the	image.").' '.
+									gettext("It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark.").' '.
+			          	gettext("If <em>allow upscale</em> is not checked the watermark will not be made larger than the original watermark image.");
+			?>
+			<br /><br />
+			<?php
+				printf(gettext('Images are in png-24 format and arelocated in the <code>%s/watermarks/</code> folder.'), ZENFOLDER);
+			?>
+			</td>
+												           
 		</tr>
 		<?php
 			$imageplugins = array_unique($_zp_extra_filetypes);
-			if (count($imageplugins) > 0) {
+			$imageplugins[] = 'Image';
+			ksort($imageplugins);
 		?>
 		<tr>
 			<td><?php echo gettext("Watermark thumbnails:"); ?></td>
@@ -1157,30 +1169,30 @@ if ($subtab == 'admin') {
 				<?php
 				foreach ($imageplugins as $plugin) {
 					$opt = $plugin.'_watermark';
-					$current = basename(getOption($opt));
-					$v = str_replace('.png', "", $current);
+					$current = getOption($opt);
 					?>
 					<tr>
 						<td><?php	echo "$plugin";	?></td>
 						<td>
 							<select id="<?php echo $opt; ?>" name="<?php echo $opt; ?>">
 							<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?>>none</option>
-							<?php
-							generateListFromFiles($v, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png');
-							?>
+							<?php generateListFromFiles($current, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png'); ?>
 							</select>
 						</td>
 					</tr>
 				<?php
-				}
+					}
 				?>
 				</table>
 			</td>
-			<td><?php echo gettext("The watermark image (png-24) that will be overlayed on the alternate thumbnail, if one exists.").'<br />'.sprintf(gettext('Images are located in the <code>%s/watermarks/</code> folder.'), ZENFOLDER); ?> </td>
+			<td>
+			<?php echo gettext("The watermark image that will be overlayed on the alternate thumbnail, if one exists."); ?> 
+			<br /><br />
+			<?php
+				printf(gettext('Images are in png-24 format and arelocated in the <code>%s/watermarks/</code> folder.'), ZENFOLDER);
+			?>
+			</td>
 		</tr>
-		<?php
-			}
-		?>
 		<tr>
 			<td><?php echo gettext("Full image quality:"); ?></td>
 			<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="full_image_quality"

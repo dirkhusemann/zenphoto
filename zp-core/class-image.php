@@ -708,11 +708,18 @@ class _Image extends PersistentObject {
 		if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
 			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($cachefilename));
 		} else {
+			if ($thumbStandin) {
+				$wmt = getOption('Image_watermark');
+			} else {
+				$wmt = '';
+			}
+			if ($wmt) $wmt = '&wmt='.$wmt;
 			return WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($this->filename)
 			. ($size ? "&s=$size" : "" ) . ($width ? "&w=$width" : "") . ($height ? "&h=$height" : "")
 			. ($cropw ? "&cw=$cropw" : "") . ($croph ? "&ch=$croph" : "")
 			. ($cropx ? "&cx=$cropx" : "") . ($cropy ? "&cy=$cropy" : "")
-			. (($thumbStandin & 1) ? "&t=true" : "") ;
+			. (($thumbStandin & 1) ? "&t=true" : "")
+			. $wmt ;
 		}
 	}
 
@@ -755,6 +762,8 @@ class _Image extends PersistentObject {
 			return $this->getCustomImage(NULL, $sw, $sh, $cw, $ch, $cx, $cy, true);
 		}
 		$filename = $this->filename;
+		$wmt = getOption('Image_watermark');
+		if ($wmt) $wmt = '&wmt='.$wmt;
 		$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename, getImageParameters(array('thumb')));
 		if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
 			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($cachefilename));
@@ -762,7 +771,7 @@ class _Image extends PersistentObject {
 			if (getOption('mod_rewrite') && !empty($alb)) {
 				$path = pathurlencode($alb) . '/'.$type.'/thumb/' . urlencode($filename);
 			} else {
-				$path = ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($filename) . '&s=thumb';
+				$path = ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($filename) . '&s=thumb'.$wmt;
 				if ($type !== 'image') $path .= '&'.$type.'=true';
 			}
 			if (substr($path, 0, 1) == "/") $path = substr($path, 1);
