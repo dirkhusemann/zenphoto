@@ -690,6 +690,26 @@ function getEnabledPlugins() {
 }
 
 /**
+ * Provides an error protected read of image EXIF/IPTC data
+ * (requires PHP version 5 to protect the read)
+ *
+ * @param string $path image path
+ * @return array
+ */
+function read_exif_data_protected($path) {
+	if (version_compare(PHP_VERSION, '5.0.0') === 1) {
+		eval('
+		try {
+			return read_exif_data_raw($path, false);
+		} catch (Exception $e) {
+			return array();
+		}');
+	} else {
+		return read_exif_data_raw($path, false);
+	}
+}
+
+/**
  * For internal use--fetches a single tag from IPTC data
  *
  * @param string $tag the metadata tag sought
@@ -757,7 +777,7 @@ function getImageMetadata($imageName) {
 	$result = array();
 	getimagesize($imageName, $imageInfo);
 	if (is_array($imageInfo)) {
-		$exifraw = read_exif_data_raw($imageName, false);
+		$exifraw = read_exif_data_protected($imageName);
 		if (isset($exifraw['SubIFD'])) {
 			$subIFD = $exifraw['SubIFD'];
 		} else {
