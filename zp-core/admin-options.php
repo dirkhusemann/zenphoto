@@ -42,6 +42,7 @@ if (isset($_GET['action'])) {
 		$wow = getOption('watermark_w_offset');
 		$ws = getOption('watermark_scale');
 		$wus = getOption('watermark_allow_upscale');
+		$wmchange = false;
 		$notify = '';
 		$returntab = '';
 
@@ -240,7 +241,6 @@ if (isset($_GET['action'])) {
 			setBoolOption('thumb_sharpen', isset($_POST['thumb_sharpen']));
 			setBoolOption('image_sharpen', isset($_POST['image_sharpen']));
 			
-			$wmchange = false;
 			$old = getOption('fullimage_watermark');
 			if (isset($_POST['fullimage_watermark'])) {
 				$new = sanitize($_POST['fullimage_watermark'], 3);
