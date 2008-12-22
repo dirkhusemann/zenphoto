@@ -16,25 +16,21 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---tag_sugg
 // register the scripts needed
 addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/plugins/tag_suggest/tag.js"></script>');
 addPluginScript('<link type="text/css" rel="stylesheet" href="' . WEBPATH . '/' . ZENFOLDER . '/plugins/tag_suggest/tag.css" />');
-
-if (isset($_zp_gallery_page) && $_zp_gallery_page !== 'image.php') { // nothing to do on an image or admin page.
-
-	$taglist = getAllTagsUnique();
-	$c = 0;
-	$list = '';
-	foreach ($taglist AS $tag) {
-		if ($c>0) $list .= ',';
-		$c++;
-		$list .= '"'.htmlspecialchars(htmlspecialchars_decode($tag), ENT_QUOTES).'"';
-	}
-	$js = '<script type="text/javascript">'.
-				'$(function () {'.
-					"$('#search_input').tagSuggest({".
-						'tags: ['.$list.']'.
-					'});'.
-				'});'.
-			'</script>';
-
-	addPluginScript($js);
+$taglist = getAllTagsUnique();
+$c = 0;
+$list = '';
+foreach ($taglist AS $tag) {
+	if ($c>0) $list .= ',';
+	$c++;
+	$list .= '"'.htmlspecialchars(htmlspecialchars_decode($tag), ENT_QUOTES).'"';
 }
+$js = '<script type="text/javascript">'.
+			'$(function () {'.
+				"$('#search_input').tagSuggest({".
+					'tags: ['.$list.']'.
+				'});'.
+			'});'.
+		'</script>';
+
+addPluginScript($js);
 ?>

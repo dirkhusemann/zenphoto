@@ -134,6 +134,7 @@
 
                     tagMatches.html(html);
                     suggestionsShow = !!(matches.length);
+										toggleSuggestions(suggestionsShow);				
                 } else {
                     hideSuggestions();
                 }
@@ -143,7 +144,14 @@
                 tagMatches.empty();
                 matches = [];
                 suggestionsShow = false;
+								toggleSuggestions(suggestionsShow);
             }
+			
+						// show or hide suggestions when applicable
+						function toggleSuggestions(display) {
+							var display = ( display ? 'inline' : 'none');
+							tagMatches.css('display', display );
+						}
 
             function setSelection() {
                 var v = tagsElm.val();
