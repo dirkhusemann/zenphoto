@@ -104,8 +104,8 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
 	} else {
 		$args[] = NULL;
 	}
-	if (isset($_GET['wmv']) && !$adminrequest) {
-		$args[] = $_GET['wmv'];
+	if (isset($_GET['wmt']) && !$adminrequest) {
+		$args[] = $_GET['wmt'];
 	} else {
 		$args[] = NULL;
 	}

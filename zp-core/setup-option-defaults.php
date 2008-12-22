@@ -96,6 +96,11 @@ function setDefault($option, $default) {
 	setOptionDefault('watermark_allow_upscale', 1);
 	setOptionDefault('perform_video_watermark', 0);
 	setOptionDefault('video_watermark_image', "watermarks/watermark-video.png");
+	
+	if (getOption('perform_video_watermark')) {
+		setoptionDefault('Video_watermark', getOption('video_watermark_image'));
+	}
+	
 	setOptionDefault('spam_filter', 'none');
 	setOptionDefault('email_new_comments', 1);
 	setOptionDefault('gallery_sorttype', 'ID');
