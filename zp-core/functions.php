@@ -454,6 +454,7 @@ function sortByMultilingual($dbresult, $field, $descending) {
  */
 function sortAlbumArray($parentalbum, $albums, $sortkey='`sort_order`', $recursed=false) {
 	global $_zp_gallery;
+	if (count($albums) == 0) return array();
 	$hidden = array();
 	if (is_null($parentalbum)) {
 		$albumid = ' IS NULL';
