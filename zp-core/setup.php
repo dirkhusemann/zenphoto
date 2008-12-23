@@ -1447,7 +1447,7 @@ if (file_exists("zp-config.php")) {
 					echo "<p>".gettext("You need to <a href=\"admin-options.php\">set your admin user and password</a>")."</p>";
 				}				
 			} else {
-				echo "<p>".gettext("You can now  <a href=\"../\">View your gallery</a> or <a href=\"admin.php\">administrate.</a>")."</p>";
+				echo "<p>".gettext("You can now  <a href=\"../\">View your gallery</a> or <a href=\"admin.php\">administer.</a>")."</p>";
 			}
 		}
 
