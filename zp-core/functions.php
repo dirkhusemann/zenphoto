@@ -15,7 +15,9 @@ if(!function_exists("gettext")) {
 	require_once(dirname(__FILE__).'/lib-gettext/gettext.inc');
 }
 
-require_once(dirname(__FILE__).'/lib-captcha.php');
+$captcha = getOption('captcha');
+if (empty($captcha)) 	$captcha = 'zenphoto';
+require_once(dirname(__FILE__). PLUGIN_FOLDER . 'captcha/'.$captcha.'.php');
 
 // allow reading of old Option tables--should be needed only during upgrade
 $result = query_full_array("SHOW COLUMNS FROM ".prefix('options').' LIKE "%ownerid%"', true);

@@ -230,6 +230,7 @@ if (isset($_GET['action'])) {
 			setOption('date_format', $f);
 			setBoolOption('UTF8_image_URI', isset($_POST['UTF8_image_URI']));
 			setBoolOption('thumb_select_images', isset($_POST['thumb_select_images']));
+			setOption('captcha', sanitize($_POST['captcha']));
 			$returntab = "&tab=gallery";
 		}
 
@@ -957,6 +958,15 @@ if ($subtab == 'admin') {
 				<?php generateListFromArray(array(getOption('charset')), array_flip($charsets), false, true) ?>
 			</select></td>
 			<td><?php echo gettext("The character encoding to use internally. Leave at <em>Unicode	(UTF-8)</em> if you're unsure."); ?></td>
+		</tr>
+		<tr>
+			<td><?php echo gettext('Captcha generator:'); ?></td>
+			<td>
+				<select id="captcha" name="captcha">
+				<?php generateListFromFiles(getOption('captcha'), SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . 'captcha', '.php'); ?>
+				</select>
+			</td>
+			<td><?php echo gettext('Select the <em>Captcha</em> generator to be used by Zenphoto.'); ?></td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Allowed tags:"); ?></td>

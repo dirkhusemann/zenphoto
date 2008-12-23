@@ -235,5 +235,6 @@ function setDefault($option, $default) {
 	
 	setOptionDefault('zp_plugin_class-video', 1);
 	setOptionDefault('UTF8_image_URI', 0);
+	setOptionDefault('captcha', 'zenphoto');
 	
 ?>
