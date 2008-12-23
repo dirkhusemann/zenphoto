@@ -143,6 +143,7 @@ if (!empty($msg)) {
 	echo '</div>';
 }
 ?>
+<div id="overview-leftcolumn">
 
 <div class="box" id="overview-comments">
 <h2 class="h2_bordered"><?php echo gettext("Gallery Stats"); ?></h2>
@@ -189,6 +190,45 @@ if ($c > 0) {
 ?>
 </li></ul>
 </div>
+
+<div class="box" id="overview-comments">
+<h2 class="h2_bordered"><?php echo gettext("Installation information"); ?></h2> 
+<ul>
+<?php
+
+if (defined('RELEASE')) {
+		$official = gettext('Official Build');
+	} else {
+		$official = gettext('SVN');
+	}
+	?>
+	<li><?php echo sprintf(gettext('Zenphoto version <strong>%1$s [%2$s] (%3$s)</strong>'),ZENPHOTO_VERSION,ZENPHOTO_RELEASE,$official); ?></li>
+	<?php	if (isset($zenpage_version)) echo sprintf(gettext('zenpage version <strong>%1$s [%2$s]</strong>'),$zenpage_version,ZENPAGE_RELEASE);	?>
+	<li><?php echo sprintf(gettext('Current gallery theme: <strong>%1$s</strong'),$gallery->getCurrentTheme()); ?></li> 
+	<li><?php echo sprintf(gettext('PHP version: <strong>%1$s</strong'),phpversion()); ?></li>
+	<li><?php echo sprintf(gettext('PHP memory limit: <strong>%1$s</strong> (Note: Your server might allocate less!)'),INI_GET('memory_limit')); ?></li>
+	<li><?php echo sprintf(gettext('MySQL version: <strong>%1$s</strong>'),mysql_get_client_info()); ?></li>
+	<li><?php echo sprintf(gettext('Database name: <strong>%1$s</strong>'),$_zp_conf_vars['mysql_database']); ?></li>
+	<li>
+	<?php
+	if(!empty($_zp_conf_vars['mysql_prefix'])) { 
+		echo sprintf(gettext('Table prefix: <strong>%1$s</strong>'),$_zp_conf_vars['mysql_prefix']); 
+	}
+	?>
+	</li>
+	</ul>
+	<h3><?php echo gettext("Active plugins:"); ?></h3>
+	<ul class="plugins">
+	<?php
+	 foreach (getEnabledPlugins() as $extension) {
+           $ext = substr($extension, 0, strlen($extension)-4);
+           echo "<li>".$ext."</li>";
+
+	}
+?>
+</ul>
+
+</div>
 <br clear="all" />
 <?php
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'check_for_update') {
@@ -204,104 +244,9 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'check_for_update') {
 	}
 }
 ?>
-<hr />
-<div class="box" id="overview-comments">
-<h2 class="h2_bordered"><?php echo gettext("10 Most Recent Comments"); ?></h2>
-<ul>
-	<?php
-$comments = fetchComments(10);
-foreach ($comments as $comment) {
-	$id = $comment['id'];
-	$author = $comment['name'];
-	$email = $comment['email'];
-		if(getOption("zp_plugin_zenpage")) {
-			require_once(dirname(__FILE__).'/plugins/zenpage/zenpage-class.php');
-			$zenpage = new Zenpage("","");
-		}
-		// ZENPAGE: switch added for zenpage comment support
-		switch ($comment['type']) {
-			case "albums":
-				$image = '';
-				$title = '';
-				$albmdata = query_full_array("SELECT `title`, `folder` FROM ". prefix('albums') .
- 										" WHERE `id`=" . $comment['ownerid']);
-				if ($albmdata) {
-					$albumdata = $albmdata[0];
-					$album = $albumdata['folder'];
-					$albumtitle = get_language_string($albumdata['title']);
-					$link = "<a href=\"".rewrite_path("/$album","/index.php?album=".urlencode($album))."\">".$albumtitle.$title."</a>";
-					if (empty($albumtitle)) $albumtitle = $album;
-				} else {
-					$title = gettext('database error');
-				}
-				break;
-			case "news": // ZENPAGE: if plugin is installed
-				if(getOption("zp_plugin_zenpage")) {
-					$titlelink = '';
-					$title = '';
-					$newsdata = query_full_array("SELECT `title`, `titlelink` FROM ". prefix('zenpage_news') .
- 										" WHERE `id`=" . $comment['ownerid']);
-					if ($newsdata) {
-						$newsdata = $newsdata[0];
-						$titlelink = $newsdata['titlelink'];
-						$title = get_language_string($newsdata['title']);
-				  $link = "<a href=\"".rewrite_path("/".ZENPAGE_NEWS."/".$titlelink,"/index.php?p=".ZENPAGE_NEWS."&amp;title=".urlencode($titlelink))."\">".$title."</a> ".gettext("[news]");
-					} else {
-						$title = gettext('database error');
-					}
-				}
-				break;
-			case "pages": // ZENPAGE: if plugin is installed
-				if(getOption("zp_plugin_zenpage")) {
-					$image = '';
-					$title = '';
-					$pagesdata = query_full_array("SELECT `title`, `titlelink` FROM ". prefix('zenpage_pages') .
- 										" WHERE `id`=" . $comment['ownerid']);
-					if ($pagesdata) {
-						$pagesdata = $pagesdata[0];
-						$titlelink = $pagesdata['titlelink'];
-						$title = get_language_string($pagesdata['title']);
-						$link = "<a href=\"".rewrite_path("/".ZENPAGE_PAGES."/".$titlelink,"/index.php?p=".ZENPAGE_PAGES."&amp;title=".urlencode($titlelink))."\">".$title."</a> ".gettext("[page]");
-					} else {
-						$title = gettext('database error');
-					}
-				}
-				break;
-			default: // all of the image types
-				$imagedata = query_full_array("SELECT `title`, `filename`, `albumid` FROM ". prefix('images') .
- 										" WHERE `id`=" . $comment['ownerid']);
-				if ($imagedata) {
-					$imgdata = $imagedata[0];
-					$image = $imgdata['filename'];
-					if ($imgdata['title'] == "") $title = $image; else $title = get_language_string($imgdata['title']);
-					$title = '/ ' . $title;
-					$albmdata = query_full_array("SELECT `folder`, `title` FROM ". prefix('albums') .
- 											" WHERE `id`=" . $imgdata['albumid']);
-					if ($albmdata) {
-						$albumdata = $albmdata[0];
-						$album = $albumdata['folder'];
-						$albumtitle = get_language_string($albumdata['title']);
-						$link = "<a href=\"".rewrite_path("/$album/$image","/index.php?album=".urlencode($album).	"&amp;image=".urlencode($image))."\">".$albumtitle.$title."</a>";
-						if (empty($albumtitle)) $albumtitle = $album;
-					} else {
-						$title = gettext('database error');
-					}
-				} else {
-					$title = gettext('database error');
-				}
-				break;
-		}
-		$date  = myts_date('%m/%d/%Y %I:%M %p', $comment['date']);
-		$website = $comment['website'];
-		$comment = truncate_string($comment['comment'], 123);
-		$inmoderation = $comment['inmoderation'];
-		$private = $comment['private'];
-		$anon = $comment['anon'];
-	echo "<li><div class=\"commentmeta\">".sprintf(gettext('%1$s commented on %2$s:'),$author,$link)."</div><div class=\"commentbody\">$comment</div></li>";
-}
-?>
-</ul>
-</div>
+
+</div><!-- overview leftcolumn end -->
+<div id="overview-rightcolumn">
 
 <?php
 $buttonlist = array();
@@ -429,6 +374,107 @@ $count = round($count/2);
 	?>
 	</div>
 </div>
+<div class="box" id="overview-maint">
+<h2 class="h2_bordered"><?php echo gettext("10 Most Recent Comments"); ?></h2>
+<ul>
+	<?php
+$comments = fetchComments(10);
+foreach ($comments as $comment) {
+	$id = $comment['id'];
+	$author = $comment['name'];
+	$email = $comment['email'];
+		if(getOption("zp_plugin_zenpage")) {
+			require_once(dirname(__FILE__).'/plugins/zenpage/zenpage-class.php');
+			$zenpage = new Zenpage("","");
+		}
+		// ZENPAGE: switch added for zenpage comment support
+		switch ($comment['type']) {
+			case "albums":
+				$image = '';
+				$title = '';
+				$albmdata = query_full_array("SELECT `title`, `folder` FROM ". prefix('albums') .
+ 										" WHERE `id`=" . $comment['ownerid']);
+				if ($albmdata) {
+					$albumdata = $albmdata[0];
+					$album = $albumdata['folder'];
+					$albumtitle = get_language_string($albumdata['title']);
+					$link = "<a href=\"".rewrite_path("/$album","/index.php?album=".urlencode($album))."\">".$albumtitle.$title."</a>";
+					if (empty($albumtitle)) $albumtitle = $album;
+				} else {
+					$title = gettext('database error');
+				}
+				break;
+			case "news": // ZENPAGE: if plugin is installed
+				if(getOption("zp_plugin_zenpage")) {
+					$titlelink = '';
+					$title = '';
+					$newsdata = query_full_array("SELECT `title`, `titlelink` FROM ". prefix('zenpage_news') .
+ 										" WHERE `id`=" . $comment['ownerid']);
+					if ($newsdata) {
+						$newsdata = $newsdata[0];
+						$titlelink = $newsdata['titlelink'];
+						$title = get_language_string($newsdata['title']);
+				  $link = "<a href=\"".rewrite_path("/".ZENPAGE_NEWS."/".$titlelink,"/index.php?p=".ZENPAGE_NEWS."&amp;title=".urlencode($titlelink))."\">".$title."</a> ".gettext("[news]");
+					} else {
+						$title = gettext('database error');
+					}
+				}
+				break;
+			case "pages": // ZENPAGE: if plugin is installed
+				if(getOption("zp_plugin_zenpage")) {
+					$image = '';
+					$title = '';
+					$pagesdata = query_full_array("SELECT `title`, `titlelink` FROM ". prefix('zenpage_pages') .
+ 										" WHERE `id`=" . $comment['ownerid']);
+					if ($pagesdata) {
+						$pagesdata = $pagesdata[0];
+						$titlelink = $pagesdata['titlelink'];
+						$title = get_language_string($pagesdata['title']);
+						$link = "<a href=\"".rewrite_path("/".ZENPAGE_PAGES."/".$titlelink,"/index.php?p=".ZENPAGE_PAGES."&amp;title=".urlencode($titlelink))."\">".$title."</a> ".gettext("[page]");
+					} else {
+						$title = gettext('database error');
+					}
+				}
+				break;
+			default: // all of the image types
+				$imagedata = query_full_array("SELECT `title`, `filename`, `albumid` FROM ". prefix('images') .
+ 										" WHERE `id`=" . $comment['ownerid']);
+				if ($imagedata) {
+					$imgdata = $imagedata[0];
+					$image = $imgdata['filename'];
+					if ($imgdata['title'] == "") $title = $image; else $title = get_language_string($imgdata['title']);
+					$title = '/ ' . $title;
+					$albmdata = query_full_array("SELECT `folder`, `title` FROM ". prefix('albums') .
+ 											" WHERE `id`=" . $imgdata['albumid']);
+					if ($albmdata) {
+						$albumdata = $albmdata[0];
+						$album = $albumdata['folder'];
+						$albumtitle = get_language_string($albumdata['title']);
+						$link = "<a href=\"".rewrite_path("/$album/$image","/index.php?album=".urlencode($album).	"&amp;image=".urlencode($image))."\">".$albumtitle.$title."</a>";
+						if (empty($albumtitle)) $albumtitle = $album;
+					} else {
+						$title = gettext('database error');
+					}
+				} else {
+					$title = gettext('database error');
+				}
+				break;
+		}
+		$date  = myts_date('%m/%d/%Y %I:%M %p', $comment['date']);
+		$website = $comment['website'];
+		$comment = truncate_string($comment['comment'], 123);
+		$inmoderation = $comment['inmoderation'];
+		$private = $comment['private'];
+		$anon = $comment['anon'];
+	echo "<li><div class=\"commentmeta\">".sprintf(gettext('%1$s commented on %2$s:'),$author,$link)."</div><div class=\"commentbody\">$comment</div></li>";
+}
+?>
+</ul>
+</div>
+
+
+
+</div><!-- overview rightcolumn end -->
 <br clear="all" />
 </div><!-- content -->
 <?php

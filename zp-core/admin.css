@@ -504,47 +504,78 @@ input.tags {
 	font-size: 100%;
 }
 
+#overview-leftcolumn {
+	border:0px solid gray;
+	width: 45%;
+	float: left;
+}
+
+#overview-rightcolumn {
+	border:0px solid gray;
+	width: 50%;
+	float: left;
+}
 #overview-stats {
 	float:left;
-	width: 40%;
+	width: 400px;
 	margin: 0 0 10px 10px;
 	padding: 0px;
 }
 
+
+
 #overview-maint {
 	float:left;
 	width: 480px;
-	margin: 0 0 10px 25px;
+	margin: 0 0 10px 0px;
 	padding: 0px;
 }
 #overview-maint_l {
 	float:left;
 	width: 50%;
-	margin-left:10px;
-	margin-right:0px;
+	margin: 5px 0px 0px 8px;
+
 }
 #overview-maint_r {
 	float:left;
 	width: 45%;
-	margin-left:0px;
-	margin-right:10px;
+	margin: 5px 0px 0px 0px;
 }
 
+	
 #overview-comments {
 	float:left;
-	width: 40%;
+	width: 90%;
 	margin: 0 0 10px 10px;
 	padding: 0px;
 }
 
-#overview-comments ul {
+#overview-comments h3 {
+	font-weight: bold;
+	padding-left: 10px;
+	margin: 0;
+	}
+
+#overview-comments ul, #overview-maint ul, #overview-stats ul {
+	width: 450px; 
 	list-style-type: none;
 	padding: 10px;
 }
 
-#overview-comments ul li {
+#overview-comments ul li, #overview-maint ul li{
 	margin-bottom: .5em;
 }
+
+#overview-comments ul.plugins {
+		width: 450px; 
+	list-style-type: none;
+	padding: 0px 0px 10px 10px;
+	}
+
+
+#overview-comments ul.plugins li {
+	margin-bottom: 0em;
+	}
 
 #overview-comments .commentmeta {
 	font-size: 85%;
