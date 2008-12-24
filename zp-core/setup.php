@@ -59,14 +59,20 @@ function updateItem($item, $value) {
 function checkAlbumParentid($albumname, $id) {
 	Global $gallery;
 	$album = new Album($gallery, $albumname);
-	if (($oldid = $album->get('parentid')) !== $id) {
+	$oldid = $album->get('parentid');
+	if ($oldid !== $id) {
 		$album->set('parentid', $id);
 		$album->save();
 		if (is_null($oldid)) $oldid = '<em>NULL</em>';
 		if (is_null($id)) $id = '<em>NULL</em>';
-		printf('Fixed album <strong>%1$s</strong>: id was %2$s should have been %3$s<br />', $albumname,$oldid, $id);
+		printf('Fixed album <strong>%1$s</strong>: parentid was %2$s should have been %3$s<br />', $albumname,$oldid, $id);
 	}
 	$id = $album->getAlbumID();
+	if (empty($id) && !is_null($id)) {
+		$album->set('id', NULL);
+		$album->save();
+		printf('Fixed album <strong>%s</strong>: id was empty should have been <em>NULL</em><br />', $albumname);
+	}
 	$albums = $album->getSubalbums();
 	foreach ($albums as $albumname) {
 		checkAlbumParentid($albumname, $id);

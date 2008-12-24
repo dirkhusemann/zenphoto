@@ -210,7 +210,10 @@ if ($page == "editcomment") { ?>
 		$id = $comment['id'];
 		$author = $comment['name'];
 		$email = $comment['email'];
-
+		$link = gettext('<strong>database error</strong> '); // in case of such
+		$image = '';
+		$albumtitle = '';
+		
 		if(getOption("zp_plugin_zenpage")) {
 			require_once(dirname(__FILE__).'/plugins/zenpage/zenpage-class.php');
 			$zenpage = new Zenpage();
@@ -228,8 +231,6 @@ if ($page == "editcomment") { ?>
 					$albumtitle = get_language_string($albumdata['title']);
 					$link = "<a href=\"".rewrite_path("/$album","/index.php?album=".urlencode($album))."\">".$albumtitle.$title."</a>";
 					if (empty($albumtitle)) $albumtitle = $album;
-				} else {
-					$title = gettext('database error');
 				}
 				break;
 			case "news": // ZENPAGE: if plugin is installed
@@ -242,9 +243,7 @@ if ($page == "editcomment") { ?>
 						$newsdata = $newsdata[0];
 						$titlelink = $newsdata['titlelink'];
 						$title = get_language_string($newsdata['title']);
-				  $link = "<a href=\"".rewrite_path("/".ZENPAGE_NEWS."/".$titlelink,"/index.php?p=".ZENPAGE_NEWS."&amp;title=".urlencode($titlelink))."\">".$title."</a><br /> ".gettext("[news]");
-					} else {
-						$title = gettext('database error');
+				  	$link = "<a href=\"".rewrite_path("/".ZENPAGE_NEWS."/".$titlelink,"/index.php?p=".ZENPAGE_NEWS."&amp;title=".urlencode($titlelink))."\">".$title."</a><br /> ".gettext("[news]");
 					}
 				}
 				break;
@@ -259,8 +258,6 @@ if ($page == "editcomment") { ?>
 						$titlelink = $pagesdata['titlelink'];
 						$title = get_language_string($pagesdata['title']);
 						$link = "<a href=\"".rewrite_path("/".ZENPAGE_PAGES."/".$titlelink,"/index.php?p=".ZENPAGE_PAGES."&amp;title=".urlencode($titlelink))."\">".$title."</a><br /> ".gettext("[page]");
-					} else {
-						$title = gettext('database error');
 					}
 				}
 				break;
@@ -280,11 +277,7 @@ if ($page == "editcomment") { ?>
 						$albumtitle = get_language_string($albumdata['title']);
 						$link = "<a href=\"".rewrite_path("/$album/$image","/index.php?album=".urlencode($album).	"&amp;image=".urlencode($image))."\">".$albumtitle.$title."</a>";
 						if (empty($albumtitle)) $albumtitle = $album;
-					} else {
-						$title = gettext('database error');
 					}
-				} else {
-					$title = gettext('database error');
 				}
 				break;
 		}

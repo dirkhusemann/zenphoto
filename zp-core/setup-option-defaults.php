@@ -184,6 +184,8 @@ function setDefault($option, $default) {
 	setOptionDefault('zp_plugin_image_album_statistics', 1);
 	setOptionDefault('zp_plugin_flowplayer', 1);
 	setOptionDefault('zp_plugin_admin_toolbox', 1);
+	setOptionDefault('zp_plugin_class-video', 1);
+	/*
 	// plugins--default to disabled
 	$curdir = getcwd();
 	chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
@@ -195,6 +197,7 @@ function setDefault($option, $default) {
 		$opt = 'zp_plugin_'.$ext;
 		setOptionDefault($opt, 0);
 	}
+	*/
 
 	setOptionDefault('use_lock_image', 1);
 	setOptionDefault('gallery_user', '');
@@ -233,7 +236,6 @@ function setDefault($option, $default) {
 	setOptionDefault('IPTC_encoding', 'ISO-8859-1');
 	setOptionDefault('Allow_comments', 1);
 	
-	setOptionDefault('zp_plugin_class-video', 1);
 	setOptionDefault('UTF8_image_URI', 0);
 	setOptionDefault('captcha', 'zenphoto');
 	
