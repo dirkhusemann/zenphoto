@@ -188,6 +188,7 @@ zp-core/class-album.php
 zp-core/class-gallery.php
 zp-core/class-image.php
 zp-core/class-load.php
+zp-core/class-mollom.php
 zp-core/class-search.php
 zp-core/class-transientimage.php
 zp-core/classes.php
@@ -300,6 +301,8 @@ zp-core/locale/zh_CN/LC_MESSAGES/zenphoto.po
 zp-core/locale/zh_TW/LC_MESSAGES/zenphoto.mo
 zp-core/locale/zh_TW/LC_MESSAGES/zenphoto.po
 zp-core/plugins/admin_toolbox.php
+zp-core/plugins/captcha/mollom.php
+zp-core/plugins/captcha/zenphoto.php
 zp-core/plugins/class-textobject/textDefault.png
 zp-core/plugins/class-textobject.php
 zp-core/plugins/class-video/multimediaDefault.png
@@ -345,6 +348,7 @@ zp-core/plugins/slideshow/flowplayerfullsizeicon.png
 zp-core/plugins/slideshow/jquery.cycle.all.pack.js
 zp-core/plugins/slideshow.php
 zp-core/plugins/spamfilters/akismet.php
+zp-core/plugins/spamfilters/mollom.php
 zp-core/plugins/spamfilters/none.php
 zp-core/plugins/spamfilters/simple.php
 zp-core/plugins/spamfilters/spamassassin.php
@@ -367,6 +371,7 @@ zp-core/utilities/gallery_statistics.php
 zp-core/utilities/scheduled_content.php
 zp-core/version.php
 zp-core/watermarks/copyright.png
+zp-core/watermarks/watermark-text.png
 zp-core/watermarks/watermark-video.png
 zp-core/watermarks/watermark.png
 zp-core/zp-config.php.source
