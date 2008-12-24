@@ -12,9 +12,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 header ("Content-type: image/png");
 $cypher = preg_replace('/[^0-9a-f]/', '', $_GET['i']);
 
-$admins = getAdministrators();
-$admin = array_shift($admins);
-$key = $admin['pass'];
+$key = getOption('zenphoto_captcha_key');
 $string = rc4($key, pack("H*", $cypher));
 
 $image = imagecreate(65, 20);

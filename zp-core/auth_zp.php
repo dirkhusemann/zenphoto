@@ -48,7 +48,7 @@ if (!isset($_POST['login'])) {
 			// Clear the cookie, just in case
 			zp_setcookie("zenphoto_auth", "", time()-368000, $cookiepath);
 			// was it a request for a reset?
-			if (checkCaptcha(trim($post_pass), sanitize($_POST['code_h'],3))) {
+			if ($_zp_captcha->checkCaptcha(trim($post_pass), sanitize($_POST['code_h'],3))) {
 				if (empty($post_user)) {
 					$requestor = 'You are receiving this e-mail because of a password reset request on your Zenphoto gallery.';
 				} else {

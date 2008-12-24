@@ -3830,6 +3830,18 @@ function printPasswordForm($hint, $showProtected=true, $showuser=NULL) {
 }
 
 /**
+ * Shell for calling the installed captcha generator.
+ * Returns a captcha string and captcha image URI
+ *
+ * @param string $img the captcha image URI
+ * @return string
+ */
+function generateCaptcha(&$img) {
+	global $_zp_captcha;
+	return $_zp_captcha->generateCaptcha($img);
+}
+
+/**
  * Simple captcha for comments.
  *
  * Prints a captcha entry field for a form such as the comments form.
@@ -3841,7 +3853,7 @@ function printPasswordForm($hint, $showProtected=true, $showuser=NULL) {
  **/
 function printCaptcha($preText='', $midText='', $postText='', $size=4) {
 	if (getOption('Use_Captcha')) {
-		$captchaCode = generateCaptcha($img);
+		$captchaCode = $_zp_captcha->generateCaptcha($img);
 		$inputBox =  "<input type=\"text\" id=\"code\" name=\"code\" size=\"" . $size . "\" class=\"inputbox\" />";
 		$captcha = "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\" />" .
  						"<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" style=\"vertical-align:bottom\"/></label>&nbsp;";

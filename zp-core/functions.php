@@ -15,9 +15,28 @@ if(!function_exists("gettext")) {
 	require_once(dirname(__FILE__).'/lib-gettext/gettext.inc');
 }
 
-$captcha = getOption('captcha');
-if (empty($captcha)) 	$captcha = 'zenphoto';
-require_once(dirname(__FILE__). PLUGIN_FOLDER . 'captcha/'.$captcha.'.php');
+// admin rights
+define('NO_RIGHTS', 2);
+define('MAIN_RIGHTS', 4);
+define('VIEWALL_RIGHTS', 8);
+define('UPLOAD_RIGHTS', 16);
+define('COMMENT_RIGHTS', 64);
+define('EDIT_RIGHTS', 256);
+define('ALL_ALBUMS_RIGHTS', 512);
+define('THEMES_RIGHTS', 1024);
+define('ZENPAGE_RIGHTS',2048);
+define('OPTIONS_RIGHTS', 8192);
+define('ADMIN_RIGHTS', 65536);
+define('ALL_RIGHTS', 07777777777);
+
+if (getOption('album_session') && OFFSET_PATH==0) {
+	session_start();
+}
+
+$_zp_captcha = getOption('captcha');
+if (empty($_zp_captcha)) 	$_zp_captcha = 'zenphoto';
+require_once(dirname(__FILE__). PLUGIN_FOLDER . 'captcha/'.$_zp_captcha.'.php');
+$_zp_captcha = new Captcha();
 
 // allow reading of old Option tables--should be needed only during upgrade
 $result = query_full_array("SHOW COLUMNS FROM ".prefix('options').' LIKE "%ownerid%"', true);
@@ -28,10 +47,6 @@ if (is_array($result)) {
 			break;
 		}
 	}
-}
-
-if (getOption('album_session') && OFFSET_PATH==0) {
-	session_start();
 }
 
 require_once(dirname(__FILE__).'/functions-i18n.php');
@@ -934,6 +949,7 @@ return array($type, $class);
  * @return int
  */
 function postComment($name, $email, $website, $comment, $code, $code_ok, $receiver, $ip, $private, $anon) {
+	global $_zp_captcha;
 	$result = commentObjectClass($receiver);
 	list($type, $class) = $result;
 	$receiver->getComments();
@@ -950,7 +966,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	if (getOption('comment_name_required') && empty($name)) { return -3; }
 	if (getOption('comment_web_required') && (empty($website) || !isValidURL($website))) { return -4; }
 	if (getOption('Use_Captcha')) {
-		if (!checkCaptcha($code, $code_ok)) return -5;
+		if (!$_zp_captcha->checkCaptcha($code, $code_ok)) return -5;
 	}
 	if (empty($comment)) {
 		return -6;
@@ -1071,20 +1087,6 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 }
 
 //admin user handling
-
-define('NO_RIGHTS', 2);
-define('MAIN_RIGHTS', 4);
-define('VIEWALL_RIGHTS', 8);
-define('UPLOAD_RIGHTS', 16);
-define('COMMENT_RIGHTS', 64);
-define('EDIT_RIGHTS', 256);
-define('ALL_ALBUMS_RIGHTS', 512);
-define('THEMES_RIGHTS', 1024);
-define('ZENPAGE_RIGHTS',2048);
-define('OPTIONS_RIGHTS', 8192);
-define('ADMIN_RIGHTS', 65536);
-define('ALL_RIGHTS', 07777777777);
-
 $_zp_current_admin = null;
 $_zp_admin_users = null;
 

@@ -355,7 +355,7 @@ function adminPrintImageThumb($image, $class=NULL, $id=NULL) {
  * @since  1.0.0
  */
 function printLoginForm($redirect=null, $logo=true) {
-	global $_zp_login_error, $_zp_current_admin;
+	global $_zp_login_error, $_zp_current_admin, $_zp_captcha;
 	if (is_null($redirect)) { $redirect = "/" . ZENFOLDER . "/admin.php"; }
 	if (isset($_POST['user'])) {
 		$requestor = sanitize($_POST['user'], 3);
@@ -390,7 +390,7 @@ function printLoginForm($redirect=null, $logo=true) {
 	echo "\n      <tr><td align=\"right\"><h2>".gettext("Login").'&nbsp;'."</h2></td><td><input class=\"textfield\" name=\"user\" type=\"text\" size=\"20\" value=\"$requestor\" /></td></tr>";
 	echo "\n      <tr><td align=\"right\"><h2>".gettext("Password").$star."</h2></td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
 	if ($star == '*') {
-		$captchaCode = generateCaptcha($img);
+		$captchaCode = $_zp_captcha->generateCaptcha($img);
 		$html = "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/><label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"bottom\"/></label>";
 		echo "\n      <tr><td colspan=\"2\">";
 		echo "\n      ".sprintf(gettext("*Enter %s to email a password reset."), $html);

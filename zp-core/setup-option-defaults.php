@@ -185,19 +185,6 @@ function setDefault($option, $default) {
 	setOptionDefault('zp_plugin_flowplayer', 1);
 	setOptionDefault('zp_plugin_admin_toolbox', 1);
 	setOptionDefault('zp_plugin_class-video', 1);
-	/*
-	// plugins--default to disabled
-	$curdir = getcwd();
-	chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
-	$filelist = safe_glob('*'.'php');
-	chdir($curdir);
-	foreach ($filelist as $extension) {
-		$extension = FilesystemToUTF8($extension);
-		$ext = substr($extension, 0, strlen($extension)-4);
-		$opt = 'zp_plugin_'.$ext;
-		setOptionDefault($opt, 0);
-	}
-	*/
 
 	setOptionDefault('use_lock_image', 1);
 	setOptionDefault('gallery_user', '');

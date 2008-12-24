@@ -112,7 +112,7 @@ function getField($field, $level=3) {
  *
  */
 function printContactForm() {
-	global $_zp_UTF8;
+	global $_zp_UTF8, $_zp_captcha;
 	$error = array();
 	if(isset($_POST['sendmail'])) {
 		$mailcontent = array();
@@ -153,7 +153,7 @@ function printContactForm() {
 		if(getOption("contactform_captcha")) {
 			$code_ok = trim($_POST['code_h']);
 			$code = trim($_POST['code']);
-			if (!checkCaptcha($code, $code_ok)) { $error[5] = gettext("<strong>the correct captcha verification code</strong>"); } // no ticket
+			if (!$_zp_captcha->checkCaptcha($code, $code_ok)) { $error[5] = gettext("<strong>the correct captcha verification code</strong>"); } // no ticket
 		} 
 		// captcha end
 		

@@ -968,6 +968,7 @@ if ($subtab == 'admin') {
 			</td>
 			<td><?php echo gettext('Select the <em>Captcha</em> generator to be used by Zenphoto.'); ?></td>
 		</tr>
+		<?php customOptions($_zp_captcha, "&nbsp;&nbsp;&nbsp;-&nbsp;"); ?>
 		<tr>
 			<td><?php echo gettext("Allowed tags:"); ?></td>
 			<td>
