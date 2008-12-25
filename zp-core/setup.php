@@ -67,12 +67,7 @@ function checkAlbumParentid($albumname, $id) {
 		if (is_null($id)) $id = '<em>NULL</em>';
 		printf('Fixed album <strong>%1$s</strong>: parentid was %2$s should have been %3$s<br />', $albumname,$oldid, $id);
 	}
-	$id = $album->getAlbumID();
-	if (empty($id) && !is_null($id)) {
-		$album->set('id', NULL);
-		$album->save();
-		printf('Fixed album <strong>%s</strong>: id was empty should have been <em>NULL</em><br />', $albumname);
-	}
+	$id = $album->id;
 	$albums = $album->getSubalbums();
 	foreach ($albums as $albumname) {
 		checkAlbumParentid($albumname, $id);

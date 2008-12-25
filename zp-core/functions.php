@@ -474,7 +474,7 @@ function sortAlbumArray($parentalbum, $albums, $sortkey='`sort_order`', $recurse
 	if (is_null($parentalbum)) {
 		$albumid = ' IS NULL';
 	} else {
-		$albumid = '='.$parentalbum->id;
+		$albumid = '="'.$parentalbum->id.'"';
 	}
 	$result = query('SELECT `folder`, `sort_order`, `title`, `show`, `dynamic`, `search_params` FROM ' .
 						prefix("albums") . ' WHERE `parentid`'.$albumid.' ORDER BY ' . $sortkey);

@@ -52,7 +52,7 @@ class captcha {
 		$result = query('DELETE FROM '.prefix('captcha').' WHERE `hash`="'.$code_cypher.'"');
 		$count = mysql_affected_rows();
 		if ($count == 1) {
-			$len = round(strlen($key)/2);
+			$len = rand(0, strlen($key)-1);
 			$key = md5(substr($key, 0, $len).$code.substr($key, $len));
 			setOption('zenphoto_captcha_key', $key);
 			return true;
