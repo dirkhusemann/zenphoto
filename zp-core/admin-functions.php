@@ -1174,21 +1174,21 @@ function printAlbumEditForm($index, $album) {
 	echo "\n<select id=\"\"";
 	if ($showThumb) echo " class=\"thumbselect\" onChange=\"updateThumbPreview(this)\"";
 	echo " name=\"".$prefix."thumb\">";
-		$thumb = $album->get('thumb');
-		echo "\n<option";
-		if ($showThumb) echo " class=\"thumboption\" value=\"\" style=\"background-color:#B1F7B6\"";
-		if ($thumb === '1') {
-			echo " selected=\"selected\"";
-		}
-		echo ' value="1">'.gettext('most recent');
-		echo '</option>';
-		echo "\n<option";
-		if ($showThumb) echo " class=\"thumboption\" value=\"\" style=\"background-color:#B1F7B6\"";
-		if (empty($thumb) && $thumb !== '1') {
-			echo " selected=\"selected\"";
-		}
-		echo ' value="">'.gettext('randomly selected');
-		echo '</option>';
+	$thumb = $album->get('thumb');
+	echo "\n<option";
+	if ($showThumb) echo " class=\"thumboption\" value=\"\" style=\"background-color:#B1F7B6\"";
+	if ($thumb === '1') {
+		echo " selected=\"selected\"";
+	}
+	echo ' value="1">'.gettext('most recent');
+	echo '</option>';
+	echo "\n<option";
+	if ($showThumb) echo " class=\"thumboption\" value=\"\" style=\"background-color:#B1F7B6\"";
+	if (empty($thumb) && $thumb !== '1') {
+		echo " selected=\"selected\"";
+	}
+	echo ' value="">'.gettext('randomly selected');
+	echo '</option>';
 	if ($album->isDynamic()) {
 		$params = $album->getSearchParams();
 		$search = new SearchEngine();

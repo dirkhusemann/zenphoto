@@ -202,13 +202,13 @@ if (defined('RELEASE')) {
 		$official = gettext('SVN');
 	}
 	?>
-	<li><?php echo sprintf(gettext('Zenphoto version <strong>%1$s [%2$s] (%3$s)</strong>'),ZENPHOTO_VERSION,ZENPHOTO_RELEASE,$official); ?></li>
-	<?php	if (isset($zenpage_version)) echo sprintf(gettext('zenpage version <strong>%1$s [%2$s]</strong>'),$zenpage_version,ZENPAGE_RELEASE);	?>
-	<li><?php echo sprintf(gettext('Current gallery theme: <strong>%1$s</strong>'),$gallery->getCurrentTheme()); ?></li> 
-	<li><?php echo sprintf(gettext('PHP version: <strong>%1$s</strong>'),phpversion()); ?></li>
-	<li><?php echo sprintf(gettext('PHP memory limit: <strong>%1$s</strong> (Note: Your server might allocate less!)'),INI_GET('memory_limit')); ?></li>
-	<li><?php echo sprintf(gettext('MySQL version: <strong>%1$s</strong>'),mysql_get_client_info()); ?></li>
-	<li><?php echo sprintf(gettext('Database name: <strong>%1$s</strong>'),$_zp_conf_vars['mysql_database']); ?></li>
+	<li><?php printf(gettext('Zenphoto version <strong>%1$s [%2$s] (%3$s)</strong>'),ZENPHOTO_VERSION,ZENPHOTO_RELEASE,$official); ?></li>
+	<?php	if (isset($zenpage_version)) printf(gettext('zenpage version <strong>%1$s [%2$s]</strong>'),$zenpage_version,ZENPAGE_RELEASE);	?>
+	<li><?php printf(gettext('Current gallery theme: <strong>%1$s</strong>'),$gallery->getCurrentTheme()); ?></li> 
+	<li><?php printf(gettext('PHP version: <strong>%1$s</strong>'),phpversion()); ?></li>
+	<li><?php printf(gettext('PHP memory limit: <strong>%1$s</strong> (Note: Your server might allocate less!)'),INI_GET('memory_limit')); ?></li>
+	<li><?php printf(gettext('MySQL version: <strong>%1$s</strong>'),mysql_get_client_info()); ?></li>
+	<li><?php printf(gettext('Database name: <strong>%1$s</strong>'),$_zp_conf_vars['mysql_database']); ?></li>
 	<li>
 	<?php
 	if(!empty($_zp_conf_vars['mysql_prefix'])) { 
@@ -216,11 +216,16 @@ if (defined('RELEASE')) {
 	}
 	?>
 	</li>
+	<li><?php printf(gettext('Spam filter: <strong>%s</strong>'), getOption('spam_filter')) ?></li>
+	<li><?php printf(gettext('Captcha generator: <strong>%s</strong>'), getOption('captcha')) ?></li>
 	</ul>
+
 	<h3><?php echo gettext("Active plugins:"); ?></h3>
 	<ul class="plugins">
 	<?php
-	 foreach (getEnabledPlugins() as $extension) {
+	$plugins = getEnabledPlugins();
+	natsort($plugins);
+	foreach ($plugins as $extension) {
 		$ext = substr($extension, 0, strlen($extension)-4);
 		echo "<li>".$ext."</li>";
 	}
