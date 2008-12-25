@@ -260,8 +260,9 @@ if (isset($_GET['album'])) {
 						$notify = '&';
 					}
 				}
-
-				/** SAVE MULTIPLE ALBUMS ******************************************************/
+			$qs_albumsuffix = '';
+				
+			/** SAVE MULTIPLE ALBUMS ******************************************************/
 			} else if ($_POST['totalalbums']) {
 				for ($i = 1; $i <= $_POST['totalalbums']; $i++) {
 					$folder = sanitize_path($_POST["$i-folder"]);
@@ -270,12 +271,12 @@ if (isset($_GET['album'])) {
 					if (!empty($rslt)) { $notify = $rslt; }
 				}
 				$notify = '';
+				$qs_albumsuffix = "&massedit";
 			}
 			// Redirect to the same album we saved.
-			$qs_albumsuffix = "&massedit";
 			if (isset($_GET['album'])) {
 				$folder = sanitize_path($_GET['album']);
-				$qs_albumsuffix = '&album='.urlencode($folder);
+				$qs_albumsuffix .= '&album='.urlencode($folder);
 			}
 			if (isset($_POST['subpage'])) {
 				$pg = '&subpage='.$_POST['subpage'];
@@ -925,12 +926,7 @@ if (isset($_GET['saved'])) {
 			$album = new Album($gallery, $folder);
 			$albums = $album->getSubAlbums();
 			$pieces = explode('/', $folder);
-			if (($i = count($pieces)) > 1) {
-				unset($pieces[$i-1]);
-				$albumdir = "&album=" . urlencode(implode('/', $pieces));
-			} else {
-				$albumdir = "";
-			}
+			$albumdir = "&album=" . urlencode($folder).'&tab=subalbuminfo';
 		} else {
 			$albums = array();
 		}
