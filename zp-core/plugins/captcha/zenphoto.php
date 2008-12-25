@@ -13,6 +13,7 @@ class captcha {
 		$admin = array_shift($admins);
 		$key = $admin['pass'];
 		setOptionDefault('zenphoto_captcha_key', $key);
+		setOptionDefault('zenphoto_captcha_string', 'abcdefghijkmnpqrstuvwxyz23456789ABCDEFGHJKLMNPQRSTUVWXYZ'); 
 	}
 
 	/**
@@ -23,7 +24,9 @@ class captcha {
 	function getOptionsSupported() {
 		return array(
 								gettext('Hash key') => array('key' => 'zenphoto_captcha_key', 'type' => 0, 
-												'desc' => gettext('The key to use in hashing the Captcha string.')),
+												'desc' => gettext('The key used in hashing the Captcha string. Note: this key will change with each successful Captcha verification.')),
+								gettext('Allowed characters') => array('key' => 'zenphoto_captcha_string', 'type' => 0, 
+												'desc' => gettext('The characters which may appear in the Captcha string.')),
 								gettext('Captcha length') => array('key' => 'zenphoto_captcha_lenght', 'type' => 4, 
 												'buttons' => array(gettext('3')=>3, gettext('4')=>4, gettext('5')=>5, gettext('6')=>6),
 												'desc' => gettext('The number of characters in the Captcha.'))
@@ -42,9 +45,6 @@ class captcha {
 	function checkCaptcha($code, $code_ok) {
 		$captcha_len = getOption('zenphoto_captcha_lenght');
 		$key = getOption('zenphoto_captcha_key');
-		
-debugLog("checkCaptcha(\$code=$code, \$code_ok=$code_ok)\$key=$key");		
-		
 		$code_cypher = md5(bin2hex(rc4($key, trim($code))));
 		$code_ok = trim($code_ok);
 		if ($code_cypher != $code_ok || strlen($code) != $captcha_len) { return false; }
@@ -73,7 +73,7 @@ debugLog("checkCaptcha(\$code=$code, \$code_ok=$code_ok)\$key=$key");
 
 		$captcha_len = getOption('zenphoto_captcha_lenght');
 		$key = getOption('zenphoto_captcha_key');
-		$lettre='abcdefghijkmnpqrstuvwxyz23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+		$lettre = getOption('zenphoto_captcha_string');
 		$numlettre = strlen($lettre)-1;
 
 		$string = '';
