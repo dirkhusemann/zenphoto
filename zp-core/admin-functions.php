@@ -1245,7 +1245,7 @@ function printAlbumEditForm($index, $album) {
 				foreach ($subIDs as $ID) {
 					$albumnames[$ID['id']] = $ID['folder'];
 					$query = 'SELECT `id` , `albumid` , `filename` , `title` FROM '.prefix('images').' WHERE `albumid` = "'.
-										$ID['id'] .'"';
+					$ID['id'] .'"';
 					$imagearray = array_merge($imagearray, query_full_array($query));
 				}
 				foreach ($imagearray as $imagerow) {

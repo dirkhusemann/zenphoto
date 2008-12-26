@@ -648,7 +648,7 @@ if ($subtab == 'admin') {
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 				<input type="checkbox" name="<?php echo $id ?>-view_rights"
 					value=<?php echo VIEWALL_RIGHTS; if ($user['rights'] & VIEWALL_RIGHTS) echo ' checked'; 
-					echo $alterrights; ?>> <?php echo gettext("View all albums"); ?></td>
+					echo $alterrights; ?>> <?php echo gettext("View all"); ?></td>
 			</tr>
 			<tr>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-main_rights"

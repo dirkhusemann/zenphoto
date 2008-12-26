@@ -129,7 +129,7 @@ class Gallery {
 		while ($dirname = readdir($dir)) {
 			$dirname = FilesystemToUTF8($dirname);
 			if ((is_dir($albumdir.$dirname) && (substr($dirname, 0, 1) != '.')) ||
-			hasDyanmicAlbumSuffix($dirname)) {
+								hasDyanmicAlbumSuffix($dirname)) {
 				$albums[] = $dirname;
 			}
 		}

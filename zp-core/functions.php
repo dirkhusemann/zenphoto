@@ -718,10 +718,11 @@ function read_exif_data_protected($path) {
 	if (version_compare(PHP_VERSION, '5.0.0') === 1) {
 		eval('
 		try {
-			return read_exif_data_raw($path, false);
+			$rslt = read_exif_data_raw($path, false);
 		} catch (Exception $e) {
-			return array();
+			$rslt = array();
 		}');
+		return $rslt;
 	} else {
 		return read_exif_data_raw($path, false);
 	}

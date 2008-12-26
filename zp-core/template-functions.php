@@ -3852,6 +3852,7 @@ function generateCaptcha(&$img) {
  * @since 1.1.4
  **/
 function printCaptcha($preText='', $midText='', $postText='', $size=4) {
+	global $_zp_captcha;
 	if (getOption('Use_Captcha')) {
 		$captchaCode = $_zp_captcha->generateCaptcha($img);
 		$inputBox =  "<input type=\"text\" id=\"code\" name=\"code\" size=\"" . $size . "\" class=\"inputbox\" />";
