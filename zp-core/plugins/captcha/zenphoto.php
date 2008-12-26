@@ -85,10 +85,6 @@ class captcha {
 		query('DELETE FROM '.prefix('captcha').' WHERE `ptime`<'.(time()-3600), true);  // expired tickets
 		query("INSERT INTO " . prefix('captcha') . " (ptime, hash) VALUES ('" . escape(time()) . "','" . escape($code) . "')", true);
 		$image = WEBPATH . '/' . ZENFOLDER . "/c.php?i=$cypher";
-
-		
-debugLog("generateCaptcha:\$string=$string:\$code=$code:\$key=$key");		
-		
 		return $code;
 	}
 }
