@@ -165,8 +165,10 @@ if (!file_exists($imgfile)) {
 		if ($source != ZENFOLDER) {
 			$source = THEMEFOLDER.'/'.$source;
 		}
+// disable these two lines and enable the one following to allow sizing of default images.
 		header("Location: " . FULLWEBPATH .'/'. pathurlencode(FilesystemToUTF8($source.$source2)) . "/" . rawurlencode(filesystemToUTF8($imgfile)));
 		exit();
+//		$imgfile = SERVERPATH .'/'. $source.$source2 . "/" . $imgfile;
 	} 
 	if (!file_exists($imgfile)) {	
 		header("HTTP/1.0 404 Not Found");

@@ -586,6 +586,11 @@ function read_entry(&$result,$in,$seek,$intel,$ifd_name,$globalOffset) {
 	if ($intel == 1) $type = intel2Moto($type);
 	lookup_type($type, $size);
 	
+	if (strpos($tag_name, 'unknown:') !== false && strpos($type, 'error:') !== false) { // we have an error
+		$result['Errors'] = $result['Errors']+1;
+		return;
+	}
+	
 	// 4 byte number of elements
 	$count = bin2hex(fread($in, 4));
 	if ($intel == 1) $count = intel2Moto($count);

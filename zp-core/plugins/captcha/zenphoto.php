@@ -10,8 +10,11 @@ class captcha {
 	function captcha() {
 		setOptionDefault('zenphoto_captcha_lenght', 5);
 		$admins = getAdministrators();
-		$admin = array_shift($admins);
-		$key = $admin['pass'];
+		if (count($admins) > 0) {
+			$admin = array_shift($admins);
+			$key = $admin['pass'];
+		}
+		$key = md5('zenphoto'.$key.'captcha key');
 		setOptionDefault('zenphoto_captcha_key', $key);
 		setOptionDefault('zenphoto_captcha_string', 'abcdefghijkmnpqrstuvwxyz23456789ABCDEFGHJKLMNPQRSTUVWXYZ'); 
 	}

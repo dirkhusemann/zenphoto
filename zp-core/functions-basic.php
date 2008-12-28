@@ -431,6 +431,7 @@ function getImageParameters($args) {
  * @return string
  */
 function sanitize_path($filename) {
+	if (get_magic_quotes_gpc()) $filename = stripslashes($filename);
 	$filename = str_replace(chr(0), " ", $filename);
 	$filename = strip_tags($filename);
 	$filename = preg_replace(array('/^\/+/','/\/+$/','/\/\/+/','/\.\.+/'), '', $filename);
