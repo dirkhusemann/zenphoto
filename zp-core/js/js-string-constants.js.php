@@ -10,9 +10,16 @@ require_once('../functions.php');
 
 ?>
 
-<?php echo "var zppath = \"/".ZENFOLDER."\";"; ?>
+var zppath =  "<?php echo ZENFOLDER; ?>";
 
 var zpstrings = {
+	/* Used in jquery.editinplace.js */
+	'Save' : "<?php echo gettext('Save'); ?>",
+	'Cancel' : "<?php echo gettext('Cancel'); ?>",
+	'Saving' : "<?php echo gettext('Saving'); ?>",
+	'ClickToEdit' : "<?php echo gettext('Click to edit...'); ?>",
+
+	/* following still in use somewhere else ? (Ozh) */
 	'Test' : "<?php echo gettext('Test'); ?>",
 	'ClickToAddATitle' : "<?php echo gettext('Click to add a title...'); ?>",
 	'ClickToEditTitle' : "<?php echo gettext('Click to edit title...'); ?>",

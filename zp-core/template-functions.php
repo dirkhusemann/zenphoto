@@ -80,6 +80,9 @@ function printSubalbumAdmin($text, $before='', $after='') {
 function zenJavascript() {
 	global $_zp_current_album, $_zp_plugin_scripts;
 
+	echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/jquery.js\"></script>\n";
+	echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/scripts-common.js\"></script>\n";
+
 	// i18n Javascript constant strings.
 	echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/js-string-constants.js.php\"></script>\n";
 
@@ -90,16 +93,9 @@ function zenJavascript() {
 			$grant = $rights & ADMIN_RIGHTS;
 		}
 		if ($grant) {
-			echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/ajax.js\"></script>\n";
-			echo "  <script type=\"text/javascript\">\n";
-			echo "  //<![CDATA[\n";
-			sajax_show_javascript();
-			echo "  //]]>\n";
-			echo "  </script>\n";
+			echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/jquery.editinplace.js\"></script>\n";
 		}
 	}
-	echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/scripts-common.js\"></script>\n";
-	echo "  <script type=\"text/javascript\" src=\"" . WEBPATH . "/" . ZENFOLDER . "/js/jquery.js\"></script>\n";
 	if (is_array($_zp_plugin_scripts)) {
 		foreach ($_zp_plugin_scripts as $script) {
 			echo $script."\n";
@@ -620,15 +616,29 @@ function getAnnotatedAlbumTitle() {
  * Prints an encapsulated title of the current album.
  * If you are logged in you can click on this to modify the title on the fly.
  *
- * @param bool $editable set to true to allow editing (for the admin)
+ * @param bool   $editable set to true to allow editing (for the admin)
+ * @param string $editclass CSS class applied to element if editable
+ * @param mixed $messageIfEmpty Either bool or string. If false, echoes nothing when description is empty. If true, echoes default placeholder message if empty. If string, echoes string.
+ * @author Ozh
  */
-function printAlbumTitle($editable=false) {
+function printAlbumTitle($editable=false, $editclass='editable albumTitleEditable', $messageIfEmpty = true) {
 	global $_zp_current_album;
+	$id = getAlbumID();
+	$title = getAlbumTitle();
+ 	if ($title === '' or $title === NULL ) {
+		if ( $messageIfEmpty === true ) {
+			$title = gettext('(No title...)');
+		} elseif ( is_string($messageIfEmpty) ) {
+			$title = $messageIfEmpty;
+		}
+	}
 	if ($editable && zp_loggedin()) {
-		echo "<span id=\"albumTitleEditable\" style=\"display: inline;\">" . getAlbumTitle() . "</span>\n";
-		echo "<script type=\"text/javascript\">initEditableTitle('albumTitleEditable');</script>";
+		if (!empty($editclass))
+			$editclass= "class=\"$editclass\"";
+		echo "<span id=\"albumTitleEditable_$id\" $editclass>" . $title . "</span>\n";
+		echo "<script type=\"text/javascript\">eip_title('albumTitleEditable_$id');</script>";
 	} else {
-		echo getAlbumTitle();
+		echo "<span id=\"albumTitleEditable_$id\">" . $title . "</span>\n";
 	}
 }
 
@@ -884,20 +894,32 @@ function getBareAlbumDesc() {
 /**
  * Prints an encapsulated description of the current album.
  * If you are logged in you can click on this to modify the description on the fly.
+ * Converts and displays line breaks set in the admin field as <br />.
  *
- * @param bool $editable
+ * @param bool $editable when true, enables AJAX editing in place
+ * @param string $editclass CSS class applied to element if editable
+ * @param mixed $messageIfEmpty Either bool or string. If false, echoes nothing when description is empty. If true, echoes default placeholder message if empty. If string, echoes string.
+ * @author Ozh
  */
-function printAlbumDesc($editable=false) {
+function printAlbumDesc($editable=false, $editclass='editable albumDescEditable', $messageIfEmpty = true ) {
 	$desc = getAlbumDesc();
-	if (!file_exists(SERVERPATH.'/'.ZENFOLDER.'/js/editor_config.js.php')) {
-		$desc = str_replace("\r\n", "\n", $desc);
-		$desc = str_replace("\n", '<br />', $desc);
+	$desc = str_replace("\r\n", "\n", $desc);
+	$desc = str_replace("\n", "<br/>", $desc);
+	if ($desc === '' or $desc === NULL ) {
+		if ( $messageIfEmpty === true ) {
+			$desc = gettext('(No description...)');
+		} elseif ( is_string($messageIfEmpty) ) {
+			$desc = $messageIfEmpty;
+		}
 	}
+	$id = getAlbumID();
 	if ($editable && zp_loggedin()) {
-		echo "<span id=\"albumDescEditable\" >" . $desc . "</span>\n";
-		echo "<script type=\"text/javascript\">initEditableDesc('albumDescEditable');</script>";
+		if (!empty($editclass))
+			$editclass= "class=\"$editclass\"";
+		echo "<span id=\"albumDescEditable_$id\" $editclass>" . $desc . "</span>\n";
+		echo "<script type=\"text/javascript\">eip_description('albumDescEditable_$id');</script>";
 	} else {
-		echo $desc;
+		echo "<span id=\"albumDescEditable_$id\">" . $desc . "</span>\n";
 	}
 }
 
@@ -1501,15 +1523,29 @@ function getAnnotatedImageTitle() {
 /**
  * Prints an encapsulated title of the current image.
  *
- * @param bool $editable if set to true and the admin is logged in allows editing of the title
+ * @param bool   $editable if set to true and the admin is logged in allows editing of the title
+ * @param string $editclass CSS class applied to element if editable
+ * @param mixed $messageIfEmpty Either bool or string. If false, echoes nothing when description is empty. If true, echoes default placeholder message if empty. If string, echoes string.
+ * @author Ozh
  */
-function printImageTitle($editable=false) {
+function printImageTitle($editable=false, $editclass='editable imageTitleEditable', $messageIfEmpty = true ) {
 	global $_zp_current_image;
+	$id = getImageID();
+	$title = getImageTitle();
+ 	if ($title === '' or $title === NULL ) {
+		if ( $messageIfEmpty === true ) {
+			$title = gettext('(No title...)');
+		} elseif ( is_string($messageIfEmpty) ) {
+			$title = $messageIfEmpty;
+		}
+	}
 	if ($editable && zp_loggedin()) {
-		echo "<span id=\"imageTitle\" style=\"display: inline;\">" . getImageTitle() . "</span>\n";
-		echo "<script type=\"text/javascript\">initEditableTitle('imageTitle');</script>";
+		if (!empty($editclass))
+			$editclass= "class=\"$editclass\"";
+		echo "<span id=\"imageTitle_$id\" $editclass>" . $title . "</span>\n";
+		echo "<script type=\"text/javascript\">eip_title('imageTitle_$id');</script>";
 	} else {
-		echo "<span id=\"imageTitle\" style=\"display: inline;\">" . getImageTitle() . "</span>\n";
+		echo "<span id=\"imageTitle_$id\">" . $title . "</span>\n";
 	}
 }
 
@@ -1658,16 +1694,29 @@ function getBareImageDesc() {
  * Converts and displays line breaks set in the admin field as <br />.
  *
  * @param bool $editable set true to allow editing by the admin
+ * @param string $editclass CSS class applied to element when editable
+ * @param mixed $messageIfEmpty Either bool or string. If false, echoes nothing when description is empty. If true, echoes default placeholder message if empty. If string, echoes string.
+ * @author Ozh
  */
-function printImageDesc($editable=false) {
+function printImageDesc($editable=false, $editclass='editable imageDescEditable', $messageIfEmpty = true) {
 	$desc = getImageDesc();
 	$desc = str_replace("\r\n", "\n", $desc);
 	$desc = str_replace("\n", "<br/>", $desc);
+ 	if ($desc === '' or $desc === NULL ) {
+		if ( $messageIfEmpty === true ) {
+			$desc = gettext('(No description...)');
+		} elseif ( is_string($messageIfEmpty) ) {
+			$desc = $messageIfEmpty;
+		}
+	}
+	$id = getImageID();
 	if ($editable && zp_loggedin()) {
-		echo "<span id=\"imageDesc\" >" . $desc . "</span>\n";
-		echo "<script type=\"text/javascript\">initEditableDesc('imageDesc');</script>";
+		if (!empty($editclass))
+			$editclass= "class=\"$editclass\"";
+		echo "<span id=\"imageDesc_$id\" $editclass>" . $desc . "</span>\n";
+		echo "<script type=\"text/javascript\">eip_description('imageDesc_$id');</script>";	
 	} else {
-		echo $desc;
+		echo "<span id=\"imageDesc_$id\">" . $desc . "</span>\n";
 	}
 }
 
@@ -3052,22 +3101,35 @@ function getTags() {
  * @param string $preText text to go before the printed tags
  * @param string $class css class to apply to the div surrounding the UL list
  * @param string $separator what charactor shall separate the tags
- * @param bool $editable true to allow admin to edit the tags
+ * @param bool   $editable true to allow admin to edit the tags
+ * @param string $editclass CSS class applied to editable element if editable
  * @since 1.1
  */
-function printTags($option='links',$preText=NULL,$class='taglist',$separator=', ',$editable=TRUE) {
+function printTags($option='links',$preText=NULL,$class='taglist',$separator=', ',$editable=TRUE, $editclass='editable EditableTags', $messageIfEmpty = true ) {
 	$singletag = getTags();
 	$tagstring = implode(', ', $singletag);
-	if (empty($tagstring)) { $preText = ""; }
+	//if (empty($tagstring)) { $preText = ""; }
+ 	if ($tagstring === '' or $tagstring === NULL ) {
+		$preText = '';
+		if ( $messageIfEmpty === true ) {
+			$tagstring = gettext('(No tags...)');
+		} elseif ( is_string($messageIfEmpty) ) {
+			$tagstring = $messageIfEmpty;
+		}
+	}
+	$id =  in_context(ZP_IMAGE) ? 'img'.getImageID() : 'alb'.getAlbumID() ;
 	if ($editable && zp_loggedin()) {
-		echo "<div id=\"tagContainer\">".$preText."<div id=\"imageTags\" style=\"display: inline;\">" . $tagstring . "</div></div>\n";
-		echo "<script type=\"text/javascript\">initEditableTags('imageTags');</script>";
+		if (!empty($editclass))
+			$editclass= "class=\"$editclass\"";
+		echo "<span id=\"tagContainer_$id\">".$preText."<span id=\"imageTags_$id\" $editclass>" . $tagstring . "</span></span>\n";
+		echo "<script type=\"text/javascript\">eip_tags('imageTags_$id');</script>";
 	} else {
+		echo "<div class=\"".$class."\">";
 		if (count($singletag) > 0) {
-			echo "<div class=\"".$class."\"><ul>\n";
 			if (!empty($preText)) {
-				echo "<li class=\"tags_title\">".$preText."</li>";
+				echo "<span class=\"tags_title\">".$preText."</span>";
 			}
+			echo "<ul>\n";
 			$ct = count($singletag);
 			for ($x = 0; $x < $ct; $x++) {
 				if ($x === $ct - 1) { $separator = ""; }
@@ -3077,9 +3139,11 @@ function printTags($option='links',$preText=NULL,$class='taglist',$separator=', 
 				}
 				echo "\t<li>".$links1.$singletag[$x].$links2.$separator."</li>\n";
 			}
-
-			echo "</ul></div>";
+			echo "</ul>";
+		} else {
+			echo "$tagstring";
 		}
+		echo "</div>";
 	}
 }
 

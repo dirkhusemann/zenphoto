@@ -92,6 +92,7 @@ if (zp_loggedin()) {
 
 	function saveDesc($newdesc) {
 		$newdesc = sanitize($newdesc, 1);
+		$newdesc = str_replace("\n", '<br/>', $newdesc);
 		global $_zp_current_image, $_zp_current_album;
 		if (in_context(ZP_IMAGE)) {
 			$_zp_current_image->setDesc($newdesc);
@@ -106,16 +107,23 @@ if (zp_loggedin()) {
 		}
 	}
 
-	// Load Sajax (AJAX Library) now that we have all objects set.
-	require_once(dirname(__FILE__).'/lib-sajax.php');
-	sajax_init();
-	$sajax_debug_mode = 0;
-	sajax_export("saveTitle");
-	sajax_export("saveTags");
-	sajax_export("saveDesc");
-	sajax_handle_client_request();
+	
+	function editInPlace_handle_request() {
+		$result = call_user_func($_POST["eip_func"], $_POST['new_value']);
+		if ($result !== false) {
+			echo $result;
+		} else {
+			echo gettext('Could not save, please retry');			
+		}
+		die();
+	}
+	
+	// Limit set of functions that will trigger the request handling function
+	$edit_functions = array("saveTitle", "saveTags", "saveDesc");
+	
+	if ( !empty($_POST["eip_func"] ) && in_array( $_POST["eip_func"] , $edit_functions ) )
+		editInPlace_handle_request();
 }
-
 
 
 /*** Consistent URL redirection ***********
