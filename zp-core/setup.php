@@ -546,9 +546,16 @@ if (!$checked) {
 		$m1 = sprintf(gettext('Your internal characater set is <strong>%s</strong>'), $charset);
 		$m2 = gettext('Setting <em>mbstring.internal_encoding</em> to <strong>UTF-8</strong> in your <em>php.ini</em> file is recommended to insure accented and multi-byte characters function properly.');
 	} else {
-		$mb= -1;
-		$m1 = gettext("[is not present]");
-		$m2 = gettext("Strings generated internally by PHP may not display correctly. (e.g. dates)");
+		$test = filesystemToUTF8('test');
+		if (empty($test)) {
+			$mb= 0;
+			$m1 = gettext("[is not present and <code>iconv()</code> is not working]");
+			$m2 = gettext("You need to install the <code>mbstring</code> package or correct the issue with <code>iconv(()</code>");
+					} else {
+			$mb= -1;
+			$m1 = gettext("[is not present]");
+			$m2 = gettext("Strings generated internally by PHP may not display correctly. (e.g. dates)");
+		}
 	}
 	checkMark($mb, gettext("PHP <code>mbstring</code> package"), ' '.$m1, $m2);
 

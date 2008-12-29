@@ -13,6 +13,8 @@ class captcha {
 		if (count($admins) > 0) {
 			$admin = array_shift($admins);
 			$key = $admin['pass'];
+		} else {
+			$key = 'No admin set';
 		}
 		$key = md5('zenphoto'.$key.'captcha key');
 		setOptionDefault('zenphoto_captcha_key', $key);

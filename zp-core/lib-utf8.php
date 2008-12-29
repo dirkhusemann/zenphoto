@@ -48,12 +48,12 @@ class utf8 {
 		if ($encoding == '')
 			$encoding = utf8::detect($string);
 
-		if (function_exists('iconv')) {
-			return @iconv($encoding, $destination . '//IGNORE', $string);
-		}
 		if (function_exists('mb_convert_encoding')) {
 			@mb_substitute_character('none');
 			return @mb_convert_encoding($string, $destination, $encoding );
+		}
+		if (function_exists('iconv')) {
+			return @iconv($encoding, $destination . '//IGNORE', $string);
 		}
 		return $string;
 	}
