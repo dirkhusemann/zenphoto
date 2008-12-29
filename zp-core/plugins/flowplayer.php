@@ -16,14 +16,14 @@ $plugin_description = ($external = (getOption('album_folder_class') === 'externa
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_version = '1.0.3';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flowplayer.php.html";
-$option_interface = new flowplayer();
 $plugin_disable = $external;
+$option_interface = new flowplayer();
 $_zp_flash_player = $option_interface; // claim to be the flash player.
 
 if ($external) return; // can't process external album images
 
 // register the scripts needed
-addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/plugins/flowplayer/jquery.flashembed.pack.js"></script>');
+addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/plugins/flowplayer/flashembed-0.34.pack.js"></script>');
 
 define ('FLOW_PLAYER_MP3_HEIGHT', 28);
 /**
