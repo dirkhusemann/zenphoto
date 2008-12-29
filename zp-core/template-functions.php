@@ -2984,7 +2984,7 @@ function getRandomImagesAlbum($rootAlbum=null) {
 		$album = new Album($_zp_gallery, $rootAlbum);
 	}
 	if ($album->isDynamic()) {
-		$search = $_zp_current_album->getSearchEngine();
+		$search = $album->getSearchEngine();
 		$images = $search->getImages(0);
 		$image = NULL;
 		shuffle($images);
