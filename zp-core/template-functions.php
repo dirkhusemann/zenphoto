@@ -29,10 +29,17 @@ $_zp_conf_vars['images_first_page'] = NULL; // insure it is initialized
 /******************************************/
 
 /**
+ * Returns the zenphoto version string
+ */
+function getVersion() {
+	return ZENPHOTO_VERSION. ' ['.ZENPHOTO_RELEASE. ']';
+}
+
+/**
  * Prints the zenphoto version string
  */
 function printVersion() {
-	echo ZENPHOTO_VERSION. ' ['.ZENPHOTO_RELEASE. ']';
+	echo getVersion();
 }
 
 /**
@@ -2693,6 +2700,27 @@ function printEditCommentLink($text, $before='', $after='', $title=NULL, $class=
 		echo $after;
 	}
 }
+/**
+ * returns an error message if a comment possting was not accepted
+ *
+ */
+function getCommentErrors() {
+	global $_zp_comment_error;
+	if (isset($_zp_comment_error)) {
+		switch ($_zp_comment_error) {
+			case  0: return false;
+			case -1: return gettext("You must supply an e-mail address.");
+			case -2: return gettext("You must enter your name."); break;
+			case -3: return gettext("You must supply an WEB page URL.");
+			case -4: return gettext("Captcha verification failed.");
+			case -5: return gettext("You must enter something in the comment text.");
+			case  1: return gettext("Your comment failed the SPAM filter check.");
+			case  2: return gettext("Your comment has been marked for moderation.");
+			default: return sprintf(gettext('Comment error "%d" not defined.'), $_zp_comment_error);
+		}
+	}
+	return false; 
+}
 
 /**
  * Tool to put an out error message if a comment possting was not accepted
@@ -2700,20 +2728,10 @@ function printEditCommentLink($text, $before='', $after='', $title=NULL, $class=
  * @param string $class optional division class for the message
  */
 function printCommentErrors($class = 'error') {
-	global $_zp_comment_error;
-	if (isset($_zp_comment_error)) {
-		switch ($_zp_comment_error) {
-			case -1: echo "<div class=\"$class\">".gettext("You must supply an e-mail address.")."</div>"; break;
-			case -2: echo "<div class=\"$class\">".gettext("You must enter your name.")."</div>"; break;
-			case -3: echo "<div class=\"$class\">".gettext("You must supply an WEB page URL.")."</div>"; break;
-			case -4: echo "<div class=\"$class\">".gettext("Captcha verification failed.")."</div>"; break;
-			case -5: echo "<div class=\"$class\">".gettext("You must enter something in the comment text.")."</div>"; break;
-			case  1: echo "<div class=\"$class\">".gettext("Your comment failed the SPAM filter check.")."</div>"; break;
-			case  2: echo "<div class=\"$class\">".gettext("Your comment has been marked for moderation.")."</div>"; break;
-		}
-		return $_zp_comment_error;
+	$s = getCommentErrors();
+	if ($s) {	
+		echo '<div class="'.$class.'">'.$s.'</div>';
 	}
-	return false;
 }
 /**
  * Creates an URL for to download of a zipped copy of the current album
