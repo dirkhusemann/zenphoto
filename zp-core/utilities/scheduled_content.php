@@ -204,7 +204,7 @@ if (db_connect()) {
 		}
 	}
 	if (isset($_POST['publish_date']))	{
-		$requestdate = sanitize($_POST['publish_date']);
+		$requestdate = dateTimeConvert(sanitize($_POST['publish_date']));
 	} else {
 		$requestdate = date('Y-m-d H:i:s');
 	}
@@ -236,7 +236,7 @@ if (db_connect()) {
 		}
 	}
 
-	$mtime = dateTimeConvert(sanitize($requestdate));
+	$mtime = dateTimeConvert(sanitize($requestdate), true);
 	$sql = "SELECT `folder`, `id` FROM ".prefix('albums').' WHERE `show`="0"'.$albumids;
 	$result = query_full_array($sql);
 	if (is_array($result)) {

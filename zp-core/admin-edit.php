@@ -177,7 +177,11 @@ if (isset($_GET['album'])) {
 									$image->setCountry(process_language_string_save("$i-country", 3));
 									$image->setCredit(process_language_string_save("$i-credit", 1));
 									$image->setCopyright(process_language_string_save("$i-copyright", 1));
-									$oldrotation = sanitize_numeric($_POST[$i.'-oldrotation']);
+									if (isset($_POST[$i.'-oldrotation'])) {
+										$oldrotation = sanitize_numeric($_POST[$i.'-oldrotation']);
+									} else {
+										$oldrotation = 0;
+									}
 									if (isset($_POST[$i.'-rotation'])) {
 										$rotation = sanitize_numeric($_POST[$i.'-rotation']);
 									} else {

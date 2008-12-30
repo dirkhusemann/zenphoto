@@ -2070,11 +2070,19 @@ function makeSpecialImageName($image) {
 	return $folder.$filename;
 }
 
-function dateTimeConvert($datetime) {
+/**
+ * Converts a datetime to connoical form
+ *
+ * @param string $datetime input date/time string
+ * @param bool $raw set to true to return the timestamp otherwise you get a string
+ * @return mixed
+ */
+function dateTimeConvert($datetime, $raw=false) {
 	// Convert 'yyyy:mm:dd hh:mm:ss' to 'yyyy-mm-dd hh:mm:ss' for Windows' strtotime compatibility
 	$datetime = preg_replace('/(\d{4}):(\d{2}):(\d{2})/', ' \1-\2-\3', $datetime);
 	$time = @strtotime($datetime);
 	if ($time == -1 || $time == false) return false;
+	if ($raw) return $time;
 	return date('Y-m-d H:i:s', $time);
 }
 
