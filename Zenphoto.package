@@ -257,6 +257,7 @@ zp-core/js/ajax.js
 zp-core/js/editor_config.js.php
 zp-core/js/Jcrop.gif
 zp-core/js/jquery.dimensions.js
+zp-core/js/jquery.editinplace.js
 zp-core/js/jquery.flashembed.pack.js
 zp-core/js/jquery.Jcrop.css
 zp-core/js/jquery.Jcrop.pack.js
@@ -310,10 +311,10 @@ zp-core/plugins/class-video.php
 zp-core/plugins/contact_form/form.php
 zp-core/plugins/contact_form.php
 zp-core/plugins/dynamic-locale.php
+zp-core/plugins/flowplayer/flashembed-0.34.pack.js
 zp-core/plugins/flowplayer/FlowPlayerDark.swf
 zp-core/plugins/flowplayer/FlowPlayerLight.swf
 zp-core/plugins/flowplayer/flowplayer_license.txt
-zp-core/plugins/flowplayer/flashembed-0.34.pack.js
 zp-core/plugins/flowplayer.php
 zp-core/plugins/flvplayer/flvplayer.js
 zp-core/plugins/flvplayer/player3.swf
@@ -368,6 +369,7 @@ zp-core/upgrade.php
 zp-core/utilities/backup_restore.php
 zp-core/utilities/gallery_statistics.css
 zp-core/utilities/gallery_statistics.php
+zp-core/utilities/reset_albumthumbs.php
 zp-core/utilities/scheduled_content.php
 zp-core/version.php
 zp-core/watermarks/copyright.png
