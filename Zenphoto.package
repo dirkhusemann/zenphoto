@@ -313,7 +313,7 @@ zp-core/plugins/dynamic-locale.php
 zp-core/plugins/flowplayer/FlowPlayerDark.swf
 zp-core/plugins/flowplayer/FlowPlayerLight.swf
 zp-core/plugins/flowplayer/flowplayer_license.txt
-zp-core/plugins/flowplayer/jquery.flashembed.pack.js
+zp-core/plugins/flowplayer/flashembed-0.34.pack.js
 zp-core/plugins/flowplayer.php
 zp-core/plugins/flvplayer/flvplayer.js
 zp-core/plugins/flvplayer/player3.swf
