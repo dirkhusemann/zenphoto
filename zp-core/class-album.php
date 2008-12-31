@@ -468,7 +468,7 @@ class Album extends PersistentObject {
 				$dir = $this->name . '/' . $dir;
 				$subalbums[] = $dir;
 			}
-			$key = '`'.$this->getSubalbumSortKey($sorttype).'`';
+			$key = $this->getSubalbumSortKey($sorttype);
 			if ($key != '`sort_order`') {
 				if (is_null($sortdirection)) {
 					if ($this->getSortDirection('album')) { $key .= ' DESC'; }
@@ -551,7 +551,7 @@ class Album extends PersistentObject {
 
 		$hidden = array();
 		$mine = isMyAlbum($this->name, ALL_RIGHTS);
-		$key = '`'.$this->getSortKey($sorttype).'`';
+		$key = $this->getSortKey($sorttype);
 		$direction = '';
 		if ($key != '`sort_order`') { // manual sort is always ascending
 			if (!is_null($sortdirection)) {

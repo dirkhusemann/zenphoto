@@ -225,7 +225,7 @@ function printAdminHeader($path='') {
 	echo "\n  \t});";
 	echo "\n  </script>";
 	?>
-<script type="text/javascript">
+	<script type="text/javascript">
 		/*-----------------------------------------------------------+
 		 | addLoadEvent: Add event handler to body when window loads |
 		 +-----------------------------------------------------------*/
@@ -968,6 +968,7 @@ function printAlbumEditForm($index, $album) {
 	if (!$album->isDynamic()) {
 		$sort[gettext('Manual')] = 'Manual';
 	}
+	$sort[gettext('Custom')] = 'custom';
 	echo "\n<tr>";
 	echo "\n<td align=\"right\" valign=\"top\">".gettext("Sort subalbums by:")." </td>";
 	echo "\n<td>";
@@ -975,32 +976,57 @@ function printAlbumEditForm($index, $album) {
 	// script to test for what is selected
 	$javaprefix = 'js_'.preg_replace("/[^a-z0-9_]/","",strtolower($prefix));
 
-	echo "\n<table>\n<tr>\n<td>";
-	echo "\n<select id=\"sortselect\" name=\"".$prefix."subalbumsortby\" onchange=\"update_direction(this,'$javaprefix"."album_direction_div')\">";
-	if (is_null($album->getParent())) {
-		$globalsort = gettext("gallery album sort order");
-	} else {
-		$globalsort = gettext("parent album subalbum sort order");
-	}
-	echo "\n<option value =''>$globalsort</option>";
-	$type = $album->get('subalbum_sort_type');
-	generateListFromArray(array($type), $sort, false, true);
-	echo "\n</select>";
-	echo "\n</td>\n<td>";
+	?>
+	<table>
+		<tr>
+			<td>
+		<?php
+			echo "\n<select id=\"sortselect\" name=\"".$prefix."subalbumsortby\" onchange=\"update_direction(this,'".$javaprefix."album_direction_div','$javaprefix"."album_custom_div')\">";
+			if (is_null($album->getParent())) {
+				$globalsort = gettext("gallery album sort order");
+			} else {
+				$globalsort = gettext("parent album subalbum sort order");
+			}
+			echo "\n<option value =''>$globalsort</option>";
+			$cvt = $type = $album->get('subalbum_sort_type');
+			generateListFromArray(array($type), $sort, false, true);
+			echo "\n</select>";
+			?>
+			</td>
+		<td>
+	<?php
 	if (($type == 'Manual') || ($type == '')) {
 		$dsp = 'none';
 	} else {
 		$dsp = 'block';
 	}
-	echo "\n<div id=\"".$javaprefix."album_direction_div\" style=\"display:".$dsp."\">";
+	echo "\n<span id=\"".$javaprefix."album_direction_div\" style=\"display:".$dsp."\">";
 	echo "&nbsp;".gettext("Descending")." <input type=\"checkbox\" name=\"".$prefix."album_sortdirection\" value=\"1\"";
 
 	if ($album->getSortDirection('album')) {
 		echo "CHECKED";
 	}
 	echo ">";
-	echo '</div>';
-	echo "\n</td>\n</tr>\n</table>";
+	echo '</span>';
+	$flip = array_flip($sort);
+	if (empty($type) || isset($flip[$type])) {
+		$dsp = 'none';
+	} else {
+		$dsp = 'block';
+	}
+	?>
+		</td>
+	</tr>
+		<td colspan="2">
+		<span id="<?php echo $javaprefix; ?>album_custom_div" class="customText" style="display:<?php echo $dsp; ?>">
+		<?php echo gettext('custom fields:') ?>
+		<input name="<? echo $prefix; ?>customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
+		</span>
+	
+		</td>
+	</tr>
+</table>
+	<?php
 	echo "\n</td>";
 	echo "\n</tr>";
 
@@ -1011,31 +1037,56 @@ function printAlbumEditForm($index, $album) {
 	// script to test for what is selected
 	$javaprefix = 'js_'.preg_replace("/[^a-z0-9_]/","",strtolower($prefix));
 
-	echo "\n<table>\n<tr>\n<td>";
-	echo "\n<select id=\"sortselect\" name=\"".$prefix."sortby\" onchange=\"update_direction(this,'".$javaprefix."image_direction_div')\">";
-	if (is_null($album->getParent())) {
-		$globalsort = gettext("gallery default image sort order");
-	} else {
-		$globalsort = gettext("parent album image sort order");
-	}
-	echo "\n<option value =''>$globalsort</option>";
-	$type = $album->get('sort_type');
-	generateListFromArray(array($type), $sort, false, true);
-	echo "\n</select>";
-	echo "\n</td>\n<td>";
+	?>
+	<table>
+		<tr>
+			<td>
+			<?php
+			echo "\n<select id=\"sortselect\" name=\"".$prefix."sortby\" onchange=\"update_direction(this,'".$javaprefix."image_direction_div','".$javaprefix."image_custom_div')\">";
+			if (is_null($album->getParent())) {
+				$globalsort = gettext("gallery default image sort order");
+			} else {
+				$globalsort = gettext("parent album image sort order");
+			}
+			echo "\n<option value =''>$globalsort</option>";
+			$cvt = $type = $album->get('sort_type');
+			generateListFromArray(array($type), $sort, false, true);
+			echo "\n</select>";
+			?>
+			</td>
+		<td>
+	<?php
 	if (($type == 'Manual') || ($type == '')) {
 		$dsp = 'none';
 	} else {
 		$dsp = 'block';
 	}
-	echo "\n<div id=\"".$javaprefix."image_direction_div\" style=\"display:".$dsp."\">";
+	echo "\n<span id=\"".$javaprefix."image_direction_div\" style=\"display:".$dsp."\">";
 	echo "&nbsp;".gettext("Descending")." <input type=\"checkbox\" name=\"".$prefix."image_sortdirection\" value=\"1\"";
 	if ($album->getSortDirection('image')) {
 		echo "CHECKED";
 	}
 	echo ">";
-	echo '</div>';
-	echo "\n</td>\n</tr>\n</table>";
+	echo '</span>';
+	$flip = array_flip($sort);
+	if (empty($type) || isset($flip[$type])) {
+		$dsp = 'none';
+	} else {
+		$dsp = 'block';
+	}
+	?>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+			<span id="<?php echo $javaprefix; ?>image_custom_div" class="customText" style="display:<?php echo $dsp; ?>">
+			<?php echo gettext('custom fields:') ?>
+			<input name="<?php echo $prefix; ?>customimagesort" type="text" value="<?php echo $cvt; ?>"></input>
+			</span>
+			</td>
+		</tr>
+	</table>
+	<?php
 	echo "\n</td>";
 	echo "\n</tr>";
 
@@ -1503,7 +1554,8 @@ function processAlbumEdit($index, $album) {
 	if (isset($_POST[$prefix.'thumb'])) $album->setAlbumThumb(strip($_POST[$prefix.'thumb']));
 	$album->setShow(isset($_POST[$prefix.'Published']));
 	$album->setCommentsAllowed(isset($_POST[$prefix.'allowcomments']));
-	$sorttype = strip($_POST[$prefix.'sortby']);
+	$sorttype = sanitize($_POST[$prefix.'sortby'], 3);
+	if ($sorttype == 'custom') $sorttype = strtolower(sanitize($_POST[$prefix.'customimagesort'],3));
 	$album->setSortType($sorttype);
 	if ($sorttype == 'Manual') {
 		$album->setSortDirection('image', 0);
@@ -1515,7 +1567,9 @@ function processAlbumEdit($index, $album) {
 		}
 		$album->setSortDirection('image', $direction);
 	}
-	$album->setSubalbumSortType($sorttype = strip($_POST[$prefix.'subalbumsortby']));
+	$sorttype = sanitize($_POST[$prefix.'subalbumsortby'],3);
+	if ($sorttype == 'custom') $sorttype = strtolower(sanitize($_POST[$prefix.'customalbumsort'],3));
+	$album->setSubalbumSortType($sorttype);
 	if ($sorttype == 'Manual') {
 		$album->setSortDirection('album', 0);
 	} else {

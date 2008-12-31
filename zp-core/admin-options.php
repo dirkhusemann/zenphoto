@@ -125,20 +125,22 @@ if (isset($_GET['action'])) {
 			setOption('website_title', process_language_string_save('website_title', 2));
 			$web = sanitize($_POST['website_url'],3);
 			setOption('website_url', $web);
-			setOption('time_offset', sanitize($_POST['time_offset']),3);
+			setOption('time_offset', sanitize($_POST['time_offset'],3));
 			setBoolOption('mod_rewrite', isset($_POST['mod_rewrite']));
-			setOption('mod_rewrite_image_suffix', sanitize($_POST['mod_rewrite_image_suffix']),3);
-			setOption('server_protocol', sanitize($_POST['server_protocol']),3);
+			setOption('mod_rewrite_image_suffix', sanitize($_POST['mod_rewrite_image_suffix'],3));
+			setOption('server_protocol', sanitize($_POST['server_protocol'],3));
 			setOption('charset', sanitize($_POST['charset']),3);
 			setBoolOption('album_use_new_image_date', isset($_POST['album_use_new_image_date']));
-			setOption('gallery_sorttype', sanitize($_POST['gallery_sorttype']),3);
-			if ($_POST['gallery_sorttype'] == 'Manual') {
+			$st = sanitize($_POST['gallery_sorttype'],3);
+			if ($st == 'custom') $st = strtolower(sanitize($_POST['customalbumsort'],3));
+			setOption('gallery_sorttype', $st);
+			if ($st == 'Manual') {
 				setBoolOption('gallery_sortdirection', 0);
 			} else {
 				setBoolOption('gallery_sortdirection', isset($_POST['gallery_sortdirection']));
 			}
-			setOption('feed_items', sanitize($_POST['feed_items']),3);
-			setOption('feed_imagesize', sanitize($_POST['feed_imagesize']),3);
+			setOption('feed_items', sanitize($_POST['feed_items'],3));
+			setOption('feed_imagesize', sanitize($_POST['feed_imagesize'],3));
 			setBoolOption('login_user_field', isset($_POST['login_user_field']));
 			$searchfields = 0;
 			foreach ($_POST as $key=>$value) {
@@ -236,8 +238,8 @@ if (isset($_GET['action'])) {
 
 		/*** Image options ***/
 		if (isset($_POST['saveimageoptions'])) {
-			setOption('image_quality', sanitize($_POST['image_quality']),3);
-			setOption('thumb_quality', sanitize($_POST['thumb_quality']),3);
+			setOption('image_quality', sanitize($_POST['image_quality'],3));
+			setOption('thumb_quality', sanitize($_POST['thumb_quality'],3));
 			setBoolOption('image_allow_upscale', isset($_POST['image_allow_upscale']));
 			setBoolOption('thumb_sharpen', isset($_POST['thumb_sharpen']));
 			setBoolOption('image_sharpen', isset($_POST['image_sharpen']));
@@ -249,10 +251,10 @@ if (isset($_GET['action'])) {
 				$wmchange = $wmchange || $old != $new;
 			}
 			
-			setOption('watermark_scale', sanitize($_POST['watermark_scale']),3);
+			setOption('watermark_scale', sanitize($_POST['watermark_scale'],3));
 			setBoolOption('watermark_allow_upscale', isset($_POST['watermark_allow_upscale']));
-			setOption('watermark_h_offset', sanitize($_POST['watermark_h_offset']),3);
-			setOption('watermark_w_offset', sanitize($_POST['watermark_w_offset']),3);
+			setOption('watermark_h_offset', sanitize($_POST['watermark_h_offset'],3));
+			setOption('watermark_w_offset', sanitize($_POST['watermark_w_offset'],3));
 			setBoolOption('perform_video_watermark', isset($_POST['perform_video_watermark']));
 			
 			$imageplugins = array_unique($_zp_extra_filetypes);
@@ -267,12 +269,14 @@ if (isset($_GET['action'])) {
 				}
 			}
 			
-			setOption('full_image_quality', sanitize($_POST['full_image_quality']),3);
+			setOption('full_image_quality', sanitize($_POST['full_image_quality'],3));
 			setBoolOption('cache_full_image', isset($_POST['cache_full_image']));
-			setOption('protect_full_image', sanitize($_POST['protect_full_image']),3);
+			setOption('protect_full_image', sanitize($_POST['protect_full_image'],3));
 			setBoolOption('hotlink_protection', isset($_POST['hotlink_protection']));
 			setBoolOption('use_lock_image', isset($_POST['use_lock_image']));
-			setOption('image_sorttype', sanitize($_POST['image_sorttype'],3));
+			$st = sanitize($_POST['image_sorttype'],3);
+			if ($st == 'custom') $st = strtolower(sanitize($_POST['customimagesort'], 3));
+			setOption('image_sorttype', $st);
 			setBoolOption('image_sortdirection', isset($_POST['image_sortdirection']));
 			setBoolOption('auto_rotate', isset($_POST['auto_rotate']));
 			setOption('IPTC_encoding', $_POST['IPTC_encoding']);
@@ -885,15 +889,7 @@ if ($subtab == 'admin') {
 		<tr>
 			<td><?php echo gettext("Date format:"); ?></td>
 			<td>
-				<script type="text/javascript">
-				function showfield(obj) {
-					no = obj.options[obj.selectedIndex].value;
-					document.getElementById('customTextBox').style.display = 'none';
-					if(no=='custom')
-						document.getElementById('customTextBox').style.display = 'block';
-				}
-				</script>
-				<select id="date_format_list" name="date_format_list" onchange="showfield(this)">
+				<select id="date_format_list" name="date_format_list" onchange="showfield(this, 'customTextBox')">
 				<?php
 				$formatlist = array(gettext('Custom')=>'custom',
 						gettext('02/25/08 15:30')=>'%d/%m/%y %H:%M',
@@ -1005,18 +1001,37 @@ if ($subtab == 'admin') {
 		</tr>
 		<tr>
 			<td><?php echo gettext("Sort gallery by:"); ?></td>
-			<td><select id="sortselect" name="gallery_sorttype">
+			<td>
 				<?php
-			$sort = $sortby;
-			$sort[gettext('Manual')] = 'Manual'; // allow manual sorttype
-			generateListFromArray(array(getOption('gallery_sorttype')), $sort, false, true);
-			?>
-			</select>
-			<input type="checkbox" name="gallery_sortdirection"
-				value="1"
-				<?php echo checked('1', getOption('gallery_sortdirection')); ?> />
-			<?php echo gettext("Descending"); ?></td>
-			<td><?php echo gettext("Sort order for the albums on the index of the gallery"); ?></td>
+				$sort = $sortby;
+				$cvt = $cv = getOption('gallery_sorttype');
+				$sort[gettext('Custom')] = 'custom';
+				$flip = array_flip($sort);
+				if (isset($flip[$cv])) {
+					$dsp = 'none';
+				} else {
+					$dsp = 'block';
+				}
+				?>
+				<select id="sortselect" name="gallery_sorttype" onchange="showfield(this, 'customTextBox2')">
+				<?php
+				if (array_search($cv, $sort) === false) $cv = 'custom';
+				generateListFromArray(array($cv), $sort, false, true);
+				?>
+				</select>
+				<input type="checkbox" name="gallery_sortdirection"	value="1" <?php echo checked('1', getOption('gallery_sortdirection')); ?> />
+				<?php echo gettext("Descending"); ?>
+				<div id="customTextBox2" class="customText" style="display:<?php echo $dsp; ?>">
+				<?php echo gettext('custom fields:') ?>
+				<input name="customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
+				</div>
+			</td>
+			<td>
+				<?php
+				echo gettext("Sort order for the albums on the index of the gallery.").' ';
+				echo gettext('Custom sort values must be database field names. You can have multiple fields separated by commas.')
+				?>
+			</td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Search fields:"); ?></td>
@@ -1085,12 +1100,38 @@ if ($subtab == 'admin') {
 	<table class="bordered">
 		<tr>
 			<td><?php echo gettext("Sort images by:"); ?></td>
-			<td><select id="imagesortselect" name="image_sorttype">
-				<?php generateListFromArray(array(getOption('image_sorttype')), $sortby, false, true); ?>
-			</select> <input type="checkbox" name="image_sortdirection" value="1"
-			<?php echo checked('1', getOption('image_sortdirection')); ?> />
-			<?php echo gettext("Descending"); ?></td>
-			<td><?php echo gettext("Default sort order for images"); ?></td>
+			<td>
+				<?php
+				$sort = $sortby;
+				$cvt = $cv = getOption('image_sorttype');
+				$sort[gettext('Custom')] = 'custom';
+				$flip = array_flip($sort);
+				if (isset($flip[$cv])) {
+					$dsp = 'none';
+				} else {
+					$dsp = 'block';
+				}
+				?>
+				<select id="imagesortselect" name="image_sorttype"  onchange="showfield(this, 'customTextBox3')">
+				<?php
+				if (array_search($cv, $sort) === false) $cv = 'custom';
+				generateListFromArray(array($cv), $sort, false, true);
+				?>
+				</select>
+				<input type="checkbox" name="image_sortdirection" value="1"
+				<?php echo checked('1', getOption('image_sortdirection')); ?> />
+				<?php echo gettext("Descending"); ?>
+				<div id="customTextBox3" class="customText" style="display:<?php echo $dsp; ?>">
+				<?php echo gettext('custom fields:') ?>
+				<input name="customimagesort" type="text" value="<?php echo $cvt; ?>"></input>
+				</div>
+				</td>
+			<td>
+				<?php
+				echo gettext("Default sort order for images.").' ';
+				echo gettext('Custom sort values must be database field names. You can have multiple fields separated by commas.')
+				?>
+			</td>
 		</tr>
 		<tr>
 			<td width="175"><?php echo gettext("Image quality:"); ?></td>

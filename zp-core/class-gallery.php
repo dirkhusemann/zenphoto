@@ -52,19 +52,7 @@ class Gallery {
 	 */
 	function getGallerySortKey($sorttype=null) {
 		if (is_null($sorttype)) { $sorttype = getOption('gallery_sorttype'); }
-		switch ($sorttype) {
-			case "Title":
-				return 'title';
-			case "Manual":
-				return 'sort_order';
-			case "Filename":
-				return 'folder';
-			case "Date":
-				return 'date';
-			case "ID":
-				return 'id';
-		}
-		return 'sort_order';
+		return getSortKey($sorttype, 'folder', 'sort_order');
 	}
 
 
@@ -86,7 +74,7 @@ class Gallery {
 		if (is_null($this->albums) || $sorttype.$direction !== $this->lastalbumsort) {
 
 			$albumnames = $this->loadAlbumNames();
-			$key = '`'.$this->getGallerySortKey($sorttype).'`';
+			$key = $this->getGallerySortKey($sorttype);
 			if (is_null($direction)) {
 				if (getOption('gallery_sortdirection')) { $key .= ' DESC'; }
 			} else {

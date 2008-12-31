@@ -231,25 +231,48 @@ function getUrAlbum($album) {
 }
 
 /**
+ * Returns a sort field part for querying
+ * Note: $sorttype may be a comma separated list of field names. If so, 
+ *       these are peckmarked and returned otherwise unchanged. 
+ *
+ * @param string $sorttype the 'Display" name of the sort
+ * @param string $default the default if $sorttype is empty
+ * @param string $filename the value to be used if $sorttype is 'Filename' since 
+ * 												 the field is different between the album table and the image table.
+ * @return string
+ */
+function getSortKey($sorttype, $default, $filename) {
+	switch ($sorttype) {
+		case "Title":
+			return '`title`';
+		case "Manual":
+			return '`sort_order`';
+		case "Filename":
+			return '`'.$filename.'`';
+		case "Date":
+			return '`date`';
+		case "ID":
+			return '`id`';
+		case 'mtime':
+			return '`mtime`';
+		default:
+			if (empty($sorttype)) return $default;
+			$list = explode(',', $sorttype);
+			foreach ($list as $key=>$field) {
+				$list[$key] = '`'.trim($field).'`';
+			}
+			return implode(',', $list);
+	}
+}
+
+/**
  * Returns the DB sort key for an album sort type
  *
  * @param string $sorttype The sort type option
  * @return string
  */
 function albumSortKey($sorttype) {
-	switch ($sorttype) {
-		case "Title":
-			return 'title';
-		case "Manual":
-			return 'sort_order';
-		case "Date":
-			return 'date';
-		case "ID":
-			return 'id';
-		case 'mtime':
-			return 'mtime';
-	}
-	return 'filename';
+	return getSortKey($sorttype, 'filename', 'filename');
 }
 /**
  * Returns the DB key associated with the subalbum sort type
@@ -258,21 +281,7 @@ function albumSortKey($sorttype) {
  * @return string
  */
 function subalbumSortKey($sorttype) {
-	switch ($sorttype) {
-		case "Title":
-			return 'title';
-		case "Manual":
-			return 'sort_order';
-		case "Filename":
-			return 'folder';
-		case "Date":
-			return 'date';
-		case "ID":
-			return 'id';
-		case 'mtime':
-			return 'mtime';
-	}
-	return 'sort_order';
+	return getSortKey($sorttype, 'folder', 'sort_order');
 }
 
 /**
@@ -476,8 +485,9 @@ function sortAlbumArray($parentalbum, $albums, $sortkey='`sort_order`', $recurse
 	} else {
 		$albumid = '="'.$parentalbum->id.'"';
 	}
-	$result = query('SELECT `folder`, `sort_order`, `title`, `show`, `dynamic`, `search_params` FROM ' .
-						prefix("albums") . ' WHERE `parentid`'.$albumid.' ORDER BY ' . $sortkey);
+	$sql = 'SELECT `folder`, `sort_order`, `title`, `show`, `dynamic`, `search_params` FROM ' .
+						prefix("albums") . ' WHERE `parentid`'.$albumid.' ORDER BY ' . $sortkey;	
+	$result = query($sql);
 	$results = array();
 	while ($row = mysql_fetch_assoc($result)) {
 		$results[] = $row;

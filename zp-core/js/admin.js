@@ -105,7 +105,7 @@ function updateFolder(nameObj, folderID, checkboxID, msg1, msg2) {
 		fname = fname.replace(/[Üü]/g, 'ue');
 		fname = fname.replace(/[ÝŸýÿ]/g, 'y');
 		fname = fname.replace(/ß/g, 'ss');
-		fname = fname.replace(/[�?æä]/g, 'ae');
+		fname = fname.replace(/[�?æä]/g, 'ae');
 		fname = fname.replace(/[ÐðÞþ]/g, 'd');
 		fname = fname.replace(/[Ññ]/g, 'n');
 
@@ -211,13 +211,16 @@ function updateThumbPreview(selectObj) {
 	}
 }
 
-function update_direction(obj, element) {
+function update_direction(obj, element, element2) {
+	no = obj.options[obj.selectedIndex].value;
 	if((obj.options[obj.selectedIndex].value == 'Manual') || (obj.options[obj.selectedIndex].value == '')) {
 		document.getElementById(element).style.display = 'none';
-		}
-	else {
+	}	else {
 		document.getElementById(element).style.display = 'block';
 	}
+	document.getElementById(element2).style.display = 'none';
+	if(no=='custom')
+		document.getElementById(element2).style.display = 'block';
 }
 
 // Uses jQuery
@@ -286,3 +289,13 @@ function toggleExtraInfo(id, category, show) {
 		jQuery(prefix+'.'+category+'extrahide').hide();
 	}
 }
+
+// used to toggle fields
+function showfield(obj, fld) {
+	no = obj.options[obj.selectedIndex].value;
+	document.getElementById(fld).style.display = 'none';
+	if(no=='custom')
+		document.getElementById(fld).style.display = 'block';
+}
+
+
