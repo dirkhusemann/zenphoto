@@ -491,7 +491,7 @@ function printTabs($currenttab) {
 
 }
 
-function printSubtabs($tabs) {
+function getSubtabs($tabs) {
 	if (isset($_GET['tab'])) {
 		$current = sanitize($_GET['tab']);
 	} else {
@@ -504,6 +504,11 @@ function printSubtabs($tabs) {
 			$current = substr($current, $i+1);
 		}
 	}
+	return $current;
+}
+
+function printSubtabs($tabs) {
+	$current = getSubtabs($tabs);
 	?>
 	<ul class="subnav">
 	<?php
@@ -890,15 +895,16 @@ function printAlbumEditForm($index, $album) {
 	// FYI: It's perfectly acceptable to drop out of php-parsing mode in a function.
 	// See the move/copy/rename block for an example.
 
-	global $sortby, $gallery, $_zp_loggedin, $mcr_albumlist;
+	global $sortby, $gallery, $_zp_loggedin, $mcr_albumlist, $albumdbfields, $imagedbfields;
 	$tagsort = getTagOrder();
 	if ($index == 0) {
 		if (isset($saved)) {
 			$album->setSubalbumSortType('Manual');
 		}
-		$prefix = '';
+		$suffix = $prefix = '';
 	} else {
 		$prefix = "$index-";
+		$suffix = "_$index";
 		echo "<p><em><strong>" . $album->name . "</strong></em></p>";
 	}
 
@@ -1017,10 +1023,18 @@ function printAlbumEditForm($index, $album) {
 	?>
 		</td>
 	</tr>
+	<script type="text/javascript">
+		$(function () {
+			$('#<?php echo $javaprefix; ?>customalbumsort').tagSuggest({
+				tags: [<?php echo $albumdbfields; ?>]
+			});
+		});
+	</script>
+	<tr>
 		<td colspan="2">
 		<span id="<?php echo $javaprefix; ?>album_custom_div" class="customText" style="display:<?php echo $dsp; ?>">
 		<?php echo gettext('custom fields:') ?>
-		<input name="<? echo $prefix; ?>customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
+		<input id="<? echo $javaprefix; ?>customalbumsort" name="<? echo $prefix; ?>customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
 		</span>
 	
 		</td>
@@ -1077,11 +1091,18 @@ function printAlbumEditForm($index, $album) {
 	?>
 			</td>
 		</tr>
+		<script type="text/javascript">
+			$(function () {
+				$('#<?php echo $javaprefix; ?>customimagesort').tagSuggest({
+					tags: [<?php echo $imagedbfields; ?>]
+				});
+			});
+		</script>
 		<tr>
 			<td colspan="2">
 			<span id="<?php echo $javaprefix; ?>image_custom_div" class="customText" style="display:<?php echo $dsp; ?>">
 			<?php echo gettext('custom fields:') ?>
-			<input name="<?php echo $prefix; ?>customimagesort" type="text" value="<?php echo $cvt; ?>"></input>
+			<input id="<?php echo $javaprefix; ?>customimagesort" name="<?php echo $prefix; ?>customimagesort" type="text" value="<?php echo $cvt; ?>"></input>
 			</span>
 			</td>
 		</tr>

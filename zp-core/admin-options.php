@@ -385,13 +385,56 @@ if (isset($_GET['action'])) {
 
 }
 printAdminHeader();
+$_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS);
+$tabs = array(gettext("admin information")=>'admin-options.php?tab=admin');
+	if (!$_zp_null_account) {
+		if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
+			$tabs[gettext("gallery configuration")] = 'admin-options.php?tab=gallery';
+			$tabs[gettext("image display")] = 'admin-options.php?tab=image';
+			$tabs[gettext("comment configuration")] = 'admin-options.php?tab=comments';
+		}
+		if ($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
+			$tabs[gettext("theme options")] = 'admin-options.php?tab=theme';
+		}
+		if ($_zp_loggedin & ADMIN_RIGHTS) {
+			$tabs[gettext("plugin options")] = 'admin-options.php?tab=plugin';
+		}
+	}
+$subtab = getSubtabs($tabs);
+if ($subtab == 'gallery' || $subtab == 'image') {
+	$sql = 'SHOW COLUMNS FROM ';
+	if ($subtab == 'image') {
+		$sql .= prefix('images');
+		$targetid = 'customimagesort';
+	} else {
+		$sql .= prefix('albums');
+		$targetid = 'customalbumsort';
+	}
+	$result = mysql_query($sql);
+	$dbfields = array();
+	while ($row = mysql_fetch_row($result)) {
+		$dbfields[] = "'".$row[0]."'";
+	}
+	sort($dbfields);
+	?>
+	<script type="text/javascript" src="js/tag.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			$('#<?php echo $targetid; ?>').tagSuggest({
+				tags: [<?php echo implode(',', $dbfields); ?>]
+			});
+		});
+	</script>
+	<?php
+}
+
 echo "\n</head>";
 echo "\n<body>";
 printLogoAndLinks();
 echo "\n" . '<div id="main">';
 printTabs('options');
 echo "\n" . '<div id="content">';
-if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
+if ($_zp_null_account) {
 	echo "<div class=\"errorbox space\">";
 	echo "<h2>".gettext("Password reset request.<br/>You may now set admin usernames and passwords.")."</h2>";
 	echo "</div>";
@@ -408,21 +451,7 @@ if ($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) {
 	}
 ?>
 <?php
-$tabs = array(gettext("admin information")=>'admin-options.php?tab=admin');
-	if (!$_zp_null_account) {
-		if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
-			$tabs[gettext("gallery configuration")] = 'admin-options.php?tab=gallery';
-			$tabs[gettext("image display")] = 'admin-options.php?tab=image';
-			$tabs[gettext("comment configuration")] = 'admin-options.php?tab=comments';
-		}
-		if ($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
-			$tabs[gettext("theme options")] = 'admin-options.php?tab=theme';
-		}
-		if ($_zp_loggedin & ADMIN_RIGHTS) {
-			$tabs[gettext("plugin options")] = 'admin-options.php?tab=plugin';
-		}
-	}
-$subtab = printSubtabs($tabs);
+printSubtabs($tabs);
 if ($subtab == 'admin') {
 ?>
 <div id="tab_admin" class="box" style="padding: 15px;">
@@ -1023,7 +1052,7 @@ if ($subtab == 'admin') {
 				<?php echo gettext("Descending"); ?>
 				<div id="customTextBox2" class="customText" style="display:<?php echo $dsp; ?>">
 				<?php echo gettext('custom fields:') ?>
-				<input name="customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
+				<input id="customalbumsort" name="customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
 				</div>
 			</td>
 			<td>
@@ -1123,7 +1152,7 @@ if ($subtab == 'admin') {
 				<?php echo gettext("Descending"); ?>
 				<div id="customTextBox3" class="customText" style="display:<?php echo $dsp; ?>">
 				<?php echo gettext('custom fields:') ?>
-				<input name="customimagesort" type="text" value="<?php echo $cvt; ?>"></input>
+				<input id="customimagesort" name="customimagesort" type="text" value="<?php echo $cvt; ?>"></input>
 				</div>
 				</td>
 			<td>

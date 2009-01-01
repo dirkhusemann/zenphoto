@@ -343,6 +343,25 @@ printAdminHeader();
 if ((empty($subtab) && !isset($_GET['album'])) || $subtab === 'subalbuminfo') {
 	zenSortablesHeader('albumList','albumOrder','div', "handle:'handle'");
 }
+if (empty($subtab)) {
+	?>
+	<script type="text/javascript" src="js/tag.js"></script>
+	<?php
+	$result = mysql_query('SHOW COLUMNS FROM '.prefix('albums'));
+	$dbfields = array();
+	while ($row = mysql_fetch_row($result)) {
+		$dbfields[] = "'".$row[0]."'";
+	}
+	sort($dbfields);
+	$albumdbfields = implode(',', $dbfields);
+	$result = mysql_query('SHOW COLUMNS FROM '.prefix('images'));
+	$dbfields = array();
+	while ($row = mysql_fetch_row($result)) {
+		$dbfields[] = "'".$row[0]."'";
+	}
+	sort($dbfields);
+	$imagedbfields = implode(',', $dbfields);
+}
 
 echo "\n</head>";
 ?>
