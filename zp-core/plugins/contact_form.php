@@ -22,6 +22,7 @@ $plugin_URL = "";
 $option_interface = new contactformOptions();
 
 require_once(SERVERPATH . "/" . ZENFOLDER . "/admin-functions.php");
+if (getOption('zp_plugin_zenpage')) require_once("zenpage/zenpage-template-functions.php");
 /**
  * Plugin option handling class
  *
