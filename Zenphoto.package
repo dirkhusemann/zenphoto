@@ -253,7 +253,6 @@ zp-core/images/warn.png
 zp-core/images/zen-logo.gif
 zp-core/index.php
 zp-core/js/admin.js
-zp-core/js/ajax.js
 zp-core/js/editor_config.js.php
 zp-core/js/Jcrop.gif
 zp-core/js/jquery.dimensions.js
@@ -276,6 +275,7 @@ zp-core/js/scriptaculous/slider.js
 zp-core/js/scriptaculous/unittest.js
 zp-core/js/scriptaculous/util.js
 zp-core/js/scripts-common.js
+zp-core/js/tag.js
 zp-core/js/thickbox.css
 zp-core/js/thickbox.js
 zp-core/js/toggleElements.css
@@ -355,7 +355,6 @@ zp-core/plugins/spamfilters/simple.php
 zp-core/plugins/spamfilters/spamassassin.php
 zp-core/plugins/static_html_cache.php
 zp-core/plugins/tag_suggest/tag.css
-zp-core/plugins/tag_suggest/tag.js
 zp-core/plugins/tag_suggest.php
 zp-core/plugins/user_logout.php
 zp-core/plugins/viewer_size_image.php

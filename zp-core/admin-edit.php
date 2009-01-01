@@ -333,14 +333,15 @@ if (isset($_GET['tab'])) {
 } else {
 	$subtab = '';
 }
-if ((empty($subtab) && !isset($_GET['album'])) || $subtab === 'subalbuminfo') {
+if ($sortablepage = (empty($subtab) && !isset($_GET['album']) && !isset($_GET['massedit'])) || $subtab === 'subalbuminfo') {
+	$sortablepage = true;
 	zenSortablesPostHandler('albumOrder', 'albumList', 'albums');
 }
 
 // Print our header
 printAdminHeader();
 
-if ((empty($subtab) && !isset($_GET['album'])) || $subtab === 'subalbuminfo') {
+if ($sortablepage) {
 	zenSortablesHeader('albumList','albumOrder','div', "handle:'handle'");
 }
 if (empty($subtab)) {
@@ -1085,7 +1086,7 @@ if (isset($_GET['saved'])) {
 </div>
 <!-- content --> <?php
 printAdminFooter();
-if (empty($subtab) || $subtab == 'subalbuminfo') {
+if ($sortablepage) {
 	zenSortablesFooter();
 }
 ?>
