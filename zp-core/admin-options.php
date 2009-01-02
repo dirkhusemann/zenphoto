@@ -911,7 +911,7 @@ if ($subtab == 'admin') {
 			<?php
 			echo gettext("The language to display text in. (Set to <em>HTTP Accept Language</em> to use the language preference specified by the viewer's browser.)");
 			echo ' '.gettext("Set <em>Multi-lingual</em> to enable multiple languages for database fields.");
-			echo ' '.gettext("<strong>Note:</strong> if you have created multi-language strings, uncheck this option, then save anything, you will loose your strings.");
+			echo ' '.gettext("<strong>Note:</strong> if you have created multi-language strings, uncheck this option, then save anything, you will lose your strings.");
 			?>
 			</td>
 		</tr>
