@@ -99,7 +99,11 @@ if (isset($_GET['refresh']) && db_connect()) {
 	$r = "";
 	if ($type !== 'prune&') {
 		if (isset($_REQUEST['album'])) {
-			$alb = $_REQUEST['album'];
+			if (isset($_POST['album'])) {
+				$alb = urldecode($_POST['album']);
+			} else {
+				$alb = $_GET['album'];
+			}
 			$folder = sanitize_path($alb);
 			if (!empty($folder)) {
 				$sql = "SELECT `id` FROM ". prefix('albums') . " WHERE `folder`=\"".mysql_real_escape_string($folder)."\";";
