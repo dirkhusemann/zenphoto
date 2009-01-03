@@ -21,8 +21,9 @@ $mapkey = getOption('gmaps_apikey');
 if (isset($_zp_gallery_page) && $_zp_gallery_page != 'index.php' && !empty($mapkey)) {
 	// NOTE: This is copied from the printGoogleJS function in the phoogle class.
 	//       If you update the phoogle class be sure this has not changed.
-	addPluginScript("\n<script src=\"http://maps.google.com/maps?file=api&v=2&key=".$mapkey."\" type=\"text/javascript\"></script>\n");
-	addPluginScript("\n<script type=\"text/javascript\">var map;</script>\n");
+	addPluginScript('<script src="http://maps.google.com/maps?file=api&v=2&key='.$mapkey.'" type="text/javascript"></script>');
+	addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'google_maps/gscale.js"></script>');
+	addPluginScript('<script type="text/javascript">var map;</script>');
 }
 
 
@@ -232,7 +233,7 @@ function printImageMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
 
 /**
  * Causes a Google map to be printed based on the gps data in all the images in the album
- * @param  string $zoomlevel the zoom in for the map. NULL will use the default (auto-zoom based on points)
+ * @param  string $zoomlevel the zoom in for the map. NULL will use the default
  * @param string $defaultmaptype the starting display of the map valid values are G_NORMAL_MAP | G_SATELLITE_MAP | G_HYBRID_MAP | G_PHYSICAL_MAP | G_SATELLITE_3D_MAP
  * @param int $width is the image width of the map. NULL will use the default
  * @param int $height is the image height of the map. NULL will use the default
@@ -314,7 +315,7 @@ function printAlbumMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
 			echo $text;
 			echo "</a>\n";
 			echo "  <div id=\"$dataid\"" . ($toggle ? " style=\"color:black; visibility: hidden;position:absolute;left: -3000px;top: -3000px\"" : '') . ">\n";
-			$_zp_phoogle->showMap();
+			$_zp_phoogle->showMap(is_null($zoomlevel));
 			echo "  </div>\n";
 		}
 	}

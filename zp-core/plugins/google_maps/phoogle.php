@@ -299,7 +299,7 @@ class PhoogleMap{
 	 * Displays the Google Map on the page
 	 *
 	 */
-	function showMap(){
+	function showMap($autozoom=false){
 		echo "\n<div id=\"map\" style=\"width: ".$this->mapWidth."px; height: ".$this->mapHeight."px\">\n</div>\n";
 		echo "    <script type=\"text/javascript\">\n
 	
@@ -312,13 +312,15 @@ class PhoogleMap{
 		echo $this->mapTypeControl."\n";
 		echo $this->controlType."\n";
 		echo $this->defaultMap."\n";
-
+		echo "var points = [];\n";
+		
 		$numPoints = count($this->validPoints);
 		for ($g = 0; $g<$numPoints; $g++){
-			echo "var point".$g." = new GPoint(".$this->validPoints[$g]['long'].",".$this->validPoints[$g]['lat'].")\n;
-			var marker".$g." = new GMarker(point".$g.");\n
-			map.addOverlay(marker".$g.")\n
-			GEvent.addListener(marker".$g.", \"click\", function() {\n";
+			echo "var point".$g." = new GPoint(".$this->validPoints[$g]['long'].",".$this->validPoints[$g]['lat'].");\n";
+			echo 'points['.$g.']=point'.$g.";\n";
+			echo "var marker".$g." = new GMarker(point".$g.");\n";
+			echo "map.addOverlay(marker".$g.");\n";
+			echo "GEvent.addListener(marker".$g.", \"click\", function() {\n";
 			if (isset($this->validPoints[$g]['htmlMessage'])) {
 				echo "marker".$g.".openInfoWindowHtml(\"".$this->validPoints[$g]['htmlMessage']."\");\n";
 			}else{
@@ -331,11 +333,13 @@ class PhoogleMap{
 			}
 			echo "});\n";
 		}
+		if ($autozoom) {
+			echo 'resizeMap( map, points );';
+		}
 		echo $this->customJS."\n";
-		echo"}
-	else {
-		var text = document.createTextNode(\"".gettext('Your browser is not compatible with Google maps')."\");\n
-		document.getElementById(\"map\").appendChild(text);\n
+		echo"} else {
+		var text = document.createTextNode(\"".gettext('Your browser is not compatible with Google maps')."\");
+		document.getElementById(\"map\").appendChild(text);
 		}\n
 	}\n";
 		echo "window.onload = showmap;
