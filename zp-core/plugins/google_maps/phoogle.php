@@ -316,9 +316,8 @@ class PhoogleMap{
 		
 		$numPoints = count($this->validPoints);
 		for ($g = 0; $g<$numPoints; $g++){
-			echo "var point".$g." = new GPoint(".$this->validPoints[$g]['long'].",".$this->validPoints[$g]['lat'].");\n";
-			echo 'points['.$g.']=point'.$g.";\n";
-			echo "var marker".$g." = new GMarker(point".$g.");\n";
+			echo "points[".$g."] = new GPoint(".$this->validPoints[$g]['long'].",".$this->validPoints[$g]['lat'].");\n";
+			echo "var marker".$g." = new GMarker(points[".$g."]);\n";
 			echo "map.addOverlay(marker".$g.");\n";
 			echo "GEvent.addListener(marker".$g.", \"click\", function() {\n";
 			if (isset($this->validPoints[$g]['htmlMessage'])) {
