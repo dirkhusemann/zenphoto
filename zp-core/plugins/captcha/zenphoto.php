@@ -9,15 +9,7 @@ class captcha {
 	 */
 	function captcha() {
 		setOptionDefault('zenphoto_captcha_lenght', 5);
-		$admins = getAdministrators();
-		if (count($admins) > 0) {
-			$admin = array_shift($admins);
-			$key = $admin['pass'];
-		} else {
-			$key = 'No admin set';
-		}
-		$key = md5('zenphoto'.$key.'captcha key');
-		setOptionDefault('zenphoto_captcha_key', $key);
+		setOptionDefault('zenphoto_captcha_key', $this->getCaptchaKey());
 		setOptionDefault('zenphoto_captcha_string', 'abcdefghijkmnpqrstuvwxyz23456789ABCDEFGHJKLMNPQRSTUVWXYZ'); 
 	}
 
@@ -37,6 +29,26 @@ class captcha {
 												'desc' => gettext('The number of characters in the Captcha.'))
 								);
 	}
+	
+	/**
+	 * gets (or creates) the captcha encryption key
+	 *
+	 * @return string
+	 */
+	function getCaptchaKey() {
+		$key = getOption('zenphoto_captcha_key');
+		if (empty($key)) {
+			$admins = getAdministrators();
+			if (count($admins) > 0) {
+				$admin = array_shift($admins);
+				$key = $admin['pass'];
+			} else {
+				$key = 'No admin set';
+			}
+			$key = md5('zenphoto'.$key.'captcha key');
+		}
+		return $key;
+	}
 
 	/**
 	 * Checks if a Captcha string matches the Captcha attached to the comment post
@@ -49,7 +61,7 @@ class captcha {
 	 */
 	function checkCaptcha($code, $code_ok) {
 		$captcha_len = getOption('zenphoto_captcha_lenght');
-		$key = getOption('zenphoto_captcha_key');
+		$key = getCaptchaKey();
 		$code_cypher = md5(bin2hex(rc4($key, trim($code))));
 		$code_ok = trim($code_ok);
 		if ($code_cypher != $code_ok || strlen($code) != $captcha_len) { return false; }
@@ -77,7 +89,7 @@ class captcha {
 	function generateCaptcha(&$image) {
 
 		$captcha_len = getOption('zenphoto_captcha_lenght');
-		$key = getOption('zenphoto_captcha_key');
+		$key = getCaptchaKey();
 		$lettre = getOption('zenphoto_captcha_string');
 		$numlettre = strlen($lettre)-1;
 
