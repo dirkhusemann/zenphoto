@@ -28,7 +28,7 @@ include(dirname(__FILE__).'/version.php'); // Include the version info.
 if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 if (!defined('OFFSET_PATH')) { define('OFFSET_PATH', 0); }
-define('COOKIE_PESISTENCE', COOKIE_PESISTENCE);
+define('COOKIE_PESISTENCE', 5184000);
 
 // Set the memory limit higher just in case -- suppress errors if user doesn't have control.
 // 100663296 bytes = 96M
