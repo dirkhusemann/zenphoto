@@ -61,7 +61,7 @@ class captcha {
 	 */
 	function checkCaptcha($code, $code_ok) {
 		$captcha_len = getOption('zenphoto_captcha_lenght');
-		$key = getCaptchaKey();
+		$key = $this->getCaptchaKey();
 		$code_cypher = md5(bin2hex(rc4($key, trim($code))));
 		$code_ok = trim($code_ok);
 		if ($code_cypher != $code_ok || strlen($code) != $captcha_len) { return false; }
@@ -89,7 +89,7 @@ class captcha {
 	function generateCaptcha(&$image) {
 
 		$captcha_len = getOption('zenphoto_captcha_lenght');
-		$key = getCaptchaKey();
+		$key = $this->getCaptchaKey();
 		$lettre = getOption('zenphoto_captcha_string');
 		$numlettre = strlen($lettre)-1;
 
