@@ -63,7 +63,7 @@ if (!OFFSET_PATH) {
 			$sh = substr($postdefault, $i+1);
 			$postdefault = '$w='.$sw.',$h='.$sh.';';
 		}
-		zp_setCookie('viewer_size_image_saved', $postdefault, time()+5184000, $cookiepath);
+		zp_setCookie('viewer_size_image_saved', $postdefault, time()+COOKIE_PESISTENCE, $cookiepath);
 	} else {
 		$saved = zp_getCookie('viewer_size_image_saved');
 		if (empty($saved)) {

@@ -341,7 +341,7 @@ function getUserLocale() {
 	if (WEBPATH == '') { $cookiepath = '/'; }
 	if (isset($_POST['dynamic-locale'])) {
 		$locale = sanitize($_POST['dynamic-locale'], 0);
-		zp_setCookie('dynamic_locale', $locale, time()+5184000, $cookiepath);
+		zp_setCookie('dynamic_locale', $locale, time()+COOKIE_PESISTENCE, $cookiepath);
 		if (DEBUG_LOCALE) debugLog("dynamic_locale post: $locale");
 	} else {
 		$localeOption = getOption('locale');

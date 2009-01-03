@@ -224,7 +224,7 @@ function zp_handle_comment() {
 				if (isset($_POST['remember'])) {
 					// Should always re-cookie to update info in case it's changed...
 					$info = array($p_name, $p_email, $p_website, '', false, $p_private, $p_anon);
-					zp_setcookie('zenphoto', implode('|~*~|', $info), time()+5184000, '/');
+					zp_setcookie('zenphoto', implode('|~*~|', $info), time()+COOKIE_PESISTENCE, '/');
 				} else {
 					zp_setcookie('zenphoto', '', time()-368000, '/');
 				}
@@ -295,11 +295,11 @@ function zp_handle_password() {
 		$post_pass = $_POST['pass'];
 		$auth = md5($post_user . $post_pass);
 		if ($_zp_loggedin = checkLogon($post_user, $post_pass)) {	// allow Admin user login
-			zp_setcookie("zenphoto_auth", $auth, time()+5184000, $cookiepath);
+			zp_setcookie("zenphoto_auth", $auth, time()+COOKIE_PESISTENCE, $cookiepath);
 		} else {
 			if (($auth == $check_auth) && $post_user == $check_user) {
 				// Correct auth info. Set the cookie.
-				zp_setcookie($authType, $auth, time()+5184000, $cookiepath);
+				zp_setcookie($authType, $auth, time()+COOKIE_PESISTENCE, $cookiepath);
 			} else {
 				// Clear the cookie, just in case
 				zp_setcookie($authType, "", time()-368000, $cookiepath);
