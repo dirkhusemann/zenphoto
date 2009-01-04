@@ -13,7 +13,6 @@ require_once('normalizer.php');
 	<script type="text/javascript">var blogrelurl = "<?php echo $_zp_themeroot ?>";</script>
 	<script type="text/javascript" src="<?php echo $_zp_themeroot ?>/js/rememberMe.js"></script>
 	<script type="text/javascript" src="<?php echo $_zp_themeroot ?>/js/comments.js"></script>
-	<script type="text/javascript" src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/jquery.js"></script>
 	<script type="text/javascript" src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/thickbox.js"></script>
 	<?php
 		printRSSHeaderLink('Gallery','Gallery RSS');
