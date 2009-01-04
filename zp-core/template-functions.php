@@ -3140,12 +3140,11 @@ function printTags($option='links',$preText=NULL,$class='taglist',$separator=', 
 		echo "<span id=\"tagContainer_$id\">".$preText."<span id=\"imageTags_$id\" $editclass>" . $tagstring . "</span></span>\n";
 		echo "<script type=\"text/javascript\">eip_tags('imageTags_$id');</script>";
 	} else {
-		echo "<div class=\"".$class."\">";
 		if (count($singletag) > 0) {
 			if (!empty($preText)) {
 				echo "<span class=\"tags_title\">".$preText."</span>";
 			}
-			echo "<ul>\n";
+			echo "<ul class=\"".$class."\">\n";
 			$ct = count($singletag);
 			for ($x = 0; $x < $ct; $x++) {
 				if ($x === $ct - 1) { $separator = ""; }
@@ -3159,7 +3158,6 @@ function printTags($option='links',$preText=NULL,$class='taglist',$separator=', 
 		} else {
 			echo "$tagstring";
 		}
-		echo "</div>";
 	}
 }
 
