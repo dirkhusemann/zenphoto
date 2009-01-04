@@ -22,7 +22,7 @@ if (isset($_zp_gallery_page) && $_zp_gallery_page != 'index.php' && !empty($mapk
 	// NOTE: This is copied from the printGoogleJS function in the phoogle class.
 	//       If you update the phoogle class be sure this has not changed.
 	addPluginScript('<script src="http://maps.google.com/maps?file=api&v=2&key='.$mapkey.'" type="text/javascript"></script>');
-	addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'google_maps/gscale.js"></script>');
+	addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'google_maps/gmaps.js"></script>');
 	addPluginScript('<script type="text/javascript">var map;</script>');
 }
 
