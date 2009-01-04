@@ -46,6 +46,7 @@ class captcha {
 				$key = 'No admin set';
 			}
 			$key = md5('zenphoto'.$key.'captcha key');
+			setOption('zenphoto_captcha_key', $key);
 		}
 		return $key;
 	}
