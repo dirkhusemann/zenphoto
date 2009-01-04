@@ -2766,7 +2766,7 @@ function getLatestComments($number) {
 	}
 	$comments_images = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.type, c.website,"
 	. " c.date, c.anon, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
-	. " WHERE i.show = 1 AND c.ownerid = i.id AND i.albumid = a.id AND c.private = 0 AND c.type = 'images'".$passwordcheck1
+	. " WHERE i.show = 1 AND c.ownerid = i.id AND i.albumid = a.id AND c.private = 0 AND (c.type IN (".zp_image_types("'") ."))".$passwordcheck1
 	. " ORDER BY c.id DESC LIMIT $number");
 	$comments_albums = query_full_array("SELECT c.id, a.folder, a.title AS albumtitle, c.name, c.type, c.website,"
 	. " c.date, c.anon, c.comment FROM ".prefix('comments')." AS c, ".prefix('albums')." AS a "
@@ -2796,8 +2796,7 @@ function printLatestComments($number, $shorten='123') {
 		$albumpath = "/index.php?album="; $imagepath = "&amp;image="; $modrewritesuffix = "";
 	}
 	$comments = getLatestComments($number,$shorten);
-	echo "<div id=\"showlatestcomments\">\n";
-	echo "<ul>\n";
+	echo "<ul id=\"showlatestcomments\">\n";
 	foreach ($comments as $comment) {
 		if($comment['anon'] === "0") {
 			$author = " ".gettext("by")." ".$comment['name'];
@@ -2822,7 +2821,6 @@ function printLatestComments($number, $shorten='123') {
 		echo "<span class=\"commentbody\">".$shortcomment."</span></li>";
 	}
 	echo "</ul>\n";
-	echo "</div>\n";
 }
 
 /**
