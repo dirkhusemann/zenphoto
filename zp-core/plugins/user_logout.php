@@ -19,7 +19,10 @@ if (WEBPATH == '') { $cookiepath = '/'; }
 
 if (!OFFSET_PATH) {
 	$cookies = array();
-	$candidate = array_unique(Array_merge(array_keys($_COOKIE), $_SESSION));
+	$candidate = array();
+	if (isset($_COOKIE)) $candidate = $_COOKIE;
+	if (isset($_SESSION)) $candidate = Array_merge($candidate, $_SESSION);
+	$candidate = array_unique($candidate);
 	foreach ($candidate as $cookie) {
 		if ($cookie == 'zenphoto_auth' || $cookie == 'zp_gallery_auth' || $cookie == 'zp_search_auth' || strpos($cookie, 'zp_album_auth_') !== false) {
 			$cookies[] = $cookie;
