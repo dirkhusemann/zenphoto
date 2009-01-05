@@ -201,11 +201,14 @@ function getAlbumRating($option, $id) {
 	return $rating;
 }
 
-// creates the cache folders from the plugins page or clears the cache from the plugin options
-
-
-
 if (isset($_GET['clear_rating'])) {
+	require_once(dirname(dirname(__FILE__)).'/admin-functions.php'); // you have to be loged in to do this
+	if (!(zp_loggedin(ADMIN_RIGHTS | EDIT_RIGHTS))) { // prevent nefarious access to this page.
+		$const_webpath = dirname(dirname(dirname($_SERVER['SCRIPT_NAME'])));
+		header("Location: " . PROTOCOL."://" . $_SERVER['HTTP_HOST'] . $const_webpath . ZENFOLDER . "/admin.php");
+		exit();
+	}
+	
 	echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
 	echo "\n<html xmlns=\"http://www.w3.org/1999/xhtml\">";
 	echo "\n<head>";
