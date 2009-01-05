@@ -283,7 +283,6 @@ zp-core/lib-encryption.php
 zp-core/lib-gettext/gettext.inc
 zp-core/lib-htmlawed.php
 zp-core/lib-pclzip.php
-zp-core/lib-sajax.php
 zp-core/lib-seo.php
 zp-core/lib-utf8.php
 zp-core/locale/de_DE/LC_MESSAGES/zenphoto.mo
@@ -327,6 +326,7 @@ zp-core/plugins/GoogleCheckout/GoogleCartPostToSandBox.js
 zp-core/plugins/GoogleCheckout/GoogleCartTopLeft.css
 zp-core/plugins/GoogleCheckout/GoogleCheckout.css
 zp-core/plugins/GoogleCheckout.php
+zp-core/plugins/google_maps/gmaps.js
 zp-core/plugins/google_maps/license.txt
 zp-core/plugins/google_maps/phoogle.php
 zp-core/plugins/google_maps.php
