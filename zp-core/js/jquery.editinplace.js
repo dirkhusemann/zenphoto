@@ -29,7 +29,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		// Defaults
 		var opt = {
 			save_url			: document.location.href,
-			eip_func			: '', // zenphoto internal function name (will be either saveTitle or saveTags or saveDesc)
+			
+			eip_context			: '', // zenphoto context: will be 'image' or 'album'
+			eip_field			: '', // data field to be edited ('desc', 'title', etc...)
 
 			save_on_enter		: true,
 			cancel_on_esc		: true,
@@ -44,7 +46,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 			max_size			: 60,
 			rows				: false, // calculate at run time
 			max_rows			: 10,
-			cols				: 60,
+			cols				: 40,
 
 			savebutton_text		: zpstrings.Save,
 			savebutton_class	: "jeip-savebutton",
@@ -62,7 +64,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 			saving				: '<span id="saving-#{id}" class="#{saving_class}" style="display: none;">#{saving_text}</span>',
 
 			start_form			: '<span id="editor-#{id}" class="#{editor_class}" style="display: none;">',
-			form_buttons		: '<span id="buttons-#{id}" class="#{buttons_class}"><input type="button" id="save-#{id}" class="#{savebutton_class}" value="#{savebutton_text}" /> &nbsp; <input type="button" id="cancel-#{id}" class="#{cancelbutton_class}" value="#{cancelbutton_text}" /></span>',
+			form_buttons		: '<span id="buttons-#{id}" class="#{buttons_class}"><input type="button" id="save-#{id}" class="#{savebutton_class}" value="#{savebutton_text}" />&nbsp;<input type="button" id="cancel-#{id}" class="#{cancelbutton_class}" value="#{cancelbutton_text}" /></span>',
 			stop_form			: '</span>',
 
 			text_form			: '<input type="text" id="edit-#{id}" class="#{editfield_class}" value="#{value}" /> ',
@@ -141,7 +143,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 						}
 					}
 					
-					value = value.replace(/<br>/g, "\n");
+					value = value.replace(/\n?<br\/?>\n?/gi, "\n");
 
 					if( rows > opt.max_rows ) {
 						rows = opt.max_rows;
@@ -157,7 +159,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 						rows			: rows,
 						editfield_class	: opt.editfield_class,
 						value			: value
-					} );
+					} ) + '<br/>';
 				} // textarea form
 				else if( opt.form_type == 'select' ) {
 					form += _template( opt.start_select_form, {
@@ -280,7 +282,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 				url			: location.href,
 				id			: self.id,
 				form_type	: opt.form_type,
-				eip_func	: opt.eip_func,
+				eip_context	: opt.eip_context,
+				eip_field	: opt.eip_field,
 				orig_value	: orig_value,
 				new_value	: $( "#edit-" + self.id ).attr( "value" ),
 				data		: opt.data
@@ -337,28 +340,14 @@ function eip_cancel_all() {
 	jQuery('._zp_cancel_button_').click();
 }
 
-/*** Wrapper functions for zenphoto ***/
-function eip_description(target) {
+/*** Wrapper function to use in zenphoto ***/
+function editInPlace(target, context, field) {
+	var form_type = (field == 'desc') ? 'textarea' : 'text';
 	jQuery('#'+target).eip(
 		{
-			form_type: "textarea",
-			eip_func: 'saveDesc'
-		}	
-	);
-}
-
-function eip_tags(target) {
-	jQuery('#'+target).eip(
-		{
-			eip_func: 'saveTags'
-		}	
-	);
-}
-
-function eip_title(target) {
-	jQuery('#'+target).eip(
-		{
-			eip_func: 'saveTitle'
+			eip_context: context,
+			eip_field: field,
+			form_type: form_type
 		}	
 	);
 }

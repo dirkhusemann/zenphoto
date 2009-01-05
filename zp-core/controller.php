@@ -58,71 +58,71 @@ if (getOption('Allow_comments')) $_zp_comment_error = zp_handle_comment();
 
 if (zp_loggedin()) {
 
-	function saveTitle($newtitle) {
-		$newtitle = sanitize($newtitle, 2);
-		global $_zp_current_image, $_zp_current_album;
-		if (in_context(ZP_IMAGE)) {
-			$_zp_current_image->setTitle($newtitle);
-			$_zp_current_image->save();
-			return $newtitle;
-		} else if (in_context(ZP_ALBUM)) {
-			$_zp_current_album->setTitle($newtitle);
-			$_zp_current_album->save();
-			return $newtitle;
-		} else {
-			return false;
-		}
-	}
+	/**
+	 * Handle AJAX editing in place
+	 *
+	 * @param string $context 	either 'image' or 'album', object to be updated
+	 * @param string $field		field of object to update (title, desc, etc...)
+	 * @param string $value		new edited value of object field
+	 * @since 1.3
+	 * @author Ozh
+	 **/
+	function editInPlace_handle_request($context = '', $field = '', $value = '', $orig_value = '') {
+		// Cannot edit when context not set in current page (should happen only when editing in place from index.php page)
+		if ( !in_context(ZP_IMAGE) && !in_context(ZP_ALBUM) )
+			die ($orig_value.'<script type="text/javascript">alert("'.gettext('Oops.. Cannot edit from this page').'");</script>');
 
-	function saveTags($newtags) {
-		$newtags = sanitize($newtags, 3);
-		global $_zp_current_image, $_zp_current_album;
-		if (in_context(ZP_IMAGE)) {
-			$_zp_current_image->setTags($newtags);
-			$_zp_current_image->save();
-			return $newtags;
-		} else if (in_context(ZP_ALBUM)) {
-			$_zp_current_album->setTags($newtags);
-			$_zp_current_album->save();
-			return $newtags;
-		} else {
-			return false;
+		// Make a copy of context object
+		switch ($context) {
+		case 'image':
+			global $_zp_current_image;
+			$object = $_zp_current_image;
+			break;
+		case 'album':
+			global $_zp_current_album;
+			$object = $_zp_current_album;
+			break;
+		default:
+			die (gettext('Error: malformed Ajax POST'));
 		}
-	}
-
-	function saveDesc($newdesc) {
-		$newdesc = sanitize($newdesc, 1);
-		$newdesc = str_replace("\n", '<br/>', $newdesc);
-		global $_zp_current_image, $_zp_current_album;
-		if (in_context(ZP_IMAGE)) {
-			$_zp_current_image->setDesc($newdesc);
-			$_zp_current_image->save();
-			return $newdesc;
-		} else if (in_context(ZP_ALBUM)) {
-			$_zp_current_album->setDesc($newdesc);
-			$_zp_current_album->save();
-			return $newdesc;
-		} else {
-			return false;
+		
+		// Dates need to be handled before stored
+		if ($field == 'date') {
+			$value = date('Y-m-d H:i:s', strtotime($value));
 		}
-	}
-
-	
-	function editInPlace_handle_request() {
-		$result = call_user_func($_POST["eip_func"], $_POST['new_value']);
+		
+		// Sanitize new value
+		switch ($field) {
+		case 'desc':
+			$level = 1;
+			break;
+		case 'title':
+			$level = 2;
+			break;
+		default:
+			$level = 3;
+		}
+		$value = str_replace("\n", '<br/>', sanitize($value, $level)); // note: not using nl2br() here because it adds an extra "\n"
+		
+		// Write new value
+		if ($field == '_update_tags') {
+			$value = trim($value, ', ');
+			$object->setTags($value);
+		} else {
+			$object->set($field, $value);
+		}
+		
+		$result = $object->save();
 		if ($result !== false) {
-			echo $result;
+			echo $value;
 		} else {
-			echo gettext('Could not save, please retry');			
+			echo ('<script type="text/javascript">alert("'.gettext('Could not save!').'");</script>'.$orig_value);
 		}
 		die();
 	}
 	
-	// Limit set of functions that will trigger the request handling function
-	$edit_functions = array("saveTitle", "saveTags", "saveDesc");
-	
-	if ( !empty($_POST["eip_func"] ) && in_array( $_POST["eip_func"] , $edit_functions ) )
-		editInPlace_handle_request();
+	if ( !empty($_POST["eip_context"] ) &&  !empty($_POST["eip_field"] ) )
+		editInPlace_handle_request($_POST["eip_context"], $_POST["eip_field"], $_POST["new_value"], $_POST["orig_value"]);
 }
 
 

@@ -18,19 +18,8 @@ var zpstrings = {
 	'Cancel' : "<?php echo gettext('Cancel'); ?>",
 	'Saving' : "<?php echo gettext('Saving'); ?>",
 	'ClickToEdit' : "<?php echo gettext('Click to edit...'); ?>",
-
-	/* following still in use somewhere else ? (Ozh) */
+	/* Used in thickbox.js */
 	'Test' : "<?php echo gettext('Test'); ?>",
-	'ClickToAddATitle' : "<?php echo gettext('Click to add a title...'); ?>",
-	'ClickToEditTitle' : "<?php echo gettext('Click to edit title...'); ?>",
-	'ClickToAddTags' : "<?php echo gettext('Click to add tags...'); ?>",
-	'ClickToEditTags' : "<?php echo gettext('Click to edit tags...'); ?>",
-	'ClickToAddADescription' : "<?php echo gettext('Click to add a description...'); ?>",
-	'ClickToEditDescription' : "<?php echo gettext('Click to edit description'); ?>",
-	'Save' : "<?php echo gettext('save'); ?>",
-	'Saving' : "<?php echo gettext('Saving'); ?>",
-	'Cancel' : "<?php echo gettext('cancel'); ?>",
-	'CurrentlyEditingSomethingElse' : "<?php echo gettext('Currently editing something else, save or cancel to edit this.'); ?>",
 	'Close' : "<?php echo gettext('Close'); ?>",
 	'close' : "<?php echo gettext('close'); ?>",
 	'orEscKey' : "<?php echo gettext('or Esc Key'); ?>",
