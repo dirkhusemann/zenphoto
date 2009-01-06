@@ -1878,13 +1878,21 @@ function printImageSortOrder() {
  *
  * @return bool
  */
-function hasNextImage() { global $_zp_current_image; return $_zp_current_image->getNextImage(); }
+function hasNextImage() {
+	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
+	return $_zp_current_image->getNextImage();
+}
 /**
  * True if there is a previous image
  *
  * @return bool
  */
-function hasPrevImage() { global $_zp_current_image; return $_zp_current_image->getPrevImage(); }
+function hasPrevImage() {
+	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
+	return $_zp_current_image->getPrevImage();
+}
 
 /**
  * Returns the url of the next image.
@@ -1894,6 +1902,7 @@ function hasPrevImage() { global $_zp_current_image; return $_zp_current_image->
 function getNextImageURL() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_album, $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
 	$nextimg = $_zp_current_image->getNextImage();
 	return rewrite_path("/" . pathurlencode($nextimg->album->name) . "/" . urlencode($nextimg->filename) . im_suffix(),
 		"/index.php?album=" . urlencode($nextimg->album->name) . "&image=" . urlencode($nextimg->filename));
@@ -1907,6 +1916,7 @@ function getNextImageURL() {
 function getPrevImageURL() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_album, $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
 	$previmg = $_zp_current_image->getPrevImage();
 	return rewrite_path("/" . pathurlencode($previmg->album->name) . "/" . urlencode($previmg->filename) . im_suffix(),
 		"/index.php?album=" . urlencode($previmg->album->name) . "&image=" . urlencode($previmg->filename));
@@ -1922,6 +1932,7 @@ function getPrevImageURL() {
 function getFirstImageURL() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_album, $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
 	$firstimg = $_zp_current_album->getImage(0);
 	return rewrite_path("/" . pathurlencode($firstimg->album->name) . "/" . urlencode($firstimg->filename) . im_suffix(),
 											"/index.php?album=" . urlencode($firstimg->album->name) . "&image=" . urlencode($firstimg->filename));
@@ -1937,6 +1948,7 @@ function getFirstImageURL() {
 function getLastImageURL() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_album, $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
 	$lastimg = $_zp_current_album->getImage($_zp_current_album->getNumImages() - 1);
 	return rewrite_path("/" . pathurlencode($lastimg->album->name) . "/" . urlencode($lastimg->filename) . im_suffix(),
 											"/index.php?album=" . urlencode($lastimg->album->name) . "&image=" . urlencode($lastimg->filename));
@@ -1973,6 +1985,7 @@ function printPreloadScript() {
  */
 function getPrevImageThumb() {
 	if(!in_context(ZP_IMAGE)) return false;
+	if (is_null($_zp_current_image)) return false;
 	global $_zp_current_image;
 	$img = $_zp_current_image->getPrevImage();
 	return $img->getThumb();
@@ -1986,6 +1999,7 @@ function getPrevImageThumb() {
 function getNextImageThumb() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
 	$img = $_zp_current_image->getNextImage();
 	return $img->getThumb();
 }
@@ -1998,6 +2012,7 @@ function getNextImageThumb() {
 function getImageLinkURL() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
 	return $_zp_current_image->getImageLink();
 }
 
@@ -2038,6 +2053,7 @@ function printImageDiv() {
  */
 function getImageEXIFData() {
 	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
 	return $_zp_current_image->getExifData();
 }
 
@@ -2119,6 +2135,7 @@ function printImageMetadata($title=NULL, $toggle=true, $id='imagemetadata', $cla
 function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL, $cx=NULL, $cy=NULL) {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image, $_zp_flash_player;
+	if (is_null($_zp_current_image)) return false;
 	$h = $_zp_current_image->getHeight();
 	$w = $_zp_current_image->getWidth();
 	if (isImageVideo()) { // size is determined by the player
@@ -2191,6 +2208,7 @@ function getSizeDefaultImage() {
  */
 function getSizeFullImage() {
 	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
 	return array($_zp_current_image->getWidth(), $_zp_current_image->getHeight());
 }
 
@@ -2219,6 +2237,7 @@ function getDefaultHeight() {
  */
 function getFullWidth() {
 	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
 	return $_zp_current_image->getWidth();
 }
 
@@ -2229,6 +2248,7 @@ function getFullWidth() {
  */
 function getFullHeight() {
 	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
 	return $_zp_current_image->getHeight();
 }
 
@@ -2249,6 +2269,7 @@ function isLandscape() {
  */
 function getDefaultSizedImage() {
 	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
 	return $_zp_current_image->getSizedImage(getOption('image_size'));
 }
 
@@ -2261,7 +2282,8 @@ function getDefaultSizedImage() {
  */
 function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 	global $_zp_current_image;
-	 if (isImagePhoto()) { //Print images
+	if (is_null($_zp_current_image)) return;
+	if (isImagePhoto()) { //Print images
 		echo '<img src="' . htmlspecialchars(getDefaultSizedImage()) . '" alt="' . html_encode($alt) . '"' .
 			' title="' . html_encode($alt) . '"'.
 			' width="' . getDefaultWidth() . '" height="' . getDefaultHeight() . '"' .
@@ -2279,6 +2301,7 @@ function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
  */
 function getImageThumb() {
 	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
 	return $_zp_current_image->getThumb();
 }
 /**
@@ -2288,6 +2311,7 @@ function getImageThumb() {
  */
 function printImageThumb($alt, $class=NULL, $id=NULL) {
 	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return;
 	if (!$_zp_current_image->getShow()) {
 		$class .= " not_visible";
 	}
@@ -2345,6 +2369,7 @@ function printImageThumb($alt, $class=NULL, $id=NULL) {
  */
 function getFullImageURL() {
 	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
 	$outcome = getOption('protect_full_image');
 	if ($outcome == 'No access') return null;
 	$url = getUnprotectedImageURL();
@@ -2374,6 +2399,7 @@ function getFullImageURL() {
  */
 function getUnprotectedImageURL() {
 	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
 	return $_zp_current_image->getFullImage();
 }
 /**
@@ -2384,6 +2410,7 @@ function getUnprotectedImageURL() {
 function getProtectedImageURL() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image, $_zp_current_album;
+	if (is_null($_zp_current_image)) return false;
 	$suffix = strtolower(substr(strrchr($_zp_current_image->filename, "."), 1));
 	$cache_file = $_zp_current_album->name . "/" . substr($_zp_current_image->filename, 0, -strlen($suffix)-1) . '_FULL.' . $suffix;
 	$cache_path = SERVERCACHE . '/' . $cache_file;
@@ -2424,6 +2451,7 @@ function getSizedImageURL($size) {
  */
 function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $thumbStandin=false) {
 	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
 	return $_zp_current_image->getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin);
 }
 
@@ -2446,6 +2474,7 @@ function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph
  * */
 function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $class=NULL, $id=NULL, $thumbStandin=false) {
 	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return;
 	if (isImagePhoto() || $thumbStandin) {
 		echo '<img src="' . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin)) . '"' .
 			' alt="' . html_encode($alt) . '"' .
@@ -2467,6 +2496,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
  */
 function getCustomSizedImageMaxSpace($width, $height) {
 	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
 	getMaxSpaceContainer($width, $height, $_zp_current_image);
 	return getCustomImageURL(NULL, $width, $height);
 }
@@ -2481,6 +2511,7 @@ function getCustomSizedImageMaxSpace($width, $height) {
  */
 function getCustomSizedImageThumbMaxSpace($width, $height) {
 	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
 	getMaxSpaceContainer($width, $height, $_zp_current_image, true);
 	return getCustomImageURL(NULL, $width, $height, NULL, NULL, NULL, NULL, true);
 }
@@ -2496,6 +2527,7 @@ function getCustomSizedImageThumbMaxSpace($width, $height) {
   */
 function printCustomSizedImageThumbMaxSpace($alt='',$width,$height,$class=NULL,$id=NULL) {
 	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return;
 	getMaxSpaceContainer($width, $height, $_zp_current_image, true);
 	printCustomSizedImage($alt, NULL, $width, $height, NULL, NULL, NULL, NULL, $class, $id, true);
 }
@@ -2512,6 +2544,7 @@ function printCustomSizedImageThumbMaxSpace($alt='',$width,$height,$class=NULL,$
  */
 function printCustomSizedImageMaxSpace($alt='',$width,$height,$class=NULL,$id=NULL, $thumb=false) {
 	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return;
 	getMaxSpaceContainer($width, $height, $_zp_current_image, $thumb);
 	printCustomSizedImage($alt, NULL, $width, $height, NULL, NULL, NULL, NULL, $class, $id, $thumb);
 }
@@ -2555,6 +2588,7 @@ function printSizedImageLink($size, $text, $title, $class=NULL, $id=NULL) {
 function getCommentCount() {
 	global $_zp_current_image, $_zp_current_album, $current_zenpage;
 	if (in_context(ZP_IMAGE) AND in_context(ZP_ALBUM)) {
+		if (is_null($_zp_current_image)) return false;
 		return $_zp_current_image->getCommentCount();
 	} else if (!in_context(ZP_IMAGE) AND in_context(ZP_ALBUM)) {
 		return $_zp_current_album->getCommentCount();
@@ -2574,6 +2608,7 @@ function getCommentCount() {
 function getCommentsAllowed() {
 	global $_zp_current_image, $_zp_current_album;
 	if (in_context(ZP_IMAGE)) {
+		if (is_null($_zp_current_image)) return false;
 		return $_zp_current_image->getCommentsAllowed();
 	} else {
 		return $_zp_current_album->getCommentsAllowed();
@@ -2592,6 +2627,7 @@ function next_comment($desc=false) {
 	//ZENPAGE: comments support
 	if (is_null($_zp_current_comment)) {
 		if (in_context(ZP_IMAGE) AND in_context(ZP_ALBUM)) {
+			if (is_null($_zp_current_image)) return false;
 			$_zp_comments = $_zp_current_image->getComments(false, false, $desc);
 		} else if (!in_context(ZP_IMAGE) AND in_context(ZP_ALBUM)) {
 			$_zp_comments = $_zp_current_album->getComments(false, false, $desc);
