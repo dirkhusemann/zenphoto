@@ -843,7 +843,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 					</tr>
 					
 					<tr class="imageextrainfo" style="display: none">
-						<td align="right" valign="top"><?php echo gettext("EXIF inforation:"); ?></td>
+						<td align="right" valign="top"><?php echo gettext("EXIF information:"); ?></td>
 						<td>
 						<?php
 							$data = '';
