@@ -170,7 +170,7 @@ class Album extends PersistentObject {
 	function getPassword() { return $this->get('password'); }
 
 	/**
-	 * Sets the album password (md5 encrypted)
+	 * Sets the encrypted album password
 	 *
 	 * @param string $pwd the cleartext password
 	 */
@@ -178,7 +178,7 @@ class Album extends PersistentObject {
 		if (empty($pwd)) {
 			$this->set('password', "");
 		} else {
-			$this->set('password', md5($this->get('user').$pwd));
+			$this->set('password', passwordHash($this->get('user'), $pwd));
 		}
 	}
 

@@ -82,7 +82,7 @@ if (!OFFSET_PATH) { // handle form post
 				if (empty($pass)) {
 					$pwd = null;
 				} else {
-					$pwd = md5($_POST['adminuser'] . $pass);
+					$pwd = passwordHash($_POST['adminuser'], $pass);
 				}
 				$notify = '';
 				$currentadmins = getAdministrators();

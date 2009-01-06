@@ -229,8 +229,19 @@ if (defined('RELEASE')) {
 		$ext = substr($extension, 0, strlen($extension)-4);
 		echo "<li>".$ext."</li>";
 	}
-?>
-</ul>
+	?>
+	</ul>
+
+	<h3><?php echo gettext("Active filters:"); ?></h3>
+	<ul class="plugins">
+	<?php
+	$filters = $_zp_filters;
+	ksort($filters);
+	foreach ($filters as $filter=>$data) {
+		echo "<li>".$filter.': '.$data['script'].' => '.$data['function']."</li>";
+	}
+	?>
+	</ul>
 
 </div>
 <br clear="all" />

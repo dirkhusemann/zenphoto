@@ -202,6 +202,7 @@ zp-core/exif/makers/olympus.php
 zp-core/exif/makers/panasonic.php
 zp-core/exif/makers/sanyo.php
 zp-core/full-image.php
+zp-core/functions-auth.php
 zp-core/functions-basic.php
 zp-core/functions-controller.php
 zp-core/functions-db.php

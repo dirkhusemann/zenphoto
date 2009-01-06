@@ -9,6 +9,7 @@
 // force UTF-8 Ø
 
 require_once(dirname(__FILE__).'/functions-basic.php');
+require_once(dirname(__FILE__).'/functions-auth.php');
 
 if(!function_exists("gettext")) {
 	// load the drop-in replacement library
@@ -1136,7 +1137,7 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums) {
 		if (DEBUG_LOGIN) { debugLog("updating[$id]:$result");	}
 
 	} else {
-		if (is_null($pass)) $pass = md5($user);
+		if (is_null($pass)) $pass = passwordHash($user, $pass);
 		$sql = "INSERT INTO " . prefix('administrators') . " (user, password, name, email, rights) VALUES ('" .
 		escape($user) . "','" . escape($pass) . "','" . escape($name) . "','" . escape($email) . "','" . $rights . "')";
 		$result = query($sql);
@@ -1264,7 +1265,7 @@ function checkLogon($user, $pass) {
 	$admins = getAdministrators();
 	foreach ($admins as $admin) {
 		if ($admin['user'] == $user) {
-			$md5 = md5($user.$pass);
+			$md5 = passwordHash($user, $pass);
 			if ($admin['pass'] == $md5) {
 				return checkAuthorization($md5);
 			}
@@ -1975,7 +1976,7 @@ function cookiecode($text) {
  */
 function zp_image_types($quote) {
 	global $_zp_extra_filetypes;
-	$typelist = $quote.'images'.$quote.',';
+	$typelist = $quote.'images'.$quote.','.$quote.'_images'.$quote.',';
 	$types = array_unique($_zp_extra_filetypes);
 	foreach ($types as $type) {
 		$typelist .= $quote.strtolower($type).'s'.$quote.',';
@@ -2112,7 +2113,13 @@ $_zp_filters = array();
  */
 function register_filter($hook, $function_name) {
   global $_zp_filters;
-  $_zp_filters[$hook] = $function_name;
+  if (function_exists($function_name)) {
+		$bt = debug_backtrace();
+		$b = array_shift($bt);
+	  $_zp_filters[$hook] = array('function' => $function_name, 'script' => basename($b['file']));
+  } else {
+		trigger_error(sprintf(gettext('Attempt to register filter function <em>%s which does not exist.'), $function_name), E_USER_NOTICE);
+  }
 }
 
 /**
@@ -2135,7 +2142,7 @@ function register_filter($hook, $function_name) {
 function apply_filter($hook, $value) {
   global $_zp_filters;
 	if (isset($_zp_filters[$hook]))	{
-		return call_user_func($_zp_filters[$hook], $value);
+		return call_user_func($_zp_filters[$hook]['function'], $value);
 	} else {
 		return $value;
 	}

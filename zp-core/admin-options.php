@@ -91,7 +91,7 @@ if (isset($_GET['action'])) {
 						if (empty($pass)) {
 							$pwd = null;
 						} else {
-							$pwd = md5($_POST[$i.'-adminuser'] . $pass);
+							$pwd = passwordHash($_POST[$i.'-adminuser'], $pass);
 						}
 						saveAdmin($user, $pwd, $admin_n, $admin_e, $rights, $albums);
 						if ($i == 0) {
@@ -169,7 +169,7 @@ if (isset($_GET['action'])) {
 						setOption('gallery_password', NULL);  // clear the gallery password
 					}
 				} else {
-					setOption('gallery_password', md5($newuser.$pwd));
+					setOption('gallery_password', passwordHash($newuser, $pwd));
 				}
 			} else {
 				if (empty($fail)) {
@@ -196,7 +196,7 @@ if (isset($_GET['action'])) {
 						setOption('search_password', NULL);  // clear the gallery password
 					}
 				} else {
-					setOption('search_password', md5($newuser.$pwd));
+					setOption('search_password', passwordHash($newuser. $pwd));
 				}
 			} else {
 				if (empty($notify)) {

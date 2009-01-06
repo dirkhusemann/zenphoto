@@ -132,6 +132,14 @@ if ($a != 'full-image.php') {
 			echo $plugin.' ';
 		}
 	}
+	if (count($_zp_filters) > 0) {
+		echo 'filters: ';
+		$filters = $_zp_filters;
+		ksort($filters);
+		foreach ($filters as $filter=>$data) {
+			echo $filter.'=>'.$data['script'].':'.$data['function']." ";
+		}
+	}
 	echo " -->";
 }
 if(!is_null($_zp_HTML_cache)) { $_zp_HTML_cache->endHTMLCache(); }
