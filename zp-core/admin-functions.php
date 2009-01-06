@@ -15,12 +15,11 @@ define('TEXTAREA_COLUMNS', 50);
 define('TEXT_INPUT_SIZE', 48);
 require_once(dirname(__FILE__).'/class-load.php');
 require_once(dirname(__FILE__).'/functions.php');
-require_once(dirname(__FILE__).'/lib-seo.php'); // keep the function separate for easy modification by site admins
 
 // load the class plugins
 $class_optionInterface = array();
 foreach (getEnabledPlugins() as $extension) {
-	if (strpos($extension, 'class-') !== false) {
+	if (strpos($extension, 'class-') === 0 || strpos($extension, 'filter-') === 0) {
 		$option_interface = NULL;
 		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
 		if (!is_null($option_interface)) {
@@ -2049,6 +2048,10 @@ function isolate($target, $str) {
 	$j = strpos($str, ";"); // This is also wrong; it disallows semicolons in strings. We need a regexp.
 	$str = substr($str, 0, $j+1);
 	return $str;
+}
+
+function seoFriendlyURL($string) {
+	return apply_filter('seoFriendlyURL', $string);	
 }
 
 ?>

@@ -1,15 +1,22 @@
 <?php
 /**
  * translates accented characters to unaccented ones
- * @package core
+ * @package plugins
  */
+$plugin_description = gettext("Filter applied to filenames to translate accented characters to unaccented ones for soe friendly URLs.");
+$plugin_author = "Stephen Billard (sbillard)";
+$plugin_version = '1.0.0';
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-seo.php.html";
+
+register_filter('seoFriendlyURL', 'filterAccentedCharacters');
+
 /**
  * translates accented characters to unaccented ones
  *
  * @param string $string
  * @return string
  */
-function seoFriendlyURL($string) {
+function filterAccentedCharacters($string) {
 	// strip/convert a few specific characters
 	$specialchars = array(
 	"À"=>"A",

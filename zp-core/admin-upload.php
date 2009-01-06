@@ -61,8 +61,8 @@ if (isset($_GET['action'])) {
 				if ($error == UPLOAD_ERR_OK) {
 					$tmp_name = $_FILES['files']['tmp_name'][$key];
 					$name = $_FILES['files']['name'][$key];
-					$soename = seoFriendlyURL($name);
-					if (is_valid_image($name) || is_valid_video($name)) {
+					$soename = UTF8toFilesystem(seoFriendlyURL($name));
+					if (is_valid_image($name) || is_valid_other_type($name)) {
 						$uploadfile = $uploaddir . '/' . $soename;
 						move_uploaded_file($tmp_name, $uploadfile);
 						@chmod($uploadfile, 0666 & CHMOD_VALUE);

@@ -283,7 +283,6 @@ zp-core/lib-encryption.php
 zp-core/lib-gettext/gettext.inc
 zp-core/lib-htmlawed.php
 zp-core/lib-pclzip.php
-zp-core/lib-seo.php
 zp-core/lib-utf8.php
 zp-core/locale/de_DE/LC_MESSAGES/zenphoto.mo
 zp-core/locale/de_DE/LC_MESSAGES/zenphoto.po
@@ -310,6 +309,7 @@ zp-core/plugins/class-video.php
 zp-core/plugins/contact_form/form.php
 zp-core/plugins/contact_form.php
 zp-core/plugins/dynamic-locale.php
+zp-core/plugins/filter-zenphoto_seo.php
 zp-core/plugins/flowplayer/flashembed-0.34.pack.js
 zp-core/plugins/flowplayer/FlowPlayerDark.swf
 zp-core/plugins/flowplayer/FlowPlayerLight.swf

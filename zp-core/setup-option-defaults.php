@@ -185,7 +185,8 @@ function setDefault($option, $default) {
 	setOptionDefault('zp_plugin_flowplayer', 1);
 	setOptionDefault('zp_plugin_admin_toolbox', 1);
 	setOptionDefault('zp_plugin_class-video', 1);
-
+	setOptionDefault('zp_plugin_filter-zenphoto_seo', 1);
+	
 	setOptionDefault('use_lock_image', 1);
 	setOptionDefault('gallery_user', '');
 	setOptionDefault('search_user', '');
