@@ -454,8 +454,19 @@ table.checkboxes td {
 }
 
 .imagethumb {
-	margin: 0px;
+	margin: 1px;
 	padding: 1px;
+}
+
+/* Sortable Images
+------------------------------ */
+div.ui-sortable img {
+	float:left;
+}
+
+div.ui-sortable {
+	clear:both;
+	overflow:hidden;
 }
 
 /* Sortable Album Divs

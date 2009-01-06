@@ -1,85 +1,54 @@
 <?php
 /**
- * Load the Sortable lists now and set up the global sortable array
+ * Create sortable lists
  * @package admin
  */
 
 // force UTF-8 Ø
 
-
-$_zp_sortable_list = new SLLists('js');
-
-
 /**
- * A utility function that can be used to insert all of the necessary script stuff
- * in the <head> of the page so that sortable lists are enabled. The container types
- * support are limited to those supported by scriptaculous: currently div and ul.
+ * Initializes a sortable list and echoes needed javascript. Can be called multiple times in a page.
  * 
- * @param $sortContainerID The id of container that will contain the sortable elements.
- * @param $orderedList     The array that will contain the ordered elements.
- * @param $sortableElement The element type that will be sorted.
- * @param $options         Additional options to be passed to scriptaculous.
+ * @param string $sortContainerID The HTML id of container that will contain the sortable elements.
+ * @param string $orderedList     The array that will contain the ordered elements.
+ * @param string $sortableElement The elements that will be sorted (eg 'div', 'img', '.someclass')
+ * @param string $options         Additional options to be passed to jQuery.sortable
  * 
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function zenSortablesHeader($sortContainerID, $orderedList, $sortableElement, $options="") {
-	global $_zp_sortable_list;
-	
-	if (zp_loggedin()) {
-			
-		$_zp_sortable_list->addList($sortContainerID, $orderedList, $sortableElement, $options);
-		$_zp_sortable_list->debug = false;
-		$_zp_sortable_list->printTopJS();
-	}
+function zenSortablesHeader(&$jQuerySortable, $sortContainerID, $orderedList, $sortableElement, $options="") {
+	$jQuerySortable->addList($sortContainerID, $orderedList, $sortableElement, $options);
+	$jQuerySortable->printJavascript();
 }
 
 /**
- * Insert the final Sortable.create call in the footer of the page. 
- * This is required to finalize the sortable lists stuff.
- * 
- * @author Todd Papaioannou (lucky@luckyspin.org)
- * @since  1.0.0
- */
-function zenSortablesFooter() {
-	global $_zp_sortable_list;
-	
-	if (zp_loggedin()) {
-		$_zp_sortable_list->printBottomJs();
-	}
-}
-
-/**
- * Insert the Save button that will POST the sortable list to the page
- * indicated by $link.
+ * Insert the Save button that will POST the sortable list
  *
- * @param $link  The destination of the POST operation.
- * @param $label The label for the button.
+ * @param string $link  The destination of the POST operation.
+ * @param string $label The label for the button.
  *
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function zenSortablesSaveButton($link, $label="Save") {
-	global $_zp_sortable_list;
-	
-	$_zp_sortable_list->printForm($link, 'POST', $label, 'button');
+function zenSortablesSaveButton(&$jQuerySortable, $link, $label="Save") {
+	$jQuerySortable->printForm($link, 'POST', $label, 'button');
 }
 
 
 /**
- * Insert the chunk that handles the POST operation of the sorted list.
+ * Handles the POST operation of the sorted list.
  * 
- * @param $orderedList     The list of ordered elements to be saved.
- * @param $sortContainerID The parent container for the sortable elements.
- * @param $dbtable         The database table that will be updated.
+ * @param string $orderedList     The list of ordered elements to be saved.
+ * @param string $sortContainerID The parent container for the sortable elements.
+ * @param string $dbtable         The database table that will be updated.
  * 
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function zenSortablesPostHandler($orderedList, $sortContainerID, $dbtable) {
-	global $_zp_sortable_list;
+function zenSortablesPostHandler(&$jQuerySortable, $orderedList, $sortContainerID, $dbtable) {
 	if (isset($_POST['sortableListsSubmitted'])) {
-		$orderArray = $_zp_sortable_list->getOrderArray($_POST[$orderedList], $sortContainerID);
+		$orderArray = $jQuerySortable->getOrderArray($_POST[$orderedList], $sortContainerID);
 		foreach($orderArray as $item) {
 			saveSortOrder($dbtable, $item['element'], $item['order']);
 		}
@@ -90,9 +59,9 @@ function zenSortablesPostHandler($orderedList, $sortContainerID, $dbtable) {
 /**
  * Save the new sort order for a sortable item.
  *
- * @param dbtable   The dababase table that will be updated.
- * @param id        The id of the sortable item, as defined in the id column.
- * @param sortorder The new sort order for this item.
+ * @param string dbtable   The dababase table that will be updated.
+ * @param string id        The id of the sortable item, as defined in the id column.
+ * @param string sortorder The new sort order for this item.
  * 
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0 
@@ -107,84 +76,94 @@ function saveSortOrder($dbtable, $id, $sortorder) {
 }
 
 
-/*
- * This class implements a PHP wrapper around the scriptaculous javascript libraries created by
- * Thomas Fuchs (http://script.aculo.us/).
- *
- * SLLists was created by Greg Neustaetter in 2005 and may be used for free by anyone for any purpose.  
- * Just keep my name in here please and give me credit if you like, but give Thomas all the real credit!
- */
-class SLLists {
 
+/**
+ * jQuery sortable class
+ *
+ * This class implements the jQuery sortable plugin. Based on Todd Papaioannou's work with Scriptaculous for zenphoto 1.0.0
+ *
+ * @author Ozh
+ * @since 1.2.3
+ */
+class jQuerySortable {
 	var $lists = array();
 	var $jsPath;
-	var $debug = false;
+	var $debugging = false;
+	var $jquery_init;
 	
-	function SLLists($jsPath) {
+	function jQuerySortable($jsPath) {
 		$this->jsPath = $jsPath;
+		$this->jquery_init = false;
+		$this->debugging = false;
 	}
 	
-	function addList($list, $input, $tag = 'li', $additionalOptions = '') {
-		if ($additionalOptions != '') $additionalOptions = ','.$additionalOptions;
-		$this->lists[] = array("list" => $list, "input" => $input, "tag" => $tag, "additionalOptions" => $additionalOptions);
+	function debug() {
+		$this->debugging = true ;
 	}
-	
-	function printTopJS() {
-		?>
-		<script src="<?php echo $this->jsPath;?>/prototype.js" type="text/javascript"></script>
-		<script src="<?php echo $this->jsPath;?>/scriptaculous/scriptaculous.js" type="text/javascript"></script>
-		<script language="JavaScript" type="text/javascript"><!--
+
+	function printJavascript() {
+		// Stuff echoed only once, no matter how many sortable elements are initialized in the page
+		if (!$this->jquery_init) {
+		?>		
+		<script src="<?php echo $this->jsPath;?>/jquery.ui.sortables.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			// <![CDATA[
 			function populateHiddenVars() {
 				<?php foreach($this->lists as $list) { ?>
-					document.getElementById('<?php echo $list['input'];?>').value = Sortable.serialize('<?php echo $list['list'];?>');
+					jQuery('#<?php echo $list['input'];?>').val(jQuery('#<?php echo $list['list'];?>').sortable('serialize',{key:'<?php echo $list['list'];?>'}));
 				<?php } ?>
 				return true;
 			}
-			//-->
+			// ]]>
+		</script>
+		<?php
+			$this->jquery_init = true;
+		}?>
+		<script type="text/javascript">
+			// <![CDATA[
+			jQuery(document).ready(function(){
+			<?php foreach($this->lists as $list) { ?>
+				jQuery('#<?php echo $list['list'];?>')
+					.sortable({items:'<?php echo $list['items'];?>'<?php echo $list['additionalOptions'];?>})
+					.sortable('enable');
+			<?php } ?>
+			});
+			// ]]>
 		</script>
 		<?php
 	}
 	
-	function printBottomJs() {
-		?>
-		 <script type="text/javascript">
-			// <![CDATA[
-			<?php foreach($this->lists as $list) { ?>
-				Sortable.create('<?php echo $list['list'];?>',{tag:'<?php echo $list['tag'];?>'<?php echo $list['additionalOptions'];?>});
-			<?php } ?>
-			// ]]>
-		 </script>
-		<?php
+	function addList($list, $input, $tag = 'li', $additionalOptions = '') {
+		if ($additionalOptions != '')
+			$additionalOptions = ','.$additionalOptions;
+		$this->lists[] = array("list" => $list, "input" => $input, "items" => $tag, "additionalOptions" => $additionalOptions);
 	}
 	
 	function printHiddenInputs() {
-		$inputType = ($this->debug) ? 'text' : 'hidden';
+		$inputType = ($this->debugging === true) ? 'text' : 'hidden';
 
 		foreach($this->lists as $list) {
-			if ($this->debug) echo '<br>'.$list['input'].': ';
+			if ($this->debugging)
+				echo '<br>'.$list['input'].': ';
 			?>
-			<input type="<?php echo $inputType;?>" name="<?php echo $list['input'];?>" id="<?php echo $list['input'];?>" size="60">
+			<input type="<?php echo $inputType;?>" name="<?php echo $list['input'];?>" id="<?php echo $list['input'];?>" style='width:100%'>
 			<?php
 		}
-		if ($this->debug) echo '<br>';
+		if ($this->debugging)
+			echo '<br>';
 	}
-	
+
 	function printForm($action, $method = 'POST', $submitText = 'Submit', $submitClass = '',$formName = 'sortableListForm') {
 		?>
-		<form action="<?php echo $action;?>" method="<?php echo $method;?>" onSubmit="populateHiddenVars();" name="<?php echo $formName;?>" id="<?php echo $formName;?>">
+		<form action="<?php echo $action;?>" method="<?php echo $method;?>" name="<?php echo $formName;?>" id="<?php echo $formName;?>">
 			<?php $this->printHiddenInputs();?>
 			<input type="hidden" name="sortableListsSubmitted" value="true">
-			<?php
-			if ($this->debug) {
-				?><input type="button" value="View Serialized Lists" class="<?php echo $submitClass;?>" onClick="populateHiddenVars();"><br><?php
-			}
-			?>
 			<input type="submit" value="<?php echo $submitText;?>" class="<?php echo $submitClass;?>">
 		</form>
 		<?php
 	}
 	
-	function getOrderArray($input,$listname,$itemKeyName = 'element',$orderKeyName = 'order') {
+	function getOrderArray($input, $listname, $itemKeyName = 'element', $orderKeyName = 'order') {
 		parse_str($input,$inputArray);
 		$inputArray = $inputArray[$listname];
 		$orderArray = array();
@@ -193,5 +172,6 @@ class SLLists {
 		}
 		return $orderArray;
 	}
-
 }
+
+?>

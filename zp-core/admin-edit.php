@@ -10,6 +10,8 @@
 define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-sortable.php');
+$_zp_sortable_list = new jQuerySortable('js');
+// $_zp_sortable_list->debug(); // Uncomment this line to display serialized object
 
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
@@ -335,14 +337,14 @@ if (isset($_GET['tab'])) {
 }
 if ($sortablepage = (empty($subtab) && !isset($_GET['album']) && !isset($_GET['massedit'])) || $subtab === 'subalbuminfo') {
 	$sortablepage = true;
-	zenSortablesPostHandler('albumOrder', 'albumList', 'albums');
+	zenSortablesPostHandler($_zp_sortable_list, 'albumOrder', 'albumList', 'albums');
 }
 
 // Print our header
 printAdminHeader();
 
 if ($sortablepage) {
-	zenSortablesHeader('albumList','albumOrder','div', "handle:'handle'");
+	zenSortablesHeader($_zp_sortable_list, 'albumList', 'albumOrder', 'div', "handle:'.handle',axis:'y',containment:'table',cursor:'move',update:function(){populateHiddenVars();}");
 }
 if (empty($subtab)) {
 	?>
@@ -561,7 +563,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 				<li><img src="images/fail.png" alt="Delete" /><?php echo gettext("Delete"); ?></li>
 				</ul>
 			<?php
-				zenSortablesSaveButton("?page=edit&album=" . urlencode($album->name) . "&subalbumsaved&tab=subalbuminfo", gettext("Save Order"));
+				zenSortablesSaveButton($_zp_sortable_list, "?page=edit&album=" . urlencode($album->name) . "&subalbumsaved&tab=subalbuminfo", gettext("Save Order"));
 			?>
 		
 		</div>
@@ -1073,7 +1075,7 @@ if (isset($_GET['saved'])) {
 		</ul>
 <?php
   if ($_zp_loggedin & (ADMIN_RIGHTS | ALL_ALBUMS_RIGHTS)) {
-		zenSortablesSaveButton("?page=edit&saved", gettext("Save Order"));
+		zenSortablesSaveButton($_zp_sortable_list, "?page=edit&saved", gettext("Save Order"));
   }
 	?>
 </div>
@@ -1086,9 +1088,6 @@ if (isset($_GET['saved'])) {
 </div>
 <!-- content --> <?php
 printAdminFooter();
-if ($sortablepage) {
-	zenSortablesFooter();
-}
 ?>
 <!-- main -->
 </body>

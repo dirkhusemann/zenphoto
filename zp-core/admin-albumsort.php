@@ -10,6 +10,8 @@
 define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 require_once(dirname(__FILE__).'/admin-sortable.php');
+$_zp_sortable_list = new jQuerySortable('js');
+// $_zp_sortable_list->debug(); // Uncomment this line to display serialized object
 
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
@@ -22,12 +24,11 @@ if (!zp_loggedin()) {
 }
 
 // Insert the POST operation handler
-zenSortablesPostHandler('imageOrder', 'images', 'images');
+zenSortablesPostHandler($_zp_sortable_list, 'imageOrder', 'images', 'images');
 // Print the admin header
 printAdminHeader();
 // Print the sortable stuff
-zenSortablesHeader('images','imageOrder','img',"overlap:'horizontal',constraint:false");
-
+zenSortablesHeader($_zp_sortable_list, 'images','imageOrder','img',"cursor:'move',tolerance:'tolerance',opacity:0.8,update:function(){populateHiddenVars();}");
 echo "\n</head>";
 ?>
 
@@ -88,7 +89,7 @@ foreach ($images as $image) {
 <br>
 
 <div><?php
-zenSortablesSaveButton("?page=edit&album=". $album->getFolder() . "&saved");
+zenSortablesSaveButton($_zp_sortable_list, "?page=edit&album=". $album->getFolder() . "&saved");
 ?></div>
 
 </div>
@@ -99,7 +100,6 @@ zenSortablesSaveButton("?page=edit&album=". $album->getFolder() . "&saved");
 </div>
 
 <?php 
-	zenSortablesFooter(); 
 }
 ?>
 
