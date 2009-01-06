@@ -2853,8 +2853,13 @@ function printAlbumZip(){
  * Gets latest comments for images and albums
  *
  * @param int $number how many comments you want.
+ * @param string $type	"all" for all latest comments of all images and albums
+ * 											"image" for the lastest comments of one specific image
+ * 											"album" for the latest comments of one specific album
+ * @param int $itemID the ID of the element to get the comments for
  */
-function getLatestComments($number) {
+function getLatestComments($number,$type="all",$itemID="") {
+	$itemID = sanitize_numeric($itemID);
 	if (zp_loggedin()) {
 		$passwordcheck1 = "";
 		$passwordcheck2 = "";
@@ -2870,14 +2875,32 @@ function getLatestComments($number) {
 			}
 		}
 	}
-	$comments_images = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.type, c.website,"
-	. " c.date, c.anon, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
-	. " WHERE i.show = 1 AND c.ownerid = i.id AND i.albumid = a.id AND c.private = 0 AND (c.type IN (".zp_image_types("'") ."))".$passwordcheck1
-	. " ORDER BY c.id DESC LIMIT $number");
-	$comments_albums = query_full_array("SELECT c.id, a.folder, a.title AS albumtitle, c.name, c.type, c.website,"
-	. " c.date, c.anon, c.comment FROM ".prefix('comments')." AS c, ".prefix('albums')." AS a "
-	. " WHERE a.show = 1 AND c.ownerid = a.id AND c.private = 0 AND c.type = 'albums'".$passwordcheck2
-	. " ORDER BY c.id DESC LIMIT $number");
+	switch ($type) {
+		case "image":
+			$whereImages = " WHERE i.show = 1 AND i.id = ".$itemID." AND c.ownerid = ".$itemID." AND i.albumid = a.id AND c.private = 0 AND (c.type IN (".zp_image_types("'") ."))".$passwordcheck1;
+			break;
+		case "album":
+			$whereAlbums = " WHERE a.show = 1 AND a.id = ".$itemID." AND c.ownerid = ".$itemID." AND c.private = 0 AND c.type = 'albums'".$passwordcheck2;
+			break;
+		case "all":
+			$whereImages = " WHERE i.show = 1 AND c.ownerid = i.id AND i.albumid = a.id AND c.private = 0 AND (c.type IN (".zp_image_types("'") ."))".$passwordcheck1;
+			$whereAlbums = " WHERE a.show = 1 AND c.ownerid = a.id AND c.private = 0 AND c.type = 'albums'".$passwordcheck2;
+			break;
+	}
+	$comments_images = array();
+	$comments_albums = array();
+	if ($type === "all" OR $type === "image") {
+		$comments_images = query_full_array("SELECT c.id, i.title, i.filename, a.folder, a.title AS albumtitle, c.name, c.type, c.website,"
+		. " c.date, c.anon, c.comment FROM ".prefix('comments')." AS c, ".prefix('images')." AS i, ".prefix('albums')." AS a "
+		. $whereImages
+		. " ORDER BY c.id DESC LIMIT $number");
+	} 
+	if ($type === "all" OR $type === "album") {
+		$comments_albums = query_full_array("SELECT c.id, a.folder, a.title AS albumtitle, c.name, c.type, c.website,"
+		. " c.date, c.anon, c.comment FROM ".prefix('comments')." AS c, ".prefix('albums')." AS a "
+		. $whereAlbums
+		. " ORDER BY c.id DESC LIMIT $number");
+	}
 	$comments = array();
 	foreach ($comments_albums as $comment) {
 		$comments[$comment['id']] = $comment;
@@ -2888,6 +2911,7 @@ function getLatestComments($number) {
 	krsort($comments);
 	return array_slice($comments, 0, $number);
 }
+
 
 /**
  * Prints out latest comments for images and albums
@@ -2901,7 +2925,7 @@ function printLatestComments($number, $shorten='123') {
 	} else {
 		$albumpath = "/index.php?album="; $imagepath = "&amp;image="; $modrewritesuffix = "";
 	}
-	$comments = getLatestComments($number,$shorten);
+	$comments = getLatestComments($number,$type,$itemID);
 	echo "<ul id=\"showlatestcomments\">\n";
 	foreach ($comments as $comment) {
 		if($comment['anon'] === "0") {
@@ -2910,7 +2934,7 @@ function printLatestComments($number, $shorten='123') {
 			$author = "";
 		}
 		$album = $comment['folder'];
-		if($comment['type'] === "images") {
+		if($comment['type'] != "albums") { // TODO: Is this the right way?
 			$imagetag = $imagepath.$comment['filename'].$modrewritesuffix;
 		} else {
 			$imagetag = "";
@@ -3477,7 +3501,9 @@ function getAlbumId() {
  * @param string $option type of RSS: "Gallery" feed for the whole gallery
  * 																		"Album" for only the album it is called from
  * 																		"Collection" for the album it is called from and all of its subalbums
- * 																		 "Comments" for all comments
+ * 																		"Comments" for all comments
+ * 																		"Comments-image" for comments of only the image it is called from
+ * 																		"Comments-album" for comments of only the album it is called from
  * @param string $prev text to before before the link
  * @param string $linktext title of the link
  * @param string $next text to appear after the link
@@ -3511,6 +3537,12 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
 			break;
 		case "Comments":
 			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss-comments.php?lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			break;
+		case "Comments-image":
+			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss-comments.php?id=".getImageID()."&amp;title=".urlencode(getImageTitle())."&amp;type=image&amp;lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			break;
+		case "Comments-album":
+			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss-comments.php?id=".getAlbumID()."&amp;title=".urlencode(getAlbumTitle())."&amp;type=album&amp;lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
 	}
 }

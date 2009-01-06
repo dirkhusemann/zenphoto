@@ -139,7 +139,7 @@
 			</div>
 		</div>
 				<?php } else { echo gettext('Comments are closed.'); } ?>
-				<?php } ?>
+	<?php printRSSLink("Comments-image","",gettext("Subscribe to comments"),""); } ?>
 	</div>
 		<?php } ?>
 </div>
