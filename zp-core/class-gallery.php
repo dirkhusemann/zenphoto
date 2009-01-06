@@ -122,7 +122,7 @@ class Gallery {
 			}
 		}
 		closedir($dir);
-		return $albums;
+		return apply_filter('album_filter', $albums);
 	}
 
 

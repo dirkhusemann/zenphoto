@@ -310,6 +310,8 @@ zp-core/plugins/class-video.php
 zp-core/plugins/contact_form/form.php
 zp-core/plugins/contact_form.php
 zp-core/plugins/dynamic-locale.php
+zp-core/plugins/filter-albums.php
+zp-core/plugins/filter-images.php
 zp-core/plugins/filter-zenphoto_seo.php
 zp-core/plugins/flowplayer/flashembed-0.34.pack.js
 zp-core/plugins/flowplayer/FlowPlayerDark.swf

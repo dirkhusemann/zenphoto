@@ -238,7 +238,7 @@ if (defined('RELEASE')) {
 	$filters = $_zp_filters;
 	ksort($filters);
 	foreach ($filters as $filter=>$data) {
-		echo "<li>".$filter.': '.$data['script'].' => '.$data['function']."</li>";
+		echo "<li><em>".$filter.'</em>: '.$data['script'].' => '.$data['function']."</li>";
 	}
 	?>
 	</ul>
