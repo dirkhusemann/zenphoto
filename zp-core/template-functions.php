@@ -2855,7 +2855,7 @@ function printAlbumZip(){
  * @param string $type	"all" for all latest comments of all images and albums
  * 											"image" for the lastest comments of one specific image
  * 											"album" for the latest comments of one specific album
- * @param int $itemID the ID of the element to get the comments for
+ * @param int $itemID the ID of the element to get the comments for if $type != "all"
  */
 function getLatestComments($number,$type="all",$itemID="") {
 	$itemID = sanitize_numeric($itemID);
@@ -2917,8 +2917,12 @@ function getLatestComments($number,$type="all",$itemID="") {
  *
  * @param int $number how many comments you want.
  * @param string $shorten the number of characters to shorten the comment display
+ * @param string $type	"all" for all latest comments of all images and albums
+ * 											"image" for the lastest comments of one specific image
+ * 											"album" for the latest comments of one specific album
+ * @param int $itemID the ID of the element to get the comments for if $type != "all"
  */
-function printLatestComments($number, $shorten='123') {
+function printLatestComments($number, $shorten='123',$type="all",$itemID="") {
 	if(getOption('mod_rewrite')) {
 		$albumpath = "/"; $imagepath = "/"; $modrewritesuffix = getOption('mod_rewrite_image_suffix');
 	} else {
@@ -2933,7 +2937,7 @@ function printLatestComments($number, $shorten='123') {
 			$author = "";
 		}
 		$album = $comment['folder'];
-		if($comment['type'] != "albums") { // TODO: Is this the right way?
+		if($comment['type'] != "albums" AND $comment['type'] != "news" AND $comment['type'] != "pages") { // check if not comments on albums or Zenpage items
 			$imagetag = $imagepath.$comment['filename'].$modrewritesuffix;
 		} else {
 			$imagetag = "";

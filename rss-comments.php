@@ -79,7 +79,7 @@ foreach ($comments as $comment) {
 		$author = "";
 	}
 	$album = $comment['folder'];
-	if($comment['type'] != "albums") { // TODO: Is this the right way?
+	if($comment['type'] != "albums" AND $comment['type'] != "news" AND $comment['type'] != "pages") { // check if not comments on albums or Zenpage items
 		$imagetag = $imagepath.$comment['filename'].$modrewritesuffix;
 	} else {
 		$imagetag = "";
