@@ -279,10 +279,10 @@ function propSizes($size, $width, $height, $w, $h, $thumb, $image_use_side, $dim
 	$hprop = round(($h / $w) * $dim);
 	$wprop = round(($w / $h) * $dim);
 	if ($size) {
-		if ((($thumb || ($image_use_side == 'longest')) && $h > $w) || ($image_use_side == 'height')) {
+		if ((($thumb || ($image_use_side == 'longest')) && $h > $w) || ($image_use_side == 'height') || ($image_use_side == 'shortest' && $h < $w)) {
 			$newh = $dim;  // height is the size and width is proportional
 			$neww = $wprop;
-		} else { // either width is longest or $image_use_side == 'width'
+		} else {
 			$neww = $dim;  // width is the size and height is proportional
 			$newh = $hprop; 
 		}

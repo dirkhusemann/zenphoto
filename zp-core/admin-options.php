@@ -1534,16 +1534,29 @@ if ($subtab == 'admin') {
 			<tr>
 				<td><?php echo gettext("Image size:"); ?></td>
 				<td>
-					<input type="text" size="<?php echo 5; ?>" name="image_size" value="<?php echo getThemeOption($album, 'image_size');?>" />
 					<?php $side = getOption('image_use_side'); ?>
-					<input type="radio" id="image_use_side" name="image_use_side" value="height" <?php if ($side=='height') echo " CHECKED"?> /> <?php echo gettext('height') ?>
-					<input type="radio" id="image_use_side" name="image_use_side" value="width" <?php if ($side=='width') echo " CHECKED"?> /> <?php echo gettext('width') ?>
-					<input type="radio" id="image_use_side" name="image_use_side" value="longest" <?php if ($side=='longest') echo " CHECKED"?> /> <?php echo gettext('longest side') ?>
+					<table>
+						<tr>
+							<td rowspan="2">
+								<input type="text" size="<?php echo 5; ?>" name="image_size" value="<?php echo getThemeOption($album, 'image_size');?>" />
+							</td>
+							<td>
+							<input type="radio" id="image_use_side" name="image_use_side" value="height" <?php if ($side=='height') echo " CHECKED"?> /> <?php echo gettext('height') ?>
+							<input type="radio" id="image_use_side" name="image_use_side" value="width" <?php if ($side=='width') echo " CHECKED"?> /> <?php echo gettext('width') ?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<input type="radio" id="image_use_side" name="image_use_side" value="shortest" <?php if ($side=='shortest') echo " CHECKED"?> /> <?php echo gettext('shortest side') ?>
+							<input type="radio" id="image_use_side" name="image_use_side" value="longest" <?php if ($side=='longest') echo " CHECKED"?> /> <?php echo gettext('longest side') ?>
+							</td>
+						</tr>
+					</table>
 				</td>
 				<td>
 					<?php echo gettext("Default image display size."); ?>
 					<br />
-					<?php echo gettext("The image will be sized so that the <em>height</em>, <em>width</em>, or the <em>longest side</em> will be equal to <em>image size</em>."); ?>
+					<?php echo gettext("The image will be sized so that the <em>height</em>, <em>width</em>, <em>shortest side</em>, or the <em>longest side</em> will be equal to <em>image size</em>."); ?>
 				</td>
 			</tr>
 			<?php if (is_null($album)) {?>

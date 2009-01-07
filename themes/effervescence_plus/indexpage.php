@@ -37,9 +37,11 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 			<!-- The Image -->
 			<?php
 	 			makeImageCurrent(getRandomImages(true));
-				$s = floor(getDefaultWidth() * $imagereduction) + 22;
+	 			$size = floor(getOption('image_size') * $imagereduction);
+	 			if ($imagereduction != 1) setOption('image_size', $size, false);
+				$s = getDefaultWidth() + 22;
 				$wide = "style=\"width:".$s."px;";
-				$s = floor(getDefaultHeight() * $imagereduction) + 72;
+				$s = getDefaultHeight() + 72;
 				$high = " height:".$s."px;\"";
 			?>
 			<div id="image" <?php echo $wide.$high; ?>>
@@ -48,7 +50,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 			</p>
 				<div id="image_container">
 					<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>">
-						<?php printCustomSizedImage(gettext('Visit the photo gallery'), floor(getOption('image_size') * $imagereduction)); ?>
+						<?php printCustomSizedImage(gettext('Visit the photo gallery'), $size); ?>
 					</a>
 				</div>
 				<?php if (!$zenpage) { ?>
