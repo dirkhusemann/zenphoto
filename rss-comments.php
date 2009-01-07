@@ -32,7 +32,7 @@ if(isset($_GET['title'])) {
 if(isset($_GET['type'])) {
 	$type = sanitize($_GET['type']);
 } else {
-	$type = "";
+	$type = "all";
 }
 
 if(isset($_GET['lang'])) {
@@ -71,7 +71,7 @@ $items = getOption('feed_items'); // # of Items displayed on the feed
 <webMaster><?php echo "$adminemail ($adminname)"; ?></webMaster>
 
 <?php
-$comments = getLatestComments($items,$type,$id);
+$comments = getLatestComments($items);
 foreach ($comments as $comment) {
 	if($comment['anon'] === "0") {
 		$author = " ".gettext("by")." ".$comment['name'];
@@ -88,7 +88,6 @@ foreach ($comments as $comment) {
 	$albumtitle = $comment['albumtitle'];
 	if ($comment['title'] == "") $title = $image; else $title = get_language_string($comment['title']);
 	$website = $comment['website'];
-	$shortcomment = truncate_string($comment['comment'], 1000);
 	if(!empty($title)) {
 		$title = ": ".$title;
 	}
@@ -96,7 +95,7 @@ foreach ($comments as $comment) {
 <item>
 <title><?php echo strip_tags($albumtitle.$title.$author); ?></title>
 <link><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$album.$imagetag.']]>';?></link>
-<description><?php echo $shortcomment; ?></description>
+<description><?php echo $comment['comment']; ?></description>
 <category><?php echo strip_tags($albumtitle); ?></category>
 <guid><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$album.$imagetag.']]>';?></guid>
 <pubDate><?php echo fixRSSDate($date); ?></pubDate>
