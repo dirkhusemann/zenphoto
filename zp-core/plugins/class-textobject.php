@@ -87,6 +87,7 @@ class TextObject extends _Image {
 			$title = $this->getDefaultTitle();
 			$this->set('title', $title);
 			$this->set('mtime', filemtime($this->localpath));
+			apply_filter('new_image', $this);
 			$this->save();
 		}
 	}

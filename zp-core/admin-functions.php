@@ -1939,19 +1939,27 @@ function getTagOrder() {
  * @param string $dir where the images go
  */
 function unzip($file, $dir) { //check if zziplib is installed
-	if(function_exists('zip_open()')) {
+	if(function_exists('zip_open')) {
 		$zip = zip_open($file);
 		if ($zip) {
 			while ($zip_entry = zip_read($zip)) { // Skip non-images in the zip file.
 				$fname = zip_entry_name($zip_entry);
-				if (is_valid_image($fname) || is_valid_video($fname)) {
+				$soename = UTF8toFilesystem(seoFriendlyURL($fname));
+				if (is_valid_image($soename) || is_valid_other_type($soename)) {
 					if (zip_entry_open($zip, $zip_entry, "r")) {
 						$buf = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
-						$path_file = str_replace("/",DIRECTORY_SEPARATOR, $dir . '/' . $fname);
+						$path_file = str_replace("/",DIRECTORY_SEPARATOR, $dir . '/' . $soename);
 						$fp = fopen($path_file, "w");
 						fwrite($fp, $buf);
 						fclose($fp);
 						zip_entry_close($zip_entry);
+						$albumname = substr($dir, strlen(getAlbumFolder()));
+						$album = new Album(new Gallery(), $albumname);
+						$image = newImage($album, $soename);
+						if ($fname != $soename) {
+							$image->setTitle($name);
+							$image->save();
+						}
 					}
 				}
 			}

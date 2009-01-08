@@ -727,7 +727,11 @@ function debugLogBacktrace($message) {
 		} else {
 			debugLog($caller.' called');
 		}
-		$line = basename($b['file'])	. ' [' . $b['line'] . "]";
+		if (isset($b['file']) && isset($b['line'])) {
+			$line = basename($b['file'])	. ' [' . $b['line'] . "]";
+		} else {
+			$line = 'unknown';
+		}
 	}
 	if (!empty($line)) {
 		debugLog($prefix.' from '.$line);

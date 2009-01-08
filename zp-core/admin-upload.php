@@ -66,8 +66,8 @@ if (isset($_GET['action'])) {
 						$uploadfile = $uploaddir . '/' . $soename;
 						move_uploaded_file($tmp_name, $uploadfile);
 						@chmod($uploadfile, 0666 & CHMOD_VALUE);
+						$image = newImage($album, $soename);
 						if ($name != $soename) {
-							$image = newImage($album, $soename);
 							$image->setTitle($name);
 							$image->save();
 						}

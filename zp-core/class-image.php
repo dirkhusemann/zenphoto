@@ -94,6 +94,7 @@ class _Image extends PersistentObject {
 		if ($new) {
 			$this->updateDimensions();
 			$metadata = getImageMetadata($this->localpath);
+			$this->set('EXIFValid', 1);
 			$newDate = '';
 			if (isset($metadata['date'])) {
 				$dt = dateTimeConvert($metadata['date']);
@@ -145,7 +146,8 @@ class _Image extends PersistentObject {
 				$this->setCopyright(sanitize($metadata['copyright'], 1));
 			}
 			$this->set('mtime', filemtime($this->localpath));
-				$this->save();
+			apply_filter('new_image', $this);
+			$this->save();
 		}
 	}
 	
@@ -802,8 +804,9 @@ class _Image extends PersistentObject {
 					$this->index = $_zp_current_search->getImageIndex($this->album->name, $this->filename);
 				}
 			} else {
-				$images =  $this->album->getImages(0);
+				$images = $this->album->getImages(0);
 				for ($i=0; $i < count($images); $i++) {
+					if (!isset($images[$i])) debugLogBacktrace('Image index not set');
 					$image = $images[$i];
 					if ($this->filename == $image) {
 						$this->index = $i;

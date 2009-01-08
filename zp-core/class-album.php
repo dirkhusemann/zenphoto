@@ -93,6 +93,7 @@ class Album extends PersistentObject {
 				$this->save();
 			}
 		}
+		if ($new) apply_filter('new_album', $this);
 	}
 
 	/**

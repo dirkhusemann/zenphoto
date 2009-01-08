@@ -1,6 +1,6 @@
 <?php
 /**
- * translates accented characters to unaccented ones
+ * Filters out images/albums from the filesystem lists
  * @package plugins
  */
 $plugin_description = gettext("Filter out files from albums and image searches that we do not want shown. See the plugin options for configuration.");
