@@ -1217,7 +1217,7 @@ class Album extends PersistentObject {
 			$files = array_diff($files, $others_thumbs);
 		}
 
-		if ($dir) $filter = 'album_filter'; else $filter = 'image_filter';
+		if ($dirs) $filter = 'album_filter'; else $filter = 'image_filter';
 		return apply_filter($filter, $files);
 	}
 

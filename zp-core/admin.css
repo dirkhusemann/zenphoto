@@ -1009,7 +1009,43 @@ button.positive,.buttons a.positive {
 	height: 1%;
 }
 
+.customchecklist li {
+	background: none;
+	padding-left: 0;
+	text-align: left;
+	
+}
 
+/* CSS for custom checklists */
+.customchecklist {
+	border: 1px solid #ccc;
+	list-style: none;
+	height: 8em;
+	overflow: auto;
+	width: 20em;
+	background-color: white;
+}
+
+.customchecklist,.customchecklist li {
+	margin: 0;
+	padding: 0;
+	border-bottom: 1px dotted #C6D880;
+}
+
+.customchecklist label {
+	display: block;
+	padding: 0 0.2em 0 25px;
+	text-indent: -25px;
+}
+
+.customchecklist label:hover,.customchecklist label.hover {
+	background: #777;
+	color: #fff;
+}
+
+* html .customchecklist label {
+	height: 1%;
+}
 
 /* image pagination on album edit page 
 -------------------------------------------*/

@@ -721,7 +721,7 @@ if ($subtab == 'admin') {
 						$rest = array_diff($albumlist, $cv);
 						$prefix = 'managed_albums_'.$id.'_';
 						echo gettext("Managed albums:");
-						echo '<ul class="albumchecklist">'."\n";;
+						echo '<ul class="albumchecklist">'."\n";
 						generateUnorderedListFromArray($cv, $cv, $prefix, $alterrights, true, false);
 						if (empty($alterrights)) {
 							generateUnorderedListFromArray(array(), $rest, $prefix, false, true, false);

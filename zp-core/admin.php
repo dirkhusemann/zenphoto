@@ -224,25 +224,31 @@ if (defined('RELEASE')) {
 	<ul class="plugins">
 	<?php
 	$plugins = getEnabledPlugins();
-	natsort($plugins);
-	foreach ($plugins as $extension) {
-		$ext = substr($extension, 0, strlen($extension)-4);
-		echo "<li>".$ext."</li>";
+	if (count($plugins) > 0) {
+		natsort($plugins);
+		foreach ($plugins as $extension) {
+			$ext = substr($extension, 0, strlen($extension)-4);
+			echo "<li>".$ext."</li>";
+		}
+	} else {
+		echo '<li>'.gettext('<em>none</em>').'</li>';
 	}
 	?>
 	</ul>
-
 	<h3><?php echo gettext("Active filters:"); ?></h3>
 	<ul class="plugins">
 	<?php
 	$filters = $_zp_filters;
-	ksort($filters);
-	foreach ($filters as $filter=>$data) {
-		echo "<li><em>".$filter.'</em>: '.$data['script'].' => '.$data['function']."</li>";
+	if (count($filters) > 0) {
+		ksort($filters);
+		foreach ($filters as $filter=>$data) {
+			echo "<li><em>".$filter.'</em>: '.$data['script'].' => '.$data['function']."</li>";
+		}
+	} else {
+		echo '<li>'.gettext('<em>none</em>').'</li>';
 	}
 	?>
 	</ul>
-
 </div>
 <br clear="all" />
 <?php
