@@ -15,6 +15,6 @@ global $x;
  * @return string
  */
 function passwordHash($user, $pass) {
-	return md5($user . pass);
+	return md5($user . $pass);
 }
 ?>
