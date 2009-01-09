@@ -15,15 +15,13 @@ function confirmDeleteImage(url, message) {
 }
 
 function addUploadBoxes(placeholderid, copyfromid, num) {
-	var placeholder = document.getElementById(placeholderid);
-	var copyfrom = document.getElementById(copyfromid);
 	for (i=0; i<num; i++) {
-		if (window.totalinputs >= 50) return;
-		var newdiv = document.createElement('div');
-		newdiv.innerHTML = copyfrom.innerHTML;
-		newdiv.className = copyfrom.className;
-		placeholder.parentNode.insertBefore(newdiv, placeholder);
+		jQuery('#'+copyfromid).clone().insertBefore('#'+placeholderid);
 		window.totalinputs++;
+		if (window.totalinputs >= 50) {
+			jQuery('#addUploadBoxes').toggle('slow');
+			return;
+		}
 	}
 }
 

@@ -9,7 +9,6 @@
 /* Don't put anything before this line! */
 define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
-require_once(dirname(__FILE__).'/admin-sortable.php');
 
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
@@ -235,14 +234,28 @@ if (defined('RELEASE')) {
 	}
 	?>
 	</ul>
+	<?php
+	$filters = $_zp_filters;
+	ksort($filters);
+	?>
 	<h3><?php echo gettext("Active filters:"); ?></h3>
 	<ul class="plugins">
 	<?php
-	$filters = $_zp_filters;
 	if (count($filters) > 0) {
-		ksort($filters);
-		foreach ($filters as $filter=>$data) {
-			echo "<li><em>".$filter.'</em>: '.$data['script'].' => '.$data['function']."</li>";
+		foreach ($filters as $filter=>$array_of_priority) {
+			foreach ($array_of_priority as $priority=>$array_of_filters) {
+				echo "<li><em>$filter</em>";
+				?>
+				<ul class="filters">
+				<?php
+				foreach ($array_of_filters as $data) {
+					echo "<li><em>$priority</em>: ".$data['script'].' => '.$data['function'].'</li>';
+				}
+				echo '</li>';
+				?>
+				</ul>
+				<?php
+			}
 		}
 	} else {
 		echo '<li>'.gettext('<em>none</em>').'</li>';

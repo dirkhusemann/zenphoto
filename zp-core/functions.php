@@ -10,6 +10,7 @@
 
 require_once(dirname(__FILE__).'/functions-basic.php');
 require_once(dirname(__FILE__).'/functions-auth.php');
+require_once(dirname(__FILE__).'/functions-filter.php');
 
 if(!function_exists("gettext")) {
 	// load the drop-in replacement library
@@ -2095,57 +2096,6 @@ function dateTimeConvert($datetime, $raw=false) {
 	if ($time == -1 || $time == false) return false;
 	if ($raw) return $time;
 	return date('Y-m-d H:i:s', $time);
-}
-
-$_zp_filters = array();
-/**
- * Registers a filtering function (normally called from a plugin)
- * Filtering functions are used to post process zenphoto elements.
- * The function must support one parameter of a type defined by the element
- * being filtered.
- * 
- * Typical use:
- * 
- *		register_filter('zp_element', 'my_zp_element_handler');
- *
- * @param string $hook the name of the zenphoto element to be filtered
- * @param string $function_name then name of the function that is to be called.
- */
-function register_filter($hook, $function_name) {
-  global $_zp_filters;
-  if (function_exists($function_name)) {
-		$bt = debug_backtrace();
-		$b = array_shift($bt);
-	  $_zp_filters[$hook] = array('function' => $function_name, 'script' => basename($b['file']));
-  } else {
-		trigger_error(sprintf(gettext('Attempt to register filter function <em>%s which does not exist.'), $function_name), E_USER_NOTICE);
-  }
-}
-
-/**
- * Performs a filtering operation on a zenphoto element.
- * This function is called for each zenphoto element which supports
- * plugin filtering. It is called after any zenphoto specific actions are
- * completed and before the element is used.
- * 
- * Typical use:
- * 
- *		$zp_elemennt = "default value";
- *		$zp_element = apply_filter('zp_element', $zp_element);
- * 
- * Returns an element which may have been filtered by a plugin filter.
- *
- * @param string $hook the name of the zenphoto element
- * @param mixed $value the value of the element before filtering
- * @return mixed
- */
-function apply_filter($hook, $value) {
-  global $_zp_filters;
-	if (isset($_zp_filters[$hook]))	{
-		return call_user_func($_zp_filters[$hook]['function'], $value);
-	} else {
-		return $value;
-	}
 }
 
 setexifvars();

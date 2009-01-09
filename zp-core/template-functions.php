@@ -7,7 +7,6 @@
 
 // force UTF-8 Ø
 
-
 /**
  * Load the classes
  */
@@ -2103,7 +2102,7 @@ function printImageMetadata($title=NULL, $toggle=true, $id='imagemetadata', $cla
 	$dataid = $id . '_data';
 	echo "<div" . (($class) ? " class=\"$class\"" : "") . (($id) ? " id=\"$id\"" : "") . ">\n";
 	if ($toggle) echo "<a href=\"javascript:toggle('$dataid');\">";
-	echo "<strong>$title</strong>";
+	echo "<span class='metadata_title'>$title</a>";
 	if ($toggle) echo "</a>\n";
 
 	echo "<table id=\"$dataid\"" . ($toggle ? " style=\"display: none;\"" : '') . ">\n";
@@ -4119,6 +4118,53 @@ function shortenContent($articlecontent, $shorten, $shortenindicator) {
 	return $short;
 }
 
-/*** End template functions ***/
+/**
+ * Expose some informations in a HTML comment
+ *
+ * @param string $obj
+ * @param array $plugins
+ * @param string $theme
+ * @param string $filters
+ */
+function exposeZenPhotoInformations( $obj = '', $plugins = '', $theme = '', $filters = '' ) {
+	global $zenpage_version, $_zp_filters;
+
+	$a = basename($obj);
+	if ($a != 'full-image.php') {
+		if (defined('RELEASE')) {
+			$official = 'Official Build';
+		} else {
+			$official = 'SVN';
+		}
+		echo "\n<!-- zenphoto version " . ZENPHOTO_VERSION . " [" . ZENPHOTO_RELEASE . "] ($official)";
+		if (isset($zenpage_version)) echo ' zenpage version '.$zenpage_version.' ['.ZENPAGE_RELEASE.'] ';
+		echo " THEME: " . $theme . " (" . $a . ") { memory: ".INI_GET('memory_limit')." }";
+		echo ' PLUGINS: ';
+		if (count($plugins) > 0) {
+			sort($plugins);
+			foreach ($plugins as $plugin) {
+				echo $plugin.' ';
+			}
+		} else {
+			echo 'none';
+		}
+		if (count($filters) > 0) {
+			ksort($filters);
+			echo 'FILTERS: ';
+			foreach ($filters as $filter=>$array_of_priority) {
+				foreach ($array_of_priority as $priority=>$array_of_filters) {
+					echo "$filter [";
+					foreach ($array_of_filters as $data) {
+						echo "$priority: ".$data['script'].'=>'.$data['function'];
+					}
+					echo '] ';
+				}
+			}
+		} else {
+			echo 'none';
+		}
+		echo " -->";
+	}
+}
 
 ?>

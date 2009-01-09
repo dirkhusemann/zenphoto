@@ -239,7 +239,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 <div id="place" style="display: none;"></div>
 <!-- New boxes get inserted before this -->
 
-<p><a href="javascript:addUploadBoxes('place','filetemplate',5)"	title="<?php echo gettext("Doesn't reload!"); ?>">+ <?php echo gettext("Add more upload boxes"); ?></a> <small>
+<p id="addUploadBoxes"><a href="javascript:addUploadBoxes('place','filetemplate',5)" title="<?php echo gettext("Doesn't reload!"); ?>">+ <?php echo gettext("Add more upload boxes"); ?></a> <small>
 <?php echo gettext("(won't reload the page, but remember your upload limits!)"); ?></small></p>
 
 

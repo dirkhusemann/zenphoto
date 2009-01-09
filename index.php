@@ -92,18 +92,20 @@ if (file_exists(SERVERPATH . "/" . UTF8ToFilesystem($obj)) && $zp_request) {
 		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
 	}
 
-// re-initialize video dimensions if needed
-if (isImageVideo() & !is_null($_zp_flash_player)) $_zp_current_image->updateDimensions();
+	// re-initialize video dimensions if needed
+	if (isImageVideo() & !is_null($_zp_flash_player)) $_zp_current_image->updateDimensions();
 
-if(!is_null($_zp_HTML_cache)) { $_zp_HTML_cache->startHTMLCache(); }
-	// Include the appropriate page for the requested object, and a 200 OK header.
-	header("HTTP/1.0 200 OK");
-	header("Status: 200 OK");
-	include($obj);
+	// Display the page itself
+	if(!is_null($_zp_HTML_cache)) { $_zp_HTML_cache->startHTMLCache(); }
+		// Include the appropriate page for the requested object, and a 200 OK header.
+		header("HTTP/1.0 200 OK");
+		header("Status: 200 OK");
+		include($obj);
 
-// If the requested object does not exist, issue a 404 and redirect to the theme's
-// 404.php page, or a 404.php in the zp-core folder.
 } else {
+	// If the requested object does not exist, issue a 404 and redirect to the theme's
+	// 404.php page, or a 404.php in the zp-core folder.
+
 	list($album, $image) = rewrite_get_album_image('album','image');
 	$_zp_gallery_page = '404.php';
 	$errpage = THEMEFOLDER.'/'.UTF8ToFilesystem($theme).'/404.php';
@@ -114,34 +116,11 @@ if(!is_null($_zp_HTML_cache)) { $_zp_HTML_cache->startHTMLCache(); }
 	} else {
 		include(ZENFOLDER. '/404.php');
 	}
+
 }
 
-$a = basename($obj);
-if ($a != 'full-image.php') {
-	if (defined('RELEASE')) {
-		$official = 'Official Build';
-	} else {
-		$official = 'SVN';
-	}
-	echo "\n<!-- zenphoto version " . ZENPHOTO_VERSION . " [" . ZENPHOTO_RELEASE . "] ($official)";
-	if (isset($zenpage_version)) echo ' zenpage version '.$zenpage_version.' ['.ZENPAGE_RELEASE.'] ';
-	echo " Theme: " . $theme . " (" . $a . ") { memory: ".INI_GET('memory_limit')." }";
-	if (count($_zp_loaded_plugins) > 0) {
-		echo ' plugins: ';
-		foreach ($_zp_loaded_plugins as $plugin) {
-			echo $plugin.' ';
-		}
-	}
-	if (count($_zp_filters) > 0) {
-		echo 'filters: ';
-		$filters = $_zp_filters;
-		ksort($filters);
-		foreach ($filters as $filter=>$data) {
-			echo $filter.'=>'.$data['script'].':'.$data['function']." ";
-		}
-	}
-	echo " -->";
-}
+exposeZenPhotoInformations( $obj, $_zp_loaded_plugins, $theme, $_zp_filters );
+
 if(!is_null($_zp_HTML_cache)) { $_zp_HTML_cache->endHTMLCache(); }
 
 ?>

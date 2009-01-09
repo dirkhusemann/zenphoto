@@ -108,7 +108,7 @@ foreach ($filelist as $extension) {
 	}
 	$str = isolate('$plugin_URL', $pluginStream);
 	if (false === $str) {
-		$plugin_url = '';
+		$plugin_URL = '';
 	} else {
 		if (false === eval($str)) {
 			$parserr = $parserr | 8;
@@ -128,7 +128,6 @@ foreach ($filelist as $extension) {
 			}
 		}
 	}
-	
 	
 	echo "<tr>";
 	echo '<td width="30%">';

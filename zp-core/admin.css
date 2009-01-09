@@ -578,13 +578,25 @@ input.tags {
 }
 
 #overview-comments ul.plugins {
-		width: 450px; 
+	width: 450px; 
 	list-style-type: none;
 	padding: 0px 0px 10px 10px;
 	}
 
 
 #overview-comments ul.plugins li {
+	margin-left: 1em;
+	margin-bottom: 0em;
+	}
+
+#overview-comments ul.filters {
+	width: 450px; 
+	list-style-type: none;
+	padding: 0;
+	}
+
+
+#overview-comments ul.filters li {
 	margin-left: 1em;
 	margin-bottom: 0em;
 	}
