@@ -3004,9 +3004,10 @@ function getHitcounter($obj=NULL) {
 				$obj = $_zp_current_image;
 				break;
 			default: return NULL; // not a valid object for hitcounter
+				break;
 		}
-	return $obj->get('hitcounter');
 	}
+	return $obj->get('hitcounter');
 }
 
 /**
