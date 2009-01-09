@@ -173,7 +173,6 @@ zp-core/admin-functions.php
 zp-core/admin-options.php
 zp-core/admin-plugins.php
 zp-core/admin-refresh-metadata.php
-zp-core/admin-sortable.php
 zp-core/admin-tags.php
 zp-core/admin-themes.php
 zp-core/admin-thumbcrop.php
@@ -190,6 +189,7 @@ zp-core/class-image.php
 zp-core/class-load.php
 zp-core/class-mollom.php
 zp-core/class-search.php
+zp-core/class-sortable.php
 zp-core/class-transientimage.php
 zp-core/classes.php
 zp-core/controller.php
@@ -206,6 +206,7 @@ zp-core/functions-auth.php
 zp-core/functions-basic.php
 zp-core/functions-controller.php
 zp-core/functions-db.php
+zp-core/functions-filter.php
 zp-core/functions-i18n.php
 zp-core/functions-image.php
 zp-core/functions.php
@@ -265,8 +266,8 @@ zp-core/js/jquery.js
 zp-core/js/jquery.tabs.js
 zp-core/js/jquery.toggleElements.js
 zp-core/js/jquery.tooltip.js
-zp-core/js/jquery.ui.sortables.js
-zp-core/js/jquery.ui.sortables.readme.txt
+zp-core/js/jquery.ui.zenphoto.js
+zp-core/js/jquery.ui.zenphoto.readme.txt
 zp-core/js/js-string-constants.js.php
 zp-core/js/scripts-common.js
 zp-core/js/tag.js
@@ -304,6 +305,7 @@ zp-core/plugins/contact_form/form.php
 zp-core/plugins/contact_form.php
 zp-core/plugins/dynamic-locale.php
 zp-core/plugins/filter-file_searches.php
+zp-core/plugins/filter-new_objects.php
 zp-core/plugins/filter-zenphoto_seo.php
 zp-core/plugins/flowplayer/flashembed-0.34.pack.js
 zp-core/plugins/flowplayer/FlowPlayerDark.swf
