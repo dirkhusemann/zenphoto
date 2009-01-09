@@ -168,7 +168,7 @@ function printAlbumStatisticItem($album, $option, $showtitle=false, $showdate=fa
 				} else {
 					$image = gettext("images");
 				}
-				echo "<span>".spintf(gettext('%1$u new %2$s'),$count,$image)."</span>";
+				echo "<span>".sprintf(gettext('%1$u new %2$s'),$count,$image)."</span>";
 			} else {
 				echo "<p>". zpFormattedDate(getOption('date_format'),strtotime($tempalbum->getDateTime()))."</p>";
 			}
