@@ -51,8 +51,8 @@ class Gallery {
 	 * @return string
 	 */
 	function getGallerySortKey($sorttype=null) {
-		if (is_null($sorttype)) { $sorttype = getOption('gallery_sorttype'); }
-		return getSortKey($sorttype, 'folder', 'sort_order');
+		if (empty($sorttype)) { $sorttype = getOption('gallery_sorttype'); }
+		return lookupSortKey($sorttype, 'sort_order', 'folder');
 	}
 
 

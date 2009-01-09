@@ -432,7 +432,7 @@ class Album extends PersistentObject {
 	 * @return string
 	 */
 	function getSubalbumSortKey($sorttype=null) {
-		if (is_null($sorttype)) { $sorttype = $this->getSubalbumSortType(); }
+		if (empty($sorttype)) { $sorttype = $this->getSubalbumSortType(); }
 		return subalbumSortKey($sorttype);
 	}
 

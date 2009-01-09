@@ -243,7 +243,7 @@ function getUrAlbum($album) {
  * 												 the field is different between the album table and the image table.
  * @return string
  */
-function getSortKey($sorttype, $default, $filename) {
+function lookupSortKey($sorttype, $default, $filename) {
 	switch ($sorttype) {
 		case "Title":
 			return '`title`';
@@ -274,7 +274,7 @@ function getSortKey($sorttype, $default, $filename) {
  * @return string
  */
 function albumSortKey($sorttype) {
-	return getSortKey($sorttype, 'filename', 'filename');
+	return lookupSortKey($sorttype, 'filename', 'filename');
 }
 /**
  * Returns the DB key associated with the subalbum sort type
@@ -283,7 +283,7 @@ function albumSortKey($sorttype) {
  * @return string
  */
 function subalbumSortKey($sorttype) {
-	return getSortKey($sorttype, 'folder', 'sort_order');
+	return lookupSortKey($sorttype, 'sort_order', 'folder');
 }
 
 /**
