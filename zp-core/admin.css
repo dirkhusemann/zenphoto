@@ -629,6 +629,36 @@ input.tags {
 	font-size: 100%;
 }
 
+#theme-editor #files {
+	float:right;
+	border:1px solid #BAC9CF;
+	background:#ECF1F2;
+	width:200px;
+}
+
+#theme-editor #files ul {
+	list-style-type:none;
+	padding:5px;
+	margin-bottom:5px;
+}
+
+#theme-editor #editor {
+	margin-right:210px;
+	background:#ECF1F2;
+	background:#F7F8F9;
+}
+
+#theme-editor #editor form {
+	padding:5px;
+}
+
+#theme-editor #editor textarea {
+	font-family:Consolas,Monaco,Courier,monospace;
+	font-size:12px;
+	width:99%;
+	padding:3px;
+}
+
 acronym {
 	cursor: help;
 }

@@ -954,11 +954,13 @@ function printEditable($context, $field, $editable = false, $editclass = 'editab
 		$text = str_replace("\n", "<br/>", $text);
 	}
 	
-	if ($text === '' or $text === NULL ) {
-		if ( $messageIfEmpty === true ) {
-			$text = gettext('(...)');
-		} elseif ( is_string($messageIfEmpty) ) {
-			$text = $messageIfEmpty;
+	if ( $text === '' or $text === NULL ) {
+		if ( $editable && zp_loggedin() ) {
+			if ( $messageIfEmpty === true ) {
+				$text = gettext('(...)');
+			} elseif ( is_string($messageIfEmpty) ) {
+				$text = $messageIfEmpty;
+			}
 		}
 	}
 	
@@ -3260,7 +3262,7 @@ function printTags($option='links', $preText=NULL, $class='taglist', $separator=
 	$tagstring = implode(', ', $singletag);
  	if ($tagstring === '' or $tagstring === NULL ) {
 		$preText = '';
-		if ( $messageIfEmpty === true ) {
+		if ( $messageIfEmpty === true && $editable && zp_loggedin() ) {
 			$tagstring = gettext('(No tags...)');
 		} elseif ( is_string($messageIfEmpty) ) {
 			$tagstring = $messageIfEmpty;

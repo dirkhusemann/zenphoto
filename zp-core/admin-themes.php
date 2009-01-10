@@ -125,8 +125,11 @@ echo "\n" . '<div id="content">';
 	<?php echo gettext("folder. You can download more themes from the"); ?>
 	<a href="http://www.zenphoto.org/zp/theme/"><?php echo gettext("zenphoto themes page"); ?></a>.
 	<?php echo gettext("Place the downloaded themes in the"); ?>	<code>/themes</code> <?php echo gettext("folder and they will be available for your use.") ?>
-
 	</p>
+
+<p><?php echo gettext("You can edit files from custom themes. Official themes shipped with Zenphoto are not editable, since your changes would be lost on next update.");
+	echo gettext("If you want to customize an official theme, please first make a copy of its directory within your <code>/themes</code> folder and edit it."); ?>
+	</p>	
 <table class="bordered">
 	<?php
 $themes = $gallery->getThemes();
@@ -163,7 +166,18 @@ foreach($themes as $theme => $themeinfo):
 			} else {
 				echo "<strong>".gettext("Current Theme")."</strong>";
 			}
-		} ?>
+		}
+		
+		echo "<br/>";
+		
+		if (themeIsEditable($theme, $themes)) {
+			echo '<a href="admin-themes-editor.php?theme='.$theme.'" title=';
+			echo gettext("Edit this theme").'>'.gettext("Edit this theme");
+			echo '</a>';
+		}
+		
+		
+		?>
 		</td>
 	</tr>
 

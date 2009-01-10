@@ -232,10 +232,10 @@ function printAdminHeader($path='') {
  * Print a link to a particular album edit function.
  *
  * @param $param The album, etc parameters.
- * @param $text   Text for the hyperlink.
+ * @param $text	Text for the hyperlink.
  * @param $title  Optional title attribute for the hyperlink. Default is NULL.
  * @param $class  Optional class attribute for the hyperlink.  Default is NULL.
- * @param $id     Optional id attribute for the hyperlink.  Default is NULL.
+ * @param $id		Optional id attribute for the hyperlink.  Default is NULL.
  *
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
@@ -251,7 +251,7 @@ function printAlbumEditLinks($param, $text, $title=NULL, $class=NULL, $id=NULL) 
  * @param $text  Text for the hyperlink.
  * @param $title Optional title attribute for the hyperlink. Default is NULL.
  * @param $class Optional class attribute for the hyperlink.  Default is NULL.
- * @param $id    Optional id attribute for the hyperlink.  Default is NULL.
+ * @param $id	 Optional id attribute for the hyperlink.  Default is NULL.
  *
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
@@ -267,7 +267,7 @@ function printSortLink($album, $text, $title=NULL, $class=NULL, $id=NULL) {
  * @param $text  Text for the hyperlink.
  * @param $title Optional title attribute for the hyperlink. Default is NULL.
  * @param $class Optional class attribute for the hyperlink.  Default is NULL.
- * @param $id    Optional id attribute for the hyperlink.  Default is NULL.
+ * @param $id	 Optional id attribute for the hyperlink.  Default is NULL.
  *
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
@@ -281,7 +281,7 @@ function printViewLink($album, $text, $title=NULL, $class=NULL, $id=NULL) {
  *
  * @param $image The Image object whose thumbnail we want to display.
  * @param $class Optional class attribute for the hyperlink.  Default is NULL.
- * @param $id    Optional id attribute for the hyperlink.  Default is NULL.
+ * @param $id	 Optional id attribute for the hyperlink.  Default is NULL.
  *
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
@@ -332,21 +332,21 @@ function printLoginForm($redirect=null, $logo=true) {
 		echo '</div>';
 	}
 	echo "\n  <form name=\"login\" action=\"#\" method=\"POST\">";
-	echo "\n    <input type=\"hidden\" name=\"login\" value=\"1\" />";
-	echo "\n    <input type=\"hidden\" name=\"redirect\" value=\"$redirect\" />";
+	echo "\n	 <input type=\"hidden\" name=\"login\" value=\"1\" />";
+	echo "\n	 <input type=\"hidden\" name=\"redirect\" value=\"$redirect\" />";
 
-	echo "\n    <table>";
-	echo "\n      <tr><td align=\"right\"><h2>".gettext("Login").'&nbsp;'."</h2></td><td><input class=\"textfield\" name=\"user\" type=\"text\" size=\"20\" value=\"$requestor\" /></td></tr>";
-	echo "\n      <tr><td align=\"right\"><h2>".gettext("Password").$star."</h2></td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
+	echo "\n	 <table>";
+	echo "\n		<tr><td align=\"right\"><h2>".gettext("Login").'&nbsp;'."</h2></td><td><input class=\"textfield\" name=\"user\" type=\"text\" size=\"20\" value=\"$requestor\" /></td></tr>";
+	echo "\n		<tr><td align=\"right\"><h2>".gettext("Password").$star."</h2></td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
 	if ($star == '*') {
 		$captchaCode = $_zp_captcha->generateCaptcha($img);
 		$html = "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/><label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"bottom\"/></label>";
-		echo "\n      <tr><td colspan=\"2\">";
-		echo "\n      ".sprintf(gettext("*Enter %s to email a password reset."), $html);
-		echo "      </td></tr>";
+		echo "\n		<tr><td colspan=\"2\">";
+		echo "\n		".sprintf(gettext("*Enter %s to email a password reset."), $html);
+		echo "		</td></tr>";
 	}
-	echo "\n      <tr><td></td><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"".gettext("Log in")."\" /></td></tr>";
-	echo "\n    </table>";
+	echo "\n		<tr><td></td><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"".gettext("Log in")."\" /></td></tr>";
+	echo "\n	 </table>";
 	echo "\n  </form>";
 	echo "\n  </div>";
 	echo "\n</body>";
@@ -402,38 +402,38 @@ function printTabs($currenttab) {
 
 	echo "\n  <ul class=\"nav\">";
 	if (($_zp_loggedin & (MAIN_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n    <li". (($currenttab == "home") ? " class=\"current\""     : "") .
+		echo "\n	 <li". (($currenttab == "home") ? " class=\"current\""		: "") .
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php\">".gettext("overview")."</a></li>";
 	}
 	if (($_zp_loggedin & (COMMENT_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n    <li". (($currenttab == 'comments') ? " class=\"current\"" : "") .
+		echo "\n	 <li". (($currenttab == 'comments') ? " class=\"current\"" : "") .
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-comments.php\">".gettext("comments")."</a></li>";
 	}
 	if (($_zp_loggedin & (UPLOAD_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n    <li". (($currenttab =='upload') ? " class=\"current\""   : "") .
+		echo "\n	 <li". (($currenttab =='upload') ? " class=\"current\""	: "") .
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-upload.php\">".gettext("upload")."</a></li>";
 	}
 
 	if (($_zp_loggedin & (EDIT_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n    <li". (($currenttab == 'edit') ? " class=\"current\""     : "") .
+		echo "\n	 <li". (($currenttab == 'edit') ? " class=\"current\""		: "") .
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-edit.php?page=edit\">".gettext("edit")."</a></li>";
 	}
 	if (($_zp_loggedin & ADMIN_RIGHTS)) {
-		echo "\n    <li". (($currenttab == 'tags') ? " class=\"current\""     : "") .
+		echo "\n	 <li". (($currenttab == 'tags') ? " class=\"current\""		: "") .
 				"><a href=\"".WEBPATH."/".ZENFOLDER."/admin-tags.php\">".gettext('tags')."</a></li>";
 	}
-	echo "\n    <li". (($currenttab == 'options') ? " class=\"current\""  : "") .
+	echo "\n	 <li". (($currenttab == 'options') ? " class=\"current\""  : "") .
  			"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-options.php\">".gettext("options")."</a></li>";
 	if (($_zp_loggedin & (THEMES_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n    <li". (($currenttab == 'themes') ? " class=\"current\""  : "") .
+		echo "\n	 <li". (($currenttab == 'themes') ? " class=\"current\""  : "") .
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-themes.php\">".gettext("themes")."</a></li>";
 	}
 	if (($_zp_loggedin & ADMIN_RIGHTS)) {
-		echo "\n    <li". (($currenttab == 'plugins') ? " class=\"current\""  : "") .
+		echo "\n	 <li". (($currenttab == 'plugins') ? " class=\"current\""  : "") .
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-plugins.php\">".gettext("plugins")."</a></li>";
 	}
 	if (($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) && getOption('zp_plugin_zenpage')) {
-		echo "\n    <li". (($currenttab == 'zenpage') ? " class=\"current\""     : "") .
+		echo "\n	 <li". (($currenttab == 'zenpage') ? " class=\"current\""		: "") .
  				"><a href=\"".WEBPATH."/".ZENFOLDER."/plugins/zenpage/page-admin.php\">zenpage</a></li>";
 	}
 	echo "\n  </ul>";
@@ -905,7 +905,7 @@ function printAlbumEditForm($index, $album) {
 	$x = $album->getPassword();
 
 	if (!empty($x)) {
-		$x = '          ';
+		$x = '			 ';
 	}
 
 	echo "\n<input type=\"password\" size=\"48\" name=\"".$prefix."albumpass\"";
@@ -2022,5 +2022,72 @@ function isolate($target, $str) {
 function seoFriendlyURL($string) {
 	return apply_filter('seoFriendlyURL', $string);	
 }
+
+/**
+ * Return an array of editable theme files
+ *
+ * This is a non recursive function that digs through a directory. More info here:
+ * @link http://planetozh.com/blog/2005/12/php-non-recursive-function-through-directories/
+ *
+ * @param string $dir theme directory
+ * @return array
+ * @author Ozh
+ * @since 1.3
+ */
+function listEditableThemeFiles( $dir ) {
+	$file_list = array();
+	$stack[] = $dir;
+	while ($stack) {
+		$current_dir = array_pop($stack);
+		if ($dh = @opendir($current_dir)) {
+			while (($file = @readdir($dh)) !== false) {
+				if ($file !== '.' AND $file !== '..') {
+					$current_file = "{$current_dir}/{$file}";
+					if ( is_file($current_file) && isTextFile($current_file) && is_readable($current_file) ) {
+						$file_list[] = "{$current_dir}/{$file}";
+					} elseif (is_dir($current_file)) {
+						$stack[] = $current_file;
+					}
+				}
+			}
+		}
+	}
+	return $file_list;
+}
+
+
+/**
+ * Check if a file is a text file
+ *
+ * @param string $file 
+ * @param array $ok_extensions array of file extensions that are OK to edit (ie text files)
+ * @return bool
+ * @author Ozh
+ * @since 1.3
+ */
+function isTextFile ( $file, $ok_extensions = array('css','php','js','txt','inc') ) {
+	$path_info = pathinfo($file);
+	$ext = (isset($path_info['extension']) ? $path_info['extension'] : '');
+	return ( !empty ( $ok_extensions ) && (in_array( $ext, $ok_extensions ) ) );
+}
+
+/**
+ * Check if a theme is editable (ie not a bundled theme)
+ *
+ * @param $theme theme to check
+ * @param $themes array of installed themes (eg result of getThemes())
+ * @return bool
+ * @author Ozh
+ * @since 1.3
+ */
+function themeIsEditable($theme, $themes) {
+	unset($themes['default']);
+	unset($themes['effervescence_plus']);
+	unset($themes['stopdesign']);
+	unset($themes['example']);
+
+	return (in_array( $theme , array_keys($themes)));
+}
+
 
 ?>
