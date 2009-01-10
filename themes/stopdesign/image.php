@@ -19,7 +19,7 @@ require_once('normalizer.php');
 		setOption('thumb_crop_width', 85, false);
 		setOption('thumb_crop_height', 85, false);
 		setOption('images_per_page', getOption('images_per_page') - 1, false);
-		global $_zp_current_image;
+		if (!isImagePhoto($_zp_current_image)) echo '<style type="text/css"> #prevnext a strong {display:none;}</style>';
 	?>
 </head>
 
