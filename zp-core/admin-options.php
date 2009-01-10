@@ -1033,27 +1033,47 @@ if ($subtab == 'admin') {
 			<td>
 				<?php
 				$sort = $sortby;
-				$cvt = $cv = getOption('gallery_sorttype');
+				$sort[gettext('Manual')] = 'Manual';
 				$sort[gettext('Custom')] = 'custom';
+				$cvt = $cv = getOption('gallery_sorttype');
+				ksort($sort);
 				$flip = array_flip($sort);
 				if (isset($flip[$cv])) {
-					$dsp = 'none';
+					$dspc = 'none';
 				} else {
-					$dsp = 'block';
+					$dspc = 'block';
+				}
+				if (($cv == 'Manual') || ($cv == '')) {
+					$dspd = 'none';
+				} else {
+					$dspd = 'block';
 				}
 				?>
-				<select id="sortselect" name="gallery_sorttype" onchange="showfield(this, 'customTextBox2')">
-				<?php
-				if (array_search($cv, $sort) === false) $cv = 'custom';
-				generateListFromArray(array($cv), $sort, false, true);
-				?>
-				</select>
-				<input type="checkbox" name="gallery_sortdirection"	value="1" <?php echo checked('1', getOption('gallery_sortdirection')); ?> />
-				<?php echo gettext("Descending"); ?>
-				<div id="customTextBox2" class="customText" style="display:<?php echo $dsp; ?>">
-				<?php echo gettext('custom fields:') ?>
-				<input id="customalbumsort" name="customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
-				</div>
+				<table>
+					<tr>
+						<td>
+							<select id="sortselect" name="gallery_sorttype" onchange="update_direction(this,'gallery_sortdirection','customTextBox2')">
+							<?php
+							if (array_search($cv, $sort) === false) $cv = 'custom';
+							generateListFromArray(array($cv), $sort, false, true);
+							?>
+							</select>
+						</td>
+						<td>
+							<span id="gallery_sortdirection" style="display:<?php echo $dspd; ?>">
+							<input type="checkbox" name="gallery_sortdirection"	value="1" <?php echo checked('1', getOption('gallery_sortdirection')); ?> />&nbsp;<?php echo gettext("Descending"); ?>
+							</span>
+							</td>
+						</tr>
+					<tr>
+						<td colspan="2">
+							<span id="customTextBox2" class="customText" style="display:<?php echo $dspc; ?>">
+							<?php echo gettext('custom fields:') ?>
+							<input id="customalbumsort" name="customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
+							</span>
+						</td>
+					</tr>
+				</table>
 			</td>
 			<td>
 				<?php

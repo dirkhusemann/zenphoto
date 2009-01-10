@@ -946,8 +946,8 @@ function printAlbumEditForm($index, $album) {
 	<table>
 		<tr>
 			<td>
-		<?php
-			echo "\n<select id=\"sortselect\" name=\"".$prefix."subalbumsortby\" onchange=\"update_direction(this,'".$javaprefix."album_direction_div','$javaprefix"."album_custom_div')\">";
+			<select id="sortselect" name="<?php echo $prefix; ?>subalbumsortby" onchange="update_direction(this,'<?php echo $javaprefix; ?>album_direction_div','<?php echo $javaprefix; ?>album_custom_div')">
+			<?php
 			if (is_null($album->getParent())) {
 				$globalsort = gettext("gallery album sort order");
 			} else {
@@ -956,8 +956,8 @@ function printAlbumEditForm($index, $album) {
 			echo "\n<option value =''>$globalsort</option>";
 			$cvt = $type = $album->get('subalbum_sort_type');
 			generateListFromArray(array($type), $sort, false, true);
-			echo "\n</select>";
 			?>
+			</select>
 			</td>
 		<td>
 	<?php
@@ -1015,8 +1015,8 @@ function printAlbumEditForm($index, $album) {
 	<table>
 		<tr>
 			<td>
+			<select id="sortselect" name="<?php echo $prefix; ?>sortby" onchange="update_direction(this,'<?php echo $javaprefix; ?>image_direction_div','<?php echo $javaprefix; ?>image_custom_div')">
 			<?php
-			echo "\n<select id=\"sortselect\" name=\"".$prefix."sortby\" onchange=\"update_direction(this,'".$javaprefix."image_direction_div','".$javaprefix."image_custom_div')\">";
 			if (is_null($album->getParent())) {
 				$globalsort = gettext("gallery default image sort order");
 			} else {
@@ -1025,8 +1025,8 @@ function printAlbumEditForm($index, $album) {
 			echo "\n<option value =''>$globalsort</option>";
 			$cvt = $type = $album->get('sort_type');
 			generateListFromArray(array($type), $sort, false, true);
-			echo "\n</select>";
 			?>
+			</select>
 			</td>
 		<td>
 	<?php

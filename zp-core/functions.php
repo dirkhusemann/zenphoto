@@ -244,19 +244,12 @@ function getUrAlbum($album) {
  * @return string
  */
 function lookupSortKey($sorttype, $default, $filename) {
+	$sorttype = strtolower($sorttype);
 	switch ($sorttype) {
-		case "Title":
-			return '`title`';
-		case "Manual":
+		case "manual":
 			return '`sort_order`';
-		case "Filename":
+		case "filename":
 			return '`'.$filename.'`';
-		case "Date":
-			return '`date`';
-		case "ID":
-			return '`id`';
-		case 'mtime':
-			return '`mtime`';
 		default:
 			if (empty($sorttype)) return $default;
 			$list = explode(',', $sorttype);
