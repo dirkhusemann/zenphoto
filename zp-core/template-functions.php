@@ -842,6 +842,7 @@ function printAlbumDate($before='', $nonemessage='', $format=null, $editable=fal
 	if ($date) {
 		$date = $before . $date;
 	} else {
+		$date = '';
 		if ($nonemessage != '') {
 			$messageIfEmpty = $nonemessage;
 		} elseif ( $messageIfEmpty === true ) {
@@ -927,7 +928,7 @@ function printAlbumDesc($editable=false, $editclass='', $messageIfEmpty = true )
  * @since 1.3
  * @author Ozh
  */
-function printEditable($context, $field, $editable = false, $editclass = 'editable', $messageIfEmpty = true, $convertBR = false, $override = '') {
+function printEditable($context, $field, $editable = false, $editclass = 'editable', $messageIfEmpty = true, $convertBR = false, $override = false) {
 	
 	if (!$context or !$field) {
 		echo "Incomplete function call";
@@ -948,7 +949,7 @@ function printEditable($context, $field, $editable = false, $editclass = 'editab
 		return false;
 	}
 	
-	$text = ( $override ? $override : $object->get($field) );
+	$text = ( $override !== false ? $override : $object->get($field) );
 	if ($convertBR) {
 		$text = str_replace("\r\n", "\n", $text);
 		$text = str_replace("\n", "<br/>", $text);
@@ -1680,6 +1681,7 @@ function printImageDate($before='', $nonemessage='', $format=null, $editable=fal
 	if ($date) {
 		$date = $before . $date;
 	} else {
+		$date = '';
 		if ($nonemessage != '') {
 			$messageIfEmpty = $nonemessage;
 		} elseif ( $messageIfEmpty === true ) {
