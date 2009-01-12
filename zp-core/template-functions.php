@@ -834,7 +834,7 @@ function getAlbumDate($format=null) {
  * @param mixed $messageIfEmpty Either bool or string. If false, echoes nothing when description is empty. If true, echoes default placeholder message if empty. If string, echoes string.
  * @author Ozh
  */
-function printAlbumDate($before='', $nonemessage='', $format=null, $editable=false, $format=null, $editclass='', $messageIfEmpty = true) {
+function printAlbumDate($before='', $nonemessage='', $format=null, $editable=false, $editclass='', $messageIfEmpty = true) {
 	if (is_null($format)) {
 		$format = getOption('date_format');
 	}
@@ -1673,7 +1673,7 @@ function getImageDate($format=null) {
  * @param mixed $messageIfEmpty Either bool or string. If false, echoes nothing when description is empty. If true, echoes default placeholder message if empty. If string, echoes string.
  * @author Ozh
  */
-function printImageDate($before='', $nonemessage='', $format=null, $editable=false, $format=null, $editclass='', $messageIfEmpty = true) {
+function printImageDate($before='', $nonemessage='', $format=null, $editable=false, $editclass='', $messageIfEmpty = true) {
 	if (is_null($format)) {
 		$format = getOption('date_format');
 	}
