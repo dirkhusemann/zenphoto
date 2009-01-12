@@ -470,7 +470,7 @@ $("#slideshow").flashembed({
  *
  */
 function printSlideShowJS() {
-?><script src="<?php echo FULLWEBPATH . '/' . ZENFOLDER ?>/js/jquery.js" type="text/javascript"></script>
+?>
 	<script src="<?php echo FULLWEBPATH . '/' . ZENFOLDER ?>/plugins/slideshow/jquery.cycle.all.pack.js" type="text/javascript"></script>
 	<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/plugins/flowplayer/flashembed-0.34.pack.js"></script>
 <?php
