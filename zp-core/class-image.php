@@ -806,7 +806,6 @@ class _Image extends PersistentObject {
 			} else {
 				$images = $this->album->getImages(0);
 				for ($i=0; $i < count($images); $i++) {
-					if (!isset($images[$i])) debugLogBacktrace('Image index not set');
 					$image = $images[$i];
 					if ($this->filename == $image) {
 						$this->index = $i;

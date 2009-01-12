@@ -608,7 +608,11 @@ class Album extends PersistentObject {
 		}
 		$images = array_flip($images_to_keys);
 		ksort($images);
-		return $images;
+		$images_ordered = array();
+		foreach($images as $image) {
+			$images_ordered[] = $image;
+		}
+		return $images_ordered;
 	}
 
 
