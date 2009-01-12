@@ -1202,7 +1202,7 @@ if ($subtab == 'admin') {
 			<td>
 			<?php
 			echo gettext("Automatically rotate images based on the EXIF orientation setting.");
-			if (!function_exists('imagerotate')) echo '<br />'.gettext('Image rotation requires PHP version 4.3 or greater.');
+			if (!function_exists('imagerotate')) echo '<br />'.gettext("Image rotation requires the <em>imagerotate</em> function found in PHP version 4.3 or greater's bundled GD library.");
 			?>
 			</td>
 		</tr>
