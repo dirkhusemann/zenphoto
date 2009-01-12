@@ -34,11 +34,15 @@ $message = $file_to_edit = $file_content = null;
 $themes = $gallery->getThemes();
 $theme = $_GET['theme'];
 $themedir = SERVERPATH . '/themes/'.UTF8ToFilesystem($theme);
-$themefiles = listEditableThemeFiles($themedir);
+$themefiles = listDirectoryFiles($themedir);
 $themefiles_to_ext = array();
 foreach ($themefiles as $file) {
-	$path_info = pathinfo($file);
-	$themefiles_to_ext[$path_info['extension']][] = $file; // array(['php']=>array('file.php', 'image.php'),['css']=>array('style.css'))
+	if (isTextFile($file)) {
+		$path_info = pathinfo($file);
+		$themefiles_to_ext[$path_info['extension']][] = $file; // array(['php']=>array('file.php', 'image.php'),['css']=>array('style.css'))
+	} else {
+		unset($themefiles[$file]); // $themefile will eventually have all editable files and nothing else
+	}
 }
 
 if (isset($_GET['file']))

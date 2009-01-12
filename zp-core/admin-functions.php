@@ -2024,17 +2024,17 @@ function seoFriendlyURL($string) {
 }
 
 /**
- * Return an array of editable theme files
+ * Return an array of files from a directory and sub directories
  *
  * This is a non recursive function that digs through a directory. More info here:
  * @link http://planetozh.com/blog/2005/12/php-non-recursive-function-through-directories/
  *
- * @param string $dir theme directory
+ * @param string $dir directory
  * @return array
  * @author Ozh
  * @since 1.3
  */
-function listEditableThemeFiles( $dir ) {
+function listDirectoryFiles( $dir ) {
 	$file_list = array();
 	$stack[] = $dir;
 	while ($stack) {
@@ -2043,7 +2043,7 @@ function listEditableThemeFiles( $dir ) {
 			while (($file = @readdir($dh)) !== false) {
 				if ($file !== '.' AND $file !== '..') {
 					$current_file = "{$current_dir}/{$file}";
-					if ( is_file($current_file) && isTextFile($current_file) && is_readable($current_file) ) {
+					if ( is_file($current_file) && is_readable($current_file) ) {
 						$file_list[] = "{$current_dir}/{$file}";
 					} elseif (is_dir($current_file)) {
 						$stack[] = $current_file;
@@ -2085,9 +2085,152 @@ function themeIsEditable($theme, $themes) {
 	unset($themes['effervescence_plus']);
 	unset($themes['stopdesign']);
 	unset($themes['example']);
+	/* TODO: in case we change the number or names of bundled themes, need to edit this ! */
 
 	return (in_array( $theme , array_keys($themes)));
 }
 
+
+/**
+ * Copy a theme directory to create a new custom theme
+ *
+ * @param $source source directory
+ * @param $target target directory
+ * @return bool|string either true or an error message
+ * @author Ozh
+ * @since 1.3
+ */
+function copyThemeDirectory($source, $target, $newname) {
+	global $_zp_current_admin;
+	$message = true;
+	$source  = SERVERPATH . '/themes/'.UTF8ToFilesystem($source);
+	$target  = SERVERPATH . '/themes/'.UTF8ToFilesystem($target);
+	
+	// If the target theme already exists, nothing to do.
+	if ( is_dir($target)) {
+		return gettext('Cannot create new theme.') .' '. sprintf(gettext('Directory "%s" already exists!'), basename($target));
+	}
+	
+	// If source dir is missing, exit too
+	if ( !is_dir($source)) {
+		return gettext('Cannot create new theme.') .' '.sprintf(gettext('Cannot find theme directory "%s" to copy!'), basename($source));
+	}
+
+	// We must be able to write to the themes dir.
+	if (! is_writable( dirname( $target) )) {
+		return gettext('Cannot create new theme.') .' '.gettext('The <tt>/themes</tt> directory is not writable!');
+	}
+
+	// We must be able to create the directory
+	if (! mkdir($target, 0777)) {
+		return gettext('Cannot create new theme.') .' '.gettext('Could not create directory for the new theme');
+	}
+	chmod($target, 0777);
+	
+	// Get a list of files to copy: get all files from the directory, remove those containing '/.svn/'
+	$source_files = array_filter( listDirectoryFiles( $source ), create_function('$str', 'return strpos($str, "/.svn/") === false;') );
+	
+	// Determine nested (sub)directories structure to create: go through each file, explode path on "/"
+	// and collect every unique directory
+	$dirs_to_create = array();
+	foreach ( $source_files as $path ) {
+		$path = dirname ( str_replace( $source . '/', '', $path ) );
+		$path = explode ('/', $path);
+		$dirs = '';
+		foreach ( $path as $subdir ) {
+			if ( $subdir == '.svn' or $subdir == '.' ) {
+				continue 2;
+			}
+			$dirs = "$dirs/$subdir";
+			$dirs_to_create[$dirs] = $dirs;	
+		}
+	}
+	/*
+	Example result for theme 'effervescence_plus': $dirs_to_create = array (
+		'/styles' => '/styles',
+		'/scripts' => '/scripts',
+		'/images' => '/images',
+		'/images/smooth' => '/images/smooth',
+		'/images/slimbox' => '/images/slimbox',
+	);
+	*/
+	
+	// Create new directory structure
+	foreach ($dirs_to_create as $dir) {
+		mkdir("$target/$dir", 0777);
+		chmod("$target/$dir", 0777); // Using chmod as PHP doc suggested: "Avoid using umask() in multithreaded webservers. It is better to change the file permissions with chmod() after creating the file."
+	}
+	
+	// Now copy every file
+	foreach ( $source_files as $file ) {
+		$newfile = str_replace($source, $target, $file);
+		if (! copy("$file", "$newfile" ) )
+			return sprintf(gettext("An error occured while copying files. Please delete manually the new theme directory '%s' and retry or copy files manually."), basename($target));
+		chmod("$newfile", 0777);	
+	}	
+
+	// Rewrite the theme header.
+	if ( file_exists($target.'/theme_description.php') ) {		
+		$theme_description = array();
+		require($target.'/theme_description.php');
+		$theme_description['desc'] = sprintf(gettext('Your theme, based on theme %s'), $theme_description['name']);
+	} else  {
+		$theme_description['desc'] = gettext('Your theme');	
+	}
+	$theme_description['name'] = $newname;
+	$theme_description['author'] = $_zp_current_admin['user'];
+	$theme_description['version'] = '1.0';
+	$theme_description['date']  = date('d/m/Y');
+	
+	$description = sprintf('<'.'?php
+// Zenphoto theme definition file
+$theme_description["name"] = "%s";
+$theme_description["author"] = "%s";
+$theme_description["version"] = "%s";
+$theme_description["date"] = "%s";
+$theme_description["desc"] = "%s";
+?'.'>' , htmlentities($theme_description['name'], ENT_COMPAT),
+		htmlentities($theme_description['author'], ENT_COMPAT),
+		htmlentities($theme_description['version'], ENT_COMPAT),
+		htmlentities($theme_description['date'], ENT_COMPAT),
+		htmlentities($theme_description['desc'], ENT_COMPAT));
+	
+	$f = fopen($target.'/theme_description.php', 'w');
+	if ($f !== FALSE) {
+		@fwrite($f, $description);
+		fclose($f);
+		$message = gettext('New custom theme created successfully!');
+	} else {
+		$message = gettext('New custom theme created, but its description could not be updated');
+	}
+	
+	// Make a slightly custom theme image
+	if (file_exists("$target/theme.png")) $themeimage = "$target/theme.png";
+	else if (file_exists("$target/theme.gif")) $themeimage = "$target/theme.gif";
+	else if (file_exists("$target/theme.jpg")) $themeimage = "$target/theme.jpg";
+	else $themeimage = false;
+	if ($themeimage) {
+		require_once(dirname(__FILE__).'/functions-image.php');
+		if ($im = get_image($themeimage)) {
+			$x = imagesx($im)/2 - 45;
+			$y = imagesy($im)/2 - 10;
+			$text = "CUSTOM COPY";
+
+			// create a blueish overlay
+			$overlay = imagecreatetruecolor(imagesx($im), imagesy($im));
+			imagefill ($overlay, 0, 0, 0x0606090);
+			// Merge theme image and overlay
+			imagecopymerge($im, $overlay, 0, 0, 0, 0, imagesx($im), imagesy($im), 45);
+			// Add text
+			imagestring ( $im,  5,  $x-1,  $y-1, $text,  0x0ffffff );
+			imagestring ( $im,  5,  $x+1,  $y+1, $text,  0x0ffffff );
+			imagestring ( $im,  5,  $x,  $y,   $text,  0x0ff0000 );
+			// Save new theme image
+			imagepng($im, $themeimage);
+		}	
+	}
+
+	return $message;
+}
 
 ?>

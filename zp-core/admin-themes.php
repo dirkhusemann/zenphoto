@@ -22,25 +22,59 @@ $gallery = new Gallery();
 $_GET['page'] = 'themes';
 
 /* handle posts */
+$message = null; // will hold error/success message displayed in a fading box
 if (isset($_GET['action'])) {
+	// Set new theme
 	if ($_GET['action'] == 'settheme') {
-			if (isset($_GET['theme'])) {
-				$alb = sanitize_path($_GET['themealbum']);
-				$newtheme = strip($_GET['theme']);
-				if (empty($alb)) {
-					$gallery->setCurrentTheme($newtheme);
-				} else {
-					$album = new Album($gallery, $alb);
-					$oldtheme = $album->getAlbumTheme();
-					$album->setAlbumTheme($newtheme);
-					$album->save();
-				}
-				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-themes.php?themealbum=".$_GET['themealbum']);
+		if (isset($_GET['theme'])) {
+			$alb = sanitize_path($_GET['themealbum']);
+			$newtheme = strip($_GET['theme']);
+			if (empty($alb)) {
+				$gallery->setCurrentTheme($newtheme);
+			} else {
+				$album = new Album($gallery, $alb);
+				$oldtheme = $album->getAlbumTheme();
+				$album->setAlbumTheme($newtheme);
+				$album->save();
 			}
+			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-themes.php?themealbum=".$_GET['themealbum']);
 		}
+	
+	// Duplicate a theme
+	} elseif ($_GET['action'] == 'copytheme') {
+		if (isset($_GET['source']) && isset($_GET['target']) && isset($_GET['name']) ) {
+			$message = copyThemeDirectory($_GET['source'], $_GET['target'], $_GET['name']);		
+		}	
+	}
 }
 
+
 printAdminHeader();
+
+// Script for the "Duplicate theme" feature
+?>
+
+<script type="text/javascript">
+jQuery(document).ready(function(){
+	jQuery('li.zp_copy_theme a').each(function(){
+		var source = jQuery(this).attr('title');
+		jQuery(this).click(function(){
+			var targetname = prompt('<?php echo gettext('New theme name? (eg. "My Cool Theme")'); ?>', 'My Cool Theme');
+			if (targetname) {
+				var targetdir = prompt('<?php echo gettext('New directory name? (eg. "my_theme")'); ?>', targetname.toLowerCase().replace(/ /g,'_').replace(/[^A-Za-z0-9_]/g,'') );
+				if (targetdir) {
+					window.location =('?action=copytheme&source='+encodeURIComponent(source)+'&target='+encodeURIComponent(targetdir)+'&name='+encodeURIComponent(targetname));
+					return false;
+				}
+			}
+			return false;
+		}).attr({data:source,title:'<?php echo gettext('Make a copy of this theme'); ?>'}).parent().toggle();
+		
+	});
+});
+</script>
+
+<?php
 echo "\n</head>";
 echo "\n<body>";
 printLogoAndLinks();
@@ -120,6 +154,12 @@ echo "\n" . '<div id="content">';
 	echo "</h1>\n";
 ?>
 
+<?php if ($message) {
+	echo '<div class="messagebox" id="fade-message">';
+	echo  "<h2>$message</h2>";
+	echo '</div>';
+} ?>
+
 <p><?php echo gettext("Themes allow you to visually change the entire look and feel of your gallery. Theme files are located in your"); ?>
 	Zenphoto <code>/themes</code>
 	<?php echo gettext("folder. You can download more themes from the"); ?>
@@ -131,6 +171,11 @@ echo "\n" . '<div id="content">';
 	echo gettext("If you want to customize an official theme, please first make a copy of its directory within your <code>/themes</code> folder and edit it."); ?>
 	</p>	
 <table class="bordered">
+	<thead>
+		<th colspan="2"><b><?php echo gettext('Installed themes'); ?></b></th>
+		<th><b><?php echo gettext('Action'); ?></b></th>
+	</thead>
+	<tbody>
 	<?php
 $themes = $gallery->getThemes();
 $current_theme_style = "background-color: #ECF1F2;";
@@ -153,35 +198,40 @@ foreach($themes as $theme => $themeinfo):
 		Version <?php echo $themeinfo['version']; ?>, <?php echo $themeinfo['date']; ?><br />
 		<?php echo $themeinfo['desc']; ?></td>
 		<td width="100" <?php echo $style; ?>>
+		<ul>
 		<?php
 		if ($theme != $current_theme) {
-			echo '<a href="?action=settheme&themealbum='.urlencode($alb).'&theme='.$theme.'" title=';
-			 echo gettext("Set this as your theme").'>'.gettext("Use this Theme");
-			echo '</a>';
+			echo '<li><a href="?action=settheme&themealbum='.urlencode($alb).'&theme='.$theme.'" title="';
+			 echo gettext("Set this as your theme").'">'.gettext("Use this Theme");
+			echo '</a></li>';
 		} else {
 			if ($gallerydefault) {
-				echo '<a href="?action=settheme&themealbum='.urlencode($alb).'&theme='.$theme.'" title=';
-			  echo gettext("Assign this as your album theme").'>'.gettext("Assign Theme");
-				echo '</a>';
+				echo '<li><a href="?action=settheme&themealbum='.urlencode($alb).'&theme='.$theme.'" title="';
+			  echo gettext("Assign this as your album theme").'">'.gettext("Assign Theme");
+				echo '</a></li>';
 			} else {
-				echo "<strong>".gettext("Current Theme")."</strong>";
+				echo "<li><strong>".gettext("Current Theme")."</strong></li>";
 			}
 		}
 		
-		echo "<br/>";
-		
 		if (themeIsEditable($theme, $themes)) {
-			echo '<a href="admin-themes-editor.php?theme='.$theme.'" title=';
-			echo gettext("Edit this theme").'>'.gettext("Edit this theme");
-			echo '</a>';
+			echo '<li>';
+			echo '<a href="admin-themes-editor.php?theme='.$theme.'" title="';
+			echo gettext("Edit this theme").'">'.gettext("Edit");
+			echo '</a></li>';
 		}
 		
+		// The "Duplicate" link will be shown by JS if available, as it needs it
+		echo '<li class="zp_copy_theme" style="display:none">';
+		echo '<a href="?" title="'.$theme.'">'.gettext("Duplicate").'</a>';
+		echo '</li>';
 		
 		?>
 		</td>
 	</tr>
 
 	<?php endforeach; ?>
+	</tbody>
 </table>
 
 
