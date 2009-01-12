@@ -662,8 +662,18 @@ function createAlbumZip($album){
 	}
 	header('Content-Type: application/zip');
 	header('Content-Disposition: attachment; filename="' . urlencode($album) . '.zip"');
-	echo file_get_contents($dest);
+	printLargeFileContents($dest);
 	if (!$persist) { unlink($dest); }
+}
+function printLargeFileContents($dest) {
+	$total = filesize($dest);
+	$blocksize = (2 << 20); //2M chunks
+	$sent = 0;
+	$handle	= fopen($dest, "r");
+	while ($sent < $total) {
+		echo fread($handle, $blocksize);
+		$sent += $blocksize;
+	}
 }
 
 /**

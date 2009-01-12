@@ -237,7 +237,9 @@ class archive
 
 		unset ($current, $pwd);
 
-		usort($files, array ("archive", "sort_files"));
+		$error_reporting = error_reporting(0); // the following violates e_strict since 'sort_files' is a method.
+		usort($files, array ("archive", 'sort_files'));
+		error_reporting($error_reporting);
 
 		return $files;
 	}
