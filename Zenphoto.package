@@ -295,7 +295,6 @@ zp-core/locale/zh_CN/LC_MESSAGES/zenphoto.mo
 zp-core/locale/zh_CN/LC_MESSAGES/zenphoto.po
 zp-core/locale/zh_TW/LC_MESSAGES/zenphoto.mo
 zp-core/locale/zh_TW/LC_MESSAGES/zenphoto.po
-zp-core/plugins/admin_toolbox.php
 zp-core/plugins/captcha/mollom.php
 zp-core/plugins/captcha/zenphoto.php
 zp-core/plugins/class-textobject/textDefault.png
@@ -305,6 +304,7 @@ zp-core/plugins/class-video.php
 zp-core/plugins/contact_form/form.php
 zp-core/plugins/contact_form.php
 zp-core/plugins/dynamic-locale.php
+zp-core/plugins/filter-admin_toolbox.php
 zp-core/plugins/filter-file_searches.php
 zp-core/plugins/filter-new_objects.php
 zp-core/plugins/filter-zenphoto_seo.php
