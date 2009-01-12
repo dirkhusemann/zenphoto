@@ -683,24 +683,31 @@ function debugLog($message, $reset=false) {
  * @param string $name the name (or message) to display for the array
  * @param array $source
  */
-function debugLogArray($name, $source) {
-	$msg = "Array $name( ";
+function debugLogArray($name, $source, $indent=0, $trail='') {
 	if (is_array($source)) {
+		$msg = str_repeat(' ', $indent)."$name => ( ";
 		if (count($source) > 0) {
 			foreach ($source as $key => $val) {
 				if (strlen($msg) > 72) {
 					debugLog($msg);
-					$msg = '';
+					$msg = str_repeat(' ', $indent);
 				}
-				$msg .= $key . " => " . $val . ", ";
+				if (is_array($val)) {
+					if (!empty($msg)) debugLog($msg);
+					debugLogArray($key, $val, $indent+5, ',');
+					$msg = '';
+				} else {
+					$msg .= $key . " => " . $val. ', ';
+				}
 			}
-			$msg = substr($msg, 0, strrpos($msg, ',')) . " )";
+
+			$msg = substr($msg, 0, strrpos($msg, ',')) . " )".$trail;
 		} else {
 			$msg .= ")";
 		}
 		debugLog($msg);
 	} else {
-		debugLog($msg . ")");
+		debugLog($name.' parameter is not an array.');
 	}
 }
 

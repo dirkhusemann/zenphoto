@@ -1215,6 +1215,7 @@ function checkAuthorization($authCode) {
 
 	global $_zp_current_admin;
 	$admins = getAdministrators();
+	if (DEBUG_LOGIN) { debugLogArray("admins",$admins);	}
 	$reset_date = getOption('admin_reset_date');
 	if ((count($admins) == 0) || empty($reset_date)) {
 		$_zp_current_admin = null;
@@ -1225,9 +1226,9 @@ function checkAuthorization($authCode) {
 	}
 	if (empty($authCode)) return 0; //  so we don't "match" with an empty password
 	$i = 0;
-	foreach($admins as $user) {
+	foreach($admins as $key=>$user) {
 
-		if (DEBUG_LOGIN) { debugLogArray("checking",$user);	}
+		if (DEBUG_LOGIN) { debugLog("checking: $key");	}
 
 		if ($user['pass'] == $authCode) {
 			$_zp_current_admin = $user;

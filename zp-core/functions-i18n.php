@@ -323,9 +323,7 @@ function parseHttpAcceptLanguage($str=NULL) {
 	krsort($accepted);
 	if (DEBUG_LOCALE) {
 		debugLog("parseHttpAcceptLanguage($str)");
-		foreach ($accepted as $key=>$lang) {
-			debugLogArray('     '.$key, $lang);
-		}
+		debugLogArray('$accepted', $accepted);
 	}
 	return $accepted;
 }
