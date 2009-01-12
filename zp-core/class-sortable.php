@@ -165,10 +165,12 @@ class jQuerySortable {
 	
 	function getOrderArray($input, $listname, $itemKeyName = 'element', $orderKeyName = 'order') {
 		parse_str($input,$inputArray);
-		$inputArray = $inputArray[$listname];
 		$orderArray = array();
-		for($i=0;$i<count($inputArray);$i++) {
-			$orderArray[] = array($itemKeyName => $inputArray[$i], $orderKeyName => $i +1);
+		if (isset($inputArray[$listname])) {
+			$inputArray = $inputArray[$listname];
+			for($i=0;$i<count($inputArray);$i++) {
+				$orderArray[] = array($itemKeyName => $inputArray[$i], $orderKeyName => $i +1);
+			}
 		}
 		return $orderArray;
 	}
