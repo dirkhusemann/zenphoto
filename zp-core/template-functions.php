@@ -949,13 +949,13 @@ function printEditable($context, $field, $editable = false, $editclass = 'editab
 		return false;
 	}
 	
-	$text = ( $override !== false ? $override : $object->get($field) );
+	$text = trim( $override !== false ? $override : $object->get($field) );
 	if ($convertBR) {
 		$text = str_replace("\r\n", "\n", $text);
 		$text = str_replace("\n", "<br/>", $text);
 	}
 	
-	if ( $text === '' or $text === NULL ) {
+	if (empty($text)) {
 		if ( $editable && zp_loggedin() ) {
 			if ( $messageIfEmpty === true ) {
 				$text = gettext('(...)');
