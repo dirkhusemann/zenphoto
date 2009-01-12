@@ -4,19 +4,6 @@ define('OFFSET_PATH', 0);
 header('Content-Type: application/xml');
 require_once(ZENFOLDER . "/template-functions.php");
 
-function fixRSSDate($bad_date) {
-	$rval = FALSE;
-	$parts = explode(" ", $bad_date);
-	$date = $parts[0];
-	$time = $parts[1];
-	$date_parts = explode("-", $date);
-	$year = $date_parts[0];
-	$month = $date_parts[2];
-	$day = $date_parts[1];
-	$rval = date("r",strtotime("$day-$month-$year $time"));
-	return $rval;
-}
-
 if(isset($_GET['albumnr'])) {
 	$albumnr = sanitize_numeric($_GET['albumnr']);
 } else {
@@ -134,7 +121,7 @@ if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4") ||  ($ext == ".3gp"
 </description>
 <category><?php echo strip_tags($images['albumtitle']); ?></category>
 	<guid><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix. ']]>';?></guid>
-	<pubDate><?php echo fixRSSDate($images['date']); ?></pubDate>
+	<pubDate><?php echo date("r",strtotime($images['date'])); ?></pubDate>
 </item>
 <?php } ?>
 </channel>

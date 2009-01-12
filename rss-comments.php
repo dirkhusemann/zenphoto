@@ -6,19 +6,6 @@ require_once(ZENFOLDER . "/template-functions.php");
 
 $host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 
-function fixRSSDate($bad_date) {
-	$rval = FALSE;
-	$parts = explode(" ", $bad_date);
-	$date = $parts[0];
-	$time = $parts[1];
-	$date_parts = explode("-", $date);
-	$year = $date_parts[0];
-	$month = $date_parts[2];
-	$day = $date_parts[1];
-	$rval = date("r",strtotime("$day-$month-$year $time"));
-	return $rval;
-}
-
 if(isset($_GET['id'])) {
 	$id = sanitize_numeric($_GET['id']);
 } else {
@@ -98,7 +85,7 @@ foreach ($comments as $comment) {
 <description><?php echo $comment['comment']; ?></description>
 <category><?php echo strip_tags($albumtitle); ?></category>
 <guid><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$album.$imagetag.']]>';?></guid>
-<pubDate><?php echo fixRSSDate($date); ?></pubDate>
+<pubDate><?php echo date("r",strtotime($date)); ?></pubDate>
 </item>
 <?php } ?>
 </channel>
