@@ -183,7 +183,9 @@ function setDefault($option, $default) {
 	setOptionDefault('zp_plugin_rating', 1);
 	setOptionDefault('zp_plugin_image_album_statistics', 1);
 	setOptionDefault('zp_plugin_flowplayer', 1);
-	setOptionDefault('zp_plugin_admin_toolbox', 1);
+	
+	setOption('zp_plugin_admin_toolbox', 0); //deprecated plugin
+	
 	setOptionDefault('zp_plugin_class-video', 1);
 	setOptionDefault('zp_plugin_filter-zenphoto_seo', 1);
 	
