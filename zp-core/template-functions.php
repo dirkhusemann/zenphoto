@@ -2137,8 +2137,8 @@ function printPreloadScript() {
  */
 function getPrevImageThumb() {
 	if(!in_context(ZP_IMAGE)) return false;
-	if (is_null($_zp_current_image)) return false;
 	global $_zp_current_image;
+	if (is_null($_zp_current_image)) return false;
 	$img = $_zp_current_image->getPrevImage();
 	return $img->getThumb();
 }
