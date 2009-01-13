@@ -215,8 +215,8 @@ if ($page == "editcomment") { ?>
 		$albumtitle = '';
 		
 		if(getOption("zp_plugin_zenpage")) {
-			require_once(dirname(__FILE__).'/plugins/zenpage/zenpage-class.php');
-			$zenpage = new Zenpage();
+			require_once(dirname(__FILE__).'/plugins/zenpage/zenpage-class-news.php');
+			require_once(dirname(__FILE__).'/plugins/zenpage/zenpage-class-page.php');
 		}
 		// ZENPAGE: switch added for zenpage comment support
 		switch ($comment['type']) {

@@ -918,7 +918,6 @@ function getImageMetadata($imageName) {
 			}
 		}
 	}
-
 	return $result;
 }
 
@@ -930,16 +929,18 @@ function getImageMetadata($imageName) {
  */
 function commentObjectClass($receiver) {
 	$class = strtolower(get_class($receiver));
-	if ($class == "zenpage") {
-		if($receiver->isPage(ZENPAGE_NEWS)) {
+	switch($class) {
+		case "zenpagenews":
 			$type = "news";
-		} else if($receiver->isPage(ZENPAGE_PAGES)) {
+			break;
+		case "zenpagepage":
 			$type = "pages";
-		}
-	} else {
-		$type = $class.'s'; // Historically we have stored "images" or "albums" as the type
+			break;
+		default:
+			$type = $class.'s'; // Historically we have stored "images" or "albums" as the type
+			break;
 	}
-return array($type, $class);
+	return array($type, $class);
 }
 
 /**
@@ -1005,12 +1006,8 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		}
 		if ($private) $private = 1; else $private = 0;
 		if ($anon) $anon = 1; else $anon = 0;
-		// added for zenpage support - $receiver->id in the query below changed to $receiverid
-		if ($class === "zenpage") {
-			$receiverid = $receiver->zenpages['id'];
-		} else {
-			$receiverid = $receiver->id;
-		}
+		$receiverid = $receiver->id;
+		
 		// Update the database entry with the new comment
 		query("INSERT INTO " . prefix("comments") . " (`ownerid`, `name`, `email`, `website`, `comment`, `inmoderation`, `date`, `type`, `ip`, `private`, `anon`) VALUES " .
 						' ("' . $receiverid .
@@ -1038,23 +1035,20 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			$action = "posted";
 		}
 	// switch added for zenpage support
-		switch ($type) {
-			case "albums":
+	$class = get_class($receiver);
+		switch ($class) {
+			case "Albums":
 				$on = $receiver->name;
 				$url = "album=" . urlencode($receiver->name);
 				$ur_album = getUrAlbum($receiver);
 				break;
-			case "news":
-				$on = get_language_string($receiver->zenpages['title']);
-				$url = "p=".ZENPAGE_NEWS."&title=" . urlencode($receiver->zenpages['titlelink']);
-				//$album = $receiver->getAlbum();
-				//$ur_album = getUrAlbum($album);
+			case "ZenpageNews":
+				$on = $receiver->getTitlelink();
+				$url = "p=".ZENPAGE_NEWS."&title=" . urlencode($receiver->getTitlelink());
 				break;
-			case "pages":
-				$on = get_language_string($receiver->zenpages['title']);
-				$url = "p=".ZENPAGE_PAGES."&title=" . urlencode($receiver->zenpages['titlelink']);
-				//$album = $receiver->getAlbum();
-				//$ur_album = getUrAlbum($album);
+			case "ZenpagePage":
+				$on = $receiver->getTitlelink();
+				$url = "p=".ZENPAGE_PAGES."&title=" . urlencode($receiver->getTitlelink());
 				break;
 			default: // all image types
 				$on = $receiver->getAlbumName() . " about " . $receiver->getTitle();
