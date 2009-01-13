@@ -23,11 +23,12 @@ if (!OFFSET_PATH) {
 	if (isset($_COOKIE)) $candidate = $_COOKIE;
 	if (isset($_SESSION)) $candidate = Array_merge($candidate, $_SESSION);
 	$candidate = array_unique($candidate);
-	foreach ($candidate as $cookie) {
+	foreach ($candidate as $cookie=>$value) {
 		if ($cookie == 'zenphoto_auth' || $cookie == 'zp_gallery_auth' || $cookie == 'zp_search_auth' || strpos($cookie, 'zp_album_auth_') !== false) {
 			$cookies[] = $cookie;
 		}
 	}
+	
 	if (isset($_GET['userlog'])) { // process the logout.
 		if ($_GET['userlog'] == 0) {
 			foreach($cookies as $cookie) {
