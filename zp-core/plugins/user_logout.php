@@ -55,8 +55,10 @@ function printUserLogout($before='', $after='', $showLoginForm=false) {
 	if ($showLoginForm) {
 		$showLoginForm = !checkforPassword(true);
 	}
-	if (empty($cookies) && $showLoginForm) {
-		printPasswordForm('', false);
+	if (empty($cookies)) {
+		if ($showLoginForm) {
+			printPasswordForm('', false);
+		}
 	} else {
 		echo $before.'<a href="?userlog=0" title="'.gettext("logout").'" >'.gettext("logout").'</a>'.$after;
 	}
