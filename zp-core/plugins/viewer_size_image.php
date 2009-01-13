@@ -53,25 +53,12 @@ class viewer_size_image_options {
 if (!OFFSET_PATH) {
 	$cookiepath = WEBPATH;
 	if (WEBPATH == '') { $cookiepath = '/'; }
-	if (isset($_POST['viewer_size_image_selection'])) { // handle form post
-		$postdefault = sanitize($_POST['viewer_size_image_selection'], 3);
-		$i = strpos($postdefault, 'x');
-		if ($i === false) {
-			$postdefault = '$s='.sanitize_numeric($postdefault).';';
-		} else {
-			$sw = substr($postdefault, 0, $i);
-			$sh = substr($postdefault, $i+1);
-			$postdefault = '$w='.$sw.',$h='.$sh.';';
-		}
-		zp_setCookie('viewer_size_image_saved', $postdefault, time()+COOKIE_PESISTENCE, $cookiepath);
+	$saved = zp_getCookie('viewer_size_image_saved');
+	if (empty($saved)) {
+		$postdefault = trim(getOption('viewer_size_image_default'));
 	} else {
-		$saved = zp_getCookie('viewer_size_image_saved');
-		if (empty($saved)) {
-			$postdefault = trim(getOption('viewer_size_image_default'));
-		} else {
-			$_POST['viewer_size_image_selection'] = true; // ignore default size
-			$postdefault = $saved;
-		}
+		$_POST['viewer_size_image_selection'] = true; // ignore default size
+		$postdefault = $saved;
 	}
 }
 
@@ -128,31 +115,43 @@ function printUserSizeSelectior($text='', $default=NULL, $usersizes=NULL) {
 			}
 		}
 	}
+	$cookiepath = WEBPATH;
+	if (WEBPATH == '') { $cookiepath = '/'; }
 	?>
-	<form name="viewer_size_image_sizes" action="?changesize=1"
-	method="POST"><?php
+	<script>
+		function switchimage(obj){
+			var url = $(obj).attr('url');
+			$('#image img').attr('src',url);
+			document.cookie='viewer_size_image_saved='+$(obj).attr('value')+'; expires=<?php echo time()+COOKIE_PESISTENCE ?>; path=<?php echo $cookiepath ?>;';
+			console.log(document.cookie);
+		}
+	</script>
+	<div>
+	<?php
 	echo $text;
 	foreach($sizes as $key=>$size) {
 		if (empty($size['$s'])) {
 			$display = sprintf(gettext('%1$s x %2$s px'), $size['$w'],$size['$h']);
+			$url = getCustomImageURL(null, $size['$w'],$size['$h'], null, null, null, null, false);
+			$value='$h='.$size['$h'].',$w='.$size['$w'];
 		} else {
 			$display = sprintf(gettext('%s px'),$size['$s']);
+			$url = getCustomImageURL($size['$s'], null, null, null, null, null, null, false);
+			$value='$s='.$size['$s'];
 		}
 		$checked ="";
 		if($key == $current) {
 			$checked = 'checked="CHECKED" '; 
 		}
 		?>
-		<input type="radio" name="viewer_size_image_selection" id="s<?php echo $key; ?>" value="<?php echo $key; ?>" <?php echo $checked; ?>onClick="this.form.submit()" />
+		<input type="radio" name="viewer_size_image_selection" id="s<?php echo $key; ?>" url="<?php echo $url;?>" value="<?php echo $value; ?>" <?php echo $checked; ?> onclick="switchimage(this);" />
 		<label for="s<?php echo $key; ?>"> <?php echo $display; ?></label>
 		<?php
 	}
 	?>
-	</form>
+	</div>
 	<?php
-
 }
-
 /**
  * returns the current values for the image size or its height & width
  * This information comes form (in order of priority)
