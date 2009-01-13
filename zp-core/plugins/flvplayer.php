@@ -142,7 +142,7 @@ class flvplayer {
 	 * @param string $count unique text for when there are multiple player items on a page
 	 */
 	function printPlayerConfig($moviepath='',$imagetitle='',$count ='') {
-		echo $this->getPlayerConfig($moviepath='',$imagetitle='',$count ='');
+		echo $this->getPlayerConfig($moviepath,$imagetitle,$count);
 	}
 
 	/**
