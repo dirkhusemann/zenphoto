@@ -3,6 +3,18 @@
  * functions used in password hashing for zenphoto
  * 
  * @package functions
+ * 
+ * At least in theory one should be able to replace this script with
+ * an alternate to change how Admin users are validated and stored.
+ * However, this has not actually been tried yet.
+ * 
+ * The global $_zp_current_admin is referenced throuought Zenphoto, so the 
+ * elements of the array need to be present in any alternate implementation.
+ * in particular, there should be array elements for:
+ * 		'id' (unique), 'user' (unique),	'password',	'name', 'email', and 'rights'
+ * 
+ * So long as all these indices are populated it should not matter when and where
+ * the data is stored.
  */
 
 // admin rights

@@ -304,7 +304,7 @@ function adminPrintImageThumb($image, $class=NULL, $id=NULL) {
  * @since  1.0.0
  */
 function printLoginForm($redirect=null, $logo=true) {
-	global $_zp_login_error, $_zp_current_admin, $_zp_captcha;
+	global $_zp_login_error, $_zp_captcha;
 	if (is_null($redirect)) { $redirect = "/" . ZENFOLDER . "/admin.php"; }
 	if (isset($_POST['user'])) {
 		$requestor = sanitize($_POST['user'], 3);
