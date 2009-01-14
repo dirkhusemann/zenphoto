@@ -1113,7 +1113,7 @@ function getManagedAlbumList() {
  * @param int $action what the user wishes to do
  */
 function isMyAlbum($albumfolder, $action) {
-	global $_zp_loggedin, $_zp_admin_album_list, $_zp_current_admin;
+	global $_zp_loggedin, $_zp_admin_album_list;
 	if ($_zp_loggedin & (ADMIN_RIGHTS | ALL_ALBUMS_RIGHTS)) {
 		return true;
 	}

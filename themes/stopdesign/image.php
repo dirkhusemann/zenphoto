@@ -37,14 +37,13 @@ require_once('normalizer.php');
 
 			<?php
 				$ls = isLandscape();
-				if (!$ls) {
-					$s = getDefaultWidth();
-					$h = getDefaultHeight();
-					$r = 480/$h;
-					$s = round($r*$s)+22;
-					$wide = "style=\"width:".$s."px;\"";
-				} else {
+				setOption('image_size', 480, false);
+				$w = getDefaultWidth();
+				$h = getDefaultHeight();
+				if ($ls) {
 					$wide = '';
+				} else {
+					$wide = "style=\"width:".($w+22)."px;\"";
 				}
 			?>
 			<div class="main" <?php echo $wide; ?>>
@@ -189,7 +188,10 @@ require_once('normalizer.php');
 						}
 					 	?>
 						<div id="prev"><span class="thumb"><span>
-							<em style="background-image:url('<?php echo htmlspecialchars($img->getCustomImage(NULL, $iw, $ih, $cw, $ch, NULL, NULL, true)); ?>')"><a href="<?php echo getPrevImageURL();?>" accesskey="z" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Previous'); ?>: </strong>Crescent</a></em></span></span></div>
+							<em style="background-image:url('<?php echo htmlspecialchars($img->getCustomImage(NULL, $iw, $ih, $cw, $ch, NULL, NULL, true)); ?>')">
+							<a href="<?php echo getPrevImageURL();?>" accesskey="z" style="background:#fff;">
+							<strong style="width:<?php echo round(($w+20)/2); ?>px; height:<?php echo $h+20; ?>px;"><?php echo gettext('Previous'); ?>: </strong>Crescent</a>
+							</em></span></span></div>
 					<?php 
 					} 
 					$img = $_zp_current_image->getNextImage();
@@ -206,7 +208,10 @@ require_once('normalizer.php');
 							$cw = 67;
 						}?>
 						<div id="next"><span class="thumb"><span>
-						<em style="background-image:url('<?php echo htmlspecialchars($img->getCustomImage(NULL, $iw, $ih, $cw, $ch, NULL, NULL, true)); ?>')"><a href="<?php echo getNextImageURL();?>" accesskey="x" style="background:#fff;"><strong style="width:190px; height:300px;"><?php echo gettext('Next'); ?>: </strong>Sagamor</a></em></span></span></div>
+						<em style="background-image:url('<?php echo htmlspecialchars($img->getCustomImage(NULL, $iw, $ih, $cw, $ch, NULL, NULL, true)); ?>')">
+						<a href="<?php echo getNextImageURL();?>" accesskey="x" style="background:#fff;">
+						<strong style="width:<?php echo round(($w+20)/2); ?>px; height:<?php echo $h+20; ?>px;"><?php echo gettext('Next'); ?>: </strong>Sagamor</a>
+						</em></span></span></div>
 					<?php } ?>
 				</div>
 
