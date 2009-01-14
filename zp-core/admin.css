@@ -629,6 +629,10 @@ input.tags {
 	font-size: 100%;
 }
 
+.theme_links li {
+	padding-bottom: 10px;
+}
+
 #theme-editor #files {
 	float:right;
 	border:1px solid #BAC9CF;

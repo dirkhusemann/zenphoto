@@ -198,7 +198,7 @@ foreach($themes as $theme => $themeinfo):
 		Version <?php echo $themeinfo['version']; ?>, <?php echo $themeinfo['date']; ?><br />
 		<?php echo $themeinfo['desc']; ?></td>
 		<td width="100" <?php echo $style; ?>>
-		<ul>
+		<ul class="theme_links">
 		<?php
 		if ($theme != $current_theme) {
 			echo '<li><a href="?action=settheme&themealbum='.urlencode($alb).'&theme='.$theme.'" title="';
