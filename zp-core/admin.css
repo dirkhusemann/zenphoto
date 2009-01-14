@@ -629,6 +629,10 @@ input.tags {
 	font-size: 100%;
 }
 
+.theme_links {
+	list-style: none;
+}
+
 .theme_links li {
 	padding-bottom: 10px;
 }
