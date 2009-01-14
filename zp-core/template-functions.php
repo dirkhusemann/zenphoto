@@ -2737,7 +2737,7 @@ function printSizedImageLink($size, $text, $title, $class=NULL, $id=NULL) {
 * @return int
 */
 function getCommentCount() {
-	global $_zp_current_image, $_zp_current_album, $current_zenpage;
+	global $_zp_current_image, $_zp_current_album, $_zp_current_zenpage_page, $_zp_current_zenpage_news;
 	if (in_context(ZP_IMAGE) & in_context(ZP_ALBUM)) {
 		if (is_null($_zp_current_image)) return false;
 		return $_zp_current_image->getCommentCount();
@@ -2746,9 +2746,11 @@ function getCommentCount() {
 		return $_zp_current_album->getCommentCount();
 	}
 	if(function_exists('is_News')) {
-		if (is_null($current_zenpage)) return false;
-		if(is_News() | is_Pages()) {			
-			return $current_zenpage->getCommentCount();
+		if(is_News()) {
+			return $_zp_current_zenpage_news->getCommentCount();
+		}
+		if(is_Pages()) {
+			return $_zp_current_zenpage_page->getCommentCount();
 		}
 	}
 }
@@ -2776,7 +2778,7 @@ function getCommentsAllowed() {
  * @return bool
  */
 function next_comment($desc=false) {
-	global $_zp_current_image, $_zp_current_album, $_zp_current_comment, $_zp_comments, $current_zenpage;
+	global $_zp_current_image, $_zp_current_album, $_zp_current_comment, $_zp_comments, $_zp_current_zenpage_page, $_zp_current_zenpage_news;
 	//ZENPAGE: comments support
 	if (is_null($_zp_current_comment)) {
 		if (in_context(ZP_IMAGE) AND in_context(ZP_ALBUM)) {
@@ -2786,8 +2788,11 @@ function next_comment($desc=false) {
 			$_zp_comments = $_zp_current_album->getComments(false, false, $desc);
 		}
 		if(function_exists('is_NewsArticle')) {
-			if (is_NewsArticle() OR is_Pages()) {
-				$_zp_comments = $current_zenpage->getComments(false, false, $desc);
+			if (is_NewsArticle()) {
+				$_zp_comments = $_zp_current_zenpage_news->getComments(false, false, $desc);
+			}
+			if(is_Pages()) {
+				$_zp_comments = $_zp_current_zenpage_page->getComments(false, false, $desc);
 			}
 		}
 		if (empty($_zp_comments)) { return false; }
