@@ -2085,6 +2085,7 @@ function themeIsEditable($theme, $themes) {
 	unset($themes['effervescence_plus']);
 	unset($themes['stopdesign']);
 	unset($themes['example']);
+	unset($themes['zenpage-default']);
 	/* TODO: in case we change the number or names of bundled themes, need to edit this ! */
 
 	return (in_array( $theme , array_keys($themes)));
