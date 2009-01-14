@@ -72,6 +72,7 @@ class slideshowOptions {
 
 }
 
+$slideshow_instance = 0;
 
 /**
  * Prints a link to call the slideshow (not shown if there are no images in the album)
@@ -81,7 +82,7 @@ class slideshowOptions {
  * @param string $linktext Text for the link
  */
 function printSlideShowLink($linktext='') {
-	global $_zp_current_image, $_zp_current_album, $_zp_current_search;
+	global $_zp_current_image, $_zp_current_album, $_zp_current_search, $slideshow_instance;
 	if (checkForPassword(true)) return;
 	if(empty($_GET['page'])) {
 		$pagenr = 1;
@@ -111,17 +112,16 @@ function printSlideShowLink($linktext='') {
 	$numberofimages = getNumImages();
 	if($numberofimages != 0) {
 		?>
-<form name="slideshow" method="post"
-	action="<?php echo $slideshowlink; ?>"><input
-	type="hidden" name="pagenr" value="<?php echo $pagenr;?>" /> <input
-	type="hidden" name="albumid" value="<?php echo $albumnr;?>" /> <input
-	type="hidden" name="numberofimages"
-	value="<?php echo $numberofimages;?>" /> <input type="hidden"
-	name="imagenumber" value="<?php echo $imagenumber;?>" /> <input
-	type="hidden" name="imagefile" value="<?php echo html_encode($imagefile);?>" /> <a
-	id="slideshowlink" href="javascript:document.slideshow.submit()"><?php echo $linktext; ?></a>
-</form>
+		<form name="slideshow_<?php echo $slideshow_instance; ?>" method="post" action="<?php echo $slideshowlink; ?>">
+			<input type="hidden" name="pagenr" value="<?php echo $pagenr;?>" />
+			<input type="hidden" name="albumid" value="<?php echo $albumnr;?>" />
+			<input type="hidden" name="numberofimages" value="<?php echo $numberofimages;?>" />
+			<input type="hidden" name="imagenumber" value="<?php echo $imagenumber;?>" />
+			<input type="hidden" name="imagefile" value="<?php echo html_encode($imagefile);?>" />
+			<a id="slideshowlink_<?php echo $slideshow_instance; ?>" href="javascript:document.slideshow_<?php echo $slideshow_instance; ?>.submit()"><?php echo $linktext; ?></a>
+		</form>
 <?php }
+	$slideshow_instance ++;
 }
 
 
