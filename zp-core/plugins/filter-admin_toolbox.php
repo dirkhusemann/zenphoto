@@ -15,10 +15,14 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flter-ad
 
 register_filter('admin_toolbox_global', 'toolbox_global_extensions');
 register_filter('admin_toolbox_gallery', 'toolbox_gallery_extensions');
+/* enable these registrations if you have album, image, search, or news specific extensions.
+ * 
+ *
 register_filter('admin_toolbox_album', 'toolbox_album_extensions');
 register_filter('admin_toolbox_image', 'toolbox_image_extensions');
 register_filter('admin_toolbox_search', 'toolbox_search_extensions');
 register_filter('admin_toolbox_news', 'toolbox_news_extensions');
+ */
 
 function toolbox_global_extensions() {
 	if (zp_loggedin(ADMIN_RIGHTS)) {
@@ -32,6 +36,11 @@ function toolbox_gallery_extensions() {
 	if (zp_loggedin(ADMIN_RIGHTS | COMMENT_RIGHTS)) {
 		echo "<li>";
 		printLink(WEBPATH."/".ZENFOLDER . '/admin-comments.php', gettext("Comments"), NULL, NULL, NULL);
+		echo "</li>\n";
+	}
+	if (zp_loggedin(ADMIN_RIGHTS | THEMES_RIGHTS)) {
+		echo "<li>";
+		printLink(WEBPATH."/".ZENFOLDER . '/admin-themes.php', gettext("Themes"), NULL, NULL, NULL);
 		echo "</li>\n";
 	}
 }
