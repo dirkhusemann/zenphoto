@@ -1074,13 +1074,14 @@ function printAlbumDesc($editable=false, $editclass='', $messageIfEmpty = true )
  * @param mixed  $messageIfEmpty message echoed if no value to print
  * @param bool   $convertBR	when true, converts new line characters into HTML line breaks
  * @param string $override	if not empty, print this string instead of fetching field value from database
+ * @param string $label "label" text to print if the field is not empty
  * @since 1.3
  * @author Ozh
  */
-function printEditable($context, $field, $editable = false, $editclass = 'editable', $messageIfEmpty = true, $convertBR = false, $override = false) {
+function printEditable($context, $field, $editable = false, $editclass = 'editable', $messageIfEmpty = true, $convertBR = false, $override = false, $label='') {
 	
 	if (!$context or !$field) {
-		echo "Incomplete function call";
+		trigger_error(gettext('printEditable() incomplete function call.'), E_USER_NOTICE);
 		return false;
 	}
 
@@ -1113,7 +1114,7 @@ function printEditable($context, $field, $editable = false, $editclass = 'editab
 			}
 		}
 	}
-	
+	if (!empty($text)) echo $label;
 	if ( $editable && zp_loggedin() ) {
 		// Increment a variable to make sure all elements will have a distinct HTML id
 		static $id = 1;
@@ -1182,7 +1183,7 @@ function getAlbumData($field) {
  * Prints arbitrary data from the album object and make it editable if applicable
  *
  * @param string $field the field name of the data desired
- * @param string $label deprecated and unused -- kept for compatibility with pre-1.3 versions
+ * @param string $label text to label the field
  * @param bool $editable when true, enables AJAX editing in place
  * @param string $editclass CSS class applied to element if editable
  * @param mixed $messageIfEmpty Either bool or string. If false, echoes nothing when description is empty. If true, echoes default placeholder message if empty. If string, echoes string.
@@ -1192,7 +1193,8 @@ function printAlbumData($field, $label='', $editable=false, $editclass='', $mess
 	if ( $messageIfEmpty === true ) {
 		$messageIfEmpty = gettext('(No data...)');
 	}
-	printEditable('album', $field, $editable, $editclass, $messageIfEmpty);
+	if (empty($editclass)) $editclass = 'metadata';
+	printEditable('album', $field, $editable, $editclass, $messageIfEmpty, false, false, $label);
 }
 
 
@@ -1973,7 +1975,7 @@ function setImageCustomData($val) {
  * Prints arbitrary data from the image object and make it editable if applicable
  *
  * @param string $field the field name of the data desired
- * @param string $label deprecated and unused -- kept for compatibility with pre-1.3 versions
+ * @param string $label text to label the field.
  * @param bool $editable when true, enables AJAX editing in place
  * @param string $editclass CSS class applied to element if editable
  * @param mixed $messageIfEmpty Either bool or string. If false, echoes nothing when description is empty. If true, echoes default placeholder message if empty. If string, echoes string.
@@ -1983,7 +1985,8 @@ function printImageData($field, $label='', $editable=false, $editclass='', $mess
 	if ( $messageIfEmpty === true ) {
 		$messageIfEmpty = gettext('(No data...)');
 	}
-	printEditable('image', $field, $editable, $editclass, $messageIfEmpty);
+	if (empty($editclass)) $editclass = 'metadata';
+	printEditable('image', $field, $editable, $editclass, $messageIfEmpty, false, false, $label);
 }
 
 /**
