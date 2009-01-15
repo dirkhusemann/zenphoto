@@ -36,7 +36,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 				}					
 				?>
 				<a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a></span>
-								<?php printPageTitle(" | "); ?>
+								<?php printParentPagesBreadcrumb(" | ", ""); ?><?php printPageTitle(" | "); ?>
 			</div>
 		</div> <!-- wrapnav -->
 
