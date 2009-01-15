@@ -31,15 +31,21 @@ if (isset($_GET['viewall'])) $viewall = true; else $viewall = false;
 
 /* handle posts */
 if (isset($_GET['action'])) {
-	$action = $_GET['action'];
-	/** un-moderate comment *********************************************************/
-	/********************************************************************************/
-	if ($action == "moderation") {
+	switch ($_GET['action']) {
+	
+	case "unapprove":
+		$sql = 'UPDATE ' . prefix('comments') . ' SET `inmoderation`=1 WHERE `id`=' . $_GET['id'] . ';';
+		query($sql);
+		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-comments.php');
+		exit();
+
+	case "moderation":
 		$sql = 'UPDATE ' . prefix('comments') . ' SET `inmoderation`=0 WHERE `id`=' . $_GET['id'] . ';';
 		query($sql);
 		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-comments.php');
 		exit();
-	} else if ($action == 'deletecomments') {
+	
+	case 'deletecomments':
 		if (isset($_POST['ids']) || isset($_GET['id'])) {
 			if (isset($_GET['id'])) {
 				$ids = array($_GET['id']);
@@ -63,7 +69,8 @@ if (isset($_GET['action'])) {
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php?ndeleted=0");
 			exit();
 		}
-	} else if ($action == 'savecomment') {
+
+	case 'savecomment':
 		if (!isset($_POST['id'])) {
 			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php");
 			exit();
@@ -80,6 +87,7 @@ if (isset($_GET['action'])) {
 
 		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php?sedit");
 		exit();
+
 	}
 }
 
@@ -92,19 +100,18 @@ echo "\n" . '<div id="main">';
 printTabs('comments');
 echo "\n" . '<div id="content">';
 
-if ($page == "editcomment") { ?>
+if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 <h1><?php echo gettext("edit comment"); ?></h1>
 <?php
-	if (isset($_GET['id'])) $id = $_GET['id'];
-	else echo "<h2>". gettext("No comment specified.")." <a href=\"#\">&laquo ".gettext("Back")."</a></h2>";
-
-	$commentarr = query_single_row("SELECT name, website, date, comment, email FROM ".prefix('comments')." WHERE id = $id LIMIT 1");
+	$id = $_GET['id'];
+	
+	$commentarr = query_single_row("SELECT * FROM ".prefix('comments')." WHERE id = $id LIMIT 1");
 	extract($commentarr);
 	?>
 
 <form action="?action=savecomment" method="post"><input
 	type="hidden" name="id" value="<?php echo $id; ?>" />
-<table>
+<table style="float:left;margin-right:2em;">
 
 	<tr>
 		<td width="100"><?php echo gettext("Author:"); ?></td>
@@ -127,6 +134,11 @@ if ($page == "editcomment") { ?>
 			value="<?php echo $date; ?>" /></td>
 	</tr>
 	<tr>
+		<td><?php echo gettext("IP:"); ?></td>
+		<td><input type="text" disabled="disabled" size="18" name="date"
+			value="<?php echo $IP; ?>" /></td>
+	</tr>
+	<tr>
 		<td valign="top"><?php echo gettext("Comment:"); ?></td>
 		<td><textarea rows="8" cols="60" name="comment" /><?php echo $comment; ?></textarea></td>
 	</tr>
@@ -138,9 +150,48 @@ if ($page == "editcomment") { ?>
 		</td>
 
 </table>
+<div>
+<h2><?php echo gettext('Comment management:'); ?></h2>
+<?php
+	if ($inmoderation) {
+		$status_moderation = gettext('Comment is unapproved');
+		$link_moderation = gettext('Approve');
+		$title_moderation = gettext('Approve this comment');
+		$url_moderation = '?action=moderation&id='.$id;
+	} else {
+		$status_moderation = gettext('Comment is approved');
+		$link_moderation = gettext('Unapprove');
+		$title_moderation = gettext('Unapprove this comment');
+		$url_moderation = '?action=unapprove&id='.$id;
+	}
+	
+	if ($private) {
+		$status_private = gettext('Comment is private');
+	} else {
+		$status_private = gettext('Comment is public');
+	}
+
+	if ($anon) {
+		$status_anon = gettext('Comment is anonymous');
+	} else {
+		$status_anon = gettext('Comment is not anonymous');
+	}
+
+
+?>
+<ul>
+<li><?php echo $status_moderation; ?>. <a href="<?php echo $url_moderation; ?>" title="<?php echo $title_moderation; ?>" ><?php echo $link_moderation; ?></a></li>
+<li><?php echo $status_private; ?></li>
+<li><?php echo $status_anon; ?></li>
+<li><a href="javascript: if(confirm('<?php echo gettext('Are you sure you want to delete this comment?'); ?>')) { window.location='?action=deletecomments&id=<?php echo $id; ?>'; }"
+		title="<?php echo gettext('Delete this comment.'); ?>" >
+		<?php echo gettext('Delete this comment'); ?></a></li>
+</ul>
+</div>
 </form>
 
 <?php
+// end of $page == "editcomment"
 } else {
 	// Set up some view option variables.
 
@@ -326,7 +377,7 @@ if ($page == "editcomment") { ?>
 		<td align="center"><a href="?page=editcomment&id=<?php echo $id; ?>" title="<?php echo gettext('Edit this comment.'); ?>"> 
 			<img src="images/pencil.png" style="border: 0px;" alt="<?php echo gettext('Edit'); ?>" /></a></td>
 		<td align="center">
-			<a href="javascript: if(confirm('Are you sure you want to delete this comment?')) { window.location='?action=deletecomments&id=<?php echo $id; ?>'; }"
+			<a href="javascript: if(confirm('<?php echo gettext('Are you sure you want to delete this comment?'); ?>')) { window.location='?action=deletecomments&id=<?php echo $id; ?>'; }"
 			title="<?php echo gettext('Delete this comment.'); ?>" > <img
 			src="images/fail.png" style="border: 0px;" alt="<?php echo gettext('Delete'); ?>" /></a></td>
 	</tr>
