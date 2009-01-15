@@ -2234,4 +2234,17 @@ $theme_description["desc"] = "%s";
 	return $message;
 }
 
+/**
+ * Return URL of current admin page, encoded for a form, relative to zp-core folder
+ *
+ * @return string current URL
+ * @author Ozh
+ * @since 1.3
+ */
+function currentRelativeURL() {
+	$from = PROTOCOL."://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; // full requested URL
+	$from = str_replace( FULLWEBPATH , '', $from); // Make relative to zenphoto installation
+	return urlencode(stripslashes( $from ));
+}
+
 ?>

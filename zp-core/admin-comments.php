@@ -9,15 +9,17 @@
 define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 
+if (!($_zp_loggedin & (ADMIN_RIGHTS | COMMENT_RIGHTS))) { // prevent nefarious access to this page.
+	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL() );
+	exit();
+}
+
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
 	exit();
 }
 
-if (!($_zp_loggedin & (ADMIN_RIGHTS | COMMENT_RIGHTS))) { // prevent nefarious access to this page.
-	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
-	exit();
-}
+
 $gallery = new Gallery();
 if (isset($_GET['page'])) {
 	$page = $_GET['page'];

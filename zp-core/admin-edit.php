@@ -13,13 +13,13 @@ require_once(dirname(__FILE__).'/class-sortable.php');
 $_zp_sortable_list = new jQuerySortable('js');
 // $_zp_sortable_list->debug(); // Uncomment this line to display serialized object
 
-if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
-	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
+if (!($_zp_loggedin & (ADMIN_RIGHTS | EDIT_RIGHTS))) { // prevent nefarious access to this page.
+	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL() );
 	exit();
 }
 
-if (!($_zp_loggedin & (ADMIN_RIGHTS | EDIT_RIGHTS))) { // prevent nefarious access to this page.
-	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
+if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
+	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
 	exit();
 }
 

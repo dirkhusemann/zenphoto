@@ -117,7 +117,8 @@ echo "\n</head>";
 // If they are not logged in, display the login form and exit
 
 if (!zp_loggedin()) {
-	printLoginForm();
+	$from = isset($_GET['from']) ? $_GET['from'] : null;
+	printLoginForm($from);
 	echo "\n</body>";
 	echo "\n</html>";
 	exit();

@@ -19,6 +19,12 @@ if (!($_zp_loggedin & (THEMES_RIGHTS | ADMIN_RIGHTS))) { // prevent nefarious ac
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
 	exit();
 }
+
+if (!isset($_GET['theme'])) {
+	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-themes.php");
+	exit();
+}
+
 $gallery = new Gallery();
 
 printAdminHeader();
