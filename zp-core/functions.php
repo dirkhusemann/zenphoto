@@ -1379,7 +1379,7 @@ function getAllTagsCount() {
 	$sql = "SELECT `name`, `id` from ".prefix('tags').' ORDER BY `name`';
 	$tagresult = query_full_array($sql);
 	if (is_array($tagresult)) {
-		$sql = 'SELECT `tagid`, `objectid` FROM '.prefix('obj_to_tag').' ORDER BY `tagid';
+		$sql = 'SELECT `tagid`, `objectid` FROM '.prefix('obj_to_tag').' ORDER BY `tagid`';
 		$countresult = query_full_array($sql);
 		if (is_array($countresult)) {
 			$id = 0;

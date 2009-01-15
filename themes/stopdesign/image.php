@@ -28,7 +28,7 @@ require_once('normalizer.php');
 
 		<div id="content" class="v">
 
-			<div id="desc" style="z-index: 100">
+			<div id="desc">
 				<?php if (!checkForPassword(true)) { ?>
 					<h1><?php printImageTitle(true); ?></h1>
 					<div id="descText"><?php printImageDesc(true); ?></div>
