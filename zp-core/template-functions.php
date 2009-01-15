@@ -855,7 +855,7 @@ function printAlbumBreadcrumb($before='', $after='', $title=NULL) {
 		$dynamic_album = $_zp_current_search->dynalbumname;
 		if (empty($dynamic_album)) {
 			if (!is_null($_zp_current_album)) {
-				if (in_context(ZP_ALBUM_LINKED) && $_zp_current_search->getAlbumIndex($_zp_current_album->name) === false) {
+				if (in_context(ZP_ALBUM_LINKED) && !in_context(ZP_IMAGE_LINKED)) {
 					echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL()). "\" title=\"" . html_encode($title) . "\">" . getAlbumTitle() . "</a>";
 				} else {
 					$after = '';
@@ -1587,7 +1587,7 @@ function isAlbumPage() {
  */
 function getNumImages() {
 	global $_zp_current_album, $_zp_current_search;
-	if (in_context(ZP_SEARCH_LINKED) || in_context(ZP_SEARCH) && is_null($_zp_current_album)) {
+	if ((in_context(ZP_SEARCH_LINKED) && !in_context(ZP_ALBUM_LINKED)) || in_context(ZP_SEARCH) && is_null($_zp_current_album)) {
 		return $_zp_current_search->getNumImages();
 	} else {
 		if ($_zp_current_album->isDynamic()) {
@@ -1766,7 +1766,7 @@ function printImageTitle($editable=false, $editclass='editable imageTitleEditabl
 function imageNumber() {
 	global $_zp_current_image, $_zp_current_search, $_zp_current_album;
 	$name = $_zp_current_image->getFileName();
-	if (in_context(ZP_SEARCH | ZP_SEARCH_LINKED)) {
+	if (in_context(ZP_SEARCH)  || (in_context(ZP_SEARCH_LINKED) && !in_context(ZP_ALBUM_LINKED))) {
 		$images = $_zp_current_search->getImages();
 		$c = 0;
 		foreach ($images as $image) {

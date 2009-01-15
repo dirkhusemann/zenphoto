@@ -28,6 +28,7 @@ $obj = '';
 // Display an arbitrary theme-included PHP page
 // If the 'p' parameter starts with * (star) then include the file from the zp-core folder.
 if (isset($_GET['p'])) {
+	handleSearchParms('page', $_zp_current_album, $_zp_current_image);
 	$theme = setupTheme();
 	$page = str_replace(array('/','\\','.'), '', sanitize($_GET['p']));
 	if (substr($page, 0, 1) == "*") {
@@ -41,7 +42,7 @@ if (isset($_GET['p'])) {
 
 // Display an Image page.
 } else if (in_context(ZP_IMAGE)) {
-	handleSearchParms($_zp_current_album->name, $_zp_current_image->filename);
+	handleSearchParms('image', $_zp_current_album, $_zp_current_image);
 	$theme = setupTheme();
 	$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/image.php");
 	//update hit counter
@@ -65,7 +66,7 @@ if (isset($_GET['p'])) {
 			$theme = setupTheme();
 			$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/album.php");
 		} else {
-			handleSearchParms($_zp_current_album->name);
+			handleSearchParms('album', $_zp_current_album);
 			$theme = setupTheme();
 			$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/album.php");
 		}
@@ -79,7 +80,7 @@ if (isset($_GET['p'])) {
 	
 // Display the Index page.
 } else if (in_context(ZP_INDEX)) {
-	handleSearchParms();
+	handleSearchParms('index');
 	$theme = setupTheme();
 	$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/index.php");
 }

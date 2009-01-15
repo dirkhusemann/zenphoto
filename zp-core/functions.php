@@ -1164,13 +1164,20 @@ function getAllSubAlbumIDs($albumfolder='') {
  * @param string $album Name of the album
  * @param string $image Name of the image
  */
-function handleSearchParms($album='', $image='') {
+function handleSearchParms($what, $album=NULL, $image=NULL) {
 	global $_zp_current_search, $zp_request;
 	$cookiepath = WEBPATH;
 	if (WEBPATH == '') { $cookiepath = '/'; }
-	if ($zp_request && empty($album)) { // clear the cookie if we are loading the index page
-		zp_setcookie("zenphoto_image_search_params", "", time()-368000, $cookiepath);
-		return;
+	if (is_null($album)) {
+		if (is_object($zp_request)) {
+			$reset = get_class($zp_request) != 'SearchEngine';
+		} else {
+			$reset = $zp_request;
+		}
+		if ($reset) { // clear the cookie if no album and not a search
+			zp_setcookie("zenphoto_image_search_params", "", time()-368000, $cookiepath);
+			return;
+		}
 	}
 	$context = get_context();
 	$params = zp_getCookie('zenphoto_image_search_params');
@@ -1178,16 +1185,23 @@ function handleSearchParms($album='', $image='') {
 		$_zp_current_search = new SearchEngine();
 		$_zp_current_search->setSearchParams($params);
 		// check to see if we are still "in the search context"
-		if (!empty($image)) {
-			if ($_zp_current_search->getImageIndex($album, $image) !== false) {
-				$context = $context | ZP_SEARCH_LINKED;
+		if (!is_null($image)) {
+			if ($_zp_current_search->getImageIndex($album->name, $image->filename) !== false) {
+				$context = $context | ZP_SEARCH_LINKED | ZP_IMAGE_LINKED;
 			}
 		}
-		if (!empty($album)) {
+		if (!is_null($album)) {
+			$albumname = $album->name;
+			
+debugLog("albumname=$albumname");			
+			
 			$albumlist = $_zp_current_search->getAlbums(0);
-			foreach ($albumlist as $searchalbum) {
-				if (strpos($album, $searchalbum) !== false) {
-					$context = $context | ZP_ALBUM_LINKED | ZP_SEARCH_LINKED;
+			
+debugLog("albumlist", $albumlist);			
+			
+			foreach ($albumlist as $searchalbum) {	
+				if (strpos($albumname, $searchalbum) !== false) {
+					$context = $context | ZP_SEARCH_LINKED | ZP_ALBUM_LINKED;
 					break;
 				}
 			}

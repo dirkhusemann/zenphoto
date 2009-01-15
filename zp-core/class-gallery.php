@@ -396,7 +396,7 @@ class Gallery {
 						if (!$album->isDynamic()) {
 							if(is_null($album->getDateTime())) {  // see if we can get one from an image
 								$image = $album->getImage(0);
-								if(!($image === false)) {
+								if(is_object($image)) {
 									$album->setDateTime($image->getDateTime());
 								}
 							}

@@ -30,17 +30,17 @@ function toolbox_global_extensions() {
 		printLink(WEBPATH."/".ZENFOLDER . '/admin-plugins.php', gettext("Plugins"), NULL, NULL, NULL);
 		echo "</li>\n";
 	}
+	if (zp_loggedin(ADMIN_RIGHTS | THEMES_RIGHTS)) {
+		echo "<li>";
+		printLink(WEBPATH."/".ZENFOLDER . '/admin-themes.php', gettext("Themes"), NULL, NULL, NULL);
+		echo "</li>\n";
+	}
 }
 
 function toolbox_gallery_extensions() {
 	if (zp_loggedin(ADMIN_RIGHTS | COMMENT_RIGHTS)) {
 		echo "<li>";
 		printLink(WEBPATH."/".ZENFOLDER . '/admin-comments.php', gettext("Comments"), NULL, NULL, NULL);
-		echo "</li>\n";
-	}
-	if (zp_loggedin(ADMIN_RIGHTS | THEMES_RIGHTS)) {
-		echo "<li>";
-		printLink(WEBPATH."/".ZENFOLDER . '/admin-themes.php', gettext("Themes"), NULL, NULL, NULL);
 		echo "</li>\n";
 	}
 }

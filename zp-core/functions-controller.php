@@ -25,6 +25,7 @@ define("ZP_COMMENT", 8);
 define("ZP_SEARCH", 16);
 define("ZP_SEARCH_LINKED", 32);
 define("ZP_ALBUM_LINKED", 64);
+define('ZP_IMAGE_LINKED', 128);
 // ZENPAGE: load zenpage class if present, used for zp_handle_comment() only
 if(getOption('zp_plugin_zenpage')) {
 	require_once(dirname(__FILE__).'/plugins/zenpage/zenpage-class-news.php');
@@ -435,7 +436,9 @@ function zp_load_request() {
 	}
 	if (isset($_GET['p'])) {
 		$page = str_replace(array('/','\\','.'), '', $_GET['p']);
-		if ($page == "search") { zp_load_search(); }
+		if ($page == "search") {
+			$success = zp_load_search();
+		}
 	}
 	return $success;
 }
