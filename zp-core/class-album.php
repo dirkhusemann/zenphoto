@@ -690,8 +690,11 @@ class Album extends PersistentObject {
 					$thumb = array_shift($thumbs);
 					if (is_valid_image($thumb['filename'])) {
 						$alb = new Album($this->gallery, $thumb['folder']);
-						$this->albumthumbnail = newImage($alb, $thumb['filename']);
-						return $this->albumthumbnail;
+						$thumb = newImage($alb, $thumb['filename']);
+						if ($thumb->getShow()) {
+							$this->albumthumbnail = $thumb;
+							return $thumb;
+						}
 					}
 				}
 			}
@@ -705,8 +708,11 @@ class Album extends PersistentObject {
 				while (count($thumbs) > 0) {
 					$thumb = array_shift($thumbs);
 					if (is_valid_image($thumb)) {
-						$this->albumthumbnail = newImage($this, $thumb);
-						return $this->albumthumbnail;
+						$thumb = newImage($this, $thumb);
+						if ($thumb->getShow()) {
+							$this->albumthumbnail = $thumb;
+							return $thumb;
+						}
 					}
 				}
 			}
@@ -717,11 +723,15 @@ class Album extends PersistentObject {
 					shuffle($subalbums);
 				}
 				while (count($subalbums) > 0) {
-					$subalbum = new Album($this->gallery, array_pop($subalbums));
-					$thumb = $subalbum->getAlbumThumbImage();
-					if (strtolower(get_class($thumb)) !== 'transientimage' && $thumb->exists) {
-						$this->albumthumbnail =  $thumb;
-						return $this->albumthumbnail;
+					$folder = array_pop($subalbums);
+					$subalbum = new Album($this->gallery, $folder);
+					$pwd = $subalbum->getPassword();
+					if (($subalbum->getShow() && empty($pwd)) || isMyALbum($folder, ALL_RIGHTS)) {
+						$thumb = $subalbum->getAlbumThumbImage();
+						if (strtolower(get_class($thumb)) !== 'transientimage' && $thumb->exists) {
+							$this->albumthumbnail =  $thumb;
+							return $thumb;
+						}
 					}
 				}
 			}
@@ -731,8 +741,11 @@ class Album extends PersistentObject {
 				if (is_file($albumdir.$thumb) && is_valid_video($thumb)) {
 					$othersThumb = checkObjectsThumb($albumdir, $thumb);
 					if (!empty($othersThumb)) {
-						$this->albumthumbnail = newImage($this, $othersThumb);
-						return $this->albumthumbnail;
+						$thumb = newImage($this, $othersThumb);
+						if ($this->getShow()) {
+							$this->albumthumbnail = $thumb;
+							return $thumb;
+						}
 					}
 				}
 			}
