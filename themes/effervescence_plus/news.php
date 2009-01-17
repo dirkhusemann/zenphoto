@@ -187,7 +187,7 @@ if (!checkForPassword()) {
 		
 	</div> <!-- content -->
 
-<?php printFooter(false); ?>
+<?php printFooter('news'); ?>
 
 </body>
 </html>

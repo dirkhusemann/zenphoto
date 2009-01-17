@@ -117,7 +117,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 <?php printGalleryDesc(); ?>
 </div>
 	
-<?php printFooter(false); ?>
+<?php printFooter('index'); ?>
 
 </body>
 </html>

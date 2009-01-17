@@ -136,7 +136,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 		
 	</div> <!-- content -->
 
-<?php printFooter(false); ?>
+<?php printFooter('page'); ?>
 
 </body>
 </html>

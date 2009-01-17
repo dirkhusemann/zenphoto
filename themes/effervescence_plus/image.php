@@ -186,29 +186,10 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);
 
 			</div>
 		</div>
-	<?php } ?>
-
-	<!-- Footer -->
-	<div class="footlinks">
-		<?php
-			$h = getHitcounter();
-			if ($h == 1) {
-				echo "<p>".gettext('1 hit on this image')."</p>";
-			} else {
-				echo "<p>".sprintf(gettext('%u hits on this image'),$h)."</p>";
-			}
-			printThemeInfo();
-		?>
-		<?php printZenphotoLink(); ?>
-		<?php
-		if (function_exists('printUserLogout')) {
-			printUserLogout('<br />', '', true);
-		}
-		?>
-	</div>
-
-	<!-- Administration Toolbox -->
-	<?php if (function_exists('printAdminToolbox')) printAdminToolbox(); ?>
+	<?php 
+	}
+	printFooter('image');
+	?>
 
 </body>
 </html>

@@ -182,13 +182,23 @@ function annotateImage() {
 	return  sprintf(gettext('View the image: %s'),GetBareImageTitle()).$tagit;
 }
 
-function printFooter($gallery) {
+function printFooter($page) {
 	global $_zp_themeroot;
 	?>
 	<!-- Footer -->
 	<div class="footlinks">
 		<?php
-		if ($gallery) {
+		switch ($page) {
+		case 'image':
+		case 'album':
+			$h = getHitcounter();
+			if ($h == 1) {
+				echo "<p>".sprintf(gettext('1 hit on this %s'),$page)."</p>";
+			} else {
+				echo "<p>".sprintf(gettext('%1$u hits on this %2$s'),$h, $page)."</p>";
+			}
+			break;
+		case 'gallery':
 			?>
 			<small>
 				<p><?php $albumNumber = getNumAlbums(); echo sprintf(gettext("Albums: %u"),$albumNumber); ?> &middot;
@@ -201,17 +211,15 @@ function printFooter($gallery) {
 						$commentsNumber = array_shift($commentsArray); echo sprintf(gettext("Comments: %u"),$commentsNumber); ?>
 					<?php } ?>
 				</p>
-				<?php printThemeInfo(); ?>
 			</small>
 			<?php
+			break;
 		}
 		?>
-		<?php if (function_exists('printLanguageSelector')) { printLanguageSelector(); } ?>
-		<?php
-			printThemeInfo();
-		?>
+		<small><?php printThemeInfo(); ?></small>
 		<?php printZenphotoLink(); ?>
-		<?php if ($gallery) { echo '<br />'; printRSSLink('Gallery','', 'Gallery RSS', ''); } ?>
+		<?php if ($page == 'gallery') { echo '<br />'; printRSSLink('Gallery','', 'Gallery RSS', ''); } ?>
+		<?php if (function_exists('printLanguageSelector')) { printLanguageSelector(); } ?>
 		<?php	if (function_exists('printUserLogout')) printUserLogout('<br />', '', true); ?>
 		<?php	if (function_exists('printContactForm')) printCustomPageURL(gettext('Contact us'), 'contact', '', '<br />');	?>
 		<?php if (!zp_loggedin() && function_exists('printRegistrationForm')) printCustomPageURL(gettext('Register for this site'), 'request', '', '<br />');	?>

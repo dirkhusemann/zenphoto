@@ -81,10 +81,9 @@
 		</div>
 	</div> <!-- content -->
 	
-	<!-- Footer -->
 	<br style="clear:all" />	
 
-	<?php printFooter(true)?>
+	<?php printFooter('gallery')?>
 
 </body>
 </html>

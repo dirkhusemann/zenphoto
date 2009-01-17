@@ -341,27 +341,10 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 
 <!-- Footer -->
 <br style="clear:all" />
-<div class="footlinks">
 
 <?php
-$h = getHitcounter();
-if ($h == 1) {
-	echo "<p>".gettext('1 hit on this album')."</p>";
-	} else {
-	echo "<p>".sprintf(gettext('%u hits on this album'),$h)."</p>";
-}
-printThemeInfo();
+printFooter('album');
 ?>
-<?php printZenphotoLink(); ?>
-<br />
-<?php printRSSLink('Album', '', 'Album RSS', ''); ?>
-<?php
-if (function_exists('printUserLogout')) {
-	printUserLogout('<br />', '', true);
-}
-?>
-
-</div> <!-- footlinks -->
 
 
 <?php if (function_exists('printAdminToolbox')) printAdminToolbox(); ?>
