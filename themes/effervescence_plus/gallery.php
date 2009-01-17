@@ -83,28 +83,8 @@
 	
 	<!-- Footer -->
 	<br style="clear:all" />	
-	<div class="footlinks">
-		<?php if (function_exists('printLanguageSelector')) { printLanguageSelector(); } ?>
-		<small>
-			<p><?php $albumNumber = getNumAlbums(); echo sprintf(gettext("Albums: %u"),$albumNumber); ?> &middot;
-				<?php echo sprintf(gettext("Subalbums: %u"),get_subalbum_count()); ?> &middot;
-				<?php $photosArray = query_single_row("SELECT count(*) FROM ".prefix('images'));
-				$photosNumber = array_shift($photosArray); echo sprintf(gettext("Images: %u"),$photosNumber); ?>
-				<?php if (getOption('Allow_comments')) { ?>
-					&middot;
-					<?php $commentsArray = query_single_row("SELECT count(*) FROM ".prefix('comments')." WHERE inmoderation = 0");
-					$commentsNumber = array_shift($commentsArray); echo sprintf(gettext("Comments: %u"),$commentsNumber); ?>
-				<?php } ?>
-			</p>
-			<?php printThemeInfo(); ?>
-		</small>
-		<?php printZenphotoLink(); ?><br />
-		<?php printRSSLink('Gallery','', 'Gallery RSS', ''); ?> 
-		<?php if (function_exists('printUserLogout')) printUserLogout('<br />', '', true); ?>
-		<?php	if (function_exists('printContactForm')) printCustomPageURL(gettext('Contact us'), 'contact', '', '<br />');	?>
-		</div> <!-- footer -->
 
-		<?php if (function_exists('printAdminToolbox')) printAdminToolbox(); ?>
+	<?php printFooter(true)?>
 
 </body>
 </html>

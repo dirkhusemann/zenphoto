@@ -187,9 +187,7 @@ if (!checkForPassword()) {
 		
 	</div> <!-- content -->
 
-<?php include('footer.php'); ?>
-		<!-- Administration Toolbox -->
-<?php if (function_exists('printAdminToolbox')) printAdminToolbox(); ?>
+<?php printFooter(false); ?>
 
 </body>
 </html>

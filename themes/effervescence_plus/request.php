@@ -96,20 +96,12 @@ $backgroundImagePath="";
 <div id="subcontent">
 <div id="submain">
 
-<?php  printReistrationForm();  ?>
+<?php  printRegistrationForm();  ?>
 </div>
 
 
 <!-- Footer -->
 <div class="footlinks">
-
-<?php
-if (getOption('Use_Simpleviewer') && !getOption('mod_rewrite')) {
-	/* display missing css file error */
-	echo '<div class="errorbox" id="message">';
-	echo  "<h2>" . gettext('Simpleviewer requires <em>mod_rewrite</em> to be set. Simpleviewer is disabled.') . "</h2>";
-	echo '</div>';
-} ?>
 
 <?php printThemeInfo(); ?>
 <?php printZenphotoLink(); ?>

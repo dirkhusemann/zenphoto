@@ -2,7 +2,7 @@
 /**
  * Provides a means where visitors can register and get limited site privileges.
  *
- * Place a call on printReistrationForm() where you want the form to appear.
+ * Place a call on printRegistrationForm() where you want the form to appear.
  * Probably the best use is to create a new 'custom page' script just for handling these
  * user registrations. Then put a link to that script on your index page so that people
  * who wish to register will click on the link and be taken to the registration page.
@@ -117,7 +117,7 @@ if (!OFFSET_PATH) { // handle form post
  *
  * @param string $thanks the message shown on successful registration
  */
-function printReistrationForm($thanks=NULL) {
+function printRegistrationForm($thanks=NULL) {
 	global $notify, $admin_e, $admin_n, $user;
 	if (zp_loggedin()) {
 		if (isset($_GET['userlog']) && $_GET['userlog'] == 1) {
