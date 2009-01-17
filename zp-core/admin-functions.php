@@ -1538,7 +1538,7 @@ function processAlbumEdit($index, $album) {
 	$sorttype = strtolower(sanitize($_POST[$prefix.'sortby'], 3));
 	if ($sorttype == 'custom') $sorttype = strtolower(sanitize($_POST[$prefix.'customimagesort'],3));
 	$album->setSortType($sorttype);
-	if ($sorttype == 'mManual') {
+	if ($sorttype == 'manual') {
 		$album->setSortDirection('image', 0);
 	} else {
 		if (empty($sorttype)) {
