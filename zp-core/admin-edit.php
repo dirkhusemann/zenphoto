@@ -428,7 +428,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		$albumdir = "&album=" . urlencode($albumdir);
 	}
 	if (isset($_GET['subalbumsaved'])) {
-		$album->setSubalbumSortType('Manual');
+		$album->setSubalbumSortType('manual');
 		$album->setSortDirection('album', 0);
 		$album->save();
 		echo '<div class="messagebox" id="fade-message">';
@@ -522,12 +522,12 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		?>
 		<div id="tab_subalbuminfo" class="box" style="padding: 15px;">
 			<table class="bordered" width="100%">
-			<input type="hidden" name="subalbumsortby" value="Manual" />
+			<input type="hidden" name="subalbumsortby" value="manual" />
 			<tr>
 				<td colspan="8">
 				<?php
-					$sorttype = $album->getSubalbumSortType();
-					if ($sorttype != 'Manual') {
+					$sorttype = strtolower($album->getSubalbumSortType());
+					if ($sorttype != 'manual') {
 						if ($album->getSortDirection('album')) {
 							$dir = gettext(' descending');
 						} else {
@@ -598,7 +598,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 				foreach ($sort as $key=>$value) {
 					$sort[sprintf(gettext('%s (descending)'),$key)] = $value.'_desc';
 				}
-				$sort[gettext('Manual')] = 'Manual';
+				$sort[gettext('Manual')] = 'manual';
 				ksort($sort);
 				if ($direction) $oldalbumimagesort = $oldalbumimagesort.'_desc';
 				echo gettext("Display images by:");
@@ -1002,7 +1002,7 @@ if (isset($_GET['saved'])) {
 <?php
 	displayDeleted(); /* Display a message if needed. Fade out and hide after 2 seconds. */
 	if (isset($_GET['saved'])) {
-		setOption('gallery_sorttype', 'Manual');
+		setOption('gallery_sorttype', 'manual');
 		setOption('gallery_sortdirection', 0);
 		echo '<div class="messagebox" id="fade-message">';
 		echo  "<h2>".gettext("Album order saved")."</h2>";
@@ -1029,8 +1029,8 @@ if (isset($_GET['saved'])) {
 <p><?php
 	if (count($albums) > 0) {
 		if (($_zp_loggedin & ADMIN_RIGHTS) && (count($albums)) > 1) {
-			$sorttype = getOption('gallery_sorttype');
-			if ($sorttype != 'Manual') {
+			$sorttype = strtolower(getOption('gallery_sorttype'));
+			if ($sorttype != 'manual') {
 				if (getOption('gallery_sortdirection')) {
 					$dir = gettext(' descending');
 				} else {

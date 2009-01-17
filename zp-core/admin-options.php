@@ -132,10 +132,10 @@ if (isset($_GET['action'])) {
 			setOption('server_protocol', sanitize($_POST['server_protocol'],3));
 			setOption('charset', sanitize($_POST['charset']),3);
 			setBoolOption('album_use_new_image_date', isset($_POST['album_use_new_image_date']));
-			$st = sanitize($_POST['gallery_sorttype'],3);
+			$st = strtolower(sanitize($_POST['gallery_sorttype'],3));
 			if ($st == 'custom') $st = strtolower(sanitize($_POST['customalbumsort'],3));
 			setOption('gallery_sorttype', $st);
-			if ($st == 'Manual') {
+			if ($st == 'manual') {
 				setBoolOption('gallery_sortdirection', 0);
 			} else {
 				setBoolOption('gallery_sortdirection', isset($_POST['gallery_sortdirection']));
@@ -1034,9 +1034,9 @@ if ($subtab == 'admin') {
 			<td>
 				<?php
 				$sort = $sortby;
-				$sort[gettext('Manual')] = 'Manual';
+				$sort[gettext('Manual')] = 'manual';
 				$sort[gettext('Custom')] = 'custom';
-				$cvt = $cv = getOption('gallery_sorttype');
+				$cvt = $cv = strtolower(getOption('gallery_sorttype'));
 				ksort($sort);
 				$flip = array_flip($sort);
 				if (isset($flip[$cv])) {
@@ -1044,7 +1044,7 @@ if ($subtab == 'admin') {
 				} else {
 					$dspc = 'block';
 				}
-				if (($cv == 'Manual') || ($cv == '')) {
+				if (($cv == 'manual') || ($cv == '')) {
 					$dspd = 'none';
 				} else {
 					$dspd = 'block';

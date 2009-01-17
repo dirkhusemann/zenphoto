@@ -49,7 +49,7 @@ if (!isset($_GET['album'])) {
 	}
 	$album = new Album($gallery, $folder);
 	if (isset($_GET['saved'])) {
-		$album->setSortType("Manual");
+		$album->setSortType("manual");
 		$album->setSortDirection('image', 0);
 		$album->save();
 	}

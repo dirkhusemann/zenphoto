@@ -28,10 +28,10 @@ foreach (getEnabledPlugins() as $extension) {
 	}
 }
 
-$sortby = array(gettext('Filename') => 'Filename',
-								gettext('Date') => 'Date',
-								gettext('Title') => 'Title',
-								gettext('ID') => 'ID',
+$sortby = array(gettext('Filename') => 'filename',
+								gettext('Date') => 'date',
+								gettext('Title') => 'title',
+								gettext('ID') => 'id',
 								gettext('Filemtime') => 'mtime'
 								);
 $charsets = array("ASMO-708" => "Arabic",
@@ -859,7 +859,7 @@ function printAlbumEditForm($index, $album) {
 	$tagsort = getTagOrder();
 	if ($index == 0) {
 		if (isset($saved)) {
-			$album->setSubalbumSortType('Manual');
+			$album->setSubalbumSortType('manual');
 		}
 		$suffix = $prefix = '';
 	} else {
@@ -932,7 +932,7 @@ function printAlbumEditForm($index, $album) {
 	echo "</td></tr>";
 	$sort = $sortby;
 	if (!$album->isDynamic()) {
-		$sort[gettext('Manual')] = 'Manual';
+		$sort[gettext('Manual')] = 'manual';
 	}
 	$sort[gettext('Custom')] = 'custom';
 	echo "\n<tr>";
@@ -954,14 +954,14 @@ function printAlbumEditForm($index, $album) {
 				$globalsort = gettext("parent album subalbum sort order");
 			}
 			echo "\n<option value =''>$globalsort</option>";
-			$cvt = $type = $album->get('subalbum_sort_type');
+			$cvt = $type = strtolower($album->get('subalbum_sort_type'));
 			generateListFromArray(array($type), $sort, false, true);
 			?>
 			</select>
 			</td>
 		<td>
 	<?php
-	if (($type == 'Manual') || ($type == '')) {
+	if (($type == 'manual') || ($type == '')) {
 		$dsp = 'none';
 	} else {
 		$dsp = 'block';
@@ -1023,14 +1023,14 @@ function printAlbumEditForm($index, $album) {
 				$globalsort = gettext("parent album image sort order");
 			}
 			echo "\n<option value =''>$globalsort</option>";
-			$cvt = $type = $album->get('sort_type');
+			$cvt = $type = strtolower($album->get('sort_type'));
 			generateListFromArray(array($type), $sort, false, true);
 			?>
 			</select>
 			</td>
 		<td>
 	<?php
-	if (($type == 'Manual') || ($type == '')) {
+	if (($type == 'manual') || ($type == '')) {
 		$dsp = 'none';
 	} else {
 		$dsp = 'block';
@@ -1535,10 +1535,10 @@ function processAlbumEdit($index, $album) {
 	if (isset($_POST[$prefix.'thumb'])) $album->setAlbumThumb(strip($_POST[$prefix.'thumb']));
 	$album->setShow(isset($_POST[$prefix.'Published']));
 	$album->setCommentsAllowed(isset($_POST[$prefix.'allowcomments']));
-	$sorttype = sanitize($_POST[$prefix.'sortby'], 3);
+	$sorttype = strtolower(sanitize($_POST[$prefix.'sortby'], 3));
 	if ($sorttype == 'custom') $sorttype = strtolower(sanitize($_POST[$prefix.'customimagesort'],3));
 	$album->setSortType($sorttype);
-	if ($sorttype == 'Manual') {
+	if ($sorttype == 'mManual') {
 		$album->setSortDirection('image', 0);
 	} else {
 		if (empty($sorttype)) {
@@ -1548,10 +1548,10 @@ function processAlbumEdit($index, $album) {
 		}
 		$album->setSortDirection('image', $direction);
 	}
-	$sorttype = sanitize($_POST[$prefix.'subalbumsortby'],3);
+	$sorttype = strtolower(sanitize($_POST[$prefix.'subalbumsortby'],3));
 	if ($sorttype == 'custom') $sorttype = strtolower(sanitize($_POST[$prefix.'customalbumsort'],3));
 	$album->setSubalbumSortType($sorttype);
-	if ($sorttype == 'Manual') {
+	if ($sorttype == 'manual') {
 		$album->setSortDirection('album', 0);
 	} else {
 		$album->setSortDirection('album', isset($_POST[$prefix.'album_sortdirection']));
