@@ -243,6 +243,10 @@ if (isset($_GET['action'])) {
 			setBoolOption('image_allow_upscale', isset($_POST['image_allow_upscale']));
 			setBoolOption('thumb_sharpen', isset($_POST['thumb_sharpen']));
 			setBoolOption('image_sharpen', isset($_POST['image_sharpen']));
+			setOption('sharpen_amount', sanitize_numeric($_POST['sharpen_amount']));
+			$num = str_replace(',', '.', sanitize($_POST['sharpen_radius']));
+			if (is_numeric($num)) setOption('sharpen_radius', $num);
+			setOption('sharpen_threshold', sanitize_numeric($_POST['sharpen_threshold']));
 			
 			$old = getOption('fullimage_watermark');
 			if (isset($_POST['fullimage_watermark'])) {
@@ -1215,11 +1219,27 @@ if ($subtab == 'admin') {
 		</tr>
 		<tr>
 			<td><?php echo gettext("Sharpen:"); ?></td>
-			<td><input type="checkbox" name="image_sharpen" value="1"
-			<?php echo checked('1', getOption('image_sharpen')); ?> /> Images
-			<input type="checkbox" name="thumb_sharpen" value="1"
-			<?php echo checked('1', getOption('thumb_sharpen')); ?> /> Thumbs</td>
-			<td><?php echo gettext("Add a small amount of unsharp mask to images and/or thumbnails. <strong>Warning</strong>: can overload slow servers."); ?></td>
+			<td>
+				<input type="checkbox" name="image_sharpen" value="1"
+				<?php echo checked('1', getOption('image_sharpen')); ?> /> Images
+				<input type="checkbox" name="thumb_sharpen" value="1"
+				<?php echo checked('1', getOption('thumb_sharpen')); ?> /> Thumbs
+				<br />
+				<br /><?php echo gettext('Amount'); ?>
+				<input type="text" name = "sharpen_amount" size="3" value="<?php echo getOption('sharpen_amount'); ?>" />
+				<br /><?php echo gettext('Radius'); ?>
+				<input type="text" name = "sharpen_radius" size="2" value="<?php echo getOption('sharpen_radius'); ?>" />
+				<br /><?php echo gettext('Threshold'); ?>
+				<input type="text" name = "sharpen_threshold" size="3" value="<?php echo getOption('sharpen_threshold'); ?>" />
+			</td>
+			<td>
+				<?php
+				echo gettext("Add an unsharp mask to images and/or thumbnails. <strong>Warning</strong>: can overload slow servers.").'<br/>';
+				echo gettext("<em>Amount</em>: the strength of the sharpening effect. Nominal values are between 0 and 100.").'<br/>';
+				echo gettext("<em>Radius</em>: the pixel radius of the sharpening mask. A smaller radius sharpens smaller details, and a larger radius sharpens larger details.").'<br/>';
+				echo gettext("<em>Threshold</em>: the color difference threshold required for sharpening. A low threshold sharpens all edges including faint ones, while a higher threshold only sharpens more distinct edges.");
+				?>
+			</td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Watermark images:"); ?></td>

@@ -229,4 +229,8 @@ function setDefault($option, $default) {
 	setOptionDefault('UTF8_image_URI', 0);
 	setOptionDefault('captcha', 'zenphoto');
 	
+	setOptionDefault('sharpen_amount', 40);
+	setOptionDefault('sharpen_radius', 0.5);
+	setOptionDefault('sharpen_threshold', 3);
+	
 ?>

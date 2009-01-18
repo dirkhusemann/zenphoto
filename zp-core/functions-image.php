@@ -489,7 +489,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		
 		
 		if (($thumb && $sharpenthumbs) || (!$thumb && $sharpenimages)) {
-			unsharp_mask($newim, 40, 0.5, 3);
+			unsharp_mask($newim, getOption('sharpen_amount'), getOption('sharpen_radius'), getOption('sharpen_threshold'));
 		}
 		$watermark_image = false;
 		if ($thumbWM) {
