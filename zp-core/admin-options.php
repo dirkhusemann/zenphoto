@@ -14,11 +14,10 @@ if (!is_null(getOption('admin_reset_date'))) {
 		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL() );
 		exit();
 	}
-}
-
-if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
-	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
-	exit();
+	if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
+		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
+		exit();
+	}
 }
 
 $gallery = new Gallery();

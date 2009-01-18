@@ -39,7 +39,7 @@ if (is_array($result)) {
 
 require_once(dirname(__FILE__).'/functions-i18n.php');
 
-setMainDomain();
+$_zp_setupCurrentLocale_result = setMainDomain();
 
 /**
  * parses the allowed HTML tags for use by htmLawed

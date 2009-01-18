@@ -205,11 +205,12 @@ function setPluginDomain($plugindomain) {
 
 /**
  * Sets the locale, etc. to the zenphoto domain details.
+ * Returns the rewult of setupCurrentLocale()
  *
  */
 function setMainDomain() {
 	getUserLocale();
-	setupCurrentLocale();
+	return setupCurrentLocale();
 }
 
 /**

@@ -168,8 +168,7 @@ if (!$checked) {
 	setupLog("Checked");
 }
 
-getUserLocale();
-$setlocaleresult = setupCurrentLocale();
+if (!isset($_zp_setupCurrentLocale_result)) $_zp_setupCurrentLocale_result = setMainDomain();
 
 $taskDisplay = array('create' => gettext("create"), 'update' => gettext("update"));
 ?>
@@ -327,6 +326,7 @@ h4 {
 
 <div id="content">
 <?php
+$warn = false;
 if (!$checked) {
 	// Some descriptions about setup/upgrade.
   if ($upgrade) {
@@ -349,13 +349,21 @@ if (!$checked) {
 	global $_zp_conf_vars;
 
 	function checkMark($check, $text, $sfx, $msg) {
+		global $warn;
 		$dsp = '';
 		if ($check > 0) {$check = 1; }
 		echo "\n<br/><span class=\"";
 		switch ($check) {
-			case 0: $dsp = "fail"; break;
-			case -1: $dsp = "warn"; break;
-			case 1: $dsp = "pass"; break;
+			case 0:
+				$dsp = "fail";
+				break;
+			case -1:
+				$dsp = "warn";
+				$warn = true;
+				break;
+			case 1:
+				$dsp = "pass";
+				break;
 		}
 		echo $dsp."\">$text</span>";
 		$dsp .= ' '.trim($text);
@@ -534,7 +542,7 @@ if (!$checked) {
 	}
 
 	checkMark($noxlate, gettext("PHP <code>gettext()</code> support"), ' '.gettext("[is not present]"), gettext("Localization of Zenphoto currently requires native PHP <code>gettext()</code> support"));
-	if ($setlocaleresult === false) {
+	if ($_zp_setupCurrentLocale_result === false) {
 		checkMark(-1, 'PHP <code>setlocale()</code>', ' '.gettext("failed"), gettext("Locale functionality is not implemented on your platform or the specified locale does not exist. Language translation may not work.").'<br />'.gettext('See the troubleshooting guide on zenphoto.org for details.'));
 	}
 	if (function_exists('mb_internal_encoding')) {
@@ -1507,7 +1515,10 @@ if (file_exists("zp-config.php")) {
 		} else {
 			$mod = '';
 		}
-		echo "<p><a href=\"?checked&amp;$task$mod\" title=\"".gettext("create and or update the database tables.")."\" style=\"font-size: 15pt; font-weight: bold;\">".gettext("Go!")."</a></p>";
+		echo "<div class='buttons'>";
+		if ($warn) $img = 'warn.png'; else $img = 'pass.png';
+		echo "<p><a href=\"?checked&amp;$task$mod\" title=\"".gettext("create and or update the database tables.")."\" style=\"font-size: 15pt; font-weight: bold;\"><img src='images/$img' />".gettext("Go")."</a></p>";
+		echo '</div>';
 	} else {
 		echo "<div class=\"error\">";
 		echo "<h3>".gettext("database did not connect")."</h3>";
