@@ -242,10 +242,7 @@ function setupCurrentLocale($plugindomain='', $type='') {
 		$locale = getOption("locale");
 		@putenv("LANG=$locale");
 		// gettext setup
-		$result = setlocale(LC_ALL, $locale.'.'.$encoding);
-		if ($result === false) {
-			$result = setlocale(LC_ALL, $locale);
-		}
+		$result = setlocale(LC_ALL, $locale.'.'.$encoding, $locale);
 		if (!$result) { // failed to set the locale
 			if (isset($_POST['dynamic-locale'])) { // and it was chosen via dynamic-locale
 				$cookiepath = WEBPATH;
@@ -273,7 +270,7 @@ function setupCurrentLocale($plugindomain='', $type='') {
 				$domain = 'zenphoto';
 				break;
 		}
-		$result = false;
+		$result = true;
 		if (DEBUG_LOCALE) debugLogBacktrace("setupCurrentLocale($plugindomain, $type): domainpath=$domainpath");
 	}
 	bindtextdomain($domain, $domainpath);

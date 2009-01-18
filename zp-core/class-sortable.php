@@ -9,6 +9,7 @@
 /**
  * Initializes a sortable list and echoes needed javascript. Can be called multiple times in a page.
  * 
+ * @param object $jQuerySortable the jQuerySortable instance for the sort
  * @param string $sortContainerID The HTML id of container that will contain the sortable elements.
  * @param string $orderedList     The array that will contain the ordered elements.
  * @param string $sortableElement The elements that will be sorted (eg 'div', 'img', '.someclass')
@@ -25,6 +26,7 @@ function zenSortablesHeader(&$jQuerySortable, $sortContainerID, $orderedList, $s
 /**
  * Insert the Save button that will POST the sortable list
  *
+ * @param object $jQuerySortable the jQuerySortable instance for the sort
  * @param string $link  The destination of the POST operation.
  * @param string $label The label for the button.
  *
@@ -39,6 +41,7 @@ function zenSortablesSaveButton(&$jQuerySortable, $link, $label="Save") {
 /**
  * Handles the POST operation of the sorted list.
  * 
+ * @param object $jQuerySortable the jQuerySortable instance for the sort
  * @param string $orderedList     The list of ordered elements to be saved.
  * @param string $sortContainerID The parent container for the sortable elements.
  * @param string $dbtable         The database table that will be updated.
@@ -59,9 +62,9 @@ function zenSortablesPostHandler(&$jQuerySortable, $orderedList, $sortContainerI
 /**
  * Save the new sort order for a sortable item.
  *
- * @param string dbtable   The dababase table that will be updated.
- * @param string id        The id of the sortable item, as defined in the id column.
- * @param string sortorder The new sort order for this item.
+ * @param string $dbtable   The dababase table that will be updated.
+ * @param string $id        The id of the sortable item, as defined in the id column.
+ * @param string $sortorder The new sort order for this item.
  * 
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0 

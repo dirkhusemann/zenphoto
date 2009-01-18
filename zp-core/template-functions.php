@@ -116,6 +116,7 @@ function zenJavascript() {
 function printAdminToolbox($id='admin') {
 	global $_zp_current_album, $_zp_current_image, $_zp_current_search, $_zp_loggedin, $_zp_gallery_page;
 	if (zp_loggedin()) {
+		echo '<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.'/js/admin.js"></script>';
 		$zf = WEBPATH."/".ZENFOLDER;
 		$dataid = $id . '_data';
 		$page = getCurrentPage();
@@ -188,7 +189,7 @@ function printAdminToolbox($id='admin') {
 			if (isMyAlbum($albumname, UPLOAD_RIGHTS) && !$_zp_current_album->isDynamic()) {
 				// provide an album upload link if the admin has upload rights for this album and it is not a dynamic album
 				echo "<li>";
-				printLink($zf . '/admin-upload.php?amp;album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL);
+				printLink($zf . '/admin-upload.php?album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL);
 				echo "</li>\n";
 				echo "<li>";
 				printLink($zf . '/admin-upload.php?new&amp;album=' . urlencode($albumname), gettext("New Album Here"), NULL, NULL, NULL);
