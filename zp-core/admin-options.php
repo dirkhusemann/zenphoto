@@ -141,6 +141,9 @@ if (isset($_GET['action'])) {
 			}
 			setOption('feed_items', sanitize($_POST['feed_items'],3));
 			setOption('feed_imagesize', sanitize($_POST['feed_imagesize'],3));
+			setOption('feed_sortorder', sanitize($_POST['feed_sortorder'],3));
+			setBoolOption('feed_enclosure', isset($_POST['feed_enclosure']));
+			setBoolOption('feed_mediarss', isset($_POST['feed_mediarss']));
 			setBoolOption('login_user_field', isset($_POST['login_user_field']));
 			$searchfields = 0;
 			foreach ($_POST as $key=>$value) {
@@ -1022,6 +1025,33 @@ if ($subtab == 'admin') {
 			<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="feed_imagesize"
 				value="<?php echo htmlspecialchars(getOption('feed_imagesize'));?>" /></td>
 			<td><?php echo gettext("The size you want your images to have in your site's RSS feed."); ?></td>
+		</tr>
+		<tr>
+			<td><?php echo gettext("RSS feed sort order:"); ?></td>
+			<td>
+			<?php 
+			$feedsortorder = array(gettext('latest by id')=>'latest',
+						gettext('latest by date')=>'latest-date',
+						gettext('latest by mtime')=>'latest-mtime'
+						);
+			?>		
+			<select id="feed_sortorder" name="feed_sortorder">
+			<?php generateListFromArray(array(getOption("feed_sortorder")), $feedsortorder, false, true); ?>
+			</select>
+			</td>
+			<td><?php echo gettext("Choose between 'latest' for the latest uploaded, 'latest-date' for the latest uploaded, but fetched by date, 'latest-mtime' for the latest uploaded, but fetched by mtime."); ?></td>
+		</tr>
+		<tr>
+			<td><?php echo gettext("RSS enclosure:"); ?></td>
+			<td><input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="feed_enclosure"
+				value="1" <?php echo checked('1', getOption('feed_enclosure')); ?> /></td>
+			<td><?php echo gettext("Check if you want to enable the rss enclosure feature that provides a direct download for full images, movies etc. from within certain rss reader clients."); ?></td>
+		</tr>
+			<tr>
+			<td><?php echo gettext("Media RSS:"); ?></td>
+			<td><input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="feed_mediarss"
+				value="1" <?php echo checked('1', getOption('feed_mediarss')); ?> /></td>
+			<td><?php echo gettext("Check if media rss support to be turned on used by some services and programs."); ?></td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Album date:"); ?></td>

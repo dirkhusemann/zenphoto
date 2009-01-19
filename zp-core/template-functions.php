@@ -3681,6 +3681,7 @@ function getAlbumId() {
  */
 function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=null, $lang='') {
 	global $_zp_current_album;
+	$host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 	if ($printIcon) {
 		$icon = ' <img src="' . FULLWEBPATH . '/' . ZENFOLDER . '/images/rss.gif" alt="RSS Feed" />';
 	} else {
@@ -3694,22 +3695,22 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
 	}
 	switch($option) {
 		case "Gallery":
-			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php?lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss.php?lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
 		case "Album":
-			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php?albumnr=".getAlbumId()."&amp;albumname=".urlencode(getAlbumTitle())."&amp;lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss.php?albumtitle=".urlencode(getAlbumTitle())."&amp;albumname=".urlencode($_zp_current_album->getFolder())."&amp;lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
 		case "Collection":
-			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss.php?albumname=".urlencode(getAlbumTitle())."&amp;folder=".urlencode($_zp_current_album->getFolder())."&amp;lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss.php?albumtitle=".urlencode(getAlbumTitle())."&amp;folder=".urlencode($_zp_current_album->getFolder())."&amp;lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
 		case "Comments":
-			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss-comments.php?lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-comments.php?lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
 		case "Comments-image":
-			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss-comments.php?id=".getImageID()."&amp;title=".urlencode(getImageTitle())."&amp;type=image&amp;lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-comments.php?id=".getImageID()."&amp;title=".urlencode(getImageTitle())."&amp;type=image&amp;lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
 		case "Comments-album":
-			echo $prev."<a $class href=\"http://".$_SERVER['HTTP_HOST'].WEBPATH."/rss-comments.php?id=".getAlbumID()."&amp;title=".urlencode(getAlbumTitle())."&amp;type=album&amp;lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-comments.php?id=".getAlbumID()."&amp;title=".urlencode(getAlbumTitle())."&amp;type=album&amp;lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
 	}
 }
@@ -3721,6 +3722,8 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
  * 																		"Album" for only the album it is called from
  * 																		"Collection" for the album it is called from and all of its subalbums
  * 																		 "Comments" for all comments
+ * 																		"Comments-image" for comments of only the image it is called from
+ * 																		"Comments-album" for comments of only the album it is called from
  * @param string $linktext title of the link
  * @param string $lang optional to display a feed link for a specific language. Enter the locale like "de_DE" (the locale must be installed on your Zenphoto to work of course). If empty the locale set in the admin option or the language selector (getOption('locale') is used.
  *
@@ -3729,6 +3732,7 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
  * @since 1.1
  */
 function getRSSHeaderLink($option, $linktext='', $lang='') {
+	global $_zp_current_album;
 	$host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 	if(empty($lang)) {
 		$lang = getOption("locale");
@@ -3737,11 +3741,16 @@ function getRSSHeaderLink($option, $linktext='', $lang='') {
 		case "Gallery":
 			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss.php?lang=".$lang."\" />\n";
 		case "Album":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss.php?albumnr=".getAlbumId()."&amp;albumname=".urlencode(getAlbumTitle())."&amp;lang=".$lang."\" />\n";
+			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss.php?albumtitle=".urlencode(getAlbumTitle())."&amp;albumname=".urlencode($_zp_current_album->getFolder())."&amp;lang=".$lang."\" />\n";
 		case "Collection":
-			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss.php?albumname=".urlencode(getAlbumTitle())."&amp;folder=".urlencode($_zp_current_album->getFolder())."&amp;lang=".$lang."\" />\n";
+			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss.php?albumtitle=".urlencode(getAlbumTitle())."&amp;folder=".urlencode($_zp_current_album->getFolder())."&amp;lang=".$lang."\" />\n";
 		case "Comments":
 			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss-comments.php?lang=".$lang."\" />\n";
+		case "Comments-image":
+			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss-comments.php?id=".getImageID()."&amp;title=".urlencode(getImageTitle())."&amp;type=image&amp;lang=".$lang."\" />\n";
+		case "Comments-album":
+			return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"".html_encode($linktext)."\" href=\"http://".$host.WEBPATH."/rss-comments.php?id=".getAlbumID()."&amp;title=".urlencode(getAlbumTitle())."&amp;type=album&amp;lang=".$lang."\" />\n";
+	
 	}
 }
 
