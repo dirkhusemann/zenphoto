@@ -73,7 +73,6 @@ function zenSortablesPostHandler(&$jQuerySortable, $orderedList, $sortContainerI
  * @since  1.0.0 
  */
 function saveSortOrder($dbtable, $id, $sortorder) {
-	
 	// This is a nasty hack really, but it works.. The hack being we need id_XX in the element id.
 	$real_id = substr($id, 0, 3);
 	
@@ -116,7 +115,7 @@ class jQuerySortable {
 			// <![CDATA[
 			function populateHiddenVars() {
 				<?php foreach($this->lists as $list) { ?>
-					jQuery('#<?php echo $list['input'];?>').val(jQuery('#<?php echo $list['list'];?>').sortable('serialize',{key:'<?php echo $list['list'];?>[]'}));
+					jQuery('#<?php echo $list['input'];?>').val(jQuery('#<?php echo $list['list'];?>').sortable('serialize',{key:'<?php echo $list['list'];?>'}));
 				<?php } ?>
 				return true;
 			}

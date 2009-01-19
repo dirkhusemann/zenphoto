@@ -1,10 +1,10 @@
 ************************************
-*   Notes from Ozh - 19/jan/2009   *
+*   Notes from Ozh - 06/jan/2009   *
 ************************************
 
 jQuery UI files to get from http://ui.jquery.com/download :
 - Select
 	- Core
 	- all Interaction components: Draggable, Droppable, Resizable, Selectable, Sortable
-- Pick version: 1.6rc5 as of zenphoto SVN build 3338 (updated for jQuery 1.3)
+- Pick version: Stable (1.5.3 as of zenphoto 1.2.2)
 - Choose: No compression (we don't care as it is used only in the backend)
