@@ -219,10 +219,10 @@ function printFooter($page) {
 		<small><?php printThemeInfo(); ?></small>
 		<?php printZenphotoLink(); ?>
 		<?php if ($page == 'gallery') { echo '<br />'; printRSSLink('Gallery','', 'Gallery RSS', ''); } ?>
-		<?php if (function_exists('printLanguageSelector')) { printLanguageSelector(); } ?>
 		<?php	if (function_exists('printUserLogout')) printUserLogout('<br />', '', true); ?>
 		<?php	if (function_exists('printContactForm')) printCustomPageURL(gettext('Contact us'), 'contact', '', '<br />');	?>
 		<?php if (!zp_loggedin() && function_exists('printRegistrationForm')) printCustomPageURL(gettext('Register for this site'), 'request', '', '<br />');	?>
+		<?php if (function_exists('printLanguageSelector')) { printLanguageSelector(); } ?>
 	</div>
 	<!-- Administration Toolbox -->
 	<?php
