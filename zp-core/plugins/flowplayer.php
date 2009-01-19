@@ -81,8 +81,7 @@ class flowplayer {
 			$autoplay = ""; // actually false should work, but it doesn't...
 		}
 		if($ext === ".mp3") {
-			return '
-			<p id="playerContainer'.$count.'"><a href="http://www.adobe.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
+			return '<p id="playerContainer'.$count.'">'.gettext('<a href="http://www.adobe.com/go/getflashplayer">Get Flash</a> to see this player.').'</p>
 			<script>
 			$("#playerContainer'.$count.'").flashembed({
       	src:\'' . WEBPATH . '/' . ZENFOLDER . '/plugins/flowplayer/FlowPlayerLight.swf\',

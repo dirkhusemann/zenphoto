@@ -1126,7 +1126,7 @@ if ($subtab == 'admin') {
 			<td><?php echo gettext("Enable gallery sessions:"); ?></td>
 			<td><input type="checkbox" name="album_session" value="1"
 			<?php echo checked('1', getOption('album_session')); ?> /></td>
-			<td><?php echo gettext("Put a checkmark here if you are having issues with with album password cookies not being retained. Setting the option causes zenphoto to use sessions rather than cookies."); ?></td>
+			<td><?php echo gettext("Put a checkmark here if you are having issues with album password cookies not being retained. Setting the option causes zenphoto to use sessions rather than cookies."); ?></td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Visual Thumb selection:"); ?></td>
@@ -1273,7 +1273,7 @@ if ($subtab == 'admin') {
 			?>
 			<br /><br />
 			<?php
-				printf(gettext('Images are in png-24 format and arelocated in the <code>%s/watermarks/</code> folder.'), ZENFOLDER);
+				printf(gettext('Images are in png-24 format and are located in the <code>%s/watermarks/</code> folder.'), ZENFOLDER);
 			?>
 			</td>
 												           
@@ -1340,7 +1340,7 @@ if ($subtab == 'admin') {
 				?>
 				</p>
 			</td>
-			<td><?php echo gettext("Select the level of protection for full sized images. <em>Download</em> forces a download dialog rather than displaying the image. <em>No&nbsp;access</em> prevents a link to the image from being shown. <em>Protected&nbsp;view</em> forces image processing before the image is diaplayed, for instance to apply a watermark or to check passwords. <em>Unprotected</em> allows direct display of the image."); ?>
+			<td><?php echo gettext("Select the level of protection for full sized images. <em>Download</em> forces a download dialog rather than displaying the image. <em>No&nbsp;access</em> prevents a link to the image from being shown. <em>Protected&nbsp;view</em> forces image processing before the image is displayed, for instance to apply a watermark or to check passwords. <em>Unprotected</em> allows direct display of the image."); ?>
 			<br /><br />
 			<?php echo gettext("Disabling hotlinking prevents linking to the full image from other domains. If enabled, external links are redirect to the image page. If you are having problems with full images being displayed, try disabling this setting. Hotlinking is not prevented if <em>Full&nbsp;image&nbsp;protection</em> is <em>Unprotected</em> or if the image is cached."); ?>
 			<br /><br />

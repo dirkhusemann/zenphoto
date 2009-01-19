@@ -192,7 +192,7 @@ function printAdminToolbox($id='admin') {
 				printLink($zf . '/admin-upload.php?album=' . urlencode($albumname), gettext("Upload Here"), NULL, NULL, NULL);
 				echo "</li>\n";
 				echo "<li>";
-				printLink($zf . '/admin-upload.php?new&amp;album=' . urlencode($albumname), gettext("New Album Here"), NULL, NULL, NULL);
+				printLink($zf . '/admin-upload.php?new&album=' . urlencode($albumname), gettext("New Album Here"), NULL, NULL, NULL);
 				echo "</li>\n";
 			}
 			// set the return to this album/page

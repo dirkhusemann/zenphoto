@@ -226,8 +226,8 @@ require_once('normalizer.php');
 		<div id="footer">
 			<hr />
 			<p>
-				<a href="http://stopdesign.com/templates/photos/"><?php echo gettext('Photo Templates</a> from Stopdesign.'); ?>
-		<?php printZenphotoLink(); ?>
+				<?php echo gettext('<a href="http://stopdesign.com/templates/photos/">Photo Templates</a> from Stopdesign.'); ?>
+				<?php printZenphotoLink(); ?>
 			</p>
 		</div>
 		<?php if (function_exists('printAdminToolbox')) printAdminToolbox(); ?>

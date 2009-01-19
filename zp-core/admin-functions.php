@@ -16,10 +16,9 @@ define('TEXT_INPUT_SIZE', 48);
 require_once(dirname(__FILE__).'/class-load.php');
 require_once(dirname(__FILE__).'/functions.php');
 
-// load the class plugins
-$class_optionInterface = array();
+// load the filter plugins
 foreach (getEnabledPlugins() as $extension) {
-	if (strpos($extension, 'class-') === 0 || strpos($extension, 'filter-') === 0) {
+	if (strpos($extension, 'filter-') === 0) {
 		$option_interface = NULL;
 		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
 		if (!is_null($option_interface)) {
