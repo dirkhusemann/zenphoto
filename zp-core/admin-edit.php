@@ -344,7 +344,7 @@ if ($sortablepage = (empty($subtab) && !isset($_GET['album']) && !isset($_GET['m
 printAdminHeader();
 
 if ($sortablepage) {
-	zenSortablesHeader($_zp_sortable_list, 'albumList', 'albumOrder', 'div', "handle:'.handle',axis:'y',containment:'table',cursor:'move',update:function(){populateHiddenVars();}");
+	zenSortablesHeader($_zp_sortable_list, 'albumList', 'albumOrder', 'div', "handle:'.handle', axis:'y', containment:'table', placeholder:'zensortable_row'");
 }
 if (empty($subtab)) {
 	?>

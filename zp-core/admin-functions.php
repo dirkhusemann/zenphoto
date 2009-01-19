@@ -278,9 +278,10 @@ function printViewLink($album, $text, $title=NULL, $class=NULL, $id=NULL) {
 /**
  * Print the thumbnail for a particular Image.
  *
- * @param $image The Image object whose thumbnail we want to display.
- * @param $class Optional class attribute for the hyperlink.  Default is NULL.
- * @param $id	 Optional id attribute for the hyperlink.  Default is NULL.
+ * @param $image object The Image object whose thumbnail we want to display.
+ * @param $class string Optional class attribute for the hyperlink.  Default is NULL.
+ * @param $id	 string Optional id attribute for the hyperlink.  Default is NULL.
+ * @param $bg    
  *
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
@@ -1457,7 +1458,7 @@ function printAlbumEditRow($album) {
 	echo "</td>\n<td style=\"text-align:center;\" width='$wide';>";
 	if ($album->getShow()) {
 		echo '<a class="publish" href="?action=publish&value=0&amp;album=' . urlencode($album->name) .
- 				'" title="'.sprintf(gettext('Publish the album %s'), $album->name) . '">';
+ 				'" title="'.sprintf(gettext('Unpublish the album %s'), $album->name) . '">';
 		echo '<img src="images/pass.png" style="border: 0px;" alt="'.gettext('Published').'" /></a>';
 	} else {
 		echo '<a class="publish" href="?action=publish&value=1&amp;album=' . urlencode($album->name) .

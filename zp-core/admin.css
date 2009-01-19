@@ -486,6 +486,26 @@ td.handle {
 	cursor: move;
 }
 
+.zensortable_row, .zensortable_img {
+	background:#D0DBDF;
+	float:left;
+	margin:1px;
+	padding:0px;
+	border:1px solid #ff5 !important;
+	border:0px;
+	color:#ff8;
+}
+
+.zensortable_img {
+	width:85px;
+	height:85px;
+}
+
+.zensortable_row {
+	width:100%;
+	height:60px;
+}
+
 /* Forms
 ------------------------------ */
 input {

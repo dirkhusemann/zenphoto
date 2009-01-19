@@ -13,12 +13,15 @@
  * @param string $sortContainerID The HTML id of container that will contain the sortable elements.
  * @param string $orderedList     The array that will contain the ordered elements.
  * @param string $sortableElement The elements that will be sorted (eg 'div', 'img', '.someclass')
- * @param string $options         Additional options to be passed to jQuery.sortable
+ * @param string $extraOptions    Additional options to be passed to jQuery.sortable
  * 
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function zenSortablesHeader(&$jQuerySortable, $sortContainerID, $orderedList, $sortableElement, $options="") {
+function zenSortablesHeader(&$jQuerySortable, $sortContainerID, $orderedList, $sortableElement, $extraOptions="") {
+	$options = "cursor:'move', tolerance:'tolerance', opacity:0.8, update:function(){populateHiddenVars();}";
+	if ($extraOptions)
+		$options .= ', '.$extraOptions;
 	$jQuerySortable->addList($sortContainerID, $orderedList, $sortableElement, $options);
 	$jQuerySortable->printJavascript();
 }
@@ -113,7 +116,7 @@ class jQuerySortable {
 			// <![CDATA[
 			function populateHiddenVars() {
 				<?php foreach($this->lists as $list) { ?>
-					jQuery('#<?php echo $list['input'];?>').val(jQuery('#<?php echo $list['list'];?>').sortable('serialize',{key:'<?php echo $list['list'];?>'}));
+					jQuery('#<?php echo $list['input'];?>').val(jQuery('#<?php echo $list['list'];?>').sortable('serialize',{key:'<?php echo $list['list'];?>[]'}));
 				<?php } ?>
 				return true;
 			}
@@ -127,8 +130,7 @@ class jQuerySortable {
 			jQuery(document).ready(function(){
 			<?php foreach($this->lists as $list) { ?>
 				jQuery('#<?php echo $list['list'];?>')
-					.sortable({items:'<?php echo $list['items'];?>'<?php echo $list['additionalOptions'];?>})
-					.sortable('enable');
+					.sortable({items:'<?php echo $list['items'];?>'<?php echo $list['additionalOptions'];?>});
 			<?php } ?>
 			});
 			// ]]>
@@ -147,7 +149,7 @@ class jQuerySortable {
 
 		foreach($this->lists as $list) {
 			if ($this->debugging)
-				echo '<br>'.$list['input'].': ';
+				echo '<br clear="all">'.$list['input'].': ';
 			?>
 			<input type="<?php echo $inputType;?>" name="<?php echo $list['input'];?>" id="<?php echo $list['input'];?>" style='width:100%'>
 			<?php
@@ -160,6 +162,7 @@ class jQuerySortable {
 		?>
 		<form action="<?php echo $action;?>" method="<?php echo $method;?>" name="<?php echo $formName;?>" id="<?php echo $formName;?>">
 			<?php $this->printHiddenInputs();?>
+			<br clear="all"/>
 			<input type="hidden" name="sortableListsSubmitted" value="true">
 			<input type="submit" value="<?php echo $submitText;?>" class="<?php echo $submitClass;?>">
 		</form>
