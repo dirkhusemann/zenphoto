@@ -115,6 +115,9 @@ function setDefault($option, $default) {
 	setOptionDefault('current_theme', 'default');
 	setOptionDefault('feed_items', 10);
 	setOptionDefault('feed_imagesize', 240);
+	setOptionDefault('feed_sortorder', 'latest');
+	setOptionDefault('feed_enclosure', '0');
+	setOptionDefault('feed_mediarss', '0');
 	setOptionDefault('search_fields', 32767);
 	$a =							"a => (href => () title => ())\n" .
 	 									"abbr =>(title =>())\n" .

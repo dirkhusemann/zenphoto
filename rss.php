@@ -3,20 +3,14 @@ if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 define('OFFSET_PATH', 0);
 header('Content-Type: application/xml');
 require_once(ZENFOLDER . "/template-functions.php");
+require_once(ZENFOLDER . "/plugins/image_album_statistics.php");
 
-if(isset($_GET['albumnr'])) {
-	$albumnr = sanitize_numeric($_GET['albumnr']);
-} else {
-	$albumnr = NULL;
-}
 if(isset($_GET['albumname'])) {
-	$albumname = sanitize_path($_GET['albumname']);
-} else {
-	$albumname = NULL;
-}
-
-if(isset($_GET['folder'])) {
+	$albumfolder = sanitize_path($_GET['albumname']);
+	$collection = FALSE;
+} else if(isset($_GET['folder'])) {
 	$albumfolder = sanitize_path($_GET['folder']);
+	$collection = TRUE;
 } else {
 	$albumfolder = NULL;
 }
@@ -26,25 +20,35 @@ if(isset($_GET['lang'])) {
 } else {
 	$locale = getOption('locale');
 }
+
 $validlocale = strtr($locale,"_","-"); // for the <language> tag of the rss
 $host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 
-// check passwords
-$passwordcheck = "";
-$albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
-foreach($albumscheck as $albumcheck) {
-	if(!checkAlbumPassword($albumcheck['folder'], $hint)) {
-		$albumpasswordcheck= " AND albums.id != ".$albumcheck['id'];
-		$passwordcheck = $passwordcheck.$albumpasswordcheck;
-	}
+if(isset($_GET['albumtitle'])) { 
+	$albumname = " (".sanitize(urldecode($_GET['albumtitle'])).")";
+} else if ($albumnr != "") {
+	$albumname = "";
 }
-if ($albumname != "") {
-	$albumname = " (".$albumname.")";
-}
+
 if(getOption('mod_rewrite')) {
-	$albumpath = "/"; $imagepath = "/"; $modrewritesuffix = getOption('mod_rewrite_image_suffix');
+	$albumpath = "/"; $imagepath = "/"; 
+	$modrewritesuffix = getOption('mod_rewrite_image_suffix');
 } else  {
-	$albumpath = "/index.php?album="; $imagepath = "&amp;image="; $modrewritesuffix = ""; }
+	$albumpath = "/index.php?album="; 
+	$imagepath = "&amp;image="; 
+	$modrewritesuffix = ""; }
+
+if(isset($_GET['size'])) {
+	$size = sanitize_numeric($_GET['size']);
+} else {
+	$size = NULL;
+}
+if(is_numeric($size) && !is_null($size) && $size < getOption('feed_imagesize')) {
+	$size = $size;
+} else {
+	$size = getOption('feed_imagesize'); // uncropped image size
+}
+$items = getOption('feed_items'); // # of Items displayed on the feed
 
 ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -67,61 +71,79 @@ if(getOption('mod_rewrite')) {
 <managingEditor><?php echo "$adminemail ($adminname)"; ?></managingEditor>
 <webMaster><?php echo "$adminemail ($adminname)"; ?></webMaster>
 <?php
-if(isset($_GET['size'])) {
-$size = sanitize_numeric($_GET['size']);
-} else {
-	$size = NULL;
-}
-if(is_numeric($size) && !is_null($size) && $size < getOption('feed_imagesize')) {
-  $s = $size;
-} else {
-	$s = getOption('feed_imagesize'); // uncropped image size
-}
-$items = getOption('feed_items'); // # of Items displayed on the feed
+$result = getImageStatistic($items,getOption("feed_sortorder"),$albumfolder,$collection);
 
-db_connect();
-
-if (is_numeric($albumnr) && !is_null($albumnr)) {
-	$albumWhere = "images.albumid = $albumnr AND";
-} else if (!is_null($albumfolder)) {
-	$albumWhere = "folder LIKE '".$albumfolder."/%' AND ";
-} else {
-	$albumWhere = "";
-}
-
-$result = query_full_array("SELECT images.albumid, images.date AS date, images.mtime AS mtime, images.filename AS filename, images.desc, images.title AS title, " .
- 														"albums.folder AS folder, albums.title AS albumtitle, images.show, albums.show, albums.password FROM " .
-															prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
-															" WHERE ".$albumWhere." images.albumid = albums.id AND images.show=1 AND albums.show=1 ".
-															" AND albums.folder != ''".$passwordcheck.
-															" ORDER BY images.mtime DESC LIMIT ".$items);
-
-foreach ($result as $images) {
-	$imagpathnames = explode('/', $images['folder']);
-	foreach ($imagpathnames as $key=>$name) {
-		$imagpathnames[$key] = rawurlencode($name);
+foreach ($result as $image) {
+	$ext = strtolower(strrchr($image->filename, "."));
+	$albumobj = $image->getAlbum();
+	$imagelink = $host.WEBPATH.$albumpath.$albumobj->name.$imagepath.$image->filename.$modrewritesuffix;
+	$fullimagelink = $host.WEBPATH."/albums/".$albumobj->name."/".$image->filename;
+	$thumburl = '<img border="0" src="'.$image->getCustomImage($size, NULL, NULL, NULL, NULL, NULL, NULL, TRUE).'" alt="'. $image->getTitle() .'" />';
+	$imagecontent = '<![CDATA[<a title="'.$image->getTitle().' in '.$albumobj->getTitle().'" href="http://'.$imagelink.'">'.$thumburl.'</a><p>' . $image->getDesc() . '</p>]]>';
+	$videocontent = '<![CDATA[<a title="'.$image->getTitle().' in '.$albumobj->getTitle().'" href="http://'.$imagelink.'">'. $image->filename.'</a><p>' . $image->getDesc() . '</p>]]>';
+	$datecontent = '<![CDATA[Date: '.zpFormattedDate(getOption('date_format'),$image->get('mtime')).']]>';
+	switch($ext) {
+		case  ".flv":
+			$mimetype = "video/x-flv";
+			break;
+		case ".mp3":
+			$mimetype = "audio/mpeg";
+			break;
+		case ".mp4":
+			$mimetype = "video/mpeg";
+			break;
+		case ".3gp":
+			$mimetype = "video/3gpp";
+			break;
+		case ".mov":
+			$mimetype = "video/quicktime";
+			break;
+		case ".jpg":
+		case ".jpeg":
+			$mimetype = "image/jpeg";
+			break;
+		case ".gif":
+			$mimetype = "image/gif";
+			break;
+		case ".png":
+			$mimetype = "image/png";
+			break;
+		default:
+			$mimetype = "image/jpeg";
+			break;
 	}
-	$images['folder'] = implode('/', $imagpathnames);
-	$images['filename'] = rawurlencode($images['filename']);
-	$ext = strtolower(strrchr($images['filename'], "."));
-	$images['title'] = get_language_string($images['title'],$locale);
-	$images['albumtitle'] = get_language_string($images['albumtitle'], $locale);
-	$images['desc'] = get_language_string($images['desc'], $locale);
 ?>
 <item>
-	<title><?php echo strip_tags($images['title'])." (".strip_tags($images['albumtitle']).")"; ?></title>
-	<link><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix. ']]>';?></link>
+	<title><?php echo $image->getTitle()." (".$albumobj->getTitle().")"; ?></title>
+	<link><?php echo '<![CDATA[http://'.$imagelink. ']]>';?></link>
 	<description>
 <?php
 if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4") ||  ($ext == ".3gp") ||  ($ext == ".mov")) {
-	echo '<![CDATA[<a title="'.strip_tags($images['title']).' in '.strip_tags($images['albumtitle']).'" href="http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix.'">'. $images['title'] .$ext.'</a><p>' . $images['desc'] . '</p>]]>';
+	echo $videocontent;
 } else {
-	echo '<![CDATA[<a title="'.strip_tags($images['title']).' in '.strip_tags($images['albumtitle']).'" href="http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix.'"><img border="0" src="http://'.$host.WEBPATH.'/'.ZENFOLDER.'/i.php?a='.$images['folder'].'&i='.$images['filename'].'&s='.$s.'" alt="'. strip_tags($images['title']) .'"></a><p>' . $images['desc'] . '</p>]]>'; } ?>
-	<?php  echo '<![CDATA[Date: '.zpFormattedDate(getOption('date_format'),$images['mtime']).']]>'; ?>
+	echo $imagecontent; } ?>
+	<?php  echo $datecontent; ?>
 </description>
-<category><?php echo strip_tags($images['albumtitle']); ?></category>
-	<guid><?php echo '<![CDATA[http://'.$host.WEBPATH.$albumpath.$images['folder'].$imagepath.$images['filename'].$modrewritesuffix. ']]>';?></guid>
-	<pubDate><?php echo date("r",strtotime($images['date'])); ?></pubDate>
+<?php 
+$enclosure = true;
+if(getOption("feed_enclosure")) { // enables download of embeded content like images or movies in some rss clients. just for testing, shall become a real option
+?>
+<enclosure url="<?php echo $fullimagelink; ?> type=\"".$mimetype.""" />
+<?php  } ?>
+<category><?php echo $albumobj->getTitle(); ?></category>
+	<guid><?php echo '<![CDATA[http://'.$imagelink.']]>';?></guid>
+	<pubDate><?php echo date("r",strtotime($image->get('date'))); ?></pubDate>
+	<?php if(getOption("feed_mediarss")) { ?>
+	<media:content url="http://<?php echo $fullimagelink; ?>" 
+			type="image/jpeg">
+			<?php $mediarssthumb = false; if($useMediaRssThumb) { ?>
+			<media:thumbnail url="<![CDATA[<?php echo $images['urlThumb']; ?>]]>" width="<?php echo $s ?>" height="<?php echo $s ?>"/>
+			<?php } ?>
+			<media:title type="plain"><?php echo strip_tags($image->getTitle()); ?></media:title>
+			<media:description type="plain"><?php echo strip_tags($image->getDesc()); ?></media:description>
+			<media:credit role="illustrator"><?php echo $adminname; ?></media:credit>
+	</media:content>
+	<?php } ?>
 </item>
 <?php } ?>
 </channel>
