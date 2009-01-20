@@ -140,10 +140,13 @@ function getOption($key, $db=false) {
 	global $_zp_conf_vars, $_zp_options, $_zp_optionDB_hasownerid;
 	if (is_null($_zp_options)) {
 		$_zp_options = array();
-
-		$sql = "SELECT `name`, `value` FROM ".prefix('options');
-		if (isset($_zp_optionDB_hasownerid)) $sql .= ' WHERE `ownerid`=0';
+	
+		$sql = "SELECT `name`, `value` FROM ".prefix('options').' WHERE `ownerid`=0';
 		$optionlist = query_full_array($sql, true);
+		if ($optionlist == false) { // might be old, un-migrated option table during setup--retry without the `ownerid`.
+			$sql = "SELECT `name`, `value` FROM ".prefix('options');
+			$optionlist = query_full_array($sql, true);
+		}
 		if ($optionlist !== false) {
 			foreach($optionlist as $option) {
 				$_zp_options[$option['name']] = $option['value'];
@@ -151,8 +154,7 @@ function getOption($key, $db=false) {
 		}
 	} else {
 		if ($db) {
-			$sql = "SELECT `value` FROM ".prefix('options')." WHERE `name`='".$key."'";
-			if (isset($_zp_optionDB_hasownerid)) $sql .= " AND `ownerid`=0";
+			$sql = "SELECT `value` FROM ".prefix('options')." WHERE `name`='".$key."' AND `ownerid`=0";
 			$optionlist = query_single_row($sql);
 			return $optionlist['value'];
 		}

@@ -26,17 +26,6 @@ if (empty($_zp_captcha)) 	$_zp_captcha = 'zenphoto';
 require_once(dirname(__FILE__). PLUGIN_FOLDER . 'captcha/'.$_zp_captcha.'.php');
 $_zp_captcha = new Captcha();
 
-// allow reading of old Option tables--should be needed only during upgrade
-$result = query_full_array("SHOW COLUMNS FROM ".prefix('options').' LIKE "%ownerid%"', true);
-if (is_array($result)) {
-	foreach ($result as $row) {
-		if ($row['Field'] == 'ownerid') {
-			$_zp_optionDB_hasownerid = true;
-			break;
-		}
-	}
-}
-
 require_once(dirname(__FILE__).'/functions-i18n.php');
 
 $_zp_setupCurrentLocale_result = setMainDomain();
