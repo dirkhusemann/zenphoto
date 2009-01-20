@@ -101,8 +101,7 @@ class flowplayer {
   		);
 			</script>';
 		} else { 
-			return '
-			<p id="playerContainer'.$count.'"><a href="http://www.adobe.com/go/getflashplayer">'.gettext('Get Flash').'</a> '.gettext('to see this player.').'</p>
+			return '<p id="playerContainer'.$count.'">'.gettext('<a href="http://www.adobe.com/go/getflashplayer">Get Flash</a> to see this player.').'</p>
 			<script>
 			$("#playerContainer'.$count.'").flashembed({
       	src:\'' . WEBPATH . '/' . ZENFOLDER . '/plugins/flowplayer/FlowPlayerLight.swf\',
@@ -120,7 +119,6 @@ class flowplayer {
       		controlsAreaBorderColor: \''.getOption('flow_player_controlsareabordercolor').'\'
     		}} 
   		);
-			
   		</script>';
 		 }
 	}
