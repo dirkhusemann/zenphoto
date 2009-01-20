@@ -161,16 +161,16 @@ echo "\n" . '<div id="content">';
 	echo '</div>';
 } ?>
 
-<p><?php echo gettext("Themes allow you to visually change the entire look and feel of your gallery. Theme files are located in your"); ?>
-	Zenphoto <code>/themes</code>
-	<?php echo gettext("folder. You can download more themes from the"); ?>
-	<a href="http://www.zenphoto.org/zp/theme/"><?php echo gettext("zenphoto themes page"); ?></a>.
-	<?php echo gettext("Place the downloaded themes in the"); ?>	<code>/themes</code> <?php echo gettext("folder and they will be available for your use.") ?>
-	</p>
+<p>
+	<?php echo gettext('Themes allow you to visually change the entire look and feel of your gallery. Theme files are located in your Zenphoto <code>/themes</code> folder.'); ?>
+	<?php echo gettext('You can download more themes from the <a href="http://www.zenphoto.org/zp/theme/">zenphoto themes page</a>.'); ?>
+	<?php echo gettext('Place the downloaded themes in the <code>/themes</code> folder and they will be available for your use.') ?>
+</p>
 
-<p><?php echo gettext("You can edit files from custom themes. Official themes shipped with Zenphoto are not editable, since your changes would be lost on next update.");
-	echo gettext("If you want to customize an official theme, please first make a copy of its directory within your <code>/themes</code> folder and edit it."); ?>
-	</p>	
+<p>
+	<?php echo gettext("You can edit files from custom themes. Official themes shipped with Zenphoto are not editable, since your changes would be lost on next update."); ?>
+	<?php echo gettext("If you want to customize an official theme, please first <em>duplicate</em> it. This will place a copy in your <code>/themes</code> folder for you to edit."); ?>
+</p>	
 <table class="bordered">
 	<thead>
 		<th colspan="2"><b><?php echo gettext('Installed themes'); ?></b></th>
