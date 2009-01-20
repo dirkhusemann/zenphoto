@@ -13,6 +13,7 @@ if(isset($_GET['albumname'])) {
 	$collection = TRUE;
 } else {
 	$albumfolder = NULL;
+	$collection = FALSE;
 }
 
 if(isset($_GET['lang'])) {
@@ -26,7 +27,7 @@ $host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 
 if(isset($_GET['albumtitle'])) { 
 	$albumname = " (".sanitize(urldecode($_GET['albumtitle'])).")";
-} else if ($albumnr != "") {
+} else {
 	$albumname = "";
 }
 
@@ -136,9 +137,7 @@ if(getOption("feed_enclosure")) { // enables download of embeded content like im
 	<?php if(getOption("feed_mediarss")) { ?>
 	<media:content url="http://<?php echo $fullimagelink; ?>" 
 			type="image/jpeg">
-			<?php //$mediarssthumb = false; if($useMediaRssThumb) { ?>
-			<media:thumbnail url="<![CDATA[<?php echo $image->getCustomImage($size, NULL, NULL, NULL, NULL, NULL, NULL, TRUE); ?>]]>" width="<?php echo $s ?>" height="<?php echo $s ?>"/>
-			<?php //} ?>
+			<media:thumbnail url="<![CDATA[<?php echo $image->getCustomImage($size, NULL, NULL, NULL, NULL, NULL, NULL, TRUE); ?>]]>" width="<?php echo $size; ?>" height="<?php echo $size; ?>"/>
 			<media:title type="plain"><?php echo strip_tags($image->getTitle()); ?></media:title>
 			<media:description type="plain"><?php echo strip_tags($image->getDesc()); ?></media:description>
 			<media:credit role="illustrator"><?php echo $adminname; ?></media:credit>
