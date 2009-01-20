@@ -136,9 +136,9 @@ if(getOption("feed_enclosure")) { // enables download of embeded content like im
 	<?php if(getOption("feed_mediarss")) { ?>
 	<media:content url="http://<?php echo $fullimagelink; ?>" 
 			type="image/jpeg">
-			<?php $mediarssthumb = false; if($useMediaRssThumb) { ?>
-			<media:thumbnail url="<![CDATA[<?php echo $images['urlThumb']; ?>]]>" width="<?php echo $s ?>" height="<?php echo $s ?>"/>
-			<?php } ?>
+			<?php //$mediarssthumb = false; if($useMediaRssThumb) { ?>
+			<media:thumbnail url="<![CDATA[<?php echo $image->getCustomImage($size, NULL, NULL, NULL, NULL, NULL, NULL, TRUE); ?>]]>" width="<?php echo $s ?>" height="<?php echo $s ?>"/>
+			<?php //} ?>
 			<media:title type="plain"><?php echo strip_tags($image->getTitle()); ?></media:title>
 			<media:description type="plain"><?php echo strip_tags($image->getDesc()); ?></media:description>
 			<media:credit role="illustrator"><?php echo $adminname; ?></media:credit>
