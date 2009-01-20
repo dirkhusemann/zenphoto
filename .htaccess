@@ -6,7 +6,7 @@
   RewriteEngine On
   
   #### !!! Change this to the web path (eg: http://www.yourwebsite.com/photos --> /photos) !!!
-  RewriteBase /zenphoto-svn
+  RewriteBase /zenphoto
   ####
   
   RewriteRule	^admin/?$                       zp-core/admin.php [R,L]

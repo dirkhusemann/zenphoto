@@ -1518,7 +1518,7 @@ if (file_exists("zp-config.php")) {
 		echo "<div class='buttons'>";
 		if ($warn) $img = 'warn.png'; else $img = 'pass.png';
 		echo "<p><a href=\"?checked&amp;$task$mod\" title=\"".gettext("create and or update the database tables.")."\" style=\"font-size: 15pt; font-weight: bold;\"><img src='images/$img' />".gettext("Go")."</a></p>";
-		echo '</div>';
+		echo '</div><br clear:all /><br clear:all />';
 	} else {
 		echo "<div class=\"error\">";
 		echo "<h3>".gettext("database did not connect")."</h3>";
