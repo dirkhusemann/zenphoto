@@ -126,10 +126,9 @@ if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4") ||  ($ext == ".3gp"
 	<?php  echo $datecontent; ?>
 </description>
 <?php 
-$enclosure = true;
 if(getOption("feed_enclosure")) { // enables download of embeded content like images or movies in some rss clients. just for testing, shall become a real option
 ?>
-<enclosure url="<?php echo $fullimagelink; ?> type=\"".$mimetype.""" />
+<enclosure url="<?php echo $fullimagelink; ?>" type="<?php echo $mimetype; ?>" />
 <?php  } ?>
 <category><?php echo $albumobj->getTitle(); ?></category>
 	<guid><?php echo '<![CDATA[http://'.$imagelink.']]>';?></guid>
