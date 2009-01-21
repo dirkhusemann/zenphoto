@@ -2078,7 +2078,6 @@ function getPrevImageURL() {
 		"/index.php?album=" . urlencode($previmg->album->name) . "&image=" . urlencode($previmg->filename));
 }
 
-
 /**
 * Returns the url of the first image in current album.
 *
@@ -2086,14 +2085,12 @@ function getPrevImageURL() {
 * @author gerben
 */
 function getFirstImageURL() {
-	if(!in_context(ZP_IMAGE)) return false;
-	global $_zp_current_album, $_zp_current_image;
-	if (is_null($_zp_current_image)) return false;
+	global $_zp_current_album;
+	if (is_null($_zp_current_album)) return false;
 	$firstimg = $_zp_current_album->getImage(0);
-	return rewrite_path("/" . pathurlencode($firstimg->album->name) . "/" . urlencode($firstimg->filename) . im_suffix(),
-											"/index.php?album=" . urlencode($firstimg->album->name) . "&image=" . urlencode($firstimg->filename));
+	return rewrite_path("/" . pathurlencode($_zp_current_album->name) . "/" . urlencode($firstimg->filename) . im_suffix(),
+											"/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($firstimg->filename));
 }
-
 
 /**
 * Returns the url of the last image in current album.
@@ -2102,16 +2099,12 @@ function getFirstImageURL() {
 * @author gerben
 */
 function getLastImageURL() {
-	if(!in_context(ZP_IMAGE)) return false;
-	global $_zp_current_album, $_zp_current_image;
-	if (is_null($_zp_current_image)) return false;
+	global $_zp_current_album;
+	if (is_null($_zp_current_album)) return false;
 	$lastimg = $_zp_current_album->getImage($_zp_current_album->getNumImages() - 1);
-	return rewrite_path("/" . pathurlencode($lastimg->album->name) . "/" . urlencode($lastimg->filename) . im_suffix(),
-											"/index.php?album=" . urlencode($lastimg->album->name) . "&image=" . urlencode($lastimg->filename));
+	return rewrite_path("/" . pathurlencode($_zp_current_album->name) . "/" . urlencode($lastimg->filename) . im_suffix(),
+											"/index.php?album=" . urlencode($_zp_current_album->name) . "&image=" . urlencode($lastimg->filename));
 }
-
-
-
 
 /**
  * Prints out the javascript to preload the next and previous images
