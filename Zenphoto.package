@@ -179,6 +179,7 @@ zp-core/admin-thumbcrop.php
 zp-core/admin-upload.php
 zp-core/admin.css
 zp-core/admin.php
+zp-core/album-zip.php
 zp-core/archive.php
 zp-core/auth_zp.php
 zp-core/c.php

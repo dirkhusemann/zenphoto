@@ -1039,19 +1039,19 @@ if ($subtab == 'admin') {
 			<?php generateListFromArray(array(getOption("feed_sortorder")), $feedsortorder, false, true); ?>
 			</select>
 			</td>
-			<td><?php echo gettext("Choose between 'latest' for the latest uploaded, 'latest-date' for the latest uploaded, but fetched by date, 'latest-mtime' for the latest uploaded, but fetched by mtime."); ?></td>
+			<td><?php echo gettext("Choose between <em>latest by id</em> for the latest uploaded, <em>latest by date</em> for the latest uploaded fetched by date, or <em>latest by mtime</em> for the latest uploaded fetched by the file's last change timestamp."); ?></td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("RSS enclosure:"); ?></td>
 			<td><input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="feed_enclosure"
 				value="1" <?php echo checked('1', getOption('feed_enclosure')); ?> /></td>
-			<td><?php echo gettext("Check if you want to enable the rss enclosure feature that provides a direct download for full images, movies etc. from within certain rss reader clients."); ?></td>
+			<td><?php echo gettext("Check if you want to enable the <em>rss enclosure</em> feature which provides a direct download for full images, movies etc. from within certain rss reader clients."); ?></td>
 		</tr>
 			<tr>
 			<td><?php echo gettext("Media RSS:"); ?></td>
 			<td><input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="feed_mediarss"
 				value="1" <?php echo checked('1', getOption('feed_mediarss')); ?> /></td>
-			<td><?php echo gettext("Check if media rss support to be turned on used by some services and programs."); ?></td>
+			<td><?php echo gettext("Check if <em>media rss</em> support is to be enabled. This support is used by some services and programs."); ?></td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Album date:"); ?></td>
@@ -1111,8 +1111,7 @@ if ($subtab == 'admin') {
 			</td>
 			<td>
 				<?php
-				echo gettext("Sort order for the albums on the index of the gallery.").' ';
-				echo gettext('Custom sort values must be database field names. You can have multiple fields separated by commas.')
+				echo gettext('Sort order for the albums on the index of the gallery. Custom sort values must be database field names. You can have multiple fields separated by commas. This option is also the default sort for albums and subalbums.');
 				?>
 			</td>
 		</tr>

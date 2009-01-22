@@ -2999,9 +2999,8 @@ function printCommentErrors($class = 'error') {
  */
 function printAlbumZip(){
 	global $_zp_current_album;
-	echo'<a href="' . rewrite_path("/" . pathurlencode($_zp_current_album->name) . '?zipfile',
-		"/index.php?album=" . urlencode($_zp_current_album->name) .
-		'&zipfile"').'" title="'.gettext('Download Zip of the Album').'">'.gettext('Download a zip file of this album').'</a>';
+	echo'<a href="' . WEBPATH . '/' . ZENFOLDER . "/album-zip.php?album=" . urlencode($_zp_current_album->name) .
+		'" title="'.gettext('Download Zip of the Album').'">'.gettext('Download a zip file of this album').'</a>';
 }
 
 /**
