@@ -227,8 +227,8 @@ A:link,A:visited {
 	color: #36C;
 }
 
-A:hover,A:active {
-	text-decoration: underline;
+a:hover, a:active {
+	text-decoration: none;
 	color: #F60;
 	background-color: #FFFCF4;
 }
@@ -1515,10 +1515,10 @@ if (file_exists("zp-config.php")) {
 		} else {
 			$mod = '';
 		}
-		echo "<div class='buttons'>";
+		echo "<p class='buttons'>";
 		if ($warn) $img = 'warn.png'; else $img = 'pass.png';
-		echo "<p><a href=\"?checked&amp;$task$mod\" title=\"".gettext("create and or update the database tables.")."\" style=\"font-size: 15pt; font-weight: bold;\"><img src='images/$img' />".gettext("Go")."</a></p>";
-		echo '</div><br clear:all /><br clear:all />';
+		echo "<a href=\"?checked&amp;$task$mod\" title=\"".gettext("create and or update the database tables.")."\" style=\"font-size: 15pt; font-weight: bold;\"><img src='images/$img' />".gettext("Go")."</a>";
+		echo '</p><br clear:all /><br clear:all />';
 	} else {
 		echo "<div class=\"error\">";
 		echo "<h3>".gettext("database did not connect")."</h3>";
