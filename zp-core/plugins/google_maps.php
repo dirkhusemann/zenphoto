@@ -76,8 +76,10 @@ class google_mapsOptions {
 									gettext('Allowed maps') => array('key' => 'gmaps_allowed_maps', 'type' => 6,
 																	'checkboxes' => array(gettext('Map') => 'gmaps_maptype_map', gettext('Satellite') => 'gmaps_maptype_sat' ,gettext('Hybrid') => 'gmaps_maptype_hyb' ,gettext('Terrain') => 'gmaps_maptype_P', gettext('Google Earth') => 'gmaps_maptype_3D'),
 																	'desc' => gettext('Select the map types that are allowed.')),
+/* Not yet implemented
 									gettext('Add Wikipedia') => array('key' => 'gmaps_wiki_layer', 'type' => 1,
 																	'desc' => gettext('Adds wikipedia georeferenced data on your maps.')),
+*/
 									gettext('Map type selector') => array('key' => 'gmaps_control_maptype', 'type' => 4,'buttons' => array(gettext('Buttons') => 1,gettext('List') => 2),
 																	'desc' => gettext('Use buttons or list for the map type selector.')),
 									gettext('Map controls') => array('key' => 'gmaps_control', 'type' => 4,'buttons' => array(gettext('None') => 'None',gettext('Small') => 'Small',gettext('Large') => 'Large'),
