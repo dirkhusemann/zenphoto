@@ -63,6 +63,8 @@ switch (OFFSET_PATH) {
 	case 4: // starts from within a folder within the plugins folder
 		$const_webpath = dirname(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))));
 		break;
+	case 5: // $const_webpath provided by the "loading function"
+		break;
 }
 $const_webpath = str_replace("\\", '/', $const_webpath);
 if ($const_webpath == '/') $const_webpath = '';
