@@ -18,19 +18,23 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 }
 
 function loadAlbum($album) {
-	global $_zp_current_album;
+	global $gallery, $_zp_current_album, $_zp_current_image;
 	$subalbums = $album->getSubAlbums();
 	$count = 0;
 	foreach ($subalbums as $folder) {
-		$subalbum = new Album($album, $folder);
+		$subalbum = new Album($gallery, $folder);
 		$count = $count + loadAlbum($subalbum);
 	}
 	$_zp_current_album = $album;
 	if (getNumImages() > 0) {
 		echo "<br />" . $album->name . "{";
 		while (next_image(true)) {
-			echo '<img src="' . getImageThumb() . '" height="8" width="8" /> | <img src="' . getDefaultSizedImage() . '" height="20" width="20" />' . "\n";
-			$count++;
+			if (isImagePhoto($_zp_current_image)) {
+				echo '<img src="' . getImageThumb() . '" height="8" width="8" /> | <img src="' . getDefaultSizedImage() . '" height="20" width="20" />' . "\n";
+			} else {
+				echo '<img src="' . getImageThumb() . '" height="8" width="8" /> | ';
+			}
+				$count++;
 		}
 		echo "}<br/>\n";
 	}
@@ -76,12 +80,12 @@ $count = 0;
 
 $gallery = new Gallery();
 
-if (isset($alb)) {
+if ($alb) {
 	echo "\n<h2>".$clear."</h2>";
 	if (isset($_REQUEST['clear'])) {
 		$gallery->clearCache(SERVERCACHE . '/' . $folder); // clean out what was there
 	}
-	$album = new Album($album, $folder);
+	$album = new Album($gallery, $folder);
 	$count = loadAlbum($album);
 } else {
 	echo "\n<h2>".$clear."</h2>";
@@ -90,7 +94,7 @@ if (isset($alb)) {
 	}
 	$albums = $_zp_gallery->getAlbums();
 	foreach ($albums as $folder) {
-		$album = new Album($album, $folder);
+		$album = new Album($gallery, $folder);
 		$count = $count + loadAlbum($album);
 	}
 }
