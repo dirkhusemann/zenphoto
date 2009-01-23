@@ -229,22 +229,22 @@ function printAdminToolbox($id='admin') {
 		if(function_exists('is_NewsArticle')) {
 			if ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
 				// admin has zenpage rights, provide link to the zenpage admin tab
-				echo "<li><a href=\"".$zf."/plugins/zenpage/page-admin.php\">".gettext("Zenpage")."</a></li>";
+				echo "<li><a href=\"".$zf."/plugins/zenpage/\">".gettext("Zenpage")."</a></li>";
 				if (is_NewsArticle()) {
 					// page is a NewsArticle--provide zenpage edit, delete, and Add links
-					echo "<li><a href=\"".$zf."/plugins/zenpage/news-article-edit.php?titlelink=".urlencode(getNewsTitlelink())."\">".gettext("Edit Article")."</li>";
+					echo "<li><a href=\"".$zf."/plugins/zenpage/admin-edit.php?newsarticle&amp;edit&amp;titlelink=".urlencode(getNewsTitlelink())."\">".gettext("Edit Article")."</li>";
 					?> 
 					<li><a href="javascript: confirmDeleteImage('<?php echo $zf; ?>/plugins/zenpage/news-article-admin.php?del=<?php echo getNewsID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete article"); ?>"><?php echo gettext("Delete Article"); ?></a></li>
 					<?php
-					echo "<li><a href=\"".$zf."/plugins/zenpage/news-article-add.php\">".gettext("Add Article")."</li>";
+					echo "<li><a href=\"".$zf."/plugins/zenpage/admin-edit.php?newsarticle&amp;add\">".gettext("Add Article")."</li>";
 				}
 				if (is_Pages()) {
 					// page is zenpage page--provide edit, delete, and add links
-					echo "<li><a href=\"".$zf."/plugins/zenpage/page-edit.php?titlelink=".urlencode(getPageTitlelink())."\">".gettext("Edit Page")."</li>";
+					echo "<li><a href=\"".$zf."/plugins/zenpage/admin-edit.php?page&amp;edit&amp;titlelink=".urlencode(getPageTitlelink())."\">".gettext("Edit Page")."</li>";
 					?> 
 					<li><a href="javascript: confirmDeleteImage('<?php echo $zf; ?>/plugins/zenpage/page-admin.php?del=<?php echo getPageID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete page"); ?>"><?php echo gettext("Delete Page"); ?></a></li>
 					<?php	
-					echo "<li><a href=\"".FULLWEBPATH."/".ZENFOLDER."/plugins/zenpage/page-add.php\">".gettext("Add Page")."</li>";
+					echo "<li><a href=\"".FULLWEBPATH."/".ZENFOLDER."/plugins/zenpage/admin-edit.php?page&amp;add\">".gettext("Add Page")."</li>";
 				}
 			}
 			apply_filter('admin_toolbox_news');
