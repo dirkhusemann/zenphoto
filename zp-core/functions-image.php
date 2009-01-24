@@ -382,7 +382,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		if (DEBUG_IMAGE) debugLog("cacheImage:".basename($imgfile).": \$size=$size, \$width=$width, \$height=$height, \$w=$w; \$h=$h; \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$newh=$newh, \$neww=$neww, \$dim=$dim, \$ratio_in=$ratio_in, \$ratio_out=$ratio_out \$upscale=$upscale \$rotate=$rotate \$force_cache=$force_cache");
 		
 		if (!$upscale && $newh >= $h && $neww >= $w) { // image is the same size or smaller than the request
-			if (!getOption('perform_watermark') && !($crop || $thumb || $rotate || $force_cache)) { // no processing needed
+			if (!getOption('watermark_image') && !($crop || $thumb || $rotate || $force_cache)) { // no processing needed
 				if (DEBUG_IMAGE) debugLog("Serve ".basename($imgfile)." from original image.");
 				if (getOption('album_folder_class') != 'external') { // local album system, return the image directly
 					$image = substr(strrchr($imgfile, '/'), 1);

@@ -45,7 +45,7 @@ if (getOption('cache_full_image')) {
 	$cache_path = NULL;
 }
 
-if (!getOption('perform_watermark')) { // no processing needed
+if (!getOption('watermark_image')) { // no processing needed
 	if (getOption('album_folder_class') != 'external' && !getOption('protect_full_image') == 'Download') { // local album system, return the image directly
 		header('Content-Type: image/'.$suffix);
 		header("Location: " . getAlbumFolder(FULLWEBPATH) . pathurlencode($_zp_current_album->name) . "/" . rawurlencode($_zp_current_image->filename));
@@ -84,7 +84,7 @@ switch ($suffix) {
 if (getOption('protect_full_image') == 'Download') {
 	header('Content-Disposition: attachment; filename="' . $_zp_current_image->filename . '"');  // enable this to make the image a download
 }
-if (getOption('perform_watermark')) {
+if (getOption('watermark_image')) {
 	$watermark_path = SERVERPATH . "/" . ZENFOLDER . "/" . UTF8ToFileSystem(getOption('watermark_image'));
 	$offset_h = getOption('watermark_h_offset') / 100;
 	$offset_w = getOption('watermark_w_offset') / 100;
