@@ -109,6 +109,7 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
 	} else {
 		$args[] = NULL;
 	}
+	$args [] = $adminrequest;
 	$args = getImageParameters($args);
 	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
 	$allowWatermark = !$thumb && !$adminrequest;

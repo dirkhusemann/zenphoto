@@ -372,10 +372,11 @@ function getImageCacheFilename($album8, $image8, $args) {
  * @return string
  */
 function getImageCachePostfix($args) {
-	list($size, $width, $height, $cw, $ch, $cx, $cy) = $args;
+	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumbstandin, $thumbWM, $adminrequest) = $args;
 	$postfix_string = ($size ? "_$size" : "") . ($width ? "_w$width" : "")
 	. ($height ? "_h$height" : "") . ($cw ? "_cw$cw" : "") . ($ch ? "_ch$ch" : "")
-	. (is_numeric($cx) ? "_cx$cx" : "") . (is_numeric($cy) ? "_cy$cy" : "");
+	. (is_numeric($cx) ? "_cx$cx" : "") . (is_numeric($cy) ? "_cy$cy" : "")
+	. ($adminrequest ? '_admin' : '');
 	return $postfix_string;
 }
 
@@ -396,7 +397,7 @@ function getImageParameters($args) {
 	$quality = getOption('image_quality');
 	// Set up the parameters
 	$thumb = $crop = false;
-	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumbstandin, $thumbWM) = $args;
+	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumbstandin, $thumbWM, $adminrequest) = $args;
 	$thumb = $thumbstandin;
 	if ($size == 'thumb') {
 		$thumb = true;
@@ -423,7 +424,7 @@ function getImageParameters($args) {
 	if (empty($quality)) $quality = getOption('image_quality');
 
 	// Return an array of parameters used in image conversion.
-	return array($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM);
+	return array($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM, $adminrequest);
 }
 
 /** Takes user input meant to be used within a path to a file or folder and
