@@ -89,11 +89,13 @@ function printSlideShowLink($linktext='') {
 	} else {
 		$pagenr = $_GET['page'];
 	}
+	$slideshowhidden = '';
 	if (in_context(ZP_SEARCH)) {
 		$imagenumber = '';
 		$imagefile = '';
 		$albumnr = 0;
 		$slideshowlink = rewrite_path("/page/slideshow","index.php?p=slideshow");
+		$slideshowhidden = '<input type="hidden" name="preserve_serch_params" value="'.$_zp_current_search->getSearchParams().'" />';
 	} else {
 		if(in_context(ZP_IMAGE)) {
 			$imagenumber = imageNumber();
@@ -113,6 +115,7 @@ function printSlideShowLink($linktext='') {
 	if($numberofimages != 0) {
 		?>
 		<form name="slideshow_<?php echo $slideshow_instance; ?>" method="post" action="<?php echo $slideshowlink; ?>">
+			<?php echo $slideshowhidden; ?>
 			<input type="hidden" name="pagenr" value="<?php echo $pagenr;?>" />
 			<input type="hidden" name="albumid" value="<?php echo $albumnr;?>" />
 			<input type="hidden" name="numberofimages" value="<?php echo $numberofimages;?>" />
@@ -166,7 +169,7 @@ function printSlideShow($heading = true, $speedctl = false) {
 	if ($albumid <= 0) { // search page
 		$dynamic = 2;
 		$search = new SearchEngine();
-		$params = trim(zp_getCookie('zenphoto_image_search_params'));
+		$params = $_POST['preserve_serch_params'];		
 		$search->setSearchParams($params);
 		$images = $search->getImages(0);
 		$searchwords = $search->words;

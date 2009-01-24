@@ -1075,6 +1075,7 @@ function getAllSubAlbumIDs($albumfolder='') {
 /**
  * recovers search parameters from stored cookie, clears the cookie
  *
+ * @param string $what the page type
  * @param string $album Name of the album
  * @param string $image Name of the image
  */
@@ -1089,7 +1090,9 @@ function handleSearchParms($what, $album=NULL, $image=NULL) {
 			$reset = $zp_request;
 		}
 		if ($reset) { // clear the cookie if no album and not a search
-			zp_setcookie("zenphoto_image_search_params", "", time()-368000, $cookiepath);
+			if (!isset($_REQUEST['preserve_serch_params'])) {
+				zp_setcookie("zenphoto_image_search_params", "", time()-368000, $cookiepath);
+			}
 			return;
 		}
 	}
@@ -1106,13 +1109,7 @@ function handleSearchParms($what, $album=NULL, $image=NULL) {
 		}
 		if (!is_null($album)) {
 			$albumname = $album->name;
-			
-debugLog("albumname=$albumname");			
-			
 			$albumlist = $_zp_current_search->getAlbums(0);
-			
-debugLog("albumlist", $albumlist);			
-			
 			foreach ($albumlist as $searchalbum) {	
 				if (strpos($albumname, $searchalbum) !== false) {
 					$context = $context | ZP_SEARCH_LINKED | ZP_ALBUM_LINKED;
