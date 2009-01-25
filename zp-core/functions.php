@@ -1666,12 +1666,8 @@ function zp_getCookie($name) {
  * @param string $path The path on the server in which the cookie will be available on
  */
 function zp_setCookie($name, $value, $time=0, $path='/') {
-	if (!getOption('album_session')) {
-		if (DEBUG_LOGIN) {
-			debugLog("zp_setCookie($name, $value, $time, $path)");
-		}
-		setcookie($name, $value, $time, $path);
-	}
+	if (DEBUG_LOGIN) debugLog("zp_setCookie($name, $value, $time, $path)");
+	setcookie($name, $value, $time, $path);
 	if ($time < time()) {
 		if (isset($_SESSION))	unset($_SESSION[$name]);
 		if (isset($_COOKIE)) unset($_COOKIE[$name]);
