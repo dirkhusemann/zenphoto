@@ -211,6 +211,7 @@ function printSlideShow($heading = true, $speedctl = false) {
 			var ImageList = new Array();
 			var TitleList = new Array();
 			var DescList = new Array();
+			var ImageNameList = new Array();
 			var DynTime=(<?php echo getOption("slideshow_timeout"); ?>) * 1.0;	// force numeric
 <?php
 			for ($cntr = 0, $idx = $imagenumber; $cntr < $numberofimages; $cntr++, $idx++) {
@@ -220,12 +221,6 @@ function printSlideShow($heading = true, $speedctl = false) {
 				} else {
 					$filename = $images[$idx];
 					$image = newImage($album, $filename);
-				}
-				//update hit counter
-				if (!isMyALbum($album->name, ALL_RIGHTS)) {
-					$hc = $image->get('hitcounter')+1;
-					$image->set('hitcounter', $hc);
-					$image->save();
 				}
 				$ext = strtolower(strrchr($filename, "."));
 
@@ -246,56 +241,61 @@ function printSlideShow($heading = true, $speedctl = false) {
 					echo 'DescList[' . $cntr . '] = "";'. "\n";
 				}
 				if ($idx == $numberofimages - 1) { $idx = -1; }
+				echo 'ImageNameList[' . $cntr . '] = "'.urlencode($filename).'";'. "\n";
 			}
 			echo "\n";
 
 ?>
-						var countOffset = <?php echo $imagenumber; ?>
+			var countOffset = <?php echo $imagenumber; ?>;
+			var totalSlideCount = <?php echo $numberofimages; ?>;
+			var currentslide = 2;
 
-            var totalSlideCount = <?php echo $numberofimages; ?>;
-            var currentslide = 2;
+			function onBefore(curr, next, opts) {
+				if (opts.timeout != DynTime) {
+					opts.timeout = DynTime;
+				}
+				if (!opts.addSlide)
+					return;
+				
+				var currentImageNum = currentslide;
+				currentslide++;
+				if (currentImageNum == totalSlideCount) {
+					opts.addSlide = null;
+					return;
+				}
+				var relativeSlot = (currentslide + countOffset) % totalSlideCount;
+				if (relativeSlot == 0) {relativeSlot = totalSlideCount;}
+				var htmlblock = "<span class='slideimage'><h4><strong>" + ThisGallery + ":</strong> ";
+				htmlblock += TitleList[currentImageNum]  + " (" + relativeSlot + "/" + totalSlideCount + ")</h4>";
+				htmlblock += "<img src='" + ImageList[currentImageNum] + "'/>";
+				htmlblock += "<p class='imgdesc'>" + DescList[currentImageNum] + "</p></span>";
+				opts.addSlide(htmlblock);
+			}
 
-            function onBefore(curr, next, opts) {
- 			  if (opts.timeout != DynTime) {
-                	opts.timeout = DynTime;
-                }
-                if (!opts.addSlide)
-                    return;
+			function onAfter(curr, next, opts){
+				<?php if (!isMyALbum($album->name, ALL_RIGHTS)) { ?>
+				$.get("<?php echo FULLWEBPATH .'/'. ZENFOLDER . PLUGIN_FOLDER; ?>slideshow/slideshow-counter.php?album=<?php echo pathurlencode($album->name); ?>&img="+ImageNameList[opts.currSlide]);
+				<?php } ?>
+			}
 
-                var currentImageNum = currentslide;
-                currentslide++;
-                if (currentImageNum == totalSlideCount) {
-                  opts.addSlide = null;
-                	return;
-            	}
-
-			  var relativeSlot = (currentslide + countOffset) % totalSlideCount;
-			  if (relativeSlot == 0) {relativeSlot = totalSlideCount;}
-                var htmlblock = "<span class='slideimage'><h4><strong>" + ThisGallery + ":</strong> ";
-			  htmlblock += TitleList[currentImageNum]  + " (" + relativeSlot + "/" + totalSlideCount + ")</h4>";
-                htmlblock += "<img src='" + ImageList[currentImageNum] + "'/>";
-                htmlblock += "<p class='imgdesc'>" + DescList[currentImageNum] + "</p></span>";
-                opts.addSlide(htmlblock);
-
-    	};
-
-		$('#slides').cycle({
+			$('#slides').cycle({
 					fx:     '<?php echo getOption("slideshow_effect"); ?>',
 					speed:   <?php echo getOption("slideshow_speed"); ?>,
 					timeout: DynTime,
 					next:   '#next',
 					prev:   '#prev',
-        				cleartype: 1,
-					before: onBefore
+					cleartype: 1,
+					before: onBefore,
+					after: onAfter
 			});
 
 			$('#speed').change(function () {
-              	DynTime = this.value;
-                	return false;
-         });
+				DynTime = this.value;
+				return false;
+			});
 
-		$('#pause').click(function() { $('#slides').cycle('pause'); return false; });
-		$('#play').click(function() { $('#slides').cycle('resume'); return false; });
+			$('#pause').click(function() { $('#slides').cycle('pause'); return false; });
+			$('#play').click(function() { $('#slides').cycle('resume'); return false; });
 		});
 
 	});	// Documentready()
