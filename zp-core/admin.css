@@ -486,8 +486,11 @@ td.handle {
 	cursor: move;
 }
 
-.zensortable_row, .zensortable_img {
-	background:#D0DBDF;
+/* Sortable placeholder
+------------------------------ */
+
+html>/**/body .zensortable_row, html>/**/body .zensortable_img {
+	background:#CFF1FF;
 	float:left;
 	margin:1px;
 	padding:0px;
