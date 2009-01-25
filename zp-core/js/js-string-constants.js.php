@@ -1,6 +1,4 @@
 <?php
-if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
-
 header("Last-Modified: " . gmdate("D, d M Y H:i:s", time()-3600*24*30) . " GMT"); // Date in the past
 header("Expires: " . gmdate("D, d M Y H:i:s", time()+3600*24*60) . " GMT"); // Don't expire for 60 days
 header("Cache-Control: max-age=86400, s-maxage=86400, proxy-revalidate, must-revalidate");
@@ -10,7 +8,7 @@ require_once('../functions.php');
 
 ?>
 
-var zppath =  "<?php echo ZENFOLDER; ?>";
+var zppath =  "<?php if (ZENFOLDER) echo '/'.ZENFOLDER; ?>";
 
 var zpstrings = {
 	/* Used in jquery.editinplace.js */
