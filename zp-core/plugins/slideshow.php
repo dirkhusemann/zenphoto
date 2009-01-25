@@ -216,10 +216,16 @@ function printSlideShow($heading = true, $speedctl = false) {
 			for ($cntr = 0, $idx = $imagenumber; $cntr < $numberofimages; $cntr++, $idx++) {
 				if ($dynamic) {
 					$filename = $images[$idx]['filename'];
-					$image = newImage(new Album($gallery, $images[$idx]['folder']), $filename);
+					$image = newImage($album = new Album($gallery, $images[$idx]['folder']), $filename);
 				} else {
 					$filename = $images[$idx];
 					$image = newImage($album, $filename);
+				}
+				//update hit counter
+				if (!isMyALbum($album->name, ALL_RIGHTS)) {
+					$hc = $image->get('hitcounter')+1;
+					$image->set('hitcounter', $hc);
+					$image->save();
 				}
 				$ext = strtolower(strrchr($filename, "."));
 
