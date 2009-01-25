@@ -217,7 +217,8 @@ function printSlideShow($heading = true, $speedctl = false) {
 			for ($cntr = 0, $idx = $imagenumber; $cntr < $numberofimages; $cntr++, $idx++) {
 				if ($dynamic) {
 					$filename = $images[$idx]['filename'];
-					$image = newImage($album = new Album($gallery, $images[$idx]['folder']), $filename);
+					$album = new Album($gallery, $images[$idx]['folder']);
+					$image = newImage($album, $filename);
 				} else {
 					$filename = $images[$idx];
 					$image = newImage($album, $filename);
