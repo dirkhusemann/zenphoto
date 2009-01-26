@@ -28,7 +28,7 @@ zenSortablesPostHandler($_zp_sortable_list, 'imageOrder', 'images', 'images');
 // Print the admin header
 printAdminHeader();
 // Print the sortable stuff
-zenSortablesHeader($_zp_sortable_list, 'images','imageOrder','img', "placeholder:'zensortable_img', zstart:function(){jQuery('.zensortable').attr('src','". FULLWEBPATH.'/'.ZENFOLDER.'/images/transparent.gif'."');}");
+zenSortablesHeader($_zp_sortable_list, 'images','imageOrder','img', "placeholder:'zensortable_img'");
 echo "\n</head>";
 ?>
 

@@ -208,9 +208,9 @@ function printAdminHeader($path='') {
 	echo "\n  <title>".gettext("zenphoto administration")."</title>";
 	echo "\n  <link rel=\"stylesheet\" href=\"".$path."admin.css\" type=\"text/css\" />";
 	echo "\n  <link rel=\"stylesheet\" href=\"".$path."js/toggleElements.css\" type=\"text/css\" />";
-	echo "\n  <script src=\"".$path."js/js-string-constants.js.php\" type=\"text/javascript\" ></script>";
-	echo "\n  <script src=\"".$path."js/admin.js\" type=\"text/javascript\" ></script>";
 	echo "\n  <script src=\"".$path."js/jquery.js\" type=\"text/javascript\"></script>";
+	echo "\n  <script src=\"".$path."js/zenphoto.js.php\" type=\"text/javascript\" ></script>";
+	echo "\n  <script src=\"".$path."js/admin.js\" type=\"text/javascript\" ></script>";
 	echo "\n  <script src=\"".$path."js/jquery.dimensions.js\" type=\"text/javascript\"></script>";
 	echo "\n  <script src=\"".$path."js/jquery.tooltip.js\" type=\"text/javascript\"></script>";
 	echo "\n  <script src=\"".$path."js/thickbox.js\" type=\"text/javascript\"></script>";
