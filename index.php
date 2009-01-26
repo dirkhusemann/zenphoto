@@ -91,24 +91,22 @@ if (file_exists(SERVERPATH . "/" . UTF8ToFilesystem($obj)) && $zp_request) {
 
 	// Zenpage automatic hitcounter update support
 	if(function_exists("is_NewsArticle") AND !$_zp_loggedin) {
-			if(is_NewsArticle()) {
-				$hc = $_zp_current_zenpage_news->get('hitcounter')+1;
-				$_zp_current_zenpage_news->set('hitcounter', $hc);
-				$_zp_current_zenpage_news->save();
-			}
-			if(is_NewsCategory()) { 
-				$catname = sanitize($_GET['category']);
-				$hc = query_single_row("SELECT hitcounter FROM ".prefix('zenpage_news_categories')." WHERE cat_link = '".$catname."'");
-				$hc = $hc["hitcounter"]+1;
-				query("UPDATE ".prefix('zenpage_news_categories')." SET hitcounter = ".$hc." WHERE cat_link = '".$catname."'",true);
-			}
-			if(is_Pages()) {
-				$hc = $_zp_current_zenpage_page->get('hitcounter')+1;
-				$_zp_current_zenpage_page->set('hitcounter', $hc);
-				$_zp_current_zenpage_page->save();
-			}
+		if(is_NewsArticle()) {
+			$hc = $_zp_current_zenpage_news->get('hitcounter')+1;
+			$_zp_current_zenpage_news->set('hitcounter', $hc);
+			$_zp_current_zenpage_news->save();
+		}
+		if(is_NewsCategory()) {
+			$catname = sanitize($_GET['category']);
+			query("UPDATE ".prefix('zenpage_news_categories')." SET `hitcounter` = `hitcounter`+1 WHERE `cat_link` = '".$catname."'",true);
+		}
+		if(is_Pages()) {
+			$hc = $_zp_current_zenpage_page->get('hitcounter')+1;
+			$_zp_current_zenpage_page->set('hitcounter', $hc);
+			$_zp_current_zenpage_page->save();
+		}
 	}
-	
+
 	// re-initialize video dimensions if needed
 	if (isImageVideo() & !is_null($_zp_flash_player)) $_zp_current_image->updateDimensions();
 

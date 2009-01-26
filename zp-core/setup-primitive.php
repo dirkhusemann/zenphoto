@@ -16,6 +16,8 @@ if (!defined('WEBPATH')) { define('WEBPATH', $const_webpath); }
 if (!defined('SERVERPATH')) { define('SERVERPATH', dirname(dirname(__FILE__))); }
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 if (!defined('THEMEFOLDER')) {define("THEMEFOLDER", 'themes'); }
+if (!defined('BACKUPFOLDER')) define('BACKUPFOLDER', 'backup');
+if (!defined('UTILITIES_FOLDER')) define('UTILITIES_FOLDER', '/utilities/');
 
 function zp_getCookie($name) {
 	if (isset($_SESSION[$name])) { return $_SESSION[$name]; }

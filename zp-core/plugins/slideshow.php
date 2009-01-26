@@ -95,7 +95,7 @@ function printSlideShowLink($linktext='') {
 		$imagefile = '';
 		$albumnr = 0;
 		$slideshowlink = rewrite_path("/page/slideshow","index.php?p=slideshow");
-		$slideshowhidden = '<input type="hidden" name="preserve_serch_params" value="'.$_zp_current_search->getSearchParams().'" />';
+		$slideshowhidden = '<input type="hidden" name="preserve_search_params" value="'.$_zp_current_search->getSearchParams().'" />';
 	} else {
 		if(in_context(ZP_IMAGE)) {
 			$imagenumber = imageNumber();
@@ -169,7 +169,7 @@ function printSlideShow($heading = true, $speedctl = false) {
 	if ($albumid <= 0) { // search page
 		$dynamic = 2;
 		$search = new SearchEngine();
-		$params = $_POST['preserve_serch_params'];		
+		$params = $_POST['preserve_search_params'];		
 		$search->setSearchParams($params);
 		$images = $search->getImages(0);
 		$searchwords = $search->words;
@@ -275,7 +275,11 @@ function printSlideShow($heading = true, $speedctl = false) {
 
 			function onAfter(curr, next, opts){
 				<?php if (!isMyALbum($album->name, ALL_RIGHTS)) { ?>
-				$.get("<?php echo FULLWEBPATH .'/'. ZENFOLDER . PLUGIN_FOLDER; ?>slideshow/slideshow-counter.php?album=<?php echo pathurlencode($album->name); ?>&img="+ImageNameList[opts.currSlide]);
+				//Only register at hit count the first time the image is viewed.
+				if ($(next).attr( 'viewed') != 1) {
+					$.get("<?php echo FULLWEBPATH .'/'. ZENFOLDER . PLUGIN_FOLDER; ?>slideshow/slideshow-counter.php?album=<?php echo pathurlencode($album->name); ?>&img="+ImageNameList[opts.currSlide]);
+					$(next).attr( 'viewed', 1 );
+				}
 				<?php } ?>
 			}
 
