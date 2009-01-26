@@ -82,7 +82,7 @@ class Video extends _Image {
 					break;
 				case '.mov':
 					$h = DEFAULT_MOV_HEIGHT;
-					$w = DEFAULT_MOMV_WIDTH;
+					$w = DEFAULT_MOV_WIDTH;
 					break;
 				default:
 					$h = 240;
