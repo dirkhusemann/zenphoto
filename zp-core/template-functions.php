@@ -2249,7 +2249,7 @@ function printImageMetadata($title=NULL, $toggle=true, $id='imagemetadata', $cla
 	$dataid = $id . '_data';
 	echo "<div" . (($class) ? " class=\"$class\"" : "") . (($id) ? " id=\"$id\"" : "") . ">\n";
 	if ($toggle) echo "<a href=\"javascript:toggle('$dataid');\">";
-	echo "<span class='metadata_title'>$title</a>";
+	echo "<span class='metadata_title'>$title</span>";
 	if ($toggle) echo "</a>\n";
 
 	echo "<table id=\"$dataid\"" . ($toggle ? " style=\"display: none;\"" : '') . ">\n";
