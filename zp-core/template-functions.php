@@ -930,7 +930,7 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
 
 /**
  * Prints a link to the 'main website'
- * Only prints the link if the url is not empty and does not point back the the gallery page
+ * Only prints the link if the url is not empty and does not point back the gallery page
  *
  * @param string $before text to precede the link
  * @param string $after text to follow the link
@@ -4022,7 +4022,7 @@ function getTheme(&$zenCSS, &$themeColor, $defaultColor) {
  * When you have albums containing both subalbums and images there may be a page where the album
  * thumbnails do not fill the page. This function returns a count of the images that can be used to
  * fill out this transition page. The return value should be passed as the second parameter to
- * next_image() so that the the page is filled out with the proper number of images. If you do not
+ * next_image() so that the page is filled out with the proper number of images. If you do not
  * pass this parameter it is assumed that album thumbs and image thumbs are not to be placed on
  * the same (transition) page. (If you do not wish to have an album/image transition page you need
  * not use this function at all.)

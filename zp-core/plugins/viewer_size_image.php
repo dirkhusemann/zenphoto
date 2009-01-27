@@ -2,7 +2,7 @@
 /**
  * Provides a means where visitors can select the size of the image on the image page.
  *
- * The the default size and list of allowed sizes may be set in the plugin options or
+ * The default size and list of allowed sizes may be set in the plugin options or
  * passed as a parameter to the support functions.
  *
  * The user selects a size to view from a radio button list. This size is then saved in

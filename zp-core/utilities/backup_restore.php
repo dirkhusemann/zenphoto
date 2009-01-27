@@ -3,7 +3,7 @@
  * Backup and restore of the zenphoto database tables
  * 
  * This plugin provides a means to make backups of your zenphoto database and
- * at a later time restore the the database to the contents of one of these backups.
+ * at a later time restore the database to the contents of one of these backups.
  * 
  * @package admin
  */

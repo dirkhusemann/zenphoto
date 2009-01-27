@@ -582,7 +582,7 @@ define ('CUSTOM_OPTION_PREFIX', '_ZP_CUSTOM_');
  *
  * @param object $optionHandler the object to handle custom options
  * @param string $indent used to indent the option for nested options
- * @param object $album if not null, the album to which the the option belongs
+ * @param object $album if not null, the album to which the option belongs
  * @param bool $hide set to true to hide the output (used by the plugin-options folding
  *
  * There are four type of custom options:
