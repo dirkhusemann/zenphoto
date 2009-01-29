@@ -59,12 +59,9 @@
 				</div>
 				<?php endwhile; ?>
 			</div>
+		<br clear=all>
 		<?php
-		if (function_exists('printSlideShowLink')) {
-			echo "<p align=\"center\">";
-			printSlideShowLink(gettext('View Slideshow'));
-			echo "</p>";
-		}
+		if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow'));
 		if ($c == 0) {
 				echo "<p>".gettext("Sorry, no image matches. Try refining your search.")."</p>";
 			}
