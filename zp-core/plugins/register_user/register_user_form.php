@@ -1,3 +1,10 @@
+<?php
+/**
+ * Form for registering users
+ * 
+ * @package plugins 
+ */
+?>
 	<form action="?action=register_user" method="post" AUTOCOMPLETE=OFF>
 		<input type="hidden" name="register_user" value="yes" />
 		<table class="register_user">

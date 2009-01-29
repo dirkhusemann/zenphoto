@@ -1,4 +1,10 @@
 <?php
+/**
+ * Zenphoto default captcha handler
+ * 
+ * @package plugins 
+ */
+
 // force UTF-8 Ø
 
 class captcha {

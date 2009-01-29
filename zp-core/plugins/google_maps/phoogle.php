@@ -27,7 +27,7 @@
  * @class        Phoogle Maps 2.0
  * @author       Justin Johnson <justinjohnson@system7designs.com>
  * @copyright    2005 system7designs
- *
+ * @package plugins 
  *
  *@Modified in 2008 by Eric Bayard to include in Zenphoto
  *

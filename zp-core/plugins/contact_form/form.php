@@ -1,3 +1,10 @@
+<?php
+/**
+ * Form for contact_form plugin
+ * 
+ * @package plugins 
+ */
+?>
 <form id="mailform" action="<?php echo sanitize($_SERVER['REQUEST_URI']); ?>" method="post" accept-charset="UTF-8">
 	<input type="hidden" id="sendmail" name="sendmail" value="sendmail" />
 	<table border="0">

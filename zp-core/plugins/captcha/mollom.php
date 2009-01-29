@@ -1,4 +1,10 @@
 <?php
+/**
+ * mollom captcha handler
+ * 
+ * @package plugins 
+ */
+
 // force UTF-8 Ø
 
 require_once(dirname(dirname(__FILE__)).'/spamfilters/mollom.php');

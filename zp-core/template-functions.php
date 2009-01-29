@@ -817,6 +817,7 @@ function albumNumber() {
 /**
  * Returns an array of the names of the parents of the current album.
  *
+ * @param object $album optional album object to use inseted of the current album
  * @return array
  */
 function getParentAlbums($album=null) {
@@ -955,7 +956,7 @@ function printHomeLink($before='', $after='', $title=NULL, $class=NULL, $id=NULL
 /**
  * Returns the formatted date field of the album
  *
- * @param string $format
+ * @param string $format optional format string for the date
  * @return string
  */
 function getAlbumDate($format=null) {
@@ -1157,7 +1158,7 @@ function printAlbumCustomData($editable = false, $editclass='', $messageIfEmpty 
 /**
  * Sets the album custom_data field
  *
- * @param string $val
+ * @param string $val The value to be set
  */
 function setAlbumCustomData($val) {
 	global $_zp_current_album;
@@ -1197,8 +1198,9 @@ function printAlbumData($field, $label='', $editable=false, $editclass='', $mess
 
 
 /**
- * Missing description
+ * Returns the album page number of the current image
  *
+ * @param object $album optional album object
  * @return integer
  */
 function getAlbumPage($album = NULL) {
@@ -1225,6 +1227,7 @@ function getAlbumPage($album = NULL) {
 /**
  * Returns the album link url of the current album.
  *
+ * @param object $album optional album object
  * @return string
  */
 function getAlbumLinkURL($album=NULL) {
@@ -2093,7 +2096,6 @@ function getFirstImageURL() {
 * Returns the url of the last image in current album.
 *
 * @return string
-* @author gerben
 */
 function getLastImageURL() {
 	global $_zp_current_album;
@@ -2428,6 +2430,14 @@ function getDefaultSizedImage() {
 function printDefaultSizedImage($alt, $class=NULL, $id=NULL) {
 	global $_zp_current_image;
 	if (is_null($_zp_current_image)) return;
+	if (!$_zp_current_image->getShow()) {
+		$class .= " not_visible";
+	}
+	$album = $_zp_current_image->getAlbum();
+	$pwd = $album->getPassword();
+	if (zp_loggedin() && !empty($pwd)) {
+		$class .= " password_protected";
+	}
 	if (isImagePhoto()) { //Print images
 		echo '<img src="' . htmlspecialchars(getDefaultSizedImage()) . '" alt="' . html_encode($alt) . '"' .
 			' title="' . html_encode($alt) . '"'.
@@ -2575,7 +2585,7 @@ function getProtectedImageURL() {
 /**
  * Returns a link to the current image custom sized to $size
  *
- * @param int $size
+ * @param int $size The size the image is to be
  */
 function getSizedImageURL($size) {
 	getCustomImageURL($size);
@@ -2620,6 +2630,14 @@ function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph
 function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $class=NULL, $id=NULL, $thumbStandin=false) {
 	global $_zp_current_image;
 	if (is_null($_zp_current_image)) return;
+	if (!$_zp_current_image->getShow()) {
+		$class .= " not_visible";
+	}
+	$album = $_zp_current_image->getAlbum();
+	$pwd = $album->getPassword();
+	if (zp_loggedin() && !empty($pwd)) {
+		$class .= " password_protected";
+	}
 	if (isImagePhoto() || $thumbStandin) {
 		echo '<img src="' . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin)) . '"' .
 			' alt="' . html_encode($alt) . '"' .
@@ -3632,6 +3650,7 @@ function printCustomPageURL($linktext, $page, $q='', $prev='', $next='', $class=
 /**
  * Returns the URL to an image (This is NOT the URL for the image.php page)
  *
+ * @param object $image the image
  * @return string
  */
 function getURL($image) {
@@ -3979,8 +3998,8 @@ function openedForComments($what=3) {
  * Returns a path and name of the theme css file. Returns the value passed for defaultcolor if the
  * theme css option file does not exist.
  *
- * @param string $zenCSS path to the css file
- * @param string $themeColor name of the css file
+ * @param string &$zenCSS path to the css file
+ * @param string &$themeColor name of the css file
  * @param string $defaultColor name of the default css file
  * @return string
  * @since 1.1
@@ -4170,6 +4189,9 @@ function printPasswordForm($hint, $showProtected=true, $showuser=NULL) {
 			break;
 		case 'image.php':
 			$action = '&amp;album='.urlencode($_zp_current_album->name).'&amp;image='.urlencode($_zp_current_image->filename);
+		case 'full-image.php':
+			$action = '&amp;album='.urlencode($_zp_current_album->name).'&amp;image='.urlencode($_zp_current_image->filename).'&amp;p=*full-image';
+			break;
 		default:
 		if (in_context(ZP_SEARCH)) {
 			$action = "&amp;p=search" . $_zp_current_search->getSearchParams();
@@ -4282,10 +4304,10 @@ function shortenContent($articlecontent, $shorten, $shortenindicator) {
 /**
  * Expose some informations in a HTML comment
  *
- * @param string $obj
- * @param array $plugins
- * @param string $theme
- * @param string $filters
+ * @param string $obj the path to the page being loaded
+ * @param array $plugins list of activated plugins
+ * @param string $theme The theme being used
+ * @param string $filters list of the activated filters
  */
 function exposeZenPhotoInformations( $obj = '', $plugins = '', $theme = '', $filters = '' ) {
 	global $zenpage_version, $_zp_filters;

@@ -830,7 +830,7 @@ function getImageMetadata($imageName) {
 /**
  * Returns an array of $type, $class of the object passed
  *
- * @param object $receiver
+ * @param object $receiver The object whose class we desire
  * @return array
  */
 function commentObjectClass($receiver) {
@@ -1563,6 +1563,9 @@ function parseThemeDef($file) {
 
 /**
  * Emits a page error. Used for attempts to bypass password protection
+ * 
+ * @param string $err error code
+ * @param string $text error message
  *
  */
 function pageError($err,$text) {
