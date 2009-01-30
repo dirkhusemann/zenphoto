@@ -9,16 +9,21 @@
 
 // force UTF-8 Ø
 
-if (function_exists('date_default_timezone_set')) { // insure a correct timezone 
-	$tz = date_default_timezone_get();
-	date_default_timezone_set($tz); 
-	ini_set('date.timezone', $tz);
-} 
 
 define('FILESYSTEM_CHARSET', 'ISO-8859-1');
 define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
 define('DEBUG_ERROR', false); // set to true to  supplies the calling sequence with zp_error messages
 define('DEBUG_IMAGE', false); // set to true to log image processing debug information.
+
+// Set error reporting.
+error_reporting(E_ALL ^E_NOTICE);
+$_zp_error = false;
+
+if (function_exists('date_default_timezone_set')) { // insure a correct timezone 
+	$tz = date_default_timezone_get();
+	date_default_timezone_set($tz); 
+	ini_set('date.timezone', $tz);
+} 
 
 require_once(dirname(__FILE__).'/lib-utf8.php');
 $_zp_UTF8 = new utf8();
@@ -88,9 +93,6 @@ define("THEMEFOLDER", 'themes');
 define('BACKUPFOLDER', 'backup');
 define('UTILITIES_FOLDER', '/utilities/');
 
-// Set error reporting.
-error_reporting(E_ALL | E_STRICT);
-$_zp_error = false;
 
 /**
  * Decodes HTML Special Characters.  Function for backwards compatability with PHP 4.1.
