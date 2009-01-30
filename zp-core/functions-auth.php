@@ -70,7 +70,7 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums) {
 			$password = "' ,`password`='" . escape($pass);
 		}
 		if (is_null($rights)) {
-			$rights = '';
+			$rightsset = '';
 		} else {
 			$rightsset = "', `rights`='" . escape($rights);
 		}
