@@ -59,59 +59,62 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
 	// Extract the image parameters from the input variables
 	// This validates the input as well.
 	$args = array();
-	if (isset($_GET['s'])) {
+	if (isset($_GET['s'])) { //0
 		$args[] = $_GET['s'];
 	} else {
 		$args[] = NULL;
 	}
-	if (isset($_GET['w'])) {
+	if (isset($_GET['w'])) {  //1
 		$args[] = $_GET['w'];
 	} else {
 		$args[] = NULL;
 	}
-	if (isset($_GET['h'])) {
+	if (isset($_GET['h'])) { //2
 		$args[] = $_GET['h'];
 	} else {
 		$args[] = NULL;
 	}
-	if (isset($_GET['cw'])) {
+	if (isset($_GET['cw'])) { //3
 		$args[] = $_GET['cw'];
 	} else {
 		$args[] = NULL;
 	}
-	if (isset($_GET['ch'])) {
+	if (isset($_GET['ch'])) { //4
 		$args[] = $_GET['ch'];
 	} else {
 		$args[] = NULL;
 	}
-	if (isset($_GET['cx'])) {
+	if (isset($_GET['cx'])) { //5
 		$args[] = $_GET['cx'];
 	} else {
 		$args[] = NULL;
 	}
-	if (isset($_GET['cy'])) {
+	if (isset($_GET['cy'])) { //6
 		$args[] = $_GET['cy'];
 	} else {
 		$args[] = NULL;
 	}
-	if (isset($_GET['q'])) {
+	if (isset($_GET['q'])) { //7
 		$args[] = $_GET['q'];
 	} else {
 		$args[] = NULL;
 	}
-	if (isset($_GET['t'])) {
+	if (isset($_GET['t'])) { //8
 		$args[] = $_GET['t'];
 	} else {
 		$args[] = NULL;
 	}
-	if (isset($_GET['wmt']) && !$adminrequest) {
+	$argh[] = NULL; //9 crop
+	$args[] = NULL; //10 thumb standin
+	if (isset($_GET['wmt']) && !$adminrequest) { //11
 		$args[] = $_GET['wmt'];
 	} else {
 		$args[] = NULL;
 	}
-	$args [] = $adminrequest;
+	$args [] = $adminrequest; //12
+	
 	$args = getImageParameters($args);
-	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
+	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM, $adminrequest) = $args;
 	$allowWatermark = !$thumb && !$adminrequest;
 	
   if ($debug) imageDebug($album, $image, $args);

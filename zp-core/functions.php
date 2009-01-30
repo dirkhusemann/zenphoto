@@ -446,54 +446,58 @@ function sortByMultilingual($dbresult, $field, $descending) {
  * @author Todd Papaioannou (lucky@luckyspin.org)
  * @since  1.0.0
  */
-function sortAlbumArray($parentalbum, $albums, $sortkey='`sort_order`', $recursed=false) {
+function sortAlbumArray($parentalbum, $albums, $sortkey='`sort_order`') {
 	global $_zp_gallery;
 	if (count($albums) == 0) return array();
-	$hidden = array();
 	if (is_null($parentalbum)) {
 		$albumid = ' IS NULL';
 	} else {
 		$albumid = '="'.$parentalbum->id.'"';
 	}
 	$sql = 'SELECT `folder`, `sort_order`, `title`, `show`, `dynamic`, `search_params` FROM ' .
-						prefix("albums") . ' WHERE `parentid`'.$albumid.' ORDER BY ' . $sortkey;	
-	$result = query($sql);
-	$results = array();
-	while ($row = mysql_fetch_assoc($result)) {
-		$results[] = $row;
-	}
-	if (strpos($sortkey,'title') !== false) {
-		$results = sortByMultilingual($results, 'title', strpos($sortkey,'DESC') !== false);
-	} else if (strpos($sortkey, 'folder') !== false) {
-		if (strpos($sortkey,'DESC') !== false) $order = 'dsc'; else $order = 'asc';
-		$results = sortMultiArray($results, 'folder', $order, true, false);
-	}
-	$i = 0;
-	$albums_r = array_flip($albums);
-	$albums_touched = array();
-	foreach ($results as $row) {
-		$folder = $row['folder'];
-		$mine = isMyALbum($folder, ALL_RIGHTS);
-		if (array_key_exists($folder, $albums_r)) {
-			$albums_r[$folder] = $i;
-			$albums_touched[] = $folder;
-			if (!($row['show'] || $mine)) {  // you can see only your own unpublished content.
-				$hidden[] = $folder;
-			}
+						prefix("albums") . ' WHERE `parentid`'.$albumid.' ORDER BY ' . $sortkey;
+	$loop = 0;	
+	do {
+		$result = query($sql);
+		$hidden = array();
+		$results = array();
+		while ($row = mysql_fetch_assoc($result)) {
+			$results[] = $row;
 		}
-		$i++;
-	}
-
-	$albums_untouched = array_diff($albums, $albums_touched);
-	if (count($albums_untouched) > 0) { //found new albums
-		foreach($albums_untouched as $alb) {
-			$albobj = new Album($_zp_gallery, $alb); // force load to DB
-			$albums_r[$alb] = -$i;  // place them in the front of the list
+		if (strpos($sortkey,'title') !== false) {
+			$results = sortByMultilingual($results, 'title', strpos($sortkey,'DESC') !== false);
+		} else if (strpos($sortkey, 'folder') !== false) {
+			if (strpos($sortkey,'DESC') !== false) $order = 'dsc'; else $order = 'asc';
+			$results = sortMultiArray($results, 'folder', $order, true, false);
+		}
+		$i = 0;
+		$albums_r = array_flip($albums);
+		$albums_touched = array();
+		foreach ($results as $row) {
+			$folder = $row['folder'];
+			$mine = isMyALbum($folder, ALL_RIGHTS);
+			if (array_key_exists($folder, $albums_r)) {
+				$albums_r[$folder] = $i;
+				$albums_touched[] = $folder;
+				if (!($row['show'] || $mine)) {  // you can see only your own unpublished content.
+					$hidden[] = $folder;
+				}
+			}
 			$i++;
 		}
-		if (!$recursed) return sortAlbumArray($parentalbum, $albums, $sortkey, true);
-	}
-
+		$albums_untouched = array_diff($albums, $albums_touched);
+		if (count($albums_untouched) > 0) { //found new albums
+			$loop ++;
+			foreach($albums_untouched as $alb) {
+				$albobj = new Album($_zp_gallery, $alb); // force load to DB
+				$albums_r[$alb] = -$i;  // place them in the front of the list
+				$i++;
+			}
+		} else {
+			$loop = 0;
+		}
+	} while ($loop==1);
+	
 	foreach($hidden as $alb) {
 		unset($albums_r[$alb]);
 	}

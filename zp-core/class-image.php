@@ -705,8 +705,8 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin=false) {
-		$cachefilename = getImageCacheFilename($this->album->name, $this->filename,
-											getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy)));
+		$args = array($size, $width, $height, $cropw, $croph, $cropx, $cropy, NULL, NULL, NULL, $thumbStandin, NULL, NULL);
+		$cachefilename = getImageCacheFilename($this->album->name, $this->filename,	getImageParameters($args));
 		if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
 			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($cachefilename));
 		} else {

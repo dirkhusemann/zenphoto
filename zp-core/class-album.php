@@ -548,9 +548,8 @@ class Album extends PersistentObject {
 	 * @param  string $sortdirection optional sort direction
 	 * @return array
 	 */
-	function sortImageArray($images, $sorttype=NULL, $sortdirection=NULL, $recursed=false) {
+	function sortImageArray($images, $sorttype=NULL, $sortdirection=NULL) {
 
-		$hidden = array();
 		$mine = isMyAlbum($this->name, ALL_RIGHTS);
 		$key = $this->getSortKey($sorttype);
 		$direction = '';
@@ -565,47 +564,54 @@ class Album extends PersistentObject {
 		}
 		$result = query($sql = "SELECT `filename`, `title`, `sort_order`, `title`, `show`, `id` FROM " . prefix("images")
 										. " WHERE `albumid`= '" . $this->id . "' ORDER BY " . $key . $direction);
-		$results = array();
-		while ($row = mysql_fetch_assoc($result)) {
-			$results[] = $row;
-		}
-		if ($key == 'title') {
-			$results = sortByMultilingual($results, 'title', $direction == ' DESC');
-		} else if ($key == 'filename') {
-			if ($direction == 'DESC') $order = 'dsc'; else $order = 'asc';
-			$results = sortMultiArray($results, 'filename', $order, true, false);
-		}
-		$i = 0;
-		$flippedimages = array_flip($images);
-		$images_to_keys = array();
-		$images_in_db = array();
-		$images_invisible = array();
-			foreach ($results as $row) { // see what images are in the database so we can check for visible
-			$filename = $row['filename'];
-			if (isset($flippedimages[$filename])) { // ignore db entries for images that no longer exist.
-				if ($row['show'] || $mine) {  // unpublished content available only to someone with rights on the album
+		$loop = 0;
+		do {
+			$hidden = array();
+			$results = array();
+			while ($row = mysql_fetch_assoc($result)) {
+				$results[] = $row;
+			}
+			if ($key == 'title') {
+				$results = sortByMultilingual($results, 'title', $direction == ' DESC');
+			} else if ($key == 'filename') {
+				if ($direction == 'DESC') $order = 'dsc'; else $order = 'asc';
+				$results = sortMultiArray($results, 'filename', $order, true, false);
+			}
+			$i = 0;
+			$flippedimages = array_flip($images);
+			$images_to_keys = array();
+			$images_in_db = array();
+			$images_invisible = array();
+				foreach ($results as $row) { // see what images are in the database so we can check for visible
+				$filename = $row['filename'];
+				if (isset($flippedimages[$filename])) { // ignore db entries for images that no longer exist.
+					if ($row['show'] || $mine) {  // unpublished content available only to someone with rights on the album
+						$images_to_keys[$filename] = $i;
+						$i++;
+					}
+					$images_in_db[] = $filename;
+				} else {
+					$id = $row['id'];
+					query("DELETE FROM ".prefix('images')." WHERE `id`=$id"); // delete the record
+					query("DELETE FROM ".prefix('comments')." WHERE `type` IN (".zp_image_types("'").") AND `ownerid`= '$id'"); // remove image comments
+				}
+			}
+			// Place the images not yet in the database before those with sort columns.
+			// This is consistent with the sort oder of a NULL sort_order key in manual sorts
+			// but will almost certainly be wrong in all other cases.
+			$images_not_in_db = array_diff($images, $images_in_db);
+			if (count($images_not_in_db) > 0) {
+				$loop ++;
+				foreach($images_not_in_db as $filename) {
+					$imgobj = newImage($this, $filename); // force it into the database
 					$images_to_keys[$filename] = $i;
 					$i++;
 				}
-				$images_in_db[] = $filename;
 			} else {
-				$id = $row['id'];
-				query("DELETE FROM ".prefix('images')." WHERE `id`=$id"); // delete the record
-				query("DELETE FROM ".prefix('comments')." WHERE `type` IN (".zp_image_types("'").") AND `ownerid`= '$id'"); // remove image comments
+				$loop = 0;
 			}
-		}
-		// Place the images not yet in the database before those with sort columns.
-		// This is consistent with the sort oder of a NULL sort_order key in manual sorts
-		// but will almost certainly be wrong in all other cases.
-		$images_not_in_db = array_diff($images, $images_in_db);
-		if (count($images_not_in_db) > 0) {
-			foreach($images_not_in_db as $filename) {
-				$imgobj = newImage($this, $filename); // force it into the database
-				$images_to_keys[$filename] = $i;
-				$i++;
-			}
-			if (!$recursed) return $this->sortImageArray($images, $sorttype, $sortdirection, true);
-		}
+		} while ($loop==1);
+		
 		$images = array_flip($images_to_keys);
 		ksort($images);
 		$images_ordered = array();

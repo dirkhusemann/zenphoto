@@ -2295,7 +2295,7 @@ function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL
 	$us = getOption('image_allow_upscale');
 
 	$args = getImageParameters(array($size, $width, $height, $cw, $ch, $cx, $cy, null));
-	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
+	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM, $adminrequest) = $args;
 	if (!empty($size)) {
 		$dim = $size;
 		$width = $height = false;
