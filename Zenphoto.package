@@ -286,6 +286,10 @@ zp-core/locale/fr_FR/LC_MESSAGES/zenphoto.mo
 zp-core/locale/fr_FR/LC_MESSAGES/zenphoto.po
 zp-core/locale/ja_JP/LC_MESSAGES/zenphoto.mo
 zp-core/locale/ja_JP/LC_MESSAGES/zenphoto.po
+zp-core/locale/zh_CN/LC_MESSAGES/zenphoto.mo
+zp-core/locale/zh_CN/LC_MESSAGES/zenphoto.po
+zp-core/locale/zh_TW/LC_MESSAGES/zenphoto.mo
+zp-core/locale/zh_TW/LC_MESSAGES/zenphoto.po
 zp-core/plugins/captcha/mollom.php
 zp-core/plugins/captcha/zenphoto.php
 zp-core/plugins/class-textobject/textDefault.png
