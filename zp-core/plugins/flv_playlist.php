@@ -31,14 +31,14 @@
  * Of course you can add further functions to b) like title, description, date etc., too.
  *  
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.4.4
+ * @version 1.0.5
  * @package plugins 
  */
 
 $plugin_description = gettext("A plugin to show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players with flv player (some options are also shared with that plugin).<strong>Note:</strong>Currently supports only FLV player version 3.").
 	' <strong>'.gettext("Requires flvplayer plugin. Also note the usage licence of FLV player on its plugin description").'</strong>';
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.4.4';
+$plugin_version = '1.0.5';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flv_playlist.php.html";
 $option_interface = new flvplaylist();
 
