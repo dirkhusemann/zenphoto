@@ -1689,82 +1689,6 @@ function checkForUpdate() {
 	Return $_zp_WEB_Version;
 }
 
-/**
- * Gets an array of comments for the current admin
- *
- * @param int $number how many comments desired
- * @return array
- */
-function fetchComments($number) {
-	if ($number) {
-		$limit = " LIMIT $number";
-	} else {
-		$limit = '';
-	}
-
-	global $_zp_loggedin;
-	$comments = array();
-	if ($_zp_loggedin & ADMIN_RIGHTS) {
-		$sql = "SELECT `id`, `name`, `website`, `type`, `ownerid`,"
-		. " (date + 0) AS date, `comment`, `email`, `inmoderation`, `ip`, `private`, `anon` FROM ".prefix('comments')
-		. " ORDER BY id DESC$limit";
-		$comments = query_full_array($sql);
-	} else  if ($_zp_loggedin & (COMMENT_RIGHTS)) {
-		$albumlist = getManagedAlbumList();
-		$albumIDs = array();
-		foreach ($albumlist as $albumname) {
-			$subalbums = getAllSubAlbumIDs($albumname);
-			foreach($subalbums as $ID) {
-				$albumIDs[] = $ID['id'];
-			}
-		}
-		if (count($albumIDs) > 0) {
-			$sql = "SELECT  `id`, `name`, `website`, `type`, `ownerid`,"
-			." (`date` + 0) AS date, `comment`, `email`, `inmoderation`, `ip` "
-			." FROM ".prefix('comments')." WHERE ";
-
-			$sql .= " (`type`='albums' AND (";
-			$i = 0;
-			foreach ($albumIDs as $ID) {
-				if ($i>0) { $sql .= " OR "; }
-				$sql .= "(".prefix('comments').".ownerid=$ID)";
-				$i++;
-			}
-			$sql .= ")) ";
-			$sql .= " ORDER BY id DESC$limit";
-			$albumcomments = query_full_array($sql);
-			foreach ($albumcomments as $comment) {
-				$comments[$comment['id']] = $comment;
-			}
-			$sql = "SELECT .".prefix('comments').".id as id, ".prefix('comments').".name as name, `website`, `type`, `ownerid`,"
-			." (".prefix('comments').".date + 0) AS date, `comment`, `email`, `inmoderation`, `ip`, ".prefix('images').".`albumid` as albumid"
-			." FROM ".prefix('comments').",".prefix('images')." WHERE ";
-			
-			$sql .= "(`type` IN (".zp_image_types("'").") AND (";
-			$i = 0;
-			foreach ($albumIDs as $ID) {
-				if ($i>0) { $sql .= " OR "; }
-				$sql .= "(".prefix('comments').".ownerid=".prefix('images').".id AND ".prefix('images')
-				.".albumid=$ID)";
-				$i++;
-			}
-			$sql .= "))";
-			$sql .= " ORDER BY id DESC$limit";
-			$imagecomments = query_full_array($sql);
-			foreach ($imagecomments as $comment) {
-				$comments[$comment['id']] = $comment;
-			}
-			krsort($comments);
-			if ($number) {
-				if ($number < count($comments)) {
-					$comments = array_slice($comments, 0, $number);
-				}
-			}
-		}
-	}
-	return $comments;
-}
-
 function adminPageNav($pagenum,$totalpages,$adminpage,$parms,$tab='') {
 	if (empty($parms)) {
 		$url = '?';
@@ -1808,7 +1732,7 @@ $_zp_current_locale = NULL;
  * @param string $locale optional locale of the translation desired
  * @param string $edit optional class
  */
-function print_language_string_list($dbstring, $name, $textbox=false, $locale=NULL, $edit='') {
+function print_language_string_list($dbstring, $name, $textbox=false, $locale=NULL, $edit='', $size=0) {
 	global $_zp_languages, $_zp_active_languages, $_zp_current_locale;
 	if (!empty($edit)) $edit = ' class="'.$edit.'"';
 	if (is_null($locale)) {
@@ -1842,9 +1766,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 					echo '<li><label for="'.$name.'_'.$key.'">';
 					echo $lang;
 					if ($textbox) {
-						echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.TEXTAREA_COLUMNS.'"	style="width: 310px" rows="6">'.$string.'</textarea>';
+						echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.($size ? $size : TEXTAREA_COLUMNS).'"	style="width: 310px" rows="6">'.$string.'</textarea>';
 					} else {
-						echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.$string.'" style="width: 310px" size="'.TEXT_INPUT_SIZE.'" />';
+						echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.$string.'" style="width: 310px" size="'.($size ? $size : TEXT_INPUT_SIZE).'" />';
 					}
 					echo "</label></li>\n";
 				}
@@ -1859,9 +1783,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 			echo '<li><label for="'.$name.'_'.$key.'">';
 			echo $lang;
 			if ($textbox) {
-				echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.TEXTAREA_COLUMNS.'"	style="width: 310px" rows="6"></textarea>';
+				echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.($size ? $size : TEXTAREA_COLUMNS).'"	style="width: 310px" rows="6"></textarea>';
 			} else {
-				echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="" style="width: 310px" size="'.TEXT_INPUT_SIZE.'" />';
+				echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="" style="width: 310px" size="'.($size ? $size : TEXT_INPUT_SIZE).'" />';
 			}
 			echo "</label></li>\n";
 
@@ -1875,9 +1799,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 			$dbstring = array_shift($strings);
 		}
 		if ($textbox) {
-			echo '<textarea name="'.$name.'_'.$locale.'"'.$edit.' cols="'.TEXTAREA_COLUMNS.'"	rows="6">'.$dbstring.'</textarea>';
+			echo '<textarea name="'.$name.'_'.$locale.'"'.$edit.' cols="'.($size ? $size : TEXTAREA_COLUMNS).'"	rows="6">'.$dbstring.'</textarea>';
 		} else {
-			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="'.TEXT_INPUT_SIZE.'" />';
+			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="'.($size ? $size : TEXT_INPUT_SIZE).'" />';
 		}
 	}
 }

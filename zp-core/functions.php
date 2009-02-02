@@ -854,6 +854,82 @@ function commentObjectClass($receiver) {
 }
 
 /**
+ * Gets an array of comments for the current admin
+ *
+ * @param int $number how many comments desired
+ * @return array
+ */
+function fetchComments($number) {
+	if ($number) {
+		$limit = " LIMIT $number";
+	} else {
+		$limit = '';
+	}
+
+	global $_zp_loggedin;
+	$comments = array();
+	if ($_zp_loggedin & ADMIN_RIGHTS) {
+		$sql = "SELECT `id`, `name`, `website`, `type`, `ownerid`,"
+		. " (date + 0) AS date, `comment`, `email`, `inmoderation`, `ip`, `private`, `anon` FROM ".prefix('comments')
+		. " ORDER BY id DESC$limit";
+		$comments = query_full_array($sql);
+	} else  if ($_zp_loggedin & (COMMENT_RIGHTS)) {
+		$albumlist = getManagedAlbumList();
+		$albumIDs = array();
+		foreach ($albumlist as $albumname) {
+			$subalbums = getAllSubAlbumIDs($albumname);
+			foreach($subalbums as $ID) {
+				$albumIDs[] = $ID['id'];
+			}
+		}
+		if (count($albumIDs) > 0) {
+			$sql = "SELECT  `id`, `name`, `website`, `type`, `ownerid`,"
+			." (`date` + 0) AS date, `comment`, `email`, `inmoderation`, `ip` "
+			." FROM ".prefix('comments')." WHERE ";
+
+			$sql .= " (`type`='albums' AND (";
+			$i = 0;
+			foreach ($albumIDs as $ID) {
+				if ($i>0) { $sql .= " OR "; }
+				$sql .= "(".prefix('comments').".ownerid=$ID)";
+				$i++;
+			}
+			$sql .= ")) ";
+			$sql .= " ORDER BY id DESC$limit";
+			$albumcomments = query_full_array($sql);
+			foreach ($albumcomments as $comment) {
+				$comments[$comment['id']] = $comment;
+			}
+			$sql = "SELECT .".prefix('comments').".id as id, ".prefix('comments').".name as name, `website`, `type`, `ownerid`,"
+			." (".prefix('comments').".date + 0) AS date, `comment`, `email`, `inmoderation`, `ip`, ".prefix('images').".`albumid` as albumid"
+			." FROM ".prefix('comments').",".prefix('images')." WHERE ";
+			
+			$sql .= "(`type` IN (".zp_image_types("'").") AND (";
+			$i = 0;
+			foreach ($albumIDs as $ID) {
+				if ($i>0) { $sql .= " OR "; }
+				$sql .= "(".prefix('comments').".ownerid=".prefix('images').".id AND ".prefix('images')
+				.".albumid=$ID)";
+				$i++;
+			}
+			$sql .= "))";
+			$sql .= " ORDER BY id DESC$limit";
+			$imagecomments = query_full_array($sql);
+			foreach ($imagecomments as $comment) {
+				$comments[$comment['id']] = $comment;
+			}
+			krsort($comments);
+			if ($number) {
+				if ($number < count($comments)) {
+					$comments = array_slice($comments, 0, $number);
+				}
+			}
+		}
+	}
+	return $comments;
+}
+
+/**
  * Generic comment adding routine. Called by album objects or image objects
  * to add comments.
  *
