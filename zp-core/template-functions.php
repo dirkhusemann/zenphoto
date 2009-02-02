@@ -2750,10 +2750,10 @@ function printSizedImageLink($size, $text, $title, $class=NULL, $id=NULL) {
 */
 function getCommentCount() {
 	global $_zp_current_image, $_zp_current_album, $_zp_current_zenpage_page, $_zp_current_zenpage_news;
-	if (in_context(ZP_IMAGE) & in_context(ZP_ALBUM)) {
+	if (in_context(ZP_IMAGE) && in_context(ZP_ALBUM)) {
 		if (is_null($_zp_current_image)) return false;
 		return $_zp_current_image->getCommentCount();
-	} else if (!in_context(ZP_IMAGE) & in_context(ZP_ALBUM)) {
+	} else if (!in_context(ZP_IMAGE) && in_context(ZP_ALBUM)) {
 		if (is_null($_zp_current_album)) return false;
 		return $_zp_current_album->getCommentCount();
 	}
