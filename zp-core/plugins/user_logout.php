@@ -13,6 +13,27 @@ $plugin_description = gettext("Provides a means for placing a user logout link o
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.0.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---user_logout.php.html";
+$option_interface = new user_logout_options();
+
+/**
+ * Plugin option handling class
+ *
+ */
+class user_logout_options {
+
+	function user_logout_options() {
+		setOptionDefault('user_logout_login_form', 0);
+	}
+
+	function getOptionsSupported() {
+		return array(	gettext('Enable login form') => array('key' => 'user_logout_login_form', 'type' => 1,
+										'desc' => gettext('If enabled, a login form will be displayed if the viewer is not logged in.'))
+		);
+	}
+	function handleOption($option, $currentValue) {
+	}
+}
+
 
 $cookiepath = WEBPATH;
 if (WEBPATH == '') { $cookiepath = '/'; }
@@ -24,7 +45,7 @@ if (!OFFSET_PATH) {
 	if (isset($_SESSION)) $candidate = Array_merge($candidate, $_SESSION);
 	$candidate = array_unique($candidate);
 	foreach ($candidate as $cookie=>$value) {
-		if ($cookie == 'zenphoto_auth' || $cookie == 'zp_gallery_auth' || $cookie == 'zp_search_auth' || strpos($cookie, 'zp_album_auth_') !== false) {
+		if ($cookie == 'zenphoto_auth' || $cookie == 'zp_gallery_auth' || $cookie == 'zp_search_auth' || $cookie == 'zp_image_auth' || strpos($cookie, 'zp_album_auth_') !== false) {
 			$cookies[] = $cookie;
 		}
 	}
@@ -52,7 +73,7 @@ if (!OFFSET_PATH) {
  */
 function printUserLogout($before='', $after='', $showLoginForm=false) {
 	global $cookies;
-	if ($showLoginForm) {
+	if ($showLoginForm || getOption('user_logout_login_form')) {
 		$showLoginForm = !checkforPassword(true);
 	}
 	if (empty($cookies)) {

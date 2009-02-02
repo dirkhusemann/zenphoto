@@ -416,6 +416,18 @@ table.bordered tr.alt1 td {
 	border-bottom: 2px solid #BAC9CF; 
 }
 
+table.bordered table.compact {
+	padding: 8px 16px;
+	margin: 0px;
+}
+table.bordered table.compact tr {
+	padding: 8px 16px;
+	margin: 0px;
+}
+table.bordered table.compact td {
+	padding: 8px 16px;
+	margin: 0px;
+}
 
 table.formlayout td {
 	padding: 2px;

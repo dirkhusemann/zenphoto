@@ -267,7 +267,11 @@ function zp_handle_password() {
 	$cookiepath = WEBPATH;
 	if (WEBPATH == '') { $cookiepath = '/'; }
 	$check_auth = '';
-	if (in_context(ZP_SEARCH)) {  // search page
+	if (isset($_GET['p']) && $_GET['p'] == '*full-image') {
+		$authType = 'zp_image_auth';
+		$check_auth = getOption('protected_image_password');
+		$check_user = getOption('protected_image_user');
+	} else if (in_context(ZP_SEARCH)) {  // search page
 		$authType = 'zp_search_auth';
 		$check_auth = getOption('search_password');
 		$check_user = getOption('search_user');
@@ -292,10 +296,12 @@ function zp_handle_password() {
 		$check_user = getOption('gallery_user');
 	}
 	// Handle the login form.
+	if (DEBUG_LOGIN) debugLog("zp_handle_password: \$authType=$authType; \$check_auth=$check_auth; \$check_user=$check_user; ");
 	if (isset($_POST['password']) && isset($_POST['pass'])) {
 		$post_user = $_POST['user'];
 		$post_pass = $_POST['pass'];
 		$auth = md5($post_user . $post_pass);
+		if (DEBUG_LOGIN) debugLog("zp_handle_password: \$post_user=$post_user; \$post_pass=$post_pass; \$auth=$auth; ");
 		if ($_zp_loggedin = checkLogon($post_user, $post_pass)) {	// allow Admin user login
 			zp_setcookie("zenphoto_auth", $auth, time()+COOKIE_PESISTENCE, $cookiepath);
 		} else {

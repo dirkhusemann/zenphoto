@@ -19,6 +19,15 @@ if (checkforPassword(true)) {
 	pageError(403, gettext("Forbidden"));
 	exit();
 }
+if (!isMyAlbum($_zp_current_album->name, ALL_RIGHTS) && ($hash = getOption('protected_image_password'))) {
+	$authType = 'zp_image_auth';
+	if (zp_getCookie($authType) != $hash) {
+		$hint = get_language_string(getOption('protected_image_hint'));
+		$show = getOption('protected_image_user');
+		printPasswordForm($hint, true, getOption('login_user_field') || $show);
+		exit();
+	}
+}
 require_once(dirname(__FILE__).'/functions-image.php');
 $image_path = $_zp_current_image->localpath;
 $suffix = strtolower(substr(strrchr($image_path, "."), 1));

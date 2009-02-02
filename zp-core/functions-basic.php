@@ -12,11 +12,11 @@
 
 define('FILESYSTEM_CHARSET', 'ISO-8859-1');
 define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
-define('DEBUG_ERROR', false); // set to true to  supplies the calling sequence with zp_error messages
+define('DEBUG_ERROR', true); // set to true to  supplies the calling sequence with zp_error messages
 define('DEBUG_IMAGE', false); // set to true to log image processing debug information.
 
 // Set error reporting.
-error_reporting(E_ALL ^E_NOTICE);
+error_reporting(E_ALL | E_STRICT);
 $_zp_error = false;
 
 if (function_exists('date_default_timezone_set')) { // insure a correct timezone 

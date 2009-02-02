@@ -199,7 +199,7 @@ if (isset($_GET['action'])) {
 						setOption('search_password', NULL);  // clear the gallery password
 					}
 				} else {
-					setOption('search_password', passwordHash($newuser. $pwd));
+					setOption('search_password', passwordHash($newuser, $pwd));
 				}
 			} else {
 				if (empty($notify)) {
@@ -279,6 +279,36 @@ if (isset($_GET['action'])) {
 			setOption('full_image_quality', sanitize($_POST['full_image_quality'],3));
 			setBoolOption('cache_full_image', isset($_POST['cache_full_image']));
 			setOption('protect_full_image', sanitize($_POST['protect_full_image'],3));
+			
+			$olduser = getOption('protected_image_user');
+			$newuser = sanitize($_POST['protected_image_user'],3);
+			if (!empty($newuser)) setOption('login_user_field', 1);
+			$pwd = trim($_POST['imagepass']);
+			if ($olduser != $newuser) {
+				if ($pwd != $_POST['imagepass_2']) {
+					$pwd2 = trim($_POST['imagepass_2']);
+					$_POST['imagepass'] = $pwd;  // invalidate, user changed but password not set
+					if (!empty($newuser) && empty($pwd) && empty($pwd2)) $fail = '?mismatch=image_user';
+				}
+			}
+			if ($_POST['imagepass'] == $_POST['imagepass_2']) {
+				setOption('protected_image_user',$newuser);
+				if (empty($pwd)) {
+					if (empty($_POST['imagepass'])) {
+						setOption('protected_image_password', NULL);  // clear the gallery password
+					}
+				} else {
+					setOption('protected_image_password', passwordHash($newuser, $pwd));
+				}
+			} else {
+				if (empty($notify)) {
+					$notify = '?mismatch=image';
+				} else {
+					$notify = $fail;
+				}
+			}
+			setOption('protected_image_hint', process_language_string_save('protected_image_hint', 3));
+			
 			setBoolOption('hotlink_protection', isset($_POST['hotlink_protection']));
 			setBoolOption('use_lock_image', isset($_POST['use_lock_image']));
 			$st = sanitize($_POST['image_sorttype'],3);
@@ -843,7 +873,7 @@ if ($subtab == 'admin') {
 				value="<?php echo $x; ?>" /><br />
 			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="searchpass_2"
 				value="<?php echo $x; ?>" /></td>
-			<td><?php echo gettext("Password for the the search guest user. If this is set, visitors must know this password to view search results."); ?></td>
+			<td><?php echo gettext("Password for the search guest user. If this is set, visitors must know this password to view search results."); ?></td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Search password hint:"); ?></td>
@@ -1175,7 +1205,19 @@ if ($subtab == 'admin') {
 	<?php
 	}
 	if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
-	?>
+	if (isset($_GET['mismatch'])) {
+		echo '<div class="errorbox" id="fade-message">';
+		switch ($_GET['mismatch']) {
+			case 'image':
+				echo  "<h2>". sprintf(gettext("Your %s passwords were empty or did not match"), $_GET['mismatch'])."</h2>";
+				break;
+			case 'image_user':
+				echo  "<h2>". gettext("You must supply a password for the Protected image user")."</h2>";
+				break;
+		}
+		echo '</div>';
+	}
+		?>
 	<div id="tab_image" class="box" style="padding: 15px;">
 	<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 	<input type="hidden" name="saveimageoptions" value="yes" /> 
@@ -1339,7 +1381,7 @@ if ($subtab == 'admin') {
 			<?php echo gettext("The watermark image that will be overlayed on the alternate thumbnail, if one exists."); ?> 
 			<br /><br />
 			<?php
-				printf(gettext('Images are in png-24 format and arelocated in the <code>%s/watermarks/</code> folder.'), ZENFOLDER);
+				printf(gettext('Images are in png-24 format and are located in the <code>%s/watermarks/</code> folder.'), ZENFOLDER);
 			?>
 			</td>
 		</tr>
@@ -1354,7 +1396,8 @@ if ($subtab == 'admin') {
 			<td>
 				<?php
 				echo "<select id=\"protect_full_image\" name=\"protect_full_image\">\n";
-				generateListFromArray(array(getOption('protect_full_image')), array(gettext('Unprotected') => 'Unprotected', gettext('Protected view') => 'Protected view', gettext('Download') => 'Download', gettext('No access') => 'No access'), false, true);
+				$protection = getOption('protect_full_image');
+				generateListFromArray(array($protection), array(gettext('Unprotected') => 'Unprotected', gettext('Protected view') => 'Protected view', gettext('Download') => 'Download', gettext('No access') => 'No access'), false, true);
 				echo "</select>\n";
 				?>
 				<p>
@@ -1368,12 +1411,37 @@ if ($subtab == 'admin') {
 				echo checked('1', getOption('cache_full_image')). ' /> '.gettext('cache the full image');
 				?>
 				</p>
+				<table class="compact">
+					<tr >
+						<td><?php echo gettext("user:"); ?>    </td>
+						<td><input type="text" size="<?php echo 30; ?>" name="protected_image_user" value="<?php echo htmlspecialchars(getOption('protected_image_user')); ?>" />		</td>
+					</tr>
+					<tr>
+						<td>
+						<?php echo gettext("password:"); ?><br />
+						&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?>
+						</td>
+						<td>
+						<?php $x = getOption('protected_image_password'); if (!empty($x)) { $x = '          '; } ?>
+						<input type="password" size="<?php echo 30; ?>" name="imagepass" value="<?php echo $x; ?>" /><br />
+						<input type="password" size="<?php echo 30; ?>" name="imagepass_2" value="<?php echo $x; ?>" />
+						</td>
+					</tr>
+					<tr>
+						<td><?php echo gettext("hint:"); ?></td>
+						<td>
+						<?php print_language_string_list(getOption('protected_image_hint'), 'protected_image_hint', false, NULL, '', 30) ?>
+						</td>
+					</tr>
+				</table>
 			</td>
 			<td><?php echo gettext("Select the level of protection for full sized images. <em>Download</em> forces a download dialog rather than displaying the image. <em>No&nbsp;access</em> prevents a link to the image from being shown. <em>Protected&nbsp;view</em> forces image processing before the image is displayed, for instance to apply a watermark or to check passwords. <em>Unprotected</em> allows direct display of the image."); ?>
 			<br /><br />
 			<?php echo gettext("Disabling hotlinking prevents linking to the full image from other domains. If enabled, external links are redirect to the image page. If you are having problems with full images being displayed, try disabling this setting. Hotlinking is not prevented if <em>Full&nbsp;image&nbsp;protection</em> is <em>Unprotected</em> or if the image is cached."); ?>
 			<br /><br />
-			<?php echo ' '.gettext("If <em>Cache the full image</em> is checked the full image will be loaded to the cache and served from there after the first reference. <em>Full&nbsp;image&nbsp;protection</em> must be set to <em>Protected&nbsp;view</em> for the image to be cached. However, once cached, no protections are applied to the image."); ?>
+			<?php echo gettext("If <em>Cache the full image</em> is checked the full image will be loaded to the cache and served from there after the first reference. <em>Full&nbsp;image&nbsp;protection</em> must be set to <em>Protected&nbsp;view</em> for the image to be cached. However, once cached, no protections are applied to the image."); ?>
+			<br /><br />
+			<?php echo gettext("The <em>user</em>, <em>password</em>, and <em>hint</em> apply to the <em>Download</em> and <em>Protected view</em> level of protection. If there is a password set, the viewer must supply this password to access the image."); ?>
 			</td>
 		</tr>
 		<tr>
