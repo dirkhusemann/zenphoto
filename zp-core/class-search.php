@@ -599,7 +599,9 @@ class SearchEngine
 												}
 											}
 										}
-										$idlist = array_merge($idlist, array_diff($allIDs, $objectid));
+										if (is_array($objectid)) {
+											$idlist = array_merge($idlist, array_diff($allIDs, $objectid));
+										}
 										break;
 									case '&!':
 										if (is_array($objectid)) {
