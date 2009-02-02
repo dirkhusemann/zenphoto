@@ -341,6 +341,8 @@ function getImageStatistic($number, $option, $albumfolder='',$collection=false) 
 			$sortorder = "images.total_votes"; break;
 		case "toprated":
 			$sortorder = "(images.total_value/images.total_votes)"; break;
+		default: 
+			$sortorder = 'id'; break;
 	}
 	$imageArray = array();
 	$images = query_full_array("SELECT images.albumid, images.filename AS filename, images.mtime as mtime, images.title AS title, " .
