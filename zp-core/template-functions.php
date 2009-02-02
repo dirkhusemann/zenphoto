@@ -1097,8 +1097,7 @@ function printEditable($context, $field, $editable = false, $editclass = 'editab
 		trigger_error(gettext('printEditable() incomplete function call.'), E_USER_NOTICE);
 		return false;
 	}
-	
-	$text = trim( $override !== false ? $override : $object->get($field) );
+	$text = trim( $override !== false ? $override : get_language_string($object->get($field)) );
 	if ($convertBR) {
 		$text = str_replace("\r\n", "\n", $text);
 		$text = str_replace("\n", "<br/>", $text);
