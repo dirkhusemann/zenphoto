@@ -3309,13 +3309,13 @@ function getRandomImagesAlbum($rootAlbum=null) {
 		$albumfolder = $album->getFolder();
 		$query = "SELECT id FROM " . prefix('albums') . " WHERE " . prefix('albums') . ".show = 1 AND folder LIKE '" . mysql_real_escape_string($albumfolder) . "%'";
 		$result = query_full_array($query);
-		$albumInWhere = prefix('albums') . ".id in (";
-		foreach ($result as $row) {
-			$albumInWhere = $albumInWhere . $row['id'] . ", ";
+		if (is_array($result) && count($result) > 0) {
+			$albumInWhere = prefix('albums') . ".id in (";
+			foreach ($result as $row) {
+				$albumInWhere = $albumInWhere . $row['id'] . ", ";
+			}
+			$albumInWhere =  ' AND '.substr($albumInWhere, 0, -2) . ')';
 		}
-
-		$albumInWhere =  ' AND '.substr($albumInWhere, 0, -2) . ')';
-
 		$c = 0;
 		while ($c < 10) {
 			$result = query_single_row('SELECT COUNT(*) AS row_count ' .
