@@ -15,15 +15,16 @@ define('DEBUG_LOGIN', false); // set to true to log admin saves and login attemp
 define('DEBUG_ERROR', true); // set to true to  supplies the calling sequence with zp_error messages
 define('DEBUG_IMAGE', false); // set to true to log image processing debug information.
 
-// Set error reporting.
-error_reporting(E_ALL | E_STRICT);
-$_zp_error = false;
-
-if (function_exists('date_default_timezone_set')) { // insure a correct timezone 
+if (function_exists('date_default_timezone_set')) { // insure a correct timezone
+	error_reporting(0);
 	$tz = date_default_timezone_get();
 	date_default_timezone_set($tz); 
 	ini_set('date.timezone', $tz);
-} 
+}
+
+// Set error reporting.
+error_reporting(E_ALL | E_STRICT);
+$_zp_error = false;
 
 require_once(dirname(__FILE__).'/lib-utf8.php');
 $_zp_UTF8 = new utf8();
