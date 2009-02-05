@@ -1,0 +1,500 @@
+img {
+	border: 0;
+	padding: 0;
+}
+
+.pagetitle {
+	margin-top: 15px;
+	text-align: left;
+	background-color: #CCCCCC;
+}
+
+.zenpagestats {
+	margin-left: 5px;
+	font-size: 0.8em; 
+	color: #5A5A4B;
+}
+
+.center {
+	text-align: center;
+}
+
+.icons {
+	width: 15px;
+	text-align: center;
+}
+
+.icons img {
+	border: 0;
+}
+
+.icons a {
+	outline: none;
+}
+
+h1 {
+	display: block;
+	text-align: left;
+	clear: both;
+	border: 0px solid gray;
+}
+
+.icons2 {
+	width: 20px;
+	text-align: center;
+}
+
+.icons2b { /* adjustment for the author column page-admin.php */
+	width: 62px;
+	text-align: left;
+}
+
+.icons3 {
+	width: 150px;
+	text-align: left;
+}
+
+.icons3b {
+	width: 145px;
+	text-align: left;
+}
+
+.editspan {
+	margin-left: 30px;
+}
+
+td {
+	padding-bottom: 6px;
+}
+
+table.bordered2 {
+	width: 100%;
+	padding: 0px;
+	border-spacing: 0px;
+	margin: 0px;
+	background: #F7F8F9;
+	border-top: 1px solid #F7F8F9; /*#BAC9CF; */
+	border-bottom: 1px solid #F7F8F9; /*#BAC9CF; */
+}
+
+table.bordered2 td {
+	padding: 4px 16px;
+	margin: 0px;
+	background-color: #fff;
+}
+
+/* right column on admin pages */
+td.rightcolumn {
+	padding-left: 15px;
+	vertical-align: top;
+	text-align: left;
+}
+
+td.rightcolumnmiddle {
+	padding-left: 15px;
+	vertical-align: middle;
+	text-align: left;
+}
+
+#pageslist {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.message {
+	text-align: center;
+	color: green;
+}
+
+
+/* zenpage subnavigation
+------------------------------------- */
+.zptabs {
+	position: relative;
+	top: -30px;
+	padding: 0;
+	margin-top: 0;
+	height: 18px; /* was 28px originally */
+	list-style: none;
+	border-bottom: 0px solid #C7D3D8;
+}
+
+.zptabs li {
+	float: left;
+	padding-right: 5px;
+	margin: 0;
+}
+
+.zptabs a {
+	float: left;
+	padding: 8px 8px;
+	margin-left: 0px;
+	margin-right: 6px;
+	margin-bottom: 0px;
+	text-decoration: none;
+	color: #6b7d84;
+	outline: none;
+	/*background: #E9ECEF; */
+	border-top: 0px solid #C7D3D8;
+	border-left: 0px solid #C7D3D8;
+	border-right: 0px solid #C7D3D8;
+}
+
+.zptabs a:hover {
+	background-color: #EEEEEE;
+	padding: 8px 8px;
+	margin-left: 0px;
+	margin-right: 6px;
+	margin-bottom: 0px;
+	color: black;
+}
+
+.zptabs a.active-zptab {
+	background-color: #EEEEEE;
+	border-top: 0px solid #6b7d84;
+	color: gray;
+}
+
+.zptabs a.active-zptab:hover {
+	background-color: #EEEEEE;
+	border-top: 0px solid #6b7d84;
+	color: black;
+}
+
+/* News Article Page Navigation
+------------------------------ */
+ul.pagelist {
+	padding: 0;
+	margin: 10px 0 0 0;
+	list-style-type: none;
+}
+
+ul.pagelist li {
+	display: inline;
+}
+
+ul.pagelist li a,ul.pagelist span.disabledlink {
+	padding: 4px;
+}
+
+ul.pagelist li.current a {
+	font-weight: bold;
+	text-decoration: none;
+	cursor: default;
+	color: #5A5A4B;
+}
+
+ul.pagelist li.prev {
+	margin-right: 0px;
+}
+
+ul.pagelist li.next {
+	margin-left: 0px;
+}
+
+.disabledlink {
+	color: #ddd;
+	cursor: default;
+	margin-left: 5px;
+}
+
+.pagenav {
+	clear: both;
+}
+
+.disabled_nav {
+	visibility: hidden;
+}
+
+/* nested sortables
+-------------------------------------*/
+div.wrap {
+	border: 1px solid #BBBBBB;
+	padding: 1em 1em 1em 1em;
+}
+
+.page-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: block;
+}
+
+.clear-element {
+	clear: both;
+}
+
+.page-item1>div,.page-item2>div,.page-item3>div,.page-item4>div {
+	background: #f8f8f8;
+	margin: 0.25em 0 0 0;
+}
+
+.left {
+	text-align: left;
+}
+
+.right {
+	text-align: right;
+}
+
+.sort-handle {
+	cursor: move;
+	height: 20px;
+	padding-bottom: 10px;
+}
+
+.helper {
+	border: 1px dotted #777777;
+}
+
+.current-nesting {
+	background-color: yellow;
+}
+
+.bold {
+	color: red;
+	font-weight: bold;
+}
+
+/* tabs for additional page and article content
+-------------------------------------------------*/
+DIV.container {
+	margin: 0;
+}
+
+FIELDSET {
+	border: 1px solid #ccc;
+	padding: 1em;
+	margin: 0;
+}
+
+LEGEND {
+	color: #ccc;
+	font-size: 120%;
+}
+
+LABEL {
+	display: block;
+	margin-top: 10px;
+}
+
+IMG {
+	margin: 5px;
+}
+
+UL.tabNavigation {
+	list-style: none;
+	margin: 2px;
+	padding: 0;
+}
+
+UL.tabNavigation LI {
+	display: inline;
+}
+
+UL.tabNavigation LI A {
+	padding: 3px 5px;
+	background-color: #EEEEEE;
+	color: #6b7d84;
+	text-decoration: none;
+	border: 1px solid #C7D3D8;
+}
+
+UL.tabNavigation LI A.selected {
+	background-color: white;
+	color: black;
+	padding: 3px 5px;
+}
+
+UL.tabNavigation LI A:hover {
+	background-color: white;
+	color: gray;
+	padding: 3px 5px;
+}
+
+UL.tabNavigation LI A:active {
+	background-color: white;
+	color: black;
+	padding: 3px 5px;
+}
+
+UL.tabNavigation LI A:focus {
+	outline: 0;
+	color: #6b7d84;
+}
+
+div.tabs>div {
+	padding: 0px;
+	margin: 0px;
+	border: 0px solid #333;
+}
+
+div.tabs>div h2 {
+	margin: 0;
+}
+
+#first {
+	background-color: none;
+	margin-left: 0px;
+}
+
+#second {
+	background-color: none;
+	margin-left: 0px;
+}
+
+#third {
+	background-color: none;
+	margin-left: 0px;
+}
+
+.tabs textarea {
+	border: 1px solid #C7D3D8;
+	width: 600px;
+	height: 150px;
+}
+
+/* admin text fields 
+***************************/
+.inputfield {
+	width: 600px;
+}
+
+.pagecontent {
+	width: 600px; 
+	height: 500px;
+}
+
+.topalign-padding { /* for left colums on edit pages */
+	vertical-align: top;
+	padding-top: 5px;
+	text-align: left;
+}
+
+.topalign-nopadding { /* for left colums on edit pages */
+	vertical-align: top;
+	padding-top: 5px;
+}
+
+/* scrollable sortables for zenpage
+-------------------------------------------------*/
+	/* CSS for checklists */
+.zenpagechecklist {
+	border: 1px solid #ccc;
+	list-style: none;
+	height: 15em;
+	overflow: auto;
+	width: 16em;
+	background-color: white;
+	padding: 0;
+	margin: 0px 0 0 0;
+}
+
+.zenpagechecklist ul {
+	padding: 0;
+	margin: 0;
+}
+
+.zenpagechecklist li {
+	background: white;
+	padding-left: 0;
+	height: 1.5em;
+	margin: 0;
+	border-bottom: 1px dotted gray;
+	font-weight: normal;
+}
+
+.zenpagechecklist label {
+	display: block;
+	padding-left: 25px;
+	padding-top: 0;
+	margin: 0;
+	text-indent: -25px;
+}
+
+.zenpagechecklist label:hover,.zenpagechecklist label.hover {
+	background: #F1F2F3;
+	color: #333;
+}
+
+* html .zenpagechecklist label {
+	height: 1%;
+}
+
+
+/* CSS for language_string_list - Modified version for zenpage*/
+.zenpage_language_string_list {
+	border: 1px solid #ccc;
+	list-style: none;
+	height: 4em;
+	width: 600px;
+	overflow: auto;
+	background-color: white;
+}
+
+.zenpage_language_string_list,.zenpage_language_string_list li {
+	margin: 0;
+	padding: 0;
+	border-bottom: 1px dotted #C6D880;
+}
+
+.zenpage_language_string_list label {
+	display: block;
+	margin: 0;
+	padding: 0;
+}
+
+.zenpage_language_string_list label:hover,.language_string_list_zenpage label.hover {
+	background: #F1F2F3;
+	color: #333;
+}
+
+* html .zenpage_language_string_list label {
+	height: 1%;
+}
+
+/* CSS for language_string_listbox 
+--------------------------------------*/
+.zenpage_language_string_listbox {
+	border: 1px solid #ccc;
+	list-style: none;
+	height: 35em;
+	width: 600px;
+	overflow: auto;
+	background-color: white;
+}
+
+.zenpage_language_string_listbox,.zenpage_language_string_listbox li {
+	margin: 0;
+	padding: 0;
+	border-bottom: 1px dotted #C6D880;
+}
+
+.zenpage_language_string_listbox label {
+	display: block;
+	margin: 0;
+	padding: 0;
+}
+
+.zenpage_language_string_listbox label:hover,.zenpage_language_string_listbox label.hover {
+	background: #F1F2F3;
+	color: #333;
+}
+
+* html .zenpage_language_string_listbox label {
+	height: 1%;
+}
+
+
+/* save, reset, delete buttons
+----------------------------------*/
+.buttons button.submitbutton {
+	width: 200px;
+	text-align: left;
+}
+
+.buttons a.submitbutton {
+	width: 181px;
+	text-align: left;
+}
