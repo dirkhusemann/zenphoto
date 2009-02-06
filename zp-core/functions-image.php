@@ -388,10 +388,12 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 					$image = substr(strrchr($imgfile, '/'), 1);
 					$album = substr($imgfile, strlen(getAlbumFolder()));
 					$album = substr($album, 0, strlen($album) - strlen($image) - 1);
+					if (DEBUG_IMAGE) debugLog("Local: ".getAlbumFolder(FULLWEBPATH) . pathurlencode($album) . "/" . rawurlencode($image));
 					header("Location: " . getAlbumFolder(FULLWEBPATH) . pathurlencode($album) . "/" . rawurlencode($image));
 					exit();
 				} else {  // the web server does not have access to the image, have to supply it
-					$suffix = strtolower(substr(strrchr($filename, "."), 1));
+					$suffix = strtolower(substr(strrchr($imgfile, "."), 1));
+					if (DEBUG_IMAGE) debugLog("External: ".$imgfile.' suffix='.$suffix.' size='.filesize($imgfile));
 					$fp = fopen($imgfile, 'rb');
 					// send the right headers
 					header("Content-Type: image/$suffix");

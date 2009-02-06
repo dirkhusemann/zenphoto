@@ -158,7 +158,7 @@ function apply_filter($hook, $value = '' ) {
  * @param int $accepted_args optional. The number of arguments the function accpets (default: 1).
  * @return boolean Whether the function was registered as a filter before it was removed.
  */
-function remove_filter($hook, $function_to_remove, $priority = 10, $accepted_args = 1) {
+function zp_remove_filter($hook, $function_to_remove, $priority = 10, $accepted_args = 1) {
 	global $_zp_filters;
 	
 	$function_to_remove = filter_unique_id($hook, $function_to_remove, $priority);
@@ -182,7 +182,7 @@ function remove_filter($hook, $function_to_remove, $priority = 10, $accepted_arg
  * @param callback $function_to_check optional.  If specified, return the priority of that function on this hook or false if not attached.
  * @return int|boolean Optionally returns the priority on that hook for the specified function.
  */
-function has_filter($hook, $function_to_check = false) {
+function zp_has_filter($hook, $function_to_check = false) {
 	global $_zp_filters;
 
 	$has = !empty($_zp_filters[$hook]);
