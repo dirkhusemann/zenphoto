@@ -873,7 +873,7 @@ function fetchComments($number) {
 		. " (date + 0) AS date, `comment`, `email`, `inmoderation`, `ip`, `private`, `anon` FROM ".prefix('comments')
 		. " ORDER BY id DESC$limit";
 		$comments = query_full_array($sql);
-	} else  if ($_zp_loggedin & (COMMENT_RIGHTS)) {
+	} else if ($_zp_loggedin & (COMMENT_RIGHTS)) {
 		$albumlist = getManagedAlbumList();
 		$albumIDs = array();
 		foreach ($albumlist as $albumname) {
@@ -1007,6 +1007,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 						'", "'.$ip .
 						'", "'.$private.
 						'", "'.$anon.'")');
+		$mysql_id = mysql_insert_id();
 		if ($moderate) {
 			$action = "placed in moderation";
 		} else {
@@ -1044,8 +1045,6 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 				break;
 		}
 		if (getOption('email_new_comments')) {
-			$last_comment = fetchComments(1);
-			$last_comment = $last_comment[0]['id'];
 			$message = gettext("A comment has been $action in your album")." $on\n" .
  										"\n" .
  										"Author: " . $name . "\n" .
@@ -1057,7 +1056,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
  										"http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/index.php?$url\n" .
  										"\n" .
  										"You can edit the comment here:\n" .
- 										"http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/" . ZENFOLDER . "/admin-comments.php?page=editcomment&id=$last_comment\n";
+ 										"http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/" . ZENFOLDER . "/admin-comments.php?page=editcomment&id=$mysql_id\n";
 			$emails = array();
 			$admin_users = getAdministrators();
 			foreach ($admin_users as $admin) {  // mail anyone else with full rights
