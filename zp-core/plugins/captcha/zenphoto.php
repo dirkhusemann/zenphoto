@@ -14,7 +14,7 @@ class captcha {
 	 * @return captcha
 	 */
 	function captcha() {
-		setOptionDefault('zenphoto_captcha_lenght', 5);
+		setOptionDefault('zenphoto_captcha_length', 5);
 		setOptionDefault('zenphoto_captcha_key', $this->getCaptchaKey());
 		setOptionDefault('zenphoto_captcha_string', 'abcdefghijkmnpqrstuvwxyz23456789ABCDEFGHJKLMNPQRSTUVWXYZ'); 
 	}
@@ -30,7 +30,7 @@ class captcha {
 												'desc' => gettext('The key used in hashing the Captcha string. Note: this key will change with each successful Captcha verification.')),
 								gettext('Allowed characters') => array('key' => 'zenphoto_captcha_string', 'type' => 0, 
 												'desc' => gettext('The characters which may appear in the Captcha string.')),
-								gettext('Captcha length') => array('key' => 'zenphoto_captcha_lenght', 'type' => 4, 
+								gettext('Captcha length') => array('key' => 'zenphoto_captcha_length', 'type' => 4, 
 												'buttons' => array(gettext('3')=>3, gettext('4')=>4, gettext('5')=>5, gettext('6')=>6),
 												'desc' => gettext('The number of characters in the Captcha.'))
 								);
@@ -67,7 +67,7 @@ class captcha {
 	 * @return bool
 	 */
 	function checkCaptcha($code, $code_ok) {
-		$captcha_len = getOption('zenphoto_captcha_lenght');
+		$captcha_len = getOption('zenphoto_captcha_length');
 		$key = $this->getCaptchaKey();
 		$code_cypher = md5(bin2hex(rc4($key, trim($code))));
 		$code_ok = trim($code_ok);
@@ -95,7 +95,7 @@ class captcha {
 	 */
 	function generateCaptcha(&$image) {
 
-		$captcha_len = getOption('zenphoto_captcha_lenght');
+		$captcha_len = getOption('zenphoto_captcha_length');
 		$key = $this->getCaptchaKey();
 		$lettre = getOption('zenphoto_captcha_string');
 		$numlettre = strlen($lettre)-1;
