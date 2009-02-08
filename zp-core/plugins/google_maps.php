@@ -294,8 +294,8 @@ function printAlbumMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
 				$long = $exif['EXIFGPSLongitude'];
 				if($exif['EXIFGPSLatitudeRef'] == 'S'){  $lat = '-' . $lat; }
 				if($exif['EXIFGPSLongitudeRef'] == 'W'){  $long = '-' . $long; }
-				$infoHTML = '<a href="' . pathurlencode(getImageLinkURL()) . '"><img src="' .
-				pathurlencode(getImageThumb()) . '" alt="' . getImageDesc() . '" ' .
+				$infoHTML = '<a href="' . htmlspecialchars(getImageLinkURL()) . '"><img src="' .
+				htmlspecialchars(getImageThumb()) . '" alt="' . getImageDesc() . '" ' .
 					'style=" margin-left: 30%; margin-right: 10%; border: 0px; "/></a>' .
 					'<p>' . getImageDesc() . '</p>';
 				addPoint($lat, $long, js_encode($infoHTML));
