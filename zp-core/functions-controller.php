@@ -258,6 +258,70 @@ function zp_handle_comment() {
 	}
 return $comment_error;
 }
+
+/**
+ * Handle AJAX editing in place
+ *
+ * @param string $context 	either 'image' or 'album', object to be updated
+ * @param string $field		field of object to update (title, desc, etc...)
+ * @param string $value		new edited value of object field
+ * @since 1.3
+ * @author Ozh
+ **/
+function editInPlace_handle_request($context = '', $field = '', $value = '', $orig_value = '') {
+	// Cannot edit when context not set in current page (should happen only when editing in place from index.php page)
+	if ( !in_context(ZP_IMAGE) && !in_context(ZP_ALBUM) )
+	die ($orig_value.'<script type="text/javascript">alert("'.gettext('Oops.. Cannot edit from this page').'");</script>');
+
+	// Make a copy of context object
+	switch ($context) {
+		case 'image':
+			global $_zp_current_image;
+			$object = $_zp_current_image;
+			break;
+		case 'album':
+			global $_zp_current_album;
+			$object = $_zp_current_album;
+			break;
+		default:
+			die (gettext('Error: malformed Ajax POST'));
+	}
+
+	// Dates need to be handled before stored
+	if ($field == 'date') {
+		$value = date('Y-m-d H:i:s', strtotime($value));
+	}
+
+	// Sanitize new value
+	switch ($field) {
+		case 'desc':
+			$level = 1;
+			break;
+		case 'title':
+			$level = 2;
+			break;
+		default:
+			$level = 3;
+	}
+	$value = str_replace("\n", '<br/>', sanitize($value, $level)); // note: not using nl2br() here because it adds an extra "\n"
+
+	// Write new value
+	if ($field == '_update_tags') {
+		$value = trim($value, ', ');
+		$object->setTags($value);
+	} else {
+		$object->set($field, $value);
+	}
+
+	$result = $object->save();
+	if ($result !== false) {
+		echo $value;
+	} else {
+		echo ('<script type="text/javascript">alert("'.gettext('Could not save!').'");</script>'.$orig_value);
+	}
+	die();
+}
+
 /**
  *checks for album password posting
  */
