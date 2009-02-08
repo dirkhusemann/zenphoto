@@ -884,8 +884,10 @@ function printAlbumBreadcrumb($before='', $after='', $title=NULL) {
  * @param string $before Insert here the text to be printed before the links
  * @param string $between Insert here the text to be printed between the links
  * @param string $after Insert here the text to be printed after the links
+ * @param mixed $truncate if not empty, the max lenght of the description.
+ * @param string $elipsis the text to append to the truncated description
  */
-function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
+function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ', $truncate=NULL, $elipsis='...') {
 	global $_zp_current_search, $_zp_current_album;
 	echo $before;
 	if (in_context(ZP_SEARCH_LINKED)) {
@@ -922,7 +924,9 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ') {
 		foreach($parents as $parent) {
 			if ($i > 0) echo $between;
 			$url = rewrite_path("/" . pathurlencode($parent->name) . "/", "/index.php?album=" . urlencode($parent->name));
-			printLink($url, $parent->getTitle(), $parent->getDesc());
+			$desc = $parent->getDesc();
+			if (!empty($desc) && $truncate) $desc = truncate_string($string, $length, $elipsis);
+			printLink($url, $parent->getTitle(), $desc);
 			$i++;
 		}
 		echo $after;
@@ -1098,6 +1102,7 @@ function printEditable($context, $field, $editable = false, $editclass = 'editab
 		return false;
 	}
 	$text = trim( $override !== false ? $override : get_language_string($object->get($field)) );
+	$text = apply_filter($context.'_'.$field, $text, $object, $context, $field);
 	if ($convertBR) {
 		$text = str_replace("\r\n", "\n", $text);
 		$text = str_replace("\n", "<br/>", $text);
