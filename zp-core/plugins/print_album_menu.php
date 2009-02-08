@@ -1,6 +1,6 @@
 <?php
 /** printAlbumMenu for Zenphoto
-  *
+ *
  * Changelog
  * 1.4.6.1: Typo in function name corrected
  *
@@ -104,13 +104,13 @@
  * - Renamed the function name from show_album_menu() to more zp style printAlbumMenu()
  *
  * @author Malte Müller (acrylian)
- * @version 1.4.6.1
+ * @version 1.4.6.2
  * @package plugins
  */
 
 $plugin_description = gettext("Adds a theme function printAlbumMenu() to print an album menu either as a nested list up to 4 sublevels (context sensitive) or as a dropdown menu.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.4.6';
+$plugin_version = '1.4.6.2';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---print_album_menu.php.html";
 
 /**
@@ -429,21 +429,26 @@ function createAlbumMenuLink($album,$option2,$css,$albumpath,$mode,$level='') {
  * checks which the current album so that the entry in the in the dropdown jump menu can be selected
  * Not for standalone use.
  *
- * @param string $checkalbum The album title to check
+ * @param string $checkalbum The album folder name to check
  * @param string $option "index" for index level, "album" for album level
  * @return string returns nothing or "selected"
  */
 function checkSelectedAlbum($checkalbum, $option) {
-	global $_zp_current_album;
+	global $_zp_current_album, $_zp_gallery_page;
+	if(is_object($_zp_current_album)) {
+		$currentalbumname = $_zp_current_album->name;
+	} else {
+		$currentalbumname = "";
+	}
 	$selected = "";
 	switch ($option) {
 		case "index":
-			if($_zp_current_album->name === "") {
+			if($_zp_gallery_page === "index.php") {
 				$selected = "selected";
 			}
 			break;
 		case "album":
-			if($_zp_current_album->name === $checkalbum) {
+			if($currentalbumname === $checkalbum) {
 				$selected = "selected";
 			}
 			break;
@@ -466,26 +471,35 @@ function checkSelectedAlbum($checkalbum, $option) {
 function checkAlbumDisplayLevel($currentalbum,$parentalbum,$currentfolder,$level) {
 	$sublevel_folder = explode("/",$currentalbum->name);
 	$sublevel_current = explode("/", $currentfolder);
- 
+  $sublevelcurrent = "";
+  $sublevelcurrentfolder = "";
 	switch ($level) {
 		case 1:
 			$sublevelfolder = $sublevel_folder[0];
-			$sublevelcurrent = $sublevel_current[0];
+			if(array_key_exists("0",$sublevel_current)) {
+				$sublevelcurrent = $sublevel_current[0];
+			}
 			$sublevelcurrentfolder = $parentalbum->name;
 			break;
 		case 2:
 			$sublevelfolder = $sublevel_folder[0]."/".$sublevel_folder[1];
-			$sublevelcurrent = $sublevel_current[1];
+			if(array_key_exists("1",$sublevel_current)) {
+				$sublevelcurrent = $sublevel_current[1];
+			}
 			$sublevelcurrentfolder = $sublevel_folder[1];
 			break;
 		case 3:
 			$sublevelfolder = $sublevel_folder[0]."/".$sublevel_folder[1]."/".$sublevel_folder[2];
-			$sublevelcurrent = $sublevel_current[2];
+			if(array_key_exists("2",$sublevel_current)) {
+				$sublevelcurrent = $sublevel_current[2];
+			}
 			$sublevelcurrentfolder = $sublevel_folder[2];
 			break;
 		case 4:
 			$sublevelfolder = $sublevel_folder[0]."/".$sublevel_folder[1]."/".$sublevel_folder[2]."/".$sublevel_folder[3];
-			$sublevelcurrent = $sublevel_current[3];
+			if(array_key_exists("3",$sublevel_current)) {
+				$sublevelcurrent = $sublevel_current[3];
+			}
 			$sublevelcurrentfolder = $sublevel_folder[3];
 			break;
 	}
