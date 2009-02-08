@@ -3,7 +3,8 @@
  * zenpage template functions
  *
  * @author Malte Müller (acrylian)
- * @package zenpage
+ * @package plugins
+ * @subpackage zenpage
  */
 
 
@@ -2059,7 +2060,7 @@ function printPageDate() {
 function getPageLastChangeDate() {
 	global $_zp_current_zenpage_page;
 	if (is_Pages()) {
-		$d = $_zp_current_zenpage_page->getLastchangeDate();
+		$d = $_zp_current_zenpage_page->getLastchange();
 	}
 	if(!empty($d)) {
 		return zpFormattedDate(getOption('date_format'),strtotime($d)); 

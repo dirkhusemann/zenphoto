@@ -3,7 +3,8 @@
  * The configuration functions for TinyMCE with Ajax File Manager.
  *
  * @author Malte Müller (acrylian)
- * @package zenpage
+ * @package plugins
+ * @subpackage zenpage
  */ 
 
 

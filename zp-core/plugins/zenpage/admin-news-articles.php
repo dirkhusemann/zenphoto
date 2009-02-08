@@ -1,4 +1,12 @@
-<?php include("zp-functions.php"); ?>
+<?php 
+/**
+ * zenpage admin-news-articles.php
+ *
+ * @author Malte Müller (acrylian)
+ * @package plugins
+ * @subpackage zenpage
+ */
+include("zp-functions.php"); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -125,7 +133,7 @@ if(isset($_GET['category'])) {
 		<img src="../../images/reset.png" alt="<?php echo gettext("Reset hitcounter"); ?>" /></a>
 	</td>
 	<td class="icons">
-		<a href="javascript: confirmDeleteImage('news-article-admin.php?del=<?php echo $articleobj->getID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete article"); ?>">
+		<a href="javascript: confirmDeleteImage('admin-news-articles.php?del=<?php echo $articleobj->getID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete article"); ?>">
 		<img src="../../images/fail.png" alt="<?php echo gettext("Delete article"); ?>" /></a>
 	</td>
 	<?php } else { ?>

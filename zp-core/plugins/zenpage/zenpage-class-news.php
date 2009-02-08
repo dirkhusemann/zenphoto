@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * zenpage news class
+ *
+ * @author Malte Müller (acrylian)
+ * @package plugins
+ * @subpackage zenpage
+ */
 if (!defined('ZENPAGE_NEWS')) {
 	define("ZENPAGE_NEWS",getOption("zenpage_news_page"));
 }

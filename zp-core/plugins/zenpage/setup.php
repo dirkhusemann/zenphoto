@@ -1,4 +1,11 @@
 <?php 
+/**
+ * zenpage setup
+ *
+ * @author Malte Müller (acrylian)
+ * @package plugins
+ * @subpackage zenpage
+ */
 define('OFFSET_PATH', 4);
 require_once('../../admin-functions.php');
 require_once('zenpage-version.php');

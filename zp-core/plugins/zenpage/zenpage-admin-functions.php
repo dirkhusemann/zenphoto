@@ -4,7 +4,8 @@ require_once('zenpage-version.php'); // includes the $plugin_version statement
  * zenpage admin functions
  *
  * @author Malte Müller (acrylian)
- * @package zenpage
+ * @package plugins
+ * @subpackage zenpage
  */ 
 
 /**

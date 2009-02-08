@@ -3,7 +3,8 @@
  * Wrapper file to include some necessary zenphoto admin stuff to zenpage
  *
  * @author Malte Müller (acrylian)
- * @package zenpage
+ * @package plugins
+ * @subpackage zenpage
  */ 
 define("OFFSET_PATH",4); 
 include('../../admin-functions.php');
