@@ -7,7 +7,7 @@ require_once('../functions.php');
 ?>
 /* Common javascripts and localized strings for Zenphoto */
 
-var zppath =  "<?php if (ZENFOLDER) echo '/'.ZENFOLDER; ?>";
+var zppath =  "<?php if (ZENFOLDER) echo WEBPATH.'/'.ZENFOLDER; ?>";
 
 var zpstrings = {
 	/* Used in jquery.editinplace.js */

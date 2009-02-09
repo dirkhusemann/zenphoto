@@ -185,6 +185,7 @@ themes/zenpage-default/slideshow.css
 themes/zenpage-default/slideshow.php
 themes/zenpage-default/style.css
 themes/zenpage-default/theme.png
+themes/zenpage-default/themeoptions.php
 themes/zenpage-default/theme_description.php
 Zenphoto.package
 zp-core/404.php
