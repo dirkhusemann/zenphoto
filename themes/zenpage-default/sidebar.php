@@ -37,8 +37,8 @@
 	<ul>
 		<li><?php printRSSLink('Gallery','','Gallery', ''); ?></li>
 		<?php if(function_exists("printZenpageRSSLink")) { ?>
-		<li><?php printZenpageRSSLink("News","","","News"); ?></li>
-		<li><?php printZenpageRSSLink("NewsWithImages","","","News and Gallery"); ?></li>
+		<li><?php printZenpageRSSLink("News","","",gettext("News")); ?></li>
+		<li><?php printZenpageRSSLink("NewsWithImages","","",gettext("News and Gallery")); ?></li>
 		<?php } ?>
 	</ul>
 </div>

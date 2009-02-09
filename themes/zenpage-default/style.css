@@ -1,7 +1,5 @@
 /*
-
-	Zenpage Default 1.0
-	
+	Zenpage Default theme
 */
 
 /* Basics
@@ -369,54 +367,6 @@ ul.pagelist li.next {
 
 /* Album Thumbnails
 ------------------------------ */
-#albums {
-	float: left;
-	width: 590px;
-	font-size: 0.9em;
-
-}
-
-.album {
-	margin: 0 15px 10px 0;
-  padding: 10px 0px 10px 10px;
-	float: left;
-	width: 265px;
-  min-height: 85px;
-	border: 1px solid #EEEEEE;
-	background: #FBFBF8;
-}
-
-.album a img {  }
-
-.album .thumb {
-    float: left; 
-    margin-right: 6px;
-    width: 100px;
-}
-.albumdesc {
-	width: 120px;
-	float: left;
-	margin: 0;
-}
-
-h3 {
-	padding-top: 2px;
-	margin: 4px 0 0 0 ;
-	font-size: 1em;
-
-}
-
-#albums p {
-font-size: 1em;
-margin:0;
-}
-
-.albumdesc small {
-	color: gray;
-}
-
-/* Album Thumbnails
------------------------------- 
 #albums {
 	float: left;
   width: 590px;

@@ -47,11 +47,11 @@ db_connect();
 <?php 
 $savedrelease =  getOption("zenpage_release");
 if(ZENPAGE_RELEASE > $savedrelease) {
-	echo "You are about to upgrade Zenpage.";
+	echo gettext("You are about to upgrade Zenpage.");
 } else if (empty($savedrelease)) {
-	echo "You are about to install Zenpage.";
+	echo gettext("You are about to install Zenpage.");
 } else if(ZENPAGE_RELEASE === $savedrelease) {
-	echo "<span style='color: green'>Your Zenpage installation seems to be up to date. You probably don't need to run setup.</span>";
+	echo "<span style='color: green'>".gettext("Your Zenpage installation seems to be up to date. You probably don't need to run setup.")."</span>";
 }
 ?>
 <?php 
