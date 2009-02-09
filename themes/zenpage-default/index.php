@@ -72,20 +72,6 @@ if(is_GalleryNewsType()) {
   printNewsPageListWithNav(gettext('next &raquo;'), gettext('&laquo; prev'));
 } ?> 
 
-
-<?php
-//$result1 = query("SET @type = 'image'");
-/* $result = query_full_array("
-		(SELECT title as album, titlelink, date, @type:='news' as type FROM ".prefix('zenpage_news')." ORDER BY date)
-		UNION
-		(SELECT albums.folder, images.filename, images.date, @type:='image' FROM ".prefix('images')." AS images, ".prefix('albums')." AS albums 
-		WHERE albums.id = images.albumid ORDER BY images.date)
-		ORDER By date DESC LIMIT 10
-		");
-
-		echo "<pre>"; print_r($result); echo "</pre>"; */
-		
-		?>
 	</div><!-- content left-->
 		
 	
