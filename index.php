@@ -36,8 +36,6 @@ if (isset($_GET['p'])) {
 	} else {
 		$obj = THEMEFOLDER."/$theme/$page.php";
 		$_zp_gallery_page = basename($obj);
-		if (file_exists(SERVERPATH . "/" . UTF8ToFilesystem($obj))) {
-		}
 	}
 
 // Display an Image page.

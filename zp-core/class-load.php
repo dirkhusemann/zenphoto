@@ -10,6 +10,11 @@ require_once(dirname(__FILE__).'/class-gallery.php');
 require_once(dirname(__FILE__).'/class-search.php');
 require_once(dirname(__FILE__).'/class-transientimage.php');
 
+if (getOption('zp_plugin_zenpage')) {
+	require_once(dirname(__FILE__).PLUGIN_FOLDER.'zenpage/zenpage-class-news.php');
+	require_once(dirname(__FILE__).PLUGIN_FOLDER.'zenpage/zenpage-class-page.php');
+}
+			
 // load the class plugins
 $class_optionInterface = array();
 foreach (getEnabledPlugins() as $extension) {

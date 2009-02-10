@@ -17,10 +17,8 @@ class ZenpagePage extends PersistentObject {
 	var $commentcount; //Contains the number of comments
 	
 	function ZenpagePage($titlelink="") {
-		if(!empty($titlelink)) {
-			$titlelink = sanitize($titlelink);
-			$new = parent::PersistentObject('zenpage_pages', array('titlelink'=>$titlelink));
-		}
+		$titlelink = sanitize($titlelink);
+		$new = parent::PersistentObject('zenpage_pages', array('titlelink'=>$titlelink), NULL, true, empty($titlelink));
 	}
 	
 

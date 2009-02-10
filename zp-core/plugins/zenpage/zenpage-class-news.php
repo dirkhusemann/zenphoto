@@ -20,10 +20,8 @@ class ZenpageNews extends PersistentObject {
 	var $commentcount; //Contains the number of comments
 	
 	function ZenpageNews($titlelink="") {
-		if(!empty($titlelink)) {
-			$titlelink = sanitize($titlelink);
-			$new = parent::PersistentObject('zenpage_news', array('titlelink'=>$titlelink));
-		}
+		$titlelink = sanitize($titlelink);
+		$new = parent::PersistentObject('zenpage_news', array('titlelink'=>$titlelink), NULL, true, empty($titlelink));
 		$this->all_categories = $this->getAllCategories();
 		if(getOption('zenpage_combinews') AND !isset($_GET['title']) AND !isset($_GET['category']) AND !isset($_GET['date']) AND OFFSET_PATH != 4) {
 			$this->total_articles = $this->countCombiNews();

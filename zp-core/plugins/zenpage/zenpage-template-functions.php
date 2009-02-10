@@ -12,30 +12,13 @@
  * Calls the zenpage classes
  *
  */
-require_once("zenpage-class-news.php");
-require_once("zenpage-class-page.php");
 
-/***********************************************************
- * INITIALIZE ZENPAGE CLASS OBJECTS AND ZENPAGE GLOBALS
- ***********************************************************/
-
-
-global $_zp_current_zenpage_news, $_zp_current_zenpage_page;
-
-// getting single news article or single page if requested or just a general class initialisation for usage
-// with some general functions like categories, pages menu or archive menu so that we don't need to create a new object for them each time.
-// But: Is this really effective?
-if(isset($_GET['p']) AND $_GET['p'] === "news" AND isset($_GET['title'])) {
-	$titlelink = $_GET['title']; // the class sanitizes the input
-	$_zp_current_zenpage_news = new ZenpageNews($titlelink);
-} else {
+// TODO: needs Malte fixes the static references. See also functions-controller.php function zenpage_load_news()
+global $_zp_current_zenpage_page, $_zp_current_zenpage_news;
+if (is_null($_zp_current_zenpage_news)) {
 	$_zp_current_zenpage_news = new ZenpageNews(); 
 }
-
-if(isset($_GET['p']) AND $_GET['p'] === "pages" AND isset($_GET['title'])) {
-	$titlelink = $_GET['title']; // the class sanitizes the input
-	$_zp_current_zenpage_page = new ZenpagePage($titlelink);
-} else {
+if(is_null($_zp_current_zenpage_page)) {
 	$_zp_current_zenpage_page = new ZenpagePage(); 
 }
 

@@ -473,6 +473,53 @@ function zp_load_image($folder, $filename) {
 }
 
 /**
+ * Loads a zenpage pages page
+ * Sets up $_zp_current_page and returns it as the function result.
+ *
+ * @return object
+ */
+function zenpage_load_page() {
+	global $_zp_current_zenpage_page;
+	$_zp_current_zenpage_page = NULL;
+	if(isset($_GET['p']) AND $_GET['p'] === "pages" AND isset($_GET['title'])) {
+		$titlelink = sanitize($_GET['title']);
+		$sql = 'SELECT `id` FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.$titlelink.'"';
+		$result = query_single_row($sql);
+		if (is_array($result)) {
+			$_zp_current_zenpage_page = new ZenpagePage($titlelink);
+		} else {
+			$_GET['p'] = 'PAGES:'.$titlelink;
+		}
+	}
+	return $_zp_current_zenpage_page;
+}
+
+/**
+ * Loads a zenpage news page
+ * Sets up $_zp_current_zenpage_news and returns it as the function result.
+ *
+ * @return object
+ */
+function zenpage_load_news() {
+	global $_zp_current_zenpage_news;
+	$_zp_current_zenpage_news = NULL;
+	if(isset($_GET['p']) AND $_GET['p'] === "news" AND isset($_GET['title'])) {
+		$titlelink = sanitize($_GET['title']);
+		$sql = 'SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.$titlelink.'"';
+		$result = query_single_row($sql);
+		if (is_array($result)) {
+			$_zp_current_zenpage_news = new ZenpageNews($titlelink);
+		} else {
+			$_GET['p'] = 'NEWS:'.$titlelink;
+		}
+	}
+	if (isset($_GET['category']) || isset($_GET['date'])) {
+		$_zp_current_zenpage_news = new ZenpageNews(); // need a generic news object for these
+	}
+	return $_zp_current_zenpage_news;
+}
+
+/**
  * zp_load_image_from_id - loads and returns the image "id" from the database, without
  * altering the global context or zp_current_image.
  * @param $id the database id-field of the image.
@@ -494,7 +541,6 @@ function zp_load_image_from_id($id){
 	return $currentImage;
 }
 
-
 function zp_load_request() {
 	list($album, $image) = rewrite_get_album_image('album','image');
 	zp_load_page();
@@ -508,6 +554,13 @@ function zp_load_request() {
 		$page = str_replace(array('/','\\','.'), '', $_GET['p']);
 		if ($page == "search") {
 			$success = zp_load_search();
+		}
+		if (getOption('zp_plugin_zenpage')) {
+			if ($page == 'pages') {
+				$success = zenpage_load_page();
+			} else if ($page == 'news') {
+				$success = zenpage_load_news();
+			}
 		}
 	}
 	return $success;
