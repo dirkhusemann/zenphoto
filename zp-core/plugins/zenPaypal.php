@@ -158,7 +158,7 @@ if (empty($locale)) { $locale = 'en_US'; }
 </form>
 <?php 
 if ($pricelistlink) {
-	zenPaypalPrintPricelist($pricelistlink, $text, $textTag, $idtag);
+	zenPaypalPrintPricelist($pricelist, $text, $textTag, $idtag);
 }	
 ?>
 </div>
