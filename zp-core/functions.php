@@ -1024,7 +1024,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	// switch added for zenpage support
 	$class = get_class($receiver);
 		switch ($class) {
-			case "Albums":
+			case "Album":
 				$on = $receiver->name;
 				$url = "album=" . urlencode($receiver->name);
 				$ur_album = getUrAlbum($receiver);

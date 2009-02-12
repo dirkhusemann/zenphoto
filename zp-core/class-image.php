@@ -502,7 +502,7 @@ class _Image extends PersistentObject {
 	function deleteImage($clean=true) {
 		$result = @unlink($this->localpath);
 		if ($clean && $result) {
-			query("DELETE FROM ".prefix('comments') . "WHERE `type` IN (".zp_image_types('"')."' AND `ownerid`=" . $this->id);
+			query("DELETE FROM ".prefix('comments') . "WHERE `type` IN (".zp_image_types('"').") AND `ownerid`=" . $this->id);
 			query("DELETE FROM ".prefix('images') . "WHERE `id` = " . $this->id);
 		}
 		return $result;
