@@ -119,7 +119,6 @@ require_once('normalizer.php');
 	</ul>
 
 	<div class="galleryinfo">
-		<p>Feed for this album: <?php printRSSLink('Album','','','',true,'i'); ?></p>
 		<?php
 			$params = $_zp_current_search->getSearchParams();
 			if (!empty($params)) {
