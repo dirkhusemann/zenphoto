@@ -74,7 +74,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 		
 	</div> <!-- content -->
 
-<?php printFooter('rchive'); ?>
+<?php printFooter('archive'); ?>
 
 </body>
 </html>
