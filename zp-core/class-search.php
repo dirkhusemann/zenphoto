@@ -351,15 +351,14 @@ class SearchEngine
 	}
 
 	/**
-	 * returns the sql string for a search
+	 * returns the results of a date search
 	 * @param string $searchstring the search target
 	 * @param string $searchdate the date target
 	 * @param string $tbl the database table to search
-	 * @param int $fields which fields to perform the search on
 	 * @return string
 	 * @since 1.1.3
 	 */
-	function getSearchSQL($searchstring, $searchdate, $tbl, $fields) {
+	function searchDate($searchstring, $searchdate, $tbl) {
 		global $_zp_current_album;
 		$sql = 'SELECT DISTINCT `id`, `show`,`title`,`desc`';
 		if ($tbl=='albums') {
@@ -370,57 +369,8 @@ class SearchEngine
 		}
 		$sql .= " FROM ".prefix($tbl)." WHERE ";
 		if(!zp_loggedin()) { $sql .= "`show` = 1 AND ("; }
-		$join = "";
-		$nrt = 0;
-		foreach($searchstring as $singlesearchstring){
-			switch ($singlesearchstring) {
-				case '&':
-					$join .= " AND ";
-					break;
-				case '!':
-					$join .= " NOT ";
-					break;
-				case '|':
-					$join .= " OR ";
-					break;
-				case '(':
-				case ')':
-					$join .= $singlesearchstring;
-					break;
-				default:
-					$subsql = "";
-					$nr = 0;
-					$singlesearchstring = sanitize($singlesearchstring, 3);
-					
-					foreach ($this->zp_search_fieldnames as $fieldname=>$value) {
-						if (($value & $fields)) {
-							if ($value == SEARCH_FILENAME) {
-								if ($tbl == 'albums') {
-									$fieldname = 'folder';
-								} else {
-									$fieldname = 'filename';
-								}
-							} else {
-								$fieldname = strtolower($fieldname);
-							}
-							$nr++;
-							if ($nr > 1) { $subsql .= " OR "; } // add OR for more searchstrings
-							$subsql .= ' `'.$fieldname.'` LIKE "%'.mysql_real_escape_string($singlesearchstring).'%"';
-						}
-					}					
-					if ($nr > 0) {
-						$nrt++;
-						$sql .= $join;
-						$join = "";
-						$sql .= "($subsql)";
-					}
-			}
-		}
-		$sql .= $join;
-
+		
 		if (!empty($searchdate)) {
-			if ($nrt > 1) { $sql = $sql." AND "; }
-			$nrt++;
 			if ($searchdate == "0000-00") {
 				$sql .= "`date`=\"0000-00-00 00:00:00\"";
 			} else {
@@ -433,7 +383,6 @@ class SearchEngine
 		}
 
 		if(!zp_loggedin()) { $sql .= ")"; }
-		if ($nrt == 0) { return NULL; } // no valid fields
 		if ($tbl == 'albums') {
 			if (empty($this->dynalbumname)) {
 				$key = subalbumSortKey(getOption('gallery_sorttype'));
@@ -478,7 +427,7 @@ class SearchEngine
 			}
 		}
 		$sql .= " ORDER BY ".$key;
-		return $sql;
+		return query_full_array($sql, true);			
 	}
 
 	/**
@@ -487,33 +436,93 @@ class SearchEngine
 	 *
 	 * @param string $searchstring
 	 * @param string $tbl set to 'albums' or 'images'
-	 * @param array $idlist list of ids seeding the search from the other fields
 	 * @return array
 	 */
-	function searchTags($searchstring, $tbl, $idlist) {
+	function searchFieldsAndTags($searchstring, $tbl) {
 		$allIDs = null;
+		$idlist = array();
 		$exact = getOption('exact_tag_match');
-		$sql = 'SELECT t.`name`, o.`objectid` FROM '.prefix('tags').' AS t, '.prefix('obj_to_tag').' AS o WHERE t.`id`=o.`tagid` AND o.`type`="'.$tbl.'" AND (';
-		foreach($searchstring as $singlesearchstring){
-			switch ($singlesearchstring) {
-				case '&':
-				case '!':
-				case '|':
-				case '(':
-				case ')':
-					break;
-				default:
-					$targetfound = true;
-					if ($exact) {
-						$sql .= '`name` = "'.mysql_real_escape_string($singlesearchstring).'" OR ';
-					} else {
-						$sql .= '`name` LIKE "%'.mysql_real_escape_string($singlesearchstring).'%" OR ';
-					}
+
+		// create an array of [tag, objectid] pairs for tags
+		$tag_objects = array();
+		$fields = $this->fields;
+		if ($fields & SEARCH_TAGS) {
+			$tagsql = 'SELECT t.`name`, o.`objectid` FROM '.prefix('tags').' AS t, '.prefix('obj_to_tag').' AS o WHERE t.`id`=o.`tagid` AND o.`type`="'.$tbl.'" AND (';
+			foreach($searchstring as $singlesearchstring){
+				switch ($singlesearchstring) {
+					case '&':
+					case '!':
+					case '|':
+					case '(':
+					case ')':
+						break;
+					default:
+						$targetfound = true;
+						if ($exact) {
+							$tagsql .= '`name` = "'.mysql_real_escape_string($singlesearchstring).'" OR ';
+						} else {
+							$tagsql .= '`name` LIKE "%'.mysql_real_escape_string($singlesearchstring).'%" OR ';
+						}
+				}
+			}
+			$tagsql = substr($tagsql, 0, strlen($tagsql)-4).') ORDER BY t.`id`';
+			$objects = query_full_array($tagsql, true);
+			if (is_array($objects)) {
+				$tag_objects = $objects;
 			}
 		}
-		$sql = substr($sql, 0, strlen($sql)-4).') ORDER BY t.`id`';
-		$objects = query_full_array($sql, true);
-		if (is_array($objects)) {
+		
+		// create an array of [name, objectid] pairs for the search fields.
+		$field_objects = array();
+		$fields = $fields & ~SEARCH_TAGS;
+		if ($fields) {
+			$columns = array();
+			$sql = 'SHOW COLUMNS FROM '.prefix($tbl);
+			$result = query_full_array($sql);
+			if (is_array($result)) {
+				foreach ($result as $row) {
+					$columns[] = strtolower($row['Field']);
+				}
+			}
+			foreach($searchstring as $singlesearchstring){
+				switch ($singlesearchstring) {
+					case '&':
+					case '!':
+					case '|':
+					case '(':
+					case ')':
+						break;
+					default:
+						$targetfound = true;
+						query("SET @serachtarget='$singlesearchstring'");
+						$fieldsql = 'SELECT @serachtarget AS name, `id` AS `objectid` FROM '.prefix($tbl).' WHERE (';
+	
+						foreach ($this->zp_search_fieldnames as $fieldname=>$value) {
+							
+							if ($value == SEARCH_FILENAME) {
+								if ($tbl == 'albums') {
+									$fieldname = 'folder';
+								} else {
+									$fieldname = 'filename';
+								}
+							} else {
+								$fieldname = strtolower($fieldname);
+							}
+							if (($value & $fields) && in_array($fieldname, $columns)) {
+								$fieldsql .= ' `'.$fieldname.'` LIKE "%'.mysql_real_escape_string($singlesearchstring).'%" OR ';
+							}
+						}
+						$fieldsql = substr($fieldsql, 0, strlen($fieldsql)-4).') ORDER BY `id`';
+						$objects = query_full_array($fieldsql, true);
+						if (is_array($objects)) {
+							$field_objects = array_merge($field_objects, $objects);
+						}
+				}	
+			}
+		}
+		
+		$objects = array_merge($tag_objects, $field_objects);
+		if (count($objects) != 0) {
 			$tagid = '';
 			$taglist = array();
 
@@ -682,23 +691,7 @@ class SearchEngine
 		$searchstring = $this->getSearchString();
 		$albumfolder = getAlbumFolder();
 		if (empty($searchstring)) { return $albums; } // nothing to find
-		$fields = $this->fields;
-		$tagsSearch = $fields & SEARCH_TAGS;
-		$fields = $fields & ~SEARCH_TAGS;
-		$sql = $this->getSearchSQL($searchstring, '', 'albums', $fields);
-		if (!empty($sql)) { // valid fields exist
-			$search_results = query_full_array($sql, true);
-		}
-		if ($tagsSearch && count($searchstring) > 0) {
-			$idlist = array();
-			if (isset($search_results) && is_array($search_results)) {
-				foreach ($search_results as $row) {
-					$idlist[] = $row['id'];
-				}
-			}
-			$search_results = $this->searchTags($searchstring, 'albums', $idlist);
-		}
-
+		$search_results = $this->searchFieldsAndTags($searchstring, 'albums');
 		if (isset($search_results) && is_array($search_results)) {
 			foreach ($search_results as $row) {
 				$albumname = $row['folder'];
@@ -801,21 +794,10 @@ class SearchEngine
 		$searchdate = $this->dates;
 		if (empty($searchstring) && empty($searchdate)) { return $images; } // nothing to find
 		$albumfolder = getAlbumFolder();
-		$fields = $this->fields;
-		$tagsSearch = $fields & SEARCH_TAGS;
-		$fields = $fields & ~SEARCH_TAGS;
-		$sql = $this->getSearchSQL($searchstring, $searchdate, 'images', $fields);
-		if (!empty($sql)) {  // valid fields exist
-			$search_results = query_full_array($sql, true);			
-		}
-		if ($tagsSearch && count($searchstring) > 0) {
-			$idlist = array();
-			if (isset($search_results) && is_array($search_results)) {
-				foreach ($search_results as $row) {
-					$idlist[] = $row['id'];
-				}
-			}
-			$search_results = $this->searchTags($searchstring, 'images', $idlist);
+		if (empty($searchdate)) {
+			$search_results = $this->searchFieldsAndTags($searchstring, 'images');	
+		} else {	
+			$search_results = $this->SearchDate($searchstring, $searchdate, 'images');
 		}
 		if (isset($search_results) && is_array($search_results)) {
 			foreach ($search_results as $row) {
