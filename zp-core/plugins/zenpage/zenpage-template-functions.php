@@ -264,9 +264,6 @@ function getNewsType() {
 	global $_zp_current_zenpage_news;
 	$ownerclass = strtolower(get_class($_zp_current_zenpage_news));
 	switch($ownerclass) {
-		case "_image":
-			$newstype = "image";
-			break;
 		case "video":
 			$newstype = "video";
 			break;
@@ -275,6 +272,9 @@ function getNewsType() {
 			break;
 		case "zenpagenews":
 			$newstype = "news";
+			break;
+		default:
+			$newstype = "image";
 			break;
 	}
  return $newstype;

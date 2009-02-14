@@ -23,6 +23,8 @@ if(!function_exists("gettext")) {
 } else {
 	$noxlate = 1;
 }
+require_once(dirname(__FILE__).'/lib-utf8.php');
+
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 if (!defined('PLUGIN_FOLDER')) { define('PLUGIN_FOLDER', '/plugins/'); }
 define('OFFSET_PATH', 2);
@@ -168,7 +170,11 @@ if (!$checked) {
 	setupLog("Checked");
 }
 
-if (!isset($_zp_setupCurrentLocale_result)) $_zp_setupCurrentLocale_result = setMainDomain();
+if (!isset($_zp_setupCurrentLocale_result) || empty($_zp_setupCurrentLocale_result)) {
+	if (DEBUG_LOCALE) debugLog('Setup checking locale');
+	$_zp_setupCurrentLocale_result = setMainDomain();
+	if (DEBUG_LOCALE) debugLog('$_zp_setupCurrentLocale_result = '.$_zp_setupCurrentLocale_result);
+}
 
 $taskDisplay = array('create' => gettext("create"), 'update' => gettext("update"));
 ?>
@@ -554,7 +560,7 @@ if (!$checked) {
 		$m1 = sprintf(gettext('Your internal characater set is <strong>%s</strong>'), $charset);
 		$m2 = gettext('Setting <em>mbstring.internal_encoding</em> to <strong>UTF-8</strong> in your <em>php.ini</em> file is recommended to insure accented and multi-byte characters function properly.');
 	} else {
-		$test = filesystemToUTF8('test');
+		$test = $_zp_UTF8->convert('test', FILESYSTEM_CHARSET, 'UTF-8');
 		if (empty($test)) {
 			$mb= 0;
 			$m1 = gettext("[is not present and <code>iconv()</code> is not working]");

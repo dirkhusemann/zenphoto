@@ -488,7 +488,6 @@ zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/jscripts/edit_area/images/searc
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/jscripts/edit_area/images/smooth_selection.gif
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/jscripts/edit_area/images/spacer.gif
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/jscripts/edit_area/images/statusbar_resize.gif
-zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/jscripts/edit_area/images/Thumbs.db
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/jscripts/edit_area/images/undo.gif
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/jscripts/edit_area/langs/de.js
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/jscripts/edit_area/langs/dk.js
@@ -557,7 +556,6 @@ zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/css/thickbox.css
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/css/tinymce.css
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/action/folder_add.png
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/action/page_add.png
-zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/action/Thumbs.db
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/action/upload.png
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/add.png
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/ajaxLoading.gif
@@ -579,7 +577,6 @@ zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/big_icon/f
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/big_icon/fileZip.png
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/big_icon/folder.png
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/big_icon/folderEmpty.png
-zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/big_icon/Thumbs.db
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/button.gif
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/close.png
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/copy.png
@@ -597,10 +594,8 @@ zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/header.jpg
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/info.png
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/loadingAnimation.gif
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/New Folder/folder_explore.png
-zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/New Folder/Thumbs.db
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/pagination/pagination_left.gif
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/pagination/pagination_right.gif
-zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/pagination/Thumbs.db
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/panel_bg.gif
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/paste.png
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/player.gif
@@ -625,8 +620,6 @@ zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/small_icon
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/small_icon/folder.png
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/small_icon/folderEmpty.png
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/small_icon/folderParent.png
-zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/small_icon/Thumbs.db
-zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/Thumbs.db
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/tickAll.png
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/transparentpixel.gif
 zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/theme/default/images/uncheckAll.png

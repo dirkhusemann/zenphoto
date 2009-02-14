@@ -27,7 +27,6 @@ error_reporting(E_ALL | E_STRICT);
 $_zp_error = false;
 
 require_once(dirname(__FILE__).'/lib-utf8.php');
-$_zp_UTF8 = new utf8();
 
 include(dirname(__FILE__).'/version.php'); // Include the version info.
 

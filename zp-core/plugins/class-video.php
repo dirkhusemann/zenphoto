@@ -126,7 +126,7 @@ class Video extends _Image {
 			return WEBPATH . "/" . $path;
 		} else {
 			$filename = $this->objectsThumb;
-			$wmt = getOption(get_class($this).'_watermark');
+			$wmt = getOption('Video_watermark');
 			if ($wmt) $wmt = '&wmt='.$wmt;
 			$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename, getImageParameters(array('thumb')));
 			if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
@@ -172,7 +172,7 @@ class Video extends _Image {
 				. "&t=true";
 			} else {
 				$filename = $this->objectsThumb;
-				$wmt = getOption(get_class($this).'_watermark');
+				$wmt = getOption('Video_watermark');
 				if ($wmt) $wmt = '&wmt='.$wmt;
 				$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename,
 														getImageParameters(array($size, $width, $height, $cropw, $croph, $cropx, $cropy, NULL, NULL, NULL, $thumbStandin, NULL, NULL)));

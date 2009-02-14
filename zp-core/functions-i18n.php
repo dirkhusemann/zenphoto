@@ -176,7 +176,7 @@ $_zp_active_languages = NULL;
  */
 function generateLanguageOptionList($HTTPAccept) {
 	global $_zp_active_languages;
-	if (is_null($_zp_active_languages)) {
+	if (!is_array($_zp_active_languages)) {
 		$_zp_active_languages = generateLanguageList();
 	}
 	$locales = $_zp_active_languages;
@@ -255,7 +255,7 @@ function setupCurrentLocale($plugindomain='', $type='') {
 		// Set the text domain as 'messages'
 		$domain = 'zenphoto';
 		$domainpath = SERVERPATH . "/" . ZENFOLDER . "/locale/";
-		if (DEBUG_LOCALE) debugLogBacktrace("setupCurrentLocale($plugindomain, $type): locale=$locale");
+		if (DEBUG_LOCALE) debugLogBacktrace("setupCurrentLocale($plugindomain, $type): locale=$locale, \$result=$result");
 	} else {
 		$domain = $plugindomain;
 		switch ($type) {

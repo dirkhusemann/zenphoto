@@ -1021,19 +1021,18 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			$receiver->comments[] = $newcomment;
 			$action = "posted";
 		}
-	// switch added for zenpage support
-	$class = get_class($receiver);
+		$class = strtolower(get_class($receiver));
 		switch ($class) {
-			case "Album":
+			case "album":
 				$on = $receiver->name;
 				$url = "album=" . urlencode($receiver->name);
 				$ur_album = getUrAlbum($receiver);
 				break;
-			case "ZenpageNews":
+			case "zenpagenews":
 				$on = $receiver->getTitlelink();
 				$url = "p=".ZENPAGE_NEWS."&title=" . urlencode($receiver->getTitlelink());
 				break;
-			case "ZenpagePage":
+			case "zenpagepage":
 				$on = $receiver->getTitlelink();
 				$url = "p=".ZENPAGE_PAGES."&title=" . urlencode($receiver->getTitlelink());
 				break;

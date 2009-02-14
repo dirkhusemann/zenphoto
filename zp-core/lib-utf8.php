@@ -32,6 +32,7 @@
 
 // force UTF-8 Ø
 
+$_zp_UTF8 = new utf8();
 
 class utf8 {
 	/**
