@@ -318,10 +318,21 @@ function printLoginForm($redirect=null, $logo=true) {
 	}
 
 	if ($logo) echo "<p><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" /></p>";
-	if (count(getAdminEmail()) > 0) {
+	$star = '';
+	$admins = getAdministrators();
+	$mails = array();	
+	if (!empty($requestor)) {
+		$user = null;
+		foreach ($admins as $tuser) {
+			if ($tuser['user'] == $requestor && !empty($tuser['email'])) {
+				$star = '*';
+				break;
+			}
+		}
+	}
+	$user = array_shift($admins);
+	if ($user['email']) {
 		$star = '*';
-	} else {
-		$star = '&nbsp;';
 	}
 	echo "\n  <div id=\"loginform\">";
 	if ($_zp_login_error == 1) {

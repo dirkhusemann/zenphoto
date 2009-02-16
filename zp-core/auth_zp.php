@@ -9,22 +9,28 @@
 require_once(dirname(__FILE__).'/functions.php');
 
 // If the auth variable gets set somehow before this, get rid of it.
-if (isset($_zp_loggedin)) unset($_zp_loggedin);
 $_zp_loggedin = false;
 // Fix the cookie's path for root installs.
 $cookiepath = WEBPATH;
 if (WEBPATH == '') { $cookiepath = '/'; }
 if (isset($_GET['ticket'])) { // password reset query
 	$offer = $_GET['ticket'];
+	$post_user = $_GET['user'];
 	$admins = getAdministrators();
-	$admin = array_shift($admins);
-	$req = getOption('admin_reset_date');
-	$adm = $admin['user'];
-	$pas = $admin['pass'];
-	$ref = md5($req . $adm . $pas);
-	if ($ref === $offer) {
-		if (time() <= ($req + (3 * 24 * 60 * 60))) { // you have one week to use the request
-			setOption('admin_reset_date', NULL);
+	foreach ($admins as $tuser) {
+		if ($tuser['user'] == $post_user && !empty($tuser['email'])) {
+			$admin = $tuser;
+			$_zp_request_date = getOption('admin_reset_date');
+			$adm = $admin['user'];
+			$pas = $admin['pass'];
+			$ref = md5($_zp_request_date . $adm . $pas);
+			if ($ref === $offer) {
+				if (time() <= ($_zp_request_date + (3 * 24 * 60 * 60))) { // you have one week to use the request
+					setOption('admin_reset_date', NULL);
+					$_zp_reset_admin = $tuser;
+				}
+			}
+			break;
 		}
 	}
 }
@@ -50,21 +56,39 @@ if (!isset($_POST['login'])) {
 			// was it a request for a reset?
 			if (isset($_POST['code_h']) && $_zp_captcha->checkCaptcha(trim($post_pass), sanitize($_POST['code_h'],3))) {
 				if (empty($post_user)) {
-					$requestor = 'You are receiving this e-mail because of a password reset request on your Zenphoto gallery.';
+					$requestor = gettext('You are receiving this e-mail because of a password reset request on your Zenphoto gallery.');
 				} else {
 					$requestor = sprintf(gettext("You are receiving this e-mail because of a password reset request on your Zenphoto gallery from a user who tried to log in as %s."),$post_user);
 				}
 				$admins = getAdministrators();
-				$user = array_shift($admins);
+				$mails = array();	
+				$user = NULL;
+				if (!empty($post_user)) {
+					$user = null;
+					foreach ($admins as $tuser) {
+						if ($tuser['user'] == $post_user && !empty($tuser['email'])) {
+							$mails[] = $tuser['email'];
+							$user = $tuser;
+							break;
+						}
+					}
+				}
+				$tuser = array_shift($admins);
+				if ($tuser['email'] && count($mails) == 0 || $mails[0] != $tuser['email']) {
+					$mails [] = $tuser['email'];
+					if (is_null($user)) {
+						$user = $tuser;
+					}
+				}
 				$adm = $user['user'];
 				$pas = $user['pass'];
 				setOption('admin_reset_date', time());
 				$req = getOption('admin_reset_date');
 				$ref = md5($req . $adm . $pas);
 				$msg = "\n".$requestor.
-						"\n".sprintf(gettext("To reset your Zenphoto Admin passwords visit: %s"),FULLWEBPATH."/".ZENFOLDER."/admin-options.php?ticket=$ref") .
+						"\n".sprintf(gettext("To reset your Zenphoto Admin passwords visit: %s"),FULLWEBPATH."/".ZENFOLDER."/admin-options.php?ticket=$ref&user=$adm") .
 						"\n".gettext("If you do not wish to reset your passwords just ignore this message. This ticket will automatically expire in 3 days.");
-				zp_mail(gettext("The Zenphoto information you requested"),  $msg);
+				zp_mail(gettext("The Zenphoto information you requested"),  $msg, '', $mails);
 				$_zp_login_error = 2;
 			} else {
 				$_zp_login_error = 1;

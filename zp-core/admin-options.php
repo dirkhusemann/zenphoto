@@ -422,7 +422,7 @@ if (isset($_GET['action'])) {
 
 }
 printAdminHeader();
-$_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS);
+$_zp_null_account = (($_zp_loggedin == ADMIN_RIGHTS) || ($_zp_loggedin == NO_RIGHTS));
 $tabs = array(gettext("admin information")=>'admin-options.php?tab=admin');
 	if (!$_zp_null_account) {
 		if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
@@ -494,14 +494,17 @@ if ($subtab == 'admin') {
 <div id="tab_admin" class="box" style="padding: 15px;">
 <?php
 	if ($_zp_loggedin & ADMIN_RIGHTS) {
-		$alterrights = '';
-		$admins = getAdministrators();
-		if (!$_zp_null_account || count($admins) == 0) {
+		if ($_zp_null_account) {
+			$admins = array($_zp_reset_admin['user'] => $_zp_reset_admin);
+			$alterrights = ' DISABLED';
+			setOption('admin_reset_date', $_zp_request_date); // reset the date in case of no save
+		} else {
+			$admins = getAdministrators();
 			$admins [''] = array('id' => -1, 'user' => '', 'pass' => '', 'name' => '', 'email' => '', 'rights' => ALL_RIGHTS ^ ALL_ALBUMS_RIGHTS);
+			$alterrights = '';
 		}
 	} else {
 		$alterrights = ' DISABLED';
-		global $_zp_current_admin;
 		$admins = array($_zp_current_admin['user'] => $_zp_current_admin);
 		echo "<input type=\"hidden\" name=\"alter_enabled\" value=\"no\" />";
 	}
@@ -581,7 +584,7 @@ if ($subtab == 'admin') {
 			$master = '&nbsp;';
 		}
 		$ismaster = false;
-		if ($id == 0) {
+		if ($id == 0 && !$_zp_null_account) {
 			if ($_zp_loggedin & ADMIN_RIGHTS) {
 				$master = "(<em>".gettext("Master")."</em>)";
 				$user['rights'] = $user['rights'] | ADMIN_RIGHTS;
@@ -589,7 +592,7 @@ if ($subtab == 'admin') {
 				$ismaster = true;
 			}
 		}
-		$current =  ($user['id'] == $_zp_current_admin['id']) || $_zp_null_account;
+		$current = ($user['id'] == $_zp_current_admin['id']) || $_zp_null_account;
 		if (count($admins) > 2) {
 			$background = ($current) ? " background-color: #ECF1F2;" : "";
 		} else {
