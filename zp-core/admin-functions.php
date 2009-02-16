@@ -1766,7 +1766,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 					echo '<li><label for="'.$name.'_'.$key.'">';
 					echo $lang;
 					if ($textbox) {
-						echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.($size ? $size : TEXTAREA_COLUMNS).'"	style="width: 310px" rows="6">'.$string.'</textarea>';
+						echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.($size ? $size : TEXTAREA_COLUMNS).'"	style="width: 310px" rows="6">'.htmlentities($string,ENT_COMPAT,getOption("charset")).'</textarea>';
 					} else {
 						echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.$string.'" style="width: 310px" size="'.($size ? $size : TEXT_INPUT_SIZE).'" />';
 					}
@@ -1799,7 +1799,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 			$dbstring = array_shift($strings);
 		}
 		if ($textbox) {
-			echo '<textarea name="'.$name.'_'.$locale.'"'.$edit.' cols="'.($size ? $size : TEXTAREA_COLUMNS).'"	rows="6">'.$dbstring.'</textarea>';
+			echo '<textarea name="'.$name.'_'.$locale.'"'.$edit.' cols="'.($size ? $size : TEXTAREA_COLUMNS).'"	rows="6">'.htmlentities($dbstring,ENT_COMPAT,getOption("charset")).'</textarea>';
 		} else {
 			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="'.($size ? $size : TEXT_INPUT_SIZE).'" />';
 		}
