@@ -1269,52 +1269,52 @@ function getIfObject($object,$field) {
  if(is_object($object)) {
  		switch ($field) {
  			case "id":
- 				return $object->getID();
+ 				return $object->get("id");
  				break;
  			case "title":
- 				return $object->getTitle();
+ 				return $object->get("title");
  				break;
  			case "content":
- 				return $object->getContent();
+ 				return $object->get("content");
  				break;
  			case "extracontent":
- 				return $object->getExtracontent();
+ 				return $object->get("extracontent");
  				break;
  			case "sortorder":
- 				return $object->getSortorder(); // only pages
+ 				return $object->get("sortorder"); // only pages
  				break;
  			case "show":
- 				return $object->getShow();
+ 				return $object->get("show");
  				break;
  			case "titlelink":
- 				return $object->getTitlelink();
+ 				return $object->get("titlelink");
  				break;
  			case "codeblock":
- 				return $object->getCodeblock();
+ 				return $object->get("codeblock");
  				break;
  			case "author":
- 				return $object->getAuthor();
+ 				return $object->get("author");
  				break;
  			case "datetime":
- 				return $object->getDatetime();
+ 				return $object->get("date");
  				break;
  			case "lastchange":
- 				return $object->getLastchange();
+ 				return $object->get("lastchange");
  				break;
  			case "lastchangeauthor":
- 				return $object->getLastchangeauthor();
+ 				return $object->get("lastchangeauthor");
  				break;
  			case "commentson":
- 				return $object->getCommentson();
+ 				return $object->get("commentson");
  				break;
  			case "hitcounter":
- 				return $object->getHitcounter();
+ 				return $object->get("hitcounter");
  				break;
  			case "locked":
- 				return $object->getLocked();
+ 				return $object->get("locked");
  				break;
  			case "permalink":
- 				return $object->getPermalink();
+ 				return $object->get("permalink");
  				break;
  		} 
   } else {
@@ -1445,7 +1445,7 @@ function print_language_string_list_zenpage($dbstring, $name, $textbox=false, $l
 					echo '<li><label for="'.$name.'_'.$key.'">';
 					if ($textbox) {
 						echo $lang;
-						echo '<textarea id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" class="mceEditor" cols="60"	'.$rows.' style="width:575px;">'.$string.'</textarea><a href="javascript:toggleEditor(\''.$name.'_'.$key.'\');">' . gettext('Toggle Editor') . '</a><br /><br />';
+						echo '<textarea id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" class="mceEditor" cols="60"	'.$rows.' style="width:575px;">'.htmlentities($string,ENT_COMPAT,getOption("charset")).'</textarea><a href="javascript:toggleEditor(\''.$name.'_'.$key.'\');">' . gettext('Toggle Editor') . '</a><br /><br />';
 					} else {
 						echo '<input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.$string.'" size="96" style="width:400px;"/>'.$lang;
 					}
@@ -1478,7 +1478,7 @@ function print_language_string_list_zenpage($dbstring, $name, $textbox=false, $l
 			$dbstring = array_shift($strings);
 		}
 		if ($textbox) {
-			echo '<textarea id="'.$name.'_'.$locale.'" name="'.$name.'" class="mceEditor" cols="60"	'.$rows.' style="width:600px;">'.$dbstring.'</textarea><a href="javascript:toggleEditor(\''.$name.'_'.$locale.'\');">' . gettext('Toggle Editor') . '</a><br /><br />';	
+			echo '<textarea id="'.$name.'_'.$locale.'" name="'.$name.'" class="mceEditor" cols="60"	'.$rows.' style="width:600px;">'.htmlentities($dbstring,ENT_COMPAT,getOption("charset")).'</textarea><a href="javascript:toggleEditor(\''.$name.'_'.$locale.'\');">' . gettext('Toggle Editor') . '</a><br /><br />';	
 		} else {
 			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="96" style="width:600px;"/>';
 		}

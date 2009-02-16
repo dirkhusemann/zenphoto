@@ -130,7 +130,7 @@ if(is_object($result)) {
   <table>
     <tr> 
       <td class="topalign-padding"><?php echo gettext("Title:"); ?></td>
-      <td><?php print_language_string_list_zenpage($result->get("title"),"title",false) ;?></td>
+      <td><?php print_language_string_list_zenpage(getIfObject($result,"title"),"title",false);?></td>
     	<td class="rightcolumnmiddle" style="vertical-align: top" rowspan="3"><?php echo gettext("Author:"); ?><?php AuthorSelector(getIfObject($result,"author")) ;?>
     		<?php if(is_object($result)) { ?>
 					<p><input name="edittitlelink" type="checkbox" id="edittitlelink" value="1" /> <?php echo gettext("Edit TitleLink"); ?></p>
@@ -181,11 +181,11 @@ if(is_object($result)) {
 	 </tr>
     <tr> 
 			<td class="topalign-padding"><?php echo gettext("Content:"); ?></td>
-			<td class="topalign-padding"><?php print_language_string_list_zenpage($result->get("content"),"content",TRUE) ;?></td>
+			<td class="topalign-padding"><?php print_language_string_list_zenpage(getIfObject($result,"content"),"content",TRUE) ;?></td>
     </tr>
     <tr> 
 			<td class="topalign-padding"><?php echo gettext("ExtraContent:"); ?></td>
-			<td><?php print_language_string_list_zenpage(sanitize(htmlentities($result->get("extracontent"),ENT_COMPAT,getOption("charset")),0),"extracontent",TRUE) ;?></td>
+			<td><?php print_language_string_list_zenpage(getIfObject($result,"extracontent"),"extracontent",TRUE) ;?></td>
 			<td class="rightcolumn"><?php echo gettext("Here you can enter extra content for example to be printed on the sidebar"); ?></td>
     <tr> 
 		<td class="topalign-nopadding"><br /><?php echo gettext("Codeblocks:"); ?></td>
