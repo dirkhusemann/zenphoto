@@ -1262,61 +1262,12 @@ function checkIfChecked($field) {
  * Used to share the same page for page/news article add (no object) and edit (object available)
  *
  * @param object $object If this is an object the function returns the value of the db field $field
- * @param string $field The db field to get (Note: parent id is not availabe for news articles!)
+ * @param string $field The db field to get (Note: "parentid" and "sortorder" are not availabe for news articles!)
  * @return string
  */
 function getIfObject($object,$field) {
  if(is_object($object)) {
- 		switch ($field) {
- 			case "id":
- 				return $object->get("id");
- 				break;
- 			case "title":
- 				return $object->get("title");
- 				break;
- 			case "content":
- 				return $object->get("content");
- 				break;
- 			case "extracontent":
- 				return $object->get("extracontent");
- 				break;
- 			case "sortorder":
- 				return $object->get("sortorder"); // only pages
- 				break;
- 			case "show":
- 				return $object->get("show");
- 				break;
- 			case "titlelink":
- 				return $object->get("titlelink");
- 				break;
- 			case "codeblock":
- 				return $object->get("codeblock");
- 				break;
- 			case "author":
- 				return $object->get("author");
- 				break;
- 			case "datetime":
- 				return $object->get("date");
- 				break;
- 			case "lastchange":
- 				return $object->get("lastchange");
- 				break;
- 			case "lastchangeauthor":
- 				return $object->get("lastchangeauthor");
- 				break;
- 			case "commentson":
- 				return $object->get("commentson");
- 				break;
- 			case "hitcounter":
- 				return $object->get("hitcounter");
- 				break;
- 			case "locked":
- 				return $object->get("locked");
- 				break;
- 			case "permalink":
- 				return $object->get("permalink");
- 				break;
- 		} 
+ 		return $object->get($field);
   } else {
   	return "";
   }
