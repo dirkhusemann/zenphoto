@@ -28,5 +28,5 @@ remove:"\u79FB\u9664",
 insert_date:"\u63D2\u5165\u76EE\u524D\u65E5\u671F/\u65F6\u95F4",
 option_ltr:"\u4ECE\u5DE6\u5230\u53F3",
 option_rtl:"\u4ECE\u53F3\u5230\u5DE6",
-attribs_title:"\u63D2\u5165/\u7F16\u8F91\u5C5E\u6027"
+attribs_title:"\u63D2\u5165/\u7F16\u8F91 \u5C5E\u6027"
 });
