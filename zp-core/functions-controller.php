@@ -362,7 +362,11 @@ function zp_handle_password() {
 	// Handle the login form.
 	if (DEBUG_LOGIN) debugLog("zp_handle_password: \$authType=$authType; \$check_auth=$check_auth; \$check_user=$check_user; ");
 	if (isset($_POST['password']) && isset($_POST['pass'])) {
-		$post_user = $_POST['user'];
+		if (isset($_POST['user'])) {
+			$post_user = $_POST['user'];
+		} else {
+			$post_user = '';
+		}
 		$post_pass = $_POST['pass'];
 		$auth = md5($post_user . $post_pass);
 		if (DEBUG_LOGIN) debugLog("zp_handle_password: \$post_user=$post_user; \$post_pass=$post_pass; \$auth=$auth; ");
