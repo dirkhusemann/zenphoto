@@ -35,7 +35,10 @@ class Video extends _Image {
 	function Video(&$album, $filename) {
 		// $album is an Album object; it should already be created.
 		if (!is_object($album)) return NULL;
-		$this->classSetup($album, $filename);
+		if (!$this->classSetup($album, $filename)) { // spoof attempt
+			$this->exists = false;
+			return NULL;
+		}
 		$this->video = true;
 		$this->objectsThumb = checkObjectsThumb($album->localpath, $filename);
 		// Check if the file exists.

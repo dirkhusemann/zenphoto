@@ -75,7 +75,10 @@ class TextObject extends _Image {
 	function TextObject($album, $filename) {
 		// $album is an Album object; it should already be created.
 		if (!is_object($album)) return NULL;
-		$this->classSetup($album, $filename);
+		if (!$this->classSetup($album, $filename)) { // spoof attempt
+			$this->exists = false;
+			return NULL;
+		}
 		$this->objectsThumb = checkObjectsThumb($album->localpath, $filename);
 		// Check if the file exists.
 		if (!file_exists($this->localpath) || is_dir($this->localpath)) {

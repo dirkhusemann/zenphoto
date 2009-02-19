@@ -80,7 +80,10 @@ class _Image extends PersistentObject {
 	function _Image(&$album, $filename) {
 		// $album is an Album object; it should already be created.
 		if (!is_object($album)) return NULL;
-		$this->classSetup($album, $filename);
+		if (!$this->classSetup($album, $filename)) { // spoof attempt
+			$this->exists = false;
+			return NULL;
+		}
 		// Check if the file exists.
 		if (!file_exists($this->localpath) || is_dir($this->localpath)) {
 			$this->exists = false;
@@ -151,7 +154,20 @@ class _Image extends PersistentObject {
 		}
 	}
 	
+	/**
+	 * generic "image" class setup code
+	 * Returns true if valid image.
+	 *
+	 * @param object $album the images' album
+	 * @param string $filename of the image
+	 * @return bool
+	 * 
+	 */
 	function classSetup(&$album, $filename) {
+		$fileFS = UTF8ToFilesystem($filename);
+		if ($filename != fileSystemToUTF8($fileFS)) { // image name spoof attempt
+			return false;
+		}
 		$this->album = &$album;
 		if ($album->name == '') {
 			$this->webpath = getAlbumFolder(WEBPATH) . $filename;
@@ -160,7 +176,7 @@ class _Image extends PersistentObject {
 		} else {
 			$this->webpath = getAlbumFolder(WEBPATH) . $album->name . "/" . $filename;
 			$this->encwebpath = getAlbumFolder(WEBPATH) . pathurlencode($album->name) . "/" . rawurlencode($filename);
-			$this->localpath = $album->localpath . UTF8ToFilesystem($filename);
+			$this->localpath = $album->localpath . $fileFS;
 		}
 		$this->filename = $filename;		
 		$this->displayname = substr($this->filename, 0, strrpos($this->filename, '.'));
@@ -168,6 +184,7 @@ class _Image extends PersistentObject {
 		$this->comments = null;
 		$this->filemtime = @filemtime($this->localpath);
 		$this->imagetype = strtolower(get_class($this)).'s';
+		return true;
 	}
 	
 	function getDefaultTitle() {

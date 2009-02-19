@@ -29,30 +29,35 @@ class Album extends PersistentObject {
 	 * Constructor for albums
 	 *
 	 * @param object &$gallery The parent gallery
-	 * @param string $folder folder name of the album
+	 * @param string $folder8 folder name (UTF8) of the album
 	 * @param bool $cache load from cache if present
 	 * @return Album
 	 */
-	function Album(&$gallery, $folder, $cache=true) {
-		$folder = sanitize_path($folder);
-		$this->name = $folder;
+	function Album(&$gallery, $folder8, $cache=true) {
+		$folder8 = sanitize_path($folder8);
+		$folderFS = UTF8ToFilesystem($folder8);
+		if (fileSystemToUTF8($folderFS) != $folder8) { // an attempt to spoof the album name.
+			$this->exists = false;
+			return NULL;
+		}
+		$this->name = $folder8;
 		$this->gallery = &$gallery;
-		if (empty($folder)) {
+		if (empty($folder8)) {
 			$this->localpath = getAlbumFolder();
 		} else {
-			$this->localpath = getAlbumFolder() . UTF8ToFilesystem($folder) . "/";
+			$this->localpath = getAlbumFolder() . $folderFS . "/";
 		}
-		if (hasDyanmicAlbumSuffix($folder)) {
+		if (hasDyanmicAlbumSuffix($folder8)) {
 			$this->localpath = substr($this->localpath, 0, -1);
 		}
 
-		// Second defense against upward folder traversal:
+		// Must be a valid (local) folder:
 		if(!file_exists($this->localpath) || strpos($this->localpath, '..') !== false) {
 			$this->exists = false;
 			return NULL;
 		}
-		$new = parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache, empty($folder));
-		if (hasDyanmicAlbumSuffix($folder)) {
+		$new = parent::PersistentObject('albums', array('folder' => $this->name), 'folder', $cache, empty($folder8));
+		if (hasDyanmicAlbumSuffix($folder8)) {
 			if ($new || (filemtime($this->localpath) > $this->get('mtime'))) {
 				$data = file_get_contents($this->localpath);
 				while (!empty($data)) {
@@ -89,7 +94,6 @@ class Album extends PersistentObject {
 					$this->set('title', substr($title, 0, -4));
 					$this->setDateTime(strftime('%Y/%m/%d %T', filemtime($this->localpath)));
 				}
-				$this->folder = $folder;
 				$this->save();
 			}
 		}
