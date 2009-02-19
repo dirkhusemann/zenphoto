@@ -18,7 +18,7 @@
 			}
 		}
 	</script>
-		<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
+		<?php printRSSHeaderLink('Album',getAlbumTitle()); ?>
 </head>
 <body>
 

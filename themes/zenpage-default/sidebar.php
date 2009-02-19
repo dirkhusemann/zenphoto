@@ -35,6 +35,9 @@
 <div class="menu">
 <h3><?php echo gettext("RSS"); ?></h3>
 	<ul>
+	<?php if(!is_null($_zp_current_album)) { ?>
+	<li><?php printRSSLink('Album', '', gettext('Album RSS'), ''); ?></li>
+	<?php } ?>
 		<li><?php printRSSLink('Gallery','','Gallery', ''); ?></li>
 		<?php if(function_exists("printZenpageRSSLink")) { ?>
 		<li><?php printZenpageRSSLink("News","","",gettext("News")); ?></li>
