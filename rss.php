@@ -52,7 +52,7 @@ if(is_numeric($size) && !is_null($size) && $size < getOption('feed_imagesize')) 
 $items = getOption('feed_items'); // # of Items displayed on the feed
 
 ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss">
 <channel>
 <title><?php echo strip_tags(get_language_string(getOption('gallery_title'), $locale)).strip_tags($albumname); ?></title>
 <link><?php echo "http://".$host.WEBPATH; ?></link>
@@ -131,17 +131,15 @@ if(getOption("feed_enclosure")) { // enables download of embeded content like im
 <enclosure url="<?php echo $fullimagelink; ?>" type="<?php echo $mimetype; ?>" />
 <?php  } ?>
 <category><?php echo $albumobj->getTitle(); ?></category>
+
+	<?php if(getOption("feed_mediarss")) { ?>
+	<media:content url="http://<?php echo $fullimagelink; ?>" type="image/jpeg" />
+	<media:thumbnail url="http://<?php echo $fullimagelink; ?>" width="<?php echo $size; ?>" height="<?php echo $size; ?>" />
+	<?php } ?>
+	
 	<guid><?php echo '<![CDATA[http://'.$imagelink.']]>';?></guid>
 	<pubDate><?php echo date("r",strtotime($image->get('date'))); ?></pubDate>
-	<?php if(getOption("feed_mediarss")) { ?>
-	<media:content url="http://<?php echo $fullimagelink; ?>" 
-			type="image/jpeg">
-			<media:thumbnail url="<![CDATA[<?php echo $image->getCustomImage($size, NULL, NULL, NULL, NULL, NULL, NULL, TRUE); ?>]]>" width="<?php echo $size; ?>" height="<?php echo $size; ?>"/>
-			<media:title type="plain"><?php echo strip_tags($image->getTitle()); ?></media:title>
-			<media:description type="plain"><?php echo strip_tags($image->getDesc()); ?></media:description>
-			<media:credit role="illustrator"><?php echo $adminname; ?></media:credit>
-	</media:content>
-	<?php } ?>
+
 </item>
 <?php } ?>
 </channel>
