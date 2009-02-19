@@ -3707,22 +3707,22 @@ function printRSSLink($option, $prev, $linktext, $next, $printIcon=true, $class=
 	}
 	switch($option) {
 		case "Gallery":
-			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss.php?lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss.php?lang=".$lang."\" title=\"".gettext("Gallery RSS")."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
 		case "Album":
-			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss.php?albumtitle=".urlencode(getAlbumTitle())."&amp;albumname=".urlencode($_zp_current_album->getFolder())."&amp;lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss.php?albumtitle=".urlencode(getAlbumTitle())."&amp;albumname=".urlencode($_zp_current_album->getFolder())."&amp;lang=".$lang."\" title=\"".gettext("Album RSS")."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
 		case "Collection":
-			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss.php?albumtitle=".urlencode(getAlbumTitle())."&amp;folder=".urlencode($_zp_current_album->getFolder())."&amp;lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss.php?albumtitle=".urlencode(getAlbumTitle())."&amp;folder=".urlencode($_zp_current_album->getFolder())."&amp;lang=".$lang."\" title=\"".gettext("Album and subalbums RSS")."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
 		case "Comments":
-			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-comments.php?lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-comments.php?lang=".$lang."\" title=\"".gettext("Comments RSS")."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
 		case "Comments-image":
-			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-comments.php?id=".getImageID()."&amp;title=".urlencode(getImageTitle())."&amp;type=image&amp;lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-comments.php?id=".getImageID()."&amp;title=".urlencode(getImageTitle())."&amp;type=image&amp;lang=".$lang."\" title=\"".gettext("Comments RSS for this image")."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
 		case "Comments-album":
-			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-comments.php?id=".getAlbumID()."&amp;title=".urlencode(getAlbumTitle())."&amp;type=album&amp;lang=".$lang."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
+			echo $prev."<a $class href=\"http://".$host.WEBPATH."/rss-comments.php?id=".getAlbumID()."&amp;title=".urlencode(getAlbumTitle())."&amp;type=album&amp;lang=".$lang."\" title=\"".gettext("Comments RSS for this album")."\" rel=\"nofollow\">".$linktext."$icon</a>".$next;
 			break;
 	}
 }
