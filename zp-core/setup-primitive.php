@@ -155,4 +155,37 @@ function debugLogBacktrace($message) {
 	}
 }
 
+/**
+ * Creates the body of a select list
+ *
+ * @param array $currentValue list of items to be flagged as checked
+ * @param array $list the elements of the select list
+ * @param bool $descending set true for a reverse order sort
+ */
+function generateListFromArray($currentValue, $list, $descending, $localize) {
+	if ($localize) {
+		$list = array_flip($list);
+		if ($descending) {
+			arsort($list);
+		} else {
+			natcasesort($list);
+		}
+		$list = array_flip($list);
+	} else {
+		if ($descending) {
+			rsort($list);
+		} else {
+			natcasesort($list);
+		}
+	}
+	foreach($list as $key=>$item) {
+		echo '<option value="' . $item . '"';		
+		if (in_array($item, $currentValue)) {
+			echo ' selected="selected"';
+		}
+		if ($localize) $display = $key; else $display = $item;
+		echo '>' . $display . "</option>"."\n";
+	}
+}
+
 ?>

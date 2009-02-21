@@ -220,10 +220,7 @@ if (isset($_GET['action'])) {
 				zp_setCookie('dynamic_locale', $newloc, time()-368000, $cookiepath);  // clear the language cookie
 				$encoding = getOption('charset');
 				if (empty($encoding)) $encoding = 'UTF-8';
-				$result = setlocale(LC_ALL, $newloc.'.'.$encoding);
-				if ($result === false) {
-					$result = setlocale(LC_ALL, $newloc);
-				}
+				$result = setlocale(LC_ALL, $locale.'.'.$encoding, $locale);
 				if (!empty($newloc) && ($result === false)) {
 					$notify = '?local_failed='.$newloc;
 				}
@@ -424,19 +421,19 @@ if (isset($_GET['action'])) {
 printAdminHeader();
 $_zp_null_account = (($_zp_loggedin == ADMIN_RIGHTS) || ($_zp_loggedin == NO_RIGHTS));
 $tabs = array(gettext("admin information")=>'admin-options.php?tab=admin');
-	if (!$_zp_null_account) {
-		if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
-			$tabs[gettext("gallery configuration")] = 'admin-options.php?tab=gallery';
-			$tabs[gettext("image display")] = 'admin-options.php?tab=image';
-			$tabs[gettext("comment configuration")] = 'admin-options.php?tab=comments';
-		}
-		if ($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
-			$tabs[gettext("theme options")] = 'admin-options.php?tab=theme';
-		}
-		if ($_zp_loggedin & ADMIN_RIGHTS) {
-			$tabs[gettext("plugin options")] = 'admin-options.php?tab=plugin';
-		}
+if (!$_zp_null_account) {
+	if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
+		$tabs[gettext("gallery configuration")] = 'admin-options.php?tab=gallery';
+		$tabs[gettext("image display")] = 'admin-options.php?tab=image';
+		$tabs[gettext("comment configuration")] = 'admin-options.php?tab=comments';
 	}
+	if ($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
+		$tabs[gettext("theme options")] = 'admin-options.php?tab=theme';
+	}
+	if ($_zp_loggedin & ADMIN_RIGHTS) {
+		$tabs[gettext("plugin options")] = 'admin-options.php?tab=plugin';
+	}
+}
 $subtab = getSubtabs($tabs);
 if ($subtab == 'gallery' || $subtab == 'image') {
 	$sql = 'SHOW COLUMNS FROM ';
@@ -494,7 +491,7 @@ if ($subtab == 'admin') {
 <div id="tab_admin" class="box" style="padding: 15px;">
 <?php
 	if ($_zp_loggedin & ADMIN_RIGHTS) {
-		if ($_zp_null_account) {
+		if ($_zp_null_account && isset($_zp_reset_admin)) {
 			$admins = array($_zp_reset_admin['user'] => $_zp_reset_admin);
 			$alterrights = ' DISABLED';
 			setOption('admin_reset_date', $_zp_request_date); // reset the date in case of no save
@@ -593,7 +590,7 @@ if ($subtab == 'admin') {
 			}
 		}
 		$current = ($user['id'] == $_zp_current_admin['id']) || $_zp_null_account;
-		if (count($admins) > 2) {
+		if (count($admins) > 1) {
 			$background = ($current) ? " background-color: #ECF1F2;" : "";
 		} else {
 			$background = '';
