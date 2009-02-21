@@ -165,13 +165,6 @@ function zp_handle_comment() {
 			$zenpage_news_context = FALSE;
 			$zenpage_pages_context = FALSE;
 		}
-		if($zenpage_news_context) {
-			$redirectTo = FULLWEBPATH . '/index.php?p='.ZENPAGE_NEWS.'&title='.$_zp_current_zenpage_news->getTitlelink();
-		} else if ($zenpage_pages_context) {
-			$redirectTo = FULLWEBPATH . '/index.php?p='.ZENPAGE_NEWS.'&title='.$_zp_current_zenpage_page->getTitlelink();
-		} else {
-			$redirectTo = FULLWEBPATH . '/' . zpurl();
-		}
 		if ((in_context(ZP_ALBUM) || $zenpage_news_context || $zenpage_pages_context)) {
 			$p_name = sanitize($_POST['name'],3);
 			if (isset($_POST['email'])) {
@@ -216,7 +209,7 @@ function zp_handle_comment() {
 					$redirectTo = FULLWEBPATH . '/index.php?p='.ZENPAGE_NEWS.'&title='.$_zp_current_zenpage_news->getTitlelink();
 				} else if ($zenpage_pages_context) {
 					$commentobject = $_zp_current_zenpage_page;
-					$redirectTo = FULLWEBPATH . '/index.php?p='.ZENPAGE_NEWS.'&title='.$_zp_current_zenpage_page->getTitlelink();
+					$redirectTo = FULLWEBPATH . '/index.php?p='.ZENPAGE_PAGES.'&title='.$_zp_current_zenpage_page->getTitlelink();
 				}
 				$commentadded = $commentobject->addComment($p_name, $p_email, $p_website, $p_comment,
 													$code1, $code2,	$p_server, $p_private, $p_anon);

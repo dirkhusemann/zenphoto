@@ -1008,9 +1008,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 						'", "'.$private.
 						'", "'.$anon.'")');
 		$mysql_id = mysql_insert_id();
-		if ($moderate) {
-			$action = "placed in moderation";
-		} else {
+		if (!$moderate) {
 			//  add to comments array and notify the admin user
 			$newcomment = array();
 			$newcomment['name'] = $name;
@@ -1019,43 +1017,50 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			$newcomment['comment'] = $comment;
 			$newcomment['date'] = time();
 			$receiver->comments[] = $newcomment;
-			$action = "posted";
 		}
 		$class = strtolower(get_class($receiver));
 		switch ($class) {
 			case "album":
-				$on = $receiver->name;
 				$url = "album=" . urlencode($receiver->name);
 				$ur_album = getUrAlbum($receiver);
+				if ($moderate) {
+					$action = sprintf(gettext('A comment has been placed in moderation on your album "%1$s".'), $receiver->name);
+				} else {
+					$action = sprintf(gettext('A comment has been posted on your album "%1$s".'), $receiver->name);
+				}
 				break;
 			case "zenpagenews":
-				$on = $receiver->getTitlelink();
 				$url = "p=".ZENPAGE_NEWS."&title=" . urlencode($receiver->getTitlelink());
+				if ($moderate) {
+					$action = sprintf(gettext('A comment has been placed in moderation on your article "%1$s".'), $receiver->getTitlelink());
+				} else {
+					$action = sprintf(gettext('A comment has been posted on your article "%1$s".'), $receiver->getTitlelink());
+				}
 				break;
 			case "zenpagepage":
-				$on = $receiver->getTitlelink();
 				$url = "p=".ZENPAGE_PAGES."&title=" . urlencode($receiver->getTitlelink());
+				if ($moderate) {
+					$action = sprintf(gettext('A comment has been placed in moderation on your page "%1$s".'), $receiver->getTitlelink());
+				} else {
+					$action = sprintf(gettext('A comment has been posted on your page "%1$s".'), $receiver->getTitlelink());
+				}
 				break;
 			default: // all image types
-				$on = $receiver->getAlbumName() . " about " . $receiver->getTitle();
 				$url = "album=" . urlencode($receiver->album->name) . "&image=" . urlencode($receiver->filename);
 				$album = $receiver->getAlbum();
 				$ur_album = getUrAlbum($album);
+				if ($moderate) {
+					$action = sprintf(gettext('A comment has been placed in moderation on your image "%1$s" in the album "%2$s".'), $receiver->getTitle(), $receiver->getAlbumName());
+				} else {
+					$action = sprintf(gettext('A comment has been posted on your image "%1$s" in the album "%2$s".'), $receiver->getTitle(), $receiver->getAlbumName());
+				}
 				break;
 		}
 		if (getOption('email_new_comments')) {
-			$message = gettext("A comment has been $action in your album")." $on\n" .
- 										"\n" .
- 										"Author: " . $name . "\n" .
- 										"Email: " . $email . "\n" .
- 										"Website: " . $website . "\n" .
- 										"Comment:\n" . $comment . "\n" .
- 										"\n" .
- 										"You can view all comments about this image here:\n" .
- 										"http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/index.php?$url\n" .
- 										"\n" .
- 										"You can edit the comment here:\n" .
- 										"http://" . $_SERVER['SERVER_NAME'] . WEBPATH . "/" . ZENFOLDER . "/admin-comments.php?page=editcomment&id=$mysql_id\n";
+			$message = $action . "\n\n" . 
+					sprintf(gettext('Author: %1$s'."\n".'Email: %2$s'."\n".'Website: %3$s'."\n".'Comment:'."\n\n".'%4$s'),$name, $email, $website, $comment) . "\n\n" .
+					sprintf(gettext('You can view all comments about this item here:'."\n".'%1$s'), 'http://' . $_SERVER['SERVER_NAME'] . WEBPATH . '/index.php?'.$url) . "\n\n" .
+					sprintf(gettext('You can edit the comment here:'."\n".'%1$s'), 'http://' . $_SERVER['SERVER_NAME'] . WEBPATH . '/' . ZENFOLDER . '/admin-comments.php?page=editcomment&id='.$mysql_id);
 			$emails = array();
 			$admin_users = getAdministrators();
 			foreach ($admin_users as $admin) {  // mail anyone else with full rights
@@ -1076,7 +1081,8 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 					}
 				}
 			}
-			zp_mail("[" . get_language_string(getOption('gallery_title'), getOption('locale')) . "] Comment posted on $on", $message, "", $emails);
+			$on = gettext('Comment posted');
+			zp_mail("[" . get_language_string(getOption('gallery_title'), getOption('locale')) . "] $on", $message, "", $emails);
 		}
 	}
 	return $goodMessage;
