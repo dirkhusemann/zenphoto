@@ -222,7 +222,7 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 
 <input type="hidden" name="folder" value="" /></div>
 
-</div>
+
 
 <div id="uploadboxes" style="display: none;">
 <hr />
@@ -250,10 +250,10 @@ foreach ($albumlist as $fullfolder => $albumtitle) {
 	class="button" /></p>
 
 </div>
-
+</div>
 </form>
 <script type="text/javascript">albumSwitch(document.uploadform.albumselect,false,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');</script>
-
+</div>
 <?php
 printAdminFooter();
 echo "\n</body>";

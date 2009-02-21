@@ -400,9 +400,9 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 }
 
 echo "\n" . '</div>';  //content
+printAdminFooter();
 echo "\n" . '</div>';  //main
 
-printAdminFooter();
 
 echo "\n</body>";
 echo "\n</html>";

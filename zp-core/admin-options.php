@@ -1849,9 +1849,10 @@ if ($subtab == 'admin') {
 <!-- end of container -->
 <?php
 echo '</div>'; // content
+printAdminFooter();
 echo '</div>'; // main
 
-printAdminFooter();
+
 echo "\n</body>";
 echo "\n</html>";
 ?>
