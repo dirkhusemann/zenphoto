@@ -18,11 +18,7 @@ var ZenpageDialog = {
 		var textwrap = '';
 		var cssclass = '';
 		var albumname = '<?php if(isset($_GET["album"]))  { echo sanitize($_GET["album"]); } else { $_GET["album"] = ""; } ?>';
-		<?php 
-		$partialpath = strpos(FULLWEBPATH,"/zp-core");
-		$webpath = substr(FULLWEBPATH,0,$partialpath); 
-		?>
-		var webpath = '<?php echo $webpath; ?>'
+		var webpath = '<?php echo WEBPATH; ?>'
 		var modrewrite = '<?php echo getOption("mod_rewrite"); ?>';
 		var modrewritesuffix = '<?php echo getOption("mod_rewrite_image_suffix"); ?>';
 					

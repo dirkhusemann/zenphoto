@@ -1,5 +1,5 @@
 <!-- tinyZenpage - A TinyMCE plugin for Zenphoto with Zenpage
-		 Version: 1.0.2
+		 Version: 1.0.4
 		 Author: Malte Müller (acrylian) 
 		 inspired by Alessandro "Simbul" Morandi's  ZenphotoPres (http://simbul.bzaar.net/zenphotopress)
 		 Webseite: zenpage.maltem.de
@@ -23,6 +23,7 @@ $const_webpath = dirname(dirname(dirname(dirname(dirname(dirname($_SERVER['SCRIP
 ?>
 <?php require_once("../../../../functions.php"); ?>
 <?php require_once("../../../../class-load.php"); ?>
+<?php require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . "zenpage/zenpage-functions.php"); ?>
 <?php require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . "zenpage/zenpage-template-functions.php"); ?>
 <?php require_once("tinyzenpage-functions.php"); ?>
 <?php require_once("js/dialog.php"); ?>
@@ -117,7 +118,7 @@ $const_webpath = dirname(dirname(dirname(dirname(dirname(dirname($_SERVER['SCRIP
 	 <?php 
 	 		if(empty($_GET['zenpage']) AND empty($_GET['album'])) {
 	 			echo "<h2 style='margin-left: 8px'>";
-	 			echo gettext("<em>tiny</em>Zenpage (v1.0.3.1)")."</h2>";
+	 			echo gettext("<em>tiny</em>Zenpage (v1.0.4)")."</h2>";
 	 			echo "<p style='margin-left: 8px'>";
 	 			echo gettext("This provides access to your images and albums (dropdown 'zenphoto') as well as pages, news articles and news categories (dropdown 'zenpage') to easily include them in your pages and articles. You need at least 'Manage all albums' or 'Edit' rights to specific albums to be able to included image from them.")."</p>";
 	 			echo "<p style='margin-left: 8px'>";

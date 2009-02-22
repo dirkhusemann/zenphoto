@@ -120,7 +120,7 @@ function printImageslist($number) {
 					break;
 				}
 				$imageobj = newImage($albumobj,$images[$nr]);
-				$imgurl = $host."/".WEBPATH."zp-core/i.php?a=".$albumobj->name."&amp;i=".$imageobj->filename;
+				$imgurl = $host.WEBPATH."/zp-core/i.php?a=".$albumobj->name."&amp;i=".$imageobj->filename;
 				$imgsizeurl = $imageobj->getCustomImage(85, NULL, NULL, 85, 85, NULL, NULL, TRUE);
 				echo "<div style='width: 85px; height: 100px; float: left; margin: 10px 10px 10px 13px'>\n";
 				echo "<a href=\"javascript:ZenpageDialog.insert('".$imgurl."','".urlencode($imageobj->filename)."','".urlencode(get_language_string($imageobj->getTitle()))."','".urlencode(get_language_string($albumobj->getTitle()))."','zenphoto');\" title='".get_language_string($imageobj->getTitle())." (".$imageobj->filename.")'><img src='".$imgsizeurl."' style='border: 1px solid gray; padding: 1px' /></a>\n";
@@ -133,7 +133,7 @@ function printImageslist($number) {
 		} else {
 			$albumthumb = $albumobj->getAlbumThumbImage();
 			$albumthumbalbum = $albumthumb->getAlbum();
-			$imgurl = $host."/".WEBPATH."zp-core/i.php?a=".$albumthumbalbum->name."&amp;i=".$albumthumb->filename;
+			$imgurl = $host.WEBPATH."/zp-core/i.php?a=".$albumthumbalbum->name."&amp;i=".$albumthumb->filename;
 			$imgsizeurl = $albumthumb->getCustomImage(85, NULL, NULL, 85, 85, NULL, NULL, TRUE);
 			echo "<p style='margin-left: 8px'>".gettext("<strong>Note:</strong> This album does not contain any images.")."</p>";
 			echo "<div style='width: 85px; height: 100px; float: left; margin: 10px 10px 10px 13px'>";
@@ -227,13 +227,12 @@ function printTinyPageNav($pagestotal="",$currentpage="") {
   * @return string
  	*/
 function printZenpageItems() {
-	global $_zp_current_zenpage_news, $_zp_current_zenpage_page;
-	$pages = $_zp_current_zenpage_page->getPages("");
+	$pages = getPages("");
 	$pagenumber = count($pages);
-	$categories = $_zp_current_zenpage_news->getAllCategories();
+	$categories = getAllCategories();
 	$catcount = count($categories);
 	echo "<option value='pages'>".gettext("pages")." (".$pagenumber.")</option>";
-	echo "<option value='articles'>".gettext("articles")." (".$_zp_current_zenpage_news->countArticles("","all").")</option>";
+	echo "<option value='articles'>".gettext("articles")." (".countArticles("","all").")</option>";
 	echo "<option value='categories'>".gettext("categories")." (".$catcount.")</option>";
 }
 
@@ -243,11 +242,11 @@ function printZenpageItems() {
   * @return string
  	*/
 function printAllPagesList() {
- global $_zp_current_zenpage_news, $_zp_current_zenpage_page,$host;
+ global $host;
  if(isset($_GET['zenpage']) AND $_GET['zenpage'] == "pages") {
  echo "<h3 style='margin-bottom:10px;'>Zenpage: <em>".sanitize($_GET['zenpage'])."</em> <small>(Click on page title to include a link)</small></h3>";
  echo "<ul style='list-style-type: none; width: 85%;'>";
- $pages = $_zp_current_zenpage_page->getPages("");
+ $pages = getPages("");
 	foreach($pages as $page) { 
 		$pageobj = new ZenpagePage($page['titlelink']);
 		$count = 0;
@@ -259,7 +258,7 @@ function printAllPagesList() {
 	 			$firstitemcss = "border-bottom: 1px dotted gray; padding: 5px 0px 5px 0px;";
    		}
 			echo "<li style='".$firstitemcss."'>";
-			echo "<a href=\"javascript:ZenpageDialog.insert('".$host."/".WEBPATH.ZENPAGE_PAGES."/".$pageobj->getTitlelink()."','".$pageobj->getTitlelink()."','".urlencode($pageobj->getTitle())."','','pages');\" title='".truncate_string(strip_tags($pageobj->getContent()),300)."'>".$pageobj->getTitle().unpublishedZenpageItemCheck($pageobj)."</a>";
+			echo "<a href=\"javascript:ZenpageDialog.insert('".ZENPAGE_PAGES."/".$pageobj->getTitlelink()."','".$pageobj->getTitlelink()."','".urlencode($pageobj->getTitle())."','','pages');\" title='".truncate_string(strip_tags($pageobj->getContent()),300)."'>".$pageobj->getTitle().unpublishedZenpageItemCheck($pageobj)."</a>";
 		
 			// sublevel 1 start
 			$subcount1 = 0;
@@ -271,7 +270,7 @@ function printAllPagesList() {
 						echo "<ul style='list-style-type: none; margin: 5px 0px 0px -20px;'>\n";
 					}
 					echo "<li style='border-top: 1px dotted darkgray; padding: 5px 0px 5px 0px'>";
-					echo "<a href=\"javascript:ZenpageDialog.insert('".$host."/".WEBPATH.ZENPAGE_PAGES."/".$sub1obj->getTitlelink()."','".$sub1obj->getTitlelink()."','".urlencode($sub1obj->getTitle())."','','pages');\" title='".truncate_string(strip_tags($sub1obj->getContent()),300)."'>".$sub1obj->getTitle().unpublishedZenpageItemCheck($sub1obj)."</a>";
+					echo "<a href=\"javascript:ZenpageDialog.insert('".ZENPAGE_PAGES."/".$sub1obj->getTitlelink()."','".$sub1obj->getTitlelink()."','".urlencode($sub1obj->getTitle())."','','pages');\" title='".truncate_string(strip_tags($sub1obj->getContent()),300)."'>".$sub1obj->getTitle().unpublishedZenpageItemCheck($sub1obj)."</a>";
 
 					// sublevel 2 start
 					$subcount2 = 0;
@@ -283,7 +282,7 @@ function printAllPagesList() {
 								echo "<ul style='list-style-type: none; margin: 5px 0px 0px -20px;'>\n";
 							}
 							echo "<li id=\"".$sub2obj->getID()."\">";
-							echo "<a href=\"javascript:ZenpageDialog.insert('".$host."/".WEBPATH.ZENPAGE_PAGES."/".$sub2obj->getTitlelink()."','".$sub2obj->getTitlelink()."','".urlencode($sub2obj->getTitle())."','','pages');\" title='".truncate_string(strip_tags($sub2obj->getContent()),300)."'>".$sub2obj->getTitle().unpublishedZenpageItemCheck($sub2obj)."</a>";
+							echo "<a href=\"javascript:ZenpageDialog.insert('".ZENPAGE_PAGES."/".$sub2obj->getTitlelink()."','".$sub2obj->getTitlelink()."','".urlencode($sub2obj->getTitle())."','','pages');\" title='".truncate_string(strip_tags($sub2obj->getContent()),300)."'>".$sub2obj->getTitle().unpublishedZenpageItemCheck($sub2obj)."</a>";
 							
 						// sublevel 3 start
 						$subcount3 = 0;
@@ -295,7 +294,7 @@ function printAllPagesList() {
 									echo "<ul style='list-style-type: none; margin: 5px 0px 0px -20px;'>\n";
 								}
 								echo "<li style='border-top: 1px dotted darkgray; padding: 5px 0px 5px 0px'>";
-								echo "<a href=\"javascript:ZenpageDialog.insert('".$host."/".WEBPATH.ZENPAGE_PAGES."/".$sub3obj->getTitlelink()."','".$sub3obj->getTitlelink()."','".urlencode($sub3obj->getTitle())."','','pages');\" title='".truncate_string(strip_tags($sub3obj->getContent()),300)."'>".$sub3obj->getTitle().unpublishedZenpageItemCheck($sub3obj)."</a>";
+								echo "<a href=\"javascript:ZenpageDialog.insert('".ZENPAGE_PAGES."/".$sub3obj->getTitlelink()."','".$sub3obj->getTitlelink()."','".urlencode($sub3obj->getTitle())."','','pages');\" title='".truncate_string(strip_tags($sub3obj->getContent()),300)."'>".$sub3obj->getTitle().unpublishedZenpageItemCheck($sub3obj)."</a>";
 							
 								// sublevel 4 start
 								$subcount4 = 0;	
@@ -307,7 +306,7 @@ function printAllPagesList() {
 											echo "<ul style='list-style-type: none; margin: 5px 0px 0px -20px;'>\n";
 										}
 										echo "<li style='border-top: 1px dotted darkgray; padding: 5px 0px 5px 0px'>";
-										echo "<a href=\"javascript:ZenpageDialog.insert('".$host."/".WEBPATH.ZENPAGE_PAGES."/".$sub4obj->getTitlelink()."','".$sub4obj->getTitlelink()."','".urlencode($sub4obj->getTitle())."','','pages');\" title='".truncate_string(strip_tags($sub4obj->getContent()),300)."'>".$sub4obj->getTitle().unpublishedZenpageItemCheck($sub4obj)."</a>";
+										echo "<a href=\"javascript:ZenpageDialog.insert('".ZENPAGE_PAGES."/".$sub4obj->getTitlelink()."','".$sub4obj->getTitlelink()."','".urlencode($sub4obj->getTitle())."','','pages');\" title='".truncate_string(strip_tags($sub4obj->getContent()),300)."'>".$sub4obj->getTitle().unpublishedZenpageItemCheck($sub4obj)."</a>";
 										if($subcount4 >= 1) {
 											echo "</li>\n"; // sublevel 4 li end
 										}
@@ -376,10 +375,10 @@ function printNewsItemsList() {
 		echo "<h3 style='margin-bottom:10px'>Zenpage: <em>".sanitize($_GET['zenpage'])."</em> <small>".gettext("(Click on article title to include a link)")."</small></h3>";
 		echo "<ul style='list-style-type: none; width: 85%;'>";
 		if($_GET['zenpage'] == "articles") {
-			$items = $_zp_current_zenpage_news->getNewsArticles("","","all");
+			$items = getNewsArticles("","","all");
 		}		
 		if($_GET['zenpage'] == "categories") {
-			$items = $_zp_current_zenpage_news->getAllCategories();
+			$items = getAllCategories();
 	  }
 		$count = 0;
 		foreach($items as $item) { 
@@ -394,10 +393,10 @@ function printNewsItemsList() {
 			}
 			echo "<li style='".$firstitemcss."'>";
 			if($_GET['zenpage'] == "articles") { 
-				echo "<a href=\"javascript:ZenpageDialog.insert('".$host."/".WEBPATH.ZENPAGE_NEWS."/".$newsobj->getTitlelink()."','".$newsobj->getTitlelink()."','".$newsobj->getTitle()."','','articles');\" title='".truncate_string(strip_tags($newsobj->getContent()),300)."'>".$newsobj->getTitle().unpublishedZenpageItemCheck($newsobj)."</a>";
+				echo "<a href=\"javascript:ZenpageDialog.insert('".ZENPAGE_NEWS."/".$newsobj->getTitlelink()."','".$newsobj->getTitlelink()."','".$newsobj->getTitle()."','','articles');\" title='".truncate_string(strip_tags($newsobj->getContent()),300)."'>".$newsobj->getTitle().unpublishedZenpageItemCheck($newsobj)."</a>";
 			}
 			if($_GET['zenpage'] == "categories") { 
-				echo "<a href=\"javascript:ZenpageDialog.insert('".$host."/".WEBPATH.ZENPAGE_NEWS."/category/".$item['cat_link']."','".$item['cat_link']."','".get_language_string($item['cat_name'])."','','categories');\" title='".$item['cat_link']."'>".get_language_string($item['cat_name'])."</a>";
+				echo "<a href=\"javascript:ZenpageDialog.insert('".ZENPAGE_NEWS."/category/".$item['cat_link']."','".$item['cat_link']."','".get_language_string($item['cat_name'])."','','categories');\" title='".$item['cat_link']."'>".get_language_string($item['cat_name'])."</a>";
 			}
 			echo "</li>";
 		}
