@@ -98,7 +98,7 @@ function setupLanguageArray() {
 		'ru_RU' => gettext('Russian (Russia)'),
 		'ru_UA' => gettext('Russian (Ukraine)'),
 		'si_LK' => gettext('Sinhala'),
-		'sk_SK' => gettext('Slovaka'),
+		'sk_SK' => gettext('Slovak'),
 		'sl_SI' => gettext('Slovenian'),
 		'es_AR' => gettext('Spanish (Argentina)'),
 		'es_BO' => gettext('Spanish (Bolivia)'),

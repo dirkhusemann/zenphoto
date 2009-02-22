@@ -3033,11 +3033,9 @@ function printAlbumZip(){
  */
 function getLatestComments($number,$type="all",$itemID="") {
 	$itemID = sanitize_numeric($itemID);
-	if (zp_loggedin()) {
-		$passwordcheck1 = "";
-		$passwordcheck2 = "";
-	} else {
-
+	$passwordcheck1 = "";
+	$passwordcheck2 = "";
+	if (!zp_loggedin(ADMIN_RIGHTS)) {
 		$albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
 		foreach ($albumscheck as $albumcheck) {
 			if(!checkAlbumPassword($albumcheck['folder'], $hint)) {
