@@ -26,14 +26,14 @@ $plugin_author = 'Jeremy Coleman (mammlouk), Stephen Billard (sbillard)';
 $plugin_version = '1.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---GoogleCheckout.php.html";
 $option_interface = new GoogleCheckoutOptions();
-addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/GoogleCheckout/GoogleCheckout.css" type="text/css" />');
+addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'GoogleCheckout/GoogleCheckout.css" type="text/css" />');
 
 $id = getOption('GoogleCheckout_merchantID');
 $curr = getOption('googleCheckout_currency');
 $cartloc = getOption('googleCheckout_cart_location');
 if (empty($curr)) { $curr = 'USD'; }
 addPluginScript('<script id="googlecart-script" type="text/javascript" src="http://checkout.google.com/seller/gsc/beta/cart-v1.js?mid='.$id.'&currency='.$curr.'"></script>');
-addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/GoogleCheckout/GoogleCart'.$cartloc.'.css" type="text/css" />');
+addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'GoogleCheckout/GoogleCart'.$cartloc.'.css" type="text/css" />');
 
 /**
  * Plugin option handling class
@@ -112,7 +112,7 @@ function printGoogleCartWidget() {
 *
 */
 function googleCheckoutTesting() {
-	addPluginScript('<script type="text/javascript" src="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/GoogleCheckout/GoogleCartPostToSandBox.js"></script>');
+	addPluginScript('<script type="text/javascript" src="'.FULLWEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'GoogleCheckout/GoogleCartPostToSandBox.js"></script>');
 }
 
 /**

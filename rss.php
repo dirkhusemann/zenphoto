@@ -3,7 +3,7 @@ if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 define('OFFSET_PATH', 0);
 header('Content-Type: application/xml');
 require_once(ZENFOLDER . "/template-functions.php");
-require_once(ZENFOLDER . "/plugins/image_album_statistics.php");
+require_once(ZENFOLDER .PLUGIN_FOLDER . "image_album_statistics.php");
 
 if(isset($_GET['albumname'])) {
 	$albumfolder = sanitize_path($_GET['albumname']);

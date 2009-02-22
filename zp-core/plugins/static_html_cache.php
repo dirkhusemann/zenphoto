@@ -65,7 +65,7 @@ class staticCache {
 	function handleOption($option, $currentValue) {
 		if($option=="clear_static_cache") {
 			echo "<div class='buttons'>";
-			echo "<a href='plugins/static_html_cache.php?clearcache&height=100&width=250' class='thickbox' title='".gettext("Clear cache")."'><img src='images/edit-delete.png' alt='' />".gettext("Clear cache")."</a>";
+			echo "<a href='".substr(PLUGIN_FOLDER, 1)."static_html_cache.php?clearcache&height=100&width=250' class='thickbox' title='".gettext("Clear cache")."'><img src='images/edit-delete.png' alt='' />".gettext("Clear cache")."</a>";
 			echo "</div>";
 		}
 	}

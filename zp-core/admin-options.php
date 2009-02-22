@@ -1505,7 +1505,7 @@ if ($subtab == 'admin') {
 			<td><select id="spam_filter" name="spam_filter">
 				<?php
 			$currentValue = getOption('spam_filter');
-			$pluginroot = SERVERPATH . "/" . ZENFOLDER . "/plugins/spamfilters";
+			$pluginroot = SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . "spamfilters";
 			generateListFromFiles($currentValue, $pluginroot , '.php');
 			?>
 			</select></td>
@@ -1711,7 +1711,7 @@ if ($subtab == 'admin') {
 						foreach($filelist as $file) {
 							$list[] = str_replace('.php', '', FilesystemToUTF8($file));
 						}
-						$list = array_diff($list, array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions', 'news', 'pages'));
+						$list = array_diff($list, array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions', ZENPAGE_NEWS, ZENPAGE_PAGES));
 						generateListFromArray(array(getThemeOption($album, 'custom_index_page')), $list, false, false);
 						chdir($curdir);
 						?>
@@ -1733,7 +1733,7 @@ if ($subtab == 'admin') {
 						foreach($filelist as $file) {
 							$list[] = str_replace('.php', '', FilesystemToUTF8($file));
 						}
-						$list = array_diff($list, array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions', 'news', 'pages'));
+						$list = array_diff($list, array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions', ZENPAGE_NEWS, ZENPAGE_PAGES));
 						generateListFromArray(array(getThemeOption($album, 'user_registration_page')), $list, false, false);
 						chdir($curdir);
 						?>

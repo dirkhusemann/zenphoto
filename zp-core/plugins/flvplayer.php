@@ -19,7 +19,7 @@ $_zp_flash_player = $option_interface; // claim to be the flash player.
 if ($external) return; // can't process external album images
 
 // register the scripts needed
-addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/plugins/flvplayer/flvplayer.js"></script>');
+addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'flvplayer/flvplayer.js"></script>');
 
 
 define ('FLV_PLAYER_MP3_HEIGHT', 20);
@@ -113,9 +113,9 @@ class flvplayer {
 		$output .= '<p id="player'.$count.'"><a href="http://www.macromedia.com/go/getflashplayer">'.gettext("Get Flash").'</a> to see this player.</p>
 			<script type="text/javascript">';
 		if($ext === ".mp3" AND !isset($videoThumb)) {
-			$output .= '	var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/plugins/flvplayer/'.getOption("flv_player_version").'.swf","player'.$count.'","'.getOption('flv_player_width').'","'.FLV_PLAYER_MP3_HEIGHT.'","7");';
+			$output .= '	var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER .PLUGIN_FOLDER . 'flvplayer/'.getOption("flv_player_version").'.swf","player'.$count.'","'.getOption('flv_player_width').'","'.FLV_PLAYER_MP3_HEIGHT.'","7");';
 		} else {
-			$output .= '	var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER . '/plugins/flvplayer/'.getOption("flv_player_version").'.swf","player'.$count.'","'.getOption('flv_player_width').'","'.getOption('flv_player_height').'","7");';
+			$output .= '	var so = new SWFObject("' . WEBPATH . '/' . ZENFOLDER .PLUGIN_FOLDER . 'flvplayer/'.getOption("flv_player_version").'.swf","player'.$count.'","'.getOption('flv_player_width').'","'.getOption('flv_player_height').'","7");';
 			$output .=  'so.addVariable("displayheight","'.getOption('flv_player_displayheight').'");';
 		}
 		$output .= 'so.addParam("allowfullscreen","true");

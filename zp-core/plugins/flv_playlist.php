@@ -87,7 +87,7 @@ function flvPlaylist($option='') {
 			?>
 	<div id="flvplaylist"><?php echo gettext("The flv player is not installed. Please install or activate the flv player plugin."); ?></div>
 	<script type="text/javascript">
-		var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER; ?>/plugins/flvplayer/player3.swf','jstest','<?php echo getOption('flvplaylist_width'); ?>','<?php echo getOption('flvplaylist_height'); ?>','8');
+		var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER.PLUGIN_FOLDER; ?>flvplayer/player3.swf','jstest','<?php echo getOption('flvplaylist_width'); ?>','<?php echo getOption('flvplaylist_height'); ?>','8');
 		so.addParam('allowfullscreen','true');
 		so.addParam('overstretch','true');
 		so.addVariable('displaywidth', '<?php echo getOption('flvplaylist_displaywidth'); ?>');
@@ -96,7 +96,7 @@ function flvPlaylist($option='') {
 		so.addVariable('frontcolor','<?php echo getOption('flv_player_frontcolor'); ?>');
 		so.addVariable('lightcolor','<?php echo getOption('flv_player_lightcolor'); ?>');
 		so.addVariable('screencolor','<?php echo getOption('flv_player_screencolor'); ?>');
-		so.addVariable('file','<?php echo WEBPATH."/".ZENFOLDER; ?>/plugins/flv_playlist/playlist.php?albumid=<?php echo $albumid; ?>');
+		so.addVariable('file','<?php echo WEBPATH."/".ZENFOLDER.PLUGIN_FOLDER; ?>flv_playlist/playlist.php?albumid=<?php echo $albumid; ?>');
 		so.addVariable('javascriptid','jstest');
 		so.addVariable('enablejs','true');
 		so.addVariable('thumbsinplaylist','<?php echo (getOption('flvplaylist_thumbsinplaylist') ? 'true' : 'false') ?>');
@@ -121,9 +121,9 @@ function flvPlaylist($option='') {
 
 		 if(($ext == ".mp3") && empty($videoThumb)) { 
 		 ?> 
-			var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER; ?>/plugins/flvplayer/player3.swf','jstest','<?php echo getOption('flvplaylist_width'); ?>','20','8');
+			var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER.PLUGIN_FOLDER; ?>flvplayer/player3.swf','jstest','<?php echo getOption('flvplaylist_width'); ?>','20','8');
 		<?php } else { ?>
-			var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER; ?>/plugins/flvplayer/player3.swf','jstest','<?php echo getOption('flvplaylist_width'); ?>','<?php echo getOption('flvplaylist_height'); ?>','8');
+			var so = new SWFObject('<?php echo WEBPATH."/".ZENFOLDER.PLUGIN_FOLDER; ?>flvplayer/player3.swf','jstest','<?php echo getOption('flvplaylist_width'); ?>','<?php echo getOption('flvplaylist_height'); ?>','8');
 		<?php } ?>
 			so.addParam('allowfullscreen','true');
 			so.addParam('overstretch','true');

@@ -15,7 +15,7 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---tag_sugg
 
 // register the scripts needed
 addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . '/js/tag.js"></script>');
-addPluginScript('<link type="text/css" rel="stylesheet" href="' . WEBPATH . '/' . ZENFOLDER . '/plugins/tag_suggest/tag.css" />');
+addPluginScript('<link type="text/css" rel="stylesheet" href="' . WEBPATH . '/' . ZENFOLDER .PLUGIN_FOLDER . 'tag_suggest/tag.css" />');
 $taglist = getAllTagsUnique();
 $c = 0;
 $list = '';

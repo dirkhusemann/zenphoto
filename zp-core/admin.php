@@ -420,11 +420,6 @@ foreach ($comments as $comment) {
 	$email = $comment['email'];
 	$link = gettext('<strong>database error</strong> '); // incase of such
 	
-	// establish default values for all these fields in case of an error.
-	if(getOption("zp_plugin_zenpage")) {
-		require_once(dirname(__FILE__).'/plugins/zenpage/zenpage-class-page.php');
-		require_once(dirname(__FILE__).'/plugins/zenpage/zenpage-class-news.php');
-	}
 	// ZENPAGE: switch added for zenpage comment support
 	switch ($comment['type']) {
 		case "albums":

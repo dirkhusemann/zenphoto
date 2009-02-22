@@ -14,8 +14,8 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---rating.p
 $option_interface = new rating();
 
 // register the scripts needed
-addPluginScript('<script type="text/javascript" src="'.FULLWEBPATH."/".ZENFOLDER .'/plugins/rating/rating.js"></script>');
-addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/rating/rating.css" type="text/css" />');
+addPluginScript('<script type="text/javascript" src="'.FULLWEBPATH."/".ZENFOLDER .PLUGIN_FOLDER .'rating/rating.js"></script>');
+addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'rating/rating.css" type="text/css" />');
 
 require_once('rating/functions-rating.php');
 
@@ -34,7 +34,7 @@ class rating {
 	function handleOption($option, $currentValue) {
 		if($option=="clear_rating") {
 			echo "<div class='buttons'>";
-			echo "<a href='plugins/rating.php?clear_rating&height=100&width=250' class='thickbox' title='".gettext("Clear ratings")."'><img src='images/edit-delete.png' alt='' />".gettext("Clear ratings")."</a>";
+			echo "<a href='".substr(PLUGIN_FOLDER, 1)."rating.php?clear_rating&height=100&width=250' class='thickbox' title='".gettext("Clear ratings")."'><img src='images/edit-delete.png' alt='' />".gettext("Clear ratings")."</a>";
 			echo "</div>";
 		}
 	}
@@ -101,7 +101,7 @@ function printRating($option) {
 	} else {
 		$ratingpx = '';
 	}
-	$zenpath = WEBPATH."/".ZENFOLDER."/plugins";
+	$zenpath = WEBPATH."/".ZENFOLDER.substr(PLUGIN_FOLDER, 0, -1);
 	echo "<div id=\"rating\">\n";
 	echo "<ul class=\"star-rating\">\n";
 	echo "<li class=\"current-rating\" id=\"current-rating\"";

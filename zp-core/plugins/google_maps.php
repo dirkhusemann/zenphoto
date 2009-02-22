@@ -95,7 +95,7 @@ class google_mapsOptions {
 }
 
 if($apiKey = getOption('gmaps_apikey')){
-	require_once(SERVERPATH.'/'.ZENFOLDER.'/plugins/'.substr(basename(__FILE__), 0, -4).'/phoogle.php');
+	require_once(SERVERPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.substr(basename(__FILE__), 0, -4).'/phoogle.php');
 	$_zp_phoogle = new PhoogleMap();
 	$_zp_phoogle->setAPIkey($apiKey);
 } else {

@@ -28,9 +28,7 @@ define("ZP_ALBUM_LINKED", 64);
 define('ZP_IMAGE_LINKED', 128);
 // ZENPAGE: load zenpage class if present, used for zp_handle_comment() only
 if(getOption('zp_plugin_zenpage')) {
-	require_once(dirname(__FILE__).'/plugins/zenpage/zenpage-class-news.php');
-	require_once(dirname(__FILE__).'/plugins/zenpage/zenpage-class-page.php');
-	require_once(dirname(__FILE__).'/plugins/zenpage/zenpage-template-functions.php');
+	require_once(dirname(__FILE__).PLUGIN_FOLDER.'zenpage/zenpage-template-functions.php');
 }
 function get_context() {
 	global $_zp_current_context;
@@ -485,7 +483,7 @@ function zenpage_load_page() {
 		if (is_array($result)) {
 			$_zp_current_zenpage_page = new ZenpagePage($titlelink);
 		} else {
-			$_GET['p'] = 'PAGES:'.$titlelink;
+			$_GET['p'] = strtoupper(ZENPAGE_PAGES).':'.$titlelink;
 		}
 	}
 	return $_zp_current_zenpage_page;
@@ -507,7 +505,7 @@ function zenpage_load_news() {
 		if (is_array($result)) {
 			$_zp_current_zenpage_news = new ZenpageNews($titlelink);
 		} else {
-			$_GET['p'] = 'NEWS:'.$titlelink;
+			$_GET['p'] = strtoupper(ZENPAGE_NEWS).':'.$titlelink;
 		}
 	}
 	if (isset($_GET['category']) || isset($_GET['date'])) {
@@ -553,9 +551,9 @@ function zp_load_request() {
 			$success = zp_load_search();
 		}
 		if (getOption('zp_plugin_zenpage')) {
-			if ($page == 'pages') {
+			if ($page == ZENPAGE_PAGES) {
 				$success = zenpage_load_page();
-			} else if ($page == 'news') {
+			} else if ($page == ZENPAGE_NEWS) {
 				$success = zenpage_load_news();
 			}
 		}

@@ -13,7 +13,7 @@ $plugin_version = '1.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---shutterfly.php.html";
 
 // register the scripts needed
-addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/shutterfly/shutterfly.css" type="text/css" />');
+addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'shutterfly/shutterfly.css" type="text/css" />');
 
 /**
  * Prints the Shutterfly logo and links to print an image.

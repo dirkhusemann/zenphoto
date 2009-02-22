@@ -23,7 +23,7 @@ $const_webpath = dirname(dirname(dirname(dirname(dirname(dirname($_SERVER['SCRIP
 ?>
 <?php require_once("../../../../functions.php"); ?>
 <?php require_once("../../../../class-load.php"); ?>
-<?php require_once("../../../../plugins/zenpage/zenpage-template-functions.php"); ?>
+<?php require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . "zenpage/zenpage-template-functions.php"); ?>
 <?php require_once("tinyzenpage-functions.php"); ?>
 <?php require_once("js/dialog.php"); ?>
 </head>

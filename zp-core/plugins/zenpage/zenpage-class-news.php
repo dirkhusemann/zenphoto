@@ -203,7 +203,7 @@ class ZenpageNews extends PersistentObject {
 	 * @return string
 	 */
 	function getLimitAndOffset($articles_per_page) {
-		if(strstr(dirname($_SERVER['REQUEST_URI']), '/plugins/zenpage')) {
+		if(strstr(dirname($_SERVER['REQUEST_URI']), PLUGIN_FOLDER.'zenpage')) {
 			$page = $this->getCurrentAdminNewsPage(); // TODO maybe useless since the $_GET['page'] is removed for getting the active main admin tab, too lazy to revert now
 		} else {
 			$page = $this->getCurrentNewsPage();

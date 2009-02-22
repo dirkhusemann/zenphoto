@@ -234,7 +234,7 @@ function printContactForm() {
 	}
 	if (count($error) > 0 || !isset($_POST['sendmail'])) {
 		echo getOption("contactform_introtext");
-		include(SERVERPATH . "/" . ZENFOLDER . "/plugins/contact_form/form.php");
+		include(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . "contact_form/form.php");
 	}
 }
 

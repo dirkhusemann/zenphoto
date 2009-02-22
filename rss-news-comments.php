@@ -3,7 +3,7 @@ if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 define('OFFSET_PATH', 0);
 header('Content-Type: application/xml');
 require_once(ZENFOLDER . "/template-functions.php");
-require_once(ZENFOLDER . "/plugins/zenpage/zenpage-template-functions.php");
+require_once(ZENFOLDER . PLUGIN_FOLDER. "zenpage/zenpage-template-functions.php");
 
 $host = htmlentities($_SERVER["HTTP_HOST"], ENT_QUOTES, 'UTF-8');
 

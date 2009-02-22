@@ -84,7 +84,7 @@ class flowplayer {
 			return '<p id="playerContainer'.$count.'">'.gettext('<a href="http://www.adobe.com/go/getflashplayer">Get Flash</a> to see this player.').'</p>
 			<script>
 			$("#playerContainer'.$count.'").flashembed({
-      	src:\'' . WEBPATH . '/' . ZENFOLDER . '/plugins/flowplayer/FlowPlayerLight.swf\',
+      	src:\'' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'flowplayer/FlowPlayerLight.swf\',
       	width:'.getOption('flow_player_width').', 
       	height:'.FLOW_PLAYER_MP3_HEIGHT.'
     	},
@@ -104,7 +104,7 @@ class flowplayer {
 			return '<p id="playerContainer'.$count.'">'.gettext('<a href="http://www.adobe.com/go/getflashplayer">Get Flash</a> to see this player.').'</p>
 			<script>
 			$("#playerContainer'.$count.'").flashembed({
-      	src:\'' . WEBPATH . '/' . ZENFOLDER . '/plugins/flowplayer/FlowPlayerLight.swf\',
+      	src:\'' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'flowplayer/FlowPlayerLight.swf\',
       	width:'.getOption('flow_player_width').', 
       	height:'.getOption('flow_player_height').'
     	},

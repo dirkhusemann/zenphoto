@@ -418,7 +418,7 @@ case "flash":
 	?>
 <script type="text/javascript">
 $("#slideshow").flashembed({
-      src:'<?php echo FULLWEBPATH . '/' . ZENFOLDER; ?>/plugins/flowplayer/FlowPlayerLight.swf',
+      src:'<?php echo FULLWEBPATH . '/' . ZENFOLDER.PLUGIN_FOLDER; ?>flowplayer/FlowPlayerLight.swf',
       width:<?php echo getOption("slideshow_flow_player_width"); ?>,
       height:<?php echo getOption("slideshow_flow_player_height"); ?>
     },
@@ -467,7 +467,7 @@ $("#slideshow").flashembed({
 <?php
 	echo "</span>";
 	echo "<p>";
-	printf (gettext("Click on %s on the right in the player control bar to view full size."), "<img style='position: relative; top: 4px; border: 1px solid gray' src='".WEBPATH . "/" . ZENFOLDER."/plugins/slideshow/flowplayerfullsizeicon.png' />");
+	printf (gettext("Click on %s on the right in the player control bar to view full size."), "<img style='position: relative; top: 4px; border: 1px solid gray' src='".WEBPATH . "/" . ZENFOLDER.PLUGIN_FOLDER."slideshow/flowplayerfullsizeicon.png' />");
 	echo "</p>";
 	break;
 }
@@ -486,8 +486,8 @@ $("#slideshow").flashembed({
  */
 function printSlideShowJS() {
 ?>
-	<script src="<?php echo FULLWEBPATH . '/' . ZENFOLDER ?>/plugins/slideshow/jquery.cycle.all.pack.js" type="text/javascript"></script>
-	<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER; ?>/plugins/flowplayer/flashembed-0.34.pack.js"></script>
+	<script src="<?php echo FULLWEBPATH . '/' . ZENFOLDER.PLUGIN_FOLDER ?>slideshow/jquery.cycle.all.pack.js" type="text/javascript"></script>
+	<script type="text/javascript" src="<?php echo WEBPATH . "/" . ZENFOLDER.PLUGIN_FOLDER; ?>flowplayer/flashembed-0.34.pack.js"></script>
 <?php
 }
 

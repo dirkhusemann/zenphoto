@@ -25,7 +25,7 @@ $plugin_author = gettext('Ebrahim Ezzy (Nimbuz) adapted as a plugin by Stephen B
 $plugin_version = '1.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---zenPaypal.php.html";
 $option_interface = new zenPaypalOptions();
-addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.'/plugins/zenPaypal/zenPaypal.css" type="text/css" />');
+addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'zenPaypal/zenPaypal.css" type="text/css" />');
 
 /**
  * Plugin option handling class

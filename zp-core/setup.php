@@ -1350,7 +1350,7 @@ if (file_exists("zp-config.php")) {
 		// 1.1.6 special cleanup section for plugins
 		$badplugs = array ('exifimagerotate.php', 'flip_image.php', 'image_mirror.php', 'image_rotate.php', 'supergallery-functions.php');
 		foreach ($badplugs as $plug) {
-			$path = SERVERPATH . '/' . ZENFOLDER . '/plugins/' . $plug;
+			$path = SERVERPATH . '/' . ZENFOLDER .PLUGIN_FOLDER . $plug;
 			@unlink($path);
 		}
 
@@ -1464,7 +1464,7 @@ if (file_exists("zp-config.php")) {
 			if ($_zp_loggedin == ADMIN_RIGHTS) {
 				$filelist = safe_glob(SERVERPATH . "/" . BACKUPFOLDER . '/*.zdb');
 				if (count($filelist) > 0) {
-					echo "<p>".gettext("You may <a href=\"admin-options.php\">set your admin user and password</a> or <a href=\"plugins/backup_restore.php\">run backup-restore</a>")."</p>";
+					echo "<p>".gettext("You may <a href=\"admin-options.php\">set your admin user and password</a> or <a href=\"".substr(PLUGIN_FOLDER,1)."plugins/backup_restore.php\">run backup-restore</a>")."</p>";
 				} else {
 					echo "<p>".gettext("You need to <a href=\"admin-options.php\">set your admin user and password</a>")."</p>";
 				}				

@@ -165,7 +165,7 @@ setOption('zenpage_release', ZENPAGE_RELEASE);
 echo "<br /><p>".gettext("Zenpage is ready to go!")."</p>";
 echo "<div class='buttons'>";
 if (isset($_GET['admin'])) {
-	echo "<a href='". WEBPATH . '/' . ZENFOLDER . "/plugins/zenpage/'><img src='../../images/pass.png' />".gettext("Go")."</a>";
+	echo "<a href='". WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . "zenpage/'><img src='../../images/pass.png' />".gettext("Go")."</a>";
 } else {
 	echo "<a href='". WEBPATH . "/index.php'><img src='../../images/pass.png' />".gettext("Go")."</a>";
 }
