@@ -12,7 +12,6 @@ if (!defined('ZENPAGE_PAGES')) {
 
 class ZenpagePage extends PersistentObject {
 	
-	var $all_pages = NULL;//Contains an array of all normal content pages
 	var $comments = NULL;//Contains an array of the comments of the current article
 	var $commentcount; //Contains the number of comments
 	
@@ -20,53 +19,6 @@ class ZenpagePage extends PersistentObject {
 		$titlelink = sanitize($titlelink);
 		$new = parent::PersistentObject('zenpage_pages', array('titlelink'=>$titlelink), NULL, true, empty($titlelink));
 	}
-	
-
-	/**
-	 * Gets all pages or published ones.
-	 *
-	 * @param bool $published TRUE for published or FALSE for all pages including unpublished
-	 * @return array
-	 */
-	function getPages($published=true) {
-		if($published) {
-			$show = " WHERE `show` = 1";
-		} else {
-			$show = " ";
-		}
-		if(is_null($this->all_pages)) {
-			$this->all_pages  = query_full_array("SELECT titlelink,sort_order FROM ".prefix('zenpage_pages').$show." ORDER by `sort_order`");
-			return $this->all_pages;
-		} else {
-			return $this->all_pages;
-		}
-	}
-
-/**
- * Gets the parent pages recursivly to the page whose parentid is passed
- *
- * @param int $parentid The parentid of the page to get the parents of
- * @param bool $initparents If the 
- * @return array
- */
-function getParentPages(&$parentid,$initparents=true) {
-	global $parentpages;
-	if($initparents) {
-		$parentpages = array();
-	}
-	$allpages = $this->getPages();
-	$currentparentid = $parentid;
-	foreach($allpages as $page) {
-		$pageobj = new ZenpagePage($page['titlelink']);
-		if($pageobj->getID() === $currentparentid) {
-			$pageobjtitlelink = $pageobj->getTitlelink();
-			$pageobjparentid = $pageobj->getParentID();
-			array_unshift($parentpages,$pageobjtitlelink);
-		 	$this->getParentPages($pageobjparentid,false);
-		} 
-	}
-	return $parentpages;
-}
 	
 
 	/**
@@ -287,7 +239,6 @@ function getParentPages(&$parentid,$initparents=true) {
 	function getCommentCount() {
 		global $_zp_current_zenpage_page;
 		$id = $this->get('id');
-	
 		if (is_null($this->commentcount)) {
 			if ($this->comments == null) {
 				$count = query_single_row("SELECT COUNT(*) FROM " . prefix("comments") . " WHERE `type`='pages' AND `inmoderation`=0 AND `private`=0 AND `ownerid`=" . $id);
@@ -295,9 +246,6 @@ function getParentPages(&$parentid,$initparents=true) {
 			} else {
 				$this->commentcount = count($this->comments);
 			}
-		} else { // probably because of the slightly different setup of zenpage this extra part is necessary to get the right comment count withn next_comment() loop
-			$count = query_single_row("SELECT COUNT(*) FROM " . prefix("comments") . " WHERE `type`='pages' AND `inmoderation`=0 AND `private`=0 AND `ownerid`=" . $id);
-			$this->commentcount = array_shift($count);
 		}
 		return $this->commentcount;
 	}

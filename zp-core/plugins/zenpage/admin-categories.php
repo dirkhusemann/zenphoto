@@ -31,7 +31,7 @@ if(isset($_GET['save'])) {
   addCategory();
 }
 if(isset($_GET['id'])){
-  $result = $_zp_current_zenpage_news->getCategory($_GET['id']);
+  $result = getCategory($_GET['id']);
 } else if(isset($_GET['update'])) {
   $result = updateCategory();
 }

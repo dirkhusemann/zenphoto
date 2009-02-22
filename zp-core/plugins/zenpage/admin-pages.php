@@ -62,7 +62,7 @@ if(isset($_GET['hitcounter'])) {
  <tr><td colspan="1" style="padding: 0;">
 	<ul id="left-to-right" class="page-list">
 <?php
-$pages = $_zp_current_zenpage_page->getPages(false,false);
+$pages = getPages(false,false);
 printPagesList($pages);
 ?>
 </ul>

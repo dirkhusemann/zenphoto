@@ -38,7 +38,7 @@ if(isset($_GET['hitcounter'])) {
 <h1><?php echo gettext("Articles"); ?> 
 <?php
 if (isset($_GET['category'])) {
-  echo "<em>".$_zp_current_zenpage_news->getCategoryTitle($_GET['category'])."</em>";
+  echo "<em>".getCategoryTitle($_GET['category'])."</em>";
 }
 if (isset($_GET['date'])) {
   echo "<em><small> (".$_GET['date'].")</small></em>";
@@ -55,9 +55,9 @@ if(!isset($_GET['published'])) {
 }
 
 if(isset($_GET['category'])) {
-  $result = $_zp_current_zenpage_news->getNewsArticles(getOption('zenpage_admin_articles'),$_GET['category'],$published,TRUE);
+  $result = getNewsArticles(getOption('zenpage_admin_articles'),$_GET['category'],$published,TRUE);
 } else {
-  $result = $_zp_current_zenpage_news->getNewsArticles(getOption('zenpage_admin_articles'),"",$published,TRUE);
+  $result = getNewsArticles(getOption('zenpage_admin_articles'),"",$published,TRUE);
 }
 
 ?>
@@ -84,7 +84,7 @@ if(isset($_GET['category'])) {
   <td> 
    <?php 
    if(checkIfLocked($articleobj)) {
-   	 echo "<a href='admin-edit.php?newsarticle&amp;titlelink=".urlencode($articleobj->getTitlelink())."&pagenr=".$_zp_current_zenpage_news->getCurrentAdminNewsPage()."' title='".truncate_string(strip_tags($articleobj->getContent()),300)."'>"; checkForEmptyTitle($articleobj->getTitle(),"news"); echo "</a>".checkHitcounterDisplay($articleobj->getHitcounter()); 
+   	 echo "<a href='admin-edit.php?newsarticle&amp;titlelink=".urlencode($articleobj->getTitlelink())."&pagenr=".getCurrentAdminNewsPage()."' title='".truncate_string(strip_tags($articleobj->getContent()),300)."'>"; checkForEmptyTitle($articleobj->getTitle(),"news"); echo "</a>".checkHitcounterDisplay($articleobj->getHitcounter()); 
    } else {
    	 echo get_language_string($articleobj->getTitle())."</a>".checkHitcounterDisplay($article->getHitcounter()); 
    }
@@ -93,7 +93,7 @@ if(isset($_GET['category'])) {
   </td>
   <td><?php echo $articleobj->getDatetime(); ?></td>
   <td>
-  <?php printArticleCategories($articleobj->getID()) ?>
+  <?php printArticleCategories($articleobj) ?>
   </td> 
   <td>
   <?php echo htmlspecialchars($articleobj->getAuthor()); ?>

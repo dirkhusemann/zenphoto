@@ -14,10 +14,11 @@ require_once('zenpage-version.php'); // includes the $plugin_version statement
  */
 require_once("zenpage-class-page.php");
 require_once("zenpage-class-news.php");
+require_once("zenpage-functions.php");
 
 global $_zp_current_zenpage_news, $_zp_current_zenpage_page;
-$_zp_current_zenpage_news = new ZenpageNews();
-$_zp_current_zenpage_page = new ZenpagePage();
+//$_zp_current_zenpage_news = new ZenpageNews();
+//$_zp_current_zenpage_page = new ZenpagePage();
 /**
  * Returns the value of a checkbox form item
  *
@@ -560,11 +561,11 @@ function deleteArticle() {
 /**
  * Print the categories of a news article for the news articles list
  *
- * @param int $id ID od the news article
+ * @param obj $obj object of the news article
  */
-function printArticleCategories($id) {
+function printArticleCategories($obj) {
   global $_zp_current_zenpage_news;
-  $cat = $_zp_current_zenpage_news->getCategories($id);
+  $cat = $obj->getCategories();
   $number = 0;
   foreach ($cat as $cats) {
     $number++;
@@ -584,7 +585,7 @@ function printArticleCategories($id) {
  */
 function printCategorySelection($id='', $option='') {
   global $_zp_current_zenpage_news;
-  $all_cats = $_zp_current_zenpage_news->all_categories;
+  $all_cats = getAllCategories();
   $selected = '';
  	echo "<ul class='zenpagechecklist'>\n";
 	foreach ($all_cats as $cats) {
@@ -611,8 +612,8 @@ function printCategorySelection($id='', $option='') {
  */
 function printArticleDatesDropdown() {
   global $_zp_current_zenpage_news;
-  $datecount = $_zp_current_zenpage_news->getAllArticleDates();
-  $currentpage = $_zp_current_zenpage_news->getCurrentAdminNewsPage();
+  $datecount = getAllArticleDates();
+  $currentpage = getCurrentAdminNewsPage();
   $lastyear = "";
   $nr = "";
  ?>
@@ -670,9 +671,9 @@ function printArticleDatesDropdown() {
  *
  */
 function printArticlesPageNav() {
-  global $_zp_current_zenpage_news;
-  $current = $_zp_current_zenpage_news->getCurrentAdminNewsPage();
-  $total = $_zp_current_zenpage_news->total_pages;
+  global $_zp_zenpage_total_pages;
+  $current = getCurrentAdminNewsPage();
+  $total = $_zp_zenpage_total_pages;
   if($total > 1) {
     echo "<ul class=\"pagelist\">";
     if ($current != 1) {
@@ -714,8 +715,8 @@ function printArticlesPageNav() {
  */
 function printCategoryDropdown() {
 	global $_zp_current_zenpage_news;
-  $currentpage = $_zp_current_zenpage_news->getCurrentAdminNewsPage();
-  $result = $_zp_current_zenpage_news->getAllCategories();
+  $currentpage = getCurrentAdminNewsPage();
+  $result = getAllCategories();
   if(isset($_GET['date'])) {
     $datelink = "&amp;date=".$_GET['date'];
     $datelinkall = "?date=".$_GET['date'];
@@ -735,7 +736,7 @@ if(!isset($_GET['category'])) {
 		echo "<option $selected value='admin-news-articles.php?pagenr=".$currentpage.getNewsAdminOptionPath(false,true,true)."'>".gettext("All categories")."</option>";
   foreach ($result as $cat) {
     // check if there are articles in this category. If not don't list the category.
-    $count = $_zp_current_zenpage_news->countArticles($cat['cat_link'],false);
+    $count = countArticles($cat['cat_link'],false);
     $count = " (".$count.")";
     if(isset($_GET['category']) AND $_GET['category'] === $cat['cat_link']) {
     	$selected = "selected";
@@ -794,7 +795,7 @@ function getNewsAdminOptionPath($categorycheck='', $postedcheck='',$publishedche
  */
 function printUnpublishedDropdown() {
 	global $_zp_current_zenpage_news;
-  $currentpage = $_zp_current_zenpage_news->getCurrentAdminNewsPage();
+  $currentpage = getCurrentAdminNewsPage();
 ?>
   <form name="AutoListBox3" style="float:left; margin-left: 10px;">
   <select name="ListBoxURL" size="1" onchange="gotoLink(this.form)">
@@ -880,7 +881,7 @@ function updateCategory() {
 	} else {
 		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A category with the title/titlelink <em>%s</em> already exists!"),$catlink)."</p>";
 	}
-	$result = $_zp_current_zenpage_news->getCategory($result['id']);
+	$result = getCategory($result['id']);
 	return $result;
 }
 
@@ -893,7 +894,7 @@ function deleteCategory() {
   global $_zp_current_zenpage_news;
   if(isset($_GET['delete'])) {
     // check if the category is in use, don't delete
-    $count = $_zp_current_zenpage_news->countArticles($_GET['cat_link'],false);
+    $count = countArticles($_GET['cat_link'],false);
     if ($count != 0) {
 			query("DELETE FROM ".prefix('zenpage_news2cat')." WHERE cat_id = '{$_GET['delete']}'");
     } 
@@ -905,9 +906,9 @@ function deleteCategory() {
 
 function printCategoryList() {
 	global $_zp_current_zenpage_news;
-  $result = $_zp_current_zenpage_news->getAllCategories();
+  $result = getAllCategories();
 	foreach($result as $cat) {
-		$count = $_zp_current_zenpage_news->countArticles($cat['cat_link'],false);
+		$count = countArticles($cat['cat_link'],false);
 			if(get_language_string($cat['cat_name'])) {
   			$catname = get_language_string($cat['cat_name']);
   		} else {
@@ -1074,15 +1075,15 @@ function printNewsPagesStatistic($option) {
 	global $_zp_current_zenpage_page, $_zp_current_zenpage_news;
 	switch($option) {
 		case "news":
-			$items = $_zp_current_zenpage_news->getNewsArticles("","",false);
+			$items = getNewsArticles("","",false);
 			$type = gettext("Articles");
 		break;
 		case "pages":
-			$items = $_zp_current_zenpage_page->getPages(false);
+			$items = getPages(false);
 			$type = gettext("Pages");
 		break;
 		case "categories":
-			$cats = $_zp_current_zenpage_news->getAllCategories();
+			$cats = getAllCategories();
 			$catstotal = count($cats);
 			printf(gettext('(<strong>%u</strong> Categories)'),$catstotal);
 		break;

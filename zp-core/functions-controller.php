@@ -476,7 +476,7 @@ function zp_load_image($folder, $filename) {
 function zenpage_load_page() {
 	global $_zp_current_zenpage_page;
 	$_zp_current_zenpage_page = NULL;
-	if(isset($_GET['p']) AND $_GET['p'] === "pages" AND isset($_GET['title'])) {
+	if(is_Pages()) {
 		$titlelink = sanitize($_GET['title']);
 		$sql = 'SELECT `id` FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.$titlelink.'"';
 		$result = query_single_row($sql);
@@ -498,7 +498,7 @@ function zenpage_load_page() {
 function zenpage_load_news() {
 	global $_zp_current_zenpage_news;
 	$_zp_current_zenpage_news = NULL;
-	if(isset($_GET['p']) AND $_GET['p'] === "news" AND isset($_GET['title'])) {
+	if(is_NewsArticle()) {
 		$titlelink = sanitize($_GET['title']);
 		$sql = 'SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.$titlelink.'"';
 		$result = query_single_row($sql);
@@ -508,9 +508,10 @@ function zenpage_load_news() {
 			$_GET['p'] = strtoupper(ZENPAGE_NEWS).':'.$titlelink;
 		}
 	}
-	if (isset($_GET['category']) || isset($_GET['date'])) {
-		$_zp_current_zenpage_news = new ZenpageNews(); // need a generic news object for these
-	}
+	//TODO This should not be needed anymore but strangely is....
+	if ((is_News() AND !is_NewsArticle()) OR is_NewsCategory() OR is_NewsArchive()) { 
+		$_zp_current_zenpage_news = new ZenpageNews(); 
+	} 
 	return $_zp_current_zenpage_news;
 }
 
