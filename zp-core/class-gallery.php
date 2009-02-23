@@ -424,9 +424,13 @@ class Gallery {
 				if (file_exists($imageName)) {
 
 					if ($image['mtime'] != filemtime($imageName)) { // file has changed since we last saw it
+						$imageobj = new _Image(new Album($this, $row['folder']), $image['filename']);
+						
+						$imageobj->getExifData(); // prime the exif fields
+						$imageobj->updateDimensions(); // update the width/height & account for rotation
+								
 						/* check metadata */
 						$metadata = getImageMetadata($imageName);
-						$set = '';
 
 						/* title */
 						$defaultTitle = substr($image['filename'], 0, strrpos($image['filename'], '.'));
@@ -442,7 +446,7 @@ class Gallery {
 						/* description */
 						if (!isset($row['desc'])) {
 							if (isset($metadata['desc'])) {
-								$set .= ', `desc`="' . mysql_real_escape_string($metadata['desc']) . '"';
+								$imageobj->set('desc', $metadata['desc']);
 							}
 						}
 
@@ -455,23 +459,23 @@ class Gallery {
 
 						/* location, city, state, and country */
 						if (isset($metadata['location'])) {
-							$set .= ', `location`="' . mysql_real_escape_string($metadata['location']) . '"';
+							$imageobj->set('location', $metadata['location']);
 						}
 						if (isset($metadata['city'])) {
-							$set .= ', `city`="' . mysql_real_escape_string($metadata['city']) . '"';
+							$imageobj->set('city', $metadata['city']);
 						}
 						if (isset($metadata['state'])) {
-							$set .= ', `state`="' . mysql_real_escape_string($metadata['state']) . '"';
+							$imageobj->set('state', $metadata['state']);
 						}
 						if (isset($metadata['country'])) {
-							$set .= ', `country`="' . mysql_real_escape_string($metadata['country']) . '"';
+							$imageobj->set('country', $metadata['country']);
 						}
 						/* credit & copyright */
 						if (isset($metadata['credit'])) {
-							$set .= ', `credit`="' . escape($metadata['credit']) . '"';
+							$imageobj->set('credit', $metadata['credit']);
 						}
 						if (isset($metadata['copyright'])) {
-							$set .= ', `copyright`="' . escape($metadata['copyright']) . '"';
+							$imageobj->set('copyright', $metadata['copyright']);
 						}
 
 						/* date (for sorting) */
@@ -482,11 +486,10 @@ class Gallery {
 								$newDate = $dt;
 							}
 						}
-						$set .= ', `date`="'. $newDate . '"';
+						$imageobj->set('date', $newDate);
 
 						/* update DB is necessary */
-						$sql = "UPDATE " . prefix('images') . " SET `EXIFValid`=0,`mtime`=" . filemtime($imageName) . $set . " WHERE `id`='" . $image['id'] ."'";
-						query($sql);
+						$imageobj->save();
 
 					}
 				} else {
