@@ -8,6 +8,11 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	exit();
 }
 
+if (!($_zp_loggedin & (THEMES_RIGHTS | ADMIN_RIGHTS))) { // prevent nefarious access to this page.
+	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
+	exit();
+}
+
 $albumname = sanitize_path($_REQUEST['a']);
 $imagename = sanitize_path($_REQUEST['i']);
 

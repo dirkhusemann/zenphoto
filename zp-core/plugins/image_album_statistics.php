@@ -346,8 +346,8 @@ function getImageStatistic($number, $option, $albumfolder='',$collection=false) 
 	}
 	$imageArray = array();
 	$images = query_full_array("SELECT images.albumid, images.filename AS filename, images.mtime as mtime, images.title AS title, " .
- 														"albums.folder AS folder, images.show, albums.show, albums.password FROM " .
-	prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
+ 															"albums.folder AS folder, images.show, albums.show, albums.password FROM " .
+															prefix('images') . " AS images, " . prefix('albums') . " AS albums " .
 															" WHERE ".$specificalbum."images.albumid = albums.id " . $imageWhere . $albumWhere .
 															" AND albums.folder != ''".
 															" ORDER BY ".$sortorder." DESC LIMIT $number");
