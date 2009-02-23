@@ -15,9 +15,11 @@ html { /* Force vertical scrollbar to prevent page shift "jog" */
 
 body {
 	font: normal 82% "Helvetica Neue", Helvetica, Arial, sans-serif;
-	color: #5A5A4B;
+	color: #4B4B4B;
 	text-align: center;
-	background: #D0DBDF;
+	background-color: #f1f1f1;
+	background-image: url(images/admin-headerback.jpg);
+	background-repeat: repeat-x;
 	margin: 0;
 	padding: 0;
 }
@@ -51,15 +53,15 @@ body {
 }
 
 #footer a {
-	color: #597580;
+	color: #4D76CF;
 	text-decoration: none;
 	border-bottom: 1px dotted #597580;
 }
 
 #footer a:hover {
-	color: #4B636B;
+	color: #FF8A00;
 	text-decoration: none;
-	border-bottom: 1px solid #4B636B;
+	border-bottom: 1px solid #FF8A00;
 }
 
 #links {
@@ -69,22 +71,22 @@ body {
 }
 
 #links a {
-	color: #597580;
+	color: #4D76CF;
 	text-decoration: none;
 	border-bottom: 1px dotted #597580;
 }
 
 #links a:hover {
-	color: #4B636B;
+	color: #FF8A00;
 	text-decoration: none;
-	border-bottom: 1px solid #4B636B;
+	border-bottom: 1px solid #FF8A00;
 }
 
 #content {
 	padding: 30px;
 	background-color: #fff;
-	border-top: 1px solid #BAC9CF;
-	border-bottom: 5px solid #BAC9CF;
+	border-top: 1px solid #CBCBCB;
+	border-bottom: 5px solid #CBCBCB;
 	min-height: 450px;
 	_height: 450px; /* IE Only */
 }
@@ -107,8 +109,9 @@ h2 {
 h2.h2_bordered {
 	font-weight: bold;
 	padding: 4px 12px;
-	border-bottom: 2px solid #BAC9CF; 
-	background: #ECF1F2;
+	border-bottom: 2px solid #cccccc; 
+	background-image: url(images/admin-headlineback.jpg);
+	background-repeat: repeat-x;
 	}
 
 /* edit page subheadlines like "images" or "albums" */
@@ -146,9 +149,9 @@ p {
 }
 
 .nav li a {
-	border-top: 1px solid #C7D3D8;
-	border-left: 1px solid #C7D3D8;
-	border-right: 1px solid #C7D3D8;
+	border-top: 1px solid #CBCBCB;
+	border-left: 1px solid #CBCBCB;
+	border-right: 1px solid #CBCBCB;
 	font-size: 115%;
 	display: block;
 	float: left;
@@ -158,16 +161,18 @@ p {
 	font-weight: normal;
 	height: 17px;
 	color: #8797A5;
-	background: #E9ECEF;
+	background: #F8F8F8;
+  background-image: url(images/admin-navtabback.jpg);
+	background-repeat: repeat-x;
 	_position: relative; /* IE Only */
 	_top: 6px; /* IE Only */
 }
 
 .nav li a:hover {
-	border-top: 1px solid #BAC9CF;
-	border-left: 1px solid #BAC9CF;
-	border-right: 1px solid #BAC9CF;
-	color: #000;
+	border-top: 1px solid #CBCBCB;
+	border-left: 1px solid #CBCBCB;
+	border-right: 1px solid #CBCBCB;
+	color: black;
 	background-color: #F7F8F9;
 	height: 21px;
 	_height: 24px;
@@ -177,9 +182,25 @@ p {
 }
 
 .nav li.current a {
-	border-top: 1px solid #BAC9CF;
-	border-left: 1px solid #BAC9CF;
-	border-right: 1px solid #BAC9CF;
+	border-top: 1px solid #CBCBCB;
+	border-left: 1px solid #CBCBCB;
+	border-right: 1px solid #CBCBCB;
+	color: black;
+	background: none;
+	background-color: #fff;
+	background-repeat: repeat-x;
+	cursor: default;
+	height: 21px;
+	_height: 24px;
+	position: relative;
+	top: -3px;
+	_top: 1px; /* IE Only */
+}
+
+.nav li.currentsubtab a {
+	border-top: 1px solid #CBCBCB;
+	border-left: 1px solid #CBCBCB;
+	border-right: 1px solid #CBCBCB;
 	color: #4D646F;
 	background-color: #fff;
 	cursor: default;
@@ -190,24 +211,10 @@ p {
 	_top: 1px; /* IE Only */
 }
 
-.nav li.currentsubtab a {
-	border-top: 1px solid #BAC9CF;
-	border-left: 1px solid #BAC9CF;
-	border-right: 1px solid #BAC9CF;
-	color: #4D646F;
-	background-color: #F7F8F9;
-	cursor: default;
-	height: 21px;
-	_height: 24px;
-	position: relative;
-	top: -3px;
-	_top: 1px; /* IE Only */
-}
-
 .nav li. a:hover {
-	border-top: 1px solid #BAC9CF;
-	border-left: 1px solid #BAC9CF;
-	border-right: 1px solid #BAC9CF;
+	border-top: 1px solid #CBCBCB;
+	border-left: 1px solid #CBCBCBF;
+	border-right: 1px solid #CBCBCB;
 	color: #000;
 	background-color: #F7F8F9;
 	height: 21px;
@@ -231,9 +238,9 @@ p {
 }
 
 .subnav li a {
-	border-top: 1px solid #C7D3D8;
-	border-left: 1px solid #C7D3D8;
-	border-right: 1px solid #C7D3D8;
+	border-top: 1px solid #CBCBCB;
+	border-left: 1px solid #CBCBCB;
+	border-right: 1px solid #CBCBCB;
 	font-size: 115%;
 	display: block;
 	float: left;
@@ -244,15 +251,17 @@ p {
 	height: 17px;
 	color: #8797A5;
 	background: #E9ECEF;
+	background-image: url(images/admin-navtabback.jpg);
+	background-repeat: repeat-x;
 	_position: relative; /* IE Only */
 	_top: 6px; /* IE Only */
 }
 
 .subnav li a:hover {
-	border-top: 1px solid #BAC9CF;
-	border-left: 1px solid #BAC9CF;
-	border-right: 1px solid #BAC9CF;
-	color: #000;
+	border-top: 1px solid #CBCBCB;
+	border-left: 1px solid #CBCBCB;
+	border-right: 1px solid #CBCBCB;
+	color:black;
 	background-color: #F7F6F8;
 	height: 21px;
 	_height: 24px;
@@ -262,11 +271,12 @@ p {
 }
 
 .subnav li.current a {
-	border-top: 1px solid #BAC9CF;
-	border-left: 1px solid #BAC9CF;
-	border-right: 1px solid #BAC9CF;
-	color: #4D646F;
-	background-color: #F7F8F9;
+	border-top: 1px solid #CBCBCB;
+	border-left: 1px solid #CBCBCB;
+	border-right: 1px solid #CBCBCB;
+	color: black;
+	background: none;
+	background-color: #FAFAFA;
 	cursor: default;
 	height: 21px;
 	_height: 24px;
@@ -276,9 +286,9 @@ p {
 }
 
 .subnav li. a:hover {
-	border-top: 1px solid #BAC9CF;
-	border-left: 1px solid #BAC9CF;
-	border-right: 1px solid #BAC9CF;
+	border-top: 1px solid #CBCBCB;
+	border-left: 1px solid #CBCBCB;
+	border-right: 1px solid #CBCBCB;
 	color: #000;
 	background-color: #F7F8F9;
 	height: 21px;
@@ -385,26 +395,29 @@ table.bordered {
 	width: 100%;
 	padding: 0px;
 	border-spacing: 1px;
-	background: #F1F2F3;
-	border: 1px solid #BAC9CF;
+	background: #E5E5E5;
+	border: 1px solid #E5E5E5;
 	border-bottom-width: 5px;
 }
 
 table.bordered th {
-	font-weight: normal;
+	font-weight: bold;
 	padding: 4px 12px;
-	border-bottom: 2px solid #BAC9CF; 
+	border-bottom: 2px solid #cccccc; 
 	background: #ECF1F2;
+  background-image: url(images/admin-headlineback.jpg);
+	background-repeat: repeat-x;
 }
 
 table.bordered .subhead {
-	border-top: 1px solid #BAC9CF;
+	border-top: 1px solid #cccccc;
 }
 
 table.bordered td {
 	padding: 8px 16px;
 	margin: 0px;
 	background-color: #fff;
+
 }
 
 table.bordered tr.alt td {
@@ -413,7 +426,9 @@ table.bordered tr.alt td {
 
 table.bordered tr.alt1 td {
 	background-color: #ECF1F2;
-	border-bottom: 2px solid #BAC9CF; 
+	border-bottom: 2px solid #dddddd; 
+	background-image: url(images/admin-headerback.jpg);
+	background-repeat: repeat-x;
 }
 
 table.bordered table.compact {
@@ -454,15 +469,15 @@ table.checkboxes td {
 
 .box {
 	padding: 0;
-	background: #F7F8F9;
-	border: 1px solid #BAC9CF;
+	background-color: #FAFAFA;
+	border: 1px solid #E5E5E5;
 	border-bottom-width: 5px;
 }
 
 .innerbox {
-	background: #fff;
-	border: 1px solid #BAC9CF;
-	border-bottom-width: 5px;
+	background: none;
+	border: 0px solid #BAC9CF;
+	border-bottom-width: 0px;
 }
 
 .imagethumb {
@@ -554,6 +569,7 @@ input.tags {
 	border:0px solid gray;
 	width: 45%;
 	float: left;
+
 }
 
 #overview-rightcolumn {
@@ -575,11 +591,14 @@ input.tags {
 	width: 480px;
 	margin: 0 0 10px 0px;
 	padding: 0px;
+
+	
 }
 #overview-maint_l {
 	float:left;
 	width: 50%;
 	margin: 5px 0px 0px 8px;
+
 
 }
 #overview-maint_r {
@@ -652,10 +671,10 @@ input.tags {
 #albumselect {
 	padding: 10px;
 	background: #F7F8F9;
-	border-top: 1px solid #BAC9CF;
-	border-left: 1px solid #BAC9CF;
-	border-right: 1px solid #BAC9CF;
-	border-bottom: 5px solid #BAC9CF;
+	border-top: 1px solid #E5E5E5;
+	border-left: 1px solid #E5E5E5;
+	border-right: 1px solid #E5E5E5;
+	border-bottom: 5px solid #E5E5E5;
 }
 
 #albumselect input {
@@ -836,6 +855,8 @@ label:hover {
 	float: left;
 	margin: 0 7px 0 0;
 	background-color: #f5f5f5;
+	background-image:url(images/admin-buttonback.jpg);
+	background-repeat: repeat-x;
 	border: 1px solid #dedede;
 	border-top: 1px solid #eee;
 	border-left: 1px solid #eee;
@@ -860,7 +881,7 @@ label:hover {
 	text-decoration: none;
 	padding: 5px 10px 5px 7px; /* Firefox */
 	line-height: 17px; /* Safari */
-}
+} 
 
 .buttons button img,.buttons a img {
 	text-decoration: none;
@@ -875,8 +896,8 @@ label:hover {
 button:hover,.buttons a:hover {
 	text-decoration: none;
 	background-color: #dff4ff;
-	border: 1px solid #c2e1ef;
-	color: #336699;
+	border: 1px solid #CBCBCB;
+	color: #FF8A00;
 }
 
 .buttons a:active {
@@ -895,7 +916,7 @@ button.positive,.buttons a.positive {
 .buttons a.positive:hover,button.positive:hover {
 	text-decoration: none;
 	background-color: #E6EFC2;
-	border: 1px solid #C6D880;
+	border: 1px solid #f5f5f4;
 	color: #529214;
 }
 
@@ -934,11 +955,13 @@ button.positive,.buttons a.positive {
 #tooltip {
 	position: absolute;
 	z-index: 3000;
-	border: 1px solid #dedede;
+	border: 1px solid gray;
 	background-color: #f5f5f5;
 	padding: 5px;
-	opacity: 0.85;
+	opacity: 0.95;
 	width: 300px;
+	text-align: left;
+	color: black;
 }
 
 #tooltip h3,#tooltip div {
@@ -1149,11 +1172,15 @@ button.positive,.buttons a.positive {
 	text-align:center; 
 	background: #ECF1F2;
 	border-bottom: 2px solid #BAC9CF;
+	background-image: url(images/admin-headlineback.jpg);
+	background-repeat: repeat-x;
 }
 #imagenavb {
 	text-align:center; 
 	background: #ECF1F2;
 	border-top: 2px solid #BAC9CF;
+	background-image: url(images/admin-headlineback.jpg);
+	background-repeat: repeat-x;
 }
 ul.pagelist {
 	clear: both;

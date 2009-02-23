@@ -191,6 +191,7 @@ $taskDisplay = array('create' => gettext("create"), 'update' => gettext("update"
 <style type="text/css">
 body {
 	margin: 0px 20% 0px;
+	background: none;
 	background-color: #f4f4f8;
 	font-family: Arial, Helvetica, Verdana, sans-serif;
 	font-size: 10pt;
