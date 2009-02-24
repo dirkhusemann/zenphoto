@@ -215,16 +215,17 @@ function printImageMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
 			$desc = getImageDesc();
 			if (empty($desc)) $desc = getImageTitle();
 			addPoint($lat, $long, js_encode($desc));
-			$dataid = $id.'_data';
 			//to avoid problems with google earth and the toggle options, the toggle option is removed from here when GE is activated
 			//it is possible to have both functionnality work but the toogle option should then be integrated in the phoogle map class dirctly within the script
 			//that calls the map and should alos trigger a map type change. check Sobre theme or  have alook at www.kaugite.com for an example
 			$toggle = $toggle && $defaultmaptype != 'G_SATELLITE_3D_MAP';
+			$id_toggle = $id.'_toggle';
+			$id_data = $id.'_data';
 			if (is_null($text)) $text = gettext('Google Map');
-			echo "<a href=\"javascript: vtoggle('$dataid');\" title=\"".gettext('Display or hide the Google Map.')."\">";
+			echo "<a id=\"$id_toggle\" href=\"javascript: vtoggle('$id_data');\" title=\"".gettext('Display or hide the Google Map.')."\">";
 			echo $text;
 			echo "</a>\n";
-			echo "  <div id=\"$dataid\"" . ($toggle ? " style=\"color:black; visibility: hidden;position:absolute;left: -3000px;top: -3000px\"" : '') . ">\n";
+			echo "  <div id=\"$id_data\"" . ($toggle ? " style=\"color:black; visibility: hidden;position:absolute;left: -3000px;top: -3000px\"" : '') . ">\n";
 			$_zp_phoogle->showMap();
 			echo "  </div>\n";
 		}
@@ -304,17 +305,18 @@ function printAlbumMap($zoomlevel=NULL, $defaultmaptype=NULL, $width=NULL, $heig
 		resetCurrentAlbum(); // clear out any 'damage'
 
 		if($foundLocation){
-			$dataid = $id.'_data';
 			//to avoid problems with google earth and the toggle options, the toggle option is removed from here when GE is activated
 			//it is possible to have both functionnality work but the toogle option should then be integrated in the phoogle map class dirctly within the script
 			//that calls the map and should alos trigger a map type change. check Sobre theme or  have alook at www.kaugite.com for an example
 			$toggle = $toggle && $defaultmaptype != 'G_SATELLITE_3D_MAP';
-
+			$id_toggle = $id.'_toggle';
+			$id_data = $id.'_data';
+			
 			if (is_null($text)) $text = gettext('Google Map');
-			echo "<a href=\"javascript: vtoggle('$dataid');\" title=\"".gettext('Display or hide the Google Map.')."\">";
+			echo "<a id=\"$id_toggle\" href=\"javascript: vtoggle('$id_data');\" title=\"".gettext('Display or hide the Google Map.')."\">";
 			echo $text;
 			echo "</a>\n";
-			echo "  <div id=\"$dataid\"" . ($toggle ? " style=\"color:black; visibility: hidden;position:absolute;left: -3000px;top: -3000px\"" : '') . ">\n";
+			echo "  <div id=\"$id_data\"" . ($toggle ? " style=\"color:black; visibility: hidden;position:absolute;left: -3000px;top: -3000px\"" : '') . ">\n";
 			$_zp_phoogle->showMap(is_null($zoomlevel));
 			echo "  </div>\n";
 		}
