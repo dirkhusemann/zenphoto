@@ -57,8 +57,8 @@ printAdminHeader();
 
 <script type="text/javascript">
 jQuery(document).ready(function(){
-	jQuery('li.zp_copy_theme a').each(function(){
-		var source = jQuery(this).attr('title');
+	jQuery('li.zp_copy_theme p.buttons').each(function(){
+		var source = jQuery('li.zp_copy_theme p.buttons a').attr('title');
 		jQuery(this).click(function(){
 			var targetname = prompt('<?php echo gettext('New theme name? (eg. "My Cool Theme")'); ?>', 'My Cool Theme');
 			if (targetname) {
@@ -198,7 +198,7 @@ foreach($themes as $theme => $themeinfo):
 		<?php echo $themeinfo['author']; ?><br />
 		Version <?php echo $themeinfo['version']; ?>, <?php echo $themeinfo['date']; ?><br />
 		<?php echo $themeinfo['desc']; ?></td>
-		<td width="100" <?php echo $style; ?>>
+		<td width="110" <?php echo $style; ?>>
 		<ul class="theme_links">
 		<?php
 		if ($theme != $current_theme) {
@@ -206,7 +206,7 @@ foreach($themes as $theme => $themeinfo):
 			<li>
 			<p class="buttons"><a href="?action=settheme&themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Set this as your theme"); ?>">
 			<img src="images/pass.png" alt="" /><?php echo gettext("Activate"); ?>
-			</a></p>	
+			</a></p><br />
 		  </li>
 		<?php
 		} else {
@@ -215,7 +215,7 @@ foreach($themes as $theme => $themeinfo):
 				<li>
 			<p class="buttons"><a href="?action=settheme&themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Assign this as your album theme"); ?>">
 			<img src="images/pass.png" alt="" /><?php echo gettext("Assign"); ?>
-			</a></p>	
+			</a></p><br />	
 		  </li>
 		<?php
 			} else {
@@ -228,23 +228,20 @@ foreach($themes as $theme => $themeinfo):
 			<li>
 			<p class="buttons"><a href="admin-themes-editor.php?theme=<?php echo $theme; ?>" title="<?php echo gettext("Edit this theme"); ?>">
 			<img src="images/pencil.png" alt="" /><?php echo gettext("Edit"); ?>
-			</a></p>	
+			</a></p><br />	
 		  </li>
 			<?php
-		}
+		} else {
 		
 		// The "Duplicate" link will be shown by JS if available, as it needs it
 		?>
 			<li class="zp_copy_theme" style="display:none">
-			<p class="buttons"><a href="?" title="<?php echo gettext("Duplicate this theme"); ?>">
+			<p class="buttons"><a href="?" title="<?php echo $theme; ?>">
 			<?php echo gettext("Duplicate"); ?>
 			</a></p>	
 		  </li>
-			<?php
-		//echo '<li class="zp_copy_theme" style="display:none">';
-		//echo '<a href="?" title="'.$theme.'">'.gettext("Duplicate").'</a>';
-		//echo '</li>';
-		
+			<?php }
+	
 		?>
 		</td>
 	</tr>
