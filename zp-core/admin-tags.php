@@ -100,13 +100,17 @@ if (count($_POST) > 0) {
 
 echo "<h1>".gettext("Tag Management")."</h1>";
 if ($tagsort == 1) {
-	echo '<a class="tagsort" href="?tagsort=0' .
- 				'" title="'.gettext('Sort the tags alphabetically').'">';
-	echo ' '.gettext('Order alphabetically').'</a>';
+?>
+<p class="buttons">
+<a class="tagsort" href="?tagsort=0" title="<?php echo gettext('Sort the tags alphabetically'); ?>"><?php echo gettext('Order alphabetically'); ?></a>
+</p><br /><br /><br clear: all />
+<?php
 } else{
-	echo '<p><a class="tagsort" href="?tagsort=1' .
- 				'" title="'.gettext('Sort the tags by most used').'">';
-	echo ' '.gettext('Order by most used').'</a></p>';
+?>
+<p class="buttons">
+<a class="tagsort" href="?tagsort=1" title="<?php echo gettext('Sort the tags by most used'); ?>"><?php echo gettext('Order by most used'); ?></a>
+</p><br /><br /><br clear: all />
+<?php
 }
 echo "\n<table class=\"bordered\">";
 echo "\n<tr>";
@@ -121,7 +125,12 @@ echo "\n<tr>";
 echo "\n<td valign='top'>";
 echo "\n".'<form name="tag_delete" action="?delete=true&amp;tagsort='.$tagsort.'" method="post">';
 tagSelector(NULL, '', true, $tagsort);
-echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='delete_tags' value=\"".gettext("delete checked tags")."\" title=\"".gettext("Delete all the tags checked above.")."\"/></p>";
+echo "\n<p align='center'>";
+?>
+<p class="buttons">
+<button type="submit\" id='delete_tags' value="<?php echo gettext("delete checked tags"); ?>" title="<?php echo gettext("Delete all the tags checked above."); ?>" /><img src="images/fail.png" alt="" /><?php echo gettext("Delete checked tags"); ?></button>
+</p><br clear: all /><br /><br />
+<?php
 echo "\n</form>";
 echo '<p>'.gettext('To delete tags from the gallery, place a checkmark in the box for each tag you wish to delete then press the <em>delete checked tags</em> button. The brackets contain the number of times the tag appears.').'</p>';
 echo "\n</td>";
@@ -136,7 +145,13 @@ foreach($list as $item) {
 	echo " size='33'/></label></li>";
 }
 echo "\n</ul>";
-echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='rename_tags' value=\"".gettext("rename tags")."\" title=\"".gettext("Save all the changes entered above.")."\" /></p>";
+echo "\n<p align='center'>";
+?>
+<p class="buttons">
+<button type="submit\" id='rename_tags' value="<?php echo gettext("rename tags"); ?>" title="<?php echo gettext("Save all the changes entered above."); ?>" /><img src="images/pass.png" alt="" /><?php echo gettext("rename tags"); ?></button>
+</p><br clear: all /><br /><br />
+<?php
+
 echo "\n</form>";
 echo '<p>'.gettext('To change the value of a tag enter a new value in the text box below the tag. Then press the <em>rename tags</em> button').'</p>';
 echo "\n</td>";
@@ -149,7 +164,12 @@ for ($i=0; $i<40; $i++) {
 	echo " size='33'/></label></li>";
 }
 echo "\n</ul>";
-echo "\n<p align='center'><input type=\"submit\" class=\"tooltip\" id='save_tags' value=\"".gettext("save new tags")."\" title=\"".gettext("Add all the tags entered above.")."\" /></p>";
+echo "\n<p align='center'>";
+?>
+<p class="buttons">
+<button type="submit\" id='save_tags' value="<?php echo gettext("save new tags"); ?>" title="<?php echo gettext("Add all the tags entered above."); ?>" /><img src="images/add.png" alt="" /><?php echo gettext("Add tags"); ?></button>
+</p><br clear: all /><br /><br />
+<?php
 echo "\n</form>";
 echo "\n<p>".gettext("Add tags to the list by entering their names in the input fields of the <em>New tags</em> list. Then press the <em>save new tags </em>button").'</p>';
 echo "\n</td>";

@@ -620,7 +620,12 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		 ?>
 			<tr>
 				<td colspan="4">
-				<input type="submit" value="<?php echo gettext('save changes'); ?>" />
+			<p class="buttons">
+				<button type="submit" title="<?php echo gettext("Save changes"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save changes"); ?></strong></button>
+				<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="images/fail.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+		 </p>
+			
+				
 				</td>
 			</tr>
 			<?php
@@ -888,8 +893,14 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		}
 		?>
 			<tr>
-				<td colspan="4"><input type="submit"
-					value="<?php echo gettext('save changes'); ?>" /></td>
+				<td colspan="4">
+				
+				<p class="buttons">
+				<button type="submit" title="<?php echo gettext("Save changes"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save changes"); ?></strong></button>
+				<button type="reset" title="<?php echo gettext("Reset"); ?>"><img src="images/fail.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+		 		</p>
+					
+			</td>
 			</tr>
 		<?php
 		if ($allimagecount != $totalimages) { // need pagination links

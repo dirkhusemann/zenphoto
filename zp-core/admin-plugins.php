@@ -73,7 +73,12 @@ echo "<p>".gettext("<strong>Note</strong>: Not all themes are setup with support
 echo "</p>\n";
 echo '<form action="?action=saveplugins" method="post">'."\n";
 echo '<input type="hidden" name="saveplugins" value="yes" />'."\n";
-echo '<input type="submit" value='. gettext('save').' />' . "\n";
+?>
+<p class="buttons">
+<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+<button type="reset" value="<?php echo gettext('Reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+</p><br clear: all /><br /><br />
+<?php
 echo "<table class=\"bordered\" width=\"100%\">\n";
 ?>
 <tr>
@@ -173,14 +178,19 @@ foreach ($filelist as $extension) {
 	echo "</tr>\n";
 }
 echo "</table>\n";
-echo '<input type="submit" value='. gettext('save').' />' . "\n";
+?>
+<br />
+<p class="buttons">
+<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+<button type="reset" value="<?php echo gettext('Reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+</p><br />
+<?php
 echo "</form>\n";
 chdir($curdir);
 
 echo "\n" . '</div>';  //content
-echo "\n" . '</div>';  //main
-
 printAdminFooter();
+echo "\n" . '</div>';  //main
 echo "\n</body>";
 echo "\n</html>";
 ?>

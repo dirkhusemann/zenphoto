@@ -163,7 +163,9 @@ class jQuerySortable {
 			<?php $this->printHiddenInputs();?>
 			<br clear="all"/>
 			<input type="hidden" name="sortableListsSubmitted" value="true">
-			<input type="submit" value="<?php echo $submitText;?>" class="<?php echo $submitClass;?>">
+			<p class="buttons">
+			<button type="submit" title="<?php echo $submitText; ?>" class="<?php echo $submitClass; ?>"><img src="images/pass.png" alt="" /><strong><?php echo $submitText; ?></strong></button>
+			</p>
 		</form>
 		<?php
 	}

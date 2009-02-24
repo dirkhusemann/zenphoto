@@ -145,8 +145,11 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 	<tr>
 		<td></td>
 		<td>
-		<input type="submit" value="<?php echo gettext('save'); ?>" /> 
-		<input type="button" value="<?php echo gettext('cancel'); ?>" onClick="window.location = '#';" />
+		<p class="buttons">
+		<button type="submit" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+		<button type="button" title="<?php echo gettext("Cancel"); ?>" onClick="window.location = 'admin-comments.php';"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Cancel"); ?></strong></button>
+		</p>
+		
 		</td>
 
 </table>
@@ -386,9 +389,8 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 
 
 </table>
-
-<input type="submit" value="<?php echo gettext('Delete Selected Comments'); ?>" class="button" />
-
+<br />
+<p class="buttons"><button type="submit" title="<?php echo gettext("Delete Selected Comments"); ?>"><img src="images/fail.png" alt="" /><strong><?php echo gettext("Delete Selected Comments"); ?></strong></button></p>
 
 </form>
 

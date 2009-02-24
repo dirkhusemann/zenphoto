@@ -188,7 +188,7 @@ printAdminHeader();
 		 				<?php echo gettext("current thumbnail"); ?>
 		 			</div>
 		 			
-					<div style="text-align:center; float: left;">
+					<div style="text-align:left; float: left;">
 					
 						<div style="width: <?php echo $sizedwidth; ?>px; height: <?php echo $sizedheight; ?>px; margin-bottom: 10px; border: 4px solid gray;">
 							<!-- This is the image we're attaching Jcrop to -->
@@ -214,10 +214,13 @@ printAdminHeader();
 							if (getOption('thumb_crop')) {
 							?>
 								<input type="checkbox" name="clear_crop" value="1" /> <?php echo gettext("Reset to the default cropping"); ?><br>
-								<input type="submit" size="4" id="submit" name="submit" value="<?php echo gettext("Save the cropping"); ?>" style="margin-top: 10px" />
-								<input type="button"  value="<?php echo gettext("cancel"); ?>" style="margin-top: 10px" 
-													onClick="window.location='admin-edit.php?page=edit&amp;album=<?php echo urlencode($albumname); ?>&amp;subpage=<?php echo $subpage; ?>&amp;tagsort=<?php echo $tagsort; ?>&amp;tab=imageinfo'" />
-							<?php
+								<br />	
+								<p class="buttons">
+								<button type="submit" id="submit" name="submit" value="<?php echo gettext('Save the cropping') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+								<button type="reset" value="<?php echo gettext('Cancel') ?>" title="<?php echo gettext("Cancel"); ?>" onClick="window.location='admin-edit.php?page=edit&amp;album=<?php echo urlencode($albumname); ?>&amp;subpage=<?php echo $subpage; ?>&amp;tagsort=<?php echo $tagsort; ?>&amp;tab=imageinfo'"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+								</p><br />
+								
+								<?php
 							} else {
 								echo gettext('Thumbnail cropping is disabled. Enable this option for the theme if you wish cropped thumbnails.');
 							}

@@ -1342,9 +1342,14 @@ function printAlbumEditForm($index, $album) {
 	echo "\n</td>";
 	echo "\n</tr>";
 	echo "\n</table>";
-
-	echo "\n<input type=\"submit\" value=\"".gettext("save album")."\" />";
-
+	?>
+<br />
+<p class="buttons">
+<button type="submit" title="<?php echo gettext("Save Album"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save Album"); ?></strong></button>
+<button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>
+</p>
+<br clear: all />
+<?php
 }
 /**
  * puts out the maintenance buttons for an album

@@ -202,30 +202,48 @@ foreach($themes as $theme => $themeinfo):
 		<ul class="theme_links">
 		<?php
 		if ($theme != $current_theme) {
-			echo '<li><a href="?action=settheme&themealbum='.urlencode($alb).'&theme='.$theme.'" title="';
-			 echo gettext("Set this as your theme").'">'.gettext("Use this Theme");
-			echo '</a></li>';
+			?>
+			<li>
+			<p class="buttons"><a href="?action=settheme&themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Set this as your theme"); ?>">
+			<img src="images/pass.png" alt="" /><?php echo gettext("Activate"); ?>
+			</a></p>	
+		  </li>
+		<?php
 		} else {
 			if ($gallerydefault) {
-				echo '<li><a href="?action=settheme&themealbum='.urlencode($alb).'&theme='.$theme.'" title="';
-			  echo gettext("Assign this as your album theme").'">'.gettext("Assign Theme");
-				echo '</a></li>';
+					?>
+				<li>
+			<p class="buttons"><a href="?action=settheme&themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Assign this as your album theme"); ?>">
+			<img src="images/pass.png" alt="" /><?php echo gettext("Assign"); ?>
+			</a></p>	
+		  </li>
+		<?php
 			} else {
 				echo "<li><strong>".gettext("Current Theme")."</strong></li>";
 			}
 		}
 		
 		if (themeIsEditable($theme, $themes)) {
-			echo '<li>';
-			echo '<a href="admin-themes-editor.php?theme='.$theme.'" title="';
-			echo gettext("Edit this theme").'">'.gettext("Edit");
-			echo '</a></li>';
+			?>
+			<li>
+			<p class="buttons"><a href="admin-themes-editor.php?theme=<?php echo $theme; ?>" title="<?php echo gettext("Edit this theme"); ?>">
+			<img src="images/pencil.png" alt="" /><?php echo gettext("Edit"); ?>
+			</a></p>	
+		  </li>
+			<?php
 		}
 		
 		// The "Duplicate" link will be shown by JS if available, as it needs it
-		echo '<li class="zp_copy_theme" style="display:none">';
-		echo '<a href="?" title="'.$theme.'">'.gettext("Duplicate").'</a>';
-		echo '</li>';
+		?>
+			<li class="zp_copy_theme" style="display:none">
+			<p class="buttons"><a href="?" title="<?php echo gettext("Duplicate this theme"); ?>">
+			<?php echo gettext("Duplicate"); ?>
+			</a></p>	
+		  </li>
+			<?php
+		//echo '<li class="zp_copy_theme" style="display:none">';
+		//echo '<a href="?" title="'.$theme.'">'.gettext("Duplicate").'</a>';
+		//echo '</li>';
 		
 		?>
 		</td>

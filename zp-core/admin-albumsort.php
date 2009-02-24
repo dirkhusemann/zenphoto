@@ -90,7 +90,7 @@ foreach ($images as $image) {
 
 <div><?php
 zenSortablesSaveButton($_zp_sortable_list, "?page=edit&album=". $album->getFolder() . "&saved");
-?></div>
+?><br /></div>
 
 </div>
 

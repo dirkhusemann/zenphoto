@@ -5,7 +5,7 @@
  * @author Ozh
  */
 
-// force UTF-8 Ø
+// force UTF-8 ï¿½
 
 define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
@@ -140,7 +140,10 @@ if ( $file_to_edit ) {
 			<form method="post" action="">
 			<p><textarea cols="70" rows="25" name="newcontent" id="newcontent"><?php echo $file_content ?></textarea></p>
 			<input type="hidden" name="action" value="edit_file"/>
-			<p><input class="button" type="submit" value="<?php echo gettext('Update File'); ?>" /></p>
+			<p class="buttons">
+			<button type="submit" value="<?php echo gettext('Update File') ?>" title="<?php echo gettext("Update File"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Update File"); ?></strong></button>
+			<button type="reset" value="<?php echo gettext('Reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+			</p><br />
 			</form>
 		</div>
 

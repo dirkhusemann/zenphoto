@@ -796,7 +796,12 @@ if ($subtab == 'admin') {
 }
 ?>
 </table> <!-- main admin table end -->
-<input type="submit" value= <?php echo gettext('save') ?> />
+<br />
+<p class="buttons">
+<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+</p>
+<br />
 </form>
 </div>
 <!-- end of tab_admin div -->
@@ -812,7 +817,12 @@ if ($subtab == 'admin') {
 	<table class="bordered">
 		<tr>
 			<td></td>
-			<td><input type="submit" value="<?php echo gettext('save'); ?>" /></td>
+			<td>
+			<p class="buttons">
+			<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+			<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+			</p>
+			</td>
 			<td></td>
 		</tr>
 		<tr>
@@ -1195,7 +1205,12 @@ if ($subtab == 'admin') {
 		</tr>
 		<tr>
 			<td></td>
-			<td><input type="submit" value="<?php echo gettext('save'); ?>" /></td>
+			<td>
+			<p class="buttons">
+			<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+			<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+			</p>
+			</td>
 			<td></td>
 		</tr>
 	</table>
@@ -1478,7 +1493,12 @@ if ($subtab == 'admin') {
 		</tr>
 		<tr>
 			<td></td>
-			<td><input type="submit" value="<?php echo gettext('save'); ?>" /></td>
+			<td>
+			<p class="buttons">
+			<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+			<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+			</p>
+			</td>
 			<td></td>
 		</tr>
 	</table>
@@ -1546,7 +1566,12 @@ if ($subtab == 'admin') {
 		</tr>
 		<tr>
 			<td></td>
-			<td><input type="submit" value="<?php echo gettext('save'); ?>" /></td>
+			<td>
+			<p class="buttons">
+			<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+			<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+			</p>
+			</td>
 			<td></td>
 		</tr>
 	</table>
@@ -1767,7 +1792,12 @@ if ($subtab == 'admin') {
 			?>
 			<tr>
 			<td></td>
-			<td><input type="submit" value= <?php echo gettext('save') ?> /></td>
+			<td>
+			<p class="buttons">
+			<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+			<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+			</p>
+			</td>
 			<td></td>
 			<?php
 			}
@@ -1828,7 +1858,10 @@ if ($subtab == 'admin') {
 		?>
 				<tr>
 					<td colspan="3">
-						<input type="submit" value= <?php echo gettext('save') ?> />
+					<p class="buttons">
+					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+					</p>
 					</td>
 				</tr>
 			</table> <!-- plugin page table -->
