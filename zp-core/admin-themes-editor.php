@@ -67,7 +67,7 @@ if ( $file_to_edit ) {
 
 // Handle POST that updates a file
 if (isset($_POST['action']) && $_POST['action'] == 'edit_file' && $file_to_edit ) {
-	$file_content = stripslashes($_POST['newcontent']);
+	$file_content = sanitize($_POST['newcontent'],0);
 	$theme = urlencode($theme);
 	if (is_writeable($file_to_edit)) {
 		//is_writable() not always reliable, check return value. see comments @ http://uk.php.net/is_writable
