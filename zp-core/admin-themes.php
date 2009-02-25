@@ -238,7 +238,7 @@ foreach($themes as $theme => $themeinfo):
 			<li class="zp_copy_theme">
 			<p class="buttons">
 			<a href="?" title='<?php printf('Make a copy of the "%s" theme.', $theme); ?>' alt='<?php echo $theme; ?>' >
-			<img src="images/stock_copy.png" alt="" /><?php echo gettext("Duplicate"); ?></a>
+			<img src="images/page_white_copy.png" alt="" /><?php echo gettext("Duplicate"); ?></a>
 			</p>	
 		  </li>
 			<?php
