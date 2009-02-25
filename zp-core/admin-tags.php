@@ -102,13 +102,13 @@ echo "<h1>".gettext("Tag Management")."</h1>";
 if ($tagsort == 1) {
 ?>
 <p class="buttons">
-<a class="tagsort" href="?tagsort=0" title="<?php echo gettext('Sort the tags alphabetically'); ?>"><?php echo gettext('Order alphabetically'); ?></a>
+<a class="tagsort" href="?tagsort=0" title="<?php echo gettext('Sort the tags alphabetically'); ?>"><img src="images/sortorder.png" alt="" /> <?php echo gettext('Order alphabetically'); ?></a>
 </p><br /><br /><br clear: all />
 <?php
 } else{
 ?>
 <p class="buttons">
-<a class="tagsort" href="?tagsort=1" title="<?php echo gettext('Sort the tags by most used'); ?>"><?php echo gettext('Order by most used'); ?></a>
+<a class="tagsort" href="?tagsort=1" title="<?php echo gettext('Sort the tags by most used'); ?>"><img src="images/sortorder.png" alt="" /> <?php echo gettext('Order by most used'); ?></a>
 </p><br /><br /><br clear: all />
 <?php
 }
