@@ -58,9 +58,9 @@ printAdminHeader();
 <script type="text/javascript">
 jQuery(document).ready(function(){
 	jQuery('li.zp_copy_theme p.buttons').each(function(){
-		var source = jQuery('li.zp_copy_theme p.buttons a').attr('title');
+		var source = jQuery('li.zp_copy_theme p.buttons a').attr('alt');
 		jQuery(this).click(function(){
-			var targetname = prompt('<?php echo gettext('New theme name? (eg. "My Cool Theme")'); ?>', 'My Cool Theme');
+			var targetname = prompt('<?php echo gettext('New theme name? (eg. "My Theme")'); ?>', '<?php echo gettext('My Theme'); ?>');
 			if (targetname) {
 				var targetdir = prompt('<?php echo gettext('New directory name? (eg. "my_theme")'); ?>', targetname.toLowerCase().replace(/ /g,'_').replace(/[^A-Za-z0-9_]/g,'') );
 				if (targetdir) {
@@ -69,7 +69,7 @@ jQuery(document).ready(function(){
 				}
 			}
 			return false;
-		}).attr({data:source,title:'<?php echo gettext('Make a copy of this theme'); ?>'}).parent().toggle();
+		});
 		
 	});
 });
@@ -226,22 +226,23 @@ foreach($themes as $theme => $themeinfo):
 		if (themeIsEditable($theme, $themes)) {
 			?>
 			<li>
-			<p class="buttons"><a href="admin-themes-editor.php?theme=<?php echo $theme; ?>" title="<?php echo gettext("Edit this theme"); ?>">
-			<img src="images/pencil.png" alt="" /><?php echo gettext("Edit"); ?>
-			</a></p><br />	
+			<p class="buttons">
+			<a href="admin-themes-editor.php?theme=<?php echo $theme; ?>" title="<?php echo gettext("Edit this theme"); ?>">
+			<img src="images/pencil.png" alt="" /><?php echo gettext("Edit"); ?></a>
+			</p><br />	
 		  </li>
 			<?php
 		} else {
 		
-		// The "Duplicate" link will be shown by JS if available, as it needs it
-		?>
-			<li class="zp_copy_theme" style="display:none">
-			<p class="buttons"><a href="?" title="<?php echo $theme; ?>">
-			<?php echo gettext("Duplicate"); ?>
-			</a></p>	
+			?>
+			<li class="zp_copy_theme">
+			<p class="buttons">
+			<a href="?" title='<?php printf('Make a copy of the "%s" theme.', $theme); ?>' alt='<?php echo $theme; ?>' >
+			<img src="images/stock_copy.png" alt="" /><?php echo gettext("Duplicate"); ?></a>
+			</p>	
 		  </li>
-			<?php }
-	
+			<?php
+		}
 		?>
 		</td>
 	</tr>

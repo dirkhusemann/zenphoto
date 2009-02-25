@@ -2121,7 +2121,7 @@ function copyThemeDirectory($source, $target, $newname) {
 	$theme_description['name'] = $newname;
 	$theme_description['author'] = $_zp_current_admin['user'];
 	$theme_description['version'] = '1.0';
-	$theme_description['date']  = date('d/m/Y');
+	$theme_description['date']  = zpFormattedDate(getOption('date_format'), time());
 	
 	$description = sprintf('<'.'?php
 // Zenphoto theme definition file
