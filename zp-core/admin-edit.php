@@ -502,7 +502,6 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	?>
 		<!-- Album info box -->
 		<div id="tab_albuminfo" class="box" style="padding: 15px;">
-		<div class="innerbox" style="padding: 15px;">
 		<form name="albumedit1" AUTOCOMPLETE=OFF
 			action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
 			<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
@@ -510,7 +509,6 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 			<?php printAlbumEditForm(0, $album); ?>
 		</form>
 		<br />
-		<?php printAlbumButtons($album) ?> 
 		</div>
 		</div>
 		<?php
@@ -566,7 +564,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 				zenSortablesSaveButton($_zp_sortable_list, "?page=edit&album=" . urlencode($album->name) . "&subalbumsaved&tab=subalbuminfo", gettext("Save Order"));
 			?>
 		
-		</div>
+		
 		<?php
 		} ?>
 <?php 
@@ -672,7 +670,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 							value="<?php echo $currentimage ?>" /> <?php echo ' '.gettext("Select as album thumbnail."); ?>
 						</label></p>
 						</td>
-						<td align="right" valign="top" width="100"><?php echo gettext("Title:"); ?></td>
+						<td align="left" valign="top" width="100"><?php echo gettext("Title:"); ?></td>
 						<td><?php print_language_string_list($image->get('title'), $currentimage.'-title', false); ?>
 						</td>
 						<td style="padding-left: 1em; text-align: left;" valign="top"
@@ -690,7 +688,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 					</tr>
 		
 					<tr>
-						<td align="right" valign="top"><?php echo gettext("Description:"); ?></td>
+						<td align="left" valign="top"><?php echo gettext("Description:"); ?></td>
 						<td><?php print_language_string_list($image->get('desc'), $currentimage.'-desc', true, NULL, 'texteditor'); ?>
 						</td>
 						<td style="padding-left: 1em;">
@@ -930,13 +928,14 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		</div>
 <?php
 	}
-?>
+
+if($subtab != "albuminfo") {	?>
 <!-- page trailer -->
+
 <p><a href="?page=edit<?php echo $albumdir ?>"
 	title="<?php echo gettext('Back to the list of albums (go up one level)'); ?>">&laquo; <?php echo gettext("Back"); ?></a></p>
-
-
-<?php
+</div>
+<?php } 
 
 /*** MULTI-ALBUM ***************************************************************************/
 
@@ -998,7 +997,7 @@ if (isset($_GET['saved'])) {
 		printAlbumEditForm($currentalbum, $album);
 		?>
 		</div>
-		<br />
+		<hr />
 		<?php
 	}
 	?></form>
@@ -1096,10 +1095,9 @@ if (isset($_GET['saved'])) {
 	}
 }
 ?>
-</div>
-<!-- content --> <?php
-printAdminFooter();
-?>
+</div
+<!-- content --> 
+<?php printAdminFooter(); ?>
 <!-- main -->
 </body>
 <?php // to fool the validator
