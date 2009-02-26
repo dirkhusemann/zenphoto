@@ -156,5 +156,21 @@ class flowplayer {
 		}
 		return getOption('flow_player_height');
 	}
+	
+	/**
+	 * Returns the file extension if the item passed is displayable by the player
+	 * 
+	 * @param mixed $image either an image object or the filename of an image.
+	 * @return string;
+	 */
+	function is_valid($image) {
+		$valid_types = array('jpg','jpeg','gif','png','flv','3gp','mov','mp3','mp4');
+		if (is_object($image)) $image = $image->filename;
+		$ext = strtolower(substr(strrchr($image, "."), 1));
+		if (in_array($ext, $valid_types)) {
+			return $ext; 
+		}
+		return false;
+	}
 }
 ?>
