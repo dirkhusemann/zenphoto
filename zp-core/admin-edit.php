@@ -563,8 +563,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 			<?php
 				zenSortablesSaveButton($_zp_sortable_list, "?page=edit&album=" . urlencode($album->name) . "&subalbumsaved&tab=subalbuminfo", gettext("Save Order"));
 			?>
-		
-		
+	<br /><br />
 		<?php
 		} ?>
 <?php 
@@ -931,10 +930,11 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 
 if($subtab != "albuminfo") {	?>
 <!-- page trailer -->
-
-<p><a href="?page=edit<?php echo $albumdir ?>"
-	title="<?php echo gettext('Back to the list of albums (go up one level)'); ?>">&laquo; <?php echo gettext("Back"); ?></a></p>
 </div>
+
+<p>
+<a href="?page=edit<?php echo $albumdir ?>"	title="<?php echo gettext('Back to the list of albums (go up one level)'); ?>">&laquo; <?php echo gettext("Back"); ?></a>
+</p>
 <?php } 
 
 /*** MULTI-ALBUM ***************************************************************************/

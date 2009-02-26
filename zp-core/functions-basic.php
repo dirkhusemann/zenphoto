@@ -19,7 +19,7 @@ if (function_exists('date_default_timezone_set')) { // insure a correct timezone
 	error_reporting(0);
 	$tz = date_default_timezone_get();
 	date_default_timezone_set($tz); 
-	ini_set('date.timezone', $tz);
+	@ini_set('date.timezone', $tz);
 }
 
 // Set error reporting.

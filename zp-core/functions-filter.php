@@ -41,8 +41,13 @@ $_zp_filters = array();
  */
 function register_filter($hook, $function_name, $priority = 10, $accepted_args = 1) {
 	global $_zp_filters;
-	$bt = debug_backtrace();
-	$b = array_shift($bt);
+	$bt = @debug_backtrace();
+	if (is_array($bt)) {
+		$b = array_shift($bt);
+		$base = basename($b['file']);
+	} else {
+		$base = 'unknown';
+	}
 	// At this point, we cannot check if the function exists, as it may well be defined later (which is OK)
 	
 	$id = filter_unique_id($hook, $function_name, $priority);
@@ -50,7 +55,7 @@ function register_filter($hook, $function_name, $priority = 10, $accepted_args =
 	$_zp_filters[$hook][$priority][$id] = array(
 		'function' => $function_name,
 		'accepted_args' => $accepted_args,
-		'script' => basename($b['file'])
+		'script' => $base
 	);
 }
 
