@@ -7,10 +7,6 @@
  * @package admin
  */
 
-$button_text = gettext('Gallery Statistics');
-$button_hint = gettext('Shows statistical graphs and info about your gallery\'s images and albums.');
-$button_icon = 'images/bar_graph.png';
-
 define('OFFSET_PATH', 3);
 define('RECORD_SEPARATOR', ':****:');
 define('TABLE_SEPARATOR', '::');
@@ -18,6 +14,10 @@ define('RESPOND_COUNTER', 1000);
 chdir(dirname(dirname(__FILE__)));
 
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
+
+$button_text = gettext('Gallery Statistics');
+$button_hint = gettext('Shows statistical graphs and info about your gallery\'s images and albums.');
+$button_icon = 'images/bar_graph.png';
 
 
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {

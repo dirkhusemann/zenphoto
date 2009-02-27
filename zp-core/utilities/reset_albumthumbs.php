@@ -5,11 +5,6 @@
  * @package admin
  */
 
-$button_text = gettext('Reset thumbs');
-$button_hint = gettext('Reset album thumbnails.');
-$button_icon = 'images/burst1.png';
-$button_rights = ADMIN_RIGHTS;
-
 define('OFFSET_PATH', 3);
 define('RECORD_SEPARATOR', ':****:');
 define('TABLE_SEPARATOR', '::');
@@ -18,6 +13,11 @@ chdir(dirname(dirname(__FILE__)));
 
 require_once(dirname(dirname(__FILE__)).'/template-functions.php');
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
+
+$button_text = gettext('Reset thumbs');
+$button_hint = gettext('Reset album thumbnails.');
+$button_icon = 'images/burst1.png';
+$button_rights = ADMIN_RIGHTS;
 
 
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {

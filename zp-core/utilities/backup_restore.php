@@ -8,11 +8,6 @@
  * @package admin
  */
 
-$button_text = gettext('Backup/Restore');
-$button_hint = gettext('Backup and restore your gallery database.');
-$button_icon = 'images/folder.png';
-$button_rights = ADMIN_RIGHTS;
-
 define('OFFSET_PATH', 3);
 define('HEADER', '__HEADER__');
 define('RECORD_SEPARATOR', ':****:');
@@ -22,6 +17,11 @@ chdir(dirname(dirname(__FILE__)));
 
 require_once(dirname(dirname(__FILE__)).'/template-functions.php');
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
+
+$button_text = gettext('Backup/Restore');
+$button_hint = gettext('Backup and restore your gallery database.');
+$button_icon = 'images/folder.png';
+$button_rights = ADMIN_RIGHTS;
 
 
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {

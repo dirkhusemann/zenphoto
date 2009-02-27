@@ -16,11 +16,6 @@
  * @package admin
  */
 
-$button_text = gettext('Publish content');
-$button_hint = gettext('Manage unpublished content in your gallery.');
-$button_icon = 'images/calendar.png';
-$button_rights = EDIT_RIGHTS;
-
 define('OFFSET_PATH', 3);
 define('RECORD_SEPARATOR', ':****:');
 define('TABLE_SEPARATOR', '::');
@@ -30,6 +25,11 @@ chdir(dirname(dirname(__FILE__)));
 
 require_once(dirname(dirname(__FILE__)).'/template-functions.php');
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
+
+$button_text = gettext('Publish content');
+$button_hint = gettext('Manage unpublished content in your gallery.');
+$button_icon = 'images/calendar.png';
+$button_rights = EDIT_RIGHTS;
 
 
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
