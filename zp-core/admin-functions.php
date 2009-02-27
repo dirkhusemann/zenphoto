@@ -907,7 +907,7 @@ function printAlbumEditForm($index, $album) {
 	}
   ?>
 	<input type="password" style="width:370px" name="<?php echo $prefix; ?>albumpass"  value="<?php echo $x; ?>" /><br/>
-	<input type="password" style="width:370px" name="<?php echo $prefix; ?>"albumpass_2\" value="<?php echo $x; ?>" />
+	<input type="password" style="width:370px" name="<?php echo $prefix; ?>albumpass_2" value="<?php echo $x; ?>" />
 	</td>
 	</tr>
 	<tr>
