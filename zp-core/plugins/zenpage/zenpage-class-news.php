@@ -171,7 +171,7 @@ class ZenpageNews extends PersistentObject {
 	 * @param int $article_id ID od the article
 	 * @return array
 	 */
-	function getCategories($article_id) {
+	function getCategories($article_id = '') {
 		if(empty($article_id)) {
 			$article_id = $this->getID();
 		}
