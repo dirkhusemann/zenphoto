@@ -1131,10 +1131,7 @@ function printAlbumEditForm($index, $album) {
 	<?php echo gettext("Allow Comments"); ?>
 	</p>
 	<p>
-	<input type="checkbox" name="<?php	echo $prefix; ?>Published" value="1" 
-	<?php	if ($album->getShow()) {	
-		echo "CHECKED";	
-	}	?>" />	
+	<input type="checkbox" name="<?php	echo $prefix; ?>Published" value="1" <?php if ($album->getShow()) echo "CHECKED";	?> />	
 	<?php echo gettext("Published");?>
 	</p>
 	<p>
@@ -1502,11 +1499,11 @@ function printAlbumEditRow($album) {
 	</td><td style="text-align:center;" width="<?php echo $wide;?>">
 	<?php
 	if ($album->getShow()) { ?>
-		<a class="publish" href="?action=publish&value=0&amp;album="<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Unpublish the album %s'), $album->name); ?>">
+		<a class="publish" href="?action=publish&value=0&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Unpublish the album %s'), $album->name); ?>">
 		<img src="images/pass.png" style="border: 0px;" alt="<?php echo gettext('Published'); ?>" /></a>
 		
  <?php	} else { ?>
-		<a class="publish" href="?action=publish&amp;value=1&amp;album="<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Publish the album %s'), $album->name); ?>">
+		<a class="publish" href="?action=publish&amp;value=1&amp;album=<?php echo urlencode($album->name); ?>" title="<?php echo sprintf(gettext('Publish the album %s'), $album->name); ?>">
 		<img src="images/action.png" style="border: 0px;" alt="Publish the album <?php echo $album->name; ?>" /></a>
  <?php	} ?>
 	</td>
