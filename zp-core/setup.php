@@ -8,7 +8,6 @@
 
 header ('Content-Type: text/html; charset=UTF-8');
 define('HTACCESS_VERSION', '1.2.2.0');  // be sure to change this the one in .htaccess when the .htaccess file is updated.
-if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
 
 $debug = isset($_GET['debug']);
 if (isset($_POST['debug'])) {
@@ -34,11 +33,11 @@ $const_webpath = str_replace("\\", '/', $const_webpath);
 if ($const_webpath == '/') $const_webpath = '';
 $serverpath = str_replace("\\", '/', dirname(dirname(__FILE__)));
 
-
+$chmod = 0755;
 $en_US = dirname(__FILE__).'/locale/en_US/';
 if (!file_exists($en_US)) {
-	@mkdir(dirname(__FILE__).'/locale/', CHMOD_VALUE);
-	@mkdir($en_US, CHMOD_VALUE);
+	@mkdir(dirname(__FILE__).'/locale/', $chmod);
+	@mkdir($en_US, $chmod);
 }
 
 function setupLog($message, $reset=false) {
@@ -122,8 +121,23 @@ if (isset($_POST['mysql'])) { //try to update the zp-config file
 		updateItem('mysql_prefix', $_POST['mysql_prefix']);
 	}
 }
+if (isset($_GET['strict_chmod'])) {
+	if ($_GET['strict_chmod']) {
+		$v = 0755;
+	} else {
+		$v = 0777;
+	}
+	$i = strpos($zp_cfg, "define('CHMOD_VALUE',")+21;
+	$j = strpos($zp_cfg, ")", $i);
+	$zp_cfg = substr($zp_cfg, 0, $i) . sprintf('0%o',$v) . substr($zp_cfg, $j);
+	$chmod = $v;
+	$updatezp_config = true;
+} else {
+	$chmod =  0777;
+}
+
 if ($updatezp_config) {
-	@chmod('zp-config.php', 0666 & CHMOD_VALUE);
+	@chmod('zp-config.php', 0666 & $chmod);
 	if (is_writeable('zp-config.php')) {
 		if ($handle = fopen('zp-config.php', 'w')) {
 			if (fwrite($handle, $zp_cfg)) {
@@ -137,6 +151,7 @@ if ($updatezp_config) {
 $result = true;
 if (file_exists("zp-config.php")) {
 	require(dirname(__FILE__).'/zp-config.php');
+	$chmod = CHMOD_VALUE;
 	if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
 		if (@mysql_select_db($_zp_conf_vars['mysql_database'])) {
 			$result = @mysql_query("SELECT `id` FROM " . $_zp_conf_vars['mysql_prefix'].'options' . " LIMIT 1", $connection);
@@ -187,6 +202,9 @@ $taskDisplay = array('create' => gettext("create"), 'update' => gettext("update"
 
 <title>zenphoto <?php echo $upgrade ? "upgrade" : "setup" ; ?></title>
 <link rel="stylesheet" href="admin.css" type="text/css" />
+
+<script src="js/jquery.js" type="text/javascript"></script>";
+<script src="js/zenphoto.js.php" type="text/javascript" ></script>";
 
 <style type="text/css">
 body {
@@ -307,6 +325,23 @@ cite {
 	font-weight : normal;
 }
 
+.notice {
+	line-height: 1;
+	text-align: center;
+	border-top: 1px solid #009966;
+	border-bottom: 1px solid #009966;
+	background-color: #B1F7B6;
+	padding: 2px 8px 0px 8px;
+	margin-left: 20px;
+	color: #009966;
+	font-weight : bold;
+}
+.notice p {
+	text-align: left;
+	color: black;
+	font-weight : normal;
+}
+
 h4 {
 	font-weight: normal;
 	font-size: 10pt;
@@ -356,7 +391,7 @@ if (!$checked) {
 	global $_zp_conf_vars;
 
 	function checkMark($check, $text, $sfx, $msg) {
-		global $warn;
+		global $warn, $moreid;
 		$dsp = '';
 		if ($check > 0) {$check = 1; }
 		echo "\n<br/><span class=\"";
@@ -369,6 +404,7 @@ if (!$checked) {
 				$warn = true;
 				break;
 			case 1:
+			case -2:
 				$dsp = "pass";
 				break;
 		}
@@ -385,9 +421,19 @@ if (!$checked) {
 					echo gettext('Error!');
 					echo "<p>".$msg."</p>";
 					echo "</div>";
-				} else {
-					echo '<div class="warning">';
+				} else if ($check == -1) {
+					$moreid++;
+// should warnings start out hidden?					
+//					echo ' <a href="javascript: toggle('. "'more" .$moreid."'".');">'.gettext('<strong>Warning!</strong> cick for details').'</a>';
+					echo "<div class='warning' id='more".$moreid."' style='display:block'>";
 					echo gettext('Warning!');
+					echo "<p>".$msg."</p>";
+					echo "</div>";
+				} else {
+					$moreid++;
+					echo ' <a href="javascript: toggle('. "'more" .$moreid."'".');">'.gettext('<strong>Notice!</strong> click for details').'</a>';
+					echo "<div class='notice' id='more".$moreid."' style='display:none'>";
+					echo gettext('Notice!');
 					echo "<p>".$msg."</p>";
 					echo "</div>";
 				}
@@ -398,11 +444,11 @@ if (!$checked) {
 		return $check;
 	}
 	function folderCheck($which, $path, $class) {
-		global $const_webpath, $serverpath;
+		global $const_webpath, $serverpath, $chmod;
 		if (!is_dir($path) && $class == 'std') {
-			@mkdir($path, CHMOD_VALUE);
+			@mkdir($path, $chmod);
 		}
-		@chmod($path, CHMOD_VALUE);
+		@chmod($path, $chmod);
 		$folder = basename($path);
 		if (empty($folder)) $folder = basename(basename($path));
 		switch ($class) {
@@ -585,6 +631,29 @@ if (!$checked) {
 	$good = checkMark($cfg, " <em>zp-config.php</em> ".gettext("file"), ' '.gettext("[does not exist]"),
  							gettext("Edit the <code>zp-config.php.source</code> file and rename it to <code>zp-config.php</code>").' ' .
  							"<br/><br/>".gettext("You can find the file in the \"zp-core\" directory.")) && $good;
+ 	if ($cfg) {
+ 		if ($chmod == 0777) {
+	 		checkMark(-1, ' '.gettext('<em>Strict Permissions</em>'), ' '.gettext('[is not in effect]'),
+	 							gettext('When this option is not in effect, file and folder permissions are relaxed. '.
+	 							'This could constitute a security risk so it is recommended that you enable '.
+	 							'<em>Strict Permissions</em>. However, on some servers Zenphoto does not function correctly '.
+	 							'with strict file/folder permissions. If you enable this option and Zenphoto has permission errors, '.
+	 							'run setup again and disable the option.').'<br /><br />'.
+	 							gettext('Click <a href="?strict_chmod=1">here</a> to use strict file/folder permissions.').
+	 							'<br /><br />'.
+	 							gettext('<strong>NOTE:</strong> This option applies only to new files and folders created by Zenphoto. You may have to change permissions on existing ones to resolve problems.')
+	 							);
+	 	} else {
+	 		checkMark(-2, ' '.gettext('<em>Strict Permisssions</em>'), ' '.gettext('[is in effect]'),
+	 							gettext('On some servers Zenphoto does not function correctly '.
+	 							'with strict file/folder permissions. If you are getting permission errors run setup again and '.
+	 							'disable the option.').'<br /><br />'.
+	 							gettext('Click <a href="?strict_chmod=0">here</a> to enable relaxed file/folder permissions.').
+	 							'<br /><br />'.
+	 							gettext('<strong>NOTE:</strong> This option applies only to new files and folders created by Zenphoto. You may have to change permissions on existing ones to resolve problems.')
+	 							);
+	 	}
+ 	}
 	if ($sql) {
 		if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])) {
 			$db = $_zp_conf_vars['mysql_database'];
@@ -602,7 +671,7 @@ if (!$checked) {
 		$sqlv = versionCheck($required, $desired, $mysqlv);;
 	}
 	if ($cfg) {
-		@chmod('zp-config.php', 0666 & CHMOD_VALUE);
+		@chmod('zp-config.php', 0666 & $chmod);
 		if ($adminstuff = (!$sql || !$connection  || !$db) && is_writable('zp-config.php')) {
 			$good = checkMark(false, ' '.gettext("MySQL setup in").' zp-config.php', '', '') && $good;
 			// input form for the information
@@ -860,7 +929,7 @@ if ($debug) {
 		}
 		$f = '';
 		if (!$base) { // try and fix it
-			@chmod($htfile, 0666 & CHMOD_VALUE);
+			@chmod($htfile, 0666 & $chmod);
 			if (is_writeable($htfile)) {
 				$ht = substr($ht, 0, $i) . "RewriteBase $d\n" . substr($ht, $j+1);
 				if ($handle = fopen($htfile, 'w')) {

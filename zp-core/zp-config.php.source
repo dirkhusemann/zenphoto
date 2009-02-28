@@ -76,7 +76,8 @@ $conf['server_protocol'] = "http";
 // When Zenphoto creates files or folders it sets their permissions based on this
 // value. The value is masked with whatever Zenphoto would otherwise have used for 
 // the chmod() parameter. So, if you remove a permission from this mask, it will 
-// be removed from the permissions set by Zenphoto.
+// be removed from the permissions set by Zenphoto. A secure setting would be a value
+// of 0755.
 //
 // NOTE:
 // When you make a fresh installation of Zenphoto there normally is not a zp-config.php

@@ -30,6 +30,12 @@ require_once(dirname(__FILE__).'/lib-utf8.php');
 
 include(dirname(__FILE__).'/version.php'); // Include the version info.
 
+if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
+	die (sprintf(gettext("<strong>Zenphoto error:</strong> zp-config.php not found. Perhaps you need to run <a href=\"%s/setup.php\">setup</a> (or migrate your old config.php)"),ZENFOLDER));
+}
+// Including zp-config.php more than once is OK, and avoids $conf missing.
+require(dirname(__FILE__).'/zp-config.php');
+
 if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', 0777); }
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 if (!defined('OFFSET_PATH')) { define('OFFSET_PATH', 0); }
@@ -40,13 +46,6 @@ define('COOKIE_PESISTENCE', 5184000);
 if (ini_get('memory_limit') && parse_size(ini_get('memory_limit')) < 100663296) {
 	@ini_set('memory_limit','96M');
 }
-
-if (!file_exists(dirname(__FILE__) . "/zp-config.php")) {
-	die (sprintf(gettext("<strong>Zenphoto error:</strong> zp-config.php not found. Perhaps you need to run <a href=\"%s/setup.php\">setup</a> (or migrate your old config.php)"),ZENFOLDER));
-}
-
-// Including zp-config.php more than once is OK, and avoids $conf missing.
-require(dirname(__FILE__).'/zp-config.php');
 
 // If the server protocol is not set, set it to the default (obscure zp-config.php change).
 if (!isset($_zp_conf_vars['server_protocol'])) $_zp_conf_vars['server_protocol'] = 'http';
