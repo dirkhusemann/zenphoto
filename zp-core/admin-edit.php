@@ -508,7 +508,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 			<input type="hidden"	name="savealbuminfo" value="1" />
 			<?php printAlbumEditForm(0, $album); ?>
 		</form>
-		<br />
+		<hr /><?php printAlbumButtons($album); ?><br /><br />
 		</div>
 		</div>
 		<?php
@@ -981,8 +981,7 @@ if (isset($_GET['saved'])) {
 	title="<?php gettext('Back to the list of albums (go up a level)'); ?>">&laquo; <?php echo gettext("Back"); ?></a></p>
 <div class="box" style="padding: 15px;">
 
-<form name="albumedit" AUTOCOMPLETE=OFF
-	action="?page=edit&action=save<?php echo $albumdir ?>" method="POST">
+<form name="albumedit" AUTOCOMPLETE=OFF	action="?page=edit&action=save<?php echo $albumdir ?>" method="POST">
 	<input type="hidden" name="totalalbums" value="<?php echo sizeof($albums); ?>" />
 <?php
 	$currentalbum = 0;

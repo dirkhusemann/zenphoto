@@ -1211,10 +1211,7 @@ function printAlbumEditForm($index, $album) {
 			<a href="javascript:toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', '');"><?php echo gettext("Cancel");?></a>
 		</p>
 	</div>
-
-	<br /><br />
-	<?php printAlbumButtons($album); ?>
-	<br /><br /><br />
+ <br /><br />
 	<?php
 	
 	echo gettext("Tags:");
@@ -1392,38 +1389,36 @@ function printAlbumEditForm($index, $album) {
 function printAlbumButtons($album) {
 	if ($album->getNumImages() > 0) {
 	?>
-		<form name="clear-cache" action="?action=clear_cache" method="post">
+		<form name="clear-cache" action="?action=clear_cache" method="post" style="float: left">
 		<input type="hidden" name="action" value="clear_cache">
 		<input type="hidden" name="album" value="<?php echo urlencode($album->name); ?> ">
-		<p class="buttons">
+		<div class="buttons">
 		<button type="submit" class="tooltip" id="edit_hitcounter" title="<?php echo gettext("Clears the album's cached images.");?>"><img src="images/edit-delete.png" style="border: 0px;" /> <?php echo gettext("Clear album cache"); ?></button>
-		</p>
+		</div>
 		</form>
-		<br /><br />
+	
 		<form name="cache_images" action="admin-cache-images.php" method="post">
 		<input type="hidden" name="album" value="<?php echo urlencode($album->name); ?>">
 		<input type="hidden" name="return" value="<?php echo urlencode($album->name); ?>">
-		<p class="buttons">
+		<div class="buttons">
 		<button type="submit" class="tooltip" id="edit_cache2 title="<?php echo gettext("Cache newly uploaded images."); ?>"><img src="images/cache1.png" style="border: 0px;" />
 		<?php echo gettext("Pre-Cache Images"); ?></button>
-		</p>
+		</div>
 		</form>
-		<br /><br />
 		<form name="refresh_metadata" action="admin-refresh-metadata.php?album="<?php echo urlencode($album->name); ?>" method="post">
 		<input type="hidden" name="album" value="<?php echo urlencode($album->name);?>">
 		<input type="hidden" name=\return" value="<?php echo urlencode($album->name); ?> ">
-		<p class="buttons">
+		<div class="buttons">
 		<button type="submit" class="tooltip" id="edit_refresh" title="<?php echo gettext("Forces a refresh of the EXIF and IPTC data for all images in the album."); ?>"><img src="images/redo.png" style="border: 0px;" /> <?php echo gettext("Refresh Metadata"); ?></button>
-	  </p>	
+	  </div>	
 		</form>
-		<br /><br />
 		<form name="reset_hitcounters" action="?action=reset_hitcounters" method="post">
 		<input type="hidden" name="action" value="reset_hitcounters">
 		<input type="hidden" name="albumid" value="<?php echo $album->getAlbumID(); ?>">
 		<input type="hidden" name="album" value="<?php echo urlencode($album->name); ?>">
-		<p class="buttons">
+		<div class="buttons">
 		<button type="submit" class="tooltip" id="edit_hitcounter" title="<?php echo gettext("Resets all hitcounters in the album."); ?>"><img src="images/reset1.png" style="border: 0px;" /> <?php echo gettext("Reset hitcounters"); ?></button>
-		</p>
+		</div>
 		</form>
 <?php		
 	}
