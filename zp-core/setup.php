@@ -123,17 +123,22 @@ if (isset($_POST['mysql'])) { //try to update the zp-config file
 }
 if (isset($_GET['strict_chmod'])) {
 	if ($_GET['strict_chmod']) {
-		$v = 0755;
+		$chmod = 0755;
 	} else {
-		$v = 0777;
+		$chmod = 0777;
 	}
-	$i = strpos($zp_cfg, "define('CHMOD_VALUE',")+21;
-	$j = strpos($zp_cfg, ")", $i);
-	$zp_cfg = substr($zp_cfg, 0, $i) . sprintf('0%o',$v) . substr($zp_cfg, $j);
-	$chmod = $v;
+	$i = strpos($zp_cfg, "define('CHMOD_VALUE',");
+	if ($i === false) {
+		$i = strpos($zp_cfg, "define('SERVERPATH',");
+		$i = strpos($zp_cfg, ';', $i);
+		$i = strpos($zp_cfg, '/', $i);
+		$zp_cfg = substr($zp_cfg, 0, $i)."if (!defined('CHMOD_VALUE')) { define('CHMOD_VALUE', ".sprintf('0%o', $chmod)."); }\n".substr($zp_cfg, $i);
+	} else {
+		$i = $i +21;
+		$j = strpos($zp_cfg, ")", $i);
+		$zp_cfg = substr($zp_cfg, 0, $i) . sprintf('0%o',$chmod) . substr($zp_cfg, $j);
+	}
 	$updatezp_config = true;
-} else {
-	$chmod =  0777;
 }
 
 if ($updatezp_config) {
@@ -149,9 +154,13 @@ if ($updatezp_config) {
 	}
 }
 $result = true;
+$chmod_defined = false;
 if (file_exists("zp-config.php")) {
 	require(dirname(__FILE__).'/zp-config.php');
-	$chmod = CHMOD_VALUE;
+	if (defined('CHMOD_VALUE')) {
+		$chmod = CHMOD_VALUE | 0755;
+		$chmod_defined = true;
+	}
 	if($connection = @mysql_connect($_zp_conf_vars['mysql_host'], $_zp_conf_vars['mysql_user'], $_zp_conf_vars['mysql_pass'])){
 		if (@mysql_select_db($_zp_conf_vars['mysql_database'])) {
 			$result = @mysql_query("SELECT `id` FROM " . $_zp_conf_vars['mysql_prefix'].'options' . " LIMIT 1", $connection);
@@ -632,7 +641,7 @@ if (!$checked) {
  							gettext("Edit the <code>zp-config.php.source</code> file and rename it to <code>zp-config.php</code>").' ' .
  							"<br/><br/>".gettext("You can find the file in the \"zp-core\" directory.")) && $good;
  	if ($cfg) {
- 		if ($chmod == 0777) {
+ 		if ($chmod == 0777 || !$chmod_defined) {
 	 		checkMark(-1, ' '.gettext('<em>Strict Permissions</em>'), ' '.gettext('[is not in effect]'),
 	 							gettext('When this option is not in effect, file and folder permissions are relaxed. '.
 	 							'This could constitute a security risk so it is recommended that you enable '.
