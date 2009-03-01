@@ -3242,7 +3242,7 @@ function getRandomImages($daily = false) {
 		$albumWhere = '';
 		$imageWhere = '';
 	} else {
-		$albumWhere = " AND " . prefix('albums') . ".show = 1" . getProtectedAlbumsWhere() ;
+		$albumWhere = " AND " . prefix('albums') . ".show=1" . getProtectedAlbumsWhere() ;
 		$imageWhere = " AND " . prefix('images') . ".show=1";
 	}
 	$c = 0;
@@ -3300,17 +3300,20 @@ function getRandomImagesAlbum($rootAlbum=null) {
 			}
 		}
 	} else {
-		if (zp_loggedin()) {
+		$albumfolder = $album->getFolder();
+		if (isMyAlbum($albumfolder, ALL_RIGHTS)) {
 			$imageWhere = '';
 			$albumNotWhere = '';
+			$albumInWhere = '';
 		} else {
 			$imageWhere = " AND " . prefix('images'). ".show=1";
 			$albumNotWhere = getProtectedAlbumsWhere();
+			$albumInWhere = prefix('albums') . ".show=1";
 		}
-		$albumInWhere = '';
 
-		$albumfolder = $album->getFolder();
-		$query = "SELECT id FROM " . prefix('albums') . " WHERE " . prefix('albums') . ".show = 1 AND folder LIKE '" . mysql_real_escape_string($albumfolder) . "%'";
+		$query = "SELECT id FROM " . prefix('albums') . " WHERE ";
+		if ($albumInWhere) $query .= $albumInWhere.' AND '; 
+		$query .= "folder LIKE '" . mysql_real_escape_string($albumfolder) . "%'";
 		$result = query_full_array($query);
 		if (is_array($result) && count($result) > 0) {
 			$albumInWhere = prefix('albums') . ".id in (";
@@ -3318,6 +3321,8 @@ function getRandomImagesAlbum($rootAlbum=null) {
 				$albumInWhere = $albumInWhere . $row['id'] . ", ";
 			}
 			$albumInWhere =  ' AND '.substr($albumInWhere, 0, -2) . ')';
+		} else {
+			return NULL;
 		}
 		$c = 0;
 		while ($c < 10) {
