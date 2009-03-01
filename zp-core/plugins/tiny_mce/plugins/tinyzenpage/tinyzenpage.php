@@ -20,11 +20,12 @@
 <?php
 define('OFFSET_PATH', 5);
 $const_webpath = dirname(dirname(dirname(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))))));
+$basepath = dirname(dirname(dirname(dirname(dirname(__FILE__)))));
 ?>
-<?php require_once("../../../../functions.php"); ?>
-<?php require_once("../../../../class-load.php"); ?>
-<?php require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . "zenpage/zenpage-functions.php"); ?>
-<?php require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . "zenpage/zenpage-template-functions.php"); ?>
+<?php require_once($basepath . "/functions.php"); ?>
+<?php require_once($basepath . "/class-load.php"); ?>
+<?php require_once($basepath . PLUGIN_FOLDER . "zenpage/zenpage-functions.php"); ?>
+<?php require_once($basepath . PLUGIN_FOLDER . "zenpage/zenpage-template-functions.php"); ?>
 <?php require_once("tinyzenpage-functions.php"); ?>
 <?php require_once("js/dialog.php"); ?>
 </head>
