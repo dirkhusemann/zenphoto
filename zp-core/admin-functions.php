@@ -1842,7 +1842,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 		if ($textbox) {
 			echo '<textarea name="'.$name.'_'.$locale.'"'.$edit.' cols="'.($size ? $size : TEXTAREA_COLUMNS).'"	rows="6">'.htmlentities($dbstring,ENT_COMPAT,getOption("charset")).'</textarea>';
 		} else {
-			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" style="width: 370px" type="text" value="'.$dbstring.'" size="'.($size ? $size : TEXT_INPUT_SIZE).'" />';
+			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="'.($size ? $size : TEXT_INPUT_SIZE).'" />';
 		}
 	}
 }
