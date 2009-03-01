@@ -508,6 +508,8 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 			<input type="hidden"	name="savealbuminfo" value="1" />
 			<?php printAlbumEditForm(0, $album); ?>
 		</form>
+		<br clear:all />
+		<br />
 		<hr /><?php printAlbumButtons($album); ?><br /><br />
 		</div>
 		</div>
@@ -996,6 +998,7 @@ if (isset($_GET['saved'])) {
 		printAlbumEditForm($currentalbum, $album);
 		?>
 		</div>
+		<br />
 		<hr />
 		<?php
 	}
