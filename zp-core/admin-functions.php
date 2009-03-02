@@ -318,8 +318,6 @@ function printLoginForm($redirect=null, $logo=true) {
 			$requestor = sanitize($_GET['ref'], 0);
 		}
 	}
-
-	if ($logo) echo "<p><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" /></p>";
 	$star = '';
 	$admins = getAdministrators();
 	$mails = array();	
@@ -337,34 +335,46 @@ function printLoginForm($redirect=null, $logo=true) {
 		$star = '*';
 	}
 	echo "\n  <div id=\"loginform\">";
+	if ($logo) echo "<p><img src=\"../" . ZENFOLDER . "/images/zen-logo.gif\" title=\"Zen Photo\" /></p>";
 	if ($_zp_login_error == 1) {
-		echo "<div class=\"errorbox\" id=\"message\"><h2>".gettext("There was an error logging in.")."</h2> ".gettext("Check your username and password and try again.")."</div>";
+	?>
+		<div class="errorbox" id="message"><h2><?php echo gettext("There was an error logging in."); ?></h2><?php echo gettext("Check your username and password and try again.");?></div>
+	<?php
 	} else if ($_zp_login_error == 2){
-		echo '<div class="messagebox" id="fade-message">';
-		echo  "<h2>".gettext("A reset request has been sent.")."</h2>";
-		echo '</div>';
-	}
-	echo "\n  <form name=\"login\" action=\"#\" method=\"POST\">";
-	echo "\n	 <input type=\"hidden\" name=\"login\" value=\"1\" />";
-	echo "\n	 <input type=\"hidden\" name=\"redirect\" value=\"$redirect\" />";
+	?>
+		<div class="messagebox" id="fade-message">
+		<h2><?php echo gettext("A reset request has been sent."); ?></h2>
+		</div>
+	<?php } ?>
+	<form name="login" action="#" method="POST">
+	<input type="hidden" name="login" value="1" />
+	<input type="hidden" name="redirect" value="<?php echo $redirect; ?>" />
 
-	echo "\n	 <table>";
-	echo "\n		<tr><td align=\"right\"><h2>".gettext("Login").'&nbsp;'."</h2></td><td><input class=\"textfield\" name=\"user\" type=\"text\" size=\"20\" value=\"$requestor\" /></td></tr>";
-	echo "\n		<tr><td align=\"right\"><h2>".gettext("Password").$star."</h2></td><td><input class=\"textfield\" name=\"pass\" type=\"password\" size=\"20\" /></td></tr>";
+	<table>
+	<tr><td align="left"><h2><?php echo gettext("Login"); ?>&nbsp;</h2></td><td><input class="textfield" name="user" type="text" size="20" value="<?php echo $requestor; ?>" /></td></tr>
+	<tr><td align="left"><h2><?php echo gettext("Password").$star; ?></h2></td><td><input class="textfield" name="pass" type="password" size="20" /></td></tr>
+	<?php 
 	if ($star == '*') {
 		$captchaCode = $_zp_captcha->generateCaptcha($img);
 		$html = "<input type=\"hidden\" name=\"code_h\" value=\"" . $captchaCode . "\"/><label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"bottom\"/></label>";
-		echo "\n		<tr><td colspan=\"2\">";
-		echo "\n		".sprintf(gettext("*Enter %s to email a password reset."), $html);
-		echo "		</td></tr>";
-	}
-	echo "\n		<tr><td></td><td colspan=\"2\"><input class=\"button\" type=\"submit\" value=\"".gettext("Log in")."\" /></td></tr>";
-	echo "\n	 </table>";
-	echo "\n  </form>";
-	echo "\n  </div>";
-	echo "\n</body>";
-	echo "\n</html>";
-}
+	?>	
+	<tr><td colspan="2">
+		<?php echo "\n		".sprintf(gettext("*Enter %s to email a password reset."), $html); ?>
+		</td></tr>
+	<?php } ?>
+	<tr><td></td><td colspan="2">
+	<div class="buttons">
+	<button type="submit" value="<?php echo gettext("Log in"); ?>" /><img src="images/pass.png" alt="" /><?php echo gettext("Log in"); ?></button>
+	<button type="reset" value="<?php echo gettext("Reset"); ?>" /><img src="images/reset.png" alt="" /><?php echo gettext("Reset"); ?></button>
+	</div>
+	</td></tr>
+	</table>
+	</form>
+	</div>
+	</body>
+	</html>
+<?php 
+} 
 
 
 /**

@@ -109,11 +109,11 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 printAdminHeader();
 
 echo "\n</head>";
-?>
-
+if (!zp_loggedin()) { ?>
+	<body style="background-image: none">
+<?php } else { ?>
 <body>
-
-<?php
+<?php }
 // If they are not logged in, display the login form and exit
 
 if (!zp_loggedin()) {
@@ -144,7 +144,7 @@ if (!empty($msg)) {
 }
 ?>
 <div id="overview-leftcolumn">
-
+<div class="boxouter">
 <div class="box" id="overview-comments">
 <h2 class="h2_bordered"><?php echo gettext("Gallery Stats"); ?></h2>
 <ul>
@@ -189,6 +189,7 @@ if ($c > 0) {
 }
 ?>
 </li></ul>
+</div>
 </div>
 
 <div class="box" id="overview-comments">
