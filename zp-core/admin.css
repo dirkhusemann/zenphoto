@@ -1220,6 +1220,27 @@ ul.pagelist li.current {
 .language_string_list label {
 	display: block;
 }
+/* CSS for language_string_list_short */
+.language_string_list_short {
+	border: 1px solid #ccc;
+	list-style: none;
+	height: 5.5em;
+	width: 18em;
+	overflow: auto;
+	background-color: white;
+}
+
+.language_string_list_short,.language_string_list_short li {
+	margin: 0;
+	padding: 0;
+	padding-bottom: 5px;
+	border-bottom: 1px dotted #C6D880;
+}
+
+.language_string_list label_short {
+	display: block;
+}
+
 
 .language_string_list label:hover,.language_string_list label.hover {
 	background: #F1F2F3;

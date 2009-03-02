@@ -13,6 +13,8 @@ $_zp_admin_LC_taglist = NULL;
 $_zp_admin_album_list = null;
 define('TEXTAREA_COLUMNS', 50);
 define('TEXT_INPUT_SIZE', 48);
+define('TEXTAREA_COLUMNS_SHORT', 32);
+define('TEXT_INPUT_SIZE_SHORT', 30);
 require_once(dirname(__FILE__).'/class-load.php');
 require_once(dirname(__FILE__).'/functions.php');
 
@@ -1773,7 +1775,7 @@ $_zp_current_locale = NULL;
  * @param string $locale optional locale of the translation desired
  * @param string $edit optional class
  */
-function print_language_string_list($dbstring, $name, $textbox=false, $locale=NULL, $edit='', $size=0) {
+function print_language_string_list($dbstring, $name, $textbox=false, $locale=NULL, $edit='', $short=false) {
 	global $_zp_languages, $_zp_active_languages, $_zp_current_locale;
 	if (!empty($edit)) $edit = ' class="'.$edit.'"';
 	if (is_null($locale)) {
@@ -1796,7 +1798,7 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 		unset($emptylang['']);
 		natsort($emptylang);
 		if ($textbox) $class = 'box'; else $class = '';
-		echo "<ul class=\"language_string_list".$class."\">\n";
+		echo '<ul class="'.($short ? 'language_string_list_short' : 'language_string_list').$class.'"'.">\n";
 		$empty = true;
 		foreach ($emptylang as $key=>$lang) {
 			if (isset($strings[$key])) {
@@ -1807,9 +1809,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 					echo '<li><label for="'.$name.'_'.$key.'">';
 					echo $lang;
 					if ($textbox) {
-						echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.($size ? $size : TEXTAREA_COLUMNS).'"	style="width: 370px" rows="6">'.htmlentities($string,ENT_COMPAT,getOption("charset")).'</textarea>';
+						echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.($short ? TEXTAREA_COLUMNS_SHORT : TEXTAREA_COLUMNS).'"	style="width: 370px" rows="6">'.htmlentities($string,ENT_COMPAT,getOption("charset")).'</textarea>';
 					} else {
-						echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.$string.'" style="width: 370px" size="'.($size ? $size : TEXT_INPUT_SIZE).'" />';
+						echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="'.$string.'" size="'.($short ? TEXT_INPUT_SIZE_SHORT : TEXT_INPUT_SIZE).'" />';
 					}
 					echo "</label></li>\n";
 				}
@@ -1824,9 +1826,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 			echo '<li><label for="'.$name.'_'.$key.'">';
 			echo $lang;
 			if ($textbox) {
-				echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.($size ? $size : TEXTAREA_COLUMNS).'"	style="width: 370px" rows="6"></textarea>';
+				echo "\n".'<textarea name="'.$name.'_'.$key.'"'.$edit.' cols="'.($short ? TEXTAREA_COLUMNS_SHORT : TEXTAREA_COLUMNS).'"	style="width: 370px" rows="6"></textarea>';
 			} else {
-				echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="" style="width: 370px" size="'.($size ? $size : TEXT_INPUT_SIZE).'" />';
+				echo '<br /><input id="'.$name.'_'.$key.'" name="'.$name.'_'.$key.'" type="text" value="" size="'.($short ? TEXT_INPUT_SIZE_SHORT : TEXT_INPUT_SIZE).'" />';
 			}
 			echo "</label></li>\n";
 
@@ -1840,9 +1842,9 @@ function print_language_string_list($dbstring, $name, $textbox=false, $locale=NU
 			$dbstring = array_shift($strings);
 		}
 		if ($textbox) {
-			echo '<textarea name="'.$name.'_'.$locale.'"'.$edit.' cols="'.($size ? $size : TEXTAREA_COLUMNS).'"	rows="6">'.htmlentities($dbstring,ENT_COMPAT,getOption("charset")).'</textarea>';
+			echo '<textarea name="'.$name.'_'.$locale.'"'.$edit.' cols="'.($short ? TEXTAREA_COLUMNS_SHORT : TEXTAREA_COLUMNS).'"	rows="6">'.htmlentities($dbstring,ENT_COMPAT,getOption("charset")).'</textarea>';
 		} else {
-			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="'.($size ? $size : TEXT_INPUT_SIZE).'" />';
+			echo '<input id="'.$name.'_'.$locale.'" name="'.$name.'_'.$locale.'" type="text" value="'.$dbstring.'" size="'.($short ? TEXT_INPUT_SIZE_SHORT : TEXT_INPUT_SIZE).'" />';
 		}
 	}
 }

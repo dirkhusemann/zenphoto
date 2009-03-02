@@ -1445,7 +1445,7 @@ if ($subtab == 'admin') {
 					<tr>
 						<td><?php echo gettext("hint:"); ?></td>
 						<td>
-						<?php print_language_string_list(getOption('protected_image_hint'), 'protected_image_hint', false, NULL, '', 30) ?>
+						<?php print_language_string_list(getOption('protected_image_hint'), 'protected_image_hint', false, NULL, '', true) ?>
 						</td>
 					</tr>
 				</table>
