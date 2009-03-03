@@ -198,7 +198,7 @@ foreach($themes as $theme => $themeinfo):
 		<?php echo $themeinfo['author']; ?><br />
 		Version <?php echo $themeinfo['version']; ?>, <?php echo $themeinfo['date']; ?><br />
 		<?php echo $themeinfo['desc']; ?></td>
-		<td width="110" <?php echo $style; ?>>
+		<td width="20%" <?php echo $style; ?>>
 		<ul class="theme_links">
 		<?php
 		if ($theme != $current_theme) {
