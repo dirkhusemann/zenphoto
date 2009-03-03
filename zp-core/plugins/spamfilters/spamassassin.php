@@ -110,7 +110,7 @@ class SpamFilter {
 	}
 
 	function prepareHeaders() {
-		$this->date=date(r);
+		$this->date=date('r');
 		$from_ip = ($_SERVER['REMOTE_ADDR'] != getenv('SERVER_ADDR')) ? $_SERVER['REMOTE_ADDR'] : getenv('HTTP_X_FORWARDED_FOR');
 		$from_name = gethostbyaddr($from_ip);
 		if($from_name == $from_ip ) {
