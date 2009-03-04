@@ -45,11 +45,10 @@
 <div id="content">
 	<div id="content-left">
 		
-
 	<!-- The Image -->
 	<?php if (!checkForPassword()) { ?>
 	
- <?php if(function_exists("printPagedThumbsNav")) { echo "<div id='pagedthumbs'>"; printPagedThumbsNav(6, FALSE, gettext('&laquo; prev thumbs'), gettext('next thumbs &raquo;'), 40, 40, 40, TRUE); echo "</div>"; } ?>
+ <?php if(function_exists("printPagedThumbsNav")) { printPagedThumbsNav(6, FALSE, gettext('&laquo; prev thumbs'), gettext('next thumbs &raquo;'), 40, 40, 40, TRUE); } ?>
 	
 	<div id="image">
 		
