@@ -4,11 +4,13 @@
  * 
  * NOTE: With version 1.0.2 $size is no longer an option for this plugin. This plugin now uses the new maxspace function if crop set to false.
  *  
- * The function contains some predefined CSS ids you can use for styling. The function prints the following html:
+ * The function contains some predefined CSS ids you can use for styling. 
+ * NOTE: In 1.0.3 a extra div around the thumbnails has been added: <div id="pagedthumbsimages">.
+ * The function prints the following HTML:
  *
  * <div id="pagedthumbsnav">
  * <a href="" id="pagedthumbsnav-prev">Previous thumbnail list</a>
- * <img><img> (...) (the active thumb has class="pagedthumbsnav-active")
+ * <div id="pagedthumbsimages"><img><img> (...) (the active thumb has class="pagedthumbsnav-active")</div>
  * <a href="" id="pagedthumbsnav-next">Next thumbnail list</a>
  * <p id="pagethumbsnav-counter>Images 1 - 10 of 20 (1/3)</p> (optional)
  * </div>
@@ -22,12 +24,12 @@
  * @param bool $crop If you want cropped thumbs
  * 
  * @author Malte Müller (acrylian)
- * @version 1.0.2
+ * @version 1.0.3
  * @package plugins 
  */
 $plugin_description = gettext("Prints a paged thumbs navigation on image.php, independend of the album.php's thumbsThe function contains some predefined CSS ids you can use for styling. Please see the documentation for more info.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.0.2';
+$plugin_version = '1.0.3';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---paged_thumbs_nav.php.html";
 $option_interface = new pagedthumbsOptions();
 
@@ -114,7 +116,7 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 		}
 	}
 	echo "<div id=\"pagedthumbsnav\">\n";
-	echo "<div class=\"pagedthumbsnav-prev\">\n";
+	echo "<div id=\"pagedthumbsnav-prev\">\n";
 	// Prev thumbnails - show only if there is a prev page
 	if ($totalpages > 1)	{
 		$prevpageimagenr = ($currentpage * $imagesperpage) - ($imagesperpage+1);
@@ -124,6 +126,7 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 		} 
 	}
 		echo "</div>\n";
+		echo "<div id='pagedthumbsimages'>";
 	// the thumbnails
 	$number = $startimg[$currentpage] - 2;
 	for ($nr = 1;$nr <= $imagesperpage; $nr++) {
@@ -149,10 +152,10 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 			break;
 		}
 	}
-
+ echo "</div>";
 	
 	// next thumbnails - show only if there is a next page
-	echo "<div class=\"pagedthumbsnav-next\">\n";
+	echo "<div id=\"pagedthumbsnav-next\">\n";
 	if ($totalpages > 1)	{
 		if ($currentpage < $totalpages) 	{
 			$nextpageimagenr = $currentpage * $imagesperpage;
@@ -164,7 +167,7 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 	
 		// image counter
 	if($counter) {
-		$fromimage = ($startimg[$currentpage]);
+		$fromimage = $startimg[$currentpage];
 		if($totalimages < $endimg[$currentpage]) {
 			$toimage = $totalimages;
 		} else {
