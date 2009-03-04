@@ -653,7 +653,7 @@ if (!$checked) {
 	 							gettext('<strong>NOTE:</strong> This option applies only to new files and folders created by Zenphoto. You may have to change permissions on existing ones to resolve problems.')
 	 							);
 	 	} else {
-	 		checkMark(-2, ' '.gettext('<em>Strict Permisssions</em>'), ' '.gettext('[is in effect]'),
+	 		checkMark(-2, ' '.gettext('<em>Strict Permissions</em>'), ' '.gettext('[is in effect]'),
 	 							gettext('On some servers Zenphoto does not function correctly '.
 	 							'with strict file/folder permissions. If you are getting permission errors run setup again and '.
 	 							'disable the option.').'<br /><br />'.
