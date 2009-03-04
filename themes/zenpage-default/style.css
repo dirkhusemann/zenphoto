@@ -475,30 +475,28 @@ ul.pagelist li.next {
 
 /* Paged thumbs nav
 ------------------------------ */
-#pagedthumbs {
-	width: 580px;
-	height: 45px;
-	position: relative;
-	left: 50px;
-	margin-bottom: 1em;
-}
 
 #pagedthumbsnav {
-	height: 45px;
-	text-align: center;
-	padding: 0px;
 	width: 580px;
+	height: 55px;
+	padding: 0px;
 	border: 0px solid gray;
 	color: #444444;
+	
 }
 
-#pagedthumbsnav img {
+#pagedthumbsimages {
+	text-align: center;
+	border: 0px solid gray;
+}
+
+#pagedthumbsimages img {
 	border: 1px solid darkgray;
 	padding: 2px;
 	float: left;
 }
 
-#pagedthumbsnav img:hover {
+#pagedthumbsimages img:hover {
 	border: 2px solid orange;
 	padding: 1px;
 }
@@ -509,20 +507,21 @@ ul.pagelist li.next {
 	float: left;
 }
 
-.pagedthumbsnav-prev {
-	width: 100px;
+#pagedthumbsnav-prev {
+	width: 155px;
 	height: 20px;
 	padding-top: 10px;
 	font-size: 1em;
 	float: left;
 }
 
-.pagedthumbsnav-next {
+#pagedthumbsnav-next {
 	width: 100px;
 	height: 20px;
 	padding-top: 10px;
 	font-size: 1em;
-	float: left;
+	float: right;
+	text-align: center;
 }
 
 /* Comments
