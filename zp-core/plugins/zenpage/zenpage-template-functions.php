@@ -1245,7 +1245,8 @@ function printLatestNews($number=5,$option='with_latest_images', $category='', $
 			$title = htmlspecialchars($item['title']);
 			$link = getNewsURL($item['titlelink']);
 			$count2 = 0;
-			$category = $_zp_current_zenpage_news->getCategories($item['id']);
+			$newsobj = new ZenpageNews($item['titlelink']);
+			$category = $newsobj->getCategories();
 			foreach($category as $cat){
 				$count2++;
 				if($count2 != 1) {
