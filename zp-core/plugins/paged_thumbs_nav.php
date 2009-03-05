@@ -3,12 +3,12 @@
  * Prints a paged thumbnail navigation to be used on a theme's image.php, independent of the album.php's thumbs loop
  * 
  * @author Malte Müller (acrylian)
- * @version 1.0.4
+ * @version 1.0.5
  * @package plugins 
  */
 $plugin_description = gettext("Prints a paged thumbs navigation on image.php, independend of the album.php's thumbsThe function contains some predefined CSS ids you can use for styling. Please see the documentation for more info.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.0.4';
+$plugin_version = '1.0.5';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---paged_thumbs_nav.php.html";
 $option_interface = new pagedthumbsOptions();
 
@@ -103,10 +103,10 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 	if(in_context(ZP_SEARCH_LINKED)) {
 		$images = $_zp_current_search->getImages();
 		$totalimages = $_zp_current_search->getNumImages();
-		$getimagenumber = -1;
+		$getimagenumber = 0;
 		foreach($images as $image) {
 			$getimagenumber++;
-			if($_zp_current_image->filename === $image['filename']) {
+			if($_zp_current_image->filename === $image['filename'] AND $_zp_current_album->name === $image['folder']) {
 				$currentimgnr = $getimagenumber;
 			}
 		}
@@ -127,7 +127,8 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 			$currentpage = $nr;
 		}
 		if ($endimg[$nr] >= $currentimgnr) {
-			$currentpage = $nr; break;
+			$currentpage = $nr; 
+			break;
 		}
 	}
 	echo "<div id=\"pagedthumbsnav\">\n";
@@ -138,7 +139,7 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 		if ($currentpage > 1) {
 			if(in_context(ZP_SEARCH_LINKED)) {
 				$albumobj = new Album($_zp_gallery,$images[$prevpageimagenr]['folder']);
-				$prevpageimage = newImage($_zp_current_album,$images[$prevpageimagenr]['filename']);
+				$prevpageimage = newImage($albumobj,$images[$prevpageimagenr]['filename']);
 			} else {
 				$prevpageimage = newImage($_zp_current_album,$images[$prevpageimagenr]);
 			}
@@ -186,7 +187,7 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 			$nextpageimagenr = $currentpage * $imagesperpage;
 			if(in_context(ZP_SEARCH_LINKED)) {
 				$albumobj = new Album($_zp_gallery,$images[$nextpageimagenr]['folder']);
-				$nextpageimage = newImage($_zp_current_album,$images[$nextpageimagenr]['filename']);
+				$nextpageimage = newImage($albumobj,$images[$nextpageimagenr]['filename']);
 			} else {
 				$nextpageimage = newImage($_zp_current_album,$images[$nextpageimagenr]);
 			}
