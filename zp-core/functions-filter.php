@@ -41,7 +41,7 @@ $_zp_filters = array();
  */
 function register_filter($hook, $function_name, $priority = 10, $accepted_args = 1) {
 	global $_zp_filters;
-	$bt = @debug_backtrace(false);
+	$bt = @debug_backtrace();
 	if (is_array($bt)) {
 		$b = array_shift($bt);
 		$base = basename($b['file']);

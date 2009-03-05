@@ -621,7 +621,7 @@ if (!$checked) {
 			$mb= 0;
 			$m1 = gettext("[is not present and <code>iconv()</code> is not working]");
 			$m2 = gettext("You need to install the <code>mbstring</code> package or correct the issue with <code>iconv(()</code>");
-					} else {
+		} else {
 			$mb= -1;
 			$m1 = gettext("[is not present]");
 			$m2 = gettext("Strings generated internally by PHP may not display correctly. (e.g. dates)");
