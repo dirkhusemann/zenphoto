@@ -1,3 +1,0 @@
-<?php
-define('ZENPAGE_RELEASE', ZENPHOTO_RELEASE);
-?>

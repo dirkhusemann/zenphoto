@@ -4327,7 +4327,7 @@ function exposeZenPhotoInformations( $obj = '', $plugins = '', $theme = '', $fil
 			$official = 'SVN';
 		}
 		echo "\n<!-- zenphoto version " . ZENPHOTO_VERSION . " [" . ZENPHOTO_RELEASE . "] ($official)";
-		if (isset($zenpage_version)) echo ' zenpage version '.$zenpage_version.' ['.ZENPAGE_RELEASE.'] ';
+		if (isset($zenpage_version)) echo ' zenpage version '.$zenpage_version.' ['.ZENPHOTO_RELEASE.'] ';
 		echo " THEME: " . $theme . " (" . $a . ") { memory: ".INI_GET('memory_limit')." }";
 		echo ' PLUGINS: ';
 		if (count($plugins) > 0) {

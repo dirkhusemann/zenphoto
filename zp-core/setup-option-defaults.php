@@ -26,7 +26,10 @@ function setDefault($option, $default) {
 
 	require(dirname(__FILE__).'/zp-config.php');
 	setOption('zenphoto_release', ZENPHOTO_RELEASE);
-
+	if (getOption('zp_plugin_zenpage')) {
+		setOption('zenpage_release', ZENPHOTO_RELEASE);
+	}
+	
 	//clear out old admin user and cleartext password
 	unset($_zp_conf_vars['adminuser']);
 	unset($_zp_conf_vars['adminpass']);

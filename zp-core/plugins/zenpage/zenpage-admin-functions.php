@@ -1,5 +1,4 @@
 <?php
-require_once('zenpage-version.php'); // includes the $plugin_version statement
 /**
  * zenpage admin functions
  *
@@ -1469,7 +1468,7 @@ function getZenpageVersion() {
 }
 
 function printZenpageFooter() {
-	$footer = sprintf(gettext('<a href="http://zenpage.maltem.de/zenpage/index.php">zenpage</a> version %1$s [%2$s]'), getZenpageVersion(), ZENPAGE_RELEASE);
+	$footer = sprintf(gettext('<a href="http://zenpage.maltem.de/zenpage/index.php">zenpage</a> version %1$s [%2$s]'), getZenpageVersion(), ZENPHOTO_RELEASE);
 	printAdminFooter($footer);
 }
 

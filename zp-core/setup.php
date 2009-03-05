@@ -983,6 +983,10 @@ if ($debug) {
 
 	$good = checkmark(file_exists($en_US), '<em>locale</em> '.gettext('folders'), ' ['.gettext('Are not complete').']', gettext('Be sure you have uploaded the complete Zenphoto package. You must have at least the <em>en_US</em> folder.')) && $good;
 
+	if (getOption('zp_plugin_zenpage')) {
+		$good = folderCheck('uploaded', dirname(dirname(__FILE__)) . "/uploaded/", 'std') && $good;
+	}
+	
 	if ($connection) { @mysql_close($connection); }
 	if ($good) {
 		$dbmsg = "";
@@ -1036,10 +1040,17 @@ if (file_exists("zp-config.php")) {
 			}
 		}
 		$expected_tables = array($_zp_conf_vars['mysql_prefix'].'options', $_zp_conf_vars['mysql_prefix'].'albums',
-		$_zp_conf_vars['mysql_prefix'].'images', $_zp_conf_vars['mysql_prefix'].'comments',
-		$_zp_conf_vars['mysql_prefix'].'administrators', $_zp_conf_vars['mysql_prefix'].'admintoalbum',
-		$_zp_conf_vars['mysql_prefix'].'tags', $_zp_conf_vars['mysql_prefix'].'obj_to_tag',
-		$_zp_conf_vars['mysql_prefix'].'captcha');
+			$_zp_conf_vars['mysql_prefix'].'images', $_zp_conf_vars['mysql_prefix'].'comments',
+			$_zp_conf_vars['mysql_prefix'].'administrators', $_zp_conf_vars['mysql_prefix'].'admintoalbum',
+			$_zp_conf_vars['mysql_prefix'].'tags', $_zp_conf_vars['mysql_prefix'].'obj_to_tag',
+			$_zp_conf_vars['mysql_prefix'].'captcha');
+		
+		if (getOption('zp_plugin_zenpage')) {
+			$expected_tables = array_merge($expected_tables, array($_zp_conf_vars['mysql_prefix'].'zenpage_pages',
+				$_zp_conf_vars['mysql_prefix'].'zenpage_news2cat', $_zp_conf_vars['mysql_prefix'].'zenpage_news_categories',
+				$_zp_conf_vars['mysql_prefix'].'zenpage_news'));
+		}
+		
 		foreach ($expected_tables as $needed) {
 			if (!isset($tables[$needed])) {
 				$tables[$needed] = 'create';
@@ -1074,7 +1085,8 @@ if (file_exists("zp-config.php")) {
 	$cst_images = prefix('images_ibfk1');
 
 	$db_schema = array();
-
+	$sql_statements = array();
+	
 	if (substr(trim(mysql_get_server_info()), 0, 1) > '4') {
 		$collation = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci';
 	} else {
@@ -1085,7 +1097,22 @@ if (file_exists("zp-config.php")) {
 	 Add new fields in the upgrade section. This section should remain static except for new
 	 tables. This tactic keeps all changes in one place so that noting gets accidentaly omitted.
 	************************************************************************************/
-
+	
+	/****************************************************************************************
+	 ******                       ZENPAGE TABLE SETUP                                  ******
+	 ****************************************************************************************/
+	if (getOption('zp_plugin_zenpage')) {  // option will not be set on first-time install
+		include(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . 'zenpage/setup_db.php');
+		foreach ($db_schema as $key=>$sql) {
+			$i = strpos($sql, '`');
+			$j = strpos($sql, '`', $i+1);
+			$db = substr($sql, $i+1, $j - $i);
+			if (!isset($create[$db])) {
+				unset($db_schema[$key]);
+			}
+		}
+	}
+	
 	//v1.2
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'captcha'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_captcha (
@@ -1242,7 +1269,6 @@ if (file_exists("zp-config.php")) {
 	 ******                          Add all new fields below                          ******
 	 ******                                                                            ******
 	 ****************************************************************************************/
-	$sql_statements = array();
 
 	// v. 1.0.0b
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `sort_type` varchar(20);";

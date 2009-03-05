@@ -6,9 +6,7 @@ $plugin_author = "Malte Müller (acrylian)";
 $plugin_URL = "http://zenpage.maltem.de";
 $option_interface = new zenpagecms();
 
-
-require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . 'zenpage/zenpage-version.php'); // includes the $plugin_version statement
-if (getOption('zenpage_release') != ZENPAGE_RELEASE) {
+if (getOption('zenpage_release') != ZENPHOTO_RELEASE) {
 	if (OFFSET_PATH == 0) {
 		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . "zenpage/setup.php");
 		exit();

@@ -204,7 +204,7 @@ if (defined('RELEASE')) {
 	}
 	?>
 	<li><?php printf(gettext('Zenphoto version <strong>%1$s [%2$s] (%3$s)</strong>'),ZENPHOTO_VERSION,ZENPHOTO_RELEASE,$official); ?></li>
-	<?php	if (isset($zenpage_version)) printf(gettext('zenpage version <strong>%1$s [%2$s]</strong>'),$zenpage_version,ZENPAGE_RELEASE);	?>
+	<?php	if (isset($zenpage_version)) printf(gettext('zenpage version <strong>%1$s [%2$s]</strong>'),$zenpage_version,ZENPHOTO_RELEASE);	?>
 	<li><?php printf(gettext('Current gallery theme: <strong>%1$s</strong>'),$gallery->getCurrentTheme()); ?></li> 
 	<li><?php printf(gettext('PHP version: <strong>%1$s</strong>'),phpversion()); ?></li>
 	<li><?php printf(gettext('PHP memory limit: <strong>%1$s</strong> (Note: Your server might allocate less!)'),INI_GET('memory_limit')); ?></li>

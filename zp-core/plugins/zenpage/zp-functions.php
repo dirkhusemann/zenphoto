@@ -8,8 +8,7 @@
  */ 
 define("OFFSET_PATH",4); 
 include('../../admin-functions.php');
-require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . 'zenpage/zenpage-version.php'); // includes the $plugin_version statement
-if (getOption('zenpage_release') != ZENPAGE_RELEASE) {
+if (getOption('zenpage_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . "zenpage/setup.php?admin");
 	exit();
 }
