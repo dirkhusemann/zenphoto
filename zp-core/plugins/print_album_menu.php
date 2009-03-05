@@ -1,116 +1,14 @@
 <?php
 /** printAlbumMenu for Zenphoto
  *
- * Changelog
- * 1.4.6.1: Typo in function name corrected
- *
- * 1.4.6:
- * - Some url encoding issues fixed
- * 
- * 1.4.5:
- * - Fixes some validation issues and an php warning
- * 
- * 1.4.4.5:
- * - Minor fix about a php notice for an undefined variable
- *
- * 1.4.4.4:
- * - Corrects an inconsistency about misslabeled css id and classes parameters:
- * There is now a class for the active toplevel element, so that you can use it for top and sub levels.
- * - Also now not every list item gets the active class assigned anymore...
- *
- * 1.4.4.3.
- * -  Minor bug fix, used the album title instead of the unique album folder name at one place.
- *
- * 1.4.4.2.
- * - HTML validation again (turns css id for subalbums into the valid css class) Thanks to miem for the find.
- *
- * 1.4.4.1
- * - Html validation changes
- *
- * 1.4.4:
- * - Adds new list mode option '$showsubs' to optionally always show subalbums
- * - Fixes a html validation error of using a CSS id several times for the active top level albums (now a class)
- *
- * 1.4.3.1:
- * - Some very minor code cleanup
- *
- * 1.4.3:
- * - Divided the menu into two separate functions printAlbumMenuList() and printAlbumMenuJump(). The plan to always have the jump menu
- * mode showing top level albums and sub level albums was simply easier to achieve separated than within the more complicated and especially
- * context sensitive list mode code. printAlbumMenu() remains as a wrapper function so that it can be used as before.
- * - Some documentation errors fixed
- *
- * 1.4.2:
- * - Fixes lost count for jump menu in the 1.4.1
- * - Some more code optimizations: Another helper function checkAlbumDisplayLevel() added
- * - Helper function checkIfActiveAlbum() renamed to checkSelectedAlbum()
- * - Helper function createAlbumMenuLink() extended for the jump menu variant
- *
- * 1.4.1:
- * - Jump variant: 'choose an album' text removed , now the active album is always selected.
- * 	 This adds the helper function checkIfActiveAlbum()
- * - List variant: Adds missing index link and title atribute to the links and make its name editiable and and option (see below)
- * - List variant: Adds helper function createAlbumMenuLink() to generate the link / none link and get rid of some repetive lines of code
- *
- * 1.4:
- * - New options for more layout flexibility: "list-top" for only showing the toplevel albums,
- *   							"list-sub" for showing only sublevel albums if within a toplevel album or one of its subalbums
- *
- * 1.3.3:
- * - Code reworked, now uses the gallery/album objects so that protected and unpublished
- * 	 albums as well as the album sortorder are handled automatically
- * - For better usability selected album names in the list are now not links anymore as suggested
- *   on the forum a while ago (also the former used <strong> is skipped)
- *
- * 1.3.2:
- * - turned into a plugin for zenphoto 1.1.5 svn/1.1.6
- *
- * 1.3.1:
- * - support for album passwords
- * - a little code reformatting
- * - the return of the somehow forgotten published or not published check
- *
- * 1.3:
- * - only for zenphoto 1.1. or newer
- * - nearly completly rewritten
- * - Supports 4 subalbum levels with context sensitive fold out display
- *
- * 1.2.2.3:
- * - Automatic detection if mod_rewrite is enabled but it has to be set and save in the admin options.
- * - Better looking source code thanks to spacing and linebreaks implemented by aitf311
- *
- * 1.2.2.2:
- * - Automatic disabling of the counter for main albums so that they don't show "(0)" anymore if you only use subalbums for images
- * now for subalbums, too.
- *
- * 1.2.2.1:
- * - Automatic disabling of the counter for main albums so that they don't show "(0)" anymore if you only use subalbums for images
- *
- * 1.2.2:
- * - Change Subalbum CSS-ID "$id2" to CLASS "$class" ((X)HTML Validation issue)
- * - Add htmlspecialchars to the printed album titles, so that validation does not fail because of ampersands in names.
- *
- * 1.2.1:
- * - New option for mod_rewrite (needs to be automatic...),
- * - bug fixes for the id-Tags, which didn't get used.
- *
- * 1.2: Now works with sbillard's album publishing function.
- *
- * 1.1.:
- * - Option for album list or a drop down jump menu if you want to save space
- * - Displays the number of images in the album (like e.g. wordpress does with articles)
- * - Option for disabling the counter
- * - Parameters for CSS-Ids for styling, separate ones for main album and subalbums
- * - Renamed the function name from show_album_menu() to more zp style printAlbumMenu()
- *
  * @author Malte Müller (acrylian)
- * @version 1.4.6.2
+ * @version 1.4.6.3
  * @package plugins
  */
 
 $plugin_description = gettext("Adds a theme function printAlbumMenu() to print an album menu either as a nested list up to 4 sublevels (context sensitive) or as a dropdown menu.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.4.6.2';
+$plugin_version = '1.4.6.3';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---print_album_menu.php.html";
 
 /**
@@ -163,6 +61,11 @@ function printAlbumMenu($option,$option2,$css_id='',$css_class_topactive='',$css
 function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',$css_class='',$css_class_active='', $indexname="Gallery Index", $showsubs=false) {
 	global $_zp_gallery, $_zp_current_album;
 	$albumpath = rewrite_path("/", "/index.php?album=");
+	
+	// if in search mode don't use the foldout contextsensitiveness and show only toplevel albums
+	if(in_context(ZP_SEARCH_LINKED)) {
+		$option = "list-top";
+	}
 	if(!empty($_zp_current_album)) {
 		$currentfolder = $_zp_current_album->name;
 	} else {
@@ -173,6 +76,9 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',
 	if ($css_class_topactive != "") { $css_class_topactive = " class='".$css_class_topactive."'"; }
 	if ($css_class != "") { $css_class = " class='".$css_class."'"; }
 	if ($css_class_active != "") { $css_class_active = " class='".$css_class_active."'"; }
+	
+	
+
 
 	/**** Top level start with Index link  ****/
 	if($option === "list" OR $option === "list-top") {
@@ -293,6 +199,7 @@ function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',
 		if($option === "list" OR $option === "list-top"){
 			echo "</ul>\n";
 		}
+		
 } // function end
 
 
@@ -391,7 +298,7 @@ function createAlbumMenuLink($album,$option2,$css,$albumpath,$mode,$level='') {
 	switch($mode) {
 		case "list":
 
-			if(getAlbumID() == $album->getAlbumID()) {
+			if(getAlbumID() == $album->getAlbumID() AND !in_context(ZP_SEARCH_LINKED)) {
 				$link = "<li".$css.">".$album->getTitle().$count;
 			} else {
 				$link = "<li><a href='".htmlspecialchars($albumpath.pathurlencode($album->name))."' title='".html_encode($album->getTitle())."'>".html_encode($album->getTitle())."</a>".$count;
