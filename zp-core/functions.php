@@ -1193,6 +1193,7 @@ function handleSearchParms($what, $album=NULL, $image=NULL) {
 		}
 		if (!is_null($album)) {
 			$albumname = $album->name;
+			if (hasDyanmicAlbumSuffix($albumname)) $albumname = substr($albumname, 0, -4); // strip off the .alb as it will not be reflected in the search path
 			$albumlist = $_zp_current_search->getAlbums(0);
 			foreach ($albumlist as $searchalbum) {	
 				if (strpos($albumname, $searchalbum) !== false) {

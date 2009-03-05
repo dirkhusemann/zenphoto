@@ -53,18 +53,17 @@ if (isset($_GET['p'])) {
 // Display an Album page.
 } else if (in_context(ZP_ALBUM)) {
 	if ($_zp_current_album->isDynamic()) {
+		// TODO: is there any way to make it so that dynamic albums can fully function in search context?
 		$search = $_zp_current_album->getSearchEngine();
 		$cookiepath = WEBPATH;
 		if (WEBPATH == '') { $cookiepath = '/'; }
 		zp_setcookie("zenphoto_image_search_params", $search->getSearchParams(), 0, $cookiepath);
 		set_context(ZP_INDEX | ZP_ALBUM);
-		$theme = setupTheme();
-		$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/album.php");
 	} else {
 		handleSearchParms('album', $_zp_current_album);
-		$theme = setupTheme();
-		$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/album.php");
 	}
+	$theme = setupTheme();
+	$_zp_gallery_page = basename($obj = THEMEFOLDER."/$theme/album.php");
 	// update hit counter
 	if (!isMyALbum($_zp_current_album->name, ALL_RIGHTS) && getCurrentPage() == 1) {
 		$hc = $_zp_current_album->get('hitcounter')+1;

@@ -1099,34 +1099,33 @@ function printAlbumEditForm($index, $album) {
 		<tr>
 		<td align="left" valign="top"><?php echo gettext("Album theme:"); ?> </td>
 		<td>
-		<select id="album_theme" class="album_theme" name="<?php echo $prefix; ?>album_theme"
-		<?php 
-		if (!($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS))) echo "DISABLED ";
-		?>
-		">
+		<select id="album_theme" class="album_theme" name="<?php echo $prefix; ?>album_theme"	<?php if (!($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS))) echo "DISABLED "; ?>	>
 		<?php 
 		$themes = $gallery->getThemes();
 		$oldtheme = $album->getAlbumTheme();
 		if (empty($oldtheme)) {
-			echo "<option value = \"\" selected=\"SELECTED\" />";
+			$selected = 'SELECTED';
 		} else {
-			echo "<option value = \"\" />";
+			$selected = '';;
 		}
 		?>
-		</option>
+		<option value="" <?php echo $selected; ?> > </option>
 		<?php
 		foreach ($themes as $theme=>$themeinfo) {
-			echo "<option value = \"$theme\"";
 			if ($oldtheme == $theme) {
-				echo "selected = \"SELECTED\"";
+				$selected = 'SELECTED';
+			} else {
+				$selected = '';;
 			}
-			echo "	/>";
-			echo $themeinfo['name'];
-			echo "</option>";
+			?>
+			<option value = "<?php echo $theme; ?>" <?php echo $selected; ?> ><?php echo $themeinfo['name']; ?></option>
+		<?php
 		}
-		echo "\n</select>";
-		echo "\n</td>";
-		echo "\n</tr>";
+		?>
+		</select>
+		</td>
+		</tr>
+	<?php
 	}
   ?>
 	</table>
