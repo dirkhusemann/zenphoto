@@ -419,6 +419,10 @@ if (isset($_GET['action'])) {
 
 }
 printAdminHeader();
+?>
+<script type="text/javascript" src="js/farbtastic.js"></script>
+<link rel="stylesheet" href="js/farbtastic.css" type="text/css" />
+<?php
 $_zp_null_account = (($_zp_loggedin == ADMIN_RIGHTS) || ($_zp_loggedin == NO_RIGHTS));
 $tabs = array(gettext("admin information")=>'admin-options.php?tab=admin');
 if (!$_zp_null_account) {

@@ -267,6 +267,8 @@ zp-core/images/folder.png
 zp-core/images/imageDefault.png
 zp-core/images/lock.png
 zp-core/images/lock_open.png
+zp-core/images/marker.png
+zp-core/images/mask.png
 zp-core/images/movie.jpg
 zp-core/images/page_white_copy.png
 zp-core/images/pass.png
@@ -288,10 +290,13 @@ zp-core/images/togglerch.gif
 zp-core/images/togglero.gif
 zp-core/images/toggleroh.gif
 zp-core/images/warn.png
+zp-core/images/wheel.png
 zp-core/images/zen-logo.gif
 zp-core/index.php
 zp-core/js/admin.js
 zp-core/js/editor_config.js.php
+zp-core/js/farbtastic.css
+zp-core/js/farbtastic.js
 zp-core/js/Jcrop.gif
 zp-core/js/jquery.dimensions.js
 zp-core/js/jquery.editinplace.js
