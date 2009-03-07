@@ -176,6 +176,7 @@ themes/zenpage-default/images/header.jpg
 themes/zenpage-default/images/img-bg.gif
 themes/zenpage-default/images/tag.png
 themes/zenpage-default/index.php
+themes/zenpage-default/indexpage.php
 themes/zenpage-default/news.php
 themes/zenpage-default/pages.php
 themes/zenpage-default/search.php
@@ -1356,9 +1357,6 @@ zp-core/plugins/zenpage/js/inestedsortable.js
 zp-core/plugins/zenpage/js/interface-1.2.js
 zp-core/plugins/zenpage/js/jquery.textarearesizer.compressed.js
 zp-core/plugins/zenpage/js/thickbox.js
-zp-core/plugins/zenpage/setup.css
-zp-core/plugins/zenpage/setup.php
-zp-core/plugins/zenpage/setup_db.php
 zp-core/plugins/zenpage/texteditorconfig.php
 zp-core/plugins/zenpage/thickbox-mod.css
 zp-core/plugins/zenpage/zenpage-admin-functions.php

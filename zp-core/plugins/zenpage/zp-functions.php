@@ -9,7 +9,7 @@
 define("OFFSET_PATH",4); 
 include('../../admin-functions.php');
 if (getOption('zenpage_release') != ZENPHOTO_RELEASE) {
-	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . "zenpage/setup.php?admin");
+	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
 	exit();
 }
 include ("zenpage-admin-functions.php");

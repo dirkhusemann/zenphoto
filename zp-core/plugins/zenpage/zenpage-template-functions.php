@@ -148,35 +148,6 @@ function is_Pages() {
 }
 
 /**
- * Checks if we are on the theme's index and if an unpublished Zenpage page is set as homepage with the "zenpage_homepage" option 
- * Returns true or false.
- *
- * @return bool
- */
-function is_Homepage() {
-	global $_zp_gallery_page;
-	if(getOption("zenpage_homepage") != "none" AND $_zp_gallery_page == "index.php") {
-		return TRUE;
-	} else {
-		return FALSE;
-	}
-}
-
-
-/**
- * Loads pages.php and sets up the pages $_zp_current_zenpage_page (via zenpage_load_page()) if the homepage option is set..
- * To be used on top of index.php
- */
-function use_Homepage() {
-	global $_zp_gallery_page, $_zp_current_album, $_zp_themeroot;
-	if(is_Homepage()) {
-		$themedir = SERVERPATH . "/themes/".basename($_zp_themeroot);
-		zenpage_load_page(getOption("zenpage_homepage"));
-		require($themedir."/".ZENPAGE_PAGES.".php");
-		exit;
-	}
-}
-/**
  * Gets the news type of a news item. 
  * "news" for a news article or if using the CombiNews feature
  * "flvmovie" (for flv, mp3 and mp4), "image", "3gpmovie" or "quicktime"
@@ -1901,7 +1872,7 @@ function printCodeblock($number='',$titlelink='') {
  */
 function getPageTitle() {
 	global $_zp_current_zenpage_page;
-	if (is_Pages() OR is_Homepage()) {
+	if (is_Pages()) {
 		return $_zp_current_zenpage_page->getTitle();
 	} 
 }
@@ -1932,7 +1903,7 @@ function getBarePageTitle() {
  */
 function getPageTitleLink() {
 	global $_zp_current_zenpage_page;
-	if(is_Pages() OR is_Homepage()) {
+	if(is_Pages()) {
 		return $_zp_current_zenpage_page->getTitlelink();
 	}
 }
@@ -1955,7 +1926,7 @@ function printPageTitleLink() {
  */
 function getPageID() {
 	global $_zp_current_zenpage_page;
-	if (is_Pages() OR is_Homepage()) {
+	if (is_Pages()) {
 		return $_zp_current_zenpage_page->getID();
 	}
 }
@@ -1978,7 +1949,7 @@ function printPageID() {
  */
 function getPageParentID() {
 	global $_zp_current_zenpage_page;
-	if (is_Pages() OR is_Homepage()) {
+	if (is_Pages()) {
 		return $_zp_current_zenpage_page->getParentid();
 	}
 }
@@ -1991,7 +1962,7 @@ function getPageParentID() {
  */
 function getPageDate() {
 	global $_zp_current_zenpage_page;
-	if (is_Pages() OR is_Homepage()) {
+	if (is_Pages()) {
 		$d = $_zp_current_zenpage_page->getDatetime();
 	}
 	return zpFormattedDate(getOption('date_format'),strtotime($d)); 
@@ -2015,7 +1986,7 @@ function printPageDate() {
  */
 function getPageLastChangeDate() {
 	global $_zp_current_zenpage_page;
-	if (is_Pages() OR is_Homepage()) {
+	if (is_Pages()) {
 		$d = $_zp_current_zenpage_page->getLastchange();
 	}
 	if(!empty($d)) {
@@ -2046,7 +2017,7 @@ function printPageLastChangeDate() {
  */
 function getPageContent($titlelink='',$published=true) {
 	global $_zp_current_zenpage_page;
-	if ((is_Pages() OR is_Homepage()) AND empty($titlelink)) {
+	if (is_Pages() AND empty($titlelink)) {
 		return $_zp_current_zenpage_page->getContent();
 	} 
 	// print content of a page directly on a normal zenphoto theme page or any other page for example
@@ -2084,7 +2055,7 @@ function printPageContent($titlelink='',$published=true) {
  */
 function getPageExtraContent($titlelink='',$published=true) {
 	global $_zp_current_zenpage_page;
-	if ((is_Pages() OR is_Homepage()) AND empty($titlelink)) {
+	if (is_Pages() AND empty($titlelink)) {
 		return $_zp_current_zenpage_page->getExtracontent();
 	} 
 	// print content of a page directly on a normal zenphoto theme page for example
@@ -2121,7 +2092,7 @@ function printPageExtraContent($titlelink='',$published=true) {
  * @return string
  */
 function getPageAuthor($fullname=false) {
-	if(is_Pages() OR is_Homepage()) {
+	if(is_Pages()) {
 		return getAuthor($fullname);
 	}
 }
@@ -2147,7 +2118,7 @@ function printPageAuthor($fullname=false) {
  */
 function getPageSortorder() {
 	global  $_zp_current_zenpage_page;
-	if (is_Pages() OR is_Homepage()) {
+	if (is_Pages()) {
 		return $_zp_current_zenpage_page->getSortOrder();
 	}
 }
@@ -2281,11 +2252,7 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 		$published = TRUE;
 	}
 	$pages = getPages($published);
-	if(is_Homepage()) {
-		$currentpageorder = "0";
-	} else {
-		$currentpageorder = getPageSortorder();
-	}
+	$currentpageorder = getPageSortorder();
 	$currentlevel = explode("-", $currentpageorder);
 	if($option === "list" OR $option === "list-top") { 
 		echo "<ul $css_id>\n";

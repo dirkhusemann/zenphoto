@@ -1097,22 +1097,7 @@ if (file_exists("zp-config.php")) {
 	 Add new fields in the upgrade section. This section should remain static except for new
 	 tables. This tactic keeps all changes in one place so that noting gets accidentaly omitted.
 	************************************************************************************/
-	
-	/****************************************************************************************
-	 ******                       ZENPAGE TABLE SETUP                                  ******
-	 ****************************************************************************************/
-	if (getOption('zp_plugin_zenpage')) {  // option will not be set on first-time install
-		include(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . 'zenpage/setup_db.php');
-		foreach ($db_schema as $key=>$sql) {
-			$i = strpos($sql, '`');
-			$j = strpos($sql, '`', $i+1);
-			$db = substr($sql, $i+1, $j - $i);
-			if (!isset($create[$db])) {
-				unset($db_schema[$key]);
-			}
-		}
-	}
-	
+
 	//v1.2
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'captcha'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_captcha (
@@ -1262,6 +1247,74 @@ if (file_exists("zp-config.php")) {
 		$db_schema[] = "ALTER TABLE $tbl_images ".
 			"ADD CONSTRAINT $cst_images FOREIGN KEY (`albumid`) REFERENCES $tbl_albums (`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
 	}
+	
+	//v1.2.4
+	if (isset($create[$_zp_conf_vars['mysql_prefix'].'zenpage_news'])) {
+		$db_schema[] = "CREATE TABLE IF NOT EXISTS ".prefix('zenpage_news')." (
+		`id` int(11) unsigned NOT NULL auto_increment,
+		`title` text NOT NULL,
+		`content` text,
+		`extracontent` text,
+		`show` int(1) unsigned NOT NULL default '1',
+		`date` datetime,
+		`titlelink` varchar(255) NOT NULL default '',
+		`commentson` int(11) unsigned NOT NULL,
+		`codeblock` text,
+		`author` varchar(64) NOT NULL,
+		`lastchange` datetime default NULL,
+		`lastchangeauthor` varchar(64) NOT NULL,
+		`hitcounter` int(11) unsigned default 0,
+		`permalink` int(1) unsigned NOT NULL default 0,
+		`locked` int(1) unsigned NOT NULL default 0,
+		PRIMARY KEY  (`id`),
+		UNIQUE (`titlelink`)
+		) $collation;";
+	}
+
+	if (isset($create[$_zp_conf_vars['mysql_prefix'].'zenpage_news_categories'])) {
+		$db_schema[] = "CREATE TABLE IF NOT EXISTS ".prefix('zenpage_news_categories')." (
+		`id` int(11) unsigned NOT NULL auto_increment,
+		`cat_name` text NOT NULL,
+		`cat_link` varchar(255) NOT NULL default '',
+		`permalink` int(1) unsigned NOT NULL default 0,
+		`hitcounter` int(11) unsigned default 0,
+		PRIMARY KEY  (`id`),
+		UNIQUE (`cat_link`)
+		) $collation;";
+	}
+
+	if (isset($create[$_zp_conf_vars['mysql_prefix'].'zenpage_news2cat'])) {
+		$db_schema[] = "CREATE TABLE IF NOT EXISTS ".prefix('zenpage_news2cat')." (
+		`id` int(11) unsigned NOT NULL auto_increment,
+		`cat_id` int(11) unsigned NOT NULL,
+		`news_id` int(11) unsigned NOT NULL,
+		PRIMARY KEY  (`id`)
+		) $collation;";
+	}
+	
+	if (isset($create[$_zp_conf_vars['mysql_prefix'].'zenpage_pages'])) {
+		$db_schema[] = "CREATE TABLE IF NOT EXISTS ".prefix('zenpage_pages')." (
+		`id` int(11) unsigned NOT NULL auto_increment,
+		`parentid` int(11) unsigned default NULL,
+		`title` text NOT NULL,
+		`content` text,
+		`extracontent` text,
+		`sort_order`varchar(20) NOT NULL default '',
+		`show` int(1) unsigned NOT NULL default '1',
+		`titlelink` varchar(255) NOT NULL default '',
+		`commentson` int(11) unsigned NOT NULL,
+		`codeblock` text,
+		`author` varchar(64) NOT NULL,
+		`date` datetime default NULL,
+		`lastchange` datetime default NULL,
+		`lastchangeauthor` varchar(64) NOT NULL,
+		`hitcounter` int(11) unsigned default 0,
+		`permalink` int(1) unsigned NOT NULL default 0,
+		`locked` int(1) unsigned NOT NULL default 0,
+		PRIMARY KEY  (`id`),
+		UNIQUE (`titlelink`)
+		) $collation;";
+	}
 
 	/****************************************************************************************
 	 ******                             UPGRADE SECTION                                ******
@@ -1403,7 +1456,14 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `thumbW` int(10) UNSIGNED default NULL;";
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `thumbH` int(10) UNSIGNED default NULL;";
 	
-
+	//v1.2.4
+	$sql_statements[] = 'ALTER TABLE '.prefix('zenpage_news_categories').' DROP INDEX `cat_link`;';
+	$sql_statements[] = 'ALTER TABLE '.prefix('zenpage_news_categories').' ADD UNIQUE (`cat_link`);';
+	$sql_statements[] = 'ALTER TABLE '.prefix('zenpage_news').' DROP INDEX `titlelink`;';
+	$sql_statements[] = 'ALTER TABLE '.prefix('zenpage_news').' ADD UNIQUE (`titlelink`);';
+	$sql_statements[] = 'ALTER TABLE '.prefix('zenpage_pages').' DROP INDEX `titlelink`;';
+	$sql_statements[] = 'ALTER TABLE '.prefix('zenpage_pages').' ADD UNIQUE (`titlelink`);';
+	
 	/**************************************************************************************
 	 ******                            END of UPGRADE SECTION     
 	 ******                                                              
