@@ -83,7 +83,7 @@ class google_mapsOptions {
 																	'desc' => gettext('Use buttons or list for the map type selector.')),
 									gettext('Map controls') => array('key' => 'gmaps_control', 'type' => 4,'buttons' => array(gettext('None') => 'None',gettext('Small') => 'Small',gettext('Large') => 'Large'),
 																	'desc' => gettext('Select the kind of map controls.')),
-									gettext('Map background') => array('key' => 'gmaps_background', 'type' => 2,
+									gettext('Map background') => array('key' => 'gmaps_background', 'type' => 8,
 																	'desc' => gettext('Set the map background color to match the one of your theme. (Use the same <em>color</em> values as in your CSS background statements.)')),
 									gettext('Initial map display selection') => array('key' => 'gmaps_starting_map', 'type' => 5, 'selections' => $MapTypes,
 																	'desc' => gettext('Select the initial type of map to display. <br /><strong>Note:</strong> If <code>Google Earth</code> is selected the <em>toggle</em> function which initially hides the map is ignored. The browser <em>Google Earth Plugin</em> does not initialize properly when the map is hidden.'))
@@ -91,17 +91,6 @@ class google_mapsOptions {
 	}
 
 	function handleOption($option, $currentValue) {
-		if($option=='gmaps_background'){
-			?>
-			<script type="text/javascript">
-		  	$(document).ready(function() {
-		    	$('#colorpicker').farbtastic('#color');
-		  	});
-			</script>
-			<div id="colorpicker"></div>
-			<input type="text" id="color" name="gmaps_background"	value="<?php echo $currentValue; ?>" />
-			<?php
-		}
 	}
 }
 

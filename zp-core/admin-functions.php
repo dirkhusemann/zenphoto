@@ -617,6 +617,7 @@ define ('CUSTOM_OPTION_PREFIX', '_ZP_CUSTOM_');
  * 		5: selector (selection list is in the 'selections' index of the supported options array)
  * 		6: checkbox array (checkboxed list is in the 'checkboxes' index of the suppoprted options array.)
  * 		7: checkbox UL (checkboxed list is in the 'checkboxes' index of the suppoprted options array.)
+ * 		8: Color picker
  *
  * type 0 and 3 support multi-lingual strings.
  */
@@ -726,6 +727,20 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 					echo '<ul class="customchecklist">'."\n";
 					generateUnorderedListFromArray($row['currentvalues'], $row['checkboxes'], '', '', true, true);
 					echo '</ul>';
+					echo "</td>\n";
+					break;
+				case 8: // Color picker
+					echo '<td width="350px">' . "\n";
+					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'text-'.$key.'" value=0 />' . "\n";
+					?>
+					<script type="text/javascript">
+				  	$(document).ready(function() {
+				    	$('#<?php echo $key; ?>_colorpicker').farbtastic('#<?php echo $key; ?>_color');
+				  	});
+					</script>
+					<div id="<?php echo $key; ?>_colorpicker"></div>
+					<input type="text" id="<?php echo $key; ?>_color" name="<?php echo $key; ?>"	value="<?php echo $v; ?>" />
+					<?php
 					echo "</td>\n";
 					break;
 			}
