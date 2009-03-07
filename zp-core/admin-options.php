@@ -1310,17 +1310,24 @@ if ($subtab == 'admin') {
 		<tr>
 			<td><?php echo gettext("Sharpen:"); ?></td>
 			<td>
-				<input type="checkbox" name="image_sharpen" value="1"
-				<?php echo checked('1', getOption('image_sharpen')); ?> /> Images
-				<input type="checkbox" name="thumb_sharpen" value="1"
-				<?php echo checked('1', getOption('thumb_sharpen')); ?> /> Thumbs
-				<br />
-				<br /><?php echo gettext('Amount'); ?>
-				<input type="text" name = "sharpen_amount" size="3" value="<?php echo getOption('sharpen_amount'); ?>" />
-				<br /><?php echo gettext('Radius'); ?>
-				<input type="text" name = "sharpen_radius" size="2" value="<?php echo getOption('sharpen_radius'); ?>" />
-				<br /><?php echo gettext('Threshold'); ?>
-				<input type="text" name = "sharpen_threshold" size="3" value="<?php echo getOption('sharpen_threshold'); ?>" />
+					<input type="checkbox" name="image_sharpen" value="1"
+					<?php echo checked('1', getOption('image_sharpen')); ?> /> Images
+					<input type="checkbox" name="thumb_sharpen" value="1"
+					<?php echo checked('1', getOption('thumb_sharpen')); ?> /> Thumbs
+				<table>
+					<tr>
+						<td style="margin:0; padding:0"><?php echo gettext('Amount'); ?></td>
+						<td style="margin:0; padding:0"><input type="text" name = "sharpen_amount" size="3" value="<?php echo getOption('sharpen_amount'); ?>" /></td>
+					</tr>
+					<tr>
+						<td style="margin:0; padding:0"><?php echo gettext('Radius'); ?></td>
+						<td style="margin:0; padding:0"><input type="text" name = "sharpen_radius" size="2" value="<?php echo getOption('sharpen_radius'); ?>" /></td>
+					</tr>
+					<tr>
+						<td style="margin:0; padding:0"><?php echo gettext('Threshold'); ?></td>
+						<td style="margin:0; padding:0"><input type="text" name = "sharpen_threshold" size="3" value="<?php echo getOption('sharpen_threshold'); ?>" /></td>
+					</tr>
+					</table>
 			</td>
 			<td>
 				<?php
@@ -1383,8 +1390,8 @@ if ($subtab == 'admin') {
 					$current = getOption($opt);
 					?>
 					<tr>
-						<td><?php	echo "$plugin";	?></td>
-						<td>
+						<td style="margin:0; padding:0"><?php	echo "$plugin";	?></td>
+						<td style="margin:0; padding:0">
 							<select id="<?php echo $opt; ?>" name="<?php echo $opt; ?>">
 							<option value="" <?php if (empty($current)) echo ' selected="SELECTED"' ?>>none</option>
 							<?php generateListFromFiles($current, SERVERPATH . "/" . ZENFOLDER . '/watermarks' , '.png'); ?>
@@ -1412,7 +1419,7 @@ if ($subtab == 'admin') {
 		</tr>
 		<tr>
 			<td><?php echo gettext("Full image protection:"); ?></td>
-			<td>
+			<td style="margin:0">
 				<?php
 				echo "<select id=\"protect_full_image\" name=\"protect_full_image\">\n";
 				$protection = getOption('protect_full_image');
@@ -1432,23 +1439,23 @@ if ($subtab == 'admin') {
 				</p>
 				<table class="compact">
 					<tr >
-						<td><?php echo gettext("user:"); ?>    </td>
-						<td><input type="text" size="<?php echo 30; ?>" name="protected_image_user" value="<?php echo htmlspecialchars(getOption('protected_image_user')); ?>" />		</td>
+						<td style="margin:0; padding:0"><?php echo gettext("user:"); ?></td>
+						<td style="margin:0; padding:0"><input type="text" size="<?php echo 30; ?>" name="protected_image_user" value="<?php echo htmlspecialchars(getOption('protected_image_user')); ?>" />		</td>
 					</tr>
 					<tr>
-						<td>
+						<td style="margin:0; padding:0">
 						<?php echo gettext("password:"); ?><br />
 						&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?>
 						</td>
-						<td>
+						<td style="margin:0; padding:0">
 						<?php $x = getOption('protected_image_password'); if (!empty($x)) { $x = '          '; } ?>
 						<input type="password" size="<?php echo 30; ?>" name="imagepass" value="<?php echo $x; ?>" /><br />
 						<input type="password" size="<?php echo 30; ?>" name="imagepass_2" value="<?php echo $x; ?>" />
 						</td>
 					</tr>
 					<tr>
-						<td><?php echo gettext("hint:"); ?></td>
-						<td>
+						<td style="margin:0; padding:0"><?php echo gettext("hint:"); ?></td>
+						<td style="margin:0; padding:0">
 						<?php print_language_string_list(getOption('protected_image_hint'), 'protected_image_hint', false, NULL, '', true) ?>
 						</td>
 					</tr>
@@ -1703,16 +1710,16 @@ if ($subtab == 'admin') {
 					<?php $side = getOption('image_use_side'); ?>
 					<table>
 						<tr>
-							<td rowspan="2">
+							<td rowspan="2" style="margin:0; padding:0">
 								<input type="text" size="<?php echo 5; ?>" name="image_size" value="<?php echo getThemeOption($album, 'image_size');?>" />
 							</td>
-							<td>
+							<td style="margin:0; padding:0">
 							<input type="radio" id="image_use_side" name="image_use_side" value="height" <?php if ($side=='height') echo " CHECKED"?> /> <?php echo gettext('height') ?>
 							<input type="radio" id="image_use_side" name="image_use_side" value="width" <?php if ($side=='width') echo " CHECKED"?> /> <?php echo gettext('width') ?>
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<td style="margin:0; padding:0">
 							<input type="radio" id="image_use_side" name="image_use_side" value="shortest" <?php if ($side=='shortest') echo " CHECKED"?> /> <?php echo gettext('shortest side') ?>
 							<input type="radio" id="image_use_side" name="image_use_side" value="longest" <?php if ($side=='longest') echo " CHECKED"?> /> <?php echo gettext('longest side') ?>
 							</td>
@@ -1751,26 +1758,37 @@ if ($subtab == 'admin') {
 			<tr>
 				<td><?php echo gettext("User registration page:"); ?></td>
 				<td>
-					<select id="user_registration_page" name="user_registration_page">
-						<option value=''>
-						<?php
-						$curdir = getcwd();
-						$root = SERVERPATH.'/'.THEMEFOLDER.'/'.$themename.'/';
-						chdir($root);
-						$filelist = safe_glob('*.php');
-						$list = array();
-						foreach($filelist as $file) {
-							$list[] = str_replace('.php', '', FilesystemToUTF8($file));
-						}
-						$list = array_diff($list, array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions', ZENPAGE_NEWS, ZENPAGE_PAGES));
-						generateListFromArray(array(getThemeOption($album, 'user_registration_page')), $list, false, false);
-						chdir($curdir);
-						?>
-					</select>
-					<br />
-					<?php echo gettext('Link text').' '; print_language_string_list(getThemeOption($album, 'user_registration_text'), 'user_registration_text'); ?>
-					<br />
-					<?php echo gettext('Hint text').' '; print_language_string_list(getThemeOption($album, 'user_registration_tip'), 'user_registration_tip'); ?>
+					<table>
+						<tr>
+							<td style="margin:0; padding:0"><?php echo gettext('script'); ?></td>
+							<td style="margin:0; padding:0"> 
+								<select id="user_registration_page" name="user_registration_page">
+									<option value=''>
+									<?php
+									$curdir = getcwd();
+									$root = SERVERPATH.'/'.THEMEFOLDER.'/'.$themename.'/';
+									chdir($root);
+									$filelist = safe_glob('*.php');
+									$list = array();
+									foreach($filelist as $file) {
+										$list[] = str_replace('.php', '', FilesystemToUTF8($file));
+									}
+									$list = array_diff($list, array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions', ZENPAGE_NEWS, ZENPAGE_PAGES));
+									generateListFromArray(array(getThemeOption($album, 'user_registration_page')), $list, false, false);
+									chdir($curdir);
+									?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td style="margin:0; padding:0"><?php echo gettext('Link text'); ?></td>
+							<td style="margin:0; padding:0"><?php print_language_string_list(getThemeOption($album, 'user_registration_text'), 'user_registration_text', false, NULL, '', true); ?></td>
+						</tr>
+						<tr>
+							<td style="margin:0; padding:0"><?php echo gettext('Hint text'); ?></td>
+							<td style="margin:0; padding:0"><?php print_language_string_list(getThemeOption($album, 'user_registration_tip'), 'user_registration_tip', false, NULL, '', true); ?></td>
+						</tr>
+					</table>
 				</td>
 				<td><?php echo gettext("If this option is not empty, the visitor login form will include a link to this page. The link text will be labeled with the text provided."); ?></td>
 			</tr>
