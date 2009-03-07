@@ -1324,10 +1324,10 @@ function getPasswordProtectImage($extra) {
 	$themedir = SERVERPATH . "/themes/".basename($_zp_themeroot);
 	$imagebase = $themedir."/images/err-passwordprotected.gif";
 	if (file_exists(UTF8ToFilesystem($imagebase))) {
-		return "<img src=\"".$image." ".$extra." />";
+		return '<img src="'.$image.'" '.$extra.' />';
 	} else {
-		return "<img src=\"". WEBPATH . '/' . ZENFOLDER."/images/err-passwordprotected.gif\" ".
-						$extra."\" />";
+		return '<img src="'. WEBPATH . '/' . ZENFOLDER.'/images/err-passwordprotected.gif" '.
+						$extra.' />';
 	}
 }
 
@@ -1350,10 +1350,25 @@ function printAlbumThumbImage($alt, $class=NULL, $id=NULL) {
 	}
 	$class = trim($class);
 	if (!getOption('use_lock_image') || checkAlbumPassword($_zp_current_album->name, $hint)) {
-		echo "<img src=\"" . htmlspecialchars(getAlbumThumb()) . "\" alt=\"" . html_encode($alt) . "\"" .
-		(($class) ? " class=\"$class\"" : "") . (($id) ? " id=\"$id\"" : "") . " />";
+		echo '<img src="' . htmlspecialchars(getAlbumThumb()) . '" alt="' . html_encode($alt) . '"' .
+		(($class) ? ' class="'.$class.'"' : '') . (($id) ? ' id="'.$id.'"' : '') . ' />';
 	} else {
-		echo getPasswordProtectImage("\" width=\"".getOption('thumb_crop_width')."\"");
+		if (getOption('thumb_crop')) {
+			$s = getOption('thumb_size');
+			$w = getOption('thumb_crop_width');
+			$h = getOption('thumb_crop_height');
+			if ($w > $h) {
+				$h = round($h * $s/$w);
+				$w = $s;
+			} else {
+				$w = round($w * $s/$w);
+				$h = $s;
+			}
+			$size = 'width="'.$w.'" height="'.$h.'"';
+		} else {
+			$size = '';
+		}
+		echo getPasswordProtectImage($size);
 	}
 }
 
@@ -1414,8 +1429,8 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 		$sizing = $sizing . ' height="' . $sizeH . '"';
 	}
 	if (!getOption('use_lock_image') || checkAlbumPassword($_zp_current_album->name, $hint)){
-		echo "<img src=\"" . htmlspecialchars(getCustomAlbumThumb($size, $width, $height, $cropw, $croph, $cropx, $cropy)). "\"" . $sizing . " alt=\"" . html_encode($alt) . "\"" .
-		(($class) ? " class=\"$class\"" : "") .	(($id) ? " id=\"$id\"" : "") . " />";
+		echo '<img src="' . htmlspecialchars(getCustomAlbumThumb($size, $width, $height, $cropw, $croph, $cropx, $cropy)). '"' . $sizing . ' alt="' . html_encode($alt) . '"' .
+		(($class) ? ' class="'.$class.'"' : '') .	(($id) ? ' id="'.$id.'"' : '') . " />";
 	} else {
 		echo getPasswordProtectImage($sizing);
 	}
