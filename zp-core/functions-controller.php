@@ -469,21 +469,25 @@ function zp_load_image($folder, $filename) {
 
 /**
  * Loads a zenpage pages page
- * Sets up $_zp_current_page and returns it as the function result.
- *
+ * Sets up $_zp_current_zenpage_page and returns it as the function result.
+ * @param $titlelink the titlelink of a zenpage page to setup a page object directly. Meant to be used only for the zenpage homepage feature.
  * @return object
  */
-function zenpage_load_page() {
+function zenpage_load_page($titlelink="") {
 	global $_zp_current_zenpage_page;
-	$_zp_current_zenpage_page = NULL;
-	if(is_Pages()) {
-		$titlelink = sanitize($_GET['title']);
-		$sql = 'SELECT `id` FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.$titlelink.'"';
-		$result = query_single_row($sql);
-		if (is_array($result)) {
-			$_zp_current_zenpage_page = new ZenpagePage($titlelink);
-		} else {
-			$_GET['p'] = strtoupper(ZENPAGE_PAGES).':'.$titlelink;
+	if(!empty($titlelink) AND is_Homepage()) {
+		$_zp_current_zenpage_page = new ZenpagePage($titlelink);
+	} else { 
+		$_zp_current_zenpage_page = NULL;
+		if(is_Pages()) {
+			$titlelink = sanitize($_GET['title']);
+			$sql = 'SELECT `id` FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.$titlelink.'"';
+			$result = query_single_row($sql);
+			if (is_array($result)) {
+				$_zp_current_zenpage_page = new ZenpagePage($titlelink);
+			} else {
+				$_GET['p'] = strtoupper(ZENPAGE_PAGES).':'.$titlelink;
+			}
 		}
 	}
 	return $_zp_current_zenpage_page;

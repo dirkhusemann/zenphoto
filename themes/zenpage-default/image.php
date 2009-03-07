@@ -48,11 +48,19 @@
 	<!-- The Image -->
 	<?php if (!checkForPassword()) { ?>
 	
- <?php if(function_exists("printPagedThumbsNav")) { printPagedThumbsNav(6, FALSE, gettext('&laquo; prev thumbs'), gettext('next thumbs &raquo;'), 40, 40, 40, TRUE); } ?>
+ <?php 
+ if(function_exists("printPagedThumbsNav")) { 
+ 		printPagedThumbsNav(6, FALSE, gettext('&laquo; prev thumbs'), gettext('next thumbs &raquo;'), 40, 40, 40, TRUE); 
+ } ?>
 	
 	<div id="image">
-		
-		<a href="<?php echo htmlspecialchars(getUnprotectedImageURL());?>" class="thickbox" title="<?php echo getBareImageTitle();?>">
+		<?php if(getOption("Use_thickbox")) {
+			$thickboxclass = " class=\"thickbox\"";
+		} else {
+			$thickboxclass = "";
+		}
+		?>
+		<a href="<?php echo htmlspecialchars(getUnprotectedImageURL()); ?>"<?php echo $thickboxclass; ?> title="<?php echo getBareImageTitle();?>">
 		<?php printCustomSizedImageMaxSpace(getBareImageTitle(),580,580); ?>
    </a>
 	</div>
@@ -62,7 +70,7 @@
 		<?php if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow')); ?>
 		<br />
 		<?php
-			if (getImageEXIFData()) {echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=345&amp;width=300&amp;inlineId=imagemetadata\" title=\"".gettext("Image Info")."\" class=\"thickbox\">".gettext("Image Info")."</a></div>";
+			if (getImageEXIFData()) { echo "<div id=\"exif_link\"><a href=\"#TB_inline?height=345&amp;width=300&amp;inlineId=imagemetadata\" title=\"".gettext("Image Info")."\" class=\"thickbox\">".gettext("Image Info")."</a></div>";
 				printImageMetadata('', false);
 			}
 		?>

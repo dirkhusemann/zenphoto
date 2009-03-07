@@ -36,6 +36,7 @@ class zenpagecms {
 		setOptionDefault('zenpage_combinews_imagesize', '300');
 		setOptionDefault('zenpage_combinews_sortorder', 'mtime');
 		setOptionDefault('zenpage_combinews_gallerylink', 'image');
+		setOptionDefault('zenpage_homepage', 'none');
 	}
 
 	function getOptionsSupported() {
@@ -54,7 +55,7 @@ class zenpagecms {
 		gettext('News articles per page (admin)') => array('key' => 'zenpage_admin_articles', 'type' => 0,
 										'desc' => gettext("How many news articles you want to show per page on the news article admin page.")),
 		gettext('News on Zenphoto index') => array('key' => 'zenpage_zp_index_news', 'type' => 1,
-										'desc' => gettext("Enable this if you want to show the news section's first page on Zenphoto's theme index.php. <strong>NOTE:</strong> You maybe have to modify your index.php page manually to use this. If using the Zenpage default theme this disables the top level album list. Visit the Zenpage site for details (link to be inserted).")),
+										'desc' => gettext("Enable this if you want to show the news section's first page on Zenphoto's theme index.php. <strong>NOTE:</strong> Your theme must be setup to use this feature. If using the Zenpage default theme this disables the top level album list. Visit the theming tutorial for details.")),
 		gettext('News page name') => array('key' => 'zenpage_news_page', 'type' => 0,
 										'desc' => gettext("If you want to rename the theme page <em>news.php</em> that is used to display news, you need to enter the new name here. <strong>NOTE: </strong>If you use mod_rewrite you need to modify your <em>.htaccess</em> file manually, too!")),
 		gettext('Pages page name') => array('key' => 'zenpage_pages_page', 'type' => 0,
@@ -76,12 +77,40 @@ class zenpagecms {
 		gettext('CombiNews: Gallery link') => array('key' => 'zenpage_combinews_gallerylink', 'type' => 5,
 										'selections' => array(gettext('image') => "image", gettext('album') => "album"),
 										'desc' => gettext("Choose if you want to link from the image entry it's image page directly or to the album page (if CombiNews mode is set for albums the link is automatically only linking to albums). This affects all links of the entry (<em>title</em>, <em>image</em> and the <em>visit gallery link</em>")),
+		gettext('Homepage') => array('key' => 'zenpage_homepage', 'type' => 2,
+										'desc' => gettext("Choose here any <em>unpublished Zenpage page</em> (listed by <em>titlelink</em>) to act as your site's homepage instead the normal gallery index. <strong>Note:</strong> This of course overrides the <em>News on index</em> option and your theme must be setup for this feature. Visit the theming tutorial for details.!")),
 		);
 	}
 
 	function handleOption($option, $currentValue) {
+		if($option == "zenpage_homepage") {
+			$unpublishedpages = query_full_array("SELECT titlelink FROM ".prefix('zenpage_pages')." WHERE `show` != 1 ORDER by `sort_order`");
+			if(empty($unpublishedpages)) {
+				echo gettext("No unpublished pages available");
+				// clear option if no unpublished pages are available or have been published meanwhile
+				// so that the normal gallery index appears and no page is accidentally set if set to unpublished again.
+				setOption("zenpage_homepage", "none", true); 
+			} else {
+				echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'selector-zenpage_homepage" value=0 />' . "\n";
+				echo '<select id="'.$option.'" name="zenpage_homepage">'."\n";
+				if($currentValue === "none") {
+					$selected = " selected = 'selected'";
+				} else {
+					$selected = "";
+				}
+				echo "<option$selected>".gettext("none")."</option>";
+				foreach($unpublishedpages as $page) {
+					if($currentValue === $page["titlelink"]) {
+						$selected = " selected = 'selected'";
+					} else {
+						$selected = "";
+					}
+					echo "<option$selected>".$page["titlelink"]."</option>";
+				}
+				echo "</select>\n";
+			}
+		}
 	}
-
 }
 
 

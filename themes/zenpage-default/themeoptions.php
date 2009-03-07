@@ -28,11 +28,13 @@ class ThemeOptions {
 	function ThemeOptions() {
 		setOptionDefault('Allow_comments', true);
 		setOptionDefault('Allow_search', true);
+		setOptionDefault('Use_thickbox', true);
 	}
 	
 	function getOptionsSupported() {
 		return array(	gettext('Allow comments') => array('key' => 'Allow_comments', 'type' => 1, 'desc' => gettext('Check to enable comment section for images.')),
-									gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Check to enable search form.'))
+									gettext('Allow search') => array('key' => 'Allow_search', 'type' => 1, 'desc' => gettext('Check to enable search form.')),
+									gettext('Use Thickbox') => array('key' => 'Use_thickbox', 'type' => 1, 'desc' => gettext('Check to display of the full size image with Thickbox.'))
 								);
 	}
 

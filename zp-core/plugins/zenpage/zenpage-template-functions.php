@@ -55,25 +55,187 @@ function zenpage404($type, $obj) {
 	exit;
 }
 
-	
+
 /**
-	 * Returns if the current page is $page (examples: isPage("news") or isPage("pages"))
-	 *
-	 * @param string $page The name of the page to check for
-	 * @return bool
-	 */
-	function isPage($page) {
-		if(isset($_GET['p'])) {
-			$currentpagetype = $_GET["p"];
-		} else {
-			$currentpagetype = NULL;
-		}
-		if($currentpagetype === $page) {
-			return TRUE;
-		} else {
-			return FALSE;
-		}
+ * Returns if the current page is $page (examples: isPage("news") or isPage("pages"))
+ *
+ * @param string $page The name of the page to check for
+ * @return bool
+ */
+function isPage($page) {
+	if(isset($_GET['p'])) {
+		$currentpagetype = $_GET["p"];
+	} else {
+		$currentpagetype = NULL;
 	}
+	if($currentpagetype === $page) {
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+
+
+/**
+ * Checks if the current page is a news or single news article page.
+ *
+ * @return bool
+ */
+function is_News() {
+	global $_zp_gallery_page;
+	if (isPage(ZENPAGE_NEWS) OR (getOption('zenpage_zp_index_news') AND $_zp_gallery_page == "index.php")) {
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+
+
+/**
+ * Checks if the current page is a single news article page
+ *
+ * @return bool
+ */
+function is_NewsArticle() {
+	if (isPage(ZENPAGE_NEWS) AND isset($_GET['title'])) {
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+
+
+/**
+ * Checks if the current page is a news category page
+ *
+ * @return bool
+ */
+function is_NewsCategory() {
+	if (isPage(ZENPAGE_NEWS) AND isset($_GET['category'])) {
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+
+
+/**
+ * Checks if the current page is a news archive page
+ *
+ * @return bool
+ */
+function is_NewsArchive() {
+	if (isPage(ZENPAGE_NEWS) AND isset($_GET['date'])) {
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+
+
+
+/**
+ * Checks if the current page is a zenpage page
+ *
+ * @return bool
+ */
+function is_Pages() {
+	if (isPage(ZENPAGE_PAGES) AND isset($_GET['title'])) {
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+
+/**
+ * Checks if we are on the theme's index and if an unpublished Zenpage page is set as homepage with the "zenpage_homepage" option 
+ * Returns true or false.
+ *
+ * @return bool
+ */
+function is_Homepage() {
+	global $_zp_gallery_page;
+	if(getOption("zenpage_homepage") != "none" AND $_zp_gallery_page == "index.php") {
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+
+
+/**
+ * Loads pages.php and sets up the pages $_zp_current_zenpage_page (via zenpage_load_page()) if the homepage option is set..
+ * To be used on top of index.php
+ */
+function use_Homepage() {
+	global $_zp_gallery_page, $_zp_current_album, $_zp_themeroot;
+	if(is_Homepage()) {
+		$themedir = SERVERPATH . "/themes/".basename($_zp_themeroot);
+		zenpage_load_page(getOption("zenpage_homepage"));
+		require($themedir."/".ZENPAGE_PAGES.".php");
+		exit;
+	}
+}
+/**
+ * Gets the news type of a news item. 
+ * "news" for a news article or if using the CombiNews feature
+ * "flvmovie" (for flv, mp3 and mp4), "image", "3gpmovie" or "quicktime"
+ *  *
+ * @return string
+ */
+function getNewsType() {
+	global $_zp_current_zenpage_news;
+	$ownerclass = strtolower(get_class($_zp_current_zenpage_news));
+	switch($ownerclass) {
+		case "video":
+			$newstype = "video";
+			break;
+		case "album":
+			$newstype = "album";
+			break;
+		case "zenpagenews":
+			$newstype = "news";
+			break;
+		default:
+			$newstype = "image";
+			break;
+	}
+ return $newstype;
+}
+
+
+/**
+ * Checks what type the current news item is (See get NewsType())
+ *
+ * @param string $type The type to check for
+ * 										 "news" for a news article or if using the CombiNews feature
+ * 										"flvmovie" (for flv, mp3 and mp4), "image", "3gpmovie" or "quicktime"
+ * @return bool
+ */
+function is_NewsType($type) {
+	if(getNewsType() === $type) {
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+
+
+/**
+ * CombiNews feature: A general wrapper function to check if this is a 'normal' news article (type 'news' or one of the zenphoto news types
+ *
+ * @return bool
+ */
+function is_GalleryNewsType() {
+	if(is_NewsType("image") OR is_NewsType("video") OR is_NewsType("album")) { // later to be extended with albums, too
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+
+
+
 /**
  * THIS FUNCTION IS DEPRECATED! Use getZenpageHitcounter()!
  * 
@@ -168,138 +330,6 @@ function getZenpageHitcounter($mode="",$obj="") {
 			$hc = query_single_row("SELECT hitcounter FROM ".prefix('zenpage_news_categories')." WHERE cat_link = '".$catname."'");
 			return $hc["hitcounter"];
 			break;
-	}
-}
-
-
-
-/**
- * Checks if the current page is a news or single news article page.
- *
- * @return bool
- */
-function is_News() {
-	global $_zp_gallery_page;
-	if (isPage(ZENPAGE_NEWS) OR (getOption('zenpage_zp_index_news') AND $_zp_gallery_page == "index.php")) {
-		return TRUE;
-	} else {
-		return FALSE;
-	}
-}
-
-
-/**
- * Checks if the current page is a single news article page
- *
- * @return bool
- */
-function is_NewsArticle() {
-	if (isPage(ZENPAGE_NEWS) AND isset($_GET['title'])) {
-		return TRUE;
-	} else {
-		return FALSE;
-	}
-}
-
-
-/**
- * Checks if the current page is a news category page
- *
- * @return bool
- */
-function is_NewsCategory() {
-	if (isPage(ZENPAGE_NEWS) AND isset($_GET['category'])) {
-		return TRUE;
-	} else {
-		return FALSE;
-	}
-}
-
-
-/**
- * Checks if the current page is a news archive page
- *
- * @return bool
- */
-function is_NewsArchive() {
-	if (isPage(ZENPAGE_NEWS) AND isset($_GET['date'])) {
-		return TRUE;
-	} else {
-		return FALSE;
-	}
-}
-
-
-
-/**
- * Checks if the current page is a zenpage page
- *
- * @return bool
- */
-function is_Pages() {
-	if (isPage(ZENPAGE_PAGES) AND isset($_GET['title'])) {
-		return TRUE;
-	} else {
-		return FALSE;
-	}
-}
-
-
-/**
- * Gets the news type of a news item. 
- * "news" for a news article or if using the CombiNews feature
- * "flvmovie" (for flv, mp3 and mp4), "image", "3gpmovie" or "quicktime"
- *  *
- * @return string
- */
-function getNewsType() {
-	global $_zp_current_zenpage_news;
-	$ownerclass = strtolower(get_class($_zp_current_zenpage_news));
-	switch($ownerclass) {
-		case "video":
-			$newstype = "video";
-			break;
-		case "album":
-			$newstype = "album";
-			break;
-		case "zenpagenews":
-			$newstype = "news";
-			break;
-		default:
-			$newstype = "image";
-			break;
-	}
- return $newstype;
-}
-
-
-/**
- * Checks what type the current news item is (See get NewsType())
- *
- * @param string $type The type to check for
- * 										 "news" for a news article or if using the CombiNews feature
- * 										"flvmovie" (for flv, mp3 and mp4), "image", "3gpmovie" or "quicktime"
- * @return bool
- */
-function is_NewsType($type) {
-	if(getNewsType() === $type) {
-		return TRUE;
-	} else {
-		return FALSE;
-	}
-}
-
-
-/**
- * CombiNews feature: A general wrapper function to check if this is a 'normal' news article (type 'news' or one of the zenphoto news types
- *
- * @return bool
- */
-function is_GalleryNewsType() {
-	if(is_NewsType("image") OR is_NewsType("video") OR is_NewsType("album")) { // later to be extended with albums, too
-		return TRUE;
-	} else {
-		return FALSE;
 	}
 }
 
@@ -1827,7 +1857,7 @@ function getCodeblock($number='',$titlelink='') {
 		$codeblock = unserialize(base64_decode($_zp_current_zenpage_news->getCodeblock()));
 		$codeblock = strip($codeblock[$number]);
 	}
-	if(is_Pages() AND isset($_GET['title'])) { // single news article or page
+	if(is_Pages()) { // single news article or page
 		$codeblock = unserialize(base64_decode($_zp_current_zenpage_page->getCodeblock()));
 		$codeblock = strip($codeblock[$number]);
 	}
@@ -1871,7 +1901,7 @@ function printCodeblock($number='',$titlelink='') {
  */
 function getPageTitle() {
 	global $_zp_current_zenpage_page;
-	if (is_Pages()) {
+	if (is_Pages() OR is_Homepage()) {
 		return $_zp_current_zenpage_page->getTitle();
 	} 
 }
@@ -1902,7 +1932,7 @@ function getBarePageTitle() {
  */
 function getPageTitleLink() {
 	global $_zp_current_zenpage_page;
-	if(is_Pages()) {
+	if(is_Pages() OR is_Homepage()) {
 		return $_zp_current_zenpage_page->getTitlelink();
 	}
 }
@@ -1925,7 +1955,7 @@ function printPageTitleLink() {
  */
 function getPageID() {
 	global $_zp_current_zenpage_page;
-	if (is_Pages()) {
+	if (is_Pages() OR is_Homepage()) {
 		return $_zp_current_zenpage_page->getID();
 	}
 }
@@ -1948,7 +1978,7 @@ function printPageID() {
  */
 function getPageParentID() {
 	global $_zp_current_zenpage_page;
-	if (is_Pages()) {
+	if (is_Pages() OR is_Homepage()) {
 		return $_zp_current_zenpage_page->getParentid();
 	}
 }
@@ -1961,7 +1991,7 @@ function getPageParentID() {
  */
 function getPageDate() {
 	global $_zp_current_zenpage_page;
-	if (is_Pages()) {
+	if (is_Pages() OR is_Homepage()) {
 		$d = $_zp_current_zenpage_page->getDatetime();
 	}
 	return zpFormattedDate(getOption('date_format'),strtotime($d)); 
@@ -1985,7 +2015,7 @@ function printPageDate() {
  */
 function getPageLastChangeDate() {
 	global $_zp_current_zenpage_page;
-	if (is_Pages()) {
+	if (is_Pages() OR is_Homepage()) {
 		$d = $_zp_current_zenpage_page->getLastchange();
 	}
 	if(!empty($d)) {
@@ -2016,7 +2046,7 @@ function printPageLastChangeDate() {
  */
 function getPageContent($titlelink='',$published=true) {
 	global $_zp_current_zenpage_page;
-	if (is_Pages() AND isset($_GET['title']) AND empty($titlelink)) {
+	if ((is_Pages() OR is_Homepage()) AND empty($titlelink)) {
 		return $_zp_current_zenpage_page->getContent();
 	} 
 	// print content of a page directly on a normal zenphoto theme page or any other page for example
@@ -2054,7 +2084,7 @@ function printPageContent($titlelink='',$published=true) {
  */
 function getPageExtraContent($titlelink='',$published=true) {
 	global $_zp_current_zenpage_page;
-	if (is_Pages() AND isset($_GET['title']) AND empty($titlelink)) {
+	if ((is_Pages() OR is_Homepage()) AND empty($titlelink)) {
 		return $_zp_current_zenpage_page->getExtracontent();
 	} 
 	// print content of a page directly on a normal zenphoto theme page for example
@@ -2091,7 +2121,7 @@ function printPageExtraContent($titlelink='',$published=true) {
  * @return string
  */
 function getPageAuthor($fullname=false) {
-	if(is_Pages()) {
+	if(is_Pages() OR is_Homepage()) {
 		return getAuthor($fullname);
 	}
 }
@@ -2117,7 +2147,7 @@ function printPageAuthor($fullname=false) {
  */
 function getPageSortorder() {
 	global  $_zp_current_zenpage_page;
-	if (is_Pages()) {
+	if (is_Pages() OR is_Homepage()) {
 		return $_zp_current_zenpage_page->getSortOrder();
 	}
 }
@@ -2183,7 +2213,7 @@ function printSubPagesExcerpts($excerptlength='', $readmore='', $shortenindicato
 	} else {
 		$published = TRUE;
 	}
-	$pages = $_zp_current_zenpage_page->getPages($published);
+	$pages = getPages($published);
 	$subcount = 0;
 	if(empty($excerptlength)) {
 		$excerptlength = getOption("zenpage_text_length");
@@ -2251,7 +2281,11 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 		$published = TRUE;
 	}
 	$pages = getPages($published);
-	$currentpageorder = getPageSortorder();
+	if(is_Homepage()) {
+		$currentpageorder = "0";
+	} else {
+		$currentpageorder = getPageSortorder();
+	}
 	$currentlevel = explode("-", $currentpageorder);
 	if($option === "list" OR $option === "list-top") { 
 		echo "<ul $css_id>\n";

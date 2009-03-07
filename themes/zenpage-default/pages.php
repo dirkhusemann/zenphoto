@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title><?php echo getBareGalleryTitle(); ?> | <?php echo getBarePageTitle(" | "); ?></title>
+	<title><?php echo getBareGalleryTitle(); ?><?php if(!is_Homepage()) { echo " | ".getBarePageTitle(" | "); } ?></title>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot; ?>/style.css" type="text/css" />
 	<?php printZenpageRSSHeaderLink("News","", "Zenpage news", ""); ?>
@@ -15,12 +15,13 @@
 
 	<div id="header">
 			<h1><?php printGalleryTitle(); ?></h1>
+			<?php if (is_Homepage() AND getOption('Allow_search')) {  printSearchForm("","search","",gettext("Search gallery")); } ?>
 		</div>
 				
 <div id="content">
 
 	<div id="breadcrumb">
-	<h2><a href="<?php echo getGalleryIndexURL(); ?>"><?php echo gettext("Index"); ?></a><?php printParentPagesBreadcrumb(" &raquo; ",""); ?><strong><?php printPageTitle(" &raquo; "); ?></strong>
+	<h2><a href="<?php echo getGalleryIndexURL(); ?>"><?php echo gettext("Index"); ?></a><?php if(!is_Homepage()) { printParentPagesBreadcrumb(" &raquo; ",""); } ?><strong><?php if(!is_Homepage()) { printPageTitle(" &raquo; "); } ?></strong>
 	</h2>
 	</div>
 <div id="content-left">
