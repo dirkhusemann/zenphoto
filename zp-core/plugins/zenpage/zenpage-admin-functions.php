@@ -1074,7 +1074,7 @@ function printNewsPagesStatistic($option) {
 	global $_zp_current_zenpage_page, $_zp_current_zenpage_news;
 	switch($option) {
 		case "news":
-			$items = getNewsArticles("","",false);
+			$items = getNewsArticles("","");
 			$type = gettext("Articles");
 		break;
 		case "pages":

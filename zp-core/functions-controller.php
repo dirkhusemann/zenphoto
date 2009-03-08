@@ -508,9 +508,8 @@ function zenpage_load_news() {
 			$_GET['p'] = strtoupper(ZENPAGE_NEWS).':'.$titlelink;
 		}
 	}
-	//TODO This should not be needed anymore but strangely is....
-	if ((is_News() AND !is_NewsArticle()) OR is_NewsCategory() OR is_NewsArchive()) { 
-		$_zp_current_zenpage_news = new ZenpageNews(); 
+	if (is_NewsCategory() || is_NewsArchive()) {
+		return true;
 	} 
 	return $_zp_current_zenpage_news;
 }

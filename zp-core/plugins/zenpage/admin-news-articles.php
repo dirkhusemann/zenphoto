@@ -55,9 +55,9 @@ if(!isset($_GET['published'])) {
 }
 
 if(isset($_GET['category'])) {
-  $result = getNewsArticles(getOption('zenpage_admin_articles'),$_GET['category'],$published,TRUE);
+  $result = getNewsArticles(getOption('zenpage_admin_articles'),$_GET['category'],$published);
 } else {
-  $result = getNewsArticles(getOption('zenpage_admin_articles'),"",$published,TRUE);
+  $result = getNewsArticles(getOption('zenpage_admin_articles'),"",$published);
 }
 
 ?>
