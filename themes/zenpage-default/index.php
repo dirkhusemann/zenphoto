@@ -9,7 +9,6 @@ if($titlelink != "none" AND $_zp_gallery_page == "index.php") {
 	}
 }
 if (is_null($_zp_current_zenpage_page)) {
-	$ishomepage = false;
 	include ('indexpage.php');
 } else {  // switch to a news page
 	$_zp_gallery_page = 'pages.php';
