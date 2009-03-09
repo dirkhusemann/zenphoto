@@ -1,5 +1,5 @@
 <?php
-if (checkForHomePage()) { // switch to a news page
+if (checkForPage(getOption("zenpage_homepage"))) { // switch to a news page
 	include ('pages.php');
 } else {
 	include ('indexpage.php');

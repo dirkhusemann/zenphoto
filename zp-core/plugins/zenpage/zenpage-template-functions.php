@@ -2457,14 +2457,15 @@ function createPageMenuLink($pageobj, $css_active='') {
 }
 
 /**
- * If the zenpage_homepage option is set and the page is valid this will setup for the home page
- * Returns true if homepage is setup and valid, otherwise returns false
+ * If the titlelink is valid this will setup for the page
+ * Returns true if page is setup and valid, otherwise returns false
+ * 
+ * @param string $titlelink The page to setup
  *
  * @return bool
  */
-function checkForHomePage() {
-	$titlelink = getOption("zenpage_homepage");
-	if($titlelink != "none" AND $_zp_gallery_page == "index.php") {
+function checkForPage($titlelink) {
+	if(!empty($titlelink)) {
 		$sql = 'SELECT `id` FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.$titlelink.'"';
 		$result = query_single_row($sql);
 		if (is_array($result)) {
