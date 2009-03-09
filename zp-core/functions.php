@@ -1903,5 +1903,57 @@ function dateTimeConvert($datetime, $raw=false) {
 	return date('Y-m-d H:i:s', $time);
 }
 
+/*** Context Manipulation Functions *******/
+/******************************************/
+
+/* Contexts are simply constants that tell us what variables are available to us
+ * at any given time. They should be set and unset with those variables.
+ */
+
+// Contexts (Bitwise and combinable)
+define("ZP_INDEX",   1);
+define("ZP_ALBUM",   2);
+define("ZP_IMAGE",   4);
+define("ZP_COMMENT", 8);
+define("ZP_SEARCH", 16);
+define("ZP_SEARCH_LINKED", 32);
+define("ZP_ALBUM_LINKED", 64);
+define('ZP_IMAGE_LINKED', 128);
+define('ZP_ZENPAGE_NEWS_ARTICLE', 256);
+define('ZP_ZENPAGE_NEWS_CATEGORY', 512);
+define('ZP_ZENPAGE_NEWS_DATE', 1024);
+
+if(getOption('zp_plugin_zenpage')) {
+	require_once(dirname(__FILE__).PLUGIN_FOLDER.'zenpage/zenpage-template-functions.php');
+}
+
+function get_context() {
+	global $_zp_current_context;
+	return $_zp_current_context;
+}
+function set_context($context) {
+	global $_zp_current_context;
+	$_zp_current_context = $context;
+}
+function in_context($context) {
+	return get_context() & $context;
+}
+function add_context($context) {
+	set_context(get_context() | $context);
+}
+function rem_context($context) {
+	global $_zp_current_context;
+	set_context(get_context() & ~$context);
+}
+// Use save and restore rather than add/remove when modifying contexts.
+function save_context() {
+	global $_zp_current_context, $_zp_current_context_restore;
+	$_zp_current_context_restore = $_zp_current_context;
+}
+function restore_context() {
+	global $_zp_current_context, $_zp_current_context_restore;
+	$_zp_current_context = $_zp_current_context_restore;
+}
+
 setexifvars();
 ?>

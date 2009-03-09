@@ -16,12 +16,17 @@ $_zp_zenpage_all_categories = getAllCategories();
 if(getOption('zenpage_combinews') AND !isset($_GET['title']) AND !isset($_GET['category']) AND !isset($_GET['date']) AND OFFSET_PATH != 4) {
 	$_zp_zenpage_total_articles = countCombiNews();
 } else {
-	if(isset($_GET['category'])) {
-		$category = sanitize($_GET['category']);
-	} else {
-		$category = "";
+	if (isset($_GET['date'])) {
+		add_context(ZP_ZENPAGE_NEWS_DATE);
+		$_zp_post_date = sanitize($_GET['date']);
 	}
-	$_zp_zenpage_total_articles = countArticles($category);
+	if(isset($_GET['category'])) {
+		add_context(ZP_ZENPAGE_NEWS_CATEGORY);
+		$_zp_current_category = sanitize($_GET['category']);
+	} else {
+		$_zp_current_category = "";
+	}
+	$_zp_zenpage_total_articles = countArticles($_zp_current_category);
 }
 
 
@@ -94,6 +99,7 @@ function getParentPages(&$parentid,$initparents=true) {
 	 * @return array
 	 */
 	function getNewsArticles($articles_per_page='', $category='', $published=NULL) {
+		global $_zp_current_category, $_zp_post_date;
 		if (is_null($published)) {
 			if(zp_loggedin(ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
 				$published = "all";
@@ -104,20 +110,20 @@ function getParentPages(&$parentid,$initparents=true) {
 		$show = "";
 		if (!empty($category)) {
 			$cat = " cat.cat_id = '".getCategoryID($category)."' AND cat.news_id = news.id ";
-		} elseif(isset($_GET['category'])) {
-			$cat = " cat.cat_id = '".getCategoryID(sanitize($_GET['category']))."' AND cat.news_id = news.id ";
+		} elseif(in_context(ZP_ZENPAGE_NEWS_CATEGORY)) {
+			$cat = " cat.cat_id = '".getCategoryID($_zp_current_category)."' AND cat.news_id = news.id ";
 		} else {
 			$cat ="";
 		}
-		if(isset($_GET['date'])) {
-			$postdate = sanitize($_GET['date']);
+		if(in_context(ZP_ZENPAGE_NEWS_DATE)) {
+			$postdate = $_zp_post_date;
 		} else {
 			$postdate = NULL;
 		}
 		$limit = getLimitAndOffset($articles_per_page);
 		 
 		/*** get articles by category ***/
-		if (!empty($category) OR isset($_GET['category'])) {
+		if (!empty($category) OR in_context(ZP_ZENPAGE_NEWS_CATEGORY)) {
 
 			switch($published) {
 				case "published":
@@ -131,7 +137,7 @@ function getParentPages(&$parentid,$initparents=true) {
 					break;
 			}
 	
-			if(isset($_GET['date'])) {
+			if(in_context(ZP_ZENPAGE_NEWS_DATE)) {
 				$datesearch = " AND news.date LIKE '".$postdate."%' ";
 			} else {
 				$datesearch = "";
@@ -152,7 +158,7 @@ function getParentPages(&$parentid,$initparents=true) {
 					$show = "";
 					break;
 			}
-			if(isset($_GET['date'])) {
+			if(in_context(ZP_ZENPAGE_NEWS_DATE)) {
 				switch($published) {
 					case "published":
 						$datesearch = " AND date LIKE '$postdate%' ";
@@ -183,7 +189,7 @@ function getParentPages(&$parentid,$initparents=true) {
 	 * @return array
 	 */
 	function countArticles($category='', $published='published') {
-		global $_zp_loggedin;
+		global $_zp_loggedin, $_zp_post_date;
 		if($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
 			$published = "all";
 		} else {
@@ -205,8 +211,8 @@ function getParentPages(&$parentid,$initparents=true) {
 			}
 		
 			// date archive query addition
-			if(isset($_GET['date'])) {
-				$postdate = sanitize($_GET['date']);
+			if(in_context(ZP_ZENPAGE_NEWS_DATE)) {
+				$postdate = $_zp_post_date;
 				if(empty($show)) {
 					$and = " WHERE ";
 				} else {

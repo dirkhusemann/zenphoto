@@ -63,7 +63,7 @@ function is_News() {
  * @return bool
  */
 function is_NewsArticle() {
-	return is_News() && isset($_GET['title']);
+	return is_News() && in_context(ZP_ZENPAGE_NEWS_ARTICLE);
 }
 
 
@@ -73,7 +73,7 @@ function is_NewsArticle() {
  * @return bool
  */
 function is_NewsCategory() {
-	return (is_News() && isset($_GET['category']));
+	return is_News() && in_context(ZP_ZENPAGE_NEWS_CATEGORY);
 }
 
 
@@ -83,7 +83,7 @@ function is_NewsCategory() {
  * @return bool
  */
 function is_NewsArchive() {
-	return is_News() && isset($_GET['category']) && isset($_GET['date']);
+	return is_News() && in_context(ZP_ZENPAGE_NEWS_CATEGORY) && in_context(ZP_ZENPAGE_NEWS_DATE);
 }
 
 
@@ -214,7 +214,7 @@ function zenpageHitcounter($option='pages', $viewonly=false, $id=NULL) {
  * @return int
  */
 function getZenpageHitcounter($mode="",$obj=NULL) {
-	global $_zp_current_zenpage_news, $_zp_current_zenpage_page, $_zp_gallery_page;
+	global $_zp_current_zenpage_news, $_zp_current_zenpage_page, $_zp_gallery_page, $_zp_current_category;
 	switch($mode) {
 		case "news":
 			if((is_NewsArticle() OR is_News()) AND !is_object($obj)) {
@@ -235,10 +235,10 @@ function getZenpageHitcounter($mode="",$obj=NULL) {
 			return $hc;
 			break;
 		case "category":
-			if(is_NewsCategory() AND !empty($obj)) {
-				$catname = sanitize($_GET['category']);
-			} else if(!is_object($obj)) {
-				$catname = sanitize($_GET['category']);
+			if(!is_object($obj) || is_NewsCategory() AND !empty($obj)) {
+				$catname = $_zp_current_category;
+			} else {
+				$catname = ''; // TODO: should this be here to protect for an uninitialized variable or should the query just be placed within the if statement above?
 			}
 			$hc = query_single_row("SELECT hitcounter FROM ".prefix('zenpage_news_categories')." WHERE cat_link = '".$catname."'");
 			return $hc["hitcounter"];
@@ -591,7 +591,7 @@ function printNewsExtraContent() {
  */
 function getNewsReadMore() {
 	global $_zp_current_zenpage_news;
-	if(!isset($_GET['title'])) {
+	if(!in_context(ZP_ZENPAGE_NEWS_ARTICLE)) {
 		$type = getNewsType();
 		switch($type) {
 			case "news":
@@ -749,10 +749,11 @@ function getFullNewsImageURL() {
  * @return string
  */
 function getCurrentNewsCategory() {
-	if(isset($_GET['category'])) {
-		$category = getCategoryTitle(sanitize($_GET['category']));
-		return $category;
+	Global $_zp_current_category;
+	if(in_context(ZP_ZENPAGE_NEWS_CATEGORY)) {
+		return getCategoryTitle($_zp_current_category);
 	}
+	return false;
 }
 
 
@@ -762,7 +763,7 @@ function getCurrentNewsCategory() {
  * @param string $before insert what you want to be show before it
  */
 function printCurrentNewsCategory($before='') {
-	if(isset($_GET['category'])) {
+	if(in_context(ZP_ZENPAGE_NEWS_CATEGORY)) {
 		echo $before.getCurrentNewsCategory();
 	}
 }
@@ -774,7 +775,7 @@ function printCurrentNewsCategory($before='') {
  * @return int
  */
 function getCurrentNewsCategoryID() {
-	if(isset($_GET['category'])) {
+	if(in_context(ZP_ZENPAGE_NEWS_CATEGORY)) {
 		$categoryID = getCategoryID(sanitize($_GET['category']));
 		return $categoryID;
 	}
@@ -792,6 +793,7 @@ function getNewsCategories() {
 		$categories = $_zp_current_zenpage_news->getCategories(getNewsID());
 		return $categories;
 	}
+	return false;
 }
 
 
@@ -966,14 +968,16 @@ function printNewsArchive($class='archive', $yearid='year', $monthid='month') {
  * @return string
  */
 function getCurrentNewsArchive($mode='formatted',$format='%B %Y') {
-	if(isset($_GET['date'])) {
-		$archivedate = sanitize($_GET['date']);
+	global $_zp_post_date;
+	if(in_context(ZP_ZENPAGE_NEWS_DATE)) {
+		$archivedate = $_zp_post_date;
 		if($mode = "formatted") {
 		 $archivedate = strtotime($archivedate);
 		 $archivedate = strftime($format,$archivedate);
 		}
 		return $archivedate;
 	}
+	return false;
 }
 
 
@@ -1454,12 +1458,11 @@ function printNewsURL($titlelink='') {
  * @return string
  */
 function getNewsCategoryPathNav() {
-	if (isset($_GET['category'])) {
-		$newscatpath = getNewsCategoryPath().urlencode(sanitize($_GET['category']));
-	}	else {
-		$newscatpath = "";
+	Global $_zp_current_category;
+	if (in_context(ZP_ZENPAGE_NEWS_CATEGORY)) {
+		return getNewsCategoryPath().urlencode($_zp_current_category);
 	}
-	return $newscatpath;
+	return false;
 }
 
 
@@ -1469,12 +1472,11 @@ function getNewsCategoryPathNav() {
  * @return string
  */
 function getNewsArchivePathNav() {
-	if (isset($_GET['date'])) {
-		$archivepath = getNewsArchivePath().sanitize($_GET['date']);
-	}	else {
-		$archivepath = "";
+	global $_zp_post_date;
+	if (in_context(ZP_ZENPAGE_NEWS_DATE)) {
+		return getNewsArchivePath().$_zp_post_date;
 	}
-	return $archivepath;
+	return false;
 }
 
 
@@ -1639,7 +1641,7 @@ function getNextPrevNews($option='') {
 				$count++;
 				$title[$count] = $newsobj->getTitle();
 				$titlelink[$count] = $newsobj->getTitlelink();
-				if($titlelink[$count] === $_GET['title']){
+				if($titlelink[$count] === $_zp_current_zenpage_news->getTitlelink()){
 					$current = $count;
 				}
 			}
@@ -1751,7 +1753,7 @@ function printPrevNewsLink($prev="&laquo; ") {
 function getCodeblock($number='',$titlelink='') {
 	global $_zp_current_zenpage_news, $_zp_current_zenpage_page;
 	$codeblock = "";
-	if(is_News() AND isset($_GET['title'])) { // single news article or page
+	if(is_News() AND in_context(ZP_ZENPAGE_NEWS_ARTICLE)) { // single news article or page
 		$codeblock = unserialize(base64_decode($_zp_current_zenpage_news->getCodeblock()));
 		$codeblock = strip($codeblock[$number]);
 	}
@@ -1759,7 +1761,7 @@ function getCodeblock($number='',$titlelink='') {
 		$codeblock = unserialize(base64_decode($_zp_current_zenpage_page->getCodeblock()));
 		$codeblock = strip($codeblock[$number]);
 	}
-	if((is_News() AND !is_Pages()) AND !isset($_GET['title']) AND is_NewsType("news")) { // news loop
+	if((is_News() AND !is_Pages()) AND !in_context(ZP_ZENPAGE_NEWS_ARTICLE) AND is_NewsType("news")) { // news loop
 		$codeblock = unserialize(base64_decode($_zp_current_zenpage_news->getCodeblock()));
 		$codeblock = strip($codeblock[$number]);
 	} 
@@ -2369,8 +2371,8 @@ function createPageMenuLink($pageobj, $css_active='') {
 	} else {
 		$class= "";
 	}
-	if(isset($_GET['title'])) {
-		$gettitle = $_GET['title']; 
+	if(!is_null($_zp_current_zenpage_page)) {
+		$gettitle = $_zp_current_zenpage_page->getTitlelink(); 
 	} else {
 		$gettitle = "";
 	}
@@ -2410,8 +2412,7 @@ function zenpage_setup_page($titlelink) {
 	global $_zp_gallery_page, $_zp_current_zenpage_page;
 	$_zp_gallery_page = ZENPAGE_PAGES.'.php';
 	// TODO: zenpage really should not rely on these
-	$_GET['p'] = ZENPAGE_PAGES;
-	$_GET['title'] = $titlelink;
+	add_context(ZP_ZENPAGE_NEWS_ARTICLE);
 	$_zp_current_zenpage_page = new ZenpagePage($titlelink);
 }
 

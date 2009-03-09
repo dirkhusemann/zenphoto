@@ -10,54 +10,6 @@
 
 
 
-/*** Context Manipulation Functions *******/
-/******************************************/
-
-/* Contexts are simply constants that tell us what variables are available to us
- * at any given time. They should be set and unset with those variables.
- */
-
-// Contexts (Bitwise and combinable)
-define("ZP_INDEX",   1);
-define("ZP_ALBUM",   2);
-define("ZP_IMAGE",   4);
-define("ZP_COMMENT", 8);
-define("ZP_SEARCH", 16);
-define("ZP_SEARCH_LINKED", 32);
-define("ZP_ALBUM_LINKED", 64);
-define('ZP_IMAGE_LINKED', 128);
-// ZENPAGE: load zenpage class if present, used for zp_handle_comment() only
-if(getOption('zp_plugin_zenpage')) {
-	require_once(dirname(__FILE__).PLUGIN_FOLDER.'zenpage/zenpage-template-functions.php');
-}
-function get_context() {
-	global $_zp_current_context;
-	return $_zp_current_context;
-}
-function set_context($context) {
-	global $_zp_current_context;
-	$_zp_current_context = $context;
-}
-function in_context($context) {
-	return get_context() & $context;
-}
-function add_context($context) {
-	set_context(get_context() | $context);
-}
-function rem_context($context) {
-	global $_zp_current_context;
-	set_context(get_context() & ~$context);
-}
-// Use save and restore rather than add/remove when modifying contexts.
-function save_context() {
-	global $_zp_current_context, $_zp_current_context_restore;
-	$_zp_current_context_restore = $_zp_current_context;
-}
-function restore_context() {
-	global $_zp_current_context, $_zp_current_context_restore;
-	$_zp_current_context = $_zp_current_context_restore;
-}
-
 
 function im_suffix() {
 	return getOption('mod_rewrite_image_suffix');
@@ -501,12 +453,13 @@ function zenpage_load_news() {
 		$sql = 'SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.$titlelink.'"';
 		$result = query_single_row($sql);
 		if (is_array($result)) {
+			add_context(ZP_ZENPAGE_NEWS_ARTICLE);
 			$_zp_current_zenpage_news = new ZenpageNews($titlelink);
 		} else {
 			$_GET['p'] = strtoupper(ZENPAGE_NEWS).':'.$titlelink;
 		}
 		return $_zp_current_zenpage_news;
-	} 
+	}
 	return true;
 }
 
