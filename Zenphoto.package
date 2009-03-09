@@ -167,6 +167,7 @@ themes/zenpage-default/404.php
 themes/zenpage-default/album.php
 themes/zenpage-default/archive.php
 themes/zenpage-default/footer.php
+themes/zenpage-default/gallery.php
 themes/zenpage-default/image.php
 themes/zenpage-default/images/50percent.png
 themes/zenpage-default/images/arrow_right.gif
@@ -176,7 +177,6 @@ themes/zenpage-default/images/header.jpg
 themes/zenpage-default/images/img-bg.gif
 themes/zenpage-default/images/tag.png
 themes/zenpage-default/index.php
-themes/zenpage-default/indexpage.php
 themes/zenpage-default/news.php
 themes/zenpage-default/pages.php
 themes/zenpage-default/search.php
