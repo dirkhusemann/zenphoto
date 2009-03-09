@@ -215,7 +215,6 @@ zp-core/class-album.php
 zp-core/class-gallery.php
 zp-core/class-image.php
 zp-core/class-load.php
-zp-core/class-mollom.php
 zp-core/class-search.php
 zp-core/class-sortable.php
 zp-core/class-transientimage.php
