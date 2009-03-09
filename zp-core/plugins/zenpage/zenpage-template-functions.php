@@ -280,7 +280,6 @@ function getAuthor($fullname=false) {
 /* News article functions
 /************************************************/
 
-
 /**
  * Returns the next news item on a page.
  * sets $_zp_current_zenpage_news to the next news item
@@ -1569,11 +1568,9 @@ function printNewsPageList($class='pagelist') {
  * @return string
  */
 function printNewsPageListWithNav($next='next &raquo;', $prev='&laquo; prev', $nextprev=true, $class='pagelist') {
-	global $_zp_zenpage_total_pages;
-	//echo "total pages: ". $_zp_current_zenpage_news->total_pages; // for debugging
-	$total = $_zp_zenpage_total_pages;
+	global $_zp_zenpage_total_pages,$_zp_zenpage_total_articles;
+	$total = ceil($_zp_zenpage_total_articles / getOption("zenpage_articles_per_page"));
 	$current = getCurrentNewsPage();
-
 	if($total > 1) {
 		echo "<ul class=\"$class\">";
 		if($nextprev) {
@@ -1605,6 +1602,14 @@ function printNewsPageListWithNav($next='next &raquo;', $prev='&laquo; prev', $n
 	}
 }
 
+
+function getTotalNewsPages() {
+	if(getOption('zenpage_combinews') AND !is_NewsCategory() AND !is_NewsArchive()) {
+		$articlecount = countArticles($category='', $published='published');
+	} else {
+		$articlecount = countArticles($category='', $published='published');
+	}
+}
 
 /************************************************************************/
 /* Single news article pagination functions (previous and next article)
