@@ -310,9 +310,6 @@ function getParentPages(&$parentid,$initparents=true) {
 		} else {
 			$page = 1;
 		}
-		if (!isset($_GET['page']) AND isPage(ZENPAGE_NEWS) AND !isset($_GET['category']) AND !isset($_GET['date']) AND getOption("zenpage_zp_index_news")) {
-			$page = 2;
-		}
 		return $page;
 	}
 

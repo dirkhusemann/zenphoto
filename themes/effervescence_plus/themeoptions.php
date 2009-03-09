@@ -27,9 +27,6 @@
  */
 
 require_once(SERVERPATH . "/" . ZENFOLDER . "/admin-functions.php");
-if (getOption('custom_index_page') === 'gallery' && getOption('zp_plugin_zenpage')) {
-	setOption('zenpage_zp_index_news', 1, false); // this option is required for this configuration
-}
 
 class ThemeOptions {
 

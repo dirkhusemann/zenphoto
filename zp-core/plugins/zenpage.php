@@ -25,7 +25,6 @@ class zenpagecms {
 		setOptionDefault('zenpage_rss_items', '10');
 		setOptionDefault('zenpage_rss_length', '100');
 		setOptionDefault('zenpage_admin_articles', '15');
-		setOptionDefault('zenpage_zp_index_news', false);
 		setOptionDefault('zenpage_news_page', 'news');
 		setOptionDefault('zenpage_pages_page', 'pages');
 		setOptionDefault('zenpage_indexhitcounter', false); 
@@ -52,8 +51,6 @@ class zenpagecms {
 										'desc' => gettext("The text length of the zenpage RSS feed items. No value for full length.")),
 		gettext('News articles per page (admin)') => array('key' => 'zenpage_admin_articles', 'type' => 0,
 										'desc' => gettext("How many news articles you want to show per page on the news article admin page.")),
-		gettext('News on Zenphoto index') => array('key' => 'zenpage_zp_index_news', 'type' => 1,
-										'desc' => gettext("Enable this if you want to show the news section's first page on Zenphoto's theme index.php. <strong>NOTE:</strong> Your theme must be setup to use this feature. If using the Zenpage default theme this disables the top level album list. Visit the theming tutorial for details.")),
 		gettext('News page name') => array('key' => 'zenpage_news_page', 'type' => 0,
 										'desc' => gettext("If you want to rename the theme page <em>news.php</em> that is used to display news, you need to enter the new name here. <strong>NOTE: </strong>If you use mod_rewrite you need to modify your <em>.htaccess</em> file manually, too!")),
 		gettext('Pages page name') => array('key' => 'zenpage_pages_page', 'type' => 0,

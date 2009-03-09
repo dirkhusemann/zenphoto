@@ -8,12 +8,6 @@
  */
 
 
-/**
- * Some global variable setup
- *
- */
-global $_zp_current_zenpage_page, $_zp_current_zenpage_news;
-
 /************************************************/
 /* ZENPAGE TEMPLATE FUNCTIONS
  /************************************************/
@@ -38,24 +32,6 @@ function rewrite_path_zenpage($rewrite='',$plain='') {
 	}
 }
 
-
-function zenpage404($type, $obj) {
-	global $_zp_gallery_page, $_zp_current_zenpage_news, $_zp_current_zenpage_page, $_zp_themeroot;
-	$_zp_gallery_page = '404.php';
-	$errpage = THEMEFOLDER.'/'.UTF8ToFilesystem(getOption('current_theme')).'/404.php';
-	unset($album);
-	unset($image);
-	$obj = sprintf(gettext('%1$s=>%2$s'), $type, $obj.'....');
-	header("HTTP/1.0 404 Not Found");
-	if (file_exists(SERVERPATH . "/" . $errpage)) {
-		include($errpage);
-	} else {
-		include(ZENFOLDER. '/404.php');
-	}
-	exit;
-}
-
-
 /**
  * Returns if the current page is $page (examples: isPage("news") or isPage("pages"))
  *
@@ -64,15 +40,9 @@ function zenpage404($type, $obj) {
  */
 function isPage($page) {
 	if(isset($_GET['p'])) {
-		$currentpagetype = $_GET["p"];
-	} else {
-		$currentpagetype = NULL;
+		return $page = $_GET["p"];
 	}
-	if($currentpagetype === $page) {
-		return TRUE;
-	} else {
-		return FALSE;
-	}
+	return false;
 }
 
 
@@ -82,12 +52,8 @@ function isPage($page) {
  * @return bool
  */
 function is_News() {
-	global $_zp_gallery_page;
-	if (isPage(ZENPAGE_NEWS) OR (getOption('zenpage_zp_index_news') AND $_zp_gallery_page == "index.php")) {
-		return TRUE;
-	} else {
-		return FALSE;
-	}
+	global $_zp_current_zenpage_news;
+	return(!is_null($_zp_current_zenpage_news));
 }
 
 
@@ -97,11 +63,7 @@ function is_News() {
  * @return bool
  */
 function is_NewsArticle() {
-	if (isPage(ZENPAGE_NEWS) AND isset($_GET['title'])) {
-		return TRUE;
-	} else {
-		return FALSE;
-	}
+	return is_News() && isset($_GET['title']);
 }
 
 
@@ -111,11 +73,7 @@ function is_NewsArticle() {
  * @return bool
  */
 function is_NewsCategory() {
-	if (isPage(ZENPAGE_NEWS) AND isset($_GET['category'])) {
-		return TRUE;
-	} else {
-		return FALSE;
-	}
+	return (is_News() && isset($_GET['category']));
 }
 
 
@@ -125,11 +83,7 @@ function is_NewsCategory() {
  * @return bool
  */
 function is_NewsArchive() {
-	if (isPage(ZENPAGE_NEWS) AND isset($_GET['date'])) {
-		return TRUE;
-	} else {
-		return FALSE;
-	}
+	return is_News() && isset($_GET['category']) && isset($_GET['date']);
 }
 
 
@@ -140,11 +94,8 @@ function is_NewsArchive() {
  * @return bool
  */
 function is_Pages() {
-	if (isPage(ZENPAGE_PAGES) AND isset($_GET['title'])) {
-		return TRUE;
-	} else {
-		return FALSE;
-	}
+	global $_zp_current_zenpage_page;
+	return !is_null($_zp_current_zenpage_page);
 }
 
 /**
@@ -184,11 +135,7 @@ function getNewsType() {
  * @return bool
  */
 function is_NewsType($type) {
-	if(getNewsType() === $type) {
-		return TRUE;
-	} else {
-		return FALSE;
-	}
+	return getNewsType() === $type;
 }
 
 
@@ -198,11 +145,7 @@ function is_NewsType($type) {
  * @return bool
  */
 function is_GalleryNewsType() {
-	if(is_NewsType("image") OR is_NewsType("video") OR is_NewsType("album")) { // later to be extended with albums, too
-		return TRUE;
-	} else {
-		return FALSE;
-	}
+	return is_NewsType("image") || is_NewsType("video") || is_NewsType("album"); // later to be extended with albums, too
 }
 
 
@@ -270,9 +213,8 @@ function zenpageHitcounter($option='pages', $viewonly=false, $id=NULL) {
  * 									 In any case $mode must be set!
  * @return int
  */
-function getZenpageHitcounter($mode="",$obj="") {
+function getZenpageHitcounter($mode="",$obj=NULL) {
 	global $_zp_current_zenpage_news, $_zp_current_zenpage_page, $_zp_gallery_page;
-	$obj = sanitize($obj);
 	switch($mode) {
 		case "news":
 			if((is_NewsArticle() OR is_News()) AND !is_object($obj)) {
@@ -349,7 +291,7 @@ function getAuthor($fullname=false) {
 function next_news() {
 	global $_zp_current_zenpage_news, $_zp_current_zenpage_news_restore, $_zp_zenpage_articles, $_zp_gallery;
 	if(!checkforPassword()) {
-		if(is_News() AND !is_NewsArticle()) {
+		if(!is_NewsArticle()) {
 			if (is_null($_zp_zenpage_articles)) {
 				if(getOption('zenpage_combinews') AND !is_NewsCategory() AND !is_NewsArchive()) {
 					$_zp_zenpage_articles = getCombiNews(getOption("zenpage_articles_per_page"));
@@ -409,7 +351,7 @@ function next_news() {
  */
 function getNewsID() {
 	global $_zp_current_zenpage_news;
-	if(is_News() && !is_null($_zp_current_zenpage_news)) {
+	if(!is_null($_zp_current_zenpage_news)) {
 		return $_zp_current_zenpage_news->getID();
 	}
 }
@@ -422,7 +364,7 @@ function getNewsID() {
  */
 function getNewsTitle() {
 	global $_zp_current_zenpage_news;
-	if (is_News() && !is_null($_zp_current_zenpage_news)) {
+	if (!is_null($_zp_current_zenpage_news)) {
 		return $_zp_current_zenpage_news->getTitle();
 	} 
 }
@@ -460,7 +402,7 @@ function getBareNewsTitle($before='') {
  */
 function getNewsTitleLink() {
 	global $_zp_current_zenpage_news;
-	if(is_News()) {
+	if(!is_null($_zp_current_zenpage_news)) {
 		$type = getNewsType();
 		switch($type) {
 			case "image":
@@ -847,7 +789,7 @@ function getCurrentNewsCategoryID() {
  */
 function getNewsCategories() {
 	global $_zp_current_zenpage_news;
-	if(is_News() AND is_NewsType("news")) {
+	if(!is_null($_zp_current_zenpage_news) AND is_NewsType("news")) {
 		$categories = $_zp_current_zenpage_news->getCategories(getNewsID());
 		return $categories;
 	}
@@ -897,11 +839,7 @@ function inNewsCategory($catlink) {
 			break;
 		}
 	}
-	if($count === 1) {
-		return TRUE;
-	} else {
-		return FALSE;
-	}
+	return $count === 1;
 }
 
 
@@ -966,7 +904,7 @@ function printNewsImageTags($option='links',$preText=NULL,$class='taglist',$sepa
  */
 function getNewsDate() {
 	global $_zp_current_zenpage_news;
-	if(is_News()) {
+	if(!is_null($_zp_current_zenpage_news)) {
 		$d = $_zp_current_zenpage_news->getDateTime();
 		return zpFormattedDate(getOption("date_format"), strtotime($d));
 	}
@@ -1414,11 +1352,7 @@ function printNewsCategoryURL($before='',$catlink='') {
  * @return string
  */
 function getNewsIndexURL() {
-	if(getOption('zenpage_zp_index_news')) {
-		return getGalleryIndexURL(false);
-	} else {
-		return rewrite_path(urlencode(ZENPAGE_NEWS), "/index.php?p=".ZENPAGE_NEWS);
-	}
+	return rewrite_path(urlencode(ZENPAGE_NEWS), "/index.php?p=".ZENPAGE_NEWS);
 }
 
 
@@ -1553,12 +1487,7 @@ function getNewsArchivePathNav() {
 function getPrevNewsPageURL() {
 	$page = getCurrentNewsPage();
 	if($page != 1) {
-		if (is_News() AND $page == 2 AND getOption("zenpage_zp_index_news") AND !is_NewsCategory() AND !is_NewsArchive()) {
-			return getGalleryIndexURL();
-		} else  {
-	 		return getNewsBaseURL().getNewsCategoryPathNav().getNewsArchivePathNav().getNewsPagePath().($page - 1);
-		} 
-		
+	 	return getNewsBaseURL().getNewsCategoryPathNav().getNewsArchivePathNav().getNewsPagePath().($page - 1);
 	} else {
 		return false;
 	}
@@ -1659,8 +1588,6 @@ function printNewsPageListWithNav($next='next &raquo;', $prev='&laquo; prev', $n
 		for ($i=$j; $i <= min($total, $j+6); $i++) {
 			if($i == $current) {
 				echo "<li>".$i."</li>\n";
-			} else if ($i === 1 AND getOption("zenpage_zp_index_news") AND !is_NewsCategory() AND !is_NewsArchive()) {
-				echo "<li><a href='".getGalleryIndexURL()."' title='".gettext("Page")." ".$i."'>".$i."</a></li>\n";
 			} else {
 				echo "<li><a href='".getNewsBaseURL().getNewsCategoryPathNav().getNewsArchivePathNav().getNewsPagePath().$i."' title='".gettext("Page")." ".$i."'>".$i."</a></li>\n";
 			}
@@ -1957,10 +1884,11 @@ function getPageParentID() {
  */
 function getPageDate() {
 	global $_zp_current_zenpage_page;
-	if (is_Pages()) {
+	if (!is_null($_zp_current_zenpage_page)) {
 		$d = $_zp_current_zenpage_page->getDatetime();
+		return zpFormattedDate(getOption('date_format'),strtotime($d)); 
 	}
-	return zpFormattedDate(getOption('date_format'),strtotime($d)); 
+	return false;
 }
 
 
@@ -1981,12 +1909,11 @@ function printPageDate() {
  */
 function getPageLastChangeDate() {
 	global $_zp_current_zenpage_page;
-	if (is_Pages()) {
+	if (!is_null($_zp_current_zenpage_page)) {
 		$d = $_zp_current_zenpage_page->getLastchange();
-	}
-	if(!empty($d)) {
 		return zpFormattedDate(getOption('date_format'),strtotime($d)); 
 	}
+	return false;
 }
 
 
@@ -2022,9 +1949,7 @@ function getPageContent($titlelink='',$published=true) {
 			return 	$page->getContent();
 		}
 	}
-	if (!is_Pages() AND empty($titlelink)) {
-		return false;
-	} 
+	return false;
 }
 
 /**
@@ -2060,9 +1985,7 @@ function getPageExtraContent($titlelink='',$published=true) {
 			return $page->getExtracontent();
 		}
 	}
-	if (!is_Pages() AND empty($titlelink)) {
-		return false;
-	} 
+	return false;
 }
 
 
@@ -2090,6 +2013,7 @@ function getPageAuthor($fullname=false) {
 	if(is_Pages()) {
 		return getAuthor($fullname);
 	}
+	return false;
 }
 
 
@@ -2116,6 +2040,7 @@ function getPageSortorder() {
 	if (is_Pages()) {
 		return $_zp_current_zenpage_page->getSortOrder();
 	}
+	return false;
 }
 
 
@@ -2411,20 +2336,15 @@ function checkPageDisplayLevel($pageobj,$parentpageobj,$currentpageorder,$curren
 			break;
 	}
 	// if in parentalbum) OR (if in subalbum)
-	if(( 
-	$parentpageobj->getSortorder() === $pageorder
-	AND count($sublevel) === $level+1
-	AND $currentpageorder === $pageorder)
-	OR
-	(getPageID() != $parentpageobj->getID()
-	AND $parentpageobj->getID() === $pageobj->getParentID()
-	AND count($sublevel) === $level+1
-	AND $currentlevelcheck === $parentpageobj->getSortorder()
-	)) {
-		return true;
-	} else {
-		return false;
-	}
+	return 
+		($parentpageobj->getSortorder() === $pageorder
+		AND count($sublevel) === $level+1
+		AND $currentpageorder === $pageorder)
+		OR
+		(getPageID() != $parentpageobj->getID()
+		AND $parentpageobj->getID() === $pageobj->getParentID()
+		AND count($sublevel) === $level+1
+		AND $currentlevelcheck === $parentpageobj->getSortorder());
 }
 
 
@@ -2508,11 +2428,7 @@ function zenpageOpenedForComments() {
 	if(is_Pages()) {
 		$obj = $_zp_current_zenpage_page;
 	}
-	if($obj->get('commentson')) {
-		return true;
-	} else {
-		return false;
-	}
+	return $obj->get('commentson');
 }
 
 

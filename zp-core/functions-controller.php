@@ -476,15 +476,13 @@ function zp_load_image($folder, $filename) {
 function zenpage_load_page() {
 	global $_zp_current_zenpage_page;
 	$_zp_current_zenpage_page = NULL;
-	if(is_Pages()) {
-		$titlelink = sanitize($_GET['title']);
-		$sql = 'SELECT `id` FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.$titlelink.'"';
-		$result = query_single_row($sql);
-		if (is_array($result)) {
-			$_zp_current_zenpage_page = new ZenpagePage($titlelink);
-		} else {
-			$_GET['p'] = strtoupper(ZENPAGE_PAGES).':'.$titlelink;
-		}
+	$titlelink = sanitize($_GET['title']);
+	$sql = 'SELECT `id` FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.$titlelink.'"';
+	$result = query_single_row($sql);
+	if (is_array($result)) {
+		$_zp_current_zenpage_page = new ZenpagePage($titlelink);
+	} else {
+		$_GET['p'] = strtoupper(ZENPAGE_PAGES).':'.$titlelink;
 	}
 	return $_zp_current_zenpage_page;
 }
@@ -497,8 +495,8 @@ function zenpage_load_page() {
  */
 function zenpage_load_news() {
 	global $_zp_current_zenpage_news;
-	if(is_NewsArticle()) {
-		$_zp_current_zenpage_news = NULL;
+	$_zp_current_zenpage_news = NULL;
+	if (isset($_GET['title'])) {
 		$titlelink = sanitize($_GET['title']);
 		$sql = 'SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.$titlelink.'"';
 		$result = query_single_row($sql);
