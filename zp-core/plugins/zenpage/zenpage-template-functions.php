@@ -336,7 +336,7 @@ function getAuthor($fullname=false) {
 
 /************************************************/
 /* News article functions
- /************************************************/
+/************************************************/
 
 
 /**
@@ -2454,6 +2454,39 @@ function createPageMenuLink($pageobj, $css_active='') {
 	} else {
 		echo "<li><a href=\"".getPageLinkURL($pageobj->getTitlelink())."\" title=\"".strip_tags($pageobj->getTitle())."\">".$pageobj->getTitle()."</a>";
 	}
+}
+
+/**
+ * If the zenpage_homepage option is set and the page is valid this will setup for the home page
+ * Returns true if homepage is setup and valid, otherwise returns false
+ *
+ * @return bool
+ */
+function checkForHomePage() {
+	$titlelink = getOption("zenpage_homepage");
+	if($titlelink != "none" AND $_zp_gallery_page == "index.php") {
+		$sql = 'SELECT `id` FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.$titlelink.'"';
+		$result = query_single_row($sql);
+		if (is_array($result)) {
+			zenpage_setup_page($titlelink);
+			return true;
+		}
+	}
+	return false;
+}
+
+/**
+ * Sets all the required items to make the titlelink the current pages page
+ *
+ * @param string $titlelink the titlelink of th epage to setup.
+ */
+function zenpage_setup_page($titlelink) {
+	global $_zp_gallery_page, $_zp_current_zenpage_page;
+	$_zp_gallery_page = ZENPAGE_PAGES.'.php';
+	// TODO: zenpage really should not rely on these
+	$_GET['p'] = ZENPAGE_PAGES;
+	$_GET['title'] = $titlelink;
+	$_zp_current_zenpage_page = new ZenpagePage($titlelink);
 }
 
 

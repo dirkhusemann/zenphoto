@@ -497,8 +497,8 @@ function zenpage_load_page() {
  */
 function zenpage_load_news() {
 	global $_zp_current_zenpage_news;
-	$_zp_current_zenpage_news = NULL;
 	if(is_NewsArticle()) {
+		$_zp_current_zenpage_news = NULL;
 		$titlelink = sanitize($_GET['title']);
 		$sql = 'SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.$titlelink.'"';
 		$result = query_single_row($sql);
@@ -507,11 +507,9 @@ function zenpage_load_news() {
 		} else {
 			$_GET['p'] = strtoupper(ZENPAGE_NEWS).':'.$titlelink;
 		}
-	}
-	if (is_NewsCategory() || is_NewsArchive()) {
-		return true;
+		return $_zp_current_zenpage_news;
 	} 
-	return $_zp_current_zenpage_news;
+	return true;
 }
 
 /**
