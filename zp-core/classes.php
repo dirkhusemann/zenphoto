@@ -306,6 +306,7 @@ class PersistentObject {
 				$i++;
 			}
 			$sql .= ');';
+			
 			$success = query($sql);
 			if ($success == false || mysql_affected_rows() != 1) { return false; }
 			$this->id = mysql_insert_id();

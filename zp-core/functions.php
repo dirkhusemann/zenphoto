@@ -987,7 +987,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	if ($goodMessage) {
 		if ($goodMessage == 1) {
 			$moderate = 1;
-		} else {
+		} else { 
 			$moderate = 0;
 		}
 		if ($private) $private = 1; else $private = 0;
@@ -995,28 +995,30 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		$receiverid = $receiver->id;
 		
 		// Update the database entry with the new comment
-		query("INSERT INTO " . prefix("comments") . " (`ownerid`, `name`, `email`, `website`, `comment`, `inmoderation`, `date`, `type`, `ip`, `private`, `anon`) VALUES " .
-						' ("' . $receiverid .
-						'", "' . mysql_real_escape_string($name) .
-						'", "' . mysql_real_escape_string($email) .
-						'", "' . mysql_real_escape_string($website) .
-						'", "' . mysql_real_escape_string ($comment) .
-						'", "' . $moderate .
-						'", NOW()'.
-						', "'.$type.
-						'", "'.$ip .
-						'", "'.$private.
-						'", "'.$anon.'")');
-		$mysql_id = mysql_insert_id();
+		$commentobj = new Comment();
+		$commentobj->setOwnerID($receiverid);
+		$commentobj->setName($name);
+		$commentobj->setEmail($email);
+		$commentobj->setWebsite($website);
+		$commentobj->setComment($comment);
+		$commentobj->setInModeration($moderate);
+		$commentobj->setType($type);
+		$commentobj->setIP($ip);
+		$commentobj->setPrivate($private);
+		$commentobj->setAnon($anon);
+		
+		apply_filter('comment_post', $commentobj, $receiver);
+		
+		$commentobj->save();
+
+		//  add to comments array and notify the admin user
 		if (!$moderate) {
-			//  add to comments array and notify the admin user
-			$newcomment = array();
-			$newcomment['name'] = $name;
-			$newcomment['email'] = $email;
-			$newcomment['website'] = $website;
-			$newcomment['comment'] = $comment;
-			$newcomment['date'] = time();
-			$receiver->comments[] = $newcomment;
+			$receiver->comments[] = array('name' => $commentobj->getname(),
+																		'email' => $commentobj->getEmail(),
+																		'website' => $commentobj->getWebsite(),
+																		'comment' => $commentobj->getComment(),
+																		'date' => $commentobj->getDateTime(),
+																		'custom_data' => $commentobj->getCustomData());
 		}
 		$class = strtolower(get_class($receiver));
 		switch ($class) {
@@ -1058,9 +1060,9 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 		}
 		if (getOption('email_new_comments')) {
 			$message = $action . "\n\n" . 
-					sprintf(gettext('Author: %1$s'."\n".'Email: %2$s'."\n".'Website: %3$s'."\n".'Comment:'."\n\n".'%4$s'),$name, $email, $website, $comment) . "\n\n" .
+					sprintf(gettext('Author: %1$s'."\n".'Email: %2$s'."\n".'Website: %3$s'."\n".'Comment:'."\n\n".'%4$s'),$commentobj->getname(), $commentobj->getEmail(), $commentobj->getWebsite(), $commentobj->getComment()) . "\n\n" .
 					sprintf(gettext('You can view all comments about this item here:'."\n".'%1$s'), 'http://' . $_SERVER['SERVER_NAME'] . WEBPATH . '/index.php?'.$url) . "\n\n" .
-					sprintf(gettext('You can edit the comment here:'."\n".'%1$s'), 'http://' . $_SERVER['SERVER_NAME'] . WEBPATH . '/' . ZENFOLDER . '/admin-comments.php?page=editcomment&id='.$mysql_id);
+					sprintf(gettext('You can edit the comment here:'."\n".'%1$s'), 'http://' . $_SERVER['SERVER_NAME'] . WEBPATH . '/' . ZENFOLDER . '/admin-comments.php?page=editcomment&id='.$commentobj->get('id'));
 			$emails = array();
 			$admin_users = getAdministrators();
 			foreach ($admin_users as $admin) {  // mail anyone else with full rights

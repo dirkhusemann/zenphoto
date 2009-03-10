@@ -10,6 +10,7 @@ require_once(dirname(__FILE__).'/class-album.php');
 require_once(dirname(__FILE__).'/class-gallery.php');
 require_once(dirname(__FILE__).'/class-search.php');
 require_once(dirname(__FILE__).'/class-transientimage.php');
+require_once(dirname(__FILE__).'/class-comment.php');
 
 if (getOption('zp_plugin_zenpage')) {
 	require_once(dirname(__FILE__).PLUGIN_FOLDER.'zenpage/zenpage-class-news.php');

@@ -1461,7 +1461,8 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' CHANGE `title` `title` TEXT;';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news_categories.' CHANGE `cat_name` `cat_name` TEXT;';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' CHANGE `title` `title` TEXT;';
-		
+	$sql_statements[] = 'ALTER TABLE '.$tbl_comments.' ADD COLUMN `custom_data` TEXT;';
+	
 	/**************************************************************************************
 	 ******                            END of UPGRADE SECTION     
 	 ******                                                              
