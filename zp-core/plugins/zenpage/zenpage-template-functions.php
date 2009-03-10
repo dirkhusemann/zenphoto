@@ -73,7 +73,7 @@ function is_NewsArticle() {
  * @return bool
  */
 function is_NewsCategory() {
-	return is_News() && in_context(ZP_ZENPAGE_NEWS_CATEGORY);
+	return in_context(ZP_ZENPAGE_NEWS_CATEGORY);
 }
 
 
@@ -83,7 +83,7 @@ function is_NewsCategory() {
  * @return bool
  */
 function is_NewsArchive() {
-	return is_News() && in_context(ZP_ZENPAGE_NEWS_CATEGORY) && in_context(ZP_ZENPAGE_NEWS_DATE);
+	return in_context(ZP_ZENPAGE_NEWS_DATE);
 }
 
 
@@ -284,62 +284,62 @@ function getAuthor($fullname=false) {
  * Returns the next news item on a page.
  * sets $_zp_current_zenpage_news to the next news item
  * Returns true if there is an new item to be shown
+ * 
+ * @param bool $c
  *
  * @return bool
  */
-function next_news() {
+function next_news($combi=true) {
 	global $_zp_current_zenpage_news, $_zp_current_zenpage_news_restore, $_zp_zenpage_articles, $_zp_gallery;
 	if(!checkforPassword()) {
-		if(!is_NewsArticle()) {
-			if (is_null($_zp_zenpage_articles)) {
-				if(getOption('zenpage_combinews') AND !is_NewsCategory() AND !is_NewsArchive()) {
-					$_zp_zenpage_articles = getCombiNews(getOption("zenpage_articles_per_page"));
-				} else {
-					$_zp_zenpage_articles = getNewsArticles(getOption("zenpage_articles_per_page"));
-				}
-				//print_r($_zp_zenpage_articles); // debugging
-				if (empty($_zp_zenpage_articles)) { return false; }
-				$_zp_current_zenpage_news_restore = $_zp_current_zenpage_news;
-				$news = array_shift($_zp_zenpage_articles);
-				//print_r($news); // debugging
-				if (is_array($news)) {
-					if(getOption('zenpage_combinews') AND array_key_exists("type",$news) AND array_key_exists("albumname",$news)) {
-						if($news['type'] === "images") {
-							$albumobj = new Album($_zp_gallery,$news['albumname']);
-							$_zp_current_zenpage_news = newImage($albumobj,$news['titlelink']);
-						} else if($news['type'] === "albums") {
-							$_zp_current_zenpage_news = new Album($_zp_gallery,$news['albumname']);
-						} else {
-							$_zp_current_zenpage_news = new ZenpageNews($news['titlelink']);
-						}
-					} else {
-						$_zp_current_zenpage_news = new ZenpageNews($news['titlelink']);
-					}
-				}
-				return true;
-			} else if (empty($_zp_zenpage_articles)) {
-				$_zp_zenpage_articles = NULL;
-				$_zp_current_zenpage_news = $_zp_current_zenpage_news_restore;
-				return false;
+		if (is_null($_zp_zenpage_articles)) {
+			if(getOption('zenpage_combinews') AND !is_NewsCategory() AND !is_NewsArchive()) {
+				$_zp_zenpage_articles = getCombiNews(getOption("zenpage_articles_per_page"));
 			} else {
-				$news = array_shift($_zp_zenpage_articles);
-				if (is_array($news)) {
-					if(getOption('zenpage_combinews') AND array_key_exists("type",$news) AND array_key_exists("albumname",$news)) {
-						if($news['type'] === "images") {
-							$albumobj = new Album($_zp_gallery,$news['albumname']);
-							$_zp_current_zenpage_news = newImage($albumobj,$news['titlelink']);
-						} else if($news['type'] === "albums") {
-							$_zp_current_zenpage_news = new Album($_zp_gallery,$news['albumname']);
-						} else {
-							$_zp_current_zenpage_news = new ZenpageNews($news['titlelink']);
-						}
+				$_zp_zenpage_articles = getNewsArticles(getOption("zenpage_articles_per_page"));
+			}
+			//print_r($_zp_zenpage_articles); // debugging
+			if (empty($_zp_zenpage_articles)) { return false; }
+			$_zp_current_zenpage_news_restore = $_zp_current_zenpage_news;
+			$news = array_shift($_zp_zenpage_articles);
+			//print_r($news); // debugging
+			if (is_array($news)) {
+				if(getOption('zenpage_combinews') AND array_key_exists("type",$news) AND array_key_exists("albumname",$news)) {
+					if($news['type'] === "images") {
+						$albumobj = new Album($_zp_gallery,$news['albumname']);
+						$_zp_current_zenpage_news = newImage($albumobj,$news['titlelink']);
+					} else if($news['type'] === "albums") {
+						$_zp_current_zenpage_news = new Album($_zp_gallery,$news['albumname']);
 					} else {
 						$_zp_current_zenpage_news = new ZenpageNews($news['titlelink']);
 					}
+				} else {
+					$_zp_current_zenpage_news = new ZenpageNews($news['titlelink']);
 				}
-				return true;
 			}
-		} // if news end
+			return true;
+		} else if (empty($_zp_zenpage_articles)) {
+			$_zp_zenpage_articles = NULL;
+			$_zp_current_zenpage_news = $_zp_current_zenpage_news_restore;
+			return false;
+		} else {
+			$news = array_shift($_zp_zenpage_articles);
+			if (is_array($news)) {
+				if(getOption('zenpage_combinews') AND array_key_exists("type",$news) AND array_key_exists("albumname",$news)) {
+					if($news['type'] === "images") {
+						$albumobj = new Album($_zp_gallery,$news['albumname']);
+						$_zp_current_zenpage_news = newImage($albumobj,$news['titlelink']);
+					} else if($news['type'] === "albums") {
+						$_zp_current_zenpage_news = new Album($_zp_gallery,$news['albumname']);
+					} else {
+						$_zp_current_zenpage_news = new ZenpageNews($news['titlelink']);
+					}
+				} else {
+					$_zp_current_zenpage_news = new ZenpageNews($news['titlelink']);
+				}
+			}
+			return true;
+		}
 	} // checkpassword if end
 }
 
@@ -1607,9 +1607,9 @@ function printNewsPageListWithNav($next='next &raquo;', $prev='&laquo; prev', $n
 
 function getTotalNewsPages() {
 	if(getOption('zenpage_combinews') AND !is_NewsCategory() AND !is_NewsArchive()) {
-		$articlecount = countArticles($category='', $published='published');
+		$articlecount = countCombiNews();
 	} else {
-		$articlecount = countArticles($category='', $published='published');
+		$articlecount = countArticles();
 	}
 }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * general functions used both on the admin backend and theme
+ * General functions used both on the admin backend and theme
  *
  * @author Malte Müller (acrylian)
  * @package plugins
