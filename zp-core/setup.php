@@ -1081,6 +1081,10 @@ if (file_exists("zp-config.php")) {
 	$tbl_tags = prefix('tags');
 	$tbl_obj_to_tag = prefix('obj_to_tag');
 	$tbl_captcha = prefix('captcha');
+	$tbl_zenpage_news = prefix('zenpage_news');
+	$tbl_zenpage_pages = prefix('zenpage_pages');
+	$tbl_zenpage_news_categories = prefix('zenpage_news_categories');
+	$tbl_zenpage_news2cat = prefix('zenpage_news2cat');
 	// Prefix the constraint names:
 	$cst_images = prefix('images_ibfk1');
 
@@ -1113,7 +1117,7 @@ if (file_exists("zp-config.php")) {
 		`id` int(11) UNSIGNED NOT NULL auto_increment,
 		`ownerid` int(11) UNSIGNED NOT NULL DEFAULT 0,
 		`name` varchar(255) NOT NULL,
-		`value` text NOT NULL,
+		`value` text,
 		PRIMARY KEY  (`id`),
 		UNIQUE (`name`, `ownerid`)
 		)	$collation;";
@@ -1141,7 +1145,7 @@ if (file_exists("zp-config.php")) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_administrators (
 		`id` int(11) UNSIGNED NOT NULL auto_increment,
 		`user` varchar(64) NOT NULL,
-		`password` text NOT NULL,
+		`password` text,
 		`name` text,
 		`email` text,
 		`rights` int,
@@ -1158,24 +1162,13 @@ if (file_exists("zp-config.php")) {
 		)	$collation;";
 	}
 
-	// v. 1.1
-	if (isset($create[$_zp_conf_vars['mysql_prefix'].'options'])) {
-		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_options (
-		`id` int(11) UNSIGNED NOT NULL auto_increment,
-		`name` varchar(64) NOT NULL,
-		`value` text NOT NULL,
-		PRIMARY KEY  (`id`),
-		UNIQUE (`name`)
-		)	$collation;";
-	}
-
 	// base implementation
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'albums'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS $tbl_albums (
 		`id` int(11) UNSIGNED NOT NULL auto_increment,
 		`parentid` int(11) unsigned default NULL,
 		`folder` varchar(255) NOT NULL default '',
-		`title` text NOT NULL,
+		`title` text,
 		`desc` text,
 		`date` datetime default NULL,
 		`place` text,
@@ -1205,7 +1198,7 @@ if (file_exists("zp-config.php")) {
 		`email` varchar(255) NOT NULL default '',
 		`website` varchar(255) default NULL,
 		`date` datetime default NULL,
-		`comment` text NOT NULL,
+		`comment` text,
 		`inmoderation` int(1) unsigned NOT NULL default '0',
 		PRIMARY KEY  (`id`),
 		KEY `ownerid` (`ownerid`)
@@ -1217,7 +1210,7 @@ if (file_exists("zp-config.php")) {
 		`id` int(11) unsigned NOT NULL auto_increment,
 		`albumid` int(11) unsigned NOT NULL default '0',
 		`filename` varchar(255) NOT NULL default '',
-		`title` text NOT NULL,
+		`title` text,
 		`desc` text,
 		`location` text,
 		`city` tinytext,
@@ -1252,7 +1245,7 @@ if (file_exists("zp-config.php")) {
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'zenpage_news'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS ".prefix('zenpage_news')." (
 		`id` int(11) unsigned NOT NULL auto_increment,
-		`title` text NOT NULL,
+		`title` text,
 		`content` text,
 		`extracontent` text,
 		`show` int(1) unsigned NOT NULL default '1',
@@ -1274,7 +1267,7 @@ if (file_exists("zp-config.php")) {
 	if (isset($create[$_zp_conf_vars['mysql_prefix'].'zenpage_news_categories'])) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS ".prefix('zenpage_news_categories')." (
 		`id` int(11) unsigned NOT NULL auto_increment,
-		`cat_name` text NOT NULL,
+		`cat_name` text,
 		`cat_link` varchar(255) NOT NULL default '',
 		`permalink` int(1) unsigned NOT NULL default 0,
 		`hitcounter` int(11) unsigned default 0,
@@ -1296,7 +1289,7 @@ if (file_exists("zp-config.php")) {
 		$db_schema[] = "CREATE TABLE IF NOT EXISTS ".prefix('zenpage_pages')." (
 		`id` int(11) unsigned NOT NULL auto_increment,
 		`parentid` int(11) unsigned default NULL,
-		`title` text NOT NULL,
+		`title` text,
 		`content` text,
 		`extracontent` text,
 		`sort_order`varchar(20) NOT NULL default '',
@@ -1378,8 +1371,8 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `total_value` int(11) UNSIGNED default '0';";
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `total_votes` int(11) UNSIGNED default '0';";
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `used_ips` longtext;";
-	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `custom_data` text default NULL";
-	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `custom_data` text default NULL";
+	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `custom_data` text";
+	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `custom_data` text";
 	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `password` `password` varchar(255) NOT NULL DEFAULT ''";
 
 	//v1.1.5
@@ -1404,11 +1397,11 @@ if (file_exists("zp-config.php")) {
 		$sql_statements[] = "ALTER TABLE $tbl_comments ADD INDEX (`ownerid`);";
 	}
 	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `dynamic` int(1) UNSIGNED default '0'";
-	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `search_params` text default NULL";
+	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `search_params` text";
 
 	//v1.1.6
-	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `album_theme` text default NULL";
-	$sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `IP` text default NULL";
+	$sql_statements[] = "ALTER TABLE $tbl_albums ADD COLUMN `album_theme` text";
+	$sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `IP` text";
 
 	//v1.1.7
 	$sql_statements[] = "ALTER TABLE $tbl_comments ADD COLUMN `private` int(1) UNSIGNED default 0";
@@ -1457,13 +1450,18 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = "ALTER TABLE $tbl_images ADD COLUMN `thumbH` int(10) UNSIGNED default NULL;";
 	
 	//v1.2.4
-	$sql_statements[] = 'ALTER TABLE '.prefix('zenpage_news_categories').' DROP INDEX `cat_link`;';
-	$sql_statements[] = 'ALTER TABLE '.prefix('zenpage_news_categories').' ADD UNIQUE (`cat_link`);';
-	$sql_statements[] = 'ALTER TABLE '.prefix('zenpage_news').' DROP INDEX `titlelink`;';
-	$sql_statements[] = 'ALTER TABLE '.prefix('zenpage_news').' ADD UNIQUE (`titlelink`);';
-	$sql_statements[] = 'ALTER TABLE '.prefix('zenpage_pages').' DROP INDEX `titlelink`;';
-	$sql_statements[] = 'ALTER TABLE '.prefix('zenpage_pages').' ADD UNIQUE (`titlelink`);';
-	
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news_categories.' DROP INDEX `cat_link`;';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news_categories.' ADD UNIQUE (`cat_link`);';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' DROP INDEX `titlelink`;';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD UNIQUE (`titlelink`);';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' DROP INDEX `titlelink`;';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD UNIQUE (`titlelink`);';
+	// Some versions of MySQL won't allow defaults on TEXT fields. Also can't make them NOT NULL because they don't have a default (catch 22) 
+	$sql_statements[] = 'ALTER TABLE '.$tbl_comments.' CHANGE `comment` `comment` TEXT;';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' CHANGE `title` `title` TEXT;';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news_categories.' CHANGE `cat_name` `cat_name` TEXT;';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' CHANGE `title` `title` TEXT;';
+		
 	/**************************************************************************************
 	 ******                            END of UPGRADE SECTION     
 	 ******                                                              
