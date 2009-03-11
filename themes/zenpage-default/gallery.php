@@ -46,6 +46,8 @@ if (!defined('WEBPATH')) die(); $firstPageImages = normalizeColumns('2', '6');?>
 		<?php printPageListWithNav("&laquo; ".gettext("prev"), gettext("next")." &raquo;"); ?>
 
 	<?php } else { // news article loop
+printNewsPageListWithNav(gettext('next &raquo;'), gettext('&laquo; prev')); 
+echo "<hr />";	
 while (next_news()): ;?> 
  <div class="newsarticle"> 
     <h3><?php printNewsTitleLink(); ?><?php echo " <span class='newstype'>[".getNewsType()."]</span>"; ?></h3>
