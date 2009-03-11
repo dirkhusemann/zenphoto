@@ -29,4 +29,14 @@ foreach (getEnabledPlugins() as $extension) {
 	}
 }
 
+// load the filter plugins
+foreach (getEnabledPlugins() as $extension) {
+	if (strpos($extension, 'filter-') === 0) {
+		$option_interface = NULL;
+		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
+		if (!is_null($option_interface)) {
+			$class_optionInterface[$extension] = $option_interface;
+		}
+	}
+}
 ?>

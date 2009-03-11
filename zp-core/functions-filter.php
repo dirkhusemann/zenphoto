@@ -36,10 +36,10 @@ $_zp_filters = array();
  * @global array $_zp_filters Storage for all of the filters
  * @param string $hook the name of the zenphoto element to be filtered
  * @param callback $function_name the name of the function that is to be called.
- * @param integer $priority optional. Used to specify the order in which the functions associated with a particular action are executed (default=10, lower=earlier execution, and functions with the same priority are executed in the order in which they were added to the filter)
  * @param int $accepted_args optional. The number of arguments the function accept (default 1).
+ * @param integer $priority optional. Used to specify the order in which the functions associated with a particular action are executed (default=10, lower=earlier execution, and functions with the same priority are executed in the order in which they were added to the filter)
  */
-function register_filter($hook, $function_name, $priority = 10, $accepted_args = 1) {
+function register_filter($hook, $function_name, $accepted_args = 1, $priority = 10) {
 	global $_zp_filters;
 	$bt = @debug_backtrace();
 	if (is_array($bt)) {

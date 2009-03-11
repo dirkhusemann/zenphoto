@@ -54,7 +54,7 @@ class Comment extends PersistentObject {
 	function getComment() { return $this->get('comment'); }
 	function setComment($value) { $this->set('comment', $value); }
 	
-	function getInModeration() { return $this-_get('inmoderation'); }
+	function getInModeration() { return $this->get('inmoderation'); }
 	function setInModeration($value) { $this->set('inmoderation', $value); }
 	
 	function getType() {
