@@ -119,7 +119,7 @@ $basepath = dirname(dirname(dirname(dirname(dirname(__FILE__)))));
 	 <?php 
 	 		if(empty($_GET['zenpage']) AND empty($_GET['album'])) {
 	 			echo "<h2 style='margin-left: 8px'>";
-	 			echo gettext("<em>tiny</em>Zenpage (v1.0.4)")."</h2>";
+	 			echo "<em>tiny</em>Zenpage (v1.0.4)</h2>";
 	 			echo "<p style='margin-left: 8px'>";
 	 			echo gettext("This provides access to your images and albums (dropdown 'zenphoto') as well as pages, news articles and news categories (dropdown 'zenpage') to easily include them in your pages and articles. You need at least 'Manage all albums' or 'Edit' rights to specific albums to be able to included image from them.")."</p>";
 	 			echo "<p style='margin-left: 8px'>";
