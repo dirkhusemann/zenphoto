@@ -12,6 +12,7 @@ $plugin_version = '1.0.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---filter-comments.php.html";
 
 register_filter('comment_post', 'emailReply', 2);
+register_filter('comment_approve', 'emailApproval');
 
 /**
  * Filters a new comment post and sends email replies to previous posters
@@ -54,6 +55,51 @@ function emailReply($comment, $owner) {
 							sprintf(gettext('You can view all comments about this item here:'."\n".'%1$s'), 'http://' . $_SERVER['SERVER_NAME'] . WEBPATH . '/index.php?'.$url) . "\n\n";
 	$on = gettext('Reply posted');
 	zp_mail("[" . get_language_string(getOption('gallery_title'), getOption('locale')) . "] $on", $message, "", $emails);
-	
+}
+
+function emailApproval($comment) {
+	$owner = NULL;
+	switch ($comment->getType()) {
+		case 'albums':
+			$sql = 'SELECT `folder` FROM '.prefix('albums').' WHERE `id`='.$comment->getOwnerID();
+			$row = query_single_row($sql);
+			if (is_array($row)) {
+				$owner = new Album(New Gallery(), $row['folder']);
+			}
+			break;
+		case 'images':
+			$sql = 'SELECT `albumid`, `filename` FROM '.prefix('images').' WHERE `id`='.$comment->getOwnerID();
+			$imagerow = query_single_row($sql);
+			if (is_array($imagerow)) {
+				$sql = 'SELECT `folder` FROM '.prefix('albums').' WHERE `id`='.$imagerow['albumid'];
+				$row = query_single_row($sql);
+				if (is_array($row)) {
+					$album = new Album(New Gallery(), $row['folder']);
+				}
+				if (is_array($row)) {
+					$owner = newImage($album, $imagerow['filename']);
+				}
+			}
+			break;
+		case 'news':
+			$sql = 'SELECT `titlelink` FROM '.prefix('news').' WHERE `id`='.$comment->getOwnerID();
+			$row = query_single_row($sql);
+			if (is_array($row)) {
+				$owner = new ZenpageNews($row['titlelink']);
+			}
+			break;
+		case 'pages':
+			$sql = 'SELECT `titlelink` FROM '.prefix('pages').' WHERE `id`='.$comment->getOwnerID();
+			$row = query_single_row($sql);
+			if (is_array($row)) {
+				$owner = new ZenpageNews($row['titlelink']);
+			}
+			break;
+	}
+	if (!is_null($owner)) {
+		$owner->getComments();
+		emailReply($comment, $owner);
+	}
+	return $comment;
 }
 ?>

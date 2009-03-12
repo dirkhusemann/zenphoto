@@ -61,7 +61,7 @@ class Comment extends PersistentObject {
 		$type = $this->get('type');
 		$image_types = explode(',',zp_image_types(''));
 		if (in_array($type, $image_types)) {
-			$type = 'image';
+			$type = 'images';
 		}
 		return $type;
 	}
