@@ -40,8 +40,14 @@ if (isset($_GET['action'])) {
 		exit();
 
 	case "moderation":
-		$sql = 'UPDATE ' . prefix('comments') . ' SET `inmoderation`=0 WHERE `id`=' . $_GET['id'] . ';';
+		$comment = new Comment(sanitize_numeric($_GET['id']));
+		apply_filter('comment_approve', $comment);
+		$comment->setInModeration(0);
+		$comment->save();
+/*		
+		$sql = 'UPDATE ' . prefix('comments') . ' SET `inmoderation`=0 WHERE `id`=' . sanitize_numeric($_get['id']) . ';';
 		query($sql);
+*/
 		header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin-comments.php');
 		exit();
 	

@@ -191,7 +191,7 @@ function printContactForm() {
 			if(!empty($mailcontent['phone'])) { $message .= $mailcontent['phone']."\n"; }
 			if(!empty($mailcontent['website'])) { $message .= $mailcontent['website']."\n"; }
 			$message .= "\n\n";
-			echo getOption("contactform_confirmtext");
+			echo get_language_string(getOption("contactform_confirmtext"));
 			?>
 <div>
 	<form id="confirm" action="<?php echo sanitize($_SERVER['REQUEST_URI']); ?>" method="post" accept-charset="UTF-8" style="float: left">
@@ -216,7 +216,7 @@ function printContactForm() {
 		$headers = sanitize($_POST['headers']);
 		$mailaddress = sanitize($_POST['mailaddress']);
 		$_zp_UTF8->send_mail(getOption("contactform_mailaddress").",".$mailaddress, $subject, $message, $headers);
-		echo getOption("contactform_thankstext");
+		echo get_language_string(getOption("contactform_thankstext"));
 	}
 	if (count($error) <= 0) {
 		$mailcontent = array();
@@ -233,7 +233,7 @@ function printContactForm() {
 		$mailcontent['message'] ='';
 	}
 	if (count($error) > 0 || !isset($_POST['sendmail'])) {
-		echo getOption("contactform_introtext");
+		echo get_language_string(getOption("contactform_introtext"));
 		include(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . "contact_form/form.php");
 	}
 }

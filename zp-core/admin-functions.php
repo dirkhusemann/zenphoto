@@ -18,16 +18,6 @@ define('TEXT_INPUT_SIZE_SHORT', 30);
 require_once(dirname(__FILE__).'/class-load.php');
 require_once(dirname(__FILE__).'/functions.php');
 
-// load the filter plugins
-foreach (getEnabledPlugins() as $extension) {
-	if (strpos($extension, 'filter-') === 0) {
-		$option_interface = NULL;
-		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
-		if (!is_null($option_interface)) {
-			$class_optionInterface[$extension] = $option_interface;
-		}
-	}
-}
 
 $sortby = array(gettext('Filename') => 'filename',
 								gettext('Date') => 'date',
@@ -1152,12 +1142,7 @@ function printAlbumEditForm($index, $album) {
 	<td valign="top">
 <?php	$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');	?>
   <p>
-	<input type="checkbox" name="
-	<?php	$prefix."allowcomments\" value=\"1\"";	
-		if ($album->getCommentsAllowed()) { 
-			echo "CHECKED";	}	echo ">"; 
-		?>
-	">
+	<input type="checkbox" name="<?php echo $prefix.'allowcomments';?>" value="1" <?php if ($album->getCommentsAllowed()) { echo "CHECKED"; } ?> />
 	<?php echo gettext("Allow Comments"); ?>
 	</p>
 	<p>
