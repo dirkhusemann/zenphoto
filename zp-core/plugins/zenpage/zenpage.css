@@ -92,8 +92,13 @@ td.rightcolumn {
 
 td.rightcolumnmiddle {
 	padding-left: 15px;
-	vertical-align: middle;
+	vertical-align: top;
 	text-align: left;
+
+}
+
+td.middlecolumn {
+vertical-align: top;
 }
 
 #pageslist {
@@ -385,7 +390,7 @@ div.tabs>div h2 {
 	list-style: none;
 	height: 15em;
 	overflow: auto;
-	width: 16em;
+	width: 17.2em;
 	background-color: white;
 	padding: 0;
 	margin: 0px 0 0 0;
@@ -497,4 +502,27 @@ div.tabs>div h2 {
 .buttons a.submitbutton {
 	width: 181px;
 	text-align: left;
+}
+
+.h2_bordered_edit-zenpage {
+	width: 16em;
+	font-weight: bold;
+	padding: 5px 8px 5px 8px;
+	border-bottom: 2px solid #E5E5E5;
+	border-left: 1px solid #E5E5E5;
+	border-right: 1px solid #E5E5E5;
+	border-top: 1px solid #E5E5E5;
+	background-image: url(../../images/admin-headlineback.jpg);
+	background-repeat: repeat-x;
+	margin-bottom: 0;
+}
+	
+.box-edit-zenpage {
+	margin: 0 0 10px 0;
+	padding: 0px 8px 8px 8px;
+	background-color: white;
+	border: 1px solid #E5E5E5;
+	border-bottom-width: 5px;
+	width: 16em;
+	line-height: 1.5em;
 }

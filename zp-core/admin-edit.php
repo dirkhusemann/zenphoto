@@ -508,9 +508,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 			<input type="hidden"	name="savealbuminfo" value="1" />
 			<?php printAlbumEditForm(0, $album); ?>
 		</form>
-		<br clear:all />
-		<br />
-		<hr /><?php printAlbumButtons($album); ?><br /><br />
+		<?php printAlbumButtons($album); ?>
 		</div>
 		</div>
 		<?php
@@ -666,6 +664,9 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 							/>
 						</a>
 						<p><strong><?php echo $image->filename; ?></strong></p>
+						<p><?php echo gettext("Dimensions:"); ?><br /><?php echo $image->getWidth(); ?> x  <?php echo $image->getHeight().' '.gettext('px'); ?></p>
+						<p><?php echo gettext("Size:"); ?><br /><?php echo byteConvert($image->getImageFootprint()); ?></p>
+						
 						<p><label for="<?php echo $currentimage; ?>-thumb"><input
 							type="radio" id="<?php echo $currentimage; ?>-thumb" name="thumb"
 							value="<?php echo $currentimage ?>" /> <?php echo ' '.gettext("Select as album thumbnail."); ?>
@@ -674,8 +675,10 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						<td align="left" valign="top" width="100"><?php echo gettext("Title:"); ?></td>
 						<td><?php print_language_string_list($image->get('title'), $currentimage.'-title', false); ?>
 						</td>
-						<td style="padding-left: 1em; text-align: left;" valign="top"
-							colspan="1"><label for="<?php echo $currentimage; ?>-allowcomments">
+						<td style="padding-left: 1em; text-align: left;" rowspan="14" valign="top">
+						<h2 class="h2_bordered_edit"><?php echo gettext("General"); ?></h2>
+     				<div class="box-edit">
+						<label for="<?php echo $currentimage; ?>-allowcomments">
 						<input type="checkbox"
 							id="<?php echo $currentimage; ?>-allowcomments"
 							name="<?php echo $currentimage; ?>-allowcomments" value="1"
@@ -685,14 +688,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 							id="<?php echo $currentimage; ?>-Visible"
 							name="<?php echo $currentimage; ?>-Visible" value="1"
 							<?php if ($image->getShow()) { echo "checked=\"checked\""; } ?> />
-						<?php echo gettext("Visible"); ?></label></td>
-					</tr>
-		
-					<tr>
-						<td align="left" valign="top"><?php echo gettext("Description:"); ?></td>
-						<td><?php print_language_string_list($image->get('desc'), $currentimage.'-desc', true, NULL, 'texteditor'); ?>
-						</td>
-						<td style="padding-left: 1em;">
+						<?php echo gettext("Visible"); ?></label>
 						<p style="margin-top: 0; margin-bottom: 1em;"><?php
 									$hc = $image->get('hitcounter');
 									if (empty($hc)) { $hc = '0'; }
@@ -707,7 +703,10 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 										echo ' '.gettext("Rating: Unrated");
 									}
 									?></p>
-		
+									</div>
+									
+							<h2 class="h2_bordered_edit"><?php echo gettext("Utilities"); ?></h2>
+     				<div class="box-edit">
 						<!-- Move/Copy/Rename this image --> <label
 							for="<?php echo $currentimage; ?>-move" style="padding-right: .5em">
 						<input type="radio" id="<?php echo $currentimage; ?>-move"
@@ -724,7 +723,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 							id="<?php echo $currentimage; ?>-rename"
 							name="<?php echo $currentimage; ?>-MoveCopyRename" value="rename"
 							onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'rename');" />
-						<?php echo gettext("Rename File");?> </label> <label
+						<?php echo gettext("Rename File");?> </label><br /><label
 							for="<?php echo $currentimage; ?>-Delete"> <input type="radio"
 							id="<?php echo $currentimage; ?>-Delete"
 							name="<?php echo $currentimage; ?>-MoveCopyRename" value="delete"
@@ -754,102 +753,105 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 											}
 										?>
 						</select>
-						<p style="text-align: right;"><a
-							href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><?php echo gettext("Cancel");?></a>
+						<br /><p class="buttons"><a href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
 						</p>
 						</div>
-						<div id="<?php echo $currentimage; ?>-renamediv"
-							style="padding-top: .5em; padding-left: .5em; display: none;"><?php echo gettext("to"); ?>:
-						<input name="<?php echo $currentimage; ?>-renameto" type="text"
-							size="35" value="<?php echo $image->filename;?>" /><br />
-						<p style="text-align: right; padding: .25em 0px;"><a
-							href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><?php echo gettext("Cancel");?></a>
+						<div id="<?php echo $currentimage; ?>-renamediv" style="padding-top: .5em; padding-left: .5em; display: none;"><?php echo gettext("to"); ?>:
+						<input name="<?php echo $currentimage; ?>-renameto" type="text" value="<?php echo $image->filename;?>" /><br />
+						<br /><p class="buttons"><a	href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
 						</p>
 						</div>
-						<div id="deletemsg<?php echo $currentimage; ?>"
-							style="padding-top: .5em; padding-left: .5em; color: red; display: none">
+						<div id="deletemsg<?php echo $currentimage; ?>"	style="padding-top: .5em; padding-left: .5em; color: red; display: none">
 						<?php echo gettext('Image will be deleted when changes are saved.'); ?>
-						<p style="text-align: right; padding: .25em 0px;"><a
-							href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><?php echo gettext("Cancel");?></a>
+						<p class="buttons"><a	href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
 						</p>
-						</div>
-						<p><br /><?php echo $image->getWidth(); ?> x  <?php echo $image->getHeight().' '.gettext('px'); ?> (<?php echo byteConvert($image->getImageFootprint()); ?>)</p>
+						
+						</div><br clear: all />
+					 <hr />
 						<?php
 						if (isImagePhoto($image)) {
 						?>
-						<p>
+						<p>	<?php echo gettext("Rotation:"); ?>
 							<?php
 							$splits = preg_split('/!([(0-9)])/', $image->get('EXIFOrientation'));
 							$rotation = $splits[0];
 							if (!in_array($rotation,array(3, 6, 8))) $rotation = 0;
 							?>
 							<input type="hidden" name="<?php echo $currentimage; ?>-oldrotation" value="<?php echo $rotation; ?>" />
-							<?php	echo gettext('Rotation: ');	?>
 							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="0" <?php checked(0, $rotation); echo $disablerotate ?> /> <?php echo gettext('none'); ?>
 							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="8" <?php checked(8, $rotation); echo $disablerotate ?> /> <?php echo gettext('90 degrees'); ?>
-							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="3" <?php checked(3, $rotation); echo $disablerotate ?> /> <?php echo gettext('180 degrees'); ?>
+							<br /><input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="3" <?php checked(3, $rotation); echo $disablerotate ?> /> <?php echo gettext('180 degrees'); ?>
 							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="6" <?php checked(6, $rotation); echo $disablerotate ?> /> <?php echo gettext('270 degrees'); ?>
 						</p>
 						<?php
 						} 
 						?>
-						</td>
-					</tr>
-		
-					<tr class="imageextrainfo" style="display: none">
-						<td align="right" valign="top"><?php echo gettext("Location:"); ?></td>
-						<td><?php print_language_string_list($image->get('location'), $currentimage.'-location', false); ?>
-						</td>
-							<td rowspan="10" style="padding-left: 1em;">
-							<p style="padding: 0px 0px .5em; margin: 0px;">Tags</p>
+						</div>
+						<span class="imageextrainfo" style="display: none">
+						<h2 class="h2_bordered_edit"><?php echo gettext("Tags"); ?></h2>
+							<div class="edit-box">
 							<?php	tagSelector($image, 'tags_'.$currentimage.'-', false, $tagsort);	?>
+							</div>
+						</span>
 						</td>
 					</tr>
 		
-					<tr class="imageextrainfo" style="display: none">
-						<td align="right" valign="top"><?php echo gettext("City:"); ?></td>
-						<td><?php print_language_string_list($image->get('city'), $currentimage.'-city', false); ?>
+					<tr>
+						<td align="left" valign="top"><?php echo gettext("Description:"); ?></td>
+						<td><?php print_language_string_list($image->get('desc'), $currentimage.'-desc', true, NULL, 'texteditor'); ?>
 						</td>
 					</tr>
-		
-					<tr class="imageextrainfo" style="display: none">
-						<td align="right" valign="top"><?php echo gettext("State:"); ?></td>
-						<td><?php print_language_string_list($image->get('state'), $currentimage.'-state', false); ?>
-						</td>
-					</tr>
-		
-					<tr class="imageextrainfo" style="display: none">
-						<td align="right" valign="top"><?php echo gettext("Country:"); ?></td>
-						<td><?php print_language_string_list($image->get('country'), $currentimage.'-country', false); ?>
-						</td>
-					</tr>
-		
-					<tr class="imageextrainfo" style="display: none">
-						<td align="right" valign="top"><?php echo gettext("Credit:"); ?></td>
-						<td><?php print_language_string_list($image->get('credit'), $currentimage.'-credit', false); ?>
-						</td>
-					</tr>
-		
-					<tr class="imageextrainfo" style="display: none">
-						<td align="right" valign="top"><?php echo gettext("Copyright:"); ?></td>
-						<td><?php print_language_string_list($image->get('copyright'), $currentimage.'-copyright', false); ?>
-						</td>
-					</tr>
-		
-					<tr class="imageextrainfo" style="display: none">
-						<td align="right" valign="top"><?php echo gettext("Date:"); ?></td>
+					
+					<tr align="left" valign="top">
+						<td valign="top"><?php echo gettext("Date:"); ?></td>
 						<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $currentimage; ?>-date"
 							value="<?php $d=$image->getDateTime(); if ($d!='0000-00-00 00:00:00') { echo $d; } ?>" /></td>
 					</tr>
-		
-					<tr class="imageextrainfo" style="display: none">
-						<td align="right" valign="top"><?php echo gettext("Custom data:"); ?></td>
+										
+					<tr>
+						<td valign="top"><?php echo gettext("Custom data:"); ?></td>
 						<td><?php print_language_string_list($image->get('custom_data'), $currentimage.'-custom_data', true); ?>
 						</td>
 					</tr>
 					
 					<tr class="imageextrainfo" style="display: none">
-						<td align="right" valign="top"><?php echo gettext("EXIF information:"); ?></td>
+						<td valign="top"><?php echo gettext("Location:"); ?></td>
+						<td><?php print_language_string_list($image->get('location'), $currentimage.'-location', false); ?>
+						</td>
+					</tr>
+		
+					<tr class="imageextrainfo" style="display: none">
+						<td valign="top"><?php echo gettext("City:"); ?></td>
+						<td><?php print_language_string_list($image->get('city'), $currentimage.'-city', false); ?>
+						</td>
+					</tr>
+		
+					<tr class="imageextrainfo" style="display: none">
+						<td valign="top"><?php echo gettext("State:"); ?></td>
+						<td><?php print_language_string_list($image->get('state'), $currentimage.'-state', false); ?>
+						</td>
+					</tr>
+		
+					<tr class="imageextrainfo" style="display: none">
+						<td valign="top"><?php echo gettext("Country:"); ?></td>
+						<td><?php print_language_string_list($image->get('country'), $currentimage.'-country', false); ?>
+						</td>
+					</tr>
+		
+					<tr class="imageextrainfo" style="display: none">
+						<td valign="top"><?php echo gettext("Credit:"); ?></td>
+						<td><?php print_language_string_list($image->get('credit'), $currentimage.'-credit', false); ?>
+						</td>
+					</tr>
+		
+					<tr class="imageextrainfo" style="display: none">
+						<td valign="top"><?php echo gettext("Copyright:"); ?></td>
+						<td><?php print_language_string_list($image->get('copyright'), $currentimage.'-copyright', false); ?>
+						</td>
+					</tr>
+								
+					<tr class="imageextrainfo" style="display: none">
+						<td valign="top"><?php echo gettext("EXIF information:"); ?></td>
 						<td>
 						<?php
 							$data = '';

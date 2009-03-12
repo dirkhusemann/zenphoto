@@ -987,7 +987,7 @@ button.positive,.buttons a.positive {
 	border: 1px solid #ccc;
 	list-style: none;
 	height: 24em;
-	width: 20em;
+	width: 19.5em;
 	overflow: auto;
 	background-color: white;
 }
@@ -1333,4 +1333,30 @@ span.tagMatches span {
 
 ._tag_suggestion {
 	float: left;
+}
+
+
+/* box for edit pages
+----------------------------------*/
+.h2_bordered_edit {
+	width: 18.25em;
+	font-weight: bold;
+	padding: 5px 8px 5px 8px;
+	border-bottom: 2px solid #cccccc;
+	border-left: 1px solid  #cccccc;
+	border-right: 1px solid  #cccccc;
+	border-top: 1px solid  #cccccc;
+	background-image: url(images/admin-headlineback.jpg);
+	background-repeat: repeat-x;
+	margin-bottom: 0;
+}
+	
+.box-edit {
+	margin: 0 0 10px 0;
+	padding: 8px 8px 8px 8px;
+	background-color: white;
+	border: 1px solid #cccccc;
+	border-bottom-width: 5px;
+	width: 18.25em;
+	line-height: 1.5em;
 }

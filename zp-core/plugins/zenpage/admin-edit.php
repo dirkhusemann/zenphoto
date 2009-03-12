@@ -108,10 +108,17 @@ if(is_object($result)) {
 </p>
 <br clear: both /><br clear: both />
 
-<div id="tips" style="display:none">		
+<div id="tips" style="display:none">
+<br />		
+<h2><?php echo gettext("Usage tips"); ?></h2>
 <p><?php echo gettext("Check <em>Edit Titlelink</em> if you need to customize how the title appears in URLs. Otherwise it will be automatically updated to any changes made to the title. If you want to prevent this check <em>Enable permaTitlelink</em> and the titlelink stays always the same (recommended if you use Zenphoto's multilingual mode). <strong>Note: </strong> <em>Edit titlelink</em> overrides the permalink setting.");?>
 <br /><?php echo gettext("If you lock an article only the current active author/user or any user with full admin rights will be able to edit it later again!"); ?></p> 
 <p><?php echo gettext("<strong>Important:</strong> If you are using Zenphoto's multi-lingual mode the Titlelink is generated from the Title of the currently selected language."); ?></p> 
+<p><?php echo gettext("<em>ExtraContent:</em> Here you can enter extra content for example to be printed on the sidebar"); ?></p>
+<p><?php echo gettext("<em>Codeblocks:</em> Use these fields if you need to enter php code (for example Zenphoto functions) or javascript code."); ?>
+<?php echo gettext("You also can use the codeblock fields as custom fields."); ?>
+<?php echo gettext("Note that your theme must be setup to use the codeblock functions. Note also that codeblock fields are not multi-lingual."); ?>
+</p>
 <p><?php echo gettext("Hint: If you need more space for your text use TinyMCE's full screen mode (Click the blue square on the top right of editor's control bar)."); ?></p> 
 </div>
 
@@ -130,34 +137,51 @@ if(is_object($result)) {
   <table>
     <tr> 
       <td class="topalign-padding"><?php echo gettext("Title:"); ?></td>
-      <td><?php print_language_string_list_zenpage(getIfObject($result,"title"),"title",false);?></td>
-    	<td class="rightcolumnmiddle" style="vertical-align: top" rowspan="3"><?php echo gettext("Author:"); ?><?php AuthorSelector(getIfObject($result,"author")) ;?>
-    		<?php if(is_object($result)) { ?>
-					<p><input name="edittitlelink" type="checkbox" id="edittitlelink" value="1" /> <?php echo gettext("Edit TitleLink"); ?></p>
+      <td class="middlecolumn"><?php print_language_string_list_zenpage(getIfObject($result,"title"),"title",false);?></td>
+    	<td class="rightcolumnmiddle" rowspan="5">
+    	
+    	
+    	<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Publish"); ?></h2>
+     		<div class="box-edit-zenpage">
+   			<p><?php echo gettext("Author:"); ?> <?php AuthorSelector(getIfObject($result,"author")) ;?></p>
+    		<p><?php if(is_object($result)) { ?>
+				<input name="edittitlelink" type="checkbox" id="edittitlelink" value="1" /> <?php echo gettext("Edit TitleLink"); ?><br />
 				<?php } ?>
-    		<p><input name="permalink" type="checkbox" id="permalink" value="1" <?php if (is_object($result)) { checkIfChecked($result->getPermalink()); } else { echo "checked='checked'"; } ?> /> <?php echo gettext("Enable permaTitlelink"); ?></p>
-     		<p><?php echo gettext("Date:"); ?> <input name="date" type="text" id="date" value="<?php if(is_object($result)) { echo $result->getDatetime(); } else { echo date('Y-m-d H:i:s'); } ?>" /></p>
-    		<p>
-				<?php if(getIfObject($result,"lastchangeauthor") != "") { ?>
-				<?php printf(gettext('Last change: %1$s by %2$s'),$result->getLastchange(),$result->getLastchangeauthor()); 
-					} ?>
+    		<input name="permalink" type="checkbox" id="permalink" value="1" <?php if (is_object($result)) { checkIfChecked($result->getPermalink()); } else { echo "checked='checked'"; } ?> /> <?php echo gettext("Enable permaTitlelink"); ?><br />
+     		<input name="show" type="checkbox" id="show" value="1" <?php checkIfChecked(getIfObject($result,"show"));?> /> <?php echo gettext("Published"); ?><br />
+    	 	<input name="locked" type="checkbox" id="locked" value="1" <?php checkIfChecked(getIfObject($result,"locked"));?>; /> <?php echo gettext("Locked for changes"); ?><br />
 				</p>
-    	  <input name="show" type="checkbox" id="show" value="1" <?php checkIfChecked(getIfObject($result,"show"));?> /> <?php echo gettext("Published"); ?><br />
-    	 <input name="commentson" type="checkbox" id="commentson" value="1" <?php checkIfChecked(getIfObject($result,"commentson"));?> /> <?php echo gettext("Comments on"); ?><br />
-    	 <input name="locked" type="checkbox" id="locked" value="1" <?php checkIfChecked(getIfObject($result,"locked"));?>; /> <?php echo gettext("Locked for changes"); ?><br />
-			<p><?php if(is_object($result)) { printf(gettext('%1$s hits'),$result->getHitcounter()); ?> <input name="resethitcounter" type="checkbox" id="resethitcounter" value="1" /> <?php echo gettext("Reset hitcounter"); } ?></p>
-    	<p class="buttons"><button class="submitbutton" type="submit" title="<?php echo $updateitem; ?>"><img src="../../images/pass.png" alt="" /><strong><?php if(is_object($result)) { echo $updateitem; } else { echo $saveitem; } ?></strong></button></p>
-			<br style="clear:both" />
-			<p class="buttons"><button class="submitbutton" type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button></p>
-			<br style="clear:both" />
-			<?php if(is_object($result)) { ?>
-    	<p class="buttons"><a class="submitbutton" href="javascript: confirmDeleteImage('admin-edit.php?<?php echo $admintype; ?>&amp;add&amp;del=<?php printIfObject($result,"id"); echo $page; ?><?php if(is_AdminEditPage("page")) { echo "&amp;sortorder=".$result->getSortorder(); } ?>','<?php echo $deletemessage; ?>')" title="<?php echo $deleteitem; ?>"><img src="../../images/fail.png" alt="" /><strong><?php echo $deleteitem; ?></strong></a></p>
-    	<br /><br />
-			<?php } ?>
+     		<p class="buttons"><button class="submitbutton" type="submit" title="<?php echo $updateitem; ?>"><img src="../../images/pass.png" alt="" /><strong><?php if(is_object($result)) { echo $updateitem; } else { echo $saveitem; } ?></strong></button></p>
+				<br style="clear:both" />
+				<p class="buttons"><button class="submitbutton" type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button></p>
+				<br style="clear:both" />
+				<?php if(is_object($result)) { ?>
+    		<p class="buttons"><a class="submitbutton" href="javascript: confirmDeleteImage('admin-edit.php?<?php echo $admintype; ?>&amp;add&amp;del=<?php printIfObject($result,"id"); echo $page; ?><?php if(is_AdminEditPage("page")) { echo "&amp;sortorder=".$result->getSortorder(); } ?>','<?php echo $deletemessage; ?>')" title="<?php echo $deleteitem; ?>"><img src="../../images/fail.png" alt="" /><strong><?php echo $deleteitem; ?></strong></a></p>
+    		<br style="clear:both" />
+				<?php } ?>
+				
+     		</div>
+     	 		
+     		<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Date"); ?></h2>
+     		<div class="box-edit-zenpage">
+     		<p><?php echo gettext("Date:"); ?> <input name="date" type="text" id="date" value="<?php if(is_object($result)) { echo $result->getDatetime(); } else { echo date('Y-m-d H:i:s'); } ?>" /></p>
+				<?php if(getIfObject($result,"lastchangeauthor") != "") { ?>
+				<p><?php printf(gettext('Last change: %1$s by %2$s'),$result->getLastchange(),$result->getLastchangeauthor()); ?>
+				</p>
+				<?php	} ?>
+				</div>
+    	
+    		<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("General"); ?></h2>
+     		<div class="box-edit-zenpage">
+     		<p><input name="commentson" type="checkbox" id="commentson" value="1" <?php checkIfChecked(getIfObject($result,"commentson"));?> /> <?php echo gettext("Comments on"); ?><br />
+				<?php if(is_object($result)) { ?> <input name="resethitcounter" type="checkbox" id="resethitcounter" value="1" /> <?php printf(gettext('Reset hitcounter (Hits: %1$s)'),$result->getHitcounter()); } ?>
+    		</p>
+    		</div>
+			
     	<p>
     	<?php
-    if(is_AdminEditPage("newsarticle")) {
-    	echo gettext("Categories:"); ?>
+    if(is_AdminEditPage("newsarticle")) { ?>
+    	<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Categories"); ?></h2>
     	<?php 
     	if(is_object($result)) {
     	 	printCategorySelection(getIfObject($result,"id")); 
@@ -181,15 +205,14 @@ if(is_object($result)) {
 	 </tr>
     <tr> 
 			<td class="topalign-padding"><?php echo gettext("Content:"); ?></td>
-			<td class="topalign-padding"><?php print_language_string_list_zenpage(getIfObject($result,"content"),"content",TRUE) ;?></td>
+			<td><?php print_language_string_list_zenpage(getIfObject($result,"content"),"content",TRUE) ;?></td>
     </tr>
     <tr> 
 			<td class="topalign-padding"><?php echo gettext("ExtraContent:"); ?></td>
 			<td><?php print_language_string_list_zenpage(getIfObject($result,"extracontent"),"extracontent",TRUE) ;?></td>
-			<td class="rightcolumn"><?php echo gettext("Here you can enter extra content for example to be printed on the sidebar"); ?></td>
     <tr> 
 		<td class="topalign-nopadding"><br /><?php echo gettext("Codeblocks:"); ?></td>
-		<td class="topalign-padding">
+		<td>
 		<br />
 			<div class="tabs">
 				<ul class="tabNavigation">
@@ -220,11 +243,6 @@ if(is_object($result)) {
 					<textarea name="codeblock3" id="codeblock3"><?php echo stripslashes($codeblock[3]); ?></textarea></div>
 				</div>
 			</div>
-		</td>
-		<td class="rightcolumn"><br />
-			<p><?php echo gettext("Use the codeblock text fields if you need to enter php code (for example Zenphoto functions) or javascript code."); ?></p> 
-			<p><?php echo gettext("You also can use the codeblock fields as custom fields."); ?></p> 
-			<p><?php echo gettext("Note that your theme must be setup to use the codeblock functions. Note also that codeblock fields are not multi-lingual."); ?></p>
 		</td>
 		</tr>
   </table>
