@@ -23,6 +23,26 @@ define('DEFAULT_MOV_WIDTH', 640);
 define('DEFAULT_3GP_HEIGHT', 304);
 define('DEFAULT_3GP_WIDTH', 352);
 
+$option_interface = new VideoObject_Options();
+
+/**
+ * Option class for video objects
+ *
+ */
+class VideoObject_Options {
+	
+	/**
+	 * Standard option interface
+	 *
+	 * @return array
+	 */
+	function getOptionsSupported() {
+		return array(gettext('Watermark default images') => array ('key' => 'video_watermark_default_images', 'type' => 1,
+																	'desc' => gettext('Check to place watermark image on default thumbnail images.')));
+	}
+	
+}
+
 class Video extends _Image {
 
 	/**
@@ -122,28 +142,26 @@ class Video extends _Image {
 	 * @return string
 	 */
 	function getThumb($type='image') {
+		$wmt = getOption('Video_watermark');
 		if ($this->objectsThumb == NULL) {
 			$filename = makeSpecialImageName($this->getThumbImageFile());
-			$path = ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($filename) . '&s=thumb';
-			if ($type !== 'image') $path .= '&'.$type.'=true';
-			return WEBPATH . "/" . $path;
+			if (!getOption('video_watermark_default_images')) $wmt = '';
 		} else {
 			$filename = $this->objectsThumb;
-			$wmt = getOption('Video_watermark');
-			if ($wmt) $wmt = '&wmt='.$wmt;
-			$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename, getImageParameters(array('thumb')));
-			if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
-				return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($cachefilename));
+		}
+		if ($wmt) $wmt = '&wmt='.$wmt;
+		$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename, getImageParameters(array('thumb')));
+		if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
+			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($cachefilename));
+		} else {
+			if (getOption('mod_rewrite') && empty($wmt) && !empty($alb)) {
+				$path = pathurlencode($alb) . '/'.$type.'/thumb/' . urlencode($filename);
 			} else {
-				if (getOption('mod_rewrite') && empty($wmt) && !empty($alb)) {
-					$path = pathurlencode($alb) . '/'.$type.'/thumb/' . urlencode($filename);
-				} else {
-					$path = ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($filename) . '&s=thumb'.$wmt;
-					if ($type !== 'image') $path .= '&'.$type.'=true';
-				}
-				if (substr($path, 0, 1) == "/") $path = substr($path, 1);
-				return WEBPATH . "/" . $path;
+				$path = ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($filename) . '&s=thumb'.$wmt;
+				if ($type !== 'image') $path .= '&'.$type.'=true';
 			}
+			if (substr($path, 0, 1) == "/") $path = substr($path, 1);
+			return WEBPATH . "/" . $path;
 		}
 	}
 
@@ -246,6 +264,6 @@ class Video extends _Image {
 				break;
 		}		
 	}
-
+	
 }
 ?>

@@ -62,6 +62,25 @@ $plugin_disable = $disable;
 if ($plugin_disable) return;
 addPluginType('txt', 'TextObject');
 
+$option_interface = new textObject_Options();
+
+/**
+ * Option class for textobjects objects
+ *
+ */
+class TextObject_Options {
+	
+	/**
+	 * Standard option interface
+	 *
+	 * @return array
+	 */
+	function getOptionsSupported() {
+		return array(gettext('Watermark default images') => array ('key' => 'textobject_watermark_default_images', 'type' => 1,
+																	'desc' => gettext('Check to place watermark image on default thumbnail images.')));
+	}
+	
+}
 
 class TextObject extends _Image {
 
@@ -119,28 +138,26 @@ class TextObject extends _Image {
 	 * @return string
 	 */
 	function getThumb($type='image') {
+		$wmt = getOption('TextObject_watermark');
 		if ($this->objectsThumb == NULL) {
 			$filename = makeSpecialImageName($this->getThumbImageFile());
-			$path = ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($filename) . '&s=thumb';
-			if ($type !== 'image') $path .= '&'.$type.'=true';
-			return WEBPATH . "/" . $path;
+			if (!getOption('textobject_watermark_default_images')) $wmt = '';
 		} else {
 			$filename = $this->objectsThumb;
-			$wmt = getOption('TextObject_watermark');
-			if ($wmt) $wmt = '&wmt='.$wmt;
-			$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename, getImageParameters(array('thumb')));
-			if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
-				return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($cachefilename));
+		}
+		if ($wmt) $wmt = '&wmt='.$wmt;
+		$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename, getImageParameters(array('thumb')));
+		if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
+			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($cachefilename));
+		} else {
+			if (getOption('mod_rewrite') && empty($wmt) && !empty($alb)) {
+				$path = pathurlencode($alb) . '/'.$type.'/thumb/' . urlencode($filename);
 			} else {
-				if (getOption('mod_rewrite') && empty($wmt) && !empty($alb)) {
-					$path = pathurlencode($alb) . '/'.$type.'/thumb/' . urlencode($filename);
-				} else {
-					$path = ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($filename) . '&s=thumb'.$wmt;
-					if ($type !== 'image') $path .= '&'.$type.'=true';
-				}
-				if (substr($path, 0, 1) == "/") $path = substr($path, 1);
-				return WEBPATH . "/" . $path;
+				$path = ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($filename) . '&s=thumb'.$wmt;
+				if ($type !== 'image') $path .= '&'.$type.'=true';
 			}
+			if (substr($path, 0, 1) == "/") $path = substr($path, 1);
+			return WEBPATH . "/" . $path;
 		}
 	}
 

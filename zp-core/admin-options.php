@@ -259,7 +259,6 @@ if (isset($_GET['action'])) {
 			setBoolOption('watermark_allow_upscale', isset($_POST['watermark_allow_upscale']));
 			setOption('watermark_h_offset', sanitize($_POST['watermark_h_offset'],3));
 			setOption('watermark_w_offset', sanitize($_POST['watermark_w_offset'],3));
-			setBoolOption('perform_video_watermark', isset($_POST['perform_video_watermark']));
 			
 			$imageplugins = array_unique($_zp_extra_filetypes);
 			$imageplugins[] = 'Image';

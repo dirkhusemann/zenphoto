@@ -33,7 +33,9 @@ if (isset($_GET['action'])) {
 		foreach ($filelist as $extension) {
 			$extension = FilesystemToUTF8($extension);
 			$opt = 'zp_plugin_'.substr($extension, 0, -4);
-			setBoolOption($opt, isset($_POST[$opt]));
+			if (isset($_POST[$opt]) || !is_null(getOption($opt))) { // don't create any options until plugin is selected at least once
+				setBoolOption($opt, isset($_POST[$opt]));
+			}
 		}
 		$saved = true;
 	}
