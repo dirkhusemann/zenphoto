@@ -105,17 +105,7 @@ function zp_handle_comment() {
 	$comment_error = 0;
 	$cookie = zp_getCookie('zenphoto');
 	if (isset($_POST['comment'])) {
-		// ZENPAGE:  if else constructs added
-		if(getOption('zp_plugin_zenpage')) {
-			//zenpage_news = new ZenpageNews();
-			//$zenpage_pages = new ZenpagePage();
-			$zenpage_news_context = isPage(ZENPAGE_NEWS);
-			$zenpage_pages_context = isPage(ZENPAGE_PAGES);
-		} else {
-			$zenpage_news_context = FALSE;
-			$zenpage_pages_context = FALSE;
-		}
-		if ((in_context(ZP_ALBUM) || $zenpage_news_context || $zenpage_pages_context)) {
+		if ((in_context(ZP_ALBUM) || in_context(ZP_ZENPAGE_NEWS_ARTICLE) || in_context(ZP_ZENPAGE_PAGE))) {
 			$p_name = sanitize($_POST['name'],3);
 			if (isset($_POST['email'])) {
 				$p_email = sanitize($_POST['email'], 3);
@@ -154,10 +144,10 @@ function zp_handle_comment() {
 				} else if (!in_context(ZP_IMAGE) AND in_context(ZP_ALBUM)){
 					$commentobject = $_zp_current_album;
 					$redirectTo = $_zp_current_album->getAlbumLink();
-				} else 	if($zenpage_news_context) {
+				} else 	if (in_context(ZP_ZENPAGE_NEWS_ARTICLE)) {
 					$commentobject = $_zp_current_zenpage_news;
 					$redirectTo = FULLWEBPATH . '/index.php?p='.ZENPAGE_NEWS.'&title='.$_zp_current_zenpage_news->getTitlelink();
-				} else if ($zenpage_pages_context) {
+				} else if (in_context(ZP_ZENPAGE_PAGE)) {
 					$commentobject = $_zp_current_zenpage_page;
 					$redirectTo = FULLWEBPATH . '/index.php?p='.ZENPAGE_PAGES.'&title='.$_zp_current_zenpage_page->getTitlelink();
 				}
@@ -183,7 +173,7 @@ function zp_handle_comment() {
 				if (isset($_POST['remember'])) $_zp_comment_stored[4] = true;
 				$comment_error = 1 + $commentadded;
 				// ZENPAGE: if statements added
-				if ($activeImage !== false AND !$zenpage_news_context AND !$zenpage_pages_context) { // tricasa hack? Set the context to the image on which the comment was posted
+				if ($activeImage !== false AND !in_context(ZP_ZENPAGE_NEWS_ARTICLE) AND !in_context(ZP_ZENPAGE_PAGE)) { // tricasa hack? Set the context to the image on which the comment was posted
 					$_zp_current_image = $activeImage;
 					$_zp_current_album = $activeImage->getAlbum();
 					set_context(ZP_IMAGE | ZP_ALBUM | ZP_INDEX);
@@ -433,6 +423,7 @@ function zenpage_load_page() {
 	$result = query_single_row($sql);
 	if (is_array($result)) {
 		$_zp_current_zenpage_page = new ZenpagePage($titlelink);
+		add_context(ZP_ZENPAGE_PAGE);
 	} else {
 		$_GET['p'] = strtoupper(ZENPAGE_PAGES).':'.$titlelink;
 	}

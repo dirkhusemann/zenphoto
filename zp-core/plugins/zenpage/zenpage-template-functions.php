@@ -94,8 +94,7 @@ function is_NewsArchive() {
  * @return bool
  */
 function is_Pages() {
-	global $_zp_current_zenpage_page;
-	return !is_null($_zp_current_zenpage_page);
+	return in_context(ZP_ZENPAGE_PAGE);
 }
 
 /**

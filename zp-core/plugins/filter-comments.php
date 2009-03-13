@@ -35,11 +35,11 @@ function emailReply($comment, $owner) {
 			$ur_album = getUrAlbum($owner);
 			$action = sprintf(gettext('A reply has been posted on album "%1$s".'), $owner->name);
 			break;
-		case "zenpagenews":
+		case "news":
 			$url = "p=".ZENPAGE_NEWS."&title=" . urlencode($owner->getTitlelink());
 			$action = sprintf(gettext('A reply has been posted on article "%1$s".'), $owner->getTitlelink());
 			break;
-		case "zenpagepage":
+		case "pages":
 			$url = "p=".ZENPAGE_PAGES."&title=" . urlencode($owner->getTitlelink());
 			$action = sprintf(gettext('A reply has been posted on page "%1$s".'), $owner->getTitlelink());
 			break;
@@ -82,17 +82,17 @@ function emailApproval($comment) {
 			}
 			break;
 		case 'news':
-			$sql = 'SELECT `titlelink` FROM '.prefix('news').' WHERE `id`='.$comment->getOwnerID();
+			$sql = 'SELECT `titlelink` FROM '.prefix('zenpage_news').' WHERE `id`='.$comment->getOwnerID();
 			$row = query_single_row($sql);
 			if (is_array($row)) {
 				$owner = new ZenpageNews($row['titlelink']);
 			}
 			break;
 		case 'pages':
-			$sql = 'SELECT `titlelink` FROM '.prefix('pages').' WHERE `id`='.$comment->getOwnerID();
+			$sql = 'SELECT `titlelink` FROM '.prefix('zenpage_pages').' WHERE `id`='.$comment->getOwnerID();
 			$row = query_single_row($sql);
 			if (is_array($row)) {
-				$owner = new ZenpageNews($row['titlelink']);
+				$owner = new ZenpagePage($row['titlelink']);
 			}
 			break;
 	}
