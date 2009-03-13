@@ -2827,21 +2827,18 @@ function next_comment($desc=false) {
 			}
 		}
 		if (empty($_zp_comments)) { return false; }
-		$_zp_current_comment = array_shift($_zp_comments);
-		add_context(ZP_COMMENT);
-		return true;
 	} else if (empty($_zp_comments)) {
 		$_zp_comments = NULL;
 		$_zp_current_comment = NULL;
 		rem_context(ZP_COMMENT);
 		return false;
-	} else {
-		$_zp_current_comment = array_shift($_zp_comments);
-		if ($_zp_current_comment['anon']) {
-			$_zp_current_comment['name'] = '<'.gettext("Anonymous").'>';
-		}
-		return true;
+	} 
+	$_zp_current_comment = array_shift($_zp_comments);
+	if ($_zp_current_comment['anon']) {
+		$_zp_current_comment['email'] = $_zp_current_comment['name'] = '<'.gettext("Anonymous").'>';
 	}
+	add_context(ZP_COMMENT);
+	return true;
 }
 
 /**
