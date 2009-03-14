@@ -735,7 +735,7 @@ function makeAlbumCurrent($album) {
 function getAlbumTitle() {
 	if(!in_context(ZP_ALBUM)) return false;
 	global $_zp_current_album;
-	return $_zp_current_album->getTitle();
+	return get_language_string($_zp_current_album->getTitle());
 }
 
 /**
@@ -1012,7 +1012,7 @@ function printAlbumDate($before='', $nonemessage='', $format=null, $editable=fal
  */
 function getAlbumPlace() {
 	global $_zp_current_album;
-	return $_zp_current_album->getPlace();
+	return get_language_string($_zp_current_album->getPlace());
 }
 
 /**
@@ -1038,7 +1038,7 @@ function printAlbumPlace($editable=false, $editclass='', $messageIfEmpty = true)
 function getAlbumDesc() {
 	if(!in_context(ZP_ALBUM)) return false;
 	global $_zp_current_album;
-	return $_zp_current_album->getDesc();
+	return get_language_string($_zp_current_album->getDesc());
 }
 
 /**
@@ -1872,7 +1872,7 @@ function printImageDate($before='', $nonemessage='', $format=null, $editable=fal
 function getImageLocation() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
-	return $_zp_current_image->getLocation();
+	return get_language_string($_zp_current_image->getLocation());
 }
 
 /**
@@ -1883,7 +1883,7 @@ function getImageLocation() {
 function getImageCity() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
-	return $_zp_current_image->getcity();
+	return get_language_stringget_language_string($_zp_current_image->getcity());
 }
 
 /**
@@ -1894,7 +1894,7 @@ function getImageCity() {
 function getImageState() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
-	return $_zp_current_image->getState();
+	return get_language_string($_zp_current_image->getState());
 }
 
 /**
@@ -1905,7 +1905,7 @@ function getImageState() {
 function getImageCountry() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
-	return $_zp_current_image->getCountry();
+	return get_language_string($_zp_current_image->getCountry());
 }
 
 /**
@@ -1917,7 +1917,7 @@ function getImageCountry() {
 function getImageDesc() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
-	return $_zp_current_image->getDesc();
+	return get_language_string($_zp_current_image->getDesc());
 }
 
 /**
