@@ -152,9 +152,9 @@ if(is_object($result)) {
     	 	<input name="locked" type="checkbox" id="locked" value="1" <?php checkIfChecked(getIfObject($result,"locked"));?>; /> <?php echo gettext("Locked for changes"); ?><br />
 				</p>
      		<p class="buttons"><button class="submitbutton" type="submit" title="<?php echo $updateitem; ?>"><img src="../../images/pass.png" alt="" /><strong><?php if(is_object($result)) { echo $updateitem; } else { echo $saveitem; } ?></strong></button></p>
-				<br style="clear:both" />
+				<br style="clear:all" />
 				<p class="buttons"><button class="submitbutton" type="reset" title="<?php echo gettext("Reset"); ?>"><img src="../../images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button></p>
-				<br style="clear:both" />
+				<br style="clear:all" />
 				<?php if(is_object($result)) { ?>
     		<p class="buttons"><a class="submitbutton" href="javascript: confirmDeleteImage('admin-edit.php?<?php echo $admintype; ?>&amp;add&amp;del=<?php printIfObject($result,"id"); echo $page; ?><?php if(is_AdminEditPage("page")) { echo "&amp;sortorder=".$result->getSortorder(); } ?>','<?php echo $deletemessage; ?>')" title="<?php echo $deleteitem; ?>"><img src="../../images/fail.png" alt="" /><strong><?php echo $deleteitem; ?></strong></a></p>
     		<br style="clear:both" />

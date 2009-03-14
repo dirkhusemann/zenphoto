@@ -265,7 +265,8 @@ function printAdminToolbox($id='admin') {
  * @return string
  */
 function getGalleryTitle() {
-	return get_language_string(getOption('gallery_title'));
+	global $_zp_gallery;
+	return $_zp_gallery->getTitle();
 }
 
 /**
@@ -290,7 +291,8 @@ function printGalleryTitle() {
  * @return string
  */
 function getGalleryDesc() {
-	return get_language_string(getOption('Gallery_description'));
+	global $_zp_gallery;
+	return $_zp_gallery->getDesc();
 }
 
 /**
@@ -735,7 +737,7 @@ function makeAlbumCurrent($album) {
 function getAlbumTitle() {
 	if(!in_context(ZP_ALBUM)) return false;
 	global $_zp_current_album;
-	return get_language_string($_zp_current_album->getTitle());
+	return $_zp_current_album->getTitle();
 }
 
 /**
@@ -1001,7 +1003,6 @@ function printAlbumDate($before='', $nonemessage='', $format=null, $editable=fal
 			$messageIfEmpty = gettext('(No date...)');
 		}
 	}
-	
 	printEditable('album', 'date', $editable, $editclass, $messageIfEmpty, false, $date);
 }
 
@@ -1012,7 +1013,7 @@ function printAlbumDate($before='', $nonemessage='', $format=null, $editable=fal
  */
 function getAlbumPlace() {
 	global $_zp_current_album;
-	return get_language_string($_zp_current_album->getPlace());
+	return $_zp_current_album->getPlace();
 }
 
 /**
@@ -1038,7 +1039,7 @@ function printAlbumPlace($editable=false, $editclass='', $messageIfEmpty = true)
 function getAlbumDesc() {
 	if(!in_context(ZP_ALBUM)) return false;
 	global $_zp_current_album;
-	return get_language_string($_zp_current_album->getDesc());
+	return $_zp_current_album->getDesc();
 }
 
 /**
@@ -1872,7 +1873,7 @@ function printImageDate($before='', $nonemessage='', $format=null, $editable=fal
 function getImageLocation() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
-	return get_language_string($_zp_current_image->getLocation());
+	return $_zp_current_image->getLocation();
 }
 
 /**
@@ -1883,7 +1884,7 @@ function getImageLocation() {
 function getImageCity() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
-	return get_language_stringget_language_string($_zp_current_image->getcity());
+	return $_zp_current_image->getcity();
 }
 
 /**
@@ -1894,7 +1895,7 @@ function getImageCity() {
 function getImageState() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
-	return get_language_string($_zp_current_image->getState());
+	return $_zp_current_image->getState();
 }
 
 /**
@@ -1905,7 +1906,7 @@ function getImageState() {
 function getImageCountry() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
-	return get_language_string($_zp_current_image->getCountry());
+	return $_zp_current_image->getCountry();
 }
 
 /**
@@ -1917,7 +1918,7 @@ function getImageCountry() {
 function getImageDesc() {
 	if(!in_context(ZP_IMAGE)) return false;
 	global $_zp_current_image;
-	return get_language_string($_zp_current_image->getDesc());
+	return $_zp_current_image->getDesc();
 }
 
 /**
@@ -4141,9 +4142,9 @@ function checkforPassword($silent=false) {
 		$hint = get_language_string(getOption('search_hint'));
 		$authType = 'zp_search_auth';
 		if (empty($hash)) {
-			$hash = getOption('gallery_password');
-			$show = (getOption('gallery_user') != '');
-			$hint = get_language_string(getOption('gallery_hint'));
+			$hash = $_zp_gallery->getPassword();
+			$show = $_zp_gallery->getUser() != '';
+			$hint = $_zp_gallery->getPasswordHint();
 			$authType = 'zp_gallery_auth';
 		}
 		if (!empty($hash)) {
@@ -4167,12 +4168,13 @@ function checkforPassword($silent=false) {
 		}
 	} else {  // index page
 		if ($_zp_loggedin) return false;
-		$hash = getOption('gallery_password');
-		$hint = get_language_string(getOption('gallery_hint'));
+		$hash = $_zp_gallery->getPassword();
+		$show = $_zp_gallery->getUser() != '';
+		$hint = $_zp_gallery->getPasswordHint();
 		if (!empty($hash)) {
 			if (zp_getCookie('zp_gallery_auth') != $hash) {
 				if (!$silent) {
-					printPasswordForm($hint, true, getOption('login_user_field') || getOption('gallery_user') != '');
+					printPasswordForm($hint, true, getOption('login_user_field') || $show);
 				}
 				return true;
 			}

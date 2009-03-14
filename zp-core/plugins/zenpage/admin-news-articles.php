@@ -86,7 +86,7 @@ if(isset($_GET['category'])) {
    if(checkIfLocked($articleobj)) {
    	 echo "<a href='admin-edit.php?newsarticle&amp;titlelink=".urlencode($articleobj->getTitlelink())."&pagenr=".getCurrentAdminNewsPage()."' title='".truncate_string(strip_tags($articleobj->getContent()),300)."'>"; checkForEmptyTitle($articleobj->getTitle(),"news"); echo "</a>".checkHitcounterDisplay($articleobj->getHitcounter()); 
    } else {
-   	 echo get_language_string($articleobj->getTitle())."</a>".checkHitcounterDisplay($article->getHitcounter()); 
+   	 echo $articleobj->getTitle()."</a>".checkHitcounterDisplay($article->getHitcounter()); 
    }
    ?>
   

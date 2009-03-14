@@ -20,6 +20,7 @@ register_filter('comment_approve', 'emailApproval');
  * @param object $owner the element commented upon.
  */
 function emailReply($comment, $owner) {
+	$gallery = new Gallery();
 	if ($comment->getInModeration() || $comment->getPrivate()) {
 		return $comment;  // we are not going to e-mail unless the comment has passed.
 	}
@@ -60,7 +61,7 @@ function emailReply($comment, $owner) {
 							sprintf(gettext('Author: %1$s'."\n".'Email: %2$s'."\n".'Website: %3$s'."\n".'Comment:'."\n\n".'%4$s'),$name, $email, $comment->getWebsite(), $comment->getComment()) . "\n\n" .
 							sprintf(gettext('You can view all comments about this item here:'."\n".'%1$s'), 'http://' . $_SERVER['SERVER_NAME'] . WEBPATH . '/index.php?'.$url) . "\n\n";
 	$on = gettext('Reply posted');
-	zp_mail("[" . get_language_string(getOption('gallery_title'), getOption('locale')) . "] $on", $message, "", $emails);
+	zp_mail("[" . $gallery->getTitle() . "] $on", $message, "", $emails);
 }
 
 function emailApproval($comment) {

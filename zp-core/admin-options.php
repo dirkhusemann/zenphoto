@@ -804,8 +804,9 @@ if ($subtab == 'admin') {
 <button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
 <button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
 </p>
-<br />
 </form>
+<br clear: all />
+<br />
 </div>
 <!-- end of tab_admin div -->
 

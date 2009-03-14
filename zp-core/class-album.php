@@ -91,7 +91,7 @@ class Album extends PersistentObject {
 				$this->set('mtime', filemtime($this->localpath));
 				if ($new) {
 					$title = $this->get('title');
-					$this->set('title', substr($title, 0, -4));
+					$this->set('title', substr($title, 0, -4)); // Strip the .'.alb' suffix
 					$this->setDateTime(strftime('%Y/%m/%d %T', filemtime($this->localpath)));
 				}
 				$this->save();
@@ -193,8 +193,7 @@ class Album extends PersistentObject {
 	 * @return string
 	 */
 	function getPasswordHint() {
-		$t =  $this->get('password_hint');
-		return get_language_string($t);
+		return get_language_string($this->get('password_hint'));
 	}
 
 	/**
@@ -211,8 +210,7 @@ class Album extends PersistentObject {
 	 * @return string
 	 */
 	function getTitle() {
-		$t = $this->get('title');
-		return get_language_string($t);
+		return get_language_string($this->get('title'));
 	}
 
 	/**
@@ -229,8 +227,7 @@ class Album extends PersistentObject {
 	 * @return string
 	 */
 	function getDesc() {
-		$t = $this->get('desc');
-		return get_language_string($t);
+		return get_language_string($this->get('desc'));
 	}
 
 	/**
@@ -292,8 +289,7 @@ class Album extends PersistentObject {
 	 * @return string
 	 */
 	function getPlace() {
-		$t =  $this->get('place');
-		return get_language_string($t);
+		return get_language_string($this->get('place'));
 	}
 
 	/**
@@ -1323,8 +1319,7 @@ class Album extends PersistentObject {
 	 * @return string
 	 */
 	function getCustomData() {
-		$t =  $this->get('custom_data');
-		return get_language_string($t);
+		return get_language_string($this->get('custom_data'));
 	}
 
 	/**

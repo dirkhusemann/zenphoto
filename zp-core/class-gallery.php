@@ -38,6 +38,46 @@ class Gallery {
 	}
 
 	/**
+	 * Returns the gallery title
+	 *
+	 * @return string
+	 */
+	function getTitle() {
+		return(get_language_string(getOption('gallery_title')));
+	}
+	
+	/**
+	 * Returns the gallery description
+	 *
+	 * @return string
+	 */
+	function getDesc() {
+		return(get_language_string(getOption('gallery_desc')));
+	}
+	
+	/**
+	 * Returns the hashed password for guest gallery access
+	 *
+	 * @return md5
+	 */
+	function getPassword() {
+		return(get_language_string(getOption('gallery_password')));
+	}
+	
+	/**
+	 * Returns the hind associated with the gallery password
+	 *
+	 * @return string
+	 */
+	function getPasswordHint() {
+		return(get_language_string(getOption('gallery_hint')));
+	}
+	
+	function getUser() {
+		return(get_language_string(getOption('gallery_user')));
+	}
+	
+	/**
 	 * Returns the main albums directory
 	 *
 	 * @return string

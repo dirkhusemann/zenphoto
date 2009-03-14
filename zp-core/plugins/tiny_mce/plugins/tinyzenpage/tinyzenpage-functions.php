@@ -20,7 +20,7 @@ function printFullAlbumsList() {
 	foreach($albumlist as $album) {
 		if (isMyAlbum($album, ALL_ALBUMS_RIGHTS) OR isMyAlbum($album, EDIT_RIGHTS)) {
 			$albumobj = new Album($galleryobj,$album);
-			echo "<option value='".urlencode($albumobj->name)."'>".get_language_string($albumobj->getTitle()).unpublishedZenphotoItemCheck($albumobj)." (".$albumobj->getNumImages().")</option>";
+			echo "<option value='".urlencode($albumobj->name)."'>".$albumobj->getTitle().unpublishedZenphotoItemCheck($albumobj)." (".$albumobj->getNumImages().")</option>";
 			printSubLevelAlbums($albumobj);
 		}
 	}
@@ -43,7 +43,7 @@ function printSubLevelAlbums(&$albumobj) {
 			$arrow .= "&raquo; ";
 		}
 		echo "<option value='".urlencode($subalbumobj->name)."'>";
-		echo $arrow.get_language_string($subalbumobj->getTitle()).unpublishedZenphotoItemCheck($subalbumobj)." (".$subalbumobj->getNumImages().")</option>";
+		echo $arrow.$subalbumobj->getTitle().unpublishedZenphotoItemCheck($subalbumobj)." (".$subalbumobj->getNumImages().")</option>";
 		printSubLevelAlbums($subalbumobj);
 	}
 }
@@ -99,7 +99,7 @@ function printImageslist($number) {
 		$images = $albumobj->getImages();
 
 		// This should be done with sprintf here but somehow the variables are always empty then...
-		echo "<h3 style='margin-bottom:10px'>".gettext("Album:")." <em>".get_language_string($albumobj->getTitle()).unpublishedZenphotoItemCheck($albumobj,false)."</em> / ".gettext("Album folder:")." <em>".$albumobj->name."</em><br /><small>".gettext("(Click on image to include)")."</small></h3>";
+		echo "<h3 style='margin-bottom:10px'>".gettext("Album:")." <em>".$albumobj->getTitle().unpublishedZenphotoItemCheck($albumobj,false)."</em> / ".gettext("Album folder:")." <em>".$albumobj->name."</em><br /><small>".gettext("(Click on image to include)")."</small></h3>";
 		if($albumobj->getNumImages() != 0) {
 			$images_per_page = $number;
 			if(isset($_GET['page'])) {
@@ -123,7 +123,7 @@ function printImageslist($number) {
 				$imgurl = $host.WEBPATH."/zp-core/i.php?a=".$albumobj->name."&amp;i=".$imageobj->filename;
 				$imgsizeurl = $imageobj->getCustomImage(85, NULL, NULL, 85, 85, NULL, NULL, TRUE);
 				echo "<div style='width: 85px; height: 100px; float: left; margin: 10px 10px 10px 13px'>\n";
-				echo "<a href=\"javascript:ZenpageDialog.insert('".$imgurl."','".urlencode($imageobj->filename)."','".urlencode(get_language_string($imageobj->getTitle()))."','".urlencode(get_language_string($albumobj->getTitle()))."','zenphoto');\" title='".get_language_string($imageobj->getTitle())." (".$imageobj->filename.")'><img src='".$imgsizeurl."' style='border: 1px solid gray; padding: 1px' /></a>\n";
+				echo "<a href=\"javascript:ZenpageDialog.insert('".$imgurl."','".urlencode($imageobj->filename)."','".urlencode($imageobj->getTitle())."','".urlencode($albumobj->getTitle())."','zenphoto');\" title='".$imageobj->getTitle()." (".$imageobj->filename.")'><img src='".$imgsizeurl."' style='border: 1px solid gray; padding: 1px' /></a>\n";
 				echo "<a href='zoom.php?keepThis=true&amp;image=".urlencode($imageobj->filename)."&amp;album=".urlencode($albumobj->name)."&amp;&TB_iframe=true&amp;height=450&amp;width=450' title='Zoom' class='thickbox' style='outline: none;'><img src='img/magnify.png' alt='' style='border: 0' /></a> ".shortentitle($imageobj->getTitle(),8).unpublishedZenphotoItemCheck($imageobj,false);
 				echo "</div>\n";
 				if ($nr === $endimage[$currentpage]){
@@ -137,7 +137,7 @@ function printImageslist($number) {
 			$imgsizeurl = $albumthumb->getCustomImage(85, NULL, NULL, 85, 85, NULL, NULL, TRUE);
 			echo "<p style='margin-left: 8px'>".gettext("<strong>Note:</strong> This album does not contain any images.")."</p>";
 			echo "<div style='width: 85px; height: 100px; float: left; margin: 10px 10px 10px 13px'>";
-			echo "<a href=\"javascript:ZenpageDialog.insert('".$imgurl."','','','".urlencode(get_language_string($albumobj->getTitle()))."','zenphoto');\" title='".get_language_string($albumobj->getTitle())." (".$albumobj->name.")'><img src='".$imgsizeurl."' style='border: 1px solid gray; padding: 1px' /></a>";
+			echo "<a href=\"javascript:ZenpageDialog.insert('".$imgurl."','','','".urlencode($albumobj->getTitle())."','zenphoto');\" title='".$albumobj->getTitle()." (".$albumobj->name.")'><img src='".$imgsizeurl."' style='border: 1px solid gray; padding: 1px' /></a>";
 			//echo "<a href='zoom.php?keepThis=true&amp;image=".urlencode($imageobj->filename)."&amp;album=".urlencode($albumobj->name)."&amp;&TB_iframe=true&amp;height=450&amp;width=450' title='Zoom' class='thickbox' style='outline: none;'><img src='img/magnify.png' alt='' style='border: 0' /></a> ".shortentitle($imageobj->getTitle(),8);
 			echo "</div>";
 		}	// if/else  no image end

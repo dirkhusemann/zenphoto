@@ -952,7 +952,7 @@ function fetchComments($number) {
  * @return int
  */
 function postComment($name, $email, $website, $comment, $code, $code_ok, $receiver, $ip, $private, $anon) {
-	global $_zp_captcha;
+	global $_zp_captcha, $_zp_gallery;
 	$result = commentObjectClass($receiver);
 	list($type, $class) = $result;
 	$receiver->getComments();
@@ -1084,7 +1084,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 				}
 			}
 			$on = gettext('Comment posted');
-			zp_mail("[" . get_language_string(getOption('gallery_title'), getOption('locale')) . "] $on", $message, "", $emails);
+			zp_mail("[" . $_zp_gallery->getTitle() . "] $on", $message, "", $emails);
 		}
 	}
 	return $goodMessage;

@@ -37,6 +37,7 @@ if (!is_null(getOption('admin_reset_date'))) {
 }
 
 $buffer = '';
+
 function fillbuffer($handle) {
 	global $buffer;
 	$record = fread($handle, 8192);
@@ -208,6 +209,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 		<?php
 	}
 } else if (isset($_REQUEST['restore']) && db_connect()) {
+	$oldzenpage = getOption('zp_plugin_zenpage');
 	$success = false;
 	if (isset($_REQUEST['backupfile'])) {
 		$file_version = 0;
@@ -354,6 +356,11 @@ if (db_connect()) {
 } else {
 	echo "<h3>".gettext("database not connected")."</h3>";
 	echo "<p>".gettext("Check the zp-config.php file to make sure you've got the right username, password, host, and database. If you haven't created the database yet, now would be a good time.");
+}
+if (isset($oldzenpage) && !$oldzenpage && getOption('zp_plugin_zenpage')) { // restore set zenpage option
+	echo	'<div class="errorbox">';
+	echo gettext('The restore enabled the Zenpage plugin. You may need to run <a href="'.WEBPATH.'/'.ZENFOLDER.'/setup.php">setup</a> again.');
+	echo	'</div>';
 }
 echo	'<p>';
 echo gettext('The backup facility creates database snapshots in the <code>backup</code> folder of your installation.').' '; 

@@ -308,8 +308,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getTitle() {
-		$t = $this->get('title');
-		return get_language_string($t);
+		return get_language_string($this->get('title'));
 	}
 
 	/**
@@ -326,8 +325,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getDesc() {
-		$t = $this->get('desc');
-		return get_language_string($t);
+		return get_language_string($this->get('desc'));
 	}
 
 	/**
@@ -343,8 +341,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getLocation() {
-		$t = $this->get('location');
-		return get_language_string($t);
+		return get_language_string($this->get('location'));
 	}
 
 	/**
@@ -360,8 +357,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getCity() {
-		$t = $this->get('city');
-		return get_language_string($t);
+		return get_language_string($this->get('city'));
 	}
 
 	/**
@@ -377,8 +373,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getState() {
-		$t = $this->get('state');
-		return get_language_string($t);
+		return get_language_string($this->get('state'));
 	}
 
 	/**
@@ -394,8 +389,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getCountry() {
-		$t = $this->get('country');
-		return get_language_string($t);
+		return get_language_string($this->get('country'));
 	}
 
 	/**
@@ -411,8 +405,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getCredit() {
-		$t = $this->get('credit');
-		return get_language_string($t);
+		return get_language_string($this->get('credit'));
 	}
 
 	/**
@@ -428,8 +421,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getCopyright() {
-		$t = $this->get('copyright');
-		return get_language_string($t);
+		return get_language_string($this->get('copyright'));
 	}
 
 	/**
@@ -872,8 +864,7 @@ class _Image extends PersistentObject {
 	 * @return string
 	 */
 	function getCustomData() {
-		$t = $this->get('custom_data');
-		return get_language_string($t);
+		return get_language_string($this->get('custom_data'));
 	}
 
 	/**

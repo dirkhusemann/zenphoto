@@ -103,12 +103,15 @@ class staticCache {
 		$array = explode(",",$pages);
 		foreach($array as $item) {
 			$page_to_exclude = explode("/",$item);
-			if ($_zp_gallery_page === $page_to_exclude[0]) {
-				if(empty($page_to_exclude[1])) {
-					$pagecheck =  FALSE; break;
+			if ($_zp_gallery_page === trim($page_to_exclude[0])) {
+				$exclude = trim($page_to_exclude[1]);
+				if(empty($exclude)) {
+					$pagecheck =  FALSE;
+					break;
 				} else {
-					if($title === $page_to_exclude[1]) {
-						$pagecheck =  FALSE; break;
+					if($title === $exclude) {
+						$pagecheck =  FALSE;
+						break;
 					} else {
 						$pagecheck =  TRUE;
 					}
