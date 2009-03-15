@@ -2423,7 +2423,7 @@ function zenpage_setup_page($titlelink) {
 	global $_zp_gallery_page, $_zp_current_zenpage_page;
 	$_zp_gallery_page = ZENPAGE_PAGES.'.php';
 	// TODO: zenpage really should not rely on these
-	add_context(ZP_ZENPAGE_NEWS_ARTICLE);
+	add_context(ZP_ZENPAGE_PAGE);
 	$_zp_current_zenpage_page = new ZenpagePage($titlelink);
 }
 
