@@ -265,8 +265,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 					$updates = substr($updates,0,-1);
 
 					$sql = 'REPLACE INTO '.prefix($table).' ('.$items.') VALUES ('.$values.')';
-					$success = query($sql);
-					if (!$success) break;
+					if (!query($sql, true)) $success = false;
 					$counter ++;
 					if ($counter >= RESPOND_COUNTER) {
 						echo ' ';
@@ -357,9 +356,10 @@ if (db_connect()) {
 	echo "<h3>".gettext("database not connected")."</h3>";
 	echo "<p>".gettext("Check the zp-config.php file to make sure you've got the right username, password, host, and database. If you haven't created the database yet, now would be a good time.");
 }
-if (isset($oldzenpage) && !$oldzenpage && getOption('zp_plugin_zenpage')) { // restore set zenpage option
+
+if (isset($oldzenpage) && !$oldzenpage && getOption('zp_plugin_zenpage', true)) { // restore set zenpage option
 	echo	'<div class="errorbox">';
-	echo gettext('The restore enabled the Zenpage plugin. You may need to run <a href="'.WEBPATH.'/'.ZENFOLDER.'/setup.php">setup</a> again.');
+	printf(gettext('The restore enabled the Zenpage plugin. You should run <a href="%1$s/%2$s/setup.php">setup</a> to create Zenpage database tables. If tables are created, you will need repeat thus restore operation.'),WEBPATH, ZENFOLDER);
 	echo	'</div>';
 }
 echo	'<p>';
