@@ -26,8 +26,8 @@
 	
 <div id="content-left">
 
-<?php 
-
+<?php printNewsPageListWithNav(gettext('next &raquo;'), gettext('&laquo; prev')); ?>
+<?php
 // single news article
 if(is_NewsArticle() AND !checkforPassword()) { 
 	?>  
@@ -108,6 +108,7 @@ if (getOption('zenpage_comments_allowed')) { ?>
 
 </div><?php printZenpageRSSLink("Comments-news","","",gettext("Subscribe to comments")); } // comments allowed - end
 } else {
+echo "<hr />";	
 // news article loop
   while (next_news()): ;?> 
  <div class="newsarticle"> 

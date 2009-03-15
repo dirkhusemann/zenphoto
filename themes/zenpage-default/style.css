@@ -475,14 +475,12 @@ ul.pagelist li.next {
 
 /* Paged thumbs nav
 ------------------------------ */
-
 #pagedthumbsnav {
 	width: 580px;
 	height: 55px;
 	padding: 0px;
 	border: 0px solid gray;
 	color: #444444;
-	
 }
 
 #pagedthumbsimages {
@@ -784,6 +782,11 @@ ul.archive li {
 
 /* News Articles
 ------------------------------ */
+hr {
+	border: 0;
+	border-top: 1px dotted gray;
+}
+
 .newsarticle {
 	padding-top: 1em;
 	padding-bottom: 1em;
