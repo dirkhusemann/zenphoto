@@ -79,9 +79,9 @@ foreach ($result as $image) {
 	$albumobj = $image->getAlbum();
 	$imagelink = $host.WEBPATH.$albumpath.$albumobj->name.$imagepath.$image->filename.$modrewritesuffix;
 	$fullimagelink = $host.WEBPATH."/albums/".$albumobj->name."/".$image->filename;
-	$thumburl = '<img border="0" src="'.$image->getCustomImage($size, NULL, NULL, NULL, NULL, NULL, NULL, TRUE).'" alt="'. $image->getTitle() .'" />';
-	$imagecontent = '<![CDATA[<a title="'.$image->getTitle().' in '.$albumobj->getTitle().'" href="http://'.$imagelink.'">'.$thumburl.'</a><p>' . $image->getDesc() . '</p>]]>';
-	$videocontent = '<![CDATA[<a title="'.$image->getTitle().' in '.$albumobj->getTitle().'" href="http://'.$imagelink.'">'. $image->filename.'</a><p>' . $image->getDesc() . '</p>]]>';
+	$thumburl = '<img border="0" src="'.$image->getCustomImage($size, NULL, NULL, NULL, NULL, NULL, NULL, TRUE).'" alt="'.get_language_string($image->get("title"),$locale) .'" />';
+	$imagecontent = '<![CDATA[<a title="'.get_language_string($image->get("title"),$locale).' in '.get_language_string($albumobj->get("title"),$locale).'" href="http://'.$imagelink.'">'.$thumburl.'</a><p>' . get_language_string($image->get("desc"),$locale) . '</p>]]>';
+	$videocontent = '<![CDATA[<a title="'.get_language_string($image->get("title"),$locale).' in '.$albumobj->getTitle().'" href="http://'.$imagelink.'">'. $image->filename.'</a><p>' . get_language_string($image->get("desc"),$locale) . '</p>]]>';
 	$datecontent = '<![CDATA[Date: '.zpFormattedDate(getOption('date_format'),$image->get('mtime')).']]>';
 	switch($ext) {
 		case  ".flv":
@@ -115,7 +115,7 @@ foreach ($result as $image) {
 	}
 ?>
 <item>
-	<title><?php echo $image->getTitle()." (".$albumobj->getTitle().")"; ?></title>
+	<title><?php echo get_language_string($image->get("title"),$locale)." (".get_language_string($albumobj->get("title"),$locale).")"; ?></title>
 	<link><?php echo '<![CDATA[http://'.$imagelink. ']]>';?></link>
 	<description>
 <?php
@@ -130,11 +130,11 @@ if(getOption("feed_enclosure")) { // enables download of embeded content like im
 ?>
 <enclosure url="<?php echo $fullimagelink; ?>" type="<?php echo $mimetype; ?>" />
 <?php  } ?>
-<category><?php echo $albumobj->getTitle(); ?></category>
+<category><?php echo get_language_string($albumobj->get("title"),$locale); ?></category>
 
 	<?php if(getOption("feed_mediarss")) { ?>
-	<media:content url="http://<?php echo $fullimagelink; ?>" type="image/jpeg" />
-	<media:thumbnail url="http://<?php echo $fullimagelink; ?>" width="<?php echo $size; ?>" height="<?php echo $size; ?>" />
+	<media:content url="<?php echo $fullimagelink; ?>" type="image/jpeg" />
+	<media:thumbnail url="<?php echo $fullimagelink; ?>" width="<?php echo $size; ?>" height="<?php echo $size; ?>" />
 	<?php } ?>
 	
 	<guid><?php echo '<![CDATA[http://'.$imagelink.']]>';?></guid>
