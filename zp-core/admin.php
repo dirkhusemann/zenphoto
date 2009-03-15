@@ -413,6 +413,7 @@ $count = round($count/2);
 		}
 	}
 	?>
+	<br clear="all" />
 	</div>
 </div>
 <div class="box" id="overview-maint">
