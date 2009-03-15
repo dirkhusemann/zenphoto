@@ -40,6 +40,24 @@ if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
 			$msg = gettext('Hitcounters reset');
 		}		
 	}
+	
+		/** check for update ***********************************************************/
+		/********************************************************************************/
+	if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'check_for_update') {
+		$v = checkForUpdate();
+		if (!empty($v)) {
+			echo '<div class="errorbox" id="fade-message">';
+			if ($v == 'X') {
+				echo  "<h2>".gettext("Could not connect to <a href=\"http://www.zenphoto.org\">zenphoto.org</a>")."</h2>";
+			} else {
+				echo  "<h2><a href=\"http://www.zenphoto.org\">". sprintf(gettext("zenphoto version %s is available."), $v)."</a></h2>";
+			}
+			echo '</div>';
+		} else {
+			$msg = gettext("You are running the latest zenphoto version.");
+		}
+	}
+
 
 /************************************************************************************/
 /** End Action Handling *************************************************************/
@@ -266,20 +284,7 @@ if (defined('RELEASE')) {
 	</ul>
 </div>
 <br clear="all" />
-<?php
-if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'check_for_update') {
-	$v = checkForUpdate();
-	if (!empty($v)) {
-		if ($v == 'X') {
-			echo "\n<div style=\"font-size:150%;color:#ff0000;text-align:center;\">".gettext("Could not connect to  <a href=\"http://www.zenphoto.org\">zenphoto.org</a>")."</div>\n";
-		} else {
-			echo "\n<div style=\"font-size:150%;text-align:center;\"><a href=\"http://www.zenphoto.org\">". sprintf(gettext("zenphoto version %s is available."), $v)."</a></div>\n";
-		}
-	} else {
-		echo "\n<div style=\"font-size:150%;color:#33cc33;text-align:center;\">".gettext("You are running the latest zenphoto version.")."</div>\n";
-	}
-}
-?>
+
 
 </div><!-- overview leftcolumn end -->
 <div id="overview-rightcolumn">
