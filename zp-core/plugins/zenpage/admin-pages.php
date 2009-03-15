@@ -37,6 +37,9 @@ if(isset($_GET['del'])) {
 if(isset($_GET['publish'])) { 
 	publishPageOrArticle("page",$_GET['id']);
 }
+if(isset($_GET['skipscheduling'])) {
+	skipScheduledPublishing("page",$_GET['id']);
+}
 if(isset($_GET['commentson'])) { 
   enableComments("page");
 }

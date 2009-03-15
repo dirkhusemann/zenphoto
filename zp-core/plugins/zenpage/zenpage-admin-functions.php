@@ -262,7 +262,12 @@ function printPagesListTable($page) {
     
 	<?php if(checkIfLocked($page)) { ?>
 	<td class="icons">
-		<a href="?publish=<?php echo $page->getShow(); ?>&amp;id=<?php echo $page->getID(); ?>" title="<?php echo gettext("Publish or unpublish page"); ?>"><?php echo checkIfPublished($page->getShow()); ?></a>
+		<?php if($page->getDatetime() >= date('Y-m-d H:i:s')) { ?>
+			<a href="?skipscheduling=<?php echo $page->getShow(); ?>&amp;id=<?php echo $page->getID(); ?>" title="<?php echo gettext("Skip scheduled publishing and publish immediatly"); ?>">
+		<?php } else { ?>
+			<a href="?publish=<?php echo $page->getShow(); ?>&amp;id=<?php echo $page->getID(); ?>" title="<?php echo gettext("Publish or unpublish page"); ?>">
+		<?php } ?>	
+		<?php echo checkIfPublished($page); ?></a>
 	</td>
 	<td class="icons">
 		<a href="?commentson=<?php echo $page->getCommentson(); ?>&amp;id=<?php echo $page->getID(); ?>" title="<?php echo gettext("Enable or disable comments"); ?>">
@@ -980,6 +985,24 @@ function publishPageOrArticle($option,$id) {
   query("UPDATE ".$dbtable." SET `show` = ".$show." WHERE id = ".$id);
 }
 
+/**
+ * Skips the scheduled publishing by setting the date of a page or article to the current date to publish it immediatly
+ *
+ * @param string $option "page" or "news"
+ * @param int $id the id of the article or page
+ * @return string
+ */
+function skipScheduledPublishing($option,$id) {
+  switch ($option) {
+		case "news":
+			$dbtable = prefix('zenpage_news');
+			break;
+		case "page":
+			$dbtable = prefix('zenpage_pages');
+			break;
+	}
+  query("UPDATE ".$dbtable." SET `date` = '".date('Y-m-d H:i:s')."' WHERE id = ".$id);
+}
 
 /**
  * Checks if comments are allowed for a article or page and prints the matching image icon for the articles or pages list
@@ -1231,18 +1254,23 @@ foreach($admins as $admin) {
 
 
 /**
- * Checks if a page or articles is published and prints the icon for the artilces or pages list
+ * Checks if a page or articles is published and prints the icon for the articles or pages list
  *
- * @param string $show The item array field "show"
+ * @param string $object The item array field "show"
  * @return string
  */
-function checkIfPublished($show) {
-  if ($show === "1") {
-    $publish = "<img src=\"../../images/pass.png\" alt=\"".gettext("Published")."\" />";
-  } else {
-    $publish = "<img src=\"../../images/action.png\" alt=\"".gettext("Unpublished")."\" />";
-  }
-  return $publish;
+function checkIfPublished($object) {
+	if ($object->getShow() === "1") {
+		if($object->getDateTime() > date('Y-m-d H:i:s')) {
+			echo $object->getDateTime()."/".date('Y-m-d H:i:s');
+			$publish = "<img src=\"images/clock.png\" alt=\"".gettext("Scheduled for publishing")."\" />";
+		} else{
+			$publish = "<img src=\"../../images/pass.png\" alt=\"".gettext("Published")."\" />";
+		}
+	} else {
+		$publish = "<img src=\"../../images/action.png\" alt=\"".gettext("Unpublished")."\" />";
+	}
+	return $publish;
 }
 
 

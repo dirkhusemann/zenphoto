@@ -43,7 +43,7 @@ if(getOption('zenpage_combinews') AND !isset($_GET['title']) AND !isset($_GET['c
 	function getPages($published=true) {
 		global $_zp_zenpage_all_pages;
 		if($published) {
-			$show = " WHERE `show` = 1";
+			$show = " WHERE `show` = 1 AND date <= '".date('Y-m-d H:i:s')."'";
 		} else {
 			$show = " ";
 		}
@@ -127,10 +127,10 @@ function getParentPages(&$parentid,$initparents=true) {
 
 			switch($published) {
 				case "published":
-					$show = " AND `show` = 1";
+					$show = " AND `show` = 1 AND date <= '".date('Y-m-d H:i:s')."'";
 					break;
 				case "unpublished":
-					$show = " AND `show` = 0";
+					$show = " AND `show` = 0 AND date <= '".date('Y-m-d H:i:s')."'";
 					break;
 				case "all":
 					$show = "";
@@ -149,10 +149,10 @@ function getParentPages(&$parentid,$initparents=true) {
 
 			switch($published) {
 				case "published":
-					$show = " WHERE `show` = 1";
+					$show = " WHERE `show` = 1 AND date <= '".date('Y-m-d H:i:s')."'";
 					break;
 				case "unpublished":
-					$show = " WHERE `show` = 0";
+					$show = " WHERE `show` = 0 AND date <= '".date('Y-m-d H:i:s')."'";
 					break;
 				case "all":
 					$show = "";
@@ -200,10 +200,10 @@ function getParentPages(&$parentid,$initparents=true) {
 			
 			switch($published) {
 				case "published":
-					$show = " WHERE `show` = 1";
+					$show = " WHERE `show` = 1 AND date <= '".date('Y-m-d H:i:s')."'";
 					break;
 				case "unpublished":
-					$show = " WHERE `show` = 0";
+					$show = " WHERE `show` = 0 AND date <= '".date('Y-m-d H:i:s')."'";
 					break;
 				case "all":
 					$show = "";
@@ -231,10 +231,10 @@ function getParentPages(&$parentid,$initparents=true) {
 
 			switch($published) {
 				case "published":
-					$show = " AND news.show = 1";
+					$show = " AND news.show = 1 AND news.date <= '".date('Y-m-d H:i:s')."'";
 					break;
 				case "unpublished":
-					$show = " AND news.show = 0";
+					$show = " AND news.show = 0 AND news.date <= '".date('Y-m-d H:i:s')."'";
 					break;
 				case "all":
 					$show = "";
@@ -364,7 +364,7 @@ function getParentPages(&$parentid,$initparents=true) {
 			$mode = sanitize($mode);
 		}
 		if($published === "published") {
-			$show = " WHERE `show` = 1 ";
+			$show = " WHERE `show` = 1 AND date <= '".date('Y-m-d H:i:s')."'";
 			$imagesshow = " AND images.show = 1 ";
 		} else {
 			$show = "";
@@ -434,7 +434,7 @@ function getParentPages(&$parentid,$initparents=true) {
 			$published = "published";
 		}
 		if($published === "published") {
-			$newsshow = " WHERE `show` = 1 ";
+			$newsshow = " WHERE `show` = 1 AND date <= '".date('Y-m-d H:i:s')."'";
 			$imagesshow = " AND images.show = 1 ";
 		} else {
 			$newsshow = "";

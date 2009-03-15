@@ -81,9 +81,23 @@ include("zp-functions.php"); ?>
 <?php
 if(is_object($result)) {
 	if(is_AdminEditPage("newsarticle")) {
-		echo gettext("Edit Article:"); ?> <em><?php checkForEmptyTitle($result->getTitle(),"news"); ?></em>
+		echo gettext("Edit Article:"); ?> <em><?php checkForEmptyTitle($result->getTitle(),"news"); 
+		if(is_object($result)) { 
+     	if($result->getDatetime() >= date('Y-m-d H:i:s')) {
+     		echo " <small><strong id='scheduldedpublishing'>".gettext("(Article scheduled for publishing)")."</strong></small>";
+     	}
+    }
+   ?>
+		</em>
 <? } else if(is_AdminEditPage("page")) {
-		 echo gettext("Edit Page:"); ?> <em><?php checkForEmptyTitle($result->getTitle(),"page"); ?></em>
+		 echo gettext("Edit Page:"); ?> <em><?php checkForEmptyTitle($result->getTitle(),"page"); 
+		 if(is_object($result)) { 
+     	if($result->getDatetime() >= date('Y-m-d H:i:s')) {
+     		echo " <small><strong id='scheduldedpublishing'>".gettext("(Page scheduled for publishing)")."</strong></small>";
+     	}
+    }
+	 ?>
+	 </em>
 <?php } ?> 
 <?php } else {
 	if(is_AdminEditPage("newsarticle")) {
@@ -114,6 +128,7 @@ if(is_object($result)) {
 <p><?php echo gettext("Check <em>Edit Titlelink</em> if you need to customize how the title appears in URLs. Otherwise it will be automatically updated to any changes made to the title. If you want to prevent this check <em>Enable permaTitlelink</em> and the titlelink stays always the same (recommended if you use Zenphoto's multilingual mode). <strong>Note: </strong> <em>Edit titlelink</em> overrides the permalink setting.");?>
 <br /><?php echo gettext("If you lock an article only the current active author/user or any user with full admin rights will be able to edit it later again!"); ?></p> 
 <p><?php echo gettext("<strong>Important:</strong> If you are using Zenphoto's multi-lingual mode the Titlelink is generated from the Title of the currently selected language."); ?></p> 
+<p><?php echo gettext("<em>Scheduled publishing:</em> Just set a page or a news article to 'published' and enter a future date in the date field manually. Note this works on server time!"); ?></p>
 <p><?php echo gettext("<em>ExtraContent:</em> Here you can enter extra content for example to be printed on the sidebar"); ?></p>
 <p><?php echo gettext("<em>Codeblocks:</em> Use these fields if you need to enter php code (for example Zenphoto functions) or javascript code."); ?>
 <?php echo gettext("You also can use the codeblock fields as custom fields."); ?>
@@ -159,12 +174,17 @@ if(is_object($result)) {
     		<p class="buttons"><a class="submitbutton" href="javascript: confirmDeleteImage('admin-edit.php?<?php echo $admintype; ?>&amp;add&amp;del=<?php printIfObject($result,"id"); echo $page; ?><?php if(is_AdminEditPage("page")) { echo "&amp;sortorder=".$result->getSortorder(); } ?>','<?php echo $deletemessage; ?>')" title="<?php echo $deleteitem; ?>"><img src="../../images/fail.png" alt="" /><strong><?php echo $deleteitem; ?></strong></a></p>
     		<br style="clear:both" />
 				<?php } ?>
-				
      		</div>
-     	 		
      		<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Date"); ?></h2>
      		<div class="box-edit-zenpage">
-     		<p><?php echo gettext("Date:"); ?> <input name="date" type="text" id="date" value="<?php if(is_object($result)) { echo $result->getDatetime(); } else { echo date('Y-m-d H:i:s'); } ?>" /></p>
+     		<p>
+     		<?php if(is_object($result)) { 
+     			if($result->getDatetime() >= date('Y-m-d H:i:s')) {
+     				echo "<p id='scheduldedpublishing'><strong>".gettext("Scheduled for publishing on:")."</strong></p>";
+     			}
+     		 }
+     		echo gettext("Date:"); ?> <input name="date" type="text" id="date" value="<?php if(is_object($result)) { echo $result->getDatetime(); } else { echo date('Y-m-d H:i:s'); } ?>" />
+     		</p>
 				<?php if(getIfObject($result,"lastchangeauthor") != "") { ?>
 				<p><?php printf(gettext('Last change: %1$s by %2$s'),$result->getLastchange(),$result->getLastchangeauthor()); ?>
 				</p>

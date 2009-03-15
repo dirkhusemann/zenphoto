@@ -28,6 +28,9 @@ if(isset($_GET['del'])) {
 if(isset($_GET['publish'])) { 
   publishPageOrArticle("news",$_GET['id']);
 }
+if(isset($_GET['skipscheduling'])) {
+	skipScheduledPublishing("news",$_GET['id']);
+}
 if(isset($_GET['commentson'])) { 
   enableComments("news");
 }
@@ -101,12 +104,18 @@ if(isset($_GET['category'])) {
   
   <?php if(checkIfLocked($articleobj)) { ?>
 	<td class="icons">
- 		 <a href="?publish=<?php echo $articleobj->getShow(); ?>&id=<?php echo $articleobj->getID(); 
- 		 if(isset($_GET['page'])) { echo "&page=".$_GET['page']; } 
- 		 if(isset($_GET['date'])) { echo "&date=".$_GET['date']; }
- 		 if(isset($_GET['category'])) { echo "&category=".$_GET['category']; }
- 		 ?>" title="<?php echo gettext("Publish or unpublish article"); ?>">
- 		 <?php echo checkIfPublished($articleobj->getShow()); ?></a>
+	<?php  
+		$urladd1 = "";$urladd2 = "";$urladd2 = "";
+		if(isset($_GET['page'])) { $urladd1 = "&page=".$_GET['page']; } 
+ 		if(isset($_GET['date'])) { $urladd2 = "&date=".$_GET['date']; }
+ 		if(isset($_GET['category'])) { $urladd3 = "&category=".$_GET['category']; }
+ 		if($articleobj->getDatetime() >= date('Y-m-d H:i:s')) {
+ 			?>
+ 		 <a href="?skipscheduling=<?php echo $articleobj->getShow(); ?>&id=<?php echo $articleobj->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Skip scheduling and publish immediatly"); ?>">
+ 		 <?php } else { ?>
+ 		  <a href="?publish=<?php echo $articleobj->getShow(); ?>&id=<?php echo $articleobj->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Publish or unpublish article"); ?>">
+ 		 <?php } 
+ 		 echo checkIfPublished($articleobj); ?></a>
 	</td>
  	<td class="icons">
 		<a href="?commentson=<?php echo $articleobj->getCommentson(); ?>&id=<?php echo $articleobj->getID(); ?>" title="<?php echo gettext("Enable or disable comments"); ?>">

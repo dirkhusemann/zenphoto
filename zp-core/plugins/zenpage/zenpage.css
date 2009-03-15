@@ -526,3 +526,10 @@ div.tabs>div h2 {
 	width: 16em;
 	line-height: 1.5em;
 }
+
+
+/* scheduled publishing
+--------------------------*/
+#scheduldedpublishing strong {
+	color: red;
+}
