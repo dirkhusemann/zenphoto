@@ -14,6 +14,24 @@ include("zp-functions.php"); ?>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <?php printTextEditorConfigJS(); ?>
 <?php zenpageJSCSS(); codeblocktabsJS(); ?>
+<script type="text/javascript">
+<?php if(!isset($_GET["add"])) { // prevent showing the message when adding page or article ?>
+$(document).ready(function() {
+	$('#date').change(function() {
+		if($('#date').val() > '<?php echo date('Y-m-d H:i:s'); ?>') {
+			$("#scheduledpublishing").html('<?php echo gettext("Future publishing date:"); ?>');
+		} else {
+			$("#scheduledpublishing").html('');
+		}
+	});
+		if($('#date').val() > '<?php echo date('Y-m-d H:i:s'); ?>') {
+			$("#scheduledpublishing").html('<?php echo gettext("Future publishing date:"); ?>');
+		} else {
+			$("#scheduledpublishing").html('');
+		}
+});
+<?php } ?>
+</script>
 </head>
 <body>
 <?php 
@@ -178,12 +196,9 @@ if(is_object($result)) {
      		<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Date"); ?></h2>
      		<div class="box-edit-zenpage">
      		<p>
-     		<?php if(is_object($result)) { 
-     			if($result->getDatetime() >= date('Y-m-d H:i:s')) {
-     				echo "<p id='scheduldedpublishing'><strong>".gettext("Scheduled for publishing on:")."</strong></p>";
-     			}
-     		 }
-     		echo gettext("Date:"); ?> <input name="date" type="text" id="date" value="<?php if(is_object($result)) { echo $result->getDatetime(); } else { echo date('Y-m-d H:i:s'); } ?>" />
+     		<p id='scheduledpublishing'></p>
+     		<input name="date" type="text" id="date" value="<?php if(is_object($result)) { echo $result->getDatetime(); } else { echo date('Y-m-d H:i:s'); } ?>" />
+     	     		
      		</p>
 				<?php if(getIfObject($result,"lastchangeauthor") != "") { ?>
 				<p><?php printf(gettext('Last change: %1$s by %2$s'),$result->getLastchange(),$result->getLastchangeauthor()); ?>
@@ -193,7 +208,7 @@ if(is_object($result)) {
     	
     		<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("General"); ?></h2>
      		<div class="box-edit-zenpage">
-     		<p><input name="commentson" type="checkbox" id="commentson" value="1" <?php checkIfChecked(getIfObject($result,"commentson"));?> /> <?php echo gettext("Comments on"); ?><br />
+     		<p><input name="commentson" type="checkbox" id="commentson"value="1" <?php checkIfChecked(getIfObject($result,"commentson"));?> /> <?php echo gettext("Comments on"); ?><br />
 				<?php if(is_object($result)) { ?> <input name="resethitcounter" type="checkbox" id="resethitcounter" value="1" /> <?php printf(gettext('Reset hitcounter (Hits: %1$s)'),$result->getHitcounter()); } ?>
     		</p>
     		</div>
