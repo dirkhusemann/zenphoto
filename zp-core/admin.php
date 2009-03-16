@@ -264,21 +264,26 @@ if (defined('RELEASE')) {
 	if (count($filters) > 0) {
 		foreach ($filters as $filter=>$array_of_priority) {
 			foreach ($array_of_priority as $priority=>$array_of_filters) {
-				echo "<li><em>$filter</em>";
 				?>
-				<ul class="filters">
-				<?php
-				foreach ($array_of_filters as $data) {
-					echo "<li><em>$priority</em>: ".$data['script'].' => '.$data['function'].'</li>';
-				}
-				echo '</li>';
-				?>
-				</ul>
+				<li>
+					<em><?php echo $filter; ?></em>
+					<ul class="filters">
+					<?php
+					foreach ($array_of_filters as $data) {
+						?>
+						<li><em><?php echo $priority; ?></em>: <?php echo $data['script'] ?> => <?php echo $data['function'] ?></li>
+						<?php
+					}
+					?>
+					</ul>
+				</li>
 				<?php
 			}
 		}
 	} else {
-		echo '<li>'.gettext('<em>none</em>').'</li>';
+		?>
+		<li><?php echo gettext('<em>none</em>'); ?></li>
+		<?php
 	}
 	?>
 	</ul>
@@ -402,7 +407,7 @@ $count = round($count/2);
 			</div>
 			<br clear="all" />
 			<br clear="all" />
-		</form>
+		</form>&nbsp;
 		<?php
 		$count --;
 		if (!$count) { // half way through
