@@ -92,7 +92,7 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
 		$args[11] = $_GET['wmt'];
 	}
 	$args [12] = $adminrequest; //12
-	
+			
 	$args = getImageParameters($args);
 	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM, $adminrequest) = $args;
 	$allowWatermark = !$thumb && !$adminrequest;
@@ -149,11 +149,10 @@ if (!file_exists($imgfile)) {
 		if ($source != ZENFOLDER) {
 			$source = THEMEFOLDER.'/'.$source;
 		}
-/* These two lines of code will prevent scaling of default images.
-		header("Location: " . FULLWEBPATH .'/'. pathurlencode(FilesystemToUTF8($source.$source2)) . "/" . rawurlencode(filesystemToUTF8($imgfile)));
-		exit();
-*/
+		$args[3] = $args[4] = 0;
+		$args[5] = 1; // full crops for these default images
 		$imgfile = SERVERPATH .'/'. $source.$source2 . "/" . $imgfile;
+		
 	} 
 	if (!file_exists($imgfile)) {	
 		header("HTTP/1.0 404 Not Found");
