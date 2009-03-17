@@ -562,7 +562,7 @@ class Album extends PersistentObject {
 				}
 			}
 		}
-		$result = query($sql = "SELECT `filename`, `title`, `sort_order`, `title`, `show`, `id` FROM " . prefix("images")
+		$result = query($sql = "SELECT `filename`, `title`, `sort_order`, `show`, `id` FROM " . prefix("images")
 										. " WHERE `albumid`= '" . $this->id . "' ORDER BY " . $key . $direction);
 		$loop = 0;
 		do {
