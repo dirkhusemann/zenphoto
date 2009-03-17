@@ -266,9 +266,9 @@ function printPagesListTable($page) {
       	$expired = $dt < $now;
       	echo "<br /><small>";
       	if ($expired) {
-      		echo '<font color="red">'.gettext("Expired: ").$dt.'</font>';
+      		printf(gettext('<font color="red">Expired: %s</font>'),$dt);
       	} else {
-      		echo gettext("Expires: ").$dt;
+      		printf( gettext("Expires: %s"),$dt);
        	}
       	echo "</small>";
       }  
