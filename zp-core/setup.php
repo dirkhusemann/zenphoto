@@ -574,36 +574,37 @@ if (!$checked) {
 	checkMark($magic_quotes_disabled, gettext("PHP magic_quotes_gpc"), ' '.gettext("[is enabled]"), gettext("You should consider disabling <code>magic_quotes_gpc</code>. For more information <a href=\"http://www.zenphoto.org/2008/08/troubleshooting-zenphoto/#25\" target=\"_new\">click here</a>."));
 
 	/* Check for graphic library and image type support. */
-	$graphics_lib = graphicsLibInfo();
-	//TODO: add imageMagick to the install message
-	$library = $graphics_lib['Library'];
-	$good = checkMark(!empty($library), ' '.sprintf(gettext("Grapics support <code>%s</code>"),$library), gettext('is not installed'), gettext('You need to install GD support in your PHP')) && $good;
-	if (!empty($library)) {
-		$missing = array();
-		if (!isset($graphics_lib['JPG'])) { $missing[] = 'JPEG'; }
-		if (!(isset($graphics_lib['GIF']))) { $missing[] = 'GIF'; }
-		if (!(isset($graphics_lib['PNG']))) { $missing[] = 'PNG'; }
-		if (count($missing) > 0) {
-			if (count($missing) < 3) {
-				if (count($missing) == 2) {
-					$imgmissing =sprintf(gettext('Your PHP graphics library does not support %1$s or %2$s'),$missing[0],$missing[1]);
+	if (function_exists('graphicsLibInfo')) {
+		$graphics_lib = graphicsLibInfo();
+		//TODO: add imageMagick to the install message
+		$library = $graphics_lib['Library'];
+		$good = checkMark(!empty($library), ' '.sprintf(gettext("Grapics support <code>%s</code>"),$library), gettext('is not installed'), gettext('You need to install GD support in your PHP')) && $good;
+		if (!empty($library)) {
+			$missing = array();
+			if (!isset($graphics_lib['JPG'])) { $missing[] = 'JPEG'; }
+			if (!(isset($graphics_lib['GIF']))) { $missing[] = 'GIF'; }
+			if (!(isset($graphics_lib['PNG']))) { $missing[] = 'PNG'; }
+			if (count($missing) > 0) {
+				if (count($missing) < 3) {
+					if (count($missing) == 2) {
+						$imgmissing =sprintf(gettext('Your PHP graphics library does not support %1$s or %2$s'),$missing[0],$missing[1]);
+					} else {
+						$imgmissing = sprintf(gettext('Your PHP graphics library does not support %1$s'),$missing[0]);
+					}
+					$err = -1;
+					$mandate = gettext("To correct this you should a install graphics library with appropriate image support in your PHP");
 				} else {
-					$imgmissing = sprintf(gettext('Your PHP graphics library does not support %1$s'),$missing[0]);
+					$imgmissing = sprintf(gettext('Your PHP graphics library does not support %1$s, %2$s, or %3$s'),$missing[0],$missing[1],$missing[2]);
+					$err = 0;
+					$good = false;
+					$mandate = gettext("To correct this you need to a install GD with appropriate image support in your PHP");
 				}
-				$err = -1;
-				$mandate = gettext("To correct this you should a install graphics library with appropriate image support in your PHP");
-			} else {
-				$imgmissing = sprintf(gettext('Your PHP graphics library does not support %1$s, %2$s, or %3$s'),$missing[0],$missing[1],$missing[2]);
-				$err = 0;
-				$good = false;
-				$mandate = gettext("To correct this you need to a install GD with appropriate image support in your PHP");
-			}
-			checkMark($err, ' '.gettext("PHP graphics image support"), '', $imgmissing.
+				checkMark($err, ' '.gettext("PHP graphics image support"), '', $imgmissing.
 	                    "<br/>".gettext("The unsupported image types will not be viewable in your albums.").
 	                    "<br/>".$mandate);
+			}
 		}
 	}
-
 	checkMark($noxlate, gettext("PHP <code>gettext()</code> support"), ' '.gettext("[is not present]"), gettext("Localization of Zenphoto currently requires native PHP <code>gettext()</code> support"));
 	if ($_zp_setupCurrentLocale_result === false) {
 		checkMark(-1, 'PHP <code>setlocale()</code>', ' '.gettext("failed"), gettext("Locale functionality is not implemented on your platform or the specified locale does not exist. Language translation may not work.").'<br />'.gettext('See the troubleshooting guide on zenphoto.org for details.'));
