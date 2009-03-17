@@ -146,15 +146,17 @@ class Video extends _Image {
 		if ($this->objectsThumb == NULL) {
 			$filename = makeSpecialImageName($this->getThumbImageFile());
 			if (!getOption('video_watermark_default_images')) $wmt = '';
+			$special = true;
 		} else {
 			$filename = $this->objectsThumb;
+			$special = false;
 		}
 		if ($wmt) $wmt = '&wmt='.$wmt;
-		$cachefilename = getImageCacheFilename($alb = $this->album->name, $filename, getImageParameters(array('thumb')));
+		$cachefilename = getImageCacheFilename($alb = $this->album->name, $this->filename, getImageParameters(array('thumb')));
 		if (file_exists(SERVERCACHE . $cachefilename)	&& filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
 			return WEBPATH . substr(CACHEFOLDER, 0, -1) . pathurlencode(imgSrcURI($cachefilename));
 		} else {
-			if (getOption('mod_rewrite') && empty($wmt) && !empty($alb)) {
+			if (getOption('mod_rewrite') && empty($wmt) && !empty($alb) && !$special) {
 				$path = pathurlencode($alb) . '/'.$type.'/thumb/' . urlencode($filename);
 			} else {
 				$path = ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($filename) . '&s=thumb'.$wmt;
