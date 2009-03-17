@@ -314,7 +314,7 @@ function rotateImage($im, $rotate) {
  * @param array $imageinfo
  * @return array
  */
-function imageGetInfo($filename, &$imageinfo=NULL) {
+function imageGetInfo($filename, &$imageinfo) {
 	return getimagesize($filename, $imageinfo);
 }
 

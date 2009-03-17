@@ -252,7 +252,8 @@ class _Image extends PersistentObject {
 	 *
 	 */
 	function updateDimensions() {
-		$size = imageGetInfo($this->localpath);
+		$discard = NULL;
+		$size = imageGetInfo($this->localpath, $discard);
 		if (imageCanRotate() && getOption('auto_rotate'))  {
 			// Swap the width and height values if the image should be rotated			
 			$splits = preg_split('/!([(0-9)])/', $this->get('EXIFOrientation'));

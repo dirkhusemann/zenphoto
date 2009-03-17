@@ -9,6 +9,9 @@
 
 
 include('version.php'); // Include the version info.
+//TODO: we need to load the imageMagick instead library if imageMagic is enabled
+require_once('lib-GD.php');
+
 $const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
 $const_webpath = str_replace("\\", '/', $const_webpath);
 if ($const_webpath == '/') $const_webpath = '';
