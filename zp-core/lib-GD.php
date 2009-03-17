@@ -417,7 +417,7 @@ function graphicsLibInfo() {
 		$lib['GIF'] = $imgtypes & IMG_GIF;
  		$lib['JPG'] = $imgtypes & IMG_JPG;
 		$lib['PNG'] = $imgtypes & IMG_PNG;
-		$lib['WBMP'] = $imgtypes & IMG_WBMP;
+		$lib['BMP'] = $imgtypes & IMG_WBMP;
 	} else {
 		$lib ['Library'] = '';
 	}

@@ -98,8 +98,14 @@ function setexifvars() {
 		$_zp_exifvars[$key][3] = getOption($key);
 	}
 }
+$_zp_supported_images = graphicsLibInfo();
+unset($_zp_supported_images['Library']);
+foreach ($_zp_supported_images as $key=>$type) {
+	unset($_zp_supported_images[$key]);
+	if ($type) $_zp_supported_images[strtolower($key)] = true;
+}
+$_zp_supported_images = array_keys($_zp_supported_images);
 
-$_zp_supported_images = array('jpg','jpeg','gif','png');
 // Image utility functions
 /**
  * Returns true if the file is an image
