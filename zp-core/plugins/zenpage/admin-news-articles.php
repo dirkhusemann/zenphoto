@@ -94,7 +94,13 @@ if(isset($_GET['category'])) {
    ?>
   
   </td>
-  <td><?php echo $articleobj->getDatetime(); ?></td>
+  <td>
+  <?php 
+  echo $articleobj->getDatetime(); 
+  if($articleobj->getExpireDate() != "") {
+  	echo "<br /><small>".gettext("Expires: ").$articleobj->getExpireDate()."</small>";
+  }  
+  ?></td>
   <td>
   <?php printArticleCategories($articleobj) ?>
   </td> 
@@ -105,7 +111,7 @@ if(isset($_GET['category'])) {
   <?php if(checkIfLocked($articleobj)) { ?>
 	<td class="icons">
 	<?php  
-		$urladd1 = "";$urladd2 = "";$urladd2 = "";
+		$urladd1 = "";$urladd2 = "";$urladd3 = "";
 		if(isset($_GET['page'])) { $urladd1 = "&page=".$_GET['page']; } 
  		if(isset($_GET['date'])) { $urladd2 = "&date=".$_GET['date']; }
  		if(isset($_GET['category'])) { $urladd3 = "&category=".$_GET['category']; }

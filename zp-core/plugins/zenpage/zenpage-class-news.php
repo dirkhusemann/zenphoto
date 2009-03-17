@@ -179,7 +179,14 @@ class ZenpageNews extends PersistentObject {
 		return $categories;
 	}
 
-	
+/**
+	 * Returns the expire date  of the news article
+	 *
+	 * @return string
+	 */
+	function getExpireDate() {
+		return $this->get("expiredate");
+	}
 	/****************
 	 * Comments
 	 ****************/

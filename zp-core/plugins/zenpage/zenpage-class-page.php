@@ -174,6 +174,15 @@ class ZenpagePage extends PersistentObject {
 		return $this->get("permalink");
 	}
 	
+/**
+	 * Returns the expire date  of the page
+	 *
+	 * @return string
+	 */
+	function getExpireDate() {
+		return $this->get("expiredate");
+	}
+	
 	/****************
 	 * Comments
 	 ****************/

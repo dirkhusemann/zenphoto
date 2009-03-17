@@ -530,6 +530,6 @@ div.tabs>div h2 {
 
 /* scheduled publishing
 --------------------------*/
-#scheduledpublishing {
+#scheduledpublishing, #expire {
 	color: red;
 }

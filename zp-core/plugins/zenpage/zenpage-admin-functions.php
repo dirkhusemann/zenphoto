@@ -46,6 +46,7 @@ function addPage() {
 	$extracontent = mysql_real_escape_string(process_language_string_save("extracontent",0)); // TinyMCE already clears unallowed code
 	$show = getCheckboxState('show');
 	$date = sanitize($_POST['date']);
+	$expiredate = sanitize($_POST['expiredate']);
 	$commentson = getCheckboxState('commentson');
 	$parentid = "";
 	$permalink = getCheckboxState('permalink');
@@ -59,9 +60,7 @@ function addPage() {
 	if(empty($title) OR empty($titlelink)) {
 		$titlelink = seoFriendlyURL($date);
 	}
-
-	//query("INSERT INTO ".prefix('zenpage_pages')." (title, content, extracontent, `show`, `titlelink`, parentid, codeblock, author, `date`, commentson, permalink, locked) VALUES ('$title', '$content', '$extracontent', '$show', '$titlelink', '$parentid', '$codeblock', '$author', '$date', '$commentson','$permalink','$locked')");
-	if (query("INSERT INTO ".prefix('zenpage_pages')." (title, content, extracontent, `show`, `titlelink`, parentid, codeblock, author, `date`, commentson, permalink, locked) VALUES ('$title', '$content', '$extracontent', '$show', '$titlelink', '$parentid', '$codeblock', '$author', '$date', '$commentson','$permalink','$locked')",true)) {
+	if (query("INSERT INTO ".prefix('zenpage_pages')." (title, content, extracontent, `show`, `titlelink`, parentid, codeblock, author, `date`, commentson, permalink, locked, expiredate) VALUES ('$title', '$content', '$extracontent', '$show', '$titlelink', '$parentid', '$codeblock', '$author', '$date', '$commentson','$permalink','$locked','$expiredate')",true)) {
 		if(empty($title) OR empty($titlelink)) {
 			echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink))."</p>";
 		} else {
@@ -91,6 +90,7 @@ function updatePage() {
 	$result['extracontent'] = mysql_real_escape_string(process_language_string_save("extracontent",0)); // TinyMCE already clears unallowed code
 	$result['show'] = getCheckboxState('show');
 	$result['date'] = sanitize($_POST['date']);
+	$result['expiredate'] = sanitize($_POST['expiredate']);
 	$result['lastchange'] = sanitize($_POST['lastchange']);
 	$result['lastchangeauthor'] = mysql_real_escape_string(sanitize($_POST['lastchangeauthor']));
 	$result['commentson'] = getCheckboxState('commentson');
@@ -121,7 +121,7 @@ function updatePage() {
 	}
 
 	// update the article in the database
-	if(query("UPDATE ".prefix('zenpage_pages')." SET title = '".$result['title']."', content = '".$result['content']."', extracontent= '".$result['extracontent']."', `show` = '".$result['show']."', `titlelink` = '".$result['titlelink']."' , `codeblock` = '".$result['codeblock']."', `author` ='".$result['author']."', `date` ='".$result['date']."', `lastchange` ='".$result['lastchange']."', `lastchangeauthor` ='".$result['lastchangeauthor']."', `commentson` ='".$result['commentson']."', `hitcounter` ='".$result['hitcounter']."', `permalink` = '".$result['permalink']."', `locked` = '".$result['locked']."' WHERE id = ".$result['id'], true)) {
+	if(query("UPDATE ".prefix('zenpage_pages')." SET title = '".$result['title']."', content = '".$result['content']."', extracontent= '".$result['extracontent']."', `show` = '".$result['show']."', `titlelink` = '".$result['titlelink']."' , `codeblock` = '".$result['codeblock']."', `author` ='".$result['author']."', `date` ='".$result['date']."', `lastchange` ='".$result['lastchange']."', `lastchangeauthor` ='".$result['lastchangeauthor']."', `commentson` ='".$result['commentson']."', `hitcounter` ='".$result['hitcounter']."', `permalink` = '".$result['permalink']."', `locked` = '".$result['locked']."', `expiredate` = '".$result['expiredate']."' WHERE id = ".$result['id'], true)) {
 		if(empty($result['title']) OR empty($result['titlelink'])) {
 			echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your page a <strong>title</strong>!")."</p>";
 		} else {
@@ -253,7 +253,11 @@ function printPagesListTable($page) {
   	}	?>
     </td>
     <td class="icons3">
-      <?php echo $page->getDatetime() ;?>
+      <?php echo $page->getDatetime();
+      if($page->getExpireDate() != "") {
+      	echo "<br /><small>".gettext("Expires: ").$page->getExpireDate()."</small>";
+      }  
+      ?>
     </td> 
     <td class="icons3" style="text-align: left">
       <?php echo htmlspecialchars($page->getAuthor()) ;?>
@@ -432,6 +436,7 @@ function addArticle() {
 	$extracontent = mysql_real_escape_string(process_language_string_save("extracontent",0)); // TinyMCE already clears unallowed code
 	$show = getCheckboxState('show');
 	$date = sanitize($_POST['date']);
+	$expiredate = sanitize($_POST['expiredate']);
 	$permalink = getCheckboxState('permalink');
 	$lastchange = getCheckboxState('lastchange');
 	$commentson = getCheckboxState('commentson');
@@ -447,7 +452,7 @@ function addArticle() {
 	}
 
 	// create new article
-	if (query("INSERT INTO ".prefix('zenpage_news')." (title, content, extracontent, `show`, date, `titlelink`, commentson, codeblock, author, lastchange, permalink, locked) VALUES ('$title', '$content', '$extracontent', '$show', '$date', '$titlelink', '$commentson', '$codeblock', '$author', '$lastchange', '$permalink','$locked')",true)) {
+	if (query("INSERT INTO ".prefix('zenpage_news')." (title, content, extracontent, `show`, date, `titlelink`, commentson, codeblock, author, lastchange, permalink, locked, expiredate) VALUES ('$title', '$content', '$extracontent', '$show', '$date', '$titlelink', '$commentson', '$codeblock', '$author', '$lastchange', '$permalink','$locked','$expiredate')",true)) {
 		if(empty($title) OR empty($titlelink)) {
 			echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink))."</p>";
 		} else {
@@ -487,6 +492,7 @@ function updateArticle() {
 	$result['extracontent'] = mysql_real_escape_string(process_language_string_save("extracontent",0)); // TinyMCE already clears unallowed code
 	$result['show'] = getCheckboxState('show');
 	$result['date'] = sanitize($_POST['date']);
+	$result['expiredate'] = sanitize($_POST['expiredate']);
 	$result['lastchange'] = sanitize($_POST['lastchange']);
 	$result['lastchangeauthor'] = mysql_real_escape_string(sanitize($_POST['lastchangeauthor']));
 	$result['commentson'] = getCheckboxState('commentson');
@@ -518,7 +524,7 @@ function updateArticle() {
 
 	// update the article in the database
 	//query("UPDATE ".prefix('zenpage_news')." SET title = '".$result['title']."', content = '".$result['content']."', extracontent = '".$result['extracontent']."', `show` = '".$result['show']."', date = '".$result['date']."', titlelink = '".$result['titlelink']."', commentson = '".$result['commentson']."', codeblock = '".$result['codeblock']."', author = '".$result['author']."', lastchange = '".$result['lastchange']."', lastchangeauthor = '".$result['lastchangeauthor']."', `hitcounter` ='".$result['hitcounter']."', `permalink` ='".$result['permalink']."', `locked` = '".$result['locked']."' WHERE id = ".$result['id']);
-	if(query("UPDATE ".prefix('zenpage_news')." SET title = '".$result['title']."', content = '".$result['content']."', extracontent = '".$result['extracontent']."', `show` = '".$result['show']."', date = '".$result['date']."', titlelink = '".$result['titlelink']."', commentson = '".$result['commentson']."', codeblock = '".$result['codeblock']."', author = '".$result['author']."', lastchange = '".$result['lastchange']."', lastchangeauthor = '".$result['lastchangeauthor']."', `hitcounter` ='".$result['hitcounter']."', `permalink` ='".$result['permalink']."', `locked` = '".$result['locked']."' WHERE id = ".$result['id'], true)) {
+	if(query("UPDATE ".prefix('zenpage_news')." SET title = '".$result['title']."', content = '".$result['content']."', extracontent = '".$result['extracontent']."', `show` = '".$result['show']."', date = '".$result['date']."', titlelink = '".$result['titlelink']."', commentson = '".$result['commentson']."', codeblock = '".$result['codeblock']."', author = '".$result['author']."', lastchange = '".$result['lastchange']."', lastchangeauthor = '".$result['lastchangeauthor']."', `hitcounter` ='".$result['hitcounter']."', `permalink` ='".$result['permalink']."', `locked` = '".$result['locked']."', `expiredate` = '".$result['expiredate']."' WHERE id = ".$result['id'], true)) {
 		if(empty($result['title']) OR empty($result['titlelink'])) {
 			echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> updated but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink))."</p>";
 		} else {
@@ -1230,7 +1236,7 @@ function zenpageAdminnav($currentpage) {
 
 function printZenpageIconLegend() { ?>
 	<ul class="iconlegend">
-	<li><img src="../../images/pass.png" alt="" /><img	src="../../images/action.png" alt="" /><img src="images/clock.png" alt="" /><?php echo gettext("Published/Not published/Scheduled for publishing"); ?></li>
+	<li><img src="../../images/pass.png" alt="" /><img src="images/pass_blue.png" alt="" /><img	src="../../images/action.png" alt="" /><img src="images/clock.png" alt="" /><?php echo gettext("Published/Published with expiration date/Not published/Scheduled for publishing"); ?></li>
 	<li><img src="images/comments-on.png" alt="" /><img src="images/comments-off.png" alt="" /><?php echo gettext("Comments on/off"); ?></li>
 	<li><img src="images/view.png" alt="" /><?php echo gettext("View"); ?></li>
 	<li><img src="../../images/reset.png" alt="" /><?php echo gettext("Reset hitcounter"); ?></li>
@@ -1274,8 +1280,12 @@ function checkIfPublished($object) {
 	if ($object->getShow() === "1") {
 		if($object->getDateTime() > date('Y-m-d H:i:s')) {
 			$publish = "<img src=\"images/clock.png\" alt=\"".gettext("Scheduled for publishing")."\" />";
-		} else{
-			$publish = "<img src=\"../../images/pass.png\" alt=\"".gettext("Published")."\" />";
+		} else {
+			if($object->getExpireDate() != "") {
+				$publish = "<img src=\"images/pass_blue.png\" alt=\"".gettext("Published with expiration date")."\" />";
+			} else {
+				$publish = "<img src=\"../../images/pass.png\" alt=\"".gettext("Published")."\" />";
+			}
 		}
 	} else {
 		$publish = "<img src=\"../../images/action.png\" alt=\"".gettext("Unpublished")."\" />";

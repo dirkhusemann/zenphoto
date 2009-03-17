@@ -30,18 +30,35 @@ if(getOption('zenpage_combinews') AND !isset($_GET['title']) AND !isset($_GET['c
 }
 
 
+/**
+	 * Unpublishes pages whose expiration date has been reached
+	 *
+	 */
+function processExpiredPages() {
+	query("UPDATE ".prefix('zenpage_pages')." SET `show` = 0 WHERE `expiredate` <= '".date('Y-m-d H:i:s')."'", true);
+}
+
+/**
+	 * Unpublishes news articles whose expiration date has been reached
+	 *
+	 */
+function processExpiredNewsArticles() {
+	query("UPDATE ".prefix('zenpage_news')." SET `show` = 0 WHERE `expiredate` <= '".date('Y-m-d H:i:s')."'", true);
+}
+
 /************************************/
 /* general page functions   */
 /************************************/
 
 /**
-	 * Gets all pages or published ones.
+	 * Gets the titlelink and sort order for all pages or published ones.
 	 *
 	 * @param bool $published TRUE for published or FALSE for all pages including unpublished
 	 * @return array
 	 */
 	function getPages($published=true) {
 		global $_zp_zenpage_all_pages;
+		processExpiredPages();
 		if($published) {
 			$show = " WHERE `show` = 1 AND date <= '".date('Y-m-d H:i:s')."'";
 		} else {
@@ -100,6 +117,7 @@ function getParentPages(&$parentid,$initparents=true) {
 	 */
 	function getNewsArticles($articles_per_page='', $category='', $published=NULL) {
 		global $_zp_current_category, $_zp_post_date;
+		processExpiredNewsArticles();
 		if (is_null($published)) {
 			if(zp_loggedin(ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
 				$published = "all";
@@ -351,6 +369,7 @@ function getParentPages(&$parentid,$initparents=true) {
 	 */
 	function getCombiNews($articles_per_page, $mode='',$published=NULL) {
 		global $_zp_gallery, $_zp_flash_player,$_zp_loggedin;
+		processExpiredNewsArticles();
 		if (is_null($published)) {
 			if(zp_loggedin(ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
 				$published = "all";

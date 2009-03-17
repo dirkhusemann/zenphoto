@@ -1260,6 +1260,7 @@ if (file_exists("zp-config.php")) {
 		`hitcounter` int(11) unsigned default 0,
 		`permalink` int(1) unsigned NOT NULL default 0,
 		`locked` int(1) unsigned NOT NULL default 0,
+		`expiredate` datetime default NULL,
 		PRIMARY KEY  (`id`),
 		UNIQUE (`titlelink`)
 		) $collation;";
@@ -1305,6 +1306,7 @@ if (file_exists("zp-config.php")) {
 		`hitcounter` int(11) unsigned default 0,
 		`permalink` int(1) unsigned NOT NULL default 0,
 		`locked` int(1) unsigned NOT NULL default 0,
+		`expiredate` datetime default NULL,
 		PRIMARY KEY  (`id`),
 		UNIQUE (`titlelink`)
 		) $collation;";
@@ -1463,6 +1465,9 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news_categories.' CHANGE `cat_name` `cat_name` TEXT;';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' CHANGE `title` `title` TEXT;';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_comments.' ADD COLUMN `custom_data` TEXT;';
+	//zenpage expiration date
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `expiredate` datetime default NULL';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `expiredate` datetime default NULL';
 	
 	/**************************************************************************************
 	 ******                            END of UPGRADE SECTION     

@@ -29,6 +29,14 @@ $(document).ready(function() {
 		} else {
 			$("#scheduledpublishing").html('');
 		}
+	$('#expiredate').change(function() {
+		if($('#expiredate').val() > '<?php echo date('Y-m-d H:i:s'); ?>' || $('#expiredate').val() === '') {
+			$("#expire").html('');
+		} else {
+			$("#expire").html('<?php echo gettext("This is not a future date!"); ?>');
+			$("#expiredate").val("");
+		}
+	});
 });
 <?php } ?>
 </script>
@@ -147,6 +155,7 @@ if(is_object($result)) {
 <br /><?php echo gettext("If you lock an article only the current active author/user or any user with full admin rights will be able to edit it later again!"); ?></p> 
 <p><?php echo gettext("<strong>Important:</strong> If you are using Zenphoto's multi-lingual mode the Titlelink is generated from the Title of the currently selected language."); ?></p> 
 <p><?php echo gettext("<em>Scheduled publishing:</em> Just set a page or a news article to 'published' and enter a future date in the date field manually. Note this works on server time!"); ?></p>
+<p><?php echo gettext("<em>Expiration date:</em> Enter a future date in the date field manually to set a date the page or article will be set unpublished automatically. After the page/article has been expired it can only be published again if the expiration date is deleted. Note this works on server time!"); ?></p>
 <p><?php echo gettext("<em>ExtraContent:</em> Here you can enter extra content for example to be printed on the sidebar"); ?></p>
 <p><?php echo gettext("<em>Codeblocks:</em> Use these fields if you need to enter php code (for example Zenphoto functions) or javascript code."); ?>
 <?php echo gettext("You also can use the codeblock fields as custom fields."); ?>
@@ -196,12 +205,16 @@ if(is_object($result)) {
      		<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Date"); ?></h2>
      		<div class="box-edit-zenpage">
      		<p>
-     		<p id='scheduledpublishing'></p>
+     		<span id='scheduledpublishing'></span>
      		<input name="date" type="text" id="date" value="<?php if(is_object($result)) { echo $result->getDatetime(); } else { echo date('Y-m-d H:i:s'); } ?>" />
-     	     		
+     		</p>
+     		<hr />
+     		<span id='expire'></span>
+     		<p><?php echo gettext("Expiration date:"); ?><br />
+     		<input name="expiredate" type="text" id="expiredate" value="<?php if(is_object($result)) { if($result->getExpireDate() != NULL) { echo $result->getExpireDate();} } ?>" />
      		</p>
 				<?php if(getIfObject($result,"lastchangeauthor") != "") { ?>
-				<p><?php printf(gettext('Last change: %1$s by %2$s'),$result->getLastchange(),$result->getLastchangeauthor()); ?>
+				<hr /><p><?php printf(gettext('Last change:<br />%1$s<br />by %2$s'),$result->getLastchange(),$result->getLastchangeauthor()); ?>
 				</p>
 				<?php	} ?>
 				</div>
