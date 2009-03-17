@@ -49,6 +49,8 @@ function db_connect() {
 	if (array_key_exists('UTF-8', $_zp_conf_vars) && $_zp_conf_vars['UTF-8']) {
 		mysql_query("SET NAMES 'utf8'");
 	}
+	// set the sql_mode to relaxed (if possible)
+	@mysql_query('SET SESSION sql_mode="";');
 	return true;
 }
 

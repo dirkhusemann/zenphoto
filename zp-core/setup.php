@@ -745,12 +745,34 @@ if ($debug) {
 	}
 	$good = checkMark($connection, ' '.gettext("connect to MySQL"), '', gettext("Could not connect to the <strong>MySQL</strong> server. Check the <code>user</code>, <code>password</code>, and <code>database host</code> in your <code>zp-config.php</code> file and try again.").' ') && $good;
 	if ($connection) {
-		$good = checkMark($sqlv, ' '.gettext("MySQL version").' '.$mysqlv, "", sprintf(gettext('Version %1$s or greater is required.<br />Version %2$s or greater is prefered.'),$required,$desired)) && $good;
+		$good = checkMark($sqlv, ' '.sprintf(gettext("MySQL version %s"),$mysqlv), "", sprintf(gettext('Version %1$s or greater is required.<br />Version %2$s or greater is prefered.'),$required,$desired)) && $good;
 		$good = checkMark($db, ' '.sprintf(gettext("connect to the database <code> %s </code>"),$_zp_conf_vars['mysql_database']), '',
 			sprintf(gettext("Could not access the <strong>MySQL</strong> database (<code>%s</code>)."), $_zp_conf_vars['mysql_database']).' '.gettext("Check the <code>user</code>, <code>password</code>, and <code>database name</code> and try again.").' ' .
 			gettext("Make sure the database has been created, and the <code>user</code> has access to it.").' ' .
 			gettext("Also check the <code>MySQL host</code>.")) && $good;
 
+		$result = @mysql_query('SELECT @@SESSION.sql_mode;', $mysql_connection);
+		if ($result) {
+			$row = @mysql_fetch_row($result);
+			$oldmode = $row[0];
+		}
+		@mysql_query('SET SESSION sql_mode="";', $mysql_connection);
+		$result = @mysql_query('SELECT @@SESSION.sql_mode;', $mysql_connection);
+		if ($result) {
+			$row = @mysql_fetch_row($result);
+			$mode = $row[0];
+			if ($oldmode != $mode) {
+				checkMark(-1, ' '.sprintf(gettext('SQL mode [<code>%s</code>] overridden'), $oldmode), '', gettext('Consider setting it <em>empty</em> in your MySQL configuration.'));
+			} else {
+				if (!empty($mode)) {
+					$err = -1;
+				} else {
+					$err = 1;
+				}
+				checkMark($err, ' '.gettext('SQL mode'), ' '.sprintf(gettext('is set to <code>%s</code>'),$mode), gettext('Consider setting it <em>empty</em> if you get MySql errors.'));
+			}
+		}
+		
 		$dbn = "`".$_zp_conf_vars['mysql_database']. "`.*";
 		if (versioncheck('4.2.1', '4.2.1', $mysqlv)) {
 			$sql = "SHOW GRANTS FOR CURRENT_USER;";
