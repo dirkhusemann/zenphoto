@@ -9,7 +9,9 @@
 /* Don't put anything before this line! */
 define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
-
+if(getOption('zp_plugin_zenpage')) {
+	require_once(dirname(__FILE__).'/plugins/zenpage/zenpage-admin-functions.php'); 
+}
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
 	exit();
@@ -206,7 +208,39 @@ if ($c > 0) {
 	}
 }
 ?>
-</li></ul>
+</li>
+<?php 
+if(getOption('zp_plugin_zenpage')) { ?>
+	<li>
+		<?php
+		list($total,$type,$unpub) = getNewsPagesStatistic("pages");
+		if (empty($unpub)) {
+			printf(gettext('<strong>%1$u</strong> Pages'),$total,$type);
+		} else {
+			printf(gettext('<strong>%1$u</strong> Pages (<strong>%2$u</strong> unpublished)'),$total,$unpub);
+		}
+		?>
+	</li>
+	<li>
+		<?php
+		list($total,$type,$unpub) = getNewsPagesStatistic("news");
+		if (empty($unpub)) {
+			printf(gettext('<strong>%1$u</strong> News'),$total);
+		} else {
+			printf(gettext('<strong>%1$u</strong> News (<strong>%2$u</strong> unpublished)'),$total,$unpub);
+		}
+		?>
+	</li>
+	<li>
+		<?php
+		list($total,$type,$unpub) = getNewsPagesStatistic("categories");
+		printf(gettext('<strong>%1$u</strong> Categories'),$total);
+		?>
+	</li>
+<?php
+}
+?>
+</ul>
 </div>
 </div>
 

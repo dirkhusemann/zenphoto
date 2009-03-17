@@ -1095,32 +1095,33 @@ function checkHitcounterDisplay($item) {
 
 
 /**
- * Prints how many pages, articles, categories and news or pages comments we got.
+ * returns an array of how many pages, articles, categories and news or pages comments we got.
  *
  * @param string $option What the statistic should be shown of: "news", "pages", "categories"
  */
-function printNewsPagesStatistic($option) {
+function getNewsPagesStatistic($option) {
 	global $_zp_current_zenpage_page, $_zp_current_zenpage_news;
 	switch($option) {
 		case "news":
 			$items = getNewsArticles("","");
 			$type = gettext("Articles");
-		break;
+			break;
 		case "pages":
 			$items = getPages(false);
 			$type = gettext("Pages");
-		break;
+			break;
 		case "categories":
+			$type = gettext("Categories");
 			$cats = getAllCategories();
-			$catstotal = count($cats);
-			printf(gettext('(<strong>%u</strong> Categories)'),$catstotal);
-		break;
-	}	
-		if($option === "news" OR $option === "pages") {	
-			$total = count($items);
-			$pub = 0;
-			foreach($items as $item) {
-				switch ($option) {
+			$total = count($cats);
+			$unpub = 0;
+			break;
+	}
+	if($option === "news" OR $option === "pages") {
+		$total = count($items);
+		$pub = 0;
+		foreach($items as $item) {
+			switch ($option) {
 				case "news":
 					$itemobj = new ZenpageNews($item['titlelink']);
 					$show = $itemobj->getShow();
@@ -1137,12 +1138,20 @@ function printNewsPagesStatistic($option) {
 				$pub++;
 			}
 		}
-			//echo " (unpublished: ";
-			$unpub = $total - $pub;
-			printf(gettext('(<strong>%1$u</strong> %2$s, <strong>%3$u</strong> unpublished)'),$total,$type,$unpub);
-		} 
+		//echo " (unpublished: ";
+		$unpub = $total - $pub;
+	}
+	return array($total,$type,$unpub);
 }
 
+function printNewsPagesStatistic($option) {
+	list($total,$type,$unpub) = getNewsPagesStatistic($option);
+	if (empty($unpub)) {
+		printf(gettext('(<strong>%1$u</strong> %2$s)'),$total,$type);
+	} else {
+		printf(gettext('(<strong>%1$u</strong> %2$s, <strong>%3$u</strong> unpublished)'),$total,$type,$unpub);
+	}
+}
 
 /**
  * Prints the links to JavaScript and CSS files zenpage needs. 
