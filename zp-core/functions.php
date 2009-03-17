@@ -719,7 +719,7 @@ function getImageMetadata($imageName) {
 	global $iptc;
 
 	$result = array();
-	getimagesize($imageName, $imageInfo);
+	imageGetInfo($imageName, $imageInfo);
 	if (is_array($imageInfo)) {
 		$exifraw = read_exif_data_protected($imageName);
 		if (isset($exifraw['SubIFD'])) {

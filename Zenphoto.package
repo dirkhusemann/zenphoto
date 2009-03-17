@@ -316,6 +316,7 @@ zp-core/js/thickbox.js
 zp-core/js/toggleElements.css
 zp-core/js/zenphoto.js.php
 zp-core/lib-encryption.php
+zp-core/lib-GD.php
 zp-core/lib-gettext/gettext.inc
 zp-core/lib-htmlawed.php
 zp-core/lib-pclzip.php
@@ -1332,6 +1333,7 @@ zp-core/plugins/zenpage/admin-edit.php
 zp-core/plugins/zenpage/admin-news-articles.php
 zp-core/plugins/zenpage/admin-pages.php
 zp-core/plugins/zenpage/images/add.png
+zp-core/plugins/zenpage/images/clock.png
 zp-core/plugins/zenpage/images/comments-off.png
 zp-core/plugins/zenpage/images/comments-on.png
 zp-core/plugins/zenpage/images/folder.png

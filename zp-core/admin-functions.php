@@ -2204,22 +2204,22 @@ $theme_description["desc"] = "%s";
 	else $themeimage = false;
 	if ($themeimage) {
 		require_once(dirname(__FILE__).'/functions-image.php');
-		if ($im = get_image($themeimage)) {
-			$x = imagesx($im)/2 - 45;
-			$y = imagesy($im)/2 - 10;
+		if ($im = imageGet($themeimage)) {
+			$x = imageWidth($im)/2 - 45;
+			$y = imageHeight($im)/2 - 10;
 			$text = "CUSTOM COPY";
 
 			// create a blueish overlay
-			$overlay = imagecreatetruecolor(imagesx($im), imagesy($im));
+			$overlay = createImage(imageWidth($im), imageHeight($im));
 			imagefill ($overlay, 0, 0, 0x0606090);
 			// Merge theme image and overlay
-			imagecopymerge($im, $overlay, 0, 0, 0, 0, imagesx($im), imagesy($im), 45);
+			imageMerge($im, $overlay, 0, 0, 0, 0, imageWidth($im), imageHeight($im), 45);
 			// Add text
 			imagestring ( $im,  5,  $x-1,  $y-1, $text,  0x0ffffff );
 			imagestring ( $im,  5,  $x+1,  $y+1, $text,  0x0ffffff );
 			imagestring ( $im,  5,  $x,  $y,   $text,  0x0ff0000 );
 			// Save new theme image
-			imagepng($im, $themeimage);
+			imageOutput($im, 'png', $themeimage);
 		}	
 	}
 

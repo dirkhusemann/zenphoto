@@ -1450,9 +1450,9 @@ function getMaxSpaceContainer(&$width, &$height, $image, $thumb=false) {
 	$imagename = $image->filename;
 	if (!isImagePhoto($image) & $thumb) {
 		$imgfile = $image->getThumbImageFile();
-		$image = get_image($imgfile);
-		$s_width = imagesx($image);
-		$s_height = imagesy($image);
+		$image = imageGet($imgfile);
+		$s_width = imageWidth($image);
+		$s_height = imageHeight($image);
 	} else {
 		$s_width = $image->get('width');
 		if ($s_width == 0) $s_width = max($width,$height);

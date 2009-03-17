@@ -9,7 +9,6 @@
 
 // force UTF-8 Ø
 
-
 define('FILESYSTEM_CHARSET', 'ISO-8859-1');
 define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
 define('DEBUG_ERROR', true); // set to true to  supplies the calling sequence with zp_error messages
@@ -25,6 +24,9 @@ if (function_exists('date_default_timezone_set')) { // insure a correct timezone
 // Set error reporting.
 error_reporting(E_ALL | E_STRICT);
 $_zp_error = false;
+
+// TODO: test for existence of ImageLib and load class based on it in place of class-GD.php
+require_once(dirname(__FILE__).'/lib-GD.php');
 
 require_once(dirname(__FILE__).'/lib-utf8.php');
 

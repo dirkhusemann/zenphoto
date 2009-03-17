@@ -76,20 +76,8 @@ if (!getOption('fullimage_watermark')) { // no processing needed
 }
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 header("content-type: image/$suffix");
-switch ($suffix) {
-	case 'png':
-		$newim = imagecreatefrompng($image_path);
-		break;
-	case 'wbmp':
-		$newim = imagecreatefromwbmp($image_path);
-		break;
-	case 'jpeg':
-		$newim = imagecreatefromjpeg($image_path);
-		break;
-	case 'gif':
-		$newim = imagecreatefromgif($image_path);
-		break;
-}
+imageGet($image_path);
+
 if (getOption('protect_full_image') == 'Download') {
 	header('Content-Disposition: attachment; filename="' . $_zp_current_image->filename . '"');  // enable this to make the image a download
 }
@@ -101,11 +89,11 @@ if (getOption('fullimage_watermark')) {
 	}
 	$offset_h = getOption('watermark_h_offset') / 100;
 	$offset_w = getOption('watermark_w_offset') / 100;
-	$watermark = imagecreatefrompng($watermark_image);
-	$watermark_width = imagesx($watermark);
-	$watermark_height = imagesy($watermark);
-	$imw = imagesx($newim);
-	$imh = imagesy($newim);
+	$watermark = imageGet($watermark_image);
+	$watermark_width = imageWidth($watermark);
+	$watermark_height = imageHeight($watermark);
+	$imw = imageWidth($newim);
+	$imh = imageHeight($newim);
 	$percent = getOption('watermark_scale')/100;
 	$r = sqrt(($imw * $imh * $percent) / ($watermark_width * $watermark_height));
 	if (!getOption('watermark_allow_upscale')) {
@@ -119,29 +107,19 @@ if (getOption('fullimage_watermark')) {
 	// Position Overlay in Bottom Right
 	$dest_x = max(0, floor(($imw - $nw) * $offset_w));
 	$dest_y = max(0, floor(($imh - $nh) * $offset_h));
-	imagecopy($newim, $watermark, $dest_x, $dest_y, 0, 0, $nw, $nh);
-	imagedestroy($watermark);
+	copyCanvas($newim, $watermark, $dest_x, $dest_y, 0, 0, $nw, $nh);
+	imageKill($watermark);
 }
 $quality = getOption('full_image_quality');
-switch ($suffix) {
-	case 'jpeg':
-		imagejpeg($newim, $cache_path, $quality);
-		break;
-	case 'png':
-		if ($quality = 100) {
-			$quality = 0;
-		} else {
-			$quality = round((99 - $quality)/10);
-		}
-		imagepng($newim, $cache_path, $quality);
-		break;
-	case 'bmp':
-		imagewbmp($newim, $cache_path);
-		break;
-	case 'gif':
-		imagegif($newim, $cache_path);
-		break;
+if ($suffix == 'png') {
+	if ($quality = 100) {
+		$quality = 0;
+	} else {
+		$quality = round((99 - $quality)/10);
+	}
 }
+imageOutput($newim, $suffix, $cache_path, $quality);
+
 if (!is_null($cache_path)) {
 	@touch($cache_path);
 	@chmod($cache_path, 0666 & CHMOD_VALUE);

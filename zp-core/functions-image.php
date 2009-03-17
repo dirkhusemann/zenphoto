@@ -10,6 +10,7 @@
 // functions-image.php - HEADERS NOT SENT YET!
 
 // Don't let anything get above this, to save the server from burning up...
+
 define('MAX_SIZE', 3000);
 
 /**
@@ -55,208 +56,6 @@ function imageDebug($album, $image, $args) {
 	.  "<li>".gettext("quality =")." <strong>" . sanitize($quality, 3)  . "</strong></li>\n"
 	.  "<li>".gettext("thumb =")."   <strong>" . sanitize($thumb, 3)    . "</strong></li>\n"
 	.  "<li>".gettext("crop =")."    <strong>" . sanitize($crop, 3)     . "</strong></li></ul>\n";
-}
-
-/**
- * Takes an image filename and returns a GD Image using the correct function
- * for the image's format (imagecreatefrom*). Supports JPEG, GIF, and PNG.
- * @param string $imagefile the full path and filename of the image to load.
- * @return image the loaded GD image object.
- *
- */
-function get_image($imgfile) {
-	$ext = strtolower(substr(strrchr($imgfile, "."), 1));
-	if ($ext == "jpg" || $ext == "jpeg") {
-		return imagecreatefromjpeg($imgfile);
-	} else if ($ext == "gif") {
-		return imagecreatefromgif($imgfile);
-	} else if ($ext == "png") {
-		return imagecreatefrompng($imgfile);
-	} else {
-		return false;
-	}
-}
-
-/**
- * Sharpens an image using an Unsharp Mask filter.
- *
- * Original description from the author:
- *
- * WARNING ! Due to a known bug in PHP 4.3.2 this script is not working well in this
- * version. The sharpened images get too dark. The bug is fixed in version 4.3.3.
- *
- * From version 2 (July 17 2006) the script uses the imageconvolution function in
- * PHP version >= 5.1, which improves the performance considerably.
- *
- * Unsharp masking is a traditional darkroom technique that has proven very
- * suitable for digital imaging. The principle of unsharp masking is to create a
- * blurred copy of the image and compare it to the underlying original. The
- * difference in colour values between the two images is greatest for the pixels
- * near sharp edges. When this difference is subtracted from the original image,
- * the edges will be accentuated.
- *
- * The Amount parameter simply says how much of the effect you want. 100 is
- * 'normal'. Radius is the radius of the blurring circle of the mask. 'Threshold'
- * is the least difference in colour values that is allowed between the original
- * and the mask. In practice this means that low-contrast areas of the picture are
- * left unrendered whereas edges are treated normally. This is good for pictures of
- * e.g. skin or blue skies.
- *
- * Any suggenstions for improvement of the algorithm, expecially regarding the
- * speed and the roundoff errors in the Gaussian blur process, are welcome.
- *
- * Permission to license this code under the GPL was granted by the author on 2/12/2007.
- *
- * @param image $img the GD format image to sharpen. This is not a URL string, but
- *   should be the result of a GD image function.
- * @param int $amount the strength of the sharpening effect. Nominal values are between 0 and 100.
- * @param int $radius the pixel radius of the sharpening mask. A smaller radius sharpens smaller
- *   details, and a larger radius sharpens larger details.
- * @param int $threshold the color difference threshold required for sharpening. A low threshold
- *   sharpens all edges including faint ones, while a higher threshold only sharpens more distinct edges.
- * @return image the input image with the specified sharpening applied.
- */
-function unsharp_mask($img, $amount, $radius, $threshold) {
-	/*
-	 Unsharp Mask for PHP - version 2.0
-	 Unsharp mask algorithm by Torstein Hønsi 2003-06.
-	 Please leave this notice.
-	 */
-
-	// $img is an image that is already created within php using
-	// imgcreatetruecolor. No url! $img must be a truecolor image.
-
-	// Attempt to calibrate the parameters to Photoshop:
-	if ($amount > 500)    $amount = 500;
-	$amount = $amount * 0.016;
-	if ($radius > 50)    $radius = 50;
-	$radius = $radius * 2;
-	if ($threshold > 255)    $threshold = 255;
-
-	$radius = abs(round($radius));     // Only integers make sense.
-	if ($radius == 0) return $img;
-	$w = imagesx($img); $h = imagesy($img);
-	$imgCanvas = imagecreatetruecolor($w, $h);
-	$imgCanvas2 = imagecreatetruecolor($w, $h);
-	$imgBlur = imagecreatetruecolor($w, $h);
-	$imgBlur2 = imagecreatetruecolor($w, $h);
-	imagecopy ($imgCanvas, $img, 0, 0, 0, 0, $w, $h);
-	imagecopy ($imgCanvas2, $img, 0, 0, 0, 0, $w, $h);
-
-
-	// Gaussian blur matrix:
-	//    1    2    1
-	//    2    4    2
-	//    1    2    1
-	//////////////////////////////////////////////////
-
-	imagecopy($imgBlur, $imgCanvas, 0, 0, 0, 0, $w, $h); // background
-
-	for ($i = 0; $i < $radius; $i++)    {
-		if (function_exists('imageconvolution')) { // PHP >= 5.1
-			$matrix = array(
-			array( 1, 2, 1 ),
-			array( 2, 4, 2 ),
-			array( 1, 2, 1 )
-			);
-			imageconvolution($imgCanvas, $matrix, 16, 0);
-		} else {
-
-			// Move copies of the image around one pixel at the time and merge them with weight
-			// according to the matrix. The same matrix is simply repeated for higher radii.
-
-			imagecopy      ($imgBlur, $imgCanvas, 0, 0, 1, 1, $w - 1, $h - 1); // up left
-			imagecopymerge ($imgBlur, $imgCanvas, 1, 1, 0, 0, $w, $h, 50); // down right
-			imagecopymerge ($imgBlur, $imgCanvas, 0, 1, 1, 0, $w - 1, $h, 33.33333); // down left
-			imagecopymerge ($imgBlur, $imgCanvas, 1, 0, 0, 1, $w, $h - 1, 25); // up right
-			imagecopymerge ($imgBlur, $imgCanvas, 0, 0, 1, 0, $w - 1, $h, 33.33333); // left
-			imagecopymerge ($imgBlur, $imgCanvas, 1, 0, 0, 0, $w, $h, 25); // right
-			imagecopymerge ($imgBlur, $imgCanvas, 0, 0, 0, 1, $w, $h - 1, 20 ); // up
-			imagecopymerge ($imgBlur, $imgCanvas, 0, 1, 0, 0, $w, $h, 16.666667); // down
-			imagecopymerge ($imgBlur, $imgCanvas, 0, 0, 0, 0, $w, $h, 50); // center
-			imagecopy      ($imgCanvas, $imgBlur, 0, 0, 0, 0, $w, $h);
-
-			// During the loop above the blurred copy darkens, possibly due to a roundoff
-			// error. Therefore the sharp picture has to go through the same loop to
-			// produce a similar image for comparison. This is not a good thing, as processing
-			// time increases heavily.
-			imagecopy      ($imgBlur2, $imgCanvas2, 0, 0, 0, 0, $w, $h);
-			imagecopymerge ($imgBlur2, $imgCanvas2, 0, 0, 0, 0, $w, $h, 50);
-			imagecopymerge ($imgBlur2, $imgCanvas2, 0, 0, 0, 0, $w, $h, 33.33333);
-			imagecopymerge ($imgBlur2, $imgCanvas2, 0, 0, 0, 0, $w, $h, 25);
-			imagecopymerge ($imgBlur2, $imgCanvas2, 0, 0, 0, 0, $w, $h, 33.33333);
-			imagecopymerge ($imgBlur2, $imgCanvas2, 0, 0, 0, 0, $w, $h, 25);
-			imagecopymerge ($imgBlur2, $imgCanvas2, 0, 0, 0, 0, $w, $h, 20 );
-			imagecopymerge ($imgBlur2, $imgCanvas2, 0, 0, 0, 0, $w, $h, 16.666667);
-			imagecopymerge ($imgBlur2, $imgCanvas2, 0, 0, 0, 0, $w, $h, 50);
-			imagecopy      ($imgCanvas2, $imgBlur2, 0, 0, 0, 0, $w, $h);
-		}
-	}
-
-	// Calculate the difference between the blurred pixels and the original
-	// and set the pixels
-	for ($x = 0; $x < $w; $x++)    { // each row
-		for ($y = 0; $y < $h; $y++)    { // each pixel
-
-			$rgbOrig = ImageColorAt($imgCanvas2, $x, $y);
-			$rOrig = (($rgbOrig >> 16) & 0xFF);
-			$gOrig = (($rgbOrig >> 8) & 0xFF);
-			$bOrig = ($rgbOrig & 0xFF);
-
-			$rgbBlur = ImageColorAt($imgCanvas, $x, $y);
-
-			$rBlur = (($rgbBlur >> 16) & 0xFF);
-			$gBlur = (($rgbBlur >> 8) & 0xFF);
-			$bBlur = ($rgbBlur & 0xFF);
-
-			// When the masked pixels differ less from the original
-			// than the threshold specifies, they are set to their original value.
-			$rNew = (abs($rOrig - $rBlur) >= $threshold)
-			? max(0, min(255, ($amount * ($rOrig - $rBlur)) + $rOrig))
-			: $rOrig;
-			$gNew = (abs($gOrig - $gBlur) >= $threshold)
-			? max(0, min(255, ($amount * ($gOrig - $gBlur)) + $gOrig))
-			: $gOrig;
-			$bNew = (abs($bOrig - $bBlur) >= $threshold)
-			? max(0, min(255, ($amount * ($bOrig - $bBlur)) + $bOrig))
-			: $bOrig;
-
-			if (($rOrig != $rNew) || ($gOrig != $gNew) || ($bOrig != $bNew)) {
-				$pixCol = ImageColorAllocate($img, $rNew, $gNew, $bNew);
-				ImageSetPixel($img, $x, $y, $pixCol);
-			}
-		}
-	}
-	return $img;
-}
-
-/**
-/**
- * Resize a PNG file with transparency to given dimensions
- * and still retain the alpha channel information
- * Author:  Alex Le - http://www.alexle.net
- *
- *
- * @param image $src
- * @param int $w
- * @param int $h
- * @return image
- */
-function imageResizeAlpha(&$src, $w, $h) {
-	/* create a new image with the new width and height */
-	$temp = imagecreatetruecolor($w, $h);
-
-	/* making the new image transparent */
-	$background = imagecolorallocate($temp, 0, 0, 0);
-	imagecolortransparent($temp, $background); // make the new temp image all transparent
-	imagealphablending($temp, false); // turn off the alpha blending to keep the alpha channel
-
-	/* Resize the PNG file */
-	/* use imagecopyresized to gain some performance but loose some quality */
-	imagecopyresampled($temp, $src, 0, 0, 0, 0, $w, $h, imagesx($src), imagesy($src));
-	/* use imagecopyresampled if you concern more about the quality */
-	//imagecopyresampled($temp, $src, 0, 0, 0, 0, $w, $h, imagesx($src), imagesy($src));
-	return $temp;
 }
 
 /**
@@ -322,26 +121,21 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 	$sharpenimages = getOption('image_sharpen');
 	$newfile = SERVERCACHE . $newfilename;
 	if (DEBUG_IMAGE) debugLog("cacheImage(\$imgfile=".basename($imgfile).", \$newfilename=$newfilename, \$allow_watermark=$allow_watermark, \$force_cache=$force_cache, \$theme=$theme) \$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop \$image_use_side=$image_use_side; \$upscale=$upscale;");
-	// Check for GD
-	if (!function_exists('imagecreatetruecolor'))
-		imageError(gettext('The GD Library is not installed or not available.'), 'err-nogd.gif');
 	// Check for the source image.
 	if (!file_exists($imgfile) || !is_readable($imgfile)) {
 		imageError(gettext('Image not found or is unreadable.'), 'err-imagenotfound.gif');
 	}
 	$rotate = false;
-	if (function_exists('imagerotate') && getOption('auto_rotate'))  {
+	if (imageCanRotate() && getOption('auto_rotate'))  {
 		$rotate = getImageRotation($imgfile);
 	}
 
-	if ($im = get_image($imgfile)) {
+	if ($im = imageGet($imgfile)) {
 		if ($rotate) {
-			$newim_rot = imagerotate($im, $rotate, 0);
-			imagedestroy($im);
-			$im = $newim_rot;
+			$im = rotateImage($im, $rotate);
 		}
-		$w = imagesx($im);
-		$h = imagesy($im);
+		$w = imageWidth($im);
+		$h = imageHeight($im);
 		// Give the sizing dimension to $dim
 		$ratio_in = '';
 		$ratio_out = '';
@@ -476,8 +270,8 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 				$cy = 0;
 			}
 			if (DEBUG_IMAGE) debugLog("cacheImage:crop ".basename($imgfile).":\$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$rotate=$rotate");
-			$newim = imagecreatetruecolor($neww, $newh);
-			imagecopyresampled($newim, $im, 0, 0, $cx, $cy, $neww, $newh, $cw, $ch);
+			$newim = createImage($neww, $newh);
+			resampleImage($newim, $im, 0, 0, $cx, $cy, $neww, $newh, $cw, $ch);
 		} else {
 			if ($allowscale) {
 				$sizes = propSizes($size, $width, $height, $w, $h, $thumb, $image_use_side, $dim);
@@ -485,13 +279,13 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 				
 			}
 			if (DEBUG_IMAGE) debugLog("cacheImage:no crop ".basename($imgfile).":\$size=$size, \$width=$width, \$height=$height, \$dim=$dim, \$neww=$neww; \$newh=$newh; \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$rotate=$rotate; \$allowscale=$allowscale;");
-			$newim = imagecreatetruecolor($neww, $newh);
-			imagecopyresampled($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
+			$newim = createImage($neww, $newh);
+			resampleImage($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
 		}		
 		
 		
 		if (($thumb && $sharpenthumbs) || (!$thumb && $sharpenimages)) {
-			unsharp_mask($newim, getOption('sharpen_amount'), getOption('sharpen_radius'), getOption('sharpen_threshold'));
+			imageUnsharpMask($newim, getOption('sharpen_amount'), getOption('sharpen_radius'), getOption('sharpen_threshold'));
 		}
 		$watermark_image = false;
 		if ($thumbWM) {
@@ -511,11 +305,11 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		if ($watermark_image) {
 			$offset_h = getOption('watermark_h_offset') / 100;
 			$offset_w = getOption('watermark_w_offset') / 100;
-			$watermark = imagecreatefrompng($watermark_image);
-			$watermark_width = imagesx($watermark);
-			$watermark_height = imagesy($watermark);
-			$imw = imagesx($newim);
-			$imh = imagesy($newim);
+			$watermark = imageGet($watermark_image);
+			$watermark_width = imageWidth($watermark);
+			$watermark_height = imageHeight($watermark);
+			$imw = imageWidth($newim);
+			$imh = imageHeight($newim);
 			$percent = getOption('watermark_scale')/100;
 			$r = sqrt(($imw * $imh * $percent) / ($watermark_width * $watermark_height));
 			if (!getOption('watermark_allow_upscale')) {
@@ -530,20 +324,20 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			$dest_x = max(0, floor(($imw - $nw) * $offset_w));
 			$dest_y = max(0, floor(($imh - $nh) * $offset_h));
 			if (DEBUG_IMAGE) debugLog("Watermark:".basename($imgfile).": \$offset_h=$offset_h, \$offset_w=$offset_w, \$watermark_height=$watermark_height, \$watermark_width=$watermark_width, \$imw=$imw, \$imh=$imh, \$percent=$percent, \$r=$r, \$nw=$nw, \$nh=$nh, \$dest_x=$dest_x, \$dest_y=$dest_y");
-			imagecopy($newim, $watermark, $dest_x, $dest_y, 0, 0, $nw, $nh);
-			imagedestroy($watermark);
+			copyCanvas($newim, $watermark, $dest_x, $dest_y, 0, 0, $nw, $nh);
+			imageKill($watermark);
 		}
 
 		// Create the cached file (with lots of compatibility)...
 		mkdir_recursive(dirname($newfile));
-		if (imagejpeg($newim, $newfile, $quality)) {
+		if (imageOutput($newim, 'jpg', $newfile, $quality)) {
 			if (DEBUG_IMAGE) debugLog('Finished:'.basename($imgfile));
 		} else {
 			if (DEBUG_IMAGE) debugLog('cacheImage: failed to create '.$newfile);
 		}
 		@chmod($newfile, 0666 & CHMOD_VALUE);
-		imagedestroy($newim);
-		imagedestroy($im);
+		imageKill($newim);
+		imageKill($im);
 	}
 }
 

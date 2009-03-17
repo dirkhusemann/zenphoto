@@ -1292,7 +1292,7 @@ if ($subtab == 'admin') {
 			<td width="175"><?php echo gettext("Auto rotate images:"); ?></td>
 			<td><input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="auto_rotate"	value="1"
 				<?php echo checked('1', getOption('auto_rotate')); ?>
-				<?php if (!function_exists('imagerotate')) echo ' DISABLED'; ?>	/></td>
+				<?php if (!imageCanRotate()) echo ' DISABLED'; ?>	/></td>
 			<td>
 			<?php
 			echo gettext("Automatically rotate images based on the EXIF orientation setting.");
