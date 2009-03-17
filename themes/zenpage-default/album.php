@@ -1,9 +1,4 @@
-<?php if (!defined('WEBPATH')) die(); $firstPageImages = normalizeColumns('2', '6');
-setOption('thumb_size', 85, false);
-setOption('thumb_crop', 1,false);
-setOption('thumb_crop_width', 85,false);
-setOption('thumb_crop_height', 85,false);
-?>
+<?php if (!defined('WEBPATH')) die(); $firstPageImages = normalizeColumns('2', '6'); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -36,7 +31,7 @@ setOption('thumb_crop_height', 85,false);
 			<div class="album">
 
 						<div class="thumb">
-					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:'); ?> <?php getBareAlbumTitle();?>"><?php printAlbumThumbImage(getAlbumTitle()); ?></a>
+					<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:'); ?> <?php getBareAlbumTitle();?>"><?php printCustomAlbumThumbImage(getBareAlbumTitle(), NULL, 95, 95, 95, 95); ?></a>
 						</div>
 				<div class="albumdesc">
 					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:'); ?> <?php echo getBareAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
