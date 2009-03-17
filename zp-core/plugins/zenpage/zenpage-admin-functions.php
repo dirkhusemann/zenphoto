@@ -117,7 +117,7 @@ function updatePage() {
 	$result['locked'] = getCheckboxState('locked');
 
 	if(empty($result['title']) OR empty($result['titlelink'])) {
-		$result['titlelink'] = seoFriendlyURL($date);;
+		$result['titlelink'] = seoFriendlyURL($result['date']);
 	}
 
 	// update the article in the database
@@ -443,7 +443,7 @@ function addArticle() {
 	$locked = getCheckboxState('locked');
 
 	if(empty($title) OR empty($titlelink)) {
-		$titlelink = seoFriendlyURL($date);;
+		$titlelink = seoFriendlyURL($date);
 	}
 
 	// create new article
@@ -513,7 +513,7 @@ function updateArticle() {
 	$result['locked'] = getCheckboxState('locked');
 
 	if(empty($result['title']) OR empty($result['titlelink'])) {
-		$result['titlelink'] = seoFriendlyURL($date);
+		$result['titlelink'] = seoFriendlyURL($result['date']);
 	}
 
 	// update the article in the database
