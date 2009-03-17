@@ -185,7 +185,12 @@ class ZenpageNews extends PersistentObject {
 	 * @return string
 	 */
 	function getExpireDate() {
-		return $this->get("expiredate");
+		$dt = $this->get("expiredate");
+		if ($dt == '0000-00-00 00:00:00') {
+			return NULL;
+		} else {
+			return $dt;
+		}
 	}
 	/****************
 	 * Comments

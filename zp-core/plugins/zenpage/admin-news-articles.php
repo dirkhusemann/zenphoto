@@ -96,10 +96,23 @@ if(isset($_GET['category'])) {
   </td>
   <td>
   <?php 
-  echo $articleobj->getDatetime(); 
-  if($articleobj->getExpireDate() != "") {
-  	echo "<br /><small>".gettext("Expires: ").$articleobj->getExpireDate()."</small>";
-  }  
+  $dt = $articleobj->getDateTime();
+  $now = date('Y-m-d H:i:s');
+  echo $dt;
+  if($future = $dt > $now) {
+    echo '<img	src="images/clock.png" alt="'.gettext('future publication date').'" title="'.gettext('future publication date').'" />';
+  }
+  $dt = $articleobj->getExpireDate();
+  if(!empty($dt)) {
+  	$expired = $dt < $now;
+  	echo "<br /><small>";
+  	if ($expired) {
+  		echo '<font color="red">'.gettext("Expired: ").$dt.'</font>';
+  	} else {
+  		echo gettext("Expires: ").$dt;
+  	}
+  	echo "</small>";
+  }
   ?></td>
   <td>
   <?php printArticleCategories($articleobj) ?>

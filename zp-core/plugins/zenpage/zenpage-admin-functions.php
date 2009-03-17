@@ -253,9 +253,24 @@ function printPagesListTable($page) {
   	}	?>
     </td>
     <td class="icons3">
-      <?php echo $page->getDatetime();
-      if($page->getExpireDate() != "") {
-      	echo "<br /><small>".gettext("Expires: ").$page->getExpireDate()."</small>";
+      <?php
+      $dt = $page->getDateTime();
+      $now = date('Y-m-d H:i:s');
+      echo $dt;
+      if($dt > $now) {
+      	echo '<img	src="images/clock.png" alt="'.gettext('future publication date').'" title="'.gettext('future publication date').'" />';
+      }
+     
+      $dt = $page->getExpireDate();
+      if(!empty($dt)) {
+      	$expired = $dt < $now;
+      	echo "<br /><small>";
+      	if ($expired) {
+      		echo '<font color="red">'.gettext("Expired: ").$dt.'</font>';
+      	} else {
+      		echo gettext("Expires: ").$dt;
+       	}
+      	echo "</small>";
       }  
       ?>
     </td> 
@@ -1245,7 +1260,7 @@ function zenpageAdminnav($currentpage) {
 
 function printZenpageIconLegend() { ?>
 	<ul class="iconlegend">
-	<li><img src="../../images/pass.png" alt="" /><img src="images/pass_blue.png" alt="" /><img	src="../../images/action.png" alt="" /><img src="images/clock.png" alt="" /><?php echo gettext("Published/Published with expiration date/Not published/Scheduled for publishing"); ?></li>
+	<li><img src="../../images/pass.png" alt="" /><img	src="../../images/action.png" alt="" /><?php echo gettext("Published/Published with expiration date/Not published/Scheduled for publishing"); ?></li>
 	<li><img src="images/comments-on.png" alt="" /><img src="images/comments-off.png" alt="" /><?php echo gettext("Comments on/off"); ?></li>
 	<li><img src="images/view.png" alt="" /><?php echo gettext("View"); ?></li>
 	<li><img src="../../images/reset.png" alt="" /><?php echo gettext("Reset hitcounter"); ?></li>
@@ -1287,15 +1302,18 @@ foreach($admins as $admin) {
  */
 function checkIfPublished($object) {
 	if ($object->getShow() === "1") {
+/*		
 		if($object->getDateTime() > date('Y-m-d H:i:s')) {
 			$publish = "<img src=\"images/clock.png\" alt=\"".gettext("Scheduled for publishing")."\" />";
 		} else {
 			if($object->getExpireDate() != "") {
 				$publish = "<img src=\"images/pass_blue.png\" alt=\"".gettext("Published with expiration date")."\" />";
 			} else {
+*/
 				$publish = "<img src=\"../../images/pass.png\" alt=\"".gettext("Published")."\" />";
+/*
 			}
-		}
+*/
 	} else {
 		$publish = "<img src=\"../../images/action.png\" alt=\"".gettext("Unpublished")."\" />";
 	}
