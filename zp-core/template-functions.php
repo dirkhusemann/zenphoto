@@ -3067,8 +3067,8 @@ function getLatestComments($number,$type="all",$itemID="") {
 			$whereAlbums = " WHERE a.show = 1 AND a.id = ".$itemID." AND c.ownerid = ".$itemID." AND c.private = 0 AND c.inmoderation = 0 AND c.type = 'albums'".$passwordcheck2;
 			break;
 		case "all":
-			$whereImages = " WHERE i.show = 1 AND c.ownerid = i.id AND i.albumid = a.id AND c.private = 0 AND (c.type IN (".zp_image_types("'") ."))".$passwordcheck1;
-			$whereAlbums = " WHERE a.show = 1 AND c.ownerid = a.id AND c.private = 0 AND c.type = 'albums'".$passwordcheck2;
+			$whereImages = " WHERE i.show = 1 AND c.ownerid = i.id AND i.albumid = a.id AND c.private = 0 AND c.inmoderation = 0 AND (c.type IN (".zp_image_types("'") ."))".$passwordcheck1;
+			$whereAlbums = " WHERE a.show = 1 AND c.ownerid = a.id AND c.private = 0 AND c.inmoderation = 0 AND c.type = 'albums'".$passwordcheck2;
 			break;
 	}
 	$comments_images = array();
