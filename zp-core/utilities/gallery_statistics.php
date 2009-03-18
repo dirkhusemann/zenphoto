@@ -14,6 +14,9 @@ define('RESPOND_COUNTER', 1000);
 chdir(dirname(dirname(__FILE__)));
 
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
+if(getOption('zp_plugin_zenpage')) {
+	require_once(dirname(dirname(__FILE__)).'/plugins/zenpage/zenpage-admin-functions.php');
+}
 
 $button_text = gettext('Gallery Statistics');
 $button_hint = gettext('Shows statistical graphs and info about your gallery\'s images and albums.');
@@ -41,7 +44,7 @@ printAdminHeader($webpath);
  * Prints a table with a bar graph of the values.
  *
  * @param string $sortorder "popular", "mostrated","toprated","mostcommented" or - only if $type = "albums"! - "mostimages" 
- * @param string_type $type "albums" or "images"
+ * @param string_type $type "albums", "images", "pages", "news", "tags"
  * @param int $limit Number of entries to show
  */
 function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $to_number=10) {
@@ -57,8 +60,33 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 			$typename = gettext("Images");
 			$dbquery = "SELECT id, title, filename, albumid, hitcounter, total_votes, total_value, `show` FROM ".prefix('images');
 			break;
+		case "pages":
+			$typename = gettext("Pages");
+			$dbquery = "SELECT id, title, titlelink, hitcounter, `show` FROM ".prefix('zenpage_pages');
+			break;
+		case "news":
+			$typename = gettext("News Articles");
+			$dbquery = "SELECT id, title, titlelink, hitcounter, `show` FROM ".prefix('zenpage_news');
+			break;
+		case "newscategories":
+			$typename = gettext("News Categories");
+			$dbquery = "SELECT id, cat_name, cat_link, hitcounter FROM ".prefix('zenpage_news_categories');
+			break;
+		case "tags":
+			$typename = gettext("Tags");
+			break;
+			
 	}
 	switch($sortorder) {
+		case "mostused":
+			$itemssorted = query_full_array("SELECT tagobj.tagid, count(*) as tagcount, tags.* FROM ".prefix('obj_to_tag')." AS tagobj, ".prefix('tags')." AS tags WHERE tags.id=tagobj.tagid GROUP BY tags.id ORDER BY tagcount DESC LIMIT ".$limit); 
+			if(empty($itemssorted)) {
+				$maxvalue = 0;
+			} else {
+				$maxvalue = $itemssorted[0]['tagcount'];
+			}
+			$headline = $typename." - ".gettext("most used");
+			break;		
 		case "popular":
 			$itemssorted = query_full_array($dbquery." ORDER BY hitcounter DESC LIMIT ".$limit);
 			if(empty($itemssorted)) {
@@ -66,8 +94,8 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 			} else {
 				$maxvalue = $itemssorted[0]['hitcounter'];
 			}
-			$headline = $typename." - ".gettext("most viewed");
-			break;
+				$headline = $typename." - ".gettext("most viewed");
+				break;
 		case "mostrated":
 			$itemssorted = query_full_array($dbquery." ORDER BY total_votes DESC LIMIT ".$limit);
 			if(empty($itemssorted)) {
@@ -105,6 +133,12 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 				case "images":
 					$itemssorted = query_full_array("SELECT comments.ownerid, count(*) as commentcount, images.* FROM ".prefix('comments')." AS comments, ".prefix('images')." AS images WHERE images.id=comments.ownerid AND type = 'images' GROUP BY comments.ownerid ORDER BY commentcount DESC LIMIT ".$limit); 
 					break;
+				case "pages":
+					$itemssorted = query_full_array("SELECT comments.ownerid, count(*) as commentcount, pages.* FROM ".prefix('comments')." AS comments, ".prefix('zenpage_pages')." AS pages WHERE pages.id=comments.ownerid AND type = 'page' GROUP BY comments.ownerid ORDER BY commentcount DESC LIMIT ".$limit); 
+					break;
+				case "news":
+					$itemssorted = query_full_array("SELECT comments.ownerid, count(*) as commentcount, news.* FROM ".prefix('comments')." AS comments, ".prefix('zenpage_news')." AS news WHERE news.id=comments.ownerid AND type = 'news' GROUP BY comments.ownerid ORDER BY commentcount DESC LIMIT ".$limit); 
+					break;
 			}
 			if(empty($itemssorted)) {
 				$maxvalue = 0;
@@ -121,6 +155,15 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 				$maxvalue =  $itemssorted[0]['imagenumber'];
 			}
 			$headline = $typename." - ".gettext("most images");
+			break;
+		case "mostarticles": // news categories only!
+			$itemssorted = query_full_array("SELECT news2cat.cat_id, count(*) as catcount, cats.* FROM ".prefix('zenpage_news2cat')." AS news2cat, ".prefix('zenpage_news_categories')." AS cats WHERE cats.id=news2cat.cat_id GROUP BY news2cat.cat_id ORDER BY catcount DESC LIMIT ".$limit); 
+			if(empty($itemssorted)) {
+				$maxvalue = 0;
+			} else {
+				$maxvalue = $itemssorted[0]['catcount'];
+			}
+			$headline = $typename." - ".gettext("most news articles");
 			break;
 		case "latest":
 			switch($type) {
@@ -245,6 +288,12 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 			$name = $item['filename'];
 		} else if(array_key_exists("folder",$item)){
 			$name = $item['folder'];
+		} else if ($type === "pages" OR $type === "news") {
+			$name = $item['titlelink'];
+		} else if ($type === "newscategories") {
+			$name = $item['cat_link'];
+		} else if ($type === "tags") {
+			$name = "";
 		}
 		switch($sortorder) {
 			case "popular":
@@ -280,6 +329,14 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 				$barsize = round($item['imagenumber'] / $maxvalue * $bargraphmaxsize);
 				$value = $item['imagenumber'];
 				break;
+			case "mostarticles":
+				if($maxvalue != 0) {
+					$barsize = round($item['catcount'] / $maxvalue * $bargraphmaxsize);
+				} else {
+					$barsize = 0;
+				}
+				$value = $item['catcount'];
+				break;
 			case "latest":
 				switch($type) {
 					case "albums":
@@ -296,6 +353,14 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 				$barsize = 0; //round($item['imagenumber'] / $maxvalue * $bargraphmaxsize);
 				$value = sprintf(gettext("%s images"),$item['imagenumber']); 
 				break;
+			case "mostused":
+				if($maxvalue != 0) {
+					$barsize = round($item['tagcount'] / $maxvalue * $bargraphmaxsize);
+				} else {
+					$barsize = 0;
+				}
+				$value = $item['tagcount'];
+				break;
 		}
 		// counter to have a gray background of every second line
 		if($countlines === 1) {
@@ -309,6 +374,7 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 			case "albums":
 				$editurl=  $webpath."/admin.php?page=edit&amp;album=".$name;
 				$viewurl = WEBPATH."/index.php?album=".$name;
+				$title = get_language_string($item['title']);
 				break;
 			case "images":
 				$getalbumfolder = query_single_row("SELECT title, folder, `show` from ".prefix("albums"). " WHERE id = ".$item['albumid']);
@@ -321,18 +387,48 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 				}
 				$editurl=  $webpath."/admin.php?page=edit&amp;album=".$getalbumfolder['folder']."&amp;image=".$item['filename']."&amp;tab=imageinfo#IT";
 				$viewurl = WEBPATH."/index.php?album=".$getalbumfolder['folder']."&amp;image=".$name;
+				$title = get_language_string($item['title']);
+				break;
+			case "pages":
+				$editurl=  $webpath."/plugins/zenpage/admin-edit.php?page&titlelink=".$name;
+				$viewurl = WEBPATH."/index.php?p=pages&title=".$name;
+				$title = get_language_string($item['title']);
+				break;
+			case "news":
+				$editurl=  $webpath."/plugins/zenpage/admin-edit.php?news&titlelink=".$name;
+				$viewurl = WEBPATH."/index.php?p=news&title=".$name;
+				$title = get_language_string($item['title']);
+				break;
+			case "newscategories":
+				$editurl=  $webpath."/plugins/zenpage/admin-categories.php?edit&id=".$item['id'];
+				$viewurl = WEBPATH."/index.php?p=news&category=".$name;
+				$title = get_language_string($item['cat_name']);
+				break;
+			case "tags":
+				$editurl=  $webpath."/admin-tags.php";
+				$viewurl = WEBPATH."/index.php?p=search&amp;searchfields=4&amp;words=".$item['name'];
+				$title = get_language_string($item['name']);
 				break;
 		}
-		if($item['show'] != "1") {
-			$show = " class='unpublished_item'";
-		} else {
-			$show = "";
-		}
+	 if($type != "newscategories" AND $type != "tags") {
+			if($item['show'] != "1") {
+				$show = " class='unpublished_item'";
+			} else {
+				$show = "";
+			}
+	 } else {
+	 	 $show = "";
+	 }
 		if($value != 0 OR $sortorder === "latest") {
+			if(empty($name)) {
+				$name = "";
+			} else {
+				$name = "(".$name.")";
+			}
 		?>
 		<tr class="statistic_wrapper">
 		<td class="statistic_counter" <?php echo $style; ?>><?php echo $count; ?></td>
-		<td class="statistic_title" <?php echo $style; ?>><strong<?php echo $show; ?>><?php echo get_language_string($item['title']); ?></strong> (<?php echo $name; ?>)</td>
+		<td class="statistic_title" <?php echo $style; ?>><strong<?php echo $show; ?>><?php echo $title; ?></strong> <?php echo $name; ?></td>
 		<td class="statistic_graphwrap" <?php echo $style; ?>><div class="statistic_bargraph" style="width: <?php echo $barsize; ?>px"></div><div class="statistic_value"><?php echo $value; ?></div></td>
 		<td class="statistic_link" <?php echo $style; ?>>
 		<?php
@@ -398,7 +494,37 @@ if ($commentcount_mod > 0) {
 	}
 }
 ?>
-</li></ul>
+</li>
+<?php if(getOption('zp_plugin_zenpage')) { ?>
+	<li>
+		<?php
+		list($total,$type,$unpub) = getNewsPagesStatistic("pages");
+		if (empty($unpub)) {
+			printf(gettext('<strong>%1$u</strong> Pages'),$total,$type);
+		} else {
+			printf(gettext('<strong>%1$u</strong> Pages (<strong>%2$u</strong> unpublished)'),$total,$unpub);
+		}
+		?>
+	</li>
+	<li>
+		<?php
+		list($total,$type,$unpub) = getNewsPagesStatistic("news");
+		if (empty($unpub)) {
+			printf(gettext('<strong>%1$u</strong> News articles'),$total);
+		} else {
+			printf(gettext('<strong>%1$u</strong> News articles(<strong>%2$u</strong> unpublished)'),$total,$unpub);
+		}
+		?>
+	</li>
+	<li>
+		<?php
+		list($total,$type,$unpub) = getNewsPagesStatistic("categories");
+		printf(gettext('<strong>%1$u</strong> Categories'),$total);
+		?>
+	</li>
+<?php } ?>
+
+</ul>
 	
 <?php
 if(!isset($_GET['stats']) AND !isset($_GET['fulllist'])) {
@@ -424,6 +550,31 @@ if(!isset($_GET['stats']) AND !isset($_GET['fulllist'])) {
 				<li><a href="#albums-mostcommented"><?php echo gettext("most commented"); ?></a></li>
 		</ul>
 		</li>
+		<li><strong><?php echo gettext("Tags"); ?></strong>
+		<ul>
+			<li><a href="#tags-mostused"><?php echo gettext("most used"); ?></a></li>
+		</ul>
+		</li>
+		<?php if(getOption('zp_plugin_zenpage')) { ?>
+		<li><strong><?php echo gettext("Pages"); ?></strong>
+		<ul>
+			<li><a href="#pages-popular"><?php echo gettext("most viewed"); ?></a> | </li>
+			<li><a href="#pages-mostcommented"><?php echo gettext("most commented"); ?></a></li>
+		</ul>
+		</li>
+		<li><strong><?php echo gettext("News articles"); ?></strong>
+		<ul>
+			<li><a href="#news-popular"><?php echo gettext("most viewed"); ?></a> | </li>
+			<li><a href="#news-mostcommented"><?php echo gettext("most commented"); ?></a></li>
+		</ul>
+		</li>
+		<li><strong><?php echo gettext("News categories"); ?></strong>
+		<ul>
+			<li><a href="#newscategories-popular"><?php echo gettext("most viewed"); ?></a> | </li>
+			<li><a href="#newscategories-mostarticles"><?php echo gettext("most articles"); ?></a></li>
+		</ul>
+		</li>
+		<?php } ?>
 </ul>
 <br style="clear:both" />
 
@@ -442,6 +593,8 @@ if(!isset($_GET['stats']) AND !isset($_GET['fulllist'])) {
   
 <a name="images-mostcommented"></a>
 <?php printBarGraph("mostcommented","images"); ?>
+
+<hr />
 
 <!-- albums --> 
 <a name="albums-latest"></a>
@@ -465,7 +618,42 @@ if(!isset($_GET['stats']) AND !isset($_GET['fulllist'])) {
 <a name="albums-mostcommented"></a>
 <?php printBarGraph("mostcommented","albums"); ?>
 
-<?php }
+<hr />
+
+<a name="tags-mostused"></a>
+<?php printBarGraph("mostused","tags"); ?>
+
+<?php if(getOption('zp_plugin_zenpage')) { ?>
+<hr />
+<!-- Zenpage pages --> 
+<a name="pages-popular"></a>
+<?php printBarGraph("popular","pages"); ?>
+
+<a name="pages-mostcommented"></a>
+<?php printBarGraph("mostcommented","pages"); ?>
+
+<hr />
+
+<!-- Zenpage news articles --> 
+<a name="news-popular"></a>
+<?php printBarGraph("popular","news"); ?>
+
+<a name="news-mostcommented"></a>
+<?php printBarGraph("mostcommented","news"); ?>
+
+<hr />
+
+<h2>Statistics for news categories</h2>
+<a name="newscategories-popular"></a>
+<?php printBarGraph("popular","newscategories"); ?>
+
+<a name="newscategories-mostarticles"></a>
+<?php printBarGraph("mostarticles","newscategories"); ?>
+
+<?php } ?>
+<?php 
+}
+
 // If a single list is requested
 if(isset($_GET['type'])) {
 	if(!isset($_GET['from_number'])) {
@@ -531,7 +719,6 @@ if(isset($_GET['type'])) {
 				}
 				break;
 					case "images":
-
 						switch ($_GET['stats']) {
 							case "latest":
 								printBarGraph("latest","images",$from_number,$to_number);
@@ -550,6 +737,45 @@ if(isset($_GET['type'])) {
 								break;
 						}
 						break;
+							case "tags":
+								printBarGraph("mostused","tags",$from_number,$to_number);
+								break;
+							case "pages":
+								if(getOption('zp_plugin_zenpage')) {
+									switch ($_GET['stats']) {
+										case "popular":
+											printBarGraph("popular","pages",$from_number,$to_number);
+											break;
+										case "mostcommented":
+											printBarGraph("mostcommented","pages",$from_number,$to_number);
+											break;
+									}
+								}
+								break;
+										case "news":
+											if(getOption('zp_plugin_zenpage')) {
+												switch ($_GET['stats']) {
+													case "popular":
+														printBarGraph("popular","news",$from_number,$to_number);
+														break;
+													case "mostcommented":
+														printBarGraph("mostcommented","news",$from_number,$to_number);
+														break;
+												}
+											}
+											break;
+													case "newscategories":
+														if(getOption('zp_plugin_zenpage')) {
+															switch ($_GET['stats']) {
+																case "popular":
+																	printBarGraph("popular","newscategories",$from_number,$to_number);
+																	break;
+																case "mostarticles":
+																	printBarGraph("mostarticles","newscategories",$from_number,$to_number);
+																	break;
+															}
+														}
+													break;
 		} // main switch end
 		echo "<a href='#top'>".gettext("Back to top")."</a>";
 } // main if end
