@@ -189,12 +189,23 @@ if(is_object($result)) {
     	<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Publish"); ?></h2>
      		<div class="box-edit-zenpage">
    			<p><?php echo gettext("Author:"); ?> <?php AuthorSelector(getIfObject($result,"author")) ;?></p>
-    		<p><?php if(is_object($result)) { ?>
-				<input name="edittitlelink" type="checkbox" id="edittitlelink" value="1" /> <?php echo gettext("Edit TitleLink"); ?><br />
+    		<?php if(is_object($result)) { ?>
+    		<p class="checkbox">
+				<input name="edittitlelink" type="checkbox" id="edittitlelink" value="1" />
+				<label for="edittitlelink"><?php echo gettext("Edit TitleLink"); ?></label>
 				<?php } ?>
-    		<input name="permalink" type="checkbox" id="permalink" value="1" <?php if (is_object($result)) { checkIfChecked($result->getPermalink()); } else { echo "checked='checked'"; } ?> /> <?php echo gettext("Enable permaTitlelink"); ?><br />
-     		<input name="show" type="checkbox" id="show" value="1" <?php checkIfChecked(getIfObject($result,"show"));?> /> <?php echo gettext("Published"); ?><br />
-    	 	<input name="locked" type="checkbox" id="locked" value="1" <?php checkIfChecked(getIfObject($result,"locked"));?>; /> <?php echo gettext("Locked for changes"); ?><br />
+				</p>
+				<p class="checkbox">
+				<input name="permalink" type="checkbox" id="permalink" value="1" <?php if (is_object($result)) { checkIfChecked($result->getPermalink()); } else { echo "checked='checked'"; } ?> />
+				<label for="permalink"><?php echo gettext("Enable permaTitlelink"); ?></label>
+				</p>
+				<p class="checkbox">
+     		<input name="show" type="checkbox" id="show" value="1" <?php checkIfChecked(getIfObject($result,"show"));?> />
+     		<label for="show"><?php echo gettext("Published"); ?></label>
+    	 	</p>
+    	 	<p class="checkbox">
+    	 	<input name="locked" type="checkbox" id="locked" value="1" <?php checkIfChecked(getIfObject($result,"locked"));?>; />
+    	 	<label for="locked"><?php echo gettext("Locked for changes"); ?></label>
 				</p>
      		<p class="buttons"><button class="submitbutton" type="submit" title="<?php echo $updateitem; ?>"><img src="../../images/pass.png" alt="" /><strong><?php if(is_object($result)) { echo $updateitem; } else { echo $saveitem; } ?></strong></button></p>
 				<br style="clear:both" />
@@ -224,9 +235,18 @@ if(is_object($result)) {
     	
     		<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("General"); ?></h2>
      		<div class="box-edit-zenpage">
-     		<p><input name="commentson" type="checkbox" id="commentson"value="1" <?php checkIfChecked(getIfObject($result,"commentson"));?> /> <?php echo gettext("Comments on"); ?><br />
-				<?php if(is_object($result)) { ?> <input name="resethitcounter" type="checkbox" id="resethitcounter" value="1" /> <?php printf(gettext('Reset hitcounter (Hits: %1$s)'),$result->getHitcounter()); } ?>
-    		</p>
+    
+				<p class="checkbox">
+				<input name="commentson" type="checkbox" id="commentson"value="1" <?php checkIfChecked(getIfObject($result,"commentson"));?> />
+				<label for="commentson"> <?php echo gettext("Comments on"); ?></label>  		
+				</p>
+				<?php if(is_object($result)) { ?> 
+				<p class="checkbox">
+				<input name="resethitcounter" type="checkbox" id="resethitcounter" value="1" />
+				<label for="resethitcounter"> <?php printf(gettext('Reset hitcounter (Hits: %1$s)'),$result->getHitcounter()); ?></label>  
+				</p>
+				<?php } ?>
+    		
     		</div>
 			
     	<p>
