@@ -35,7 +35,7 @@ if(getOption('zenpage_combinews') AND !isset($_GET['title']) AND !isset($_GET['c
 	 *
 	 */
 function processExpiredPages() {
-	query("UPDATE ".prefix('zenpage_pages')." SET `show` = 0 WHERE `expiredate` <> NULL AND `expiredate` <= '".date('Y-m-d H:i:s')."'", true);
+	query("UPDATE ".prefix('zenpage_pages')." SET `show` = 0 WHERE `date` <= '".date('Y-m-d H:i:s')."' AND `expiredate` <= '".date('Y-m-d H:i:s')."'", true);
 }
 
 /**
@@ -43,7 +43,7 @@ function processExpiredPages() {
 	 *
 	 */
 function processExpiredNewsArticles() {
-	query("UPDATE ".prefix('zenpage_news')." SET `show` = 0 WHERE `expiredate` <> NULL AND `expiredate` <= '".date('Y-m-d H:i:s')."'", true);
+	query("UPDATE ".prefix('zenpage_news')." SET `show` = 0 WHERE `date` <= '".date('Y-m-d H:i:s')."' AND `expiredate` <= '".date('Y-m-d H:i:s')."'", true);
 }
 
 /************************************/
