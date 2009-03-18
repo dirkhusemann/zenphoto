@@ -19,21 +19,21 @@ include("zp-functions.php"); ?>
 $(document).ready(function() {
 	$('#date').change(function() {
 		if($('#date').val() > '<?php echo date('Y-m-d H:i:s'); ?>') {
-			$("#scheduledpublishing").html('<?php echo gettext("Future publishing date:"); ?>');
+			$(".scheduledpublishing").html('<?php echo gettext("Future publishing date:"); ?>');
 		} else {
-			$("#scheduledpublishing").html('');
+			$(".scheduledpublishing").html('');
 		}
 	});
 		if($('#date').val() > '<?php echo date('Y-m-d H:i:s'); ?>') {
-			$("#scheduledpublishing").html('<?php echo gettext("Future publishing date:"); ?>');
+			$(".scheduledpublishing").html('<?php echo gettext("Future publishing date:"); ?>');
 		} else {
-			$("#scheduledpublishing").html('');
+			$(".scheduledpublishing").html('');
 		}
 	$('#expiredate').change(function() {
 		if($('#expiredate').val() > '<?php echo date('Y-m-d H:i:s'); ?>' || $('#expiredate').val() === '') {
-			$("#expire").html('');
+			$(".expire").html('');
 		} else {
-			$("#expire").html('<?php echo gettext("This is not a future date!"); ?>');
+			$(".expire").html('<?php echo gettext("This is not a future date!"); ?>');
 			$("#expiredate").val("");
 		}
 	});
@@ -111,6 +111,9 @@ if(is_object($result)) {
 		if(is_object($result)) { 
      	if($result->getDatetime() >= date('Y-m-d H:i:s')) {
      		echo " <small><strong id='scheduldedpublishing'>".gettext("(Article scheduled for publishing)")."</strong></small>";
+     		if($result->getShow() != 1) {
+     			echo "<p class='scheduledate'><small>".gettext("Note: Scheduled publishing is not active unless the page/article is also set to 'published'")."</small></p>";
+     		}
      	}
     }
    ?>
@@ -154,7 +157,7 @@ if(is_object($result)) {
 <p><?php echo gettext("Check <em>Edit Titlelink</em> if you need to customize how the title appears in URLs. Otherwise it will be automatically updated to any changes made to the title. If you want to prevent this check <em>Enable permaTitlelink</em> and the titlelink stays always the same (recommended if you use Zenphoto's multilingual mode). <strong>Note: </strong> <em>Edit titlelink</em> overrides the permalink setting.");?>
 <br /><?php echo gettext("If you lock an article only the current active author/user or any user with full admin rights will be able to edit it later again!"); ?></p> 
 <p><?php echo gettext("<strong>Important:</strong> If you are using Zenphoto's multi-lingual mode the Titlelink is generated from the Title of the currently selected language."); ?></p> 
-<p><?php echo gettext("<em>Scheduled publishing:</em> Just set a page or a news article to 'published' and enter a future date in the date field manually. Note this works on server time!"); ?></p>
+<p><?php echo gettext("<em>Scheduled publishing:</em> To automatically publish a page/news article in the future set it to 'unpublished' and enter a future date in the date field manually.Note this works on server time!"); ?></p>
 <p><?php echo gettext("<em>Expiration date:</em> Enter a future date in the date field manually to set a date the page or article will be set unpublished automatically. After the page/article has been expired it can only be published again if the expiration date is deleted. Note this works on server time!"); ?></p>
 <p><?php echo gettext("<em>ExtraContent:</em> Here you can enter extra content for example to be printed on the sidebar"); ?></p>
 <p><?php echo gettext("<em>Codeblocks:</em> Use these fields if you need to enter php code (for example Zenphoto functions) or javascript code."); ?>
@@ -205,11 +208,11 @@ if(is_object($result)) {
      		<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Date"); ?></h2>
      		<div class="box-edit-zenpage">
      		<p>
-     		<span id='scheduledpublishing'></span>
+     		<strong class='scheduledpublishing'></strong>
      		<input name="date" type="text" id="date" value="<?php if(is_object($result)) { echo $result->getDatetime(); } else { echo date('Y-m-d H:i:s'); } ?>" />
      		</p>
      		<hr />
-     		<span id='expire'></span>
+     		<strong class='expire'></strong>
      		<p><?php echo gettext("Expiration date:"); ?><br />
      		<input name="expiredate" type="text" id="expiredate" value="<?php if(is_object($result)) { if($result->getExpireDate() != NULL) { echo $result->getExpireDate();} } ?>" />
      		</p>

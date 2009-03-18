@@ -254,24 +254,8 @@ function printPagesListTable($page) {
     </td>
     <td class="icons3">
       <?php
-      $dt = $page->getDateTime();
-      $now = date('Y-m-d H:i:s');
-      echo $dt;
-      if($dt > $now) {
-      	echo '<img	src="images/clock.png" alt="'.gettext('future publication date').'" title="'.gettext('future publication date').'" />';
-      }
-     
-      $dt = $page->getExpireDate();
-      if(!empty($dt)) {
-      	$expired = $dt < $now;
-      	echo "<br /><small>";
-      	if ($expired) {
-      		printf(gettext('<font color="red">Expired: %s</font>'),$dt);
-      	} else {
-      		printf( gettext("Expires: %s"),$dt);
-       	}
-      	echo "</small>";
-      }  
+       checkIfScheduled($page);
+       checkIfExpires($page);
       ?>
     </td> 
     <td class="icons3" style="text-align: left">
@@ -281,12 +265,7 @@ function printPagesListTable($page) {
     
 	<?php if(checkIfLocked($page)) { ?>
 	<td class="icons">
-		<?php if($page->getDatetime() >= date('Y-m-d H:i:s')) { ?>
-			<a href="?skipscheduling=<?php echo $page->getShow(); ?>&amp;id=<?php echo $page->getID(); ?>" title="<?php echo gettext("Skip scheduled publishing and publish immediatly"); ?>">
-		<?php } else { ?>
-			<a href="?publish=<?php echo $page->getShow(); ?>&amp;id=<?php echo $page->getID(); ?>" title="<?php echo gettext("Publish or unpublish page"); ?>">
-		<?php } ?>	
-		<?php echo checkIfPublished($page); ?></a>
+		<?php printPublishIconLink($page,"page"); ?>
 	</td>
 	<td class="icons">
 		<a href="?commentson=<?php echo $page->getCommentson(); ?>&amp;id=<?php echo $page->getID(); ?>" title="<?php echo gettext("Enable or disable comments"); ?>">
@@ -1022,7 +1001,7 @@ function skipScheduledPublishing($option,$id) {
 			$dbtable = prefix('zenpage_pages');
 			break;
 	}
-  query("UPDATE ".$dbtable." SET `date` = '".date('Y-m-d H:i:s')."' WHERE id = ".$id);
+  query("UPDATE ".$dbtable." SET `date` = '".date('Y-m-d H:i:s')."' AND `show`= 1 WHERE id = ".$id);
 }
 
 /**
@@ -1260,7 +1239,7 @@ function zenpageAdminnav($currentpage) {
 
 function printZenpageIconLegend() { ?>
 	<ul class="iconlegend">
-	<li><img src="../../images/pass.png" alt="" /><img	src="../../images/action.png" alt="" /><?php echo gettext("Published/Published with expiration date/Not published/Scheduled for publishing"); ?></li>
+	<li><img src="../../images/pass.png" alt="" /><img	src="../../images/action.png" alt="" /><?php echo gettext("Published/Not published"); ?></li>
 	<li><img src="images/comments-on.png" alt="" /><img src="images/comments-off.png" alt="" /><?php echo gettext("Comments on/off"); ?></li>
 	<li><img src="images/view.png" alt="" /><?php echo gettext("View"); ?></li>
 	<li><img src="../../images/reset.png" alt="" /><?php echo gettext("Reset hitcounter"); ?></li>
@@ -1302,24 +1281,80 @@ foreach($admins as $admin) {
  */
 function checkIfPublished($object) {
 	if ($object->getShow() === "1") {
-/*		
-		if($object->getDateTime() > date('Y-m-d H:i:s')) {
-			$publish = "<img src=\"images/clock.png\" alt=\"".gettext("Scheduled for publishing")."\" />";
+		$dt = $object->getDateTime();
+		if($dt > date('Y-m-d H:i:s')) {
+			$publish = "<img src=\"images/clock.png\" alt=\"".gettext("Scheduled for published")."\" />";
 		} else {
-			if($object->getExpireDate() != "") {
-				$publish = "<img src=\"images/pass_blue.png\" alt=\"".gettext("Published with expiration date")."\" />";
-			} else {
-*/
-				$publish = "<img src=\"../../images/pass.png\" alt=\"".gettext("Published")."\" />";
-/*
-			}
-*/
+			$publish = "<img src=\"../../images/pass.png\" alt=\"".gettext("Published")."\" />";
+		}
 	} else {
 		$publish = "<img src=\"../../images/action.png\" alt=\"".gettext("Unpublished")."\" />";
 	}
 	return $publish;
 }
 
+/**
+ * Checks if a page or articles has an expiration date set and prints out this date and a message about it or if it already is expired
+ *
+ * @param string $object Object of the page or news article to check
+ * @return string
+ */
+function checkIfExpires($object) {
+	$dt = $object->getExpireDate();
+	if(!empty($dt)) {
+		$expired = $dt < date('Y-m-d H:i:s');
+		echo "<br /><small>";
+		if ($expired) {
+			echo '<strong class="expired">';printf(gettext('Expired: %s'),$dt); echo "</strong>";
+		} else {
+			echo '<strong class="expiredate">';printf(gettext("Expires: %s"),$dt); echo "</strong>";
+		}
+		echo "</small>";
+	}
+}
+
+/**
+ * Checks if a page or articles is scheduled for publishing and prints out a message and the future date or the publishing date if not scheduled.
+ *
+ * @param string $object Object of the page or news article to check
+ * @return string
+ */
+function checkIfScheduled($object) {
+	$dt = $object->getDateTime();
+	if($dt > date('Y-m-d H:i:s')) {
+		if($object->getShow() != 1) {
+			echo '<strong class="scheduledate">'.$dt.'<br /><small>'.gettext("Scheduled publishing not active").'</small></strong>';
+		} else {
+			echo '<strong class="scheduledate">'.$dt.'<br /><small>'.gettext("Scheduled for publishing").'</small></strong>';
+		}
+	} else {
+		echo $dt;
+	}
+}
+
+/**
+ * Prints the publish/unpublished/scheduled publishing icon with a link for the pages and news articles list.
+ *
+ * @param string $object Object of the page or news article to check
+ * @return string
+ */
+function printPublishIconLink($object,$type) {
+	$urladd1 = "";$urladd2 = "";$urladd3 = "";
+	if($type === "news") {
+		if(isset($_GET['page'])) { $urladd1 = "&amp;page=".$_GET['page']; }
+		if(isset($_GET['date'])) { $urladd2 = "&amp;date=".$_GET['date']; }
+		if(isset($_GET['category'])) { $urladd3 = "&amp;category=".$_GET['category']; }
+	}
+	if($object->getDatetime() > date('Y-m-d H:i:s') AND $object->getShow() == 1) {	?>
+		<a href="?skipscheduling=<?php echo $object->getShow(); ?>&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Skip scheduling and publish immediatly"); ?>">
+	<?php } else if($object->getShow() != 1 AND $object->getDatetime() > date('Y-m-d H:i:s')) { ?> 
+		<a href="?publish=<?php echo $object->getShow(); ?>&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Enable scheduled publishing"); ?>"> 
+	<?php } else { ?> 
+		<a href="?publish=<?php echo $object->getShow(); ?>&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Publish or unpublish"); ?>"> 
+<?php } 
+	echo checkIfPublished($object);
+	echo "</a>";
+}
 
 /**
  * Checks if a checkbox is selected and checks it if.
@@ -1412,8 +1447,8 @@ function is_AdminEditPage($page) {
  * Codeblock tabs javascript code
  *
  */
-function codeblocktabsJS() { ?>
-	<script type="text/javascript" charset="utf-8">
+function codeblocktabsJS() { ?> <script type="text/javascript"
+		charset="utf-8">
 		$(function () {
 			var tabContainers = $('div.tabs > div');
 			tabContainers.hide().filter(':first').show();
@@ -1426,8 +1461,7 @@ function codeblocktabsJS() { ?>
 				return false;
 			}).filter(':first').click();
 		});
-	</script>
-<?php }
+	</script> <?php }
 
 
 

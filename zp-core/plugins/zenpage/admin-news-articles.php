@@ -66,8 +66,8 @@ if(isset($_GET['category'])) {
 ?>
 <span class="zenpagestats"><?php printNewsPagesStatistic("news");?></span></h1>
 <div style="margin-bottom:-5px"><div style="float:left; margin-right: 15px; margin-top: 2px;">
-	<div class="buttons"><strong><a href="admin-edit.php?newsarticle&amp;add" title="<?php echo gettext("Add Article"); ?>"><img src="images/add.png" alt="" /> <?php echo gettext("Add Article"); ?></a></strong>
-	<strong><a href="<?php echo WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER; ?>tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language=<?php echo getLocaleForTinyMCEandAFM(); ?>&KeepThis=true&TB_iframe=true&height=480&width=750" class="thickbox"><img src="images/folder.png" /> <?php echo gettext("Manage files"); ?></a></strong>
+	<div class="buttons"><strong><a href="admin-edit.php?newsarticle&amp;amp;add" title="<?php echo gettext("Add Article"); ?>"><img src="images/add.png" alt="" /> <?php echo gettext("Add Article"); ?></a></strong>
+	<strong><a href="<?php echo WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER; ?>tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language=<?php echo getLocaleForTinyMCEandAFM(); ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=480&amp;width=750" class="thickbox"><img src="images/folder.png" /> <?php echo gettext("Manage files"); ?></a></strong>
 	</div>
 </div>
 <?php printCategoryDropdown(); printArticleDatesDropdown(); printUnpublishedDropdown(); ?>
@@ -80,65 +80,40 @@ if(isset($_GET['category'])) {
   <th colspan="9"><strong><?php echo gettext("Edit this article"); ?></strong></th>
  </tr>
 <?php foreach ($result as $article) { 
-	$articleobj = new ZenpageNews($article['titlelink']);
+	$article = new ZenpageNews($article['titlelink']);
 	
 	?>
  <tr> 
   <td> 
    <?php 
-   if(checkIfLocked($articleobj)) {
-   	 echo "<a href='admin-edit.php?newsarticle&amp;titlelink=".urlencode($articleobj->getTitlelink())."&pagenr=".getCurrentAdminNewsPage()."' title='".truncate_string(strip_tags($articleobj->getContent()),300)."'>"; checkForEmptyTitle($articleobj->getTitle(),"news"); echo "</a>".checkHitcounterDisplay($articleobj->getHitcounter()); 
+   if(checkIfLocked($article)) {
+   	 echo "<a href='admin-edit.php?newsarticle&amp;titlelink=".urlencode($article->getTitlelink())."&amp;pagenr=".getCurrentAdminNewsPage()."' title='".truncate_string(strip_tags($article->getContent()),300)."'>"; checkForEmptyTitle($article->getTitle(),"news"); echo "</a>".checkHitcounterDisplay($article->getHitcounter()); 
    } else {
-   	 echo $articleobj->getTitle()."</a>".checkHitcounterDisplay($article->getHitcounter()); 
+   	 echo $article->getTitle()."</a>".checkHitcounterDisplay($article->getHitcounter()); 
    }
    ?>
   
   </td>
   <td>
   <?php 
-  $dt = $articleobj->getDateTime();
-  $now = date('Y-m-d H:i:s');
-  echo $dt;
-  if($future = $dt > $now) {
-    echo '<img	src="images/clock.png" alt="'.gettext('future publication date').'" title="'.gettext('future publication date').'" />';
-  }
-  $dt = $articleobj->getExpireDate();
-  if(!empty($dt)) {
-  	$expired = $dt < $now;
-  	echo "<br /><small>";
-  	if ($expired) {
-  		printf(gettext('<font color="red">Expired: %s</font>'),$dt);
-  	} else {
-  		printf( gettext("Expires: %s"),$dt);
-  	}
-  	echo "</small>";
-  }
+  checkIfScheduled($article);
+  checkIfExpires($article);
   ?></td>
   <td>
-  <?php printArticleCategories($articleobj) ?>
+  <?php printArticleCategories($article) ?>
   </td> 
   <td>
-  <?php echo htmlspecialchars($articleobj->getAuthor()); ?>
+  <?php echo htmlspecialchars($article->getAuthor()); ?>
   </td> 
   
-  <?php if(checkIfLocked($articleobj)) { ?>
+  <?php if(checkIfLocked($article)) { ?>
 	<td class="icons">
 	<?php  
-		$urladd1 = "";$urladd2 = "";$urladd3 = "";
-		if(isset($_GET['page'])) { $urladd1 = "&page=".$_GET['page']; } 
- 		if(isset($_GET['date'])) { $urladd2 = "&date=".$_GET['date']; }
- 		if(isset($_GET['category'])) { $urladd3 = "&category=".$_GET['category']; }
- 		if($articleobj->getDatetime() >= date('Y-m-d H:i:s')) {
- 			?>
- 		 <a href="?skipscheduling=<?php echo $articleobj->getShow(); ?>&id=<?php echo $articleobj->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Skip scheduling and publish immediatly"); ?>">
- 		 <?php } else { ?>
- 		  <a href="?publish=<?php echo $articleobj->getShow(); ?>&id=<?php echo $articleobj->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Publish or unpublish article"); ?>">
- 		 <?php } 
- 		 echo checkIfPublished($articleobj); ?></a>
+		printPublishIconLink($article,"news"); ?>
 	</td>
  	<td class="icons">
-		<a href="?commentson=<?php echo $articleobj->getCommentson(); ?>&id=<?php echo $articleobj->getID(); ?>" title="<?php echo gettext("Enable or disable comments"); ?>">
-		<?php echo checkIfCommentsAllowed($articleobj->getCommentson()); ?></a>
+		<a href="?commentson=<?php echo $article->getCommentson(); ?>&amp;id=<?php echo $article->getID(); ?>" title="<?php echo gettext("Enable or disable comments"); ?>">
+		<?php echo checkIfCommentsAllowed($article->getCommentson()); ?></a>
  	</td>
  		 <?php } else { ?>
 	<td class="icons">
@@ -150,18 +125,18 @@ if(isset($_GET['category'])) {
   <?php } ?>
  
   <td class="icons">
-  	<a href="../../../index.php?p=<?php echo ZENPAGE_NEWS; ?>&title=<?php echo $articleobj->getTitlelink();?>" title="<?php echo gettext("View article"); ?>">
+  	<a href="../../../index.php?p=<?php echo ZENPAGE_NEWS; ?>&amp;title=<?php echo $article->getTitlelink();?>" title="<?php echo gettext("View article"); ?>">
   	<img src="images/view.png" alt="<?php echo gettext("View article"); ?>" />
   	</a>
   </td> 
      
-	<?php if(checkIfLocked($articleobj)) { ?>
+	<?php if(checkIfLocked($article)) { ?>
 	<td class="icons">
-		<a href="?hitcounter=1&id=<?php echo $articleobj->getID();?>" title="<?php echo gettext("Reset hitcounter"); ?>">
+		<a href="?hitcounter=1&amp;id=<?php echo $article->getID();?>" title="<?php echo gettext("Reset hitcounter"); ?>">
 		<img src="../../images/reset.png" alt="<?php echo gettext("Reset hitcounter"); ?>" /></a>
 	</td>
 	<td class="icons">
-		<a href="javascript: confirmDeleteImage('admin-news-articles.php?del=<?php echo $articleobj->getID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete article"); ?>">
+		<a href="javascript: confirmDeleteImage('admin-news-articles.php?del=<?php echo $article->getID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete article"); ?>">
 		<img src="../../images/fail.png" alt="<?php echo gettext("Delete article"); ?>" /></a>
 	</td>
 	<?php } else { ?>
