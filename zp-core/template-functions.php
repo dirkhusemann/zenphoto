@@ -3031,8 +3031,10 @@ function printCommentErrors($class = 'error') {
  */
 function printAlbumZip(){
 	global $_zp_current_album;
-	echo'<a href="' . WEBPATH . '/' . ZENFOLDER . "/album-zip.php?album=" . urlencode($_zp_current_album->name) .
-		'" title="'.gettext('Download Zip of the Album').'">'.gettext('Download a zip file of this album').'</a>';
+	if (!is_null($_zp_current_album) && !is_dynamic($_zp_current_album)) {
+		echo'<a href="' . WEBPATH . '/' . ZENFOLDER . "/album-zip.php?album=" . urlencode($_zp_current_album->name) .
+			'" title="'.gettext('Download Zip of the Album').'">'.gettext('Download a zip file of this album').'</a>';
+	}
 }
 
 /**

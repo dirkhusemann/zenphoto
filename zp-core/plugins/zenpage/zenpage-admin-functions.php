@@ -1581,7 +1581,7 @@ function getZenpageVersion() {
 }
 
 function printZenpageFooter() {
-	$footer = sprintf(gettext('<a href="http://zenpage.maltem.de/zenpage/index.php">zenpage</a> version %1$s [%2$s]'), getZenpageVersion(), ZENPHOTO_RELEASE);
+	$footer = sprintf(gettext('<a href="http://zenpage.maltem.de/zenpage/index.php">zenpage</a> version %1$s'), getZenpageVersion());
 	printAdminFooter($footer);
 }
 
