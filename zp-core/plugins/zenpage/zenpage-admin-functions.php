@@ -978,7 +978,11 @@ function publishPageOrArticle($option,$id) {
 			break;
 	}
   $show = sanitize_numeric($_GET['publish']);
-  query("UPDATE ".$dbtable." SET `show` = ".$show.", `expiredate`=NULL WHERE id = ".$id);
+  if ($show > 1) {
+  	query('UPDATE '.$dbtable.' SET `show` = "1", `expiredate`=NULL WHERE id = '.$id);
+  } else {
+  	query("UPDATE ".$dbtable." SET `show` = ".$show." WHERE id = ".$id);
+  }
 }
 
 /**
@@ -1346,7 +1350,7 @@ function printPublishIconLink($object,$type) {
 				<?php
 			} else {
 				?>
-				<a href="?publish=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Publish (override expiration)"); ?>">
+				<a href="?publish=2&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Publish (override expiration)"); ?>">
 				<?php
 			}
 			?>
