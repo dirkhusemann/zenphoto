@@ -31,7 +31,7 @@ if (isset($_GET['action'])) {
 		$filelist = safe_glob('*'.'php');
 		chdir($curdir);
 		foreach ($filelist as $extension) {
-			$extension = FilesystemToUTF8($extension);
+			$extension = filesystemToInternal($extension);
 			$opt = 'zp_plugin_'.substr($extension, 0, -4);
 			if (isset($_POST[$opt]) || !is_null(getOption($opt))) { // don't create any options until plugin is selected at least once
 				setBoolOption($opt, isset($_POST[$opt]));
@@ -60,7 +60,7 @@ $curdir = getcwd();
 chdir(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER);
 $filelist = safe_glob('*'.'php');
 foreach ($filelist as $key=>$plugin) {
-	$filelist[$key] = FilesystemToUTF8($plugin);
+	$filelist[$key] = filesystemToInternal($plugin);
 }
 natcasesort($filelist);
 
@@ -93,7 +93,7 @@ foreach ($filelist as $extension) {
 	$ext = substr($extension, 0, strlen($extension)-4);
 	$opt = 'zp_plugin_'.$ext;
 	
-	$pluginStream = file_get_contents(UTF8ToFilesystem($extension));
+	$pluginStream = file_get_contents(internalToFIlesystem($extension));
 	$parserr = 0;
 	$str = isolate('$plugin_description', $pluginStream);
 	if (false === $str) {

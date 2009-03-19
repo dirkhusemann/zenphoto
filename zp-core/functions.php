@@ -153,7 +153,7 @@ function checkObjectsThumb($album, $video){
 	$video = is_objectsThumb($album, $video);
 	if($video) {
 		foreach($_zp_supported_images as $ext) {
-			if(file_exists(UTF8ToFilesystem($album."/".$video.'.'.$ext))) {
+			if(file_exists(internalToFIlesystem($album."/".$video.'.'.$ext))) {
 				return $video.'.'.$ext;
 			}
 		}
@@ -173,7 +173,7 @@ function checkVideoOriginal($album, $video){
 	if ($video) {
 		$extTab = array(".ogg",".OGG",".avi",".AVI",".wmv",".WMV");
 		foreach($extTab as $ext) {
-			if(file_exists(UTF8ToFilesystem($album."/".$video.$ext))) {
+			if(file_exists(internalToFIlesystem($album."/".$video.$ext))) {
 				return $video.$ext;
 			}
 		}
@@ -271,12 +271,13 @@ function zpFormattedDate($format, $dt) {
 	global $_zp_UTF8;
 	$fdate = strftime($format, $dt);
 	$charset = 'ISO-8859-1';
+	$outputset = getOption('charset');
 	if (function_exists('mb_internal_encoding')) {
-		if (($charset = mb_internal_encoding()) == 'UTF-8') {
+		if (($charset = mb_internal_encoding()) == $outputset) {
 			return $fdate;
 		}
 	}
-	return $_zp_UTF8->convert($fdate, $charset);
+	return $_zp_UTF8->convert($fdate, $charset, $outputset);
 }
 
 /**
@@ -606,9 +607,9 @@ function getPlugin($plugin, $inTheme) {
 	global $_zp_themeroot;
 	$_zp_themeroot = WEBPATH . '/' . THEMEFOLDER . '/'. $inTheme;
 	if ($inTheme) {
-		$pluginFile = SERVERPATH . '/' . THEMEFOLDER . '/'. UTF8ToFilesystem($inTheme . '/' . $plugin);
+		$pluginFile = SERVERPATH . '/' . THEMEFOLDER . '/'. internalToFIlesystem($inTheme . '/' . $plugin);
 	} else {
-		$pluginFile = SERVERPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . UTF8ToFilesystem($plugin);
+		$pluginFile = SERVERPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . internalToFIlesystem($plugin);
 	}
 	if (file_exists($pluginFile)) {
 		return $pluginFile;
@@ -629,7 +630,7 @@ function getEnabledPlugins() {
 	$filelist = safe_glob('*'.'php');
 	chdir($curdir);
 	foreach ($filelist as $extension) {
-		$extension = FilesystemToUTF8($extension);
+		$extension = filesystemToInternal($extension);
 		$opt = 'zp_plugin_'.substr($extension, 0, strlen($extension)-4);
 		if (getOption($opt)) {
 			$pluginlist[] = $extension;
@@ -704,12 +705,13 @@ function getIPTCTagArray($tag) {
  */
 function prepIPTCString($iptcstring, $characterset) {
 	global $_zp_UTF8;
-	if ($characterset == 'UTF-8') return $iptcstring;
-	$iptcstring = $_zp_UTF8->convert($iptcstring, $characterset);
 	// Remove null byte at the end of the string if it exists.
 	if (substr($iptcstring, -1) === 0x0) {
 		$iptcstring = substr($iptcstring, 0, -1);
 	}
+	$outputset = getOption('charset');
+	if ($characterset == $outputset) return $iptcstring;
+	$iptcstring = $_zp_UTF8->convert($iptcstring, $characterset, $outputset);
 	return $iptcstring;
 }
 
@@ -985,7 +987,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	}
 	$goodMessage = 2;
 	$gallery = new gallery();
-	if (!(false === ($requirePath = getPlugin('spamfilters/'.UTF8ToFileSystem(getOption('spam_filter')).".php", false)))) {
+	if (!(false === ($requirePath = getPlugin('spamfilters/'.internalToFIlesystem(getOption('spam_filter')).".php", false)))) {
 		require_once($requirePath);
 		$spamfilter = new SpamFilter();
 		$goodMessage = $spamfilter->filterMessage($name, $email, $website, $comment, isImageClass($receiver)?$receiver->getFullImage():NULL, $ip);
@@ -1532,7 +1534,7 @@ function generateListFromFiles($currentValue, $root, $suffix, $descending=false)
 	$list = array();
 	foreach($filelist as $file) {
 		$file = str_replace($suffix, '', $file);
-		$list[] = FilesystemToUTF8($file);
+		$list[] = filesystemToInternal($file);
 	}
 	generateListFromArray(array($currentValue), $list, $descending, false);
 	chdir($curdir);
@@ -1639,7 +1641,7 @@ function getNotViewableAlbums() {
  * @return string
  */
 function parseThemeDef($file) {
-	$file = UTF8ToFilesystem($file);
+	$file = internalToFIlesystem($file);
 	$themeinfo = array();
 	if (is_readable($file) && $fp = @fopen($file, "r")) {
 		while($line = fgets($fp)) {

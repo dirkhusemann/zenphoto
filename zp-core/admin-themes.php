@@ -182,7 +182,7 @@ $themes = $gallery->getThemes();
 $current_theme_style = "background-color: #ECF1F2;";
 foreach($themes as $theme => $themeinfo):
 	$style = ($theme == $current_theme) ? " style=\"$current_theme_style\"" : "";
-	$themedir = SERVERPATH . '/themes/'.UTF8ToFilesystem($theme);
+	$themedir = SERVERPATH . '/themes/'.internalToFIlesystem($theme);
 	$themeweb = WEBPATH . "/themes/$theme";
 ?>
 	<tr>

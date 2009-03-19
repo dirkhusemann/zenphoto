@@ -76,7 +76,7 @@ class filter_file_searches_options {
 		$albums = array();
 
 		while ($dirname = readdir($dir)) {
-			$dirname = FilesystemToUTF8($dirname);
+			$dirname = filesystemToInternal($dirname);
 			if ((is_dir($albumdir.$dirname) && (substr($dirname, 0, 1) != '.'))) {
 				$albums[] = $dirname;
 				$albums = array_merge($albums, $this->loadAlbumNames($albumdir.$dirname.'/'));

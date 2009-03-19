@@ -44,8 +44,8 @@ if (!isset($_GET['a']) || !isset($_GET['i'])) {
 // URL looks like: "/album1/subalbum/image/picture.jpg"
 
 list($ralbum, $rimage) = rewrite_get_album_image('a', 'i');
-$ralbum = UTF8ToFileSystem($ralbum);
-$rimage = UTF8ToFileSystem($rimage);
+$ralbum = internalToFIlesystem($ralbum);
+$rimage = internalToFIlesystem($rimage);
 $album = str_replace('..','', sanitize_path($ralbum));
 $image = str_replace(array('/',"\\"),'', sanitize_path($rimage));
 $theme = themeSetup($album); // loads the theme based image options.
@@ -102,12 +102,12 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
 } else {
 	// No image parameters specified or are out of bounds; return the original image.
 	//TODO: this will fail when the album folder is external to zp. Maybe should force the sizes within bounds.
-	header("Location: " . getAlbumFolder(FULLWEBPATH) . pathurlencode(FilesystemToUTF8($album)) . "/" . rawurlencode(filesystemToUTF8($image)));
+	header("Location: " . getAlbumFolder(FULLWEBPATH) . pathurlencode(filesystemToInternal($album)) . "/" . rawurlencode(filesystemToInternal($image)));
 	return;
 }
 
 // Construct the filename to save the cached image.
-$newfilename = getImageCacheFilename(FilesystemToUTF8($album), filesystemToUTF8($image), $args);
+$newfilename = getImageCacheFilename(filesystemToInternal($album), filesystemToInternal($image), $args);
 $newfile = SERVERCACHE . $newfilename;
 if (trim($album)=='') {
 	$imgfile = getAlbumFolder() . $image;
@@ -165,7 +165,7 @@ if (!file_exists($imgfile)) {
 if (!ini_get("safe_mode")) {
 	$albumdirs = getAlbumArray($album, true);
 	foreach($albumdirs as $dir) {
-		$dir = UTF8ToFilesystem($dir);
+		$dir = internalToFIlesystem($dir);
 		$dir = SERVERCACHE . '/' . $dir;
 		if (!is_dir($dir)) {
 			@mkdir($dir, CHMOD_VALUE);
@@ -212,7 +212,7 @@ function themeSetup($album) {
 			return $theme;
 		}
 	}
-	$uralbum = FilesystemToUTF8($folders[0]);
+	$uralbum = filesystemToInternal($folders[0]);
 	$sql = 'SELECT `id`, `album_theme` FROM '.prefix('albums').' WHERE `folder`="'.$uralbum.'"';
 	$result = query_single_row($sql);
 	if (!empty($result['album_theme'])) {

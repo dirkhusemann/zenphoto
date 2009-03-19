@@ -123,7 +123,7 @@ class TextObject extends _Image {
 		if ($this->objectsThumb != NULL) {
 			$imgfile = getAlbumFolder().$this->album->name.'/'.$this->objectsThumb;
 		} else {
-			$imgfile = SERVERPATH . '/' . THEMEFOLDER . '/' . UTF8ToFilesystem($this->album->gallery->getCurrentTheme()) . '/images/textDefault.png';
+			$imgfile = SERVERPATH . '/' . THEMEFOLDER . '/' . internalToFIlesystem($this->album->gallery->getCurrentTheme()) . '/images/textDefault.png';
 			if (!file_exists($imgfile)) {
 				$imgfile = SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . substr(basename(__FILE__), 0, -4). '/textDefault.png';
 			}

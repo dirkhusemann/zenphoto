@@ -38,7 +38,7 @@ class flowplayer {
 		setOptionDefault('flow_player_controlbarbackgroundcolor', '0x567890');
 		setOptionDefault('flow_player_controlsareabordercolor', '0x567890');
 		setOptionDefault('flow_player_autoplay', '');
-		setOptionDefault('flow_player_backgroundcolor', '');
+		setOptionDefault('flow_player_backgroundcolor', '#000000');
 	}
 
 
@@ -47,14 +47,14 @@ class flowplayer {
 										'desc' => gettext("Player width (ignored for <em>mp3</em> files.)")),
 		gettext('flow player height') => array('key' => 'flow_player_height', 'type' => 0,
 										'desc' => gettext("Player height (ignored for <em>mp3</em> files.)")),
-		gettext('Controls background color') => array('key' => 'flow_player_controlbarbackgroundcolor', 'type' => 0,
+		gettext('Controls background color') => array('key' => 'flow_player_controlbarbackgroundcolor', 'type' => 8,
 										'desc' => gettext("Background color of the controls.")),
-		gettext('Control area border color') => array('key' => 'flow_player_controlsareabordercolor', 'type' => 0,
+		gettext('Control area border color') => array('key' => 'flow_player_controlsareabordercolor', 'type' => 8,
 										'desc' => gettext("Color of the border of the player controls")),
 		gettext('Autoplay') => array('key' => 'flow_player_autoplay', 'type' => 1,
 										'desc' => gettext("Should the video start automatically. Yes if selected.")),
-		gettext('Background color') => array('key' => 'flow_player_backgroundcolor', 'type' => 0,
-										'desc' => gettext("Changes the color of the Flowplayer's background canvas. By default the canvas is all black. You can specify a value of -1 and the background will not be drawn (only the video will be visible)."))
+		gettext('Background color') => array('key' => 'flow_player_backgroundcolor', 'type' => 8,
+										'desc' => gettext("Changes the color of the Flowplayer's background canvas. You can specify a value of -1 and the background will not be drawn (only the video will be visible)."))
 		);
 	}
 

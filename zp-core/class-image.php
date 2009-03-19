@@ -164,15 +164,15 @@ class _Image extends PersistentObject {
 	 * 
 	 */
 	function classSetup(&$album, $filename) {
-		$fileFS = UTF8ToFilesystem($filename);
-		if ($filename != fileSystemToUTF8($fileFS)) { // image name spoof attempt
+		$fileFS = internalToFIlesystem($filename);
+		if ($filename != filesystemToInternal($fileFS)) { // image name spoof attempt
 			return false;
 		}
 		$this->album = &$album;
 		if ($album->name == '') {
 			$this->webpath = getAlbumFolder(WEBPATH) . $filename;
 			$this->encwebpath = getAlbumFolder(WEBPATH) . rawurlencode($filename);
-			$this->localpath = getAlbumFolder() . UTF8ToFilesystem($filename);
+			$this->localpath = getAlbumFolder() . internalToFIlesystem($filename);
 		} else {
 			$this->webpath = getAlbumFolder(WEBPATH) . $album->name . "/" . $filename;
 			$this->encwebpath = getAlbumFolder(WEBPATH) . pathurlencode($album->name) . "/" . rawurlencode($filename);
@@ -532,7 +532,7 @@ class _Image extends PersistentObject {
 			// Nothing to do - moving the file to the same place.
 			return true;
 		}
-		$newpath = $newalbum->localpath . UTF8ToFilesystem($newfilename);
+		$newpath = $newalbum->localpath . internalToFIlesystem($newfilename);
 		if (file_exists($newpath)) {
 			// If the file exists, don't overwrite it.
 			return false;
@@ -565,7 +565,7 @@ class _Image extends PersistentObject {
 			// Nothing to do - moving the file to the same place.
 			return true;
 		}
-		$newpath = $newalbum->localpath . UTF8ToFilesystem($this->filename);
+		$newpath = $newalbum->localpath . internalToFIlesystem($this->filename);
 		if (file_exists($newpath)) {
 			// If the file exists, don't overwrite it.
 			return false;

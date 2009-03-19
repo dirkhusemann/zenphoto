@@ -155,7 +155,7 @@ class Gallery {
 		$albums = array();
 
 		while ($dirname = readdir($dir)) {
-			$dirname = FilesystemToUTF8($dirname);
+			$dirname = filesystemToInternal($dirname);
 			if ((is_dir($albumdir.$dirname) && (substr($dirname, 0, 1) != '.')) ||
 								hasDyanmicAlbumSuffix($dirname)) {
 				$albums[] = $dirname;
@@ -219,7 +219,7 @@ class Gallery {
 				while (false !== ($dir = readdir($dp))) {
 					if (substr($dir, 0, 1) != "." && is_dir("$themedir/$dir")) {
 						$themefile = $themedir . "/$dir/theme_description.php";
-						$dir8 = FilesystemToUTF8($dir);
+						$dir8 = filesystemToInternal($dir);
 						if (file_exists($themefile)) {
 							$theme_description = array();
 							require($themefile);
@@ -337,7 +337,7 @@ class Gallery {
 			// Load the albums from disk
 			$albumfolder = getAlbumFolder();
 			while($row = mysql_fetch_assoc($result)) {
-				if (!file_exists($albumfolder.UTF8ToFilesystem($row['folder'])) || in_array($row['folder'], $live)) {
+				if (!file_exists($albumfolder.internalToFIlesystem($row['folder'])) || in_array($row['folder'], $live)) {
 					$dead[] = $row['id'];
 					if ($row['album_theme'] !== '') {  // orphaned album theme options table
 						$deadalbumthemes[$row['id']] = $row['folder'];
@@ -381,8 +381,8 @@ class Gallery {
 				$albumfolder = getAlbumFolder();
 				$albumids = query_full_array("SELECT `id`, `mtime`, `folder` FROM " . prefix('albums') . " WHERE `dynamic`='1'");
 				foreach ($albumids as $album) {
-					if (($mtime=filemtime($albumfolder.UTF8ToFilesystem($album['folder']))) > $album['mtime']) {  // refresh
-						$data = file_get_contents($albumfolder.UTF8ToFilesystem($album['folder']));
+					if (($mtime=filemtime($albumfolder.internalToFIlesystem($album['folder']))) > $album['mtime']) {  // refresh
+						$data = file_get_contents($albumfolder.internalToFIlesystem($album['folder']));
 						while (!empty($data)) {
 							$data1 = trim(substr($data, 0, $i = strpos($data, "\n")));
 							if ($i === false) {
@@ -460,7 +460,7 @@ class Gallery {
 			foreach($images as $image) {
 				$sql = 'SELECT `folder` FROM ' . prefix('albums') . ' WHERE `id`="' . $image['albumid'] . '";';
 				$row = query_single_row($sql);
-				$imageName = UTF8ToFilesystem(getAlbumFolder() . $row['folder'] . '/' . $image['filename']);
+				$imageName = internalToFIlesystem(getAlbumFolder() . $row['folder'] . '/' . $image['filename']);
 				if (file_exists($imageName)) {
 
 					if ($image['mtime'] != filemtime($imageName)) { // file has changed since we last saw it

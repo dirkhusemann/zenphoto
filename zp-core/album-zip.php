@@ -3,7 +3,7 @@ if (!defined('OFFSET_PATH')) define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/functions.php');
 require_once(dirname(__FILE__).'/auth_zp.php');
 
-if(isset($_GET['album']) && is_dir(realpath(getAlbumFolder() . UTF8ToFilesystem($_GET['album'])))){
+if(isset($_GET['album']) && is_dir(realpath(getAlbumFolder() . internalToFIlesystem($_GET['album'])))){
 	createAlbumZip(sanitize_path($_GET['album']));
 }
 
@@ -48,7 +48,7 @@ function createAlbumZip($album){
 		pageError();
 		exit();
 	}
-	$album = UTF8ToFilesystem($album);
+	$album = internalToFIlesystem($album);
 	$rp = realpath(getAlbumFolder() . $album) . '/';
 	$p = $album . '/';
 	include_once('archive.php');

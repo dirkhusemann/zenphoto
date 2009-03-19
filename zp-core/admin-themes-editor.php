@@ -39,7 +39,7 @@ echo "\n" . '<div id="content">';
 $message = $file_to_edit = $file_content = null;
 $themes = $gallery->getThemes();
 $theme = $_GET['theme'];
-$themedir = SERVERPATH . '/themes/'.UTF8ToFilesystem($theme);
+$themedir = SERVERPATH . '/themes/'.internalToFIlesystem($theme);
 $themefiles = listDirectoryFiles($themedir);
 $themefiles_to_ext = array();
 foreach ($themefiles as $file) {
@@ -52,7 +52,7 @@ foreach ($themefiles as $file) {
 }
 
 if (isset($_GET['file']))
-	$file_to_edit = str_replace ('\\', '/', realpath (SERVERPATH . '/themes/'.UTF8ToFilesystem($theme) . '/'. $_GET['file'])) ;
+	$file_to_edit = str_replace ('\\', '/', realpath (SERVERPATH . '/themes/'.internalToFIlesystem($theme) . '/'. $_GET['file'])) ;
 	// realpath() to take care of ../../file.php schemes, str_replace() to sanitize Win32 filenames
 
 // If we're attempting to edit a file from a bundled theme, this is an illegal attempt

@@ -32,10 +32,10 @@ class flvplayer {
 	function flvplayer() {
 		setOptionDefault('flv_player_width', '320');
 		setOptionDefault('flv_player_height', '240');
-		setOptionDefault('flv_player_backcolor', '0xFFFFFF');
-		setOptionDefault('flv_player_frontcolor', '0x000000');
-		setOptionDefault('flv_player_lightcolor', '0x000000');
-		setOptionDefault('flv_player_screencolor', '0x000000');
+		setOptionDefault('flv_player_backcolor', '#FFFFFF');
+		setOptionDefault('flv_player_frontcolor', '#000000');
+		setOptionDefault('flv_player_lightcolor', '#000000');
+		setOptionDefault('flv_player_screencolor', '#000000');
 		setOptionDefault('flv_player_displayheight', '240');
 		setOptionDefault('flv_player_autostart', '');
 		setOptionDefault('flv_player_buffer','0');
@@ -49,13 +49,13 @@ class flvplayer {
 										'desc' => gettext("Player width (ignored for <em>mp3</em> files.)")),
 		gettext('flv player height') => array('key' => 'flv_player_height', 'type' => 0,
 										'desc' => gettext("Player height (ignored for .<em>mp3</em> files if there is no preview image available.)")),
-		gettext('Backcolor') => array('key' => 'flv_player_backcolor', 'type' => 0,
+		gettext('Backcolor') => array('key' => 'flv_player_backcolor', 'type' => 8,
 										'desc' => gettext("Backgroundcolor of the controls, in HEX format. <em>Player version 3 only!</em>")),
-		gettext('Frontcolor') => array('key' => 'flv_player_frontcolor', 'type' => 0,
+		gettext('Frontcolor') => array('key' => 'flv_player_frontcolor', 'type' => 8,
 										'desc' => gettext("Texts & buttons color of the controls, in HEX format. <em>Player version 3 only!</em>")),
-		gettext('Lightcolor') => array('key' => 'flv_player_lightcolor', 'type' => 0,
+		gettext('Lightcolor') => array('key' => 'flv_player_lightcolor', 'type' => 8,
 										'desc' => gettext("Rollover color of the controls, in HEX format. <em>Player version 3 only!</em>")),
-		gettext('Screencolor') => array('key' => 'flv_player_screencolor', 'type' => 0,
+		gettext('Screencolor') => array('key' => 'flv_player_screencolor', 'type' => 8,
 										'desc' => gettext("Color of the display area, in HEX format. <em>Player version 3 only!</em>")),
 		gettext('Displayheight') => array('key' => 'flv_player_displayheight', 'type' => 0,
 										'desc' => gettext("The height of the player display. Generally it should be the same as the height. (ignored for .<em>mp3</em> files if there is no preview image available.)")),

@@ -34,7 +34,7 @@ if (isset($_GET['action'])) {
 		if (isset($_POST['processed']) && !empty($_POST['folder']) && ($newAlbum || !$files_empty)) {
 
 			$folder = sanitize_path($_POST['folder']);
-			$uploaddir = $gallery->albumdir . UTF8ToFilesystem($folder);
+			$uploaddir = $gallery->albumdir . internalToFIlesystem($folder);
 			if (!is_dir($uploaddir)) {
 				mkdir ($uploaddir, CHMOD_VALUE);
 			}
@@ -62,7 +62,7 @@ if (isset($_GET['action'])) {
 				if ($error == UPLOAD_ERR_OK) {
 					$tmp_name = $_FILES['files']['tmp_name'][$key];
 					$name = $_FILES['files']['name'][$key];
-					$soename = UTF8toFilesystem(seoFriendlyURL($name));
+					$soename = internalToFIlesystem(seoFriendlyURL($name));
 					if (is_valid_image($name) || is_valid_other_type($name)) {
 						$uploadfile = $uploaddir . '/' . $soename;
 						move_uploaded_file($tmp_name, $uploadfile);

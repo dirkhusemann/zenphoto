@@ -1760,7 +1760,7 @@ if ($subtab == 'admin') {
 						$filelist = safe_glob('*.php');
 						$list = array();
 						foreach($filelist as $file) {
-							$list[] = str_replace('.php', '', FilesystemToUTF8($file));
+							$list[] = str_replace('.php', '', filesystemToInternal($file));
 						}
 						$list = array_diff($list, array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions', ZENPAGE_NEWS, ZENPAGE_PAGES));
 						generateListFromArray(array(getThemeOption($album, 'custom_index_page')), $list, false, false);
@@ -1786,7 +1786,7 @@ if ($subtab == 'admin') {
 									$filelist = safe_glob('*.php');
 									$list = array();
 									foreach($filelist as $file) {
-										$list[] = str_replace('.php', '', FilesystemToUTF8($file));
+										$list[] = str_replace('.php', '', filesystemToInternal($file));
 									}
 									$list = array_diff($list, array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions', ZENPAGE_NEWS, ZENPAGE_PAGES));
 									generateListFromArray(array(getThemeOption($album, 'user_registration_page')), $list, false, false);
@@ -1853,7 +1853,7 @@ if ($subtab == 'admin') {
 		<input type="hidden" name="savepluginoptions" value="yes" />
 		<table class="bordered">
 		<tr>
-			<th colspan="3">
+			<th colspan="3" style="text-align:center">
 				<span style="font-weight: normal"> <a href="javascript:toggleExtraInfo('','plugin',true);"><?php echo gettext('Expand plugin options');?></a>
 			| <a href="javascript:toggleExtraInfo('','plugin',false);"><?php echo gettext('Collapse all plugin options');?></a></span>
 			</th>
@@ -1874,7 +1874,7 @@ if ($subtab == 'admin') {
 	<!-- <?php echo $extension; ?> -->
 				<table class="bordered" style="border: 0" id="plugin-<?php echo $ext; ?>">
 					<tr>
-					<th colspan="3">
+					<th colspan="3" style="text-align:left">
 						<span class="pluginextrashow"><a href="javascript:toggleExtraInfo('<?php echo $ext;?>','plugin',true);"><?php echo $ext; ?></a></span>
 						<span style="display:none;" class="pluginextrahide"><a href="javascript:toggleExtraInfo('<?php echo $ext;?>','plugin',false);"><?php echo $ext; ?></a></span>
 					</th>

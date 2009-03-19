@@ -215,7 +215,7 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 		$file_version = 0;
 		$compression_handler = 'gzip';
 		$folder = SERVERPATH . '/' . BACKUPFOLDER .'/';
-		$filename = $folder . UTF8ToFileSystem(sanitize($_REQUEST['backupfile'], 3)).'.zdb';
+		$filename = $folder . internalToFIlesystem(sanitize($_REQUEST['backupfile'], 3)).'.zdb';
 		if (file_exists($filename)) {
 			$handle = fopen($filename, 'r');
 			if ($handle !== false) {

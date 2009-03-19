@@ -119,7 +119,7 @@ if (!function_exists("htmlspecialchars_decode")) {
 function html_encode($this_string, $striptags=true) {
 	if ($striptags) {$this_string = strip_tags($this_string);}
 	$this_string = htmlspecialchars_decode($this_string, ENT_QUOTES);
-	return htmlspecialchars($this_string, ENT_QUOTES, "UTF-8");
+	return htmlspecialchars($this_string, ENT_QUOTES, getOption('charset'));
 }
 
 /**
@@ -323,7 +323,7 @@ function rewrite_get_album_image($albumvar, $imagevar) {
 			} else if ($slashpos !== false) {
 				$ralbum = substr($path, 0, $slashpos);
 				$rimage = substr($path, $slashpos+1);
-				if ((is_dir(getAlbumFolder() . UTF8ToFilesystem($ralbum . '/' . $rimage)) || hasDyanmicAlbumSuffix($rimage))) {
+				if ((is_dir(getAlbumFolder() . internalToFIlesystem($ralbum . '/' . $rimage)) || hasDyanmicAlbumSuffix($rimage))) {
 					$ralbum = $ralbum . '/' . $rimage;
 					$rimage = null;
 				}
@@ -351,8 +351,8 @@ function rewrite_get_album_image($albumvar, $imagevar) {
  */
 function getImageCacheFilename($album8, $image8, $args) {
 	// this function works in FILESYSTEM_CHARSET, so convert the file names
-	$album = UTF8ToFilesystem($album8);
-	$image = UTF8ToFilesystem($image8);
+	$album = internalToFIlesystem($album8);
+	$image = internalToFIlesystem($image8);
 	// Set default variable values.
 	$postfix = getImageCachePostfix($args);
 	if (empty($album)) {
@@ -789,9 +789,9 @@ function parse_size($size) {
  * @param string $filename the file name to convert
  * @return string
  */
-function fileSystemToUTF8($filename) {
+function filesystemToInternal($filename) {
 	global $_zp_UTF8;
-	return $_zp_UTF8->convert($filename, FILESYSTEM_CHARSET, 'UTF-8');
+	return $_zp_UTF8->convert($filename, FILESYSTEM_CHARSET, getOption('charset'));
 }
 
 /**
@@ -800,9 +800,9 @@ function fileSystemToUTF8($filename) {
  * @param string $filename the file name to convert
  * @return string
  */
-function UTF8ToFileSystem($filename) {
+function internalToFIlesystem($filename) {
 	global $_zp_UTF8;
-	return $_zp_UTF8->convert($filename, 'UTF-8', FILESYSTEM_CHARSET);
+	return $_zp_UTF8->convert($filename, getOption('charset'), FILESYSTEM_CHARSET);
 }
 
 /** getAlbumArray - returns an array of folder names corresponding to the
@@ -855,7 +855,7 @@ function isWin() {
  * @return string
  */
 function imgSrcURI($uri) {
-	if (getOption('UTF8_image_URI')) return filesystemToUTF8($uri);
+	if (getOption('UTF8_image_URI')) return filesystemToInternal($uri);
 	return $uri;
 }
 

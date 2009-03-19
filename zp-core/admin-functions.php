@@ -397,7 +397,7 @@ function printLogoAndLinks() {
 	}
 	echo "<a href=\"".WEBPATH."/index.php";
 	if ($specialpage = getOption('custom_index_page')) {
-		if (file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.UTF8ToFilesystem($specialpage).'.php')) {
+		if (file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.internalToFIlesystem($specialpage).'.php')) {
 			echo '?p='.$specialpage;
 		}
 	}
@@ -1686,7 +1686,7 @@ function processAlbumEdit($index, $album) {
 	}
 
 	if ($movecopyrename_action == 'move') {
-		$dest = UTF8ToFileSystem(sanitize_path($_POST['a'.$prefix.'-albumselect'],3));
+		$dest = internalToFIlesystem(sanitize_path($_POST['a'.$prefix.'-albumselect'],3));
 		// Append the album name.
 		$dest = ($dest ? $dest . '/' : '') . (strpos($album->name, '/') === FALSE ? $album->name : basename($album->name));
 		if ($dest && $dest != $album->name) {
@@ -1700,7 +1700,7 @@ function processAlbumEdit($index, $album) {
 			// Cannot move album to same album.
 		}
 	} else if ($movecopyrename_action == 'copy') {
-		$dest = UTF8ToFileSystem(sanitize_path($_POST['a'.$prefix.'-albumselect'],3));
+		$dest = internalToFIlesystem(sanitize_path($_POST['a'.$prefix.'-albumselect'],3));
 		// Append the album name.
 		$dest = ($dest ? $dest . '/' : '') . (strpos($album->name, '/') === FALSE ? $album->name : basename($album->name));
 		if ($dest && $dest != $album->name) {
@@ -1712,7 +1712,7 @@ function processAlbumEdit($index, $album) {
 			// Or, copy with rename?
 		}
 	} else if ($movecopyrename_action == 'rename') {
-		$renameto = UTF8ToFileSystem(sanitize_path($_POST['a'.$prefix.'-renameto'],3));
+		$renameto = internalToFIlesystem(sanitize_path($_POST['a'.$prefix.'-renameto'],3));
 		$renameto = str_replace(array('/', '\\'), '', $renameto);
 		if (dirname($album->name) != '.') {
 			$renameto = dirname($album->name) . '/' . $renameto;
@@ -1945,7 +1945,7 @@ function unzip($file, $dir) { //check if zziplib is installed
 		if ($zip) {
 			while ($zip_entry = zip_read($zip)) { // Skip non-images in the zip file.
 				$fname = zip_entry_name($zip_entry);
-				$soename = UTF8toFilesystem(seoFriendlyURL($fname));
+				$soename = internalToFIlesystem(seoFriendlyURL($fname));
 				if (is_valid_image($soename) || is_valid_other_type($soename)) {
 					if (zip_entry_open($zip, $zip_entry, "r")) {
 						$buf = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
@@ -2105,8 +2105,8 @@ function themeIsEditable($theme, $themes) {
 function copyThemeDirectory($source, $target, $newname) {
 	global $_zp_current_admin;
 	$message = true;
-	$source  = SERVERPATH . '/themes/'.UTF8ToFilesystem($source);
-	$target  = SERVERPATH . '/themes/'.UTF8ToFilesystem($target);
+	$source  = SERVERPATH . '/themes/'.internalToFIlesystem($source);
+	$target  = SERVERPATH . '/themes/'.internalToFIlesystem($target);
 	
 	// If the target theme already exists, nothing to do.
 	if ( is_dir($target)) {

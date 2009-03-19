@@ -35,8 +35,8 @@ class Album extends PersistentObject {
 	 */
 	function Album(&$gallery, $folder8, $cache=true) {
 		$folder8 = sanitize_path($folder8);
-		$folderFS = UTF8ToFilesystem($folder8);
-		if (fileSystemToUTF8($folderFS) != $folder8) { // an attempt to spoof the album name.
+		$folderFS = internalToFIlesystem($folder8);
+		if (filesystemToInternal($folderFS) != $folder8) { // an attempt to spoof the album name.
 			$this->exists = false;
 			return NULL;
 		}
@@ -672,7 +672,7 @@ class Album extends PersistentObject {
 			$albumdir = getAlbumFolder();
 		}
 		$shuffle = $thumb != '1';
-		if (!empty($thumb) && $thumb != '1' && file_exists($albumdir.UTF8ToFilesystem($thumb))) {
+		if (!empty($thumb) && $thumb != '1' && file_exists($albumdir.internalToFIlesystem($thumb))) {
 			if ($i===false) {
 				return newImage($this, $thumb);
 			} else {
@@ -769,7 +769,7 @@ class Album extends PersistentObject {
 			}
 			if (!empty($theme)) {
 				$themeimage = SERVERPATH.'/'.THEMEFOLDER.'/'.$theme.'/images/imageDefault.png';
-				if (file_exists(UTF8ToFilesystem($themeimage))) {
+				if (file_exists(internalToFIlesystem($themeimage))) {
 					$nullimage = $themeimage;
 				}
 			}
@@ -925,7 +925,7 @@ class Album extends PersistentObject {
 			}
 		}
 		$oldfolder = $this->name;
-		$dest = getAlbumFolder().UTF8ToFilesystem($newfolder);
+		$dest = getAlbumFolder().internalToFIlesystem($newfolder);
 		// Check to see if the destination already exists
 		if (file_exists($dest)) {
 			// Disallow moving an album over an existing one.
@@ -1043,7 +1043,7 @@ class Album extends PersistentObject {
 	function copyAlbum($newfolder) {
 		// First, ensure the new base directory exists.
 		$oldfolder = $this->name;
-		$dest = getAlbumFolder().'/'.UTF8ToFilesystem($newfolder);
+		$dest = getAlbumFolder().'/'.internalToFIlesystem($newfolder);
 		// Check to see if the destination directory already exists
 
 		if (file_exists($dest)) {
@@ -1145,7 +1145,7 @@ class Album extends PersistentObject {
 		$live = array();
 		// Does the dirname from the db row exist on disk?
 		while($row = mysql_fetch_assoc($result)) {
-			if (!is_dir(getAlbumFolder() . UTF8ToFilesystem($row['folder'])) || in_array($row['folder'], $live)
+			if (!is_dir(getAlbumFolder() . internalToFIlesystem($row['folder'])) || in_array($row['folder'], $live)
 			|| substr($row['folder'], -1) == '/' || substr($row['folder'], 0, 1) == '/') {
 				$dead[] = $row['id'];
 			} else {
@@ -1214,7 +1214,7 @@ class Album extends PersistentObject {
 		$others = array();
 
 		while (false !== ($file = readdir($dir))) {
-			$file8 = FilesystemToUTF8($file);
+			$file8 = filesystemToInternal($file);
 			if ($dirs && (is_dir($albumdir.$file) && (substr($file, 0, 1) != '.') || hasDyanmicAlbumSuffix($file))) {
 				$files[] = $file8;
 			} else if (!$dirs && is_file($albumdir.$file)) {
