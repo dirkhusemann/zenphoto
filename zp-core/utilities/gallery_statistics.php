@@ -38,7 +38,7 @@ $webpath = WEBPATH.'/'.ZENFOLDER.'/';
 
 printAdminHeader($webpath);
 ?>
-<link rel="stylesheet" href="gallery_statistics.css" type="text/css" />
+<link rel="stylesheet" href="gallery_statistics.css" type="text/css" media="screen" />
 <?php
 /**
  * Prints a table with a bar graph of the values.
@@ -79,14 +79,26 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 	}
 	switch($sortorder) {
 		case "mostused":
-			$itemssorted = query_full_array("SELECT tagobj.tagid, count(*) as tagcount, tags.* FROM ".prefix('obj_to_tag')." AS tagobj, ".prefix('tags')." AS tags WHERE tags.id=tagobj.tagid GROUP BY tags.id ORDER BY tagcount DESC LIMIT ".$limit); 
-			if(empty($itemssorted)) {
-				$maxvalue = 0;
-			} else {
-				$maxvalue = $itemssorted[0]['tagcount'];
+			switch ($type) {
+				case "tags":
+					$itemssorted = query_full_array("SELECT tagobj.tagid, count(*) as tagcount, tags.* FROM ".prefix('obj_to_tag')." AS tagobj, ".prefix('tags')." AS tags WHERE tags.id=tagobj.tagid GROUP BY tags.id ORDER BY tagcount DESC LIMIT ".$limit);
+					if(empty($itemssorted)) {
+						$maxvalue = 0;
+					} else {
+						$maxvalue = $itemssorted[0]['tagcount'];
+					}
+					break;
+				case"newscategories":
+					$itemssorted = query_full_array("SELECT news2cat.cat_id, count(*) as catcount, cats.* FROM ".prefix('zenpage_news2cat')." AS news2cat, ".prefix('zenpage_news_categories')." AS cats WHERE cats.id=news2cat.cat_id GROUP BY news2cat.cat_id ORDER BY catcount DESC LIMIT ".$limit);
+					if(empty($itemssorted)) {
+						$maxvalue = 0;
+					} else {
+						$maxvalue = $itemssorted[0]['catcount'];
+					}
+					break;
 			}
 			$headline = $typename." - ".gettext("most used");
-			break;		
+			break;
 		case "popular":
 			$itemssorted = query_full_array($dbquery." ORDER BY hitcounter DESC LIMIT ".$limit);
 			if(empty($itemssorted)) {
@@ -155,15 +167,6 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 				$maxvalue =  $itemssorted[0]['imagenumber'];
 			}
 			$headline = $typename." - ".gettext("most images");
-			break;
-		case "mostarticles": // news categories only!
-			$itemssorted = query_full_array("SELECT news2cat.cat_id, count(*) as catcount, cats.* FROM ".prefix('zenpage_news2cat')." AS news2cat, ".prefix('zenpage_news_categories')." AS cats WHERE cats.id=news2cat.cat_id GROUP BY news2cat.cat_id ORDER BY catcount DESC LIMIT ".$limit); 
-			if(empty($itemssorted)) {
-				$maxvalue = 0;
-			} else {
-				$maxvalue = $itemssorted[0]['catcount'];
-			}
-			$headline = $typename." - ".gettext("most news articles");
 			break;
 		case "latest":
 			switch($type) {
@@ -329,14 +332,6 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 				$barsize = round($item['imagenumber'] / $maxvalue * $bargraphmaxsize);
 				$value = $item['imagenumber'];
 				break;
-			case "mostarticles":
-				if($maxvalue != 0) {
-					$barsize = round($item['catcount'] / $maxvalue * $bargraphmaxsize);
-				} else {
-					$barsize = 0;
-				}
-				$value = $item['catcount'];
-				break;
 			case "latest":
 				switch($type) {
 					case "albums":
@@ -354,13 +349,25 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 				$value = sprintf(gettext("%s images"),$item['imagenumber']); 
 				break;
 			case "mostused":
-				if($maxvalue != 0) {
-					$barsize = round($item['tagcount'] / $maxvalue * $bargraphmaxsize);
-				} else {
-					$barsize = 0;
+				switch ($type) {
+					case "tags":
+						if($maxvalue != 0) {
+							$barsize = round($item['tagcount'] / $maxvalue * $bargraphmaxsize);
+						} else {
+							$barsize = 0;
+						}
+						$value = $item['tagcount'];
+						break;
+					case "newscategories":
+						if($maxvalue != 0) {
+							$barsize = round($item['catcount'] / $maxvalue * $bargraphmaxsize);
+						} else {
+							$barsize = 0;
+						}
+						$value = $item['catcount'];
+						break;
 				}
-				$value = $item['tagcount'];
-				break;
+		break;
 		}
 		// counter to have a gray background of every second line
 		if($countlines === 1) {
@@ -512,7 +519,7 @@ if ($commentcount_mod > 0) {
 		if (empty($unpub)) {
 			printf(gettext('<strong>%1$u</strong> News articles'),$total);
 		} else {
-			printf(gettext('<strong>%1$u</strong> News articles(<strong>%2$u</strong> unpublished)'),$total,$unpub);
+			printf(gettext('<strong>%1$u</strong> News articles (<strong>%2$u</strong> unpublished)'),$total,$unpub);
 		}
 		?>
 	</li>
@@ -571,7 +578,7 @@ if(!isset($_GET['stats']) AND !isset($_GET['fulllist'])) {
 		<li><strong><?php echo gettext("News categories"); ?></strong>
 		<ul>
 			<li><a href="#newscategories-popular"><?php echo gettext("most viewed"); ?></a> | </li>
-			<li><a href="#newscategories-mostarticles"><?php echo gettext("most articles"); ?></a></li>
+			<li><a href="#newscategories-mostused"><?php echo gettext("most used"); ?></a></li>
 		</ul>
 		</li>
 		<?php } ?>
@@ -648,7 +655,7 @@ if(!isset($_GET['stats']) AND !isset($_GET['fulllist'])) {
 <?php printBarGraph("popular","newscategories"); ?>
 
 <a name="newscategories-mostarticles"></a>
-<?php printBarGraph("mostarticles","newscategories"); ?>
+<?php printBarGraph("mostused","newscategories"); ?>
 
 <?php } ?>
 <?php 
@@ -770,8 +777,8 @@ if(isset($_GET['type'])) {
 																case "popular":
 																	printBarGraph("popular","newscategories",$from_number,$to_number);
 																	break;
-																case "mostarticles":
-																	printBarGraph("mostarticles","newscategories",$from_number,$to_number);
+																case "mostused":
+																	printBarGraph("mostused","newscategories",$from_number,$to_number);
 																	break;
 															}
 														}
