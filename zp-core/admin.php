@@ -280,7 +280,20 @@ if (defined('RELEASE')) {
 		natsort($plugins);
 		foreach ($plugins as $extension) {
 			$ext = substr($extension, 0, strlen($extension)-4);
-			echo "<li>".$ext."</li>";
+			$pluginStream = file_get_contents(SERVERPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . $extension);
+			$str =  $pluginStream;
+			$i = strpos($str, '$plugin_version');
+			if ($i !== false) {
+				$str = substr($str, $i);
+				//$j = strpos($str, ";\n"); // This is wrong - PHP will not treat all newlines as \n.
+				$j = strpos($str, ";"); // This is also wrong; it disallows semicolons in strings. We need a regexp.
+				$str = substr($str, 0, $j+1);
+				eval($str);
+				$version = ' v'.$plugin_version;
+			} else {
+				$version = '';
+			}
+			echo "<li>".$ext.$version."</li>";
 		}
 	} else {
 		echo '<li>'.gettext('<em>none</em>').'</li>';
