@@ -119,17 +119,16 @@ if(is_object($result)) {
    ?>
 		</em>
 <? } else if(is_AdminEditPage("page")) {
-		 echo gettext("Edit Page:"); ?> <em><?php checkForEmptyTitle($result->getTitle(),"page"); 
-		 if(is_object($result)) { 
-     	if($result->getDatetime() >= date('Y-m-d H:i:s')) {
-     		echo " <small><strong id='scheduldedpublishing'>".gettext("(Page scheduled for publishing)")."</strong></small>";
-     	}
-     	if($result->getShow() != 1) {
-     		echo "<p class='scheduledate'><small>".gettext("Note: Scheduled publishing is not active unless the page is also set to 'published'")."</small></p>";
-     	}
-		 }
-	 ?>
-	 </em>
+	echo gettext("Edit Page:"); ?> <em><?php checkForEmptyTitle($result->getTitle(),"page");
+	if(is_object($result)) {
+		if($result->getDatetime() >= date('Y-m-d H:i:s')) {
+			echo " <small><strong id='scheduldedpublishing'>".gettext("(Page scheduled for publishing)")."</strong></small>";
+			if($result->getShow() != 1) {
+				echo "<p class='scheduledate'><small>".gettext("Note: Scheduled publishing is not active unless the page is also set to 'published'")."</small></p>";
+			}
+		}
+	}
+	?> </em>
 <?php } ?> 
 <?php } else {
 	if(is_AdminEditPage("newsarticle")) {
