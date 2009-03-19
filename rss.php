@@ -6,8 +6,8 @@ require_once(ZENFOLDER . "/template-functions.php");
 require_once(ZENFOLDER .PLUGIN_FOLDER . "image_album_statistics.php");
 
 // rssmode to differ between images and albums rss
-if(isset($_GET['rssmode'])) {
-	$rssmode = sanitize($_GET['rssmode']);
+if(isset($_GET['albumsmode'])) {
+	$rssmode = "albums";
 } else {
 	$rssmode = "";
 }
