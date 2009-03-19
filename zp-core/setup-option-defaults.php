@@ -116,9 +116,12 @@ function setDefault($option, $default) {
 	setOptionDefault('image_sortdirection', '0');
 	setOptionDefault('hotlink_protection', '1');
 	setOptionDefault('current_theme', 'default');
-	setOptionDefault('feed_items', 10);
+	setOptionDefault('feed_items', 10); // options for standard images rss
 	setOptionDefault('feed_imagesize', 240);
 	setOptionDefault('feed_sortorder', 'latest');
+	setOptionDefault('feed_items_albums', 10); // options for albums rss
+	setOptionDefault('feed_imagesize_albums', 240);
+	setOptionDefault('feed_sortorder_albums', 'latest');
 	setOptionDefault('feed_enclosure', '0');
 	setOptionDefault('feed_mediarss', '0');
 	setOptionDefault('search_fields', 32767);

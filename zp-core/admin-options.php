@@ -142,6 +142,9 @@ if (isset($_GET['action'])) {
 			setOption('feed_items', sanitize($_POST['feed_items'],3));
 			setOption('feed_imagesize', sanitize($_POST['feed_imagesize'],3));
 			setOption('feed_sortorder', sanitize($_POST['feed_sortorder'],3));
+			setOption('feed_items_albums', sanitize($_POST['feed_items_albums'],3));
+			setOption('feed_imagesize_albums', sanitize($_POST['feed_imagesize_albums'],3));
+			setOption('feed_sortorder_albums', sanitize($_POST['feed_sortorder_albums'],3));
 			setBoolOption('feed_enclosure', isset($_POST['feed_enclosure']));
 			setBoolOption('feed_mediarss', isset($_POST['feed_mediarss']));
 			setBoolOption('login_user_field', isset($_POST['login_user_field']));
@@ -1060,14 +1063,20 @@ if ($subtab == 'admin') {
 		</tr>
 		<tr>
 			<td><?php echo gettext("Number of RSS feed items:"); ?></td>
-			<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="feed_items"
-				value="<?php echo htmlspecialchars(getOption('feed_items'));?>" /></td>
-			<td><?php echo gettext("The number of new images/albums/comments you want to appear in your site's RSS feed."); ?></td>
+			<td>
+			<input type="text" size="15" id="feed_items" name="feed_items" value="<?php echo htmlspecialchars(getOption('feed_items'));?>" /> <label for="feed_items"><?php echo gettext("Images RSS"); ?></label><br />
+			<input type="text" size="15" id="feed_items_albums" name="feed_items_albums" value="<?php echo htmlspecialchars(getOption('feed_items_albums'));?>" /> <label for="feed_items"><?php echo gettext("Albums RSS"); ?></label>
+			</td>
+			<td><?php echo gettext("The number of new items you want to appear in your site's RSS feed. The images and comments RSS share the value."); ?></td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Size of RSS feed images:"); ?></td>
-			<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="feed_imagesize"
-				value="<?php echo htmlspecialchars(getOption('feed_imagesize'));?>" /></td>
+			<td>
+			<input type="text" size="15" id="feed_imagesize" name="feed_imagesize"
+				value="<?php echo htmlspecialchars(getOption('feed_imagesize'));?>" /> <label for="feed_imagesize"><?php echo gettext("Images RSS"); ?></label><br /> 
+				<input type="text" size="15" id="feed_imagesize_albums" name="feed_imagesize_albums"
+				value="<?php echo htmlspecialchars(getOption('feed_imagesize_albums'));?>" /> <label for="feed_imagesize_albums"><?php echo gettext("Albums RSS"); ?></label>
+				</td>
 			<td><?php echo gettext("The size you want your images to have in your site's RSS feed."); ?></td>
 		</tr>
 		<tr>
@@ -1078,24 +1087,30 @@ if ($subtab == 'admin') {
 						gettext('latest by date')=>'latest-date',
 						gettext('latest by mtime')=>'latest-mtime'
 						);
+			$feedsortorder_albums = array(gettext('latest by id')=>'latest',
+						gettext('latest updated')=>'latestupdated'
+						);
 			?>		
 			<select id="feed_sortorder" name="feed_sortorder">
 			<?php generateListFromArray(array(getOption("feed_sortorder")), $feedsortorder, false, true); ?>
-			</select>
+			</select> <label for="feed_sortorder"><?php echo gettext("Images RSS"); ?></label><br /><br /> 
+			<select id="feed_sortorder_albums" name="feed_sortorder_albums">
+			<?php generateListFromArray(array(getOption("feed_sortorder_albums")), $feedsortorder_albums, false, true); ?>
+			</select> <label for="feed_sortorder_albums"><?php echo gettext("Albums RSS"); ?></label>
 			</td>
-			<td><?php echo gettext("Choose between <em>latest by id</em> for the latest uploaded, <em>latest by date</em> for the latest uploaded fetched by date, or <em>latest by mtime</em> for the latest uploaded fetched by the file's last change timestamp."); ?></td>
+			<td><?php echo gettext("a) Images RSS: Choose between <em>latest by id</em> for the latest uploaded, <em>latest by date</em> for the latest uploaded fetched by date, or <em>latest by mtime</em> for the latest uploaded fetched by the file's last change timestamp.<br />b) Albums RSS: Choose between <em>latest by id</em> for the latest uploaded and <em>latest updated</em>"); ?></td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("RSS enclosure:"); ?></td>
 			<td><input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="feed_enclosure"
 				value="1" <?php echo checked('1', getOption('feed_enclosure')); ?> /></td>
-			<td><?php echo gettext("Check if you want to enable the <em>rss enclosure</em> feature which provides a direct download for full images, movies etc. from within certain rss reader clients."); ?></td>
+			<td><?php echo gettext("Check if you want to enable the <em>rss enclosure</em> feature which provides a direct download for full images, movies etc. from within certain rss reader clients <em>(only Images RSS)</em>."); ?></td>
 		</tr>
 			<tr>
 			<td><?php echo gettext("Media RSS:"); ?></td>
 			<td><input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="feed_mediarss"
 				value="1" <?php echo checked('1', getOption('feed_mediarss')); ?> /></td>
-			<td><?php echo gettext("Check if <em>media rss</em> support is to be enabled. This support is used by some services and programs."); ?></td>
+			<td><?php echo gettext("Check if <em>media rss</em> support is to be enabled. This support is used by some services and programs <em>(only Images RSS)</em>."); ?></td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Album date:"); ?></td>
