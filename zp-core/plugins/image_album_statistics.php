@@ -7,13 +7,13 @@
  * C A U T I O N: With 1.0.4.7 the usage to get an specific album changes. You now have to pass the foldername of an album instead the album title.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.7
+ * @version 1.0.7.1
  * @package plugins
  */
 
 $plugin_description = gettext("Functions that provide various statistics about images and albums in the gallery.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0.7';
+$plugin_version = '1.0.7.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---image_album_statistics.php.html";
 
 /**
@@ -552,5 +552,33 @@ function printLatestImagesByDate($number=5, $albumfolder='', $showtitle=false, $
  */
 function printLatestImagesByMtime($number=5, $albumfolder='', $showtitle=false, $showdate=false, $showdesc=false, $desclength=40,$showstatistic='',$width=85,$height=85,$crop=true,$collection=false) {
 	printImageStatistic($number, "latest-date", $albumfolder, $showtitle, $showdate, $showdesc, $desclength,$showstatistic,$width,$height,$crop,$collection);
+}
+
+
+
+/**
+ * A little helper function that checks if an image or album is to be considered 'new' within the time range set in relation to getImageDate()/getAlbumDate()
+ * Returns true or false.
+ *
+ * @param string $mode What to check "image" or "album".
+ * @param integer $timerange The time range the item should be considered new. Default is 604800 (unix time seconds = ca. 7 days)
+ * @return bool
+ */
+function checkIfNew($mode="image",$timerange=604800) {
+	$currentdate = date("U");
+	switch($mode) {
+		case "image":
+			$itemdate = getImageDate("%s");
+			break;
+		case "album":
+			$itemdate = getAlbumDate("%s");
+			break;
+	}
+	$newcheck = $currentdate - $itemdate;
+	if($newcheck < $timerange) {
+		return TRUE;
+	} else {
+		return FALSE;
+	}
 }
 ?>
