@@ -977,12 +977,8 @@ function publishPageOrArticle($option,$id) {
 			$dbtable = prefix('zenpage_pages');
 			break;
 	}
-  if($_GET['publish'] === "1") {
-		$show = "0";
-  } else {
-  	$show = "1";
-  }
-  query("UPDATE ".$dbtable." SET `show` = ".$show." WHERE id = ".$id);
+  $show = sanitize_numeric($_GET['publish']);
+  query("UPDATE ".$dbtable." SET `show` = ".$show.", `expiredate`=NULL WHERE id = ".$id);
 }
 
 /**
@@ -1001,7 +997,7 @@ function skipScheduledPublishing($option,$id) {
 			$dbtable = prefix('zenpage_pages');
 			break;
 	}
-  query("UPDATE ".$dbtable." SET `date` = '".date('Y-m-d H:i:s')."' AND `show`= 1 WHERE id = ".$id);
+  query("UPDATE ".$dbtable." SET `date` = '".date('Y-m-d H:i:s')."', `show`= 1 WHERE id = ".$id);
 }
 
 /**
@@ -1272,27 +1268,6 @@ foreach($admins as $admin) {
 <?php
 }
 
-
-/**
- * Checks if a page or articles is published and prints the icon for the articles or pages list
- *
- * @param string $object The item array field "show"
- * @return string
- */
-function checkIfPublished($object) {
-	if ($object->getShow() === "1") {
-		$dt = $object->getDateTime();
-		if($dt > date('Y-m-d H:i:s')) {
-			$publish = "<img src=\"images/clock.png\" alt=\"".gettext("Scheduled for published")."\" />";
-		} else {
-			$publish = "<img src=\"../../images/pass.png\" alt=\"".gettext("Published")."\" />";
-		}
-	} else {
-		$publish = "<img src=\"../../images/action.png\" alt=\"".gettext("Unpublished")."\" />";
-	}
-	return $publish;
-}
-
 /**
  * Checks if a page or articles has an expiration date set and prints out this date and a message about it or if it already is expired
  *
@@ -1321,11 +1296,11 @@ function checkIfExpires($object) {
  */
 function checkIfScheduled($object) {
 	$dt = $object->getDateTime();
-	if($dt > date('Y-m-d H:i:s')) {
+	if($dt > date('Y-m-d H:i:s')) {		
 		if($object->getShow() != 1) {
-			echo '<strong class="scheduledate">'.$dt.'<br /><small>'.gettext("Scheduled publishing not active").'</small></strong>';
+			echo '<strong class="inactivescheduledate">'.$dt.'</strong>';
 		} else {
-			echo '<strong class="scheduledate">'.$dt.'<br /><small>'.gettext("Scheduled for publishing").'</small></strong>';
+			echo '<strong class="scheduledate">'.$dt.'</strong>';
 		}
 	} else {
 		echo $dt;
@@ -1345,15 +1320,40 @@ function printPublishIconLink($object,$type) {
 		if(isset($_GET['date'])) { $urladd2 = "&amp;date=".$_GET['date']; }
 		if(isset($_GET['category'])) { $urladd3 = "&amp;category=".$_GET['category']; }
 	}
-	if($object->getDatetime() > date('Y-m-d H:i:s') AND $object->getShow() == 1) {	?>
-		<a href="?skipscheduling=<?php echo $object->getShow(); ?>&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Skip scheduling and publish immediatly"); ?>">
-	<?php } else if($object->getShow() != 1 AND $object->getDatetime() > date('Y-m-d H:i:s')) { ?> 
-		<a href="?publish=<?php echo $object->getShow(); ?>&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Enable scheduled publishing"); ?>"> 
-	<?php } else { ?> 
-		<a href="?publish=<?php echo $object->getShow(); ?>&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Publish or unpublish"); ?>"> 
-<?php } 
-	echo checkIfPublished($object);
-	echo "</a>";
+	if ($object->getDateTime() > date('Y-m-d H:i:s')) {
+		if ($object->getShow()) {
+			?>
+			<a href="?skipscheduling=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Publish immediatly (skip scheduling)"); ?>">
+			<img src="images/clock.png" alt="<?php gettext("Scheduled for published"); ?>" /></a>
+			<?php
+		} else {
+			?>
+			<a href="?publish=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Enable scheduled publishing"); ?>"> 
+			<img src="../../images/action.png" alt="<?php echo gettext("Unpublished"); ?>" /></a>
+			<?php
+		}
+	} else {
+		if ($object->getShow()) {
+			?>
+			<a href="?publish=0&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Un-publish"); ?>"> 
+			<img src="../../images/pass.png" alt\""<?php echo gettext("Published"); ?>" /></a>
+			<?php
+		} else {
+			$dt = $object->getExpireDate();
+			if(empty($dt)) {
+				?>
+				<a href="?publish=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Publish"); ?>">
+				<?php
+			} else {
+				?>
+				<a href="?publish=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Publish (override expiration)"); ?>">
+				<?php
+			}
+			?>
+			<img src="../../images/action.png" alt="<?php echo gettext("Unpublished"); ?>" /></a>
+			<?php
+		}
+	}
 }
 
 /**

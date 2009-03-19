@@ -112,7 +112,7 @@ if(is_object($result)) {
      	if($result->getDatetime() >= date('Y-m-d H:i:s')) {
      		echo " <small><strong id='scheduldedpublishing'>".gettext("(Article scheduled for publishing)")."</strong></small>";
      		if($result->getShow() != 1) {
-     			echo "<p class='scheduledate'><small>".gettext("Note: Scheduled publishing is not active unless the page/article is also set to 'published'")."</small></p>";
+     			echo "<p class='scheduledate'><small>".gettext("Note: Scheduled publishing is not active unless the article is also set to 'published'")."</small></p>";
      		}
      	}
     }
@@ -124,7 +124,10 @@ if(is_object($result)) {
      	if($result->getDatetime() >= date('Y-m-d H:i:s')) {
      		echo " <small><strong id='scheduldedpublishing'>".gettext("(Page scheduled for publishing)")."</strong></small>";
      	}
-    }
+     	if($result->getShow() != 1) {
+     		echo "<p class='scheduledate'><small>".gettext("Note: Scheduled publishing is not active unless the page is also set to 'published'")."</small></p>";
+     	}
+		 }
 	 ?>
 	 </em>
 <?php } ?> 
@@ -265,7 +268,7 @@ if(is_object($result)) {
    </tr>
     <tr>
 			<td><?php echo gettext("TitleLink:"); ?></td>
-			<td>
+			<td width="175">
 			<?php if(is_object($result)) { ?>
 				<input name="titlelink" class="inputfield" type="text" size="96" id="titlelink" value="<?php printIfObject($result,"titlelink");?>" />
 			<?php } else {

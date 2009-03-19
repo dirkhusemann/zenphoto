@@ -175,13 +175,22 @@ function issetPage($page) {
  * @since  1.0.0
  */
 function printAdminFooter($addl='') {
-	echo "<div id=\"footer\">";
-	echo "\n  <a href=\"http://www.zenphoto.org\" title=\"".gettext('A simpler web photo album')."\">zen<strong>photo</strong></a>";
-	echo " version ". ZENPHOTO_VERSION.' ['.ZENPHOTO_RELEASE.']';
+	?>
+	<div id="footer">
+	<a href="http://www.zenphoto.org" title="<?php echo gettext('A simpler web photo album'); ?>.">zen<strong>photo</strong></a>
+	version 
+	<?php echo ZENPHOTO_VERSION.' ['.ZENPHOTO_RELEASE.']';
 	if (!empty($addl)) {
 		echo ' | '. $addl;
 	}
-	echo " | <a href=\"http://www.zenphoto.org/support/\" title=\"".gettext('Forum')."\">Forum</a> | <a href=\"http://www.zenphoto.org/trac/\" title=\"Trac\">Trac</a> | <a href=\"".WEBPATH."/".ZENFOLDER."/changelog.html\" title=\"".gettext('View Changelog')."\">Changelog</a>\n</div>";
+	?>
+	 | <a href="http://www.zenphoto.org/support/" title="<?php echo gettext('Forum'); ?>">Forum</a> 
+	 | <a href="http://www.zenphoto.org/trac/" title="Trac">Trac</a> 
+	 | <a href="<? echo WEBPATH."/".ZENFOLDER; ?>/changelog.html" title="<?echo gettext('View Changelog'); ?>">Changelog</a>
+	 <br />
+	<?php	printf(gettext('Server date: %s'),date('Y-m-d H:i:s')); 	?>
+	</div>
+  <?php
 }
 
 /**

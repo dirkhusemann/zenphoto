@@ -550,7 +550,11 @@ div.tabs>div h2 {
 .scheduledate {
 	color: #FF8A00;
 	font-weight: normal;
-	
+}
+
+.inactivescheduledate {
+	color: red;
+	font-weight: normal;
 }
 
 .expiredate {
