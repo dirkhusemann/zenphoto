@@ -50,7 +50,7 @@
 	
  <?php 
  if(function_exists("printPagedThumbsNav")) { 
- 		printPagedThumbsNav(6, FALSE, gettext('&laquo; prev thumbs'), gettext('next thumbs &raquo;'), 40, 40, 40, TRUE); 
+ 		printPagedThumbsNav(6, FALSE, gettext('&laquo; prev thumbs'), gettext('next thumbs &raquo;'), 40, 40,TRUE); 
  } ?>
 	
 	<div id="image">
