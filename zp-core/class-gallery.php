@@ -52,7 +52,7 @@ class Gallery {
 	 * @return string
 	 */
 	function getDesc() {
-		return(get_language_string(getOption('gallery_desc')));
+		return(get_language_string(getOption('Gallery_description')));
 	}
 	
 	/**
@@ -155,10 +155,9 @@ class Gallery {
 		$albums = array();
 
 		while ($dirname = readdir($dir)) {
-			$dirname = filesystemToInternal($dirname);
 			if ((is_dir($albumdir.$dirname) && (substr($dirname, 0, 1) != '.')) ||
 								hasDyanmicAlbumSuffix($dirname)) {
-				$albums[] = $dirname;
+				$albums[] = filesystemToInternal($dirname);
 			}
 		}
 		closedir($dir);

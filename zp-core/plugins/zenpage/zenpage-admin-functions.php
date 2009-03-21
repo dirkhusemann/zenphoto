@@ -1326,35 +1326,40 @@ function printPublishIconLink($object,$type) {
 	}
 	if ($object->getDateTime() > date('Y-m-d H:i:s')) {
 		if ($object->getShow()) {
+			$title = gettext("Publish immediatly (skip scheduling)");
 			?>
-			<a href="?skipscheduling=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Publish immediatly (skip scheduling)"); ?>">
-			<img src="images/clock.png" alt="<?php gettext("Scheduled for published"); ?>" /></a>
+			<a href="?skipscheduling=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo $title; ?>">
+			<img src="images/clock.png" alt="<?php gettext("Scheduled for published"); ?>" title="<?php echo $title; ?>" /></a>
 			<?php
 		} else {
+			$title = gettext("Enable scheduled publishing");
 			?>
-			<a href="?publish=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Enable scheduled publishing"); ?>"> 
-			<img src="../../images/action.png" alt="<?php echo gettext("Unpublished"); ?>" /></a>
+			<a href="?publish=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo $title; ?>"> 
+			<img src="../../images/action.png" alt="<?php echo gettext("Unpublished"); ?>" title="<?php echo $title; ?>" /></a>
 			<?php
 		}
 	} else {
 		if ($object->getShow()) {
+			$title = gettext("Un-publish");
 			?>
-			<a href="?publish=0&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Un-publish"); ?>"> 
-			<img src="../../images/pass.png" alt\""<?php echo gettext("Published"); ?>" /></a>
+			<a href="?publish=0&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo $title; ?>"> 
+			<img src="../../images/pass.png" alt\""<?php echo gettext("Published"); ?>" title="<?php echo $title; ?>" /></a>
 			<?php
 		} else {
 			$dt = $object->getExpireDate();
 			if(empty($dt)) {
+				$title = gettext("Publish");
 				?>
-				<a href="?publish=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Publish"); ?>">
+				<a href="?publish=1&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo $title; ?>">
 				<?php
 			} else {
+				$title = gettext("Publish (override expiration)");
 				?>
-				<a href="?publish=2&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo gettext("Publish (override expiration)"); ?>">
+				<a href="?publish=2&amp;id=<?php echo $object->getID().$urladd1.$urladd2.$urladd3; ?>" title="<?php echo $title; ?>">
 				<?php
 			}
 			?>
-			<img src="../../images/action.png" alt="<?php echo gettext("Unpublished"); ?>" /></a>
+			<img src="../../images/action.png" alt="<?php echo gettext("Unpublished"); ?>" title= "<?php echo $title; ?>" /></a>
 			<?php
 		}
 	}

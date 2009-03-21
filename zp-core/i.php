@@ -150,7 +150,8 @@ if (!file_exists($imgfile)) {
 			$source = THEMEFOLDER.'/'.$source;
 		}
 		$args[3] = $args[4] = 0;
-		$args[5] = 1; // full crops for these default images
+		$args[5] = 1;    // full crops for these default images
+		$args[9] = NULL; 
 		$imgfile = SERVERPATH .'/'. $source.$source2 . "/" . $imgfile;
 		
 	} 

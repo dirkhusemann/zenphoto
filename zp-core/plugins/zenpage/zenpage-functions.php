@@ -31,19 +31,15 @@ if(getOption('zenpage_combinews') AND !isset($_GET['title']) AND !isset($_GET['c
 
 
 /**
-	 * Unpublishes pages whose expiration date has been reached
+	 * Unpublishes pages/news whose expiration date has been reached
 	 *
 	 */
-function processExpiredPages() {
-	query("UPDATE ".prefix('zenpage_pages')." SET `show` = 0 WHERE `date` <= '".date('Y-m-d H:i:s')."' AND `expiredate` <= '".date('Y-m-d H:i:s')."'", true);
-}
-
-/**
-	 * Unpublishes news articles whose expiration date has been reached
-	 *
-	 */
-function processExpiredNewsArticles() {
-	query("UPDATE ".prefix('zenpage_news')." SET `show` = 0 WHERE `date` <= '".date('Y-m-d H:i:s')."' AND `expiredate` <= '".date('Y-m-d H:i:s')."'", true);
+function processExpired($table) {
+	$expire = date('Y-m-d H:i:s');
+	query('update'.prefix($table).'SET `show`=0 WHERE `date`<="'.$expire.'"'.
+		' AND `expiredate`<="'.$expire.'"'.
+		' AND `expiredate`!="0000-00-00 00:00:00"'.
+		' AND `expiredate`!=NULL');
 }
 
 /************************************/
@@ -58,7 +54,7 @@ function processExpiredNewsArticles() {
 	 */
 	function getPages($published=true) {
 		global $_zp_zenpage_all_pages;
-		processExpiredPages();
+		processExpired('zenpage_pages');
 		if($published) {
 			$show = " WHERE `show` = 1 AND date <= '".date('Y-m-d H:i:s')."'";
 		} else {
@@ -117,7 +113,7 @@ function getParentPages(&$parentid,$initparents=true) {
 	 */
 	function getNewsArticles($articles_per_page='', $category='', $published=NULL) {
 		global $_zp_current_category, $_zp_post_date;
-		processExpiredNewsArticles();
+		processExpired('zenpage_news');
 		if (is_null($published)) {
 			if(zp_loggedin(ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
 				$published = "all";
@@ -369,7 +365,7 @@ function getParentPages(&$parentid,$initparents=true) {
 	 */
 	function getCombiNews($articles_per_page, $mode='',$published=NULL) {
 		global $_zp_gallery, $_zp_flash_player,$_zp_loggedin;
-		processExpiredNewsArticles();
+		processExpired('zenpage_news');
 		if (is_null($published)) {
 			if(zp_loggedin(ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
 				$published = "all";
