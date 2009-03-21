@@ -55,44 +55,48 @@ class flvplayer {
 	}
 
 	function getOptionsSupported() {
-		return array(	gettext('flv player width') => array('key' => 'flv_player_width', 'type' => 0,
+		$result = array(	gettext('flv player width') => array('key' => 'flv_player_width', 'type' => 0,
 										'desc' => gettext("Player width (ignored for <em>mp3</em> files.)")),
-		gettext('flv player height') => array('key' => 'flv_player_height', 'type' => 0,
-										'desc' => gettext("Player height (ignored for .<em>mp3</em> files if there is no preview image available.)")),
-		gettext('Backcolor') => array('key' => 'flv_player_backcolor', 'type' => 8,
-										'desc' => gettext("Backgroundcolor of the controls, in HEX format. <em>Player version 3 only!</em>")),
-		gettext('Frontcolor') => array('key' => 'flv_player_frontcolor', 'type' => 8,
-										'desc' => gettext("Texts & buttons color of the controls, in HEX format. <em>Player version 3 only!</em>")),
-		gettext('Lightcolor') => array('key' => 'flv_player_lightcolor', 'type' => 8,
-										'desc' => gettext("Rollover color of the controls, in HEX format. <em>Player version 3 only!</em>")),
-		gettext('Screencolor') => array('key' => 'flv_player_screencolor', 'type' => 8,
-										'desc' => gettext("Color of the display area, in HEX format. <em>Player version 3 only!</em>")),
-		gettext('Displayheight') => array('key' => 'flv_player_displayheight', 'type' => 0,
-										'desc' => gettext("The height of the player display. Generally it should be the same as the height. (ignored for .<em>mp3</em> files if there is no preview image available.)")),
-		gettext('Autostart') => array('key' => 'flv_player_autostart', 'type' => 1,
-										'desc' => gettext("Should the video start automatically. Yes if selected.")),
-		gettext('BufferSize') => array('key' => 'flv_player_buffer', 'type' => 0,
-										'desc' => /*xgettext:no-php-format*/ gettext("Size of the buffer in % before the video starts.")),
-		gettext('FLV Player version') => array('key' => 'flv_player_version', 'type' => 5,
-										'selections' => array(gettext('Version 3')=>"player3", gettext('Version 4')=>"player4"),
-										'desc' => gettext("The FLV Player version to be used. Note that due to API changes version 3 and 4 support not all the same options as noted.")),
-		gettext('Controlbar position') => array('key' => 'flv_player_controlbar', 'type' => 5,
-										'selections' => array(gettext('Bottom')=>"bottom", gettext('Over')=>"over", gettext('None')=>"none"),
-										'desc' => gettext("The position of the controlbar. <em>Player version 4 only!</em>")),
-		gettext('Playlist Width') => array('key' => 'flvplaylist_width', 'type' => 0,
-										'desc' => gettext("Player width for the playlist")),
-		gettext('Playlist Height') => array('key' => 'flvplaylist_height', 'type' => 0,
-										'desc' => gettext("Player height for the playlist (ignored for .<em>mp3</em> files if there is no preview image available.)")),
-		gettext('Playlist Displaywidth') => array('key' => 'flvplaylist_displaywidth', 'type' => 0,
-										'desc' => gettext("Display width for the playlist. The display width is needed for the playlist menu to be shown. In this case the 'displaywidth - width = width of the playlist menu'. See the flv player site for more info about these options.")),
-		gettext('Playlist Displayheight') => array('key' => 'flvplaylist_displayheight', 'type' => 0,
-										'desc' => gettext("Display height for the playlist. If the width is too small to show the playlist menu, you can set the height higher to show it below the actual movie display. See the flv player site for more info about these options.")),
-		gettext('Playlist Thumbs in playlist') => array('key' => 'flvplaylist_thumbsinplaylist', 'type' => 1,
-										'desc' => gettext("Check if you want that thumbnails of the preview images should be shown in the playlist."))
+										gettext('flv player height') => array('key' => 'flv_player_height', 'type' => 0,
+																		'desc' => gettext("Player height (ignored for .<em>mp3</em> files if there is no preview image available.)")),
+										gettext('Displayheight') => array('key' => 'flv_player_displayheight', 'type' => 0,
+																		'desc' => gettext("The height of the player display. Generally it should be the same as the height. (ignored for .<em>mp3</em> files if there is no preview image available.)")),
+										gettext('Autostart') => array('key' => 'flv_player_autostart', 'type' => 1,
+																		'desc' => gettext("Should the video start automatically. Yes if selected.")),
+										gettext('BufferSize') => array('key' => 'flv_player_buffer', 'type' => 0,
+																		'desc' => /*xgettext:no-php-format*/ gettext("Size of the buffer in % before the video starts.")),
+										gettext('FLV Player version') => array('key' => 'flv_player_version', 'type' => 5,
+																		'selections' => array(gettext('Version 3')=>"player3", gettext('Version 4')=>"player4"),
+																		'desc' => gettext("The FLV Player version to be used. Note that due to API changes version 3 and 4 support not all the same options as noted.")),
+										gettext('Controlbar position') => array('key' => 'flv_player_controlbar', 'type' => 5,
+																		'selections' => array(gettext('Bottom')=>"bottom", gettext('Over')=>"over", gettext('None')=>"none"),
+																		'desc' => gettext("The position of the controlbar. <em>Player version 4 only!</em>")),
+										gettext('Playlist Width') => array('key' => 'flvplaylist_width', 'type' => 0,
+																		'desc' => gettext("Player width for the playlist")),
+										gettext('Playlist Height') => array('key' => 'flvplaylist_height', 'type' => 0,
+																		'desc' => gettext("Player height for the playlist (ignored for .<em>mp3</em> files if there is no preview image available.)")),
+										gettext('Playlist Displaywidth') => array('key' => 'flvplaylist_displaywidth', 'type' => 0,
+																		'desc' => gettext("Display width for the playlist. The display width is needed for the playlist menu to be shown. In this case the 'displaywidth - width = width of the playlist menu'. See the flv player site for more info about these options.")),
+										gettext('Playlist Displayheight') => array('key' => 'flvplaylist_displayheight', 'type' => 0,
+																		'desc' => gettext("Display height for the playlist. If the width is too small to show the playlist menu, you can set the height higher to show it below the actual movie display. See the flv player site for more info about these options.")),
+										gettext('Playlist Thumbs in playlist') => array('key' => 'flvplaylist_thumbsinplaylist', 'type' => 1,
+																		'desc' => gettext("Check if you want that thumbnails of the preview images should be shown in the playlist."))
+										);
 		
+		if (getOption('flv_player_version') == 'player3') {
+			$result = array_merge($result, 
+						array(	gettext('Backcolor') => array('key' => 'flv_player_backcolor', 'type' => 8,
+																		'desc' => gettext("Backgroundcolor of the controls, in HEX format. <em>Player version 3 only!</em>")),
+										gettext('Frontcolor') => array('key' => 'flv_player_frontcolor', 'type' => 8,
+																		'desc' => gettext("Texts & buttons color of the controls, in HEX format. <em>Player version 3 only!</em>")),
+										gettext('Lightcolor') => array('key' => 'flv_player_lightcolor', 'type' => 8,
+																		'desc' => gettext("Rollover color of the controls, in HEX format. <em>Player version 3 only!</em>")),
+										gettext('Screencolor') => array('key' => 'flv_player_screencolor', 'type' => 8,
+																		'desc' => gettext("Color of the display area, in HEX format. <em>Player version 3 only!</em>"))
+										));
+		};
 		
-		
-		);
+		return $result;
 	}
 
 	/**
