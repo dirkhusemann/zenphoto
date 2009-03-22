@@ -22,7 +22,8 @@ $_zp_flash_player = $option_interface; // claim to be the flash player.
 if ($external) return; // can't process external album images
 
 // register the scripts needed
-addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER .'flowplayer3/flowplayer.js"></script>');
+addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER .'flowplayer3/flowplayer.js"></script>
+<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER .'flowplayer3/flowplayer.playlist.pack.js"></script>');
 
 define ('FLOW_PLAYER_MP3_HEIGHT', 24);
 /**
@@ -147,9 +148,6 @@ class flowplayer3 {
 			<script>
 			flowplayer("player'.$count.'","'.WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'flowplayer3/flowplayer.swf", {
 			plugins: { 
-        audio: { 
-            url: "'.WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'flowplayer3/flowplayer.audio.swf" 
-        }, 
         controls: {
         	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
         	autoHide: "'.getOption('flow_player3_controlsautohide').'",
@@ -162,7 +160,7 @@ class flowplayer3 {
         	sliderColor: "'.getOption('flow_player3_controlsslidercolor').'",	
         	sliderGradient: "'.getOption('flow_player3_controlsslidergradient').'",
         	buttonColor: "'.getOption('flow_player3_controlsbuttoncolor').'",
-        	buttonOverColor: "'.getOption('flow_player3_controlsbuttonovercolor').'"
+        	buttonOverColor: "'.getOption('flow_player3_controlsbuttonovercolor').'",
         }
     	},
     	canvas: {
@@ -188,9 +186,6 @@ class flowplayer3 {
 			<script>
 			flowplayer("player'.$count.'","'.WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'flowplayer3/flowplayer.swf", {
 			plugins: { 
-        audio: { 
-            url: "'.WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'flowplayer3/flowplayer.audio.swf" 
-        }, 
         controls: {
         	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
         	autoHide: "'.getOption('flow_player3_controlsautohide').'",
