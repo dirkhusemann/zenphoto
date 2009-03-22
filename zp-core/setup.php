@@ -980,13 +980,14 @@ if ($debug) {
 	}
 
 	if (isset($_zp_conf_vars['external_album_folder']) && !is_null($_zp_conf_vars['external_album_folder'])) {
-		checkmark(-1, 'albums', ' ['.gettext("<code>\$conf['album_folder']</code> is deprecated").']', gettext('You should update your zp-config.php file to conform to the current zp-config.php.example file.'));
+		checkmark(-1, 'albums', ' ['.gettext("<code>\$conf['external_album_folder']</code> is deprecated").']', gettext('You should update your zp-config.php file to conform to the current zp-config.php.example file.'));
 		$_zp_conf_vars['album_folder_class'] = 'external';
 		$albumfolder = $_zp_conf_vars['external_album_folder'];
-	} else {
-		if (!isset($_zp_conf_vars['album_folder_class'])) {
-			$_zp_conf_vars['album_folder_class'] = 'std';
-		}
+	}
+	if (!isset($_zp_conf_vars['album_folder_class'])) {
+		$_zp_conf_vars['album_folder_class'] = 'std';
+	}
+	if (isset($_zp_conf_vars['album_folder'])) {
 		$albumfolder = $_zp_conf_vars['album_folder'];
 		switch ($_zp_conf_vars['album_folder_class']) {
 			case 'std':
@@ -1000,8 +1001,10 @@ if ($debug) {
 				$albumfolder = $root . $albumfolder;
 				break;
 		}
+		$good = folderCheck('albums', $albumfolder, $_zp_conf_vars['album_folder_class']) && $good;
+	} else {
+		checkmark(-1, gettext('<em>albums</em> folder'), ' ['.gettext("The line <code>\$conf['album_folder']</code> is missing from your zp-config.php file.").']', gettext('You should update your zp-config.php file to conform to the current zp-config.php.example file.'));
 	}
-	$good = folderCheck('albums', $albumfolder, $_zp_conf_vars['album_folder_class']) && $good;
 
 	$good = folderCheck('cache', dirname(dirname(__FILE__)) . "/cache/", 'std') && $good;
 

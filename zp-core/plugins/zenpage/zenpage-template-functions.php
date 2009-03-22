@@ -1797,7 +1797,18 @@ function getCodeblock($number='',$titlelink='') {
  */
 function printCodeblock($number='',$titlelink='') {
 	$codeblock = getCodeblock($number,$titlelink);
-	eval("?>$codeblock");
+	if (version_compare(PHP_VERSION, '5.0.0') === 1) {
+		$context = get_context();
+		eval('
+			try {
+				eval("?>$codeblock");
+			} catch (Exception $e) {
+			}'
+		);
+		add_context($context);
+	} else {
+		eval("?>$codeblock");
+	}
 }
 
 
@@ -2662,6 +2673,7 @@ function printZenpageRSSHeaderLink($option, $linktext) {
  * @param int $size the size to make the image. If omitted image will be 50% of 'image_size' option.
  */
 function zenpageAlbumImage($albumname, $imagename=NULL, $size=NULL) {
+	global $_zp_gallery;
 	echo '<br />';
 	$album = new Album($_zp_gallery, $albumname);
 	if (is_null($size)) {

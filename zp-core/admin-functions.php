@@ -629,7 +629,11 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 			$row = $supportedOptions[$option];
 			$type = $row['type'];
 			$desc = $row['desc'];
-			$multilingual = isset($row['multilingual']) && $row['multilingual'];
+			if (isset($row['multilingual'])) {
+				$multilingual = $row['multilingual'];
+			} else {
+				$multilingual = $type == 3;
+			}
 			if (isset($row['texteditor']) && $row['texteditor']) {
 				$editor = 'texteditor';
 			} else {
@@ -667,7 +671,7 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 				case 3:  // text area
 					echo '<td width="350px">';
 					echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'text-'.$key.'" value=0 />'."\n";
-					if ($multilingual || $type) {
+					if ($multilingual) {
 						print_language_string_list($v, $key, $type, NULL, $editor);
 					} else {
 						echo '<input type="text" size="40" name="' . $key . '" style="width: 338px" value="' . html_encode($v) . '">' . "\n";

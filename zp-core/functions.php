@@ -649,11 +649,12 @@ function getEnabledPlugins() {
 function read_exif_data_protected($path) {
 	if (version_compare(PHP_VERSION, '5.0.0') === 1) {
 		eval('
-		try {
-			$rslt = read_exif_data_raw($path, false);
-		} catch (Exception $e) {
-			$rslt = array();
-		}');
+			try {
+				$rslt = read_exif_data_raw($path, false);
+			} catch (Exception $e) {
+				$rslt = array();
+			}'
+		);
 		return $rslt;
 	} else {
 		return read_exif_data_raw($path, false);

@@ -36,16 +36,16 @@ class Album extends PersistentObject {
 	function Album(&$gallery, $folder8, $cache=true) {
 		$folder8 = sanitize_path($folder8);
 		$folderFS = internalToFIlesystem($folder8);
-		if (filesystemToInternal($folderFS) != $folder8) { // an attempt to spoof the album name.
-			$this->exists = false;
-			return NULL;
-		}
 		$this->name = $folder8;
 		$this->gallery = &$gallery;
 		if (empty($folder8)) {
 			$this->localpath = getAlbumFolder();
 		} else {
 			$this->localpath = getAlbumFolder() . $folderFS . "/";
+		}
+		if (filesystemToInternal($folderFS) != $folder8) { // an attempt to spoof the album name.
+			$this->exists = false;
+			return NULL;
 		}
 		if (hasDyanmicAlbumSuffix($folder8)) {
 			$this->localpath = substr($this->localpath, 0, -1);
@@ -742,21 +742,23 @@ class Album extends PersistentObject {
 				}
 			}
 			//jordi-kun - no images, no subalbums, check for videos
-			$dp = opendir($albumdir);
-			while ($thumb = readdir($dp)) {
-				if (is_file($albumdir.$thumb) && is_valid_video($thumb)) {
-					$othersThumb = checkObjectsThumb($albumdir, $thumb);
-					if (!empty($othersThumb)) {
-						$thumb = newImage($this, $othersThumb);
-						if ($this->getShow()) {
-							$this->albumthumbnail = $thumb;
-							return $thumb;
+			$dp = @opendir($albumdir);
+			if ($dp) {
+				while ($thumb = readdir($dp)) {
+					if (is_file($albumdir.$thumb) && is_valid_video($thumb)) {
+						$othersThumb = checkObjectsThumb($albumdir, $thumb);
+						if (!empty($othersThumb)) {
+							$thumb = newImage($this, $othersThumb);
+							if ($this->getShow()) {
+								$this->albumthumbnail = $thumb;
+								return $thumb;
+							}
 						}
 					}
 				}
 			}
 		}
-		
+
 		$nullimage = SERVERPATH.'/'.ZENFOLDER.'/images/imageDefault.png';
 		if (OFFSET_PATH == 0) { // check for theme imageDefault.png if we are in the gallery
 			$theme = '';
@@ -1207,7 +1209,8 @@ class Album extends PersistentObject {
 			} else {
 				$msg = sprintf(gettext("Error: The album %s is not readable."), $this->name);
 			}
-			die($msg);
+			echo $msg;
+			return array();
 		}
 		$dir = opendir($albumdir);
 		$files = array();
