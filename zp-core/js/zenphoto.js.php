@@ -3,11 +3,19 @@ header("Last-Modified: " . gmdate("D, d M Y H:i:s", time()-3600*24*30) . " GMT")
 header("Expires: " . gmdate("D, d M Y H:i:s", time()+3600*24*60) . " GMT"); // Don't expire for 60 days
 header("Cache-Control: max-age=86400, s-maxage=86400, proxy-revalidate, must-revalidate");
 header("Content-Type: application/x-javascript");
-require_once('../functions.php');
+
+if (!defined('WEBPATH')) { 
+	$const_webpath = dirname(dirname($_SERVER['SCRIPT_NAME']));
+	$const_webpath = str_replace("\\", '/', $const_webpath);
+	if ($const_webpath == '/') $const_webpath = '';
+	define('WEBPATH', $const_webpath);
+ }
+if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 ?>
+
 /* Common javascripts and localized strings for Zenphoto */
 
-var zppath =  "<?php if (ZENFOLDER) echo WEBPATH.'/'.ZENFOLDER; ?>";
+var zppath =  "<?php echo WEBPATH.'/'.ZENFOLDER; ?>";
 
 var zpstrings = {
 	/* Used in jquery.editinplace.js */

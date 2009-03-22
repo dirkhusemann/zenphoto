@@ -83,24 +83,27 @@ function getOptionTableName($albumname) {
 	return $albumname.'_options';
 }
 
-if (!$checked) {
-	if ($oldconfig = !file_exists('zp-config.php')) {
-		@copy('zp-config.php.source', 'zp-config.php');
-	}
+if (!file_exists('zp-config.php')) {
+	$newconfig = true;
+	@copy('zp-config.php.source', 'zp-config.php');
+	setupLog("Copied zp-copnfig.php.source");
 } else {
+	$newconfig = false;
+}
+if ($checked) {
 	setupLog("Completed system check");
 }
 
 
-	$zp_cfg = @file_get_contents('zp-config.php');
-	$i = strpos($zp_cfg, 'define("DEBUG", false);');
-	if ($i !== false) {
-		$updatezp_config = true;
-		$j = strpos($zp_cfg, "\n", $i);
-		$zp_cfg = substr($zp_cfg, 0, $i) . substr($zp_cfg, $j); // remove this so it won't be defined twice
-	} else {
-		$updatezp_config = false;
-	}
+$zp_cfg = @file_get_contents('zp-config.php');
+$updatezp_config = false;
+
+$i = strpos($zp_cfg, 'define("DEBUG", false);');
+if ($i !== false) {
+	$updatezp_config = true;
+	$j = strpos($zp_cfg, "\n", $i);
+	$zp_cfg = substr($zp_cfg, 0, $i) . substr($zp_cfg, $j); // remove this so it won't be defined twice
+}
 
 if (isset($_POST['mysql'])) { //try to update the zp-config file
 	setupLog("MySQL POST handling");
@@ -744,7 +747,9 @@ if ($debug) {
 											gettext("You have not set your <strong>MySQL</strong> <code>user</code>, <code>password</code>, etc. in your <code>zp-config.php</code> file and <strong>setup</strong> is not able to write to the file.")) && $good;
 		}
 	}
-	$good = checkMark($connection, ' '.gettext("connect to MySQL"), '', gettext("Could not connect to the <strong>MySQL</strong> server. Check the <code>user</code>, <code>password</code>, and <code>database host</code> in your <code>zp-config.php</code> file and try again.").' ') && $good;
+	if (!$newconfig && !$connection) {
+		$good = checkMark($connection, ' '.gettext("connect to MySQL"), '', gettext("Could not connect to the <strong>MySQL</strong> server. Check the <code>user</code>, <code>password</code>, and <code>database host</code> and try again.").' ') && $good;
+	}
 	if ($connection) {
 		$good = checkMark($sqlv, ' '.sprintf(gettext("MySQL version %s"),$mysqlv), "", sprintf(gettext('Version %1$s or greater is required.<br />Version %2$s or greater is prefered.'),$required,$desired)) && $good;
 		$good = checkMark($db, ' '.sprintf(gettext("connect to the database <code> %s </code>"),$_zp_conf_vars['mysql_database']), '',

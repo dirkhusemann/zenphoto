@@ -113,7 +113,6 @@ function zenJavascript() {
 function printAdminToolbox($id='admin') {
 	global $_zp_current_album, $_zp_current_image, $_zp_current_search, $_zp_loggedin, $_zp_gallery_page;
 	if (zp_loggedin()) {
-		echo '<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.'/js/admin.js"></script>';
 		$zf = WEBPATH."/".ZENFOLDER;
 		$dataid = $id . '_data';
 		$page = getCurrentPage();
