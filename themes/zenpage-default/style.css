@@ -431,6 +431,11 @@ ul.pagelist li.next {
 	font-size: 0.7em;
 }
 
+/* centering flowplayer 3 on image.php */
+#image .flowplayer {
+	margin: 0 auto;
+}
+
 .imgnav {
 	float: right;
 	position: relative;

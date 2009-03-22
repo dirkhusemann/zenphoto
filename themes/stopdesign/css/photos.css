@@ -710,7 +710,11 @@ html>body #photo strong {
   left:-3px;
   border:10px solid #fff;
   }
-
+  
+/* centering flowplayer 3 on image.php */
+#photo .flowplayer {
+	margin: 0 auto;
+}
 
 /* =PrevNext Nav (Individual Photo template)
 Thumbnails used for prev/next photo navigation

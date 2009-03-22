@@ -518,3 +518,8 @@ ul.archive .month {
  font-size: 0.9em;
  font-weight: bold;
 }
+
+/* centering flowplayer 3 on image.php */
+#image .flowplayer {
+	margin: 0 auto;
+}
