@@ -142,7 +142,7 @@ class flowplayer3 {
 				}
 				// inline css is kind of ugly but since we need to style dynamically there is no other way
 			$playerconfig = '
-			<span id="player'.$count.'" style="display:block; margin: 0 auto; width: '.getOption('flow_player3_width').'px; height: '.$height.'px;">
+			<span id="player'.$count.'" class="flowplayer" style="display:block; width: '.getOption('flow_player3_width').'px; height: '.$height.'px;">
 			</span>
 			<script>
 			flowplayer("player'.$count.'","'.WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'flowplayer3/flowplayer.swf", {
@@ -183,7 +183,7 @@ class flowplayer3 {
 			</script>';
 			} else {
 			$playerconfig = '
-			<span id="player'.$count.'" style="display:block; margin: 0 auto;width: '.getOption('flow_player3_width').'px; height: '.getOption('flow_player3_height').'px;">
+			<span id="player'.$count.'" class="flowplayer" style="display:block; width: '.getOption('flow_player3_width').'px; height: '.getOption('flow_player3_height').'px;">
 			</span>
 			<script>
 			flowplayer("player'.$count.'","'.WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'flowplayer3/flowplayer.swf", {
@@ -192,7 +192,7 @@ class flowplayer3 {
             url: "'.WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'flowplayer3/flowplayer.audio.swf" 
         }, 
         controls: {
-        	backgroundColor: "'.getOption('flow_player3_controlbarbackgroundcolor').'",
+        	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
         	autoHide: "'.getOption('flow_player3_controlsautohide').'",
         	timeColor:"'.getOption('flow_player3_controlstimecolor').'",
         	durationColor: "'.getOption('flow_player3_controlsdurationcolor').'",
