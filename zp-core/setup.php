@@ -97,6 +97,12 @@ if ($checked) {
 
 $zp_cfg = @file_get_contents('zp-config.php');
 $updatezp_config = false;
+if (isset($_GET['mod_rewrite'])) {
+	$mod = '&mod_rewrite='.$_GET['mod_rewrite'];
+} else {
+	$mod = '';
+}
+
 
 $i = strpos($zp_cfg, 'define("DEBUG", false);');
 if ($i !== false) {
@@ -933,6 +939,7 @@ if ($debug) {
 		$desc = gettext("You need to upload the copy of the .htaccess file that was included with the zenphoto distribution.");
 	}
 
+	$mod = '&mod_rewrite=OFF';
 	if ($ch) {
 		$i = strpos($htu, 'REWRITEENGINE');
 		if ($i === false) {
@@ -941,10 +948,11 @@ if ($debug) {
 			$j = strpos($htu, "\n", $i+13);
 			$rw = trim(substr($htu, $i+13, $j-$i-13));
 		}
-		$mod = '';
 		if (!empty($rw)) {
 			$msg .= ' '.sprintf(gettext("(<em>RewriteEngine</em> is <strong>%s</strong>)"), $rw);
-			$mod = "&mod_rewrite=$rw";
+			if (isset($_SERVER['REQUEST_URI'])) {
+				$mod = "&mod_rewrite=$rw";
+			}
 		}
 	}
 	if ($Apache || $ch != -2) {
@@ -1717,11 +1725,7 @@ if (file_exists("zp-config.php")) {
 		if ($debug) {
 			$task .= '&debug';
 		}
-		if (isset($_GET['mod_rewrite'])) {
-			$mod = '&mod_rewrite='.$_GET['mod_rewrite'];
-		} else {
-			$mod = '';
-		}
+		
 		echo "<p class='buttons'>";
 		if ($warn) $img = 'warn.png'; else $img = 'pass.png';
 		echo "<a href=\"?checked&amp;$task$mod\" title=\"".gettext("create and or update the database tables.")."\" style=\"font-size: 15pt; font-weight: bold;\"><img src='images/$img' />".gettext("Go")."</a>";

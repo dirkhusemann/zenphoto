@@ -58,7 +58,7 @@ function setDefault($option, $default) {
 	setDefault('website_title', "");
 	setDefault('website_url', "");
 	setDefault('time_offset', 0);
-	if (isset($_GET['mod_rewrite']) && $_GET['mod_rewrite'] == 'ON') {
+	if (isset($_GET['mod_rewrite']) && ($_GET['mod_rewrite'] == 'ON')) {
 		$rw = 1;
 	} else {
 		$rw = 0;
