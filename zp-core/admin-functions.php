@@ -2243,11 +2243,18 @@ $theme_description["desc"] = "%s";
  * @return string current URL
  * @author Ozh
  * @since 1.3
+ * 
+ * @param string $source the script file incase REQUEST_URI is not available
  */
-function currentRelativeURL() {
-	$from = PROTOCOL."://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; // full requested URL
-	$from = str_replace( FULLWEBPATH , '', $from); // Make relative to zenphoto installation
-	return urlencode(stripslashes( $from ));
+function currentRelativeURL($source) {
+	if (isset($_SERVER['REQUEST_URI'])) {
+		$from = PROTOCOL."://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; // full requested URL
+		$from = str_replace( FULLWEBPATH , '', $from); // Make relative to zenphoto installation
+		return urlencode(stripslashes( $from ));
+	} else {
+		$source = str_replace(SERVERPATH, '', $source);
+		return $source;
+	}
 }
 
 ?>

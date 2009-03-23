@@ -14,7 +14,7 @@ $_zp_sortable_list = new jQuerySortable('js');
 // $_zp_sortable_list->debug(); // Uncomment this line to display serialized object
 
 if (!($_zp_loggedin & (ADMIN_RIGHTS | EDIT_RIGHTS))) { // prevent nefarious access to this page.
-	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL() );
+	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__) );
 	exit();
 }
 

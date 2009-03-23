@@ -19,7 +19,7 @@ function im_suffix() {
 // Determines if this request used a query string (as opposed to mod_rewrite).
 // A valid encoded URL is only allowed to have one question mark: for a query string.
 function is_query_request() {
-	return (strpos($_SERVER['REQUEST_URI'], '?') !== false);
+	return (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '?') !== false);
 }
 
 
@@ -76,21 +76,22 @@ function zpurl($with_rewrite=NULL, $album=NULL, $image=NULL, $page=NULL, $specia
  * corrected URL if not with a 301 Moved Permanently.
  */
 function fix_path_redirect() {
-	$sfx = im_suffix();
-	$request_uri = urldecode($_SERVER['REQUEST_URI']);
-	$i = strpos($request_uri, '?');
-	if ($i !== false) {
-		$params = substr($request_uri, $i+1);
-		$request_uri = substr($request_uri, 0, $i);
-	} else {
-		$params = '';
-	}
-	if (getOption('mod_rewrite') && strlen($sfx) > 0
-				&& in_context(ZP_IMAGE) && substr($request_uri, -strlen($sfx)) != $sfx ) {				
-		$redirecturl = zpurl(true, NULL, NULL, NULL, $params);
-		header("HTTP/1.0 301 Moved Permanently");
-		header('Location: ' . FULLWEBPATH . '/' . $redirecturl);
-		exit();
+	if (getOption('mod_rewrite')) {
+		$sfx = im_suffix();
+		$request_uri = urldecode($_SERVER['REQUEST_URI']);
+		$i = strpos($request_uri, '?');
+		if ($i !== false) {
+			$params = substr($request_uri, $i+1);
+			$request_uri = substr($request_uri, 0, $i);
+		} else {
+			$params = '';
+		}
+		if (strlen($sfx) > 0 && in_context(ZP_IMAGE) && substr($request_uri, -strlen($sfx)) != $sfx ) {
+			$redirecturl = zpurl(true, NULL, NULL, NULL, $params);
+			header("HTTP/1.0 301 Moved Permanently");
+			header('Location: ' . FULLWEBPATH . '/' . $redirecturl);
+			exit();
+		}
 	}
 }
 

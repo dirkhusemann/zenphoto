@@ -51,12 +51,12 @@ function emailReply($comment, $owner) {
 			$action = sprintf(gettext('A reply has been posted on "%1$s" the album "%2$s".'), $owner->getTitle(), $owner->getAlbumName());
 	}
 
-		if ($comment->getAnon()) {
-			$email = $name = '<'.gettext("Anonymous").'>';
-		} else {
-			$name = $comment->getname();
-			$email = $comment->getEmail();
-		}
+	if ($comment->getAnon()) {
+		$email = $name = '<'.gettext("Anonymous").'>';
+	} else {
+		$name = $comment->getname();
+		$email = $comment->getEmail();
+	}
 	$message = $action . "\n\n" . 
 							sprintf(gettext('Author: %1$s'."\n".'Email: %2$s'."\n".'Website: %3$s'."\n".'Comment:'."\n\n".'%4$s'),$name, $email, $comment->getWebsite(), $comment->getComment()) . "\n\n" .
 							sprintf(gettext('You can view all comments about this item here:'."\n".'%1$s'), 'http://' . $_SERVER['SERVER_NAME'] . WEBPATH . '/index.php?'.$url) . "\n\n";
