@@ -200,7 +200,7 @@ class flvplayer {
 	 * @return string;
 	 */
 	function is_valid($image) {
-		$valid_types = array('jpg','jpeg','gif','png','flv','3gp','mov','mp3','mp4');
+		$valid_types = array('flv','mp3','mp4');
 		if (is_object($image)) $image = $image->filename;
 		$ext = strtolower(substr(strrchr($image, "."), 1));
 		if (in_array($ext, $valid_types)) {
@@ -238,7 +238,8 @@ class flvplayer {
  * endwhile;
  * ?>
  * Of course you can add further functions to b) like title, description, date etc., too.
- *  
+ * 
+ * @param string $option the mode to use "playlist" or "players"
  */
 function flvPlaylist($option='') {
 	global $_zp_current_album, $_zp_current_image;
@@ -253,6 +254,8 @@ function flvPlaylist($option='') {
 
 	switch($option) {
 		case "playlist":
+			
+			if(getNumImages() != 0) {
 			?>
 	<div id="flvplaylist"><?php echo gettext("The flv player is not installed. Please install or activate the flv player plugin."); ?></div>
 	<script type="text/javascript">
@@ -271,7 +274,7 @@ function flvPlaylist($option='') {
 		so.addVariable('thumbsinplaylist','<?php echo (getOption('flvplaylist_thumbsinplaylist') ? 'true' : 'false') ?>');
 		so.write('flvplaylist');
 	</script>
-	<?php
+	<?php }
 		break;
 
 		case "players":

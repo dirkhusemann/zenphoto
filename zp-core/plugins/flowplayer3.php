@@ -103,7 +103,7 @@ class flowplayer3 {
 	 * Print the JS configuration of flowplayer
 	 *
 	 * @param string $moviepath the direct path of a movie (within the slideshow), if empty (within albums) the zenphoto function getUnprotectedImageURL() is used
-	 * @param string $imagetitle the title of the movie [not used by flowplayer]
+	 * @param string $imagetitle the title of the movie
 	 * 	 */
 	function getPlayerConfig($moviepath='', $imagetitle,$count='') {
 		global $_zp_current_image;
@@ -217,7 +217,7 @@ class flowplayer3 {
 				$playerconfigadd = 'playlist: [ 
 				{
 					url:"'.$videoThumb.'",
-					scaling: "'.getOption('flow_player3_splashimagescale').'"
+					scaling: "'.getOption('flow_player3_splashimagescale').'",
 				},
 				{
 					url:"' . $moviepath . '",

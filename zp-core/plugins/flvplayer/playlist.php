@@ -35,7 +35,7 @@ foreach($playlist as $item) {
 		if($ext == ".flv" OR $ext == ".mp4") {
 			echo "\t\t<location>../../..".ALBUMFOLDER."/".$album->name."/".$item."</location>\n";
 		} else {
-			echo "\t\t<location>../".ALBUMFOLDER."/".$album->name."/".$item."</location>\n";
+			echo "\t\t<location>../../".ALBUMFOLDER."/".$album->name."/".$item."</location>\n";
 		}
 		echo "\t\t<image>".$videoThumb."</image>\n";
 		echo "\t\t<info>..".ALBUMFOLDER."/".$item."</info>\n";
