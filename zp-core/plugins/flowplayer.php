@@ -164,7 +164,7 @@ class flowplayer {
 	 * @return string;
 	 */
 	function is_valid($image) {
-		$valid_types = array('flv','mp3','mp4');
+		$valid_types = array('jpg','jpeg','gif','png','mov','3gp','flv','mp3','mp4');
 		if (is_object($image)) $image = $image->filename;
 		$ext = strtolower(substr(strrchr($image, "."), 1));
 		if (in_array($ext, $valid_types)) {
