@@ -186,7 +186,7 @@ function printAdminFooter($addl='') {
 	?>
 	 | <a href="http://www.zenphoto.org/support/" title="<?php echo gettext('Forum'); ?>">Forum</a> 
 	 | <a href="http://www.zenphoto.org/trac/" title="Trac">Trac</a> 
-	 | <a href="<? echo WEBPATH."/".ZENFOLDER; ?>/changelog.html" title="<?echo gettext('View Changelog'); ?>">Changelog</a>
+	 | <a href="<?php echo WEBPATH."/".ZENFOLDER; ?>/changelog.html" title="<?php echo gettext('View Changelog'); ?>">Changelog</a>
 	 <br />
 	<?php	printf(gettext('Server date: %s'),date('Y-m-d H:i:s')); 	?>
 	</div>
@@ -223,8 +223,6 @@ function printAdminHeader($path='') {
 	echo "\n  \t\t $('.tooltip').tooltip();";
 	echo "\n  \t});";
 	echo "\n  </script>";
-	?>
-	<?php
 	if (file_exists(dirname(__FILE__).'/js/editor_config.js.php')) require_once(dirname(__FILE__).'/js/editor_config.js.php');	
 }
 
