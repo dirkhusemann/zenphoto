@@ -48,7 +48,6 @@ function addPage() {
 	$date = sanitize($_POST['date']);
 	$expiredate = sanitize($_POST['expiredate']);
 	$commentson = getCheckboxState('commentson');
-	$parentid = "";
 	$permalink = getCheckboxState('permalink');
 	$codeblock1 = $_POST['codeblock1'];
 	$codeblock2 = $_POST['codeblock2'];
@@ -57,11 +56,11 @@ function addPage() {
 	$codeblock = base64_encode(serialize($codeblock));
 	$locked = getCheckboxState('locked');
 
-	if(empty($title) OR empty($titlelink)) {
+	if(empty($titlelink)) {
 		$titlelink = seoFriendlyURL($date);
 	}
-	if (query("INSERT INTO ".prefix('zenpage_pages')." (title, content, extracontent, `show`, `titlelink`, parentid, codeblock, author, `date`, commentson, permalink, locked, expiredate) VALUES ('$title', '$content', '$extracontent', '$show', '$titlelink', '$parentid', '$codeblock', '$author', '$date', '$commentson','$permalink','$locked','$expiredate')",true)) {
-		if(empty($title) OR empty($titlelink)) {
+	if (query("INSERT INTO ".prefix('zenpage_pages')." (title, content, extracontent, `show`, `titlelink`, parentid, codeblock, author, `date`, commentson, permalink, locked, expiredate) VALUES ('$title', '$content', '$extracontent', '$show', '$titlelink', NULL, '$codeblock', '$author', '$date', '$commentson','$permalink','$locked','$expiredate')",true)) {
+		if(empty($title)) {
 			echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink))."</p>";
 		} else {
 			echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added"),$titlelink)."</p>";
@@ -176,19 +175,7 @@ function updatePageSortorder() {
 			$sortarraycount = count($sortlevelex);
 			foreach($sortlevelex as $sortex) {
 				$count2++;
-				$countchar = strlen($sortex);
-				//echo "countchar".$countchar." / ";
-				switch($countchar) {
-					case 1:
-						$sort = "00".$sortex;
-						break;
-					case 2:
-						$sort = "0".$sortex;
-						break;
-					case 3:
-						$sort = $sortex;
-						break;
-				}
+				$sort = sprintf('%03u', $sortex);
 				if($count2 === $sortarraycount) {
 					$dash = "";
 				} else {
@@ -196,9 +183,9 @@ function updatePageSortorder() {
 				}
 				$sortlevelnew[$count] .= $sort.$dash;
 			}
-			//echo $count.". ".$sortlevelnew[$count]."<br />"; //debugging
 			$sortlevel[$count] = $sortlevelnew[$count];
 		} 	
+		//echo "<br/>";print_r($sortlevelnew); //debugging
 		
 		// update loop
 		for($nr = 1; $nr <= $count; $nr++) {
@@ -226,8 +213,9 @@ function updatePageSortorder() {
 				} 
 			}
 				// replace with db update query
-				//echo "ID: ".$id[$nr]." /  Sortorder: ".$sortlevel[$nr]." / ParentID: ".$parentid."<br />"; // for debugging
-				query("UPDATE " . prefix('zenpage_pages') . " SET `sort_order` = '".$sortlevel[$nr]."', `parentid`= ".$parentid." WHERE `id`=" . $id[$nr]);
+				$sql = "UPDATE " . prefix('zenpage_pages') . " SET `sort_order` = '".$sortlevel[$nr]."', `parentid`= ".$parentid." WHERE `id`=" . $id[$nr];
+				//echo "<br/>$sql"; // debugging
+				query($sql);
 			}
 		
 	} // if empty end
@@ -320,7 +308,8 @@ function printPagesList($pages) {
 	foreach($pages as $page) { 
 		$pageobj = new ZenpagePage($page['titlelink']);
 		$count = 0;
-	 	if($pageobj->getParentId() === NULL OR $pageobj->getParentID() === "0") {
+		$parent = $pageobj->getParentId();
+	 	if(empty($parent)) {
 	 		$count++;
 			echo "<li id=\"".$pageobj->getID()."\" class=\"clear-element page-item1 left\">";
 			printPagesListTable($pageobj);

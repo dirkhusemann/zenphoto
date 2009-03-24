@@ -1507,6 +1507,8 @@ if (file_exists("zp-config.php")) {
 	//zenpage expiration date
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `expiredate` datetime default NULL';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `expiredate` datetime default NULL';
+	//fix up parent id that are zero
+	$sql_statements[] = 'UPDATE '.$tbl_zenpage_pages.' SET `parentid`=NULL WHERE `parentid`=0';
 	
 	/**************************************************************************************
 	 ******                            END of UPGRADE SECTION     

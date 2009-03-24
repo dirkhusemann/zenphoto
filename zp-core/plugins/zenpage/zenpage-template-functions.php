@@ -2216,7 +2216,8 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 	foreach($pages as $page) {
 		$count = 0;
 		$pageobj = new ZenpagePage($page['titlelink']);
-		if($pageobj->getParentID() == NULL OR $pageobj->getParentID() == "0") {
+		$parent = $pageobj->getParentID();
+		if (empty($parent)) {
 			$count++;
 			if($option === "list" OR $option === "list-top") {
 				createPageMenuLink($pageobj,$css_class_topactive);
