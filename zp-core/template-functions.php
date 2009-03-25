@@ -4230,21 +4230,42 @@ function printPasswordForm($hint, $showProtected=true, $showuser=NULL) {
 	if ($showProtected && !$_zp_login_error) {
 		echo "\n<p>".gettext("The page you are trying to view is password protected.")."</p>";
 	}
-	echo "\n<br/>";
-	echo "\n  <form name=\"password\" action=\"?userlog=1$action\" method=\"POST\">";
-	echo "\n    <input type=\"hidden\" name=\"password\" value=\"1\" />";
+	?>
 
-	echo "\n    <table>";
-	if ($showuser) {
-		echo "\n      <tr><td style=\"text-align:right\">".gettext("Login")." </td><td style=\"text-align:left;\"><input type=\"text\" size=\"38\" name=\"user\" /></td></tr>";
-	}
-	echo "\n      <tr><td style=\"text-align:right\">".gettext("Password")." </td><td style=\"text-align:left;\"><input type=\"password\" size=\"40\" name=\"pass\" /></td></tr>";
-	echo "\n      <tr><td></td><td style=\"text-align:left\" ><input class=\"button\" type=\"submit\" value=\"".gettext("Submit")."\" /></td></tr>";
-	if (!empty($hint)) {
-		echo "\n      <tr><td style=\"text-align:left\">".sprintf(gettext("Hint: %s"), $hint) . "</td></tr>";
-	}
-	echo "\n    </table>";
-	echo "\n  </form>";
+	<form name="password" action=?userlog=1<?php echo $action; ?> method="POST">
+		<input type="hidden" name="password" value="1" />
+	
+		<table class="password">
+		<?php 
+			if ($showuser) {
+				?>
+				<tr>
+				<td class="userlabel"><?php echo gettext("Login"); ?></td>
+				<td class="userinput"><input type="text" name="user" /></td>
+				</tr>
+				<?php
+			}
+			?>
+			<tr>
+			<td class="passwordlabel"><?php echo gettext("Password"); ?></td>
+			<td class="passwordinput"><input type="password" name="pass" /></td>
+			</tr>
+			<tr>
+			<td></td>
+			<td class="submit" ><input class="button" type="submit" value="<?php echo gettext("Submit"); ?>" /></td>
+			</tr>
+			<?php 
+			if (!empty($hint)) {
+				?>
+				<tr>
+				<td class="hint" colspan="2"><?php sprintf(gettext("Hint: %s"), $hint); ?></td>
+				</tr>
+				<?php
+			}
+			?>
+		</table>
+	</form>
+	<?php
 	$registerpage = getOption('user_registration_page');
 	if (!empty($registerpage) && file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.internalToFIlesystem($registerpage).'.php')) {
 		if (getOption('mod_rewrite')) {

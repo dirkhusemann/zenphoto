@@ -64,11 +64,11 @@ if(isset($_GET['hitcounter'])) {
  </tr>
  <tr><td colspan="1" style="padding: 0;">
 	<ul id="left-to-right" class="page-list">
-<?php
-$pages = getPages(false,false);
-printPagesList($pages);
-?>
-</ul>
+	<?php
+	$pages = getPages(false);
+	printPagesList($pages);
+	?>
+	</ul>
  </td></tr>
  </table>
 

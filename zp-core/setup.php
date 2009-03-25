@@ -1333,7 +1333,7 @@ if (file_exists("zp-config.php")) {
 		`title` text,
 		`content` text,
 		`extracontent` text,
-		`sort_order`varchar(20) NOT NULL default '',
+		`sort_order`varchar(50) NOT NULL default '',
 		`show` int(1) unsigned NOT NULL default '1',
 		`titlelink` varchar(255) NOT NULL default '',
 		`commentson` int(11) unsigned NOT NULL,
@@ -1504,11 +1504,10 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news_categories.' CHANGE `cat_name` `cat_name` TEXT;';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' CHANGE `title` `title` TEXT;';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_comments.' ADD COLUMN `custom_data` TEXT;';
-	//zenpage expiration date
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `expiredate` datetime default NULL';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `expiredate` datetime default NULL';
-	//fix up parent id that are zero
 	$sql_statements[] = 'UPDATE '.$tbl_zenpage_pages.' SET `parentid`=NULL WHERE `parentid`=0';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' CHANGE `sort_order` `sort_order` VARCHAR(50) NOT NULL default ""';
 	
 	/**************************************************************************************
 	 ******                            END of UPGRADE SECTION     

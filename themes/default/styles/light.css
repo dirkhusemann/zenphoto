@@ -528,3 +528,32 @@ ul.archive .month {
 #image .flowplayer {
 	margin: 0 auto;
 }
+
+/* login form */
+table.password td.userlabel{
+	text-align:right;
+}
+table.password td.userinput{
+	text-align:left;
+}
+
+table.password td.userinput input, td.passwordinput input {
+	width: 15em;
+}
+
+/* login form */
+table.password td.passwordlabel{
+	text-align:right;
+}
+
+table.password td.passwordinput{
+	text-align:left;
+}
+
+table.password td.submit{
+	text-align:center;
+}
+
+table.password td.hint{
+	text-align:left;
+}
