@@ -2206,222 +2206,133 @@ function printParentPagesBreadcrumb($before='', $after='') {
  * @return string
  */
 function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_class='',$css_class_active='',$indexname='') {
-	global $_zp_loggedin, $_zp_gallery_page;
-
+	global $_zp_loggedin, $_zp_gallery_page, $_zp_current_zenpage_page;
 	if ($css_id != "") { $css_id = " id='".$css_id."'"; }
 	if ($css_class_topactive != "") { $css_class_topactive = " class='".$css_class_topactive."'"; }
 	if ($css_class != "") { $css_class = " class='".$css_class."'"; }
 	if ($css_class_active != "") { $css_class_active = " class='".$css_class_active."'"; }
-	
+
 	if(($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS | VIEWALL_RIGHTS))) {
 		$published = FALSE;
 	} else {
 		$published = TRUE;
 	}
 	$pages = getPages($published);
-	$currentpageorder = getPageSortorder();
-	$currentlevel = explode("-", $currentpageorder);
-	if($option === "list" OR $option === "list-top") { 
+	$listtop = $option == "list" || $option == "list-top";
+	if($listtop) {
 		echo "<ul $css_id>\n";
 	}
 	if(!empty($indexname)) {
-		if($_zp_gallery_page === "index.php") {
+		if($_zp_gallery_page == "index.php") {
 			echo "<li $css_class_topactive>".$indexname."</li>";
 		} else {
 			echo "<li><a href='".htmlspecialchars(getGalleryIndexURL())."' title='".html_encode($indexname)."'>".$indexname."</a></li>";
 		}
 	}
-	foreach($pages as $page) {
-		$count = 0;
+	$baseindent = max(1,count(explode("-", getPageSortorder())));
+	$indent = 1;
+	$open = array($indent=>0);
+	$parents = array(NULL);
+	$pageid = getPageID();
+	$parents = array(NULL);
+	$mylevel = count(explode('-', getPageSortorder()));
+	
+	foreach ($pages as $page) {
 		$pageobj = new ZenpagePage($page['titlelink']);
-		$parent = $pageobj->getParentID();
-		if (empty($parent)) {
-			$count++;
-			if($option === "list" OR $option === "list-top") {
-				createPageMenuLink($pageobj,$css_class_topactive);
-			}
-			if($option === "list" OR $option === "list-sub") {
-					
-				// sublevel 1 start
-				$subcount1 = 0;
-				foreach($pages as $sub1) {
-					$sub1pageobj = new ZenpagePage($sub1['titlelink']);
-					if(checkPageDisplayLevel($sub1pageobj,$pageobj,$currentpageorder,$currentlevel,1)) {
-						$subcount1++;
-						if($subcount1 === 1) {
-							echo "\n<ul $css_class>\n";
-						}
-						createPageMenuLink($sub1pageobj,$css_class_active);
-
-						// sublevel 2 start
-						$subcount2 = 0;
-						foreach($pages as $sub2) {
-							$sub2pageobj = new ZenpagePage($sub2['titlelink']);
-							if(checkPageDisplayLevel($sub2pageobj,$sub1pageobj,$currentpageorder,$currentlevel,2)) {
-								$subcount2++;
-								if($subcount2 === 1) {
-									echo "\n<ul $css_class>\n";
-								}
-								createPageMenuLink($sub2pageobj,$css_class_active);
-
-								// sublevel 3 start
-								$subcount3 = 0;
-								foreach($pages as $sub3) {
-									$sub3pageobj = new ZenpagePage($sub3['titlelink']);
-									if(checkPageDisplayLevel($sub3pageobj,$sub2pageobj,$currentpageorder,$currentlevel,3)) {
-										$subcount3++;
-										if($subcount3 === 1) {
-											echo "\n<ul $css_class>\n";
-										}
-										createPageMenuLink($sub3pageobj,$css_class_active);
-
-										// sublevel 4 start
-										$subcount4 = 0;
-										foreach($pages as $sub4) {
-											$sub4pageobj = new ZenpagePage($sub4['titlelink']);
-											if(checkPageDisplayLevel($sub4pageobj,$sub3pageobj,$currentpageorder,$currentlevel,4)) {
-												$subcount4++;
-												if($subcount4 === 1) {
-													echo "\n<ul $css_class>\n";
-												}
-												createPageMenuLink($sub4pageobj,$css_class_active);
-												if($subcount4 >= 1) {
-													echo "</li>\n"; // sublevel 4 li end
-												}
-											}
-										}
-										if($subcount4 >= 1) { // sublevel 4 end
-											echo "</ul>\n";
-										}
-										if($subcount3 >= 1) {
-											echo "</li>\n"; // sublevel 3 li end
-										}
-									}
-								}
-								if($subcount3 >= 1) { // sublevel 3 end
-									echo "</ul>\n";
-								}
-								if($subcount2 >= 1) {
-									echo "</li>\n"; // sublevel 2 li end
-								}
-							}
-						}
-						if($subcount2 >= 1) { // sublevel 2 end
-							echo "</ul>\n";
-						}
-						if($subcount1 >= 1) {
-							echo "</li>\n"; // sublevel 1 li end
-						}
+		$level = max(1,count(explode('-', $pageobj->getSortOrder())));
+		if ($process = $listtop && $level==1 || 
+						($option == "list-sub" && $level>1 && $level <= $baseindent+1) || 
+						($option == "list" && (
+							($pageobj->getID() == $pageid) // current page
+							|| ($pageobj->getParentID()==$pageid) // offspring of current page
+							|| ($level<=$mylevel && $pageobj->getParentID()==$parents[$level-1]) // offspring of andicedent page
+							|| (isAncestor($pageobj, $_zp_current_zenpage_page))))
+				) {
+			if ($level > $indent) {
+				echo "\n".str_pad("\t",$indent,"\t")."<ul $css_class>\n";
+				$indent++;
+				$parents[$indent] = NULL;
+				$open[$indent] = 0;
+			} else if ($level < $indent) {
+				$parents[$indent] = NULL;
+				while ($indent > $level) {
+					if ($open[$indent]) {
+						$open[$indent]--;
+						echo "</li>\n";
 					}
+					$indent--;
+					echo str_pad("\t",$indent,"\t")."</ul>\n";
 				}
-				if($subcount1 >= 1 AND $option != "list-sub") { // sublevel 1 end
-					echo "</ul>\n";
+			} else { // level == indent, have not changed
+				if ($open[$indent]) { // level = indent
+					echo str_pad("\t",$indent,"\t")."</li>\n";
+					$open[$indent]--;
+				} else {
+					echo "\n";
 				}
 			}
-		} // if end for "list" or "list-sub" if
-		if($count === 1 AND $option != "list-sub") {
-			echo "</li>\n"; // top level li end
+	
+			if ($open[$indent]) { // close an open LI if it exists
+				echo "</li>\n";
+				$open[$indent]--;
+			}
+			
+			echo str_pad("\t",$indent-1,"\t");
+			$open[$indent]++;
+			$parents[$indent] = $pageobj->getID();
+			if($level == 1) { // top level
+				$class = $css_class_topactive;
+			} else {
+				$class = $css_class_active;
+			}
+			if(!is_null($_zp_current_zenpage_page)) {
+				$gettitle = $_zp_current_zenpage_page->getTitlelink(); 
+			} else {
+				$gettitle = "";
+			}
+			if ($pageobj->getTitlelink() == $gettitle) {
+				echo "<li $class>".$pageobj->getTitle(); 
+			} else {
+				echo "<li><a href=\"".getPageLinkURL($pageobj->getTitlelink())."\" title=\"".strip_tags($pageobj->getTitle())."\">".$pageobj->getTitle()."</a>";
+			}
+			
 		}
-	} // foreach end
-	echo "</ul>\n";
+	}
+	// cleanup any hanging list elements
+	while ($indent > 1) {
+		if ($open[$indent]) {
+			echo "</li>\n";
+			$open[$indent]--;
+		}
+		$indent--;
+		echo str_pad("\t",$indent,"\t")."</ul>";
+	}
+	if ($open[$indent]) {
+		echo "</li>\n";
+		$open[$indent]--;
+	} else {
+		echo "\n";
+	}
+
+	if($listtop) echo "</ul>\n";
 }
 
-
 /**
- * Helper function for printPageMenu() that checks the current page and level 
- * 
- * Not for standalone use.
- * 
- * @param string $page Array of the page in the list
- * @param string $parentpage Array of the parent page in the list
- * @param string $curentpageorder The current sort order of the page in the list
- * @param string $currentlevel The current level we are on
- * @param string $level The level the page is in (1-4)
- * @return string
+ * Checks to see if a page is an ancestor
+ *
+ * @param object $page
+ * @param object $child
+ * @return bool
  */
-function checkPageDisplayLevel($pageobj,$parentpageobj,$currentpageorder,$currentlevel,$level) {
-	$sortorder = $pageobj->getSortorder();
-	$sublevel = explode("-",$sortorder );
-	switch ($level) {
-		case 1: // the array_key_exists calls where added to preven PHP notices
-			if(array_key_exists('0',$sublevel) AND array_key_exists('0',$currentlevel)) {
-				$pageorder = $sublevel[0];
-				$currentlevelcheck = $currentlevel[0];
-			} else {
-				$pageorder = false;
-				$currentlevelcheck = false;
-			}
-			break;
-		case 2:
-			if(array_key_exists('0',$sublevel) AND array_key_exists('1',$sublevel)
-			AND array_key_exists('0',$currentlevel) AND array_key_exists('1',$currentlevel)) {
-				$pageorder = $sublevel[0]."-".$sublevel[1];
-				$currentlevelcheck = $currentlevel[0]."-".$currentlevel[1];
-			} else {
-				$pageorder = false;
-				$currentlevelcheck = false;
-			}
-			break;
-		case 3:
-			if(array_key_exists('0',$sublevel) AND array_key_exists('1',$sublevel) AND array_key_exists('2',$sublevel)
-			AND array_key_exists('0',$currentlevel) AND array_key_exists('1',$currentlevel) AND array_key_exists('2',$currentlevel)) {
-				$pageorder = $sublevel[0]."-".$sublevel[1]."-".$sublevel[2];
-				$currentlevelcheck = $currentlevel[0]."-".$currentlevel[1]."-".$currentlevel[2];
-			} else {
-				$pageorder = false;
-				$currentlevelcheck = false;
-			}
-			break;
-		case 4:
-			if(array_key_exists('0',$sublevel) AND array_key_exists('1',$sublevel) AND array_key_exists('2',$sublevel) AND array_key_exists('3',$sublevel)
-			AND array_key_exists('0',$currentlevel) AND array_key_exists('1',$currentlevel) AND array_key_exists('2',$currentlevel) AND array_key_exists('3',$currentlevel)) {
-				$pageorder = $sublevel[0]."-".$sublevel[1]."-".$sublevel[2]."-".$sublevel[3];
-				$currentlevelcheck = $currentlevel[0]."-".$currentlevel[1]."-".$currentlevel[2]."-".$currentlevel[3];
-			} else {
-				$pageorder = false;
-				$currentlevelcheck = false;
-			}
-			break;
+function isAncestor($page, $child) {
+	if (!is_object($child)) return false;
+	$parentid = $page->getID();
+	while ($parentid != ($parent = $child->getParentID())) {
+		if (empty($parent)) return false;
+		$row = query_single_row('SELECT `titlelink` FROM '.prefix('zenpage_pages').' WHERE `id`='.$parent);
+		$child = New ZenpagePage($row['titlelink']);
 	}
-	// if in parentalbum) OR (if in subalbum)
-	return 
-		($parentpageobj->getSortorder() === $pageorder
-		AND count($sublevel) === $level+1
-		AND $currentpageorder === $pageorder)
-		OR
-		(getPageID() != $parentpageobj->getID()
-		AND $parentpageobj->getID() === $pageobj->getParentID()
-		AND count($sublevel) === $level+1
-		AND $currentlevelcheck === $parentpageobj->getSortorder());
-}
-
-
-/**
- * Helper function for printPageMenu() that create the page entry for the list
- * 
- * Not for standalone use.
- * 
- * @param obj $pageobj Array of the page to create the link entry for
- * @param string $css_active class of the active item in the top level list (submitted by printPageMenu() as class='<class>')
- * @return string
- */
-function createPageMenuLink($pageobj, $css_active='') {
-	global $_zp_current_zenpage_page;
-	if(!empty($css_active)) {
-		$class = $css_active;
-	} else {
-		$class= "";
-	}
-	if(!is_null($_zp_current_zenpage_page)) {
-		$gettitle = $_zp_current_zenpage_page->getTitlelink(); 
-	} else {
-		$gettitle = "";
-	}
-	if ($pageobj->getTitlelink() == $gettitle) {
-		echo "<li $class>".$pageobj->getTitle(); 
-	} else {
-		echo "<li><a href=\"".getPageLinkURL($pageobj->getTitlelink())."\" title=\"".strip_tags($pageobj->getTitle())."\">".$pageobj->getTitle()."</a>";
-	}
+	return true;
 }
 
 /**

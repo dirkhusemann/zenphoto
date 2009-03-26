@@ -227,7 +227,7 @@ function printTinyPageNav($pagestotal="",$currentpage="") {
   * @return string
  	*/
 function printZenpageItems() {
-	$pages = getPages("");
+	$pages = getPages(false);
 	$pagenumber = count($pages);
 	$categories = getAllCategories();
 	$catcount = count($categories);
@@ -242,110 +242,66 @@ function printZenpageItems() {
   * @return string
  	*/
 function printAllPagesList() {
- global $host;
- if(isset($_GET['zenpage']) AND $_GET['zenpage'] == "pages") {
- echo "<h3 style='margin-bottom:10px;'>Zenpage: <em>".sanitize($_GET['zenpage'])."</em> <small>(Click on page title to include a link)</small></h3>";
- echo "<ul style='list-style-type: none; width: 85%;'>";
- $pages = getPages("");
-	foreach($pages as $page) { 
-		$pageobj = new ZenpagePage($page['titlelink']);
-		$count = 0;
-	 	if($pageobj->getParentid() === NULL OR $pageobj->getParentid() === "0") {
-	 		$count++;
-	 		if($pages[0]['titlelink'] === $pageobj->getTitlelink()) {
-	 			$firstitemcss = "border-top: 1px dotted gray; border-bottom: 1px dotted gray; padding: 5px 0px 5px 0px;";
-	 		} else {
-	 			$firstitemcss = "border-bottom: 1px dotted gray; padding: 5px 0px 5px 0px;";
-   		}
-			echo "<li style='".$firstitemcss."'>";
-			echo "<a href=\"javascript:ZenpageDialog.insert('".ZENPAGE_PAGES."/".$pageobj->getTitlelink()."','".$pageobj->getTitlelink()."','".urlencode($pageobj->getTitle())."','','pages');\" title='".truncate_string(strip_tags($pageobj->getContent()),300)."'>".$pageobj->getTitle().unpublishedZenpageItemCheck($pageobj)."</a>";
-		
-			// sublevel 1 start
-			$subcount1 = 0;
-			foreach($pages as $sub1) {
-				$sub1obj = new ZenpagePage($sub1['titlelink']);
-				if($sub1obj->getParentID() === $pageobj->getID()) {
-					$subcount1++;
-					if($subcount1 === 1) {
-						echo "<ul style='list-style-type: none; margin: 5px 0px 0px -20px;'>\n";
-					}
-					echo "<li style='border-top: 1px dotted darkgray; padding: 5px 0px 5px 0px'>";
-					echo "<a href=\"javascript:ZenpageDialog.insert('".ZENPAGE_PAGES."/".$sub1obj->getTitlelink()."','".$sub1obj->getTitlelink()."','".urlencode($sub1obj->getTitle())."','','pages');\" title='".truncate_string(strip_tags($sub1obj->getContent()),300)."'>".$sub1obj->getTitle().unpublishedZenpageItemCheck($sub1obj)."</a>";
+	global $host;
+	if(isset($_GET['zenpage']) AND $_GET['zenpage'] == "pages") {
+		echo "<h3 style='margin-bottom:10px;'>Zenpage: <em>".sanitize($_GET['zenpage'])."</em> <small>(Click on page title to include a link)</small></h3>";
+		echo "<ul style='list-style-type: none; width: 85%;'>";
+		$pages = getPages(false);
 
-					// sublevel 2 start
-					$subcount2 = 0;
-					foreach($pages as $sub2) {
-						$sub2obj = new ZenpagePage($sub2['titlelink']);
-						if($sub2obj->getParentID() === $sub1obj->getID()) {
-							$subcount2++;
-							if($subcount2 === 1) {
-								echo "<ul style='list-style-type: none; margin: 5px 0px 0px -20px;'>\n";
-							}
-							echo "<li id=\"".$sub2obj->getID()."\">";
-							echo "<a href=\"javascript:ZenpageDialog.insert('".ZENPAGE_PAGES."/".$sub2obj->getTitlelink()."','".$sub2obj->getTitlelink()."','".urlencode($sub2obj->getTitle())."','','pages');\" title='".truncate_string(strip_tags($sub2obj->getContent()),300)."'>".$sub2obj->getTitle().unpublishedZenpageItemCheck($sub2obj)."</a>";
-							
-						// sublevel 3 start
-						$subcount3 = 0;
-						foreach($pages as $sub3) {
-							$sub3obj = new ZenpagePage($sub3['titlelink']);
-							if($sub3obj->getParentID() === $sub2obj->getID()) {
-								$subcount3++;
-								if($subcount3 === 1) {
-									echo "<ul style='list-style-type: none; margin: 5px 0px 0px -20px;'>\n";
-								}
-								echo "<li style='border-top: 1px dotted darkgray; padding: 5px 0px 5px 0px'>";
-								echo "<a href=\"javascript:ZenpageDialog.insert('".ZENPAGE_PAGES."/".$sub3obj->getTitlelink()."','".$sub3obj->getTitlelink()."','".urlencode($sub3obj->getTitle())."','','pages');\" title='".truncate_string(strip_tags($sub3obj->getContent()),300)."'>".$sub3obj->getTitle().unpublishedZenpageItemCheck($sub3obj)."</a>";
-							
-								// sublevel 4 start
-								$subcount4 = 0;	
-								foreach($pages as $sub4) {
-									$sub4obj = new ZenpagePage($sub4['titlelink']);
-									if($sub4obj->getParentID() === $sub3obj->getID()) {
-										$subcount4++;
-										if($subcount4 === 1) {
-											echo "<ul style='list-style-type: none; margin: 5px 0px 0px -20px;'>\n";
-										}
-										echo "<li style='border-top: 1px dotted darkgray; padding: 5px 0px 5px 0px'>";
-										echo "<a href=\"javascript:ZenpageDialog.insert('".ZENPAGE_PAGES."/".$sub4obj->getTitlelink()."','".$sub4obj->getTitlelink()."','".urlencode($sub4obj->getTitle())."','','pages');\" title='".truncate_string(strip_tags($sub4obj->getContent()),300)."'>".$sub4obj->getTitle().unpublishedZenpageItemCheck($sub4obj)."</a>";
-										if($subcount4 >= 1) {
-											echo "</li>\n"; // sublevel 4 li end
-										}
-									}
-								}
-								if($subcount4 >= 1) { // sublevel 4 end
-									echo "</ul>\n";
-								}
-								if($subcount3 >= 1) {	
-									echo "</li>\n"; // sublevel 3 li end
-								}
-							}
-						}
-						if($subcount3 >= 1) { // sublevel 3 end
-							echo "</ul>\n";
-						}
-							if($subcount2 >= 1) {
-								echo "</li>\n"; // sublevel 2 li end
-							}
-						}
-					}
-					if($subcount2 >= 1) { // sublevel 2 end
-						echo "</ul>\n";
-					}
-					if($subcount1 >= 1) {
-						echo "</li>\n"; // sublevel 1 li end
-					}
+		$indent = 1;
+		$open = array(1=>0);
+		$topped = false;
+		foreach ($pages as $key=>$page) {
+			$itemcss = "padding: 5px 0px 5px 0px;";
+			$pageobj = new ZenpagePage($page['titlelink']);
+			$level = max(1,count(explode('-', $pageobj->getSortOrder())));
+			if ($level > $indent) {
+				$itemcss .= " border-top: 1px dotted gray;";
+				$topped = true;
+				echo "\n"."<ul style='list-style-type: none; margin: 5px 0px 0px -20px;'>\n";
+				$indent++;
+				$open[$indent] = 0;
+			} else if ($level < $indent) {
+				while ($indent > $level) {
+					$open[$indent]--;
+					$indent--;
+					echo "</li>\n"."</ul>\n";
+				}
+			} else {
+				if ($open[$indent]) {
+					echo "</li>\n";
+					$open[$indent]--;
+				} else {
+					echo "\n";
 				}
 			}
-			if($subcount1 >= 1) { // sublevel 1 end
-					echo "</ul>\n";
-			} 
+			if ($open[$indent]) {
+				echo "</li>\n";
+			}
+			if (!$topped) {
+				$itemcss .= ' border-top: 1px dotted gray; ';
+			}
+			if ($topped = !array_key_exists($key+1, $pages) || count(explode('-', $pages[$key+1]['sort_order'])) == $level) { // another at this level or at the absolute end
+				$itemcss .= " border-bottom: 1px dotted gray;";
+			}
+			echo "<li id='".$pageobj->getID()."' style='".$itemcss."'>";
+			echo "<a href=\"javascript:ZenpageDialog.insert('".ZENPAGE_PAGES."/".$pageobj->getTitlelink()."','".$pageobj->getTitlelink()."','".urlencode($pageobj->getTitle())."','','pages');\" title='".truncate_string(strip_tags($pageobj->getContent()),300)."'>".$pageobj->getTitle().unpublishedZenpageItemCheck($pageobj)."</a>";
+			$open[$indent]++;
 		}
-		if($count === 1) {
-			echo "</li>\n"; // top level li end
+		while ($indent > 1) {
+			echo "</li>\n";
+			$open[$indent]--;
+			$indent--;
+			echo "</ul>";
 		}
-	} // foreach end
-echo "</ul>";
-} // if end
+		if ($open[$indent]) {
+			echo "</li>\n";
+		} else {
+			echo "\n";
+		}
+	
+	echo "</ul>";
+	} // if end
 }
 
 

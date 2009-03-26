@@ -167,22 +167,15 @@ function updatePageSortorder() {
 			$replace = array("left-to-right[" => "", "][id]=$id[$count]" => "", "][children][" => "-");
 			$sortlevel[$count] = strtr($order,$replace);
 			
-			//TODO confirm page sortorder sticks
 			$sortlevelex = explode("-",$sortlevel[$count]);
 			//echo "<pre>";print_r($sortlevelex); echo "</pre>";
 			$sortlevelnew[$count] = "";
-			$count2 = 0;
 			$sortarraycount = count($sortlevelex);
 			foreach($sortlevelex as $sortex) {
-				$count2++;
 				$sort = sprintf('%03u', $sortex);
-				if($count2 === $sortarraycount) {
-					$dash = "";
-				} else {
-					$dash = "-";
-				}
-				$sortlevelnew[$count] .= $sort.$dash;
+				$sortlevelnew[$count] .= $sort.'-';
 			}
+			$sortlevelnew[$count] = substr($sortlevelnew[$count], 0, -1);
 			$sortlevel[$count] = $sortlevelnew[$count];
 		} 	
 		//echo "<br/>";print_r($sortlevelnew); //debugging
@@ -199,10 +192,12 @@ function updatePageSortorder() {
 				
 				// nasty check if too many sub levels, since the sortables do not have a sub level limit option yet.
 				$leveldepth = substr_count($sortlevel[$nr],"-");
-				if($leveldepth > 4) {
+//TODO: Change the error message after 1.2.4 is out. 
+				if($leveldepth > 10) {
 					echo "<p class='errorbox' id='fade-message'>".gettext("You have more than the maximum supported 4 sub levels! Please try sorting differently.")."</p>";
 					break;
 				}
+
 				//get parent id
 				$test = strrpos($sortlevel[$nr],"-");
 				$parent = substr($sortlevel[$nr],0,$test);
@@ -305,99 +300,48 @@ function printPagesListTable($page) {
  * @param array $pages The array containing all pages
  */
 function printPagesList($pages) {
-	foreach($pages as $page) { 
+	$indent = 1;
+	$open = array(1=>0);
+	foreach ($pages as $page) {
 		$pageobj = new ZenpagePage($page['titlelink']);
-		$count = 0;
-		$parent = $pageobj->getParentId();
-	 	if(empty($parent)) {
-	 		$count++;
-			echo "<li id=\"".$pageobj->getID()."\" class=\"clear-element page-item1 left\">";
-			printPagesListTable($pageobj);
-			
-			// sublevel 1 start
-			$subcount1 = 0;
-			foreach($pages as $sub1) {
-				$sub1obj = new ZenpagePage($sub1['titlelink']);
-				if($sub1obj->getParentID() === $pageobj->getID()) {
-					$subcount1++;
-					if($subcount1 === 1) {
-						echo "<ul class=\"page-list\">\n";
-					}
-					echo "<li id=\"".$sub1obj->getID()."\" class=\"clear-element page-item1 left\">";
-					printPagesListTable($sub1obj);
-					
-					// sublevel 2 start
-					$subcount2 = 0;
-					foreach($pages as $sub2) {
-						$sub2obj = new ZenpagePage($sub2['titlelink']);
-						if($sub2obj->getParentID() === $sub1obj->getID()) {
-							$subcount2++;
-							if($subcount2 === 1) {
-								echo "<ul class=\"page-list\">\n";
-							}
-							echo "<li id=\"".$sub2obj->getID()."\" class=\"clear-element page-item1 left\">";
-							printPagesListTable($sub2obj);
-							
-						// sublevel 3 start
-						$subcount3 = 0;
-						foreach($pages as $sub3) {
-							$sub3obj = new ZenpagePage($sub3['titlelink']);
-							if($sub3obj->getParentID() === $sub2obj->getID()) {
-								$subcount3++;
-								if($subcount3 === 1) {
-									echo "<ul class=\"page-list\">\n";
-								}
-								echo "<li id=\"".$sub3obj->getID()."\" class=\"clear-element page-item1 left\">";
-								printPagesListTable($sub3obj);
-							
-								// sublevel 4 start
-								$subcount4 = 0;	
-								foreach($pages as $sub4) {
-									$sub4obj = new ZenpagePage($sub4['titlelink']);
-									if($sub4obj->getParentID() === $sub3obj->getID()) {
-										$subcount4++;
-										if($subcount4 === 1) {
-											echo "<ul class=\"page-list\">\n";
-										}
-										echo "<li id=\"".$sub4obj->getID()."\" class=\"clear-element page-item1 left\">";
-										printPagesListTable($sub4obj);	
-										if($subcount4 >= 1) {
-											echo "</li>\n"; // sublevel 4 li end
-										}
-									}
-								}
-								if($subcount4 >= 1) { // sublevel 4 end
-									echo "</ul>\n";
-								}
-								if($subcount3 >= 1) {	
-									echo "</li>\n"; // sublevel 3 li end
-								}
-							}
-						}
-						if($subcount3 >= 1) { // sublevel 3 end
-							echo "</ul>\n";
-						}
-							if($subcount2 >= 1) {
-								echo "</li>\n"; // sublevel 2 li end
-							}
-						}
-					}
-					if($subcount2 >= 1) { // sublevel 2 end
-						echo "</ul>\n";
-					}
-					if($subcount1 >= 1) {
-						echo "</li>\n"; // sublevel 1 li end
-					}
+		$level = max(1,count(explode('-', $pageobj->getSortOrder())));
+		if ($level > $indent) {
+			echo "\n".str_pad("\t",$indent,"\t")."<ul class=\"page-list\">\n";
+			$indent++;
+			$open[$indent] = 0;
+		} else if ($level < $indent) {
+				while ($indent > $level) {
+					$open[$indent]--;
+					$indent--;
+					echo "</li>\n".str_pad("\t",$indent,"\t")."</ul>\n";
 				}
+		} else { // indent == level
+			if ($open[$indent]) {
+				echo str_pad("\t",$indent,"\t")."</li>\n";
+				$open[$indent]--;
+			} else {
+				echo "\n";
 			}
-			if($subcount1 >= 1) { // sublevel 1 end
-					echo "</ul>\n";
-			} 
 		}
-		if($count === 1) {
-			echo "</li>\n"; // top level li end
-		}
-	} // foreach end
+		if ($open[$indent]) {
+			echo str_pad("\t",$indent,"\t")."</li>\n";
+			$open[$indent]--;
+		} 
+		echo str_pad("\t",$indent-1,"\t")."<li id=\"".$pageobj->getID()."\" class=\"clear-element page-item1 left\">";
+		echo printPagesListTable($pageobj);
+		$open[$indent]++;
+	}
+	while ($indent > 1) {
+		echo "</li>\n"; 
+		$open[$indent]--;
+		$indent--;
+		echo str_pad("\t",$indent,"\t")."</ul>";
+	}
+	if ($open[$indent]) {
+		echo "</li>\n"; 
+	} else {
+		echo "\n";
+	}
 }
 
 
