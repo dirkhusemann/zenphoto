@@ -57,8 +57,8 @@ printAdminHeader();
 
 <script type="text/javascript">
 jQuery(document).ready(function(){
-	jQuery('li.zp_copy_theme p.buttons').each(function(){
-		var source = jQuery('li.zp_copy_theme p.buttons a').attr('alt');
+	jQuery('li.zp_copy_theme p.buttons a').each(function(){
+		var source = jQuery(this).attr('title');
 		jQuery(this).click(function(){
 			var targetname = prompt('<?php echo gettext('New theme name? (eg. "My Theme")'); ?>', '<?php echo gettext('My Theme'); ?>');
 			if (targetname) {
@@ -237,7 +237,7 @@ foreach($themes as $theme => $themeinfo):
 			?>
 			<li class="zp_copy_theme">
 			<p class="buttons">
-			<a href="?" title='<?php printf('Make a copy of the "%s" theme.', $theme); ?>' alt='<?php echo $theme; ?>' >
+			<a href="?" title="<?php echo $theme; ?>">
 			<img src="images/page_white_copy.png" alt="" /><?php echo gettext("Duplicate"); ?></a>
 			</p>	
 		  </li>
