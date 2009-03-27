@@ -933,8 +933,8 @@ background-position: 1px 0px;
 text-decoration:none;
 }
 .menu ul li.menu-active {
-	color: #002E5B;
-background-image: none;
+color: #002E5B;
+background-image: url(../images/dark-bullet.png);
 }
 .submenu {
 list-style: none;
