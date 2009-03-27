@@ -1762,7 +1762,9 @@ if ($subtab == 'admin') {
 						foreach($filelist as $file) {
 							$list[] = str_replace('.php', '', filesystemToInternal($file));
 						}
-						$list = array_diff($list, array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions', ZENPAGE_NEWS, ZENPAGE_PAGES));
+						$standardlist = array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions');
+						if (getOption('zp_plugin_zenpage')) $standardlist = array_merge($standardlist, array(ZENPAGE_NEWS, ZENPAGE_PAGES));
+						$list = array_diff($list, $standardlist);
 						generateListFromArray(array(getThemeOption($album, 'custom_index_page')), $list, false, false);
 						chdir($curdir);
 						?>
@@ -1788,7 +1790,9 @@ if ($subtab == 'admin') {
 									foreach($filelist as $file) {
 										$list[] = str_replace('.php', '', filesystemToInternal($file));
 									}
-									$list = array_diff($list, array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions', ZENPAGE_NEWS, ZENPAGE_PAGES));
+									$standardlist = array('themeoptions', 'theme_description', '404', 'slideshow', 'search', 'image', 'index', 'album', 'customfunctions');
+									if (getOption('zp_plugin_zenpage')) $standardlist = array_merge($standardlist, array(ZENPAGE_NEWS, ZENPAGE_PAGES));
+									$list = array_diff($list, $standardlist);
 									generateListFromArray(array(getThemeOption($album, 'user_registration_page')), $list, false, false);
 									chdir($curdir);
 									?>
