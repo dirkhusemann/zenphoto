@@ -52,9 +52,16 @@ function processExpired($table) {
 	 * @param bool $published TRUE for published or FALSE for all pages including unpublished
 	 * @return array
 	 */
-	function getPages($published=true) {
+	function getPages($published=NULL) {
 		global $_zp_zenpage_all_pages;
 		processExpired('zenpage_pages');
+		if (is_null($published)) {
+			if(zp_loggedin(ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
+				$published = FALSE;
+			} else {
+				$published = TRUE;
+			}
+		}
 		if($published) {
 			$show = " WHERE `show` = 1 AND date <= '".date('Y-m-d H:i:s')."'";
 		} else {
@@ -441,47 +448,36 @@ function getParentPages(&$parentid,$initparents=true) {
 	 *
 	 * @return int
 	 */
-	function countCombiNews($published='') {
-		global $_zp_loggedin;
-		if($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
-			$published = "all";
-		} else {
-			$published = "published";
-		}
-		if($published === "published") {
-			$newsshow = " WHERE `show` = 1 AND date <= '".date('Y-m-d H:i:s')."'";
-			$imagesshow = " AND images.show = 1 ";
-		} else {
-			$newsshow = "";
-			$imagesshow = "";
-		}
-		$result = query("SELECT Count(*) FROM ".prefix('zenpage_news')." $newsshow");
-		$row = mysql_fetch_row($result);
-		$count1 = $row[0];
-		$passwordcheck = "";
-		if ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
-			$albumWhere = "";
-			$passwordcheck = "";			
-		} else {
-			$albumscheck = query_full_array("SELECT * FROM " . prefix('albums'). " ORDER BY title");
-			foreach($albumscheck as $albumcheck) {
-				if(!checkAlbumPassword($albumcheck['folder'], $hint)) {
-					$albumpasswordcheck= " AND albums.id != ".$albumcheck['id'];
-					$passwordcheck = $passwordcheck.$albumpasswordcheck;
+	function countCombiNews($published=NULL) {
+		global $_zp_loggedin,$_zp_gallery;
+		if(getOption("zenpage_combinews")) {
+			$countArticles = countArticles();
+			if(is_null($published)) {
+				if(zp_loggedin(ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
+					$published = FALSE;
+				} else {
+					$published = TRUE;
 				}
 			}
-			$albumWhere = "AND albums.show=1".$passwordcheck;
+			if(is_object($_zp_gallery)) { // workaround if called on the admin pages....
+				switch(getOption("zenpage_combinews_mode")) {
+					case "latestimages-sizedimage":
+					case "latestimages-thumbnail":
+						$countGalleryitems = $_zp_gallery->getNumImages($published);
+						break;
+					case "latestalbums-sizedimage":
+					case "latestalbums-thumbnail":
+						$countGalleryitems = $_zp_gallery->getNumAlbums(true,$published);
+						break;
+				}
+			} else {
+				$countGalleryitems = 0;
+			}
+			$totalcount = $countArticles+$countGalleryitems;
+			return $totalcount;
 		}
-		$result2 = query_full_array("SELECT images.id FROM ".prefix('images')." AS images, ".prefix('albums')." AS albums
-		WHERE albums.id = images.albumid ".$imagesshow.$albumWhere);
-		$count2 = 0;
-		foreach($result2 as $counter2) {
-			$count2++;
-		}
-		$totalcount = $count1+$count2;
-		return $totalcount;
 	}
-	
+
 	/************************************/
 	/* general news category functions  */
 	/************************************/

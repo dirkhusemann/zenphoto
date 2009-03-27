@@ -1026,21 +1026,12 @@ function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id=''
 		} 
 		if($counter) {
 			if(getOption("zenpage_combinews")) {
-				switch(getOption("zenpage_combinews_mode")) {
-					case "latestimages-sizedimage":
-					case "latestimages-thumbnail":
-						$galleryitemcount = $_zp_gallery->getNumImages(false,$pub);
-						break;
-					case "latestalbums-sizedimage":
-					case "latestalbums-thumbnail":
-						$galleryitemcount = $_zp_gallery->getNumAlbums($pub);
-						break;
-				}
+				$totalcount = countCombiNews($pub);
 			} else {
-				$galleryitemcount = 0;
+				$totalcount = countArticles("",$pub);
 			}
-			$articlecount = countArticles("",$published);
-			$totalcount = $articlecount+$galleryitemcount;
+			//$articlecount = countArticles("",$published);
+			//$totalcount = $articlecount+$galleryitemcount;
 			echo " (".$totalcount.")";
 		}
 		echo "</li>\n";
