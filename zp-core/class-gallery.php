@@ -225,6 +225,9 @@ class Gallery {
 							$themes[$dir8] = sanitize($theme_description, 1);
 						} else if (file_exists($themedir . "/$dir/theme.txt")) {
 							$themes[$dir8] = parseThemeDef($themedir . "/$dir/theme.txt");
+						} else {
+							//TODO: after 1.2.4 is released put some real text in these fields.
+							$themes[$dir8] = array('name'=>'****', 'author'=>'****', 'version'=>'****', 'desc'=>'****', 'date'=>'****');
 						}
 					}
 				}
