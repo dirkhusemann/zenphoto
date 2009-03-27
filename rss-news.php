@@ -4,6 +4,7 @@ define('OFFSET_PATH', 0);
 header('Content-Type: application/xml');
 require_once(ZENFOLDER . "/template-functions.php");
 require_once(ZENFOLDER . PLUGIN_FOLDER . "image_album_statistics.php");
+require_once(ZENFOLDER . PLUGIN_FOLDER . "zenpage/zenpage-functions.php");
 require_once(ZENFOLDER . PLUGIN_FOLDER . "zenpage/zenpage-template-functions.php");
 $themepath = 'themes';
 
@@ -35,7 +36,7 @@ $validlocale = strtr($locale,"_","-"); // for the <language> tag of the rss
 ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-<title><?php echo get_language_string(getOption('gallery_title'), $locale)." - News "; ?><?php if(isset($cat)) { echo $cat ; } ?></title>
+<title><?php echo get_language_string(getOption('gallery_title'), $locale)." - News "; ?><?php if(!empty($cattitle)) { echo $cattitle ; } ?></title>
 <link><?php echo "http://".$host.WEBPATH; ?></link>
 <atom:link href="http://<?php echo $host.WEBPATH; ?>/rss-news.php" rel="self" type="application/rss+xml" />
 <description><?php echo get_language_string(getOption('gallery_title'), $locale); ?></description>
