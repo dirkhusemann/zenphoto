@@ -2,7 +2,7 @@
 /**
  * General functions used both on the admin backend and theme
  *
- * @author Malte Müller (acrylian)
+ * @author Malte Müller (acrylian), Stephen Billard (sbillard)
  * @package plugins
  * @subpackage zenpage
  */

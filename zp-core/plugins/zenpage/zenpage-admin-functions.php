@@ -2,7 +2,7 @@
 /**
  * zenpage admin functions
  *
- * @author Malte Müller (acrylian)
+ * @author Malte Müller (acrylian), Stephen Billard (sbillard)
  * @package plugins
  * @subpackage zenpage
  */ 

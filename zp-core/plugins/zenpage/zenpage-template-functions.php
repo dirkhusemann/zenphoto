@@ -2,7 +2,7 @@
 /**
  * zenpage template functions
  *
- * @author Malte Müller (acrylian)
+ * @author Malte Müller (acrylian), Stephen Billard (sbillard)
  * @package plugins
  * @subpackage zenpage
  */
@@ -236,11 +236,9 @@ function getZenpageHitcounter($mode="",$obj=NULL) {
 		case "category":
 			if(!is_object($obj) || is_NewsCategory() AND !empty($obj)) {
 				$catname = $_zp_current_category;
-			} else {
-				$catname = ''; // TODO: should this be here to protect for an uninitialized variable or should the query just be placed within the if statement above?
-			}
-			$hc = query_single_row("SELECT hitcounter FROM ".prefix('zenpage_news_categories')." WHERE cat_link = '".$catname."'");
-			return $hc["hitcounter"];
+				$hc = query_single_row("SELECT hitcounter FROM ".prefix('zenpage_news_categories')." WHERE cat_link = '".$catname."'");
+				return $hc["hitcounter"];
+			} 
 			break;
 	}
 }
@@ -508,7 +506,7 @@ function printNewsContent($shorten='',$shortenindicator='') {
 						echo  "<img src='" . WEBPATH . '/' . ZENFOLDER . "'/images/err-noflashplayer.gif' alt='".gettext('No flash player installed.')."' />";
 					} else {
 						$newalbum = new Album($_zp_gallery,getNewsAlbumName());
-						$_zp_current_image = newImage($newalbum,getNewsFilename());
+						$_zp_current_image = newImage($newalbum,$_zp_current_zenpage_news->filename);
 						$_zp_flash_player->printPlayerConfig(getFullNewsImageURL(),getNewsTitle(),$_zp_current_image->get("id"));
 					}
 					echo getNewsContent($shorten);
@@ -656,19 +654,6 @@ function printNewsAuthor($fullname=false) {
 	}
 }
 
-/**TODO NOT NEEDED ANYMORE
- * CombiNews feature only: returns the filename with extension if image or movie/audio or false.
- *
- * @return mixed
- */
-function getNewsFilename() {
-	global $_zp_current_zenpage_news;
-	if(is_GalleryNewsType()) {
-		return $_zp_current_zenpage_news->filename;
-	} else {
-		return false;
-	}
-}
 
 /**
  * CombiNews feature only: returns the album title if image or movie/audio or false.

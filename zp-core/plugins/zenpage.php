@@ -1,9 +1,9 @@
 <?php 
-$plugin_version = "1.1";
+$plugin_version = "1.1.1";
 $plugin_description = gettext("A CMS plugin that adds the capability to run an entire gallery focused website with zenphoto. <br />" 
 				."<strong>NOTE:</strong> Your theme must be setup to use this feature (or use the zenpage default theme). Also, different from Zenphoto some parts of Zenpage requires MySQL 4.1! Please see the zenPage Project site for more information.");
-$plugin_author = "Malte Müller (acrylian)";
-$plugin_URL = "http://zenpage.maltem.de";
+$plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
+$plugin_URL = "http://www.zenphoto.org/documentation/plugins/zenpage/_plugins---zenpage---zenpage-template-functions.php.html";
 $option_interface = new zenpagecms();
 
 if (getOption('zenpage_release') != ZENPHOTO_RELEASE) {
@@ -17,7 +17,7 @@ $zenpage_version = $plugin_version;
 class zenpagecms {
 
 	function zenpagecms() {
-		setOptionDefault('zenpage_release', '1.1');
+		setOptionDefault('zenpage_release', '1.1.1');
 		setOptionDefault('zenpage_articles_per_page', '10');
 		setOptionDefault('zenpage_text_length', '500');
 		setOptionDefault('zenpage_textshorten_indicator', ' (...)');
