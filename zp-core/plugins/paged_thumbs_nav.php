@@ -3,12 +3,12 @@
  * Prints a paged thumbnail navigation to be used on a theme's image.php, independent of the album.php's thumbs loop
  * 
  * @author Malte Müller (acrylian)
- * @version 1.0.5.3
+ * @version 1.0.6
  * @package plugins 
  */
 $plugin_description = gettext("Prints a paged thumbs navigation on image.php, independend of the album.php's thumbsThe function contains some predefined CSS ids you can use for styling. Please see the documentation for more info.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.0.5.3';
+$plugin_version = '1.0.6';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---paged_thumbs_nav.php.html";
 $option_interface = new pagedthumbsOptions();
 
@@ -69,25 +69,25 @@ class pagedthumbsOptions {
  * @param bool $counter If you want to show the counter of the type "Images 1 - 10 of 20 (1/3)"
  * @param string $prev The previous thumb list link text
  * @param string $next The next thumb list link text
- * @param int $width The thumbnail crop width, if empty the general admin setting is used. If cropping is disabled this is the size of the thumb (longest side, depending on your image option settings)
- * @param int $height The thumbnail crop height, if empty the general admin setting is used
- * @param bool $crop Enter 'true' or 'false' to override the admin plugin option setting, leave blank to use the admin plugin option (default) 
+ * @param int $width The thumbnail crop width, if set to NULL the general admin setting is used. If cropping is FALSE this is the maxwidth of the thumb
+ * @param int $height The thumbnail crop height, if set to NULL the general admin setting is used. If cropping is FALSE this is the maxwheight of the thumb
+ * @param bool $crop Enter 'true' or 'false' to override the admin plugin option setting, enter NULL to use the admin plugin option (default) 
  */
-function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='', $width=NULL, $height=NULL, $crop="") {
+function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='', $width=NULL, $height=NULL, $crop=NULL) {
 	global $_zp_current_album, $_zp_current_image,$_zp_current_search;
 	// in case someone wants to override the options by parameter
-	if(empty($crop)) { 
+	if(is_null($crop)) { 
 		$crop = getOption("pagedthumbs_crop");
 	} 
 	if(empty($imagesperpage)) {
 		$imagesperpage = getOption("pagedthumbs_imagesperpage");
 	}
-	if(empty($width)) {
+	if(is_null($width)) {
 		$width = getOption("pagedthumbs_width");
 	} else {
 		$width = sanitize_numeric($width);
 	}
-	if(empty($height)) {
+	if(is_null($height)) {
 		$height = getOption("pagedthumbs_height");
 	} else {
 		$height = sanitize_numeric($height);
@@ -177,12 +177,12 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 			$css = "";
 		}
 		echo "<a $css href=\"".$image->getImageLink()."\" title=\"".strip_tags($image->getTitle())."\">";
+		
 		if($crop) {
 			echo "<img src='".$image->getCustomImage(null, $width, $height, $width, $height, null, null, true)."' alt=\"".strip_tags($image->getTitle())."\" width='".$width."' height='".$height."' />";
 		} else {
-			//$_zp_current_image = $image; // TODO How can the global be restored so that it not break the normal image behaviour?
-			//printCustomSizedImageThumbMaxSpace(strip_tags($image->getTitle()),$width,$height);
-			echo "<img src='".$image->getCustomImage($width,  null,  null,  null,  null, null, null, true)."' alt=\"".strip_tags($image->getTitle())."\" />";
+			getMaxSpaceContainer($width, $height, $image, true);
+			echo "<img src=\"".$image-> getCustomImage(NULL, $width, $height, NULL, NULL, NULL, NULL, true)."\" alt=\"".strip_tags($image->getTitle())."\" />";
 		}
 		echo "</a>\n";
 		if ($number == $endimg[$currentpage]) {
