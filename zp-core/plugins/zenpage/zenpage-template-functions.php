@@ -488,10 +488,10 @@ function printNewsContent($shorten='',$shortenindicator='') {
 		case "image":
 			switch($mode) {
 				case "latestimages-sizedimage":
-					echo "<a href='".$_zp_current_zenpage_news->getImageLink()."' title'".strip_tags($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getSizedImage($size)."' alt='".$_zp_current_zenpage_news->getTitle()."' /></a><br />";
+					echo "<a href='".$_zp_current_zenpage_news->getImageLink()."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getSizedImage($size)."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
 					break;
 				case "latestimages-thumbnail":
-					echo "<a href='".$_zp_current_zenpage_news->getImageLink()."' title'".strip_tags($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getThumb()."' alt='".$_zp_current_zenpage_news->getTitle()."' /></a><br />";
+					echo "<a href='".$_zp_current_zenpage_news->getImageLink()."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getThumb()."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
 					break;
 			}
 			echo getNewsContent("");
@@ -544,10 +544,10 @@ function printNewsContent($shorten='',$shortenindicator='') {
 			switch($mode) {
 				case "latestalbums-sizedimage":
 					$albumthumbobj = $_zp_current_zenpage_news->getAlbumThumbImage();
-					echo "<a href='".$_zp_current_zenpage_news->getAlbumLink()."' title'".strip_tags($_zp_current_zenpage_news->getTitle())."'><img src='".$albumthumbobj->getSizedImage($size)."' alt='".$_zp_current_zenpage_news->getTitle()."' /></a><br />";
+					echo "<a href='".$_zp_current_zenpage_news->getAlbumLink()."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$albumthumbobj->getSizedImage($size)."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
 					break;
 				case "latestalbums-thumbnail":
-					echo "<a href='".$_zp_current_zenpage_news->getAlbumLink()."' title'".strip_tags($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getAlbumThumb()."' alt='".$_zp_current_zenpage_news->getTitle()."' /></a><br />";
+					echo "<a href='".$_zp_current_zenpage_news->getAlbumLink()."' title='".html_encode($_zp_current_zenpage_news->getTitle())."'><img src='".$_zp_current_zenpage_news->getAlbumThumb()."' alt='".html_encode($_zp_current_zenpage_news->getTitle())."' /></a><br />";
 					break;
 			}
 			echo getNewsContent("");

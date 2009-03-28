@@ -5,7 +5,7 @@ if (!defined('WEBPATH')) die(); $firstPageImages = normalizeColumns('2', '6');?>
 <head>
 	<?php zenJavascript(); ?>
 	<title><?php echo getBareGalleryTitle(); ?></title>
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<link rel="stylesheet" href="<?php echo $_zp_themeroot; ?>/style.css" type="text/css" />
 	<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
 </head>
