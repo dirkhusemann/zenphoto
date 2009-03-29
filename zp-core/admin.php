@@ -10,7 +10,7 @@
 define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/admin-functions.php');
 if(getOption('zp_plugin_zenpage')) {
-	require_once(dirname(__FILE__).'/plugins/zenpage/zenpage-admin-functions.php'); 
+	require_once(dirname(__FILE__).PLUGIN_FOLDER.'zenpage/zenpage-admin-functions.php'); 
 }
 if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
@@ -419,7 +419,7 @@ foreach ($filelist as $utility) {
 	
 	$buttonlist[$button_text] = array(
 								'formname'=>$utility,
-								'action'=>'utilities/'.$utility,
+								'action'=>substr(UTILITIES_FOLDER, 1).$utility,
 								'icon'=>$button_icon, 
 								'title'=>$button_hint,
 								'alt'=>'',

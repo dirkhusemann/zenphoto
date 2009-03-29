@@ -347,7 +347,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
   * @return false when the image should not be rotated, or the degrees the  
   *         image should be rotated otherwise.  
   *  
-  * FIXME: PHP GD do not support flips so when a flip is needed we make a  
+  * PHP GD do not support flips so when a flip is needed we make a  
   * rotation that get close to that flip. But I don't think any camera will  
   * fill a flipped value in the tag.  
   */  

@@ -15,7 +15,7 @@ chdir(dirname(dirname(__FILE__)));
 
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 if(getOption('zp_plugin_zenpage')) {
-	require_once(dirname(dirname(__FILE__)).'/plugins/zenpage/zenpage-admin-functions.php');
+	require_once(dirname(dirname(__FILE__)).PLUGIN_FOLDER.'zenpage/zenpage-admin-functions.php');
 }
 
 $button_text = gettext('Gallery Statistics');
@@ -397,17 +397,17 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 				$title = get_language_string($item['title']);
 				break;
 			case "pages":
-				$editurl=  $webpath."/plugins/zenpage/admin-edit.php?page&titlelink=".$name;
+				$editurl=  $webpath.PLUGIN_FOLDER."zenpage/admin-edit.php?page&titlelink=".$name;
 				$viewurl = WEBPATH."/index.php?p=pages&title=".$name;
 				$title = get_language_string($item['title']);
 				break;
 			case "news":
-				$editurl=  $webpath."/plugins/zenpage/admin-edit.php?news&titlelink=".$name;
+				$editurl=  $webpath.PLUGIN_FOLDER."zenpage/admin-edit.php?news&titlelink=".$name;
 				$viewurl = WEBPATH."/index.php?p=news&title=".$name;
 				$title = get_language_string($item['title']);
 				break;
 			case "newscategories":
-				$editurl=  $webpath."/plugins/zenpage/admin-categories.php?edit&id=".$item['id'];
+				$editurl=  $webpath.PLUGIN_FOLDER."zenpage/admin-categories.php?edit&id=".$item['id'];
 				$viewurl = WEBPATH."/index.php?p=news&category=".$name;
 				$title = get_language_string($item['cat_name']);
 				break;

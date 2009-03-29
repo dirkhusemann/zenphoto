@@ -53,7 +53,6 @@ if (isset($_GET['p'])) {
 // Display an Album page.
 } else if (in_context(ZP_ALBUM)) {
 	if ($_zp_current_album->isDynamic()) {
-		// TODO: is there any way to make it so that dynamic albums can fully function in search context?
 		$search = $_zp_current_album->getSearchEngine();
 		$cookiepath = WEBPATH;
 		if (WEBPATH == '') { $cookiepath = '/'; }

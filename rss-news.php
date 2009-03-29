@@ -6,7 +6,7 @@ require_once(ZENFOLDER . "/template-functions.php");
 require_once(ZENFOLDER . PLUGIN_FOLDER . "image_album_statistics.php");
 require_once(ZENFOLDER . PLUGIN_FOLDER . "zenpage/zenpage-functions.php");
 require_once(ZENFOLDER . PLUGIN_FOLDER . "zenpage/zenpage-template-functions.php");
-$themepath = 'themes';
+$themepath = THEMEFOLDER;
 
 if(isset($_GET['category'])) {
 	$catlink = sanitize($_GET['category']);
