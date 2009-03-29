@@ -1437,7 +1437,7 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 }
 
 /**
- * Called by xxxMaxSpace functions to compute the parameters to be passed to xxCustomXXX functions.
+ * Called by ***MaxSpace functions to compute the parameters to be passed to xxCustomXXX functions.
  *
  * @param int $width maxspace width
  * @param int $height maxspace height
@@ -3687,7 +3687,7 @@ function getURL($image) {
  */
 function getAlbumId() {
 	global $_zp_current_album;
-	if (!isset($_zp_current_album)) { return null; }
+	if (is_null($_zp_current_album)) { return null; }
 	return $_zp_current_album->getAlbumId();
 }
 
@@ -4258,7 +4258,7 @@ function printPasswordForm($hint, $showProtected=true, $showuser=NULL) {
 			if (!empty($hint)) {
 				?>
 				<tr>
-				<td class="hint" colspan="2"><?php sprintf(gettext("Hint: %s"), $hint); ?></td>
+				<td class="hint" colspan="2"><?php printf(gettext("Hint: %s"), $hint); ?></td>
 				</tr>
 				<?php
 			}
