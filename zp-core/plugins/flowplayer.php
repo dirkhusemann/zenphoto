@@ -25,7 +25,7 @@ if ($external) return; // can't process external album images
 // register the scripts needed
 addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER .'flowplayer/flashembed-0.34.pack.js"></script>');
 
-define ('FLOW_PLAYER_MP3_HEIGHT', 28);
+if (!defined('FLOW_PLAYER_MP3_HEIGHT')) define ('FLOW_PLAYER_MP3_HEIGHT', 28);
 /**
  * Plugin option handling class
  *

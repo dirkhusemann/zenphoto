@@ -25,7 +25,7 @@ if ($external) return; // can't process external album images
 addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER .'flowplayer3/flowplayer.js"></script>
 <script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER .'flowplayer3/flowplayer.playlist.pack.js"></script>');
 
-define ('FLOW_PLAYER_MP3_HEIGHT', 24);
+if (!defined('FLOW_PLAYER_MP3_HEIGHT')) define ('FLOW_PLAYER_MP3_HEIGHT', 24);
 /**
  * Plugin option handling class
  *
