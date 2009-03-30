@@ -51,7 +51,7 @@ if(isset($_GET['hitcounter'])) {
  <form action="admin-pages.php" method="post" name="update">
  
 <div>
-<p><?php echo gettext("Select a page to edit or drag the pages into the order, including sub page levels, you wish them displayed. <strong>Note: </strong>The supported maximum of levels is top level plus <strong>4</strong> sub levels."); ?></p>
+<p><?php echo gettext("Select a page to edit or drag the pages into the order, including sub page levels, you wish them displayed. <strong>"); ?></p>
 <p class="buttons"><button type="submit" title="<?php echo gettext("Save order"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save order"); ?></strong></button></p>
 <p class="buttons"><strong><a href="admin-edit.php?page&amp;add"" title="<?php echo gettext("Add Page"); ?>"><img src="images/add.png" alt="" /> <?php echo gettext("Add Page"); ?></a></strong>
 <strong><a href="<?php echo WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER; ?>tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php?language=<?php echo getLocaleForTinyMCEandAFM(); ?>&KeepThis=true&TB_iframe=true&height=480&width=750" class="thickbox"><img src="images/folder.png" alt="" /> <?php echo gettext("Manage files"); ?></a></strong>
@@ -66,12 +66,18 @@ if(isset($_GET['hitcounter'])) {
 	<ul id="left-to-right" class="page-list">
 	<?php
 	$pages = getPages(false);
-	printPagesList($pages);
+	$toodeep = printPagesList($pages);
 	?>
 	</ul>
  </td></tr>
  </table>
-
+	<?php
+	if ($toodeep) {
+			echo '<div class="errorbox">';
+			echo  "<h2>".gettext("The sort position of the indicated pages cannot be recorded because the nesting is too deep. Please move them to a higher level and save your order.")."</h2>";
+			echo '</div>';
+	}
+	?>
 <div id='left-to-right-ser'><input type="hidden" name="order" size="30" maxlength="1000" /></div>
  				<input name="update" type="hidden" value="Save Order" />
  				<p class="buttons"><button type="submit" title="<?php echo gettext("Save order"); ?>"><img src="../../images/pass.png" alt="" /><strong><?php echo gettext("Save order"); ?></strong></button></p>

@@ -2168,12 +2168,13 @@ function printParentPagesBreadcrumb($before='', $after='') {
 
 
 /**
- * Prints a context sensitive menu of all pages up to the 4th sublevel as a unordered html list
+ * Prints a context sensitive menu of all pages as a unordered html list
  *
  * @param string $option The mode for the menu:
  * 												"list" context sensitive toplevel plus sublevel pages,
  * 												"list-top" only top level pages,
- * 												"list-sub" only sub level pages
+ * 												"omit-top" only sub level pages
+ * 												"list-sub" lists only the current pages direct offspring
  * @param string $css_id CSS id of the top level list
  * @param string $css_class_topactive class of the active item in the top level list
  * @param string $css_class CSS class of the sub level list(s)
@@ -2193,11 +2194,9 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 	} else {
 		$published = TRUE;
 	}
+	
 	$pages = getPages($published);
-	$listtop = $option == "list" || $option == "list-top";
-	if($listtop) {
-		echo "<ul $css_id>\n";
-	}
+	echo "<ul $css_id>\n";
 	if(!empty($indexname)) {
 		if($_zp_gallery_page == "index.php") {
 			echo "<li $css_class_topactive>".$indexname."</li>";
@@ -2208,22 +2207,26 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 	$baseindent = max(1,count(explode("-", getPageSortorder())));
 	$indent = 1;
 	$open = array($indent=>0);
-	$parents = array(NULL);
 	$pageid = getPageID();
 	$parents = array(NULL);
 	$mylevel = count(explode('-', getPageSortorder()));
-	
+	for ($c=0; $c<=$mylevel; $c++) {
+		$parents[$c] = NULL;
+	}
 	foreach ($pages as $page) {
 		$pageobj = new ZenpagePage($page['titlelink']);
 		$level = max(1,count(explode('-', $pageobj->getSortOrder())));
-		if ($process = $listtop && $level==1 || 
-						($option == "list-sub" && $level>1 && $level <= $baseindent+1) || 
-						($option == "list" && (
-							($pageobj->getID() == $pageid) // current page
-							|| ($pageobj->getParentID()==$pageid) // offspring of current page
-							|| ($level<=$mylevel && $pageobj->getParentID()==$parents[$level-1]) // offspring of andicedent page
-							|| (isAncestor($pageobj, $_zp_current_zenpage_page))))
-				) {
+		$process = (($option == 'list' || $option == 'list-top') && $level==1 // show the top level
+								|| (($option == 'list' || ($option == 'omit-top' && $level>1))
+										&& (($pageobj->getID() == $pageid) // current page
+											|| ($pageobj->getParentID()==$pageid) // offspring of current page
+											|| (isAncestor($pageobj, $_zp_current_zenpage_page)))
+									)
+								|| ($option == 'list-sub'
+										&& ($pageobj->getParentID()==$pageid) // offspring of the current page
+									 )
+								);
+		if ($process) {
 			if ($level > $indent) {
 				echo "\n".str_pad("\t",$indent,"\t")."<ul $css_class>\n";
 				$indent++;
@@ -2290,7 +2293,7 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 		echo "\n";
 	}
 
-	if($listtop) echo "</ul>\n";
+	echo "</ul>\n";
 }
 
 /**

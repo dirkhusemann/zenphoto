@@ -1,18 +1,18 @@
 <?php
 /** printAlbumMenu for Zenphoto
  *
- * @author Malte Müller (acrylian)
- * @version 1.4.6.3
+ * @author Malte Müller (acrylian), Stephen Billard (sbillard)
+ * @version 1.4.7
  * @package plugins
  */
 
-$plugin_description = gettext("Adds a theme function printAlbumMenu() to print an album menu either as a nested list up to 4 sublevels (context sensitive) or as a dropdown menu.");
-$plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.4.6.3';
+$plugin_description = gettext("Adds a theme function printAlbumMenu() to print an album menu either as a nested list (context sensitive) or as a dropdown menu.");
+$plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
+$plugin_version = '1.4.7';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---print_album_menu.php.html";
 
 /**
- * Prints a list of all albums context sensitive up to the 4th subalbum level.
+ * Prints a list of all albums context sensitive.
  * Since 1.4.3 this is a wrapper function for the separate functions printAlbumMenuList() and printAlbumMenuJump().
  * that was included to remain compatiblility with older installs of this menu.
  *
@@ -20,7 +20,13 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---print_al
  * enable this extension on the zenphoto admin plugins tab.
  * Call the function printAlbumMenu() at the point where you want the menu to appear.
  *
- * @param string $option "list" for html list, "list-top" for only the top level albums, "list-sub" for only the subalbums if in one of theme or their toplevel album
+ * @param string $option 
+ * * 								"list" for html list, 
+ * 									"list-top" for only the top level albums, 
+ * 									"omit-top" same as list, but the first level of albums is omitted
+ * 									"list-sub" lists the offspring level of subalbums for the current album
+ * 									"jump" dropdown menu of all albums(not context sensitive)
+ * 
  * @param string $option2 "count" for a image counter in brackets behind the album name, "" = for no image numbers or leave blank
  * @param string $css_id insert css id for the main album list, leave blank if you don't use (only list mode)
  * @param string $css_class_topactive insert css class for the active link in the main album list (only list mode)
@@ -32,22 +38,26 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---print_al
  * @since 1.2
  */
 
-function printAlbumMenu($option,$option2,$css_id='',$css_class_topactive='',$css_class='',$css_class_active='', $indexname="Gallery Index", $showsubs=false) {
-	if($option === "list" OR $option === "list-top" OR $option === "list-sub") {
-		printAlbumMenuList($option,$option2,$css_id,$css_class_topactive,$css_class,$css_class_active, $indexname, $showsubs);
-	} else if ($option === "jump") {
+function printAlbumMenu($option,$option2='',$css_id='',$css_class_topactive='',$css_class='',$css_class_active='', $indexname="Gallery Index", $showsubs=false) {
+	if ($option == "jump") {
 		printAlbumMenuJump($option,$indexname);
+	} else {
+		printAlbumMenuList($option,$option2,$css_id,$css_class_topactive,$css_class,$css_class_active, $indexname, $showsubs);
 	}
 }
 
 /**
- * Prints a nested html list of all albums context sensitive up to the 4th subalbum level.
+ * Prints a nested html list of all albums context sensitive.
  *
  * Usage: add the following to the php page where you wish to use these menus:
  * enable this extension on the zenphoto admin plugins tab;
  * Call the function printAlbumMenuList() at the point where you want the menu to appear.
  *
- * @param string $option "list" for html list, "list-top" for only the top level albums, "list-sub" for only the subalbums if in one of theme or their toplevel album
+ * @param string $option 
+ * 									"list" for html list, 
+ * 									"list-top" for only the top level albums, 
+ * 									"omit-top" same as list, but the first level of albums is omitted
+ * 									"list-sub" lists the offspring level of subalbums for the current album
  * @param string $option2 "count" for a image counter in brackets behind the album name, "" = for no image numbers or leave blank
  * @param string $css_id insert css id for the main album list, leave blank if you don't use (only list mode)
  * @param string $css_id_active insert css class for the active link in the main album list (only list mode)
@@ -60,151 +70,111 @@ function printAlbumMenu($option,$option2,$css_id='',$css_class_topactive='',$css
 
 function printAlbumMenuList($option,$option2,$css_id='',$css_class_topactive='',$css_class='',$css_class_active='', $indexname="Gallery Index", $showsubs=false) {
 	global $_zp_gallery, $_zp_current_album;
-	$albumpath = rewrite_path("/", "/index.php?album=");
 	
 	// if in search mode don't use the foldout contextsensitiveness and show only toplevel albums
 	if(in_context(ZP_SEARCH_LINKED)) {
 		$option = "list-top";
 	}
-	if(!empty($_zp_current_album)) {
-		$currentfolder = $_zp_current_album->name;
-	} else {
+
+	$albumpath = rewrite_path("/", "/index.php?album=");
+	if(empty($_zp_current_album)) {
 		$currentfolder = "";
+	} else {
+		$currentfolder = $_zp_current_album->name;
 	}
+
 	// check if css parameters are used
 	if ($css_id != "") { $css_id = " id='".$css_id."'"; }
 	if ($css_class_topactive != "") { $css_class_topactive = " class='".$css_class_topactive."'"; }
 	if ($css_class != "") { $css_class = " class='".$css_class."'"; }
 	if ($css_class_active != "") { $css_class_active = " class='".$css_class_active."'"; }
-	
-	
 
-
+	echo "<ul".$css_id.">\n"; // top level list
 	/**** Top level start with Index link  ****/
 	if($option === "list" OR $option === "list-top") {
-		echo "<ul".$css_id.">\n"; // top level list
 		if(!empty($indexname)) {
 			echo "<li><a href='".htmlspecialchars(getGalleryIndexURL())."' title='".html_encode($indexname)."'>".$indexname."</a></li>";
 		}
 	}
-		/**** TOPALBUM LEVEL ****/
-		$gallery = $_zp_gallery;
+
+	if ($option == 'list-sub' && in_context(ZP_ALBUM)) {
+		$albums = $_zp_current_album->getSubalbums();
+	} else {
 		$albums = $_zp_gallery->getAlbums();
-		foreach ($albums as $toplevelalbum) {
-			$topalbum = new Album($gallery,$toplevelalbum,true);
-			if($option === "list" OR $option === "list-top") {
-				createAlbumMenuLink($topalbum,$option2,$css_class_topactive,$albumpath,"list");
-			}
-			$sub1_count = 0;
+	}
 
-			if($option === "list" OR $option === "list-sub") { // show either only sublevels or sublevels with toplevel
+	printAlbumMenuListAlbum($albums, $albumpath, $currentfolder, $option, $option2, $showsubs, $css_class, $css_class_topactive, $css_class_active);
 
-				/**** SUBALBUM LEVEL 1 ****/
-				$subalbums1 = $topalbum->getSubAlbums();
-				foreach($subalbums1 as $sublevelalbum1) {
-					$subalbum1 = new Album($gallery,$sublevelalbum1,true);
+	echo "</ul>\n";
 
-						// if 2: (if in parentalbum) OR (if in subalbum)
-						if(checkAlbumDisplayLevel($subalbum1,$topalbum,$currentfolder,1) OR $showsubs) {
-							$sub1_count++; // count subalbums for checking if to open or close the sublist
-							if ($sub1_count === 1) { // open sublevel 1 sublist once if subalbums
-								echo "<ul".$css_class.">\n";
-							}
-							if ($option === "list" OR $option === "list-sub") {
-								createAlbumMenuLink($subalbum1,$option2,$css_class_active,$albumpath,"list");
-							}
-							$sub2_count = 0;
-
-						/**** SUBALBUM LEVEL 2 ****/
-						$subalbums2 = $subalbum1->getSubAlbums();
-						foreach($subalbums2 as $sublevelalbum2) {
-							$subalbum2 = new Album($gallery,$sublevelalbum2,true);
-
-							// if 3
-							if(checkAlbumDisplayLevel($subalbum2,$subalbum1,$currentfolder,2) OR $showsubs) {
-								$sub2_count++; // count subalbums for checking if to open or close the sublist
-								if ($sub2_count === 1) { // open sublevel 1 sublist once if subalbums
-									echo "<ul".$css_class.">\n";
-								}
-								if($option === "list" OR $option === "list-sub") {
-									createAlbumMenuLink($subalbum2,$option2,$css_class_active,$albumpath,"list");
-								}
-								$sub3_count = 0;
-
-								/**** SUBALBUM LEVEL 3 ****/
-								$subalbums3 = $subalbum2->getSubAlbums();
-								foreach($subalbums3 as $sublevelalbum3) {
-									$subalbum3 = new Album($gallery,$sublevelalbum3,true);
-
-									// if 4
-									if(checkAlbumDisplayLevel($subalbum3,$subalbum2,$currentfolder,3) OR $showsubs) {
-										$sub3_count++; // count subalbums for checking if to open or close the sublist
-										if ($sub3_count === 1) { // open sublevel 1 sublist once if subalbums
-											echo "<ul".$css_class.">\n";
-										}
-										if($option === "list" OR $option === "list-sub") {
-											createAlbumMenuLink($subalbum3,$option2,$css_class_active,$albumpath,"list");
-										}
-										$sub4_count = 0;
-
-										/**** SUBALBUM LEVEL 4 ****/
-										$subalbums4 = $subalbum3->getSubAlbums();
-										foreach($subalbums4 as $sublevelalbum4) {
-											$subalbum4 = new Album($gallery,$sublevelalbum4,true);
-
-											// if 5
-											if(checkAlbumDisplayLevel($subalbum4,$subalbum3,$currentfolder,4) OR $showsubs){
-												$sub4_count++; // count subalbums for checking if to open or close the sublist
-												if ($sub4_count === 1) { // open sublevel 1 sublist once if subalbums
-													echo "<ul".$css_class.">\n";
-												}
-												if($option === "list" OR $option === "list-sub") {
-													createAlbumMenuLink($subalbum4,$option2,$css_class_active,$albumpath,"list");
-												}
-											} // if subalbum level 4 - end
-										}	// subalbum level 4 - end
-										if($sub4_count > 0 AND ($option === "list" OR $option === "list-sub")) 	{ // sublevel 4 sublist end if subalbums
-											echo "</ul>\n";
-										}
-										if($option === "list" OR $option === "list-sub")	{	// sub level 4 list item end
-											echo "</li>\n";
-										}
-									} // if subalbum level 3 - end
-								}	// subalbum level 3 - end
-								if($sub3_count > 0 AND ($option === "list" OR $option === "list-sub")) { // sublevel 3 sublist end if subalbums
-									echo "</ul>\n";
-								}
-								if($option === "list" OR $option === "list-sub") { // sub level 2 list item end
-									echo "</li>\n";
-								}
-							} // if subalbum level 2 - end
-						} // subalbum level 2 - end
-						if($sub2_count > 0 AND ($option === "list" OR $option === "list-sub")) {// sublevel 2 sublist end if subalbums
-							echo "</ul>\n";
-						}
-						if($option === "list" OR $option === "list-sub") { // sub level 1 list item end
-							echo "</li>\n";
-						}
-					}  // if subalbum level 1 - end
-				} // subalbum level 1 - end
-				if($sub1_count > 0 AND ($option === "list" OR $option === "list-sub")) {// sublevel 1 sublist end if subalbums
-					echo "</ul>\n";
-				}
-			} // main if end for option "list" or "list-sub" (subalbum loops)
-			if($option === "list" OR $option === "list-top") { // top level list item end
-				echo "</li>\n";
-			}
-			//	} // if Top level albums - end
-		} // top level album loop - end
-		if($option === "list" OR $option === "list-top"){
-			echo "</ul>\n";
-		}
-		
-} // function end
+}
 
 
 /**
- * Prints a dropdown menu of all albums up to the 4 sublevel (not context sensitive)
+ * Handles an album for printAlbumMenuList
+ *
+ * @param array $albums albums array
+ * @param string $path for createAlbumMenuLink
+ * @param string $folder 
+ * @param string $option see printAlbumMenuList
+ * @param string $option2 see printAlbumMenuList
+ * @param string $showsubs see printAlbumMenuList
+ * @param string $css_class see printAlbumMenuList
+ * @param string $css_class_topactive see printAlbumMenuList
+ * @param string $css_class_active see printAlbumMenuList
+ */
+function printAlbumMenuListAlbum($albums, $path, $folder, $option, $option2, $showsubs, $css_class, $css_class_topactive, $css_class_active) {
+	global $_zp_gallery;
+	$pagelevel = count(explode('/', $folder));
+	foreach ($albums as $album) {
+		$level = count(explode('/', $album));
+		$process =  ($showsubs
+									|| ($option != 'list-top' // not top only
+											&& strpos($folder, $album) === 0 // within the family
+											&& $level<=$pagelevel) // but not too deep
+								);
+
+		$topalbum = new Album($_zp_gallery,$album,true);
+		if ($level>1
+				|| ($option != 'omit-top') 
+				) { // listing current level album
+			if ($level==1) {
+				$css_class_t = $css_class_topactive;
+			} else {
+				$css_class_t = $css_class_active;
+			}
+			if($option2 == 'count' AND $topalbum->getNumImages() > 0) {
+				$count = " (".$topalbum->getNumImages().")";
+			} else {
+				$count = "";
+			}
+			
+			if(in_context(ZP_ALBUM) && !in_context(ZP_SEARCH_LINKED) && getAlbumID() == $topalbum->getAlbumID()) {
+				$link = "<li".$css_class_t.">".$topalbum->getTitle().$count;
+			} else {
+				$link = "<li><a href='".htmlspecialchars($path.pathurlencode($topalbum->name))."' title='".html_encode($topalbum->getTitle())."'>".html_encode($topalbum->getTitle())."</a>".$count;
+			}
+			echo $link;
+		}
+		if ($process) { // listing subalbums
+			$subalbums = $topalbum->getSubAlbums();
+			if (!empty($subalbums)) {
+
+				echo "\n<ul".$css_class.">\n";
+				printAlbumMenuListAlbum($subalbums, $path, $folder, $option, $option2, $showsubs, $css_class, $css_class_topactive, $css_class_active);
+				echo "\n</ul>\n";
+
+			}
+		}
+		if($option == 'list' || $option == 'list-top' || $level>1) { // close the LI
+			echo "\n</li>\n";
+		}
+
+	}
+}
+
+/**
+ * Prints a dropdown menu of all albums(not context sensitive)
  * Is used by the wrapper function printAlbumMenu() if the options "jump" is choosen. For standalone use, too.
  *
  * Usage: add the following to the php page where you wish to use these menus:
@@ -221,115 +191,62 @@ function printAlbumMenuJump($option="count", $indexname="Gallery Index") {
 		$currentfolder = $_zp_current_album->name;
 	}
 	?>
-<form name="AutoListBox" action="#">
-<p><select name="ListBoxURL" size="1"
-		onchange="gotoLink(this.form);">
-		<?php
-		if(!empty($indexname)) {
-			$selected = checkSelectedAlbum("", "index"); ?>
-		<option <?php echo $selected; ?> value="<?php echo htmlspecialchars(getGalleryIndexURL()); ?>"><?php echo $indexname; ?></option>
-		<?php }
-		/**** TOPALBUM LEVEL ****/
-		$gallery = $_zp_gallery;
-		$albums = $_zp_gallery->getAlbums();
-		foreach ($albums as $toplevelalbum) {
-			$topalbum = new Album($gallery,$toplevelalbum,true);
-			createAlbumMenuLink($topalbum,$option,"",$albumpath,"jump",0);
-
-			/**** SUBALBUM LEVEL 1 ****/
-			$subalbums1 = $topalbum->getSubAlbums();
-			foreach($subalbums1 as $sublevelalbum1) {
-				$subalbum1 = new Album($gallery,$sublevelalbum1,true);
-				createAlbumMenuLink($subalbum1,$option,"",$albumpath,"jump",1);
-
-				/**** SUBALBUM LEVEL 2 ****/
-				$subalbums2 = $subalbum1->getSubAlbums();
-				foreach($subalbums2 as $sublevelalbum2) {
-					$subalbum2 = new Album($gallery,$sublevelalbum2,true);
-					createAlbumMenuLink($subalbum2,$option,"",$albumpath,"jump",2);
-
-					/**** SUBALBUM LEVEL 3 ****/
-					$subalbums3 = $subalbum2->getSubAlbums();
-					foreach($subalbums3 as $sublevelalbum3) {
-						$subalbum3 = new Album($gallery,$sublevelalbum3,true);
-						createAlbumMenuLink($subalbum3,$option,"",$albumpath,"jump",3);
-
-						/**** SUBALBUM LEVEL 4 ****/
-						$subalbums4 = $subalbum3->getSubAlbums();
-						foreach($subalbums4 as $sublevelalbum4) {
-							$subalbum4 = new Album($gallery,$sublevelalbum4,true);
-							createAlbumMenuLink($subalbum4,$option,"",$albumpath,"jump",4);
-						}
-					}
-				}
-			}
+	<script type="text/javaScript">
+		function gotoLink(form) {
+		 	var OptionIndex=form.ListBoxURL.selectedIndex;
+			parent.location = form.ListBoxURL.options[OptionIndex].value;
 		}
-?>
-</select></p>
-<script type="text/javaScript">
-<!--
-function gotoLink(form) {
- 	var OptionIndex=form.ListBoxURL.selectedIndex;
-	parent.location = form.ListBoxURL.options[OptionIndex].value;}
-//-->
-</script></form>
-<?php
+	</script>
+	<form name="AutoListBox" action="#">
+		<p>
+			<select name="ListBoxURL" size="1" onchange="gotoLink(this.form);">
+			<?php
+			if(!empty($indexname)) {
+				$selected = checkSelectedAlbum("", "index");
+				 ?>
+			<option <?php echo $selected; ?> value="<?php echo htmlspecialchars(getGalleryIndexURL()); ?>"><?php echo $indexname; ?></option>
+			<?php 
+			}
+			$albums = $_zp_gallery->getAlbums();
+			printAlbumMenuJumpAlbum($albums,$option,$albumpath);
+			?>
+			</select>
+		</p>
+	</form>
+	<?php
 }
 
 /**
- * A printAlbumMenu() helper function for the list menu mode of printAlbumMenu() that only
- * generates an list item, as a link if not the current album
- * Not for standalone use.
+ * Handles a single album level for printAlbumMenuJump
  *
- * @param object $album the album oject
- * @param string $option2 the value of $option of the printAlbumMenu()
- * @param string $css One of the both css_active values of the printAlbumMenu()
- * @param string $albumpath the albumpath for mod_rewrite or not
- * @param string $mode "list" for list mode link, "jump" for jump mode link
- * @param int	$level level number for jump mode (0 toplevel, 1-4 sublevel)
- * @return string
+ * @param array $albums list of album names
+ * @param string $option2 see printAlbumMenuJump
+ * @param string $albumpath path of the page album
+ * @param int $level current level
  */
-function createAlbumMenuLink($album,$option2,$css,$albumpath,$mode,$level='') {
-	if($option2 === "count" AND $album->getNumImages() > 0) {
-		$count = " (".$album->getNumImages().")";
-	} else {
-		$count = "";
-	}
-	switch($mode) {
-		case "list":
+function printAlbumMenuJumpAlbum($albums,$option,$albumpath,$level=1) {
+	global $_zp_gallery;
+	foreach ($albums as $album) {
+		$subalbum = new Album($_zp_gallery,$album,true);
 
-			if(getAlbumID() == $album->getAlbumID() AND !in_context(ZP_SEARCH_LINKED)) {
-				$link = "<li".$css.">".$album->getTitle().$count;
-			} else {
-				$link = "<li><a href='".htmlspecialchars($albumpath.pathurlencode($album->name))."' title='".html_encode($album->getTitle())."'>".html_encode($album->getTitle())."</a>".$count;
-			}
-			break;
-		case "jump":
-			$arrow = "&raquo; ";
-			switch ($level) {
-				case 0:
-					$arrow = "";
-					break;
-				case 1:
-					$arrow = $arrow;
-					break;
-				case 2:
-					$arrow = $arrow.$arrow;
-					break;
-				case 3:
-					$arrow = $arrow.$arrow.$arrow;
-					break;
-				case 4:
-					$arrow = $arrow.$arrow.$arrow.$arrow;
-					break;
-			}
-			$selected = checkSelectedAlbum($album->name, "album");
-			$link = "<option $selected value='".htmlspecialchars($albumpath.pathurlencode($album->name))."'>".$arrow.strip_tags($album->getTitle()).$count."</option>";
-			break;
+
+		if($option === "count" AND $subalbum->getNumImages() > 0) {
+			$count = " (".$subalbum->getNumImages().")";
+		} else {
+			$count = "";
+		}
+		$arrow = str_replace(':', '&raquo; ', str_pad("", $level-1, ":"));
+						
+		$selected = checkSelectedAlbum($subalbum->name, "album");
+		$link = "<option $selected value='".htmlspecialchars($albumpath.pathurlencode($subalbum->name))."'>".$arrow.strip_tags($subalbum->getTitle()).$count."</option>";
+		echo $link;
+		$subalbums = $subalbum->getSubAlbums();
+		if (!empty($subalbums)) {
+			printAlbumMenuJumpAlbum($subalbums,$option,$albumpath,$level+1);
+		}
 	}
-	echo $link;
+
 }
-
 
 /**
  * A printAlbumMenu() helper function for the jump menu mode of printAlbumMenu() that only
@@ -362,71 +279,4 @@ function checkSelectedAlbum($checkalbum, $option) {
 	}
 	return $selected;
 }
-
-/**
- * A printAlbumMenu() helper function that checks what subalbum level should be displayed. If you are in an subalbum
- * that it itself an subalbum and containts subalbums it returns true and lets the album menu display the parent album,
- * the current level and the next sublevel
- * Not for standalone use.
- *
- * @param object $currentalbum The album object of the current album in whose level we are
- * @param object $parentalbum The album object of the parent album
- * @param string $currentfolder The current folder
- * @param int $level The level the function should check for (1-4 for sublevel 1 - 4)
- * @return bool
- */
-function checkAlbumDisplayLevel($currentalbum,$parentalbum,$currentfolder,$level) {
-	$sublevel_folder = explode("/",$currentalbum->name);
-	$sublevel_current = explode("/", $currentfolder);
-  $sublevelcurrent = "";
-  $sublevelcurrentfolder = "";
-	switch ($level) {
-		case 1:
-			$sublevelfolder = $sublevel_folder[0];
-			if(array_key_exists("0",$sublevel_current)) {
-				$sublevelcurrent = $sublevel_current[0];
-			}
-			$sublevelcurrentfolder = $parentalbum->name;
-			break;
-		case 2:
-			$sublevelfolder = $sublevel_folder[0]."/".$sublevel_folder[1];
-			if(array_key_exists("1",$sublevel_current)) {
-				$sublevelcurrent = $sublevel_current[1];
-			}
-			$sublevelcurrentfolder = $sublevel_folder[1];
-			break;
-		case 3:
-			$sublevelfolder = $sublevel_folder[0]."/".$sublevel_folder[1]."/".$sublevel_folder[2];
-			if(array_key_exists("2",$sublevel_current)) {
-				$sublevelcurrent = $sublevel_current[2];
-			}
-			$sublevelcurrentfolder = $sublevel_folder[2];
-			break;
-		case 4:
-			$sublevelfolder = $sublevel_folder[0]."/".$sublevel_folder[1]."/".$sublevel_folder[2]."/".$sublevel_folder[3];
-			if(array_key_exists("3",$sublevel_current)) {
-				$sublevelcurrent = $sublevel_current[3];
-			}
-			$sublevelcurrentfolder = $sublevel_folder[3];
-			break;
-	}
-	if(!empty($currentfolder) AND !empty($parentalbum->name)) {
-		// if in parentalbum) OR (if in subalbum)
-		if((strpos($currentalbum->name,$parentalbum->name) === 0
-		AND strpos($currentalbum->name,$currentfolder) === 0
-		AND $currentfolder === $sublevelfolder)
-		OR
-		(getAlbumID() != $parentalbum->getAlbumID()
-		AND strpos($currentalbum->name,$parentalbum->name) === 0
-		AND $sublevelcurrent === $sublevelcurrentfolder)) {
-			return true;
-		} else {
-			return false;
-		}
-	} else {
-		return false;
-	}
-}
-
-
 ?>

@@ -189,15 +189,6 @@ function updatePageSortorder() {
 							
 			// if not top level, get parent id
 			} else { 
-				
-				// nasty check if too many sub levels, since the sortables do not have a sub level limit option yet.
-				$leveldepth = substr_count($sortlevel[$nr],"-");
-//TODO: Change the error message after 1.2.4 is out. 
-				if($leveldepth > 10) {
-					echo "<p class='errorbox' id='fade-message'>".gettext("You have more than the maximum supported 4 sub levels! Please try sorting differently.")."</p>";
-					break;
-				}
-
 				//get parent id
 				$test = strrpos($sortlevel[$nr],"-");
 				$parent = substr($sortlevel[$nr],0,$test);
@@ -222,13 +213,19 @@ function updatePageSortorder() {
  * Prints the table part of a single page item for the sortable pages list
  *
  * @param object $page The array containing the single page
+ * @param bool $flag set to true to flag the element as having a problem with nesting level
  */
-function printPagesListTable($page) {
+function printPagesListTable($page, $flag) {
+	if ($flag) {
+		$img = '../../images/drag_handle_flag.png';
+	} else {
+		$img = '../../images/drag_handle.png';
+	}
 	?>
  <table class='bordered2'>
    <tr>
     <td class='sort-handle' style="padding-bottom: 15px; ">
-       <img src="../../images/drag_handle.png" style="position: relative; top: 7px; margin-right: 4px; width:14px; height:14px" />
+       <img src="<?php echo $img; ?>" style="position: relative; top: 7px; margin-right: 4px; width:14px; height:14px" />
   	<?php if(checkIfLocked($page)) { 
   		echo "<a href='admin-edit.php?page&amp;titlelink=".urlencode($page->getTitlelink())."' title='".truncate_string(strip_tags($page->getContent()),300)."'> "; checkForEmptyTitle($page->getTitle(),"page"); echo "</a>".checkHitcounterDisplay($page->getHitcounter());
   	} else { 
@@ -295,16 +292,24 @@ function printPagesListTable($page) {
 
 
 /**
- * Prints the sortable pages list up to the 4th sublevel
+ * Prints the sortable pages list
+ * returns true if nesting levels exceede the database container
  *
  * @param array $pages The array containing all pages
+ * 
+ * @return bool
  */
 function printPagesList($pages) {
 	$indent = 1;
 	$open = array(1=>0);
+	$rslt = false;
 	foreach ($pages as $page) {
 		$pageobj = new ZenpagePage($page['titlelink']);
-		$level = max(1,count(explode('-', $pageobj->getSortOrder())));
+		$order = explode('-', $pageobj->getSortOrder());
+		$level = max(1,count($order));
+		if ($toodeep = $level>1 && $order[$level-1] === '') {
+			$rslt = true;
+		}
 		if ($level > $indent) {
 			echo "\n".str_pad("\t",$indent,"\t")."<ul class=\"page-list\">\n";
 			$indent++;
@@ -328,7 +333,7 @@ function printPagesList($pages) {
 			$open[$indent]--;
 		} 
 		echo str_pad("\t",$indent-1,"\t")."<li id=\"".$pageobj->getID()."\" class=\"clear-element page-item1 left\">";
-		echo printPagesListTable($pageobj);
+		echo printPagesListTable($pageobj, $toodeep);
 		$open[$indent]++;
 	}
 	while ($indent > 1) {
@@ -342,6 +347,7 @@ function printPagesList($pages) {
 	} else {
 		echo "\n";
 	}
+	return $rslt;
 }
 
 
