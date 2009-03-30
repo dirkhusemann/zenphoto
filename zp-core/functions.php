@@ -548,7 +548,9 @@ function checkAlbumPassword($albumname, &$hint) {
 			$saved_auth = zp_getCookie($authType);
 
 			if (!empty($hash)) {
-				if ($saved_auth != $hash) {
+				if ($saved_auth == $hash) {
+					return true;
+				} else {
 					$hint = $album->getPasswordHint();
 					return false;
 				}
