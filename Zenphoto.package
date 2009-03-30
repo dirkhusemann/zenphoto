@@ -325,10 +325,16 @@ zp-core/lib-utf8.php
 zp-core/locale/de_DE/LC_MESSAGES/zenphoto.mo
 zp-core/locale/de_DE/LC_MESSAGES/zenphoto.po
 zp-core/locale/en_US/place_holder.txt
+zp-core/locale/fr_FR/LC_MESSAGES/zenphoto.mo
+zp-core/locale/fr_FR/LC_MESSAGES/zenphoto.po
 zp-core/locale/it_IT/LC_MESSAGES/zenphoto.mo
 zp-core/locale/it_IT/LC_MESSAGES/zenphoto.po
 zp-core/locale/nl_NL/LC_MESSAGES/zenphoto.mo
 zp-core/locale/nl_NL/LC_MESSAGES/zenphoto.po
+zp-core/locale/zh_CN/LC_MESSAGES/zenphoto.mo
+zp-core/locale/zh_CN/LC_MESSAGES/zenphoto.po
+zp-core/locale/zh_TW/LC_MESSAGES/zenphoto.mo
+zp-core/locale/zh_TW/LC_MESSAGES/zenphoto.po
 zp-core/plugins/captcha/zenphoto.php
 zp-core/plugins/class-textobject/textDefault.png
 zp-core/plugins/class-textobject.php
