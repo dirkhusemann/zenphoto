@@ -135,12 +135,17 @@ class flowplayer3 {
 		} else {
 			$autoplay = "false";
 		}
-			if($ext === ".mp3") { 
-				if(empty($videoThumb)) {
-					$height = FLOW_PLAYER_MP3_HEIGHT;
-				} else {
-					$height = getOption('flow_player3_height');
-				}
+		if(getOption("flow_player3_autohide") == 1) {
+			$autohide = "true";
+		} else {
+			$autohide = "false";
+		}
+		if($ext === ".mp3") {
+			if(empty($videoThumb)) {
+				$height = FLOW_PLAYER_MP3_HEIGHT;
+			} else {
+				$height = getOption('flow_player3_height');
+			}
 				// inline css is kind of ugly but since we need to style dynamically there is no other way
 			$playerconfig = '
 			<span id="player'.$count.'" class="flowplayer" style="display:block; width: '.getOption('flow_player3_width').'px; height: '.$height.'px;">
@@ -150,7 +155,7 @@ class flowplayer3 {
 			plugins: { 
         controls: {
         	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
-        	autoHide: "'.getOption('flow_player3_controlsautohide').'",
+        	autoHide: '.$autohide.',
         	timeColor:"'.getOption('flow_player3_controlstimecolor').'",
         	durationColor: "'.getOption('flow_player3_controlsdurationcolor').'",
         	progressColor: "'.getOption('flow_player3_controlsprogresscolor').'",
