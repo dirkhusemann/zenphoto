@@ -601,7 +601,7 @@ if (!$checked) {
 						$imgmissing = sprintf(gettext('Your PHP graphics library does not support %1$s'),$missing[0]);
 					}
 					$err = -1;
-					$mandate = gettext("To correct this you should a install graphics library with appropriate image support in your PHP");
+					$mandate = gettext("To correct this you should install a graphics library with appropriate image support in your PHP");
 				} else {
 					$imgmissing = sprintf(gettext('Your PHP graphics library does not support %1$s, %2$s, or %3$s'),$missing[0],$missing[1],$missing[2]);
 					$err = 0;
@@ -1333,7 +1333,7 @@ if (file_exists("zp-config.php")) {
 		`title` text,
 		`content` text,
 		`extracontent` text,
-		`sort_order`varchar(50) NOT NULL default '',
+		`sort_order`varchar(48) NOT NULL default '',
 		`show` int(1) unsigned NOT NULL default '1',
 		`titlelink` varchar(255) NOT NULL default '',
 		`commentson` int(11) unsigned NOT NULL,
@@ -1507,7 +1507,7 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `expiredate` datetime default NULL';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `expiredate` datetime default NULL';
 	$sql_statements[] = 'UPDATE '.$tbl_zenpage_pages.' SET `parentid`=NULL WHERE `parentid`=0';
-	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' CHANGE `sort_order` `sort_order` VARCHAR(50) NOT NULL default ""';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' CHANGE `sort_order` `sort_order` VARCHAR(48) NOT NULL default ""';
 	
 	/**************************************************************************************
 	 ******                            END of UPGRADE SECTION     

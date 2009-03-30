@@ -1656,10 +1656,11 @@ function getTotalImagesIn($album) {
  *
  * @return bool
  */
-function next_image($all=false, $firstPageCount=0, $sorttype=null, $sortdirection=NULL, $overridePassword=false) {
+function next_image($all=false, $firstPageCount=NULL, $sorttype=null, $sortdirection=NULL, $overridePassword=false) {
 	global $_zp_images, $_zp_current_image, $_zp_current_album, $_zp_page, $_zp_current_image_restore,
 				 $_zp_conf_vars, $_zp_current_search, $_zp_gallery;
 	if (!$overridePassword) { if (checkforPassword()) { return false; } }
+	if (is_null($firstPageCount)) $firstPageCount = $_zp_conf_vars['images_first_page']; 
 	$imagePageOffset = getTotalPages(true) - 1; /* gives us the count of pages for album thumbs */
 	if ($all) {
 		$imagePage = 1;
@@ -4106,7 +4107,7 @@ function normalizeColumns($albumColumns, $imageColumns) {
 		}
 		$rowssused = ceil(($count % $albcount) / $albumColumns);     /* number of album rows unused */
 		$leftover = floor(max(1, getOption('images_per_page')) / $imageColumns) - $rowssused;
-		$firstPageImages = max(0, $leftover * $imageColumns);  /* number of images that fill the leftover rows */
+		$_zp_conf_vars['images_first_page'] = $firstPageImages = max(0, $leftover * $imageColumns);  /* number of images that fill the leftover rows */
 		if ($firstPageImages == $imgcount) {
 			return 0;
 		} else {
