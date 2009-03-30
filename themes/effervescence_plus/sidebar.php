@@ -10,9 +10,17 @@ if(function_exists("printAllNewsCategories")) {
 
 <div class="menu">
 	<h3><?php echo gettext("Gallery"); ?></h3>
-	<ul>
-	<li><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Visit the photo gallery'); ?>"><?php echo getGalleryTitle();?></a></li>
-	</ul>
+	<?php
+	if(function_exists("printAlbumMenu")) {
+		printAlbumMenu("list",'',"","menu-active","submenu","menu-active","");
+	} else {
+		?>
+		<ul>
+		<li><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Visit the photo gallery'); ?>"><?php echo getGalleryTitle();?></a></li>
+		</ul>
+		<?php
+	}
+	?>
 </div>
 <?php if(function_exists("printPageMenu")) { ?>
 <div class="menu">
