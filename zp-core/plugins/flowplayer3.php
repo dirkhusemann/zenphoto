@@ -59,6 +59,8 @@ class flowplayer3 {
 										'desc' => gettext("Player width (ignored for <em>mp3</em> files.)")),
 		gettext('flow player height') => array('key' => 'flow_player3_height', 'type' => 0,
 										'desc' => gettext("Player height (ignored for <em>mp3</em> files.)")),
+		gettext('Player background color') => array('key' => 'flow_player3_backgroundcolor', 'type' => 0,
+										'desc' => gettext("The color of the player background.")),
 		gettext('Controls background color') => array('key' => 'flow_player3_controlsbackgroundcolor', 'type' => 8,
 										'desc' => gettext("Background color of the controls.")),
 		gettext('Controls border color') => array('key' => 'flow_player3_controlsbordercolor', 'type' => 8,
