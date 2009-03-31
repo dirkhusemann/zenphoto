@@ -2209,7 +2209,10 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 	$open = array($indent=>0);
 	$pageid = getPageID();
 	$parents = array(NULL);
-	$mylevel = count(explode('-', getPageSortorder()));
+	$order = explode('-', getPageSortorder());
+	$mylevel = count($order);
+	$myparentsort = array_shift($order);
+	
 	for ($c=0; $c<=$mylevel; $c++) {
 		$parents[$c] = NULL;
 	}
@@ -2220,7 +2223,7 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 								|| (($option == 'list' || ($option == 'omit-top' && $level>1))
 										&& (($pageobj->getID() == $pageid) // current page
 											|| ($pageobj->getParentID()==$pageid) // offspring of current page
-											|| (isAncestor($pageobj, $_zp_current_zenpage_page)))
+											|| ($level <= $mylevel && $level > 1 && strpos($pageobj->getSortOrder(), $myparentsort) === 0)) // direct ancestor
 									)
 								|| ($option == 'list-sub'
 										&& ($pageobj->getParentID()==$pageid) // offspring of the current page
@@ -2294,24 +2297,6 @@ function printPageMenu($option='list',$css_id='',$css_class_topactive='',$css_cl
 	}
 
 	echo "</ul>\n";
-}
-
-/**
- * Checks to see if a page is an ancestor
- *
- * @param object $page
- * @param object $child
- * @return bool
- */
-function isAncestor($page, $child) {
-	if (!is_object($child)) return false;
-	$parentid = $page->getID();
-	while ($parentid != ($parent = $child->getParentID())) {
-		if (empty($parent)) return false;
-		$row = query_single_row('SELECT `titlelink` FROM '.prefix('zenpage_pages').' WHERE `id`='.$parent);
-		$child = New ZenpagePage($row['titlelink']);
-	}
-	return true;
 }
 
 /**

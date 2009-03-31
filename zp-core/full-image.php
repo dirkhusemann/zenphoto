@@ -76,7 +76,7 @@ if (!getOption('fullimage_watermark')) { // no processing needed
 }
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s').' GMT');
 header("content-type: image/$suffix");
-imageGet($image_path);
+$newim = imageGet($image_path);
 
 if (getOption('protect_full_image') == 'Download') {
 	header('Content-Disposition: attachment; filename="' . $_zp_current_image->filename . '"');  // enable this to make the image a download

@@ -155,7 +155,7 @@ body {
 
 .menu ul li {
 	padding-left: 20px;
-	padding-bottom: 3px;
+	padding-bottom: 2px;
 	background-image: url(images/arrow_right.gif);
 	background-repeat: no-repeat;
 	background-position: 1px 0px;
@@ -168,7 +168,7 @@ body {
 .submenu {
 	list-style: none;
 	margin-left: -25px;
-	padding: 2px;
+	padding: 0px;
 }
 
 #footer {

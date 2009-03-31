@@ -1508,6 +1508,9 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `expiredate` datetime default NULL';
 	$sql_statements[] = 'UPDATE '.$tbl_zenpage_pages.' SET `parentid`=NULL WHERE `parentid`=0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' CHANGE `sort_order` `sort_order` VARCHAR(48) NOT NULL default ""';
+	//v1.2.5
+	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `parentid` `parentid` int(11) unsigned default NULL;";
+	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `albumid` `albumid` int(11) unsigned default NULL;";
 	
 	/**************************************************************************************
 	 ******                            END of UPGRADE SECTION     
@@ -1669,7 +1672,10 @@ if (file_exists("zp-config.php")) {
 		foreach ($albums as $album) {
 			checkAlbumParentid($album, NULL);
 		}
-
+		// fix any parent/album IDs which are 0 instead of NULL
+		query('UPDATE '.prefix('albums').' SET `parentid`=NULL WHERE `parentid`=0');
+		query('UPDATE '.prefix('images').' SET `albumid`=NULL WHERE `albumid`=0');
+		
 		if ($createTables) {
 			if ($_zp_loggedin == ADMIN_RIGHTS) {
 				$filelist = safe_glob(SERVERPATH . "/" . BACKUPFOLDER . '/*.zdb');
