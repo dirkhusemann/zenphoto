@@ -1290,7 +1290,7 @@ if (file_exists("zp-config.php")) {
 		`extracontent` text,
 		`show` int(1) unsigned NOT NULL default '1',
 		`date` datetime,
-		`titlelink` varchar(255) NOT NULL default '',
+		`titlelink` varchar(255) NOT NULL,
 		`commentson` int(11) unsigned NOT NULL,
 		`codeblock` text,
 		`author` varchar(64) NOT NULL,
@@ -1335,7 +1335,7 @@ if (file_exists("zp-config.php")) {
 		`extracontent` text,
 		`sort_order`varchar(48) NOT NULL default '',
 		`show` int(1) unsigned NOT NULL default '1',
-		`titlelink` varchar(255) NOT NULL default '',
+		`titlelink` varchar(255) NOT NULL,
 		`commentson` int(11) unsigned NOT NULL,
 		`codeblock` text,
 		`author` varchar(64) NOT NULL,
@@ -1511,6 +1511,11 @@ if (file_exists("zp-config.php")) {
 	//v1.2.5
 	$sql_statements[] = "ALTER TABLE $tbl_albums CHANGE `parentid` `parentid` int(11) unsigned default NULL;";
 	$sql_statements[] = "ALTER TABLE $tbl_images CHANGE `albumid` `albumid` int(11) unsigned default NULL;";
+	$sql_statements[] = 'UPDATE '.$tbl_albums.' SET `parentid`=NULL WHERE `parentid`=0';
+	$sql_statements[] = 'UPDATE '.$tbl_images.' SET `albumid`=NULL WHERE `albumid`=0';
+	$sql_statements[] = 'DELETE FROM '.$tbl_zenpage_pages.' WHERE `titlelink`=""'; // cleanup for bad records
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' DROP INDEX `titlelink`;';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD UNIQUE (`titlelink`);';
 	
 	/**************************************************************************************
 	 ******                            END of UPGRADE SECTION     
@@ -1672,9 +1677,6 @@ if (file_exists("zp-config.php")) {
 		foreach ($albums as $album) {
 			checkAlbumParentid($album, NULL);
 		}
-		// fix any parent/album IDs which are 0 instead of NULL
-		query('UPDATE '.prefix('albums').' SET `parentid`=NULL WHERE `parentid`=0');
-		query('UPDATE '.prefix('images').' SET `albumid`=NULL WHERE `albumid`=0');
 		
 		if ($createTables) {
 			if ($_zp_loggedin == ADMIN_RIGHTS) {

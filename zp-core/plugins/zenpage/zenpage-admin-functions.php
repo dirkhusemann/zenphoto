@@ -16,8 +16,6 @@ require_once("zenpage-class-news.php");
 require_once("zenpage-functions.php");
 
 global $_zp_current_zenpage_news, $_zp_current_zenpage_page;
-//$_zp_current_zenpage_news = new ZenpageNews();
-//$_zp_current_zenpage_page = new ZenpagePage();
 /**
  * Returns the value of a checkbox form item
  *
