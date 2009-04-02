@@ -408,11 +408,10 @@ if (!$checked) {
 
 	global $_zp_conf_vars;
 
-	function checkMark($check, $text, $sfx, $msg) {
+	function checkMark($check, $text, $text2, $msg) {
 		global $warn, $moreid;
 		$dsp = '';
 		if ($check > 0) {$check = 1; }
-		echo "\n<br/><span class=\"";
 		switch ($check) {
 			case 0:
 				$dsp = "fail";
@@ -426,12 +425,19 @@ if (!$checked) {
 				$dsp = "pass";
 				break;
 		}
-		echo $dsp."\">$text</span>";
-		$dsp .= ' '.trim($text);
 		if ($check <= 0) {
-			if (!empty($sfx)) {
-				echo $sfx;
-				$dsp .= ' '.trim($sfx);
+			if (!empty($text2)) {
+				?>
+				<br />
+				<span class="<?php echo $dsp; ?>"><?php echo  $text2; ?></span>
+				<?php
+				$dsp .= ' '.trim($text2);
+			} else {
+				?>
+				<br />
+				<span class="<?php echo $dsp; ?>"><?php echo  $text; ?></span>
+				<?php
+				$dsp .= ' '.trim($text);
 			}
 			if (!empty($msg)) {
 				if ($check == 0) {
@@ -441,8 +447,8 @@ if (!$checked) {
 					echo "</div>";
 				} else if ($check == -1) {
 					$moreid++;
-// should warnings start out hidden?					
-//					echo ' <a href="javascript: toggle('. "'more" .$moreid."'".');">'.gettext('<strong>Warning!</strong> cick for details').'</a>';
+					// should warnings start out hidden?
+					//					echo ' <a href="javascript: toggle('. "'more" .$moreid."'".');">'.gettext('<strong>Warning!</strong> cick for details').'</a>';
 					echo "<div class='warning' id='more".$moreid."' style='display:block'>";
 					echo gettext('Warning!');
 					echo "<p>".$msg."</p>";
@@ -457,10 +463,17 @@ if (!$checked) {
 				}
 				$dsp .= ' '.trim($msg);
 			}
+		} else {
+			?> 
+			<br />
+			<span class="<?php echo $dsp; ?>"><?php echo  $text; ?></span>
+			<?php
+			$dsp .= ' '.trim($text);
 		}
 		setupLog($dsp);
 		return $check;
 	}
+	
 	function folderCheck($which, $path, $class) {
 		global $const_webpath, $serverpath, $chmod;
 		if (!is_dir($path) && $class == 'std') {
@@ -488,28 +501,23 @@ if (!$checked) {
 		}
 		$f = '';
 		if (!is_dir($path)) {
-			$e = '';
-			if ($class != 'std') {
-				$sfx = ' '.sprintf(gettext("[<em>%s</em> does not exist]"),$append);
-				$folder = $append;
-			} else {
-				$sfx = ' '.sprintf(gettext("[<em>%s</em> does not exist and <strong>setup</strong> could not create it]"),$append);
-			}
 			$msg = " ".sprintf(gettext('You must create the folder <em>%1$s</em><br /><code>mkdir(%2$s, 0777)</code>.'),$folder,$path);
+			if ($class != 'std') {
+				return checkMark(false, '', sprintf(gettext('<em>%1$s</em> folder [<em>%2$s</em> does not exist]'),$which, $append), $msg);
+			} else {
+				return checkMark(false, '', sprintf(gettext('<em>%1$s</em> folder [<em>%2$s</em> does not exist and <strong>setup</strong> could not create it]'),$which, $append), $msg);
+			}
 		} else if (!is_writable($path)) {
-			$sfx = ' '.sprintf(gettext('[<em>%s</em> is not writeable and <strong>setup</strong> could not make it so]'),$append);
 			$msg =  sprintf(gettext('Change the permissions on the <code>%1$s</code> folder to be writable by the server (<code>chmod 777 %2$s</code>)'),$folder,$append);
+			return checkMark(false, '', sprintf(gettext('<em>%1$s</em> folder [<em>%2$s</em> is not writeable and <strong>setup</strong> could not make it so]'),$which, $append), $msg);
 		} else {
 			if (($folder != $which) || $class != 'std') {
 				$f = " (<em>$append</em>)";
 			}
-			$msg = '';
-			$sfx = '';
+			return checkMark(true, sprintf(gettext('<em>%1$s</em> folder%2$s'),$which, $f), '', '');
 		}
-
-
-		return checkMark(is_dir($path) && is_writable($path), sprintf(gettext(" <em>%s</em> folder"),$which).$f, $sfx, $msg);
 	}
+	
 	function versionCheck($required, $desired, $found) {
 		$nr = explode(".", $required . '.0.0.0');
 		$vr = $nr[0]*10000 + $nr[1]*100 + $nr[2];
@@ -566,28 +574,28 @@ if (!$checked) {
 
 	$required = '4.1.0';
 	$desired = '4.1.0';
-	$good = checkMark(versionCheck($required, $desired, PHP_VERSION), " ".sprintf(gettext("PHP version %s"), PHP_VERSION), "", sprintf(gettext('Version %1$s or greater is required.'),$required)) && $good;
+	$good = checkMark(versionCheck($required, $desired, PHP_VERSION), sprintf(gettext("PHP version %s"), PHP_VERSION), "", sprintf(gettext('Version %1$s or greater is required.'),$required)) && $good;
 
 	if (ini_get('safe_mode')) {
 		$safe = -1;
 	} else {
 		$safe = true;
 	}
-	checkMark($safe, gettext("PHP Safe Mode"), ' '.gettext("[is set]"), gettext("Zenphoto functionality is reduced when PHP <code>safe mode</code> restrictions are in effect."));
+	checkMark($safe, gettext("PHP Safe Mode"), gettext("PHP Safe Mode [is set]"), gettext("Zenphoto functionality is reduced when PHP <code>safe mode</code> restrictions are in effect."));
 
 	if (get_magic_quotes_gpc()) {
 		$magic_quotes_disabled = -1;
 	} else {
 		$magic_quotes_disabled = true;
 	}
-	checkMark($magic_quotes_disabled, gettext("PHP magic_quotes_gpc"), ' '.gettext("[is enabled]"), gettext("You should consider disabling <code>magic_quotes_gpc</code>. For more information <a href=\"http://www.zenphoto.org/2008/08/troubleshooting-zenphoto/#25\" target=\"_new\">click here</a>."));
+	checkMark($magic_quotes_disabled, gettext("PHP magic_quotes_gpc"), gettext("PHP magic_quotes_gpc [is enabled]"), gettext("You should consider disabling <code>magic_quotes_gpc</code>. For more information <a href=\"http://www.zenphoto.org/2008/08/troubleshooting-zenphoto/#25\" target=\"_new\">click here</a>."));
 
 	/* Check for graphic library and image type support. */
 	if (function_exists('graphicsLibInfo')) {
 		$graphics_lib = graphicsLibInfo();
 		//TODO: add imageMagick to the install message
 		$library = $graphics_lib['Library'];
-		$good = checkMark(!empty($library), ' '.sprintf(gettext("Grapics support <code>%s</code>"),$library), gettext('is not installed'), gettext('You need to install GD support in your PHP')) && $good;
+		$good = checkMark(!empty($library), sprintf(gettext("Grapics support <code>%s</code>"),$library), sprintf(gettext('Grapics support <code>%s</code> [is not installed]'),$library), gettext('You need to install GD support in your PHP')) && $good;
 		if (!empty($library)) {
 			$missing = array();
 			if (!isset($graphics_lib['JPG'])) { $missing[] = 'JPEG'; }
@@ -608,15 +616,15 @@ if (!$checked) {
 					$good = false;
 					$mandate = gettext("To correct this you need to a install GD with appropriate image support in your PHP");
 				}
-				checkMark($err, ' '.gettext("PHP graphics image support"), '', $imgmissing.
+				checkMark($err, gettext("PHP graphics image support"), '', $imgmissing.
 	                    "<br/>".gettext("The unsupported image types will not be viewable in your albums.").
 	                    "<br/>".$mandate);
 			}
 		}
 	}
-	checkMark($noxlate, gettext("PHP <code>gettext()</code> support"), ' '.gettext("[is not present]"), gettext("Localization of Zenphoto currently requires native PHP <code>gettext()</code> support"));
+	checkMark($noxlate, gettext('PHP <code>gettext()</code> support'), gettext('PHP <code>gettext()</code> support [is not present]'), gettext("Localization of Zenphoto currently requires native PHP <code>gettext()</code> support"));
 	if ($_zp_setupCurrentLocale_result === false) {
-		checkMark(-1, 'PHP <code>setlocale()</code>', ' '.gettext("failed"), gettext("Locale functionality is not implemented on your platform or the specified locale does not exist. Language translation may not work.").'<br />'.gettext('See the troubleshooting guide on zenphoto.org for details.'));
+		checkMark(-1, gettest('PHP <code>setlocale()</code>'), ' '.gettext('PHP <code>setlocale()</code> failed'), gettext("Locale functionality is not implemented on your platform or the specified locale does not exist. Language translation may not work.").'<br />'.gettext('See the troubleshooting guide on zenphoto.org for details.'));
 	}
 	if (function_exists('mb_internal_encoding')) {
 		if (($charset = mb_internal_encoding()) == 'UTF-8') {
@@ -624,36 +632,33 @@ if (!$checked) {
 		} else {
 			$mb = -1;
 		}
-		$m1 = sprintf(gettext('Your internal characater set is <strong>%s</strong>'), $charset);
 		$m2 = gettext('Setting <em>mbstring.internal_encoding</em> to <strong>UTF-8</strong> in your <em>php.ini</em> file is recommended to insure accented and multi-byte characters function properly.');
+		checkMark($mb, gettext("PHP <code>mbstring</code> package"), sprintf(gettext('PHP <code>mbstring</code> package [Your internal characater set is <strong>%s</strong>]'), $charset), $m2);
 	} else {
 		$test = $_zp_UTF8->convert('test', FILESYSTEM_CHARSET, 'UTF-8');
 		if (empty($test)) {
-			$mb= 0;
-			$m1 = gettext("[is not present and <code>iconv()</code> is not working]");
 			$m2 = gettext("You need to install the <code>mbstring</code> package or correct the issue with <code>iconv(()</code>");
+			checkMark(0, '', gettext("PHP <code>mbstring</code> package [is not present and <code>iconv()</code> is not working]"), $m2);
 		} else {
-			$mb= -1;
-			$m1 = gettext("[is not present]");
 			$m2 = gettext("Strings generated internally by PHP may not display correctly. (e.g. dates)");
+			checkMark(-1, '', gettext("PHP <code>mbstring</code> package [is not present]"), $m2);
 		}
 	}
-	checkMark($mb, gettext("PHP <code>mbstring</code> package"), ' '.$m1, $m2);
 
 	$sql = extension_loaded('mysql');
-	$good = checkMark($sql, ' '.gettext(" PHP MySQL support"), '', gettext('You need to install MySQL support in your PHP')) && $good;
+	$good = checkMark($sql, gettext("PHP MySQL support"), gettext("PHP MySQL support [is not installed]"), gettext('You need to install MySQL support in your PHP')) && $good;
 	if (file_exists("zp-config.php")) {
 		require(dirname(__FILE__).'/zp-config.php');
 		$cfg = true;
 	} else {
 		$cfg = false;
 	}
-	$good = checkMark($cfg, " <em>zp-config.php</em> ".gettext("file"), ' '.gettext("[does not exist]"),
+	$good = checkMark($cfg, gettext("<em>zp-config.php</em> file"), gettext("<em>zp-config.php</em> file [does not exist]"),
  							gettext("Edit the <code>zp-config.php.source</code> file and rename it to <code>zp-config.php</code>").' ' .
  							"<br/><br/>".gettext("You can find the file in the \"zp-core\" directory.")) && $good;
  	if ($cfg) {
  		if ($chmod == 0777 || !$chmod_defined) {
-	 		checkMark(-1, ' '.gettext('<em>Strict Permissions</em>'), ' '.gettext('[is not in effect]'),
+	 		checkMark(-1, gettext('<em>Strict Permissions</em>'), gettext('<em>Strict Permissions</em> [is not in effect]'),
 	 							gettext('When this option is not in effect, file and folder permissions are relaxed. '.
 	 							'This could constitute a security risk so it is recommended that you enable '.
 	 							'<em>Strict Permissions</em>. However, on some servers Zenphoto does not function correctly '.
@@ -664,7 +669,7 @@ if (!$checked) {
 	 							gettext('<strong>NOTE:</strong> This option applies only to new files and folders created by Zenphoto. You may have to change permissions on existing ones to resolve problems.')
 	 							);
 	 	} else {
-	 		checkMark(-2, ' '.gettext('<em>Strict Permissions</em>'), ' '.gettext('[is in effect]'),
+	 		checkMark(-2, gettext('<em>Strict Permissions</em>'), gettext('<em>Strict Permissions</em> [is in effect]'),
 	 							gettext('On some servers Zenphoto does not function correctly '.
 	 							'with strict file/folder permissions. If you are getting permission errors run setup again and '.
 	 							'disable the option.').'<br /><br />'.
@@ -693,7 +698,7 @@ if (!$checked) {
 	if ($cfg) {
 		@chmod('zp-config.php', 0666 & $chmod);
 		if ($adminstuff = (!$sql || !$connection  || !$db) && is_writable('zp-config.php')) {
-			$good = checkMark(false, ' '.gettext("MySQL setup in").' zp-config.php', '', '') && $good;
+			$good = checkMark(false, gettext("MySQL setup in zp-config.php"), '', '') && $good;
 			// input form for the information
 			?>
 
@@ -749,16 +754,16 @@ if ($debug) {
 
 <?php
 		} else {
-			$good = checkMark(!$adminstuff, ' '.gettext("MySQL setup in <em>zp-config.php</em>"), '',
+			$good = checkMark(!$adminstuff, gettext("MySQL setup in <em>zp-config.php</em>"), '',
 											gettext("You have not set your <strong>MySQL</strong> <code>user</code>, <code>password</code>, etc. in your <code>zp-config.php</code> file and <strong>setup</strong> is not able to write to the file.")) && $good;
 		}
 	}
 	if (!$newconfig && !$connection) {
-		$good = checkMark($connection, ' '.gettext("connect to MySQL"), '', gettext("Could not connect to the <strong>MySQL</strong> server. Check the <code>user</code>, <code>password</code>, and <code>database host</code> and try again.").' ') && $good;
+		$good = checkMark($connection, gettext("connect to MySQL"), '', gettext("Could not connect to the <strong>MySQL</strong> server. Check the <code>user</code>, <code>password</code>, and <code>database host</code> and try again.").' ') && $good;
 	}
 	if ($connection) {
-		$good = checkMark($sqlv, ' '.sprintf(gettext("MySQL version %s"),$mysqlv), "", sprintf(gettext('Version %1$s or greater is required.<br />Version %2$s or greater is prefered.'),$required,$desired)) && $good;
-		$good = checkMark($db, ' '.sprintf(gettext("connect to the database <code> %s </code>"),$_zp_conf_vars['mysql_database']), '',
+		$good = checkMark($sqlv, sprintf(gettext("MySQL version %s"),$mysqlv), "", sprintf(gettext('Version %1$s or greater is required.<br />Version %2$s or greater is prefered.'),$required,$desired)) && $good;
+		$good = checkMark($db, sprintf(gettext("connect to the database <code> %s </code>"),$_zp_conf_vars['mysql_database']), '',
 			sprintf(gettext("Could not access the <strong>MySQL</strong> database (<code>%s</code>)."), $_zp_conf_vars['mysql_database']).' '.gettext("Check the <code>user</code>, <code>password</code>, and <code>database name</code> and try again.").' ' .
 			gettext("Make sure the database has been created, and the <code>user</code> has access to it.").' ' .
 			gettext("Also check the <code>MySQL host</code>.")) && $good;
@@ -768,23 +773,28 @@ if ($debug) {
 			$row = @mysql_fetch_row($result);
 			$oldmode = $row[0];
 		}
-		@mysql_query('SET SESSION sql_mode="";', $mysql_connection);
-		$result = @mysql_query('SELECT @@SESSION.sql_mode;', $mysql_connection);
+		$result = @mysql_query('SET SESSION sql_mode="";', $mysql_connection);
 		if ($result) {
-			$row = @mysql_fetch_row($result);
-			$mode = $row[0];
-			if ($oldmode != $mode) {
-				checkMark(-1, ' '.sprintf(gettext('SQL mode [<code>%s</code>] overridden'), $oldmode), '', gettext('Consider setting it <em>empty</em> in your MySQL configuration.'));
-			} else {
-				if (!empty($mode)) {
-					$err = -1;
+			$result = @mysql_query('SELECT @@SESSION.sql_mode;', $mysql_connection);
+			if ($result) {
+				$row = @mysql_fetch_row($result);
+				$mode = $row[0];
+				if ($oldmode != $mode) {
+					checkMark(-1, sprintf(gettext('SQL mode [<code>%s</code> overridden]'), $oldmode), '', gettext('Consider setting it <em>empty</em> in your MySQL configuration.'));
 				} else {
-					$err = 1;
+					if (!empty($mode)) {
+						$err = -1;
+					} else {
+						$err = 1;
+					}
+					checkMark($err, gettext('SQL mode'), sprintf(gettext('SQL mode [is set to <code>%s</code>]'),$mode), gettext('Consider setting it <em>empty</em> if you get MySql errors.'));
 				}
-				checkMark($err, ' '.gettext('SQL mode'), ' '.sprintf(gettext('is set to <code>%s</code>'),$mode), gettext('Consider setting it <em>empty</em> if you get MySql errors.'));
+			} else {
+				checkMark(-1, '', sprintf(gettext('SQL mode [query failed]'), $oldmode), gettext('You may need to set  <code>SQL mode</code> <em>empty</em> in your MySQL configuration.'));
 			}
+		} else {
+			checkMark(-1, '', gettext('SQL mode [SET SESSION failed]'), gettext('You may need to set <code>SQL mode</code> <em>empty</em> in your MySQL configuration.'));
 		}
-		
 		$dbn = "`".$_zp_conf_vars['mysql_database']. "`.*";
 		if (versioncheck('4.2.1', '4.2.1', $mysqlv)) {
 			$sql = "SHOW GRANTS FOR CURRENT_USER;";
@@ -842,7 +852,7 @@ if ($debug) {
 		} else {
 			$report = "<br/><br/>".gettext("The <em>SHOW GRANTS</em> query failed.");
 		}
-		checkMark($access, ' '.gettext("MySQL access rights"), " [$rightsfound]",
+		checkMark($access, gettext("MySQL access rights"), sprintf(gettext("MySQL access rights [%s]"),$rightsfound),
  											sprintf(gettext("Your MySQL user must have %s rights."),$neededlist) . $report);
 
 
@@ -855,13 +865,15 @@ if ($debug) {
 			}
 		}
 		if (empty($tableslist)) {
-			$msg = gettext('MySQL <em>show tables</em> found no tables');
+			$msg = gettext('MySQL <em>show tables</em> [found no tables]');
+			$msg2 = '';
 		} else {
 			$msg = sprintf(gettext("MySQL <em>show tables</em> found: %s"),substr($tableslist, 0, -2));
+			$msg2 = '';
 		}
 		if (!$result) { $result = -1; }
 		$dbn = $_zp_conf_vars['mysql_database'];
-		checkMark($result, ' '.$msg, ' '.gettext("[Failed]"), sprintf(gettext("MySQL did not return a list of the database tables for <code>%s</code>."),$dbn) .
+		checkMark($result, $msg, gettext("MySQL <em>show tables</em> [Failed]"), sprintf(gettext("MySQL did not return a list of the database tables for <code>%s</code>."),$dbn) .
  											"<br/>".gettext("<strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables."));
 
 	}
@@ -885,7 +897,7 @@ if ($debug) {
 
 	$filelist = implode("<br />", $installed_files);
 	if (count($installed_files) > 0) {
-		$msg1 = gettext("Some files are missing or their <em>filemtimes</em> seem out of variance.");
+		$msg1 = gettext("Zenphoto core files [Some files are missing or their <em>filemtimes</em> seem out of variance]");
 		$msg2 = gettext('Perhaps there was a problem with the upload. You should check the following files: ').
 					'<br /><code>'.$filelist.'</code>';
 		$mark = -1;
@@ -896,13 +908,12 @@ if ($debug) {
 	}
 	if (!defined("RELEASE")) {
 		$mark = -1;
-		if (!empty($msg1)) $msg1 = ' '.$msg1;
-		$msg1 = gettext("This is not an official build.").$msg1;
+		$msg1 = gettext("Zenphoto core files [This is not an official build]").$msg1;
 	}
 	
-	checkMark($mark, ' '.gettext("Zenphoto core files"), ' ['.$msg1.']', $msg2);
+	checkMark($mark, gettext("Zenphoto core files"), $msg1, $msg2);
 
-	$msg = " <em>.htaccess</em> ".gettext("file");
+	$msg = gettext("<em>.htaccess</em> file");
 	if (!stristr($_SERVER['SERVER_SOFTWARE'], "apache") && !stristr($_SERVER['SERVER_SOFTWARE'], "litespeed")) {
 		checkMark(-1, gettext("Server seems not to be Apache or Apache-compatible, <code>.htaccess</code> not required."), "", "");
 		$Apache = false;
@@ -918,7 +929,7 @@ if ($debug) {
 	if (empty($htu)) {
 		if ($Apache) {
 			$ch = -1;
-			$err = gettext("is empty or does not exist");
+			$err = gettext("<em>.htaccess</em> file [is empty or does not exist]");
 			$desc = gettext("Edit the <code>.htaccess</code> file in the root zenphoto folder if you have the mod_rewrite module, and want cruft-free URLs.")
 			.gettext("Just change the one line indicated to make it work.").' ' .
 						"<br/><br/>".gettext("You can ignore this warning if you do not intend to set the option <code>mod_rewrite</code>.");
@@ -935,7 +946,7 @@ if ($debug) {
 		}
 		$ch = !empty($vr) && ($vr == HTACCESS_VERSION);
 		if (!$ch && !$Apache) $ch = -1;
-		$err = gettext("wrong version");
+		$err = gettext("<em>.htaccess</em> file [wrong version]");
 		$desc = gettext("You need to upload the copy of the .htaccess file that was included with the zenphoto distribution.");
 	}
 
@@ -949,14 +960,14 @@ if ($debug) {
 			$rw = trim(substr($htu, $i+13, $j-$i-13));
 		}
 		if (!empty($rw)) {
-			$msg .= ' '.sprintf(gettext("(<em>RewriteEngine</em> is <strong>%s</strong>)"), $rw);
+			$msg = sprintf(gettext("<em>.htaccess</em> file (<em>RewriteEngine</em> is <strong>%s</strong>)"), $rw);
 			if (isset($_SERVER['REQUEST_URI'])) {
 				$mod = "&mod_rewrite=$rw";
 			}
 		}
 	}
 	if ($Apache || $ch != -2) {
-		checkMark($ch, $msg, " [$err]", $desc);			
+		checkMark($ch, $msg, $err, $desc);			
 	}
 	$base = true;
 	$f = '';
@@ -965,13 +976,15 @@ if ($debug) {
 		$i = strpos($htu, 'REWRITEBASE', $j);
 		if ($i === false) {
 			$base = false;
-			$b = gettext("<em>.htaccess</em> RewriteBase is <em>missing</em>");
+			$b = '';
+			$err = gettext("<em>.htaccess</em> RewriteBase [is <em>missing</em>]");
 			$i = $j+1;
 		} else {
 			$j = strpos($htu, "\n", $i+11);
-			$b = trim(substr($ht, $i+11, $j-$i-11));
-			$base = ($b == $d);
-			$b = sprintf(gettext("<em>.htaccess</em> RewriteBase is <code>%s</code>"), $b);
+			$bs = trim(substr($ht, $i+11, $j-$i-11));
+			$base = ($bs == $d);
+			$b = sprintf(gettext("<em>.htaccess</em> RewriteBase is <code>%s</code>"), $bs);
+			$err = sprintf(gettext("<em>.htaccess</em> RewriteBase is <code>%s</code> [Does not match install folder]"), $bs);
 		}
 		$f = '';
 		if (!$base) { // try and fix it
@@ -982,18 +995,19 @@ if ($debug) {
 					if (fwrite($handle, $ht)) {
 						$base = true;
 						$b =  sprintf(gettext("<em>.htaccess</em> RewriteBase is <code>%s</code> (fixed)"), $d);
+						$err =  '';
 					}
 				}
 				fclose($handle);
 			}
 		}
-		$good = checkMark($base, $b, ' ['.gettext("Does not match install folder").']',
+		$good = checkMark($base, $b, $err,
 											gettext("Setup was not able to write to the file change RewriteBase match the install folder.") .
 											"<br/>".sprintf(gettext("Either make the file writeable or set <code>RewriteBase</code> in your <code>.htaccess</code> file to <code>%s</code>."),$d)) && $good;
 	}
 
 	if (isset($_zp_conf_vars['external_album_folder']) && !is_null($_zp_conf_vars['external_album_folder'])) {
-		checkmark(-1, 'albums', ' ['.gettext("<code>\$conf['external_album_folder']</code> is deprecated").']', gettext('You should update your zp-config.php file to conform to the current zp-config.php.example file.'));
+		checkmark(-1, 'albums', gettext("albums [<code>\$conf['external_album_folder']</code> is deprecated["), gettext('You should update your zp-config.php file to conform to the current zp-config.php.example file.'));
 		$_zp_conf_vars['album_folder_class'] = 'external';
 		$albumfolder = $_zp_conf_vars['external_album_folder'];
 	}
@@ -1016,12 +1030,12 @@ if ($debug) {
 		}
 		$good = folderCheck('albums', $albumfolder, $_zp_conf_vars['album_folder_class']) && $good;
 	} else {
-		checkmark(-1, gettext('<em>albums</em> folder'), ' ['.gettext("The line <code>\$conf['album_folder']</code> is missing from your zp-config.php file.").']', gettext('You should update your zp-config.php file to conform to the current zp-config.php.example file.'));
+		checkmark(-1, gettext('<em>albums</em> folder'), gettext("<em>albums</em> folder [The line <code>\$conf['album_folder']</code> is missing from your zp-config.php file]"), gettext('You should update your zp-config.php file to conform to the current zp-config.php.example file.'));
 	}
 
 	$good = folderCheck('cache', dirname(dirname(__FILE__)) . "/cache/", 'std') && $good;
 
-	$good = checkmark(file_exists($en_US), '<em>locale</em> '.gettext('folders'), ' ['.gettext('Are not complete').']', gettext('Be sure you have uploaded the complete Zenphoto package. You must have at least the <em>en_US</em> folder.')) && $good;
+	$good = checkmark(file_exists($en_US), gettext('<em>locale</em> folders'), gettext('<em>locale</em> folders [Are not complete]'), gettext('Be sure you have uploaded the complete Zenphoto package. You must have at least the <em>en_US</em> folder.')) && $good;
 
 	if (getOption('zp_plugin_zenpage')) {
 		$good = folderCheck('uploaded', dirname(dirname(__FILE__)) . "/uploaded/", 'std') && $good;
