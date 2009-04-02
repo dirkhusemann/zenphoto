@@ -223,7 +223,7 @@ if (isset($_GET['action'])) {
 				zp_setCookie('dynamic_locale', $newloc, time()-368000, $cookiepath);  // clear the language cookie
 				$encoding = getOption('charset');
 				if (empty($encoding)) $encoding = 'UTF-8';
-				$result = setlocale(LC_ALL, $locale.'.'.$encoding, $locale);
+				$result = setlocale(LC_ALL, $newloc.'.'.$encoding, $newloc);
 				if (!empty($newloc) && ($result === false)) {
 					$notify = '?local_failed='.$newloc;
 				}
