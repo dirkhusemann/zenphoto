@@ -221,7 +221,7 @@ if (isset($_GET['album'])) {
 
 									$image->setDateTime(strip($_POST["$i-date"]));
 									$image->setShow(isset($_POST["$i-Visible"]));
-									$image->setCommentsAllowed(strip($_POST["$i-allowcomments"]));
+									$image->setCommentsAllowed(isset($_POST["$i-allowcomments"]));
 									if (isset($_POST["$i-reset_hitcounter"])) {
 										$image->set('hitcounter', 0);
 									}
