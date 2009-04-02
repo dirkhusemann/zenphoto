@@ -581,21 +581,21 @@ if (!$checked) {
 	} else {
 		$safe = true;
 	}
-	checkMark($safe, gettext("PHP Safe Mode"), gettext("PHP Safe Mode [is set]"), gettext("Zenphoto functionality is reduced when PHP <code>safe mode</code> restrictions are in effect."));
+	checkMark($safe, gettext("PHP <code>Safe Mode</code>"), gettext("PHP <code>Safe Mode</code> [is set]"), gettext("Zenphoto functionality is reduced when PHP <code>safe mode</code> restrictions are in effect."));
 
 	if (get_magic_quotes_gpc()) {
 		$magic_quotes_disabled = -1;
 	} else {
 		$magic_quotes_disabled = true;
 	}
-	checkMark($magic_quotes_disabled, gettext("PHP magic_quotes_gpc"), gettext("PHP magic_quotes_gpc [is enabled]"), gettext("You should consider disabling <code>magic_quotes_gpc</code>. For more information <a href=\"http://www.zenphoto.org/2008/08/troubleshooting-zenphoto/#25\" target=\"_new\">click here</a>."));
+	checkMark($magic_quotes_disabled, gettext("PHP <code>magic_quotes_gpc</code>"), gettext("PHP <code>magic_quotes_gpc</code> [is enabled]"), gettext("You should consider disabling <code>magic_quotes_gpc</code>. For more information <a href=\"http://www.zenphoto.org/2008/08/troubleshooting-zenphoto/#25\" target=\"_new\">click here</a>."));
 
 	/* Check for graphic library and image type support. */
 	if (function_exists('graphicsLibInfo')) {
 		$graphics_lib = graphicsLibInfo();
 		//TODO: add imageMagick to the install message
 		$library = $graphics_lib['Library'];
-		$good = checkMark(!empty($library), sprintf(gettext("Grapics support <code>%s</code>"),$library), sprintf(gettext('Grapics support <code>%s</code> [is not installed]'),$library), gettext('You need to install GD support in your PHP')) && $good;
+		$good = checkMark(!empty($library), sprintf(gettext("Graphics support: <code>%s</code>"),$library), gettext('Graphics support [is not installed]'), gettext('You need to install a graphics support library support in your PHP')) && $good;
 		if (!empty($library)) {
 			$missing = array();
 			if (!isset($graphics_lib['JPG'])) { $missing[] = 'JPEG'; }
@@ -621,6 +621,8 @@ if (!$checked) {
 	                    "<br/>".$mandate);
 			}
 		}
+	} else {
+		checkmark(0, '', gettext('Graphics support [configuration error]'), gettext('No Zenphoto image handling library was loaded. Check your install files.'));
 	}
 	checkMark($noxlate, gettext('PHP <code>gettext()</code> support'), gettext('PHP <code>gettext()</code> support [is not present]'), gettext("Localization of Zenphoto currently requires native PHP <code>gettext()</code> support"));
 	if ($_zp_setupCurrentLocale_result === false) {
@@ -646,7 +648,7 @@ if (!$checked) {
 	}
 
 	$sql = extension_loaded('mysql');
-	$good = checkMark($sql, gettext("PHP MySQL support"), gettext("PHP MySQL support [is not installed]"), gettext('You need to install MySQL support in your PHP')) && $good;
+	$good = checkMark($sql, gettext("PHP <code>MySQL support</code>"), gettext("PHP <code>MySQL support</code> [is not installed]"), gettext('You need to install MySQL support in your PHP')) && $good;
 	if (file_exists("zp-config.php")) {
 		require(dirname(__FILE__).'/zp-config.php');
 		$cfg = true;
@@ -759,11 +761,11 @@ if ($debug) {
 		}
 	}
 	if (!$newconfig && !$connection) {
-		$good = checkMark($connection, gettext("connect to MySQL"), '', gettext("Could not connect to the <strong>MySQL</strong> server. Check the <code>user</code>, <code>password</code>, and <code>database host</code> and try again.").' ') && $good;
+		$good = checkMark($connection, gettext("Connect to MySQL"), '', gettext("Could not connect to the <strong>MySQL</strong> server. Check the <code>user</code>, <code>password</code>, and <code>database host</code> and try again.").' ') && $good;
 	}
 	if ($connection) {
 		$good = checkMark($sqlv, sprintf(gettext("MySQL version %s"),$mysqlv), "", sprintf(gettext('Version %1$s or greater is required.<br />Version %2$s or greater is prefered.'),$required,$desired)) && $good;
-		$good = checkMark($db, sprintf(gettext("connect to the database <code> %s </code>"),$_zp_conf_vars['mysql_database']), '',
+		$good = checkMark($db, sprintf(gettext("Connect to the database <code>%s</code>"),$_zp_conf_vars['mysql_database']), '',
 			sprintf(gettext("Could not access the <strong>MySQL</strong> database (<code>%s</code>)."), $_zp_conf_vars['mysql_database']).' '.gettext("Check the <code>user</code>, <code>password</code>, and <code>database name</code> and try again.").' ' .
 			gettext("Make sure the database has been created, and the <code>user</code> has access to it.").' ' .
 			gettext("Also check the <code>MySQL host</code>.")) && $good;
@@ -780,20 +782,20 @@ if ($debug) {
 				$row = @mysql_fetch_row($result);
 				$mode = $row[0];
 				if ($oldmode != $mode) {
-					checkMark(-1, sprintf(gettext('SQL mode [<code>%s</code> overridden]'), $oldmode), '', gettext('Consider setting it <em>empty</em> in your MySQL configuration.'));
+					checkMark(-1, sprintf(gettext('MySQL <code>SQL mode</code> [<em>%s</em> overridden]'), $oldmode), '', gettext('Consider setting it <em>empty</em> in your MySQL configuration.'));
 				} else {
 					if (!empty($mode)) {
 						$err = -1;
 					} else {
 						$err = 1;
 					}
-					checkMark($err, gettext('SQL mode'), sprintf(gettext('SQL mode [is set to <code>%s</code>]'),$mode), gettext('Consider setting it <em>empty</em> if you get MySql errors.'));
+					checkMark($err, gettext('MySQL <code>SQL mode</code>'), sprintf(gettext('MySQL <code>SQL mode</code> [is set to <em>%s</em>]'),$mode), gettext('Consider setting it <em>empty</em> if you get MySql errors.'));
 				}
 			} else {
-				checkMark(-1, '', sprintf(gettext('SQL mode [query failed]'), $oldmode), gettext('You may need to set  <code>SQL mode</code> <em>empty</em> in your MySQL configuration.'));
+				checkMark(-1, '', sprintf(gettext('MySQL <code>SQL mode</code> [query failed]'), $oldmode), gettext('You may need to set  <code>SQL mode</code> <em>empty</em> in your MySQL configuration.'));
 			}
 		} else {
-			checkMark(-1, '', gettext('SQL mode [SET SESSION failed]'), gettext('You may need to set <code>SQL mode</code> <em>empty</em> in your MySQL configuration.'));
+			checkMark(-1, '', gettext('MySQL <code>SQL mode</code> [SET SESSION failed]'), gettext('You may need to set <code>SQL mode</code> <em>empty</em> in your MySQL configuration.'));
 		}
 		$dbn = "`".$_zp_conf_vars['mysql_database']. "`.*";
 		if (versioncheck('4.2.1', '4.2.1', $mysqlv)) {
@@ -852,7 +854,7 @@ if ($debug) {
 		} else {
 			$report = "<br/><br/>".gettext("The <em>SHOW GRANTS</em> query failed.");
 		}
-		checkMark($access, gettext("MySQL access rights"), sprintf(gettext("MySQL access rights [%s]"),$rightsfound),
+		checkMark($access, gettext("MySQL <code>access rights</code>"), sprintf(gettext("MySQL <code>access rights</code> [%s]"),$rightsfound),
  											sprintf(gettext("Your MySQL user must have %s rights."),$neededlist) . $report);
 
 

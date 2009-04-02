@@ -419,10 +419,14 @@ function zp_load_image($folder, $filename) {
 function zenpage_load_page() {
 	global $_zp_current_zenpage_page;
 	$_zp_current_zenpage_page = NULL;
-	$titlelink = sanitize($_GET['title']);
+	if (isset($_GET['title'])) {
+		$titlelink = sanitize($_GET['title']);
+	} else {
+		$titlelink = '';
+	}
 	$sql = 'SELECT `id` FROM '.prefix('zenpage_pages').' WHERE `titlelink`="'.$titlelink.'"';
 	$result = query_single_row($sql);
-	if (is_array($result)) {
+	if (!empty($titlelink) && is_array($result)) {
 		$_zp_current_zenpage_page = new ZenpagePage($titlelink);
 		add_context(ZP_ZENPAGE_PAGE);
 	} else {

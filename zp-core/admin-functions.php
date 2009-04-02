@@ -722,11 +722,18 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 					break;
 				case 7: // checkbox UL
 					echo "<td width=\"350px>\"\n";
+					$cvarray = array();
+					$c = 0;
 					foreach ($row['checkboxes'] as $display=>$checkbox) {
 						echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'chkbox-'.$checkbox.'" value=0 />' . "\n";
+						$ck_sql = str_replace($key, $checkbox, $sql);
+						$db = query_single_row($ck_sql);
+						if ($db) {
+							if ($db['value'])	$cvarray[$c++] = $checkbox;
+						}
 					}
 					echo '<ul class="customchecklist">'."\n";
-					generateUnorderedListFromArray($row['currentvalues'], $row['checkboxes'], '', '', true, true);
+					generateUnorderedListFromArray($cvarray, $row['checkboxes'], '', '', true, true);
 					echo '</ul>';
 					echo "</td>\n";
 					break;

@@ -56,11 +56,9 @@ class filter_file_searches_options {
 		}
 		return array(	gettext('Albums') => array('key' => 'filter_file_searches_albums', 'type' => 7,
 										'checkboxes' => $lista,
-										'currentvalues' => $mysetoptions,
 										'desc' => gettext("Check album names to be ignored.")),
 		gettext('Images') => array('key' => 'filter_file_searches_images', 'type' => 7,
 										'checkboxes' => $listi,
-										'currentvalues' => $mysetoptions,
 										'desc' => gettext('Check image suffixes to be ingnored.'))
 		);
 	}
