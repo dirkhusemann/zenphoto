@@ -65,7 +65,7 @@ function processExpired($table) {
 		if($published) {
 			$show = " WHERE `show` = 1 AND date <= '".date('Y-m-d H:i:s')."'";
 		} else {
-			$show = " ";
+			$show = '';
 		}
 		$_zp_zenpage_all_pages = NULL; // Disabled cache var for now because it does not return unpublishded and published if logged on index.php somehow if logged in.
 		if(is_null($_zp_zenpage_all_pages)) {

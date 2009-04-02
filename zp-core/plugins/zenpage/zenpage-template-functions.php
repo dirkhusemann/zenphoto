@@ -774,7 +774,7 @@ function getCurrentNewsCategoryID() {
 function getNewsCategories() {
 	global $_zp_current_zenpage_news;
 	if(!is_null($_zp_current_zenpage_news) AND is_NewsType("news")) {
-		$categories = $_zp_current_zenpage_news->getCategories(getNewsID());
+		$categories = $_zp_current_zenpage_news->getCategories();
 		return $categories;
 	}
 	return false;
@@ -1072,7 +1072,7 @@ function getLatestNews($number=5,$option='none', $category='') {
 					"id" => $article->getID(),
 					"title" => $article->getTitle(), 
 					"titlelink" => $article->getTitlelink(),
-				  "category" => $article->getCategories($article->getID()),
+				  "category" => $article->getCategories(),
 					"content" => $article->getContent(),
 					"date" => $article->getDateTime(),
 				  "thumb" => "",
@@ -2107,7 +2107,7 @@ function printPageLinkURL($titlelink) {
  * <h4>page title</h3>
  * <p>page content excerpt</p>
  * <p>read more</p>
-  * </div>
+ * </div>
  * 
  * @param int $excerptlength The length of the page content, if nothing specifically set, the plugin option value for 'news article text length' is used
  * @param string $readmore The text for the link to the full page. If empty the read more setting from the options is used.
@@ -2133,7 +2133,7 @@ function printSubPagesExcerpts($excerptlength='', $readmore='', $shortenindicato
 		$excerptlength = getOption("zenpage_text_length");
 	}
 	foreach($pages as $page) {
-		$pageobj = new ZenpagePage($page);
+		$pageobj = new ZenpagePage($page['titlelink']);
 		if($pageobj->getParentid() === getPageID()) {
 			$subcount++;
 			$pagetitle = $pageobj->getTitle();

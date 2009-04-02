@@ -15,9 +15,10 @@ class ZenpageNews extends PersistentObject {
 	var $comments = NULL;//Contains an array of the comments of the current article
 	var $commentcount; //Contains the number of comments
 	
-	function ZenpageNews($titlelink="") {
+	function ZenpageNews($titlelink) {
 		$titlelink = sanitize($titlelink);
-		$new = parent::PersistentObject('zenpage_news', array('titlelink'=>$titlelink), NULL, true, empty($titlelink));
+		if (!is_string($titlelink) || empty($titlelink)) return NULL;
+		$new = parent::PersistentObject('zenpage_news', array('titlelink'=>$titlelink), NULL, true);
 	}
 
 
@@ -171,11 +172,8 @@ class ZenpageNews extends PersistentObject {
 	 * @param int $article_id ID od the article
 	 * @return array
 	 */
-	function getCategories($article_id = '') {
-		if(empty($article_id)) {
-			$article_id = $this->getID();
-		}
-		$categories = query_full_array("SELECT cat.cat_name, cat.cat_link FROM ".prefix('zenpage_news_categories')." as cat,".prefix('zenpage_news2cat')." as newscat WHERE newscat.cat_id = cat.id AND newscat.news_id = ".$article_id." ORDER BY cat.cat_name");
+	function getCategories() {
+		$categories = query_full_array("SELECT cat.cat_name, cat.cat_link FROM ".prefix('zenpage_news_categories')." as cat,".prefix('zenpage_news2cat')." as newscat WHERE newscat.cat_id = cat.id AND newscat.news_id = ".$this->getID()." ORDER BY cat.cat_name");
 		return $categories;
 	}
 

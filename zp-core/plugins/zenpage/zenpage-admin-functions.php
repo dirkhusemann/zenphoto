@@ -113,7 +113,7 @@ function updatePage() {
 	$result['codeblock'] = base64_encode(serialize($codeblock));
 	$result['locked'] = getCheckboxState('locked');
 
-	if(empty($result['title']) OR empty($result['titlelink'])) {
+	if(empty($result['titlelink'])) {
 		$result['titlelink'] = seoFriendlyURL($result['date']);
 	}
 
@@ -378,7 +378,7 @@ function addArticle() {
 	$codeblock = base64_encode(serialize($codeblock));
 	$locked = getCheckboxState('locked');
 
-	if(empty($title) OR empty($titlelink)) {
+	if(empty($titlelink)) {
 		$titlelink = seoFriendlyURL($date);
 	}
 
@@ -505,8 +505,7 @@ function deleteArticle() {
  * @param obj $obj object of the news article
  */
 function printArticleCategories($obj) {
-  global $_zp_current_zenpage_news;
-  $cat = $obj->getCategories();
+   $cat = $obj->getCategories();
   $number = 0;
   foreach ($cat as $cats) {
     $number++;

@@ -81,8 +81,8 @@ foreach($latest as $item) {
 		$title = htmlspecialchars(get_language_string($item['title'],$locale), ENT_QUOTES);
 		$link = getNewsURL($item['titlelink']);
 		$count2 = 0;
-		$newsobj = new ZenpageNews();
-		$category = $newsobj->getCategories($item['id']);
+		$newsobj = new ZenpageNews($item['titlelink']);
+		$category = $newsobj->getCategories();
 		foreach($category as $cat){
 			$count2++;
 			if($count2 != 1) {
