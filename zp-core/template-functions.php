@@ -3031,7 +3031,7 @@ function printCommentErrors($class = 'error') {
  */
 function printAlbumZip(){
 	global $_zp_current_album;
-	if (!is_null($_zp_current_album) && !is_dynamic($_zp_current_album)) {
+	if (!is_null($_zp_current_album) && !$_zp_current_album->isDynamic()) {
 		echo'<a href="' . WEBPATH . '/' . ZENFOLDER . "/album-zip.php?album=" . urlencode($_zp_current_album->name) .
 			'" title="'.gettext('Download Zip of the Album').'">'.gettext('Download a zip file of this album').'</a>';
 	}
@@ -3874,9 +3874,10 @@ function getSearchURL($words, $dates, $fields, $page) {
  * @param string $buttonSource optional path to the image for the button
  * @param string $buttontext optional text for the button ("Search" will be the default text)
  * @param string $iconsource optional theme based icon for the search fields toggle
+ * @param bit $query_fields override selection for enabled fields with this mask
  * @since 1.1.3
  */
-function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL,$buttontext='', $iconsource=NULL) {
+function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL,$buttontext='', $iconsource=NULL, $query_fields=NULL) {
 	global $_zp_adminJS_loaded;
 	if(empty($buttontext)) {
 		$buttontext = gettext("Search");
@@ -3888,7 +3889,6 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL,$butto
 	$dataid = $id . '_data';
 	$searchwords = (isset($_POST['words']) ? html_encode(sanitize($_REQUEST['words'],0),false) : '');
 
-	$fields = getOption('search_fields');
 	if (empty($buttonSource)) {
 		$type = 'submit';
 	} else {
@@ -3922,7 +3922,7 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL,$butto
 	if (count($fields) > 1) {
 		natcasesort($fields);
 		$fields = array_flip($fields);
-		$query_fields = $engine->parseQueryFields();
+		if (is_null($query_fields)) $query_fields = $engine->parseQueryFields();
 		?>
 		<ul style="display:none;" id="searchextrashow">
 		<?php
