@@ -1332,11 +1332,13 @@ function printAlbumEditForm($index, $album) {
 			onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
 		<?php echo gettext("Move");?>
 	</label>
+	<br />
 	<label for="a-<?php echo $prefix; ?>copy" style="padding-right: .5em">
 		<input type="radio" id="a-<?php echo $prefix; ?>copy" name="a-<?php echo $prefix; ?>MoveCopyRename" value="copy"
 			onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
 		<?php echo gettext("Copy");?>
 	</label>
+	<br />
 	<label for="a-<?php echo $prefix; ?>rename" style="padding-right: .5em">
 		<input type="radio" id="a-<?php echo $prefix; ?>rename" name="a-<?php echo $prefix; ?>MoveCopyRename" value="rename"
 			onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'rename');"/>

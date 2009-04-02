@@ -153,7 +153,7 @@ if (isset($_GET['album'])) {
 							// The file might no longer exist
 							$image = newImage($album, $filename);
 							if ($image->exists) {
-								if (isset($_POST[$i.'-MoveCopyRename'])) {
+								if (isset($_POST[$i.'-MoveCopy'])) {
 									$movecopyrename_action = sanitize($_POST[$i.'-MoveCopyRename'],3);
 								} else {
 									$movecopyrename_action = '';
@@ -768,10 +768,11 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						</p>
 						
 						</div><br clear: all />
-					 <hr />
+					 
 						<?php
 						if (isImagePhoto($image)) {
 						?>
+						<hr />
 						<p>	<?php echo gettext("Rotation:"); ?>
 							<?php
 							$splits = preg_split('/!([(0-9)])/', $image->get('EXIFOrientation'));
