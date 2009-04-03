@@ -626,7 +626,7 @@ if (!$checked) {
 	}
 	checkMark($noxlate, gettext('PHP <code>gettext()</code> support'), gettext('PHP <code>gettext()</code> support [is not present]'), gettext("Localization of Zenphoto currently requires native PHP <code>gettext()</code> support"));
 	if ($_zp_setupCurrentLocale_result === false) {
-		checkMark(-1, gettest('PHP <code>setlocale()</code>'), ' '.gettext('PHP <code>setlocale()</code> failed'), gettext("Locale functionality is not implemented on your platform or the specified locale does not exist. Language translation may not work.").'<br />'.gettext('See the troubleshooting guide on zenphoto.org for details.'));
+		checkMark(-1, gettext('PHP <code>setlocale()</code>'), ' '.gettext('PHP <code>setlocale()</code> failed'), gettext("Locale functionality is not implemented on your platform or the specified locale does not exist. Language translation may not work.").'<br />'.gettext('See the troubleshooting guide on zenphoto.org for details.'));
 	}
 	if (function_exists('mb_internal_encoding')) {
 		if (($charset = mb_internal_encoding()) == 'UTF-8') {
