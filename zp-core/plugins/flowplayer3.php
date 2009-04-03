@@ -6,14 +6,14 @@
  * Note on splash images: Flowplayer will try to use the first frame of a movie as a splash image or a videothumb if existing.
  * 
  * @author Malte Müller (acrylian)
- * @version 1.0
+ * @version 1.0.1
  * @package plugins 
  */
 
 
 $plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext("Enable <strong>flowplayer 3</strong> to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time. <br> Please see <a href='http://flowplayer.org'>flowplayer.org</a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.0';
+$plugin_version = '1.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flowplayer3.php.html";
 $plugin_disable = $external;
 $option_interface = new flowplayer3();
@@ -36,9 +36,11 @@ class flowplayer3 {
 		setOptionDefault('flow_player3_width', '320');
 		setOptionDefault('flow_player3_height', '240');
 		setOptionDefault('flow_player3_controlsbackgroundcolor', '#110e0e');
+		setOptionDefault('flow_player3_controlsbackgroundcolorgradient', 'none');
 		setOptionDefault('flow_player3_controlsbordercolor', '#000000');
 		setOptionDefault('flow_player3_autoplay', '');
 		setOptionDefault('flow_player3_backgroundcolor', '#000000');
+		setOptionDefault('flow_player3_backgroundcolorgradient', 'none');
 		setOptionDefault('flow_player3_controlsautohide', 'never');
 		setOptionDefault('flow_player3_controlstimecolor', '#fcfcfc');
 		setOptionDefault('flow_player3_controlsdurationcolor', '#ffffff');
@@ -61,8 +63,14 @@ class flowplayer3 {
 										'desc' => gettext("Player height (ignored for <em>mp3</em> files.)")),
 		gettext('Player background color') => array('key' => 'flow_player3_backgroundcolor', 'type' => 0,
 										'desc' => gettext("The color of the player background.")),
+		gettext('Player background color gradient') => array('key' => 'flow_player3_backgroundcolorgradient', 'type' => 5,
+										'selections' => array(gettext('none')=>"none",gettext('low')=>"low", gettext('medium')=>"medium", gettext('high')=>"high"),
+										'desc' => gettext("Gradient setting for playler background color.")),
 		gettext('Controls background color') => array('key' => 'flow_player3_controlsbackgroundcolor', 'type' => 8,
 										'desc' => gettext("Background color of the controls.")),
+		gettext('Controls background color gradient') => array('key' => 'flow_player3_controlsbackgroundcolorgradient', 'type' => 5,
+										'selections' => array(gettext('none')=>"none",gettext('low')=>"low", gettext('medium')=>"medium", gettext('high')=>"high"),
+										'desc' => gettext("Gradient setting for background color of the controls.")),
 		gettext('Controls border color') => array('key' => 'flow_player3_controlsbordercolor', 'type' => 8,
 										'desc' => gettext("Color of the border of the player controls")),
 		gettext('Autoplay') => array('key' => 'flow_player3_autoplay', 'type' => 1,
@@ -97,7 +105,7 @@ class flowplayer3 {
 										'desc' => gettext("Button color when the mouse is positioned over them.")),
 		gettext('Splash image scale') => array('key' => 'flow_player3_splashimagescale', 'type' => 5,
 										'selections' => array(gettext('fit')=>"fit",gettext('half')=>"half", gettext('orig')=>"orig", gettext('scale')=>"scale"),
-										'desc' => gettext("Setting which defines how video is scaled on the video screen. Available options are:: <br /><em>fit</em> : Fit to window by preserving the aspect ratio encoded in the file's metadata.<br /><em>half</em>: Half-size (preserves aspect ratio)<br /><em>orig</em>: Use the dimensions encoded in the file. If the video is too big for the available space, the video is scaled using the 'fit' option.<br /><em>scale</em>: Scale the video to fill all available spacthe metadata. This is the default setting."))
+										'desc' => gettext("Setting which defines how video is scaled on the video screen. Available options are:: <br /><em>fit</em> : Fit to window by preserving the aspect ratio encoded in the file's metadata.<br /><em>half</em>: Half-size (preserves aspect ratio)<br /><em>orig</em>: Use the dimensions encoded in the file. If the video is too big for the available space, the video is scaled using the 'fit' option.<br /><em>scale</em>: Scale the video to fill all available space. This is the default setting."))
 		);
 	}
 
@@ -157,13 +165,14 @@ class flowplayer3 {
 			plugins: { 
         controls: {
         	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
+        	backgroundGradient: "'.getOption('flow_player3_controlsbackgroundcolorgradient').'",
         	autoHide: '.$autohide.',
         	timeColor:"'.getOption('flow_player3_controlstimecolor').'",
         	durationColor: "'.getOption('flow_player3_controlsdurationcolor').'",
         	progressColor: "'.getOption('flow_player3_controlsprogresscolor').'",
         	progressGradient: "'.getOption('flow_player3_controlsprogressgradient').'",
         	bufferColor: "'.getOption('flow_player3_controlsbuffercolor').'",
-        	bufferGradient:	 "'.getOption('fflow_player3_controlsbuffergradient').'",
+        	bufferGradient:	 "'.getOption('flow_player3_controlsbuffergradient').'",
         	sliderColor: "'.getOption('flow_player3_controlsslidercolor').'",	
         	sliderGradient: "'.getOption('flow_player3_controlsslidergradient').'",
         	buttonColor: "'.getOption('flow_player3_controlsbuttoncolor').'",
@@ -171,7 +180,8 @@ class flowplayer3 {
         }
     	},
     	canvas: {
-    		backgroundColor: "'.getOption('flow_player3_backgroundcolor').'"
+    		backgroundColor: "'.getOption('flow_player3_backgroundcolor').'",
+    		backgroundGradient: "'.getOption('flow_player3_backgroundcolorgradient').'"
     	},
 			playlist: [ 
 				{
@@ -195,21 +205,23 @@ class flowplayer3 {
 			plugins: { 
         controls: {
         	backgroundColor: "'.getOption('flow_player3_controlsbackgroundcolor').'",
-        	autoHide: "'.getOption('flow_player3_controlsautohide').'",
+        	backgroundGradient: "'.getOption('flow_player3_controlsbackgroundcolorgradient').'",
+        	autoHide: '.$autohide.',
         	timeColor:"'.getOption('flow_player3_controlstimecolor').'",
         	durationColor: "'.getOption('flow_player3_controlsdurationcolor').'",
         	progressColor: "'.getOption('flow_player3_controlsprogresscolor').'",
         	progressGradient: "'.getOption('flow_player3_controlsprogressgradient').'",
         	bufferColor: "'.getOption('flow_player3_controlsbuffercolor').'",
-        	bufferGradient:	 "'.getOption('fflow_player3_controlsbuffergradient').'",
+        	bufferGradient:	 "'.getOption('flow_player3_controlsbuffergradient').'",
         	sliderColor: "'.getOption('flow_player3_controlsslidercolor').'",	
         	sliderGradient: "'.getOption('flow_player3_controlsslidergradient').'",
         	buttonColor: "'.getOption('flow_player3_controlsbuttoncolor').'",
-        	buttonOverColor: "'.getOption('flow_player3_controlsbuttonovercolor').'"
+        	buttonOverColor: "'.getOption('flow_player3_controlsbuttonovercolor').'",
         }
     	},
     	canvas: {
     		backgroundColor: "'.getOption('flow_player3_backgroundcolor').'",
+    		backgroundGradient: "'.getOption('flow_player3_backgroundcolorgradient').'"
     	},';
 			if(empty($videoThumb)) { // use first frame as slash image
 				$playerconfigadd = 'clip:  
