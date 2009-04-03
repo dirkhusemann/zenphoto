@@ -176,7 +176,7 @@ class flowplayer3 {
         	sliderColor: "'.getOption('flow_player3_controlsslidercolor').'",	
         	sliderGradient: "'.getOption('flow_player3_controlsslidergradient').'",
         	buttonColor: "'.getOption('flow_player3_controlsbuttoncolor').'",
-        	buttonOverColor: "'.getOption('flow_player3_controlsbuttonovercolor').'",
+        	buttonOverColor: "'.getOption('flow_player3_controlsbuttonovercolor').'"
         }
     	},
     	canvas: {
@@ -216,7 +216,7 @@ class flowplayer3 {
         	sliderColor: "'.getOption('flow_player3_controlsslidercolor').'",	
         	sliderGradient: "'.getOption('flow_player3_controlsslidergradient').'",
         	buttonColor: "'.getOption('flow_player3_controlsbuttoncolor').'",
-        	buttonOverColor: "'.getOption('flow_player3_controlsbuttonovercolor').'",
+        	buttonOverColor: "'.getOption('flow_player3_controlsbuttonovercolor').'"
         }
     	},
     	canvas: {
@@ -236,7 +236,7 @@ class flowplayer3 {
 				$playerconfigadd = 'playlist: [ 
 				{
 					url:"'.$videoThumb.'",
-					scaling: "'.getOption('flow_player3_splashimagescale').'",
+					scaling: "'.getOption('flow_player3_splashimagescale').'"
 				},
 				{
 					url:"' . $moviepath . '",
