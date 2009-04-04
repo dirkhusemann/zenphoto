@@ -265,7 +265,7 @@ function zp_handle_password() {
 	$cookiepath = WEBPATH;
 	if (WEBPATH == '') { $cookiepath = '/'; }
 	$check_auth = '';
-	if (isset($_GET['p']) && $_GET['p'] == '*full-image') {
+	if (isset($_GET['z']) && $_GET['p'] == 'full-image' || isset($_GET['p']) && $_GET['p'] == '*full-image') {
 		$authType = 'zp_image_auth';
 		$check_auth = getOption('protected_image_password');
 		$check_user = getOption('protected_image_user');

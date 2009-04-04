@@ -26,13 +26,16 @@ header ('Content-Type: text/html; charset=' . getOption('charset'));
 $obj = '';
 
 // Display an arbitrary theme-included PHP page
-// If the 'p' parameter starts with * (star) then include the file from the zp-core folder.
 if (isset($_GET['p'])) {
 	handleSearchParms('page', $_zp_current_album, $_zp_current_image);
 	$theme = setupTheme();
 	$page = str_replace(array('/','\\','.'), '', sanitize($_GET['p']));
-	if (substr($page, 0, 1) == "*") {
-		$_zp_gallery_page = basename($obj = ZENFOLDER."/".substr($page, 1) . ".php");
+	if (strpos($page, '*')===0) {
+		$page = substr($page,1); // handle old zenfolder page urls
+		$_GET['z'] = true;
+	}
+	if (isset($_GET['z'])) { // system page
+		$_zp_gallery_page = basename($obj = ZENFOLDER."/".$page.".php");
 	} else {
 		$obj = THEMEFOLDER."/$theme/$page.php";
 		$_zp_gallery_page = basename($obj);

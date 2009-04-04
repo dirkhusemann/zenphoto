@@ -2594,9 +2594,9 @@ function getProtectedImageURL() {
 	} else {
 		$path = $_zp_current_image->getImageLink();
 		if (getOption('mod_rewrite')) {
-			$path .= "?p=*full-image";
+			$path .= "?z&p=full-image";
 		} else {
-			$path .= "&p=*full-image";
+			$path .= "&z&p=full-image";
 		}
 		return $path;
 	}
@@ -4219,7 +4219,7 @@ function printPasswordForm($hint, $showProtected=true, $showuser=NULL) {
 		case 'image.php':
 			$action = '&amp;album='.urlencode($_zp_current_album->name).'&amp;image='.urlencode($_zp_current_image->filename);
 		case 'full-image.php':
-			$action = '&amp;album='.urlencode($_zp_current_album->name).'&amp;image='.urlencode($_zp_current_image->filename).'&amp;p=*full-image';
+			$action = '&amp;album='.urlencode($_zp_current_album->name).'&amp;image='.urlencode($_zp_current_image->filename).'&amp;z&amp;p=full-image';
 			break;
 		default:
 		if (in_context(ZP_SEARCH)) {
