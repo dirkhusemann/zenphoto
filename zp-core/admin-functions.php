@@ -972,12 +972,18 @@ function printAlbumEditForm($index, $album) {
 		<?php print_language_string_list($album->get('place'), $prefix."albumplace", false); ?>
 		</td>
 	</tr>
-	<tr>
-		<td align="left" valign="top"><?php echo gettext("Custom data:"); ?></td><td>
-		<?php print_language_string_list($album->get('custom_data'), $prefix."album_custom_data", true); ?>
-		</td>
-	</tr>
 	<?php
+	$custom = apply_filter('edit_album_custom_data', '', $album, $prefix);
+	if (empty($custom)) {
+		?>
+		<tr>
+			<td align="left" valign="top"><?php echo gettext("Custom data:"); ?></td>
+			<td><?php print_language_string_list($album->get('custom_data'), $prefix."album_custom_data", true); ?></td>
+		</tr>
+		<?php
+	} else {
+		echo $custom;
+	}
 	$sort = $sortby;
 	if (!$album->isDynamic()) {
 		$sort[gettext('Manual')] = 'manual';
@@ -1687,7 +1693,7 @@ function processAlbumEdit($index, $album) {
 		}
 	}
 	$album->setPasswordHint(process_language_string_save($prefix.'albumpass_hint', 3));
-	$album->setCustomData(process_language_string_save($prefix.'album_custom_data', 1));
+	$album->setCustomData(apply_filter('save_album_custom_data', process_language_string_save($prefix.'album_custom_data', 1), $prefix));
 	$album->save();
 
 	// Move/Copy/Rename the album after saving.

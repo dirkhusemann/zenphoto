@@ -225,7 +225,7 @@ if (isset($_GET['album'])) {
 									if (isset($_POST["$i-reset_hitcounter"])) {
 										$image->set('hitcounter', 0);
 									}
-									$image->setCustomData(process_language_string_save("$i-custom_data", 1));
+									$image->setCustomData(apply_filter('save_image_custom_data', process_language_string_save("$i-custom_data", 1), $i));
 									$image->save();
 
 									// Process move/copy/rename
@@ -808,13 +808,21 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						<td valign="top"><?php echo gettext("Date:"); ?></td>
 						<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $currentimage; ?>-date"
 							value="<?php $d=$image->getDateTime(); if ($d!='0000-00-00 00:00:00') { echo $d; } ?>" /></td>
-					</tr>
-										
-					<tr>
-						<td valign="top"><?php echo gettext("Custom data:"); ?></td>
-						<td><?php print_language_string_list($image->get('custom_data'), $currentimage.'-custom_data', true); ?>
-						</td>
-					</tr>
+					</tr>		
+					
+					<?php
+					$custom = apply_filter('edit_image_custom_data', '', $image, $currentimage);
+					if (empty($custom)) {
+						?>
+						<tr>
+							<td valign="top"><?php echo gettext("Custom data:"); ?></td>
+							<td><?php print_language_string_list($image->get('custom_data'), $currentimage.'-custom_data', true); ?></td>
+						</tr>
+						<?php
+						} else {
+							echo $custom;
+						}
+					?>
 					
 					<tr class="imageextrainfo" style="display: none">
 						<td valign="top"><?php echo gettext("Location:"); ?></td>

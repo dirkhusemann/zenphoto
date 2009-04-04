@@ -87,8 +87,12 @@ if (isset($_GET['action'])) {
 		$website = mysql_real_escape_string(sanitize($_POST['website'], 3));
 		$date = mysql_real_escape_string(sanitize($_POST['date'], 3));
 		$comment = mysql_real_escape_string(sanitize($_POST['comment'], 1));
+		$custom = apply_filter('save_comment_custom_data', '');
+		if (!empty($custom)) {
+			$custom = ", `custom_data`='".$custom."'";
+		}
 
-		$sql = "UPDATE ".prefix('comments')." SET `name` = '$name', `email` = '$email', `website` = '$website', `comment` = '$comment' WHERE id = $id";
+		$sql = "UPDATE ".prefix('comments')." SET `name` = '$name', `email` = '$email', `website` = '$website', `comment` = '$comment'".$custom." WHERE id = $id";
 		query($sql);
 
 		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-comments.php?sedit");
@@ -148,6 +152,9 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		<td valign="top"><?php echo gettext("Comment:"); ?></td>
 		<td><textarea rows="8" cols="60" name="comment" /><?php echo $comment; ?></textarea></td>
 	</tr>
+	<?php
+ 	echo apply_filter('edit_comment_custom_data', '', $custom_data);
+	?>
 	<tr>
 		<td></td>
 		<td>
@@ -157,7 +164,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		</p>
 		
 		</td>
-
+	</tr>
 </table>
 <div>
 <h2><?php echo gettext('Comment management:'); ?></h2>
