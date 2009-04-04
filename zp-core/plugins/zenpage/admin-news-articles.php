@@ -47,10 +47,10 @@ if (isset($_GET['date'])) {
   echo "<em><small> (".$_GET['date'].")</small></em>";
 }
 
-if(isset($_GET['published']) AND $_GET['published'] === "no") {
+if(isset($_GET['published']) AND $_GET['published'] == "no") {
 	$published = "unpublished";
 } 
-if(isset($_GET['published']) AND $_GET['published'] === "yes") {
+if(isset($_GET['published']) AND $_GET['published'] == "yes") {
 	$published = "published";
 } 
 if(!isset($_GET['published'])) {
@@ -154,6 +154,6 @@ if(isset($_GET['category'])) {
 <?php printArticlesPageNav(); ?>
 <?php printZenpageIconLegend(); ?>
 </div>
-<?php printZenpageFooter(); ?>
+<?php printAdminFooter(); ?>
 </body>
 </html>

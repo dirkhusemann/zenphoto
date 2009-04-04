@@ -134,7 +134,7 @@ function getNewsType() {
  * @return bool
  */
 function is_NewsType($type) {
-	return getNewsType() === $type;
+	return getNewsType() == $type;
 }
 
 
@@ -187,7 +187,7 @@ function zenpageHitcounter($option='pages', $viewonly=false, $id=NULL) {
 			$doUpdate = true;
 			break;
 	}
-	if(($option === "pages" AND is_Pages()) OR ($option === "news" AND is_NewsArticle()) OR ($option === "category" AND is_NewsCategory())) {
+	if(($option == "pages" AND is_Pages()) OR ($option == "news" AND is_NewsArticle()) OR ($option == "category" AND is_NewsCategory())) {
 		if (($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) || $viewonly) { $doUpdate = false; }
 		$hitcounter = "hitcounter";
 		$whereID = " WHERE `id` = $id";
@@ -263,7 +263,7 @@ function getAuthor($fullname=false) {
 		if($fullname) {
 			$admins = getAdministrators();
 			foreach ($admins as $admin) {
-				if($admin['user'] === $obj->getAuthor()) {
+				if($admin['user'] == $obj->getAuthor()) {
 					return $admin['name'];
 				}
 			}
@@ -302,10 +302,10 @@ function next_news($combi=true) {
 			//print_r($news); // debugging
 			if (is_array($news)) {
 				if(getOption('zenpage_combinews') AND array_key_exists("type",$news) AND array_key_exists("albumname",$news)) {
-					if($news['type'] === "images") {
+					if($news['type'] == "images") {
 						$albumobj = new Album($_zp_gallery,$news['albumname']);
 						$_zp_current_zenpage_news = newImage($albumobj,$news['titlelink']);
-					} else if($news['type'] === "albums") {
+					} else if($news['type'] == "albums") {
 						$_zp_current_zenpage_news = new Album($_zp_gallery,$news['albumname']);
 					} else {
 						$_zp_current_zenpage_news = new ZenpageNews($news['titlelink']);
@@ -323,10 +323,10 @@ function next_news($combi=true) {
 			$news = array_shift($_zp_zenpage_articles);
 			if (is_array($news)) {
 				if(getOption('zenpage_combinews') AND array_key_exists("type",$news) AND array_key_exists("albumname",$news)) {
-					if($news['type'] === "images") {
+					if($news['type'] == "images") {
 						$albumobj = new Album($_zp_gallery,$news['albumname']);
 						$_zp_current_zenpage_news = newImage($albumobj,$news['titlelink']);
-					} else if($news['type'] === "albums") {
+					} else if($news['type'] == "albums") {
 						$_zp_current_zenpage_news = new Album($_zp_gallery,$news['albumname']);
 					} else {
 						$_zp_current_zenpage_news = new ZenpageNews($news['titlelink']);
@@ -824,7 +824,7 @@ function inNewsCategory($catlink) {
 			break;
 		}
 	}
-	return $count === 1;
+	return $count == 1;
 }
 
 
@@ -866,8 +866,8 @@ function printNewsImageTags($option='links',$preText=NULL,$class='taglist',$sepa
 			}
 			$ct = count($singletag);
 			for ($x = 0; $x < $ct; $x++) {
-				if ($x === $ct - 1) { $separator = ""; }
-				if ($option === "links") {
+				if ($x == $ct - 1) { $separator = ""; }
+				if ($option == "links") {
 					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($singletag[$x], '', SEARCH_TAGS, 0, 0))."\" title=\"".$singletag[$x]."\" rel=\"nofollow\">";
 					$links2 = "</a>";
 				}
@@ -1004,7 +1004,7 @@ function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id=''
 	}
 	echo "<ul $css_id>";
 	if(!empty($newsindex)) {
-		if(($_zp_gallery_page === "news.php" OR (getOption("zenpage_zp_index_news") AND $_zp_gallery_page === "index.php")) AND !is_NewsCategory() AND !is_NewsArchive() AND !is_NewsArticle()) {
+		if(($_zp_gallery_page == "news.php" OR (getOption("zenpage_zp_index_news") AND $_zp_gallery_page == "index.php")) AND !is_NewsCategory() AND !is_NewsArchive() AND !is_NewsArticle()) {
 			echo "<li $css_class_active>".htmlspecialchars($newsindex);
 		} else {
 			echo "<li><a href=\"".getNewsIndexURL()."\" title=\"".strip_tags(htmlspecialchars($newsindex))."\">".htmlspecialchars($newsindex)."</a>";
@@ -1029,7 +1029,7 @@ function printAllNewsCategories($newsindex='All news', $counter=TRUE, $css_id=''
 				$count = " (".$catcount.")";
 			}
 			if($catcount != 0) {
-				if(getCurrentNewsCategoryID() === $category['id']) {
+				if(getCurrentNewsCategoryID() == $category['id']) {
 					echo "<li $css_class_active>".$catname." ".$count;
 				} else {
 					echo "<li><a href=\"".getNewsCategoryURL($category['cat_link'])."\" title=\"".$catname."\">".$catname."</a>".$count;
@@ -1080,7 +1080,7 @@ function getLatestNews($number=5,$option='none', $category='') {
 		);
 	}
 	$latest = $latestnews;
-	if($option === "with_latest_images" OR $option === "with_latest_images_date") {
+	if($option == "with_latest_images" OR $option == "with_latest_images_date") {
 		switch($option) {
 			case "with_latest_images":
 				$images = getImageStatistic($number, "latest");
@@ -1111,7 +1111,7 @@ function getLatestNews($number=5,$option='none', $category='') {
 		$latest = array_merge($latest, $latestimages);
 		$latest = sortMultiArray($latest,"date","desc",true,false);
 	}
-	if($option === "with_latest_albums" OR $option === "with_latestupdated_albums") {
+	if($option == "with_latest_albums" OR $option == "with_latestupdated_albums") {
 		switch($option) {
 			case "with_latest_albums":
 				$albums = getAlbumStatistic($number, "latest");
@@ -1193,7 +1193,7 @@ function printLatestNews($number=5,$option='with_latest_images', $category='', $
 			$content = strip_tags($item['content']);
 			$type = "news";
 		} else {
-			if($option === "with_latest_images" OR $option === "with_latest_images_date") {
+			if($option == "with_latest_images" OR $option == "with_latest_images_date") {
 				$categories = $item['category']->getTitle();
 				$title = htmlspecialchars($item['title']);
 				$link = $item['titlelink'];
@@ -1201,7 +1201,7 @@ function printLatestNews($number=5,$option='with_latest_images', $category='', $
 				$thumb = "<a href=\"".$link."\" title=\"".strip_tags(htmlspecialchars($title))."\"><img src=\"".$item['thumb']."\" alt=\"".strip_tags($title)."\" /></a>\n";
 				$type = "image";
 			}
-			if($option === "with_latest_albums" OR $option === "with_latestupdated_albums") {
+			if($option == "with_latest_albums" OR $option == "with_latestupdated_albums") {
 				//$image = newImage(new Album($_zp_gallery, $item['categorylink']), $item['titlelink']);
 				$category = $item['titlelink'];
 				$categories = "";
@@ -1218,7 +1218,7 @@ function printLatestNews($number=5,$option='with_latest_images', $category='', $
 		}
 		echo "<h3><a href=\"".$link."\" title=\"".strip_tags(htmlspecialchars($title,ENT_QUOTES))."\">".htmlspecialchars($title)."</a></h3>\n";;
 	  if($showdate) {
-			if($option === "with_latest_image_date" AND $type === "image") {
+			if($option == "with_latest_image_date" AND $type == "image") {
 				$date = zpFormattedDate(getOption('date_format'),$item['date']);
 			} else {
 				$date = zpFormattedDate(getOption('date_format'),strtotime($item['date']));
@@ -1232,7 +1232,7 @@ function printLatestNews($number=5,$option='with_latest_images', $category='', $
 			echo "<p class=\"latestnews-cats\">(".$categories.")</p>\n";
 		}
 		echo "</li>\n";
-		if($count === $number) {
+		if($count == $number) {
 			break;
 		}
 	}
@@ -1242,7 +1242,7 @@ function printLatestNews($number=5,$option='with_latest_images', $category='', $
 
 function getMostPopularItems($number=10, $option="all") {
 	global $_zp_current_zenpage_news, $_zp_current_zenpage_pages;
-	if($option === "all" OR $option === "news") {
+	if($option == "all" OR $option == "news") {
 		$articles = query_full_array("SELECT id, title, titlelink, hitcounter FROM " . prefix('zenpage_news')." ORDER BY hitcounter DESC LIMIT $number");
 		$counter = "";
 		$poparticles = array();
@@ -1258,7 +1258,7 @@ function getMostPopularItems($number=10, $option="all") {
 		}	
 		$mostpopular = $poparticles;
 	}
-	if($option === "all" OR $option === "categories") {
+	if($option == "all" OR $option == "categories") {
 		$categories = query_full_array("SELECT id, cat_name as title, cat_link as titlelink, hitcounter FROM " . prefix('zenpage_news_categories')." ORDER BY hitcounter DESC LIMIT $number");
 		$counter = "";
 		$popcats = array();
@@ -1274,7 +1274,7 @@ function getMostPopularItems($number=10, $option="all") {
 		}		
 		$mostpopular = $popcats;
 	}
-	if($option === "all" OR $option === "pages") {
+	if($option == "all" OR $option == "pages") {
 		$pages = query_full_array("SELECT id, title, titlelink, hitcounter FROM " . prefix('zenpage_pages')." ORDER BY hitcounter DESC LIMIT $number");
 		$counter = "";
 		$poppages = array();
@@ -1290,7 +1290,7 @@ function getMostPopularItems($number=10, $option="all") {
 		}
 		$mostpopular = $poppages;
 	}
-	if($option === "all") {
+	if($option == "all") {
 		$mostpopular = array_merge($poparticles,$popcats,$poppages);
 	}
 	$mostpopular = sortMultiArray($mostpopular,"hitcounter","desc",true,false);
@@ -1589,7 +1589,7 @@ function printNewsPageListWithNav($next='next &raquo;', $prev='&laquo; prev', $n
 			if($i == $current) {
 				echo "<li>".$i."</li>\n";
 			} else {
-				if($i === 1 AND getOption("zenpage_zp_index_news")) {
+				if($i == 1 AND getOption("zenpage_zp_index_news")) {
 					echo "<li><a href='".getNewsIndexURL()."' title='".gettext("Page")." ".$i."'>".$i."</a></li>\n";
 				} else {
 					echo "<li><a href='".getNewsBaseURL().getNewsCategoryPathNav().getNewsArchivePathNav().getNewsPagePath().$i."' title='".gettext("Page")." ".$i."'>".$i."</a></li>\n";
@@ -1646,7 +1646,7 @@ function getNextPrevNews($option='') {
 				$count++;
 				$title[$count] = $newsobj->getTitle();
 				$titlelink[$count] = $newsobj->getTitlelink();
-				if($titlelink[$count] === $_zp_current_zenpage_news->getTitlelink()){
+				if($titlelink[$count] == $_zp_current_zenpage_news->getTitlelink()){
 					$current = $count;
 				}
 			}
@@ -1791,7 +1791,7 @@ function getCodeblock($number='',$titlelink='') {
  */
 function printCodeblock($number='',$titlelink='') {
 	$codeblock = getCodeblock($number,$titlelink);
-	if (version_compare(PHP_VERSION, '5.0.0') === 1) {
+	if (version_compare(PHP_VERSION, '5.0.0') == 1) {
 		$context = get_context();
 		eval('
 			try {
@@ -1968,7 +1968,7 @@ function getPageContent($titlelink='',$published=true) {
 	// print content of a page directly on a normal zenphoto theme page or any other page for example
 	if(!empty($titlelink)) {
 		$page = new ZenpagePage($titlelink);
-		if($page->getShow() === "1" OR ($page->getShow() != "1" AND $published === false)) {
+		if($page->getShow() OR (!$page->getShow() AND !$published)) {
 			return 	$page->getContent();
 		}
 	}
@@ -2004,7 +2004,7 @@ function getPageExtraContent($titlelink='',$published=true) {
 	// print content of a page directly on a normal zenphoto theme page for example
 	if(!empty($titlelink)) {
 		$page = new ZenpagePage($titlelink);
-		if($page->getShow() === "1" OR ($page->getShow() != "1" AND $published === false)) {
+		if($page->getShow() OR (!$page->getShow() AND !$published)) {
 			return $page->getExtracontent();
 		}
 	}
@@ -2134,7 +2134,7 @@ function printSubPagesExcerpts($excerptlength='', $readmore='', $shortenindicato
 	}
 	foreach($pages as $page) {
 		$pageobj = new ZenpagePage($page['titlelink']);
-		if($pageobj->getParentid() === getPageID()) {
+		if($pageobj->getParentid() == getPageID()) {
 			$subcount++;
 			$pagetitle = $pageobj->getTitle();
 			$pagecontent = $pageobj->getContent();
@@ -2378,13 +2378,13 @@ function getLatestZenpageComments($number,$type="all",$itemID="") {
 	}
 	$comments_news = array();
 	$comments_pages = array();
-	if ($type === "all" OR $type === "news") {
+	if ($type == "all" OR $type == "news") {
 		$comments_news = query_full_array("SELECT c.id, c.name, c.type, c.website,"
 		. " c.date, c.anon, c.comment, news.title, news.titlelink FROM ".prefix('comments')." AS c, ".prefix('zenpage_news')." AS news "
 		. $whereNews
 		. " ORDER BY c.id DESC LIMIT $number");
 	}
-	if ($type === "all" OR $type === "page") {
+	if ($type == "all" OR $type == "page") {
 		$comments_pages = query_full_array("SELECT c.id, c.name, c.type, c.website,"
 		. " c.date, c.anon, c.comment, pages.title, pages.titlelink FROM ".prefix('comments')." AS c, ".prefix('zenpage_pages')." AS pages "
 		. $wherePages
@@ -2422,10 +2422,10 @@ function printLatestZenpageComments($number, $shorten='123', $id='showlatestcomm
 	$comments = getLatestZenpageComments($number,$type,$itemID);
 	echo "<ul $id>\n";
 	foreach ($comments as $comment) {
-		if($comment['anon'] === "0") {
-			$author = " ".gettext("by")." ".$comment['name'];
-		} else {
+		if($comment['anon']) {
 			$author = "";
+		} else {
+			$author = " ".gettext("by")." ".$comment['name'];
 		}
 		$date = $comment['date'];
 		$title = get_language_string($comment['title']);
@@ -2475,13 +2475,13 @@ function printZenpageRSSLink($option='News', $categorylink='', $prev='', $linkte
 	if(empty($lang)) {
 		$lang = getOption("locale");
 	} 
-	if($option === "Category" AND empty($categorylink) AND issset($_GET['category'])) {
+	if($option == "Category" AND empty($categorylink) AND issset($_GET['category'])) {
 		$categorylink = "&amp;category=".sanitize($_GET['category']);
 	} 
-	if ($option === "Category" AND !empty($categorylink)) {
+	if ($option == "Category" AND !empty($categorylink)) {
 		$categorylink = "&amp;category=".sanitize($categorylink);
 	} 
-	if ($option === "Category" AND !empty($categorylink) AND !issset($_GET['category'])) {
+	if ($option == "Category" AND !empty($categorylink) AND !issset($_GET['category'])) {
 		$categorylink = "";
 	}
 	switch($option) {
@@ -2524,13 +2524,13 @@ function getZenpageRSSHeaderLink($option='', $categorylink='', $linktext='', $la
 	if(empty($lang)) {
 		$lang = getOption("locale");
 	}
-	if($option === "Category" AND empty($categorylink) AND issset($_GET['category'])) {
+	if($option == "Category" AND empty($categorylink) AND issset($_GET['category'])) {
 		$categorylink = "&amp;category=".sanitize($_GET['category']);
 	}
-	if ($option === "Category" AND !empty($categorylink)) {
+	if ($option == "Category" AND !empty($categorylink)) {
 		$categorylink = "&amp;category=".sanitize($categorylink);
 	}
-	if ($option === "Category" AND !empty($categorylink) AND !issset($_GET['category'])) {
+	if ($option == "Category" AND !empty($categorylink) AND !issset($_GET['category'])) {
 		$categorylink = "";
 	}
 	switch($option) {

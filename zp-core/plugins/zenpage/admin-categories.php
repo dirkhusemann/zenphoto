@@ -116,7 +116,7 @@ if(isset($_GET["edit"])) {
 <li><img src="../../images/fail.png" alt="" /><?php echo gettext("Delete category"); ?></li>
 </ul>
 </div>
-<?php printZenpageFooter(); ?>
+<?php printAdminFooter(); ?>
 
 </body>
 </html>

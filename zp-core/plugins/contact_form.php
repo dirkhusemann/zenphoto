@@ -167,7 +167,7 @@ function printContactForm() {
 				if(count($error) > 1) { $separator = ", "; }
 				echo $err;
 				if($count != count($error)) {
-					if ($count === (count($error) - 1)) {
+					if ($count == (count($error) - 1)) {
 						$separator = gettext(" and ");
 					}
 					echo $separator;

@@ -36,12 +36,14 @@ function getCheckboxState($id) {
  * @return object
  */
 function addPage() {
-	$title = mysql_real_escape_string(process_language_string_save("title",2));
-	$titlelink = process_language_string_save("title",2);
-	$titlelink = mysql_real_escape_string(seoFriendlyURL(get_language_string($titlelink)));
-	$author = mysql_real_escape_string(sanitize($_POST['author']));
-	$content = mysql_real_escape_string(process_language_string_save("content",0)); // TinyMCE already clears unallowed code
-	$extracontent = mysql_real_escape_string(process_language_string_save("extracontent",0)); // TinyMCE already clears unallowed code
+	$title = process_language_string_save("title",2);
+	$titlelink = seoFriendlyURL(sanitize($_POST['titlelink']));
+	if (empty($titlelink)) $titlelink = seoFriendlyURL($title);
+	if (empty($titlelink)) $titlelink = seoFriendlyURL($date);
+
+	$author = sanitize($_POST['author']);
+	$content = process_language_string_save("content",0); // TinyMCE already clears unallowed code
+	$extracontent = process_language_string_save("extracontent",0); // TinyMCE already clears unallowed code
 	$show = getCheckboxState('show');
 	$date = sanitize($_POST['date']);
 	$expiredate = sanitize($_POST['expiredate']);
@@ -54,20 +56,33 @@ function addPage() {
 	$codeblock = base64_encode(serialize($codeblock));
 	$locked = getCheckboxState('locked');
 
-	if(empty($titlelink)) {
-		$titlelink = seoFriendlyURL($date);
+	$rslt = query('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.$titlelink.'"',true);
+	if (!$rslt) {
+		$titlelink = seoFriendlyURL($date); // force unique so that data may be saved.
 	}
-	if (query("INSERT INTO ".prefix('zenpage_pages')." (title, content, extracontent, `show`, `titlelink`, parentid, codeblock, author, `date`, commentson, permalink, locked, expiredate) VALUES ('$title', '$content', '$extracontent', '$show', '$titlelink', NULL, '$codeblock', '$author', '$date', '$commentson','$permalink','$locked','$expiredate')",true)) {
-		if(empty($title)) {
-			echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink))."</p>";
-		} else {
-			echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added"),$titlelink)."</p>";
-		}
-	}	else {
+	$page = new ZenpagePage($titlelink);
+	$page->set('title',$title);
+	$page->set('content',$content);
+	$page->set('extracontent',$extracontent);
+	$page->set('show',$show);
+	$page->set('parentid',NULL);
+	$page->set('codeblock',$codeblock);
+	$page->set('author',$author);
+	$page->set('date',$date);
+	$page->set('commentson',$commentson);
+	$page->set('permalink',$permalink);
+	$page->set('locked',$locked);
+	$page->set('expiredate',$expiredate);
+	apply_filter('new_page', $page);
+	$page->save();
+	if (!$rslt) {
 		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A page with the title/titlelink <em>%s</em> already exists"),$titlelink)."</p>";
+	} else if(empty($title)) {
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink))."</p>";
+	} else {
+		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> added"),$titlelink)."</p>";
 	}
-	$result = new ZenpagePage($titlelink);
-	return $result;
+	return $page;
 }
 
 
@@ -78,57 +93,64 @@ function addPage() {
  * @return object
  */
 function updatePage() {
-	global $_zp_current_admin, $_zp_current_zenpage_page;
-	$result['id'] = sanitize($_POST['id']);
-	$result['title']  = mysql_real_escape_string(process_language_string_save("title",2));
-	$result['permalink'] = getCheckboxState('permalink');
-	$result['author'] = mysql_real_escape_string(sanitize($_POST['author']));
-	$result['content'] = mysql_real_escape_string(process_language_string_save("content",0)); // TinyMCE already clears unallowed code
-	$result['extracontent'] = mysql_real_escape_string(process_language_string_save("extracontent",0)); // TinyMCE already clears unallowed code
-	$result['show'] = getCheckboxState('show');
-	$result['date'] = sanitize($_POST['date']);
-	$result['expiredate'] = sanitize($_POST['expiredate']);
-	$result['lastchange'] = sanitize($_POST['lastchange']);
-	$result['lastchangeauthor'] = mysql_real_escape_string(sanitize($_POST['lastchangeauthor']));
-	$result['commentson'] = getCheckboxState('commentson');
-	if($result['permalink'] === 1) {
-		$result['titlelink'] = sanitize($_POST['titlelink-old']);
-	}
-	if(getCheckboxState('edittitlelink') === 1) {
-		$result['titlelink'] = sanitize($_POST['titlelink']);
-	}
-	if($result['permalink'] === 0 AND getCheckboxState('edittitlelink') === 0) {
-		$result['titlelink'] = process_language_string_save("title",2);
-		$result['titlelink'] = mysql_real_escape_string(seoFriendlyURL(get_language_string($result['titlelink'])));
-	}
-	if(isset($_POST['resethitcounter'])) {
-		$result['hitcounter'] = "0";
-	} else {
-		$result['hitcounter'] = sanitize($_POST['hitcounter']);
-	}
+	$title = process_language_string_save("title",2);
+	$author = sanitize($_POST['author']);
+	$content = process_language_string_save("content",0); // TinyMCE already clears unallowed code
+	$extracontent = process_language_string_save("extracontent",0); // TinyMCE already clears unallowed code
+	$show = getCheckboxState('show');
+	$date = sanitize($_POST['date']);
+	$expiredate = sanitize($_POST['expiredate']);
+	$commentson = getCheckboxState('commentson');
+	$permalink = getCheckboxState('permalink');
 	$codeblock1 = $_POST['codeblock1'];
 	$codeblock2 = $_POST['codeblock2'];
 	$codeblock3 = $_POST['codeblock3'];
 	$codeblock = array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3);
-	$result['codeblock'] = base64_encode(serialize($codeblock));
-	$result['locked'] = getCheckboxState('locked');
+	$codeblock = base64_encode(serialize($codeblock));
+	$locked = getCheckboxState('locked');
 
-	if(empty($result['titlelink'])) {
-		$result['titlelink'] = seoFriendlyURL($result['date']);
-	}
-
-	// update the article in the database
-	if(query("UPDATE ".prefix('zenpage_pages')." SET title = '".$result['title']."', content = '".$result['content']."', extracontent= '".$result['extracontent']."', `show` = '".$result['show']."', `titlelink` = '".$result['titlelink']."' , `codeblock` = '".$result['codeblock']."', `author` ='".$result['author']."', `date` ='".$result['date']."', `lastchange` ='".$result['lastchange']."', `lastchangeauthor` ='".$result['lastchangeauthor']."', `commentson` ='".$result['commentson']."', `hitcounter` ='".$result['hitcounter']."', `permalink` = '".$result['permalink']."', `locked` = '".$result['locked']."', `expiredate` = '".$result['expiredate']."' WHERE id = ".$result['id'], true)) {
-		if(empty($result['title']) OR empty($result['titlelink'])) {
-			echo "<p class='errorbox' id='fade-message'>".gettext("You forgot to give your page a <strong>title</strong>!")."</p>";
-		} else {
-			echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> changes saved"),$result['titlelink'])."</p>";
-		}
+	if (getCheckboxState('edittitlelink')) {
+		$titlelink = sanitize($_POST['titlelink']);
+	} else if($permalink) {
+		$titlelink = sanitize($_POST['titlelink-old']);
 	} else {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A page with the title/titlelink <em>%s</em> already exists"),$result['titlelink'])."</p>";
+		$titlelink = seoFriendlyURL(get_language_string($title));
 	}
-	$result = new ZenpagePage($result['titlelink']);
-	return $result;
+	if(empty($titlelink)) $titlelink = seoFriendlyURL($result['date']);
+	$id = sanitize($_POST['id']);
+	$rslt = true;
+	if (getCheckboxState('edittitlelink')) { // title link change must be reflected in DB before any other updates
+		$rslt = query('UPDATE '.prefix('zenpage_pages').' SET `titlelink`="'.$titlelink.'" WHERE `id`="'.$id.'"',true);
+		if (!$rslt) {
+			$titlelink = sanitize($_POST['titlelink-old']); // force old link so data gets saved
+		}
+	}
+	// update page
+	$page = new ZenpagePage($titlelink);
+	$page->set('title',$title);
+	$page->set('content',$content);
+	$page->set('extracontent',$extracontent);
+	$page->set('show',$show);
+	$page->set('parentid',NULL);
+	$page->set('codeblock',$codeblock);
+	$page->set('author',$author);
+	$page->set('date',$date);
+	$page->set('commentson',$commentson);
+	$page->set('permalink',$permalink);
+	$page->set('locked',$locked);
+	$page->set('expiredate',$expiredate);
+	if (getCheckboxState('resethitcounter')) {
+		$page->set('hitcounter',0);
+	}
+	$page->save();
+	if (!$rslt) {
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("A page with the title/titlelink <em>%s</em> already exists!"),$titlelink)."</p>";
+	} else 	if(empty($title)) {
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> updated but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink))."</p>";
+	} else {
+		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Page <em>%s</em> updated"),$titlelink)."</p>";
+	}
+	return $page;
 }
 
 
@@ -359,12 +381,14 @@ function printPagesList($pages) {
  * @return object
  */
 function addArticle() {
-	$title = mysql_real_escape_string(process_language_string_save("title",2));
-	$titlelink = process_language_string_save("title",2);
-	$titlelink = mysql_real_escape_string(seoFriendlyURL(get_language_string($titlelink)));
-	$author = mysql_real_escape_string(sanitize($_POST['author']));
-	$content = mysql_real_escape_string(process_language_string_save("content",0)); // TinyMCE already clears unallowed code
-	$extracontent = mysql_real_escape_string(process_language_string_save("extracontent",0)); // TinyMCE already clears unallowed code
+	$title = process_language_string_save("title",2);
+	$titlelink = seoFriendlyURL(sanitize($_POST['titlelink']));
+	if (empty($titlelink)) $titlelink = seoFriendlyURL($title);
+	if (empty($titlelink)) $titlelink = seoFriendlyURL($date);
+
+	$author = sanitize($_POST['author']);
+	$content = process_language_string_save("content",0); // TinyMCE already clears unallowed code
+	$extracontent = process_language_string_save("extracontent",0); // TinyMCE already clears unallowed code
 	$show = getCheckboxState('show');
 	$date = sanitize($_POST['date']);
 	$expiredate = sanitize($_POST['expiredate']);
@@ -378,34 +402,41 @@ function addArticle() {
 	$codeblock = base64_encode(serialize($codeblock));
 	$locked = getCheckboxState('locked');
 
-	if(empty($titlelink)) {
-		$titlelink = seoFriendlyURL($date);
+	$rslt = query('SELECT `id` FROM '.prefix('zenpage_news').' WHERE `titlelink`="'.$titlelink.'"',true);
+	if (!$rslt) {
+		$titlelink = seoFriendlyURL($date); // force unique so that data may be saved.
 	}
-
 	// create new article
-	if (query("INSERT INTO ".prefix('zenpage_news')." (title, content, extracontent, `show`, date, `titlelink`, commentson, codeblock, author, lastchange, permalink, locked, expiredate) VALUES ('$title', '$content', '$extracontent', '$show', '$date', '$titlelink', '$commentson', '$codeblock', '$author', '$lastchange', '$permalink','$locked','$expiredate')",true)) {
-		if(empty($title) OR empty($titlelink)) {
-			echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink))."</p>";
-		} else {
-			echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> added"),$titlelink)."</p>";
-		}
-	}	else {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("An article with the title/titlelink <em>%s</em> already exists!"),$titlelink)."</p>";
-	}
-
-	// get id of new article
-	$result = query_single_row("SELECT id FROM ".prefix('zenpage_news')." WHERE titlelink = '$titlelink'");
-	$newsid = $result['id'];
-
+	$article = new ZenpageNews($titlelink);
+	$article->set('title',$title);
+	$article->set('content',$content);
+	$article->set('extracontent',$extracontent);
+	$article->set('show',$show);
+	$article->set('date',$date);
+	$article->set('commentson',$commentson);
+	$article->set('codeblock',$codeblock);
+	$article->set('author',$author);
+	$article->set('lastchange',$lastchange);
+	$article->set('permalink',$permalink);
+	$article->set('locked',$locked);
+	$article->set('expiredate',$expiredate);
+	apply_filter('new_article', $article);
+	$article->save();
 	// create news2cat rows
 	$result2 = query_full_array("SELECT id, cat_name, cat_link FROM ".prefix('zenpage_news_categories')." ORDER BY cat_name");
 	foreach ($result2 as $cat) {
 		if (isset($_POST["cat".$cat['id']])) {
-			query("INSERT INTO ".prefix('zenpage_news2cat')." (cat_id, news_id) VALUES ('".$cat['id']."', '$newsid')");
+			query("INSERT INTO ".prefix('zenpage_news2cat')." (cat_id, news_id) VALUES ('".$cat['id']."', '".$article->get('id')."')");
 		}
 	}
-	$result = new ZenpageNews($titlelink);
-	return $result;
+	if (!$rslt) {
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("An article with the title/titlelink <em>%s</em> already exists!"),$titlelink)."</p>";
+	} else if(empty($title)) {
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> added but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink))."</p>";
+	} else {
+		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> added"),$titlelink)."</p>";
+	}
+	return $article;
 }
 
 
@@ -415,75 +446,82 @@ function addArticle() {
  * @return object
  */
 function updateArticle() {
-	$result['id'] = sanitize($_POST['id']);
-	$result['title'] = mysql_real_escape_string(process_language_string_save("title",2));
-	$result['permalink'] = getCheckboxState('permalink');
-	$result['author'] = mysql_real_escape_string(sanitize($_POST['author']));
-	$result['content'] = mysql_real_escape_string(process_language_string_save("content",0)); // TinyMCE already clears unallowed code
-	$result['extracontent'] = mysql_real_escape_string(process_language_string_save("extracontent",0)); // TinyMCE already clears unallowed code
-	$result['show'] = getCheckboxState('show');
-	$result['date'] = sanitize($_POST['date']);
-	$result['expiredate'] = sanitize($_POST['expiredate']);
-	$result['lastchange'] = sanitize($_POST['lastchange']);
-	$result['lastchangeauthor'] = mysql_real_escape_string(sanitize($_POST['lastchangeauthor']));
-	$result['commentson'] = getCheckboxState('commentson');
-	if($result['permalink'] === 1) {
-		$result['titlelink'] = sanitize($_POST['titlelink-old']);
-	}
-	if(getCheckboxState('edittitlelink') === 1) {
-		$result['titlelink'] = sanitize($_POST['titlelink']);
-	}
-	if($result['permalink'] === 0 AND getCheckboxState('edittitlelink') === 0) {
-		$result['titlelink'] = process_language_string_save("title",2);
-		$result['titlelink'] = mysql_real_escape_string(seoFriendlyURL(get_language_string($result['titlelink'])));
-	}
-	if(isset($_POST['resethitcounter'])) {
-		$result['hitcounter'] = "0";
-	} else {
-		$result['hitcounter'] = sanitize($_POST['hitcounter']);
-	}
+	$title = process_language_string_save("title",2);
+	$author = sanitize($_POST['author']);
+	$content = process_language_string_save("content",0); // TinyMCE already clears unallowed code
+	$extracontent = process_language_string_save("extracontent",0); // TinyMCE already clears unallowed code
+	$show = getCheckboxState('show');
+	$date = sanitize($_POST['date']);
+	$expiredate = sanitize($_POST['expiredate']);
+	$permalink = getCheckboxState('permalink');
+	$lastchange = getCheckboxState('lastchange');
+	$commentson = getCheckboxState('commentson');
 	$codeblock1 = $_POST['codeblock1'];
 	$codeblock2 = $_POST['codeblock2'];
 	$codeblock3 = $_POST['codeblock3'];
 	$codeblock = array("1" => $codeblock1, "2" => $codeblock2, "3" => $codeblock3);
-	$result['codeblock'] = base64_encode(serialize($codeblock));
-	$result['locked'] = getCheckboxState('locked');
+	$codeblock = base64_encode(serialize($codeblock));
+	$locked = getCheckboxState('locked');
 
-	if(empty($result['title']) OR empty($result['titlelink'])) {
-		$result['titlelink'] = seoFriendlyURL($result['date']);
+	if (getCheckboxState('edittitlelink')) {
+		$titlelink = sanitize($_POST['titlelink']);
+	} else if($permalink) {
+		$titlelink = sanitize($_POST['titlelink-old']);
+	} else {
+		$titlelink = seoFriendlyURL(get_language_string($title));
 	}
+	if(empty($titlelink)) $titlelink = seoFriendlyURL($date);
 
-	// update the article in the database
-	//query("UPDATE ".prefix('zenpage_news')." SET title = '".$result['title']."', content = '".$result['content']."', extracontent = '".$result['extracontent']."', `show` = '".$result['show']."', date = '".$result['date']."', titlelink = '".$result['titlelink']."', commentson = '".$result['commentson']."', codeblock = '".$result['codeblock']."', author = '".$result['author']."', lastchange = '".$result['lastchange']."', lastchangeauthor = '".$result['lastchangeauthor']."', `hitcounter` ='".$result['hitcounter']."', `permalink` ='".$result['permalink']."', `locked` = '".$result['locked']."' WHERE id = ".$result['id']);
-	if(query("UPDATE ".prefix('zenpage_news')." SET title = '".$result['title']."', content = '".$result['content']."', extracontent = '".$result['extracontent']."', `show` = '".$result['show']."', date = '".$result['date']."', titlelink = '".$result['titlelink']."', commentson = '".$result['commentson']."', codeblock = '".$result['codeblock']."', author = '".$result['author']."', lastchange = '".$result['lastchange']."', lastchangeauthor = '".$result['lastchangeauthor']."', `hitcounter` ='".$result['hitcounter']."', `permalink` ='".$result['permalink']."', `locked` = '".$result['locked']."', `expiredate` = '".$result['expiredate']."' WHERE id = ".$result['id'], true)) {
-		if(empty($result['title']) OR empty($result['titlelink'])) {
-			echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> updated but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink))."</p>";
-		} else {
-			echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> updated"),$result['titlelink'])."</p>";
+	$id = sanitize($_POST['id']);
+	$rslt = true;
+	if (getCheckboxState('edittitlelink')) { // title link change must be reflected in DB before any other updates
+		$rslt = query('UPDATE '.prefix('zenpage_news').' SET `titlelink`="'.$titlelink.'" WHERE `id`="'.$id.'"',true);
+		if (!$rslt) {
+			$titlelink = sanitize($_POST['titlelink-old']); // force old link so data gets saved
 		}
-	}	else {
-		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("An article with the title/titlelink <em>%s</em> already exists!"),$result['titlelink'])."</p>";
 	}
+	// update article
+	$article = new ZenpageNews($titlelink);
+	$article->set('title',$title);
+	$article->set('content',$content);
+	$article->set('extracontent',$extracontent);
+	$article->set('show',$show);
+	$article->set('date',$date);
+	$article->set('commentson',$commentson);
+	$article->set('codeblock',$codeblock);
+	$article->set('author',$author);
+	$article->set('lastchange',$lastchange);
+	$article->set('permalink',$permalink);
+	$article->set('locked',$locked);
+	$article->set('expiredate',$expiredate);
+	if(getCheckboxState('resethitcounter')) {
+		$page->set('hitcounter',0);
+	}
+	$article->save();
 	// create news2cat rows
 	$result2 = query_full_array("SELECT id, cat_name, cat_link FROM ".prefix('zenpage_news_categories')." ORDER BY id");
 	foreach($result2 as $cat) {
 
 		// if category is sent
 		if(isset($_POST["cat".$cat['id']])) {
-
 			// check if category is already set in db, if not add it to news2cat
-			$checkcat = query_single_row("SELECT cat_id, news_id FROM ".prefix('zenpage_news2cat')." WHERE cat_id = ".$cat['id']. " AND news_id = ".$result['id']);
+			$checkcat = query_single_row("SELECT cat_id, news_id FROM ".prefix('zenpage_news2cat')." WHERE cat_id = ".$cat['id']. " AND news_id = ".$article->get('id'));
 			if(!$checkcat) {
-				query("INSERT INTO ".prefix('zenpage_news2cat')." (cat_id, news_id) VALUES ('".$cat['id']."', '".$result['id']."')");
+				query("INSERT INTO ".prefix('zenpage_news2cat')." (cat_id, news_id) VALUES ('".$cat['id']."', '".$article->get('id')."')");
 			}
-
 			// if category is not sent, delete it from news2cat
 		} else {
-			query("DELETE FROM ".prefix('zenpage_news2cat')." WHERE cat_id = ".$cat['id']." AND news_id = ".$result['id']);
+			query("DELETE FROM ".prefix('zenpage_news2cat')." WHERE cat_id = ".$cat['id']." AND news_id = ".$article->get('id'));
 		}
 	}
-	$result = new ZenpageNews($result['titlelink']);
-	return $result;
+	if (!$rslt) {
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("An article with the title/titlelink <em>%s</em> already exists!"),$titlelink)."</p>";
+	} else if(empty($title)) {
+		echo "<p class='errorbox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> updated but you need to give it a <strong>title</strong> before publishing!"),get_language_string($titlelink))."</p>";
+	} else {
+		echo "<p class='messagebox' id='fade-message'>".sprintf(gettext("Article <em>%s</em> updated"),$titlelink)."</p>";
+	}
+	return $article;
 }
 
 
@@ -582,7 +620,7 @@ function printArticleDatesDropdown() {
 	      $catlink = "";
 	    }
 		$check = $month."-".$year;
-		 if(isset($_GET['date']) AND $_GET['date'] === substr($key,0,7)) {
+		 if(isset($_GET['date']) AND $_GET['date'] == substr($key,0,7)) {
 				$selected = "selected";
 		 } else {
 		 		$selected = "";
@@ -743,10 +781,10 @@ function printUnpublishedDropdown() {
  		$all="";
 		$published="";
 		$unpublished="";
-		 if(isset($_GET['published']) AND $_GET['published'] === "no") {
+		 if(isset($_GET['published']) AND $_GET['published'] == "no") {
 				$unpublished="selected";
 		 }
-		 if(isset($_GET['published']) AND $_GET['published'] === "yes") {
+		 if(isset($_GET['published']) AND $_GET['published'] == "yes") {
 				$published="selected";
 		 	}
 		 	if(!isset($_GET['published'])) {
@@ -801,13 +839,13 @@ function updateCategory() {
 	$result['id'] = sanitize($_POST['id']);
 	$result['cat_name'] = mysql_real_escape_string(process_language_string_save("category",2));
 	$result['permalink'] = getCheckboxState('permalink');
-	if($result['permalink'] === 1) {
+	if($result['permalink']) {
 		$result['cat_link'] = sanitize($_POST['catlink-old']);
 	}
-	if(getCheckboxState('edittitlelink') === 1) {
+	if(getCheckboxState('edittitlelink')) {
 		$result['cat_link'] = sanitize($_POST['catlink']);
 	}
-	if($result['permalink'] === 0 AND getCheckboxState('edittitlelink') === 0) {
+	if(!$result['permalink'] AND !getCheckboxState('edittitlelink')) {
 		$result['cat_link'] = process_language_string_save("category",2);
 		$result['cat_link'] = mysql_real_escape_string(seoFriendlyURL(get_language_string($result['cat_link'])));
 	}
@@ -946,8 +984,8 @@ function skipScheduledPublishing($option,$id) {
  * @param string $commentson the comments array field of "commentson"
  * @return string 
  */
-function checkIfCommentsAllowed($commentson='') {
-  if ($commentson === "1") {
+function checkIfCommentsAllowed($commentson=false) {
+  if ($commentson) {
     $check = "<img src=\"images/comments-on.png\" alt=\"".gettext("Comments on")."\" />";
   } else {
     $check = "<img src=\"images/comments-off.png\" alt=\"".gettext("Comments off")."\" />";
@@ -962,7 +1000,7 @@ function checkIfCommentsAllowed($commentson='') {
  * @param string $type "news" or "pages"
  */
 function enableComments($type) {
-  if($_GET['commentson'] === "1") {
+  if($_GET['commentson']) {
 		$comments = "0";
   } else {
   	$comments = "1";
@@ -997,7 +1035,7 @@ function resetPageOrArticleHitcounter($option='') {
 			break;
 	}
 	$id = sanitize_numeric($_GET['id']);
-  if($_GET['hitcounter'] === "1") {
+  if($_GET['hitcounter']) {
 		query("UPDATE ".$dbtable." SET `hitcounter` = 0 WHERE id = ".$id);
   }   
 }
@@ -1047,7 +1085,7 @@ function getNewsPagesStatistic($option) {
 			$unpub = 0;
 			break;
 	}
-	if($option === "news" OR $option === "pages") {
+	if($option == "news" OR $option == "pages") {
 		$total = count($items);
 		$pub = 0;
 		foreach($items as $item) {
@@ -1150,17 +1188,17 @@ function zenpageAdminnav($currentpage) {
 			$page = "";
 		}
 		echo "<ul class=\"zptabs\">\n";
-		if($currentpage === "pages") {
+		if($currentpage == "pages") {
 			echo "<li><a href=\"admin-pages.php\" class=\"active-zptab\" title=\"".gettext("Pages")."\">".gettext("pages")."</a></li>\n";
 		} else {
 			echo "<li><a href=\"admin-pages.php\" title=\"".gettext("Pages")."\">".gettext("pages")."</a></li>\n";
 		}
-		if($currentpage === "articles") {
+		if($currentpage == "articles") {
 			echo "<li><a href=\"admin-news-articles.php".$page."\" class=\"active-zptab\" title=\"".gettext("Articles")."\">".gettext("articles")."</a></li>\n";
 		} else {
 			echo "<li><a href=\"admin-news-articles.php\" title=\"".gettext("Articles")."\">".gettext("articles")."</a></li>\n";
 		}
-		if($currentpage === "categories") {
+		if($currentpage == "categories") {
 			echo "<li><a href=\"admin-categories.php\" class=\"active-zptab\" title=\"".gettext("Categories")."\">".gettext("categories")."</a></li>\n";
 		} else {
 			echo "<li><a href=\"admin-categories.php\" title=\"".gettext("Categories")."\">".gettext("categories")."</a></li>\n";
@@ -1196,7 +1234,7 @@ function AuthorSelector($currentadmin='') {
 <?php
 foreach($admins as $admin) {
 	if($admin['rights'] & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
-		if($currentadmin === $admin['user']) {
+		if($currentadmin == $admin['user']) {
 			echo "<option selected value='".$admin['user']."'>".$admin['user']."</option>";
 		} else {
 			echo "<option value='".$admin['user']."'>".$admin['user']."</option>";
@@ -1255,7 +1293,7 @@ function checkIfScheduled($object) {
  */
 function printPublishIconLink($object,$type) {
 	$urladd1 = "";$urladd2 = "";$urladd3 = "";
-	if($type === "news") {
+	if($type == "news") {
 		if(isset($_GET['page'])) { $urladd1 = "&amp;page=".$_GET['page']; }
 		if(isset($_GET['date'])) { $urladd2 = "&amp;date=".$_GET['date']; }
 		if(isset($_GET['category'])) { $urladd3 = "&amp;category=".$_GET['category']; }
@@ -1307,7 +1345,7 @@ function printPublishIconLink($object,$type) {
  * @param string $field the array field of an item array to be checked (for example "permalink" or "comments on")
  */
 function checkIfChecked($field) {
-	if ($field === "1") {
+	if ($field) {
 		echo "checked='checked'";
 	} 
 }
@@ -1352,12 +1390,8 @@ function checkIfLocked($page) {
 	$admins = getAdministrators();
 	$admin = array_shift($admins);
 	$adminname = $admin['user'];
-	if($page->getLocked() === 1) {
-		if($_zp_current_admin['user'] === $page->getAuthor() OR $_zp_current_admin['user'] === $adminname) {
-			return TRUE;
-		} else {
-			return FALSE;
-		}
+	if($page->getLocked()) {
+		 return $_zp_current_admin['user'] == $page->getAuthor() OR $_zp_current_admin['user'] == $adminname;
 	} else {
 		return TRUE;
 	}
@@ -1420,7 +1454,7 @@ function print_language_string_list_zenpage($dbstring, $name, $textbox=false, $l
 		}
 		$locale = $_zp_current_locale;
 	}
-	if($name === "content") { // for the different sizes of content and extracontent textareas
+	if($name == "content") { // for the different sizes of content and extracontent textareas
 		$rows = "rows='35'";
 	} else {
 		$rows = "rows='10'";
@@ -1519,11 +1553,6 @@ function getZenpageVersion() {
 	$str = substr($str, 0, $j+1);
 	eval($str);
 	return ($plugin_version);
-}
-
-function printZenpageFooter() {
-	$footer = sprintf(gettext('<a href="http://zenpage.maltem.de/zenpage/index.php">zenpage</a> version %1$s'), getZenpageVersion());
-	printAdminFooter($footer);
 }
 
 /**

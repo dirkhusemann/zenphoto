@@ -105,7 +105,7 @@ $('#left-to-right').NestedSortable(
 });
 </script>
 
-<?php printZenpageFooter(); ?>
+<?php printAdminFooter(); ?>
 
 </body>
 </html>

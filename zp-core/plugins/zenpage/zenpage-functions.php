@@ -93,7 +93,7 @@ function getParentPages(&$parentid,$initparents=true) {
 	$currentparentid = $parentid;
 	foreach($allpages as $page) {
 		$pageobj = new ZenpagePage($page['titlelink']);
-		if($pageobj->getID() === $currentparentid) {
+		if($pageobj->getID() == $currentparentid) {
 			$pageobjtitlelink = $pageobj->getTitlelink();
 			$pageobjparentid = $pageobj->getParentID();
 			array_unshift($parentpages,$pageobjtitlelink);
@@ -385,7 +385,7 @@ function getParentPages(&$parentid,$initparents=true) {
 		} else {
 			$mode = sanitize($mode);
 		}
-		if($published === "published") {
+		if($published == "published") {
 			$show = " WHERE `show` = 1 AND date <= '".date('Y-m-d H:i:s')."'";
 			$imagesshow = " AND images.show = 1 ";
 		} else {
@@ -491,7 +491,7 @@ function getParentPages(&$parentid,$initparents=true) {
 	function getCategoryLink($catname) {
 		global $_zp_zenpage_all_categories;
 		foreach($_zp_zenpage_all_categories as $cat) {
-			if($cat['cat_name'] === $catname) {
+			if($cat['cat_name'] == $catname) {
 				return $cat['cat_link'];
 			}
 		}
@@ -507,7 +507,7 @@ function getParentPages(&$parentid,$initparents=true) {
 	function getCategoryTitle($catlink) {
 		global $_zp_zenpage_all_categories;
 		foreach($_zp_zenpage_all_categories as $cat) {
-			if($cat['cat_link'] === $catlink) {
+			if($cat['cat_link'] == $catlink) {
 				return htmlspecialchars(get_language_string($cat['cat_name']));
 			}
 		}
@@ -523,7 +523,7 @@ function getParentPages(&$parentid,$initparents=true) {
 	function getCategoryID($catlink) {
 		global $_zp_zenpage_all_categories;
 		foreach($_zp_zenpage_all_categories as $cat) {
-			if($cat['cat_link'] === $catlink) {
+			if($cat['cat_link'] == $catlink) {
 				return $cat['id'];
 			}
 		}

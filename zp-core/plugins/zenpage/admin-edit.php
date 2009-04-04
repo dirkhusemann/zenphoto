@@ -322,6 +322,6 @@ if(is_object($result)) {
 </form>
 </div>
 </div>
-<?php printZenpageFooter(); ?>
+<?php printAdminFooter(); ?>
 </body>
 </html>
