@@ -1,6 +1,9 @@
 <?php
 /** 
- * A plugin to print the most common html meta tags to the head of your site's pages using general existing Zenphoto info like gallery description, tags or Zenpage news categories.
+ * A plugin to print the most common html meta tags to the head of your site's pages using
+ * general existing Zenphoto info like gallery description, tags or Zenpage news categories.
+ * 
+ * Just enable the plugin and the meta data will be inserted into your <head> section.
  *  
  * @author Malte Müller (acrylian)
  * @version 1.0
@@ -12,6 +15,8 @@ $plugin_author = "Malte Müller (acrylian)";
 $plugin_version = '1.0';
 $plugin_URL = "";
 $option_interface = new htmlmetatags();
+
+if (!OFFSET_PATH) addPluginScript(getHTMLMetaData()); // insert the meta tags into the <head></head> if on a theme page.
 
 class htmlmetatags {
 
@@ -64,44 +69,44 @@ class htmlmetatags {
 									'desc' => gettext("When the page should be loaded directly from the server and not from any cache. You can either set a date/time in international date format <em>Sat, 15 Dec 2001 12:00:00 GMT (example)</em> or a number. A number then means seconds, the default value <em>43200</em> means 12 hours.")),
 		gettext('HTML meta tags') => array('key' => 'htmlmeta_tags', 'type' => 7,
 										"checkboxes" => array(
-"http-equiv='language'" => "htmlmeta_http-equiv-language",
-"name = 'language'"=>  "htmlmeta_name-language",
-"content-language" => "htmlmeta_name-content-language",
-"http-equiv-content-type/charset (recommended)" => "htmlmeta_http-equiv-content-type",
-"http-equiv='imagetoolbar' ('false')" => "htmlmeta_http-equiv-imagetoolbar",
-"http-equiv='cache-control'" => "htmlmeta_http-equiv-cache-control",
-"http-equiv='pragma'" => "htmlmeta_http-equiv-pragma",
-"http-equiv='content-style-type'" => "htmlmeta_http-equiv-content-style-type",
-"name='title'" => "htmlmeta_name-title",
-"name='keywords'" => "htmlmeta_name-keywords",
-"name='description'" => "htmlmeta_name-description",
-"name='page-topic'" => "htmlmeta_name-page-topic",
-"name='robots'" => "htmlmeta_name-robots",
-"name='publisher'" => "htmlmeta_name-publisher",
-"name='creator'" => "htmlmeta_name-creator",
-"name='author'" => "htmlmeta_name-author",
-"name='copyright'" => "htmlmeta_name-copyright",
-"name='rights'" => "htmlmeta_name-rights",
-"name='generator' ('Zenphoto')" => "htmlmeta_name-generator",
-"name='revisit-after'" => "htmlmeta_name-revisit-after",
-"name='expires'" => "htmlmeta_name-expires",
-"name='date'" => "htmlmeta_name-date",
-"name='DC.title'" => "htmlmeta_name-DC.title",
-"name='DC.keywords'" => "htmlmeta_name-DC.keywords",
-"name='DC.description'" => "htmlmeta_name-DC.description",
-"name='DC.language'" => "htmlmeta_name-DC.language",
-"name='DC.subject'" => "htmlmeta_name-DC.subject",
-"name='DC.publisher'" => "htmlmeta_name-DC.publisher",
-"name='DC.creator'" => "htmlmeta_name-DC.creator",
-"name='DC.date'" => "htmlmeta_name-DC.date",
-"name='DC.type'" => "htmlmeta_name-DC.type",
-"name='DC.format'" => "htmlmeta_name-DC.format",
-"name='DC.identifier'" => "htmlmeta_name-DC.identifier",
-"name='DC.rights'" => "htmlmeta_name-DC.rights",
-"name='DC.source'" => "htmlmeta_name-DC.source",
-"name='DC.relation'" => "htmlmeta_name-DC.relation",
-"name='DC.Date.created'" => "htmlmeta_name-DC.Date.created"
-),
+												"http-equiv='language'" => "htmlmeta_http-equiv-language",
+												"name = 'language'"=>  "htmlmeta_name-language",
+												"content-language" => "htmlmeta_name-content-language",
+												"http-equiv-content-type/charset (recommended)" => "htmlmeta_http-equiv-content-type",
+												"http-equiv='imagetoolbar' ('false')" => "htmlmeta_http-equiv-imagetoolbar",
+												"http-equiv='cache-control'" => "htmlmeta_http-equiv-cache-control",
+												"http-equiv='pragma'" => "htmlmeta_http-equiv-pragma",
+												"http-equiv='content-style-type'" => "htmlmeta_http-equiv-content-style-type",
+												"name='title'" => "htmlmeta_name-title",
+												"name='keywords'" => "htmlmeta_name-keywords",
+												"name='description'" => "htmlmeta_name-description",
+												"name='page-topic'" => "htmlmeta_name-page-topic",
+												"name='robots'" => "htmlmeta_name-robots",
+												"name='publisher'" => "htmlmeta_name-publisher",
+												"name='creator'" => "htmlmeta_name-creator",
+												"name='author'" => "htmlmeta_name-author",
+												"name='copyright'" => "htmlmeta_name-copyright",
+												"name='rights'" => "htmlmeta_name-rights",
+												"name='generator' ('Zenphoto')" => "htmlmeta_name-generator",
+												"name='revisit-after'" => "htmlmeta_name-revisit-after",
+												"name='expires'" => "htmlmeta_name-expires",
+												"name='date'" => "htmlmeta_name-date",
+												"name='DC.title'" => "htmlmeta_name-DC.title",
+												"name='DC.keywords'" => "htmlmeta_name-DC.keywords",
+												"name='DC.description'" => "htmlmeta_name-DC.description",
+												"name='DC.language'" => "htmlmeta_name-DC.language",
+												"name='DC.subject'" => "htmlmeta_name-DC.subject",
+												"name='DC.publisher'" => "htmlmeta_name-DC.publisher",
+												"name='DC.creator'" => "htmlmeta_name-DC.creator",
+												"name='DC.date'" => "htmlmeta_name-DC.date",
+												"name='DC.type'" => "htmlmeta_name-DC.type",
+												"name='DC.format'" => "htmlmeta_name-DC.format",
+												"name='DC.identifier'" => "htmlmeta_name-DC.identifier",
+												"name='DC.rights'" => "htmlmeta_name-DC.rights",
+												"name='DC.source'" => "htmlmeta_name-DC.source",
+												"name='DC.relation'" => "htmlmeta_name-DC.relation",
+												"name='DC.Date.created'" => "htmlmeta_name-DC.Date.created"
+												),
 										"desc" => gettext("Which of the html meta tags should be used. For info about these in detail please refer to the net."))
 		
 		);
@@ -112,7 +117,7 @@ class htmlmetatags {
  * Prints html meta data to be used in the <head> section of a page
  *
  */
-function printHTMLMetaData() {	
+function getHTMLMetaData() {	
 	global $_zp_gallery, $_zp_current_album, $_zp_current_image, $_zp_current_zenpage_news, $_zp_current_zenpage_page, $_zp_gallery_page;
 	$url = sanitize("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 
@@ -164,45 +169,46 @@ function printHTMLMetaData() {
 			$author = $admin['name'];
 			if($admincount === 1 ) break;
 		}
-?>
-<?php if(getOption('htmlmeta_http-equiv-language')) { ?><meta http-equiv="language" content="<?php echo $locale; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-language')) { ?><meta name="language" content="<?php echo $locale; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-content-language')) { ?><meta name="content-language" content="<?php echo $locale; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_http-equiv-content-type')) { ?><meta http-equiv="content-type" content="text/html; charset=<?php echo getOption("charset"); ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_http-equiv-imagetoolbar')) { ?><meta http-equiv="imagetoolbar" content="false" /><?php } ?>
-<?php if(getOption('htmlmeta_http-equiv-cache-control')) { ?><meta http-equiv="cache-control" content="<?php echo getOption("htmlmeta_cache_control"); ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_http-equiv-pragma')) { ?><meta http-equiv="pragma" content="<?php echo getOption("htmlmeta_pragma"); ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_http-equiv-content-style-type')) { ?><meta http-equiv="Content-Style-Type" content="text/css" /><?php } ?>
-<?php if(getOption('htmlmeta_name-title')) { ?><meta name="title" content="<?php echo $pagetitle; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-keywords')) { ?><meta name="keywords" content="<?php printMetaKeywords(); ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-description')) { ?><meta name="description" content="<?php echo $desc; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-page-topic')) { ?><meta name="page-topic" content="<?php echo $desc; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-robots')) { ?><meta name="robots" content="<?php echo getOption("htmlmeta_robots"); ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-publisher')) { ?><meta name="publisher" content="<?php echo FULLWEBPATH; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-creator')) { ?><meta name="creator" content="<?php echo FULLWEBPATH; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-author')) { ?><meta name="author" content="<?php echo $author; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-copyright')) { ?><meta name="copyright" content=" (c) <?php echo FULLWEBPATH; ?> - <?php echo $author; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-rights')) { ?><meta name="rights" content="<?php echo $author; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-rights')) { ?><meta name="generator" content="Zenphoto <?php echo ZENPHOTO_VERSION . ' [' . ZENPHOTO_RELEASE . ']'; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-revisit-after')) { ?><meta name="revisit-after" content="<?php echo getOption("htmlmeta_revisit_after"); ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-expires')) { ?><meta name="expires" content="<?php echo getOption("htmlmeta_expires"); ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-expires')) { ?><meta name="date" content="<?php echo $date; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-DC.titl')) { ?><meta name="DC.title" content="<?php echo $pagetitle; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-DC.keywords')) { ?><meta name="DC.keywords" content="<?php printMetaKeywords(); ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-DC.description')) { ?><meta name="DC.description" content="<?php echo $desc; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-DC.language')) { ?><meta name="DC.language" content="<?php echo $locale; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-DC.subject')) { ?><meta name="DC.subject" content="<?php echo $desc; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-DC.publisher')) { ?><meta name="DC.publisher" content="<?php echo FULLWEBPATH; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-DC.creator')) { ?><meta name="DC.creator" content="<?php echo FULLWEBPATH; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-DC.date')) { ?><meta name="DC.date" content="<?php echo $date; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-DC.type')) { ?><meta name="DC.type" content="Text" /> <!-- ? --><?php } ?>
-<?php if(getOption('htmlmeta_name-DC.format')) { ?><meta name="DC.format" content="text/html" /><!-- What else? --><?php } ?>
-<?php if(getOption('htmlmeta_name-DC.identifier')) { ?><meta name="DC.identifier" content="<?php echo FULLWEBPATH; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-DC.rights')) { ?><meta name="DC.rights" content="<?php echo FULLWEBPATH; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-DC.source')) { ?><meta name="DC.source" content="<?php echo $url; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-DC.relation')) { ?><meta name="DC.relation" content="<?php echo FULLWEBPATH; ?>" /><?php } ?>
-<?php if(getOption('htmlmeta_name-DC.Date.created')) { ?><meta name="DC.Date.created" content="<?php echo $date; ?>" /><?php } ?>
-<?php 
+	$meta = ''; 
+	if(getOption('htmlmeta_http-equiv-language')) { $meta .= '<meta http-equiv="language" content="<?php echo $locale; ?>" />'."\n"; }
+	if(getOption('htmlmeta_name-language')) { $meta .= '<meta name="language" content="<?php echo $locale; ?>" />'."\n"; }
+	if(getOption('htmlmeta_name-content-language')) { $meta .= '<meta name="content-language" content="'.$locale.'" />'."\n"; }
+	if(getOption('htmlmeta_http-equiv-content-type')) { $meta .= '<meta http-equiv="content-type" content="text/html; charset='.getOption("charset").'" />'."\n"; }
+	if(getOption('htmlmeta_http-equiv-imagetoolbar')) { $meta .= '<meta http-equiv="imagetoolbar" content="false" />'."\n"; }
+	if(getOption('htmlmeta_http-equiv-cache-control')) { $meta .= '<meta http-equiv="cache-control" content="'.getOption("htmlmeta_cache_control").'" />'."\n"; }
+	if(getOption('htmlmeta_http-equiv-pragma')) { $meta .= '<meta http-equiv="pragma" content="'.getOption("htmlmeta_pragma").'" />'."\n"; }
+	if(getOption('htmlmeta_http-equiv-content-style-type')) { $meta .= '<meta http-equiv="Content-Style-Type" content="text/css" />'."\n"; }
+	if(getOption('htmlmeta_name-title')) { $meta .= '<meta name="title" content="'.$pagetitle.'" />'."\n"; }
+	if(getOption('htmlmeta_name-keywords')) { $meta .= '<meta name="keywords" content="'.getMetaKeywords().'" />'."\n"; }
+	if(getOption('htmlmeta_name-description')) { $meta .= '<meta name="description" content="'.$desc.'" />'."\n"; }
+	if(getOption('htmlmeta_name-page-topic')) { $meta .= '<meta name="page-topic" content="'.$desc.'" />'."\n"; }
+	if(getOption('htmlmeta_name-robots')) { $meta .= '<meta name="robots" content="'.getOption("htmlmeta_robots").'" />'."\n"; }
+	if(getOption('htmlmeta_name-publisher')) { $meta .= '<meta name="publisher" content="'.FULLWEBPATH.'" />'."\n"; }
+	if(getOption('htmlmeta_name-creator')) { $meta .= '<meta name="creator" content="'.FULLWEBPATH.'" />'."\n"; }
+	if(getOption('htmlmeta_name-author')) { $meta .= '<meta name="author" content="'.$author.'" />'."\n"; }
+	if(getOption('htmlmeta_name-copyright')) { $meta .= '<meta name="copyright" content=" (c) '.FULLWEBPATH.' - '.$author.'" />'."\n"; }
+	if(getOption('htmlmeta_name-rights')) { $meta .= '<meta name="rights" content="'.$author.'" />'."\n"; }
+	if(getOption('htmlmeta_name-rights')) { $meta .= '<meta name="generator" content="Zenphoto '.ZENPHOTO_VERSION . ' [' . ZENPHOTO_RELEASE . ']" />'."\n"; }
+	if(getOption('htmlmeta_name-revisit-after')) { $meta .= '<meta name="revisit-after" content="'.getOption("htmlmeta_revisit_after").'" />'."\n"; }
+	if(getOption('htmlmeta_name-expires')) { $meta .= '<meta name="expires" content="'.getOption("htmlmeta_expires").'" />'."\n"; }
+	if(getOption('htmlmeta_name-expires')) { $meta .= '<meta name="date" content="'.$date.'" />'."\n"; }
+	if(getOption('htmlmeta_name-DC.titl')) { $meta .= '<meta name="DC.title" content="'.$pagetitle.'" />'."\n"; }
+	if(getOption('htmlmeta_name-DC.keywords')) { $meta .= '<meta name="DC.keywords" content="'.gettMetaKeywords().'" />'."\n"; }
+	if(getOption('htmlmeta_name-DC.description')) { $meta .= '<meta name="DC.description" content="'.$desc.'" />'."\n"; }
+	if(getOption('htmlmeta_name-DC.language')) { $meta .= '<meta name="DC.language" content="'.$locale.'" />'."\n"; }
+	if(getOption('htmlmeta_name-DC.subject')) { $meta .= '<meta name="DC.subject" content="'.$desc.'" />'."\n"; }
+	if(getOption('htmlmeta_name-DC.publisher')) { $meta .= '<meta name="DC.publisher" content="'.FULLWEBPATH.'" />'."\n"; }
+	if(getOption('htmlmeta_name-DC.creator')) { $meta .= '<meta name="DC.creator" content="'.FULLWEBPATH.'" />'."\n"; }
+	if(getOption('htmlmeta_name-DC.date')) { $meta .= '<meta name="DC.date" content="'.$date.'" />'."\n"; }
+	if(getOption('htmlmeta_name-DC.type')) { $meta .= '<meta name="DC.type" content="Text" /> <!-- ? -->'."\n"; }
+	if(getOption('htmlmeta_name-DC.format')) { $meta .= '<meta name="DC.format" content="text/html" /><!-- What else? -->'."\n"; }
+	if(getOption('htmlmeta_name-DC.identifier')) { $meta .= '<meta name="DC.identifier" content="'.FULLWEBPATH.'" />'."\n"; }
+	if(getOption('htmlmeta_name-DC.rights')) { $meta .= '<meta name="DC.rights" content="'.FULLWEBPATH.'" />'."\n"; }
+	if(getOption('htmlmeta_name-DC.source')) { $meta .= '<meta name="DC.source" content="'.$url.'" />'."\n"; }
+	if(getOption('htmlmeta_name-DC.relation')) { $meta .= '<meta name="DC.relation" content="'.FULLWEBPATH.'" />'."\n"; }
+	if(getOption('htmlmeta_name-DC.Date.created')) { $meta .= '<meta name="DC.Date.created" content="'.$date.'" />'."\n"; }
+
+	return $meta;
 }
 	
 	/**
@@ -210,26 +216,28 @@ function printHTMLMetaData() {
 	 *
 	 * @param array $array the array of the tags or categories to list
 	 */
-	function printMetaKeywords() {
+	function getMetaKeywords() {
 		global $_zp_gallery, $_zp_current_album, $_zp_current_image, $_zp_current_zenpage_news, $_zp_current_zenpage_page, $_zp_gallery_page;
+		$words = '';
 		if(is_object($_zp_current_album) OR is_object($_zp_current_image)) {
 			$tags = getTags();
-			printMetaAlbumAndImageTags($tags,"gallery");
+			$words .= getMetaAlbumAndImageTags($tags,"gallery");
 		} else if($_zp_gallery_page === "index.php") {
 			$tags = array_keys(getAllTagsCount()); // get all if no specific item is set
-			printMetaAlbumAndImageTags($tags,"gallery");
+			$words .= getMetaAlbumAndImageTags($tags,"gallery");
 		} 
 		if(function_exists("getNewsCategories")) {
 			if(is_NewsArticle()) {
 				$tags = getNewsCategories(getNewsID());
-				printMetaAlbumAndImageTags($tags,"zenpage");
+				$words .= getMetaAlbumAndImageTags($tags,"zenpage");
 			} else if(is_News()) {
 				$tags = getAllCategories();
-				printMetaAlbumAndImageTags($tags,"zenpage");
+				$words .= getMetaAlbumAndImageTags($tags,"zenpage");
 			} else if (is_NewsCategory()) {
-				printCurrentNewsCategory();
+				$words .= getCurrentNewsCategory();
 			}
 		}
+		return $words;
 	}
 	/**
 	 * Helper function to print the album and image tags or the news article categorieslist within printMetaKeywords()
@@ -238,30 +246,26 @@ function printHTMLMetaData() {
 	 * @param array $tags the array of the tags to list
 	 * @param string $mode "gallery" or "zenpage"
 	 */
-	function printMetaAlbumAndImageTags($tags,$mode="") {
-		$count = 0;
-		if(!is_array($tags)) {
+	function getMetaAlbumAndImageTags($tags,$mode="") {
+		if(is_array($tags)) {
+			$alltags = '';
 			foreach($tags as $keyword) {
-				$count++;
-				if($count === 1) {
-					$comma = "";
-				} else {
-					$comma = ",";
-				}
 				switch($mode) {
 					case "gallery":
-						$tags = $tags.$comma.$keyword;
+						$alltags .= ','.$keyword;
 						break;
 					case "zenpage":
-						$tags = $tags.$comma.$keyword["cat_name"];
+						$alltags .= ','.$keyword["cat_name"];
 						break;
 				}
 			}
-			if(strlen($tags) > 1000) {
-				$tags = substr($tags,0,1000);
+			if(strlen($alltags) > 1000) {
+				break;
 			}
-			echo $tags;
+		} else {
+			$alltags = $tags;
 		}
+		return substr($alltags,1);
 	}
 
 ?>
