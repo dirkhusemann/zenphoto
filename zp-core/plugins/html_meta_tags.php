@@ -210,62 +210,62 @@ function getHTMLMetaData() {
 
 	return $meta;
 }
-	
-	/**
-	 * Helper function to list tags/categories as keywords separated by comma. Limited to 30 keywords currently.
-	 *
-	 * @param array $array the array of the tags or categories to list
-	 */
-	function getMetaKeywords() {
-		global $_zp_gallery, $_zp_current_album, $_zp_current_image, $_zp_current_zenpage_news, $_zp_current_zenpage_page, $_zp_gallery_page;
-		$words = '';
-		if(is_object($_zp_current_album) OR is_object($_zp_current_image)) {
-			$tags = getTags();
-			$words .= getMetaAlbumAndImageTags($tags,"gallery");
-		} else if($_zp_gallery_page === "index.php") {
-			$tags = array_keys(getAllTagsCount()); // get all if no specific item is set
-			$words .= getMetaAlbumAndImageTags($tags,"gallery");
-		} 
-		if(function_exists("getNewsCategories")) {
-			if(is_NewsArticle()) {
-				$tags = getNewsCategories(getNewsID());
-				$words .= getMetaAlbumAndImageTags($tags,"zenpage");
-			} else if(is_News()) {
-				$tags = getAllCategories();
-				$words .= getMetaAlbumAndImageTags($tags,"zenpage");
-			} else if (is_NewsCategory()) {
-				$words .= getCurrentNewsCategory();
+
+/**
+ * Helper function to list tags/categories as keywords separated by comma. Limited to 30 keywords currently.
+ *
+ * @param array $array the array of the tags or categories to list
+ */
+function getMetaKeywords() {
+	global $_zp_gallery, $_zp_current_album, $_zp_current_image, $_zp_current_zenpage_news, $_zp_current_zenpage_page, $_zp_gallery_page;
+	$words = '';
+	if(is_object($_zp_current_album) OR is_object($_zp_current_image)) {
+		$tags = getTags();
+		$words .= getMetaAlbumAndImageTags($tags,"gallery");
+	} else if($_zp_gallery_page === "index.php") {
+		$tags = array_keys(getAllTagsCount()); // get all if no specific item is set
+		$words .= getMetaAlbumAndImageTags($tags,"gallery");
+	}
+	if(function_exists("getNewsCategories")) {
+		if(is_NewsArticle()) {
+			$tags = getNewsCategories(getNewsID());
+			$words .= getMetaAlbumAndImageTags($tags,"zenpage");
+		} else if(is_News()) {
+			$tags = getAllCategories();
+			$words .= getMetaAlbumAndImageTags($tags,"zenpage");
+		} else if (is_NewsCategory()) {
+			$words .= getCurrentNewsCategory();
+		}
+	}
+	return $words;
+}
+/**
+ * Helper function to print the album and image tags or the news article categorieslist within printMetaKeywords()
+ * Shorens the length to the allowed 1000 characters.
+ *
+ * @param array $tags the array of the tags to list
+ * @param string $mode "gallery" or "zenpage"
+ */
+function getMetaAlbumAndImageTags($tags,$mode="") {
+	if(is_array($tags)) {
+		$alltags = '';
+		foreach($tags as $keyword) {
+			switch($mode) {
+				case "gallery":
+					$alltags .= ','.$keyword;
+					break;
+				case "zenpage":
+					$alltags .= ','.$keyword["cat_name"];
+					break;
 			}
 		}
-		return $words;
-	}
-	/**
-	 * Helper function to print the album and image tags or the news article categorieslist within printMetaKeywords()
-	 * Shorens the length to the allowed 1000 characters.
-	 *
-	 * @param array $tags the array of the tags to list
-	 * @param string $mode "gallery" or "zenpage"
-	 */
-	function getMetaAlbumAndImageTags($tags,$mode="") {
-		if(is_array($tags)) {
-			$alltags = '';
-			foreach($tags as $keyword) {
-				switch($mode) {
-					case "gallery":
-						$alltags .= ','.$keyword;
-						break;
-					case "zenpage":
-						$alltags .= ','.$keyword["cat_name"];
-						break;
-				}
-			}
-			if(strlen($alltags) > 1000) {
-				break;
-			}
-		} else {
-			$alltags = $tags;
+		if(strlen($alltags) > 1000) {
+			break;
 		}
-		return substr($alltags,1);
+	} else {
+		$alltags = $tags;
 	}
+	return substr($alltags,1);
+}
 
 ?>
