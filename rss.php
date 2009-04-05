@@ -67,7 +67,7 @@ if(getOption('mod_rewrite')) {
 	?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss">
 <channel>
-<title><?php echo strip_tags(get_language_string(getOption('gallery_title'), $locale)).strip_tags($albumname); ?></title>
+<title><?php echo strip_tags(get_language_string(getOption('gallery_title'), $locale)).' '.strip_tags($albumname); ?></title>
 <link><?php echo "http://".$host.WEBPATH; ?></link>
 <atom:link href="http://<?php echo $host.WEBPATH; ?>/rss.php" rel="self"	type="application/rss+xml" />
 <description><?php echo strip_tags(get_language_string(getOption('gallery_title'), $locale)); ?></description>
@@ -108,29 +108,31 @@ if(getOption('mod_rewrite')) {
 			$albumthumb = $albumitem->getAlbumThumbImage();
 			$thumb = newImage($albumitem, $albumthumb->filename);
 			$thumburl = '<img border="0" src="'.$thumb->getCustomImage($size, NULL, NULL, NULL, NULL, NULL, NULL, TRUE).'" alt="'.get_language_string($albumitem->get("title"),$locale) .'" />';
-			if(getOption("feed_sortorder_albums") === "latestupdated") {
+			$title =  get_language_string($albumitem->get("title"),$locale);
+			if(true || getOption("feed_sortorder_albums") === "latestupdated") {
 				$filechangedate = filectime(getAlbumFolder().internalToFIlesystem($albumitem->name));
 				$latestimage = query_single_row("SELECT mtime FROM " . prefix('images'). " WHERE albumid = ".$albumitem->getAlbumID() . " AND `show` = 1 ORDER BY id DESC");
 				$lastuploaded = query("SELECT COUNT(*) FROM ".prefix('images')." WHERE albumid = ".$albumitem->getAlbumID() . " AND mtime = ". $latestimage['mtime']);
 				$row = mysql_fetch_row($lastuploaded);
 				$count = $row[0];
+				if($count == 1) {
+					$imagenumber = sprintf(gettext('(%s: 1 new image)'),$title);
+				} else {
+					$imagenumber = sprintf(gettext('(%1$s: %2$s new images)'),$title,$count);
+				}
+				$itemcontent = '<![CDATA[<a title="'.$title.'" href="http://'.$itemlink.'">'.$thumburl.'</a>'.
+						'<p><br />'.$imagenumber.'</p>'.
+						'<p>'.get_language_string($albumitem->get("desc"),$locale).'</p>]]>';
 				$datecontent = '<![CDATA['.sprintf(gettext("Last update: %s"),zpFormattedDate(getOption('date_format'),$filechangedate)).']]>';
-				if($count <= 1) {
-					$image = gettext("image");
-				} else {
-					$image = gettext("images");
-				}
-				$imagenumber = sprintf(gettext('(%1$s new %2$s)'),$count,$image);
-				$itemcontent = '<![CDATA[<a title="'.get_language_string($albumitem->get("title"),$locale).'" href="http://'.$itemlink.'">'.$thumburl.'</a><p>'.sprintf(gettext('<br />%1$s new %2$s'),$count,$image).'</p><p>'.get_language_string($albumitem->get("desc"),$locale).'</p>]]>';
 			} else {
-				if($totalimages <= 1) {
-					$image = gettext("image");
+				if($totalimages == 1) {
+					$imagenumber = sprintf(gettext('(%s: 1 image)'),$title);
 				} else {
-					$image = gettext("images");
+					$imagenumber = sprintf(gettext('(%1$s: %2$s images)'),$title,$totalimages);
 				}
-				$itemcontent = '<![CDATA[<a title="'.get_language_string($albumitem->get("title"),$locale).'" href="http://'.$itemlink.'">'.$thumburl.'</a><p>'.get_language_string($albumitem->get("desc"),$locale).'</p>]]>';
+				$itemcontent = '<![CDATA[<a title="'.$title.'" href="http://'.$itemlink.'">'.$thumburl.'</a>'.
+						'<p>'.get_language_string($albumitem->get("desc"),$locale).'</p>]]>';
 				$datecontent = '<![CDATA['.sprintf(gettext("Date: %s"),zpFormattedDate(getOption('date_format'),$albumitem->get('mtime'))).']]>';
-				$imagenumber = sprintf(gettext('(%1$s %2$s)'),$totalimages,$image);
 			}
 			$ext = strtolower(strrchr($thumb->filename, "."));
 		}
@@ -168,10 +170,9 @@ if(getOption('mod_rewrite')) {
 <item>
 <title><?php 
 if($rssmode != "albums") {
-	echo get_language_string($item->get("title"),$locale);
-	echo	" (".get_language_string($albumobj->get("title"),$locale).")";
+	printf('%1$s (%2$s)', get_language_string($item->get("title"),$locale), get_language_string($albumobj->get("title"),$locale));
 } else {
-	echo get_language_string($albumitem->get("title"),$locale)." ".$imagenumber;
+	echo $imagenumber;
 }
 ?></title>
 <link>
