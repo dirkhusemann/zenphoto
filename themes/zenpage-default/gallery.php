@@ -32,11 +32,11 @@ if (!defined('WEBPATH')) die(); $firstPageImages = normalizeColumns('2', '6');?>
 				<?php while (next_album()): ?>
 					<div class="album">
 							<div class="thumb">
-							<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:'); ?> <?php echo getBareAlbumTitle();?>"><?php printAlbumThumbImage(getBareAlbumTitle()); ?></a>
+							<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:'); ?> <?php echo getBareAlbumTitle();?>"><?php printCustomAlbumThumbImage(getBareAlbumTitle(), NULL, 95, 95, 95, 95); ?></a>
  							 </div>
 								<div class="albumdesc">
 									<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:'); ?> <?php echo getBareAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
- 									<small><?php printAlbumDate(""); ?></small>
+ 									<?php printAlbumDate(""); ?>
 									<p><?php echo truncate_string(getAlbumDesc(), 45); ?></p>
 								</div>
 					</div>

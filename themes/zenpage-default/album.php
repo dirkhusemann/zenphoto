@@ -35,7 +35,7 @@
 						</div>
 				<div class="albumdesc">
 					<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:'); ?> <?php echo getBareAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
-								<small><?php printAlbumDate(""); ?></small>
+						<?php printAlbumDate(""); ?>
 					<p><?php echo truncate_string(getAlbumDesc(), 45); ?></p>
 				</div>
 				<p style="clear: both; "></p>
