@@ -37,6 +37,16 @@ $(document).ready(function() {
 			$("#expiredate").val("");
 		}
 	});
+	if(jQuery('#edittitlelink:checked').val() != 1) {
+		$('#titlelink').attr("disabled", true); 
+	}
+	$('#edittitlelink').change(function() {
+		if(jQuery('#edittitlelink:checked').val() == 1) {	
+			$('#titlelink').removeAttr("disabled"); 
+		} else {
+			$('#titlelink').attr("disabled", true); 
+		}
+	});
 });
 <?php } ?>
 </script>
