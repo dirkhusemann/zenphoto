@@ -18,7 +18,7 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 }
 
 if (zp_loggedin()) { /* Display the admin pages. Do action handling first. */
-	if (($_zp_null_account = ($_zp_loggedin == ADMIN_RIGHTS)) || $_zp_reset_admin) { // user/password set required.
+	if ($_zp_loggedin == ADMIN_RIGHTS || $_zp_reset_admin) { // user/password set required.
 		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-options.php");
 	}
 
