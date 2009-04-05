@@ -1382,14 +1382,15 @@ function printAlbumThumbImage($alt, $class=NULL, $id=NULL) {
  * @param int $croph crop height
  * @param int $cropx crop part x axis
  * @param int $cropy crop part y axis
+ * @param bool $gray set true to force grayscale
  *
  * @return string
  */
 
-function getCustomAlbumThumb($size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=null) {
+function getCustomAlbumThumb($size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=null, $gray=false) {
 	global $_zp_current_album;
 	$thumb = $_zp_current_album->getAlbumThumbImage();
-	return $thumb->getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, true);
+	return $thumb->getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, true, $gray);
 }
 
 /**
@@ -2315,7 +2316,7 @@ function getSizeCustomImage($size, $width=NULL, $height=NULL, $cw=NULL, $ch=NULL
 	$us = getOption('image_allow_upscale');
 
 	$args = getImageParameters(array($size, $width, $height, $cw, $ch, $cx, $cy, null));
-	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM, $adminrequest) = $args;
+	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM, $adminrequest, $gray) = $args;
 	if (!empty($size)) {
 		$dim = $size;
 		$width = $height = false;
@@ -2622,12 +2623,13 @@ function getSizedImageURL($size) {
  * @param int $cropx crop part x axis
  * @param int $cropy crop part y axis
  * @param bool $thumbStandin set true to inhibit watermarking
+ * @param bool $gray set true to force to grayscale
  * @return string
  */
-function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $thumbStandin=false) {
+function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $thumbStandin=false, $gray=false) {
 	global $_zp_current_image;
 	if (is_null($_zp_current_image)) return false;
-	return $_zp_current_image->getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin);
+	return $_zp_current_image->getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin, $gray);
 }
 
 /**
@@ -2645,9 +2647,10 @@ function getCustomImageURL($size, $width=NULL, $height=NULL, $cropw=NULL, $croph
  * @param string $class Optional style class
  * @param string $id Optional style id
  * @param bool $thumbStandin set true to inhibit watermarking
+ * @param bool $gray set true to force grayscale
 
  * */
-function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $class=NULL, $id=NULL, $thumbStandin=false) {
+function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NULL, $croph=NULL, $cropx=NULL, $cropy=NULL, $class=NULL, $id=NULL, $thumbStandin=false, $gray=false) {
 	global $_zp_current_image;
 	if (is_null($_zp_current_image)) return;
 	if (!$_zp_current_image->getShow()) {
@@ -2659,7 +2662,7 @@ function printCustomSizedImage($alt, $size, $width=NULL, $height=NULL, $cropw=NU
 		$class .= " password_protected";
 	}
 	if (isImagePhoto() || $thumbStandin) {
-		echo '<img src="' . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin)) . '"' .
+		echo '<img src="' . htmlspecialchars(getCustomImageURL($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin, $gray)) . '"' .
 			' alt="' . html_encode($alt) . '"' .
 			' title="' . html_encode($alt) . '"' .
 			(($class) ? ' class="'.$class.'"' : '') .

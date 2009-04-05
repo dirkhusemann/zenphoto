@@ -92,9 +92,12 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
 		$args[11] = $_GET['wmt'];
 	}
 	$args [12] = $adminrequest; //12
+	if (isset($_GET['gray'])) {
+		$args[12] = $_GET['gray'];
+	}
 			
 	$args = getImageParameters($args);
-	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM, $adminrequest) = $args;
+	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM, $adminrequest, $gray) = $args;
 	$allowWatermark = !$thumb && !$adminrequest;
 	
   if ($debug) imageDebug($album, $image, $args);

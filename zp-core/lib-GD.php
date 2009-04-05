@@ -357,6 +357,36 @@ function imageMerge($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $s
 }
 
 /**
+ * Creates a grayscale image
+ *
+ * @param resource $image
+ * @return resource
+ */
+function imageGray($image) {
+	$img_height = imagesy($image);
+	$img_width = imagesx($image);
+	for ($y = 0; $y <$img_height; $y++) {
+		for ($x = 0; $x <$img_width; $x++) {
+
+			/* here we extract the green from
+				 the pixel at x,y , to use it as gray value */
+			$gray = (ImageColorAt($image, $x, $y) >> 8) & 0xFF;
+
+			/* a more exact way would be this:
+			$rgb = ImageColorAt($image, $x, $y);
+			$red = ($rgb >> 16) & 0xFF;
+			$green = (trgb >> 8) & 0xFF;
+			$blue = $rgb & 0xFF;
+			$gray = int(($red+$green+$blue)/4);
+			*/
+
+			// and here we set the new pixel/color
+			imagesetpixel ($image, $x, $y, ImageColorAllocate ($image, $gray,$gray,$gray));
+		}
+	}
+}
+
+/**
  * destroys an image resource
  *
  * @param resource $im

@@ -712,9 +712,10 @@ class _Image extends PersistentObject {
 	 * @param string $class Optional style class
 	 * @param string $id Optional style id
 	 * @param bool $thumbStandin set true to inhibit watermarking
+	 * @param bool $gray set true to force grayscale
 	 * @return string
 	 */
-	function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin=false) {
+	function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin=false, $gray=false) {
 		$args = array($size, $width, $height, $cropw, $croph, $cropx, $cropy, NULL, NULL, NULL, $thumbStandin, NULL, NULL);
 		$cachefilename = getImageCacheFilename($this->album->name, $this->filename,	getImageParameters($args));
 		if (file_exists(SERVERCACHE . $cachefilename) && filemtime(SERVERCACHE . $cachefilename) > $this->filemtime) {
@@ -731,6 +732,7 @@ class _Image extends PersistentObject {
 			. ($cropw ? "&cw=$cropw" : "") . ($croph ? "&ch=$croph" : "")
 			. ($cropx ? "&cx=$cropx" : "") . ($cropy ? "&cy=$cropy" : "")
 			. (($thumbStandin & 1) ? "&t=true" : "")
+			. ($gray ? "&gray=true" : "")
 			. $wmt ;
 		}
 	}

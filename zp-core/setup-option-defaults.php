@@ -242,4 +242,6 @@ function setDefault($option, $default) {
 	setOptionDefault('sharpen_radius', 0.5);
 	setOptionDefault('sharpen_threshold', 3);
 	
+	setOptionDefault('thumb_gray', 0);
+	
 ?>

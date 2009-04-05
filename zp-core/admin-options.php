@@ -278,6 +278,7 @@ if (isset($_GET['action'])) {
 			setOption('full_image_quality', sanitize($_POST['full_image_quality'],3));
 			setBoolOption('cache_full_image', isset($_POST['cache_full_image']));
 			setOption('protect_full_image', sanitize($_POST['protect_full_image'],3));
+			setBoolOption('thumb_gray', isset($_POST['thumb_gray']));
 			
 			$olduser = getOption('protected_image_user');
 			$newuser = sanitize($_POST['protected_image_user'],3);
@@ -1293,13 +1294,13 @@ if ($subtab == 'admin') {
 		</tr>
 		<tr>
 			<td width="175"><?php echo gettext("Image quality:"); ?></td>
-			<td width="350"><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="image_quality"
+			<td width="350"><input type="text" size="3" name="image_quality"
 				value="<?php echo htmlspecialchars(getOption('image_quality'));?>" /></td>
 			<td><?php echo gettext("JPEG Compression quality for all images."); ?></td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Thumb quality:"); ?></td>
-			<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="thumb_quality"
+			<td><input type="text" size="3" name="thumb_quality"
 				value="<?php echo htmlspecialchars(getOption('thumb_quality'));?>" /></td>
 			<td><?php echo gettext("JPEG Compression quality for all thumbnails."); ?></td>
 		</tr>
@@ -1427,8 +1428,13 @@ if ($subtab == 'admin') {
 			</td>
 		</tr>
 		<tr>
+			<td><?php echo gettext("Grayscale thumbnail:"); ?></td>
+			<td><input type="Checkbox" size="3" name="thumb_gray" value="1" <?php echo checked('1', getOption('thumb_gray')); ?>/></td>
+			<td><?php echo gettext("If checked, thumbnails will be created in grayscale."); ?></td>
+		</tr>
+		<tr>
 			<td><?php echo gettext("Full image quality:"); ?></td>
-			<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="full_image_quality"
+			<td><input type="text" size="3" name="full_image_quality"
 				value="<?php echo htmlspecialchars(getOption('full_image_quality'));?>" /></td>
 			<td><?php echo gettext("Controls compression on full images."); ?></td>
 		</tr>

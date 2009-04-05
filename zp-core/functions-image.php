@@ -112,13 +112,20 @@ function propSizes($size, $width, $height, $w, $h, $thumb, $image_use_side, $dim
  * @param string $theme the current theme
  */
 function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $force_cache=false, $theme) {
-	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM, $adminrequest) = $args;
+	@list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM, $adminrequest, $gray) = $args;
 	// Set the config variables for convenience.
 	$image_use_side = getOption('image_use_side');
 	$upscale = getOption('image_allow_upscale');
 	$allowscale = true;
 	$sharpenthumbs = getOption('thumb_sharpen');
 	$sharpenimages = getOption('image_sharpen');
+	if ($gray) {
+		$grayscale = true;
+	} else 	if ($thumb) {
+		$grayscale = getOption('thumb_gray');
+	} else {
+		$grayscale = false;
+	}
 	$newfile = SERVERCACHE . $newfilename;
 	if (DEBUG_IMAGE) debugLog("cacheImage(\$imgfile=".basename($imgfile).", \$newfilename=$newfilename, \$allow_watermark=$allow_watermark, \$force_cache=$force_cache, \$theme=$theme) \$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop \$image_use_side=$image_use_side; \$upscale=$upscale;");
 	// Check for the source image.
@@ -173,10 +180,12 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		$sizes = propSizes($size, $width, $height, $w, $h, $thumb, $image_use_side, $dim);
 		list($neww, $newh) = $sizes;
 		
-		if (DEBUG_IMAGE) debugLog("cacheImage:".basename($imgfile).": \$size=$size, \$width=$width, \$height=$height, \$w=$w; \$h=$h; \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$newh=$newh, \$neww=$neww, \$dim=$dim, \$ratio_in=$ratio_in, \$ratio_out=$ratio_out \$upscale=$upscale \$rotate=$rotate \$force_cache=$force_cache");
+		if (DEBUG_IMAGE) debugLog("cacheImage:".basename($imgfile).": \$size=$size, \$width=$width, \$height=$height, \$w=$w; \$h=$h; \$cw=$cw, ".
+											"\$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$newh=$newh, \$neww=$neww, \$dim=$dim, ".
+											"\$ratio_in=$ratio_in, \$ratio_out=$ratio_out \$upscale=$upscale \$rotate=$rotate \$force_cache=$force_cache \$grayscale=$grayscale");
 		
 		if (!$upscale && $newh >= $h && $neww >= $w) { // image is the same size or smaller than the request
-			if (!getOption('fullimage_watermark') && !($crop || $thumb || $rotate || $force_cache)) { // no processing needed
+			if (!$grayscale && !getOption('fullimage_watermark') && !($crop || $thumb || $rotate || $force_cache)) { // no processing needed
 				if (DEBUG_IMAGE) debugLog("Serve ".basename($imgfile)." from original image.");
 				if (getOption('album_folder_class') != 'external') { // local album system, return the image directly
 					$image = substr(strrchr($imgfile, '/'), 1);
@@ -283,7 +292,10 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			resampleImage($newim, $im, 0, 0, 0, 0, $neww, $newh, $w, $h);
 		}		
 		
-		
+		if ($grayscale) {
+			imageGray($newim);
+		}
+			
 		if (($thumb && $sharpenthumbs) || (!$thumb && $sharpenimages)) {
 			imageUnsharpMask($newim, getOption('sharpen_amount'), getOption('sharpen_radius'), getOption('sharpen_threshold'));
 		}

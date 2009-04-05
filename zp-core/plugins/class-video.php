@@ -181,9 +181,10 @@ class Video extends _Image {
 	 * @param string $class Optional style class
 	 * @param string $id Optional style id
 	 * @param bool $thumbStandin set true to inhibit watermarking
+	 * @param bool $gray ignored
 	 * @return string
 	 */
-	function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin=false) {
+	function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin=false, $gray=false) {
 		if ($thumbStandin & 1) {
 			if ($this->objectsThumb == NULL) {
 				$filename = makeSpecialImageName($this->getThumbImageFile());

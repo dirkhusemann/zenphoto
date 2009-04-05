@@ -173,7 +173,24 @@ class TextObject extends _Image {
 		return '<div class="textobject">'.$text.'</div>';
 	}
 
-	function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin=false) {
+	/**
+	 *  Get a custom sized version of this image based on the parameters.
+	 *
+	 * @param string $alt Alt text for the url
+	 * @param int $size size
+	 * @param int $width width
+	 * @param int $height height
+	 * @param int $cropw crop width
+	 * @param int $croph crop height
+	 * @param int $cropx crop x axis
+	 * @param int $cropy crop y axis
+	 * @param string $class Optional style class
+	 * @param string $id Optional style id
+	 * @param bool $thumbStandin set true to inhibit watermarking
+	 * @param bool $gray ignored
+	 * @return string
+	 */
+	function getCustomImage($size, $width, $height, $cropw, $croph, $cropx, $cropy, $thumbStandin=false, $gray=false) {
 		if ($thumbStandin) {
 			if ($this->objectsThumb == NULL) {
 				$filename = makeSpecialImageName($this->getThumbImageFile());
