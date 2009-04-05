@@ -10,6 +10,7 @@ require_once(dirname(__FILE__).'/functions.php');
 
 // If the auth variable gets set somehow before this, get rid of it.
 $_zp_loggedin = false;
+$_zp_reset_admin = NULL;
 // Fix the cookie's path for root installs.
 $cookiepath = WEBPATH;
 if (WEBPATH == '') { $cookiepath = '/'; }

@@ -67,7 +67,7 @@ if (isset($_GET['action'])) {
 						if (isset($_POST[$i.'-options_rights'])) $rights = $rights | OPTIONS_RIGHTS;
 						if (isset($_POST[$i.'-zenpage_rights'])) $rights = $rights | ZENPAGE_RIGHTS;
 						if (isset($_POST[$i.'-admin_rights'])) $rights = $rights | ADMIN_RIGHTS;
-						if (!isset($_POST['alter_enabled'])) {
+						if (isset($_POST['alter_enabled'])) {
 							if ($rights & ALL_ALBUMS_RIGHTS) $rights = $rights | EDIT_RIGHTS;
 							$managedalbums = array();
 							$l = strlen($albumsprefix = 'managed_albums_'.$i.'_');
@@ -426,7 +426,7 @@ printAdminHeader();
 <script type="text/javascript" src="js/farbtastic.js"></script>
 <link rel="stylesheet" href="js/farbtastic.css" type="text/css" />
 <?php
-$_zp_null_account = (($_zp_loggedin == ADMIN_RIGHTS) || ($_zp_loggedin == NO_RIGHTS));
+$_zp_null_account = (($_zp_loggedin == ADMIN_RIGHTS) || $_zp_reset_admin);
 $tabs = array(gettext("admin information")=>'admin-options.php?tab=admin');
 if (!$_zp_null_account) {
 	if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
@@ -510,7 +510,6 @@ if ($subtab == 'admin') {
 	} else {
 		$alterrights = ' DISABLED';
 		$admins = array($_zp_current_admin['user'] => $_zp_current_admin);
-		echo "<input type=\"hidden\" name=\"alter_enabled\" value=\"no\" />";
 	}
 	if (isset($_GET['mismatch'])) {
 		if ($_GET['mismatch'] == 'mismatch') {
@@ -570,6 +569,13 @@ if ($subtab == 'admin') {
 <form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 <input type="hidden" name="saveadminoptions" value="yes" /> 
 <input type="hidden" name="totaladmins" value="<?php echo count($admins); ?>" />
+<?php			
+if (empty($alterrights)) {
+	?>
+	<input type="hidden" name="alter_enabled" value="1" />
+	<?php 
+}
+?>
 <table class="bordered"> <!-- main table -->
 	<tr>
 		<th>
