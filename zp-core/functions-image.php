@@ -124,7 +124,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 	} else 	if ($thumb) {
 		$grayscale = getOption('thumb_gray');
 	} else {
-		$grayscale = false;
+		$grayscale = getOption('image_gray');
 	}
 	$newfile = SERVERCACHE . $newfilename;
 	if (DEBUG_IMAGE) debugLog("cacheImage(\$imgfile=".basename($imgfile).", \$newfilename=$newfilename, \$allow_watermark=$allow_watermark, \$force_cache=$force_cache, \$theme=$theme) \$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop \$image_use_side=$image_use_side; \$upscale=$upscale;");

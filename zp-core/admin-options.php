@@ -349,8 +349,8 @@ if (isset($_GET['action'])) {
 			if ($themeswitch) {
 				$notify = '?switched';
 			} else {
-				$cw = getOption('thumb_crop_width');
-				$ch = getOption('thumb_crop_height');
+				$cw = getThemeOption($table, 'thumb_crop_width');
+				$ch = getThemeOption($table, 'thumb_crop_height');
 				if (isset($_POST['image_size'])) setThemeOption($table, 'image_size', sanitize($_POST['image_size'],3));
 				setOption('image_use_side', sanitize($_POST['image_use_side']));
 				if (isset($_POST['thumb_size'])) setThemeOption($table, 'thumb_size', sanitize($_POST['thumb_size'],3));
@@ -363,7 +363,12 @@ if (isset($_GET['action'])) {
 				if (isset($_POST['user_registration_page'])) setThemeOption($table, 'user_registration_page', sanitize($_POST['user_registration_page'], 3));
 				if (isset($_POST['user_registration_text'])) setThemeOption($table, 'user_registration_text', process_language_string_save('user_registration_text', 3));  
 				if (isset($_POST['user_registration_tip'])) setThemeOption($table, 'user_registration_tip', process_language_string_save('user_registration_tip', 3));  
+				$otg = getThemeOption($table, 'thumb_gray');
 				setBoolThemeOption($table, 'thumb_gray', isset($_POST['thumb_gray']));
+				if ($otg = getThemeOption($table, 'thumb_gray')) $wmo = 99; // force cache clear		
+				$oig = getThemeOption($table, 'image_gray');
+				setBoolThemeOption($table, 'image_gray', isset($_POST['image_gray']));
+				if ($oig = getThemeOption($table, 'image_gray')) $wmo = 99; // force cache clear		
 				if ($nch != $ch || $ncw != $cw) { // the crop height/width has been changed
 					$sql = 'UPDATE '.prefix('images').' SET `thumbX`=NULL,`thumbY`=NULL,`thumbW`=NULL,`thumbH`=NULL WHERE `thumbY` IS NOT NULL';
 					query($sql);
@@ -1726,9 +1731,12 @@ if (empty($alterrights)) {
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo gettext("Grayscale thumbnail:"); ?></td>
-				<td><input type="Checkbox" size="3" name="thumb_gray" value="1" <?php echo checked('1', getThemeOption($album, 'thumb_gray')); ?>/></td>
-				<td><?php echo gettext("If checked, thumbnails will be created in grayscale."); ?></td>
+				<td><?php echo gettext("Grayscale conversion:"); ?></td>
+				<td>
+				<?php echo gettext('image') ?><input type="Checkbox" size="3" name="image_gray" value="1" <?php echo checked('1', getThemeOption($album, 'image_gray')); ?>/>
+				<?php echo gettext('thumbnail') ?><input type="Checkbox" size="3" name="thumb_gray" value="1" <?php echo checked('1', getThemeOption($album, 'thumb_gray')); ?>/>
+				</td>
+				<td><?php echo gettext("If checked, images/thumbnails will be created in grayscale."); ?></td>
 			</tr>
 			<tr>
 				<td><?php echo gettext("Image size:"); ?></td>
