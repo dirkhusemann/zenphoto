@@ -256,6 +256,7 @@ zp-core/images/cache1.png
 zp-core/images/calendar.png
 zp-core/images/captcha_background.png
 zp-core/images/drag_handle.png
+zp-core/images/drag_handle_flag.png
 zp-core/images/edit-delete.png
 zp-core/images/envelope.png
 zp-core/images/err-cachewrite.gif
@@ -345,6 +346,7 @@ zp-core/plugins/contact_form.php
 zp-core/plugins/dynamic-locale.php
 zp-core/plugins/filter-admin_toolbox.php
 zp-core/plugins/filter-comments.php
+zp-core/plugins/filter-custom_data.php
 zp-core/plugins/filter-file_searches.php
 zp-core/plugins/filter-new_objects.php
 zp-core/plugins/filter-zenphoto_seo.php
@@ -357,9 +359,21 @@ zp-core/plugins/flowplayer3/controls.css
 zp-core/plugins/flowplayer3/flowplayer.audio.swf
 zp-core/plugins/flowplayer3/flowplayer.controls.swf
 zp-core/plugins/flowplayer3/flowplayer.js
+zp-core/plugins/flowplayer3/flowplayer.playlist.pack.js
 zp-core/plugins/flowplayer3/flowplayer.swf
 zp-core/plugins/flowplayer3/LICENSE.txt
 zp-core/plugins/flowplayer3.php
+zp-core/plugins/flowplayer3_playlist/flowplayer.content.swf
+zp-core/plugins/flowplayer3_playlist/flowplayer3_playlist.css
+zp-core/plugins/flowplayer3_playlist/images/arrow_bottom_blue.png
+zp-core/plugins/flowplayer3_playlist/images/arrow_bottom_gray.png
+zp-core/plugins/flowplayer3_playlist/images/arrow_top_blue.png
+zp-core/plugins/flowplayer3_playlist/images/arrow_top_gray.png
+zp-core/plugins/flowplayer3_playlist/images/control_play.png
+zp-core/plugins/flowplayer3_playlist/images/control_play_blue.png
+zp-core/plugins/flowplayer3_playlist/jquery.mousewheel.pack.js
+zp-core/plugins/flowplayer3_playlist/jquery.scrollable.pack.js
+zp-core/plugins/flowplayer3_playlist.php
 zp-core/plugins/flvplayer/flvplayer.js
 zp-core/plugins/flvplayer/player3.swf
 zp-core/plugins/flvplayer/player4.swf
@@ -369,6 +383,7 @@ zp-core/plugins/google_maps/gmaps.js
 zp-core/plugins/google_maps/license.txt
 zp-core/plugins/google_maps/phoogle.php
 zp-core/plugins/google_maps.php
+zp-core/plugins/html_meta_tags.php
 zp-core/plugins/image_album_statistics.php
 zp-core/plugins/paged_thumbs_nav.php
 zp-core/plugins/print_album_menu.php
