@@ -547,11 +547,7 @@ function setThemeOption($album, $key, $value) {
 	if (is_null($album)) {
 		setOption($key, $value);
 	} else {
-		if (is_null($album)) {
-			$id = 0;
-		} else {
-			$id = $album->id;
-		}
+		$id = $album->id;
 		$exists = query_single_row("SELECT `name`, `value`, `id` FROM ".prefix('options')." WHERE `name`='".mysql_real_escape_string($key)."' AND `ownerid`=".$id, true);
 		if ($exists) {
 			if (is_null($value)) {
@@ -1693,7 +1689,12 @@ function processAlbumEdit($index, $album) {
 		}
 	}
 	$album->setPasswordHint(process_language_string_save($prefix.'albumpass_hint', 3));
-	$album->setCustomData(apply_filter('save_album_custom_data', process_language_string_save($prefix.'album_custom_data', 1), $prefix));
+	if (isset($_POST['album_custom_data'])) {
+		$custom = process_language_string_save($prefix.'album_custom_data', 1);
+	} else {
+		$custom = '';
+	}
+	$album->setCustomData(apply_filter('save_album_custom_data', $custom, $prefix));
 	$album->save();
 
 	// Move/Copy/Rename the album after saving.

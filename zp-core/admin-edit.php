@@ -225,7 +225,12 @@ if (isset($_GET['album'])) {
 									if (isset($_POST["$i-reset_hitcounter"])) {
 										$image->set('hitcounter', 0);
 									}
-									$image->setCustomData(apply_filter('save_image_custom_data', process_language_string_save("$i-custom_data", 1), $i));
+									if (isset($_POST['$i-custom_data'])) {
+										$custom = process_language_string_save("$i-custom_data", 1);
+									} else {
+										$custom = '';
+									}
+									$image->setCustomData(apply_filter('save_image_custom_data', $custom, $i));
 									$image->save();
 
 									// Process move/copy/rename

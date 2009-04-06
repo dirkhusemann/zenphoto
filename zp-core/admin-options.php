@@ -278,7 +278,6 @@ if (isset($_GET['action'])) {
 			setOption('full_image_quality', sanitize($_POST['full_image_quality'],3));
 			setBoolOption('cache_full_image', isset($_POST['cache_full_image']));
 			setOption('protect_full_image', sanitize($_POST['protect_full_image'],3));
-			setBoolOption('thumb_gray', isset($_POST['thumb_gray']));
 			
 			$olduser = getOption('protected_image_user');
 			$newuser = sanitize($_POST['protected_image_user'],3);
@@ -339,18 +338,17 @@ if (isset($_GET['action'])) {
 			$returntab = "&tab=theme";
 			// all theme specific options are custom options, handled below
 			if (!empty($_POST['themealbum'])) {
-				$alb = sanitize_path($_POST['themealbum']);
+				$alb = urldecode(sanitize_path($_POST['themealbum']));
 				$table = new Album(new Gallery(), $alb);
 				$returntab = '&themealbum='.urlencode($alb).'&tab=theme';
-				$themeswitch = $alb != sanitize_path($_POST['old_themealbum']);
+				$themeswitch = $alb != urldecode(sanitize_path($_POST['old_themealbum']));
 			} else {
 				$table = NULL;
-				$themeswitch = sanitize_path($_POST['old_themealbum']) != '';
+				$themeswitch = urldecode(sanitize_path($_POST['old_themealbum'])) != '';
 			}
 			if ($themeswitch) {
 				$notify = '?switched';
 			} else {
-				
 				$cw = getOption('thumb_crop_width');
 				$ch = getOption('thumb_crop_height');
 				if (isset($_POST['image_size'])) setThemeOption($table, 'image_size', sanitize($_POST['image_size'],3));
@@ -365,6 +363,7 @@ if (isset($_GET['action'])) {
 				if (isset($_POST['user_registration_page'])) setThemeOption($table, 'user_registration_page', sanitize($_POST['user_registration_page'], 3));
 				if (isset($_POST['user_registration_text'])) setThemeOption($table, 'user_registration_text', process_language_string_save('user_registration_text', 3));  
 				if (isset($_POST['user_registration_tip'])) setThemeOption($table, 'user_registration_tip', process_language_string_save('user_registration_tip', 3));  
+				setBoolThemeOption($table, 'thumb_gray', isset($_POST['thumb_gray']));
 				if ($nch != $ch || $ncw != $cw) { // the crop height/width has been changed
 					$sql = 'UPDATE '.prefix('images').' SET `thumbX`=NULL,`thumbY`=NULL,`thumbW`=NULL,`thumbH`=NULL WHERE `thumbY` IS NOT NULL';
 					query($sql);
@@ -1434,11 +1433,6 @@ if (empty($alterrights)) {
 			</td>
 		</tr>
 		<tr>
-			<td><?php echo gettext("Grayscale thumbnail:"); ?></td>
-			<td><input type="Checkbox" size="3" name="thumb_gray" value="1" <?php echo checked('1', getOption('thumb_gray')); ?>/></td>
-			<td><?php echo gettext("If checked, thumbnails will be created in grayscale."); ?></td>
-		</tr>
-		<tr>
 			<td><?php echo gettext("Full image quality:"); ?></td>
 			<td><input type="text" size="3" name="full_image_quality"
 				value="<?php echo htmlspecialchars(getOption('full_image_quality'));?>" /></td>
@@ -1730,6 +1724,11 @@ if (empty($alterrights)) {
 					<br />
 					<?php echo gettext('<strong>Note</strong>: changing crop height or width will invalidate existing crops.'); ?>
 				</td>
+			</tr>
+			<tr>
+				<td><?php echo gettext("Grayscale thumbnail:"); ?></td>
+				<td><input type="Checkbox" size="3" name="thumb_gray" value="1" <?php echo checked('1', getThemeOption($album, 'thumb_gray')); ?>/></td>
+				<td><?php echo gettext("If checked, thumbnails will be created in grayscale."); ?></td>
 			</tr>
 			<tr>
 				<td><?php echo gettext("Image size:"); ?></td>

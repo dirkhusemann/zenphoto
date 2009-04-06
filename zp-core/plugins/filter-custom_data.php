@@ -53,7 +53,7 @@ function edit_image($discard, $image, $currentimage) {
  * @return string
  */
 function save_album($discard, $prefix) {
-	return sanitize($_POST[$prefix.'album_custom_data'], 1);
+	return sanitize($_POST[$prefix.'x_album_custom_data'], 1);
 }
 
 /**
@@ -68,7 +68,7 @@ function edit_album($discard, $album, $prefix) {
 	return
 		'<tr>
 			<td align="left" valign="top">'.gettext("Special data:").'</td>
-			<td><textarea name="'.$prefix.'album_custom_data" cols="'.TEXTAREA_COLUMNS.'"	rows="6">'.htmlentities($album->get('custom_data'),ENT_COMPAT,getOption("charset")).'</textarea></td>
+			<td><textarea name="'.$prefix.'x_album_custom_data" cols="'.TEXTAREA_COLUMNS.'"	rows="6">'.htmlentities($album->get('custom_data'),ENT_COMPAT,getOption("charset")).'</textarea></td>
 		</tr>';
 }
 
