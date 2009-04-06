@@ -128,11 +128,11 @@ tagSelector(NULL, '', true, $tagsort);
 echo "\n<p align='center'>";
 ?>
 <p class="buttons">
-<button type="submit\" id='delete_tags' value="<?php echo gettext("delete checked tags"); ?>" title="<?php echo gettext("Delete all the tags checked above."); ?>" /><img src="images/fail.png" alt="" /><?php echo gettext("Delete checked tags"); ?></button>
+<button type="submit\" id='delete_tags' value="<?php echo gettext("Delete checked tags"); ?>" title="<?php echo gettext("Delete all the tags checked above."); ?>" /><img src="images/fail.png" alt="" /><?php echo gettext("Delete checked tags"); ?></button>
 </p><br clear: all /><br /><br />
 <?php
 echo "\n</form>";
-echo '<p>'.gettext('To delete tags from the gallery, place a checkmark in the box for each tag you wish to delete then press the <em>delete checked tags</em> button. The brackets contain the number of times the tag appears.').'</p>';
+echo '<p>'.gettext('To delete tags from the gallery, place a checkmark in the box for each tag you wish to delete then press the <em>Delete checked tags</em> button. The brackets contain the number of times the tag appears.').'</p>';
 echo "\n</td>";
 
 echo "\n<td valign='top'>";
@@ -148,12 +148,12 @@ echo "\n</ul>";
 echo "\n<p align='center'>";
 ?>
 <p class="buttons">
-<button type="submit\" id='rename_tags' value="<?php echo gettext("rename tags"); ?>" title="<?php echo gettext("Save all the changes entered above."); ?>" /><img src="images/pass.png" alt="" /><?php echo gettext("rename tags"); ?></button>
+<button type="submit\" id='rename_tags' value="<?php echo gettext("Rename tags"); ?>" title="<?php echo gettext("Save all the changes entered above."); ?>" /><img src="images/pass.png" alt="" /><?php echo gettext("Rename tags"); ?></button>
 </p><br clear: all /><br /><br />
 <?php
 
 echo "\n</form>";
-echo '<p>'.gettext('To change the value of a tag enter a new value in the text box below the tag. Then press the <em>rename tags</em> button').'</p>';
+echo '<p>'.gettext('To change the value of a tag enter a new value in the text box below the tag. Then press the <em>Rename tags</em> button').'</p>';
 echo "\n</td>";
 
 echo "\n<td valign='top'>";
@@ -167,11 +167,11 @@ echo "\n</ul>";
 echo "\n<p align='center'>";
 ?>
 <p class="buttons">
-<button type="submit\" id='save_tags' value="<?php echo gettext("save new tags"); ?>" title="<?php echo gettext("Add all the tags entered above."); ?>" /><img src="images/add.png" alt="" /><?php echo gettext("Add tags"); ?></button>
+<button type="submit\" id='save_tags' value="<?php echo gettext("Add tags"); ?>" title="<?php echo gettext("Add all the tags entered above."); ?>" /><img src="images/add.png" alt="" /><?php echo gettext("Add tags"); ?></button>
 </p><br clear: all /><br /><br />
 <?php
 echo "\n</form>";
-echo "\n<p>".gettext("Add tags to the list by entering their names in the input fields of the <em>New tags</em> list. Then press the <em>save new tags </em>button").'</p>';
+echo "\n<p>".gettext("Add tags to the list by entering their names in the input fields of the <em>New tags</em> list. Then press the <em>Add tags</em> button").'</p>';
 echo "\n</td>";
 echo "\n</tr>";
 echo "\n</table>";
