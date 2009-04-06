@@ -243,5 +243,6 @@ function setDefault($option, $default) {
 	setOptionDefault('sharpen_threshold', 3);
 	
 	setOptionDefault('thumb_gray', 0);
+	setOptionDefault('image_gray', 0);
 	
 ?>
