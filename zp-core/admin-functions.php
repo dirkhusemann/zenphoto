@@ -2038,8 +2038,14 @@ function isolate($target, $str) {
 	return $str;
 }
 
-function seoFriendlyURL($string) {
-	return apply_filter('seoFriendlyURL', $string);	
+function seoFriendlyURL($source) {
+	$string = apply_filter('seoFriendlyURL', $source);	
+	if ($source == $string) { // no filter, do basic cleanup
+		$string = preg_replace("/&([a-zA-Z])(uml|acute|grave|circ|tilde|ring),/","",$string);
+		$string = preg_replace("/[^a-zA-Z0-9_.-]/","",$string);
+		$string = str_replace(array('---','--'),'-', $string);
+	}
+	return $string;
 }
 
 /**

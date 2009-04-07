@@ -37,7 +37,7 @@ function getCheckboxState($id) {
  */
 function addPage() {
 	$title = process_language_string_save("title",2);
-	$titlelink = seoFriendlyURL(sanitize($_POST['titlelink']));
+	$titlelink = seoFriendlyURL(sanitize($title));
 	if (empty($titlelink)) $titlelink = seoFriendlyURL($title);
 	if (empty($titlelink)) $titlelink = seoFriendlyURL($date);
 
@@ -382,7 +382,7 @@ function printPagesList($pages) {
  */
 function addArticle() {
 	$title = process_language_string_save("title",2);
-	$titlelink = seoFriendlyURL(sanitize($_POST['titlelink']));
+	$titlelink = seoFriendlyURL(sanitize($title));
 	if (empty($titlelink)) $titlelink = seoFriendlyURL($title);
 	if (empty($titlelink)) $titlelink = seoFriendlyURL($date);
 

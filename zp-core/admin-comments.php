@@ -372,7 +372,7 @@ if ($page == "editcomment" && isset($_GET['id']) ) { ?>
 		<td align="center"><a
 			href="mailto:<?php echo $email; ?>?body=<?php echo commentReply($fullcomment, $author, $image, $albumtitle); ?>" title="<?php echo gettext('Reply'); ?>">
 		<img src="images/envelope.png" style="border: 0px;" alt="<?php echo gettext('Reply'); ?>" /></a></td>
-		<td><?php echo $comment['ip']; ?></td>
+		<td><?php echo $comment['IP']; ?></td>
 		<td align="center">
 			<?php
 			if($private) {
