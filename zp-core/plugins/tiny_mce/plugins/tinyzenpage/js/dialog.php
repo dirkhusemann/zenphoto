@@ -116,7 +116,7 @@ var ZenpageDialog = {
 				}
 			}
 		}
-		tinyMCEPopup.execCommand('mceInsertContent', false, decodeURIComponent(imglink));
+		tinyMCEPopup.execCommand('mceInsertContent', false, imglink);
 	}
 };
 

@@ -9,15 +9,15 @@
  * 
  * NOTE: Flash players do not support external albums!
  * 
- * @author Malte Müller (acrylian)
- * @version 1.0
+ * @author Malte Müller (acrylian), Stephen Billard (sbillard)
+ * @version 1.0.1
  * @package plugins 
  */
 
 
 $plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext("Show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players on one page with Flowplayer 3. Important: The Flowplayer 3 plugin needs to be activated to use this plugin.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.0';
+$plugin_version = '1.0.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flowplayer3_playlist.php.html";
 $plugin_disable = $external;
 $option_interface = new flowplayer3_playlist();
@@ -95,7 +95,8 @@ class flowplayer3_playlist {
  * <a class="down" title="Down"></a>
  * </div>
  * </div>
- * This can be styled via the css file 'playlist.css" that is located within the 'zp-core/plugins/flowplayer3_playlist/'
+ * This is styled by the css file 'playlist.css" that is located within the 'zp-core/plugins/flowplayer3_playlist/flowplayer3_playlist.css' by default.
+ * Alternatively you can style it specifically for your theme. Just place a css file named "flowplayer3_playlist.css" in your theme's folder.
  * 
  * b) 'players'
  * This displays each audio/movie file as a separate player on album.php. 
