@@ -2,17 +2,18 @@
 /** 
  * A plugin to print the most common html meta tags to the head of your site's pages using
  * general existing Zenphoto info like gallery description, tags or Zenpage news categories.
- * 
- * Just enable the plugin and the meta data will be inserted into your <head> section.
  *  
+ * Just enable the plugin and the meta data will be inserted into your <head> section. 
+ * You can choose on the plugin's admin option what tags you want to be printed.
+ *   
  * @author Malte Müller (acrylian)
- * @version 1.0
+ * @version 1.0.1
  * @package plugins 
  */
 
 $plugin_description = gettext("A plugin to print the most common html meta tags to the head of your site's pages using general existing Zenphoto info like gallery description, tags or Zenpage news categories."); 
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.0';
+$plugin_version = '1.0.1';
 $plugin_URL = "";
 $option_interface = new htmlmetatags();
 
@@ -33,7 +34,7 @@ class htmlmetatags {
 		setOptionDefault('htmlmeta_name-language', '1');
 		setOptionDefault('htmlmeta_htmlmeta_tags', '1');
 		setOptionDefault('htmlmeta_name=content-language', '1');
-		setOptionDefault('htmlmeta_http-equiv-content-type', '1');
+		setOptionDefault('htmlmeta_http-equiv-content-type', '');
 		setOptionDefault('htmlmeta_http-equiv-cache-control', '1');
 		setOptionDefault('htmlmeta_http-equiv-pragma', '1');
 		setOptionDefault('htmlmeta_http-equiv-content-style-type','1');
@@ -72,7 +73,7 @@ class htmlmetatags {
 												"http-equiv='language'" => "htmlmeta_http-equiv-language",
 												"name = 'language'"=>  "htmlmeta_name-language",
 												"content-language" => "htmlmeta_name-content-language",
-												"http-equiv-content-type/charset (recommended)" => "htmlmeta_http-equiv-content-type",
+												"http-equiv-content-type/charset" => "htmlmeta_http-equiv-content-type",
 												"http-equiv='imagetoolbar' ('false')" => "htmlmeta_http-equiv-imagetoolbar",
 												"http-equiv='cache-control'" => "htmlmeta_http-equiv-cache-control",
 												"http-equiv='pragma'" => "htmlmeta_http-equiv-pragma",
