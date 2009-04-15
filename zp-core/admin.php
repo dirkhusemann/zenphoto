@@ -192,20 +192,12 @@ if ($c > 0) {
 </li>
 
 <li>
-<?php $t = $gallery->getNumComments(true);
+<?php 
+$t = $gallery->getNumComments(true);
 $c = $t - $gallery->getNumComments(false);
+printf(ngettext('<strong>%u</strong> comment', '<strong>%u</strong> comments', $t), $t);
 if ($c > 0) {
-	if ($t != 1) {
-		printf(gettext('<strong>%1$u</strong> comments (%2$u in moderation)'),$t, $c);
-	} else {
-		printf(gettext('<strong>1</strong> comment (%u in moderation)'), $c);
-	}
-} else {
-	if ($t != 1) {
-		printf(gettext('<strong>%u</strong> comments'),$t);
-	} else {
-		echo gettext('<strong>1</strong> comment');
-	}
+	printf(ngettext(' (<strong>%u</strong> in moderation)', ' (<strong>%u</strong> in moderation)', $c), $c);
 }
 ?>
 </li>

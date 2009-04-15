@@ -164,6 +164,7 @@ if ($updatezp_config) {
 }
 $result = true;
 $chmod_defined = false;
+$environ = false;
 if (file_exists("zp-config.php")) {
 	require(dirname(__FILE__).'/zp-config.php');
 	if (defined('CHMOD_VALUE')) {
@@ -590,39 +591,41 @@ if (!$checked) {
 	}
 	checkMark($magic_quotes_disabled, gettext("PHP <code>magic_quotes_gpc</code>"), gettext("PHP <code>magic_quotes_gpc</code> [is enabled]"), gettext("You should consider disabling <code>magic_quotes_gpc</code>. For more information <a href=\"http://www.zenphoto.org/2008/08/troubleshooting-zenphoto/#25\" target=\"_new\">click here</a>."));
 
-	/* Check for graphic library and image type support. */
-	if (function_exists('graphicsLibInfo')) {
-		$graphics_lib = graphicsLibInfo();
-		//TODO: add imageMagick to the install message
-		$library = $graphics_lib['Library'];
-		$good = checkMark(!empty($library), sprintf(gettext("Graphics support: <code>%s</code>"),$library), gettext('Graphics support [is not installed]'), gettext('You need to install a graphics support library support in your PHP')) && $good;
-		if (!empty($library)) {
-			$missing = array();
-			if (!isset($graphics_lib['JPG'])) { $missing[] = 'JPEG'; }
-			if (!(isset($graphics_lib['GIF']))) { $missing[] = 'GIF'; }
-			if (!(isset($graphics_lib['PNG']))) { $missing[] = 'PNG'; }
-			if (count($missing) > 0) {
-				if (count($missing) < 3) {
-					if (count($missing) == 2) {
-						$imgmissing =sprintf(gettext('Your PHP graphics library does not support %1$s or %2$s'),$missing[0],$missing[1]);
+	if ($environ) {
+		/* Check for graphic library and image type support. */
+		if (function_exists('graphicsLibInfo')) {
+			$graphics_lib = graphicsLibInfo();
+			//TODO: add imageMagick to the install message
+			$library = $graphics_lib['Library'];
+			$good = checkMark(!empty($library), sprintf(gettext("Graphics support: <code>%s</code>"),$library), gettext('Graphics support [is not installed]'), gettext('You need to install a graphics support library support in your PHP')) && $good;
+			if (!empty($library)) {
+				$missing = array();
+				if (!isset($graphics_lib['JPG'])) { $missing[] = 'JPEG'; }
+				if (!(isset($graphics_lib['GIF']))) { $missing[] = 'GIF'; }
+				if (!(isset($graphics_lib['PNG']))) { $missing[] = 'PNG'; }
+				if (count($missing) > 0) {
+					if (count($missing) < 3) {
+						if (count($missing) == 2) {
+							$imgmissing =sprintf(gettext('Your PHP graphics library does not support %1$s or %2$s'),$missing[0],$missing[1]);
+						} else {
+							$imgmissing = sprintf(gettext('Your PHP graphics library does not support %1$s'),$missing[0]);
+						}
+						$err = -1;
+						$mandate = gettext("To correct this you should install a graphics library with appropriate image support in your PHP");
 					} else {
-						$imgmissing = sprintf(gettext('Your PHP graphics library does not support %1$s'),$missing[0]);
+						$imgmissing = sprintf(gettext('Your PHP graphics library does not support %1$s, %2$s, or %3$s'),$missing[0],$missing[1],$missing[2]);
+						$err = 0;
+						$good = false;
+						$mandate = gettext("To correct this you need to a install GD with appropriate image support in your PHP");
 					}
-					$err = -1;
-					$mandate = gettext("To correct this you should install a graphics library with appropriate image support in your PHP");
-				} else {
-					$imgmissing = sprintf(gettext('Your PHP graphics library does not support %1$s, %2$s, or %3$s'),$missing[0],$missing[1],$missing[2]);
-					$err = 0;
-					$good = false;
-					$mandate = gettext("To correct this you need to a install GD with appropriate image support in your PHP");
-				}
-				checkMark($err, gettext("PHP graphics image support"), '', $imgmissing.
+					checkMark($err, gettext("PHP graphics image support"), '', $imgmissing.
 	                    "<br/>".gettext("The unsupported image types will not be viewable in your albums.").
 	                    "<br/>".$mandate);
+				}
 			}
+		} else {
+			checkmark(0, '', gettext('Graphics support [configuration error]'), gettext('No Zenphoto image handling library was loaded. Check your install files.'));
 		}
-	} else {
-		checkmark(0, '', gettext('Graphics support [configuration error]'), gettext('No Zenphoto image handling library was loaded. Check your install files.'));
 	}
 	checkMark($noxlate, gettext('PHP <code>gettext()</code> support'), gettext('PHP <code>gettext()</code> support [is not present]'), gettext("Localization of Zenphoto currently requires native PHP <code>gettext()</code> support"));
 	if ($_zp_setupCurrentLocale_result === false) {

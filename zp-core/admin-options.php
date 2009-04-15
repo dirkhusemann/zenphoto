@@ -1306,7 +1306,13 @@ if (empty($alterrights)) {
 			<td width="175"><?php echo gettext("Image quality:"); ?></td>
 			<td width="350"><input type="text" size="3" name="image_quality"
 				value="<?php echo htmlspecialchars(getOption('image_quality'));?>" /></td>
-			<td><?php echo gettext("JPEG Compression quality for all images."); ?></td>
+			<td><?php echo gettext("JPEG Compression quality for images."); ?></td>
+		</tr>
+		<tr>
+			<td><?php echo gettext("Full image quality:"); ?></td>
+			<td><input type="text" size="3" name="full_image_quality"
+				value="<?php echo htmlspecialchars(getOption('full_image_quality'));?>" /></td>
+			<td><?php echo gettext('JPEG Compression quality for <em>"full"</em> images.'); ?></td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Thumb quality:"); ?></td>
@@ -1436,12 +1442,6 @@ if (empty($alterrights)) {
 				printf(gettext('Images are in png-24 format and are located in the <code>%s/watermarks/</code> folder.'), ZENFOLDER);
 			?>
 			</td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Full image quality:"); ?></td>
-			<td><input type="text" size="3" name="full_image_quality"
-				value="<?php echo htmlspecialchars(getOption('full_image_quality'));?>" /></td>
-			<td><?php echo gettext("Controls compression on full images."); ?></td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Full image protection:"); ?></td>
