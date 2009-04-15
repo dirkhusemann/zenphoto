@@ -494,7 +494,7 @@ class SearchEngine
 						break;
 					default:
 						$targetfound = true;
-						query("SET @serachtarget='$singlesearchstring'");
+						query('SET @serachtarget="'.mysql_real_escape_string($singlesearchstring).'"');
 						$fieldsql = 'SELECT @serachtarget AS name, `id` AS `objectid` FROM '.prefix($tbl).' WHERE (';
 	
 						foreach ($this->zp_search_fieldnames as $fieldname=>$value) {
