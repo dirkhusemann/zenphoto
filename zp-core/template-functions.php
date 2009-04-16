@@ -228,19 +228,19 @@ function printAdminToolbox($id='admin') {
 				echo "<li><a href=\"".$zf.PLUGIN_FOLDER."zenpage/\">".gettext("Zenpage")."</a></li>";
 				if (is_NewsArticle()) {
 					// page is a NewsArticle--provide zenpage edit, delete, and Add links
-					echo "<li><a href=\"".$zf.PLUGIN_FOLDER."zenpage/admin-edit.php?newsarticle&amp;edit&amp;titlelink=".urlencode(getNewsTitlelink())."\">".gettext("Edit Article")."</li>";
+					echo "<li><a href=\"".$zf.PLUGIN_FOLDER."zenpage/admin-edit.php?newsarticle&amp;edit&amp;titlelink=".urlencode(getNewsTitlelink())."\">".gettext("Edit Article")."</a></li>";
 					?> 
 					<li><a href="javascript: confirmDeleteImage('<?php echo $zf.PLUGIN_FOLDER; ?>zenpage/news-article-admin.php?del=<?php echo getNewsID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete article"); ?>"><?php echo gettext("Delete Article"); ?></a></li>
 					<?php
-					echo "<li><a href=\"".$zf.PLUGIN_FOLDER."zenpage/admin-edit.php?newsarticle&amp;add\">".gettext("Add Article")."</li>";
+					echo "<li><a href=\"".$zf.PLUGIN_FOLDER."zenpage/admin-edit.php?newsarticle&amp;add\">".gettext("Add Article")."</a></li>";
 				}
 				if (is_Pages()) {
 					// page is zenpage page--provide edit, delete, and add links
-					echo "<li><a href=\"".$zf.PLUGIN_FOLDER."zenpage/admin-edit.php?page&amp;edit&amp;titlelink=".urlencode(getPageTitlelink())."\">".gettext("Edit Page")."</li>";
+					echo "<li><a href=\"".$zf.PLUGIN_FOLDER."zenpage/admin-edit.php?page&amp;edit&amp;titlelink=".urlencode(getPageTitlelink())."\">".gettext("Edit Page")."</a></li>";
 					?> 
 					<li><a href="javascript: confirmDeleteImage('<?php echo $zf.PLUGIN_FOLDER; ?>zenpage/page-admin.php?del=<?php echo getPageID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete page"); ?>"><?php echo gettext("Delete Page"); ?></a></li>
 					<?php	
-					echo "<li><a href=\"".FULLWEBPATH."/".ZENFOLDER.PLUGIN_FOLDER."zenpage/admin-edit.php?page&amp;add\">".gettext("Add Page")."</li>";
+					echo "<li><a href=\"".FULLWEBPATH."/".ZENFOLDER.PLUGIN_FOLDER."zenpage/admin-edit.php?page&amp;add\">".gettext("Add Page")."</a></li>";
 				}
 			}
 			apply_filter('admin_toolbox_news');
