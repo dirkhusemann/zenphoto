@@ -7,13 +7,13 @@
  * You can choose on the plugin's admin option what tags you want to be printed.
  *   
  * @author Malte Müller (acrylian)
- * @version 1.0.1
+ * @version 1.0.1.1
  * @package plugins 
  */
 
 $plugin_description = gettext("A plugin to print the most common html meta tags to the head of your site's pages using general existing Zenphoto info like gallery description, tags or Zenpage news categories."); 
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.0.1';
+$plugin_version = '1.0.1.1';
 $plugin_URL = "";
 $option_interface = new htmlmetatags();
 
@@ -33,7 +33,6 @@ class htmlmetatags {
 		setOptionDefault('htmlmeta_http-equiv-language', '1');
 		setOptionDefault('htmlmeta_name-language', '1');
 		setOptionDefault('htmlmeta_htmlmeta_tags', '1');
-		setOptionDefault('htmlmeta_name=content-language', '1');
 		setOptionDefault('htmlmeta_http-equiv-content-type', '');
 		setOptionDefault('htmlmeta_http-equiv-cache-control', '1');
 		setOptionDefault('htmlmeta_http-equiv-pragma', '1');
@@ -171,8 +170,8 @@ function getHTMLMetaData() {
 			if($admincount === 1 ) break;
 		}
 	$meta = ''; 
-	if(getOption('htmlmeta_http-equiv-language')) { $meta .= '<meta http-equiv="language" content="<?php echo $locale; ?>" />'."\n"; }
-	if(getOption('htmlmeta_name-language')) { $meta .= '<meta name="language" content="<?php echo $locale; ?>" />'."\n"; }
+	if(getOption('htmlmeta_http-equiv-language')) { $meta .= '<meta http-equiv="language" content="'.$locale.'" />'."\n"; }
+	if(getOption('htmlmeta_name-language')) { $meta .= '<meta name="language" content="'.$locale.'" />'."\n"; }
 	if(getOption('htmlmeta_name-content-language')) { $meta .= '<meta name="content-language" content="'.$locale.'" />'."\n"; }
 	if(getOption('htmlmeta_http-equiv-content-type')) { $meta .= '<meta http-equiv="content-type" content="text/html; charset='.getOption("charset").'" />'."\n"; }
 	if(getOption('htmlmeta_http-equiv-imagetoolbar')) { $meta .= '<meta http-equiv="imagetoolbar" content="false" />'."\n"; }
