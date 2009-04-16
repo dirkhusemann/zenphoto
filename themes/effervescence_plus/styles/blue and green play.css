@@ -936,6 +936,19 @@ text-decoration:none;
 color: #002E5B;
 background-image: url(../images/dark-bullet.png);
 }
+
+.menu h3 a {
+color: black;
+font-size: 1em;
+font-weight: normal;
+text-transform: uppercase;
+letter-spacing: 0.3em;
+text-decoration:none
+}
+.menu h3 a:hover {
+color: #002E5B;
+}
+
 .submenu {
 list-style: none;
 margin-left: -25px;

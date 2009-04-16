@@ -9,12 +9,15 @@ if(function_exists("printAllNewsCategories")) {
 <?php } ?>
 
 <div class="menu">
-	<h3><?php echo gettext("Gallery"); ?></h3>
 	<?php
 	if(function_exists("printAlbumMenu")) {
+		?>
+		<h3><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Visit the photo gallery'); ?>"><?php echo gettext("Gallery"); ?></a></h3>
+		<?php
 		printAlbumMenu("list",'',"","menu-active","submenu","menu-active","");
 	} else {
 		?>
+		<h3><?php echo gettext("Gallery"); ?></h3>
 		<ul>
 		<li><a href="<?php echo htmlspecialchars(getGalleryIndexURL());?>" title="<?php echo gettext('Visit the photo gallery'); ?>"><?php echo getGalleryTitle();?></a></li>
 		</ul>
