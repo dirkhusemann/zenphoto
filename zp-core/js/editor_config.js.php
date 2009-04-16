@@ -19,8 +19,9 @@ if (file_exists(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . "tiny_mce/tiny_mc
 		paste_create_linebreaks : false,
 		paste_auto_cleanup_on_paste : true,
 		apply_source_formatting : true,
-		force_br_newlines : false,
-		force_p_newlines : true,	
+		force_br_newlines : true,
+		forced_root_block: "",
+		force_p_newlines : false,	
 		relative_urls : false,
 		document_base_url : "<?php echo WEBPATH."/"; ?>",
 		convert_urls : false

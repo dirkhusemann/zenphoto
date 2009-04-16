@@ -130,7 +130,8 @@ function setDefault($option, $default) {
 	 									"acronym =>(title =>())\n" .
 	 									"b => ()\n" .
 	 									"blockquote =>(cite =>())\n" .
-	 									"code => ()\n" .
+										"br => ()\n" .
+										"code => ()\n" .
 	 									"em => ()\n" .
 	 									"i => () \n" .
 	 									"strike => ()\n" .
@@ -150,7 +151,7 @@ function setDefault($option, $default) {
 										"span=>(style=>())\n".
 										"img=>(style=>() src=>() title=>() alt=>() width=>() height=>())\n"
 										;
-	setOptionDefault('allowed_tags_default', $a); 
+	setOption('allowed_tags_default', $a); 
 	setOptionDefault('allowed_tags', $a);
 	setOptionDefault('style_tags', 
 										"abbr => (title => ())\n" .
