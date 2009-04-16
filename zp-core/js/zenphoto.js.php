@@ -11,6 +11,11 @@ if (!defined('WEBPATH')) {
 	define('WEBPATH', $const_webpath);
  }
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
+
+if(!function_exists("gettext")) {
+	// load the drop-in replacement library
+	require_once(dirname(dirname(__FILE__)).'/lib-gettext/gettext.inc');
+}
 ?>
 
 /* Common javascripts and localized strings for Zenphoto */
