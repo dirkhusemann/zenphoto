@@ -1,19 +1,5 @@
 /* Zenphoto administration javascript. */
 
-function confirmDeleteAlbum(url, message1, message2) {
-	if (confirm(message1)) {
-		if (confirm(message2)) {
-			window.location = url;
-		}
-	}
-}
-
-function confirmDeleteImage(url, message) {
-	if (confirm(message)) {
-		window.location = url;
-	}
-}
-
 function addUploadBoxes(placeholderid, copyfromid, num) {
 	for (i=0; i<num; i++) {
 		jQuery('#'+copyfromid).clone().insertBefore('#'+placeholderid);
