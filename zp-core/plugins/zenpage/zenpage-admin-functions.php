@@ -1129,8 +1129,13 @@ function zenpageJSCSS() {
   echo "<link rel=\"stylesheet\" href=\"zenpage.css\" type=\"text/css\" />";
   echo "<script type=\"text/javascript\" src=\"../../js/admin.js\"></script>";
   echo "<script type=\"text/javascript\" src=\"../../js/jquery.js\"></script>";
-	echo "\n  <script src=\"../../js/jquery.dimensions.js\" type=\"text/javascript\"></script>";
+  echo "\n  <script src=\"../../js/jquery.dimensions.js\" type=\"text/javascript\"></script>";
 	?>
+	<script src="../../js/jquery.ui.zenphoto.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$.datepicker.setDefaults($.datepicker.regional['<?php echo substr(getOption('locale'), 0, 2); ?>']);
+		$.datepicker.setDefaults({ dateFormat: 'yy-mm-dd' });
+	</script>
 	<script type="text/javascript" src="../../js/zenphoto.js.php"></script>
 	<script type="text/javascript" src="../../js/thickbox.js"></script>
 	<link rel="stylesheet" href="thickbox-mod.css" type="text/css" />

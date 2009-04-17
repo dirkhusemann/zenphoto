@@ -231,12 +231,27 @@ if(is_object($result)) {
      		<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Date"); ?></h2>
      		<div class="box-edit-zenpage">
      		<p>
-     		<strong class='scheduledpublishing'></strong>
+<?php /*     		
+ 				<script type="text/javascript">
+					$(function() {
+						$("#date").datepicker();
+					});
+				</script>
+*/ ?>
+    		<strong class='scheduledpublishing'></strong>
      		<input name="date" type="text" id="date" value="<?php if(is_object($result)) { echo $result->getDatetime(); } else { echo date('Y-m-d H:i:s'); } ?>" />
      		</p>
      		<hr />
      		<strong class='expire'></strong>
-     		<p><?php echo gettext("Expiration date:"); ?><br />
+     		<p>
+<?php /*     		
+				<script type="text/javascript">
+					$(function() {
+						$("#expiredate").datepicker();
+					});
+				</script>
+*/ ?>
+     		<?php echo gettext("Expiration date:"); ?><br />
      		<input name="expiredate" type="text" id="expiredate" value="<?php if(is_object($result)) { if($result->getExpireDate() != NULL) { echo $result->getExpireDate();} } ?>" />
      		</p>
 				<?php if(getIfObject($result,"lastchangeauthor") != "") { ?>

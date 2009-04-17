@@ -203,26 +203,35 @@ function printAdminFooter($addl='') {
  */
 function printAdminHeader($path='') {
 	header ('Content-Type: text/html; charset=' . getOption('charset'));
-	echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
-	echo "\n<html xmlns=\"http://www.w3.org/1999/xhtml\">";
-	echo "\n<head>";
-	echo "\n  <title>".gettext("zenphoto administration")."</title>";
-	echo "\n  <link rel=\"stylesheet\" href=\"".$path."admin.css\" type=\"text/css\" />";
-	echo "\n  <link rel=\"stylesheet\" href=\"".$path."js/toggleElements.css\" type=\"text/css\" />";
-	echo "\n  <script src=\"".$path."js/jquery.js\" type=\"text/javascript\"></script>";
-	echo "\n  <script src=\"".$path."js/zenphoto.js.php\" type=\"text/javascript\" ></script>";
-	echo "\n  <script src=\"".$path."js/admin.js\" type=\"text/javascript\" ></script>";
-	echo "\n  <script src=\"".$path."js/jquery.dimensions.js\" type=\"text/javascript\"></script>";
-	echo "\n  <script src=\"".$path."js/jquery.tooltip.js\" type=\"text/javascript\"></script>";
-	echo "\n  <script src=\"".$path."js/thickbox.js\" type=\"text/javascript\"></script>";
-	echo "\n  <link rel=\"stylesheet\" href=\"".$path."js/thickbox.css\" type=\"text/css\" />";
-	echo "\n  <script type=\"text/javascript\">";
-	echo "\n  \tjQuery(function( $ ){";
-	echo "\n  \t\t $(\"#fade-message\").fadeTo(5000, 1).fadeOut(1000);";
-	echo "\n  \t\t $(\"#fade-message2\").fadeTo(5000, 1).fadeOut(1000);";
-	echo "\n  \t\t $('.tooltip').tooltip();";
-	echo "\n  \t});";
-	echo "\n  </script>";
+	?>
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	<title><?php echo gettext("zenphoto administration") ?></title>
+	<link rel="stylesheet" href="<?php echo $path; ?>admin.css" type="text/css" />
+	<link rel="stylesheet" href="<?php echo $path; ?>js/toggleElements.css" type="text/css" />
+	<script src="<?php echo $path; ?>js/jquery.js" type="text/javascript"></script>
+	<script src="<?php echo $path; ?>js/zenphoto.js.php" type="text/javascript" ></script>
+
+	<script src="<?php echo $path;?>js/jquery.ui.zenphoto.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$.datepicker.setDefaults($.datepicker.regional['<?php echo substr(getOption('locale'), 0, 2); ?>']);
+		$.datepicker.setDefaults({ dateFormat: 'yy-mm-dd' });
+	</script>
+
+	<script src="<?php echo $path; ?>js/admin.js" type="text/javascript" ></script>
+	<script src="<?php echo $path; ?>js/jquery.dimensions.js" type="text/javascript"></script>
+	<script src="<?php echo $path; ?>js/jquery.tooltip.js" type="text/javascript"></script>
+	<script src="<?php echo $path; ?>js/thickbox.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="<?php echo $path; ?>js/thickbox.css" type="text/css" />
+	<script type="text/javascript">
+		jQuery(function( $ ){
+			$("#fade-message").fadeTo(5000, 1).fadeOut(1000);
+			$("#fade-message2").fadeTo(5000, 1).fadeOut(1000);
+			$('.tooltip').tooltip();
+			});
+	</script>
+	<?php
 	if (file_exists(dirname(__FILE__).'/js/editor_config.js.php')) require_once(dirname(__FILE__).'/js/editor_config.js.php');	
 }
 
@@ -957,10 +966,17 @@ function printAlbumEditForm($index, $album) {
 		$d = "";
 	}
   ?>
+ <?php /*
+	<script type="text/javascript">
+		$(function() {
+			$("#datepicker_<?php echo $prefix; ?>").datepicker();
+		});
+	</script>
+*/ ?>
 	<tr>
 		<td align="left" valign="top"><?php echo gettext("Date:");?> </td> 
 		<td width="400">
-		<input type="text" style="width:370px" name="<?php echo $prefix; ?>albumdate" value="<?php echo $d; ?>" /></td>
+		<input type="text" id="datepicker_<?php echo $prefix; ?>"style="width:370px" name="<?php echo $prefix; ?>albumdate" value="<?php echo $d; ?>" /></td>
 	</tr>
 	<tr>
 		<td align="left" valign="top"><?php echo gettext("Location:"); ?> </td> 

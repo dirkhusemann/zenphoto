@@ -110,7 +110,6 @@ class jQuerySortable {
 		// Stuff echoed only once, no matter how many sortable elements are initialized in the page
 		if (!$this->jquery_init) {
 		?>		
-		<script src="<?php echo $this->jsPath;?>/jquery.ui.zenphoto.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			// <![CDATA[
 			function populateHiddenVars() {
