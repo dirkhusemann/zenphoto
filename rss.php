@@ -65,7 +65,7 @@ if(getOption('mod_rewrite')) {
 	$items = getOption('feed_items'); // # of Items displayed on the feed
 
 	?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
 <channel>
 <title><?php echo strip_tags(get_language_string(getOption('gallery_title'), $locale)).' '.strip_tags($albumname); ?></title>
 <link><?php echo "http://".$host.WEBPATH; ?></link>
@@ -94,9 +94,9 @@ if(getOption('mod_rewrite')) {
 		if($rssmode != "albums") {
 			$ext = strtolower(strrchr($item->filename, "."));
 			$albumobj = $item->getAlbum();
-			$itemlink = $host.WEBPATH.$albumpath.$albumobj->name.$imagepath.$item->filename.$modrewritesuffix;
+			$itemlink = $host.WEBPATH.$albumpath.urlencode($albumobj->name).$imagepath.urlencode($item->filename).$modrewritesuffix;
 			$fullimagelink = $host.WEBPATH."/albums/".$albumobj->name."/".$item->filename;
-			$thumburl = '<img border="0" src="'.$item->getCustomImage($size, NULL, NULL, NULL, NULL, NULL, NULL, TRUE).'" alt="'.get_language_string($item->get("title"),$locale) .'" />';
+			$thumburl = '<img border="0" src="http://'.$host.$item->getCustomImage($size, NULL, NULL, NULL, NULL, NULL, NULL, TRUE).'" alt="'.get_language_string($item->get("title"),$locale) .'" />';
 			$itemcontent = '<![CDATA[<a title="'.get_language_string($item->get("title"),$locale).' in '.get_language_string($albumobj->get("title"),$locale).'" href="http://'.$itemlink.'">'.$thumburl.'</a><p>' . get_language_string($item->get("desc"),$locale) . '</p>]]>';
 			$videocontent = '<![CDATA[<a title="'.get_language_string($item->get("title"),$locale).' in '.$albumobj->getTitle().'" href="http://'.$itemlink.'">'. $item->filename.'</a><p>' . get_language_string($item->get("desc"),$locale) . '</p>]]>';
 			$datecontent = '<![CDATA[Date: '.zpFormattedDate(getOption('date_format'),$item->get('mtime')).']]>';
