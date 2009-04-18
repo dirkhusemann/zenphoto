@@ -197,7 +197,7 @@ function datepickerJS($path) {
 	?>
 	<script src="<?php echo $path;?>js/jquery.ui.zenphoto.js" type="text/javascript"></script>
 	<?php
-	$lang = getOption('locale');
+	$lang = str_replace('_', '-',getOption('locale'));
 	if (file_exists($path.'js/jquery.datepicker.i18n/ui.datepicker-'.$lang.'.js')) {
 	} else {
 		$lang = substr($lang, 0, 2);
