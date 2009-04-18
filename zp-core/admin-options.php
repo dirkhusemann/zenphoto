@@ -1305,20 +1305,51 @@ if (empty($alterrights)) {
 		<tr>
 			<td width="175"><?php echo gettext("Image quality:"); ?></td>
 			<td width="350">
-				<table>
-					<tr>
-						<td style="margin:0; padding:0"><?php echo gettext('Normal Image'); ?>&nbsp;</td>
-						<td style="margin:0; padding:0"><input type="text" size="3" id="imagequality" name="image_quality" value="<?php echo getOption('image_quality');?>" /></td>
-					</tr>
-					<tr>
-						<td style="margin:0; padding:0"><?php echo gettext('<em>full</em> Image'); ?>&nbsp;</td>
-						<td style="margin:0; padding:0"><input type="text" size="3" id="fullimagequality" name="full_image_quality" value="<?php echo getOption('full_image_quality');?>" /></td>
-					</tr>
-					<tr>
-						<td style="margin:0; padding:0"><?php echo gettext('Thumbnail'); ?>&nbsp;</td>
-						<td style="margin:0; padding:0"><input type="text" size="3" id="thumbquality" name="thumb_quality" value="<?php echo getOption('thumb_quality');?>" /></td>
-					</tr>
-				</table>
+				<?php echo gettext('Normal Image'); ?>&nbsp;<input type="text" size="3" id="imagequality" name="image_quality" value="<?php echo getOption('image_quality');?>" />
+				<script type="text/javascript">
+				$(function() {
+					$("#slider-imagequality").slider({
+						startValue: <?php echo getOption('image_quality');?>, //TODO!!!! this becomes 'value' if we upgrade Jquery?
+						min: 0,
+						max: 100,
+						slide: function(event, ui) {
+							$("#imagequality").val( ui.value);
+						}
+					});
+					$("#imagequality").val($("#slider-imagequality").slider("value"));
+				});
+				</script>
+				<div id="slider-imagequality"></div>
+				<?php echo gettext('<em>full</em> Image'); ?>&nbsp;<input type="text" size="3" id="fullimagequality" name="full_image_quality" value="<?php echo getOption('full_image_quality');?>" />
+				<script type="text/javascript">
+				$(function() {
+					$("#slider-fullimagequality").slider({
+						startValue: <?php echo getOption('full_image_quality');?>, //TODO!!!! this becomes 'value' if we upgrade Jquery?
+						min: 0,
+						max: 100,
+						slide: function(event, ui) {
+							$("#fullimagequality").val( ui.value);
+						}
+					});
+					$("#fullimagequality").val($("#slider-fullimagequality").slider("value"));
+				});
+				</script>
+				<div id="slider-fullimagequality"></div>
+				<?php echo gettext('Thumbnail'); ?>&nbsp;<input type="text" size="3" id="thumbquality" name="thumb_quality" value="<?php echo getOption('thumb_quality');?>" />
+				<script type="text/javascript">
+				$(function() {
+					$("#slider-thumbquality").slider({
+						startValue: <?php echo getOption('thumb_quality');?>, //TODO!!!! this becomes 'value' if we upgrade Jquery?
+						min: 0,
+						max: 100,
+						slide: function(event, ui) {
+							$("#thumbquality").val( ui.value);
+						}
+					});
+					$("#thumbquality").val($("#slider-thumbquality").slider("value"));
+				});
+				</script>
+				<div id="slider-thumbquality"></div>
 			</td>
 			<td><?php echo gettext("JPEG Compression quality for images and thumbnails. Quality ranges from 0 (worst quality, smallest file) to 100 (best quality, biggest file). "); ?></td>
 		</tr>
@@ -1348,11 +1379,23 @@ if (empty($alterrights)) {
 					<?php echo checked('1', getOption('image_sharpen')); ?> /> Images
 					<input type="checkbox" name="thumb_sharpen" value="1"
 					<?php echo checked('1', getOption('thumb_sharpen')); ?> /> Thumbs
+				<br />
+				<?php echo gettext('Amount'); ?>&nbsp;<input type="text" id="sharpenamount" name="sharpen_amount" size="3" value="<?php echo getOption('sharpen_amount'); ?>" />
+				<script type="text/javascript">
+				$(function() {
+					$("#slider-sharpenamount").slider({
+						startValue: <?php echo getOption('sharpen_amount');?>, //TODO!!!! this becomes 'value' if we upgrade Jquery?
+						min: 0,
+						max: 100,
+						slide: function(event, ui) {
+							$("#sharpenamount").val( ui.value);
+						}
+					});
+					$("#sharpenamount").val($("#slider-sharpenamount").slider("value"));
+				});
+				</script>
+				<div id="slider-sharpenamount"></div>
 				<table>
-					<tr>
-						<td style="margin:0; padding:0"><?php echo gettext('Amount'); ?>&nbsp;</td>
-						<td style="margin:0; padding:0"><input type="text" name = "sharpen_amount" size="3" value="<?php echo getOption('sharpen_amount'); ?>" /></td>
-					</tr>
 					<tr>
 						<td style="margin:0; padding:0"><?php echo gettext('Radius'); ?>&nbsp;</td>
 						<td style="margin:0; padding:0"><input type="text" name = "sharpen_radius" size="2" value="<?php echo getOption('sharpen_radius'); ?>" /></td>
@@ -1366,7 +1409,7 @@ if (empty($alterrights)) {
 			<td>
 				<?php
 				echo gettext("Add an unsharp mask to images and/or thumbnails. <strong>Warning</strong>: can overload slow servers.").'<br/>';
-				echo gettext("<em>Amount</em>: the strength of the sharpening effect. Nominal values are between 0 and 100.").'<br/>';
+				echo gettext("<em>Amount</em>: the strength of the sharpening effect. Values are between 0 (least sharpening) and 100 (most sharpening).").'<br/>';
 				echo gettext("<em>Radius</em>: the pixel radius of the sharpening mask. A smaller radius sharpens smaller details, and a larger radius sharpens larger details.").'<br/>';
 				echo gettext("<em>Threshold</em>: the color difference threshold required for sharpening. A low threshold sharpens all edges including faint ones, while a higher threshold only sharpens more distinct edges.");
 				?>
