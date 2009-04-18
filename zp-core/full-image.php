@@ -111,13 +111,6 @@ if (getOption('fullimage_watermark')) {
 	imageKill($watermark);
 }
 $quality = getOption('full_image_quality');
-if ($suffix == 'png') {
-	if ($quality = 100) {
-		$quality = 0;
-	} else {
-		$quality = round((99 - $quality)/10);
-	}
-}
 imageOutput($newim, $suffix, $cache_path, $quality);
 
 if (!is_null($cache_path)) {

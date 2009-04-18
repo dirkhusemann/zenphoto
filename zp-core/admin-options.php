@@ -1304,21 +1304,23 @@ if (empty($alterrights)) {
 		</tr>
 		<tr>
 			<td width="175"><?php echo gettext("Image quality:"); ?></td>
-			<td width="350"><input type="text" size="3" name="image_quality"
-				value="<?php echo htmlspecialchars(getOption('image_quality'));?>" /></td>
-			<td><?php echo gettext("JPEG Compression quality for images."); ?></td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Full image quality:"); ?></td>
-			<td><input type="text" size="3" name="full_image_quality"
-				value="<?php echo htmlspecialchars(getOption('full_image_quality'));?>" /></td>
-			<td><?php echo gettext('JPEG Compression quality for <em>"full"</em> images.'); ?></td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Thumb quality:"); ?></td>
-			<td><input type="text" size="3" name="thumb_quality"
-				value="<?php echo htmlspecialchars(getOption('thumb_quality'));?>" /></td>
-			<td><?php echo gettext("JPEG Compression quality for all thumbnails."); ?></td>
+			<td width="350">
+				<table>
+					<tr>
+						<td style="margin:0; padding:0"><?php echo gettext('Normal Image'); ?>&nbsp;</td>
+						<td style="margin:0; padding:0"><input type="text" size="3" id="imagequality" name="image_quality" value="<?php echo getOption('image_quality');?>" /></td>
+					</tr>
+					<tr>
+						<td style="margin:0; padding:0"><?php echo gettext('<em>full</em> Image'); ?>&nbsp;</td>
+						<td style="margin:0; padding:0"><input type="text" size="3" id="fullimagequality" name="full_image_quality" value="<?php echo getOption('full_image_quality');?>" /></td>
+					</tr>
+					<tr>
+						<td style="margin:0; padding:0"><?php echo gettext('Thumbnail'); ?>&nbsp;</td>
+						<td style="margin:0; padding:0"><input type="text" size="3" id="thumbquality" name="thumb_quality" value="<?php echo getOption('thumb_quality');?>" /></td>
+					</tr>
+				</table>
+			</td>
+			<td><?php echo gettext("JPEG Compression quality for images and thumbnails. Quality ranges from 0 (worst quality, smallest file) to 100 (best quality, biggest file). "); ?></td>
 		</tr>
 		<tr>
 			<td width="175"><?php echo gettext("Auto rotate images:"); ?></td>
@@ -1348,15 +1350,15 @@ if (empty($alterrights)) {
 					<?php echo checked('1', getOption('thumb_sharpen')); ?> /> Thumbs
 				<table>
 					<tr>
-						<td style="margin:0; padding:0"><?php echo gettext('Amount'); ?></td>
+						<td style="margin:0; padding:0"><?php echo gettext('Amount'); ?>&nbsp;</td>
 						<td style="margin:0; padding:0"><input type="text" name = "sharpen_amount" size="3" value="<?php echo getOption('sharpen_amount'); ?>" /></td>
 					</tr>
 					<tr>
-						<td style="margin:0; padding:0"><?php echo gettext('Radius'); ?></td>
+						<td style="margin:0; padding:0"><?php echo gettext('Radius'); ?>&nbsp;</td>
 						<td style="margin:0; padding:0"><input type="text" name = "sharpen_radius" size="2" value="<?php echo getOption('sharpen_radius'); ?>" /></td>
 					</tr>
 					<tr>
-						<td style="margin:0; padding:0"><?php echo gettext('Threshold'); ?></td>
+						<td style="margin:0; padding:0"><?php echo gettext('Threshold'); ?>&nbsp;</td>
 						<td style="margin:0; padding:0"><input type="text" name = "sharpen_threshold" size="3" value="<?php echo getOption('sharpen_threshold'); ?>" /></td>
 					</tr>
 					</table>

@@ -40,11 +40,17 @@ function imageGet($imgfile) {
  * @param resource $im
  * @param string $type
  * @param string $filename
- * @param int $quality
+ * @param int $qual
  */
-function imageOutput($im, $type, $filename=NULL, $qual=0) {
+function imageOutput($im, $type, $filename=NULL, $qual=75) {
+	$qual = max(min($qual, 100),0);
 	switch ($type) {
 		case 'png':
+			if ($qual = 100) {
+				$qual = 0;
+			} else {
+				$qual = round((99 - $qual)/10);
+			}
 			return imagepng($im, $filename, $qual);
 		case 'wbmp':
 			return imagewbmp($im, $filename);
