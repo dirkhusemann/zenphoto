@@ -1871,7 +1871,7 @@ if (empty($alterrights)) {
 	<!-- end of tab_theme div -->
 	<?php
 	if ($subtab == 'plugin' && $_zp_loggedin & ADMIN_RIGHTS) {
-		$c = 0;
+		$_zp_plugin_count = 0;
 	?>
 		<div id="tab_plugin" class="box" style="padding: 15px;">
 		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
@@ -1894,7 +1894,7 @@ if (empty($alterrights)) {
 			}
 			require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
 			if (!is_null($option_interface)) {
-				$c++;
+				$_zp_plugin_count++;
 				?>
 	<!-- <?php echo $extension; ?> -->
 				<table class="bordered" style="border: 0" id="plugin-<?php echo $ext; ?>">
@@ -1914,7 +1914,7 @@ if (empty($alterrights)) {
 			<?php
 			}
 		}
-		if ($c == 0) {
+		if ($_zp_plugin_count == 0) {
 			echo gettext("There are no plugin options to administer.");
 		} else {
 		?>

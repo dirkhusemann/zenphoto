@@ -3884,7 +3884,7 @@ function getSearchURL($words, $dates, $fields, $page) {
  * Search works on a list of tokens entered into the search form.
  *
  * Tokens may be part of boolean expressions using &, |, !, and parens. (Comma is retained as a synonom of | for
- * backwords compatibility.) If tokens are separated by spaces, the OR function is presumed.
+ * backwords compatibility.)
  *
  * Tokens may be enclosed in quotation marks to create exact pattern matches or to include the boolean operators and
  * parens as part of the tag..
