@@ -935,14 +935,12 @@ if (empty($alterrights)) {
 			<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="time_offset"
 				value="<?php echo htmlspecialchars(getOption('time_offset'));?>" /></td>
 			<td>
-				<?php
+				<p><?php
 					if (function_exists('date_default_timezone_get')) { 
-						$tz = date_default_timezone_get();
 						printf(gettext('Your server reports its timezone as: <code>%s</code>.'),date_default_timezone_get()); 
-						echo ' ';
 					} 
-					echo gettext("If you're in a different time zone from your server, set the	offset in hours of your timezone from that of the server. For instance if your server is on the US East Coast (<em>GMT</em> - 5) and you are on the Pacific Coast (<em>GMT</em> - 8), set the offset to 3 (-5 - (-8)).")
-				?>
+				?></p>
+				<p><?php echo gettext("If you're in a different time zone from your server, set the	offset in hours of your timezone from that of the server. For instance if your server is on the US East Coast (<em>GMT</em> - 5) and you are on the Pacific Coast (<em>GMT</em> - 8), set the offset to 3 (-5 - (-8))."); ?></p>
 			</td>
 		</tr>
 		<tr>
@@ -953,9 +951,8 @@ if (empty($alterrights)) {
 			<input type="checkbox" name="UTF8_image_URI" value="1"<?php echo checked('1', getOption('UTF8_image_URI')); ?> /> <?php echo gettext('UTF8 image URIs'); ?>
 			</td>
 			<td>
-				<?php echo gettext("If you have Apache <em>mod_rewrite</em>, put a checkmark on the <em>mod rewrite</em> option, and	you'll get nice cruft-free URLs."); ?>
-				<br /><br />
-				<?php echo gettext("If you are having problems with images who's names with contain accented characters try changing the <em>UTF8 image URIs</em> setting."); ?>
+				<p><?php echo gettext("If you have Apache <em>mod_rewrite</em>, put a checkmark on the <em>mod rewrite</em> option, and	you'll get nice cruft-free URLs."); ?></p>
+				<p><?php echo gettext("If you are having problems with images who's names with contain accented characters try changing the <em>UTF8 image URIs</em> setting."); ?></p>
 			</td>
 		</tr>
 		<tr>
@@ -973,11 +970,9 @@ if (empty($alterrights)) {
 			<?php echo gettext('Multi-lingual'); ?>
 			</td>
 			<td>
-			<?php
-			echo gettext("The language to display text in. (Set to <em>HTTP Accept Language</em> to use the language preference specified by the viewer's browser.)");
-			echo ' '.gettext("Set <em>Multi-lingual</em> to enable multiple languages for database fields.");
-			echo ' '.gettext("<strong>Note:</strong> if you have created multi-language strings, uncheck this option, then save anything, you will lose your strings.");
-			?>
+				<p><?php echo gettext("The language to display text in. (Set to <em>HTTP Accept Language</em> to use the language preference specified by the viewer's browser.)"); ?></p>
+				<p><?php echo gettext("Set <em>Multi-lingual</em> to enable multiple languages for database fields."); ?></p>
+				<p><?php echo gettext("<strong>Note:</strong> if you have created multi-language strings, uncheck this option, then save anything, you will lose your strings."); ?></p>
 			</td>
 		</tr>
 		<tr>
@@ -1209,9 +1204,8 @@ if (empty($alterrights)) {
 			?>
 			</td>
 			<td>
-			<?php echo gettext("The set of fields on which searches may be performed."); ?>
-			<br /><br />
-			<?php echo gettext("Search does partial matches on all fields with the possible exception of <em>Tags</em>. This means that if the field contains the search criteria anywhere within it a result will be returned. If <em>exact</em> is selected for <em>Tags</em> then the search criteria must exactly match the tag for a result to be returned.") ?>
+				<p><?php echo gettext("The set of fields on which searches may be performed."); ?></p>
+				<p><?php echo gettext("Search does partial matches on all fields with the possible exception of <em>Tags</em>. This means that if the field contains the search criteria anywhere within it a result will be returned. If <em>exact</em> is selected for <em>Tags</em> then the search criteria must exactly match the tag for a result to be returned.") ?></p>
 			</td>
 		</tr>
 		<tr>
@@ -1266,6 +1260,10 @@ if (empty($alterrights)) {
 	<div id="tab_image" class="box" style="padding: 15px;">
 	<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 	<input type="hidden" name="saveimageoptions" value="yes" /> 
+	<p align="center">
+	<?php echo gettext('See also the <a href="?tab=theme">Theme Options</a> tab for theme specific image options.'); ?>
+	</p>
+
 	<table class="bordered">
 		<tr>
 			<td><?php echo gettext("Sort images by:"); ?></td>
@@ -1296,10 +1294,8 @@ if (empty($alterrights)) {
 				</div>
 				</td>
 			<td>
-				<?php
-				echo gettext("Default sort order for images.").' ';
-				echo gettext('Custom sort values must be database field names. You can have multiple fields separated by commas.')
-				?>
+				<p><?php	echo gettext("Default sort order for images."); ?></p>
+				<p><?php echo gettext('Custom sort values must be database field names. You can have multiple fields separated by commas.') ?></p>
 			</td>
 		</tr>
 		<tr>
@@ -1351,7 +1347,10 @@ if (empty($alterrights)) {
 				</script>
 				<div id="slider-thumbquality"></div>
 			</td>
-			<td><?php echo gettext("JPEG Compression quality for images and thumbnails. Quality ranges from 0 (worst quality, smallest file) to 100 (best quality, biggest file). "); ?></td>
+			<td>
+				<p><?php echo gettext("Compression quality for images and thumbnails generated by Zenphoto.");?></p>
+				<p><?php echo gettext("Quality ranges from 0 (worst quality, smallest file) to 100 (best quality, biggest file). "); ?></p>
+			</td>
 		</tr>
 		<tr>
 			<td width="175"><?php echo gettext("Auto rotate images:"); ?></td>
@@ -1359,26 +1358,22 @@ if (empty($alterrights)) {
 				<?php echo checked('1', getOption('auto_rotate')); ?>
 				<?php if (!imageCanRotate()) echo ' DISABLED'; ?>	/></td>
 			<td>
-			<?php
-			echo gettext("Automatically rotate images based on the EXIF orientation setting.");
-			if (!function_exists('imagerotate')) echo '<br />'.gettext("Image rotation requires the <em>imagerotate</em> function found in PHP version 4.3 or greater's bundled GD library.");
-			?>
+				<p><?php	echo gettext("Automatically rotate images based on the EXIF orientation setting."); ?></p>
+				<?php
+				if (!function_exists('imagerotate')) echo '<p>'.gettext("Image rotation requires the <em>imagerotate</em> function found in PHP version 4.3 or greater's bundled GD library.").'</p>';
+				?>
 			</td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Allow upscale:"); ?></td>
-			<td><input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="image_allow_upscale"
-				value="1"
-				<?php echo checked('1', getOption('image_allow_upscale')); ?> /></td>
+			<td><input type="checkbox" size="<?php echo TEXT_INPUT_SIZE; ?>" name="image_allow_upscale" value="1" <?php echo checked('1', getOption('image_allow_upscale')); ?> /></td>
 			<td><?php echo gettext("Allow images to be scaled up to the requested size. This could	result in loss of quality, so it's off by default."); ?></td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Sharpen:"); ?></td>
 			<td>
-					<input type="checkbox" name="image_sharpen" value="1"
-					<?php echo checked('1', getOption('image_sharpen')); ?> /> Images
-					<input type="checkbox" name="thumb_sharpen" value="1"
-					<?php echo checked('1', getOption('thumb_sharpen')); ?> /> Thumbs
+					<input type="checkbox" name="image_sharpen" value="1" <?php echo checked('1', getOption('image_sharpen')); ?> /> Images
+					<input type="checkbox" name="thumb_sharpen" value="1" <?php echo checked('1', getOption('thumb_sharpen')); ?> /> Thumbs
 				<br />
 				<?php echo gettext('Amount'); ?>&nbsp;<input type="text" id="sharpenamount" name="sharpen_amount" size="3" value="<?php echo getOption('sharpen_amount'); ?>" />
 				<script type="text/javascript">
@@ -1407,12 +1402,10 @@ if (empty($alterrights)) {
 					</table>
 			</td>
 			<td>
-				<?php
-				echo gettext("Add an unsharp mask to images and/or thumbnails. <strong>Warning</strong>: can overload slow servers.").'<br/>';
-				echo gettext("<em>Amount</em>: the strength of the sharpening effect. Values are between 0 (least sharpening) and 100 (most sharpening).").'<br/>';
-				echo gettext("<em>Radius</em>: the pixel radius of the sharpening mask. A smaller radius sharpens smaller details, and a larger radius sharpens larger details.").'<br/>';
-				echo gettext("<em>Threshold</em>: the color difference threshold required for sharpening. A low threshold sharpens all edges including faint ones, while a higher threshold only sharpens more distinct edges.");
-				?>
+				<p><?php echo gettext("Add an unsharp mask to images and/or thumbnails. <strong>Warning</strong>: can overload slow servers."); ?></p>
+				<p><?php echo gettext("<em>Amount</em>: the strength of the sharpening effect. Values are between 0 (least sharpening) and 100 (most sharpening)."); ?></p>
+				<p><?php echo gettext("<em>Radius</em>: the pixel radius of the sharpening mask. A smaller radius sharpens smaller details, and a larger radius sharpens larger details."); ?></p>
+				<p><?php echo gettext("<em>Threshold</em>: the color difference threshold required for sharpening. A low threshold sharpens all edges including faint ones, while a higher threshold only sharpens more distinct edges."); ?></p>
 			</td>
 		</tr>
 		<tr>
@@ -1440,15 +1433,10 @@ if (empty($alterrights)) {
 				value="<?php echo htmlspecialchars(getOption('watermark_w_offset'));?>" /><?php /*xgettext:no-php-format*/ echo gettext("%"); ?>
 			</td>
 			<td>
-			<?php
-				echo gettext("The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the	image.").' '.
-									gettext("It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark.").' '.
-			          	gettext("If <em>allow upscale</em> is not checked the watermark will not be made larger than the original watermark image.");
-			?>
-			<br /><br />
-			<?php
-				printf(gettext('Images are in png-24 format and are located in the <code>%s/watermarks/</code> folder.'), ZENFOLDER);
-			?>
+				<p><?php echo gettext("The watermark image is scaled by to cover <em>cover percentage</em> of the image and placed relative to the upper left corner of the	image."); ?></p>
+				<p><?php echo gettext("It is offset from there (moved toward the lower right corner) by the <em>offset</em> percentages of the height and width difference between the image and the watermark."); ?></p>
+				<p><?php echo gettext("If <em>allow upscale</em> is not checked the watermark will not be made larger than the original watermark image."); ?></p>
+				<p><?php printf(gettext('Images are in png-24 format and are located in the <code>%s/watermarks/</code> folder.'), ZENFOLDER); ?></p>
 			</td>
 												           
 		</tr>
@@ -1481,11 +1469,8 @@ if (empty($alterrights)) {
 				</table>
 			</td>
 			<td>
-			<?php echo gettext("The watermark image that will be overlayed on the alternate thumbnail, if one exists."); ?> 
-			<br /><br />
-			<?php
-				printf(gettext('Images are in png-24 format and are located in the <code>%s/watermarks/</code> folder.'), ZENFOLDER);
-			?>
+				<p><?php echo gettext("The watermark image that will be overlayed on the thumbnail."); ?></p> 
+				<p><?php printf(gettext('Images are in png-24 format and are located in the <code>%s/watermarks/</code> folder.'), ZENFOLDER); ?></p>
 			</td>
 		</tr>
 		<tr>
@@ -1532,13 +1517,11 @@ if (empty($alterrights)) {
 					</tr>
 				</table>
 			</td>
-			<td><?php echo gettext("Select the level of protection for full sized images. <em>Download</em> forces a download dialog rather than displaying the image. <em>No&nbsp;access</em> prevents a link to the image from being shown. <em>Protected&nbsp;view</em> forces image processing before the image is displayed, for instance to apply a watermark or to check passwords. <em>Unprotected</em> allows direct display of the image."); ?>
-			<br /><br />
-			<?php echo gettext("Disabling hotlinking prevents linking to the full image from other domains. If enabled, external links are redirect to the image page. If you are having problems with full images being displayed, try disabling this setting. Hotlinking is not prevented if <em>Full&nbsp;image&nbsp;protection</em> is <em>Unprotected</em> or if the image is cached."); ?>
-			<br /><br />
-			<?php echo gettext("If <em>Cache the full image</em> is checked the full image will be loaded to the cache and served from there after the first reference. <em>Full&nbsp;image&nbsp;protection</em> must be set to <em>Protected&nbsp;view</em> for the image to be cached. However, once cached, no protections are applied to the image."); ?>
-			<br /><br />
-			<?php echo gettext("The <em>user</em>, <em>password</em>, and <em>hint</em> apply to the <em>Download</em> and <em>Protected view</em> level of protection. If there is a password set, the viewer must supply this password to access the image."); ?>
+			<td>
+				<p><?php echo gettext("Select the level of protection for full sized images. <em>Download</em> forces a download dialog rather than displaying the image. <em>No&nbsp;access</em> prevents a link to the image from being shown. <em>Protected&nbsp;view</em> forces image processing before the image is displayed, for instance to apply a watermark or to check passwords. <em>Unprotected</em> allows direct display of the image."); ?></p>
+				<p><?php echo gettext("Disabling hotlinking prevents linking to the full image from other domains. If enabled, external links are redirect to the image page. If you are having problems with full images being displayed, try disabling this setting. Hotlinking is not prevented if <em>Full&nbsp;image&nbsp;protection</em> is <em>Unprotected</em> or if the image is cached."); ?></p>
+				<p><?php echo gettext("If <em>Cache the full image</em> is checked the full image will be loaded to the cache and served from there after the first reference. <em>Full&nbsp;image&nbsp;protection</em> must be set to <em>Protected&nbsp;view</em> for the image to be cached. However, once cached, no protections are applied to the image."); ?></p>
+				<p><?php echo gettext("The <em>user</em>, <em>password</em>, and <em>hint</em> apply to the <em>Download</em> and <em>Protected view</em> level of protection. If there is a password set, the viewer must supply this password to access the image."); ?></p>
 			</td>
 		</tr>
 		<tr>
@@ -1568,9 +1551,11 @@ if (empty($alterrights)) {
 		</tr>
 		<tr>
 			<td><?php echo gettext("IPTC encoding:"); ?></td>
-			<td><select id="IPTC_encoding" name="IPTC_encoding">
-				<?php generateListFromArray(array(getOption('IPTC_encoding')), array_flip($charsets), false, true) ?>
-			</select></td>
+			<td>
+				<select id="IPTC_encoding" name="IPTC_encoding">
+					<?php generateListFromArray(array(getOption('IPTC_encoding')), array_flip($charsets), false, true) ?>
+				</select>
+			</td>
 			<td><?php echo gettext("The default character encoding of image IPTC metadata."); ?></td>
 		</tr>
 		<tr>
@@ -1743,19 +1728,19 @@ if (empty($alterrights)) {
 			</tr>
 			<tr>
 				<td style='width: 175px'><?php echo gettext("Albums per page:"); ?></td>
-				<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="albums_per_page"
+				<td><input type="text" size="3" name="albums_per_page"
 					value="<?php echo getThemeOption($album, 'albums_per_page');?>" /></td>
 				<td><?php echo gettext("Controls the number of albums on a page. You might need to change	this after switching themes to make it look better."); ?></td>
 			</tr>
 			<tr>
 				<td><?php echo gettext("Images per page:"); ?></td>
-				<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="images_per_page"
+				<td><input type="text" size="3" name="images_per_page"
 					value="<?php echo getThemeOption($album, 'images_per_page');?>" /></td>
 				<td><?php echo gettext("Controls the number of images on a page. You might need to change	this after switching themes to make it look better."); ?></td>
 			</tr>
 			<tr>
 				<td><?php echo gettext("Thumb size:"); ?></td>
-				<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="thumb_size"
+				<td><input type="text" size="3" name="thumb_size"
 					value="<?php echo getThemeOption($album, 'thumb_size');?>" /></td>
 				<td><?php echo gettext("Default thumbnail size and scale."); ?></td>
 			</tr>
@@ -1764,9 +1749,9 @@ if (empty($alterrights)) {
 				<td>
 					<input type="checkbox" name="thumb_crop" value="1"
 						<?php echo checked('1', getThemeOption($album, 'thumb_crop')); ?> />
-					Crop width <input type="text" size="5" name="thumb_crop_width"
+					Crop width <input type="text" size="3" name="thumb_crop_width"
 						value="<?php echo getThemeOption($album, 'thumb_crop_width');?>" />
-					Crop height <input type="text" size="5" name="thumb_crop_height"
+					Crop height <input type="text" size="3" name="thumb_crop_height"
 						value="<?php echo getThemeOption($album, 'thumb_crop_height');?>" />
 				</td>
 				<td>
@@ -1790,7 +1775,7 @@ if (empty($alterrights)) {
 					<table>
 						<tr>
 							<td rowspan="2" style="margin:0; padding:0">
-								<input type="text" size="<?php echo 5; ?>" name="image_size" value="<?php echo getThemeOption($album, 'image_size');?>" />
+								<input type="text" size="3" name="image_size" value="<?php echo getThemeOption($album, 'image_size');?>" />
 							</td>
 							<td style="margin:0; padding:0">
 							<input type="radio" id="image_use_side" name="image_use_side" value="height" <?php if ($side=='height') echo " CHECKED"?> /> <?php echo gettext('height') ?>
