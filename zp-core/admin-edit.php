@@ -808,13 +808,13 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						<td><?php print_language_string_list($image->get('desc'), $currentimage.'-desc', true, NULL, 'texteditor'); ?>
 						</td>
 					</tr>
-					<?php /*
+
 					<script type="text/javascript">
 						$(function() {
 							$("#datepicker_<?php echo $currentimage; ?>").datepicker();
 						});
 					</script>
-					*/ ?>
+
 					<tr align="left" valign="top">
 						<td valign="top"><?php echo gettext("Date:"); ?></td>
 						<td><input type="text" id="datepicker_<?php echo $currentimage; ?>" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $currentimage; ?>-date"

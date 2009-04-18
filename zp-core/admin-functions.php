@@ -193,6 +193,31 @@ function printAdminFooter($addl='') {
   <?php
 }
 
+function datepickerJS($path) {
+	?>
+	<script src="<?php echo $path;?>js/jquery.ui.zenphoto.js" type="text/javascript"></script>
+	<?php
+	$lang = getOption('locale');
+	if (file_exists($path.'js/jquery.datepicker.i18n/ui.datepicker-'.$lang.'.js')) {
+	} else {
+		$lang = substr($lang, 0, 2);
+		if (!file_exists($path.'js/jquery.datepicker.i18n/ui.datepicker-'.$lang.'.js')) {
+			$lang = '';
+		}
+	}
+	if (!empty($lang)) {
+		?>
+		<script src="<?php echo $path;?>js/jquery.datepicker.i18n/ui.datepicker-<?php echo $lang; ?>.js" type="text/javascript"></script>
+		<?php
+	}
+	?>
+	<link rel="stylesheet" href="<?php echo $path; ?>js/jquery.ui.all.css" type="text/css" />
+	<script type="text/javascript">
+		$.datepicker.setDefaults({ dateFormat: 'yy-mm-dd 00:00:00' });
+	</script>
+	<?php
+}
+
 /**
  * Print the header for all admin pages. Starts at <DOCTYPE> but does not include the </head> tag,
  * in case there is a need to add something further.
@@ -213,11 +238,7 @@ function printAdminHeader($path='') {
 	<script src="<?php echo $path; ?>js/jquery.js" type="text/javascript"></script>
 	<script src="<?php echo $path; ?>js/zenphoto.js.php" type="text/javascript" ></script>
 
-	<script src="<?php echo $path;?>js/jquery.ui.zenphoto.js" type="text/javascript"></script>
-	<script type="text/javascript">
-		$.datepicker.setDefaults($.datepicker.regional['<?php echo substr(getOption('locale'), 0, 2); ?>']);
-		$.datepicker.setDefaults({ dateFormat: 'yy-mm-dd' });
-	</script>
+	<?php datepickerJS($path); ?>
 
 	<script src="<?php echo $path; ?>js/admin.js" type="text/javascript" ></script>
 	<script src="<?php echo $path; ?>js/jquery.dimensions.js" type="text/javascript"></script>
@@ -966,13 +987,13 @@ function printAlbumEditForm($index, $album) {
 		$d = "";
 	}
   ?>
- <?php /*
+
 	<script type="text/javascript">
 		$(function() {
 			$("#datepicker_<?php echo $prefix; ?>").datepicker();
 		});
 	</script>
-*/ ?>
+
 	<tr>
 		<td align="left" valign="top"><?php echo gettext("Date:");?> </td> 
 		<td width="400">
