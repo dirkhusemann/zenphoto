@@ -86,10 +86,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'edit_file' && $file_to_edit 
 
 // Get file contents
 if ( $file_to_edit ) {
-	$f = @fopen($file_to_edit, 'r');
-	$file_content = @fread($f, filesize($file_to_edit));
+	$file_content = @file_get_contents ($file_to_edit);
 	$file_content = htmlspecialchars($file_content);
-	fclose($f);
 }
 
 ?>
@@ -134,7 +132,6 @@ if ( $file_to_edit ) {
 	
 
 	<?php if ($file_to_edit) { ?>
-
 		<div id="editor">
 			<h2 class="h2_bordered"><?php echo sprintf(gettext('File <tt>%s</tt> from theme %s'), $_GET['file'], $themes[$theme]['name']); ?></h2>
 			<form method="post" action="">
