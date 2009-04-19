@@ -245,5 +245,5 @@ function setDefault($option, $default) {
 	
 	setOptionDefault('thumb_gray', 0);
 	setOptionDefault('image_gray', 0);
-	
+	setOptionDefault('search_space_is_or', 0);
 ?>

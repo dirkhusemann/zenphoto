@@ -214,6 +214,7 @@ if (isset($_GET['action'])) {
 			setOption('gallery_hint', process_language_string_save('gallery_hint', 3));
 			setOption('search_hint', process_language_string_save('search_hint', 3));
 			setBoolOption('persistent_archive', isset($_POST['persistent_archive']));
+			setBoolOption('search_space_is_or', isset($_POST['search_space_is_or']));
 			setBoolOption('album_session', isset($_POST['album_session']));
 			$oldloc = getOption('locale', true); // get the option as stored in the database, not what might have been set by a cookie
 			$newloc = sanitize($_POST['locale'],3);
@@ -1181,7 +1182,7 @@ if (empty($alterrights)) {
 			</td>
 		</tr>
 		<tr>
-			<td><?php echo gettext("Search fields:"); ?></td>
+			<td><?php echo gettext("Search behavior settings:"); ?></td>
 			<td>
 			<?php 
 			$exact = '<input type="radio" id="exact_tags" name="tag_match" value="1" ';
@@ -1198,20 +1199,26 @@ if (empty($alterrights)) {
 			$fields[SEARCH_TAGS] .= $exact.$partial;
 			$fields = array_flip($fields);
 			$set_fields = $engine->allowedSearchFields();
-			echo '<ul class="searchchecklist">'."\n";
-			generateUnorderedListFromArray($set_fields, $fields, '_SEARCH_', false, true, true);
-			echo '</ul>';
+			echo gettext('Fields list:');
 			?>
+				<ul class="searchchecklist">
+					<?php
+					generateUnorderedListFromArray($set_fields, $fields, '_SEARCH_', false, true, true);
+					?>
+				</ul>
+			</p>
+			<p><input type="checkbox" name="search_space_is_or" value="1" <?php echo checked('1', getOption('search_space_is_or')); ?> /> <?php echo gettext('Treat spaces as <em>OR</em>') ?></p>
 			</td>
 			<td>
-				<p><?php echo gettext("The set of fields on which searches may be performed."); ?></p>
-				<p><?php echo gettext("Search does partial matches on all fields with the possible exception of <em>Tags</em>. This means that if the field contains the search criteria anywhere within it a result will be returned. If <em>exact</em> is selected for <em>Tags</em> then the search criteria must exactly match the tag for a result to be returned.") ?></p>
+				<p><?php echo gettext('Search behavior settings.') ?></p>
+				<p><?php echo gettext("<em>Field list</em> is the set of fields on which searches may be performed."); ?></p>
+				<p><?php echo gettext("Search does partial matches on all fields selected with the possible exception of <em>Tags</em>. This means that if the field contains the search criteria anywhere within it a result will be returned. If <em>exact</em> is selected for <em>Tags</em> then the search criteria must exactly match the tag for a result to be returned.") ?></p>
+				<p><?php echo gettext('Setting <code>Treat spaces as <em>OR</em></code> will cause search to trigger on any of the words in a string separated by spaces. Leaving the option unchecked will treat the whole string as a search target.') ?></p>
 			</td>
 		</tr>
 		<tr>
 			<td><?php echo gettext("Enable Persistent Archives:"); ?></td>
-			<td><input type="checkbox" name="persistent_archive" value="1"
-			<?php echo checked('1', getOption('persistent_archive')); ?> /></td>
+			<td><input type="checkbox" name="persistent_archive" value="1" <?php echo checked('1', getOption('persistent_archive')); ?> /></td>
 			<td><?php echo gettext("Put a checkmark here to re-serve Zip Archive files if you are using the optional template function <em>printAlbumZip()</em> to enable visitors of your site to download images of an album as .zip files. If not checked	that .zip file will be regenerated each time."); ?>
 			<?php echo gettext("<strong>Note: </strong>Setting	this option may impact password protected albums!"); ?></td>
 		</tr>

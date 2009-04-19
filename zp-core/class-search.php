@@ -211,6 +211,7 @@ class SearchEngine
 	 */
 	function getSearchString() {
 		$searchstring = trim($this->words);
+		$space_is_OR = getOption('search_space_is_or');
 		$opChars = array ('&'=>1, '|'=>1, '!'=>1, ','=>1, '('=>2);
 		$c1 = ' ';
 		$result = array();
@@ -231,6 +232,12 @@ class SearchEngine
 					}
 					$c1 = $c;
 					break;
+				case ' ':
+					if (!$space_is_OR) {
+						$c1 = $c;
+						$target .= $c;
+						break;
+					}
 				case ',':
 					if (!empty($target)) {
 						$r = trim($target);
