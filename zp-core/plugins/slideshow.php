@@ -16,13 +16,13 @@
  * NOTE: The jQuery mode does not support movie and audio files anymore. If you need to show them please use the Flash mode.
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)
- * @version 1.0.6.6
+ * @version 1.0.6.7
  * @package plugins
  */
 
 $plugin_description = gettext("Adds a theme function to call a slideshow either based on jQuery (default) or Flash using Flowplayer if installed. Additionally the files <em>slideshow.php</em>, <em>slideshow.css</em> and <em>slideshow-controls.png</em> need to be present in the theme folder.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard), Don Peterson (dpeterson)";
-$plugin_version = '1.0.6.6';
+$plugin_version = '1.0.6.7';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---slideshow.php.html";
 $option_interface = new slideshowOptions();
 
@@ -228,7 +228,6 @@ function printSlideShow($heading = true, $speedctl = false) {
 							}
 							$ext = $player->is_valid($filename);
 							if ($ext) {
-								$cntr++;
 								// 2008-08-02 acrylian: This at least make the urls correct, the flashplayer does not load anyway...
 								if (($ext == ".flv") || ($ext == ".mp3") || ($ext == ".mp4")) {
 									$img = FULLWEBPATH.'/albums/'.pathurlencode($image->album->name) .'/'. urlencode($filename);
@@ -247,10 +246,11 @@ function printSlideShow($heading = true, $speedctl = false) {
 								}
 								if ($idx == $numberofimages - 1) { $idx = -1; }
 								echo 'ImageNameList[' . $cntr . '] = "'.urlencode($filename).'";'. "\n";
+								$cntr++;
 							}
 						}
 						echo "\n";
-						$numberofimages = $cntr+1;
+						$numberofimages = $cntr;
 						?>
 						var countOffset = <?php echo $imagenumber; ?>;
 						var totalSlideCount = <?php echo $numberofimages; ?>;
