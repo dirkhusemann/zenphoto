@@ -104,9 +104,10 @@ if (isset($_GET['action'])) {
 			}
 			$returntab = "&tab=admin";
 		}
-
-		/*** Gallery options ***/
-		if (isset($_POST['savegalleryoptions'])) {
+		
+		/*** General options ***/
+		if (isset($_POST['savegeneraloptions'])) {
+			
 			if (isset($_POST['allowed_tags_reset'])) {
 				setOption('allowed_tags', getOption('allowed_tags_default'));
 			} else {
@@ -120,16 +121,46 @@ if (isset($_GET['action'])) {
 					$notify = '?tag_parse_error';
 				}
 			}
+			setBoolOption('mod_rewrite', isset($_POST['mod_rewrite']));
+			setOption('mod_rewrite_image_suffix', sanitize($_POST['mod_rewrite_image_suffix'],3));
+			setOption('time_offset', sanitize($_POST['time_offset'],3));
+			setOption('server_protocol', sanitize($_POST['server_protocol'],3));
+			setOption('charset', sanitize($_POST['charset']),3);
+			$oldloc = getOption('locale', true); // get the option as stored in the database, not what might have been set by a cookie
+			$newloc = sanitize($_POST['locale'],3);
+			if ($newloc != $oldloc) {
+				$cookiepath = WEBPATH;
+				if (WEBPATH == '') { $cookiepath = '/'; }
+				zp_setCookie('dynamic_locale', $newloc, time()-368000, $cookiepath);  // clear the language cookie
+				$encoding = getOption('charset');
+				if (empty($encoding)) $encoding = 'UTF-8';
+				$result = setlocale(LC_ALL, $newloc.'.'.$encoding, $newloc);
+				if (!empty($newloc) && ($result === false)) {
+					$notify = '?local_failed='.$newloc;
+				}
+				setOption('locale', $newloc);
+			}
+			setBoolOption('multi_lingual', isset($_POST['multi_lingual']));
+			$f = sanitize($_POST['date_format_list'],3);
+			if ($f == 'custom') $f = sanitize($_POST['date_format'],3);
+			setOption('date_format', $f);
+			setBoolOption('UTF8_image_URI', isset($_POST['UTF8_image_URI']));
+			setOption('captcha', sanitize($_POST['captcha']));
+			
+			$returntab = "&tab=general";
+		}
+			
+		/*** Gallery options ***/
+		if (isset($_POST['savegalleryoptions'])) {
+			setBoolOption('persistent_archive', isset($_POST['persistent_archive']));
+			setBoolOption('album_session', isset($_POST['album_session']));
+			setBoolOption('thumb_select_images', isset($_POST['thumb_select_images']));
+			setOption('login_user_field', isset($_POST['login_user_field']));
 			setOption('gallery_title', process_language_string_save('gallery_title', 2));
 			setoption('Gallery_description', process_language_string_save('Gallery_description', 1));
 			setOption('website_title', process_language_string_save('website_title', 2));
 			$web = sanitize($_POST['website_url'],3);
 			setOption('website_url', $web);
-			setOption('time_offset', sanitize($_POST['time_offset'],3));
-			setBoolOption('mod_rewrite', isset($_POST['mod_rewrite']));
-			setOption('mod_rewrite_image_suffix', sanitize($_POST['mod_rewrite_image_suffix'],3));
-			setOption('server_protocol', sanitize($_POST['server_protocol'],3));
-			setOption('charset', sanitize($_POST['charset']),3);
 			setBoolOption('album_use_new_image_date', isset($_POST['album_use_new_image_date']));
 			$st = strtolower(sanitize($_POST['gallery_sorttype'],3));
 			if ($st == 'custom') $st = strtolower(sanitize($_POST['customalbumsort'],3));
@@ -139,23 +170,6 @@ if (isset($_GET['action'])) {
 			} else {
 				setBoolOption('gallery_sortdirection', isset($_POST['gallery_sortdirection']));
 			}
-			setOption('feed_items', sanitize($_POST['feed_items'],3));
-			setOption('feed_imagesize', sanitize($_POST['feed_imagesize'],3));
-			setOption('feed_sortorder', sanitize($_POST['feed_sortorder'],3));
-			setOption('feed_items_albums', sanitize($_POST['feed_items_albums'],3));
-			setOption('feed_imagesize_albums', sanitize($_POST['feed_imagesize_albums'],3));
-			setOption('feed_sortorder_albums', sanitize($_POST['feed_sortorder_albums'],3));
-			setBoolOption('feed_enclosure', isset($_POST['feed_enclosure']));
-			setBoolOption('feed_mediarss', isset($_POST['feed_mediarss']));
-			setBoolOption('login_user_field', isset($_POST['login_user_field']));
-			$searchfields = 0;
-			foreach ($_POST as $key=>$value) {
-				if (strpos($key, '_SEARCH_') !== false) {
-					$searchfields = $searchfields | $value;
-				}
-			}
-			setOption('search_fields', $searchfields);
-			setOption('exact_tag_match', sanitize($_POST['tag_match']));
 			$olduser = getOption('gallery_user');
 			$newuser = sanitize($_POST['gallery_user'],3);
 			if (!empty($newuser)) setOption('login_user_field', 1);
@@ -184,6 +198,20 @@ if (isset($_GET['action'])) {
 					$notify = $fail;
 				}
 			}
+			setOption('gallery_hint', process_language_string_save('gallery_hint', 3));
+			$returntab = "&tab=gallery";
+		}
+
+		/*** Search options ***/
+		if (isset($_POST['savesearchoptions'])) {
+			$searchfields = 0;
+			foreach ($_POST as $key=>$value) {
+				if (strpos($key, '_SEARCH_') !== false) {
+					$searchfields = $searchfields | $value;
+				}
+			}
+			setOption('search_fields', $searchfields);
+			setOption('exact_tag_match', sanitize($_POST['tag_match']));
 			$olduser = getOption('search_user');
 			$newuser = sanitize($_POST['search_user'],3);
 			if (!empty($newuser)) setOption('login_user_field', 1);
@@ -211,35 +239,24 @@ if (isset($_GET['action'])) {
 					$notify = $fail;
 				}
 			}
-			setOption('gallery_hint', process_language_string_save('gallery_hint', 3));
 			setOption('search_hint', process_language_string_save('search_hint', 3));
-			setBoolOption('persistent_archive', isset($_POST['persistent_archive']));
 			setBoolOption('search_space_is_or', isset($_POST['search_space_is_or']));
-			setBoolOption('album_session', isset($_POST['album_session']));
-			$oldloc = getOption('locale', true); // get the option as stored in the database, not what might have been set by a cookie
-			$newloc = sanitize($_POST['locale'],3);
-			if ($newloc != $oldloc) {
-				$cookiepath = WEBPATH;
-				if (WEBPATH == '') { $cookiepath = '/'; }
-				zp_setCookie('dynamic_locale', $newloc, time()-368000, $cookiepath);  // clear the language cookie
-				$encoding = getOption('charset');
-				if (empty($encoding)) $encoding = 'UTF-8';
-				$result = setlocale(LC_ALL, $newloc.'.'.$encoding, $newloc);
-				if (!empty($newloc) && ($result === false)) {
-					$notify = '?local_failed='.$newloc;
-				}
-				setOption('locale', $newloc);
-			}
-			setBoolOption('multi_lingual', isset($_POST['multi_lingual']));
-			$f = sanitize($_POST['date_format_list'],3);
-			if ($f == 'custom') $f = sanitize($_POST['date_format'],3);
-			setOption('date_format', $f);
-			setBoolOption('UTF8_image_URI', isset($_POST['UTF8_image_URI']));
-			setBoolOption('thumb_select_images', isset($_POST['thumb_select_images']));
-			setOption('captcha', sanitize($_POST['captcha']));
-			$returntab = "&tab=gallery";
+			$returntab = "&tab=search";
 		}
-
+		
+		/*** RSS options ***/
+		if (isset($_POST['saverssoptions'])) {
+			setOption('feed_items', sanitize($_POST['feed_items'],3));
+			setOption('feed_imagesize', sanitize($_POST['feed_imagesize'],3));
+			setOption('feed_sortorder', sanitize($_POST['feed_sortorder'],3));
+			setOption('feed_items_albums', sanitize($_POST['feed_items_albums'],3));
+			setOption('feed_imagesize_albums', sanitize($_POST['feed_imagesize_albums'],3));
+			setOption('feed_sortorder_albums', sanitize($_POST['feed_sortorder_albums'],3));
+			setBoolOption('feed_enclosure', isset($_POST['feed_enclosure']));
+			setBoolOption('feed_mediarss', isset($_POST['feed_mediarss']));
+			$returntab = "&tab=rss";
+		}
+		
 		/*** Image options ***/
 		if (isset($_POST['saveimageoptions'])) {
 			setOption('image_quality', sanitize($_POST['image_quality'],3));
@@ -432,20 +449,26 @@ printAdminHeader();
 <link rel="stylesheet" href="js/farbtastic.css" type="text/css" />
 <?php
 $_zp_null_account = (($_zp_loggedin == ADMIN_RIGHTS) || $_zp_reset_admin);
-$tabs = array(gettext("admin information")=>'admin-options.php?tab=admin');
+$tabs = array(gettext("admin")=>'admin-options.php?tab=admin');
 if (!$_zp_null_account) {
 	if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
-		$tabs[gettext("gallery configuration")] = 'admin-options.php?tab=gallery';
-		$tabs[gettext("image display")] = 'admin-options.php?tab=image';
-		$tabs[gettext("comment configuration")] = 'admin-options.php?tab=comments';
+		$tabs[gettext("gallery")] = 'admin-options.php?tab=gallery';
+		$tabs[gettext("general")] = 'admin-options.php?tab=general';
+		$tabs[gettext("search")] = 'admin-options.php?tab=search';
+		$tabs[gettext("rss")] = 'admin-options.php?tab=rss';
+		$tabs[gettext("image")] = 'admin-options.php?tab=image';
+		$tabs[gettext("comment")] = 'admin-options.php?tab=comments';
 	}
 	if ($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
-		$tabs[gettext("theme options")] = 'admin-options.php?tab=theme';
+		$tabs[gettext("theme")] = 'admin-options.php?tab=theme';
 	}
 	if ($_zp_loggedin & ADMIN_RIGHTS) {
-		$tabs[gettext("plugin options")] = 'admin-options.php?tab=plugin';
+		$tabs[gettext("plugin")] = 'admin-options.php?tab=plugin';
 	}
 }
+$flipped = array_flip($tabs);
+natsort($flipped);
+$tabs = array_flip($flipped);
 $subtab = getSubtabs($tabs);
 if ($subtab == 'gallery' || $subtab == 'image') {
 	$sql = 'SHOW COLUMNS FROM ';
@@ -825,14 +848,359 @@ if (empty($alterrights)) {
 </div>
 <!-- end of tab_admin div -->
 
+
 <?php
 } else if (!$_zp_null_account) {
+	if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
+	?>
+	<div id="tab_gallery" class="box" style="padding: 15px;">
+		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
+		<input	type="hidden" name="savegeneraloptions" value="yes" />
+			<table class="bordered">
+				<tr>
+					<td></td>
+					<td>
+					<p class="buttons">
+					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+					</p>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td width="175"><?php echo gettext("Server protocol:"); ?></td>
+					<td width="350"><input type="text" size="10" name="server_protocol"
+						value="<?php echo htmlspecialchars(getOption('server_protocol'));?>" /></td>
+					<td><?php echo gettext("If you're running a secure server, change this to"); ?> <em>https</em>
+					<?php echo gettext("(Most people will leave this alone.)"); ?></td>
+				</tr>
+				<tr>
+					<td><?php echo gettext("Time offset (hours):"); ?></td>
+					<td><input type="text" size="3" name="time_offset"
+						value="<?php echo htmlspecialchars(getOption('time_offset'));?>" /></td>
+					<td>
+						<p><?php
+							if (function_exists('date_default_timezone_get')) { 
+								printf(gettext('Your server reports its timezone as: <code>%s</code>.'),date_default_timezone_get()); 
+							} 
+						?></p>
+						<p><?php echo gettext("If you're in a different time zone from your server, set the	offset in hours of your timezone from that of the server. For instance if your server is on the US East Coast (<em>GMT</em> - 5) and you are on the Pacific Coast (<em>GMT</em> - 8), set the offset to 3 (-5 - (-8))."); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<td><?php echo gettext("URL options:"); ?></td>
+					<td>
+						<p><input type="checkbox" name="mod_rewrite" value="1"<?php echo checked('1', getOption('mod_rewrite')); ?> /> <?php echo gettext('mod rewrite'); ?></p>
+						<p><input type="checkbox" name="UTF8_image_URI" value="1"<?php echo checked('1', getOption('UTF8_image_URI')); ?> /> <?php echo gettext('UTF8 image URIs'); ?></p>
+						<p><?php echo gettext("mod_rewrite suffix:"); ?> <input type="text" size="10" name="mod_rewrite_image_suffix" value="<?php echo htmlspecialchars(getOption('mod_rewrite_image_suffix'));?>" /></p>
+					</td>
+					<td>
+						<p><?php echo gettext("If you have Apache <em>mod rewrite</em>, put a checkmark on the <em>mod rewrite</em> option, and	you'll get nice cruft-free URLs."); ?></p>
+						<p><?php echo gettext("If you are having problems with images who's names with contain accented characters try changing the <em>UTF8 image URIs</em> setting."); ?></p>
+						<p><?php echo gettext("If <em>mod_rewrite</em> is checked above, zenphoto will appended	the <em>mod_rewrite suffix</em> to the end of image URLs. (This helps search engines.) Examples: <em>.html, .php,	/view</em>, etc."); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<td><?php echo gettext("Language:"); ?></td>
+					<td><select id="locale" name="locale">
+						<?php	generateLanguageOptionList(true);	?>
+					</select>
+					<input type="checkbox" name="multi_lingual" value="1"	<?php echo checked('1', getOption('multi_lingual')); ?> />
+					<?php echo gettext('Multi-lingual'); ?>
+					</td>
+					<td>
+						<p><?php echo gettext("The language to display text in. (Set to <em>HTTP Accept Language</em> to use the language preference specified by the viewer's browser.)"); ?></p>
+						<p><?php echo gettext("Set <em>Multi-lingual</em> to enable multiple languages for database fields."); ?></p>
+						<p><?php echo gettext("<strong>Note:</strong> if you have created multi-language strings, uncheck this option, then save anything, you will lose your strings."); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<td><?php echo gettext("Date format:"); ?></td>
+					<td>
+						<select id="date_format_list" name="date_format_list" onchange="showfield(this, 'customTextBox')">
+						<?php
+						$formatlist = array(gettext('Custom')=>'custom',
+								gettext('02/25/08 15:30')=>'%d/%m/%y %H:%M',
+								gettext('02/25/08')=>'%d/%m/%y',
+								gettext('02/25/2008 15:30')=>'%d/%m/%Y %H:%M',
+								gettext('02/25/2008')=>'%d/%m/%Y',
+								gettext('02-25-08 15:30')=>'%d-%m-%y %H:%M',
+								gettext('02-25-08')=>'%d-%m-%y',
+								gettext('02-25-2008 15:30')=>'%d-%m-%Y %H:%M',
+								gettext('02-25-2008')=>'%d-%m-%Y',
+								gettext('2008. February 25. 15:30')=>'%Y. %B %d. %H:%M',
+								gettext('2008. February 25.')=>'%Y. %B %d.',
+								gettext('2008-02-25 15:30')=>'%Y-%m-%d %H:%M',
+								gettext('2008-02-25')=>'%Y-%m-%d',
+								gettext('25 Feb 2008 15:30')=>'%d %B %Y %H:%M',
+								gettext('25 Feb 2008')=>'%d %B %Y',
+								gettext('25 February 2008 15:30')=>'%d %B %Y %H:%M',
+								gettext('25 February 2008')=>'%d %B %Y',
+								gettext('25. Feb 2008 15:30')=>'%d. %B %Y %H:%M',
+								gettext('25. Feb 2008')=>'%d. %B %Y',
+								gettext('25. Feb. 08 15:30')=>'%d. %b %y %H:%M',
+								gettext('25. Feb. 08')=>'%d. %b %y',
+								gettext('25. February 2008 15:30')=>'%d. %B %Y %H:%M',
+								gettext('25. February 2008')=>'%d. %B %Y',
+								gettext('25.02.08 15:30')=>'%d.%m.%y %H:%M',
+								gettext('25.02.08')=>'%d.%m.%y',
+								gettext('25.02.2008 15:30')=>'%d.%m.%Y %H:%M',
+								gettext('25.02.2008')=>'%d.%m.%Y',
+								gettext('25-02-08 15:30')=>'%d-%m-%y %H:%M',
+								gettext('25-02-08')=>'%d-%m-%y',
+								gettext('25-02-2008 15:30')=>'%d-%m-%Y %H:%M',
+								gettext('25-02-2008')=>'%d-%m-%Y',
+								gettext('25-Feb-08 15:30')=>'%d-%b-%y %H:%M',
+								gettext('25-Feb-08')=>'%d-%b-%y',
+								gettext('25-Feb-2008 15:30')=>'%d-%b-%Y %H:%M',
+								gettext('25-Feb-2008')=>'%d-%b-%Y',
+								gettext('Feb 25, 2008 15:30')=>'%b %d, %Y %H:%M',
+								gettext('Feb 25, 2008')=>'%b %d, %Y',
+								gettext('February 25, 2008 15:30')=>'%B %d, %Y %H:%M',
+								gettext('February 25, 2008')=>'%B %d, %Y');
+						$cv = getOption("date_format");
+						$flip = array_flip($formatlist);
+						if (isset($flip[$cv])) {
+							$dsp = 'none';
+						} else {
+							$dsp = 'block';
+						}
+						if (array_search($cv, $formatlist) === false) $cv = 'custom';
+						generateListFromArray(array($cv), $formatlist, false, true);
+						?>
+						</select><br />
+						<div id="customTextBox" class="customText" style="display:<?php echo $dsp; ?>">
+						<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="date_format"
+						value="<?php echo htmlspecialchars(getOption('date_format'));?>" />
+						</div>
+						</td>
+					<td><?php echo gettext('Format for dates. Select from the list or set to <code>custom</code> and provide a <a href="http://us2.php.net/manual/en/function.strftime.php"><code>strftime()</code></a> format string in the text box.'); ?></td>
+				</tr>
+				<tr>
+					<td><?php echo gettext("Charset:"); ?></td>
+					<td><select id="charset" name="charset">
+						<?php generateListFromArray(array(getOption('charset')), array_flip($charsets), false, true) ?>
+					</select></td>
+					<td><?php echo gettext("The character encoding to use internally. Leave at <em>Unicode	(UTF-8)</em> if you're unsure."); ?></td>
+				</tr>
+				<tr>
+					<td><?php echo gettext('Captcha generator:'); ?></td>
+					<td>
+						<select id="captcha" name="captcha">
+						<?php generateListFromFiles(getOption('captcha'), SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . 'captcha', '.php'); ?>
+						</select>
+					</td>
+					<td><?php echo gettext('Select the <em>Captcha</em> generator to be used by Zenphoto.'); ?></td>
+				</tr>
+				<?php customOptions($_zp_captcha, "&nbsp;&nbsp;&nbsp;-&nbsp;"); ?>
+				<tr>
+					<td><?php echo gettext("Allowed tags:"); ?></td>
+					<td>
+						<textarea name="allowed_tags" style="width: 310px" rows="10"><?php echo htmlspecialchars(getOption('allowed_tags')); ?></textarea>
+						<br />
+						<input type="checkbox" name="allowed_tags_reset" value="1" /><?php echo gettext('restore default allowed tags'); ?>
+					</td>
+					<td><?php echo gettext("Tags and attributes allowed in comments, descriptions, and other fields."); ?>
+					<br />
+					<?php echo gettext("Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"); ?>
+					<br />
+					<?php echo gettext('Check <em>restore default allowed tags</em> to reset allowed tags to the zenphoto default values.') ?>
+					</td>
+				</tr>			
+				<tr>
+					<td></td>
+					<td>
+					<p class="buttons">
+					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+					</p>
+					</td>
+					<td></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<!-- end of tab-general div -->
+	<?php
+	}
 	if ($subtab == 'gallery' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	?>
 	<div id="tab_gallery" class="box" style="padding: 15px;">
 		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
-		<input	type="hidden" name="savegalleryoptions" value="yes" /> <?php
-		?>
+		<input	type="hidden" name="savegalleryoptions" value="yes" />
+			<table class="bordered">
+				<tr>
+					<td></td>
+					<td>
+					<p class="buttons">
+					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+					</p>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td width="175"><?php echo gettext("Gallery title:"); ?></td>
+					<td width="350">
+					<?php print_language_string_list(getOption('gallery_title'), 'gallery_title', false) ?>
+					</td>
+					<td><?php echo gettext("What you want to call your photo gallery."); ?></td>
+				</tr>
+				<tr>
+					<td width="175"><?php echo gettext("Gallery description:"); ?></td>
+					<td width="350">
+					<?php print_language_string_list(getOption('Gallery_description'), 'Gallery_description', true, NULL, 'texteditor') ?>
+					</td>
+					<td><?php echo gettext("A brief description of your gallery. Some themes may display this text."); ?></td>
+				</tr>
+				<tr>
+					<td><?php echo gettext("Gallery guest user:"); ?>    </td>
+					<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallery_user" value="<?php echo htmlspecialchars(getOption('gallery_user')); ?>" />		</td>
+					<td><?php echo gettext("User ID for the gallery guest user") ?></td>
+				</tr>
+				<tr>
+					<td><?php echo gettext("Gallery password:"); ?><br />
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php gettext("(repeat)"); ?>
+					</td>
+					<td>
+					<?php $x = getOption('gallery_password'); if (!empty($x)) { $x = '          '; } ?>
+					<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallerypass"
+						value="<?php echo $x; ?>" /><br />
+					<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallerypass_2"
+						value="<?php echo $x; ?>" /></td>
+					<td><?php echo gettext("Master password for the gallery. If this is set, visitors must know this password to view the gallery."); ?></td>
+				</tr>
+				<tr>
+					<td><?php echo gettext("Gallery password hint:"); ?></td>
+					<td>
+					<?php print_language_string_list(getOption('gallery_hint'), 'gallery_hint', false) ?>
+					</td>
+					<td><?php echo gettext("A reminder hint for the password."); ?></td>
+				</tr>
+				<tr>
+					<td><?php echo gettext("Website title:"); ?></td>
+					<td>
+					<?php print_language_string_list(getOption('website_title'), 'website_title', false) ?>
+					</td>
+					<td><?php echo gettext("Your web site title."); ?></td>
+				</tr>
+				<tr>
+					<td><?php echo gettext("Website url:"); ?></td>
+					<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="website_url"
+						value="<?php echo htmlspecialchars(getOption('website_url'));?>" /></td>
+					<td><?php echo gettext("This is used to link back to your main site, but your theme must	support it."); ?></td>
+				</tr>
+				<tr>
+					<td><?php echo gettext("Sort gallery by:"); ?></td>
+					<td>
+						<?php
+						$sort = $sortby;
+						$sort[gettext('Manual')] = 'manual';
+						$sort[gettext('Custom')] = 'custom';
+						$cvt = $cv = strtolower(getOption('gallery_sorttype'));
+						ksort($sort);
+						$flip = array_flip($sort);
+						if (isset($flip[$cv])) {
+							$dspc = 'none';
+						} else {
+							$dspc = 'block';
+						}
+						if (($cv == 'manual') || ($cv == '')) {
+							$dspd = 'none';
+						} else {
+							$dspd = 'block';
+						}
+						?>
+						<table>
+							<tr>
+								<td>
+									<select id="sortselect" name="gallery_sorttype" onchange="update_direction(this,'gallery_sortdirection','customTextBox2')">
+									<?php
+									if (array_search($cv, $sort) === false) $cv = 'custom';
+									generateListFromArray(array($cv), $sort, false, true);
+									?>
+									</select>
+								</td>
+								<td>
+									<span id="gallery_sortdirection" style="display:<?php echo $dspd; ?>">
+									<input type="checkbox" name="gallery_sortdirection"	value="1" <?php echo checked('1', getOption('gallery_sortdirection')); ?> />&nbsp;<?php echo gettext("Descending"); ?>
+									</span>
+									</td>
+								</tr>
+							<tr>
+								<td colspan="2">
+									<span id="customTextBox2" class="customText" style="display:<?php echo $dspc; ?>">
+									<?php echo gettext('custom fields:') ?>
+									<input id="customalbumsort" name="customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
+									</span>
+								</td>
+							</tr>
+						</table>
+					</td>
+					<td>
+						<?php
+						echo gettext('Sort order for the albums on the index of the gallery. Custom sort values must be database field names. You can have multiple fields separated by commas. This option is also the default sort for albums and subalbums.');
+						?>
+					</td>
+				</tr>
+				<tr>
+					<td><?php echo gettext("Gallery behavior:"); ?></td>
+					<td>
+					<p><input type="checkbox" name="album_use_new_image_date" value="1" <?php echo checked('1', getOption('album_use_new_image_date')); ?> /> <?php echo gettext("Use latest image date as album date"); ?></p>
+					<p><input type="checkbox" name="login_user_field" value="1" <?php echo checked('1', getOption('login_user_field')); ?> /> <?php echo gettext("enable user name login field"); ?></p>
+					<p><input type="checkbox" name="thumb_select_images" value="1" <?php echo checked('1', getOption('thumb_select_images')); ?> /> <?php echo gettext("visual thumb selection"); ?></p>
+					<p><input type="checkbox" name="persistent_archive" value="1" <?php echo checked('1', getOption('persistent_archive')); ?> /> <?php echo gettext("enable persistent archives"); ?></p>
+					<p><input type="checkbox" name="album_session" value="1" <?php echo checked('1', getOption('album_session')); ?> /> <?php echo gettext("enable gallery sessions"); ?></p>					
+					</td>
+					<td>
+						<p><?php  echo gettext("<a href=\"javascript: toggle('albumdate');\" >Details</a> for <em>use latest image date as album date</em>" ); ?></p>
+						<div id="albumdate" style="display: none">
+							<p><?php echo gettext("If you wish your album date to reflect the date of the latest image uploaded set set this option. Otherwise the date will be set initially to the date the album was created.") ?></p>
+						</div>
+
+						<p><?php  echo gettext("<a href=\"javascript: toggle('username');\" >Details</a> for <em>enable user name login field</em>" ); ?></p>
+						<div id="username" style="display: none">
+						<p><?php echo gettext("This option places a field on the gallery (search, album) login form for entering a user name. This is necessary if you have set guest login user names. It is also useful to allow Admin users to log in on these pages rather than at the Admin login."); ?></p>
+						</div>
+
+						<p><?php  echo gettext("<a href=\"javascript: toggle('visualthumb');\" >Details</a> for <em>visual thumb selection</em>" ); ?></p>
+						<div id="visualthumb" style="display: none">
+						<p><?php echo gettext("Setting this places thumbnails in the album thumbnail selection list (the dropdown list on each album's edit page). In Firefox the dropdown shows the thumbs, but in IE and Safari only the names are displayed (even if the thumbs are loaded!). In albums with many images loading these thumbs takes much time and is unnecessary when the browser won't display them. Uncheck this option and the images will not be loaded. "); ?></p>
+						</div>
+
+						<p><?php  echo gettext("<a href=\"javascript: toggle('persistentarchive');\" >Details</a> for <em>enable persistent archive</em>" ); ?></p>
+						<div id="persistentarchive" style="display: none">
+						<p><?php echo gettext("Put a checkmark here to re-serve Zip Archive files if you are using the optional template function <em>printAlbumZip()</em> to enable visitors of your site to download images of an album as .zip files. If not checked	that .zip file will be regenerated each time."); ?>
+							<?php echo gettext("<strong>Note: </strong>Setting	this option may impact password protected albums!"); ?></p>
+						</div>
+
+						<p><?php  echo gettext("<a href=\"javascript: toggle('gallerysessions');\" >Details</a> for <em>enable gallery sessions</em>" ); ?></p>
+						<div id="gallerysessions" style="display: none">
+						<p><?php echo gettext("Check this option if you are having issues with album password cookies not being retained. Setting the option causes zenphoto to use sessions rather than cookies."); ?></p>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+					<p class="buttons">
+					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+					</p>
+					</td>
+					<td></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<!-- end of tab-gallery div -->
+	<?php
+	}
+	if ($subtab == 'search' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
+	?>
+	<div id="tab_search" class="box" style="padding: 15px;">
+		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
+		<input	type="hidden" name="savesearchoptions" value="yes" />
 	<table class="bordered">
 		<tr>
 			<td></td>
@@ -845,52 +1213,8 @@ if (empty($alterrights)) {
 			<td></td>
 		</tr>
 		<tr>
-			<td width="175"><?php echo gettext("Gallery title:"); ?></td>
-			<td width="350">
-			<?php print_language_string_list(getOption('gallery_title'), 'gallery_title', false) ?>
-			</td>
-			<td><?php echo gettext("What you want to call your photo gallery."); ?></td>
-		</tr>
-		<tr>
-			<td width="175"><?php echo gettext("Gallery description:"); ?></td>
-			<td width="350">
-			<?php print_language_string_list(getOption('Gallery_description'), 'Gallery_description', true, NULL, 'texteditor') ?>
-			</td>
-			<td><?php echo gettext("A brief description of your gallery. Some themes may display this text."); ?></td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Enable user name login field:"); ?></td>
-			<td><input type="checkbox" name="login_user_field" value="1"
-			<?php echo checked('1', getOption('login_user_field')); ?> /></td>
-			<td><?php echo gettext("This option places a field on the gallery (search, album) login form for entering a user name. This is necessary if you have set guest login user names. It is also useful to allow Admin users to log in on these pages rather than at the Admin login."); ?></td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Gallery guest user:"); ?>    </td>
-			<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallery_user" value="<?php echo htmlspecialchars(getOption('gallery_user')); ?>" />		</td>
-			<td><?php echo gettext("User ID for the gallery guest user") ?></td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Gallery password:"); ?><br />
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php gettext("(repeat)"); ?>
-			</td>
-			<td>
-			<?php $x = getOption('gallery_password'); if (!empty($x)) { $x = '          '; } ?>
-			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallerypass"
-				value="<?php echo $x; ?>" /><br />
-			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallerypass_2"
-				value="<?php echo $x; ?>" /></td>
-			<td><?php echo gettext("Master password for the gallery. If this is set, visitors must know this password to view the gallery."); ?></td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Gallery password hint:"); ?></td>
-			<td>
-			<?php print_language_string_list(getOption('gallery_hint'), 'gallery_hint', false) ?>
-			</td>
-			<td><?php echo gettext("A reminder hint for the password."); ?></td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Search guest user:"); ?>    </td>
-			<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="search_user" value="<?php echo htmlspecialchars(getOption('search_user')); ?>" />		</td>
+			<td width="175"><?php echo gettext("Search guest user:"); ?>    </td>
+			<td width="350"><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="search_user" value="<?php echo htmlspecialchars(getOption('search_user')); ?>" />		</td>
 			<td><?php echo gettext("User ID for the search guest user") ?></td>
 		</tr>
 		<tr>
@@ -912,165 +1236,76 @@ if (empty($alterrights)) {
 			<td><?php echo gettext("A reminder hint for the password."); ?></td>
 		</tr>
 		<tr>
-			<td><?php echo gettext("Website title:"); ?></td>
+			<td><?php echo gettext("Search behavior settings:"); ?></td>
 			<td>
-			<?php print_language_string_list(getOption('website_title'), 'website_title', false) ?>
-			</td>
-			<td><?php echo gettext("Your web site title."); ?></td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Website url:"); ?></td>
-			<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="website_url"
-				value="<?php echo htmlspecialchars(getOption('website_url'));?>" /></td>
-			<td><?php echo gettext("This is used to link back to your main site, but your theme must	support it."); ?></td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Server protocol:"); ?></td>
-			<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="server_protocol"
-				value="<?php echo htmlspecialchars(getOption('server_protocol'));?>" /></td>
-			<td><?php echo gettext("If you're running a secure server, change this to"); ?> <em>https</em>
-			<?php echo gettext("(Most people will leave this alone.)"); ?></td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Time offset (hours):"); ?></td>
-			<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="time_offset"
-				value="<?php echo htmlspecialchars(getOption('time_offset'));?>" /></td>
-			<td>
-				<p><?php
-					if (function_exists('date_default_timezone_get')) { 
-						printf(gettext('Your server reports its timezone as: <code>%s</code>.'),date_default_timezone_get()); 
-					} 
-				?></p>
-				<p><?php echo gettext("If you're in a different time zone from your server, set the	offset in hours of your timezone from that of the server. For instance if your server is on the US East Coast (<em>GMT</em> - 5) and you are on the Pacific Coast (<em>GMT</em> - 8), set the offset to 3 (-5 - (-8))."); ?></p>
-			</td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("URL options:"); ?></td>
-			<td>
-			<input type="checkbox" name="mod_rewrite" value="1"<?php echo checked('1', getOption('mod_rewrite')); ?> /> <?php echo gettext('mod rewrite'); ?>
-			<br/>
-			<input type="checkbox" name="UTF8_image_URI" value="1"<?php echo checked('1', getOption('UTF8_image_URI')); ?> /> <?php echo gettext('UTF8 image URIs'); ?>
+			<?php 
+			$exact = '<input type="radio" id="exact_tags" name="tag_match" value="1" ';
+			$partial = '<input type="radio" id="exact_tags" name="tag_match" value="0" ';
+			if (getOption('exact_tag_match')) {
+				$exact .= ' CHECKED ';
+			} else {
+				$partial .= ' CHECKED ';
+			}
+			$exact .= '/>'. gettext('exact');
+			$partial .= '/>'. gettext('partial');
+			$engine = new SearchEngine();
+			$fields = array_flip($engine->zp_search_fields);
+			$fields[SEARCH_TAGS] .= $exact.$partial;
+			$fields = array_flip($fields);
+			$set_fields = $engine->allowedSearchFields();
+			echo gettext('Fields list:');
+			?>
+				<ul class="searchchecklist">
+					<?php
+					generateUnorderedListFromArray($set_fields, $fields, '_SEARCH_', false, true, true);
+					?>
+				</ul>
+			</p>
+			<p><input type="checkbox" name="search_space_is_or" value="1" <?php echo checked('1', getOption('search_space_is_or')); ?> /> <?php echo gettext('Treat spaces as <em>OR</em>') ?></p>
 			</td>
 			<td>
-				<p><?php echo gettext("If you have Apache <em>mod_rewrite</em>, put a checkmark on the <em>mod rewrite</em> option, and	you'll get nice cruft-free URLs."); ?></p>
-				<p><?php echo gettext("If you are having problems with images who's names with contain accented characters try changing the <em>UTF8 image URIs</em> setting."); ?></p>
+				<p><?php echo gettext('Search behavior settings.') ?></p>
+				<p><?php echo gettext("<em>Field list</em> is the set of fields on which searches may be performed."); ?></p>
+				<p><?php echo gettext("Search does partial matches on all fields selected with the possible exception of <em>Tags</em>. This means that if the field contains the search criteria anywhere within it a result will be returned. If <em>exact</em> is selected for <em>Tags</em> then the search criteria must exactly match the tag for a result to be returned.") ?></p>
+				<p><?php echo gettext('Setting <code>Treat spaces as <em>OR</em></code> will cause search to trigger on any of the words in a string separated by spaces. Leaving the option unchecked will treat the whole string as a search target.') ?></p>
 			</td>
 		</tr>
 		<tr>
-			<td><?php echo gettext("Mod_rewrite Image suffix:"); ?></td>
-			<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="mod_rewrite_image_suffix"
-				value="<?php echo htmlspecialchars(getOption('mod_rewrite_image_suffix'));?>" /></td>
-			<td><?php echo gettext("If <em>mod_rewrite</em> is checked above, zenphoto will appended	this to the end (helps search engines). Examples: <em>.html, .php,	/view</em>, etc."); ?></td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Language:"); ?></td>
-			<td><select id="locale" name="locale">
-				<?php	generateLanguageOptionList(true);	?>
-			</select>
-			<input type="checkbox" name="multi_lingual" value="1"	<?php echo checked('1', getOption('multi_lingual')); ?> />
-			<?php echo gettext('Multi-lingual'); ?>
-			</td>
+			<td></td>
 			<td>
-				<p><?php echo gettext("The language to display text in. (Set to <em>HTTP Accept Language</em> to use the language preference specified by the viewer's browser.)"); ?></p>
-				<p><?php echo gettext("Set <em>Multi-lingual</em> to enable multiple languages for database fields."); ?></p>
-				<p><?php echo gettext("<strong>Note:</strong> if you have created multi-language strings, uncheck this option, then save anything, you will lose your strings."); ?></p>
+			<p class="buttons">
+			<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+			<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+			</p>
 			</td>
+			<td></td>
 		</tr>
+	</table>
+	</form>
+	</div>
+	<!-- end of tab-search div -->
+ <?php
+	}
+	if ($subtab == 'rss' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
+	?>
+	<div id="tab_rss" class="box" style="padding: 15px;">
+		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
+		<input	type="hidden" name="saverssoptions" value="yes" />
+	<table class="bordered">
 		<tr>
-			<td><?php echo gettext("Date format:"); ?></td>
+			<td></td>
 			<td>
-				<select id="date_format_list" name="date_format_list" onchange="showfield(this, 'customTextBox')">
-				<?php
-				$formatlist = array(gettext('Custom')=>'custom',
-						gettext('02/25/08 15:30')=>'%d/%m/%y %H:%M',
-						gettext('02/25/08')=>'%d/%m/%y',
-						gettext('02/25/2008 15:30')=>'%d/%m/%Y %H:%M',
-						gettext('02/25/2008')=>'%d/%m/%Y',
-						gettext('02-25-08 15:30')=>'%d-%m-%y %H:%M',
-						gettext('02-25-08')=>'%d-%m-%y',
-						gettext('02-25-2008 15:30')=>'%d-%m-%Y %H:%M',
-						gettext('02-25-2008')=>'%d-%m-%Y',
-						gettext('2008. February 25. 15:30')=>'%Y. %B %d. %H:%M',
-						gettext('2008. February 25.')=>'%Y. %B %d.',
-						gettext('2008-02-25 15:30')=>'%Y-%m-%d %H:%M',
-						gettext('2008-02-25')=>'%Y-%m-%d',
-						gettext('25 Feb 2008 15:30')=>'%d %B %Y %H:%M',
-						gettext('25 Feb 2008')=>'%d %B %Y',
-						gettext('25 February 2008 15:30')=>'%d %B %Y %H:%M',
-						gettext('25 February 2008')=>'%d %B %Y',
-						gettext('25. Feb 2008 15:30')=>'%d. %B %Y %H:%M',
-						gettext('25. Feb 2008')=>'%d. %B %Y',
-						gettext('25. Feb. 08 15:30')=>'%d. %b %y %H:%M',
-						gettext('25. Feb. 08')=>'%d. %b %y',
-						gettext('25. February 2008 15:30')=>'%d. %B %Y %H:%M',
-						gettext('25. February 2008')=>'%d. %B %Y',
-						gettext('25.02.08 15:30')=>'%d.%m.%y %H:%M',
-						gettext('25.02.08')=>'%d.%m.%y',
-						gettext('25.02.2008 15:30')=>'%d.%m.%Y %H:%M',
-						gettext('25.02.2008')=>'%d.%m.%Y',
-						gettext('25-02-08 15:30')=>'%d-%m-%y %H:%M',
-						gettext('25-02-08')=>'%d-%m-%y',
-						gettext('25-02-2008 15:30')=>'%d-%m-%Y %H:%M',
-						gettext('25-02-2008')=>'%d-%m-%Y',
-						gettext('25-Feb-08 15:30')=>'%d-%b-%y %H:%M',
-						gettext('25-Feb-08')=>'%d-%b-%y',
-						gettext('25-Feb-2008 15:30')=>'%d-%b-%Y %H:%M',
-						gettext('25-Feb-2008')=>'%d-%b-%Y',
-						gettext('Feb 25, 2008 15:30')=>'%b %d, %Y %H:%M',
-						gettext('Feb 25, 2008')=>'%b %d, %Y',
-						gettext('February 25, 2008 15:30')=>'%B %d, %Y %H:%M',
-						gettext('February 25, 2008')=>'%B %d, %Y');
-				$cv = getOption("date_format");
-				$flip = array_flip($formatlist);
-				if (isset($flip[$cv])) {
-					$dsp = 'none';
-				} else {
-					$dsp = 'block';
-				}
-				if (array_search($cv, $formatlist) === false) $cv = 'custom';
-				generateListFromArray(array($cv), $formatlist, false, true);
-				?>
-				</select><br />
-				<div id="customTextBox" class="customText" style="display:<?php echo $dsp; ?>">
-				<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="date_format"
-				value="<?php echo htmlspecialchars(getOption('date_format'));?>" />
-				</div>
-				</td>
-			<td><?php echo gettext('Format for dates. Select from the list or set to <code>custom</code> and provide a <a href="http://us2.php.net/manual/en/function.strftime.php"><code>strftime()</code></a> format string in the text box.'); ?></td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Charset:"); ?></td>
-			<td><select id="charset" name="charset">
-				<?php generateListFromArray(array(getOption('charset')), array_flip($charsets), false, true) ?>
-			</select></td>
-			<td><?php echo gettext("The character encoding to use internally. Leave at <em>Unicode	(UTF-8)</em> if you're unsure."); ?></td>
-		</tr>
-		<tr>
-			<td><?php echo gettext('Captcha generator:'); ?></td>
-			<td>
-				<select id="captcha" name="captcha">
-				<?php generateListFromFiles(getOption('captcha'), SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . 'captcha', '.php'); ?>
-				</select>
+			<p class="buttons">
+			<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+			<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+			</p>
 			</td>
-			<td><?php echo gettext('Select the <em>Captcha</em> generator to be used by Zenphoto.'); ?></td>
+			<td></td>
 		</tr>
-		<?php customOptions($_zp_captcha, "&nbsp;&nbsp;&nbsp;-&nbsp;"); ?>
+
 		<tr>
-			<td><?php echo gettext("Allowed tags:"); ?></td>
-			<td>
-				<textarea name="allowed_tags" style="width: 310px" rows="10"><?php echo htmlspecialchars(getOption('allowed_tags')); ?></textarea>
-				<input type="checkbox" name="allowed_tags_reset" value="1" /><?php echo gettext('restore default allowed tags'); ?>
-			</td>
-			<td><?php echo gettext("Tags and attributes allowed in comments, descriptions, and other fields."); ?>
-			<br />
-			<?php echo gettext("Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"); ?>
-			<br />
-			<?php echo gettext('Check <em>restore default allowed tags</em> to reset allowed tags to the zenphoto default values.') ?>
-			</td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Number of RSS feed items:"); ?></td>
-			<td>
+			<tdn width="175"><?php echo gettext("Number of RSS feed items:"); ?></td>
+			<td width="350">
 			<input type="text" size="15" id="feed_items" name="feed_items" value="<?php echo htmlspecialchars(getOption('feed_items'));?>" /> <label for="feed_items"><?php echo gettext("Images RSS"); ?></label><br />
 			<input type="text" size="15" id="feed_items_albums" name="feed_items_albums" value="<?php echo htmlspecialchars(getOption('feed_items_albums'));?>" /> <label for="feed_items"><?php echo gettext("Albums RSS"); ?></label>
 			</td>
@@ -1120,121 +1355,6 @@ if (empty($alterrights)) {
 			<td><?php echo gettext("Check if <em>media rss</em> support is to be enabled. This support is used by some services and programs <em>(only Images RSS)</em>."); ?></td>
 		</tr>
 		<tr>
-			<td><?php echo gettext("Album date:"); ?></td>
-			<td>
-			<input type="checkbox" name="album_use_new_image_date" value="1"
-				<?php echo checked('1', getOption('album_use_new_image_date')); ?> />
-				<?php echo gettext("Use latest image date"); ?>
-			</td>
-			<td><?php echo gettext("Set this option if you wish your album date to reflect the date of the latest image uploaded. Otherwise it will initially be set to the date the album was created.") ?></td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Sort gallery by:"); ?></td>
-			<td>
-				<?php
-				$sort = $sortby;
-				$sort[gettext('Manual')] = 'manual';
-				$sort[gettext('Custom')] = 'custom';
-				$cvt = $cv = strtolower(getOption('gallery_sorttype'));
-				ksort($sort);
-				$flip = array_flip($sort);
-				if (isset($flip[$cv])) {
-					$dspc = 'none';
-				} else {
-					$dspc = 'block';
-				}
-				if (($cv == 'manual') || ($cv == '')) {
-					$dspd = 'none';
-				} else {
-					$dspd = 'block';
-				}
-				?>
-				<table>
-					<tr>
-						<td>
-							<select id="sortselect" name="gallery_sorttype" onchange="update_direction(this,'gallery_sortdirection','customTextBox2')">
-							<?php
-							if (array_search($cv, $sort) === false) $cv = 'custom';
-							generateListFromArray(array($cv), $sort, false, true);
-							?>
-							</select>
-						</td>
-						<td>
-							<span id="gallery_sortdirection" style="display:<?php echo $dspd; ?>">
-							<input type="checkbox" name="gallery_sortdirection"	value="1" <?php echo checked('1', getOption('gallery_sortdirection')); ?> />&nbsp;<?php echo gettext("Descending"); ?>
-							</span>
-							</td>
-						</tr>
-					<tr>
-						<td colspan="2">
-							<span id="customTextBox2" class="customText" style="display:<?php echo $dspc; ?>">
-							<?php echo gettext('custom fields:') ?>
-							<input id="customalbumsort" name="customalbumsort" type="text" value="<?php echo $cvt; ?>"></input>
-							</span>
-						</td>
-					</tr>
-				</table>
-			</td>
-			<td>
-				<?php
-				echo gettext('Sort order for the albums on the index of the gallery. Custom sort values must be database field names. You can have multiple fields separated by commas. This option is also the default sort for albums and subalbums.');
-				?>
-			</td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Search behavior settings:"); ?></td>
-			<td>
-			<?php 
-			$exact = '<input type="radio" id="exact_tags" name="tag_match" value="1" ';
-			$partial = '<input type="radio" id="exact_tags" name="tag_match" value="0" ';
-			if (getOption('exact_tag_match')) {
-				$exact .= ' CHECKED ';
-			} else {
-				$partial .= ' CHECKED ';
-			}
-			$exact .= '/>'. gettext('exact');
-			$partial .= '/>'. gettext('partial');
-			$engine = new SearchEngine();
-			$fields = array_flip($engine->zp_search_fields);
-			$fields[SEARCH_TAGS] .= $exact.$partial;
-			$fields = array_flip($fields);
-			$set_fields = $engine->allowedSearchFields();
-			echo gettext('Fields list:');
-			?>
-				<ul class="searchchecklist">
-					<?php
-					generateUnorderedListFromArray($set_fields, $fields, '_SEARCH_', false, true, true);
-					?>
-				</ul>
-			</p>
-			<p><input type="checkbox" name="search_space_is_or" value="1" <?php echo checked('1', getOption('search_space_is_or')); ?> /> <?php echo gettext('Treat spaces as <em>OR</em>') ?></p>
-			</td>
-			<td>
-				<p><?php echo gettext('Search behavior settings.') ?></p>
-				<p><?php echo gettext("<em>Field list</em> is the set of fields on which searches may be performed."); ?></p>
-				<p><?php echo gettext("Search does partial matches on all fields selected with the possible exception of <em>Tags</em>. This means that if the field contains the search criteria anywhere within it a result will be returned. If <em>exact</em> is selected for <em>Tags</em> then the search criteria must exactly match the tag for a result to be returned.") ?></p>
-				<p><?php echo gettext('Setting <code>Treat spaces as <em>OR</em></code> will cause search to trigger on any of the words in a string separated by spaces. Leaving the option unchecked will treat the whole string as a search target.') ?></p>
-			</td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Enable Persistent Archives:"); ?></td>
-			<td><input type="checkbox" name="persistent_archive" value="1" <?php echo checked('1', getOption('persistent_archive')); ?> /></td>
-			<td><?php echo gettext("Put a checkmark here to re-serve Zip Archive files if you are using the optional template function <em>printAlbumZip()</em> to enable visitors of your site to download images of an album as .zip files. If not checked	that .zip file will be regenerated each time."); ?>
-			<?php echo gettext("<strong>Note: </strong>Setting	this option may impact password protected albums!"); ?></td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Enable gallery sessions:"); ?></td>
-			<td><input type="checkbox" name="album_session" value="1"
-			<?php echo checked('1', getOption('album_session')); ?> /></td>
-			<td><?php echo gettext("Put a checkmark here if you are having issues with album password cookies not being retained. Setting the option causes zenphoto to use sessions rather than cookies."); ?></td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Visual Thumb selection:"); ?></td>
-			<td><input type="checkbox" name="thumb_select_images" value="1"
-			<?php echo checked('1', getOption('thumb_select_images')); ?> /></td>
-			<td><?php echo gettext("Setting this option places thumbnails in the album thumbnail selection list (the dropdown list on each album's edit page). In Firefox the dropdown shows the thumbs, but in IE and Safari only the names are displayed (even if the thumbs are loaded!). In albums with many images loading these thumbs takes much time and is unnecessary when the browser won't display them. Uncheck this option and the images will not be loaded. "); ?></td>
-		</tr>
-		<tr>
 			<td></td>
 			<td>
 			<p class="buttons">
@@ -1247,7 +1367,8 @@ if (empty($alterrights)) {
 	</table>
 	</form>
 	</div>
-	<!-- end of tab-gallery div -->
+	<!-- end of tab-rss div -->
+	
 	<?php
 	}
 	if ($subtab == 'image' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
