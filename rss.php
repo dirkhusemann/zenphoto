@@ -1,4 +1,5 @@
 <?php
+require_once('zp-config.php'); // in case the defines are enabled! 
 if (!defined('ZENFOLDER')) { define('ZENFOLDER', 'zp-core'); }
 define('OFFSET_PATH', 0);
 header('Content-Type: application/xml');
