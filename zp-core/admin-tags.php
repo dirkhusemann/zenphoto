@@ -7,7 +7,7 @@ define('OFFSET_PATH', 1);
 require_once(dirname(__FILE__).'/template-functions.php');
 require_once(dirname(__FILE__).'/admin-functions.php');
 
-if (!($_zp_loggedin & ADMIN_RIGHTS)) { // prevent nefarious access to this page.
+if (!($_zp_loggedin & (TAGS_RIGHTS | ADMIN_RIGHTS))) { // prevent nefarious access to this page.
 	header('Location: ' . FULLWEBPATH . '/' . ZENFOLDER . '/admin.php?from=' . currentRelativeURL(__FILE__) );
 	exit();
 }

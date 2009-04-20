@@ -64,6 +64,7 @@ if (isset($_GET['action'])) {
 						if (isset($_POST[$i.'-edit_rights'])) $rights = $rights | EDIT_RIGHTS;
 						if (isset($_POST[$i.'-all_album_rights'])) $rights = $rights | ALL_ALBUMS_RIGHTS;
 						if (isset($_POST[$i.'-themes_rights'])) $rights = $rights | THEMES_RIGHTS;
+						if (isset($_POST[$i.'-tags_rights'])) $rights = $rights | TAGS_RIGHTS;
 						if (isset($_POST[$i.'-options_rights'])) $rights = $rights | OPTIONS_RIGHTS;
 						if (isset($_POST[$i.'-zenpage_rights'])) $rights = $rights | ZENPAGE_RIGHTS;
 						if (isset($_POST[$i.'-admin_rights'])) $rights = $rights | ADMIN_RIGHTS;
@@ -731,37 +732,37 @@ if (empty($alterrights)) {
 			</tr>
 			<tr>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+				<input type="checkbox" name="<?php echo $id ?>-tags_rights"
+					value=<?php echo TAGS_RIGHTS; if ($user['rights'] & TAGS_RIGHTS) echo ' checked';
+					echo $alterrights; ?>> <?php echo gettext("Tags"); ?></td>
+				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 				<input type="checkbox" name="<?php echo $id ?>-themes_rights"
 					value=<?php echo THEMES_RIGHTS; if ($user['rights'] & THEMES_RIGHTS) echo ' checked';
 					echo $alterrights; ?>> <?php echo gettext("Themes"); ?></td>
-
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 				<input type="checkbox" name="<?php echo $id ?>-all_album_rights"
 					value=<?php echo ALL_ALBUMS_RIGHTS; if ($user['rights'] & ALL_ALBUMS_RIGHTS) echo ' checked'; 
 					echo $alterrights; ?>> <?php echo gettext("Manage all albums"); ?></td>
-
+			</tr>
+			<tr>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 				<input type="checkbox" name="<?php echo $id ?>-edit_rights"
 					value=<?php echo EDIT_RIGHTS; if ($user['rights'] & EDIT_RIGHTS) echo ' checked'; 
 					echo $alterrights; ?>> <?php echo gettext("Edit"); ?></td>
-			</tr>
-			<tr>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 				<input type="checkbox" name="<?php echo $id ?>-comment_rights"
 					value=<?php echo COMMENT_RIGHTS; if ($user['rights'] & COMMENT_RIGHTS) echo ' checked'; 
 					echo $alterrights; ?>> <?php echo gettext("Comment"); ?></td>
-
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 				<input type="checkbox" name="<?php echo $id ?>-upload_rights"
 					value=<?php echo UPLOAD_RIGHTS; if ($user['rights'] & UPLOAD_RIGHTS) echo ' checked'; 
 					echo $alterrights; ?>> <?php echo gettext("Upload"); ?></td>
-
+			</tr>
+			<tr>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
 				<input type="checkbox" name="<?php echo $id ?>-view_rights"
 					value=<?php echo VIEWALL_RIGHTS; if ($user['rights'] & VIEWALL_RIGHTS) echo ' checked'; 
 					echo $alterrights; ?>> <?php echo gettext("View all"); ?></td>
-			</tr>
-			<tr>
 				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-main_rights"
 					value=<?php echo MAIN_RIGHTS; if ($user['rights'] & MAIN_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Overview"); ?></td>
 			</tr>

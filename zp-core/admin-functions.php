@@ -468,7 +468,7 @@ function printTabs($currenttab) {
 		echo "\n	 <li". (($currenttab == 'edit') ? " class=\"current\""		: "") .
  				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-edit.php?page=edit\">".gettext("edit")."</a></li>";
 	}
-	if (($_zp_loggedin & ADMIN_RIGHTS)) {
+	if (($_zp_loggedin & (TAGS_RIGHTS | ADMIN_RIGHTS))) {
 		echo "\n	 <li". (($currenttab == 'tags') ? " class=\"current\""		: "") .
 				"><a href=\"".WEBPATH."/".ZENFOLDER."/admin-tags.php\">".gettext('tags')."</a></li>";
 	}
