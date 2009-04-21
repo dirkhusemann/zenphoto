@@ -1305,7 +1305,7 @@ if (empty($alterrights)) {
 		</tr>
 
 		<tr>
-			<tdn width="175"><?php echo gettext("Number of RSS feed items:"); ?></td>
+			<td width="175"><?php echo gettext("Number of RSS feed items:"); ?></td>
 			<td width="350">
 			<input type="text" size="15" id="feed_items" name="feed_items" value="<?php echo htmlspecialchars(getOption('feed_items'));?>" /> <label for="feed_items"><?php echo gettext("Images RSS"); ?></label><br />
 			<input type="text" size="15" id="feed_items_albums" name="feed_items_albums" value="<?php echo htmlspecialchars(getOption('feed_items_albums'));?>" /> <label for="feed_items"><?php echo gettext("Albums RSS"); ?></label>
