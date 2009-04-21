@@ -249,7 +249,9 @@ function printAdminHeader($path='') {
 		jQuery(function( $ ){
 			$("#fade-message").fadeTo(5000, 1).fadeOut(1000);
 			$("#fade-message2").fadeTo(5000, 1).fadeOut(1000);
-			$('.tooltip').tooltip();
+			$('.tooltip').tooltip({
+				left: -80
+			});
 			});
 	</script>
 	<?php
@@ -1483,7 +1485,7 @@ function printAlbumButtons($album) {
 		<input type="hidden" name="album" value="<?php echo urlencode($album->name); ?>">
 		<input type="hidden" name="return" value="<?php echo urlencode($album->name); ?>">
 		<div class="buttons">
-		<button type="submit" class="tooltip" id="edit_cache2 title="<?php echo gettext("Cache newly uploaded images."); ?>"><img src="images/cache1.png" style="border: 0px;" />
+		<button type="submit" class="tooltip" id="edit_cache2" title="<?php echo gettext("Cache newly uploaded images."); ?>"><img src="images/cache1.png" style="border: 0px;" />
 		<?php echo gettext("Pre-Cache Images"); ?></button>
 		</div>
 		</form>
