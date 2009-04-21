@@ -292,8 +292,13 @@ if (count($publish_albums_list) > 0) {
 	}
 ?>
 
+<script type="text/javascript">
+	$(function() {
+		$("#publish_date").datepicker();
+	});
+</script>
 <form name="review" action="" method="post">
-<?php printf(gettext('Review images older than: %s'),'<input type="text" size="20" name="publish_date" value="'.$requestdate.'" />'); ?>
+<?php printf(gettext('Review images older than: %s'),'<input type="text" size="20" id="publish_date" name="publish_date" value="'.$requestdate.'" />'); ?>
 <input type="hidden" name="review" value="true">
 
 <div class="buttons pad_button" id="reviewobjects">
