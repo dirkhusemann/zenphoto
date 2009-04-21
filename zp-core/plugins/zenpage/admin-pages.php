@@ -47,7 +47,7 @@ if(isset($_GET['hitcounter'])) {
 	resetPageOrArticleHitcounter("page");
 }
 ?>
-<h1><?php echo gettext("Pages"); ?><span class="zenpagestats"><?php printNewsPagesStatistic("pages");?></span></h1> 				
+<h1><?php echo gettext("Pages"); ?><span class="zenpagestats"><?php printPagesStatistic();?></span></h1> 				
  <form action="admin-pages.php" method="post" name="update">
  
 <div>

@@ -1544,11 +1544,7 @@ function printAlbumEditRow($album) {
 	} else {
 		$ci = count($album->getImages());
 		if ($ci > 0) {
-			if ($ci > 1) {
-				$si = sprintf(gettext('%u images'),$ci);
-			}	else {
-				$si = gettext('1 image');
-			}
+			$si = sprintf(ngettext('%u image','%u images', $ci), $ci);
 		} else {
 			$si = gettext('no images');
 		}
@@ -1557,11 +1553,7 @@ function printAlbumEditRow($album) {
 		}
 		$ca = count($album->getSubalbums());
 		if ($ca > 0) {
-			if ($ca > 1) {
-				$sa = sprintf(gettext("%u albums"), $ca);
-			} else {
-				$sa = gettext("1 album");
-			}
+			$sa = sprintf(ngettext('%u album','%u albums', $ca), $ca);
 		} else {
 			$sa = '&nbsp;';
 		}

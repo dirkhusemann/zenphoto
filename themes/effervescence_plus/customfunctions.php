@@ -63,13 +63,13 @@ function getCustomAlbumDesc() {
 function getImage_AlbumCount() {
 	$c = getNumSubalbums();
 	if ($c > 0) {
-		$result = "\n ".sprintf(gettext("%u albums(s)"),$c);
+		$result = "\n ".sprintf(ngettext("%u album","%u albums",$c),$c);
 	} else {
 		$result = '';
 	}
 	$c = getNumImages();
 	if ($c > 0) {
-		$result .=  "\n ".sprintf(gettext("%u images(s)"),$c);
+		$result .=  "\n ".sprintf(ngettext("%u image","%u images",$c),$c);
 	}
 	return $result;
 }
@@ -190,25 +190,23 @@ function printFooter($page) {
 		<?php
 		switch ($page) {
 		case 'image':
-		case 'album':
 			$h = getHitcounter();
-			if ($h == 1) {
-				echo "<p>".sprintf(gettext('1 hit on this %s'),$page)."</p>";
-			} else {
-				echo "<p>".sprintf(gettext('%1$u hits on this %2$s'),$h, $page)."</p>";
-			}
+			echo "<p>".sprintf(ngettext('%1$u hit on this %2$s','%1$u hits on this image',$h),$h)."</p>";
+			case 'album':
+			$h = getHitcounter();
+			echo "<p>".sprintf(ngettext('%1$u hit on this %2$s','%1$u hits on this album',$h),$h)."</p>";
 			break;
 		case 'gallery':
 			?>
 			<small>
-				<p><?php $albumNumber = getNumAlbums(); echo sprintf(gettext("Albums: %u"),$albumNumber); ?> &middot;
-					<?php echo sprintf(gettext("Subalbums: %u"),get_subalbum_count()); ?> &middot;
+				<p><?php $albumNumber = getNumAlbums(); echo sprintf(ngettext("%u Album","%u Albums",$albumNumber),$albumNumber); ?> &middot;
+					<?php $c=get_subalbum_count(); echo sprintf(ngettext("%u Subalbum", "%u Subalbums",$c),$c); ?> &middot;
 					<?php $photosArray = query_single_row("SELECT count(*) FROM ".prefix('images'));
-					$photosNumber = array_shift($photosArray); echo sprintf(gettext("Images: %u"),$photosNumber); ?>
+					$photosNumber = array_shift($photosArray); echo sprintf(ngettext("%u Image","%u Images",$photosNumber),$photosNumber); ?>
 					<?php if (getOption('Allow_comments')) { ?>
 						&middot;
 						<?php $commentsArray = query_single_row("SELECT count(*) FROM ".prefix('comments')." WHERE inmoderation = 0");
-						$commentsNumber = array_shift($commentsArray); echo sprintf(gettext("Comments: %u"),$commentsNumber); ?>
+						$commentsNumber = array_shift($commentsArray); echo sprintf(ngettext("%u Comment","%u Comments",$commentsNumber),$commentsNumber); ?>
 					<?php } ?>
 				</p>
 			</small>

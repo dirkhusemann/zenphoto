@@ -43,7 +43,7 @@ if(isset($_GET["edit"])) {
 } else {
 	echo gettext("Categories"); 
 }
-?><span class="zenpagestats"><?php printNewsPagesStatistic("categories");?></span></h1>
+?><span class="zenpagestats"><?php printCategoriesStatistic();?></span></h1>
 <p class="buttons">
 <span id="tip"><a href="#"><img src="images/info.png" alt="" /><?php echo gettext("Usage tips"); ?></a></span>
 <?php if(isset($_GET["edit"])) { ?>

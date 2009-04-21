@@ -1110,13 +1110,25 @@ function getNewsPagesStatistic($option) {
 	return array($total,$type,$unpub);
 }
 
-function printNewsPagesStatistic($option) {
-	list($total,$type,$unpub) = getNewsPagesStatistic($option);
+function printPagesStatistic() {
+	list($total,$type,$unpub) = getNewsPagesStatistic("pages");
 	if (empty($unpub)) {
-		printf(gettext('(<strong>%1$u</strong> %2$s)'),$total,$type);
+		printf(ngettext('(<strong>%1$u</strong> page)','(<strong>%1$u</strong> pages)',$total),$total);
 	} else {
-		printf(gettext('(<strong>%1$u</strong> %2$s, <strong>%3$u</strong> unpublished)'),$total,$type,$unpub);
+		printf(ngettext('(<strong>%1$u</strong> page, <strong>%3$u</strong> unpublished)','(<strong>%1$u</strong> pages, <strong>%2$u</strong> unpublished)',$total),$total,$unpub);
 	}
+}
+function printNewsStatistic() {
+	list($total,$type,$unpub) = getNewsPagesStatistic("news");
+	if (empty($unpub)) {
+		printf(ngettext('(<strong>%1$u</strong> news)','(<strong>%1$u</strong> news)',$total),$total);
+	} else {
+		printf(ngettext('(<strong>%1$u</strong> newws, <strong>%3$u</strong> unpublished)','(<strong>%1$u</strong> news, <strong>%2$u</strong> unpublished)',$total),$total,$unpub);
+	}
+}
+function printCategoriesStatistic() {
+	list($total,$type,$unpub) = getNewsPagesStatistic("categories");
+	printf(ngettext('(<strong>%1$u</strong> categorie)','(<strong>%1$u</strong> categories)',$total),$total);
 }
 
 /**

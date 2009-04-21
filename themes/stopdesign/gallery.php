@@ -32,41 +32,47 @@ require_once('normalizer.php');
 			$counter = 0;
 			while (next_album()):
 			?>
-			<li class="gal">
-			<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAnnotatedAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
-			<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>" title="<?php echo gettext('View album:').' '; echo getAnnotatedAlbumTitle();?>" class="img"><?php printCustomAlbumThumbImage(getAnnotatedAlbumTitle(), null, 210, 59, 210, 59); ?></a>
-			<p>
-			<?php
+	<li class="gal">
+	<h3><a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>"
+		title="<?php echo gettext('View album:').' '; echo getAnnotatedAlbumTitle();?>"><?php printAlbumTitle(); ?></a></h3>
+	<a href="<?php echo htmlspecialchars(getAlbumLinkURL());?>"
+		title="<?php echo gettext('View album:').' '; echo getAnnotatedAlbumTitle();?>"
+		class="img"><?php printCustomAlbumThumbImage(getAnnotatedAlbumTitle(), null, 210, 59, 210, 59); ?></a>
+		<p>
+		<?php
 			$anumber = getNumSubalbums();
 			$inumber = getNumImages();
 			if ($anumber > 0 || $inumber > 0) {
 				echo '<p><em>(';
-				if ($anumber == 0 && $inumber == 1) {
-					printf(gettext('1 photo'));
-				} else if ($anumber == 0 && $inumber > 1) {
-					printf(gettext('%u photos'), $inumber);
-				} else if ($anumber == 1 && $inumber == 1) {
-					printf(gettext('1 album,&nbsp;1 photo'));
-				} else if ($anumber > 1 && $inumber == 1) {
-					printf(gettext('%u album,&nbsp;1 photo'), $anumber);
-				} else if ($anumber > 1 && $inumber > 1) {
-					printf(gettext('%1$u album,&nbsp;%2$u photos'), $anumber, $inumber);
-				} else if ($anumber == 1 && $inumber == 0) {
-					printf(gettext('1 album'));
-				} else if ($anumber > 1 && $inumber == 0) {
-					printf(gettext('%u album'),$anumber);
-				} else if ($anumber == 1 && $inumber > 1) {
-					printf(gettext('1 album,&nbsp;%u photos'), $inumber);
+				if ($anumber == 0) {
+					if ($inumber != 0) {
+						printf(ngettext('%u photo','%u photos', $inumber), $inumber);
+					}
+				} else if ($anumber == 1) {
+					if ($inumber > 0) {
+						printf(ngettext('1 album,&nbsp;%u photo','1 album,&nbsp;%u photos', $inumber), $inumber);
+					} else {
+						printf(gettext('1 album'));
+					}
+				} else {
+					if ($inumber == 1) {
+						printf(ngettext('%u album,&nbsp;1 photo','%u albums,&nbsp;1 photo', $anumber), $anumber);
+					} else if ($inumber > 0) {
+						printf(ngettext('%1$u album,&nbsp;%2$s','%1$u albums,&nbsp;%2$s', $anumber), $anumber, sprintf(ngettext('%u photo','%u photos',$inumber),$inumber));
+					} else {
+						printf(ngettext('%u album','%u albums', $anumber), $anumber);
+					}
 				}
 				echo ')</em><br/>';
 			}
 			$text = getAlbumDesc();
 			if(strlen($text) > 100) { $text = preg_replace("/[^ ]*$/", '', substr($text, 0, 100)) . "..."; }
 			echo $text;
-			?></p>
-			<div class="date"><?php printAlbumDate(); ?></div>
-			</li>
-			<?php
+		?>
+		</p>
+	<div class="date"><?php printAlbumDate(); ?></div>
+	</li>
+	<?php
 			if ($counter == 2) {
 				echo "</ul><ul>";
 			}
