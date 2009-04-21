@@ -41,21 +41,32 @@ function imageError($errormessage, $errorimg='err-imagegeneral.gif') {
  * @param string $album alubm name
  * @param string $image image name
  * @param array $args size/crop arguments
+ * @param string $imgfile the filename of the image
  */
-function imageDebug($album, $image, $args) {
+function imageDebug($album, $image, $args, $imgfile) {
 	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop) = $args;
 	echo "Album: [ " . $album . " ], Image: [ " . $image . " ]<br/><br/>";
+	if (file_exists($imgfile)) {
+		echo "Image filesize: ".filesize($imgfile);
+	} else {
+		echo "Image file not found.";
+	}
+	echo '<br /><br />';
 	echo "<strong>".gettext("Debug")." <code>i.php</code> | ".gettext("Arguments:")."</strong><br />\n\n"
-	.  "<ul><li>".gettext("size =")."    <strong>" . sanitize($size, 3)     . "</strong></li>\n"
-	.  "<li>".gettext("width =")."   <strong>" . sanitize($width, 3)    . "</strong></li>\n"
-	.  "<li>".gettext("height =")."  <strong>" . sanitize($height, 3)   . "</strong></li>\n"
-	.  "<li>".gettext("cw =")."      <strong>" . sanitize($cw, 3)       . "</strong></li>\n"
-	.  "<li>".gettext("ch =")."      <strong>" . sanitize($ch, 3)       . "</strong></li>\n"
-	.  "<li>".gettext("cx =")."      <strong>" . sanitize($cx, 3)       . "</strong></li>\n"
-	.  "<li>".gettext("cy =")."      <strong>" . sanitize($cy, 3)       . "</strong></li>\n"
-	.  "<li>".gettext("quality =")." <strong>" . sanitize($quality, 3)  . "</strong></li>\n"
-	.  "<li>".gettext("thumb =")."   <strong>" . sanitize($thumb, 3)    . "</strong></li>\n"
-	.  "<li>".gettext("crop =")."    <strong>" . sanitize($crop, 3)     . "</strong></li></ul>\n";
+	?>
+	<ul>
+		<li><?php echo gettext("size ="); ?>   <strong> <?php echo sanitize($size, 3)     ?> </strong></li>
+		<li><?php echo gettext("width =") ?>   <strong> <?php echo sanitize($width, 3)    ?> </strong></li>
+		<li><?php echo gettext("height =") ?>  <strong> <?php echo sanitize($height, 3)   ?> </strong></li>
+		<li><?php echo gettext("cw =") ?>      <strong> <?php echo sanitize($cw, 3)       ?> </strong></li>
+		<li><?php echo gettext("ch =") ?>      <strong> <?php echo sanitize($ch, 3)       ?> </strong></li>
+		<li><?php echo gettext("cx =") ?>      <strong> <?php echo sanitize($cx, 3)       ?> </strong></li>
+		<li><?php echo gettext("cy =") ?>      <strong> <?php echo sanitize($cy, 3)       ?> </strong></li>
+		<li><?php echo gettext("quality =") ?> <strong> <?php echo sanitize($quality, 3)  ?> </strong></li>
+		<li><?php echo gettext("thumb =") ?>   <strong> <?php echo sanitize($thumb, 3)    ?> </strong></li>
+		<li><?php echo gettext("crop =") ?>    <strong> <?php echo sanitize($crop, 3)     ?> </strong></li>
+	</ul>
+	<?php
 }
 
 /**

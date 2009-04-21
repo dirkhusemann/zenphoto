@@ -99,9 +99,6 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
 	$args = getImageParameters($args);
 	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM, $adminrequest, $gray) = $args;
 	$allowWatermark = !$thumb && !$adminrequest;
-	
-  if ($debug) imageDebug($album, $image, $args);
-	
 } else {
 	// No image parameters specified or are out of bounds; return the original image.
 	//TODO: this will fail when the album folder is external to zp. Maybe should force the sizes within bounds.
@@ -117,6 +114,9 @@ if (trim($album)=='') {
 } else {
 	$imgfile = getAlbumFolder() . $album.'/'.$image;
 }
+
+if ($debug) imageDebug($album, $image, $args, $imgfile);
+	
 
 /** Check for possible problems ***********
  ******************************************/
