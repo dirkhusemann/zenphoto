@@ -1,13 +1,13 @@
 <?php
 /**
- * This is a "simple" SPAM filter. 
+ * This is a "simple" SPAM filter.
  * It uses a word black list and checks for excessive URLs
- * 
+ *
  * @author Stephen Billard (sbillard)
  * @version 1.0.0
- * @package plugins	 
+ * @package plugins
  */
- 
+
 /**
  * This implements the standard SpamFilter class for the Simple spam filter.
  *
@@ -15,11 +15,11 @@
 class SpamFilter  {
 
 	var $wordsToDieOn = array('cialis','ebony','nude','porn','porno','pussy','upskirt','ringtones','phentermine','viagra', 'levitra'); /* the word black list */
-	
+
 	var $patternsToDieOn = array('\[url=.*\]');
-	
+
 	var $excessiveURLCount = 5;
-	
+
 	/**
 	 * The SpamFilter class instantiation function.
 	 *
@@ -30,49 +30,36 @@ class SpamFilter  {
 		setOptionDefault('Patterns_to_die_on', implode(' ', $this->patternsToDieOn));
 		setOptionDefault('Excessive_URL_count', $this->excessiveURLCount);
 		setOptionDefault('Forgiving', 0);
-}
-	
+		setOptionDefault('Banned_IP_list', serialize(array()));
+	}
+
 	/**
 	 * The admin options interface
-	 * called from admin Options tab
-	 *  returns an array of the option names the theme supports
-	 *  the array is indexed by the option name. The value for each option is an array:
-	 *          'type' => 0 says for admin to use a standard textbox for the option
-	 *          'type' => 1 says for admin to use a standard checkbox for the option
-	 *          'type' => 2 will cause admin to call handleOption to generate the HTML for the option
-	 *          'desc' => text to be displayed for the option description.
-	 *
 	 * @return array
 	 */
 	function getOptionsSupported() {
-		return array(	gettext('Words to die on') => array('key' => 'Words_to_die_on', 'type' => 2, 'desc' => gettext('SPAM blacklist words (separate with commas)')),
-									gettext('Patterns to die on') => array('key' => 'Patterns_to_die_on', 'type' => 2, 'desc' => gettext('SPAM blacklist <a href="http://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> (separate with spaces)')),
-									gettext('Excessive URL count') => array('key' => 'Excessive_URL_count', 'type' => 0, 'desc' => gettext('Message is considered SPAM if there are more than this many URLs in it')),
-									gettext('Forgiving') => array('key' => 'Forgiving', 'type' => 1, 'desc' => gettext('Mark suspected SPAM for moderation rather than as SPAM')));
+		return array(	gettext('Words to die on') => array('key' => 'Words_to_die_on', 'type' => 3, 'desc' => gettext('SPAM blacklist words (separate with commas)')),
+		gettext('Patterns to die on') => array('key' => 'Patterns_to_die_on', 'type' => 3, 'desc' => gettext('SPAM blacklist <a href="http://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> (separate with spaces)')),
+		gettext('Excessive URL count') => array('key' => 'Excessive_URL_count', 'type' => 0, 'desc' => gettext('Message is considered SPAM if there are more than this many URLs in it')),
+		gettext('Banned IPs') => array('key' => 'Banned_IP_list', 'type' => 3, 'desc' => gettext('Prevent posts from this list of IP addresses')),
+		gettext('Forgiving') => array('key' => 'Forgiving', 'type' => 1, 'desc' => gettext('Mark suspected SPAM for moderation rather than as SPAM')));
 	}
-	
- 	/**
- 	 * Handles custom formatting of options for Admin
- 	 *
- 	 * @param string $option the option name of the option to be processed
- 	 * @param mixed $currentValue the current value of the option (the "before" value)
- 	 */
- 	function handleOption($option, $currentValue) {
- 		if ($option=='Words_to_die_on') {
- 			$list = explode(',', $currentValue);
- 			sort($list);
-	 		echo '<textarea name="' . $option . '" cols="42" rows="4">' . implode(',', $list) . "</textarea>\n";
- 		} else if ($option=='Patterns_to_die_on') {
-	 		echo '<textarea name="' . $option . '" cols="42" rows="2">' . $currentValue . "</textarea>\n";
-	 }
+
+	/**
+	 * Handles custom formatting of options for Admin
+	 *
+	 * @param string $option the option name of the option to be processed
+	 * @param mixed $currentValue the current value of the option (the "before" value)
+	 */
+	function handleOption($option, $currentValue) {
 	}
 
 	/**
 	 * The function for processing a message to see if it might be SPAM
-   *       returns:
-   *         0 if the message is SPAM
-   *         1 if the message might be SPAM (it will be marked for moderation)
-   *         2 if the message is not SPAM
+	 *       returns:
+	 *         0 if the message is SPAM
+	 *         1 if the message might be SPAM (it will be marked for moderation)
+	 *         2 if the message is not SPAM
 	 *
 	 * @param string $author Author field from the posting
 	 * @param string $email Email field from the posting
@@ -80,10 +67,13 @@ class SpamFilter  {
 	 * @param string $body The text of the comment
 	 * @param string $imageLink A link to the album/image on which the post was made
 	 * @param string $ip the IP address of the comment poster
-	 * 
+	 *
 	 * @return int
 	 */
 	function filterMessage($author, $email, $website, $body, $imageLink, $ip) {
+		if (strpos(getOption('Banned_IP_list'),$ip) !== false) {
+			return 0;
+		}
 		$forgive = getOption('Forgiving');
 		$list = getOption('Words_to_die_on');
 		$list = strtolower($list);
@@ -106,7 +96,7 @@ class SpamFilter  {
 				}
 			}
 		}
-		return $die;  
+		return $die;
 	}
 
 	/**
@@ -124,7 +114,7 @@ class SpamFilter  {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Tests to see if the text contains any of the list of SPAM trigger words
 	 *
@@ -137,7 +127,7 @@ class SpamFilter  {
 		$intersect = array_intersect($blacklist , $words);
 		return $intersect ;
 	}
-	
+
 	function getWords($text, $notUnique=false) {
 		if ($notUnique) {
 			return preg_split("/[\W]+/", strtolower(strip_tags($text)));

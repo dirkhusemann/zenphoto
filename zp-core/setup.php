@@ -595,7 +595,6 @@ if (!$checked) {
 		/* Check for graphic library and image type support. */
 		if (function_exists('graphicsLibInfo')) {
 			$graphics_lib = graphicsLibInfo();
-			//TODO: add imageMagick to the install message
 			$library = $graphics_lib['Library'];
 			$good = checkMark(!empty($library), sprintf(gettext("Graphics support: <code>%s</code>"),$library), gettext('Graphics support [is not installed]'), gettext('You need to install a graphics support library support in your PHP')) && $good;
 			if (!empty($library)) {

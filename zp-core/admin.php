@@ -173,9 +173,9 @@ if (!empty($msg)) {
 $t = $gallery->getNumImages();
 $c = $t-$gallery->getNumImages(true);
 if ($c > 0) {
-	printf(gettext('<strong>%1$u</strong> images (%2$u not visible)'),$t, $c);
+	printf(ngettext('<strong>%1$u</strong> Image (%2$u not visible)','<strong>%1$u</strong> Images (%2$u not visible)',$t),$t, $c);
 } else {
-	printf(gettext('<strong>%u</strong> images'),$t);
+	printf(ngettext('<strong>%u</strong> Image','<strong>%u</strong> Images',$t),$t);
 }
 ?>
 </li>
@@ -184,20 +184,20 @@ if ($c > 0) {
 $t = $gallery->getNumAlbums(true);
 $c = $t-$gallery->getNumAlbums(true,true);
 if ($c > 0) {
-	printf(gettext('<strong>%1$u</strong> albums (%2$u not published)'),$t, $c);
+	printf(ngettext('<strong>%1$u</strong> Album (%2$u not published)','<strong>%1$u</strong> Albums (%2$u not published)',$t),$t, $c);
 } else {
-	printf(gettext('<strong>%u</strong> albums'),$t);
+	printf(ngettext('<strong>%u</strong> Album', '<strong>%u</strong> Albums',$t),$t);
 }
 ?>
 </li>
-
 <li>
 <?php 
 $t = $gallery->getNumComments(true);
 $c = $t - $gallery->getNumComments(false);
-printf(ngettext('<strong>%u</strong> comment', '<strong>%u</strong> comments', $t), $t);
 if ($c > 0) {
-	printf(ngettext(' (<strong>%u</strong> in moderation)', ' (<strong>%u</strong> in moderation)', $c), $c);
+	printf(ngettext('<strong>%1$u</strong> Comment (<strong>%2$u</strong> in moderation)','<strong>%1$u</strong> Comments (<strong>%2$u</strong> in moderation)', $t), $t, $c);
+} else {
+	printf(ngettext('<strong>%u</strong> Comments','<strong>%u</strong> Comments', $t), $t);
 }
 ?>
 </li>
@@ -207,9 +207,9 @@ if(getOption('zp_plugin_zenpage')) { ?>
 		<?php
 		list($total,$type,$unpub) = getNewsPagesStatistic("pages");
 		if (empty($unpub)) {
-			printf(gettext('<strong>%1$u</strong> Pages'),$total,$type);
+			printf(ngettext('<strong>%1$u</strong> Page','<strong>%1$u</strong> Pages',$total),$total,$type);
 		} else {
-			printf(gettext('<strong>%1$u</strong> Pages (<strong>%2$u</strong> unpublished)'),$total,$unpub);
+			printf(ngettext('<strong>%1$u</strong> Pages (<strong>%2$u</strong> unpublished)','<strong>%1$u</strong> Pages (<strong>%2$u</strong> unpublished)',$total),$total,$unpub);
 		}
 		?>
 	</li>
@@ -217,16 +217,16 @@ if(getOption('zp_plugin_zenpage')) { ?>
 		<?php
 		list($total,$type,$unpub) = getNewsPagesStatistic("news");
 		if (empty($unpub)) {
-			printf(gettext('<strong>%1$u</strong> News'),$total);
+			printf(ngettext('<strong>%1$u</strong> News','<strong>%1$u</strong> News',$total),$total);
 		} else {
-			printf(gettext('<strong>%1$u</strong> News (<strong>%2$u</strong> unpublished)'),$total,$unpub);
+			printf(ngettext('<strong>%1$u</strong> News (<strong>%2$u</strong> unpublished)','<strong>%1$u</strong> News (<strong>%2$u</strong> unpublished)',$total),$total,$unpub);
 		}
 		?>
 	</li>
 	<li>
 		<?php
 		list($total,$type,$unpub) = getNewsPagesStatistic("categories");
-		printf(gettext('<strong>%1$u</strong> Categories'),$total);
+		printf(ngettext('<strong>%1$u</strong> Category','<strong>%1$u</strong> Categories',$total),$total);
 		?>
 	</li>
 <?php
@@ -246,10 +246,12 @@ if (defined('RELEASE')) {
 	} else {
 		$official = gettext('SVN');
 	}
+	$graphics_lib = graphicsLibInfo();
 	?>
 	<li><?php printf(gettext('Zenphoto version <strong>%1$s [%2$s] (%3$s)</strong>'),ZENPHOTO_VERSION,ZENPHOTO_RELEASE,$official); ?></li>
 	<li><?php printf(gettext('Current gallery theme: <strong>%1$s</strong>'),$gallery->getCurrentTheme()); ?></li> 
 	<li><?php printf(gettext('PHP version: <strong>%1$s</strong>'),phpversion()); ?></li>
+	<li><?php printf(gettext("Graphics support: <strong>%s</strong>"),$graphics_lib['Library']); ?></li>
 	<li><?php printf(gettext('PHP memory limit: <strong>%1$s</strong> (Note: Your server might allocate less!)'),INI_GET('memory_limit')); ?></li>
 	<li><?php printf(gettext('MySQL version: <strong>%1$s</strong>'),mysql_get_client_info()); ?></li>
 	<li><?php printf(gettext('Database name: <strong>%1$s</strong>'),$_zp_conf_vars['mysql_database']); ?></li>

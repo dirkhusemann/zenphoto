@@ -25,8 +25,14 @@ if (function_exists('date_default_timezone_set')) { // insure a correct timezone
 error_reporting(E_ALL | E_STRICT);
 $_zp_error = false;
 
-// TODO: test for existence of ImageMagick and load library based on it in place of lib-GD.php
-require_once(dirname(__FILE__).'/lib-GD.php');
+if (class_exists('Imagick')) {
+	require_once(dirname(__FILE__).'/lib-GD.php');
+/* TODO: Imagick: implement the below library and remove the above line
+	require_once(dirname(__FILE__).'/lib-Imagick.php');
+*/
+} else {
+	require_once(dirname(__FILE__).'/lib-GD.php');
+}
 
 require_once(dirname(__FILE__).'/lib-utf8.php');
 
