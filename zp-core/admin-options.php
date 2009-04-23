@@ -1434,7 +1434,9 @@ if (empty($alterrights)) {
 				<script type="text/javascript">
 				$(function() {
 					$("#slider-imagequality").slider({
-						startValue: <?php echo getOption('image_quality');?>, //TODO!!!! this becomes 'value' if we upgrade Jquery?
+						<?php $v = getOption('image_quality'); ?>
+						startValue: <?php echo $v; ?>,
+						value: <?php echo $v; ?>,
 						min: 0,
 						max: 100,
 						slide: function(event, ui) {
@@ -1449,7 +1451,9 @@ if (empty($alterrights)) {
 				<script type="text/javascript">
 				$(function() {
 					$("#slider-fullimagequality").slider({
-						startValue: <?php echo getOption('full_image_quality');?>, //TODO!!!! this becomes 'value' if we upgrade Jquery?
+						<?php $v = getOption('full_image_quality'); ?>
+						startValue: <?php echo $v; ?>,
+						value: <?php echo $v; ?>,
 						min: 0,
 						max: 100,
 						slide: function(event, ui) {
@@ -1464,7 +1468,9 @@ if (empty($alterrights)) {
 				<script type="text/javascript">
 				$(function() {
 					$("#slider-thumbquality").slider({
-						startValue: <?php echo getOption('thumb_quality');?>, //TODO!!!! this becomes 'value' if we upgrade Jquery?
+						<?php $v = getOption('thumb_quality'); ?>
+						startValue: <?php echo $v; ?>,
+						value: <?php echo $v; ?>,
 						min: 0,
 						max: 100,
 						slide: function(event, ui) {
@@ -1508,7 +1514,10 @@ if (empty($alterrights)) {
 				<script type="text/javascript">
 				$(function() {
 					$("#slider-sharpenamount").slider({
-						startValue: <?php echo getOption('sharpen_amount');?>, //TODO!!!! this becomes 'value' if we upgrade Jquery?
+					<?php $v = getOption('sharpen_amount'); ?>
+						<?php $v = getOption('sharpen_amount'); ?>
+						startValue: <?php echo $v; ?>,
+						value: <?php echo $v; ?>,
 						min: 0,
 						max: 100,
 						slide: function(event, ui) {
