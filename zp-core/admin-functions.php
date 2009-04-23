@@ -195,23 +195,23 @@ function printAdminFooter($addl='') {
 
 function datepickerJS($path) {
 	?>
-	<script src="<?php echo $path;?>js/jquery.ui.zenphoto.js" type="text/javascript"></script>
+	<script src="<?php echo $path;?>js/jqueryui/jquery.ui.zenphoto.js" type="text/javascript"></script>
 	<?php
 	$lang = str_replace('_', '-',getOption('locale'));
-	if (file_exists($path.'js/jquery.datepicker.i18n/ui.datepicker-'.$lang.'.js')) {
+	if (file_exists($path.'js/jqueryui/i18n/ui.datepicker-'.$lang.'.js')) {
 	} else {
 		$lang = substr($lang, 0, 2);
-		if (!file_exists($path.'js/jquery.datepicker.i18n/ui.datepicker-'.$lang.'.js')) {
+		if (!file_exists($path.'js/jqueryui/i18n/ui.datepicker-'.$lang.'.js')) {
 			$lang = '';
 		}
 	}
 	if (!empty($lang)) {
 		?>
-		<script src="<?php echo $path;?>js/jquery.datepicker.i18n/ui.datepicker-<?php echo $lang; ?>.js" type="text/javascript"></script>
+		<script src="<?php echo $path;?>js/i18n/ui.datepicker-<?php echo $lang; ?>.js" type="text/javascript"></script>
 		<?php
 	}
 	?>
-	<link rel="stylesheet" href="<?php echo $path; ?>js/jquery.ui.all.css" type="text/css" />
+	<link rel="stylesheet" href="<?php echo $path; ?>js/jqueryui/ui.zenphoto.css" type="text/css" />
 	<script type="text/javascript">
 		$.datepicker.setDefaults({ dateFormat: 'yy-mm-dd 00:00:00' });
 	</script>
