@@ -128,7 +128,7 @@ tagSelector(NULL, '', true, $tagsort);
 echo "\n<p align='center'>";
 ?>
 <p class="buttons">
-<button type="submit\" id='delete_tags' value="<?php echo gettext("Delete checked tags"); ?>" title="<?php echo gettext("Delete all the tags checked above."); ?>" /><img src="images/fail.png" alt="" /><?php echo gettext("Delete checked tags"); ?></button>
+<button type="submit" id='delete_tags' value="<?php echo gettext("Delete checked tags"); ?>" title="<?php echo gettext("Delete all the tags checked above."); ?>" /><img src="images/fail.png" alt="" /><?php echo gettext("Delete checked tags"); ?></button>
 </p><br clear: all /><br /><br />
 <?php
 echo "\n</form>";
@@ -148,7 +148,7 @@ echo "\n</ul>";
 echo "\n<p align='center'>";
 ?>
 <p class="buttons">
-<button type="submit\" id='rename_tags' value="<?php echo gettext("Rename tags"); ?>" title="<?php echo gettext("Save all the changes entered above."); ?>" /><img src="images/pass.png" alt="" /><?php echo gettext("Rename tags"); ?></button>
+<button type="submit" id='rename_tags' value="<?php echo gettext("Rename tags"); ?>" title="<?php echo gettext("Save all the changes entered above."); ?>" /><img src="images/pass.png" alt="" /><?php echo gettext("Rename tags"); ?></button>
 </p><br clear: all /><br /><br />
 <?php
 
@@ -167,7 +167,7 @@ echo "\n</ul>";
 echo "\n<p align='center'>";
 ?>
 <p class="buttons">
-<button type="submit\" id='save_tags' value="<?php echo gettext("Add tags"); ?>" title="<?php echo gettext("Add all the tags entered above."); ?>" /><img src="images/add.png" alt="" /><?php echo gettext("Add tags"); ?></button>
+<button type="submit" id='save_tags' value="<?php echo gettext("Add tags"); ?>" title="<?php echo gettext("Add all the tags entered above."); ?>" /><img src="images/add.png" alt="" /><?php echo gettext("Add tags"); ?></button>
 </p><br clear: all /><br /><br />
 <?php
 echo "\n</form>";
