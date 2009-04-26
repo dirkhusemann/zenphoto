@@ -35,7 +35,7 @@ class Album extends PersistentObject {
 	 */
 	function Album(&$gallery, $folder8, $cache=true) {
 		$folder8 = sanitize_path($folder8);
-		$folderFS = internalToFIlesystem($folder8);
+		$folderFS = internalToFilesystem($folder8);
 		$this->name = $folder8;
 		$this->gallery = &$gallery;
 		if (empty($folder8)) {
@@ -672,7 +672,7 @@ class Album extends PersistentObject {
 			$albumdir = getAlbumFolder();
 		}
 		$shuffle = $thumb != '1';
-		if (!empty($thumb) && $thumb != '1' && file_exists($albumdir.internalToFIlesystem($thumb))) {
+		if (!empty($thumb) && $thumb != '1' && file_exists($albumdir.internalToFilesystem($thumb))) {
 			if ($i===false) {
 				return newImage($this, $thumb);
 			} else {
@@ -771,7 +771,7 @@ class Album extends PersistentObject {
 			}
 			if (!empty($theme)) {
 				$themeimage = SERVERPATH.'/'.THEMEFOLDER.'/'.$theme.'/images/imageDefault.png';
-				if (file_exists(internalToFIlesystem($themeimage))) {
+				if (file_exists(internalToFilesystem($themeimage))) {
 					$nullimage = $themeimage;
 				}
 			}
@@ -927,7 +927,7 @@ class Album extends PersistentObject {
 			}
 		}
 		$oldfolder = $this->name;
-		$dest = getAlbumFolder().internalToFIlesystem($newfolder);
+		$dest = getAlbumFolder().internalToFilesystem($newfolder);
 		// Check to see if the destination already exists
 		if (file_exists($dest)) {
 			// Disallow moving an album over an existing one.
@@ -1045,7 +1045,7 @@ class Album extends PersistentObject {
 	function copyAlbum($newfolder) {
 		// First, ensure the new base directory exists.
 		$oldfolder = $this->name;
-		$dest = getAlbumFolder().'/'.internalToFIlesystem($newfolder);
+		$dest = getAlbumFolder().'/'.internalToFilesystem($newfolder);
 		// Check to see if the destination directory already exists
 
 		if (file_exists($dest)) {
@@ -1147,7 +1147,7 @@ class Album extends PersistentObject {
 		$live = array();
 		// Does the dirname from the db row exist on disk?
 		while($row = mysql_fetch_assoc($result)) {
-			if (!is_dir(getAlbumFolder() . internalToFIlesystem($row['folder'])) || in_array($row['folder'], $live)
+			if (!is_dir(getAlbumFolder() . internalToFilesystem($row['folder'])) || in_array($row['folder'], $live)
 			|| substr($row['folder'], -1) == '/' || substr($row['folder'], 0, 1) == '/') {
 				$dead[] = $row['id'];
 			} else {

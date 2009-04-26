@@ -82,7 +82,7 @@ if (isset($_GET['p'])) {
 
 // Load plugins, then load the requested $obj (page, image, album, or index; defined above).
 $_zp_loaded_plugins = array();
-if (file_exists(SERVERPATH . "/" . internalToFIlesystem($obj)) && $zp_request) {
+if (file_exists(SERVERPATH . "/" . internalToFilesystem($obj)) && $zp_request) {
 	foreach (getEnabledPlugins() as $extension) {
 		$_zp_loaded_plugins[] = $extension;
 		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
@@ -122,7 +122,7 @@ if (file_exists(SERVERPATH . "/" . internalToFIlesystem($obj)) && $zp_request) {
 
 	list($album, $image) = rewrite_get_album_image('album','image');
 	$_zp_gallery_page = '404.php';
-	$errpage = THEMEFOLDER.'/'.internalToFIlesystem($theme).'/404.php';
+	$errpage = THEMEFOLDER.'/'.internalToFilesystem($theme).'/404.php';
 	header("HTTP/1.0 404 Not Found");
 	header("Status: 404 Not Found");
 	if (file_exists(SERVERPATH . "/" . $errpage)) {

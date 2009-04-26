@@ -1147,7 +1147,7 @@ if (empty($alterrights)) {
 				<tr>
 					<td><?php echo gettext("Gallery behavior:"); ?></td>
 					<td>
-					<p><input type="checkbox" name="album_use_new_image_date" value="1" <?php echo checked('1', getOption('album_use_new_image_date')); ?> /> <?php echo gettext("Use latest image date as album date"); ?></p>
+					<p><input type="checkbox" name="album_use_new_image_date" value="1" <?php echo checked('1', getOption('album_use_new_image_date')); ?> /> <?php echo gettext("use latest image date as album date"); ?></p>
 					<p><input type="checkbox" name="login_user_field" value="1" <?php echo checked('1', getOption('login_user_field')); ?> /> <?php echo gettext("enable user name login field"); ?></p>
 					<p><input type="checkbox" name="thumb_select_images" value="1" <?php echo checked('1', getOption('thumb_select_images')); ?> /> <?php echo gettext("visual thumb selection"); ?></p>
 					<p><input type="checkbox" name="persistent_archive" value="1" <?php echo checked('1', getOption('persistent_archive')); ?> /> <?php echo gettext("enable persistent archives"); ?></p>

@@ -49,7 +49,7 @@ switch ($suffix) {
 }
 
 if (getOption('cache_full_image')) {
-	$cache_path = SERVERCACHE . '/' . internalToFIlesystem($cache_file);
+	$cache_path = SERVERCACHE . '/' . internalToFilesystem($cache_file);
 } else {
 	$cache_path = NULL;
 }
@@ -84,7 +84,7 @@ if (getOption('protect_full_image') == 'Download') {
 if (getOption('fullimage_watermark')) {
 	$watermark_image = getOption('fullimage_watermark');
 	if ($watermark_image) {
-		$watermark_image = SERVERPATH . '/' . ZENFOLDER . '/watermarks/' . internalToFIlesystem($watermark_image).'.png';
+		$watermark_image = SERVERPATH . '/' . ZENFOLDER . '/watermarks/' . internalToFilesystem($watermark_image).'.png';
 		if (!file_exists($watermark_image)) $watermark_image = SERVERPATH . '/' . ZENFOLDER . '/images/imageDefault.png';
 	}
 	$offset_h = getOption('watermark_h_offset') / 100;

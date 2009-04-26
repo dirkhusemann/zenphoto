@@ -153,7 +153,7 @@ function checkObjectsThumb($album, $video){
 	$video = is_objectsThumb($album, $video);
 	if($video) {
 		foreach($_zp_supported_images as $ext) {
-			if(file_exists(internalToFIlesystem($album."/".$video.'.'.$ext))) {
+			if(file_exists(internalToFilesystem($album."/".$video.'.'.$ext))) {
 				return $video.'.'.$ext;
 			}
 		}
@@ -173,7 +173,7 @@ function checkVideoOriginal($album, $video){
 	if ($video) {
 		$extTab = array(".ogg",".OGG",".avi",".AVI",".wmv",".WMV");
 		foreach($extTab as $ext) {
-			if(file_exists(internalToFIlesystem($album."/".$video.$ext))) {
+			if(file_exists(internalToFilesystem($album."/".$video.$ext))) {
 				return $video.$ext;
 			}
 		}
@@ -609,9 +609,9 @@ function getPlugin($plugin, $inTheme) {
 	global $_zp_themeroot;
 	$_zp_themeroot = WEBPATH . '/' . THEMEFOLDER . '/'. $inTheme;
 	if ($inTheme) {
-		$pluginFile = SERVERPATH . '/' . THEMEFOLDER . '/'. internalToFIlesystem($inTheme . '/' . $plugin);
+		$pluginFile = SERVERPATH . '/' . THEMEFOLDER . '/'. internalToFilesystem($inTheme . '/' . $plugin);
 	} else {
-		$pluginFile = SERVERPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . internalToFIlesystem($plugin);
+		$pluginFile = SERVERPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . internalToFilesystem($plugin);
 	}
 	if (file_exists($pluginFile)) {
 		return $pluginFile;
@@ -988,7 +988,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 	}
 	$goodMessage = 2;
 	$gallery = new gallery();
-	if (!(false === ($requirePath = getPlugin('spamfilters/'.internalToFIlesystem(getOption('spam_filter')).".php", false)))) {
+	if (!(false === ($requirePath = getPlugin('spamfilters/'.internalToFilesystem(getOption('spam_filter')).".php", false)))) {
 		require_once($requirePath);
 		$spamfilter = new SpamFilter();
 		$goodMessage = $spamfilter->filterMessage($name, $email, $website, $comment, isImageClass($receiver)?$receiver->getFullImage():NULL, $ip);
@@ -1642,7 +1642,7 @@ function getNotViewableAlbums() {
  * @return string
  */
 function parseThemeDef($file) {
-	$file = internalToFIlesystem($file);
+	$file = internalToFilesystem($file);
 	$themeinfo = array();
 	if (is_readable($file) && $fp = @fopen($file, "r")) {
 		while($line = fgets($fp)) {

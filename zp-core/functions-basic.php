@@ -329,7 +329,7 @@ function rewrite_get_album_image($albumvar, $imagevar) {
 			} else if ($slashpos !== false) {
 				$ralbum = substr($path, 0, $slashpos);
 				$rimage = substr($path, $slashpos+1);
-				if ((is_dir(getAlbumFolder() . internalToFIlesystem($ralbum . '/' . $rimage)) || hasDyanmicAlbumSuffix($rimage))) {
+				if ((is_dir(getAlbumFolder() . internalToFilesystem($ralbum . '/' . $rimage)) || hasDyanmicAlbumSuffix($rimage))) {
 					$ralbum = $ralbum . '/' . $rimage;
 					$rimage = null;
 				}
@@ -357,8 +357,8 @@ function rewrite_get_album_image($albumvar, $imagevar) {
  */
 function getImageCacheFilename($album8, $image8, $args) {
 	// this function works in FILESYSTEM_CHARSET, so convert the file names
-	$album = internalToFIlesystem($album8);
-	$image = internalToFIlesystem($image8);
+	$album = internalToFilesystem($album8);
+	$image = internalToFilesystem($image8);
 	// Set default variable values.
 	$postfix = getImageCachePostfix($args);
 	if (empty($album)) {
@@ -807,7 +807,7 @@ function filesystemToInternal($filename) {
  * @param string $filename the file name to convert
  * @return string
  */
-function internalToFIlesystem($filename) {
+function internalToFilesystem($filename) {
 	global $_zp_UTF8;
 	return $_zp_UTF8->convert($filename, getOption('charset'), FILESYSTEM_CHARSET);
 }

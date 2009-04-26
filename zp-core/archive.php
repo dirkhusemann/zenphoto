@@ -26,7 +26,7 @@ class archive
 	{
 		$this->options = array (
 			'basedir' => ".",
-			'name' => internalToFIlesystem($name),
+			'name' => internalToFilesystem($name),
 			'prepend' => "",
 			'inmemory' => 0,
 			'overwrite' => 0,

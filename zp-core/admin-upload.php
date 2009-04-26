@@ -34,7 +34,7 @@ if (isset($_GET['action'])) {
 		if (isset($_POST['processed']) && !empty($_POST['folder']) && ($newAlbum || !$files_empty)) {
 
 			$folder = sanitize_path($_POST['folder']);
-			$uploaddir = $gallery->albumdir . internalToFIlesystem($folder);
+			$uploaddir = $gallery->albumdir . internalToFilesystem($folder);
 			if (!is_dir($uploaddir)) {
 				mkdir ($uploaddir, CHMOD_VALUE);
 			}
@@ -62,7 +62,7 @@ if (isset($_GET['action'])) {
 				if ($error == UPLOAD_ERR_OK) {
 					$tmp_name = $_FILES['files']['tmp_name'][$key];
 					$name = $_FILES['files']['name'][$key];
-					$soename = internalToFIlesystem(seoFriendlyURL($name));
+					$soename = internalToFilesystem(seoFriendlyURL($name));
 					if (is_valid_image($name) || is_valid_other_type($name)) {
 						$uploadfile = $uploaddir . '/' . $soename;
 						move_uploaded_file($tmp_name, $uploadfile);
@@ -104,10 +104,13 @@ printAdminHeader();
 echo "\n</head>";
 echo "\n<body>";
 printLogoAndLinks();
-echo "\n" . '<div id="main">';
-printTabs('upload');
-echo "\n" . '<div id="content">';
-
+?>
+<div id="main">
+	<?php
+	printTabs('upload');
+	?>
+		<div id="content">
+		<?php
 			$albumlist = array();
 			genAlbumUploadList($albumlist);
 			?> 

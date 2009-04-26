@@ -311,7 +311,7 @@ if (defined('RELEASE')) {
 					<?php
 					foreach ($array_of_filters as $data) {
 						?>
-						<li><em><?php echo $priority; ?></em>: <?php echo $data['script'] ?> => <?php echo $data['function'] ?></li>
+						<li><em><?php echo $priority; ?></em>: <?php echo $data['script'] ?> =&gt; <?php echo $data['function'] ?></li>
 						<?php
 					}
 					?>

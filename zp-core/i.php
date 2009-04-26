@@ -44,8 +44,8 @@ if (!isset($_GET['a']) || !isset($_GET['i'])) {
 // URL looks like: "/album1/subalbum/image/picture.jpg"
 
 list($ralbum, $rimage) = rewrite_get_album_image('a', 'i');
-$ralbum = internalToFIlesystem($ralbum);
-$rimage = internalToFIlesystem($rimage);
+$ralbum = internalToFilesystem($ralbum);
+$rimage = internalToFilesystem($rimage);
 $album = str_replace('..','', sanitize_path($ralbum));
 $image = str_replace(array('/',"\\"),'', sanitize_path($rimage));
 $theme = themeSetup($album); // loads the theme based image options.
@@ -169,7 +169,7 @@ if (!file_exists($imgfile)) {
 if (!ini_get("safe_mode")) {
 	$albumdirs = getAlbumArray($album, true);
 	foreach($albumdirs as $dir) {
-		$dir = internalToFIlesystem($dir);
+		$dir = internalToFilesystem($dir);
 		$dir = SERVERCACHE . '/' . $dir;
 		if (!is_dir($dir)) {
 			@mkdir($dir, CHMOD_VALUE);

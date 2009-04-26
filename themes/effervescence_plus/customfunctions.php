@@ -75,7 +75,7 @@ function getImage_AlbumCount() {
 }
 function parseCSSDef($file) {
 	$file = str_replace(WEBPATH, '', $file);
-	$file = SERVERPATH . internalToFIlesystem($file);
+	$file = SERVERPATH . internalToFilesystem($file);
 	if (is_readable($file) && $fp = @fopen($file, "r")) {
 		while($line = fgets($fp)) {
 			if (!(false === strpos($line, "#main2 {"))) {

@@ -144,7 +144,7 @@ function printAdminToolbox($id='admin') {
 		apply_filter('admin_toolbox_global');
 		
 		$gal = getOption('custom_index_page');
-		if (empty($gal) || !file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.internalToFIlesystem($gal).'.php')) {
+		if (empty($gal) || !file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.internalToFilesystem($gal).'.php')) {
 			$gal = 'index.php';
 		} else {
 			$gal .= '.php';
@@ -348,7 +348,7 @@ function getGalleryIndexURL($relative=true) {
 	$gallink2 = '';
 	$specialpage = false;
 	if ($relative && $specialpage = getOption('custom_index_page')) {
-		if (file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.internalToFIlesystem($specialpage).'.php')) {
+		if (file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.internalToFilesystem($specialpage).'.php')) {
 			$gallink1 = $specialpage.'/';
 			$gallink2 = 'p='.$specialpage.'&';
 		} else {
@@ -1340,7 +1340,7 @@ function getPasswordProtectImage($extra) {
 	$image = $_zp_themeroot."/images/err-passwordprotected.gif\"";
 	$themedir = SERVERPATH . "/themes/".basename($_zp_themeroot);
 	$imagebase = $themedir."/images/err-passwordprotected.gif";
-	if (file_exists(internalToFIlesystem($imagebase))) {
+	if (file_exists(internalToFilesystem($imagebase))) {
 		return '<img src="'.$image.'" '.$extra.' />';
 	} else {
 		return '<img src="'. WEBPATH . '/' . ZENFOLDER.'/images/err-passwordprotected.gif" '.
@@ -2607,7 +2607,7 @@ function getProtectedImageURL() {
 	$suffix = strtolower(substr(strrchr($_zp_current_image->filename, "."), 1));
 	$cache_file = $_zp_current_album->name . "/" . substr($_zp_current_image->filename, 0, -strlen($suffix)-1) . '_FULL.' . $suffix;
 	$cache_path = SERVERCACHE . '/' . $cache_file;
-	if (file_exists(internalToFIlesystem($cache_path))) {
+	if (file_exists(internalToFilesystem($cache_path))) {
 		return WEBPATH . CACHEFOLDER . pathurlencode($cache_file);
 	} else {
 		$path = $_zp_current_image->getImageLink();
@@ -4057,7 +4057,7 @@ function getTheme(&$zenCSS, &$themeColor, $defaultColor) {
 	$themeColor = getOption('Theme_colors');
 	$zenCSS = $_zp_themeroot . '/styles/' . $themeColor . '.css';
 	$unzenCSS = str_replace(WEBPATH, '', $zenCSS);
-	if (!file_exists(SERVERPATH . internalToFIlesystem($unzenCSS))) {
+	if (!file_exists(SERVERPATH . internalToFilesystem($unzenCSS))) {
 		$zenCSS = $_zp_themeroot. "/styles/" . $defaultColor . ".css";
 		return ($themeColor == '');
 	} else {
@@ -4288,7 +4288,7 @@ function printPasswordForm($hint, $showProtected=true, $showuser=NULL) {
 	</form>
 	<?php
 	$registerpage = getOption('user_registration_page');
-	if (!empty($registerpage) && file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.internalToFIlesystem($registerpage).'.php')) {
+	if (!empty($registerpage) && file_exists(SERVERPATH.'/'.THEMEFOLDER.'/'.getOption('current_theme').'/'.internalToFilesystem($registerpage).'.php')) {
 		if (getOption('mod_rewrite')) {
 			$link = '/page/'.$registerpage;
 		} else {

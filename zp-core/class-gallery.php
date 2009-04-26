@@ -339,7 +339,7 @@ class Gallery {
 			// Load the albums from disk
 			$albumfolder = getAlbumFolder();
 			while($row = mysql_fetch_assoc($result)) {
-				if (!file_exists($albumfolder.internalToFIlesystem($row['folder'])) || in_array($row['folder'], $live)) {
+				if (!file_exists($albumfolder.internalToFilesystem($row['folder'])) || in_array($row['folder'], $live)) {
 					$dead[] = $row['id'];
 					if ($row['album_theme'] !== '') {  // orphaned album theme options table
 						$deadalbumthemes[$row['id']] = $row['folder'];
@@ -383,8 +383,8 @@ class Gallery {
 				$albumfolder = getAlbumFolder();
 				$albumids = query_full_array("SELECT `id`, `mtime`, `folder` FROM " . prefix('albums') . " WHERE `dynamic`='1'");
 				foreach ($albumids as $album) {
-					if (($mtime=filemtime($albumfolder.internalToFIlesystem($album['folder']))) > $album['mtime']) {  // refresh
-						$data = file_get_contents($albumfolder.internalToFIlesystem($album['folder']));
+					if (($mtime=filemtime($albumfolder.internalToFilesystem($album['folder']))) > $album['mtime']) {  // refresh
+						$data = file_get_contents($albumfolder.internalToFilesystem($album['folder']));
 						while (!empty($data)) {
 							$data1 = trim(substr($data, 0, $i = strpos($data, "\n")));
 							if ($i === false) {
@@ -462,7 +462,7 @@ class Gallery {
 			foreach($images as $image) {
 				$sql = 'SELECT `folder` FROM ' . prefix('albums') . ' WHERE `id`="' . $image['albumid'] . '";';
 				$row = query_single_row($sql);
-				$imageName = internalToFIlesystem(getAlbumFolder() . $row['folder'] . '/' . $image['filename']);
+				$imageName = internalToFilesystem(getAlbumFolder() . $row['folder'] . '/' . $image['filename']);
 				if (file_exists($imageName)) {
 
 					if ($image['mtime'] != filemtime($imageName)) { // file has changed since we last saw it

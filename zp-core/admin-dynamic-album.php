@@ -52,7 +52,7 @@ if (isset($_POST['savealbum'])) {
 	$redirect = $album.'/'.$albumname.".alb";
 
 	if (!empty($albumname)) {
-		$f = fopen(internalToFIlesystem(getAlbumFolder().$redirect), 'w');
+		$f = fopen(internalToFilesystem(getAlbumFolder().$redirect), 'w');
 		if ($f !== false) {
 			fwrite($f,"WORDS=$words\nTHUMB=$thumb\nFIELDS=$fields\n");
 			fclose($f);

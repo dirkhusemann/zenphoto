@@ -110,7 +110,7 @@ if(getOption('mod_rewrite')) {
 			$thumburl = '<img border="0" src="'.$thumb->getCustomImage($size, NULL, NULL, NULL, NULL, NULL, NULL, TRUE).'" alt="'.get_language_string($albumitem->get("title"),$locale) .'" />';
 			$title =  get_language_string($albumitem->get("title"),$locale);
 			if(true || getOption("feed_sortorder_albums") === "latestupdated") {
-				$filechangedate = filectime(getAlbumFolder().internalToFIlesystem($albumitem->name));
+				$filechangedate = filectime(getAlbumFolder().internalToFilesystem($albumitem->name));
 				$latestimage = query_single_row("SELECT mtime FROM " . prefix('images'). " WHERE albumid = ".$albumitem->getAlbumID() . " AND `show` = 1 ORDER BY id DESC");
 				$lastuploaded = query("SELECT COUNT(*) FROM ".prefix('images')." WHERE albumid = ".$albumitem->getAlbumID() . " AND mtime = ". $latestimage['mtime']);
 				$row = mysql_fetch_row($lastuploaded);

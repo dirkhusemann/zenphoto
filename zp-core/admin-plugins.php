@@ -93,7 +93,7 @@ foreach ($filelist as $extension) {
 	$ext = substr($extension, 0, strlen($extension)-4);
 	$opt = 'zp_plugin_'.$ext;
 	
-	$pluginStream = file_get_contents(internalToFIlesystem($extension));
+	$pluginStream = file_get_contents(internalToFilesystem($extension));
 	$parserr = 0;
 	$str = isolate('$plugin_description', $pluginStream);
 	if (false === $str) {

@@ -28,7 +28,7 @@ if ($external) return; // can't process external album images
 // TODO: Allow theme based playlist.css, too
 if ( in_context(ZP_ALBUM) && !OFFSET_PATH) {
 	$theme = getCurrentTheme();
-	$css = SERVERPATH . '/' . THEMEFOLDER . '/' . internalToFIlesystem($theme) . '/flowplayer3_playlist.css';
+	$css = SERVERPATH . '/' . THEMEFOLDER . '/' . internalToFilesystem($theme) . '/flowplayer3_playlist.css';
 	if (file_exists($css)) {
 		$css = WEBPATH . '/' . THEMEFOLDER . '/' . $theme . '/flowplayer3_playlist.css';
 	} else {

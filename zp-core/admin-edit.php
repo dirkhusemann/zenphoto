@@ -127,7 +127,6 @@ if (isset($_GET['album'])) {
 
 			/** SAVE A SINGLE ALBUM *******************************************************/
 			if (isset($_POST['album'])) {
-
 				$folder = sanitize_path($_POST['album']);
 				$album = new Album($gallery, $folder);
 				$notify = '';
@@ -153,7 +152,7 @@ if (isset($_GET['album'])) {
 							// The file might no longer exist
 							$image = newImage($album, $filename);
 							if ($image->exists) {
-								if (isset($_POST[$i.'-MoveCopy'])) {
+								if (isset($_POST[$i.'-MoveCopyRename'])) {
 									$movecopyrename_action = sanitize($_POST[$i.'-MoveCopyRename'],3);
 								} else {
 									$movecopyrename_action = '';
@@ -351,8 +350,10 @@ printAdminHeader();
 if ($sortablepage) {
 	zenSortablesHeader($_zp_sortable_list, 'albumList', 'albumOrder', 'div', "handle:'.handle', axis:'y', containment:'table', placeholder:'zensortable_row'");
 }
-if (empty($subtab)) {
-	?>
+
+echo "subtab:$subtab";
+
+if ($subtab=='albuminfo') {	?>
 	<script type="text/javascript" src="js/tag.js"></script>
 	<?php
 }
@@ -1120,7 +1121,7 @@ if (isset($_GET['saved'])) {
 	}
 }
 ?>
-</div
+</div>
 <!-- content --> 
 <?php printAdminFooter(); ?>
 <!-- main -->

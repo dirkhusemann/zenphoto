@@ -313,14 +313,14 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		$watermark_image = false;
 		if ($thumbWM) {
 			if ($thumb || !$allow_watermark) {
-				$watermark_image = SERVERPATH . '/' . ZENFOLDER . '/watermarks/' . internalToFIlesystem($thumbWM).'.png';
+				$watermark_image = SERVERPATH . '/' . ZENFOLDER . '/watermarks/' . internalToFilesystem($thumbWM).'.png';
 				if (!file_exists($watermark_image)) $watermark_image = SERVERPATH . '/' . ZENFOLDER . '/images/imageDefault.png';
 			}
 		} else {
 			if ($allow_watermark) {
 				$watermark_image = getOption('fullimage_watermark');
 				if ($watermark_image) {
-					$watermark_image = SERVERPATH . '/' . ZENFOLDER . '/watermarks/' . internalToFIlesystem($watermark_image).'.png';
+					$watermark_image = SERVERPATH . '/' . ZENFOLDER . '/watermarks/' . internalToFilesystem($watermark_image).'.png';
 					if (!file_exists($watermark_image)) $watermark_image = SERVERPATH . '/' . ZENFOLDER . '/images/imageDefault.png';
 				}
 			}

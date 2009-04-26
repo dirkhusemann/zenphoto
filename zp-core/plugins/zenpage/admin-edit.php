@@ -278,7 +278,7 @@ if(is_object($result)) {
 			
     	<p>
     	<?php
-    if(is_AdminEditPage("newsarticle")) { ?>
+    if (is_AdminEditPage("newsarticle")) { ?>
     	<h2 class="h2_bordered_edit-zenpage"><?php echo gettext("Categories"); ?></h2>
     	<?php 
     	if(is_object($result)) {
