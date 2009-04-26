@@ -1075,7 +1075,7 @@ function printAlbumEditForm($index, $album) {
 	<script type="text/javascript">
 		$(function () {
 			$('#<?php echo $javaprefix; ?>customalbumsort').tagSuggest({
-				tags: [<?php echo $albumdbfields; ?>]
+				tags: [<?php echo mysql_real_escape_string($albumdbfields); ?>]
 			});
 		});
 	</script>
@@ -1147,7 +1147,7 @@ function printAlbumEditForm($index, $album) {
 		<script type="text/javascript">
 			$(function () {
 				$('#<?php echo $javaprefix; ?>customimagesort').tagSuggest({
-					tags: [<?php echo $imagedbfields; ?>]
+					tags: [<?php echo mysql_real_escape_string($imagedbfields); ?>]
 				});
 			});
 		</script>
