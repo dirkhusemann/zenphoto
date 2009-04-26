@@ -191,10 +191,11 @@ function printFooter($page) {
 		switch ($page) {
 		case 'image':
 			$h = getHitcounter();
-			echo "<p>".sprintf(ngettext('%1$u hit on this %2$s','%1$u hits on this image',$h),$h)."</p>";
+			echo "<p>".sprintf(ngettext('%1$u hit on this image','%1$u hits on this image',$h),$h)."</p>";
+			break;
 			case 'album':
 			$h = getHitcounter();
-			echo "<p>".sprintf(ngettext('%1$u hit on this %2$s','%1$u hits on this album',$h),$h)."</p>";
+			echo "<p>".sprintf(ngettext('%1$u hit on this album','%1$u hits on this album',$h),$h)."</p>";
 			break;
 		case 'gallery':
 			?>
