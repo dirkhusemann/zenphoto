@@ -183,7 +183,7 @@ printAdminHeader('../');
 		<?php printTabs('edit'); ?>
 		<div id="content">
 				<h1><?php echo gettext("Image cropping"); ?></h1>
-				<p><?php echo gettext("You can crop your image by draging the your mouse on the image.<br /><br /><strong>NOTE:</strong> these changes are permanent!."); ?></p>
+				<p><?php echo gettext("You can crop your image by draging the crop handles on the image.<br /><br /><strong>NOTE:</strong> If you save these changes they are permanent!"); ?></p>
 				<div style="display:block">
 		 			
 					<div style="text-align:left; float: left;">
