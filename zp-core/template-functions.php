@@ -192,13 +192,13 @@ function printAdminToolbox($id='admin') {
 				echo "</li>\n";
 			}
 			// set the return to this album/page
-			apply_filter('admin_toolbox_album');
+			apply_filter('admin_toolbox_album', $albumname);
 			$redirect = "&amp;album=".urlencode($albumname)."&amp;page=$page";
 			
 		} else if ($_zp_gallery_page === 'image.php') {
 		// script is image.php
 			$albumname = $_zp_current_album->name;
-			$imagename = urlencode($_zp_current_image->filename);
+			$imagename = $_zp_current_image->filename;
 			if (isMyAlbum($albumname, EDIT_RIGHTS)) {
 				// if admin has edit rights on this album, provide a delete link for the image.
 				echo "<li><a href=\"javascript: confirmDeleteImage('".$zf."/admin-edit.php?page=edit&amp;action=deleteimage&amp;album=" .
@@ -208,8 +208,8 @@ function printAdminToolbox($id='admin') {
 				echo '<li><a href="'.$zf.'/admin-edit.php?page=edit&amp;album='.urlencode($albumname).'&amp;image='.urlencode($imagename).'&amp;tab=imageinfo#IT" title="'.gettext('Edit this image').'">'.gettext('Edit image').'</a></li>'."\n";
 			}
 			// set return to this image page
-			apply_filter('admin_toolbox_image');
-			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=$imagename";
+			apply_filter('admin_toolbox_image', $albumname, $imagename);
+			$redirect = "&amp;album=".urlencode($albumname)."&amp;image=urlencode($imagename)";
 			
 		} else if (($_zp_gallery_page === 'search.php') && !empty($_zp_current_search->words)) {
 		// script is search.php with a search string
@@ -228,22 +228,25 @@ function printAdminToolbox($id='admin') {
 				echo "<li><a href=\"".$zf.PLUGIN_FOLDER."zenpage/\">".gettext("Zenpage")."</a></li>";
 				if (is_NewsArticle()) {
 					// page is a NewsArticle--provide zenpage edit, delete, and Add links
-					echo "<li><a href=\"".$zf.PLUGIN_FOLDER."zenpage/admin-edit.php?newsarticle&amp;edit&amp;titlelink=".urlencode(getNewsTitlelink())."\">".gettext("Edit Article")."</a></li>";
+					$titlelink = getNewsTitlelink();
+					echo "<li><a href=\"".$zf.PLUGIN_FOLDER."zenpage/admin-edit.php?newsarticle&amp;edit&amp;titlelink=".urlencode($titlelink)."\">".gettext("Edit Article")."</a></li>";
 					?> 
 					<li><a href="javascript: confirmDeleteImage('<?php echo $zf.PLUGIN_FOLDER; ?>zenpage/news-article-admin.php?del=<?php echo getNewsID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this article? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete article"); ?>"><?php echo gettext("Delete Article"); ?></a></li>
 					<?php
 					echo "<li><a href=\"".$zf.PLUGIN_FOLDER."zenpage/admin-edit.php?newsarticle&amp;add\">".gettext("Add Article")."</a></li>";
+					apply_filter('admin_toolbox_news', $titlelink);
 				}
 				if (is_Pages()) {
 					// page is zenpage page--provide edit, delete, and add links
-					echo "<li><a href=\"".$zf.PLUGIN_FOLDER."zenpage/admin-edit.php?page&amp;edit&amp;titlelink=".urlencode(getPageTitlelink())."\">".gettext("Edit Page")."</a></li>";
+					$titlelink = getPageTitlelink();
+					echo "<li><a href=\"".$zf.PLUGIN_FOLDER."zenpage/admin-edit.php?page&amp;edit&amp;titlelink=".urlencode($titlelink)."\">".gettext("Edit Page")."</a></li>";
 					?> 
 					<li><a href="javascript: confirmDeleteImage('<?php echo $zf.PLUGIN_FOLDER; ?>zenpage/page-admin.php?del=<?php echo getPageID(); ?>','<?php echo js_encode(gettext("Are you sure you want to delete this page? THIS CANNOT BE UNDONE!")); ?>')" title="<?php echo gettext("Delete page"); ?>"><?php echo gettext("Delete Page"); ?></a></li>
 					<?php	
 					echo "<li><a href=\"".FULLWEBPATH."/".ZENFOLDER.PLUGIN_FOLDER."zenpage/admin-edit.php?page&amp;add\">".gettext("Add Page")."</a></li>";
+					apply_filter('admin_toolbox_page', $titlelink);
 				}
 			}
-			apply_filter('admin_toolbox_news');
 		}	
 		
 		// logout link

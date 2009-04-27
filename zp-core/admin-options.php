@@ -491,7 +491,9 @@ if ($subtab == 'gallery' || $subtab == 'image') {
 	<script type="text/javascript">
 		$(function () {
 			$('#<?php echo $targetid; ?>').tagSuggest({
-				tags: [<?php echo implode(',', mysql_real_escape_string($dbfields); ?>]
+				tags: [
+				<?php echo implode(',', $dbfields);  ?>
+				]
 			});
 		});
 	</script>

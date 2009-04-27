@@ -778,22 +778,24 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						<?php
 						if (isImagePhoto($image)) {
 						?>
-						<hr />
-						<p>	<?php echo gettext("Rotation:"); ?>
+							<hr />
+							<p>	<?php echo gettext("Rotation:"); ?>
+								<?php
+								$splits = preg_split('/!([(0-9)])/', $image->get('EXIFOrientation'));
+								$rotation = $splits[0];
+								if (!in_array($rotation,array(3, 6, 8))) $rotation = 0;
+								?>
+								<input type="hidden" name="<?php echo $currentimage; ?>-oldrotation" value="<?php echo $rotation; ?>" />
+								<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="0" <?php checked(0, $rotation); echo $disablerotate ?> /> <?php echo gettext('none'); ?>
+								<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="8" <?php checked(8, $rotation); echo $disablerotate ?> /> <?php echo gettext('90 degrees'); ?>
+								<br /><input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="3" <?php checked(3, $rotation); echo $disablerotate ?> /> <?php echo gettext('180 degrees'); ?>
+								<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="6" <?php checked(6, $rotation); echo $disablerotate ?> /> <?php echo gettext('270 degrees'); ?>
+							</p>
 							<?php
-							$splits = preg_split('/!([(0-9)])/', $image->get('EXIFOrientation'));
-							$rotation = $splits[0];
-							if (!in_array($rotation,array(3, 6, 8))) $rotation = 0;
-							?>
-							<input type="hidden" name="<?php echo $currentimage; ?>-oldrotation" value="<?php echo $rotation; ?>" />
-							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="0" <?php checked(0, $rotation); echo $disablerotate ?> /> <?php echo gettext('none'); ?>
-							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="8" <?php checked(8, $rotation); echo $disablerotate ?> /> <?php echo gettext('90 degrees'); ?>
-							<br /><input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="3" <?php checked(3, $rotation); echo $disablerotate ?> /> <?php echo gettext('180 degrees'); ?>
-							<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="6" <?php checked(6, $rotation); echo $disablerotate ?> /> <?php echo gettext('270 degrees'); ?>
-						</p>
-						<?php
-						} 
+							apply_filter('edit_image_utilities', $folder, $filename, $pagenum, $tagsort);
+						}
 						?>
+
 						</div>
 						<span class="imageextrainfo" style="display: none">
 						<h2 class="h2_bordered_edit"><?php echo gettext("Tags"); ?></h2>

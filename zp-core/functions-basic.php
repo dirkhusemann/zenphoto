@@ -866,4 +866,13 @@ function imgSrcURI($uri) {
 	return $uri;
 }
 
+/**
+ * returns the mod_rewrite suffix
+ *
+ * @return string
+ */
+function im_suffix() {
+	return getOption('mod_rewrite_image_suffix');
+}
+
 ?>

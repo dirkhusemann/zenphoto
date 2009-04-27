@@ -10,12 +10,6 @@
 
 
 
-
-function im_suffix() {
-	return getOption('mod_rewrite_image_suffix');
-}
-
-
 // Determines if this request used a query string (as opposed to mod_rewrite).
 // A valid encoded URL is only allowed to have one question mark: for a query string.
 function is_query_request() {

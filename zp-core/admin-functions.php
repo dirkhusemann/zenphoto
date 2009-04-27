@@ -1075,7 +1075,7 @@ function printAlbumEditForm($index, $album) {
 	<script type="text/javascript">
 		$(function () {
 			$('#<?php echo $javaprefix; ?>customalbumsort').tagSuggest({
-				tags: [<?php echo mysql_real_escape_string($albumdbfields); ?>]
+				tags: [<?php echo $albumdbfields; ?>]
 			});
 		});
 	</script>
