@@ -1430,6 +1430,7 @@ function printAlbumEditForm($index, $album) {
 		</p>
 	</div>
 	<br clear: all />
+	<?php apply_filter('edit_album_utilities', $album->name); ?>
  </div>
   <h2 class="h2_bordered_edit"><?php echo gettext("Tags"); ?></h2>
 	<?php
