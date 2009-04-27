@@ -15,30 +15,35 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---crop_ima
 
 if (!isset($_REQUEST['performcrop'])) {
 	register_filter('admin_toolbox_image', 'toolbox_crop_image', 2);
-	register_filter('edit_image_utilities', 'edit_crop_image', 4);
+	register_filter('edit_image_utilities', 'edit_crop_image', 5);
 	return;
 }
 
 function toolbox_crop_image($albumname, $imagename) {
 	if (isMyALbum($albumname, EDIT_RIGHTS)) {
-		?>
-		<li>
-		<a href="<?php echo WEBPATH."/".ZENFOLDER . PLUGIN_FOLDER; ?>filter-crop_image.php?a=<?php echo pathurlencode($albumname); ?>
-				&amp;i=<?php echo urlencode($imagename); ?>&amp;performcrop=frontend "><?php echo gettext("Crop image"); ?></a>
-		</li>
-		<?php
+		$image = newimage(New Album(New Gallery(), $albumname),$imagename);
+		if (isImagePhoto($image)) {
+			?>
+			<li>
+			<a href="<?php echo WEBPATH."/".ZENFOLDER . PLUGIN_FOLDER; ?>filter-crop_image.php?a=<?php echo pathurlencode($albumname); ?>
+					&amp;i=<?php echo urlencode($imagename); ?>&amp;performcrop=frontend "><?php echo gettext("Crop image"); ?></a>
+			</li>
+			<?php
+		}
 	}
 }
 
-function edit_crop_image($albumname, $imagename, $subpage, $tagsort) {
-	?>
-	<hr />
-	<p>
-		<a href="<?php echo WEBPATH."/".ZENFOLDER . PLUGIN_FOLDER; ?>filter-crop_image.php?a=<?php echo pathurlencode($albumname); ?>
-				&amp;i=<?php echo urlencode($imagename); ?>&amp;performcrop=backend&amp;subpage=<?php echo $subpage; ?>&amp;tagsort=<?php echo $tagsort; ?>">
-				<?php echo gettext("Crop image"); ?></a>
-	</p>
-	<?php
+function edit_crop_image($output, $albumname, $imagename, $subpage, $tagsort) {
+	$image = newimage(New Album(New Gallery(), $albumname),$imagename);
+	if (isImagePhoto($image)) {
+		$output .= 
+			'<p class="buttons" style="clear: both;">'.
+					'<a href="'.WEBPATH."/".ZENFOLDER . PLUGIN_FOLDER.'filter-crop_image.php?a='.pathurlencode($albumname).
+							'&amp;i='.urlencode($imagename).'&amp;performcrop=backend&amp;subpage='.$subpage.'&amp;tagsort='.$tagsort.'">'.
+							'<img src="images/shape_handles.png" alt="" />'.gettext("Crop image").'</a>'.
+			'</p>';
+	}
+	return $output;
 }
 
 if (!defined('OFFSET_PATH')) define('OFFSET_PATH', 3);
@@ -67,8 +72,8 @@ if (isImagePhoto($imageobj)) {
 	$imgpath = $imageobj->localpath;
 	$imagepart = basename($imgpath);
 	$timg = imageGet($imgpath);
-	$width = imageWidth($timg);
-	$height = imageHeight($timg);
+	$width = $imageobj->getWidth();
+	$height = $imageobj->getHeight();
 } else {
 	die(gettest('attempt to crop an object which is not an image.'));
 }
@@ -102,12 +107,19 @@ if (isset($_REQUEST['crop'])) {
 	$ch = round($ch*$rh);
 	$cx = round($cx*$rw);
 	$cy = round($cy*$rh);
-	if ($cx == 0) $cx = 1;
-	if ($cy == 0) $cy = 1;
 	
 	//create a new image with the set cropping
 	$quality = getOption('full_image_quality');
-	if (DEBUG_IMAGE) debugLog("image_crop: crop ".basename($imgpath).":\$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy");
+	$rotate = false;
+	if (imageCanRotate() && getOption('auto_rotate'))  {
+		$rotate = getImageRotation($imgpath);
+	}
+	if (DEBUG_IMAGE) debugLog("image_crop: crop ".basename($imgpath).":\$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy \$rotate=$rotate");
+	
+	if ($rotate) {
+		$timg = rotateImage($timg, $rotate);
+	}
+	
 	$newim = createImage($cw, $ch);
 	resampleImage($newim, $timg, 0, 0, $cx, $cy, $cw, $ch, $cw, $ch);
 	@unlink($imgpath);
@@ -120,7 +132,8 @@ if (isset($_REQUEST['crop'])) {
 	imageKill($newim);
 	imageKill($timg);
 	$gallery->clearCache(SERVERCACHE . '/' . $albumname);
-	// be sure the diminsions reflect the new cropping, obsolete any thumbcrop
+	// update the image data
+	$imageobj->set('EXIFOrientation', 0);
 	$imageobj->updateDimensions();
 	$imageobj->set('thumbX', NULL);
 	$imageobj->set('thumbY', NULL);
@@ -182,7 +195,7 @@ printAdminHeader('../');
 	<div id="main">
 		<?php printTabs('edit'); ?>
 		<div id="content">
-				<h1><?php echo gettext("Image cropping"); ?></h1>
+				<h1><?php echo gettext("Image cropping").": <em>".$albumobj->name." (".$albumobj->getTitle().") /".$imageobj->filename." (".$imageobj->getTitle().")</em>"; ?></h1>
 				<p><?php echo gettext("You can crop your image by draging the crop handles on the image.<br /><br /><strong>NOTE:</strong> If you save these changes they are permanent!"); ?></p>
 				<div style="display:block">
 		 			

@@ -180,7 +180,7 @@ printAdminHeader();
 	<div id="main">
 		<?php printTabs('edit'); ?>
 		<div id="content">
-				<h1><?php echo gettext("Custom thumbnail cropping"); ?></h1>
+				<h1><?php echo gettext("Custom thumbnail cropping").": <em>".$albumobj->name." (".$albumobj->getTitle().") /".$imageobj->filename." (".$imageobj->getTitle().")</em>"; ?></h1>
 				<p><?php echo gettext("You can change the portion of your image which is shown in thumbnails by cropping it here."); ?></p>
 				<div style="display:block">
 					<div style="float: left; width:<?php echo $thumbcropwidth; ?>px; text-align: center;margin-right: 18px;  margin-bottom: 10px;">

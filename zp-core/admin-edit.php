@@ -770,11 +770,11 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						<p class="buttons"><a	href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
 						</p>
 						
-						</div><br clear: all />
+						</div>
 					 
 						<?php
 						if (isImagePhoto($image)) {
-						?>
+							?>
 							<hr />
 							<p>	<?php echo gettext("Rotation:"); ?>
 								<?php
@@ -788,11 +788,21 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 								<br /><input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="3" <?php checked(3, $rotation); echo $disablerotate ?> /> <?php echo gettext('180 degrees'); ?>
 								<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="6" <?php checked(6, $rotation); echo $disablerotate ?> /> <?php echo gettext('270 degrees'); ?>
 							</p>
+							<hr />
+							<p class="buttons" style="clear: both"><a href="admin-thumbcrop.php?a=<?php echo urlencode($album->name); ?>&amp;i=<?php echo urlencode($image->filename); ?>&amp;subpage=<?php echo $pagenum; ?>&amp;tagsort=<?php echo $tagsort; ?>"
+											title="<?php printf(gettext('crop %s'), $image->filename); ?>"  ><img src="images/shape_handles.png" alt="" /><?php echo gettext("Crop thumbnail"); ?></a></p>
 							<?php
-							apply_filter('edit_image_utilities', $folder, $filename, $pagenum, $tagsort);
+							$hr = true;
+						} else {
+							$hr = false;
+						}
+						$output = apply_filter('edit_image_utilities', '', $folder, $filename, $pagenum, $tagsort);
+						if ($output) {
+							if (!$hr) echo '<hr />';
+							echo $output;
 						}
 						?>
-
+						<br clear: all /><br />
 						</div>
 						<span class="imageextrainfo" style="display: none">
 						<h2 class="h2_bordered_edit"><?php echo gettext("Tags"); ?></h2>

@@ -1147,7 +1147,7 @@ function printAlbumEditForm($index, $album) {
 		<script type="text/javascript">
 			$(function () {
 				$('#<?php echo $javaprefix; ?>customimagesort').tagSuggest({
-					tags: [<?php echo mysql_real_escape_string($imagedbfields); ?>]
+					tags: [<?php echo $imagedbfields; ?>]
 				});
 			});
 		</script>
@@ -1430,7 +1430,10 @@ function printAlbumEditForm($index, $album) {
 		</p>
 	</div>
 	<br clear: all />
-	<?php apply_filter('edit_album_utilities', $album->name); ?>
+	<?php
+	$output = apply_filter('edit_album_utilities', '', $album->name);
+	if ($output) echo '<hr />'.$output;
+	?>
  </div>
   <h2 class="h2_bordered_edit"><?php echo gettext("Tags"); ?></h2>
 	<?php
