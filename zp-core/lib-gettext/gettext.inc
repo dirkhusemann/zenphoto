@@ -17,6 +17,9 @@ function textdomain($domain) {
 function gettext($msgid) {
 	return $msgid;
 }
+function ngettext($msgid) {
+	return $msgid;
+}
 function _($msgid) {
 	return $msgid;
 }
