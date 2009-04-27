@@ -444,6 +444,7 @@ function printNewsTitleLink($before='') {
  */
 function getNewsContent($shorten='', $shortenindicator='') {
 	global $_zp_current_zenpage_news;
+	$excerptbreak = false;
 	if(empty($shortenindicator)) {
 		$shortenindicator = getOption("zenpage_textshorten_indicator");
 	}
@@ -454,6 +455,11 @@ function getNewsContent($shorten='', $shortenindicator='') {
 	switch($newstype) {
 		case "news":
 			$articlecontent = $_zp_current_zenpage_news->getContent();
+			$excerptbreak = stristr($articlecontent,"<!-- pagebreak -->");
+			if($excerptbreak != FALSE) {
+				$array = explode("<!-- pagebreak -->",$articlecontent);
+				$articlecontent = $array[0].$shortenindicator; 
+			}
 			break;
 		case "image":
 		case "video":
@@ -461,7 +467,7 @@ function getNewsContent($shorten='', $shortenindicator='') {
 			$articlecontent = $_zp_current_zenpage_news->getDesc();
 			break;
 	}
-	if(!empty($shorten) AND strlen($articlecontent) > $shorten) {
+	if(!$excerptbreak AND !empty($shorten) AND strlen($articlecontent) > $shorten) {
 		$articlecontent = shortenContent($articlecontent,$shorten,$shortenindicator);
 	}
 	return $articlecontent;
