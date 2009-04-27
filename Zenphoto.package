@@ -418,6 +418,7 @@ zp-core/plugins/contact_form.php
 zp-core/plugins/dynamic-locale.php
 zp-core/plugins/filter-admin_toolbox.php
 zp-core/plugins/filter-comments.php
+zp-core/plugins/filter-crop_image.php
 zp-core/plugins/filter-custom_data.php
 zp-core/plugins/filter-file_searches.php
 zp-core/plugins/filter-new_objects.php

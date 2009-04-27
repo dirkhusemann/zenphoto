@@ -16,12 +16,11 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---crop_ima
 if (!isset($_REQUEST['performcrop'])) {
 	register_filter('admin_toolbox_image', 'toolbox_crop_image', 2);
 	register_filter('edit_image_utilities', 'edit_crop_image', 4);
-	
 	return;
 }
 
 function toolbox_crop_image($albumname, $imagename) {
-	if (zp_loggedin(ADMIN_RIGHTS | EDIT_RIGHTS)) {
+	if (isMyALbum($albumname, EDIT_RIGHTS)) {
 		?>
 		<li>
 		<a href="<?php echo WEBPATH."/".ZENFOLDER . PLUGIN_FOLDER; ?>filter-crop_image.php?a=<?php echo pathurlencode($albumname); ?>
@@ -38,7 +37,6 @@ function edit_crop_image($albumname, $imagename, $subpage, $tagsort) {
 		<a href="<?php echo WEBPATH."/".ZENFOLDER . PLUGIN_FOLDER; ?>filter-crop_image.php?a=<?php echo pathurlencode($albumname); ?>
 				&amp;i=<?php echo urlencode($imagename); ?>&amp;performcrop=backend&amp;subpage=<?php echo $subpage; ?>&amp;tagsort=<?php echo $tagsort; ?>">
 				<?php echo gettext("Crop image"); ?></a>
-	?>
 	</p>
 	<?php
 }
@@ -52,13 +50,13 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	exit();
 }
 
-if (!($_zp_loggedin & (THEMES_RIGHTS | ADMIN_RIGHTS))) { // prevent nefarious access to this page.
+$albumname = sanitize_path($_REQUEST['a']);
+$imagename = sanitize_path($_REQUEST['i']);
+
+if (!isMyALbum($albumname, EDIT_RIGHTS)) { // prevent nefarious access to this page.
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin.php");
 	exit();
 }
-
-$albumname = sanitize_path($_REQUEST['a']);
-$imagename = sanitize_path($_REQUEST['i']);
 
 // get full width and height
 $gallery = new Gallery();
@@ -87,10 +85,10 @@ if ($width >= $height) {
 }
 
 $imageurl = "../i.php?a=".pathurlencode($albumname)."&i=".urlencode($imagename)."&s=".$size.'&admin';
-$iW = $sizedwidth;
-$iH = $sizedheight;
-$iX = 0;
-$iY = 0;
+$iW = round($sizedwidth*0.9);
+$iH = round($sizedheight*0.9);
+$iX = round($sizedwidth*0.05);
+$iY = round($sizedheight*0.05);
 
 if (isset($_REQUEST['crop'])) {
 	$cw = $_REQUEST['w'];
@@ -122,8 +120,12 @@ if (isset($_REQUEST['crop'])) {
 	imageKill($newim);
 	imageKill($timg);
 	$gallery->clearCache(SERVERCACHE . '/' . $albumname);
-	// be sure the diminsions reflect the new cropping
+	// be sure the diminsions reflect the new cropping, obsolete any thumbcrop
 	$imageobj->updateDimensions();
+	$imageobj->set('thumbX', NULL);
+	$imageobj->set('thumbY', NULL);
+	$imageobj->set('thumbW', NULL);
+	$imageobj->set('thumbH', NULL);
 	$imageobj->save();
 	
 	if ($_REQUEST['performcrop']=='backend') {
@@ -153,6 +155,7 @@ printAdminHeader('../');
 
 		jQuery('#cropbox').Jcrop({
 			onChange: showCoords,
+			setSelect: [ <?php echo $iX; ?>, <?php echo $iY; ?>, <?php echo $iX+$iW; ?>, <?php echo $iY+$iH; ?> ],					
 			bgOpacity:   .4,
 			bgColor:     'black'
 			});
