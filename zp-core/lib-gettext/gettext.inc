@@ -17,8 +17,8 @@ function textdomain($domain) {
 function gettext($msgid) {
 	return $msgid;
 }
-function ngettext($msgid) {
-	return $msgid;
+function ngettext($msgid1,$msgid2,$n) {
+	return $msgid1;
 }
 function _($msgid) {
 	return $msgid;
