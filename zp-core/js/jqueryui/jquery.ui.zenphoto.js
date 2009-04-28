@@ -232,7 +232,7 @@ $.ui.mouse = {
 	
 	mouseMove: function(e) {
 		// IE mouseup check - mouseup happened when mouse was out of window
-		if ($.browser.msie && !e.button) {
+		if ($.browser.msie && parseInt($.browser.version) < 8 &&  !e.button) {
 			return this.mouseUp(e);
 		}
 		
