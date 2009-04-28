@@ -95,6 +95,7 @@ class _Image extends PersistentObject {
 		$new = parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', false, empty($album_name));
 		$this->getExifData(); // prime the exif fields
 		if ($new) {
+			$this->set('mtime', filemtime($this->localpath));
 			$this->updateDimensions();
 			$metadata = getImageMetadata($this->localpath);
 			$this->set('EXIFValid', 1);
@@ -106,7 +107,7 @@ class _Image extends PersistentObject {
 				}
 			}
 			if (empty($newDate)) {
-				$newDate = strftime('%Y/%m/%d %T', filemtime($this->localpath));
+				$newDate = myts_date('%Y/%m/%d %T', $this->get('mtime'));
 			}
 			$this->setDateTime($newDate);
 			$alb = $this->album;
@@ -148,7 +149,6 @@ class _Image extends PersistentObject {
 			if (isset($metadata['copyright'])) {
 				$this->setCopyright(sanitize($metadata['copyright'], 1));
 			}
-			$this->set('mtime', filemtime($this->localpath));
 			apply_filter('new_image', $this);
 			$this->save();
 		}

@@ -25,27 +25,37 @@ $_GET['page'] = 'themes';
 /* handle posts */
 $message = null; // will hold error/success message displayed in a fading box
 if (isset($_GET['action'])) {
-	// Set new theme
-	if ($_GET['action'] == 'settheme') {
-		if (isset($_GET['theme'])) {
-			$alb = sanitize_path($_GET['themealbum']);
-			$newtheme = strip($_GET['theme']);
-			if (empty($alb)) {
-				$gallery->setCurrentTheme($newtheme);
-			} else {
-				$album = new Album($gallery, $alb);
-				$oldtheme = $album->getAlbumTheme();
-				$album->setAlbumTheme($newtheme);
-				$album->save();
+	switch ($_GET['action']) {
+		case 'settheme':
+			if (isset($_GET['theme'])) {
+				$alb = sanitize_path($_GET['themealbum']);
+				$newtheme = strip($_GET['theme']);
+				if (empty($alb)) {
+					$gallery->setCurrentTheme($newtheme);
+				} else {
+					$album = new Album($gallery, $alb);
+					$oldtheme = $album->getAlbumTheme();
+					$album->setAlbumTheme($newtheme);
+					$album->save();
+				}
+				header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-themes.php?themealbum=".$_GET['themealbum']);
 			}
-			header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/admin-themes.php?themealbum=".$_GET['themealbum']);
-		}
-	
-	// Duplicate a theme
-	} elseif ($_GET['action'] == 'copytheme') {
-		if (isset($_GET['source']) && isset($_GET['target']) && isset($_GET['name']) ) {
-			$message = copyThemeDirectory($_GET['source'], $_GET['target'], $_GET['name']);		
-		}	
+			break;
+			// Duplicate a theme
+		case 'copytheme':
+			if (isset($_GET['source']) && isset($_GET['target']) && isset($_GET['name'])) {
+				$message = copyThemeDirectory(sanitize($_GET['source'],3), sanitize($_GET['target'],3), sanitize($_GET['name'],3));
+			}
+			break;
+		case 'deletetheme':
+			if (isset($_GET['theme'])) {
+				if (deleteThemeDirectory(SERVERPATH . '/themes/'.internalToFilesystem(sanitize($_GET['theme'],3)))) {
+					$message = gettext("Theme removed.");
+				} else {
+					$message = gettext('Error removing theme');
+				}
+				break;
+			}
 	}
 }
 
@@ -211,13 +221,13 @@ foreach($themes as $theme => $themeinfo):
 		<?php
 		} else {
 			if ($gallerydefault) {
-					?>
+				?>
 				<li>
-			<p class="buttons"><a href="?action=settheme&themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Assign this as your album theme"); ?>">
-			<img src="images/pass.png" alt="" /><?php echo gettext("Assign"); ?>
-			</a></p><br />	
-		  </li>
-		<?php
+				<p class="buttons"><a href="?action=settheme&themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Assign this as your album theme"); ?>">
+				<img src="images/pass.png" alt="" /><?php echo gettext("Assign"); ?>
+				</a></p><br />	
+			  </li>
+				<?php
 			} else {
 				echo "<li><strong>".gettext("Current Theme")."</strong></li>";
 			}
@@ -231,7 +241,17 @@ foreach($themes as $theme => $themeinfo):
 			<img src="images/pencil.png" alt="" /><?php echo gettext("Edit"); ?></a>
 			</p><br />	
 		  </li>
-			<?php
+		  <?php
+		  if ($theme != $current_theme) {
+		  	?>
+				<li>
+				<p class="buttons">
+				<a href="?action=deletetheme&themealbum=<?php echo urlencode($alb); ?>&amp;theme=<?php echo $theme; ?>" title="<?php echo gettext("Delete this theme"); ?>">
+				<img src="images/edit-delete.png" alt="" /><?php echo gettext("Delete"); ?></a>
+				</p>	
+			  </li>
+				<?php
+		  }
 		} else {
 		
 			?>

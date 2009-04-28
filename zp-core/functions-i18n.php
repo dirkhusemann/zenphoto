@@ -397,6 +397,71 @@ function get_language_string($dbstring, $locale=NULL) {
 	return array_shift($strings);
 }
 
+/**
+ * Returns a list of timezones
+ *
+ * @return unknown
+ */
+function getTimezones() {
+	$cities = array();
+	if (function_exists('timezone_abbreviations_list')) {
+		$timezones = timezone_abbreviations_list();
+		foreach($timezones as $key => $zones) {
+			foreach($zones as $id => $zone) {
+				/**
+				 * Only get timezones explicitely not part of "Others".
+				 * @see http://www.php.net/manual/en/timezones.others.php
+				 */
+				if (preg_match('/^(America|Antartica|Arctic|Asia|Atlantic|Europe|Indian|Pacific)\//', $zone['timezone_id'])) {
+					$cities[] =$zone['timezone_id'];
+				}
+			}
+		}
+		// Only keep one city (the first and also most important) for each set of possibilities.
+		$cities = array_unique($cities);
+
+		// Sort by area/city name.
+		ksort($cities);
+	}
+	return $cities;
+}
+
+/**
+ * Returns the difference between the server timezone and the local (users) timezone
+ *
+ * @param string $server
+ * @param string $local
+ * @return int
+ */
+function timezoneDiff($server, $local) {
+	if (function_exists('timezone_abbreviations_list')) {
+		$timezones = timezone_abbreviations_list();
+		foreach($timezones as $key => $zones) {
+			foreach($zones as $id => $zone) {
+				if (!isset($offset_server) && $zone['timezone_id'] === $server) {
+					$offset_server = $zone['offset'];
+				}
+				if (!isset($offset_local) && $zone['timezone_id'] === $local) {
+					$offset_local = $zone['offset'];
+				}
+				if (isset($offset_server) && isset($offset_local)) {
+					return ($offset_server - $offset_local)/3600;
+				}
+			}
+		}
+	}
+	return 0;
+}
+
 setupLanguageArray();
+if (function_exists('date_default_timezone_set')) { // insure a correct timezone
+	$tz = getOption('time_zone');
+	if (!empty($tz)) {
+		$err = error_reporting(0);
+		date_default_timezone_set($tz);
+		@ini_set('date.timezone', $tz);
+		error_reporting($err);
+	}
+}
 
 ?>

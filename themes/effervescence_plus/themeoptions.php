@@ -71,7 +71,7 @@ class ThemeOptions {
 				$theme = $gallery->getCurrentTheme();
 				$themeroot = SERVERPATH . "/themes/$theme/images";
 				echo '<select id="themeselect" name="' . $option . '"' . ">\n";
-				echo '<option></option>';
+				echo '<option value=""></option>';
 				generateListFromFiles($currentValue, $themeroot , '.png');
 				echo "</select>\n";
 				break;

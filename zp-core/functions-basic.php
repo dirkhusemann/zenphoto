@@ -16,9 +16,9 @@ define('DEBUG_IMAGE', false); // set to true to log image processing debug infor
 
 if (function_exists('date_default_timezone_set')) { // insure a correct timezone
 	error_reporting(0);
-	$tz = date_default_timezone_get();
-	date_default_timezone_set($tz); 
-	@ini_set('date.timezone', $tz);
+	$_zp_server_timezone = date_default_timezone_get();
+	date_default_timezone_set($_zp_server_timezone); 
+	@ini_set('date.timezone', $_zp_server_timezone);
 }
 
 // Set error reporting.

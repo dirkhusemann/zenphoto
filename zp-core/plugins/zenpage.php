@@ -6,18 +6,11 @@ $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/zenpage/_plugins---zenpage---zenpage-template-functions.php.html";
 $option_interface = new zenpagecms();
 
-if (getOption('zenpage_release') != ZENPHOTO_RELEASE) {
-	if (OFFSET_PATH == 0) {
-		header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
-		exit();
-	}
-}
 $zenpage_version = $plugin_version;
 
 class zenpagecms {
 
 	function zenpagecms() {
-		setOptionDefault('zenpage_release', '1.1.1');
 		setOptionDefault('zenpage_articles_per_page', '10');
 		setOptionDefault('zenpage_text_length', '500');
 		setOptionDefault('zenpage_textshorten_indicator', ' (...)');

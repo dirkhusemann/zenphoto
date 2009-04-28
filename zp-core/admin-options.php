@@ -124,7 +124,13 @@ if (isset($_GET['action'])) {
 			}
 			setBoolOption('mod_rewrite', isset($_POST['mod_rewrite']));
 			setOption('mod_rewrite_image_suffix', sanitize($_POST['mod_rewrite_image_suffix'],3));
-			setOption('time_offset', sanitize($_POST['time_offset'],3));
+			if (isset($_POST['time_zone'])) {
+				setOption('time_zone', $tz = sanitize($_POST['time_zone'], 3));
+				$offset = 0;
+			} else {
+				$offset = sanitize($_POST['time_offset'],3);
+			}
+			setOption('time_offset', $offset);
 			setOption('server_protocol', sanitize($_POST['server_protocol'],3));
 			setOption('charset', sanitize($_POST['charset']),3);
 			$oldloc = getOption('locale', true); // get the option as stored in the database, not what might have been set by a cookie
@@ -878,16 +884,40 @@ if (empty($alterrights)) {
 					<?php echo gettext("(Most people will leave this alone.)"); ?></td>
 				</tr>
 				<tr>
-					<td><?php echo gettext("Time offset (hours):"); ?></td>
-					<td><input type="text" size="3" name="time_offset"
-						value="<?php echo htmlspecialchars(getOption('time_offset'));?>" /></td>
-					<td>
-						<p><?php
-							if (function_exists('date_default_timezone_get')) { 
-								printf(gettext('Your server reports its timezone as: <code>%s</code>.'),date_default_timezone_get()); 
-							} 
-						?></p>
-						<p><?php echo gettext("If you're in a different time zone from your server, set the	offset in hours of your timezone from that of the server. For instance if your server is on the US East Coast (<em>GMT</em> - 5) and you are on the Pacific Coast (<em>GMT</em> - 8), set the offset to 3 (-5 - (-8))."); ?></p>
+					<?php
+					if (function_exists('date_default_timezone_get')) {
+						$offset = timezoneDiff($_zp_server_timezone, $tz);
+						?>
+						<td>
+						<?php echo gettext("Timezone:"); ?>
+						</td>
+						<td>
+						<?php
+							$zones = getTimezones();
+							?>
+							<select id="time_zone" name="time_zone">
+							<option value=""></option>
+							<?php generateListFromArray(array($tz = getOption('time_zone')), $zones, false, false); ?>
+							</select>
+						</td>
+						<td>
+							<p><?php printf(gettext('Your server reports its timezone as: <code>%s</code>.'), $_zp_server_timezone); ?></p>
+							<p><?php printf(ngettext('Your timezone offset is %d hour. If your timezone is different from the servers, select the correct timezone here.', 'Your timezone offset is: %d hours. If your timezone is different from the servers, select the correct timezone here.', $offset), $offset); ?></p>
+						</td>
+						<?php
+					} else {
+						$offset = getOption('time_offset');
+						?>
+						<td><?php echo gettext("Time offset (hours):"); ?></td>
+						<td>
+							<input type="text" size="3" name="time_offset" value="<?php echo htmlspecialchars($offset);?>" />
+						</td>
+						<td>
+						<p><?php printf(gettext('Your server reports its timezone as: <code>%s</code>.'), $_zp_server_timezone); ?></p>
+							<p><?php echo gettext("If you're in a different time zone from your server, set the	offset in hours of your timezone from that of the server. For instance if your server is on the US East Coast (<em>GMT</em> - 5) and you are on the Pacific Coast (<em>GMT</em> - 8), set the offset to 3 (-5 - (-8))."); ?></p>
+						<?php
+					}
+					?>
 					</td>
 				</tr>
 				<tr>

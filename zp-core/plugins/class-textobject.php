@@ -109,6 +109,15 @@ class TextObject extends _Image {
 			$title = $this->getDefaultTitle();
 			$this->set('title', $title);
 			$this->set('mtime', filemtime($this->localpath));
+			$newdate = myts_date('%Y/%m/%d %T', $this->get('mtime'));
+			$this->setDateTime($newdate);
+			$alb = $this->album;
+			if (!is_null($alb)) {
+				if (is_null($alb->getDateTime()) || getOption('album_use_new_image_date')) {
+					$this->album->setDateTime($newDate);   //  not necessarily the right one, but will do. Can be changed in Admin
+					$this->album->save();
+				}
+			}
 			apply_filter('new_image', $this);
 			$this->save();
 		}

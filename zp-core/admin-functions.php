@@ -2294,6 +2294,31 @@ $theme_description["desc"] = "%s";
 	return $message;
 }
 
+function deleteThemeDirectory($source) {
+	global $_zp_current_admin;
+	if (is_dir($source)) {
+		$result = true;
+		$handle = opendir($source);
+		while (false !== ($filename = readdir($handle))) {
+			$fullname = $source . '/' . $filename;
+			if (is_dir($fullname) && !(substr($filename, 0, 1) == '.')) {
+				if (($filename != '.') && ($filename != '..')) {
+					$result = $result && deleteThemeDirectory($fullname);
+				}
+			} else {
+				if (file_exists($fullname) && !(substr($filename, 0, 1) == '.')) {
+					$result = $result && @unlink($fullname);
+				}
+			}
+
+		}
+		closedir($handle);
+		$result = $result && @rmdir($source);
+		return $result;
+	}
+	return false;
+}
+
 /**
  * Return URL of current admin page, encoded for a form, relative to zp-core folder
  *

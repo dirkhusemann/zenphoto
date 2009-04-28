@@ -287,6 +287,9 @@ if (isset($_REQUEST['backup']) && db_connect()) {
 		} else {
 			printf(gettext('restore completed using %s compression'), $compression_handler);
 		}
+		// override the release level settings
+		setOption('zenphoto_release', ZENPHOTO_RELEASE);
+
 		?>
 		</h2>
 		</div>

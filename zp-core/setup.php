@@ -881,49 +881,51 @@ if ($debug) {
  											"<br/>".gettext("<strong>Setup</strong> will attempt to create all tables. This will not over write any existing tables."));
 
 		if (isset($_zp_conf_vars['UTF-8']) && $_zp_conf_vars['UTF-8']) {
-			$fields = 0;
-			$sql = 'SHOW FULL COLUMNS FROM `'.$_zp_conf_vars['mysql_prefix'].'albums`';
-			$result1 = @mysql_query($sql, $mysql_connection);
-			if ($result1) {
-				while ($row = @mysql_fetch_row($result1)) {
-					if (!is_null($row[2]) && $row[2] != 'utf8_unicode_ci') {
-						$fields = $fields | 1;
+			if (!empty($tableslist)) {
+				$fields = 0;
+				$sql = 'SHOW FULL COLUMNS FROM `'.$_zp_conf_vars['mysql_prefix'].'albums`';
+				$result1 = @mysql_query($sql, $mysql_connection);
+				if ($result1) {
+					while ($row = @mysql_fetch_row($result1)) {
+						if (!is_null($row[2]) && $row[2] != 'utf8_unicode_ci') {
+							$fields = $fields | 1;
+						}
 					}
+				} else {
+					$fields = 4;
 				}
-			} else {
-				$fields = 4;
-			}
-			$sql = 'SHOW FULL COLUMNS FROM `'.$_zp_conf_vars['mysql_prefix'].'albums`';
-			$result2 = @mysql_query($sql, $mysql_connection);
-			if ($result2) {
-				while ($row = @mysql_fetch_row($result2)) {
-					if (!is_null($row[2]) && $row[2] != 'utf8_unicode_ci') {
-						$fields = $fields | 2;
+				$sql = 'SHOW FULL COLUMNS FROM `'.$_zp_conf_vars['mysql_prefix'].'albums`';
+				$result2 = @mysql_query($sql, $mysql_connection);
+				if ($result2) {
+					while ($row = @mysql_fetch_row($result2)) {
+						if (!is_null($row[2]) && $row[2] != 'utf8_unicode_ci') {
+							$fields = $fields | 2;
+						}
 					}
+				} else {
+					$fields = 4;
 				}
-			} else {
-				$fields = 4;
+				$err = -1;
+				switch ($fields) {
+					case 0: // all is well
+						$msg2 = '';
+						$err = 1;
+						break;
+					case 1:
+						$msg2 = gettext('MySQL <code>field collations</code> [Image table]');
+						break;
+					case 2:
+						$msg2 = gettext('MySQL <code>field collations</code> [Album table]');
+						break;
+					case 3:
+						$msg2 = gettext('MySQL <code>field collations</code> [Image and Album tables]');
+						break;
+					default:
+						$msg2 = gettext('MySQL <code>field collations</code> [SHOW COLUMNS query failed]');
+						break;
+				}
+				checkmark($err, gettext('MySQL <code>field collations</code>'), $msg2, gettext('You should consider porting your data to UTF-8 and changing the collation of the database fields fields to <code>utf8_unicode_ci</code>'));
 			}
-			$err = -1;
-			switch ($fields) {
-				case 0: // all is well
-					$msg2 = '';
-					$err = 1;
-					break;
-				case 1:
-					$msg2 = gettext('MySQL <code>field collations</code> [Image table]');
-					break;
-				case 2:
-					$msg2 = gettext('MySQL <code>field collations</code> [Album table]');
-					break;
-				case 3:
-					$msg2 = gettext('MySQL <code>field collations</code> [Image and Album tables]');
-					break;
-				default:
-					$msg2 = gettext('MySQL <code>field collations</code> [SHOW COLUMNS query failed]');
-					break;
-			}
-			checkmark($err, gettext('MySQL <code>field collations</code>'), $msg2, gettext('You should consider porting your data to UTF-8 and changing the collation of the database fields fields to <code>utf8_unicode_ci</code>'));
 		} else {
 			checkmark(-1, '', gettext('MySQL <code>$conf["UTF-8"]</code> [is not set <em>true</em>]'), gettext('You should consider porting your data to UTF-8 and changing the collation of the database fields fields to <code>utf8_unicode_ci</code> and setting this <em>true</em>. Zenphoto works best with pure UTF-8 encodings.'));
 		}
