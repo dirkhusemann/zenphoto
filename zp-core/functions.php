@@ -1215,8 +1215,9 @@ function handleSearchParms($what, $album=NULL, $image=NULL) {
 		}
 		if (($context & ZP_SEARCH_LINKED)) {
 			set_context($context);
-		} else {
+		} else { // not an object in the current search path
 			$_zp_current_search = null;
+			zp_setcookie("zenphoto_image_search_params", "", time()-368000, $cookiepath);
 		}
 	}
 }
