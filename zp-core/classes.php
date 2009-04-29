@@ -310,6 +310,7 @@ class PersistentObject {
 			$success = query($sql);
 			if ($success == false || mysql_affected_rows() != 1) { return false; }
 			$this->id = mysql_insert_id();
+			$this->data['id'] = $this->id; // so 'get' will retrieve it!
 			$this->updates = array();
 			$this->tempdata = array();
 
