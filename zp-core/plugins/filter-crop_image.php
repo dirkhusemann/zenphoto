@@ -231,7 +231,7 @@ printAdminHeader('../');
 								<?php
 							} else {
 								?>
-								<button type="reset" value="<?php echo gettext('Cancel') ?>" title="<?php echo gettext("Cancel"); ?>" onClick="window.location='/index.php?album=<?php echo urlencode($albumname); ?>&amp;image=<?php echo urlencode($imagename); ?>'"><img src="../images/reset.png" alt="" /><strong><?php echo gettext("Cancel"); ?></strong></button>
+								<button type="reset" value="<?php echo gettext('Cancel') ?>" title="<?php echo gettext("Cancel"); ?>" onClick="window.location='../../index.php?album=<?php echo urlencode($albumname); ?>&amp;image=<?php echo urlencode($imagename); ?>'"><img src="../images/reset.png" alt="" /><strong><?php echo gettext("Cancel"); ?></strong></button>
 								</p><br />
 								<?php
 							}

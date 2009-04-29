@@ -2339,4 +2339,48 @@ function currentRelativeURL($source) {
 	}
 }
 
+/**
+ * Returns an array of the names of the parents of the current album.
+ *
+ * @param object $album optional album object to use inseted of the current album
+ * @return array
+ */
+function getParentAlbumsAdmin($album) {
+	$parents = array();
+	while (!is_null($album = $album->getParent())) {
+		array_unshift($parents, $album);
+	}
+	return $parents;
+}
+
+/**
+ * prints the album breadcrumb for the album edit page
+ *
+ * @param object $album Object of the album
+ */
+function printAlbumBreadcrumbAdmin($album) {
+	$parents = getParentAlbumsAdmin($album);
+	foreach($parents as $parent) {
+		echo "<a href='admin-edit.php?page=edit&amp;album=".pathurlencode($parent->name)."'>".removeParentAlbumNames($parent)."</a>/";
+	}
+}
+
+/**
+ * Removes the parent album name so that we can print a album breadcrumb with them
+ *
+ * @param object $album Object of the album
+ * @return string
+ */
+function removeParentAlbumNames($album) {
+	$slash = stristr($album->name,"/");
+	if($slash) {
+		$array = explode("/",$album->name);
+		$array = array_reverse($array);
+		$albumname = $array[0];
+	} else {
+		$albumname = $album->name;
+	}
+	return $albumname;
+}
+
 ?>

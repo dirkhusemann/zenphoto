@@ -446,7 +446,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	}
 	
 	?>
-<h1><?php echo gettext("Edit Album:");?> <em><?php echo $album->name; ?></em></h1>
+<h1><?php echo gettext("Edit Album:");?> <em><?php if($album->getParent()) { printAlbumBreadcrumbAdmin($album); } echo removeParentAlbumNames($album); ?></em></h1>
 <p><?php printAlbumEditLinks('' . $albumdir, "&laquo; ".gettext("Back"), gettext("Back to the list of albums (go up one level)"));?>
  | <?php if (!$album->isDynamic() && $album->getNumImages() > 1) {
    printSortLink($album, gettext("Sort Album"), gettext("Sort Album"));
