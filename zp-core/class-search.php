@@ -320,6 +320,15 @@ class SearchEngine
 			}
 		} while ($i++ < strlen($searchstring));
 		if (!empty($target)) { $result[] = trim($target); }
+		$lasttoken = '';
+		if ($space_is_OR) {
+			foreach ($result as $key=>$token) {
+				if ($token=='|' && $lasttoken=='|') { // remove redundant OR ops
+					unset($result[$key]); 
+				}
+				$lasttoken = $token;
+			}
+		}
 		return $result;
 	}
 
