@@ -868,14 +868,14 @@ function getParentAlbums($album=null) {
  * @param string $title Text to be used as the URL title tag
  */
 function printAlbumBreadcrumb($before='', $after='', $title=NULL) {
-	global $_zp_current_search, $_zp_gallery, $_zp_current_album;
+	global $_zp_current_search, $_zp_gallery, $_zp_current_album, $_zp_last_album, $_zp_search_album_list;
 	if (is_null($title)) $title = gettext('Album Thumbnails');
 	echo $before;
 	if (in_context(ZP_SEARCH_LINKED)) {
 		$dynamic_album = $_zp_current_search->dynalbumname;
 		if (empty($dynamic_album)) {
 			if (!is_null($_zp_current_album)) {
-				if (in_context(ZP_ALBUM_LINKED) && !in_context(ZP_IMAGE_LINKED)) {
+				if (in_context(ZP_ALBUM_LINKED) && $_zp_last_album == $_zp_current_album->name) {
 					echo "<a href=\"" . htmlspecialchars(getAlbumLinkURL()). "\" title=\"" . html_encode($title) . "\">" . getAlbumTitle() . "</a>";
 				} else {
 					$after = '';
@@ -909,7 +909,7 @@ function printAlbumBreadcrumb($before='', $after='', $title=NULL) {
  * @param string $elipsis the text to append to the truncated description
  */
 function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ', $truncate=NULL, $elipsis='...') {
-	global $_zp_current_search, $_zp_current_album;
+	global $_zp_current_search, $_zp_current_album, $_zp_last_album, $_zp_search_album_list;
 	echo $before;
 	if (in_context(ZP_SEARCH_LINKED)) {
 		$page = $_zp_current_search->page;
@@ -926,6 +926,11 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ', $tr
 				return;
 			} else {
 				$parents = getParentAlbums();
+				foreach ($parents as $key=>$analbum) {
+					if (!in_array($analbum->name, $_zp_search_album_list)) {
+						unset($parents[$key]);
+					}
+				}
 				echo $between;
 			}
 		} else {

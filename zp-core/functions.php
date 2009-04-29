@@ -1071,7 +1071,7 @@ function postComment($name, $email, $website, $comment, $code, $code_ok, $receiv
 			$message = $action . "\n\n" . 
 					sprintf(gettext('Author: %1$s'."\n".'Email: %2$s'."\n".'Website: %3$s'."\n".'Comment:'."\n\n".'%4$s'),$commentobj->getname(), $commentobj->getEmail(), $commentobj->getWebsite(), $commentobj->getComment()) . "\n\n" .
 					sprintf(gettext('You can view all comments about this item here:'."\n".'%1$s'), 'http://' . $_SERVER['SERVER_NAME'] . WEBPATH . '/index.php?'.$url) . "\n\n" .
-					sprintf(gettext('You can edit the comment here:'."\n".'%1$s'), 'http://' . $_SERVER['SERVER_NAME'] . WEBPATH . '/' . ZENFOLDER . '/admin-comments.php?page=editcomment&id='.$commentobj->get('id'));
+					sprintf(gettext('You can edit the comment here:'."\n".'%1$s'), 'http://' . $_SERVER['SERVER_NAME'] . WEBPATH . '/' . ZENFOLDER . '/admin-comments.php?page=editcomment&id='.$commentobj->id));
 			$emails = array();
 			$admin_users = getAdministrators();
 			foreach ($admin_users as $admin) {  // mail anyone else with full rights
@@ -1175,9 +1175,10 @@ function getAllSubAlbumIDs($albumfolder='') {
  * @param string $image Name of the image
  */
 function handleSearchParms($what, $album=NULL, $image=NULL) {
-	global $_zp_current_search, $zp_request;
+	global $_zp_current_search, $zp_request, $_zp_last_album, $_zp_search_album_list;
 	$cookiepath = WEBPATH;
 	if (WEBPATH == '') { $cookiepath = '/'; }
+	$_zp_last_album = zp_getCookie('zenphoto_last_album');
 	if (is_null($album)) {
 		if (is_object($zp_request)) {
 			$reset = get_class($zp_request) != 'SearchEngine';
@@ -1204,14 +1205,17 @@ function handleSearchParms($what, $album=NULL, $image=NULL) {
 		}
 		if (!is_null($album)) {
 			$albumname = $album->name;
+			zp_setCookie('zenphoto_last_album', $albumname, time()+COOKIE_PESISTENCE, $cookiepath);
 			if (hasDyanmicAlbumSuffix($albumname)) $albumname = substr($albumname, 0, -4); // strip off the .alb as it will not be reflected in the search path
-			$albumlist = $_zp_current_search->getAlbums(0);
-			foreach ($albumlist as $searchalbum) {	
+			$_zp_search_album_list = $_zp_current_search->getAlbums(0);
+			foreach ($_zp_search_album_list as $searchalbum) {	
 				if (strpos($albumname, $searchalbum) !== false) {
 					$context = $context | ZP_SEARCH_LINKED | ZP_ALBUM_LINKED;
 					break;
 				}
 			}
+		} else {
+			zp_setCookie('zenphoto_last_album', '', time()-368000, $cookiepath);
 		}
 		if (($context & ZP_SEARCH_LINKED)) {
 			set_context($context);
