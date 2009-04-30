@@ -6,7 +6,6 @@
 	<title><?php echo getBareGalleryTitle(); ?> | <?php echo gettext("Search"); ?></title>
 	<link rel="stylesheet" href="<?php echo $zenCSS ?>" type="text/css" />
 	<?php printRSSHeaderLink('Gallery',gettext('Gallery RSS')); ?>
-  <script src="<?php echo FULLWEBPATH . "/" . ZENFOLDER ?>/js/prototype.js" type="text/javascript"></script>
 </head>
 
 <body>
