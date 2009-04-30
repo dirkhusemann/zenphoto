@@ -45,8 +45,24 @@
 		<?php } ?>
 	</ul>
 </div>
-
-
+<?php if(function_exists("printUserLogout") AND getOption("loginform")) { ?>
+<div class="menu">
+<?php if($_zp_loggedin) { ?>
+<ul>
+<li>
+<?php }
+if(getOption("loginform")) {
+	$showform = TRUE;
+} else {
+	$showform = FALSE;
+}
+printUserLogout("","",getOption("loginform"));
+if($_zp_loggedin) { ?>
+</li></ul>
+<?php }
+?>
+</div>
+<?php }	?>
 
 <?php if (function_exists('printLanguageSelector')) { ?>
  <?php printLanguageSelector("langselector"); ?>
