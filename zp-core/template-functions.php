@@ -926,11 +926,6 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ', $tr
 				return;
 			} else {
 				$parents = getParentAlbums();
-				foreach ($parents as $key=>$analbum) {
-					if (!in_array($analbum->name, $_zp_search_album_list)) {
-						unset($parents[$key]);
-					}
-				}
 				echo $between;
 			}
 		} else {
@@ -938,6 +933,12 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ', $tr
 			$parents = getParentAlbums($album);
 			if (in_context(ZP_ALBUM_LINKED)) {
 				array_push($parents, $album);
+			}
+		}
+		// remove parent links that are not in the search path
+		foreach ($parents as $key=>$analbum) {
+			if (!in_array($analbum->name, $_zp_search_album_list)) {
+				unset($parents[$key]);
 			}
 		}
 	} else {
