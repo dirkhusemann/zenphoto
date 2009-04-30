@@ -4262,7 +4262,7 @@ function printPasswordForm($hint, $showProtected=true, $showuser=NULL) {
 	}
 	?>
 
-	<form name="password" action=?userlog=1<?php echo $action; ?> method="POST">
+	<form id="passwordform" name="password" action=?userlog=1<?php echo $action; ?> method="POST">
 		<input type="hidden" name="password" value="1" />
 	
 		<table class="password">
