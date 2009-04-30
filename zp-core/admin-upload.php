@@ -24,12 +24,14 @@ $gallery = new Gallery();
 /* handle posts */
 if (isset($_GET['action'])) {
 	if ($_GET['action'] == 'upload') {
-
 		// Check for files.
 		$files_empty = true;
-		if (isset($_FILES['files']))
-		foreach($_FILES['files']['name'] as $name) { if (!empty($name)) $files_empty = false; }
-		$newAlbum = (($_POST['existingfolder'] == 'false') || isset($_POST['newalbum']));
+		if (isset($_FILES['files'])) {
+			foreach($_FILES['files']['name'] as $name) {
+				if (!empty($name)) $files_empty = false;
+			}
+		}
+		$newAlbum = ((isset($_POST['existingfolder']) && $_POST['existingfolder'] == 'false') || isset($_POST['newalbum']));
 		// Make sure the folder exists. If not, create it.
 		if (isset($_POST['processed']) && !empty($_POST['folder']) && ($newAlbum || !$files_empty)) {
 
@@ -89,12 +91,11 @@ if (isset($_GET['action'])) {
 				$errormsg = gettext("You must upload at least one file.");
 			} else if (empty($_POST['folder'])) {
 				$errormsg = gettext("You must enter a folder name for your new album.");
-			} else if (empty($_POST['processed'])) {
+			} else if (!isset($_POST['processed'])) {
 				$errormsg = gettext("You've most likely exceeded the upload limits. Try uploading fewer files at a time, or use a ZIP file.");
 
 			} else {
-				$errormsg = gettext("There was an error submitting the form. Please try again. If this keeps happening, check your server and PHP configuration (make sure file uploads are enabled, and upload_max_filesize is set high enough)")
-				. gettext("If you think this is a bug, file a bug report. Thanks!");
+				$errormsg = gettext("There was an error submitting the form. Please try again. If this keeps happening, check your server and PHP configuration (make sure file uploads are enabled, and upload_max_filesize is set high enough.) If you think this is a bug, file a bug report. Thanks!");
 			}
 		}
 	}
@@ -160,8 +161,7 @@ if (ini_get('safe_mode')) { ?>
 }
 ?>
 
-<form name="uploadform" enctype="multipart/form-data"
-	action="?action=upload" method="POST"
+<form name="uploadform" enctype="multipart/form-data" action="?action=upload" method="POST"
 	onSubmit="return validateFolder(document.uploadform.folder,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');">
 	<input type="hidden" name="processed" value="1" /> 
 	<input type="hidden" name="existingfolder" value="false" />
