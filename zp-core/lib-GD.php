@@ -494,7 +494,8 @@ function createRectangle($image, $x1, $y1, $x2, $y2 , $color) {
 function graphicsLibInfo() {
 	$lib = array ();
 	if (extension_loaded('gd')) {
-		$lib['Library'] = 'PHP GD library';
+		$info = gd_info();
+		$lib['Library'] = 'PHP GD library <em>'.$info['GD Version'].'</em>';
 		$imgtypes = imagetypes();
 		$lib['GIF'] = $imgtypes & IMG_GIF;
  		$lib['JPG'] = $imgtypes & IMG_JPG;
