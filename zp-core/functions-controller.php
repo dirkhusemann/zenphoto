@@ -497,6 +497,7 @@ function zp_load_request() {
 			}
 		}
 	}
+	if ($success) add_context(ZP_INDEX);
 	return $success;
 }
 

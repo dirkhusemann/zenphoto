@@ -122,6 +122,9 @@ if (file_exists(SERVERPATH . "/" . internalToFilesystem($obj)) && $zp_request) {
 
 	list($album, $image) = rewrite_get_album_image('album','image');
 	$_zp_gallery_page = '404.php';
+	if (!isset($theme)) {
+		$theme = setupTheme();
+	}
 	$errpage = THEMEFOLDER.'/'.internalToFilesystem($theme).'/404.php';
 	header("HTTP/1.0 404 Not Found");
 	header("Status: 404 Not Found");
