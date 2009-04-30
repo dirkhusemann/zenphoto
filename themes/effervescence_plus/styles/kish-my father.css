@@ -1056,6 +1056,16 @@ font-size: 0.8em;
 }
 
 /* login form */
+#passwordform {
+	text-align: center;
+	width: 400px;
+	margin: 0 auto;
+}
+	
+table.password {
+	margin: 0 auto;
+}
+	
 table.password td.userlabel{
 	text-align:right;
 }
