@@ -248,6 +248,7 @@ if (isset($_GET['action'])) {
 			}
 			setOption('search_hint', process_language_string_save('search_hint', 3));
 			setBoolOption('search_space_is_or', isset($_POST['search_space_is_or']));
+			setBoolOption('search_no_albums', isset($_POST['search_no_albums']));
 			$returntab = "&tab=search";
 		}
 		
@@ -878,10 +879,16 @@ if (empty($alterrights)) {
 				</tr>
 				<tr>
 					<td width="175"><?php echo gettext("Server protocol:"); ?></td>
-					<td width="350"><input type="text" size="10" name="server_protocol"
-						value="<?php echo htmlspecialchars(getOption('server_protocol'));?>" /></td>
-					<td><?php echo gettext("If you're running a secure server, change this to"); ?> <em>https</em>
-					<?php echo gettext("(Most people will leave this alone.)"); ?></td>
+					<td width="350">
+						<select id="server_protocol" name="server_protocol">
+							<?php $protocal = getOption('server_protocol'); ?>
+							<option value="http" <?php if ($protocal == 'http') echo 'SELECTED'; ?>>http</option>
+							<option value="https" <?php if ($protocal == 'https') echo 'SELECTED'; ?>>https</option>
+						</select>
+					</td>
+					<td>
+						<?php echo gettext("If you're running a secure server, change this to <em>https</em>. (Most people will leave this alone.)"); ?>
+					</td>
 				</tr>
 				<tr>
 					<?php
@@ -1271,36 +1278,39 @@ if (empty($alterrights)) {
 		<tr>
 			<td><?php echo gettext("Search behavior settings:"); ?></td>
 			<td>
-			<?php 
-			$exact = '<input type="radio" id="exact_tags" name="tag_match" value="1" ';
-			$partial = '<input type="radio" id="exact_tags" name="tag_match" value="0" ';
-			if (getOption('exact_tag_match')) {
-				$exact .= ' CHECKED ';
-			} else {
-				$partial .= ' CHECKED ';
-			}
-			$exact .= '/>'. gettext('exact');
-			$partial .= '/>'. gettext('partial');
-			$engine = new SearchEngine();
-			$fields = array_flip($engine->zp_search_fields);
-			$fields[SEARCH_TAGS] .= $exact.$partial;
-			$fields = array_flip($fields);
-			$set_fields = $engine->allowedSearchFields();
-			echo gettext('Fields list:');
-			?>
-				<ul class="searchchecklist">
-					<?php
-					generateUnorderedListFromArray($set_fields, $fields, '_SEARCH_', false, true, true);
-					?>
-				</ul>
+			<p>
+				<?php 
+				$exact = '<input type="radio" id="exact_tags" name="tag_match" value="1" ';
+				$partial = '<input type="radio" id="exact_tags" name="tag_match" value="0" ';
+				if (getOption('exact_tag_match')) {
+					$exact .= ' CHECKED ';
+				} else {
+					$partial .= ' CHECKED ';
+				}
+				$exact .= '/>'. gettext('exact');
+				$partial .= '/>'. gettext('partial');
+				$engine = new SearchEngine();
+				$fields = array_flip($engine->zp_search_fields);
+				$fields[SEARCH_TAGS] .= $exact.$partial;
+				$fields = array_flip($fields);
+				$set_fields = $engine->allowedSearchFields();
+				echo gettext('Fields list:');
+				?>
+					<ul class="searchchecklist">
+						<?php
+						generateUnorderedListFromArray($set_fields, $fields, '_SEARCH_', false, true, true);
+						?>
+					</ul>
 			</p>
 			<p><input type="checkbox" name="search_space_is_or" value="1" <?php echo checked('1', getOption('search_space_is_or')); ?> /> <?php echo gettext('Treat spaces as <em>OR</em>') ?></p>
+			<p><input type="checkbox" name="search_no_albums" value="1" <?php echo checked('1', getOption('search_no_albums')); ?> /> <?php echo gettext('Do not return <em>album</em> matches') ?></p>
 			</td>
 			<td>
 				<p><?php echo gettext('Search behavior settings.') ?></p>
 				<p><?php echo gettext("<em>Field list</em> is the set of fields on which searches may be performed."); ?></p>
 				<p><?php echo gettext("Search does partial matches on all fields selected with the possible exception of <em>Tags</em>. This means that if the field contains the search criteria anywhere within it a result will be returned. If <em>exact</em> is selected for <em>Tags</em> then the search criteria must exactly match the tag for a result to be returned.") ?></p>
 				<p><?php echo gettext('Setting <code>Treat spaces as <em>OR</em></code> will cause search to trigger on any of the words in a string separated by spaces. Leaving the option unchecked will treat the whole string as a search target.') ?></p>
+				<p><?php echo gettext('Setting <code>Do not return <em>album</em> matches</code> will cause search to ignore albums when looking for matches. No albums will be returned from the <code>next_album()</code> loop.') ?></p>
 			</td>
 		</tr>
 		<tr>

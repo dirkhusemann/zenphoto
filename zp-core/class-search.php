@@ -703,6 +703,7 @@ class SearchEngine
 	 * @return array
 	 */
 	function getSearchAlbums() {
+		if (getOption('search_no_albums')) return array();
 		$albums = array();
 		$searchstring = $this->getSearchString();
 		$albumfolder = getAlbumFolder();
