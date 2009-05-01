@@ -6,7 +6,9 @@
  * 
  * At least in theory one should be able to replace this script with
  * an alternate to change how Admin users are validated and stored.
- * However, this has not actually been tried yet.
+ * 
+ * Name the new script lib-auth_custom.php. It then will be automatically loaded 
+ * in place of this script.
  * 
  * The global $_zp_current_admin is referenced throuought Zenphoto, so the 
  * elements of the array need to be present in any alternate implementation.
@@ -17,7 +19,13 @@
  * the data is stored.
  */
 
-// admin rights
+/*
+ * admin rights [the values for the 'rights' element of $_zp_current_admin
+ * at least these definitions are required. Their values should indicate the 
+ * hierarchy of privileges as the checkAuthorization function will promote the 
+ * "most privileged" Admin to ADMIN_RIGHTS
+ * 
+ */
 define('NO_RIGHTS', 2);
 define('MAIN_RIGHTS', 4);
 define('VIEWALL_RIGHTS', 8);
@@ -107,9 +115,9 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums) {
 }
 
 /**
- * Returns an array of admin users, indexed by the userid
+ * Returns an array of admin users, indexed by the userid and ordered by "privileges"
  *
- * The array contains the hashed password, user's name, email, and admin priviledges
+ * The array contains the id, hashed password, user's name, email, and admin priviledges
  *
  * @return array
  */
@@ -155,6 +163,7 @@ function getAdministrators() {
 
 /**
  * Retuns the administration rights of a saved authorization code
+ * Will promote an admin to ADMIN_RIGHTS if he is the most privileged admin
  *
  * @param string $authCode the md5 code to check
  *

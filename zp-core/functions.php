@@ -9,7 +9,11 @@
 // force UTF-8 Ø
 
 require_once(dirname(__FILE__).'/functions-basic.php');
-require_once(dirname(__FILE__).'/functions-auth.php');
+if (file_exists(dirname(__FILE__).'/lib-auth_custom.php')) { // load a custom authroization package if it is present
+	require_once(dirname(__FILE__).'/lib-auth_custom.php');
+} else {
+	require_once(dirname(__FILE__).'/lib-auth.php');
+}
 require_once(dirname(__FILE__).'/functions-filter.php');
 
 if(!function_exists("gettext")) {

@@ -231,7 +231,6 @@ zp-core/exif/makers/olympus.php
 zp-core/exif/makers/panasonic.php
 zp-core/exif/makers/sanyo.php
 zp-core/full-image.php
-zp-core/functions-auth.php
 zp-core/functions-basic.php
 zp-core/functions-controller.php
 zp-core/functions-db.php
@@ -390,6 +389,7 @@ zp-core/js/thickbox.css
 zp-core/js/thickbox.js
 zp-core/js/toggleElements.css
 zp-core/js/zenphoto.js.php
+zp-core/lib-auth.php
 zp-core/lib-encryption.php
 zp-core/lib-GD.php
 zp-core/lib-gettext/gettext.inc
