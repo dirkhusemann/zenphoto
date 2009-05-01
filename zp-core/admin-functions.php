@@ -992,14 +992,18 @@ function printAlbumEditForm($index, $album) {
 
 	<script type="text/javascript">
 		$(function() {
-			$("#datepicker_<?php echo $prefix; ?>").datepicker();
+			$("#datepicker_<?php echo $prefix; ?>").datepicker({
+							showOn: 'button',
+							buttonImage: 'images/calendar.png',
+							buttonImageOnly: true
+							});
 		});
 	</script>
 
 	<tr>
 		<td align="left" valign="top"><?php echo gettext("Date:");?> </td> 
 		<td width="400">
-		<input type="text" id="datepicker_<?php echo $prefix; ?>"style="width:370px" name="<?php echo $prefix; ?>albumdate" value="<?php echo $d; ?>" /></td>
+		<input type="text" id="datepicker_<?php echo $prefix; ?>" size="20em" name="<?php echo $prefix; ?>albumdate" value="<?php echo $d; ?>" /></td>
 	</tr>
 	<tr>
 		<td align="left" valign="top"><?php echo gettext("Location:"); ?> </td> 

@@ -821,13 +821,17 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 
 					<script type="text/javascript">
 						$(function() {
-							$("#datepicker_<?php echo $currentimage; ?>").datepicker();
+							$("#datepicker_<?php echo $currentimage; ?>").datepicker({
+											showOn: 'button',
+											buttonImage: 'images/calendar.png',
+											buttonImageOnly: true
+											});
 						});
 					</script>
 
 					<tr align="left" valign="top">
 						<td valign="top"><?php echo gettext("Date:"); ?></td>
-						<td><input type="text" id="datepicker_<?php echo $currentimage; ?>" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $currentimage; ?>-date"
+						<td><input type="text" id="datepicker_<?php echo $currentimage; ?>" size="20em" name="<?php echo $currentimage; ?>-date"
 							value="<?php $d=$image->getDateTime(); if ($d!='0000-00-00 00:00:00') { echo $d; } ?>" /></td>
 					</tr>		
 					

@@ -236,7 +236,11 @@ if(is_object($result)) {
     		
  				<script type="text/javascript">
 					$(function() {
-						$("#date").datepicker();
+						$("#date").datepicker({
+							showOn: 'button',
+							buttonImage: '../../images/calendar.png',
+							buttonImageOnly: true
+							});
 					});
 				</script>
 
@@ -249,7 +253,11 @@ if(is_object($result)) {
      		
 				<script type="text/javascript">
 					$(function() {
-						$("#expiredate").datepicker();
+						$("#expiredate").datepicker({
+							showOn: 'button',
+							buttonImage: '../../images/calendar.png',
+							buttonImageOnly: true
+							});
 					});
 				</script>
 
