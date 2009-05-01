@@ -294,7 +294,12 @@ if (count($publish_albums_list) > 0) {
 
 <script type="text/javascript">
 	$(function() {
-		$("#publish_date").datepicker();
+		$("#publish_date").datepicker({
+							showOn: 'button',
+							buttonImage: '../images/calendar.png',
+							buttonText: '<?php echo gettext('calendar'); ?>',
+							buttonImageOnly: true
+							});
 	});
 </script>
 <form name="review" action="" method="post">

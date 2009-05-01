@@ -239,6 +239,7 @@ if(is_object($result)) {
 						$("#date").datepicker({
 							showOn: 'button',
 							buttonImage: '../../images/calendar.png',
+							buttonText: '<?php echo gettext('calendar'); ?>',
 							buttonImageOnly: true
 							});
 					});
@@ -256,6 +257,7 @@ if(is_object($result)) {
 						$("#expiredate").datepicker({
 							showOn: 'button',
 							buttonImage: '../../images/calendar.png',
+							buttonText: '<?php echo gettext('calendar'); ?>',
 							buttonImageOnly: true
 							});
 					});

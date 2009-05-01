@@ -995,6 +995,7 @@ function printAlbumEditForm($index, $album) {
 			$("#datepicker_<?php echo $prefix; ?>").datepicker({
 							showOn: 'button',
 							buttonImage: 'images/calendar.png',
+							buttonText: '<?php echo gettext('calendar'); ?>',
 							buttonImageOnly: true
 							});
 		});

@@ -824,6 +824,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 							$("#datepicker_<?php echo $currentimage; ?>").datepicker({
 											showOn: 'button',
 											buttonImage: 'images/calendar.png',
+											buttonText: '<?php echo gettext('calendar'); ?>',
 											buttonImageOnly: true
 											});
 						});
