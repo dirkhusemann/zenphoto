@@ -34,7 +34,6 @@ $(document).ready(function() {
 			$(".expire").html('');
 		} else {
 			$(".expire").html('<?php echo gettext("This is not a future date!"); ?>');
-			$("#expiredate").val("");
 		}
 	});
 	if(jQuery('#edittitlelink:checked').val() != 1) {

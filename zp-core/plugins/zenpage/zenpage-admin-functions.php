@@ -26,6 +26,19 @@ function getCheckboxState($id) {
 	if (isset($_REQUEST[$id])) return 1; else return 0;
 }
 
+/**
+ * Retrieves posted expiry date and checks it against the current date/time
+ * Returns the posted date if it is in the future
+ * Returns NULL if the date is past
+ *
+ * @return string
+ */
+function getExpiryDatePost() {
+	$expiredate = sanitize($_POST['expiredate']);
+	if ($expiredate > date(date('Y-m-d H:i:s'))) return $expiredate;
+	return NULL;
+}
+
 /**************************
 /* page functions
 ***************************/
@@ -45,7 +58,7 @@ function addPage() {
 	$extracontent = process_language_string_save("extracontent",0); // TinyMCE already clears unallowed code
 	$show = getCheckboxState('show');
 	$date = sanitize($_POST['date']);
-	$expiredate = sanitize($_POST['expiredate']);
+	$expiredate = getExpiryDatePost();
 	$commentson = getCheckboxState('commentson');
 	$permalink = getCheckboxState('permalink');
 	$codeblock1 = $_POST['codeblock1'];
@@ -98,7 +111,7 @@ function updatePage() {
 	$extracontent = process_language_string_save("extracontent",0); // TinyMCE already clears unallowed code
 	$show = getCheckboxState('show');
 	$date = sanitize($_POST['date']);
-	$expiredate = sanitize($_POST['expiredate']);
+	$expiredate = getExpiryDatePost();
 	$commentson = getCheckboxState('commentson');
 	$permalink = getCheckboxState('permalink');
 	$codeblock1 = $_POST['codeblock1'];
@@ -389,7 +402,7 @@ function addArticle() {
 	$extracontent = process_language_string_save("extracontent",0); // TinyMCE already clears unallowed code
 	$show = getCheckboxState('show');
 	$date = sanitize($_POST['date']);
-	$expiredate = sanitize($_POST['expiredate']);
+	$expiredate = getExpiryDatePost();
 	$permalink = getCheckboxState('permalink');
 	$lastchange = getCheckboxState('lastchange');
 	$commentson = getCheckboxState('commentson');
@@ -450,7 +463,7 @@ function updateArticle() {
 	$extracontent = process_language_string_save("extracontent",0); // TinyMCE already clears unallowed code
 	$show = getCheckboxState('show');
 	$date = sanitize($_POST['date']);
-	$expiredate = sanitize($_POST['expiredate']);
+	$expiredate = getExpiryDatePost();
 	$permalink = getCheckboxState('permalink');
 	$lastchange = getCheckboxState('lastchange');
 	$commentson = getCheckboxState('commentson');
