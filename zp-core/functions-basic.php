@@ -11,7 +11,7 @@
 
 define('FILESYSTEM_CHARSET', 'ISO-8859-1');
 define('DEBUG_LOGIN', false); // set to true to log admin saves and login attempts
-define('DEBUG_ERROR', true); // set to true to  supplies the calling sequence with zp_error messages
+define('DEBUG_ERROR', false); // set to true to  supplies the calling sequence with zp_error messages
 define('DEBUG_IMAGE', false); // set to true to log image processing debug information.
 
 if (function_exists('date_default_timezone_set')) { // insure a correct timezone
@@ -772,7 +772,7 @@ function debugLogBacktrace($message) {
 
 function mkdir_recursive($pathname, $mode=0777) {
 	is_dir(dirname($pathname)) || mkdir_recursive(dirname($pathname), $mode);
-	return is_dir($pathname) || @mkdir($pathname, $mode);
+	return is_dir($pathname) || @mkdir($pathname, $mode & CHMOD_VALUE);
 }
 
 /**

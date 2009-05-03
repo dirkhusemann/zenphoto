@@ -205,6 +205,12 @@ zp-core/admin-themes-editor.php
 zp-core/admin-themes.php
 zp-core/admin-thumbcrop.php
 zp-core/admin-upload.php
+zp-core/admin-uploadify/cancel.png
+zp-core/admin-uploadify/check.php
+zp-core/admin-uploadify/jquery.uploadify.js
+zp-core/admin-uploadify/uploader.php
+zp-core/admin-uploadify/uploader.swf
+zp-core/admin-uploadify/uploadify.css
 zp-core/admin.css
 zp-core/admin.php
 zp-core/album-zip.php

@@ -40,6 +40,7 @@ class SearchEngine
 	var $page;
 	var $images;
 	var $albums;
+	var $album_list; // list of albums to search
 	var $dynalbumname;
 	var $zp_search_fields;			// translatable names
 	var $zp_search_fieldnames;	// database field names
@@ -88,6 +89,11 @@ class SearchEngine
 			$this->dates = '';
 		}
 		$this->fields = $this->parseQueryFields();
+		if (isset($_REQUEST['inalbums'])) {
+			$this->album_list = explode(',',sanitize($_REQUEST['inalbums']));
+		} else {
+			$this->album_list = NULL;
+		}
 		$this->images = null;
 		$this->albums = null;
 	}
@@ -135,6 +141,9 @@ class SearchEngine
 		if (!empty($f)) { $r .= '&searchfields=' . $f; }
 		$a = $this->dynalbumname;
 		if ($a) { $r .= '&albumname=' . $a; }
+		if (!empty($this->album_list)) {
+			$r .= '&inalbums='.implode(',', $this->album_list);
+		}
 		if ($_zp_page != 1) {
 			$this->page = $_zp_page;
 			$r .= '&page=' . $_zp_page;
@@ -168,6 +177,9 @@ class SearchEngine
 					break;
 				case 'albumname':
 					$this->dynalbumname = $v;
+					break;
+				case 'inalbums':
+					$this->album_list = explode(',', $v);
 					break;
 			}
 		}
@@ -715,7 +727,9 @@ class SearchEngine
 				if ($albumname != $this->dynalbumname) {
 					if (file_exists($albumfolder . internalToFilesystem($albumname))) {
 						if (isMyAlbum($albumname, ALL_RIGHTS) || $row['show']) {
-							$albums[] = $row['folder'];
+							if (empty($this->album_list) || in_array($albumname, $this->album_list)) {
+								$albums[] = $albumname;
+							}
 						}
 					}
 				}
@@ -824,7 +838,9 @@ class SearchEngine
 				$albumname = $row2['folder'];
 				if (file_exists($albumfolder . internalToFilesystem($albumname) . '/' . internalToFilesystem($row['filename']))) {
 					if (isMyAlbum($albumname, ALL_RIGHTS) || $row2['show']) {
-						$images[] = array('filename' => $row['filename'], 'folder' => $albumname);
+						if (empty($this->album_list) || in_array($albumname, $this->album_list)) {
+							$images[] = array('filename' => $row['filename'], 'folder' => $albumname);
+						}
 					}
 				}
 			}

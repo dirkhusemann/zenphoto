@@ -556,7 +556,7 @@ function getPageURL($page, $total=null) {
 		$searchwords = implode(' ', $search);
 		$searchdate = $_zp_current_search->dates;
 		$searchfields = $_zp_current_search->getFields();
-		$searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields, $page);
+		$searchpagepath = getSearchURL($searchwords, $searchdate, $searchfields, $page, $_zp_current_search->album_list);
 		return $searchpagepath;
 	} else {
 		if ($specialpage = !in_array($_zp_gallery_page, array('index.php', 'album.php', 'image.php', 'search.php'))) {
@@ -916,7 +916,7 @@ function printParentBreadcrumb($before = '', $between=' | ', $after = ' | ', $tr
 		$searchwords = $_zp_current_search->words;
 		$searchdate = $_zp_current_search->dates;
 		$searchfields = $_zp_current_search->getFields();
-		$searchpagepath = htmlspecialchars(getSearchURL($searchwords, $searchdate, $searchfields, $page));
+		$searchpagepath = htmlspecialchars(getSearchURL($searchwords, $searchdate, $searchfields, $page, $_zp_current_search->album_list));
 		$dynamic_album = $_zp_current_search->dynalbumname;
 		if (empty($dynamic_album)) {
 			echo "<a href=\"" . $searchpagepath . "\" title=\"Return to search\">";
@@ -1718,7 +1718,6 @@ function next_image($all=false, $firstPageCount=NULL, $sorttype=null, $sortdirec
 		$_zp_current_image_restore = $_zp_current_image;
 		$img = array_shift($_zp_images);
 		if (is_array($img)) {
-
 			$_zp_current_image = newImage(new Album($_zp_gallery, $img['folder']), $img['filename']);
 		} else {
 			$_zp_current_image = newImage($_zp_current_album, $img);
@@ -3502,7 +3501,7 @@ function printTags($option='links', $preText=NULL, $class='taglist', $separator=
 			for ($x = 0; $x < $ct; $x++) {
 				if ($x === $ct - 1) { $separator = ""; }
 				if ($option === "links") {
-					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($singletag[$x], '', SEARCH_TAGS, 0, 0))."\" title=\"".html_encode($singletag[$x])."\" rel=\"nofollow\">";
+					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($singletag[$x], '', SEARCH_TAGS, 0, 0, $_zp_current_search->album_list))."\" title=\"".html_encode($singletag[$x])."\" rel=\"nofollow\">";
 					$links2 = "</a>";
 				}
 				echo "\t<li>".$links1.$singletag[$x].$links2.$separator."</li>\n";
@@ -3565,7 +3564,7 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 			} else {
 				$key = str_replace('"', '', $key);
 				echo "\t<li><a href=\"".
-					htmlspecialchars(getSearchURL($key, '', SEARCH_TAGS, 0, 0))."\"$size rel=\"nofollow\">".
+					htmlspecialchars(getSearchURL($key, '', SEARCH_TAGS, 0, 0, $_zp_current_search->album_list))."\"$size rel=\"nofollow\">".
 					$key.$counter."</a></li>\n";
 			}
 		}
@@ -3648,7 +3647,7 @@ function printAllDates($class='archive', $yearid='year', $monthid='month', $orde
 			if($nr != 1) {  echo "</ul>\n</li>\n";}
 			echo "<li $yearid>$year\n<ul $monthid>\n";
 		}
-		echo "<li><a href=\"".htmlspecialchars(getSearchURl('', substr($key, 0, 7), 0, 0))."\" rel=\"nofollow\">$month ($val)</a></li>\n";
+		echo "<li><a href=\"".htmlspecialchars(getSearchURl('', substr($key, 0, 7), 0, 0, $_zp_current_search->album_list))."\" rel=\"nofollow\">$month ($val)</a></li>\n";
 	}
 	echo "</ul>\n</li>\n</ul>\n";
 }
@@ -3842,10 +3841,11 @@ function printRSSHeaderLink($option, $linktext) {
  * @param string $dates the dates that limit the search
  * @param int $fields the fields on which to search
  * @param int $page the page number for the URL
+ * @param array $inalbums the list of albums to search
  * @return string
  * @since 1.1.3
  */
-function getSearchURL($words, $dates, $fields, $page) {
+function getSearchURL($words, $dates, $fields, $page, $inalbums) {
 	if ($mr = getOption('mod_rewrite')) {
 		$url = WEBPATH."/page/search/";
 	} else {
@@ -3884,6 +3884,14 @@ function getSearchURL($words, $dates, $fields, $page) {
 			$url .= "&page=$page";
 		}
 	}
+	if (!empty($inalbums)) {
+		if ($mr) {
+			$url .= '?';
+		} else {
+			$url .= '&';
+		}
+		$url .= 'inalbums='.urlencode(implode(',',$inalbums));
+	}
 	return $url;
 }
 
@@ -3904,9 +3912,10 @@ function getSearchURL($words, $dates, $fields, $page) {
  * @param string $buttontext optional text for the button ("Search" will be the default text)
  * @param string $iconsource optional theme based icon for the search fields toggle
  * @param bit $query_fields override selection for enabled fields with this mask
+ * @param array $album_list optional array of albums to search
  * @since 1.1.3
  */
-function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL,$buttontext='', $iconsource=NULL, $query_fields=NULL) {
+function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL, $buttontext='', $iconsource=NULL, $query_fields=NULL, $album_list=NULL) {
 	global $_zp_adminJS_loaded;
 	if(empty($buttontext)) {
 		$buttontext = gettext("Search");
@@ -3920,8 +3929,10 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL,$butto
 
 	if (empty($buttonSource)) {
 		$type = 'submit';
+		$buttontext = 'value="'.$buttontext.'"';
 	} else {
 		$buttonSource = 'src="' . $buttonSource . '" alt="'.$buttontext.'"';
+		$buttontext = 'title="'.$buttontext.'"';
 		$type = 'image';
 	}
 	if (empty($iconsource)) {
@@ -3932,9 +3943,9 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL,$butto
 	$fields = array_flip($engine->allowedSearchFields());
 	if (!$_zp_adminJS_loaded) {
 		$_zp_adminJS_loaded = true;
-	?>
+		?>
 		<script type="text/javascript" src="<?php echo WEBPATH.'/'.ZENFOLDER; ?>/js/admin.js"></script>
-	<?php
+		<?php
 	}
 	?>
 	<div id="search"><!-- search form -->
@@ -3945,7 +3956,8 @@ function printSearchForm($prevtext=NULL, $id='search', $buttonSource=NULL,$butto
 	<?php if(count($fields) > 1) { ?>
 		<a href="javascript: toggle('searchextrashow');"><img src="<?php echo $iconsource; ?>" alt="<?php echo gettext('select search fields'); ?>" id="searchfields_icon" /></a>
 	<?php } ?>
-	<input type="<?php echo $type; ?>" value="<?php echo $buttontext; ?>" class="pushbutton" id="search_submit" <?php echo $buttonSource; ?> />
+	<input type="<?php echo $type; ?>" <?php echo $buttontext; ?> class="pushbutton" id="search_submit" <?php echo $buttonSource; ?> />
+	<input type="hidden" name="inalbums" value="<?php if (empty($album_list)) echo ''; else echo implode(',', $album_list); ?>" />
 	<br />
 	<?php
 	if (count($fields) > 1) {
