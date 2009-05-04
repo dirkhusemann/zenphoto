@@ -261,6 +261,9 @@ if (ini_get('safe_mode')) { ?>
 						'checkScript': 'admin-uploadify/check.php',
 						'displayData': 'speed',
 						'simUploadLimit': 3,
+						'onAllComplete': function() {
+						  window.location = 'admin-edit.php?page=edit&subpage=1&tab=imageinfo&album='+$('#folderdisplay').val();
+						},
 						'fileDesc': 'Allowed file types',
 						'fileExt': '<?php echo $extensions; ?>'
 					});
@@ -303,7 +306,7 @@ if (ini_get('safe_mode')) { ?>
 				<a href="javascript:$('#fileUpload').fileUploadClearQueue()"><img src="images/fail.png" alt="" /><?php echo gettext("Cancel"); ?></a>
 			<br clear: all /><br />
 			</p>
-			<p><?php echo gettext("If your upload does not work try the <a href='admin-upload.php?uploadtype=http'>http-browser single file upload</a> or use FTP instead"); ?></p>
+			<p><?php echo gettext("If your upload does not work try the <a href='admin-upload.php?uploadtype=http'>http-browser single file upload</a> or use FTP instead."); ?></p>
 		</div>
 		<?php
 	} else {
