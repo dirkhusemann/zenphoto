@@ -277,7 +277,13 @@ class _Image extends PersistentObject {
 	 * @return int
 	 */
 	function getWidth() {
-		return $this->get('width');
+		$w = $this->get('width');
+		if (empty($w)) {
+			$this->updateDimensions();
+			$this->save();
+			$w = $this->get('width');
+		}
+		return $w;
 	}
 
 	/**
@@ -286,7 +292,13 @@ class _Image extends PersistentObject {
 	 * @return int
 	 */
 	function getHeight() {
-		return $this->get('height');
+		$h = $this->get('height');
+		if (empty($h)) {
+			$this->updateDimensions();
+			$this->save();
+			$h = $this->get('height');
+		}
+		return $h;
 	}
 
 	/**

@@ -22,7 +22,7 @@ if (!empty($_FILES)) {
 		$folder = substr($folder,0,-1);
 	}
 	$targetPath = getAlbumFolder().internalToFilesystem($folder);
-	$name = sanitize($_FILES['Filedata']['name'],3);
+	$name = basename(sanitize($_FILES['Filedata']['name'],3));
 	if (!empty($folder) && isMyAlbum($folder, UPLOAD_RIGHTS)) {
 		if (is_valid_image($name) || is_valid_other_type($name)) {
 			$soename = seoFriendlyURL($name);
@@ -31,9 +31,9 @@ if (!empty($_FILES)) {
 			move_uploaded_file($tempFile,$targetFile);
 			@chmod($targetFile, 0666 & CHMOD_VALUE);
 			$album = new Album(New Gallery(), $folder);
-			$image = newImage($album, $soename);
+			$image = newImage($album, $name);
 			if ($name != $soename) {
-				$image->setTitle($name);
+				$image->setTitle(substr($name, 0, strrpos($name, '.')));
 				$image->save();
 			}
 		} else if (is_zip($name)) {
