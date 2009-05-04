@@ -18,7 +18,11 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	header("Location: " . FULLWEBPATH . "/" . ZENFOLDER . "/setup.php");
 	exit();
 }
-
+$uploadtype = zp_getcookie('uploadtype');
+if (isset($_GET['uploadtype'])) {
+	$uploadtype = sanitize($_GET['uploadtype'])	;
+	zp_setcookie('uploadtype', $uploadtype);
+}
 $gallery = new Gallery();
 
 /* handle posts */
@@ -58,7 +62,7 @@ if (isset($_GET['action'])) {
 				. gettext("or use your FTP program to give everyone write permissions to those folders."));
 			}
 				
-			$error = !isMyAlbum();
+			$error = !isMyAlbum($folder, UPLOAD_RIGHTS);
 			if (!$error) {
 				foreach ($_FILES['files']['error'] as $key => $error) {
 					if ($_FILES['files']['name'][$key] == "") continue;
@@ -165,7 +169,7 @@ if (ini_get('safe_mode')) { ?>
 }
 ?>
 
-<form name="uploadform" enctype="multipart/form-data" action="?action=upload" method="POST" onSubmit="return validateFolder(document.uploadform.folder,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');">
+<form name="uploadform" enctype="multipart/form-data" action="?action=upload&uploadtype=http" method="POST" onSubmit="return validateFolder(document.uploadform.folder,'<?php echo gettext('That name is already used.'); ?>','<?php echo gettext('This upload has to have a folder. Type a title or folder name to continue...'); ?>');">
 	<input type="hidden" name="processed" value="1" /> 
 	<input type="hidden" name="existingfolder" value="false" />
 
@@ -240,50 +244,67 @@ if (ini_get('safe_mode')) { ?>
 		$extensions .= ';*.'.$ext;
 	}
 	$extensions = substr($extensions, 1);
-	if(!isset($_GET['oldfileupload'])) {
+	if($uploadtype != 'http') {
 		?>
 		<div id="uploadboxes" style="display: none;"></div> <!--  need this so that toggling it does not fail. -->
 		<div>
 		<!-- UPLOADIFY JQUERY/FLASH MULTIFILE UPLOAD TEST -->
-		<script type="text/javascript">
-			$(document).ready(function() { 
-				$('#fileUpload').fileUpload({
-					'uploader': 'admin-uploadify/uploader.swf',
-					'cancelImg': 'images/fail.png',
-					'script': 'admin-uploadify/uploader.php',
-					'folder': '/',
-					'multi': true,
-					'buttonText': '<?php echo gettext("Select files"); ?>',
-					'checkScript': 'admin-uploadify/check.php',
-					'displayData': 'speed',
-					'simUploadLimit': 3,
-					'fileDesc': 'Allowed file types',
-					'fileExt': '<?php echo $extensions; ?>'
-				});
-			$('#albumselectmenu').change(function(){
-				$('#fileUpload').fileUploadSettings('folder','/'+$('#folderdisplay').val());
+			<script type="text/javascript">
+				$(document).ready(function() { 
+					$('#fileUpload').fileUpload({
+						'uploader': 'admin-uploadify/uploader.swf',
+						'cancelImg': 'images/fail.png',
+						'script': 'admin-uploadify/uploader.php',
+						'folder': '/',
+						'multi': true,
+						'buttonText': '<?php echo gettext("Select files"); ?>',
+						'checkScript': 'admin-uploadify/check.php',
+						'displayData': 'speed',
+						'simUploadLimit': 3,
+						'fileDesc': 'Allowed file types',
+						'fileExt': '<?php echo $extensions; ?>'
+					});
 				if($('#folderdisplay').val() == "") {
 					$('#fileUploadbuttons').hide();
 				} else {
 					$('#fileUploadbuttons').show();
 				}
+				$('#albumselectmenu').change(function(){
+					$('#fileUpload').fileUploadSettings('folder','/'+$('#folderdisplay').val());
+					if($('#folderdisplay').val() == "") {
+						$('#fileUploadbuttons').hide();
+					} else {
+						$('#fileUploadbuttons').show();
+					}
+				});
+				$('#albumtitle').change(function(){
+					$('#fileUpload').fileUploadSettings('folder','/'+$('#folderdisplay').val());
+					if($('#folderdisplay').val() == "") {
+						$('#fileUploadbuttons').hide();
+					} else {
+						$('#fileUploadbuttons').show();
+					}
+				});
+				$('#folderdisplay').change(function(){
+					$('#fileUpload').fileUploadSettings('folder','/'+$('#folderdisplay').val());
+					if($('#folderdisplay').val() == "") {
+						$('#fileUploadbuttons').hide();
+					} else {
+						$('#fileUploadbuttons').show();
+					}
+				});
 			});
-			$('#albumtitle').change(function(){
-				$('#fileUpload').fileUploadSettings('folder','/'+$('#folderdisplay').val());
-			});
-		});
-		</script>
-		<div id="fileUpload"><?php echo gettext("You have a problem with your javascript or your browser's flash plugin is not supported."); ?></div>
-		<p class="buttons" id="fileUploadbuttons" style="display: none;">
-			<a href="javascript:$('#fileUpload').fileUploadStart()"><img src="images/pass.png" alt="" /><?php echo gettext("Upload"); ?></a>
-			<a href="javascript:$('#fileUpload').fileUploadClearQueue()"><img src="images/fail.png" alt="" /><?php echo gettext("Cancel"); ?></a>
-		<br clear: all /><br />
-		</p>
-	
-	<p><?php echo gettext('This uploader is still under development.') ?></p>
-		
-		<p><?php echo gettext("If your upload does not work try the <a href='admin-upload.php?oldfileupload'>http-browser single file upload</a> or use FTP instead"); ?></p>
-		<div>
+			</script>
+			<div id="fileUpload">
+				<?php echo gettext("You have a problem with your javascript or your browser's flash plugin is not supported."); ?>
+			</div>
+			<p class="buttons" id="fileUploadbuttons" style="display: none;">
+				<a href="javascript:$('#fileUpload').fileUploadStart()"><img src="images/pass.png" alt="" /><?php echo gettext("Upload"); ?></a>
+				<a href="javascript:$('#fileUpload').fileUploadClearQueue()"><img src="images/fail.png" alt="" /><?php echo gettext("Cancel"); ?></a>
+			<br clear: all /><br />
+			</p>
+			<p><?php echo gettext("If your upload does not work try the <a href='admin-upload.php?uploadtype=http'>http-browser single file upload</a> or use FTP instead"); ?></p>
+		</div>
 		<?php
 	} else {
 		?>
@@ -308,7 +329,7 @@ if (ini_get('safe_mode')) { ?>
 				</p>
 			<br /><br clear: all />
 			</div>
-			<p><?php echo gettext("Try the <a href='admin-upload.php'>multi file upload</a>"); ?></p>
+			<p><?php echo gettext("Try the <a href='admin-upload.php?uploadtype=multifile'>multi file upload</a>"); ?></p>
 			<?php
 	}
 	?>
