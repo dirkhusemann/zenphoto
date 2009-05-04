@@ -89,13 +89,15 @@ class SearchEngine
 			$this->dates = '';
 		}
 		$this->fields = $this->parseQueryFields();
+		$this->album_list = NULL;
 		if (isset($_REQUEST['inalbums'])) {
-			$this->album_list = explode(',',sanitize($_REQUEST['inalbums']));
-		} else {
-			$this->album_list = NULL;
+			$list = trim(sanitize($_REQUEST['inalbums'], 3));
+			if (!empty($list)) {
+				$this->album_list = explode(',',$list);
+			}
 		}
-		$this->images = null;
-		$this->albums = null;
+		$this->images = NULL;
+		$this->albums = NULL;
 	}
 
 	/**

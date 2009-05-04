@@ -350,7 +350,8 @@ printAdminHeader();
 if ($sortablepage) {
 	zenSortablesHeader($_zp_sortable_list, 'albumList', 'albumOrder', 'div', "handle:'.handle', axis:'y', containment:'table', placeholder:'zensortable_row'");
 }
-if ($subtab=='albuminfo') {	?>
+if (empty($subtab) || $subtab=='albuminfo') {
+	?>
 	<script type="text/javascript" src="js/tag.js"></script>
 	<?php
 }
