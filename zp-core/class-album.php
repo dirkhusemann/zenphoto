@@ -645,7 +645,7 @@ class Album extends PersistentObject {
 		if ($index >= 0 && $index < count($images)) {
 			if ($this->isDynamic()) {
 				$album = new Album($this->gallery, $images[$index]['folder']);
-				return newImage($album, $images['filename']);
+				return newImage($album, $images[$index]['filename']);
 			} else {
 				return newImage($this, $this->images[$index]);
 			}
