@@ -142,11 +142,11 @@ $last = strtoupper(array_pop($types));
 $s1 = strtoupper(implode(', ', $_zp_supported_images));
 $s2 = strtoupper(implode(', ', $types));
 printf(gettext('This web-based upload accepts ZenPhoto formats: %s, %s, and %s.'), $s1, $s2, $last);
-echo gettext("You can also upload a <strong>ZIP</strong> archive containing any of those file types."); ?></p>
+echo gettext(" If using the <em>http-browser single file upload</em> you can also upload a <strong>ZIP</strong> archive containing any of those file types."); ?></p>
 <!--<p><em>Note:</em> When uploading archives, <strong>all</strong> images in the archive are added to the album, regardles of directory structure.</p>-->
 <p>
 <?php echo sprintf(gettext("The maximum size for any one file is <strong>%sB</strong>."), ini_get('upload_max_filesize')); ?>
-<?php echo gettext('Don\'t forget, you can also use <acronym title="File Transfer Protocol">FTP</acronym> to upload folders of images into the albums directory!'); ?>
+<?php echo gettext(' Don\'t forget, you can also use <acronym title="File Transfer Protocol">FTP</acronym> to upload folders of images into the albums directory!'); ?>
 </p>
 
 <?php if (isset($error) && $error) { ?>
@@ -256,31 +256,33 @@ if (ini_get('safe_mode')) { ?>
 					'buttonText': '<?php echo gettext("Select files"); ?>',
 					'checkScript': 'admin-uploadify/check.php',
 					'displayData': 'speed',
-					'simUploadLimit': 2,
+					'simUploadLimit': 3,
 					'fileDesc': 'Allowed file types',
 					'fileExt': '<?php echo $extensions; ?>'
 				});
-			
 			$('#albumselectmenu').change(function(){
 				$('#fileUpload').fileUploadSettings('folder','/'+$('#folderdisplay').val());
+				if($('#folderdisplay').val() == "") {
+					$('#fileUploadbuttons').hide();
+				} else {
+					$('#fileUploadbuttons').show();
+				}
 			});
 			$('#albumtitle').change(function(){
 				$('#fileUpload').fileUploadSettings('folder','/'+$('#folderdisplay').val());
 			});
-			
 		});
 		</script>
 		<div id="fileUpload"><?php echo gettext("You have a problem with your javascript or your browser's flash plugin is not supported."); ?></div>
-		<p class="buttons">
+		<p class="buttons" id="fileUploadbuttons" style="display: none;">
 			<a href="javascript:$('#fileUpload').fileUploadStart()"><img src="images/pass.png" alt="" /><?php echo gettext("Upload"); ?></a>
 			<a href="javascript:$('#fileUpload').fileUploadClearQueue()"><img src="images/fail.png" alt="" /><?php echo gettext("Cancel"); ?></a>
-		</p>
-		
 		<br clear: all /><br />
-		
+		</p>
+	
 	<p><?php echo gettext('This uploader is still under development.') ?></p>
 		
-		<p><?php echo gettext("If yor upload does not work try the <a href='admin-upload.php?oldfileupload'>http-browser single file upload</a> or use FTP instead"); ?></p>
+		<p><?php echo gettext("If your upload does not work try the <a href='admin-upload.php?oldfileupload'>http-browser single file upload</a> or use FTP instead"); ?></p>
 		<div>
 		<?php
 	} else {

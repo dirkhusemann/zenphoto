@@ -14,13 +14,19 @@ Co-developed by Travis Nickels
 	padding: 10px;
 	width: 300px;
 }
-.fileUploadQueueItem .cancel {
+
+
+.fileUploadQueueItem .cancel img {
 	float: right;
+	border: 0;
+	outline: none;
 }
 .fileUploadQueueItem .cancel a {
 	text-decoration: none;
 	border: 0;
+	outline: none;
 	}
+
 .fileUploadProgress {
 	background-color: #FFFFFF;
 	border-top: 1px solid #808080;
