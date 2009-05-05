@@ -255,6 +255,7 @@ if (ini_get('safe_mode')) { ?>
 						'uploader': 'admin-uploadify/uploader.swf',
 						'cancelImg': 'images/fail.png',
 						'script': 'admin-uploadify/uploader.php',
+						'scriptData': {'auth': '<?php echo $_zp_current_admin['pass']; ?>'},
 						'folder': '/',
 						'multi': true,
 						'buttonText': '<?php echo gettext("Select files"); ?>',

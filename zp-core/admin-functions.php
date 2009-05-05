@@ -451,7 +451,6 @@ function printLogoAndLinks() {
  */
 function printTabs($currenttab) {
 	global $_zp_loggedin;
-	setOption('admin_session', serialize(array('admin_page'=>$currenttab, 'credentials'=>zp_getCookie('zenphoto_auth'), 'timestamp'=>time())));
 
 	echo "\n  <ul class=\"nav\">";
 	if (($_zp_loggedin & (MAIN_RIGHTS | ADMIN_RIGHTS))) {

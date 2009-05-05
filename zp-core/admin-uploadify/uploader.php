@@ -2,14 +2,8 @@
 define('OFFSET_PATH', 3);
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 if (!zp_loggedin()) {
-	$session = getOption('admin_session');
-	if (!empty($session)) {
-		$session_a = unserialize($session);
-		$expiry = $session_a['timestamp']+7200;
-		$now = time();
-		if ($session_a['admin_page']=='upload' && $expiry>$now) {
-			$_zp_loggedin = checkAuthorization($session_a['credentials']);
-		}
+	if (isset($_GET['auth'])) {
+		$_zp_loggedin = checkAuthorization($_GET['auth']);
 	}
 }
 if (!empty($_FILES)) {
