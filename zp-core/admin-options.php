@@ -1036,15 +1036,13 @@ if (empty($alterrights)) {
 				<tr>
 					<td><?php echo gettext("Allowed tags:"); ?></td>
 					<td>
-						<textarea name="allowed_tags" style="width: 310px" rows="10"><?php echo htmlspecialchars(getOption('allowed_tags')); ?></textarea>
-						<br />
-						<input type="checkbox" name="allowed_tags_reset" value="1" /><?php echo gettext('restore default allowed tags'); ?>
+						<p><textarea name="allowed_tags" style="width: 310px" rows="10"><?php echo htmlspecialchars(getOption('allowed_tags')); ?></textarea></p>
+						<p><input type="checkbox" name="allowed_tags_reset" value="1" /><?php echo gettext('restore default allowed tags'); ?></p>
 					</td>
-					<td><?php echo gettext("Tags and attributes allowed in comments, descriptions, and other fields."); ?>
-					<br />
-					<?php echo gettext("Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"); ?>
-					<br />
-					<?php echo gettext('Check <em>restore default allowed tags</em> to reset allowed tags to the zenphoto default values.') ?>
+					<td>
+					<p><?php echo gettext("Tags and attributes allowed in comments, descriptions, and other fields."); ?></p>
+					<p><?php echo gettext("Follow the form <em>tag</em> =&gt; (<em>attribute</em> =&gt; (<em>attribute</em>=&gt; (), <em>attribute</em> =&gt; ()...)))"); ?></p>
+					<p><?php echo gettext('Check <em>restore default allowed tags</em> to reset allowed tags to the zenphoto default values.') ?></p>
 					</td>
 				</tr>			
 				<tr>

@@ -122,7 +122,7 @@ function setDefault($option, $default) {
 	setOptionDefault('feed_enclosure', '0');
 	setOptionDefault('feed_mediarss', '0');
 	setOptionDefault('search_fields', 32767);
-	$a =							"a => (href => () title => ())\n" .
+	$a =							"a => (href =>() title =>() target=>())\n" .
 	 									"abbr =>(title =>())\n" .
 	 									"acronym =>(title =>())\n" .
 	 									"b => ()\n" .
