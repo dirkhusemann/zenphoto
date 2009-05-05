@@ -3,7 +3,14 @@ define('OFFSET_PATH', 3);
 require_once(dirname(dirname(__FILE__)).'/admin-functions.php');
 if (!zp_loggedin()) {
 	if (isset($_GET['auth'])) {
-		$_zp_loggedin = checkAuthorization($_GET['auth']);
+		$auth = $_GET['auth'];
+		$admins = getAdministrators();
+		foreach ($admins as $admin) {
+			if (md5(serialize($admin)) == $auth) {
+				$_zp_loggedin = checkAuthorization($admin['pass']);
+				break;
+			}
+		}
 	}
 }
 if (!empty($_FILES)) {
