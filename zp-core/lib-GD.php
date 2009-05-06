@@ -487,10 +487,15 @@ function writeString($image, $font, $x, $y, $string, $color) {
  * @param int $color
  * @return bool
  */
-function createRectangle($image, $x1, $y1, $x2, $y2 , $color) {
+function drawRectangle($image, $x1, $y1, $x2, $y2 , $color) {
 	return imagerectangle($image, $x1, $y1, $x2, $y2 , $color);
 }
 
+/**
+ * Returns array of graphics library info
+ *
+ * @return array
+ */
 function graphicsLibInfo() {
 	$lib = array ();
 	if (extension_loaded('gd')) {

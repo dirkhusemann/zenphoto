@@ -3477,6 +3477,7 @@ function getTags() {
  * @since 1.1
  */
 function printTags($option='links', $preText=NULL, $class='taglist', $separator=', ', $editable=TRUE, $editclass='', $messageIfEmpty = true ) {
+	global $_zp_current_search;
 	$singletag = getTags();
 	$tagstring = implode(', ', $singletag);
  	if ($tagstring === '' or $tagstring === NULL ) {
@@ -3498,10 +3499,15 @@ function printTags($option='links', $preText=NULL, $class='taglist', $separator=
 			}
 			echo "<ul class=\"".$class."\">\n";
 			$ct = count($singletag);
+			if (is_object($_zp_current_search)) {
+				$albumlist = $_zp_current_search->album_list;
+			} else {
+				$albumlist = NULL;
+			}
 			for ($x = 0; $x < $ct; $x++) {
 				if ($x === $ct - 1) { $separator = ""; }
 				if ($option === "links") {
-					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($singletag[$x], '', SEARCH_TAGS, 0, 0, $_zp_current_search->album_list))."\" title=\"".html_encode($singletag[$x])."\" rel=\"nofollow\">";
+					$links1 = "<a href=\"".htmlspecialchars(getSearchURL($singletag[$x], '', SEARCH_TAGS, 0, 0, $albumlist))."\" title=\"".html_encode($singletag[$x])."\" rel=\"nofollow\">";
 					$links2 = "</a>";
 				}
 				echo "\t<li>".$links1.$singletag[$x].$links2.$separator."</li>\n";
@@ -3528,6 +3534,7 @@ function printTags($option='links', $preText=NULL, $class='taglist', $separator=
  * @since 1.1
  */
 function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE,$maxfontsize=2,$maxcount=50,$mincount=10, $limit=NULL) {
+	global $_zp_current_search;
 	define('MINFONTSIZE', 0.8);
 
 	$option = strtolower($option);
@@ -3562,9 +3569,14 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 			if(!$links) {
 				echo "\t<li$size>".$key.$counter."</li>\n";
 			} else {
+				if (is_object($_zp_current_search)) {
+					$albumlist = $_zp_current_search->album_list;
+				} else {
+					$albumlist = NULL;
+				}
 				$key = str_replace('"', '', $key);
 				echo "\t<li><a href=\"".
-					htmlspecialchars(getSearchURL($key, '', SEARCH_TAGS, 0, 0, $_zp_current_search->album_list))."\"$size rel=\"nofollow\">".
+					htmlspecialchars(getSearchURL($key, '', SEARCH_TAGS, 0, 0, $albumlist))."\"$size rel=\"nofollow\">".
 					$key.$counter."</a></li>\n";
 			}
 		}
@@ -3624,6 +3636,7 @@ function getAllDates($order='asc') {
  * @param string $order set to 'desc' for the list to be in descending order
  */
 function printAllDates($class='archive', $yearid='year', $monthid='month', $order='asc') {
+	global $_zp_current_search;
 	if (!empty($class)){ $class = "class=\"$class\""; }
 	if (!empty($yearid)){ $yearid = "class=\"$yearid\""; }
 	if (!empty($monthid)){ $monthid = "class=\"$monthid\""; }
@@ -3647,7 +3660,12 @@ function printAllDates($class='archive', $yearid='year', $monthid='month', $orde
 			if($nr != 1) {  echo "</ul>\n</li>\n";}
 			echo "<li $yearid>$year\n<ul $monthid>\n";
 		}
-		echo "<li><a href=\"".htmlspecialchars(getSearchURl('', substr($key, 0, 7), 0, 0, $_zp_current_search->album_list))."\" rel=\"nofollow\">$month ($val)</a></li>\n";
+		if (is_object($_zp_current_search)) {
+			$albumlist = $_zp_current_search->album_list;
+		} else {
+			$albumlist = NULL;
+		}
+		echo "<li><a href=\"".htmlspecialchars(getSearchURl('', substr($key, 0, 7), 0, 0, $albumlist))."\" rel=\"nofollow\">$month ($val)</a></li>\n";
 	}
 	echo "</ul>\n</li>\n</ul>\n";
 }
@@ -4238,10 +4256,11 @@ function checkforPassword($silent=false) {
  * @param string $hint hint to the password
  * @param bool $showProtected set false to supress the password protected message
  * @param bool $showuser set true to force the user name filed to be present
+ * @param string $redirect optional URL to send the user to after successful login
  *
  *@since 1.1.3
  */
-function printPasswordForm($hint, $showProtected=true, $showuser=NULL) {
+function printPasswordForm($hint, $showProtected=true, $showuser=NULL, $redirect=NULL) {
 	global $_zp_login_error, $_zp_password_form_printed, $_zp_current_search, $_zp_gallery_page,
 					$_zp_current_album, $_zp_current_image;
 	if (is_null($showuser)) { $showuser = getOption('login_user_field'); }
@@ -4276,6 +4295,7 @@ function printPasswordForm($hint, $showProtected=true, $showuser=NULL) {
 
 	<form id="passwordform" name="password" action=?userlog=1<?php echo $action; ?> method="POST">
 		<input type="hidden" name="password" value="1" />
+		<input type="hidden" name="redirect" value="<?php echo $redirect; ?>" />
 	
 		<table class="password">
 		<?php 

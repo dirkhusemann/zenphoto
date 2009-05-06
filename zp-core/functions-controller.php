@@ -300,10 +300,18 @@ function zp_handle_password() {
 		if (DEBUG_LOGIN) debugLog("zp_handle_password: \$post_user=$post_user; \$post_pass=$post_pass; \$auth=$auth; ");
 		if ($_zp_loggedin = checkLogon($post_user, $post_pass)) {	// allow Admin user login
 			zp_setcookie("zenphoto_auth", $auth, time()+COOKIE_PESISTENCE, $cookiepath);
+			if (isset($_POST['redirect'])) {
+				header("Location: " . FULLWEBPATH . "/" . sanitize($_POST['redirect'], 3));
+				exit();
+			}
 		} else {
 			if (($auth == $check_auth) && $post_user == $check_user) {
 				// Correct auth info. Set the cookie.
 				zp_setcookie($authType, $auth, time()+COOKIE_PESISTENCE, $cookiepath);
+				if (isset($_POST['redirect'])) {
+					header("Location: " . FULLWEBPATH . "/" . sanitize($_POST['redirect'], 3));
+					exit();
+				}
 			} else {
 				// Clear the cookie, just in case
 				zp_setcookie($authType, "", time()-368000, $cookiepath);

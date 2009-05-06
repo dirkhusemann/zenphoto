@@ -29,7 +29,7 @@ for ($i=0; $i<$len; $i++) {
 }
 
 $rectangle = colorAllocate($image,48,57,85);
-createRectangle($image,0,0,64,19,$rectangle);
+drawRectangle($image,0,0,64,19,$rectangle);
 
 imageOutput($image, 'png', NULL);
 
