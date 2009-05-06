@@ -604,7 +604,7 @@ if ($subtab == 'admin') {
 	
 	
 ?> 
-<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
+<form action="?action=saveoptions<?php if (isset($_zp_ticket)) echo '&ticket='.$_zp_ticket.'&user='.$post_user; ?>" method="post" AUTOCOMPLETE=OFF>
 <input type="hidden" name="saveadminoptions" value="yes" /> 
 <input type="hidden" name="totaladmins" value="<?php echo count($admins); ?>" />
 <?php			

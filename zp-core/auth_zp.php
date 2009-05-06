@@ -15,7 +15,7 @@ $_zp_reset_admin = NULL;
 $cookiepath = WEBPATH;
 if (WEBPATH == '') { $cookiepath = '/'; }
 if (isset($_GET['ticket'])) { // password reset query
-	$offer = $_GET['ticket'];
+	$_zp_ticket = $_GET['ticket'];
 	$post_user = $_GET['user'];
 	$admins = getAdministrators();
 	foreach ($admins as $tuser) {
@@ -25,7 +25,7 @@ if (isset($_GET['ticket'])) { // password reset query
 			$adm = $admin['user'];
 			$pas = $admin['pass'];
 			$ref = md5($_zp_request_date . $adm . $pas);
-			if ($ref === $offer) {
+			if ($ref === $_zp_ticket) {
 				if (time() <= ($_zp_request_date + (3 * 24 * 60 * 60))) { // you have one week to use the request
 					setOption('admin_reset_date', NULL);
 					$_zp_reset_admin = $tuser;
