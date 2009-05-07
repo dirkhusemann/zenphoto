@@ -217,7 +217,6 @@ zp-core/album-zip.php
 zp-core/archive.php
 zp-core/auth_zp.php
 zp-core/c.php
-zp-core/changelog.html
 zp-core/class-album.php
 zp-core/class-comment.php
 zp-core/class-gallery.php

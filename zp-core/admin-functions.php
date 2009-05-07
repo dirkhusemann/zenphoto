@@ -186,7 +186,7 @@ function printAdminFooter($addl='') {
 	?>
 	 | <a href="http://www.zenphoto.org/support/" title="<?php echo gettext('Forum'); ?>">Forum</a> 
 	 | <a href="http://www.zenphoto.org/trac/" title="Trac">Trac</a> 
-	 | <a href="<?php echo WEBPATH."/".ZENFOLDER; ?>/changelog.html" title="<?php echo gettext('View Changelog'); ?>"><?php echo gettext('Changelog'); ?></a>
+	 | <a href="http://www.zenphoto.org/category/news/changelog/" title="<?php echo gettext('View Changelog'); ?>"><?php echo gettext('Changelog'); ?></a>
 	 <br />
 	<?php	printf(gettext('Server date: %s'),date('Y-m-d H:i:s')); 	?>
 	</div>
