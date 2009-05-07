@@ -3,12 +3,12 @@
  * Prints a paged thumbnail navigation to be used on a theme's image.php, independent of the album.php's thumbs loop
  * 
  * @author Malte Müller (acrylian)
- * @version 1.0.6
+ * @version 1.0.6.1
  * @package plugins 
  */
 $plugin_description = gettext("Prints a paged thumbs navigation on image.php, independend of the album.php's thumbsThe function contains some predefined CSS ids you can use for styling. Please see the documentation for more info.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.0.6';
+$plugin_version = '1.0.6.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---paged_thumbs_nav.php.html";
 $option_interface = new pagedthumbsOptions();
 
@@ -59,9 +59,9 @@ class pagedthumbsOptions {
  * The function prints the following HTML:
  *
  * <div id="pagedthumbsnav">
- * <a href="" id="pagedthumbsnav-prev">Previous thumbnail list</a>
- * <div id="pagedthumbsimages"><img><img> (...) (the active thumb has class="pagedthumbsnav-active")</div>
- * <a href="" id="pagedthumbsnav-next">Next thumbnail list</a>
+ * <div id="pagedthumbsnav-prev"><a href="">Previous thumbnail list</a></div> (if the link is inactive id="pagedthumbsnav-prevdisabled", you can hide it via CSS if needed)
+ * <div id="pagedthumbsimages"><img> (...) (the active thumb has class="pagedthumbsnav-active")</div>
+ * <div id="pagedthumbsnav-next"><a href="">Next thumbnail list</a></div> (if the link is inactive id="pagedthumbsnav-nextdisabled", you can hide it via CSS if needed)
  * <p id="pagethumbsnav-counter>Images 1 - 10 of 20 (1/3)</p> (optional)
  * </div>
  *
@@ -74,7 +74,7 @@ class pagedthumbsOptions {
  * @param bool $crop Enter 'true' or 'false' to override the admin plugin option setting, enter NULL to use the admin plugin option (default) 
  */
 function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='', $width=NULL, $height=NULL, $crop=NULL) {
-	global $_zp_current_album, $_zp_current_image,$_zp_current_search;
+	global $_zp_current_album, $_zp_current_image, $_zp_current_search;
 	// in case someone wants to override the options by parameter
 	if(is_null($crop)) { 
 		$crop = getOption("pagedthumbs_crop");
@@ -142,15 +142,19 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 		}
 	}
 	echo "<div id=\"pagedthumbsnav\">\n";
-	echo "<div id=\"pagedthumbsnav-prev\">\n";
+	if ($currentpage == 1) {
+		echo "<div id=\"pagedthumbsnav-prevdisabled\">".$prev.">";
+	} else {
+		echo "<div id=\"pagedthumbsnav-prev\">\n";
+	}
 	// Prev thumbnails - show only if there is a prev page
 	if ($totalpages > 1)	{
 		$prevpageimagenr = ($currentpage * $imagesperpage) - ($imagesperpage+1);
 		if ($currentpage > 1) {
-		if(in_context(ZP_SEARCH_LINKED) AND $searchimages) {
+			if(in_context(ZP_SEARCH_LINKED) AND $searchimages) {
 				$albumobj = new Album($_zp_gallery,$images[$prevpageimagenr]['folder']);
 				$prevpageimage = newImage($albumobj,$images[$prevpageimagenr]['filename']);
-			} else { 
+			} else {
 				$prevpageimage = newImage($_zp_current_album,$images[$prevpageimagenr]);
 			}
 			echo "<a href=\"".$prevpageimage->getImageLink()."\" title=\"".gettext("previous thumbs")."\">".$prev."</a>\n";
@@ -181,8 +185,10 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
 		if($crop) {
 			echo "<img src='".$image->getCustomImage(null, $width, $height, $width, $height, null, null, true)."' alt=\"".strip_tags($image->getTitle())."\" width='".$width."' height='".$height."' />";
 		} else {
-			getMaxSpaceContainer($width, $height, $image, true);
-			echo "<img src=\"".$image-> getCustomImage(NULL, $width, $height, NULL, NULL, NULL, NULL, true)."\" alt=\"".strip_tags($image->getTitle())."\" />";
+			$maxwidth = $width; // needed because otherwise getMaxSpaceContainer will use the values of the first image for all others, too
+			$maxheight = $height;
+			getMaxSpaceContainer($maxwidth, $maxheight, $image, true);
+			echo "<img src=\"".$image->getCustomImage(NULL, $maxwidth, $maxheight, NULL, NULL, NULL, NULL, false)."\" alt=\"".strip_tags($image->getTitle())."\" />";
 		}
 		echo "</a>\n";
 		if ($number == $endimg[$currentpage]) {
@@ -192,20 +198,24 @@ function printPagedThumbsNav($imagesperpage='', $counter='', $prev='', $next='',
  echo "</div>";
 	
 	// next thumbnails - show only if there is a next page
-	echo "<div id=\"pagedthumbsnav-next\">\n";
-	if ($totalpages > 1)	{
-		if ($currentpage < $totalpages) 	{
-			$nextpageimagenr = $currentpage * $imagesperpage;
-			if(in_context(ZP_SEARCH_LINKED) AND $searchimages) {
-				$albumobj = new Album($_zp_gallery,$images[$nextpageimagenr]['folder']);
-				$nextpageimage = newImage($albumobj,$images[$nextpageimagenr]['filename']);
-			} else {
-				$nextpageimage = newImage($_zp_current_album,$images[$nextpageimagenr]);
-			}
-			echo "<a href=\"".$nextpageimage->getImageLink()."\" title=\"".gettext("next thumbs")."\">".$next."</a>\n";
-		} 
-	} //first if
-	echo "</div>\n";
+ if ($currentpage == $totalpages) {
+ 	echo "<div id=\"pagedthumbsnav-nextdisabled\">".$prev.">";
+ } else {
+ 	echo "<div id=\"pagedthumbsnav-next\">\n";
+ }
+ if ($totalpages > 1)	{
+ 	if ($currentpage < $totalpages) 	{
+ 		$nextpageimagenr = $currentpage * $imagesperpage;
+ 		if(in_context(ZP_SEARCH_LINKED) AND $searchimages) {
+ 			$albumobj = new Album($_zp_gallery,$images[$nextpageimagenr]['folder']);
+ 			$nextpageimage = newImage($albumobj,$images[$nextpageimagenr]['filename']);
+ 		} else {
+ 			$nextpageimage = newImage($_zp_current_album,$images[$nextpageimagenr]);
+ 		}
+ 		echo "<a href=\"".$nextpageimage->getImageLink()."\" title=\"".gettext("next thumbs")."\">".$next."</a>\n";
+ 	} 
+ } //first if
+echo "</div>\n";
 	
 		// image counter
 	if($counter) {

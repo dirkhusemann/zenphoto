@@ -528,6 +528,25 @@ ul.pagelist li.next {
 	text-align: center;
 }
 
+#pagedthumbsnav-prevdisabled {
+	visibility: hidden;
+	width: 155px;
+	height: 20px;
+	padding-top: 10px;
+	font-size: 1em;
+	float: left;
+}
+
+#pagedthumbsnav-nextdisabled {
+	visibility: hidden;
+	width: 100px;
+	height: 20px;
+	padding-top: 10px;
+	font-size: 1em;
+	float: right;
+	text-align: center;
+}
+
 /* Comments
 ------------------------------ */
 #comments {
