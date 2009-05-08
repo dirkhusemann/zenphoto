@@ -15,11 +15,9 @@
  *   q  - JPEG quality (1-100): sets the quality of the resulting image.
  *   t  - Set for custom images if used as thumbs (no watermarking.)
  *
- * - cx and cy are measured from the top-left corner of the _scaled_ image.
+ * - cx and cy are measured from the top-left corner of the image.
  * - One of s, h, or w _must_ be specified; the others are optional.
  * - If more than one of s, h, or w are specified, s takes priority, then w+h:
- * - If both w and h are given, the image is resized to shortest side, then
- *     cropped on the remaining dimension. Image output will always be WxH.
  * - If none of s, h, or w are specified, the original image is returned.
  *******************************************************************************
  * @package core
@@ -192,6 +190,7 @@ if (file_exists($newfile) & !$adminrequest) {
 if ($process) {
 	// setup standard image options from the album theme if it exists
 	cacheImage($newfilename, $imgfile, $args, $allowWatermark, false, $theme);
+	$fmt = filemtime($newfile);
 }
 if (!$debug) {
 	// ... and redirect the browser to it.

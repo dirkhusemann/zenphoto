@@ -742,7 +742,7 @@ class _Image extends PersistentObject {
 			return WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($this->filename)
 			. ($size ? "&s=$size" : "" ) . ($width ? "&w=$width" : "") . ($height ? "&h=$height" : "")
 			. ($cropw ? "&cw=$cropw" : "") . ($croph ? "&ch=$croph" : "")
-			. ($cropx ? "&cx=$cropx" : "") . ($cropy ? "&cy=$cropy" : "")
+			. (is_null($cropx) ? "" : "&cx=$cropx"). (is_null($cropy) ? "" : "&cy=$cropy")
 			. (($thumbStandin & 1) ? "&t=true" : "")
 			. ($gray ? "&gray=true" : "")
 			. $wmt ;

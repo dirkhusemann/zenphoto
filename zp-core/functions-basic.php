@@ -430,8 +430,18 @@ function getImageParameters($args) {
 	}
 
 	// Round each numeric variable, or set it to false if not a number.
-	list($width, $height, $cw, $ch, $cx, $cy, $quality) =	array_map('sanitize_numeric', array($width, $height, $cw, $ch, $cx, $cy, $quality));
-	if (empty($cw) && empty($ch)) $crop = false; else $crop = true;
+	list($width, $height, $cw, $ch, $quality) =	array_map('sanitize_numeric', array($width, $height, $cw, $ch, $quality));
+	if (!is_null($cx)) {
+		$cx = sanitize_numeric($cx);
+	}
+	if (!is_null($cy)) {
+		$cx = sanitize_numeric($cy);
+	}
+	if (empty($cw) && empty($ch)) {
+		$crop = false; 
+	} else {
+		$crop = true;
+	}
 	if (empty($quality)) $quality = getOption('image_quality');
 
 	// Return an array of parameters used in image conversion.
@@ -713,7 +723,11 @@ function debugLogArray($name, $source, $indent=0, $trail='') {
 					debugLogArray($key, $val, $indent+5, ',');
 					$msg = '';
 				} else {
-					$msg .= $key . " => " . $val. ', ';
+					if (is_null($val)) {
+						$msg .= $key.' => NULL, ';
+					} else {
+						$msg .= $key . " => " . $val. ', ';
+					}
 				}
 			}
 

@@ -192,7 +192,7 @@ class Video extends _Image {
 				return WEBPATH . "/" . $path
 				. ($size ? "&s=$size" : "" ) . ($width ? "&w=$width" : "") . ($height ? "&h=$height" : "")
 				. ($cropw ? "&cw=$cropw" : "") . ($croph ? "&ch=$croph" : "")
-				. ($cropx ? "&cx=$cropx" : "") . ($cropy ? "&cy=$cropy" : "")
+				. (is_null($cropx) ? "" : "&cx=$cropx"). (is_null($cropy) ? "" : "&cy=$cropy")
 				. "&t=true";
 			} else {
 				$filename = $this->objectsThumb;
@@ -208,7 +208,7 @@ class Video extends _Image {
 					return WEBPATH . "/" . $path
 					. ($size ? "&s=$size" : "" ) . ($width ? "&w=$width" : "") . ($height ? "&h=$height" : "")
 					. ($cropw ? "&cw=$cropw" : "") . ($croph ? "&ch=$croph" : "")
-					. ($cropx ? "&cx=$cropx" : "") . ($cropy ? "&cy=$cropy" : "")
+					. (is_null($cropx) ? "" : "&cx=$cropx"). (is_null($cropy) ? "" : "&cy=$cropy")
 					. "&t=true".$wmt;
 				}
 			}
@@ -221,7 +221,7 @@ class Video extends _Image {
 				return WEBPATH . '/' . ZENFOLDER . '/i.php?a=' . urlencode($this->album->name) . '&i=' . urlencode($filename)
 				. ($size ? "&s=$size" : "" ) . ($width ? "&w=$width" : "") . ($height ? "&h=$height" : "")
 				. ($cropw ? "&cw=$cropw" : "") . ($croph ? "&ch=$croph" : "")
-				. ($cropx ? "&cx=$cropx" : "") . ($cropy ? "&cy=$cropy" : "");
+				. (is_null($cropx) ? "" : "&cx=$cropx"). (is_null($cropy) ? "" : "&cy=$cropy");
 			}
 		}
 	}

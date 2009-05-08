@@ -138,7 +138,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 		$grayscale = getOption('image_gray');
 	}
 	$newfile = SERVERCACHE . $newfilename;
-	if (DEBUG_IMAGE) debugLog("cacheImage(\$imgfile=".basename($imgfile).", \$newfilename=$newfilename, \$allow_watermark=$allow_watermark, \$force_cache=$force_cache, \$theme=$theme) \$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop \$image_use_side=$image_use_side; \$upscale=$upscale;");
+	if (DEBUG_IMAGE) debugLog("cacheImage(\$imgfile=".basename($imgfile).", \$newfilename=$newfilename, \$allow_watermark=$allow_watermark, \$force_cache=$force_cache, \$theme=$theme) \$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=".(is_null($cx)?'NULL':$cx).", \$cy=".(is_null($cy)?'NULL':$cy).", \$quality=$quality, \$thumb=$thumb, \$crop=$crop \$image_use_side=$image_use_side; \$upscale=$upscale;");
 	// Check for the source image.
 	if (!file_exists($imgfile) || !is_readable($imgfile)) {
 		imageError(gettext('Image not found or is unreadable.'), 'err-imagenotfound.gif');
@@ -259,8 +259,8 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 				}
 			
 			$cr = min($w, $h)/$ts;
-			if (!$cx) {
-				if (!$cw) {
+			if (is_null($cx)) {
+				if (is_null($cw)) {
 					$cw = $w;
 				} else {
 					$cw = round($cw*$cr);
@@ -269,8 +269,8 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 			} else { // custom crop
 				if (!$cw || $cw > $w) $cw = $w;
 			}
-			if (!$cy) {
-				if (!$ch) {
+			if (is_null($cy)) {
+				if (is_null($ch)) {
 					$ch = $h;
 				} else {
 					$ch = round($ch*$cr);
