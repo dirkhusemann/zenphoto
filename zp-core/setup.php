@@ -1583,6 +1583,12 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = 'DELETE FROM '.$tbl_zenpage_pages.' WHERE `titlelink`=""'; // cleanup for bad records
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' DROP INDEX `titlelink`;';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD UNIQUE (`titlelink`);';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_albums.' ADD COLUMN `rating` FLOAT  NOT NULL DEFAULT 0';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' ADD COLUMN `rating` FLOAT  NOT NULL DEFAULT 0';
+	$sql_statements[] = 'UPDATE '.$tbl_albums.' SET rating=total_value / total_votes WHERE total_votes > 0';
+	$sql_statements[] = 'UPDATE '.$tbl_images.' SET rating=total_value / total_votes WHERE total_votes > 0';
+	
+	
 	
 	/**************************************************************************************
 	 ******                            END of UPGRADE SECTION     

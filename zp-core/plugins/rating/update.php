@@ -28,6 +28,6 @@ $ip = sanitize($_SERVER['REMOTE_ADDR'], 0);
 if(!checkForIP($ip,$id,$option)) {
 	$_rating_current_IPlist[] = $ip;
 	$insertip = serialize($_rating_current_IPlist);
-	query("UPDATE ".$dbtable." SET total_votes = total_votes + 1, total_value = total_value + ".$rating.", used_ips='".$insertip."' WHERE id = '".$id."'");
+	query("UPDATE ".$dbtable." SET total_votes = total_votes + 1, total_value = total_value + ".$rating.", rating = total_value / total_votes, used_ips='".$insertip."' WHERE id = '".$id."'");
 }
 ?>
