@@ -310,7 +310,7 @@ zp-core/js/jquery.dimensions.js
 zp-core/js/jquery.editinplace.js
 zp-core/js/jquery.flashembed.pack.js
 zp-core/js/jquery.Jcrop.css
-zp-core/js/jquery.Jcrop.pack.js
+zp-core/js/jquery.Jcrop.js
 zp-core/js/jquery.js
 zp-core/js/jquery.tabs.js
 zp-core/js/jquery.toggleElements.js

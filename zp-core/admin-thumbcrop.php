@@ -109,8 +109,6 @@ if (isset($_REQUEST['crop'])) {
 		}
 		$cx = round($cx*$rw);
 		$cy = round($cy*$rh);
-		if ($cx == 0) $cx = 1;
-		if ($cy == 0) $cy = 1;
 	}
 	$imageobj->set('thumbX', $cx);
 	$imageobj->set('thumbY', $cy);
@@ -127,7 +125,7 @@ $tagsort = sanitize($_REQUEST['tagsort']);
 printAdminHeader();
 ?>
 
-<script src="js/jquery.Jcrop.pack.js"></script>
+<script src="js/jquery.Jcrop.js"></script>
 <link rel="stylesheet" href="js/jquery.Jcrop.css" type="text/css" />
 <script language="Javascript">
 	// Remember to invoke within jQuery(window).load(...)
@@ -239,10 +237,10 @@ printAdminHeader();
 					<!-- set the initial view for the preview -->
 					<script language="Javascript">
 						jQuery('#preview').css({
-							width: <?php echo round($cropwidth / $iW * $sizedwidth); ?> + 'px', 
-							height: <?php echo round($cropheight / $iH  * $sizedheight); ?> + 'px',
-							marginLeft: '-' + <?php echo round($cropwidth / $iW * $iX); ?> + 'px',
-							marginTop: '-' + <?php echo round($cropheight / $iH * $iY); ?> + 'px'
+							width: '<?php echo round($cropwidth / $iW * $sizedwidth); ?>px', 
+							height: '<?php echo round($cropheight / $iH  * $sizedheight); ?>px',
+							marginLeft: '-<?php echo round($cropwidth / $iW * $iX); ?>px',
+							marginTop: '-<?php echo round($cropheight / $iH * $iY); ?>px'
 						});
 					</script>
 				<br style="clear: both" />
