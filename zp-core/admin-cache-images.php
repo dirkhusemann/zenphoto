@@ -89,7 +89,7 @@ if ($alb) {
 	$count = loadAlbum($album);
 } else {
 	echo "\n<h2>".$clear."</h2>";
-	if (!empty($clear)) {
+	if (isset($_REQUEST['clear'])) {
 		$gallery->clearCache(); // clean out what was there.
 	}
 	$albums = $_zp_gallery->getAlbums();
