@@ -529,7 +529,8 @@ class Gallery {
 							}
 						}
 						$imageobj->set('date', $newDate);
-
+						
+						apply_filter('image_refresh', $imageobj);
 						/* update DB is necessary */
 						$imageobj->save();
 
