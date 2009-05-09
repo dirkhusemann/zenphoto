@@ -28,6 +28,25 @@
 			<td><?php echo gettext("Email:"); ?></td>
 			<td><input type="text" id="admin_email" name="admin_email" value="<?php echo $admin_e; ?>" /></td>
 		</tr>
+		<?php
+		if (getOption('register_user_captcha')) {
+			?>
+			<tr>
+				<td>
+					<?php
+					$captchaCode = generateCaptcha(&$img);
+					$html = "<label for=\"code\"><img src=\"" . $img . "\" alt=\"Code\" align=\"bottom\"/></label>";
+					?>
+					<input type="hidden" name="code_h" value="<?php echo $captchaCode; ?>"/>
+					<?php
+					printf(gettext("Enter %s:"),$html);
+					?>
+				</td>
+				<td><input type="text" id="code" name="code" value="" /></td>
+			</tr>
+			<?php
+		}
+		?>
 		</table>
 		<input type="submit" value= <?php echo gettext('Submit') ?> />
 	</form>

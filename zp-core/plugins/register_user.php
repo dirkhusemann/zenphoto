@@ -35,6 +35,7 @@ class register_user_options {
 	function register_user_options() {
 		setOptionDefault('register_user_rights', NO_RIGHTS);
 		setOptionDefault('register_user_notify', 1);
+		setOptionDefault('register_user_captcha', 0);
 	}
 
 	function getOptionsSupported() {
@@ -42,8 +43,10 @@ class register_user_options {
 										'buttons' => array(gettext('No rights') => NO_RIGHTS, gettext('View Rights') => VIEWALL_RIGHTS | NO_RIGHTS),
 										'desc' => gettext("Initial rights for the new user.<br />Set to <em>No rights</em> if you want to approve the user.<br />Set to <em>View Rights</em> to allow viewing the gallery once the user is verified.")),
 									gettext('Notify') => array('key' => 'register_user_notify', 'type' => 1, 
-										'desc' => gettext('If checked, an e-mail notification is sent on new user registration.'))
-		);
+										'desc' => gettext('If checked, an e-mail notification is sent on new user registration.')),
+									gettext('Use Captcha') => array('key' => 'register_user_captcha', 'type' => 1, 
+										'desc' => gettext('If checked, captcha validation will be required for user registration.'))
+									);
 	}
 	function handleOption($option, $currentValue) {
 	}
@@ -106,6 +109,18 @@ if (!OFFSET_PATH) { // handle form post
 			} else {
 				$notify = 'mismatch';
 			}
+			if (getOption('register_user_captcha')) {
+				if (isset($_POST['code'])) {
+					$code = sanitize($_POST['code'], 3);
+					$code_ok = sanitize($_POST['code_h'], 3);
+				} else {
+					$code = '';
+					$code_ok = '';
+				}
+				if (!$_zp_captcha->checkCaptcha($code, $code_ok)) {
+					$notify = 'invalidcaptcha';
+				}
+			}
 		} else {
 			$notify = 'incomplete';
 		}
@@ -166,6 +181,9 @@ function printRegistrationForm($thanks=NULL) {
 					break;
 				case 'invalidemail':
 					echo gettext('Enter a valid email address.');
+					break;
+				case 'invalidcaptcha':
+					echo gettext('The captcha you entered was not correct.');
 					break;
 			}
 			echo '</p>';
