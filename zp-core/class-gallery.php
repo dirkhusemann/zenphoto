@@ -226,8 +226,7 @@ class Gallery {
 						} else if (file_exists($themedir . "/$dir/theme.txt")) {
 							$themes[$dir8] = parseThemeDef($themedir . "/$dir/theme.txt");
 						} else {
-							//TODO: after 1.2.4 is released put some real text in these fields.
-							$themes[$dir8] = array('name'=>'****', 'author'=>'****', 'version'=>'****', 'desc'=>'****', 'date'=>'****');
+							$themes[$dir8] = array('name'=>gettext('Unknown'), 'author'=>gettext('Unknown'), 'version'=>gettext('Unknown'), 'desc'=>gettext('<strong>Missing theme info file!</strong>'), 'date'=>gettext('Unknown'));
 						}
 					}
 				}

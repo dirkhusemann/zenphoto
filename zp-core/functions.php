@@ -1652,12 +1652,18 @@ function getNotViewableAlbums() {
  */
 function parseThemeDef($file) {
 	$file = internalToFilesystem($file);
-	$themeinfo = array();
+	$themeinfo = array('name'=>gettext('Unknown name'), 'author'=>gettext('Unknown author'), 'version'=>gettext('Unknown'), 'desc'=>gettext('<strong>Theme description error!</strong>'), 'date'=>gettext('Unknown date'));
 	if (is_readable($file) && $fp = @fopen($file, "r")) {
-		while($line = fgets($fp)) {
-			if (substr(trim($line), 0, 1) != "#") {
+		while($line = trim(fgets($fp))) {
+			if (!empty($line) && substr($line, 0, 1) != "#") {
 				$item = explode("::", $line);
-				$themeinfo[trim($item[0])] = sanitize(trim($item[1]), 1);
+				if (count($item)>1) {
+					$v = sanitize(trim($item[1]), 1);
+				} else {
+					$v = gettext('<strong>Theme description error!</strong>');
+				}
+				$i = sanitize(trim($item[0]), 1);
+				$themeinfo[$i] = $v;
 			}
 		}
 		return $themeinfo;

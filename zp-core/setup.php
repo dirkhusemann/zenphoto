@@ -950,18 +950,22 @@ if ($debug) {
 
 	$filelist = implode("<br />", $installed_files);
 	if (count($installed_files) > 0) {
-		$msg1 = gettext("Zenphoto core files [Some files are missing or their <em>filemtimes</em> seem out of variance]");
-		$msg2 = gettext('Perhaps there was a problem with the upload. You should check the following files: ').
-					'<br /><code>'.$filelist.'</code>';
+		if (!defined("RELEASE")) {
+			$msg1 = gettext("Zenphoto core files [This is not an official build, Some files are missing or their <em>filemtimes</em> seem out of variance]");
+		} else {
+			$msg1 = gettext("Zenphoto core files [Some files are missing or their <em>filemtimes</em> seem out of variance]");
+		}
+		$msg2 = gettext('Perhaps there was a problem with the upload. You should check the following files: ').'<br /><code>'.$filelist.'</code>';
 		$mark = -1;
 	} else {
-		$msg1 = '';
+		if (!defined("RELEASE")) {
+			$mark = -1;
+			$msg1 = gettext("Zenphoto core files [This is not an official build]");
+		} else {
+			$msg1 = '';
+			$mark = 1;
+		}
 		$msg2 = '';
-		$mark = 1;
-	}
-	if (!defined("RELEASE")) {
-		$mark = -1;
-		$msg1 = gettext("Zenphoto core files [This is not an official build]").$msg1;
 	}
 	
 	checkMark($mark, gettext("Zenphoto core files"), $msg1, $msg2);
