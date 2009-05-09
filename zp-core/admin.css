@@ -83,7 +83,7 @@ body {
 }
 
 #content {
-	padding: 30px;
+	padding: 20px;
 	background-color: #fff;
 	border-top: 1px solid #CBCBCB;
 	border-bottom: 5px solid #CBCBCB;
@@ -470,6 +470,13 @@ table.checkboxes td {
 
 .box {
 	padding: 0;
+	background-color: #FAFAFA;
+	border: 1px solid #E5E5E5;
+	border-bottom-width: 5px;
+}
+
+.tabbox {
+	padding: 10px;
 	background-color: #FAFAFA;
 	border: 1px solid #E5E5E5;
 	border-bottom-width: 5px;

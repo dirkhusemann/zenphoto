@@ -54,7 +54,7 @@ $(document).ready(function() {
 <?php 
 	printLogoAndLinks();
 	echo "<div id=\"main\">";
-	printTabs("zenpage"); 
+	printTabs("pages"); 
 	echo "<div id=\"content\">";
 
 	if(empty($_GET['pagenr'])) {
@@ -64,7 +64,14 @@ $(document).ready(function() {
 	}
 
 	if(is_AdminEditPage("newsarticle")) {
-		zenpageAdminnav("articles"); 
+		checkRights("articles"); 
+		if (!empty($page)) {
+			$newstabs['articles'] .= $page;
+		}
+		printSubtabs($newstabs);
+		?>
+		<div id="tab_articles" class="tabbox">
+		<?php
 		if(isset($_GET['titlelink'])) {
 			$result = new ZenpageNews(urldecode($_GET['titlelink']));
 		} else if(isset($_GET['update'])) {
@@ -88,7 +95,6 @@ $(document).ready(function() {
 	}
 	
 	if(is_AdminEditPage("page")) {
-		zenpageAdminnav("pages"); 
 		if(isset($_GET['titlelink'])) {
 			$result = new ZenpagePage(urldecode($_GET['titlelink']));
 		} else if(isset($_GET['update'])) {
@@ -359,6 +365,13 @@ if(is_object($result)) {
 </form>
 </div>
 </div>
-<?php printAdminFooter(); ?>
+
+<?php
+if (is_AdminEditPage("newsarticle")) { 
+	?>
+	</div>
+	<?php
+}
+printAdminFooter(); ?>
 </body>
 </html>

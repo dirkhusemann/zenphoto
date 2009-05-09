@@ -1180,61 +1180,17 @@ function zenpageJSCSS() {
 	<?php
 }
 
-
 /**
- * Wrapper function to print the zenphoto head and main admin navigation
+ * Prevents access if improper RIGHTS
  *
+ * @param string $currentpage the kind of zenphoto object being accessed.
  */
-function zenpageHeader() {
-	printLogoAndLinks();
-	echo "<div id=\"main\">";
-	printTabs("zenpage"); setPluginDomain("zenpage");
-	echo "<div id=\"content\">";
-	zenpageAdminnav();
-}
-
-
-/**
- * Prints the zenpage admin subnavigation
- *
- * @param string $currentpage Which tab should be hightlighted as the current page
- */
-function zenpageAdminnav($currentpage) {
- 	global $_zp_loggedin;
- 	if (($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS))) {
- 		// for return from news article edit to the page we came from
-		if(strstr($currentpage,"admin-edit.php") AND isset($_GET['newsarticle'])) {
-			if(empty($_GET['pagenr'])) {
-				$page = "";
-			} else {
-				$page = "?pagenr=".$_GET['pagenr'];
-			}
-		} else {
-			$page = "";
-		}
-		echo "<ul class=\"zptabs\">\n";
-		if($currentpage == "pages") {
-			echo "<li><a href=\"admin-pages.php\" class=\"active-zptab\" title=\"".gettext("Pages")."\">".gettext("pages")."</a></li>\n";
-		} else {
-			echo "<li><a href=\"admin-pages.php\" title=\"".gettext("Pages")."\">".gettext("pages")."</a></li>\n";
-		}
-		if($currentpage == "articles") {
-			echo "<li><a href=\"admin-news-articles.php".$page."\" class=\"active-zptab\" title=\"".gettext("Articles")."\">".gettext("articles")."</a></li>\n";
-		} else {
-			echo "<li><a href=\"admin-news-articles.php\" title=\"".gettext("Articles")."\">".gettext("articles")."</a></li>\n";
-		}
-		if($currentpage == "categories") {
-			echo "<li><a href=\"admin-categories.php\" class=\"active-zptab\" title=\"".gettext("Categories")."\">".gettext("categories")."</a></li>\n";
-		} else {
-			echo "<li><a href=\"admin-categories.php\" title=\"".gettext("Categories")."\">".gettext("categories")."</a></li>\n";
-		}
-		echo "</ul>\n";
-  } else {
+function checkRights($currentpage) {
+ 	if (!(zp_loggedin(ADMIN_RIGHTS | ZENPAGE_RIGHTS))) {
   	echo "<div class='errorbox'>".gettext("You need Admin Rights or Zenpage rights to use Zenpage")."</div>";
   	exit;
-  }
+ 	}
 }
-
 
 function printZenpageIconLegend() { ?>
 	<ul class="iconlegend">

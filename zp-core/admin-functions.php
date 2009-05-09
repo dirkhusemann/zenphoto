@@ -146,6 +146,32 @@ $charsets = array("ASMO-708" => "Arabic",
 									"X-MAC-TURKISH" => "Turkish (Mac)"
 									);
 
+if (OFFSET_PATH) {									
+	// setup sub-tab arrays for use in dropdown
+	$optiontabs = array(gettext("admin")=>'admin-options.php?tab=admin');
+	if (!(($_zp_loggedin == ADMIN_RIGHTS) || $_zp_reset_admin)) {
+		if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
+			$optiontabs[gettext("gallery")] = 'admin-options.php?tab=gallery';
+			$optiontabs[gettext("general")] = 'admin-options.php?tab=general';
+			$optiontabs[gettext("search")] = 'admin-options.php?tab=search';
+			$optiontabs[gettext("rss")] = 'admin-options.php?tab=rss';
+			$optiontabs[gettext("image")] = 'admin-options.php?tab=image';
+			$optiontabs[gettext("comment")] = 'admin-options.php?tab=comments';
+		}
+		if ($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
+			$optiontabs[gettext("theme")] = 'admin-options.php?tab=theme';
+		}
+		if ($_zp_loggedin & ADMIN_RIGHTS) {
+			$optiontabs[gettext("plugin")] = 'admin-options.php?tab=plugin';
+		}
+	}
+	$flipped = array_flip($optiontabs);
+	natsort($flipped);
+	$optiontabs = array_flip($flipped);
+	
+	$newstabs = array(gettext('articles')=>substr(PLUGIN_FOLDER,1).'zenpage/admin-news-articles.php?tab=articles', 'categories'=>substr(PLUGIN_FOLDER,1).'zenpage/admin-categories.php?tab=categories');
+}
+
 /**
  * Test to see whether we should be displaying a particular page.
  *
@@ -451,45 +477,79 @@ function printLogoAndLinks() {
  */
 function printTabs($currenttab) {
 	global $_zp_loggedin;
-
-	echo "\n  <ul class=\"nav\">";
+	?>
+	<ul class="nav">
+	<?php
 	if (($_zp_loggedin & (MAIN_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n	 <li". (($currenttab == "home") ? " class=\"current\""		: "") .
- 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin.php\">".gettext("overview")."</a></li>";
+		?>
+		<li <?php if($currenttab == "home") echo 'class="current"' ?>>
+		<a href="<?php echo WEBPATH."/".ZENFOLDER.'/admin.php'; ?>"><?php echo gettext("overview"); ?></a>
+		</li>
+ 		<?php
 	}
 	if (($_zp_loggedin & (COMMENT_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n	 <li". (($currenttab == 'comments') ? " class=\"current\"" : "") .
- 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-comments.php\">".gettext("comments")."</a></li>";
+		?>
+		<li <?php if($currenttab == "comments") echo 'class="current"' ?>>
+		<a href="<?php echo WEBPATH."/".ZENFOLDER.'/admin-comments.php'; ?>"><?php echo gettext("comments"); ?></a>
+		</li>
+ 		<?php
 	}
 	if (($_zp_loggedin & (UPLOAD_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n	 <li". (($currenttab =='upload') ? " class=\"current\""	: "") .
- 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-upload.php\">".gettext("upload")."</a></li>";
+		?>
+		<li <?php if($currenttab == "upload") echo 'class="current"' ?>>
+		<a href="<?php echo WEBPATH."/".ZENFOLDER.'/admin-upload.php'; ?>"><?php echo gettext("upload"); ?></a>
+		</li>
+ 		<?php
 	}
 
 	if (($_zp_loggedin & (EDIT_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n	 <li". (($currenttab == 'edit') ? " class=\"current\""		: "") .
- 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-edit.php?page=edit\">".gettext("edit")."</a></li>";
+		?>
+		<li <?php if($currenttab == "edit") echo 'class="current"' ?>>
+		<a href="<?php echo WEBPATH."/".ZENFOLDER.'/admin-edit.php?page=edit'; ?>"><?php echo gettext("edit"); ?></a>
+		</li>
+ 		<?php
 	}
 	if (($_zp_loggedin & (TAGS_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n	 <li". (($currenttab == 'tags') ? " class=\"current\""		: "") .
-				"><a href=\"".WEBPATH."/".ZENFOLDER."/admin-tags.php\">".gettext('tags')."</a></li>";
+		?>
+		<li <?php if($currenttab == "tags") echo 'class="current"' ?>>
+		<a href="<?php echo WEBPATH."/".ZENFOLDER.'/admin-tags.php'; ?>"><?php echo gettext("tags"); ?></a>
+		</li>
+ 		<?php
 	}
-	echo "\n	 <li". (($currenttab == 'options') ? " class=\"current\""  : "") .
- 			"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-options.php\">".gettext("options")."</a></li>";
+	?>
+	<li <?php if($currenttab == "options") echo 'class="current"' ?>>
+	<a href="<?php echo WEBPATH."/".ZENFOLDER.'/admin-options.php'; ?>"><?php echo gettext("options"); ?></a>
+	</li>
+ 	<?php
 	if (($_zp_loggedin & (THEMES_RIGHTS | ADMIN_RIGHTS))) {
-		echo "\n	 <li". (($currenttab == 'themes') ? " class=\"current\""  : "") .
- 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-themes.php\">".gettext("themes")."</a></li>";
+		?>
+		<li <?php if($currenttab == "themes") echo 'class="current"' ?>>
+		<a href="<?php echo WEBPATH."/".ZENFOLDER.'/admin-themes.php'; ?>"><?php echo gettext("themes"); ?></a>
+		</li>
+ 		<?php
 	}
 	if (($_zp_loggedin & ADMIN_RIGHTS)) {
-		echo "\n	 <li". (($currenttab == 'plugins') ? " class=\"current\""  : "") .
- 				"> <a href=\"".WEBPATH."/".ZENFOLDER."/admin-plugins.php\">".gettext("plugins")."</a></li>";
+		?>
+		<li <?php if($currenttab == "plugins") echo 'class="current"' ?>>
+		<a href="<?php echo WEBPATH."/".ZENFOLDER.'/admin-plugins.php'; ?>"><?php echo gettext("plugins"); ?></a>
+		</li>
+ 		<?php
 	}
-	if (($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) && getOption('zp_plugin_zenpage')) {
-		echo "\n	 <li". (($currenttab == 'zenpage') ? " class=\"current\""		: "") .
- 				"><a href=\"".WEBPATH."/".ZENFOLDER.PLUGIN_FOLDER."zenpage/\">zenpage</a></li>";
+	if (getOption('zp_plugin_zenpage') && ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS))) {
+		?>
+		<li <?php if($currenttab == "pages") echo 'class="current"' ?>>
+		<a href="<?php echo WEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'zenpage/admin-pages.php'; ?>"><?php echo gettext("pages"); ?></a>
+		</li>
+ 		<?php
+		?>
+		<li <?php if($currenttab == "articles") echo 'class="current"' ?>>
+		<a href="<?php echo WEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'zenpage/admin-news-articles.php'; ?>"><?php echo gettext("news"); ?></a>
+		</li>
+ 		<?php
 	}
-	echo "\n  </ul>";
-
+	?>
+	</ul>
+	<?php
 }
 
 function getSubtabs($tabs) {

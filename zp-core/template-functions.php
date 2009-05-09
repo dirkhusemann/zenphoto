@@ -225,7 +225,7 @@ function printAdminToolbox($id='admin') {
 		if(function_exists('is_NewsArticle')) {
 			if ($_zp_loggedin & (ADMIN_RIGHTS | ZENPAGE_RIGHTS)) {
 				// admin has zenpage rights, provide link to the zenpage admin tab
-				echo "<li><a href=\"".$zf.PLUGIN_FOLDER."zenpage/\">".gettext("Zenpage")."</a></li>";
+				echo "<li><a href=\"".$zf.PLUGIN_FOLDER."zenpage/admin-news-articles.php\">".gettext("News")."</a></li>";
 				if (is_NewsArticle()) {
 					// page is a NewsArticle--provide zenpage edit, delete, and Add links
 					$titlelink = getNewsTitlelink();
@@ -236,6 +236,7 @@ function printAdminToolbox($id='admin') {
 					echo "<li><a href=\"".$zf.PLUGIN_FOLDER."zenpage/admin-edit.php?newsarticle&amp;add\">".gettext("Add Article")."</a></li>";
 					apply_filter('admin_toolbox_news', $titlelink);
 				}
+				echo "<li><a href=\"".$zf.PLUGIN_FOLDER."zenpage/admin-pages.php\">".gettext("Pages")."</a></li>";
 				if (is_Pages()) {
 					// page is zenpage page--provide edit, delete, and add links
 					$titlelink = getPageTitlelink();

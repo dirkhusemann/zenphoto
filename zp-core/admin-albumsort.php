@@ -76,7 +76,7 @@ if (!isset($_GET['album'])) {
 	}
 	?>
 
-<div class="box" style="padding: 15px;">
+<div class="tabbox">
 
 <p><?php echo gettext("Sort the images by dragging them..."); ?></p>
 

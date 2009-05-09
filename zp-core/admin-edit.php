@@ -506,7 +506,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	if ($subtab == 'albuminfo') {
 	?>
 		<!-- Album info box -->
-		<div id="tab_albuminfo" class="box" style="padding: 15px;">
+		<div id="tab_albuminfo" class="tabbox">
 		<form name="albumedit1" AUTOCOMPLETE=OFF
 			action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
 			<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
@@ -523,7 +523,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		<?php
 		if (count($subalbums) > 0) {
 		?>
-		<div id="tab_subalbuminfo" class="box" style="padding: 15px;">
+		<div id="tab_subalbuminfo" class="tabbox">
 			<table class="bordered" width="100%">
 			<input type="hidden" name="subalbumsortby" value="manual" />
 			<tr>
@@ -575,7 +575,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	} else if ($subtab == 'imageinfo') {
 ?>
 		<!-- Images List -->
-		<div id="tab_imageinfo" class="box" style="padding: 15px;">
+		<div id="tab_imageinfo" class="tabbox">
 		<?php
 		if ($allimagecount) {
 		?>
@@ -1020,7 +1020,7 @@ if (isset($_GET['saved'])) {
 <h1><?php echo gettext("Edit All Albums in"); ?> <?php if (!isset($_GET['album'])) { echo gettext("Gallery");} else {echo "<em>" . $album->name . "</em>";}?></h1>
 <p><a href="?page=edit<?php echo $albumdir ?>"
 	title="<?php gettext('Back to the list of albums (go up a level)'); ?>">&laquo; <?php echo gettext("Back"); ?></a></p>
-<div class="box" style="padding: 15px;">
+<div class="tabbox">
 
 <form name="albumedit" AUTOCOMPLETE=OFF	action="?page=edit&action=save<?php echo $albumdir ?>" method="POST">
 	<input type="hidden" name="totalalbums" value="<?php echo sizeof($albums); ?>" />

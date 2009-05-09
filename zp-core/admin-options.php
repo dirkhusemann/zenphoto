@@ -457,27 +457,7 @@ printAdminHeader();
 <link rel="stylesheet" href="js/farbtastic.css" type="text/css" />
 <?php
 $_zp_null_account = (($_zp_loggedin == ADMIN_RIGHTS) || $_zp_reset_admin);
-$tabs = array(gettext("admin")=>'admin-options.php?tab=admin');
-if (!$_zp_null_account) {
-	if ($_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
-		$tabs[gettext("gallery")] = 'admin-options.php?tab=gallery';
-		$tabs[gettext("general")] = 'admin-options.php?tab=general';
-		$tabs[gettext("search")] = 'admin-options.php?tab=search';
-		$tabs[gettext("rss")] = 'admin-options.php?tab=rss';
-		$tabs[gettext("image")] = 'admin-options.php?tab=image';
-		$tabs[gettext("comment")] = 'admin-options.php?tab=comments';
-	}
-	if ($_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) {
-		$tabs[gettext("theme")] = 'admin-options.php?tab=theme';
-	}
-	if ($_zp_loggedin & ADMIN_RIGHTS) {
-		$tabs[gettext("plugin")] = 'admin-options.php?tab=plugin';
-	}
-}
-$flipped = array_flip($tabs);
-natsort($flipped);
-$tabs = array_flip($flipped);
-$subtab = getSubtabs($tabs);
+$subtab = getSubtabs($optiontabs);
 if ($subtab == 'gallery' || $subtab == 'image') {
 	$sql = 'SHOW COLUMNS FROM ';
 	if ($subtab == 'image') {
@@ -530,10 +510,10 @@ if ($_zp_null_account) {
 	}
 ?>
 <?php
-printSubtabs($tabs);
+printSubtabs($optiontabs);
 if ($subtab == 'admin') {
 ?>
-<div id="tab_admin" class="box" style="padding: 15px;">
+<div id="tab_admin" class="tabbox">
 <?php
 	if ($_zp_loggedin & ADMIN_RIGHTS) {
 		if ($_zp_null_account && isset($_zp_reset_admin)) {
@@ -863,7 +843,7 @@ if (empty($alterrights)) {
 } else if (!$_zp_null_account) {
 	if ($subtab == 'general' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	?>
-	<div id="tab_gallery" class="box" style="padding: 15px;">
+	<div id="tab_gallery" class="tabbox">
 		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 		<input	type="hidden" name="savegeneraloptions" value="yes" />
 			<table class="bordered">
@@ -1063,7 +1043,7 @@ if (empty($alterrights)) {
 	}
 	if ($subtab == 'gallery' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	?>
-	<div id="tab_gallery" class="box" style="padding: 15px;">
+	<div id="tab_gallery" class="tabbox">
 		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 		<input	type="hidden" name="savegalleryoptions" value="yes" />
 			<table class="bordered">
@@ -1236,7 +1216,7 @@ if (empty($alterrights)) {
 	}
 	if ($subtab == 'search' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	?>
-	<div id="tab_search" class="box" style="padding: 15px;">
+	<div id="tab_search" class="tabbox">
 		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 		<input	type="hidden" name="savesearchoptions" value="yes" />
 	<table class="bordered">
@@ -1329,7 +1309,7 @@ if (empty($alterrights)) {
 	}
 	if ($subtab == 'rss' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	?>
-	<div id="tab_rss" class="box" style="padding: 15px;">
+	<div id="tab_rss" class="tabbox">
 		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 		<input	type="hidden" name="saverssoptions" value="yes" />
 	<table class="bordered">
@@ -1426,7 +1406,7 @@ if (empty($alterrights)) {
 		echo '</div>';
 	}
 		?>
-	<div id="tab_image" class="box" style="padding: 15px;">
+	<div id="tab_image" class="tabbox">
 	<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 	<input type="hidden" name="saveimageoptions" value="yes" /> 
 	<p align="center">
@@ -1753,7 +1733,7 @@ if (empty($alterrights)) {
 	}
 	if ($subtab == 'comments' && $_zp_loggedin & (ADMIN_RIGHTS | OPTIONS_RIGHTS)) {
 	?>
-	<div id="tab_comments" class="box" style="padding: 15px;">
+	<div id="tab_comments" class="tabbox">
 	<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 	<input 	type="hidden" name="savecommentoptions" value="yes" /> <?php
 		?>
@@ -1825,7 +1805,7 @@ if (empty($alterrights)) {
 	<?php } ?>
 	<!-- end of tab_comments div -->
 	<?php if ($subtab=='theme' && $_zp_loggedin & (ADMIN_RIGHTS | THEMES_RIGHTS)) { ?>
-	<div id="tab_theme" class="box" style="padding: 15px;">
+	<div id="tab_theme" class="tabbox">
 	<?php
 	$themelist = array();
 	if (($_zp_loggedin & ADMIN_RIGHTS)) {
@@ -2079,7 +2059,7 @@ if (empty($alterrights)) {
 	if ($subtab == 'plugin' && $_zp_loggedin & ADMIN_RIGHTS) {
 		$_zp_plugin_count = 0;
 	?>
-		<div id="tab_plugin" class="box" style="padding: 15px;">
+		<div id="tab_plugin" class="tabbox">
 		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
 		<input type="hidden" name="savepluginoptions" value="yes" />
 		<table class="bordered">

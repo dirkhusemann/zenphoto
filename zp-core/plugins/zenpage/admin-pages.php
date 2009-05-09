@@ -22,9 +22,9 @@ require_once("zp-functions.php");
 <?php 
 	printLogoAndLinks();
 	echo "<div id=\"main\">";
-	printTabs("zenpage"); 
+	printTabs("pages"); 
 	echo "<div id=\"content\">";
-	zenpageAdminnav("pages");  
+	checkRights("pages");  
 // update page sort order
 if(isset($_POST['update'])) {
 	updatePageSortorder();
