@@ -67,7 +67,7 @@ printLogoAndLinks();
 				<p><?php echo gettext("<strong>Important:</strong> If you are using Zenphoto's multi-lingual mode the Titlelink is generated from the Title of the currently selected language."); ?></p> 
 				<p><?php echo gettext("Hint: If you need more space for your text use TinyMCE's full screen mode (Click the blue square on the top right of editor's control bar)."); ?></p> 
 			</div>
-			<div class="box" style="padding:15px; margin-top: 10px">
+			<div style="padding:15px; margin-top: 10px">
 				<?php
 				if(isset($_GET["edit"])) {
 					$formname = 'update';

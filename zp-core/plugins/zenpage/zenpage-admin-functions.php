@@ -905,7 +905,7 @@ function printCategoryList() {
   		}
 ?>
  <tr> 
-  <td><?php echo "<a href='admin-categories.php?edit&amp;id=".$cat['id']."' title='".gettext('Edit this category')."'>".$catname."</a>".checkHitcounterDisplay($cat['hitcounter']); ?></td>
+  <td><?php echo "<a href='admin-categories.php?edit&amp;id=".$cat['id']."&amp;tab=categories' title='".gettext('Edit this category')."'>".$catname."</a>".checkHitcounterDisplay($cat['hitcounter']); ?></td>
   <td class="icons3"><?php echo $count; ?> <?php echo gettext("articles"); ?></td>
   <td class="icons">
   	<a href="?hitcounter=1&amp;id=<?php echo $cat['id'];?>" title="<?php echo gettext("Reset hitcounter"); ?>">
@@ -1155,7 +1155,7 @@ function zenpageJSCSS() {
   echo "<script type=\"text/javascript\" src=\"../../js/admin.js\"></script>";
   echo "<script type=\"text/javascript\" src=\"../../js/jquery.js\"></script>";
   echo "\n  <script src=\"../../js/jquery.dimensions.js\" type=\"text/javascript\"></script>";
-  
+   echo "\n  <script src=\"../../js/jquery.dropdownPlain.js\" type=\"text/javascript\"></script>";
   datepickerJS('../../');
 	?>
 	<script type="text/javascript" src="../../js/zenphoto.js.php"></script>

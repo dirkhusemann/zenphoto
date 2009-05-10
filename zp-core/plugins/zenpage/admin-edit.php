@@ -54,7 +54,11 @@ $(document).ready(function() {
 <?php 
 	printLogoAndLinks();
 	echo "<div id=\"main\">";
-	printTabs("pages"); 
+	if(is_AdminEditPage("newsarticle")) {
+		printTabs("articles"); 
+	} else {
+		printTabs("pages");
+	}
 	echo "<div id=\"content\">";
 
 	if(empty($_GET['pagenr'])) {
@@ -186,9 +190,11 @@ if(is_object($result)) {
 </p>
 <p><?php echo gettext("Hint: If you need more space for your text use TinyMCE's full screen mode (Click the blue square on the top right of editor's control bar)."); ?></p> 
 </div>
-
+<?php if(is_AdminEditPage("page")) { ?>
 <div class="box" style="padding:15px; margin-top: 10px">
-
+<?php } else { ?>
+<div style="padding:15px; margin-top: 10px">
+<?php } ?>
 <?php if(is_object($result)) { ?>
 <form method="post" action="admin-edit.php?<?php echo $admintype; ?>&amp;update<?php echo $page; ?>" name="update">
 <input type="hidden" name="id" value="<?php printIfObject($result,"id");?>" />
