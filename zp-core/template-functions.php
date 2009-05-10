@@ -486,6 +486,27 @@ function getNumSubalbums() {
 	return false;
 }
 
+/**
+ * Returns a list of all subalbums decendent from an album
+ *
+ * @param object $album optional album. If absent the current album is used
+ * @return array
+ */
+function getAllSubalbums($album = NULL) {
+	global $_zp_current_album, $_zp_gallery;
+	if (is_null($album)) $album = $_zp_current_album;
+	$list = array();
+	$subalbums = $album->getSubalbums(0);
+	if (is_array($subalbums)) {
+		foreach ($subalbums as $subalbum) {
+			$list[] = $subalbum;
+			$sub = new Album($_zp_gallery, $subalbum);
+			$list = array_merge($list, getAllSubalbums($sub));
+		}
+	}
+	return $list;
+}
+
 function resetCurrentAlbum() {
 	global $_zp_images, $_zp_current_album, $_zp_conf_vars;
 	$_zp_images = NULL;
