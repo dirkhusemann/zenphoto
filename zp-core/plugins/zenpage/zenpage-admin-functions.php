@@ -1155,7 +1155,7 @@ function zenpageJSCSS() {
   echo "<script type=\"text/javascript\" src=\"../../js/admin.js\"></script>";
   echo "<script type=\"text/javascript\" src=\"../../js/jquery.js\"></script>";
   echo "\n  <script src=\"../../js/jquery.dimensions.js\" type=\"text/javascript\"></script>";
-   echo "\n  <script src=\"../../js/jquery.dropdownPlain.js\" type=\"text/javascript\"></script>";
+  
   datepickerJS('../../');
 	?>
 	<script type="text/javascript" src="../../js/zenphoto.js.php"></script>
