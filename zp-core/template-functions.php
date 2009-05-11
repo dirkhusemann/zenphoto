@@ -1503,7 +1503,7 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 	if (is_null($width)) {
 		if (!is_null($cropw) && !is_null($croph)) {
 			$s = round($height * ($cropw/$croph));
-			$sizing = ' width="'.$s.'"';
+			if (!empty($s)) $sizing = ' width="'.$s.'"';
 		}
 	} else {
 		$sizing = ' width="'.$width.'"';
@@ -1511,7 +1511,7 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 	if (is_null($height)) {
 		if (!is_null($cropw) && !is_null($croph)) {
 			$s = round($width * ($croph/$cropw));
-			$sizing = $sizing.' height="'.$s.'"';
+			if (!empty($s)) $sizing = $sizing.' height="'.$s.'"';
 		}
 	} else {
 		$sizing = $sizing.' height="'.$height.'"';
