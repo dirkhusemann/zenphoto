@@ -1499,13 +1499,22 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 	}
 	$class = trim($class);
 	/* set the HTML image width and height parameters in case this image was "imageDefault.png" substituted for no thumbnail then the thumb layout is preserved */
-	if ($sizeW = max(is_null($width) ? 0: $width, is_null($cropw) ? 0 : $cropw)) {
-		$sizing = ' width="' . $sizeW . '"';
+	$sizing = '';
+	if (is_null($width)) {
+		if (!is_null($cropw) && !is_null($croph)) {
+			$s = round($height * ($cropw/$croph));
+			$sizing = ' width="'.$s.'"';
+		}
 	} else {
-		$sizing = null;
+		$sizing = ' width="'.$width.'"';
 	}
-	if ($sizeH = max(is_null($height) ? 0 : $height, is_null($croph) ? 0 : $croph)) {
-		$sizing = $sizing . ' height="' . $sizeH . '"';
+	if (is_null($height)) {
+		if (!is_null($cropw) && !is_null($croph)) {
+			$s = round($width * ($croph/$cropw));
+			$sizing = $sizing.' height="'.$s.'"';
+		}
+	} else {
+		$sizing = $sizing.' height="'.$height.'"';
 	}
 	if (!getOption('use_lock_image') || checkAlbumPassword($_zp_current_album->name, $hint)){
 		echo '<img src="' . htmlspecialchars(getCustomAlbumThumb($size, $width, $height, $cropw, $croph, $cropx, $cropy)). '"' . $sizing . ' alt="' . html_encode($alt) . '"' .
