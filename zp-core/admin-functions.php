@@ -1011,6 +1011,7 @@ function printAlbumEditForm($index, $album) {
 		<?php print_language_string_list($album->get('title'), $prefix."albumtitle", false); ?>
   	</td>
   	</tr>
+  	 
 	<tr>
 	<td align="left" valign="top" ><?php echo gettext("Album Description:"); ?> </td> 
 	<td>
@@ -1020,7 +1021,7 @@ function printAlbumEditForm($index, $album) {
 	<tr>
 	<td align="left" value="top"><?php echo gettext("Album guest user:"); ?></td>
 		<td>
-			<input type="text" style="width:370px" name="<?php echo $prefix; ?>albumuser" value="<?php echo $album->getUser(); ?>" />
+			<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumuser" value="<?php echo $album->getUser(); ?>" />
 		</td>
 	</tr>
 	<tr>
@@ -1033,8 +1034,8 @@ function printAlbumEditForm($index, $album) {
 		$x = '			 ';
 	}
   ?>
-	<input type="password" style="width:370px" name="<?php echo $prefix; ?>albumpass"  value="<?php echo $x; ?>" /><br/>
-	<input type="password" style="width:370px" name="<?php echo $prefix; ?>albumpass_2" value="<?php echo $x; ?>" />
+	<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumpass"  value="<?php echo $x; ?>" /><br/>
+	<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumpass_2" value="<?php echo $x; ?>" />
 	</td>
 	</tr>
 	<tr>
@@ -1269,7 +1270,7 @@ function printAlbumEditForm($index, $album) {
 	<?php
 	$showThumb = getOption('thumb_select_images');
 	if ($showThumb) echo "\n<script type=\"text/javascript\">updateThumbPreview(document.getElementById('thumbselect'));</script>";
-	echo "\n<select style='width:380px' id=\"\"";
+	echo "\n<select style='width:320px' id=\"\"";
 	if ($showThumb) echo " class=\"thumbselect\" onChange=\"updateThumbPreview(this)\"";
 	echo " name=\"".$prefix."thumb\">";
 	$thumb = $album->get('thumb');
