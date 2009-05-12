@@ -253,7 +253,16 @@ if (defined('RELEASE')) {
 	<li><?php printf(gettext('PHP version: <strong>%1$s</strong>'),phpversion()); ?></li>
 	<li><?php printf(gettext("Graphics support: <strong>%s</strong>"),$graphics_lib['Library']); ?></li>
 	<li><?php printf(gettext('PHP memory limit: <strong>%1$s</strong> (Note: Your server might allocate less!)'),INI_GET('memory_limit')); ?></li>
-	<li><?php printf(gettext('MySQL version: <strong>%1$s</strong>'),mysql_get_client_info()); ?></li>
+	<li>
+		<?php
+		$mysqlv = trim(@mysql_get_server_info());
+		$i = strpos($mysqlv, "-");
+		if ($i !== false) {
+			$mysqlv = substr($mysqlv, 0, $i);
+		}
+		printf(gettext('MySQL version: <strong>%1$s</strong>'),$mysqlv);
+		?>
+	</li>
 	<li><?php printf(gettext('Database name: <strong>%1$s</strong>'),$_zp_conf_vars['mysql_database']); ?></li>
 	<li>
 	<?php
