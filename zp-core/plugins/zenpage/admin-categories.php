@@ -73,8 +73,8 @@ printLogoAndLinks();
 					$formname = 'update';
 					$formaction = "admin-categories.php?edit&amp;update";
 				} else {
-					$formmame = 'addcat';
-					$FORMaction = "admin-categories.php?save";
+					$formname = 'addcat';
+					$formaction = "admin-categories.php?save";
 				}
 				?>
 				<form method="post" name="<?php echo $formname; ?>update" action="<?php echo $formaction; ?>">
