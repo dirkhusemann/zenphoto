@@ -87,7 +87,7 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums) {
  					"', `email`='" . escape($email) . $rightsset . "' WHERE `id`='" . $id ."'";
 		$result = query($sql);
 
-		if (DEBUG_LOGIN) { debugLog("updating[$id]:$result");	}
+		if (DEBUG_LOGIN) { debugLog("saveAdmin: updating[$id]:$result");	}
 
 	} else {
 		if (is_null($pass)) $pass = passwordHash($user, $pass);
@@ -98,7 +98,7 @@ function saveAdmin($user, $pass, $name, $email, $rights, $albums) {
 		$result = query_single_row($sql);
 		$id = $result['id'];
 
-		if (DEBUG_LOGIN) { debugLog("inserting[$id]:$result"); }
+		if (DEBUG_LOGIN) { debugLog("saveAdmin: inserting[$id]:$result"); }
 
 	}
 	$gallery = new Gallery();
@@ -175,12 +175,12 @@ function checkAuthorization($authCode) {
 
 	global $_zp_current_admin;
 	$admins = getAdministrators();
-	if (DEBUG_LOGIN) { debugLogArray("admins",$admins);	}
+	if (DEBUG_LOGIN) { debugLogArray("checkAuthorization: admins",$admins);	}
 	$reset_date = getOption('admin_reset_date');
 	if ((count($admins) == 0) || empty($reset_date)) {
 		$_zp_current_admin = null;
 
-		if (DEBUG_LOGIN) { debugLog("no admin or reset request"); }
+		if (DEBUG_LOGIN) { debugLog("checkAuthorization: no admin or reset request"); }
 
 		return ADMIN_RIGHTS; //no admins or reset request
 	}
@@ -188,7 +188,7 @@ function checkAuthorization($authCode) {
 	$i = 0;
 	foreach($admins as $key=>$user) {
 
-		if (DEBUG_LOGIN) { debugLog("checking: $key");	}
+		if (DEBUG_LOGIN) { debugLog("checkAuthorization: checking: $key");	}
 
 		if ($user['pass'] == $authCode) {
 			$_zp_current_admin = $user;
@@ -197,13 +197,14 @@ function checkAuthorization($authCode) {
 				$result = $result | ADMIN_RIGHTS;
 			}
 
-			if (DEBUG_LOGIN) { debugLog("match");	}
+			if (DEBUG_LOGIN) { debugLog("checkAuthorization: match");	}
 
 			return $result;
 		}
 		$i++;
 	}
 	$_zp_current_admin = null;
+	if (DEBUG_LOGIN) { debugLog("checkAuthorization: no match");	}
 	return 0; // no rights
 }
 

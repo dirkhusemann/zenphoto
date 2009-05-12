@@ -1488,24 +1488,6 @@ function getLocaleForTinyMCEandAFM() {
 }
 
 /**
- * returns the zenpage version string
- *
- * @return string
- */
-function getZenpageVersion() {
-	$pluginStream = file_get_contents(SERVERPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'zenpage.php');
-	$str =  $pluginStream;
-	$i = strpos($str, '$plugin_version');
-	if ($i === false) return false;
-	$str = substr($str, $i);
-	//$j = strpos($str, ";\n"); // This is wrong - PHP will not treat all newlines as \n.
-	$j = strpos($str, ";"); // This is also wrong; it disallows semicolons in strings. We need a regexp.
-	$str = substr($str, 0, $j+1);
-	eval($str);
-	return ($plugin_version);
-}
-
-/**
  * Calls the configuration file for the rich text editor used for pages and news articles. 
  * Default is TinyMCE, but basically other editors would be possible, too. 
  * The by default included Ajax File Manager does only work with TinyMCE and FCKEditor though.

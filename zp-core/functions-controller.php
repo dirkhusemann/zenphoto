@@ -307,6 +307,7 @@ function zp_handle_password() {
 		} else {
 			if (($auth == $check_auth) && $post_user == $check_user) {
 				// Correct auth info. Set the cookie.
+				if (DEBUG_LOGIN) debugLog("zp_handle_password: valid credentials");
 				zp_setcookie($authType, $auth, time()+COOKIE_PESISTENCE, $cookiepath);
 				if (isset($_POST['redirect'])) {
 					header("Location: " . FULLWEBPATH . "/" . sanitize($_POST['redirect'], 3));
@@ -314,6 +315,7 @@ function zp_handle_password() {
 				}
 			} else {
 				// Clear the cookie, just in case
+				if (DEBUG_LOGIN) debugLog("zp_handle_password: invalid credentials");
 				zp_setcookie($authType, "", time()-368000, $cookiepath);
 				$_zp_login_error = true;
 			}
@@ -325,9 +327,11 @@ function zp_handle_password() {
 	}
 	if (($saved_auth = zp_getCookie($authType)) != '') {
 		if ($saved_auth == $check_auth) {
+			if (DEBUG_LOGIN) debugLog("zp_handle_password: valid cookie");
 			return;
 		} else {
 			// Clear the cookie
+			if (DEBUG_LOGIN) debugLog("zp_handle_password: invalid cookie");
 			zp_setcookie($authType, "", time()-368000, $cookiepath);
 		}
 	}
