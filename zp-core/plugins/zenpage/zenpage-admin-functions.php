@@ -143,7 +143,6 @@ function updatePage() {
 	$page->set('content',$content);
 	$page->set('extracontent',$extracontent);
 	$page->set('show',$show);
-	$page->set('parentid',NULL);
 	$page->set('codeblock',$codeblock);
 	$page->set('author',$author);
 	$page->set('date',$date);
@@ -186,58 +185,28 @@ function deletePage() {
 function updatePageSortorder() {
 	if(!empty($_POST['order'])) { // if someone didn't sort anything there are no values!
 		$orderarray = explode("&",$_POST['order']);
-		
-		// first clear out unnecessary info from the submitted data string
-		$count = 0;
+		$parents = array('NULL');
 		foreach($orderarray as $order) {
-			$count++;
-				
-			// get ID
-			$id[$count] = substr(strstr($order,"="),1); 
-			//echo $order."<br />"; // debugging
-			// get sort level
-			$replace = array("left-to-right[" => "", "][id]=$id[$count]" => "", "][children][" => "-");
-			$sortlevel[$count] = strtr($order,$replace);
-			
-			$sortlevelex = explode("-",$sortlevel[$count]);
-			//echo "<pre>";print_r($sortlevelex); echo "</pre>";
-			$sortlevelnew[$count] = "";
-			$sortarraycount = count($sortlevelex);
+			$id = substr(strstr($order,"="),1);
+			// clear out unnecessary info from the submitted data string
+			$sortstring = strtr($order, array("left-to-right[" => "", "][id]=$id" => "", "][children][" => "-"));
+			$sortlevelex = explode("-",$sortstring);
+			$sortstring = '';
+			//regenerate the sort key in connical form
 			foreach($sortlevelex as $sortex) {
 				$sort = sprintf('%03u', $sortex);
-				$sortlevelnew[$count] .= $sort.'-';
+				$sortstring .= $sort.'-';
 			}
-			$sortlevelnew[$count] = substr($sortlevelnew[$count], 0, -1);
-			$sortlevel[$count] = $sortlevelnew[$count];
-		} 	
-		//echo "<br/>";print_r($sortlevelnew); //debugging
-		
-		// update loop
-		for($nr = 1; $nr <= $count; $nr++) {
-				
-			// check if top level (no "-" means top level)
-			if(!strrpos($sortlevel[$nr],"-")) { 
-				$parentid = "NULL";
-							
-			// if not top level, get parent id
-			} else { 
-				//get parent id
-				$test = strrpos($sortlevel[$nr],"-");
-				$parent = substr($sortlevel[$nr],0,$test);
-				for($nr2 = 1; $nr2 <= $count; $nr2++) {
-					if($sortlevel[$nr2] === $parent) {
-						$parentid = $id[$nr2];
-					} 
-				} 
-			}
-				// replace with db update query
-				$sql = "UPDATE " . prefix('zenpage_pages') . " SET `sort_order` = '".$sortlevel[$nr]."', `parentid`= ".$parentid." WHERE `id`=" . $id[$nr];
-				//echo "<br/>$sql"; // debugging
-				query($sql);
-			}
-		
-	} // if empty end
-		echo "<br clear: all><p class='messagebox' id='fade-message'>".gettext("Sort order saved.")."</p>";
+			$sortstring = substr($sortstring, 0, -1);
+			// now fix the parent ID and update the DB record
+			$level = count($sortlevelex);
+			$parents[$level] = $id;
+			$myparent = $parents[$level-1];
+			$sql = "UPDATE " . prefix('zenpage_pages') . " SET `sort_order` = '".$sortstring."', `parentid`= ".$myparent." WHERE `id`=" . $id;
+			query($sql);
+		}
+	}
+	echo "<br clear: all><p class='messagebox' id='fade-message'>".gettext("Sort order saved.")."</p>";
 }
 
 
