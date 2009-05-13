@@ -3580,6 +3580,7 @@ function printTags($option='links', $preText=NULL, $class='taglist', $separator=
 	}
 }
 
+define('ALLTAGS_MINFONTSIZE', 0.8);
 /**
  * Either prints all of the galleries tgs as a UL list or a cloud
  *
@@ -3596,7 +3597,6 @@ function printTags($option='links', $preText=NULL, $class='taglist', $separator=
  */
 function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE,$maxfontsize=2,$maxcount=50,$mincount=10, $limit=NULL) {
 	global $_zp_current_search;
-	define('MINFONTSIZE', 0.8);
 
 	$option = strtolower($option);
 	if ($class != "") { $class = "class=\"".$class."\""; }
@@ -3617,9 +3617,9 @@ function printAllTagsAs($option,$class='',$sort='abc',$counter=FALSE,$links=TRUE
 		}
 		if ($option == "cloud") { // calculate font sizes, formula from wikipedia
 			if ($val <= $mincount) {
-				$size = MINFONTSIZE;
+				$size = ALLTAGS_MINFONTSIZE;
 			} else {
-				$size = min(max(round(($maxfontsize*($val-$mincount))/($maxcount-$mincount), 2), MINFONTSIZE), $maxfontsize);
+				$size = min(max(round(($maxfontsize*($val-$mincount))/($maxcount-$mincount), 2), ALLTAGS_MINFONTSIZE), $maxfontsize);
 			}
 			$size = str_replace(',','.', $size);
 			$size = " style=\"font-size:".$size."em;\"";
