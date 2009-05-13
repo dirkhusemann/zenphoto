@@ -216,8 +216,8 @@ if (isset($_GET['clear_rating'])) {
 	echo "\n  <link rel=\"stylesheet\" href=\"../admin.css\" type=\"text/css\" />";
 	echo "</head>";
 	echo "<body>";
-	query('UPDATE '.prefix('images').' SET total_value = 0, total_votes = 0, used_ips = "" ');
-	query('UPDATE '.prefix('albums').' SET total_value = 0, total_votes = 0, used_ips = "" ');
+	query('UPDATE '.prefix('images').' SET total_value = 0, total_votes = 0, rating = 0, used_ips = "" ');
+	query('UPDATE '.prefix('albums').' SET total_value = 0, total_votes = 0, rating = 0, used_ips = "" ');
 	echo '<div style="margin-top: 20px; text-align: left;">';
 	echo "<h2><img src='images/pass.png' style='position: relative; top: 3px; margin-right: 5px' />".gettext("Ratings have been reset!")."</h2>";
 	echo "<div class='buttons'><a href='#' onclick='self.parent.tb_remove();'>".gettext('Close')."</a></div>";
