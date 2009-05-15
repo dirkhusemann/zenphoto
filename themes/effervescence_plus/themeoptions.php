@@ -5,25 +5,6 @@
  * If it is present it is linked to with a require_once call.
  * If it is not present, no theme options are displayed.
  *
- * Interface functions:
- *     getOptionsSupported()
- *        returns an array of the option names the theme supports
- *        the array is indexed by the option name. The value for each option is an array:
- *          'type' => 0 says for admin to use a standard textbox for the option
- *          'type' => 1 says for admin to use a standard checkbox for the option
- *          'type' => 2 will cause admin to call handleOption to generate the HTML for the option
- * 					'multilingual' => 1 will cause type 0 fields to be rendered multilingual 
- *          'desc' => text to be displayed for the option description.
- *
- *     handleOption($option, $currentValue)
- *       $option is the name of the option being processed
- *       $currentValue is the "before" value of the option
- *
- *       this function is called by admin from within the table row/column where the option field is placed
- *       It must write the HTML that does the option handling UI
- *
- *       the version below provides a dropdown list of all the CSS files in the theme folder. It is used by themes
- *       which support selectable CSS files for different color schemes.
  */
 
 require_once(SERVERPATH . "/" . ZENFOLDER . "/admin-functions.php");

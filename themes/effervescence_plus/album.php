@@ -277,8 +277,8 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
  					</div> <!-- images -->
  					</div> <!-- main -->
 	 			<div class="clearage"></div>
- 					<?php if (isset($firstImage)) printNofM('Photo', $firstImage, $lastImage, getNumImages()); ?>
-		</div> <!-- content -->
+ 				<?php if (isset($firstImage)) printNofM('Photo', $firstImage, $lastImage, getNumImages()); ?>
+ 		</div> <!-- content -->
 			<?php
 				} else {  /* flash */
 	 			if (($imagePage = isImagePage()) && !checkforPassword()) {
@@ -310,7 +310,7 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 									fo.addParam("wmode", "opaque");
 									fo.write("flash");
  						</script>
-			</div> <!-- flash -->
+				</div> <!-- flash -->
  						<?php
 	 			}
 	 		} /* image loop */
@@ -325,7 +325,8 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 				</div> <!-- main3 -->
 				<?php
 	 		}
-	 	} ?>
+	 	} 
+	 	?>
 
 <!-- Page Numbers -->
 		<div id="pagenumbers">
@@ -335,8 +336,19 @@ if (!isset($_GET['format']) || $_GET['format'] != 'xml') {
 		}
 		?>
 		</div> <!-- pagenumbers -->
-
-
+	<?php
+/*
+	if (function_exists('printRating')) {
+		?>
+		<p align="center">
+		<?php
+		printRating();
+		?>
+		</p>
+	<?php
+	}
+*/
+	?>
 </div> <!-- subcontent -->
 
 <!-- Footer -->

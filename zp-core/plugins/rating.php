@@ -1,229 +1,218 @@
 <?php
 /**
- * rating -- Supports an image and album rating system
- * @author Malte Müller (acrylian) and Stephen Billard (sbillard)
- * @version 1.0.1
+ * rating -- Supports an rating system for images, albums, pages, and news articles
+ * 
+ * uses Star Rating Plugin by Fyneworks.com
+ * 
+ * An option exists to allow viewers to recast their votes. If not set, a viewer may
+ * vote only one time and not change his mind.
+ *  
+ * @author Stephen Billard (sbillard)and Malte Müller (acrylian)
+ * @version 2.0.0
  * @package plugins
  */
 require_once(dirname(dirname(__FILE__)).'/functions.php');
 
-$plugin_description = gettext("Adds several theme functions to enable images and/or album rating by users.");
-$plugin_author = "Malte Müller (acrylian) and Stephen Billard (sbillard)";
-$plugin_version = '1.0.1';
+$plugin_description = gettext("Adds several theme functions to enable images, album, news, or pages to be rating by users.");
+$plugin_author = "Stephen Billard (sbillard)and Malte Müller (acrylian)";
+$plugin_version = '2.0.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---rating.php.html";
-$option_interface = new rating();
+$option_interface = new jquery_rating();
 
 // register the scripts needed
-addPluginScript('<script type="text/javascript" src="'.FULLWEBPATH."/".ZENFOLDER .PLUGIN_FOLDER .'rating/rating.js"></script>');
-addPluginScript('<link rel="stylesheet" href="'.FULLWEBPATH."/".ZENFOLDER.PLUGIN_FOLDER.'rating/rating.css" type="text/css" />');
+$ME = substr(basename(__FILE__),0,-4);
+addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.$ME.'/jquery.MetaData.js"></script>');
+addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.$ME.'/jquery.rating.js"></script>');
+addPluginScript('<link rel="stylesheet" href="'.WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.$ME.'/jquery.rating.css" type="text/css" />');
 
-require_once('rating/functions-rating.php');
+require_once($ME.'/functions-rating.php');
 
-class rating {
-
-	function staticCache() {
-		setOptionDefault('clear_rating', '');
+/**
+ * Option handler class
+ *
+ */
+class jquery_rating {
+	/**
+	 * class instantiation function
+	 *
+	 * @return jquery_rating
+	 */
+	function jquery_rating() {
+		setOptionDefault('rating_recast', 1);
 	}
 
+	/**
+	 * Reports the supported options
+	 *
+	 * @return array
+	 */
 	function getOptionsSupported() {
 		return array(	gettext('Clear ratings') => array('key' => 'clear_rating', 'type' => 2,
-										'desc' => gettext("Sets all images and albums to unrated."))
+										'desc' => gettext("Sets all images and albums to unrated.")),
+									gettext('Recast vote') =>array('key' => 'rating_recast', 'type' => 1,
+										'desc' => gettext('Allow users to change their vote.'))
 								);
 	}
 
+	/**
+	 * Custom opton handler--creates the clear ratings button
+	 *
+	 * @param string $option
+	 * @param string $currentValue
+	 */
 	function handleOption($option, $currentValue) {
 		if($option=="clear_rating") {
-			echo "<div class='buttons'>";
-			echo "<a href='".substr(PLUGIN_FOLDER, 1)."rating.php?clear_rating&height=100&width=250' class='thickbox' title='".gettext("Clear ratings")."'><img src='images/edit-delete.png' alt='' />".gettext("Clear ratings")."</a>";
-			echo "</div>";
+			?>
+			<div class='buttons'>
+				<a href="<?php echo WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.substr(basename(__FILE__),0,-4); ?>/update.php?clear_rating&height=100&width=250" class="thickbox" title="<?php echo gettext("Clear ratings"); ?>">
+					<img src='images/edit-delete.png' alt='' />
+					<?php echo gettext("Clear ratings"); ?>
+				</a>
+			</div>
+			<?php
 		}
 	}
 
 }
 
-
 /**
- * Returns the rating of the designated image
+ * Prints the rating star form and the current rating
+ * Insert this function call in the page script where you 
+ * want the star ratings to appear.
  *
- * @param string $option 'totalvalue' or 'totalvotes'
- * @param int $id Record id for the image
- * @return int
+ * NOTE:
+ * If $vote is false or the rating_recast option is false then
+ * the stars shown will be the rating. Otherwise the stars will
+ * show the value of the viewer's last vote.
+ * 
+ * @param bool $vote set to false to disable voting
+ * @param object $object optional object for the ratings target. If not set, the current page object is used
  */
-function getImageRating($option, $id) {
-	return getRating($option,"image",$id);
-}
-
-/**
- * Returns the average rating of the image
- *
- * @param int $id the id of the image
- * @return real
- */
-function getImageRatingCurrent($id) {
-	$votes = getImageRating("totalvotes",$id);
-	$value = getImageRating("totalvalue",$id);
-	if($votes != 0)	{
-		return round($value/$votes, 1);
+function printRating($vote=true, $object=NULL) {
+	if (is_null($object)) {
+		getCurrentPageObject($object, $table);
 	}
-	return '';
+	$rating = round($object->get('rating'));
+  $votes = $object->get('total_votes');
+	$id = $object->get('id');
+	$unique = '_'.get_class($object).'_'.$id;
+	$ip = sanitize($_SERVER['REMOTE_ADDR'], 0);
+	$recast = getOption('rating_recast');
+	$oldrating = round(checkForIP($ip, $id, $table));
+	if ($vote && $recast && $oldrating) {
+		$starselector = round($oldrating*2);
+	} else {
+		$starselector = round($rating*2);
+	}
+	$disable = !$vote || ($oldrating && !$recast);
+  if ($rating > 0) {
+  	$msg = sprintf(ngettext('Rating %2$d (%1$u vote)', 'Rating %2$d (%1$u votes)', $votes), $votes, $object->get('rating'));
+  } else {
+  	$msg = gettext('Not yet rated');
+  }
+	?>
+	<span class="rating">
+		<form name="star_rating">
+		<script type="text/javascript">
+			$.fn.rating.options = { 
+				cancel: '<?php echo gettext('reset'); ?>'   // advisory title for the 'cancel' link
+		 	}; 
+ 		</script>
+			<?php
+			if ($rating > 0) {
+				?>
+				<script type="text/javascript">
+					$(function() {
+					$('input',this.form).rating('select','<?php echo $starselector; ?>');
+				});
+				</script>
+				<?php
+			}
+			if ($disable) {
+				?>
+				<script type="text/javascript">
+					$(function() {
+						$('input',this.form).rating('disable');
+						$('#submit_button<?php echo $unique; ?>').hide();
+						$('#vote<?php echo $unique; ?>').html('<?php echo $msg; ?>');
+					});
+				</script>
+				<?php
+			}
+			?>
+		  <input type="radio" class="star {split:2}" name="star_rating-value" value="1" title="<?php echo gettext('1 star'); ?>" />
+		  <input type="radio" class="star {split:2}" name="star_rating-value" value="2" title="<?php echo gettext('1 star'); ?>"/>
+		  <input type="radio" class="star {split:2}" name="star_rating-value" value="3" title="<?php echo gettext('2 stars'); ?>"/>
+		  <input type="radio" class="star {split:2}" name="star_rating-value" value="4" title="<?php echo gettext('2 stars'); ?>"/>
+		  <input type="radio" class="star {split:2}" name="star_rating-value" value="5" title="<?php echo gettext('3 stars'); ?>"/>
+		  <input type="radio" class="star {split:2}" name="star_rating-value" value="6" title="<?php echo gettext('3 stars'); ?>"/>
+		  <input type="radio" class="star {split:2}" name="star_rating-value" value="7" title="<?php echo gettext('4 stars'); ?>"/>
+		  <input type="radio" class="star {split:2}" name="star_rating-value" value="8" title="<?php echo gettext('4 stars'); ?>"/>
+		  <input type="radio" class="star {split:2}" name="star_rating-value" value="9" title="<?php echo gettext('5 stars'); ?>"/>
+		  <input type="radio" class="star {split:2}" name="star_rating-value" value="10" title="<?php echo gettext('5 stars'); ?>"/>
+		  <span id="submit_button<?php echo $unique; ?>">
+		  <input type="button" value="<?php echo gettext('Submit &raquo;'); ?>" onClick="javascript:
+					var dataString = $(this.form).serialize();   
+					if (dataString) {
+						<?php
+						if (!$recast) {
+							?>
+							$('input',this.form).rating('disable');
+							$('#submit_button<?php echo $unique; ?>').hide();
+							<?php
+						}
+						?>
+						$.ajax({   
+							type: 'POST',   
+							url: '<?php echo WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.substr(basename(__FILE__),0,-4); ?>/update.php',   
+							data: dataString+'&id=<?php echo $id; ?>&table=<?php echo $table; ?>'
+						});
+						$('#vote<?php echo $unique; ?>').html('<?php echo gettext('Vote Submitted'); ?>');
+					} else {
+						$('#vote<?php echo $unique; ?>').html('<?php echo gettext('nothing to submit'); ?>');
+					}
+		  		"/>
+		  </span>
+	  </form>
+	</span>
+  <span class="vote" id="vote<?php echo $unique; ?>" style="clear:all">
+  	<?php echo $msg; ?>
+  </span>
+	<?php
 }
 
 /**
  * Prints the image rating information for the current image
+ * Deprecated:
+ * Included for forward compatibility--use printRating() directly
  *
  */
 function printImageRating() {
-	printRating("image");
+	printRating();
 }
 
 /**
- * Prints the rating accordingly to option, it's a combined function for image and album rating
- *
- * @param string $option "image" for image rating, "album" for album rating.
- * @see printImageRating() and printAlbumRating()
- *
- */
-function printRating($option) {
-	switch($option) {
-		case "image":
-			$id = getImageID();
-			$value = getImageRating("totalvalue", $id);
-			$votes = getImageRating("totalvotes", $id);
-			break;
-		case "album":
-			$id = getAlbumID();
-			$value = getAlbumRating("totalvalue", $id);
-			$votes = getAlbumRating("totalvotes", $id);
-			break;
-	}
-	if($votes != 0) {
-		$ratingpx = round(($value/$votes)*25);
-	} else {
-		$ratingpx = '';
-	}
-	$zenpath = WEBPATH."/".ZENFOLDER.substr(PLUGIN_FOLDER, 0, -1);
-	echo "<div id=\"rating\">\n";
-	echo "<ul class=\"star-rating\">\n";
-	echo "<li class=\"current-rating\" id=\"current-rating\"";
-	if (!empty($ratingpx)) {
-		echo " style=\"width: ".$ratingpx."px;\"";
-	}
-	echo "></li>\n";
-	$msg1 = gettext("Rating");
-	$msg2 = gettext("Total votes");
-	if(!checkForIP(sanitize($_SERVER['REMOTE_ADDR'], 0),$id,$option)){
-		echo "<li><a href=\"javascript:rate(1,$id,'".rawurlencode($zenpath)."','$option')\" title=\"".gettext("1 star out of 5")."\" class=\"one-star\">2</a></li>\n";
-		echo "<li><a href=\"javascript:rate(2,$id,'".rawurlencode($zenpath)."','$option')\" title=\"".gettext("2 stars out of 5")."\" class=\"two-stars\">2</a></li>\n";
-		echo "<li><a href=\"javascript:rate(3,$id,'".rawurlencode($zenpath)."','$option')\" title=\"".gettext("3 stars out of 5")."\" class=\"three-stars\">2</a></li>\n";
-		echo "<li><a href=\"javascript:rate(4,$id,'".rawurlencode($zenpath)."','$option')\" title=\"".gettext("4 stars out of 5")."\" class=\"four-stars\">2</a></li>\n";
-		echo "<li><a href=\"javascript:rate(5,$id,'".rawurlencode($zenpath)."','$option')\" title=\"".gettext("5 stars out of 5")."\" class=\"five-stars\">2</a></li>\n";
-	}
-	echo "</ul>\n";
-	echo "<div id =\"vote\">\n";
-	switch($option) {
-		case "image":
-			echo $msg1.' '.getImageRatingCurrent($id).' ('.$msg2.': '.$votes.")";
-			break;
-		case "album":
-			echo $msg1.' '.getAlbumRatingCurrent($id).' ('.$msg2.': '.$votes.")";
-			break;
-	}
-	echo "</div>\n";
-	echo "</div>\n";
-}
-
-/**
- * Get the rating for an image or album,
- *
- * @param string $option 'totalvalue' or 'totalvotes'
- * @param string $option2 'image' or 'album'
- * @param int $id id of the image or album
- * @see getImageRating() and getAlbumRating()
- * @return unknown
- */
-function getRating($option,$option2,$id) {
-	switch ($option) {
-		case "totalvalue":
-			$rating = "total_value"; break;
-		case "totalvotes":
-			$rating = "total_votes"; break;
-	}
-	switch ($option2) {
-		case "image":
-			if(!$id) {
-				$id = getImageID();
-			}
-			$dbtable = prefix('images');
-			break;
-		case "album":
-			if(!$id) {
-				$id = getAlbumID();
-			}
-			$dbtable = prefix('albums');
-			break;
-	}
-	$result = query_single_row("SELECT ".$rating." FROM $dbtable WHERE id = $id");
-	return $result[$rating];
-}
-
-/**
- * Prints the image rating information for the current image
+ * Prints the album rating information for the current image
+ * Deprecated:
+ * Included for forward compatibility--use printRating() directly
  *
  */
 function printAlbumRating() {
-	printRating("album");
+	printRating();
 }
+
 
 /**
- * Returns the average rating of the album
+ * Returns the current rating of an object
  *
- * @param int $id Record id for the album
- * @return real
+ * @param object $object optional ratings target. If not supplied, the current script object is used
+ * @return float
  */
-function getAlbumRatingCurrent($id) {
-	$votes = getAlbumRating("totalvotes",$id);
-	$value = getAlbumRating("totalvalue",$id);
-	if($votes != 0)	{
-		return round($value/$votes, 1);
+function getRating($object=NULL) {
+	if (is_null($object)) {
+		getCurrentPageObject($object, $table);
 	}
-	return '';
+	return $object->get('rating');
 }
 
-/**
- * Returns the rating of the designated album
- *
- * @param string $option 'totalvalue' or 'totalvotes'
- * @param int $id Record id for the album
- * @return int
- */
-function getAlbumRating($option, $id) {
-	$rating =  getRating($option,"album",$id);
-	return $rating;
-}
-
-if (isset($_GET['clear_rating'])) {
-	require_once(dirname(dirname(__FILE__)).'/admin-functions.php'); // you have to be loged in to do this
-	if (!(zp_loggedin(ADMIN_RIGHTS | EDIT_RIGHTS))) { // prevent nefarious access to this page.
-		$const_webpath = dirname(dirname(dirname($_SERVER['SCRIPT_NAME'])));
-		header("Location: " . PROTOCOL."://" . $_SERVER['HTTP_HOST'] . $const_webpath . ZENFOLDER . "/admin.php");
-		exit();
-	}
-	
-	echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
-	echo "\n<html xmlns=\"http://www.w3.org/1999/xhtml\">";
-	echo "\n<head>";
-	echo "\n  <title>".gettext("zenphoto administration")."</title>";
-	echo "\n  <link rel=\"stylesheet\" href=\"../admin.css\" type=\"text/css\" />";
-	echo "</head>";
-	echo "<body>";
-	query('UPDATE '.prefix('images').' SET total_value = 0, total_votes = 0, rating = 0, used_ips = "" ');
-	query('UPDATE '.prefix('albums').' SET total_value = 0, total_votes = 0, rating = 0, used_ips = "" ');
-	echo '<div style="margin-top: 20px; text-align: left;">';
-	echo "<h2><img src='images/pass.png' style='position: relative; top: 3px; margin-right: 5px' />".gettext("Ratings have been reset!")."</h2>";
-	echo "<div class='buttons'><a href='#' onclick='self.parent.tb_remove();'>".gettext('Close')."</a></div>";
-	echo '</div>';
-	echo "</body>";
-	echo "</html>";
-	exit;
-}
 ?>

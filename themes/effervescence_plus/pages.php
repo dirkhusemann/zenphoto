@@ -59,6 +59,7 @@ normalizeColumns(ALBUMCOLUMNS, IMAGECOLUMNS);?>
 	</div>
 	
 	<?php 
+	if (function_exists('printRating')) printRating();
 	if (getOption('zenpage_comments_allowed')) { ?>
 					<div id="comments">
 			<?php $num = getCommentCount(); echo ($num == 0) ? "" : ("<h3>".gettext("Comments")." ($num)</h3>"); ?>

@@ -84,6 +84,7 @@ if (!checkForPassword()) {
 	   <?php printCodeblock(2); ?>
 	  </div>  
 	<?php 
+	if (function_exists('printRating')) printRating();
 	// COMMENTS TEST
 	if (getOption('zenpage_comments_allowed')) { ?>
 					<div id="comments">
