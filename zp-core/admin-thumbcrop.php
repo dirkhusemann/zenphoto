@@ -95,6 +95,7 @@ if (isset($_REQUEST['crop'])) {
 	$ch = $_REQUEST['h'];
 	$cx = $_REQUEST['x'];
 	$cy = $_REQUEST['y'];
+	if (DEBUG_IMAGE) debugLog("Thumbcrop-in: \$width=$width \$height=$height \$cx=$cx \$cy=$cy \$cw=$cw \$ch=$ch");
 	if (isset($_REQUEST['clear_crop']) || ($cw == 0 && $ch == 0)) {
 		$cx = $cy = $cw = $ch = NULL;
 	} else {
@@ -110,6 +111,7 @@ if (isset($_REQUEST['crop'])) {
 		$cx = round($cx*$rw);
 		$cy = round($cy*$rh);
 	}
+	if (DEBUG_IMAGE) debugLog("Thumbcrop-out: \$cx=$cx \$cy=$cy \$cw=$cw \$ch=$ch");
 	$imageobj->set('thumbX', $cx);
 	$imageobj->set('thumbY', $cy);
 	$imageobj->set('thumbW', $cw);

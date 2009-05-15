@@ -93,9 +93,10 @@ if ( (isset($_GET['s']) && abs($_GET['s']) < MAX_SIZE)
 	if (isset($_GET['gray'])) {
 		$args[12] = $_GET['gray'];
 	}
-			
 	$args = getImageParameters($args);
 	list($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM, $adminrequest, $gray) = $args;
+	if (DEBUG_IMAGE) debugLog("i.php($ralbum, $rimage): \$size=$size, \$width=$width, \$height=$height, \$cw=$cw, \$ch=$ch, \$cx=$cx, \$cy=$cy, \$quality=$quality, \$thumb=$thumb, \$crop=$crop, \$thumbstandin=$thumbstandin, \$thumbWM=$thumbWM, \$adminrequest=$adminrequest, \$gray=$gray");
+	
 	$allowWatermark = !$thumb && !$adminrequest;
 } else {
 	// No image parameters specified or are out of bounds; return the original image.

@@ -435,7 +435,7 @@ function getImageParameters($args) {
 		$cx = sanitize_numeric($cx);
 	}
 	if (!is_null($cy)) {
-		$cx = sanitize_numeric($cy);
+		$cy = sanitize_numeric($cy);
 	}
 	if (empty($cw) && empty($ch)) {
 		$crop = false; 
@@ -445,7 +445,8 @@ function getImageParameters($args) {
 	if (empty($quality)) $quality = getOption('image_quality');
 
 	// Return an array of parameters used in image conversion.
-	return array($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM, $adminrequest, $gray);
+	$args =  array($size, $width, $height, $cw, $ch, $cx, $cy, $quality, $thumb, $crop, $thumbstandin, $thumbWM, $adminrequest, $gray);
+	return $args;
 }
 
 /** Takes user input meant to be used within a path to a file or folder and
