@@ -123,7 +123,7 @@ if (isset($_REQUEST['crop'])) {
 	$newim = createImage($cw, $ch);
 	resampleImage($newim, $timg, 0, 0, $cx, $cy, $cw, $ch, $cw, $ch);
 	@unlink($imgpath);
-	if (imageOutput($newim, 'jpg', $imgpath, $quality)) {
+	if (imageOutput($newim, getSuffix($imgpath), $imgpath, $quality)) {
 		if (DEBUG_IMAGE) debugLog('image_crop Finished:'.basename($imgpath));
 	} else {
 		if (DEBUG_IMAGE) debugLog('image_crop: failed to create '.$imgpath);
@@ -156,21 +156,18 @@ if (isset($_REQUEST['subpage'])) {
 } else {
 	$subpage = $tagsort = '';
 }
-printAdminHeader('../');
+printAdminHeader(WEBPATH.'/'.ZENFOLDER.'/');
 ?>
 
-<script src="../js/jquery.Jcrop.pack.js"></script>
-<link rel="stylesheet" href="../js/jquery.Jcrop.css" type="text/css" />
-<script language="Javascript">
-	// Remember to invoke within jQuery(window).load(...)
-	// If you don't, Jcrop may not initialize properly
+<script src="<?php echo WEBPATH.'/'.ZENFOLDER ?>/js/jquery.Jcrop.js" type="text/javascript"></script>
+<link rel="stylesheet" href="<?php echo WEBPATH.'/'.ZENFOLDER ?>/js/jquery.Jcrop.css" type="text/css" />
+<script language="javascript">
 	jQuery(window).load(function(){
-
 		jQuery('#cropbox').Jcrop({
 			onChange: showCoords,
-			setSelect: [ <?php echo $iX; ?>, <?php echo $iY; ?>, <?php echo $iX+$iW; ?>, <?php echo $iY+$iH; ?> ],					
 			bgOpacity:   .4,
-			bgColor:     'black'
+			bgColor:     'black',
+			setSelect: [ <?php echo $iX; ?>, <?php echo $iY; ?>, <?php echo $iX+$iW; ?>, <?php echo $iY+$iH; ?> ]					
 			});
 	});
 

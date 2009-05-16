@@ -2101,8 +2101,8 @@ function unzip($file, $dir) { //check if zziplib is installed
  * @return bool
  */
 function is_zip($filename) {
-	$ext = strtolower(strrchr($filename, "."));
-	return ($ext == ".zip");
+	$ext = getSuffix($filename);
+	return ($ext == "zip");
 }
 
 /**

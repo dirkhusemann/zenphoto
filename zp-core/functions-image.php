@@ -353,7 +353,7 @@ function cacheImage($newfilename, $imgfile, $args, $allow_watermark=false, $forc
 
 		// Create the cached file (with lots of compatibility)...
 		mkdir_recursive(dirname($newfile));
-		if (imageOutput($newim, 'jpg', $newfile, $quality)) {
+		if (imageOutput($newim, getSuffix($newfile), $newfile, $quality)) {
 			if (DEBUG_IMAGE) debugLog('Finished:'.basename($imgfile));
 		} else {
 			if (DEBUG_IMAGE) debugLog('cacheImage: failed to create '.$newfile);

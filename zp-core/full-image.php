@@ -30,7 +30,7 @@ if (!isMyAlbum($_zp_current_album->name, ALL_RIGHTS) && ($hash = getOption('prot
 }
 require_once(dirname(__FILE__).'/functions-image.php');
 $image_path = $_zp_current_image->localpath;
-$suffix = strtolower(substr(strrchr($image_path, "."), 1));
+$suffix = getSuffix($image_path);
 $cache_file = $_zp_current_album->name . "/" . substr($_zp_current_image->filename, 0, -strlen($suffix)-1) . '_FULL.' . $suffix;
 switch ($suffix) {
 	case 'bmp':

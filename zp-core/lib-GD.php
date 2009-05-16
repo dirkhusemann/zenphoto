@@ -19,7 +19,7 @@
  *
  */
 function imageGet($imgfile) {
-	$ext = strtolower(substr(strrchr($imgfile, "."), 1));
+	$ext = getSuffix($imgfile);
 	switch ($ext) {
 		case 'png':
 			return imagecreatefrompng($imgfile);

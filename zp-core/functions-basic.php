@@ -99,6 +99,7 @@ if (!defined('PLUGIN_FOLDER')) { define('PLUGIN_FOLDER', '/plugins/'); }
 define("THEMEFOLDER", 'themes');
 define('BACKUPFOLDER', 'backup');
 define('UTILITIES_FOLDER', '/utilities/');
+define('IMAGE_FORMAT', 'jpg');
 
 
 /**
@@ -371,7 +372,7 @@ function getImageCacheFilename($album8, $image8, $args) {
 			$albumsep = '/';
 		}
 	}
-	return '/' . $album . $albumsep . $image . $postfix . '.jpg';
+	return '/' . $album . $albumsep . $image . $postfix . '.'.IMAGE_FORMAT;
 }
 
 /**
@@ -890,4 +891,13 @@ function im_suffix() {
 	return getOption('mod_rewrite_image_suffix');
 }
 
+/**
+ * Returns the suffix of a file name
+ *
+ * @param string $filename
+ * @return string
+ */
+function getSuffix($filename) {
+	return strtolower(substr(strrchr($filename, "."), 1));
+}
 ?>

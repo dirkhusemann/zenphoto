@@ -127,13 +127,10 @@ $tagsort = sanitize($_REQUEST['tagsort']);
 printAdminHeader();
 ?>
 
-<script src="js/jquery.Jcrop.js"></script>
+<script src="js/jquery.Jcrop.js" type="text/javascript"></script>
 <link rel="stylesheet" href="js/jquery.Jcrop.css" type="text/css" />
-<script language="Javascript">
-	// Remember to invoke within jQuery(window).load(...)
-	// If you don't, Jcrop may not initialize properly
+<script language="javascript">
 	jQuery(window).load(function(){
-
 		jQuery('#cropbox').Jcrop({
 			onChange: showPreview,
 			onSelect: showPreview,
