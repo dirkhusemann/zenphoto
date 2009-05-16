@@ -30,6 +30,7 @@
 <?php 
 printPageContent(); 
 printCodeblock(1); 
+if (function_exists('printRating')) { printRating(); }
 ?>
 
 <?php 

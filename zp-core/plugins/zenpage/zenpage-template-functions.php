@@ -1246,77 +1246,6 @@ function printLatestNews($number=5,$option='with_latest_images', $category='', $
 }
 
 
-function getMostPopularItems($number=10, $option="all") {
-	global $_zp_current_zenpage_news, $_zp_current_zenpage_pages;
-	if($option == "all" OR $option == "news") {
-		$articles = query_full_array("SELECT id, title, titlelink, hitcounter FROM " . prefix('zenpage_news')." ORDER BY hitcounter DESC LIMIT $number");
-		$counter = "";
-		$poparticles = array();
-		foreach ($articles as $article) {
-		$counter++;
-			$poparticles[$counter] = array(
-					"id" => $article['id'],
-					"title" => htmlspecialchars(get_language_string($article['title'])), 
-					"titlelink" => getNewsURL($article['titlelink']),
-				  "hitcounter" => $article['hitcounter'],
-					"type" => "News"
-			);
-		}	
-		$mostpopular = $poparticles;
-	}
-	if($option == "all" OR $option == "categories") {
-		$categories = query_full_array("SELECT id, cat_name as title, cat_link as titlelink, hitcounter FROM " . prefix('zenpage_news_categories')." ORDER BY hitcounter DESC LIMIT $number");
-		$counter = "";
-		$popcats = array();
-		foreach ($categories as $cat) {
-		$counter++;
-			$popcats[$counter] = array(
-					"id" => $cat['id'],
-					"title" => htmlspecialchars(get_language_string($cat['title'])), 
-					"titlelink" => getNewsCategoryURL($cat['titlelink']),
-				  "hitcounter" => $cat['hitcounter'],
-					"type" => "Category"
-			);
-		}		
-		$mostpopular = $popcats;
-	}
-	if($option == "all" OR $option == "pages") {
-		$pages = query_full_array("SELECT id, title, titlelink, hitcounter FROM " . prefix('zenpage_pages')." ORDER BY hitcounter DESC LIMIT $number");
-		$counter = "";
-		$poppages = array();
-		foreach ($pages as $page) {
-			$counter++;
-			$poppages[$counter] = array(
-					"id" => $cat['id'],
-					"title" => htmlspecialchars(get_language_string($page['title'])), 
-					"titlelink" => getPageLinkURL($page['titlelink']),
-				  "hitcounter" => $page['hitcounter'],
-					"type" => "Page"
-			);
-		}
-		$mostpopular = $poppages;
-	}
-	if($option == "all") {
-		$mostpopular = array_merge($poparticles,$popcats,$poppages);
-	}
-	$mostpopular = sortMultiArray($mostpopular,"hitcounter","desc",true,false);
-	return $mostpopular;
-}
-
-
-function printMostPopularItems($number=10, $option="all",$showhitcount=true) {
-	$mostpopular = getMostPopularItems($number,$option);
-	echo "<ul id='zenpagemostpopular'>";
-	foreach($mostpopular as $item) {
-		echo "<li><a href='".$item['titlelink']."' title='".strip_tags($item['title'])."'><h3>".$item['title']." <small>[".$item['type']."]";
-		if($showhitcount) {
-		echo " (".$item['hitcounter'].")</small>";
-		}
-		echo "</h3></a>";
-	}
-	echo "</ul>";
-}
-
 /************************************************/
 /* News article URL functions
 /************************************************/
@@ -1744,7 +1673,7 @@ function printPrevNewsLink($prev="&laquo; ") {
 
 
 /**********************************************************/
-/* Codeblock functions - shared by Pages and News articles
+/* Functions - shared by Pages and News articles
  /**********************************************************/
 
 /**
@@ -1810,6 +1739,170 @@ function printCodeblock($number='',$titlelink='') {
 		eval("?>$codeblock");
 	}
 }
+
+/**
+ * Gets the statistic for pages, news articles or categories as an unordered list
+ * 
+ * @param int $number The number of news items to get
+ * @param string $option "all" pages, articles  and categories
+ * 											 "news" for news articles
+ * 											 "categories" for news categories
+ * 											 "pages" for pages
+ * @param string $mode "popular" most viewed for pages, news articles and categories
+ * 										 "mostrated" for news articles and pages
+ * 										 "toprated" for news articles and pages
+ * @return array
+ */
+function getZenpageStatistic($number=10, $option="all",$mode="popular") {
+	global $_zp_current_zenpage_news, $_zp_current_zenpage_pages;
+	switch($option) {
+		case "popular":
+			$sortorder = "hitcounter"; break;
+		case "mostrated":
+			$sortorder = "total_votes"; break;
+		case "toprated":
+			$sortorder = "rating"; break;
+		}
+	if($option == "all" OR $option == "news") {
+		$articles = query_full_array("SELECT id, title, titlelink, hitcounter, total_votes, rating FROM " . prefix('zenpage_news')." ORDER BY $sortorder DESC LIMIT $number");
+		$counter = "";
+		$statsarticles = array();
+		foreach ($articles as $article) {
+		$counter++;
+			$statsarticles[$counter] = array(
+					"id" => $article['id'],
+					"title" => htmlspecialchars(get_language_string($article['title'])), 
+					"titlelink" => getNewsURL($article['titlelink']),
+				  "hitcounter" => $article['hitcounter'],
+					"total_votes" => $article['total_votes'],
+					"rating" => $article['rating'],
+					"type" => "News"
+			);
+		}	
+		$stats = $statsarticles;
+	}
+	if(($option == "all" OR $option == "categories") AND ($mode != "mostrated" OR $mode != "toprated")) {
+		$categories = query_full_array("SELECT id, cat_name as title, cat_link as titlelink, hitcounter FROM " . prefix('zenpage_news_categories')." ORDER BY $sortorder DESC LIMIT $number");
+		$counter = "";
+		$statscats = array();
+		foreach ($categories as $cat) {
+		$counter++;
+			$statscats[$counter] = array(
+					"id" => $cat['id'],
+					"title" => htmlspecialchars(get_language_string($cat['title'])), 
+					"titlelink" => getNewsCategoryURL($cat['titlelink']),
+				  "hitcounter" => $cat['hitcounter'],
+					"total_votes" => "",
+					"rating" => "",
+					"type" => "Category"
+			);
+		}		
+		$stats = $statscats;
+	}
+	if($option == "all" OR $option == "pages") {
+		$pages = query_full_array("SELECT id, title, titlelink, hitcounter, total_votes, rating FROM " . prefix('zenpage_pages')." ORDER BY $sortorder DESC LIMIT $number");
+		$counter = "";
+		$statspages = array();
+		foreach ($pages as $page) {
+			$counter++;
+			$statspages[$counter] = array(
+					"id" => $cat['id'],
+					"title" => htmlspecialchars(get_language_string($page['title'])), 
+					"titlelink" => getPageLinkURL($page['titlelink']),
+				  "hitcounter" => $page['hitcounter'],
+					"total_votes" => $page['total_votes'],
+					"rating" => $page['rating'],
+					"type" => "Page"
+			);
+		}
+		$stats = $statspages;
+	}
+	if($option == "all") {
+		$stats = array_merge($statsarticles,$statscats,$statspages);
+	}
+	$stats = sortMultiArray($stats,$sortorder,"desc",true,false);
+	return $stats;
+}
+
+/**
+ * Prints the statistics Zenpage items as an unordered list
+ * 
+ * @param int $number The number of news items to get
+ * @param string $option "all" pages and articles
+ * 											 "news" for news articles
+ * 											 "pages" for pages
+ * @param string $mode "popular" most viewed for pages, news articles and categories
+ * 										 "mostrated" for news articles and pages
+ * 										 "toprated" for news articles and pages
+ * @param bool $showstats if the value should be shown									
+ */
+function printZenpageStatistic($number=10, $option="all",$mode="popular",$showstats=true) {
+	$stats = getZenpageStatistic($number, $option,$mode);
+	echo "<ul id=$cssid>";
+	foreach($stats as $item) {
+		switch($mode) {
+			case "popular":
+				$cssid = "'zenpagemostpopular'";
+				$statsvalue = $stats['hitcounter'];
+				break;
+			case "mostrated":
+				$cssid ="'zenpagemostrated'";
+				$statsvalue = $stats['total_votes'];
+				break;
+			case "toprated":
+				$cssid ="'zenpagetoprated'";
+				$statsvalue = $stats['rating'];
+				break;
+		}
+		echo "<li><a href='".$item['titlelink']."' title='".strip_tags($item['title'])."'><h3>".$item['title']." <small>[".$item['type']."]";
+		if($showhitcount) {
+			echo " (".$statsvalue.")</small>";
+		}
+		echo "</h3></a>";
+	}
+	echo "</ul>";
+}
+
+/**
+ * Prints the most popular pages, news articles and categories as an unordered list
+ * 
+ * @param int $number The number of news items to get
+ * @param string $option "all" pages and articles
+ * 											 "news" for news articles
+ * 											 "pages" for pages
+ * @param bool $showstats if the votes should be shown
+ */
+function printMostPopularItems($number=10, $option="all",$showstats=true) {
+	printZenpageStatistic($number, $option,"popular",$showstats);
+}
+
+/**
+ * Prints the most rated pages and news articles as an unordered list
+ * 
+ * @param int $number The number of news items to get
+ * @param string $option "all" pages and articles
+ * 											 "news" for news articles
+ * 											 "pages" for pages
+ * @param bool $showstats if the votes should be shown
+ */
+function printMostRatedItems($number=10, $option="all",$showstats=true) {
+	printZenpageStatistic($number, $option,"mostrated",$showstats);
+}
+
+/**
+ * Prints the top rated pages and news articles as an unordered list
+ * 
+ * @param int $number The number of news items to get
+ * @param string $option "all" pages and articles
+ * 											 "news" for news articles
+ * 											 "pages" for pages
+ * @param bool $showstats if the votes should be shown
+ */
+function printTopRatedItems($number=10, $option="all",$showstats=true) {
+	printZenpageStatistic($number, $option,"toprated",$showstats);
+}
+
+
 
 
 /************************************************/

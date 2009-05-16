@@ -37,7 +37,7 @@ if(is_NewsArticle() AND !checkforPassword()) {
   <h3><?php printNewsTitle(); ?></h3> 
   <div class="newsarticlecredit"><span class="newsarticlecredit-left"><?php printNewsDate();?> | <?php echo gettext("Comments:"); ?> <?php echo getCommentCount(); ?> | </span> <?php printNewsCategories(", ",gettext("Categories: "),"newscategories"); ?></div>
   <?php printNewsContent(); ?>
-  
+  <?php if (function_exists('printRating')) { printRating(); } ?>
 <?php 
 // COMMENTS TEST
 if (getOption('zenpage_comments_allowed')) { ?>

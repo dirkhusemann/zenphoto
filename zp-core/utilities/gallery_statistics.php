@@ -62,11 +62,11 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 			break;
 		case "pages":
 			$typename = gettext("Pages");
-			$dbquery = "SELECT id, title, titlelink, hitcounter, `show` FROM ".prefix('zenpage_pages');
+			$dbquery = "SELECT id, title, titlelink, hitcounter, total_votes, total_value, `show` FROM ".prefix('zenpage_pages');
 			break;
 		case "news":
 			$typename = gettext("News Articles");
-			$dbquery = "SELECT id, title, titlelink, hitcounter, `show` FROM ".prefix('zenpage_news');
+			$dbquery = "SELECT id, title, titlelink, hitcounter, total_votes, total_value, `show` FROM ".prefix('zenpage_news');
 			break;
 		case "newscategories":
 			$typename = gettext("News Categories");
@@ -118,14 +118,7 @@ function printBarGraph($sortorder="mostimages",$type="albums",$from_number=0, $t
 			$headline = $typename." - ".gettext("most rated");
 			break;
 		case "toprated":
-			switch($type) {
-				case "albums":
-					$itemssorted = query_full_array("SELECT * FROM " . prefix('albums') ." ORDER BY (total_value/total_votes) DESC LIMIT $limit");
-					break;
-				case "images":
-					$itemssorted = query_full_array("SELECT * FROM " . prefix('images') ." ORDER BY (total_value/total_votes) DESC LIMIT $limit");
-					break;
-			}
+			$itemssorted = query_full_array($dbquery." ORDER BY (total_value/total_votes) DESC LIMIT $limit");
 			if(empty($itemssorted)) {
 				$maxvalue = 0;
 			} else {
@@ -567,12 +560,16 @@ if(!isset($_GET['stats']) AND !isset($_GET['fulllist'])) {
 		<ul>
 			<li><a href="#pages-popular"><?php echo gettext("most viewed"); ?></a> | </li>
 			<li><a href="#pages-mostcommented"><?php echo gettext("most commented"); ?></a></li>
+			<li><a href="#pages-mostrated"><?php echo gettext("most rated"); ?></a> | </li>
+			<li><a href="#pages-toprated"><?php echo gettext("top rated"); ?></a></li>
 		</ul>
 		</li>
 		<li><strong><?php echo gettext("News articles"); ?></strong>
 		<ul>
 			<li><a href="#news-popular"><?php echo gettext("most viewed"); ?></a> | </li>
 			<li><a href="#news-mostcommented"><?php echo gettext("most commented"); ?></a></li>
+			<li><a href="#news-mostrated"><?php echo gettext("most rated"); ?></a> | </li>
+			<li><a href="#news-toprated"><?php echo gettext("top rated"); ?></a></li>
 		</ul>
 		</li>
 		<li><strong><?php echo gettext("News categories"); ?></strong>
@@ -639,6 +636,12 @@ if(!isset($_GET['stats']) AND !isset($_GET['fulllist'])) {
 <a name="pages-mostcommented"></a>
 <?php printBarGraph("mostcommented","pages"); ?>
 
+<a name="pages-mostrated"></a>
+<?php printBarGraph("mostrated","pages"); ?>
+
+<a name="pages-toprated"></a>
+<?php printBarGraph("toprated","pages"); ?>
+
 <hr />
 
 <!-- Zenpage news articles --> 
@@ -648,6 +651,11 @@ if(!isset($_GET['stats']) AND !isset($_GET['fulllist'])) {
 <a name="news-mostcommented"></a>
 <?php printBarGraph("mostcommented","news"); ?>
 
+<a name="news-mostrated"></a>
+<?php printBarGraph("mostrated","news"); ?>
+
+<a name="news-toprated"></a>
+<?php printBarGraph("toprated","news"); ?>
 <hr />
 
 <h2>Statistics for news categories</h2>
@@ -756,6 +764,12 @@ if(isset($_GET['type'])) {
 										case "mostcommented":
 											printBarGraph("mostcommented","pages",$from_number,$to_number);
 											break;
+										case "mostrated":
+											printBarGraph("mostrated","pages",$from_number,$to_number);
+											break;
+										case "toprated":
+											printBarGraph("toprated","pages",$from_number,$to_number);
+											break;
 									}
 								}
 								break;
@@ -767,6 +781,12 @@ if(isset($_GET['type'])) {
 														break;
 													case "mostcommented":
 														printBarGraph("mostcommented","news",$from_number,$to_number);
+														break;
+													case "mostrated":
+														printBarGraph("mostrated","news",$from_number,$to_number);
+														break;
+													case "toprated":
+														printBarGraph("toprated","news",$from_number,$to_number);
 														break;
 												}
 											}
