@@ -1497,7 +1497,7 @@ function printAlbumEditForm($index, $album) {
 	</div>
 	<br clear: all />
 	<?php
-	$output = apply_filter('edit_album_utilities', '', $album->name);
+	$output = apply_filter('edit_album_utilities', '', $album, $prefix);
 	if ($output) echo '<hr />'.$output;
 	?>
  </div>
@@ -1796,6 +1796,7 @@ function processAlbumEdit($index, $album) {
 		$custom = '';
 	}
 	$album->setCustomData(apply_filter('save_album_custom_data', $custom, $prefix));
+	apply_filter('save_album_utilities_data', $album, $prefix);
 	$album->save();
 
 	// Move/Copy/Rename the album after saving.

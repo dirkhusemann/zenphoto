@@ -34,7 +34,12 @@ if (isset($_GET['action'])) {
 			$extension = filesystemToInternal($extension);
 			$opt = 'zp_plugin_'.substr($extension, 0, -4);
 			if (isset($_POST[$opt]) || !is_null(getOption($opt))) { // don't create any options until plugin is selected at least once
-				setBoolOption($opt, isset($_POST[$opt]));
+				if (isset($_POST[$opt])) {
+					$value = sanitize_numeric($_POST[$opt]);
+				} else {
+					$value = 0;
+				}
+				setOption($opt, $value);
 			}
 		}
 		$saved = true;
@@ -144,14 +149,28 @@ foreach ($filelist as $extension) {
 			}
 		}
 	}
-	
+	if (strpos($extension, 'class-') === 0 || strpos($extension, 'filter-') === 0) {
+		$loadtype = 2;
+	} else {
+		$loadtype = 1;
+	}
+	$str = isolate('$plugin_is_filter', $pluginStream);
+	if (false !== $str) {
+		if (false !== eval($str)) {
+			if ($plugin_is_filter) {
+				$loadtype = 2;
+			}
+		}
+	}
 	echo "<tr>";
 	echo '<td width="30%">';
-	echo '<input type="checkbox" name="'.$opt.'" value="1"';
+	echo '<input type="checkbox" name="'.$opt.'" value="'.$loadtype.'"';
 	if ($parserr || $plugin_disable) {
 		echo 'DISABLED';
 	} else {
-		echo checked('1', getOption($opt));
+		if (getOption($opt)) {
+			echo 'CHECKED="CHECKED"';
+		}
 	}
 	echo ' /> ';
 	echo '<strong>'.$ext.'</strong>';

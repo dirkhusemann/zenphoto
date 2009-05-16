@@ -110,7 +110,7 @@ function filterAlbums($album_array) {
 function filterImages($image_array) {
 	$new_list = array();
 	foreach ($image_array as $image) {
-		if (!getOption('filter_file_searches_images_'.strtolower(substr(strrchr($image, "."), 1)))) {
+		if (!getOption('filter_file_searches_images_'.getSuffix($image))) {
 			$new_list[] = $image;
 		}
 	}

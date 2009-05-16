@@ -1587,18 +1587,26 @@ if (file_exists("zp-config.php")) {
 	$sql_statements[] = 'DELETE FROM '.$tbl_zenpage_pages.' WHERE `titlelink`=""'; // cleanup for bad records
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' DROP INDEX `titlelink`;';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD UNIQUE (`titlelink`);';
+	
 	$sql_statements[] = 'ALTER TABLE '.$tbl_albums.' ADD COLUMN `rating` FLOAT  NOT NULL DEFAULT 0';
-	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' ADD COLUMN `rating` FLOAT  NOT NULL DEFAULT 0';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_albums.' ADD COLUMN `rating_status` int(1) UNSIGNED default 3';
 	$sql_statements[] = 'UPDATE '.$tbl_albums.' SET rating=total_value / total_votes WHERE total_votes > 0';
+	
+	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' ADD COLUMN `rating` FLOAT  NOT NULL DEFAULT 0';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_images.' ADD COLUMN `rating_status` int(1) UNSIGNED default 3';
 	$sql_statements[] = 'UPDATE '.$tbl_images.' SET rating=total_value / total_votes WHERE total_votes > 0';
+	
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `total_votes` int(11) UNSIGNED default 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `total_value` int(11) UNSIGNED default 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `rating` FLOAT  NOT NULL DEFAULT 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `used_ips` longtext;';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_pages.' ADD COLUMN `rating_status` int(1) UNSIGNED default 3';
+	
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `total_votes` int(11) UNSIGNED default 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `total_value` int(11) UNSIGNED default 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `rating` FLOAT  NOT NULL DEFAULT 0';
 	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `used_ips` longtext;';
+	$sql_statements[] = 'ALTER TABLE '.$tbl_zenpage_news.' ADD COLUMN `rating_status` int(1) UNSIGNED default 3';
 	
 	
 	

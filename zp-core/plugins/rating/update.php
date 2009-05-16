@@ -49,12 +49,16 @@ if (isset($_GET['clear_rating'])) {
 	require($zp.'/template-functions.php');
 	require_once('functions-rating.php');
 	$id = sanitize_numeric($_POST['id']);
-	$rating = max(1, min(5, round(sanitize_numeric($_POST['star_rating-value'])/2)));
+	$rating = max(0, min(5, round(sanitize_numeric($_POST['star_rating-value'])/2)));
 	$dbtable = sanitize($_POST['table'],3);
 	$ip = sanitize($_SERVER['REMOTE_ADDR'], 0);
 	$oldrating = checkForIP($ip,$id,$dbtable);
 	if(!$oldrating || getOption('rating_recast')) {
-		$_rating_current_IPlist[$ip] = $rating;
+		if ($rating) {
+			$_rating_current_IPlist[$ip] = $rating;
+		} else {
+			unset($_rating_current_IPlist[$ip]); // retract vote
+		}
 		$insertip = serialize($_rating_current_IPlist);
 		if ($oldrating) {
 			$voting = 0;
@@ -68,7 +72,7 @@ if (isset($_GET['clear_rating'])) {
 		}
 		$sql = "UPDATE ".$dbtable.'SET total_votes=total_votes+'.$voting.", total_value=total_value".$valuechange.", rating=total_value/total_votes, used_ips='".$insertip."' WHERE id='".$id."'";
 		$rslt = query($sql,true);
-		//if (!$rslt) debugLog("MySQL Query"." ( $sql ) ".gettext("Failed. Error:").' '.mysql_error());
+		if (!$rslt) debugLog("MySQL Query"." ( $sql ) ".gettext("Failed. Error:").' '.mysql_error());
 	}
 }
 ?>

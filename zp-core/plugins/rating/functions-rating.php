@@ -21,16 +21,18 @@ function checkForIp($ip, $id, $dbtable) {
 	if (is_array($IPlist)) {
 		if (!empty($IPlist['used_ips'])) {
 			$_rating_current_IPlist = unserialize($IPlist['used_ips']);
-			foreach ($_rating_current_IPlist as $element=>$value) {
-				break;
-			}
-			if (!is_numeric($element)) {
-				if (array_key_exists($ip, $_rating_current_IPlist)) {
-					return $_rating_current_IPlist[$ip];
+			if (!empty($_rating_current_IPlist)) {
+				foreach ($_rating_current_IPlist as $element=>$value) {
+					break;
 				}
-			} else {
-				if (in_array($ip, $_rating_current_IPlist)) {
-					return $IPlist['rating']; // use the average when old data.
+				if (!is_numeric($element)) {
+					if (array_key_exists($ip, $_rating_current_IPlist)) {
+						return $_rating_current_IPlist[$ip];
+					}
+				} else {
+					if (in_array($ip, $_rating_current_IPlist)) {
+						return $IPlist['rating']; // use the average when old data.
+					}
 				}
 			}
 		}

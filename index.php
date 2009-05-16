@@ -18,10 +18,6 @@ if (getOption('zenphoto_release') != ZENPHOTO_RELEASE) {
 	exit();
 }
 
-$_zp_plugin_scripts = array();
-$_zp_flash_player = NULL;
-$_zp_HTML_cache = NULL;
-
 header ('Content-Type: text/html; charset=' . getOption('charset'));
 $obj = '';
 
@@ -81,9 +77,8 @@ if (isset($_GET['p'])) {
 }
 
 // Load plugins, then load the requested $obj (page, image, album, or index; defined above).
-$_zp_loaded_plugins = array();
 if (file_exists(SERVERPATH . "/" . internalToFilesystem($obj)) && $zp_request) {
-	foreach (getEnabledPlugins() as $extension) {
+	foreach (getEnabledPlugins() as $extension=>$loadtype) {
 		$_zp_loaded_plugins[] = $extension;
 		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
 	}

@@ -19,8 +19,8 @@ if (getOption('zp_plugin_zenpage')) {
 			
 // load the class & filter plugins
 $class_optionInterface = array();
-foreach (getEnabledPlugins() as $extension) {
-	if (strpos($extension, 'class-') !== false || strpos($extension, 'filter-') === 0) {
+foreach (getEnabledPlugins() as $extension => $class) {
+	if ($class > 1) {
 		$option_interface = NULL;
 		require_once(SERVERPATH . "/" . ZENFOLDER . PLUGIN_FOLDER . $extension);
 		if (!is_null($option_interface)) {

@@ -33,8 +33,9 @@ function toolbox_crop_image($albumname, $imagename) {
 	}
 }
 
-function edit_crop_image($output, $albumname, $imagename, $subpage, $tagsort) {
-	$image = newimage(New Album(New Gallery(), $albumname),$imagename);
+function edit_crop_image($output, $image, $prefix, $subpage, $tagsort) {
+	$albumname = $image->getAlbum()->name;
+	$imagename = $image->filename;
 	if (isImagePhoto($image)) {
 		$output .= 
 			'<p class="buttons" style="clear: both;">'.

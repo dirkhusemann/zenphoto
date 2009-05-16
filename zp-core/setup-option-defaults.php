@@ -244,4 +244,12 @@ function setDefault($option, $default) {
 	setOptionDefault('image_gray', 0);
 	setOptionDefault('search_space_is_or', 0);
 	setOptionDefault('search_no_albums', 0);
+	
+	foreach (getEnabledPlugins() as $extension => $class) { // fix the options of 'assumed' backend plugins
+		if ($class == 1 && (strpos($extension, 'class-') !== false || strpos($extension, 'filter-') === 0)) {
+			setOption('zp_plugin_'.$extension, 2);
+		}
+	}
+
+	
 	?>

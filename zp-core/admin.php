@@ -281,7 +281,7 @@ if (defined('RELEASE')) {
 	$plugins = getEnabledPlugins();
 	if (count($plugins) > 0) {
 		natsort($plugins);
-		foreach ($plugins as $extension) {
+		foreach ($plugins as $extension=>$loadtype) {
 			$ext = substr($extension, 0, strlen($extension)-4);
 			$pluginStream = file_get_contents(SERVERPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . $extension);
 			$str =  $pluginStream;

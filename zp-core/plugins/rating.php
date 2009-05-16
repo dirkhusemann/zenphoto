@@ -6,25 +6,28 @@
  * 
  * An option exists to allow viewers to recast their votes. If not set, a viewer may
  * vote only one time and not change his mind.
+ * 
+ * Customize the stars by placing a modified copy of jquery.rating.css in your theme folder
  *  
  * @author Stephen Billard (sbillard)and Malte Müller (acrylian)
  * @version 2.0.0
  * @package plugins
  */
 require_once(dirname(dirname(__FILE__)).'/functions.php');
-
+$plugin_is_filter = true;
 $plugin_description = gettext("Adds several theme functions to enable images, album, news, or pages to be rating by users.");
 $plugin_author = "Stephen Billard (sbillard)and Malte Müller (acrylian)";
 $plugin_version = '2.0.0';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---rating.php.html";
 $option_interface = new jquery_rating();
 
-// register the scripts needed
+register_filter('edit_album_utilities', 'optionVoteStatus', 3);
+register_filter('save_album_utilities_data', 'optionVoteStatusSave', 2);
+
 $ME = substr(basename(__FILE__),0,-4);
+// register the scripts needed
 addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.$ME.'/jquery.MetaData.js"></script>');
 addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.$ME.'/jquery.rating.js"></script>');
-addPluginScript('<link rel="stylesheet" href="'.WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.$ME.'/jquery.rating.css" type="text/css" />');
-
 require_once($ME.'/functions-rating.php');
 
 /**
@@ -32,6 +35,7 @@ require_once($ME.'/functions-rating.php');
  *
  */
 class jquery_rating {
+	var $ratingstate;
 	/**
 	 * class instantiation function
 	 *
@@ -39,7 +43,10 @@ class jquery_rating {
 	 */
 	function jquery_rating() {
 		setOptionDefault('rating_recast', 1);
+		setOptionDefault('rating_status', 3);
+		$this->ratingstate = array('open' => 3, 'members & guests' => 2, 'members only' => 1, 'closed' => 0);
 	}
+
 
 	/**
 	 * Reports the supported options
@@ -48,7 +55,10 @@ class jquery_rating {
 	 */
 	function getOptionsSupported() {
 		return array(	gettext('Clear ratings') => array('key' => 'clear_rating', 'type' => 2,
-										'desc' => gettext("Sets all images and albums to unrated.")),
+										'desc' => gettext('Sets all images and albums to unrated.')),
+									gettext('Voting state') => array('key' => 'rating_status', 'type' => 4,
+										'buttons' => $this->ratingstate,
+										'desc' => gettext('<em>Enable</em> state of voting.')),
 									gettext('Recast vote') =>array('key' => 'rating_recast', 'type' => 1,
 										'desc' => gettext('Allow users to change their vote.'))
 								);
@@ -75,6 +85,7 @@ class jquery_rating {
 
 }
 
+$_rating_css_loaded = false;
 /**
  * Prints the rating star form and the current rating
  * Insert this function call in the page script where you 
@@ -88,10 +99,43 @@ class jquery_rating {
  * @param bool $vote set to false to disable voting
  * @param object $object optional object for the ratings target. If not set, the current page object is used
  */
-function printRating($vote=true, $object=NULL) {
+function printRating($vote=3, $object=NULL) {
+	global $_zp_gallery_page, $_rating_css_loaded;
 	if (is_null($object)) {
 		getCurrentPageObject($object, $table);
 	}
+	$vote = min($vote, getOption('rating_status'), $object->get('rating_status'));
+	switch ($vote) {
+		case 1: // members only
+			if (!zp_loggedin()) {
+				$vote = 0;
+			}
+			break;
+		case 2: // members & guests
+			switch ($_zp_gallery_page) {
+				case 'album.php':
+					$album = $object;
+					$hint = '';
+					if (!(zp_loggedin() || checkAlbumPassword($album->name, $hint))) {
+						$vote = 0;
+					}
+					break;
+				case 'pages.php':
+				case 'news.php':
+					if (!zp_loggedin()) { // no guest password
+						$vote = 0;
+					}
+					break;
+				default:
+					$album = $object->getAlbum();
+					$hint = '';
+					if (!(zp_loggedin() || checkAlbumPassword($album->name, $hint))) {
+						$vote = 0;
+					}
+					break;
+			}
+	}
+
 	$rating = round($object->get('rating'));
   $votes = $object->get('total_votes');
 	$id = $object->get('id');
@@ -110,14 +154,27 @@ function printRating($vote=true, $object=NULL) {
   } else {
   	$msg = gettext('Not yet rated');
   }
-	?>
-	<span class="rating">
-		<form name="star_rating">
+  if (!$_rating_css_loaded) {
+	  $theme = getCurrentTheme();
+	  $css = SERVERPATH.'/'.THEMEFOLDER. '/'.internalToFilesystem($theme).'/jquery.rating.css';
+		if (file_exists($css)) {
+			$css = WEBPATH.'/'.THEMEFOLDER.'/'.$theme.'/jquery.rating.css';
+		} else {
+			$css = WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.substr(basename(__FILE__),0,-4).'/jquery.rating.css';
+		}
+	  ?>
+		<link rel="stylesheet" href="<?php echo $css; ?>" type="text/css" />
 		<script type="text/javascript">
 			$.fn.rating.options = { 
-				cancel: '<?php echo gettext('reset'); ?>'   // advisory title for the 'cancel' link
+				cancel: '<?php echo gettext('retract'); ?>'   // advisory title for the 'cancel' link
 		 	}; 
  		</script>
+		<?php
+		$_rating_css_loaded = true;
+  }
+  ?>
+	<span class="rating">
+		<form name="star_rating">
 			<?php
 			if ($rating > 0) {
 				?>
@@ -152,10 +209,16 @@ function printRating($vote=true, $object=NULL) {
 		  <input type="radio" class="star {split:2}" name="star_rating-value" value="10" title="<?php echo gettext('5 stars'); ?>"/>
 		  <span id="submit_button<?php echo $unique; ?>">
 		  <input type="button" value="<?php echo gettext('Submit &raquo;'); ?>" onClick="javascript:
-					var dataString = $(this.form).serialize();   
-					if (dataString) {
+					var dataString = $(this.form).serialize();
+					if (dataString || (<?php echo $recast; ?> && <?php echo $oldrating; ?>)) {
 						<?php
-						if (!$recast) {
+						if ($recast) {
+							?>
+							if (!dataString) {
+								dataString = 'star_rating-value=0';
+							}
+							<?php
+						} else {
 							?>
 							$('input',this.form).rating('disable');
 							$('#submit_button<?php echo $unique; ?>').hide();
@@ -175,7 +238,8 @@ function printRating($vote=true, $object=NULL) {
 		  </span>
 	  </form>
 	</span>
-  <span class="vote" id="vote<?php echo $unique; ?>" style="clear:all">
+	<span style="line-height: 0em;"><br clear=all /></span>
+  <span class="vote" id="vote<?php echo $unique; ?>">
   	<?php echo $msg; ?>
   </span>
 	<?php
@@ -213,6 +277,28 @@ function getRating($object=NULL) {
 		getCurrentPageObject($object, $table);
 	}
 	return $object->get('rating');
+}
+
+function optionVoteStatus($before, $album, $prefix) {
+	$me = new jquery_rating();
+	$currentvalue = $album->get('rating_status');
+	$output = 'Vote Status:<ul style="list-style-type: none;">';
+	foreach($me->ratingstate as $text=>$value) {
+		if($value == $currentvalue) {
+			$checked = "checked='checked' ";
+		} else {
+			$checked = '';
+		} 
+		$output .= "<li><input type='radio' name='".$prefix."rating_status' id='".$value."-".$prefix."rating_status' value='".$value."' ".$checked."/><label for='".$value."-".$prefix."rating_status'> ".$text."</label></li>";
+	}
+	if (!empty($before)) {
+		$output = $before.'<hr>'.$output.'</ul>';
+	}
+	return $output;
+}
+
+function optionVoteStatusSave($album, $prefix) {
+	$album->set('rating_status', sanitize($_POST[$prefix.'rating_status']));
 }
 
 ?>

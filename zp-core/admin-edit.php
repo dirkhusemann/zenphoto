@@ -230,6 +230,7 @@ if (isset($_GET['album'])) {
 										$custom = '';
 									}
 									$image->setCustomData(apply_filter('save_image_custom_data', $custom, $i));
+									apply_filter('save_image_utilities_data', $image, $i);
 									$image->save();
 
 									// Process move/copy/rename
@@ -797,7 +798,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						} else {
 							$hr = false;
 						}
-						$output = apply_filter('edit_image_utilities', '', $folder, $filename, $pagenum, $tagsort);
+						$output = apply_filter('edit_image_utilities', '', $image, $currentimage, $pagenum, $tagsort);
 						if ($output) {
 							if (!$hr) echo '<hr />';
 							echo $output;

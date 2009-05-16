@@ -34,6 +34,61 @@ require_once(dirname(__FILE__).'/functions-i18n.php');
 
 $_zp_setupCurrentLocale_result = setMainDomain();
 
+$_zp_plugin_scripts = array();
+$_zp_loaded_plugins = array();
+$_zp_flash_player = NULL;
+$_zp_HTML_cache = NULL;
+
+// Note: The database setup/upgrade uses this list, so if fields are added or deleted, setup.php should be
+//   run or the new data won't be stored (but existing fields will still work; nothing breaks).
+$_zp_exifvars = array(
+	// Database Field       => array('IFDX', 	 'ExifKey',          'ZP Display Text',        				 	 Display?)
+	'EXIFOrientation'       => array('IFD0',   'Orientation',       gettext('Orientation'),            false),
+	'EXIFMake'              => array('IFD0',   'Make',              gettext('Camera Maker'),           true),
+	'EXIFModel'             => array('IFD0',   'Model',             gettext('Camera Model'),           true),
+	'EXIFExposureTime'      => array('SubIFD', 'ExposureTime',      gettext('Shutter Speed'),          true),
+	'EXIFFNumber'           => array('SubIFD', 'FNumber',           gettext('Aperture'),               true),
+	'EXIFFocalLength'       => array('SubIFD', 'FocalLength',       gettext('Focal Length'),           true),
+	'EXIFFocalLength35mm'   => array('SubIFD', 'FocalLength35mmEquiv', gettext('35mm Equivalent Focal Length'), false),
+	'EXIFISOSpeedRatings'   => array('SubIFD', 'ISOSpeedRatings',   gettext('ISO Sensitivity'),        true),
+	'EXIFDateTimeOriginal'  => array('SubIFD', 'DateTimeOriginal',  gettext('Time Taken'),             true),
+	'EXIFExposureBiasValue' => array('SubIFD', 'ExposureBiasValue', gettext('Exposure Compensation'),  true),
+	'EXIFMeteringMode'      => array('SubIFD', 'MeteringMode',      gettext('Metering Mode'),          true),
+	'EXIFFlash'             => array('SubIFD', 'Flash',             gettext('Flash Fired'),            true),
+	'EXIFImageWidth'        => array('SubIFD', 'ExifImageWidth',    gettext('Original Width'),         false),
+	'EXIFImageHeight'       => array('SubIFD', 'ExifImageHeight',   gettext('Original Height'),        false),
+	'EXIFContrast'          => array('SubIFD', 'Contrast',          gettext('Contrast Setting'),       false),
+	'EXIFSharpness'         => array('SubIFD', 'Sharpness',         gettext('Sharpness Setting'),      false),
+	'EXIFSaturation'        => array('SubIFD', 'Saturation',        gettext('Saturation Setting'),     false),
+	'EXIFWhiteBalance'			=> array('SubIFD', 'WhiteBalance',			gettext('White Balance'),					 false),
+	'EXIFSubjectDistance'		=> array('SubIFD', 'SubjectDistance',		gettext('Subject Distance'),			 false),
+	'EXIFGPSLatitude'       => array('GPS',    'Latitude',          gettext('Latitude'),               false),
+	'EXIFGPSLatitudeRef'    => array('GPS',    'Latitude Reference',gettext('Latitude Reference'),     false),
+	'EXIFGPSLongitude'      => array('GPS',    'Longitude',         gettext('Longitude'),              false),
+	'EXIFGPSLongitudeRef'   => array('GPS',    'Longitude Reference',gettext('Longitude Reference'),   false),
+	'EXIFGPSAltitude'       => array('GPS',    'Altitude',          gettext('Altitude'),               false),
+	'EXIFGPSAltitudeRef'    => array('GPS',    'Altitude Reference',gettext('Altitude Reference'),     false)
+	);
+
+$_zp_supported_images = graphicsLibInfo();
+unset($_zp_supported_images['Library']);
+foreach ($_zp_supported_images as $key=>$type) {
+	unset($_zp_supported_images[$key]);
+	if ($type) $_zp_supported_images[strtolower($key)] = true;
+}
+$_zp_supported_images = array_keys($_zp_supported_images);
+
+/**
+ * initializes the $_zp_exifvars array display state
+ *
+ */
+function setexifvars() {
+	global $_zp_exifvars;
+	foreach ($_zp_exifvars as $key=>$item) {
+		$_zp_exifvars[$key][3] = getOption($key);
+	}
+}
+
 /**
  * parses the allowed HTML tags for use by htmLawed
  *
@@ -60,56 +115,6 @@ function parseAllowedTags(&$source) {
 	$source = trim(substr($source, 1)); //strip the close paren
 	return $a;
 }
-
-	// Note: The database setup/upgrade uses this list, so if fields are added or deleted, setup.php should be
-	//   run or the new data won't be stored (but existing fields will still work; nothing breaks).
-	$_zp_exifvars = array(
-		// Database Field       => array('IFDX', 	 'ExifKey',          'ZP Display Text',        				 	 Display?)
-		'EXIFOrientation'       => array('IFD0',   'Orientation',       gettext('Orientation'),            false),
-		'EXIFMake'              => array('IFD0',   'Make',              gettext('Camera Maker'),           true),
-		'EXIFModel'             => array('IFD0',   'Model',             gettext('Camera Model'),           true),
-		'EXIFExposureTime'      => array('SubIFD', 'ExposureTime',      gettext('Shutter Speed'),          true),
-		'EXIFFNumber'           => array('SubIFD', 'FNumber',           gettext('Aperture'),               true),
-		'EXIFFocalLength'       => array('SubIFD', 'FocalLength',       gettext('Focal Length'),           true),
-		'EXIFFocalLength35mm'   => array('SubIFD', 'FocalLength35mmEquiv', gettext('35mm Equivalent Focal Length'), false),
-		'EXIFISOSpeedRatings'   => array('SubIFD', 'ISOSpeedRatings',   gettext('ISO Sensitivity'),        true),
-		'EXIFDateTimeOriginal'  => array('SubIFD', 'DateTimeOriginal',  gettext('Time Taken'),             true),
-		'EXIFExposureBiasValue' => array('SubIFD', 'ExposureBiasValue', gettext('Exposure Compensation'),  true),
-		'EXIFMeteringMode'      => array('SubIFD', 'MeteringMode',      gettext('Metering Mode'),          true),
-		'EXIFFlash'             => array('SubIFD', 'Flash',             gettext('Flash Fired'),            true),
-		'EXIFImageWidth'        => array('SubIFD', 'ExifImageWidth',    gettext('Original Width'),         false),
-		'EXIFImageHeight'       => array('SubIFD', 'ExifImageHeight',   gettext('Original Height'),        false),
-		'EXIFContrast'          => array('SubIFD', 'Contrast',          gettext('Contrast Setting'),       false),
-		'EXIFSharpness'         => array('SubIFD', 'Sharpness',         gettext('Sharpness Setting'),      false),
-		'EXIFSaturation'        => array('SubIFD', 'Saturation',        gettext('Saturation Setting'),     false),
-		'EXIFWhiteBalance'			=> array('SubIFD', 'WhiteBalance',			gettext('White Balance'),					 false),
-		'EXIFSubjectDistance'		=> array('SubIFD', 'SubjectDistance',		gettext('Subject Distance'),			 false),
-		'EXIFGPSLatitude'       => array('GPS',    'Latitude',          gettext('Latitude'),               false),
-		'EXIFGPSLatitudeRef'    => array('GPS',    'Latitude Reference',gettext('Latitude Reference'),     false),
-		'EXIFGPSLongitude'      => array('GPS',    'Longitude',         gettext('Longitude'),              false),
-		'EXIFGPSLongitudeRef'   => array('GPS',    'Longitude Reference',gettext('Longitude Reference'),   false),
-		'EXIFGPSAltitude'       => array('GPS',    'Altitude',          gettext('Altitude'),               false),
-		'EXIFGPSAltitudeRef'    => array('GPS',    'Altitude Reference',gettext('Altitude Reference'),     false)
-		);
-
-/**
- * initializes the $_zp_exifvars array display state
- *
- */
-function setexifvars() {
-	global $_zp_exifvars;
-	foreach ($_zp_exifvars as $key=>$item) {
-		$_zp_exifvars[$key][3] = getOption($key);
-	}
-}
-$_zp_supported_images = graphicsLibInfo();
-unset($_zp_supported_images['Library']);
-foreach ($_zp_supported_images as $key=>$type) {
-	unset($_zp_supported_images[$key]);
-	if ($type) $_zp_supported_images[strtolower($key)] = true;
-}
-$_zp_supported_images = array_keys($_zp_supported_images);
-
 // Image utility functions
 /**
  * Returns true if the file is an image
@@ -638,8 +643,8 @@ function getEnabledPlugins() {
 	foreach ($filelist as $extension) {
 		$extension = filesystemToInternal($extension);
 		$opt = 'zp_plugin_'.substr($extension, 0, strlen($extension)-4);
-		if (getOption($opt)) {
-			$pluginlist[] = $extension;
+		if ($option = getOption($opt)) {
+			$pluginlist[$extension] = $option;
 		}
 	}
 	return $pluginlist;

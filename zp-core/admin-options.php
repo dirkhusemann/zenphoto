@@ -387,21 +387,21 @@ if (isset($_GET['action'])) {
 				if (isset($_POST['images_per_page'])) setThemeOption($table, 'images_per_page', sanitize($_POST['images_per_page'],3));
 				if (isset($_POST['custom_index_page'])) setThemeOption($table, 'custom_index_page', sanitize($_POST['custom_index_page'], 3));
 				if (isset($_POST['user_registration_page'])) setThemeOption($table, 'user_registration_page', sanitize($_POST['user_registration_page'], 3));
-				if (isset($_POST['user_registration_text'])) setThemeOption($table, 'user_registration_text', process_language_string_save('user_registration_text', 3));  
-				if (isset($_POST['user_registration_tip'])) setThemeOption($table, 'user_registration_tip', process_language_string_save('user_registration_tip', 3));  
+				if (isset($_POST['user_registration_text'])) setThemeOption($table, 'user_registration_text', process_language_string_save('user_registration_text', 3));
+				if (isset($_POST['user_registration_tip'])) setThemeOption($table, 'user_registration_tip', process_language_string_save('user_registration_tip', 3));
 				$otg = getThemeOption($table, 'thumb_gray');
 				setBoolThemeOption($table, 'thumb_gray', isset($_POST['thumb_gray']));
-				if ($otg = getThemeOption($table, 'thumb_gray')) $wmo = 99; // force cache clear		
+				if ($otg = getThemeOption($table, 'thumb_gray')) $wmo = 99; // force cache clear
 				$oig = getThemeOption($table, 'image_gray');
 				setBoolThemeOption($table, 'image_gray', isset($_POST['image_gray']));
-				if ($oig = getThemeOption($table, 'image_gray')) $wmo = 99; // force cache clear		
+				if ($oig = getThemeOption($table, 'image_gray')) $wmo = 99; // force cache clear
 				if ($nch != $ch || $ncw != $cw) { // the crop height/width has been changed
 					$sql = 'UPDATE '.prefix('images').' SET `thumbX`=NULL,`thumbY`=NULL,`thumbW`=NULL,`thumbH`=NULL WHERE `thumbY` IS NOT NULL';
 					query($sql);
 					$wmo = 99; // force cache clear as well.
 				}
 			}
-}
+		}
 		/*** Plugin Options ***/
 		if (isset($_POST['savepluginoptions'])) {
 			// all plugin options are handled by the custom option code.
@@ -419,7 +419,7 @@ if (isset($_GET['action'])) {
 							break;
 						case 'chkbox':
 							if (isset($_POST[$key])) {
-								$value = 1;
+								$value = sanitize($_POST[$key], 1);
 							} else {
 								$value = 0;
 							}
@@ -2072,7 +2072,7 @@ if (empty($alterrights)) {
 		<tr>
 		<td style="padding: 0;margin:0" colspan="3">
 		<?php
-		foreach (getEnabledPlugins() as $extension) {
+		foreach (getEnabledPlugins() as $extension=>$loadtype) {
 			$ext = substr($extension, 0, strlen($extension)-4);
 			$option_interface = NULL;
 			if (array_key_exists($extension, $class_optionInterface)) {
