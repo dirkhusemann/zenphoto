@@ -65,6 +65,8 @@ if (!isMyALbum($albumname, EDIT_RIGHTS)) { // prevent nefarious access to this p
 	exit();
 }
 
+// get what image side is being used for resizing
+$use_side = getOption('image_use_side');
 // get full width and height
 $gallery = new Gallery();
 $albumobj = new Album($gallery,$albumname);
@@ -80,15 +82,44 @@ if (isImagePhoto($imageobj)) {
 	die(gettest('attempt to crop an object which is not an image.'));
 }
 	
-$size = min(400, $width, $height);
-if ($width >= $height) {
-	$sr = $size/$width;
-	$sizedwidth = $size;
-	$sizedheight = round($height/$width*$size);
-} else {
-	$sr = $size/$height;
-	$sizedwidth = Round($width/$height*$size);
-	$sizedheight = $size;
+// get appropriate $sizedwidth and $sizedheight
+switch ($use_side) {
+	case 'longest':
+		$size = min(400, $width, $height);
+		if ($width >= $height) {
+			$sr = $size/$width;
+			$sizedwidth = $size;
+			$sizedheight = round($height/$width*$size);
+		} else {
+			$sr = $size/$height;
+			$sizedwidth = Round($width/$height*$size);
+			$sizedheight = $size;
+		}
+		break;
+	case 'shortest':
+		$size = min(400, $width, $height);
+		if ($width < $height) {
+			$sr = $size/$width;
+			$sizedwidth = $size;
+			$sizedheight = round($height/$width*$size);
+		} else {
+			$sr = $size/$height;
+			$sizedwidth = Round($width/$height*$size);
+			$sizedheight = $size;
+		}
+		break;
+	case 'width':
+		$size = $width;
+		$sr = 1;
+		$sizedwidth = $size;
+		$sizedheight = round($height/$width*$size);
+		break;
+	case 'height':
+		$size = $height;
+		$sr = 1;
+		$sizedwidth = Round($width/$height*$size);
+		$sizedheight = $size;
+		break;
 }
 
 $imageurl = "../i.php?a=".pathurlencode($albumname)."&i=".urlencode($imagename)."&s=".$size.'&admin';
