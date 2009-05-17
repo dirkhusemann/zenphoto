@@ -24,6 +24,11 @@ $option_interface = new jquery_rating();
 register_filter('edit_album_utilities', 'optionVoteStatus', 3);
 register_filter('save_album_utilities_data', 'optionVoteStatusSave', 2);
 
+if (getOption('rating_image_individual_control')) {
+	register_filter('edit_image_utilities', 'optionVoteStatus', 3);
+	register_filter('save_image_utilities_data', 'optionVoteStatusSave', 2);
+}
+
 $ME = substr(basename(__FILE__),0,-4);
 // register the scripts needed
 addPluginScript('<script type="text/javascript" src="'.WEBPATH.'/'.ZENFOLDER.PLUGIN_FOLDER.$ME.'/jquery.MetaData.js"></script>');
@@ -44,6 +49,7 @@ class jquery_rating {
 	function jquery_rating() {
 		setOptionDefault('rating_recast', 1);
 		setOptionDefault('rating_status', 3);
+		setOptionDefault('rating_image_individual_control', 0);
 		$this->ratingstate = array('open' => 3, 'members & guests' => 2, 'members only' => 1, 'closed' => 0);
 	}
 
@@ -59,6 +65,8 @@ class jquery_rating {
 									gettext('Voting state') => array('key' => 'rating_status', 'type' => 4,
 										'buttons' => $this->ratingstate,
 										'desc' => gettext('<em>Enable</em> state of voting.')),
+									gettext('Individual image control') =>array('key' => 'rating_image_individual_control', 'type' => 1,
+										'desc' => gettext('Enable to allow voting status control on individual images.')),
 									gettext('Recast vote') =>array('key' => 'rating_recast', 'type' => 1,
 										'desc' => gettext('Allow users to change their vote.'))
 								);
@@ -210,7 +218,7 @@ function printRating($vote=3, $object=NULL) {
 		  <span id="submit_button<?php echo $unique; ?>">
 		  <input type="button" value="<?php echo gettext('Submit &raquo;'); ?>" onClick="javascript:
 					var dataString = $(this.form).serialize();
-					if (dataString || (<?php echo $recast; ?> && <?php echo $oldrating; ?>)) {
+					if (dataString || <?php printf('%u',$recast && $oldrating); ?>) {
 						<?php
 						if ($recast) {
 							?>
@@ -279,9 +287,17 @@ function getRating($object=NULL) {
 	return $object->get('rating');
 }
 
-function optionVoteStatus($before, $album, $prefix) {
+/**
+ * Option filter handler for images and albums
+ *
+ * @param string $before HTML from prior filters
+ * @param object $object object being rated
+ * @param string $prefix indicator if admin is processing multiple objects
+ * @return string Combined HTML
+ */
+function optionVoteStatus($before, $object, $prefix) {
 	$me = new jquery_rating();
-	$currentvalue = $album->get('rating_status');
+	$currentvalue = $object->get('rating_status');
 	$output = 'Vote Status:<ul style="list-style-type: none;">';
 	foreach($me->ratingstate as $text=>$value) {
 		if($value == $currentvalue) {
@@ -291,14 +307,18 @@ function optionVoteStatus($before, $album, $prefix) {
 		} 
 		$output .= "<li><input type='radio' name='".$prefix."rating_status' id='".$value."-".$prefix."rating_status' value='".$value."' ".$checked."/><label for='".$value."-".$prefix."rating_status'> ".$text."</label></li>";
 	}
-	if (!empty($before)) {
-		$output = $before.'<hr>'.$output.'</ul>';
-	}
+	$output = $before.'<br / clear=all><hr>'.$output.'</ul>';
 	return $output;
 }
 
-function optionVoteStatusSave($album, $prefix) {
-	$album->set('rating_status', sanitize($_POST[$prefix.'rating_status']));
+/**
+ * Option save handler for the filter
+ *
+ * @param object $object object being rated
+ * @param string $prefix indicator if admin is processing multiple objects
+ */
+function optionVoteStatusSave($object, $prefix) {
+	$object->set('rating_status', sanitize($_POST[$prefix.'rating_status']));
 }
 
 ?>

@@ -4,6 +4,7 @@
  * 
  * @package plugins
  */
+$plugin_is_filter = true;
 $plugin_description = gettext("Example filter for custom data.");
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.0.0';

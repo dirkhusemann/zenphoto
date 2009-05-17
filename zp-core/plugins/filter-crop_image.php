@@ -8,6 +8,7 @@
  * @package plugins
  */
 
+$plugin_is_filter = true;
 $plugin_description = gettext("An image crop tool for the admin toolbox on your theme pages.");
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.0.0';

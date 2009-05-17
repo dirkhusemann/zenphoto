@@ -8,6 +8,7 @@
  * @package plugins
  */
 
+$plugin_is_filter = true;
 $plugin_description = gettext("An example of how to create extensions to the  administrative toolbox on your theme pages.");
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.0.0';

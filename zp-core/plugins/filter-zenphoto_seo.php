@@ -3,6 +3,7 @@
  * translates accented characters to unaccented ones
  * @package plugins
  */
+$plugin_is_filter = true;
 $plugin_description = gettext("Filter applied to filenames to translate accented characters to unaccented ones for seo friendly URLs.");
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.0.0';

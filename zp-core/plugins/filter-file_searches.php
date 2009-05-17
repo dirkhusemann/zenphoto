@@ -3,6 +3,7 @@
  * Filters out images/albums from the filesystem lists
  * @package plugins
  */
+$plugin_is_filter = true;
 $plugin_description = gettext("Filter out files from albums and image searches that we do not want shown. See the plugin options for configuration.");
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.0.0';

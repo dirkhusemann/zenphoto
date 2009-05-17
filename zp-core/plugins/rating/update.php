@@ -57,7 +57,9 @@ if (isset($_GET['clear_rating'])) {
 		if ($rating) {
 			$_rating_current_IPlist[$ip] = $rating;
 		} else {
-			unset($_rating_current_IPlist[$ip]); // retract vote
+			if (isset($_rating_current_IPlist[$ip])) {
+				unset($_rating_current_IPlist[$ip]); // retract vote
+			}
 		}
 		$insertip = serialize($_rating_current_IPlist);
 		if ($oldrating) {
