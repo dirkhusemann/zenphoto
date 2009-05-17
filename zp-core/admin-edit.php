@@ -791,20 +791,18 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 								<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="6" <?php checked(6, $rotation); echo $disablerotate ?> /> <?php echo gettext('270 degrees'); ?>
 							</p>
 							<hr />
-							<p class="buttons" style="clear: both"><a href="admin-thumbcrop.php?a=<?php echo urlencode($album->name); ?>&amp;i=<?php echo urlencode($image->filename); ?>&amp;subpage=<?php echo $pagenum; ?>&amp;tagsort=<?php echo $tagsort; ?>"
-											title="<?php printf(gettext('crop %s'), $image->filename); ?>"  ><img src="images/shape_handles.png" alt="" /><?php echo gettext("Crop thumbnail"); ?></a></p>
+							<p class="buttons" style="clear: both">
+								<a href="admin-thumbcrop.php?a=<?php echo urlencode($album->name); ?>&amp;i=<?php echo urlencode($image->filename); ?>&amp;subpage=<?php echo $pagenum; ?>&amp;tagsort=<?php echo $tagsort; ?>"
+											title="<?php printf(gettext('crop %s'), $image->filename); ?>"  >
+									<img src="images/shape_handles.png" alt="" /><?php echo gettext("Crop thumbnail"); ?>
+								</a>
+							</p>
+							<span style="line-height: 0em;"><br clear=all /></span>
 							<?php
-							$hr = true;
-						} else {
-							$hr = false;
 						}
-						$output = apply_filter('edit_image_utilities', '', $image, $currentimage, $pagenum, $tagsort);
-						if ($output) {
-							if (!$hr) echo '<hr />';
-							echo $output;
-						}
+						echo apply_filter('edit_image_utilities', '<!--image-->', $image, $currentimage, $pagenum, $tagsort); //pass space as HTML because there is already a button shown for cropimage
 						?>
-						<br clear: all /><br />
+						<span style="line-height: 0em;"><br clear=all /></span>
 						</div>
 						<span class="imageextrainfo" style="display: none">
 						<h2 class="h2_bordered_edit"><?php echo gettext("Tags"); ?></h2>

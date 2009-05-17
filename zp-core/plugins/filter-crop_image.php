@@ -39,11 +39,12 @@ function edit_crop_image($output, $image, $prefix, $subpage, $tagsort) {
 	$imagename = $image->filename;
 	if (isImagePhoto($image)) {
 		$output .= 
-			'<p class="buttons" style="clear: both;">'.
-					'<a href="'.WEBPATH."/".ZENFOLDER . PLUGIN_FOLDER.'filter-crop_image.php?a='.pathurlencode($albumname).
-							'&amp;i='.urlencode($imagename).'&amp;performcrop=backend&amp;subpage='.$subpage.'&amp;tagsort='.$tagsort.'">'.
-							'<img src="images/shape_handles.png" alt="" />'.gettext("Crop image").'</a>'.
-			'</p>';
+			'<p class="buttons" >'."\n".
+					'<a href="'.WEBPATH."/".ZENFOLDER . PLUGIN_FOLDER.'filter-crop_image.php?a='.pathurlencode($albumname)."\n".
+							'&amp;i='.urlencode($imagename).'&amp;performcrop=backend&amp;subpage='.$subpage.'&amp;tagsort='.$tagsort.'">'."\n".
+							'<img src="images/shape_handles.png" alt="" />'.gettext("Crop image").'</a>'."\n".
+			'</p>'."\n".
+			'<span style="line-height: 0em;"><br clear=all /></span>'."\n";
 	}
 	return $output;
 }

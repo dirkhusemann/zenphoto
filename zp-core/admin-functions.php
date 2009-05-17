@@ -974,7 +974,7 @@ function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
 	}
 	if (count($tags) > 0) {
 		generateUnorderedListFromArray($tags, $tags, $postit, false, true, false);
-		echo '<hr>';
+		echo '<hr />';
 	}
 	generateUnorderedListFromArray(array(), $displaylist, $postit, false, true, false);
 	echo '</ul>';
@@ -1487,20 +1487,20 @@ function printAlbumEditForm($index, $album) {
 		<p class="buttons">
 			<a href="javascript:toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
 		</p>
+		</div>
+		<div id="a-<?php echo $prefix; ?>renamediv" style="padding-top: .5em; padding-left: .5em; display: none;">
+			<?php echo gettext("to"); ?>: <input name="a-<?php echo $prefix; ?>renameto" type="text" value="<?php echo basename($album->name);?>"/><br />
+			<br clear: all />
+			<p class="buttons">
+			<a href="javascript:toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
+			</p>
+		</div>
+		<span style="line-height: 0em;"><br clear=all /></span>
+		<?php
+		echo apply_filter('edit_album_utilities', '', $album, $prefix);
+		?>
+		<span style="line-height: 0em;"><br clear=all /></span>
 	</div>
-	<div id="a-<?php echo $prefix; ?>renamediv" style="padding-top: .5em; padding-left: .5em; display: none;">
-		<?php echo gettext("to"); ?>: <input name="a-<?php echo $prefix; ?>renameto" type="text" value="<?php echo basename($album->name);?>"/><br />
-		<br clear: all />
-		<p class="buttons">
-		<a href="javascript:toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
-		</p>
-	</div>
-	<br clear: all />
-	<?php
-	$output = apply_filter('edit_album_utilities', '', $album, $prefix);
-	if ($output) echo '<hr />'.$output;
-	?>
- </div>
   <h2 class="h2_bordered_edit"><?php echo gettext("Tags"); ?></h2>
 	<?php
 	$tagsort = getTagOrder();

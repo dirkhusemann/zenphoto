@@ -298,16 +298,16 @@ function getRating($object=NULL) {
 function optionVoteStatus($before, $object, $prefix) {
 	$me = new jquery_rating();
 	$currentvalue = $object->get('rating_status');
-	$output = 'Vote Status:<ul style="list-style-type: none;">';
+	$output = 'Vote Status:<ul style="list-style-type: none;">'."\n";
 	foreach($me->ratingstate as $text=>$value) {
 		if($value == $currentvalue) {
 			$checked = "checked='checked' ";
 		} else {
 			$checked = '';
 		} 
-		$output .= "<li><input type='radio' name='".$prefix."rating_status' id='".$value."-".$prefix."rating_status' value='".$value."' ".$checked."/><label for='".$value."-".$prefix."rating_status'> ".$text."</label></li>";
+		$output .= "<li><input type='radio' name='".$prefix."rating_status' id='".$value."-".$prefix."rating_status' value='".$value."' ".$checked."/><label for='".$value."-".$prefix."rating_status'> ".$text."</label></li>"."\n";
 	}
-	$output = $before.'<br / clear=all><hr>'.$output.'</ul>';
+	$output = $before.'<hr />'."\n".$output.'</ul>'."\n";
 	return $output;
 }
 
