@@ -16,6 +16,8 @@ if (!($_zp_loggedin & (THEMES_RIGHTS | ADMIN_RIGHTS))) { // prevent nefarious ac
 $albumname = sanitize_path($_REQUEST['a']);
 $imagename = sanitize_path($_REQUEST['i']);
 
+// get what image side is being used for resizing
+$use_side = getOption('image_use_side');
 // get full width and height
 $albumobj = new Album(new Gallery,$albumname);
 $imageobj = newImage($albumobj,$imagename);
@@ -63,15 +65,44 @@ if (getOption('thumb_crop')) {
 	$thumbcropheight = $thumbcropheight * ($tsize/$max);
 }
 	
-$size = min(400, $width, $height);
-if ($width >= $height) {
-	$sr = $size/$width;
-	$sizedwidth = $size;
-	$sizedheight = round($height/$width*$size);
-} else {
-	$sr = $size/$height;
-	$sizedwidth = Round($width/$height*$size);
-	$sizedheight = $size;
+// get appropriate $sizedwidth and $sizedheight
+switch ($use_side) {
+	case 'longest':
+		$size = min(400, $width, $height);
+		if ($width >= $height) {
+			$sr = $size/$width;
+			$sizedwidth = $size;
+			$sizedheight = round($height/$width*$size);
+		} else {
+			$sr = $size/$height;
+			$sizedwidth = Round($width/$height*$size);
+			$sizedheight = $size;
+		}
+		break;
+	case 'shortest':
+		$size = min(400, $width, $height);
+		if ($width < $height) {
+			$sr = $size/$width;
+			$sizedwidth = $size;
+			$sizedheight = round($height/$width*$size);
+		} else {
+			$sr = $size/$height;
+			$sizedwidth = Round($width/$height*$size);
+			$sizedheight = $size;
+		}
+		break;
+	case 'width':
+		$size = $width;
+		$sr = 1;
+		$sizedwidth = $size;
+		$sizedheight = round($height/$width*$size);
+		break;
+	case 'height':
+		$size = $height;
+		$sr = 1;
+		$sizedwidth = Round($width/$height*$size);
+		$sizedheight = $size;
+		break;
 }
 
 $imageurl = "i.php?a=".pathurlencode($albumname)."&i=".urlencode($imagepart)."&s=".$size.'&admin';
