@@ -7,13 +7,13 @@
  * IMPORTANT: Flash players do not support external albums!
  *
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.1
+ * @version 1.1.1
  * @package plugins
  */
 
 $plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext("Enable <strong>FLV</strong> player to handle multimedia files. IMPORTANT: Only one multimedia player plugin can be enabled at the time.<br />Version 1.1. now incorporates the flv_playlist plugin to show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players with flv player.<strong>Note:</strong>Currently supports only FLV player version 3.<br> <strong>NOTE: You need to buy a licence from the player's developer LongTail Video if you intend to use this plugin for commercial purposes.</strong> Please see <a href='http://www.longtailvideo.com/players/jw-flv-player/'>LongTail Video - JW players</a> for more info about the player and its licence.");
 $plugin_author = "Malte Müller (acrylian), Stephen Billard (sbillard)";
-$plugin_version = '1.1';
+$plugin_version = '1.1.1';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flvplayer.php.html";
 $plugin_disable = $external;
 $option_interface = new flvplayer();
@@ -22,7 +22,7 @@ $_zp_flash_player = $option_interface; // claim to be the flash player.
 if ($external) return; // can't process external album images
 
 // register the scripts needed
-addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'flvplayer/flvplayer.js"></script>');
+addPluginScript('<script type="text/javascript" src="' . WEBPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . 'flvplayer/swfobject.js"></script>');
 
 
 define ('FLV_PLAYER_MP3_HEIGHT', 20);
