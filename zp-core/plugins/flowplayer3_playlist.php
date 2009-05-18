@@ -10,14 +10,14 @@
  * NOTE: Flash players do not support external albums!
  * 
  * @author Malte Müller (acrylian), Stephen Billard (sbillard)
- * @version 1.0.1
+ * @version 1.0.2
  * @package plugins 
  */
 
 
 $plugin_description = ($external = (getOption('album_folder_class') === 'external'))? gettext('<strong>Flash players do not support <em>External Albums</em>!</strong>'): gettext("Show the content of an media album with .flv/.mp4/.mp3 movie/audio files only as a playlist or as separate players on one page with Flowplayer 3. Important: The Flowplayer 3 plugin needs to be activated to use this plugin.");
 $plugin_author = "Malte Müller (acrylian)";
-$plugin_version = '1.0.1';
+$plugin_version = '1.0.2';
 $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---flowplayer3_playlist.php.html";
 $plugin_disable = $external;
 $option_interface = new flowplayer3_playlist();
@@ -45,7 +45,6 @@ if ( in_context(ZP_ALBUM) && !OFFSET_PATH) {
  *
  */
 class flowplayer3_playlist {
-	//TODO Add Options...:-)
 	function flowplayer3_playlist() {
 		setOptionDefault('flow_player3_playlistwidth', '320');
 		setOptionDefault('flow_player3_playlistheight', '240');
