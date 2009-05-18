@@ -92,7 +92,7 @@ class Album extends PersistentObject {
 				if ($new) {
 					$title = $this->get('title');
 					$this->set('title', substr($title, 0, -4)); // Strip the .'.alb' suffix
-					$this->setDateTime(myts_date('%Y/%m/%d %T', $this->get('mtime')));
+					$this->setDateTime(strftime('%Y-%m-%d %T', $this->get('mtime')));
 				}
 				$this->save();
 			}

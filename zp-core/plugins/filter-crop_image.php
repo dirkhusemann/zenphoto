@@ -8,7 +8,7 @@
  * @package plugins
  */
 
-$plugin_is_filter = true;
+$plugin_is_filter = 5;
 $plugin_description = gettext("An image crop tool for the admin toolbox on your theme pages.");
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.0.0';
@@ -16,7 +16,7 @@ $plugin_URL = "http://www.zenphoto.org/documentation/plugins/_plugins---crop_ima
 
 if (!isset($_REQUEST['performcrop'])) {
 	register_filter('admin_toolbox_image', 'toolbox_crop_image', 2);
-	register_filter('edit_image_utilities', 'edit_crop_image', 5);
+	register_filter('edit_image_utilities', 'edit_crop_image', 5, 1); // we want this one to come right after the crop thumbnail button
 	return;
 }
 

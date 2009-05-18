@@ -51,7 +51,7 @@
 
 	</div>
 	<?php if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow')); ?>
-	<?php if (function_exists('printAlbumRating')) { printAlbumRating(); }?>
+	<?php if (function_exists('printRating')) { printRating(); }?>
 
 </div>
 

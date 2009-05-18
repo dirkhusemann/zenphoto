@@ -453,10 +453,10 @@ zp-core/plugins/flowplayer3_playlist/images/control_play_blue.png
 zp-core/plugins/flowplayer3_playlist/jquery.mousewheel.pack.js
 zp-core/plugins/flowplayer3_playlist/jquery.scrollable.pack.js
 zp-core/plugins/flowplayer3_playlist.php
-zp-core/plugins/flvplayer/flvplayer.js
 zp-core/plugins/flvplayer/player3.swf
 zp-core/plugins/flvplayer/player4.swf
 zp-core/plugins/flvplayer/playlist.php
+zp-core/plugins/flvplayer/swfobject.js
 zp-core/plugins/flvplayer.php
 zp-core/plugins/google_maps/gmaps.js
 zp-core/plugins/google_maps/license.txt

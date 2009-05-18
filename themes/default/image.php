@@ -71,7 +71,7 @@
 
 		<?php if (function_exists('printImageMap')) printImageMap(); ?>
 
-    <?php if (function_exists('printImageRating')) { printImageRating(); }?>
+    <?php if (function_exists('printRating')) { printRating(); }?>
 
 		<?php if (function_exists('printShutterfly')) printShutterfly(); ?>
 

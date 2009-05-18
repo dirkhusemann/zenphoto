@@ -1441,19 +1441,17 @@ function printAlbumEditForm($index, $album) {
 	<!-- **************** Move/Copy/Rename ****************** -->
 		<h2 class="h2_bordered_edit"><?php echo gettext("Utilities"); ?></h2>
 	<div class="box-edit">
-	<label for="a-<?php echo $prefix; ?>move" style="padding-right: .5em">
+	<label for="a-<?php echo $prefix; ?>move" style="padding-right: .5em" style="white-space:nowrap">
 		<input type="radio" id="a-<?php echo $prefix; ?>move" name="a-<?php echo $prefix; ?>MoveCopyRename" value="move"
 			onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
 		<?php echo gettext("Move");?>
 	</label>
-	<br />
-	<label for="a-<?php echo $prefix; ?>copy" style="padding-right: .5em">
+	<label for="a-<?php echo $prefix; ?>copy" style="padding-right: .5em" style="white-space:nowrap">
 		<input type="radio" id="a-<?php echo $prefix; ?>copy" name="a-<?php echo $prefix; ?>MoveCopyRename" value="copy"
 			onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
 		<?php echo gettext("Copy");?>
 	</label>
-	<br />
-	<label for="a-<?php echo $prefix; ?>rename" style="padding-right: .5em">
+	<label for="a-<?php echo $prefix; ?>rename" style="padding-right: .5em" style="white-space:nowrap">
 		<input type="radio" id="a-<?php echo $prefix; ?>rename" name="a-<?php echo $prefix; ?>MoveCopyRename" value="rename"
 			onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'rename');"/>
 		<?php echo gettext("Rename Folder");?>

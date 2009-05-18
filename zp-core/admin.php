@@ -278,10 +278,10 @@ if (defined('RELEASE')) {
 	<h3><?php echo gettext("Active plugins:"); ?></h3>
 	<ul class="plugins">
 	<?php
-	$plugins = getEnabledPlugins();
+	$plugins = array_keys(getEnabledPlugins());
 	if (count($plugins) > 0) {
 		natsort($plugins);
-		foreach ($plugins as $extension=>$loadtype) {
+		foreach ($plugins as $extension) {
 			$ext = substr($extension, 0, strlen($extension)-4);
 			$pluginStream = file_get_contents(SERVERPATH . '/' . ZENFOLDER . PLUGIN_FOLDER . $extension);
 			$str =  $pluginStream;

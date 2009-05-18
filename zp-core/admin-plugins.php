@@ -149,16 +149,12 @@ foreach ($filelist as $extension) {
 			}
 		}
 	}
-	if (strpos($extension, 'class-') === 0 || strpos($extension, 'filter-') === 0) {
-		$loadtype = 2;
-	} else {
-		$loadtype = 1;
-	}
+	$loadtype = 1;
 	$str = isolate('$plugin_is_filter', $pluginStream);
 	if (false !== $str) {
 		if (false !== eval($str)) {
 			if ($plugin_is_filter) {
-				$loadtype = 2;
+				$loadtype = $plugin_is_filter;
 			}
 		}
 	}

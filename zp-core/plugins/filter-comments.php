@@ -6,7 +6,7 @@
  * 
  * @package plugins
  */
-$plugin_is_filter = true;
+$plugin_is_filter = 5;
 $plugin_description = gettext("Email all posters when a new comment is made on an item.");
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.0.0';

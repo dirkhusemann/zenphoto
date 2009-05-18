@@ -82,11 +82,11 @@ class SearchEngine
 			$this->words = $_REQUEST['words'];
 		} else {
 			$this->words = '';
-		}
-		if (isset($_REQUEST['date'])) {
-			$this->dates = sanitize($_REQUEST['date'], 3);
-		} else {
-			$this->dates = '';
+			if (isset($_REQUEST['date'])) {  // words & dates are mutually exclusive
+				$this->dates = sanitize($_REQUEST['date'], 3);
+			} else {
+				$this->dates = '';
+			}
 		}
 		$this->fields = $this->parseQueryFields();
 		$this->album_list = NULL;
@@ -184,6 +184,9 @@ class SearchEngine
 					$this->album_list = explode(',', $v);
 					break;
 			}
+		}
+		if (!empty($this->words)) {
+			$this->dates = ''; // words and dates are mutually exclusive
 		}
 	}
 

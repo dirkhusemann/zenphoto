@@ -713,28 +713,23 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 									
 							<h2 class="h2_bordered_edit"><?php echo gettext("Utilities"); ?></h2>
      				<div class="box-edit">
-						<!-- Move/Copy/Rename this image --> <label
-							for="<?php echo $currentimage; ?>-move" style="padding-right: .5em">
-						<input type="radio" id="<?php echo $currentimage; ?>-move"
-							name="<?php echo $currentimage; ?>-MoveCopyRename" value="move"
-							onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'movecopy');" />
-						<?php echo gettext("Move");?> </label> <label
-							for="<?php echo $currentimage; ?>-copy" style="padding-right: .5em">
-						<input type="radio" id="<?php echo $currentimage; ?>-copy"
-							name="<?php echo $currentimage; ?>-MoveCopyRename" value="copy"
-							onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'movecopy');" />
-						<?php echo gettext("Copy");?> </label> <label
-							for="<?php echo $currentimage; ?>-rename"
-							style="padding-right: .5em"> <input type="radio"
-							id="<?php echo $currentimage; ?>-rename"
-							name="<?php echo $currentimage; ?>-MoveCopyRename" value="rename"
-							onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'rename');" />
-						<?php echo gettext("Rename File");?> </label><br /><label
-							for="<?php echo $currentimage; ?>-Delete"> <input type="radio"
-							id="<?php echo $currentimage; ?>-Delete"
-							name="<?php echo $currentimage; ?>-MoveCopyRename" value="delete"
-							onclick="image_deleteconfirm(this, '<?php echo $currentimage; ?>','<?php echo gettext("Are you sure you want to select this image for deletion?"); ?>')" />
-						<?php echo ' '.gettext("Delete image.") ?> </label>
+						<!-- Move/Copy/Rename this image -->
+						<label for="<?php echo $currentimage; ?>-move" style="padding-right: .5em" style="white-space:nowrap">
+							<input type="radio" id="<?php echo $currentimage; ?>-move" name="<?php echo $currentimage; ?>-MoveCopyRename" value="move"
+								onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'movecopy');" /><?php echo gettext("Move");?>
+						</label>
+						<label for="<?php echo $currentimage; ?>-copy" style="padding-right: .5em" style="white-space:nowrap">
+							<input type="radio" id="<?php echo $currentimage; ?>-copy" name="<?php echo $currentimage; ?>-MoveCopyRename" value="copy"
+								onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'movecopy');" /><?php echo gettext("Copy");?>
+							</label>
+						<label for="<?php echo $currentimage; ?>-rename" style="padding-right: .5em" style="white-space:nowrap">
+							<input type="radio" id="<?php echo $currentimage; ?>-rename" name="<?php echo $currentimage; ?>-MoveCopyRename" value="rename"
+								onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'rename');" /><?php echo gettext("Rename File");?>
+						</label>
+						<label for="<?php echo $currentimage; ?>-Delete" style="white-space:nowrap">
+							<input type="radio" id="<?php echo $currentimage; ?>-Delete" name="<?php echo $currentimage; ?>-MoveCopyRename" value="delete"
+								onclick="image_deleteconfirm(this, '<?php echo $currentimage; ?>','<?php echo gettext("Are you sure you want to select this image for deletion?"); ?>')" /><?php echo ' '.gettext("Delete image.") ?>
+						</label>
 						<div id="<?php echo $currentimage; ?>-movecopydiv"
 							style="padding-top: .5em; padding-left: .5em; display: none;"><?php echo gettext("to"); ?>:
 						<select id="<?php echo $currentimage; ?>-albumselectmenu"

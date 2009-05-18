@@ -6,7 +6,7 @@
 
 // force UTF-8 Ø
 
-$plugin_is_filter = true;
+$plugin_is_filter = 9;
 $plugin_description = ($disable = (ZENPHOTO_RELEASE < 3112))? gettext('class-image is not compatible with this zenphoto release.') : gettext('Video and MP3/4 handling for Zenphoto.');
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.0.0';
@@ -73,8 +73,8 @@ class Video extends _Image {
 		$album_name = $album->name;
 		$this->updateDimensions();  // TODO: figure out how to know if this should change. I.e. old videos, changes of the flash player.
 		if ( parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', false, empty($album_name))) {
-			$this->set('mtime', filemtime($this->localpath));
-			$newDate = myts_date('%Y/%m/%d %T', $this->get('mtime'));
+			$this->set('mtime', $ts = filemtime($this->localpath));
+			$newDate = strftime('%Y-%m-%d %T', $ts);
 			$this->setDateTime($newDate);
 			$alb = $this->album;
 			if (!is_null($alb)) {

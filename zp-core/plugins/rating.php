@@ -14,7 +14,7 @@
  * @package plugins
  */
 require_once(dirname(dirname(__FILE__)).'/functions.php');
-$plugin_is_filter = true;
+$plugin_is_filter = 5;
 $plugin_description = gettext("Adds several theme functions to enable images, album, news, or pages to be rating by users.");
 $plugin_author = "Stephen Billard (sbillard)and Malte Müller (acrylian)";
 $plugin_version = '2.0.0';
@@ -50,7 +50,7 @@ class jquery_rating {
 		setOptionDefault('rating_recast', 1);
 		setOptionDefault('rating_status', 3);
 		setOptionDefault('rating_image_individual_control', 0);
-		$this->ratingstate = array('open' => 3, 'members & guests' => 2, 'members only' => 1, 'closed' => 0);
+		$this->ratingstate = array('open' => 3, gettext('members &amp; guests') => 2, gettext('members only') => 1, gettext('closed') => 0);
 	}
 
 
@@ -298,16 +298,16 @@ function getRating($object=NULL) {
 function optionVoteStatus($before, $object, $prefix) {
 	$me = new jquery_rating();
 	$currentvalue = $object->get('rating_status');
-	$output = 'Vote Status:<ul style="list-style-type: none;">'."\n";
+	$output = 'Vote Status:<br />'."\n";
 	foreach($me->ratingstate as $text=>$value) {
 		if($value == $currentvalue) {
 			$checked = "checked='checked' ";
 		} else {
 			$checked = '';
 		} 
-		$output .= "<li><input type='radio' name='".$prefix."rating_status' id='".$value."-".$prefix."rating_status' value='".$value."' ".$checked."/><label for='".$value."-".$prefix."rating_status'> ".$text."</label></li>"."\n";
+		$output .= "<label for='".$value."-".$prefix."rating_status' style='white-space:nowrap'><input type='radio' name='".$prefix."rating_status' id='".$value."-".$prefix."rating_status' value='".$value."' ".$checked."/> ".$text."</label>"."\n";
 	}
-	$output = $before.'<hr />'."\n".$output.'</ul>'."\n";
+	$output = $before.'<hr />'."\n".$output;
 	return $output;
 }
 

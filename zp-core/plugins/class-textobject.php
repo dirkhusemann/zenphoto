@@ -54,7 +54,7 @@
  * 
  * */
 
-$plugin_is_filter = true;
+$plugin_is_filter = 9;
 $plugin_description = ($disable = (ZENPHOTO_RELEASE < 2492))? gettext('class-textobject requires Zenphoto v 1.2.1 or greater.') : gettext('Provides a means for showing text where zenphoto would normally display images. For documentation, see the script file.');
 $plugin_author = "Stephen Billard (sbillard)";
 $plugin_version = '1.0.0';
@@ -109,8 +109,8 @@ class TextObject extends _Image {
 		if (parent::PersistentObject('images', array('filename'=>$filename, 'albumid'=>$this->album->id), 'filename', false, false)) {
 			$title = $this->getDefaultTitle();
 			$this->set('title', $title);
-			$this->set('mtime', filemtime($this->localpath));
-			$newdate = myts_date('%Y/%m/%d %T', $this->get('mtime'));
+			$this->set('mtime', $ts = filectime($this->localpath));
+			$newdate = strftime('%Y-%m-%d %T', $ts);
 			$this->setDateTime($newdate);
 			$alb = $this->album;
 			if (!is_null($alb)) {

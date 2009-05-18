@@ -107,7 +107,7 @@ class _Image extends PersistentObject {
 				}
 			}
 			if (empty($newDate)) {
-				$newDate = myts_date('%Y/%m/%d %T', $this->get('mtime'));
+				$newDate = strftime('%Y-%m-%d %T', $this->get('mtime'));
 			}
 			$this->setDateTime($newDate);
 			$alb = $this->album;

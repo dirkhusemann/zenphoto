@@ -245,11 +245,15 @@ function setDefault($option, $default) {
 	setOptionDefault('search_space_is_or', 0);
 	setOptionDefault('search_no_albums', 0);
 	
+	// set filter load priorities
 	foreach (getEnabledPlugins() as $extension => $class) { // fix the options of 'assumed' backend plugins
-		if ($class == 1 && (strpos($extension, 'class-') !== false || strpos($extension, 'filter-') === 0)) {
-			setOption('zp_plugin_'.$extension, 2);
+		if ($class == 1 && (strpos($extension, 'class-') !== false)) {
+			setOption('zp_plugin_'.$extension, 9);
+		}
+		if ($class == 1 && strpos($extension, 'filter-') === 0) {
+			setOption('zp_plugin_'.$extension, 5);
 		}
 	}
-	if (getOption('zp_plugin_rating')) setOption('zp_plugin_rating', 2);
+	if (getOption('zp_plugin_rating') == 1) setOption('zp_plugin_rating', 5);
 	
 	?>

@@ -74,7 +74,7 @@ if (isset($_GET['clear_rating'])) {
 		}
 		$sql = "UPDATE ".$dbtable.'SET total_votes=total_votes+'.$voting.", total_value=total_value".$valuechange.", rating=total_value/total_votes, used_ips='".$insertip."' WHERE id='".$id."'";
 		$rslt = query($sql,true);
-		if (!$rslt) debugLog("MySQL Query"." ( $sql ) ".gettext("Failed. Error:").' '.mysql_error());
+		//if (!$rslt) debugLog("MySQL Query"." ( $sql ) ".gettext("Failed. Error:").' '.mysql_error());
 	}
 }
 ?>
