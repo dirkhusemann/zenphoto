@@ -801,10 +801,15 @@ function customOptions($optionHandler, $indent="", $album=NULL, $hide=false) {
 							$v = 0;
 						}
 						$display = str_replace(' ', '&nbsp;', $display);
-						echo '<input type="hidden" name="'.CUSTOM_OPTION_PREFIX.'chkbox-'.$checkbox.'" value=0 />' . "\n";
-						echo '<input type="checkbox" name="'.$checkbox.'" value="1"';
-						echo checked('1', $v);
-						echo " />&nbsp;$display\n";
+						?>
+						<input type="hidden" name="<?php echo CUSTOM_OPTION_PREFIX.'chkbox-'.$checkbox; ?>" value=0 />
+						<label for="<?php echo $checkbox; ?>" style="padding-right: .5em">
+							<span style="white-space:nowrap"> 
+								<input type="checkbox" name="<?php echo $checkbox; ?>" value="1"<?php echo checked('1', $v); ?> />
+								<?php echo($display); ?>
+							</span>
+						</label>
+						<?php
 					}
 					echo "</td>\n";
 					break;
@@ -884,8 +889,15 @@ function generateRadiobuttonsFromArray($currentvalue,$list,$option) {
 		$checked ="";
 		if($value == $currentvalue) {
 			$checked = "checked='checked' "; //the checked() function uses quotes the other way round...
-		} 
-		echo "<input type='radio' name='".$option."' id='".$value."-".$option."' value='".$value."' ".$checked."/><label for='".$value."-".$option."'> ".$text."</label> ";
+		}
+		?>
+		<label for="<?php echo $value."-".$option; ?>" style="padding-right: .5em">
+			<span style="white-space:nowrap">
+				<input type="radio" name="<?php echo $option; ?>" id="<?php echo $value.'-'.$option; ?>" value="<?php echo $value; ?>"<?php echo $checked; ?> />
+				<?php echo $text; ?>
+			</span>
+		</label>
+		<?php
 	}
 }
 
@@ -1441,20 +1453,26 @@ function printAlbumEditForm($index, $album) {
 	<!-- **************** Move/Copy/Rename ****************** -->
 		<h2 class="h2_bordered_edit"><?php echo gettext("Utilities"); ?></h2>
 	<div class="box-edit">
-	<label for="a-<?php echo $prefix; ?>move" style="padding-right: .5em" style="white-space:nowrap">
-		<input type="radio" id="a-<?php echo $prefix; ?>move" name="a-<?php echo $prefix; ?>MoveCopyRename" value="move"
-			onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
-		<?php echo gettext("Move");?>
+	<label for="a-<?php echo $prefix; ?>move" style="padding-right: .5em">
+		<span style="white-space:nowrap">
+			<input type="radio" id="a-<?php echo $prefix; ?>move" name="a-<?php echo $prefix; ?>MoveCopyRename" value="move"
+				onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
+			<?php echo gettext("Move");?>
+		</span>
 	</label>
-	<label for="a-<?php echo $prefix; ?>copy" style="padding-right: .5em" style="white-space:nowrap">
-		<input type="radio" id="a-<?php echo $prefix; ?>copy" name="a-<?php echo $prefix; ?>MoveCopyRename" value="copy"
-			onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
-		<?php echo gettext("Copy");?>
+	<label for="a-<?php echo $prefix; ?>copy" style="padding-right: .5em">
+		<span style="white-space:nowrap">
+			<input type="radio" id="a-<?php echo $prefix; ?>copy" name="a-<?php echo $prefix; ?>MoveCopyRename" value="copy"
+				onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
+			<?php echo gettext("Copy");?>
+		</span>
 	</label>
-	<label for="a-<?php echo $prefix; ?>rename" style="padding-right: .5em" style="white-space:nowrap">
-		<input type="radio" id="a-<?php echo $prefix; ?>rename" name="a-<?php echo $prefix; ?>MoveCopyRename" value="rename"
-			onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'rename');"/>
-		<?php echo gettext("Rename Folder");?>
+	<label for="a-<?php echo $prefix; ?>rename" style="padding-right: .5em">
+		<span style="white-space:nowrap">
+			<input type="radio" id="a-<?php echo $prefix; ?>rename" name="a-<?php echo $prefix; ?>MoveCopyRename" value="rename"
+				onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'rename');"/>
+			<?php echo gettext("Rename Folder");?>
+		</span>
 	</label>
 
 

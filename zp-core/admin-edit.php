@@ -673,10 +673,11 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						<p><?php echo gettext("Dimensions:"); ?><br /><?php echo $image->getWidth(); ?> x  <?php echo $image->getHeight().' '.gettext('px'); ?></p>
 						<p><?php echo gettext("Size:"); ?><br /><?php echo byteConvert($image->getImageFootprint()); ?></p>
 						
-						<p><label for="<?php echo $currentimage; ?>-thumb"><input
-							type="radio" id="<?php echo $currentimage; ?>-thumb" name="thumb"
-							value="<?php echo $currentimage ?>" /> <?php echo ' '.gettext("Select as album thumbnail."); ?>
-						</label></p>
+						<p>
+							<label for="<?php echo $currentimage; ?>-thumb">
+								<input type="radio" id="<?php echo $currentimage; ?>-thumb" name="thumb" value="<?php echo $currentimage ?>" /> <?php echo ' '.gettext("Select as album thumbnail."); ?>
+							</label>
+						</p>
 						</td>
 						<td align="left" valign="top" width="100"><?php echo gettext("Title:"); ?></td>
 						<td><?php print_language_string_list($image->get('title'), $currentimage.'-title', false); ?>
@@ -714,21 +715,29 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 							<h2 class="h2_bordered_edit"><?php echo gettext("Utilities"); ?></h2>
      				<div class="box-edit">
 						<!-- Move/Copy/Rename this image -->
-						<label for="<?php echo $currentimage; ?>-move" style="padding-right: .5em" style="white-space:nowrap">
-							<input type="radio" id="<?php echo $currentimage; ?>-move" name="<?php echo $currentimage; ?>-MoveCopyRename" value="move"
-								onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'movecopy');" /><?php echo gettext("Move");?>
+						<label for="<?php echo $currentimage; ?>-move" style="padding-right: .5em">
+							<span style="white-space:nowrap">
+								<input type="radio" id="<?php echo $currentimage; ?>-move" name="<?php echo $currentimage; ?>-MoveCopyRename" value="move"
+									onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'movecopy');" style="display:inline" /> <?php echo gettext("Move");?>
+							</span>
 						</label>
-						<label for="<?php echo $currentimage; ?>-copy" style="padding-right: .5em" style="white-space:nowrap">
-							<input type="radio" id="<?php echo $currentimage; ?>-copy" name="<?php echo $currentimage; ?>-MoveCopyRename" value="copy"
-								onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'movecopy');" /><?php echo gettext("Copy");?>
-							</label>
-						<label for="<?php echo $currentimage; ?>-rename" style="padding-right: .5em" style="white-space:nowrap">
-							<input type="radio" id="<?php echo $currentimage; ?>-rename" name="<?php echo $currentimage; ?>-MoveCopyRename" value="rename"
-								onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'rename');" /><?php echo gettext("Rename File");?>
+						<label for="<?php echo $currentimage; ?>-copy" style="padding-right: .5em">
+							<span style="white-space:nowrap">
+								<input type="radio" id="<?php echo $currentimage; ?>-copy" name="<?php echo $currentimage; ?>-MoveCopyRename" value="copy"
+									onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'movecopy');" style="display:inline" /> <?php echo gettext("Copy");?>
+							</span>
 						</label>
-						<label for="<?php echo $currentimage; ?>-Delete" style="white-space:nowrap">
-							<input type="radio" id="<?php echo $currentimage; ?>-Delete" name="<?php echo $currentimage; ?>-MoveCopyRename" value="delete"
-								onclick="image_deleteconfirm(this, '<?php echo $currentimage; ?>','<?php echo gettext("Are you sure you want to select this image for deletion?"); ?>')" /><?php echo ' '.gettext("Delete image.") ?>
+						<label for="<?php echo $currentimage; ?>-rename" style="padding-right: .5em">
+							<span style="white-space:nowrap">
+								<input type="radio" id="<?php echo $currentimage; ?>-rename" name="<?php echo $currentimage; ?>-MoveCopyRename" value="rename"
+									onclick="toggleMoveCopyRename('<?php echo $currentimage; ?>', 'rename');" style="display:inline" /> <?php echo gettext("Rename File");?>
+							</span>
+						</label>
+						<label for="<?php echo $currentimage; ?>-Delete" style="padding-right: .5em">
+							<span style="white-space:nowrap">
+								<input type="radio" id="<?php echo $currentimage; ?>-Delete" name="<?php echo $currentimage; ?>-MoveCopyRename" value="delete"
+									onclick="image_deleteconfirm(this, '<?php echo $currentimage; ?>','<?php echo gettext("Are you sure you want to select this image for deletion?"); ?>')" style="display:inline" /> <?php echo gettext("Delete image.") ?>
+							</span>
 						</label>
 						<div id="<?php echo $currentimage; ?>-movecopydiv"
 							style="padding-top: .5em; padding-left: .5em; display: none;"><?php echo gettext("to"); ?>:
@@ -766,25 +775,45 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 						<?php echo gettext('Image will be deleted when changes are saved.'); ?>
 						<p class="buttons"><a	href="javascript:toggleMoveCopyRename('<?php echo $currentimage; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
 						</p>
-						
 						</div>
+						<span style="line-height: 0em;"><br clear=all /></span>						
 					 
 						<?php
 						if (isImagePhoto($image)) {
 							?>
 							<hr />
-							<p>	<?php echo gettext("Rotation:"); ?>
-								<?php
-								$splits = preg_split('/!([(0-9)])/', $image->get('EXIFOrientation'));
-								$rotation = $splits[0];
-								if (!in_array($rotation,array(3, 6, 8))) $rotation = 0;
-								?>
-								<input type="hidden" name="<?php echo $currentimage; ?>-oldrotation" value="<?php echo $rotation; ?>" />
-								<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="0" <?php checked(0, $rotation); echo $disablerotate ?> /> <?php echo gettext('none'); ?>
-								<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="8" <?php checked(8, $rotation); echo $disablerotate ?> /> <?php echo gettext('90 degrees'); ?>
-								<br /><input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="3" <?php checked(3, $rotation); echo $disablerotate ?> /> <?php echo gettext('180 degrees'); ?>
-								<input type="radio"	id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="6" <?php checked(6, $rotation); echo $disablerotate ?> /> <?php echo gettext('270 degrees'); ?>
-							</p>
+							<?php echo gettext("Rotation:"); ?>
+							<br />
+							<?php
+							$splits = preg_split('/!([(0-9)])/', $image->get('EXIFOrientation'));
+							$rotation = $splits[0];
+							if (!in_array($rotation,array(3, 6, 8))) $rotation = 0;
+							?>
+							<input type="hidden" name="<?php echo $currentimage; ?>-oldrotation" value="<?php echo $rotation; ?>" />
+							<label for="<?php echo $currentimage; ?>-rotation_none" style="padding-right: .5em">
+								<span style="white-space:nowrap">
+									<input type="radio" id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="0" <?php checked(0, $rotation); echo $disablerotate ?> />
+									<?php echo gettext('none'); ?>
+								</span>
+							</label>
+							<label for="<?php echo $currentimage; ?>-rotation_90" style="padding-right: .5em">
+								<span style="white-space:nowrap">
+									<input type="radio" id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="8" <?php checked(8, $rotation); echo $disablerotate ?> />
+									<?php echo gettext('90 degrees'); ?>
+								</span>
+							</label>
+							<label for="<?php echo $currentimage; ?>-rotation_180" style="padding-right: .5em">
+								<span style="white-space:nowrap">
+									<input type="radio" id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="3" <?php checked(3, $rotation); echo $disablerotate ?> />
+									<?php echo gettext('180 degrees'); ?>
+								</span>
+							</label>
+							<label for="<?php echo $currentimage; ?>-rotation_270" style="padding-right: .5em">
+								<span style="white-space:nowrap">
+									<input type="radio" id="<?php echo $currentimage; ?>-rotation"	name="<?php echo $currentimage; ?>-rotation" value="6" <?php checked(6, $rotation); echo $disablerotate ?> />
+									<?php echo gettext('270 degrees'); ?>
+								</span>
+							</label>
 							<hr />
 							<p class="buttons" style="clear: both">
 								<a href="admin-thumbcrop.php?a=<?php echo urlencode($album->name); ?>&amp;i=<?php echo urlencode($image->filename); ?>&amp;subpage=<?php echo $pagenum; ?>&amp;tagsort=<?php echo $tagsort; ?>"
