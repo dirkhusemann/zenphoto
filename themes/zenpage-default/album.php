@@ -14,6 +14,10 @@
 
 		<div id="header">
 		<h1><?php echo getGalleryTitle();?></h1>
+			<?php if (getOption('Allow_search')) {  
+			$album_list = array($_zp_current_album->name);
+			printSearchForm(NULL, 'search', NULL, 'Search album', NULL, NULL, $album_list);
+			} ?>
 		</div>
 
 <div id="content">
@@ -56,7 +60,7 @@
 		<?php printTags('links', gettext('<strong>Tags:</strong>').' ', 'taglist', ''); ?>
 
 	<?php if (function_exists('printSlideShowLink')) printSlideShowLink(gettext('View Slideshow')); ?>
-	<?php if (function_exists('printAlbumRating')) { printAlbumRating(); }?>
+	<?php if (function_exists('printRating')) { printRating(); }?>
 
 
 	</div><!-- content left-->

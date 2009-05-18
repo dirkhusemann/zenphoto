@@ -50,7 +50,7 @@
 	
  <?php 
  if(function_exists("printPagedThumbsNav")) { 
- 		printPagedThumbsNav(6, FALSE, gettext('&laquo; prev thumbs'), gettext('next thumbs &raquo;'), 40, 40,false); 
+ 		printPagedThumbsNav(6, FALSE, gettext('&laquo; prev thumbs'), gettext('next thumbs &raquo;'), 40, 40); 
  } ?>
 	
 	<div id="image">
@@ -78,7 +78,7 @@
 
 		<?php if (function_exists('printImageMap')) printImageMap(); ?>
 
-    <?php if (function_exists('printImageRating')) { printImageRating(); }?>
+    <?php if (function_exists('printRating')) { printRating(); }?>
 
 		<?php if (function_exists('printShutterfly')) printShutterfly(); ?>
 
