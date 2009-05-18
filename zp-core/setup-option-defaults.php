@@ -250,6 +250,6 @@ function setDefault($option, $default) {
 			setOption('zp_plugin_'.$extension, 2);
 		}
 	}
-
+	if (getOption('zp_plugin_rating')) setOption('zp_plugin_rating', 2);
 	
 	?>
