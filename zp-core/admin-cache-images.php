@@ -114,7 +114,7 @@ if (isset($_REQUEST['return'])) {
 } else {
 	$r = '';
 }
-echo "<p><a href=\"admin.php$r\">&laquo; ".gettext("Back")."</a></p>"; //TODO: do we need a tab to return to?
+echo "<p><a href=\"admin.php$r\">&laquo; ".gettext("Back")."</a></p>";
 echo "\n" . '</div>';
 echo "\n" . '</div>';
 

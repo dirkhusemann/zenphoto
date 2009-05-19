@@ -82,7 +82,7 @@ if (isset($_GET['refresh']) && db_connect()) {
 			$backurl = 'admin-edit.php'.$r;
 		}
 		echo '<p>'.gettext('you should return automatically. If not press: ').'</p>';
-		echo "<p><a href=\"$backurl\">&laquo; ".gettext('Back')."</a></p>"; //TODO: do we need a tab to return to?
+		echo "<p><a href=\"$backurl\">&laquo; ".gettext('Back')."</a></p>";
 		echo '<meta HTTP-EQUIV="REFRESH" content="1; url='.$backurl.'">';
 	} else {
 		echo '<h3>'.$incomplete.'</h3>';

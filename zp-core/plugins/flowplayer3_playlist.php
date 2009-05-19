@@ -25,7 +25,6 @@ $option_interface = new flowplayer3_playlist();
 if ($external) return; // can't process external album images 
 
 // register the scripts needed - only playlist additions, all others incl. the playlist plugin are loaded by the flowplayer3 plugin!
-// TODO: Allow theme based playlist.css, too
 if ( in_context(ZP_ALBUM) && !OFFSET_PATH) {
 	$theme = getCurrentTheme();
 	$css = SERVERPATH . '/' . THEMEFOLDER . '/' . internalToFilesystem($theme) . '/flowplayer3_playlist.css';

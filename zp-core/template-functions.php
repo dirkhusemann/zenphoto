@@ -1525,7 +1525,7 @@ function printCustomAlbumThumbImage($alt, $size, $width=NULL, $height=NULL, $cro
 }
 
 /**
- * Called by ***MaxSpace functions to compute the parameters to be passed to xxCustomXXX functions.
+ * Called by ***MaxSpace functions to compute the parameters to be passed to xxCustomyyy functions.
  *
  * @param int $width maxspace width
  * @param int $height maxspace height

@@ -48,10 +48,15 @@ if (isset($_GET['action'])) {
 
 		/*** admin options ***/
 		if (isset($_POST['saveadminoptions'])) {
+			$nouser = true;
 			for ($i = 0; $i < $_POST['totaladmins']; $i++) {
 				$pass = trim($_POST[$i.'-adminpass']);
 				$user = trim($_POST[$i.'-adminuser']);
+				if (empty($user) && !empty($pass)) {
+					$notify = '?mismatch=nothing';
+				}
 				if (!empty($user)) {
+					$nouser = false;
 					if ($pass == trim($_POST[$i.'-adminpass_2'])) {
 						$admin_n = trim($_POST[$i.'-admin_name']);
 						$admin_e = trim($_POST[$i.'-admin_email']);
@@ -102,6 +107,9 @@ if (isset($_GET['action'])) {
 						$notify = '?mismatch=password';
 					}
 				}
+			}
+			if ($nouser) {
+				$notify = '?mismatch=nothing';
 			}
 			$returntab = "&tab=admin";
 		}
@@ -529,16 +537,6 @@ if ($subtab == 'admin') {
 		$alterrights = ' DISABLED';
 		$admins = array($_zp_current_admin['user'] => $_zp_current_admin);
 	}
-	if (isset($_GET['mismatch'])) {
-		if ($_GET['mismatch'] == 'mismatch') {
-			$msg = gettext('You must supply a password');
-		} else {
-			$msg = gettext('Your passwords did not match');
-		}
-		echo '<div class="errorbox" id="fade-message">';
-		echo  "<h2>$msg</h2>";
-		echo '</div>';
-	}
 	if (isset($_GET['deleted'])) {
 		echo '<div class="messagebox" id="fade-message">';
 		echo  "<h2>Deleted</h2>";
@@ -554,13 +552,23 @@ if ($subtab == 'admin') {
 		switch ($_GET['mismatch']) {
 			case 'gallery':
 			case 'search':
-				echo  "<h2>". sprintf(gettext("Your %s passwords were empty or did not match"), $_GET['mismatch'])."</h2>";
+				echo  "<h2>".sprintf(gettext("Your %s passwords were empty or did not match"), $_GET['mismatch'])."</h2>";
 				break;
 			case 'user_gallery':
-				echo  "<h2>". gettext("You must supply a password for the Gallery guest user")."</h2>";
+				echo  "<h2>".gettext("You must supply a password for the Gallery guest user")."</h2>";
 				break;
 			case 'user_search':
-				echo  "<h2>". gettext("You must supply a password for the Search guest user")."</h2>";
+				echo  "<h2>".gettext("You must supply a password for the Search guest user")."</h2>";
+				break;
+			case 'mismatch':
+				echo  "<h2>".gettext('You must supply a password')."</h2>";
+				break;
+			case 'nothing':
+				//TODO: translation string
+				//echo  "<h2>".gettext('User name not provided')."</h2>";
+				break;
+			default:
+				echo  "<h2>".gettext('Your passwords did not match')."</h2>";
 				break;
 		}
 		echo '</div>';
