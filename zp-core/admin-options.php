@@ -508,6 +508,7 @@ printTabs('options');
 echo "\n" . '<div id="content">';
 if ($_zp_null_account) {
 	echo "<div class=\"errorbox space\">";
+	//TODO: change the <br/> to <br />
 	echo "<h2>".gettext("Password reset request.<br/>You may now set admin usernames and passwords.")."</h2>";
 	echo "</div>";
 }

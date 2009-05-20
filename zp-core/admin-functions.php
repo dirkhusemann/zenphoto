@@ -995,11 +995,12 @@ function tagSelector($that, $postit, $showCounts=false, $mostused=false) {
 /**
  * emits the html for editing album information
  * called in edit album and mass edit
- *@param string param1 the index of the entry in mass edit or '0' if single album
- *@param object param2 the album object
- *@since 1.1.3
+ * @param string $index the index of the entry in mass edit or '0' if single album
+ * @param object $album the album object
+ * @param bool $collapse_tags set true to initially hide tab list
+ * @since 1.1.3
  */
-function printAlbumEditForm($index, $album) {
+function printAlbumEditForm($index, $album, $collapse_tags) {
 	global $sortby, $gallery, $_zp_loggedin, $mcr_albumlist, $albumdbfields, $imagedbfields;
 	$tagsort = getTagOrder();
 	if ($index == 0) {
@@ -1441,115 +1442,131 @@ function printAlbumEditForm($index, $album) {
 	</table>
 	</td>
 	<td valign="top">
-	<h2 class="h2_bordered_edit"><?php echo gettext("Publish"); ?></h2>
-	<div class="box-edit">
-<?php	$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');	?>
-	<p>
-	<input type="checkbox" name="<?php	echo $prefix; ?>Published" value="1" <?php if ($album->getShow()) echo "CHECKED";	?> />	
-	<?php echo gettext("Published");?>
-	</p>
-	</div>
-	
-	<h2 class="h2_bordered_edit"><?php echo gettext("General"); ?></h2>
-	<div class="box-edit">
-	<p>
-	<input type="checkbox" name="<?php echo $prefix.'allowcomments';?>" value="1" <?php if ($album->getCommentsAllowed()) { echo "CHECKED"; } ?> />
-	<?php echo gettext("Allow Comments"); ?>
-	</p>
-	<p>
-	<?php
-	$hc = $album->get('hitcounter');
-	if (empty($hc)) { $hc = '0'; }
-	?>
-	<input type="checkbox" name="reset_hitcounter"> <?php echo sprintf(gettext("Reset Hitcounter (Hits: %u)"), $hc); ?> 
-	</p>
-	<p>
-	<?php
-	$tv = $album->get('total_value');
-	$tc = $album->get('total_votes');
-
-	if ($tc > 0) {
-		$hc = $tv/$tc;
-		printf(gettext('Rating: <strong>%u</strong>'), $hc);
-		echo "<label for=\"".$prefix."reset_rating\"><input type=\"checkbox\" id=\"".$prefix."reset_rating\" name=\"".$prefix."reset_rating\" value=1> ".gettext("Reset")."</label> ";
-	} else {
-		echo gettext("Rating: Unrated");
-	}
-	?>
-	</p>
-	</div>
-	<!-- **************** Move/Copy/Rename ****************** -->
-		<h2 class="h2_bordered_edit"><?php echo gettext("Utilities"); ?></h2>
-	<div class="box-edit">
-	<label for="a-<?php echo $prefix; ?>move" style="padding-right: .5em">
-		<span style="white-space:nowrap">
-			<input type="radio" id="a-<?php echo $prefix; ?>move" name="a-<?php echo $prefix; ?>MoveCopyRename" value="move"
-				onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
-			<?php echo gettext("Move");?>
-		</span>
-	</label>
-	<label for="a-<?php echo $prefix; ?>copy" style="padding-right: .5em">
-		<span style="white-space:nowrap">
-			<input type="radio" id="a-<?php echo $prefix; ?>copy" name="a-<?php echo $prefix; ?>MoveCopyRename" value="copy"
-				onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
-			<?php echo gettext("Copy");?>
-		</span>
-	</label>
-	<label for="a-<?php echo $prefix; ?>rename" style="padding-right: .5em">
-		<span style="white-space:nowrap">
-			<input type="radio" id="a-<?php echo $prefix; ?>rename" name="a-<?php echo $prefix; ?>MoveCopyRename" value="rename"
-				onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'rename');"/>
-			<?php echo gettext("Rename Folder");?>
-		</span>
-	</label>
-
-
-	<div id="a-<?php echo $prefix; ?>movecopydiv" style="padding-top: .5em; padding-left: .5em; display: none;">
-		<?php echo gettext("to"); ?>: <select id="a-<?php echo $prefix; ?>albumselectmenu" name="a-<?php echo $prefix; ?>albumselect" onChange="">
-			<option value="" selected="selected">/</option>
-			<?php
-				foreach ($mcr_albumlist as $fullfolder => $albumtitle) {
-					$singlefolder = $fullfolder;
-					$saprefix = "";
-					$salevel = 0;
-					$selected = "";
-					if ($album->name == $fullfolder) {
-						continue;
-					}
-					// Get rid of the slashes in the subalbum, while also making a subalbum prefix for the menu.
-					while (strstr($singlefolder, '/') !== false) {
-						$singlefolder = substr(strstr($singlefolder, '/'), 1);
-						$saprefix = "&nbsp; &nbsp;&nbsp;" . $saprefix;
-						$salevel++;
-					}
-					echo '<option value="' . $fullfolder . '"' . ($salevel > 0 ? ' style="background-color: '.$bglevels[$salevel].';"' : '')
-					. "$selected>". $saprefix . $singlefolder ."</option>\n";
-				}
-			?>
-		</select>
-		<br clear: all /><br />
-		<p class="buttons">
-			<a href="javascript:toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
-		</p>
-		</div>
-		<div id="a-<?php echo $prefix; ?>renamediv" style="padding-top: .5em; padding-left: .5em; display: none;">
-			<?php echo gettext("to"); ?>: <input name="a-<?php echo $prefix; ?>renameto" type="text" value="<?php echo basename($album->name);?>"/><br />
-			<br clear: all />
-			<p class="buttons">
-			<a href="javascript:toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
+		<h2 class="h2_bordered_edit"><?php echo gettext("Publish"); ?></h2>
+		<div class="box-edit">
+			<?php	$bglevels = array('#fff','#f8f8f8','#efefef','#e8e8e8','#dfdfdf','#d8d8d8','#cfcfcf','#c8c8c8');	?>
+			<p>
+				<input type="checkbox" name="<?php	echo $prefix; ?>Published" value="1" <?php if ($album->getShow()) echo "CHECKED";	?> />	
+				<?php echo gettext("Published");?>
 			</p>
 		</div>
-		<span style="line-height: 0em;"><br clear=all /></span>
-		<?php
-		echo apply_filter('edit_album_utilities', '', $album, $prefix);
-		?>
-		<span style="line-height: 0em;"><br clear=all /></span>
-	</div>
-  <h2 class="h2_bordered_edit"><?php echo gettext("Tags"); ?></h2>
-	<?php
-	$tagsort = getTagOrder();
-	tagSelector($album, 'tags_'.$prefix, false, $tagsort);
-	?>
+		
+		<h2 class="h2_bordered_edit"><?php echo gettext("General"); ?></h2>
+		<div class="box-edit">
+			<p>
+				<input type="checkbox" name="<?php echo $prefix.'allowcomments';?>" value="1" <?php if ($album->getCommentsAllowed()) { echo "CHECKED"; } ?> />
+				<?php echo gettext("Allow Comments"); ?>
+			</p>
+			<p>
+				<?php
+				$hc = $album->get('hitcounter');
+				if (empty($hc)) { $hc = '0'; }
+				?>
+				<input type="checkbox" name="reset_hitcounter"> <?php echo sprintf(gettext("Reset Hitcounter (Hits: %u)"), $hc); ?> 
+			</p>
+			<p>
+				<?php
+				$tv = $album->get('total_value');
+				$tc = $album->get('total_votes');
+			
+				if ($tc > 0) {
+					$hc = $tv/$tc;
+					printf(gettext('Rating: <strong>%u</strong>'), $hc);
+					echo "<label for=\"".$prefix."reset_rating\"><input type=\"checkbox\" id=\"".$prefix."reset_rating\" name=\"".$prefix."reset_rating\" value=1> ".gettext("Reset")."</label> ";
+				} else {
+					echo gettext("Rating: Unrated");
+				}
+				?>
+			</p>
+		</div>
+		<!-- **************** Move/Copy/Rename ****************** -->
+		<h2 class="h2_bordered_edit"><?php echo gettext("Utilities"); ?></h2>
+		<div class="box-edit">
+			<label for="a-<?php echo $prefix; ?>move" style="padding-right: .5em">
+				<span style="white-space:nowrap">
+					<input type="radio" id="a-<?php echo $prefix; ?>move" name="a-<?php echo $prefix; ?>MoveCopyRename" value="move"
+						onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
+					<?php echo gettext("Move");?>
+				</span>
+			</label>
+			<label for="a-<?php echo $prefix; ?>copy" style="padding-right: .5em">
+				<span style="white-space:nowrap">
+					<input type="radio" id="a-<?php echo $prefix; ?>copy" name="a-<?php echo $prefix; ?>MoveCopyRename" value="copy"
+						onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'movecopy');"/>
+					<?php echo gettext("Copy");?>
+				</span>
+			</label>
+			<label for="a-<?php echo $prefix; ?>rename" style="padding-right: .5em">
+				<span style="white-space:nowrap">
+					<input type="radio" id="a-<?php echo $prefix; ?>rename" name="a-<?php echo $prefix; ?>MoveCopyRename" value="rename"
+						onclick="toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', 'rename');"/>
+					<?php echo gettext("Rename Folder");?>
+				</span>
+			</label>
+		
+		
+			<div id="a-<?php echo $prefix; ?>movecopydiv" style="padding-top: .5em; padding-left: .5em; display: none;">
+				<?php echo gettext("to"); ?>: <select id="a-<?php echo $prefix; ?>albumselectmenu" name="a-<?php echo $prefix; ?>albumselect" onChange="">
+					<option value="" selected="selected">/</option>
+					<?php
+						foreach ($mcr_albumlist as $fullfolder => $albumtitle) {
+							$singlefolder = $fullfolder;
+							$saprefix = "";
+							$salevel = 0;
+							$selected = "";
+							if ($album->name == $fullfolder) {
+								continue;
+							}
+							// Get rid of the slashes in the subalbum, while also making a subalbum prefix for the menu.
+							while (strstr($singlefolder, '/') !== false) {
+								$singlefolder = substr(strstr($singlefolder, '/'), 1);
+								$saprefix = "&nbsp; &nbsp;&nbsp;" . $saprefix;
+								$salevel++;
+							}
+							echo '<option value="' . $fullfolder . '"' . ($salevel > 0 ? ' style="background-color: '.$bglevels[$salevel].';"' : '')
+							. "$selected>". $saprefix . $singlefolder ."</option>\n";
+						}
+					?>
+				</select>
+				<br clear: all /><br />
+				<p class="buttons">
+					<a href="javascript:toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
+				</p>
+			</div>
+			<div id="a-<?php echo $prefix; ?>renamediv" style="padding-top: .5em; padding-left: .5em; display: none;">
+				<?php echo gettext("to"); ?>: <input name="a-<?php echo $prefix; ?>renameto" type="text" value="<?php echo basename($album->name);?>"/><br />
+				<br clear: all />
+				<p class="buttons">
+				<a href="javascript:toggleAlbumMoveCopyRename('<?php echo $prefix; ?>', '');"><img src="images/reset.png" alt="" /><?php echo gettext("Cancel");?></a>
+				</p>
+			</div>
+			<span style="line-height: 0em;"><br clear=all /></span>
+			<?php
+			echo apply_filter('edit_album_utilities', '', $album, $prefix);
+			?>
+			<span style="line-height: 0em;"><br clear=all /></span>
+			</div>
+		  <h2 class="h2_bordered_edit">
+		  	<?php
+		  	if ($collapse_tags) {
+		  		?>
+		  		<a href="javascript:toggle('<?php echo $prefix; ?>taglist_hide');" >
+					<?php
+		  	}
+		  	echo gettext("Tags");
+		  	if ($collapse_tags) {
+		  		?>
+		  		</a>
+					<?php
+		  	}
+		  	?>
+	  	</h2>
+	  	<div id="<?php echo $prefix; ?>taglist_hide" <?php if ($collapse_tags) echo 'style="display:none"'; ?>>
+				<?php
+				$tagsort = getTagOrder();
+				tagSelector($album, 'tags_'.$prefix, false, $tagsort);
+				?>
+			</div>
 	</td>
 	</tr>
 	</table>
@@ -1579,6 +1596,7 @@ function printAlbumEditForm($index, $album) {
 <br clear: all />
 <?php
 }
+
 /**
  * puts out the maintenance buttons for an album
  *
