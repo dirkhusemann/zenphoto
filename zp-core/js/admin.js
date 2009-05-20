@@ -282,4 +282,13 @@ function showfield(obj, fld) {
 		document.getElementById(fld).style.display = 'block';
 }
 
+// password field hide/disable
+function toggle_passwords(id, pwd_enable) {
+	toggleExtraInfo('',id+'password',pwd_enable);
+	if (pwd_enable) {
+		jQuery('#'+id+'password_enabled').val('1');
+	} else {
+		jQuery('#'+id+'password_enabled').val('0');
+	}
+}
 

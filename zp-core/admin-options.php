@@ -564,8 +564,7 @@ if ($subtab == 'admin') {
 				echo  "<h2>".gettext('You must supply a password')."</h2>";
 				break;
 			case 'nothing':
-				//TODO: translation string
-				//echo  "<h2>".gettext('User name not provided')."</h2>";
+				echo  "<h2>".gettext('User name not provided')."</h2>";
 				break;
 			default:
 				echo  "<h2>".gettext('Your passwords did not match')."</h2>";

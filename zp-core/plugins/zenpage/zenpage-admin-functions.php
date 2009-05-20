@@ -1097,7 +1097,7 @@ function printPagesStatistic() {
 	if (empty($unpub)) {
 		printf(ngettext('(<strong>%1$u</strong> page)','(<strong>%1$u</strong> pages)',$total),$total);
 	} else {
-		printf(ngettext('(<strong>%1$u</strong> page, <strong>%3$u</strong> unpublished)','(<strong>%1$u</strong> pages, <strong>%2$u</strong> unpublished)',$total),$total,$unpub);
+		printf(ngettext('(<strong>%1$u</strong> page, <strong>%2$u</strong> unpublished)','(<strong>%1$u</strong> pages, <strong>%2$u</strong> unpublished)',$total),$total,$unpub);
 	}
 }
 function printNewsStatistic() {
@@ -1105,7 +1105,7 @@ function printNewsStatistic() {
 	if (empty($unpub)) {
 		printf(ngettext('(<strong>%1$u</strong> news)','(<strong>%1$u</strong> news)',$total),$total);
 	} else {
-		printf(ngettext('(<strong>%1$u</strong> newws, <strong>%3$u</strong> unpublished)','(<strong>%1$u</strong> news, <strong>%2$u</strong> unpublished)',$total),$total,$unpub);
+		printf(ngettext('(<strong>%1$u</strong> news, <strong>%2$u</strong> unpublished)','(<strong>%1$u</strong> news, <strong>%2$u</strong> unpublished)',$total),$total,$unpub);
 	}
 }
 function printCategoriesStatistic() {

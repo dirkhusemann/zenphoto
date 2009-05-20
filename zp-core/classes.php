@@ -83,7 +83,6 @@ class PersistentObject {
  	*/
 	function cache($entry=NULL) {
 		global $_zp_object_cache;
-
 		if (is_null($this->cache_by)) return false;
 		$classname = get_class($this);
 		if (!isset($_zp_object_cache[$classname])) {
@@ -100,7 +99,9 @@ class PersistentObject {
 			$cache_location = &$cache_location[$value];
 		}
 		// Exit if this object set is already cached.
-		if (!empty($cache_location)) return $cache_location;
+		if (!empty($cache_location)) {
+			return $cache_location;
+		}
 
 		if (!is_null($entry)) {
 			$key = $entry[$this->cache_by];
@@ -247,7 +248,6 @@ class PersistentObject {
 			$cache_location = &$this->cache();
 			$entry = &$cache_location[$this->unique_set[$this->cache_by]];
 			error_reporting($reporting);
-			
 		}
 		// Re-check the database if: 1) not using cache, or 2) didn't get a hit.
 		if (empty($entry)) {
