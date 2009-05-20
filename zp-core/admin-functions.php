@@ -1561,11 +1561,13 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 		  	}
 		  	?>
 	  	</h2>
-	  	<div id="<?php echo $prefix; ?>taglist_hide" <?php if ($collapse_tags) echo 'style="display:none"'; ?>>
-				<?php
-				$tagsort = getTagOrder();
-				tagSelector($album, 'tags_'.$prefix, false, $tagsort);
-				?>
+	  	<div class="box-edit-unpadded">
+		  	<div id="<?php echo $prefix; ?>taglist_hide" <?php if ($collapse_tags) echo 'style="display:none"'; ?> >
+					<?php
+					$tagsort = getTagOrder();
+					tagSelector($album, 'tags_'.$prefix, false, $tagsort);
+					?>
+				</div>
 			</div>
 	</td>
 	</tr>
@@ -1588,7 +1590,7 @@ function printAlbumEditForm($index, $album, $collapse_tags) {
 	
 	</table>
 	
-<br />
+<br / clear:all>
 <p class="buttons">
 <button type="submit" title="<?php echo gettext("Save Album"); ?>"><img	src="images/pass.png" alt="" /> <strong><?php echo gettext("Save Album"); ?></strong></button>
 <button type="reset" title="<?php echo gettext("Reset"); ?>"><img	src="images/fail.png" alt="" /> <strong><?php echo gettext("Reset"); ?></strong></button>

@@ -48,10 +48,10 @@ $_zp_object_update_cache = array();
 class PersistentObject {
 
 	var $data;
-	var $updates;
+	var $updates = NULL;
 	var $loaded = false;
 	var $table;
-	var $unique_set;
+	var $unique_set = NULL;
 	var $cache_by;
 	var $id;
 	var $use_cache = false;
@@ -281,7 +281,7 @@ class PersistentObject {
  	*/
 	function save() {
 		if (!$this->unique_set) { // If we don't have a unique set, then this is incorrect. Don't attempt to save.
-			zp_error('empty $this->unique set');		
+			zp_error('empty $this->unique set is empty');		
 			return;
 		}
 		if ($this->transient) return; // If this object isn't supposed to be persisted, don't save it.

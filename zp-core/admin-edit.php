@@ -516,7 +516,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 		<form name="albumedit1" AUTOCOMPLETE=OFF action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
 			<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 			<input type="hidden"	name="savealbuminfo" value="1" />
-			<?php printAlbumEditForm(0, $album, false); ?>
+			<?php printAlbumEditForm(0, $album, true); ?>
 		</form>
 		<?php printAlbumButtons($album); ?>
 		</div>
