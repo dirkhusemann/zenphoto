@@ -275,13 +275,18 @@ if (isset($_GET['album'])) {
 				
 			/** SAVE MULTIPLE ALBUMS ******************************************************/
 			} else if ($_POST['totalalbums']) {
-				for ($i = 1; $i <= $_POST['totalalbums']; $i++) {
-					$folder = sanitize_path($_POST["$i-folder"]);
+				$notify = '';
+				for ($i = 0; $i < $_POST['totalalbums']; $i++) {
+					if ($i>0) {
+						$prefix = $i."-";
+					} else {
+						$prefix = '';
+					}
+					$folder = sanitize_path($_POST[$prefix.'folder']);
 					$album = new Album($gallery, $folder);
 					$rslt = processAlbumEdit($i, $album);
 					if (!empty($rslt)) { $notify = $rslt; }
 				}
-				$notify = '';
 				$qs_albumsuffix = "&massedit";
 			}
 			// Redirect to the same album we saved.
@@ -508,8 +513,7 @@ if (isset($_GET['album']) && !isset($_GET['massedit'])) {
 	?>
 		<!-- Album info box -->
 		<div id="tab_albuminfo" class="tabbox">
-		<form name="albumedit1" AUTOCOMPLETE=OFF
-			action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
+		<form name="albumedit1" AUTOCOMPLETE=OFF action="?page=edit&action=save<?php echo "&album=" . urlencode($album->name); ?>"	method="post">
 			<input type="hidden" name="album"	value="<?php echo $album->name; ?>" />
 			<input type="hidden"	name="savealbuminfo" value="1" />
 			<?php printAlbumEditForm(0, $album); ?>
@@ -1047,10 +1051,9 @@ if (isset($_GET['saved'])) {
 
 <form name="albumedit" AUTOCOMPLETE=OFF	action="?page=edit&action=save<?php echo $albumdir ?>" method="POST">
 	<input type="hidden" name="totalalbums" value="<?php echo sizeof($albums); ?>" />
-<?php
+	<?php
 	$currentalbum = 0;
 	foreach ($albums as $folder) {
-		$currentalbum++;
 		$album = new Album($gallery, $folder);
 		$images = $album->getImages();
 		echo "\n<!-- " . $album->name . " -->\n";
@@ -1058,13 +1061,15 @@ if (isset($_GET['saved'])) {
 		<div class="innerbox" style="padding: 15px;">
 		<?php
 		printAlbumEditForm($currentalbum, $album);
+		$currentalbum++;
 		?>
 		</div>
 		<br />
 		<hr />
 		<?php
 	}
-	?></form>
+	?>
+	</form>
 
 </div>
 <?php

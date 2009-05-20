@@ -1015,6 +1015,7 @@ function printAlbumEditForm($index, $album) {
  ?>
 	<input type="hidden" name="<?php echo $prefix; ?>folder" value=" <?php echo $album->name; ?>" />
 	<input type="hidden" name="tagsort" value="<?php echo $tagsort; ?>" />
+	<input	type="hidden" name="<?php echo $prefix; ?>password_enabled" id="<?php echo $prefix; ?>password_enabled" value=0 />
 	<table>
 		<td width="70%" valign="top">
 		<table>
@@ -1030,29 +1031,56 @@ function printAlbumEditForm($index, $album) {
 	<?php	print_language_string_list($album->get('desc'), $prefix."albumdesc", true, NULL, 'texteditor'); ?>
 	</td>
 	</tr>
-	<tr>
-	<td align="left" value="top"><?php echo gettext("Album guest user:"); ?></td>
-		<td>
-			<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumuser" value="<?php echo $album->getUser(); ?>" />
+	<tr class="<?php echo $prefix; ?>passwordextrashow">
+		<td align="left" value="top">
+			<p>
+				<a href="javascript:toggle_passwords('<?php echo $prefix; ?>',true);">
+					<?php echo gettext("Album password:"); ?>
+				</a>
+			</p>
 		</td>
-	</tr>
-	<tr>
-		<td align="left"><?php echo gettext("Album password:");?> <br/><?php echo gettext("repeat:");?> </td>
-	<td>
-	<?php
-	$x = $album->getPassword();
-
-	if (!empty($x)) {
-		$x = '			 ';
-	}
-  ?>
-	<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumpass"  value="<?php echo $x; ?>" /><br/>
-	<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumpass_2" value="<?php echo $x; ?>" />
-	</td>
-	</tr>
-	<tr>
-		<td align="left" valign="top"><?php echo gettext("Password hint:"); ?> </td> <td>
-		<?php print_language_string_list($album->get('password_hint'), $prefix."albumpass_hint", false); ?>
+		<td>
+		<?php
+		$x = $album->getPassword();
+		if (!empty($x)) echo "**********";
+		?>
+		</td>
+	</tr> 
+	<tr class="<?php echo $prefix; ?>passwordextrahide" style="display:none" >
+		<td align="left" value="top">
+			<p>
+			<a href="javascript:toggle_passwords('<?php echo $prefix; ?>',false);">
+				<?php echo gettext("Album guest user:"); ?>
+			</a>
+			</p>
+			<p>
+			<?php echo gettext("Album password:");?>
+			<br />
+			<?php echo gettext("repeat:");?>
+			</p>
+			<p>
+			<?php echo gettext("Password hint:"); ?>
+			</p>
+		</td>
+		<td>
+			<p></p>
+			<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumuser" value="<?php echo $album->getUser(); ?>" />
+			</p>
+			<p>
+			<?php
+			$x = $album->getPassword();
+		
+			if (!empty($x)) {
+				$x = '			 ';
+			}
+		  ?>
+			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumpass"  value="<?php echo $x; ?>" />
+			<br/>
+			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $prefix; ?>albumpass_2" value="<?php echo $x; ?>" />
+			</p>
+			<p>
+			<?php print_language_string_list($album->get('password_hint'), $prefix."albumpass_hint", false); ?>
+			</p>
 		</td>
 	</tr>
 	
@@ -1771,31 +1799,33 @@ function processAlbumEdit($index, $album) {
 		$album->set('total_votes', 0);
 		$album->set('used_ips', 0);
 	}
-	$olduser = $album->getUser();
-	$newuser = $_POST[$prefix.'albumuser'];
-	$pwd = trim($_POST[$prefix.'albumpass']);
 	$fail = '';
-	if (($olduser != $newuser)) {
-		if ($pwd != $_POST[$prefix.'albumpass_2']) {
-			$pwd2 = trim($_POST[$prefix.'albumpass_2']);
-			$_POST[$prefix.'albumpass'] = $pwd; // invalidate password, user changed without password beign set
-			if (!empty($newuser) && empty($pwd) && empty($pwd2)) $fail = '&mismatch=user';
+	if (sanitize($_POST[$prefix.'password_enabled'])) {
+		$olduser = $album->getUser();
+		$newuser = $_POST[$prefix.'albumuser'];
+		$pwd = trim($_POST[$prefix.'albumpass']);
+		if (($olduser != $newuser)) {
+			if ($pwd != $_POST[$prefix.'albumpass_2']) {
+				$pwd2 = trim($_POST[$prefix.'albumpass_2']);
+				$_POST[$prefix.'albumpass'] = $pwd; // invalidate password, user changed without password beign set
+				if (!empty($newuser) && empty($pwd) && empty($pwd2)) $fail = '&mismatch=user';
+			}
 		}
-	}
-	if ($_POST[$prefix.'albumpass'] == $_POST[$prefix.'albumpass_2']) {
-		$album->setUser($newuser);
-		if (empty($pwd)) {
-			if (empty($_POST[$prefix.'albumpass'])) {
-				$album->setPassword(NULL);  // clear the gallery password
+		if ($_POST[$prefix.'albumpass'] == $_POST[$prefix.'albumpass_2']) {
+			$album->setUser($newuser);
+			if (empty($pwd)) {
+				if (empty($_POST[$prefix.'albumpass'])) {
+					$album->setPassword(NULL);  // clear the gallery password
+				}
+			} else {
+				$album->setPassword($pwd);
 			}
 		} else {
-			$album->setPassword($pwd);
-		}
-	} else {
-		if (empty($fail)) {
-			$notify = '&mismatch=album';
-		} else {
-			$notify = $fail;
+			if (empty($fail)) {
+				$notify = '&mismatch=album';
+			} else {
+				$notify = $fail;
+			}
 		}
 	}
 	$oldtheme = $album->getAlbumTheme();
@@ -1814,7 +1844,7 @@ function processAlbumEdit($index, $album) {
 	$album->setCustomData(apply_filter('save_album_custom_data', $custom, $prefix));
 	apply_filter('save_album_utilities_data', $album, $prefix);
 	$album->save();
-
+		
 	// Move/Copy/Rename the album after saving.
 	$movecopyrename_action = '';
 	if (isset($_POST['a-'.$prefix.'MoveCopyRename'])) {

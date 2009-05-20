@@ -167,6 +167,7 @@ if (isset($_GET['action'])) {
 			
 		/*** Gallery options ***/
 		if (isset($_POST['savegalleryoptions'])) {
+			
 			setBoolOption('persistent_archive', isset($_POST['persistent_archive']));
 			setBoolOption('album_session', isset($_POST['album_session']));
 			setBoolOption('thumb_select_images', isset($_POST['thumb_select_images']));
@@ -190,30 +191,32 @@ if (isset($_GET['action'])) {
 			if (!empty($newuser)) setOption('login_user_field', 1);
 			$pwd = trim($_POST['gallerypass']);
 			$fail = '';
-			if ($olduser != $newuser) {
-				if ($pwd != $_POST['gallerypass_2']) {
-					$_POST['gallerypass'] = $pwd;  // invalidate, user changed but password not set
-					$pwd2 = trim($_POST['gallerypass_2']);
-					if (!empty($newuser)  && empty($pwd) && empty($pwd2)) $fail = '?mismatch=user_gallery';
+			if (sanitize($_POST['password_enabled'])) {
+				if ($olduser != $newuser) {
+					if ($pwd != $_POST['gallerypass_2']) {
+						$_POST['gallerypass'] = $pwd;  // invalidate, user changed but password not set
+						$pwd2 = trim($_POST['gallerypass_2']);
+						if (!empty($newuser)  && empty($pwd) && empty($pwd2)) $fail = '?mismatch=user_gallery';
+					}
 				}
-			}
-			if ($_POST['gallerypass'] == $_POST['gallerypass_2']) {
-				setOption('gallery_user', $newuser);
-				if (empty($pwd)) {
-					if (empty($_POST['gallerypass'])) {
-						setOption('gallery_password', NULL);  // clear the gallery password
+				if ($_POST['gallerypass'] == $_POST['gallerypass_2']) {
+					setOption('gallery_user', $newuser);
+					if (empty($pwd)) {
+						if (empty($_POST['gallerypass'])) {
+							setOption('gallery_password', NULL);  // clear the gallery password
+						}
+					} else {
+						setOption('gallery_password', passwordHash($newuser, $pwd));
 					}
 				} else {
-					setOption('gallery_password', passwordHash($newuser, $pwd));
+					if (empty($fail)) {
+						$notify = '?mismatch=gallery';
+					} else {
+						$notify = $fail;
+					}
 				}
-			} else {
-				if (empty($fail)) {
-					$notify = '?mismatch=gallery';
-				} else {
-					$notify = $fail;
-				}
+				setOption('gallery_hint', process_language_string_save('gallery_hint', 3));
 			}
-			setOption('gallery_hint', process_language_string_save('gallery_hint', 3));
 			$returntab = "&tab=gallery";
 		}
 
@@ -229,32 +232,34 @@ if (isset($_GET['action'])) {
 			setOption('exact_tag_match', sanitize($_POST['tag_match']));
 			$olduser = getOption('search_user');
 			$newuser = sanitize($_POST['search_user'],3);
-			if (!empty($newuser)) setOption('login_user_field', 1);
-			$pwd = trim($_POST['searchpass']);
-			if ($olduser != $newuser) {
-				if ($pwd != $_POST['searchpass_2']) {
-					$pwd2 = trim($_POST['searchpass_2']);
-					$_POST['searchpass'] = $pwd;  // invalidate, user changed but password not set
-					if (!empty($newuser) && empty($pwd) && empty($pwd2)) $fail = '?mismatch=user_search';
+			if (sanitize($_POST['password_enabled'], 3)) {
+				if (!empty($newuser)) setOption('login_user_field', 1);
+				$pwd = trim($_POST['searchpass']);
+				if ($olduser != $newuser) {
+					if ($pwd != $_POST['searchpass_2']) {
+						$pwd2 = trim($_POST['searchpass_2']);
+						$_POST['searchpass'] = $pwd;  // invalidate, user changed but password not set
+						if (!empty($newuser) && empty($pwd) && empty($pwd2)) $fail = '?mismatch=user_search';
+					}
 				}
-			}
-			if ($_POST['searchpass'] == $_POST['searchpass_2']) {
-				setOption('search_user',$newuser);
-				if (empty($pwd)) {
-					if (empty($_POST['searchpass'])) {
-						setOption('search_password', NULL);  // clear the gallery password
+				if ($_POST['searchpass'] == $_POST['searchpass_2']) {
+					setOption('search_user',$newuser);
+					if (empty($pwd)) {
+						if (empty($_POST['searchpass'])) {
+							setOption('search_password', NULL);  // clear the gallery password
+						}
+					} else {
+						setOption('search_password', passwordHash($newuser, $pwd));
 					}
 				} else {
-					setOption('search_password', passwordHash($newuser, $pwd));
+					if (empty($notify)) {
+						$notify = '?mismatch=search';
+					} else {
+						$notify = $fail;
+					}
 				}
-			} else {
-				if (empty($notify)) {
-					$notify = '?mismatch=search';
-				} else {
-					$notify = $fail;
-				}
+				setOption('search_hint', process_language_string_save('search_hint', 3));
 			}
-			setOption('search_hint', process_language_string_save('search_hint', 3));
 			setBoolOption('search_space_is_or', isset($_POST['search_space_is_or']));
 			setBoolOption('search_no_albums', isset($_POST['search_no_albums']));
 			$returntab = "&tab=search";
@@ -641,41 +646,49 @@ if (empty($alterrights)) {
 			<td width="20%" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
 				<input type="hidden" name="<?php echo $id ?>-adminuser" value="<?php echo $userid ?>" />
 				<span <?php if ($current) echo 'style="display:none;"'; ?> class="userextrashow">
-				<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',true);"><?php
-				if (empty($userid)) {
-					echo gettext("Add New Admin");
-				} else {
-					echo $userid; 
-				}
-				?></a></span>
+					<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',true);">
+						<?php
+						if (empty($userid)) {
+							echo gettext("Add New Admin");
+						} else {
+							echo $userid; 
+						}
+						?>
+					</a>
+				</span>
 				<span <?php if ($current) echo 'style="display:block;"'; else echo 'style="display:none;"'; ?> class="userextrahide">
-				<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',false);"><?php 
-				if (empty($userid)) {
-					echo gettext("Add New Admin");
-				} else {
-					echo $userid;
-				}?></a></span>
+					<a href="javascript:toggleExtraInfo('<?php echo $id;?>','user',false);">
+						<?php 
+						if (empty($userid)) {
+							echo gettext("Add New Admin");
+						} else {
+							echo $userid;
+						}
+						?>
+					</a>
+				</span>
 			</td>
 			<td width="35%" style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>">
 			<?php 
-			if (empty($userid)) {
-			?>
-				<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminuser" value="" />
-			<?php
-			} else {
-				echo $master;
-				if (!$user['rights']) {
-				?>
-					<input type="checkbox" name="<?php echo $id ?>-confirmed"
-						value=<?php echo NO_RIGHTS; echo $alterrights; ?>> <?php echo gettext("Authenticate user"); ?>
-				<?php
-				} else {
+				if (empty($userid)) {
 					?>
-					<input type = "hidden" name="<?php echo $id ?>-confirmed"	value=<?php echo NO_RIGHTS; ?>>
-					<?php 
+					<input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminuser" value=""
+						onClick="toggleExtraInfo('<?php echo $id;?>','user',true);" />
+					<?php
+				} else {
+					echo $master;
+					if (!$user['rights']) {
+					?>
+						<input type="checkbox" name="<?php echo $id ?>-confirmed" value=<?php echo NO_RIGHTS; echo $alterrights; ?>>
+						<?php echo gettext("Authenticate user"); ?>
+						<?php
+					} else {
+						?>
+						<input type = "hidden" name="<?php echo $id ?>-confirmed"	value=<?php echo NO_RIGHTS; ?>>
+						<?php 
+					}
 				}
-			}
- 			?>
+	 			?>
  			</td>
 			<td style="border-top: 4px solid #D1DBDF;<?php echo $background; ?>" >
 				<?php 
@@ -696,73 +709,73 @@ if (empty($alterrights)) {
 			</tr>
 	<tr <?php if (!$current) echo 'style="display:none;"'; ?> class="userextrainfo">
 		<td width="20%" <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Password:"); ?><br />
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?></td>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("Password:"); ?><br />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?></td>
 		<td width="35%" <?php if (!empty($background)) echo "style=\"$background\""; ?>><?php $x = $user['pass']; if (!empty($x)) { $x = '          '; } ?>
-		<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass"
-			value="<?php echo $x; ?>" /><br />
-		<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass_2"
-			value="<?php echo $x; ?>" /></td>
+			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass"
+				value="<?php echo $x; ?>" /><br />
+			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="<?php echo $id ?>-adminpass_2"
+				value="<?php echo $x; ?>" /></td>
 		<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-		<table class="checkboxes" > <!-- checkbox table -->
-			<tr>
-				<td style="padding-bottom: 3px;<?php echo $background; ?>" colspan="5">
-				<strong><?php echo gettext("Rights"); ?></strong>:
-				</td>
-			</tr>
-			<tr>
-				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<input type="checkbox" name="<?php echo $id ?>-admin_rights"
-					value=<?php echo ADMIN_RIGHTS; if ($user['rights'] & ADMIN_RIGHTS) echo ' checked'; 
-					echo $alterrights; ?>> <?php echo gettext("User admin"); ?></td>
-					
-				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<input type="checkbox" name="<?php echo $id ?>-options_rights"
-					value=<?php echo OPTIONS_RIGHTS; if ($user['rights'] & OPTIONS_RIGHTS) echo ' checked'; 
-					echo $alterrights; ?>> <?php echo gettext("Options"); ?></td>
-					
-				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<input type="checkbox" name="<?php echo $id ?>-zenpage_rights"
-					<?php if($disabled = !getOption('zp_plugin_zenpage')) echo "DISABLED ";?>value=<?php echo ZENPAGE_RIGHTS; if (!$disabled && ($user['rights'] & ZENPAGE_RIGHTS)) echo ' checked'; 
-					echo $alterrights; ?>> <?php echo gettext("Zenpage"); ?></td>
-			</tr>
-			<tr>
-				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<input type="checkbox" name="<?php echo $id ?>-tags_rights"
-					value=<?php echo TAGS_RIGHTS; if ($user['rights'] & TAGS_RIGHTS) echo ' checked';
-					echo $alterrights; ?>> <?php echo gettext("Tags"); ?></td>
-				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<input type="checkbox" name="<?php echo $id ?>-themes_rights"
-					value=<?php echo THEMES_RIGHTS; if ($user['rights'] & THEMES_RIGHTS) echo ' checked';
-					echo $alterrights; ?>> <?php echo gettext("Themes"); ?></td>
-				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<input type="checkbox" name="<?php echo $id ?>-all_album_rights"
-					value=<?php echo ALL_ALBUMS_RIGHTS; if ($user['rights'] & ALL_ALBUMS_RIGHTS) echo ' checked'; 
-					echo $alterrights; ?>> <?php echo gettext("Manage all albums"); ?></td>
-			</tr>
-			<tr>
-				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<input type="checkbox" name="<?php echo $id ?>-edit_rights"
-					value=<?php echo EDIT_RIGHTS; if ($user['rights'] & EDIT_RIGHTS) echo ' checked'; 
-					echo $alterrights; ?>> <?php echo gettext("Edit"); ?></td>
-				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<input type="checkbox" name="<?php echo $id ?>-comment_rights"
-					value=<?php echo COMMENT_RIGHTS; if ($user['rights'] & COMMENT_RIGHTS) echo ' checked'; 
-					echo $alterrights; ?>> <?php echo gettext("Comment"); ?></td>
-				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<input type="checkbox" name="<?php echo $id ?>-upload_rights"
-					value=<?php echo UPLOAD_RIGHTS; if ($user['rights'] & UPLOAD_RIGHTS) echo ' checked'; 
-					echo $alterrights; ?>> <?php echo gettext("Upload"); ?></td>
-			</tr>
-			<tr>
-				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
-				<input type="checkbox" name="<?php echo $id ?>-view_rights"
-					value=<?php echo VIEWALL_RIGHTS; if ($user['rights'] & VIEWALL_RIGHTS) echo ' checked'; 
-					echo $alterrights; ?>> <?php echo gettext("View all"); ?></td>
-				<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-main_rights"
-					value=<?php echo MAIN_RIGHTS; if ($user['rights'] & MAIN_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Overview"); ?></td>
-			</tr>
-		</table> <!-- end checkbox table -->
+			<table class="checkboxes" > <!-- checkbox table -->
+				<tr>
+					<td style="padding-bottom: 3px;<?php echo $background; ?>" colspan="5">
+					<strong><?php echo gettext("Rights"); ?></strong>:
+					</td>
+				</tr>
+				<tr>
+					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+					<input type="checkbox" name="<?php echo $id ?>-admin_rights"
+						value=<?php echo ADMIN_RIGHTS; if ($user['rights'] & ADMIN_RIGHTS) echo ' checked'; 
+						echo $alterrights; ?>> <?php echo gettext("User admin"); ?></td>
+						
+					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+					<input type="checkbox" name="<?php echo $id ?>-options_rights"
+						value=<?php echo OPTIONS_RIGHTS; if ($user['rights'] & OPTIONS_RIGHTS) echo ' checked'; 
+						echo $alterrights; ?>> <?php echo gettext("Options"); ?></td>
+						
+					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+					<input type="checkbox" name="<?php echo $id ?>-zenpage_rights"
+						<?php if($disabled = !getOption('zp_plugin_zenpage')) echo "DISABLED ";?>value=<?php echo ZENPAGE_RIGHTS; if (!$disabled && ($user['rights'] & ZENPAGE_RIGHTS)) echo ' checked'; 
+						echo $alterrights; ?>> <?php echo gettext("Zenpage"); ?></td>
+				</tr>
+				<tr>
+					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+					<input type="checkbox" name="<?php echo $id ?>-tags_rights"
+						value=<?php echo TAGS_RIGHTS; if ($user['rights'] & TAGS_RIGHTS) echo ' checked';
+						echo $alterrights; ?>> <?php echo gettext("Tags"); ?></td>
+					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+					<input type="checkbox" name="<?php echo $id ?>-themes_rights"
+						value=<?php echo THEMES_RIGHTS; if ($user['rights'] & THEMES_RIGHTS) echo ' checked';
+						echo $alterrights; ?>> <?php echo gettext("Themes"); ?></td>
+					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+					<input type="checkbox" name="<?php echo $id ?>-all_album_rights"
+						value=<?php echo ALL_ALBUMS_RIGHTS; if ($user['rights'] & ALL_ALBUMS_RIGHTS) echo ' checked'; 
+						echo $alterrights; ?>> <?php echo gettext("Manage all albums"); ?></td>
+				</tr>
+				<tr>
+					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+					<input type="checkbox" name="<?php echo $id ?>-edit_rights"
+						value=<?php echo EDIT_RIGHTS; if ($user['rights'] & EDIT_RIGHTS) echo ' checked'; 
+						echo $alterrights; ?>> <?php echo gettext("Edit"); ?></td>
+					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+					<input type="checkbox" name="<?php echo $id ?>-comment_rights"
+						value=<?php echo COMMENT_RIGHTS; if ($user['rights'] & COMMENT_RIGHTS) echo ' checked'; 
+						echo $alterrights; ?>> <?php echo gettext("Comment"); ?></td>
+					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+					<input type="checkbox" name="<?php echo $id ?>-upload_rights"
+						value=<?php echo UPLOAD_RIGHTS; if ($user['rights'] & UPLOAD_RIGHTS) echo ' checked'; 
+						echo $alterrights; ?>> <?php echo gettext("Upload"); ?></td>
+				</tr>
+				<tr>
+					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>>
+					<input type="checkbox" name="<?php echo $id ?>-view_rights"
+						value=<?php echo VIEWALL_RIGHTS; if ($user['rights'] & VIEWALL_RIGHTS) echo ' checked'; 
+						echo $alterrights; ?>> <?php echo gettext("View all"); ?></td>
+					<td <?php if (!empty($background)) echo "style=\"$background\""; ?>><input type="checkbox" name="<?php echo $id ?>-main_rights"
+						value=<?php echo MAIN_RIGHTS; if ($user['rights'] & MAIN_RIGHTS) echo ' checked';echo$alterrights; ?>> <?php echo gettext("Overview"); ?></td>
+				</tr>
+			</table> <!-- end checkbox table -->
 
 		</td>
 	</tr>
@@ -852,7 +865,7 @@ if (empty($alterrights)) {
 	?>
 	<div id="tab_gallery" class="tabbox">
 		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
-		<input	type="hidden" name="savegeneraloptions" value="yes" />
+			<input	type="hidden" name="savegeneraloptions" value="yes" />
 			<table class="bordered">
 				<tr>
 					<td></td>
@@ -1052,7 +1065,8 @@ if (empty($alterrights)) {
 	?>
 	<div id="tab_gallery" class="tabbox">
 		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
-		<input	type="hidden" name="savegalleryoptions" value="yes" />
+			<input	type="hidden" name="savegalleryoptions" value="yes" />
+			<input	type="hidden" name="password_enabled" id="password_enabled" value=0 />
 			<table class="bordered">
 				<tr>
 					<td></td>
@@ -1078,29 +1092,54 @@ if (empty($alterrights)) {
 					</td>
 					<td><?php echo gettext("A brief description of your gallery. Some themes may display this text."); ?></td>
 				</tr>
-				<tr>
-					<td><?php echo gettext("Gallery guest user:"); ?>    </td>
-					<td><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallery_user" value="<?php echo htmlspecialchars(getOption('gallery_user')); ?>" />		</td>
-					<td><?php echo gettext("User ID for the gallery guest user") ?></td>
+				<tr class="passwordextrashow">
+					<td style="background-color: #ECF1F2;">
+						<p>
+							<a href="javascript:toggle_passwords('',true);">
+								<?php echo gettext("Gallery password:"); ?>
+							</a>
+						</p>
+					</td>
+					<td style="background-color: #ECF1F2;">
+					<?php
+					$x = getOption('gallery_password');
+					if (!empty($x)) echo "**********";
+					?>
+					</td>
+					<td style="background-color: #ECF1F2;">
+						<p><?php echo gettext("User ID for the gallery guest user") ?></p>
+						<p><?php echo gettext("Master password for the gallery. If this is set, visitors must know this password to view the gallery."); ?></p>
+						<p><?php echo gettext("A reminder hint for the password."); ?></p>
+					</td>
 				</tr>
-				<tr>
-					<td><?php echo gettext("Gallery password:"); ?><br />
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php gettext("(repeat)"); ?>
+				<tr class="passwordextrahide" style="display:none" >
+					<td>
+						<p>
+							<a href="javascript:toggle_passwords('',false);">
+							<?php echo gettext("Gallery guest user:"); ?>
+							</a>
+						</p>
+						<p>
+							<?php echo gettext("Gallery password:"); ?><br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?>
+						</p>
+						<p><?php echo gettext("Gallery password hint:"); ?></p>
 					</td>
 					<td>
-					<?php $x = getOption('gallery_password'); if (!empty($x)) { $x = '          '; } ?>
-					<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallerypass"
-						value="<?php echo $x; ?>" /><br />
-					<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallerypass_2"
-						value="<?php echo $x; ?>" /></td>
-					<td><?php echo gettext("Master password for the gallery. If this is set, visitors must know this password to view the gallery."); ?></td>
-				</tr>
-				<tr>
-					<td><?php echo gettext("Gallery password hint:"); ?></td>
-					<td>
-					<?php print_language_string_list(getOption('gallery_hint'), 'gallery_hint', false) ?>
+						<p><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallery_user" value="<?php echo htmlspecialchars(getOption('gallery_user')); ?>" /></p>
+						<p>
+							<?php $x = getOption('gallery_password'); if (!empty($x)) { $x = '          '; } ?>
+							<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallerypass" value="<?php echo $x; ?>" />
+							<br />
+							<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="gallerypass_2" value="<?php echo $x; ?>" />
+						</p>
+						<p><?php print_language_string_list(getOption('gallery_hint'), 'gallery_hint', false) ?></p>
 					</td>
-					<td><?php echo gettext("A reminder hint for the password."); ?></td>
+					<td>
+						<p><?php echo gettext("User ID for the gallery guest user") ?></p>
+						<p><?php echo gettext("Master password for the gallery. If this is set, visitors must know this password to view the gallery."); ?></p>
+						<p><?php echo gettext("A reminder hint for the password."); ?></p>
+					</td>
 				</tr>
 				<tr>
 					<td><?php echo gettext("Website title:"); ?></td>
@@ -1225,91 +1264,118 @@ if (empty($alterrights)) {
 	?>
 	<div id="tab_search" class="tabbox">
 		<form action="?action=saveoptions" method="post" AUTOCOMPLETE=OFF>
-		<input	type="hidden" name="savesearchoptions" value="yes" />
-	<table class="bordered">
-		<tr>
-			<td></td>
-			<td>
-			<p class="buttons">
-			<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
-			<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
-			</p>
-			</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td width="175"><?php echo gettext("Search guest user:"); ?>    </td>
-			<td width="350"><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="search_user" value="<?php echo htmlspecialchars(getOption('search_user')); ?>" />		</td>
-			<td><?php echo gettext("User ID for the search guest user") ?></td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Search password:"); ?><br />
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?>
-			</td>
-			<td><?php $x = getOption('search_password'); if (!empty($x)) { $x = '          '; } ?>
-			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="searchpass"
-				value="<?php echo $x; ?>" /><br />
-			<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="searchpass_2"
-				value="<?php echo $x; ?>" /></td>
-			<td><?php echo gettext("Password for the search guest user. If this is set, visitors must know this password to view search results."); ?></td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Search password hint:"); ?></td>
-			<td>
-			<?php print_language_string_list(getOption('search_hint'), 'search_hint', false) ?>
-			</td>
-			<td><?php echo gettext("A reminder hint for the password."); ?></td>
-		</tr>
-		<tr>
-			<td><?php echo gettext("Search behavior settings:"); ?></td>
-			<td>
-			<p>
-				<?php 
-				$exact = '<input type="radio" id="exact_tags" name="tag_match" value="1" ';
-				$partial = '<input type="radio" id="exact_tags" name="tag_match" value="0" ';
-				if (getOption('exact_tag_match')) {
-					$exact .= ' CHECKED ';
-				} else {
-					$partial .= ' CHECKED ';
-				}
-				$exact .= '/>'. gettext('exact');
-				$partial .= '/>'. gettext('partial');
-				$engine = new SearchEngine();
-				$fields = array_flip($engine->zp_search_fields);
-				$fields[SEARCH_TAGS] .= $exact.$partial;
-				$fields = array_flip($fields);
-				$set_fields = $engine->allowedSearchFields();
-				echo gettext('Fields list:');
-				?>
-					<ul class="searchchecklist">
-						<?php
-						generateUnorderedListFromArray($set_fields, $fields, '_SEARCH_', false, true, true);
+			<input	type="hidden" name="savesearchoptions" value="yes" />
+			<input	type="hidden" name="password_enabled" id="password_enabled" value=0 />
+			<table class="bordered">
+				<tr>
+					<td></td>
+					<td>
+					<p class="buttons">
+					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+					</p>
+					</td>
+					<td></td>
+				</tr>
+				<tr class="passwordextrashow">
+					<td width="175" style="background-color: #ECF1F2;">
+						<p>
+							<a href="javascript:toggle_passwords('',true);">
+								<?php echo gettext("Search password:"); ?>
+							</a>
+						</p>
+					</td>
+					<td style="background-color: #ECF1F2;">
+					<?php
+					$x = getOption('search_password');
+					if (!empty($x)) echo "**********";
+					?>
+					</td>
+					<td style="background-color: #ECF1F2;">
+						<p><?php echo gettext("User ID for the search guest user") ?></p>
+						<p><?php echo gettext("Password for the search guest user. If this is set, visitors must know this password to view search results."); ?></p>
+						<p><?php echo gettext("A reminder hint for the password."); ?></p>
+					</td>
+				</tr>
+				<tr class="passwordextrahide" style="display:none" >
+					<td width="175">
+						<p>
+							<a href="javascript:toggle_passwords('',false);">
+								<?php echo gettext("Search guest user:"); ?>
+							</a>
+						</p>
+						<p>
+							<?php echo gettext("Search password:"); ?><br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?>
+						</p>
+						<p><?php echo gettext("Search password hint:"); ?></p>
+					</td>
+					<td>
+						<p><input type="text" size="<?php echo TEXT_INPUT_SIZE; ?>" name="search_user" value="<?php echo htmlspecialchars(getOption('search_user')); ?>" /></p>
+						<p>
+							<?php $x = getOption('search_password'); if (!empty($x)) { $x = '          '; } ?>
+							<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="searchpass" value="<?php echo $x; ?>" />
+							<br />
+							<input type="password" size="<?php echo TEXT_INPUT_SIZE; ?>" name="searchpass_2" value="<?php echo $x; ?>" />
+						</p>
+						<p><?php print_language_string_list(getOption('search_hint'), 'search_hint', false) ?></p>
+					</td>
+					<td>
+						<p><?php echo gettext("User ID for the search guest user") ?></p>
+						<p><?php echo gettext("Password for the search guest user. If this is set, visitors must know this password to view search results."); ?></p>
+						<p><?php echo gettext("A reminder hint for the password."); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<td><?php echo gettext("Search behavior settings:"); ?></td>
+					<td>
+					<p>
+						<?php 
+						$exact = '<input type="radio" id="exact_tags" name="tag_match" value="1" ';
+						$partial = '<input type="radio" id="exact_tags" name="tag_match" value="0" ';
+						if (getOption('exact_tag_match')) {
+							$exact .= ' CHECKED ';
+						} else {
+							$partial .= ' CHECKED ';
+						}
+						$exact .= '/>'. gettext('exact');
+						$partial .= '/>'. gettext('partial');
+						$engine = new SearchEngine();
+						$fields = array_flip($engine->zp_search_fields);
+						$fields[SEARCH_TAGS] .= $exact.$partial;
+						$fields = array_flip($fields);
+						$set_fields = $engine->allowedSearchFields();
+						echo gettext('Fields list:');
 						?>
-					</ul>
-			</p>
-			<p><input type="checkbox" name="search_space_is_or" value="1" <?php echo checked('1', getOption('search_space_is_or')); ?> /> <?php echo gettext('Treat spaces as <em>OR</em>') ?></p>
-			<p><input type="checkbox" name="search_no_albums" value="1" <?php echo checked('1', getOption('search_no_albums')); ?> /> <?php echo gettext('Do not return <em>album</em> matches') ?></p>
-			</td>
-			<td>
-				<p><?php echo gettext('Search behavior settings.') ?></p>
-				<p><?php echo gettext("<em>Field list</em> is the set of fields on which searches may be performed."); ?></p>
-				<p><?php echo gettext("Search does partial matches on all fields selected with the possible exception of <em>Tags</em>. This means that if the field contains the search criteria anywhere within it a result will be returned. If <em>exact</em> is selected for <em>Tags</em> then the search criteria must exactly match the tag for a result to be returned.") ?></p>
-				<p><?php echo gettext('Setting <code>Treat spaces as <em>OR</em></code> will cause search to trigger on any of the words in a string separated by spaces. Leaving the option unchecked will treat the whole string as a search target.') ?></p>
-				<p><?php echo gettext('Setting <code>Do not return <em>album</em> matches</code> will cause search to ignore albums when looking for matches. No albums will be returned from the <code>next_album()</code> loop.') ?></p>
-			</td>
-		</tr>
-		<tr>
-			<td></td>
-			<td>
-			<p class="buttons">
-			<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
-			<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
-			</p>
-			</td>
-			<td></td>
-		</tr>
-	</table>
-	</form>
+							<ul class="searchchecklist">
+								<?php
+								generateUnorderedListFromArray($set_fields, $fields, '_SEARCH_', false, true, true);
+								?>
+							</ul>
+					</p>
+					<p><input type="checkbox" name="search_space_is_or" value="1" <?php echo checked('1', getOption('search_space_is_or')); ?> /> <?php echo gettext('Treat spaces as <em>OR</em>') ?></p>
+					<p><input type="checkbox" name="search_no_albums" value="1" <?php echo checked('1', getOption('search_no_albums')); ?> /> <?php echo gettext('Do not return <em>album</em> matches') ?></p>
+					</td>
+					<td>
+						<p><?php echo gettext('Search behavior settings.') ?></p>
+						<p><?php echo gettext("<em>Field list</em> is the set of fields on which searches may be performed."); ?></p>
+						<p><?php echo gettext("Search does partial matches on all fields selected with the possible exception of <em>Tags</em>. This means that if the field contains the search criteria anywhere within it a result will be returned. If <em>exact</em> is selected for <em>Tags</em> then the search criteria must exactly match the tag for a result to be returned.") ?></p>
+						<p><?php echo gettext('Setting <code>Treat spaces as <em>OR</em></code> will cause search to trigger on any of the words in a string separated by spaces. Leaving the option unchecked will treat the whole string as a search target.') ?></p>
+						<p><?php echo gettext('Setting <code>Do not return <em>album</em> matches</code> will cause search to ignore albums when looking for matches. No albums will be returned from the <code>next_album()</code> loop.') ?></p>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+					<p class="buttons">
+					<button type="submit" value="<?php echo gettext('save') ?>" title="<?php echo gettext("Save"); ?>"><img src="images/pass.png" alt="" /><strong><?php echo gettext("Save"); ?></strong></button>
+					<button type="reset" value="<?php echo gettext('reset') ?>" title="<?php echo gettext("Reset"); ?>"><img src="images/reset.png" alt="" /><strong><?php echo gettext("Reset"); ?></strong></button>
+					</p>
+					</td>
+					<td></td>
+				</tr>
+			</table>
+		</form>
 	</div>
 	<!-- end of tab-search div -->
  <?php
@@ -1641,12 +1707,14 @@ if (empty($alterrights)) {
 		<tr>
 			<td><?php echo gettext("Full image protection:"); ?></td>
 			<td style="margin:0">
+				<p>
 				<?php
 				echo "<select id=\"protect_full_image\" name=\"protect_full_image\">\n";
 				$protection = getOption('protect_full_image');
 				generateListFromArray(array($protection), array(gettext('Unprotected') => 'Unprotected', gettext('Protected view') => 'Protected view', gettext('Download') => 'Download', gettext('No access') => 'No access'), false, true);
 				echo "</select>\n";
 				?>
+				</p>
 				<p>
 				<?php
 				echo '<input type="checkbox" name="hotlink_protection" value="1"';
@@ -1658,29 +1726,69 @@ if (empty($alterrights)) {
 				echo checked('1', getOption('cache_full_image')). ' /> '.gettext('cache the full image');
 				?>
 				</p>
+				<p>
+				<input	type="hidden" name="password_enabled" id="password_enabled" value=0 />
 				<table class="compact">
-					<tr >
-						<td style="margin:0; padding:0"><?php echo gettext("user:"); ?></td>
+					<tr class="passwordextrashow">
+						<td style="margin:0; padding:0">
+							<a href="javascript:toggle_passwords('',true);">
+								<?php echo gettext("password:"); ?>
+							</a>
+						</td>
+						<td style="margin:0; padding:0">
+							<?php
+							$x = getOption('protected_image_password');
+							if (!empty($x)) echo "  **********";
+							?>
+						</td>
+					</tr>
+					<tr class="passwordextrashow">
+						<td style="margin:0; padding:0">
+						</td>
+						<td style="margin:0; padding:0">
+							<!-- password & repeat -->
+							<br />
+							<br />
+						</td>
+					</tr>
+					<tr class="passwordextrashow">
+						<td style="margin:0; padding:0">
+						</td>
+						<td style="margin:0; padding:0">
+							<!-- hint -->
+							<br />
+							<br />
+						</td>
+					</tr>
+					
+					<tr class="passwordextrahide" style="display:none">
+						<td style="margin:0; padding:0">
+							<a href="javascript:toggle_passwords('',false);">
+								<?php echo gettext("user:"); ?>
+							</a>
+						</td>
 						<td style="margin:0; padding:0"><input type="text" size="<?php echo 30; ?>" name="protected_image_user" value="<?php echo htmlspecialchars(getOption('protected_image_user')); ?>" />		</td>
 					</tr>
-					<tr>
+					<tr class="passwordextrahide" style="display:none">
 						<td style="margin:0; padding:0">
 						<?php echo gettext("password:"); ?><br />
 						&nbsp;&nbsp;&nbsp;<?php echo gettext("(repeat)"); ?>
 						</td>
 						<td style="margin:0; padding:0">
 						<?php $x = getOption('protected_image_password'); if (!empty($x)) { $x = '          '; } ?>
-						<input type="password" size="<?php echo 30; ?>" name="imagepass" value="<?php echo $x; ?>" /><br />
+						<input type="password" size="<?php echo 30; ?>" name="imagepass" value="<?php echo $x; ?>" />
+						<br />
 						<input type="password" size="<?php echo 30; ?>" name="imagepass_2" value="<?php echo $x; ?>" />
 						</td>
 					</tr>
-					<tr>
+					<tr class="passwordextrahide" style="display:none">
 						<td style="margin:0; padding:0"><?php echo gettext("hint:"); ?></td>
 						<td style="margin:0; padding:0">
 						<?php print_language_string_list(getOption('protected_image_hint'), 'protected_image_hint', false, NULL, '', true) ?>
 						</td>
 					</tr>
 				</table>
+				</td>
 			</td>
 			<td>
 				<p><?php echo gettext("Select the level of protection for full sized images. <em>Download</em> forces a download dialog rather than displaying the image. <em>No&nbsp;access</em> prevents a link to the image from being shown. <em>Protected&nbsp;view</em> forces image processing before the image is displayed, for instance to apply a watermark or to check passwords. <em>Unprotected</em> allows direct display of the image."); ?></p>
